@@ -7,20 +7,20 @@
 , pipdate
 , tqdm
 , rich
-, pytest
-, isPy27
+, pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "perfplot";
-  version = "0.8.10";
-  disabled = isPy27;
+  version = "0.9.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "nschloe";
-    repo = "perfplot";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "17xx33fk95fpkd8h2whblpwfls9vyqbv7anq34kpigjy8zxfi2qk";
+    sha256 = "11f31d6xqxp04693symc2dl8890gjaycrb2a35y5xy023abwir5b";
   };
   format = "pyproject";
 
@@ -34,20 +34,15 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    pytest
+    pytestCheckHook
   ];
 
-  checkPhase = ''
-    export HOME=$TMPDIR
-    mkdir -p $HOME/.matplotlib
-    echo "backend: ps" > $HOME/.matplotlib/matplotlibrc
-    pytest test/perfplot_test.py
-  '';
+  pythonImportsCheck = [ "perfplot" ];
 
   meta = with lib; {
     description = "Performance plots for Python code snippets";
     homepage = "https://github.com/nschloe/perfplot";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc ];
   };
 }

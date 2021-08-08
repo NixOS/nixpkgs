@@ -1,18 +1,18 @@
 { lib, fetchFromGitHub, buildPythonPackage
 , lxml, pycryptodomex, construct
-, argon2_cffi, dateutil, future
+, argon2_cffi, python-dateutil, future
 , python
 }:
 
 buildPythonPackage rec {
   pname   = "pykeepass";
-  version = "4.0.0";
+  version = "4.0.1";
 
   src = fetchFromGitHub {
     owner = "libkeepass";
     repo = "pykeepass";
     rev = version;
-    sha256 = "1zw5hjk90zfxpgq2fz4h5qzw3kmvdnlfbd32gw57l034hmz2i08v";
+    sha256 = "sha256-D+loaPBpKdXyiqpdth3ANDjH6IewuKYhj/DzRE2hDn4=";
   };
 
   postPatch = ''
@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     lxml pycryptodomex construct
-    argon2_cffi dateutil future
+    argon2_cffi python-dateutil future
   ];
 
   checkPhase = ''

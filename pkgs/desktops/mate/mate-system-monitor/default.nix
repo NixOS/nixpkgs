@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, gettext, itstool, gtkmm3, libxml2, libgtop, libwnck3, librsvg, polkit, systemd, wrapGAppsHook, mateUpdateScript }:
+{ lib, stdenv, fetchurl, pkg-config, gettext, itstool, gtkmm3, libxml2, libgtop, libwnck, librsvg, polkit, systemd, wrapGAppsHook, mateUpdateScript }:
 
 stdenv.mkDerivation rec {
   pname = "mate-system-monitor";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     gtkmm3
     libxml2
     libgtop
-    libwnck3
+    libwnck
     librsvg
     polkit
     systemd

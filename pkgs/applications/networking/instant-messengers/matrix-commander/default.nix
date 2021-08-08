@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation {
   pname = "matrix-commander";
-  version = "unstable-2021-04-18";
+  version = "unstable-2021-05-26";
 
   src = fetchFromGitHub {
     owner = "8go";
     repo = "matrix-commander";
-    rev = "3e89a5f4c98dd191880ae371cc63eb9282d7d91f";
-    sha256 = "08nwwszp1kv5b7bgf6mmfn42slxkyhy98x18xbn4pglc4bj32iql";
+    rev = "06b4738bc74ee86fb3ac88c04b8230abf82e7421";
+    sha256 = "1skpq3xfnz11m298qnsw68xv391p5qg47flagzsk86pnzi841vc1";
   };
 
   buildInputs = [
@@ -35,7 +35,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "Simple but convenient CLI-based Matrix client app for sending and receiving";
     homepage = "https://github.com/8go/matrix-commander";
-    license = licenses.gpl3Only;
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.seb314 ];
   };

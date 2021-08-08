@@ -93,6 +93,8 @@
 
 , doCheck ? config.doCheckByDefault or false
 
+, disabledTestPaths ? []
+
 , ... } @ attrs:
 
 
@@ -108,6 +110,7 @@ let
 
   self = toPythonModule (stdenv.mkDerivation ((builtins.removeAttrs attrs [
     "disabled" "checkPhase" "checkInputs" "doCheck" "doInstallCheck" "dontWrapPythonPrograms" "catchConflicts" "format"
+    "disabledTestPaths"
   ]) // {
 
     name = namePrefix + name_;
@@ -173,11 +176,15 @@ let
       # default to python's platforms
       platforms = python.meta.platforms;
       isBuildPythonPackage = python.meta.platforms;
+    } // lib.optionalAttrs (attrs?pname) {
+      mainProgram = attrs.pname;
     } // meta;
   } // lib.optionalAttrs (attrs?checkPhase) {
     # If given use the specified checkPhase, otherwise use the setup hook.
     # Longer-term we should get rid of `checkPhase` and use `installCheckPhase`.
     installCheckPhase = attrs.checkPhase;
+  } //  lib.optionalAttrs (disabledTestPaths != []) {
+      disabledTestPaths = lib.escapeShellArgs disabledTestPaths;
   }));
 
   passthru.updateScript = let

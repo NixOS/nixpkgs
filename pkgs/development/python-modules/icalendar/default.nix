@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , setuptools
-, dateutil
+, python-dateutil
 , pytz
 }:
 
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ setuptools ];
-  propagatedBuildInputs = [ dateutil pytz ];
+  propagatedBuildInputs = [ python-dateutil pytz ];
 
   meta = with lib; {
     description = "A parser/generator of iCalendar files";

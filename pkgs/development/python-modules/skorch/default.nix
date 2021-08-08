@@ -3,12 +3,12 @@
 , fetchPypi
 , pytestCheckHook
 , pytest
-, pytestcov
+, pytest-cov
 , flaky
 , numpy
 , pandas
 , pytorch
-, scikitlearn
+, scikit-learn
 , scipy
 , tabulate
 , tqdm
@@ -23,8 +23,8 @@ buildPythonPackage rec {
     sha256 = "9910f97339e654c8d38e0075d87b735e69e5eb11db59c527fb36705b30c8d0a4";
   };
 
-  propagatedBuildInputs = [ numpy pytorch scikitlearn scipy tabulate tqdm ];
-  checkInputs = [ pytest pytestcov flaky pandas pytestCheckHook ];
+  propagatedBuildInputs = [ numpy pytorch scikit-learn scipy tabulate tqdm ];
+  checkInputs = [ pytest pytest-cov flaky pandas pytestCheckHook ];
 
   disabledTests = [
     # on CPU, these expect artifacts from previous GPU run

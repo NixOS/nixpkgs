@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, libtool
 , bzip2, zlib, libX11, libXext, libXt, fontconfig, freetype, ghostscript, libjpeg, djvulibre
-, lcms2, openexr, libpng, librsvg, libtiff, libxml2, openjpeg, libwebp, fftw, libheif, libde265
-, ApplicationServices
+, lcms2, openexr, libpng, liblqr1, librsvg, libtiff, libxml2, openjpeg, libwebp, fftw, libheif, libde265
+, ApplicationServices, Foundation
 }:
 
 let
@@ -9,20 +9,20 @@ let
     if stdenv.hostPlatform.system == "i686-linux" then "i686"
     else if stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "x86_64-darwin" then "x86-64"
     else if stdenv.hostPlatform.system == "armv7l-linux" then "armv7l"
-    else if stdenv.hostPlatform.system == "aarch64-linux" then "aarch64"
+    else if stdenv.hostPlatform.system == "aarch64-linux"  || stdenv.hostPlatform.system == "aarch64-darwin" then "aarch64"
     else if stdenv.hostPlatform.system == "powerpc64le-linux" then "ppc64le"
-    else throw "ImageMagick is not supported on this platform.";
+    else null;
 in
 
 stdenv.mkDerivation rec {
   pname = "imagemagick";
-  version = "6.9.12-8";
+  version = "6.9.12-19";
 
   src = fetchFromGitHub {
     owner = "ImageMagick";
     repo = "ImageMagick6";
     rev = version;
-    sha256 = "sha256-ZFCmoZOdZ3jbM5S90zBNiMGJKFylMLO0r3DB25wu3MM=";
+    sha256 = "sha256-8KofT9aNd8SXL0YBQ0RUOTccVxQNacvJL1uYPZiSPkY=";
   };
 
   outputs = [ "out" "dev" "doc" ]; # bin/ isn't really big
@@ -32,8 +32,9 @@ stdenv.mkDerivation rec {
 
   configureFlags =
     [ "--with-frozenpaths" ]
-    ++ [ "--with-gcc-arch=${arch}" ]
+    ++ (if arch != null then [ "--with-gcc-arch=${arch}" ] else [ "--without-gcc-arch" ])
     ++ lib.optional (librsvg != null) "--with-rsvg"
+    ++ lib.optional (liblqr1 != null) "--with-lqr"
     ++ lib.optionals (ghostscript != null)
       [ "--with-gs-font-dir=${ghostscript}/share/ghostscript/fonts"
         "--with-gslib"
@@ -46,11 +47,12 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ zlib fontconfig freetype ghostscript
-      libpng libtiff libxml2 libheif libde265 djvulibre
+      liblqr1 libpng libtiff libxml2 libheif libde265 djvulibre
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isMinGW)
       [ openexr librsvg openjpeg ]
-    ++ lib.optional stdenv.isDarwin ApplicationServices;
+    ++ lib.optionals stdenv.isDarwin
+      [ ApplicationServices Foundation ];
 
   propagatedBuildInputs =
     [ bzip2 freetype libjpeg lcms2 fftw ]

@@ -39,6 +39,7 @@ buildPythonPackage rec {
     substituteInPlace setup.py \
       --replace "ecdsa<0.15" "ecdsa" \
       --replace "idna<3,>=2.5" "idna" \
+      --replace "MarkupSafe<2.0" "MarkupSafe" \
   '';
 
   patches = [

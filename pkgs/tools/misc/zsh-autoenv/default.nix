@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation {
   pname = "zsh-autoenv";
-  version = "2017-12-16";
+  version = "unstable-2017-12-16";
 
   src = fetchFromGitHub {
     owner = "Tarrasch";
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     sha256 = "004svkfzhc3ab6q2qvwzgj36wvicg5bs8d2gcibx6adq042di7zj";
   };
 
-  buildPhase = ":";
+  dontBuild = true;
 
   installPhase = ''
     mkdir -p $out/{bin,share}

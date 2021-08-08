@@ -21,11 +21,11 @@
 
 buildPythonApplication rec {
   pname = "archivy";
-  version = "1.1.4";
+  version = "1.4.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-oSmwQcKvp9RABmc7aq6fdLOZapMauIi6+7azVTXVb30=";
+    sha256 = "sha256-wQuR7cltDLr2u8BQ851MSjKmeLW8mQ/3bdEF5c9nxL0=";
   };
 
   # Relax some dependencies
@@ -38,7 +38,10 @@ buildPythonApplication rec {
       --replace 'python_frontmatter == 0.5.0' 'python_frontmatter' \
       --replace 'requests ==' 'requests >=' \
       --replace 'validators ==' 'validators >=' \
-      --replace 'tinydb ==' 'tinydb >='
+      --replace 'tinydb ==' 'tinydb >=' \
+      --replace 'Flask_WTF == 0.14.3' 'Flask_WTF' \
+      --replace 'Werkzeug ==' 'Werkzeug >=' \
+      --replace 'Flask ==' 'Flask >='
   '';
 
   propagatedBuildInputs = [

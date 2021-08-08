@@ -7,7 +7,7 @@
 , mechanize
 , beautifulsoup4
 , pyxdg
-, dateutil
+, python-dateutil
 , requests
 , httpretty
 }:
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    django suds-jurko ldap mechanize beautifulsoup4 pyxdg dateutil requests
+    django suds-jurko ldap mechanize beautifulsoup4 pyxdg python-dateutil requests
   ];
 
   buildInputs = [ httpretty ];

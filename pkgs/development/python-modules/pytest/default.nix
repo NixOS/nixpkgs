@@ -19,12 +19,12 @@
 
 buildPythonPackage rec {
   pname = "pytest";
-  version = "6.2.3";
+  version = "6.2.4";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0d5nx7xqr9khagbvg6ac2cjjvcxrvvjp0chwim4z7w2ddsj3h4k7";
+    sha256 = "50bcad0a0b9c5a72c8e4e7c9855a3ad496ca6a881a3641b4260605450772c54b";
   };
 
   nativeBuildInputs = [ setuptools-scm ];

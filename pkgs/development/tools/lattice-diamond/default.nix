@@ -1,8 +1,9 @@
-{ lib, stdenv, rpmextract, patchelf, makeWrapper, file, requireFile, glib, zlib, 
+{ lib, stdenv, rpmextract, patchelf, makeWrapper, file, requireFile, glib, zlib,
     freetype, fontconfig, xorg, libusb-compat-0_1 }:
 
 stdenv.mkDerivation {
-  name = "diamond-3.10";
+  pname = "diamond";
+  version = "3.10";
 
   nativeBuildInputs = [ rpmextract patchelf makeWrapper file ];
 
@@ -15,17 +16,17 @@ stdenv.mkDerivation {
   buildCommand = ''
     origprefix=usr/local/diamond/3.10_x64
     prefix=diamond
-    
+
     echo "Unpacking $src..."
     rpmextract $src
-    
+
     # Move $pwd/usr/local/diamond/VERS to $out/diamond, cd.
     mkdir -p $out/$prefix
     rmdir $out/$prefix
     mv $origprefix $out/$prefix
-    
+
     cd $out
-    
+
     # Extract all tarballs.
     for tb in \
         cae_library/cae_library.tar.gz \
@@ -36,13 +37,13 @@ stdenv.mkDerivation {
         bin/bin.tar.gz \
         examples/examples.tar.gz \
         data/data.tar.gz ; do
-    
+
         echo "Extracting tarball $prefix/$tb"
         cd $out/$prefix/$(dirname $tb)
         tar xf $(basename $tb)
         rm $(basename $tb)
     done
-    
+
     # Patch shebangs in start scripts .
     cd $out/$prefix/bin/lin64
     for tool in \
@@ -60,11 +61,11 @@ stdenv.mkDerivation {
         ipexpress \
         fileutility \
         diamond ; do
-        
+
         echo "Patching script $prefix/bin/lin64/$tool..."
         patchShebangs $tool
     done
-    
+
     # Patch executable ELFs.
     for path in bin/lin64 ispfpga/bin/lin64; do
         cd $out/$prefix/$path
@@ -82,10 +83,10 @@ stdenv.mkDerivation {
                 $f
         done
     done
-    
+
     # Remove 32-bit libz.
     rm $out/$prefix/bin/lin64/libz.{so,so.1}
-    
+
     # Make wrappers (should these target more than the 'diamond' tool?).
     # The purpose of these is just to call the target program using its
     # absolute path - otherwise, it will crash.
@@ -108,7 +109,7 @@ stdenv.mkDerivation {
       for cost- sensitive, low-power Lattice FPGA architectures. It is the
       next-generation replacement for ispLEVER.
     '';
-    homepage = "http://www.latticesemi.com/latticediamond";
+    homepage = "https://www.latticesemi.com/latticediamond";
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ q3k ];
     platforms = [ "x86_64-linux" ];

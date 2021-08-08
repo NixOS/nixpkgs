@@ -260,14 +260,14 @@ rec {
         };
         u8 = unsign 8 256;
         u16 = unsign 16 65536;
-        # the biggest int a 64-bit Nix accepts is 2^63 - 1 (9223372036854775808), for a 32-bit Nix it is 2^31 - 1 (2147483647)
-        # the smallest int a 64-bit Nix accepts is -2^63 (-9223372036854775807), for a 32-bit Nix it is -2^31 (-2147483648)
-        # u32 = unsign 32 4294967296;
+        # the biggest int Nix accepts is 2^63 - 1 (9223372036854775808)
+        # the smallest int Nix accepts is -2^63 (-9223372036854775807)
+        u32 = unsign 32 4294967296;
         # u64 = unsign 64 18446744073709551616;
 
         s8 = sign 8 256;
         s16 = sign 16 65536;
-        # s32 = sign 32 4294967296;
+        s32 = sign 32 4294967296;
       };
 
     # Alias of u16 for a port number
@@ -285,6 +285,13 @@ rec {
       description = "string";
       check = isString;
       merge = mergeEqualOption;
+    };
+
+    nonEmptyStr = mkOptionType {
+      name = "nonEmptyStr";
+      description = "non-empty string";
+      check = x: str.check x && builtins.match "[ \t\n]*" x == null;
+      inherit (str) merge;
     };
 
     strMatching = pattern: mkOptionType {
@@ -581,7 +588,17 @@ rec {
       in
       mkOptionType rec {
         name = "enum";
-        description = "one of ${concatMapStringsSep ", " show values}";
+        description =
+          # Length 0 or 1 enums may occur in a design pattern with type merging
+          # where an "interface" module declares an empty enum and other modules
+          # provide implementations, each extending the enum with their own
+          # identifier.
+          if values == [] then
+            "impossible (empty enum)"
+          else if builtins.length values == 1 then
+            "value ${show (builtins.head values)} (singular enum)"
+          else
+            "one of ${concatMapStringsSep ", " show values}";
         check = flip elem values;
         merge = mergeEqualOption;
         functor = (defaultFunctor name) // { payload = values; binOp = a: b: unique (a ++ b); };

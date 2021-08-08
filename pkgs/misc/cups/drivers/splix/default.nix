@@ -10,8 +10,6 @@ let
       sha256 = "1156flics5m9m7a4hdmcc2nphbdyary6dfmbcrmsp9xb7ivsypdl";
     };
 
-    phases = [ "unpackPhase" "installPhase" ];
-
     installPhase = ''
       mkdir -p $out/share/cups/profiles/samsung
       cp * $out/share/cups/profiles/samsung/

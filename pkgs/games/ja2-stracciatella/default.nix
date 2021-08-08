@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, fetchFromGitHub, cmake, python, rustPlatform, SDL2, fltk, rapidjson, gtest, Carbon, Cocoa }:
+{ stdenv, lib, fetchurl, fetchFromGitHub, cmake, python3, rustPlatform, SDL2, fltk, rapidjson, gtest, Carbon, Cocoa }:
 let
   version = "0.17.0";
   src = fetchFromGitHub {
@@ -11,7 +11,7 @@ let
     pname = "libstracciatella";
     inherit version;
     src = "${src}/rust";
-    cargoSha256 = "0blb971cv9k6c460mwq3zq8vih687bdnb39b9gph1hr90pxjviba";
+    cargoHash = "sha256-asUt+wUpwwDvSyuNZds6yMC4Ef4D8woMYWamzcJJiy4=";
 
     preBuild = ''
       mkdir -p $out/include/stracciatella
@@ -28,7 +28,7 @@ stdenv.mkDerivation {
   pname = "ja2-stracciatella";
   inherit src version;
 
-  nativeBuildInputs = [ cmake python ];
+  nativeBuildInputs = [ cmake python3 ];
   buildInputs = [ SDL2 fltk rapidjson gtest ] ++ lib.optionals stdenv.isDarwin [ Carbon Cocoa ];
 
   patches = [

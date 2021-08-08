@@ -44,7 +44,7 @@ with lib;
 
   # Enable GDM/GNOME by uncommenting above two lines and two lines below.
   # services.xserver.displayManager.gdm.enable = true;
-  # services.xserver.desktopManager.gnome3.enable = true;
+  # services.xserver.desktopManager.gnome.enable = true;
 
   # Set your time zone.
   # time.timeZone = "Europe/Amsterdam";

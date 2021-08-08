@@ -1,23 +1,43 @@
-{ lib, buildPythonPackage, fetchFromGitHub, numba, numpy, pandas, pytestrunner
-, thrift, pytestCheckHook, python-snappy, lz4, zstandard, zstd }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, python
+, numba
+, numpy
+, pandas
+, pytest-runner
+, cramjam
+, fsspec
+, thrift
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "fastparquet";
-  version = "0.5.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "dask";
     repo = pname;
     rev = version;
-    sha256 = "17i091kky34m2xivk29fqsyxxxa7v4352n79w01n7ni93za6wana";
+    hash = "sha256-08hanzRnt6WuMriNNtOd+ZHycr2XBeIRav+5sgvT7Do=";
   };
 
-  nativeBuildInputs = [ pytestrunner ];
-  propagatedBuildInputs = [ numba numpy pandas thrift ];
-  checkInputs = [ pytestCheckHook python-snappy lz4 zstandard zstd ];
+  nativeBuildInputs = [ pytest-runner ];
+  propagatedBuildInputs = [ cramjam fsspec numba numpy pandas thrift ];
+  checkInputs = [ pytestCheckHook ];
 
-  # E   ModuleNotFoundError: No module named 'fastparquet.speedups'
-  doCheck = false;
+  # Workaround https://github.com/NixOS/nixpkgs/issues/123561
+  preCheck = ''
+    mv fastparquet/test .
+    rm -rf fastparquet
+    fastparquet_test="$out"/${python.sitePackages}/fastparquet/test
+    ln -s `pwd`/test "$fastparquet_test"
+  '';
+  postCheck = ''
+    rm "$fastparquet_test"
+  '';
+
   pythonImportsCheck = [ "fastparquet" ];
 
   meta = with lib; {

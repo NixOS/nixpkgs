@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, setuptools_scm
+, setuptools-scm
 , pytestCheckHook
 , pytest-flake8
 , glibcLocales
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytestCheckHook pytest-flake8 glibcLocales packaging ];
-  buildInputs = [ setuptools_scm ];
+  buildInputs = [ setuptools-scm ];
   propagatedBuildInputs = [
     importlib-metadata
   ];

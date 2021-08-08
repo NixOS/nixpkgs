@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, autoreconfHook, gnutls, freetype
-, SDL, SDL_gfx, SDL_ttf, liblo, libxml2, alsaLib, libjack2, libvorbis
+, SDL, SDL_gfx, SDL_ttf, liblo, libxml2, alsa-lib, libjack2, libvorbis
 , libSM, libsndfile, libogg, libtool
 }:
 let
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config autoreconfHook libtool ];
   buildInputs = [
     freetype SDL SDL_gfx SDL_ttf
-    liblo libxml2 libjack2 alsaLib libvorbis libsndfile libogg libSM
+    liblo libxml2 libjack2 alsa-lib libvorbis libsndfile libogg libSM
     (gnutls.overrideAttrs (oldAttrs: {
       configureFlags = oldAttrs.configureFlags ++ [ "--enable-openssl-compatibility" ];
     }))

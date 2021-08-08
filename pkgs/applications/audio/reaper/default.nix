@@ -3,11 +3,13 @@
 , autoPatchelfHook
 , makeWrapper
 
-, alsaLib
+, alsa-lib
 , gtk3
 , lame
 , ffmpeg
 , vlc
+, xdg-utils
+, which
 
 , jackSupport ? true, libjack2
 , pulseaudioSupport ? config.pulseaudio or true, libpulseaudio
@@ -15,17 +17,23 @@
 
 stdenv.mkDerivation rec {
   pname = "reaper";
-  version = "6.25";
+  version = "6.29";
 
   src = fetchurl {
-    url = "https://www.reaper.fm/files/${lib.versions.major version}.x/reaper${builtins.replaceStrings ["."] [""] version}_linux_x86_64.tar.xz";
-    sha256 = "0i1idlr4ar28wvwcvwn9hqzb63kki1x1995cr87a9slxfa7zcshb";
+    url = "https://www.reaper.fm/files/${lib.versions.major version}.x/reaper${builtins.replaceStrings ["."] [""] version}_linux_${stdenv.targetPlatform.qemuArch}.tar.xz";
+    hash = if stdenv.isx86_64 then "sha256-DOul6J2Y7szy4+Q4SeO0uG6PSuU+MELE7ky8W3mSpTQ="
+                              else "sha256-67iTi6bFlbQtyCjnPIjK8K/3aV+zaCsWBRCWmgYonM4=";
   };
 
-  nativeBuildInputs = [ autoPatchelfHook makeWrapper ];
+  nativeBuildInputs = [
+    autoPatchelfHook
+    makeWrapper
+    xdg-utils # Required for desktop integration
+    which
+  ];
 
   buildInputs = [
-    alsaLib
+    alsa-lib
     stdenv.cc.cc.lib # reaper and libSwell need libstdc++.so.6
     gtk3
   ];
@@ -41,7 +49,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    XDG_DATA_HOME="$out/share" ./install-reaper.sh \
+    HOME="$out/share" XDG_DATA_HOME="$out/share" ./install-reaper.sh \
       --install $out/opt \
       --integrate-user-desktop
     rm $out/opt/REAPER/uninstall-reaper.sh
@@ -67,7 +75,7 @@ stdenv.mkDerivation rec {
     description = "Digital audio workstation";
     homepage = "https://www.reaper.fm/";
     license = licenses.unfree;
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
     maintainers = with maintainers; [ jfrankenau ilian ];
   };
 }

@@ -2,18 +2,18 @@
 
 buildGoModule rec {
   pname = "grpcurl";
-  version = "1.8.1";
+  version = "1.8.2";
 
   src = fetchFromGitHub {
     owner = "fullstorydev";
     repo = "grpcurl";
     rev = "v${version}";
-    sha256 = "sha256-BxmoIGhuAt/uhHLNdMiSrNVWAoxAAMKPJ/NsXjf2ynk=";
+    sha256 = "sha256-/no8bRGoKibtcjaITUuzwAbX+gPHNJROSf79iuuRwe4=";
   };
 
   subPackages = [ "cmd/grpcurl" ];
 
-  vendorSha256 = "sha256-EnstvJk2kZ1Ft5xY1dO14wnmT//2K72OnDMZqeaOeQI=";
+  vendorSha256 = "sha256-nl8vKVhUMSO20qCDyhNkU5cghNy8vIFqSBvLk59nbWg=";
 
   buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version}" ];
 

@@ -1,4 +1,4 @@
-{ lib, python3Packages, gobject-introspection, libappindicator-gtk3, libnotify, gtk3, gnome3, xprintidle-ng, wrapGAppsHook, gdk-pixbuf, shared-mime-info, librsvg
+{ lib, python3Packages, gobject-introspection, libappindicator-gtk3, libnotify, gtk3, gnome, xprintidle-ng, wrapGAppsHook, gdk-pixbuf, shared-mime-info, librsvg
 }:
 
 let inherit (python3Packages) python buildPythonApplication fetchPypi croniter;
@@ -16,8 +16,8 @@ in buildPythonApplication rec {
   buildInputs = [
     gtk3
     gobject-introspection
-    gnome3.adwaita-icon-theme
-    gnome3.adwaita-icon-theme
+    gnome.adwaita-icon-theme
+    gnome.adwaita-icon-theme
   ];
 
   nativeBuildInputs = [

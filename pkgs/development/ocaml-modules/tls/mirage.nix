@@ -1,26 +1,23 @@
 { buildDunePackage, tls
-, x509, lwt, fmt, mirage-flow, mirage-kv, mirage-clock, ptime
-, mirage-crypto, mirage-crypto-pk, hacl_x25519, fiat-p256
+, fmt, lwt, mirage-clock, mirage-crypto, mirage-crypto-ec, mirage-crypto-pk, mirage-flow, mirage-kv, ptime, x509
 }:
 
 buildDunePackage {
   pname = "tls-mirage";
-
-  inherit (tls) version src useDune2 minimumOCamlVersion;
+  inherit (tls) src version minimumOCamlVersion useDune2;
 
   propagatedBuildInputs = [
-    tls
-    x509
-    lwt
     fmt
+    lwt
+    mirage-clock
+    mirage-crypto
+    mirage-crypto-ec
+    mirage-crypto-pk
     mirage-flow
     mirage-kv
-    mirage-clock
     ptime
-    mirage-crypto
-    mirage-crypto-pk
-    hacl_x25519
-    fiat-p256
+    tls
+    x509
   ];
 
   meta = tls.meta // {

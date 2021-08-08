@@ -1,41 +1,50 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pytestCheckHook, pythonOlder
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, pytestCheckHook
+, pythonOlder
 , attrs
-, coverage
+, linkify-it-py
 , psutil
 , pytest-benchmark
+, pytest-regressions
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "markdown-it-py";
-  version = "0.6.2";
+  version = "1.0.0";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "executablebooks";
-    repo = "markdown-it-py";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "1g9p8pdnvjya436lii63r5gjajhmbhmyh9ngbjqf9dqny05nagz1";
+    hash = "sha256-GA7P2I8N+i2ISsVgx58zyhrfKMcZ7pL4X9T/trbsr1Y=";
   };
 
-  propagatedBuildInputs = [ attrs ];
+  patches = [
+    (fetchpatch {
+      # :arrow_up: UPGRADE: attrs -> v21 (#165)
+      # https://github.com/executablebooks/markdown-it-py/pull/165
+      url = "https://github.com/executablebooks/markdown-it-py/commit/78381ffe1a651741594dc93e693b761422512fa2.patch";
+      sha256 = "1kxhblpi4sycrs3rv50achr8g0wlgq33abg2acra26l736hlsya1";
+    })
+  ];
+
+  propagatedBuildInputs = [ attrs linkify-it-py ]
+    ++ lib.optional (pythonOlder "3.8") typing-extensions;
 
   checkInputs = [
-    coverage
-    pytest-benchmark
     psutil
+    pytest-benchmark
+    pytest-regressions
     pytestCheckHook
   ];
-
-  disabledTests = [
-    # Requires the unpackaged pytest-regressions fixture plugin
-    "test_amsmath"
-    "test_container"
-    "test_deflist"
-    "test_dollarmath"
-    "test_spec"
-    "test_texmath"
-  ];
+  pytestImportsCheck = [ "markdown_it" ];
 
   meta = with lib; {
     description = "Markdown parser done right";

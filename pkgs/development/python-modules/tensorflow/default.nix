@@ -1,5 +1,5 @@
 { stdenv, bazel_3, buildBazelPackage, isPy3k, lib, fetchFromGitHub, symlinkJoin
-, addOpenGLRunpath
+, addOpenGLRunpath, fetchpatch
 # Python deps
 , buildPythonPackage, pythonOlder, pythonAtLeast, python
 # Python libraries
@@ -72,7 +72,7 @@ let
 
   tfFeature = x: if x then "1" else "0";
 
-  version = "2.4.0";
+  version = "2.4.2";
   variant = if cudaSupport then "-gpu" else "";
   pname = "tensorflow${variant}";
 
@@ -110,10 +110,16 @@ let
       owner = "tensorflow";
       repo = "tensorflow";
       rev = "v${version}";
-      sha256 = "0yl06aypfxrcs35828xf04mkidz1x0j89v0q5h4d2xps1cb5rv3f";
+      sha256 = "07a2y05hixch1bjag5pzw3p1m7bdj3bq4gdvmsfk2xraz49b1pi8";
     };
 
     patches = [
+      # included from 2.6.0 onwards
+      (fetchpatch {
+        name = "fix-numpy-1.20-notimplementederror.patch";
+        url = "https://github.com/tensorflow/tensorflow/commit/b258941525f496763d4277045b6513c815720e3a.patch";
+        sha256 = "19f9bzrcfsynk11s2hqvscin5c65zf7r6g3nb10jnimw79vafiry";
+      })
       # Relax too strict Python packages versions dependencies.
       ./relax-dependencies.patch
       # Add missing `io_bazel_rules_docker` dependency.
@@ -288,9 +294,9 @@ let
     fetchAttrs = {
       # cudaSupport causes fetch of ncclArchive, resulting in different hashes
       sha256 = if cudaSupport then
-        "1i7z2a7bc2q1vn1h9nx1xc6g1r1cby2xvbcs20fj9h6c2fgaw9j4"
+        "10m6qj3kchgxfgb6qh59vc51knm9r9pkng8bf90h00dnggvv8234"
       else
-        "0s8q5rxq8abr50c5jpwv96ncfc0k8jw7w70ri8viqy031g9v9v45";
+        "04a98yrp09nd0p17k0jbzkgjppxs0yma7m5zkfrwgvr4g0w71v68";
     };
 
     buildAttrs = {

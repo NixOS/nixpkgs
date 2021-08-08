@@ -1,7 +1,7 @@
 { stdenv, lib, python3, fetchFromGitHub, installShellFiles }:
 
 let
-  version = "2.20.0";
+  version = "2.26.1";
   srcName = "azure-cli-${version}-src";
 
   src = fetchFromGitHub {
@@ -9,7 +9,7 @@ let
     owner = "Azure";
     repo = "azure-cli";
     rev = "azure-cli-${version}";
-    sha256 = "sha256-unG17oiqZZJNGg8QCg7xY0GzuMu2gaAIIgGF8TlMBQQ=";
+    sha256 = "sha256-AwchP0o3I2T37dLPNw51wldwYUmcRuWptyzrhOocEaQ=";
   };
 
   # put packages that needs to be overriden in the py package scope
@@ -28,6 +28,7 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
     substituteInPlace setup.py \
       --replace "javaproperties==0.5.1" "javaproperties" \
       --replace "pytz==2019.1" "pytz" \
+      --replace "jsondiff==1.2.0" "jsondiff~=1.2" \
       --replace "antlr4-python3-runtime~=4.7.2" "antlr4-python3-runtime~=4.7" \
       --replace "mock~=4.0" "mock"
 
@@ -50,6 +51,7 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
     azure-datalake-store
     azure-functions-devops-build
     azure-graphrbac
+    azure-identity
     azure-keyvault
     azure-keyvault-administration
     azure-loganalytics
@@ -79,6 +81,7 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
     azure-mgmt-dns
     azure-mgmt-eventgrid
     azure-mgmt-eventhub
+    azure-mgmt-extendedlocation
     azure-mgmt-hdinsight
     azure-mgmt-imagebuilder
     azure-mgmt-iotcentral
@@ -110,6 +113,7 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
     azure-mgmt-security
     azure-mgmt-servicebus
     azure-mgmt-servicefabric
+    azure-mgmt-servicefabricmanagedclusters
     azure-mgmt-signalr
     azure-mgmt-sql
     azure-mgmt-sqlvirtualmachine
@@ -130,6 +134,7 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
     mock
     paramiko
     pydocumentdb
+    PyGithub
     pygments
     pyopenssl
     pytz
@@ -142,7 +147,7 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
     sshtunnel
     urllib3
     vsts-cd-manager
-    websocket_client
+    websocket-client
     xmltodict
     javaproperties
     jsondiff

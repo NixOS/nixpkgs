@@ -7,7 +7,7 @@
 , flask
 , psutil
 , pytest-timeout
-, pytest_xdist
+, pytest-xdist
 , pytestCheckHook
 , requests
 , isPy27
@@ -17,13 +17,13 @@
 
 buildPythonPackage rec {
   pname = "debugpy";
-  version = "1.3.0";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "Microsoft";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-YGzc9mMIzPTmUgIXuZROLdYKjUm69x9SR+JtYRVpn24=";
+    hash = "sha256-W51Y9tZB1Uyp175+hWCpXChwL+MBpDWjudF87F1MRso=";
   };
 
   patches = [
@@ -68,7 +68,7 @@ buildPythonPackage rec {
     flask
     psutil
     pytest-timeout
-    pytest_xdist
+    pytest-xdist
     pytestCheckHook
     requests
   ] ++ lib.optionals (!isPy27) [
@@ -94,7 +94,7 @@ buildPythonPackage rec {
     description = "An implementation of the Debug Adapter Protocol for Python";
     homepage = "https://github.com/microsoft/debugpy";
     license = licenses.mit;
-    maintainers = with maintainers; [ metadark ];
+    maintainers = with maintainers; [ kira-bruneau ];
     platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" "i686-darwin" ];
   };
 }

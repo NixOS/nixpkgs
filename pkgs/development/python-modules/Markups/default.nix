@@ -5,6 +5,7 @@
 , markdown
 , docutils
 , pygments
+, pyyaml
 }:
 
 buildPythonPackage rec {
@@ -16,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "e309d79dde0935576ce1def6752f2127a12e2c2ea2ae8b0c69f99ff8bc12181d";
   };
 
-  checkInputs = [ markdown docutils pygments ];
+  checkInputs = [ markdown docutils pygments pyyaml ];
   propagatedBuildInputs = [ python-markdown-math ];
 
   meta = {

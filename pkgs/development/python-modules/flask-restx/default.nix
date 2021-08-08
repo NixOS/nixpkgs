@@ -20,15 +20,22 @@
 
 buildPythonPackage rec {
   pname = "flask-restx";
-  version = "0.3.0";
+  version = "0.4.0";
 
   # Tests not included in PyPI tarball
   src = fetchFromGitHub {
     owner = "python-restx";
     repo = pname;
     rev = version;
-    sha256 = "0aj13nd3z71gb8c2kqiaz3f9k7jr0srlvrsx8hpz4nkpki8jiz2s";
+    sha256 = "sha256-jM0QJ/klbWh3qho6ZQOH2n1qaguK9C98QIuSfqpI8xA=";
   };
+
+  postPatch = ''
+    # https://github.com/python-restx/flask-restx/pull/341
+    substituteInPlace requirements/install.pip \
+      --replace "Flask>=0.8, <2.0.0" "Flask>=0.8, !=2.0.0" \
+      --replace "werkzeug <2.0.0" "werkzeug !=2.0.0"
+  '';
 
   propagatedBuildInputs = [ aniso8601 jsonschema flask werkzeug pytz six ]
     ++ lib.optionals isPy27 [ enum34 ];
@@ -41,6 +48,8 @@ buildPythonPackage rec {
     "--deselect=tests/test_inputs.py::EmailTest::test_valid_value_check"
     "--deselect=tests/test_logging.py::LoggingTest::test_override_app_level"
   ];
+
+  pythonImportsCheck = [ "flask_restx" ];
 
   meta = with lib; {
     homepage = "https://flask-restx.readthedocs.io/en/${version}/";

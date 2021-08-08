@@ -36,7 +36,7 @@ import ./make-test-python.nix (
           default.wait_for_unit("calibre-web.service")
           default.wait_for_open_port(${toString defaultPort})
           default.succeed(
-              "curl --fail 'http://localhost:${toString defaultPort}/basicconfig' | grep -q 'Basic Configuration'"
+              "curl --fail 'http://localhost:${toString defaultPort}/basicconfig' | grep 'Basic Configuration'"
           )
 
           customized.succeed(
@@ -46,7 +46,7 @@ import ./make-test-python.nix (
           customized.wait_for_unit("calibre-web.service")
           customized.wait_for_open_port(${toString port})
           customized.succeed(
-              "curl --fail -H X-User:admin 'http://localhost:${toString port}' | grep -q test-book"
+              "curl --fail -H X-User:admin 'http://localhost:${toString port}' | grep test-book"
           )
         '';
       }

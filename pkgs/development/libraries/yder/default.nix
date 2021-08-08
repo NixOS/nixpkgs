@@ -1,7 +1,14 @@
-{ stdenv, lib, fetchFromGitHub, cmake, orcania, systemd, check, subunit
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, orcania
+, systemd
+, check
+, subunit
 , withSystemd ? stdenv.isLinux
 }:
-assert withSystemd -> systemd != null;
+
 stdenv.mkDerivation rec {
   pname = "yder";
   version = "1.4.12";
@@ -21,7 +28,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ orcania ] ++ lib.optional withSystemd systemd;
+  buildInputs = [ orcania ]
+    ++ lib.optional withSystemd systemd;
 
   checkInputs = [ check subunit ];
 

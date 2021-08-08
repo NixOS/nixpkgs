@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , nose
 , numpy
-, scikitlearn
+, scikit-learn
 , scipy
 , numba
 , pynndescent
@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     numpy
-    scikitlearn
+    scikit-learn
     scipy
     numba
     pynndescent

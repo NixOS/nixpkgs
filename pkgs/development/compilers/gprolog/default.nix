@@ -1,14 +1,14 @@
 { lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "gprolog-1.4.5";
+  name = "gprolog-1.5.0";
 
   src = fetchurl {
     urls = [
       "mirror://gnu/gprolog/${name}.tar.gz"
       "http://www.gprolog.org/${name}.tar.gz"
     ];
-    sha256 = "0z4cc42n3k6i35b8mr816iwsvrpxshw6d7dgz6s2h1hy0l7g1p5z";
+    sha256 = "sha256-ZwZCtDwPqifr1olh77F+vnB2iPkbaAlWbd1gYTlRLAE=";
   };
 
   hardeningDisable = lib.optional stdenv.isi686 "pic";

@@ -1,7 +1,8 @@
 { stdenv, lib, coreutils }:
 
-stdenv.mkDerivation {
-  name = "libredirect-0";
+stdenv.mkDerivation rec {
+  pname = "libredirect";
+  version = "0";
 
   unpackPhase = ''
     cp ${./libredirect.c} libredirect.c

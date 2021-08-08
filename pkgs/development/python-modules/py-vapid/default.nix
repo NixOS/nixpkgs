@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "py-vapid";
-  version = "1.8.0";
+  version = "1.8.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9e8de790cce397d9bc567a2148c3c5d88740f668342c59aaff9ed004f716a111";
+    sha256 = "874f21910f2103c56228cded941d6e733dd8f1eb12876137919533bfacb65a48";
   };
 
   propagatedBuildInputs = [ cryptography ];

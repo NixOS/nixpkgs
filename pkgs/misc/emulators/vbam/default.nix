@@ -2,6 +2,7 @@
 , cairo
 , cmake
 , fetchFromGitHub
+, fetchpatch
 , ffmpeg
 , gettext
 , libGLU, libGL
@@ -44,6 +45,15 @@ stdenv.mkDerivation rec {
     "-DSYSCONFDIR=etc"
     "-DENABLE_WX='false'"
     "-DENABLE_SDL='true'"
+  ];
+
+  patches = [
+    (fetchpatch {
+      # https://github.com/visualboyadvance-m/visualboyadvance-m/pull/793
+      name = "fix-build-SDL-2.0.14.patch";
+      url = "https://github.com/visualboyadvance-m/visualboyadvance-m/commit/619a5cce683ec4b1d03f08f316ba276d8f8cd824.patch";
+      sha256 = "099cbzgq4r9g83bvdra8a0swfl1vpfng120wf4q7h6vs0n102rk9";
+    })
   ];
 
   meta =  with lib; {

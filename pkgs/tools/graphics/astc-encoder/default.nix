@@ -31,13 +31,13 @@ with rec {
 
 gccStdenv.mkDerivation rec {
   pname = "astc-encoder";
-  version = "2.5";
+  version = "3.1";
 
   src = fetchFromGitHub {
     owner = "ARM-software";
     repo = "astc-encoder";
     rev = version;
-    sha256 = "0ff5jh40w942dz7hmgvznmpa9yhr1j4i9qqj5wy6icm2jb9j4pak";
+    sha256 = "sha256-WWxk8F1MtFv1tWbSs45fmu4k9VCAAOjJP8zBz80zLTo=";
   };
 
   nativeBuildInputs = [ cmake ];

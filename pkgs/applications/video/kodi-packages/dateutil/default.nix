@@ -14,8 +14,11 @@ buildKodiAddon rec {
     six
   ];
 
-  passthru.updateScript = addonUpdateScript {
-    attrPath = "kodi.packages.dateutil";
+  passthru = {
+    pythonPath = "lib";
+    updateScript = addonUpdateScript {
+      attrPath = "kodi.packages.dateutil";
+    };
   };
 
   meta = with lib; {

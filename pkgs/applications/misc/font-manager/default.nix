@@ -1,19 +1,60 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, gettext, python3,
-  pkg-config, libxml2, json-glib , sqlite, itstool, yelp-tools,
-  vala, gtk3, gnome3, desktop-file-utils, wrapGAppsHook, gobject-introspection,
-  libsoup, webkitgtk
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, fetchpatch
+, ninja
+, gettext
+, python3
+, pkg-config
+, libxml2
+, json-glib
+, sqlite
+, itstool
+, yelp-tools
+, vala
+, gsettings-desktop-schemas
+, gtk3
+, gnome
+, desktop-file-utils
+, wrapGAppsHook
+, gobject-introspection
+, libsoup
+, glib-networking
+, webkitgtk
 }:
 
 stdenv.mkDerivation rec {
   pname = "font-manager";
-  version = "0.8.5-1";
+  version = "0.8.6";
 
   src = fetchFromGitHub {
     owner = "FontManager";
     repo = "master";
     rev = version;
-    sha256 = "1p0hfnf06892hn25a6zv8fnhbh4ln11nn2fv1vjqs63rr59fprbk";
+    sha256 = "0a18rbdy9d0fj0vnsc2rm7xlh17vjqn4kdyrq0ldzlzkb6zbdk2k";
   };
+
+  patches = [
+    # Fix some Desktop Settings with GNOME 40.
+    # https://github.com/FontManager/font-manager/issues/215
+    (fetchpatch {
+      url = "https://github.com/FontManager/font-manager/commit/b28f325d7951a66ebf1a2a432ee09fd22048a033.patch";
+      sha256 = "dKbrXGb9a4JuG/4x9vprMlh5J17HKJFifRWq9BWp1ow=";
+    })
+    (fetchpatch {
+      url = "https://github.com/FontManager/font-manager/commit/2147204d4c4c6b58161230500186c3a5d4eeb1c1.patch";
+      sha256 = "2/PFLwf7h76fIIN4+lyjg/L0KVU1hhRQCfwCAGDpb00=";
+    })
+    (fetchpatch {
+      url = "https://github.com/FontManager/font-manager/commit/3abc541ef8606727c72af7631c021809600336ac.patch";
+      sha256 = "rJPnW+7uuFLxTf5tk+Rzo+xkw2+uzU6BkzPXLeR/RGc=";
+    })
+    (fetchpatch {
+      url = "https://github.com/FontManager/font-manager/commit/03a822f0d7b72442cd2ffcc8668da265d3535e0d.patch";
+      sha256 = "3Z2UqK5VV2bIwpGd1tA7fivd7ooIuV6CxTJhzgOAkIM=";
+    })
+  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -34,10 +75,16 @@ stdenv.mkDerivation rec {
     libxml2
     json-glib
     sqlite
+    gsettings-desktop-schemas # for font settings
     gtk3
-    gnome3.adwaita-icon-theme
+    gnome.adwaita-icon-theme
     libsoup
+    glib-networking # for SSL so that Google Fonts can load
     webkitgtk
+  ];
+
+  mesonFlags = [
+    "-Dreproducible=true" # Do not hardcode build directory…
   ];
 
   postPatch = ''

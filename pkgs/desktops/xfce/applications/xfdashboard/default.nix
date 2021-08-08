@@ -4,7 +4,7 @@
 , libXinerama
 , libXdamage
 , libX11
-, libwnck3
+, libwnck
 , libxfce4ui
 , libxfce4util
 , garcon
@@ -21,7 +21,7 @@ mkXfceDerivation {
   rev-prefix = "";
   odd-unstable = false;
 
-  sha256 = "06pvzhhkr2mimsrzlkpsrzf5fxag4fhabyb3cpmgpyp5hcbgvaj3";
+  sha256 = "sha256-Q6r9FoPl+vvqZWP5paAjT3VX3M/6TvqzrrGKPCH8+xo=";
 
   buildInputs = [
     clutter
@@ -33,7 +33,7 @@ mkXfceDerivation {
     libXcomposite
     libXdamage
     libXinerama
-    libwnck3
+    libwnck
     libxfce4ui
     libxfce4util
     xfconf

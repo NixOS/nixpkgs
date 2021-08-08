@@ -5,7 +5,7 @@
 , x11Support ? true, libX11 ? null, libXext ? null, libGLU, libGL ? null
 , xineramaSupport ? true, libXinerama ? null
 , xvSupport ? true, libXv ? null
-, alsaSupport ? stdenv.isLinux, alsaLib ? null
+, alsaSupport ? stdenv.isLinux, alsa-lib ? null
 , screenSaverSupport ? true, libXScrnSaver ? null
 , vdpauSupport ? false, libvdpau ? null
 , cddaSupport ? !stdenv.isDarwin, cdparanoia ? null
@@ -36,7 +36,7 @@ assert fribidiSupport -> (fribidi != null);
 assert x11Support -> (libX11 != null && libXext != null && libGLU != null && libGL != null);
 assert xineramaSupport -> (libXinerama != null && x11Support);
 assert xvSupport -> (libXv != null && x11Support);
-assert alsaSupport -> alsaLib != null;
+assert alsaSupport -> alsa-lib != null;
 assert screenSaverSupport -> libXScrnSaver != null;
 assert vdpauSupport -> libvdpau != null;
 assert cddaSupport -> cdparanoia != null;
@@ -106,6 +106,8 @@ stdenv.mkDerivation rec {
     rm -rf ffmpeg
   '';
 
+  patches = [ ./svn-r38199-ffmpeg44fix.patch ];
+
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ pkg-config yasm ];
   buildInputs = with lib;
@@ -114,7 +116,7 @@ stdenv.mkDerivation rec {
     ++ optional fontconfigSupport fontconfig
     ++ optional fribidiSupport fribidi
     ++ optionals x11Support [ libX11 libXext libGLU libGL ]
-    ++ optional alsaSupport alsaLib
+    ++ optional alsaSupport alsa-lib
     ++ optional xvSupport libXv
     ++ optional theoraSupport libtheora
     ++ optional cacaSupport libcaca
@@ -203,6 +205,7 @@ stdenv.mkDerivation rec {
        optional  fontconfigSupport "-lfontconfig"
     ++ optional  fribidiSupport "-lfribidi"
     ++ optionals x11Support [ "-lX11" "-lXext" ]
+    ++ optional  x264Support "-lx264"
     ++ [ "-lfreetype" ]
   );
 

@@ -38,16 +38,6 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs . contrib
-    for i in backtrace cmdlineargs; do
-      mv test/$i.jl{,.off}
-      touch test/$i.jl
-    done
-    rm stdlib/Sockets/test/runtests.jl && touch stdlib/Sockets/test/runtests.jl
-    rm stdlib/Distributed/test/runtests.jl && touch stdlib/Distributed/test/runtests.jl
-    # LibGit2 fails with a weird error, so we skip it as well now
-    rm stdlib/LibGit2/test/runtests.jl && touch stdlib/LibGit2/test/runtests.jl
-    sed -e 's/Invalid Content-Type:/invalid Content-Type:/g' -i ./stdlib/LibGit2/test/libgit2.jl
-    sed -e 's/Failed to resolve /failed to resolve /g' -i ./stdlib/LibGit2/test/libgit2.jl
   '';
 
   dontUseCmakeConfigure = true;
@@ -112,11 +102,6 @@ stdenv.mkDerivation rec {
     openspecfun pcre2 lapack
   ];
 
-  # Julia's tests require read/write access to $HOME
-  preCheck = ''
-    export HOME="$NIX_BUILD_TOP"
-  '';
-
   preBuild = ''
     sed -e '/^install:/s@[^ ]*/doc/[^ ]*@@' -i Makefile
     sed -e '/[$](DESTDIR)[$](docdir)/d' -i Makefile
@@ -124,6 +109,13 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+
+  # Julia's tests require read/write access to $HOME
+  preCheck = ''
+    export HOME="$NIX_BUILD_TOP"
+  '';
+  doCheck = true;
+  checkTarget = "test";
 
   postInstall = ''
     # Symlink shared libraries from LD_LIBRARY_PATH into lib/julia,
@@ -148,6 +140,8 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ raskin rob garrison ];
     platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" "aarch64-linux" ];
-    broken = stdenv.isi686;
+    # Unfortunately, this derivation does not pass Julia's test suite. See
+    # https://github.com/NixOS/nixpkgs/pull/121114.
+    broken = true;
   };
 }

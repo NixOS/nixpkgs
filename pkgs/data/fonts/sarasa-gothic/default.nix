@@ -1,12 +1,12 @@
 { lib, fetchurl, libarchive }:
 
 let
-  version = "0.12.11";
+  version = "0.32.9";
 in fetchurl {
   name = "sarasa-gothic-${version}";
 
   url = "https://github.com/be5invis/Sarasa-Gothic/releases/download/v${version}/sarasa-gothic-ttc-${version}.7z";
-  sha256 = "0vcp8583by7pfqinq8p2jx2bn4dqq816x4bxgv05k0kb9ziwj7aj";
+  sha256 = "0mwaj9dq26f36ddywjm7m0is1jml2kpmqm46b16c8avvr97c65z5";
 
   recursiveHash = true;
   downloadToTemp = true;

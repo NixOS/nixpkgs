@@ -14,7 +14,8 @@ let
 
 in
 stdenv.mkDerivation {
-  name = "bossa-1.8";
+  pname = "bossa";
+  version = "1.8";
 
   src = fetchgit {
     url = "https://github.com/shumatech/BOSSA";

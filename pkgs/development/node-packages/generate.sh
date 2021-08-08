@@ -3,7 +3,7 @@ set -eu -o pipefail
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 node2nix=$(nix-build ../../.. -A nodePackages.node2nix)
-cd ${DIR}
+cd "$DIR"
 rm -f ./node-env.nix
 ${node2nix}/bin/node2nix -i node-packages.json -o node-packages.nix -c composition.nix
 # using --no-out-link in nix-build argument would cause the

@@ -53,9 +53,13 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  # fails to import graphql, but integrated graphql support is about to
-  # be removed in 0.15, see https://github.com/encode/starlette/pull/1135.
-  disabledTestPaths = [ "tests/test_graphql.py" ];
+  disabledTestPaths = [
+    # fails to import graphql, but integrated graphql support is about to
+    # be removed in 0.15, see https://github.com/encode/starlette/pull/1135.
+    "tests/test_graphql.py"
+    # contextfunction was removed in Jinja 3.1
+    "tests/test_templates.py"
+  ];
 
   pythonImportsCheck = [ "starlette" ];
 

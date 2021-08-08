@@ -9,7 +9,7 @@ in
 {
 
   meta = {
-    maintainers = with maintainers; [ worldofpeace ];
+    maintainers = with maintainers; [ ];
   };
 
   imports = [
@@ -74,8 +74,8 @@ in
       glib # for gsettings
       gtk3.out # gtk-update-icon-cache
 
-      gnome3.gnome-themes-extra
-      gnome3.adwaita-icon-theme
+      gnome.gnome-themes-extra
+      gnome.adwaita-icon-theme
       hicolor-icon-theme
       tango-icon-theme
       xfce4-icon-theme
@@ -149,7 +149,7 @@ in
     security.polkit.enable = true;
     services.accounts-daemon.enable = true;
     services.upower.enable = config.powerManagement.enable;
-    services.gnome3.glib-networking.enable = true;
+    services.gnome.glib-networking.enable = true;
     services.gvfs.enable = true;
     services.tumbler.enable = true;
     services.system-config-printer.enable = (mkIf config.services.printing.enable (mkDefault true));

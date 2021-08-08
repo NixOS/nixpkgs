@@ -1,19 +1,46 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, makeWrapper
-, which, nodejs, mkYarnPackage, python2, nixosTests }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, makeWrapper
+, which
+, nodejs
+, mkYarnPackage
+, python2
+, nixosTests
+, buildGoModule
+}:
+
+let
+  # we need a different version than the one already available in nixpkgs
+  esbuild-hedgedoc = buildGoModule rec {
+    pname = "esbuild";
+    version = "0.11.20";
+
+    src = fetchFromGitHub {
+      owner = "evanw";
+      repo = "esbuild";
+      rev = "v${version}";
+      sha256 = "009f2mfgzkzgxjh3034mzdkcvm5vz17sgy1cs604f0425i22z8qm";
+    };
+
+    vendorSha256 = "1n5538yik72x94vzfq31qaqrkpxds5xys1wlibw2gn2am0z5c06q";
+  };
+in
 
 mkYarnPackage rec {
-  name = "hedgedoc";
-  version = "1.8.0";
+  pname = "hedgedoc";
+  version = "1.8.2";
 
   src = fetchFromGitHub {
     owner  = "hedgedoc";
     repo   = "hedgedoc";
     rev    = version;
-    sha256 = "1xi4gi1yjwggdsnz5hljx9xl4qhnm9r3c24q7i6d5y8yv6lh6lsr";
+    sha256 = "1h2wyhap264iqm2jh0i05w0hb2j86jsq1plyl7k3an90w7wngyg1";
   };
 
   nativeBuildInputs = [ which makeWrapper ];
-  extraBuildInputs = [ python2 ];
+  extraBuildInputs = [ python2 esbuild-hedgedoc ];
 
   yarnNix = ./yarn.nix;
   yarnLock = ./yarn.lock;
@@ -33,6 +60,11 @@ mkYarnPackage rec {
     pushd node_modules/sqlite3
     export CPPFLAGS="-I${nodejs}/include/node"
     npm run install --build-from-source --nodedir=${nodejs}/include/node
+    popd
+
+    pushd node_modules/esbuild
+    rm bin/esbuild
+    ln -s ${lib.getBin esbuild-hedgedoc}/bin/esbuild bin/
     popd
 
     npm run build

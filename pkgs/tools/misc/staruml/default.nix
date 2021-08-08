@@ -1,11 +1,11 @@
 { stdenv, lib, fetchurl, makeWrapper
 , dpkg, patchelf
-, gtk2, glib, gdk-pixbuf, alsaLib, nss, nspr, GConf, cups, libgcrypt, dbus, systemd
+, gtk2, glib, gdk-pixbuf, alsa-lib, nss, nspr, GConf, cups, libgcrypt, dbus, systemd
 , libXdamage, expat }:
 
 let
   LD_LIBRARY_PATH = lib.makeLibraryPath
-    [ glib gtk2 gdk-pixbuf alsaLib nss nspr GConf cups libgcrypt dbus libXdamage expat ];
+    [ glib gtk2 gdk-pixbuf alsa-lib nss nspr GConf cups libgcrypt dbus libXdamage expat ];
 in
 stdenv.mkDerivation rec {
   version = "2.8.1";

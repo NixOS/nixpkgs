@@ -11,14 +11,14 @@
 , pulseaudio
 , glib
 , gtk3
-, gnome3
+, gnome
 , gcr
 , pam
 , systemd
 , upower
 , wayland
 , dbus
-, xvfb_run
+, xvfb-run
 , phoc
 , feedbackd
 , networkmanager
@@ -35,36 +35,16 @@ let
     rev = "ae1a34aafce7026b8c0f65a43c9192d756fe1057";
     sha256 = "0a4qh5pgyjki904qf7qmvqz2ksxb0p8xhgl2aixfbhixn0pw6saw";
   };
-
-  executable = writeText "phosh" ''
-    PHOC_INI=@out@/share/phosh/phoc.ini
-    GNOME_SESSION_ARGS="--disable-acceleration-check --session=phosh --debug"
-
-    if [ -f /etc/phosh/phoc.ini ]; then
-      PHOC_INI=/etc/phosh/phoc.ini
-    elif  [ -f /etc/phosh/rootston.ini ]; then
-      # honor old configs
-      PHOC_INI=/etc/phosh/rootston.ini
-    fi
-
-    # Run gnome-session through a login shell so it picks
-    # variables from /etc/profile.d (XDG_*)
-    [ -n "$WLR_BACKENDS" ] || WLR_BACKENDS=drm,libinput
-    export WLR_BACKENDS
-    exec "${phoc}/bin/phoc" -C "$PHOC_INI" \
-      -E "bash -lc 'XDG_DATA_DIRS=$XDG_DATA_DIRS:\$XDG_DATA_DIRS ${gnome3.gnome-session}/bin/gnome-session $GNOME_SESSION_ARGS'"
-  '';
-
 in stdenv.mkDerivation rec {
   pname = "phosh";
-  version = "0.10.2";
+  version = "0.12.1";
 
   src = fetchFromGitLab {
     domain = "source.puri.sm";
     owner = "Librem5";
     repo = pname;
     rev = "v${version}";
-    sha256 = "07i8wpzl7311dcf9s57s96qh1v672c75wv6cllrxx7fsmpf8fhx4";
+    sha256 = "048g5sp9jgfiwq6n8my4msm7wy3pdhbg0wxqxvps4m8qf8wa7ffq";
   };
 
   nativeBuildInputs = [
@@ -85,9 +65,9 @@ in stdenv.mkDerivation rec {
     gcr
     networkmanager
     polkit
-    gnome3.gnome-control-center
-    gnome3.gnome-desktop
-    gnome3.gnome-session
+    gnome.gnome-control-center
+    gnome.gnome-desktop
+    gnome.gnome-session
     gtk3
     pam
     systemd
@@ -98,11 +78,13 @@ in stdenv.mkDerivation rec {
 
   checkInputs = [
     dbus
-    xvfb_run
+    xvfb-run
   ];
 
   # Temporarily disabled - Test is broken (SIGABRT)
   doCheck = false;
+
+  mesonFlags = [ "-Dsystemd=true" "-Dcompositor=${phoc}/bin/phoc" ];
 
   postUnpack = ''
     rmdir $sourceRoot/subprojects/gvc
@@ -123,15 +105,11 @@ in stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
-  # Replace the launcher script with ours
-  postInstall = ''
-    substituteAll ${executable} $out/bin/phosh
-  '';
-
   # Depends on GSettings schemas in gnome-shell
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix XDG_DATA_DIRS : "${gnome3.gnome-shell}/share/gsettings-schemas/${gnome3.gnome-shell.name}"
+      --prefix XDG_DATA_DIRS : "${gnome.gnome-shell}/share/gsettings-schemas/${gnome.gnome-shell.name}"
+      --set GNOME_SESSION "${gnome.gnome-session}/bin/gnome-session"
     )
   '';
 

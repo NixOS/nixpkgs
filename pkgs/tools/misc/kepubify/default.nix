@@ -2,18 +2,21 @@
 
 buildGoModule rec {
   pname = "kepubify";
-  version = "3.1.6";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "pgaskin";
     repo = pname;
     rev = "v${version}";
-    sha256 = "129izxgvhcybipfgcwzzwsir9zhi7axxadnw822zy5rk2ky4zjpk";
+    sha256 = "sha256-Mxe43U0kxkSdAzs+lSJ0x/VspbJPam59DpTpFEJVMl4=";
   };
 
-  vendorSha256 = "0vwzm1c4kada7mqdkr444gj8c2vkvz7av9wkpgdpjrq0v2h0hpcc";
+  vendorSha256 = "sha256-bLQH7ZY2hE8fBTcW7DNoUQxe4N3m9Mv3JjjKO4cG7DY=";
 
-  buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version}" ];
+  # remove when built with >= go 1.17
+  tags = [ "zip117" ];
+
+  ldflags = [ "-s" "-w" "-X main.version=${version}" ];
 
   excludedPackages = [ "kobotest" ];
 

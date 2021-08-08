@@ -1,35 +1,67 @@
-{ lib, python3, platformio, esptool, git, protobuf3_12, fetchpatch }:
+{ lib
+, pkgs
+, python3
+, fetchFromGitHub
+, platformio
+, esptool
+, git
+}:
 
 let
   python = python3.override {
     packageOverrides = self: super: {
-      protobuf = super.protobuf.override {
-        protobuf = protobuf3_12;
-      };
+      esphome-dashboard = pkgs.callPackage ./dashboard.nix {};
     };
   };
-
-in python.pkgs.buildPythonApplication rec {
+in
+with python.pkgs; buildPythonApplication rec {
   pname = "esphome";
-  version = "1.16.0";
+  version = "1.20.4";
 
-  src = python.pkgs.fetchPypi {
-    inherit pname version;
-    sha256 = "0pvwzkdcpjqdf7lh1k3xv1la5v60lhjixzykapl7f2xh71fbm144";
+  src = fetchFromGitHub {
+    owner = pname;
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-Z2/7J8F9o+ZY+7Q9bpAT79yHqUFyJu9usu4XI4PhpCI=";
   };
 
-  ESPHOME_USE_SUBPROCESS = "";
-
-  propagatedBuildInputs = with python.pkgs; [
-    voluptuous pyyaml paho-mqtt colorlog colorama
-    tornado protobuf tzlocal pyserial ifaddr
-    protobuf click
+  patches = [
+    # fix missing write permissions on src files before modifing them
+   ./fix-src-permissions.patch
   ];
 
-  # remove all version pinning (E.g tornado==5.1.1 -> tornado)
   postPatch = ''
+    # remove all version pinning (E.g tornado==5.1.1 -> tornado)
     sed -i -e "s/==[0-9.]*//" requirements.txt
+
+    # drop coverage testing
+    sed -i '/--cov/d' pytest.ini
   '';
+
+  # Remove esptool and platformio from requirements
+  ESPHOME_USE_SUBPROCESS = "";
+
+  # esphome has optional dependencies it does not declare, they are
+  # loaded when certain config blocks are used, like `font`, `image`
+  # or `animation`.
+  # They have validation functions like:
+  # - validate_cryptography_installed
+  # - validate_pillow_installed
+  propagatedBuildInputs = [
+    click
+    colorama
+    cryptography
+    esphome-dashboard
+    ifaddr
+    paho-mqtt
+    pillow
+    protobuf
+    pyserial
+    pyyaml
+    tornado
+    tzlocal
+    voluptuous
+  ];
 
   makeWrapperArgs = [
     # platformio is used in esphomeyaml/platformio_api.py
@@ -39,16 +71,37 @@ in python.pkgs.buildPythonApplication rec {
     "--set ESPHOME_USE_SUBPROCESS ''"
   ];
 
-  # Platformio will try to access the network
-  # Instead, run the executable
-  checkPhase = ''
+  checkInputs = [
+    hypothesis
+    mock
+    pytest-asyncio
+    pytest-mock
+    pytest-sugar
+    pytestCheckHook
+  ];
+
+  disabledTestPaths = [
+    # requires hypothesis 5.49, we have 6.x
+    # ImportError: cannot import name 'ip_addresses' from 'hypothesis.provisional'
+    "tests/unit_tests/test_core.py"
+    "tests/unit_tests/test_helpers.py"
+  ];
+
+  postCheck = ''
     $out/bin/esphome --help > /dev/null
   '';
+
+  passthru = {
+    dashboard = esphome-dashboard;
+  };
 
   meta = with lib; {
     description = "Make creating custom firmwares for ESP32/ESP8266 super easy";
     homepage = "https://esphome.io/";
-    license = licenses.mit;
+    license = with licenses; [
+      mit # The C++/runtime codebase of the ESPHome project (file extensions .c, .cpp, .h, .hpp, .tcc, .ino)
+      gpl3Only # The python codebase and all other parts of this codebase
+    ];
     maintainers = with maintainers; [ globin elseym hexa ];
   };
 }

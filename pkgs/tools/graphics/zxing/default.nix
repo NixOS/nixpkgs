@@ -24,7 +24,6 @@ stdenv.mkDerivation rec {
     cd "$out/lib/java"; for i in *.jar; do mv "$i" "''${i#*-}"; done
   '';
   meta = {
-    inherit version;
     description = "1D and 2D code reading library";
     license = lib.licenses.asl20;
     maintainers = [lib.maintainers.raskin];

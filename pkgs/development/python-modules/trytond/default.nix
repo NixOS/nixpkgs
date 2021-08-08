@@ -6,7 +6,7 @@
 , lxml
 , relatorio
 , genshi
-, dateutil
+, python-dateutil
 , polib
 , python-sql
 , werkzeug
@@ -23,12 +23,12 @@
 
 buildPythonApplication rec {
   pname = "trytond";
-  version = "5.8.5";
+  version = "5.8.9";
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "62753cebdae2d9e2d6bf8a5dde840ef77540414c4df76c8ed202c0c0d0bedb02";
+    sha256 = "5f14e9615ff91e18c146c74eb4c1cd56112662361a52c73389f15baced0bef18";
   };
 
   # Tells the tests which database to use
@@ -41,7 +41,7 @@ buildPythonApplication rec {
     lxml
     relatorio
     genshi
-    dateutil
+    python-dateutil
     polib
     python-sql
     werkzeug

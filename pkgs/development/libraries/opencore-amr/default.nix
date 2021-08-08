@@ -1,11 +1,8 @@
 { lib, stdenv, fetchurl }:
 
-let
-    version = "0.1.5";
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "opencore-amr";
-  inherit version;
+  version = "0.1.5";
   src = fetchurl {
     url = "https://vorboss.dl.sourceforge.net/project/opencore-amr/opencore-amr/opencore-amr-${version}.tar.gz";
     sha256 = "0hfk9khz3by0119h3jdwgdfd7jgkdbzxnmh1wssvylgnsnwnq01c";

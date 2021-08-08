@@ -2,8 +2,8 @@
 , replace, fetchurl, zip, unzip, jq, xdg-utils, writeText
 
 ## various stuff that can be plugged in
-, ffmpeg, xorg, alsaLib, libpulseaudio, libcanberra-gtk2, libglvnd, libnotify
-, gnome3/*.gnome-shell*/
+, ffmpeg, xorg, alsa-lib, libpulseaudio, libcanberra-gtk3, libglvnd, libnotify, opensc
+, gnome/*.gnome-shell*/
 , browserpass, chrome-gnome-shell, uget-integrator, plasma5Packages, bukubrow, pipewire
 , tridactyl-native
 , fx_cast_bridge
@@ -11,6 +11,7 @@
 , libkrb5
 , libva
 , mesa # firefox wants gbm for drm+dmabuf
+, cups
 }:
 
 ## configurability of the wrapper itself
@@ -43,13 +44,13 @@ let
     , nixExtensions ? null
     }:
 
-    assert forceWayland -> (browser ? gtk3); # Can only use the wayland backend if gtk3 is being used
-
     let
       ffmpegSupport = browser.ffmpegSupport or false;
       gssSupport = browser.gssSupport or false;
       alsaSupport = browser.alsaSupport or false;
       pipewireSupport = browser.pipewireSupport or false;
+      # PCSC-Lite daemon (services.pcscd) also must be enabled for firefox to access smartcards
+      smartcardSupport = cfg.smartcardSupport or false;
 
       nativeMessagingHosts =
         ([ ]
@@ -62,17 +63,18 @@ let
           ++ lib.optional (cfg.enableFXCastBridge or false) fx_cast_bridge
           ++ extraNativeMessagingHosts
         );
-      libs =   lib.optionals stdenv.isLinux [ udev libva mesa libnotify xorg.libXScrnSaver ]
+      libs =   lib.optionals stdenv.isLinux [ udev libva mesa libnotify xorg.libXScrnSaver cups ]
             ++ lib.optional (pipewireSupport && lib.versionAtLeast version "83") pipewire
             ++ lib.optional ffmpegSupport ffmpeg
             ++ lib.optional gssSupport libkrb5
             ++ lib.optional useGlvnd libglvnd
             ++ lib.optionals (cfg.enableQuakeLive or false)
-            (with xorg; [ stdenv.cc libX11 libXxf86dga libXxf86vm libXext libXt alsaLib zlib ])
+            (with xorg; [ stdenv.cc libX11 libXxf86dga libXxf86vm libXext libXt alsa-lib zlib ])
             ++ lib.optional (config.pulseaudio or true) libpulseaudio
-            ++ lib.optional alsaSupport alsaLib
+            ++ lib.optional alsaSupport alsa-lib
+            ++ lib.optional smartcardSupport opensc
             ++ pkcs11Modules;
-      gtk_modules = [ libcanberra-gtk2 ];
+      gtk_modules = [ libcanberra-gtk3 ];
 
       #########################
       #                       #
@@ -120,6 +122,10 @@ let
               Install = lib.foldr (e: ret:
                 ret ++ [ "${e.outPath}/${e.extid}.xpi" ]
                 ) [] extensions;
+            };
+          } // lib.optionalAttrs smartcardSupport {
+            SecurityDevices = {
+              "OpenSC PKCS#11 Module" = "onepin-opensc-pkcs11.so";
             };
           }
         // extraPolicies;
@@ -182,7 +188,7 @@ let
       };
 
       nativeBuildInputs = [ makeWrapper lndir ];
-      buildInputs = lib.optional (browser ? gtk3) browser.gtk3;
+      buildInputs = [ browser.gtk3 ];
 
 
       buildCommand = lib.optionalString stdenv.isDarwin ''
@@ -265,13 +271,11 @@ let
             --set MOZ_SYSTEM_DIR "$out/lib/mozilla" \
             --set MOZ_LEGACY_PROFILES 1 \
             --set MOZ_ALLOW_DOWNGRADE 1 \
+            --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
+            --suffix XDG_DATA_DIRS : '${gnome.adwaita-icon-theme}/share' \
             ${lib.optionalString forceWayland ''
               --set MOZ_ENABLE_WAYLAND "1" \
-            ''}${lib.optionalString (browser ? gtk3)
-                ''--prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
-                  --suffix XDG_DATA_DIRS : '${gnome3.adwaita-icon-theme}/share'
-                ''
-            }
+            ''}
         #############################
         #                           #
         #   END EXTRA PREF CHANGES  #
@@ -302,10 +306,6 @@ let
         for ext in ${toString pkcs11Modules}; do
             ln -sLt $out/lib/mozilla/pkcs11-modules $ext/lib/mozilla/pkcs11-modules/*
         done
-
-        # For manpages, in case the program supplies them
-        mkdir -p $out/nix-support
-        echo ${browser} > $out/nix-support/propagated-user-env-packages
 
 
         #########################

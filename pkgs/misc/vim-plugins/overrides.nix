@@ -20,7 +20,8 @@
 , dasht
 , direnv
 , fzf
-, gnome3
+, gnome
+, himalaya
 , khard
 , languagetool
 , llvmPackages
@@ -97,7 +98,7 @@ self: super: {
     # https://gist.github.com/Mic92/135e83803ed29162817fce4098dec144
     preFixup = ''
       substituteInPlace "$out"/share/vim-plugins/clang_complete/plugin/clang_complete.vim \
-        --replace "let g:clang_library_path = '' + "''" + ''" "let g:clang_library_path='${llvmPackages.clang.cc.lib}/lib/libclang.so'"
+        --replace "let g:clang_library_path = '' + "''" + ''" "let g:clang_library_path='${llvmPackages.libclang.lib}/lib/libclang.so'"
 
       substituteInPlace "$out"/share/vim-plugins/clang_complete/plugin/libclang.py \
         --replace "/usr/lib/clang" "${llvmPackages.clang.cc}/lib/clang"
@@ -207,7 +208,7 @@ self: super: {
   });
 
   ensime-vim = super.ensime-vim.overrideAttrs (old: {
-    passthru.python3Dependencies = ps: with ps; [ sexpdata websocket_client ];
+    passthru.python3Dependencies = ps: with ps; [ sexpdata websocket-client ];
     dependencies = with self; [ vimproc-vim vimshell-vim self.self forms ];
   });
 
@@ -250,6 +251,14 @@ self: super: {
       '';
     });
 
+  fzf-checkout-vim = super.fzf-checkout-vim.overrideAttrs (old: {
+    # The plugin has a makefile which tries to run tests in a docker container.
+    # This prevents it.
+    prePatch = ''
+      rm Makefile
+    '';
+  });
+
   fzf-vim = super.fzf-vim.overrideAttrs (old: {
     dependencies = with self; [ fzfWrapper ];
   });
@@ -285,6 +294,25 @@ self: super: {
       license = lib.licenses.mit;
     };
   });
+
+  himalaya-vim = buildVimPluginFrom2Nix {
+    pname = "himalaya-vim";
+    inherit (himalaya) src version;
+    dependencies = with self; [ himalaya ];
+    patchPhase = ''
+      rm -rf !"vim/"
+      cp -vaR vim/. .
+      rm -rf vim/
+    '';
+    preFixup = ''
+      substituteInPlace $out/share/vim-plugins/himalaya-vim/plugin/himalaya.vim \
+        --replace 'if !executable("himalaya")' 'if v:false'
+    '';
+    postFixup = ''
+      mkdir -p $out/bin
+      ln -s ${himalaya}/bin/himalaya $out/bin/himalaya
+    '';
+  };
 
   LanguageClient-neovim =
     let
@@ -379,6 +407,14 @@ self: super: {
     dependencies = with self; [ ultisnips ];
   });
 
+  neogit = super.neogit.overrideAttrs (old: {
+    dependencies = with self; [ plenary-nvim ];
+  });
+
+  null-ls-nvim = super.null-ls-nvim.overrideAttrs (old: {
+    path = "null-ls.nvim";
+  });
+
   nvim-lsputils = super.nvim-lsputils.overrideAttrs (old: {
     dependencies = with self; [ popfix ];
   });
@@ -399,6 +435,10 @@ self: super: {
             ln -s ${grammars} parser
           '';
       });
+  });
+
+  onedark-nvim = super.onedark-nvim.overrideAttrs (old: {
+    dependencies = with self; [ lush-nvim ];
   });
 
   onehalf = super.onehalf.overrideAttrs (old: {
@@ -459,6 +499,12 @@ self: super: {
     dependencies = with self; [ telescope-nvim ];
   });
 
+  telescope-fzf-native-nvim = super.telescope-fzf-native-nvim.overrideAttrs (old: {
+    dependencies = with self; [ telescope-nvim ];
+    buildPhase = "make";
+    meta.platforms = lib.platforms.all;
+  });
+
   telescope-fzy-native-nvim = super.telescope-fzy-native-nvim.overrideAttrs (old: {
     dependencies = with self; [ telescope-nvim ];
     preFixup =
@@ -515,7 +561,7 @@ self: super: {
 
   vCoolor-vim = super.vCoolor-vim.overrideAttrs (old: {
     # on linux can use either Zenity or Yad.
-    propagatedBuildInputs = [ gnome3.zenity ];
+    propagatedBuildInputs = [ gnome.zenity ];
     meta = {
       description = "Simple color selector/picker plugin";
       license = lib.licenses.publicDomain;
@@ -605,7 +651,7 @@ self: super: {
             libiconv
           ];
 
-          cargoSha256 = "1c8bwvwd23d7c3bk1ky1i8xgfz10dr8nqqcvp20g8rldjl8p2r08";
+          cargoSha256 = "sha256-wYxUo9zfflU7RTsTb7W9wc/WBsXhz3OLjC8CwUkRRiE=";
         };
       in
       ''
@@ -613,16 +659,6 @@ self: super: {
       '';
 
     meta.platforms = lib.platforms.all;
-  });
-
-  vim-closer = super.vim-closer.overrideAttrs (old: {
-    patches = [
-      # Fix duplicate tag in doc
-      (fetchpatch {
-        url = "https://github.com/rstacruz/vim-closer/commit/a504be8c7050e41b7dfc50c2362948e2cf7c5422.patch";
-        sha256 = "065q30d913fm3pc7r5y53wmnb7q7bhv21qxavm65bkb91242d409";
-      })
-    ];
   });
 
   vim-codefmt = super.vim-codefmt.overrideAttrs (old: {
@@ -730,7 +766,7 @@ self: super: {
       vim-markdown-composer-bin = rustPlatform.buildRustPackage rec {
         pname = "vim-markdown-composer-bin";
         inherit (super.vim-markdown-composer) src version;
-        cargoSha256 = "iuhq2Zhdkib8hw4uvXBjwE5ZiN1kzairlzufaGuVkWc=";
+        cargoSha256 = "1cvnjsw5dd02wrm1q5xi8b033rsn44f7fkmw5j7lhskv5j286zrh";
       };
     in
     super.vim-markdown-composer.overrideAttrs (oldAttrs: rec {
@@ -749,12 +785,24 @@ self: super: {
     dependencies = with self; [ vim-addon-mw-utils tlib_vim ];
   });
 
+  vim-speeddating = super.vim-speeddating.overrideAttrs (old: {
+    dependencies = with self; [ vim-repeat ];
+  });
+
   vim-stylish-haskell = super.vim-stylish-haskell.overrideAttrs (old: {
     postPatch = old.postPatch or "" + ''
       substituteInPlace ftplugin/haskell/stylish-haskell.vim --replace \
         'g:stylish_haskell_command = "stylish-haskell"' \
         'g:stylish_haskell_command = "${stylish-haskell}/bin/stylish-haskell"'
     '';
+  });
+
+  vim-surround = super.vim-surround.overrideAttrs (old: {
+    dependencies = with self; [ vim-repeat ];
+  });
+
+  vim-unimpaired = super.vim-unimpaired.overrideAttrs (old: {
+    dependencies = with self; [ vim-repeat ];
   });
 
   vim-wakatime = super.vim-wakatime.overrideAttrs (old: {

@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, dateutil
+, python-dateutil
 , sigtools
 , six
 , attrs
@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytestCheckHook
-    dateutil
+    python-dateutil
     pygments
     repeated_test
     unittest2

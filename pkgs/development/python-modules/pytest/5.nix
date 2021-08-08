@@ -12,7 +12,7 @@
 , pygments
 , python
 , setuptools
-, setuptools_scm
+, setuptools-scm
 , six
 , toml
 , wcwidth
@@ -31,7 +31,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ hypothesis pygments ];
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
   propagatedBuildInputs = [
     atomicwrites
     attrs

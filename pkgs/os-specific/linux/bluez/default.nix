@@ -1,11 +1,13 @@
 { stdenv
 , lib
 , fetchurl
-, alsaLib
+, alsa-lib
 , dbus
+, ell
 , glib
 , json_c
 , libical
+, docutils
 , pkg-config
 , python3
 , readline
@@ -19,16 +21,17 @@
   ];
 in stdenv.mkDerivation rec {
   pname = "bluez";
-  version = "5.58";
+  version = "5.60";
 
   src = fetchurl {
     url = "mirror://kernel/linux/bluetooth/${pname}-${version}.tar.xz";
-    sha256 = "1wgiv8cqya6n1w5fz24cb8q401bhn5aa6s7g95l26rzblmsmw1n8";
+    sha256 = "sha256-cQmZWA0B7lnsWF5efAf9lO3e3AAaom/nRkxUb52UUwQ=";
   };
 
   buildInputs = [
-    alsaLib
+    alsa-lib
     dbus
+    ell
     glib
     json_c
     libical
@@ -38,6 +41,7 @@ in stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
+    docutils
     pkg-config
     python3.pkgs.wrapPython
   ];
@@ -48,6 +52,11 @@ in stdenv.mkDerivation rec {
     substituteInPlace tools/hid2hci.rules \
       --replace /sbin/udevadm ${systemd}/bin/udevadm \
       --replace "hid2hci " "$out/lib/udev/hid2hci "
+    # Disable some tests:
+    # - test-mesh-crypto depends on the following kernel settings:
+    #   CONFIG_CRYPTO_[USER|USER_API|USER_API_AEAD|USER_API_HASH|AES|CCM|AEAD|CMAC]
+    if [[ ! -f unit/test-mesh-crypto.c ]]; then echo "unit/test-mesh-crypto.c no longer exists"; false; fi
+    echo 'int main() { return 77; }' > unit/test-mesh-crypto.c
   '';
 
   configureFlags = [
@@ -55,6 +64,7 @@ in stdenv.mkDerivation rec {
     "--enable-library"
     "--enable-cups"
     "--enable-pie"
+    "--enable-external-ell"
     "--with-dbusconfdir=${placeholder "out"}/share"
     "--with-dbussystembusdir=${placeholder "out"}/share/dbus-1/system-services"
     "--with-dbussessionbusdir=${placeholder "out"}/share/dbus-1/services"
@@ -67,7 +77,6 @@ in stdenv.mkDerivation rec {
     "--enable-nfc"
     "--enable-sap"
     "--enable-sixaxis"
-    "--enable-wiimote"
   ];
 
   # Work around `make install' trying to create /var/lib/bluetooth.

@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "pytest-helpers-namespace";
-  version = "2021.3.24";
+  version = "2021.4.29";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0pyj2d45zagmzlajzqdnkw5yz8k49pkihbydsqkzm413qnkzb38q";
+    sha256 = "183524e3db4e2a1fea92e0ca3662a624ba44c9f3568da15679d7535ba6838a6a";
   };
 
   nativeBuildInputs = [ setuptools setuptools-declarative-requirements setuptools-scm ];

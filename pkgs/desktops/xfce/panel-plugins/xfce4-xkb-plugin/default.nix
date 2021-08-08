@@ -2,7 +2,7 @@
 , mkXfceDerivation
 , gtk3
 , librsvg
-, libwnck3
+, libwnck
 , libxklavier
 , garcon
 , libxfce4ui
@@ -16,7 +16,7 @@ mkXfceDerivation {
   pname = "xfce4-xkb-plugin";
   version = "0.8.2";
   rev-prefix = "";
-  sha256 = "xmCoNMxykeaThYEJo6BcbraFo9CruFZL6YPjovzb6hg=";
+  sha256 = "sha256-xmCoNMxykeaThYEJo6BcbraFo9CruFZL6YPjovzb6hg=";
 
   buildInputs = [
     garcon
@@ -25,7 +25,7 @@ mkXfceDerivation {
     libxfce4ui
     libxfce4util
     libxklavier
-    libwnck3
+    libwnck
     xfce4-panel
     xfconf
   ];

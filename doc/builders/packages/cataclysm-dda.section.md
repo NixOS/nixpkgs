@@ -1,6 +1,6 @@
 # Cataclysm: Dark Days Ahead {#cataclysm-dark-days-ahead}
 
-## How to install Cataclysm DDA
+## How to install Cataclysm DDA {#how-to-install-cataclysm-dda}
 
 To install the latest stable release of Cataclysm DDA to your profile, execute
 `nix-env -f "<nixpkgs>" -iA cataclysm-dda`. For the curses build (build
@@ -34,7 +34,7 @@ cataclysm-dda.override {
 }
 ```
 
-## Important note for overriding packages
+## Important note for overriding packages {#important-note-for-overriding-packages}
 
 After applying `overrideAttrs`, you need to fix `passthru.pkgs` and
 `passthru.withMods` attributes either manually or by using `attachPkgs`:
@@ -69,7 +69,7 @@ in
 goodExample2.withMods (_: [])    # parallel building enabled
 ```
 
-## Customizing with mods
+## Customizing with mods {#customizing-with-mods}
 
 To install Cataclysm DDA with mods of your choice, you can use `withMods`
 attribute:

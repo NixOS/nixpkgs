@@ -12,17 +12,16 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.53.0";
+  version = "0.53.1";
   pname = "numba";
-  # uses f-strings, python 3.9 is not yet supported
-  disabled = pythonOlder "3.6" || pythonAtLeast "3.9";
+  disabled = pythonOlder "3.6" || pythonAtLeast "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "55c11d7edbba2ba715f2b56f5294cad55cfd87bff98e2627c3047c2d5cc52d16";
+    sha256 = "9cd4e5216acdc66c4e9dab2dfd22ddb5bef151185c070d4a3cd8e78638aff5b0";
   };
 
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-I${libcxx}/include/c++/v1";
+  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-I${lib.getDev libcxx}/include/c++/v1";
 
   propagatedBuildInputs = [ numpy llvmlite setuptools ];
   pythonImportsCheck = [ "numba" ];

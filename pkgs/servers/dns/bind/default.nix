@@ -10,11 +10,11 @@ assert enablePython -> python3 != null;
 
 stdenv.mkDerivation rec {
   pname = "bind";
-  version = "9.16.15";
+  version = "9.16.16";
 
   src = fetchurl {
     url = "https://downloads.isc.org/isc/bind9/${version}/${pname}-${version}.tar.xz";
-    sha256 = "0fbqisrh84f8wszm94cqp7v8q9r7pql3qyzbay7vz9vqv0rg9dlq";
+    sha256 = "sha256-bJE5Aq34eOfcXiKc6pT678nUD0R3WjAhPt0Ihg92HXs=";
   };
 
   outputs = [ "out" "lib" "dev" "man" "dnsutils" "host" ];

@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, openssl, rustPlatform, Security, makeWrapper, bash }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, openssl, rustPlatform, libiconv
+, Security, makeWrapper, bash }:
 
 rustPlatform.buildRustPackage rec {
   pname = "websocat";
@@ -15,7 +16,8 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "sha256-+3SG1maarY4DJ4+QiYGwltGLksOoOhKtcqstRwgzi2k=";
 
   nativeBuildInputs = [ pkg-config makeWrapper ];
-  buildInputs = [ openssl ] ++ lib.optional stdenv.isDarwin Security;
+  buildInputs = [ openssl ]
+    ++ lib.optionals stdenv.isDarwin [ libiconv Security ];
 
   # Needed to get openssl-sys to use pkg-config.
   OPENSSL_NO_VENDOR=1;

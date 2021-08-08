@@ -12,7 +12,7 @@
 , qtbase
 , qttools
 , qtquickcontrols2
-, alsaLib
+, alsa-lib
 , speex
 , ilbc
 , fetchurl
@@ -41,7 +41,7 @@ mkDerivation rec {
     qtbase
     qttools
     qtquickcontrols2
-    alsaLib
+    alsa-lib
     speex
     ilbc
   ];

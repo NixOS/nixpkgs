@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchFromGitHub, pythonOlder
-, pytest, pytestrunner, pyyaml, six, pathlib2, isPy27 }:
+, pytest, pytest-runner, pyyaml, six, pathlib2, isPy27 }:
 
 buildPythonPackage rec {
   pname = "omegaconf";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytest ];
-  buildInputs = [ pytestrunner ];
+  buildInputs = [ pytest-runner ];
   propagatedBuildInputs = [ pyyaml six ] ++ lib.optional isPy27 pathlib2;
 
   meta = with lib; {

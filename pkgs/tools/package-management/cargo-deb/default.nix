@@ -3,23 +3,24 @@
 , fetchFromGitHub
 , rustPlatform
 , rust
+, libiconv
 , Security
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-deb";
-  version = "1.29.2";
+  version = "1.30.0";
 
   src = fetchFromGitHub {
     owner = "mmstick";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-2eOWhxKZ+YPj5oKTe5g7PyeakiSNnPz27dK150GAcVQ=";
+    sha256 = "sha256-rAmG6Aj0D9dHVueh1BN1Chhit+XFhqGib1WTvMDy0LI=";
   };
 
-  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security ];
 
-  cargoSha256 = "sha256-QmchuY+4R7w0zMOdReH1m8idl9RI1hHE9VtbwT2K9YM=";
+  cargoSha256 = "sha256-MEpyEdjLWNZvqE7gJLvQ169tgmJRzec4vqQI9fF3xr8=";
 
   preCheck = ''
     substituteInPlace tests/command.rs \

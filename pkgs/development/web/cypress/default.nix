@@ -1,15 +1,28 @@
-{ stdenv, lib, fetchzip, autoPatchelfHook, xorg, gtk2, gnome2, gtk3, nss, alsaLib, udev, unzip, wrapGAppsHook, mesa }:
+{ alsa-lib
+, autoPatchelfHook
+, callPackage
+, fetchzip
+, gnome2
+, gtk2
+, gtk3
+, lib
+, mesa
+, nss
+, stdenv
+, udev
+, unzip
+, wrapGAppsHook
+, xorg
+}:
 
 stdenv.mkDerivation rec {
   pname = "cypress";
-  version = "7.1.0";
+  version = "8.2.0";
 
   src = fetchzip {
     url = "https://cdn.cypress.io/desktop/${version}/linux-x64/cypress.zip";
-    sha256 = "1m52v6hhblrjji9c5885bn5qq0xlaw36krbmqfac7fhgsxmkxd2h";
+    sha256 = "0j5acj7ghqf2pywpf4vzzvmcn4ypc4gv0pjyjd8hgzrrl3kff4dm";
   };
-
-  passthru.updateScript = ./update.sh;
 
   # don't remove runtime deps
   dontPatchELF = true;
@@ -17,9 +30,16 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoPatchelfHook wrapGAppsHook unzip ];
 
   buildInputs = with xorg; [
-    libXScrnSaver libXdamage libXtst libxshmfence
+    libXScrnSaver
+    libXdamage
+    libXtst
+    libxshmfence
   ] ++ [
-    nss gtk2 alsaLib gnome2.GConf gtk3
+    nss
+    gtk2
+    alsa-lib
+    gnome2.GConf
+    gtk3
     mesa # for libgbm
   ];
 
@@ -41,11 +61,19 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  passthru = {
+    updateScript = ./update.sh;
+
+    tests = {
+      example = callPackage ./cypress-example-kitchensink { };
+    };
+  };
+
   meta = with lib; {
     description = "Fast, easy and reliable testing for anything that runs in a browser";
     homepage = "https://www.cypress.io";
     license = licenses.mit;
-    platforms = ["x86_64-linux"];
+    platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ tweber mmahut ];
   };
 }

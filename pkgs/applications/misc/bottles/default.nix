@@ -8,13 +8,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "bottles";
-  version = "3.1.6";
+  version = "2021.7.14-treviso";
 
   src = fetchFromGitHub {
     owner = "bottlesdevs";
     repo = pname;
     rev = version;
-    sha256 = "1izks01010akjf83xvi70dr4yzgk6yr84kd0slzz22yq204pdh5m";
+    sha256 = "0xhfk1ll8vacgrr0kkhynq4bryjhfjs29j824bark5mj9b6lkbix";
   };
 
   postPatch = ''
@@ -44,6 +44,8 @@ python3Packages.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with python3Packages; [
+    pyyaml
+    requests
     pycairo
     pygobject3
     lxml

@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "hijri-converter";
-  version = "2.1.1";
+  version = "2.1.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "08gv6ypn2zd0i8yrv24m448xkic492qrgxj349slp1achhg9p7ln";
+    sha256 = "1cq67v0fjk7cd8kbppg2kl31a5i6jm8qrkcdqxx6vxwmx65l68ks";
   };
 
   checkInputs = [ pytestCheckHook ];

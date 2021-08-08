@@ -76,7 +76,7 @@ in
 
     environment.systemPackages =
       pkgs.mate.basePackages ++
-      (pkgs.gnome3.removePackagesByName
+      (pkgs.gnome.removePackagesByName
         pkgs.mate.extraPackages
         config.environment.mate.excludePackages) ++
       [
@@ -97,8 +97,8 @@ in
     # Mate uses this for printing
     programs.system-config-printer.enable = (mkIf config.services.printing.enable (mkDefault true));
 
-    services.gnome3.at-spi2-core.enable = true;
-    services.gnome3.gnome-keyring.enable = true;
+    services.gnome.at-spi2-core.enable = true;
+    services.gnome.gnome-keyring.enable = true;
     services.udev.packages = [ pkgs.mate.mate-settings-daemon ];
     services.gvfs.enable = true;
     services.upower.enable = config.powerManagement.enable;

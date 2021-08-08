@@ -1,7 +1,7 @@
 { lib, fetchzip }:
 
 let
-  version = "5.000";
+  version = "6.001";
 in
   fetchzip rec {
     name = "charis-sil-${version}";
@@ -14,7 +14,7 @@ in
       unzip -j $downloadedFile \*OFL.txt \*OFL-FAQ.txt \*README.txt \*FONTLOG.txt -d "$out/share/doc/${name}"
     '';
 
-    sha256 = "1a220s8n0flvcdkazqf5g10v6r55s2an308slvvarynpj6l7x27n";
+    sha256 = "sha256-eKSOvYuTMpAnTk4sRiWFUDJrTsF+K5716ALCepaUU08=";
 
     meta = with lib; {
       homepage = "https://software.sil.org/charis";

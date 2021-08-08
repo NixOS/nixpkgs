@@ -3,7 +3,7 @@
 , fetchPypi
 , python
 , six
-, dateutil
+, python-dateutil
 , ipaddress
 , mock
 }:
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "f5bd18deb22ad8cb4402513c025877bc6b50de58902d686b6b21ba8981dce260";
   };
 
-  propagatedBuildInputs = [ six dateutil ipaddress mock ];
+  propagatedBuildInputs = [ six python-dateutil ipaddress mock ];
 
   # fake-factory is depreciated and single test will always fail
   doCheck = false;

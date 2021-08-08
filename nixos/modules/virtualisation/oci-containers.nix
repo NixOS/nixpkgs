@@ -31,6 +31,30 @@ let
           example = literalExample "pkgs.dockerTools.buildDockerImage {...};";
         };
 
+        login = {
+
+          username = mkOption {
+            type = with types; nullOr str;
+            default = null;
+            description = "Username for login.";
+          };
+
+          passwordFile = mkOption {
+            type = with types; nullOr str;
+            default = null;
+            description = "Path to file containing password.";
+            example = "/etc/nixos/dockerhub-password.txt";
+          };
+
+          registry = mkOption {
+            type = with types; nullOr str;
+            default = null;
+            description = "Registry where to login to.";
+            example = "https://docker.pkg.github.com";
+          };
+
+        };
+
         cmd = mkOption {
           type =  with types; listOf str;
           default = [];
@@ -220,6 +244,8 @@ let
       };
     };
 
+  isValidLogin = login: login.username != null && login.passwordFile != null && login.registry != null;
+
   mkService = name: container: let
     dependsOn = map (x: "${cfg.backend}-${x}.service") container.dependsOn;
   in {
@@ -235,6 +261,13 @@ let
 
     preStart = ''
       ${cfg.backend} rm -f ${name} || true
+      ${optionalString (isValidLogin container.login) ''
+        cat ${container.login.passwordFile} | \
+          ${cfg.backend} login \
+            ${container.login.registry} \
+            --username ${container.login.username} \
+            --password-stdin
+        ''}
       ${optionalString (container.imageFile != null) ''
         ${cfg.backend} load -i ${container.imageFile}
         ''}
@@ -262,9 +295,6 @@ let
     postStop = "${cfg.backend} rm -f ${name} || true";
 
     serviceConfig = {
-      StandardOutput = "null";
-      StandardError = "null";
-
       ### There is no generalized way of supporting `reload` for docker
       ### containers. Some containers may respond well to SIGHUP sent to their
       ### init process, but it is not guaranteed; some apps have other reload

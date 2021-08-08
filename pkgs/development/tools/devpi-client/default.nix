@@ -49,6 +49,8 @@ buildPythonApplication rec {
 
   LC_ALL = "en_US.UTF-8";
 
+  __darwinAllowLocalNetworking = true;
+
   meta = with lib; {
     homepage = "http://doc.devpi.net";
     description = "Client for devpi, a pypi index server and packaging meta tool";

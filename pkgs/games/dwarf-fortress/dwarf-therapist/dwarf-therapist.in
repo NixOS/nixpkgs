@@ -5,22 +5,21 @@
 install_dir="@install@"
 therapist_dir="@therapist@"
 
-cat <<EOF >&2
+@cat@ <<EOF >&2
 Using $DT_DIR as Dwarf Therapist overlay directory.
 EOF
 
 update_path() {
   local path="$1"
 
-  mkdir -p "$DT_DIR/$(dirname "$path")"
+  @mkdir@ -p "$DT_DIR/$(@dirname@ "$path")"
   if [ ! -e "$DT_DIR/$path" ] || [ -L "$DT_DIR/$path" ]; then
-    rm -f "$DT_DIR/$path"
-    ln -s "$install_dir/share/dwarftherapist/$path" "$DT_DIR/$path"
+    @rm@ -f "$DT_DIR/$path"
+    @ln@ -s "$install_dir/share/dwarftherapist/$path" "$DT_DIR/$path"
   fi
 }
 
 cd "$install_dir/share/dwarftherapist"
 update_path memory_layouts
 
-QT_QPA_PLATFORM_PLUGIN_PATH="@qt_plugin_path@" \
-  exec "$therapist_dir/bin/dwarftherapist" "$@"
+exec "$therapist_dir/bin/dwarftherapist" "$@"

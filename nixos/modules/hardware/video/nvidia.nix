@@ -92,7 +92,7 @@ in
       example = "PCI:4:0:0";
       description = ''
         Bus ID of the AMD APU. You can find it using lspci; for example if lspci
-	shows the AMD APU at "04:00.0", set this option to "PCI:4:0:0".
+        shows the AMD APU at "04:00.0", set this option to "PCI:4:0:0".
       '';
     };
 
@@ -159,7 +159,7 @@ in
       description = ''
         The NVIDIA X11 derivation to use.
       '';
-      example = "config.boot.kernelPackages.nvidiaPackages.legacy340";
+      example = "config.boot.kernelPackages.nvidiaPackages.legacy_340";
     };
   };
 
@@ -179,27 +179,40 @@ in
           You cannot configure both an Intel iGPU and an AMD APU. Pick the one corresponding to your processor.
         '';
       }
+
       {
         assertion = primeEnabled -> pCfg.nvidiaBusId != "" && (pCfg.intelBusId != "" || pCfg.amdgpuBusId != "");
         message = ''
           When NVIDIA PRIME is enabled, the GPU bus IDs must configured.
         '';
       }
+
       {
         assertion = offloadCfg.enable -> versionAtLeast nvidia_x11.version "435.21";
         message = "NVIDIA PRIME render offload is currently only supported on versions >= 435.21.";
       }
+
       {
         assertion = !(syncCfg.enable && offloadCfg.enable);
         message = "Only one NVIDIA PRIME solution may be used at a time.";
       }
+
       {
         assertion = !(syncCfg.enable && cfg.powerManagement.finegrained);
         message = "Sync precludes powering down the NVIDIA GPU.";
       }
+
       {
         assertion = cfg.powerManagement.enable -> offloadCfg.enable;
         message = "Fine-grained power management requires offload to be enabled.";
+      }
+
+      {
+        assertion = cfg.powerManagement.enable -> (
+          builtins.pathExists (cfg.package.out + "/bin/nvidia-sleep.sh") &&
+          builtins.pathExists (cfg.package.out + "/lib/systemd/system-sleep/nvidia")
+        );
+        message = "Required files for driver based power management don't exist.";
       }
     ];
 

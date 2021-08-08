@@ -18,7 +18,7 @@
 , libxklavier
 , networkmanager
 , libwacom
-, gnome3
+, gnome
 , wrapGAppsHook
 , tzdata
 , glibc
@@ -28,6 +28,7 @@
 , gdk-pixbuf
 , meson
 , ninja
+, cinnamon-translations
 }:
 
 stdenv.mkDerivation rec {
@@ -83,7 +84,10 @@ stdenv.mkDerivation rec {
   '';
 
   mesonFlags = [
+    # TODO: https://github.com/NixOS/nixpkgs/issues/36468
     "-Dc_args=-I${glib.dev}/include/gio-unix-2.0"
+    # use locales from cinnamon-translations
+    "--localedir=${cinnamon-translations}/share/locale"
   ];
 
   preInstall = ''

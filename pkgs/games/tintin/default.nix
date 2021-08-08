@@ -6,10 +6,11 @@
 assert tlsSupport -> gnutls != null;
 
 stdenv.mkDerivation rec {
-  name = "tintin-2.02.05";
+  pname = "tintin";
+  version = "2.02.05";
 
   src = fetchurl {
-    url    = "mirror://sourceforge/tintin/${name}.tar.gz";
+    url    = "mirror://sourceforge/tintin/tintin-${version}.tar.gz";
     sha256 = "sha256-Y6cAUhItJNade8ASOVdF8aBBLf/UVqjoqrhXBNRL1aE=";
   };
 

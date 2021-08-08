@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "conftest";
-  version = "0.24.0";
+  version = "0.26.0";
 
   src = fetchFromGitHub {
     owner = "open-policy-agent";
     repo = "conftest";
     rev = "v${version}";
-    sha256 = "sha256-iFxRZq/8TW7Df+aAc5IN+FAXU4kvbDiHWiFOlWMmCY0=";
+    sha256 = "sha256-AIFZhe0N6FT06IrDVF2OVfSwmQVg62ZglOcnnDL9TK8=";
   };
 
-  vendorSha256 = "sha256-LvaSs1y1CEP+cJc0vqTh/8MezmtuFAbfMgqloAjLZl8=";
+  vendorSha256 = "sha256-7wj1n5ggYYrmMrDuQkbbJ2C1S1LHawkkj91owHDIwr0=";
 
   doCheck = false;
 
@@ -36,6 +36,6 @@ buildGoModule rec {
     '';
     inherit (src.meta) homepage;
     license = licenses.asl20;
-    maintainers = with maintainers; [ yurrriq ];
+    maintainers = with maintainers; [ yurrriq jk ];
   };
 }

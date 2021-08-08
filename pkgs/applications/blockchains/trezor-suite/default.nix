@@ -8,7 +8,7 @@
 
 let
   pname = "trezor-suite";
-  version = "21.4.1";
+  version = "21.7.1";
   name = "${pname}-${version}";
 
   suffix = {
@@ -18,9 +18,10 @@ let
 
   src = fetchurl {
     url = "https://github.com/trezor/${pname}/releases/download/v${version}/Trezor-Suite-${version}-${suffix}.AppImage";
-    sha256 = {
-      aarch64-linux = "51ea8a5210f008d13a729ac42085563b5e8b971b17ed766f84d69d76dcb2db0c";
-      x86_64-linux  = "9219168a504356152b3b807e1e7282e21952461d277596c6b82ddfe81ac2419c";
+    # sha512 hashes are obtained from latest-linux-arm64.yml and latest-linux.yml
+    sha512 = {
+      aarch64-linux = "sha512-GEu1Zx3IQws8wsVsZUaIKvC0kTe8l/BBPSdu5q44tDpszmPugz8G/8FDAO/Ra50dzyiHhRheybZPuf2BBGGb7A==";
+      x86_64-linux  = "sha512-ghPbQa/MstzfUOWve1KNwB1t9dxK0+eYunBSoShWKpb85hgK69+ncTmhY8HejT28OkjFnGk6h4PWbrnQetj8MA==";
     }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
 
@@ -45,7 +46,7 @@ appimageTools.wrapType2 rec {
     install -m 444 -D ${appimageContents}/${pname}.png $out/share/icons/hicolor/512x512/apps/${pname}.png
     install -m 444 -D ${appimageContents}/resources/images/icons/512x512.png $out/share/icons/hicolor/512x512/apps/${pname}.png
     substituteInPlace $out/share/applications/${pname}.desktop \
-      --replace 'Exec=AppRun' 'Exec=${pname}'
+      --replace 'Exec=AppRun --no-sandbox %U' 'Exec=${pname}'
 
     # symlink system binaries instead bundled ones
     mkdir -p $out/share/${pname}/resources/bin/{bridge,tor}
@@ -56,6 +57,7 @@ appimageTools.wrapType2 rec {
   meta = with lib; {
     description = "Trezor Suite - Desktop App for managing crypto";
     homepage = "https://suite.trezor.io";
+    changelog = "https://github.com/trezor/trezor-suite/releases/tag/v${version}";
     license = licenses.unfree;
     maintainers = with maintainers; [ prusnak ];
     platforms = [ "aarch64-linux" "x86_64-linux" ];

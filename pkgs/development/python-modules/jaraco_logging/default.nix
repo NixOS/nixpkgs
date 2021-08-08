@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, setuptools_scm
+{ lib, buildPythonPackage, fetchPypi, setuptools-scm
 , tempora, six
 }:
 
@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   pythonNamespaces = [ "jaraco" ];
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
   propagatedBuildInputs = [ tempora six ];
 
   # test no longer packaged with pypi

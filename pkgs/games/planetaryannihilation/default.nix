@@ -1,4 +1,4 @@
-{ lib, stdenv, config, fetchurl, patchelf, makeWrapper, gtk2, glib, udev, alsaLib, atk
+{ lib, stdenv, config, fetchurl, patchelf, makeWrapper, gtk2, glib, udev, alsa-lib, atk
 , nspr, fontconfig, cairo, pango, nss, freetype, gnome2, gdk-pixbuf, curl, systemd, xorg }:
 
 # TODO: use dynamic attributes once Nix 1.7 is out
@@ -34,7 +34,7 @@ stdenv.mkDerivation {
     ln -s ${systemd}/lib/libudev.so.1 $out/lib/libudev.so.0
 
     patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$out/PA"
-    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" --set-rpath "${lib.makeLibraryPath [ stdenv.cc.cc.lib xorg.libXdamage xorg.libXfixes gtk2 glib stdenv.glibc.out "$out" xorg.libXext pango udev xorg.libX11 xorg.libXcomposite alsaLib atk nspr fontconfig cairo pango nss freetype gnome2.GConf gdk-pixbuf xorg.libXrender ]}:{stdenv.cc.cc.lib}/lib64:${stdenv.glibc.out}/lib64" "$out/host/CoherentUI_Host"
+    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" --set-rpath "${lib.makeLibraryPath [ stdenv.cc.cc.lib xorg.libXdamage xorg.libXfixes gtk2 glib stdenv.glibc.out "$out" xorg.libXext pango udev xorg.libX11 xorg.libXcomposite alsa-lib atk nspr fontconfig cairo pango nss freetype gnome2.GConf gdk-pixbuf xorg.libXrender ]}:{stdenv.cc.cc.lib}/lib64:${stdenv.glibc.out}/lib64" "$out/host/CoherentUI_Host"
 
     wrapProgram $out/PA --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc.lib stdenv.glibc.out xorg.libX11 xorg.libXcursor gtk2 glib curl "$out" ]}:${stdenv.cc.cc.lib}/lib64:${stdenv.glibc.out}/lib64"
 

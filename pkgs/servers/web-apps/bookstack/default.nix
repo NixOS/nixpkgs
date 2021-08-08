@@ -14,14 +14,14 @@ let
   });
 
 in package.override rec {
-  name = "bookstack";
-  version = "21.04.3";
+  pname = "bookstack";
+  version = "21.05.3";
 
   src = fetchFromGitHub {
     owner = "bookstackapp";
-    repo = name;
+    repo = pname;
     rev = "v${version}";
-    sha256 = "1vkl0v3c5q0734xvvqinq4zikhy37wjys6nj1h9qdbbka0h39592";
+    sha256 = "0dymrmy771lv6h9432vw7d12x5xgchjn9s3z8maz3b9d5xlx9gw8";
   };
 
   meta = with lib; {

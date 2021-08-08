@@ -1,13 +1,13 @@
 { lib, stdenv, fetchurl, zlib, pciutils, coreutils, acpica-tools, iasl, makeWrapper, gnugrep, gnused, file, buildEnv }:
 
 let
-  version = "4.13";
+  version = "4.14";
 
   commonMeta = with lib; {
     description = "Various coreboot-related tools";
     homepage = "https://www.coreboot.org";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ petabyteboy felixsinger ];
+    maintainers = with maintainers; [ petabyteboy felixsinger yuka ];
     platforms = platforms.linux;
   };
 
@@ -16,13 +16,14 @@ let
 
     src = fetchurl {
       url = "https://coreboot.org/releases/coreboot-${version}.tar.xz";
-      sha256 = "0sl50aajnah4a138sr3jjm3ydc8gfh5vvlhviz3ypp95b9jdlya7";
+      sha256 = "0viw2x4ckjwiylb92w85k06b0g9pmamjy2yqs7fxfqbmfadkf1yr";
     };
 
     enableParallelBuilding = true;
 
     postPatch = ''
       cd ${path}
+      patchShebangs .
     '';
 
     makeFlags = [
@@ -42,7 +43,7 @@ let
     };
     cbmem = generic {
       pname = "cbmem";
-      meta.description = "Coreboot console log reader";
+      meta.description = "coreboot console log reader";
     };
     ifdtool = generic {
       pname = "ifdtool";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, gettext, fetchurl, fetchpatch }:
 
 stdenv.mkDerivation rec {
   name = "lrzsz-0.12.20";
@@ -7,6 +7,16 @@ stdenv.mkDerivation rec {
     url = "https://ohse.de/uwe/releases/${name}.tar.gz";
     sha256 = "1wcgfa9fsigf1gri74gq0pa7pyajk12m4z69x7ci9c6x9fqkd2y2";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2018-10195.patch";
+      url = "https://bugzilla.redhat.com/attachment.cgi?id=79507";
+      sha256 = "0jlh8w0cjaz6k56f0h3a0h4wgc51axmrdn3mdspk7apjfzqcvx3c";
+    })
+  ];
+
+  nativeBuildInputs = [ gettext ];
 
   hardeningDisable = [ "format" ];
 

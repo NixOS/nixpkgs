@@ -38,6 +38,7 @@ in runBuildTests {
       str = "foo";
       attrs.foo = null;
       list = [ null null ];
+      path = ./formats.nix;
     };
     expected = ''
       {
@@ -52,6 +53,7 @@ in runBuildTests {
           null
         ],
         "null": null,
+        "path": "${./formats.nix}",
         "str": "foo",
         "true": true
       }
@@ -67,6 +69,7 @@ in runBuildTests {
       str = "foo";
       attrs.foo = null;
       list = [ null null ];
+      path = ./formats.nix;
     };
     expected = ''
       {
@@ -80,6 +83,7 @@ in runBuildTests {
           null
         ],
         "null": null,
+        "path": "${./formats.nix}",
         "str": "foo",
         "true": true
       }

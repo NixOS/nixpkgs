@@ -2,7 +2,7 @@
 , stdenv
 , buildPythonPackage
 , fetchPypi
-, setuptools_scm
+, setuptools-scm
 , pytestCheckHook
 , pytest-asyncio
 , pytest-timeout
@@ -14,15 +14,15 @@
 
 buildPythonPackage rec {
   pname = "tqdm";
-  version = "4.60.0";
+  version = "4.61.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ebdebdb95e3477ceea267decfc0784859aa3df3e27e22d23b83e9b272bf157ae";
+    sha256 = "24be966933e942be5f074c29755a95b315c69a91f839a29139bf26ffffe2d3fd";
   };
 
   nativeBuildInputs = [
-    setuptools_scm
+    setuptools-scm
   ];
 
   checkInputs = [
@@ -34,8 +34,8 @@ buildPythonPackage rec {
     rich
     tkinter
   ] ++
-    # pandas is not supported on i686
-    lib.optional (!stdenv.isi686) pandas;
+    # pandas is not supported on i686 or risc-v
+    lib.optional (!stdenv.isi686 && !stdenv.hostPlatform.isRiscV) pandas;
 
   # Remove performance testing.
   # Too sensitive for on Hydra.

@@ -2,29 +2,40 @@
 
 buildGoModule rec {
   pname = "starboard";
-  version = "0.10.1";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "aquasecurity";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-cDqZo0GTpvvkEiccP42u9X2ydHkSBuoD8Zfp+i+/qjo=";
+    sha256 = "sha256-NV37K5JUfGPK8TwCi/4XY7MQUvp76vzdxsHUNPlYpYk=";
   };
 
-  vendorSha256 = "sha256-noK4fF9wCP1dYfDgmJVZehcF+eunzP+d9n1SiPO9UEU=";
+  vendorSha256 = "sha256-4CmAf1s+tK7cKxwetgv0YewLLROsZ5g1Zd30FCep5k8=";
 
-  subPackages = [ "cmd/starboard" ];
+  # Don't build and check the integration tests
+  excludedPackages = "itest";
 
-  doCheck = false;
+  preBuild = ''
+    buildFlagsArray+=("-ldflags" "-s -w -X main.version=v${version}")
+  '';
 
-  buildFlagsArray = [
-    "-ldflags="
-    "-s"
-    "-w"
-    "-X main.version=v${version}"
-  ];
+  preCheck = ''
+    # Remove test that requires networking
+    rm pkg/plugin/aqua/client/client_integration_test.go
+  '';
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+    $out/bin/starboard --help
+    $out/bin/starboard version | grep "v${version}"
+    runHook postInstallCheck
+  '';
 
   meta = with lib; {
+    homepage = "https://github.com/aquasecurity/starboard";
+    changelog = "https://github.com/aquasecurity/starboard/releases/tag/v${version}";
     description = "Kubernetes-native security tool kit";
     longDescription = ''
       Starboard integrates security tools into the Kubernetes environment, so
@@ -35,7 +46,6 @@ buildGoModule rec {
       plug-in that make security reports available through familiar Kubernetes
       tools.
     '';
-    homepage = src.meta.homepage;
     license = licenses.asl20;
     maintainers = with maintainers; [ jk ];
   };

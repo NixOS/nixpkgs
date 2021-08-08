@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libnbd";
-  version = "1.7.7";
+  version = "1.9.2";
 
   src = fetchurl {
     url = "https://download.libguestfs.org/libnbd/${lib.versions.majorMinor version}-development/${pname}-${version}.tar.gz";
-    hash = "sha256-fNeu1qx+EbKitv2I8nJAmGMF5jxN2RZGPR/LJYnOjG8=";
+    hash = "sha256-UDLH5IMuKI6mAO/9VNmI8pCbxv94tCCQYRKZn2DBclg=";
   };
 
   nativeBuildInputs = [
@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
     pkg-config
     perl
   ];
+
   buildInputs = [
     fuse
     gnutls

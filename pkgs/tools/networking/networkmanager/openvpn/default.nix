@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, substituteAll, openvpn, intltool, libxml2, pkg-config, file, networkmanager, libsecret
-, gtk3, withGnome ? true, gnome3, kmod, libnma }:
+, gtk3, withGnome ? true, gnome, kmod, libnma }:
 
 let
   pname = "NetworkManager-openvpn";
@@ -31,9 +31,10 @@ in stdenv.mkDerivation {
   ];
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       attrPath = "networkmanager-openvpn";
+      versionPolicy = "odd-unstable";
     };
   };
 

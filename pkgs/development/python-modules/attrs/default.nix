@@ -1,26 +1,35 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, pytest, hypothesis, zope_interface
-, pympler, coverage, six, clang }:
+{ lib
+, callPackage
+, buildPythonPackage
+, fetchPypi
+}:
 
 buildPythonPackage rec {
   pname = "attrs";
-  version = "20.3.0";
+  version = "21.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "832aa3cde19744e49938b91fea06d69ecb9e649c93ba974535d08ad92164f700";
+    sha256 = "ef6aaac3ca6cd92904cdd0d83f629a15f18053ec84e6432106f7a4d04ae4f5fb";
   };
 
-  # macOS needs clang for testing
-  checkInputs = [
-    pytest hypothesis zope_interface pympler coverage six
-  ] ++ lib.optionals (stdenv.isDarwin) [ clang ];
+  outputs = [ "out" "testout" ];
 
-  checkPhase = ''
-    py.test
+  postInstall = ''
+    # Install tests as the tests output.
+    mkdir $testout
+    cp -R tests $testout/tests
   '';
 
-  # To prevent infinite recursion with pytest
+  pythonImportsCheck = [ "attr" ];
+
+  # pytest depends on attrs, so we can't do this out-of-the-box.
+  # Instead, we do this as a passthru.tests test.
   doCheck = false;
+
+  passthru.tests = {
+    pytest = callPackage ./tests.nix { };
+  };
 
   meta = with lib; {
     description = "Python attributes without boilerplate";

@@ -159,7 +159,8 @@ in
       # create a dummy Glibc here, which will be used in the stdenv of
       # stage1.
       ${localSystem.libc} = self.stdenv.mkDerivation {
-        name = "bootstrap-stage0-${localSystem.libc}";
+        pname = "bootstrap-stage0-${localSystem.libc}";
+        version = "bootstrap";
         buildCommand = ''
           mkdir -p $out
           ln -s ${bootstrapTools}/lib $out/lib
@@ -257,6 +258,25 @@ in
         # Rewrap the binutils with the new glibc, so both the next
         # stage's wrappers use it.
         libc = getLibc self;
+
+        # Unfortunately, when building gcc in the next stage, its LTO plugin
+        # would use the final libc but `ld` would use the bootstrap one,
+        # and that can fail to load.  Therefore we upgrade `ld` to use newer libc;
+        # apparently the interpreter needs to match libc, too.
+        bintools = self.stdenvNoCC.mkDerivation {
+          inherit (prevStage.bintools.bintools) name;
+          dontUnpack = true;
+          dontBuild = true;
+          # We wouldn't need to *copy* all, but it's easier and the result is temporary anyway.
+          installPhase = ''
+            mkdir -p "$out"/bin
+            cp -a '${prevStage.bintools.bintools}'/bin/* "$out"/bin/
+            chmod +w "$out"/bin/ld.bfd
+            patchelf --set-interpreter '${getLibc self}'/lib/ld*.so.? \
+              --set-rpath "${getLibc self}/lib:$(patchelf --print-rpath "$out"/bin/ld.bfd)" \
+              "$out"/bin/ld.bfd
+          '';
+        };
       };
     };
   })
@@ -283,6 +303,10 @@ in
       isl_0_20 = super.isl_0_20.override { stdenv = self.makeStaticLibraries self.stdenv; };
       gcc-unwrapped = super.gcc-unwrapped.override {
         isl = isl_0_20;
+        # Use a deterministically built compiler
+        # see https://github.com/NixOS/nixpkgs/issues/108475 for context
+        reproducibleBuild = true;
+        profiledCompiler = false;
       };
     };
     extraNativeBuildInputs = [ prevStage.patchelf ] ++

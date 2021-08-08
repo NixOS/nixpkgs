@@ -2,7 +2,7 @@
 
 `pkgs.appimageTools` is a set of functions for extracting and wrapping [AppImage](https://appimage.org/) files. They are meant to be used if traditional packaging from source is infeasible, or it would take too long. To quickly run an AppImage file, `pkgs.appimage-run` can be used as well.
 
-::: warning
+::: {.warning}
 The `appimageTools` API is unstable and may be subject to backwards-incompatible changes in the future.
 :::
 

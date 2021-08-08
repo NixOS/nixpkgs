@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "igraph";
-  version = "0.9.3";
+  version = "0.9.4";
 
   src = fetchFromGitHub {
     owner = "igraph";
     repo = pname;
     rev = version;
-    sha256 = "sha256-StRXtP2PelPcS+l5O1AOVFkza3hiKFwCdp8XLal4grE=";
+    sha256 = "sha256-tF+cnJRv125bSpZIpABTIHAfJO4TNfSBHjnzpNTbFgk=";
   };
 
   # Normally, igraph wants us to call bootstrap.sh, which will call
@@ -77,21 +77,27 @@ stdenv.mkDerivation rec {
     "-DIGRAPH_USE_INTERNAL_GMP=OFF"
     "-DIGRAPH_GLPK_SUPPORT=ON"
     "-DIGRAPH_GRAPHML_SUPPORT=ON"
-    "-DIGRAPH_ENABLE_LTO=ON"
+    "-DIGRAPH_ENABLE_LTO=AUTO"
     "-DIGRAPH_ENABLE_TLS=ON"
     "-DBUILD_SHARED_LIBS=ON"
   ];
 
   doCheck = true;
 
-  preCheck = ''
-    # needed to find libigraph.so
+  # needed to find libigraph, and liblas on darwin
+  preCheck = if stdenv.isDarwin then ''
+    export DYLD_LIBRARY_PATH="${lib.makeLibraryPath [ blas ]}:$PWD/src"
+  '' else ''
     export LD_LIBRARY_PATH="$PWD/src"
   '';
 
   postInstall = ''
     mkdir -p "$out/share"
     cp -r doc "$out/share"
+  '';
+
+  postFixup = lib.optionalString stdenv.isDarwin ''
+    install_name_tool -change libblas.dylib ${blas}/lib/libblas.dylib $out/lib/libigraph.dylib
   '';
 
   meta = with lib; {

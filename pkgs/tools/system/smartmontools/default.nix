@@ -4,8 +4,6 @@
 , IOKit, ApplicationServices }:
 
 let
-  version = "7.2";
-
   dbrev = "5171";
   drivedbBranch = "RELEASE_7_2_DRIVEDB";
   driverdb = fetchurl {
@@ -16,7 +14,7 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "smartmontools";
-  inherit version;
+  version = "7.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/smartmontools/${pname}-${version}.tar.gz";
@@ -40,5 +38,6 @@ in stdenv.mkDerivation rec {
     license     = licenses.gpl2Plus;
     maintainers = with maintainers; [ peti Frostman ];
     platforms   = with platforms; linux ++ darwin;
+    mainProgram = "smartctl";
   };
 }

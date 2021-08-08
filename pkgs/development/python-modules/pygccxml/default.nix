@@ -2,13 +2,13 @@
 llvmPackages }:
 buildPythonPackage rec {
   pname = "pygccxml";
-  version = "2.1.0";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner  = "gccxml";
     repo   = "pygccxml";
     rev    = "v${version}";
-    sha256 = "1vsxnfzz6qhiv8ac98qgk6w3s4j1jp661qy48gc9plcg2r952453";
+    sha256 = "1msqpg3dqn7wjlf91ddljxzz01a3b1p2sy91n36lrsy87lz499gh";
   };
 
   buildInputs = [ castxml llvmPackages.libcxxStdenv];

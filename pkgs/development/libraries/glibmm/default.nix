@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, gnum4, glib, libsigcxx, gnome3, darwin, meson, ninja }:
+{ lib, stdenv, fetchurl, pkg-config, gnum4, glib, libsigcxx, gnome, darwin, meson, ninja }:
 
 stdenv.mkDerivation rec {
   pname = "glibmm";
@@ -24,13 +24,12 @@ stdenv.mkDerivation rec {
   ]);
   propagatedBuildInputs = [ glib libsigcxx ];
 
-  enableParallelBuilding = true;
-
   doCheck = false; # fails. one test needs the net, another /etc/fstab
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
     };
   };
 

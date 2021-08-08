@@ -4,7 +4,7 @@ with builtins; with lib; let
   elpi = coq.ocamlPackages.elpi.override (lib.switch coq.coq-version [
     { case = "8.11"; out = { version = "1.11.4"; };}
     { case = "8.12"; out = { version = "1.12.0"; };}
-    { case = "8.13"; out = { version = "1.13.1"; };}
+    { case = "8.13"; out = { version = "1.13.5"; };}
   ] {});
 in mkCoqDerivation {
   pname = "elpi";
@@ -12,10 +12,11 @@ in mkCoqDerivation {
   owner = "LPCIC";
   inherit version;
   defaultVersion = lib.switch coq.coq-version [
-    { case = "8.13"; out = "1.9.7"; }
+    { case = "8.13"; out = "1.10.1"; }
     { case = "8.12"; out = "1.8.3_8.12"; }
     { case = "8.11"; out = "1.6.3_8.11"; }
   ] null;
+  release."1.10.1".sha256      = "1zsyx26dvj7pznfd2msl2w7zbw51q1nsdw0bdvdha6dga7ijf7xk";
   release."1.9.7".sha256      = "0rvn12h9dpk9s4pxy32p8j0a1h7ib7kg98iv1cbrdg25y5vs85n1";
   release."1.9.5".sha256      = "0gjdwmb6bvb5gh0a6ra48bz5fb3pr5kpxijb7a8mfydvar5i9qr6";
   release."1.9.4".sha256      = "0nii7238mya74f9g6147qmpg6gv6ic9b54x5v85nb6q60d9jh0jq";
@@ -46,6 +47,6 @@ in mkCoqDerivation {
   meta = {
     description = "Coq plugin embedding ELPI.";
     maintainers = [ maintainers.cohencyril ];
-    license = licenses.lgpl21;
+    license = licenses.lgpl21Plus;
   };
 }

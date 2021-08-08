@@ -1,5 +1,5 @@
 { buildPythonPackage, freezegun, fetchFromGitHub, lib, pytestCheckHook
-, pytest-mock, pytestrunner, six, tornado_4 }:
+, pytest-mock, pytest-runner, six, tornado_4 }:
 
 buildPythonPackage rec {
   pname = "lomond";
@@ -12,7 +12,7 @@ buildPythonPackage rec {
     sha256 = "0lydq0imala08wxdyg2iwhqa6gcdrn24ah14h91h2zcxjhjk4gv8";
   };
 
-  nativeBuildInputs = [ pytestrunner ];
+  nativeBuildInputs = [ pytest-runner ];
   propagatedBuildInputs = [ six ];
   checkInputs = [ pytestCheckHook freezegun pytest-mock tornado_4 ];
   # Makes HTTP requests

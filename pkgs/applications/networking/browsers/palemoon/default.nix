@@ -1,11 +1,8 @@
-# Compiler in stdenv MUST be a supported one for official branding
-# See https://developer.palemoon.org/build/linux/
-# TODO assert if stdenv.cc is supported?
 { stdenv
 , lib
 , fetchFromGitHub
 , writeScript
-, alsaLib
+, alsa-lib
 , autoconf213
 , cairo
 , desktop-file-utils
@@ -37,6 +34,15 @@
 , gtk3
 }:
 
+# Only specific GCC versions are supported with branding
+# https://developer.palemoon.org/build/linux/
+assert stdenv.cc.isGNU;
+assert with lib.strings; (
+  versionAtLeast stdenv.cc.version "4.9"
+  && !hasPrefix "6" stdenv.cc.version
+  && versionOlder stdenv.cc.version "11"
+);
+
 let
   libPath = lib.makeLibraryPath [
     ffmpeg
@@ -46,14 +52,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "palemoon";
-  version = "29.2.0";
+  version = "29.3.0";
 
   src = fetchFromGitHub {
     githubBase = "repo.palemoon.org";
     owner = "MoonchildProductions";
     repo = "Pale-Moon";
     rev = "${version}_Release";
-    sha256 = "0pa9j41bbfarwi60a6hxi5vpn52mwgr4p05l98acv4fcs1ccb427";
+    sha256 = "1q0w1ffmdfk22df4p2ks4n55zmz44ir8fbcdn5a5h4ihy73nf6xp";
     fetchSubmodules = true;
   };
 
@@ -87,7 +93,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    alsaLib
+    alsa-lib
     cairo
     dbus
     dbus-glib
@@ -142,6 +148,7 @@ stdenv.mkDerivation rec {
     ac_add_options --enable-jemalloc
     ac_add_options --enable-strip
     ac_add_options --enable-devtools
+    ac_add_options --enable-av1
 
     ac_add_options --disable-eme
     ac_add_options --disable-webrtc
@@ -158,8 +165,6 @@ stdenv.mkDerivation rec {
     export MOZILLA_OFFICIAL=1
 
     ac_add_options --x-libraries=${lib.makeLibraryPath [ xorg.libX11 ]}
-
-    export MOZ_PKG_SPECIAL=gtk$_GTK_VERSION
 
     #
     # NixOS-specific adjustments
@@ -188,7 +193,7 @@ stdenv.mkDerivation rec {
     ./mach install
 
     # Fix missing icon due to wrong WMClass
-    # TODO report upstream
+    # https://forum.palemoon.org/viewtopic.php?f=3&t=26746&p=214221#p214221
     substituteInPlace ./palemoon/branding/official/palemoon.desktop \
       --replace 'StartupWMClass="pale moon"' 'StartupWMClass=Pale moon'
     desktop-file-install --dir=$out/share/applications \
@@ -202,7 +207,7 @@ stdenv.mkDerivation rec {
     done
 
     # Remove unneeded SDK data from installation
-    # TODO: move to a separate output?
+    # https://forum.palemoon.org/viewtopic.php?f=37&t=26796&p=214676#p214729
     rm -rf $out/{include,share/idl,lib/palemoon-devel-${version}}
 
     runHook postInstall
@@ -231,6 +236,7 @@ stdenv.mkDerivation rec {
       extensions and themes to make the browser truly your own.
     '';
     homepage = "https://www.palemoon.org/";
+    changelog = "https://repo.palemoon.org/MoonchildProductions/Pale-Moon/releases/tag/${version}_Release";
     license = licenses.mpl20;
     maintainers = with maintainers; [ AndersonTorres OPNA2608 ];
     platforms = [ "i686-linux" "x86_64-linux" ];

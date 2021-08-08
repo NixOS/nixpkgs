@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, SDL, libpng, libjpeg, libtiff, libungif, libXpm }:
+{ lib, stdenv, fetchurl, fetchpatch, SDL, libpng, libjpeg, libtiff, giflib, libXpm }:
 
 stdenv.mkDerivation rec {
   pname = "SDL_image";
@@ -12,8 +12,9 @@ stdenv.mkDerivation rec {
   patches = [
     (fetchpatch {
       name = "CVE-2017-2887";
-      url = "https://hg.libsdl.org/SDL_image/raw-diff/318484db0705/IMG_xcf.c";
-      sha256 = "140dyszz9hkpgwjdiwp1b7jdd8f8l5d862xdaf3ml4cimga1h5kv";
+      url = "https://github.com/libsdl-org/SDL_image/commit/e7723676825cd2b2ffef3316ec1879d7726618f2.patch";
+      includes = [ "IMG_xcf.c" ];
+      sha256 = "174ka2r95i29nlshzgp6x5vc68v7pi8lhzf33and2b1ms49g4jb7";
     })
   ];
 
@@ -24,7 +25,7 @@ stdenv.mkDerivation rec {
     "--disable-tif-shared"
   ] ++ lib.optional stdenv.isDarwin "--disable-sdltest";
 
-  buildInputs = [ SDL libpng libjpeg libtiff libungif libXpm ];
+  buildInputs = [ SDL libpng libjpeg libtiff giflib libXpm ];
 
   meta = with lib; {
     description = "SDL image library";

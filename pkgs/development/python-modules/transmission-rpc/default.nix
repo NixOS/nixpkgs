@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "transmission-rpc";
-  version = "3.2.4";
+  version = "3.2.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f852d1afd0f0d4f515fe20f0de94d57b6d2e36cbac45e07da43ea0b6518f535c";
+    sha256 = "59598c9aa338703951686420fea292d9ba2d83d2a81361f16b64c2603c4ebb45";
   };
 
   propagatedBuildInputs = [

@@ -5,7 +5,7 @@
 }:
 let
   # Poetry2nix version
-  version = "1.16.1";
+  version = "1.17.1";
 
   inherit (poetryLib) isCompatible readTOML moduleName;
 
@@ -163,7 +163,7 @@ lib.makeScope pkgs.newScope (self: {
       compatible = partitions.right;
       incompatible = partitions.wrong;
 
-      # Create an overriden version of pythonPackages
+      # Create an overridden version of pythonPackages
       #
       # We need to avoid mixing multiple versions of pythonPackages in the same
       # closure as python can only ever have one version of a dependency
@@ -209,12 +209,12 @@ lib.makeScope pkgs.newScope (self: {
                   poetry-core = if __isBootstrap then null else poetryPkg.passthru.python.pkgs.poetry-core;
                   poetry = if __isBootstrap then null else poetryPkg;
 
-                  # The canonical name is setuptools-scm
-                  setuptools-scm = super.setuptools_scm;
-
                   __toPluginAble = toPluginAble self;
 
                   inherit (hooks) pipBuildHook removePathDependenciesHook poetry2nixFixupHook wheelUnpackHook;
+                } // lib.optionalAttrs (! super ? setuptools-scm) {
+                  # The canonical name is setuptools-scm
+                  setuptools-scm = super.setuptools_scm;
                 }
             )
             # Null out any filtered packages, we don't want python.pkgs from nixpkgs
@@ -229,7 +229,12 @@ lib.makeScope pkgs.newScope (self: {
 
       inputAttrs = mkInputAttrs { inherit py pyProject; attrs = { }; includeBuildSystem = false; };
 
-      storePackages = builtins.foldl' (acc: v: acc ++ v) [ ] (lib.attrValues inputAttrs);
+      requiredPythonModules = python.pkgs.requiredPythonModules;
+      /* Include all the nested dependencies which are required for each package.
+         This guarantees that using the "poetryPackages" attribute will return
+         complete list of dependencies for the poetry project to be portable.
+      */
+      storePackages = requiredPythonModules (builtins.foldl' (acc: v: acc ++ v) [ ] (lib.attrValues inputAttrs));
     in
     {
       python = py;

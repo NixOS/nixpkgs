@@ -13,11 +13,11 @@
 
 buildPythonPackage rec {
   pname = "trustme";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1fde1dd27052ab5e5693e1fbe3ba091a6496daf1125409d73232561145fca369";
+    sha256 = "3dcfbe186bf33d146347c6180b67564257f2708960027ab6d24fea2865daabca";
   };
 
   checkInputs = [

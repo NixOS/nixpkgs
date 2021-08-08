@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "octant";
-  version = "0.19.0";
+  version = "0.23.0";
 
   src =
     let
@@ -11,6 +11,7 @@ stdenv.mkDerivation rec {
         x86_64-linux = "Linux-64bit";
         aarch64-linux = "Linux-arm64";
         x86_64-darwin = "macOS-64bit";
+        aarch64-darwin = "macOS-arm64";
       }.${system} or (throw "Unsupported system: ${system}");
       fetchsrc = version: sha256: fetchzip {
         url = "https://github.com/vmware-tanzu/octant/releases/download/v${version}/octant_${version}_${suffix}.tar.gz";
@@ -18,9 +19,10 @@ stdenv.mkDerivation rec {
       };
     in
     fetchsrc version {
-      x86_64-linux = "sha256-TKvUBof4TLcHr9hg6AOLjVd1NcAX9HHVuuABdFKRNQA=";
-      aarch64-linux = "sha256-BJb7h6kJZ3QhdlEqNHkiFp91uYLXzYHvKftxEAhjY38=";
-      x86_64-darwin = "sha256-Ig98IqLmlN9D4iXrP9SXYwTrQOvbtQ/tQW+uEmntm+I=";
+      x86_64-linux = "sha256-wnm4Zprlao+zbWVJNY4BsAT1fFMft7luyDaW2HfNotg=";
+      aarch64-linux = "sha256-eYvfLUelSrmdY9dbgAlPm7en88hsdCnejJGq2Gz4DN0=";
+      x86_64-darwin = "sha256-NXMQ4mbYfIK+arGWZVhQk5iAw6AZM9PAGJ9CEC/rmgA=";
+      aarch64-darwin = "sha256-WqlbiDV2CuBYr6IXQ8vaESxKNZGp9vBj683igazcmwM=";
     };
 
   dontConfigure = true;
@@ -59,6 +61,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.asl20;
     maintainers = with maintainers; [ jk ];
-    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];
+    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
   };
 }

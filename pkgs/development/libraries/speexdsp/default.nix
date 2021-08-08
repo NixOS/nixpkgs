@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, autoreconfHook, pkg-config, fftw }:
 
 stdenv.mkDerivation rec {
-  name = "speexdsp-1.2.0";
+  pname = "speexdsp";
+  version = "1.2.0";
 
   src = fetchurl {
-    url = "http://downloads.us.xiph.org/releases/speex/${name}.tar.gz";
+    url = "https://downloads.xiph.org/releases/speex/${pname}-${version}.tar.gz";
     sha256 = "0wa7sqpk3x61zz99m7lwkgr6yv62ml6lfgs5xja65vlvdzy44838";
   };
 

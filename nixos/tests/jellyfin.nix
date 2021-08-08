@@ -24,7 +24,6 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
       in
       ''
         import json
-        import time
         from urllib.parse import urlencode
 
         machine.wait_for_unit("jellyfin.service")
@@ -101,7 +100,7 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
 
 
         def is_refreshed(_):
-            folders = machine.succeed(api_get(f"/Library/VirtualFolders"))
+            folders = machine.succeed(api_get("/Library/VirtualFolders"))
             folders = json.loads(folders)
             print(folders)
             return all(folder["RefreshStatus"] == "Idle" for folder in folders)
@@ -141,7 +140,7 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
                 "ffmpeg"
                 + f" -headers 'X-Emby-Authorization:{auth_header}'"
                 + f" -i http://localhost:8096/Videos/{video}/master.m3u8?mediaSourceId={media_source_id}"
-                + f" /tmp/test.mkv"
+                + " /tmp/test.mkv"
             )
 
             duration = machine.succeed(

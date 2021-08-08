@@ -7,8 +7,8 @@
 , glib
 , gobject-introspection
 , gst_all_1
-, gtk3
-, libhandy
+, gtk4
+, libadwaita
 , librsvg
 , meson
 , ninja
@@ -18,7 +18,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "mousai";
-  version = "0.3.1";
+  version = "0.4.2";
 
   format = "other";
 
@@ -26,7 +26,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "SeaDve";
     repo = "Mousai";
     rev = "v${version}";
-    sha256 = "0x57dci0prhlj79h74yh79cazn48rn0bckz5j3z4njk4fwc3fvfx";
+    sha256 = "sha256-zH++GGFIz3oxkKOYB4zhY6yL3vENEXxtrv8mZZ+41kU=";
   };
 
   postPatch = ''
@@ -38,7 +38,7 @@ python3.pkgs.buildPythonApplication rec {
     desktop-file-utils
     gettext
     glib
-    gtk3
+    gtk4
     meson
     ninja
     pkg-config
@@ -50,8 +50,8 @@ python3.pkgs.buildPythonApplication rec {
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
-    gtk3
-    libhandy
+    gtk4
+    libadwaita
     librsvg
   ];
 

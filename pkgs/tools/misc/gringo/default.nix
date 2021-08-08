@@ -3,13 +3,9 @@
   libcxx
 }:
 
-let
-  version = "4.5.4";
-in
-
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "gringo";
-  inherit version;
+  version = "4.5.4";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/potassco/gringo/${version}/gringo-${version}-source.tar.gz";
@@ -32,12 +28,12 @@ stdenv.mkDerivation {
     substituteInPlace ./SConstruct \
       --replace \
         "env['CPPPATH']        = []" \
-        "env['CPPPATH']        = ['${libcxx}/include/c++/v1']"
+        "env['CPPPATH']        = ['${lib.getDev libcxx}/include/c++/v1']"
 
     substituteInPlace ./SConstruct \
       --replace \
         "env['LIBPATH']        = []" \
-        "env['LIBPATH']        = ['${libcxx}/lib']"
+        "env['LIBPATH']        = ['${lib.getLib libcxx}/lib']"
   '';
 
   buildPhase = ''

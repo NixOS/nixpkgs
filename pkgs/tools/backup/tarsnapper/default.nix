@@ -17,7 +17,7 @@ python3Packages.buildPythonApplication rec {
     py.test .
   '';
 
-  propagatedBuildInputs = with python3Packages; [ pyyaml dateutil pexpect ];
+  propagatedBuildInputs = with python3Packages; [ pyyaml python-dateutil pexpect ];
 
   patches = [ ./remove-argparse.patch ];
 

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, meson, ninja, pkg-config, exiv2, glib, gnome3, gobject-introspection, vala, gtk-doc, docbook_xsl, docbook_xml_dtd_43 }:
+{ lib, stdenv, fetchurl, meson, ninja, pkg-config, exiv2, glib, gnome, gobject-introspection, vala, gtk-doc, docbook_xsl, docbook_xml_dtd_43 }:
 
 stdenv.mkDerivation rec {
   pname = "gexiv2";
@@ -22,8 +22,9 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
     };
   };
 

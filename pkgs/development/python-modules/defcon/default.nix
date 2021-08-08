@@ -1,6 +1,6 @@
 { lib, buildPythonPackage, fetchPypi, pythonOlder
 , fonttools, setuptools-scm
-, pytest, pytestrunner, lxml, fs, unicodedata2, fontpens
+, pytest, pytest-runner, lxml, fs, unicodedata2, fontpens
 }:
 
 buildPythonPackage rec {
@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytest
-    pytestrunner
+    pytest-runner
     lxml
     fs
     unicodedata2

@@ -62,5 +62,6 @@ stdenv.mkDerivation rec {
   };
   passthru.tests = {
     basic-functionality-and-dovecot-interaction = nixosTests.opensmtpd;
+    rspamd-integration = nixosTests.opensmtpd-rspamd;
   };
 }

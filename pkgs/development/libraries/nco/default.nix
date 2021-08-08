@@ -1,10 +1,10 @@
-{ lib, stdenv, fetchzip, netcdf, netcdfcxx4, gsl, udunits, antlr, which, curl, flex, coreutils }:
+{ lib, stdenv, fetchzip, netcdf, netcdfcxx4, gsl, udunits, antlr2, which, curl, flex, coreutils }:
 
 stdenv.mkDerivation rec {
   version = "4.9.8";
   pname = "nco";
 
-  nativeBuildInputs = [ flex which antlr ];
+  nativeBuildInputs = [ flex which antlr2 ];
   buildInputs = [ netcdf netcdfcxx4 gsl udunits curl coreutils ];
 
   src = fetchzip {

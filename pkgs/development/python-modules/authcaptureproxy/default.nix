@@ -27,9 +27,10 @@ buildPythonPackage rec {
 
   postPatch = ''
     # https://github.com/alandtse/auth_capture_proxy/issues/14
-    substituteInPlace pyproject.toml --replace \
-      "poetry.masonry.api" \
-      "poetry.core.masonry.api"
+    # https://github.com/alandtse/auth_capture_proxy/issues/15
+    substituteInPlace pyproject.toml \
+       --replace "poetry.masonry.api" "poetry.core.masonry.api" \
+       --replace 'importlib-metadata = "^3.4.0"' 'importlib-metadata = "*"'
   '';
 
   nativeBuildInputs = [

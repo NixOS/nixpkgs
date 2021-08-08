@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "aws-c-common";
-  version = "0.5.5";
+  version = "0.6.8";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-rGv+fa+UF/f6mY8CmZpkjP98CAcAQCTjL3OI7HsUHcU=";
+    sha256 = "sha256-wtgD8txViYu7yXdnID6TTf4gCDmvebD19XRxFnubndY=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -21,9 +21,6 @@ stdenv.mkDerivation rec {
     "-DBUILD_SHARED_LIBS=ON"
     "-DCMAKE_SKIP_BUILD_RPATH=OFF" # for tests
   ];
-
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin
-    "-Wno-nullability-extension -Wno-typedef-redefinition";
 
   doCheck = true;
 

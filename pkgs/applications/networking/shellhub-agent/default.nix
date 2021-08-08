@@ -9,23 +9,18 @@
 
 buildGoModule rec {
   pname = "shellhub-agent";
-  version = "0.6.4";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "shellhub-io";
     repo = "shellhub";
     rev = "v${version}";
-    sha256 = "12g9067knppkci2acc4w9xcismgw2w1zd0f1swbzdnx8bxl3vg9i";
+    sha256 = "02ka7acynkwkml2pavlv4j5vkm6x5aq5sfxgydv26qzs39f1wdgc";
   };
-
-  patches = [
-    # Fix missing multierr package on go.mod
-    ./fix-go-mod-deps.patch
-  ];
 
   modRoot = "./agent";
 
-  vendorSha256 = "0z5qvgmmrwwvhpmhjxdvgdfsd60a24q9ld68ggnkv36qln0gw7p4";
+  vendorSha256 = "18z3vwcwkyj6hcvl35qmj034237h9l18dvcbx1hxry7qdwv807c9";
 
   buildFlagsArray = [ "-ldflags=-s -w -X main.AgentVersion=v${version}" ];
 

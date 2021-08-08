@@ -48,6 +48,35 @@ in
       description = "containers.conf configuration";
     };
 
+    containersConf.cniPlugins = mkOption {
+      type = types.listOf types.package;
+      defaultText = ''
+        [
+          pkgs.cni-plugins
+        ]
+      '';
+      example = lib.literalExample ''
+        [
+          pkgs.cniPlugins.dnsname
+        ]
+      '';
+      description = ''
+        CNI plugins to install on the system.
+      '';
+    };
+
+    storage.settings = mkOption {
+      type = toml.type;
+      default = {
+        storage = {
+          driver = "overlay";
+          graphroot = "/var/lib/containers/storage";
+          runroot = "/run/containers/storage";
+        };
+      };
+      description = "storage.conf configuration";
+    };
+
     registries = {
       search = mkOption {
         type = types.listOf types.str;
@@ -97,8 +126,11 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+
+    virtualisation.containers.containersConf.cniPlugins = [ pkgs.cni-plugins ];
+
     virtualisation.containers.containersConf.settings = {
-      network.cni_plugin_dirs = [ "${pkgs.cni-plugins}/bin/" ];
+      network.cni_plugin_dirs = map (p: "${lib.getBin p}/bin") cfg.containersConf.cniPlugins;
       engine = {
         init_path = "${pkgs.catatonit}/bin/catatonit";
       } // lib.optionalAttrs cfg.ociSeccompBpfHook.enable {
@@ -108,6 +140,9 @@ in
 
     environment.etc."containers/containers.conf".source =
       toml.generate "containers.conf" cfg.containersConf.settings;
+
+    environment.etc."containers/storage.conf".source =
+      toml.generate "storage.conf" cfg.storage.settings;
 
     environment.etc."containers/registries.conf".source = toml.generate "registries.conf" {
       registries = lib.mapAttrs (n: v: { registries = v; }) cfg.registries;

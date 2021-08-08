@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, pkg-config, gettext, perl, itstool, isocodes, enchant, libxml2, python3
-, gnome3, gtksourceview3, libpeas, mate, wrapGAppsHook, mateUpdateScript }:
+, gnome, gtksourceview3, libpeas, mate, wrapGAppsHook, mateUpdateScript }:
 
 stdenv.mkDerivation rec {
   pname = "pluma";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     python3
     gtksourceview3
     libpeas
-    gnome3.adwaita-icon-theme
+    gnome.adwaita-icon-theme
     mate.mate-desktop
   ];
 

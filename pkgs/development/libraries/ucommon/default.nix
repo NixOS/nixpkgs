@@ -10,10 +10,11 @@ assert xor (openssl != null) (gnutls != null);
 assert !(xor (openssl != null) (zlib != null));
 
 stdenv.mkDerivation rec {
-  name = "ucommon-7.0.0";
+  pname = "ucommon";
+  version = "7.0.0";
 
   src = fetchurl {
-    url = "mirror://gnu/commoncpp/${name}.tar.gz";
+    url = "mirror://gnu/commoncpp/${pname}-${version}.tar.gz";
     sha256 = "6ac9f76c2af010f97e916e4bae1cece341dc64ca28e3881ff4ddc3bc334060d7";
   };
 

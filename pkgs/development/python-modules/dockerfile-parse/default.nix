@@ -1,12 +1,12 @@
-{ lib, buildPythonPackage, fetchPypi, six, pytestcov, pytest }:
+{ lib, buildPythonPackage, fetchPypi, six, pytest-cov, pytest }:
 
 buildPythonPackage rec {
-  version = "1.1.0";
+  version = "1.2.0";
   pname = "dockerfile-parse";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f37bfa327fada7fad6833aebfaac4a3aaf705e4cf813b737175feded306109e8";
+    sha256 = "07e65eec313978e877da819855870b3ae47f3fac94a40a965b9ede10484dacc5";
   };
 
   postPatch = ''
@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ six ];
 
-  checkInputs = [ pytestcov pytest ];
+  checkInputs = [ pytest-cov pytest ];
 
   meta = with lib; {
     description = "Python library for parsing Dockerfile files";

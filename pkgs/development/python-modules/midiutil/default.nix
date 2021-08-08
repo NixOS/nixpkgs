@@ -13,6 +13,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/MarkCWirt/MIDIUtil";
     description = "A pure python library for creating multi-track MIDI files";
     license = licenses.mit;
-    maintainers = [ maintainers.gnidorah ];
+    maintainers = [ ];
   };
 }

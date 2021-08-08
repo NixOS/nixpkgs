@@ -6,7 +6,26 @@ stdenv.mkDerivation {
   pname = "libcxxabi";
   inherit version;
 
-  src = fetch "libcxxabi" "1cbmzspwjlr8f6sp73pw6ivf4dpg6rpc61by0q1m2zca2k6yif3a";
+  src = fetch "libcxxabi" "1l4idd8npbkm168d26kqn529yv3npsd8f2dm8a7iwyknj7iyivw8";
+
+  outputs = [ "out" "dev" ];
+
+  postUnpack = ''
+    unpackFile ${libcxx.src}
+    mv libcxx-* libcxx
+    unpackFile ${llvm.src}
+    mv llvm-* llvm
+  '' + lib.optionalString stdenv.isDarwin ''
+    export TRIPLE=x86_64-apple-darwin
+  '' + lib.optionalString stdenv.hostPlatform.isMusl ''
+    patch -p1 -d libcxx -i ${../../libcxx-0001-musl-hacks.patch}
+  '' + lib.optionalString stdenv.hostPlatform.isWasm ''
+    patch -p1 -d llvm -i ${./wasm.patch}
+  '';
+
+  patches = [
+    ./gnu-install-dirs.patch
+  ];
 
   nativeBuildInputs = [ cmake python3 ];
   buildInputs = lib.optional (!stdenv.isDarwin && !stdenv.isFreeBSD && !stdenv.hostPlatform.isWasm) libunwind;
@@ -20,19 +39,6 @@ stdenv.mkDerivation {
   ] ++ lib.optionals (!enableShared) [
     "-DLIBCXXABI_ENABLE_SHARED=OFF"
   ];
-
-  postUnpack = ''
-    unpackFile ${libcxx.src}
-    mv libcxx-* libcxx
-    unpackFile ${llvm.src}
-    mv llvm-* llvm
-  '' + lib.optionalString stdenv.isDarwin ''
-    export TRIPLE=x86_64-apple-darwin
-  '' + lib.optionalString stdenv.hostPlatform.isMusl ''
-    patch -p1 -d libcxx -i ${../../libcxx-0001-musl-hacks.patch}
-  '' + lib.optionalString stdenv.hostPlatform.isWasm ''
-    patch -p1 -d llvm -i ${./libcxxabi-wasm.patch}
-  '';
 
   installPhase = if stdenv.isDarwin
     then ''

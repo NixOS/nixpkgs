@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, cmake, libusb1 }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, libusb1
+, gtk3
+, pkg-config
+, wrapGAppsHook
+, withGUI ? false
+}:
 
 let
   # The Darwin build of stlink explicitly refers to static libusb.
@@ -18,8 +27,17 @@ in stdenv.mkDerivation rec {
     sha256 = "03xypffpbp4imrczbxmq69vgkr7mbp0ps9dk815br5wwlz6vgygl";
   };
 
-  buildInputs = [ libusb1' ];
-  nativeBuildInputs = [ cmake ];
+  buildInputs = [
+    libusb1'
+  ] ++ lib.optionals withGUI [
+    gtk3
+  ];
+  nativeBuildInputs = [
+    cmake
+  ] ++ lib.optionals withGUI [
+    pkg-config
+    wrapGAppsHook
+  ];
 
   cmakeFlags = [
     "-DSTLINK_MODPROBED_DIR=${placeholder "out"}/etc/modprobe.d"

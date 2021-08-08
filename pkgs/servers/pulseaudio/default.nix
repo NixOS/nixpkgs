@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, pkg-config, autoreconfHook
 , libsndfile, libtool, makeWrapper, perlPackages
-, xorg, libcap, alsaLib, glib, dconf
+, xorg, libcap, alsa-lib, glib, dconf
 , avahi, libjack2, libasyncns, lirc, dbus
 , sbc, bluez5, udev, openssl, fftwFloat
 , soxr, speexdsp, systemd, webrtc-audio-processing
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
       ++ lib.optional jackaudioSupport libjack2
       ++ lib.optionals x11Support [ xorg.xlibsWrapper xorg.libXtst xorg.libXi ]
       ++ lib.optional useSystemd systemd
-      ++ lib.optionals stdenv.isLinux [ alsaLib udev ]
+      ++ lib.optionals stdenv.isLinux [ alsa-lib udev ]
       ++ lib.optional airtunesSupport openssl
       ++ lib.optionals bluetoothSupport [ bluez5 sbc ]
       ++ lib.optional remoteControlSupport lirc
@@ -92,7 +92,10 @@ stdenv.mkDerivation rec {
       "--with-bash-completion-dir=${placeholder "out"}/share/bash-completions/completions"
     ]
     ++ lib.optional (jackaudioSupport && !libOnly) "--enable-jack"
-    ++ lib.optional stdenv.isDarwin "--with-mac-sysroot=/"
+    ++ lib.optionals stdenv.isDarwin [
+      "--with-mac-sysroot=/"
+      "--disable-neon-opt"
+    ]
     ++ lib.optional (stdenv.isLinux && useSystemd) "--with-systemduserunitdir=${placeholder "out"}/lib/systemd/user"
     ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "--disable-gsettings";
 

@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "bear";
-  version = "3.0.9";
+  version = "3.0.13";
 
   src = fetchFromGitHub {
     owner = "rizsotto";
     repo = pname;
     rev = version;
-    sha256 = "xac8PYo3qYjtQbDy8piOz5BQQpcVlAvMCv1qHrVZmPQ=";
+    sha256 = "sha256-oMrTH3GjxiLBKX0i3ZuV+bNqpA7PkoAQAb/08Q/uELs=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/rizsotto/Bear";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
-    maintainers = [ maintainers.babariviere ];
+    maintainers = with maintainers; [ babariviere qyliss ];
     # ld: symbol(s) not found for architecture x86_64
     broken = stdenv.isDarwin;
   };

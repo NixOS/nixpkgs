@@ -4,6 +4,8 @@
 # Run this script to generate deps.nix
 # ./create_deps.sh /path/to/microsoft/python/language/server/source/checkout
 
+set -euo pipefail
+
 SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 if [ -d "$1" ]; then
@@ -14,13 +16,13 @@ else
 fi
 
 # Generate lockfiles in source checkout
-cd $CHECKOUT_PATH/src
+cd "$CHECKOUT_PATH/src"
 dotnet nuget locals all --clear
 dotnet restore -v normal --no-cache PLS.sln --use-lock-file -r linux-x64
 
 # Use the lockfiles to make a file with two columns: name and version number
 # for all possible package dependencies
-cd $SCRIPTDIR
+cd "$SCRIPTDIR"
 echo "" > all_versions.txt
 for lockfile in $(find "$CHECKOUT_PATH" -name packages.lock.json); do
     echo "Processing lockfile $lockfile"

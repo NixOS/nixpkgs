@@ -20,4 +20,6 @@ pkgs.buildPythonApplication rec {
     toml
     jsonschema
   ];
+  # https://github.com/nix-community/pypi2nix/issues/460
+  meta.broken = true;
 }

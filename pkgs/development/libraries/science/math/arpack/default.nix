@@ -46,6 +46,10 @@ stdenv.mkDerivation rec {
     export OMP_NUM_THREADS=2
   '';
 
+  postFixup = lib.optionalString stdenv.isDarwin ''
+    install_name_tool -change libblas.dylib ${blas}/lib/libblas.dylib $out/lib/libarpack.dylib
+  '';
+
   meta = {
     homepage = "https://github.com/opencollab/arpack-ng";
     description = ''

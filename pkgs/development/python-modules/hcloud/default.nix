@@ -8,15 +8,17 @@
 , isort
 , mock
 , pytest
+, isPy27
 }:
 
 buildPythonPackage rec {
   pname = "hcloud";
-  version = "1.12.0";
+  version = "1.13.0";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1fka4m3kbz52pksrjw3v42k611x5kl06dxrc7p5rb64jg6gayjfl";
+    sha256 = "0f84nwr3ddzivlnswwmhvm3lgq9fy3n7nryy93xqpk5nxcd1ybpn";
   };
 
   propagatedBuildInputs = [ future requests python-dateutil ];

@@ -20,15 +20,15 @@
 
 buildPythonPackage rec {
   pname = "ipfshttpclient";
-  version = "0.7.0";
+  version = "0.8.0a2";
   format = "flit";
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "ipfs-shipyard";
     repo = "py-ipfs-http-client";
     rev = version;
-    sha256 = "sha256-0lMoZo/9kZUXkaKvD9ZAZDQdGX7eNLzJVszZdlM/3Qs=";
+    sha256 = "sha256-OmC67pN2BbuGwM43xNDKlsLhwVeUbpvfOazyIDvoMEA=";
   };
 
   propagatedBuildInputs = [
@@ -51,11 +51,7 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
-    # Remove when the package supports the latest IPFS version by default
-    substituteInPlace ipfshttpclient/client/__init__.py \
-      --replace 'VERSION_MAXIMUM   = "0.8.0"' \
-                'VERSION_MAXIMUM   = "0.9.0"'
-
+    # This can be removed for the 0.8.0 release
     # Use pytest-order instead of pytest-ordering since the latter is unmaintained and broken
     substituteInPlace test/run-tests.py \
       --replace 'pytest_ordering' 'pytest_order'

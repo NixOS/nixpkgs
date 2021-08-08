@@ -428,7 +428,7 @@ let
       extraVeths = {};
       additionalCapabilities = [];
       ephemeral = false;
-      timeoutStartSec = "15s";
+      timeoutStartSec = "1min";
       allowedDevices = [];
       hostAddress = null;
       hostAddress6 = null;

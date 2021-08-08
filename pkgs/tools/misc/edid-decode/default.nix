@@ -1,9 +1,8 @@
 { lib, stdenv, fetchgit }:
-let
-  version = "2018-12-06";
-in stdenv.mkDerivation {
+
+stdenv.mkDerivation rec {
   pname = "edid-decode-unstable";
-  inherit version;
+  version = "unstable-2018-12-06";
 
   src = fetchgit {
     url = "git://linuxtv.org/edid-decode.git";

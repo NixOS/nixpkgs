@@ -248,7 +248,7 @@ let
       DRM_LOAD_EDID_FIRMWARE = yes;
       VGA_SWITCHEROO         = yes; # Hybrid graphics support
       DRM_GMA500             = whenAtLeast "5.12" module;
-      DRM_GMA600             = yes;
+      DRM_GMA600             = whenOlder "5.13" yes;
       DRM_GMA3600            = whenOlder "5.12" yes;
       DRM_VMWGFX_FBCON       = yes;
       # necessary for amdgpu polaris support
@@ -443,7 +443,7 @@ let
       SECURITY_SELINUX_BOOTPARAM_VALUE = whenOlder "5.1" (freeform "0"); # Disable SELinux by default
       # Prevent processes from ptracing non-children processes
       SECURITY_YAMA                    = option yes;
-      DEVKMEM                          = no; # Disable /dev/kmem
+      DEVKMEM                          = whenOlder "5.13" no; # Disable /dev/kmem
 
       USER_NS                          = yes; # Support for user namespaces
 
@@ -698,7 +698,7 @@ let
       THRUSTMASTER_FF    = yes;
       ZEROPLUS_FF        = yes;
 
-      MODULE_COMPRESS    = yes;
+      MODULE_COMPRESS    = whenOlder "5.13" yes;
       MODULE_COMPRESS_XZ = yes;
 
       SYSVIPC            = yes;  # System-V IPC
@@ -758,7 +758,7 @@ let
       POSIX_MQUEUE        = yes;
       FRONTSWAP           = yes;
       FUSION              = yes; # Fusion MPT device support
-      IDE                 = no; # deprecated IDE support
+      IDE                 = whenOlder "5.14" no; # deprecated IDE support, removed in 5.14
       IDLE_PAGE_TRACKING  = yes;
       IRDA_ULTRA          = whenOlder "4.17" yes; # Ultra (connectionless) protocol
 
@@ -844,6 +844,9 @@ let
       PREEMPT_VOLUNTARY = yes;
 
       X86_AMD_PLATFORM_DEVICE = yes;
+      X86_PLATFORM_DRIVERS_DELL = whenAtLeast "5.12" yes;
+
+      LIRC = mkMerge [ (whenOlder "4.16" module) (whenAtLeast "4.17" yes) ];
 
     } // optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "aarch64-linux") {
       # Enable CPU/memory hotplug support
@@ -859,7 +862,7 @@ let
       # Bump the maximum number of CPUs to support systems like EC2 x1.*
       # instances and Xeon Phi.
       NR_CPUS = freeform "384";
-    } // optionalAttrs (stdenv.hostPlatform.system == "aarch64-linux") {
+    } // optionalAttrs (stdenv.hostPlatform.system == "armv7l-linux" || stdenv.hostPlatform.system == "aarch64-linux") {
       # Enables support for the Allwinner Display Engine 2.0
       SUN8I_DE2_CCU = whenAtLeast "4.13" yes;
 
@@ -871,6 +874,12 @@ let
       # The kernel command line will override a platform-specific configuration from its device tree.
       # https://github.com/torvalds/linux/blob/856deb866d16e29bd65952e0289066f6078af773/kernel/dma/contiguous.c#L35-L44
       CMA_SIZE_MBYTES = freeform "32";
+
+      # Many ARM SBCs hand off a pre-configured framebuffer.
+      # This always can can be replaced by the actual native driver.
+      # Keeping it a built-in ensures it will be used if possible.
+      FB_SIMPLE = yes;
+
     };
   };
 in

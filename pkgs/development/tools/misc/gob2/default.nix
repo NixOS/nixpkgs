@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, glib, bison, flex, gnome3 }:
+{ lib, stdenv, fetchurl, pkg-config, glib, bison, flex, gnome }:
 
 stdenv.mkDerivation rec {
   pname = "gob2";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ glib bison flex ];
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "none";
     };

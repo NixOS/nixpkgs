@@ -2,10 +2,10 @@
 , curl, openssl, zlib, expat, perlPackages, python3, gettext, cpio
 , gnugrep, gnused, gawk, coreutils # needed at runtime by git-filter-branch etc
 , openssh, pcre2
-, asciidoctor, texinfo, xmlto, docbook2x, docbook_xsl, docbook_xsl_ns, docbook_xml_dtd_45
+, asciidoc, texinfo, xmlto, docbook2x, docbook_xsl, docbook_xml_dtd_45
 , libxslt, tcl, tk, makeWrapper, libiconv
 , svnSupport, subversionClient, perlLibs, smtpPerlLibs
-, perlSupport ? true
+, perlSupport ? stdenv.buildPlatform == stdenv.hostPlatform
 , nlsSupport ? true
 , osxkeychainSupport ? stdenv.isDarwin
 , guiSupport
@@ -14,6 +14,7 @@
 , withpcre2 ? true
 , sendEmailSupport
 , darwin
+, nixosTests
 , withLibsecret ? false
 , pkg-config, glib, libsecret
 , gzip # needed at runtime by gitweb.cgi
@@ -24,7 +25,7 @@ assert sendEmailSupport -> perlSupport;
 assert svnSupport -> perlSupport;
 
 let
-  version = "2.31.1";
+  version = "2.32.0";
   svn = subversionClient.override { perlBindings = perlSupport; };
 
   gitwebPerlLibs = with perlPackages; [ CGI HTMLParser CGIFast FCGI FCGIProcManager HTMLTagCloud ];
@@ -36,7 +37,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-    sha256 = "10367n5sv4nsgaxy486pbp7nscx34vjk8vrb06jm9ffm8ix42qcz";
+    sha256 = "08rnm3ipjqdd2n31dw7mxl3iv9g4nxgc409krmz892a37kd43a38";
   };
 
   outputs = [ "out" ] ++ lib.optional withManual "doc";
@@ -67,8 +68,8 @@ stdenv.mkDerivation {
   '';
 
   nativeBuildInputs = [ gettext perlPackages.perl makeWrapper ]
-    ++ lib.optionals withManual [ asciidoctor texinfo xmlto docbook2x
-         docbook_xsl docbook_xsl_ns docbook_xml_dtd_45 libxslt ];
+    ++ lib.optionals withManual [ asciidoc texinfo xmlto docbook2x
+         docbook_xsl docbook_xml_dtd_45 libxslt ];
   buildInputs = [curl openssl zlib expat cpio libiconv]
     ++ lib.optionals perlSupport [ perlPackages.perl ]
     ++ lib.optionals guiSupport [tcl tk]
@@ -77,7 +78,7 @@ stdenv.mkDerivation {
     ++ lib.optionals withLibsecret [ pkg-config glib libsecret ];
 
   # required to support pthread_cancel()
-  NIX_LDFLAGS = lib.optionalString (!stdenv.cc.isClang) "-lgcc_s"
+  NIX_LDFLAGS = lib.optionalString (stdenv.cc.isGNU && stdenv.hostPlatform.libc == "glibc") "-lgcc_s"
               + lib.optionalString (stdenv.isFreeBSD) "-lthr";
 
   configureFlags = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
@@ -147,7 +148,7 @@ stdenv.mkDerivation {
       }
 
       # Install git-subtree.
-      make -C contrib/subtree install ${lib.optionalString withManual "USE_ASCIIDOCTOR=1 install-doc"}
+      make -C contrib/subtree install ${lib.optionalString withManual "install-doc"}
       rm -rf contrib/subtree
 
       # Install contrib stuff.
@@ -232,7 +233,7 @@ stdenv.mkDerivation {
       '')
 
    + lib.optionalString withManual ''# Install man pages
-       make -j $NIX_BUILD_CORES -l $NIX_BUILD_CORES USE_ASCIIDOCTOR=1 PERL_PATH="${buildPackages.perl}/bin/perl" cmd-list.made install install-html \
+       make -j $NIX_BUILD_CORES -l $NIX_BUILD_CORES PERL_PATH="${buildPackages.perl}/bin/perl" cmd-list.made install install-html \
          -C Documentation ''
 
    + (if guiSupport then ''
@@ -289,11 +290,13 @@ stdenv.mkDerivation {
       fi
     }
 
-    # Shared permissions are forbidden in sandbox builds.
-    disable_test t0001-init shared
+    # Shared permissions are forbidden in sandbox builds:
+    substituteInPlace t/test-lib.sh \
+      --replace "test_set_prereq POSIXPERM" ""
+    # TODO: Investigate while these still fail (without POSIXPERM):
+    disable_test t0001-init 'shared overrides system'
+    disable_test t0001-init 'init honors global core.sharedRepository'
     disable_test t1301-shared-repo
-    disable_test t5324-split-commit-graph 'split commit-graph respects core.sharedrepository'
-    disable_test t4129-apply-samemode 'do not use core.sharedRepository for working tree files'
 
     # Our patched gettext never fallbacks
     disable_test t0201-gettext-fallbacks
@@ -334,6 +337,12 @@ stdenv.mkDerivation {
 
   stripDebugList = [ "lib" "libexec" "bin" "share/git/contrib/credential/libsecret" ];
 
+  passthru = {
+    shellPath = "/bin/git-shell";
+    tests = {
+      buildbot-integration = nixosTests.buildbot;
+    };
+  };
 
   meta = {
     homepage = "https://git-scm.com/";

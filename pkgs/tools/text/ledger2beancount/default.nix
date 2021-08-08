@@ -17,20 +17,16 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "ledger2beancount";
-  version = "2.5";
+  version = "2.6";
 
   src = fetchFromGitHub {
     owner = "beancount";
     repo = "ledger2beancount";
     rev = version;
-    sha256 = "0kimp8l9ax37grfv5r5iw0g0xnrpkak022fl10y3i7kc4nyi1s99";
+    sha256 = "sha256-0Br+zuSUYrNP+ZL/FtNoaYoYBYho5kVfxu0tqKJSuBk=";
   };
 
-  phases = [
-    "unpackPhase"
-    "installPhase"
-    "fixupPhase"
-  ];
+  dontBuild = true;
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ perlPackages.perl beancount ] ++ perlDeps;

@@ -1,10 +1,3 @@
-# `configure` (maybe others) set `POSIXLY_CORRECT`, which
-# breaks the gcc wrapper script of nixpkgs (maybe others).
-# We simply un-export `POSIXLY_CORRECT` after each export so
-# its effects don't apply within nixpkgs wrapper scripts.
-grep -rlF POSIXLY_CORRECT | xargs \
-  sed '/export *POSIXLY_CORRECT/a export -n POSIXLY_CORRECT' -i
-
 # Replace strange default value for the nobody account.
 if test -n "@maxuid@"
 then

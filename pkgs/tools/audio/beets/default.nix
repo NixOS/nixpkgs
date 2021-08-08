@@ -105,13 +105,13 @@ in pythonPackages.buildPythonApplication rec {
   # unstable does not require bs1770gain[2].
   # [1]: https://discourse.beets.io/t/forming-a-beets-core-team/639
   # [2]: https://github.com/NixOS/nixpkgs/pull/90504
-  version = "unstable-2021-04-17";
+  version = "unstable-2021-05-13";
 
   src = fetchFromGitHub {
     owner = "beetbox";
     repo = "beets";
-    rev = "50163b373f527d1b1f8b2442240ca547e846744e";
-    sha256 = "sha256-l7drav4Qx2JCF+F5OA0s641idcKM3S4Yx2lM2evJQWE=";
+    rev = "1faa41f8c558d3f4415e5e48cf4513d50b466d34";
+    sha256 = "sha256-P0bV7WNqCYe9+3lqnFmAoRlb2asdsBUjzRMc24RngpU=";
   };
 
   propagatedBuildInputs = [
@@ -133,7 +133,7 @@ in pythonPackages.buildPythonApplication rec {
     ++ lib.optional enableAcoustid         pythonPackages.pyacoustid
     ++ lib.optional enableBeatport         pythonPackages.requests_oauthlib
     ++ lib.optional enableConvert          ffmpeg
-    ++ lib.optional enableDiscogs          pythonPackages.discogs_client
+    ++ lib.optional enableDiscogs          pythonPackages.discogs-client
     ++ lib.optional (enableFetchart
                   || enableDeezer
                   || enableEmbyupdate
@@ -175,7 +175,7 @@ in pythonPackages.buildPythonApplication rec {
     # https://github.com/beetbox/beets/blob/v1.4.9/setup.py
     pylast
     mpd2
-    discogs_client
+    discogs-client
     pyxdg
   ];
 

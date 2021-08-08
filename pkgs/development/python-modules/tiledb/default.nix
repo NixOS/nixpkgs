@@ -8,7 +8,7 @@
 , numpy
 , wheel
 , isPy3k
-, setuptools_scm
+, setuptools-scm
 , psutil
 , pandas
 }:
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     cython
     pybind11
-    setuptools_scm
+    setuptools-scm
   ];
 
   buildInputs = [

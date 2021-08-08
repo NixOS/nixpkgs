@@ -4,20 +4,23 @@
 , nix-update-script
 , pkg-config
 , openssl
+, stdenv
+, libiconv
+, Security
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-msrv";
-  version = "0.4.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "foresterre";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1ynv5d2rxlc1gzq93v8qjyl5063w7q42g9m95250yh2lmf9hdj5i";
+    sha256 = "sha256-TqrbkTij+XCousADorrzsVVNVYOUEyl5+nhMn4IgaIY=";
   };
 
-  cargoSha256 = "03rphdps17gzcmf8n5w14x5i5rjnfznsl150s3cz5vzhbmnlpszf";
+  cargoSha256 = "sha256-cA4a7lqzOXkNZ7ehM/gCqtTyAaY2TH+23bITHBId8wQ=";
 
   passthru = {
     updateScript = nix-update-script {
@@ -28,7 +31,9 @@ rustPlatform.buildRustPackage rec {
   # Integration tests fail
   doCheck = false;
 
-  buildInputs = [ openssl ];
+  buildInputs = if stdenv.isDarwin
+    then [ libiconv Security ]
+    else [ openssl ];
 
   nativeBuildInputs = [ pkg-config ];
 

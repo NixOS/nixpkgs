@@ -41,7 +41,17 @@ llvmPackages.stdenv.mkDerivation rec {
   # Note: only openblas and not atlas part of this Nix expression
   # see pkgs/development/libraries/science/math/liblapack/3.5.0.nix
   # to get a hint howto setup atlas instead of openblas
-  buildInputs = [ llvmPackages.llvm libpng libjpeg mesa eigen openblas ];
+  buildInputs = [
+    llvmPackages.llvm
+    llvmPackages.lld
+    llvmPackages.openmp
+    llvmPackages.libclang
+    libpng
+    libjpeg
+    mesa
+    eigen
+    openblas
+  ];
 
   nativeBuildInputs = [ cmake ];
 

@@ -13,6 +13,5 @@ stdenv.mkDerivation rec {
     description = "The GNU oSIP library, an implementation of the Session Initiation Protocol (SIP)";
     maintainers = with lib.maintainers; [ raskin ];
     platforms = lib.platforms.all;
-    inherit version;
   };
 }

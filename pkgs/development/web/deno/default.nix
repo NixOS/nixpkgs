@@ -11,25 +11,29 @@
 , CoreServices
 , Metal
 , Foundation
+, QuartzCore
 , librusty_v8 ? callPackage ./librusty_v8.nix { }
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "deno";
-  version = "1.9.2";
+  version = "1.12.2";
 
   src = fetchFromGitHub {
     owner = "denoland";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-FKhSFqFZhqzrXrJcBc0YBNHoUq0/1+ULZ9sE+LyNQTI=";
+    sha256 = "sha256-xIFJv/roTD7sq7vCy4JDwe8gYDMuZd34vyjS08xeijI=";
   };
-  cargoSha256 = "sha256-Pp322D7YtdpeNnKWcE78tvLh5nFNcrh9oGYX2eCiPzI=";
+  cargoSha256 = "sha256-aETAFh5yTE+ZonDC0ITdaZ2YN3/SpYROsXP47aNEICE=";
 
   # Install completions post-install
   nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv libobjc Security CoreServices Metal Foundation ];
+  buildAndTestSubdir = "cli";
+
+  buildInputs = lib.optionals stdenv.isDarwin
+    [ libiconv libobjc Security CoreServices Metal Foundation QuartzCore ];
 
   # The rusty_v8 package will try to download a `librusty_v8.a` release at build time to our read-only filesystem
   # To avoid this we pre-download the file and place it in the locations it will require it in advance
@@ -51,9 +55,6 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   postInstall = ''
-    # remove test plugin and test server
-    rm -r $out/lib $out/bin/test_server $out/bin/denort
-
     installShellCompletion --cmd deno \
       --bash <($out/bin/deno completions bash) \
       --fish <($out/bin/deno completions fish) \

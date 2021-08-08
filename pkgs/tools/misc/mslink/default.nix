@@ -1,9 +1,9 @@
-{ stdenv
+{ gccStdenv
 , lib
 , fetchurl
 }:
 
-stdenv.mkDerivation rec {
+gccStdenv.mkDerivation rec {
   pname = "mslink";
   version = "1.3";
 
@@ -17,6 +17,9 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    if [[ "$(uname)" == "Darwin" ]]; then
+      mv mslink.exe mslink
+    fi
     install -D mslink $out/bin/mslink
   '';
 

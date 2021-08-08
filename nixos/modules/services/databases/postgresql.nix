@@ -159,7 +159,7 @@ in
                 For more information on how to specify the target
                 and on which privileges exist, see the
                 <link xlink:href="https://www.postgresql.org/docs/current/sql-grant.html">GRANT syntax</link>.
-                The attributes are used as <code>GRANT ''${attrName} ON ''${attrValue}</code>.
+                The attributes are used as <code>GRANT ''${attrValue} ON ''${attrName}</code>.
               '';
               example = literalExample ''
                 {
@@ -293,7 +293,8 @@ in
       # Note: when changing the default, make it conditional on
       # ‘system.stateVersion’ to maintain compatibility with existing
       # systems!
-      mkDefault (if versionAtLeast config.system.stateVersion "20.03" then pkgs.postgresql_11
+      mkDefault (if versionAtLeast config.system.stateVersion "21.11" then pkgs.postgresql_13
+            else if versionAtLeast config.system.stateVersion "20.03" then pkgs.postgresql_11
             else if versionAtLeast config.system.stateVersion "17.09" then pkgs.postgresql_9_6
             else throw "postgresql_9_5 was removed, please upgrade your postgresql version.");
 

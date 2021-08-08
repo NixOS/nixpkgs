@@ -2,7 +2,7 @@
 , libX11, xorgproto, libXext, libXcursor, libXmu, libIDL, SDL, libcap, libGL
 , libpng, glib, lvm2, libXrandr, libXinerama, libopus, qtbase, qtx11extras
 , qttools, qtsvg, qtwayland, pkg-config, which, docbook_xsl, docbook_xml_dtd_43
-, alsaLib, curl, libvpx, nettools, dbus, substituteAll
+, alsa-lib, curl, libvpx, nettools, dbus, substituteAll
 # If open-watcom-bin is not passed, VirtualBox will fall back to use
 # the shipped alternative sources (assembly).
 , open-watcom-bin ? null
@@ -23,7 +23,7 @@ let
   buildType = "release";
   # Use maintainers/scripts/update.nix to update the version and all related hashes or
   # change the hashes in extpack.nix and guest-additions/default.nix as well manually.
-  version = "6.1.18";
+  version = "6.1.26";
 
   iasl' = iasl.overrideAttrs (old: rec {
     inherit (old) pname;
@@ -40,7 +40,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://download.virtualbox.org/virtualbox/${version}/VirtualBox-${version}.tar.bz2";
-    sha256 = "108d42b9b391b7a332a33df1662cf7b0e9d9a80f3079d16288d8b9487f427d40";
+    sha256 = "0212602eea878d6c9fd7f4a3e0182da3e4505f31d25f5539fb8f7b1fbe366195";
   };
 
   outputs = [ "out" "modsrc" ];
@@ -53,7 +53,7 @@ in stdenv.mkDerivation {
 
   buildInputs =
     [ iasl' dev86 libxslt libxml2 xorgproto libX11 libXext libXcursor libIDL
-      libcap glib lvm2 alsaLib curl libvpx pam makeself perl
+      libcap glib lvm2 alsa-lib curl libvpx pam makeself perl
       libXmu libpng libopus python ]
     ++ optional javaBindings jdk
     ++ optional pythonBindings python # Python is needed even when not building bindings
@@ -82,7 +82,7 @@ in stdenv.mkDerivation {
       s@"libdbus-1\.so\.3"@"${dbus.lib}/lib/libdbus-1.so.3"@g'
 
     grep 'libasound\.so\.2'     src include -rI --files-with-match | xargs sed -i -e '
-      s@"libasound\.so\.2"@"${alsaLib.out}/lib/libasound.so.2"@g'
+      s@"libasound\.so\.2"@"${alsa-lib.out}/lib/libasound.so.2"@g'
 
     export USER=nix
     set +x
@@ -103,9 +103,10 @@ in stdenv.mkDerivation {
       qtPluginPath = "${qtbase.bin}/${qtbase.qtPluginPrefix}:${qtsvg.bin}/${qtbase.qtPluginPrefix}:${qtwayland.bin}/${qtbase.qtPluginPrefix}";
     })
   ++ [
-    # NOTE: the patch for linux 5.11 can be removed when the next version of VirtualBox is released
-    ./linux-5-11.patch
     ./qtx11extras.patch
+    # Temporary workaround for broken build
+    # https://www.virtualbox.org/pipermail/vbox-dev/2021-July/015670.html
+    ./fix-configure-pkgconfig-qt.patch
   ];
 
   postPatch = ''

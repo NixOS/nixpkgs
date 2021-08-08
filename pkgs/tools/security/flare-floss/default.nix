@@ -1,8 +1,9 @@
 { lib
-, python2
+, python3
 , fetchFromGitHub
 }:
-python2.pkgs.buildPythonPackage rec {
+
+python3.pkgs.buildPythonPackage rec {
   pname = "flare-floss";
   version = "1.7.0";
 
@@ -13,18 +14,17 @@ python2.pkgs.buildPythonPackage rec {
     sha256 = "GMOA1+qM2A/Qw33kOTIINEvjsfqjWQWBXHNemh3IK8w=";
   };
 
-  propagatedBuildInputs = with python2.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
     pyyaml
     simplejson
     tabulate
     vivisect
     plugnplay
     viv-utils
-    enum34
   ];
 
-  checkInputs = [
-    python2.pkgs.pytestCheckHook
+  checkInputs = with python3.pkgs; [
+    pytestCheckHook
   ];
 
   disabledTests = [

@@ -1,0 +1,35 @@
+From 5b562aaddbc6e7a94a079c2e88230b205a7f4d73 Mon Sep 17 00:00:00 2001
+From: Zane van Iperen <zane@zanevaniperen.com>
+Date: Sat, 15 May 2021 19:33:52 +1000
+Subject: [PATCH v2] avcodec/videotoolboxenc: #define TARGET_CPU_ARM64 to 0 if
+ not provided by the SDK
+
+Fixes build failure on older SDKs without it.
+
+Fixes #9242
+
+Signed-off-by: Zane van Iperen <zane@zanevaniperen.com>
+---
+ libavcodec/videotoolboxenc.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+NB: This is untested, I do not have a Mac to try it on.
+
+diff --git a/libavcodec/videotoolboxenc.c b/libavcodec/videotoolboxenc.c
+index 58239e0ab9..f063a86e73 100644
+--- a/libavcodec/videotoolboxenc.c
++++ b/libavcodec/videotoolboxenc.c
+@@ -50,6 +50,10 @@ enum { kCVPixelFormatType_420YpCbCr10BiPlanarFullRange = 'xf20' };
+ enum { kCVPixelFormatType_420YpCbCr10BiPlanarVideoRange = 'x420' };
+ #endif
+ 
++#ifndef TARGET_CPU_ARM64
++#   define TARGET_CPU_ARM64 0
++#endif
++
+ typedef OSStatus (*getParameterSetAtIndex)(CMFormatDescriptionRef videoDesc,
+                                            size_t parameterSetIndex,
+                                            const uint8_t **parameterSetPointerOut,
+-- 
+2.29.3
+

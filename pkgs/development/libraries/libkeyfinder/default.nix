@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libkeyfinder";
-  version = "2.2.4";
+  version = "2.2.5";
 
   src = fetchFromGitHub {
     owner = "mixxxdj";
     repo = "libkeyfinder";
     rev = "v${version}";
-    sha256 = "005qq81xfzi1iifvpgkqpizxcrfisafq2r0cjp4fxqh1ih7bfimv";
+    sha256 = "sha256-4jbnsKMGJKUIRfRPymGGgqPgwPyLInc6rLvCXnOcQ5g=";
   };
 
   # needed for finding libkeyfinder.so to link it into keyfinder-tests executable

@@ -4,22 +4,23 @@
 let
 
   inherit (python3Packages)
-    python nose cryptography pyyaml requests mock python-dateutil setuptools;
+    python pytest nose cryptography pyyaml requests mock python-dateutil setuptools;
 
 in stdenv.mkDerivation rec {
   pname = "svtplay-dl";
-  version = "3.6";
+  version = "4.2";
 
   src = fetchFromGitHub {
     owner = "spaam";
     repo = "svtplay-dl";
     rev = version;
-    sha256 = "1hnbpj4k08356k2rmsairbfnxwfxs5lv59nxcj6hy5wf162h2hzb";
+    sha256 = "1bsinf2r07g8c03mcw4gprl92wmysyaa81s8wyck0c6wdq3hcsnp";
   };
 
   pythonPaths = [ cryptography pyyaml requests ];
-  buildInputs = [ python perl nose mock python-dateutil setuptools ] ++ pythonPaths;
+  buildInputs = [ python perl mock python-dateutil setuptools ] ++ pythonPaths;
   nativeBuildInputs = [ gitMinimal zip makeWrapper ];
+  checkInputs = [ nose pytest ];
 
   postPatch = ''
     substituteInPlace scripts/run-tests.sh \
@@ -40,6 +41,13 @@ in stdenv.mkDerivation rec {
   doCheck = true;
   checkPhase = ''
     sh scripts/run-tests.sh -2
+  '';
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+    $out/bin/svtplay-dl --help > /dev/null
+    runHook postInstallCheck
   '';
 
   meta = with lib; {

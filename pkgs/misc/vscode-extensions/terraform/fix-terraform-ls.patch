@@ -1,39 +1,19 @@
-diff --git a/out/extension.js b/out/extension.js
-index e815393..aeade0e 100644
---- a/out/extension.js
-+++ b/out/extension.js
-@@ -141,25 +141,6 @@ function updateLanguageServer() {
-     return __awaiter(this, void 0, void 0, function* () {
-         const delay = 1000 * 60 * 24;
-         setTimeout(updateLanguageServer, delay); // check for new updates every 24hrs
--        // skip install if a language server binary path is set
--        if (!vscodeUtils_1.config('terraform').get('languageServer.pathToBinary')) {
--            const installer = new languageServerInstaller_1.LanguageServerInstaller(installPath, reporter);
--            const install = yield installer.needsInstall();
--            if (install) {
--                yield stopClients();
--                try {
--                    yield installer.install();
--                }
--                catch (err) {
--                    console.log(err); // for test failure reporting
--                    reporter.sendTelemetryException(err);
--                    throw err;
--                }
--                finally {
--                    yield installer.cleanupZips();
--                }
--            }
--        }
-         return startClients(); // on repeat runs with no install, this will be a no-op
-     });
- }
-@@ -257,7 +238,7 @@ function pathToBinary() {
-                 reporter.sendTelemetryEvent('usePathToBinary');
-             }
-             else {
--                command = path.join(installPath, 'terraform-ls');
-+                command = 'TERRAFORM-LS-PATH';
-             }
-             _pathToBinaryPromise = Promise.resolve(command);
-         }
+diff --git a/out/serverPath.js b/out/serverPath.js
+index ffb1b80..990ca2b 100644
+--- a/out/serverPath.js
++++ b/out/serverPath.js
+@@ -8,7 +8,13 @@ exports.CUSTOM_BIN_PATH_OPTION_NAME = 'languageServer.pathToBinary';
+ class ServerPath {
+     constructor(context) {
+         this.context = context;
+-        this.customBinPath = vscode.workspace.getConfiguration('terraform').get(exports.CUSTOM_BIN_PATH_OPTION_NAME);
++
++        const customBinPath = vscode.workspace.getConfiguration('terraform').get(exports.CUSTOM_BIN_PATH_OPTION_NAME);
++        if (!customBinPath) {
++          this.customBinPath = 'TERRAFORM-LS-PATH';
++        } else {
++            this.customBinPath = customBinPath;
++        }
+     }
+     installPath() {
+         return this.context.asAbsolutePath(INSTALL_FOLDER_NAME);

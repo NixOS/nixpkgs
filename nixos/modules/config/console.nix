@@ -43,13 +43,14 @@ in
 
   options.console  = {
     font = mkOption {
-      type = types.str;
+      type = with types; either str path;
       default = "Lat2-Terminus16";
       example = "LatArCyrHeb-16";
       description = ''
         The font used for the virtual consoles.  Leave empty to use
         whatever the <command>setfont</command> program considers the
         default font.
+        Can be either a font name or a path to a PSF font file.
       '';
     };
 
@@ -82,8 +83,7 @@ in
 
     packages = mkOption {
       type = types.listOf types.package;
-      default = with pkgs.kbdKeymaps; [ dvp neo ];
-      defaultText = "with pkgs.kbdKeymaps; [ dvp neo ]";
+      default = [ ];
       description = ''
         List of additional packages that provide console fonts, keymaps and
         other resources for virtual consoles use.

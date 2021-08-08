@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, fetchpatch, fetchFromGitLab, bundlerEnv
 , ruby, tzdata, git, nettools, nixosTests, nodejs, openssl
 , gitlabEnterprise ? false, callPackage, yarn
-, fixup_yarn_lock, replace, file
+, fixup_yarn_lock, replace, file, cacert
 }:
 
 let
@@ -51,7 +51,7 @@ let
     pname = "gitlab-assets";
     inherit version src;
 
-    nativeBuildInputs = [ rubyEnv.wrappedRuby rubyEnv.bundler nodejs yarn git ];
+    nativeBuildInputs = [ rubyEnv.wrappedRuby rubyEnv.bundler nodejs yarn git cacert ];
 
     # Since version 12.6.0, the rake tasks need the location of git,
     # so we have to apply the location patches here too.
@@ -125,21 +125,13 @@ stdenv.mkDerivation {
   patches = [
     # Change hardcoded paths to the NixOS equivalent
     ./remove-hardcoded-locations.patch
-
-    # Use the exactly 32 byte long version of db_key_base with
-    # aes-256-gcm, see
-    # https://gitlab.com/gitlab-org/gitlab/-/merge_requests/53602
-    (fetchpatch {
-      name = "secrets_db_key_base_length.patch";
-      url = "https://gitlab.com/gitlab-org/gitlab/-/commit/a5c78650441c31a522b18e30177c717ffdd7f401.patch";
-      sha256 = "1qcxr5f59slgzmpcbiwabdhpz1lxnq98yngg1xkyihk2zhv0g1my";
-    })
   ];
 
   postPatch = ''
     ${lib.optionalString (!gitlabEnterprise) ''
       # Remove all proprietary components
       rm -rf ee
+      sed -i 's/-ee//' ./VERSION
     ''}
 
     # For reasons I don't understand "bundle exec" ignores the
@@ -190,6 +182,7 @@ stdenv.mkDerivation {
     GITLAB_PAGES_VERSION = data.passthru.GITLAB_PAGES_VERSION;
     GITLAB_SHELL_VERSION = data.passthru.GITLAB_SHELL_VERSION;
     GITLAB_WORKHORSE_VERSION = data.passthru.GITLAB_WORKHORSE_VERSION;
+    gitlabEnv.FOSS_ONLY = lib.boolToString (!gitlabEnterprise);
     tests = {
       nixos-test-passes = nixosTests.gitlab;
     };
@@ -198,7 +191,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     homepage = "http://www.gitlab.com/";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ fpletz globin krav talyz ];
+    maintainers = with maintainers; [ fpletz globin krav talyz yuka ];
   } // (if gitlabEnterprise then
     {
       license = licenses.unfreeRedistributable; # https://gitlab.com/gitlab-org/gitlab-ee/raw/master/LICENSE

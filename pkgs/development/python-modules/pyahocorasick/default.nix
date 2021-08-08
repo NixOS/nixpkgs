@@ -6,13 +6,13 @@
 
 buildPythonPackage rec {
   pname = "pyahocorasick";
-  version = "1.4.0";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "WojciechMula";
     repo = pname;
     rev = version;
-    sha256 = "0plm9x2gziayjsl7flsgn1z8qx88c9vqm4fs1wq7dv7fr188liik";
+    sha256 = "13x3718if28l50474xrz1b9709kvnvdg3nzm6y8bh7mc9a4zyss5";
   };
 
   checkInputs = [ pytestCheckHook ];

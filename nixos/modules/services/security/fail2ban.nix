@@ -45,7 +45,12 @@ in
       enable = mkOption {
         default = false;
         type = types.bool;
-        description = "Whether to enable the fail2ban service.";
+        description = ''
+          Whether to enable the fail2ban service.
+
+          See the documentation of <option>services.fail2ban.jails</option>
+          for what jails are enabled by default.
+        '';
       };
 
       package = mkOption {
@@ -221,6 +226,15 @@ in
           defined in <filename>/etc/fail2ban/action.d</filename>,
           while filters are defined in
           <filename>/etc/fail2ban/filter.d</filename>.
+
+          NixOS comes with a default <literal>sshd</literal> jail;
+          for it to work well,
+          <option>services.openssh.logLevel</option> should be set to
+          <literal>"VERBOSE"</literal> or higher so that fail2ban
+          can observe failed login attempts.
+          This module sets it to <literal>"VERBOSE"</literal> if
+          not set otherwise, so enabling fail2ban can make SSH logs
+          more verbose.
         '';
       };
 
@@ -257,7 +271,6 @@ in
       partOf = optional config.networking.firewall.enable "firewall.service";
 
       restartTriggers = [ fail2banConf jailConf pathsConf ];
-      reloadIfChanged = true;
 
       path = [ cfg.package cfg.packageFirewall pkgs.iproute2 ] ++ cfg.extraPackages;
 
@@ -314,6 +327,9 @@ in
       banaction_allports = ${cfg.banaction-allports}
     '';
     # Block SSH if there are too many failing connection attempts.
+    # Benefits from verbose sshd logging to observe failed login attempts,
+    # so we set that here unless the user overrode it.
+    services.openssh.logLevel = lib.mkDefault "VERBOSE";
     services.fail2ban.jails.sshd = mkDefault ''
       enabled = true
       port    = ${concatMapStringsSep "," (p: toString p) config.services.openssh.ports}

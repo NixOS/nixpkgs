@@ -40,6 +40,8 @@
 
 # java is problematic on some platforms, where it is unfree
 , enableJava ? true
+
+, buildPackages
 }:
 
 assert enableStandardFeatures ->
@@ -146,7 +148,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "asciidoc";
-  version = "9.0.4";
+  version = "9.1.0";
 
   # Note: a substitution to improve reproducibility should be updated once 10.0.0 is
   # released. See the comment in `patchPhase` for more information.
@@ -154,10 +156,12 @@ stdenv.mkDerivation rec {
     owner = "asciidoc";
     repo = "asciidoc-py3";
     rev = version;
-    sha256 = "1gspxw5i0axymxdjzj5rmhf10gyl2gqr666gz141nv042l9dm5vi";
+    sha256 = "1clf1axkns23wfmh48xfspzsnw04pjh4mq1pshpzvj0cwxhz0yaq";
   };
 
+  strictDeps = true;
   nativeBuildInputs = [ python3 unzip autoreconfHook ];
+  buildInputs = [ python3 ];
 
   # install filters early, so their shebangs are patched too
   postPatch = with lib; ''
@@ -262,7 +266,20 @@ stdenv.mkDerivation rec {
         -e "s|^XMLLINT =.*|XMLLINT = '${libxml2.bin}/bin/xmllint'|" \
         -i a2x.py
   '') + ''
-    patchShebangs .
+    patchShebangs --host \
+      asciidoc.py \
+      a2x.py \
+      tests/testasciidoc.py \
+      filters/code/code-filter.py \
+      filters/latex/latex2img.py \
+      filters/music/music2png.py \
+      filters/unwraplatex.py \
+      filters/graphviz/graphviz2png.py
+
+    # Hardcode the path to its own asciidoc.
+    # This helps with cross-compilation.
+    substituteInPlace a2x.py \
+      --replace "find_executable(ASCIIDOC)" "'${placeholder "out"}/bin/asciidoc'"
 
     # Note: this substitution will not work in the planned 10.0.0 release:
     #
@@ -273,10 +290,23 @@ stdenv.mkDerivation rec {
     # --replace "python3 -m asciidoc.a2x" "python3 -m asciidoc.a2x -a revdate=01/01/1980"
     substituteInPlace Makefile.in \
       --replace "python3 a2x.py" "python3 a2x.py -a revdate=01/01/1980"
+
+    # Fix tests
+    for f in $(grep -R --files-with-matches "2002-11-25") ; do
+      substituteInPlace $f --replace "2002-11-25" "1970-01-01"
+      substituteInPlace $f --replace "00:37:42" "00:00:01"
+    done
+  '' + lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+    # We want to use asciidoc from the build platform to build the documentation.
+    substituteInPlace Makefile.in \
+      --replace "python3 a2x.py" "python3 ${buildPackages.asciidoc}/bin/a2x.py"
   '';
 
   preInstall = "mkdir -p $out/etc/vim";
   makeFlags = lib.optional stdenv.isCygwin "DESTDIR=/.";
+
+  checkInputs = [ sourceHighlight ];
+  doCheck = true;
 
   meta = with lib; {
     description = "Text-based document generation system";

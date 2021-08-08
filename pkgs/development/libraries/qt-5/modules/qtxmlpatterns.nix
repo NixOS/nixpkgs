@@ -1,7 +1,7 @@
 { qtModule, qtbase, qtdeclarative }:
 
 qtModule {
-  name = "qtxmlpatterns";
+  pname = "qtxmlpatterns";
   qtInputs = [ qtbase qtdeclarative ];
   devTools = [ "bin/xmlpatterns" "bin/xmlpatternsvalidator" ];
 }

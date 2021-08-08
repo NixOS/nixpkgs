@@ -51,9 +51,9 @@
 , iptables
 , withSelinux ? false
 , libselinux
-, withLibseccomp ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) libseccomp.meta.platforms
+, withLibseccomp ? lib.meta.availableOn stdenv.hostPlatform libseccomp
 , libseccomp
-, withKexectools ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) kexectools.meta.platforms
+, withKexectools ? lib.meta.availableOn stdenv.hostPlatform kexectools
 , kexectools
 , bashInteractive
 , libmicrohttpd
@@ -151,6 +151,19 @@ stdenv.mkDerivation {
     ./0017-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
     ./0018-logind-seat-debus-show-CanMultiSession-again.patch
     ./0019-pkg-config-derive-prefix-from-prefix.patch
+
+    # Fix -Werror=format.
+    (fetchpatch {
+      url = "https://github.com/systemd/systemd/commit/ab1aa6368a883bce88e3162fee2bea14aacedf23.patch";
+      sha256 = "1b280l5jrjsg8qhsang199mpqjhkpix4c8bm3blknjnq9iv43add";
+    })
+
+    # Fix CVE-2021-33910, disclosed 2021-07-20
+    (fetchpatch {
+      name = "CVE-2021-33910.patch";
+      url = "https://github.com/systemd/systemd/commit/441e0115646d54f080e5c3bb0ba477c892861ab9.patch";
+      sha256 = "1g1lk95igaadg67kah9bpi4zsc01rg398sd1247ghjsvl5hxn4v4";
+    })
   ];
 
   postPatch = ''
@@ -507,8 +520,6 @@ stdenv.mkDerivation {
   '' + lib.optionalString (!withDocumentation) ''
     rm -rf $out/share/doc
   '';
-
-  enableParallelBuilding = true;
 
   # The interface version prevents NixOS from switching to an
   # incompatible systemd at runtime.  (Switching across reboots is

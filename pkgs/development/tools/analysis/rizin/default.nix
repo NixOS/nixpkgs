@@ -77,6 +77,5 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ raskin makefu mic92 ];
     platforms = with lib.platforms; linux;
-    inherit version;
   };
 }

@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub
 , libjack2, libsndfile, xorg, freetype, libxkbcommon
-, cairo, glib, gnome3, flac, libogg, libvorbis, libopus
+, cairo, glib, gnome, flac, libogg, libvorbis, libopus
 , cmake, pkg-config
 }:
 
@@ -35,14 +35,14 @@ stdenv.mkDerivation rec {
     libxkbcommon
     cairo
     glib
-    gnome3.zenity
+    gnome.zenity
     freetype
   ];
   nativeBuildInputs = [ cmake pkg-config ];
 
   postPatch = ''
   substituteInPlace editor/external/vstgui4/vstgui/lib/platform/linux/x11fileselector.cpp \
-    --replace '"/usr/bin/zenity' '"${gnome3.zenity}/bin/zenity'
+    --replace '"/usr/bin/zenity' '"${gnome.zenity}/bin/zenity'
   '';
 
   cmakeFlags = [

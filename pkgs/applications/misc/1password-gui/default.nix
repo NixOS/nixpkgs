@@ -2,76 +2,117 @@
 , stdenv
 , fetchurl
 , makeWrapper
-, electron_11
-, openssl
+, alsa-lib
+, at-spi2-atk
+, at-spi2-core
+, atk
+, cairo
+, cups
+, dbus
+, expat
+, gdk-pixbuf
+, glib
+, gtk3
+, libX11
+, libXcomposite
+, libXdamage
+, libXext
+, libXfixes
+, libXrandr
+, libdrm
+, libxcb
+, libxkbcommon
+, libxshmfence
+, mesa
+, nspr
+, nss
+, pango
+, systemd
+, udev
+, xdg-utils
 }:
-
 stdenv.mkDerivation rec {
   pname = "1password";
-  version = "8.0.33-53.BETA";
+  version = "8.1.1";
 
   src = fetchurl {
-    url = "https://downloads.1password.com/linux/tar/beta/x86_64/1password-${version}.x64.tar.gz";
-    hash = "sha256-YUYER+UiM1QEDgGl0P9bIT65YVacUnuGtQVkV91teEU=";
+    url = "https://downloads.1password.com/linux/tar/stable/x86_64/1password-${version}.x64.tar.gz";
+    sha256 = "0y39sfhj9xrgprh01i9apzfkqzm6pdhjc8x59x5p5djjjvxbcwmy";
   };
 
   nativeBuildInputs = [ makeWrapper ];
 
   dontConfigure = true;
   dontBuild = true;
+  dontPatchELF = true;
 
-  installPhase = let
-    runtimeLibs = [
-      openssl.out
-      stdenv.cc.cc
-    ];
-  in ''
-    mkdir -p $out/bin $out/share/1password
+  installPhase =
+    let rpath = lib.makeLibraryPath [
+      alsa-lib
+      at-spi2-atk
+      at-spi2-core
+      atk
+      cairo
+      cups
+      dbus
+      expat
+      gdk-pixbuf
+      glib
+      gtk3
+      libX11
+      libXcomposite
+      libXdamage
+      libXext
+      libXfixes
+      libXrandr
+      libdrm
+      libxcb
+      libxkbcommon
+      libxshmfence
+      mesa
+      nspr
+      nss
+      pango
+      systemd
+    ] + ":${stdenv.cc.cc.lib}/lib64";
+    in ''
+      runHook preInstall
 
-    # Applications files.
-    cp -a {locales,resources} $out/share/${pname}
-    install -Dm0755 -t $out/share/${pname} {1Password-BrowserSupport,1Password-KeyringHelper}
+      mkdir -p $out/bin $out/share/1password
+      cp -a * $out/share/1password
 
-    # Desktop file.
-    install -Dt $out/share/applications resources/${pname}.desktop
-    substituteInPlace $out/share/applications/${pname}.desktop \
-      --replace 'Exec=/opt/1Password/${pname}' 'Exec=${pname}'
+      # Desktop file
+      install -Dt $out/share/applications resources/${pname}.desktop
+      substituteInPlace $out/share/applications/${pname}.desktop \
+        --replace 'Exec=/opt/1Password/${pname}' 'Exec=${pname}'
 
-    # Icons.
-    cp -a resources/icons $out/share
+      # Icons
+      cp -a resources/icons $out/share
 
-    # Wrap the application with Electron.
-    makeWrapper "${electron_11}/bin/electron" "$out/bin/${pname}" \
-      --add-flags "$out/share/${pname}/resources/app.asar" \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath runtimeLibs}"
+      interp="$(cat $NIX_CC/nix-support/dynamic-linker)"
+      patchelf --set-interpreter $interp $out/share/1password/{1password,1Password-BrowserSupport,1Password-KeyringHelper}
+      patchelf --set-rpath ${rpath}:$out/share/1password $out/share/1password/{1password,1Password-BrowserSupport,1Password-KeyringHelper}
+      for file in $(find $out -type f -name \*.so\* ); do
+        patchelf --set-rpath ${rpath}:$out/share/1password $file
+      done
 
-    # Set the interpreter for the helper binaries and wrap them with
-    # the runtime libraries.
-    interp="$(cat $NIX_CC/nix-support/dynamic-linker)"
-    patchelf --set-interpreter $interp \
-      $out/share/$pname/{1Password-BrowserSupport,1Password-KeyringHelper}
+      # Electron is trying to open udev via dlopen()
+      # and for some reason that doesn't seem to be impacted from the rpath.
+      # Adding udev to LD_LIBRARY_PATH fixes that.
+      makeWrapper $out/share/1password/1password $out/bin/1password \
+        --prefix PATH : ${lib.makeBinPath [ xdg-utils ]} \
+        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ udev ]}
 
-    wrapProgram $out/share/${pname}/1Password-BrowserSupport \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath runtimeLibs}"
-
-    wrapProgram $out/share/${pname}/1Password-KeyringHelper \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath runtimeLibs}"
-  '';
+      runHook postInstall
+    '';
 
   passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     description = "Multi-platform password manager";
-    longDescription = ''
-      1Password is a multi-platform package manager.
-
-      The Linux version is currently a development preview and can
-      only be used to search, view, and copy items. However items
-      cannot be created or edited.
-    '';
     homepage = "https://1password.com/";
     license = licenses.unfree;
-    maintainers = with maintainers; [ danieldk timstott ];
+    maintainers = with maintainers; [ timstott savannidgerinel ];
     platforms = [ "x86_64-linux" ];
   };
 }

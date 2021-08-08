@@ -1,7 +1,8 @@
 { buildGoPackage, lib, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "curl-unix-socket-2015-04-10";
+  pname = "curl-unix-socket";
+  version = "unstable-2015-04-10";
 
   src = fetchFromGitHub {
     owner = "Soulou";

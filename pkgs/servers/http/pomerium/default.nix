@@ -11,15 +11,15 @@ let
 in
 buildGoModule rec {
   pname = "pomerium";
-  version = "0.13.3";
+  version = "0.14.7";
   src = fetchFromGitHub {
     owner = "pomerium";
     repo = "pomerium";
     rev = "v${version}";
-    hash = "sha256-g0w1aIHvf2rJANvGWHeUxdnyCDsvy/PQ9Kp8nDdT/0w=";
+    hash = "sha256:1jb96jk5qmary4fi1z9zwmppdyskj0qb6qii8s8mwazjjxqj1z2s";
   };
 
-  vendorSha256 = "sha256-grihU85OcGyf9/KKrv87xZonX5r+Z1oHQTf84Ya61fg=";
+  vendorSha256 = "sha256:1daabi9qc9nx8bafn26iw6rv4vx2xpd0nnk06265aqaksx26db0s";
   subPackages = [
     "cmd/pomerium"
     "cmd/pomerium-cli"

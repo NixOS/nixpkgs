@@ -19,6 +19,6 @@
   <xi:include href="./generated/options-db.xml"
                 xpointer="configuration-variable-list" />
  </appendix>
- <xi:include href="contributing-to-this-manual.xml" />
+ <xi:include href="./from_md/contributing-to-this-manual.chapter.xml" />
  <xi:include href="release-notes/release-notes.xml" />
 </book>

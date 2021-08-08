@@ -85,7 +85,7 @@ let
       # https://bugreports.qt.io/browse/QTBUG-77037
       (fetchpatch {
         name = "fix-build-with-pulseaudio-13.0.patch";
-        url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/qtbug-77037-workaround.patch?h=packages/qt5-webengine&id=fc77d6b3d5ec74e421b58f199efceb2593cbf951";
+        url = "https://raw.githubusercontent.com/archlinux/svntogit-packages/fc77d6b3d5ec74e421b58f199efceb2593cbf951/trunk/qtbug-77037-workaround.patch";
         sha256 = "1gv733qfdn9746nbqqxzyjx4ijjqkkb7zb71nxax49nna5bri3am";
       })
 
@@ -97,6 +97,11 @@ let
         name = "qtwebkit-bison-3.7-build.patch";
         url = "https://github.com/qtwebkit/qtwebkit/commit/d92b11fea65364fefa700249bd3340e0cd4c5b31.patch";
         sha256 = "0h8ymfnwgkjkwaankr3iifiscsvngqpwb91yygndx344qdiw9y0n";
+      })
+      (fetchpatch {
+        name = "qtwebkit-glib-2.68.patch";
+        url = "https://github.com/qtwebkit/qtwebkit/pull/1058/commits/5b698ba3faffd4e198a45be9fe74f53307395e4b.patch";
+        sha256 = "0a3xv0h4lv8wggckgy8cg8xnpkg7n9h45312pdjdnnwy87xvzss0";
       })
       ./qtwebkit.patch
       ./qtwebkit-icu68.patch

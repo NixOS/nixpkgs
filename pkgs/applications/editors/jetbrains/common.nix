@@ -3,13 +3,13 @@
 , vmopts ? null
 }:
 
-{ name, product, version, src, wmClass, jdk, meta, extraLdPath ? [] }:
+{ name, product, version, src, wmClass, jdk, meta, extraLdPath ? [] }@args:
 
 with lib;
 
 let loName = toLower product;
     hiName = toUpper product;
-    execName = concatStringsSep "-" (init (splitString "-" name));
+    mainProgram = concatStringsSep "-" (init (splitString "-" name));
     vmoptsName = loName
                + ( if (with stdenv.hostPlatform; (is32bit || isDarwin))
                    then ""
@@ -18,15 +18,17 @@ let loName = toLower product;
 in
 
 with stdenv; lib.makeOverridable mkDerivation rec {
-  inherit name src meta;
+  inherit name src;
+  meta = args.meta // { inherit mainProgram; };
+
   desktopItem = makeDesktopItem {
-    name = execName;
-    exec = execName;
+    name = mainProgram;
+    exec = mainProgram;
     comment = lib.replaceChars ["\n"] [" "] meta.longDescription;
     desktopName = product;
     genericName = meta.description;
     categories = "Development;";
-    icon = execName;
+    icon = mainProgram;
     extraEntries = ''
       StartupWMClass=${wmClass}
     '';
@@ -36,7 +38,7 @@ with stdenv; lib.makeOverridable mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper patchelf unzip ];
 
-  patchPhase = lib.optionalString (!stdenv.isDarwin) ''
+  postPatch = lib.optionalString (!stdenv.isDarwin) ''
       get_file_size() {
         local fname="$1"
         echo $(ls -l $fname | cut -d ' ' -f5)
@@ -50,7 +52,7 @@ with stdenv; lib.makeOverridable mkDerivation rec {
       }
 
       interpreter=$(echo ${stdenv.glibc.out}/lib/ld-linux*.so.2)
-      if [ "${stdenv.hostPlatform.system}" == "x86_64-linux" ]; then
+      if [[ "${stdenv.hostPlatform.system}" == "x86_64-linux" && -e bin/fsnotifier64 ]]; then
         target_size=$(get_file_size bin/fsnotifier64)
         patchelf --set-interpreter "$interpreter" bin/fsnotifier64
         munge_size_hack bin/fsnotifier64 $target_size
@@ -62,15 +64,17 @@ with stdenv; lib.makeOverridable mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/{bin,$name,share/pixmaps,libexec/${name}}
     cp -a . $out/$name
-    ln -s $out/$name/bin/${loName}.png $out/share/pixmaps/${execName}.png
+    ln -s $out/$name/bin/${loName}.png $out/share/pixmaps/${mainProgram}.png
     mv bin/fsnotifier* $out/libexec/${name}/.
 
     jdk=${jdk.home}
     item=${desktopItem}
 
-    makeWrapper "$out/$name/bin/${loName}.sh" "$out/bin/${execName}" \
+    makeWrapper "$out/$name/bin/${loName}.sh" "$out/bin/${mainProgram}" \
       --prefix PATH : "$out/libexec/${name}:${lib.optionalString (stdenv.isDarwin) "${jdk}/jdk/Contents/Home/bin:"}${lib.makeBinPath [ jdk coreutils gnugrep which git ]}" \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath ([
         # Some internals want libstdc++.so.6
@@ -84,6 +88,8 @@ with stdenv; lib.makeOverridable mkDerivation rec {
       --set ${hiName}_VM_OPTIONS ${vmoptsFile}
 
     ln -s "$item/share/applications" $out/share
+
+    runHook postInstall
   '';
 
 } // lib.optionalAttrs (!(meta.license.free or true)) {

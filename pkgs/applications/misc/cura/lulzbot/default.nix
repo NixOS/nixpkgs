@@ -10,10 +10,10 @@ let
   };
 
   libarcusLulzbot = callPackage ./libarcus.nix {
-    inherit (python3.pkgs) buildPythonPackage sip pythonOlder;
+    inherit (python3.pkgs) buildPythonPackage sip_4 pythonOlder;
   };
   libsavitarLulzbot = callPackage ./libsavitar.nix {
-    inherit (python3.pkgs) buildPythonPackage sip pythonOlder;
+    inherit (python3.pkgs) buildPythonPackage sip_4 pythonOlder;
   };
 
   inherit (python3.pkgs) buildPythonPackage pyqt5 numpy scipy shapely pythonOlder;

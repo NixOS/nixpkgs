@@ -1,29 +1,43 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pythonOlder
 , requests_oauthlib
 , simplejson
+, pkce
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "pyvicare";
-  version = "0.2.5";
+  version = "2.4";
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    pname = "PyViCare";
-    inherit version;
-    sha256 = "16wqqjs238ad6znlz2gjadqj8891226bd02a1106xyz6vbbk2gdk";
+  src = fetchFromGitHub {
+    owner = "somm15";
+    repo = "PyViCare";
+    rev = version;
+    sha256 = "1lih5hdyc3y0ickvfxd0gdgqv19zmqsfrnlxfwg8aqr73hl3ca8z";
   };
+
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   propagatedBuildInputs = [
     requests_oauthlib
     simplejson
+    pkce
   ];
 
-  # The published tarball on PyPI is incomplete and there are GitHub releases
-  doCheck = false;
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "version_config=True," 'version="${version}",' \
+      --replace "'setuptools-git-versioning'" " "
+  '';
+
   pythonImportsCheck = [ "PyViCare" ];
 
   meta = with lib; {

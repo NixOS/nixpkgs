@@ -1,33 +1,24 @@
-{ lib, stdenv, fetchurl, tcl, openssl }:
+{ lib, fetchurl, tcl, openssl }:
 
-stdenv.mkDerivation rec {
+tcl.mkTclDerivation rec {
   pname = "tcltls";
-  version = "1.6.7";
+  version = "1.7.21";
 
   src = fetchurl {
-    url = "mirror://sourceforge/tls/tls${version}-src.tar.gz";
-    sha256 = "1f53sfcnrridjl5ayrq1xrqkahs8khf8c3d0m2brndbhahzdw6ai";
+    url = "https://core.tcl-lang.org/tcltls/uv/tcltls-${version}.tar.gz";
+    sha256 = "0xf1rfsnn4k9j1bd2a1p8ir0xr4a3phgr9lcgbazh4084l2y8sl0";
   };
 
-  buildInputs = [ tcl openssl ];
+  buildInputs = [ openssl ];
 
   configureFlags = [
-    "--with-tcl=${tcl}/lib"
-    "--with-tclinclude=${tcl}/include"
     "--with-ssl-dir=${openssl.dev}"
   ];
 
-  preConfigure = ''
-    configureFlags="--exec_prefix=$prefix $configureFlags"
-  '';
-
-  passthru = {
-    libPrefix = "tls${version}";
-  };
-
   meta = {
-    homepage = "http://tls.sourceforge.net/";
+    homepage = "https://core.tcl-lang.org/tcltls/index";
     description = "An OpenSSL / RSA-bsafe Tcl extension";
+    maintainers = [ lib.maintainers.agbrooks ];
     license = lib.licenses.tcltk;
     platforms = lib.platforms.unix;
   };

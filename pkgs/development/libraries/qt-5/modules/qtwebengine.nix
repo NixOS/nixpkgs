@@ -8,14 +8,15 @@
 , fontconfig, freetype, harfbuzz, icu, dbus, libdrm
 , zlib, minizip, libjpeg, libpng, libtiff, libwebp, libopus
 , jsoncpp, protobuf, libvpx, srtp, snappy, nss, libevent
-, alsaLib
+, alsa-lib
 , libcap
 , pciutils
 , systemd
+, pipewire_0_2
 , enableProprietaryCodecs ? true
 , gn
 , cups, darwin, openbsm, runCommand, xcbuild, writeScriptBin
-, ffmpeg_3 ? null
+, ffmpeg ? null
 , lib, stdenv, fetchpatch
 , version ? null
 , qtCompatVersion
@@ -24,18 +25,10 @@
 with lib;
 
 qtModule {
-  name = "qtwebengine";
+  pname = "qtwebengine";
   qtInputs = [ qtdeclarative qtquickcontrols qtlocation qtwebchannel ];
   nativeBuildInputs = [
     bison coreutils flex git gperf ninja pkg-config python2 which gn nodejs
-
-    # qmake looks for syncqt instead of syncqt.pl and fails with a cryptic
-    # error if it can't find it. syncqt.pl also has a /usr/bin/env shebang, so
-    # it can't be directly used in a sandboxed build environment.
-    (writeScriptBin "syncqt" ''
-      #!${stdenv.shell}
-      exec ${perl}/bin/perl ${qtbase.dev}/bin/syncqt.pl "$@"
-    '')
   ] ++ optional stdenv.isDarwin xcbuild;
   doCheck = true;
   outputs = [ "bin" "dev" "out" ];
@@ -140,9 +133,9 @@ qtModule {
     fi
   '';
 
-  qmakeFlags = if stdenv.hostPlatform.isAarch32 || stdenv.hostPlatform.isAarch64
-    then [ "--" "-system-ffmpeg" ] ++ optional enableProprietaryCodecs "-proprietary-codecs"
-    else optional enableProprietaryCodecs "-- -proprietary-codecs";
+  qmakeFlags = [ "--" "-system-ffmpeg" ]
+    ++ optional (stdenv.isLinux && (lib.versionAtLeast qtCompatVersion "5.15")) "-webengine-webrtc-pipewire"
+    ++ optional enableProprietaryCodecs "-proprietary-codecs";
 
   propagatedBuildInputs = [
     # Image formats
@@ -158,13 +151,12 @@ qtModule {
     harfbuzz icu
 
     libevent
-  ] ++ optionals (stdenv.hostPlatform.isAarch32 || stdenv.hostPlatform.isAarch64) [
-    ffmpeg_3
+    ffmpeg
   ] ++ optionals (!stdenv.isDarwin) [
     dbus zlib minizip snappy nss protobuf jsoncpp
 
     # Audio formats
-    alsaLib
+    alsa-lib
 
     # Text rendering
     fontconfig freetype
@@ -174,7 +166,11 @@ qtModule {
 
     # X11 libs
     xorg.xrandr libXScrnSaver libXcursor libXrandr xorg.libpciaccess libXtst
-    xorg.libXcomposite xorg.libXdamage libdrm
+    xorg.libXcomposite xorg.libXdamage libdrm xorg.libxkbfile
+
+  ] ++ optionals (stdenv.isLinux && (lib.versionAtLeast qtCompatVersion "5.15")) [
+    # Pipewire
+    pipewire_0_2
   ]
 
   # FIXME These dependencies shouldn't be needed but can't find a way

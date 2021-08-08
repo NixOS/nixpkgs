@@ -1,16 +1,18 @@
-{ lib, stdenv, fetchurl, alsaLib, fixDarwinDylibNames }:
+{ lib, stdenv, fetchurl, alsa-lib, fixDarwinDylibNames }:
 
 stdenv.mkDerivation rec {
   pname = "sndio";
-  version = "1.7.0";
-  enableParallelBuilding = true;
-  nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
-  buildInputs = lib.optional stdenv.hostPlatform.isLinux alsaLib;
+  version = "1.8.0";
 
   src = fetchurl {
     url = "http://www.sndio.org/sndio-${version}.tar.gz";
-    sha256 = "0ljmac0lnjn61admgbcwjfcr5fwccrsblx9rj9bys8wlhz8f796x";
+    sha256 = "027hlqji0h2cm96rb8qvkdmwxl56l59bgn828nvmwak2c2i5k703";
   };
+
+  nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
+  buildInputs = lib.optional stdenv.hostPlatform.isLinux alsa-lib;
+
+  enableParallelBuilding = true;
 
   meta = with lib; {
     homepage = "http://www.sndio.org";

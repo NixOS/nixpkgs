@@ -1,9 +1,8 @@
 { lib
 , stdenv
 , fetchurl
-, fetchpatch
 , aalib
-, alsaLib
+, alsa-lib
 , ffmpeg
 , flac
 , libGL
@@ -16,6 +15,7 @@
 , libtheora
 , libv4l
 , libvorbis
+, ncurses
 , perl
 , pkg-config
 , speex
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     aalib
-    alsaLib
+    alsa-lib
     ffmpeg
     flac
     libGL
@@ -52,6 +52,7 @@ stdenv.mkDerivation rec {
     libtheora
     libv4l
     libvorbis
+    ncurses
     perl
     speex
     vcdimager
@@ -64,18 +65,10 @@ stdenv.mkDerivation rec {
     libxcb
   ]);
 
-  patches = [
-    # splitting path plugin
-    (fetchpatch {
-      name = "0001-fix-XINE_PLUGIN_PATH-splitting.patch";
-      url = "https://sourceforge.net/p/xine/mailman/attachment/32394053-5e27-6558-f0c9-49e0da0bc3cc%40gmx.de/1/";
-      sha256 = "sha256-LJedxrD8JWITDo9pnS9BCmy7wiPTyJyoQ1puX49tOls=";
-    })
-  ];
+  enableParallelBuilding = true;
 
   NIX_LDFLAGS = "-lxcb-shm";
 
-  enableParallelBuilding = true;
 
   meta = with lib; {
     homepage = "http://www.xinehq.de/";

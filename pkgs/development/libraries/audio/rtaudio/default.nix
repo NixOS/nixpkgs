@@ -6,7 +6,7 @@
 , cmake
 , pkg-config
 , alsaSupport ? stdenv.hostPlatform.isLinux
-, alsaLib
+, alsa-lib
 , pulseaudioSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux
 , libpulseaudio
 , jackSupport ? true
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config ];
 
-  buildInputs = lib.optional alsaSupport alsaLib
+  buildInputs = lib.optional alsaSupport alsa-lib
     ++ lib.optional pulseaudioSupport libpulseaudio
     ++ lib.optional jackSupport jack
     ++ lib.optional coreaudioSupport CoreAudio;

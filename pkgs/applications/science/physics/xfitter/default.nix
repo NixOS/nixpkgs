@@ -16,9 +16,6 @@ stdenv.mkDerivation rec {
     ./undefined_behavior.patch
   ];
 
-  # patch needs to updated due to version bump
-  #CXXFLAGS = "-Werror=return-type";
-
   preConfigure =
   # Fix F77LD to workaround for a following build error:
   #
@@ -47,8 +44,6 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ lynx ];
 
   enableParallelBuilding = true;
-
-  hardeningDisable = [ "format" ];
 
   NIX_CFLAGS_COMPILE = lib.optional (stdenv.hostPlatform.libc == "glibc") "-I${libtirpc.dev}/include/tirpc";
   NIX_LDFLAGS = lib.optional (stdenv.hostPlatform.libc == "glibc") "-ltirpc";

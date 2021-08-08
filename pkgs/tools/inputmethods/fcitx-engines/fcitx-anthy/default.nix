@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "fcitx-anthy";
-  version = "0.2.3";
+  version = "0.2.4";
 
   src = fetchurl {
     url = "http://download.fcitx-im.org/fcitx-anthy/${pname}-${version}.tar.xz";
-    sha256 = "01jx7wwq0mifqrzkswfglqhwkszbfcl4jinxgdgqx9kc6mb4k6zd";
+    sha256 = "sha256-Hxhs2RXuFf/bhczcQ3+Zj+gI3+Z4BEfIzMIfUOUNX7M=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];

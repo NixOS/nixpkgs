@@ -1,21 +1,29 @@
-{ lib, fetchFromGitHub, rustPlatform }:
+{ lib, fetchFromGitHub, rustPlatform, makeWrapper, openssh, nix-serve }:
 
 rustPlatform.buildRustPackage rec {
   pname = "nix-simple-deploy";
-  version = "0.1.1";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "misuzu";
     repo = pname;
     rev = version;
-    sha256 = "12g0sbgs2dfnk0agp1kagfi1yhk26ga98zygxxrjhjxrqb2n5w80";
+    sha256 = "0vkgs3ffb5vdzhrqdnd54vbi36vrgd3408zvjn0rmqlnwi3wwhnk";
   };
 
-  cargoSha256 = "0svnz9r0lrmz333qpbpdddjd46vh9i74qchws8aifa2qwnqy0kmn";
+  cargoSha256 = "0z4d4cazl6qvigyqzdayxqfjc1ki1rhrpm76agc8lkrxrvhyay2h";
+
+  nativeBuildInputs = [ makeWrapper ];
+
+  postInstall = ''
+    wrapProgram "$out/bin/nix-simple-deploy" \
+      --prefix PATH : "${lib.makeBinPath [ openssh nix-serve ]}"
+  '';
 
   meta = with lib; {
     description = "Deploy software or an entire NixOS system configuration to another NixOS system";
     homepage = "https://github.com/misuzu/nix-simple-deploy";
+    platforms = platforms.unix;
     license = with licenses; [ asl20 /* OR */ mit ];
     maintainers = with maintainers; [ misuzu ];
   };

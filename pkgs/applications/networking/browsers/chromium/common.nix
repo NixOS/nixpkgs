@@ -7,9 +7,9 @@
 , xdg-utils, yasm, nasm, minizip, libwebp
 , libusb1, pciutils, nss, re2
 
-, python2Packages, python3Packages, perl, pkg-config
+, python2, python3, perl, pkg-config
 , nspr, systemd, libkrb5
-, util-linux, alsaLib
+, util-linux, alsa-lib
 , bison, gperf
 , glib, gtk3, dbus-glib
 , glibc
@@ -20,12 +20,13 @@
 , pipewire
 , libva
 , libdrm, wayland, mesa, libxkbcommon # Ozone
+, curl
 
 # optional dependencies
 , libgcrypt ? null # gnomeSupport || cupsSupport
 
 # package customization
-, gnomeSupport ? false, gnome ? null
+, gnomeSupport ? false, gnome2 ? null
 , gnomeKeyringSupport ? false, libgnome-keyring3 ? null
 , proprietaryCodecs ? true
 , cupsSupport ? true
@@ -41,25 +42,20 @@ buildFun:
 with lib;
 
 let
-  jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
-  # TODO: Python 3 support is incomplete and "python3 ../../build/util/python2_action.py"
-  # currently doesn't work due to mixed Python 2/3 dependencies:
-  pythonPackages = if chromiumVersionAtLeast "93"
-    then python3Packages
-    else python2Packages;
-  forcePython3Patch = (githubPatch
-    # Reland #8 of "Force Python 3 to be used in build."":
-    "a2d3c362802d9e6b62f895fcda75a3695b77b1b8"
-    "1r9spr2wmjk9x9l3m1gzn6692mlvbxdz0r5hlr5rfwiwr900rxi2"
-  );
+  python2WithPackages = python2.withPackages(ps: with ps; [
+    ply jinja2 setuptools
+  ]);
+  python3WithPackages = python3.withPackages(ps: with ps; [
+    ply jinja2 setuptools
+  ]);
 
   # The additional attributes for creating derivations based on the chromium
   # source tree.
   extraAttrs = buildFun base;
 
-  githubPatch = commit: sha256: fetchpatch {
+  githubPatch = { commit, sha256, revert ? false }: fetchpatch {
     url = "https://github.com/chromium/chromium/commit/${commit}.patch";
-    inherit sha256;
+    inherit sha256 revert;
   };
 
   mkGnFlags =
@@ -78,15 +74,16 @@ let
     in attrs: concatStringsSep " " (attrValues (mapAttrs toFlag attrs));
 
   # https://source.chromium.org/chromium/chromium/src/+/master:build/linux/unbundle/replace_gn_files.py
-  gnSystemLibraries = [
+  gnSystemLibraries = lib.optionals (!chromiumVersionAtLeast "93") [
     "ffmpeg"
+    "snappy"
+  ] ++ [
     "flac"
     "libjpeg"
     "libpng"
     "libwebp"
     "libxslt"
     "opus"
-    "snappy"
     "zlib"
   ];
 
@@ -95,9 +92,10 @@ let
   };
 
   defaultDependencies = [
+    (libpng.override { apngSupport = false; }) # https://bugs.chromium.org/p/chromium/issues/detail?id=752403
     bzip2 flac speex opusWithCustomModes
     libevent expat libjpeg snappy
-    libpng libcap
+    libcap
     xdg-utils minizip libwebp
     libusb1 re2
     ffmpeg libxslt libxml2
@@ -137,26 +135,26 @@ let
     };
 
     nativeBuildInputs = [
-      llvmPackages.lldClang.bintools
-      ninja which pythonPackages.python perl pkg-config
-      pythonPackages.ply pythonPackages.jinja2 nodejs
-      gnutar pythonPackages.setuptools
+      ninja pkg-config
+      python2WithPackages python3WithPackages perl nodejs
+      gnutar which
+      llvmPackages.bintools
     ];
 
     buildInputs = defaultDependencies ++ [
       nspr nss systemd
-      util-linux alsaLib
+      util-linux alsa-lib
       bison gperf libkrb5
       glib gtk3 dbus-glib
       libXScrnSaver libXcursor libXtst libxshmfence libGLU libGL
       mesa # required for libgbm
       pciutils protobuf speechd libXdamage at-spi2-core
-      jre
       pipewire
       libva
       libdrm wayland mesa.drivers libxkbcommon
+      curl
     ] ++ optional gnomeKeyringSupport libgnome-keyring3
-      ++ optionals gnomeSupport [ gnome.GConf libgcrypt ]
+      ++ optionals gnomeSupport [ gnome2.GConf libgcrypt ]
       ++ optionals cupsSupport [ libgcrypt cups ]
       ++ optional pulseSupport libpulseaudio;
 
@@ -165,16 +163,30 @@ let
       ./patches/widevine-79.patch # For bundling Widevine (DRM), might be replaceable via bundle_widevine_cdm=true in gnFlags
       # Fix the build by adding a missing dependency (s. https://crbug.com/1197837):
       ./patches/fix-missing-atspi2-dependency.patch
-    ] ++ optionals (chromiumVersionAtLeast "91") [
-      ./patches/closure_compiler-Use-the-Java-binary-from-the-system.patch
+    ] ++ lib.optionals (versionRange "91" "94.0.4583.0") [
+      # Required as dependency for the next patch:
+      (githubPatch {
+        # Reland "Reland "Linux sandbox syscall broker: use struct kernel_stat""
+        commit = "4b438323d68840453b5ef826c3997568e2e0e8c7";
+        sha256 = "1lf6yilx2ffd3r0840ilihp4px35w7jvr19ll56bncqmz4r5fd82";
+      })
+      # To fix the text rendering, see #131074:
+      (githubPatch {
+        # Linux sandbox: fix fstatat() crash
+        commit = "60d5e803ef2a4874d29799b638754152285e0ed9";
+        sha256 = "0apmsqqlfxprmdmi3qzp3kr9jc52mcc4xzps206kwr8kzwv48b70";
+      })
+    ] ++ lib.optionals (chromiumVersionAtLeast "93") [
+      # We need to revert this patch to build M93 with LLVM 12.
+      (githubPatch {
+        # Reland "Replace 'blacklist' with 'ignorelist' in ./tools/msan/."
+        commit = "9d080c0934b848ee4a05013c78641e612fcc1e03";
+        sha256 = "1bxdhxmiy6h4acq26lq43x2mxx6rawmfmlgsh5j7w8kyhkw5af0c";
+        revert = true;
+      })
     ];
 
-    postPatch = lib.optionalString (chromiumVersionAtLeast "91") ''
-      # Required for patchShebangs (unsupported):
-      chmod -x third_party/webgpu-cts/src/tools/deno
-    '' + optionalString (chromiumVersionAtLeast "92") ''
-      patch -p1 --reverse < ${forcePython3Patch}
-    '' + ''
+    postPatch = ''
       # remove unused third-party
       for lib in ${toString gnSystemLibraries}; do
         if [ -d "third_party/$lib" ]; then
@@ -193,6 +205,7 @@ let
         substituteInPlace third_party/harfbuzz-ng/src/src/update-unicode-tables.make \
           --replace "/usr/bin/env -S make -f" "/usr/bin/make -f"
       fi
+      chmod -x third_party/webgpu-cts/src/tools/deno
 
       # We want to be able to specify where the sandbox is via CHROME_DEVEL_SANDBOX
       substituteInPlace sandbox/linux/suid/client/setuid_sandbox_host.cc \
@@ -203,7 +216,7 @@ let
       substituteInPlace services/audio/audio_sandbox_hook_linux.cc \
         --replace \
           '/usr/share/alsa/' \
-          '${alsaLib}/share/alsa/' \
+          '${alsa-lib}/share/alsa/' \
         --replace \
           '/usr/lib/x86_64-linux-gnu/gconv/' \
           '${glibc}/lib/gconv/' \
@@ -224,9 +237,10 @@ let
       sed -i -e 's,/usr,/run/current-system/sw,' chrome/common/chrome_paths.cc
 
       patchShebangs .
-      # use our own nodejs
+      # Link to our own Node.js and Java (required during the build):
       mkdir -p third_party/node/linux/node-linux-x64/bin
       ln -s "$(command -v node)" third_party/node/linux/node-linux-x64/bin/node
+      ln -s "${jre8}/bin/java" third_party/jdk/current/bin/
 
       # Allow building against system libraries in official builds
       sed -i 's/OFFICIAL_BUILD/GOOGLE_CHROME_BUILD/' tools/generate_shim_headers/generate_shim_headers.py
@@ -241,35 +255,40 @@ let
     '';
 
     gnFlags = mkGnFlags ({
+      # Main build and toolchain settings:
       is_official_build = true;
       custom_toolchain = "//build/toolchain/linux/unbundle:default";
       host_toolchain = "//build/toolchain/linux/unbundle:default";
-      system_wayland_scanner_path = "${wayland}/bin/wayland-scanner";
-
       use_sysroot = false;
-      use_gnome_keyring = gnomeKeyringSupport;
-      use_gio = gnomeSupport;
-      # ninja: error: '../../native_client/toolchain/linux_x86/pnacl_newlib/bin/x86_64-nacl-objcopy',
-      # needed by 'nacl_irt_x86_64.nexe', missing and no known rule to make it
-      enable_nacl = false;
-      # Enabling the Widevine component here doesn't affect whether we can
-      # redistribute the chromium package; the Widevine component is either
-      # added later in the wrapped -wv build or downloaded from Google.
-      enable_widevine = true;
-      use_cups = cupsSupport;
-      # Provides the enable-webrtc-pipewire-capturer flag to support Wayland screen capture.
-      rtc_use_pipewire = true;
-
+      system_wayland_scanner_path = "${wayland}/bin/wayland-scanner";
       treat_warnings_as_errors = false;
       clang_use_chrome_plugins = false;
       blink_symbol_level = 0;
       symbol_level = 0;
-      fieldtrial_testing_like_official_build = true;
 
       # Google API key, see: https://www.chromium.org/developers/how-tos/api-keys
       # Note: The API key is for NixOS/nixpkgs use ONLY.
       # For your own distribution, please get your own set of keys.
       google_api_key = "AIzaSyDGi15Zwl11UNe6Y-5XW_upsfyw31qwZPI";
+
+      # Optional features:
+      use_cups = cupsSupport;
+      use_gio = gnomeSupport;
+      use_gnome_keyring = gnomeKeyringSupport;
+
+      # Feature overrides:
+      # Native Client support was deprecated in 2020 and support will end in June 2021:
+      enable_nacl = false;
+      # Enabling the Widevine component here doesn't affect whether we can
+      # redistribute the chromium package; the Widevine component is either
+      # added later in the wrapped -wv build or downloaded from Google:
+      enable_widevine = true;
+      # Provides the enable-webrtc-pipewire-capturer flag to support Wayland screen capture:
+      rtc_use_pipewire = true;
+    } // optionalAttrs (!chromiumVersionAtLeast "94") {
+      fieldtrial_testing_like_official_build = true;
+    } // optionalAttrs (chromiumVersionAtLeast "94") {
+      disable_fieldtrial_testing_config = true;
     } // optionalAttrs proprietaryCodecs {
       # enable support for the H.264 codec
       proprietary_codecs = true;
@@ -278,14 +297,6 @@ let
     } // optionalAttrs pulseSupport {
       use_pulseaudio = true;
       link_pulseaudio = true;
-      # Disable PGO (defaults to 2 since M89) because it fails without additional changes:
-      # error: Could not read profile ../../chrome/build/pgo_profiles/chrome-linux-master-1610647094-405a32bcf15e5a84949640f99f84a5b9f61e2f2e.profdata: Unsupported instrumentation profile format version
-      chrome_pgo_phase = 0;
-      # Disable build with TFLite library because it fails without additional changes:
-      # ninja: error: '../../chrome/test/data/simple_test.tflite', needed by 'test_data/simple_test.tflite', missing and no known rule to make it
-      # Note: chrome/test/data/simple_test.tflite is in the Git repository but not in chromium-90.0.4400.8.tar.xz
-      # See also chrome/services/machine_learning/README.md
-      build_with_tflite_lib = false;
     } // optionalAttrs ungoogled {
       chrome_pgo_phase = 0;
       enable_hangout_services_extension = false;
@@ -311,7 +322,7 @@ let
 
       # This is to ensure expansion of $out.
       libExecPath="${libExecPath}"
-      python build/linux/unbundle/replace_gn_files.py --system-libraries ${toString gnSystemLibraries}
+      ${python2}/bin/python2 build/linux/unbundle/replace_gn_files.py --system-libraries ${toString gnSystemLibraries}
       ${gnChromium}/bin/gn gen --args=${escapeShellArg gnFlags} out/Release | tee gn-gen-outputs.txt
 
       # Fail if `gn gen` contains a WARNING.

@@ -85,7 +85,7 @@ in buildFHSUserEnv rec {
   targetPkgs = pkgs: with pkgs; [
     steamPackages.steam
     # License agreement
-    gnome3.zenity
+    gnome.zenity
   ] ++ commonTargetPkgs pkgs;
 
   multiPkgs = pkgs: with pkgs; [
@@ -98,6 +98,7 @@ in buildFHSUserEnv rec {
     xorg.libXfixes
     libGL
     libva
+    pipewire.lib
 
     # Not formally in runtime but needed by some games
     at-spi2-atk
@@ -105,6 +106,7 @@ in buildFHSUserEnv rec {
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-ugly
     gst_all_1.gst-plugins-base
+    json-glib # paradox launcher (Stellaris)
     libdrm
     libxkbcommon # paradox launcher
     mono
@@ -134,7 +136,7 @@ in buildFHSUserEnv rec {
     libGLU
     libuuid
     libbsd
-    alsaLib
+    alsa-lib
 
     # Loop Hero
     libidn2
@@ -148,6 +150,7 @@ in buildFHSUserEnv rec {
 
     # dependencies for mesa drivers, needed inside pressure-vessel
     mesa.drivers
+    mesa.llvmPackages.llvm.lib
     vulkan-loader
     expat
     wayland
@@ -155,7 +158,6 @@ in buildFHSUserEnv rec {
     xorg.libXdamage
     xorg.libxshmfence
     xorg.libXxf86vm
-    llvm_11.lib
     libelf
   ] ++ (if (!nativeOnly) then [
     (steamPackages.steam-runtime-wrapped.override {

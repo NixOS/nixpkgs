@@ -17,11 +17,11 @@ lua = luajitPackages;
 
 unwrapped = stdenv.mkDerivation rec {
   pname = "knot-resolver";
-  version = "5.3.2";
+  version = "5.4.0";
 
   src = fetchurl {
     url = "https://secure.nic.cz/files/knot-resolver/${pname}-${version}.tar.xz";
-    sha256 = "8b6f447d5fe93422d4c129a2d4004a977369c3aa6e55258ead1cbd488bc01436";
+    sha256 = "534af671b98433b23b57039acc9d7d3c100a4888a8cf9aeba36161774ca0815e";
   };
 
   outputs = [ "out" "dev" ];
@@ -43,7 +43,7 @@ unwrapped = stdenv.mkDerivation rec {
     # some tests have issues with network sandboxing, apparently
   + optionalString doInstallCheck ''
     echo 'os.exit(77)' > daemon/lua/trust_anchors.test/bootstrap.test.lua
-    sed '/^[[:blank:]]*test_dstaddr,$/d' -i \
+    sed -E '/^[[:blank:]]*test_(dstaddr|headers),?$/d' -i \
       tests/config/doh2.test.lua modules/http/http_doh.test.lua
   '';
 
@@ -79,7 +79,8 @@ unwrapped = stdenv.mkDerivation rec {
     rm -r "$out"/lib/sysusers.d/ # ATM more likely to harm than help
   '';
 
-  doInstallCheck = with stdenv; hostPlatform == buildPlatform;
+  doInstallCheck = with stdenv; hostPlatform == buildPlatform
+    && !(isDarwin && isAarch64); # avoid luarocks, as it's broken ATM on the platform
   installCheckInputs = [ cmocka which cacert lua.cqueues lua.basexx lua.http ];
   installCheckPhase = ''
     meson test --print-errorlogs

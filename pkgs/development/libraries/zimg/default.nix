@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "zimg";
-  version = "3.0.1";
+  version = "3.0.2";
 
   src = fetchFromGitHub {
     owner  = "sekrit-twc";
     repo   = "zimg";
     rev    = "release-${version}";
-    sha256 = "1mpns443ifbkbaxsw6yy8z01l7815259pxzd7s006npr0dxnc8ng";
+    sha256 = "19qim6vyfas0m09piiw0pw7i0xjzi8vs6bx716gz472nflsg1604";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

@@ -1,5 +1,5 @@
 { lib, mkDerivation, fetchFromGitHub
-, pkg-config, cmake, alsaLib, libjack2, dbus, qtbase, qttools, qtx11extras
+, pkg-config, cmake, alsa-lib, libjack2, dbus, qtbase, qttools, qtx11extras
 # Enable jack session support
 , jackSession ? false
 }:
@@ -21,7 +21,7 @@ mkDerivation rec {
     qtbase
     qtx11extras
     qttools
-    alsaLib
+    alsa-lib
     libjack2
     dbus
   ];

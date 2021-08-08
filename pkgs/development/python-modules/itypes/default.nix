@@ -26,6 +26,6 @@ buildPythonPackage rec {
     description = "Simple immutable types for python";
     homepage = "https://github.com/tomchristie/itypes";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ivegotasthma ];
+    maintainers = with maintainers; [ ];
   };
 }

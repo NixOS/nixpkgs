@@ -13,14 +13,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "pijul";
-  version = "1.0.0-alpha.48";
+  version = "1.0.0-alpha.53";
 
   src = fetchCrate {
     inherit version pname;
-    sha256 = "09sz5665nwj2jppx2695hbwdqr3ws6z6rg7mmc4ldb7hkp4yilig";
+    sha256 = "1y5wnqscyfhd806qs6gfmssm7hvfdi7mxc9p1125jnmzca4wcsm2";
   };
 
-  cargoSha256 = "1v5w5za7l3hy9anz136x0vgdmgg090f5sawzgrg5ylgxy2l9s2gn";
+  cargoSha256 = "0m9zjagq59rxf5pysklal030f4n0dqgmjsgwcnljajxc2r26665h";
 
   cargoBuildFlags = lib.optional gitImportSupport "--features=git";
 
@@ -36,6 +36,6 @@ rustPlatform.buildRustPackage rec {
     description = "A distributed version control system";
     homepage = "https://pijul.org";
     license = with licenses; [ gpl2Plus ];
-    maintainers = with maintainers; [ gal_bolle dywedir ];
+    maintainers = with maintainers; [ gal_bolle dywedir fabianhjr ];
   };
 }

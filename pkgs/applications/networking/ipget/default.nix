@@ -2,16 +2,21 @@
 
 buildGoModule rec {
   pname = "ipget";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "ipfs";
     repo = "ipget";
     rev = "v${version}";
-    sha256 = "14ygij6hj6bd4g4aw6jgfbi1fgpal0jgf1hr22zxm16dpx3vva6b";
+    sha256 = "sha256-YD05HIVr99b8VmEJgzY2ClNv31I98d0NbfCk3XcB+xk=";
   };
 
-  vendorSha256 = "0vy21pdqk6q5fw7wlcv51myhh9y79n2qhvy61rmblwhxlrkh6sdv";
+  vendorSha256 = "sha256-bymHVWskCt7bf02CveMXl1VhZYhRSEH7xIoESh31iGg=";
+
+  postPatch = ''
+    # main module (github.com/ipfs/ipget) does not contain package github.com/ipfs/ipget/sharness/dependencies
+    rm -r sharness/dependencies/
+  '';
 
   doCheck = false;
 

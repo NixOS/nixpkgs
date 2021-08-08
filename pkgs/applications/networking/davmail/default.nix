@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   pname = "davmail";
-  version = "5.4.0";
+  version = "5.5.1";
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${version}/${pname}-${version}-3135.zip";
-    sha256 = "05n2j5canh046744arvni6yfdsandvjkld93w3p7rg116jrh19gq";
+    url = "mirror://sourceforge/${pname}/${version}/${pname}-${version}-3299.zip";
+    sha256 = "sha256-NN/TUOcUIifNzrJnZmtYhs6UVktjlfoOYJjYaMEQpI4=";
   };
 
   sourceRoot = ".";
@@ -13,11 +13,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper unzip ];
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/share/davmail
     cp -vR ./* $out/share/davmail
     makeWrapper $out/share/davmail/davmail $out/bin/davmail \
       --prefix PATH : ${jre}/bin \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ glib gtk2 libXtst ]}
+    runHook postInstall
   '';
 
   meta = with lib; {
@@ -25,6 +27,6 @@ stdenv.mkDerivation rec {
     description = "A Java application which presents a Microsoft Exchange server as local CALDAV, IMAP and SMTP servers";
     maintainers = [ maintainers.hinton ];
     platforms = platforms.all;
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
   };
 }

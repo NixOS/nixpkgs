@@ -1,4 +1,5 @@
 { buildDunePackage
+, cppo
 , stdlib-shims
 , ppx_yojson_conv_lib
 , ocaml-syntax-shims
@@ -26,16 +27,20 @@ buildDunePackage {
   '';
 
   buildInputs = [
-    stdlib-shims
+    cppo
     ppx_yojson_conv_lib
     ocaml-syntax-shims
     octavius
-    uutf
-    csexp
     dune-build-info
     omd
     cmdliner
+  ];
+
+  propagatedBuildInputs = [
+    csexp
     jsonrpc
+    stdlib-shims
+    uutf
   ];
 
   meta = jsonrpc.meta // {

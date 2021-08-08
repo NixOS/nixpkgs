@@ -21,7 +21,15 @@ let
                                 ))
     else throw (traceSeq v "services.unbound.settings: unexpected type");
 
-  confFile = pkgs.writeText "unbound.conf" (concatStringsSep "\n" ((mapAttrsToList (toConf "") cfg.settings) ++ [""]));
+  confNoServer = concatStringsSep "\n" ((mapAttrsToList (toConf "") (builtins.removeAttrs cfg.settings [ "server" ])) ++ [""]);
+  confServer = concatStringsSep "\n" (mapAttrsToList (toConf "  ") (builtins.removeAttrs cfg.settings.server [ "define-tag" ]));
+
+  confFile = pkgs.writeText "unbound.conf" ''
+    server:
+    ${optionalString (cfg.settings.server.define-tag != "") (toOption "  " "define-tag" cfg.settings.server.define-tag)}
+    ${confServer}
+    ${confNoServer}
+  '';
 
   rootTrustAnchorFile = "${cfg.stateDir}/root.key";
 
@@ -102,8 +110,8 @@ in {
           freeformType = let
             validSettingsPrimitiveTypes = oneOf [ int str bool float ];
             validSettingsTypes = oneOf [ validSettingsPrimitiveTypes (listOf validSettingsPrimitiveTypes) ];
-            settingsType = (attrsOf validSettingsTypes);
-          in attrsOf (oneOf [ string settingsType (listOf settingsType) ])
+            settingsType = oneOf [ str (attrsOf validSettingsTypes) ];
+          in attrsOf (oneOf [ settingsType (listOf settingsType) ])
               // { description = ''
                 unbound.conf configuration type. The format consist of an attribute
                 set of settings. Each settings can be either one value, a list of
@@ -170,6 +178,7 @@ in {
         # prevent race conditions on system startup when interfaces are not yet
         # configured
         ip-freebind = mkDefault true;
+        define-tag = mkDefault "";
       };
       remote-control = {
         control-enable = mkDefault false;

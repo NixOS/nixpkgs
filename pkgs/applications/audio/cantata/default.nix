@@ -54,12 +54,26 @@ let
   fstat = x: fn:
     "-DENABLE_${fn}=${if x then "ON" else "OFF"}";
 
-  fstats = x:
-    map (fstat x);
-
   withUdisks = (withTaglib && withDevices);
 
-  perl' = perl.withPackages (ppkgs: with ppkgs; [ URI ]);
+  options = [
+    { names = [ "CDDB" ]; enable = withCddb; pkgs = [ libcddb ]; }
+    { names = [ "CDPARANOIA" ]; enable = withCdda; pkgs = [ cdparanoia ]; }
+    { names = [ "DEVICES_SUPPORT" ]; enable = withDevices; pkgs = [ ]; }
+    { names = [ "DYNAMIC" ]; enable = withDynamic; pkgs = [ ]; }
+    { names = [ "FFMPEG" "MPG123" "SPEEXDSP" ]; enable = withReplaygain; pkgs = [ ffmpeg speex mpg123 ]; }
+    { names = [ "HTTPS_SUPPORT" ]; enable = true; pkgs = [ ]; }
+    { names = [ "HTTP_SERVER" ]; enable = withHttpServer; pkgs = [ ]; }
+    { names = [ "HTTP_STREAM_PLAYBACK" ]; enable = withHttpStream; pkgs = [ qtmultimedia ]; }
+    { names = [ "LAME" ]; enable = withLame; pkgs = [ lame ]; }
+    { names = [ "LIBVLC" ]; enable = withLibVlc; pkgs = [ libvlc ]; }
+    { names = [ "MTP" ]; enable = withMtp; pkgs = [ libmtp ]; }
+    { names = [ "MUSICBRAINZ" ]; enable = withMusicbrainz; pkgs = [ libmusicbrainz5 ]; }
+    { names = [ "ONLINE_SERVICES" ]; enable = withOnlineServices; pkgs = [ ]; }
+    { names = [ "STREAMS" ]; enable = withStreams; pkgs = [ ]; }
+    { names = [ "TAGLIB" "TAGLIB_EXTRAS" ]; enable = withTaglib; pkgs = [ taglib taglib_extras ]; }
+    { names = [ "UDISKS2" ]; enable = withUdisks; pkgs = [ udisks2 ]; }
+  ];
 
 in
 mkDerivation rec {
@@ -84,38 +98,16 @@ mkDerivation rec {
     patchShebangs playlists
   '';
 
-  buildInputs = [ qtbase qtsvg perl' ]
-    ++ lib.optionals withTaglib [ taglib taglib_extras ]
-    ++ lib.optionals withReplaygain [ ffmpeg speex mpg123 ]
-    ++ lib.optional withHttpStream qtmultimedia
-    ++ lib.optional withCdda cdparanoia
-    ++ lib.optional withCddb libcddb
-    ++ lib.optional withLame lame
-    ++ lib.optional withMtp libmtp
-    ++ lib.optional withMusicbrainz libmusicbrainz5
-    ++ lib.optional withUdisks udisks2
-    ++ lib.optional withLibVlc libvlc;
+  buildInputs = [
+    qtbase
+    qtsvg
+    (perl.withPackages (ppkgs: with ppkgs; [ URI ]))
+  ]
+  ++ lib.flatten (builtins.catAttrs "pkgs" (builtins.filter (e: e.enable) options));
 
   nativeBuildInputs = [ cmake pkg-config qttools ];
 
-  cmakeFlags = lib.flatten [
-    (fstats withTaglib [ "TAGLIB" "TAGLIB_EXTRAS" ])
-    (fstats withReplaygain [ "FFMPEG" "MPG123" "SPEEXDSP" ])
-    (fstat withHttpStream "HTTP_STREAM_PLAYBACK")
-    (fstat withCdda "CDPARANOIA")
-    (fstat withCddb "CDDB")
-    (fstat withLame "LAME")
-    (fstat withMtp "MTP")
-    (fstat withMusicbrainz "MUSICBRAINZ")
-    (fstat withOnlineServices "ONLINE_SERVICES")
-    (fstat withDynamic "DYNAMIC")
-    (fstat withDevices "DEVICES_SUPPORT")
-    (fstat withHttpServer "HTTP_SERVER")
-    (fstat withLibVlc "LIBVLC")
-    (fstat withStreams "STREAMS")
-    (fstat withUdisks "UDISKS2")
-    "-DENABLE_HTTPS_SUPPORT=ON"
-  ];
+  cmakeFlags = lib.flatten (map (e: map (f: fstat e.enable f) e.names) options);
 
   meta = with lib; {
     description = "A graphical client for MPD";

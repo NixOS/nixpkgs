@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "aiodiscover";
-  version = "1.4.0";
+  version = "1.4.2";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-t0bs3n0eLUR22i1lZkepCffjiUFzvXBdP7Xq49KXeS4=";
+    sha256 = "sha256-xiIN/YLIOdPuqenyxybu0iUpYEy3MyBssXswza5InU0=";
   };
 
   propagatedBuildInputs = [
@@ -28,7 +28,9 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
-    substituteInPlace setup.py --replace '"pytest-runner>=5.2",' ""
+    substituteInPlace setup.py \
+      --replace '"pytest-runner>=5.2",' "" \
+      --replace "pyroute2>=0.5.18,!=0.6.1" "pyroute2"
   '';
 
   checkInputs = [

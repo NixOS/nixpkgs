@@ -8,15 +8,17 @@
 , libmysqlclient
 , log4cplus
 , postgresql
-, python3 }:
+, python3
+, nixosTests
+}:
 
 stdenv.mkDerivation rec {
   pname = "kea";
-  version = "1.9.6";
+  version = "1.9.9";
 
   src = fetchurl {
     url = "https://ftp.isc.org/isc/${pname}/${version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-sEFE5OfYt1mcAnGZCWqYFzIepzKNZZcd2rVhdxv/3sw=";
+    sha256 = "sha256-iVSWBR1+SkXlkwMii2PXpcxFSXYigz4lfNnMZBvS2kM=";
   };
 
   patches = [ ./dont-create-var.patch ];
@@ -48,11 +50,15 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  passthru.tests = {
+    inherit (nixosTests) kea;
+  };
+
   meta = with lib; {
     homepage = "https://kea.isc.org/";
     description = "High-performance, extensible DHCP server by ISC";
     longDescription = ''
-      KEA is a new open source DHCPv4/DHCPv6 server being developed by
+      Kea is a new open source DHCPv4/DHCPv6 server being developed by
       Internet Systems Consortium. The objective of this project is to
       provide a very high-performance, extensible DHCP server engine for
       use by enterprises and service providers, either as is or with
@@ -60,6 +66,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.mpl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ fpletz ];
+    maintainers = with maintainers; [ fpletz hexa ];
   };
 }

@@ -39,19 +39,19 @@
 , zlib
 }:
 let
-  version = "2012";
+  version = "2103";
 
   sysArch =
     if stdenv.hostPlatform.system == "x86_64-linux" then "x64"
     else throw "Unsupported system: ${stdenv.hostPlatform.system}";
-  # The downloaded archive also contains i386 and ARM binaries, but these have not been tested.
+  # The downloaded archive also contains ARM binaries, but these have not been tested.
 
   vmwareHorizonClientFiles = stdenv.mkDerivation {
     name = "vmwareHorizonClientFiles";
     inherit version;
     src = fetchurl {
-      url = "https://download3.vmware.com/software/view/viewclients/CART21FQ4/VMware-Horizon-Client-Linux-2012-8.1.0-17349998.tar.gz";
-      sha256 = "0afda1f3116e75a4e7f89990d8ee60ccea5f3bb8a2360652162fa11c795724ce";
+      url = "https://download3.vmware.com/software/view/viewclients/CART22FQ1/VMware-Horizon-Client-Linux-2103-8.2.0-17742757.tar.gz";
+      sha256 = "62f95bb802b058a98f5ee6c2296b89bd7e15884a24dc8a8ba7ce89de7e0798e4";
     };
     nativeBuildInputs = [ makeWrapper ];
     installPhase = ''

@@ -1,16 +1,17 @@
 { lib, stdenv
 , fetchurl
 , makeWrapper
-, alsaLib
+, alsa-lib
 , perl
 , withConplay ? !stdenv.targetPlatform.isWindows
 }:
 
 stdenv.mkDerivation rec {
-  name = "mpg123-1.26.5";
+  pname = "mpg123";
+  version = "1.26.5";
 
   src = fetchurl {
-    url = "mirror://sourceforge/mpg123/${name}.tar.bz2";
+    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.bz2";
     sha256 = "sha256-UCqX4Nk1vn432YczgCHY8wG641wohPKoPVnEtSRm7wY=";
   };
 
@@ -19,7 +20,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = lib.optionals withConplay [ makeWrapper ];
 
   buildInputs = lib.optionals withConplay [ perl ]
-    ++ lib.optionals (!stdenv.isDarwin && !stdenv.targetPlatform.isWindows) [ alsaLib ];
+    ++ lib.optionals (!stdenv.isDarwin && !stdenv.targetPlatform.isWindows) [ alsa-lib ];
 
   configureFlags = lib.optional
     (stdenv.hostPlatform ? mpg123)

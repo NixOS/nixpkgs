@@ -1,7 +1,7 @@
 { lib, stdenv
 , fetchurl
 , gettext
-, gnome3
+, gnome
 , itstool
 , libxml2
 , yelp-tools
@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-user-docs";
-  version = "3.38.2";
+  version = "40.3";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-user-docs/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1h9lyn80zccmgi6gpymabgrcj7km0sb1axll5z490qnx74xbn37m";
+    url = "mirror://gnome/sources/gnome-user-docs/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    sha256 = "PeBXr6KsDebKcH9KdsKTLcvFVsHQ0cwCBWXcGHYpLM0=";
   };
 
   nativeBuildInputs = [
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
     };
   };

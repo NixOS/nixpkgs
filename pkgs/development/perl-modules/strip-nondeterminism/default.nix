@@ -18,7 +18,8 @@ buildPerlPackage rec {
   doCheck = false;
 
   nativeBuildInputs = lib.optionals stdenv.isDarwin [ shortenPerlShebang ];
-  buildInputs = [ ArchiveZip ArchiveCpio file ];
+  buildInputs = [ ArchiveZip ArchiveCpio ];
+  propagatedNativeBuildInputs = [ file ];
 
   perlPostHook = ''
     # we don’t need the debhelper script

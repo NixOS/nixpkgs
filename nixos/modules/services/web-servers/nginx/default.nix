@@ -22,7 +22,9 @@ let
     } // (optionalAttrs (vhostConfig.enableACME || vhostConfig.useACMEHost != null) {
       sslCertificate = "${certs.${certName}.directory}/fullchain.pem";
       sslCertificateKey = "${certs.${certName}.directory}/key.pem";
-      sslTrustedCertificate = "${certs.${certName}.directory}/chain.pem";
+      sslTrustedCertificate = if vhostConfig.sslTrustedCertificate != null
+                              then vhostConfig.sslTrustedCertificate
+                              else "${certs.${certName}.directory}/chain.pem";
     })
   ) cfg.virtualHosts;
   enableIPv6 = config.networking.enableIPv6;
@@ -154,9 +156,9 @@ let
 
       ${optionalString (cfg.recommendedProxySettings) ''
         proxy_redirect          off;
-        proxy_connect_timeout   60;
-        proxy_send_timeout      60;
-        proxy_read_timeout      60;
+        proxy_connect_timeout   ${cfg.proxyTimeout};
+        proxy_send_timeout      ${cfg.proxyTimeout};
+        proxy_read_timeout      ${cfg.proxyTimeout};
         proxy_http_version      1.1;
         include ${recommendedProxyConfig};
       ''}
@@ -230,13 +232,13 @@ let
 
         defaultListen =
           if vhost.listen != [] then vhost.listen
-          else ((optionals hasSSL (
-            singleton                    { addr = "0.0.0.0"; port = 443; ssl = true; }
-            ++ optional enableIPv6 { addr = "[::]";    port = 443; ssl = true; }
-          )) ++ optionals (!onlySSL) (
-            singleton                    { addr = "0.0.0.0"; port = 80;  ssl = false; }
-            ++ optional enableIPv6 { addr = "[::]";    port = 80;  ssl = false; }
-          ));
+          else optionals (hasSSL || vhost.rejectSSL) (
+            singleton { addr = "0.0.0.0"; port = 443; ssl = true; }
+            ++ optional enableIPv6 { addr = "[::]"; port = 443; ssl = true; }
+          ) ++ optionals (!onlySSL) (
+            singleton { addr = "0.0.0.0"; port = 80; ssl = false; }
+            ++ optional enableIPv6 { addr = "[::]"; port = 80; ssl = false; }
+          );
 
         hostListen =
           if vhost.forceSSL
@@ -302,6 +304,9 @@ let
           ''}
           ${optionalString (hasSSL && vhost.sslTrustedCertificate != null) ''
             ssl_trusted_certificate ${vhost.sslTrustedCertificate};
+          ''}
+          ${optionalString vhost.rejectSSL ''
+            ssl_reject_handshake on;
           ''}
 
           ${mkBasicAuth vhostName vhost}
@@ -398,6 +403,15 @@ in
         type = types.bool;
         description = "
           Enable recommended proxy settings.
+        ";
+      };
+
+      proxyTimeout = mkOption {
+        type = types.str;
+        default = "60s";
+        example = "20s";
+        description = "
+          Change the proxy related timeouts in recommendedProxySettings.
         ";
       };
 
@@ -762,20 +776,27 @@ in
       }
 
       {
-        assertion = all (conf: with conf;
-          !(addSSL && (onlySSL || enableSSL)) &&
-          !(forceSSL && (onlySSL || enableSSL)) &&
-          !(addSSL && forceSSL)
+        assertion = all (host: with host;
+          count id [ addSSL (onlySSL || enableSSL) forceSSL rejectSSL ] <= 1
         ) (attrValues virtualHosts);
         message = ''
           Options services.nginx.service.virtualHosts.<name>.addSSL,
-          services.nginx.virtualHosts.<name>.onlySSL and services.nginx.virtualHosts.<name>.forceSSL
-          are mutually exclusive.
+          services.nginx.virtualHosts.<name>.onlySSL,
+          services.nginx.virtualHosts.<name>.forceSSL and
+          services.nginx.virtualHosts.<name>.rejectSSL are mutually exclusive.
         '';
       }
 
       {
-        assertion = all (conf: !(conf.enableACME && conf.useACMEHost != null)) (attrValues virtualHosts);
+        assertion = any (host: host.rejectSSL) (attrValues virtualHosts) -> versionAtLeast cfg.package.version "1.19.4";
+        message = ''
+          services.nginx.virtualHosts.<name>.rejectSSL requires nginx version
+          1.19.4 or above; see the documentation for services.nginx.package.
+        '';
+      }
+
+      {
+        assertion = all (host: !(host.enableACME && host.useACMEHost != null)) (attrValues virtualHosts);
         message = ''
           Options services.nginx.service.virtualHosts.<name>.enableACME and
           services.nginx.virtualHosts.<name>.useACMEHost are mutually exclusive.
@@ -850,7 +871,7 @@ in
         PrivateMounts = true;
         # System Call Filtering
         SystemCallArchitectures = "native";
-        SystemCallFilter = "~@chown @cpu-emulation @debug @keyring @ipc @module @mount @obsolete @privileged @raw-io @reboot @setuid @swap";
+        SystemCallFilter = "~@cpu-emulation @debug @keyring @ipc @mount @obsolete @privileged @setuid";
       };
     };
 
@@ -858,8 +879,9 @@ in
       source = configFile;
     };
 
-    # postRun hooks on cert renew can't be used to restart Nginx since renewal
-    # runs as the unprivileged acme user. sslTargets are added to wantedBy + before
+    # This service waits for all certificates to be available
+    # before reloading nginx configuration.
+    # sslTargets are added to wantedBy + before
     # which allows the acme-finished-$cert.target to signify the successful updating
     # of certs end-to-end.
     systemd.services.nginx-config-reload = let

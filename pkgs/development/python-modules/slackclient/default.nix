@@ -10,11 +10,11 @@
 , pytest-cov
 , pytest-mock
 , pytestCheckHook
-, pytestrunner
+, pytest-runner
 , requests
 , responses
 , six
-, websocket_client
+, websocket-client
 }:
 
 buildPythonPackage rec {
@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiohttp
-    websocket_client
+    websocket-client
     requests
     six
   ];
@@ -45,7 +45,7 @@ buildPythonPackage rec {
     pytest-cov
     pytest-mock
     pytestCheckHook
-    pytestrunner
+    pytest-runner
     responses
   ];
 

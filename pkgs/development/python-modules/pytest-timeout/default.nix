@@ -4,7 +4,7 @@
 , pytest
 , pytestCheckHook
 , pexpect
-, pytestcov
+, pytest-cov
 }:
 
 buildPythonPackage rec {
@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   buildInputs = [ pytest ];
 
-  checkInputs = [ pytestCheckHook pexpect pytestcov ];
+  checkInputs = [ pytestCheckHook pexpect pytest-cov ];
 
   disabledTests = [
     "test_suppresses_timeout_when_pdb_is_entered"

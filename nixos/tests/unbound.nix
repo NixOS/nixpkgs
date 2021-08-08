@@ -192,7 +192,6 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
 
     testScript = { nodes, ... }: ''
       import typing
-      import json
 
       zone = "example.local."
       records = [("AAAA", "abcd::eeff"), ("A", "1.2.3.4")]

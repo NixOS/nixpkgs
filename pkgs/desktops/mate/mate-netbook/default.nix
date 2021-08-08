@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, gettext, gtk3, libwnck3, libfakekey, libXtst, mate, wrapGAppsHook, mateUpdateScript }:
+{ lib, stdenv, fetchurl, pkg-config, gettext, gtk3, libwnck, libfakekey, libXtst, mate, wrapGAppsHook, mateUpdateScript }:
 
 stdenv.mkDerivation rec {
   pname = "mate-netbook";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gtk3
-    libwnck3
+    libwnck
     libfakekey
     libXtst
     mate.mate-panel

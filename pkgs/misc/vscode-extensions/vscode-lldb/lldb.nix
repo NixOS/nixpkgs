@@ -1,13 +1,13 @@
 # Patched lldb for Rust language support.
-{ lldb_11, fetchFromGitHub }:
+{ lldb_12, fetchFromGitHub }:
 let
   llvmSrc = fetchFromGitHub {
     owner = "vadimcn";
     repo = "llvm-project";
-    rev = "dd7efd9ea2d38e3227bc2e83a99772aceeb44242";
-    sha256 = "sha256-XY8J8Ie1cWb6ok72Gju/KUxZ4fIFQVitYVnuCezGRKQ=";
+    rev = "f2e9ff34256cd8c6feaf14359f88ad3f538ed687";
+    sha256 = "sha256-5UsCBu3rtt+l2HZiCswoQJPPh8T6y471TBF4AypdF9I=";
   };
-in lldb_11.overrideAttrs (oldAttrs: {
+in lldb_12.overrideAttrs (oldAttrs: {
   src = "${llvmSrc}/lldb";
 
   passthru = (oldAttrs.passthru or {}) // {

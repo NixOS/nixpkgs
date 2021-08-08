@@ -5,11 +5,12 @@
 # cgit) that are needed here should be included directly in Nixpkgs as
 # files.
 
-stdenv.mkDerivation {
-  name = "gnum4-1.4.18";
+stdenv.mkDerivation rec {
+  pname = "gnum4";
+  version = "1.4.18";
 
   src = fetchurl {
-    url = "mirror://gnu/m4/m4-1.4.18.tar.bz2";
+    url = "mirror://gnu/m4/m4-${version}.tar.bz2";
     sha256 = "1xkwwq0sgv05cla0g0a01yzhk0wpsn9y40w9kh9miiiv0imxfh36";
   };
 

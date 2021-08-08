@@ -14,6 +14,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
   patches = [ ./no-var-spool-install.patch ];
 
+  postPatch = ''
+    substituteInPlace libuptimed/urec.h \
+      --replace /var/spool /var/lib
+  '';
+
   meta = with lib; {
     description = "Uptime record daemon";
     longDescription = ''

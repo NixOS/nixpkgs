@@ -10,7 +10,7 @@ let
     (builtins.attrNames (builtins.removeAttrs variantHashes [ "iosevka" ]));
 in stdenv.mkDerivation rec {
   pname = "${name}-bin";
-  version = "5.0.5";
+  version = "9.0.1";
 
   src = fetchurl {
     url = "https://github.com/be5invis/Iosevka/releases/download/v${version}/ttc-${name}-${version}.zip";
@@ -22,7 +22,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ unzip ];
 
-  phases = [ "unpackPhase" ];
+  dontInstall = true;
 
   unpackPhase = ''
     mkdir -p $out/share/fonts

@@ -1,5 +1,6 @@
-{ lib, buildGoModule, fetchFromGitHub
-, pkg-config, taglib, alsaLib
+{ lib, stdenv, buildGoModule, fetchFromGitHub
+, pkg-config, taglib, alsa-lib
+, zlib, AudioToolbox, AppKit
 
 # Disable on-the-fly transcoding,
 # removing the dependency on ffmpeg.
@@ -11,17 +12,29 @@
 
 buildGoModule rec {
   pname = "gonic";
-  version = "0.12.2";
+  version = "0.13.1";
   src = fetchFromGitHub {
     owner = "sentriz";
     repo = pname;
-    rev = "7d420f61a90739cd82a81c2740274c538405d950";
-    sha256 = "0ix33cbhik1580h1jgv6n512dcgip436wmljpiw53c9v438k0ps5";
+    rev = "v${version}";
+    sha256 = "08zr5cbmn25wfi1sjfsb311ycn1855x57ypyn5165zcz49pcfzxn";
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ taglib alsaLib ] ++ lib.optionals transcodingSupport [ ffmpeg ];
+  buildInputs = [ taglib zlib ]
+    ++ lib.optionals stdenv.isLinux [ alsa-lib ]
+    ++ lib.optionals stdenv.isDarwin [ AudioToolbox AppKit ];
   vendorSha256 = "0inxlqxnkglz4j14jav8080718a80nqdcl866lkql8r6zcxb4fm9";
+
+  # TODO(Profpatsch): write a test for transcoding support,
+  # since it is prone to break
+  postPatch = lib.optionalString transcodingSupport ''
+    substituteInPlace \
+      server/encode/encode.go \
+      --replace \
+        '"ffmpeg"' \
+        '"${lib.getBin ffmpeg}/bin/ffmpeg"'
+  '';
 
   meta = {
     homepage = "https://github.com/sentriz/gonic";

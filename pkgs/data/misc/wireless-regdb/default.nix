@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "wireless-regdb";
-  version = "2020.04.29";
+  version = "2021.04.21";
 
   src = fetchurl {
     url = "https://www.kernel.org/pub/software/network/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "0yicda474ygahv8da18h1p4yf42s6x2f208mlwcw4xsrxld07zc9";
+    sha256 = "sha256-nkwCsqlxDfTb2zJ8OWEujLuuZJWYev7drrqyjB6j2Po=";
   };
 
   dontBuild = true;

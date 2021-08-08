@@ -5,8 +5,7 @@
 , waylandSupport ? true
 , x11Support ? true
 
-, ConfigArgParse
-, pyxdg
+, configargparse
 , rofi
 , wl-clipboard
 , wtype
@@ -16,18 +15,18 @@
 
 buildPythonApplication rec {
   pname = "rofimoji";
-  version = "4.3.0";
+  version = "5.1.0";
 
   src = fetchFromGitHub {
     owner = "fdw";
     repo = "rofimoji";
     rev = version;
-    sha256 = "08ayndpifr04njpijc5n5ii5nvibfpab39p6ngyyj0pb43792a8j";
+    sha256 = "sha256-bLV0hYDjVH11euvNHUHZFcCVywuceRljkCqyX4aANVs=";
   };
 
   # `rofi` and the `waylandSupport` and `x11Support` dependencies
   # contain binaries needed at runtime.
-  propagatedBuildInputs = with lib; [ ConfigArgParse pyxdg rofi ]
+  propagatedBuildInputs = with lib; [ configargparse rofi ]
     ++ optionals waylandSupport [ wl-clipboard wtype ]
     ++ optionals x11Support [ xdotool xsel ];
 
@@ -35,7 +34,6 @@ buildPythonApplication rec {
   # and has additional dependencies.
   postPatch = ''
     rm -rf extractors
-    substituteInPlace setup.py --replace 'pyxdg==0.26' 'pyxdg'
   '';
 
   # no tests executed

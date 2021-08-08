@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, colorama
 , sphinx
 , livereload
 }:
@@ -14,10 +15,15 @@ buildPythonPackage rec {
     sha256 = "de1ca3b66e271d2b5b5140c35034c89e47f263f2cd5db302c9217065f7443f05";
   };
 
-  propagatedBuildInputs = [ sphinx livereload ];
+  propagatedBuildInputs = [
+    colorama
+    sphinx
+    livereload
+  ];
 
   # No tests included.
   doCheck = false;
+
   pythonImportsCheck = [ "sphinx_autobuild" ];
 
   meta = with lib; {

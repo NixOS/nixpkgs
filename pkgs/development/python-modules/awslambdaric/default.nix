@@ -3,15 +3,20 @@
 
 buildPythonPackage rec {
   pname = "awslambdaric";
-  version = "1.0.0";
+  version = "1.2.0";
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-lambda-python-runtime-interface-client";
-    rev = "v${version}";
-    sha256 = "13v1lsp3lxbqknvlb3gvljjf3wyrx5jg8sf9yfiaj1sm8pb8pmrf";
+    rev = version;
+    sha256 = "120qar8iaxj6dmnhjw1c40n2w06f1nyxy57dwh06xdiany698fg4";
   };
+
+  postPatch = ''
+    substituteInPlace requirements/base.txt \
+      --replace 'simplejson==3' 'simplejson~=3'
+  '';
 
   propagatedBuildInputs = [ simplejson ];
 

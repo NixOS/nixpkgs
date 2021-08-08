@@ -51,10 +51,11 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : with lib; {
             host = "localhost";
             port = 143;
           };
-          pages = {
-            enabled = true;
-            host = "localhost";
-          };
+          # https://github.com/NixOS/nixpkgs/issues/132295
+          # pages = {
+          #   enabled = true;
+          #   host = "localhost";
+          # };
         };
         secrets = {
           secretFile = pkgs.writeText "secret" "Aig5zaic";
@@ -90,7 +91,8 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : with lib; {
       waitForServices = ''
         gitlab.wait_for_unit("gitaly.service")
         gitlab.wait_for_unit("gitlab-workhorse.service")
-        gitlab.wait_for_unit("gitlab-pages.service")
+        # https://github.com/NixOS/nixpkgs/issues/132295
+        # gitlab.wait_for_unit("gitlab-pages.service")
         gitlab.wait_for_unit("gitlab-mailroom.service")
         gitlab.wait_for_unit("gitlab.service")
         gitlab.wait_for_unit("gitlab-sidekiq.service")
@@ -102,7 +104,7 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : with lib; {
       # `doSetup` is is true.
       test = doSetup: ''
         gitlab.succeed(
-            "curl -isSf http://gitlab | grep -i location | grep -q http://gitlab/users/sign_in"
+            "curl -isSf http://gitlab | grep -i location | grep http://gitlab/users/sign_in"
         )
         gitlab.succeed(
             "${pkgs.sudo}/bin/sudo -u gitlab -H gitlab-rake gitlab:check 1>&2"

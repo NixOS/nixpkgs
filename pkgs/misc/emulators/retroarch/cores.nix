@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchgit, fetchFromGitHub, fetchFromGitLab, fetchpatch, cmake, pkg-config, makeWrapper, python27, python37, retroarch
-, alsaLib, fluidsynth, curl, hidapi, libGLU, gettext, glib, gtk2, portaudio, SDL, SDL_net, SDL2, SDL2_image, libGL
-, ffmpeg_3, pcre, libevdev, libpng, libjpeg, libzip, udev, libvorbis, snappy, which, hexdump
+{ lib, stdenv, fetchgit, fetchFromGitHub, fetchFromGitLab, fetchpatch, cmake, pkg-config, makeWrapper, python27, python3, retroarch
+, alsa-lib, fluidsynth, curl, hidapi, libGLU, gettext, glib, gtk2, portaudio, SDL, SDL_net, SDL2, SDL2_image, libGL
+, ffmpeg, pcre, libevdev, libpng, libjpeg, libzip, udev, libvorbis, snappy, which, hexdump
 , miniupnpc, sfml, xorg, zlib, nasm, libpcap, boost, icu, openssl
 , buildPackages }:
 
@@ -548,7 +548,7 @@ in with lib.licenses;
     description = "Port of MAME to libretro";
     license = gpl2Plus;
 
-    extraBuildInputs = [ alsaLib libGLU libGL portaudio python27 xorg.libX11 ];
+    extraBuildInputs = [ alsa-lib libGLU libGL portaudio python27 xorg.libX11 ];
     postPatch = ''
       # Prevent the failure during the parallel building of:
       # make -C 3rdparty/genie/build/gmake.linux -f genie.make obj/Release/src/host/lua-5.3.0/src/lgc.o
@@ -617,7 +617,7 @@ in with lib.licenses;
     description = "Port of MAME ~2015 to libretro";
     license = gpl2Plus;
     extraNativeBuildInputs = [ python27 ];
-    extraBuildInputs = [ alsaLib ];
+    extraBuildInputs = [ alsa-lib ];
     makefile = "Makefile";
   };
 
@@ -638,7 +638,7 @@ in with lib.licenses;
     description = "Port of MAME ~2016 to libretro";
     license = gpl2Plus;
     extraNativeBuildInputs = [ python27 ];
-    extraBuildInputs = [ alsaLib ];
+    extraBuildInputs = [ alsa-lib ];
     postPatch = ''
       # Prevent the failure during the parallel building of:
       # make -C 3rdparty/genie/build/gmake.linux -f genie.make obj/Release/src/host/lua-5.3.0/src/lgc.o
@@ -831,15 +831,24 @@ in with lib.licenses;
 
   ppsspp = mkLibRetroCore {
     core = "ppsspp";
-    src = fetchgit {
-      url = "https://github.com/hrydgard/ppsspp";
-      rev = "bf1777f7d3702e6a0f71c7ec1fc51976e23c2327";
-      sha256 = "17sym0vk72lzbh9a1501mhw98c78x1gq7k1fpy69nvvb119j37wa";
+    src = fetchFromGitHub {
+      owner = "hrydgard";
+      repo = "ppsspp";
+      rev = "v1.11";
+      fetchSubmodules = true;
+      sha256 = "sha256-vfp/vacIItlPP5dR7jzDT7oOUNFnjvvdR46yi79EJKU=";
     };
+    patches = [
+      (fetchpatch {
+        name = "fix_ffmpeg_4.4.patch";  # to be removed with next release
+        url = "https://patch-diff.githubusercontent.com/raw/hrydgard/ppsspp/pull/14176.patch";
+        sha256 = "sha256-ecDoOydaLfL6+eFpahcO1TnRl866mZZVHlr6Qrib1mo=";
+      })
+    ];
     description = "ppsspp libretro port";
     license = gpl2;
-    extraNativeBuildInputs = [ cmake pkg-config ];
-    extraBuildInputs = [ libGLU libGL libzip ffmpeg_3 python37 snappy xorg.libX11 ];
+    extraNativeBuildInputs = [ cmake pkg-config python3 ];
+    extraBuildInputs = [ libGLU libGL libzip ffmpeg snappy xorg.libX11 ];
     makefile = "Makefile";
     cmakeFlags = [ "-DLIBRETRO=ON -DUSE_SYSTEM_FFMPEG=ON -DUSE_SYSTEM_SNAPPY=ON -DUSE_SYSTEM_LIBZIP=ON -DOpenGL_GL_PREFERENCE=GLVND" ];
     postBuild = "mv lib/ppsspp_libretro${stdenv.hostPlatform.extensions.sharedLibrary} ppsspp_libretro${stdenv.hostPlatform.extensions.sharedLibrary}";

@@ -323,15 +323,13 @@ let
               HTTP username
             '';
           };
-          password = mkOption {
-            type = types.str;
-            description = ''
-              HTTP password
-            '';
-          };
+          password = mkOpt types.str "HTTP password";
+          password_file = mkOpt types.str "HTTP password file";
         };
       }) ''
-        Optional http login credentials for metrics scraping.
+        Sets the `Authorization` header on every scrape request with the
+        configured username and password.
+        password and password_file are mutually exclusive.
       '';
 
       bearer_token = mkOpt types.str ''
@@ -384,6 +382,10 @@ let
 
       relabel_configs = mkOpt (types.listOf promTypes.relabel_config) ''
         List of relabel configurations.
+      '';
+
+      metric_relabel_configs = mkOpt (types.listOf promTypes.relabel_config) ''
+        List of metric relabel configurations.
       '';
 
       sample_limit = mkDefOpt types.int "0" ''
@@ -941,6 +943,7 @@ in {
         RuntimeDirectoryMode = "0700";
         WorkingDirectory = workingDir;
         StateDirectory = cfg.stateDir;
+        StateDirectoryMode = "0700";
       };
     };
   };

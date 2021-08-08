@@ -8,6 +8,8 @@ let
 
       # This is important to obtain a version of `libpq` that does not depend on systemd.
       , enableSystemd ? (lib.versionAtLeast version "9.6" && !stdenv.isDarwin)
+      , gssSupport ? with stdenv.hostPlatform; !isWindows && !isStatic, libkrb5
+
 
       # for postgreql.pkgs
       , this, self, newScope, buildEnv
@@ -31,6 +33,8 @@ let
       inherit sha256;
     };
 
+    hardeningEnable = lib.optionals (!stdenv.cc.isClang) [ "pie" ];
+
     outputs = [ "out" "lib" "doc" "man" ];
     setOutputFlags = false; # $out retains configureFlags :-/
 
@@ -38,6 +42,7 @@ let
       [ zlib readline openssl libxml2 ]
       ++ lib.optionals icuEnabled [ icu ]
       ++ lib.optionals enableSystemd [ systemd ]
+      ++ lib.optionals gssSupport [ libkrb5 ]
       ++ lib.optionals (!stdenv.isDarwin) [ libossp_uuid ];
 
     nativeBuildInputs = [ makeWrapper ] ++ lib.optionals icuEnabled [ pkg-config ];
@@ -62,7 +67,8 @@ let
       "--enable-debug"
       (lib.optionalString enableSystemd "--with-systemd")
       (if stdenv.isDarwin then "--with-uuid=e2fs" else "--with-ossp-uuid")
-    ] ++ lib.optionals icuEnabled [ "--with-icu" ];
+    ] ++ lib.optionals icuEnabled [ "--with-icu" ]
+      ++ lib.optionals gssSupport [ "--with-gssapi" ];
 
     patches =
       [ (if atLeast "9.4" then ./patches/disable-resolve_symlinks-94.patch else ./patches/disable-resolve_symlinks.patch)
@@ -192,18 +198,18 @@ let
 in self: {
 
   postgresql_9_6 = self.callPackage generic {
-    version = "9.6.21";
+    version = "9.6.22";
     psqlSchema = "9.6";
-    sha256 = "0d0ngpadf1i7c0i2psaxcbmiwx8334ibcsn283n9fp4853pyl3wk";
+    sha256 = "0c19kzrj5ib5ygmavf5d6qvxdwrxzzz6jz1r2dl5b815208cscix";
     this = self.postgresql_9_6;
     thisAttr = "postgresql_9_6";
     inherit self;
   };
 
   postgresql_10 = self.callPackage generic {
-    version = "10.16";
+    version = "10.17";
     psqlSchema = "10.0"; # should be 10, but changing it is invasive
-    sha256 = "1cvv8qw0gkkczqhiwx6ns7w88dwkvdz4cvb2d4ff14363f5p2p53";
+    sha256 = "0v5jahkqm6gkq67s4bac3h7297bscn2ab6y128idi73cc1qq1wjs";
     this = self.postgresql_10;
     thisAttr = "postgresql_10";
     inherit self;
@@ -211,29 +217,38 @@ in self: {
   };
 
   postgresql_11 = self.callPackage generic {
-    version = "11.11";
+    version = "11.12";
     psqlSchema = "11.1"; # should be 11, but changing it is invasive
-    sha256 = "0v0qk298nxmpzpgsxcsxma328hdkyzd7fwjs0zsn6zavl5zpnq20";
+    sha256 = "016bacpmqxc676ipzc1l8zv1jj44mjz7dv7jhqazg3ibdfqxiyc7";
     this = self.postgresql_11;
     thisAttr = "postgresql_11";
     inherit self;
   };
 
   postgresql_12 = self.callPackage generic {
-    version = "12.6";
+    version = "12.7";
     psqlSchema = "12";
-    sha256 = "028asz92mi3706zabfs8w9z03mzyx62d1l71qy9zdwfabj6xjzfz";
+    sha256 = "15frsmsl1n2i4p76ji0wng4lvnlzw6f01br4cs5xr3n88wgp9444";
     this = self.postgresql_12;
     thisAttr = "postgresql_12";
     inherit self;
   };
 
   postgresql_13 = self.callPackage generic {
-    version = "13.2";
+    version = "13.3";
     psqlSchema = "13";
-    sha256 = "1z5d847jnajcfr3wa6jn52a8xjhamvwzmz18xlm5nvxqip8grmsz";
+    sha256 = "18dliq7h2l8irffhyyhdmfwx3si515q6gds3cxdjb9n7m17lbn9w";
     this = self.postgresql_13;
     thisAttr = "postgresql_13";
+    inherit self;
+  };
+
+  postgresql_14 = self.callPackage generic {
+    version = "14beta1";
+    psqlSchema = "14";
+    sha256 = "0lih2iykychhvis3mxqyp087m1hld3lyi48n3qwd2js44prxv464";
+    this = self.postgresql_14;
+    thisAttr = "postgresql_14";
     inherit self;
   };
 }

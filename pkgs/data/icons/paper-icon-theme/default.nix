@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, gtk3, python3, gnome3, gnome-icon-theme, hicolor-icon-theme }:
+{ lib, stdenv, fetchFromGitHub, meson, ninja, gtk3, python3, gnome, gnome-icon-theme, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
   pname = "paper-icon-theme";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   ];
 
   propagatedBuildInputs = [
-    gnome3.adwaita-icon-theme
+    gnome.adwaita-icon-theme
     gnome-icon-theme
     hicolor-icon-theme
   ];

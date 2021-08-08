@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , convertdate
-, dateutil
+, python-dateutil
 , fetchPypi
 , hijri-converter
 , korean-lunar-calendar
@@ -12,17 +12,17 @@
 
 buildPythonPackage rec {
   pname = "holidays";
-  version = "0.11.1";
+  version = "0.11.2";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-f6/YRvZ/Drfh+cGcOPSnlnvweu1d7S3XqKovk3sOoBs=";
+    sha256 = "0nqxan6nr3jp63i3sbb9s1v5dlig22bl927a6pl1ahks8cnr7rkn";
   };
 
   propagatedBuildInputs = [
     convertdate
-    dateutil
+    python-dateutil
     hijri-converter
     korean-lunar-calendar
     six

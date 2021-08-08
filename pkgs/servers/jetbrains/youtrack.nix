@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Issue tracking and project management tool for developers";
-    maintainers = with maintainers; [ yorickvp ];
+    maintainers = teams.serokell.members;
     # https://www.jetbrains.com/youtrack/buy/license.html
     license = licenses.unfree;
   };

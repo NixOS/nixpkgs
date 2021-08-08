@@ -11,6 +11,8 @@
 , ncurses
 , pango
 , wxGTK
+, pillow
+, numpy
 }:
 let
   dynamic-linker = stdenv.cc.bintools.dynamicLinker;
@@ -35,6 +37,8 @@ buildPythonPackage rec {
     wxGTK.gtk
     ncurses
   ];
+
+  propagatedBuildInputs = [ pillow numpy ];
 
   DOXYGEN = "${doxygen}/bin/doxygen";
 

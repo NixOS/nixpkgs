@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, postgresql, zeromq, openssl }:
+{ lib, stdenv, fetchFromGitHub, postgresql, zeromq, openssl, libsodium, libkrb5 }:
 
 stdenv.mkDerivation rec {
   pname = "pipelinedb";
@@ -11,9 +11,11 @@ stdenv.mkDerivation rec {
     sha256 = "1mnqpvx6g1r2n4kjrrx01vbdx7kvndfsbmm7zbzizjnjlyixz75f";
   };
 
-  buildInputs = [ postgresql openssl zeromq ];
+  buildInputs = [ postgresql openssl zeromq libsodium libkrb5 ];
 
   makeFlags = [ "USE_PGXS=1" ];
+
+  NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-lsodium";
 
   preConfigure = ''
     substituteInPlace Makefile \

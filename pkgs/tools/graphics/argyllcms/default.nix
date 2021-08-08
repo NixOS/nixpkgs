@@ -1,12 +1,10 @@
 { stdenv, fetchzip, jam, unzip, libX11, libXxf86vm, libXrandr, libXinerama
 , libXrender, libXext, libtiff, libjpeg, libpng, libXScrnSaver, writeText
 , libXdmcp, libXau, lib, openssl }:
-let
-  version = "2.2.0";
- in
+
 stdenv.mkDerivation rec {
   pname = "argyllcms";
-  inherit version;
+  version = "2.2.0";
 
   src = fetchzip {
     # Kind of flacky URL, it was reaturning 406 and inconsistent binaries for a

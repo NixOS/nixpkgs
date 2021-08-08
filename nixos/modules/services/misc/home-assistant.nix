@@ -66,7 +66,9 @@ in {
   meta.maintainers = teams.home-assistant.members;
 
   options.services.home-assistant = {
-    enable = mkEnableOption "Home Assistant";
+    # Running home-assistant on NixOS is considered an installation method that is unsupported by the upstream project.
+    # https://github.com/home-assistant/architecture/blob/master/adr/0012-define-supported-installation-method.md#decision
+    enable = mkEnableOption "Home Assistant. Please note that this installation method is unsupported upstream";
 
     configDir = mkOption {
       default = "/var/lib/hass";
@@ -266,6 +268,53 @@ in {
           "CAP_NET_BIND_SERVICE"
           "CAP_NET_RAW"
         ]));
+        componentsUsingBluetooth = [
+          # Components that require the AF_BLUETOOTH address family
+          "bluetooth_tracker"
+          "bluetooth_le_tracker"
+        ];
+        componentsUsingSerialDevices = [
+          # Components that require access to serial devices (/dev/tty*)
+          # List generated from home-assistant documentation:
+          #   git clone https://github.com/home-assistant/home-assistant.io/
+          #   cd source/_integrations
+          #   rg "/dev/tty" -l | cut -d'/' -f3 | cut -d'.' -f1 | sort
+          # And then extended by references found in the source code, these
+          # mostly the ones using config flows already.
+          "acer_projector"
+          "alarmdecoder"
+          "arduino"
+          "blackbird"
+          "dsmr"
+          "edl21"
+          "elkm1"
+          "elv"
+          "enocean"
+          "firmata"
+          "flexit"
+          "gpsd"
+          "insteon"
+          "kwb"
+          "lacrosse"
+          "mhz19"
+          "modbus"
+          "modem_callerid"
+          "mysensors"
+          "nad"
+          "numato"
+          "rflink"
+          "rfxtrx"
+          "scsgate"
+          "serial"
+          "serial_pm"
+          "sms"
+          "upb"
+          "velbus"
+          "w800rf32"
+          "xbee"
+          "zha"
+          "zwave"
+        ];
       in {
         ExecStart = "${package}/bin/hass --runner --config '${cfg.configDir}'";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
@@ -279,11 +328,11 @@ in {
         # Hardening
         AmbientCapabilities = capabilities;
         CapabilityBoundingSet = capabilities;
-        DeviceAllow = [
+        DeviceAllow = (optionals (any useComponent componentsUsingSerialDevices) [
           "char-ttyACM rw"
           "char-ttyAMA rw"
           "char-ttyUSB rw"
-        ];
+        ]);
         DevicePolicy = "closed";
         LockPersonality = true;
         MemoryDenyWriteExecute = true;
@@ -298,7 +347,7 @@ in {
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
         ProtectProc = "invisible";
-        ProcSubset = "pid";
+        ProcSubset = "all";
         ProtectSystem = "strict";
         RemoveIPC = true;
         ReadWritePaths = let
@@ -308,16 +357,19 @@ in {
           allowPaths = if isList value then value else singleton value;
         in [ "${cfg.configDir}" ] ++ allowPaths;
         RestrictAddressFamilies = [
-          "AF_UNIX"
           "AF_INET"
           "AF_INET6"
-        ] ++ optionals (useComponent "bluetooth_tracker" || useComponent "bluetooth_le_tracker") [
+          "AF_NETLINK"
+          "AF_UNIX"
+        ] ++ optionals (any useComponent componentsUsingBluetooth) [
           "AF_BLUETOOTH"
         ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
-        SupplementaryGroups = [ "dialout" ];
+        SupplementaryGroups = optionals (any useComponent componentsUsingSerialDevices) [
+          "dialout"
+        ];
         SystemCallArchitectures = "native";
         SystemCallFilter = [
           "@system-service"

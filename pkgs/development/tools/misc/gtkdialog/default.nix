@@ -1,10 +1,11 @@
 {lib, stdenv, fetchurl, gtk2, pkg-config }:
 
-stdenv.mkDerivation {
-  name = "gtkdialog-0.8.3";
+stdenv.mkDerivation rec {
+  pname = "gtkdialog";
+  version = "0.8.3";
 
   src = fetchurl {
-    url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/gtkdialog/gtkdialog-0.8.3.tar.gz";
+    url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/${pname}/${pname}-${version}.tar.gz";
     sha256 = "ff89d2d7f1e6488e5df5f895716ac1d4198c2467a2a5dc1f51ab408a2faec38e";
   };
 

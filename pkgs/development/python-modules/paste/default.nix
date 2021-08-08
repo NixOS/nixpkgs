@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , six
-, pytestrunner
+, pytest-runner
 , pytest
 }:
 
@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ six ];
 
-  checkInputs = [ pytestrunner pytest ];
+  checkInputs = [ pytest-runner pytest ];
 
   # Certain tests require network
   checkPhase = ''

@@ -4,7 +4,7 @@
 , importlib-metadata
 , isPy3k
 , jedi
-, prompt_toolkit
+, prompt-toolkit
 , pygments
 }:
 
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     appdirs
     black # yes, this is in install_requires
     jedi
-    prompt_toolkit
+    prompt-toolkit
     pygments
   ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 

@@ -1,7 +1,7 @@
-{ lib, stdenv, fetchurl, unzip, jre }:
+{ lib, stdenv, fetchurl, unzip, jre, jre8 }:
 
 let
-  common = { pname, version, src, description
+  common = { pname, version, src, description, java ? jre
            , prog ? null, jar ? null, license ? lib.licenses.mpl20 }:
     stdenv.mkDerivation {
       name = "${pname}-${version}";
@@ -45,6 +45,7 @@ in {
     description = "XSLT 1.0 processor";
     # http://saxon.sourceforge.net/saxon6.5.3/conditions.html
     license = lib.licenses.mpl10;
+    java = jre8;
   };
 
   saxonb_8_8 = common {
@@ -56,6 +57,7 @@ in {
       sha256 = "15bzrfyd2f1045rsp9dp4znyhmizh1pm97q8ji2bc0b43q23xsb8";
     };
     description = "Complete and conformant processor of XSLT 2.0, XQuery 1.0, and XPath 2.0";
+    java = jre8;
   };
 
   saxonb_9_1 = common {

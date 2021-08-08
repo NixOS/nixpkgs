@@ -1,12 +1,13 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, glib }:
 
 stdenv.mkDerivation rec {
-  name = "libmongo-client-0.1.8";
+  pname = "libmongo-client";
+  version = "0.1.8";
 
   src = fetchFromGitHub {
     owner = "algernon";
     repo = "libmongo-client";
-    rev = name;
+    rev = "${pname}-${version}";
     sha256 = "1cjx06i3gd9zkyvwm2ysjrf0hkhr7bjg3c27s7n0y31j10igfjp0";
   };
 

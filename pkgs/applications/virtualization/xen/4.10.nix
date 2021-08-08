@@ -10,7 +10,7 @@
 
 # qemu
 , udev, pciutils, xorg, SDL, pixman, acl, glusterfs, spice-protocol, usbredir
-, alsaLib, glib, python2
+, alsa-lib, glib, python2
 , ... } @ args:
 
 assert withInternalSeabios -> !withSeabios;
@@ -33,7 +33,7 @@ let
 
   qemuDeps = [
     udev pciutils xorg.libX11 SDL pixman acl glusterfs spice-protocol usbredir
-    alsaLib glib python2
+    alsa-lib glib python2
   ];
 in
 

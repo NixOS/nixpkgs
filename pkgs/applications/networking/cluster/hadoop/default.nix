@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, makeWrapper, pkg-config, which, maven, cmake, jre, jdk8, bash
-, coreutils, glibc, protobuf2_5, fuse, snappy, zlib, bzip2, openssl, openssl_1_0_2
+, coreutils, glibc, protobuf2_5, fuse, snappy, zlib, bzip2, openssl, openssl_1_0_2, fetchpatch, libtirpc
 }:
 
 let
@@ -38,8 +38,19 @@ let
         };
 
         nativeBuildInputs = [ maven cmake pkg-config ];
-        buildInputs = [ fuse snappy zlib bzip2 opensslPkg protobuf2_5 ];
+        buildInputs = [ fuse snappy zlib bzip2 opensslPkg protobuf2_5 libtirpc ];
+        NIX_CFLAGS_COMPILE = [ "-I${libtirpc.dev}/include/tirpc" ];
+        NIX_LDFLAGS = [ "-ltirpc" ];
+
         # most of the hardcoded pathes are fixed in 2.9.x and 3.0.0, this list of patched files might be reduced when 2.7.x and 2.8.x will be deprecated
+
+        patches = [
+          (fetchpatch {
+            url = "https://patch-diff.githubusercontent.com/raw/apache/hadoop/pull/2886.patch";
+            sha256 = "1fim1d8va050za5i8a6slphmx015fzvhxkc2wi4rwg7kbj31sv0r";
+          })
+        ];
+
         postPatch = ''
           for file in hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/fs/HardLink.java \
                       hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/util/Shell.java \
@@ -98,7 +109,7 @@ let
         '';
 
         meta = with lib; {
-          homepage = "http://hadoop.apache.org/";
+          homepage = "https://hadoop.apache.org/";
           description = "Framework for distributed processing of large data sets across clusters of computers";
           license = licenses.asl20;
 

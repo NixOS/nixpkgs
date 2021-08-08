@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchPypi, fetchpatch
-, pytest, pytestrunner, hypothesis }:
+, pytest, pytest-runner, hypothesis }:
 
 buildPythonPackage rec {
   pname = "chardet";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     })
   ];
 
-  checkInputs = [ pytest pytestrunner hypothesis ];
+  checkInputs = [ pytest pytest-runner hypothesis ];
 
   meta = with lib; {
     homepage = "https://github.com/chardet/chardet";

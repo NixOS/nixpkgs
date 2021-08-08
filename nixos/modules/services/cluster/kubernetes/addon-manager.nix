@@ -62,7 +62,7 @@ in
       '';
     };
 
-    enable = mkEnableOption "Whether to enable Kubernetes addon manager.";
+    enable = mkEnableOption "Kubernetes addon manager.";
   };
 
   ###### implementation

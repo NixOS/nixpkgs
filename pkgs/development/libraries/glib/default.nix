@@ -1,5 +1,5 @@
 { config, lib, stdenv, fetchurl, gettext, meson, ninja, pkg-config, perl, python3
-, libiconv, zlib, libffi, pcre, libelf, gnome3, libselinux, bash, gnum4, gtk-doc, docbook_xsl, docbook_xml_dtd_45
+, libiconv, zlib, libffi, pcre, libelf, gnome, libselinux, bash, gnum4, gtk-doc, docbook_xsl, docbook_xml_dtd_45
 # use util-linuxMinimal to avoid circular dependency (util-linux, systemd, glib)
 , util-linuxMinimal ? null
 , buildPackages
@@ -45,15 +45,16 @@ in
 
 stdenv.mkDerivation rec {
   pname = "glib";
-  version = "2.66.8";
+  version = "2.68.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-l7yH3ZE2VYmvXLv+oldIM66nobcYQP02Xs0oUsdrnIs=";
+    sha256 = "0f1iprj7v0b5wn9njj39dkl25g6filfs7i4ybk20jq821k1a7qg7";
   };
 
   patches = optionals stdenv.isDarwin [
     ./darwin-compilation.patch
+    ./link-with-coreservices.patch
   ] ++ optionals stdenv.hostPlatform.isMusl [
     ./quark_init_on_demand.patch
     ./gobject_init_on_demand.patch
@@ -92,13 +93,23 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libelf setupHook pcre
     bash gnum4 # install glib-gettextize and m4 macros for other apps to use
-    gtk-doc
   ] ++ optionals stdenv.isLinux [
     libselinux
     util-linuxMinimal # for libmount
   ] ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
     AppKit Carbon Cocoa CoreFoundation CoreServices Foundation
-  ]);
+  ]) ++ optionals (stdenv.hostPlatform == stdenv.buildPlatform) [
+    # Note: this needs to be both in buildInputs and nativeBuildInputs. The
+    # Meson gtkdoc module uses find_program to look it up (-> build dep), but
+    # glib's own Meson configuration uses the host pkg-config to find its
+    # version (-> host dep). We could technically go and fix this in glib, add
+    # pkg-config to depsBuildBuild, but this would be a futile exercise since
+    # Meson's gtkdoc integration does not support cross compilation[1] anyway
+    # and this derivation disables the docs build when cross compiling.
+    #
+    # [1] https://github.com/mesonbuild/meson/issues/2003
+    gtk-doc
+  ];
 
   strictDeps = true;
 
@@ -184,14 +195,14 @@ stdenv.mkDerivation rec {
     makeSchemaPath = dir: name: "${dir}/share/gsettings-schemas/${name}/glib-2.0/schemas";
     getSchemaPath = pkg: makeSchemaPath pkg pkg.name;
     inherit flattenInclude;
-    updateScript = gnome3.updateScript { packageName = "glib"; };
+    updateScript = gnome.updateScript { packageName = "glib"; };
   };
 
   meta = with lib; {
     description = "C library of programming buildings blocks";
     homepage    = "https://www.gtk.org/";
     license     = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ lovek323 raskin worldofpeace ];
+    maintainers = teams.gnome.members ++ (with maintainers; [ lovek323 raskin ]);
     platforms   = platforms.unix;
 
     longDescription = ''

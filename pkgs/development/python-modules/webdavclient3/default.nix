@@ -1,4 +1,4 @@
-{ buildPythonPackage, fetchPypi, isPy27, lib, dateutil, lxml, requests
+{ buildPythonPackage, fetchPypi, isPy27, lib, python-dateutil, lxml, requests
 , pytestCheckHook }:
 
 buildPythonPackage rec {
@@ -12,7 +12,7 @@ buildPythonPackage rec {
     sha256 = "0yw3n5m70ysjn1ch48znpn4zr4a1bd0lsm7q2grqz7q5hfjzjwk0";
   };
 
-  propagatedBuildInputs = [ dateutil lxml requests ];
+  propagatedBuildInputs = [ python-dateutil lxml requests ];
 
   checkInputs = [ pytestCheckHook ];
 

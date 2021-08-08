@@ -46,6 +46,12 @@
    to increase the font size.
   </para>
 
+  <para>
+    To install over a serial port connect with <literal>115200n8</literal>
+    (e.g. <command>picocom -b 115200 /dev/ttyUSB0</command>). When the
+    bootloader lists boot entries, select the serial console boot entry.
+  </para>
+
   <section xml:id="sec-installation-booting-networking">
    <title>Networking in the installer</title>
 
@@ -440,8 +446,8 @@
      password for the <literal>root</literal> user, e.g.
 <screen>
 setting root password...
-Enter new UNIX password: ***
-Retype new UNIX password: ***</screen>
+New password: ***
+Retype new password: ***</screen>
      <note>
       <para>
        For unattended installations, it is possible to use

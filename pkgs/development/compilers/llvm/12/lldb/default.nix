@@ -1,4 +1,5 @@
 { lib, stdenv, llvm_meta
+, runCommand
 , fetch
 , cmake
 , zlib
@@ -7,8 +8,8 @@
 , which
 , libedit
 , libxml2
-, llvm
-, clang-unwrapped
+, libllvm
+, libclang
 , python3
 , version
 , libobjc
@@ -18,6 +19,7 @@
 , Carbon
 , Cocoa
 , lit
+, makeWrapper
 , enableManpages ? false
 }:
 
@@ -25,19 +27,32 @@ stdenv.mkDerivation (rec {
   pname = "lldb";
   inherit version;
 
-  src = fetch pname "1v85qyq3snk81vjmwq5q7xikyyqsfpqy2c4qmr81mps4avsw1g0l";
+  src = fetch pname "0g3pj1m3chafavpr35r9fynm85y2hdyla6klj0h28khxs2613i78";
 
-  patches = [ ./lldb-procfs.patch ];
+  patches = [
+    ./procfs.patch
+    (runCommand "resource-dir.patch" {
+      clangLibDir = "${libclang.lib}/lib";
+    } ''
+      substitute '${./resource-dir.patch}' "$out" --subst-var clangLibDir
+    '')
+    ./gnu-install-dirs.patch
+  ];
 
-  nativeBuildInputs = [ cmake python3 which swig lit ]
-    ++ lib.optionals enableManpages [ python3.pkgs.sphinx python3.pkgs.recommonmark ];
+  outputs = [ "out" "lib" "dev" ];
+
+  nativeBuildInputs = [
+    cmake python3 which swig lit makeWrapper
+  ] ++ lib.optionals enableManpages [
+    python3.pkgs.sphinx python3.pkgs.recommonmark
+  ];
 
   buildInputs = [
     ncurses
     zlib
     libedit
     libxml2
-    llvm
+    libllvm
   ]
   ++ lib.optionals stdenv.isDarwin [
     libobjc
@@ -51,8 +66,9 @@ stdenv.mkDerivation (rec {
   hardeningDisable = [ "format" ];
 
   cmakeFlags = [
+    "-DLLDB_INCLUDE_TESTS=${if doCheck then "YES" else "NO"}"
     "-DLLVM_ENABLE_RTTI=OFF"
-    "-DClang_DIR=${clang-unwrapped}/lib/cmake"
+    "-DClang_DIR=${libclang.dev}/lib/cmake"
     "-DLLVM_EXTERNAL_LIT=${lit}/bin/lit"
   ] ++ lib.optionals stdenv.isDarwin [
     "-DLLDB_USE_SYSTEM_DEBUGSERVER=ON"
@@ -62,9 +78,22 @@ stdenv.mkDerivation (rec {
     "-DLLVM_ENABLE_SPHINX=ON"
     "-DSPHINX_OUTPUT_MAN=ON"
     "-DSPHINX_OUTPUT_HTML=OFF"
+  ] ++ lib.optionals doCheck [
+    "-DLLDB_TEST_C_COMPILER=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc"
+    "-DLLDB_TEST_CXX_COMPILER=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}c++"
   ];
 
+  doCheck = false;
+
+  installCheckPhase = ''
+    if [ ! -e "$lib/${python3.sitePackages}/lldb/_lldb.so" ] ; then
+        return 1;
+    fi
+  '';
+
   postInstall = ''
+    wrapProgram $out/bin/lldb --prefix PYTHONPATH : $lib/${python3.sitePackages}/
+
     # Editor support
     # vscode:
     install -D ../tools/lldb-vscode/package.json $out/share/vscode/extensions/llvm-org.lldb-vscode-0.1.0/package.json
@@ -90,6 +119,7 @@ stdenv.mkDerivation (rec {
   '';
 
   propagatedBuildInputs = [];
+
   # manually install lldb man page
   installPhase = ''
     mkdir -p $out/share/man/man1

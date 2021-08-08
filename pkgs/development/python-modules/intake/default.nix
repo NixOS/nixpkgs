@@ -73,6 +73,7 @@ buildPythonPackage rec {
 
     # broken test
     "test_read_pattern"
+    "test_remote_arr"
   ];
 
   meta = with lib; {

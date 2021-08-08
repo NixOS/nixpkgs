@@ -25,11 +25,10 @@
 , fribidi
 , xorg
 , epoxy
-, json-glib
 , libxkbcommon
 , libxml2
 , gmp
-, gnome3
+, gnome
 , gsettings-desktop-schemas
 , sassc
 , trackerSupport ? stdenv.isLinux
@@ -60,7 +59,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gtk+3";
-  version = "3.24.27";
+  version = "3.24.30";
 
   outputs = [ "out" "dev" ] ++ lib.optional withGtkDoc "devdoc";
   outputBin = "dev";
@@ -72,7 +71,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk+/${lib.versions.majorMinor version}/gtk+-${version}.tar.xz";
-    sha256 = "09ksflq5j257bf5zn8q2nnf2flicg9qqgfy7za79z7rkf1shc77p";
+    sha256 = "sha256-unW//zIK0fTPvukrqBPsM2MizDxmDUBqrQFLBwh6O6k=";
   };
 
   patches = [
@@ -111,7 +110,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libxkbcommon
     epoxy
-    json-glib
     isocodes
   ] ++ lib.optionals stdenv.isDarwin [
     AppKit
@@ -206,7 +204,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = "gtk+";
       attrPath = "gtk3";
     };

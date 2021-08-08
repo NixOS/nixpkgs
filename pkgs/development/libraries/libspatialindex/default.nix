@@ -1,10 +1,8 @@
 { lib, stdenv, fetchurl }:
 
-let version = "1.8.5"; in
-
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "libspatialindex";
-  inherit version;
+  version = "1.8.5";
 
   src = fetchurl {
     url = "https://download.osgeo.org/libspatialindex/spatialindex-src-${version}.tar.gz";

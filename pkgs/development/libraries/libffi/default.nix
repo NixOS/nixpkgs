@@ -9,10 +9,11 @@
 # files.
 
 stdenv.mkDerivation rec {
-  name = "libffi-3.3";
+  pname = "libffi";
+  version = "3.3";
 
   src = fetchurl {
-    url = "https://sourceware.org/pub/libffi/${name}.tar.gz";
+    url = "https://sourceware.org/pub/libffi/${pname}-${version}.tar.gz";
     sha256 = "0mi0cpf8aa40ljjmzxb7im6dbj45bb0kllcd09xgmp834y9agyvj";
   };
 

@@ -1,4 +1,4 @@
-{ pkgs, fetchurl, lib, stdenv, gtk3, pkg-config, intltool, alsaLib }:
+{ pkgs, fetchurl, lib, stdenv, gtk3, pkg-config, intltool, alsa-lib }:
 
 stdenv.mkDerivation {
   pname = "volumeicon";
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ gtk3 intltool alsaLib ];
+  buildInputs = [ gtk3 intltool alsa-lib ];
 
   meta = with lib; {
     description = "A lightweight volume control that sits in your systray";

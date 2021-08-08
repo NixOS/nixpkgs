@@ -1,12 +1,14 @@
-{ lib, stdenv, fetchurl, cmake }:
+{ lib, stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
-  name = "yajl-2.1.0";
+  pname = "yajl";
+  version = "2.1.0";
 
-  src = fetchurl {
-    url = "https://github.com/lloyd/yajl/tarball/2.1.0";
-    name = "${name}.tar.gz";
-    sha256 = "0f6yrjc05aa26wfi7lqn2gslm19m6rm81b30ksllpkappvh162ji";
+  src = fetchFromGitHub {
+    owner = "lloyd";
+    repo = "yajl";
+    rev = version;
+    sha256 = "00yj06drb6izcxfxfqlhimlrb089kka0w0x8k27pyzyiq7qzcvml";
   };
 
   nativeBuildInputs = [ cmake ];

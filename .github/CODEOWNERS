@@ -71,19 +71,23 @@
 /pkgs/common-updater/scripts/update-source-version    @jtojnar
 
 # Python-related code and docs
-/maintainers/scripts/update-python-libraries	@FRidh
-/pkgs/top-level/python-packages.nix     @FRidh @jonringer
-/pkgs/development/interpreters/python   @FRidh
-/pkgs/development/python-modules        @FRidh @jonringer
-/doc/languages-frameworks/python.section.md     @FRidh
-/pkgs/development/tools/poetry2nix @adisbladis
+/maintainers/scripts/update-python-libraries	              @FRidh
+/pkgs/top-level/python-packages.nix                         @FRidh @jonringer
+/pkgs/development/interpreters/python                       @FRidh
+/pkgs/development/python-modules                            @FRidh @jonringer
+/doc/languages-frameworks/python.section.md                 @FRidh
+/pkgs/development/tools/poetry2nix                          @adisbladis
+/pkgs/development/interpreters/python/hooks                 @FRidh @jonringer @DavHau
+/pkgs/development/interpreters/python/conda                 @DavHau
 
 # Haskell
-/pkgs/development/compilers/ghc                       @cdepillabout @sternenseemann
-/pkgs/development/haskell-modules		      @cdepillabout @sternenseemann
-/pkgs/development/haskell-modules/default.nix	      @cdepillabout @sternenseemann
-/pkgs/development/haskell-modules/generic-builder.nix @cdepillabout @sternenseemann
-/pkgs/development/haskell-modules/hoogle.nix	      @cdepillabout @sternenseemann
+/doc/languages-frameworks/haskell.section.md  @cdepillabout @sternenseemann @maralorn @expipiplus1
+/maintainers/scripts/haskell                  @cdepillabout @sternenseemann @maralorn @expipiplus1
+/pkgs/development/compilers/ghc               @cdepillabout @sternenseemann @maralorn @expipiplus1
+/pkgs/development/haskell-modules             @cdepillabout @sternenseemann @maralorn @expipiplus1
+/pkgs/test/haskell                            @cdepillabout @sternenseemann @maralorn @expipiplus1
+/pkgs/top-level/release-haskell.nix           @cdepillabout @sternenseemann @maralorn @expipiplus1
+/pkgs/top-level/haskell-packages.nix          @cdepillabout @sternenseemann @maralorn @expipiplus1
 
 # Perl
 /pkgs/development/interpreters/perl @volth @stigtsp
@@ -177,8 +181,7 @@
 /pkgs/top-level/emacs-packages.nix     @adisbladis
 
 # Neovim
-/pkgs/applications/editors/neovim      @jonringer
-/pkgs/applications/editors/neovim      @teto
+/pkgs/applications/editors/neovim      @jonringer @teto
 
 # VimPlugins
 /pkgs/misc/vim-plugins         @jonringer @softinio
@@ -192,12 +195,12 @@
 /nixos/tests/prometheus-exporters.nix                        @WilliButz
 
 # PHP interpreter, packages, extensions, tests and documentation
-/doc/languages-frameworks/php.section.md @NixOS/php
-/nixos/tests/php                         @NixOS/php
-/pkgs/build-support/build-pecl.nix       @NixOS/php
-/pkgs/development/interpreters/php       @NixOS/php
-/pkgs/development/php-packages           @NixOS/php
-/pkgs/top-level/php-packages.nix         @NixOS/php
+/doc/languages-frameworks/php.section.md          @NixOS/php @aanderse @etu @globin @ma27 @talyz
+/nixos/tests/php                                  @NixOS/php @aanderse @etu @globin @ma27 @talyz
+/pkgs/build-support/build-pecl.nix                @NixOS/php @aanderse @etu @globin @ma27 @talyz
+/pkgs/development/interpreters/php       @jtojnar @NixOS/php @aanderse @etu @globin @ma27 @talyz
+/pkgs/development/php-packages                    @NixOS/php @aanderse @etu @globin @ma27 @talyz
+/pkgs/top-level/php-packages.nix         @jtojnar @NixOS/php @aanderse @etu @globin @ma27 @talyz
 
 # Podman, CRI-O modules and related
 /nixos/modules/virtualisation/containers.nix @NixOS/podman @zowoq

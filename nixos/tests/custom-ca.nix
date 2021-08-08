@@ -107,11 +107,19 @@ in
           '';
         };
 
-      environment.systemPackages = with pkgs;
-        [ xdotool firefox chromium falkon midori ];
+      environment.systemPackages = with pkgs; [
+        xdotool
+        # Firefox was disabled here, because we needed to disable p11-kit support in nss,
+        # which is why it will not use the system certificate store for the time being.
+        # firefox
+        chromium
+        falkon
+        midori
+      ];
     };
 
   testScript = ''
+    from typing import Tuple
     def execute_as(user: str, cmd: str) -> Tuple[int, str]:
         """
         Run a shell command as a specific user.
@@ -144,7 +152,14 @@ in
     with subtest("Unknown CA is untrusted in curl"):
         machine.fail("curl -fv https://bad.example.com")
 
-    browsers = ["firefox", "chromium", "falkon", "midori"]
+    browsers = [
+      # Firefox was disabled here, because we needed to disable p11-kit support in nss,
+      # which is why it will not use the system certificate store for the time being.
+      # "firefox",
+      "chromium",
+      "falkon",
+      "midori"
+    ]
     errors = ["Security Risk", "not private", "Certificate Error", "Security"]
 
     machine.wait_for_x()

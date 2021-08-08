@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.gnome-look.org/p/1231025";
     license = licenses.gpl3;
     platforms = platforms.all;
-    maintainers = with maintainers; [ gnidorah ];
+    maintainers = with maintainers; [ ];
     hydraPlatforms = [];
   };
 }

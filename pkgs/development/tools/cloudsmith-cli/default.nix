@@ -23,7 +23,7 @@ python3.pkgs.buildPythonApplication rec {
     colorama
     future
     requests
-    requests_toolbelt
+    requests-toolbelt
     semver
     simplejson
     six

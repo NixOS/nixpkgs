@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "karton-dashboard";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "CERT-Polska";
     repo = pname;
     rev = "v${version}";
-    sha256 = "101qmx6nmiim0vrz2ldk973ns498hnxla1xy7nys9kh9wijg4msk";
+    sha256 = "0qygv9lkd1jad5b4l0zz6hsi7m8q0fmpwaa6hpp7p9x6ql7gnyl8";
   };
 
   propagatedBuildInputs = [
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace requirements.txt \
       --replace "Flask==1.1.1" "Flask" \
-      --replace "karton-core==4.1.0" "karton-core"
+      --replace "prometheus_client==0.9.0" "prometheus-client"
   '';
 
   # Project has no tests. pythonImportsCheck requires MinIO configuration

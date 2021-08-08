@@ -32,7 +32,7 @@
 , python3Minimal
 }:
 
-{ name
+{ pname
 , withLinuxHeaders ? false
 , profilingLibraries ? false
 , withGd ? false
@@ -41,16 +41,16 @@
 } @ args:
 
 let
-  version = "2.32";
-  patchSuffix = "-40";
-  sha256 = "0di848ibffrnwq7g2dvgqrnn4xqhj3h96csn69q4da51ymafl9qn";
+  version = "2.33";
+  patchSuffix = "-47";
+  sha256 = "sha256-LiVWAA4QXb1X8Layoy/yzxc73k8Nhd/8z9i35RoGd/8=";
 in
 
 assert withLinuxHeaders -> linuxHeaders != null;
 assert withGd -> gd != null && libpng != null;
 
 stdenv.mkDerivation ({
-  inherit version;
+  version = version + patchSuffix;
   linuxHeaders = if withLinuxHeaders then linuxHeaders else null;
 
   inherit (stdenv) is64bit;
@@ -60,14 +60,14 @@ stdenv.mkDerivation ({
   patches =
     [
       /* No tarballs for stable upstream branch, only https://sourceware.org/git/glibc.git and using git would complicate bootstrapping.
-          $ git fetch --all -p && git checkout origin/release/2.32/master && git describe
-          glibc-2.32-40-g778b8d3786
-          $ git show --minimal --reverse glibc-2.32.. | gzip -9n --rsyncable - > 2.32-master.patch.gz
+          $ git fetch --all -p && git checkout origin/release/2.33/master && git describe
+          glibc-2.33-47-gb5711025bc
+          $ git show --minimal --reverse glibc-2.33.. | gzip -9n --rsyncable - > 2.33-master.patch.gz
 
          To compare the archive contents zdiff can be used.
-          $ zdiff -u 2.32-master.patch.gz ../nixpkgs/pkgs/development/libraries/glibc/2.32-master.patch.gz
+          $ zdiff -u 2.33-master.patch.gz ../nixpkgs/pkgs/development/libraries/glibc/2.33-master.patch.gz
        */
-      ./2.32-master.patch.gz
+      ./2.33-master.patch.gz
 
       /* Allow NixOS and Nix to handle the locale-archive. */
       ./nix-locale-archive.patch
@@ -153,8 +153,15 @@ stdenv.mkDerivation ({
       "--enable-add-ons"
       "--sysconfdir=/etc"
       "--enable-stackguard-randomization"
+      "--enable-bind-now"
       (lib.withFeatureAs withLinuxHeaders "headers" "${linuxHeaders}/include")
       (lib.enableFeature profilingLibraries "profile")
+    ] ++ lib.optionals (stdenv.hostPlatform.isx86_64 || stdenv.hostPlatform.isi686 || stdenv.hostPlatform.isAarch64) [
+      # This feature is currently supported on
+      # i386, x86_64 and x32 with binutils 2.29 or later,
+      # and on aarch64 with binutils 2.30 or later.
+      # https://sourceware.org/glibc/wiki/PortStatus
+      "--enable-static-pie"
     ] ++ lib.optionals withLinuxHeaders [
       "--enable-kernel=3.2.0" # can't get below with glibc >= 2.26
     ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
@@ -187,14 +194,13 @@ stdenv.mkDerivation ({
   # bootstrap.
   BASH_SHELL = "/bin/sh";
 
+  # Used by libgcc, elf-header, and others to determine ABI
   passthru = { inherit version; };
 }
 
 // (removeAttrs args [ "withLinuxHeaders" "withGd" ]) //
 
 {
-  name = name + "-${version}${patchSuffix}";
-
   src = fetchurl {
     url = "mirror://gnu/glibc/glibc-${version}.tar.xz";
     inherit sha256;
@@ -227,6 +233,28 @@ stdenv.mkDerivation ({
     libc_cv_c_cleanup=yes
     libc_cv_gnu89_inline=yes
     EOF
+
+    # ./configure has logic like
+    #
+    #     AR=`$CC -print-prog-name=ar`
+    #
+    # This searches various directories in the gcc and its wrapper. In nixpkgs,
+    # this returns the bare string "ar", which is build ar. This can result as
+    # a build failure with the following message:
+    #
+    #     libc_pic.a: error adding symbols: archive has no index; run ranlib to add one
+    #
+    # (Observed cross compiling from aarch64-linux -> armv7l-linux).
+    #
+    # Nixpkgs passes a correct value for AR and friends, so to use the correct
+    # set of tools, we only need to delete this special handling.
+    sed -i \
+      -e '/^AR=/d' \
+      -e '/^AS=/d' \
+      -e '/^LD=/d' \
+      -e '/^OBJCOPY=/d' \
+      -e '/^OBJDUMP=/d' \
+      $configureScript
   '';
 
   preBuild = lib.optionalString withGd "unset NIX_DONT_SET_RPATH";

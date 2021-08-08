@@ -1,15 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, pkg-config, which, libxslt, libxml2, docbook_xml_dtd_412, docbook_xsl, glib, imagemagick, darwin }:
-
+{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, pkg-config, which
+, libxslt, libxml2, docbook_xml_dtd_412, docbook_xsl, glib, imagemagick
+, Foundation
+}:
 
 stdenv.mkDerivation rec {
-  version = "1.6.0";
+  version = "1.6.1";
   pname = "chafa";
 
   src = fetchFromGitHub {
     owner = "hpjansson";
     repo = "chafa";
     rev = version;
-    sha256 = "sha256-GaXVMM23U3M+qNJrWYR+DLiCmILcuX5EIkQqzwN/l1Y=";
+    sha256 = "sha256-isQxeb7OQh4W8RvtKWXbKVYJ8LlfLiOkMJoPjsGFouM=";
   };
 
   nativeBuildInputs = [ autoconf
@@ -23,7 +25,8 @@ stdenv.mkDerivation rec {
                         docbook_xsl
                       ];
 
-  buildInputs = [ glib imagemagick ] ++ lib.optional stdenv.isDarwin [ darwin.apple_sdk.frameworks.ApplicationServices ];
+  buildInputs = [ glib imagemagick ]
+    ++ lib.optional stdenv.isDarwin Foundation;
 
   patches = [ ./xmlcatalog_patch.patch ];
 

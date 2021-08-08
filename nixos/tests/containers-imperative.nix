@@ -162,6 +162,6 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
           machine.fail(
               "nixos-container create b0rk --config-file ${brokenCfg}"
           )
-          machine.succeed(f"test ! -e /var/lib/containers/b0rk")
+          machine.succeed("test ! -e /var/lib/containers/b0rk")
     '';
 })

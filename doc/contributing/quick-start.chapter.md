@@ -9,7 +9,7 @@ To add a package to Nixpkgs:
    $ cd nixpkgs
    ```
 
-2. Find a good place in the Nixpkgs tree to add the Nix expression for your package. For instance, a library package typically goes into `pkgs/development/libraries/pkgname`, while a web browser goes into `pkgs/applications/networking/browsers/pkgname`. See <xref linkend="sec-organisation" /> for some hints on the tree organisation. Create a directory for your package, e.g.
+2. Find a good place in the Nixpkgs tree to add the Nix expression for your package. For instance, a library package typically goes into `pkgs/development/libraries/pkgname`, while a web browser goes into `pkgs/applications/networking/browsers/pkgname`. See [](#sec-organisation) for some hints on the tree organisation. Create a directory for your package, e.g.
 
    ```ShellSession
    $ mkdir pkgs/development/libraries/libfoo

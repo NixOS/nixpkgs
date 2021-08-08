@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, zlib, rdkafka, yajl }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, zlib, rdkafka, yajl, avro-c, libserdes }:
 
 stdenv.mkDerivation rec {
   pname = "kafkacat";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ zlib rdkafka yajl ];
+  buildInputs = [ zlib rdkafka yajl avro-c libserdes ];
 
   preConfigure = ''
     patchShebangs ./configure

@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
     ./update-deps.patch
   ];
 
-  cargoSha256 = "0br7r8wz3knzgl3gjpq6z8w33my0yiaq711s1wih9jizhia02y5r";
+  cargoSha256 = "130gqvzpyr055xkqcy1r0y7l5k2dcv7n9zgr4ja7dm7iayzbwwi1";
 
   nativeBuildInputs = [ pkg-config ];
 

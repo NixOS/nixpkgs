@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "karton-autoit-ripper";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "CERT-Polska";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0vdsxkbjcr0inpcfjh45gl72ipzklkhgs06fdpkyy9y0cfx3zq7z";
+    sha256 = "1bsqpf9w6d9fjysmnafaglg2w41gsafs2xz4dzcgc7n92shpcs8w";
   };
 
   propagatedBuildInputs = [
@@ -28,7 +28,6 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace requirements.txt \
       --replace "autoit-ripper==1.0.0" "autoit-ripper" \
-      --replace "karton.core==4.0.4" "karton-core" \
       --replace "malduck==3.1.0" "malduck>=3.1.0" \
       --replace "regex==2020.2.20" "regex>=2020.2.20"
   '';

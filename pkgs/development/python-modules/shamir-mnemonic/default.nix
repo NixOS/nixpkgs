@@ -21,6 +21,11 @@ buildPythonPackage rec {
     sha256 = "1mi1n01yw8yycbiv1l0xnfzlhhq2arappyvyi2jm5yq65jln77kg";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "click>=7,<8" "click"
+  '';
+
   propagatedBuildInputs = [
     attrs
     click

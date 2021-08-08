@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, setuptools_scm
+{ lib, buildPythonPackage, fetchPypi, setuptools-scm
 , inflect, more-itertools, six, pytest
 }:
 
@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   pythonNamespaces = [ "jaraco" ];
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [ inflect more-itertools six ];
   checkInputs = [ pytest ];

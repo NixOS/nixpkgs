@@ -18,7 +18,7 @@ python3Packages.buildPythonApplication rec {
     ./fix_pluginpath.patch
     # this fixes another bug with python3
     (fetchpatch {
-      url = https://github.com/efexgee/dstat/commit/220a785321b13b6df92a536080aca6ef1cb644ad.patch ;
+      url = "https://github.com/efexgee/dstat/commit/220a785321b13b6df92a536080aca6ef1cb644ad.patch";
       sha256 = "08kcz3yxvl35m55y7g1pr73x3bjcqnv0qlswxqyq8cqxg9zd64cn";
     })
   ];

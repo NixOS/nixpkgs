@@ -2,13 +2,13 @@
 
 let
   pname = "freeplane";
-  version = "1.8.11";
+  version = "1.9.5";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "release-${version}";
-    sha256 = "07xjx9pf62dvy8lx6vnbwwcn1zqy89cmdmwy792k7gb12wz81nnc";
+    sha256 = "qfhhmF3mePxcL4U8izkEmWaiaOLi4slsaymVnDoO3sY=";
   };
 
   deps = stdenv.mkDerivation {
@@ -31,7 +31,7 @@ let
 
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "0r7f6713m0whh5hlk1id7z9j5v9494r41sivn9fzl63q70kzz92g";
+    outputHash = "xphTzaSXTGpP7vI/t4oIiv1ZpbekG2dFRzyl3ub6qnA=";
   };
 
   # Point to our local deps repo
@@ -86,8 +86,7 @@ let
 in stdenv.mkDerivation rec {
   inherit pname version src;
 
-  buildInputs = [ makeWrapper ];
-  nativeBuildInputs = [ jdk11 gradle_5 ];
+  nativeBuildInputs = [ makeWrapper jdk11 gradle_5 ];
 
   buildPhase = ''
     mkdir -p -- ./freeplane/build/emoji/{txt,resources/images}

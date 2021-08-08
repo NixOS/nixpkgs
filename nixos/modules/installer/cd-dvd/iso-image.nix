@@ -182,13 +182,29 @@ let
     # Menu configuration
     #
 
+    # Search using a "marker file"
+    search --set=root --file /EFI/nixos-installer-image
+
     insmod gfxterm
     insmod png
     set gfxpayload=keep
+    set gfxmode=${concatStringsSep "," [
+      # GRUB will use the first valid mode listed here.
+      # `auto` will sometimes choose the smallest valid mode it detects.
+      # So instead we'll list a lot of possibly valid modes :/
+      #"3840x2160"
+      #"2560x1440"
+      "1920x1080"
+      "1366x768"
+      "1280x720"
+      "1024x768"
+      "800x600"
+      "auto"
+    ]}
 
     # Fonts can be loaded?
     # (This font is assumed to always be provided as a fallback by NixOS)
-    if loadfont /EFI/boot/unicode.pf2; then
+    if loadfont (\$root)/EFI/boot/unicode.pf2; then
       set with_fonts=true
     fi
     if [ "\$textmode" != "true" -a "\$with_fonts" == "true" ]; then
@@ -212,11 +228,11 @@ let
     ${ # When there is a theme configured, use it, otherwise use the background image.
     if config.isoImage.grubTheme != null then ''
       # Sets theme.
-      set theme=/EFI/boot/grub-theme/theme.txt
+      set theme=(\$root)/EFI/boot/grub-theme/theme.txt
       # Load theme fonts
-      $(find ${config.isoImage.grubTheme} -iname '*.pf2' -printf "loadfont /EFI/boot/grub-theme/%P\n")
+      $(find ${config.isoImage.grubTheme} -iname '*.pf2' -printf "loadfont (\$root)/EFI/boot/grub-theme/%P\n")
     '' else ''
-      if background_image /EFI/boot/efi-background.png; then
+      if background_image (\$root)/EFI/boot/efi-background.png; then
         # Black background means transparent background when there
         # is a background image set... This seems undocumented :(
         set color_normal=black/black
@@ -233,8 +249,14 @@ let
   # Notes about grub:
   #  * Yes, the grubMenuCfg has to be repeated in all submenus. Otherwise you
   #    will get white-on-black console-like text on sub-menus. *sigh*
-  efiDir = pkgs.runCommand "efi-directory" {} ''
+  efiDir = pkgs.runCommand "efi-directory" {
+    nativeBuildInputs = [ pkgs.buildPackages.grub2_efi ];
+    strictDeps = true;
+  } ''
     mkdir -p $out/EFI/boot/
+
+    # Add a marker so GRUB can find the filesystem.
+    touch $out/EFI/nixos-installer-image
 
     # ALWAYS required modules.
     MODULES="fat iso9660 part_gpt part_msdos \
@@ -263,7 +285,7 @@ let
 
     # Make our own efi program, we can't rely on "grub-install" since it seems to
     # probe for devices, even with --skip-fs-probe.
-    ${grubPkgs.grub2_efi}/bin/grub-mkimage -o $out/EFI/boot/boot${targetArch}.efi -p /EFI/boot -O ${grubPkgs.grub2_efi.grubTarget} \
+    grub-mkimage --directory=${grubPkgs.grub2_efi}/lib/grub/${grubPkgs.grub2_efi.grubTarget} -o $out/EFI/boot/boot${targetArch}.efi -p /EFI/boot -O ${grubPkgs.grub2_efi.grubTarget} \
       $MODULES
     cp ${grubPkgs.grub2_efi}/share/grub/unicode.pf2 $out/EFI/boot/
 
@@ -291,12 +313,12 @@ let
     ${grubMenuCfg}
 
     hiddenentry 'Text mode' --hotkey 't' {
-      loadfont /EFI/boot/unicode.pf2
+      loadfont (\$root)/EFI/boot/unicode.pf2
       set textmode=true
       terminal_output gfxterm console
     }
     hiddenentry 'GUI mode' --hotkey 'g' {
-      $(find ${config.isoImage.grubTheme} -iname '*.pf2' -printf "loadfont /EFI/boot/grub-theme/%P\n")
+      $(find ${config.isoImage.grubTheme} -iname '*.pf2' -printf "loadfont (\$root)/EFI/boot/grub-theme/%P\n")
       set textmode=false
       terminal_output gfxterm
     }
@@ -367,8 +389,10 @@ let
     ${lib.optionalString (refindBinary != null) ''
     # GRUB apparently cannot do "chainloader" operations on "CD".
     if [ "\$root" != "cd0" ]; then
+      # Force root to be the FAT partition
+      # Otherwise it breaks rEFInd's boot
+      search --set=root --no-floppy --fs-uuid 1234-5678
       menuentry 'rEFInd' --class refind {
-        # \$root defaults to the drive the EFI is found on.
         chainloader (\$root)/EFI/boot/${refindBinary}
       }
     fi
@@ -388,7 +412,10 @@ let
     ${refind}
   '';
 
-  efiImg = pkgs.runCommand "efi-image_eltorito" { buildInputs = [ pkgs.mtools pkgs.libfaketime ]; }
+  efiImg = pkgs.runCommand "efi-image_eltorito" {
+    nativeBuildInputs = [ pkgs.buildPackages.mtools pkgs.buildPackages.libfaketime pkgs.buildPackages.dosfstools ];
+    strictDeps = true;
+  }
     # Be careful about determinism: du --apparent-size,
     #   dates (cp -p, touch, mcopy -m, faketime for label), IDs (mkfs.vfat -i)
     ''
@@ -397,9 +424,12 @@ let
       mkdir ./boot
       cp -p "${config.boot.kernelPackages.kernel}/${config.system.boot.loader.kernelFile}" \
         "${config.system.build.initialRamdisk}/${config.system.boot.loader.initrdFile}" ./boot/
-      touch --date=@0 ./EFI ./boot
 
-      usage_size=$(du -sb --apparent-size . | tr -cd '[:digit:]')
+      # Rewrite dates for everything in the FS
+      find . -exec touch --date=2000-01-01 {} +
+
+      # Round up to the nearest multiple of 1MB, for more deterministic du output
+      usage_size=$(( $(du -s --block-size=1M --apparent-size . | tr -cd '[:digit:]') * 1024 * 1024 ))
       # Make the image 110% as big as the files need to make up for FAT overhead
       image_size=$(( ($usage_size * 110) / 100 ))
       # Make the image fit blocks of 1M
@@ -408,10 +438,19 @@ let
       echo "Usage size: $usage_size"
       echo "Image size: $image_size"
       truncate --size=$image_size "$out"
-      ${pkgs.libfaketime}/bin/faketime "2000-01-01 00:00:00" ${pkgs.dosfstools}/sbin/mkfs.vfat -i 12345678 -n EFIBOOT "$out"
-      mcopy -psvm -i "$out" ./EFI ./boot ::
+      faketime "2000-01-01 00:00:00" mkfs.vfat -i 12345678 -n EFIBOOT "$out"
+
+      # Force a fixed order in mcopy for better determinism, and avoid file globbing
+      for d in $(find EFI boot -type d | sort); do
+        faketime "2000-01-01 00:00:00" mmd -i "$out" "::/$d"
+      done
+
+      for f in $(find EFI boot -type f | sort); do
+        mcopy -pvm -i "$out" "$f" "::/$f"
+      done
+
       # Verify the FAT partition.
-      ${pkgs.dosfstools}/sbin/fsck.vfat -vn "$out"
+      fsck.vfat -vn "$out"
     ''; # */
 
   # Name used by UEFI for architectures.
@@ -420,6 +459,8 @@ let
       "ia32"
     else if pkgs.stdenv.isx86_64 then
       "x64"
+    else if pkgs.stdenv.isAarch32 then
+      "arm"
     else if pkgs.stdenv.isAarch64 then
       "aa64"
     else
@@ -613,7 +654,11 @@ in
       ];
 
     fileSystems."/" =
-      { fsType = "tmpfs";
+      # This module is often over-layed onto an existing host config
+      # that defines `/`. We use mkOverride 60 to override standard
+      # values, but at the same time leave room for mkForce values
+      # targeted at the image build.
+      { fsType = mkOverride 60 "tmpfs";
         options = [ "mode=0755" ];
       };
 
@@ -648,6 +693,12 @@ in
           "lowerdir=/nix/.ro-store"
           "upperdir=/nix/.rw-store/store"
           "workdir=/nix/.rw-store/work"
+        ];
+
+        depends = [
+          "/nix/.ro-store"
+          "/nix/.rw-store/store"
+          "/nix/.rw-store/work"
         ];
       };
 

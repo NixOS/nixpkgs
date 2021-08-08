@@ -1,7 +1,8 @@
 { stdenv, fetchFromGitHub, lib }:
 
 stdenv.mkDerivation {
-  name = "wasilibc-20190712";
+  pname = "wasilibc";
+  version = "20190712";
   src = fetchFromGitHub {
     owner = "CraneStation";
     repo = "wasi-libc";

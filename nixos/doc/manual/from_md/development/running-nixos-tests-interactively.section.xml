@@ -1,0 +1,39 @@
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="sec-running-nixos-tests-interactively">
+  <title>Running Tests interactively</title>
+  <para>
+    The test itself can be run interactively. This is particularly
+    useful when developing or debugging a test:
+  </para>
+  <programlisting>
+$ nix-build nixos/tests/login.nix -A driverInteractive
+$ ./result/bin/nixos-test-driver --interactive
+starting VDE switch for network 1
+&gt;
+</programlisting>
+  <para>
+    You can then take any Python statement, e.g.
+  </para>
+  <programlisting language="python">
+&gt; start_all()
+&gt; test_script()
+&gt; machine.succeed(&quot;touch /tmp/foo&quot;)
+&gt; print(machine.succeed(&quot;pwd&quot;)) # Show stdout of command
+</programlisting>
+  <para>
+    The function <literal>test_script</literal> executes the entire test
+    script and drops you back into the test driver command line upon its
+    completion. This allows you to inspect the state of the VMs after
+    the test (e.g. to debug the test script).
+  </para>
+  <para>
+    You can re-use the VM states coming from a previous run by setting
+    the <literal>--keep-vm-state</literal> flag.
+  </para>
+  <programlisting>
+$ ./result/bin/nixos-test-driver --interactive --keep-vm-state
+</programlisting>
+  <para>
+    The machine state is stored in the
+    <literal>$TMPDIR/vm-state-machinename</literal> directory.
+  </para>
+</section>

@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
   # Because there's a test that requires terminal access
   doCheck = false;
 
-  cargoSha256 = "0xblxsp7jgqbb3kr5k7yy6ziz18a8wlkrhls0vz9ak2n0ngddg3r";
+  cargoSha256 = "1c9vw1n6h7irwim1zf3mr0g520jnlvfqdy7y9v9g9xpkvbjr7ich";
 
   meta = with lib; {
     description = "A terminal user interface for taskwarrior ";

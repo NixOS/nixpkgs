@@ -6,7 +6,7 @@
 , numpy, toolz # dask[array]
 , numba
 , pandas
-, scikitlearn
+, scikit-learn
 , scipy
 , dask-glm
 , six
@@ -17,14 +17,18 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.8.0";
+  version = "1.9.0";
   pname = "dask-ml";
   disabled = pythonOlder "3.6"; # >= 3.6
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8fc4ac3ec1915e382fb8cae9ff1ec9b5ac1bee0b6f4c6975d6e6cb7191a4a815";
+    sha256 = "2f376a7114133b484a6d393f62298473116fc49c79ec7d50d5b031d752f54307";
   };
+
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
   propagatedBuildInputs = [
     dask
@@ -35,11 +39,10 @@ buildPythonPackage rec {
     numpy
     packaging
     pandas
-    scikitlearn
+    scikit-learn
     scipy
     six
     toolz
-    setuptools-scm
   ];
 
   # has non-standard build from source, and pypi doesn't include tests

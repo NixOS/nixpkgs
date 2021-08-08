@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , nose
-, scikitlearn
+, scikit-learn
 , scipy
 , numba
 , llvmlite
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    scikitlearn
+    scikit-learn
     scipy
     numba
     llvmlite

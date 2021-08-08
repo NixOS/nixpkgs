@@ -248,7 +248,6 @@ let
     Cardinal = [ pkgs.which ];
     chebpol = [ pkgs.fftw ];
     ChemmineOB = [ pkgs.openbabel pkgs.pkg-config ];
-    cit = [ pkgs.gsl_1 ];
     curl = [ pkgs.curl.dev ];
     data_table = [pkgs.zlib.dev] ++ lib.optional stdenv.isDarwin pkgs.llvmPackages.openmp;
     devEMF = [ pkgs.xorg.libXft.dev pkgs.x11 ];
@@ -276,6 +275,7 @@ let
     jqr = [ pkgs.jq.dev ];
     KFKSDS = [ pkgs.gsl_1 ];
     kza = [ pkgs.fftw.dev ];
+    lwgeom = [ pkgs.gdal pkgs.geos pkgs.proj ];
     magick = [ pkgs.imagemagick.dev ];
     ModelMetrics = lib.optional stdenv.isDarwin pkgs.llvmPackages.openmp;
     mvabund = [ pkgs.gsl_1 ];
@@ -309,7 +309,7 @@ let
     Rglpk = [ pkgs.glpk ];
     RGtk2 = [ pkgs.gtk2.dev ];
     rhdf5 = [ pkgs.zlib ];
-    Rhdf5lib = [ pkgs.zlib ];
+    Rhdf5lib = [ pkgs.zlib.dev ];
     Rhpc = [ pkgs.zlib pkgs.bzip2.dev pkgs.icu pkgs.xz.dev pkgs.mpi pkgs.pcre.dev ];
     Rhtslib = [ pkgs.zlib.dev pkgs.automake pkgs.autoconf pkgs.bzip2.dev pkgs.xz.dev pkgs.curl.dev ];
     rjags = [ pkgs.jags ];
@@ -322,14 +322,12 @@ let
     RNetCDF = [ pkgs.netcdf pkgs.udunits ];
     RODBC = [ pkgs.libiodbc ];
     rpanel = [ pkgs.bwidget ];
-    rpg = [ pkgs.postgresql ];
     Rpoppler = [ pkgs.poppler ];
     RPostgreSQL = [ pkgs.postgresql pkgs.postgresql ];
     RProtoBuf = [ pkgs.protobuf ];
     RSclient = [ pkgs.openssl.dev ];
     Rserve = [ pkgs.openssl ];
     Rssa = [ pkgs.fftw.dev ];
-    rtiff = [ pkgs.libtiff.dev ];
     runjags = [ pkgs.jags ];
     RVowpalWabbit = [ pkgs.zlib.dev pkgs.boost ];
     rzmq = [ pkgs.zeromq pkgs.pkg-config ];
@@ -347,6 +345,7 @@ let
     stsm = [ pkgs.gsl_1 ];
     stringi = [ pkgs.icu.dev ];
     survSNP = [ pkgs.gsl_1 ];
+    svglite = [ pkgs.libpng.dev ];
     sysfonts = [ pkgs.zlib pkgs.libpng pkgs.freetype.dev ];
     systemfonts = [ pkgs.fontconfig.dev pkgs.freetype.dev ];
     TAQMNGR = [ pkgs.zlib.dev ];
@@ -374,11 +373,13 @@ let
     affyio = [ pkgs.zlib.dev ];
     VariantAnnotation = [ pkgs.zlib.dev pkgs.curl.dev ];
     snpStats = [ pkgs.zlib.dev ];
+    hdf5r = [ pkgs.hdf5.dev ];
   };
 
   packagesWithBuildInputs = {
     # sort -t '=' -k 2
     gam = lib.optionals stdenv.isDarwin [ pkgs.libiconv ];
+    RcppArmadillo = lib.optionals stdenv.isDarwin [ pkgs.libiconv ];
     quantreg = lib.optionals stdenv.isDarwin [ pkgs.libiconv ];
     rmutil = lib.optionals stdenv.isDarwin [ pkgs.libiconv ];
     robustbase = lib.optionals stdenv.isDarwin [ pkgs.libiconv ];
@@ -405,6 +406,7 @@ let
     gdtools = [ pkgs.pkg-config ];
     jqr = [ pkgs.jq.lib ];
     kza = [ pkgs.pkg-config ];
+    lwgeom = [ pkgs.pkg-config pkgs.proj.dev pkgs.sqlite.dev ];
     magick = [ pkgs.pkg-config ];
     mwaved = [ pkgs.pkg-config ];
     odbc = [ pkgs.pkg-config ];
@@ -487,9 +489,7 @@ let
     "DeducerText"
     "Demerelate"
     "detrendeR"
-    "dgmb"
     "dpa"
-    "DSpat"
     "dynamicGraph"
     "dynBiplotGUI"
     "EasyqpcR"
@@ -564,7 +564,6 @@ let
     "PredictABEL"
     "prefmod"
     "PrevMap"
-    "ProbForecastGOP"
     "r4ss"
     "RandomFields"
     "rareNMtests"

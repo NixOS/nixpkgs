@@ -4,7 +4,7 @@
 , nose
 , tox
 , six
-, dateutil
+, python-dateutil
 , kitchen
 , pytz
 , pkgs
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   buildInputs = [ nose pkgs.taskwarrior tox ];
-  propagatedBuildInputs = [ six dateutil kitchen pytz ];
+  propagatedBuildInputs = [ six python-dateutil kitchen pytz ];
 
   meta = with lib; {
     homepage =  "https://github.com/ralphbean/taskw";

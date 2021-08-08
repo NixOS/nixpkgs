@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "azure-servicebus";
-  version = "7.1.0";
+  version = "7.3.1";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "c5b3681ce4d7a44c223ddddfdec4c8d2eadede3b11b598ac09c4dbf4b729e89b";
+    sha256 = "dc162fc572087cdf53065a2ea9517b002a6702cf382f998d69903d68c16c731e";
   };
 
   propagatedBuildInputs = [
@@ -35,7 +35,7 @@ buildPythonPackage rec {
   pythonImportsCheck = lib.optionals isPy3k [ "azure.servicebus" ];
 
   meta = with lib; {
-    description = "This is the Microsoft Azure Service Bus Client Library";
+    description = "Microsoft Azure Service Bus Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
     maintainers = with maintainers; [ maxwilson ];

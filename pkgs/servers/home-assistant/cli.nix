@@ -4,11 +4,11 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "homeassistant-cli";
-  version = "0.9.3";
+  version = "0.9.4";
 
   src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "18h6bc99skzb0a1pffb6lr2z04928srrcz1w2zy66bndasic5yfs";
+    sha256 = "03kiyqpp3zf8rg30d12h4fapihh0rqwpv5p8jfxb3iq0chfmjx2f";
   };
 
   postPatch = ''
@@ -30,11 +30,13 @@ python3.pkgs.buildPythonApplication rec {
     tabulate
   ];
 
-  postInstall = ''
-    mkdir -p "$out/share/bash-completion/completions" "$out/share/zsh/site-functions"
-    $out/bin/hass-cli completion bash > "$out/share/bash-completion/completions/hass-cli"
-    $out/bin/hass-cli completion zsh > "$out/share/zsh/site-functions/_hass-cli"
-  '';
+  # Completion needs to be ported to work with click > 8.0
+  # https://github.com/home-assistant-ecosystem/home-assistant-cli/issues/367
+  #postInstall = ''
+  #  mkdir -p "$out/share/bash-completion/completions" "$out/share/zsh/site-functions"
+  #  $out/bin/hass-cli completion bash > "$out/share/bash-completion/completions/hass-cli"
+  #  $out/bin/hass-cli completion zsh > "$out/share/zsh/site-functions/_hass-cli"
+  #'';
 
   checkInputs = with python3.pkgs; [
     pytestCheckHook
@@ -43,7 +45,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Command-line tool for Home Assistant";
-    homepage = "https://github.com/home-assistant/home-assistant-cli";
+    homepage = "https://github.com/home-assistant-ecosystem/home-assistant-cli";
     changelog = "https://github.com/home-assistant-ecosystem/home-assistant-cli/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = teams.home-assistant.members;

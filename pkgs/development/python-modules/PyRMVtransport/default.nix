@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "PyRMVtransport";
-  version = "0.3.1";
+  version = "0.3.2";
   format = "pyproject";
   disabled = pythonOlder "3.6";
 
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "cgtobi";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1savzndg8l7rrc5dgzgsrdz9hnnjfv6qs5drznqmdw4f2rq84ypa";
+    sha256 = "0m74m3dhxmbv10hsvs7cpshzs3pg66va5lyq94i5j1nxrl9i7spb";
   };
 
   nativeBuildInputs = [
@@ -40,11 +40,6 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-asyncio
     pytest-httpx
-  ];
-
-  disabledTests = [
-    # fails with pytest-httpx>=0.12.0
-    "test__query_rmv_api_fail"
   ];
 
   meta = with lib; {

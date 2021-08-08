@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "aiopylgtv";
-  version = "0.4.0";
+  version = "0.4.1";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "bendavid";
     repo = pname;
     rev = version;
-    sha256 = "0x0xcnlz42arsp53zlq5wyv9pwif1in8j2pv48gh0pkdnz9s86b6";
+    sha256 = "sha256-NkWJGy5QUrhpbARoscrXy/ilCjAz01YxeVTH0I+IjNM=";
   };
 
   propagatedBuildInputs = [

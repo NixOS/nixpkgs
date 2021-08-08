@@ -3,7 +3,7 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: let
   v2rayUser = {
     # A random UUID.
     id = "a6a46834-2150-45f8-8364-0f6f6ab32384";
-    alterId = 4;
+    alterId = 0; # Non-zero support will be disabled in the future.
   };
 
   # 1080 [http proxy] -> 1081 [vmess] -> direct

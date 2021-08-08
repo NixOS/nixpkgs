@@ -5,10 +5,11 @@
 
 let
   mkDict =
-  { name, readmeFile, dictFileName, ... }@args:
+  { pname, readmeFile, dictFileName, ... }@args:
   stdenv.mkDerivation ({
-    inherit name;
+    inherit pname;
     installPhase = ''
+      runHook preInstall
       # hunspell dicts
       install -dm755 "$out/share/hunspell"
       install -m644 ${dictFileName}.dic "$out/share/hunspell/"
@@ -19,7 +20,7 @@ let
       ln -sv "$out/share/hunspell/${dictFileName}.aff" "$out/share/myspell/dicts/"
       # docs
       install -dm755 "$out/share/doc"
-      install -m644 ${readmeFile} $out/share/doc/${name}.txt
+      install -m644 ${readmeFile} $out/share/doc/${pname}.txt
       runHook postInstall
     '';
   } // args);
@@ -29,7 +30,7 @@ let
     mkDict rec {
       inherit dictFileName;
       version = "2.2";
-      name = "hunspell-dict-${shortName}-rla-${version}";
+      pname = "hunspell-dict-${shortName}-rla";
       readmeFile = "README.txt";
       src = fetchFromGitHub {
         owner = "sbosio";
@@ -44,7 +45,6 @@ let
         maintainers = with maintainers; [ renzo ];
         platforms = platforms.all;
       };
-      phases = "unpackPhase patchPhase buildPhase installPhase";
       nativeBuildInputs = [ unzip ];
       buildInputs = [ bash coreutils which zip ];
       patchPhase = ''
@@ -70,7 +70,7 @@ let
       version = "2.40";
       # Should really use a string function or something
       _version = "2-40";
-      name = "hunspell-dict-${shortName}-dsso-${version}";
+      pname = "hunspell-dict-${shortName}-dsso";
       _name = "ooo_swedish_dict_${_version}";
       readmeFile = "LICENSE_en_US.txt";
       src = fetchurl {
@@ -88,7 +88,6 @@ let
         platforms = platforms.all;
       };
       nativeBuildInputs = [ unzip ];
-      phases = "unpackPhase installPhase";
       sourceRoot = ".";
       unpackCmd = ''
       unzip $src dictionaries/${dictFileName}.dic dictionaries/${dictFileName}.aff $readmeFile
@@ -104,7 +103,7 @@ let
         ln -sv "$out/share/hunspell/${dictFileName}.aff" "$out/share/myspell/dicts/"
         # docs
         install -dm755 "$out/share/doc"
-        install -m644 ${readmeFile} $out/share/doc/${name}.txt
+        install -m644 ${readmeFile} $out/share/doc/${pname}.txt
       '';
     };
 
@@ -113,7 +112,7 @@ let
     mkDict rec {
       inherit dictFileName;
       version = "5.3";
-      name = "hunspell-dict-${shortName}-dicollecte-${version}";
+      pname = "hunspell-dict-${shortName}-dicollecte";
       readmeFile = "README_dict_fr.txt";
       src = fetchurl {
          url = "http://www.dicollecte.org/download/fr/hunspell-french-dictionaries-v${version}.zip";
@@ -128,7 +127,6 @@ let
         platforms = platforms.all;
       };
       nativeBuildInputs = [ unzip ];
-      phases = "unpackPhase installPhase";
       sourceRoot = ".";
       unpackCmd = ''
         unzip $src ${dictFileName}.dic ${dictFileName}.aff ${readmeFile}
@@ -146,7 +144,7 @@ let
     mkDict rec {
       inherit src srcFileName dictFileName;
       version = "2018.04.16";
-      name = "hunspell-dict-${shortName}-wordlist-${version}";
+      pname = "hunspell-dict-${shortName}-wordlist";
       srcReadmeFile = "README_" + srcFileName + ".txt";
       readmeFile = "README_" + dictFileName + ".txt";
       meta = with lib; {
@@ -157,7 +155,6 @@ let
         platforms = platforms.all;
       };
       nativeBuildInputs = [ unzip ];
-      phases = "unpackPhase installPhase";
       sourceRoot = ".";
       unpackCmd = ''
         unzip $src ${srcFileName}.dic ${srcFileName}.aff ${srcReadmeFile}
@@ -174,7 +171,7 @@ let
     mkDict rec {
       inherit src dictFileName;
       version = "2.4";
-      name = "hunspell-dict-${shortName}-linguistico-${version}";
+      pname = "hunspell-dict-${shortName}-linguistico";
       readmeFile = dictFileName + "_README.txt";
       meta = with lib; {
         description = "Hunspell dictionary for ${shortDescription}";
@@ -184,7 +181,6 @@ let
         platforms = platforms.all;
       };
       nativeBuildInputs = [ unzip ];
-      phases = "unpackPhase patchPhase installPhase";
       sourceRoot = ".";
       prePatch = ''
         # Fix dic file empty lines (FS#22275)
@@ -198,12 +194,11 @@ let
   mkDictFromXuxen =
     { shortName, srcs, shortDescription, longDescription, dictFileName }:
     stdenv.mkDerivation rec {
-      name = "hunspell-dict-${shortName}-xuxen-${version}";
+      pname = "hunspell-dict-${shortName}-xuxen";
       version = "5-2015.11.10";
 
       inherit srcs;
 
-      phases = ["unpackPhase" "installPhase"];
       sourceRoot = ".";
       # Copy files stripping until first dash (path and hash)
       unpackCmd = "cp $curSrc \${curSrc##*-}";
@@ -231,7 +226,7 @@ let
   mkDictFromJ3e =
     { shortName, shortDescription, dictFileName }:
     stdenv.mkDerivation rec {
-      name = "hunspell-dict-${shortName}-j3e-${version}";
+      pname = "hunspell-dict-${shortName}-j3e";
       version = "20161207";
 
       src = fetchurl {
@@ -241,7 +236,8 @@ let
 
       buildInputs = [ ispell perl hunspell ];
 
-      phases = ["unpackPhase" "installPhase"];
+      dontBuild = true;
+
       installPhase = ''
         patchShebangs bin
         make hunspell/${dictFileName}.aff hunspell/${dictFileName}.dic
@@ -272,7 +268,7 @@ let
     , readmeFile ? "README_${dictFileName}.txt"
     , sourceRoot ? dictFileName }:
     mkDict rec {
-      name = "hunspell-dict-${shortName}-libreoffice-${version}";
+      pname = "hunspell-dict-${shortName}-libreoffice";
       version = "6.3.0.4";
       inherit dictFileName readmeFile;
       src = fetchFromGitHub {
@@ -699,7 +695,7 @@ in rec {
 
   uk_UA = uk-ua;
   uk-ua = mkDict rec {
-    name = "hunspell-dict-uk-ua-${version}";
+    pname = "hunspell-dict-uk-ua";
     version = "4.6.3";
     _version = "4-6.3";
 
@@ -760,12 +756,12 @@ in rec {
 
   da_DK = da-dk;
   da-dk = mkDict rec {
-    name = "hunspell-dict-da-dk-${version}";
-    version = "2.5.137";
+    pname = "hunspell-dict-da-dk";
+    version = "2.5.189";
 
     src = fetchurl {
       url = "https://stavekontrolden.dk/dictionaries/da_DK/da_DK-${version}.oxt";
-      sha256 = "16y0smkg1mq0133r1fbw5ak6s2xw39281knk5ivhanakayq789qx";
+      sha256 = "sha256:0i1cw0nfg24b0sg2yc3q7315ng5vc5245nvh0l1cndkn2c9z4978";
     };
 
     shortName = "da-dk";
@@ -783,5 +779,46 @@ in rec {
       license = with lib.licenses; [ gpl2Only lgpl21Only mpl11 ];
       maintainers = with maintainers; [ louisdk1 ];
     };
+  };
+
+  /* DUTCH */
+
+  nl_NL = nl_nl;
+  nl_nl = mkDict rec {
+    pname = "hunspell-dict-nl-nl";
+    version = "2.20.19";
+
+    src = fetchFromGitHub {
+      owner = "OpenTaal";
+      repo = "opentaal-hunspell";
+      rev = version;
+      sha256 = "0jma8mmrncyzd77kxliyngs4z6z4769g3nh0a7xn2pd4s5y2xdpy";
+    };
+
+    preInstall = ''
+      mv nl.aff nl_NL.aff
+      mv nl.dic nl_NL.dic
+    '';
+
+    dictFileName = "nl_NL";
+    readmeFile = "README.md";
+
+    meta = with lib; {
+      description = "Hunspell dictionary for Dutch (Netherlands) from OpenTaal";
+      homepage = "https://www.opentaal.org/";
+      license = with licenses; [ bsd3 cc-by-nc-30 ];
+      maintainers = with maintainers; [ artturin ];
+    };
+  };
+
+  /* HEBREW */
+
+  he_IL = he-il;
+  he-il = mkDictFromLibreOffice {
+    shortName = "he-il";
+    dictFileName = "he_IL";
+    shortDescription = "Hebrew (Israel)";
+    readmeFile = "README_he_IL.txt";
+    license = with lib.licenses; [ agpl3Plus ];
   };
 }

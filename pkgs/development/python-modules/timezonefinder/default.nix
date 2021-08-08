@@ -5,7 +5,7 @@
 , numba
 , numpy
 , pytestCheckHook
-, pytestcov
+, pytest-cov
 }:
 
 buildPythonPackage rec {
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     numpy
   ];
 
-  checkInputs = [ numba pytestCheckHook pytestcov ];
+  checkInputs = [ numba pytestCheckHook pytest-cov ];
 
   meta = with lib; {
     description = "fast python package for finding the timezone of any point on earth (coordinates) offline";

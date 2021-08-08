@@ -5,7 +5,7 @@ stdenv.mkDerivation {
 
   pname = "collectd-data";
 
-  phases = [ "installPhase" ];
+  dontUnpack = true;
 
   installPhase = ''
     mkdir -p $out/share/collectd

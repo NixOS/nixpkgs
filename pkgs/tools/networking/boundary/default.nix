@@ -2,25 +2,26 @@
 
 stdenv.mkDerivation rec {
   pname = "boundary";
-  version = "0.2.0";
+  version = "0.5.0";
 
   src =
     let
       inherit (stdenv.hostPlatform) system;
-      suffix = {
+      selectSystem = attrs: attrs.${system} or (throw "Unsupported system: ${system}");
+      suffix = selectSystem {
         x86_64-linux = "linux_amd64";
         aarch64-linux = "linux_arm64";
         x86_64-darwin = "darwin_amd64";
-      }.${system} or (throw "Unsupported system: ${system}");
-      fetchsrc = version: sha256: fetchzip {
-        url = "https://releases.hashicorp.com/boundary/${version}/boundary_${version}_${suffix}.zip";
-        sha256 = sha256.${system};
+      };
+      sha256 = selectSystem {
+        x86_64-linux = "sha256-5ggbM6Ev4TkpyG0yPGCh22QSqefyO32Q2k2kthHgkTc=";
+        aarch64-linux = "sha256-oboMI2OxemIEX+IcBkN/DoACGXzyxsxHg4OD3ugbLR0=";
+        x86_64-darwin = "sha256-dpSI7I37vChljHSV0mwUDymngIFoQ5sWAszJ9MePMG8=";
       };
     in
-    fetchsrc version {
-      x86_64-linux = "sha256-4h1Lx+Et1AfX75Cn0YUhV4MkEtzP6ICqAHVKex3PBpg=";
-      aarch64-linux = "sha256-i7gzv8GdDgikPT1tMia4xltEYiIZ/VNRbAiGF2o8oKA=";
-      x86_64-darwin = "sha256-tleIY1loPE61n59Qc9CJeropRUvTBbcIA8xmB1SaMt8=";
+    fetchzip {
+      url = "https://releases.hashicorp.com/boundary/${version}/boundary_${version}_${suffix}.zip";
+      inherit sha256;
     };
 
   dontConfigure = true;

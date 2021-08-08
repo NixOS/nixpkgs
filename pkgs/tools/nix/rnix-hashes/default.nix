@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
     })
   ];
 
-  cargoSha256 = "vaG+0t+XAckV9F4iIgcTkbIUurxdQsTCfOnRnrOKoRc=";
+  cargoSha256 = "sha256-p6W9NtOKzVViyFq5SQvnIsik7S3mqUqxI/05OiC+P+Q=";
 
   meta = with lib; {
     description = "Nix Hash Converter";

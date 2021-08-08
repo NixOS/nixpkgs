@@ -5,6 +5,7 @@
 , nose
 , lxml
 , requests
+, six
 }:
 
 buildPythonPackage rec {
@@ -17,7 +18,11 @@ buildPythonPackage rec {
     sha256 = "22524120d744b50d25ef6bfc7052637e4ead9e2afac92563231ec89848f5adf5";
   };
 
-  propagatedBuildInputs = [ lxml requests ];
+  propagatedBuildInputs = [
+    lxml
+    requests
+    six
+  ];
 
   # future is not used, and pathlib is installed part of python38+
   # w/o an external package

@@ -1,22 +1,39 @@
-{ lib, fetchFromGitHub, python3Packages }:
+{ lib, fetchFromGitHub, python3Packages, unstableGitUpdater, gnupg }:
 
 python3Packages.buildPythonApplication rec {
-  version = "1.8.1";
   pname = "apt-offline";
+  version = "unstable-2021-04-11";
 
   src = fetchFromGitHub {
     owner = "rickysarraf";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "0k79d1d8jiwg1s684r05njmk1dz8gsb8a9bl4agz7m31snc11j84";
+    rev = "4e4b3281d004d1ece4833b7680e2b5b091402a03";
+    sha256 = "1lk4186h2wc8fphd592rhq7yj4kgc7jjawx4pjrs6pg4n0q32pl6";
   };
+
+  postPatch = ''
+    substituteInPlace org.debian.apt.aptoffline.policy \
+      --replace /usr/bin/ "$out/bin"
+
+    substituteInPlace apt_offline_core/AptOfflineCoreLib.py \
+      --replace /usr/bin/gpgv "${gnupg}/bin/gpgv"
+  '';
+
+  preFixup = ''
+    rm "$out/bin/apt-offline-gui"
+    rm "$out/bin/apt-offline-gui-pkexec"
+  '';
 
   doCheck = false;
 
-  # Requires python-qt4 (feel free to get it working).
-  preFixup = ''rm "$out/bin/apt-offline-gui"'';
+  pythonimportsCheck = [ "apt-offline" ];
+
+  passthru.updateScript = unstableGitUpdater {
+    url = "https://github.com/rickysarraf/apt-offline.git";
+  };
 
   meta = with lib; {
+    homepage = "https://github.com/rickysarraf/apt-offline";
     description = "Offline APT package manager";
     license = licenses.gpl3;
     maintainers = [ ];

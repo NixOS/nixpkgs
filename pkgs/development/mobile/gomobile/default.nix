@@ -3,29 +3,26 @@
 , xcodeWrapper ? xcodeenv.composeXcodeWrapper xcodeWrapperArgs
 , androidPkgs ? androidenv.composeAndroidPackages {
     includeNDK = true;
-    ndkVersion = "21.3.6528147"; # WARNING: 22.0.7026061 is broken.
+    ndkVersion = "22.1.7171670";
   } }:
 
 buildGoModule {
   pname = "gomobile";
-  version = "unstable-2020-06-22";
+  version = "unstable-2021-06-14";
 
-  vendorSha256 = "1n1338vqkc1n8cy94501n7jn3qbr28q9d9zxnq2b4rxsqjfc9l94";
+  vendorSha256 = "1irgkgv72rakg7snk1bnp10ibr64ykz9l40s59l4fnl63zsh12a0";
 
   src = fetchgit {
-    # WARNING: Next commit removes support for ARM 32 bit builds for iOS
-    rev = "33b80540585f2b31e503da24d6b2a02de3c53ff5";
+    rev = "7c8f154d100840bc5828285bb390bbae1cb5a98c";
     name = "gomobile";
     url = "https://go.googlesource.com/mobile";
-    sha256 = "0c9map2vrv34wmaycsv71k4day3b0z5p16yzxmlp8amvqb38zwlm";
+    sha256 = "1w9mra1mqf60iafp0ywvja5196fjsjyfhvz4yizqq4qkyll5qmj1";
   };
 
   subPackages = [ "bind" "cmd/gobind" "cmd/gomobile" ];
 
   # Fails with: go: cannot find GOROOT directory
   doCheck = false;
-
-  patches = [ ./resolve-nix-android-sdk.patch ];
 
   nativeBuildInputs = [ makeWrapper ]
     ++ lib.optionals stdenv.isDarwin [ xcodeWrapper ];
@@ -48,8 +45,8 @@ buildGoModule {
     wrapProgram $out/bin/gomobile \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ zlib ]}" \
       --prefix PATH : "${androidPkgs.androidsdk}/bin" \
-      --set ANDROID_HOME "${androidPkgs.androidsdk}/libexec/android-sdk" \
-      --set GOPATH $out
+      --set ANDROID_NDK_HOME "${androidPkgs.androidsdk}/libexec/android-sdk/ndk-bundle" \
+      --set ANDROID_HOME "${androidPkgs.androidsdk}/libexec/android-sdk"
   '';
 
   meta = with lib; {

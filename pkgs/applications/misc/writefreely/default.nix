@@ -17,11 +17,11 @@ buildGoModule rec {
 
   preBuild = ''
     make assets
-    export buildFlagsArray=(
-      "-ldflags=-s -w -X github.com/writeas/writefreely.softwareVer=${version}"
-      "-tags='sqlite'"
-    )
   '';
+
+  ldflags = [ "-s" "-w" "-X github.com/writeas/writefreely.softwareVer=${version}" ];
+
+  tags = [ "sqlite" ];
 
   subPackages = [ "cmd/writefreely" ];
 

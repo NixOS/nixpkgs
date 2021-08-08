@@ -40,14 +40,14 @@ let
   };
 in buildPythonPackage rec {
   pname = "numpy";
-  version = "1.20.2";
+  version = "1.20.3";
   format = "pyproject.toml";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "1vkc1739lwqx0n9dwxzmy18axlz22za034xa8jh0lmfpbazj52c7";
+    sha256 = "e55185e51b18d788e49fe8305fd73ef4470596b33fc2c1ceb304566b99c71a69";
   };
 
   patches = lib.optionals python.hasDistutilsCxxPatch [
@@ -74,8 +74,6 @@ in buildPythonPackage rec {
   '';
 
   enableParallelBuilding = true;
-
-  doCheck = !isPyPy; # numpy 1.16+ hits a bug in pypy's ctypes, using either numpy or pypy HEAD fixes this (https://github.com/numpy/numpy/issues/13807)
 
   checkInputs = [
     pytest

@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , mkDerivation
 , fetchFromGitHub
 , cmake
@@ -20,6 +21,13 @@ mkDerivation rec {
     rev = version;
     sha256 = "0zhcv6cbdn9fr5lpglz26gzssbxkpi824sgc0g7w3hh1z6nqqf8l";
   };
+
+  # Nix clang on darwin identifies as 'Clang', not 'AppleClang'
+  # Without this, dependants fail to link.
+  postPatch = ''
+    substituteInPlace cmake/modules/LXQtCompilerSettings.cmake \
+      --replace AppleClang Clang
+  '';
 
   nativeBuildInputs = [
     cmake

@@ -3,7 +3,7 @@
 , # required for both
   unzip, libjpeg, zlib, libvorbis, curl
 , # glx
-  libX11, libGLU, libGL, libXpm, libXext, libXxf86vm, alsaLib
+  libX11, libGLU, libGL, libXpm, libXext, libXxf86vm, alsa-lib
 , # sdl
   SDL2
 
@@ -58,13 +58,13 @@ let
     inherit version;
 
     src = fetchurl {
-      url = "https://dl.xonotic.org/${name}-source.zip";
+      url = "https://dl.xonotic.org/xonotic-${version}-source.zip";
       sha256 = "0axxw04fyz6jlfqd0kp7hdrqa0li31sx1pbipf2j5qp9wvqicsay";
     };
 
     nativeBuildInputs = [ unzip ];
     buildInputs = [ libjpeg zlib libvorbis curl ]
-      ++ lib.optional withGLX [ libX11.dev libGLU.dev libGL.dev libXpm.dev libXext.dev libXxf86vm.dev alsaLib.dev ]
+      ++ lib.optional withGLX [ libX11.dev libGLU.dev libGL.dev libXpm.dev libXext.dev libXxf86vm.dev alsa-lib.dev ]
       ++ lib.optional withSDL [ SDL2.dev ];
 
     sourceRoot = "Xonotic/source/darkplaces";
@@ -119,8 +119,8 @@ let
 
 in rec {
   xonotic-data = fetchzip {
-    name = "xonotic-data-${version}";
-    url = "https://dl.xonotic.org/${name}.zip";
+    name = "xonotic-data";
+    url = "https://dl.xonotic.org/xonotic-${version}.zip";
     sha256 = "1ygkh0v68y4sd1w5vpk8dgb65h5jm599hwszdfgjp3ax4d3ml81x";
     extraPostFetch = ''
       cd $out

@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "pdns-recursor";
-  version = "4.4.3";
+  version = "4.5.4";
 
   src = fetchurl {
     url = "https://downloads.powerdns.com/releases/pdns-recursor-${version}.tar.bz2";
-    sha256 = "01dypbqq6ynrdr3dqwbz8dzpkd2ykgaz9mqhaz3i1hqc21c14hgq";
+    sha256 = "0sl98ykk2bh0v2aw2hyak7wk9k3pbhvmfkb3i4a72jlsixm60p81";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -26,14 +26,17 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   passthru.tests = {
-    nixos = nixosTests.pdns-recursor;
+    inherit (nixosTests) pdns-recursor ncdns;
   };
 
   meta = with lib; {
     description = "A recursive DNS server";
     homepage = "https://www.powerdns.com/";
     platforms = platforms.linux;
-    license = licenses.gpl2;
+    badPlatforms = [
+      "i686-linux"  # a 64-bit time_t is needed
+    ];
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ rnhmjoj ];
   };
 }

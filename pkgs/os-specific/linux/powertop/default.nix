@@ -1,17 +1,20 @@
-{ lib, stdenv, fetchurl, fetchpatch, gettext, libnl, ncurses, pciutils, pkg-config, zlib }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, gettext, libnl, ncurses, pciutils
+, pkg-config, zlib, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "powertop";
-  version = "2.13";
+  version = "2.14";
 
-  src = fetchurl {
-    url = "https://01.org/sites/default/files/downloads/${pname}-${version}.tar.gz";
-    sha256 = "0y1ixw8v17fdb1ima0zshrd0rh4zxdh10r93nrrvq6d4lhn9jpx6";
+  src = fetchFromGitHub {
+    owner = "fenrus75";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "1zkr2y5nb1nr22nq8a3zli87iyfasfq6489p7h1k428pv8k45w4f";
   };
 
   outputs = [ "out" "man" ];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config autoreconfHook ];
   buildInputs = [ gettext libnl ncurses pciutils zlib ];
 
   patches = lib.optional stdenv.hostPlatform.isMusl (
@@ -21,6 +24,8 @@ stdenv.mkDerivation rec {
       sha256 = "1kzddhcrb0n2iah4lhgxwwy4mkhq09ch25jjngyq6pdj6pmfkpfw";
     }
   );
+
+  NIX_LDFLAGS = [ "-lpthread" ];
 
   postPatch = ''
     substituteInPlace src/main.cpp --replace "/sbin/modprobe" "modprobe"

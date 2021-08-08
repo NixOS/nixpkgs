@@ -6,10 +6,11 @@
 assert docSupport -> texLive != null && texinfo != null && texi2html != null;
 
 stdenv.mkDerivation rec {
-  name = "avrdude-6.3";
+  pname = "avrdude";
+  version = "6.3";
 
   src = fetchurl {
-    url = "mirror://savannah/avrdude/${name}.tar.gz";
+    url = "mirror://savannah/${pname}/${pname}-${version}.tar.gz";
     sha256 = "15m1w1qad3dj7r8n5ng1qqcaiyx1gyd6hnc3p2apgjllccdp77qg";
   };
 

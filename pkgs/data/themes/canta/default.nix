@@ -4,7 +4,7 @@
 , librsvg
 , gtk-engine-murrine
 , gtk3
-, gnome3
+, gnome
 , gnome-icon-theme
 , numix-icon-theme-circle
 , hicolor-icon-theme
@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "canta-theme";
-  version = "2020-05-17";
+  version = "2021-07-06";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
-    sha256 = "0b9ffkw611xxb2wh43sjqla195jp0ygxph5a8dvifkxdw6nxc2y0";
+    sha256 = "sha256-dz78h9Qq25+/i6fmw/zGlPq3DVQB3ADYwehgaWReMQ8=";
   };
 
   nativeBuildInputs = [
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   ];
 
   propagatedBuildInputs = [
-    gnome3.adwaita-icon-theme
+    gnome.adwaita-icon-theme
     gnome-icon-theme
     numix-icon-theme-circle
     hicolor-icon-theme

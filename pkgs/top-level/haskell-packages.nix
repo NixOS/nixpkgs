@@ -42,6 +42,8 @@ let
 in {
   lib = haskellLib;
 
+  package-list = callPackage ../development/haskell-modules/package-list.nix {};
+
   compiler = {
 
     ghc865Binary = callPackage ../development/compilers/ghc/8.6.5-binary.nix { };
@@ -57,7 +59,8 @@ in {
 
     ghc884 = callPackage ../development/compilers/ghc/8.8.4.nix {
       # aarch64 ghc865Binary gets SEGVs due to haskell#15449 or similar
-      bootPkgs = if stdenv.isAarch64 then
+      # Musl bindists do not exist for ghc 8.6.5, so we use 8.10.* for them
+      bootPkgs = if stdenv.isAarch64 || stdenv.targetPlatform.isMusl then
           packages.ghc8102BinaryMinimal
         else
           packages.ghc865Binary;
@@ -67,7 +70,8 @@ in {
     };
     ghc8104 = callPackage ../development/compilers/ghc/8.10.4.nix {
       # aarch64 ghc865Binary gets SEGVs due to haskell#15449 or similar
-      bootPkgs = if stdenv.isAarch64 || stdenv.isAarch32 then
+      # Musl bindists do not exist for ghc 8.6.5, so we use 8.10.* for them
+      bootPkgs = if stdenv.isAarch64 || stdenv.isAarch32 || stdenv.targetPlatform.isMusl then
           packages.ghc8102BinaryMinimal
         else
           packages.ghc865Binary;
@@ -76,13 +80,17 @@ in {
       llvmPackages = pkgs.llvmPackages_9;
     };
     ghc901 = callPackage ../development/compilers/ghc/9.0.1.nix {
-      bootPkgs = packages.ghc8102Binary;
+      # aarch64 ghc8102Binary exceeds max output size on hydra
+      bootPkgs = if stdenv.isAarch64 || stdenv.isAarch32 then
+          packages.ghc8102BinaryMinimal
+        else
+          packages.ghc8102Binary;
       inherit (buildPackages.python3Packages) sphinx;
       buildLlvmPackages = buildPackages.llvmPackages_10;
       llvmPackages = pkgs.llvmPackages_10;
     };
     ghcHEAD = callPackage ../development/compilers/ghc/head.nix {
-      bootPkgs = packages.ghc884; # no binary yet
+      bootPkgs = packages.ghc901; # no binary yet
       inherit (buildPackages.python3Packages) sphinx;
       buildLlvmPackages = buildPackages.llvmPackages_10;
       llvmPackages = pkgs.llvmPackages_10;

@@ -3,6 +3,7 @@ from contextlib import contextmanager, _GeneratorContextManager
 from queue import Queue, Empty
 from typing import Tuple, Any, Callable, Dict, Iterator, Optional, List, Iterable
 from xml.sax.saxutils import XMLGenerator
+from colorama import Style
 import queue
 import io
 import _thread
@@ -20,9 +21,9 @@ import shutil
 import socket
 import subprocess
 import sys
+import telnetlib
 import tempfile
 import time
-import traceback
 import unicodedata
 
 CHAR_TO_KEY = {
@@ -127,18 +128,18 @@ def create_vlan(vlan_nr: str) -> Tuple[str, str, "subprocess.Popen[bytes]", Any]
     return (vlan_nr, vde_socket, vde_process, fd)
 
 
-def retry(fn: Callable) -> None:
+def retry(fn: Callable, timeout: int = 900) -> None:
     """Call the given function repeatedly, with 1 second intervals,
     until it returns True or a timeout is reached.
     """
 
-    for _ in range(900):
+    for _ in range(timeout):
         if fn(False):
             return
         time.sleep(1)
 
     if not fn(True):
-        raise Exception("action timed out")
+        raise Exception(f"action timed out after {timeout} seconds")
 
 
 class Logger:
@@ -150,6 +151,8 @@ class Logger:
 
         self.xml.startDocument()
         self.xml.startElement("logfile", attrs={})
+
+        self._print_serial_logs = True
 
     def close(self) -> None:
         self.xml.endElement("logfile")
@@ -174,15 +177,21 @@ class Logger:
         self.drain_log_queue()
         self.log_line(message, attributes)
 
-    def enqueue(self, message: Dict[str, str]) -> None:
-        self.queue.put(message)
+    def log_serial(self, message: str, machine: str) -> None:
+        self.enqueue({"msg": message, "machine": machine, "type": "serial"})
+        if self._print_serial_logs:
+            eprint(Style.DIM + "{} # {}".format(machine, message) + Style.RESET_ALL)
+
+    def enqueue(self, item: Dict[str, str]) -> None:
+        self.queue.put(item)
 
     def drain_log_queue(self) -> None:
         try:
             while True:
                 item = self.queue.get_nowait()
-                attributes = {"machine": item["machine"], "type": "serial"}
-                self.log_line(self.sanitise(item["msg"]), attributes)
+                msg = self.sanitise(item["msg"])
+                del item["msg"]
+                self.log_line(msg, item)
         except Empty:
             pass
 
@@ -282,7 +291,12 @@ class Machine:
             net_frontend += "," + args["netFrontendArgs"]
 
         start_command = (
-            "qemu-kvm -m 384 " + net_backend + " " + net_frontend + " $QEMU_OPTS "
+            args.get("qemuBinary", "qemu-kvm")
+            + " -m 384 "
+            + net_backend
+            + " "
+            + net_frontend
+            + " $QEMU_OPTS "
         )
 
         if "hda" in args:
@@ -307,8 +321,9 @@ class Machine:
             start_command += "-cdrom " + args["cdrom"] + " "
 
         if "usb" in args:
+            # https://github.com/qemu/qemu/blob/master/docs/usb2.txt
             start_command += (
-                "-device piix3-usb-uhci -drive "
+                "-device usb-ehci -drive "
                 + "id=usbdisk,file="
                 + args["usb"]
                 + ",if=none,readonly "
@@ -326,6 +341,9 @@ class Machine:
 
     def log(self, msg: str) -> None:
         self.logger.log(msg, {"machine": self.name})
+
+    def log_serial(self, msg: str) -> None:
+        self.logger.log_serial(msg, self.name)
 
     def nested(self, msg: str, attrs: Dict[str, str] = {}) -> _GeneratorContextManager:
         my_attrs = {"machine": self.name}
@@ -427,7 +445,7 @@ class Machine:
     def execute(self, command: str) -> Tuple[int, str]:
         self.connect()
 
-        out_command = "( {} ); echo '|!=EOF' $?\n".format(command)
+        out_command = "( set -euo pipefail; {} ); echo '|!=EOF' $?\n".format(command)
         self.shell.send(out_command.encode())
 
         output = ""
@@ -441,6 +459,17 @@ class Machine:
                 status_code = int(match[2])
                 return (status_code, output)
             output += chunk
+
+    def shell_interact(self) -> None:
+        """Allows you to interact with the guest shell
+
+        Should only be used during test development, not in the production test."""
+        self.connect()
+        self.log("Terminal is ready (there is no prompt):")
+        subprocess.run(
+            ["socat", "READLINE", f"FD:{self.shell.fileno()}"],
+            pass_fds=[self.shell.fileno()],
+        )
 
     def succeed(self, *commands: str) -> str:
         """Execute each command and check that it succeeds."""
@@ -469,7 +498,7 @@ class Machine:
                 output += out
         return output
 
-    def wait_until_succeeds(self, command: str) -> str:
+    def wait_until_succeeds(self, command: str, timeout: int = 900) -> str:
         """Wait until a command returns success and return its output.
         Throws an exception on timeout.
         """
@@ -481,7 +510,7 @@ class Machine:
             return status == 0
 
         with self.nested("waiting for success: {}".format(command)):
-            retry(check_success)
+            retry(check_success, timeout)
             return output
 
     def wait_until_fails(self, command: str) -> str:
@@ -784,8 +813,7 @@ class Machine:
                 # Ignore undecodable bytes that may occur in boot menus
                 line = _line.decode(errors="ignore").replace("\r", "").rstrip()
                 self.last_lines.put(line)
-                eprint("{} # {}".format(self.name, line))
-                self.logger.enqueue({"msg": line, "machine": self.name})
+                self.log_serial(line)
 
         _thread.start_new_thread(process_serial_output, ())
 
@@ -884,7 +912,6 @@ class Machine:
 def create_machine(args: Dict[str, Any]) -> Machine:
     global log
     args["log"] = log
-    args["redirectSerial"] = os.environ.get("USE_SERIAL", "0") == "1"
     return Machine(args)
 
 
@@ -902,29 +929,51 @@ def join_all() -> None:
             machine.wait_for_shutdown()
 
 
-def test_script() -> None:
-    exec(os.environ["testScript"])
-
-
-def run_tests() -> None:
+def run_tests(interactive: bool = False) -> None:
     global machines
-    tests = os.environ.get("tests", None)
-    if tests is not None:
-        with log.nested("running the VM test script"):
-            try:
-                exec(tests, globals())
-            except Exception as e:
-                eprint("error: ")
-                traceback.print_exc()
-                sys.exit(1)
+    if interactive:
+        ptpython.repl.embed(globals(), locals())
     else:
-        ptpython.repl.embed(locals(), globals())
+        test_script()
+        # TODO: Collect coverage data
+        for machine in machines:
+            if machine.is_up():
+                machine.execute("sync")
 
-    # TODO: Collect coverage data
 
-    for machine in machines:
-        if machine.is_up():
-            machine.execute("sync")
+def serial_stdout_on() -> None:
+    global log
+    log._print_serial_logs = True
+
+
+def serial_stdout_off() -> None:
+    global log
+    log._print_serial_logs = False
+
+
+class EnvDefault(argparse.Action):
+    """An argpars Action that takes values from the specified
+    environment variable as the flags default value.
+    """
+
+    def __init__(self, envvar, required=False, default=None, nargs=None, **kwargs):  # type: ignore
+        if not default and envvar:
+            if envvar in os.environ:
+                if nargs is not None and (nargs.isdigit() or nargs in ["*", "+"]):
+                    default = os.environ[envvar].split()
+                else:
+                    default = os.environ[envvar]
+                kwargs["help"] = (
+                    kwargs["help"] + f" (default from environment: {default})"
+                )
+        if required and default:
+            required = False
+        super(EnvDefault, self).__init__(
+            default=default, required=required, nargs=nargs, **kwargs
+        )
+
+    def __call__(self, parser, namespace, values, option_string=None):  # type: ignore
+        setattr(namespace, self.dest, values)
 
 
 @contextmanager
@@ -941,25 +990,59 @@ def subtest(name: str) -> Iterator[None]:
 
 
 if __name__ == "__main__":
-    arg_parser = argparse.ArgumentParser()
+    arg_parser = argparse.ArgumentParser(prog="nixos-test-driver")
     arg_parser.add_argument(
         "-K",
         "--keep-vm-state",
         help="re-use a VM state coming from a previous run",
         action="store_true",
     )
-    (cli_args, vm_scripts) = arg_parser.parse_known_args()
+    arg_parser.add_argument(
+        "-I",
+        "--interactive",
+        help="drop into a python repl and run the tests interactively",
+        action="store_true",
+    )
+    arg_parser.add_argument(
+        "--start-scripts",
+        metavar="START-SCRIPT",
+        action=EnvDefault,
+        envvar="startScripts",
+        nargs="*",
+        help="start scripts for participating virtual machines",
+    )
+    arg_parser.add_argument(
+        "--vlans",
+        metavar="VLAN",
+        action=EnvDefault,
+        envvar="vlans",
+        nargs="*",
+        help="vlans to span by the driver",
+    )
+    arg_parser.add_argument(
+        "testscript",
+        action=EnvDefault,
+        envvar="testScript",
+        help="the test script to run",
+        type=pathlib.Path,
+    )
+
+    args = arg_parser.parse_args()
+    global test_script
+
+    def test_script() -> None:
+        with log.nested("running the VM test script"):
+            exec(pathlib.Path(args.testscript).read_text(), globals())
 
     log = Logger()
 
-    vlan_nrs = list(dict.fromkeys(os.environ.get("VLANS", "").split()))
-    vde_sockets = [create_vlan(v) for v in vlan_nrs]
+    vde_sockets = [create_vlan(v) for v in args.vlans]
     for nr, vde_socket, _, _ in vde_sockets:
         os.environ["QEMU_VDE_SOCKET_{}".format(nr)] = vde_socket
 
     machines = [
-        create_machine({"startCommand": s, "keepVmState": cli_args.keep_vm_state})
-        for s in vm_scripts
+        create_machine({"startCommand": s, "keepVmState": args.keep_vm_state})
+        for s in args.start_scripts
     ]
     machine_eval = [
         "{0} = machines[{1}]".format(m.name, idx) for idx, m in enumerate(machines)
@@ -979,6 +1062,6 @@ if __name__ == "__main__":
         log.close()
 
     tic = time.time()
-    run_tests()
+    run_tests(args.interactive)
     toc = time.time()
     print("test script finished in {:.2f}s".format(toc - tic))

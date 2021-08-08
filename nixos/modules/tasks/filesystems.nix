@@ -24,13 +24,15 @@ let
 
   specialFSTypes = [ "proc" "sysfs" "tmpfs" "ramfs" "devtmpfs" "devpts" ];
 
+  nonEmptyWithoutTrailingSlash = addCheckDesc "non-empty without trailing slash" types.str
+    (s: isNonEmpty s && (builtins.match ".+/" s) == null);
+
   coreFileSystemOpts = { name, config, ... }: {
 
     options = {
       mountPoint = mkOption {
         example = "/mnt/usb";
-        type = addCheckDesc "non-empty without trailing slash" types.str
-          (s: isNonEmpty s && (builtins.match ".+/" s) == null);
+        type = nonEmptyWithoutTrailingSlash;
         description = "Location of the mounted the file system.";
       };
 
@@ -53,6 +55,20 @@ let
         example = [ "data=journal" ];
         description = "Options used to mount the file system.";
         type = types.listOf nonEmptyStr;
+      };
+
+      depends = mkOption {
+        default = [ ];
+        example = [ "/persist" ];
+        type = types.listOf nonEmptyWithoutTrailingSlash;
+        description = ''
+          List of paths that should be mounted before this one. This filesystem's
+          <option>device</option> and <option>mountPoint</option> are always
+          checked and do not need to be included explicitly. If a path is added
+          to this list, any other filesystem whose mount point is a parent of
+          the path will be mounted before this filesystem. The paths do not need
+          to actually be the <option>mountPoint</option> of some other filesystem.
+        '';
       };
 
     };
@@ -238,8 +254,11 @@ in
         skipCheck = fs: fs.noCheck || fs.device == "none" || builtins.elem fs.fsType fsToSkipCheck;
         # https://wiki.archlinux.org/index.php/fstab#Filepath_spaces
         escape = string: builtins.replaceStrings [ " " "\t" ] [ "\\040" "\\011" ] string;
-        swapOptions = sw: "defaults"
-          + optionalString (sw.priority != null) ",pri=${toString sw.priority}";
+        swapOptions = sw: concatStringsSep "," (
+          sw.options
+          ++ optional (sw.priority != null) "pri=${toString sw.priority}"
+          ++ optional (sw.discardPolicy != null) "discard${optionalString (sw.discardPolicy != "both") "=${toString sw.discardPolicy}"}"
+        );
       in ''
         # This is a generated file.  Do not edit!
         #
@@ -272,10 +291,10 @@ in
         wants = [ "local-fs.target" "remote-fs.target" ];
       };
 
-    # Emit systemd services to format requested filesystems.
     systemd.services =
-      let
 
+    # Emit systemd services to format requested filesystems.
+      let
         formatDevice = fs:
           let
             mountPoint' = "${escapeSystemdPath fs.mountPoint}.mount";
@@ -302,8 +321,40 @@ in
             unitConfig.DefaultDependencies = false; # needed to prevent a cycle
             serviceConfig.Type = "oneshot";
           };
-
-      in listToAttrs (map formatDevice (filter (fs: fs.autoFormat) fileSystems));
+      in listToAttrs (map formatDevice (filter (fs: fs.autoFormat) fileSystems)) // {
+    # Mount /sys/fs/pstore for evacuating panic logs and crashdumps from persistent storage onto the disk using systemd-pstore.
+    # This cannot be done with the other special filesystems because the pstore module (which creates the mount point) is not loaded then.
+        "mount-pstore" = {
+          serviceConfig = {
+            Type = "oneshot";
+            # skip on kernels without the pstore module
+            ExecCondition = "${pkgs.kmod}/bin/modprobe -b pstore";
+            ExecStart = pkgs.writeShellScript "mount-pstore.sh" ''
+              set -eu
+              # if the pstore module is builtin it will have mounted the persistent store automatically. it may also be already mounted for other reasons.
+              ${pkgs.util-linux}/bin/mountpoint -q /sys/fs/pstore || ${pkgs.util-linux}/bin/mount -t pstore -o nosuid,noexec,nodev pstore /sys/fs/pstore
+              # wait up to 1.5 seconds for the backend to be registered and the files to appear. a systemd path unit cannot detect this happening; and succeeding after a restart would not start dependent units.
+              TRIES=15
+              while [ "$(cat /sys/module/pstore/parameters/backend)" = "(null)" ]; do
+                if (( $TRIES )); then
+                  sleep 0.1
+                  TRIES=$((TRIES-1))
+                else
+                  echo "Persistent Storage backend was not registered in time." >&2
+                  break
+                fi
+              done
+            '';
+            RemainAfterExit = true;
+          };
+          unitConfig = {
+            ConditionVirtualization = "!container";
+            DefaultDependencies = false; # needed to prevent a cycle
+          };
+          before = [ "systemd-pstore.service" ];
+          wantedBy = [ "systemd-pstore.service" ];
+        };
+      };
 
     systemd.tmpfiles.rules = [
       "d /run/keys 0750 root ${toString config.ids.gids.keys}"

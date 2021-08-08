@@ -26,7 +26,8 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "riak-2.2.0";
+  pname = "riak";
+  version = "2.2.0";
 
   nativeBuildInputs = [ unzip ];
   buildInputs = [

@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , rustPlatform
 , pkg-config
@@ -11,19 +12,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mdcat";
-  version = "0.22.2";
+  version = "0.23.2";
 
   src = fetchFromGitHub {
     owner = "lunaryorn";
     repo = pname;
     rev = "mdcat-${version}";
-    hash = "sha256-i36MYTMkbSuWxxlWUDsyYMay/4Mg7M5jEFhHM60UrkM=";
+    sha256 = "sha256-PM6bx7qzEx4He9aX4WRO7ad/f9+wzT+gPGXKwYwG8+A=";
   };
 
   nativeBuildInputs = [ pkg-config asciidoctor installShellFiles ];
-  buildInputs = [ openssl ] ++ lib.optional stdenv.isDarwin Security;
+  buildInputs = [ openssl ]
+    ++ lib.optional stdenv.isDarwin Security;
 
-  cargoSha256 = "sha256-mnDUIJhEGNoh3eq2Vhww1T/tpZh9RP+RxbRsBNrpOzw=";
+  cargoSha256 = "sha256-GL9WGoyM1++QFAR+bzj0XkjaRaDCWcbcahles5amNpk=";
 
   checkInputs = [ ansi2html ];
   # Skip tests that use the network and that include files.
@@ -32,6 +34,7 @@ rustPlatform.buildRustPackage rec {
     "--skip magic::tests::detect_mimetype_of_magic_param_bytes_max_length"
     "--skip magic::tests::detect_mimetype_of_png_image"
     "--skip magic::tests::detect_mimetype_of_svg_image"
+    "--skip resources::tests::read_url_with_http_url_fails_when_size_limit_is_exceeded"
     "--skip resources::tests::read_url_with_http_url_fails_when_status_404"
     "--skip resources::tests::read_url_with_http_url_returns_content_when_status_200"
     "--skip iterm2_tests_render_md_samples_images_md"
@@ -48,6 +51,6 @@ rustPlatform.buildRustPackage rec {
     description = "cat for markdown";
     homepage = "https://github.com/lunaryorn/mdcat";
     license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ davidtwco ];
+    maintainers = with maintainers; [ davidtwco SuperSandro2000 ];
   };
 }

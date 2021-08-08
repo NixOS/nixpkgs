@@ -346,6 +346,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) ({
     fullName = "Unspecified free software license";
   };
 
+  ftl = spdx {
+    spdxId = "FTL";
+    fullName = "Freetype Project License";
+  };
+
   g4sl = {
     fullName = "Geant4 Software License";
     url = "https://geant4.web.cern.ch/geant4/license/LICENSE.html";
@@ -734,6 +739,12 @@ lib.mapAttrs (n: v: v // { shortName = n; }) ({
     free = false;
   };
 
+  stk = {
+    shortName = "stk";
+    fullName = "Synthesis Tool Kit 4.3";
+    url = "https://github.com/thestk/stk/blob/master/LICENSE";
+  };
+
   tcltk = spdx {
     spdxId = "TCL";
     fullName = "TCL/TK License";
@@ -758,6 +769,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) ({
     fullName = "Unfree redistributable firmware";
     # Note: we currently consider these "free" for inclusion in the
     # channel and NixOS images.
+  };
+
+  unicode-dfs-2015 = spdx {
+    spdxId = "Unicode-DFS-2015";
+    fullName = "Unicode License Agreement - Data Files and Software (2015)";
   };
 
   unicode-dfs-2016 = spdx {

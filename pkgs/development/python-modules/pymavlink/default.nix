@@ -22,7 +22,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python MAVLink interface and utilities";
     homepage = "https://github.com/ArduPilot/pymavlink";
-    license = with licenses; [ lgpl3Only mit ];
+    license = with licenses; [ lgpl3Plus mit ];
     maintainers = with maintainers; [ lopsided98 ];
   };
 }

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "git-filter-repo";
-  version = "2.29.0";
+  version = "2.32.0";
 
   src = fetchurl {
     url = "https://github.com/newren/git-filter-repo/releases/download/v${version}/${pname}-${version}.tar.xz";
-    sha256 = "00nn7k9jqrybb762486fmigsnbcn9lbvimgpfvvarz4ikdp9y9pb";
+    sha256 = "sha256-CztFSyeKM9Bmcf0eSrLHH3vHGepd8WXPvcAACT+vFps=";
   };
 
   buildInputs = [ pythonPackages.python ];

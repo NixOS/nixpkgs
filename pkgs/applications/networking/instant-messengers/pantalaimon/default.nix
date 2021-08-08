@@ -1,7 +1,7 @@
 { lib, stdenv, buildPythonApplication, fetchFromGitHub, pythonOlder,
   attrs, aiohttp, appdirs, click, keyring, Logbook, peewee, janus,
-  prompt_toolkit, matrix-nio, dbus-python, pydbus, notify2, pygobject3,
-  setuptools,
+  prompt-toolkit, matrix-nio, dbus-python, pydbus, notify2, pygobject3,
+  setuptools, fetchpatch, installShellFiles,
 
   pytest, faker, pytest-aiohttp, aioresponses,
 
@@ -10,7 +10,7 @@
 
 buildPythonApplication rec {
   pname = "pantalaimon";
-  version = "0.8.0";
+  version = "0.9.2";
 
   disabled = pythonOlder "3.6";
 
@@ -19,8 +19,16 @@ buildPythonApplication rec {
     owner = "matrix-org";
     repo = pname;
     rev = version;
-    sha256 = "0n86cdpw85qzlcr1ynvar0f0zbphmdz1jia9r75lmj07iw4r5hk9";
+    sha256 = "11dfv5b2slqybisq6npmrqxrzslh4bjs4093vrc05s94046d9d9n";
   };
+
+  patches = [
+    # accept newer matrix-nio versions
+    (fetchpatch {
+      url = "https://github.com/matrix-org/pantalaimon/commit/73f68c76fb05037bd7fe71688ce39eb1f526a385.patch";
+      sha256 = "0wvqcfan8yp67p6khsqkynbkifksp2422b9jy511mvhpy51sqykl";
+    })
+  ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -32,7 +40,7 @@ buildPythonApplication rec {
     Logbook
     matrix-nio
     peewee
-    prompt_toolkit
+    prompt-toolkit
     setuptools
   ] ++ lib.optional enableDbusUi [
       dbus-python
@@ -48,11 +56,19 @@ buildPythonApplication rec {
     aioresponses
   ];
 
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+
   # darwin has difficulty communicating with server, fails some integration tests
   doCheck = !stdenv.isDarwin;
 
   checkPhase = ''
     pytest
+  '';
+
+  postInstall = ''
+    installManPage docs/man/*.[1-9]
   '';
 
   meta = with lib; {

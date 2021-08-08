@@ -11,9 +11,12 @@ rustPlatform.buildRustPackage rec {
     sha256 = "014blvrv0kk4gzga86mbk7gd5dl1szajfi972da3lrfznck1w24n";
   };
 
-  cargoSha256 = "0b5pqsdggdjq9sl54rmh2gaq31va6b2crdv7ihh3198ixwasaf02";
+  cargoSha256 = "119szaighki565w28la6qg25s3cv8wviqin9f7f9w8x2rif3ipb3";
 
   buildInputs = lib.optional stdenv.isDarwin Security;
+
+  # 10 passed; 47 failed https://hydra.nixos.org/build/148943783/nixlog/1
+  doCheck = !stdenv.isDarwin;
 
   meta = with lib; {
     description = "A CLI utility for displaying current network utilization";
@@ -26,7 +29,7 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/imsnif/bandwhich";
     license = licenses.mit;
-    maintainers = with maintainers; [ Br1ght0ne ma27 ];
+    maintainers = with maintainers; [ Br1ght0ne ma27 SuperSandro2000 ];
     platforms = platforms.unix;
   };
 }

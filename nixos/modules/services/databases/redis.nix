@@ -52,7 +52,7 @@ in {
       };
 
       port = mkOption {
-        type = types.int;
+        type = types.port;
         default = 6379;
         description = "The port for Redis to listen to.";
       };
@@ -272,7 +272,7 @@ in {
       }
       (mkIf (cfg.bind != null) { bind = cfg.bind; })
       (mkIf (cfg.unixSocket != null) { unixsocket = cfg.unixSocket; unixsocketperm = "${toString cfg.unixSocketPerm}"; })
-      (mkIf (cfg.slaveOf != null) { slaveof = "${cfg.slaveOf.ip} ${cfg.slaveOf.port}"; })
+      (mkIf (cfg.slaveOf != null) { slaveof = "${cfg.slaveOf.ip} ${toString cfg.slaveOf.port}"; })
       (mkIf (cfg.masterAuth != null) { masterauth = cfg.masterAuth; })
       (mkIf (cfg.requirePass != null) { requirepass = cfg.requirePass; })
     ];
@@ -331,7 +331,7 @@ in {
         PrivateMounts = true;
         # System Call Filtering
         SystemCallArchitectures = "native";
-        SystemCallFilter = "~@clock @cpu-emulation @debug @keyring @memlock @module @mount @obsolete @privileged @raw-io @reboot @resources @setuid @swap";
+        SystemCallFilter = "~@cpu-emulation @debug @keyring @memlock @mount @obsolete @privileged @resources @setuid";
       };
     };
   };

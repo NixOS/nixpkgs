@@ -266,5 +266,7 @@ in
       } // mapAttrs' appConfigToINICompatible cfg.appConfig);
   };
 
-  meta.maintainers = with lib.maintainers; [ worldofpeace ];
+  meta = with lib; {
+    maintainers = with maintainers; [ ] ++ teams.pantheon.members;
+  };
 }

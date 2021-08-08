@@ -1,11 +1,11 @@
 { lib, fetchurl, gettext, wrapGAppsHook
 
 # Native dependencies
-, python3, gtk3, gobject-introspection, gnome3
+, python3, gtk3, gobject-introspection, gnome
 , glib-networking
 
 # Test dependencies
-, xvfb_run, dbus
+, xvfb-run, dbus
 
 # Optional dependencies
 , enableJingle ? true, farstream, gstreamer, gst-plugins-base, gst-libav, gst-plugins-good, libnice
@@ -15,6 +15,7 @@
 , enableSpelling ? true, gspell
 , enableUPnP ? true, gupnp-igd
 , enableOmemoPluginDependencies ? true
+, enableAppIndicator ? true, libappindicator-gtk3
 , extraPythonPackages ? ps: []
 }:
 
@@ -28,12 +29,13 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   buildInputs = [
-    gobject-introspection gtk3 gnome3.adwaita-icon-theme
+    gobject-introspection gtk3 gnome.adwaita-icon-theme
     glib-networking
   ] ++ lib.optionals enableJingle [ farstream gstreamer gst-plugins-base gst-libav gst-plugins-good libnice ]
     ++ lib.optional enableSecrets libsecret
     ++ lib.optional enableSpelling gspell
-    ++ lib.optional enableUPnP gupnp-igd;
+    ++ lib.optional enableUPnP gupnp-igd
+    ++ lib.optional enableAppIndicator libappindicator-gtk3;
 
   nativeBuildInputs = [
     gettext wrapGAppsHook
@@ -52,7 +54,7 @@ python3.pkgs.buildPythonApplication rec {
     ++ lib.optionals enableOmemoPluginDependencies [ python-axolotl qrcode ]
     ++ extraPythonPackages python3.pkgs;
 
-  checkInputs = [ xvfb_run dbus.daemon ];
+  checkInputs = [ xvfb-run dbus.daemon ];
 
   checkPhase = ''
     # https://dev.gajim.org/gajim/gajim/-/issues/10478

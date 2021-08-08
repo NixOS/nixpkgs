@@ -1,10 +1,11 @@
-{ lib, mkCoqDerivation, coq, ssreflect, coq-ext-lib, simple-io }:
-with lib;
-let recent = versions.isGe "8.7" coq.coq-version; in
+{ lib, mkCoqDerivation, coq, ssreflect, coq-ext-lib, simple-io, version ? null }:
+
+let recent = lib.versions.isGe "8.7" coq.coq-version; in
 mkCoqDerivation {
   pname = "QuickChick";
   owner = "QuickChick";
-  defaultVersion = with versions; switch [ coq.coq-version ssreflect.version ] [
+  inherit version;
+  defaultVersion = with lib; with versions; lib.switch [ coq.coq-version ssreflect.version ] [
       { cases = [ "8.13" pred.true  ]; out = "1.5.0"; }
       { cases = [ "8.12" pred.true  ]; out = "1.4.0"; }
       { cases = [ "8.11" pred.true  ]; out = "1.3.2"; }
@@ -29,19 +30,19 @@ mkCoqDerivation {
   release."20170512".sha256 = "033ch10i5wmqyw8j6wnr0dlbnibgfpr1vr0c07q3yj6h23xkmqpg";
   releaseRev = v: "v${v}";
 
-  preConfigure = optionalString recent
+  preConfigure = lib.optionalString recent
     "substituteInPlace Makefile --replace quickChickTool.byte quickChickTool.native";
 
   mlPlugin = true;
-  extraBuildInputs = optional recent coq.ocamlPackages.num;
+  extraBuildInputs = lib.optional recent coq.ocamlPackages.num;
   propagatedBuildInputs = [ ssreflect ]
-    ++ optionals recent [ coq-ext-lib simple-io ]
-    ++ optional  recent coq.ocamlPackages.ocamlbuild;
+    ++ lib.optionals recent [ coq-ext-lib simple-io ]
+    ++ lib.optional recent coq.ocamlPackages.ocamlbuild;
   extraInstallFlags = [ "-f Makefile.coq" ];
 
   enableParallelBuilding = false;
 
-  meta = {
+  meta = with lib; {
     description = "Randomized property-based testing plugin for Coq; a clone of Haskell QuickCheck";
     maintainers = with maintainers; [ jwiegley ];
   };

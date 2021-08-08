@@ -34,7 +34,6 @@ in stdenv.mkDerivation rec {
     ln -s $out/lib/libqscintilla2_qt?.so $out/lib/libqscintilla2.so
   '';
 
-  enableParallelBuilding = true;
   dontWrapQtApps = true;
 
   postPatch = ''

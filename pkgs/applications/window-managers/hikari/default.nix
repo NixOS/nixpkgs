@@ -1,8 +1,8 @@
-{ lib, stdenv, fetchzip,
-  pkg-config, bmake,
-  cairo, glib, libevdev, libinput, libxkbcommon, linux-pam, pango, pixman,
-  libucl, wayland, wayland-protocols, wlroots, mesa,
-  features ? {
+{ lib, stdenv, fetchzip
+, pkg-config, bmake
+, cairo, glib, libevdev, libinput, libxkbcommon, linux-pam, pango, pixman
+, libucl, wayland, wayland-protocols, wlroots, mesa
+, features ? {
     gammacontrol = true;
     layershell   = true;
     screencopy   = true;
@@ -10,17 +10,13 @@
   }
 }:
 
-let
+stdenv.mkDerivation rec {
   pname = "hikari";
-  version = "2.3.0";
-in
-
-stdenv.mkDerivation {
-  inherit pname version;
+  version = "2.3.2";
 
   src = fetchzip {
     url = "https://hikari.acmelabs.space/releases/${pname}-${version}.tar.gz";
-    sha256 = "0vxwma2r9mb2h0c3dkpvf8dbrc2x2ykhc5bb0vd72sl9pwj4jxmy";
+    sha256 = "sha256-At4b6mkArKe6knNWouLdZ9v8XhfHaUW+aB+CHyEBg8o=";
   };
 
   nativeBuildInputs = [ pkg-config bmake ];

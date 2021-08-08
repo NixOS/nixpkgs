@@ -16,6 +16,7 @@
 , openssl
 , coreutils
 , autoreconfHook
+, autoSignDarwinBinariesHook
 }:
 
 stdenv.mkDerivation rec {
@@ -27,7 +28,12 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-xt6txQWV8tmiLcbCmanyizk+NYNG6/bKREqEadwWbCc=";
   };
 
-  nativeBuildInputs = [ pkg-config autoreconfHook unzip ];
+  nativeBuildInputs = [ pkg-config autoreconfHook unzip ]
+    # The preFixup hook rewrites the binary, which invaliates the code
+    # signature. Add the fixup hook to sign the output.
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+      autoSignDarwinBinariesHook
+    ];
 
   buildInputs = [
     file
@@ -54,6 +60,13 @@ stdenv.mkDerivation rec {
   preFixup = ''
     # remove unwanted build-dependency references
     sed -i -e "s!PKG_CONFIG_PATH=''${PKG_CONFIG_PATH}!PKG_CONFIG_PATH=$(echo "$PKG_CONFIG_PATH" | sed -e 's/./0/g')!" $out/bin/mc
+  '';
+
+  postFixup = lib.optionalString (!stdenv.isDarwin) ''
+    # libX11.so is loaded dynamically so autopatch doesn't detect it
+    patchelf \
+      --add-needed ${libX11}/lib/libX11.so \
+      $out/bin/mc
   '';
 
   meta = with lib; {

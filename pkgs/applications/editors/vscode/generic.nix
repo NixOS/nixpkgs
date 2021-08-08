@@ -9,7 +9,10 @@
 
 # Attributes inherit from specific versions
 , version, src, meta, sourceRoot
-, executableName, longName, shortName, pname
+, executableName, longName, shortName, pname, updateScript
+# sourceExecutableName is the name of the binary in the source archive, over
+# which we have no control
+, sourceExecutableName ? executableName
 }:
 
 let
@@ -19,7 +22,7 @@ let
     inherit pname version src sourceRoot;
 
     passthru = {
-      inherit executableName tests;
+      inherit executableName tests updateScript;
       fhs = fhs {};
       fhsWithPackages = f: fhs { additionalPkgs = f; };
     };
@@ -74,15 +77,15 @@ let
 
     installPhase = ''
       runHook preInstall
-    '' + (if system == "x86_64-darwin" then ''
+    '' + (if stdenv.isDarwin then ''
       mkdir -p "$out/Applications/${longName}.app" $out/bin
       cp -r ./* "$out/Applications/${longName}.app"
-      ln -s "$out/Applications/${longName}.app/Contents/Resources/app/bin/code" $out/bin/${executableName}
+      ln -s "$out/Applications/${longName}.app/Contents/Resources/app/bin/${sourceExecutableName}" $out/bin/${executableName}
     '' else ''
       mkdir -p $out/lib/vscode $out/bin
       cp -r ./* $out/lib/vscode
 
-      ln -s $out/lib/vscode/bin/${executableName} $out/bin
+      ln -s $out/lib/vscode/bin/${sourceExecutableName} $out/bin/${executableName}
 
       mkdir -p $out/share/applications
       ln -s $desktopItem/share/applications/${executableName}.desktop $out/share/applications/${executableName}.desktop
@@ -159,4 +162,3 @@ let
   };
 in
   unwrapped
-

@@ -315,6 +315,12 @@ rec {
         # Disable OABI to have seccomp_filter (required for systemd)
         # https://github.com/raspberrypi/firmware/issues/651
         OABI_COMPAT n
+
+        # >=5.12 fails with:
+        # drivers/net/ethernet/micrel/ks8851_common.o: in function `ks8851_probe_common':
+        # ks8851_common.c:(.text+0x179c): undefined reference to `__this_module'
+        # See: https://lore.kernel.org/netdev/20210116164828.40545-1-marex@denx.de/T/
+        KS8851_MLL y
       '';
     };
     gcc = {
@@ -372,6 +378,13 @@ rec {
     };
     gcc = {
       arch = "armv8-a";
+    };
+  };
+
+  apple-m1 = {
+    gcc = {
+      arch = "armv8.3-a+crypto+sha2+aes+crc+fp16+lse+simd+ras+rdm+rcpc";
+      cpu = "apple-a13";
     };
   };
 
@@ -474,11 +487,11 @@ rec {
   riscv-multiplatform = {
     linux-kernel = {
       name = "riscv-multiplatform";
-      target = "vmlinux";
+      target = "Image";
       autoModules = true;
       baseConfig = "defconfig";
+      DTB = true;
       extraConfig = ''
-        FTRACE n
         SERIAL_OF_PLATFORM y
       '';
     };
@@ -495,7 +508,10 @@ rec {
         else if lib.versionOlder version "6" then sheevaplug
         else if lib.versionOlder version "7" then raspberrypi
         else armv7l-hf-multiplatform
-    else if platform.isAarch64 then aarch64-multiplatform
+
+    else if platform.isAarch64 then
+      if platform.isDarwin then apple-m1
+      else aarch64-multiplatform
 
     else if platform.isRiscV then riscv-multiplatform
 

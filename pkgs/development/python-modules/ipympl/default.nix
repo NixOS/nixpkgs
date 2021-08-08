@@ -1,4 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, ipywidgets, matplotlib }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, ipywidgets
+, matplotlib
+, jupyter-packaging
+}:
 
 buildPythonPackage rec {
   pname = "ipympl";
@@ -9,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "f0f1f356d8cb9d4fb51bb86dbbf837c190145316cb72f66081872ebc4d6db0a1";
   };
 
-  propagatedBuildInputs = [ ipywidgets matplotlib ];
+  propagatedBuildInputs = [ ipywidgets matplotlib jupyter-packaging ];
 
   # There are no unit tests in repository
   doCheck = false;

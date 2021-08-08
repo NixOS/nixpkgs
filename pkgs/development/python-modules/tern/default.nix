@@ -7,19 +7,20 @@
 , requests
 , stevedore
 , pbr
-, debut
+, debian-inspector
 , regex
 , GitPython
 , prettytable
 , idna
 }:
+
 buildPythonPackage rec {
   pname = "tern";
-  version = "2.5.0";
+  version = "2.6.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "606c62944991b2cbcccf3f5353be693305d6d7d318c3865b9ecca49dbeab2727";
+    sha256 = "749c18ef493ebe3ac28624b2b26c6e38f77de2afd6a6579d2c92393d8fbdbd46";
   };
 
   preBuild = ''
@@ -36,7 +37,7 @@ buildPythonPackage rec {
     dockerfile-parse
     requests
     stevedore
-    debut
+    debian-inspector
     regex
     GitPython
     prettytable

@@ -15,11 +15,11 @@
 
 buildPythonPackage rec {
   pname = "knack";
-  version = "0.8.0";
+  version = "0.8.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "16aa47240add6badd933a0b27576f3c090d7469177dc941e3ece05ca88123199";
+    sha256 = "4eaa50a1c5e79d1c5c8e5e1705b661721b0b83a089695e59e229cc26c64963b9";
   };
 
   propagatedBuildInputs = [

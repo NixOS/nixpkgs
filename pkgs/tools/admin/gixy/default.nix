@@ -21,7 +21,7 @@ python3.pkgs.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3.pkgs; [
     cached-property
-    ConfigArgParse
+    configargparse
     pyparsing
     jinja2
     nose
@@ -38,6 +38,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/yandex/gixy";
     license = licenses.mpl20;
     maintainers = [ maintainers.willibutz ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

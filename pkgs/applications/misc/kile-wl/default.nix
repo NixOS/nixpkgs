@@ -1,20 +1,28 @@
-{ lib, fetchFromGitLab, rustPlatform }:
+{ lib, fetchFromGitLab, unstableGitUpdater, rustPlatform, scdoc }:
 
 rustPlatform.buildRustPackage rec {
   pname = "kile-wl";
-  version = "unstable-2021-04-22";
+  version = "unstable-2021-08-03";
 
   src = fetchFromGitLab {
     owner = "snakedye";
     repo = "kile";
-    rev = "b97b9f1e5b33862b33918efaf23fd1c0c5d7058a";
-    sha256 = "sha256-97qJd3o8nJt8IX5tyGWtAmJsIv5Gcw1xoBFwxAqk7I8=";
+    rev = "7f0b1578352d935084d3d56ef42487d2a8cfbfe8";
+    sha256 = "sha256-Ir9LNQt7/7TjhCJ69HYx1tBXeq/i7F3ydmenvchZgDI=";
   };
 
-  # Upstream has Cargo.lock gitignored
-  cargoPatches = [ ./update-Cargo-lock.diff ];
+  passthru.updateScript = unstableGitUpdater {
+    url = "https://gitlab.com/snakedye/kile.git";
+  };
 
-  cargoSha256 = "sha256-TEgIiw/XTDUOe9K7agHWI86f88w+eDJ332V0CgNHtfo=";
+  cargoSha256 = "sha256-195rPxX3BTxJ0xLgye14aWuBd5OuJ30wyUa4wrbQ3Xo=";
+
+  nativeBuildInputs = [ scdoc ];
+
+  postInstall = ''
+    mkdir -p $out/share/man
+    scdoc < doc/kile.1.scd > $out/share/man/kile.1
+  '';
 
   meta = with lib; {
     description = "A tiling layout generator for river";
@@ -22,5 +30,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mit;
     platforms = platforms.linux; # It's meant for river, a wayland compositor
     maintainers = with maintainers; [ fortuneteller2k ];
+    mainProgram = "kile";
   };
 }

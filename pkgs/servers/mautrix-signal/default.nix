@@ -1,17 +1,17 @@
-{ lib, python3Packages, fetchFromGitHub }:
+{ lib, python3, fetchFromGitHub }:
 
-python3Packages.buildPythonPackage rec {
+python3.pkgs.buildPythonPackage rec {
   pname = "mautrix-signal";
-  version = "0.1.1";
+  version = "unstable-2021-07-01";
 
   src = fetchFromGitHub {
     owner = "tulir";
     repo = "mautrix-signal";
-    rev = "v${version}";
-    sha256 = "11snsl7i407855h39g1fgk26hinnq0inr8sjrgd319li0d3jwzxl";
+    rev = "56eb24412fcafb4836f29375fba9cc6db1715d6f";
+    sha256 = "10nbfl48yb7h23znkxvkqh1dgp2xgldvxsigwfmwa1qbq0l4dljl";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = with python3.pkgs; [
     CommonMark
     aiohttp
     asyncpg
@@ -41,7 +41,7 @@ python3Packages.buildPythonPackage rec {
     " > $out/bin/mautrix-signal
     chmod +x $out/bin/mautrix-signal
     wrapProgram $out/bin/mautrix-signal \
-      --set PATH ${python3Packages.python}/bin \
+      --set PATH ${python3}/bin \
       --set PYTHONPATH "$PYTHONPATH"
   '';
 

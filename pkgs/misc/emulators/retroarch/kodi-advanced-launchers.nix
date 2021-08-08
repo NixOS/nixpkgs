@@ -1,8 +1,6 @@
-{ stdenv, pkgs, cores, runtimeShell }:
+{ stdenv, pkgs, lib, cores, runtimeShell }:
 
 assert cores != [];
-
-with pkgs.lib;
 
 let
 

@@ -21,7 +21,7 @@ buildGoPackage rec {
   goDeps = ./deps.nix;
 
   nativeBuildInputs = [ sudo ];
-  buildFlags = [ "-tags textsecure" ];
+  tags = [ "textsecure" ];
   postPatch = ''
     grep -lr '/s\?bin/' | xargs sed -i \
       -e 's|/bin/mount|${mount}/bin/mount|' \

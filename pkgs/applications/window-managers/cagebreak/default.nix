@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , cairo
 , fontconfig
 , libxkbcommon
@@ -9,7 +10,6 @@
 , meson
 , ninja
 , nixosTests
-, pandoc
 , pango
 , pixman
 , pkg-config
@@ -23,20 +23,28 @@
 
 stdenv.mkDerivation rec {
   pname = "cagebreak";
-  version = "1.7.0";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "project-repo";
     repo = pname;
     rev = version;
-    hash = "sha256-HpAjJHu5sxZKof3ydnU3wcP5GpnH6Ax8m1T1vVoq+oI=";
+    hash = "sha256-1IztedN5/I/4TDKHLJ26fSrDsvJ5QAr+cbzS2PQITDE=";
   };
+
+  patches = [
+    # To fix the build with wlroots 0.14.0:
+    (fetchpatch {
+      # Add fixes for wlroots 0.14.0
+      url = "https://github.com/project-repo/cagebreak/commit/d57869d43add58331386fc8e89c14bb2b74afe17.patch";
+      sha256 = "0g6sl8y4kk0bm5x6pxqbxw2j0gyg3ybr2v9m70q2pxp70kms4lqg";
+    })
+  ];
 
   nativeBuildInputs = [
     makeWrapper
     meson
     ninja
-    pandoc
     pkg-config
     scdoc
     wayland
@@ -55,37 +63,33 @@ stdenv.mkDerivation rec {
     wlroots
   ];
 
-  outputs = [
-    "out"
-    "contrib"
-  ];
-
   mesonFlags = [
     "-Dman-pages=true"
     "-Dversion_override=${version}"
     "-Dxwayland=${lib.boolToString withXwayland}"
   ];
 
+  # TODO: investigate why is this happening
   postPatch = ''
     sed -i -e 's|<drm_fourcc.h>|<libdrm/drm_fourcc.h>|' *.c
   '';
 
   postInstall = ''
-    mkdir -p $contrib/share/cagebreak
-    cp $src/examples/config $contrib/share/cagebreak/config
+    install -d $out/share/cagebreak/
+    install -m644 $src/examples/config $out/share/cagebreak/
   '';
 
   postFixup = lib.optionalString withXwayland ''
     wrapProgram $out/bin/cagebreak --prefix PATH : "${xwayland}/bin"
   '';
 
-  passthru.tests.basic = nixosTests.cagebreak;
-
   meta = with lib; {
-    description = "A Wayland tiling compositor inspired by ratpoison";
     homepage = "https://github.com/project-repo/cagebreak";
+    description = "A Wayland tiling compositor inspired by ratpoison";
     license = licenses.mit;
-    platforms = platforms.linux;
     maintainers = with maintainers; [ berbiche ];
+    platforms = platforms.linux;
   };
+
+  passthru.tests.basic = nixosTests.cagebreak;
 }

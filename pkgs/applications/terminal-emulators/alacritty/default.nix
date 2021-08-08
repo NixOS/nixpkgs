@@ -31,6 +31,7 @@
 , CoreServices
 , CoreText
 , Foundation
+, libiconv
 , OpenGL
 }:
 let
@@ -52,16 +53,16 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "alacritty";
-  version = "0.7.2";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "alacritty";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-VXV6w4OnhJBmvMKl7CynbhI9LclTKaSr+5DhHXMwSsc=";
+    sha256 = "sha256-kgZEbOGmO+uRKaWR+oQBiGkBzDSuCznUyWNUoMICHhk=";
   };
 
-  cargoSha256 = "sha256-PWnNTMNZKxsfS1OAXe4G3zjfg5gK1SMTc0JJrW90iSM=";
+  cargoSha256 = "sha256-JqnYMDkagWNGliUxi5eqJN92ULsvT7Fwmah8um1xaRw=";
 
   nativeBuildInputs = [
     cmake
@@ -80,13 +81,14 @@ rustPlatform.buildRustPackage rec {
     CoreServices
     CoreText
     Foundation
+    libiconv
     OpenGL
   ];
 
   outputs = [ "out" "terminfo" ];
 
   postPatch = ''
-    substituteInPlace alacritty/src/config/mouse.rs \
+    substituteInPlace alacritty/src/config/ui_config.rs \
       --replace xdg-open ${xdg-utils}/bin/xdg-open
   '';
 
@@ -97,6 +99,7 @@ rustPlatform.buildRustPackage rec {
       ln -s $out/bin $out/Applications/Alacritty.app/Contents/MacOS
     '' else ''
       install -D extra/linux/Alacritty.desktop -t $out/share/applications/
+      install -D extra/linux/io.alacritty.Alacritty.appdata.xml -t $out/share/appdata/
       install -D extra/logo/compat/alacritty-term.svg $out/share/icons/hicolor/scalable/apps/Alacritty.svg
 
       # patchelf generates an ELF that binutils' "strip" doesn't like:
@@ -129,7 +132,7 @@ rustPlatform.buildRustPackage rec {
     description = "A cross-platform, GPU-accelerated terminal emulator";
     homepage = "https://github.com/alacritty/alacritty";
     license = licenses.asl20;
-    maintainers = with maintainers; [ Br1ght0ne mic92 cole-h ma27 ];
+    maintainers = with maintainers; [ Br1ght0ne mic92 ma27 ];
     platforms = platforms.unix;
     changelog = "https://github.com/alacritty/alacritty/blob/v${version}/CHANGELOG.md";
   };

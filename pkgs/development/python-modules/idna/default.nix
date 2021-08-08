@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "idna";
-  version = "3.1";
+  version = "3.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c5b02147e01ea9920e6b0a3f1f7bb833612d507592c837a6c49552768f4054e1";
+    sha256 = "467fbad99067910785144ce333826c71fb0e63a425657295239737f7ecd125f3";
   };
 
   checkInputs = [ pytestCheckHook ];

@@ -33,19 +33,42 @@ let
         (mkOverride "unidecode" "0.04.21" "280a6ab88e1f2eb5af79edff450021a0d3f0448952847cd79677e55e58bad051")
         (mkOverride "sarge" "0.1.5.post0" "1c1ll7pys9vra5cfi8jxlgrgaql6c27l6inpy15aprgqhc4ck36s")
 
-        # Octoprint needs zeroconf >=0.24 <0.25. While this should be done in
-        # the mkOverride aboves, this package also has broken tests, so we need
-        # a proper override.
+        # Requires websocket-client <1.0, >=0.57. Cannot do mkOverride b/c differing underscore/hyphen in pypi source name
+        (
+          self: super: {
+            websocket-client = super.websocket-client.overridePythonAttrs (
+              oldAttrs: rec {
+                version = "0.58.0";
+                src = oldAttrs.src.override {
+                  pname = "websocket_client";
+                  inherit version;
+                  sha256 = "63509b41d158ae5b7f67eb4ad20fecbb4eee99434e73e140354dc3ff8e09716f";
+                };
+                propagatedBuildInputs = [ self.six ];
+              }
+            );
+          }
+        )
+
+        # Octoprint needs zeroconf >=0.24 <0.25. This can't be done via mkOverride, because in zeroconf 0.32
+        # the super package was migrated to fetchFromGitHub.
         (
           self: super: {
             zeroconf = super.zeroconf.overrideAttrs (oldAttrs: rec {
               version = "0.24.5";
-              src = oldAttrs.src.override {
+              src = super.fetchPypi {
+                inherit (oldAttrs) pname;
                 inherit version;
                 sha256 = "0jpgd0rk91si93857mjrizan5gc42kj1q4fi4160qgk68la88fl9";
               };
-              buildInputs = [ self.nose ];
-              checkPhase = "nosetests";
+              pythonImportsCheck = [
+                "zeroconf"
+              ];
+              buildInputs = with self; [
+                pytestCheckHook
+                nose
+              ];
+              pytestFlagsArray = [ "zeroconf/test.py" ];
             });
           }
         )
@@ -134,7 +157,7 @@ let
                 tornado
                 unidecode
                 watchdog
-                websocket_client
+                websocket-client
                 werkzeug
                 wrapt
                 zeroconf
