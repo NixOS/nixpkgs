@@ -110,6 +110,10 @@ let
       orga = "GrayJack";
       repo = "tree-sitter-zig";
     };
+    "tree-sitter-fish" = {
+      orga = "ram02z";
+      repo = "tree-sitter-fish";
+    };
   };
 
   allGrammars =

@@ -8,6 +8,7 @@
   tree-sitter-css = (builtins.fromJSON (builtins.readFile ./tree-sitter-css.json));
   tree-sitter-embedded-template = (builtins.fromJSON (builtins.readFile ./tree-sitter-embedded-template.json));
   tree-sitter-fennel = (builtins.fromJSON (builtins.readFile ./tree-sitter-fennel.json));
+  tree-sitter-fish = (builtins.fromJSON (builtins.readFile ./tree-sitter-fish.json));
   tree-sitter-fluent = (builtins.fromJSON (builtins.readFile ./tree-sitter-fluent.json));
   tree-sitter-go = (builtins.fromJSON (builtins.readFile ./tree-sitter-go.json));
   tree-sitter-haskell = (builtins.fromJSON (builtins.readFile ./tree-sitter-haskell.json));
