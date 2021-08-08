@@ -193,7 +193,7 @@ in {
         ${pkgs.git}/bin/git config --global --add http.sslCAinfo /etc/ssl/certs/ca-certificates.crt
         ${pkgs.jre}/bin/java ${concatStringsSep " " cfg.startupOptions} \
                         ${concatStringsSep " " cfg.extraOptions} \
-                              -jar ${pkgs.gocd-agent}/go-agent/agent-bootstrapper.jar \
+                              -jar ${pkgs.gocd-agent}/go-agent/lib/agent-bootstrapper.jar \
                               -serverUrl ${cfg.goServer}
       '';
 
