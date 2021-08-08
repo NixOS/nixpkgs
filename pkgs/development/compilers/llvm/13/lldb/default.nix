@@ -19,6 +19,7 @@
 , Carbon
 , Cocoa
 , lit
+, makeWrapper
 , enableManpages ? false
 }:
 
@@ -42,7 +43,7 @@ stdenv.mkDerivation (rec {
   outputs = [ "out" "lib" "dev" ];
 
   nativeBuildInputs = [
-    cmake python3 which swig lit
+    cmake python3 which swig lit makeWrapper
   ] ++ lib.optionals enableManpages [
     python3.pkgs.sphinx python3.pkgs.recommonmark
   ];
@@ -85,12 +86,14 @@ stdenv.mkDerivation (rec {
   doCheck = false;
 
   installCheckPhase = ''
-    if [ ! -e "$out/lib/python3.8/site-packages/lldb/_lldb.so" ] ; then
+    if [ ! -e "$lib/${python3.sitePackages}/lldb/_lldb.so" ] ; then
         return 1;
     fi
   '';
 
   postInstall = ''
+    wrapProgram $out/bin/lldb --prefix PYTHONPATH : $lib/${python3.sitePackages}/
+
     # Editor support
     # vscode:
     install -D ../tools/lldb-vscode/package.json $out/share/vscode/extensions/llvm-org.lldb-vscode-0.1.0/package.json

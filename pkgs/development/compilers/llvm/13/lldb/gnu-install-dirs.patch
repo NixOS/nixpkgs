@@ -76,3 +76,16 @@ index 752113b..010f187 100644
  if(WIN32 OR CYGWIN)
    # DLL platform -- put DLLs into bin.
    set(LLVM_SHLIB_OUTPUT_INTDIR ${LLVM_RUNTIME_OUTPUT_INTDIR})
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index b5633e2..86e4738 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -79,7 +79,7 @@ if (LLDB_ENABLE_PYTHON)
+   if(LLDB_BUILD_FRAMEWORK)
+     set(lldb_python_target_dir "${LLDB_FRAMEWORK_ABSOLUTE_BUILD_DIR}/LLDB.framework/Resources/Python/lldb")
+   else()
+-    set(lldb_python_target_dir "${CMAKE_BINARY_DIR}/${CMAKE_CFG_INTDIR}/${LLDB_PYTHON_RELATIVE_PATH}/lldb")
++    set(lldb_python_target_dir "${CMAKE_INSTALL_LIBDIR}/../${LLDB_PYTHON_RELATIVE_PATH}/lldb")
+   endif()
+   get_target_property(lldb_python_bindings_dir swig_wrapper_python BINARY_DIR)
+   finish_swig_python("lldb-python" "${lldb_python_bindings_dir}" "${lldb_python_target_dir}")
