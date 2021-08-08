@@ -5,6 +5,7 @@
 , rust-analyzer
 , nodePackages
 , setDefaultServerPath ? true
+, moreutils
 }:
 
 let
@@ -35,13 +36,12 @@ vscode-utils.buildVscodeExtension {
   src = "${vsix}/${pname}.zip";
   vscodeExtUniqueId = "${publisher}.${pname}";
 
-  nativeBuildInputs = lib.optional setDefaultServerPath jq;
+  nativeBuildInputs = lib.optionals setDefaultServerPath [ jq moreutils ];
 
   preInstall = lib.optionalString setDefaultServerPath ''
-    jq '.contributes.configuration.properties."rust-analyzer.serverPath".default = $s' \
+    jq '.contributes.configuration.properties."rust-analyzer.server.path".default = $s' \
       --arg s "${rust-analyzer}/bin/rust-analyzer" \
-      package.json >package.json.new
-    mv package.json.new package.json
+      package.json | sponge package.json
   '';
 
   meta = with lib; {
