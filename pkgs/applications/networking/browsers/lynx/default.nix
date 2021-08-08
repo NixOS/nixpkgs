@@ -1,11 +1,15 @@
-{ lib, stdenv, buildPackages
-, fetchurl, pkg-config, ncurses, gzip
-, sslSupport ? true, openssl ? null
+{ lib
+, stdenv
+, buildPackages
+, fetchurl
+, pkg-config
+, ncurses
+, gzip
+, sslSupport ? true
+, openssl
 , nukeReferences
 , fetchpatch
 }:
-
-assert sslSupport -> openssl != null;
 
 stdenv.mkDerivation rec {
   pname = "lynx";
@@ -41,7 +45,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ nukeReferences ]
     ++ lib.optional sslSupport pkg-config;
 
-  buildInputs = [ ncurses gzip ] ++ lib.optional sslSupport openssl.dev;
+  buildInputs = [ ncurses gzip ]
+    ++ lib.optional sslSupport openssl;
 
   # cfg_defs.h captures lots of references to build-only dependencies, derived
   # from config.cache.
@@ -53,6 +58,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A text-mode web browser";
     homepage = "https://lynx.invisible-island.net/";
+    maintainers = with maintainers; [ ];
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
   };
