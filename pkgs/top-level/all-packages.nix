@@ -11926,14 +11926,10 @@ in
   mint = callPackage ../development/compilers/mint { };
 
   mitscheme = callPackage ../development/compilers/mit-scheme {
-    texLive = texlive.combine { inherit (texlive) scheme-small; };
-    texinfo = texinfo5;
-    xlibsWrapper = null;
+    texLive = texlive.combine { inherit (texlive) scheme-small epsf texinfo; };
   };
 
   mitschemeX11 = mitscheme.override {
-    texLive = texlive.combine { inherit (texlive) scheme-small; };
-    texinfo = texinfo5;
     enableX11 = true;
   };
 
@@ -11972,7 +11968,7 @@ in
 
   roslyn = callPackage ../development/compilers/roslyn { };
 
-  msbuild = callPackage ../development/tools/build-managers/msbuild { };
+  msbuild = callPackage ../development/tools/build-managers/msbuild { dotnet-sdk = dotnet-sdk_5; };
 
   mosml = callPackage ../development/compilers/mosml { };
 
@@ -19732,7 +19728,7 @@ in
   grafana-agent = callPackage ../servers/monitoring/grafana-agent { };
 
   grafana-loki = callPackage ../servers/monitoring/loki {
-    buildGoModule = buildGo115Module;
+    buildGoModule = buildGo116Module;
   };
 
   grafana_reporter = callPackage ../servers/monitoring/grafana-reporter { };
@@ -21550,12 +21546,17 @@ in
     inherit name src;
     depsBuildBuild = [ buildPackages.stdenv.cc ]
       ++ lib.optionals (lib.versionAtLeast version "4.16") [ buildPackages.bison buildPackages.flex ];
+    postPatch = ''
+      patchShebangs scripts/
+    '';
     buildPhase = ''
+      (
       set -x
       make \
         ARCH=${stdenv.hostPlatform.linuxArch} \
         HOSTCC=${buildPackages.stdenv.cc.targetPrefix}gcc \
         ${makeTarget}
+      )
     '';
     installPhase = ''
       cp .config $out
@@ -26222,6 +26223,8 @@ in
   };
 
   yambar = callPackage ../applications/misc/yambar { };
+
+  yambar-wayland = callPackage ../applications/misc/yambar { waylandSupport = true; };
 
   polyphone = libsForQt514.callPackage ../applications/audio/polyphone { };
 
@@ -32640,7 +32643,7 @@ in
     stdenv = crossLibcStdenv;
     };
 
-  omnisharp-roslyn = callPackage ../development/tools/omnisharp-roslyn { };
+  omnisharp-roslyn = callPackage ../development/tools/omnisharp-roslyn { dotnet-sdk = dotnet-sdk_5; };
 
   wasmtime = callPackage ../development/interpreters/wasmtime {};
 

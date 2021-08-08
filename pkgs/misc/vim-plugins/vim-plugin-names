@@ -597,6 +597,7 @@ RRethy/nvim-base16
 RRethy/vim-hexokinase
 RRethy/vim-illuminate
 rstacruz/vim-closer
+ruifm/gitlinker.nvim
 rust-lang/rust.vim
 ryanoasis/vim-devicons
 ryvnf/readline.vim

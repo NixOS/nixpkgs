@@ -47,21 +47,19 @@ buildGoModule rec {
     ln -s ${webui} web/ui/static/react
   '';
 
-  buildFlags = "-tags=builtinassets";
-  buildFlagsArray =
+  tags = [ "builtinassets" ];
+
+  ldflags =
     let
       t = "${goPackagePath}/vendor/github.com/prometheus/common/version";
     in
     [
-      ''
-        -ldflags=
-           -X ${t}.Version=${version}
-           -X ${t}.Revision=unknown
-           -X ${t}.Branch=unknown
-           -X ${t}.BuildUser=nix@nixpkgs
-           -X ${t}.BuildDate=unknown
-           -X ${t}.GoVersion=${lib.getVersion go}
-      ''
+      "-X ${t}.Version=${version}"
+      "-X ${t}.Revision=unknown"
+      "-X ${t}.Branch=unknown"
+      "-X ${t}.BuildUser=nix@nixpkgs"
+      "-X ${t}.BuildDate=unknown"
+      "-X ${t}.GoVersion=${lib.getVersion go}"
     ];
 
   # only run this in the real build, not during the vendor build

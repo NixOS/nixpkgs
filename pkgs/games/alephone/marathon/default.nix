@@ -7,8 +7,7 @@ alephone.makeWrapper rec {
   icon = alephone.icons + "/marathon.png";
 
   zip = fetchurl {
-    url =
-      "https://github.com/Aleph-One-Marathon/alephone/releases/download/release-${version}/Marathon-${version}-Data.zip";
+    url = "https://github.com/Aleph-One-Marathon/alephone/releases/download/release-${version}/Marathon-${version}-Data.zip";
     sha256 = "sha256-WM5c0X/BGeDu8d7hME3LiZavkgJll6rc3Beat/2bsdg=";
   };
 
