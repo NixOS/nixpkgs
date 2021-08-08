@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Deploy software or an entire NixOS system configuration to another NixOS system";
     homepage = "https://github.com/misuzu/nix-simple-deploy";
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
     license = with licenses; [ asl20 /* OR */ mit ];
     maintainers = with maintainers; [ misuzu ];
   };
