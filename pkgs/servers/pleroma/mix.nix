@@ -346,14 +346,27 @@ let
       beamDeps = [];
     };
 
-    ecto = buildMix rec {
-      name = "ecto";
-      version = "3.4.6";
+    eblurhash = buildRebar3 rec {
+      name = "eblurhash";
+      version = "1.1.0";
 
       src = fetchHex {
         pkg = "${name}";
         version = "${version}";
-        sha256 = "02zpyd5mm2zfkz4b839nz1x3ias5av3by1vjzkfc4x9flviaj4vg";
+        sha256 = "07dmkbyafpxffh8ar6af4riqfxiqc547rias7i73gpgx16fqhsrf";
+      };
+
+      beamDeps = [];
+    };
+
+    ecto = buildMix rec {
+      name = "ecto";
+      version = "3.6.2";
+
+      src = fetchHex {
+        pkg = "${name}";
+        version = "${version}";
+        sha256 = "0kl893yi9jxzxnpd5gafivzazn96z2q24y04lfw8dyg60kxnvbgg";
       };
 
       beamDeps = [ decimal jason telemetry ];
@@ -372,27 +385,14 @@ let
       beamDeps = [ ecto ecto_sql postgrex ];
     };
 
-    ecto_explain = buildMix rec {
-      name = "ecto_explain";
-      version = "0.1.2";
-
-      src = fetchHex {
-        pkg = "${name}";
-        version = "${version}";
-        sha256 = "0c3366grl2r7k29a7sxwgqmq670c98sya4p96k7g9v1hmsc7f3hx";
-      };
-
-      beamDeps = [];
-    };
-
     ecto_sql = buildMix rec {
       name = "ecto_sql";
-      version = "3.4.5";
+      version = "3.6.2";
 
       src = fetchHex {
         pkg = "${name}";
         version = "${version}";
-        sha256 = "1hlar4r206szv84qbxc4igg2grvmqaa4mls110y6mcvr6mm0r69i";
+        sha256 = "0syv5wjdkywaxx9mmps0x9sdawqp3nnakbnf7av3ksj2yzkdgjay";
       };
 
       beamDeps = [ db_connection ecto postgrex telemetry ];
@@ -842,12 +842,12 @@ let
 
     linkify = buildMix rec {
       name = "linkify";
-      version = "0.5.0";
+      version = "0.5.1";
 
       src = fetchHex {
         pkg = "${name}";
         version = "${version}";
-        sha256 = "1mzjkn0f2svn44fhazkhpaxnwn9hbnqha7z2i4fcbrxfa21rbkac";
+        sha256 = "0i7r9z49sdxs7nrnh2igmwzzmq9ih4fm02a046klmnps49z8q4m3";
       };
 
       beamDeps = [];
@@ -1154,12 +1154,12 @@ let
 
     plug = buildMix rec {
       name = "plug";
-      version = "1.11.1";
+      version = "1.10.4";
 
       src = fetchHex {
         pkg = "${name}";
         version = "${version}";
-        sha256 = "07w83cx4xx90x4l1kmil4lpby55lpw83jfw3y08pqn5vxx7lwli3";
+        sha256 = "1874ixvvjklg0hnxr6d990qzarvvfxhd4s35c5bfqbixwwzj67md";
       };
 
       beamDeps = [ mime plug_crypto telemetry ];
@@ -1517,4 +1517,3 @@ let
     };
   };
 in self
-
