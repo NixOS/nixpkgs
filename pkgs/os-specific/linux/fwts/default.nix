@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip, autoreconfHook, pkg-config, glib, libtool, pcre
+{ lib, stdenv, fetchzip, autoreconfHook, pkg-config, glib, pcre
 , json_c, flex, bison, dtc, pciutils, dmidecode, iasl, libbsd }:
 
 stdenv.mkDerivation rec {
@@ -6,18 +6,19 @@ stdenv.mkDerivation rec {
   version = "20.11.00";
 
   src = fetchzip {
-    url = "http://fwts.ubuntu.com/release/${pname}-V${version}.tar.gz";
+    url = "https://fwts.ubuntu.com/release/${pname}-V${version}.tar.gz";
     sha256 = "0s8iz6c9qhyndcsjscs3qail2mzfywpbiys1x232igm5kl089vvr";
     stripRoot = false;
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config libtool ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ glib pcre json_c flex bison dtc pciutils dmidecode iasl libbsd ];
 
   postPatch = ''
-    substituteInPlace src/lib/include/fwts_binpaths.h --replace "/usr/bin/lspci"      "${pciutils}/bin/lspci"
-    substituteInPlace src/lib/include/fwts_binpaths.h --replace "/usr/sbin/dmidecode" "${dmidecode}/bin/dmidecode"
-    substituteInPlace src/lib/include/fwts_binpaths.h --replace "/usr/bin/iasl"       "${iasl}/bin/iasl"
+    substituteInPlace src/lib/include/fwts_binpaths.h \
+      --replace "/usr/bin/lspci"      "${pciutils}/bin/lspci" \
+      --replace "/usr/sbin/dmidecode" "${dmidecode}/bin/dmidecode" \
+      --replace "/usr/bin/iasl"       "${iasl}/bin/iasl"
   '';
 
   enableParallelBuilding = true;
