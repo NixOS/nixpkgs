@@ -1,6 +1,6 @@
 { stdenv
 , lib
-, fetchzip
+, fetchFromGitea
 , fetchurl
 , fetchpatch
 , runCommandNoCC
@@ -94,8 +94,11 @@ stdenv.mkDerivation rec {
   pname = "foot";
   inherit version;
 
-  src = fetchzip {
-    url = "https://codeberg.org/dnkl/${pname}/archive/${version}.tar.gz";
+  src = fetchFromGitea {
+    domain = "codeberg.org";
+    owner = "dnkl";
+    repo = pname;
+    rev = version;
     sha256 = "1k0alz991cslls4926c5gq02pdq0vfw9jfpprh2a1vb59xgikv7h";
   };
 
@@ -147,8 +150,9 @@ stdenv.mkDerivation rec {
     export AR="${ar}"
   '';
 
+  mesonBuildType = "release";
+
   mesonFlags = [
-    "--buildtype=release"
     "-Db_lto=true"
     "-Dterminfo-install-location=${placeholder "terminfo"}/share/terminfo"
   ];
