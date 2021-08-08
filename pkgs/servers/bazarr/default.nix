@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     description = "Subtitle manager for Sonarr and Radarr";
     homepage = "https://www.bazarr.media/";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ xwvvvvwx ];
+    maintainers = with maintainers; [ d-xo ];
     platforms = platforms.all;
   };
 }
