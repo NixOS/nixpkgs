@@ -1,8 +1,8 @@
-{ stdenv
+{ rustPlatform
+, stdenv
 , lib
 , fetchFromGitLab
 , meson
-, ninja
 , cmake
 , desktop-file-utils
 , automake
@@ -23,24 +23,33 @@
 , miniupnpc
 , dht
 , libnatpmp
+, sqlite
+, dbus
+, gtk4
+, libadwaita
+, git
+, cargo
+, rustc
 , hicolor-icon-theme
 , libtransmission
 , libb64
 , wrapGAppsHook
 }:
 
-stdenv.mkDerivation rec {
+rustPlatform.buildRustPackage rec {
   pname = "fragments";
-  version = "1.5";
+  version = "2.0-unstable";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "Fragments";
-    rev = version;
+    rev = "020addb3431773da7410e9373e58e7f427eb6886";
     fetchSubmodules = true;
-    sha256 = "0x1kafhlgyi65l4w67c24r8mpvasg3q3c4wlgnjc9sxvp6ki7xbn";
+    sha256 = "01i86mff3znblf6sw62wvm2z8nyr47bbg8pzw2h9aqyvrpgz7c3b";
   };
+
+  cargoSha256 = "16sxyrk89lqglkkjkh655s2303cvg4p0ym3z8bjs04xy9nmvzy0w";
 
   nativeBuildInputs = [
     autoconf
@@ -49,7 +58,6 @@ stdenv.mkDerivation rec {
     desktop-file-utils
     libtool
     meson
-    ninja
     pkg-config
     python3
     vala
@@ -72,9 +80,16 @@ stdenv.mkDerivation rec {
     zlib
     libtransmission
     libb64
+    sqlite
+    dbus
+    gtk4
+    libadwaita
+    git
+    rustc
+    cargo
   ];
 
-  patches = [ ./find_library.patch ];
+  #patches = [ ./find_library.patch ];
 
   postPatch = ''
     chmod +x build-aux/*
