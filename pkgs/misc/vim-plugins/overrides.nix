@@ -86,6 +86,8 @@
 , iferr
 , impl
 , reftools
+# must be lua51Packages
+, luaPackages
 }:
 
 self: super: {
@@ -281,6 +283,8 @@ self: super: {
   gitsigns-nvim = super.gitsigns-nvim.overrideAttrs (old: {
     dependencies = with self; [ plenary-nvim ];
   });
+
+  plenary-nvim = super.toVimPlugin(luaPackages.plenary-nvim);
 
   gruvbox-nvim = super.gruvbox-nvim.overrideAttrs (old: {
     dependencies = with self; [ lush-nvim ];
