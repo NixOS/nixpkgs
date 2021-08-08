@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, cmake, makeWrapper, openal, fluidsynth_1
 , soundfont-fluid, libGL, SDL2, bzip2, zlib, libjpeg, libsndfile, mpg123
-, game-music-emu, pkg-config }:
+, game-music-emu, pkg-config, copyDesktopItems, makeDesktopItem }:
 
 let
   zmusic-src = fetchFromGitHub {
@@ -38,7 +38,7 @@ let
       fetchSubmodules = true;
     };
 
-    nativeBuildInputs = [ cmake makeWrapper pkg-config ];
+    nativeBuildInputs = [ cmake makeWrapper pkg-config copyDesktopItems ];
     buildInputs = [
       SDL2
       libGL
@@ -55,7 +55,18 @@ let
 
     NIX_CFLAGS_LINK = "-lopenal -lfluidsynth";
 
+    desktopItems = [
+      (makeDesktopItem {
+        name = "gzdoom";
+        exec = "gzdoom";
+        desktopName = "GZDoom";
+        categories = "Game;";
+      })
+    ];
+
     installPhase = ''
+      runHook preInstall
+
       install -Dm755 gzdoom "$out/lib/gzdoom/gzdoom"
       for i in *.pk3; do
         install -Dm644 "$i" "$out/lib/gzdoom/$i"
@@ -68,6 +79,8 @@ let
       done
       mkdir $out/bin
       makeWrapper $out/lib/gzdoom/gzdoom $out/bin/gzdoom
+
+      runHook postInstall
     '';
 
     meta = with lib; {

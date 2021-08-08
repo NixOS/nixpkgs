@@ -31,9 +31,12 @@ buildPythonPackage rec {
     poetry-core
   ];
 
+  buildInputs = [
+    pytest
+  ];
+
   propagatedBuildInputs = [
     aiohttp
-    pytest
     pytest-asyncio
   ];
 

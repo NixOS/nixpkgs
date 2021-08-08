@@ -3,7 +3,6 @@
 , pythonOlder
 , fetchFromGitHub
 , colorama
-, pytest-runner
 , pytest
 , pytestCheckHook
 }:
@@ -20,13 +19,17 @@ buildPythonPackage rec {
     sha256 = "1siv3pk4fsabz254fdzr7c0pxy124habnbw4ym66pfk883fr96g2";
   };
 
-  nativeBuildInputs = [
-    pytest-runner
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "pytest-runner" ""
+  '';
+
+  buildInputs = [
+    pytest
   ];
 
   propagatedBuildInputs = [
     colorama
-    pytest
   ];
 
   checkInputs = [
