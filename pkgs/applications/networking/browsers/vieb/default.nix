@@ -1,4 +1,4 @@
-{ mkYarnPackage, fetchFromGitHub, electron, makeWrapper, makeDesktopItem, lib }:
+{ mkYarnPackage, fetchFromGitHub, electron, makeWrapper, makeDesktopItem, lib, autoPatchelfHook, stdenv }:
 
 mkYarnPackage rec {
   pname = "vieb";
@@ -16,7 +16,7 @@ mkYarnPackage rec {
   yarnNix = ./yarn.nix;
   yarnFlags = [ "--production" "--offline" ];
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper autoPatchelfHook stdenv.cc.cc.lib ];
 
   desktopItem = makeDesktopItem {
     name = "vieb";
