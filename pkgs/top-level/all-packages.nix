@@ -940,10 +940,6 @@ in
 
   cool-retro-term = libsForQt5.callPackage ../applications/terminal-emulators/cool-retro-term { };
 
-  coreterminal = libsForQt5.callPackage ../applications/terminal-emulators/coreterminal {
-    inherit (lxqt) qtermwidget;
-  };
-
   eterm = callPackage ../applications/terminal-emulators/eterm { };
 
   evilvte = callPackage ../applications/terminal-emulators/evilvte (config.evilvte or {});
@@ -1415,8 +1411,6 @@ in
   cloudsmith-cli = callPackage ../development/tools/cloudsmith-cli { };
 
   codeql = callPackage ../development/tools/analysis/codeql { };
-
-  corearchiver = libsForQt5.callPackage ../tools/archivers/corearchiver { };
 
   container-linux-config-transpiler = callPackage ../development/tools/container-linux-config-transpiler { };
 
@@ -3927,15 +3921,7 @@ in
                                                                         qtbase = qt5.qtbase;
                                                                       };
 
-  coregarage = libsForQt5.callPackage ../applications/misc/coregarage { };
-
-  coreshot = libsForQt5.callPackage ../tools/misc/coreshot { };
-
   c14 = callPackage ../applications/networking/c14 { };
-
-  corehunt = libsForQt5.callPackage ../applications/misc/corehunt { };
-
-  coretoppings = libsForQt5.callPackage ../applications/misc/coretoppings { };
 
   certstrap = callPackage ../tools/security/certstrap { };
 
@@ -6428,10 +6414,6 @@ in
   libcsptr = callPackage ../development/libraries/libcsptr { };
 
   libscrypt = callPackage ../development/libraries/libscrypt { };
-
-  libcsys = libsForQt5.callPackage ../development/libraries/libcsys { };
-
-  libcprime = libsForQt5.callPackage ../development/libraries/libcprime { };
 
   libcloudproviders = callPackage ../development/libraries/libcloudproviders { };
 
@@ -12664,6 +12646,13 @@ in
   };
 
   ### END OF LUA
+
+  ### CuboCore
+  CuboCore = recurseIntoAttrs (import ./cubocore-packages.nix {
+    inherit newScope lxqt lib libsForQt5;
+  });
+
+  ### End of CuboCore
 
   lush2 = callPackage ../development/interpreters/lush {};
 
@@ -23345,8 +23334,6 @@ in
 
   cheesecutter = callPackage ../applications/audio/cheesecutter { };
 
-  corefm = libsForQt5.callPackage ../applications/misc/corefm { };
-
   milkytracker = callPackage ../applications/audio/milkytracker { };
 
   ptcollab = libsForQt5.callPackage ../applications/audio/ptcollab { };
@@ -23683,8 +23670,6 @@ in
 
   copyq = libsForQt5.callPackage ../applications/misc/copyq { };
 
-  coreaction = libsForQt5.callPackage ../applications/misc/coreaction { };
-
   corectrl = libsForQt5.callPackage ../applications/misc/corectrl { };
 
   coriander = callPackage ../applications/video/coriander {
@@ -23692,8 +23677,6 @@ in
   };
 
   corrscope = libsForQt5.callPackage ../applications/video/corrscope { };
-
-  coreimage = libsForQt5.callPackage ../applications/graphics/coreimage { };
 
   csa = callPackage ../applications/audio/csa { };
 
