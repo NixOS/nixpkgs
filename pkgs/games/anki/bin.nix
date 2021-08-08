@@ -3,14 +3,14 @@
 let
   pname = "anki-bin";
   # Update hashes for both Linux and Darwin!
-  version = "2.1.44";
+  version = "2.1.46";
 
   unpacked = stdenv.mkDerivation {
     inherit pname version;
 
     src = fetchurl {
       url = "https://github.com/ankitects/anki/releases/download/${version}/anki-${version}-linux.tar.bz2";
-      sha256 = "01d5ll3vsd4v0ikxgamv47bkwmag15vnmsgpda5wivc3dyawc9j9";
+      sha256 = "1jzpf42fqhfbjr95k7bpsnf34sfinamp6v828y0sapa4gzfvwkkz";
     };
 
     installPhase = ''
@@ -57,7 +57,7 @@ if stdenv.isLinux then buildFHSUserEnv (appimageTools.defaultFhsEnvArgs // {
 
   src = fetchurl {
     url = "https://github.com/ankitects/anki/releases/download/${version}/anki-${version}-mac.dmg";
-    sha256 = "1zrdih4rjsq30480sf200pw59r42p3nq2md56kj2l641kbc7ljka";
+    sha256 = "003cmh5qdj5mkrpm51n0is872faj99dqfkaaxyyrn6x03s36l17y";
   };
 
   nativeBuildInputs = [ undmg ];

@@ -663,6 +663,15 @@
           group.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          The <literal>yambar</literal> package has been split into
+          <literal>yambar</literal> and
+          <literal>yambar-wayland</literal>, corresponding to the xorg
+          and wayland backend respectively. Please switch to
+          <literal>yambar-wayland</literal> if you are on wayland.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-notable-changes">
