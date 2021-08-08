@@ -1,26 +1,26 @@
 { lib, stdenv, fetchurl, unzip, makeWrapper, gawk, glibc }:
 
 let
-  version = "1.8.0";
+  version = "1.8.1";
 
   sources = let
     base = "https://releases.hashicorp.com/vault/${version}";
   in {
     x86_64-linux = fetchurl {
       url = "${base}/vault_${version}_linux_amd64.zip";
-      sha256 = "sha256-H+kPDE8xuu2lgENf4t+vCb+Tni+ChkB8K5ZEgIY3Jyo=";
+      sha256 = "sha256-u0EfK7rXnC5PBkDx09XvUOK9p9T0CHWlaRfJX/eDwts=";
     };
     i686-linux = fetchurl {
       url = "${base}/vault_${version}_linux_386.zip";
-      sha256 = "19c7d7yr5nm1xgrkh46pcgwwxa6iic6is06n343qaxcj0dfg43kn";
+      sha256 = "11khjx5lrb7zmrahkniqwn4ad98yjy2fm0miz63nzpq85c0yrjdn";
     };
     x86_64-darwin = fetchurl {
       url = "${base}/vault_${version}_darwin_amd64.zip";
-      sha256 = "0zql0r6gmq0yqb1cbpjgwsg6cky9y43n5gsvijp6snhnp86bicdr";
+      sha256 = "02gqavhg3pk6jkdmn1yp9pl3pv4ni2sg56q218gs8gbbypj22wpq";
     };
     aarch64-linux = fetchurl {
       url = "${base}/vault_${version}_linux_arm64.zip";
-      sha256 = "1ajkgkanq8ijcxbb5zbn9z25r0v7qcq13ivjqr0x7ql5bxm3xfmc";
+      sha256 = "0500nc8v7hwnrckz4fkf5fpqcg3i45q25lz4lghzkcabnss4qand";
     };
   };
 

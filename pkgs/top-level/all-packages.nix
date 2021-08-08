@@ -5147,7 +5147,9 @@ in
 
   gexiv2 = callPackage ../development/libraries/gexiv2 { };
 
-  gftp = callPackage ../tools/networking/gftp { };
+  gftp = callPackage ../applications/networking/gftp {
+    gtk = gtk2;
+  };
 
   gfbgraph = callPackage ../development/libraries/gfbgraph { };
 
@@ -8076,6 +8078,10 @@ in
   pius = callPackage ../tools/security/pius { };
 
   pixiewps = callPackage ../tools/networking/pixiewps {};
+
+  pinyin-tool = callPackage ../tools/text/pinyin-tool {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   pk2cmd = callPackage ../tools/misc/pk2cmd { };
 
@@ -25515,6 +25521,8 @@ in
 
   kubernetes-helmPlugins = dontRecurseIntoAttrs (callPackage ../applications/networking/cluster/helm/plugins { });
 
+  chart-testing = callPackage ../applications/networking/cluster/helm/chart-testing { };
+
   kubetail = callPackage ../applications/networking/cluster/kubetail { } ;
 
   kupfer = callPackage ../applications/misc/kupfer {
@@ -27901,7 +27909,7 @@ in
   wrapNeovimUnstable = callPackage ../applications/editors/neovim/wrapper.nix { };
   wrapNeovim = neovim-unwrapped: lib.makeOverridable (neovimUtils.legacyWrapper neovim-unwrapped);
   neovim-unwrapped = callPackage ../applications/editors/neovim {
-    # neovim doesn't build with luajit on aarch64:
+    # neovim doesn't build with luajit on aarch64-darwin :
     # ./luarocks init
     # PANIC: unprotected error in call to Lua API (module 'luarocks.core.hardcoded' not found:
     #         no field package.preload['luarocks.core.hardcoded']
@@ -27925,7 +27933,7 @@ in
     # See https://github.com/NixOS/nixpkgs/issues/129099
     # Possibly related: https://github.com/neovim/neovim/issues/7879
     lua =
-      if stdenv.isAarch64 then lua5_1 else
+      if (stdenv.isDarwin && stdenv.isAarch64) then lua5_1 else
       luajit;
   };
 

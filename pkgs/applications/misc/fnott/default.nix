@@ -1,6 +1,6 @@
 { stdenv
 , lib
-, fetchgit
+, fetchFromGitea
 , pkg-config
 , meson
 , ninja
@@ -21,10 +21,12 @@ stdenv.mkDerivation rec {
   pname = "fnott";
   version = "1.1.0";
 
-  src = fetchgit {
-    url = "https://codeberg.org/dnkl/fnott.git";
+  src = fetchFromGitea {
+    domain = "codeberg.org";
+    owner = "dnkl";
+    repo = "fnott";
     rev = version;
-    sha256 = "sha256-lePd36TFQKZd+B7puUbQhLVrbybeSPjMTFWfY0B82S4=";
+    sha256 = "sha256-gzU5AqjCIZlhLbnj/xuSGJ69ZhLv9zQxlM0Nn+MIX/U=";
   };
 
   nativeBuildInputs = [

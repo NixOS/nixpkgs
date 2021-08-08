@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "convbin";
-  version = "3.0";
+  version = "3.4";
 
   src = fetchFromGitHub {
     owner = "mateoconlechuga";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0n502zj8igm583kbfvyv7zhd97vb71jac41ncb9jr2yz2v5ir8j9";
+    sha256 = "sha256-JM9ixxOI3NnK3h54byFycTCJ/A+JTcNHKR71zxRed/s=";
   };
 
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];

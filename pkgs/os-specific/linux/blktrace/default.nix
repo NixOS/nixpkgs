@@ -1,13 +1,13 @@
 { lib, stdenv, fetchurl, libaio }:
 
 stdenv.mkDerivation {
-  name = "blktrace-1.2.0";
+  name = "blktrace-1.3.0";
 
   # Official source
   # "git://git.kernel.org/pub/scm/linux/kernel/git/axboe/blktrace.git"
   src = fetchurl {
-    url = "http://brick.kernel.dk/snaps/blktrace-1.2.0.tar.bz2";
-    sha256 = "0i9z7ayh9qx4wi0ihyz15bhr1c9aknjl8v5i8c9mx3rhyy41i5i6";
+    url = "http://brick.kernel.dk/snaps/blktrace-1.3.0.tar.bz2";
+    sha256 = "sha256-1t7aA4Yt4r0bG5+6cpu7hi2bynleaqf3yoa2VoEacNY=";
   };
 
   buildInputs = [ libaio ];
