@@ -2289,6 +2289,12 @@
       fingerprint = "1C4E F4FE 7F8E D8B7 1E88 CCDF BAB1 D15F B7B4 D4CE";
     }];
   };
+  d-xo = {
+    email = "hi@d-xo.org";
+    github = "d-xo";
+    githubId = 6689924;
+    name = "David Terry";
+  };
   dadada = {
     name = "dadada";
     email = "dadada@dadada.li";
@@ -3242,6 +3248,12 @@
       longkeyid = "rsa4096/0x6C79278F3FCDCC02";
       fingerprint = "2D37 1AD2 7E2B BC77 97E1  B759 6C79 278F 3FCD CC02";
     }];
+  };
+  ereslibre = {
+    email = "ereslibre@ereslibre.es";
+    github = "ereslibre";
+    githubId = 8706;
+    name = "Rafael Fernández López";
   };
   ericbmerritt = {
     email = "eric@afiniate.com";
@@ -11709,12 +11721,6 @@
     github = "xworld21";
     githubId = 1962985;
     name = "Vincenzo Mantova";
-  };
-  xwvvvvwx = {
-    email = "davidterry@posteo.de";
-    github = "xwvvvvwx";
-    githubId = 6689924;
-    name = "David Terry";
   };
   xzfc = {
     email = "xzfcpw@gmail.com";

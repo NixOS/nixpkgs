@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rocksdb";
-  version = "6.17.3";
+  version = "6.23.2";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-mfONfYMxZ3CT7Bk3OYSwg0UChmk4mQ1+cHN94gEDZcM=";
+    sha256 = "0ivdcc012c35f2wcc5qzic2jlrwp4whyz5sbz1nyfyrnv0xf5djw";
   };
 
   nativeBuildInputs = [ cmake ninja ];
@@ -60,7 +60,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://rocksdb.org";
     description = "A library that provides an embeddable, persistent key-value store for fast storage";
+    changelog = "https://github.com/facebook/rocksdb/raw/v${version}/HISTORY.md";
     license = licenses.asl20;
+    platforms = platforms.all;
     maintainers = with maintainers; [ adev magenbluten ];
   };
 }

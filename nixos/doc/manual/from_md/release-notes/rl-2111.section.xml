@@ -841,6 +841,15 @@
           version of zfs.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          Nginx will use the value of
+          <literal>sslTrustedCertificate</literal> if provided for a
+          virtual host, even if <literal>enableACME</literal> is set.
+          This is useful for providers not using the same certificate to
+          sign OCSP responses and server certificates.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
 </section>

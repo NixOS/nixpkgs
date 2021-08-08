@@ -10,19 +10,6 @@ res: pkgs: super:
 
 with pkgs;
 
-let
-  self =
-    builtins.trace ''
-        It seems that you are using a patched Nixpkgs that references the self
-        variable in pkgs/top-level/all-packages.nix. This variable was incorrectly
-        named, so its usage needs attention. Please use pkgs for packages or super
-        for functions.
-      ''
-      res; # Do *NOT* use res in your fork. It will be removed.
-
-  # TODO: turn self into an error
-
-in
 {
 
   # A stdenv capable of building 32-bit binaries.  On x86_64-linux,
@@ -3260,6 +3247,8 @@ in
   };
 
   psrecord = python3Packages.callPackage ../tools/misc/psrecord {};
+
+  reg = callPackage ../tools/virtualization/reg { };
 
   river = callPackage ../applications/window-managers/river { };
 
@@ -13549,6 +13538,8 @@ in
   cvise = python3Packages.callPackage ../development/tools/misc/cvise {
     inherit (llvmPackages_11) llvm libclang;
   };
+
+  cwltool = callPackage ../applications/science/misc/cwltool { };
 
   dprint = callPackage ../development/tools/dprint { };
 
@@ -28695,9 +28686,6 @@ in
 
   zola = callPackage ../applications/misc/zola {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
-    # Version 0.13.0 has the lexical_core 0.7.4 dependency that doesn't build
-    # with rust 1.53. This should be fixed in the next version.
-    rustPlatform = rustPackages_1_45.rustPlatform;
   };
 
   zombietrackergps = libsForQt5.callPackage ../applications/gis/zombietrackergps { };

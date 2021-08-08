@@ -25,6 +25,6 @@ buildGoModule rec {
     homepage = "https://github.com/ledgerwatch/turbo-geth/";
     description = "Ethereum node and geth fork focused on scalability and modularity";
     license = with licenses; [ lgpl3Plus gpl3Plus ];
-    maintainers = with maintainers; [ xwvvvvwx ];
+    maintainers = with maintainers; [ d-xo ];
   };
 }
