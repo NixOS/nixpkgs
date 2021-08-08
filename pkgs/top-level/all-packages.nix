@@ -4216,6 +4216,8 @@ in
 
   dnsmasq = callPackage ../tools/networking/dnsmasq { };
 
+  dnspeep = callPackage ../tools/security/dnspeep { };
+
   dnsproxy = callPackage ../tools/networking/dnsproxy { };
 
   dnsperf = callPackage ../tools/networking/dnsperf { };
