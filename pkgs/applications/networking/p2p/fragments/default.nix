@@ -5,6 +5,7 @@
 , meson
 , cmake
 , desktop-file-utils
+, ninja
 , automake
 , autoconf
 , libtool
@@ -29,6 +30,7 @@
 , libadwaita
 , git
 , cargo
+, gettext
 , rustc
 , hicolor-icon-theme
 , libtransmission
@@ -49,7 +51,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "01i86mff3znblf6sw62wvm2z8nyr47bbg8pzw2h9aqyvrpgz7c3b";
   };
 
-  cargoSha256 = "16sxyrk89lqglkkjkh655s2303cvg4p0ym3z8bjs04xy9nmvzy0w";
+  cargoSha256 = "0s8vmyf3fqwz4nyqxs0l9q2g20pqhbzi7vfzp8z8xncsva0jsn5k";
 
   nativeBuildInputs = [
     autoconf
@@ -62,11 +64,14 @@ rustPlatform.buildRustPackage rec {
     python3
     vala
     wrapGAppsHook
+    gettext
+    glib
+    ninja
   ];
 
   buildInputs = [
+    meson
     curl
-    glib
     gtk3
     hicolor-icon-theme
     libevent
@@ -89,7 +94,12 @@ rustPlatform.buildRustPackage rec {
     cargo
   ];
 
-  #patches = [ ./find_library.patch ];
+  # Don't use buildRustPackage phases, only use it for rust deps setup
+  configurePhase = null;
+  buildPhase = null;
+  doCheck = true;
+  checkPhase = null;
+  installPhase = null;
 
   postPatch = ''
     chmod +x build-aux/*
