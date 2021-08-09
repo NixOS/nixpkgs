@@ -358,13 +358,13 @@ in {
 
   touchui = buildPlugin rec {
     pname = "TouchUI";
-    version = "0.3.16";
+    version = "0.3.18";
 
     src = fetchFromGitHub {
       owner = "BillyBlaze";
       repo = "OctoPrint-${pname}";
       rev = version;
-      sha256 = "1jlqjirc4ygl4k7jp93l2h6b18jap3mzz8sf2g61j9w0kgv9l365";
+      sha256 = "sha256-PNDCjY7FhfnwK7Nd86el9ZQ00G4uMANH2Sk080iMYXw=";
     };
 
     meta = with lib; {
