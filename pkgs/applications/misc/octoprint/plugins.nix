@@ -52,13 +52,13 @@ in {
 
   bedlevelvisualizer = buildPlugin rec {
     pname = "BedLevelVisualizer";
-    version = "0.1.15";
+    version = "1.1.0";
 
     src = fetchFromGitHub {
       owner = "jneilliii";
       repo = "OctoPrint-${pname}";
       rev = version;
-      sha256 = "1bq39fnarnpk8phxfbpx6l4n9anf358z1cgid5r89nadmn2a0cny";
+      sha256 = "sha256-SKrhtTGyDuvbDmUCXSx83Y+C83ZzVHA78TwMYwE6tcc=";
     };
 
     propagatedBuildInputs = with super; [ numpy ];
