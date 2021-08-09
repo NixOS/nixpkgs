@@ -15,13 +15,13 @@ assert withGtk3 -> gtk3 != null;
 
 stdenv.mkDerivation rec {
   pname = "carla";
-  version = "2.3.1";
+  version = "2.3.2";
 
   src = fetchFromGitHub {
     owner = "falkTX";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-LM7wRvUg2Q3f4qBZN1MPvsLkdl1ziArCfhdalyD1G3w=";
+    sha256 = "sha256-en3eQtRUd2schpIccnuD42+wTYOAG9zsD6yNRA73bKE=";
   };
 
   nativeBuildInputs = [
