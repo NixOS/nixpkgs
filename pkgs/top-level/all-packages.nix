@@ -30006,7 +30006,7 @@ with pkgs;
   keen4 = callPackage ../games/keen4 { };
 
   zeroadPackages = dontRecurseIntoAttrs (callPackage ../games/0ad {
-    wxGTK = wxGTK30;
+    wxGTK = wxGTK31;
   });
 
   zeroad = zeroadPackages.zeroad;
