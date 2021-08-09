@@ -34,6 +34,8 @@ stdenv.mkDerivation rec {
       sha256 = "17j5r7gsa3izrm7zln4mrp7l16h532gvmpas0kzglybicbiz7d56";
       stripLen = 1;
     })
+    # Fixes compilation warning about uninitialied variables (in test code)
+    ./uninitialized-variable-warning.patch
   ];
 
   preBuild = ''
