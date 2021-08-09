@@ -46,6 +46,10 @@ let
       '';
     };
 
+    deltachat-desktop = super."deltachat-desktop-../../applications/networking/instant-messengers/deltachat-desktop".override {
+      meta.broken = true; # use the top-level package instead
+    };
+
     fast-cli = super.fast-cli.override ({
       nativeBuildInputs = [ pkgs.makeWrapper ];
       prePatch = ''
