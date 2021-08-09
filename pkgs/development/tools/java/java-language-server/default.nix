@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     buildPhase = ''
       runHook preBuild
 
-      mvn package -Dmaven.repo.local=$out/.m2 -DskipTests
+      mvn package -Dmaven.repo.local=$out -DskipTests
 
       runHook postBuild
     '';
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     dontConfigure = true;
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "sha256-2MVlF3QIWiDvUlnMH4RLi2Od57aoh8zK/OmHqztOnZ4=";
+    outputHash = "sha256-YkcQKmm8oeEH7uyUzV/qGoe4LiI6o5wZ7o69qrO3oCA=";
   };
 
 
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
       --no-man-pages \
       --compress 2
 
-    mvn package --offline -Dmaven.repo.local=${fetchedMavenDeps}/.m2 -DskipTests
+    mvn package --offline -Dmaven.repo.local=${fetchedMavenDeps} -DskipTests
 
     runHook postBuild
   '';
