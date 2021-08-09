@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "bigloo";
-  version = "4.3h";
+  version = "4.4b";
 
   src = fetchurl {
     url = "ftp://ftp-sop.inria.fr/indes/fp/Bigloo/bigloo-${version}.tar.gz";
-    sha256 = "0fw08096sf8ma2cncipnidnysxii0h0pc7kcqkjhkhdchknp8vig";
+    sha256 = "sha256-oxOSJwKWmwo7PYAwmeoFrKaYdYvmvQquWXyutolc488=";
   };
 
   nativeBuildInputs = [ autoconf automake libtool ];
