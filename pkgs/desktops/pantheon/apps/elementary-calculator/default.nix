@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchFromGitHub
+, fetchpatch
 , nix-update-script
 , pantheon
 , pkg-config
@@ -12,6 +13,7 @@
 , python3
 , granite
 , libgee
+, libhandy
 , elementary-icon-theme
 , appstream
 , wrapGAppsHook
@@ -19,7 +21,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-calculator";
-  version = "1.6.2";
+  version = "1.7.0";
 
   repoName = "calculator";
 
@@ -27,7 +29,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "sha256-kOQr94PAfLPv4LjY2WDdTtlbf3/tYf+NUESZ94+L41M=";
+    sha256 = "1kl2iximcmbk8inklb2xav7dp08lp5pn9xxa59327zw13gdy8fkf";
   };
 
   passthru = {
@@ -53,6 +55,7 @@ stdenv.mkDerivation rec {
     granite
     gtk3
     libgee
+    libhandy
   ];
 
   postPatch = ''
