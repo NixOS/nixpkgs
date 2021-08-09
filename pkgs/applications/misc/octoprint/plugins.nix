@@ -299,13 +299,13 @@ in {
 
   telegram = buildPlugin rec {
     pname = "Telegram";
-    version = "1.6.4";
+    version = "1.6.5";
 
     src = fetchFromGitHub {
       owner = "fabianonline";
       repo = "OctoPrint-${pname}";
       rev = version;
-      sha256 = "14d9f9a5m1prcikd7y26qks6c2ls6qq4b97amn24q5a8k5hbgl94";
+      sha256 = "sha256-SckJCbPNCflgGYLHFiXy0juCtpvo8YS1BQsFpc1f5rg=";
     };
 
     propagatedBuildInputs = with super; [ pillow ];
