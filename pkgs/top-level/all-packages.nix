@@ -12299,7 +12299,6 @@ with pkgs;
   scala = scala_2_13;
   scala-runners = callPackage ../development/compilers/scala-runners/default.nix {
     coursier = coursier.override { jre = jdk8; };
-    jre = jdk8;
   };
 
   metal = callPackage ../development/libraries/metal { };
