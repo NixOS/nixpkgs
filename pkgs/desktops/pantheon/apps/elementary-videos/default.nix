@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchFromGitHub
+, fetchpatch
 , nix-update-script
 , pantheon
 , pkg-config
@@ -30,6 +31,15 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "04nl9kn33dysvsg0n5qx1z8qgrifkgfwsm7gh1l308v3n8c69lh7";
   };
+
+  patches = [
+    # Upstream code not respecting our localedir
+    # https://github.com/elementary/videos/pull/233
+    (fetchpatch {
+      url = "https://github.com/elementary/videos/commit/19ba2a9148be09ea521d2e9ac29dede6b9c6fa07.patch";
+      sha256 = "0ffp7ana98846xi7vxrzfg6dbs4yy28x2i4ky85mqs1gj6fjqin5";
+    })
+  ];
 
   passthru = {
     updateScript = nix-update-script {
