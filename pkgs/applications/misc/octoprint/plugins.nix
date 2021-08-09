@@ -168,13 +168,13 @@ in {
 
   marlingcodedocumentation = buildPlugin rec {
     pname = "MarlinGcodeDocumentation";
-    version = "0.11.0";
+    version = "0.13.0";
 
     src = fetchFromGitHub {
       owner = "costas-basdekis";
       repo = pname;
       rev = "v${version}";
-      sha256 = "0vx06w9hqwy0k4r8g67y8gdckfdx7wl8ghfx6hmxc1s8fgkghfkc";
+      sha256 = "sha256-3ay6iCxZk8QkFM/2Y14VTpPoxr6NXq14BFSHofn3q7I=";
     };
 
     meta = with lib; {
