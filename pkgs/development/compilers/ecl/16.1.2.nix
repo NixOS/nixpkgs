@@ -7,15 +7,13 @@
 , useBoehmgc ? true, boehmgc
 }:
 
-assert useBoehmgc -> boehmgc != null;
-
 let
   s = # Generated upstream information
   rec {
     baseName="ecl";
     version="16.1.2";
     name="${baseName}-${version}";
-    url="https://common-lisp.net/project/ecl/static/files/release/ecl-16.1.2.tgz";
+    url="https://common-lisp.net/project/ecl/static/files/release/ecl-${version}.tgz";
     sha256="16ab8qs3awvdxy8xs8jy82v8r04x4wr70l9l2j45vgag18d2nj1d";
   };
   buildInputs = [
@@ -42,10 +40,7 @@ stdenv.mkDerivation {
     "--with-gmp-libdir=${lib.getLib gmp}/lib"
     # -incdir, -libdir doesn't seem to be supported for libffi
     "--with-libffi-prefix=${lib.getDev libffi}"
-    ]
-    ++
-    (lib.optional (! noUnicode)
-      "--enable-unicode")
+    ] ++ lib.optional (! noUnicode) "--enable-unicode"
     ;
 
   patches = [
@@ -91,11 +86,11 @@ stdenv.mkDerivation {
       --prefix NIX_LDFLAGS_BEFORE_${gcc.bintools.suffixSalt} ' ' "-L${lib.getLib libffi}/lib"
   '';
 
-  meta = {
+  meta = with lib; {
     inherit (s) version;
     description = "Lisp implementation aiming to be small, fast and easy to embed";
-    license = lib.licenses.mit ;
-    maintainers = [lib.maintainers.raskin];
-    platforms = lib.platforms.unix;
+    license = licenses.mit ;
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.unix;
   };
 }
