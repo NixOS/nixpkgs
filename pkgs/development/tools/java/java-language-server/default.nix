@@ -1,5 +1,6 @@
 { lib, stdenv, fetchFromGitHub
-, jdk, maven, runtimeShell
+, jdk, maven
+, runtimeShell, makeWrapper
 }:
 
 let
@@ -54,7 +55,7 @@ stdenv.mkDerivation rec {
   };
 
 
-  nativeBuildInputs = [ maven jdk ];
+  nativeBuildInputs = [ maven jdk makeWrapper ];
 
   dontConfigure = true;
   buildPhase = ''
@@ -79,13 +80,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/java/java-language-server
     cp -r dist/classpath dist/*${platform}* $out/share/java/java-language-server
 
-    mkdir -p $out/bin
     # a link is not used as lang_server_${platform}.sh makes use of "dirname $0" to access other files
-    cat << _EOF > $out/bin/java-language-server
-    #!${runtimeShell}
-    $out/share/java/java-language-server/lang_server_${platform}.sh "\$@"
-    _EOF
-    chmod +x $out/bin/java-language-server
+    makeWrapper $out/share/java/java-language-server/lang_server_${platform}.sh $out/bin/java-language-server
 
     runHook postInstall
   '';
