@@ -24443,9 +24443,12 @@ with pkgs;
 
   firefox-unwrapped = firefoxPackages.firefox;
   firefox-esr-78-unwrapped = firefoxPackages.firefox-esr-78;
+  firefox-esr-91-unwrapped = firefoxPackages.firefox-esr-91;
   firefox = wrapFirefox firefox-unwrapped { };
   firefox-wayland = wrapFirefox firefox-unwrapped { forceWayland = true; };
+  firefox-esr-wayland = wrapFirefox firefox-esr-91-unwrapped { forceWayland = true; };
   firefox-esr-78 = wrapFirefox firefox-esr-78-unwrapped { };
+  firefox-esr-91 = wrapFirefox firefox-esr-91-unwrapped { };
   firefox-esr = firefox-esr-78;
 
   firefox-bin-unwrapped = callPackage ../applications/networking/browsers/firefox-bin {
