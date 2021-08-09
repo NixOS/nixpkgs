@@ -70,7 +70,48 @@ let
         )
       );
 
-      overrides = {
+      overrides = lib.optionalAttrs (variant == "stable") {
+
+        # upstream issue: missing file header
+        speech-tagger = markBroken super.speech-tagger;
+
+        # upstream issue: missing file header
+        textmate = markBroken super.textmate;
+
+        # upstream issue: missing file header
+        window-numbering = markBroken super.window-numbering;
+
+        # upstream issue: missing file header
+        voca-builder = markBroken super.voca-builder;
+
+        # upstream issue: missing file header
+        initsplit = markBroken super.initsplit;
+
+        # upstream issue: missing file header
+        jsfmt = markBroken super.jsfmt;
+
+        # upstream issue: missing file header
+        maxframe = markBroken super.maxframe;
+
+        # upstream issue: missing file header
+        connection = markBroken super.connection;
+
+        # upstream issue: missing file header
+        dictionary = markBroken super.dictionary;
+
+        # upstream issue: missing file header
+        link = markBroken super.link;
+
+        # upstream issue: missing file header
+        bufshow = markBroken super.bufshow;
+
+        # upstream issue: missing file header
+        elmine = markBroken super.elmine;
+
+        # upstream issue: missing file header
+        ido-complete-space-or-hyphen = markBroken super.ido-complete-space-or-hyphen;
+
+      } // {
         # Expects bash to be at /bin/bash
         ac-rtags = fix-rtags super.ac-rtags;
 
@@ -392,31 +433,7 @@ let
         rect-plus = super."rect+";
 
         # upstream issue: missing file header
-        bufshow = markBroken super.bufshow;
-
-        # upstream issue: missing file header
-        connection = markBroken super.connection;
-
-        # upstream issue: missing file header
-        dictionary = markBroken super.dictionary;
-
-        # upstream issue: missing file header
-        elmine = markBroken super.elmine;
-
-        # upstream issue: missing file header
-        ido-complete-space-or-hyphen = markBroken super.ido-complete-space-or-hyphen;
-
-        # upstream issue: missing file header
-        initsplit = markBroken super.initsplit;
-
-        # upstream issue: missing file header
         instapaper = markBroken super.instapaper;
-
-        # upstream issue: missing file header
-        jsfmt = markBroken super.jsfmt;
-
-        # upstream issue: missing file header
-        maxframe = markBroken super.maxframe;
 
         # upstream issue: doesn't build
         magit-stgit = markBroken super.magit-stgit;
@@ -434,22 +451,7 @@ let
         qiita = markBroken super.qiita;
 
         # upstream issue: missing file header
-        speech-tagger = markBroken super.speech-tagger;
-
-        # upstream issue: missing file header
         sql-presto = markBroken super.sql-presto;
-
-        # upstream issue: missing file header
-        textmate = markBroken super.textmate;
-
-        # upstream issue: missing file header
-        link = markBroken super.link;
-
-        # upstream issue: missing file header
-        voca-builder = markBroken super.voca-builder;
-
-        # upstream issue: missing file header
-        window-numbering = markBroken super.window-numbering;
 
         editorconfig = super.editorconfig.overrideAttrs (attrs: {
           propagatedUserEnvPkgs = [ pkgs.editorconfig-core-c ];
