@@ -14,11 +14,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-translate";
-  version = "3.2.0";
+  version = "3.3.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8cd957f4b29a8c7a983e0a427c2712533c41bb7007b76a8cc88d6c65075c679a";
+    sha256 = "sha256-XkHNIu7KWPUpgBceIBqzWgYPCay+Ud1/nM0KbeRnHk0=";
   };
 
   propagatedBuildInputs = [
