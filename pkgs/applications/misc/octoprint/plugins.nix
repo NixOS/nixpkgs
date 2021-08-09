@@ -208,24 +208,25 @@ in {
 
   printtimegenius = buildPlugin rec {
     pname = "PrintTimeGenius";
-    version = "2.2.6";
+    version = "2.2.8";
 
     src = fetchFromGitHub {
       owner = "eyal0";
       repo = "OctoPrint-${pname}";
       rev = version;
-      sha256 = "04zfgd3x3lbriyzwhpqnwdcfdm19fsqgsb7l2ix5d0ssmqxwg2r6";
+      sha256 = "sha256-Bbpm7y4flzEbUb6Sgkp6hIIHs455A0IsbmzvZwlkbh0=";
     };
+
+    propagatedBuildInputs = with super; [
+      psutil
+      sarge
+    ];
 
     preConfigure = ''
       # PrintTimeGenius ships with marlin-calc binaries for multiple architectures
       rm */analyzers/marlin-calc*
       sed 's@"{}.{}".format(binary_base_name, machine)@"${pkgs.marlin-calc}/bin/marlin-calc"@' -i */analyzers/analyze_progress.py
     '';
-
-    patches = [
-      ./printtimegenius-logging.patch
-    ];
 
     meta = with lib; {
       description = "Better print time estimation for OctoPrint";
