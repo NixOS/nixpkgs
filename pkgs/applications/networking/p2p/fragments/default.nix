@@ -20,10 +20,6 @@
 , python3
 , gtk3
 , libhandy
-, libutp
-, miniupnpc
-, dht
-, libnatpmp
 , sqlite
 , dbus
 , gtk4
@@ -32,6 +28,7 @@
 , cargo
 , gettext
 , rustc
+, transmission
 , hicolor-icon-theme
 , libtransmission
 , libb64
@@ -77,10 +74,6 @@ rustPlatform.buildRustPackage rec {
     libevent
     libgee
     libhandy
-    libutp
-    miniupnpc
-    dht
-    libnatpmp
     openssl
     zlib
     libtransmission
@@ -107,6 +100,11 @@ rustPlatform.buildRustPackage rec {
   '';
 
   dontUseCmakeConfigure = true;
+
+  postInstall = ''
+    wrapProgram $out/bin/fragments \
+        --set PATH ${lib.makeBinPath [ transmission ]}
+  '';
 
   meta = with lib; {
     description = "An easy to use BitTorrent client which follows the GNOME HIG and includes well thought-out features";
