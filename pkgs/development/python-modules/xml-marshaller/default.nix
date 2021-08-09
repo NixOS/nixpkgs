@@ -10,12 +10,14 @@ buildPythonPackage rec {
   version = "1.0.2";
 
   src = fetchPypi {
-    inherit version;
     pname = "xml_marshaller";
+    inherit version;
     sha256 = "sha256-QvBALLDD8o5nZQ5Z4bembhadK6jcydWKQpJaSmGqqJM=";
   };
 
   propagatedBuildInputs = [ lxml six ];
+
+  pythonImportsCheck = [ "xml_marshaller" ];
 
   meta = with lib; {
     description = "This module allows one to marshal simple Python data types into a custom XML format.";

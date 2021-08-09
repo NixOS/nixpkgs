@@ -13,6 +13,11 @@ buildPythonPackage rec {
     sha256 = "120qar8iaxj6dmnhjw1c40n2w06f1nyxy57dwh06xdiany698fg4";
   };
 
+  postPatch = ''
+    substituteInPlace requirements/base.txt \
+      --replace 'simplejson==3' 'simplejson~=3'
+  '';
+
   propagatedBuildInputs = [ simplejson ];
 
   nativeBuildInputs = [ autoconf automake cmake libtool perl ];
@@ -20,10 +25,6 @@ buildPythonPackage rec {
   buildInputs = [ gcc ];
 
   dontUseCmakeConfigure = true;
-
-  preBuild = ''
-    substituteInPlace requirements/base.txt --replace 'simplejson==3' 'simplejson~=3'
-  '';
 
   checkInputs = [ pytestCheckHook ];
 

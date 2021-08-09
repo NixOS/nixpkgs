@@ -663,6 +663,15 @@
           group.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          The <literal>yambar</literal> package has been split into
+          <literal>yambar</literal> and
+          <literal>yambar-wayland</literal>, corresponding to the xorg
+          and wayland backend respectively. Please switch to
+          <literal>yambar-wayland</literal> if you are on wayland.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-notable-changes">
@@ -830,6 +839,15 @@
           <literal>boot.kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;</literal>
           to always track the latest compatible kernel with a given
           version of zfs.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Nginx will use the value of
+          <literal>sslTrustedCertificate</literal> if provided for a
+          virtual host, even if <literal>enableACME</literal> is set.
+          This is useful for providers not using the same certificate to
+          sign OCSP responses and server certificates.
         </para>
       </listitem>
     </itemizedlist>

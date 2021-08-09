@@ -707,8 +707,8 @@
     name = "microsoft.visualstudio.debugger.contracts";
     version = "17.2.0-beta.21262.1";
     src = fetchurl {
-      url = "https://pkgs.dev.azure.com/azure-public/3ccf6661-f8ce-4e8a-bb2e-eff943ddd3c7/_packaging/78665e4c-b767-412b-9804-2b1ef7a48b8a/nuget/v3/flat2/microsoft.visualstudio.debugger.contracts/17.2.0-beta.21262.1/microsoft.visualstudio.debugger.contracts.17.2.0-beta.21262.1.nupkg";
-      sha256 = "10fi1jdxnxvww1qzfhqi53fn0a411gvpvcsb0pvwvj7qk0lzs7c9";
+      url = "https://api.nuget.org/v3-flatcontainer/microsoft.visualstudio.debugger.contracts/17.2.0-beta.21262.1/microsoft.visualstudio.debugger.contracts.17.2.0-beta.21262.1.nupkg";
+      sha256 = "148gb4k28fch1rhh6kr82dajl7qnvjxvkxvc8igy7zra70nvbx74";
     };
   }
   {
@@ -840,6 +840,14 @@
     };
   }
   {
+    name = "nuget.common";
+    version = "5.9.1-rc.8";
+    src = fetchurl {
+      url = "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/nuget.common/5.9.1-rc.8/nuget.common.5.9.1-rc.8.nupkg";
+      sha256 = "056b1h4fvik6z2qc2s6qzz0s4acbipc50af14fbr7hd9h2fxya4c";
+    };
+  }
+  {
     name = "nuget.configuration";
     version = "5.2.0";
     src = fetchurl {
@@ -848,11 +856,27 @@
     };
   }
   {
+    name = "nuget.configuration";
+    version = "5.9.1-rc.8";
+    src = fetchurl {
+      url = "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/nuget.configuration/5.9.1-rc.8/nuget.configuration.5.9.1-rc.8.nupkg";
+      sha256 = "0x8vigf0sfp6kf1i98xcr4k84vci596x16hmajdm0zgv3p1w2kvk";
+    };
+  }
+  {
     name = "nuget.dependencyresolver.core";
     version = "5.2.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/nuget.dependencyresolver.core/5.2.0/nuget.dependencyresolver.core.5.2.0.nupkg";
       sha256 = "156yjfsk9pzqviiwy69lxfqf61yyj4hn4vdgfcbqvw4d567i150r";
+    };
+  }
+  {
+    name = "nuget.dependencyresolver.core";
+    version = "5.9.1-rc.8";
+    src = fetchurl {
+      url = "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/nuget.dependencyresolver.core/5.9.1-rc.8/nuget.dependencyresolver.core.5.9.1-rc.8.nupkg";
+      sha256 = "1q9a97s1z3a6fb4p82ag2lqnzl53895prbqwlbvckdw9c3rpz3gc";
     };
   }
   {
@@ -872,11 +896,27 @@
     };
   }
   {
+    name = "nuget.frameworks";
+    version = "5.9.1-rc.8";
+    src = fetchurl {
+      url = "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/nuget.frameworks/5.9.1-rc.8/nuget.frameworks.5.9.1-rc.8.nupkg";
+      sha256 = "1n3mp9ns79yq4dwgj7h2av3b485mzgsw0qlj8z7p47krwlzp5hiv";
+    };
+  }
+  {
     name = "nuget.librarymodel";
     version = "5.2.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/nuget.librarymodel/5.2.0/nuget.librarymodel.5.2.0.nupkg";
       sha256 = "0vxd0y7rzzxvmxji9bzp95p2rx48303r3nqrlhmhhfc4z5fxjlqk";
+    };
+  }
+  {
+    name = "nuget.librarymodel";
+    version = "5.9.1-rc.8";
+    src = fetchurl {
+      url = "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/nuget.librarymodel/5.9.1-rc.8/nuget.librarymodel.5.9.1-rc.8.nupkg";
+      sha256 = "0sy8422c94wcg8ka85lnawq26mpixl79avk9m6y44lshrpga5v4v";
     };
   }
   {
@@ -888,11 +928,19 @@
     };
   }
   {
-    name = "nuget.packaging.core";
-    version = "5.2.0";
+    name = "nuget.packaging";
+    version = "5.9.1-rc.8";
     src = fetchurl {
-      url = "https://api.nuget.org/v3-flatcontainer/nuget.packaging.core/5.2.0/nuget.packaging.core.5.2.0.nupkg";
-      sha256 = "16sm2amzvbpmisb6x6dz1pvj1h3xm67vd2byl1wl13vrda0az3xb";
+      url = "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/nuget.packaging/5.9.1-rc.8/nuget.packaging.5.9.1-rc.8.nupkg";
+      sha256 = "0x9c3v741nn6m2xgidna88fa4xj5avhv6asj73hqv4pzpdprlrhv";
+    };
+  }
+  {
+    name = "nuget.packaging.core";
+    version = "5.9.1-rc.8";
+    src = fetchurl {
+      url = "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/nuget.packaging.core/5.9.1-rc.8/nuget.packaging.core.5.9.1-rc.8.nupkg";
+      sha256 = "0vsaixmla4zh277xpn5ngbmi2f52hb26aqzr0z9l4a3mlpi4l5nx";
     };
   }
   {
@@ -904,6 +952,14 @@
     };
   }
   {
+    name = "nuget.projectmodel";
+    version = "5.9.1-rc.8";
+    src = fetchurl {
+      url = "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/nuget.projectmodel/5.9.1-rc.8/nuget.projectmodel.5.9.1-rc.8.nupkg";
+      sha256 = "1xjh7isw467nkc7dkfj3wlw69vi2cns66z152jrzjdmxmia3i3pv";
+    };
+  }
+  {
     name = "nuget.protocol";
     version = "5.2.0";
     src = fetchurl {
@@ -912,11 +968,27 @@
     };
   }
   {
+    name = "nuget.protocol";
+    version = "5.9.1-rc.8";
+    src = fetchurl {
+      url = "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/nuget.protocol/5.9.1-rc.8/nuget.protocol.5.9.1-rc.8.nupkg";
+      sha256 = "1rnrxzaciqhhgwd4by0dhkvfrm1h161vvmkvlcwaz2589sqq2dzq";
+    };
+  }
+  {
     name = "nuget.versioning";
     version = "5.2.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/nuget.versioning/5.2.0/nuget.versioning.5.2.0.nupkg";
       sha256 = "08ay8bhddj9yiq6h9lk814l65fpx5gh1iprkl7pcp78g57a6k45k";
+    };
+  }
+  {
+    name = "nuget.versioning";
+    version = "5.9.1-rc.8";
+    src = fetchurl {
+      url = "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/nuget.versioning/5.9.1-rc.8/nuget.versioning.5.9.1-rc.8.nupkg";
+      sha256 = "1vv7z122ilsk2rsvjm6j3hpifb45g8wa1mgnq1kwi9k8b2dbb6vv";
     };
   }
   {
@@ -1320,14 +1392,6 @@
     };
   }
   {
-    name = "system.diagnostics.process";
-    version = "4.3.0";
-    src = fetchurl {
-      url = "https://api.nuget.org/v3-flatcontainer/system.diagnostics.process/4.3.0/system.diagnostics.process.4.3.0.nupkg";
-      sha256 = "0g4prsbkygq8m21naqmcp70f24a1ksyix3dihb1r1f71lpi3cfj7";
-    };
-  }
-  {
     name = "system.diagnostics.tools";
     version = "4.3.0";
     src = fetchurl {
@@ -1341,14 +1405,6 @@
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.diagnostics.tracing/4.3.0/system.diagnostics.tracing.4.3.0.nupkg";
       sha256 = "1m3bx6c2s958qligl67q7grkwfz3w53hpy7nc97mh6f7j5k168c4";
-    };
-  }
-  {
-    name = "system.dynamic.runtime";
-    version = "4.3.0";
-    src = fetchurl {
-      url = "https://api.nuget.org/v3-flatcontainer/system.dynamic.runtime/4.3.0/system.dynamic.runtime.4.3.0.nupkg";
-      sha256 = "1d951hrvrpndk7insiag80qxjbf2y0y39y8h5hnq9612ws661glk";
     };
   }
   {
@@ -1888,6 +1944,14 @@
     };
   }
   {
+    name = "system.security.cryptography.cng";
+    version = "5.0.0";
+    src = fetchurl {
+      url = "https://api.nuget.org/v3-flatcontainer/system.security.cryptography.cng/5.0.0/system.security.cryptography.cng.5.0.0.nupkg";
+      sha256 = "06hkx2za8jifpslkh491dfwzm5dxrsyxzj5lsc0achb6yzg4zqlw";
+    };
+  }
+  {
     name = "system.security.cryptography.csp";
     version = "4.3.0";
     src = fetchurl {
@@ -1920,6 +1984,14 @@
     };
   }
   {
+    name = "system.security.cryptography.pkcs";
+    version = "5.0.0";
+    src = fetchurl {
+      url = "https://api.nuget.org/v3-flatcontainer/system.security.cryptography.pkcs/5.0.0/system.security.cryptography.pkcs.5.0.0.nupkg";
+      sha256 = "0hb2mndac3xrw3786bsjxjfh19bwnr991qib54k6wsqjhjyyvbwj";
+    };
+  }
+  {
     name = "system.security.cryptography.primitives";
     version = "4.3.0";
     src = fetchurl {
@@ -1929,10 +2001,10 @@
   }
   {
     name = "system.security.cryptography.protecteddata";
-    version = "4.3.0";
+    version = "4.4.0";
     src = fetchurl {
-      url = "https://api.nuget.org/v3-flatcontainer/system.security.cryptography.protecteddata/4.3.0/system.security.cryptography.protecteddata.4.3.0.nupkg";
-      sha256 = "1kg264xmqabyz8gfg8ymp6qp6aw43vawfp0znf0909d7b5jd3dq9";
+      url = "https://api.nuget.org/v3-flatcontainer/system.security.cryptography.protecteddata/4.4.0/system.security.cryptography.protecteddata.4.4.0.nupkg";
+      sha256 = "1q8ljvqhasyynp94a1d7jknk946m20lkwy2c3wa8zw2pc517fbj6";
     };
   }
   {
@@ -2149,22 +2221,6 @@
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.threading.tasks.extensions/4.5.4/system.threading.tasks.extensions.4.5.4.nupkg";
       sha256 = "0y6ncasgfcgnjrhynaf0lwpkpkmv4a07sswwkwbwb5h7riisj153";
-    };
-  }
-  {
-    name = "system.threading.thread";
-    version = "4.3.0";
-    src = fetchurl {
-      url = "https://api.nuget.org/v3-flatcontainer/system.threading.thread/4.3.0/system.threading.thread.4.3.0.nupkg";
-      sha256 = "0y2xiwdfcph7znm2ysxanrhbqqss6a3shi1z3c779pj2s523mjx4";
-    };
-  }
-  {
-    name = "system.threading.threadpool";
-    version = "4.3.0";
-    src = fetchurl {
-      url = "https://api.nuget.org/v3-flatcontainer/system.threading.threadpool/4.3.0/system.threading.threadpool.4.3.0.nupkg";
-      sha256 = "027s1f4sbx0y1xqw2irqn6x161lzj8qwvnh2gn78ciiczdv10vf1";
     };
   }
   {

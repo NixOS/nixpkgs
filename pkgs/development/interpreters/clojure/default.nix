@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
       echo "Installing libs into $clojure_lib_dir"
       install -Dm644 deps.edn "$clojure_lib_dir/deps.edn"
       install -Dm644 example-deps.edn "$clojure_lib_dir/example-deps.edn"
+      install -Dm644 tools.edn "$clojure_lib_dir/tools.edn"
       install -Dm644 exec.jar "$clojure_lib_dir/libexec/exec.jar"
       install -Dm644 clojure-tools-${version}.jar "$clojure_lib_dir/libexec/clojure-tools-${version}.jar"
 
@@ -48,7 +49,7 @@ stdenv.mkDerivation rec {
 
   doInstallCheck = true;
   installCheckPhase = ''
-    CLJ_CONFIG=$out CLJ_CACHE=$out/libexec $out/bin/clojure \
+    CLJ_CONFIG=$TMPDIR CLJ_CACHE=$TMPDIR/.clj_cache $out/bin/clojure \
       -Spath \
       -Sverbose \
       -Scp $out/libexec/clojure-tools-${version}.jar

@@ -10,13 +10,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "orchis-theme";
-  version = "2021-06-09";
+  version = "2021-06-25";
 
   src = fetchFromGitHub {
     repo = "Orchis-theme";
     owner = "vinceliuice";
     rev = version;
-    sha256 = "sha256-YlrocFDk3da2eqxbJ5lPUUxHHvJZx19LOa0MSljWY8Q=";
+    sha256 = "sha256-j0nsw1yR1yOckXiIMtzhC3w6kvfzxQQHgwdY6l0OuXw=";
   };
 
   nativeBuildInputs = [ gtk3 sassc ];

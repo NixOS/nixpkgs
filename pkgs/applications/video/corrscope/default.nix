@@ -30,17 +30,17 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
     })
   ];
 
-  nativeBuildInputs = [ wrapQtAppsHook ];
+  nativeBuildInputs = [ wrapQtAppsHook ] ++ (with python3Packages; [ poetry-core ]);
 
   buildInputs = [ ffmpeg qtbase ];
 
-  propagatedBuildInputs = with python3Packages; [ appdirs atomicwrites attrs click matplotlib numpy poetry-core pyqt5 ruamel_yaml ];
+  propagatedBuildInputs = with python3Packages; [ appdirs atomicwrites attrs click matplotlib numpy pyqt5 ruamel_yaml ];
 
   dontWrapQtApps = true;
 
   preFixup = ''
     makeWrapperArgs+=(
-      --prefix PATH : ${ffmpeg}/bin
+      --prefix PATH : ${lib.makeBinPath [ ffmpeg ]}
       "''${qtWrapperArgs[@]}"
     )
   '';

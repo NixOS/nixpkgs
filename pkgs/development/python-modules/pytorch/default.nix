@@ -301,6 +301,11 @@ in buildPythonPackage rec {
   # Builds in 2+h with 2 cores, and ~15m with a big-parallel builder.
   requiredSystemFeatures = [ "big-parallel" ];
 
+  passthru = {
+    inherit cudaSupport;
+    cudaArchList = final_cudaArchList;
+  };
+
   meta = with lib; {
     description = "Open source, prototype-to-production deep learning platform";
     homepage    = "https://pytorch.org/";
