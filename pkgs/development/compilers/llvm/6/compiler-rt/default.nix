@@ -1,4 +1,4 @@
-{ lib, stdenv, llvm_meta, version, fetch, cmake, python3, llvm, libcxxabi }:
+{ lib, stdenv, llvm_meta, version, fetch, cmake, python3, libllvm, libcxxabi }:
 
 let
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   inherit version;
   src = fetch "compiler-rt" "1fcr3jn24yr8lh36nc0c4ikli4744i2q9m1ik67p1jymwwaixkgl";
 
-  nativeBuildInputs = [ cmake python3 llvm.dev ];
+  nativeBuildInputs = [ cmake python3 libllvm.dev ];
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin libcxxabi;
 
   NIX_CFLAGS_COMPILE = [
