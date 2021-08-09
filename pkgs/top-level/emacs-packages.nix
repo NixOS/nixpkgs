@@ -79,7 +79,7 @@ in makeScope pkgs'.newScope (self: makeOverridable ({
 
     # Propagate overriden scope
     emacs = emacs'.overrideAttrs(old: {
-      passthru = old.passthru // {
+      passthru = (old.passthru or {}) // {
         pkgs = dontRecurseIntoAttrs self;
       };
     });
