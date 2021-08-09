@@ -71,7 +71,12 @@ stdenv.mkDerivation {
   postInstall = ''
     sed -e 's/@[-a-zA-Z_]*@//g' -i $out/bin/ecl-config
     wrapProgram "$out/bin/ecl" \
-      --prefix PATH ':' "${gcc}/bin" \
+      --prefix PATH ':' "${
+        lib.makeBinPath [
+          gcc                   # for the C compiler
+          gcc.bintools.bintools # for ar
+        ]
+      }" \
   ''
   # ecl 16.1.2 is too old to have -libdir for libffi and boehmgc, so we need to
   # use NIX_LDFLAGS_BEFORE to make gcc find these particular libraries.

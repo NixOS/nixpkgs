@@ -58,7 +58,12 @@ stdenv.mkDerivation {
 
   postInstall = ''
     sed -e 's/@[-a-zA-Z_]*@//g' -i $out/bin/ecl-config
-    wrapProgram "$out/bin/ecl" --prefix PATH ':' "${gcc}/bin"
+    wrapProgram "$out/bin/ecl" --prefix PATH ':' "${
+      lib.makeBinPath [
+        gcc                   # for the C compiler
+        gcc.bintools.bintools # for ar
+      ]
+    }"
   '';
 
   meta = with lib; {
