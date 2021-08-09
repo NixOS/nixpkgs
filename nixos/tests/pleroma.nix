@@ -202,6 +202,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
       security.pki.certificateFiles = [ "${tls-cert}/cert.pem" ];
       networking.extraHosts = hosts nodes;
       networking.firewall.enable = false;
+      virtualisation.memorySize = 512;
       environment.systemPackages = with pkgs; [
         provision-db
         provision-secrets
