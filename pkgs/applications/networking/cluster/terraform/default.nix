@@ -114,7 +114,7 @@ let
           passthru = {
             withPlugins = newplugins:
               withPlugins (x: newplugins x ++ actualPlugins);
-            full = withPlugins lib.attrValues;
+            full = withPlugins (plugins: lib.filter (x: (builtins.tryEval x).success) (lib.attrValues plugins));
 
             # Ouch
             overrideDerivation = f:
