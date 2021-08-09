@@ -177,7 +177,7 @@
     <note>
      <para>
       You can safely ignore <command>parted</command>'s informational message
-      about needing to update /etc/fstab.
+      about needing to update /etc/fstab and about partition alignment.
      </para>
     </note>
    </para>
@@ -195,6 +195,12 @@
        Add the <emphasis>root</emphasis> partition. This will fill the the disk
        except for the end part, where the swap will live.
 <screen language="commands"><prompt># </prompt>parted /dev/sda -- mkpart primary 1MiB -8GiB</screen>
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       Set it bootable. NixOS won't be able to boot if you don't set this flag.
+       <screen language="command"><prompt># </prompt>parted /dev/sda -- set 1 boot on</screen>
       </para>
      </listitem>
      <listitem>
