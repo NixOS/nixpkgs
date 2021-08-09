@@ -3767,7 +3767,9 @@ in
 
   cpuminer-multi = callPackage ../tools/misc/cpuminer-multi { };
 
-  cryptpad = callPackage ../servers/web-apps/cryptpad { };
+  cryptpad = callPackage ../servers/web-apps/cryptpad {
+    nodejs = nodejs-12_x;
+  };
 
   ethash = callPackage ../development/libraries/ethash { };
 
