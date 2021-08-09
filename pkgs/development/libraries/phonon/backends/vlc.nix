@@ -3,18 +3,9 @@
 , debug ? false
 }:
 
-with lib;
-
 stdenv.mkDerivation rec {
   pname = "phonon-backend-vlc";
   version = "0.11.2";
-
-  meta = with lib; {
-    homepage = "https://phonon.kde.org/";
-    description = "GStreamer backend for Phonon";
-    platforms = platforms.linux;
-    license = with licenses; [ bsd3 lgpl2Plus ];
-  };
 
   src = fetchurl {
     url = "mirror://kde/stable/phonon/${pname}/${version}/${pname}-${version}.tar.xz";
@@ -40,4 +31,11 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DCMAKE_BUILD_TYPE=${if debug then "Debug" else "Release"}"
   ];
+
+  meta = with lib; {
+    homepage = "https://phonon.kde.org/";
+    description = "GStreamer backend for Phonon";
+    platforms = platforms.linux;
+    license = with licenses; [ bsd3 lgpl2Plus ];
+  };
 }
