@@ -12111,19 +12111,19 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
     llvm_10 = llvmPackages_10.libllvm;
   };
-  rust_1_53 = callPackage ../development/compilers/rust/1_53.nix {
+  rust_1_54 = callPackage ../development/compilers/rust/1_54.nix {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
     llvm_12 = llvmPackages_12.libllvm;
   };
-  rust = rust_1_53;
+  rust = rust_1_54;
 
   mrustc = callPackage ../development/compilers/mrustc { };
   mrustc-minicargo = callPackage ../development/compilers/mrustc/minicargo.nix { };
   mrustc-bootstrap = callPackage ../development/compilers/mrustc/bootstrap.nix { };
 
   rustPackages_1_45 = rust_1_45.packages.stable;
-  rustPackages_1_53 = rust_1_53.packages.stable;
-  rustPackages = rustPackages_1_53;
+  rustPackages_1_54 = rust_1_54.packages.stable;
+  rustPackages = rustPackages_1_54;
 
   inherit (rustPackages) cargo clippy rustc rustPlatform;
 
