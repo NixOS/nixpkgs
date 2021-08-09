@@ -1,6 +1,6 @@
 {
   "name": "rust-analyzer",
-  "version": "0.2.694",
+  "version": "0.2.702",
   "dependencies": {
     "https-proxy-agent": "^5.0.0",
     "node-fetch": "^2.6.1",
