@@ -363,6 +363,18 @@ final: prev:
     meta.homepage = "https://github.com/fruit-in/brainfuck-vim/";
   };
 
+  bufdelete-nvim = buildVimPluginFrom2Nix {
+    pname = "bufdelete-nvim";
+    version = "2021-07-24";
+    src = fetchFromGitHub {
+      owner = "famiu";
+      repo = "bufdelete.nvim";
+      rev = "f73ecffb790c9b1e356c5511ba6ae3b761331d8d";
+      sha256 = "0lyc49c909r74q0pvzx0fmyzl3lvspq590vgkld8b3r6vyp44m2c";
+    };
+    meta.homepage = "https://github.com/famiu/bufdelete.nvim/";
+  };
+
   bufexplorer = buildVimPluginFrom2Nix {
     pname = "bufexplorer";
     version = "2021-04-20";
