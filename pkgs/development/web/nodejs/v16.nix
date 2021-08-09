@@ -18,7 +18,7 @@ in
         sha256 = "1narhk5dqdkbndh9hg0dn5ghhgrd6gsamjqszpivmp33nl5hgsx3";
       })
       # Brings Node version to 16.6.1 which may or may not be needed for Discord.js v13
-      # (Originally was, now isn't? Confusing, but should still be updated regardless)       
+      # (Originally was, now isn't? Confusing, but should still be updated regardless)
       (fetchpatch {
         url = "https://github.com/nodejs/node/commit/3d53ff8ff0e721f908d8aff7a3709bc6dbb07ebb.patch";
         sha256 = "0mz5wfhf2k1qf3d57h4r8b30izhyg93g5m9c8rljlzy6ih2ymcbr";
