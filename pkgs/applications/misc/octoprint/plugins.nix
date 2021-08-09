@@ -237,14 +237,18 @@ in {
 
   psucontrol = buildPlugin rec {
     pname = "PSUControl";
-    version = "0.1.9";
+    version = "1.0.6";
 
     src = fetchFromGitHub {
       owner = "kantlivelong";
       repo = "OctoPrint-${pname}";
       rev = version;
-      sha256 = "1cn009bdgn6c9ba9an5wfj8z02wi0xcsmbhkqggiqlnqy1fq45ca";
+      sha256 = "sha256-S+lPm85+ZEO/3BXYsrxE4FU29EGWzWrSw3y1DLdByrM=";
     };
+
+    propagatedBuildInputs = with super; [
+      python-periphery
+    ];
 
     preConfigure = ''
       # optional; RPi.GPIO is broken on vanilla kernels
