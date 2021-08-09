@@ -2,7 +2,7 @@
 
 buildPythonPackage rec {
   pname = "PyTado";
-  version = "0.2.7";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "wmalgadey";
