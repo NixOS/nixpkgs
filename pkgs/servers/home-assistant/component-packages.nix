@@ -2,14 +2,14 @@
 # Do not edit!
 
 {
-  version = "2021.8.3";
+  version = "2021.8.4";
   components = {
     "abode" = ps: with ps; [ abodepy ];
     "accuweather" = ps: with ps; [ accuweather ];
     "acer_projector" = ps: with ps; [ pyserial ];
     "acmeda" = ps: with ps; [ aiopulse ];
     "actiontec" = ps: with ps; [ ];
-    "adax" = ps: with ps; [ ]; # missing inputs: adax
+    "adax" = ps: with ps; [ adax ];
     "adguard" = ps: with ps; [ adguardhome ];
     "ads" = ps: with ps; [ pyads ];
     "advantage_air" = ps: with ps; [ advantage-air ];
@@ -659,7 +659,7 @@
     "progettihwsw" = ps: with ps; [ ]; # missing inputs: progettihwsw
     "proliphix" = ps: with ps; [ ]; # missing inputs: proliphix
     "prometheus" = ps: with ps; [ aiohttp-cors prometheus_client ];
-    "prosegur" = ps: with ps; [ ]; # missing inputs: pyprosegur
+    "prosegur" = ps: with ps; [ pyprosegur ];
     "prowl" = ps: with ps; [ ];
     "proximity" = ps: with ps; [ ];
     "proxmoxve" = ps: with ps; [ proxmoxer ];
