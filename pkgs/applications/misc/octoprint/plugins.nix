@@ -261,13 +261,13 @@ in {
 
   simpleemergencystop = buildPlugin rec {
     pname = "SimpleEmergencyStop";
-    version = "1.0.3";
+    version = "1.0.5";
 
     src = fetchFromGitHub {
       owner = "Sebclem";
       repo = "OctoPrint-${pname}";
       rev = version;
-      sha256 = "0hhh5grmn32abkix1b9fr1d0pcpdi2r066iypcxdxcza9qzwjiyi";
+      sha256 = "sha256-MbP3cKa9FPElQ/M8ykYh9kVXl8hNvmGiCHDvjgWvm9k=";
     };
 
     meta = with lib; {
