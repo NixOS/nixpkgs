@@ -87,8 +87,7 @@ stdenv.mkDerivation rec {
         --replace 'Exec=/opt/1Password/${pname}' 'Exec=${pname}'
 
       # Polkit file
-      mkdir -p $out/share/polkit-1/actions
-      cp -a com.1password.1Password.policy $out/share/polkit-1/actions/
+      install -Dm 0644 -t $out/share/polkit-1/actions com.1password.1Password.policy
 
       # Icons
       cp -a resources/icons $out/share
