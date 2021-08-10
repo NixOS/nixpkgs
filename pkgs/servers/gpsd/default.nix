@@ -15,17 +15,17 @@
 
 # optional deps for GUI packages
 , guiSupport ? true
-, dbus-glib ? null
-, libX11 ? null
-, libXt ? null
-, libXpm ? null
-, libXaw ? null
-, libXext ? null
-, gobject-introspection ? null
-, pango ? null
-, gdk-pixbuf ? null
-, atk ? null
-, wrapGAppsHook ? null
+, dbus-glib
+, libX11
+, libXt
+, libXpm
+, libXaw
+, libXext
+, gobject-introspection
+, pango
+, gdk-pixbuf
+, atk
+, wrapGAppsHook
 
 , gpsdUser ? "gpsd", gpsdGroup ? "dialout"
 }:
