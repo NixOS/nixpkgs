@@ -69,6 +69,6 @@ stdenv.mkDerivation rec {
     homepage = "http://www.lighttpd.net/";
     license = lib.licenses.bsd3;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = [ maintainers.bjornfor ];
+    maintainers = with maintainers; [ bjornfor brecht ];
   };
 }
