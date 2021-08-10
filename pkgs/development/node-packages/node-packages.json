@@ -26,6 +26,7 @@
 , "cdk8s-cli"
 , "cdktf-cli"
 , "clean-css-cli"
+, "clipboard-cli"
 , "clubhouse-cli"
 , "coc-clangd"
 , "coc-cmake"
