@@ -13,13 +13,13 @@ buildPythonPackage rec {
   # The websites yt-dlp deals with are a very moving target. That means that
   # downloads break constantly. Because of that, updates should always be backported
   # to the latest stable release.
-  version = "2021.07.21";
+  version = "2021.08.02";
 
   src = fetchFromGitHub {
     owner = "yt-dlp";
     repo = "yt-dlp";
     rev = version;
-    sha256 = "ziOW52LJUBe0j7ru8GYgiUCE6YJeBTTjm+H6W8EZjuY=";
+    sha256 = "QEJKOZGVQNXLU8GfTbwBx2Zv3KO++ozTJcXLWxXA4hI=";
   };
 
   nativeBuildInputs = [ installShellFiles makeWrapper ];
