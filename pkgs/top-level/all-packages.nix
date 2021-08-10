@@ -28729,6 +28729,8 @@ with pkgs;
 
   zsteg = callPackage ../tools/security/zsteg { };
 
+  inherit (nodePackages) zx;
+
   zynaddsubfx = zyn-fusion;
 
   zynaddsubfx-fltk = callPackage ../applications/audio/zynaddsubfx {
