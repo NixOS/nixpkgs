@@ -19,6 +19,7 @@
 
 ## backported libraries
 
+, nspr_latest
 , nss_latest
 , rust-cbindgen_latest
 
@@ -95,6 +96,7 @@ let
             then "/Applications/${binaryNameCapitalized}.app/Contents/MacOS"
             else "/bin";
 
+  nspr_pkg = if lib.versionAtLeast ffversion "91" then nspr_latest else nspr;
   rust-cbindgen_pkg = if lib.versionAtLeast ffversion "89" then rust-cbindgen_latest else rust-cbindgen;
 
   # 78 ESR won't build with rustc 1.47
@@ -185,7 +187,7 @@ buildStdenv.mkDerivation ({
     # yasm can potentially be removed in future versions
     # https://bugzilla.mozilla.org/show_bug.cgi?id=1501796
     # https://groups.google.com/forum/#!msg/mozilla.dev.platform/o-8levmLU80/SM_zQvfzCQAJ
-    nspr nss_pkg
+    nspr_pkg nss_pkg
   ]
   ++ lib.optional  alsaSupport alsaLib
   ++ lib.optional  pulseaudioSupport libpulseaudio # only headers are needed
@@ -371,7 +373,7 @@ buildStdenv.mkDerivation ({
     version = ffversion;
     inherit alsaSupport;
     inherit pipewireSupport;
-    inherit nspr;
+    inherit nspr_pkg;
     inherit ffmpegSupport;
     inherit gssSupport;
     inherit execdir;
