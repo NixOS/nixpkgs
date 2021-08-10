@@ -38,10 +38,13 @@ let
     "mod_rrdtool"
     "mod_accesslog"
     # Remaining list of modules, order assumed to be unimportant.
+    "mod_authn_dbi"
     "mod_authn_file"
     "mod_authn_gssapi"
     "mod_authn_ldap"
     "mod_authn_mysql"
+    "mod_authn_pam"
+    "mod_authn_sasl"
     "mod_cml"
     "mod_deflate"
     "mod_evasive"
