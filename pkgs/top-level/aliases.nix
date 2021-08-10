@@ -339,6 +339,7 @@ mapAliases ({
   htmlTidy = html-tidy;  # added 2014-12-06
   hydra-flakes = throw "hydra-flakes: Flakes support has been merged into Hydra's master. Please use `hydra-unstable` now."; # added 2020-04-06
   iana_etc = iana-etc;  # added 2017-03-08
+  iasl = throw "iasl has been removed, use acpica-tools instead"; # added 2021-08-08
   icedtea8_web = adoptopenjdk-icedtea-web; # added 2019-08-21
   icedtea_web = adoptopenjdk-icedtea-web; # added 2019-08-21
   idea = jetbrains; # added 2017-04-03

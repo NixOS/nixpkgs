@@ -55,6 +55,7 @@ source 'https://rubygems.org' do
   gem 'fog-dnsimple'
   gem 'gdk_pixbuf2'
   gem 'gio2'
+  gem 'github-pages'
   gem 'gitlab-markup'
   gem 'glib2'
   # gem 'gobject-introspection' fails on require

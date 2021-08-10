@@ -1,65 +1,63 @@
-{
-  bashInteractive,
-  buildPackages,
-  cacert,
-  callPackage,
-  closureInfo,
-  coreutils,
-  e2fsprogs,
-  fakeroot,
-  findutils,
-  go,
-  jq,
-  jshon,
-  lib,
-  makeWrapper,
-  moreutils,
-  nix,
-  pigz,
-  pkgs,
-  rsync,
-  runCommand,
-  runtimeShell,
-  shadow,
-  skopeo,
-  storeDir ? builtins.storeDir,
-  substituteAll,
-  symlinkJoin,
-  util-linux,
-  vmTools,
-  writeReferencesToFile,
-  writeScript,
-  writeText,
-  writeTextDir,
-  writePython3,
-  system,  # Note: This is the cross system we're compiling for
+{ bashInteractive
+, buildPackages
+, cacert
+, callPackage
+, closureInfo
+, coreutils
+, e2fsprogs
+, fakeroot
+, findutils
+, go
+, jq
+, jshon
+, lib
+, makeWrapper
+, moreutils
+, nix
+, pigz
+, pkgs
+, rsync
+, runCommand
+, runtimeShell
+, shadow
+, skopeo
+, storeDir ? builtins.storeDir
+, substituteAll
+, symlinkJoin
+, util-linux
+, vmTools
+, writeReferencesToFile
+, writeScript
+, writeText
+, writeTextDir
+, writePython3
+, system
+, # Note: This is the cross system we're compiling for
 }:
 
 let
 
-  inherit (lib)
-    optionals
-    ;
+  mkDbExtraCommand = contents:
+    let
+      contentsList = if builtins.isList contents then contents else [ contents ];
+    in
+    ''
+      echo "Generating the nix database..."
+      echo "Warning: only the database of the deepest Nix layer is loaded."
+      echo "         If you want to use nix commands in the container, it would"
+      echo "         be better to only have one layer that contains a nix store."
 
-  mkDbExtraCommand = contents: let
-    contentsList = if builtins.isList contents then contents else [ contents ];
-  in ''
-    echo "Generating the nix database..."
-    echo "Warning: only the database of the deepest Nix layer is loaded."
-    echo "         If you want to use nix commands in the container, it would"
-    echo "         be better to only have one layer that contains a nix store."
+      export NIX_REMOTE=local?root=$PWD
+      # A user is required by nix
+      # https://github.com/NixOS/nix/blob/9348f9291e5d9e4ba3c4347ea1b235640f54fd79/src/libutil/util.cc#L478
+      export USER=nobody
+      ${buildPackages.nix}/bin/nix-store --load-db < ${closureInfo {rootPaths = contentsList;}}/registration
 
-    export NIX_REMOTE=local?root=$PWD
-    # A user is required by nix
-    # https://github.com/NixOS/nix/blob/9348f9291e5d9e4ba3c4347ea1b235640f54fd79/src/libutil/util.cc#L478
-    export USER=nobody
-    ${buildPackages.nix}/bin/nix-store --load-db < ${closureInfo {rootPaths = contentsList;}}/registration
-
-    mkdir -p nix/var/nix/gcroots/docker/
-    for i in ${lib.concatStringsSep " " contentsList}; do
-    ln -s $i nix/var/nix/gcroots/docker/$(basename $i)
-    done;
-  '';
+      mkdir -p nix/var/nix/gcroots/docker/
+      for i in ${lib.concatStringsSep " " contentsList}; do
+      ln -s $i nix/var/nix/gcroots/docker/$(basename $i)
+      done;
+    '';
 
   # The OCI Image specification recommends that configurations use values listed
   # in the Go Language document for GOARCH.
@@ -70,14 +68,14 @@ let
 
 in
 rec {
-
   examples = callPackage ./examples.nix {
     inherit buildImage buildLayeredImage fakeNss pullImage shadowSetup buildImageWithNixDb;
   };
 
-  pullImage = let
-    fixName = name: builtins.replaceStrings ["/" ":"] ["-" "-"] name;
-  in
+  pullImage =
+    let
+      fixName = name: builtins.replaceStrings [ "/" ":" ] [ "-" "-" ] name;
+    in
     { imageName
       # To find the digest of an image, you can use skopeo:
       # see doc/functions.xml
@@ -96,21 +94,22 @@ rec {
     , name ? fixName "docker-image-${finalImageName}-${finalImageTag}.tar"
     }:
 
-    runCommand name {
-      inherit imageDigest;
-      imageName = finalImageName;
-      imageTag = finalImageTag;
-      impureEnvVars = lib.fetchers.proxyImpureEnvVars;
-      outputHashMode = "flat";
-      outputHashAlgo = "sha256";
-      outputHash = sha256;
+    runCommand name
+      {
+        inherit imageDigest;
+        imageName = finalImageName;
+        imageTag = finalImageTag;
+        impureEnvVars = lib.fetchers.proxyImpureEnvVars;
+        outputHashMode = "flat";
+        outputHashAlgo = "sha256";
+        outputHash = sha256;
 
-      nativeBuildInputs = lib.singleton skopeo;
-      SSL_CERT_FILE = "${cacert.out}/etc/ssl/certs/ca-bundle.crt";
+        nativeBuildInputs = lib.singleton skopeo;
+        SSL_CERT_FILE = "${cacert.out}/etc/ssl/certs/ca-bundle.crt";
 
-      sourceURL = "docker://${imageName}@${imageDigest}";
-      destNameTag = "${finalImageName}:${finalImageTag}";
-    } ''
+        sourceURL = "docker://${imageName}@${imageDigest}";
+        destNameTag = "${finalImageName}:${finalImageTag}";
+      } ''
       skopeo \
         --src-tls-verify=${lib.boolToString tlsVerify} \
         --insecure-policy \
@@ -126,13 +125,14 @@ rec {
   tarsum = pkgs.tarsum;
 
   # buildEnv creates symlinks to dirs, which is hard to edit inside the overlay VM
-  mergeDrvs = {
-    derivations,
-    onlyDeps ? false
-  }:
-    runCommand "merge-drvs" {
-      inherit derivations onlyDeps;
-    } ''
+  mergeDrvs =
+    { derivations
+    , onlyDeps ? false
+    }:
+    runCommand "merge-drvs"
+      {
+        inherit derivations onlyDeps;
+      } ''
       if [[ -n "$onlyDeps" ]]; then
         echo $derivations > $out
         exit 0
@@ -180,104 +180,105 @@ rec {
   '';
 
   # Run commands in a virtual machine.
-  runWithOverlay = {
-    name,
-    fromImage ? null,
-    fromImageName ? null,
-    fromImageTag ? null,
-    diskSize ? 1024,
-    preMount ? "",
-    postMount ? "",
-    postUmount ? ""
-  }:
-  let
-    result = vmTools.runInLinuxVM (
-      runCommand name {
-        preVM = vmTools.createEmptyImage {
-          size = diskSize;
-          fullName = "docker-run-disk";
-        };
-        inherit fromImage fromImageName fromImageTag;
+  runWithOverlay =
+    { name
+    , fromImage ? null
+    , fromImageName ? null
+    , fromImageTag ? null
+    , diskSize ? 1024
+    , preMount ? ""
+    , postMount ? ""
+    , postUmount ? ""
+    }:
+    let
+      result = vmTools.runInLinuxVM (
+        runCommand name
+          {
+            preVM = vmTools.createEmptyImage {
+              size = diskSize;
+              fullName = "docker-run-disk";
+            };
+            inherit fromImage fromImageName fromImageTag;
 
-        nativeBuildInputs = [ util-linux e2fsprogs jshon rsync jq ];
-      } ''
-      mkdir disk
-      mkfs /dev/${vmTools.hd}
-      mount /dev/${vmTools.hd} disk
-      cd disk
+            nativeBuildInputs = [ util-linux e2fsprogs jshon rsync jq ];
+          } ''
+          mkdir disk
+          mkfs /dev/${vmTools.hd}
+          mount /dev/${vmTools.hd} disk
+          cd disk
 
-      if [[ -n "$fromImage" ]]; then
-        echo "Unpacking base image..."
-        mkdir image
-        tar -C image -xpf "$fromImage"
+          if [[ -n "$fromImage" ]]; then
+            echo "Unpacking base image..."
+            mkdir image
+            tar -C image -xpf "$fromImage"
 
-        if [[ -n "$fromImageName" ]] && [[ -n "$fromImageTag" ]]; then
-          parentID="$(
-            cat "image/manifest.json" |
-              jq -r '.[] | select(.RepoTags | contains([$desiredTag])) | rtrimstr(".json")' \
-                --arg desiredTag "$fromImageName:$fromImageTag"
-          )"
-        else
-          echo "From-image name or tag wasn't set. Reading the first ID."
-          parentID="$(cat "image/manifest.json" | jq -r '.[0].Config | rtrimstr(".json")')"
-        fi
+            if [[ -n "$fromImageName" ]] && [[ -n "$fromImageTag" ]]; then
+              parentID="$(
+                cat "image/manifest.json" |
+                  jq -r '.[] | select(.RepoTags | contains([$desiredTag])) | rtrimstr(".json")' \
+                    --arg desiredTag "$fromImageName:$fromImageTag"
+              )"
+            else
+              echo "From-image name or tag wasn't set. Reading the first ID."
+              parentID="$(cat "image/manifest.json" | jq -r '.[0].Config | rtrimstr(".json")')"
+            fi
 
-        cat ./image/manifest.json  | jq -r '.[0].Layers | .[]' > layer-list
-      else
-        touch layer-list
-      fi
+            cat ./image/manifest.json  | jq -r '.[0].Layers | .[]' > layer-list
+          else
+            touch layer-list
+          fi
 
-      # Unpack all of the parent layers into the image.
-      lowerdir=""
-      extractionID=0
-      for layerTar in $(tac layer-list); do
-        echo "Unpacking layer $layerTar"
-        extractionID=$((extractionID + 1))
+          # Unpack all of the parent layers into the image.
+          lowerdir=""
+          extractionID=0
+          for layerTar in $(tac layer-list); do
+            echo "Unpacking layer $layerTar"
+            extractionID=$((extractionID + 1))
 
-        mkdir -p image/$extractionID/layer
-        tar -C image/$extractionID/layer -xpf image/$layerTar
-        rm image/$layerTar
+            mkdir -p image/$extractionID/layer
+            tar -C image/$extractionID/layer -xpf image/$layerTar
+            rm image/$layerTar
 
-        find image/$extractionID/layer -name ".wh.*" -exec bash -c 'name="$(basename {}|sed "s/^.wh.//")"; mknod "$(dirname {})/$name" c 0 0; rm {}' \;
+            find image/$extractionID/layer -name ".wh.*" -exec bash -c 'name="$(basename {}|sed "s/^.wh.//")"; mknod "$(dirname {})/$name" c 0 0; rm {}' \;
 
-        # Get the next lower directory and continue the loop.
-        lowerdir=image/$extractionID/layer''${lowerdir:+:}$lowerdir
-      done
+            # Get the next lower directory and continue the loop.
+            lowerdir=image/$extractionID/layer''${lowerdir:+:}$lowerdir
+          done
 
-      mkdir work
-      mkdir layer
-      mkdir mnt
+          mkdir work
+          mkdir layer
+          mkdir mnt
 
-      ${lib.optionalString (preMount != "") ''
-        # Execute pre-mount steps
-        echo "Executing pre-mount steps..."
-        ${preMount}
-      ''}
+          ${lib.optionalString (preMount != "") ''
+            # Execute pre-mount steps
+            echo "Executing pre-mount steps..."
+            ${preMount}
+          ''}
 
-      if [ -n "$lowerdir" ]; then
-        mount -t overlay overlay -olowerdir=$lowerdir,workdir=work,upperdir=layer mnt
-      else
-        mount --bind layer mnt
-      fi
+          if [ -n "$lowerdir" ]; then
+            mount -t overlay overlay -olowerdir=$lowerdir,workdir=work,upperdir=layer mnt
+          else
+            mount --bind layer mnt
+          fi
 
-      ${lib.optionalString (postMount != "") ''
-        # Execute post-mount steps
-        echo "Executing post-mount steps..."
-        ${postMount}
-      ''}
+          ${lib.optionalString (postMount != "") ''
+            # Execute post-mount steps
+            echo "Executing post-mount steps..."
+            ${postMount}
+          ''}
 
-      umount mnt
+          umount mnt
 
-      (
-        cd layer
-        cmd='name="$(basename {})"; touch "$(dirname {})/.wh.$name"; rm "{}"'
-        find . -type c -exec bash -c "$cmd" \;
-      )
+          (
+            cd layer
+            cmd='name="$(basename {})"; touch "$(dirname {})/.wh.$name"; rm "{}"'
+            find . -type c -exec bash -c "$cmd" \;
+          )
 
-      ${postUmount}
-      '');
+          ${postUmount}
+        '');
     in
-    runCommand name {} ''
+    runCommand name { } ''
       mkdir -p $out
       cd ${result}
       cp layer.tar json VERSION $out
@@ -293,7 +294,6 @@ rec {
       '';
     };
 
-
   # Create an executable shell script which has the coreutils in its
   # PATH. Since root scripts are executed in a blank environment, even
   # things like `ls` or `echo` will be missing.
@@ -306,94 +306,100 @@ rec {
     '';
 
   # Create a "layer" (set of files).
-  mkPureLayer = {
-    # Name of the layer
-    name,
-    # JSON containing configuration and metadata for this layer.
-    baseJson,
-    # Files to add to the layer.
-    contents ? null,
-    # When copying the contents into the image, preserve symlinks to
-    # directories (see `rsync -K`).  Otherwise, transform those symlinks
-    # into directories.
-    keepContentsDirlinks ? false,
-    # Additional commands to run on the layer before it is tar'd up.
-    extraCommands ? "", uid ? 0, gid ? 0
-  }:
-    runCommand "docker-layer-${name}" {
-      inherit baseJson contents extraCommands;
-      nativeBuildInputs = [ jshon rsync tarsum ];
-    }
-    ''
-      mkdir layer
-      if [[ -n "$contents" ]]; then
-        echo "Adding contents..."
-        for item in $contents; do
-          echo "Adding $item"
-          rsync -a${if keepContentsDirlinks then "K" else "k"} --chown=0:0 $item/ layer/
-        done
-      else
-        echo "No contents to add to layer."
-      fi
+  mkPureLayer =
+    {
+      # Name of the layer
+      name
+    , # JSON containing configuration and metadata for this layer.
+      baseJson
+    , # Files to add to the layer.
+      contents ? null
+    , # When copying the contents into the image, preserve symlinks to
+      # directories (see `rsync -K`).  Otherwise, transform those symlinks
+      # into directories.
+      keepContentsDirlinks ? false
+    , # Additional commands to run on the layer before it is tar'd up.
+      extraCommands ? ""
+    , uid ? 0
+    , gid ? 0
+    }:
+    runCommand "docker-layer-${name}"
+      {
+        inherit baseJson contents extraCommands;
+        nativeBuildInputs = [ jshon rsync tarsum ];
+      }
+      ''
+        mkdir layer
+        if [[ -n "$contents" ]]; then
+          echo "Adding contents..."
+          for item in $contents; do
+            echo "Adding $item"
+            rsync -a${if keepContentsDirlinks then "K" else "k"} --chown=0:0 $item/ layer/
+          done
+        else
+          echo "No contents to add to layer."
+        fi
 
-      chmod ug+w layer
+        chmod ug+w layer
 
-      if [[ -n "$extraCommands" ]]; then
-        (cd layer; eval "$extraCommands")
-      fi
+        if [[ -n "$extraCommands" ]]; then
+          (cd layer; eval "$extraCommands")
+        fi
 
-      # Tar up the layer and throw it into 'layer.tar'.
-      echo "Packing layer..."
-      mkdir $out
-      tarhash=$(tar -C layer --hard-dereference --sort=name --mtime="@$SOURCE_DATE_EPOCH" --owner=${toString uid} --group=${toString gid} -cf - . | tee -p $out/layer.tar | tarsum)
+        # Tar up the layer and throw it into 'layer.tar'.
+        echo "Packing layer..."
+        mkdir $out
+        tarhash=$(tar -C layer --hard-dereference --sort=name --mtime="@$SOURCE_DATE_EPOCH" --owner=${toString uid} --group=${toString gid} -cf - . | tee -p $out/layer.tar | tarsum)
 
-      # Add a 'checksum' field to the JSON, with the value set to the
-      # checksum of the tarball.
-      cat ${baseJson} | jshon -s "$tarhash" -i checksum > $out/json
+        # Add a 'checksum' field to the JSON, with the value set to the
+        # checksum of the tarball.
+        cat ${baseJson} | jshon -s "$tarhash" -i checksum > $out/json
 
-      # Indicate to docker that we're using schema version 1.0.
-      echo -n "1.0" > $out/VERSION
+        # Indicate to docker that we're using schema version 1.0.
+        echo -n "1.0" > $out/VERSION
 
-      echo "Finished building layer '${name}'"
-    '';
+        echo "Finished building layer '${name}'"
+      '';
 
   # Make a "root" layer; required if we need to execute commands as a
   # privileged user on the image. The commands themselves will be
   # performed in a virtual machine sandbox.
-  mkRootLayer = {
-    # Name of the image.
-    name,
-    # Script to run as root. Bash.
-    runAsRoot,
-    # Files to add to the layer. If null, an empty layer will be created.
-    contents ? null,
-    # When copying the contents into the image, preserve symlinks to
-    # directories (see `rsync -K`).  Otherwise, transform those symlinks
-    # into directories.
-    keepContentsDirlinks ? false,
-    # JSON containing configuration and metadata for this layer.
-    baseJson,
-    # Existing image onto which to append the new layer.
-    fromImage ? null,
-    # Name of the image we're appending onto.
-    fromImageName ? null,
-    # Tag of the image we're appending onto.
-    fromImageTag ? null,
-    # How much disk to allocate for the temporary virtual machine.
-    diskSize ? 1024,
-    # Commands (bash) to run on the layer; these do not require sudo.
-    extraCommands ? ""
-  }:
+  mkRootLayer =
+    {
+      # Name of the image.
+      name
+    , # Script to run as root. Bash.
+      runAsRoot
+    , # Files to add to the layer. If null, an empty layer will be created.
+      contents ? null
+    , # When copying the contents into the image, preserve symlinks to
+      # directories (see `rsync -K`).  Otherwise, transform those symlinks
+      # into directories.
+      keepContentsDirlinks ? false
+    , # JSON containing configuration and metadata for this layer.
+      baseJson
+    , # Existing image onto which to append the new layer.
+      fromImage ? null
+    , # Name of the image we're appending onto.
+      fromImageName ? null
+    , # Tag of the image we're appending onto.
+      fromImageTag ? null
+    , # How much disk to allocate for the temporary virtual machine.
+      diskSize ? 1024
+    , # Commands (bash) to run on the layer; these do not require sudo.
+      extraCommands ? ""
+    }:
     # Generate an executable script from the `runAsRoot` text.
     let
       runAsRootScript = shellScript "run-as-root.sh" runAsRoot;
       extraCommandsScript = shellScript "extra-commands.sh" extraCommands;
-    in runWithOverlay {
+    in
+    runWithOverlay {
       name = "docker-layer-${name}";
 
       inherit fromImage fromImageName fromImageTag diskSize;
 
-      preMount = lib.optionalString (contents != null && contents != []) ''
+      preMount = lib.optionalString (contents != null && contents != [ ]) ''
         echo "Adding contents..."
         for item in ${toString contents}; do
           echo "Adding $item..."
@@ -445,11 +451,12 @@ rec {
       '';
     };
 
-  buildLayeredImage = {name, ...}@args:
+  buildLayeredImage = { name, ... }@args:
     let
       stream = streamLayeredImage args;
     in
-      runCommand "${baseNameOf name}.tar.gz" {
+    runCommand "${baseNameOf name}.tar.gz"
+      {
         inherit (stream) imageName;
         passthru = { inherit (stream) imageTag; };
         nativeBuildInputs = [ pigz ];
@@ -461,40 +468,45 @@ rec {
   # 4. compute the layer id
   # 5. put the layer in the image
   # 6. repack the image
-  buildImage = args@{
-    # Image name.
-    name,
-    # Image tag, when null then the nix output hash will be used.
-    tag ? null,
-    # Parent image, to append to.
-    fromImage ? null,
-    # Name of the parent image; will be read from the image otherwise.
-    fromImageName ? null,
-    # Tag of the parent image; will be read from the image otherwise.
-    fromImageTag ? null,
-    # Files to put on the image (a nix store path or list of paths).
-    contents ? null,
-    # When copying the contents into the image, preserve symlinks to
-    # directories (see `rsync -K`).  Otherwise, transform those symlinks
-    # into directories.
-    keepContentsDirlinks ? false,
-    # Docker config; e.g. what command to run on the container.
-    config ? null,
-    # Optional bash script to run on the files prior to fixturizing the layer.
-    extraCommands ? "", uid ? 0, gid ? 0,
-    # Optional bash script to run as root on the image when provisioning.
-    runAsRoot ? null,
-    # Size of the virtual machine disk to provision when building the image.
-    diskSize ? 1024,
-    # Time of creation of the image.
-    created ? "1970-01-01T00:00:01Z",
-  }:
+  buildImage =
+    args@{
+      # Image name.
+      name
+    , # Image tag, when null then the nix output hash will be used.
+      tag ? null
+    , # Parent image, to append to.
+      fromImage ? null
+    , # Name of the parent image; will be read from the image otherwise.
+      fromImageName ? null
+    , # Tag of the parent image; will be read from the image otherwise.
+      fromImageTag ? null
+    , # Files to put on the image (a nix store path or list of paths).
+      contents ? null
+    , # When copying the contents into the image, preserve symlinks to
+      # directories (see `rsync -K`).  Otherwise, transform those symlinks
+      # into directories.
+      keepContentsDirlinks ? false
+    , # Docker config; e.g. what command to run on the container.
+      config ? null
+    , # Optional bash script to run on the files prior to fixturizing the layer.
+      extraCommands ? ""
+    , uid ? 0
+    , gid ? 0
+    , # Optional bash script to run as root on the image when provisioning.
+      runAsRoot ? null
+    , # Size of the virtual machine disk to provision when building the image.
+      diskSize ? 1024
+    , # Time of creation of the image.
+      created ? "1970-01-01T00:00:01Z"
+    ,
+    }:
 
     let
       baseName = baseNameOf name;
 
       # Create a JSON blob of the configuration. Set the date to unix zero.
-      baseJson = let
+      baseJson =
+        let
           pure = writeText "${baseName}-config.json" (builtins.toJSON {
             inherit created config;
             architecture = defaultArch;
@@ -503,36 +515,41 @@ rec {
           impure = runCommand "${baseName}-config.json"
             { nativeBuildInputs = [ jq ]; }
             ''
-               jq ".created = \"$(TZ=utc date --iso-8601="seconds")\"" ${pure} > $out
+              jq ".created = \"$(TZ=utc date --iso-8601="seconds")\"" ${pure} > $out
             '';
-        in if created == "now" then impure else pure;
+        in
+        if created == "now" then impure else pure;
 
       layer =
         if runAsRoot == null
-        then mkPureLayer {
-          name = baseName;
-          inherit baseJson contents keepContentsDirlinks extraCommands uid gid;
-        } else mkRootLayer {
-          name = baseName;
-          inherit baseJson fromImage fromImageName fromImageTag
-                  contents keepContentsDirlinks runAsRoot diskSize
-                  extraCommands;
-        };
-      result = runCommand "docker-image-${baseName}.tar.gz" {
-        nativeBuildInputs = [ jshon pigz coreutils findutils jq moreutils ];
-        # Image name must be lowercase
-        imageName = lib.toLower name;
-        imageTag = if tag == null then "" else tag;
-        inherit fromImage baseJson;
-        layerClosure = writeReferencesToFile layer;
-        passthru.buildArgs = args;
-        passthru.layer = layer;
-        passthru.imageTag =
-          if tag != null
+        then
+          mkPureLayer
+            {
+              name = baseName;
+              inherit baseJson contents keepContentsDirlinks extraCommands uid gid;
+            } else
+          mkRootLayer {
+            name = baseName;
+            inherit baseJson fromImage fromImageName fromImageTag
+              contents keepContentsDirlinks runAsRoot diskSize
+              extraCommands;
+          };
+      result = runCommand "docker-image-${baseName}.tar.gz"
+        {
+          nativeBuildInputs = [ jshon pigz coreutils findutils jq moreutils ];
+          # Image name must be lowercase
+          imageName = lib.toLower name;
+          imageTag = if tag == null then "" else tag;
+          inherit fromImage baseJson;
+          layerClosure = writeReferencesToFile layer;
+          passthru.buildArgs = args;
+          passthru.layer = layer;
+          passthru.imageTag =
+            if tag != null
             then tag
             else
               lib.head (lib.strings.splitString "-" (baseNameOf result.outPath));
-      } ''
+        } ''
         ${lib.optionalString (tag == null) ''
           outName="$(basename "$out")"
           outHash=$(echo "$outName" | cut -d - -f 1)
@@ -732,14 +749,14 @@ rec {
         root:x:0:
         nobody:x:65534:
       '')
-      (runCommand "var-empty" {} ''
+      (runCommand "var-empty" { } ''
         mkdir -p $out/var/empty
       '')
     ];
   };
 
   # This provides /bin/sh, pointing to bashInteractive.
-  binSh = runCommand "bin-sh" {} ''
+  binSh = runCommand "bin-sh" { } ''
     mkdir -p $out/bin
     ln -s ${bashInteractive}/bin/bash $out/bin/sh
   '';
@@ -760,189 +777,194 @@ rec {
     })
   );
 
-  streamLayeredImage = {
-    # Image Name
-    name,
-    # Image tag, the Nix's output hash will be used if null
-    tag ? null,
-    # Parent image, to append to.
-    fromImage ? null,
-    # Files to put on the image (a nix store path or list of paths).
-    contents ? [],
-    # Docker config; e.g. what command to run on the container.
-    config ? {},
-    # Time of creation of the image. Passing "now" will make the
-    # created date be the time of building.
-    created ? "1970-01-01T00:00:01Z",
-    # Optional bash script to run on the files prior to fixturizing the layer.
-    extraCommands ? "",
-    # Optional bash script to run inside fakeroot environment.
-    # Could be used for changing ownership of files in customisation layer.
-    fakeRootCommands ? "",
-    # We pick 100 to ensure there is plenty of room for extension. I
-    # believe the actual maximum is 128.
-    maxLayers ? 100,
-    # Whether to include store paths in the image. You generally want to leave
-    # this on, but tooling may disable this to insert the store paths more
-    # efficiently via other means, such as bind mounting the host store.
-    includeStorePaths ? true,
-  }:
-    assert
+  streamLayeredImage =
+    {
+      # Image Name
+      name
+    , # Image tag, the Nix's output hash will be used if null
+      tag ? null
+    , # Parent image, to append to.
+      fromImage ? null
+    , # Files to put on the image (a nix store path or list of paths).
+      contents ? [ ]
+    , # Docker config; e.g. what command to run on the container.
+      config ? { }
+    , # Time of creation of the image. Passing "now" will make the
+      # created date be the time of building.
+      created ? "1970-01-01T00:00:01Z"
+    , # Optional bash script to run on the files prior to fixturizing the layer.
+      extraCommands ? ""
+    , # Optional bash script to run inside fakeroot environment.
+      # Could be used for changing ownership of files in customisation layer.
+      fakeRootCommands ? ""
+    , # We pick 100 to ensure there is plenty of room for extension. I
+      # believe the actual maximum is 128.
+      maxLayers ? 100
+    , # Whether to include store paths in the image. You generally want to leave
+      # this on, but tooling may disable this to insert the store paths more
+      # efficiently via other means, such as bind mounting the host store.
+      includeStorePaths ? true
+    ,
+    }:
+      assert
       (lib.assertMsg (maxLayers > 1)
-      "the maxLayers argument of dockerTools.buildLayeredImage function must be greather than 1 (current value: ${toString maxLayers})");
-    let
-      baseName = baseNameOf name;
+        "the maxLayers argument of dockerTools.buildLayeredImage function must be greather than 1 (current value: ${toString maxLayers})");
+      let
+        baseName = baseNameOf name;
 
-      streamScript = writePython3 "stream" {} ./stream_layered_image.py;
-      baseJson = writeText "${baseName}-base.json" (builtins.toJSON {
-         inherit config;
-         architecture = defaultArch;
-         os = "linux";
-      });
+        streamScript = writePython3 "stream" { } ./stream_layered_image.py;
+        baseJson = writeText "${baseName}-base.json" (builtins.toJSON {
+          inherit config;
+          architecture = defaultArch;
+          os = "linux";
+        });
 
-      contentsList = if builtins.isList contents then contents else [ contents ];
+        contentsList = if builtins.isList contents then contents else [ contents ];
 
-      # We store the customisation layer as a tarball, to make sure that
-      # things like permissions set on 'extraCommands' are not overriden
-      # by Nix. Then we precompute the sha256 for performance.
-      customisationLayer = symlinkJoin {
-        name = "${baseName}-customisation-layer";
-        paths = contentsList;
-        inherit extraCommands fakeRootCommands;
-        nativeBuildInputs = [ fakeroot ];
-        postBuild = ''
-          mv $out old_out
-          (cd old_out; eval "$extraCommands" )
+        # We store the customisation layer as a tarball, to make sure that
+        # things like permissions set on 'extraCommands' are not overriden
+        # by Nix. Then we precompute the sha256 for performance.
+        customisationLayer = symlinkJoin {
+          name = "${baseName}-customisation-layer";
+          paths = contentsList;
+          inherit extraCommands fakeRootCommands;
+          nativeBuildInputs = [ fakeroot ];
+          postBuild = ''
+            mv $out old_out
+            (cd old_out; eval "$extraCommands" )
 
-          mkdir $out
+            mkdir $out
 
-          fakeroot bash -c '
-            source $stdenv/setup
-            cd old_out
-            eval "$fakeRootCommands"
-            tar \
-              --sort name \
-              --numeric-owner --mtime "@$SOURCE_DATE_EPOCH" \
-              --hard-dereference \
-              -cf $out/layer.tar .
-          '
+            fakeroot bash -c '
+              source $stdenv/setup
+              cd old_out
+              eval "$fakeRootCommands"
+              tar \
+                --sort name \
+                --numeric-owner --mtime "@$SOURCE_DATE_EPOCH" \
+                --hard-dereference \
+                -cf $out/layer.tar .
+            '
 
-          sha256sum $out/layer.tar \
-            | cut -f 1 -d ' ' \
-            > $out/checksum
-        '';
-      };
-
-      closureRoots = optionals includeStorePaths /* normally true */ (
-        [ baseJson ] ++ contentsList
-      );
-      overallClosure = writeText "closure" (lib.concatStringsSep " " closureRoots);
-
-      # These derivations are only created as implementation details of docker-tools,
-      # so they'll be excluded from the created images.
-      unnecessaryDrvs = [ baseJson overallClosure ];
-
-      conf = runCommand "${baseName}-conf.json" {
-        inherit fromImage maxLayers created;
-        imageName = lib.toLower name;
-        passthru.imageTag =
-          if tag != null
-            then tag
-            else
-              lib.head (lib.strings.splitString "-" (baseNameOf conf.outPath));
-        paths = buildPackages.referencesByPopularity overallClosure;
-        nativeBuildInputs = [ jq ];
-      } ''
-        ${if (tag == null) then ''
-          outName="$(basename "$out")"
-          outHash=$(echo "$outName" | cut -d - -f 1)
-
-          imageTag=$outHash
-        '' else ''
-          imageTag="${tag}"
-        ''}
-
-        # convert "created" to iso format
-        if [[ "$created" != "now" ]]; then
-            created="$(date -Iseconds -d "$created")"
-        fi
-
-        paths() {
-          cat $paths ${lib.concatMapStringsSep " "
-                         (path: "| (grep -v ${path} || true)")
-                         unnecessaryDrvs}
-        }
-
-        # Compute the number of layers that are already used by a potential
-        # 'fromImage' as well as the customization layer. Ensure that there is
-        # still at least one layer available to store the image contents.
-        usedLayers=0
-
-        # subtract number of base image layers
-        if [[ -n "$fromImage" ]]; then
-          (( usedLayers += $(tar -xOf "$fromImage" manifest.json | jq '.[0].Layers | length') ))
-        fi
-
-        # one layer will be taken up by the customisation layer
-        (( usedLayers += 1 ))
-
-        if ! (( $usedLayers < $maxLayers )); then
-          echo >&2 "Error: usedLayers $usedLayers layers to store 'fromImage' and" \
-                    "'extraCommands', but only maxLayers=$maxLayers were" \
-                    "allowed. At least 1 layer is required to store contents."
-          exit 1
-        fi
-        availableLayers=$(( maxLayers - usedLayers ))
-
-        # Create $maxLayers worth of Docker Layers, one layer per store path
-        # unless there are more paths than $maxLayers. In that case, create
-        # $maxLayers-1 for the most popular layers, and smush the remainaing
-        # store paths in to one final layer.
-        #
-        # The following code is fiddly w.r.t. ensuring every layer is
-        # created, and that no paths are missed. If you change the
-        # following lines, double-check that your code behaves properly
-        # when the number of layers equals:
-        #      maxLayers-1, maxLayers, and maxLayers+1, 0
-        store_layers="$(
-          paths |
-            jq -sR '
-              rtrimstr("\n") | split("\n")
-                | (.[:$maxLayers-1] | map([.])) + [ .[$maxLayers-1:] ]
-                | map(select(length > 0))
-            ' \
-              --argjson maxLayers "$availableLayers"
-        )"
-
-        cat ${baseJson} | jq '
-          . + {
-            "store_dir": $store_dir,
-            "from_image": $from_image,
-            "store_layers": $store_layers,
-            "customisation_layer", $customisation_layer,
-            "repo_tag": $repo_tag,
-            "created": $created
-          }
-          ' --arg store_dir "${storeDir}" \
-            --argjson from_image ${if fromImage == null then "null" else "'\"${fromImage}\"'"} \
-            --argjson store_layers "$store_layers" \
-            --arg customisation_layer ${customisationLayer} \
-            --arg repo_tag "$imageName:$imageTag" \
-            --arg created "$created" |
-          tee $out
-      '';
-      result = runCommand "stream-${baseName}" {
-        inherit (conf) imageName;
-        passthru = {
-          inherit (conf) imageTag;
-
-          # Distinguish tarballs and exes at the Nix level so functions that
-          # take images can know in advance how the image is supposed to be used.
-          isExe = true;
+            sha256sum $out/layer.tar \
+              | cut -f 1 -d ' ' \
+              > $out/checksum
+          '';
         };
-        nativeBuildInputs = [ makeWrapper ];
-      } ''
-        makeWrapper ${streamScript} $out --add-flags ${conf}
-      '';
-    in result;
+
+        closureRoots = lib.optionals includeStorePaths /* normally true */ (
+          [ baseJson ] ++ contentsList
+        );
+        overallClosure = writeText "closure" (lib.concatStringsSep " " closureRoots);
+
+        # These derivations are only created as implementation details of docker-tools,
+        # so they'll be excluded from the created images.
+        unnecessaryDrvs = [ baseJson overallClosure ];
+
+        conf = runCommand "${baseName}-conf.json"
+          {
+            inherit fromImage maxLayers created;
+            imageName = lib.toLower name;
+            passthru.imageTag =
+              if tag != null
+              then tag
+              else
+                lib.head (lib.strings.splitString "-" (baseNameOf conf.outPath));
+            paths = buildPackages.referencesByPopularity overallClosure;
+            nativeBuildInputs = [ jq ];
+          } ''
+          ${if (tag == null) then ''
+            outName="$(basename "$out")"
+            outHash=$(echo "$outName" | cut -d - -f 1)
+
+            imageTag=$outHash
+          '' else ''
+            imageTag="${tag}"
+          ''}
+
+          # convert "created" to iso format
+          if [[ "$created" != "now" ]]; then
+              created="$(date -Iseconds -d "$created")"
+          fi
+
+          paths() {
+            cat $paths ${lib.concatMapStringsSep " "
+                           (path: "| (grep -v ${path} || true)")
+                           unnecessaryDrvs}
+          }
+
+          # Compute the number of layers that are already used by a potential
+          # 'fromImage' as well as the customization layer. Ensure that there is
+          # still at least one layer available to store the image contents.
+          usedLayers=0
+
+          # subtract number of base image layers
+          if [[ -n "$fromImage" ]]; then
+            (( usedLayers += $(tar -xOf "$fromImage" manifest.json | jq '.[0].Layers | length') ))
+          fi
+
+          # one layer will be taken up by the customisation layer
+          (( usedLayers += 1 ))
+
+          if ! (( $usedLayers < $maxLayers )); then
+            echo >&2 "Error: usedLayers $usedLayers layers to store 'fromImage' and" \
+                      "'extraCommands', but only maxLayers=$maxLayers were" \
+                      "allowed. At least 1 layer is required to store contents."
+            exit 1
+          fi
+          availableLayers=$(( maxLayers - usedLayers ))
+
+          # Create $maxLayers worth of Docker Layers, one layer per store path
+          # unless there are more paths than $maxLayers. In that case, create
+          # $maxLayers-1 for the most popular layers, and smush the remainaing
+          # store paths in to one final layer.
+          #
+          # The following code is fiddly w.r.t. ensuring every layer is
+          # created, and that no paths are missed. If you change the
+          # following lines, double-check that your code behaves properly
+          # when the number of layers equals:
+          #      maxLayers-1, maxLayers, and maxLayers+1, 0
+          store_layers="$(
+            paths |
+              jq -sR '
+                rtrimstr("\n") | split("\n")
+                  | (.[:$maxLayers-1] | map([.])) + [ .[$maxLayers-1:] ]
+                  | map(select(length > 0))
+              ' \
+                --argjson maxLayers "$availableLayers"
+          )"
+
+          cat ${baseJson} | jq '
+            . + {
+              "store_dir": $store_dir,
+              "from_image": $from_image,
+              "store_layers": $store_layers,
+              "customisation_layer", $customisation_layer,
+              "repo_tag": $repo_tag,
+              "created": $created
+            }
+            ' --arg store_dir "${storeDir}" \
+              --argjson from_image ${if fromImage == null then "null" else "'\"${fromImage}\"'"} \
+              --argjson store_layers "$store_layers" \
+              --arg customisation_layer ${customisationLayer} \
+              --arg repo_tag "$imageName:$imageTag" \
+              --arg created "$created" |
+            tee $out
+        '';
+        result = runCommand "stream-${baseName}"
+          {
+            inherit (conf) imageName;
+            passthru = {
+              inherit (conf) imageTag;
+
+              # Distinguish tarballs and exes at the Nix level so functions that
+              # take images can know in advance how the image is supposed to be used.
+              isExe = true;
+            };
+            nativeBuildInputs = [ makeWrapper ];
+          } ''
+          makeWrapper ${streamScript} $out --add-flags ${conf}
+        '';
+      in
+      result;
 }

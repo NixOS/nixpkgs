@@ -1,19 +1,33 @@
-{ lib, stdenv, fetchFromGitHub, gtk_engines, gtk-engine-murrine }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, gnome-shell
+, gtk-engine-murrine
+, gtk_engines
+}:
 
 stdenv.mkDerivation rec {
   pname = "vimix-gtk-themes";
-  version = "2021-04-25";
+  version = "2021-08-09";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
-    sha256 = "0ak763vs27h5z2pgcqpz1g1hypn5gl0p0ylffawc9zdi1wp2mpxb";
+    sha256 = "0j6sq7z4zqc9q4hqcq4y9vh4qpgl0v1i353l6rcd6bh1r594rwjm";
   };
 
-  buildInputs = [ gtk_engines ];
+  nativeBuildInputs = [
+    gnome-shell  # needed to determine the gnome-shell version
+  ];
 
-  propagatedUserEnvPkgs = [ gtk-engine-murrine ];
+  buildInputs = [
+    gtk_engines
+  ];
+
+  propagatedUserEnvPkgs = [
+    gtk-engine-murrine
+  ];
 
   installPhase = ''
     runHook preInstall

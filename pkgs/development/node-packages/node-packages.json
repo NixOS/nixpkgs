@@ -104,6 +104,7 @@
 , "fx"
 , "ganache-cli"
 , "gatsby-cli"
+, "generator-code"
 , "get-graphql-schema"
 , "git-run"
 , "git-ssb"
