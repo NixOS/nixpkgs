@@ -34,16 +34,16 @@ let
     let
       list =
         lib.concatMap
-        (name:
-          let v = set.${name}; in
-          if pred name v then [v] else []
-        )
-        (lib.attrNames set)
-        ;
-    in
-      if list == [] then default
-      else lib.head list
+          (name:
+            let v = set.${name}; in
+            if pred name v then [ v ] else [ ]
+          )
+          (lib.attrNames set)
       ;
+    in
+    if list == [ ] then default
+    else lib.head list
+  ;
 
   # The cryptpad package attribute key changes for each release. Get it out
   # programatically instead.
@@ -51,7 +51,7 @@ let
     (k: v: v.packageName == "cryptpad")
     (throw "cryptpad not found")
     nodePackages
-    ;
+  ;
 
   combined = cryptpad.override {
     postInstall = ''
@@ -77,4 +77,4 @@ let
 
   };
 in
-  combined
+combined
