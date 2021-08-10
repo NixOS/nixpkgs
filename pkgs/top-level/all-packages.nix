@@ -31347,7 +31347,7 @@ with pkgs;
 
   faustStk = callPackage ../applications/audio/faustStk  { };
 
-  fceux = callPackage ../misc/emulators/fceux { };
+  fceux = libsForQt5.callPackage ../misc/emulators/fceux { };
 
   flockit = callPackage ../tools/backup/flockit { };
 
