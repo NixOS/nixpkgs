@@ -7,7 +7,6 @@
 , makeWrapper
 , pkg-config
 , python2
-, expat
 , openssl
 , SDL2
 , fontconfig
@@ -81,7 +80,6 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   buildInputs = [
-    expat
     openssl
     SDL2
     (fontconfig.overrideAttrs (old: {
