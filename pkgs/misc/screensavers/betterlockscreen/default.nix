@@ -1,17 +1,31 @@
-{
-  lib, stdenv, makeWrapper, fetchFromGitHub,
-  imagemagick, i3lock-color, xdpyinfo, xrandr, bc, feh, procps, xrdb
+{ fetchFromGitHub
+, lib
+, makeWrapper
+, stdenv
+
+# Dependencies (@see https://github.com/pavanjadhaw/betterlockscreen/blob/master/shell.nix)
+, bc
+, coreutils
+, i3lock-color
+, gawk
+, gnugrep
+, gnused
+, imagemagick
+, procps
+, xdpyinfo
+, xrandr
+, xset
 }:
 
 stdenv.mkDerivation rec {
   pname = "betterlockscreen";
-  version = "3.1.0";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "pavanjadhaw";
     repo = "betterlockscreen";
-    rev = version;
-    sha256 = "14vkgdzw7mprjsvmhm3aav8gds73ngn2xxij4syq7l1mhk701wak";
+    rev = "v${version}";
+    sha256 = "1ha1yddrcmbsdljdg3gn7i42csbw8h3zgf4i3mcsmbz8nsvc2wdc";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -20,18 +34,22 @@ stdenv.mkDerivation rec {
     let
       PATH =
         lib.makeBinPath
-        [imagemagick i3lock-color xdpyinfo xrandr bc feh procps xrdb];
+        [ bc coreutils i3lock-color gawk gnugrep gnused imagemagick procps xdpyinfo xrandr xset ];
     in ''
+      runHook preInstall
+
       mkdir -p $out/bin
       cp betterlockscreen $out/bin/betterlockscreen
       wrapProgram "$out/bin/betterlockscreen" --prefix PATH : "$out/bin:${PATH}"
+
+      runHook postInstall
     '';
 
   meta = with lib; {
-    description = "A simple minimal lock screen which allows you to cache images with different filters and lockscreen with blazing speed";
+    description = "Fast and sweet looking lockscreen for linux systems with effects!";
     homepage = "https://github.com/pavanjadhaw/betterlockscreen";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ eyjhb ];
+    maintainers = with maintainers; [ eyjhb sebtm ];
   };
 }
