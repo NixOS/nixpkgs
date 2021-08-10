@@ -9529,6 +9529,13 @@ in {
     phantomjsSupport = false;
   };
 
+  yt-dlp = callPackage ../tools/misc/yt-dlp { };
+
+  yt-dlp-light = callPackage ../tools/misc/yt-dlp {
+    ffmpegSupport = false;
+    phantomjsSupport = false;
+  };
+
   youtube-search = callPackage ../development/python-modules/youtube-search { };
 
   youtube-transcript-api = callPackage ../development/python-modules/youtube-transcript-api { };
