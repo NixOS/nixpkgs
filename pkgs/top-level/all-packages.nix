@@ -17167,6 +17167,10 @@ in
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
+  nspr_latest = callPackage ../development/libraries/nspr/latest.nix {
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+  };
+
   nss = lowPrio (callPackage ../development/libraries/nss { });
   nssTools = nss.tools;
 
