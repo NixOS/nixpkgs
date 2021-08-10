@@ -236,6 +236,7 @@ package-maintainers:
     - stm-containers
     - streamly
     - taskwarrior
+    - witch
   pacien:
     - ldgallery-compiler
   peti:
