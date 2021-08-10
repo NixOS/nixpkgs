@@ -18136,7 +18136,9 @@ with pkgs;
     };
   });
 
-  portmidi = callPackage ../development/libraries/portmidi {};
+  portmidi = callPackage ../development/libraries/portmidi {
+    inherit (darwin.apple_sdk.frameworks) Carbon CoreAudio CoreFoundation CoreMIDI CoreServices;
+  };
 
   presage = callPackage ../development/libraries/presage { };
 
