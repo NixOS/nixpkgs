@@ -3,6 +3,7 @@
 , buildGoPackage
 , fetchFromGitHub
 , callPackage
+, config
 }:
 let
   list = lib.importJSON ./providers.json;
@@ -50,12 +51,13 @@ let
     cloudfoundry = callPackage ./cloudfoundry {};
     gandi = callPackage ./gandi {};
     hcloud = callPackage ./hcloud {};
-    kubernetes-alpha = throw "This has been merged as beta into the kubernetes provider. See https://www.hashicorp.com/blog/beta-support-for-crds-in-the-terraform-provider-for-kubernetes for details";
     libvirt = callPackage ./libvirt {};
     linuxbox = callPackage ./linuxbox {};
     lxd = callPackage ./lxd {};
     vpsadmin = callPackage ./vpsadmin {};
     vercel = callPackage ./vercel {};
-  };
+  } // (lib.optionalAttrs (config.allowAliases or false) {
+    kubernetes-alpha = throw "This has been merged as beta into the kubernetes provider. See https://www.hashicorp.com/blog/beta-support-for-crds-in-the-terraform-provider-for-kubernetes for details";
+  });
 in
   automated-providers // special-providers
