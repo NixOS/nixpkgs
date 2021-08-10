@@ -6051,7 +6051,9 @@ in {
 
   pygal = callPackage ../development/python-modules/pygal { };
 
-  pygame = callPackage ../development/python-modules/pygame { };
+  pygame = callPackage ../development/python-modules/pygame {
+    inherit (pkgs.darwin.apple_sdk.frameworks) AppKit CoreMIDI;
+  };
 
   pygame_sdl2 = callPackage ../development/python-modules/pygame_sdl2 { };
 
