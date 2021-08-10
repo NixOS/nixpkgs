@@ -1,4 +1,5 @@
-{ stdenv, lib, fetchFromGitHub, bzip2, expat, openssl, lmdb
+{ stdenv, lib, fetchFromGitHub
+, bzip2, expat, libedit, lmdb, openssl
 , darwin, libiconv, Security
 , cpp11 ? false
 }:
@@ -21,16 +22,16 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "zeroc-ice";
-  version = "3.7.2";
+  version = "3.7.6";
 
   src = fetchFromGitHub {
     owner = "zeroc-ice";
     repo = "ice";
     rev = "v${version}";
-    sha256 = "0m9lh79dfpcwcp2jhmj0wqdcsw3rl633x2hzfw9n2i34jjv64fvg";
+    sha256 = "0zc8gmlzl2f38m1fj6pv2vm8ka7fkszd6hx2lb8gfv65vn3m4sk4";
   };
 
-  buildInputs = [ zeroc_mcpp bzip2 expat openssl lmdb ]
+  buildInputs = [ zeroc_mcpp bzip2 expat libedit lmdb openssl ]
     ++ lib.optionals stdenv.isDarwin [ darwin.cctools libiconv Security ];
 
   NIX_CFLAGS_COMPILE = "-Wno-error=class-memaccess -Wno-error=deprecated-copy";
