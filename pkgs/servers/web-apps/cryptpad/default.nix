@@ -72,6 +72,9 @@ let
       EOF
       chmod +x $out/bin/cryptpad
     '';
+
+    meta.maintainers = with lib.maintainers; [ davhau ];
+
   };
 in
   combined
