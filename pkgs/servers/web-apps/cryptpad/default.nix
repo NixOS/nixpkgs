@@ -20,6 +20,8 @@ let
   }).overrideAttrs (old: {
     bowerPackages = old.bowerPackages.override (old_: {
       # add missing dependencies:
+      # Those dependencies are EOL and they are not installed by buildBowerComponents,
+      # but they are required, otherwise the resolver crashes.
       # * add the second jquery ~2.1.0 entry
       # * add the second bootstrap ~3.1.1 entry
       paths = old_.paths ++ [
