@@ -1,9 +1,16 @@
+# This file should support dmd versions 2.minor.patch in the long term where minor
+# is divisable by 4 and patch is the last available. Plus the latest stable
+# release.
+
+# Other versions might work by specifying the hashes and HOST_DMD in callPackage
+# parameters in the client side but they have not been tested
+
 args @ { version, callPackage, ...}:
-if (version == "2.095.1") then callPackage ./sourcebuild.nix ({
+if (version == "2.092.1") then callPackage ./sourcebuild.nix ({
   HOST_DMD = "${callPackage ./bootstrap.nix { }}/bin/dmd";
-  dmdSha256 = "0faca1y42a1h16aml4lb7z118mh9k9fjx3xlw3ki5f1h3ln91xhk";
-  druntimeSha256 = "0ad4pa5llr9m9wqbvfv4yrcra4zz9qxlh5kx43mrv48f9bcxm2ha";
-  phobosSha256 = "04w6jw4izix2vbw62j13wvz6q3pi7vivxnmxqj0g8904j5g0cxjl";
+  dmdSha256 = "1x4fspsk91cdf3pc3sfhhk47511acdbwd458wai2sirkqsdypmnm";
+  druntimeSha256 = "0rmqlnw1jlgsh6jjvw6bbmyn26v0xnygqdny699y93g0jldasas4";
+  phobosSha256 = "0mw4bad9af7z54dc2rs1aa9h63p3z6bf0fq14v2iyyq4y08ikxzc";
 } // args)
 else if (version == "2.096.1") then callPackage ./sourcebuild.nix ({
   HOST_DMD = "${callPackage ./bootstrap.nix { }}/bin/dmd";
@@ -11,13 +18,12 @@ else if (version == "2.096.1") then callPackage ./sourcebuild.nix ({
   druntimeSha256 = "1jzs6qrljs7nvq0dlld9l7f5n2yj306i5czpvxgxymbrcyzzh1q4";
   phobosSha256 = "0jyxkdy6h35z1cv22pqhx136mcpg8h2hwxr4j4lixpzyr8kw0i4d";
 } // args)
-else if (version == "2.097.0") then callPackage ./sourcebuild.nix ({
+else if (version == "2.097.2") then callPackage ./sourcebuild.nix ({
   HOST_DMD = "${callPackage ./bootstrap.nix { }}/bin/dmd";
-  dmdSha256 = "0rbbsxz91sp9kmn8qjkqjbx5p49l4xldjf55bay22nc6v6k5p3mk";
-  druntimeSha256 = "18jwqvls0dwjxr1zf76igybrr5kq0p1raskm26hrih9jh47vlpdx";
-  phobosSha256 = "1ipa3804zqnvywqw0g7rcy3vvd16sik2gvhjg1r8klnqviizvhgh";
+  dmdSha256 = "16ldkk32y7ln82n7g2ym5d1xf3vly3i31hf8600cpvimf6yhr6kb";
+  druntimeSha256 = "1sayg6ia85jln8g28vb4m124c27lgbkd6xzg9gblss8ardb8dsp1";
+  phobosSha256 = "0czg13h65b6qwhk9ibya21z3iv3fpk3rsjr3zbcrpc2spqjknfw5";
 } // args)
-
 else callPackage ./sourcebuild.nix ({
   HOST_DMD = "${callPackage ./bootstrap.nix { }}/bin/dmd";
 } // args) # caller needs to provide the hashes
