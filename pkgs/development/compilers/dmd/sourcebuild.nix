@@ -28,27 +28,27 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   srcs = [
-  (fetchFromGitHub {
-    owner = "dlang";
-    repo = "dmd";
-    rev = "v${version}";
-    sha256 = dmdSha256;
-    name = "dmd";
-  })
-  (fetchFromGitHub {
-    owner = "dlang";
-    repo = "druntime";
-    rev = "v${version}";
-    sha256 = druntimeSha256;
-    name = "druntime";
-  })
-  (fetchFromGitHub {
-    owner = "dlang";
-    repo = "phobos";
-    rev = "v${version}";
-    sha256 = phobosSha256;
-    name = "phobos";
-  })
+    (fetchFromGitHub {
+      owner = "dlang";
+      repo = "dmd";
+      rev = "v${version}";
+      sha256 = dmdSha256;
+      name = "dmd";
+    })
+    (fetchFromGitHub {
+      owner = "dlang";
+      repo = "druntime";
+      rev = "v${version}";
+      sha256 = druntimeSha256;
+      name = "druntime";
+    })
+    (fetchFromGitHub {
+      owner = "dlang";
+      repo = "phobos";
+      rev = "v${version}";
+      sha256 = phobosSha256;
+      name = "phobos";
+    })
   ];
 
   sourceRoot = ".";
@@ -56,11 +56,9 @@ stdenv.mkDerivation rec {
   # https://issues.dlang.org/show_bug.cgi?id=19553
   hardeningDisable = [ "fortify" ];
 
-  postUnpack = ''
-    patchShebangs .
-  '';
-
   postPatch = ''
+    patchShebangs .
+
     substituteInPlace dmd/test/dshell/test6952.d --replace "/usr/bin/env bash" "${bash}/bin/bash"
 
     rm dmd/test/runnable/gdb1.d
@@ -72,26 +70,26 @@ stdenv.mkDerivation rec {
     rm dmd/test/runnable/gdb15729.sh
     rm dmd/test/runnable/gdb4149.d
     rm dmd/test/runnable/gdb4181.d
-  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
+  '' + lib.optionalString stdenv.isLinux ''
     substituteInPlace phobos/std/socket.d --replace "assert(ih.addrList[0] == 0x7F_00_00_01);" ""
-  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
+  '' + lib.optionalString stdenv.isDarwin ''
     substituteInPlace phobos/std/socket.d --replace "foreach (name; names)" "names = []; foreach (name; names)"
   '';
 
-  nativeBuildInputs = [ makeWrapper unzip which gdb git ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin [ Foundation ];
+  nativeBuildInputs = [ makeWrapper unzip which git ];
 
-  buildInputs = [ curl tzdata ];
+  buildInputs = [ gdb curl tzdata ]
+    ++ lib.optional stdenv.isDarwin [ Foundation gdb ];
 
   bits = builtins.toString stdenv.hostPlatform.parsed.cpu.bits;
-  osname = if stdenv.hostPlatform.isDarwin then
+  osname = if stdenv.isDarwin then
     "osx"
   else
     stdenv.hostPlatform.parsed.kernel.name;
-  top = "$(echo $NIX_BUILD_TOP)";
+  top = "$NIX_BUILD_TOP";
   pathToDmd = "${top}/dmd/generated/${osname}/release/${bits}/dmd";
 
-  # Buid and install are based on http://wiki.dlang.org/Building_DMD
+  # Build and install are based on http://wiki.dlang.org/Building_DMD
   buildPhase = ''
     cd dmd
     make -j$NIX_BUILD_CORES -f posix.mak INSTALL_DIR=$out BUILD=release ENABLE_RELEASE=1 PIC=1 HOST_DMD=${HOST_DMD}

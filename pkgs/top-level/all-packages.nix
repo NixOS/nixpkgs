@@ -4066,16 +4066,16 @@ in
 
   dleyna-server = callPackage ../development/libraries/dleyna-server { };
 
-  dmd_2_95 = callPackage ../development/compilers/dmd
-  { version = "2.095.1";
+  dmd_2_95 = callPackage ../development/compilers/dmd {
+    version = "2.095.1";
     inherit (darwin.apple_sdk.frameworks) Foundation;
   };
-  dmd_2_96 = callPackage ../development/compilers/dmd
-  { version = "2.096.1";
+  dmd_2_96 = callPackage ../development/compilers/dmd {
+    version = "2.096.1";
     inherit (darwin.apple_sdk.frameworks) Foundation;
   };
-  dmd_2_97 = callPackage ../development/compilers/dmd
-  { version = "2.097.0";
+  dmd_2_97 = callPackage ../development/compilers/dmd {
+    version = "2.097.0";
     inherit (darwin.apple_sdk.frameworks) Foundation;
   };
   dmd = dmd_2_97;
