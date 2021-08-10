@@ -67,13 +67,9 @@ stdenv.mkDerivation rec {
     sed -i 's|^#define LVM_CONFIGURE_LINE.*$|#define LVM_CONFIGURE_LINE "<removed>"|g' ./include/configure.h
   '';
 
-
-  patches = lib.optionals stdenv.hostPlatform.isMusl [
-    (fetchpatch {
-      name = "fix-stdio-usage.patch";
-      url = "https://git.alpinelinux.org/aports/plain/main/lvm2/fix-stdio-usage.patch?h=3.7-stable&id=31bd4a8c2dc00ae79a821f6fe0ad2f23e1534f50";
-      sha256 = "0m6wr6qrvxqi2d2h054cnv974jq1v65lqxy05g1znz946ga73k3p";
-    })
+  patches = [
+    # Musl fixes from Alpine.
+    ./fix-stdio-usage.patch
     (fetchpatch {
       name = "mallinfo.patch";
       url = "https://git.alpinelinux.org/aports/plain/main/lvm2/mallinfo.patch?h=3.7-stable&id=31bd4a8c2dc00ae79a821f6fe0ad2f23e1534f50";
