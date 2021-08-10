@@ -2,6 +2,7 @@
 { lib, stdenv, vim, vimPlugins, vim_configurable, buildEnv, writeText, writeScriptBin
 , nix-prefetch-hg, nix-prefetch-git
 , fetchFromGitHub, runtimeShell
+, hasLuaModule
 }:
 
 /*
@@ -186,7 +187,21 @@ let
 
   nativeImpl = packages:
   (let
-    link = (packageName: dir: pluginPath: "ln -sf ${pluginPath}/share/vim-plugins/* $out/pack/${packageName}/${dir}");
+    # dir is "start" or "opt"
+    linkLuaPlugin = plugin: packageName: dir: ''
+      mkdir -p $out/pack/${packageName}/${dir}/${plugin.pname}/lua
+      ln -sf ${plugin}/share/lua/5.1/* $out/pack/${packageName}/${dir}/${plugin.pname}/lua
+      ln -sf ${plugin}/${plugin.pname}-${plugin.version}-rocks/${plugin.pname}/${plugin.version}/* $out/pack/${packageName}/${dir}/${plugin.pname}/
+    '';
+
+    linkVimlPlugin = pluginPath: packageName: dir:
+      "ln -sf ${pluginPath}/${rtpPath}/* $out/pack/${packageName}/${dir}";
+
+      # (builtins.trace pluginPath )
+      link = pluginPath: if hasLuaModule pluginPath
+        then linkLuaPlugin pluginPath
+        else linkVimlPlugin pluginPath;
+
     packageLinks = (packageName: {start ? [], opt ? []}:
     let
       # `nativeImpl` expects packages to be derivations, not strings (as
@@ -199,9 +214,9 @@ let
       [ "mkdir -p $out/pack/${packageName}/start" ]
       # To avoid confusion, even dependencies of optional plugins are added
       # to `start` (except if they are explicitly listed as optional plugins).
-      ++ (builtins.map (link packageName "start") (lib.unique (startWithDeps ++ depsOfOptionalPlugins)))
+      ++ (builtins.map (x: link x packageName "start") (lib.unique (startWithDeps ++ depsOfOptionalPlugins)))
       ++ ["mkdir -p $out/pack/${packageName}/opt"]
-      ++ (builtins.map (link packageName "opt") opt)
+      ++ (builtins.map (x: link x packageName "opt") opt)
     );
     packDir = (packages:
       stdenv.mkDerivation {
@@ -217,6 +232,18 @@ let
     set runtimepath^=${packDir packages}
   '');
 
+  /* Generates a vimrc string
+
+    packages is an attrset with {name: { start = [ vim derivations ]; opt = [ vim derivations ]; }
+    Example:
+      vimrcContent {
+
+        packages = { home-manager = { start = [vimPlugins.vim-fugitive]; opt = [];};
+        beforePlugins = '';
+        customRc = ''let mapleader = " "'';
+
+      };
+   */
   vimrcContent = {
     packages ? null,
     vam ? null,

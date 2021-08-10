@@ -69,6 +69,7 @@ in
   cjdns = handleTest ./cjdns.nix {};
   clickhouse = handleTest ./clickhouse.nix {};
   cloud-init = handleTest ./cloud-init.nix {};
+  cntr = handleTest ./cntr.nix {};
   cockroachdb = handleTestOn ["x86_64-linux"] ./cockroachdb.nix {};
   consul = handleTest ./consul.nix {};
   containers-bridge = handleTest ./containers-bridge.nix {};
@@ -125,8 +126,9 @@ in
   fancontrol = handleTest ./fancontrol.nix {};
   fcitx = handleTest ./fcitx {};
   ferm = handleTest ./ferm.nix {};
-  firefox = handleTest ./firefox.nix {};
-  firefox-esr = handleTest ./firefox.nix { esr = true; };
+  firefox = handleTest ./firefox.nix { firefoxPackage = pkgs.firefox; };
+  firefox-esr-78 = handleTest ./firefox.nix { firefoxPackage = pkgs.firefox-esr-78; };
+  firefox-esr-91 = handleTest ./firefox.nix { firefoxPackage = pkgs.firefox-esr-91; };
   firejail = handleTest ./firejail.nix {};
   firewall = handleTest ./firewall.nix {};
   fish = handleTest ./fish.nix {};

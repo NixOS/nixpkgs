@@ -78,6 +78,7 @@
 , "csslint"
 , "dat"
 , "degit"
+, {"deltachat-desktop": "../../applications/networking/instant-messengers/deltachat-desktop"}
 , "dhcp"
 , "diagnostic-languageserver"
 , "dockerfile-language-server-nodejs"
