@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Yet another *nix distro fetching program, but less complex";
-    homepage = "https://github.com/llathasa-veleth/disfetch";
+    homepage = "https://github.com/q60/disfetch";
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = [ maintainers.vel ];
