@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Fast and simple Node.js version manager";
     homepage = "https://github.com/Schniz/fnm";
-    license = lib.licenses.gpl3Only;
+    license = licenses.gpl3Only;
     maintainers = with maintainers; [ kidonng ];
   };
 }
