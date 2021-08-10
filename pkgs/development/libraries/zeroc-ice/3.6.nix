@@ -1,6 +1,7 @@
 { stdenv, lib, fetchFromGitHub
 , mcpp, bzip2, expat, openssl, db5
 , darwin, libiconv, Security
+, zeroc-ice # to share meta
 , cpp11 ? false
 }:
 
@@ -54,10 +55,5 @@ stdenv.mkDerivation rec {
     rm -rf $out/share/slice
   '';
 
-  meta = with lib; {
-    homepage = "http://www.zeroc.com/ice.html";
-    description = "The internet communications engine";
-    license = licenses.gpl2;
-    platforms = platforms.unix;
-  };
+  inherit (zeroc-ice) meta;
 }
