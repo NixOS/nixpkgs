@@ -15,6 +15,11 @@ stdenv.mkDerivation rec {
     sha256 = "0h7wjfnk2092glqcp9mqaax7xx0s13m501z1gi0gsjl2vvvd0gfp";
   };
 
+  patches = [
+    # https://c-ares.haxx.se/adv_20210810.html
+    ./CVE-2021-3672.patch
+  ];
+
   meta = with lib; {
     description = "A C library for asynchronous DNS requests";
     homepage = "https://c-ares.haxx.se";
