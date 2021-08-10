@@ -16,12 +16,12 @@
 
 buildPythonPackage rec {
   pname = "b2sdk";
-  version = "1.11.0";
+  version = "1.12.0";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-yOOyhuue3A6p/SBaO6UUxbd4mTDyW2mRnbqlvZSyiKA=";
+    sha256 = "sha256-PsImSuK0IVY9EwpLKlP5ZFS6A7j2iJOtUg/GUcQTJR0=";
   };
 
   nativeBuildInputs = [
