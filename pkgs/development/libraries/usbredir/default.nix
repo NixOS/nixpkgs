@@ -1,27 +1,50 @@
-{ lib, stdenv, fetchurl, pkg-config, libusb1 }:
+{ lib
+, stdenv
+, cmake
+, fetchFromGitLab
+, pkg-config
+, meson
+, ninja
+, glib
+, libusb1
+}:
 
 stdenv.mkDerivation rec {
   pname = "usbredir";
-  version = "0.8.0";
+  version = "0.10.0";
 
-  src = fetchurl {
-    url = "https://spice-space.org/download/usbredir/${pname}-${version}.tar.bz2";
-    sha256 = "002yik1x7kn0427xahvnhjby2np14a6xqw7c3dx530n9h5d9rg47";
+  src = fetchFromGitLab {
+    domain = "gitlab.freedesktop.org";
+    owner = "spice";
+    repo = "usbredir";
+    rev = "${pname}-${version}";
+    sha256 = "1dz8jms9l6gg2hw0k6p1p1lnchc9mcgmskgvm5gbdvw3j7wrhdbz";
   };
 
-  NIX_CFLAGS_COMPILE = "-Wno-error";
+  nativeBuildInputs = [
+    glib
+    meson
+    ninja
+    pkg-config
+  ];
 
-  nativeBuildInputs = [ pkg-config ];
-  propagatedBuildInputs = [ libusb1 ];
+  propagatedBuildInputs = [
+    libusb1
+  ];
+
+  mesonFlags = [
+    "-Dgit_werror=disabled"
+    "-Dtools=enabled"
+    "-Dfuzzing=disabled"
+  ];
 
   outputs = [ "out" "dev" ];
 
   meta = with lib; {
     description = "USB traffic redirection protocol";
     homepage = "https://www.spice-space.org/usbredir.html";
-    license = licenses.lgpl21;
-
-    maintainers = [ maintainers.offline ];
+    license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [ offline ];
     platforms = platforms.linux;
   };
 }
