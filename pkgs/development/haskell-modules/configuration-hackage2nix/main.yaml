@@ -374,6 +374,7 @@ unsupported-platforms:
   gtk-sni-tray:                                 [ x86_64-darwin ]
   haskell-snake:                                [ x86_64-darwin ]
   hcwiid:                                       [ x86_64-darwin ]
+  hevm:                                         [ aarch64-linux ] # depends on sbv, which is not supported on aarch64-linux
   HFuse:                                        [ x86_64-darwin ]
   hidapi:                                       [ x86_64-darwin ]
   hinotify-bytestring:                          [ x86_64-darwin ]
