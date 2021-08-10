@@ -5280,6 +5280,12 @@
     githubId = 20675;
     name = "Joël Perras";
   };
+  jpetrucciani = {
+    email = "j@cobi.dev";
+    github = "jpetrucciani";
+    githubId = 8117202;
+    name = "Jacobi Petrucciani";
+  };
   jpierre03 = {
     email = "nix@prunetwork.fr";
     github = "jpierre03";
