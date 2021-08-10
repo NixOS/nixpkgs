@@ -179,6 +179,14 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://github.com/tuxedocomputers/tuxedo-control-center">tuxedo-control-center</link>,
+          a graphical user interface to control fan and power management
+          on Tuxedo laptops. Available as
+          <link linkend="opt-hardware.tuxedo-control-center.enable">hardware.tuxedo-control-center</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://www.rstudio.com/products/rstudio/#rstudio-server">rstudio-server</link>,
           a browser-based version of the RStudio IDE for the R
           programming language. Available as

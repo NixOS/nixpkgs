@@ -74,6 +74,7 @@
   ./hardware/rtl-sdr.nix
   ./hardware/steam-hardware.nix
   ./hardware/system-76.nix
+  ./hardware/tuxedo-control-center.nix
   ./hardware/tuxedo-keyboard.nix
   ./hardware/ubertooth.nix
   ./hardware/usb-wwan.nix
