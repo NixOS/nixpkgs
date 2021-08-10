@@ -1937,4 +1937,9 @@ EOT
     sha256 = "0l15ccfdys100jf50s9rr4p0d0ikn53bkh7a9qlk9i0y0z5jc6x1";
   });
 
+  # Needs Cabal >= 3.4
+  chs-cabal = super.chs-cabal.override {
+    Cabal = self.Cabal_3_6_0_0;
+  };
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

@@ -406,6 +406,7 @@ dont-distribute-packages:
  - algebra-driven-design
  - algebra-sql
  - algolia
+ - align-audio
  - alms
  - alpha
  - alsa-gui
@@ -1539,6 +1540,7 @@ dont-distribute-packages:
  - hmeap-utils
  - hmep
  - hmm-lapack
+ - hmm-lapack_0_4_1
  - hmt
  - hmt-diagrams
  - hnormalise
@@ -1888,6 +1890,8 @@ dont-distribute-packages:
  - lapack
  - lapack-carray
  - lapack-comfort-array
+ - lapack-comfort-array_0_0_1
+ - lapack_0_4
  - lat
  - latex-formulae-hakyll
  - latex-formulae-pandoc
@@ -1932,6 +1936,7 @@ dont-distribute-packages:
  - lighttpd-conf
  - lighttpd-conf-qq
  - linear-circuit
+ - linear-circuit_0_1_0_3
  - linearmap-category
  - linearscan-hoopl
  - linkchk
@@ -2010,6 +2015,7 @@ dont-distribute-packages:
  - magic-wormhole
  - magicbane
  - magico
+ - magico_0_0_2_2
  - mahoro
  - maid
  - mail-pool
@@ -2560,6 +2566,7 @@ dont-distribute-packages:
  - representable-tries
  - req-oauth2
  - resistor-cube
+ - resistor-cube_0_0_1_3
  - resource-pool-catchio
  - resource-simple
  - respond
@@ -3120,6 +3127,7 @@ dont-distribute-packages:
  - venzone
  - verdict-json
  - versioning-servant
+ - vessel
  - vflow-types
  - vformat-aeson
  - vformat-time
