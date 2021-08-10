@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     runHook preBuild
 
     jlink \
-      ${lib.strings.optionalString (!stdenv.isDarwin) "--module-path './jdks/${platform}/jdk-13/jmods'"} \
+      ${lib.optionalString (!stdenv.isDarwin) "--module-path './jdks/${platform}/jdk-13/jmods'"} \
       --add-modules java.base,java.compiler,java.logging,java.sql,java.xml,jdk.compiler,jdk.jdi,jdk.unsupported,jdk.zipfs \
       --output dist/${platform} \
       --no-header-files \
