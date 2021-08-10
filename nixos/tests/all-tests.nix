@@ -127,6 +127,7 @@ in
   fcitx = handleTest ./fcitx {};
   ferm = handleTest ./ferm.nix {};
   firefox = handleTest ./firefox.nix { firefoxPackage = pkgs.firefox; };
+  firefox-esr    = handleTest ./firefox.nix { firefoxPackage = pkgs.firefox-esr; }; # used in `tested` job
   firefox-esr-78 = handleTest ./firefox.nix { firefoxPackage = pkgs.firefox-esr-78; };
   firefox-esr-91 = handleTest ./firefox.nix { firefoxPackage = pkgs.firefox-esr-91; };
   firejail = handleTest ./firejail.nix {};
