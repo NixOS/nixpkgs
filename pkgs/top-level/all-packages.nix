@@ -1341,6 +1341,8 @@ with pkgs;
 
   inherit (nodePackages) hyperspace-cli;
 
+  bklk = callPackage ../applications/misc/bklk { };
+
   bkyml = callPackage ../tools/misc/bkyml { };
 
   blockbench-electron = callPackage ../applications/graphics/blockbench-electron { };
