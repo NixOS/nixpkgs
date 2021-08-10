@@ -7175,7 +7175,7 @@ with pkgs;
 
   mmixware = callPackage ../development/tools/mmixware { };
 
-  modemmanager = callPackage ../tools/networking/modem-manager {};
+  modemmanager = callPackage ../tools/networking/modemmanager {};
 
   modem-manager-gui = callPackage ../applications/networking/modem-manager-gui {};
 

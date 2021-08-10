@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "modem-manager";
+  pname = "modemmanager";
   version = "1.16.10";
 
   src = fetchurl {
