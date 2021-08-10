@@ -9051,6 +9051,12 @@
     githubId = 1567527;
     name = "Sebastian Hyberts";
   };
+  sebtm = {
+    email = "mail@sebastian-sellmeier.de";
+    github = "sebtm";
+    githubId = 17243347;
+    name = "Sebastian Sellmeier";
+  };
   sellout = {
     email = "greg@technomadic.org";
     github = "sellout";
