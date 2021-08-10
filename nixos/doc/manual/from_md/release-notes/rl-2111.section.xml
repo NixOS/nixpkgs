@@ -687,6 +687,15 @@
           <literal>yambar-wayland</literal> if you are on wayland.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          The <literal>services.minio</literal> module gained an
+          additional option <literal>consoleAddress</literal>, that
+          configures the address and port the web UI is listening, it
+          defaults to <literal>:9001</literal>. To be able to access the
+          web UI this port needs to be opened in the firewall.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-notable-changes">
