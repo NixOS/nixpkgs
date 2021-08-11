@@ -2152,10 +2152,10 @@ let
 
   CatalystPluginPrometheusTiny = buildPerlPackage {
     pname = "Catalyst-Plugin-PrometheusTiny";
-    version = "0.005";
+    version = "0.006";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SY/SYSPETE/Catalyst-Plugin-PrometheusTiny-0.005.tar.gz";
-      sha256 = "a42ef09efdc3053899ae007c41220d3ed7207582cc86e491b4f534539c992c5a";
+      url = "mirror://cpan/authors/id/S/SY/SYSPETE/Catalyst-Plugin-PrometheusTiny-0.006.tar.gz";
+      sha256 = "1hd2nv21c2mq3yvhsys4a276bdwr5igs4b73m99v7ymzpabvjf9b";
     };
     buildInputs = [ HTTPMessage Plack SubOverride TestDeep ];
     propagatedBuildInputs = [ CatalystRuntime Moose PrometheusTiny PrometheusTinyShared ];
@@ -17478,10 +17478,10 @@ let
 
   PrometheusTiny = buildPerlPackage {
     pname = "Prometheus-Tiny";
-    version = "0.007";
+    version = "0.008";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RO/ROBN/Prometheus-Tiny-0.007.tar.gz";
-      sha256 = "0ef8b226a2025cdde4df80129dd319aa29e884e653c17dc96f4823d985c028ec";
+      url = "mirror://cpan/authors/id/R/RO/ROBN/Prometheus-Tiny-0.008.tar.gz";
+      sha256 = "17d7b69chkcq8fprww6m15glndyb0lms2l0xjbnbw04q7f8ncskk";
     };
     buildInputs = [ HTTPMessage Plack TestException ];
     meta = {
@@ -17493,10 +17493,10 @@ let
 
   PrometheusTinyShared = buildPerlPackage {
     pname = "Prometheus-Tiny-Shared";
-    version = "0.023";
+    version = "0.024";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RO/ROBN/Prometheus-Tiny-Shared-0.023.tar.gz";
-      sha256 = "7c2c72397be5d8e4839d1bf4033c1800f467f2509689673c6419df48794f2abe";
+      url = "mirror://cpan/authors/id/R/RO/ROBN/Prometheus-Tiny-Shared-0.024.tar.gz";
+      sha256 = "02w24r4amk8dqlavg6abxap48hzxrbda48f1pmrqypgx1cz59g4g";
     };
     buildInputs = [ DataRandom HTTPMessage Plack TestDifferences TestException ];
     propagatedBuildInputs = [ HashSharedMem JSONXS PrometheusTiny ];
