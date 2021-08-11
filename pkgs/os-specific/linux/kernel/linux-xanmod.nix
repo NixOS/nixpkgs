@@ -44,6 +44,12 @@ buildLinux (args // rec {
     ANDROID_BINDER_IPC = module;
     ANDROID_BINDERFS = module;
     ANDROID_BINDER_DEVICES = freeform "binder,hwbinder,vndbinder";
+
+    # Futex WAIT_MULTIPLE implementation for Wine / Proton Fsync.
+    # Futex2 interface compatible w/ latest Wine / Proton Fsync.
+    FUTEX = yes;
+    FUTEX2 = yes;
+    FUTEX_PI = yes;
   };
 
   extraMeta = {
