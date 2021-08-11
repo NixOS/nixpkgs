@@ -10,7 +10,8 @@ let
   hasVirtuals = any (i: i.virtual) interfaces;
   hasSits = cfg.sits != { };
   hasBonds = cfg.bonds != { };
-  hasFous = cfg.fooOverUDP != { };
+  hasFous = cfg.fooOverUDP != { }
+    || filterAttrs (_: s: s.encapsulation != null) cfg.sits != { };
 
   slaves = concatMap (i: i.interfaces) (attrValues cfg.bonds)
     ++ concatMap (i: i.interfaces) (attrValues cfg.bridges)
@@ -945,6 +946,44 @@ in
             example = "enp4s0f0";
             description = ''
               The underlying network device on which the tunnel resides.
+            '';
+          };
+
+          encapsulation = with types; mkOption {
+            type = nullOr (submodule {
+              options = {
+                type = mkOption {
+                  type = enum [ "fou" "gue" ];
+                  description = ''
+                    Selects encapsulation type. See
+                    <citerefentry><refentrytitle>ip-link</refentrytitle>
+                    <manvolnum>8</manvolnum></citerefentry> for details.
+                  '';
+                };
+
+                port = mkOption {
+                  type = port;
+                  example = 9001;
+                  description = ''
+                    Destination port for encapsulated packets.
+                  '';
+                };
+
+                sourcePort = mkOption {
+                  type = nullOr types.port;
+                  default = null;
+                  example = 9002;
+                  description = ''
+                    Source port for encapsulated packets. Will be chosen automatically by
+                    the kernel if unset.
+                  '';
+                };
+              };
+            });
+            default = null;
+            example = { type = "fou"; port = 9001; };
+            description = ''
+              Configures encapsulation in UDP packets.
             '';
           };
 

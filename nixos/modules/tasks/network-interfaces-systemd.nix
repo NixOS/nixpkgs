@@ -227,7 +227,17 @@ in
               Local = sit.local;
             }) // (optionalAttrs (sit.ttl != null) {
               TTL = sit.ttl;
-            });
+            }) // (optionalAttrs (sit.encapsulation != null) (
+              {
+                FooOverUDP = true;
+                Encapsulation =
+                  if sit.encapsulation.type == "fou"
+                  then "FooOverUDP"
+                  else "GenericUDPEncapsulation";
+                FOUDestinationPort = sit.encapsulation.port;
+              } // (optionalAttrs (sit.encapsulation.sourcePort != null) {
+                FOUSourcePort = sit.encapsulation.sourcePort;
+              })));
         };
         networks = mkIf (sit.dev != null) {
           "40-${sit.dev}" = (mkMerge [ (genericNetwork (mkOverride 999)) {

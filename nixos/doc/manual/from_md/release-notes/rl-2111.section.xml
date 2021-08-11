@@ -1548,6 +1548,12 @@ Superuser created successfully.
           Foo-over-UDP encapsulations.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <literal>networking.sits</literal> now supports Foo-over-UDP
+          encapsulation.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
 </section>
