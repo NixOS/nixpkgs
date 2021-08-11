@@ -3206,6 +3206,8 @@ in {
 
   guestfs = callPackage ../development/python-modules/guestfs { };
 
+  gudhi = callPackage ../development/python-modules/gudhi { };
+
   gumath = callPackage ../development/python-modules/gumath { };
 
   gunicorn = callPackage ../development/python-modules/gunicorn { };
