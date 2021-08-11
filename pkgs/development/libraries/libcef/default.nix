@@ -61,6 +61,11 @@ let
       projectArch = "arm64";
       sha256 = "1j93qawh9h6k2ic70i10npppv5f9dch961lc1wxwsi68daq8r081";
     };
+    "i686-linux" = {
+      platformStr = "linux32";
+      projectArch = "x86";
+      sha256 = "0ki4zr8ih06kirgbpxbinv4baw3qvacx208q6qy1cvpfh6ll4fwb";
+    };
     "x86_64-linux" = {
       platformStr = "linux64";
       projectArch = "x86_64";
@@ -102,6 +107,6 @@ stdenv.mkDerivation rec {
     homepage = "https://cef-builds.spotifycdn.com/index.html";
     maintainers = with maintainers; [ puffnfresh ];
     license = licenses.bsd3;
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" ];
   };
 }
