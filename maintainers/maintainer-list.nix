@@ -6977,6 +6977,12 @@
       fingerprint = "3DEE 1C55 6E1C 3DC5 54F5  875A 003F 2096 411B 5F92";
     }];
   };
+  michaeladler = {
+    email = "therisen06@gmail.com";
+    github = "michaeladler";
+    githubId = 1575834;
+    name = "Michael Adler";
+  };
   michaelpj = {
     email = "michaelpj@gmail.com";
     github = "michaelpj";
