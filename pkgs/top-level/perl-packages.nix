@@ -2150,6 +2150,21 @@ let
     };
   };
 
+  CatalystPluginPrometheusTiny = buildPerlPackage {
+    pname = "Catalyst-Plugin-PrometheusTiny";
+    version = "0.005";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SY/SYSPETE/Catalyst-Plugin-PrometheusTiny-0.005.tar.gz";
+      sha256 = "a42ef09efdc3053899ae007c41220d3ed7207582cc86e491b4f534539c992c5a";
+    };
+    buildInputs = [ HTTPMessage Plack SubOverride TestDeep ];
+    propagatedBuildInputs = [ CatalystRuntime Moose PrometheusTiny PrometheusTinyShared ];
+    meta = {
+      description = "Prometheus metrics for Catalyst";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   CatalystPluginSession = buildPerlPackage {
     pname = "Catalyst-Plugin-Session";
     version = "0.41";
@@ -4928,6 +4943,20 @@ let
     propagatedBuildInputs = [ ClonePP FileHomeDir PackageStash SortNaturally ];
     meta = {
       description = "colored pretty-print of Perl data structures and objects";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  DataRandom = buildPerlPackage {
+    pname = "Data-Random";
+    version = "0.13";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/B/BA/BAREFOOT/Data-Random-0.13.tar.gz";
+      sha256 = "eb590184a8db28a7e49eab09e25f8650c33f1f668b6a472829de74a53256bfc0";
+    };
+    buildInputs = [ FileShareDirInstall TestMockTime ];
+    meta = {
+      description = "Perl module to generate random data";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -9398,6 +9427,20 @@ let
     };
     meta = {
       description = "Store multiple values per key";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  HashSharedMem = buildPerlModule {
+    pname = "Hash-SharedMem";
+    version = "0.005";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/Z/ZE/ZEFRAM/Hash-SharedMem-0.005.tar.gz";
+      sha256 = "324776808602f7bdc44adaa937895365454029a926fa611f321c9bf6b940bb5e";
+    };
+    buildInputs = [ ScalarString ];
+    meta = {
+      description = "Efficient shared mutable hash";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -17418,6 +17461,37 @@ let
       sha256 = "1g3l8jzx06x4l4p0x7fyn4wvg6plfzl420irwwb9v447wzsn6xfh";
     };
     propagatedBuildInputs = [ IPCSignal ];
+  };
+
+  PrometheusTiny = buildPerlPackage {
+    pname = "Prometheus-Tiny";
+    version = "0.007";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/R/RO/ROBN/Prometheus-Tiny-0.007.tar.gz";
+      sha256 = "0ef8b226a2025cdde4df80129dd319aa29e884e653c17dc96f4823d985c028ec";
+    };
+    buildInputs = [ HTTPMessage Plack TestException ];
+    meta = {
+      homepage = "https://github.com/robn/Prometheus-Tiny";
+      description = "A tiny Prometheus client";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  PrometheusTinyShared = buildPerlPackage {
+    pname = "Prometheus-Tiny-Shared";
+    version = "0.023";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/R/RO/ROBN/Prometheus-Tiny-Shared-0.023.tar.gz";
+      sha256 = "7c2c72397be5d8e4839d1bf4033c1800f467f2509689673c6419df48794f2abe";
+    };
+    buildInputs = [ DataRandom HTTPMessage Plack TestDifferences TestException ];
+    propagatedBuildInputs = [ HashSharedMem JSONXS PrometheusTiny ];
+    meta = {
+      homepage = "https://github.com/robn/Prometheus-Tiny-Shared";
+      description = "A tiny Prometheus client with a shared database behind it";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
   };
 
   ProtocolRedis = buildPerlPackage {
