@@ -227,6 +227,7 @@ let
   ++ optional stdenv.hostPlatform.isLinux "ac_cv_func_lchmod=no"
   ++ optional static "LDFLAGS=-static";
 
+  strictDeps = true;
   buildInputs =
     optional (stdenv ? cc && stdenv.cc.libc != null) stdenv.cc.libc ++
     [ bzip2 openssl zlib ]
