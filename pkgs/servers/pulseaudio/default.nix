@@ -94,7 +94,6 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optional (jackaudioSupport && !libOnly) "--enable-jack"
     ++ lib.optionals stdenv.isDarwin [
-      "--with-mac-sysroot=${sdk}"
       "--disable-neon-opt"
     ]
     ++ lib.optional (stdenv.isLinux && useSystemd) "--with-systemduserunitdir=${placeholder "out"}/lib/systemd/user"
