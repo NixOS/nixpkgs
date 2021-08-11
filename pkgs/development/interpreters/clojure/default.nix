@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
 
       echo "Installing clojure and clj into $bin_dir"
       substituteInPlace clojure --replace PREFIX $out
+      substituteInPlace clj --replace BINDIR $bin_dir
       install -Dm755 clojure "$bin_dir/clojure"
       install -Dm755 clj "$bin_dir/clj"
 
