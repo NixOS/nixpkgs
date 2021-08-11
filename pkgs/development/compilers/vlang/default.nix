@@ -1,6 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, glfw, freetype, openssl, makeWrapper, upx ? null }:
-
-assert stdenv.hostPlatform.isUnix -> upx != null;
+{ lib, stdenv, fetchFromGitHub, glfw, freetype, openssl, makeWrapper, upx }:
 
 stdenv.mkDerivation rec {
   pname = "vlang";
