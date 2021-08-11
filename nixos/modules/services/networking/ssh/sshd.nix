@@ -520,11 +520,7 @@ in
             XAuthLocation ${pkgs.xorg.xauth}/bin/xauth
         ''}
 
-        ${if cfg.forwardX11 then ''
-          X11Forwarding yes
-        '' else ''
-          X11Forwarding no
-        ''}
+        X11Forwarding ${if cfg.forwardX11 then "yes" else "no"}
 
         ${optionalString cfg.allowSFTP ''
           Subsystem sftp ${cfg.sftpServerExecutable} ${concatStringsSep " " cfg.sftpFlags}
