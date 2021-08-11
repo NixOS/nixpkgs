@@ -13,6 +13,7 @@
 , gtk3
 , gnome
 , gcr
+, libgudev
 , pam
 , systemd
 , upower
@@ -37,7 +38,7 @@ let
   };
 in stdenv.mkDerivation rec {
   pname = "phosh";
-  version = "0.12.1";
+  version = "0.13.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -45,7 +46,7 @@ in stdenv.mkDerivation rec {
     owner = "Phosh";
     repo = pname;
     rev = "v${version}";
-    sha256 = "048g5sp9jgfiwq6n8my4msm7wy3pdhbg0wxqxvps4m8qf8wa7ffq";
+    sha256 = "1rk6jca08vab92dyajg5ziv4wi5sn555schxacf6jr239g88vrwj";
   };
 
   nativeBuildInputs = [
@@ -57,6 +58,7 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    libgudev
     phoc
     libhandy
     libsecret
