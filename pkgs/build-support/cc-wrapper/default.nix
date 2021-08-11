@@ -308,7 +308,7 @@ stdenv.mkDerivation {
 
       echo "-B${gccForLibs}/lib/gcc/${targetPlatform.config}/${gccForLibs.version}" >> $out/nix-support/cc-cflags
       echo "-L${gccForLibs}/lib/gcc/${targetPlatform.config}/${gccForLibs.version}" >> $out/nix-support/cc-ldflags
-      echo "-L${gccForLibs.lib}/${targetPlatform.config}/lib" >> $out/nix-support/cc-ldflags
+      echo "-L${gccForLibs.lib}/lib" >> $out/nix-support/cc-ldflags
     ''
 
     # TODO We would like to connect this to `useGccForLibs`, but we cannot yet
