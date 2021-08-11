@@ -40,8 +40,9 @@ in stdenv.mkDerivation rec {
   version = "0.12.1";
 
   src = fetchFromGitLab {
-    domain = "source.puri.sm";
-    owner = "Librem5";
+    domain = "gitlab.gnome.org";
+    group = "World";
+    owner = "Phosh";
     repo = pname;
     rev = "v${version}";
     sha256 = "048g5sp9jgfiwq6n8my4msm7wy3pdhbg0wxqxvps4m8qf8wa7ffq";
