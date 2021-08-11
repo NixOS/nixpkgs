@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "requests-cache";
-  version = "0.7.2";
+  version = "0.7.3";
   disabled = pythonOlder "3.6";
   format = "pyproject";
 
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "reclosedev";
     repo = "requests-cache";
     rev = "v${version}";
-    sha256 = "055dfyjm8dqwr62v86lyvq4r04692gmvlgp86218vwvzgm7p3p2c";
+    sha256 = "sha256-QGh/ThI5bKE65luVHDSsr6RQq5RReugdZrVvR1R0pUU=";
   };
 
   nativeBuildInputs = [
