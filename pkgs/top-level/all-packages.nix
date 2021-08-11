@@ -8484,6 +8484,8 @@ with pkgs;
 
   rtss = callPackage ../development/tools/misc/rtss { };
 
+  realvnc-vnc-viewer = callPackage ../tools/admin/realvnc-vnc-viewer {};
+
   reaverwps = callPackage ../tools/networking/reaver-wps {};
 
   reaverwps-t6x = callPackage ../tools/networking/reaver-wps-t6x {};
