@@ -4,7 +4,7 @@
 , makeBinaryWrapper
 , libfido2
 , dbus
-, pinentry
+, pinentry-gnome3
 , nix-update-script
 }:
 
@@ -29,7 +29,7 @@ buildGoModule rec {
 
   postInstall = ''
     wrapProgram $out/bin/goldwarden \
-      --suffix PATH : ${lib.makeBinPath [dbus pinentry]}
+      --suffix PATH : ${lib.makeBinPath [dbus pinentry-gnome3]}
 
     install -Dm644 $src/resources/com.quexten.goldwarden.policy -t $out/share/polkit-1/actions
   '';

@@ -14920,7 +14920,9 @@ self: super: with self; {
 
   treq = callPackage ../development/python-modules/treq { };
 
-  trezor-agent = callPackage ../development/python-modules/trezor-agent { };
+  trezor-agent = callPackage ../development/python-modules/trezor-agent {
+    pinentry = pkgs.pinentry-curses;
+  };
 
   trezor = callPackage ../development/python-modules/trezor { };
 

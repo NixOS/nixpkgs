@@ -210,6 +210,7 @@ in {
       serif = ["Noto Serif"];
     };
 
+    programs.gnupg.agent.pinentryPackage = pkgs.pinentry-qt;
     programs.ssh.askPassword = mkDefault "${kdePackages.ksshaskpass.out}/bin/ksshaskpass";
 
     # Enable helpful DBus services.
