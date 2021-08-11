@@ -13,6 +13,8 @@
   "lockkeys@vaina.lt" = "lock-keys";
   "lockkeys@fawtytoo" = "lock-keys-2";
 
+  "system-monitor@paradoxxx.zero.gmail.com" = "system-monitor"; # manually packaged
+  "System_Monitor@bghome.gmail.com" = "system-monitor-2";
 
 
   # ############################################################################
