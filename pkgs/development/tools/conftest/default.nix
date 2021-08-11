@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "conftest";
-  version = "0.26.0";
+  version = "0.27.0";
 
   src = fetchFromGitHub {
     owner = "open-policy-agent";
     repo = "conftest";
     rev = "v${version}";
-    sha256 = "sha256-AIFZhe0N6FT06IrDVF2OVfSwmQVg62ZglOcnnDL9TK8=";
+    sha256 = "sha256-Yc/aejGLMbAqpIRTVQQ3lv7/oyr7tVAy41Gx6198Eos=";
   };
 
-  vendorSha256 = "sha256-7wj1n5ggYYrmMrDuQkbbJ2C1S1LHawkkj91owHDIwr0=";
+  vendorSha256 = "sha256-jI5bX6S2C0ckiiieVlaRNEsLS/5gGkC3o/xauDtCOjA=";
 
   doCheck = false;
 

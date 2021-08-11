@@ -1,4 +1,4 @@
-{ config, stdenv, fetchurl, lib, iasl, dev86, pam, libxslt, libxml2, wrapQtAppsHook
+{ config, stdenv, fetchurl, lib, acpica-tools, dev86, pam, libxslt, libxml2, wrapQtAppsHook
 , libX11, xorgproto, libXext, libXcursor, libXmu, libIDL, SDL, libcap, libGL
 , libpng, glib, lvm2, libXrandr, libXinerama, libopus, qtbase, qtx11extras
 , qttools, qtsvg, qtwayland, pkg-config, which, docbook_xsl, docbook_xml_dtd_43
@@ -24,16 +24,6 @@ let
   # Use maintainers/scripts/update.nix to update the version and all related hashes or
   # change the hashes in extpack.nix and guest-additions/default.nix as well manually.
   version = "6.1.26";
-
-  iasl' = iasl.overrideAttrs (old: rec {
-    inherit (old) pname;
-    version = "20190108";
-    src = fetchurl {
-      url = "https://acpica.org/sites/acpica/files/acpica-unix-${version}.tar.gz";
-      sha256 = "0bqhr3ndchvfhxb31147z8gd81dysyz5dwkvmp56832d0js2564q";
-    };
-    NIX_CFLAGS_COMPILE = old.NIX_CFLAGS_COMPILE + " -Wno-error=stringop-truncation";
-  });
 in stdenv.mkDerivation {
   pname = "virtualbox";
   inherit version;
@@ -52,7 +42,7 @@ in stdenv.mkDerivation {
   dontWrapQtApps = true;
 
   buildInputs =
-    [ iasl' dev86 libxslt libxml2 xorgproto libX11 libXext libXcursor libIDL
+    [ acpica-tools dev86 libxslt libxml2 xorgproto libX11 libXext libXcursor libIDL
       libcap glib lvm2 alsa-lib curl libvpx pam makeself perl
       libXmu libpng libopus python ]
     ++ optional javaBindings jdk

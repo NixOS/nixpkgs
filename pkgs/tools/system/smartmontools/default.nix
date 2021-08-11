@@ -1,6 +1,5 @@
 { lib, stdenv, fetchurl, autoreconfHook
-, mailutils, enableMail ? true
-, inetutils
+, enableMail ? false, mailutils, inetutils
 , IOKit, ApplicationServices }:
 
 let
@@ -21,15 +20,17 @@ in stdenv.mkDerivation rec {
     sha256 = "1mlc25sd5rgj5xmzcllci47inmfdw7cp185fday6hc9rwqkqmnaw";
   };
 
-  patches = [ ./smartmontools.patch ];
+  patches = [
+    # fixes darwin build
+    ./smartmontools.patch
+  ];
   postPatch = "cp -v ${driverdb} drivedb.h";
 
-  configureFlags = [
-    "--with-scriptpath=${lib.makeBinPath ([ inetutils ] ++ lib.optional enableMail mailutils)}"
-  ];
+  configureFlags = lib.optional enableMail
+    "--with-scriptpath=${lib.makeBinPath [ inetutils mailutils ]}";
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [] ++ lib.optionals stdenv.isDarwin [IOKit ApplicationServices];
+  buildInputs = lib.optionals stdenv.isDarwin [ IOKit ApplicationServices ];
   enableParallelBuilding = true;
 
   meta = with lib; {

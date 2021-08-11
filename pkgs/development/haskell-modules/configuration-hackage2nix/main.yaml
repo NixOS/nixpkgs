@@ -97,6 +97,7 @@ extra-packages:
   - Cabal == 2.2.*                      # required for jailbreak-cabal etc.
   - Cabal == 2.4.*                      # required for cabal-install etc.
   - Cabal == 3.2.*                      # required for cabal-install etc.
+  - Cabal == 3.4.*                      # required for cabal-install etc.
   - dependent-map == 0.2.4.0            # required by Hasura 1.3.1, 2020-08-20
   - dependent-sum == 0.4                # required by Hasura 1.3.1, 2020-08-20
   - dhall == 1.29.0                     # required for ats-pkg
@@ -236,6 +237,7 @@ package-maintainers:
     - stm-containers
     - streamly
     - taskwarrior
+    - witch
   pacien:
     - ldgallery-compiler
   peti:
@@ -372,6 +374,7 @@ unsupported-platforms:
   gtk-sni-tray:                                 [ x86_64-darwin ]
   haskell-snake:                                [ x86_64-darwin ]
   hcwiid:                                       [ x86_64-darwin ]
+  hevm:                                         [ aarch64-linux ] # depends on sbv, which is not supported on aarch64-linux
   HFuse:                                        [ x86_64-darwin ]
   hidapi:                                       [ x86_64-darwin ]
   hinotify-bytestring:                          [ x86_64-darwin ]

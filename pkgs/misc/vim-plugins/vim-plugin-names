@@ -138,6 +138,7 @@ esneider/YUNOcommit.vim
 euclidianAce/BetterLua.vim
 euclio/vim-markdown-composer
 f-person/git-blame.nvim
+famiu/bufdelete.nvim
 famiu/feline.nvim
 farmergreg/vim-lastplace
 fatih/vim-go

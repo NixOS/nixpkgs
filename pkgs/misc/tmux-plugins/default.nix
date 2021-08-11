@@ -72,6 +72,7 @@ in rec {
       rev = "aa59077c635ab21b251bd8cb4dc24c415e64a58e";
       sha256 = "06346ih3hzwszhkj25g4xv5av7292s6sdbrdpx39p0n3kgf5mwww";
     };
+    rtpFilePath = "scroll_copy_mode.tmux";
     meta = {
       homepage = "https://github.com/NHDaly/tmux-better-mouse-mode";
       description = "better mouse support for tmux";

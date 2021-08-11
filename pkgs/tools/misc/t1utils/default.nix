@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "t1utils";
-  version = "1.41";
+  version = "1.42";
 
   src = fetchurl {
-    url = "https://www.lcdf.org/type/t1utils-${version}.tar.gz";
-    sha256 = "09rlc837dr69hyiiicha3il37mchsvz84qw8hnvb60lrh9zdsppw";
+    url = "https://www.lcdf.org/type/${pname}-${version}.tar.gz";
+    sha256 = "YYd5NbGYcETd/0u5CgUgDKcWRnijVeFwv18aVVbMnyk=";
   };
 
   meta = with lib; {
