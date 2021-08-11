@@ -40,6 +40,8 @@ stdenv.mkDerivation rec {
     ++ lib.optional pythonSupport "py"
     ++ lib.optional (enableStatic && enableShared) "static";
 
+  strictDeps = true;
+
   buildInputs = lib.optional pythonSupport python
     ++ lib.optional (pythonSupport && python?isPy2 && python.isPy2) gettext
     ++ lib.optional (pythonSupport && python?isPy3 && python.isPy3) ncurses
