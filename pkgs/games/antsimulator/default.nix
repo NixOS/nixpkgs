@@ -14,8 +14,19 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ sfml ];
 
+  postPatch = ''
+    substituteInPlace src/main.cpp \
+      --replace "res/" "$out/opt/antsimulator/"
+
+    substituteInPlace include/simulation/config.hpp \
+      --replace "res/" "$out/opt/antsimulator/"
+
+    substituteInPlace include/render/colony_renderer.hpp \
+      --replace "res/" "$out/opt/antsimulator/"
+  '';
+
   installPhase = ''
-    mkdir -p $out/bin
+    install -Dm644 -t $out/opt/antsimulator res/*
     install -Dm755 ./AntSimulator $out/bin/antsimulator
   '';
 
