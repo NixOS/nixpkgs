@@ -29,10 +29,23 @@ let
   };
 in
 {
-  name = "systemd-unit-path";
+  name = "systemd-misc";
 
   machine = { pkgs, lib, ... }: {
     boot.extraSystemdUnitPaths = [ "/etc/systemd-rw/system" ];
+
+    users.users.limited = {
+      isNormalUser = true;
+      uid = 1000;
+    };
+
+    systemd.units."user-1000.slice.d/limits.conf" = {
+      text = ''
+        [Slice]
+        TasksAccounting=yes
+        TasksMax=100
+      '';
+    };
   };
 
   testScript = ''
@@ -43,5 +56,7 @@ in
     )
     machine.succeed("systemctl start example.service")
     machine.succeed("systemctl status example.service | grep 'Active: active'")
+
+    machine.succeed("systemctl show --property TasksMax --value user-1000.slice | grep 100")
   '';
 })
