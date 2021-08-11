@@ -8382,6 +8382,8 @@ in {
 
   subliminal = callPackage ../development/python-modules/subliminal { };
 
+  subprocess-tee = callPackage ../development/python-modules/subprocess-tee { };
+
   subunit = callPackage ../development/python-modules/subunit {
     inherit (pkgs) subunit cppunit check;
   };
