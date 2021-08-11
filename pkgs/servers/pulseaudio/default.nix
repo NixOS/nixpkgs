@@ -26,7 +26,7 @@
 , # Whether to build only the library.
   libOnly ? false
 
-, AudioUnit, Cocoa, CoreServices, Libc, sdk
+, AudioUnit, Cocoa, CoreServices, Libc
 }:
 
 stdenv.mkDerivation rec {
