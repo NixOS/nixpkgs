@@ -20,6 +20,7 @@ rustPlatform.buildRustPackage rec {
     description = "A post-modern modal text editor";
     homepage = "https://helix-editor.com";
     license = licenses.mpl20;
+    mainProgram = "hx";
     maintainers = with maintainers; [ yusdacra ];
   };
 }

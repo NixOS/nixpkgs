@@ -12,9 +12,6 @@ let
   pname = "rust-analyzer";
   publisher = "matklad";
 
-  # Follow the unstable version of rust-analyzer, since the extension is not stable yet.
-  inherit (rust-analyzer) version;
-
   build-deps = nodePackages."rust-analyzer-build-deps-../../misc/vscode-extensions/rust-analyzer/build-deps";
   # FIXME: Making a new derivation to link `node_modules` and run `npm run package`
   # will cause a build failure.
@@ -22,12 +19,26 @@ let
     src = "${rust-analyzer.src}/editors/code";
     outputs = [ "vsix" "out" ];
 
+    releaseTag = rust-analyzer.version;
+
+    nativeBuildInputs = [ jq moreutils ];
+
+    # Follows https://github.com/rust-analyzer/rust-analyzer/blob/41949748a6123fd6061eb984a47f4fe780525e63/xtask/src/dist.rs#L39-L65
     postInstall = ''
-      npm run package
-      mkdir $vsix
-      cp ${pname}.vsix $vsix/${pname}.zip
+      jq '
+        .version = $ENV.version |
+        .releaseTag = $ENV.releaseTag |
+        .enableProposedApi = false |
+        walk(del(.["$generated-start"]?) | del(.["$generated-end"]?))
+      ' package.json | sponge package.json
+
+      mkdir -p $vsix
+      npx vsce package -o $vsix/${pname}.zip
     '';
   };
+
+  # Use the plugin version as in vscode marketplace, updated by update script.
+  inherit (vsix) version;
 
 in
 vscode-utils.buildVscodeExtension {

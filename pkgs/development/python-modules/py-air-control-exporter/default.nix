@@ -1,6 +1,15 @@
-{ buildPythonPackage, fetchPypi, flask, isPy27, lib, nixosTests
-, prometheus_client, py-air-control, pytestCheckHook, pytest-cov, pytest-runner
-, setuptools-scm }:
+{ lib
+, buildPythonPackage
+, click
+, fetchPypi
+, flask
+, isPy27
+, nixosTests
+, prometheus_client
+, py-air-control
+, pytestCheckHook
+, setuptools-scm
+}:
 
 buildPythonPackage rec {
   pname = "py-air-control-exporter";
@@ -12,14 +21,40 @@ buildPythonPackage rec {
     sha256 = "ece2e446273542e5c0352c9d6e80d8279132c6ada3649c59e87a711448801a3b";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
-  checkInputs = [ pytestCheckHook pytest-cov pytest-runner ];
-  propagatedBuildInputs = [ flask prometheus_client py-air-control ];
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
+
+  propagatedBuildInputs = [
+    click
+    flask
+    prometheus_client
+    py-air-control
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "pytest-runner" ""
+    substituteInPlace setup.cfg \
+      --replace "--cov=py_air_control_exporter" ""
+  '';
+
+  disabledTests = [
+    # Tests are outdated
+    "test_help"
+    "test_unknown_protocol"
+  ];
+
+  pythonImportsCheck = [ "py_air_control_exporter" ];
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) py-air-control; };
 
   meta = with lib; {
-    description = "Exports Air Quality Metrics to Prometheus.";
+    description = "Exports Air Quality Metrics to Prometheus";
     homepage = "https://github.com/urbas/py-air-control-exporter";
     license = licenses.mit;
     maintainers = with maintainers; [ urbas ];

@@ -1,0 +1,14 @@
+diff --git a/internal/buf/cmd/buf/workspace_test.go b/internal/buf/cmd/buf/workspace_test.go
+index e051690..8887837 100644
+--- a/internal/buf/cmd/buf/workspace_test.go
++++ b/internal/buf/cmd/buf/workspace_test.go
+@@ -335,6 +335,9 @@ func TestWorkspaceNestedArchive(t *testing.T) {
+ }
+ 
+ func TestWorkspaceGit(t *testing.T) {
++	// Requires .git directory which we do not retain due to
++	// `leaveDotGit` non-determinism
++	t.Skip()
+ 	// Directory paths specified as a git reference within a workspace.
+ 	t.Parallel()
+ 	testRunStdout(

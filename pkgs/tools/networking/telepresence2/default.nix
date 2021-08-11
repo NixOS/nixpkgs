@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "telepresence2";
-  version = "2.3.6";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "telepresenceio";
     repo = "telepresence";
     rev = "v${version}";
-    sha256 = "1bs4h450109vhy18kpyy6y4p5l9kvz4w09m56fxh5z547m5ax6k3";
+    sha256 = "1v2jkhdlyq37akqyhb8mwsh7rjdv2fjw8kyzys3dv04k3dy5sl0f";
   };
 
-  vendorSha256 = "0xmw9mc0iy64kb12lsii4nn63ynh6gab9ls8z6mrizjjqz845sa5";
+  vendorSha256 = "1snmp461h8driy1w1xggk669yxl0sjl1m9pbqm7dwk44yb94zi1q";
 
   buildFlagsArray = ''
     -ldflags=-s -w -X=github.com/telepresenceio/telepresence/v2/pkg/version.Version=${src.rev}

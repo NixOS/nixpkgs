@@ -36,7 +36,7 @@
 , libidn
 , libedit
 , readline
-, sdk
+, apple_sdk
 , libGL
 , libGLU
 , mesa
@@ -167,13 +167,15 @@ stdenv.mkDerivation rec {
   ]) ++ lib.optionals stdenv.isDarwin [
     libedit
     readline
+  ] ++ lib.optional (stdenv.isDarwin && !stdenv.isAarch64) (
     # Pull a header that contains a definition of proc_pid_rusage().
     # (We pick just that one because using the other headers from `sdk` is not
-    # compatible with our C++ standard library)
-    (runCommandNoCC "${pname}_headers" {} ''
-      install -Dm444 "${lib.getDev sdk}"/include/libproc.h "$out"/include/libproc.h
-    '')
-  ] ++ lib.optionals stdenv.isLinux [
+    # compatible with our C++ standard library. This header is already in
+    # the standard library on aarch64)
+    runCommandNoCC "${pname}_headers" {} ''
+      install -Dm444 "${lib.getDev apple_sdk.sdk}"/include/libproc.h "$out"/include/libproc.h
+    ''
+  ) ++ lib.optionals stdenv.isLinux [
     bubblewrap
     libseccomp
     systemd

@@ -713,6 +713,8 @@ broken-packages:
   - combinatorial-problems
   - combinator-interactive
   - combobuffer
+  - comfort-array-shape
+  - comfort-fftw
   - Command
   - commander
   - Commando
@@ -2230,6 +2232,7 @@ broken-packages:
   - hscd
   - hs-cdb
   - hscdio
+  - hscim
   - hsclock
   - hScraper
   - hscuid
@@ -4034,6 +4037,7 @@ broken-packages:
   - robin
   - robots-txt
   - roc-cluster
+  - rocksdb-haskell
   - roku-api
   - rollbar
   - rollbar-client

@@ -163,7 +163,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
   '';
 
   tls-cert = pkgs.runCommandNoCC "selfSignedCerts" { buildInputs = [ pkgs.openssl ]; } ''
-    openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -nodes -subj '/CN=pleroma.nixos.test'
+    openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -nodes -subj '/CN=pleroma.nixos.test' -days 36500
     mkdir -p $out
     cp key.pem cert.pem $out
   '';
@@ -202,6 +202,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
       security.pki.certificateFiles = [ "${tls-cert}/cert.pem" ];
       networking.extraHosts = hosts nodes;
       networking.firewall.enable = false;
+      virtualisation.memorySize = 512;
       environment.systemPackages = with pkgs; [
         provision-db
         provision-secrets

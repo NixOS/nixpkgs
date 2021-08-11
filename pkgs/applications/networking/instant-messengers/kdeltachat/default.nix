@@ -66,5 +66,6 @@ in mkDerivation rec {
     homepage = "https://git.sr.ht/~link2xt/kdeltachat";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dotlambda ];
+    platforms = platforms.linux;
   };
 }

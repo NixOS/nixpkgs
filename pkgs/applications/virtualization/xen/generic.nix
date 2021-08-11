@@ -3,7 +3,7 @@ config:
 
 # Xen
 , bison, bzip2, checkpolicy, dev86, figlet, flex, gettext, glib
-, iasl, libaio, libiconv, libuuid, ncurses, openssl, perl
+, acpica-tools, libaio, libiconv, libuuid, ncurses, openssl, perl
 , python2Packages
 # python2Packages.python
 , xz, yajl, zlib
@@ -71,7 +71,7 @@ stdenv.mkDerivation (rec {
     cmake which
 
     # Xen
-    bison bzip2 checkpolicy dev86 figlet flex gettext glib iasl libaio
+    bison bzip2 checkpolicy dev86 figlet flex gettext glib acpica-tools libaio
     libiconv libuuid ncurses openssl perl python2Packages.python xz yajl zlib
 
     # oxenstored

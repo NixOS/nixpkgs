@@ -13,6 +13,7 @@
 , tor
 , psmisc
 }:
+
 let
   bisq-launcher = writeScript "bisq-launcher" ''
     #! ${bash}/bin/bash
@@ -46,14 +47,15 @@ let
   '';
 in
 stdenv.mkDerivation rec {
-  version = "1.7.0";
   pname = "bisq-desktop";
-  nativeBuildInputs = [ makeWrapper copyDesktopItems dpkg ];
+  version = "1.7.0";
 
   src = fetchurl {
     url = "https://github.com/bisq-network/bisq/releases/download/v${version}/Bisq-64bit-${version}.deb";
     sha256 = "0crry5k7crmrqn14wxiyrnhk09ac8a9ksqrwwky7jsnyah0bx5k4";
   };
+
+  nativeBuildInputs = [ makeWrapper copyDesktopItems dpkg ];
 
   desktopItems = [
     (makeDesktopItem {
@@ -71,6 +73,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/lib $out/bin
     cp opt/bisq/lib/app/desktop-${version}-all.jar $out/lib
 
@@ -80,13 +84,13 @@ stdenv.mkDerivation rec {
     makeWrapper ${bisq-launcher} $out/bin/bisq-desktop \
       --prefix PATH : $out/bin
 
-    copyDesktopItems
-
     for n in 16 24 32 48 64 96 128 256; do
       size=$n"x"$n
       ${imagemagick}/bin/convert opt/bisq/lib/Bisq.png -resize $size bisq.png
       install -Dm644 -t $out/share/icons/hicolor/$size/apps bisq.png
     done;
+
+    runHook postInstall
   '';
 
   meta = with lib; {
