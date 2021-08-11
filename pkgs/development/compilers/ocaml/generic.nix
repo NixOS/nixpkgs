@@ -44,6 +44,8 @@ stdenv.mkDerivation (args // {
 
   inherit src;
 
+  strictDeps = true;
+
   prefixKey = "-prefix ";
   configureFlags =
     let flags = new: old:
