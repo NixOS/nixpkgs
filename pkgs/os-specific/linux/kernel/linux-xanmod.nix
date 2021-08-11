@@ -1,9 +1,9 @@
-{ lib, stdenv, buildLinux, fetchFromGitHub, ... } @ args:
+{ lib, stdenv, buildLinux, fetchFromGitHub, realtime ? false, ... } @ args:
 
 let
-  version = "5.13.12";
+  version = if !realtime then "5.13.12" else "5.13.1";
   release = "1";
-  suffix = "xanmod${release}-cacule";
+  suffix = if !realtime then "xanmod${release}-cacule" else "rt${release}-xanmod${release}";
 in
 buildLinux (args // rec {
   inherit version;
@@ -13,15 +13,21 @@ buildLinux (args // rec {
     owner = "xanmod";
     repo = "linux";
     rev = modDirVersion;
-    sha256 = "sha256-cuZ8o0Ogi2dg4kVoFv4aqThRPDVI271i+DVw5Z4R7Kg=";
+    sha256 =
+      if !realtime
+      then "sha256-cuZ8o0Ogi2dg4kVoFv4aqThRPDVI271i+DVw5Z4R7Kg="
+      else "sha256-VSeeGe9D4/nX3cs7mvv70v1I0PN2QHMpaVgR5XuuqKY=";
   };
 
   structuredExtraConfig = with lib.kernel; {
     # Preemptive Full Tickless Kernel at 500Hz
+    EXPERT = if realtime then yes else no;
     PREEMPT_VOLUNTARY = lib.mkForce no;
-    PREEMPT = lib.mkForce yes;
+    PREEMPT = if !realtime then (lib.mkForce yes) else no;
+    PREEMPT_RT = if realtime then yes else no;
     NO_HZ_FULL = yes;
     HZ_500 = yes;
+    RT_GROUP_SCHED = lib.mkForce (option no);
 
     # Google's Multigenerational LRU Framework
     LRU_GEN = yes;
@@ -53,9 +59,10 @@ buildLinux (args // rec {
   };
 
   extraMeta = {
-    branch = "5.13-cacule";
-    maintainers = with lib.maintainers; [ fortuneteller2k lovesegfault ];
-    description = "Built with custom settings and new features built to provide a stable, responsive and smooth desktop experience";
+    branch = if !realtime then "5.13-cacule" else "5.13-rt";
+    maintainers = with lib.maintainers; [ fortuneteller2k ] ++ lib.optional (!realtime) lovesegfault;
+    description = "Built with custom settings and new features built to provide a stable, responsive and smooth desktop experience"
+      + lib.strings.optionalString realtime " (realtime version)";
     broken = stdenv.isAarch64;
   };
 } // (args.argsOverride or { }))

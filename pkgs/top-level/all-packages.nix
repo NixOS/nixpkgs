@@ -21272,6 +21272,8 @@ with pkgs;
     ];
   };
 
+  linux_xanmod-rt = linux_xanmod.override { rt = true; };
+
   /*  Linux kernel modules are inherently tied to a specific kernel.  So
       rather than provide specific instances of those packages for a
       specific kernel, we have a function that builds those packages
@@ -21607,6 +21609,7 @@ with pkgs;
 
   # XanMod kernel
   linuxPackages_xanmod = recurseIntoAttrs (linuxPackagesFor pkgs.linux_xanmod);
+  linuxPackages_xanmod_rt = recurseIntoAttrs (linuxPackagesFor pkgs.linux_xanmod-rt);
 
   # A function to build a manually-configured kernel
   linuxManualConfig = makeOverridable (callPackage ../os-specific/linux/kernel/manual-config.nix {});
