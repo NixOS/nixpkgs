@@ -13,6 +13,8 @@ python3Packages.buildPythonApplication rec {
     pytestCheckHook pytest-xdist responses
   ];
 
+  nativeBuildInputs = with python3Packages; [ setuptools-scm ];
+
   propagatedBuildInputs = with python3Packages; [
     colorama imagesize lxml requests setuptools
   ];
