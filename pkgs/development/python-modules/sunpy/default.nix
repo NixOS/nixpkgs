@@ -17,6 +17,7 @@
 , numpy
 , pandas
 , parfive
+, pytestCheckHook
 , pytest-astropy
 , pytest-mock
 , pytest-cov
@@ -67,6 +68,7 @@ buildPythonPackage rec {
 
   checkInputs = [
     hypothesis
+    pytestCheckHook
     pytest-astropy
     pytest-cov
     pytest-mock
