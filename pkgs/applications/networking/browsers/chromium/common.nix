@@ -171,14 +171,6 @@ let
       ./patches/widevine-79.patch
       # Fix the build by adding a missing dependency (s. https://crbug.com/1197837):
       ./patches/fix-missing-atspi2-dependency.patch
-    ] ++ lib.optionals (chromiumVersionAtLeast "93") [
-      # We need to revert this patch to build M93 with LLVM 12.
-      (githubPatch {
-        # Reland "Replace 'blacklist' with 'ignorelist' in ./tools/msan/."
-        commit = "9d080c0934b848ee4a05013c78641e612fcc1e03";
-        sha256 = "1bxdhxmiy6h4acq26lq43x2mxx6rawmfmlgsh5j7w8kyhkw5af0c";
-        revert = true;
-      })
     ];
 
     postPatch = ''
