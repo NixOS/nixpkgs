@@ -19,7 +19,6 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "stderr in red";
-
     longDescription = '' stderred hooks on write() and a family of stream
       functions (fwrite, fprintf, error...) from libc in order to colorize
       all stderr output that goes to terminal thus making it distinguishable
@@ -29,7 +28,6 @@ stdenv.mkDerivation rec {
       of existing binaries thanks to preload/insert feature of dynamic
       linkers.
     '';
-
     license = licenses.mit;
     maintainers = [ maintainers.scoder12 ];
     platforms = platforms.unix;
