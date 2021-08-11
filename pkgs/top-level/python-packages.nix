@@ -8367,6 +8367,8 @@ in {
 
   transitions = callPackage ../development/python-modules/transitions { };
 
+  translatepy = callPackage ../development/python-modules/translatepy { };
+
   translationstring = callPackage ../development/python-modules/translationstring { };
 
   transmission-rpc = callPackage ../development/python-modules/transmission-rpc { };

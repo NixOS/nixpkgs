@@ -9177,6 +9177,8 @@ in
 
   translate-shell = callPackage ../applications/misc/translate-shell { };
 
+  translatepy = with python3.pkgs; toPythonApplication translatepy;
+
   trash-cli = callPackage ../tools/misc/trash-cli { };
 
   trebleshot = libsForQt5.callPackage ../applications/networking/trebleshot { };
