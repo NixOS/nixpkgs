@@ -101,6 +101,8 @@ let
 
   version = with sourceVersion; "${major}.${minor}.${patch}${suffix}";
 
+  strictDeps = true;
+
   nativeBuildInputs = optionals (!stdenv.isDarwin) [
     autoreconfHook
   ] ++ optionals (!stdenv.isDarwin && passthru.pythonAtLeast "3.10") [
