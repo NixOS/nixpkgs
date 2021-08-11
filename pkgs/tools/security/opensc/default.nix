@@ -60,6 +60,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/OpenSC/OpenSC/wiki";
     license = licenses.lgpl21Plus;
     platforms = platforms.all;
-    maintainers = [ maintainers.erictapen ];
+    maintainers = [ maintainers.michaeladler ];
   };
 }
