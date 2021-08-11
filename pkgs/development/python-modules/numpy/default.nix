@@ -1,5 +1,6 @@
 { lib
 , fetchPypi
+, fetchpatch
 , python
 , buildPythonPackage
 , gfortran
@@ -50,7 +51,13 @@ in buildPythonPackage rec {
     sha256 = "1za22ggjxzm7drs2vd15s81ad9rlshk4p7pv7mxcbz4acdiszx6z";
   };
 
-  patches = lib.optionals python.hasDistutilsCxxPatch [
+  patches = [
+    # fix https://github.com/numpy/numpy/issues/19624
+    (fetchpatch {
+      url = "https://github.com/numpy/numpy/commit/ae279066d6bd253e8675428fac8946938b8d48d9.diff";
+      sha256 = "sha256-q8SoF/pMzLI4zYCx2YAZzR31cARlZXerNnBSevBO5pE=";
+    })
+  ] ++ lib.optionals python.hasDistutilsCxxPatch [
     # We patch cpython/distutils to fix https://bugs.python.org/issue1222585
     # Patching of numpy.distutils is needed to prevent it from undoing the
     # patch to distutils.
@@ -72,10 +79,6 @@ in buildPythonPackage rec {
   preBuild = ''
     ln -s ${cfg} site.cfg
   '';
-
-  # Workaround flakey compiler feature detection
-  # https://github.com/numpy/numpy/issues/19624
-  hardeningDisable = [ "strictoverflow" ];
 
   enableParallelBuilding = true;
 
