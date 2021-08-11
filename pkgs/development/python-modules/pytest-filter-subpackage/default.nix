@@ -26,6 +26,9 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     pytest-doctestplus
     pytest-cov
+  ];
+
+  checkInputs = [
     pytestCheckHook
   ];
 
