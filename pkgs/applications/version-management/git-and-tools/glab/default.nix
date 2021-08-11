@@ -14,8 +14,14 @@ buildGoModule rec {
   vendorSha256 = "sha256-9+WBKc8PI0v6bnkC+78Ygv/eocQ3D7+xBb8lcv16QTE=";
   runVend = true;
 
-  # Tests are trying to access /homeless-shelter
-  doCheck = false;
+  ldflags = [
+    "-X main.version=${version}"
+  ];
+
+  preCheck = ''
+    # failed to read configuration:  mkdir /homeless-shelter: permission denied
+    export HOME=$TMPDIR
+  '';
 
   subPackages = [ "cmd/glab" ];
 
