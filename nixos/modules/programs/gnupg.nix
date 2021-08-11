@@ -1,8 +1,7 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
+  inherit (lib) mkRemovedOptionModule mkOption mkPackageOption types mkIf optionalString;
 
   cfg = config.programs.gnupg;
 
@@ -26,8 +25,10 @@ let
       "curses";
 
 in
-
 {
+  imports = [
+    (mkRemovedOptionModule [ "programs" "gnupg" "agent" "pinentryFlavor" ] "Use programs.gnupg.agent.pinentryPackage instead")
+  ];
 
   options.programs.gnupg = {
     package = mkPackageOption pkgs "gnupg" { };
@@ -66,17 +67,17 @@ in
       '';
     };
 
-    agent.pinentryFlavor = mkOption {
-      type = types.nullOr (types.enum pkgs.pinentry.flavors);
-      example = "gnome3";
-      default = defaultPinentryFlavor;
-      defaultText = literalMD ''matching the configured desktop environment'';
+    agent.pinentryPackage = mkOption {
+      type = types.nullOr types.package;
+      example = lib.literalMD "pkgs.pinentry-gnome3";
+      default = pkgs.pinentry-curses;
+      defaultText = lib.literalMD "matching the configured desktop environment or `pkgs.pinentry-curses`";
       description = lib.mdDoc ''
-        Which pinentry interface to use. If not null, the path to the
-        pinentry binary will be set in /etc/gnupg/gpg-agent.conf.
-        If not set at all, it'll pick an appropriate flavor depending on the
-        system configuration (qt flavor for lxqt and plasma5, gtk2 for xfce
-        4.12, gnome3 on all other systems with X enabled, ncurses otherwise).
+        Which pinentry package to use. The path to the mainProgram as defined in
+        the package's meta attriutes will be set in /etc/gnupg/gpg-agent.conf.
+        If not set by the user, it'll pick an appropriate flavor depending on the
+        system configuration (qt flavor for lxqt and plasma5, gtk2 for xfce,
+        gnome3 on all other systems with X enabled, curses otherwise).
       '';
     };
 
@@ -102,9 +103,8 @@ in
   };
 
   config = mkIf cfg.agent.enable {
-    programs.gnupg.agent.settings = {
-      pinentry-program = lib.mkIf (cfg.agent.pinentryFlavor != null)
-        "${pkgs.pinentry.${cfg.agent.pinentryFlavor}}/bin/pinentry";
+    programs.gnupg.agent.settings = mkIf (cfg.agent.pinentryPackage != null) {
+      pinentry-program = lib.getExe cfg.agent.pinentryPackage;
     };
 
     environment.etc."gnupg/gpg-agent.conf".source =
@@ -207,9 +207,9 @@ in
       wantedBy = [ "sockets.target" ];
     };
 
-    services.dbus.packages = mkIf (cfg.agent.pinentryFlavor == "gnome3") [ pkgs.gcr ];
+    services.dbus.packages = mkIf (lib.elem "gnome3" (cfg.agent.pinentryPackage.flavors or [])) [ pkgs.gcr ];
 
-    environment.systemPackages = with pkgs; [ cfg.package ];
+    environment.systemPackages = [ cfg.package ];
 
     environment.interactiveShellInit = ''
       # Bind gpg-agent to this TTY if gpg commands are used.
@@ -230,12 +230,10 @@ in
     '';
 
     assertions = [
-      { assertion = cfg.agent.enableSSHSupport -> !config.programs.ssh.startAgent;
+      {
+        assertion = cfg.agent.enableSSHSupport -> !config.programs.ssh.startAgent;
         message = "You can't use ssh-agent and GnuPG agent with SSH support enabled at the same time!";
       }
     ];
   };
-
-  # uses attributes of the linked package
-  meta.buildDocsInSandbox = false;
 }

@@ -66,7 +66,7 @@ with lib;
       networkmanager-sstp = super.networkmanager-vpnc.override { withGnome = false; };
       networkmanager-vpnc = super.networkmanager-vpnc.override { withGnome = false; };
       pango = super.pango.override { x11Support = false; };
-      pinentry = super.pinentry.override { enabledFlavors = [ "curses" "tty" "emacs" ]; withLibsecret = false; };
+      pinentry-curses = super.pinentry-curses.override { withLibsecret = false; };
       pipewire = super.pipewire.override { vulkanSupport = false; x11Support = false; };
       pythonPackagesExtensions = super.pythonPackagesExtensions ++ [
         (python-final: python-prev: {
