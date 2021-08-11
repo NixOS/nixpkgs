@@ -7338,6 +7338,8 @@ in {
     inherit (pkgs) libusb1;
   };
 
+  pyuseragents = callPackage ../development/python-modules/pyuseragents { };
+
   pyutilib = callPackage ../development/python-modules/pyutilib { };
 
   pyuv = callPackage ../development/python-modules/pyuv { };
@@ -8847,6 +8849,8 @@ in {
   transip = callPackage ../development/python-modules/transip { };
 
   transitions = callPackage ../development/python-modules/transitions { };
+
+  translatepy = callPackage ../development/python-modules/translatepy { };
 
   translationstring = callPackage ../development/python-modules/translationstring { };
 
