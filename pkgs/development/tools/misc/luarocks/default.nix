@@ -9,16 +9,14 @@
 
 stdenv.mkDerivation rec {
   pname = "luarocks";
-  version = "3.2.1";
+  version = "3.7.0";
 
   src = fetchFromGitHub {
     owner = "luarocks";
     repo = "luarocks";
     rev = "v${version}";
-    sha256 = "0viiafmb8binksda79ah828q1dfnb6jsqlk7vyndl2xvx9yfn4y2";
+    sha256 = "sha256-LU2GBqB7zMU37GpHtAtG/INz0qTvkBMklm1ZtOGRwuo=";
   };
-
-  patches = [ ./darwin-3.1.3.patch ];
 
   postPatch = lib.optionalString stdenv.targetPlatform.isDarwin ''
     substituteInPlace src/luarocks/core/cfg.lua --subst-var-by 'darwinMinVersion' '${stdenv.targetPlatform.darwinMinVersion}'
