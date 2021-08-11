@@ -9626,6 +9626,16 @@
     githubId = 59476;
     name = "Peter Schuller";
   };
+  scoder12 = {
+    email = "nix@scoder12.ml";
+    github = "Scoder12";
+    githubId = 34356756;
+    name = "Spencer Pogorzelski";
+    keys = [{
+      longkeyid = "rsa4096/0xA3594358BE39551D";
+      fingerprint = "BE2B 0F63 85E9 9843 2C07  E3AA A359 4358 BE39 551D";
+    }];
+  };
   scolobb = {
     email = "sivanov@colimite.fr";
     github = "scolobb";

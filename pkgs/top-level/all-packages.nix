@@ -9048,6 +9048,8 @@ with pkgs;
 
   stdman = callPackage ../data/documentation/stdman { };
 
+  stderred = callPackage ../tools/misc/stderred { };
+
   steck = callPackage ../servers/pinnwand/steck.nix { };
 
   stenc = callPackage ../tools/backup/stenc { };
