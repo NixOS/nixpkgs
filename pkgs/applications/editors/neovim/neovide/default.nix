@@ -116,5 +116,6 @@ rustPlatform.buildRustPackage rec {
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ ck3d ];
     platforms = platforms.linux;
+    mainProgram = "neovide";
   };
 }
