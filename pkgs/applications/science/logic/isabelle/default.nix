@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
 
     echo 'PATH="${perl}/bin:$PATH"' >> etc/settings
 
-    rm -rf lib/classes heaps
+    rm -r lib/classes heaps
     '');
 
   buildPhase = ''
