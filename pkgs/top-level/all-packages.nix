@@ -28874,6 +28874,8 @@ with pkgs;
 
   ergo = callPackage ../applications/blockchains/ergo { };
 
+  erigon = callPackage ../applications/blockchains/erigon.nix { };
+
   exodus = callPackage ../applications/blockchains/exodus { };
 
   faraday = callPackage ../applications/blockchains/faraday { };
@@ -28944,8 +28946,6 @@ with pkgs;
   sumokoin = callPackage ../applications/blockchains/sumokoin { boost = boost165; };
 
   tessera = callPackage ../applications/blockchains/tessera { };
-
-  turbo-geth = callPackage ../applications/blockchains/turbo-geth { };
 
   vertcoin  = libsForQt514.callPackage ../applications/blockchains/vertcoin {
     boost = boost165;
