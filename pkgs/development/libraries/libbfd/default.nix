@@ -30,6 +30,7 @@ stdenv.mkDerivation {
   # We update these ourselves
   dontUpdateAutotoolsGnuConfigScripts = true;
 
+  strictDeps = true;
   nativeBuildInputs = [ autoreconfHook bison ];
   buildInputs = [ libiberty zlib.dev ];
 
