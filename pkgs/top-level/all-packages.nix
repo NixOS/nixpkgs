@@ -14334,7 +14334,11 @@ in
     rustPlatform = rustPackages_1_45.rustPlatform;
   };
 
-  svls = callPackage ../development/tools/misc/svls { };
+  svls = callPackage ../development/tools/misc/svls {
+    # Version 0.1.28 has a dependency on lexical_core 0.7.4 that will not build with Rust 1.53.
+    # To be fixed in the next release.
+    rustPlatform = rustPackages_1_45.rustPlatform;
+  };
 
   swarm = callPackage ../development/tools/analysis/swarm { };
 
