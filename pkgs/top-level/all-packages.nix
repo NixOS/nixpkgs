@@ -18055,6 +18055,8 @@ with pkgs;
 
   openrct2 = callPackage ../games/openrct2 { };
 
+  optparse-bash = callPackage ../development/libraries/optparse-bash { };
+
   orcania = callPackage ../development/libraries/orcania { };
 
   osm-gps-map = callPackage ../development/libraries/osm-gps-map { };
