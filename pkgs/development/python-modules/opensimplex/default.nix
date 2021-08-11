@@ -1,10 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, autopep8
 , nose
-, pycodestyle
-, twine
 }:
 
 buildPythonPackage rec {
@@ -18,10 +15,11 @@ buildPythonPackage rec {
     sha256 = "idF5JQGnAye6z3c3YU9rsHaebB3rlHJfA8vSpjDnFeM=";
   };
 
-  checkInputs = [ autopep8 nose pycodestyle twine ];
+  checkInputs = [ nose ];
   checkPhase = ''
     nosetests tests/
   '';
+  pythonImportsCheck = [ "opensimplex" ];
 
   meta = with lib; {
     description = "OpenSimplex Noise functions for 2D, 3D and 4D";
