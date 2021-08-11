@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     sed -i src/anlghead.h \
       -e "s|#define DEFAULTCONFIGFILE .*|#define DEFAULTCONFIGFILE \"$out/etc/analog.cfg\"|g" \
-      -e "s|#define LANGDIR .*|#define LANGDIR \"$out/share/$pname}/lang/\"|g"
+      -e "s|#define LANGDIR .*|#define LANGDIR \"$out/share/$pname/lang/\"|g"
     substituteInPlace src/Makefile --replace "gcc" "${stdenv.cc.targetPrefix}cc"
   '';
 
