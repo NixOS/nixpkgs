@@ -6722,6 +6722,12 @@
     githubId = 35892750;
     name = "Maxine Aubrey";
   };
+  maxhille = {
+    email = "mh@lambdasoup.com";
+    github = "maxhille";
+    githubId = 693447;
+    name = "Max Hille";
+  };
   maxhbr = {
     email = "nixos@maxhbr.dev";
     github = "maxhbr";

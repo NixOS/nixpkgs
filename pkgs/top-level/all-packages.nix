@@ -161,6 +161,8 @@ with pkgs;
 
   addOpenGLRunpath = callPackage ../build-support/add-opengl-runpath { };
 
+  aether = callPackage ../applications/networking/aether { };
+
   alda = callPackage ../development/interpreters/alda { };
 
   althttpd = callPackage ../servers/althttpd { };
