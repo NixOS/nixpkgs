@@ -5,7 +5,10 @@
 , libsForQt5
 , mtools
 , p7zip
-, qt5
+, wrapQtAppsHook
+, qtbase
+, qttools
+, qmake
 , syslinux
 , util-linux
 , which
@@ -27,14 +30,12 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    qt5.qtbase
-    qt5.qttools
-    libsForQt5.qmake
+    qtbase
+    qttools
+    qmake
   ];
 
-  nativeBuildInputs = [ qt5.wrapQtAppsHook ];
-
-  enableParallelBuilding = true;
+  nativeBuildInputs = [ wrapQtAppsHook ];
 
   # Lots of nice hard-coded paths...
   postPatch = ''
@@ -76,7 +77,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A tool to create bootable live USB drives from ISO images";
-    homepage = "http://unetbootin.github.io/";
+    homepage = "https://unetbootin.github.io/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ ebzzry ];
     platforms = platforms.linux;
