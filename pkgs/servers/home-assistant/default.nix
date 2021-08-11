@@ -62,23 +62,6 @@ let
     (mkOverride "pylast" "4.2.0"
       "0zd0dn2l738ndz62vpa751z0ldnm91dcz9zzbvxv53r08l0s9yf3")
 
-    # Pinned due to API changes in pyopenuv>=1.1.0
-    (self: super: {
-      pyopenuv = super.pyopenuv.overridePythonAttrs (oldAttrs: rec {
-        version = "1.0.13";
-        src = fetchFromGitHub {
-          owner = "bachya";
-          repo = "pyopenuv";
-          rev = version;
-          sha256 = "1gx9xjkyvqqy8410lnbshq1j5y4cb0cdc4m505g17rwdzdwb01y8";
-        };
-        postPatch = ''
-          substituteInPlace pyproject.toml \
-            --replace "poetry.masonry.api" "poetry.core.masonry.api"
-        '';
-      });
-    })
-
     # Pinned due to API changes in pyruckus>0.12
     (self: super: {
       pyruckus = super.pyruckus.overridePythonAttrs (oldAttrs: rec {
@@ -138,7 +121,7 @@ let
   extraBuildInputs = extraPackages py.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2021.8.5";
+  hassVersion = "2021.8.6";
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "homeassistant";
@@ -155,7 +138,7 @@ in with py.pkgs; buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = version;
-    sha256 = "0alyr87vm0szljw1lgdsv7085rl0m9r16nwdprwskhcjlwllk1bh";
+    sha256 = "1hahxvvlk32dbmv2lhn67w1ii5g24znvjqgsq318qv8c2qh5z5ws";
   };
 
   # leave this in, so users don't have to constantly update their downstream patch handling
