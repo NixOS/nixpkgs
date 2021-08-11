@@ -380,6 +380,52 @@ let
               router.wait_until_succeeds("ping -c 1 192.168.1.3")
         '';
     };
+    fou = {
+      name = "foo-over-udp";
+      nodes.machine = { ... }: {
+        virtualisation.vlans = [ 1 ];
+        networking = {
+          useNetworkd = networkd;
+          useDHCP = false;
+          interfaces.eth1.ipv4.addresses = mkOverride 0
+            [ { address = "192.168.1.1"; prefixLength = 24; } ];
+          fooOverUDP = {
+            fou1 = { port = 9001; };
+            fou2 = { port = 9002; protocol = 41; };
+            fou3 = mkIf (!networkd)
+              { port = 9003; local.address = "192.168.1.1"; };
+            fou4 = mkIf (!networkd)
+              { port = 9004; local = { address = "192.168.1.1"; dev = "eth1"; }; };
+          };
+        };
+        systemd.services = {
+          fou3-fou-encap.after = optional (!networkd) "network-addresses-eth1.service";
+        };
+      };
+      testScript = { ... }:
+        ''
+          import json
+
+          machine.wait_for_unit("network.target")
+          fous = json.loads(machine.succeed("ip -json fou show"))
+          assert {"port": 9001, "gue": None, "family": "inet"} in fous, "fou1 exists"
+          assert {"port": 9002, "ipproto": 41, "family": "inet"} in fous, "fou2 exists"
+        '' + optionalString (!networkd) ''
+          assert {
+              "port": 9003,
+              "gue": None,
+              "family": "inet",
+              "local": "192.168.1.1",
+          } in fous, "fou3 exists"
+          assert {
+              "port": 9004,
+              "gue": None,
+              "family": "inet",
+              "local": "192.168.1.1",
+              "dev": "eth1",
+          } in fous, "fou4 exists"
+        '';
+    };
     sit = let
       node = { address4, remote, address6 }: { pkgs, ... }: with pkgs.lib; {
         virtualisation.vlans = [ 1 ];

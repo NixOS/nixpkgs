@@ -1535,6 +1535,19 @@ Superuser created successfully.
           release notes</link> for changes and upgrade instructions.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          The <literal>systemd.network</literal> module has gained
+          support for the FooOverUDP link type.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>networking</literal> module has a new
+          <literal>networking.fooOverUDP</literal> option to configure
+          Foo-over-UDP encapsulations.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
 </section>
