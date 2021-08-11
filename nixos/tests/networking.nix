@@ -431,7 +431,6 @@ let
         virtualisation.vlans = [ 1 ];
         networking = {
           useNetworkd = networkd;
-          firewall.enable = false;
           useDHCP = false;
           sits.sit = {
             inherit remote;
@@ -446,8 +445,30 @@ let
       };
     in {
       name = "Sit";
-      nodes.client1 = node { address4 = "192.168.1.1"; remote = "192.168.1.2"; address6 = "fc00::1"; };
-      nodes.client2 = node { address4 = "192.168.1.2"; remote = "192.168.1.1"; address6 = "fc00::2"; };
+      # note on firewalling: the two nodes are explicitly asymmetric.
+      # client1 sends SIT packets in UDP, but accepts only proto-41 incoming.
+      # client2 does the reverse, sending in proto-41 and accepting only UDP incoming.
+      # that way we'll notice when either SIT itself or FOU breaks.
+      nodes.client1 = args@{ pkgs, ... }:
+        mkMerge [
+          (node { address4 = "192.168.1.1"; remote = "192.168.1.2"; address6 = "fc00::1"; } args)
+          {
+            networking = {
+              firewall.extraCommands = "iptables -A INPUT -p 41 -j ACCEPT";
+              sits.sit.encapsulation = { type = "fou"; port = 9001; };
+            };
+          }
+        ];
+      nodes.client2 = args@{ pkgs, ... }:
+        mkMerge [
+          (node { address4 = "192.168.1.2"; remote = "192.168.1.1"; address6 = "fc00::2"; } args)
+          {
+            networking = {
+              firewall.allowedUDPPorts = [ 9001 ];
+              fooOverUDP.fou1 = { port = 9001; protocol = 41; };
+            };
+          }
+        ];
       testScript = { ... }:
         ''
           start_all()
