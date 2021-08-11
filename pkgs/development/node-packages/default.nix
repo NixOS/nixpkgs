@@ -198,6 +198,16 @@ let
       '';
     };
 
+    node-gyp = super.node-gyp.override {
+      nativeBuildInputs = [ pkgs.makeWrapper ];
+      # Teach node-gyp to use nodejs headers locally rather that download them form https://nodejs.org.
+      # This is important when build nodejs packages in sandbox.
+      postInstall = ''
+        wrapProgram "$out/bin/node-gyp" \
+          --set npm_config_nodedir ${nodejs}
+      '';
+    };
+
     node-inspector = super.node-inspector.override {
       buildInputs = [ self.node-pre-gyp ];
       meta.broken = since "10";

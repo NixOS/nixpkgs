@@ -3177,11 +3177,11 @@ lib.makeScope newScope (self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xrdb = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXmu, xorgproto }: stdenv.mkDerivation {
     pname = "xrdb";
-    version = "1.2.0";
+    version = "1.2.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/xrdb-1.2.0.tar.bz2";
-      sha256 = "0ik9gh6363c47pr0dp7q22nfs8vmavjg2v4bsr0604ppl77nafpj";
+      url = "mirror://xorg/individual/app/xrdb-1.2.1.tar.bz2";
+      sha256 = "1d78prd8sfszq2rwwlb32ksph4fymf988lp75aj8iysg44f06pag";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkg-config ];

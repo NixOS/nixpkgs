@@ -26,6 +26,7 @@
 , "cdk8s-cli"
 , "cdktf-cli"
 , "clean-css-cli"
+, "clipboard-cli"
 , "clubhouse-cli"
 , "coc-clangd"
 , "coc-cmake"
@@ -276,6 +277,7 @@
 , "vscode-html-languageserver-bin"
 , "vscode-json-languageserver"
 , "vscode-json-languageserver-bin"
+, "vscode-langservers-extracted"
 , { "vscode-lldb-build-deps": "../../misc/vscode-extensions/vscode-lldb/build-deps" }
 , "vue-cli"
 , "vue-language-server"

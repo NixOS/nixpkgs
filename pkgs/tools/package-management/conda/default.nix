@@ -66,6 +66,8 @@ in
       source ${installationPath}/etc/profile.d/conda.sh
     '';
 
+    runScript = "bash -l";
+
     meta = {
       description = "Conda is a package manager for Python";
       homepage = "https://conda.io/";
