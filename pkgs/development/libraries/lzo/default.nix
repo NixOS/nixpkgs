@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
 
   doCheck = true; # not cross;
 
+  strictDeps = true;
+
   meta = with lib; {
     description = "Real-time data (de)compression library";
     longDescription = ''
