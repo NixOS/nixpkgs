@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     "VC=${vc}"
     # vlang seems to want to write to $HOME/.vmodules , so lets give
     # it a writable HOME
-    "HOME=/tmp"
+    "HOME=$TMPDIR"
   ];
 
   installPhase = ''
