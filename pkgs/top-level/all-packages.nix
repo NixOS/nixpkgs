@@ -4130,6 +4130,8 @@ with pkgs;
 
   daemonize = callPackage ../tools/system/daemonize { };
 
+  danger-gitlab = callPackage ../applications/version-management/danger-gitlab { };
+
   daq = callPackage ../applications/networking/ids/daq { };
 
   dar = callPackage ../tools/backup/dar { };
