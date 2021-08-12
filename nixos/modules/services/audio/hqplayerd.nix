@@ -53,7 +53,7 @@ in
         type = types.bool;
         default = false;
         description = ''
-          Open TCP port 8088 in the firewall for the server.
+          Opens ports needed for the WebUI and controller API.
         '';
       };
     };
@@ -77,7 +77,7 @@ in
     };
 
     networking.firewall = mkIf cfg.openFirewall {
-      allowedTCPPorts = [ 8088 ];
+      allowedTCPPorts = [ 8088 4321 ];
     };
 
     services.udev.packages = [ pkg ];
