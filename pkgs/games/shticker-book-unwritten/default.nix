@@ -4,7 +4,7 @@ let
   shticker-book-unwritten-unwrapped = callPackage ./unwrapped.nix { };
 
 in buildFHSUserEnv {
-  name = "shticker_book_unwritten";
+  name = "shticker_book_unwritten-${shticker-book-unwritten-unwrapped.version}";
   targetPkgs = pkgs: with pkgs; [
       alsa-lib
       xorg.libX11
