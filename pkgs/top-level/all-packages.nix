@@ -29426,6 +29426,8 @@ with pkgs;
 
   liberal-crime-squad = callPackage ../games/liberal-crime-squad { };
 
+  liberation-circuit = callPackage ../games/liberation-circuit { };
+
   lincity = callPackage ../games/lincity {};
 
   lincity_ng = callPackage ../games/lincity/ng.nix {
