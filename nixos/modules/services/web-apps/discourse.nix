@@ -771,7 +771,6 @@ in
           "tmp"
           "assets/javascripts/plugins"
           "public"
-          "plugins"
           "sockets"
         ];
         RuntimeDirectoryMode = 0750;
