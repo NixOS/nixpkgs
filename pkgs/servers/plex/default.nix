@@ -10,7 +10,7 @@
 }:
 
 buildFHSUserEnv {
-  name = "plexmediaserver";
+  name = "plexmediaserver-${plexRaw.version}";
   inherit (plexRaw) meta;
 
   # This script is run when we start our Plex binary
