@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "0ipmnrn6lmf6rqzsqmaxzy9lblrxyrxzkji968356nxxmwzfbfvh";
 
   meta = with lib; {
-    description = "battop is an interactive viewer, similar to top, htop and other *top utilities, but about the batteries installed in your notebook.";
+    description = "is an interactive battery viewer";
     homepage = "https://github.com/svartalf/rust-battop";
     license = licenses.asl20;
     maintainers = with maintainers; [ hdhog ];
