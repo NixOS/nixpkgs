@@ -7918,6 +7918,8 @@ in {
 
   scripttest = callPackage ../development/python-modules/scripttest { };
 
+  scikit-survival = callPackage ../development/python-modules/scikit-survival { };
+
   scs = callPackage ../development/python-modules/scs { scs = pkgs.scs; };
 
   sdnotify = callPackage ../development/python-modules/sdnotify { };
