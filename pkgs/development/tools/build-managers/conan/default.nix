@@ -55,18 +55,27 @@ let newPython = python3.override {
         sha256 = "29872e92839765e546828bb7754a68c418d927cd064fd4708fab9fe9c8bb116b";
       };
     });
+    # conan wants distro>=1.0.2, <=1.5.0
+    distro = super.distro.overridePythonAttrs (oldAttrs: rec {
+      version = "1.5.0";
+      src = oldAttrs.src.override {
+        inherit version;
+        sha256 = "14nz51cqlnxmgfqqilxyvjwwa5xfivdvlm0d0b1qzgcgwdm7an0f";
+      };
+      doCheck = false;
+    });
   };
 };
 
 in newPython.pkgs.buildPythonApplication rec {
-  version = "1.35.0";
+  version = "1.39.0";
   pname = "conan";
 
   src = fetchFromGitHub {
     owner = "conan-io";
     repo = "conan";
     rev = version;
-    sha256 = "19rgylkjxvv47vz5vgh46rw108xskpv7lmax8y2fnm2wd1j3bq9c";
+    sha256 = "sha256-MUciWz7EG/9PtEQ+t0nEDT8KMF6A/TlGrEVSIq3Fqqs=";
   };
 
   propagatedBuildInputs = with newPython.pkgs; [
