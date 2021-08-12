@@ -14,10 +14,12 @@ lib.mapAttrs (lname: lset: let
       then license // { url = "https://spdx.org/licenses/${license.spdxId}.html"; }
       else license;
     applyRedistributable = license: { redistributable = license.free; } // license;
+    applyDeprecated = license: if license ? "deprecated" && license.deprecated then builtins.trace "Deprecated license ${license.shortName} used" license else license;
   in lib.pipe licenseDeclaration [
     applyDefaults
     applySpdx
     applyRedistributable
+    applyDeprecated
   ];
 in mkLicense lset) ({
   /* License identifiers from spdx.org where possible.
