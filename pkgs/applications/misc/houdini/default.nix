@@ -3,7 +3,7 @@
 let
   houdini-runtime = callPackage ./runtime.nix { };
 in buildFHSUserEnv {
-  name = "houdini-${houdini-runtime.version}";
+  name = houdini-runtime.name;
 
   extraBuildCommands = ''
     mkdir -p $out/usr/lib/sesi
@@ -15,4 +15,3 @@ in buildFHSUserEnv {
 
   runScript = "${undaemonize}/bin/undaemonize ${houdini-runtime}/bin/houdini";
 }
-
