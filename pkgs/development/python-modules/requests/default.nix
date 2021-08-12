@@ -4,6 +4,7 @@
 , buildPythonPackage
 , certifi
 , chardet
+, charset-normalizer
 , fetchPypi
 , idna
 , pytest-mock
@@ -17,14 +18,17 @@
 
 buildPythonPackage rec {
   pname = "requests";
-  version = "2.25.1";
+  version = "2.26.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-J5c91KkEpPE7JjoZyGbBO5KjntHJZGVfAl8/jT11uAQ=";
+    sha256 = "sha256-uKpY+M95P/2HgtPYyxnmbvNverpDU+7IWedGeLAbB6c=";
   };
 
-  patches = [ ./0001-Prefer-NixOS-Nix-default-CA-bundles-over-certifi.patch ];
+  patches = [
+    # Use the default NixOS CA bundle from the certifi package
+    ./0001-Prefer-NixOS-Nix-default-CA-bundles-over-certifi.patch
+  ];
 
   postPatch = ''
     # Use latest idna
@@ -32,7 +36,9 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
+    brotlicffi
     certifi
+    charset-normalizer
     chardet
     idna
     urllib3
@@ -47,6 +53,7 @@ buildPythonPackage rec {
     pytest-mock
     pytest-xdist
     pytestCheckHook
+    trustme
   ];
 
   # AttributeError: 'KeywordMapping' object has no attribute 'get'
