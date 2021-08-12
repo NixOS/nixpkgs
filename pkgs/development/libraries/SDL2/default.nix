@@ -11,6 +11,10 @@
 , udevSupport ? false, udev
 , ibusSupport ? false, ibus
 , fcitxSupport ? false, fcitx
+, libdecorSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid
+, libdecor
+, pipewireSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid
+, pipewire # Note: must be built with SDL2 without pipewire support
 , pulseaudioSupport ? config.pulseaudio or stdenv.isLinux && !stdenv.hostPlatform.isAndroid
 , libpulseaudio
 , AudioUnit, Cocoa, CoreAudio, CoreServices, ForceFeedback, OpenGL
@@ -25,11 +29,11 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "SDL2";
-  version = "2.0.14";
+  version = "2.0.16";
 
   src = fetchurl {
     url = "https://www.libsdl.org/release/${pname}-${version}.tar.gz";
-    sha256 = "1g1jahknv5r4yhh1xq5sf0md20ybdw1zh1i15lry26sq39bmn8fq";
+    sha256 = "0yr8bw3rfihy1ap2sjww2q7r650qvfjba9wrrsrbad2003v9zgk5";
   };
   dontDisableStatic = withStatic;
   outputs = [ "out" "dev" ];
@@ -60,8 +64,10 @@ stdenv.mkDerivation rec {
     ++ optionals x11Support [ libX11 xorgproto ];
 
   dlopenBuildInputs = [ ]
-    ++ optionals  alsaSupport [ alsa-lib audiofile ]
+    ++ optionals alsaSupport [ alsa-lib audiofile ]
     ++ optional  dbusSupport dbus
+    ++ optional  libdecorSupport libdecor
+    ++ optional  pipewireSupport pipewire
     ++ optional  pulseaudioSupport libpulseaudio
     ++ optional  udevSupport udev
     ++ optionals waylandSupport [ wayland wayland-protocols libxkbcommon ]

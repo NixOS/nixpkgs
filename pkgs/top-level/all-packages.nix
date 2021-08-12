@@ -13198,7 +13198,18 @@ with pkgs;
 
   pipenv = callPackage ../development/tools/pipenv {};
 
-  pipewire = callPackage ../development/libraries/pipewire {};
+  pipewire =
+    let
+      # Break a dependency cycle
+      customSDL2 = SDL2.override {
+        pipewireSupport = false;
+      };
+    in callPackage ../development/libraries/pipewire {
+      SDL2 = customSDL2;
+      ffmpeg = ffmpeg.override {
+        SDL2 = customSDL2;
+      };
+    };
   pipewire_0_2 = callPackage ../development/libraries/pipewire/0.2.nix {};
 
   pyradio = callPackage ../applications/audio/pyradio {};
