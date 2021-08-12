@@ -32,6 +32,7 @@ let
     "dnsmasq"
     "domain"
     "dovecot"
+    "fastly"
     "fritzbox"
     "influxdb"
     "json"
