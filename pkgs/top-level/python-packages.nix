@@ -5438,8 +5438,6 @@ in {
 
   pysyncthru = callPackage ../development/python-modules/pysyncthru { };
 
-  pytest-subprocess = callPackage ../development/python-modules/pytest-subprocess { };
-
   python-codon-tables = callPackage ../development/python-modules/python-codon-tables { };
 
   python-crfsuite = callPackage ../development/python-modules/python-crfsuite { };
@@ -6968,6 +6966,8 @@ in {
   python-string-utils = callPackage ../development/python-modules/python-string-utils { };
 
   pytest-socket = callPackage ../development/python-modules/pytest-socket { };
+
+  pytest-subprocess = callPackage ../development/python-modules/pytest-subprocess { };
 
   pytest-subtesthack = callPackage ../development/python-modules/pytest-subtesthack { };
 
