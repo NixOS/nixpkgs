@@ -14,7 +14,7 @@ let
   ];
 
 in buildFHSUserEnv {
-  name = "lutris";
+  name = "lutris-${lutris-unwrapped.version}";
 
   runScript = "lutris";
 
