@@ -2,6 +2,8 @@
 , stdenv
 , fetchFromGitHub
 , scfbuild
+, nodejs
+, nodePackages
 , python3Packages
 , variant ? "color" # "color" or "black"
 }:
@@ -25,36 +27,20 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     scfbuild
+    nodejs
+    nodePackages.glob
+    nodePackages.lodash
   ];
 
   buildPhase = ''
-    # Bash reimplementation of helpers/export-svg-font.js
-    # so we don't need to build all the node deps first
-    hexcodes=()
-    missingGlyphBlack='./black/svg/25A1.svg'
-    missingGlyphColor='./color/svg/25A1.svg'
-    for f in ./color/svg/*.svg; do
-      basename=$(basename "$f" .svg)
-      hexcodes+=(''${basename//-/ })
-      filename=$(basename "$f");
-      cp "./color/svg/$filename" "./font/tmp-color/$filename"
-      cp "./black/svg/$filename" "./font/tmp-black/$filename"
-    done
+    runHook preBuild
 
-    hexcodes=($(uniq<<<"''${hexcodes[@]}"))
+    node helpers/generate-font-glyphs.js
 
-    for h in ''${hexcodes[@]}; do
-      filename="$h.svg"
-      if [ ! -e "./color/svg/$filename" ]; then
-        echo "$h is missing -> substitute with \"Missing Glyph\": $filename"
-        cp $missingGlyphColor "./font/tmp-color/$filename"
-        cp $missingGlyphBlack "./font/tmp-black/$filename"
-      fi
-    done
-
-    # Actually build the font:
     cd font
     scfbuild -c scfbuild-${variant}.yml
+
+    runHook postBuild
   '';
 
   installPhase = ''
