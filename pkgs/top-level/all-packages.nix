@@ -19161,6 +19161,8 @@ in
 
   mailman-web = with python3.pkgs; toPythonApplication mailman-web;
 
+  listadmin = callPackage ../applications/networking/listadmin {};
+
   mastodon = callPackage ../servers/mastodon { };
 
   materialize = callPackage ../servers/sql/materialize {
