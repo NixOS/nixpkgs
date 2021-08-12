@@ -157,6 +157,11 @@ let
       # Use the Ruby API version in the plugin gem path, to match the
       # one constructed by bundlerEnv
       ./plugin_gem_api_version.patch
+
+      # Change the path to the auto generated plugin assets, which
+      # defaults to the plugin's directory and isn't writable at the
+      # time of asset generation
+      ./auto_generated_path.patch
     ];
 
     # We have to set up an environment that is close enough to
@@ -243,6 +248,11 @@ let
       # Use mv instead of rename, since rename doesn't work across
       # device boundaries
       ./use_mv_instead_of_rename.patch
+
+      # Change the path to the auto generated plugin assets, which
+      # defaults to the plugin's directory and isn't writable at the
+      # time of asset generation
+      ./auto_generated_path.patch
     ];
 
     postPatch = ''
