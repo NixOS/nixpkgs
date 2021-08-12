@@ -75,7 +75,7 @@ let
 
   suffix = if channel != "stable" then "-" + channel else "";
 
-in stdenv.mkDerivation {
+in stdenv.mkDerivation rec {
   inherit version;
 
   name = "google-chrome${suffix}-${version}";
@@ -151,6 +151,10 @@ in stdenv.mkDerivation {
       patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $elf
     done
   '';
+
+  passthru = {
+    inherit rpath binpath;
+  };
 
   meta = {
     description = "A freeware web browser developed by Google";

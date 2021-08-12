@@ -3215,6 +3215,8 @@ with pkgs;
 
   playerctl = callPackage ../tools/audio/playerctl { };
 
+  playwright-chromium = callPackage ../development/web/playwright { };
+
   pn = callPackage ../tools/text/pn { };
 
   poweralertd = callPackage ../tools/misc/poweralertd { };
