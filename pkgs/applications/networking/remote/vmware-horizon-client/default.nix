@@ -81,7 +81,7 @@ let
   };
 
   vmwareFHSUserEnv = buildFHSUserEnv {
-    name = "vmware-view";
+    name = "vmware-view-${version}";
 
     runScript = "${vmwareHorizonClientFiles}/bin/vmware-view_wrapper";
 
@@ -131,7 +131,8 @@ let
 
 in
 stdenv.mkDerivation {
-  name = "vmware-view";
+  pname = "vmware-view";
+  inherit version;
 
   dontUnpack = true;
 
