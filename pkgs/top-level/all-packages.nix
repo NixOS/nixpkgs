@@ -30767,6 +30767,8 @@ with pkgs;
 
   logisim = callPackage ../applications/science/logic/logisim {};
 
+  logisim-evolution = callPackage ../applications/science/logic/logisim-evolution {};
+
   ltl2ba = callPackage ../applications/science/logic/ltl2ba {};
 
   metis-prover = callPackage ../applications/science/logic/metis-prover { };
