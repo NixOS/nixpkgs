@@ -35,7 +35,7 @@ let
 in
 
 if stdenv.isLinux then buildFHSUserEnv (appimageTools.defaultFhsEnvArgs // {
-  name = "anki";
+  name = "${pname}-${version}";
 
   runScript = writeShellScript "anki-wrapper.sh" ''
     # Wayland support is broken, disable via ENV variable
