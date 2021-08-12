@@ -85,7 +85,7 @@ let
 
 in
 buildFHSUserEnv rec {
-  name = pname;
+  name = hover.name;
   targetPkgs = pkgs: [
     binutils
     dejavu_fonts
