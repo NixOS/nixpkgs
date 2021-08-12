@@ -38,10 +38,13 @@ let
     "mod_rrdtool"
     "mod_accesslog"
     # Remaining list of modules, order assumed to be unimportant.
+    "mod_authn_dbi"
     "mod_authn_file"
     "mod_authn_gssapi"
     "mod_authn_ldap"
     "mod_authn_mysql"
+    "mod_authn_pam"
+    "mod_authn_sasl"
     "mod_cml"
     "mod_deflate"
     "mod_evasive"
@@ -129,6 +132,15 @@ in
         type = types.bool;
         description = ''
           Enable the lighttpd web server.
+        '';
+      };
+
+      package = mkOption {
+        default = pkgs.lighttpd;
+        defaultText = "pkgs.lighttpd";
+        type = types.package;
+        description = ''
+          lighttpd package to use.
         '';
       };
 
@@ -240,7 +252,7 @@ in
       description = "Lighttpd Web Server";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      serviceConfig.ExecStart = "${pkgs.lighttpd}/sbin/lighttpd -D -f ${configFile}";
+      serviceConfig.ExecStart = "${cfg.package}/sbin/lighttpd -D -f ${configFile}";
       # SIGINT => graceful shutdown
       serviceConfig.KillSignal = "SIGINT";
     };
