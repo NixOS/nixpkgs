@@ -3322,7 +3322,6 @@ broken-packages:
   - oblivious-transfer
   - ocaml-export
   - Octree
-  - odbc
   - OddWord
   - oden-go-packages
   - oeis2
