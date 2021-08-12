@@ -8,7 +8,7 @@
 , numpy
 , osqp
 , pandas
-, scikitlearn
+, scikit-learn
 , scipy
 , pytestCheckHook
 }:
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     numpy
     osqp
     pandas
-    scikitlearn
+    scikit-learn
     scipy
   ];
 
