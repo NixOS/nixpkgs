@@ -28,6 +28,7 @@
 let
   basename = "streamlink-twitch-gui";
   runtimeLibs = lib.makeLibraryPath [ libudev0-shim ];
+  runtimeBins = lib.makeBinPath [ streamlink ];
   arch =
     if stdenv.hostPlatform.system == "x86_64-linux"
     then
@@ -90,16 +91,23 @@ stdenv.mkDerivation rec {
   dontConfigure = true;
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/{bin,opt/${basename},share}
 
     # Install all files, remove unnecessary ones
     cp -a . $out/opt/${basename}/
     rm -r $out/opt/${basename}/{{add,remove}-menuitem.sh,credits.html,icons/}
-
-    wrapProgram $out/opt/${basename}/${basename} --add-flags "--no-version-check" --prefix LD_LIBRARY_PATH : ${runtimeLibs}
-
     ln -s "$out/opt/${basename}/${basename}" $out/bin/
-    ln -s "${desktopItem}/share/applications" $out/share/
+    cp -r "${desktopItem}/share/applications" $out/share/
+    runHook postInstall
+  '';
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --add-flags "--no-version-check" \
+      --prefix LD_LIBRARY_PATH : ${runtimeLibs} \
+      --prefix PATH : ${runtimeBins}
+    )
   '';
 
   desktopItem = makeDesktopItem {
@@ -115,7 +123,7 @@ stdenv.mkDerivation rec {
     description = "Twitch.tv browser for Streamlink";
     longDescription = "Browse Twitch.tv and watch streams in your videoplayer of choice";
     homepage = "https://streamlink.github.io/streamlink-twitch-gui/";
-    downloadPage = https://github.com/streamlink/streamlink-twitch-gui/releases;
+    downloadPage = "https://github.com/streamlink/streamlink-twitch-gui/releases";
     license = licenses.mit;
     maintainers = with maintainers; [ rileyinman ];
     platforms = [ "x86_64-linux" "i686-linux" ];
