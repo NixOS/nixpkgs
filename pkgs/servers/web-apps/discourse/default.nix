@@ -1,4 +1,4 @@
-{ stdenv, makeWrapper, runCommand, lib, nixosTests, writeShellScript
+{ stdenv, pkgs, makeWrapper, runCommand, lib, writeShellScript
 , fetchFromGitHub, bundlerEnv, callPackage
 
 , ruby, replace, gzip, gnutar, git, cacert, util-linux, gawk
@@ -6,7 +6,7 @@
 , redis, postgresql, which, brotli, procps, rsync, nodePackages, v8
 
 , plugins ? []
-}:
+}@args:
 
 let
   version = "2.7.7";
@@ -293,7 +293,7 @@ let
       enabledPlugins = plugins;
       plugins = callPackage ./plugins/all-plugins.nix { inherit mkDiscoursePlugin; };
       ruby = rubyEnv.wrappedRuby;
-      tests = nixosTests.discourse;
+      tests = import ../../../../nixos/tests/discourse.nix { package = pkgs.discourse.override args; };
     };
   };
 in discourse
