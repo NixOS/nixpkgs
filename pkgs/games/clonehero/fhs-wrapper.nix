@@ -17,7 +17,7 @@ let
   };
 in
 buildFHSUserEnv {
-  inherit name;
+  name = "${name}-${clonehero-unwrapped.version}";
   inherit (clonehero-unwrapped) meta;
 
   # Clone Hero has /usr/share/fonts hard-coded in its binary for looking up fonts.
