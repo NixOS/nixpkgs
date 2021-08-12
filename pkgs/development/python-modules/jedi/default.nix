@@ -1,34 +1,36 @@
-{ lib, buildPythonPackage, fetchFromGitHub, fetchPypi, pytest, glibcLocales, tox, pytest-cov, parso }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pytestCheckHook
+, pytest
+, glibcLocales
+, tox
+, parso }:
 
 buildPythonPackage rec {
   pname = "jedi";
-  # switch back to stable version on the next release.
-  # current stable is incompatible with parso
-  version = "2020-08-06";
+  version = "0.18.0";
 
-  src = fetchFromGitHub {
-    owner = "davidhalter";
-    repo = "jedi";
-    rev = "216f976fd5cab7a460e5d287e853d11759251e52";
-    sha256 = "1kb2ajzigadl95pnwglg8fxz9cvpg9hx30hqqj91jkgrc7djdldj";
-    fetchSubmodules = true;
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "sha256-klUKQEutiv7YgaE37JpGH+1J7KZhQUvkUFkylhTtBwc=";
   };
 
-  checkInputs = [ pytest glibcLocales tox pytest-cov ];
+  checkInputs = [ glibcLocales tox pytestCheckHook ];
 
   propagatedBuildInputs = [ parso ];
 
-  checkPhase = ''
-    LC_ALL="en_US.UTF-8" py.test test
-  '';
-
-  # tox required for tests: https://github.com/davidhalter/jedi/issues/808
+  # NOTE(breakds): There are 21 tests among ~ 4000 of them failing at
+  # this moment. I am not confident enough to be able to fix them,
+  # therefore disabling the tests for now.
   doCheck = false;
+
+  pythonImportsCheck = [ "jedi" ];
 
   meta = with lib; {
     homepage = "https://github.com/davidhalter/jedi";
     description = "An autocompletion tool for Python that can be used for text editors";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ breakds ];
   };
 }
