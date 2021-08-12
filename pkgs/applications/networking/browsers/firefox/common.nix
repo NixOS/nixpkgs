@@ -273,7 +273,10 @@ buildStdenv.mkDerivation ({
   '') + ''
     # AS=as in the environment causes build failure https://bugzilla.mozilla.org/show_bug.cgi?id=1497286
     unset AS
-  '';
+  '' + (lib.optionalString enableOfficialBranding ''
+    export MOZILLA_OFFICIAL=1
+    export BUILD_OFFICIAL=1
+  '');
 
   configureFlags = [
     "--enable-application=browser"
@@ -325,11 +328,7 @@ buildStdenv.mkDerivation ({
     cd obj-*
   '';
 
-  makeFlags = lib.optionals enableOfficialBranding [
-    "MOZILLA_OFFICIAL=1"
-    "BUILD_OFFICIAL=1"
-  ]
-  ++ lib.optionals ltoSupport [
+  makeFlags = lib.optionals ltoSupport [
     "AR=${buildStdenv.cc.bintools.bintools}/bin/llvm-ar"
     "LLVM_OBJDUMP=${buildStdenv.cc.bintools.bintools}/bin/llvm-objdump"
     "NM=${buildStdenv.cc.bintools.bintools}/bin/llvm-nm"
