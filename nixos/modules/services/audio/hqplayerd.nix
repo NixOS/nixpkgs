@@ -56,6 +56,16 @@ in
           Opens ports needed for the WebUI and controller API.
         '';
       };
+
+      config = mkOption {
+        type = types.nullOr types.lines;
+        default = null;
+        description = ''
+          HQplayer daemon configuration, written to /etc/hqplayer/hqplayerd.xml.
+
+          Refer to ${pkg}/share/doc/hqplayerd/readme.txt for possible values.
+        '';
+      };
     };
   };
 
@@ -70,6 +80,7 @@ in
 
     environment = {
       etc = {
+        "hqplayer/hqplayerd.xml" = mkIf (cfg.config != null) { source = pkgs.writeText "hqplayerd.xml" cfg.config; };
         "hqplayer/hqplayerd4-key.xml" = mkIf (cfg.licenseFile != null) { source = cfg.licenseFile; };
         "modules-load.d/taudio2.conf".source = "${pkg}/etc/modules-load.d/taudio2.conf";
       };
@@ -98,6 +109,8 @@ in
         environment.HOME = "${stateDir}/home";
 
         unitConfig.ConditionPathExists = [ configDir stateDir ];
+
+        restartTriggers = [ config.environment.etc."hqplayer/hqplayerd.xml".source ];
 
         preStart = ''
           cp -r "${pkg}/var/lib/hqplayer/web" "${stateDir}"
