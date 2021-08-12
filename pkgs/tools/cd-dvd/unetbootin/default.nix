@@ -2,7 +2,6 @@
 , stdenv
 , coreutils
 , fetchFromGitHub
-, libsForQt5
 , mtools
 , p7zip
 , wrapQtAppsHook
