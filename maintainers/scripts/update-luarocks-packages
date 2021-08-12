@@ -110,7 +110,6 @@ class LuaEditor(Editor):
         return "luaPackages"
 
     def get_update(self, input_file: str, outfile: str, proc: int):
-        cache: Cache = Cache(self.cache_file)
         _prefetch = generate_pkg_nix
 
         def update() -> dict:
