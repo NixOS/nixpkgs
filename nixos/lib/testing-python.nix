@@ -186,6 +186,12 @@ rec {
           --set startScripts "''${vmStartScripts[*]}" \
           --set testScript "$out/test-script" \
           --set vlans '${toString vlans}'
+
+        ln -s ${testDriver}/bin/nixos-test-driver $out/bin/nixos-run-vms
+        wrapProgram $out/bin/nixos-run-vms \
+          --set startScripts "''${vmStartScripts[*]}" \
+          --set testScript "${pkgs.writeText "start-all" "start_all(); join_all();"}" \
+          --set vlans '${toString vlans}'
       '');
 
   # Make a full-blown test
