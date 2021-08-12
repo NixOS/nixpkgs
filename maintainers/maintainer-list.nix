@@ -3007,6 +3007,13 @@
     githubId = 761151;
     name = "Eduardo Sánchez Muñoz";
   };
+  edlimerkaj = {
+      name = "Edli Merkaj";
+      email = "edli.merkaj@identinet.io";
+      github = "edlimerkaj";
+      githubId = 71988351;
+  };
+
   eduarrrd = {
     email = "e.bachmakov@gmail.com";
     github = "eduarrrd";
