@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, gettext, coreutils }:
 
 stdenv.mkDerivation rec {
-  name = "sharutils-4.15.2";
+  pname = "sharutils";
+  version = "4.15.2";
 
   src = fetchurl {
-    url = "mirror://gnu/sharutils/${name}.tar.xz";
+    url = "mirror://gnu/sharutils/sharutils-${version}.tar.xz";
     sha256 = "16isapn8f39lnffc3dp4dan05b7x6mnc76v6q5nn8ysxvvvwy19b";
   };
 
