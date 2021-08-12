@@ -658,6 +658,12 @@
     githubId = 11699655;
     name = "Stanislas Lange";
   };
+  angustrau = {
+    name = "Angus Trau";
+    email = "nix@angus.ws";
+    github = "angustrau";
+    githubId = 13267947;
+  };
   anhdle14 = {
     name = "Le Anh Duc";
     email = "anhdle14@icloud.com";
