@@ -1,11 +1,12 @@
 { lib, stdenv, fetchurl, perl, autoconf }:
 
 stdenv.mkDerivation rec {
-  name = "automake-1.16.4";
+  # When updating, beware of https://github.com/NixOS/nixpkgs/pull/131928#issuecomment-896614165
+  name = "automake-1.16.3";
 
   src = fetchurl {
     url = "mirror://gnu/automake/${name}.tar.xz";
-    sha256 = "sha256-gPrMCYhaV+bUnQaXLArhCJxfqPTUx8/luupY5QhfE20=";
+    sha256 = "0fmz2fhmzcpacnprl5msphvaflwiy0hvpgmqlgfny72ddijzfazz";
   };
 
   nativeBuildInputs = [ autoconf perl ];
