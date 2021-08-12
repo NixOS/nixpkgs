@@ -38,7 +38,7 @@ let
           inherit (upstream-info.deps.gn) url rev sha256;
         };
       });
-    } // lib.optionalAttrs (lib.versionAtLeast upstream-info.version "94") rec {
+    } // lib.optionalAttrs (lib.versionAtLeast upstream-info.version "93") rec {
       llvmPackages = llvmPackages_13;
       stdenv = llvmPackages.stdenv;
     });

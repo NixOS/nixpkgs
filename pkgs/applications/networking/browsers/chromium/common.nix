@@ -184,14 +184,6 @@ let
         commit = "60d5e803ef2a4874d29799b638754152285e0ed9";
         sha256 = "0apmsqqlfxprmdmi3qzp3kr9jc52mcc4xzps206kwr8kzwv48b70";
       })
-    ] ++ lib.optionals (chromiumVersionAtLeast "93") [
-      # We need to revert this patch to build M93 with LLVM 12.
-      (githubPatch {
-        # Reland "Replace 'blacklist' with 'ignorelist' in ./tools/msan/."
-        commit = "9d080c0934b848ee4a05013c78641e612fcc1e03";
-        sha256 = "1bxdhxmiy6h4acq26lq43x2mxx6rawmfmlgsh5j7w8kyhkw5af0c";
-        revert = true;
-      })
     ];
 
     postPatch = ''
