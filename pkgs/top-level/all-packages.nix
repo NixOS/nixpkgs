@@ -3253,6 +3253,8 @@ with pkgs;
     inherit (darwin) libiconv;
   };
 
+  profetch = callPackage ../tools/misc/profetch { };
+
   psrecord = python3Packages.callPackage ../tools/misc/psrecord {};
 
   reg = callPackage ../tools/virtualization/reg { };
