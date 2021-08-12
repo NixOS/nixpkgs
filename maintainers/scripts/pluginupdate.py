@@ -42,8 +42,6 @@ LOG_LEVELS = {
 }
 
 log = logging.getLogger()
-log.addHandler(logging.StreamHandler())
-
 
 def retry(ExceptionToCheck: Any, tries: int = 4, delay: float = 3, backoff: float = 2):
     """Retry calling the decorated function using an exponential backoff.
@@ -203,7 +201,6 @@ class Editor:
         name: str,
         root: Path,
         get_plugins: str,
-        generate_nix: Callable[[List[Tuple[str, str, Plugin]], str], None],
         default_in: Optional[Path] = None,
         default_out: Optional[Path] = None,
         deprecated: Optional[Path] = None,
@@ -213,7 +210,6 @@ class Editor:
         self.name = name
         self.root = root
         self.get_plugins = get_plugins
-        self._generate_nix = generate_nix
         self.default_in = default_in or root.joinpath(f"{name}-plugin-names")
         self.default_out = default_out or root.joinpath("generated.nix")
         self.deprecated = deprecated or root.joinpath("deprecated.json")
@@ -226,9 +222,9 @@ class Editor:
     def load_plugin_spec(self, plugin_file) -> List[PluginDesc]:
         return load_plugin_spec(plugin_file)
 
-    def generate_nix(self, plugins, outfile):
+    def generate_nix(self, plugins, outfile: str):
         '''Returns nothing for now, writes directly to outfile'''
-        self._generate_nix(plugins, outfile)
+        raise NotImplementedError()
 
     def get_update(self, input_file: str, outfile: str, proc: int):
         return get_update(input_file, outfile, proc, editor=self)
@@ -237,9 +233,58 @@ class Editor:
     def attr_path(self):
         return self.name + "Plugins"
 
+    def get_drv_name(self, name: str):
+        return self.attr_path + "." + name
+
     def rewrite_input(self, *args, **kwargs):
         return rewrite_input(*args, **kwargs)
 
+    def create_parser(self):
+        parser = argparse.ArgumentParser(
+            description=(
+                f"Updates nix derivations for {self.name} plugins"
+                f"By default from {self.default_in} to {self.default_out}"
+            )
+        )
+        parser.add_argument(
+            "--add",
+            dest="add_plugins",
+            default=[],
+            action="append",
+            help=f"Plugin to add to {self.attr_path} from Github in the form owner/repo",
+        )
+        parser.add_argument(
+            "--input-names",
+            "-i",
+            dest="input_file",
+            default=self.default_in,
+            help="A list of plugins in the form owner/repo",
+        )
+        parser.add_argument(
+            "--out",
+            "-o",
+            dest="outfile",
+            default=self.default_out,
+            help="Filename to save generated nix code",
+        )
+        parser.add_argument(
+            "--proc",
+            "-p",
+            dest="proc",
+            type=int,
+            default=30,
+            help="Number of concurrent processes to spawn.",
+        )
+        parser.add_argument(
+            "--no-commit", "-n", action="store_true", default=False,
+            help="Whether to autocommit changes"
+        )
+        parser.add_argument(
+            "--debug", "-d", choices=LOG_LEVELS.keys(),
+            default=logging.getLevelName(logging.WARN),
+            help="Adjust log level"
+        )
+        return parser
 
 
 
@@ -466,54 +511,6 @@ def rewrite_input(
     with open(input_file, "w") as f:
         f.writelines(lines)
 
-# TODO move to Editor ?
-def parse_args(editor: Editor):
-    parser = argparse.ArgumentParser(
-        description=(
-            f"Updates nix derivations for {editor.name} plugins"
-            f"By default from {editor.default_in} to {editor.default_out}"
-        )
-    )
-    parser.add_argument(
-        "--add",
-        dest="add_plugins",
-        default=[],
-        action="append",
-        help=f"Plugin to add to {editor.attr_path} from Github in the form owner/repo",
-    )
-    parser.add_argument(
-        "--input-names",
-        "-i",
-        dest="input_file",
-        default=editor.default_in,
-        help="A list of plugins in the form owner/repo",
-    )
-    parser.add_argument(
-        "--out",
-        "-o",
-        dest="outfile",
-        default=editor.default_out,
-        help="Filename to save generated nix code",
-    )
-    parser.add_argument(
-        "--proc",
-        "-p",
-        dest="proc",
-        type=int,
-        default=30,
-        help="Number of concurrent processes to spawn.",
-    )
-    parser.add_argument(
-        "--no-commit", "-n", action="store_true", default=False,
-        help="Whether to autocommit changes"
-    )
-    parser.add_argument(
-        "--debug", "-d", choices=LOG_LEVELS.keys(),
-        default=logging.getLevelName(logging.WARN),
-        help="Adjust log level"
-    )
-    return parser.parse_args()
-
 
 def commit(repo: git.Repo, message: str, files: List[Path]) -> None:
     repo.index.add([str(f.resolve()) for f in files])
@@ -547,12 +544,10 @@ def get_update(input_file: str, outfile: str, proc: int, editor: Editor):
     return update
 
 
-def update_plugins(editor: Editor):
+def update_plugins(editor: Editor, args):
     """The main entry function of this module. All input arguments are grouped in the `Editor`."""
 
-    args = parse_args(editor)
     log.setLevel(LOG_LEVELS[args.debug])
-
     log.info("Start updating plugins")
     nixpkgs_repo = git.Repo(editor.root, search_parent_directories=True)
     update = editor.get_update(args.input_file, args.outfile, args.proc)
@@ -581,7 +576,7 @@ def update_plugins(editor: Editor):
         if autocommit:
             commit(
                 nixpkgs_repo,
-                "{editor.attr_path}.{name}: init at {version}".format(
+                "{editor.get_drv_name name}: init at {version}".format(
                     editor=editor.name, name=plugin.normalized_name, version=plugin.version
                 ),
                 [args.outfile, args.input_file],
