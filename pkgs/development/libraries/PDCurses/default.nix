@@ -83,6 +83,7 @@ let
 
       postInstall = ''
         cp ../curspriv.h $out/include
+        cp -r .. $out/cool
       '';
     };
     sdl1 = {
