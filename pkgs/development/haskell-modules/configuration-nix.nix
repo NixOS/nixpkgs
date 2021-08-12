@@ -224,6 +224,9 @@ self: super: builtins.intersectAttrs super {
   # Test suite wants to connect to $DISPLAY.
   hsqml = dontCheck (addExtraLibraries (super.hsqml.override { qt5 = pkgs.qt5Full; }) [pkgs.libGLU pkgs.libGL]);
 
+  # Wants to check against a real DB, Needs freetds
+  odbc = dontCheck (addExtraLibraries super.odbc [ pkgs.freetds ]);
+
   # Tests attempt to use NPM to install from the network into
   # /homeless-shelter. Disabled.
   purescript = dontCheck super.purescript;
