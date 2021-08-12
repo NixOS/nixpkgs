@@ -2,6 +2,7 @@
 , aiohttp
 , aresponses
 , asynctest
+, backoff
 , buildPythonPackage
 , fetchFromGitHub
 , poetry-core
@@ -13,19 +14,22 @@
 
 buildPythonPackage rec {
   pname = "pyopenuv";
-  version = "2.0.2";
+  version = "2.1.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "bachya";
     repo = pname;
     rev = version;
-    sha256 = "sha256-QVgNwu/NXSV9nbRN0POBCdKCv6xdp4uSEzFAiHkhVaQ=";
+    sha256 = "sha256-S2X7cTArjiWOFjQGnrZ4AuhgN8t18wf9d6i9X5thRZg=";
   };
 
   nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [ aiohttp ];
+  propagatedBuildInputs = [
+    aiohttp
+    backoff
+  ];
 
   checkInputs = [
     aresponses

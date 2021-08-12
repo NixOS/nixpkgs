@@ -161,6 +161,8 @@ with pkgs;
 
   addOpenGLRunpath = callPackage ../build-support/add-opengl-runpath { };
 
+  aether = callPackage ../applications/networking/aether { };
+
   alda = callPackage ../development/interpreters/alda { };
 
   althttpd = callPackage ../servers/althttpd { };
@@ -1123,6 +1125,8 @@ with pkgs;
   aptly = callPackage ../tools/misc/aptly { };
 
   ArchiSteamFarm = callPackage ../applications/misc/ArchiSteamFarm { };
+
+  archivebox = python3Packages.callPackage ../applications/misc/archivebox { };
 
   archivemount = callPackage ../tools/filesystems/archivemount { };
 
@@ -3781,7 +3785,9 @@ with pkgs;
 
   cpuminer-multi = callPackage ../tools/misc/cpuminer-multi { };
 
-  cryptpad = callPackage ../servers/web-apps/cryptpad { };
+  cryptpad = callPackage ../servers/web-apps/cryptpad {
+    nodejs = nodejs-12_x;
+  };
 
   ethash = callPackage ../development/libraries/ethash { };
 
@@ -4207,6 +4213,8 @@ with pkgs;
   dnsenum = callPackage ../tools/security/dnsenum { };
 
   dnsmasq = callPackage ../tools/networking/dnsmasq { };
+
+  dnspeep = callPackage ../tools/security/dnspeep { };
 
   dnsproxy = callPackage ../tools/networking/dnsproxy { };
 
@@ -6693,8 +6701,6 @@ with pkgs;
     nodejs = pkgs.nodejs;
   });
 
-  now-cli = callPackage ../development/web/now-cli {};
-
   np2kai = callPackage ../misc/emulators/np2kai { };
 
   ox = callPackage ../applications/editors/ox { };
@@ -7024,6 +7030,8 @@ with pkgs;
   };
 
   marktext = callPackage ../applications/misc/marktext { };
+
+  mars-mips = callPackage ../development/tools/mars-mips { };
 
   mawk = callPackage ../tools/text/mawk { };
 
@@ -8476,6 +8484,8 @@ with pkgs;
 
   rtss = callPackage ../development/tools/misc/rtss { };
 
+  realvnc-vnc-viewer = callPackage ../tools/admin/realvnc-vnc-viewer {};
+
   reaverwps = callPackage ../tools/networking/reaver-wps {};
 
   reaverwps-t6x = callPackage ../tools/networking/reaver-wps-t6x {};
@@ -9547,6 +9557,8 @@ with pkgs;
   transifex-client = python3.pkgs.callPackage ../tools/text/transifex-client { };
 
   translate-shell = callPackage ../applications/misc/translate-shell { };
+
+  translatepy = with python3.pkgs; toPythonApplication translatepy;
 
   trash-cli = callPackage ../tools/misc/trash-cli { };
 
@@ -18045,6 +18057,8 @@ with pkgs;
 
   openrct2 = callPackage ../games/openrct2 { };
 
+  optparse-bash = callPackage ../development/libraries/optparse-bash { };
+
   orcania = callPackage ../development/libraries/orcania { };
 
   osm-gps-map = callPackage ../development/libraries/osm-gps-map { };
@@ -23604,6 +23618,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Carbon;
   };
 
+  cyanrip = callPackage ../applications/audio/cyanrip { };
+
   centerim = callPackage ../applications/networking/instant-messengers/centerim { };
 
   cgit = callPackage ../applications/version-management/git-and-tools/cgit {
@@ -28866,6 +28882,8 @@ with pkgs;
 
   ergo = callPackage ../applications/blockchains/ergo { };
 
+  erigon = callPackage ../applications/blockchains/erigon.nix { };
+
   exodus = callPackage ../applications/blockchains/exodus { };
 
   faraday = callPackage ../applications/blockchains/faraday { };
@@ -28936,8 +28954,6 @@ with pkgs;
   sumokoin = callPackage ../applications/blockchains/sumokoin { boost = boost165; };
 
   tessera = callPackage ../applications/blockchains/tessera { };
-
-  turbo-geth = callPackage ../applications/blockchains/turbo-geth { };
 
   vertcoin  = libsForQt514.callPackage ../applications/blockchains/vertcoin {
     boost = boost165;
@@ -29071,6 +29087,8 @@ with pkgs;
   braincurses = callPackage ../games/braincurses { };
 
   brogue = callPackage ../games/brogue { };
+
+  brutalmaze = callPackage ../games/brutalmaze { };
 
   bsdgames = callPackage ../games/bsdgames { };
 
@@ -31343,7 +31361,7 @@ with pkgs;
 
   faustStk = callPackage ../applications/audio/faustStk  { };
 
-  fceux = callPackage ../misc/emulators/fceux { };
+  fceux = libsForQt5.callPackage ../misc/emulators/fceux { };
 
   flockit = callPackage ../tools/backup/flockit { };
 

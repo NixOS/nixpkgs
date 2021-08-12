@@ -3,28 +3,34 @@
 , fetchPypi
 , pythonOlder
 , pytestCheckHook
-, pysocks
+, python-socks
 }:
 
 buildPythonPackage rec {
   pname = "websocket-client";
-  version = "1.1.0";
+  version = "1.2.0";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-to5JWdcEdo+iDjXJ1QjI3Cu8BB/Y0mfA1zRc/+KCRWg=";
+    sha256 = "sha256-dmW6bGRZibKLYWcIdKt1PmkpF56fyQVlrOasCQ9ZxVk=";
   };
 
-  checkInputs = [ pytestCheckHook pysocks ];
+  propagatedBuildInputs = [
+    python-socks
+   ];
+
+  checkInputs = [
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "websocket" ];
 
   meta = with lib; {
     description = "Websocket client for Python";
     homepage = "https://github.com/websocket-client/websocket-client";
+    changelog = "https://github.com/websocket-client/websocket-client/blob/v${version}/ChangeLog";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ fab ];
-    changelog = "https://github.com/websocket-client/websocket-client/blob/v${version}/ChangeLog";
   };
 }

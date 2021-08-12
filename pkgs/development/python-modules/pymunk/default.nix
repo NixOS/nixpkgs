@@ -1,9 +1,11 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchPypi
 , python
 , cffi
 , pytestCheckHook
+, ApplicationServices
 }:
 
 buildPythonPackage rec {
@@ -17,6 +19,9 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ cffi ];
+  buildInputs = lib.optionals stdenv.isDarwin [
+    ApplicationServices
+  ];
 
   preBuild = ''
     ${python.interpreter} setup.py build_ext --inplace
@@ -26,11 +31,13 @@ buildPythonPackage rec {
   pytestFlagsArray = [
     "pymunk/tests"
   ];
+  pythonImportsCheck = [ "pymunk" ];
 
   meta = with lib; {
     description = "2d physics library";
     homepage = "https://www.pymunk.org";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ angustrau ];
+    platforms = platforms.linux ++ [ "x86_64-darwin" ];
   };
 }

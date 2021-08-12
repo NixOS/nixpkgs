@@ -2,12 +2,16 @@
 
 stdenv.mkDerivation rec {
   pname = "portmidi";
-  version = "217";
+  version = "234";
 
   src = fetchurl {
-    url = "mirror://sourceforge/portmedia/portmidi-src-${version}.zip";
-    sha256 = "03rfsk7z6rdahq2ihy5k13qjzgx757f75yqka88v3gc0pn9ais88";
+    url = "mirror://sourceforge/portmedia/portmedia-code-r${version}.zip";
+    sha256 = "1g7i8hgarihycadbgy2f7lifiy5cbc0mcrcazmwnmbbh1bqx6dyp";
   };
+
+  prePatch = ''
+    cd portmidi/trunk
+  '';
 
   cmakeFlags = let
     #base = "${jdk}/jre/lib/${jdk.architecture}";
@@ -58,7 +62,7 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = let ext = stdenv.hostPlatform.extensions.sharedLibrary; in ''
-    ln -s libportmidi.${ext} "$out/lib/libporttime.${ext}"
+    ln -s libportmidi${ext} "$out/lib/libporttime${ext}"
   '';
 
   nativeBuildInputs = [ unzip cmake ];
