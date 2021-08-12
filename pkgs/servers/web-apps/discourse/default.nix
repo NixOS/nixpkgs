@@ -9,13 +9,13 @@
 }:
 
 let
-  version = "2.7.5";
+  version = "2.7.7";
 
   src = fetchFromGitHub {
     owner = "discourse";
     repo = "discourse";
     rev = "v${version}";
-    sha256 = "sha256-OykWaiBAHcZy41i+aRzBHCRgwnfQUBijHjb+ofIk25M=";
+    sha256 = "sha256-rhcTQyirgPX0ITjgotJAYLLSU957GanxAYYhy9j123U=";
   };
 
   runtimeDeps = [
