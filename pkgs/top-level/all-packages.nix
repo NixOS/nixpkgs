@@ -16419,6 +16419,8 @@ with pkgs;
 
   libcacard = callPackage ../development/libraries/libcacard { };
 
+  libcamera = callPackage ../development/libraries/libcamera { };
+
   libcanberra = callPackage ../development/libraries/libcanberra {
     inherit (darwin.apple_sdk.frameworks) Carbon CoreServices;
   };
