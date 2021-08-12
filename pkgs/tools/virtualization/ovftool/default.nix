@@ -8,7 +8,7 @@ let
 
   # FHS environment required to unpack ovftool on x86.
   ovftoolX86Unpacker = buildFHSUserEnv rec {
-    name = "ovftool-unpacker";
+    name = "ovftool-unpacker-${version}";
     targetPkgs = pkgs: [ pkgs.bash ];
     multiPkgs = targetPkgs;
     runScript = "bash";
