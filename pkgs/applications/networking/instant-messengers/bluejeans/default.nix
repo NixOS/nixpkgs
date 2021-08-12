@@ -38,14 +38,17 @@
 , xdg-utils
 }:
 
+let
+  getFirst = n: v: builtins.concatStringsSep "." (lib.take n (lib.splitString "." v));
+in
+
 stdenv.mkDerivation rec {
   pname = "bluejeans";
-  version = "2.21.3";
-  buildNumber = "2";
+  version = "2.22.0.87";
 
   src = fetchurl {
-    url = "https://swdl.bluejeans.com/desktop-app/linux/${version}/BlueJeans_${version}.${buildNumber}.rpm";
-    sha256 = "sha256-a/REuxkqZmLLa7N3CUgUAdq74VMD9D10a/Sx2jOj1QA=";
+    url = "https://swdl.bluejeans.com/desktop-app/linux/${getFirst 3 version}/BlueJeans_${version}.rpm";
+    sha256 = "sha256-0nobn+YcvqakwvBdkoEJrzHoL+OGym2zJ806oUabYfo=";
   };
 
   nativeBuildInputs = [ rpmextract makeWrapper ];
@@ -106,7 +109,7 @@ stdenv.mkDerivation rec {
       --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
       opt/BlueJeans/resources/BluejeansHelper
 
-    cc $localtime64_stub -shared -o "$out"/opt/BlueJeans/liblocaltime64_stub.so
+    cc $localtime64_stub -shared -o "${placeholder "out"}"/opt/BlueJeans/liblocaltime64_stub.so
 
     makeWrapper $out/opt/BlueJeans/bluejeans-v2 $out/bin/bluejeans \
       --set LD_LIBRARY_PATH "${libPath}":"${placeholder "out"}"/opt/BlueJeans \
@@ -119,6 +122,8 @@ stdenv.mkDerivation rec {
     patchShebangs "$out"
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = with lib; {
     description = "Video, audio, and web conferencing that works together with the collaboration tools you use every day";
     homepage = "https://www.bluejeans.com";
@@ -127,3 +132,4 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
   };
 }
+
