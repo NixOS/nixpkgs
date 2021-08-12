@@ -14,17 +14,6 @@ in
     services.hqplayerd = {
       enable = mkEnableOption "HQPlayer Embedded";
 
-      licenseFile = mkOption {
-        type = types.nullOr types.path;
-        default = null;
-        description = ''
-          Path to the HQPlayer license key file.
-
-          Without this, the service will run in trial mode and restart every 30
-          minutes.
-        '';
-      };
-
       auth = {
         username = mkOption {
           type = types.nullOr types.str;
@@ -47,6 +36,17 @@ in
             first start by going to http://your.ip/8088/auth
           '';
         };
+      };
+
+      licenseFile = mkOption {
+        type = types.nullOr types.path;
+        default = null;
+        description = ''
+          Path to the HQPlayer license key file.
+
+          Without this, the service will run in trial mode and restart every 30
+          minutes.
+        '';
       };
 
       openFirewall = mkOption {
