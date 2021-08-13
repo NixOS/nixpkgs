@@ -5151,6 +5151,8 @@ with pkgs;
     gtk = gtk2;
   };
 
+  gfs2-utils = callPackage ../tools/filesystems/gfs2-utils { };
+
   gfbgraph = callPackage ../development/libraries/gfbgraph { };
 
   ggobi = callPackage ../tools/graphics/ggobi { };
