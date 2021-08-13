@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1clh3l50wz6mlrw9kx0wh2bbhnz6bsksyh4ngz7givv4y3g9m702";
   };
 
-  buildInputs = [ gprolog ];
+  nativeBuildInputs = [ gprolog ];
 
   buildPhase = ''
     runHook preBuild
