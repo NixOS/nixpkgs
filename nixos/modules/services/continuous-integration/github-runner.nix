@@ -120,13 +120,7 @@ in
         RUNNER_ROOT = runtimeDir;
       };
 
-      path = (with pkgs; [
-        bash
-        coreutils
-        git
-        gnutar
-        gzip
-      ]) ++ [
+      path = [
         config.nix.package
       ] ++ cfg.extraPackages;
 
