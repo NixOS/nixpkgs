@@ -21309,6 +21309,22 @@ let
     };
   };
 
+  TestDeepJSON = buildPerlModule {
+    pname = "Test-Deep-JSON";
+    version = "0.05";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MO/MOTEMEN/Test-Deep-JSON-0.05.tar.gz";
+      sha256 = "aec8571b9e31b7301e26132c132c6800952dc089c645d76954a3ad1a6b350858";
+    };
+    buildInputs = [ ModuleBuildTiny ];
+    propagatedBuildInputs = [ ExporterLite JSONMaybeXS TestDeep ];
+    meta = {
+      homepage = "https://github.com/motemen/perl5-Test-Deep-JSON";
+      description = "Compare JSON with Test::Deep";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   TestDeepType = buildPerlPackage {
     pname = "Test-Deep-Type";
     version = "0.008";
