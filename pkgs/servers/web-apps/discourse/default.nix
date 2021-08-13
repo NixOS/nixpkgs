@@ -55,6 +55,7 @@ let
     , version ? null
     , meta ? null
     , bundlerEnvArgs ? {}
+    , preserveGemsDir ? false
     , src
     , ...
     }@args:
@@ -71,11 +72,20 @@ let
           runHook preInstall
           mkdir -p $out
           cp -r * $out/
-        '' + lib.optionalString (bundlerEnvArgs != {}) ''
-          ln -sf ${rubyEnv}/lib/ruby/gems $out/gems
-        '' + ''
+        '' + lib.optionalString (bundlerEnvArgs != {}) (
+          if preserveGemsDir then ''
+            cp -r ${rubyEnv}/lib/ruby/gems/* $out/gems/
+          ''
+          else ''
+            if [[ -e $out/gems ]]; then
+              echo "Warning: The repo contains a 'gems' directory which will be removed!"
+              echo "         If you need to preserve it, set 'preserveGemsDir = true'."
+              rm -r $out/gems
+            fi
+            ln -sf ${rubyEnv}/lib/ruby/gems $out/gems
+          '' + ''
           runHook postInstall
-        '';
+        '');
       });
 
   rake = runCommandNoCC "discourse-rake" {
