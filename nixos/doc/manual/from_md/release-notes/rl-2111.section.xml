@@ -1058,6 +1058,13 @@ Superuser created successfully.
           sign OCSP responses and server certificates.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <literal>lib.formats.yaml</literal>’s
+          <literal>generate</literal> will not generate JSON anymore,
+          but instead use more of the YAML-specific syntax.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
 </section>
