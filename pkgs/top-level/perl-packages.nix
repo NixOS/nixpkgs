@@ -118,6 +118,22 @@ let
     };
   };
 
+  ActionCircuitBreaker = buildPerlPackage {
+    pname = "Action-CircuitBreaker";
+    version = "0.1";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/H/HA/HANGY/Action-CircuitBreaker-0.1.tar.gz";
+      sha256 = "3f8f5d726fae537ab336e00a6819ae4a8596e4c5f243e772a536ef2eb6e606b1";
+    };
+    buildInputs = [ ActionRetry TryTiny ];
+    propagatedBuildInputs = [ Moo ];
+    meta = {
+      homepage = "https://github.com/hangy/Action-CircuitBreaker";
+      description = "Module to try to perform an action, with an option to suspend execution after a number of failures";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   AlgorithmAnnotate = buildPerlPackage {
     pname = "Algorithm-Annotate";
     version = "0.10";
