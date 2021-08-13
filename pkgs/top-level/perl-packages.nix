@@ -12354,6 +12354,21 @@ let
     };
   };
 
+  LogAnyAdapterTAP = buildPerlPackage {
+    pname = "Log-Any-Adapter-TAP";
+    version = "0.003003";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/N/NE/NERDVANA/Log-Any-Adapter-TAP-0.003003.tar.gz";
+      sha256 = "131f0689b2b42b1b31449714c6eda8f811dd96a7c86748f1e03b239cfd0121c0";
+    };
+    propagatedBuildInputs = [ LogAny TryTiny ];
+    meta = {
+      homepage = "https://github.com/silverdirk/perl-Log-Any-Adapter-TAP";
+      description = "Logger suitable for use with TAP test files";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   LogContextual = buildPerlPackage {
     pname = "Log-Contextual";
     version = "0.008001";
