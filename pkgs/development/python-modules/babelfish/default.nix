@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "babelfish";
-  version = "0.5.5";
+  version = "0.6.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8380879fa51164ac54a3e393f83c4551a275f03617f54a99d70151358e444104";
+    sha256 = "2dadfadd1b205ca5fa5dc9fa637f5b7933160a0418684c7c46a7a664033208a2";
   };
 
   propagatedBuildInputs = [ setuptools ];
