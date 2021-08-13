@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./no-usr-local-search-paths.patch
+    ./skip-check-for-aarch64.patch
   ];
 
   prePatch = lib.optionalString stdenv.isDarwin ''
