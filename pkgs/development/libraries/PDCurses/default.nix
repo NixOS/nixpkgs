@@ -21,25 +21,14 @@ let
       license = licenses.publicDomain;
       maintainers = with maintainers; [ hqurve ];
     };
-
   };
 
-  maker = name: {installPhase ? null, ...}@attrs:
+  maker = name: attrs:
     stdenv.mkDerivation ( base
     // {
       name = "PDCurses-${name}";
       sourceRoot = "source/${name}";
-    }
-    // attrs
-    // lib.attrsets.optionalAttrs (installPhase != null){
-      installPhase = ''
-        runHook preInstall
-
-        ${installPhase}
-
-        runHook postInstall
-      '';
-    });
+    } // attrs);
 
 
   platforms = {
@@ -92,11 +81,15 @@ let
         gcc -shared -o pdcurses.so *.o
       '';
       installPhase = ''
+        runHook preInstall
+
         mkdir -p $out/include
         cp pdcsdl.h $out/include
 
         mkdir -p $out/lib
         cp pdcurses.so $out/lib/libpdcurses.so
+
+        runHook postInstall
       '';
     };
     sdl2 = {
@@ -105,11 +98,15 @@ let
         gcc -shared -o pdcurses.so *.o
       '';
       installPhase = ''
+        runHook preInstall
+
         mkdir -p $out/include
         cp pdcsdl.h $out/include
 
         mkdir -p $out/lib
         cp pdcurses.so $out/lib/libpdcurses.so
+
+        runHook postInstall
       '';
     };
   };
