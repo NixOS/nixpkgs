@@ -7526,6 +7526,21 @@ let
     };
   };
 
+  ExcelWriterXLSX = buildPerlPackage {
+    pname = "Excel-Writer-XLSX";
+    version = "1.09";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JM/JMCNAMARA/Excel-Writer-XLSX-1.09.tar.gz";
+      sha256 = "d679c6ac19e93c32ab77594c793e41b948c7bb3873b600e70ad637d093dca187";
+    };
+    propagatedBuildInputs = [ ArchiveZip ];
+    meta = {
+      homepage = "http://jmcnamara.github.com/excel-writer-xlsx/";
+      description = "Create a new file in the Excel 2007+ XLSX format";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   ExceptionBase = buildPerlModule {
     pname = "Exception-Base";
     version = "0.2501";
