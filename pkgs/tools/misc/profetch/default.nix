@@ -15,16 +15,16 @@ stdenv.mkDerivation rec {
 
   buildPhase = ''
     runHook preBuild
-      gplc profetch.pl --no-top-level --no-debugger    \
-                       --no-fd-lib    --no-fd-lib-warn \
-                       --min-size -o profetch
-      runHook postBuild
+    gplc profetch.pl --no-top-level --no-debugger    \
+                     --no-fd-lib    --no-fd-lib-warn \
+                     --min-size -o profetch
+    runHook postBuild
   '';
 
   installPhase = ''
-      runHook preInstall
-      install -Dm755 -t $out/bin profetch
-      runHook postInstall
+    runHook preInstall
+    install -Dm755 -t $out/bin profetch
+    runHook postInstall
   '';
 
   meta = with lib; {
