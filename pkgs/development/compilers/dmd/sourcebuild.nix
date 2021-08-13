@@ -19,6 +19,7 @@ let
     });
   };
 
+  bits = builtins.toString stdenv.hostPlatform.parsed.cpu.bits;
 in
 
 stdenv.mkDerivation rec {
@@ -65,7 +66,10 @@ stdenv.mkDerivation rec {
       sha256 = "0nxzkrd1rzj44l83j7jj90yz2cv01na8vn9d116ijnm85jl007b4";
     })}
 
-  '' + ''
+  '' + postPatch;
+
+  postPatch =
+  ''
     patchShebangs .
 
   '' + lib.optionalString (version == "2.092.1") ''
@@ -95,7 +99,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ gdb curl tzdata ]
     ++ lib.optional stdenv.isDarwin [ Foundation gdb ];
 
-  bits = builtins.toString stdenv.hostPlatform.parsed.cpu.bits;
+
   osname = if stdenv.isDarwin then
     "osx"
   else
