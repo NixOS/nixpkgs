@@ -11609,6 +11609,20 @@ let
     };
   };
 
+  LEOCHARRECLI = buildPerlPackage {
+    pname = "LEOCHARRE-CLI";
+    version = "1.19";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/L/LE/LEOCHARRE/LEOCHARRE-CLI-1.19.tar.gz";
+      sha256 = "37835f11ee35326241b4d30368ae1bc195a50414b3662db3e13b865bd52fcde9";
+    };
+    propagatedBuildInputs = [ FileWhich Filechmod LEOCHARREDEBUG Linuxusermod YAML ];
+    meta = {
+      description = "Useful subs for coding cli scripts";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   libapreq2 = buildPerlPackage {
     pname = "libapreq2";
     version = "2.16";
