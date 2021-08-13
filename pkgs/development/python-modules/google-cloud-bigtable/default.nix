@@ -12,11 +12,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-bigtable";
-  version = "2.2.0";
+  version = "2.3.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-89fXmr3jHTtp8QOMFeueJwslHJ7Q6srQ/Kxsp0mLlKU=";
+    sha256 = "e2b3271a70d0b6ebb9e66ceb6247898eb534ca441777ea4e600c36c9572a2404";
   };
 
   propagatedBuildInputs = [
