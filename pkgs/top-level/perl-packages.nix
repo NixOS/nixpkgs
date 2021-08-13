@@ -141,6 +141,20 @@ let
     };
   };
 
+  AlgorithmCheckDigits = buildPerlModule {
+    pname = "Algorithm-CheckDigits";
+    version = "1.3.5";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MA/MAMAWE/Algorithm-CheckDigits-v1.3.5.tar.gz";
+      sha256 = "a956d0517180d6d9042f47d73aa6a2728b75fcbd546940d2dbe0a7e7cf428f73";
+    };
+    buildInputs = [ ProbePerl ];
+    meta = {
+      description = "Perl extension to generate and test check digits";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   AlgorithmDiff = buildPerlPackage {
     pname = "Algorithm-Diff";
     version = "1.1903";
