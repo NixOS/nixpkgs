@@ -24947,6 +24947,21 @@ let
     };
   };
 
+  YAMLOld = buildPerlPackage {
+    pname = "YAML-Old";
+    version = "1.23";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/I/IN/INGY/YAML-Old-1.23.tar.gz";
+      sha256 = "fa546fcd9acc5a39bc8871902f7fc1eba50e7dc781c5cd5c0abf1aece6d17ecd";
+    };
+    buildInputs = [ TestYAML TestBase ];
+    meta = {
+      homepage = "https://github.com/ingydotnet/yaml-old-pm";
+      description = "Old YAML.pm Legacy Code";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   YAMLSyck = buildPerlPackage {
     pname = "YAML-Syck";
     version = "1.34";
