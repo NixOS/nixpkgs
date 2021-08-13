@@ -69,6 +69,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   elementary-videos = callPackage ./apps/elementary-videos { };
 
+  epiphany = pkgs.epiphany.override { withPantheon = true; };
+
   sideload = callPackage ./apps/sideload { };
 
   #### DESKTOP
