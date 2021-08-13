@@ -14,17 +14,6 @@ in
     services.hqplayerd = {
       enable = mkEnableOption "HQPlayer Embedded";
 
-      licenseFile = mkOption {
-        type = types.nullOr types.path;
-        default = null;
-        description = ''
-          Path to the HQPlayer license key file.
-
-          Without this, the service will run in trial mode and restart every 30
-          minutes.
-        '';
-      };
-
       auth = {
         username = mkOption {
           type = types.nullOr types.str;
@@ -49,11 +38,32 @@ in
         };
       };
 
+      licenseFile = mkOption {
+        type = types.nullOr types.path;
+        default = null;
+        description = ''
+          Path to the HQPlayer license key file.
+
+          Without this, the service will run in trial mode and restart every 30
+          minutes.
+        '';
+      };
+
       openFirewall = mkOption {
         type = types.bool;
         default = false;
         description = ''
-          Open TCP port 8088 in the firewall for the server.
+          Opens ports needed for the WebUI and controller API.
+        '';
+      };
+
+      config = mkOption {
+        type = types.nullOr types.lines;
+        default = null;
+        description = ''
+          HQplayer daemon configuration, written to /etc/hqplayer/hqplayerd.xml.
+
+          Refer to ${pkg}/share/doc/hqplayerd/readme.txt for possible values.
         '';
       };
     };
@@ -70,6 +80,7 @@ in
 
     environment = {
       etc = {
+        "hqplayer/hqplayerd.xml" = mkIf (cfg.config != null) { source = pkgs.writeText "hqplayerd.xml" cfg.config; };
         "hqplayer/hqplayerd4-key.xml" = mkIf (cfg.licenseFile != null) { source = cfg.licenseFile; };
         "modules-load.d/taudio2.conf".source = "${pkg}/etc/modules-load.d/taudio2.conf";
       };
@@ -77,7 +88,7 @@ in
     };
 
     networking.firewall = mkIf cfg.openFirewall {
-      allowedTCPPorts = [ 8088 ];
+      allowedTCPPorts = [ 8088 4321 ];
     };
 
     services.udev.packages = [ pkg ];
@@ -98,6 +109,8 @@ in
         environment.HOME = "${stateDir}/home";
 
         unitConfig.ConditionPathExists = [ configDir stateDir ];
+
+        restartTriggers = [ config.environment.etc."hqplayer/hqplayerd.xml".source ];
 
         preStart = ''
           cp -r "${pkg}/var/lib/hqplayer/web" "${stateDir}"

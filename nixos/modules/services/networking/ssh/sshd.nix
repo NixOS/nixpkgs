@@ -549,11 +549,7 @@ in
 
         LogLevel ${cfg.logLevel}
 
-        ${if cfg.useDns then ''
-          UseDNS yes
-        '' else ''
-          UseDNS no
-        ''}
+        UseDNS ${if cfg.useDns then "yes" else "no"}
 
       '';
 

@@ -5438,8 +5438,6 @@ in {
 
   pysyncthru = callPackage ../development/python-modules/pysyncthru { };
 
-  pytest-subprocess = callPackage ../development/python-modules/pytest-subprocess { };
-
   python-codon-tables = callPackage ../development/python-modules/python-codon-tables { };
 
   python-crfsuite = callPackage ../development/python-modules/python-crfsuite { };
@@ -6969,6 +6967,8 @@ in {
 
   pytest-socket = callPackage ../development/python-modules/pytest-socket { };
 
+  pytest-subprocess = callPackage ../development/python-modules/pytest-subprocess { };
+
   pytest-subtesthack = callPackage ../development/python-modules/pytest-subtesthack { };
 
   pytest-subtests = callPackage ../development/python-modules/pytest-subtests { };
@@ -7917,6 +7917,8 @@ in {
   screenlogicpy = callPackage ../development/python-modules/screenlogicpy { };
 
   scripttest = callPackage ../development/python-modules/scripttest { };
+
+  scikit-survival = callPackage ../development/python-modules/scikit-survival { };
 
   scs = callPackage ../development/python-modules/scs { scs = pkgs.scs; };
 

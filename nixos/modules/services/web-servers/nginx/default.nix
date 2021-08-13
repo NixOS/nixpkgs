@@ -232,13 +232,13 @@ let
 
         defaultListen =
           if vhost.listen != [] then vhost.listen
-          else optionals (hasSSL || vhost.rejectSSL) (
-            singleton { addr = "0.0.0.0"; port = 443; ssl = true; }
-            ++ optional enableIPv6 { addr = "[::]"; port = 443; ssl = true; }
-          ) ++ optionals (!onlySSL) (
-            singleton { addr = "0.0.0.0"; port = 80; ssl = false; }
-            ++ optional enableIPv6 { addr = "[::]"; port = 80; ssl = false; }
-          );
+          else
+            let addrs = if vhost.listenAddresses != [] then vhost.listenAddreses else (
+              [ "0.0.0.0" ] ++ optional enableIPv6 "[::0]"
+            );
+            in
+          optionals (hasSSL || vhost.rejectSSL) (map (addr: { inherit addr; port = 443; ssl = true; }) addrs)
+          ++ optionals (!onlySSL) (map (addr: { inherit addr; port = 80; ssl = false; }) addrs);
 
         hostListen =
           if vhost.forceSSL

@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "sqlfluff";
-  version = "0.6.1";
+  version = "0.6.2";
   disabled = python3.pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "0p5vjpfmy52hbq6mz8svvxrg9757cvgj0cbvaa0340309953ilvj";
+    sha256 = "sha256-N1ZIm5LsKXXu3CyqFJZd7biaIhVW1EMBLKajgSAwc0g=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -28,10 +28,9 @@ python3.pkgs.buildPythonApplication rec {
     pytest
     tblib
     toml
+    typing-extensions
   ] ++ lib.optionals (pythonOlder "3.7") [
     dataclasses
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    typing-extensions
   ];
 
   checkInputs = with python3.pkgs; [

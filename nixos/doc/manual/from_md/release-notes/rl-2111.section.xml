@@ -668,6 +668,11 @@
           to use wildcards in the <literal>source</literal> argument.
         </para>
       </listitem>
+    </itemizedlist>
+    <para>
+      &lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+    </para>
+    <itemizedlist>
       <listitem>
         <para>
           The <literal>openrazer</literal> and
@@ -701,6 +706,13 @@
           configures the address and port the web UI is listening, it
           defaults to <literal>:9001</literal>. To be able to access the
           web UI this port needs to be opened in the firewall.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>varnish</literal> package was upgraded from 6.3.x
+          to 6.5.x. <literal>varnish60</literal> for the last LTS
+          release is also still available.
         </para>
       </listitem>
     </itemizedlist>
