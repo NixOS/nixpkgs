@@ -14290,6 +14290,22 @@ let
     };
   };
 
+  MongoDB = buildPerlPackage {
+    pname = "MongoDB";
+    version = "2.2.2";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MO/MONGODB/MongoDB-v2.2.2.tar.gz";
+      sha256 = "201935f92dac94f39c35de73661e8b252439e496f228657db85ff93257c3268f";
+    };
+    buildInputs = [ JSONMaybeXS PathTiny TestDeep TestFatal TimeMoment ];
+    propagatedBuildInputs = [ AuthenSASLSASLprep AuthenSCRAM BSON IOSocketSSL NetSSLeay ClassXSAccessor BSONXS TypeTinyXS MozillaCA Moo NetDNS SafeIsa SubQuote TieIxHash TypeTiny UUIDURandom boolean namespaceclean ];
+    meta = {
+      homepage = "https://github.com/mongodb-labs/mongo-perl-driver";
+      description = "Official MongoDB Driver for Perl (EOL)";
+      license = lib.licenses.asl20;
+    };
+  };
+
   MonitoringPlugin = buildPerlPackage {
     pname = "Monitoring-Plugin";
     version = "0.40";
