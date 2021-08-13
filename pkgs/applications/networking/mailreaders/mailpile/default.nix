@@ -8,7 +8,8 @@ python2Packages.buildPythonApplication rec {
     owner = "mailpile";
     repo = "Mailpile";
     rev = version;
-    sha256 = "gZqVDvOhVYBEMVPwzTzCWFW8DSrwq0W6cfKV3kgi8o4=";
+    sha256 = "pw0DRwAeOHRKcgI3C/D0DU0rKrfPCI/Qfj8//J4fCsw=";
+    fetchSubmodules = true;
   };
 
   postPatch = ''
@@ -33,10 +34,16 @@ python2Packages.buildPythonApplication rec {
     pysocks
   ];
 
+  outputs = [ "out" "doc" ];
+
   postInstall = ''
     wrapProgram $out/bin/mailpile \
       --prefix PATH ":" "${lib.makeBinPath [ gnupg openssl tor ]}" \
       --set-default MAILPILE_SHARED "$out/share/mailpile"
+
+      # Install package documentation
+      mkdir -p $doc/share/doc/mailpile
+      cp -r -t $doc/share/doc/mailpile $src/doc/*
   '';
 
   # No tests were found
