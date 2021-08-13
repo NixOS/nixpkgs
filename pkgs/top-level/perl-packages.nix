@@ -4872,6 +4872,21 @@ let
     };
   };
 
+  DataDumperAutoEncode = buildPerlModule {
+    pname = "Data-Dumper-AutoEncode";
+    version = "1.00";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/B/BA/BAYASHI/Data-Dumper-AutoEncode-1.00.tar.gz";
+      sha256 = "2d9a0262ad443d321dc489ef6dfa7b3eed11a2708a75d397d371bb2585e5eca1";
+    };
+    buildInputs = [ ModuleBuildPluggable ModuleBuildPluggableCPANfile ];
+    propagatedBuildInputs = [ IOInteractiveTiny ];
+    meta = {
+      description = "Dump with recursive encoding";
+      license = lib.licenses.artistic2;
+    };
+  };
+
   DataDumperConcise = buildPerlPackage {
     pname = "Data-Dumper-Concise";
     version = "2.023";
