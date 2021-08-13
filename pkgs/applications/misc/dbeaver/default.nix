@@ -150,6 +150,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.asl20;
     platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" ];
-    maintainers = with maintainers; [ jojosch ];
+    maintainers = with maintainers; [ jojosch mkg20001 ];
   };
 }
