@@ -1541,6 +1541,22 @@ let
     };
   };
 
+  BSON = buildPerlPackage {
+    pname = "BSON";
+    version = "1.12.2";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MO/MONGODB/BSON-v1.12.2.tar.gz";
+      sha256 = "f4612c0c354310741b99ab6d26451226823150ca27109b1b391232d5cfdda6db";
+    };
+    buildInputs = [ JSONMaybeXS PathTiny TestDeep TestFatal ];
+    propagatedBuildInputs = [ CryptURandom Moo TieIxHash boolean namespaceclean ];
+    meta = {
+      homepage = "https://github.com/mongodb-labs/mongo-perl-bson";
+      description = "BSON serialization and deserialization (EOL)";
+      license = lib.licenses.asl20;
+    };
+  };
+
   BUtils = buildPerlPackage {
      pname = "B-Utils";
      version = "0.27";
