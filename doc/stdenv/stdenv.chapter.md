@@ -952,7 +952,7 @@ The [generic builder](https://github.com/NixOS/nixpkgs/blob/6ba632c2a442082f353b
 :::
 
 `#!/bin/sh` will be rewritten to `#!/nix/store/<hash>-some-bash/bin/sh`.
-`#!/usr/bin/env` gets special treatment: `#!/usr/bin/env python` is rewritten to `/nix/store/<hash>/bin/python`. Interpreters that are already in the store are left untouched.
+`#!/usr/bin/env` gets special treatment: `#!/usr/bin/env python` is rewritten to `/nix/store/<hash>/bin/python`. Interpreter paths that point to a valid Nix store location are not changed.
 
 ::: note
 A script file must be marked as executable, otherwise it will not be
