@@ -12010,6 +12010,20 @@ let
     };
   };
 
+  Linuxusermod = buildPerlPackage {
+    pname = "Linux-usermod";
+    version = "0.69";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/V/VI/VIDUL/Linux-usermod-0.69.tar.gz";
+      sha256 = "97ca186a3c416bf69ed62da046f1a60d88d89b8e6ed25008b2f96e787dee9d60";
+    };
+    meta = {
+      description = "This module adds, removes and modify user and group accounts according to the passwd and shadow files syntax";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      platforms = lib.platforms.linux;
+    };
+  };
+
   ListAllUtils = buildPerlPackage {
     pname = "List-AllUtils";
     version = "0.18";
