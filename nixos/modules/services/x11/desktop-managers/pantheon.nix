@@ -214,7 +214,6 @@ in
         pantheon-agent-geoclue2
         pantheon-agent-polkit
       ]) ++ (gnome.removePackagesByName [
-        gnome.epiphany
         gnome.gnome-font-viewer
         gnome.gnome-settings-daemon338
       ] config.environment.pantheon.excludePackages);
@@ -282,6 +281,7 @@ in
         elementary-screenshot
         elementary-terminal
         elementary-videos
+        epiphany
       ] config.environment.pantheon.excludePackages);
 
       # needed by screenshot
