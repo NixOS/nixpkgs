@@ -24393,6 +24393,21 @@ let
     };
   };
 
+  XMLRules = buildPerlModule {
+    pname = "XML-Rules";
+    version = "1.16";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JE/JENDA/XML-Rules-1.16.tar.gz";
+      sha256 = "3788255c07afe4195a0de72ce050652320d817528ff2d10c611f6e392043868b";
+    };
+    propagatedBuildInputs = [ XMLParser ];
+    meta = {
+      description =
+        "Parse XML and specify what and how to keep/process for individual tags";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   XMLSAX = buildPerlPackage {
     pname = "XML-SAX";
     version = "1.02";
