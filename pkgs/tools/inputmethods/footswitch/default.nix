@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ hidapi ];
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace Makefile \
       --replace /usr/local $out \
       --replace /usr/bin/install install \
