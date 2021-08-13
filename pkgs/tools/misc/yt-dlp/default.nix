@@ -1,6 +1,5 @@
-{ lib, fetchurl, buildPythonPackage
+{ lib, fetchPypi, buildPythonPackage
 , zip, ffmpeg, rtmpdump, phantomjs2, atomicparsley, pycryptodome, pandoc
-, fetchFromGitHub
 , websockets, mutagen
 , ffmpegSupport ? true
 , rtmpSupport ? true
@@ -10,17 +9,19 @@
 
 buildPythonPackage rec {
   pname = "yt-dlp";
-  # The websites yt-dlp deals with are a very moving target. That means that
-  # downloads break constantly. Because of that, updates should always be backported
-  # to the latest stable release.
-  version = "2021.08.02";
+  version = "2021.08.10";
 
-  src = fetchFromGitHub {
-    owner = "yt-dlp";
-    repo = "yt-dlp";
-    rev = version;
-    sha256 = "QEJKOZGVQNXLU8GfTbwBx2Zv3KO++ozTJcXLWxXA4hI=";
+  src = fetchPypi {
+    inherit pname;
+    version = with lib; concatMapStringsSep "." (removePrefix "0") (with versions; [(major version) (minor version) (patch version)]);
+    sha256 = "0h2jybl39mfiv5qd5q6mm8y3ks4y221lfg246z8kf7b4qi6vz8cd";
   };
+
+  # build_lazy_extractors assumes this directory exists
+  # but it is not present in the pypi package
+  postPatch = ''
+    mkdir -p ytdlp_plugins/extractor
+  '';
 
   nativeBuildInputs = [ installShellFiles makeWrapper ];
   buildInputs = [ zip pandoc ];
