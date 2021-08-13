@@ -23926,6 +23926,8 @@ with pkgs;
     buildServerGui = false;
   };
 
+  drawterm = callPackage ../tools/admin/drawterm { };
+
   droopy = python3Packages.callPackage ../applications/networking/droopy { };
 
   drumgizmo = callPackage ../applications/audio/drumgizmo { };
