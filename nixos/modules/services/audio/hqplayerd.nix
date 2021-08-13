@@ -110,7 +110,7 @@ in
 
         unitConfig.ConditionPathExists = [ configDir stateDir ];
 
-        restartTriggers = [ config.environment.etc."hqplayer/hqplayerd.xml".source ];
+        restartTriggers = optionals (cfg.config != null) [ config.environment.etc."hqplayer/hqplayerd.xml".source ];
 
         preStart = ''
           cp -r "${pkg}/var/lib/hqplayer/web" "${stateDir}"
