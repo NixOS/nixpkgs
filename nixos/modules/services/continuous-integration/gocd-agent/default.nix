@@ -35,9 +35,18 @@ in {
         '';
       };
 
+      javaPackage = mkOption {
+        default = pkgs.adoptopenjdk-jre-hotspot-bin-15;
+        defaultText = "pkgs.adoptopenjdk-jre-hotspot-bin-15";
+        type = types.package;
+        description = ''
+          Java package to run the Go.CD agent's process.
+        '';
+      };
+
       packages = mkOption {
-        default = [ pkgs.stdenv pkgs.jre pkgs.git config.programs.ssh.package pkgs.nix ];
-        defaultText = "[ pkgs.stdenv pkgs.jre pkgs.git config.programs.ssh.package pkgs.nix ]";
+        default = [ pkgs.stdenv pkgs.git config.programs.ssh.package pkgs.nix ];
+        defaultText = "[ pkgs.stdenv pkgs.git config.programs.ssh.package pkgs.nix ]";
         type = types.listOf types.package;
         description = ''
           Packages to add to PATH for the Go.CD agent process.
@@ -191,7 +200,7 @@ in {
         ln -s "${pkgs.writeText "autoregister.properties" cfg.agentConfig}" config/autoregister.properties
 
         ${pkgs.git}/bin/git config --global --add http.sslCAinfo /etc/ssl/certs/ca-certificates.crt
-        ${pkgs.jre}/bin/java ${concatStringsSep " " cfg.startupOptions} \
+        ${cfg.javaPackage}/bin/java ${concatStringsSep " " cfg.startupOptions} \
                         ${concatStringsSep " " cfg.extraOptions} \
                               -jar ${pkgs.gocd-agent}/go-agent/lib/agent-bootstrapper.jar \
                               -serverUrl ${cfg.goServer}

@@ -67,9 +67,18 @@ in {
         '';
       };
 
+      javaPackage = mkOption {
+        default = pkgs.adoptopenjdk-jre-hotspot-bin-15;
+        defaultText = "pkgs.adoptopenjdk-jre-hotspot-bin-15";
+        type = types.package;
+        description = ''
+          Java package run the Go.CD server's process.
+        '';
+      };
+
       packages = mkOption {
-        default = [ pkgs.stdenv pkgs.jre pkgs.git config.programs.ssh.package pkgs.nix ];
-        defaultText = "[ pkgs.stdenv pkgs.jre pkgs.git config.programs.ssh.package pkgs.nix ]";
+        default = [ pkgs.stdenv pkgs.git config.programs.ssh.package pkgs.nix ];
+        defaultText = "[ pkgs.stdenv pkgs.git config.programs.ssh.package pkgs.nix ]";
         type = types.listOf types.package;
         description = ''
           Packages to add to PATH for the Go.CD server's process.
@@ -182,9 +191,9 @@ in {
 
       script = ''
         ${pkgs.git}/bin/git config --global --add http.sslCAinfo /etc/ssl/certs/ca-certificates.crt
-        ${pkgs.jre}/bin/java -server ${concatStringsSep " " cfg.startupOptions} \
+        ${cfg.javaPackage}/bin/java -server ${concatStringsSep " " cfg.startupOptions} \
                                ${concatStringsSep " " cfg.extraOptions}  \
-                              -jar ${pkgs.gocd-server}/go-server/go.jar
+                              -jar ${pkgs.gocd-server}/go-server/lib/go.jar
       '';
 
       serviceConfig = {
