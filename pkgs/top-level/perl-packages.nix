@@ -24045,6 +24045,21 @@ let
     };
   };
 
+  UUIDURandom = buildPerlPackage {
+    pname = "UUID-URandom";
+    version = "0.001";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DA/DAGOLDEN/UUID-URandom-0.001.tar.gz";
+      sha256 = "3f13631b13b9604fb489e2989490c99f103743a837239bdafae9d6baf55f8f46";
+    };
+    propagatedBuildInputs = [ CryptURandom ];
+    meta = {
+      homepage = "https://github.com/dagolden/UUID-URandom";
+      description = "UUIDs based on /dev/urandom or the Windows Crypto API";
+      license = lib.licenses.asl20;
+    };
+  };
+
   VariableMagic = buildPerlPackage {
     pname = "Variable-Magic";
     version = "0.62";
