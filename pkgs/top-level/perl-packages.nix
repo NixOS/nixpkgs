@@ -12187,6 +12187,20 @@ let
     LANG="C";
   };
 
+  LocaleMaketextLexiconGetcontext = buildPerlPackage {
+    pname = "Locale-Maketext-Lexicon-Getcontext";
+    version = "0.05";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SA/SAPER/Locale-Maketext-Lexicon-Getcontext-0.05.tar.gz";
+      sha256 = "75cb33df9472a5962de54082f42c6a76b260fc405ba10ca53246fb1f82c09208";
+    };
+    propagatedBuildInputs = [ LocaleMaketextLexicon ];
+    meta = {
+      description = "PO file parser for Maketext";
+      license = lib.licenses.mit;
+    };
+  };
+
   LocaleMOFile = buildPerlPackage {
      pname = "Locale-MO-File";
      version = "0.09";
