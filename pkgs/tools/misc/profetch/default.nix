@@ -3,7 +3,7 @@
 
 stdenv.mkDerivation rec {
   pname = "profetch";
-  version = "v0.1.6";
+  version = "0.1.6";
 
   src = fetchFromGitHub {
     owner = "RustemB";
