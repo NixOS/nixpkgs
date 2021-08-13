@@ -222,6 +222,9 @@ in with passthru; stdenv.mkDerivation {
       else
         ./3.5/profile-task.patch
     )
+  ] ++ optionals (pythonAtLeast "3.9" && stdenv.isDarwin) [
+    # Stop checking for TCL/TK in global macOS locations
+    ./3.9/darwin-tcl-tk.patch
   ] ++ optionals (isPy3k && hasDistutilsCxxPatch) [
     # Fix for http://bugs.python.org/issue1222585
     # Upstream distutils is calling C compiler to compile C++ code, which
@@ -320,6 +323,8 @@ in with passthru; stdenv.mkDerivation {
   '' + optionalString stdenv.isDarwin ''
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -msse2"
     export MACOSX_DEPLOYMENT_TARGET=10.6
+    # Override the auto-detection in setup.py, which assumes a universal build
+    export PYTHON_DECIMAL_WITH_MACHINE=${if stdenv.isAarch64 then "uint128" else "x64"}
   '' + optionalString (isPy3k && pythonOlder "3.7") ''
     # Determinism: The interpreter is patched to write null timestamps when compiling Python files
     #   so Python doesn't try to update the bytecode when seeing frozen timestamps in Nix's store.
