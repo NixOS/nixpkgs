@@ -134,6 +134,20 @@ let
     };
   };
 
+  ActionRetry = buildPerlPackage {
+    pname = "Action-Retry";
+    version = "0.24";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DA/DAMS/Action-Retry-0.24.tar.gz";
+      sha256 = "a3759742c5bef2d1975ab73d35499d8113324919b24936130255cff07d0294f7";
+    };
+    propagatedBuildInputs = [ MathFibonacci ModuleRuntime Moo ];
+    meta = {
+      description = "Module to try to perform an action, with various ways of retrying and sleeping between retries";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   AlgorithmAnnotate = buildPerlPackage {
     pname = "Algorithm-Annotate";
     version = "0.10";
