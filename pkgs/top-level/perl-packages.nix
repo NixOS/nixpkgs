@@ -7441,6 +7441,22 @@ let
      };
   };
 
+  EncodePunycode = buildPerlPackage {
+    pname = "Encode-Punycode";
+    version = "1.002";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/C/CF/CFAERBER/Encode-Punycode-1.002.tar.gz";
+      sha256 = "ca3aceecdb80b5d45aa10e1cde8fec4e90b4f8c9189c7504dd8658f071f77194";
+    };
+    buildInputs = [ TestNoWarnings ];
+    propagatedBuildInputs = [ NetIDNEncode ];
+    meta = {
+      homepage = "http://search.cpan.org/dist/Encode-Punycode";
+      description = "Encode plugin for Punycode (RFC 3492)";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   enum = buildPerlPackage {
     pname = "enum";
     version = "1.11";
