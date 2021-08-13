@@ -6516,6 +6516,18 @@ let
     };
   };
 
+  DevelSize = buildPerlPackage {
+    pname = "Devel-Size";
+    version = "0.83";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/N/NW/NWCLARK/Devel-Size-0.83.tar.gz";
+      sha256 = "757a67e0aa59ae103ea5ca092cbecc025644ebdc326731688ffab6f8823ef4b3";
+    };
+    meta = {
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   DevelStackTraceAsHTML = buildPerlPackage {
     pname = "Devel-StackTrace-AsHTML";
     version = "0.15";
