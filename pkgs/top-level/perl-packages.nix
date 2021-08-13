@@ -9481,6 +9481,22 @@ let
     };
   };
 
+  GraphicsColor = buildPerlPackage {
+    pname = "Graphics-Color";
+    version = "0.31";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/G/GP/GPHAT/Graphics-Color-0.31.tar.gz";
+      sha256 = "faa8fed5b2d80e5160af976e5db2242c0b3555542ce1042575ff6b694587a33d";
+    };
+    buildInputs = [ TestNumberDelta ModulePluggable ];
+    propagatedBuildInputs = [ ColorLibrary Moose MooseXAliases MooseXClone MooseXStorage MooseXTypes ];
+    meta = {
+      homepage = "https://github.com/gphat/graphics-color";
+      description = "Device and library agnostic color spaces";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   GraphicsTIFF = buildPerlPackage {
     pname = "Graphics-TIFF";
     version = "16";
