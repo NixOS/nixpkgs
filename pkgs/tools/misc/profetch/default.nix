@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "RustemB";
     repo = pname;
-    rev = version;
+    rev = "v${version};
     sha256 = "1clh3l50wz6mlrw9kx0wh2bbhnz6bsksyh4ngz7givv4y3g9m702";
   };
 
