@@ -1,13 +1,11 @@
 { lib, stdenv, fetchurl, pkg-config, fuse, libarchive }:
 
-let
-  name = "archivemount-0.9.1";
-in
-stdenv.mkDerivation {
-  inherit name;
+stdenv.mkDerivation rec {
+  pname = "archivemount";
+  version = "0.9.1";
 
   src = fetchurl {
-    url = "https://www.cybernoia.de/software/archivemount/${name}.tar.gz";
+    url = "https://www.cybernoia.de/software/archivemount/archivemount-${version}.tar.gz";
     sha256 = "1cy5b6qril9c3ry6fv7ir87s8iyy5vxxmbyx90dm86fbra0vjaf5";
   };
 
