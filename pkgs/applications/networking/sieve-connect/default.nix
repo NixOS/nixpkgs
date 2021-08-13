@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   buildFlags = [ "PERL5LIB=${perlPackages.makePerlPath [ perlPackages.FileSlurp ]}" "bin" "man" ];
 
   installPhase = ''
-    mkdir -p $out/bin $out/share/man/man1
+    mkdir -p $out/bin
     install -m 755 sieve-connect $out/bin
     installManPage sieve-connect.1
 
