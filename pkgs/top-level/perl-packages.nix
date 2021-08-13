@@ -8099,6 +8099,21 @@ let
     };
   };
 
+  FilechmodRecursive = buildPerlPackage {
+    pname = "File-chmod-Recursive";
+    version = "1.0.3";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MI/MITHUN/File-chmod-Recursive-v1.0.3.tar.gz";
+      sha256 = "9348ca5c5b88deadcc483b9399ef7c2e0fc2504f9058db65f3c3c53c41139aa7";
+    };
+    propagatedBuildInputs = [ Filechmod ];
+    meta = {
+      homepage = "https://github.com/mithun/perl-file-chmod-recursive";
+      description = "Run chmod recursively against directories";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   FileCopyRecursive = buildPerlPackage {
     pname = "File-Copy-Recursive";
     version = "0.45";
