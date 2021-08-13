@@ -15277,6 +15277,22 @@ let
     propagatedBuildInputs = [ Moose ];
   };
 
+  MooseXStorage = buildPerlPackage {
+    pname = "MooseX-Storage";
+    version = "0.53";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/E/ET/ETHER/MooseX-Storage-0.53.tar.gz";
+      sha256 = "8704bfe505f66b340f62e85c9ff319c19e9670b26d4b012c91f4e103b1daace0";
+    };
+    buildInputs = [ TestDeep TestDeepType TestFatal TestNeeds TestDeepJSON TestWithoutModule DigestHMAC MooseXTypes ];
+    propagatedBuildInputs = [ ModuleRuntime Moose MooseXRoleParameterized PodCoverage StringRewritePrefix namespaceautoclean IOStringy JSON JSONXS JSONMaybeXS CpanelJSONXS YAML YAMLOld YAMLTiny YAMLLibYAML YAMLSyck ];
+    meta = {
+      homepage = "https://github.com/moose/MooseX-Storage";
+      description = "A serialization framework for Moose classes";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   MooseXStrictConstructor = buildPerlPackage {
     pname = "MooseX-StrictConstructor";
     version = "0.21";
