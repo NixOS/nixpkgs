@@ -10601,6 +10601,29 @@ let
     };
   };
 
+  ImageOCRTesseract = buildPerlPackage {
+    pname = "Image-OCR-Tesseract";
+    version = "1.26";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/L/LE/LEOCHARRE/Image-OCR-Tesseract-1.26.tar.gz";
+      sha256 = "98d904266a7062f09c9b46f77c4e94529e1fe99339e3f83fda1f92013f007cea";
+    };
+    nativeBuildInputs = [ pkgs.which pkgs.makeWrapper pkgs.tesseract pkgs.imagemagick ];
+    propagatedBuildInputs = [ FileFindRule FileWhich LEOCHARRECLI StringShellQuote ];
+    postPatch = ''
+      substituteInPlace lib/Image/OCR/Tesseract.pm \
+        --replace "which('tesseract')" "\"${pkgs.tesseract}/bin/tesseract\"" \
+        --replace "which('convert')" "\"${pkgs.imagemagick}/bin/convert"\"
+    '';
+    postInstall = ''
+      wrapProgram $out/bin/ocr --prefix PATH : ${lib.makeBinPath [ pkgs.tesseract pkgs.imagemagick ]}
+    '';
+    meta = {
+      description = "Read an image with tesseract ocr and get output";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   IMAPClient = buildPerlPackage {
     pname = "IMAP-Client";
     version = "0.13";
