@@ -11359,6 +11359,20 @@ let
     buildInputs = [ TestFatal TestRequires TestWarnings TestWithoutModule ];
   };
 
+  JSONCreate = buildPerlPackage {
+    pname = "JSON-Create";
+    version = "0.35";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/B/BK/BKB/JSON-Create-0.35.tar.gz";
+      sha256 = "5faefe0d833b8132568865308f3239d3cdaa1b8a1ecc9b5624dcf1efbe10683e";
+    };
+    propagatedBuildInputs = [ JSONParse UnicodeUTF8 ];
+    meta = {
+      description = "Create JSON";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   JSONMaybeXS = buildPerlPackage {
     pname = "JSON-MaybeXS";
     version = "1.004003";
