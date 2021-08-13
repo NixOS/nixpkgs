@@ -116,6 +116,18 @@ def _diff_file(filepath: str, old_version: str, new_version: str):
     return
 
 
+def _remove_platforms(rubyenv_dir: Path):
+    for platform in ['arm64-darwin-20', 'x86_64-darwin-18',
+                     'x86_64-darwin-19', 'x86_64-darwin-20',
+                     'x86_64-linux']:
+        with open(rubyenv_dir / 'Gemfile.lock', 'r') as f:
+            for line in f:
+                if platform in line:
+                    subprocess.check_output(
+                        ['bundle', 'lock', '--remove-platform', platform], cwd=rubyenv_dir)
+                    break
+
+
 @click_log.simple_verbosity_option(logger)
 
 
@@ -178,10 +190,7 @@ def update(rev):
             f.write(repo.get_file(fn, rev))
 
     subprocess.check_output(['bundle', 'lock'], cwd=rubyenv_dir)
-    for platform in ['arm64-darwin-20', 'x86_64-darwin-18',
-                     'x86_64-darwin-19', 'x86_64-darwin-20',
-                     'x86_64-linux']:
-        subprocess.check_output(['bundle', 'lock', '--remove-platform', platform], cwd=rubyenv_dir)
+    _remove_platforms(rubyenv_dir)
     subprocess.check_output(['bundix'], cwd=rubyenv_dir)
 
     _call_nix_update('discourse', repo.rev2version(rev))
@@ -299,7 +308,9 @@ def update_plugins():
             with open(gemfile, 'a') as f:
                 f.write(gemfile_text)
 
+            subprocess.check_output(['bundle', 'lock', '--add-platform', 'ruby'], cwd=rubyenv_dir)
             subprocess.check_output(['bundle', 'lock', '--update'], cwd=rubyenv_dir)
+            _remove_platforms(rubyenv_dir)
             subprocess.check_output(['bundix'], cwd=rubyenv_dir)
 
 
