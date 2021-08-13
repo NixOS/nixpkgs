@@ -66,6 +66,9 @@ let result = stdenv.mkDerivation rec {
 
     mv $sourceRoot $out
 
+    # jni.h expects jni_md.h to be in the header search path.
+    ln -s $out/include/linux/*_md.h $out/include/
+
     rm -rf $out/demo
 
     # Remove some broken manpages.

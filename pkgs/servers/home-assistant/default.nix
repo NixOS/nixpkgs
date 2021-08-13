@@ -58,45 +58,9 @@ let
     (mkOverride "ring-doorbell" "0.6.2"
       "fbd537722a27b3b854c26506d894b7399bb8dc57ff36083285971227a2d46560")
 
-    # Pinned due to API changes in pyflunearyou>=2.0
-    (self: super: {
-      pyflunearyou = super.pyflunearyou.overridePythonAttrs (oldAttrs: rec {
-        version = "1.0.7";
-        src = fetchFromGitHub {
-          owner = "bachya";
-          repo = "pyflunearyou";
-          rev = version;
-          sha256 = "0hq55k298m9a90qb3lasw9bi093hzndrah00rfq94bp53aq0is99";
-        };
-        postPatch = ''
-          substituteInPlace pyproject.toml \
-            --replace "poetry.masonry.api" "poetry.core.masonry.api" \
-            --replace 'msgpack = "^0.6.2"' 'msgpack = "*"' \
-            --replace 'ujson = "^1.35"' 'ujson = "*"'
-        '';
-      });
-    })
-
     # Pinned due to API changes in pylast 4.2.1
     (mkOverride "pylast" "4.2.0"
       "0zd0dn2l738ndz62vpa751z0ldnm91dcz9zzbvxv53r08l0s9yf3")
-
-    # Pinned due to API changes in pyopenuv>=1.1.0
-    (self: super: {
-      pyopenuv = super.pyopenuv.overridePythonAttrs (oldAttrs: rec {
-        version = "1.0.13";
-        src = fetchFromGitHub {
-          owner = "bachya";
-          repo = "pyopenuv";
-          rev = version;
-          sha256 = "1gx9xjkyvqqy8410lnbshq1j5y4cb0cdc4m505g17rwdzdwb01y8";
-        };
-        postPatch = ''
-          substituteInPlace pyproject.toml \
-            --replace "poetry.masonry.api" "poetry.core.masonry.api"
-        '';
-      });
-    })
 
     # Pinned due to API changes in pyruckus>0.12
     (self: super: {
@@ -157,7 +121,7 @@ let
   extraBuildInputs = extraPackages py.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2021.7.4";
+  hassVersion = "2021.8.6";
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "homeassistant";
@@ -174,7 +138,7 @@ in with py.pkgs; buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = version;
-    sha256 = "1y6p3hg487ishar1r8vir5cxfbaw4c86s5w3zn9bmbf6jbd51pyk";
+    sha256 = "1hahxvvlk32dbmv2lhn67w1ii5g24znvjqgsq318qv8c2qh5z5ws";
   };
 
   # leave this in, so users don't have to constantly update their downstream patch handling
@@ -388,7 +352,6 @@ in with py.pkgs; buildPythonApplication rec {
     "fritzbox_callmonitor"
     "frontend"
     "garages_amsterdam"
-    "garmin_connect"
     "gdacs"
     "generic"
     "generic_thermostat"
@@ -430,7 +393,8 @@ in with py.pkgs; buildPythonApplication rec {
     "home_connect"
     "home_plus_control"
     "homeassistant"
-    "homekit"
+    # disable homekit tests because they fail in the network component
+    #"homekit"
     "homekit_controller"
     "homematic"
     "homematicip_cloud"
@@ -658,7 +622,6 @@ in with py.pkgs; buildPythonApplication rec {
     "switcher_kis"
     "syncthing"
     "syncthru"
-    "synology_dsm"
     "system_health"
     "system_log"
     "tado"
@@ -731,7 +694,6 @@ in with py.pkgs; buildPythonApplication rec {
     "workday"
     "worldclock"
     "wsdot"
-    "wunderground"
     "xbox"
     "xiaomi"
     "xiaomi_aqara"
@@ -791,8 +753,15 @@ in with py.pkgs; buildPythonApplication rec {
     # wallbox/test_config_flow.py: Tries to connect to api.wall-box.cim: Failed to establish a new connection: [Errno -2] Name or service not known
     "--deselect tests/components/wallbox/test_config_flow.py::test_form_invalid_auth"
     "--deselect tests/components/wallbox/test_config_flow.py::test_form_cannot_connect"
-    # tests/components/default_config/test_init.py: Tries to check for updates and fails ungracefully without network access
+    # default_config/test_init.py: Tries to check for updates and fails ungracefully without network access
     "--deselect tests/components/default_config/test_init.py::test_setup"
+    # local_ip/test_{init,config_flow}.py: tries to lookup a route towards a multicast address and fails
+    "--deselect tests/components/local_ip/test_init.py::test_basic_setup"
+    "--deselect tests/components/local_ip/test_config_flow.py::test_config_flow"
+    # netatmo/test_select.py: NoneType object has no attribute state
+    "--deselect tests/components/netatmo/test_select.py::test_select_schedule_thermostats"
+    # helpers/test_system_info.py: AssertionError: assert 'Unknown' == 'Home Assistant Container'
+    "--deselect tests/helpers/test_system_info.py::test_container_installationtype"
     # tests are located in tests/
     "tests"
     # dynamically add packages required for component tests
@@ -828,8 +797,6 @@ in with py.pkgs; buildPythonApplication rec {
     "test_onboarding_core_no_rpi_power"
     # hue/test_sensor_base.py: Race condition when counting events
     "test_hue_events"
-    # homekit/test_homekit.py: Tries to use zeroconf, which tries to join a multicast group
-    "test_homekit_uses_system_zeroconf"
     # august/test_lock.py: AssertionError: assert 'unlocked' == 'locked'
     "test_lock_update_via_pubnub"
   ];

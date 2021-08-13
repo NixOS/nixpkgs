@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "The RDF Parser Toolkit";
-    homepage = "http://librdf.org/raptor";
+    homepage = "https://librdf.org/raptor";
     license = with lib.licenses; [ lgpl21 asl20 ];
     maintainers = with lib.maintainers; [ marcweber ];
     platforms = lib.platforms.unix;

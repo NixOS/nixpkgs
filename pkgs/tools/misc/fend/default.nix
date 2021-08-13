@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "fend";
-  version = "0.1.21";
+  version = "0.1.24";
 
   src = fetchFromGitHub {
     owner = "printfn";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-LrHZsnW96+QsXuGxWoGqIEKTE86m3tMnh4fpDPIhd1w=";
+    sha256 = "sha256-Oa/o2Jd0rf+fIVQCaCiSh+tI2KINh1Kx3NTVEULQlzI=";
   };
 
-  cargoSha256 = "sha256-GZ4Yt5iQkgupJMTYIbvCPtz19985MFf8IDy3ui0M6DE=";
+  cargoSha256 = "sha256-iFGw5mkeRGiMWe5wcrEcmH0WlHJ8p1D0rf1mh+1Mo+w=";
 
   doInstallCheck = true;
 

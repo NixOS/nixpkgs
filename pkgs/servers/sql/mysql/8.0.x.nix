@@ -6,11 +6,11 @@
 let
 self = stdenv.mkDerivation rec {
   pname = "mysql";
-  version = "8.0.25";
+  version = "8.0.26";
 
   src = fetchurl {
     url = "https://dev.mysql.com/get/Downloads/MySQL-${self.mysqlVersion}/${pname}-${version}.tar.gz";
-    sha256 = "c16aa9cf621bc028efba2bb11f3c36a323b125fa0d108ff92fab60e46309206e";
+    sha256 = "sha256-293Nx3L4BscRo3MTY6UPPTWeqsnF0UgAhHKKHCzl2k0=";
   };
 
   patches = [

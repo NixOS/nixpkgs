@@ -33,6 +33,7 @@ let
     "domain"
     "dovecot"
     "fritzbox"
+    "influxdb"
     "json"
     "jitsi"
     "kea"

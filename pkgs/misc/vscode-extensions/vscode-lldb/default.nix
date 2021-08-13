@@ -31,7 +31,7 @@ let
 
     buildAndTestSubdir = "adapter";
 
-    cargoFlags = [
+    cargoBuildFlags = [
       "--lib"
       "--bin=codelldb"
       "--features=weak-linkage"
@@ -99,6 +99,5 @@ in stdenv.mkDerivation {
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ oxalica ];
     platforms = platforms.all;
-    broken = stdenv.isDarwin; # Build failed on x86_64-darwin currently.
   };
 }

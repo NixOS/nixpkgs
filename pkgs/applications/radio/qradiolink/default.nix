@@ -68,8 +68,6 @@ gnuradio3_8.pkgs.mkDerivation rec {
     gnuradio3_8.qt.wrapQtAppsHook
   ];
 
-  enableParallelBuilding = true;
-
   meta = with lib; {
     description = "SDR transceiver application for analog and digital modes";
     homepage = "http://qradiolink.org/";

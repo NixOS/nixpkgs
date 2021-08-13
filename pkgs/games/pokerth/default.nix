@@ -61,8 +61,6 @@ mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-I${SDL.dev}/include/SDL";
 
-  enableParallelBuilding = true;
-
   meta = with lib; {
     homepage = "https://www.pokerth.net";
     description = "Poker game ${target}";

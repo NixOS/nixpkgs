@@ -61,6 +61,15 @@ stdenv.mkDerivation {
     # cross-compiling.
     ./always-search-rpath.patch
 
+    # Fix quadratic slowdown in `strip` performance.
+    # See #129467 and https://sourceware.org/bugzilla/show_bug.cgi?id=28058
+    # Remove when we're on binutils > 2.36.1.
+    # The patch is downloaded from
+    #     https://sourceware.org/git/?p=binutils-gdb.git;a=blobdiff_plain;f=bfd/elf.c;h=af62aadc3d446cd5b1f0201b207c90c22e7809b1;hp=36733e080dd9d9be28b576b246aaf5bd8c8569c7;hb=84fd26d8209e99fc3a432dd0b09b6c053de1ce65;hpb=abe2a28aaa7a2bfd0f3061c72a98eb898976b721
+    # which is the 2.36 backport (using `TRUE` instead of `true` of binutils master commit:
+    #     https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;h=956ea65cd707707c0f725930214cbc781367a831
+    ./bfd-elf-Dont-read-non-existing-secondary-relocs.patch
+
     ./CVE-2020-35448.patch
   ] ++ lib.optional stdenv.targetPlatform.isiOS ./support-ios.patch
     ++ # This patch was suggested by Nick Clifton to fix

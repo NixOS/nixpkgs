@@ -772,7 +772,7 @@ nameValuePair "some" 6
    <title>Modifying each value of an attribute set</title>
 <programlisting><![CDATA[
 lib.attrsets.mapAttrs
-  (name: value: name + "-" value)
+  (name: value: name + "-" + value)
   { x = "foo"; y = "bar"; }
 => { x = "x-foo"; y = "y-bar"; }
 ]]></programlisting>

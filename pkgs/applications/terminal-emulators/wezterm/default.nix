@@ -34,7 +34,7 @@ let
     zlib
     fontconfig
     freetype
-  ] ++ lib.optionals (stdenv.isLinux) [
+  ] ++ lib.optionals stdenv.isLinux [
     libX11
     xcbutil
     libxcb
@@ -49,7 +49,7 @@ let
     libGLU
     libGL
     openssl
-  ] ++ lib.optionals (stdenv.isDarwin) [
+  ] ++ lib.optionals stdenv.isDarwin [
     Foundation
     CoreGraphics
     Cocoa
@@ -90,6 +90,10 @@ rustPlatform.buildRustPackage rec {
     mkdir -p $terminfo/share/terminfo/w $out/nix-support
     tic -x -o $terminfo/share/terminfo termwiz/data/wezterm.terminfo
     echo "$terminfo" >> $out/nix-support/propagated-user-env-packages
+
+    install -Dm644 assets/icon/terminal.png $out/share/icons/hicolor/128x128/apps/org.wezfurlong.wezterm.png
+    install -Dm644 assets/wezterm.desktop $out/share/applications/org.wezfurlong.wezterm.desktop
+    install -Dm644 assets/wezterm.appdata.xml $out/share/metainfo/org.wezfurlong.wezterm.appdata.xml
   '';
 
   preFixup = lib.optionalString stdenv.isLinux ''

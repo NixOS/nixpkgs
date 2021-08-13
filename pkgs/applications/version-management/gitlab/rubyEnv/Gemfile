@@ -35,7 +35,7 @@ gem 'rexml', '~> 3.2.5'
 gem 'ruby-saml', '~> 1.12.1'
 gem 'omniauth', '~> 1.8'
 gem 'omniauth-auth0', '~> 2.0.0'
-gem 'omniauth-azure-activedirectory-v2', '~> 0.1'
+gem 'omniauth-azure-activedirectory-v2', '~> 1.0'
 gem 'omniauth-azure-oauth2', '~> 0.0.9' # Deprecated v1 version
 gem 'omniauth-cas3', '~> 1.1.4'
 gem 'omniauth-facebook', '~> 4.0.0'
@@ -124,7 +124,7 @@ gem 'fog-aws', '~> 3.9'
 # Locked until fog-google resolves https://github.com/fog/fog-google/issues/421.
 # Also see config/initializers/fog_core_patch.rb.
 gem 'fog-core', '= 2.1.0'
-gem 'gitlab-fog-google', '~> 1.13', require: 'fog/google'
+gem 'fog-google', '~> 1.15', require: 'fog/google'
 gem 'fog-local', '~> 0.6'
 gem 'fog-openstack', '~> 1.0'
 gem 'fog-rackspace', '~> 0.1.1'
@@ -157,14 +157,14 @@ gem 'github-markup', '~> 1.7.0', require: 'github/markup'
 gem 'commonmarker', '~> 0.21'
 gem 'kramdown', '~> 2.3.1'
 gem 'RedCloth', '~> 4.3.2'
-gem 'gitlab-rdoc', '~> 6.3.2', require: 'rdoc' # We need this fork until rdoc releases a new version. See https://gitlab.com/gitlab-org/gitlab/-/issues/334695
+gem 'rdoc', '~> 6.3.2'
 gem 'org-ruby', '~> 0.9.12'
 gem 'creole', '~> 0.5.0'
 gem 'wikicloth', '0.8.1'
 gem 'asciidoctor', '~> 2.0.10'
 gem 'asciidoctor-include-ext', '~> 0.3.1', require: false
 gem 'asciidoctor-plantuml', '~> 0.0.12'
-gem 'asciidoctor-kroki', '~> 0.4.0', require: false
+gem 'asciidoctor-kroki', '~> 0.5.0', require: false
 gem 'rouge', '~> 3.26.0'
 gem 'truncato', '~> 0.7.11'
 gem 'bootstrap_form', '~> 4.2.0'
@@ -197,7 +197,7 @@ gem 'acts-as-taggable-on', '~> 7.0'
 # Background jobs
 gem 'sidekiq', '~> 5.2.7'
 gem 'sidekiq-cron', '~> 1.0'
-gem 'redis-namespace', '~> 1.7.0'
+gem 'redis-namespace', '~> 1.8.1'
 gem 'gitlab-sidekiq-fetcher', '0.5.6', require: 'sidekiq-reliable-fetch'
 
 # Cron Parser
@@ -229,7 +229,7 @@ gem 'js_regex', '~> 3.4'
 gem 'device_detector'
 
 # Redis
-gem 'redis', '~> 4.0'
+gem 'redis', '~> 4.1.4'
 gem 'connection_pool', '~> 2.0'
 
 # Redis session store
@@ -258,7 +258,7 @@ gem 'asana', '~> 0.10.3'
 gem 'ruby-fogbugz', '~> 0.2.1'
 
 # Kubernetes integration
-gem 'kubeclient', '~> 4.9.1'
+gem 'kubeclient', '~> 4.9.2'
 
 # Sanitize user input
 gem 'sanitize', '~> 5.2.1'
@@ -286,16 +286,16 @@ gem 'gitlab_chronic_duration', '~> 0.10.6.2'
 gem 'rack-proxy', '~> 0.6.0'
 
 gem 'sassc-rails', '~> 2.1.0'
-gem 'autoprefixer-rails', '10.2.0.0'
+gem 'autoprefixer-rails', '10.2.5.1'
 gem 'terser', '1.0.2'
 
-gem 'addressable', '~> 2.7'
+gem 'addressable', '~> 2.8'
 gem 'gemojione', '~> 3.3'
 gem 'gon', '~> 6.4.0'
 gem 'request_store', '~> 1.5'
 gem 'base32', '~> 0.3.0'
 
-gem 'gitlab-license', '~> 1.5'
+gem 'gitlab-license', '~> 2.0'
 
 # Protect against bruteforcing
 gem 'rack-attack', '~> 6.3.0'
@@ -305,16 +305,12 @@ gem 'sentry-raven', '~> 3.1'
 
 # PostgreSQL query parsing
 #
-# We need this fork until https://github.com/pganalyze/pg_query/pull/212
-# and https://github.com/pganalyze/pg_query/pull/213 are
-# released. gitlab-labkit will need to be updated to use the pg_query
-# version.
-gem 'gitlab-pg_query', '~> 2.0.4', require: 'pg_query'
+gem 'pg_query', '~> 2.1'
 
 gem 'premailer-rails', '~> 1.10.3'
 
 # LabKit: Tracing and Correlation
-gem 'gitlab-labkit', '~> 0.18.0'
+gem 'gitlab-labkit', '~> 0.20.0'
 # Thrift is a dependency of gitlab-labkit, we want a version higher than 0.14.0
 # because of https://gitlab.com/gitlab-org/gitlab/-/issues/321900
 gem 'thrift', '>= 0.14.0'
@@ -335,13 +331,9 @@ gem 'peek', '~> 1.1'
 gem 'snowplow-tracker', '~> 0.6.1'
 
 # Metrics
-group :metrics do
-  gem 'method_source', '~> 1.0', require: false
-  gem 'webrick', '~> 1.6.1', require: false
-
-  # Prometheus
-  gem 'prometheus-client-mmap', '~> 0.12.0'
-end
+gem 'method_source', '~> 1.0', require: false
+gem 'webrick', '~> 1.6.1', require: false
+gem 'prometheus-client-mmap', '~> 0.12.0', require: 'prometheus/client'
 
 group :development do
   gem 'lefthook', '~> 0.7.0', require: false
@@ -402,7 +394,7 @@ group :development, :test do
 end
 
 group :development, :test, :danger do
-  gem 'gitlab-dangerfiles', '~> 2.1.2', require: false
+  gem 'gitlab-dangerfiles', '~> 2.2.2', require: false
 end
 
 group :development, :test, :coverage do
@@ -480,7 +472,7 @@ end
 gem 'spamcheck', '~> 0.1.0'
 
 # Gitaly GRPC protocol definitions
-gem 'gitaly', '~> 14.0.0.pre.rc2'
+gem 'gitaly', '~> 14.1.0.pre.rc3'
 
 # KAS GRPC protocol definitions
 gem 'kas-grpc', '~> 0.0.2'
@@ -489,14 +481,14 @@ gem 'grpc', '~> 1.30.2'
 
 gem 'google-protobuf', '~> 3.17.1'
 
-gem 'toml-rb', '~> 1.0.0'
+gem 'toml-rb', '~> 2.0'
 
 # Feature toggles
 gem 'flipper', '~> 0.21.0'
 gem 'flipper-active_record', '~> 0.21.0'
 gem 'flipper-active_support_cache_store', '~> 0.21.0'
 gem 'unleash', '~> 0.1.5'
-gem 'gitlab-experiment', '~> 0.5.4'
+gem 'gitlab-experiment', '~> 0.6.1'
 
 # Structured logging
 gem 'lograge', '~> 0.5'

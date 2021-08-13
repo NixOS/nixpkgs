@@ -40,7 +40,7 @@
 , # Whether to build terminfo.
   enableTerminfo ? !stdenv.targetPlatform.isWindows
 
-, version ? "9.3.20210504"
+, version ? "9.3.20210806"
 , # What flavour to build. An empty string indicates no
   # specific flavour and falls back to ghc default values.
   ghcFlavour ? lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform)
@@ -152,8 +152,8 @@ stdenv.mkDerivation (rec {
 
   src = fetchgit {
     url = "https://gitlab.haskell.org/ghc/ghc.git/";
-    rev = "049c3a83fbce67e58e70c727d89e8331608a4e04";
-    sha256 = "0dk7c9ywam9fj33lqzpwxhiwz017m58j6ixvc8b07kzp7kskaxq7";
+    rev = "5d651c78fed7e55b3b3cd21a04499d1a2f75204d";
+    sha256 = "1z9xg8jsqr9id985wxfhkjyb3kpyrmr7vjdqzfv42cpxynd483r8";
   };
 
   enableParallelBuilding = true;

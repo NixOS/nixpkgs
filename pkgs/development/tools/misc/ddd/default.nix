@@ -10,14 +10,22 @@ stdenv.mkDerivation rec {
   buildInputs = [motif ncurses libX11 libXt];
   configureFlags = [ "--with-x" ];
 
-  patches = [ ./gcc44.patch ];
+  patches = [
+    # http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=504868
+    ./gcc44.patch
+  ];
 
   NIX_CFLAGS_COMPILE = "-fpermissive";
+
+  postInstall = ''
+    install -D icons/ddd.xpm $out/share/pixmaps/ddd.xpm
+  '';
 
   meta = {
     homepage = "https://www.gnu.org/software/ddd";
     description = "Graphical front-end for command-line debuggers";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ angustrau ];
   };
 }

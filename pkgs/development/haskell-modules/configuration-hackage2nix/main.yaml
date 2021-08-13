@@ -85,15 +85,19 @@ default-package-overrides:
   - dual-tree < 0.2.3.0
   - diagrams-core < 1.5.0
   - diagrams-lib < 1.4.4
-  # 2021-06-14: hnix still needs old versions https://github.com/haskell-nix/hnix/issues/952
-  - hnix-store-core < 0.5
-  - hnix-store-remote < 0.5
+  # streamly-* packages which are not in stackage and to be constrained
+  # as long as we have streamly < 0.8.0
+  - streamly-archive < 0.1.0
+  - streamly-bytestring < 0.1.3
+  - streamly-lmdb < 0.3.0
+  - streamly-process
 
 extra-packages:
   - base16-bytestring < 1               # required for cabal-install etc.
   - Cabal == 2.2.*                      # required for jailbreak-cabal etc.
   - Cabal == 2.4.*                      # required for cabal-install etc.
   - Cabal == 3.2.*                      # required for cabal-install etc.
+  - Cabal == 3.4.*                      # required for cabal-install etc.
   - dependent-map == 0.2.4.0            # required by Hasura 1.3.1, 2020-08-20
   - dependent-sum == 0.4                # required by Hasura 1.3.1, 2020-08-20
   - dhall == 1.29.0                     # required for ats-pkg
@@ -114,12 +118,14 @@ extra-packages:
   - sbv == 7.13                         # required for pkgs.petrinizer
   - crackNum < 3.0                      # 2021-05-21: 3.0 removed the lib which sbv 7.13 uses
   - ShellCheck == 0.7.1                 # 2021-05-09: haskell-ci 0.12.1 pins this version
-  - hackage-db < 2.1.1                  # 2021-06-10: Need older hackage-db as long as Cabal < 3.4, see https://github.com/NixOS/cabal2nix/issues/501
-  - opaleye < 0.7.3.0                   # 2021-07-11: for rel8 <= 1.0.0.1, see https://github.com/circuithub/rel8/issues/95#issuecomment-877616118
 
 package-maintainers:
   abbradar:
     - Agda
+  Anton-Latukha:
+    - hnix
+    - hnix-store-core
+    - hnix-store-remote
   berberman:
     - nvfetcher
     - arch-web
@@ -231,6 +237,7 @@ package-maintainers:
     - stm-containers
     - streamly
     - taskwarrior
+    - witch
   pacien:
     - ldgallery-compiler
   peti:
@@ -337,7 +344,9 @@ unsupported-platforms:
   barbly:                                       [ i686-linux, x86_64-linux, aarch64-linux, armv7l-linux ]
   bdcs-api:                                     [ x86_64-darwin ]
   bindings-directfb:                            [ x86_64-darwin ]
+  bindings-parport:                             [ x86_64-darwin ] # parport is a linux kernel component
   bindings-sane:                                [ x86_64-darwin ]
+  btrfs:                                        [ x86_64-darwin ] # depends on linux
   bustle:                                       [ x86_64-darwin ] # uses glibc-specific ptsname_r
   charsetdetect:                                [ aarch64-linux ] # not supported by vendored lib / not configured properly https://github.com/batterseapower/libcharsetdetect/issues/3
   crackNum:                                     [ aarch64-linux ] # depends on sbv, which is not supported on aarch64-linux
@@ -351,6 +360,7 @@ unsupported-platforms:
   follow-file:                                  [ x86_64-darwin ]
   freenect:                                     [ x86_64-darwin ]
   FTGL:                                         [ x86_64-darwin ]
+  fuzzytime:                                    [ x86_64-darwin ] # https://github.com/kamwitsta/fuzzytime/issues/2
   ghcjs-dom-hello:                              [ x86_64-darwin ]
   gi-dbusmenugtk3:                              [ x86_64-darwin ]
   gi-dbusmenu:                                  [ x86_64-darwin ]
@@ -364,15 +374,18 @@ unsupported-platforms:
   gtk-sni-tray:                                 [ x86_64-darwin ]
   haskell-snake:                                [ x86_64-darwin ]
   hcwiid:                                       [ x86_64-darwin ]
+  hevm:                                         [ aarch64-linux ] # depends on sbv, which is not supported on aarch64-linux
   HFuse:                                        [ x86_64-darwin ]
   hidapi:                                       [ x86_64-darwin ]
   hinotify-bytestring:                          [ x86_64-darwin ]
   hommage-ds:                                   [ i686-linux, x86_64-linux, x86_64-darwin, aarch64-linux, armv7l-linux ]
   honk:                                         [ x86_64-darwin ]
   hpapi:                                        [ x86_64-darwin ]
+  HQu:                                          [ aarch64-linux, armv7l-linux ] # unsupported by vendored C++ library, TODO: explicitly list supported platforms
   HSoM:                                         [ x86_64-darwin ]
   iwlib:                                        [ x86_64-darwin ]
   jsaddle-webkit2gtk:                           [ x86_64-darwin ]
+  kqueue:                                       [ x86_64-linux, aarch64-linux, i686-linux, armv7l-linux ] # BSD / Darwin only API
   LambdaHack:                                   [ x86_64-darwin ]
   large-hashable:                               [ aarch64-linux ] # https://github.com/factisresearch/large-hashable/issues/17
   libmodbus:                                    [ x86_64-darwin ]
@@ -395,6 +408,7 @@ unsupported-platforms:
   mplayer-spot:                                 [ aarch64-linux ]
   mptcp-pm:                                     [ x86_64-darwin ]
   netlink:                                      [ x86_64-darwin ]
+  notifications-tray-icon:                      [ x86_64-darwin ] # depends on gi-dbusmenu
   oculus:                                       [ x86_64-darwin ]
   pam:                                          [ x86_64-darwin ]
   parport:                                      [ x86_64-darwin ]

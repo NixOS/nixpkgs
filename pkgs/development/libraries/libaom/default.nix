@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libaom";
-  version = "3.1.1";
+  version = "3.1.2";
 
   src = fetchzip {
     url = "https://aomedia.googlesource.com/aom/+archive/v${version}.tar.gz";
-    sha256 = "11fy2xw35ladkjcz71samhcpqlqr3y0n1n17nk90i13aydrll66f";
+    sha256 = "1c7yrhb56qj5c3lz54n1f9cbrvdr32g2yrrdiiy72sib8ycq9hz2";
     stripRoot = false;
   };
 
@@ -35,6 +35,8 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
     # CPU detection isn't supported on Darwin and breaks the aarch64-darwin build:
     "-DCONFIG_RUNTIME_CPU_DETECT=0"
+  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    "-DAS_EXECUTABLE=${stdenv.cc.targetPrefix}as"
   ];
 
   postFixup = ''

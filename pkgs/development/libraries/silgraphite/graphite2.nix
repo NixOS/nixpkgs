@@ -5,6 +5,7 @@
 , freetype
 , cmake
 , static ? stdenv.hostPlatform.isStatic
+, libgcc
 }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +19,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config cmake ];
-  buildInputs = [ freetype ];
+  buildInputs = [ freetype ]
+    ++ lib.optionals (!stdenv.cc.isGNU) [ libgcc ];
 
   patches = lib.optionals stdenv.isDarwin [ ./macosx.patch ];
 

@@ -8,6 +8,8 @@ import ./make-test-python.nix ({ pkgs, ... }: {
 
   machine = {
     services.rabbitmq.enable = true;
+    # Ensure there is sufficient extra disk space for rabbitmq to be happy
+    virtualisation.diskSize = 1024;
   };
 
   testScript = ''

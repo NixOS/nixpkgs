@@ -5,13 +5,13 @@
 
 buildGoPackage rec {
   pname = "tfsec";
-  version = "0.51.4";
+  version = "0.57.1";
 
   src = fetchFromGitHub {
     owner = "aquasecurity";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0l9b6hdcfcyn03y5wsfganb3h2vsnlrs9y3vahnnlx4rvv51ldwf";
+    sha256 = "0g3yq2y9z7vnaznmdmdb98djsv8nbai8jvbhfs2g12q55dlm3vf3";
   };
 
   goPackagePath = "github.com/aquasecurity/tfsec";

@@ -125,7 +125,7 @@ let
     else showWarnings config.warnings baseSystem;
 
   # Replace runtime dependencies
-  system = fold ({ oldDependency, newDependency }: drv:
+  system = foldr ({ oldDependency, newDependency }: drv:
       pkgs.replaceDependency { inherit oldDependency newDependency drv; }
     ) baseSystemAssertWarn config.system.replaceRuntimeDependencies;
 

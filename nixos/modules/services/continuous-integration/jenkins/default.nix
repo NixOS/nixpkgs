@@ -61,7 +61,7 @@ in {
 
       port = mkOption {
         default = 8080;
-        type = types.int;
+        type = types.port;
         description = ''
           Specifies port number on which the jenkins HTTP interface listens.
           The default is 8080.

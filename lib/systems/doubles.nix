@@ -26,22 +26,22 @@ let
 
     # Linux
     "aarch64-linux" "armv5tel-linux" "armv6l-linux" "armv7a-linux"
-    "armv7l-linux" "i686-linux" "mipsel-linux" "powerpc64-linux"
-    "powerpc64le-linux" "riscv32-linux" "riscv64-linux" "x86_64-linux"
-    "m68k-linux" "s390-linux"
+    "armv7l-linux" "i686-linux" "m68k-linux" "mipsel-linux"
+    "powerpc64-linux" "powerpc64le-linux" "riscv32-linux"
+    "riscv64-linux" "s390-linux" "x86_64-linux"
 
     # MMIXware
     "mmix-mmixware"
 
     # NetBSD
     "aarch64-netbsd" "armv6l-netbsd" "armv7a-netbsd" "armv7l-netbsd"
-    "i686-netbsd" "mipsel-netbsd" "powerpc-netbsd" "riscv32-netbsd"
-    "riscv64-netbsd" "x86_64-netbsd"
+    "i686-netbsd" "m68k-netbsd" "mipsel-netbsd" "powerpc-netbsd"
+    "riscv32-netbsd" "riscv64-netbsd" "x86_64-netbsd"
 
     # none
-    "aarch64-none" "arm-none" "armv6l-none" "avr-none" "i686-none" "msp430-none"
-    "or1k-none" "powerpc-none" "riscv32-none" "riscv64-none" "vc4-none" "m68k-none"
-    "s390-none" "x86_64-none"
+    "aarch64-none" "arm-none" "armv6l-none" "avr-none" "i686-none"
+    "msp430-none" "or1k-none" "m68k-none" "powerpc-none"
+    "riscv32-none" "riscv64-none" "s390-none" "vc4-none" "x86_64-none"
 
     # OpenBSD
     "i686-openbsd" "x86_64-openbsd"

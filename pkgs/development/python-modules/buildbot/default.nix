@@ -1,9 +1,10 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, makeWrapper, isPy3k,
-  python, twisted, jinja2, zope_interface, sqlalchemy,
-  sqlalchemy_migrate, python-dateutil, txaio, autobahn, pyjwt, pyyaml, unidiff, treq,
-  txrequests, pypugjs, boto3, moto, mock, python-lz4, setuptoolsTrial,
-  isort, pylint, flake8, buildbot-worker, buildbot-pkg, buildbot-plugins,
-  parameterized, git, openssh, glibcLocales, ldap3, nixosTests }:
+{ stdenv, lib, buildPythonPackage, fetchPypi, makeWrapper, isPy3k
+, python, twisted, jinja2, zope_interface, sqlalchemy
+, sqlalchemy_migrate, python-dateutil, txaio, autobahn, pyjwt, pyyaml, unidiff, treq
+, txrequests, pypugjs, boto3, moto, mock, lz4, setuptoolsTrial
+, isort, pylint, flake8, buildbot-worker, buildbot-pkg, buildbot-plugins
+, parameterized, git, openssh, glibcLocales, ldap3, nixosTests
+}:
 
 let
   withPlugins = plugins: buildPythonPackage {
@@ -25,11 +26,11 @@ let
 
   package = buildPythonPackage rec {
     pname = "buildbot";
-    version = "3.1.1";
+    version = "3.3.0";
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "0vh2v1qs65kwcj1x8r1wj2g456kflspyz7mjara9ph9qs7j97y74";
+      sha256 = "sha256-FST+mCIQpzxc/5iQdsSNBlKxY985v+z6Xeh8ZQRu2FE=";
     };
 
     propagatedBuildInputs = [
@@ -56,7 +57,7 @@ let
       boto3
       moto
       mock
-      python-lz4
+      lz4
       setuptoolsTrial
       isort
       pylint
@@ -96,6 +97,7 @@ let
     passthru = {
       inherit withPlugins;
       tests.buildbot = nixosTests.buildbot;
+      updateScript = ./update.sh;
     };
 
     meta = with lib; {

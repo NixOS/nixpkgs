@@ -236,6 +236,7 @@
   ./security/doas.nix
   ./security/systemd-confinement.nix
   ./security/tpm2.nix
+  ./services/admin/meshcentral.nix
   ./services/admin/oxidized.nix
   ./services/admin/salt/master.nix
   ./services/admin/salt/minion.nix
@@ -243,13 +244,16 @@
   ./services/amqp/rabbitmq.nix
   ./services/audio/alsa.nix
   ./services/audio/botamusique.nix
-  ./services/audio/jack.nix
+  ./services/audio/hqplayerd.nix
   ./services/audio/icecast.nix
+  ./services/audio/jack.nix
   ./services/audio/jmusicbot.nix
   ./services/audio/liquidsoap.nix
   ./services/audio/mpd.nix
   ./services/audio/mpdscribble.nix
   ./services/audio/mopidy.nix
+  ./services/audio/networkaudiod.nix
+  ./services/audio/roon-bridge.nix
   ./services/audio/roon-server.nix
   ./services/audio/slimserver.nix
   ./services/audio/snapserver.nix
@@ -317,6 +321,7 @@
   ./services/databases/foundationdb.nix
   ./services/databases/hbase.nix
   ./services/databases/influxdb.nix
+  ./services/databases/influxdb2.nix
   ./services/databases/memcached.nix
   ./services/databases/monetdb.nix
   ./services/databases/mongodb.nix
@@ -519,6 +524,7 @@
   ./services/misc/logkeys.nix
   ./services/misc/leaps.nix
   ./services/misc/lidarr.nix
+  ./services/misc/libreddit.nix
   ./services/misc/lifecycled.nix
   ./services/misc/mame.nix
   ./services/misc/matrix-appservice-discord.nix
@@ -528,8 +534,11 @@
   ./services/misc/mbpfan.nix
   ./services/misc/mediatomb.nix
   ./services/misc/metabase.nix
+  ./services/misc/moonraker.nix
   ./services/misc/mwlib.nix
+  ./services/misc/mx-puppet-discord.nix
   ./services/misc/n8n.nix
+  ./services/misc/nitter.nix
   ./services/misc/nix-daemon.nix
   ./services/misc/nix-gc.nix
   ./services/misc/nix-optimise.nix
@@ -633,6 +642,7 @@
   ./services/network-filesystems/glusterfs.nix
   ./services/network-filesystems/kbfs.nix
   ./services/network-filesystems/ipfs.nix
+  ./services/network-filesystems/litestream/default.nix
   ./services/network-filesystems/netatalk.nix
   ./services/network-filesystems/nfsd.nix
   ./services/network-filesystems/openafs/client.nix
@@ -929,6 +939,7 @@
   ./services/wayland/cage.nix
   ./services/video/epgstation/default.nix
   ./services/video/mirakurun.nix
+  ./services/video/replay-sorcery.nix
   ./services/web-apps/atlassian/confluence.nix
   ./services/web-apps/atlassian/crowd.nix
   ./services/web-apps/atlassian/jira.nix
@@ -949,6 +960,7 @@
   ./services/web-apps/icingaweb2/icingaweb2.nix
   ./services/web-apps/icingaweb2/module-monitoring.nix
   ./services/web-apps/ihatemoney
+  ./services/web-apps/isso.nix
   ./services/web-apps/jirafeau.nix
   ./services/web-apps/jitsi-meet.nix
   ./services/web-apps/keycloak.nix
@@ -960,6 +972,7 @@
   ./services/web-apps/moodle.nix
   ./services/web-apps/nextcloud.nix
   ./services/web-apps/nexus.nix
+  ./services/web-apps/node-red.nix
   ./services/web-apps/plantuml-server.nix
   ./services/web-apps/plausible.nix
   ./services/web-apps/pgpkeyserver-lite.nix

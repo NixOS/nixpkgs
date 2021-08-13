@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pytest-asyncio
-, pytest-cov
 , pytest-timeout
 , pytestCheckHook
 , pythonOlder
@@ -11,19 +10,18 @@
 
 buildPythonPackage rec {
   pname = "pypck";
-  version = "0.7.10";
+  version = "0.7.11";
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "alengwenus";
     repo = pname;
     rev = version;
-    sha256 = "sha256-B2imewEONewj1Y+Q316reIBZB/b9WQAu67x9cLMkRTU=";
+    sha256 = "1jj0y487qcxrprx4x2rs6r7rqsf5m9khk0xhigbvnbyvh8rsd2jr";
   };
 
   checkInputs = [
     pytest-asyncio
-    pytest-cov
     pytest-timeout
     pytestCheckHook
   ];

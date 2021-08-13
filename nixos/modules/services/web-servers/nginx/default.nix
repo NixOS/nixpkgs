@@ -22,7 +22,9 @@ let
     } // (optionalAttrs (vhostConfig.enableACME || vhostConfig.useACMEHost != null) {
       sslCertificate = "${certs.${certName}.directory}/fullchain.pem";
       sslCertificateKey = "${certs.${certName}.directory}/key.pem";
-      sslTrustedCertificate = "${certs.${certName}.directory}/chain.pem";
+      sslTrustedCertificate = if vhostConfig.sslTrustedCertificate != null
+                              then vhostConfig.sslTrustedCertificate
+                              else "${certs.${certName}.directory}/chain.pem";
     })
   ) cfg.virtualHosts;
   enableIPv6 = config.networking.enableIPv6;

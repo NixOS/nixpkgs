@@ -10,6 +10,8 @@
 , nss
 , gobject-introspection
 , coreutils
+, cairo
+, libgudev
 , gtk-doc
 , docbook-xsl-nons
 , docbook_xml_dtd_43
@@ -17,7 +19,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libfprint";
-  version = "1.90.7";
+  version = "1.92.1";
   outputs = [ "out" "devdoc" ];
 
   src = fetchFromGitLab {
@@ -25,7 +27,7 @@ stdenv.mkDerivation rec {
     owner = "libfprint";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-g/yczzCZEzUKV2uFl1MAPL1H/R2QJSwxgppI2ftt9QI=";
+    sha256 = "0dpwzmwl9jjpaz44znvy3v8s9sln0c71b756rs1knk0zx8sa1qbc";
   };
 
   nativeBuildInputs = [
@@ -43,6 +45,8 @@ stdenv.mkDerivation rec {
     pixman
     glib
     nss
+    cairo
+    libgudev
   ];
 
   checkInputs = [
@@ -53,6 +57,7 @@ stdenv.mkDerivation rec {
     "-Dudev_rules_dir=${placeholder "out"}/lib/udev/rules.d"
     # Include virtual drivers for fprintd tests
     "-Ddrivers=all"
+    "-Dudev_hwdb_dir=${placeholder "out"}/lib/udev/hwdb.d"
   ];
 
   doCheck = true;
@@ -61,7 +66,9 @@ stdenv.mkDerivation rec {
     patchShebangs \
       tests/test-runner.sh \
       tests/unittest_inspector.py \
-      tests/virtual-image.py
+      tests/virtual-image.py \
+      tests/umockdev-test.py \
+      tests/test-generated-hwdb.sh
   '';
 
   meta = with lib; {

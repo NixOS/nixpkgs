@@ -29,6 +29,7 @@ isExecutable() {
     isExeResult="$(LANG=C $READELF -h -l "$1" 2> /dev/null \
         | grep '^ *Type: *EXEC\>\|^ *INTERP\>')"
     # not using grep -q, because it can cause Broken pipe
+    # https://unix.stackexchange.com/questions/305547/broken-pipe-when-grepping-output-but-only-with-i-flag
     [ -n "$isExeResult" ]
 }
 

@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "aioambient";
-  version = "1.2.4";
+  version = "1.2.6";
   format = "pyproject";
   disabled = pythonOlder "3.6";
 
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "bachya";
     repo = pname;
     rev = version;
-    sha256 = "sha256-uqvM5F0rpw+xeCXYl4lGMt3r0ugPsUmSvujmTJ9HABk=";
+    sha256 = "sha256-EppnuZP62YTFI3UJUzBUj2m5TvFh1WiDz9smHY7We60=";
   };
 
   nativeBuildInputs = [
@@ -45,12 +45,6 @@ buildPythonPackage rec {
     pytest-asyncio
     pytestCheckHook
   ];
-
-  postPatch = ''
-    # https://github.com/bachya/aioambient/pull/84
-    substituteInPlace pyproject.toml \
-      --replace 'websockets = "^8.1"' 'websockets = ">=8.1,<10.0"'
-  '';
 
   # Ignore the examples directory as the files are prefixed with test_
   disabledTestPaths = [ "examples/" ];

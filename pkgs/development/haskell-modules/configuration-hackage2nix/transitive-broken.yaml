@@ -113,7 +113,6 @@ dont-distribute-packages:
  - Forestry
  - FormalGrammars
  - Foster
- - Frames-beam
  - Frames-dsv
  - Frank
  - GLFW-OGL
@@ -394,6 +393,7 @@ dont-distribute-packages:
  - adict
  - adp-multi-monadiccp
  - aern2-real
+ - aern2-real_0_2_8_0
  - aeson-native
  - afv
  - agda-server
@@ -406,6 +406,7 @@ dont-distribute-packages:
  - algebra-driven-design
  - algebra-sql
  - algolia
+ - align-audio
  - alms
  - alpha
  - alsa-gui
@@ -515,7 +516,6 @@ dont-distribute-packages:
  - bamboo-theme-mini-html5
  - bamse
  - bamstats
- - base16-lens
  - base32-bytestring
  - base64-bytes
  - baserock-schema
@@ -527,11 +527,6 @@ dont-distribute-packages:
  - bdcs
  - bdcs-api
  - beam-automigrate
- - beam-migrate
- - beam-mysql
- - beam-newtype-field
- - beam-postgres
- - beam-sqlite
  - beam-th
  - beautifHOL
  - bech32-th
@@ -1444,7 +1439,6 @@ dont-distribute-packages:
  - hasql-cursor-query
  - hasql-postgres
  - hasql-postgres-options
- - hasql-queue
  - hasql-th
  - hastache-aeson
  - haste-app
@@ -1546,6 +1540,7 @@ dont-distribute-packages:
  - hmeap-utils
  - hmep
  - hmm-lapack
+ - hmm-lapack_0_4_1
  - hmt
  - hmt-diagrams
  - hnormalise
@@ -1589,6 +1584,7 @@ dont-distribute-packages:
  - hs-ffmpeg
  - hs-gen-iface
  - hs-pkpass
+ - hs-sdl-term-emulator
  - hs-swisstable-hashtables-class
  - hs2dot
  - hsautogui
@@ -1838,6 +1834,7 @@ dont-distribute-packages:
  - keid-geometry
  - keid-render-basic
  - keid-resource-gltf
+ - keid-sound-openal
  - keid-ui-dearimgui
  - kevin
  - keysafe
@@ -1893,6 +1890,8 @@ dont-distribute-packages:
  - lapack
  - lapack-carray
  - lapack-comfort-array
+ - lapack-comfort-array_0_0_1
+ - lapack_0_4
  - lat
  - latex-formulae-hakyll
  - latex-formulae-pandoc
@@ -1937,6 +1936,7 @@ dont-distribute-packages:
  - lighttpd-conf
  - lighttpd-conf-qq
  - linear-circuit
+ - linear-circuit_0_1_0_3
  - linearmap-category
  - linearscan-hoopl
  - linkchk
@@ -1972,10 +1972,12 @@ dont-distribute-packages:
  - llvm-tf
  - llvm-tools
  - lmonad-yesod
+ - lnd-client
  - local-search
  - localize
  - locked-poll
  - log
+ - log-elasticsearch
  - log-postgres
  - log-utils
  - logging-effect-extra
@@ -2013,6 +2015,7 @@ dont-distribute-packages:
  - magic-wormhole
  - magicbane
  - magico
+ - magico_0_0_2_2
  - mahoro
  - maid
  - mail-pool
@@ -2341,21 +2344,27 @@ dont-distribute-packages:
  - polysemy-fskvstore
  - polysemy-http
  - polysemy-keyed-state
+ - polysemy-kvstore
  - polysemy-kvstore-jsonfile
  - polysemy-log
  - polysemy-log-co
  - polysemy-log-di
  - polysemy-methodology
+ - polysemy-methodology-co-log
  - polysemy-methodology-composite
  - polysemy-mocks
  - polysemy-optics
  - polysemy-path
  - polysemy-plugin
+ - polysemy-plugin_0_4_0_0
  - polysemy-readline
  - polysemy-req
  - polysemy-resume
+ - polysemy-several
+ - polysemy-socket
  - polysemy-test
  - polysemy-time
+ - polysemy-uncontrolled
  - polysemy-video
  - polysemy-vinyl
  - polysemy-webserver
@@ -2557,6 +2566,7 @@ dont-distribute-packages:
  - representable-tries
  - req-oauth2
  - resistor-cube
+ - resistor-cube_0_0_1_3
  - resource-pool-catchio
  - resource-simple
  - respond
@@ -2710,7 +2720,6 @@ dont-distribute-packages:
  - servant-streaming-docs
  - servant-streaming-server
  - servant-swagger-tags
- - servant-util-beam-pg
  - servant-waargonaut
  - servant-zeppelin-client
  - servant-zeppelin-server
@@ -2893,7 +2902,6 @@ dont-distribute-packages:
  - swearjure
  - sweet-egison
  - switch
- - sydtest-persistent-postgresql
  - sylvia
  - sym-plot
  - symantic-atom
@@ -3119,6 +3127,7 @@ dont-distribute-packages:
  - venzone
  - verdict-json
  - versioning-servant
+ - vessel
  - vflow-types
  - vformat-aeson
  - vformat-time
@@ -3140,6 +3149,7 @@ dont-distribute-packages:
  - wai-dispatch
  - wai-handler-snap
  - wai-hastache
+ - wai-log
  - wai-middleware-brotli
  - wai-middleware-cache
  - wai-middleware-cache-redis

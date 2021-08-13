@@ -1,4 +1,4 @@
-{ stdenv, lib, edk2, util-linux, nasm, iasl
+{ stdenv, lib, edk2, util-linux, nasm, acpica-tools
 , csmSupport ? false, seabios ? null
 , secureBoot ? false
 , httpSupport ? false
@@ -25,7 +25,7 @@ edk2.mkDerivation projectDscPath {
 
   outputs = [ "out" "fd" ];
 
-  buildInputs = [ util-linux nasm iasl ];
+  buildInputs = [ util-linux nasm acpica-tools ];
 
   hardeningDisable = [ "format" "stackprotector" "pic" "fortify" ];
 

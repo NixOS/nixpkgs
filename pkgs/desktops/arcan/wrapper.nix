@@ -20,9 +20,10 @@ symlinkJoin rec {
         --set ARCAN_BINPATH "${placeholder "out"}/bin/arcan_frameserver" \
         --set ARCAN_LIBPATH "${placeholder "out"}/lib/" \
         --set ARCAN_RESOURCEPATH "${placeholder "out"}/share/arcan/resources/" \
-        --set ARCAN_SCRIPTPATH "${placeholder "out"}/share/arcan/scripts/" \
-        --set ARCAN_STATEBASEPATH "\$HOME/.arcan/resources/savestates/"
+        --set ARCAN_SCRIPTPATH "${placeholder "out"}/share/arcan/scripts/"
     done
   '';
 }
 # TODO: set ARCAN_FONTPATH to a set of fonts that can be provided in a parameter
+# TODO: set ARCAN_STATEBASEPATH to $HOME/.arcan/resources/savestates/ - possibly
+# via a suitable script

@@ -1,10 +1,11 @@
 {lib, stdenv, lynx, fetchurl}:
 
-stdenv.mkDerivation {
-  name = "jwhois-4.0";
+stdenv.mkDerivation rec {
+  pname = "jwhois";
+  version = "4.0";
 
   src = fetchurl {
-    url = "mirror://gnu/jwhois/jwhois-4.0.tar.gz";
+    url = "mirror://gnu/jwhois/jwhois-${version}.tar.gz";
     sha256 = "0knn7iaj5v0n6jpmldyv2yk4bcy9dn3kywmv63bwc5drh9kvi6zs";
   };
 

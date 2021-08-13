@@ -333,15 +333,15 @@ in
               set -eu
               # if the pstore module is builtin it will have mounted the persistent store automatically. it may also be already mounted for other reasons.
               ${pkgs.util-linux}/bin/mountpoint -q /sys/fs/pstore || ${pkgs.util-linux}/bin/mount -t pstore -o nosuid,noexec,nodev pstore /sys/fs/pstore
-              # wait up to five seconds (arbitrary, happened within one in testing) for the backend to be registered and the files to appear. a systemd path unit cannot detect this happening; and succeeding after a restart would not start dependent units.
-              TRIES=50
+              # wait up to 1.5 seconds for the backend to be registered and the files to appear. a systemd path unit cannot detect this happening; and succeeding after a restart would not start dependent units.
+              TRIES=15
               while [ "$(cat /sys/module/pstore/parameters/backend)" = "(null)" ]; do
                 if (( $TRIES )); then
                   sleep 0.1
                   TRIES=$((TRIES-1))
                 else
                   echo "Persistent Storage backend was not registered in time." >&2
-                  exit 1
+                  break
                 fi
               done
             '';

@@ -7,7 +7,7 @@
 , mypy
 , pygments
 , pytestCheckHook
-, prompt_toolkit
+, prompt-toolkit
 , tkinter
 , watchdog
 }:
@@ -23,7 +23,7 @@ buildPythonApplication rec {
     sha256 = "1pz13vza3yy95dbylnq89fzc3mwgcqr7ds096wy25k6vxd9dp9c3";
   };
 
-  propagatedBuildInputs = [ cpyparsing pygments prompt_toolkit ipykernel mypy watchdog ];
+  propagatedBuildInputs = [ cpyparsing pygments prompt-toolkit ipykernel mypy watchdog ];
 
   patches = [
     (fetchpatch {

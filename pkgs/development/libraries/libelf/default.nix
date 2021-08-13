@@ -1,5 +1,5 @@
 { lib, stdenv
-, fetchurl, autoreconfHook, gettext
+, fetchurl, autoreconfHook, gettext, netbsd
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -33,7 +33,8 @@ stdenv.mkDerivation rec {
        # on Darwin, so disable NLS for now.
     ++ lib.optional stdenv.hostPlatform.isDarwin "--disable-nls";
 
-  nativeBuildInputs = [ gettext ]
+  nativeBuildInputs =
+    if stdenv.hostPlatform.isNetBSD then [ netbsd.gencat ] else [ gettext ]
        # Need to regenerate configure script with newer version in order to pass
        # "mr_cv_target_elf=yes", but `autoreconfHook` brings in `makeWrapper`
        # which doesn't work with the bootstrapTools bash, so can only do this

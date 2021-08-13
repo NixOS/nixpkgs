@@ -20,14 +20,12 @@ stdenv.mkDerivation rec {
     sha256 = "1l4yw9fqc1blvx1sq1jnfvp1jijla3ca2jw90p4x9m8hvfpc933c";
   };
 
-  patches =
-    # TODO: apply unconditionally on a rebuild; probably included in > 1.16.0
-    lib.optional (stdenv.is32bit && stdenv.isLinux) (fetchpatch {
+  patches = [
+    (fetchpatch { # probably included in > 1.16.0
       name = "test_t-edit-sign.diff"; # we experienced segmentation fault in this test
       url = "https://git.gnupg.org/cgi-bin/gitweb.cgi?p=gpgme.git;a=patch;h=81a33ea5e1b86d586b956e893a5b25c4cd41c969";
       sha256 = "1xxvv0kc9wdj5hzpddzs3cn8dhmm2cb29224a7h9vairraq5272h";
     })
-  ++ [
     (fetchpatch { # gpg: Send --with-keygrip when listing keys
       name = "c4cf527ea227edb468a84bf9b8ce996807bd6992.patch";
       url = "http://git.gnupg.org/cgi-bin/gitweb.cgi?p=gpgme.git;a=patch;h=c4cf527ea227edb468a84bf9b8ce996807bd6992";

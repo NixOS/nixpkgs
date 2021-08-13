@@ -1,13 +1,13 @@
 { lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "hologram-2018-03-19";
-  rev = "a7bab58642b530edb75b9cf6c1d834c85822ceac";
+  pname = "hologram";
+  version = "unstable-2018-03-19";
 
   src = fetchFromGitHub {
     owner = "AdRoll";
     repo = "hologram";
-    inherit rev;
+    rev = "a7bab58642b530edb75b9cf6c1d834c85822ceac";
     sha256 = "00scryz8js6gbw8lp2y23qikbazz2dd992r97rqh0l1q4baa0ckn";
   };
 

@@ -53,6 +53,7 @@ mapAliases ({
   lammps-cython = throw "no longer builds and is unmaintained";
   MechanicalSoup = mechanicalsoup; # added 2021-06-01
   privacyidea = throw "renamed to pkgs.privacyidea"; # added 2021-06-20
+  prompt_toolkit = prompt-toolkit;
   pylibgen = throw "pylibgen is unmaintained upstreamed, and removed from nixpkgs"; # added 2020-06-20
   pymssql = throw "pymssql has been abandoned upstream."; # added 2020-05-04
   pytestcov = pytest-cov; # added 2021-01-04
@@ -60,6 +61,8 @@ mapAliases ({
   pytestpep8 = throw "pytestpep8 was removed because it is abandoned and no longer compatible with pytest v6.0"; # added 2020-12-10
   pytestquickcheck = pytest-quickcheck; # added 2021-07-20
   pytestrunner = pytest-runner; # added 2021-01-04
+  python-lz4 = lz4; # added 2018-06-01
+  pam = python-pam; # added 2020-09-07.
   pytest_xdist = pytest-xdist; # added 2021-01-04
   python_simple_hipchat = python-simple-hipchat; # added 2021-07-21
   qasm2image = throw "qasm2image is no longer maintained (since November 2018), and is not compatible with the latest pythonPackages.qiskit versions."; # added 2020-12-09
@@ -70,6 +73,7 @@ mapAliases ({
   setuptools_scm = setuptools-scm; # added 2021-06-03
   smart_open = smart-open; # added 2021-03-14
   smmap2 = throw "smmap2 has been deprecated, use smmap instead."; # added 2020-03-14
+  sphinxcontrib_plantuml = sphinxcontrib-plantuml;
   topydo = throw "python3Packages.topydo was moved to topydo"; # 2017-09-22
   tvnamer = throw "python3Packages.tvnamer was moved to tvnamer"; # 2021-07-05
   websocket_client = websocket-client;

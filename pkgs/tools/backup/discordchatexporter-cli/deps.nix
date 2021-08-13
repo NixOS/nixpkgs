@@ -31,13 +31,13 @@
   })
   (fetchNuGet {
     name = "MiniRazor.CodeGen";
-    version = "2.1.2";
-    sha256 = "0mg4zy4zq0ccrc9wchy796ln1znkmn3k1aax0kd2gha4fwa1d1fb";
+    version = "2.1.4";
+    sha256 = "1856hfw2wl3ilxmpg4jmwpigmq0rm50i9pmy3sq8f1xc8j44kzl2";
   })
   (fetchNuGet {
     name = "MiniRazor.Runtime";
-    version = "2.1.2";
-    sha256 = "1a6cm7j1f5n1bfzhg8w60xwa7cps2i82418k57dm2hgqla6p3rsp";
+    version = "2.1.4";
+    sha256 = "1pc3kjbnz810a8bb94k6355rflmayigfmpfmc4jzzx6l6iavnnc4";
   })
   (fetchNuGet {
     name = "Polly";

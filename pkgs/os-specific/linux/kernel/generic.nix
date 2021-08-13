@@ -70,7 +70,7 @@ assert stdenv.isLinux;
 
 let
   # Combine the `features' attribute sets of all the kernel patches.
-  kernelFeatures = lib.fold (x: y: (x.features or {}) // y) ({
+  kernelFeatures = lib.foldr (x: y: (x.features or {}) // y) ({
     iwlwifi = true;
     efiBootStub = true;
     needsCifsUtils = true;

@@ -1,15 +1,16 @@
 { lib, stdenv, fetchurl, flex, bison, zlib, libpng, ncurses, ed, automake }:
 
-stdenv.mkDerivation {
-  name = "tetex-3.0";
+stdenv.mkDerivation rec {
+  pname = "tetex";
+  version = "3.0";
 
   src = fetchurl {
-    url = "http://mirrors.ctan.org/obsolete/systems/unix/teTeX/3.0/distrib/tetex-src-3.0.tar.gz";
+    url = "http://mirrors.ctan.org/obsolete/systems/unix/teTeX/${version}/distrib/tetex-src-${version}.tar.gz";
     sha256 = "16v44465ipd9yyqri9rgxp6rbgs194k4sh1kckvccvdsnnp7w3ww";
   };
 
   texmf = fetchurl {
-    url = "http://mirrors.ctan.org/obsolete/systems/unix/teTeX/3.0/distrib/tetex-texmf-3.0.tar.gz";
+    url = "http://mirrors.ctan.org/obsolete/systems/unix/teTeX/${version}/distrib/tetex-texmf-${version}.tar.gz";
     sha256 = "1hj06qvm02a2hx1a67igp45kxlbkczjlg20gr8lbp73l36k8yfvc";
   };
 

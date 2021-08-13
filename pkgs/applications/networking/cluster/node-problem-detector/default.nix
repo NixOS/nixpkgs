@@ -28,11 +28,9 @@ buildGoModule rec {
 
   buildInputs = lib.optionals stdenv.isLinux [ systemd ];
 
-  buildFlags = "-mod vendor" +
-    lib.optionalString stdenv.isLinux " -tags journald";
+  tags = lib.optionals stdenv.isLinux [ "journald" ];
 
-  buildFlagsArray = [
-    "-ldflags="
+  ldflags = [
     "-X k8s.io/${pname}/pkg/version.version=v${version}"
   ];
 

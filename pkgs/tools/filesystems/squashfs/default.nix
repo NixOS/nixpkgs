@@ -1,11 +1,13 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , zlib
 , xz
 , lz4
 , lzo
 , zstd
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -23,6 +25,12 @@ stdenv.mkDerivation rec {
     # This patch adds an option to pad filesystems (increasing size) in
     # exchange for better chunking / binary diff calculation.
     ./4k-align.patch
+    # Otherwise sizes of some files may break in our ISO; see
+    # https://github.com/NixOS/nixpkgs/issues/132286
+    (fetchpatch {
+      url = "https://github.com/plougher/squashfs-tools/commit/19b161c1cd3e31f7a396ea92dea4390ad43f27b9.diff";
+      sha256 = "15ng8m2my3a6a9hnfx474bip2vwdh08hzs2k0l5gwd36jv2z1h3f";
+    })
   ] ++ lib.optional stdenv.isDarwin ./darwin.patch;
 
   buildInputs = [ zlib xz zstd lz4 lzo ];
@@ -39,6 +47,10 @@ stdenv.mkDerivation rec {
     "LZ4_SUPPORT=1"
     "LZO_SUPPORT=1"
   ];
+
+  passthru.tests = {
+    nixos-iso-boots-and-verifies = nixosTests.boot.biosCdrom;
+  };
 
   meta = with lib; {
     homepage = "https://github.com/plougher/squashfs-tools";

@@ -4,52 +4,45 @@ let
   webassets = fetchFromGitHub {
     owner = "gravitational";
     repo = "webassets";
-    rev = "8a30ee4e3570c7db0566028b6b562167aa40f646";
-    sha256 = "sha256-noMVcB1cjiMcRke6/qJIzDaEh4uPIewsedLQRdPbzIQ=";
+    rev = "2891baa0de7283f61c08ff2fa4494e53f9d4afc1";
+    sha256 = "sha256-AvhCOLa+mgty9METlOCARlUOEDMAW6Kk1esSmBbVcok=";
   };
 in
-
 buildGoModule rec {
   pname = "teleport";
-  version = "6.2.7";
+  version = "7.0.0";
 
   # This repo has a private submodule "e" which fetchgit cannot handle without failing.
   src = fetchFromGitHub {
     owner = "gravitational";
     repo = "teleport";
     rev = "v${version}";
-    sha256 = "0ychs2pqi3awbr0vraz0ksddwk5hihrd1d9raq8mxyw5dz5124ki";
+    sha256 = "sha256-2GQ3IP5jfT6vSni5hfDex09wXrnUmTpcvH2S6zc399I=";
   };
 
   vendorSha256 = null;
 
   subPackages = [ "tool/tctl" "tool/teleport" "tool/tsh" ];
+  tags = [ "webassets_embed" ];
 
   nativeBuildInputs = [ zip makeWrapper ];
 
-  # https://github.com/NixOS/nixpkgs/issues/120738
-  patches = [ ./tsh.patch ];
-
-  postBuild = ''
-    pushd .
-    mkdir -p build
-    echo "making webassets"
-    cp -r ${webassets}/* webassets/
-    make build/webassets.zip
-    cat build/webassets.zip >> $NIX_BUILD_TOP/go/bin/teleport
-    rm -fr build/webassets.zip
-    cd $NIX_BUILD_TOP/go/bin
-    zip -q -A teleport
-    popd
-  '';
-
-  # Do not strip the embedded web assets
-  dontStrip = true;
+  patches = [
+    # https://github.com/NixOS/nixpkgs/issues/120738
+    ./tsh.patch
+    # https://github.com/NixOS/nixpkgs/issues/132652
+    ./test.patch
+  ];
 
   # Reduce closure size for client machines
   outputs = [ "out" "client" ];
 
-  buildTargets = [ "full" ];
+  preBuild = ''
+    mkdir -p build
+    echo "making webassets"
+    cp -r ${webassets}/* webassets/
+    make lib/web/build/webassets.zip
+  '';
 
   preCheck = ''
     export HOME=$(mktemp -d)

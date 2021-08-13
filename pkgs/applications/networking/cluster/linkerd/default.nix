@@ -22,8 +22,8 @@ let generic = { channel, version, sha256, vendorSha256 }:
       env GOFLAGS="" go generate ./viz/static
     '';
 
-    buildFlagsArray = [
-      "-tags=prod"
+    tags = [
+      "prod"
     ];
 
     ldflags = [

@@ -3,15 +3,15 @@
 , fontconfig, libwebp, libxml2, libxslt
 , sqlite, systemd, glib, gst_all_1, cmake
 , bison, flex, gdb, gperf, perl, pkg-config, python2, ruby
-, darwin
+, ICU, OpenGL
 }:
 
 let
-  inherit (lib) optional optionals getDev getLib;
   hyphen = stdenv.mkDerivation rec {
-    name = "hyphen-2.8.8";
+    pname = "hyphen";
+    version = "2.8.8";
     src = fetchurl {
-      url = "http://dev-www.libreoffice.org/src/5ade6ae2a99bc1e9e57031ca88d36dad-${name}.tar.gz";
+      url = "http://dev-www.libreoffice.org/src/5ade6ae2a99bc1e9e57031ca88d36dad-hyphen-${version}.tar.gz";
       sha256 = "304636d4eccd81a14b6914d07b84c79ebb815288c76fe027b9ebff6ff24d5705";
     };
     postPatch = ''
@@ -24,19 +24,19 @@ in
 qtModule {
   pname = "qtwebkit";
   qtInputs = [ qtbase qtdeclarative qtlocation qtsensors ]
-    ++ optional (stdenv.isDarwin && lib.versionAtLeast qtbase.version "5.9.0") qtmultimedia
-    ++ optional usingAnnulenWebkitFork qtwebchannel;
+    ++ lib.optional (stdenv.isDarwin && lib.versionAtLeast qtbase.version "5.9.0") qtmultimedia
+    ++ lib.optional usingAnnulenWebkitFork qtwebchannel;
   buildInputs = [ fontconfig libwebp libxml2 libxslt sqlite glib gst_all_1.gstreamer gst_all_1.gst-plugins-base ]
-    ++ optionals (stdenv.isDarwin) (with darwin; with apple_sdk.frameworks; [ ICU OpenGL ])
-    ++ optional usingAnnulenWebkitFork hyphen;
+    ++ lib.optionals stdenv.isDarwin [ ICU OpenGL ]
+    ++ lib.optional usingAnnulenWebkitFork hyphen;
   nativeBuildInputs = [
     bison flex gdb gperf perl pkg-config python2 ruby
-  ] ++ optional usingAnnulenWebkitFork cmake;
+  ] ++ lib.optional usingAnnulenWebkitFork cmake;
 
-  cmakeFlags = optionals usingAnnulenWebkitFork ([ "-DPORT=Qt" ]
-    ++ optionals stdenv.isDarwin [
-      "-DQt5Multimedia_DIR=${getDev qtmultimedia}/lib/cmake/Qt5Multimedia"
-      "-DQt5MultimediaWidgets_DIR=${getDev qtmultimedia}/lib/cmake/Qt5MultimediaWidgets"
+  cmakeFlags = lib.optionals usingAnnulenWebkitFork ([ "-DPORT=Qt" ]
+    ++ lib.optionals stdenv.isDarwin [
+      "-DQt5Multimedia_DIR=${lib.getDev qtmultimedia}/lib/cmake/Qt5Multimedia"
+      "-DQt5MultimediaWidgets_DIR=${lib.getDev qtmultimedia}/lib/cmake/Qt5MultimediaWidgets"
       "-DMACOS_FORCE_SYSTEM_XML_LIBRARIES=OFF"
     ]);
 
@@ -50,19 +50,22 @@ qtModule {
   '';
 
   NIX_CFLAGS_COMPILE = [
-      # with gcc7 this warning blows the log over Hydra's limit
-      "-Wno-expansion-to-defined"
-    ]
-    # with gcc8, -Wclass-memaccess became part of -Wall and this too exceeds the logging limit
-    ++ optional stdenv.cc.isGNU "-Wno-class-memaccess"
-    # with clang this warning blows the log over Hydra's limit
-    ++ optional stdenv.isDarwin "-Wno-inconsistent-missing-override"
-    ++ optional (!stdenv.isDarwin) ''-DNIXPKGS_LIBUDEV="${getLib systemd}/lib/libudev"'';
+    # with gcc7 this warning blows the log over Hydra's limit
+    "-Wno-expansion-to-defined"
+  ]
+  # with gcc8, -Wclass-memaccess became part of -Wall and this too exceeds the logging limit
+  ++ lib.optional stdenv.cc.isGNU "-Wno-class-memaccess"
+  # with clang this warning blows the log over Hydra's limit
+  ++ lib.optional stdenv.isDarwin "-Wno-inconsistent-missing-override"
+  ++ lib.optional (!stdenv.isDarwin) ''-DNIXPKGS_LIBUDEV="${lib.getLib systemd}/lib/libudev"'';
 
   doCheck = false; # fails 13 out of 13 tests (ctest)
 
   # Hack to avoid TMPDIR in RPATHs.
-  preFixup = ''rm -rf "$(pwd)" && mkdir "$(pwd)" '';
+  preFixup = ''
+    rm -rf "$(pwd)"
+    mkdir "$(pwd)"
+  '';
 
   meta = {
     maintainers = with lib.maintainers; [ abbradar periklis ];

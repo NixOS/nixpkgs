@@ -36,5 +36,5 @@ sed -i -e "s/hassVersion =.*/hassVersion = \"${TARGET_VERSION}\";/" \
     nix-update --version "$TARGET_VERSION" --build home-assistant
 )
 
-git add ./component-packages.nix ./default.nix ./frontend.nix
-git commit -m "home-assistant: ${CURRENT_VERSION} -> ${TARGET_VERSION}"
+#git add ./component-packages.nix ./default.nix ./frontend.nix
+#git commit -m "home-assistant: ${CURRENT_VERSION} -> ${TARGET_VERSION}"

@@ -1044,7 +1044,7 @@ in
           done
         '' + concatMapStrings (name: optionalString (hasPrefix "tmpfiles.d/" name) ''
           rm -f $out/${removePrefix "tmpfiles.d/" name}
-        '') config.system.build.etc.targets;
+        '') config.system.build.etc.passthru.targets;
       }) + "/*";
 
       "systemd/system-generators" = { source = hooks "generators" cfg.generators; };
@@ -1053,6 +1053,7 @@ in
 
     services.dbus.enable = true;
 
+    users.users.systemd-coredump.uid = config.ids.uids.systemd-coredump;
     users.users.systemd-network.uid = config.ids.uids.systemd-network;
     users.groups.systemd-network.gid = config.ids.gids.systemd-network;
     users.users.systemd-resolve.uid = config.ids.uids.systemd-resolve;
@@ -1127,6 +1128,7 @@ in
 
     users.groups.systemd-journal.gid = config.ids.gids.systemd-journal;
     users.users.systemd-journal-gateway.uid = config.ids.uids.systemd-journal-gateway;
+    users.users.systemd-journal-gateway.group = "systemd-journal-gateway";
     users.groups.systemd-journal-gateway.gid = config.ids.gids.systemd-journal-gateway;
 
     # Generate timer units for all services that have a ‘startAt’ value.

@@ -30,9 +30,10 @@ EOF
 
 # clear environment here to avoid things like allowing broken builds in
 sort -iu "$tmpfile" >> "$broken_config"
-env -i maintainers/scripts/haskell/regenerate-hackage-packages.sh
-env -i maintainers/scripts/haskell/regenerate-transitive-broken-packages.sh
-env -i maintainers/scripts/haskell/regenerate-hackage-packages.sh
+clear="env -u HOME -u NIXPKGS_CONFIG"
+$clear maintainers/scripts/haskell/regenerate-hackage-packages.sh
+$clear maintainers/scripts/haskell/regenerate-transitive-broken-packages.sh
+$clear maintainers/scripts/haskell/regenerate-hackage-packages.sh
 
 if [[ "${1:-}" == "--do-commit" ]]; then
 git add $broken_config

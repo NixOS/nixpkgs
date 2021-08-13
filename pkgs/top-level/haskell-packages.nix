@@ -42,6 +42,8 @@ let
 in {
   lib = haskellLib;
 
+  package-list = callPackage ../development/haskell-modules/package-list.nix {};
+
   compiler = {
 
     ghc865Binary = callPackage ../development/compilers/ghc/8.6.5-binary.nix { };

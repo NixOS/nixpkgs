@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "headscale";
-  version = "0.3.4";
+  version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "juanfont";
     repo = "headscale";
     rev = "v${version}";
-    sha256 = "sha256-O8PJrowP9iDK4sQXHNi1eo44X/tRc7nyKZgJUB6fKC4=";
+    sha256 = "sha256-AclIH2Gd8U/Hfy24KOFic/np4qAWELlIMfsPCSkdjog=";
   };
 
-  vendorSha256 = "sha256-0Lqr/tWk31S01vi21sG2gtlGouOhecL4u8ScKG0nWLo=";
+  vendorSha256 = "sha256-UIBH6Pf2mmXBsdFW0RRvedLQhonNsrl4j2fxxRtum4M=";
 
   # Ldflags are same as build target in the project's Makefile
   # https://github.com/juanfont/headscale/blob/main/Makefile

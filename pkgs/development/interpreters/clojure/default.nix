@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "clojure";
-  version = "1.10.3.855";
+  version = "1.10.3.933";
 
   src = fetchurl {
     # https://clojure.org/releases/tools
     url = "https://download.clojure.org/install/clojure-tools-${version}.tar.gz";
-    sha256 = "sha256-y2PuOBRq5kZlTpPV8NwkWhspQKlNxwjl+k/Drwixk4Q=";
+    sha256 = "sha256-xsm0/HNWr8a/7iLQVC9TbUkASWvw/EI3bD0dMDhLZXA=";
   };
 
   nativeBuildInputs = [
@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
       echo "Installing libs into $clojure_lib_dir"
       install -Dm644 deps.edn "$clojure_lib_dir/deps.edn"
       install -Dm644 example-deps.edn "$clojure_lib_dir/example-deps.edn"
+      install -Dm644 tools.edn "$clojure_lib_dir/tools.edn"
       install -Dm644 exec.jar "$clojure_lib_dir/libexec/exec.jar"
       install -Dm644 clojure-tools-${version}.jar "$clojure_lib_dir/libexec/clojure-tools-${version}.jar"
 
@@ -48,7 +49,7 @@ stdenv.mkDerivation rec {
 
   doInstallCheck = true;
   installCheckPhase = ''
-    CLJ_CONFIG=$out CLJ_CACHE=$out/libexec $out/bin/clojure \
+    CLJ_CONFIG=$TMPDIR CLJ_CACHE=$TMPDIR/.clj_cache $out/bin/clojure \
       -Spath \
       -Sverbose \
       -Scp $out/libexec/clojure-tools-${version}.jar

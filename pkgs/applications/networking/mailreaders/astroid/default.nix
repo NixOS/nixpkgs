@@ -3,7 +3,7 @@
 , gtkmm3, libpeas, gsettings-desktop-schemas, gobject-introspection, python3
 
 # vim to be used, should support the GUI mode.
-, vim ? vim_configurable.override { features = "normal"; gui = "auto"; }
+, vim
 
 # additional python3 packages to be available within plugins
 , extraPythonPackages ? []

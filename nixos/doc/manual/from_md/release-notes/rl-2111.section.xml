@@ -125,6 +125,52 @@
           <link linkend="opt-services.prometheus.exporters.buildkite-agent.enable">services.prometheus.exporters.buildkite-agent</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/prometheus/influxdb_exporter">influxdb-exporter</link>
+          a Prometheus exporter that exports metrics received on an
+          InfluxDB compatible endpoint is now available as
+          <link linkend="opt-services.prometheus.exporters.influxdb.enable">services.prometheus.exporters.influxdb</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/matrix-discord/mx-puppet-discord">mx-puppet-discord</link>,
+          a discord puppeting bridge for matrix. Available as
+          <link linkend="opt-services.mx-puppet-discord.enable">services.mx-puppet-discord</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://www.meshcommander.com/meshcentral2/overview">MeshCentral</link>,
+          a remote administration service (<quote>TeamViewer but
+          self-hosted and with more features</quote>) is now available
+          with a package and a module:
+          <link linkend="opt-services.meshcentral.enable">services.meshcentral.enable</link>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/Arksine/moonraker">moonraker</link>,
+          an API web server for Klipper. Available as
+          <link linkend="opt-services.moonraker.enable">moonraker</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/influxdata/influxdb">influxdb2</link>,
+          a Scalable datastore for metrics, events, and real-time
+          analytics. Available as
+          <link linkend="opt-services.influxdb2.enable">services.influxdb2</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://posativ.org/isso/">isso</link>, a
+          commenting server similar to Disqus. Available as
+          <link linkend="opt-services.isso.enable">isso</link>
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-incompatibilities">
@@ -134,6 +180,13 @@
         <para>
           The <literal>staticjinja</literal> package has been upgraded
           from 1.0.4 to 3.0.1
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>erigon</literal> ethereum node has moved to a new
+          database format in <literal>2021-05-04</literal>, and requires
+          a full resync
         </para>
       </listitem>
       <listitem>
@@ -555,6 +608,101 @@
           6.0.0 to 9.0.0
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <literal>tt-rss</literal> was upgraded to the commit on
+          2021-06-21, which has breaking changes. If you use
+          <literal>services.tt-rss.extraConfig</literal> you should
+          migrate to the <literal>putenv</literal>-style configuration.
+          See
+          <link xlink:href="https://community.tt-rss.org/t/rip-config-php-hello-classes-config-php/4337">this
+          Discourse post</link> in the tt-rss forums for more details.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The following Visual Studio Code extensions were renamed to
+          keep the naming convention uniform.
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              <literal>bbenoist.Nix</literal> -&gt;
+              <literal>bbenoist.nix</literal>
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              <literal>CoenraadS.bracket-pair-colorizer</literal> -&gt;
+              <literal>coenraads.bracket-pair-colorizer</literal>
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              <literal>golang.Go</literal> -&gt;
+              <literal>golang.go</literal>
+            </para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>services.uptimed</literal> now uses
+          <literal>/var/lib/uptimed</literal> as its stateDirectory
+          instead of <literal>/var/spool/uptimed</literal>. Make sure to
+          move all files to the new directory.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Deprecated package aliases in <literal>emacs.pkgs.*</literal>
+          have been removed. These aliases were remnants of the old
+          Emacs package infrastructure. We now use exact upstream names
+          wherever possible.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>programs.neovim.runtime</literal> switched to a
+          <literal>linkFarm</literal> internally, making it impossible
+          to use wildcards in the <literal>source</literal> argument.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>openrazer</literal> and
+          <literal>openrazer-daemon</literal> packages as well as the
+          <literal>hardware.openrazer</literal> module now require users
+          to be members of the <literal>openrazer</literal> group
+          instead of <literal>plugdev</literal>. With this change, users
+          no longer need be granted the entire set of
+          <literal>plugdev</literal> group permissions, which can
+          include permissions other than those required by
+          <literal>openrazer</literal>. This is desirable from a
+          security point of view. The setting
+          <link xlink:href="options.html#opt-services.hardware.openrazer.users"><literal>harware.openrazer.users</literal></link>
+          can be used to add users to the <literal>openrazer</literal>
+          group.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>yambar</literal> package has been split into
+          <literal>yambar</literal> and
+          <literal>yambar-wayland</literal>, corresponding to the xorg
+          and wayland backend respectively. Please switch to
+          <literal>yambar-wayland</literal> if you are on wayland.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>services.minio</literal> module gained an
+          additional option <literal>consoleAddress</literal>, that
+          configures the address and port the web UI is listening, it
+          defaults to <literal>:9001</literal>. To be able to access the
+          web UI this port needs to be opened in the firewall.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-notable-changes">
@@ -700,6 +848,37 @@
           module has a new
           <link xlink:href="options.html#opt-networking.wireless.iwd.settings">networking.wireless.iwd.settings</link>
           option.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The
+          <link xlink:href="options.html#opt-services.syncoid.enable">services.syncoid.enable</link>
+          module now properly drops ZFS permissions after usage. Before
+          it delegated permissions to whole pools instead of datasets
+          and didn’t clean up after execution. You can manually look
+          this up for your pools by running
+          <literal>zfs allow your-pool-name</literal> and use
+          <literal>zfs unallow syncoid your-pool-name</literal> to clean
+          this up.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Zfs: <literal>latestCompatibleLinuxPackages</literal> is now
+          exported on the zfs package. One can use
+          <literal>boot.kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;</literal>
+          to always track the latest compatible kernel with a given
+          version of zfs.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Nginx will use the value of
+          <literal>sslTrustedCertificate</literal> if provided for a
+          virtual host, even if <literal>enableACME</literal> is set.
+          This is useful for providers not using the same certificate to
+          sign OCSP responses and server certificates.
         </para>
       </listitem>
     </itemizedlist>

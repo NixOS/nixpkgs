@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "phonenumbers";
-  version = "8.12.26";
+  version = "8.12.29";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Zbq269vg7FGWx0YmlJdI21M30jiVqrwe+PXXKEeHmYo=";
+    sha256 = "12h9l9kgviqvy7asax23ci12bwflpsf8c51ia7wg2k7dd56nlfcs";
   };
 
   checkInputs = [

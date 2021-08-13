@@ -65,7 +65,8 @@ let
     in
       stdenv.mkDerivation (builtins.removeAttrs args [ "bundlerEnvArgs" ] // {
         pluginName = if name != null then name else "${pname}-${version}";
-        phases = [ "unpackPhase" "installPhase" ];
+        dontConfigure = true;
+        dontBuild = true;
         installPhase = ''
           runHook preInstall
           mkdir -p $out

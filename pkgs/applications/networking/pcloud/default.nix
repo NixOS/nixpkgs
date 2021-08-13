@@ -15,29 +15,28 @@
 # ^1 https://github.com/NixOS/nixpkgs/issues/69338
 
 {
-  # Build dependencies
-  appimageTools, autoPatchelfHook, fetchzip, lib, stdenv,
+ # Build dependencies
+ appimageTools, autoPatchelfHook, fetchzip, lib, stdenv
 
-  # Runtime dependencies;
-  # A few additional ones (e.g. Node) are already shipped together with the
-  # AppImage, so we don't have to duplicate them here.
-  alsa-lib, dbus-glib, fuse, gnome, gtk3, libdbusmenu-gtk2, libXdamage, nss, udev
+ # Runtime dependencies;
+ # A few additional ones (e.g. Node) are already shipped together with the
+ # AppImage, so we don't have to duplicate them here.
+, alsa-lib, dbus-glib, fuse, gnome, gsettings-desktop-schemas, gtk3, libdbusmenu-gtk2, libXdamage, nss, udev
 }:
 
 let
   pname = "pcloud";
-  version = "1.9.3";
-  code = "XZh0QTXZIYkI66plpzLAJ4G2mwDvJFvKvEzy";
-  name = "${pname}-${version}";
+  version = "1.9.5";
+  code = "XZy4VwXZjkvoMGM3x6kCTkIGLFYVKjqKbefX";
 
   # Archive link's code thanks to: https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=pcloud-drive
   src = fetchzip {
-    url = "https://api.pcloud.com/getpubzip?code=${code}&filename=${name}.zip";
-    hash = "sha256-NFbSYZRysRIg6q0aaDocpK7xJbiCWc1S0McXKlCRGjU=";
+    url = "https://api.pcloud.com/getpubzip?code=${code}&filename=${pname}-${version}.zip";
+    hash = "sha256-GuO4wsSRT6WMlqYs2X+5oA7CykHb/NmhZ7UGA1FA6y4=";
   };
 
   appimageContents = appimageTools.extractType2 {
-    inherit name;
+    name = "${pname}-${version}";
     src = "${src}/pcloud";
   };
 
@@ -94,7 +93,7 @@ in stdenv.mkDerivation {
 
     # This is required for the file picker dialog - otherwise pcloud just
     # crashes
-    export XDG_DATA_DIRS="${gnome.gsettings-desktop-schemas}/share/gsettings-schemas/${gnome.gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS"
+    export XDG_DATA_DIRS="${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS"
 
     exec "$out/app/pcloud"
     EOF

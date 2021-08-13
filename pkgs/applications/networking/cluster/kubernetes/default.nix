@@ -7,6 +7,7 @@
 , makeWrapper
 , rsync
 , installShellFiles
+, nixosTests
 
 , components ? [
     "cmd/kubelet"
@@ -20,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "kubernetes";
-  version = "1.21.3";
+  version = "1.22.0";
 
   src = fetchFromGitHub {
     owner = "kubernetes";
     repo = "kubernetes";
     rev = "v${version}";
-    sha256 = "sha256-GMigdVuqJN6eIN0nhY5PVUEnCqjAYUzitetk2QmX5wQ=";
+    sha256 = "sha256-4lqqD3SBLBWrnFWhRzV3QgRLdGRW1Jx/eL6swtHL0Vw=";
   };
 
   nativeBuildInputs = [ removeReferencesTo makeWrapper which go rsync installShellFiles ];
@@ -66,8 +67,8 @@ stdenv.mkDerivation rec {
     install -D build/pause/linux/pause -t $pause/bin
     installManPage docs/man/man1/*.[1-9]
 
-    # Unfortunately, kube-addons-main.sh only looks for the lib file in either the current working dir
-    # or in /opt. We have to patch this for now.
+    # Unfortunately, kube-addons-main.sh only looks for the lib file in either the
+    # current working dir or in /opt. We have to patch this for now.
     substitute cluster/addons/addon-manager/kube-addons-main.sh $out/bin/kube-addons \
       --subst-var out
 
@@ -94,5 +95,12 @@ stdenv.mkDerivation rec {
     homepage = "https://kubernetes.io";
     maintainers = with maintainers; [ johanot offline saschagrunert ];
     platforms = platforms.unix;
+  };
+
+  passthru.tests = with nixosTests.kubernetes; {
+    dns-single-node = dns.singlenode;
+    dns-multi-node = dns.multinode;
+    rbac-single-node = rbac.singlenode;
+    rbac-multi-node = rbac.multinode;
   };
 }

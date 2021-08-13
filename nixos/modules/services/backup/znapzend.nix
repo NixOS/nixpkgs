@@ -279,7 +279,7 @@ let
     src_plan = plan;
     tsformat = timestampFormat;
     zend_delay = toString sendDelay;
-  } // fold (a: b: a // b) {} (
+  } // foldr (a: b: a // b) {} (
     map mkDestAttrs (builtins.attrValues destinations)
   );
 

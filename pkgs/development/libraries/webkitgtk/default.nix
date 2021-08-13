@@ -36,7 +36,7 @@
 , libidn
 , libedit
 , readline
-, sdk
+, apple_sdk
 , libGL
 , libGLU
 , mesa
@@ -82,12 +82,6 @@ stdenv.mkDerivation rec {
     })
     ./libglvnd-headers.patch
   ] ++ lib.optionals stdenv.isDarwin [
-    (fetchpatch {
-      url = "https://github.com/WebKit/WebKit/commit/94cdcd289b993ed4d39c17d4b8b90db7c81a9b10.diff";
-      sha256 = "sha256-ywrTEjf3ATqI0Vvs60TeAZ+m58kCibum4DamRWrQfaA=";
-      excludes = [ "Source/WebKit/ChangeLog" ];
-    })
-
     # https://bugs.webkit.org/show_bug.cgi?id=225856
     (fetchpatch {
       url = "https://bug-225856-attachments.webkit.org/attachment.cgi?id=428797";
@@ -173,13 +167,15 @@ stdenv.mkDerivation rec {
   ]) ++ lib.optionals stdenv.isDarwin [
     libedit
     readline
+  ] ++ lib.optional (stdenv.isDarwin && !stdenv.isAarch64) (
     # Pull a header that contains a definition of proc_pid_rusage().
     # (We pick just that one because using the other headers from `sdk` is not
-    # compatible with our C++ standard library)
-    (runCommandNoCC "${pname}_headers" {} ''
-      install -Dm444 "${lib.getDev sdk}"/include/libproc.h "$out"/include/libproc.h
-    '')
-  ] ++ lib.optionals stdenv.isLinux [
+    # compatible with our C++ standard library. This header is already in
+    # the standard library on aarch64)
+    runCommandNoCC "${pname}_headers" {} ''
+      install -Dm444 "${lib.getDev apple_sdk.sdk}"/include/libproc.h "$out"/include/libproc.h
+    ''
+  ) ++ lib.optionals stdenv.isLinux [
     bubblewrap
     libseccomp
     systemd

@@ -1,7 +1,16 @@
-{ lib, stdenv, fetchurl, nspr, perl, zlib
-, sqlite, ninja
-, darwin, fixDarwinDylibNames, buildPackages
-, useP11kit ? true, p11-kit
+{ lib
+, stdenv
+, fetchurl
+, nspr
+, perl
+, zlib
+, sqlite
+, ninja
+, darwin
+, fixDarwinDylibNames
+, buildPackages
+, useP11kit ? true
+, p11-kit
 , # allow FIPS mode. Note that this makes the output non-reproducible.
   # https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/NSS_Tech_Notes/nss_tech_note6
   enableFIPS ? false
@@ -18,16 +27,16 @@ let
   #       It will rebuild itself using the version of this package (NSS) and if
   #       an update is required do the required changes to the expression.
   #       Example: nix-shell ./maintainers/scripts/update.nix --argstr package cacert
-  version = "3.67";
-  underscoreVersion = builtins.replaceStrings ["."] ["_"] version;
+  version = "3.68";
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "nss";
   inherit version;
 
   src = fetchurl {
-    url = "mirror://mozilla/security/nss/releases/NSS_${underscoreVersion}_RTM/src/${pname}-${version}.tar.gz";
-    sha256 = "0zyfi27lbdz1bmk9dmsivcya4phx25rzlxqcnjab69yd928rlm7n";
+    url = "mirror://mozilla/security/nss/releases/NSS_${lib.replaceStrings [ "." ] [ "_" ] version}_RTM/src/${pname}-${version}.tar.gz";
+    sha256 = "0nvj7h2brcw21p1z99nrsxka056d0r1yy9nqqg0lw0w3mhnb60n4";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -56,55 +65,58 @@ in stdenv.mkDerivation rec {
     substituteInPlace nss/coreconf/config.gypi --replace "/usr/bin/grep" "${buildPackages.coreutils}/bin/env grep"
   '';
 
-  patches =
-    [
-      # Based on http://patch-tracker.debian.org/patch/series/dl/nss/2:3.15.4-1/85_security_load.patch
-      ./85_security_load.patch
-      ./ckpem.patch
-      ./fix-cross-compilation.patch
-    ];
+  patches = [
+    # Based on http://patch-tracker.debian.org/patch/series/dl/nss/2:3.15.4-1/85_security_load.patch
+    ./85_security_load.patch
+    ./ckpem.patch
+    ./fix-cross-compilation.patch
+  ];
 
   patchFlags = [ "-p0" ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
-     substituteInPlace nss/coreconf/Darwin.mk --replace '@executable_path/$(notdir $@)' "$out/lib/\$(notdir \$@)"
-     substituteInPlace nss/coreconf/config.gypi --replace "'DYLIB_INSTALL_NAME_BASE': '@executable_path'" "'DYLIB_INSTALL_NAME_BASE': '$out/lib'"
-   '';
+    substituteInPlace nss/coreconf/Darwin.mk --replace '@executable_path/$(notdir $@)' "$out/lib/\$(notdir \$@)"
+    substituteInPlace nss/coreconf/config.gypi --replace "'DYLIB_INSTALL_NAME_BASE': '@executable_path'" "'DYLIB_INSTALL_NAME_BASE': '$out/lib'"
+  '';
 
   outputs = [ "out" "dev" "tools" ];
 
   preConfigure = "cd nss";
 
-  buildPhase = let
-    getArch = platform: if platform.isx86_64 then "x64"
-          else if platform.isx86_32 then "ia32"
-          else if platform.isAarch32 then "arm"
-          else if platform.isAarch64 then "arm64"
-          else if platform.isPower && platform.is64bit then (
+  buildPhase =
+    let
+      getArch = platform:
+        if platform.isx86_64 then "x64"
+        else if platform.isx86_32 then "ia32"
+        else if platform.isAarch32 then "arm"
+        else if platform.isAarch64 then "arm64"
+        else if platform.isPower && platform.is64bit then
+          (
             if platform.isLittleEndian then "ppc64le" else "ppc64"
           )
-          else platform.parsed.cpu.name;
-    # yes, this is correct. nixpkgs uses "host" for the platform the binary will run on whereas nss uses "host" for the platform that the build is running on
-    target = getArch stdenv.hostPlatform;
-    host = getArch stdenv.buildPlatform;
-  in ''
-    runHook preBuild
+        else platform.parsed.cpu.name;
+      # yes, this is correct. nixpkgs uses "host" for the platform the binary will run on whereas nss uses "host" for the platform that the build is running on
+      target = getArch stdenv.hostPlatform;
+      host = getArch stdenv.buildPlatform;
+    in
+    ''
+      runHook preBuild
 
-    sed -i 's|nss_dist_dir="$dist_dir"|nss_dist_dir="'$out'"|;s|nss_dist_obj_dir="$obj_dir"|nss_dist_obj_dir="'$out'"|' build.sh
-    ./build.sh -v --opt \
-      --with-nspr=${nspr.dev}/include:${nspr.out}/lib \
-      --system-sqlite \
-      --enable-legacy-db \
-      --target ${target} \
-      -Dhost_arch=${host} \
-      -Duse_system_zlib=1 \
-      --enable-libpkix \
-      ${lib.optionalString enableFIPS "--enable-fips"} \
-      ${lib.optionalString stdenv.isDarwin "--clang"} \
-      ${lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) "--disable-tests"}
+      sed -i 's|nss_dist_dir="$dist_dir"|nss_dist_dir="'$out'"|;s|nss_dist_obj_dir="$obj_dir"|nss_dist_obj_dir="'$out'"|' build.sh
+      ./build.sh -v --opt \
+        --with-nspr=${nspr.dev}/include:${nspr.out}/lib \
+        --system-sqlite \
+        --enable-legacy-db \
+        --target ${target} \
+        -Dhost_arch=${host} \
+        -Duse_system_zlib=1 \
+        --enable-libpkix \
+        ${lib.optionalString enableFIPS "--enable-fips"} \
+        ${lib.optionalString stdenv.isDarwin "--clang"} \
+        ${lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) "--disable-tests"}
 
-    runHook postBuild
-  '';
+      runHook postBuild
+    '';
 
   NIX_CFLAGS_COMPILE = "-Wno-error -DNIX_NSS_LIBDIR=\"${placeholder "out"}/lib/\" " + lib.optionalString stdenv.hostPlatform.is64bit "-DNSS_USE_64=1";
 
@@ -147,36 +159,38 @@ in stdenv.mkDerivation rec {
     ln -sf ${p11-kit}/lib/pkcs11/p11-kit-trust.so $out/lib/libnssckbi.so
   '';
 
-  postFixup = let
-    isCross = stdenv.hostPlatform != stdenv.buildPlatform;
-    nss = if isCross then buildPackages.nss.tools else "$out";
-  in
-  (lib.optionalString enableFIPS (''
-    for libname in freebl3 nssdbm3 softokn3
-    do '' +
+  postFixup =
+    let
+      isCross = stdenv.hostPlatform != stdenv.buildPlatform;
+      nss = if isCross then buildPackages.nss.tools else "$out";
+    in
+    (lib.optionalString enableFIPS (''
+      for libname in freebl3 nssdbm3 softokn3
+      do '' +
     (if stdenv.isDarwin
-     then ''
-       libfile="$out/lib/lib$libname.dylib"
-       DYLD_LIBRARY_PATH=$out/lib:${nspr.out}/lib \
-     '' else ''
-       libfile="$out/lib/lib$libname.so"
-       LD_LIBRARY_PATH=$out/lib:${nspr.out}/lib \
-     '') + ''
-        ${nss}/bin/shlibsign -v -i "$libfile"
-    done
-  '')) +
-  ''
-    moveToOutput bin "$tools"
-    moveToOutput bin/nss-config "$dev"
-    moveToOutput lib/libcrmf.a "$dev" # needed by firefox, for example
-    rm -f "$out"/lib/*.a
+    then ''
+      libfile="$out/lib/lib$libname.dylib"
+      DYLD_LIBRARY_PATH=$out/lib:${nspr.out}/lib \
+    '' else ''
+      libfile="$out/lib/lib$libname.so"
+      LD_LIBRARY_PATH=$out/lib:${nspr.out}/lib \
+    '') + ''
+          ${nss}/bin/shlibsign -v -i "$libfile"
+      done
+    '')) +
+    ''
+      moveToOutput bin "$tools"
+      moveToOutput bin/nss-config "$dev"
+      moveToOutput lib/libcrmf.a "$dev" # needed by firefox, for example
+      rm -f "$out"/lib/*.a
 
-    runHook postInstall
-  '';
+      runHook postInstall
+    '';
 
   meta = with lib; {
-    homepage = "https://developer.mozilla.org/en-US/docs/NSS";
+    homepage = "https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS";
     description = "A set of libraries for development of security-enabled client and server applications";
+    maintainers = with maintainers; [ ];
     license = licenses.mpl20;
     platforms = platforms.all;
   };

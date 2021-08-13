@@ -1,50 +1,64 @@
 { stdenv
 , lib
-, fetchgit
+, fetchFromGitea
+, pkg-config
 , meson
 , ninja
-, pkg-config
-, git
-, scdoc
-, cairo
-, fcft
-, libpng
-, librsvg
-, libxkbcommon
 , pixman
 , tllist
 , wayland
+, wayland-scanner
 , wayland-protocols
-, wlroots
+, enablePNG ? true
+, enableJPEG ? true
+# Optional dependencies
+, libpng
+, libjpeg
 }:
+
+let
+  # Courtesy of sternenseemann and FRidh, commit c9a7fdfcfb420be8e0179214d0d91a34f5974c54
+  mesonFeatureFlag = opt: b: "-D${opt}=${if b then "enabled" else "disabled"}";
+in
 
 stdenv.mkDerivation rec {
   pname = "wbg";
-  version = "unstable-2020-08-01";
+  version = "1.0.2";
 
-  src = fetchgit {
-    url = "https://codeberg.org/dnkl/wbg";
-    rev = "1b05bd80d0f40e3ba1e977002d0653f532649269";
-    sha256 = "0i1j7aqvj0vl2ww5cvffqci1kjqjn0sw6sp2j0ljblaif6qk9asc";
+  src = fetchFromGitea {
+    domain = "codeberg.org";
+    owner = "dnkl";
+    repo = "wbg";
+    rev = version;
+    sha256 = "sha256-PKEOWRcSAB4Uv5TfameQIEZh6s6xCGdyoZ13etL1TKA=";
   };
 
-  nativeBuildInputs = [ pkg-config meson ninja scdoc git ];
+  nativeBuildInputs = [
+    pkg-config
+    meson
+    ninja
+    wayland-scanner
+  ];
+
   buildInputs = [
-    cairo
-    fcft
-    libpng
-    librsvg
-    libxkbcommon
     pixman
     tllist
     wayland
     wayland-protocols
-    wlroots
+  ] ++ lib.optional enablePNG libpng
+    ++ lib.optional enableJPEG libjpeg;
+
+  mesonBuildType = "release";
+
+  mesonFlags = [
+    (mesonFeatureFlag "png" enablePNG)
+    (mesonFeatureFlag "jpeg" enableJPEG)
   ];
 
   meta = with lib; {
     description = "Wallpaper application for Wayland compositors";
     homepage = "https://codeberg.org/dnkl/wbg";
+    changelog = "https://codeberg.org/dnkl/wbg/releases/tag/${version}";
     license = licenses.isc;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = with platforms; linux;

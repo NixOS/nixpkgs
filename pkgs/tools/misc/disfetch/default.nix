@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "disfetch";
-  version = "1.24";
+  version = "2.9";
 
   src = fetchFromGitHub {
-    owner = "llathasa-veleth";
+    owner = "q60";
     repo = "disfetch";
     rev = version;
-    sha256 = "sha256-Uoc5xSyLXXEqdyYn71NK8c8A/1wQ6djYn/HHJwGg5vc=";
+    sha256 = "sha256-dmDDO1DcDMGWtQtIQncOjSc114tL5QH1Jaq1n4vAe5M=";
   };
 
   dontBuild = true;
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Yet another *nix distro fetching program, but less complex";
-    homepage = "https://github.com/llathasa-veleth/disfetch";
+    homepage = "https://github.com/q60/disfetch";
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = [ maintainers.vel ];

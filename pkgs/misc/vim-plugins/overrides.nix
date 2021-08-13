@@ -86,6 +86,8 @@
 , iferr
 , impl
 , reftools
+# must be lua51Packages
+, luaPackages
 }:
 
 self: super: {
@@ -282,6 +284,8 @@ self: super: {
     dependencies = with self; [ plenary-nvim ];
   });
 
+  plenary-nvim = super.toVimPlugin(luaPackages.plenary-nvim);
+
   gruvbox-nvim = super.gruvbox-nvim.overrideAttrs (old: {
     dependencies = with self; [ lush-nvim ];
   });
@@ -298,8 +302,12 @@ self: super: {
   himalaya-vim = buildVimPluginFrom2Nix {
     pname = "himalaya-vim";
     inherit (himalaya) src version;
-    configurePhase = "cd vim/";
     dependencies = with self; [ himalaya ];
+    patchPhase = ''
+      rm -rf !"vim/"
+      cp -vaR vim/. .
+      rm -rf vim/
+    '';
     preFixup = ''
       substituteInPlace $out/share/vim-plugins/himalaya-vim/plugin/himalaya.vim \
         --replace 'if !executable("himalaya")' 'if v:false'
@@ -431,6 +439,10 @@ self: super: {
             ln -s ${grammars} parser
           '';
       });
+  });
+
+  onedark-nvim = super.onedark-nvim.overrideAttrs (old: {
+    dependencies = with self; [ lush-nvim ];
   });
 
   onehalf = super.onehalf.overrideAttrs (old: {
@@ -643,7 +655,7 @@ self: super: {
             libiconv
           ];
 
-          cargoSha256 = "sha256-J5BCLcwOPB+EfOmdITCHgec9XDkm2oCGfRo/sKjEOIg=";
+          cargoSha256 = "sha256-wYxUo9zfflU7RTsTb7W9wc/WBsXhz3OLjC8CwUkRRiE=";
         };
       in
       ''

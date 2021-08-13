@@ -14,7 +14,7 @@ _separateDebugInfo() {
     dst="$dst/lib/debug/.build-id"
 
     # Find executables and dynamic libraries.
-    local i magic
+    local i
     while IFS= read -r -d $'\0' i; do
         if ! isELF "$i"; then continue; fi
 

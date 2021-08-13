@@ -273,6 +273,26 @@ let
       '';
     };
 
+    influxdb = {
+      exporterConfig = {
+        enable = true;
+        sampleExpiry = "3s";
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-influxdb-exporter.service")
+        succeed(
+          "curl -XPOST http://localhost:9122/write --data-binary 'influxdb_exporter,distro=nixos,added_in=21.09 value=1'"
+        )
+        succeed(
+          "curl -sSf http://localhost:9122/metrics | grep 'nixos'"
+        )
+        execute("sleep 5")
+        fail(
+          "curl -sSf http://localhost:9122/metrics | grep 'nixos'"
+        )
+      '';
+    };
+
     jitsi = {
       exporterConfig = {
         enable = true;
@@ -340,7 +360,6 @@ let
         systemd.services.prometheus-kea-exporter.after = [ "kea-dhcp6-server.service" ];
 
         services.kea = {
-          enable = true;
           dhcp6 = {
             enable = true;
             settings = {

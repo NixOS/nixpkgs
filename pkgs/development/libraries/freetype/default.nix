@@ -14,7 +14,7 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "freetype";
-  version = "2.10.4";
+  version = "2.11.0";
 
   meta = with lib; {
     description = "A font rendering engine";
@@ -33,7 +33,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://savannah/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "112pyy215chg7f7fmp2l9374chhhpihbh8wgpj5nj6avj3c59a46";
+    sha256 = "sha256-i+45vTloxIBLcGFKCjrVlyma0OgkvIqtXOiq9IBnvec=";
   };
 
   propagatedBuildInputs = [ zlib bzip2 libpng ]; # needed when linking against freetype

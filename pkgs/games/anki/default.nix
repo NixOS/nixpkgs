@@ -48,7 +48,7 @@ let
       rev = rev-manual;
       sha256 = sha256-manual;
     };
-    phases = [ "unpackPhase" "patchPhase" "buildPhase" ];
+    dontInstall = true;
     nativeBuildInputs = [ asciidoc ];
     patchPhase = ''
       # rsync isnt needed

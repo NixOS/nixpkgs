@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A graphical user interface for the PDF Toolkit (PDFtk)";
     homepage = "https://pdfchain.sourceforge.io";
-    license = licenses.gpl3Only;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ hqurve ];
     platforms = platforms.linux;
   };

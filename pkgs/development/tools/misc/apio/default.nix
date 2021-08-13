@@ -14,14 +14,14 @@
 
 buildPythonApplication rec {
   pname = "apio";
-  version = "0.7.5";
+  version = "0.7.6";
   format = "flit";
 
   src = fetchFromGitHub {
     owner = "FPGAwars";
     repo = "apio";
     rev = "v${version}";
-    sha256 = "sha256-9f0q6tELUDo6FdjPG708d7BY3O5ZiZ0FwNFzBBiLQp4=";
+    sha256 = "sha256-KmqxwYKsvcTSuUSVXgegR47y9VeU/vICbYWD7z3aDRM=";
   };
 
   postPatch = ''

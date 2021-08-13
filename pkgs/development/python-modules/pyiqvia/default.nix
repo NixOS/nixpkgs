@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pyiqvia";
-  version = "1.0.0";
+  version = "1.0.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -21,12 +21,16 @@ buildPythonPackage rec {
     owner = "bachya";
     repo = pname;
     rev = version;
-    sha256 = "sha256-6BbJgRpn2hivm4N3Zpll9NACMSNlIhxj8CF2iVduIro=";
+    sha256 = "18qzxxn9xw9rwv3qz8k3zxh9xxy8c7rs8xlsrdrcq9wb0dhd7p0r";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
-  propagatedBuildInputs = [ aiohttp ];
+  propagatedBuildInputs = [
+    aiohttp
+  ];
 
   checkInputs = [
     aresponses
@@ -36,7 +40,8 @@ buildPythonPackage rec {
   ];
 
   # Ignore the examples as they are prefixed with test_
-  pytestFlagsArray = [ "--ignore examples/" ];
+  disabledTestPaths = [ "examples/" ];
+
   pythonImportsCheck = [ "pyiqvia" ];
 
   meta = with lib; {
