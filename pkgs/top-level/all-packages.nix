@@ -6590,10 +6590,6 @@ with pkgs;
 
   mhonarc = perlPackages.MHonArc;
 
-  minergate = callPackage ../applications/misc/minergate { };
-
-  minergate-cli = callPackage ../applications/misc/minergate-cli { };
-
   minica = callPackage ../tools/security/minica { };
 
   minidlna = callPackage ../tools/networking/minidlna { };
