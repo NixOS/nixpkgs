@@ -2,6 +2,7 @@
 , autoreconfHook, autoconf-archive, pkg-config, doxygen, perl
 , openssl, json_c, curl, libgcrypt
 , cmocka, uthash, ibm-sw-tpm2, iproute2, procps, which
+, loader-path-patch ? true
 }:
 
 stdenv.mkDerivation rec {
@@ -27,7 +28,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  patches = [
+  patches = lib.optional loader-path-patch [
     # Do not rely on dynamic loader path
     # TCTI loader relies on dlopen(), this patch prefixes all calls with the output directory
     ./no-dynamic-loader-path.patch
@@ -35,6 +36,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs script
+  '' + lib.optionalString loader-path-patch ''
     substituteInPlace src/tss2-tcti/tctildr-dl.c \
       --replace '@PREFIX@' $out/lib/
     substituteInPlace ./test/unit/tctildr-dl.c \
