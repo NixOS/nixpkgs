@@ -96,6 +96,8 @@ with self; with super; {
 
   eventlib = callPackage ../development/python-modules/eventlib { };
 
+  fasteners = callPackage ../development/python-modules/fasteners/2.nix { };
+
   faulthandler = callPackage ../development/python-modules/faulthandler { };
 
   fdint = callPackage ../development/python-modules/fdint { };

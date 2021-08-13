@@ -1,14 +1,14 @@
-{ lib, fetchFromGitHub, python2Packages, gnupg1orig, openssl, git }:
+{ lib, fetchFromGitHub, python2Packages, gnupg, openssl, git, tor }:
 
 python2Packages.buildPythonApplication rec {
   pname = "mailpile";
-  version = "1.0.0rc2";
+  version = "1.0.0rc6";
 
   src = fetchFromGitHub {
     owner = "mailpile";
     repo = "Mailpile";
     rev = version;
-    sha256 = "1z5psh00fjr8gnl4yjcl4m9ywfj24y1ffa2rfb5q8hq4ksjblbdj";
+    sha256 = "gZqVDvOhVYBEMVPwzTzCWFW8DSrwq0W6cfKV3kgi8o4=";
   };
 
   postPatch = ''
@@ -22,17 +22,20 @@ python2Packages.buildPythonApplication rec {
     appdirs
     cryptography
     fasteners
-    gnupg1orig
     jinja2
     pgpdump
     pillow
-    python2Packages.lxml
+    lxml
     spambayes
+    stem
+    imgsize
+    icalendar
+    pysocks
   ];
 
   postInstall = ''
     wrapProgram $out/bin/mailpile \
-      --prefix PATH ":" "${lib.makeBinPath [ gnupg1orig openssl ]}" \
+      --prefix PATH ":" "${lib.makeBinPath [ gnupg openssl tor ]}" \
       --set-default MAILPILE_SHARED "$out/share/mailpile"
   '';
 
