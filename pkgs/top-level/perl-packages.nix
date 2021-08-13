@@ -575,6 +575,19 @@ let
     };
   };
 
+  ApacheDB = buildPerlPackage {
+    pname = "Apache-DB";
+    version = "0.18";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/L/LZ/LZE/Apache-DB-0.18.tar.gz";
+      sha256 = "6527f4f1598270bea07bec787b71bdf0ec2b572548be7438cf74f2b9a600bfed";
+    };
+    meta = {
+      description = "Run the interactive Perl debugger under mod_perl";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   ApacheLogFormatCompiler = buildPerlModule {
     pname = "Apache-LogFormat-Compiler";
     version = "0.36";
