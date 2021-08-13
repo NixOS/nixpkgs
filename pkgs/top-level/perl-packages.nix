@@ -12969,6 +12969,19 @@ let
     };
   };
 
+  MathFibonacci = buildPerlPackage {
+    pname = "Math-Fibonacci";
+    version = "1.5";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/V/VI/VIPUL/Math-Fibonacci-1.5.tar.gz";
+      sha256 = "70a8286e94558df99dc92f52d83e1e20a7b8f7852bcc3a1de7d9e338260b99ba";
+    };
+    meta = {
+      description = "This module provides a few functions related to Fibonacci numbers";
+      license = lib.licenses.artistic2;
+    };
+  };
+
   MathGMP = buildPerlPackage {
     pname = "Math-GMP";
     version = "2.20";
