@@ -19887,6 +19887,8 @@ with pkgs;
 
   mailman-web = with python3.pkgs; toPythonApplication mailman-web;
 
+  listadmin = callPackage ../applications/networking/listadmin {};
+
   maker-panel = callPackage ../tools/misc/maker-panel { };
 
   mastodon = callPackage ../servers/mastodon { };
