@@ -1,16 +1,16 @@
-{ lib, fetchFromGitHub, python3Packages, wrapQtAppsHook }:
+{ lib, fetchFromGitHub, python39Packages, wrapQtAppsHook }:
 
 let
-  py = python3Packages;
+  py = python39Packages;
 in py.buildPythonApplication rec {
   pname = "friture";
-  version = "unstable-2020-02-16";
+  version = "0.47";
 
   src = fetchFromGitHub {
     owner = "tlecomte";
     repo = pname;
-    rev = "4460b4e72a9c55310d6438f294424b5be74fc0aa";
-    sha256 = "1pmxzq78ibifby3gbir1ah30mgsqv0y7zladf5qf3sl5r1as0yym";
+    rev = "v${version}";
+    sha256 = "1qcsvmgdz9hhv5gaa918147wvng6manc4iq8ci6yr761ljqrgwjx";
   };
 
   nativeBuildInputs = (with py; [ numpy cython scipy ]) ++
