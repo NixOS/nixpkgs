@@ -8141,6 +8141,20 @@ let
     };
   };
 
+  Filechmod = buildPerlPackage {
+    pname = "File-chmod";
+    version = "0.42";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/X/XE/XENO/File-chmod-0.42.tar.gz";
+      sha256 = "6cafafff68bc84215168b55ede0d191dcb57f9a3201b51d61edb2858a2407795";
+    };
+    meta = {
+      homepage = "https://metacpan.org/dist/File-chmod";
+      description = "Implements symbolic and ls chmod modes";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   FilechmodRecursive = buildPerlPackage {
     pname = "File-chmod-Recursive";
     version = "1.0.3";
