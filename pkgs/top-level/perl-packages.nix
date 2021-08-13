@@ -22492,6 +22492,19 @@ let
     };
   };
 
+  TextFuzzy = buildPerlPackage {
+    pname = "Text-Fuzzy";
+    version = "0.29";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/B/BK/BKB/Text-Fuzzy-0.29.tar.gz";
+      sha256 = "3df5cfd2ca1a4c5ca7ff7bab3cc8d53ad2064e134cbf11004f3cf8c4b9055bff";
+    };
+    meta = {
+      description = "Partial string matching using edit distances";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   TextGerman = buildPerlPackage {
      pname = "Text-German";
      version = "0.06";
