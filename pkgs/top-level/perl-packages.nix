@@ -1570,6 +1570,22 @@ let
     };
   };
 
+  BSONXS = buildPerlPackage {
+    pname = "BSON-XS";
+    version = "0.8.4";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MO/MONGODB/BSON-XS-v0.8.4.tar.gz";
+      sha256 = "28f7d338fd78b6f9c9a6080be9de3f5cb23d888b96ebf6fcbface9f2966aebf9";
+    };
+    buildInputs = [ ConfigAutoConf JSONMaybeXS PathTiny TestDeep TestFatal TieIxHash ];
+    propagatedBuildInputs = [ BSON boolean JSONXS JSONPP CpanelJSONXS ];
+    meta = {
+      homepage = "https://github.com/mongodb-labs/mongo-perl-bson-xs";
+      description = "XS implementation of MongoDB's BSON serialization (EOL)";
+      license = lib.licenses.asl20;
+    };
+  };
+
   BUtils = buildPerlPackage {
      pname = "B-Utils";
      version = "0.27";
