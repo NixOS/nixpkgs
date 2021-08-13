@@ -19,9 +19,9 @@ buildPythonPackage rec {
 
   disabled = isPyPy;
 
-  preConfigure = if (lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11" && stdenv.isDarwin) then ''
+  preConfigure = lib.optionalString (lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11" && stdenv.isDarwin) ''
     MACOSX_DEPLOYMENT_TARGET=10.16
-  '' else null;
+  '';
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ dbus dbus-glib ]

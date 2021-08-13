@@ -61,9 +61,9 @@ stdenv.mkDerivation rec {
     ++ optionals cupsSupport [ cups ]
     ++ optionals stdenv.isDarwin [ AppKit Cocoa ];
 
-  preConfigure = if (lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11" && stdenv.isDarwin) then ''
+  preConfigure = lib.optionalString (lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11" && stdenv.isDarwin) ''
     MACOSX_DEPLOYMENT_TARGET=10.16
-  '' else null;
+  '';
 
   configureFlags = [
     "--with-gdktarget=${gdktarget}"
