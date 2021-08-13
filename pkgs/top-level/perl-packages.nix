@@ -23589,6 +23589,20 @@ let
     };
   };
 
+  TimeMoment = buildPerlPackage {
+    pname = "Time-Moment";
+    version = "0.44";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/C/CH/CHANSEN/Time-Moment-0.44.tar.gz";
+      sha256 = "64acfa042f634fcef8dadf55e7f42ba4eaab8aaeb7d5212eb89815a31f78f6fd";
+    };
+    buildInputs = [ TestFatal TestNumberDelta TestRequires ];
+    meta = {
+      description = "Represents a date and time of day with an offset from UTC";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   TimeOut = buildPerlPackage {
     pname = "Time-Out";
     version = "0.11";
