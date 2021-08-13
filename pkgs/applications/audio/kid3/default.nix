@@ -28,11 +28,11 @@
 
 stdenv.mkDerivation rec {
   pname = "kid3";
-  version = "3.8.6";
+  version = "3.8.7";
 
   src = fetchurl {
     url = "https://download.kde.org/stable/${pname}/${version}/${pname}-${version}.tar.xz";
-    hash = "sha256-R4gAWlCw8RezhYbw1XDo+wdp797IbLoM3wqHwr+ul6k=";
+    sha256 = "sha256-Dr+NLh5ajG42jRKt1Swq6mccPfuAXRvhhoTNuO8lnI0=";
   };
 
   nativeBuildInputs = [
