@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, autoPatchelfHook, makeWrapper }:
+{ lib, stdenv, fetchurl, autoPatchelfHook, makeWrapper, preserveLdLibraryPath ? false }:
 
 with lib;
 
@@ -17,7 +17,7 @@ in stdenv.mkDerivation {
   installPhase = ''
     mkdir -p $out/bin
     cp * $out/bin/
-  '' + optionalString stdenv.isLinux ''
+  '' + optionalString (stdenv.isLinux && !preserveLdLibraryPath) pres''
     wrapProgram $out/bin/pulumi --set LD_LIBRARY_PATH "${stdenv.cc.cc.lib}/lib"
   '';
 
