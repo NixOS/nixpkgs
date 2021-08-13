@@ -13678,6 +13678,12 @@ let
       url = "mirror://cpan/authors/id/S/SH/SHAY/mod_perl-2.0.11.tar.gz";
       sha256 = "0x3gq4nz96y202cymgrf56n8spm7bffkd1p74dh9q3zrrlc9wana";
     };
+
+    patches = [
+      # Fix build on perl-5.34.0, https://github.com/Perl/perl5/issues/18617
+      ../development/perl-modules/mod_perl2-PL_hash_seed.patch
+    ];
+
     makeMakerFlags = "MP_AP_DESTDIR=$out";
     buildInputs = [ pkgs.apacheHttpd ];
     doCheck = false; # would try to start Apache HTTP server
