@@ -4,6 +4,8 @@ with lib;
 
 let
   data = import ./data.nix {};
+  wrap = stdenv.isLinux && !preserveLdLibraryPath;
+
 in stdenv.mkDerivation {
   pname = "pulumi";
   version = data.version;
@@ -17,11 +19,11 @@ in stdenv.mkDerivation {
   installPhase = ''
     mkdir -p $out/bin
     cp * $out/bin/
-  '' + optionalString (stdenv.isLinux && !preserveLdLibraryPath) pres''
+  '' + optionalString wrap ''
     wrapProgram $out/bin/pulumi --set LD_LIBRARY_PATH "${stdenv.cc.cc.lib}/lib"
   '';
 
-  nativeBuildInputs = optionals stdenv.isLinux [ autoPatchelfHook makeWrapper ];
+  nativeBuildInputs = optionals wrap [ autoPatchelfHook makeWrapper ];
 
   meta = {
     homepage = "https://pulumi.io/";
