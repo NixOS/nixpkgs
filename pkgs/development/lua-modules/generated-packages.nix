@@ -1618,8 +1618,8 @@ plenary-nvim = buildLuarocksPackage {
   version = "scm-1";
 
   knownRockspec = (fetchurl {
-    url    = "https://luarocks.org/plenary.nvim-scm-1.rockspec";
-    sha256 = "1xgqq0skg3vxahlnh1libc5dvhafp11k6k8cs65jcr9sw6xjycwh";
+    url    = "https://raw.githubusercontent.com/nvim-lua/plenary.nvim/master/plenary.nvim-scm-1.rockspec";
+    sha256 = "08kv1s66zhl9amzy9gx3101854ig992kl1gzzr51sx3szr43bx3x";
   }).outPath;
 
   src = fetchgit ( removeAttrs (builtins.fromJSON ''{
