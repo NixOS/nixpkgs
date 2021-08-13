@@ -14870,6 +14870,22 @@ let
     };
   };
 
+  MooseXStorageFormatJSONpm = buildPerlPackage {
+    pname = "MooseX-Storage-Format-JSONpm";
+    version = "0.093093";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/MooseX-Storage-Format-JSONpm-0.093093.tar.gz";
+      sha256 = "ebe0407a7eb1870270e0e2579f097dfd7df2aea3307fb71f324fb69e242cc58f";
+    };
+    buildInputs = [ Moose TestDeepJSON TestWithoutModule DigestHMAC MooseXTypes ];
+    propagatedBuildInputs = [ JSON MooseXRoleParameterized MooseXStorage namespaceautoclean ];
+    meta = {
+      homepage = "https://github.com/rjbs/MooseX-Storage-Format-JSONpm";
+      description = "A format role for MooseX::Storage using JSON.pm";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   MooX = buildPerlPackage {
     pname = "MooX";
     version = "0.101";
