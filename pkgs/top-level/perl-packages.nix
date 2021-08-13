@@ -19238,6 +19238,21 @@ let
     };
   };
 
+  SpreadsheetCSV = buildPerlPackage {
+    pname = "Spreadsheet-CSV";
+    version = "0.20";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DD/DDICK/Spreadsheet-CSV-0.20.tar.gz";
+      sha256 = "070bb252a8fe8b938a1ce4fc90525f833d4e619b6d4673b0ae0a23408d514ab6";
+    };
+    nativeBuildInputs = [ CGI ];
+    propagatedBuildInputs = [ ArchiveZip SpreadsheetParseExcel TextCSV_XS XMLParser ];
+    meta = {
+      description = "Drop-in replacement for Text::CSV_XS with spreadsheet support";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   SpreadsheetParseExcel = buildPerlPackage {
     pname = "Spreadsheet-ParseExcel";
     version = "0.65";
