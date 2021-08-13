@@ -3219,6 +3219,23 @@ let
     };
   };
 
+  CLDRNumber = buildPerlModule {
+    pname = "CLDR-Number";
+    version = "0.19";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PA/PATCH/CLDR-Number-0.19.tar.gz";
+      sha256 = "c6716488e65fe779ff79a83f0f2036ad94463efe3d0f349c6b99112975bd85fc";
+    };
+    buildInputs = [ SoftwareLicense TestDifferences TestException TestWarn ];
+    propagatedBuildInputs =
+      [ ClassMethodModifiers MathRound Moo namespaceclean ];
+    meta = {
+      homepage = "https://github.com/patch/cldr-number-pm5";
+      description = "Localized number formatters using the Unicode CLDR";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   CLIHelpers = buildPerlPackage {
     pname = "CLI-Helpers";
     version = "1.8";
