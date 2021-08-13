@@ -1,12 +1,14 @@
 { lib, stdenv, fetchurl, libusb-compat-0_1, readline }:
-
+let
+  version = "1.8.0";
+in
 stdenv.mkDerivation {
-  pname = "libnfc";
-  version = "1.7.1";
+  inherit version;
+  pname = "libnfc"
 
   src = fetchurl {
-    url = "http://dl.bintray.com/nfc-tools/sources/libnfc-1.7.1.tar.bz2";
-    sha256 = "0wj0iwwcpmpalyk61aa7yc6i4p9hgdajkrgnlswgk0vnwbc78pll";
+    url = "https://github.com/nfc-tools/libnfc/releases/download/libnfc-${version}/libnfc-${version}.tar.bz2";
+    sha256 = "1m9xpbza648ngn8xiq62hdv4kiq1669v218glvq131s0hqfd76kd";
   };
 
   buildInputs = [ libusb-compat-0_1 readline ];
