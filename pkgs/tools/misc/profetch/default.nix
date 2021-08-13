@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
       runHook preInstall
       install -Dm755 -t $out/bin profetch
-    runHook postInstall
+      runHook postInstall
   '';
 
   meta = with lib; {
