@@ -62,7 +62,7 @@ if [ $# -gt 0 ]; then
   services=("$@")
 else
   services=( "srht" "buildsrht" "dispatchsrht" "gitsrht" "hgsrht" "hubsrht" "listssrht" "mansrht"
-             "metasrht" "pastesrht" "todosrht" "scmsrht" )
+             "metasrht" "pagessrht" "pastesrht" "todosrht" "scmsrht" )
 fi
 
 for service in "${services[@]}"; do
