@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "azure-batch";
-  version = "10.0.0";
+  version = "11.0.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "83d7a2b0be42ca456ac2b56fa3dc6ce704c130e888d37d924072c1d3718f32d0";
+    sha256 = "ce5fdb0ec962eddfe85cd82205e9177cb0bbdb445265746e38b3bbbf1f16dc73";
   };
 
   propagatedBuildInputs = [
