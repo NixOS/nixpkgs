@@ -970,6 +970,8 @@ with pkgs;
 
   logseq = callPackage ../applications/misc/logseq { };
 
+  lua-format = callPackage ../tools/misc/lua-format { };
+
   lxterminal = callPackage ../applications/terminal-emulators/lxterminal { };
 
   microcom = callPackage ../applications/terminal-emulators/microcom { };
@@ -16345,6 +16347,8 @@ with pkgs;
   libayatana-appindicator-gtk2 = libayatana-appindicator.override { gtkVersion = "2"; };
   libayatana-appindicator-gtk3 = libayatana-appindicator.override { gtkVersion = "3"; };
   libayatana-appindicator = callPackage ../development/libraries/libayatana-appindicator { };
+
+  libargs = callPackage ../development/libraries/libargs { };
 
   libarchive = callPackage ../development/libraries/libarchive {
     autoreconfHook = buildPackages.autoreconfHook269;
