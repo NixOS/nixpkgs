@@ -11616,9 +11616,22 @@ let
       url = "mirror://cpan/authors/id/L/LE/LEOCHARRE/LEOCHARRE-CLI-1.19.tar.gz";
       sha256 = "37835f11ee35326241b4d30368ae1bc195a50414b3662db3e13b865bd52fcde9";
     };
-    propagatedBuildInputs = [ FileWhich Filechmod LEOCHARREDEBUG Linuxusermod YAML ];
+    propagatedBuildInputs = [ FileWhich Filechmod LEOCHARREDebug Linuxusermod YAML ];
     meta = {
       description = "Useful subs for coding cli scripts";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  LEOCHARREDebug = buildPerlPackage {
+    pname = "LEOCHARRE-Debug";
+    version = "1.03";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/L/LE/LEOCHARRE/LEOCHARRE-Debug-1.03.tar.gz";
+      sha256 = "c1665aa3abd457cc8624b8c418c6f8bdf58fb3a686f8eed515cf7e93514df192";
+    };
+    meta = {
+      description = "Debug sub";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
