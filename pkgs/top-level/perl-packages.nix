@@ -13691,6 +13691,22 @@ let
     buildInputs = [ TestSharedFork ];
   };
 
+  ModuleBuildPluggableCPANfile = buildPerlModule {
+    pname = "Module-Build-Pluggable-CPANfile";
+    version = "0.05";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/K/KA/KAZEBURO/Module-Build-Pluggable-CPANfile-0.05.tar.gz";
+      sha256 = "4aec6cba240cb6e78016406b6a3a875634cc2aec08ffc5f1572da1cdc40e1e7c";
+    };
+    buildInputs = [ CaptureTiny TestRequires TestSharedFork ];
+    propagatedBuildInputs = [ ModuleBuildPluggable ModuleCPANfile ];
+    meta = {
+      homepage = "https://github.com/kazeburo/Module-Build-Pluggable-CPANfile";
+      description = "Include cpanfile";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   ModuleBuildPluggablePPPort = buildPerlModule {
     pname = "Module-Build-Pluggable-PPPort";
     version = "0.04";
