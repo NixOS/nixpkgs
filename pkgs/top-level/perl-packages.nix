@@ -3371,6 +3371,21 @@ let
      };
   };
 
+  ColorLibrary = buildPerlPackage {
+    pname = "Color-Library";
+    version = "0.021";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/R/RO/ROKR/Color-Library-0.021.tar.gz";
+      sha256 = "58cbf7e333d3a4a40297abc43412b321da449c6816020e4fa6625ab079fc90a5";
+    };
+    buildInputs = [ TestMost TestWarn TestException TestDeep TestDifferences ModulePluggable ];
+    propagatedBuildInputs = [ ClassAccessor ClassDataInheritable ];
+    meta = {
+      description = "An easy-to-use and comprehensive named-color library";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   CommandRunner = buildPerlModule {
     pname = "Command-Runner";
     version = "0.103";
