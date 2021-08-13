@@ -10920,6 +10920,19 @@ let
     };
   };
 
+  IOInteractiveTiny = buildPerlPackage {
+    pname = "IO-Interactive-Tiny";
+    version = "0.2";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DM/DMUEY/IO-Interactive-Tiny-0.2.tar.gz";
+      sha256 = "45c0696505c7e4347845f5cd2512b7b1bc78fbce4cbed2b58008283fc95ea5f9";
+    };
+    meta = {
+      description = "Is_interactive() without large deps";
+      license = lib.licenses.artistic2;
+    };
+  };
+
   IOLockedFile = buildPerlPackage {
     pname = "IO-LockedFile";
     version = "0.23";
