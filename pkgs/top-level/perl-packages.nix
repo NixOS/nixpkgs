@@ -21224,6 +21224,22 @@ let
     };
   };
 
+  TestDeepType = buildPerlPackage {
+    pname = "Test-Deep-Type";
+    version = "0.008";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/E/ET/ETHER/Test-Deep-Type-0.008.tar.gz";
+      sha256 = "6e7bea1a2f1e75319a22d1c51996ebac50ca5e3663d1bc223130887e62e959f1";
+    };
+    buildInputs = [ TestFatal TestNeeds ];
+    propagatedBuildInputs = [ TestDeep TryTiny ];
+    meta = {
+      homepage = "https://github.com/karenetheridge/Test-Deep-Type";
+      description = "A Test::Deep plugin for validating type constraints";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   TestDir = buildPerlPackage {
     pname = "Test-Dir";
     version = "1.16";
