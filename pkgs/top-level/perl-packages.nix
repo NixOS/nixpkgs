@@ -23629,6 +23629,20 @@ let
     };
   };
 
+  XMLEncoding = buildPerlPackage {
+    pname = "XML-Encoding";
+    version = "2.11";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SH/SHAY/XML-Encoding-2.11.tar.gz";
+      sha256 = "a50e41af0a79b882d48816b95681f38a55af1e6a88828dcd96374a8bde2305a1";
+    };
+    propagatedBuildInputs = [ XMLParser ];
+    meta = {
+      description = "A perl module for parsing XML encoding maps";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   XMLDOM = buildPerlPackage {
     pname = "XML-DOM";
     version = "1.46";
