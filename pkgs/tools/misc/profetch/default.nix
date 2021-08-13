@@ -14,6 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ gprolog ];
 
   buildPhase = ''
+    runHook preBuild
       gplc profetch.pl --no-top-level --no-debugger    \
                        --no-fd-lib    --no-fd-lib-warn \
                        --min-size -o profetch
