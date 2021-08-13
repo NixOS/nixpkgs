@@ -27662,8 +27662,8 @@ with pkgs;
 
   thunderbolt = callPackage ../os-specific/linux/thunderbolt {};
 
-  thunderbird-bin = thunderbird-bin-78;
-  thunderbird-bin-78 = callPackage ../applications/networking/mailreaders/thunderbird-bin { };
+  thunderbird-bin = thunderbird-bin-91;
+  thunderbird-bin-91 = callPackage ../applications/networking/mailreaders/thunderbird-bin { };
 
   ticpp = callPackage ../development/libraries/ticpp { };
 
