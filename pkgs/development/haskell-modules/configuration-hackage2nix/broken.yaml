@@ -3898,7 +3898,6 @@ broken-packages:
   - read-bounded
   - read-ctags
   - read-io
-  - readline
   - readme-lhs
   - readshp
   - really-simple-xml-parser
