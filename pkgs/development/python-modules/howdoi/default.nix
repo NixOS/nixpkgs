@@ -11,16 +11,12 @@
 
 buildPythonPackage rec {
   pname = "howdoi";
-  version = "2.0.16";
+  version = "2.0.17";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0257fbb328eb3a15ed3acc498314902f00908b130209073509eec21cb7235b2b";
+    sha256 = "sha256-ea7KIDYgDWCi1skZKlbzhHASfwHqwbfvWDuNOxGRhek=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.py --replace 'cachelib==0.1' 'cachelib'
-  '';
 
   propagatedBuildInputs = [ six pygments pyquery cachelib appdirs keep ];
 
