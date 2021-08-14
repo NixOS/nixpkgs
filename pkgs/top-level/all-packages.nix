@@ -970,6 +970,8 @@ with pkgs;
 
   logseq = callPackage ../applications/misc/logseq { };
 
+  lua-format = callPackage ../tools/misc/lua-format { };
+
   lxterminal = callPackage ../applications/terminal-emulators/lxterminal { };
 
   microcom = callPackage ../applications/terminal-emulators/microcom { };
@@ -4958,6 +4960,8 @@ with pkgs;
 
   fontmatrix = libsForQt514.callPackage ../applications/graphics/fontmatrix {};
 
+  footswitch = callPackage ../tools/inputmethods/footswitch { };
+
   foremost = callPackage ../tools/system/foremost { };
 
   forktty = callPackage ../os-specific/linux/forktty {};
@@ -5150,6 +5154,8 @@ with pkgs;
   gftp = callPackage ../applications/networking/gftp {
     gtk = gtk2;
   };
+
+  gfs2-utils = callPackage ../tools/filesystems/gfs2-utils { };
 
   gfbgraph = callPackage ../development/libraries/gfbgraph { };
 
@@ -6589,10 +6595,6 @@ with pkgs;
   mftrace = callPackage ../tools/typesetting/tex/mftrace { };
 
   mhonarc = perlPackages.MHonArc;
-
-  minergate = callPackage ../applications/misc/minergate { };
-
-  minergate-cli = callPackage ../applications/misc/minergate-cli { };
 
   minica = callPackage ../tools/security/minica { };
 
@@ -16346,6 +16348,8 @@ with pkgs;
   libayatana-appindicator-gtk3 = libayatana-appindicator.override { gtkVersion = "3"; };
   libayatana-appindicator = callPackage ../development/libraries/libayatana-appindicator { };
 
+  libargs = callPackage ../development/libraries/libargs { };
+
   libarchive = callPackage ../development/libraries/libarchive {
     autoreconfHook = buildPackages.autoreconfHook269;
   };
@@ -19886,6 +19890,8 @@ with pkgs;
   mailman-rss = callPackage ../development/python-modules/mailman-rss { };
 
   mailman-web = with python3.pkgs; toPythonApplication mailman-web;
+
+  listadmin = callPackage ../applications/networking/listadmin {};
 
   maker-panel = callPackage ../tools/misc/maker-panel { };
 
@@ -23927,6 +23933,8 @@ with pkgs;
     buildClient = false;
     buildServerGui = false;
   };
+
+  drawterm = callPackage ../tools/admin/drawterm { };
 
   droopy = python3Packages.callPackage ../applications/networking/droopy { };
 
@@ -29431,6 +29439,8 @@ with pkgs;
   lgogdownloader = callPackage ../games/lgogdownloader { };
 
   liberal-crime-squad = callPackage ../games/liberal-crime-squad { };
+
+  liberation-circuit = callPackage ../games/liberation-circuit { };
 
   lincity = callPackage ../games/lincity {};
 

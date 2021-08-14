@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, libpng }:
 
-stdenv.mkDerivation {
-  name = "pngtoico-1.0";
+stdenv.mkDerivation rec {
+  pname = "pngtoico";
+  version = "1.0";
 
   src = fetchurl {
-    url = "mirror://kernel/software/graphics/pngtoico/pngtoico-1.0.tar.gz";
+    url = "mirror://kernel/software/graphics/pngtoico/pngtoico-${version}.tar.gz";
     sha256 = "1xb4aa57sjvgqfp01br3dm72hf7q0gb2ad144s1ifrs09215fgph";
   };
 

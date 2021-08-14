@@ -126,8 +126,8 @@ self: super: {
     buildInputs = [ tabnine ];
 
     postFixup = ''
-      mkdir $target/binaries
-      ln -s ${tabnine}/bin/TabNine $target/binaries/TabNine_$(uname -s)
+      mkdir -p $target/binaries/${tabnine.version}
+      ln -s ${tabnine}/bin/ $target/binaries/${tabnine.version}/${tabnine.passthru.platform}
     '';
   });
 
