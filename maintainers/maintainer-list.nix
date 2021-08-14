@@ -11277,7 +11277,7 @@
   };
   vel = {
     email = "llathasa@outlook.com";
-    github = "llathasa-veleth";
+    github = "q60";
     githubId = 61933599;
     name = "vel";
   };
