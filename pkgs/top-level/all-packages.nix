@@ -13403,7 +13403,7 @@ with pkgs;
 
   cbrowser = callPackage ../development/tools/misc/cbrowser { };
 
-  cc-tool = callPackage ../development/tools/misc/cc-tool { };
+  cc-tool = callPackage ../development/embedded/cc-tool { };
 
   ccache = callPackage ../development/tools/misc/ccache {
     asciidoc = asciidoc-full;
