@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, ocaml, findlib }:
+{ stdenv, lib, fetchurl, ocaml, findlib, ncurses }:
 
 if !lib.versionAtLeast ocaml.version "4.02"
 || lib.versionAtLeast ocaml.version "4.12"
@@ -14,6 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ ocaml findlib ];
+  buildInputs = [ ncurses ];
   strictDeps = true;
 
   buildFlags = [ "release" ];
