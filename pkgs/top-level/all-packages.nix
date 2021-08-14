@@ -14650,7 +14650,7 @@ with pkgs;
 
   webdis = callPackage ../development/tools/database/webdis { };
 
-  xc3sprog = callPackage ../development/tools/misc/xc3sprog { };
+  xc3sprog = callPackage ../development/embedded/xc3sprog { };
 
   xcb-imdkit = callPackage ../development/libraries/xcb-imdkit { };
 
