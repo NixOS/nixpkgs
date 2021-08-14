@@ -6,12 +6,15 @@ let
 
   cfg = config.services.gnunet;
 
-  homeDir = "/var/lib/gnunet";
+  stateDir = "/var/lib/gnunet";
 
-  configFile = with cfg; pkgs.writeText "gnunetd.conf"
+  configFile = with cfg;
     ''
       [PATHS]
-      SERVICEHOME = ${homeDir}
+      GNUNET_HOME = ${stateDir}
+      GNUNET_RUNTIME_DIR = /run/gnunet
+      GNUNET_USER_RUNTIME_DIR = /run/gnunet
+      GNUNET_DATA_HOME = ${stateDir}/data
 
       [ats]
       WAN_QUOTA_IN = ${toString load.maxNetDownBandwidth} b
@@ -137,8 +140,6 @@ in
     users.users.gnunet = {
       group = "gnunet";
       description = "GNUnet User";
-      home = homeDir;
-      createHome = true;
       uid = config.ids.uids.gnunet;
     };
 
@@ -148,17 +149,20 @@ in
     # so install them globally.
     environment.systemPackages = [ cfg.package ];
 
+    environment.etc."gnunet.conf".text = configFile;
+
     systemd.services.gnunet = {
       description = "GNUnet";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
+      restartTriggers = [ configFile ];
       path = [ cfg.package pkgs.miniupnpc ];
-      environment.TMPDIR = "/tmp";
-      serviceConfig.PrivateTmp = true;
-      serviceConfig.ExecStart = "${cfg.package}/lib/gnunet/libexec/gnunet-service-arm -c ${configFile}";
+      serviceConfig.ExecStart = "${cfg.package}/lib/gnunet/libexec/gnunet-service-arm -c /etc/gnunet.conf";
       serviceConfig.User = "gnunet";
       serviceConfig.UMask = "0007";
-      serviceConfig.WorkingDirectory = homeDir;
+      serviceConfig.WorkingDirectory = stateDir;
+      serviceConfig.RuntimeDirectory = "gnunet";
+      serviceConfig.StateDirectory = "gnunet";
     };
 
   };
