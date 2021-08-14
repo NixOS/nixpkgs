@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ArchiSteamFarm";
-  version = "4.3.1.0";
+  version = "5.1.2.4";
 
   src = fetchurl {
     url = "https://github.com/JustArchiNET/ArchiSteamFarm/releases/download/${version}/ASF-generic.zip";
-    sha256 = "1q28byshh4wkfsfdb0sfdqq9a5da9k7i4nagsfpk0fzyajvzd4lx";
+    sha256 = "sha256-2vYEyzb6fT2V8EywwP3lpRdsy+E2sL6FLaCitTx3VTw=";
   };
 
   nativeBuildInputs = [ unzip makeWrapper jq ];
