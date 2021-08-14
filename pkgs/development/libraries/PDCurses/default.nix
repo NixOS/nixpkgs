@@ -26,7 +26,7 @@ let
   maker = name: attrs:
     stdenv.mkDerivation ( base
     // {
-      name = "PDCurses-${name}";
+      pname = "PDCurses-${name}";
       sourceRoot = "source/${name}";
     } // attrs);
 
