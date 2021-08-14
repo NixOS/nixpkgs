@@ -14473,7 +14473,7 @@ with pkgs;
 
   stm32cubemx = callPackage ../development/tools/misc/stm32cubemx { };
 
-  stm32flash = callPackage ../development/tools/misc/stm32flash { };
+  stm32flash = callPackage ../development/embedded/stm32/stm32flash { };
 
   strace = callPackage ../development/tools/misc/strace { };
 
