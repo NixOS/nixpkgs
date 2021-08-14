@@ -14471,7 +14471,7 @@ with pkgs;
 
   sselp = callPackage ../tools/X11/sselp{ };
 
-  stm32cubemx = callPackage ../development/tools/misc/stm32cubemx { };
+  stm32cubemx = callPackage ../development/embedded/stm32/stm32cubemx { };
 
   stm32flash = callPackage ../development/embedded/stm32/stm32flash { };
 
