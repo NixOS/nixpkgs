@@ -13762,7 +13762,7 @@ with pkgs;
 
   fsearch = callPackage ../tools/misc/fsearch { };
 
-  fujprog = callPackage ../development/tools/misc/fujprog {
+  fujprog = callPackage ../development/embedded/fpga/fujprog {
     inherit (darwin.apple_sdk.frameworks) IOKit;
   };
 
