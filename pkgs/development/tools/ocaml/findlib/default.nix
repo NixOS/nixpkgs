@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-K0K4vVRIjWTEvzy3BUtLN70wwdwSvUMeoeTXrYqYD+I=";
   };
 
-  buildInputs = [m4 ncurses ocaml];
+  nativeBuildInputs = [m4 ocaml];
+  buildInputs = [ ncurses ];
 
   patches = [ ./ldconf.patch ./install_topfind.patch ];
 
