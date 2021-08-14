@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "disfetch";
-  version = "2.9";
+  version = "2.10";
 
   src = fetchFromGitHub {
     owner = "q60";
     repo = "disfetch";
     rev = version;
-    sha256 = "sha256-dmDDO1DcDMGWtQtIQncOjSc114tL5QH1Jaq1n4vAe5M=";
+    sha256 = "sha256-mjjFy6VItTg4VVXvGNjOJYHKHTy8o26iYsVC9Fq0YVg=";
   };
 
   dontBuild = true;
