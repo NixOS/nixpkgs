@@ -4910,7 +4910,9 @@ with pkgs;
 
   libbtbb = callPackage ../development/libraries/libbtbb { };
 
-  lp_solve = callPackage ../applications/science/math/lp_solve { };
+  lp_solve = callPackage ../applications/science/math/lp_solve {
+    inherit (darwin) cctools;
+  };
 
   fabric-installer = callPackage ../tools/games/minecraft/fabric-installer { };
 
