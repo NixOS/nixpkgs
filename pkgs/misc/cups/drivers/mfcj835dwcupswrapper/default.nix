@@ -60,6 +60,6 @@ stdenv.mkDerivation rec {
     license = with licenses; gpl2;
     platforms = with platforms; linux;
     downloadPage = https://support.brother.com/g/b/downloadlist.aspx?c=us&lang=en&prod=mfcj835dw_us&os=128;
-    maintainers = with maintainers; [ zandroidius ];
+    maintainers = with maintainers; [ alexander-c-b ];
   };
 }

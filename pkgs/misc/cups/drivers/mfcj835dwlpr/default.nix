@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
     downloadPage = https://support.brother.com/g/b/downloadlist.aspx?c=us&lang=en&prod=mfcj835dw_us&os=128;
     homepage     = http://www.brother.com/;
     license      = with licenses; unfree;
-    maintainers  = with maintainers; [ zandroidius ];
+    maintainers  = with maintainers; [ alexander-c-b ];
     platforms    = with platforms; linux;
   };
 }
