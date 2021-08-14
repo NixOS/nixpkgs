@@ -13061,7 +13061,7 @@ with pkgs;
     guile = guile_2_0;
   };
 
-  inav = callPackage ../development/misc/stm32/inav {
+  inav = callPackage ../development/embedded/stm32/inav {
     gcc-arm-embedded = pkgsCross.arm-embedded.buildPackages.gcc;
     binutils-arm-embedded = pkgsCross.arm-embedded.buildPackages.binutils;
   };
