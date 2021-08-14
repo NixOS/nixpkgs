@@ -13628,7 +13628,7 @@ with pkgs;
 
   ddd = callPackage ../development/tools/misc/ddd { };
 
-  lattice-diamond = callPackage ../development/tools/lattice-diamond { };
+  lattice-diamond = callPackage ../development/embedded/fpga/lattice-diamond { };
 
   direvent = callPackage ../development/tools/misc/direvent { };
 
