@@ -1427,6 +1427,8 @@ in {
 
   cherrypy = callPackage ../development/python-modules/cherrypy { };
 
+  chess = callPackage ../development/python-modules/chess { };
+
   chevron = callPackage ../development/python-modules/chevron { };
 
   chiabip158 = callPackage ../development/python-modules/chiabip158 { };
