@@ -23737,6 +23737,8 @@ in
 
   fractal = callPackage ../applications/networking/instant-messengers/fractal { };
 
+  fragments = callPackage ../applications/networking/p2p/fragments { };
+
   freecad = libsForQt5.callPackage ../applications/graphics/freecad {
     inherit (python3Packages)
       GitPython
