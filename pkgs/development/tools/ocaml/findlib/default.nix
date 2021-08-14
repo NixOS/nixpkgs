@@ -16,19 +16,14 @@ stdenv.mkDerivation rec {
 
   dontAddPrefix=true;
 
-  preConfigure=''
-    configureFlagsArray=(
-      -bindir $out/bin
-      -mandir $out/share/man
-      -sitelib $out/lib/ocaml/${ocaml.version}/site-lib
-      -config $out/etc/findlib.conf
-    )
-  '';
+  configureFlags = [
+      "-bindir" "${placeholder "out"}/bin"
+      "-mandir" "${placeholder "out"}/share/man"
+      "-sitelib" "${placeholder "out"}/lib/ocaml/${ocaml.version}/site-lib"
+      "-config" "${placeholder "out"}/etc/findlib.conf"
+  ];
 
-  buildPhase = ''
-    make all
-    make opt
-  '';
+  buildFlags = [ "all" "opt" ];
 
   setupHook = writeText "setupHook.sh" ''
     addOCamlPath () {
