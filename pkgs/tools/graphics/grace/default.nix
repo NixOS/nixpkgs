@@ -58,7 +58,7 @@ gccStdenv.mkDerivation rec {
       homepage = "https://plasma-gate.weizmann.ac.il/Grace/";
       description = "Grace is a WYSIWYG 2D plotting tool for the X Window System and M*tif. Grace is a descendant of ACE/gr, also known as Xmgr, and runs on practically any version of Unix-like OS.";
     platforms = platforms.linux ++ platforms.darwin;
-    license = {
+    license = licenses.gpl2Only;
       # GNU GENERAL PUBLIC LICENSE
 
       # Version 2, June 1991
