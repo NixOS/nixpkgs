@@ -19793,6 +19793,8 @@ with pkgs;
 
   graph-cli = callPackage ../tools/graphics/graph-cli { };
 
+  grace = callPackage ../tools/graphics/grace { };
+
   h2o = callPackage ../servers/http/h2o { };
 
   haka = callPackage ../tools/security/haka { };
