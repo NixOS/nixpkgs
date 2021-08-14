@@ -7641,7 +7641,7 @@ with pkgs;
 
   opencorsairlink = callPackage ../tools/misc/opencorsairlink { };
 
-  openfpgaloader = callPackage ../development/tools/misc/openfpgaloader { };
+  openfpgaloader = callPackage ../development/embedded/fpga/openfpgaloader { };
 
   openfortivpn = callPackage ../tools/networking/openfortivpn { };
 
