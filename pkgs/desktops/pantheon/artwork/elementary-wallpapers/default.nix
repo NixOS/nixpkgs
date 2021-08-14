@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-wallpapers";
-  version = "5.5.0";
+  version = "6.0.0";
 
   repoName = "wallpapers";
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "sha256-Q5sYDXqFhiTu8nABmyND3L8bIXd1BJ3GZQ9TL3SzwzA=";
+    sha256 = "sha256-KxXaBLKcsyKcJvWpxT3BE/PLfZE06/tJ0+Pq1A9H7uI=";
   };
 
   nativeBuildInputs = [
