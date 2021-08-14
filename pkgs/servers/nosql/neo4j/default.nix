@@ -1,14 +1,12 @@
 { lib, stdenv, fetchurl, makeWrapper, jre, which, gawk, bashInteractive }:
 
-with lib;
-
 stdenv.mkDerivation rec {
   pname = "neo4j";
-  version = "3.5.14";
+  version = "4.3.2";
 
   src = fetchurl {
     url = "https://neo4j.com/artifact.php?name=neo4j-community-${version}-unix.tar.gz";
-    sha256 = "1zjb6cgk2lpzx6pq1cs5fh65in6b5ccpl1cgfiglgpjc948mnhzv";
+    sha256 = "3474f3ec9da57fb627af71652ae6ecbd036e6ea689379f09e77e4cd8ba4b5515";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -27,7 +25,7 @@ stdenv.mkDerivation rec {
     _EOF_
     chmod +x $compgen_wrapper
 
-    for NEO4J_SCRIPT in neo4j neo4j-admin neo4j-import cypher-shell
+    for NEO4J_SCRIPT in neo4j neo4j-admin cypher-shell
     do
         makeWrapper "$out/share/neo4j/bin/$NEO4J_SCRIPT" \
             "$out/bin/$NEO4J_SCRIPT" \
@@ -40,7 +38,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A highly scalable, robust (fully ACID) native graph database";
-    homepage = "http://www.neo4j.org/";
+    homepage = "https://www.neo4j.org/";
     license = licenses.gpl3Only;
 
     maintainers = [ maintainers.offline ];

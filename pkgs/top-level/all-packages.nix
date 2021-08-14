@@ -20003,7 +20003,7 @@ in
   check_systemd = callPackage ../servers/monitoring/nagios/plugins/check_systemd.nix { };
 
   neo4j = callPackage ../servers/nosql/neo4j {
-    jre = jre8_headless;
+    jre = openjdk11_headless;
   };
 
   neo4j-desktop = callPackage ../applications/misc/neo4j-desktop { };
