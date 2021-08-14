@@ -9445,7 +9445,7 @@ with pkgs;
 
   tinyobjloader = callPackage ../development/libraries/tinyobjloader { };
 
-  tinyprog = callPackage ../development/tools/misc/tinyprog { };
+  tinyprog = callPackage ../development/embedded/fpga/tinyprog { };
 
   tinyproxy = callPackage ../tools/networking/tinyproxy { };
 
