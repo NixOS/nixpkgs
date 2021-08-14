@@ -3,6 +3,8 @@
 , fetchFromGitHub
 , protobuf
 , git
+, testVersion
+, buf
 }:
 
 buildGoModule rec {
@@ -54,13 +56,7 @@ buildGoModule rec {
     runHook postInstall
   '';
 
-  doInstallCheck = true;
-  installCheckPhase = ''
-    runHook preInstallCheck
-    $out/bin/buf --help
-    $out/bin/buf --version 2>&1 | grep "${version}"
-    runHook postInstallCheck
-  '';
+  passthru.tests.version = testVersion { package = buf; };
 
   meta = with lib; {
     homepage = "https://buf.build";
