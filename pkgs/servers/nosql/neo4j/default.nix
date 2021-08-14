@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/share/neo4j"
     cp -R * "$out/share/neo4j"
 
@@ -32,12 +34,14 @@ stdenv.mkDerivation rec {
             --prefix PATH : "${lib.makeBinPath [ jre which gawk ]}:$out/share/neo4j/bin/" \
             --set JAVA_HOME "${jre}"
     done
+
+    runHook postInstall
   '';
 
   meta = with lib; {
     description = "A highly scalable, robust (fully ACID) native graph database";
     homepage = "http://www.neo4j.org/";
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
 
     maintainers = [ maintainers.offline ];
     platforms = lib.platforms.unix;
