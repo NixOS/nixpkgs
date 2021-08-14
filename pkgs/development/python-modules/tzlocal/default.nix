@@ -1,16 +1,26 @@
-{ lib, buildPythonPackage, fetchPypi
-, pytz }:
+{ lib
+, backports-zoneinfo
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, pytz
+}:
 
 buildPythonPackage rec {
   pname = "tzlocal";
-  version = "2.1";
-
-  propagatedBuildInputs = [ pytz ];
+  version = "3.0";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "643c97c5294aedc737780a49d9df30889321cbe1204eac2c2ec6134035a92e44";
+    sha256 = "sha256-9ObjbbUEmeDZL3m2c2EEHwSOJgnRZuk0VrUHRtxK7xI=";
   };
+
+  propagatedBuildInputs = [
+    pytz
+  ]  ++ lib.optionals (pythonOlder "3.9") [
+    backports-zoneinfo
+  ];
 
   # test fail (timezone test fail)
   doCheck = false;
