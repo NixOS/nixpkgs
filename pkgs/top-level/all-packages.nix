@@ -13855,7 +13855,7 @@ with pkgs;
 
   gprbuild = callPackage ../development/tools/build-managers/gprbuild { };
 
-  gputils = callPackage ../development/tools/misc/gputils { };
+  gputils = callPackage ../development/embedded/gputils { };
 
   gpuvis = callPackage ../development/tools/misc/gpuvis { };
 
