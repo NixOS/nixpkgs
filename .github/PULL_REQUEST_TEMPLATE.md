@@ -15,11 +15,12 @@ Reviewing guidelines: https://nixos.org/manual/nixpkgs/unstable/#chap-reviewing-
 
 <!-- Please check what applies. Note that these are not hard requirements but merely serve as information for reviewers. -->
 
-- [ ] Tested using sandboxing ([nix.useSandbox](https://nixos.org/nixos/manual/options.html#opt-nix.useSandbox) on NixOS, or option `sandbox` in [`nix.conf`](https://nixos.org/nix/manual/#sec-conf-file) on non-NixOS linux)
 - Built on platform(s)
-   - [ ] NixOS
-   - [ ] macOS
-   - [ ] other Linux distributions
+  - [ ] x86_64-linux
+  - [ ] aarch64-linux
+  - [ ] x86_64-darwin
+  - [ ] aarch64-darwin
+- [ ] For non-Linux: Is `sandbox = true` set in `nix.conf`? (See [Nix manual](https://nixos.org/manual/nix/stable/#sec-conf-file))
 - [ ] Tested via one or more NixOS test(s) if existing and applicable for the change (look inside [nixos/tests](https://github.com/NixOS/nixpkgs/blob/master/nixos/tests))
 - [ ] Tested compilation of all packages that depend on this change using `nix-shell -p nixpkgs-review --run "nixpkgs-review wip"`
 - [ ] Tested execution of all binary files (usually in `./result/bin/`)
