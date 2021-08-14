@@ -1,16 +1,9 @@
-{config, pkgs, lib, ...}:
+{ config, pkgs, lib, ... }:
 with lib;
 {
   options.services.languageToolHttp = {
     enable = mkEnableOption "the LanguagTool http server";
-    port = mkOption {
-      description = ''
-        The port which the LanguageTool server listen.
-      '';
-      type = types.port;
-      default = 8081;
-    };
-    address = mkOption{
+    address = mkOption {
       description = ''
         The address on which the server listen.
       '';
@@ -22,28 +15,36 @@ with lib;
       description = ''
         Arguments to be passed when starting the server.
       '';
-      #TODO: GNU commandline type
-      type = with types;attrsOf (oneOf [ int str bool ]);
+      type = types.submodule {
+        freeformType = with types;attrsOf (oneOf [ int str bool ]);
+        options.port = mkOption {
+          description = ''
+            The port which the LanguageTool server listen.
+          '';
+          type = types.port;
+          default = 8081;
+        };
+      };
       default = { };
     };
   };
-  
-  config = 
+
+  config =
     let
       cfg = config.services.languageToolHttp;
-    in {
+    in
+    {
       services.languageToolHttp.args = {
-        allow-origin = 
-        mkIf cfg.allowBrowserPluginAccess (mkDefault "*");
-        port = mkDefault cfg.port;
+        allow-origin =
+          mkIf cfg.allowBrowserPluginAccess (mkDefault "*");
       };
       #TODO:socket activation
       # systemd.sockets.languagetool-http = {
-      #   socketConfig.ListenStream = with cfg;["${address}:${toString port}"];
+      #   socketConfig.ListenStream = with cfg;["${address}:${toString args.port}"];
       # };
       systemd.services.languagetool-http = {
         wantedBy = [ "multi-user.target" ];
-        serviceConfig.ExecStart = 
+        serviceConfig.ExecStart =
           "${pkgs.languagetool}/bin/languagetool-http-server ${cli.toGNUCommandLineShell {} cfg.args}";
       };
     };
