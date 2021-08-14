@@ -24833,6 +24833,8 @@ in
 
   libvmi = callPackage ../development/libraries/libvmi { };
 
+  libutp = callPackage ../applications/networking/p2p/libutp { };
+
   lifelines = callPackage ../applications/misc/lifelines { };
 
   liferea = callPackage ../applications/networking/newsreaders/liferea { };
