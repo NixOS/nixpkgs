@@ -17,9 +17,9 @@ stdenv.mkDerivation rec {
     sha256 = "1jslm1rv1j0ya818yh23wf3bb6hz7qqj9pn5fwl45y9mqyqa01s9";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ ocaml findlib ];
+  nativeBuildInputs = [ pkg-config ocaml findlib ];
   propagatedBuildInputs = [ gmp ];
+  strictDeps = true;
 
   dontAddPrefix = true;
   configureFlags = [ "-installdir ${placeholder "out"}/lib/ocaml/${ocaml.version}/site-lib" ];
