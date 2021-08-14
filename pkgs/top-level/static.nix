@@ -47,21 +47,6 @@ self: super: let
     # ++ optional (super.stdenv.hostPlatform.libc == "glibc") ((flip overrideInStdenv) [ self.stdenv.glibc.static ])
   ;
 
-  ocamlFixPackage = b:
-    b.overrideAttrs (o: {
-      configurePlatforms = [ ];
-      dontAddStaticConfigureFlags = true;
-    });
-
-  ocamlStaticAdapter = _: super:
-    self.lib.mapAttrs
-      (_: p: if p ? overrideAttrs then ocamlFixPackage p else p)
-      super
-    // {
-      lablgtk = null; # Currently xlibs cause infinite recursion
-      ocaml = super.ocaml;
-    };
-
 in {
   stdenv = foldl (flip id) super.stdenv staticAdapters;
 
@@ -77,11 +62,6 @@ in {
     # disable gss becuase of: undefined reference to `k5_bcmp'
     gssSupport = false;
   };
-
-  ocaml-ng = self.lib.mapAttrs (_: set:
-    if set ? overrideScope' then set.overrideScope' ocamlStaticAdapter else set
-  ) super.ocaml-ng;
-
 
   zlib = super.zlib.override {
     # Don’t use new stdenv zlib because

@@ -12,6 +12,8 @@ else
 stdenv.mkDerivation ({
 
   inherit enableParallelBuilding;
+  dontAddStaticConfigureFlags = true;
+  configurePlatforms = [];
 
   buildPhase = ''
     runHook preBuild

@@ -40,6 +40,8 @@ buildDunePackage rec {
   configureFlags = [ "--root $(out)" "--prefix /" ];
 
   dontAddPrefix = true;
+  dontAddStaticConfigureFlags = true;
+  configurePlatforms = [];
 
   postConfigure = ''
     make -C src confs

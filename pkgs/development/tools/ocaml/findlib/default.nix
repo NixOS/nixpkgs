@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
   patches = [ ./ldconf.patch ./install_topfind.patch ];
 
   dontAddPrefix=true;
+  dontAddStaticConfigureFlags = true;
+  configurePlatforms = [];
 
   configureFlags = [
       "-bindir" "${placeholder "out"}/bin"

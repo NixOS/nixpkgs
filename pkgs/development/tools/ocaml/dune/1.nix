@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
   ];
 
   dontAddPrefix = true;
+  dontAddStaticConfigureFlags = true;
+  configurePlatforms = [];
 
   meta = with lib; {
     homepage = "https://dune.build/";
