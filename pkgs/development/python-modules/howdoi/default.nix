@@ -1,39 +1,61 @@
 { lib
+, appdirs
 , buildPythonPackage
-, fetchPypi
-, six
+, cachelib
+, cssselect
+, fetchFromGitHub
+, keep
+, lxml
 , pygments
 , pyquery
-, cachelib
-, appdirs
-, keep
+, requests
+, six
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "howdoi";
   version = "2.0.17";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-ea7KIDYgDWCi1skZKlbzhHASfwHqwbfvWDuNOxGRhek=";
+  src = fetchFromGitHub {
+    owner = "gleitz";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "1cc9hbnalbsd5la9wsm8s6drb79vlzin9qnv86ic81r5nq27n180";
   };
 
-  propagatedBuildInputs = [ six pygments pyquery cachelib appdirs keep ];
+  propagatedBuildInputs = [
+    appdirs
+    cachelib
+    cssselect
+    keep
+    lxml
+    pygments
+    pyquery
+    requests
+    six
+  ];
 
-  # author hasn't included page_cache directory (which allows tests to run without
-  # external requests) in pypi tarball. github repo doesn't have release revisions
-  # clearly tagged. re-enable tests when either is sorted.
-  doCheck = false;
+  checkInputs = [
+    pytestCheckHook
+  ];
+
   preCheck = ''
-    mv howdoi _howdoi
     export HOME=$(mktemp -d)
   '';
+
+  disabledTests = [
+    # AssertionError: "The...
+    "test_get_text_with_one_link"
+    "test_get_text_without_links"
+  ];
+
   pythonImportsCheck = [ "howdoi" ];
 
   meta = with lib; {
     description = "Instant coding answers via the command line";
     homepage = "https://pypi.python.org/pypi/howdoi";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc ];
   };
 }
