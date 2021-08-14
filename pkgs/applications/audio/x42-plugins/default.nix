@@ -3,12 +3,12 @@
 , libGLU, lv2, gtk2, cairo, pango, fftwFloat, zita-convolver }:
 
 stdenv.mkDerivation rec {
-  version = "20210114";
+  version = "20210714";
   pname = "x42-plugins";
 
   src = fetchurl {
     url = "https://gareus.org/misc/x42-plugins/${pname}-${version}.tar.xz";
-    sha256 = "sha256-xUiA/k5ZbI/SkY8a20FsyRwqPxxMteiFdEhFF/8e2OA=";
+    sha256 = "sha256-X389bA+cf3N5eJpAlpDn/CJQ6xM4qzrBQ47fYPIyIHk=";
   };
 
   nativeBuildInputs = [ pkg-config ];
