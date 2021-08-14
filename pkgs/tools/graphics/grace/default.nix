@@ -16,7 +16,7 @@
 , libXt
 }:
 
-gccStdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
     pname = "grace";
     version = "5.1.25";
     src = fetchurl {
