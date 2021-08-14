@@ -1146,13 +1146,13 @@ with pkgs;
 
   arduino = arduino-core.override { withGui = true; };
 
-  arduino-ci = callPackage ../development/arduino/arduino-ci { };
+  arduino-ci = callPackage ../development/embedded/arduino/arduino-ci { };
 
-  arduino-cli = callPackage ../development/arduino/arduino-cli { };
+  arduino-cli = callPackage ../development/embedded/arduino/arduino-cli { };
 
-  arduino-core = callPackage ../development/arduino/arduino-core { };
+  arduino-core = callPackage ../development/embedded/arduino/arduino-core { };
 
-  arduino-mk = callPackage ../development/arduino/arduino-mk {};
+  arduino-mk = callPackage ../development/embedded/arduino/arduino-mk {};
 
   apio = python3Packages.callPackage ../development/tools/misc/apio { };
 
@@ -13931,7 +13931,7 @@ with pkgs;
 
   indent = callPackage ../development/tools/misc/indent { };
 
-  ino = callPackage ../development/arduino/ino { };
+  ino = callPackage ../development/embedded/arduino/ino { };
 
   inotify-tools = callPackage ../development/tools/misc/inotify-tools { };
 
