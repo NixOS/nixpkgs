@@ -545,7 +545,26 @@ The following types of tests exists:
 
 Here in the nixpkgs manual we describe mostly _package tests_; for _module tests_ head over to the corresponding [section in the NixOS manual](https://nixos.org/manual/nixos/stable/#sec-nixos-tests).
 
-### Writing package tests {#ssec-package-tests-writing}
+### Writing inline package tests {#ssec-inline-package-tests-writing}
+
+For very simple tests, they can be written inline:
+
+```nix
+{ …, yq-go }:
+
+buildGoModule rec {
+  …
+
+  passthru.tests = {
+    simple = runCommand "${pname}-test" {} ''
+      echo "test: 1" | ${yq-go}/bin/yq eval -j > $out
+      [ "$(cat $out | tr -d $'\n ')" = '{"test":1}' ]
+    '';
+  };
+}
+```
+
+### Writing larger package tests {#ssec-package-tests-writing}
 
 This is an example using the `phoronix-test-suite` package with the current best practices.
 
