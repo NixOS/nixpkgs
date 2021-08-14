@@ -12,17 +12,17 @@
 
 let
   # specVersion taken from: https://www.linode.com/docs/api/openapi.yaml at `info.version`.
-  specVersion = "4.99.0";
+  specVersion = "4.101.0";
   spec = fetchurl {
     url = "https://raw.githubusercontent.com/linode/linode-api-docs/v${specVersion}/openapi.yaml";
-    sha256 = "10z63a2clbiskdnmnyf4m8v2hgc4bdm703y7s2dpw0q09msx9aca";
+    sha256 = "1l4xi82b2pvkj7p1bq26ax2ava5vnv324j5sw3hvkkqqf1fmpdl5";
   };
 
 in
 
 buildPythonApplication rec {
   pname = "linode-cli";
-  version = "5.5.2";
+  version = "5.6.0";
 
   src = fetchFromGitHub {
     owner = "linode";
