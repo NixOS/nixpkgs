@@ -1154,7 +1154,7 @@ with pkgs;
 
   arduino-mk = callPackage ../development/embedded/arduino/arduino-mk {};
 
-  apio = python3Packages.callPackage ../development/tools/misc/apio { };
+  apio = python3Packages.callPackage ../development/embedded/fpga/apio { };
 
   apitrace = libsForQt514.callPackage ../applications/graphics/apitrace {};
 
