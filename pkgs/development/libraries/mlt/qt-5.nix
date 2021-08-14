@@ -23,7 +23,7 @@
 , mkDerivation
 , which
 }:
-let inherit (lib) getDev; in
+
 mkDerivation rec {
   pname = "mlt";
   version = "6.24.0";
@@ -71,7 +71,7 @@ mkDerivation rec {
 
   # mlt is unable to cope with our multi-prefix Qt build
   # because it does not use CMake or qmake.
-  NIX_CFLAGS_COMPILE = "-I${getDev qtsvg}/include/QtSvg";
+  NIX_CFLAGS_COMPILE = "-I${lib.getDev qtsvg}/include/QtSvg";
 
   CXXFLAGS = "-std=c++11";
 
