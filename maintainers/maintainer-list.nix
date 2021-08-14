@@ -10006,6 +10006,12 @@
       fingerprint = "6F8A 18AE 4101 103F 3C54  24B9 6AA2 3A11 93B7 064B";
     }];
   };
+  smancill = {
+    email = "smancill@smancill.dev";
+    github = "smancill";
+    githubId = 238528;
+    name = "Sebastián Mancilla";
+  };
   smaret = {
     email = "sebastien.maret@icloud.com";
     github = "smaret";
