@@ -1,4 +1,4 @@
-{ ctags, fetchurl, fetchpatch, lib, libressl, man, ncurses, pkg-config, stdenv }:
+{ ctags, fetchurl, fetchpatch, lib, libressl, ncurses, pkg-config, stdenv }:
 
 stdenv.mkDerivation rec {
   pname = "catgirl";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ ctags pkg-config ];
-  buildInputs = [ libressl man ncurses ];
+  buildInputs = [ libressl ncurses ];
   strictDeps = true;
 
   meta = with lib; {
