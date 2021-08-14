@@ -121,11 +121,6 @@ in {
     if set ? overrideScope' then set.overrideScope' ocamlStaticAdapter else set
   ) super.ocaml-ng;
 
-  perl = super.perl.override {
-    # Don’t use new stdenv zlib because
-    # it doesn’t like the --disable-shared flag
-    stdenv = super.stdenv;
-  };
 
   zlib = super.zlib.override {
     # Don’t use new stdenv zlib because
