@@ -12,7 +12,11 @@ stdenv.mkDerivation rec {
 
   createFindlibDestdir = true;
 
-  buildInputs = [ ocaml findlib ];
+  nativeBuildInputs = [ ocaml findlib ];
+  strictDeps = true;
+
+  # x86_64-unknown-linux-musl-ld: -r and -pie may not be used together
+  hardeningDisable = lib.optional stdenv.hostPlatform.isStatic "pie";
 
   configurePhase = ''
   make -f configure.make Makefile.config \
