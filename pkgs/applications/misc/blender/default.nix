@@ -26,11 +26,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "blender";
-  version = "2.93.1";
+  version = "2.93.2";
 
   src = fetchurl {
     url = "https://download.blender.org/source/${pname}-${version}.tar.xz";
-    sha256 = "sha256-IdriOBw/DlpH6B0GKqC1nKnhTZwrIL8U9hkMS20BHNg=";
+    sha256 = "sha256-nG1Kk6UtiCwsQBDz7VELcMRVEovS49QiO3haIpvSfu4=";
   };
 
   patches = lib.optional stdenv.isDarwin ./darwin.patch;

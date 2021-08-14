@@ -681,7 +681,7 @@ in
     systemd.services.display-manager =
       { description = "X11 Server";
 
-        after = [ "acpid.service" "systemd-logind.service" ];
+        after = [ "acpid.service" "systemd-logind.service" "systemd-user-sessions.service" ];
 
         restartIfChanged = false;
 

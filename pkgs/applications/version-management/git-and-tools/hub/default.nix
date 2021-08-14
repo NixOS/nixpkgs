@@ -1,4 +1,4 @@
-{ lib, buildGoPackage, fetchFromGitHub, git, groff, installShellFiles, util-linux, nixosTests }:
+{ lib, buildGoPackage, fetchFromGitHub, git, groff, installShellFiles, unixtools, nixosTests }:
 
 buildGoPackage rec {
   pname = "hub";
@@ -16,7 +16,7 @@ buildGoPackage rec {
     sha256 = "1qjab3dpia1jdlszz3xxix76lqrm4zbmqzd9ymld7h06awzsg2vh";
   };
 
-  nativeBuildInputs = [ groff installShellFiles util-linux ];
+  nativeBuildInputs = [ groff installShellFiles unixtools.col ];
 
   postPatch = ''
     patchShebangs .

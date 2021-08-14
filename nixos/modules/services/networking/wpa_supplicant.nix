@@ -8,28 +8,108 @@ let
     else pkgs.wpa_supplicant;
 
   cfg = config.networking.wireless;
-  configFile = if cfg.networks != {} || cfg.extraConfig != "" || cfg.userControlled.enable then pkgs.writeText "wpa_supplicant.conf" ''
-    ${optionalString cfg.userControlled.enable ''
-      ctrl_interface=DIR=/run/wpa_supplicant GROUP=${cfg.userControlled.group}
-      update_config=1''}
-    ${cfg.extraConfig}
-    ${concatStringsSep "\n" (mapAttrsToList (ssid: config: with config; let
-      key = if psk != null
-        then ''"${psk}"''
-        else pskRaw;
-      baseAuth = if key != null
-        then "psk=${key}"
-        else "key_mgmt=NONE";
-    in ''
-      network={
-        ssid="${ssid}"
-        ${optionalString (priority != null) ''priority=${toString priority}''}
-        ${optionalString hidden "scan_ssid=1"}
-        ${if (auth != null) then auth else baseAuth}
-        ${extraConfig}
-      }
-    '') cfg.networks)}
-  '' else "/etc/wpa_supplicant.conf";
+
+  # Content of wpa_supplicant.conf
+  generatedConfig = concatStringsSep "\n" (
+    (mapAttrsToList mkNetwork cfg.networks)
+    ++ optional cfg.userControlled.enable (concatStringsSep "\n"
+      [ "ctrl_interface=/run/wpa_supplicant"
+        "ctrl_interface_group=${cfg.userControlled.group}"
+        "update_config=1"
+      ])
+    ++ optional cfg.scanOnLowSignal ''bgscan="simple:30:-70:3600"''
+    ++ optional (cfg.extraConfig != "") cfg.extraConfig);
+
+  configFile =
+    if cfg.networks != {} || cfg.extraConfig != "" || cfg.userControlled.enable
+      then pkgs.writeText "wpa_supplicant.conf" generatedConfig
+      else "/etc/wpa_supplicant.conf";
+
+  # Creates a network block for wpa_supplicant.conf
+  mkNetwork = ssid: opts:
+  let
+    quote = x: ''"${x}"'';
+    indent = x: "  " + x;
+
+    pskString = if opts.psk != null
+      then quote opts.psk
+      else opts.pskRaw;
+
+    options = [
+      "ssid=${quote ssid}"
+      (if pskString != null || opts.auth != null
+        then "key_mgmt=${concatStringsSep " " opts.authProtocols}"
+        else "key_mgmt=NONE")
+    ] ++ optional opts.hidden "scan_ssid=1"
+      ++ optional (pskString != null) "psk=${pskString}"
+      ++ optionals (opts.auth != null) (filter (x: x != "") (splitString "\n" opts.auth))
+      ++ optional (opts.priority != null) "priority=${toString opts.priority}"
+      ++ optional (opts.extraConfig != "") opts.extraConfig;
+  in ''
+    network={
+    ${concatMapStringsSep "\n" indent options}
+    }
+  '';
+
+  # Creates a systemd unit for wpa_supplicant bound to a given (or any) interface
+  mkUnit = iface:
+    let
+      deviceUnit = optional (iface != null) "sys-subsystem-net-devices-${utils.escapeSystemdPath iface}.device";
+      configStr = if cfg.allowAuxiliaryImperativeNetworks
+        then "-c /etc/wpa_supplicant.conf -I ${configFile}"
+        else "-c ${configFile}";
+    in {
+      description = "WPA Supplicant instance" + optionalString (iface != null) " for interface ${iface}";
+
+      after = deviceUnit;
+      before = [ "network.target" ];
+      wants = [ "network.target" ];
+      requires = deviceUnit;
+      wantedBy = [ "multi-user.target" ];
+      stopIfChanged = false;
+
+      path = [ package ];
+
+      script =
+      ''
+        if [ -f /etc/wpa_supplicant.conf -a "/etc/wpa_supplicant.conf" != "${configFile}" ]; then
+          echo >&2 "<3>/etc/wpa_supplicant.conf present but ignored. Generated ${configFile} is used instead."
+        fi
+
+        iface_args="-s ${optionalString cfg.dbusControlled "-u"} -D${cfg.driver} ${configStr}"
+
+        ${if iface == null then ''
+          # detect interfaces automatically
+
+          # check if there are no wireless interfaces
+          if ! find -H /sys/class/net/* -name wireless | grep -q .; then
+            # if so, wait until one appears
+            echo "Waiting for wireless interfaces"
+            grep -q '^ACTION=add' < <(stdbuf -oL -- udevadm monitor -s net/wlan -pu)
+            # Note: the above line has been carefully written:
+            # 1. The process substitution avoids udevadm hanging (after grep has quit)
+            #    until it tries to write to the pipe again. Not even pipefail works here.
+            # 2. stdbuf is needed because udevadm output is buffered by default and grep
+            #    may hang until more udev events enter the pipe.
+          fi
+
+          # add any interface found to the daemon arguments
+          for name in $(find -H /sys/class/net/* -name wireless | cut -d/ -f 5); do
+            echo "Adding interface $name"
+            args+="''${args:+ -N} -i$name $iface_args"
+          done
+        '' else ''
+          # add known interface to the daemon arguments
+          args="-i${iface} $iface_args"
+        ''}
+
+        # finally start daemon
+        exec wpa_supplicant $args
+      '';
+    };
+
+  systemctl = "/run/current-system/systemd/bin/systemctl";
+
 in {
   options = {
     networking.wireless = {
@@ -42,6 +122,10 @@ in {
         description = ''
           The interfaces <command>wpa_supplicant</command> will use. If empty, it will
           automatically use all wireless interfaces.
+
+          <note><para>
+            A separate wpa_supplicant instance will be started for each interface.
+          </para></note>
         '';
       };
 
@@ -58,6 +142,16 @@ in {
           <xref linkend="opt-networking.wireless.networks" />.
 
           Please note that this adds a custom patch to <package>wpa_supplicant</package>.
+        '';
+      };
+
+      scanOnLowSignal = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Whether to periodically scan for (better) networks when the signal of
+          the current one is low. This will make roaming between access points
+          faster, but will consume more power.
         '';
       };
 
@@ -89,11 +183,52 @@ in {
               '';
             };
 
+            authProtocols = mkOption {
+              default = [
+                # WPA2 and WPA3
+                "WPA-PSK" "WPA-EAP" "SAE"
+                # 802.11r variants of the above
+                "FT-PSK" "FT-EAP" "FT-SAE"
+              ];
+              # The list can be obtained by running this command
+              # awk '
+              #   /^# key_mgmt: /{ run=1 }
+              #   /^#$/{ run=0 }
+              #   /^# [A-Z0-9-]{2,}/{ if(run){printf("\"%s\"\n", $2)} }
+              # ' /run/current-system/sw/share/doc/wpa_supplicant/wpa_supplicant.conf.example
+              type = types.listOf (types.enum [
+                "WPA-PSK"
+                "WPA-EAP"
+                "IEEE8021X"
+                "NONE"
+                "WPA-NONE"
+                "FT-PSK"
+                "FT-EAP"
+                "FT-EAP-SHA384"
+                "WPA-PSK-SHA256"
+                "WPA-EAP-SHA256"
+                "SAE"
+                "FT-SAE"
+                "WPA-EAP-SUITE-B"
+                "WPA-EAP-SUITE-B-192"
+                "OSEN"
+                "FILS-SHA256"
+                "FILS-SHA384"
+                "FT-FILS-SHA256"
+                "FT-FILS-SHA384"
+                "OWE"
+                "DPP"
+              ]);
+              description = ''
+                The list of authentication protocols accepted by this network.
+                This corresponds to the <literal>key_mgmt</literal> option in wpa_supplicant.
+              '';
+            };
+
             auth = mkOption {
               type = types.nullOr types.str;
               default = null;
               example = ''
-                key_mgmt=WPA-EAP
                 eap=PEAP
                 identity="user@example.com"
                 password="secret"
@@ -200,6 +335,16 @@ in {
           description = "Members of this group can control wpa_supplicant.";
         };
       };
+
+      dbusControlled = mkOption {
+        type = types.bool;
+        default = lib.length cfg.interfaces < 2;
+        description = ''
+          Whether to enable the DBus control interface.
+          This is only needed when using NetworkManager or connman.
+        '';
+      };
+
       extraConfig = mkOption {
         type = types.str;
         default = "";
@@ -223,80 +368,47 @@ in {
     assertions = flip mapAttrsToList cfg.networks (name: cfg: {
       assertion = with cfg; count (x: x != null) [ psk pskRaw auth ] <= 1;
       message = ''options networking.wireless."${name}".{psk,pskRaw,auth} are mutually exclusive'';
-    });
-
-    environment.systemPackages = [ package ];
-
-    services.dbus.packages = [ package ];
+    }) ++ [
+      {
+        assertion = length cfg.interfaces > 1 -> !cfg.dbusControlled;
+        message =
+          let daemon = if config.networking.networkmanager.enable then "NetworkManager" else
+                       if config.services.connman.enable then "connman" else null;
+              n = toString (length cfg.interfaces);
+          in ''
+            It's not possible to run multiple wpa_supplicant instances with DBus support.
+            Note: you're seeing this error because `networking.wireless.interfaces` has
+            ${n} entries, implying an equal number of wpa_supplicant instances.
+          '' + optionalString (daemon != null) ''
+            You don't need to change `networking.wireless.interfaces` when using ${daemon}:
+            in this case the interfaces will be configured automatically for you.
+          '';
+      }
+    ];
 
     hardware.wirelessRegulatoryDatabase = true;
 
-    # FIXME: start a separate wpa_supplicant instance per interface.
-    systemd.services.wpa_supplicant = let
-      ifaces = cfg.interfaces;
-      deviceUnit = interface: [ "sys-subsystem-net-devices-${utils.escapeSystemdPath interface}.device" ];
-    in {
-      description = "WPA Supplicant";
+    environment.systemPackages = [ package ];
+    services.dbus.packages = optional cfg.dbusControlled package;
 
-      after = lib.concatMap deviceUnit ifaces;
-      before = [ "network.target" ];
-      wants = [ "network.target" ];
-      requires = lib.concatMap deviceUnit ifaces;
-      wantedBy = [ "multi-user.target" ];
-      stopIfChanged = false;
+    systemd.services =
+      if cfg.interfaces == []
+        then { wpa_supplicant = mkUnit null; }
+        else listToAttrs (map (i: nameValuePair "wpa_supplicant-${i}" (mkUnit i)) cfg.interfaces);
 
-      path = [ package pkgs.udev ];
+    # Restart wpa_supplicant after resuming from sleep
+    powerManagement.resumeCommands = concatStringsSep "\n" (
+      optional (cfg.interfaces == []) "${systemctl} try-restart wpa_supplicant"
+      ++ map (i: "${systemctl} try-restart wpa_supplicant-${i}") cfg.interfaces
+    );
 
-      script = let
-        configStr = if cfg.allowAuxiliaryImperativeNetworks
-          then "-c /etc/wpa_supplicant.conf -I ${configFile}"
-          else "-c ${configFile}";
-      in ''
-        if [ -f /etc/wpa_supplicant.conf -a "/etc/wpa_supplicant.conf" != "${configFile}" ]; then
-          echo >&2 "<3>/etc/wpa_supplicant.conf present but ignored. Generated ${configFile} is used instead."
-        fi
-
-        iface_args="-s -u -D${cfg.driver} ${configStr}"
-
-        ${if ifaces == [] then ''
-          # detect interfaces automatically
-
-          # check if there are no wireless interface
-          if ! find -H /sys/class/net/* -name wireless | grep -q .; then
-            # if so, wait until one appears
-            echo "Waiting for wireless interfaces"
-            grep -q '^ACTION=add' < <(stdbuf -oL -- udevadm monitor -s net/wlan -pu)
-            # Note: the above line has been carefully written:
-            # 1. The process substitution avoids udevadm hanging (after grep has quit)
-            #    until it tries to write to the pipe again. Not even pipefail works here.
-            # 2. stdbuf is needed because udevadm output is buffered by default and grep
-            #    may hang until more udev events enter the pipe.
-          fi
-
-          # add any interface found to the daemon arguments
-          for name in $(find -H /sys/class/net/* -name wireless | cut -d/ -f 5); do
-            echo "Adding interface $name"
-            args+="''${args:+ -N} -i$name $iface_args"
-          done
-        '' else ''
-          # add known interfaces to the daemon arguments
-          args="${concatMapStringsSep " -N " (i: "-i${i} $iface_args") ifaces}"
-        ''}
-
-        # finally start daemon
-        exec wpa_supplicant $args
-      '';
-    };
-
-    powerManagement.resumeCommands = ''
-      /run/current-system/systemd/bin/systemctl try-restart wpa_supplicant
-    '';
-
-    # Restart wpa_supplicant when a wlan device appears or disappears.
-    services.udev.extraRules = ''
-      ACTION=="add|remove", SUBSYSTEM=="net", ENV{DEVTYPE}=="wlan", RUN+="/run/current-system/systemd/bin/systemctl try-restart wpa_supplicant.service"
+    # Restart wpa_supplicant when a wlan device appears or disappears. This is
+    # only needed when an interface hasn't been specified by the user.
+    services.udev.extraRules = optionalString (cfg.interfaces == []) ''
+      ACTION=="add|remove", SUBSYSTEM=="net", ENV{DEVTYPE}=="wlan", \
+      RUN+="${systemctl} try-restart wpa_supplicant.service"
     '';
   };
 
-  meta.maintainers = with lib.maintainers; [ globin ];
+  meta.maintainers = with lib.maintainers; [ globin rnhmjoj ];
 }
