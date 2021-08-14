@@ -2,8 +2,10 @@
 , backports-zoneinfo
 , buildPythonPackage
 , fetchPypi
-, pythonOlder
 , pytz
+, pythonOlder
+, pytest-mock
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -22,8 +24,15 @@ buildPythonPackage rec {
     backports-zoneinfo
   ];
 
-  # test fail (timezone test fail)
-  doCheck = false;
+  checkInputs = [
+    pytestCheckHook
+    pytest-mock
+  ];
+
+  disabledTests = [
+    # Timezone test fail
+    "test_symlink_localtime"
+  ];
 
   pythonImportsCheck = [ "tzlocal" ];
 
