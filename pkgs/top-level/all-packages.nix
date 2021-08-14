@@ -14573,7 +14573,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  trellis = callPackage ../development/tools/trellis { };
+  trellis = callPackage ../development/embedded/fpga/trellis { };
 
   ttyd = callPackage ../servers/ttyd { };
 
