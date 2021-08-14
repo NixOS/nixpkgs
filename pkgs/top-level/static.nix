@@ -51,7 +51,7 @@ self: super: let
     b.overrideAttrs (o: {
       configurePlatforms = [ ];
       dontAddStaticConfigureFlags = true;
-      buildInputs = o.buildInputs ++ o.nativeBuildInputs or [ ];
+      buildInputs = (o.buildInputs or [ ]) ++ o.nativeBuildInputs or [ ];
       propagatedNativeBuildInputs = o.propagatedBuildInputs or [ ];
     });
 
