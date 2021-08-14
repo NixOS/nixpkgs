@@ -3,7 +3,7 @@
 let
   versionNoPatch = "${toString major_version}.${toString minor_version}";
   version = "${versionNoPatch}.${toString patch_version}";
-  safeX11 = stdenv: !(stdenv.isAarch32 || stdenv.isMips);
+  safeX11 = stdenv: !(stdenv.isAarch32 || stdenv.isMips || stdenv.hostPlatform.isStatic);
 in
 
 { lib, stdenv, fetchurl, ncurses, buildEnv, libunwind
@@ -13,7 +13,7 @@ in
 , spaceTimeSupport ? false
 }:
 
-assert useX11 -> !stdenv.isAarch32 && !stdenv.isMips;
+assert useX11 -> safeX11 stdenv;
 assert aflSupport -> lib.versionAtLeast version "4.05";
 assert flambdaSupport -> lib.versionAtLeast version "4.03";
 assert spaceTimeSupport -> lib.versionAtLeast version "4.04";

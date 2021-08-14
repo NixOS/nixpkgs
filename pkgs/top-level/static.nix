@@ -61,7 +61,7 @@ self: super: let
       super
     // {
       lablgtk = null; # Currently xlibs cause infinite recursion
-      ocaml = super.ocaml.override { useX11 = false; };
+      ocaml = super.ocaml;
     };
 
 in {
