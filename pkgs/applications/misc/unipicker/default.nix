@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
    preInstall = ''
       substituteInPlace unipicker --replace "/etc/unipickerrc" "$out/etc/unipickerrc"
       substituteInPlace unipickerrc --replace "/usr/local" "$out"
+      substituteInPlace unipicker --replace "fzf" "${fzf}/bin/fzf"
+      substituteInPlace unipickerrc --replace "fzf" "${fzf}/bin/fzf"
    '';
 
    makeFlags = [

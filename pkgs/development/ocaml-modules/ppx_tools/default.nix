@@ -1,9 +1,9 @@
 { lib, stdenv, fetchFromGitHub, buildDunePackage, ocaml, findlib, cppo }:
 
 let param =
-  let v6_3 = {
-    version = "6.3";
-    sha256 = "1skf4njvkifwx0qlsrc0jn891gvvcp5ryd6kkpx56hck7nnxv8x6";
+  let v6_4 = {
+    version = "6.4";
+    sha256 = "15v7yfv6gyp8lzlgwi9garz10wpg34dk4072jdv19n6v20zfg7n1";
     useDune2 = true;
     buildInputs = [cppo];
   }; in
@@ -27,11 +27,12 @@ let param =
   "4.07" = {
     version = "5.1+4.06.0";
     sha256 = "1ww4cspdpgjjsgiv71s0im5yjkr3544x96wsq1vpdacq7dr7zwiw"; };
-  "4.08" = v6_3;
-  "4.09" = v6_3;
-  "4.10" = v6_3;
-  "4.11" = v6_3;
-  "4.12" = v6_3;
+  "4.08" = v6_4;
+  "4.09" = v6_4;
+  "4.10" = v6_4;
+  "4.11" = v6_4;
+  "4.12" = v6_4;
+  "4.13" = v6_4;
 }.${ocaml.meta.branch};
 in
 

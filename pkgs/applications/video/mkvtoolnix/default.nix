@@ -1,6 +1,5 @@
 { lib
 , stdenv
-, mkDerivation
 , fetchFromGitLab
 , pkg-config
 , autoreconfHook
@@ -46,15 +45,15 @@ let
     '';
 
 in
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "mkvtoolnix";
-  version = "59.0.0";
+  version = "60.0.0";
 
   src = fetchFromGitLab {
     owner = "mbunkus";
     repo = "mkvtoolnix";
     rev = "release-${version}";
-    sha256 = "sha256-bPypOsveXrkz1V961b9GTJKFdgru/kcW15z/yik/4yQ=";
+    sha256 = "sha256-WtEC/EH0G1Tm6OK6hmVRzloLkO8mxxOYYZY7k/Wi2zE=";
   };
 
   nativeBuildInputs = [

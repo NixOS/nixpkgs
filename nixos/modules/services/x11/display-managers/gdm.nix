@@ -164,6 +164,11 @@ in
     systemd.packages = with pkgs.gnome; [ gdm gnome-session gnome-shell ];
     environment.systemPackages = [ pkgs.gnome.adwaita-icon-theme ];
 
+    # We dont use the upstream gdm service
+    # it has to be disabled since the gdm package has it
+    # https://github.com/NixOS/nixpkgs/issues/108672
+    systemd.services.gdm.enable = false;
+
     systemd.services.display-manager.wants = [
       # Because sd_login_monitor_new requires /run/systemd/machines
       "systemd-machined.service"

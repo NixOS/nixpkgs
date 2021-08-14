@@ -970,6 +970,8 @@ with pkgs;
 
   logseq = callPackage ../applications/misc/logseq { };
 
+  lua-format = callPackage ../tools/misc/lua-format { };
+
   lxterminal = callPackage ../applications/terminal-emulators/lxterminal { };
 
   microcom = callPackage ../applications/terminal-emulators/microcom { };
@@ -4958,6 +4960,8 @@ with pkgs;
 
   fontmatrix = libsForQt514.callPackage ../applications/graphics/fontmatrix {};
 
+  footswitch = callPackage ../tools/inputmethods/footswitch { };
+
   foremost = callPackage ../tools/system/foremost { };
 
   forktty = callPackage ../os-specific/linux/forktty {};
@@ -5150,6 +5154,8 @@ with pkgs;
   gftp = callPackage ../applications/networking/gftp {
     gtk = gtk2;
   };
+
+  gfs2-utils = callPackage ../tools/filesystems/gfs2-utils { };
 
   gfbgraph = callPackage ../development/libraries/gfbgraph { };
 
@@ -6589,10 +6595,6 @@ with pkgs;
   mftrace = callPackage ../tools/typesetting/tex/mftrace { };
 
   mhonarc = perlPackages.MHonArc;
-
-  minergate = callPackage ../applications/misc/minergate { };
-
-  minergate-cli = callPackage ../applications/misc/minergate-cli { };
 
   minica = callPackage ../tools/security/minica { };
 
@@ -9304,6 +9306,10 @@ with pkgs;
 
   tartube = callPackage ../applications/video/tartube { };
 
+  tartube-yt-dlp = callPackage ../applications/video/tartube {
+    youtube-dl = yt-dlp;
+  };
+
   tayga = callPackage ../tools/networking/tayga { };
 
   tcpcrypt = callPackage ../tools/security/tcpcrypt { };
@@ -9678,7 +9684,7 @@ with pkgs;
 
   umlet = callPackage ../tools/misc/umlet { };
 
-  unetbootin = callPackage ../tools/cd-dvd/unetbootin { };
+  unetbootin = libsForQt5.callPackage ../tools/cd-dvd/unetbootin { };
 
   unfs3 = callPackage ../servers/unfs3 { };
 
@@ -10148,13 +10154,11 @@ with pkgs;
   valum = callPackage ../development/web/valum { };
 
   inherit (callPackages ../servers/varnish { })
-    varnish60 varnish62 varnish63;
+    varnish60 varnish65;
   inherit (callPackages ../servers/varnish/packages.nix { })
-    varnish60Packages
-    varnish62Packages
-    varnish63Packages;
+    varnish60Packages varnish65Packages;
 
-  varnishPackages = varnish63Packages;
+  varnishPackages = varnish65Packages;
   varnish = varnishPackages.varnish;
 
   hitch = callPackage ../servers/hitch { };
@@ -12251,7 +12255,7 @@ with pkgs;
   };
   cargo-valgrind = callPackage ../development/tools/rust/cargo-valgrind { };
   cargo-watch = callPackage ../development/tools/rust/cargo-watch {
-    inherit (darwin.apple_sdk.frameworks) CoreServices;
+    inherit (darwin.apple_sdk.frameworks) CoreServices Foundation;
   };
   cargo-wipe = callPackage ../development/tools/rust/cargo-wipe { };
   cargo-xbuild = callPackage ../development/tools/rust/cargo-xbuild { };
@@ -16348,6 +16352,8 @@ with pkgs;
   libayatana-appindicator-gtk3 = libayatana-appindicator.override { gtkVersion = "3"; };
   libayatana-appindicator = callPackage ../development/libraries/libayatana-appindicator { };
 
+  libargs = callPackage ../development/libraries/libargs { };
+
   libarchive = callPackage ../development/libraries/libarchive {
     autoreconfHook = buildPackages.autoreconfHook269;
   };
@@ -16418,6 +16424,8 @@ with pkgs;
   };
 
   libcacard = callPackage ../development/libraries/libcacard { };
+
+  libcamera = callPackage ../development/libraries/libcamera { };
 
   libcanberra = callPackage ../development/libraries/libcanberra {
     inherit (darwin.apple_sdk.frameworks) Carbon CoreServices;
@@ -19868,6 +19876,8 @@ with pkgs;
   mailman-rss = callPackage ../development/python-modules/mailman-rss { };
 
   mailman-web = with python3.pkgs; toPythonApplication mailman-web;
+
+  listadmin = callPackage ../applications/networking/listadmin {};
 
   maker-panel = callPackage ../tools/misc/maker-panel { };
 
@@ -23914,6 +23924,8 @@ with pkgs;
     buildServerGui = false;
   };
 
+  drawterm = callPackage ../tools/admin/drawterm { };
+
   droopy = python3Packages.callPackage ../applications/networking/droopy { };
 
   drumgizmo = callPackage ../applications/audio/drumgizmo { };
@@ -24472,7 +24484,7 @@ with pkgs;
   };
 
   firefox-bin = wrapFirefox firefox-bin-unwrapped {
-    browserName = "firefox";
+    applicationName = "firefox";
     pname = "firefox-bin";
     desktopName = "Firefox";
   };
@@ -24483,7 +24495,7 @@ with pkgs;
   };
 
   firefox-beta-bin = res.wrapFirefox firefox-beta-bin-unwrapped {
-    browserName = "firefox";
+    applicationName = "firefox";
     pname = "firefox-beta-bin";
     desktopName = "Firefox Beta";
   };
@@ -24494,7 +24506,7 @@ with pkgs;
   };
 
   firefox-devedition-bin = res.wrapFirefox firefox-devedition-bin-unwrapped {
-    browserName = "firefox";
+    applicationName = "firefox";
     nameSuffix = "-devedition";
     pname = "firefox-devedition-bin";
     desktopName = "Firefox DevEdition";
@@ -27632,17 +27644,23 @@ with pkgs;
 
   thonny = callPackage ../applications/editors/thonny { };
 
-  thunderbird = thunderbird-78;
+  thunderbirdPackages = recurseIntoAttrs (callPackage ../applications/networking/mailreaders/thunderbird/packages.nix {
+    callPackage = pkgs.newScope {
+      inherit (rustPackages) cargo rustc;
+      libpng = libpng_apng;
+      gnused = gnused_422;
+      inherit (darwin.apple_sdk.frameworks) CoreMedia ExceptionHandling
+                                            Kerberos AVFoundation MediaToolbox
+                                            CoreLocation Foundation AddressBook;
+      inherit (darwin) libobjc;
+    };
+  });
 
-  thunderbird-78 = callPackage ../applications/networking/mailreaders/thunderbird {
-    # Using older Rust for workaround:
-    # https://bugzilla.mozilla.org/show_bug.cgi?id=1663715
-    inherit (rustPackages_1_45) cargo rustc;
-    libpng = libpng_apng;
-    icu = icu67;
-    libvpx = libvpx_1_8;
-    gtk3Support = true;
-  };
+  thunderbird-unwrapped = thunderbirdPackages.thunderbird;
+  thunderbird-78-unwrapped = thunderbirdPackages.thunderbird-78;
+  thunderbird = wrapThunderbird thunderbird-unwrapped { };
+  thunderbird-78 = wrapThunderbird thunderbird-78-unwrapped { };
+  thunderbird-wayland = wrapThunderbird thunderbird-unwrapped { forceWayland = true; };
 
   thunderbolt = callPackage ../os-specific/linux/thunderbolt {};
 
@@ -28261,6 +28279,8 @@ with pkgs;
   wpsoffice = libsForQt514.callPackage ../applications/office/wpsoffice {};
 
   wrapFirefox = callPackage ../applications/networking/browsers/firefox/wrapper.nix { };
+
+  wrapThunderbird = callPackage ../applications/networking/mailreaders/thunderbird/wrapper.nix { };
 
   wp-cli = callPackage ../development/tools/wp-cli { };
 
@@ -29409,6 +29429,8 @@ with pkgs;
   lgogdownloader = callPackage ../games/lgogdownloader { };
 
   liberal-crime-squad = callPackage ../games/liberal-crime-squad { };
+
+  liberation-circuit = callPackage ../games/liberation-circuit { };
 
   lincity = callPackage ../games/lincity {};
 
@@ -30750,6 +30772,8 @@ with pkgs;
   leo3-bin = callPackage ../applications/science/logic/leo3/binary.nix {};
 
   logisim = callPackage ../applications/science/logic/logisim {};
+
+  logisim-evolution = callPackage ../applications/science/logic/logisim-evolution {};
 
   ltl2ba = callPackage ../applications/science/logic/ltl2ba {};
 

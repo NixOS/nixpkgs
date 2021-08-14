@@ -7,7 +7,7 @@
 , withGUI ? withGTK
 , withPython ? true
 , withExtras ? true
-, Carbon ? null, Cocoa ? null
+, Carbon, Cocoa
 }:
 
 assert withGTK -> withGUI;
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     readline uthash woff2 zeromq libuninameslist
     python freetype zlib glib giflib libpng libjpeg libtiff libxml2
   ]
-    ++ lib.optionals withSpiro [libspiro]
+    ++ lib.optionals withSpiro [ libspiro ]
     ++ lib.optionals withGUI [ gtk3 cairo pango ]
     ++ lib.optionals stdenv.isDarwin [ Carbon Cocoa ];
 
@@ -77,11 +77,11 @@ stdenv.mkDerivation rec {
       rm -r "$out/share/fontforge/python"
     '';
 
-  meta = {
+  meta = with lib; {
     description = "A font editor";
-    homepage = "http://fontforge.github.io";
-    platforms = lib.platforms.all;
-    license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.erictapen ];
+    homepage = "https://fontforge.github.io";
+    platforms = platforms.all;
+    license = licenses.bsd3;
+    maintainers = [ maintainers.erictapen ];
   };
 }
