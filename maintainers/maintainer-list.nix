@@ -9680,6 +9680,12 @@
     githubId = 1567527;
     name = "Sebastian Hyberts";
   };
+  sebbel = {
+    email = "hej@sebastian-ball.de";
+    github = "sebbel";
+    githubId = 1940568;
+    name = "Sebastian Ball";
+  };
   sebtm = {
     email = "mail@sebastian-sellmeier.de";
     github = "sebtm";
