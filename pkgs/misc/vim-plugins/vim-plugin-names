@@ -9,6 +9,7 @@ ajmwagar/vim-deus
 akinsho/nvim-bufferline.lua
 akinsho/nvim-toggleterm.lua
 aklt/plantuml-syntax
+allendang/nvim-expand-expr@main
 altercation/vim-colors-solarized
 alvan/vim-closetag
 alx741/vim-hindent
