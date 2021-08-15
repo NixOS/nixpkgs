@@ -70,6 +70,11 @@ stdenv.mkDerivation {
     #     https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;h=956ea65cd707707c0f725930214cbc781367a831
     ./bfd-elf-Dont-read-non-existing-secondary-relocs.patch
 
+    # Fix building plv8’s v8.
+    # https://github.com/NixOS/nixpkgs/issues/134190
+    # Obtained from: https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=586e30940e640f67bd55bd72e1d1355a4faf8079
+    ./gold-Update-GNU_PROPERTY_X86_XXX-macros.patch
+
     ./CVE-2020-35448.patch
   ] ++ lib.optional stdenv.targetPlatform.isiOS ./support-ios.patch
     ++ # This patch was suggested by Nick Clifton to fix
