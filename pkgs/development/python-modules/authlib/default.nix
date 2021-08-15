@@ -8,14 +8,14 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.15.3";
+  version = "0.15.4";
   pname = "authlib";
 
   src = fetchFromGitHub {
     owner = "lepture";
     repo = "authlib";
     rev = "v${version}";
-    sha256 = "1lqicv8awyygqh1z8vhwvx38dw619kgbirdn8c9sc3qilagq1rdx";
+    sha256 = "1jc7rssi1y6brkwjplj8qmi4q5w9h9wz03fbhg01c0y5bmy0g1nj";
   };
 
   propagatedBuildInputs = [ cryptography requests ];
