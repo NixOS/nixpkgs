@@ -1,12 +1,13 @@
 { lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "gprolog-1.5.0";
+  pname = "gprolog";
+  version = "1.5.0";
 
   src = fetchurl {
     urls = [
-      "mirror://gnu/gprolog/${name}.tar.gz"
-      "http://www.gprolog.org/${name}.tar.gz"
+      "mirror://gnu/gprolog/gprolog-${version}.tar.gz"
+      "http://www.gprolog.org/gprolog-${version}.tar.gz"
     ];
     sha256 = "sha256-ZwZCtDwPqifr1olh77F+vnB2iPkbaAlWbd1gYTlRLAE=";
   };
@@ -22,13 +23,13 @@ stdenv.mkDerivation rec {
     configureFlagsArray=(
       "--with-install-dir=$out"
       "--without-links-dir"
-      "--with-examples-dir=$out/share/${name}/examples"
-      "--with-doc-dir=$out/share/${name}/doc"
+      "--with-examples-dir=$out/share/gprolog-${version}/examples"
+      "--with-doc-dir=$out/share/gprolog-${version}/doc"
     )
   '';
 
   postInstall = ''
-    mv -v $out/[A-Z]* $out/gprolog.ico $out/share/${name}/
+    mv -v $out/[A-Z]* $out/gprolog.ico $out/share/gprolog-${version}/
   '';
 
   doCheck = true;
