@@ -79,7 +79,7 @@ in
         description =
           ''
             This option determines which Docker storage driver to use. By default
-            it let's docker automatically choose preferred storage driver.
+            it lets docker automatically choose preferred storage driver.
           '';
       };
 
