@@ -6,7 +6,12 @@ let
   cfg = config.services.nzbget;
   pkg = pkgs.nzbget;
   stateDir = "/var/lib/nzbget";
-  configFile = "${stateDir}/nzbget.conf";
+  configFile = if cfg.declarativeConfig == null then
+                 "${stateDir}/nzbget.conf"
+               else
+                 "/run/nzbget/nzbget.conf";
+  declarativeConfigFile = pkgs.writeText "nzbget.conf" (generators.toKeyValue {} cfg.declarativeConfig);
+  defaultConfigFile = "${pkg}/share/nzbget/nzbget.conf";
   configOpts = concatStringsSep " " (mapAttrsToList (name: value: "-o ${name}=${value}") nixosOpts);
 
   nixosOpts = {
@@ -50,6 +55,26 @@ in
         default = "nzbget";
         description = "Group under which NZBGet runs";
       };
+
+      declarativeConfig = mkOption {
+        type = with types; nullOr (attrsOf (oneOf [ int str ]));
+        default = null;
+        description = ''
+          NZBGet configuration options, if used the configuration cannot be
+          modified by NZBGet.
+        '';
+      };
+
+      appendConfigFile = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          NZBGet config file that is added to and overwrites the declarative
+          configuration. This can be useful for specifying passwords or other
+          secrets. This option is ignored if <option>declarativeConfig</option>
+          is unset.
+        '';
+      };
     };
   };
 
@@ -64,10 +89,27 @@ in
         unrar
         p7zip
       ];
-      preStart = ''
+      preStart = if cfg.declarativeConfig == null then ''
         if [ ! -f ${configFile} ]; then
           ${pkgs.coreutils}/bin/install -m 0700 ${pkg}/share/nzbget/nzbget.conf ${configFile}
         fi
+      '' else ''
+        set -u
+        # parse config files in order overwriting options and dump the resulting configuration
+        IFS='
+        '
+        declare -A options
+        for file in ${
+          escapeShellArgs ([ defaultConfigFile declarativeConfigFile ]
+                           ++ optional (cfg.appendConfigFile != null) cfg.appendConfigFile)
+        }; do
+          while read -r line; do
+            [[ $line =~ ^# || $line =~ ^\ *$ ]] || options["''${line%%=*}"]="$line"
+          done < "$file"
+        done
+        for line in "''${options[@]}"; do
+          printf '%s\n' "$line"
+        done | install -m 0400 /dev/stdin ${configFile}
       '';
 
       serviceConfig = {
@@ -77,8 +119,10 @@ in
         Group = cfg.group;
         UMask = "0002";
         Restart = "on-failure";
-        ExecStart = "${pkg}/bin/nzbget --server --configfile ${stateDir}/nzbget.conf ${configOpts}";
+        ExecStart = "${pkg}/bin/nzbget --server --configfile ${configFile} ${configOpts}";
         ExecStop = "${pkg}/bin/nzbget --quit";
+      } // optionalAttrs (cfg.declarativeConfig != null) {
+        RuntimeDirectory = "nzbget";
       };
     };
 
