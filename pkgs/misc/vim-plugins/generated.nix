@@ -495,6 +495,18 @@ final: prev:
     meta.homepage = "https://github.com/xavierd/clang_complete/";
   };
 
+  clever-f-vim = buildVimPluginFrom2Nix {
+    pname = "clever-f-vim";
+    version = "2021-07-07";
+    src = fetchFromGitHub {
+      owner = "rhysd";
+      repo = "clever-f.vim";
+      rev = "fd370f27cca93918184a8043220cef1aa440a1fd";
+      sha256 = "163gd1vv6k9pyzyfjfcqinn7w001ickwdh1ygg6g62h4s98r2ann";
+    };
+    meta.homepage = "https://github.com/rhysd/clever-f.vim/";
+  };
+
   clighter8 = buildVimPluginFrom2Nix {
     pname = "clighter8";
     version = "2018-07-25";
