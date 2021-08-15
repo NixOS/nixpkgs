@@ -5092,6 +5092,8 @@ in {
 
   oset = callPackage ../development/python-modules/oset { };
 
+  oslotest = callPackage ../development/python-modules/oslotest { };
+
   osmnx = callPackage ../development/python-modules/osmnx { };
 
   osmpythontools = callPackage ../development/python-modules/osmpythontools { };
