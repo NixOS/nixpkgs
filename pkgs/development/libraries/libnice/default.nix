@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
     openssl
-  ] ++ optional !stdenv.isDarwin gupnp-igd;
+  ] ++ optional (!stdenv.isDarwin) gupnp-igd;
 
   propagatedBuildInputs = [
     glib
