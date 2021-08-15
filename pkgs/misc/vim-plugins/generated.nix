@@ -1544,6 +1544,18 @@ final: prev:
     meta.homepage = "https://github.com/konfekt/fastfold/";
   };
 
+  fcitx-vim = buildVimPluginFrom2Nix {
+    pname = "fcitx-vim";
+    version = "2021-08-15";
+    src = fetchFromGitHub {
+      owner = "lilydjwg";
+      repo = "fcitx.vim";
+      rev = "4042bbb29c50a592062563f5042951abec696702";
+      sha256 = "1y5c1nan5gajrz1l0zkqx0y3a8cpam6l62yd7x19z6dzn7m1b5yb";
+    };
+    meta.homepage = "https://github.com/lilydjwg/fcitx.vim/";
+  };
+
   feline-nvim = buildVimPluginFrom2Nix {
     pname = "feline-nvim";
     version = "2021-07-30";
