@@ -7616,6 +7616,12 @@
     githubId = 34162313;
     name = "Jason Wing";
   };
+  netforceexplorer = {
+    email = "netforce-explorer-dev@outlook.com";
+    github = "netforceexplorer";
+    githubId = 20754345;
+    name = "Tobias Fischbach";
+  };
   netixx = {
     email = "dev.espinetfrancois@gmail.com";
     github = "netixx";
