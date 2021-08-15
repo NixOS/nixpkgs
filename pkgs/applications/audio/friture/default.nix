@@ -1,7 +1,7 @@
-{ lib, fetchFromGitHub, python39Packages, wrapQtAppsHook }:
+{ lib, fetchFromGitHub, python3Packages, wrapQtAppsHook }:
 
 let
-  py = python39Packages;
+  py = python3Packages;
 in py.buildPythonApplication rec {
   pname = "friture";
   version = "0.47";
