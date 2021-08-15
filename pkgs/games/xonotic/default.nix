@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchzip, makeWrapper, runCommandNoCC, makeDesktopItem
+{ lib, stdenv, fetchurl, fetchzip, makeWrapper, runCommand, makeDesktopItem
 , xonotic-data, copyDesktopItems
 , # required for both
   unzip, libjpeg, zlib, libvorbis, curl
@@ -130,7 +130,7 @@ in rec {
     passthru.version = version;
   };
 
-  xonotic = runCommandNoCC "xonotic${variant}-${version}" {
+  xonotic = runCommand "xonotic${variant}-${version}" {
     inherit xonotic-unwrapped;
     nativeBuildInputs = [ makeWrapper copyDesktopItems ];
     desktopItems = [ desktopItem ];

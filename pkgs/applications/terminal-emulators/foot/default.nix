@@ -3,7 +3,7 @@
 , fetchFromGitea
 , fetchurl
 , fetchpatch
-, runCommandNoCC
+, runCommand
 , fcft
 , freetype
 , pixman
@@ -54,7 +54,7 @@ let
     '';
   };
 
-  stimuliFile = runCommandNoCC "pgo-stimulus-file" { } ''
+  stimuliFile = runCommand "pgo-stimulus-file" { } ''
     ${stimulusGenerator} \
       --rows=67 --cols=135 \
       --scroll --scroll-region \
