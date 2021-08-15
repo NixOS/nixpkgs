@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "opendht";
-  version = "2.1.6";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "savoirfairelinux";
     repo = "opendht";
     rev = version;
-    sha256 = "0sjb2a3yqnabwgmmn8gapc1dq9m8vp9z8w85zhsj654i5h3gp6zv";
+    sha256 = "sha256-u4MWMUbnq2q4FH0TMpbrbhS5erAfT4/3HYGLXaLTz+I=";
   };
 
   nativeBuildInputs =
