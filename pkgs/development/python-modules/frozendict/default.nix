@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "frozendict";
-  version = "1.2";
+  version = "2.0.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0ibf1wipidz57giy53dh7mh68f2hz38x8f4wdq88mvxj5pr7jhbp";
+    sha256 = "3f00de72805cf4c9e81b334f3f04809278b967d2fed84552313a0fcce511beb1";
   };
 
   # frozendict does not come with tests
