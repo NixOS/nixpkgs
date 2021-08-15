@@ -1,0 +1,13 @@
+diff --git a/server/src-lib/Data/HashMap/Strict/Extended.hs b/server/src-lib/Data/HashMap/Strict/Extended.hs
+index eaff0dfba..5047a0e9d 100644
+--- a/src-lib/Data/HashMap/Strict/Extended.hs
++++ b/src-lib/Data/HashMap/Strict/Extended.hs
+@@ -17,7 +17,7 @@ import qualified Data.Align          as A
+ import qualified Data.Foldable       as F
+ 
+ import           Data.Function
+-import           Data.HashMap.Strict as M
++import           Data.HashMap.Strict as M hiding (mapKeys)
+ import           Data.Hashable
+ import           Data.List.NonEmpty  (NonEmpty (..))
+ import           Data.These

@@ -1293,23 +1293,19 @@ self: super: {
   # Fails with "supports custom headers"
   Spock-core = dontCheck super.Spock-core;
 
-  # Needed by Hasura  1.3.1
-  dependent-map_0_2_4_0 = super.dependent-map_0_2_4_0.override {
-    dependent-sum = self.dependent-sum_0_4;
-  };
-
-  # Hasura 1.3.1
-  # Because of ghc-heap-view, profiling needs to be disabled.
-  graphql-engine = disableLibraryProfiling( overrideCabal (super.graphql-engine.override {
-     immortal = self.immortal_0_2_2_1;
-     dependent-map = self.dependent-map_0_2_4_0;
-     dependent-sum = self.dependent-sum_0_4;
+  # hasura packages need some extra care
+  graphql-engine = overrideCabal (super.graphql-engine.override {
+    immortal = self.immortal_0_2_2_1;
   }) (drv: {
-     # version in cabal file is invalid
-     version = "1.3.1-beta1";
-     # hasura needs VERSION env exported during build
-     preBuild = "export VERSION=1.3.1-beta1";
-  }));
+    patches = [ ./patches/graphql-engine-mapkeys.patch ];
+    doHaddock = false;
+    version = "2.0.5";
+  });
+  pg-client = overrideCabal super.pg-client (drv: {
+    librarySystemDepends = with pkgs; [ postgresql krb5.dev openssl.dev ];
+    # wants a running DB to check against
+    doCheck = false;
+  });
 
   # https://github.com/bos/statistics/issues/170
   statistics = dontCheck super.statistics;
