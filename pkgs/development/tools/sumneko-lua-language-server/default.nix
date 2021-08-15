@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sumneko-lua-language-server";
-  version = "1.20.2";
+  version = "2.2.3";
 
   src = fetchFromGitHub {
     owner = "sumneko";
     repo = "lua-language-server";
     rev = version;
-    sha256 = "sha256-7Ishq/TonJsteHBGDTNjImIwGPdeRgPS1g60d8bhTYg=";
+    sha256 = "168n0f19glhdw955vrhz6h38ipydkbai5wv5qqaiaw2x7ajzh69y";
     fetchSubmodules = true;
   };
 
@@ -17,12 +17,19 @@ stdenv.mkDerivation rec {
     makeWrapper
   ];
 
+  postPatch = ''
+    # doesn't work on aarch64, already removed on master:
+    # https://github.com/actboy168/bee.lua/commit/fd5ee552c8cff2c48eff72edc0c8db5b7bf1ee2c
+    rm {3rd/luamake/,}3rd/bee.lua/test/test_platform.lua
+    sed /test_platform/d -i {3rd/luamake/,}3rd/bee.lua/test/test.lua
+  '';
+
   preBuild = ''
     cd 3rd/luamake
   '';
 
   ninjaFlags = [
-    "-fninja/linux.ninja"
+    "-fcompile/ninja/linux.ninja"
   ];
 
   postBuild = ''
