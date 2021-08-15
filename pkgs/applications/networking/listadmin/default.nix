@@ -22,7 +22,7 @@ stdenvNoCC.mkDerivation rec {
 
     wrapProgram $out/bin/listadmin \
       --prefix PERL5LIB : "${with perl.pkgs; makeFullPerlPath [
-        TextReform NetINET6Glue LWPProtocolhttps
+        TextReform NetINET6Glue LWPProtocolHttps
         ]}"
   '';
 
