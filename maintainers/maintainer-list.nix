@@ -7605,6 +7605,12 @@
     githubId = 628342;
     name = "Tim Steinbach";
   };
+  nerdypepper = {
+    email = "nerdy@peppe.rs";
+    github = "nerdypepper";
+    githubId = 23743547;
+    name = "Akshay Oppiliappan";
+  };
   nessdoor = {
     name = "Tomas Antonio Lopez";
     email = "entropy.overseer@protonmail.com";
