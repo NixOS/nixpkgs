@@ -4523,6 +4523,18 @@ final: prev:
     meta.homepage = "https://github.com/chrisbra/Recover.vim/";
   };
 
+  refactoring-nvim = buildVimPluginFrom2Nix {
+    pname = "refactoring-nvim";
+    version = "2021-08-15";
+    src = fetchFromGitHub {
+      owner = "theprimeagen";
+      repo = "refactoring.nvim";
+      rev = "48eeaf96bd78087dbf1df220fa6bf3e81906a481";
+      sha256 = "1h6vgw25fi7ar9gk8b1a5v61lc26myf7rr82hg2vfdrif4w9qgzq";
+    };
+    meta.homepage = "https://github.com/theprimeagen/refactoring.nvim/";
+  };
+
   registers-nvim = buildVimPluginFrom2Nix {
     pname = "registers-nvim";
     version = "2021-08-11";
