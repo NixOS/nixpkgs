@@ -728,8 +728,8 @@ mapAliases ({
   rubyPackages_2_5 = throw "rubyPackages_2_5 was deprecated in 2021-02: use a newer version of rubyPackages instead";
   rubygems = throw "rubygems was deprecated on 2016-03-02: rubygems is now bundled with ruby";
   rubyMinimal = throw "rubyMinimal was removed due to being unused";
-  runCommandNoCC = lib.warn "runCommandNoCC is deprecated. Use the equivalent runCommand function instead." runCommand;
-  runCommandNoCCLocal = lib.warn "runCommandNoCCLocal is deprecated. Use the equivalent runCommandLocal function instead." runCommandLocal;
+  runCommandNoCC = runCommand;
+  runCommandNoCCLocal = runCommandLocal;
   runwayml = throw "runwayml is now a webapp"; # added 2021-04-17
   rxvt_unicode-with-plugins = rxvt-unicode; # added 2020-02-02
   rxvt_unicode = rxvt-unicode-unwrapped; # added 2020-02-02
