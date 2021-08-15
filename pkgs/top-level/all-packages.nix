@@ -27321,6 +27321,8 @@ with pkgs;
 
   stella = callPackage ../misc/emulators/stella { };
 
+  stestr = with python3Packages; toPythonApplication stestr;
+
   linuxstopmotion = libsForQt5.callPackage ../applications/video/linuxstopmotion { };
 
   sweethome3d = recurseIntoAttrs (
