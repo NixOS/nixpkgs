@@ -17,10 +17,12 @@ stdenv.mkDerivation rec {
    ];
 
    preInstall = ''
-      substituteInPlace unipicker --replace "/etc/unipickerrc" "$out/etc/unipickerrc"
-      substituteInPlace unipickerrc --replace "/usr/local" "$out"
-      substituteInPlace unipicker --replace "fzf" "${fzf}/bin/fzf"
-      substituteInPlace unipickerrc --replace "fzf" "${fzf}/bin/fzf"
+      substituteInPlace unipicker \
+        --replace "/etc/unipickerrc" "$out/etc/unipickerrc" \
+        --replace "fzf" "${fzf}/bin/fzf"
+      substituteInPlace unipickerrc \
+        --replace "/usr/local" "$out" \
+        --replace "fzf" "${fzf}/bin/fzf"
    '';
 
    makeFlags = [
@@ -33,6 +35,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/jeremija/unipicker";
     license = licenses.mit;
     maintainers = with maintainers; [ kiyengar ];
-    platforms = with platforms; unix;
+    platforms = platforms.unix;
    };
 }
