@@ -5096,6 +5096,8 @@ in {
 
   oslo-config = callPackage ../development/python-modules/oslo-config { };
 
+  oslo-context = callPackage ../development/python-modules/oslo-context { };
+
   oslo-i18n = callPackage ../development/python-modules/oslo-i18n { };
 
   oslo-utils = callPackage ../development/python-modules/oslo-utils { };
