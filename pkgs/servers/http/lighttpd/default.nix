@@ -1,25 +1,15 @@
 { lib, stdenv, buildPackages, fetchurl, pkg-config, pcre, libxml2, zlib, bzip2, which, file
 , openssl
-, enableDbi ? false, libdbi ? null
-, enableMagnet ? false, lua5_1 ? null
-, enableMysql ? false, libmysqlclient ? null
-, enableLdap ? false, openldap ? null
-, enablePam ? false, linux-pam ? null
-, enableSasl ? false, cyrus_sasl ? null
-, enableWebDAV ? false, sqlite ? null, libuuid ? null
-, enableExtendedAttrs ? false, attr ? null
+, enableDbi ? false, libdbi
+, enableMagnet ? false, lua5_1
+, enableMysql ? false, libmysqlclient
+, enableLdap ? false, openldap
+, enablePam ? false, linux-pam
+, enableSasl ? false, cyrus_sasl
+, enableWebDAV ? false, sqlite, libuuid
+, enableExtendedAttrs ? false, attr
 , perl
 }:
-
-assert enableDbi -> libdbi != null;
-assert enableMagnet -> lua5_1 != null;
-assert enableMysql -> libmysqlclient != null;
-assert enableLdap -> openldap != null;
-assert enablePam -> linux-pam != null;
-assert enableSasl -> cyrus_sasl != null;
-assert enableWebDAV -> sqlite != null;
-assert enableWebDAV -> libuuid != null;
-assert enableExtendedAttrs -> attr != null;
 
 stdenv.mkDerivation rec {
   pname = "lighttpd";
