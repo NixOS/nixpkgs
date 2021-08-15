@@ -299,7 +299,9 @@ clone_user_rev() {
     local rev="${3:-HEAD}"
 
     if [ -n "$fetchLFS" ]; then
-        HOME=$TMPDIR
+        tmpHomePath="$(mktemp -d -p nix-prefetch-git-tmp-home-XXXXXXXXXX)"
+        exit_handlers+=(remove_tmpHomePath)
+        HOME="$tmpHomePath"
         git lfs install
     fi
 
@@ -405,6 +407,10 @@ EOF
 
 remove_tmpPath() {
     rm -rf "$tmpPath"
+}
+
+remove_tmpHomePath() {
+    rm -rf "$tmpHomePath"
 }
 
 if test -n "$QUIET"; then
