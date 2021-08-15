@@ -14,6 +14,7 @@
 # Kernel dependencies
 , kernel ? null
 , enablePython ? true
+, zfsPatches ? []
 
 # for determining the latest compatible linuxPackages
 , linuxPackages_5_13
@@ -28,7 +29,7 @@ let
 
   common = { version
     , sha256
-    , extraPatches ? []
+    , extraPatches ? zfsPatches
     , rev ? "zfs-${version}"
     , isUnstable ? false
     , latestCompatibleLinuxPackages

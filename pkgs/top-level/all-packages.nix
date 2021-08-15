@@ -21472,7 +21472,7 @@ with pkgs;
 
     inherit (callPackages ../os-specific/linux/zfs {
         configFile = "kernel";
-        inherit kernel;
+        inherit kernel zfsPatches;
       }) zfsStable zfsUnstable;
     zfs = zfsStable;
 
@@ -22261,6 +22261,7 @@ with pkgs;
   }) zfsStable zfsUnstable;
 
   zfs = zfsStable;
+  zfsPatches = [ ];
 
   ### DATA
 
