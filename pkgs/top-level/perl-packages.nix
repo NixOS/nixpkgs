@@ -9,6 +9,7 @@
 , stdenv, lib, buildPackages, pkgs
 , fetchurl, fetchgit, fetchpatch, fetchFromGitHub
 , perl, overrides, buildPerl, shortenPerlShebang
+, nixosTests
 }:
 
 # cpan2nix assumes that perl-packages.nix will be used only with perl 5.30.3 or above
@@ -13691,6 +13692,8 @@ let
       description = "Embed a Perl interpreter in the Apache HTTP server";
       license = lib.licenses.asl20;
     };
+
+    passthru.tests = nixosTests.mod_perl;
   };
 
   Mojolicious = buildPerlPackage {
