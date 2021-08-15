@@ -24,16 +24,13 @@ rec {
   * `allowSubstitutes = false;`
   * to a derivation’s attributes.
   */
-  runCommand = runCommandNoCC;
-  runCommandLocal = runCommandNoCCLocal;
-
-  runCommandNoCC = name: env: runCommandWith {
+  runCommand = name: env: runCommandWith {
     stdenv = stdenvNoCC;
     runLocal = false;
     inherit name;
     derivationArgs = env;
   };
-  runCommandNoCCLocal = name: env: runCommandWith {
+  runCommandLocal = name: env: runCommandWith {
     stdenv = stdenvNoCC;
     runLocal = true;
     inherit name;

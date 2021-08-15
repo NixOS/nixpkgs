@@ -241,7 +241,7 @@ let
         defaultListen =
           if vhost.listen != [] then vhost.listen
           else
-            let addrs = if vhost.listenAddresses != [] then vhost.listenAddreses else (
+            let addrs = if vhost.listenAddresses != [] then vhost.listenAddresses else (
               [ "0.0.0.0" ] ++ optional enableIPv6 "[::0]"
             );
             in
