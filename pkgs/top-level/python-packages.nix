@@ -5094,6 +5094,8 @@ in {
 
   osc = callPackage ../development/python-modules/osc { };
 
+  osc-lib = callPackage ../development/python-modules/osc-lib { };
+
   oscrypto = callPackage ../development/python-modules/oscrypto { };
 
   oset = callPackage ../development/python-modules/oset { };
