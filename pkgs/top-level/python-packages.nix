@@ -7307,6 +7307,8 @@ in {
 
   pyturbojpeg = callPackage ../development/python-modules/pyturbojpeg { };
 
+  pytwitchapi = callPackage ../development/python-modules/pytwitchapi { };
+
   pytz = callPackage ../development/python-modules/pytz { };
 
   pytzdata = callPackage ../development/python-modules/pytzdata { };

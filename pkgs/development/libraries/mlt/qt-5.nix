@@ -24,7 +24,7 @@
 , mkDerivation
 , which
 }:
-let inherit (lib) getDev; in
+
 mkDerivation rec {
   pname = "mlt";
   version = "7.0.1";
