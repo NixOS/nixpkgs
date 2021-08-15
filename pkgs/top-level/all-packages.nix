@@ -12853,6 +12853,8 @@ with pkgs;
 
   pypi2nix = callPackage ../development/tools/pypi2nix {};
 
+  pypi-mirror = callPackage ../development/tools/pypi-mirror {};
+
   setupcfg2nix = python3Packages.callPackage ../development/tools/setupcfg2nix {};
 
   # These pyside tools do not provide any Python modules and are meant to be here.
