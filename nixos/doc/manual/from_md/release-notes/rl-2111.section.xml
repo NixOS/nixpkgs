@@ -722,6 +722,20 @@
     <itemizedlist>
       <listitem>
         <para>
+          The linux kernel package infrastructure was moved out of
+          <literal>all-packages.nix</literal>, and restructured. Linux
+          related functions and attributes now live under the
+          <literal>pkgs.linuxKernel</literal> attribute set. In
+          particular the versioned <literal>linuxPackages_*</literal>
+          package sets (such as <literal>linuxPackages_5_4</literal>)
+          and kernels from <literal>pkgs</literal> were moved there and
+          now live under <literal>pkgs.linuxKernel.packages.*</literal>.
+          The unversioned ones (such as
+          <literal>linuxPackages_latest</literal>) remain untouched.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The setting
           <link xlink:href="options.html#opt-services.openssh.logLevel"><literal>services.openssh.logLevel</literal></link>
           <literal>&quot;VERBOSE&quot;</literal>
