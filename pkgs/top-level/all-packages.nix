@@ -19791,9 +19791,9 @@ with pkgs;
 
   gobgpd = callPackage ../servers/misc/gobgpd { };
 
-  graph-cli = callPackage ../tools/graphics/graph-cli { };
-
   grace = callPackage ../tools/graphics/grace { };
+
+  graph-cli = callPackage ../tools/graphics/graph-cli { };
 
   h2o = callPackage ../servers/http/h2o { };
 
