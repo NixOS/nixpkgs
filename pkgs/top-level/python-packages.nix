@@ -1876,6 +1876,8 @@ in {
 
   debts = callPackage ../development/python-modules/debts { };
 
+  debtcollector = callPackage ../development/python-modules/debtcollector { };
+
   debugpy = callPackage ../development/python-modules/debugpy { };
 
   decorator = callPackage ../development/python-modules/decorator { };
