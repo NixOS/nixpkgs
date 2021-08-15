@@ -5094,6 +5094,8 @@ in {
 
   oset = callPackage ../development/python-modules/oset { };
 
+  oslo-config = callPackage ../development/python-modules/oslo-config { };
+
   oslo-i18n = callPackage ../development/python-modules/oslo-i18n { };
 
   oslo-utils = callPackage ../development/python-modules/oslo-utils { };
