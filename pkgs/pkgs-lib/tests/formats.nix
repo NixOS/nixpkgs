@@ -14,7 +14,7 @@ let
       }) [ def ]);
     in formatSet.generate "test-format-file" config;
 
-  runBuildTest = name: { drv, expected }: pkgs.runCommandNoCC name {} ''
+  runBuildTest = name: { drv, expected }: pkgs.runCommand name {} ''
     if diff -u '${builtins.toFile "expected" expected}' '${drv}'; then
       touch "$out"
     else
