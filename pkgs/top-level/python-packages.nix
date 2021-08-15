@@ -5086,6 +5086,8 @@ in {
 
   orvibo = callPackage ../development/python-modules/orvibo { };
 
+  os-service-types = callPackage ../development/python-modules/os-service-types { };
+
   osc = callPackage ../development/python-modules/osc { };
 
   oscrypto = callPackage ../development/python-modules/oscrypto { };
