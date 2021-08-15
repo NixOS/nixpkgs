@@ -29,6 +29,8 @@ buildPythonPackage rec {
     export SRHT_PATH=${srht}/${python.sitePackages}/srht
   '';
 
+  pythonImportsCheck = [ "mansrht" ];
+
   meta = with lib; {
     homepage = "https://git.sr.ht/~sircmpwn/man.sr.ht";
     description = "Wiki service for the sr.ht network";

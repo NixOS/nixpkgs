@@ -31,6 +31,8 @@ buildPythonPackage rec {
     export SRHT_PATH=${srht}/${python.sitePackages}/srht
   '';
 
+  pythonImportsCheck = [ "dispatchsrht" ];
+
   meta = with lib; {
     homepage = "https://dispatch.sr.ht/~sircmpwn/dispatch.sr.ht";
     description = "Task dispatcher and service integration tool for the sr.ht network";

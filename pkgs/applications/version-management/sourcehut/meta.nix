@@ -66,6 +66,8 @@ buildPythonPackage rec {
     cp ${buildApi "${src}/api/"}/bin/api $out/bin/metasrht-api
   '';
 
+  pythonImportsCheck = [ "metasrht" ];
+
   meta = with lib; {
     homepage = "https://git.sr.ht/~sircmpwn/meta.sr.ht";
     description = "Account management service for the sr.ht network";

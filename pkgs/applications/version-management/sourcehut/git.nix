@@ -72,6 +72,8 @@ buildPythonPackage rec {
     inherit updateHook;
   };
 
+  pythonImportsCheck = [ "gitsrht" ];
+
   meta = with lib; {
     homepage = "https://git.sr.ht/~sircmpwn/git.sr.ht";
     description = "Git repository hosting service for the sr.ht network";

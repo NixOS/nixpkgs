@@ -33,6 +33,7 @@ buildPythonPackage rec {
   '';
 
   dontUseSetuptoolsCheck = true;
+  pythonImportsCheck = [ "scmsrht" ];
 
   meta = with lib; {
     homepage = "https://git.sr.ht/~sircmpwn/git.sr.ht";

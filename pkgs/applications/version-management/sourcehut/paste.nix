@@ -29,6 +29,8 @@ buildPythonPackage rec {
     export SRHT_PATH=${srht}/${python.sitePackages}/srht
   '';
 
+  pythonImportsCheck = [ "pastesrht" ];
+
   meta = with lib; {
     homepage = "https://git.sr.ht/~sircmpwn/paste.sr.ht";
     description = "Ad-hoc text file hosting service for the sr.ht network";

@@ -26,6 +26,7 @@ buildPythonPackage rec {
   '';
 
   dontUseSetuptoolsCheck = true;
+  pythonImportsCheck = [ "hubsrht" ];
 
   meta = with lib; {
     homepage = "https://git.sr.ht/~sircmpwn/hub.sr.ht";

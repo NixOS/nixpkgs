@@ -42,6 +42,7 @@ buildPythonPackage rec {
   ];
 
   dontUseSetuptoolsCheck = true;
+  pythonImportsCheck = [ "todosrht" ];
 
   meta = with lib; {
     homepage = "https://todo.sr.ht/~sircmpwn/todo.sr.ht";
