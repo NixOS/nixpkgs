@@ -1,6 +1,6 @@
 # Builder for Agda packages.
 
-{ stdenv, lib, self, Agda, runCommandNoCC, makeWrapper, writeText, ghcWithPackages, nixosTests }:
+{ stdenv, lib, self, Agda, runCommand, makeWrapper, writeText, ghcWithPackages, nixosTests }:
 
 with lib.strings;
 
@@ -15,7 +15,7 @@ let
     '';
     pname = "agdaWithPackages";
     version = Agda.version;
-  in runCommandNoCC "${pname}-${version}" {
+  in runCommand "${pname}-${version}" {
     inherit pname version;
     nativeBuildInputs = [ makeWrapper ];
     passthru = {
