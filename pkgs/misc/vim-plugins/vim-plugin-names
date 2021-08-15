@@ -352,6 +352,7 @@ lifepillar/vim-gruvbox8
 lifepillar/vim-mucomplete
 lighttiger2505/deoplete-vim-lsp
 lilydjwg/colorizer
+lilydjwg/fcitx.vim@fcitx5
 liuchengxu/vim-clap
 liuchengxu/vim-which-key
 liuchengxu/vista.vim

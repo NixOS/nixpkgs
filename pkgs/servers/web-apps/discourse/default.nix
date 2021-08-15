@@ -1,4 +1,4 @@
-{ stdenv, makeWrapper, runCommandNoCC, lib, nixosTests, writeShellScript
+{ stdenv, makeWrapper, runCommand, lib, nixosTests, writeShellScript
 , fetchFromGitHub, bundlerEnv, callPackage
 
 , ruby, replace, gzip, gnutar, git, cacert, util-linux, gawk
@@ -78,7 +78,7 @@ let
         '';
       });
 
-  rake = runCommandNoCC "discourse-rake" {
+  rake = runCommand "discourse-rake" {
     nativeBuildInputs = [ makeWrapper ];
   } ''
     mkdir -p $out/bin

@@ -162,7 +162,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
     pleroma_ctl user new jamy jamy@nixos.test --password 'jamy-password' --moderator --admin -y
   '';
 
-  tls-cert = pkgs.runCommandNoCC "selfSignedCerts" { buildInputs = [ pkgs.openssl ]; } ''
+  tls-cert = pkgs.runCommand "selfSignedCerts" { buildInputs = [ pkgs.openssl ]; } ''
     openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -nodes -subj '/CN=pleroma.nixos.test' -days 36500
     mkdir -p $out
     cp key.pem cert.pem $out

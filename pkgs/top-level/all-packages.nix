@@ -2234,6 +2234,8 @@ with pkgs;
 
   croc = callPackage ../tools/networking/croc { };
 
+  cbftp = callPackage ../tools/networking/cbftp { };
+
   cddl = callPackage ../development/tools/cddl { };
 
   cedille = callPackage ../applications/science/logic/cedille
