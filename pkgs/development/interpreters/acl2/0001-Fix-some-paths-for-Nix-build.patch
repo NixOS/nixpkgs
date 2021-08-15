@@ -1,54 +1,46 @@
-From 43d23211dd7d22b5264ed06d446f89d632125da8 Mon Sep 17 00:00:00 2001
+From d0136f350b82ae845d56029db43d153c91d5e494 Mon Sep 17 00:00:00 2001
 From: Keshav Kini <keshav.kini@gmail.com>
 Date: Sat, 30 May 2020 21:27:47 -0700
-Subject: [PATCH 1/2] Fix some paths for Nix build
+Subject: [PATCH] Fix some paths for Nix build
 
 ---
  books/build/features.sh                       |  1 +
- .../ipasir/load-ipasir-sharedlib-raw.lsp      | 16 +++----
+ .../ipasir/load-ipasir-sharedlib-raw.lsp      |  6 +--
  books/projects/smtlink/config.lisp            |  2 +-
  books/projects/smtlink/examples/examples.lisp |  4 +-
  books/projects/smtlink/smtlink-config         |  2 +-
- .../cl+ssl-20181018-git/src/reload.lisp       | 48 ++-----------------
- .../shellpool-20150505-git/src/main.lisp      | 20 +-------
- 7 files changed, 15 insertions(+), 78 deletions(-)
+ .../cl+ssl-20200610-git/src/reload.lisp       | 53 +------------------
+ 6 files changed, 8 insertions(+), 60 deletions(-)
 
 diff --git a/books/build/features.sh b/books/build/features.sh
-index c8493d51a..def853f53 100755
+index d45a7aa61..27256b7cd 100755
 --- a/books/build/features.sh
 +++ b/books/build/features.sh
-@@ -84,6 +84,7 @@ fi
- 
+@@ -122,6 +122,7 @@ EOF
+ fi
  
  echo "Determining whether an ipasir shared library is installed" 1>&2
-+IPASIR_SHARED_LIBRARY=${IPASIR_SHARED_LIBRARY:-@libipasirglucose4@/lib/libipasirglucose4.so}
- if [[ $IPASIR_SHARED_LIBRARY != '' ]];
- then
-     if [[ -e $IPASIR_SHARED_LIBRARY ]];
++IPASIR_SHARED_LIBRARY=${IPASIR_SHARED_LIBRARY:-@libipasir@}
+ if check_ipasir; then
+     cat >> Makefile-features <<EOF
+ export OS_HAS_IPASIR ?= 1
 diff --git a/books/centaur/ipasir/load-ipasir-sharedlib-raw.lsp b/books/centaur/ipasir/load-ipasir-sharedlib-raw.lsp
-index c6b0b3185..5ac5c675a 100644
+index 762e4ad4c..c9802cb58 100644
 --- a/books/centaur/ipasir/load-ipasir-sharedlib-raw.lsp
 +++ b/books/centaur/ipasir/load-ipasir-sharedlib-raw.lsp
-@@ -28,13 +28,9 @@
- ;
- ; Original authors: Sol Swords <sswords@centtech.com>
+@@ -30,11 +30,7 @@
  
--(er-let* ((libname (acl2::getenv$ "IPASIR_SHARED_LIBRARY" acl2::*the-live-state*)))
--         (if libname
--             (handler-case 
--               (cffi::load-foreign-library libname)
--               (error () (er hard? 'load-ipasir-shardlib-raw
--                             "Couldn't load the specified ipasir shared library, ~s0."
--                             libname)))
--           (er hard? 'load-ipasir-shardlib-raw
--               "Couldn't load an ipasir library because the ~
--                IPASIR_SHARED_LIBRARY environment variable was unset.")))
-+(let ((libname "@libipasirglucose4@/lib/libipasirglucose4.so"))
-+  (handler-case
-+      (cffi::load-foreign-library libname)
-+    (error () (er hard? 'load-ipasir-shardlib-raw
-+                  "Couldn't load the specified ipasir shared library, ~s0."
-+                  libname))))
+ (er-let* ((libname (acl2::getenv$ "IPASIR_SHARED_LIBRARY" acl2::*the-live-state*)))
+   (handler-case
+-      (cffi::load-foreign-library
+-       (or libname
+-           (cw "WARNING: $IPASIR_SHARED_LIBRARY not specified, ~
+-                defaulting to \"libipasirglucose4.so\"")
+-           "libipasirglucose4.so"))
++      (cffi::load-foreign-library (or libname "@libipasir@"))
+     (error () (er hard? 'load-ipasir-shardlib-raw
+                   "Couldn't load ipasir shared library from ~s0."
+                   libname))))
 diff --git a/books/projects/smtlink/config.lisp b/books/projects/smtlink/config.lisp
 index c74073174..8d92355f7 100644
 --- a/books/projects/smtlink/config.lisp
@@ -63,7 +55,7 @@ index c74073174..8d92355f7 100644
  
  ;; -----------------------------------------------------------------
 diff --git a/books/projects/smtlink/examples/examples.lisp b/books/projects/smtlink/examples/examples.lisp
-index bc66e0165..24f0d639c 100644
+index 90534892f..4ab98b2f0 100644
 --- a/books/projects/smtlink/examples/examples.lisp
 +++ b/books/projects/smtlink/examples/examples.lisp
 @@ -75,7 +75,7 @@ Subgoal 2
@@ -91,25 +83,32 @@ index 0d2703545..0f58904ea 100644
 @@ -1 +1 @@
 -smt-cmd=/usr/bin/env python
 +smt-cmd=python
-diff --git a/books/quicklisp/bundle/software/cl+ssl-20181018-git/src/reload.lisp b/books/quicklisp/bundle/software/cl+ssl-20181018-git/src/reload.lisp
-index 3f6aa35d0..ac4012363 100644
---- a/books/quicklisp/bundle/software/cl+ssl-20181018-git/src/reload.lisp
-+++ b/books/quicklisp/bundle/software/cl+ssl-20181018-git/src/reload.lisp
-@@ -20,54 +20,12 @@
- (in-package :cl+ssl)
+diff --git a/books/quicklisp/bundle/software/cl+ssl-20200610-git/src/reload.lisp b/books/quicklisp/bundle/software/cl+ssl-20200610-git/src/reload.lisp
+index e5db28645..65eb818a1 100644
+--- a/books/quicklisp/bundle/software/cl+ssl-20200610-git/src/reload.lisp
++++ b/books/quicklisp/bundle/software/cl+ssl-20200610-git/src/reload.lisp
+@@ -37,59 +37,10 @@
+ ;; These are 32-bit only.
  
  (cffi:define-foreign-library libcrypto
+-  (:windows (:or #+(and windows x86-64) "libcrypto-1_1-x64.dll"
+-                 #+(and windows x86) "libcrypto-1_1.dll"
+-                 "libeay32.dll"))
 -  (:openbsd "libcrypto.so")
 -  (:darwin (:or "/opt/local/lib/libcrypto.dylib" ;; MacPorts
 -                "/sw/lib/libcrypto.dylib"        ;; Fink
 -                "/usr/local/opt/openssl/lib/libcrypto.dylib" ;; Homebrew
 -                "/usr/local/lib/libcrypto.dylib" ;; personalized install
 -                "libcrypto.dylib"                ;; default system libcrypto, which may have insufficient crypto
--                "/usr/lib/libcrypto.dylib")))
+-                "/usr/lib/libcrypto.dylib"))
+-  (:cygwin (:or "cygcrypto-1.1.dll" "cygcrypto-1.0.0.dll")))
 +  (t "@openssl@/lib/libcrypto.so"))
  
  (cffi:define-foreign-library libssl
--  (:windows (:or "libssl32.dll" "ssleay32.dll"))
+-  (:windows (:or #+(and windows x86-64) "libssl-1_1-x64.dll"
+-                 #+(and windows x86) "libssl-1_1.dll"
+-                 "libssl32.dll"
+-                 "ssleay32.dll"))
 -  ;; The default OS-X libssl seems have had insufficient crypto algos
 -  ;; (missing TLSv1_[1,2]_XXX methods,
 -  ;; see https://github.com/cl-plus-ssl/cl-plus-ssl/issues/56)
@@ -128,11 +127,13 @@ index 3f6aa35d0..ac4012363 100644
 -  ;; so we can just use just "libssl.so".
 -  ;; More info at https://github.com/cl-plus-ssl/cl-plus-ssl/pull/2.
 -  (:openbsd "libssl.so")
--  ((and :unix (not :cygwin)) (:or "libssl.so.1.0.2m"
+-  ((and :unix (not :cygwin)) (:or "libssl.so.1.1"
+-                                  "libssl.so.1.0.2m"
 -                                  "libssl.so.1.0.2k"
 -                                  "libssl.so.1.0.2"
 -                                  "libssl.so.1.0.1l"
 -                                  "libssl.so.1.0.1j"
+-                                  "libssl.so.1.0.1f"
 -                                  "libssl.so.1.0.1e"
 -                                  "libssl.so.1.0.1"
 -                                  "libssl.so.1.0.0q"
@@ -142,49 +143,12 @@ index 3f6aa35d0..ac4012363 100644
 -                                  "libssl.so.10"
 -                                  "libssl.so.4"
 -                                  "libssl.so"))
--  (:cygwin "cygssl-1.0.0.dll")
+-  (:cygwin (:or "cygssl-1.1.dll" "cygssl-1.0.0.dll"))
 -  (t (:default "libssl3")))
--
--(cffi:define-foreign-library libeay32
--  (:windows "libeay32.dll"))
 +  (t "@openssl@/lib/libssl.so"))
- 
-+(cffi:define-foreign-library libeay32)
  
  (unless (member :cl+ssl-foreign-libs-already-loaded
                  *features*)
-diff --git a/books/quicklisp/bundle/software/shellpool-20150505-git/src/main.lisp b/books/quicklisp/bundle/software/shellpool-20150505-git/src/main.lisp
-index cda8dc94c..11035ea09 100644
---- a/books/quicklisp/bundle/software/shellpool-20150505-git/src/main.lisp
-+++ b/books/quicklisp/bundle/software/shellpool-20150505-git/src/main.lisp
-@@ -106,26 +106,8 @@
- ; Glue
- 
- 
--#-sbcl
- (defun find-bash ()
--  #+windows "bash.exe"
--  #-windows "bash")
--
--#+sbcl
--;; SBCL (on Linux, at least) won't successfully run "bash" all by itself.  So,
--;; on SBCL, try to find a likely bash.  BOZO this probably isn't great.  It
--;; would be better to search the user's PATH for which bash to use.
--(let ((found-bash))
--  (defun find-bash ()
--    (or found-bash
--        (let ((paths-to-try '("/bin/bash"
--                              "/usr/bin/bash"
--                              "/usr/local/bin/bash")))
--          (loop for path in paths-to-try do
--                (when (cl-fad::file-exists-p path)
--                  (setq found-bash path)
--                  (return-from find-bash path)))
--          (error "Bash not found among ~s" paths-to-try)))))
-+  "@bash@/bin/bash")
- 
- #+(or allegro lispworks)
- (defstruct bashprocess
 -- 
-2.25.4
+2.31.1
 
