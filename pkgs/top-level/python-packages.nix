@@ -5100,6 +5100,8 @@ in {
 
   oslo-i18n = callPackage ../development/python-modules/oslo-i18n { };
 
+  oslo-serialization = callPackage ../development/python-modules/oslo-serialization { };
+
   oslo-utils = callPackage ../development/python-modules/oslo-utils { };
 
   oslotest = callPackage ../development/python-modules/oslotest { };
