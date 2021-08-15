@@ -5,7 +5,6 @@
 , redis
 , pyyaml
 , buildsrht
-, writeText
 }:
 
 buildPythonPackage rec {

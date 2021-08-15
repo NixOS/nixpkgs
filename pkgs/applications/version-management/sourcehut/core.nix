@@ -25,7 +25,6 @@
 , sassc
 , nodejs
 , redis
-, writeText
 }:
 
 buildPythonPackage rec {
@@ -46,6 +45,7 @@ buildPythonPackage rec {
   };
 
   patches = [
+    # Disable check for npm
     ./disable-npm-install.patch
   ];
 
