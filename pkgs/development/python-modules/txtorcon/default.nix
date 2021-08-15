@@ -4,7 +4,7 @@
 
 buildPythonPackage rec {
   pname = "txtorcon";
-  version = "20.0.0";
+  version = "21.0.0";
 
   checkInputs = [ pytest mock lsof GeoIP ];
   propagatedBuildInputs = [
@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0yipb41w2icbj50d3z1j92d8w6xhbqd1rnmd31vzb5k3g20x0b0j";
+    sha256 = "68c047064018aa861c480607b133c6944e19e4d3da9f09100cfc413f25831444";
   };
 
   # zope.interface issue
