@@ -3,7 +3,7 @@
 assert kernel != null -> lib.versionAtLeast kernel.version "4.0";
 
 let
-  version = "1.0.beta1-9e810b1";
+  version = "2.1.1";
 in stdenv.mkDerivation {
   pname = "ply";
   inherit version;
@@ -12,8 +12,8 @@ in stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "iovisor";
     repo = "ply";
-    rev = "9e810b157ba079c32c430a7d4c6034826982056e";
-    sha256 = "15cp6iczawaqlhsa0af6i37zn5iq53kh6ya8s2hzd018yd7mhg50";
+    rev = "899afb0c35ba2191dd7aa21f13bc7fde2655c475";
+    sha256 = "0mfnfczk6kw6p15nx5l735qmcnb0pkix7ngq0j8nndg7r2fsckah";
   };
 
   preAutoreconf = ''
@@ -34,7 +34,7 @@ in stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "dynamic Tracing in Linux";
+    description = "Dynamic tracing in Linux";
     homepage = "https://wkz.github.io/ply/";
     license = [ licenses.gpl2 ];
     maintainers = with maintainers; [ mic92 mbbx6spp ];
