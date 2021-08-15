@@ -10,9 +10,8 @@
 , docbook_xsl
 , docbook_xml_dtd_412
 , glib
-, gupnp-igd
 , gst_all_1
-, gnutls
+, openssl
 }:
 
 stdenv.mkDerivation rec {
@@ -52,8 +51,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
-    gnutls
-    gupnp-igd
+    openssl
   ];
 
   propagatedBuildInputs = [
