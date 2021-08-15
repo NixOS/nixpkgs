@@ -4,7 +4,7 @@ with lib;
 
 let
   cfg = config.services.nzbget;
-  pkg = pkgs.nzbget;
+  pkg = cfg.package;
   stateDir = "/var/lib/nzbget";
   configFile = if cfg.declarativeConfig == null then
                  "${stateDir}/nzbget.conf"
@@ -43,6 +43,13 @@ in
   options = {
     services.nzbget = {
       enable = mkEnableOption "NZBGet";
+
+      package = mkOption {
+        type = types.package;
+        default = pkgs.nzbget;
+        defaultText = "pkgs.nzbget";
+        description = "NZBGet package to use";
+      };
 
       user = mkOption {
         type = types.str;
