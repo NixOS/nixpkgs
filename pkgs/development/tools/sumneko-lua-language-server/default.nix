@@ -17,6 +17,13 @@ stdenv.mkDerivation rec {
     makeWrapper
   ];
 
+  postPatch = ''
+    # doesn't work on aarch64, already removed on master:
+    # https://github.com/actboy168/bee.lua/commit/fd5ee552c8cff2c48eff72edc0c8db5b7bf1ee2c
+    rm {3rd/luamake/,}3rd/bee.lua/test/test_platform.lua
+    sed /test_platform/d -i {3rd/luamake/,}3rd/bee.lua/test/test.lua
+  '';
+
   preBuild = ''
     cd 3rd/luamake
   '';
