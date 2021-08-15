@@ -83,7 +83,10 @@ in
     };
 
     boot.kernelParams = mkOption {
-      type = types.listOf types.str;
+      type = types.listOf (types.strMatching ''([^"[:space:]]|"[^"]*")+'' // {
+        name = "kernelParam";
+        description = "string, with spaces inside double quotes";
+      });
       default = [ ];
       description = "Parameters added to the kernel command line.";
     };
