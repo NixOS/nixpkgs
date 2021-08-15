@@ -7,9 +7,10 @@
 }:
 
 {
-name ? "${attrs.pname}-${attrs.version}"
+# name ? "${attrs.pname}-${attrs.version}"
+pname,
 
-, version
+version
 
 # by default prefix `name` e.g. "lua5.2-${name}"
 , namePrefix ? if lua.pkgs.isLuaJIT
@@ -60,7 +61,9 @@ name ? "${attrs.pname}-${attrs.version}"
 # The two above arguments have access to builder variables -- e.g. to $out
 
 # relative to srcRoot, path to the rockspec to use when using rocks
-, rockspecFilename ?  "../*.rockspec"
+, rockspecFilename ? null
+  # "../*.rockspec"
+, rockspecDir ?  "."
 
 # must be set for packages that don't have a rock
 , knownRockspec ? null
@@ -71,6 +74,9 @@ name ? "${attrs.pname}-${attrs.version}"
 # Keep extra attributes from `attrs`, e.g., `patchPhase', etc.
 
 let
+  generatedRockspecFilename = "${pname}-${version}.rockspec";
+
+
   # TODO fix warnings "Couldn't load rockspec for ..." during manifest
   # construction -- from initial investigation, appears it will require
   # upstream luarocks changes to fix cleanly (during manifest construction,
@@ -144,7 +150,7 @@ in
 toLuaModule ( lua.stdenv.mkDerivation (
 builtins.removeAttrs attrs ["disabled" "checkInputs" "externalDeps" "extraVariables"] // {
 
-  name = namePrefix + name;
+  name = namePrefix + pname + "-" + version;
 
   buildInputs = [ wrapLua lua.pkgs.luarocks ]
     ++ buildInputs
@@ -159,12 +165,13 @@ builtins.removeAttrs attrs ["disabled" "checkInputs" "externalDeps" "extraVariab
   # @-patterns do not capture formal argument default values, so we need to
   # explicitly inherit this for it to be available as a shell variable in the
   # builder
-  inherit rockspecFilename;
+  # inherit rockspecFilename;
   inherit rocksSubdir;
 
   # enabled only for src.rock
   setSourceRoot= let
-    name_only= lib.getName name;
+    # name_only= lib.getName name;
+    name_only= pname;
   in
     lib.optionalString (knownRockspec == null) ''
     # format is rockspec_basename/source_basename
@@ -180,18 +187,23 @@ builtins.removeAttrs attrs ["disabled" "checkInputs" "externalDeps" "extraVariab
     ${luarocks_content}
     EOF
     export LUAROCKS_CONFIG="$PWD/${luarocks_config}";
-  ''
-  + lib.optionalString (knownRockspec != null) ''
 
-    # prevents the following type of error:
-    # Inconsistency between rockspec filename (42fm1b3d7iv6fcbhgm9674as3jh6y2sh-luv-1.22.0-1.rockspec) and its contents (luv-1.22.0-1.rockspec)
-    rockspecFilename="$TMP/$(stripHash ''${knownRockspec})"
-    cp ''${knownRockspec} "$rockspecFilename"
   ''
+  + lib.optionalString (rockspecFilename == null) ''
+    rockspecFilename="${generatedRockspecFilename}"
+  ''
+  # + lib.optionalString (knownRockspec != null) ''
+
+  #   # prevents the following type of error:
+  #   # Inconsistency between rockspec filename (42fm1b3d7iv6fcbhgm9674as3jh6y2sh-luv-1.22.0-1.rockspec) and its contents (luv-1.22.0-1.rockspec)
+  #   rockspecFilename="$TMP/$(stripHash ''${knownRockspec})"
+  #   cp ''${knownRockspec} "$rockspecFilename"
+  # ''
   + ''
     runHook postConfigure
   '';
 
+  # TODO could be moved to configurePhase
   buildPhase = ''
     runHook preBuild
 
@@ -225,7 +237,9 @@ builtins.removeAttrs attrs ["disabled" "checkInputs" "externalDeps" "extraVariab
 
     nix_debug "ROCKSPEC $rockspecFilename"
     nix_debug "cwd: $PWD"
+    set -x
     $LUAROCKS make --deps-mode=all --tree=$out ''${rockspecFilename}
+    set +x
 
     runHook postInstall
   '';

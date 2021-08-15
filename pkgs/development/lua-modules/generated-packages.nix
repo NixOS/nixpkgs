@@ -69,10 +69,11 @@ basexx = buildLuarocksPackage {
   pname = "basexx";
   version = "0.4.1-1";
 
-  knownRockspec = (fetchurl {
-    url    = "https://luarocks.org/basexx-0.4.1-1.rockspec";
-    sha256 = "0kmydxm2wywl18cgj303apsx7hnfd68a9hx9yhq10fj7yfcxzv5f";
-  }).outPath;
+  # knownRockspec = (fetchurl {
+  #   url    = "https://luarocks.org/basexx-0.4.1-1.rockspec";
+  #   sha256 = "0kmydxm2wywl18cgj303apsx7hnfd68a9hx9yhq10fj7yfcxzv5f";
+  # }).outPath;
+  rockspecDir = "dist";
 
   src = fetchurl {
     url    = "https://github.com/aiq/basexx/archive/v0.4.1.tar.gz";
@@ -111,6 +112,8 @@ binaryheap = buildLuarocksPackage {
 bit32 = buildLuarocksPackage {
   pname = "bit32";
   version = "5.3.0-1";
+
+  NIX_DEBUG=3;
 
   src = fetchurl {
     url    = "https://luarocks.org/bit32-5.3.0-1.src.rock";
@@ -1617,10 +1620,12 @@ plenary-nvim = buildLuarocksPackage {
   pname = "plenary.nvim";
   version = "scm-1";
 
-  knownRockspec = (fetchurl {
-    url    = "https://luarocks.org/plenary.nvim-scm-1.rockspec";
-    sha256 = "1xgqq0skg3vxahlnh1libc5dvhafp11k6k8cs65jcr9sw6xjycwh";
-  }).outPath;
+  # knownRockspec = (fetchurl {
+  #   url    = "https://luarocks.org/plenary.nvim-scm-1.rockspec";
+  #   sha256 = "1xgqq0skg3vxahlnh1libc5dvhafp11k6k8cs65jcr9sw6xjycwh";
+  # }).outPath;
+  # shouldn't this be the default ?
+  rockspecPath=".";
 
   src = fetchgit ( removeAttrs (builtins.fromJSON ''{
   "url": "git://github.com/nvim-lua/plenary.nvim",
@@ -1684,10 +1689,10 @@ say = buildLuarocksPackage {
   pname = "say";
   version = "1.3-1";
 
-  knownRockspec = (fetchurl {
-    url    = "https://luarocks.org/say-1.3-1.rockspec";
-    sha256 = "0bknglb0qwd6r703wp3hcb6z2xxd14kq4md3sg9al3b28fzxbhdv";
-  }).outPath;
+  # knownRockspec = (fetchurl {
+  #   url    = "https://luarocks.org/say-1.3-1.rockspec";
+  #   sha256 = "0bknglb0qwd6r703wp3hcb6z2xxd14kq4md3sg9al3b28fzxbhdv";
+  # }).outPath;
 
   src = fetchurl {
     url    = "https://github.com/Olivine-Labs/say/archive/v1.3-1.tar.gz";
