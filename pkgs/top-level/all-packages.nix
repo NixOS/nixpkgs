@@ -14891,22 +14891,25 @@ with pkgs;
 
   boolstuff = callPackage ../development/libraries/boolstuff { };
 
-  boost155 = callPackage ../development/libraries/boost/1.55.nix { };
-  boost159 = callPackage ../development/libraries/boost/1.59.nix { };
+  inherit (callPackage ../development/libraries/boost { inherit (buildPackages) boost-build; })
+    boost155
+    boost159
+    boost160
+    boost165
+    boost166
+    boost167
+    boost168
+    boost169
+    boost170
+    boost171
+    boost172
+    boost173
+    boost174
+    boost175
+  ;
+
   boost15x = boost159;
-  boost160 = callPackage ../development/libraries/boost/1.60.nix { };
-  boost165 = callPackage ../development/libraries/boost/1.65.nix { };
-  boost166 = callPackage ../development/libraries/boost/1.66.nix { };
-  boost167 = callPackage ../development/libraries/boost/1.67.nix { };
-  boost168 = callPackage ../development/libraries/boost/1.68.nix { };
-  boost169 = callPackage ../development/libraries/boost/1.69.nix { };
   boost16x = boost169;
-  boost170 = callPackage ../development/libraries/boost/1.70.nix { };
-  boost171 = callPackage ../development/libraries/boost/1.71.nix { };
-  boost172 = callPackage ../development/libraries/boost/1.72.nix { };
-  boost173 = callPackage ../development/libraries/boost/1.73.nix { };
-  boost174 = callPackage ../development/libraries/boost/1.74.nix { };
-  boost175 = callPackage ../development/libraries/boost/1.75.nix { };
   boost17x = boost175;
   boost = boost16x;
 
