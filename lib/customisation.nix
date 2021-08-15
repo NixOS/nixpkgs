@@ -64,21 +64,20 @@ rec {
      "<pkg>.overrideDerivation" to learn about `overrideDerivation` and caveats
      related to its use.
   */
-  makeOverridable = f: origArgs:
-    let
-      result = f origArgs;
+  makeOverridable = f:
+    let fArgs = lib.functionArgs f;
+    in lib.setFunctionArgs (origArgs:
+      let
+        result = f origArgs;
 
-      # Creates a functor with the same arguments as f
-      copyArgs = g: lib.setFunctionArgs g (lib.functionArgs f);
-      # Changes the original arguments with (potentially a function that returns) a set of new attributes
-      overrideWith = newArgs: origArgs // (if lib.isFunction newArgs then newArgs origArgs else newArgs);
+        # Changes the original arguments with (potentially a function that returns) a set of new attributes
+        overrideWith = newArgs: origArgs // (if lib.isFunction newArgs then newArgs origArgs else newArgs);
 
-      # Re-call the function but with different arguments
-      overrideArgs = copyArgs (newArgs: makeOverridable f (overrideWith newArgs));
-      # Change the result of the function call by applying g to it
-      overrideResult = g: makeOverridable (copyArgs (args: g (f args))) origArgs;
-    in
-      if builtins.isAttrs result then
+        # Re-call the function but with different arguments
+        overrideArgs = lib.setFunctionArgs (newArgs: makeOverridable f (overrideWith newArgs)) fArgs;
+        # Change the result of the function call by applying g to it
+        overrideResult = g: makeOverridable (lib.setFunctionArgs (args: g (f args)) fArgs) origArgs;
+      in if builtins.isAttrs result then
         result // {
           override = overrideArgs;
           overrideDerivation = fdrv: overrideResult (x: overrideDerivation x fdrv);
@@ -90,7 +89,7 @@ rec {
         lib.setFunctionArgs result (lib.functionArgs result) // {
           override = overrideArgs;
         }
-      else result;
+      else result) fArgs;
 
 
   /* Call the package function in the file `fn' with the required
