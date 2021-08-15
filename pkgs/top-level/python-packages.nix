@@ -3273,6 +3273,8 @@ in {
 
   hachoir = callPackage ../development/python-modules/hachoir { };
 
+  hacking = callPackage ../development/python-modules/hacking { };
+
   hdate = callPackage ../development/python-modules/hdate { };
 
   ha-ffmpeg = callPackage ../development/python-modules/ha-ffmpeg { };
