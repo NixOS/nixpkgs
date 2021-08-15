@@ -3193,6 +3193,10 @@ with pkgs;
 
   libpsm2 = callPackage ../os-specific/linux/libpsm2 { };
 
+  openstackclient = callPackage ../tools/admin/openstackclient { };
+
+  openstackclientFull = callPackage ../tools/admin/openstackclient/full.nix { };
+
   optar = callPackage ../tools/graphics/optar {};
 
   obinskit = callPackage ../applications/misc/obinskit {};
