@@ -7,11 +7,11 @@
 
 mkDerivation rec {
   pname = "skrooge";
-  version = "2.24.6";
+  version = "2.26.1";
 
   src = fetchurl {
-    url = "http://download.kde.org/stable/skrooge/${pname}-${version}.tar.xz";
-    sha256 = "sha256-DReIm9lcq0j761wWTpJu7HnfEWz9QsRGgUtyVaXFs6A=";
+    url = "https://download.kde.org/stable/skrooge/${pname}-${version}.tar.xz";
+    sha256 = "sha256-66hoA+FDTeMbNAInr9TlTSnwUywJQjTRz87MkdNYn5Q=";
   };
 
   nativeBuildInputs = [
@@ -30,6 +30,7 @@ mkDerivation rec {
   cmakeFlags = [
     "-DSKG_DESIGNER=OFF"
     "-DSKG_WEBENGINE=ON"
+    "-DSKG_WEBKIT=OFF"
     "-DBUILD_TESTS=ON"
   ];
 
