@@ -12,6 +12,7 @@
 , glib
 , gst_all_1
 , openssl
+, gupnp-igd ? !stdenv.isDarwin
 }:
 
 stdenv.mkDerivation rec {
@@ -52,7 +53,7 @@ stdenv.mkDerivation rec {
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
     openssl
-  ];
+  ] ++ optional !stdenv.isDarwin gupnp-igd;
 
   propagatedBuildInputs = [
     glib
@@ -61,7 +62,9 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dgtk_doc=enabled" # Disabled by default as of libnice-0.1.15
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
-  ];
+  ] ++ (if stdenv.isDarwin then [
+    "-Dgupnp=disabled" # gupnp-igd does not build on Darwin
+  ] else []);
 
   # Tests are flaky
   # see https://github.com/NixOS/nixpkgs/pull/53293#issuecomment-453739295
@@ -77,7 +80,7 @@ stdenv.mkDerivation rec {
       It provides a GLib-based library, libnice and a Glib-free library,
       libstun as well as GStreamer elements.'';
     homepage = "https://libnice.freedesktop.org/";
-    platforms = platforms.linux;
+    platforms = platforms.all;
     license = with licenses; [ lgpl21 mpl11 ];
   };
 }
