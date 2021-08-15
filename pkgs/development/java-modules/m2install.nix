@@ -17,5 +17,5 @@ in stdenv.mkDerivation {
     cp $src $out/m2/$m2Path/$m2File
   '';
 
-  phases = "installPhase";
+  dontUnpack = true;
 }
