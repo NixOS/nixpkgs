@@ -878,6 +878,8 @@ let
 
     ocaml_pcre = callPackage ../development/ocaml-modules/pcre {};
 
+    ocaml-print-intf = callPackage ../development/ocaml-modules/ocaml-print-intf { };
+
     pgocaml = callPackage ../development/ocaml-modules/pgocaml {};
 
     pgocaml_ppx = callPackage ../development/ocaml-modules/pgocaml/ppx.nix {};
