@@ -1,7 +1,7 @@
-{ lib, stdenv, fetchFromGitHub, cmake, fmt }:
+{ lib, stdenv, fetchFromGitHub, cmake, fmt_7, fmt_8 }:
 
 let
-  generic = { version, sha256 }:
+  generic = { version, sha256, fmt }:
     stdenv.mkDerivation {
       pname = "spdlog";
       inherit version;
@@ -49,12 +49,14 @@ let
 in
 {
   spdlog_1 = generic {
-    version = "1.8.5";
-    sha256 = "sha256-D29jvDZQhPscaOHlrzGN1s7/mXlcsovjbqYpXd7OM50=";
+    version = "1.9.2";
+    sha256 = "sha256-GSUdHtvV/97RyDKy8i+ticnSlQCubGGWHg4Oo+YAr8Y=";
+    fmt = fmt_8;
   };
 
   spdlog_0 = generic {
     version = "0.17.0";
     sha256 = "112kfh4fbpm5cvrmgbgz4d8s802db91mhyjpg7cwhlywffnzkwr9";
+    fmt = fmt_7;
   };
 }

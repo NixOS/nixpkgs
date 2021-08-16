@@ -2332,7 +2332,9 @@ with pkgs;
 
   czkawka = callPackage ../tools/misc/czkawka { };
 
-  cherrytree = callPackage ../applications/misc/cherrytree { };
+  cherrytree = callPackage ../applications/misc/cherrytree {
+    fmt = fmt_8;
+  };
 
   chntpw = callPackage ../tools/security/chntpw { };
 
@@ -4540,6 +4542,7 @@ with pkgs;
 
   vowpal-wabbit = callPackage ../applications/science/machine-learning/vowpal-wabbit {
     boost = boost17x;
+    fmt = fmt_8;
   };
 
   utahfs = callPackage ../applications/networking/utahfs { };
@@ -5810,7 +5813,9 @@ with pkgs;
 
   haste-client = callPackage ../tools/misc/haste-client { };
 
-  hal-hardware-analyzer = libsForQt5.callPackage ../applications/science/electronics/hal-hardware-analyzer { };
+  hal-hardware-analyzer = libsForQt5.callPackage ../applications/science/electronics/hal-hardware-analyzer {
+    fmt = fmt_8;
+  };
 
   half = callPackage ../development/libraries/half { };
 
@@ -11800,7 +11805,9 @@ with pkgs;
 
   liquibase = callPackage ../development/tools/database/liquibase { };
 
-  lizardfs = callPackage ../tools/filesystems/lizardfs { };
+  lizardfs = callPackage ../tools/filesystems/lizardfs {
+    fmt = fmt_8;
+  };
 
   lobster = callPackage ../development/compilers/lobster {
     inherit (darwin) cf-private;
@@ -13292,7 +13299,9 @@ with pkgs;
 
   buildBazelPackage = callPackage ../build-support/build-bazel-package { };
 
-  bear = callPackage ../development/tools/build-managers/bear { };
+  bear = callPackage ../development/tools/build-managers/bear {
+    fmt = fmt_8;
+  };
 
   bin_replace_string = callPackage ../development/tools/misc/bin_replace_string { };
 
@@ -15272,6 +15281,7 @@ with pkgs;
 
   far2l = callPackage ../applications/misc/far2l {
     stdenv = if stdenv.cc.isClang then llvmPackages.stdenv else stdenv;
+    fmt = fmt_8;
   };
 
   farbfeld = callPackage ../development/libraries/farbfeld { };
@@ -19800,7 +19810,9 @@ with pkgs;
 
   grafana-image-renderer = callPackage ../servers/monitoring/grafana-image-renderer { };
 
-  gerbera = callPackage ../servers/gerbera {};
+  gerbera = callPackage ../servers/gerbera {
+    fmt = fmt_8;
+  };
 
   gobetween = callPackage ../servers/gobetween { };
 
@@ -25124,7 +25136,9 @@ with pkgs;
 
   rootbar = callPackage ../applications/misc/rootbar {};
 
-  waybar = callPackage ../applications/misc/waybar {};
+  waybar = callPackage ../applications/misc/waybar {
+    fmt = fmt_8;
+  };
 
   wbg = callPackage ../applications/misc/wbg { };
 
@@ -26483,7 +26497,9 @@ with pkgs;
 
   ngt = callPackage ../development/libraries/ngt { };
 
-  nheko = libsForQt5.callPackage ../applications/networking/instant-messengers/nheko { };
+  nheko = libsForQt5.callPackage ../applications/networking/instant-messengers/nheko {
+    fmt = fmt_8;
+  };
 
   nomacs = libsForQt5.callPackage ../applications/graphics/nomacs { };
 
@@ -28474,15 +28490,18 @@ with pkgs;
 
   kodi = callPackage ../applications/video/kodi {
     jre_headless = jdk11_headless;
+    fmt = fmt_8;
   };
 
   kodi-wayland = callPackage ../applications/video/kodi {
     jre_headless = jdk11_headless;
+    fmt = fmt_8;
     waylandSupport = true;
   };
 
   kodi-gbm = callPackage ../applications/video/kodi {
     jre_headless = jdk11_headless;
+    fmt = fmt_8;
     gbmSupport = true;
   };
 
