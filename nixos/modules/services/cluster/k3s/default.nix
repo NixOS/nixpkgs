@@ -92,11 +92,6 @@ in
     virtualisation.docker = mkIf cfg.docker {
       enable = mkDefault true;
     };
-
-    # TODO: disable this once k3s supports cgroupsv2, either by docker
-    # supporting it, or their bundled containerd
-    systemd.enableUnifiedCgroupHierarchy = false;
-
     environment.systemPackages = [ config.services.k3s.package ];
 
     systemd.services.k3s = {
