@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "v4l2loopback";
-  version = "unstable-2020-04-22-${kernel.version}";
+  version = "unstable-2021-07-13-${kernel.version}";
 
   src = fetchFromGitHub {
     owner = "umlaeute";
     repo = "v4l2loopback";
-    rev = "d26e624b4ead762d34152f9f825b3a51fb92fb9c";
-    sha256 = "sha256-OA45vmuVieoL7J83D3TD5qi3SBsiqi0kiQn4i1K6dVE=";
+    rev = "baf9de279afc7a7c7513e9c40a0c9ff88f456af4";
+    sha256 = "sha256-uglYTeqz81fgkKYYU9Cw8x9+S088jGxDEGkb3rmkhrw==";
   };
 
   hardeningDisable = [ "format" "pic" ];
