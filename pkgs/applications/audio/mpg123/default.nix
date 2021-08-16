@@ -2,8 +2,10 @@
 , fetchurl
 , makeWrapper
 , alsa-lib
+, AudioUnit
+, AudioToolbox
 , perl
-, withConplay ? !stdenv.targetPlatform.isWindows
+, withConplay ? !stdenv.hostPlatform.isWindows
 }:
 
 stdenv.mkDerivation rec {
@@ -20,7 +22,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = lib.optionals withConplay [ makeWrapper ];
 
   buildInputs = lib.optionals withConplay [ perl ]
-    ++ lib.optionals (!stdenv.isDarwin && !stdenv.targetPlatform.isWindows) [ alsa-lib ];
+    ++ lib.optionals (stdenv.hostPlatform.isLinux) [ alsa-lib ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [ AudioUnit AudioToolbox ];
 
   configureFlags = lib.optional
     (stdenv.hostPlatform ? mpg123)
@@ -43,8 +46,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Fast console MPEG Audio Player and decoder library";
     homepage = "https://mpg123.org";
-    license = licenses.lgpl21;
-    maintainers = [ maintainers.ftrvxmtrx ];
+    license = licenses.lgpl21Only;
+    maintainers = with maintainers; [ ftrvxmtrx ];
     platforms = platforms.all;
   };
 }
