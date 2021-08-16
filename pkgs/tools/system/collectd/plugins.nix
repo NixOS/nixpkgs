@@ -6,6 +6,7 @@
 , jdk
 , libatasmart
 , libdbi
+, libesmtp
 , libgcrypt
 , libmemcached, cyrus_sasl
 , libmodbus
@@ -19,12 +20,14 @@
 , libvirt
 , libxml2
 , libapparmor, libcap_ng, numactl
-, lvm2
 , lua
+, lvm2
 , lm_sensors
 , mongoc
 , mosquitto
 , net-snmp
+, openldap
+, openipmi
 , perl
 , postgresql
 , protobufc
@@ -35,6 +38,7 @@
 , rrdtool
 , udev
 , varnish
+, xen
 , yajl
 # Defaults to `null` for all supported plugins,
 # list of plugin names for a custom build
@@ -122,7 +126,9 @@ let
     intel_rdt = {};
     interface = {};
     ipc = {};
-    ipmi = {};
+    ipmi = {
+      buildInputs = [ openipmi ];
+    };
     iptables = {
       buildInputs = [
         libpcap
@@ -200,6 +206,12 @@ let
     openldap = {};
     openvpn = {};
     oracle = {};
+    notify_email = {
+      buildInputs = [ libesmtp ];
+    };
+    openldap = {
+      buildInputs = [ openldap ];
+    };
     ovs_events = {
       buildInputs = [ yajl ];
     };
@@ -318,6 +330,9 @@ let
     zfs_arc = {};
     zone = {};
     zookeeper = {};
+    xencpu = {
+      buildInputs = [ xen ];
+    };
   };
 
   configureFlags =
