@@ -20,7 +20,7 @@
 , libglvnd
 , libpulseaudio
 , zlib
-, udev
+, udev # for libudev
 }:
 
 stdenv.mkDerivation rec {
