@@ -13745,6 +13745,8 @@ with pkgs;
 
   drush = callPackage ../development/tools/misc/drush { };
 
+  dwz = callPackage ../development/tools/misc/dwz { };
+
   easypdkprog = callPackage ../development/embedded/easypdkprog { };
 
   editorconfig-checker = callPackage ../development/tools/misc/editorconfig-checker { };
