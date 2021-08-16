@@ -58,7 +58,6 @@ dont-distribute-packages:
  - CC-delcont-alt
  - CMCompare
  - CPBrainfuck
- - CPL
  - CSPM-Interpreter
  - CSPM-ToProlog
  - CSPM-cspm
@@ -371,8 +370,6 @@ dont-distribute-packages:
  - XSaiga
  - YACPong
  - Yablog
- - Yogurt
- - Yogurt-Standalone
  - Z-Botan
  - Z-IO
  - Z-MessagePack
@@ -1559,7 +1556,6 @@ dont-distribute-packages:
  - hoodle-publish
  - hoodle-render
  - hoovie
- - hoq
  - hp2any-graph
  - hp2any-manager
  - hpaco
@@ -1613,7 +1609,6 @@ dont-distribute-packages:
  - hset
  - hsfacter
  - hslogstash
- - hsnock
  - hspec-expectations-pretty
  - hspec-pg-transact
  - hspec-setup
@@ -1655,7 +1650,6 @@ dont-distribute-packages:
  - hunt-searchengine
  - hunt-server
  - hurdle
- - husky
  - huzzy
  - hw-all
  - hw-dsv
@@ -1973,6 +1967,8 @@ dont-distribute-packages:
  - llvm-tools
  - lmonad-yesod
  - lnd-client
+ - lnurl
+ - lnurl-authenticator
  - local-search
  - localize
  - locked-poll
@@ -2078,7 +2074,6 @@ dont-distribute-packages:
  - minecraft-data
  - minesweeper
  - mini-egison
- - miniforth
  - minilight-lua
  - minimung
  - minioperational
@@ -2087,7 +2082,6 @@ dont-distribute-packages:
  - missing-py2
  - mixed-strategies
  - mkbndl
- - mkcabal
  - mlist
  - mmark-cli
  - mmark-ext
@@ -2107,6 +2101,7 @@ dont-distribute-packages:
  - monetdb-mapi
  - mongrel2-handler
  - monky
+ - monomer
  - monte-carlo
  - moo
  - moo-nad
@@ -2385,6 +2380,7 @@ dont-distribute-packages:
  - postgresql-tx-query
  - postgresql-tx-squeal
  - postgresql-tx-squeal-compat-simple
+ - postgrest_8_0_0
  - postmark
  - potoki
  - potoki-cereal
@@ -2449,7 +2445,6 @@ dont-distribute-packages:
  - queryparser-hive
  - queryparser-presto
  - queryparser-vertica
- - questioner
  - queuelike
  - quickbench
  - quickcheck-combinators
@@ -2513,7 +2508,6 @@ dont-distribute-packages:
  - reactive-fieldtrip
  - reactive-glut
  - reactor
- - readline-statevar
  - readpyc
  - reanimate
  - record-aeson
@@ -2899,7 +2893,6 @@ dont-distribute-packages:
  - svg2q
  - svgone
  - swapper
- - swearjure
  - sweet-egison
  - switch
  - sylvia
@@ -3041,7 +3034,6 @@ dont-distribute-packages:
  - twidge
  - twilight-stm
  - twill
- - twitter
  - twitter-enumerator
  - type-assertions
  - type-cache
