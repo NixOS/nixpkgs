@@ -3556,8 +3556,8 @@ final: prev:
     src = fetchFromGitHub {
       owner = "jose-elias-alvarez";
       repo = "null-ls.nvim";
-      rev = "fcd3964ff7e28b7b441942ecf4f0c9d22d5b7bc9";
-      sha256 = "0zkb5sfchqc91w6gacb3c43cm2n4wxjp1npzslrl4n1x4bsddz5l";
+      rev = "f5dc246c2edfd237ebcb0288250a18771019e810";
+      sha256 = "1mm89m7lfcrw2hxqbpnvxv610wl5lvinslb8m26j2xrpv0k2qnzb";
     };
     meta.homepage = "https://github.com/jose-elias-alvarez/null-ls.nvim/";
   };
@@ -3828,12 +3828,12 @@ final: prev:
 
   nvim-lspconfig = buildVimPluginFrom2Nix {
     pname = "nvim-lspconfig";
-    version = "2021-08-14";
+    version = "2021-08-15";
     src = fetchFromGitHub {
       owner = "neovim";
       repo = "nvim-lspconfig";
-      rev = "cf0c25e372a6ee26f8a4254d6adb34021fec1a4c";
-      sha256 = "1g678y71dmzmd7mfa26mj5blszq41shkbjdc87p1ydj1aq918s17";
+      rev = "b4661ec91e4675a339289d5662a93e646aeabe6f";
+      sha256 = "1ax327j9p2bjrwni24s9ymp1zjhq5b1h5znxb4myjmh29q5x0pgm";
     };
     meta.homepage = "https://github.com/neovim/nvim-lspconfig/";
   };
@@ -3912,12 +3912,12 @@ final: prev:
 
   nvim-toggleterm-lua = buildVimPluginFrom2Nix {
     pname = "nvim-toggleterm-lua";
-    version = "2021-08-06";
+    version = "2021-08-15";
     src = fetchFromGitHub {
       owner = "akinsho";
       repo = "nvim-toggleterm.lua";
-      rev = "cdeb723ffe955ff0d3fdcbbe3776632da2b41513";
-      sha256 = "1r67avqfqv7rzjg1whwacy0938nql0j0vxb6rwsc4ay19zv1nng9";
+      rev = "775012662eb2070e44b294d43938fa2625a9c836";
+      sha256 = "0q39ddq6yb1iscgp1mdgdyhz0cmb794ycbfd5ph3xp8ffly4z7hk";
     };
     meta.homepage = "https://github.com/akinsho/nvim-toggleterm.lua/";
   };
@@ -4333,12 +4333,12 @@ final: prev:
 
   presence-nvim = buildVimPluginFrom2Nix {
     pname = "presence-nvim";
-    version = "2021-08-11";
+    version = "2021-08-15";
     src = fetchFromGitHub {
       owner = "andweeb";
       repo = "presence.nvim";
-      rev = "e632306af10f28a662d53bafed85a8cf8b4f63b7";
-      sha256 = "1sa8lc3xyb8sbmh0iwrh2r3j3rqnp5pjmi99h3i0ksm7yqcmkkk4";
+      rev = "e7aac8fb011d76ba5d432eebee990e3631bbc71b";
+      sha256 = "09450ms1jzb37i8d0p133zr3ffpngcyn88x69d873hxnd1kxm5hm";
     };
     meta.homepage = "https://github.com/andweeb/presence.nvim/";
   };
@@ -4521,6 +4521,18 @@ final: prev:
       sha256 = "1ia2bv7yigcv944rkqy7jlrzi71m3k9kzj1hjhyrk0c2rg738r94";
     };
     meta.homepage = "https://github.com/chrisbra/Recover.vim/";
+  };
+
+  refactoring-nvim = buildVimPluginFrom2Nix {
+    pname = "refactoring-nvim";
+    version = "2021-08-15";
+    src = fetchFromGitHub {
+      owner = "theprimeagen";
+      repo = "refactoring.nvim";
+      rev = "48eeaf96bd78087dbf1df220fa6bf3e81906a481";
+      sha256 = "1h6vgw25fi7ar9gk8b1a5v61lc26myf7rr82hg2vfdrif4w9qgzq";
+    };
+    meta.homepage = "https://github.com/theprimeagen/refactoring.nvim/";
   };
 
   registers-nvim = buildVimPluginFrom2Nix {

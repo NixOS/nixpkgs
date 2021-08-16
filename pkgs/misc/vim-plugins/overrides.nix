@@ -457,6 +457,10 @@ self: super: {
     configurePhase = "cd vim";
   });
 
+  refactoring-nvim = super.refactoring-nvim.overrideAttrs (old: {
+    dependencies = with self; [ nvim-treesitter plenary-nvim ];
+  });
+
   skim = buildVimPluginFrom2Nix {
     pname = "skim";
     version = skim.version;
