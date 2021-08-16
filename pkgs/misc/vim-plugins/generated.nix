@@ -567,6 +567,18 @@ final: prev:
     meta.homepage = "https://github.com/hrsh7th/cmp-nvim-lsp/";
   };
 
+  cmp-path = buildVimPluginFrom2Nix {
+    pname = "cmp-path";
+    version = "2021-08-09";
+    src = fetchFromGitHub {
+      owner = "hrsh7th";
+      repo = "cmp-path";
+      rev = "175a3854242f7dd43d706e2e0acc4f08ab1ed9ee";
+      sha256 = "1pimzhp5hh9gg7f37x4mklxxg44a7fnzli7mv46p73b3w97vkbl4";
+    };
+    meta.homepage = "https://github.com/hrsh7th/cmp-path/";
+  };
+
   coc-clap = buildVimPluginFrom2Nix {
     pname = "coc-clap";
     version = "2021-05-10";

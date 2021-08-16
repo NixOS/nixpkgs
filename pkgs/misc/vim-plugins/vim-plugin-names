@@ -217,6 +217,7 @@ hrsh7th/cmp-buffer@main
 hrsh7th/cmp-calc@main
 hrsh7th/cmp-emoji@main
 hrsh7th/cmp-nvim-lsp@main
+hrsh7th/cmp-path@main
 hrsh7th/nvim-cmp@main
 hrsh7th/nvim-compe
 hrsh7th/vim-vsnip
