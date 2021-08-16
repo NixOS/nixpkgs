@@ -3,7 +3,7 @@
 buildPythonPackage rec {
   pname = "gay";
   version = "1.2.8";
-  
+
   src = fetchPypi {
     inherit pname version;
     sha256 = "07ay0xjjjrm7qxz4c10s5mn2029rqq4m5ai26ypi5dh91al0g0pz";
