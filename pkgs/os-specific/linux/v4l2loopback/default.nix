@@ -23,6 +23,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ kmod ];
 
+  postInstall = ''
+    make install-utils PREFIX=$bin
+  '';
+
+  outputs = [ "out" "bin" ];
+
   makeFlags = [
     "KERNELRELEASE=${kernel.modDirVersion}"
     "KERNEL_DIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
