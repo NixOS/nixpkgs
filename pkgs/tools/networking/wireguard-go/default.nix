@@ -24,7 +24,7 @@ buildGoPackage rec {
   meta = with lib; {
     description = "Userspace Go implementation of WireGuard";
     homepage = "https://git.zx2c4.com/wireguard-go/about/";
-    license = licenses.gpl2;
+    license = licenses.mit;
     maintainers = with maintainers; [ elseym kirelagin yegortimoshenko zx2c4 ];
   };
 }
