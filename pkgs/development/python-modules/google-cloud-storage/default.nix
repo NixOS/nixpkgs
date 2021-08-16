@@ -42,12 +42,18 @@ buildPythonPackage rec {
     "post"
     "test_build_api_url"
     "test_ctor_mtls"
+    "test_hmac_key_crud"
+    "test_list_buckets"
     "test_open"
+    "test_anonymous_client_access_to_public_bucket"
   ];
 
-  pytestFlagsArray = [
-    "--ignore=tests/unit/test_bucket.py"
-    "--ignore=tests/system/test_system.py"
+  disabledTestPaths = [
+    "tests/unit/test_bucket.py"
+    "tests/system/test_blob.py"
+    "tests/system/test_bucket.py"
+    "tests/system/test_fileio.py"
+    "tests/system/test_kms_integration.py"
   ];
 
   # prevent google directory from shadowing google imports
