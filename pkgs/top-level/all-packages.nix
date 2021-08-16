@@ -896,6 +896,8 @@ in
 
   veikk-linux-driver-gui = libsForQt5.callPackage ../tools/misc/veikk-linux-driver-gui { };
 
+  ventoy-bin = callPackage ../tools/cd-dvd/ventoy-bin { };
+
   xcd = callPackage ../tools/misc/xcd { };
 
   xtrt = callPackage ../tools/archivers/xtrt { };
