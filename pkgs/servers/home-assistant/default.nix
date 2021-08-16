@@ -88,6 +88,19 @@ let
       });
     })
 
+    # Pinned due to changes in total-connect-client>0.58 which made the tests fails at the moment
+    (self: super: {
+      total-connect-client = super.total-connect-client.overridePythonAttrs (oldAttrs: rec {
+        version = "0.58";
+        src = fetchFromGitHub {
+          owner = "craigjmidwinter";
+          repo = "total-connect-client";
+          rev = version;
+          sha256 = "1dqmgvgvwjh235wghygan2jnfvmn9vz789in2as3asig9cifix9z";
+        };
+      });
+    })
+
     # home-assistant-frontend does not exist in python3.pkgs
     (self: super: {
       home-assistant-frontend = self.callPackage ./frontend.nix { };
