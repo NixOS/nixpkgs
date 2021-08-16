@@ -531,6 +531,18 @@ final: prev:
     meta.homepage = "https://github.com/hrsh7th/cmp-buffer/";
   };
 
+  cmp-calc = buildVimPluginFrom2Nix {
+    pname = "cmp-calc";
+    version = "2021-08-08";
+    src = fetchFromGitHub {
+      owner = "hrsh7th";
+      repo = "cmp-calc";
+      rev = "bac4f988d14665a6a681df3646ff1baa2affc2da";
+      sha256 = "09g5pglbfzgnzl0lbn1fa27fh88a5pv2s2agmbw0gh4idnrvi66x";
+    };
+    meta.homepage = "https://github.com/hrsh7th/cmp-calc/";
+  };
+
   coc-clap = buildVimPluginFrom2Nix {
     pname = "coc-clap";
     version = "2021-05-10";
