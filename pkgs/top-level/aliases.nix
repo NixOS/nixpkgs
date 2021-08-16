@@ -448,6 +448,20 @@ mapAliases ({
   linuxPackages_xen_dom0_hardened = linuxPackages_hardened;
   linuxPackages_latest_xen_dom0_hardened = linuxPackages_latest_hardened;
 
+  # added 2021-08-16
+  linuxPackages_latest_hardened = throw ''
+    The attribute `linuxPackages_hardened_latest' was dropped because the hardened patches
+    frequently lag behind the upstream kernel. In some cases this meant that this attribute
+    had to refer to an older kernel[1] because the latest hardened kernel was EOL and
+    the latest supported kernel didn't have patches.
+
+    If you want to use a hardened kernel, please check which kernel minors are supported
+    and use a versioned attribute, e.g. `linuxPackages_5_10_hardened'.
+
+    [1] for more context: https://github.com/NixOS/nixpkgs/pull/133587
+  '';
+  linux_latest_hardened = linuxPackages_latest_hardened;
+
   linux-steam-integration = throw "linux-steam-integration has been removed, as the upstream project has been abandoned"; # added 2020-05-22
   loadcaffe = throw "loadcaffe has been removed, as the upstream project has been abandoned"; # added 2020-03-28
   lobster-two = google-fonts; # added 2021-07-22
