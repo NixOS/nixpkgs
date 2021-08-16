@@ -292,11 +292,7 @@ let
     };
     virt = {
       buildInputs = [ libvirt libxml2 yajl ] ++
-        lib.optionals stdenv.isLinux [ lvm2 udev
-          # those might be no longer required when https://github.com/NixOS/nixpkgs/pull/51767
-          # is merged
-          libapparmor numactl libcap_ng
-        ];
+        lib.optionals stdenv.isLinux [ lvm2 udev ];
     };
     vmem = {};
     vserver = {};
