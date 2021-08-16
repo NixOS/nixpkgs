@@ -4,7 +4,7 @@
 , pytestCheckHook
 , google-api-core
 , google-cloud-testutils
-, grpc_google_iam_v1
+, grpc-google-iam-v1
 , libcst
 , mock
 , proto-plus
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    grpc_google_iam_v1
+    grpc-google-iam-v1
     google-api-core
     libcst
     proto-plus

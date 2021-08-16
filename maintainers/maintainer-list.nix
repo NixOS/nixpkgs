@@ -4755,6 +4755,12 @@
     githubId = 40566146;
     name = "Jonas Braun";
   };
+  j-hui = {
+    email = "j-hui@cs.columbia.edu";
+    github = "j-hui";
+    githubId = 11800204;
+    name = "John Hui";
+  };
   j-keck = {
     email = "jhyphenkeck@gmail.com";
     github = "j-keck";
@@ -8767,6 +8773,12 @@
     github = "purcell";
     githubId = 5636;
     name = "Steve Purcell";
+  };
+  putchar = {
+    email = "slim.cadoux@gmail.com";
+    github = "putchar";
+    githubId = 8208767;
+    name = "Slim Cadoux";
   };
   puzzlewolf = {
     email = "nixos@nora.pink";

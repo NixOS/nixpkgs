@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pythonOlder
 , stdenv
 , packaging
@@ -10,12 +10,14 @@
 
 buildPythonPackage rec {
   pname = "desktop-notifier";
-  version = "3.3.0";
+  version = "3.3.1";
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-ROSZorkA2wAp2Ubh3B3KWIUxM/4r7cv/1aSJqeKnPqg=";
+  src = fetchFromGitHub {
+    owner = "SamSchott";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-GbsbwCKRTgLk0xK6MGKb1Tp6cd8q3h6OUdJ2f+VPyzk=";
   };
 
   propagatedBuildInputs = [
