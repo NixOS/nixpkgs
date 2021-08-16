@@ -543,6 +543,18 @@ final: prev:
     meta.homepage = "https://github.com/hrsh7th/cmp-calc/";
   };
 
+  cmp-emoji = buildVimPluginFrom2Nix {
+    pname = "cmp-emoji";
+    version = "2021-08-09";
+    src = fetchFromGitHub {
+      owner = "hrsh7th";
+      repo = "cmp-emoji";
+      rev = "a80d20b3461b802b3ff6f4cd60f7b99399fd7757";
+      sha256 = "0q70zbd4fw6x62zar7ph1dp6zwri6dqnyprl58p6w3k5n4xgpdrf";
+    };
+    meta.homepage = "https://github.com/hrsh7th/cmp-emoji/";
+  };
+
   coc-clap = buildVimPluginFrom2Nix {
     pname = "coc-clap";
     version = "2021-05-10";
