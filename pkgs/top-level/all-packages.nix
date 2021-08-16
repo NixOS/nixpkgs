@@ -26759,6 +26759,19 @@ in
     gtk3Support = true;
   };
 
+  thunderbird-91-unwrapped = callPackage ../applications/networking/mailreaders/thunderbird/91 {
+    callPackage = pkgs.newScope {
+      inherit (rustPackages) cargo rustc;
+      libpng = libpng_apng;
+      gnused = gnused_422;
+      inherit (darwin.apple_sdk.frameworks) CoreMedia ExceptionHandling
+                                            Kerberos AVFoundation MediaToolbox
+                                            CoreLocation Foundation AddressBook;
+      inherit (darwin) libobjc;
+    };
+  };
+  thunderbird-91 = wrapThunderbird thunderbird-91-unwrapped { };
+
   thunderbolt = callPackage ../os-specific/linux/thunderbolt {};
 
   thunderbird-bin = thunderbird-bin-78;
@@ -27347,6 +27360,9 @@ in
   wpsoffice = libsForQt514.callPackage ../applications/office/wpsoffice {};
 
   wrapFirefox = callPackage ../applications/networking/browsers/firefox/wrapper.nix { };
+
+  # Only used for new Thunderbird 91.x
+  wrapThunderbird = callPackage ../applications/networking/mailreaders/thunderbird/91/wrapper.nix { };
 
   wp-cli = callPackage ../development/tools/wp-cli { };
 
