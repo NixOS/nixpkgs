@@ -47,10 +47,9 @@
 }:
 
 let
-  # All plugins and their dependencies.
-  # Please help complete this!
+  # Plugins that have dependencies.
+  # Please help to extend these!
   plugins = {
-    aggregation = {};
     amqp = {
       buildInputs = [ yajl ] ++
         lib.optionals stdenv.isLinux [ rabbitmq-c ];
@@ -58,13 +57,9 @@ let
     apache = {
       buildInputs = [ curl ];
     };
-    apcups = {};
-    apple_sensors = {};
-    aquaero = {};
     ascent = {
       buildInputs = [ curl libxml2 ];
     };
-    barometer = {};
     battery = {
       buildInputs = lib.optionals stdenv.isDarwin [
         darwin.apple_sdk.frameworks.IOKit
@@ -76,14 +71,6 @@ let
     ceph = {
       buildInputs = [ yajl ];
     };
-    cgroups = {};
-    chrony = {};
-    conntrack = {};
-    contextswitch = {};
-    cpu = {};
-    cpufreq = {};
-    cpusleep = {};
-    csv = {};
     curl = {
       buildInputs = [ curl ];
     };
@@ -96,7 +83,6 @@ let
     dbi = {
       buildInputs = [ libdbi ];
     };
-    df = {};
     disk = {
       buildInputs = lib.optionals stdenv.isLinux [
         udev
@@ -107,25 +93,6 @@ let
     dns = {
       buildInputs = [ libpcap ];
     };
-    dpdkevents = {};
-    dpdkstat = {};
-    drbd = {};
-    email = {};
-    entropy = {};
-    ethstat = {};
-    exec = {};
-    fhcount = {};
-    filecount = {};
-    fscache = {};
-    gmond = {};
-    gps = {};
-    grpc = {};
-    hddtemp = {};
-    hugepages = {};
-    intel_pmu = {};
-    intel_rdt = {};
-    interface = {};
-    ipc = {};
     ipmi = {
       buildInputs = [ openipmi ];
     };
@@ -136,49 +103,29 @@ let
         iptables libmnl
       ];
     };
-    ipvs = {};
-    irq = {};
     java = {
       buildInputs = [ jdk libgcrypt libxml2 ];
     };
-    load = {};
-    logfile = {};
     log_logstash = {
       buildInputs = [ yajl ];
     };
-    lpar = {};
     lua = {
       buildInputs = [ lua ];
     };
-    lvm = {};
-    madwifi = {};
-    match_empty_counter = {};
-    match_hashed = {};
-    match_regex = {};
-    match_timediff = {};
-    match_value = {};
-    mbmon = {};
-    mcelog = {};
-    md = {};
     memcachec = {
       buildInputs = [ libmemcached cyrus_sasl ];
     };
-    memcached = {};
-    memory = {};
-    mic = {};
     modbus = {
       buildInputs = lib.optionals stdenv.isLinux [ libmodbus ];
     };
     mqtt = {
       buildInputs = [ mosquitto ];
     };
-    multimeter = {};
     mysql = {
       buildInputs = lib.optionals (libmysqlclient != null) [
         libmysqlclient
       ];
     };
-    netapp = {};
     netlink = {
       buildInputs = [
         libpcap
@@ -189,23 +136,12 @@ let
     network = {
       buildInputs = [ libgcrypt ];
     };
-    nfs = {};
     nginx = {
       buildInputs = [ curl ];
     };
     notify_desktop = {
       buildInputs = [ libnotify gdk-pixbuf ];
     };
-    notify_email = {};
-    notify_nagios = {};
-    ntpd = {};
-    numa = {};
-    nut = {};
-    olsrd = {};
-    onewire = {};
-    openldap = {};
-    openvpn = {};
-    oracle = {};
     notify_email = {
       buildInputs = [ libesmtp ];
     };
@@ -221,7 +157,6 @@ let
     perl = {
       buildInputs = [ perl ];
     };
-    pf = {};
     pinba = {
       buildInputs = [ protobufc ];
     };
@@ -231,16 +166,12 @@ let
     postgresql = {
       buildInputs = [ postgresql ];
     };
-    powerdns = {};
-    processes = {};
-    protocols = {};
     python = {
       buildInputs = [ python ];
     };
     redis = {
       buildInputs = [ hiredis ];
     };
-    routeros = {};
     rrdcached = {
       buildInputs = [ rrdtool libxml2 ];
     };
@@ -250,7 +181,6 @@ let
     sensors = {
       buildInputs = lib.optionals stdenv.isLinux [ lm_sensors ];
     };
-    serial = {};
     sigrok = {
       buildInputs = lib.optionals stdenv.isLinux [ libsigrok udev ];
     };
@@ -263,30 +193,6 @@ let
     snmp_agent = {
       buildInputs = lib.optionals stdenv.isLinux [ net-snmp ];
     };
-    statsd = {};
-    swap = {};
-    synproxy = {};
-    syslog = {};
-    table = {};
-    tail_csv = {};
-    tail = {};
-    tape = {};
-    target_notification = {};
-    target_replace = {};
-    target_scale = {};
-    target_set = {};
-    target_v5upgrade = {};
-    tcpconns = {};
-    teamspeak2 = {};
-    ted = {};
-    thermal = {};
-    threshold = {};
-    tokyotyrant = {};
-    turbostat = {};
-    unixsock = {};
-    uptime = {};
-    users = {};
-    uuid = {};
     varnish = {
       buildInputs = [ curl varnish ];
     };
@@ -294,10 +200,6 @@ let
       buildInputs = [ libvirt libxml2 yajl ] ++
         lib.optionals stdenv.isLinux [ lvm2 udev ];
     };
-    vmem = {};
-    vserver = {};
-    wireless = {};
-    write_graphite = {};
     write_http = {
       buildInputs = [ curl yajl ];
     };
@@ -319,37 +221,18 @@ let
     write_riemann = {
       buildInputs = [ protobufc riemann_c_client ];
     };
-    write_sensu = {};
-    write_tsdb = {};
-    xencpu = {};
-    xmms = {};
-    zfs_arc = {};
-    zone = {};
-    zookeeper = {};
     xencpu = {
       buildInputs = [ xen ];
     };
   };
 
-  configureFlags =
-    if enabledPlugins == null
-    then []
-    else (map (plugin: "--enable-${plugin}") enabledPlugins) ++
-    (map (plugin: "--disable-${plugin}")
-      (builtins.filter (plugin: ! builtins.elem plugin enabledPlugins)
-        (builtins.attrNames plugins))
-    );
+  configureFlags = lib.optionals (enabledPlugins != null) (
+    [ "--disable-all-plugins" ]
+    ++ (map (plugin: "--enable-${plugin}") enabledPlugins));
 
   pluginBuildInputs = plugin:
-        if ! builtins.hasAttr plugin plugins
-        then throw "Unknown collectd plugin: ${plugin}"
-        else
-          let
-            pluginAttrs = builtins.getAttr plugin plugins;
-          in
-          if pluginAttrs ? "buildInputs"
-          then pluginAttrs.buildInputs
-          else [];
+    lib.optionals (plugins ? ${plugin} && plugins.${plugin} ? buildInputs)
+    plugins.${plugin}.buildInputs;
 
   buildInputs =
     if enabledPlugins == null
