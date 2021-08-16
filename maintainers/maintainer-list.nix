@@ -4755,6 +4755,12 @@
     githubId = 40566146;
     name = "Jonas Braun";
   };
+  j-hui = {
+    email = "j-hui@cs.columbia.edu";
+    github = "j-hui";
+    githubId = 11800204;
+    name = "John Hui";
+  };
   j-keck = {
     email = "jhyphenkeck@gmail.com";
     github = "j-keck";
