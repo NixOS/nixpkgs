@@ -224,6 +224,8 @@ ianks/vim-tsx
 idanarye/vim-merginal
 idris-hackers/idris-vim
 Inazuma110/deoplete-greek
+inkarkat/vim-ReplaceWithRegister
+inkarkat/vim-ReplaceWithSameIndentRegister
 inkarkat/vim-SyntaxRange
 int3/vim-extradite
 Iron-E/nvim-highlite
