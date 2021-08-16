@@ -7690,6 +7690,12 @@
     githubId = 151337;
     name = "Nick Novitski";
   };
+  nicoo = {
+    email = "nicoo@debian.org";
+    github = "nbraud";
+    githubId = 1155801;
+    name = "nicoo";
+  };
   nico202 = {
     email = "anothersms@gmail.com";
     github = "nico202";
