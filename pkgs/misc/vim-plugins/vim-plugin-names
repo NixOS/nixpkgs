@@ -614,6 +614,7 @@ ruifm/gitlinker.nvim
 rust-lang/rust.vim
 ryanoasis/vim-devicons
 ryvnf/readline.vim
+saadparwaiz1/cmp_luasnip
 sainnhe/edge
 sainnhe/gruvbox-material
 sainnhe/sonokai

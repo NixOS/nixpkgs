@@ -591,6 +591,18 @@ final: prev:
     meta.homepage = "https://github.com/hrsh7th/cmp-vsnip/";
   };
 
+  cmp_luasnip = buildVimPluginFrom2Nix {
+    pname = "cmp_luasnip";
+    version = "2021-08-16";
+    src = fetchFromGitHub {
+      owner = "saadparwaiz1";
+      repo = "cmp_luasnip";
+      rev = "1852a9e9e3a0e0ba0363e3be6c87f46982fba549";
+      sha256 = "1ji3ys0k0sw23yh4yk3pgb2ab895jfsjnsjrpy0idvmxclk20l0m";
+    };
+    meta.homepage = "https://github.com/saadparwaiz1/cmp_luasnip/";
+  };
+
   coc-clap = buildVimPluginFrom2Nix {
     pname = "coc-clap";
     version = "2021-05-10";
