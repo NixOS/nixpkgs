@@ -17,11 +17,11 @@
 
 stdenv.mkDerivation rec {
   pname = "hqplayerd";
-  version = "4.25.0-64";
+  version = "4.25.1-65";
 
   src = fetchurl {
     url = "https://www.signalyst.eu/bins/${pname}/fc34/${pname}-${version}.fc34.x86_64.rpm";
-    sha256 = "sha256-KLP7g1SQzVKu9Hnptb6s0FwmLSjhlAINJoJskja+bDM=";
+    sha256 = "sha256-1Gfnha0DRAH2q0HJQVZegFKjpnVVK+MxPUmYJsA8Xgc=";
   };
 
   unpackPhase = ''
