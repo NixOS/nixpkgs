@@ -579,6 +579,18 @@ final: prev:
     meta.homepage = "https://github.com/hrsh7th/cmp-path/";
   };
 
+  cmp-vsnip = buildVimPluginFrom2Nix {
+    pname = "cmp-vsnip";
+    version = "2021-08-13";
+    src = fetchFromGitHub {
+      owner = "hrsh7th";
+      repo = "cmp-vsnip";
+      rev = "1f7c99719adbb2258c697dc43c31729ab73a8d99";
+      sha256 = "1a252mzi5nzcml2g52g5nwlih40dh19yshns6dlk5gmfwa0mf3z6";
+    };
+    meta.homepage = "https://github.com/hrsh7th/cmp-vsnip/";
+  };
+
   coc-clap = buildVimPluginFrom2Nix {
     pname = "coc-clap";
     version = "2021-05-10";
