@@ -212,6 +212,7 @@ mapAliases ({
   esniper = throw "esniper has been removed because upstream no longer maintains it (and it no longer works)"; # added 2021-04-12
   evolution_data_server = evolution-data-server; # added 2018-02-25
   etcdctl = etcd; # added 2018-04-25
+  etesync = throw "etesync is now known as etebase, and only exists as a legacy dependency for etesync-dav"; # added 2021-08-16
   exfat-utils = exfat;                  # 2015-09-11
   facette = throw "facette has been removed."; # added 2020-01-06
   fast-neural-doodle = throw "fast-neural-doodle has been removed, as the upstream project has been abandoned"; # added 2020-03-28

@@ -1,6 +1,10 @@
 { lib, stdenv, python3Packages, radicale3 }:
 
-python3Packages.buildPythonApplication rec {
+with python3Packages;
+
+let
+  etesync = callPackage ./etesync.nix { };
+in python3Packages.buildPythonApplication rec {
   pname = "etesync-dav";
   version = "0.30.8";
 
