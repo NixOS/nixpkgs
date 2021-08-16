@@ -213,6 +213,13 @@ HerringtonDarkholme/yats.vim
 honza/vim-snippets
 hoob3rt/lualine.nvim
 hotwatermorning/auto-git-diff
+hrsh7th/cmp-buffer@main
+hrsh7th/cmp-calc@main
+hrsh7th/cmp-emoji@main
+hrsh7th/cmp-nvim-lsp@main
+hrsh7th/cmp-path@main
+hrsh7th/cmp-vsnip@main
+hrsh7th/nvim-cmp@main
 hrsh7th/nvim-compe
 hrsh7th/vim-vsnip
 hrsh7th/vim-vsnip-integ
@@ -607,6 +614,7 @@ ruifm/gitlinker.nvim
 rust-lang/rust.vim
 ryanoasis/vim-devicons
 ryvnf/readline.vim
+saadparwaiz1/cmp_luasnip
 sainnhe/edge
 sainnhe/gruvbox-material
 sainnhe/sonokai
