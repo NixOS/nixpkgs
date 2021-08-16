@@ -379,6 +379,10 @@ self: super: {
     dependencies = with self; [ vim-floaterm ];
   });
 
+  lir-nvim = super.lir-nvim.overrideAttrs (old: {
+    dependencies = with self; [ plenary-nvim ];
+  });
+
   meson = buildVimPluginFrom2Nix {
     inherit (meson) pname version src;
     preInstall = "cd data/syntax-highlighting/vim";
