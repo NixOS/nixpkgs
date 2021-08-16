@@ -4,20 +4,20 @@
 
 mixRelease rec {
   pname = "elixir-ls";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "elixir-lsp";
     repo = "elixir-ls";
     rev = "v${version}";
-    sha256 = "0d0hqc35hfjkpm88vz21mnm2a9rxiqfrdi83whhhh6d2ba216b7s";
+    sha256 = "sha256-pUvONMTYH8atF/p2Ep/K3bwJUDxTzCsxLPbpjP0tQpM=";
     fetchSubmodules = true;
   };
 
   mixFodDeps = fetchMixDeps {
     pname = "mix-deps-${pname}";
     inherit src version;
-    sha256 = "0r9x223imq4j9pn9niskyaybvk7jmq8dxcyzk7kwfsi128qig1a1";
+    sha256 = "sha256-YRzPASpg1K2kZUga5/aQf4Q33d8aHCwhw7KJxSY56k4=";
   };
 
   # elixir_ls is an umbrella app
