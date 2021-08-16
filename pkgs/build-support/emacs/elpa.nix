@@ -21,7 +21,7 @@ in
 
 import ./generic.nix { inherit lib stdenv emacs texinfo writeText gcc; } ({
 
-  phases = "installPhase fixupPhase distPhase";
+  dontUnpack = true;
 
   installPhase = ''
     runHook preInstall
