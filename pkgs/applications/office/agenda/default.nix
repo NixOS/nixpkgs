@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "agenda";
-  version = "1.1.1";
+  version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "dahenson";
     repo = pname;
     rev = version;
-    sha256 = "sha256-K6ZtYllxBzLUPS2qeSxtplXqayB1m49sqmB28tHDS14=";
+    sha256 = "sha256-tzGcqCxIkoBNskpadEqv289Sj5bij9u+LdYySiGdop8=";
   };
 
   nativeBuildInputs = [

@@ -463,7 +463,7 @@ rec {
   layeredStoreSymlink =
   let
     target = pkgs.writeTextDir "dir/target" "Content doesn't matter.";
-    symlink = pkgs.runCommandNoCC "symlink" {} "ln -s ${target} $out";
+    symlink = pkgs.runCommand "symlink" {} "ln -s ${target} $out";
   in
     pkgs.dockerTools.buildLayeredImage {
       name = "layeredstoresymlink";

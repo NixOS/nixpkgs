@@ -214,6 +214,14 @@ self: super: {
     dependencies = with self; [ vimproc-vim vimshell-vim self.self forms ];
   });
 
+  fcitx-vim = super.fcitx-vim.overrideAttrs (old: {
+    passthru.python3Dependencies = ps: with ps; [ dbus-python ];
+    meta = {
+      description = "Keep and restore fcitx state when leaving/re-entering insert mode or search mode";
+      license = lib.licenses.mit;
+    };
+  });
+
   forms = super.forms.overrideAttrs (old: {
     dependencies = with self; [ self.self ];
   });
@@ -284,7 +292,7 @@ self: super: {
     dependencies = with self; [ plenary-nvim ];
   });
 
-  plenary-nvim = super.toVimPlugin(luaPackages.plenary-nvim);
+  # plenary-nvim = super.toVimPlugin(luaPackages.plenary-nvim);
 
   gruvbox-nvim = super.gruvbox-nvim.overrideAttrs (old: {
     dependencies = with self; [ lush-nvim ];
