@@ -4495,6 +4495,8 @@ with pkgs;
 
   sonobuoy = callPackage ../applications/networking/cluster/sonobuoy { };
 
+  soupault = callPackage ../tools/typesetting/soupault { };
+
   strawberry = libsForQt5.callPackage ../applications/audio/strawberry { };
 
   tealdeer = callPackage ../tools/misc/tealdeer {
