@@ -1,18 +1,19 @@
 { lib, stdenv, fetchPypi, buildPythonPackage, typed-ast, psutil, isPy3k
 , mypy-extensions
 , typing-extensions
+, toml, types-toml
 }:
 buildPythonPackage rec {
   pname = "mypy";
-  version = "0.812";
+  version = "0.910";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "069i9qnfanp7dn8df1vspnqb0flvsszzn22v00vj08nzlnd061yd";
+    sha256 = "0l31s5pr3j4xkqg44ac2q6s30srp7f3mlxzi32i33jvk4hq9hh3h";
   };
 
-  propagatedBuildInputs = [ typed-ast psutil mypy-extensions typing-extensions ];
+  propagatedBuildInputs = [ typed-ast psutil mypy-extensions typing-extensions toml types-toml ];
 
   # Tests not included in pip package.
   doCheck = false;
