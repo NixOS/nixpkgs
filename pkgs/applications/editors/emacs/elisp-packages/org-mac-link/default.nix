@@ -1,14 +1,15 @@
 { lib, stdenv, fetchurl, emacs }:
 
 stdenv.mkDerivation {
-  name = "org-mac-link-1.2";
+  pname = "org-mac-link";
+  version = "1.2";
 
   src = fetchurl {
     url = "https://raw.githubusercontent.com/stuartsierra/org-mode/master/contrib/lisp/org-mac-link.el";
     sha256 = "1gkzlfbhg289r1hbqd25szan1wizgk6s99h9xxjip5bjv0jywcx5";
   };
 
-  phases = [ "buildPhase" "installPhase"];
+  dontUnpack = true;
 
   buildInputs = [ emacs ];
 
