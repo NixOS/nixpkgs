@@ -2997,6 +2997,8 @@ in {
 
   google-cloud-core = callPackage ../development/python-modules/google-cloud-core { };
 
+  google-cloud-datacatalog = callPackage ../development/python-modules/google-cloud-datacatalog { };
+
   google-cloud-dataproc = callPackage ../development/python-modules/google-cloud-dataproc { };
 
   google-cloud-datastore = callPackage ../development/python-modules/google-cloud-datastore { };
