@@ -5,7 +5,7 @@ let
 in fetchurl rec {
   name = "libertinus-${version}";
   url = "https://github.com/alerque/libertinus/releases/download/v${version}/Libertinus-${version}.tar.xz";
-  sha256 = "sha256-GT2kBfTCP1lf8SYG0z6iii/1482hx3uUNsPTCrM+DKQ=";
+  sha256 = "0z658r88p52dyrcslv0wlccw0sw7m5jz8nbqizv95nf7bfw96iyk";
 
   downloadToTemp = true;
   recursiveHash = true;
