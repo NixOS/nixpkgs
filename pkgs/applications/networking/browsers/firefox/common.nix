@@ -1,4 +1,4 @@
-{ pname, ffversion, meta, updateScript ? null
+{ pname, ffversion, meta, updateScript ? null, binaryName ? "firefox", application ? "browser"
 , src, unpackPhase ? null, patches ? []
 , extraNativeBuildInputs ? [], extraConfigureFlags ? [], extraMakeFlags ? [], tests ? [] }:
 
@@ -87,7 +87,6 @@ let
   default-toolkit = if stdenv.isDarwin then "cairo-cocoa"
                     else "cairo-gtk3${lib.optionalString waylandSupport "-wayland"}";
 
-  binaryName = "firefox";
   binaryNameCapitalized = lib.toUpper (lib.substring 0 1 binaryName) + lib.substring 1 (-1) binaryName;
 
   browserName = if stdenv.isDarwin then binaryNameCapitalized else binaryName;
@@ -287,7 +286,7 @@ buildStdenv.mkDerivation ({
   '');
 
   configureFlags = [
-    "--enable-application=browser"
+    "--enable-application=${application}"
     "--with-system-jpeg"
     "--with-system-zlib"
     "--with-system-libevent"
