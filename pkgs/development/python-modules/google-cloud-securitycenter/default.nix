@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, grpc_google_iam_v1
+, grpc-google-iam-v1
 , google-api-core
 , libcst
 , mock
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     sha256 = "sha256-DrdzC7Oe/8cq41OLcN51Qm208L0zPa9cxscHqmYji04=";
   };
 
-  propagatedBuildInputs = [ grpc_google_iam_v1 google-api-core libcst proto-plus ];
+  propagatedBuildInputs = [ grpc-google-iam-v1 google-api-core libcst proto-plus ];
 
   checkInputs = [ mock pytestCheckHook pytest-asyncio ];
 

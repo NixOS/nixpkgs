@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, grpc_google_iam_v1
+, grpc-google-iam-v1
 , google-cloud-core
 , google-cloud-testutils
 , libcst
@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     google-cloud-core
-    grpc_google_iam_v1
+    grpc-google-iam-v1
     libcst
     proto-plus
     sqlparse

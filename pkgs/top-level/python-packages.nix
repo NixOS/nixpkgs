@@ -3164,7 +3164,7 @@ in {
 
   grip = callPackage ../development/python-modules/grip { };
 
-  grpc_google_iam_v1 = callPackage ../development/python-modules/grpc_google_iam_v1 { };
+  grpc-google-iam-v1 = callPackage ../development/python-modules/grpc-google-iam-v1 { };
 
   grpcio = callPackage ../development/python-modules/grpcio { };
 

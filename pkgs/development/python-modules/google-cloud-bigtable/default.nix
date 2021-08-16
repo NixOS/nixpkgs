@@ -3,7 +3,7 @@
 , fetchPypi
 , google-api-core
 , google-cloud-core
-, grpc_google_iam_v1
+, grpc-google-iam-v1
 , libcst
 , mock
 , proto-plus
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     google-api-core
     google-cloud-core
-    grpc_google_iam_v1
+    grpc-google-iam-v1
     libcst
     proto-plus
   ];
