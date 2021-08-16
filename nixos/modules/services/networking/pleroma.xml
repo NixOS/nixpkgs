@@ -136,18 +136,27 @@ services.nginx = {
   enable = true;
   addSSL = true;
 
+  recommendedTlsSettings = true;
+  recommendedOptimisation = true;
+  recommendedGzipSettings = true;
+
   recommendedProxySettings = false;
-  # NOTE: if enabled, the Proxy optimizations will override the Pleroma
+  # NOTE: if enabled, the NixOS proxy optimizations will override the Pleroma
   # specific settings, and they will enter in conflict.
 
   virtualHosts = {
     "pleroma.example.net" = {
+      http2 = true;
       enableACME = true;
       forceSSL = true;
 
       locations."/" = {
         proxyPass = "http://127.0.0.1:4000";
+
         extraConfig = ''
+          etag on;
+          gzip on;
+
           add_header 'Access-Control-Allow-Origin' '*' always;
           add_header 'Access-Control-Allow-Methods' 'POST, PUT, DELETE, GET, PATCH, OPTIONS' always;
           add_header 'Access-Control-Allow-Headers' 'Authorization, Content-Type, Idempotency-Key' always;
@@ -165,7 +174,9 @@ services.nginx = {
           proxy_set_header Upgrade $http_upgrade;
           proxy_set_header Connection "upgrade";
           proxy_set_header Host $host;
+
           client_max_body_size 16m;
+          # NOTE: increase if users need to upload very big files
         '';
       };
     };
