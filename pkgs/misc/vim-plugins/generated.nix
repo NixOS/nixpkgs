@@ -2698,6 +2698,18 @@ final: prev:
     meta.homepage = "https://github.com/junegunn/limelight.vim/";
   };
 
+  lir-nvim = buildVimPluginFrom2Nix {
+    pname = "lir-nvim";
+    version = "2021-08-15";
+    src = fetchFromGitHub {
+      owner = "tamago324";
+      repo = "lir.nvim";
+      rev = "2704b9374c541db9a1cb0da1f095d800cf1c5af3";
+      sha256 = "1ixqq5jigm5fdbcgp611sjybvr8fyvfnm7z55g5nk9zk5gql4xma";
+    };
+    meta.homepage = "https://github.com/tamago324/lir.nvim/";
+  };
+
   lispdocs-nvim = buildVimPluginFrom2Nix {
     pname = "lispdocs-nvim";
     version = "2021-05-16";
