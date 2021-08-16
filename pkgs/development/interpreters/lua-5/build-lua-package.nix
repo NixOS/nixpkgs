@@ -74,7 +74,7 @@ version
 # Keep extra attributes from `attrs`, e.g., `patchPhase', etc.
 
 let
-  generatedRockspecFilename = "${pname}-${version}.rockspec";
+  generatedRockspecFilename = "${rockspecDir}/${pname}-${version}.rockspec";
 
 
   # TODO fix warnings "Couldn't load rockspec for ..." during manifest
@@ -169,16 +169,17 @@ builtins.removeAttrs attrs ["disabled" "checkInputs" "externalDeps" "extraVariab
   inherit rocksSubdir;
 
   # enabled only for src.rock
-  setSourceRoot= let
-    # name_only= lib.getName name;
-    name_only= pname;
-  in
-    lib.optionalString (knownRockspec == null) ''
-    # format is rockspec_basename/source_basename
-    # rockspec can set it via spec.source.dir
-    folder=$(find . -mindepth 2 -maxdepth 2 -type d -path '*${name_only}*/*'|head -n1)
-    sourceRoot="$folder"
-  '';
+  # setSourceRoot= let
+  #   # name_only= lib.getName name;
+  #   name_only= pname;
+  # in
+  #   # if this is a rockFile
+  #   lib.optionalString (knownRockspec == null  ) ''
+  #   # format is rockspec_basename/source_basename
+  #   # rockspec can set it via spec.source.dir
+  #   folder=$(find . -mindepth 2 -maxdepth 2 -type d -path '*${name_only}*/*'|head -n1)
+  #   sourceRoot="$folder"
+  # '';
 
   configurePhase = ''
     runHook preConfigure
@@ -187,6 +188,7 @@ builtins.removeAttrs attrs ["disabled" "checkInputs" "externalDeps" "extraVariab
     ${luarocks_content}
     EOF
     export LUAROCKS_CONFIG="$PWD/${luarocks_config}";
+    echo "pwd: $PWD"
 
   ''
   + lib.optionalString (rockspecFilename == null) ''
