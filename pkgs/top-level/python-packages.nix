@@ -2999,6 +2999,8 @@ in {
 
   google-cloud-core = callPackage ../development/python-modules/google-cloud-core { };
 
+  google-cloud-datacatalog = callPackage ../development/python-modules/google-cloud-datacatalog { };
+
   google-cloud-dataproc = callPackage ../development/python-modules/google-cloud-dataproc { };
 
   google-cloud-datastore = callPackage ../development/python-modules/google-cloud-datastore { };
@@ -3166,7 +3168,7 @@ in {
 
   grip = callPackage ../development/python-modules/grip { };
 
-  grpc_google_iam_v1 = callPackage ../development/python-modules/grpc_google_iam_v1 { };
+  grpc-google-iam-v1 = callPackage ../development/python-modules/grpc-google-iam-v1 { };
 
   grpcio = callPackage ../development/python-modules/grpcio { };
 

@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, grpc_google_iam_v1
+, grpc-google-iam-v1
 , google-api-core
 , google-cloud-access-context-manager
 , google-cloud-org-policy
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
-    grpc_google_iam_v1
+    grpc-google-iam-v1
     google-api-core
     google-cloud-access-context-manager
     google-cloud-org-policy
