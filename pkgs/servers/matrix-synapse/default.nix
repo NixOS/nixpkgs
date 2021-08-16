@@ -20,8 +20,7 @@ buildPythonApplication rec {
   };
 
   patches = [
-    # adds an entry point for the service
-    ./homeserver-script.patch
+    ./0001-setup-add-homeserver-as-console-script.patch
   ];
 
   buildInputs = [ openssl ];
