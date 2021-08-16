@@ -17,11 +17,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-asset";
-  version = "2.2.0";
+  version = "3.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "05q0yaw6b553qmzylr45zin17h8mvi8yyyxhbv3cxa7f0ahviw8w";
+    sha256 = "sha256-/iTpO1Y+v//ZzaXUpOfBOXDRfftpmUV4hxsFmMj3tM0=";
   };
 
   postPatch = ''

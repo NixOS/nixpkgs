@@ -13,11 +13,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-pubsub";
-  version = "2.5.0";
+  version = "2.7.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8706557b71532c76aec48409dcac189caac47cf2decb8850ae75694bf70326b2";
+    sha256 = "sha256-F4itJadl6oNJnY9EENTIugJll8uC20bS9yF/HCUlrWU=";
   };
 
   propagatedBuildInputs = [

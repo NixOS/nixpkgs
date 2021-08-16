@@ -14902,7 +14902,6 @@ with pkgs;
   boost160 = callPackage ../development/libraries/boost/1.60.nix { };
   boost165 = callPackage ../development/libraries/boost/1.65.nix { };
   boost166 = callPackage ../development/libraries/boost/1.66.nix { };
-  boost167 = callPackage ../development/libraries/boost/1.67.nix { };
   boost168 = callPackage ../development/libraries/boost/1.68.nix { };
   boost169 = callPackage ../development/libraries/boost/1.69.nix { };
   boost16x = boost169;
@@ -21180,13 +21179,6 @@ with pkgs;
     ];
   };
 
-  linux_5_12 = callPackage ../os-specific/linux/kernel/linux-5.12.nix {
-    kernelPatches = [
-      kernelPatches.bridge_stp_helper
-      kernelPatches.request_key_helper
-    ];
-  };
-
   linux_5_13 = callPackage ../os-specific/linux/kernel/linux-5.13.nix {
     kernelPatches = [
       kernelPatches.bridge_stp_helper
@@ -21510,7 +21502,6 @@ with pkgs;
   linuxPackages_4_19 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_19);
   linuxPackages_5_4 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_4);
   linuxPackages_5_10 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_10);
-  linuxPackages_5_12 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_12);
   linuxPackages_5_13 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_13);
 
   # When adding to the list above:
@@ -21544,7 +21535,7 @@ with pkgs;
   # Hardened Linux
   hardenedLinuxPackagesFor = kernel': overrides:
     let # Note: We use this hack since the hardened patches can lag behind and we don't want to delay updates:
-      linux_latest_for_hardened = pkgs.linux_5_12;
+      linux_latest_for_hardened = pkgs.linux_5_10;
       kernel = (if kernel' == pkgs.linux_latest then linux_latest_for_hardened else kernel').override overrides;
     in linuxPackagesFor (kernel.override {
       structuredExtraConfig = import ../os-specific/linux/kernel/hardened/config.nix {
