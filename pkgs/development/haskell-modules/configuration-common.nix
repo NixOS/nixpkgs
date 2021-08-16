@@ -1458,6 +1458,10 @@ self: super: {
     addBuildDepend (unmarkBroken super.hercules-ci-cli) super.hercules-ci-optparse-applicative
   );
 
+  # Readline uses Distribution.Simple from Cabal 2, in a way that is not
+  # compatible with Cabal 3. No upstream repository found so far
+  readline =  appendPatch super.readline ./patches/readline-fix-for-cabal-3.patch;
+
   # 2020-12-05: http-client is fixed on too old version
   essence-of-live-coding-warp = doJailbreak (super.essence-of-live-coding-warp.override {
     http-client = self.http-client_0_7_8;
