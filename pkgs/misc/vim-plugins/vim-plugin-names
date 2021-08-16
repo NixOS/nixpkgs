@@ -9,6 +9,7 @@ ajmwagar/vim-deus
 akinsho/nvim-bufferline.lua
 akinsho/nvim-toggleterm.lua
 aklt/plantuml-syntax
+allendang/nvim-expand-expr@main
 altercation/vim-colors-solarized
 alvan/vim-closetag
 alx741/vim-hindent
@@ -351,6 +352,7 @@ lifepillar/vim-gruvbox8
 lifepillar/vim-mucomplete
 lighttiger2505/deoplete-vim-lsp
 lilydjwg/colorizer
+lilydjwg/fcitx.vim@fcitx5
 liuchengxu/vim-clap
 liuchengxu/vim-which-key
 liuchengxu/vista.vim
@@ -570,6 +572,7 @@ rbong/vim-flog
 rcarriga/nvim-dap-ui
 rcarriga/nvim-notify
 rcarriga/vim-ultest
+rhysd/clever-f.vim
 rhysd/committia.vim
 rhysd/conflict-marker.vim
 rhysd/devdocs.vim

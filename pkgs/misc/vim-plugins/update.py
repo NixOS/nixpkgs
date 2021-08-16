@@ -65,20 +65,20 @@ class VimEditor(pluginupdate.Editor):
 
                 f.write(textwrap.indent(textwrap.dedent(
                     f"""
-                      {plugin.normalized_name} = buildVimPluginFrom2Nix {{
-                        pname = "{plugin.normalized_name}";
-                        version = "{plugin.version}";
-                        src = fetchFromGitHub {{
-                          owner = "{owner}";
-                          repo = "{repo}";
-                          rev = "{plugin.commit}";
-                          sha256 = "{plugin.sha256}";{submodule_attr}
-                        }};
-                        meta.homepage = "https://github.com/{owner}/{repo}/";
-                      }};
-                    """
+  {plugin.normalized_name} = buildVimPluginFrom2Nix {{
+    pname = "{plugin.normalized_name}";
+    version = "{plugin.version}";
+    src = fetchFromGitHub {{
+      owner = "{owner}";
+      repo = "{repo}";
+      rev = "{plugin.commit}";
+      sha256 = "{plugin.sha256}";{submodule_attr}
+    }};
+    meta.homepage = "https://github.com/{owner}/{repo}/";
+  }};
+"""
                 ), '  '))
-            f.write("\n}")
+            f.write("\n}\n")
         print(f"updated {outfile}")
 
 

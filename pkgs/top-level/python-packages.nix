@@ -1427,6 +1427,8 @@ in {
 
   cherrypy = callPackage ../development/python-modules/cherrypy { };
 
+  chess = callPackage ../development/python-modules/chess { };
+
   chevron = callPackage ../development/python-modules/chevron { };
 
   chiabip158 = callPackage ../development/python-modules/chiabip158 { };
@@ -7304,6 +7306,8 @@ in {
   pytun = callPackage ../development/python-modules/pytun { };
 
   pyturbojpeg = callPackage ../development/python-modules/pyturbojpeg { };
+
+  pytwitchapi = callPackage ../development/python-modules/pytwitchapi { };
 
   pytz = callPackage ../development/python-modules/pytz { };
 

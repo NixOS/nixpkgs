@@ -1,6 +1,6 @@
 import ./make-test-python.nix ({ lib, pkgs, ... }:
 let
-  gpgKeyring = (pkgs.runCommandNoCC "gpg-keyring" { buildInputs = [ pkgs.gnupg ]; } ''
+  gpgKeyring = (pkgs.runCommand "gpg-keyring" { buildInputs = [ pkgs.gnupg ]; } ''
     mkdir -p $out
     export GNUPGHOME=$out
     cat > foo <<EOF

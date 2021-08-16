@@ -111,12 +111,13 @@ rec {
         destNameTag = "${finalImageName}:${finalImageTag}";
       } ''
       skopeo \
-        --src-tls-verify=${lib.boolToString tlsVerify} \
         --insecure-policy \
         --tmpdir=$TMPDIR \
         --override-os ${os} \
         --override-arch ${arch} \
-        copy "$sourceURL" "docker-archive://$out:$destNameTag" \
+        copy \
+        --src-tls-verify=${lib.boolToString tlsVerify} \
+        "$sourceURL" "docker-archive://$out:$destNameTag" \
         | cat  # pipe through cat to force-disable progress bar
     '';
 
