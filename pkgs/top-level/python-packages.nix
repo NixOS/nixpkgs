@@ -8966,6 +8966,8 @@ in {
 
   types-requests = callPackage ../development/python-modules/types-requests { };
 
+  types-toml = callPackage ../development/python-modules/types-toml { };
+
   typesentry = callPackage ../development/python-modules/typesentry { };
 
   typesystem = callPackage ../development/python-modules/typesystem { };
