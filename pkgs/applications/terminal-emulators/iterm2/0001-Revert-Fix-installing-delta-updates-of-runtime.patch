@@ -1,0 +1,43 @@
+From 2315f3912a8bf24d9df0ee72285dfdde87c7eb6a Mon Sep 17 00:00:00 2001
+From: Vanilla <neko@hydev.org>
+Date: Mon, 16 Aug 2021 10:22:55 +0800
+Subject: [PATCH] Revert "Fix installing delta updates of runtime"
+
+This reverts commit 2a4869a54e49f7b43b599a0b461b8f9a5fa5eed1.
+---
+ iTerm2.xcodeproj/xcshareddata/xcschemes/iTerm2.xcscheme | 1 -
+ sources/iTermPythonRuntimeDownloader.m                  | 6 +++---
+ 2 files changed, 3 insertions(+), 4 deletions(-)
+
+diff --git a/iTerm2.xcodeproj/xcshareddata/xcschemes/iTerm2.xcscheme b/iTerm2.xcodeproj/xcshareddata/xcschemes/iTerm2.xcscheme
+index 969833c87..8f59f0b52 100644
+--- a/iTerm2.xcodeproj/xcshareddata/xcschemes/iTerm2.xcscheme
++++ b/iTerm2.xcodeproj/xcshareddata/xcschemes/iTerm2.xcscheme
+@@ -67,7 +67,6 @@
+       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
+       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+       enableASanStackUseAfterReturn = "YES"
+-      enableUBSanitizer = "YES"
+       disableMainThreadChecker = "YES"
+       launchStyle = "0"
+       useCustomWorkingDirectory = "NO"
+diff --git a/sources/iTermPythonRuntimeDownloader.m b/sources/iTermPythonRuntimeDownloader.m
+index ca8f685fb..881f7edc8 100644
+--- a/sources/iTermPythonRuntimeDownloader.m
++++ b/sources/iTermPythonRuntimeDownloader.m
+@@ -568,9 +568,9 @@ NSString *const iTermPythonRuntimeDownloaderDidInstallRuntimeNotification = @"iT
+         NSString *replaceWith1 = [NSString stringWithFormat:@"/iterm2env-%@/", @(runtimeVersion)];
+         NSString *searchFor2 = [NSString stringWithFormat:@"/iterm2env-%@\"", @(latestFullComponent)];
+         NSString *replaceWith2 = [NSString stringWithFormat:@"/iterm2env-%@\"", @(runtimeVersion)];
+-        NSDictionary<NSString *, NSString *> *subs =
+-            @{ searchFor1: replaceWith1,
+-               searchFor2: replaceWith2 } ;
++        NSDictionary<NSString *, NSDictionary<NSString *, NSString *> *> *subs =
++        @{ @"": @{ searchFor1: replaceWith1,
++                   searchFor2: replaceWith2 } };
+         [self performSubstitutions:subs inFilesUnderFolder:tempDestination];
+         [self unzip:[NSURL fileURLWithPath:zip] to:tempDestination completion:^(BOOL ok) {
+             if (!ok) {
+-- 
+2.32.0
+

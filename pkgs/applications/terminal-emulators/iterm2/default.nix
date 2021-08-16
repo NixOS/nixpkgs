@@ -10,16 +10,22 @@
 
 stdenv.mkDerivation rec {
   pname = "iterm2";
-  version = "3.4.0";
+  version = "3.4.8";
 
   src = fetchFromGitHub {
     owner = "gnachman";
     repo = "iTerm2";
     rev = "v${version}";
-    sha256 = "09nhrmi25zxw3vp0wlib9kjr3p1j6am2zpwimdzqn0c80fq1lwvi";
+    sha256 = "sha256-7nhlg5BBudfa0hWtnHx4aujWpOLv6ByrUKmo+nqtb2M=";
   };
 
-  patches = [ ./disable_updates.patch ];
+  patches = [
+    ./disable_updates.patch
+
+    # v3.4.5 cannot build but v3.4.4 can,
+    # revert 2a4869a54e49f7b43b599a0b461b8f9a5fa5eed1 from git bisect.
+    ./0001-Revert-Fix-installing-delta-updates-of-runtime.patch
+   ];
   postPatch = ''
     sed -i -e 's/CODE_SIGN_IDENTITY = "Developer ID Application"/CODE_SIGN_IDENTITY = ""/g' ./iTerm2.xcodeproj/project.pbxproj
   '';
@@ -42,7 +48,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.iterm2.com/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ tricktron ];
-    platforms = platforms.darwin;
+    platforms = [ "x86_64-darwin" ];
     hydraPlatforms = [];
   };
 }
