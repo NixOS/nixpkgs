@@ -83,8 +83,8 @@ let
       };
 
       syncmode = mkOption {
-        type = types.enum [ "fast" "full" "light" ];
-        default = "fast";
+        type = types.enum [ "snap" "fast" "full" "light" ];
+        default = "snap";
         description = "Blockchain sync mode.";
       };
 

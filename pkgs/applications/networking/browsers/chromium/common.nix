@@ -256,15 +256,28 @@ let
 
     gnFlags = mkGnFlags ({
       # Main build and toolchain settings:
+      # Create an official and optimized release build (only official builds
+      # should be distributed to users, as non-official builds are intended for
+      # development and may not be configured appropriately for production,
+      # e.g. unsafe developer builds have developer-friendly features that may
+      # weaken or disable security measures like sandboxing or ASLR):
       is_official_build = true;
+      # Build Chromium using the system toolchain (for Linux distributions):
       custom_toolchain = "//build/toolchain/linux/unbundle:default";
       host_toolchain = "//build/toolchain/linux/unbundle:default";
+      # Don't build against a sysroot image downloaded from Cloud Storage:
       use_sysroot = false;
+      # The default value is hardcoded instead of using pkg-config:
       system_wayland_scanner_path = "${wayland}/bin/wayland-scanner";
+      # Because we use a different toolchain / compiler version:
       treat_warnings_as_errors = false;
+      # We aren't compiling with Chrome's Clang (would enable Chrome-specific
+      # plugins for enforcing coding guidelines, etc.):
       clang_use_chrome_plugins = false;
-      blink_symbol_level = 0;
+      # Disable symbols (they would negatively affect the performance of the
+      # build since the symbols are large and dealing with them is slow):
       symbol_level = 0;
+      blink_symbol_level = 0;
 
       # Google API key, see: https://www.chromium.org/developers/how-tos/api-keys
       # Note: The API key is for NixOS/nixpkgs use ONLY.

@@ -90,6 +90,14 @@ in
       '';
     };
 
+    resume = mkOption {
+      default = false;
+      type = types.bool;
+      description = ''
+        Use saved config, if any (and prefer over configuration passed with <option>services.caddy.config</option>).
+      '';
+    };
+
     ca = mkOption {
       default = "https://acme-v02.api.letsencrypt.org/directory";
       example = "https://acme-staging-v02.api.letsencrypt.org/directory";
@@ -142,7 +150,7 @@ in
       startLimitIntervalSec = 14400;
       startLimitBurst = 10;
       serviceConfig = {
-        ExecStart = "${cfg.package}/bin/caddy run --config ${configJSON}";
+        ExecStart = "${cfg.package}/bin/caddy run ${optionalString cfg.resume "--resume"} --config ${configJSON}";
         ExecReload = "${cfg.package}/bin/caddy reload --config ${configJSON}";
         Type = "simple";
         User = cfg.user;
