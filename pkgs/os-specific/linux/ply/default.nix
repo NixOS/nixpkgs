@@ -10,7 +10,7 @@ in stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "iovisor";
     repo = "ply";
-    rev = "899afb0c35ba2191dd7aa21f13bc7fde2655c475";
+    rev = version;
     sha256 = "0mfnfczk6kw6p15nx5l735qmcnb0pkix7ngq0j8nndg7r2fsckah";
   };
 
