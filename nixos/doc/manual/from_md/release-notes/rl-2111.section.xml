@@ -172,6 +172,16 @@
         </para>
       </listitem>
     </itemizedlist>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          <link xlink:href="https://www.navidrome.org/">navidrome</link>,
+          a personal music streaming server with subsonic-compatible
+          api. Available as
+          <link linkend="opt-services.navidrome.enable">navidrome</link>.
+        </para>
+      </listitem>
+    </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-incompatibilities">
     <title>Backward Incompatibilities</title>

@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "promscale";
-  version = "0.4.1";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "timescale";
     repo = pname;
     rev = version;
-    sha256 = "sha256-RdhsQtrD+I8eAgFNr1hvW83Ho22aNhWBX8crCM0b8jU=";
+    sha256 = "sha256-u9qlABTuQ4EWEfyei6nN/AZ7j9QJXQ61GvyhP8wEmK0=";
   };
 
-  vendorSha256 = "sha256-82E82O0yaLbu+oSTX7AQoYXFYy3wYVdBCevV7pHZVOA=";
+  vendorSha256 = "sha256-DFDTYT7UK1cYwGeCgeQcJmrCoqGPDzicusRPPUbH0Gs=";
 
   buildFlagsArray = [ "-ldflags=-s -w -X github.com/timescale/promscale/pkg/version.Version=${version} -X github.com/timescale/promscale/pkg/version.CommitHash=${src.rev}" ];
 
