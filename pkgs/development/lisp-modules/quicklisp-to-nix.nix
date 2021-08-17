@@ -3257,6 +3257,16 @@ let quicklisp-to-nix-packages = rec {
        }));
 
 
+  "float-features" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."float-features" or (x: {}))
+       (import ./quicklisp-to-nix-output/float-features.nix {
+         inherit fetchurl;
+           "documentation-utils" = quicklisp-to-nix-packages."documentation-utils";
+           "trivial-indent" = quicklisp-to-nix-packages."trivial-indent";
+       }));
+
+
   "flexi-streams" = buildLispPackage
     ((f: x: (x // (f x)))
        (qlOverrides."flexi-streams" or (x: {}))
