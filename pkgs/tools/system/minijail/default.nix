@@ -50,6 +50,8 @@ stdenv.mkDerivation rec {
     cp -v constants.json $out/share/minijail
   '';
 
+  enableParallelBuilding = true;
+
   meta = with lib; {
     homepage = "https://android.googlesource.com/platform/external/minijail/";
     description = "Sandboxing library and application using Linux namespaces and capabilities";
