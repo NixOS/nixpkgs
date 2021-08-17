@@ -5662,6 +5662,16 @@
     githubId = 148352;
     name = "Jim Fowler";
   };
+  kittywitch = {
+    email = "kat@kittywit.ch";
+    github = "kittywitch";
+    githubId = 67870215;
+    name = "kat witch";
+    keys = [{
+      longkeyid = "rsa4096/0x7248991EFA8EFBEE";
+      fingerprint = "01F5 0A29 D4AA 9117 5A11  BDB1 7248 991E FA8E FBEE";
+     }];
+  };
   kiwi = {
     email = "envy1988@gmail.com";
     github = "Kiwi";
