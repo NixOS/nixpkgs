@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "uthash";
-  version = "2.1.0";
+  version = "2.3.0";
 
   src = fetchurl {
     url = "https://github.com/troydhanson/uthash/archive/v${version}.tar.gz";
-    sha256 = "17k6k97n20jpi9zj3lzvqfw8pv670r6rdqrjf8vrbx6hcj7csb0m";
+    sha256 = "sha256-4QOCq3VRi62DGeuSKtBPkHyyDMy0UaOqmAydAF5mGsw=";
   };
 
   dontBuild = false;
