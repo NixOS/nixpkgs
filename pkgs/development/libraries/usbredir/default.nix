@@ -11,14 +11,14 @@
 
 stdenv.mkDerivation rec {
   pname = "usbredir";
-  version = "0.10.0";
+  version = "0.11.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "spice";
     repo = "usbredir";
     rev = "${pname}-${version}";
-    sha256 = "1dz8jms9l6gg2hw0k6p1p1lnchc9mcgmskgvm5gbdvw3j7wrhdbz";
+    sha256 = "sha256-NIw2fDnXefhsCfmJ8zkLGFygnvCW9I/3dgE3buLdSOU=";
   };
 
   nativeBuildInputs = [
