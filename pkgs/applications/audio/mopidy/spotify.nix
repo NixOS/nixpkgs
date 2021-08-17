@@ -1,12 +1,14 @@
-{ lib, fetchurl, pythonPackages, mopidy }:
+{ lib, fetchFromGitHub, pythonPackages, mopidy }:
 
 pythonPackages.buildPythonApplication rec {
   pname = "mopidy-spotify";
   version = "4.1.1";
 
-  src = fetchurl {
-    url = "https://github.com/mopidy/mopidy-spotify/archive/v${version}.tar.gz";
-    sha256 = "0054gqvnx3brpfxr06dcby0z0dirwv9ydi6gj5iz0cxn0fbi6gv2";
+  src = fetchFromGitHub {
+    owner = "mopidy";
+    repo = "mopidy-spotify";
+    rev = "v${version}";
+    sha256 = "1qsac2yy26cdlsmxd523v8ayacs0s6jj9x79sngwap781i63zqrm";
   };
 
   propagatedBuildInputs = [ mopidy pythonPackages.pyspotify ];
