@@ -10230,6 +10230,8 @@ with pkgs;
 
   woeusb = callPackage ../tools/misc/woeusb { };
 
+  woeusb-ng = callPackage ../tools/misc/woeusb-ng { };
+
   wslu = callPackage ../tools/system/wslu { };
 
   chase = callPackage ../tools/system/chase { };
