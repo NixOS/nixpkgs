@@ -13,6 +13,16 @@ callPackage ./generic.nix (rec {
   darwinFrameworks = [ Cocoa CoreMedia VideoToolbox ];
 
   patches = [
+    (fetchpatch {
+      name = "CVE-2021-33815.patch";
+      url = "https://github.com/FFmpeg/FFmpeg/commit/26d3c81bc5ef2f8c3f09d45eaeacfb4b1139a777.patch";
+      sha256 = "0l8dqga5845f7d3wdbvd05i23saldq4pm2cyfdgszbr0c18sxagf";
+    })
+    (fetchpatch {
+      name = "CVE-2021-38114.patch";
+      url = "https://github.com/FFmpeg/FFmpeg/commit/7150f9575671f898382c370acae35f9087a30ba1.patch";
+      sha256 = "0gwkc7v1wsh4j0am2nnskhsca1b5aqzhcfd41sd9mh2swsdyf27i";
+    })
     # Fix incorrect segment length in HLS child playlist with fmp4 segment format
     # FIXME remove in version 4.5
     # https://trac.ffmpeg.org/ticket/9193
