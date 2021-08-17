@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
     "--without-cpprest"
     "--with-boost-libdir=${boost.out}/lib"
     "CPPFLAGS=-I${nlohmann_json}/include/nlohmann/"
+    "LDFLAGS=-llucene++"
   ];
 
   preFixup = ''
