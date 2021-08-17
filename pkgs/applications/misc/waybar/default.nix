@@ -2,6 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , meson
+, cmake
 , pkg-config
 , ninja
 , wrapGAppsHook
@@ -14,12 +15,14 @@
 , scdoc
 , spdlog
 , gtk-layer-shell
-, howard-hinnant-date, cmake
+, howard-hinnant-date
+, libxkbcommon
 , traySupport  ? true,  libdbusmenu-gtk3
 , pulseSupport ? true,  libpulseaudio
 , sndioSupport ? true,  sndio
 , nlSupport    ? true,  libnl
 , udevSupport  ? true,  udev
+, evdevSupport ? true,  libevdev
 , swaySupport  ? true,  sway
 , mpdSupport   ? true,  libmpdclient
 , withMediaPlayer ? false, glib, gobject-introspection, python3, python38Packages, playerctl
@@ -27,13 +30,13 @@
 
 stdenv.mkDerivation rec {
   pname = "waybar";
-  version = "0.9.7";
+  version = "0.9.8";
 
   src = fetchFromGitHub {
     owner = "Alexays";
     repo = "Waybar";
     rev = version;
-    sha256 = "17cn4d3dx92v40jd9vl41smp8hh3gf5chd1j2f7l1lrpfpnllg5x";
+    sha256 = "sha256-XOguhbvlO3iUyk5gWOvimipXV8yqnia0LKoSA1wiKoE=";
   };
 
   nativeBuildInputs = [
@@ -48,12 +51,13 @@ stdenv.mkDerivation rec {
   strictDeps = false;
 
   buildInputs = with lib;
-    [ wayland wlroots gtkmm3 libsigcxx jsoncpp fmt spdlog gtk-layer-shell howard-hinnant-date ]
+    [ wayland wlroots gtkmm3 libsigcxx jsoncpp fmt spdlog gtk-layer-shell howard-hinnant-date libxkbcommon ]
     ++ optional  traySupport  libdbusmenu-gtk3
     ++ optional  pulseSupport libpulseaudio
     ++ optional  sndioSupport sndio
     ++ optional  nlSupport    libnl
     ++ optional  udevSupport  udev
+    ++ optional  evdevSupport libevdev
     ++ optional  swaySupport  sway
     ++ optional  mpdSupport   libmpdclient;
 
