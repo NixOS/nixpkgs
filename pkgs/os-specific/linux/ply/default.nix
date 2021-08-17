@@ -1,7 +1,5 @@
 { lib, stdenv, kernel, fetchFromGitHub, autoreconfHook, bison, flex, p7zip, rsync }:
 
-assert kernel != null -> lib.versionAtLeast kernel.version "4.0";
-
 let
   version = "2.1.1";
 in stdenv.mkDerivation {
@@ -38,5 +36,6 @@ in stdenv.mkDerivation {
     homepage = "https://wkz.github.io/ply/";
     license = [ licenses.gpl2 ];
     maintainers = with maintainers; [ mic92 mbbx6spp ];
+    broken = lib.versionAtLeast kernel.version "4.0";
   };
 }
