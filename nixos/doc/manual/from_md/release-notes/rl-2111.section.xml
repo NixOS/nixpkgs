@@ -668,11 +668,6 @@
           to use wildcards in the <literal>source</literal> argument.
         </para>
       </listitem>
-    </itemizedlist>
-    <para>
-      &lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
-    </para>
-    <itemizedlist>
       <listitem>
         <para>
           The <literal>openrazer</literal> and
@@ -713,6 +708,23 @@
           The <literal>varnish</literal> package was upgraded from 6.3.x
           to 6.5.x. <literal>varnish60</literal> for the last LTS
           release is also still available.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>kubernetes</literal> package was upgraded to
+          1.22. The <literal>kubernetes.apiserver.kubeletHttps</literal>
+          option was removed and HTTPS is always used.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The attribute <literal>linuxPackages_latest_hardened</literal>
+          was dropped because the hardened patches lag behind the
+          upstream kernel which made version bumps harder. If you want
+          to use a hardened kernel, please pin it explicitly with a
+          versioned attribute such as
+          <literal>linuxPackages_5_10_hardened</literal>.
         </para>
       </listitem>
     </itemizedlist>

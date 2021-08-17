@@ -4,6 +4,7 @@
 , pytestCheckHook
 , freezegun
 , google-cloud-core
+, google-cloud-datacatalog
 , google-cloud-storage
 , google-cloud-testutils
 , google-resumable-media
@@ -17,11 +18,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-bigquery";
-  version = "2.20.0";
+  version = "2.23.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ff728f9a4a64d6b4ec5beb7fd2f6ed550b49bfe2b8bb3755c00821716e0d1f91";
+    sha256 = "sha256-FQXtRM7YaU+S+Jqkn9dTQqJR3A1hL/XQjgPTXmANO0I=";
   };
 
   propagatedBuildInputs = [
@@ -38,6 +39,7 @@ buildPythonPackage rec {
     mock
     pandas
     psutil
+    google-cloud-datacatalog
     google-cloud-storage
     pytestCheckHook
   ];
@@ -53,6 +55,12 @@ buildPythonPackage rec {
     "TestBigQuery"
     # Mocking of _ensure_bqstorage_client fails
     "test_to_arrow_ensure_bqstorage_client_wo_bqstorage"
+    # requires network
+    "test_dbapi_create_view"
+    "test_list_rows_nullable_scalars_dtypes"
+    "test_parameterized_types_round_trip"
+    "test_structs"
+    "test_table_snapshots"
   ];
 
   pythonImportsCheck = [

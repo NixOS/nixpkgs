@@ -98,7 +98,7 @@ in stdenv.mkDerivation rec {
 
     # Clean up some stuff to save space
     find -name '*@useless-runes.lsp' -execdir rm {} +  # saves ~1GB of space
-    find -name '*.cert.out' -execdir gz {} +           # saves ~400MB of space
+    find -name '*.cert.out' -execdir gzip {} +         # saves ~400MB of space
 
     popd
   '';

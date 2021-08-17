@@ -1029,10 +1029,11 @@ if __name__ == "__main__":
 
     args = arg_parser.parse_args()
     global test_script
+    testscript = pathlib.Path(args.testscript).read_text()
 
     def test_script() -> None:
         with log.nested("running the VM test script"):
-            exec(pathlib.Path(args.testscript).read_text(), globals())
+            exec(testscript, globals())
 
     log = Logger()
 
@@ -1061,7 +1062,8 @@ if __name__ == "__main__":
                 process.terminate()
         log.close()
 
+    interactive = args.interactive or (not bool(testscript))
     tic = time.time()
-    run_tests(args.interactive)
+    run_tests(interactive)
     toc = time.time()
     print("test script finished in {:.2f}s".format(toc - tic))
