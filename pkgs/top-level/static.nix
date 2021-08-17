@@ -35,9 +35,6 @@ self: super: let
   };
 
   staticAdapters =
-    # makeStaticDarwin must go first so that the extraBuildInputs
-    # override does not recreate mkDerivation, removing subsequent
-    # adapters.
     optional super.stdenv.hostPlatform.isDarwin makeStaticDarwin
 
     ++ [ makeStaticLibraries propagateBuildInputs ]
@@ -80,29 +77,8 @@ self: super: let
       });
     };
 
-  llvmStaticAdapter = llvmPackages:
-    llvmPackages // {
-      stdenv = foldl (flip id) llvmPackages.stdenv staticAdapters;
-      libcxxStdenv = foldl (flip id) llvmPackages.libcxxStdenv staticAdapters;
-    };
-
 in {
   stdenv = foldl (flip id) super.stdenv staticAdapters;
-
-  gcc49Stdenv = foldl (flip id) super.gcc49Stdenv staticAdapters;
-  gcc6Stdenv = foldl (flip id) super.gcc6Stdenv staticAdapters;
-  gcc7Stdenv = foldl (flip id) super.gcc7Stdenv staticAdapters;
-  gcc8Stdenv = foldl (flip id) super.gcc8Stdenv staticAdapters;
-  gcc9Stdenv = foldl (flip id) super.gcc9Stdenv staticAdapters;
-
-  llvmPackages_5 = llvmStaticAdapter super.llvmPackages_5;
-  llvmPackages_6 = llvmStaticAdapter super.llvmPackages_6;
-  llvmPackages_7 = llvmStaticAdapter super.llvmPackages_7;
-  llvmPackages_8 = llvmStaticAdapter super.llvmPackages_8;
-  llvmPackages_9 = llvmStaticAdapter super.llvmPackages_9;
-  llvmPackages_10 = llvmStaticAdapter super.llvmPackages_10;
-  llvmPackages_11 = llvmStaticAdapter super.llvmPackages_11;
-  llvmPackages_12 = llvmStaticAdapter super.llvmPackages_12;
 
   boost = super.boost.override {
     # Don’t use new stdenv for boost because it doesn’t like the

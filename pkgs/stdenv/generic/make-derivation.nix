@@ -1,4 +1,6 @@
-{ lib, config, stdenv }:
+{ lib, config }:
+
+stdenv:
 
 let
   checkMeta = import ./check-meta.nix {
@@ -7,7 +9,7 @@ let
     # to build it. This is a bit confusing for cross compilation.
     inherit (stdenv) hostPlatform;
   };
-in rec {
+in
   # `mkDerivation` wraps the builtin `derivation` function to
   # produce derivations that use this stdenv and its shell.
   #
@@ -18,7 +20,6 @@ in rec {
   #
   # * https://nixos.org/nix/manual/#ssec-derivation
   #   Explanation about derivations in general
-  mkDerivation =
     {
 
     # These types of dependencies are all exhaustively documented in
@@ -373,7 +374,7 @@ in rec {
       lib.extendDerivation
         validity.handled
         ({
-           overrideAttrs = f: mkDerivation (attrs // (f attrs));
+           overrideAttrs = f: stdenv.mkDerivation (attrs // (f attrs));
 
            # A derivation that always builds successfully and whose runtime
            # dependencies are the original derivations build time dependencies
@@ -406,6 +407,4 @@ in rec {
          # should be made available to Nix expressions using the
          # derivation (e.g., in assertions).
          passthru)
-        (derivation derivationArg);
-
-}
+        (derivation derivationArg)
