@@ -1548,6 +1548,10 @@ with pkgs;
 
   genann = callPackage ../development/libraries/genann { };
 
+  gay = callPackage ../tools/misc/gay {
+    inherit (python3Packages) buildPythonPackage fetchPypi;
+  };
+
   genpass = callPackage ../tools/security/genpass {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
