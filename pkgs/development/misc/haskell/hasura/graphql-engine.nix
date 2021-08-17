@@ -6,32 +6,32 @@
 , bytestring, case-insensitive, ci-info, containers, cron
 , cryptonite, data-has, deepseq, dependent-map, dependent-sum
 , directory, ekg-core, ekg-json, exceptions, fast-logger, fetchgit
-, file-embed, filepath, generic-arbitrary, ghc-heap-view
-, graphql-parser, hashable, hashable-time, hspec, hspec-core
-, hspec-expectations, hspec-expectations-lifted, http-api-data
-, http-client, http-client-tls, http-conduit, http-types, immortal
+, file-embed, filepath, ghc-heap-view, graphql-parser, hashable
+, hashable-time, hspec, hspec-core, hspec-expectations
+, hspec-expectations-lifted, http-api-data, http-client
+, http-client-tls, http-conduit, http-types, immortal
 , insert-ordered-containers, jose, kan-extensions, lens, lens-aeson
 , lib, lifted-async, lifted-base, list-t, memory, mime-types
 , mmorph, monad-control, monad-loops, monad-validate, mtl, mustache
 , mysql, mysql-simple, natural-transformation, network, network-uri
 , odbc, optparse-applicative, pem, pg-client, postgresql-binary
-, postgresql-libpq, process, profunctors, psqueues, QuickCheck
-, quickcheck-instances, random, regex-tdfa, resource-pool, retry
-, safe, safe-exceptions, scientific, semialign, semigroups, semver
-, shakespeare, some, split, Spock-core, stm, stm-containers, tagged
-, template-haskell, text, text-builder, text-conversions, these
-, time, transformers, transformers-base, unix, unordered-containers
-, uri-encode, utf8-string, uuid, validation, vector
-, vector-instances, wai, warp, websockets, wreq, x509, x509-store
-, yaml, zlib
+, postgresql-libpq, pretty-simple, process, profunctors, psqueues
+, QuickCheck, quickcheck-instances, random, regex-tdfa
+, resource-pool, retry, safe, safe-exceptions, scientific
+, semialign, semigroups, semver, shakespeare, some, split
+, Spock-core, stm, stm-containers, tagged, template-haskell, text
+, text-builder, text-conversions, these, time, transformers
+, transformers-base, unix, unordered-containers, uri-encode
+, utf8-string, uuid, validation, vector, vector-instances, wai
+, warp, websockets, wreq, x509, x509-store, yaml, zlib
 }:
 mkDerivation {
   pname = "graphql-engine";
   version = "1.0.0";
   src = fetchgit {
     url = "https://github.com/hasura/graphql-engine.git";
-    sha256 = "0sw7jwj3ixr0nnh3i9yagiqjsvf83w79jd7ac9vdvm410jfjcnxf";
-    rev = "5990ca403bf6e7dd66081720c329e513f0624fb6";
+    sha256 = "04s8rczvm0l5dbh14g2vav2wbqb4fg51471fncqf36s59img14b7";
+    rev = "cf6f3edc1f6df7843dfb91be6dcb0fd7cc94d133";
     fetchSubmodules = true;
   };
   postUnpack = "sourceRoot+=/server; echo source root reset to $sourceRoot";
@@ -50,14 +50,14 @@ mkDerivation {
     memory mime-types mmorph monad-control monad-loops monad-validate
     mtl mustache mysql mysql-simple network network-uri odbc
     optparse-applicative pem pg-client postgresql-binary
-    postgresql-libpq process profunctors psqueues QuickCheck
-    quickcheck-instances random regex-tdfa resource-pool retry
-    safe-exceptions scientific semialign semigroups semver shakespeare
-    some split Spock-core stm stm-containers tagged template-haskell
-    text text-builder text-conversions these time transformers
-    transformers-base unix unordered-containers uri-encode utf8-string
-    uuid validation vector vector-instances wai warp websockets wreq
-    x509 x509-store yaml zlib
+    postgresql-libpq pretty-simple process profunctors psqueues
+    QuickCheck quickcheck-instances random regex-tdfa resource-pool
+    retry safe-exceptions scientific semialign semigroups semver
+    shakespeare some split Spock-core stm stm-containers tagged
+    template-haskell text text-builder text-conversions these time
+    transformers transformers-base unix unordered-containers uri-encode
+    utf8-string uuid validation vector vector-instances wai warp
+    websockets wreq x509 x509-store yaml zlib
   ];
   executableHaskellDepends = [
     base bytestring ekg-core kan-extensions pg-client text
@@ -65,13 +65,13 @@ mkDerivation {
   ];
   testHaskellDepends = [
     aeson base bytestring containers cron dependent-map dependent-sum
-    generic-arbitrary graphql-parser hspec hspec-core
-    hspec-expectations hspec-expectations-lifted http-client
-    http-client-tls http-types insert-ordered-containers jose
-    kan-extensions lens lifted-base mmorph monad-control mtl
-    natural-transformation network-uri optparse-applicative pg-client
-    process QuickCheck safe scientific split template-haskell text time
-    transformers-base unordered-containers vector
+    graphql-parser hspec hspec-core hspec-expectations
+    hspec-expectations-lifted http-client http-client-tls http-types
+    insert-ordered-containers jose kan-extensions lens lifted-base
+    mmorph monad-control mtl natural-transformation network-uri
+    optparse-applicative pg-client process QuickCheck safe scientific
+    split template-haskell text time transformers-base
+    unordered-containers vector
   ];
   doCheck = false;
   homepage = "https://www.hasura.io";
