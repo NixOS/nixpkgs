@@ -40,6 +40,7 @@ let
       fiat_HEAD = callPackage ../development/coq-modules/fiat/HEAD.nix {};
       flocq = callPackage ../development/coq-modules/flocq {};
       fourcolor = callPackage ../development/coq-modules/fourcolor {};
+      gaia = callPackage ../development/coq-modules/gaia {};
       gappalib = callPackage ../development/coq-modules/gappalib {};
       goedel = callPackage ../development/coq-modules/goedel {};
       graph-theory = callPackage ../development/coq-modules/graph-theory {};
