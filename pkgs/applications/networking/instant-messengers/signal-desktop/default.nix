@@ -10,9 +10,6 @@
 , hunspellDicts, spellcheckerLanguage ? null # E.g. "de_DE"
 # For a full list of available languages:
 # $ cat pkgs/development/libraries/hunspell/dictionaries.nix | grep "dictFileName =" | awk '{ print $3 }'
-, python3
-, gnome
-, sqlcipher
 }:
 
 let
@@ -115,7 +112,7 @@ in stdenv.mkDerivation rec {
 
     # Symlink to bin
     mkdir -p $out/bin
-    ln -s $out/lib/Signal/signal-desktop $out/bin/signal-desktop-unwrapped
+    ln -s $out/lib/Signal/signal-desktop $out/bin/signal-desktop
 
     runHook postInstall
   '';
@@ -138,16 +135,6 @@ in stdenv.mkDerivation rec {
 
     autoPatchelf --no-recurse -- $out/lib/Signal/
     patchelf --add-needed ${libpulseaudio}/lib/libpulse.so $out/lib/Signal/resources/app.asar.unpacked/node_modules/ringrtc/build/linux/libringrtc-x64.node
-  '';
-
-  postFixup = ''
-    # This hack is temporarily required to avoid data-loss for users:
-    cp ${./db-reencryption-wrapper.py} $out/bin/signal-desktop
-    substituteInPlace $out/bin/signal-desktop \
-      --replace '@PYTHON@' '${python3}/bin/python3' \
-      --replace '@ZENITY@' '${gnome.zenity}/bin/zenity' \
-      --replace '@SQLCIPHER@' '${sqlcipher}/bin/sqlcipher' \
-      --replace '@SIGNAL-DESKTOP@' "$out/bin/signal-desktop-unwrapped"
   '';
 
   # Tests if the application launches and waits for "Link your phone to Signal Desktop":
