@@ -2178,6 +2178,8 @@ with pkgs;
 
   traefik = callPackage ../servers/traefik { };
 
+  traefik-certs-dumper = callPackage ../tools/misc/traefik-certs-dumper { };
+
   calamares = libsForQt514.callPackage ../tools/misc/calamares {
     python = python3;
     boost = pkgs.boost.override { python = python3; };
