@@ -379,6 +379,10 @@ self: super: {
     dependencies = with self; [ vim-floaterm ];
   });
 
+  lir-nvim = super.lir-nvim.overrideAttrs (old: {
+    dependencies = with self; [ plenary-nvim ];
+  });
+
   meson = buildVimPluginFrom2Nix {
     inherit (meson) pname version src;
     preInstall = "cd data/syntax-highlighting/vim";
@@ -455,6 +459,10 @@ self: super: {
 
   onehalf = super.onehalf.overrideAttrs (old: {
     configurePhase = "cd vim";
+  });
+
+  refactoring-nvim = super.refactoring-nvim.overrideAttrs (old: {
+    dependencies = with self; [ nvim-treesitter plenary-nvim ];
   });
 
   skim = buildVimPluginFrom2Nix {
@@ -663,7 +671,7 @@ self: super: {
             libiconv
           ];
 
-          cargoSha256 = "sha256-wYxUo9zfflU7RTsTb7W9wc/WBsXhz3OLjC8CwUkRRiE=";
+          cargoSha256 = "16lcsi5mxmj79ky5lbpivravn8rjl4z3j3fsxrglb22ab4i7js3n";
         };
       in
       ''

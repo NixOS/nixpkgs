@@ -3,7 +3,6 @@
 , fetchPypi
 , grpcio
 , googleapis-common-protos
-, pytest
 }:
 
 buildPythonPackage rec {
@@ -17,15 +16,18 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ grpcio googleapis-common-protos ];
 
-  # non-standard test format, and python3 will load local google folder first
-  # but tests cannot be ran if google folder is removed or moved
+  # no tests run
   doCheck = false;
-  checkInputs = [ pytest ];
+
+  pythonImportsCheck = [
+    "google.iam"
+    "google.iam.v1"
+  ];
 
   meta = with lib; {
     description = "GRPC library for the google-iam-v1 service";
     homepage = "https://github.com/googleapis/googleapis";
     license = licenses.asl20;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

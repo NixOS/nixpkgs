@@ -1146,15 +1146,15 @@ with pkgs;
 
   arduino = arduino-core.override { withGui = true; };
 
-  arduino-ci = callPackage ../development/arduino/arduino-ci { };
+  arduino-ci = callPackage ../development/embedded/arduino/arduino-ci { };
 
-  arduino-cli = callPackage ../development/arduino/arduino-cli { };
+  arduino-cli = callPackage ../development/embedded/arduino/arduino-cli { };
 
-  arduino-core = callPackage ../development/arduino/arduino-core { };
+  arduino-core = callPackage ../development/embedded/arduino/arduino-core { };
 
-  arduino-mk = callPackage ../development/arduino/arduino-mk {};
+  arduino-mk = callPackage ../development/embedded/arduino/arduino-mk {};
 
-  apio = python3Packages.callPackage ../development/tools/misc/apio { };
+  apio = python3Packages.callPackage ../development/embedded/fpga/apio { };
 
   apitrace = libsForQt514.callPackage ../applications/graphics/apitrace {};
 
@@ -7641,7 +7641,7 @@ with pkgs;
 
   opencorsairlink = callPackage ../tools/misc/opencorsairlink { };
 
-  openfpgaloader = callPackage ../development/tools/misc/openfpgaloader { };
+  openfpgaloader = callPackage ../development/embedded/fpga/openfpgaloader { };
 
   openfortivpn = callPackage ../tools/networking/openfortivpn { };
 
@@ -8100,7 +8100,7 @@ with pkgs;
 
   plan9port = callPackage ../tools/system/plan9port { };
 
-  platformioPackages = dontRecurseIntoAttrs (callPackage ../development/arduino/platformio { });
+  platformioPackages = dontRecurseIntoAttrs (callPackage ../development/embedded/platformio { });
   platformio = platformioPackages.platformio-chrootenv;
 
   platinum-searcher = callPackage ../tools/text/platinum-searcher { };
@@ -9445,7 +9445,7 @@ with pkgs;
 
   tinyobjloader = callPackage ../development/libraries/tinyobjloader { };
 
-  tinyprog = callPackage ../development/tools/misc/tinyprog { };
+  tinyprog = callPackage ../development/embedded/fpga/tinyprog { };
 
   tinyproxy = callPackage ../tools/networking/tinyproxy { };
 
@@ -13003,7 +13003,7 @@ with pkgs;
 
   avr8burnomat = callPackage ../development/misc/avr8-burn-omat { };
 
-  betaflight = callPackage ../development/misc/stm32/betaflight {
+  betaflight = callPackage ../development/embedded/stm32/betaflight {
     gcc-arm-embedded = pkgsCross.arm-embedded.buildPackages.gcc;
     binutils-arm-embedded = pkgsCross.arm-embedded.buildPackages.binutils;
   };
@@ -13061,7 +13061,7 @@ with pkgs;
     guile = guile_2_0;
   };
 
-  inav = callPackage ../development/misc/stm32/inav {
+  inav = callPackage ../development/embedded/stm32/inav {
     gcc-arm-embedded = pkgsCross.arm-embedded.buildPackages.gcc;
     binutils-arm-embedded = pkgsCross.arm-embedded.buildPackages.binutils;
   };
@@ -13215,7 +13215,7 @@ with pkgs;
 
   automoc4 = callPackage ../development/tools/misc/automoc4 { };
 
-  avrdude = callPackage ../development/tools/misc/avrdude { };
+  avrdude = callPackage ../development/embedded/avrdude { };
 
   b4 = callPackage ../development/tools/b4 { };
 
@@ -13369,13 +13369,13 @@ with pkgs;
 
   black-macchiato = with python3Packages; toPythonApplication black-macchiato;
 
-  blackmagic = callPackage ../development/tools/misc/blackmagic { };
+  blackmagic = callPackage ../development/embedded/blackmagic { };
 
   bloaty = callPackage ../development/tools/bloaty { };
 
   bloop = callPackage ../development/tools/build-managers/bloop { };
 
-  bossa = callPackage ../development/tools/misc/bossa {
+  bossa = callPackage ../development/embedded/bossa {
     wxGTK = wxGTK30;
   };
 
@@ -13403,7 +13403,7 @@ with pkgs;
 
   cbrowser = callPackage ../development/tools/misc/cbrowser { };
 
-  cc-tool = callPackage ../development/tools/misc/cc-tool { };
+  cc-tool = callPackage ../development/embedded/cc-tool { };
 
   ccache = callPackage ../development/tools/misc/ccache {
     asciidoc = asciidoc-full;
@@ -13628,7 +13628,7 @@ with pkgs;
 
   ddd = callPackage ../development/tools/misc/ddd { };
 
-  lattice-diamond = callPackage ../development/tools/lattice-diamond { };
+  lattice-diamond = callPackage ../development/embedded/fpga/lattice-diamond { };
 
   direvent = callPackage ../development/tools/misc/direvent { };
 
@@ -13689,7 +13689,7 @@ with pkgs;
 
   drush = callPackage ../development/tools/misc/drush { };
 
-  easypdkprog = callPackage ../development/tools/misc/easypdkprog { };
+  easypdkprog = callPackage ../development/embedded/easypdkprog { };
 
   editorconfig-checker = callPackage ../development/tools/misc/editorconfig-checker { };
 
@@ -13762,7 +13762,7 @@ with pkgs;
 
   fsearch = callPackage ../tools/misc/fsearch { };
 
-  fujprog = callPackage ../development/tools/misc/fujprog {
+  fujprog = callPackage ../development/embedded/fpga/fujprog {
     inherit (darwin.apple_sdk.frameworks) IOKit;
   };
 
@@ -13855,7 +13855,7 @@ with pkgs;
 
   gprbuild = callPackage ../development/tools/build-managers/gprbuild { };
 
-  gputils = callPackage ../development/tools/misc/gputils { };
+  gputils = callPackage ../development/embedded/gputils { };
 
   gpuvis = callPackage ../development/tools/misc/gpuvis { };
 
@@ -13882,6 +13882,8 @@ with pkgs;
   gtk-doc = callPackage ../development/tools/documentation/gtk-doc { };
 
   gtkdialog = callPackage ../development/tools/misc/gtkdialog { };
+
+  crowdin-cli = callPackage ../tools/text/crowdin-cli { };
 
   gtranslator = callPackage ../tools/text/gtranslator { };
 
@@ -13915,7 +13917,7 @@ with pkgs;
   iaca_3_0 = callPackage ../development/tools/iaca/3.0.nix { };
   iaca = iaca_3_0;
 
-  icestorm = callPackage ../development/tools/icestorm { };
+  icestorm = callPackage ../development/embedded/fpga/icestorm { };
 
   icmake = callPackage ../development/tools/build-managers/icmake { };
 
@@ -13931,7 +13933,7 @@ with pkgs;
 
   indent = callPackage ../development/tools/misc/indent { };
 
-  ino = callPackage ../development/arduino/ino { };
+  ino = callPackage ../development/embedded/arduino/ino { };
 
   inotify-tools = callPackage ../development/tools/misc/inotify-tools { };
 
@@ -14180,7 +14182,7 @@ with pkgs;
 
   opengrok = callPackage ../development/tools/misc/opengrok { };
 
-  openocd = callPackage ../development/tools/misc/openocd { };
+  openocd = callPackage ../development/embedded/openocd { };
 
   oprofile = callPackage ../development/tools/profiling/oprofile {
     libiberty_static = libiberty.override { staticBuild = true; };
@@ -14353,6 +14355,8 @@ with pkgs;
 
   saleae-logic = callPackage ../development/tools/misc/saleae-logic { };
 
+  saleae-logic-2 = callPackage ../development/tools/misc/saleae-logic-2 { };
+
   sauce-connect = callPackage ../development/tools/sauce-connect { };
 
   sd-local = callPackage ../development/tools/sd-local { };
@@ -14471,9 +14475,9 @@ with pkgs;
 
   sselp = callPackage ../tools/X11/sselp{ };
 
-  stm32cubemx = callPackage ../development/tools/misc/stm32cubemx { };
+  stm32cubemx = callPackage ../development/embedded/stm32/stm32cubemx { };
 
-  stm32flash = callPackage ../development/tools/misc/stm32flash { };
+  stm32flash = callPackage ../development/embedded/stm32/stm32flash { };
 
   strace = callPackage ../development/tools/misc/strace { };
 
@@ -14528,7 +14532,7 @@ with pkgs;
 
   teensyduino = arduino-core.override { withGui = true; withTeensyduino = true; };
 
-  teensy-loader-cli = callPackage ../development/tools/misc/teensy-loader-cli { };
+  teensy-loader-cli = callPackage ../development/embedded/teensy-loader-cli { };
 
   terracognita = callPackage ../development/tools/misc/terracognita { };
 
@@ -14573,7 +14577,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  trellis = callPackage ../development/tools/trellis { };
+  trellis = callPackage ../development/embedded/fpga/trellis { };
 
   ttyd = callPackage ../servers/ttyd { };
 
@@ -14596,7 +14600,7 @@ with pkgs;
     boost = boost17x;
   };
 
-  uisp = callPackage ../development/tools/misc/uisp { };
+  uisp = callPackage ../development/embedded/uisp { };
 
   uncrustify = callPackage ../development/tools/misc/uncrustify { };
 
@@ -14650,7 +14654,7 @@ with pkgs;
 
   webdis = callPackage ../development/tools/database/webdis { };
 
-  xc3sprog = callPackage ../development/tools/misc/xc3sprog { };
+  xc3sprog = callPackage ../development/embedded/xc3sprog { };
 
   xcb-imdkit = callPackage ../development/libraries/xcb-imdkit { };
 
@@ -14902,7 +14906,6 @@ with pkgs;
     boost160
     boost165
     boost166
-    boost167
     boost168
     boost169
     boost170
@@ -18459,7 +18462,7 @@ with pkgs;
 
   ronn = callPackage ../development/tools/ronn { };
 
-  rshell = python3.pkgs.callPackage ../development/tools/rshell { };
+  rshell = python3.pkgs.callPackage ../development/embedded/rshell { };
 
   rttr = callPackage ../development/libraries/rttr { };
 
@@ -21134,8 +21137,14 @@ with pkgs;
   # hardened kernels
   linuxPackages_hardened = linuxKernel.packages.linux_hardened;
   linux_hardened = linuxPackages_hardened.kernel;
-  linuxPackages_latest_hardened = linuxKernel.packages.linux_latest_hardened;
-  linux_latest_hardened = linuxPackages_latest_hardened.kernel;
+  linuxPackages_4_14_hardened = linuxKernel.packages.linux_4_14_hardened;
+  linux_4_14_hardened = linuxPackages_4_14_hardened.kernel;
+  linuxPackages_4_19_hardened = linuxKernel.packages.linux_4_19_hardened;
+  linux_4_19_hardened = linuxPackages_4_19_hardened.kernel;
+  linuxPackages_5_4_hardened = linuxKernel.linux_5_4_hardened.linux_latest_hardened;
+  linux_5_4_hardened = linuxPackages_5_4_hardened.kernel;
+  linuxPackages_5_10_hardened = linuxKernel.packages.linux_5_10_hardened;
+  linux_5_10_hardened = linuxPackages_5_10_hardened.kernel;
 
   # Hardkernel (Odroid) kernels.
   linuxPackages_hardkernel_latest = linuxKernel.packageAliases.linux_hardkernel_latest;
@@ -23309,6 +23318,7 @@ with pkgs;
   comical = callPackage ../applications/graphics/comical { };
 
   containerd = callPackage ../applications/virtualization/containerd { };
+  containerd_1_4 = callPackage ../applications/virtualization/containerd/1.4.nix { };
 
   convchain = callPackage ../tools/graphics/convchain {};
 
@@ -23479,8 +23489,8 @@ with pkgs;
 
   drawio = callPackage ../applications/graphics/drawio {};
 
-  drawpile = libsForQt514.callPackage ../applications/graphics/drawpile { };
-  drawpile-server-headless = libsForQt514.callPackage ../applications/graphics/drawpile {
+  drawpile = libsForQt5.callPackage ../applications/graphics/drawpile { };
+  drawpile-server-headless = libsForQt5.callPackage ../applications/graphics/drawpile {
     buildClient = false;
     buildServerGui = false;
   };
@@ -23545,7 +23555,7 @@ with pkgs;
     jdk = jdk11;
   });
 
-  ecpdap = callPackage ../development/tools/ecpdap {
+  ecpdap = callPackage ../development/embedded/fpga/ecpdap {
     inherit (darwin.apple_sdk.frameworks) AppKit;
   };
 
@@ -25526,6 +25536,8 @@ with pkgs;
 
   xmrig = callPackage ../applications/misc/xmrig { };
 
+  xmrig-mo = callPackage ../applications/misc/xmrig/moneroocean.nix { };
+
   xmrig-proxy = callPackage ../applications/misc/xmrig/proxy.nix { };
 
   molot-lite = callPackage ../applications/audio/molot-lite { };
@@ -27227,8 +27239,8 @@ with pkgs;
 
   thunderbolt = callPackage ../os-specific/linux/thunderbolt {};
 
-  thunderbird-bin = thunderbird-bin-78;
-  thunderbird-bin-78 = callPackage ../applications/networking/mailreaders/thunderbird-bin { };
+  thunderbird-bin = thunderbird-bin-91;
+  thunderbird-bin-91 = callPackage ../applications/networking/mailreaders/thunderbird-bin { };
 
   ticpp = callPackage ../development/libraries/ticpp { };
 

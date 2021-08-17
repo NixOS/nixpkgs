@@ -137,13 +137,6 @@ let
       ];
     };
 
-    linux_5_12 = callPackage ../os-specific/linux/kernel/linux-5.12.nix {
-      kernelPatches = [
-        kernelPatches.bridge_stp_helper
-        kernelPatches.request_key_helper
-      ];
-    };
-
     linux_5_13 = callPackage ../os-specific/linux/kernel/linux-5.13.nix {
       kernelPatches = [
         kernelPatches.bridge_stp_helper
@@ -446,7 +439,6 @@ let
     linux_4_19 = recurseIntoAttrs (packagesFor kernels.linux_4_19);
     linux_5_4 = recurseIntoAttrs (packagesFor kernels.linux_5_4);
     linux_5_10 = recurseIntoAttrs (packagesFor kernels.linux_5_10);
-    linux_5_12 = recurseIntoAttrs (packagesFor kernels.linux_5_12);
     linux_5_13 = recurseIntoAttrs (packagesFor kernels.linux_5_13);
   };
 
@@ -472,9 +464,11 @@ let
     linux_testing_bcachefs = recurseIntoAttrs (packagesFor kernels.linux_testing_bcachefs);
 
     linux_hardened = recurseIntoAttrs (hardenedPackagesFor packageAliases.linux_default.kernel { });
-    # Note: We use an explicit version instead of linux_latest since the hardened patches
-    # can lag behind and we don't want to delay updates.
-    linux_latest_hardened = recurseIntoAttrs (hardenedPackagesFor kernels.linux_5_12 { });
+
+    linux_4_14_hardened = recurseIntoAttrs (hardenedPackagesFor kernels.linux_4_14 { });
+    linux_4_19_hardened = recurseIntoAttrs (hardenedPackagesFor kernels.linux_4_19 { });
+    linux_5_4_hardened = recurseIntoAttrs (hardenedPackagesFor kernels.linux_5_4 { });
+    linux_5_10_hardened = recurseIntoAttrs (hardenedPackagesFor kernels.linux_5_10 { });
 
     linux_zen = recurseIntoAttrs (packagesFor kernels.linux_zen);
     linux_lqx = recurseIntoAttrs (packagesFor kernels.linux_lqx);

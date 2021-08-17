@@ -5,6 +5,7 @@
 , glib
 , hunspell
 , hspell
+, nuspell
 , unittest-cpp
 }:
 
@@ -26,6 +27,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     glib
     hunspell
+    nuspell
   ];
 
   checkInputs = [
