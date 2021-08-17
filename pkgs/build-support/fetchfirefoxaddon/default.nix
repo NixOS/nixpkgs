@@ -2,19 +2,22 @@
 
 {
   name
-, url
+, url ? null
 , md5 ? ""
 , sha1 ? ""
 , sha256 ? ""
 , sha512 ? ""
 , fixedExtid ? null
 , hash ? ""
+, src ? ""
 }:
 
-stdenv.mkDerivation rec {
-
-  inherit name;
+let
   extid = if fixedExtid == null then "nixos@${name}" else fixedExtid;
+in
+stdenv.mkDerivation {
+  inherit name extid;
+
   passthru = {
     inherit extid;
   };
@@ -33,9 +36,11 @@ stdenv.mkDerivation rec {
     zip -r -q -FS "$out/$UUID.xpi" *
     rm -r "$out/$UUID"
   '';
-  src = fetchurl {
+
+  src = if url == null then src else fetchurl {
     url = url;
     inherit md5 sha1 sha256 sha512 hash;
   };
+
   nativeBuildInputs = [ coreutils unzip zip jq  ];
 }
