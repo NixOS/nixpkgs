@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rpiplay";
-  version = "unstable-2021-02-27";
+  version = "unstable-2021-06-14";
 
   src = fetchFromGitHub {
     owner = "FD-";
     repo = "RPiPlay";
-    rev = "4a65c7b84ff09acd7d6d494bb9037bbf106153a8";
-    sha256 = "06znqlj5b09z3mc965dyvmx2kh64fd7s571q34fh8r9ng98k351s";
+    rev = "35dd995fceed29183cbfad0d4110ae48e0635786";
+    sha256 = "sha256-qe7ZTT45NYvzgnhRmz15uGT/FnGi9uppbKVbmch5B9A=";
   };
 
   patches = [
