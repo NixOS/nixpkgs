@@ -31463,6 +31463,8 @@ with pkgs;
 
   hatari = callPackage ../misc/emulators/hatari { };
 
+  hck = callPackage ../tools/text/hck { };
+
   helm = callPackage ../applications/audio/helm { };
 
   helmfile = callPackage ../applications/networking/cluster/helmfile { };
