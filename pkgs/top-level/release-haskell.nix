@@ -278,14 +278,14 @@ let
       # Test some statically linked packages to catch regressions
       # and get some cache going for static compilation with GHC.
       # Use integer-simple to avoid GMP linking problems (LGPL)
-      pkgsStatic.haskell.packages.integer-simple.ghc8104 =
+      pkgsStatic.haskell.packages.integer-simple.ghc8106 =
         removePlatforms
           [
             "aarch64-linux" # times out on Hydra
             "x86_64-darwin" # TODO: reenable when static libiconv works on darwin
           ]
           {
-            inherit (packagePlatforms pkgs.pkgsStatic.haskell.packages.integer-simple.ghc8104)
+            inherit (packagePlatforms pkgs.pkgsStatic.haskell.packages.integer-simple.ghc8106)
               hello
               lens
               random
@@ -379,7 +379,7 @@ let
         constituents = accumulateDerivations [
           jobs.pkgsMusl.haskell.compiler.ghc8102Binary
           jobs.pkgsMusl.haskell.compiler.ghc884
-          jobs.pkgsMusl.haskell.compiler.ghc8104
+          jobs.pkgsMusl.haskell.compiler.ghc8106
           jobs.pkgsMusl.haskell.compiler.ghc901
         ];
       };
@@ -394,9 +394,9 @@ let
           ];
         };
         constituents = accumulateDerivations [
-          jobs.pkgsStatic.haskell.packages.integer-simple.ghc8104.hello
-          jobs.pkgsStatic.haskell.packages.integer-simple.ghc8104.lens
-          jobs.pkgsStatic.haskell.packages.integer-simple.ghc8104.random
+          jobs.pkgsStatic.haskell.packages.integer-simple.ghc8106.hello
+          jobs.pkgsStatic.haskell.packages.integer-simple.ghc8106.lens
+          jobs.pkgsStatic.haskell.packages.integer-simple.ghc8106.random
         ];
       };
     }
