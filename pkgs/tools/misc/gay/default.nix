@@ -13,12 +13,12 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/ms-jpq/gay";
-    description = "Colour your text / terminal to be more gay.";
+    description = "Colour your text / terminal to be more gay";
     longDescription = ''
       Colour your text / terminal to be more gay.
       Gayer version of lolcat.
     '';
-    license = licenses.publicDomain;
+    license = licenses.mit;
     maintainers = with maintainers; [ l3gacyb3ta ];
   };
 }

@@ -1547,7 +1547,7 @@ with pkgs;
   fxlinuxprintutil = callPackage ../tools/misc/fxlinuxprintutil { };
 
   gay = callPackage ../tools/misc/gay {
-    inherit (python38Packages) buildPythonPackage fetchPypi;
+    inherit (python3Packages) buildPythonPackage fetchPypi;
   };
 
   genann = callPackage ../development/libraries/genann { };
