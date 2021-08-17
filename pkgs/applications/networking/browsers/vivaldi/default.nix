@@ -18,11 +18,11 @@ let
   vivaldiName = if isSnapshot then "vivaldi-snapshot" else "vivaldi";
 in stdenv.mkDerivation rec {
   pname = "vivaldi";
-  version = "3.8.2259.37-1";
+  version = "4.1.2369.18-1";
 
   src = fetchurl {
     url = "https://downloads.vivaldi.com/${branch}/vivaldi-${branch}_${version}_amd64.deb";
-    sha256 = "1lpia3jm6l2yvbhrw5khws28n653w22bszzd44y6zv6zwbw7y127";
+    sha256 = "062zh7a4mr52h9m09dnqrdc48ajnkq887kcbcvzcd20wsnvivi48";
   };
 
   unpackPhase = ''
@@ -49,10 +49,12 @@ in stdenv.mkDerivation rec {
   buildPhase = ''
     runHook preBuild
     echo "Patching Vivaldi binaries"
-    patchelf \
-      --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      --set-rpath "${libPath}" \
-      opt/${vivaldiName}/vivaldi-bin
+    for f in crashpad_handler vivaldi-bin vivaldi-sandbox ; do
+      patchelf \
+        --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+        --set-rpath "${libPath}" \
+        opt/${vivaldiName}/$f
+    done
   '' + lib.optionalString proprietaryCodecs ''
     ln -s ${vivaldi-ffmpeg-codecs}/lib/libffmpeg.so opt/${vivaldiName}/libffmpeg.so.''${version%\.*\.*}
   '' + ''
