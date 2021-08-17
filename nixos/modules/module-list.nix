@@ -254,6 +254,7 @@
   ./services/audio/mopidy.nix
   ./services/audio/networkaudiod.nix
   ./services/audio/roon-bridge.nix
+  ./services/audio/navidrome.nix
   ./services/audio/roon-server.nix
   ./services/audio/slimserver.nix
   ./services/audio/snapserver.nix

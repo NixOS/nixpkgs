@@ -828,7 +828,7 @@ in
       };
       challengeResponsePath = mkOption {
         default = null;
-        type = types.path;
+        type = types.nullOr types.path;
         description = ''
           If not null, set the path used by yubico pam module where the challenge expected response is stored.
 
