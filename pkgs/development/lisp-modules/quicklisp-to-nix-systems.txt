@@ -209,6 +209,7 @@ usocket
 utilities.print-items
 utilities.print-tree
 uuid
+varjo
 woo
 wookie
 xembed

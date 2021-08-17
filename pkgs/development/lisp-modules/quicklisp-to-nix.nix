@@ -6,6 +6,14 @@ let quicklisp-to-nix-packages = rec {
   buildLispPackage = callPackage ./define-package.nix;
   qlOverrides = callPackage ./quicklisp-to-nix-overrides.nix {};
 
+  "lisp-unit" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."lisp-unit" or (x: {}))
+       (import ./quicklisp-to-nix-output/lisp-unit.nix {
+         inherit fetchurl;
+       }));
+
+
   "pythonic-string-reader" = buildLispPackage
     ((f: x: (x // (f x)))
        (qlOverrides."pythonic-string-reader" or (x: {}))
@@ -71,6 +79,58 @@ let quicklisp-to-nix-packages = rec {
        (qlOverrides."clunit2" or (x: {}))
        (import ./quicklisp-to-nix-output/clunit2.nix {
          inherit fetchurl;
+       }));
+
+
+  "vas-string-metrics" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."vas-string-metrics" or (x: {}))
+       (import ./quicklisp-to-nix-output/vas-string-metrics.nix {
+         inherit fetchurl;
+       }));
+
+
+  "parse-float" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."parse-float" or (x: {}))
+       (import ./quicklisp-to-nix-output/parse-float.nix {
+         inherit fetchurl;
+           "alexandria" = quicklisp-to-nix-packages."alexandria";
+           "lisp-unit" = quicklisp-to-nix-packages."lisp-unit";
+       }));
+
+
+  "glsl-symbols" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."glsl-symbols" or (x: {}))
+       (import ./quicklisp-to-nix-output/glsl-symbols.nix {
+         inherit fetchurl;
+       }));
+
+
+  "glsl-spec" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."glsl-spec" or (x: {}))
+       (import ./quicklisp-to-nix-output/glsl-spec.nix {
+         inherit fetchurl;
+       }));
+
+
+  "glsl-docs" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."glsl-docs" or (x: {}))
+       (import ./quicklisp-to-nix-output/glsl-docs.nix {
+         inherit fetchurl;
+           "glsl-symbols" = quicklisp-to-nix-packages."glsl-symbols";
+       }));
+
+
+  "fn" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."fn" or (x: {}))
+       (import ./quicklisp-to-nix-output/fn.nix {
+         inherit fetchurl;
+           "named-readtables" = quicklisp-to-nix-packages."named-readtables";
        }));
 
 
@@ -1473,6 +1533,26 @@ let quicklisp-to-nix-packages = rec {
            "trivial-utf-8" = quicklisp-to-nix-packages."trivial-utf-8";
            "vom" = quicklisp-to-nix-packages."vom";
            "xsubseq" = quicklisp-to-nix-packages."xsubseq";
+       }));
+
+
+  "varjo" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."varjo" or (x: {}))
+       (import ./quicklisp-to-nix-output/varjo.nix {
+         inherit fetchurl;
+           "alexandria" = quicklisp-to-nix-packages."alexandria";
+           "cl-ppcre" = quicklisp-to-nix-packages."cl-ppcre";
+           "documentation-utils" = quicklisp-to-nix-packages."documentation-utils";
+           "fn" = quicklisp-to-nix-packages."fn";
+           "glsl-docs" = quicklisp-to-nix-packages."glsl-docs";
+           "glsl-spec" = quicklisp-to-nix-packages."glsl-spec";
+           "glsl-symbols" = quicklisp-to-nix-packages."glsl-symbols";
+           "named-readtables" = quicklisp-to-nix-packages."named-readtables";
+           "parse-float" = quicklisp-to-nix-packages."parse-float";
+           "trivial-indent" = quicklisp-to-nix-packages."trivial-indent";
+           "uiop" = quicklisp-to-nix-packages."uiop";
+           "vas-string-metrics" = quicklisp-to-nix-packages."vas-string-metrics";
        }));
 
 
