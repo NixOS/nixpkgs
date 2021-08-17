@@ -17,7 +17,8 @@
 # Darwin frameworks
 , Cocoa, darwinFrameworks ? [ Cocoa ]
 # Inherit generics
-, branch, sha256, version, patches ? [], knownVulnerabilities ? [], ...
+, branch, sha256, version, patches ? [], knownVulnerabilities ? []
+, doCheck ? true, ...
 }:
 
 /* Maintainer notes:
@@ -187,7 +188,13 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  doCheck = false; # fails
+  inherit doCheck;
+  checkPhase = let
+    ldLibraryPathEnv = if stdenv.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH";
+  in ''
+    ${ldLibraryPathEnv}="libavcodec:libavdevice:libavfilter:libavformat:libavresample:libavutil:libpostproc:libswresample:libswscale:''${${ldLibraryPathEnv}}" \
+      make check -j$NIX_BUILD_CORES
+  '';
 
   # ffmpeg 3+ generates pkg-config (.pc) files that don't have the
   # form automatically handled by the multiple-outputs hooks.
