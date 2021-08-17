@@ -100,14 +100,14 @@ stdenv.mkDerivation rec {
       mv * $out/
     ''}
     ${lib.optionalString (lib.versionAtLeast version "11") ''
-      mkdir -p $out/bin $out/lib64 $out/include $out/doc
+      mkdir -p $out/bin $out/lib64 $out/include $doc
       for dir in pkg/builds/* pkg/builds/cuda_nvcc/nvvm pkg/builds/cuda_cupti/extras/CUPTI; do
         if [ -d $dir/bin ]; then
           mv $dir/bin/* $out/bin
         fi
         if [ -d $dir/doc ]; then
-          (cd $dir/doc && find . -type d -exec mkdir -p $out/doc/\{} \;)
-          (cd $dir/doc && find . \( -type f -o -type l \) -exec mv \{} $out/doc/\{} \;)
+          (cd $dir/doc && find . -type d -exec mkdir -p $doc/\{} \;)
+          (cd $dir/doc && find . \( -type f -o -type l \) -exec mv \{} $doc/\{} \;)
         fi
         if [ -L $dir/include ] || [ -d $dir/include ]; then
           (cd $dir/include && find . -type d -exec mkdir -p $out/include/\{} \;)
