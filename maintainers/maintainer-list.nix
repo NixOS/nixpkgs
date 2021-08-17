@@ -5917,12 +5917,6 @@
     githubId = 72546287;
     name = "L3af";
   };
-  l3gacyb3ta = {
-    email = "arcade@omg.lol";
-    github = "l3gacyb3ta";
-    githubId = 58434499;
-    name = "Arcade Wise";
-  };
   lach = {
     email = "iam@lach.pw";
     github = "CertainLach";
