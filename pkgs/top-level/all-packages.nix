@@ -13883,6 +13883,8 @@ with pkgs;
 
   gtkdialog = callPackage ../development/tools/misc/gtkdialog { };
 
+  crowdin-cli = callPackage ../tools/text/crowdin-cli { };
+
   gtranslator = callPackage ../tools/text/gtranslator { };
 
   guff = callPackage ../tools/graphics/guff { };
