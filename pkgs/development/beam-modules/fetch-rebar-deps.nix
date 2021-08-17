@@ -14,6 +14,9 @@ stdenv.mkDerivation ({
   inherit version;
 
   dontUnpack = true;
+  dontConfigure = true;
+  dontBuild = true;
+  dontFixup = true;
 
   prePhases = ''
     cp ${src} .
