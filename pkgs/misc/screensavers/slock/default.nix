@@ -6,10 +6,11 @@
 
 with lib;
 stdenv.mkDerivation rec {
-  name = "slock-1.4";
+  pname = "slock";
+  version = "1.4";
 
   src = fetchurl {
-    url = "https://dl.suckless.org/tools/${name}.tar.gz";
+    url = "https://dl.suckless.org/tools/slock-${version}.tar.gz";
     sha256 = "0sif752303dg33f14k6pgwq2jp1hjyhqv6x4sy3sj281qvdljf5m";
   };
 
