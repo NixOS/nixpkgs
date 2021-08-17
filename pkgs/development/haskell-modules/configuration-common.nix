@@ -1288,14 +1288,23 @@ self: super: {
   Spock-core = dontCheck super.Spock-core;
 
   # hasura packages need some extra care
-  graphql-engine = overrideCabal (super.graphql-engine.override {
+  graphql-engine = overrideCabal (super.graphql-engine.overrideScope (self: super: {
     immortal = self.immortal_0_2_2_1;
-  }) (drv: {
+    resource-pool = self.hasura-resource-pool;
+    ekg-core = self.hasura-ekg-core;
+    ekg-json = self.hasura-ekg-json;
+    hspec = dontCheck self.hspec_2_8_3;
+    hspec-core = dontCheck self.hspec-core_2_8_3;
+    hspec-discover = dontCheck super.hspec-discover_2_8_3;
+    tasty-hspec = self.tasty-hspec_1_2;
+  })) (drv: {
     patches = [ ./patches/graphql-engine-mapkeys.patch ];
     doHaddock = false;
-    version = "2.0.5";
+    version = "2.0.7";
   });
-  pg-client = overrideCabal super.pg-client (drv: {
+  pg-client = overrideCabal (super.pg-client.override {
+    resource-pool = self.hasura-resource-pool;
+  }) (drv: {
     librarySystemDepends = with pkgs; [ postgresql krb5.dev openssl.dev ];
     # wants a running DB to check against
     doCheck = false;

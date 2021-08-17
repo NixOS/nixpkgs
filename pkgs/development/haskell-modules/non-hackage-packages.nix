@@ -28,17 +28,13 @@ self: super: {
 
   # hasura graphql-engine is not released to hackage.
   # https://github.com/hasura/graphql-engine/issues/7391
-  #
-  # pg-client and graphql-engine depend on a hasura fork of resource-pool
-  # which is provided by pool.nix
   ci-info = self.callPackage ../misc/haskell/hasura/ci-info.nix {};
-  pg-client = self.callPackage ../misc/haskell/hasura/pg-client.nix {
-    resource-pool = self.callPackage ../misc/haskell/hasura/pool.nix {};
-  };
+  pg-client = self.callPackage ../misc/haskell/hasura/pg-client.nix {};
   graphql-parser = self.callPackage ../misc/haskell/hasura/graphql-parser.nix {};
-  graphql-engine = self.callPackage ../misc/haskell/hasura/graphql-engine.nix {
-    resource-pool = self.callPackage ../misc/haskell/hasura/pool.nix {};
-  };
+  graphql-engine = self.callPackage ../misc/haskell/hasura/graphql-engine.nix {};
+  hasura-resource-pool = self.callPackage ../misc/haskell/hasura/pool.nix {};
+  hasura-ekg-core = self.callPackage ../misc/haskell/hasura/ekg-core.nix {};
+  hasura-ekg-json = self.callPackage ../misc/haskell/hasura/ekg-json.nix {};
 
   # Unofficial fork until PRs are merged https://github.com/pcapriotti/optparse-applicative/pulls/roberth
   # cabal2nix --maintainer roberth https://github.com/hercules-ci/optparse-applicative.git > pkgs/development/misc/haskell/hercules-ci-optparse-applicative.nix
