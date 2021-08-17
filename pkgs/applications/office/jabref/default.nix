@@ -2,11 +2,13 @@
 , zlib , libX11, libXext, libXi, libXrender, libXtst, libGL, alsa-lib, cairo, freetype, pango, gdk-pixbuf, glib }:
 
 stdenv.mkDerivation rec {
-  version = "5.1";
+  version = "5.3";
   pname = "jabref";
 
-  src = fetchurl {
-    url = "https://github.com/JabRef/jabref/releases/download/v${version}/JabRef-${version}-portable_linux.tar.gz";
+  src = fetchFromGiHub {
+    owner = "JabRef";
+    repo = pname;
+    rev = "v${version}";
     sha256 = "04f612byrq3agzy26byg1sgrjyhcpa8xfj0ssh8dl8d8vnhx9742";
   };
 
@@ -67,6 +69,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.jabref.org";
     license = licenses.gpl2;
     platforms = platforms.unix;
-    maintainers = [ maintainers.gebner ];
+    maintainers = with maintainers; [ gebner matdsoupe ];
   };
 }
