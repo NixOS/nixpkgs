@@ -1,4 +1,4 @@
-{ pkgs }:
+{ pkgs, stdenv }:
 rec {
   inherit (pkgs) eggDerivation fetchegg;
 
@@ -47,12 +47,12 @@ rec {
   };
 
   srfi-13 = eggDerivation {
-    name = "srfi-13-0.3";
+    name = "srfi-13-0.3.1";
 
     src = fetchegg {
       name = "srfi-13";
-      version = "0.3";
-      sha256 = "0yaw9i6zhpxl1794pirh168clprjgmsb0xlr96drirjzsslgm3zp";
+      version = "0.3.1";
+      sha256 = "12ryxs3w3las0wjdh0yp52g1xmyq1fb48xi3i26l5a9sfx7gbilp";
     };
 
     buildInputs = [
