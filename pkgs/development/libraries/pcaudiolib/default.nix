@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pcaudiolib";
-  version = "1.1";
+  version = "1.2";
 
   src = fetchFromGitHub {
     owner = "espeak-ng";
     repo = "pcaudiolib";
     rev = version;
-    sha256 = "0c55hlqqh0m7bcb3nlgv1s4a22s5bgczr1cakjh3767rjb10khi0";
+    sha256 = "sha256-ZG/HBk5DHaZP/H3M01vDr3M2nP9awwsPuKpwtalz3EE=";
   };
 
   nativeBuildInputs = [ autoconf automake which libtool pkg-config ];
