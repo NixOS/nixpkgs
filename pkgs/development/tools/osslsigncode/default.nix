@@ -1,10 +1,10 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , autoreconfHook
-, libgsf
 , pkg-config
-, openssl
 , curl
+, openssl
 }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +18,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-/YKj6JkVbQ4Fz+KSmBIRQ7F7A8fxi5Eg+pvKwhjpGYQ=";
   };
 
-  nativeBuildInputs = [ autoreconfHook libgsf pkg-config openssl curl ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
+
+  buildInputs = [ curl openssl ];
 
   meta = with lib; {
     homepage = "https://github.com/mtrojnar/osslsigncode";
