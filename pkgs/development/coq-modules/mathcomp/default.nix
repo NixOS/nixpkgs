@@ -19,7 +19,7 @@ let
   owner = "math-comp";
   withDoc = single && (args.withDoc or false);
   defaultVersion = with versions; switch coq.coq-version [
-      { case = isGe  "8.13";        out = "1.12.0"; } # lower version of coq to 8.10 when all mathcomp packages are ported
+      { case = isGe  "8.10";        out = "1.12.0"; }
       { case = range "8.7"  "8.12"; out = "1.11.0"; }
       { case = range "8.7" "8.11";  out = "1.10.0"; }
       { case = range "8.7" "8.11";  out = "1.9.0";  }
