@@ -1,34 +1,4 @@
-{ lib, stdenv, ps, coreutils, fetchurl, jdk, jre, ant, gettext, which }:
-
-let wrapper = stdenv.mkDerivation rec {
-  pname = "wrapper";
-  version = "3.5.46";
-
-  src = fetchurl {
-    url = "https://wrapper.tanukisoftware.com/download/${version}/wrapper_${version}_src.tar.gz";
-    sha256 = "sha256-guHQyFSI0TidAuOr4zWaf3WRGeNW4+Or1sbWdhWuWtg=";
-  };
-
-  buildInputs = [ jdk ];
-
-  buildPhase = ''
-    export ANT_HOME=${ant}
-    export JAVA_HOME=${jdk}/lib/openjdk/jre/
-    export JAVA_TOOL_OPTIONS=-Djava.home=$JAVA_HOME
-    export CLASSPATH=${jdk}/lib/openjdk/lib/tools.jar
-    sed 's/ testsuite$//' -i src/c/Makefile-linux-x86-64.make
-    ${if stdenv.isi686 then "./build32.sh" else "./build64.sh"}
-  '';
-
-  installPhase = ''
-    mkdir -p $out/{bin,lib}
-    cp bin/wrapper $out/bin/wrapper
-    cp lib/wrapper.jar $out/lib/wrapper.jar
-    cp lib/libwrapper.so $out/lib/libwrapper.so
-  '';
-};
-
-in
+{ lib, stdenv, ps, coreutils, fetchurl, jdk, jre, ant, gettext, which, java-service-wrapper }:
 
 stdenv.mkDerivation rec {
   pname = "i2p";
@@ -52,9 +22,9 @@ stdenv.mkDerivation rec {
     mkdir -p $out/{bin,share}
     cp -r pkg-temp/* $out
 
-    cp ${wrapper}/bin/wrapper $out/i2psvc
-    cp ${wrapper}/lib/wrapper.jar $out/lib
-    cp ${wrapper}/lib/libwrapper.so $out/lib
+    cp ${java-service-wrapper}/bin/wrapper $out/i2psvc
+    cp ${java-service-wrapper}/lib/wrapper.jar $out/lib
+    cp ${java-service-wrapper}/lib/libwrapper.so $out/lib
 
     sed -i $out/i2prouter -i $out/runplain.sh \
       -e "s#uname#${coreutils}/bin/uname#" \
