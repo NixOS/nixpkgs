@@ -347,14 +347,14 @@ declare -a allPlatOffsets=(-1 0 1)
 # implements.
 findInputs() {
     local -r pkg="$1"
-    local -ri hostOffset="$2"
-    local -ri targetOffset="$3"
+    local -r hostOffset="$2"
+    local -r targetOffset="$3"
 
     # Sanity check
-    (( "$hostOffset" <= "$targetOffset" )) || exit -1
+    (( hostOffset <= targetOffset )) || exit -1
 
-    local varVar="${pkgAccumVarVars[$hostOffset + 1]}"
-    local varRef="$varVar[\$targetOffset - \$hostOffset]"
+    local varVar="${pkgAccumVarVars[hostOffset + 1]}"
+    local varRef="$varVar[$((targetOffset - hostOffset))]"
     local var="${!varRef}"
     unset -v varVar varRef
 
@@ -381,21 +381,21 @@ findInputs() {
     # offsets to current offset
     local -i mapOffsetResult
     function mapOffset() {
-        local -ri inputOffset="$1"
-        if (( "$inputOffset" <= 0 )); then
-            local -ri outputOffset="$inputOffset + $hostOffset"
+        local -r inputOffset="$1"
+        if (( inputOffset <= 0 )); then
+            local -r outputOffset=$((inputOffset + hostOffset))
         else
-            local -ri outputOffset="$inputOffset - 1 + $targetOffset"
+            local -r outputOffset=$((inputOffset - 1 + targetOffset))
         fi
         mapOffsetResult="$outputOffset"
     }
 
     # Host offset relative to that of the package whose immediate
     # dependencies we are currently exploring.
-    local -i relHostOffset
+    local relHostOffset
     for relHostOffset in "${allPlatOffsets[@]}"; do
         # `+ 1` so we start at 0 for valid index
-        local files="${propagatedDepFilesVars[$relHostOffset + 1]}"
+        local files="${propagatedDepFilesVars[relHostOffset + 1]}"
 
         # Host offset relative to the package currently being
         # built---as absolute an offset as will be used.
@@ -473,11 +473,11 @@ done
 # Add package to the future PATH and run setup hooks
 activatePackage() {
     local pkg="$1"
-    local -ri hostOffset="$2"
-    local -ri targetOffset="$3"
+    local -r hostOffset="$2"
+    local -r targetOffset="$3"
 
     # Sanity check
-    (( "$hostOffset" <= "$targetOffset" )) || exit -1
+    (( hostOffset <= targetOffset )) || exit -1
 
     if [ -f "$pkg" ]; then
         source "$pkg"
@@ -494,7 +494,7 @@ activatePackage() {
         addToSearchPath _PATH "$pkg/bin"
     fi
 
-    if [[ "$hostOffset" -le -1 ]]; then
+    if (( hostOffset <= -1 )); then
         addToSearchPath _XDG_DATA_DIRS "$pkg/share"
     fi
 
@@ -508,13 +508,13 @@ activatePackage() {
 }
 
 _activatePkgs() {
-    local -i hostOffset targetOffset
+    local hostOffset targetOffset
     local pkg
 
     for hostOffset in "${allPlatOffsets[@]}"; do
-        local pkgsVar="${pkgAccumVarVars[$hostOffset + 1]}"
+        local pkgsVar="${pkgAccumVarVars[hostOffset + 1]}"
         for targetOffset in "${allPlatOffsets[@]}"; do
-            (( "$hostOffset" <= "$targetOffset" )) || continue
+            (( hostOffset <= targetOffset )) || continue
             local pkgsRef="${pkgsVar}[$targetOffset - $hostOffset]"
             local pkgsSlice="${!pkgsRef}[@]"
             for pkg in ${!pkgsSlice+"${!pkgsSlice}"}; do
@@ -536,14 +536,14 @@ _activatePkgs
 # with this information to the relevant env hook array, but bash
 # doesn't have closures, so it's easier to just pass this in.
 _addToEnv() {
-    local -i depHostOffset depTargetOffset
+    local depHostOffset depTargetOffset
     local pkg
 
     for depHostOffset in "${allPlatOffsets[@]}"; do
-        local hookVar="${pkgHookVarVars[$depHostOffset + 1]}"
-        local pkgsVar="${pkgAccumVarVars[$depHostOffset + 1]}"
+        local hookVar="${pkgHookVarVars[depHostOffset + 1]}"
+        local pkgsVar="${pkgAccumVarVars[depHostOffset + 1]}"
         for depTargetOffset in "${allPlatOffsets[@]}"; do
-            (( "$depHostOffset" <= "$depTargetOffset" )) || continue
+            (( depHostOffset <= depTargetOffset )) || continue
             local hookRef="${hookVar}[$depTargetOffset - $depHostOffset]"
             if [[ -z "${strictDeps-}" ]]; then
 
@@ -635,7 +635,7 @@ export NIX_INDENT_MAKE=1
 
 if [ -z "${NIX_BUILD_CORES:-}" ]; then
   NIX_BUILD_CORES="1"
-elif [ "$NIX_BUILD_CORES" -le 0 ]; then
+elif (( NIX_BUILD_CORES <= 0 )); then
   NIX_BUILD_CORES=$(nproc 2>/dev/null || true)
   if expr >/dev/null 2>&1 "$NIX_BUILD_CORES" : "^[0-9][0-9]*$"; then
     :
