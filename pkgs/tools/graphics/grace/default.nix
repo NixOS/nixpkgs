@@ -43,27 +43,21 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   NIX_CFLAGS_COMPILE = [ "-Wno-format-security" ]
-    ++ lib.optionals stdenv.cc.isClang
-    [ "-Wno-implicit-function-declaration" "-O1" ];
+    ++ lib.optionals stdenv.cc.isClang [ "-Wno-implicit-function-declaration" "-O1" ];
+
+  preConfigure = ''configureFlags="$configureFlags --enable-grace-home=$out"'';
 
   configureFlags = [
     "--disable-debug"
     "--with-bundled-t1lib=yes"
   ];
 
-  preConfigure = ''
-    configureFlags="$configureFlags --enable-grace-home=$out"
-  '';
-
   meta = with lib; {
     homepage = "https://plasma-gate.weizmann.ac.il/Grace/";
-
     description = "Grace is a WYSIWYG 2D plotting tool.";
     longDescription = "Grace is a WYSIWYG 2D plotting tool for the X Window System and M*tif. Grace is a descendant of ACE/gr, also known as Xmgr, and runs on practically any version of Unix-like OS.";
-
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.gpl2Only;
-
     maintainers = with maintainers; [ netforceexplorer ];
   };
 }
