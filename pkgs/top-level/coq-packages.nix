@@ -14,6 +14,7 @@ let
         (callPackage ../development/coq-modules/contribs {});
 
       aac-tactics = callPackage ../development/coq-modules/aac-tactics {};
+      addition-chains = callPackage ../development/coq-modules/addition-chains {};
       autosubst = callPackage ../development/coq-modules/autosubst {};
       bignums = if lib.versionAtLeast coq.coq-version "8.6"
         then callPackage ../development/coq-modules/bignums {}
