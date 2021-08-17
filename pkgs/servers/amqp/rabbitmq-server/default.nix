@@ -83,6 +83,6 @@ stdenv.mkDerivation rec {
     description = "An implementation of the AMQP messaging protocol";
     license = licenses.mpl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ turion ];
   };
 }
