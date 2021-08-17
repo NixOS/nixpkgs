@@ -45,5 +45,5 @@ rec {
     cudatoolkit = cudatoolkit_11_4;
   };
 
-  cutensor_cudatoolkit_11 = cutensor_cudatoolkit_11_2;
+  cutensor_cudatoolkit_11 = cutensor_cudatoolkit_11_4;
 }
