@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "osslsigncode";
-  version = "2.1";
+  version = "2.2";
 
   src = fetchFromGitHub {
     owner = "mtrojnar";
     repo = pname;
     rev = version;
-    sha256 = "0iwxdzqan2bswz62pmwjcyh01vs6ifpdcannw3s192gqzac1lgg3";
+    sha256 = "sha256-/YKj6JkVbQ4Fz+KSmBIRQ7F7A8fxi5Eg+pvKwhjpGYQ=";
   };
 
   nativeBuildInputs = [ autoreconfHook libgsf pkg-config openssl curl ];
