@@ -18006,7 +18006,9 @@ with pkgs;
 
   imath = callPackage ../development/libraries/imath { };
 
-  openexr = callPackage ../development/libraries/openexr { };
+  openexr = openexr_2;
+  openexr_2 = callPackage ../development/libraries/openexr { };
+  openexr_3 = callPackage ../development/libraries/openexr/3.nix { };
 
   openexrid-unstable = callPackage ../development/libraries/openexrid-unstable { };
 
