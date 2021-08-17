@@ -11,6 +11,9 @@ with lib;
 stdenv.mkDerivation ({
   pname = "hex-source-${pkg}";
   inherit version;
+  dontBuild = true;
+  dontConfigure = true;
+  dontFixup = true;
 
   src = fetchurl {
     url = "https://repo.hex.pm/tarballs/${pkg}-${version}.tar";
