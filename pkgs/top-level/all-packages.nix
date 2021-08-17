@@ -1674,6 +1674,8 @@ with pkgs;
 
   lsix = callPackage ../tools/graphics/lsix { };
 
+  mdr = callPackage ../tools/misc/mdr { };
+
   mpdevil = callPackage ../applications/audio/mpdevil { };
 
   pacparser = callPackage ../tools/networking/pacparser { };
