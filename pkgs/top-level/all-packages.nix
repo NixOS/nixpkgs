@@ -9324,6 +9324,8 @@ with pkgs;
 
   tboot = callPackage ../tools/security/tboot { };
 
+  tagutil = callPackage ../applications/audio/tagutil { };
+
   tcpdump = callPackage ../tools/networking/tcpdump { };
 
   tcpflow = callPackage ../tools/networking/tcpflow { };
