@@ -21,22 +21,10 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    (fetchpatch { # probably included in > 1.16.0
-      name = "test_t-edit-sign.diff"; # we experienced segmentation fault in this test
-      urls = [
-        "https://files.gnupg.net/file/data/w43xz2zf73pnyqk5mm5l/PHID-FILE-hm2x5mjntsdyxrxve5tb/file"
-        "https://git.gnupg.org/cgi-bin/gitweb.cgi?p=gpgme.git;a=patch;h=81a33ea5e1b86d586b956e893a5b25c4cd41c969"
-      ];
-      sha256 = "1xxvv0kc9wdj5hzpddzs3cn8dhmm2cb29224a7h9vairraq5272h";
-    })
-    (fetchpatch { # gpg: Send --with-keygrip when listing keys
-      name = "c4cf527ea227edb468a84bf9b8ce996807bd6992.patch";
-      urls = [
-        "https://files.gnupg.net/file/data/2ufcg7ny5jdnv7hmewb4/PHID-FILE-7iwvryn2btti6txr3bsz/file"
-        "http://git.gnupg.org/cgi-bin/gitweb.cgi?p=gpgme.git;a=patch;h=c4cf527ea227edb468a84bf9b8ce996807bd6992"
-      ];
-      sha256 = "0y0b0lb2nq5p9kx13b59b2jaz157mvflliw1qdvg1v1hynvgb8m4";
-    })
+    # probably included in > 1.16.0
+    ./test_t-edit-sign.diff
+    # https://dev.gnupg.org/rMc4cf527ea227edb468a84bf9b8ce996807bd6992
+    ./fix_gpg_list_keys.diff
     # https://lists.gnupg.org/pipermail/gnupg-devel/2020-April/034591.html
     (fetchpatch {
       name = "0001-Fix-python-tests-on-non-Linux.patch";
