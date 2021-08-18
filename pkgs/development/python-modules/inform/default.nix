@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "inform";
-  version = "1.24";
+  version = "1.25";
 
   src = fetchFromGitHub {
     owner = "KenKundert";
     repo = "inform";
     rev = "v${version}";
-    sha256 = "114cyff00j9r7qm2ld4w1a4kklr5gx570vk67p56gpr2553dkmly";
+    sha256 = "1r56wmn21c7ggy33548l6dfjswhadkp2iaalfb7xgsxmq7qfcnax";
   };
 
   nativeBuildInputs = [ pytest-runner ];
