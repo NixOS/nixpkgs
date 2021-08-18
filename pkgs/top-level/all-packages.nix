@@ -21141,10 +21141,10 @@ with pkgs;
   linux_4_14_hardened = linuxPackages_4_14_hardened.kernel;
   linuxPackages_4_19_hardened = linuxKernel.packages.linux_4_19_hardened;
   linux_4_19_hardened = linuxPackages_4_19_hardened.kernel;
-  linuxPackages_5_4_hardened = linuxKernel.linux_5_4_hardened.linux_latest_hardened;
-  linux_5_4_hardened = linuxPackages_5_4_hardened.kernel;
+  linuxPackages_5_4_hardened = linuxKernel.packages.linux_5_4_hardened;
+  linux_5_4_hardened = linuxKernel.kernels.linux_5_4_hardened;
   linuxPackages_5_10_hardened = linuxKernel.packages.linux_5_10_hardened;
-  linux_5_10_hardened = linuxPackages_5_10_hardened.kernel;
+  linux_5_10_hardened = linuxKernel.kernels.linux_5_10_hardened;
 
   # Hardkernel (Odroid) kernels.
   linuxPackages_hardkernel_latest = linuxKernel.packageAliases.linux_hardkernel_latest;
