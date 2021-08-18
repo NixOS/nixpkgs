@@ -65,7 +65,12 @@
 
 let
   stdenvAdapters = self: super:
-    let res = import ../stdenv/adapters.nix self; in res // {
+    let
+      res = import ../stdenv/adapters.nix {
+        inherit lib config;
+        pkgs = self;
+      };
+    in res // {
       stdenvAdapters = res;
     };
 
