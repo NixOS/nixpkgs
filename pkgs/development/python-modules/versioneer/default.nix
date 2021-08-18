@@ -1,10 +1,13 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27 }:
-
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "versioneer";
   version = "0.20";
-  disabled = isPy27;
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
@@ -15,11 +18,12 @@ buildPythonPackage rec {
   # pip.
   doCheck = false;
 
+  pythonImportsCheck = [ "versioneer" ];
+
   meta = with lib; {
     description = "Version-string management for VCS-controlled trees";
     homepage = "https://github.com/warner/python-versioneer";
     license = licenses.publicDomain;
     maintainers = with maintainers; [ jluttine ];
   };
-
 }
