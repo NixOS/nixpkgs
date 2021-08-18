@@ -42,10 +42,12 @@ buildPythonPackage rec {
   # Some of the tests use localhost networking.
   __darwinAllowLocalNetworking = true;
 
-  meta = {
+  pythonImportsCheck = [ "trustme" ];
+
+  meta = with lib; {
     description = "High quality TLS certs while you wait, for the discerning tester";
     homepage = "https://github.com/python-trio/trustme";
-    license = with lib.licenses; [ mit asl20 ];
-    maintainers = with lib.maintainers; [ catern ];
+    license = with licenses; [ mit asl20 ];
+    maintainers = with maintainers; [ catern ];
   };
 }
