@@ -13,16 +13,17 @@
 , mock
 , sphinx
 , testtools
+, tkinter
 }:
 
 buildPythonPackage rec {
-  pname = "softlayer-python";
-  version = "5.8.4";
+  pname = "softlayer";
+  version = "5.9.7";
   disabled = isPy27;
 
   propagatedBuildInputs = [ ptable click requests prompt-toolkit pygments urllib3 ];
 
-  checkInputs = [ pytest pytest-cov mock sphinx testtools ];
+  checkInputs = [ pytest pytest-cov mock sphinx testtools tkinter ];
 
   checkPhase = ''
     pytest
@@ -32,7 +33,7 @@ buildPythonPackage rec {
     owner = "softlayer";
     repo = pname;
     rev = "v${version}";
-    sha256 = "10kzi7kvvifr21a46q2xqsibs0bx5ys22nfym0bg605ka37vcz88";
+    sha256 = "sha256-72ZKc8WlVPs7HISHaAcZKM+ZLbiPbsOJpaNPdvP0kH8=";
   };
 
   meta = with lib; {
