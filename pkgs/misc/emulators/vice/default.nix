@@ -3,10 +3,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "vice-3.1";
+  pname = "vice";
+  version = "3.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/vice-emu/vice-3.1.tar.gz";
+    url = "mirror://sourceforge/vice-emu/vice-${version}.tar.gz";
     sha256 = "0h0jbml02s2a36hr78dxv1zshmfhxp1wadpcdl09aq416fb1bf1y";
   };
 

@@ -53,12 +53,10 @@ echo "Extension version: $extension_ver"
 
 build_deps="../../../../misc/vscode-extensions/rust-analyzer/build-deps"
 # We need devDependencies to build vsix.
-jq '{ name, version: $ver, dependencies: (.dependencies + .devDependencies) }' "$node_src/package.json" \
+# `esbuild` is a binary package an is already in nixpkgs so we omit it here.
+jq '{ name, version: $ver, dependencies: (.dependencies + .devDependencies | del(.esbuild)) }' "$node_src/package.json" \
     --arg ver "$extension_ver" \
     >"$build_deps/package.json.new"
-
-# FIXME: rollup@2.55.0 breaks the build: https://github.com/rollup/rollup/issues/4195
-sed 's/"rollup": ".*"/"rollup": "=2.51.1"/' --in-place "$build_deps/package.json.new"
 
 old_deps="$(jq '.dependencies' "$build_deps"/package.json)"
 new_deps="$(jq '.dependencies' "$build_deps"/package.json.new)"

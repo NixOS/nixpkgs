@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "aiotractive";
-  version = "0.5.1";
+  version = "0.5.2";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "zhulik";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "09zbca84dn1sprwqpfanmxxnmaknbzjz98xa87agpgy8xb3wpw7j";
+    rev = "v.${version}";
+    sha256 = "04qdjyxq35063jpn218vw94a4r19fknk1q2kkxr8gnaabkpkjrnf";
   };
 
   propagatedBuildInputs = [

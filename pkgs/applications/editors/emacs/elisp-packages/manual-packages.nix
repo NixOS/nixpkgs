@@ -46,7 +46,7 @@
     pname = "agda-mode";
     version = pkgs.haskellPackages.Agda.version;
 
-    phases = [ "buildPhase" "installPhase" ];
+    dontUnpack = true;
 
     # already byte-compiled by Agda builder
     buildPhase = ''

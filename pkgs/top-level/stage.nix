@@ -239,6 +239,8 @@ let
             gnu = lib.systems.parse.abis.musl;
             gnueabi = lib.systems.parse.abis.musleabi;
             gnueabihf = lib.systems.parse.abis.musleabihf;
+            musleabi = lib.systems.parse.abis.musleabi;
+            musleabihf = lib.systems.parse.abis.musleabihf;
           }.${stdenv.hostPlatform.parsed.abi.name}
             or lib.systems.parse.abis.musl;
         };

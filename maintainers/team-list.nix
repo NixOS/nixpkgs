@@ -132,6 +132,17 @@ with lib.maintainers; {
     scope = "Maintain the Home Assistant ecosystem";
   };
 
+  iog = {
+    members = [
+      cleverca22
+      disassembler
+      jonringer
+      maveru
+      nrdxp
+    ];
+    scope = "Input-Output Global employees, which maintain critical software";
+  };
+
   jitsi = {
     members = [
       petabyteboy

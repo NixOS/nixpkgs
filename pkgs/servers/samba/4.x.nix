@@ -139,6 +139,9 @@ stdenv.mkDerivation rec {
     ++ optional (!enablePam) "--without-pam"
     ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "--bundled-libraries=!asn1_compile,!compile_et"
+  ] ++ optional stdenv.isAarch32 [
+    # https://bugs.gentoo.org/683148
+    "--jobs 1"
   ];
 
   # python-config from build Python gives incorrect values when cross-compiling.
