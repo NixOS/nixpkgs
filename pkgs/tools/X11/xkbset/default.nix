@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "xkbset";
-  version = "0.5";
+  version = "0.6";
 
   src = fetchurl {
     url = "http://faculty.missouri.edu/~stephen/software/xkbset/xkbset-${version}.tar.gz";
-    sha256 = "01c2579495b39e00d870f50225c441888dc88021e9ee3b693a842dd72554d172";
+    sha256 = "sha256-rAMv7EnExPDyMY0/RhiXDFFBkbFC4GxRpmH+I0KlNaU=";
   };
 
   buildInputs = [ perl libX11 ];

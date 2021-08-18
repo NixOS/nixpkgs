@@ -737,6 +737,12 @@
           <literal>linuxPackages_5_10_hardened</literal>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          The <literal>nomad</literal> package now defaults to a 1.1.x
+          release instead of 1.0.x
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-notable-changes">

@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "popeye";
-  version = "0.9.2";
+  version = "0.9.7";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "derailed";
     repo = "popeye";
-    sha256 = "sha256-GSH9q0hnyuGiJAdbFWKbaaYoHKl4e0SNmBkOvpn5a6s=";
+    sha256 = "sha256-oft1zLLd5TP8S9GMjp5kYaoPoOYnbhJwL2wBerkhp+c=";
   };
 
   buildFlagsArray = ''
@@ -18,7 +18,7 @@ buildGoModule rec {
       -X github.com/derailed/popeye/cmd.commit=${version}
   '';
 
-  vendorSha256 = "sha256-pK04vGL9Izv1aK8UA+/3lSt/SjLyckjnfSCrOalRj3c=";
+  vendorSha256 = "sha256-vUUDLMicop5QzZmAHi5qrc0hx8oV2xWNFHvCWioLhl8=";
 
   doCheck = true;
 
