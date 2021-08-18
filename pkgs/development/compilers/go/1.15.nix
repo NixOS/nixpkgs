@@ -281,5 +281,8 @@ stdenv.mkDerivation rec {
     maintainers = teams.golang.members;
     platforms = platforms.linux ++ platforms.darwin;
     badPlatforms = [ "aarch64-darwin" ];
+    knownVulnerabilities = [
+      "Support for Go 1.15 ended with the release of Go 1.17: https://golang.org/doc/devel/release.html#policy"
+    ];
   };
 }
