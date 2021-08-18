@@ -1,0 +1,11 @@
+--- a/libraries/cmake/source/libmagic/config/linux/config.h
++++ b/libraries/cmake/source/libmagic/config/linux/config.h
+@@ -248,7 +248,7 @@
+ #define HAVE_WORKING_VFORK 1
+ 
+ /* Define to 1 if you have the <xlocale.h> header file. */
+-#define HAVE_XLOCALE_H 1
++/* #undef HAVE_XLOCALE_H */
+ 
+ /* Define to 1 if you have the <zlib.h> header file. */
+ #define HAVE_ZLIB_H 1

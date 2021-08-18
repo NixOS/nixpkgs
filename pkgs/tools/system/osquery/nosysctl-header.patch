@@ -1,0 +1,69 @@
+Linux and glibc have removed these calls.
+--- a/libraries/cmake/source/lldpd/config/x86_64/linux/libevent/config.h
++++ b/libraries/cmake/source/lldpd/config/x86_64/linux/libevent/config.h
+@@ -288,7 +288,7 @@
+ #define HAVE_SYS_STAT_H 1
+ 
+ /* Define to 1 if you have the <sys/sysctl.h> header file. */
+-#define HAVE_SYS_SYSCTL_H 1
++/* #undef HAVE_SYS_SYSCTL_H */
+ 
+ /* Define to 1 if you have the <sys/time.h> header file. */
+ #define HAVE_SYS_TIME_H 1
+--- a/libraries/cmake/source/lldpd/config/x86_64/linux/libevent/event2/event-config.h
++++ b/libraries/cmake/source/lldpd/config/x86_64/linux/libevent/event2/event-config.h
+@@ -301,7 +301,7 @@
+ #define _EVENT_HAVE_SYS_STAT_H 1
+ 
+ /* Define to 1 if you have the <sys/sysctl.h> header file. */
+-#define _EVENT_HAVE_SYS_SYSCTL_H 1
++/* #undef _EVENT_HAVE_SYS_SYSCTL_H */
+ 
+ /* Define to 1 if you have the <sys/time.h> header file. */
+ #define _EVENT_HAVE_SYS_TIME_H 1
+--- a/osquery/tables/system/linux/sysctl_utils.cpp
++++ b/osquery/tables/system/linux/sysctl_utils.cpp
+@@ -7,8 +7,6 @@
+  * SPDX-License-Identifier: (Apache-2.0 OR GPL-2.0-only)
+  */
+ 
+-#include <sys/sysctl.h>
+-
+ #include <boost/algorithm/string/trim.hpp>
+ 
+ #include <osquery/core/tables.h>
+@@ -70,20 +68,7 @@ void genControlInfo(int* oid,
+                     size_t oid_size,
+                     QueryData& results,
+                     const std::map<std::string, std::string>& config) {
+-  // Get control size
+-  size_t response_size = CTL_MAX_VALUE;
+-  char response[CTL_MAX_VALUE + 1] = {0};
+-  if (sysctl(oid, oid_size, response, &response_size, 0, 0) != 0) {
+-    // Cannot request MIB data.
+-    return;
+-  }
+-
+-  // Data is output, but no way to determine type (long, int, string, struct).
+-  Row r;
+-  r["oid"] = stringFromMIB(oid, oid_size);
+-  r["current_value"] = std::string(response);
+-  r["type"] = "string";
+-  results.push_back(r);
++  return; // Syscall has been deprecated, always fail.
+ }
+ 
+ void genAllControls(QueryData& results,
+diff --git a/osquery/tables/system/posix/sysctl_utils.h b/osquery/tables/system/posix/sysctl_utils.h
+index e119f8a9e..40a96dbc4 100644
+--- a/osquery/tables/system/posix/sysctl_utils.h
++++ b/osquery/tables/system/posix/sysctl_utils.h
+@@ -9,7 +9,7 @@
+ 
+ #pragma once
+ 
+-#include <sys/sysctl.h>
++#define CTL_MAXNAME 10
+ 
+ #include <osquery/core/tables.h>
+ 

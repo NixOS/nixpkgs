@@ -1,0 +1,14 @@
+Fixes repeated define: https://bugs.gentoo.org/669532
+--- ./libraries/cmake/source/libaudit/src/lib/libaudit.h
++++ ./libraries/cmake/source/libaudit/src/lib/libaudit.h
+@@ -260,7 +260,9 @@
+ #define AUDIT_KEY_SEPARATOR 0x01
+ 
+ /* These are used in filter control */
+-#define AUDIT_FILTER_EXCLUDE	AUDIT_FILTER_TYPE
++#ifndef AUDIT_FILTER_EXCLUDE
++#define AUDIT_FILTER_EXCLUDE    AUDIT_FILTER_TYPE
++#endif
+ #define AUDIT_FILTER_MASK	0x07	/* Mask to get actual filter */
+ #define AUDIT_FILTER_UNSET	0x80	/* This value means filter is unset */
+ 

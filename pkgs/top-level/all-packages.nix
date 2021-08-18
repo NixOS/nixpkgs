@@ -26595,6 +26595,8 @@ with pkgs;
 
   osmium-tool = callPackage ../applications/misc/osmium-tool { };
 
+  osquery = callPackage ../tools/system/osquery { };
+
   osu-lazer = callPackage ../games/osu-lazer { };
 
   owamp = callPackage ../applications/networking/owamp { };

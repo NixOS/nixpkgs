@@ -1,0 +1,33 @@
+This patch stops cmake from attempting to download openssl at build time.
+This patch could be further improved to just link against the system openssl
+instead of trying to build one.
+
+--- a/libraries/cmake/formula/openssl/CMakeLists.txt
++++ b/libraries/cmake/formula/openssl/CMakeLists.txt
+@@ -1,8 +1,5 @@
+ project(thirdparty_openssl)
+ 
+-set(OPENSSL_VERSION "1.1.1k")
+-set(OPENSSL_ARCHIVE_SHA256 "892a0875b9872acd04a9fde79b1f943075d5ea162415de3047c327df33fbaee5")
+-
+ include(ExternalProject)
+ 
+ function(opensslMain)
+@@ -162,16 +159,8 @@ function(opensslMain)
+   list(APPEND openssl_c_flags ${OSQUERY_FORMULA_CFLAGS})
+   string(REPLACE ";" " " openssl_c_flags "${openssl_c_flags}")
+ 
+-  string(REGEX MATCH "[0-9]\.[0-9]\.[0-9]" OPENSSL_VERSION_NO_PATCH "${OPENSSL_VERSION}")
+-
+-  set(openssl_urls
+-    "https://www.openssl.org/source/openssl-${OPENSSL_VERSION}.tar.gz"
+-    "https://www.openssl.org/source/old/${OPENSSL_VERSION_NO_PATCH}/openssl-${OPENSSL_VERSION}.tar.gz"
+-  )
+-
+   ExternalProject_Add(openssl
+-    URL "${openssl_urls}"
+-    URL_HASH SHA256=${OPENSSL_ARCHIVE_SHA256}
++    URL "@OSQUERY_OPENSSL_TARBALL@"
+     CONFIGURE_COMMAND ${configure_command}
+     BUILD_COMMAND ${build_command}
+     INSTALL_COMMAND ""

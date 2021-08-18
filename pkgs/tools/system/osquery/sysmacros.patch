@@ -1,0 +1,115 @@
+Submodule libraries/cmake/source/libudev/src contains modified content
+diff --git a/libraries/cmake/source/libudev/src/libudev/libudev-device.c b/libraries/cmake/source/libudev/src/libudev/libudev-device.c
+index 1024b46803..21e9d46c65 100644
+--- a/libraries/cmake/source/libudev/src/libudev/libudev-device.c
++++ b/libraries/cmake/source/libudev/src/libudev/libudev-device.c
+@@ -23,6 +23,10 @@
+ #include <sys/stat.h>
+ #include <sys/ioctl.h>
+ #include <sys/socket.h>
++#include <sys/types.h>
++#ifdef __GNU_LIBRARY__
++#include <sys/sysmacros.h>
++#endif
+ #include <linux/sockios.h>
+ 
+ #include "libudev.h"
+diff --git a/libraries/cmake/source/libudev/src/libudev/libudev-enumerate.c b/libraries/cmake/source/libudev/src/libudev/libudev-enumerate.c
+index f14d5c8f57..85669c6f53 100644
+--- a/libraries/cmake/source/libudev/src/libudev/libudev-enumerate.c
++++ b/libraries/cmake/source/libudev/src/libudev/libudev-enumerate.c
+@@ -20,6 +20,9 @@
+ #include <stdbool.h>
+ #include <sys/stat.h>
+ #include <sys/param.h>
++#ifdef __GNU_LIBRARY__
++#include <sys/sysmacros.h>
++#endif
+ 
+ #include "libudev.h"
+ #include "libudev-private.h"
+Submodule libraries/cmake/source/util-linux/src contains modified content
+diff --git a/libraries/cmake/source/util-linux/src/lib/sysfs.c b/libraries/cmake/source/util-linux/src/lib/sysfs.c
+index 51ec2bfe2..51be12db2 100644
+--- a/libraries/cmake/source/util-linux/src/lib/sysfs.c
++++ b/libraries/cmake/source/util-linux/src/lib/sysfs.c
+@@ -5,6 +5,9 @@
+  * Written by Karel Zak <kzak@redhat.com>
+  */
+ #include <ctype.h>
++#ifdef __GNU_LIBRARY__
++#include <sys/sysmacros.h>
++#endif
+ 
+ #include "c.h"
+ #include "at.h"
+diff --git a/libraries/cmake/source/util-linux/src/libblkid/src/partitions/partitions.c b/libraries/cmake/source/util-linux/src/libblkid/src/partitions/partitions.c
+index 6e55a8f3e..4be4113b6 100644
+--- a/libraries/cmake/source/util-linux/src/libblkid/src/partitions/partitions.c
++++ b/libraries/cmake/source/util-linux/src/libblkid/src/partitions/partitions.c
+@@ -14,6 +14,9 @@
+ #include <fcntl.h>
+ #include <ctype.h>
+ #include <sys/types.h>
++#ifdef __GNU_LIBRARY__
++#include <sys/sysmacros.h>
++#endif
+ #include <sys/stat.h>
+ #include <errno.h>
+ #include <stdint.h>
+diff --git a/libraries/cmake/source/util-linux/src/libblkid/src/topology/dm.c b/libraries/cmake/source/util-linux/src/libblkid/src/topology/dm.c
+index e061632ca..8708215d2 100644
+--- a/libraries/cmake/source/util-linux/src/libblkid/src/topology/dm.c
++++ b/libraries/cmake/source/util-linux/src/libblkid/src/topology/dm.c
+@@ -17,6 +17,9 @@
+ #include <string.h>
+ #include <sys/stat.h>
+ #include <sys/types.h>
++#ifdef __GNU_LIBRARY__
++#include <sys/sysmacros.h>
++#endif
+ #include <unistd.h>
+ 
+ #include "topology.h"
+diff --git a/libraries/cmake/source/util-linux/src/libblkid/src/topology/evms.c b/libraries/cmake/source/util-linux/src/libblkid/src/topology/evms.c
+index 7a4fd554d..d1a413d90 100644
+--- a/libraries/cmake/source/util-linux/src/libblkid/src/topology/evms.c
++++ b/libraries/cmake/source/util-linux/src/libblkid/src/topology/evms.c
+@@ -18,6 +18,9 @@
+ #include <sys/ioctl.h>
+ #include <sys/stat.h>
+ #include <sys/types.h>
++#ifdef __GNU_LIBRARY__
++#include <sys/sysmacros.h>
++#endif
+ #include <unistd.h>
+ 
+ #include "topology.h"
+diff --git a/libraries/cmake/source/util-linux/src/libblkid/src/topology/lvm.c b/libraries/cmake/source/util-linux/src/libblkid/src/topology/lvm.c
+index bd079d47b..c9b580ff3 100644
+--- a/libraries/cmake/source/util-linux/src/libblkid/src/topology/lvm.c
++++ b/libraries/cmake/source/util-linux/src/libblkid/src/topology/lvm.c
+@@ -17,6 +17,9 @@
+ #include <string.h>
+ #include <sys/stat.h>
+ #include <sys/types.h>
++#ifdef __GNU_LIBRARY__
++#include <sys/sysmacros.h>
++#endif
+ #include <unistd.h>
+ 
+ #include "topology.h"
+diff --git a/libraries/cmake/source/util-linux/src/libblkid/src/topology/md.c b/libraries/cmake/source/util-linux/src/libblkid/src/topology/md.c
+index 5eba94787..6a869adb3 100644
+--- a/libraries/cmake/source/util-linux/src/libblkid/src/topology/md.c
++++ b/libraries/cmake/source/util-linux/src/libblkid/src/topology/md.c
+@@ -18,6 +18,9 @@
+ #include <sys/ioctl.h>
+ #include <sys/stat.h>
+ #include <sys/types.h>
++#ifdef __GNU_LIBRARY__
++#include <sys/sysmacros.h>
++#endif
+ #include <unistd.h>
+ 
+ #include "topology.h"
