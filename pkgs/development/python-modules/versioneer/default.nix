@@ -3,12 +3,12 @@
 
 buildPythonPackage rec {
   pname = "versioneer";
-  version = "0.19";
+  version = "0.20";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a4fed39bbebcbd2d07f8a86084773f303cb442709491955a0e6754858e47afae";
+    sha256 = "sha256-Ljk2AOwnF7efWcmE942TX3bkbEyu+HWoe4tO1gLy/2U=";
   };
 
   # Couldn't get tests to work because, for instance, they used virtualenv and
