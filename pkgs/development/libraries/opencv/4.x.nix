@@ -12,6 +12,7 @@
 , gflags
 , protobuf
 , config
+, ocl-icd
 
 , enableJPEG ? true
 , libjpeg
@@ -305,6 +306,8 @@ stdenv.mkDerivation {
   ] ++ lib.optionals stdenv.isDarwin [
     "-DWITH_OPENCL=OFF"
     "-DWITH_LAPACK=OFF"
+  ] ++ lib.optionals (!stdenv.isDarwin) [
+    "-DOPENCL_LIBRARY=${ocl-icd}/lib/libOpenCL.so"
   ] ++ lib.optionals enablePython [
     "-DOPENCV_SKIP_PYTHON_LOADER=ON"
   ];
