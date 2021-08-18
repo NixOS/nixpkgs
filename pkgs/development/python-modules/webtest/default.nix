@@ -14,14 +14,14 @@
 }:
 
 buildPythonPackage rec {
-  version = "2.0.32";
+  version = "2.0.35";
   pname = "webtest";
   disabled = isPy27; # paste.deploy is not longer a valid import
 
   src = fetchPypi {
     pname = "WebTest";
     inherit version;
-    sha256 = "4221020d502ff414c5fba83c1213985b83219cb1cc611fe58aa4feaf96b5e062";
+    sha256 = "sha256-qsFotbK08gCvTjWGfPMWcSIQ49XbgcHL3/OHImR7sIc=";
   };
 
   preConfigure = ''
