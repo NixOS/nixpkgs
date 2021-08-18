@@ -7332,10 +7332,12 @@ with pkgs;
 
   netatalk = callPackage ../tools/filesystems/netatalk { };
 
-  netcdf = callPackage ../development/libraries/netcdf { };
+  netcdf = callPackage ../development/libraries/netcdf {
+    hdf5 = hdf5.override { usev110Api = true; };
+  };
 
   netcdf-mpi = appendToName "mpi" (netcdf.override {
-    hdf5 = hdf5-mpi;
+    hdf5 = hdf5-mpi.override { usev110Api = true; };
   });
 
   netcdfcxx4 = callPackage ../development/libraries/netcdf-cxx4 { };
