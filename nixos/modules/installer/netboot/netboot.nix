@@ -29,31 +29,27 @@ with lib;
           then []
           else [ pkgs.grub2 pkgs.syslinux ]);
 
-    fileSystems."/" =
-      # This module is often over-layed onto an existing host config
-      # that defines `/`. We use mkOverride 60 to override standard
-      # values, but at the same time leave room for mkForce values
-      # targeted at the image build.
-      { fsType = mkOverride 60 "tmpfs";
+    fileSystems."/" = mkImageMediaOverride
+      { fsType = "tmpfs";
         options = [ "mode=0755" ];
       };
 
     # In stage 1, mount a tmpfs on top of /nix/store (the squashfs
     # image) to make this a live CD.
-    fileSystems."/nix/.ro-store" =
+    fileSystems."/nix/.ro-store" = mkImageMediaOverride
       { fsType = "squashfs";
         device = "../nix-store.squashfs";
         options = [ "loop" ];
         neededForBoot = true;
       };
 
-    fileSystems."/nix/.rw-store" =
+    fileSystems."/nix/.rw-store" = mkImageMediaOverride
       { fsType = "tmpfs";
         options = [ "mode=0755" ];
         neededForBoot = true;
       };
 
-    fileSystems."/nix/store" =
+    fileSystems."/nix/store" = mkImageMediaOverride
       { fsType = "overlay";
         device = "overlay";
         options = [

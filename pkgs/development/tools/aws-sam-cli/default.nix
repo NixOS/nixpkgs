@@ -44,8 +44,8 @@ python3.pkgs.buildPythonApplication rec {
       --replace "Flask~=1.1.2" "Flask~=2.0" \
       --replace "dateparser~=0.7" "dateparser>=0.7" \
       --replace "docker~=4.2.0" "docker>=4.2.0" \
-      --replace "requests==2.23.0" "requests~=2.24" \
-      --replace "watchdog==0.10.3" "watchdog"
+      --replace "requests==" "requests~=" \
+      --replace "watchdog==" "watchdog #"
   '';
 
   meta = with lib; {

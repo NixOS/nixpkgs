@@ -3,7 +3,7 @@
 buildGoModule rec {
   pname = "velero";
   # When updating, change the commit underneath
-  version = "1.6.2";
+  version = "1.6.3";
   commit = "8c9cdb9603446760452979dc77f93b17054ea1cc";
 
 
@@ -11,7 +11,7 @@ buildGoModule rec {
     rev = "v${version}";
     owner = "vmware-tanzu";
     repo = "velero";
-    sha256 = "sha256-JYa+5lP9uo/6/5wTxNz8xa2usHo6WfXSndbwrMpHhcg=";
+    sha256 = "sha256-oFDTjpcwlvSiAROG/EKYRCD+qKyZXu1gKotBcD0dfvk=";
   };
 
   buildFlagsArray = ''
@@ -22,7 +22,7 @@ buildGoModule rec {
       -X github.com/vmware-tanzu/velero/pkg/buildinfo.GitTreeState=clean
   '';
 
-  vendorSha256 = "sha256-Rmj2qGY2w1gsnKAuRQ8cQyqfoM556t4/MookkuPmbDM=";
+  vendorSha256 = "sha256-ypgrdv6nVW+AAwyVsiROXs6jGgDTodGrGqiT2s5elOU=";
 
   excludedPackages = [ "issue-template-gen" "crd-gen" "release-tools" "velero-restic-restore-helper" ];
 
