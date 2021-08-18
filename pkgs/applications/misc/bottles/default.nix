@@ -3,7 +3,7 @@
 , desktop-file-utils, gsettings-desktop-schemas, libnotify, libhandy
 , python3Packages, gettext
 , appstream-glib, gdk-pixbuf, glib, gobject-introspection, gspell, gtk3
-, steam-run-native, xdg-utils, pciutils
+, steam-run, xdg-utils, pciutils, cabextract, wineWowPackages
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -54,9 +54,11 @@ python3Packages.buildPythonApplication rec {
     liblarch
     patool
   ] ++ [
-    steam-run-native
+    steam-run
     xdg-utils
     pciutils
+    cabextract
+    wineWowPackages.minimal
   ];
 
   format = "other";
@@ -67,10 +69,10 @@ python3Packages.buildPythonApplication rec {
     substituteInPlace build-aux/meson/postinstall.py \
       --replace "'update-desktop-database'" "'${desktop-file-utils}/bin/update-desktop-database'"
     substituteInPlace src/runner.py \
-      --replace " {runner}" " ${steam-run-native}/bin/steam-run {runner}" \
-      --replace " {dxvk_setup}" " ${steam-run-native}/bin/steam-run {dxvk_setup}"
+      --replace " {runner}" " ${steam-run}/bin/steam-run {runner}" \
+      --replace " {dxvk_setup}" " ${steam-run}/bin/steam-run {dxvk_setup}"
       substituteInPlace src/runner_utilities.py \
-        --replace " {runner}" " ${steam-run-native}/bin/steam-run {runner}" \
+        --replace " {runner}" " ${steam-run}/bin/steam-run {runner}" \
   '';
 
   preFixup = ''
