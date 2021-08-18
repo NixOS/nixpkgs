@@ -16,14 +16,15 @@
 , gtk-layer-shell
 , howard-hinnant-date
 , libxkbcommon
-, traySupport  ? true,  libdbusmenu-gtk3
-, pulseSupport ? true,  libpulseaudio
-, sndioSupport ? true,  sndio
-, nlSupport    ? true,  libnl
-, udevSupport  ? true,  udev
-, evdevSupport ? true,  libevdev
-, swaySupport  ? true,  sway
-, mpdSupport   ? true,  libmpdclient
+, traySupport     ? true,  libdbusmenu-gtk3
+, pulseSupport    ? true,  libpulseaudio
+, sndioSupport    ? true,  sndio
+, nlSupport       ? true,  libnl
+, udevSupport     ? true,  udev
+, evdevSupport    ? true,  libevdev
+, swaySupport     ? true,  sway
+, mpdSupport      ? true,  libmpdclient
+, rfkillSupport   ? true
 , withMediaPlayer ? false, glib, gobject-introspection, python3, python38Packages, playerctl
 }:
 
@@ -69,6 +70,7 @@ stdenv.mkDerivation rec {
       libnl = nlSupport;
       libudev = udevSupport;
       mpd = mpdSupport;
+      rfkill = rfkillSupport;
     }
   ) ++ [
     "-Dsystemd=disabled"
