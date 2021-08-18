@@ -195,6 +195,7 @@ self: super: {
   hls-splice-plugin = dontCheck super.hls-splice-plugin;
   hls-ormolu-plugin = dontCheck super.hls-ormolu-plugin;
   hls-pragmas-plugin = dontCheck super.hls-pragmas-plugin;
+  hls-haddock-comments-plugin = dontCheck super.hls-haddock-comments-plugin;
 
   # We are lacking pure pgrep at the moment for tests to work
   tmp-postgres = dontCheck super.tmp-postgres;
