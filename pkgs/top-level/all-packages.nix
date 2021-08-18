@@ -13747,6 +13747,8 @@ with pkgs;
   foreman = callPackage ../tools/system/foreman { };
   goreman = callPackage ../tools/system/goreman { };
 
+  fprettify = callPackage ../development/tools/fprettify { };
+
   framac = callPackage ../development/tools/analysis/frama-c { };
 
   frame = callPackage ../development/libraries/frame { };
