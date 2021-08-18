@@ -129,4 +129,5 @@ self: super: {
   # vector 0.12.2 indroduced doctest checks that don‘t work on older compilers
   vector = dontCheck super.vector;
 
+  ghc-api-compat = super.ghc-api-compat_8_6;
 }
