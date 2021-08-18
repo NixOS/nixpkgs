@@ -1,44 +1,55 @@
 { lib
 , buildPythonPackage
-, fetchFromGitHub
-, isPy27
-, ptable
 , click
-, requests
-, prompt-toolkit
-, pygments
-, urllib3
-, pytest
-, pytest-cov
+, fetchFromGitHub
 , mock
+, prompt-toolkit
+, ptable
+, pygments
+, pytestCheckHook
+, pythonOlder
+, requests
 , sphinx
 , testtools
 , tkinter
+, urllib3
 }:
 
 buildPythonPackage rec {
   pname = "softlayer";
   version = "5.9.7";
-  disabled = isPy27;
-
-  propagatedBuildInputs = [ ptable click requests prompt-toolkit pygments urllib3 ];
-
-  checkInputs = [ pytest pytest-cov mock sphinx testtools tkinter ];
-
-  checkPhase = ''
-    pytest
-  '';
+  disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
-    owner = "softlayer";
-    repo = pname;
+    owner = pname;
+    repo = "softlayer-python";
     rev = "v${version}";
-    sha256 = "sha256-72ZKc8WlVPs7HISHaAcZKM+ZLbiPbsOJpaNPdvP0kH8=";
+    sha256 = "0zwhykrpckx3ln4w6vlgp0nrkkr8343ni1w43hxznm55qmrllrpg";
   };
 
+  propagatedBuildInputs = [
+    click
+    prompt-toolkit
+    ptable
+    pygments
+    requests
+    urllib3
+  ];
+
+  checkInputs = [
+    mock
+    pytestCheckHook
+    sphinx
+    testtools
+    tkinter
+  ];
+
+  pythonImportsCheck = [ "SoftLayer" ];
+
   meta = with lib; {
-    description = "A set of Python libraries that assist in calling the SoftLayer API.";
+    description = "Python libraries that assist in calling the SoftLayer API";
     homepage = "https://github.com/softlayer/softlayer-python";
     license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
 }
