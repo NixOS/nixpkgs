@@ -1,17 +1,16 @@
 { lib, stdenv, kernel, fetchFromGitHub, autoreconfHook, bison, flex, p7zip, rsync }:
 
-let
-  version = "2.1.1";
-in stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "ply";
-  inherit version;
+  version = "2.1.1-${lib.substring 0 7 src.rev}";
+
   nativeBuildInputs = [ autoreconfHook flex bison p7zip rsync ];
 
   src = fetchFromGitHub {
     owner = "iovisor";
     repo = "ply";
-    rev = version;
-    sha256 = "0mfnfczk6kw6p15nx5l735qmcnb0pkix7ngq0j8nndg7r2fsckah";
+    rev = "e25c9134b856cc7ffe9f562ff95caf9487d16b59";
+    sha256 = "1178z7vvnjwnlxc98g2962v16878dy7bd0b2njsgn4vqgrnia7i5";
   };
 
   preAutoreconf = ''
