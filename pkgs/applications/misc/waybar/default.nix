@@ -71,7 +71,6 @@ stdenv.mkDerivation rec {
       mpd = mpdSupport;
     }
   ) ++ [
-    "-Dout=${placeholder "out"}"
     "-Dsystemd=disabled"
   ];
 
