@@ -189,6 +189,13 @@ let
 
     linux_latest_libre = deblobKernel packageAliases.linux_latest.kernel;
 
+    linux_hardened = hardenedKernelFor packageAliases.linux_default.kernel { };
+
+    linux_4_14_hardened = hardenedKernelFor kernels.linux_4_14 { };
+    linux_4_19_hardened = hardenedKernelFor kernels.linux_4_19 { };
+    linux_5_4_hardened = hardenedKernelFor kernels.linux_5_4 { };
+    linux_5_10_hardened = hardenedKernelFor kernels.linux_5_10 { };
+
   });
   /*  Linux kernel modules are inherently tied to a specific kernel.  So
     rather than provide specific instances of those packages for a
@@ -417,9 +424,9 @@ let
   });
 
   # Hardened Linux
-  hardenedPackagesFor = kernel': overrides:
+  hardenedKernelFor = kernel': overrides:
     let kernel = kernel'.override overrides;
-    in packagesFor (kernel.override {
+    in kernel.override {
       structuredExtraConfig = import ../os-specific/linux/kernel/hardened/config.nix {
         inherit lib;
         inherit (kernel) version;
@@ -429,7 +436,8 @@ let
       ];
       modDirVersionArg = kernel.modDirVersion + (kernelPatches.hardened.${kernel.meta.branch}).extra;
       isHardened = true;
-  });
+  };
+  hardenedPackagesFor = kernel: overrides: packagesFor (hardenedKernelFor kernel overrides);
 
   vanillaPackages = {
     # recurse to build modules for the kernels

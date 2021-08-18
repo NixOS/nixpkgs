@@ -451,7 +451,6 @@ mapAliases ({
   linuxPackages_4_19 = linuxKernel.packages.linux_4_19;
   linuxPackages_5_4 = linuxKernel.packages.linux_5_4;
   linuxPackages_5_10 = linuxKernel.packages.linux_5_10;
-  linuxPackages_5_12 = linuxKernel.packages.linux_5_12;
   linuxPackages_5_13 = linuxKernel.packages.linux_5_13;
 
   linux_mptcp_95 = linuxKernel.kernels.linux_mptcp_95;
@@ -467,7 +466,6 @@ mapAliases ({
   linux-rt_5_4 = linuxKernel.kernels.linux_rt_5_4;
   linux_5_10 = linuxKernel.kernels.linux_5_10;
   linux-rt_5_10 = linuxKernel.kernels.linux_rt_5_10;
-  linux_5_12 = linuxKernel.kernels.linux_5_12;
   linux-rt_5_11 = linuxKernel.kernels.linux_rt_5_11;
 
   # added 2020-04-04
