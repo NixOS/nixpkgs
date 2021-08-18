@@ -188,6 +188,90 @@
     <itemizedlist>
       <listitem>
         <para>
+          The <literal>paperless</literal> module and package have been
+          removed. All users should migrate to the successor
+          <literal>paperless-ng</literal> instead. The Paperless project
+          <link xlink:href="https://github.com/the-paperless-project/paperless/commit/9b0063c9731f7c5f65b1852cb8caff97f5e40ba4">has
+          been archived</link> and advises all users to use
+          <literal>paperless-ng</literal> instead.
+        </para>
+        <para>
+          Users can use the <literal>services.paperless-ng</literal>
+          module as a replacement while noting the following
+          incompatibilities:
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              <literal>services.paperless.ocrLanguages</literal> has no
+              replacement. Users should migrate to
+              <link xlink:href="options.html#opt-services.paperless-ng.extraConfig"><literal>services.paperless-ng.extraConfig</literal></link>
+              instead:
+            </para>
+          </listitem>
+        </itemizedlist>
+        <programlisting language="bash">
+{
+  services.paperless-ng.extraConfig = {
+    # Provide languages as ISO 639-2 codes
+    # separated by a plus (+) sign.
+    # https://en.wikipedia.org/wiki/List_of_ISO_639-2_codes
+    PAPERLESS_OCR_LANGUAGE = &quot;deu+eng+jpn&quot;; # German &amp; English &amp; Japanse
+  };
+}
+</programlisting>
+        <itemizedlist>
+          <listitem>
+            <para>
+              If you previously specified
+              <literal>PAPERLESS_CONSUME_MAIL_*</literal> settings in
+              <literal>services.paperless.extraConfig</literal> you
+              should remove those options now. You now
+              <emphasis>must</emphasis> define those settings in the
+              admin interface of paperless-ng.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Option <literal>services.paperless.manage</literal> no
+              longer exists. Use the script at
+              <literal>${services.paperless-ng.dataDir}/paperless-ng-manage</literal>
+              instead. Note that this script only exists after the
+              <literal>paperless-ng</literal> service has been started
+              at least once.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              After switching to the new system configuration you should
+              run the Django management command to reindex your
+              documents and optionally create a user, if you don’t have
+              one already.
+            </para>
+            <para>
+              To do so, enter the data directory (the value of
+              <literal>services.paperless-ng.dataDir</literal>,
+              <literal>/var/lib/paperless</literal> by default), switch
+              to the paperless user and execute the management command
+              like below:
+            </para>
+            <programlisting>
+$ cd /var/lib/paperless
+$ su paperless -s /bin/sh
+$ ./paperless-ng-manage document_index reindex
+# if not already done create a user account, paperless-ng requires a login
+$ ./paperless-ng-manage createsuperuser
+Username (leave blank to use 'paperless'): my-user-name
+Email address: me@example.com
+Password: **********
+Password (again): **********
+Superuser created successfully.
+</programlisting>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>staticjinja</literal> package has been upgraded
           from 1.0.4 to 3.0.1
         </para>
