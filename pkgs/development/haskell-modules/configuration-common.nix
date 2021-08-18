@@ -1942,4 +1942,7 @@ EOT
     Cabal = self.Cabal_3_6_0_0;
   };
 
+  # ghc-api-compat needlessly requires 8.10.5 exactly, but we have 8.10.6
+  ghc-api-compat = doJailbreak super.ghc-api-compat;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

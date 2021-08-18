@@ -118,6 +118,7 @@ extra-packages:
   - sbv == 7.13                         # required for pkgs.petrinizer
   - crackNum < 3.0                      # 2021-05-21: 3.0 removed the lib which sbv 7.13 uses
   - ShellCheck == 0.7.1                 # 2021-05-09: haskell-ci 0.12.1 pins this version
+  - ghc-api-compat < 8.10.5             # 2021-08-18: ghc-api-compat 8.10.5 is only compatible with ghc 8.10.5
 
 package-maintainers:
   abbradar:
