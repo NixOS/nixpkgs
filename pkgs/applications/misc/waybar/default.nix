@@ -2,7 +2,6 @@
 , stdenv
 , fetchFromGitHub
 , meson
-, cmake
 , pkg-config
 , ninja
 , wrapGAppsHook
@@ -40,7 +39,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    meson ninja pkg-config scdoc wrapGAppsHook cmake
+    meson ninja pkg-config scdoc wrapGAppsHook
   ] ++ lib.optional withMediaPlayer gobject-introspection;
 
   propagatedBuildInputs = lib.optionals withMediaPlayer [
