@@ -1,18 +1,25 @@
 { lib, stdenv, buildPackages
-, gcc, glibc
-, libiberty
+, gcc_src, version
+, glibc
+, autoreconfHook269, libiberty
 }:
 
 stdenv.mkDerivation rec {
-  name = "libgcc-${version}";
-  inherit (gcc.cc) src version;
+  pname = "libgcc";
+  inherit version;
+
+  src = gcc_src;
+
+  patches = [
+    ./libgcc-custom-threading-model.patch
+  ];
 
   outputs = [ "out" "dev" ];
 
   strictDeps = true;
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ libiberty ];
+  nativeBuildInputs = [ autoreconfHook269 libiberty ];
 
   enableParallelBuilding = true;
 
@@ -24,6 +31,8 @@ stdenv.mkDerivation rec {
   postPatch = ''
     sourceRoot=$(readlink -e "./libgcc")
   '';
+
+  autoreconfFlags = "--install --force --verbose . libgcc";
 
   preConfigure = ''
     cd "$buildRoot"
@@ -137,6 +146,7 @@ stdenv.mkDerivation rec {
   configurePlatforms = [ "build" "host" ];
   configureFlags = [
     "--disable-dependency-tracking"
+    "--with-threads=single"
     # $CC cannot link binaries, let alone run then
     "cross_compiling=true"
     # Do not have dynamic linker without libc
