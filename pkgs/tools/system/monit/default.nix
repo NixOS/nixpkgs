@@ -6,10 +6,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "monit-5.27.2";
+  pname = "monit";
+  version = "5.27.2";
 
   src = fetchurl {
-    url = "${meta.homepage}dist/${name}.tar.gz";
+    url = "${meta.homepage}dist/monit-${version}.tar.gz";
     sha256 = "sha256-2ICceNXcHtenujKlpVxRFIVRMsxNpIBfjTqvjPRuqkw=";
   };
 
