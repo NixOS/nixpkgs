@@ -3,16 +3,16 @@ let
   platform =
     if stdenv.hostPlatform.system == "x86_64-linux" then {
       name = "x86_64-unknown-linux-musl";
-      sha256 = "sha256-pttjlx7WWE3nog9L1APp8HN+a4ShhlBj5irHOaPgqHw=";
+      sha256 = "sha256-uy3+/+XMq56rO75mmSeOmE1HW7hhefaGwfY/QJPk3Ok=";
     } else if stdenv.hostPlatform.system == "x86_64-darwin" then {
       name = "x86_64-apple-darwin";
-      sha256 = "sha256-Vxmhl4/bhRDeByGgkdSF8yEY5wI23WzT2iH1OFkEpck=";
+      sha256 = "sha256-EK7FbRzgaCXviOuBcRf/ElllRdakhDmOLsKkwrIEhBU=";
     } else throw "Not supported on ${stdenv.hostPlatform.system}";
 in
 stdenv.mkDerivation rec {
   pname = "tabnine";
   # You can check the latest version with `curl -sS https://update.tabnine.com/bundles/version`
-  version = "3.5.37";
+  version = "3.5.49";
 
   src = fetchurl {
     url = "https://update.tabnine.com/bundles/${version}/${platform.name}/TabNine.zip";
