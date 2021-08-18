@@ -2,6 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , cmake
+, coreutils
 }:
 
 stdenv.mkDerivation rec {
@@ -21,6 +22,13 @@ stdenv.mkDerivation rec {
     "-DBUILD_SHARED_LIBS=ON"
     "-DCMAKE_SKIP_BUILD_RPATH=OFF" # for tests
   ];
+
+  # Prevent the execution of tests known to be flaky.
+  preCheck = ''
+    cat <<EOW >CTestCustom.cmake
+    SET(CTEST_CUSTOM_TESTS_IGNORE promise_test_multiple_waiters)
+    EOW
+  '';
 
   doCheck = true;
 
