@@ -244,7 +244,7 @@ assert opensslExtlib -> gnutls == null && openssl != null && nonfreeLicensing;
 
 stdenv.mkDerivation rec {
   pname = "ffmpeg-full";
-  inherit (ffmpeg) src version;
+  inherit (ffmpeg) src version patches;
 
   prePatch = ''
     patchShebangs .
