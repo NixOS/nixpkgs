@@ -3585,6 +3585,8 @@ in {
 
   inotify-simple = callPackage ../development/python-modules/inotify-simple { };
 
+  inotifyrecursive = callPackage ../development/python-modules/inotifyrecursive { };
+
   inquirer = callPackage ../development/python-modules/inquirer { };
 
   intake = callPackage ../development/python-modules/intake { };
@@ -8745,6 +8747,8 @@ in {
   tidylib = callPackage ../development/python-modules/pytidylib { };
 
   tifffile = callPackage ../development/python-modules/tifffile { };
+
+  tika = callPackage ../development/python-modules/tika { };
 
   tiledb = callPackage ../development/python-modules/tiledb {
     inherit (pkgs) tiledb;

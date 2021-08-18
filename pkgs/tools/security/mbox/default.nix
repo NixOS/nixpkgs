@@ -1,7 +1,8 @@
 { lib, stdenv, fetchFromGitHub, openssl, which }:
 
 stdenv.mkDerivation {
-  name = "mbox-20140526";
+  pname = "mbox";
+  version = "20140526";
 
   src = fetchFromGitHub {
     owner = "tsgates";

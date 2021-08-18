@@ -96,6 +96,10 @@ self: let
         postInstall = ''
           ./install.sh --prefix=$out
         '';
+
+        meta = old.meta // {
+          maintainers = [ lib.maintainers.sternenseemann ];
+        };
       });
     };
 
