@@ -1,4 +1,15 @@
-{lib, fetchPypi, python, buildPythonPackage, gfortran, nose, pytest, pytest-xdist, numpy, pybind11 }:
+{ lib
+, stdenv
+, fetchPypi
+, python
+, buildPythonPackage
+, gfortran
+, nose
+, pytest
+, pytest-xdist
+, numpy
+, pybind11
+}:
 
 buildPythonPackage rec {
   pname = "scipy";
@@ -29,6 +40,17 @@ buildPythonPackage rec {
   preBuild = ''
     ln -s ${numpy.cfg} site.cfg
   '';
+
+
+  # disable stackprotector on aarch64-darwin for now
+  #
+  # build error:
+  #
+  # /private/tmp/nix-build-python3.9-scipy-1.6.3.drv-0/ccDEsw5U.s:109:15: error: index must be an integer in range [-256, 255].
+  #
+  #         ldr     x0, [x0, ___stack_chk_guard];momd
+  #
+  hardeningDisable = lib.optionals (stdenv.isAarch64 && stdenv.isDarwin) [ "stackprotector" ];
 
   checkPhase = ''
     runHook preCheck

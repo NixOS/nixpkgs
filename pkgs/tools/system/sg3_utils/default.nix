@@ -5,8 +5,8 @@ stdenv.mkDerivation rec {
   version = "1.46r862";
 
   src = fetchurl {
-    url = "http://sg.danny.cz/sg/p/sg3_utils-${version}.tgz";
-    sha256 = "sha256-s2UmU+p3s7Hoe+GFri2q+/3XLBICc+h04cxM86yaAs8=";
+    url = "https://sg.danny.cz/sg/p/sg3_utils-${version}.tgz";
+    sha256 = "s2UmU+p3s7Hoe+GFri2q+/3XLBICc+h04cxM86yaAs8=";
   };
 
   meta = with lib; {

@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "gcsfs";
-  version = "2021.06.0";
+  version = "2021.07.0";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "dask";
     repo = pname;
     rev = version;
-    sha256 = "sha256-tJeCSGK24WC8E7NKupg6/Tv861idWg6WYir+ZXeU+e0=";
+    sha256 = "sha256-nC/uyhKKam3W+cOOTBULPeG6Hy2bExWYNOfDs1cPt1Y=";
   };
 
   propagatedBuildInputs = [

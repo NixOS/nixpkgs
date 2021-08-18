@@ -4,7 +4,7 @@
 , pkg-config
 , util-linux
 , libuuid
-, thin-provisioning-tools, libaio
+, libaio
 , enableCmdlib ? false
 , enableDmeventd ? false
 , udev ? null
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ udev libuuid thin-provisioning-tools libaio ];
+  buildInputs = [ udev libuuid libaio ];
 
   configureFlags = [
     "--disable-readline"
