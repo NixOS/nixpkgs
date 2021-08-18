@@ -8,7 +8,7 @@ buildPackage {
   sha256 = "12bzc483jpd16xmhfsfrib84daj1k3kwy5s5nc18ap60apa1r39a";
 
   description = "A service manager for s6-based systems";
-  platforms = lib.platforms.linux;
+  platforms = lib.platforms.unix;
 
   outputs = [ "bin" "lib" "dev" "doc" "out" ];
 
