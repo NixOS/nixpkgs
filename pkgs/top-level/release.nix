@@ -104,7 +104,7 @@ let
               jobs.nix-info.x86_64-linux
               jobs.nix-info-tested.x86_64-linux
               # Ensure that X11/GTK are in order.
-              jobs.thunderbird.x86_64-linux
+              jobs.thunderbird-unwrapped.x86_64-linux
               jobs.cachix.x86_64-linux
 
               /*
@@ -194,6 +194,7 @@ let
       idrisPackages = packagePlatforms pkgs.idrisPackages;
       agdaPackages = packagePlatforms pkgs.agdaPackages;
 
+      pkgsLLVM.stdenv = [ "x86_64-linux" "aarch64-linux" ];
       pkgsMusl.stdenv = [ "x86_64-linux" "aarch64-linux" ];
       pkgsStatic.stdenv = [ "x86_64-linux" "aarch64-linux" ];
 

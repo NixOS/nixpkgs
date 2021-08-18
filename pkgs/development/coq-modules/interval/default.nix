@@ -1,11 +1,11 @@
 { lib, mkCoqDerivation, which, autoconf, coq, coquelicot, flocq, bignums ? null, gnuplot_qt, version ? null }:
 
-with lib; mkCoqDerivation rec {
+mkCoqDerivation rec {
   pname = "interval";
   owner = "coqinterval";
   domain = "gitlab.inria.fr";
   inherit version;
-  defaultVersion = with versions; switch coq.coq-version [
+  defaultVersion = with lib.versions; lib.switch coq.coq-version [
     { case = isGe "8.8" ;        out = "4.3.0"; }
     { case = range "8.8" "8.12"; out = "4.0.0"; }
     { case = range "8.7" "8.11"; out = "3.4.2"; }
@@ -21,7 +21,7 @@ with lib; mkCoqDerivation rec {
 
   nativeBuildInputs = [ which autoconf ];
   propagatedBuildInputs = [ bignums coquelicot flocq ]
-    ++ lib.optionals (versions.isGe "4.2.0" defaultVersion) [ gnuplot_qt ];
+    ++ lib.optionals (lib.versions.isGe "4.2.0" defaultVersion) [ gnuplot_qt ];
   useMelquiondRemake.logpath = "Interval";
   mlPlugin = true;
   enableParallelBuilding = true;

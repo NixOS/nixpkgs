@@ -9,6 +9,7 @@
 , libedit
 , libelf
 , libzip
+, copyDesktopItems
 , makeDesktopItem
 , minizip
 , pkg-config
@@ -48,8 +49,8 @@ stdenv.mkDerivation rec {
     qttools
   ];
 
-  postInstall = let
-    desktopItem = makeDesktopItem {
+  desktopItems = [
+    (makeDesktopItem {
       name = "mgba";
       exec = "mgba-qt";
       icon = "mgba";
@@ -58,11 +59,8 @@ stdenv.mkDerivation rec {
       genericName = "Game Boy Advance Emulator";
       categories = "Game;Emulator;";
       startupNotify = "false";
-    };
-  in
-    ''
-      cp -r ${desktopItem}/share/applications $out/share
-    '';
+    })
+  ];
 
   meta = with lib; {
     homepage = "https://mgba.io";

@@ -3,13 +3,14 @@
 , lib
 , fetchFromGitHub
 , fetchgit
+, fetchurl
 , makeWrapper
 , pkg-config
 , python2
-, expat
 , openssl
 , SDL2
 , fontconfig
+, freetype
 , ninja
 , gn
 , llvmPackages
@@ -21,16 +22,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "neovide";
-  version = "unstable-2021-06-21";
+  version = "unstable-2021-08-08";
 
   src = fetchFromGitHub {
     owner = "Kethku";
     repo = "neovide";
-    rev = "4159c47ff4f30073b92b9d63fc6ab70e07b74b6d";
-    sha256 = "sha256-XwirJGXMGxc/NkpSeHBUc16ppvJ+H4ECnrOVu030Qfg=";
+    rev = "725f12cafd4a26babd0d6bbcbca9a99c181991ac";
+    sha256 = "sha256-ThMobWKe3wHhR15TmmKrI6Gp1wvGVfJ52MzibK0ubkc=";
   };
 
-  cargoSha256 = "sha256-WCk9kt81DtBwpEEdKH9gKQSVxAvH+vkyP2y24tU+vzY=";
+  cargoSha256 = "sha256-5lOGncnyA8DwetY5bU6k2KXNClFgp+xIBEeA0/iwGF0=";
 
   SKIA_SOURCE_DIR =
     let
@@ -38,8 +39,8 @@ rustPlatform.buildRustPackage rec {
         owner = "rust-skia";
         repo = "skia";
         # see rust-skia:skia-bindings/Cargo.toml#package.metadata skia
-        rev = "m90-0.38.3";
-        sha256 = "sha256-l8c4vfO1PELAT8bDyr/yQGZetZsaufAlJ6bBOXz7E1w=";
+        rev = "m91-0.39.4";
+        sha256 = "sha256-ovlR1vEZaQqawwth/UYVUSjFu+kTsywRpRClBaE1CEA=";
       };
       # The externals for skia are taken from skia/DEPS
       externals = lib.mapAttrs (n: v: fetchgit v) (lib.importJSON ./skia-externals.json);
@@ -79,10 +80,20 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   buildInputs = [
-    expat
     openssl
     SDL2
-    fontconfig
+    (fontconfig.overrideAttrs (old: {
+      propagatedBuildInputs = [
+        # skia is not compatible with freetype 2.11.0
+        (freetype.overrideAttrs (old: rec {
+          version = "2.10.4";
+          src = fetchurl {
+            url = "mirror://savannah/${old.pname}/${old.pname}-${version}.tar.xz";
+            sha256 = "112pyy215chg7f7fmp2l9374chhhpihbh8wgpj5nj6avj3c59a46";
+          };
+        }))
+      ];
+    }))
   ];
 
   postFixup = ''
@@ -105,5 +116,6 @@ rustPlatform.buildRustPackage rec {
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ ck3d ];
     platforms = platforms.linux;
+    mainProgram = "neovide";
   };
 }

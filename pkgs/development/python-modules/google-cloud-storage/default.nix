@@ -13,11 +13,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-storage";
-  version = "1.38.0";
+  version = "1.42.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "162011d66f64b8dc5d7936609a5daf0066cc521231546aea02c126a5559446c4";
+    sha256 = "c1dd3d09198edcf24ec6803dd4545e867d82b998f06a68ead3b6857b1840bdae";
   };
 
   propagatedBuildInputs = [
@@ -42,12 +42,18 @@ buildPythonPackage rec {
     "post"
     "test_build_api_url"
     "test_ctor_mtls"
+    "test_hmac_key_crud"
+    "test_list_buckets"
     "test_open"
+    "test_anonymous_client_access_to_public_bucket"
   ];
 
-  pytestFlagsArray = [
-    "--ignore=tests/unit/test_bucket.py"
-    "--ignore=tests/system/test_system.py"
+  disabledTestPaths = [
+    "tests/unit/test_bucket.py"
+    "tests/system/test_blob.py"
+    "tests/system/test_bucket.py"
+    "tests/system/test_fileio.py"
+    "tests/system/test_kms_integration.py"
   ];
 
   # prevent google directory from shadowing google imports

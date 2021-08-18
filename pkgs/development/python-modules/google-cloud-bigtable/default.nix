@@ -3,7 +3,7 @@
 , fetchPypi
 , google-api-core
 , google-cloud-core
-, grpc_google_iam_v1
+, grpc-google-iam-v1
 , libcst
 , mock
 , proto-plus
@@ -12,17 +12,17 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-bigtable";
-  version = "2.2.0";
+  version = "2.3.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-89fXmr3jHTtp8QOMFeueJwslHJ7Q6srQ/Kxsp0mLlKU=";
+    sha256 = "sha256-4rMnGnDQtuu55mzrYkeJjrU0ykQXd+pOYAw2yVcqJAQ=";
   };
 
   propagatedBuildInputs = [
     google-api-core
     google-cloud-core
-    grpc_google_iam_v1
+    grpc-google-iam-v1
     libcst
     proto-plus
   ];

@@ -1,7 +1,6 @@
 { lib, stdenv
 , buildPackages
 , fetchurl
-, python3
 , wafHook
 , pkg-config
 , bison
@@ -64,7 +63,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    python3
+    python3Packages.python
     wafHook
     pkg-config
     bison
@@ -83,7 +82,8 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    python3
+    python3Packages.python
+    python3Packages.wrapPython
     readline
     popt
     dbus
@@ -139,12 +139,17 @@ stdenv.mkDerivation rec {
     ++ optional (!enablePam) "--without-pam"
     ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "--bundled-libraries=!asn1_compile,!compile_et"
+  ] ++ optional stdenv.isAarch32 [
+    # https://bugs.gentoo.org/683148
+    "--jobs 1"
   ];
 
   # python-config from build Python gives incorrect values when cross-compiling.
   # If python-config is not found, the build falls back to using the sysconfig
   # module, which works correctly in all cases.
   PYTHON_CONFIG = "/invalid";
+
+  pythonPath = [ python3Packages.dnspython tdb ];
 
   preBuild = ''
     export MAKEFLAGS="-j $NIX_BUILD_CORES"
@@ -167,7 +172,10 @@ stdenv.mkDerivation rec {
 
     # Samba does its own shebang patching, but uses build Python
     find "$out/bin" -type f -executable -exec \
-      sed -i '1 s^#!${python3.pythonForBuild}/bin/python.*^#!${python3.interpreter}^' {} \;
+      sed -i '1 s^#!${python3Packages.python.pythonForBuild}/bin/python.*^#!${python3Packages.python.interpreter}^' {} \;
+
+    # Fix PYTHONPATH for some tools
+    wrapPythonPrograms
   '';
 
   passthru = {

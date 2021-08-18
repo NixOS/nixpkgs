@@ -1,40 +1,49 @@
-{ stdenv, lib, llvmPackages, gnChromium, ninja, which, nodejs, fetchpatch, fetchurl
+{ stdenv, lib, fetchurl, fetchpatch
+# Channel data:
+, channel, upstream-info
 
-# default dependencies
-, gnutar, bzip2, flac, speex, libopus
+# Native build inputs:
+, ninja, pkg-config
+, python2, python3, perl
+, gnutar, which
+, llvmPackages
+# postPatch:
+, pkgsBuildHost
+# configurePhase:
+, gnChromium
+
+# Build inputs:
+, libpng
+, bzip2, flac, speex, libopus
 , libevent, expat, libjpeg, snappy
-, libpng, libcap
-, xdg-utils, yasm, nasm, minizip, libwebp
-, libusb1, pciutils, nss, re2
-
-, python2, python3, perl, pkg-config
-, nspr, systemd, libkrb5
+, libcap
+, xdg-utils, minizip, libwebp
+, libusb1, re2
+, ffmpeg, libxslt, libxml2
+, nasm
+, nspr, nss, systemd
 , util-linux, alsa-lib
-, bison, gperf
+, bison, gperf, libkrb5
 , glib, gtk3, dbus-glib
-, glibc
 , libXScrnSaver, libXcursor, libXtst, libxshmfence, libGLU, libGL
-, protobuf, speechd, libXdamage, cups
-, ffmpeg, libxslt, libxml2, at-spi2-core
-, jre8
+, mesa
+, pciutils, protobuf, speechd, libXdamage, at-spi2-core
 , pipewire
 , libva
-, libdrm, wayland, mesa, libxkbcommon # Ozone
+, libdrm, wayland, libxkbcommon # Ozone
 , curl
+# postPatch:
+, glibc # gconv + locale
 
-# optional dependencies
-, libgcrypt ? null # gnomeSupport || cupsSupport
-
-# package customization
+# Package customization:
 , gnomeSupport ? false, gnome2 ? null
 , gnomeKeyringSupport ? false, libgnome-keyring3 ? null
+, cupsSupport ? true, cups ? null
 , proprietaryCodecs ? true
-, cupsSupport ? true
 , pulseSupport ? false, libpulseaudio ? null
 , ungoogled ? false, ungoogled-chromium
-
-, channel
-, upstream-info
+# Optional dependencies:
+, libgcrypt ? null # gnomeSupport || cupsSupport
 }:
 
 buildFun:
@@ -42,7 +51,6 @@ buildFun:
 with lib;
 
 let
-  jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   python2WithPackages = python2.withPackages(ps: with ps; [
     ply jinja2 setuptools
   ]);
@@ -92,17 +100,6 @@ let
     withCustomModes = true;
   };
 
-  defaultDependencies = [
-    (libpng.override { apngSupport = false; }) # https://bugs.chromium.org/p/chromium/issues/detail?id=752403
-    bzip2 flac speex opusWithCustomModes
-    libevent expat libjpeg snappy
-    libcap
-    xdg-utils minizip libwebp
-    libusb1 re2
-    ffmpeg libxslt libxml2
-    nasm
-  ];
-
   # build paths and release info
   packageName = extraAttrs.packageName or extraAttrs.name;
   buildType = "Release";
@@ -137,14 +134,20 @@ let
 
     nativeBuildInputs = [
       ninja pkg-config
-      python2WithPackages perl nodejs
+      python2WithPackages python3WithPackages perl
       gnutar which
       llvmPackages.bintools
-    ] ++ lib.optionals (chromiumVersionAtLeast "92") [
-      python3WithPackages
     ];
 
-    buildInputs = defaultDependencies ++ [
+    buildInputs = [
+      (libpng.override { apngSupport = false; }) # https://bugs.chromium.org/p/chromium/issues/detail?id=752403
+      bzip2 flac speex opusWithCustomModes
+      libevent expat libjpeg snappy
+      libcap
+      xdg-utils minizip libwebp
+      libusb1 re2
+      ffmpeg libxslt libxml2
+      nasm
       nspr nss systemd
       util-linux alsa-lib
       bison gperf libkrb5
@@ -152,22 +155,22 @@ let
       libXScrnSaver libXcursor libXtst libxshmfence libGLU libGL
       mesa # required for libgbm
       pciutils protobuf speechd libXdamage at-spi2-core
-      jre
       pipewire
       libva
       libdrm wayland mesa.drivers libxkbcommon
       curl
-    ] ++ optional gnomeKeyringSupport libgnome-keyring3
-      ++ optionals gnomeSupport [ gnome2.GConf libgcrypt ]
+    ] ++ optionals gnomeSupport [ gnome2.GConf libgcrypt ]
+      ++ optional gnomeKeyringSupport libgnome-keyring3
       ++ optionals cupsSupport [ libgcrypt cups ]
       ++ optional pulseSupport libpulseaudio;
 
     patches = [
-      ./patches/no-build-timestamps.patch # Optional patch to use SOURCE_DATE_EPOCH in compute_build_timestamp.py (should be upstreamed)
-      ./patches/widevine-79.patch # For bundling Widevine (DRM), might be replaceable via bundle_widevine_cdm=true in gnFlags
+      # Optional patch to use SOURCE_DATE_EPOCH in compute_build_timestamp.py (should be upstreamed):
+      ./patches/no-build-timestamps.patch
+      # For bundling Widevine (DRM), might be replaceable via bundle_widevine_cdm=true in gnFlags:
+      ./patches/widevine-79.patch
       # Fix the build by adding a missing dependency (s. https://crbug.com/1197837):
       ./patches/fix-missing-atspi2-dependency.patch
-      ./patches/closure_compiler-Use-the-Java-binary-from-the-system.patch
     ] ++ lib.optionals (versionRange "91" "94.0.4583.0") [
       # Required as dependency for the next patch:
       (githubPatch {
@@ -180,14 +183,6 @@ let
         # Linux sandbox: fix fstatat() crash
         commit = "60d5e803ef2a4874d29799b638754152285e0ed9";
         sha256 = "0apmsqqlfxprmdmi3qzp3kr9jc52mcc4xzps206kwr8kzwv48b70";
-      })
-    ] ++ lib.optionals (chromiumVersionAtLeast "93") [
-      # We need to revert this patch to build M93 with LLVM 12.
-      (githubPatch {
-        # Reland "Replace 'blacklist' with 'ignorelist' in ./tools/msan/."
-        commit = "9d080c0934b848ee4a05013c78641e612fcc1e03";
-        sha256 = "1bxdhxmiy6h4acq26lq43x2mxx6rawmfmlgsh5j7w8kyhkw5af0c";
-        revert = true;
       })
     ];
 
@@ -242,9 +237,10 @@ let
       sed -i -e 's,/usr,/run/current-system/sw,' chrome/common/chrome_paths.cc
 
       patchShebangs .
-      # use our own nodejs
+      # Link to our own Node.js and Java (required during the build):
       mkdir -p third_party/node/linux/node-linux-x64/bin
-      ln -s "$(command -v node)" third_party/node/linux/node-linux-x64/bin/node
+      ln -s "${pkgsBuildHost.nodejs}/bin/node" third_party/node/linux/node-linux-x64/bin/node
+      ln -s "${pkgsBuildHost.jre8}/bin/java" third_party/jdk/current/bin/
 
       # Allow building against system libraries in official builds
       sed -i 's/OFFICIAL_BUILD/GOOGLE_CHROME_BUILD/' tools/generate_shim_headers/generate_shim_headers.py
@@ -260,16 +256,28 @@ let
 
     gnFlags = mkGnFlags ({
       # Main build and toolchain settings:
+      # Create an official and optimized release build (only official builds
+      # should be distributed to users, as non-official builds are intended for
+      # development and may not be configured appropriately for production,
+      # e.g. unsafe developer builds have developer-friendly features that may
+      # weaken or disable security measures like sandboxing or ASLR):
       is_official_build = true;
+      # Build Chromium using the system toolchain (for Linux distributions):
       custom_toolchain = "//build/toolchain/linux/unbundle:default";
       host_toolchain = "//build/toolchain/linux/unbundle:default";
+      # Don't build against a sysroot image downloaded from Cloud Storage:
       use_sysroot = false;
+      # The default value is hardcoded instead of using pkg-config:
       system_wayland_scanner_path = "${wayland}/bin/wayland-scanner";
+      # Because we use a different toolchain / compiler version:
       treat_warnings_as_errors = false;
+      # We aren't compiling with Chrome's Clang (would enable Chrome-specific
+      # plugins for enforcing coding guidelines, etc.):
       clang_use_chrome_plugins = false;
-      blink_symbol_level = 0;
+      # Disable symbols (they would negatively affect the performance of the
+      # build since the symbols are large and dealing with them is slow):
       symbol_level = 0;
-      fieldtrial_testing_like_official_build = true;
+      blink_symbol_level = 0;
 
       # Google API key, see: https://www.chromium.org/developers/how-tos/api-keys
       # Note: The API key is for NixOS/nixpkgs use ONLY.
@@ -277,9 +285,9 @@ let
       google_api_key = "AIzaSyDGi15Zwl11UNe6Y-5XW_upsfyw31qwZPI";
 
       # Optional features:
-      use_cups = cupsSupport;
       use_gio = gnomeSupport;
       use_gnome_keyring = gnomeKeyringSupport;
+      use_cups = cupsSupport;
 
       # Feature overrides:
       # Native Client support was deprecated in 2020 and support will end in June 2021:
@@ -290,6 +298,10 @@ let
       enable_widevine = true;
       # Provides the enable-webrtc-pipewire-capturer flag to support Wayland screen capture:
       rtc_use_pipewire = true;
+    } // optionalAttrs (!chromiumVersionAtLeast "94") {
+      fieldtrial_testing_like_official_build = true;
+    } // optionalAttrs (chromiumVersionAtLeast "94") {
+      disable_fieldtrial_testing_config = true;
     } // optionalAttrs proprietaryCodecs {
       # enable support for the H.264 codec
       proprietary_codecs = true;

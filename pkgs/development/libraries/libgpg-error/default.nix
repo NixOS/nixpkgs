@@ -1,4 +1,5 @@
 { stdenv, lib, buildPackages, fetchurl, gettext
+, fetchpatch
 , genPosixLockObjOnly ? false
 }: let
   genPosixLockObjOnlyAttrs = lib.optionalAttrs genPosixLockObjOnly {
@@ -23,6 +24,15 @@ in stdenv.mkDerivation (rec {
     url = "mirror://gnupg/${pname}/${pname}-${version}.tar.bz2";
     sha256 = "sha256-/AfnD2xhX4xPWQqON6m43S4soelAj45gRZxnRSuSXiM=";
   };
+
+  patches = lib.optionals (with stdenv; buildPlatform != hostPlatform) [
+    # Fix cross-compilation, remove in next release
+    # TODO apply unconditionally
+    (fetchpatch {
+      url = "https://github.com/gpg/libgpg-error/commit/33593864cd54143db594c4237bba41e14179061c.patch";
+      sha256 = "1jnd7flaj5nlc7spa6mwwygmh5fajw1n8js8f23jpw4pbgvgdv4r";
+    })
+  ];
 
   postPatch = ''
     sed '/BUILD_TIMESTAMP=/s/=.*/=1970-01-01T00:01+0000/' -i ./configure

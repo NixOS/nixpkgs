@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "flufl.bounce";
-  version = "3.0.1";
+  version = "3.0.2";
 
   buildInputs = [ nose2 ];
   propagatedBuildInputs = [ atpublic zope_interface ];
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e432fa1ca25ddbf23e2716b177d4d1c6ab6c078e357df56b0106b92bc10a8f06";
+    sha256 = "5014b23248fce72b13143c32da30073e6abc655b963e7739575608280c52c9a7";
   };
 }

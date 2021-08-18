@@ -1,7 +1,7 @@
 { mkDerivation, lib, fetchFromGitHub, callPackage
 , pkg-config, cmake, ninja, python3, wrapGAppsHook, wrapQtAppsHook
 , extra-cmake-modules
-, qtbase, qtimageformats, gtk3, libsForQt5, lz4, xxHash
+, qtbase, qtimageformats, gtk3, kwayland, libdbusmenu, lz4, xxHash
 , ffmpeg, openalSoft, minizip, libopus, alsa-lib, libpulseaudio, range-v3
 , tl-expected, hunspell, glibmm, webkitgtk, jemalloc
 , rnnoise
@@ -11,8 +11,6 @@
 , at-spi2-core, libXtst, libthai, libdatrie
 , xdg-utils, libsysprof-capture, libpsl, brotli
 }:
-
-with lib;
 
 # Main reference:
 # - This package was originally based on the Arch package but all patches are now upstreamed:
@@ -59,7 +57,7 @@ in mkDerivation rec {
   ];
 
   buildInputs = [
-    qtbase qtimageformats gtk3 libsForQt5.kwayland libsForQt5.libdbusmenu lz4 xxHash
+    qtbase qtimageformats gtk3 kwayland libdbusmenu lz4 xxHash
     ffmpeg openalSoft minizip libopus alsa-lib libpulseaudio range-v3
     tl-expected hunspell glibmm webkitgtk jemalloc
     rnnoise
@@ -85,7 +83,7 @@ in mkDerivation rec {
     wrapProgram $out/bin/telegram-desktop \
       "''${gappsWrapperArgs[@]}" \
       "''${qtWrapperArgs[@]}" \
-      --prefix PATH : ${xdg-utils}/bin \
+      --prefix PATH : ${lib.makeBinPath [ xdg-utils]} \
       --set XDG_RUNTIME_DIR "XDG-RUNTIME-DIR"
     sed -i $out/bin/telegram-desktop \
       -e "s,'XDG-RUNTIME-DIR',\"\''${XDG_RUNTIME_DIR:-/run/user/\$(id --user)}\","
@@ -96,7 +94,7 @@ in mkDerivation rec {
     updateScript = ./update.py;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Telegram Desktop messaging app";
     longDescription = ''
       Desktop client for the Telegram messenger, based on the Telegram API and

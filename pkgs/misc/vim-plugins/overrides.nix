@@ -86,6 +86,8 @@
 , iferr
 , impl
 , reftools
+# must be lua51Packages
+, luaPackages
 }:
 
 self: super: {
@@ -124,8 +126,8 @@ self: super: {
     buildInputs = [ tabnine ];
 
     postFixup = ''
-      mkdir $target/binaries
-      ln -s ${tabnine}/bin/TabNine $target/binaries/TabNine_$(uname -s)
+      mkdir -p $target/binaries/${tabnine.version}
+      ln -s ${tabnine}/bin/ $target/binaries/${tabnine.version}/${tabnine.passthru.platform}
     '';
   });
 
@@ -212,6 +214,14 @@ self: super: {
     dependencies = with self; [ vimproc-vim vimshell-vim self.self forms ];
   });
 
+  fcitx-vim = super.fcitx-vim.overrideAttrs (old: {
+    passthru.python3Dependencies = ps: with ps; [ dbus-python ];
+    meta = {
+      description = "Keep and restore fcitx state when leaving/re-entering insert mode or search mode";
+      license = lib.licenses.mit;
+    };
+  });
+
   forms = super.forms.overrideAttrs (old: {
     dependencies = with self; [ self.self ];
   });
@@ -282,6 +292,8 @@ self: super: {
     dependencies = with self; [ plenary-nvim ];
   });
 
+  # plenary-nvim = super.toVimPlugin(luaPackages.plenary-nvim);
+
   gruvbox-nvim = super.gruvbox-nvim.overrideAttrs (old: {
     dependencies = with self; [ lush-nvim ];
   });
@@ -298,8 +310,12 @@ self: super: {
   himalaya-vim = buildVimPluginFrom2Nix {
     pname = "himalaya-vim";
     inherit (himalaya) src version;
-    configurePhase = "cd vim/";
     dependencies = with self; [ himalaya ];
+    patchPhase = ''
+      rm -rf !"vim/"
+      cp -vaR vim/. .
+      rm -rf vim/
+    '';
     preFixup = ''
       substituteInPlace $out/share/vim-plugins/himalaya-vim/plugin/himalaya.vim \
         --replace 'if !executable("himalaya")' 'if v:false'
@@ -361,6 +377,10 @@ self: super: {
 
   lf-vim = super.lf-vim.overrideAttrs (old: {
     dependencies = with self; [ vim-floaterm ];
+  });
+
+  lir-nvim = super.lir-nvim.overrideAttrs (old: {
+    dependencies = with self; [ plenary-nvim ];
   });
 
   meson = buildVimPluginFrom2Nix {
@@ -433,8 +453,16 @@ self: super: {
       });
   });
 
+  onedark-nvim = super.onedark-nvim.overrideAttrs (old: {
+    dependencies = with self; [ lush-nvim ];
+  });
+
   onehalf = super.onehalf.overrideAttrs (old: {
     configurePhase = "cd vim";
+  });
+
+  refactoring-nvim = super.refactoring-nvim.overrideAttrs (old: {
+    dependencies = with self; [ nvim-treesitter plenary-nvim ];
   });
 
   skim = buildVimPluginFrom2Nix {
@@ -643,7 +671,7 @@ self: super: {
             libiconv
           ];
 
-          cargoSha256 = "sha256-J5BCLcwOPB+EfOmdITCHgec9XDkm2oCGfRo/sKjEOIg=";
+          cargoSha256 = "16lcsi5mxmj79ky5lbpivravn8rjl4z3j3fsxrglb22ab4i7js3n";
         };
       in
       ''

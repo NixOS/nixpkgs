@@ -1,5 +1,13 @@
-{ lib, fetchzip, makeWrapper, makeDesktopItem, stdenv
-, gtk3, libXtst, glib, zlib, wrapGAppsHook
+{ lib
+, fetchzip
+, makeWrapper
+, makeDesktopItem
+, stdenv
+, gtk3
+, libXtst
+, glib
+, zlib
+, wrapGAppsHook
 }:
 
 let
@@ -17,7 +25,8 @@ let
   };
 
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "tla-toolbox";
   version = "1.7.1";
   src = fetchzip {
@@ -30,8 +39,6 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper wrapGAppsHook ];
 
   dontWrapGApps = true;
-
-  phases = [ "installPhase" ];
 
   installPhase = ''
     runHook preInstall

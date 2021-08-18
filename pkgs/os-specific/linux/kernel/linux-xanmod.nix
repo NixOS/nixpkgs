@@ -1,8 +1,9 @@
 { lib, stdenv, buildLinux, fetchFromGitHub, ... } @ args:
 
 let
-  version = "5.13.5";
-  suffix = "xanmod1-cacule";
+  version = "5.13.11";
+  release = "1";
+  suffix = "xanmod${release}-cacule";
 in
 buildLinux (args // rec {
   inherit version;
@@ -12,7 +13,7 @@ buildLinux (args // rec {
     owner = "xanmod";
     repo = "linux";
     rev = modDirVersion;
-    sha256 = "sha256-Vhshu3mNkQ58TEOUBOuF7jLBlablxg/BioUyd96lI5g=";
+    sha256 = "sha256-55BRj0JNQKwmSvlquNHr6ZaI7x/sBYzfZPHIblxK4lY=";
   };
 
   structuredExtraConfig = with lib.kernel; {
@@ -43,11 +44,17 @@ buildLinux (args // rec {
     ANDROID_BINDER_IPC = module;
     ANDROID_BINDERFS = module;
     ANDROID_BINDER_DEVICES = freeform "binder,hwbinder,vndbinder";
+
+    # Futex WAIT_MULTIPLE implementation for Wine / Proton Fsync.
+    # Futex2 interface compatible w/ latest Wine / Proton Fsync.
+    FUTEX = yes;
+    FUTEX2 = yes;
+    FUTEX_PI = yes;
   };
 
   extraMeta = {
     branch = "5.13-cacule";
-    maintainers = with lib.maintainers; [ fortuneteller2k ];
+    maintainers = with lib.maintainers; [ fortuneteller2k lovesegfault ];
     description = "Built with custom settings and new features built to provide a stable, responsive and smooth desktop experience";
     broken = stdenv.isAarch64;
   };

@@ -1,15 +1,15 @@
-{ lib, mkDerivation, fetchurl, qtbase, qtscript, qmake, zlib, pkg-config, poppler }:
+{ lib, mkDerivation, fetchurl, qtbase, qtscript, qtwebengine, qmake, zlib, pkg-config, poppler }:
 
 mkDerivation rec {
   pname = "texmaker";
-  version = "5.0.4";
+  version = "5.1.0";
 
   src = fetchurl {
     url = "http://www.xm1math.net/texmaker/${pname}-${version}.tar.bz2";
-    sha256 = "1qnh5g8zkjpjmw2l8spcynpfgs3wpcfcla5ms2kkgvkbdlzspqqx";
+    sha256 = "0zhqq9s5r2w44p7xhlxkj0c10jyx0hji5bjdpgp7xdlrvckr9yf6";
   };
 
-  buildInputs = [ qtbase qtscript poppler zlib ];
+  buildInputs = [ qtbase qtscript poppler zlib qtwebengine ];
   nativeBuildInputs = [ pkg-config poppler qmake ];
   NIX_CFLAGS_COMPILE="-I${poppler.dev}/include/poppler";
 

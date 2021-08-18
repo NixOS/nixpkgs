@@ -300,7 +300,7 @@ let
       # package sets (like Cabal, jailbreak-cabal) are
       # working as expected.
       cabal-install = all;
-      Cabal_3_4_0_0 = with compilerNames; [ ghc884 ghc8104 ];
+      Cabal_3_6_0_0 = with compilerNames; [ ghc884 ghc8104 ];
       cabal2nix-unstable = all;
       funcmp = all;
       # Doesn't currently work on ghc-9.0:

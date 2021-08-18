@@ -31,12 +31,7 @@ stdenv.mkDerivation rec {
     zstd
   ] ++ lib.optional stdenv.isDarwin argp-standalone;
 
-
-  outputs = [
-    "out"
-    "lib"
-    "dev"
-  ];
+  outputs = [ "out" "lib" "dev" ];
 
   meta = with lib; {
     homepage = "https://github.com/zchunk/zchunk";

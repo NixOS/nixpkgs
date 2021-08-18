@@ -64,14 +64,51 @@
    </para>
 
    <para>
-    To manually configure the network on the graphical installer, first disable
-    network-manager with <command>systemctl stop NetworkManager</command>.
+    On the graphical installer, you can configure the network, wifi included,
+    through NetworkManager. Using the <command>nmtui</command> program, you
+    can do so even in a non-graphical session. If you prefer to configure the
+    network manually, disable NetworkManager with
+    <command>systemctl stop NetworkManager</command>.
    </para>
 
    <para>
-    To manually configure the wifi on the minimal installer, run
-    <command>wpa_supplicant -B -i interface -c &lt;(wpa_passphrase 'SSID'
-    'key')</command>.
+    On the minimal installer, NetworkManager is not available, so configuration
+    must be perfomed manually. To configure the wifi, first start wpa_supplicant
+    with <command>sudo systemctl start wpa_supplicant</command>, then run
+    <command>wpa_cli</command>. For most home networks, you need to type
+    in the following commands:
+    <programlisting>
+<prompt>&gt; </prompt>add_network
+0
+<prompt>&gt; </prompt>set_network 0 ssid "myhomenetwork"
+OK
+<prompt>&gt; </prompt>set_network 0 psk "mypassword"
+OK
+<prompt>&gt; </prompt>set_network 0 key_mgmt WPA-PSK
+OK
+<prompt>&gt; </prompt>enable_network 0
+OK
+    </programlisting>
+    For enterprise networks, for example <emphasis>eduroam</emphasis>, instead do:
+    <programlisting>
+<prompt>&gt; </prompt>add_network
+0
+<prompt>&gt; </prompt>set_network 0 ssid "eduroam"
+OK
+<prompt>&gt; </prompt>set_network 0 identity "myname@example.com"
+OK
+<prompt>&gt; </prompt>set_network 0 password "mypassword"
+OK
+<prompt>&gt; </prompt>set_network 0 key_mgmt WPA-EAP
+OK
+<prompt>&gt; </prompt>enable_network 0
+OK
+    </programlisting>
+    When successfully connected, you should see a line such as this one
+    <programlisting>
+&lt;3&gt;CTRL-EVENT-CONNECTED - Connection to 32:85:ab:ef:24:5c completed [id=0 id_str=]
+    </programlisting>
+    you can now leave <command>wpa_cli</command> by typing <command>quit</command>.
    </para>
 
    <para>

@@ -1,25 +1,28 @@
-{ stdenv, lib, fetchurl, makeWrapper, python3, unrar, ffmpeg, nixosTests }:
+{ stdenv, lib, fetchurl, makeWrapper, unzip, python3, unrar, ffmpeg, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "bazarr";
-  version = "0.9.6";
+  version = "0.9.7";
+
+  sourceRoot = ".";
 
   src = fetchurl {
-    url = "https://github.com/morpheus65535/bazarr/archive/v${version}.tar.gz";
-    sha256 = "sha256-aO9PIE/YlSIGEcntDCdxIYuuvV5jG266ldhC2QfT+e4=";
+    url = "https://github.com/morpheus65535/bazarr/releases/download/v${version}/bazarr.zip";
+    sha256 = "sha256-OyH3/KK8d5pWu+Ubzgd4N0IwpumbAe/43Oo+LGg+Erc=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ unzip makeWrapper ];
 
   installPhase = ''
-    mkdir -p $out/src
-    cp -r * $out/src
-
-    mkdir -p $out/bin
-    makeWrapper "${(python3.withPackages (ps: [ps.lxml ps.numpy])).interpreter}" \
+    mkdir -p $out/{bin,share/${pname}-${version}}
+    cp -r * $out/share/${pname}-${version}
+    makeWrapper "${
+      (python3.withPackages
+        (ps: [ ps.lxml ps.numpy ps.gevent ps.gevent-websocket ])).interpreter
+    }" \
       $out/bin/bazarr \
-      --add-flags "$out/src/bazarr.py" \
-      --suffix PATH : ${lib.makeBinPath [ unrar ffmpeg ]} \
+      --add-flags "$out/share/${pname}-${version}/bazarr.py" \
+      --suffix PATH : ${lib.makeBinPath [ unrar ffmpeg ]}
   '';
 
   passthru.tests = {
@@ -30,7 +33,7 @@ stdenv.mkDerivation rec {
     description = "Subtitle manager for Sonarr and Radarr";
     homepage = "https://www.bazarr.media/";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ xwvvvvwx ];
+    maintainers = with maintainers; [ d-xo ];
     platforms = platforms.all;
   };
 }

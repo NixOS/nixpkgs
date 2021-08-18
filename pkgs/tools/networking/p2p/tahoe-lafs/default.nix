@@ -6,9 +6,8 @@
 # some loss of functionality because of it.
 
 python3Packages.buildPythonApplication rec {
-  version = "2021-07-09";
   pname = "tahoe-lafs";
-  namePrefix = "";
+  version = "unstable-2021-07-09";
 
   src = fetchFromGitHub {
     owner = "tahoe-lafs";
@@ -84,7 +83,7 @@ python3Packages.buildPythonApplication rec {
     trial --rterrors allmydata
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Tahoe-LAFS, a decentralized, fault-tolerant, distributed storage system";
     longDescription = ''
       Tahoe-LAFS is a secure, decentralized, fault-tolerant filesystem.
@@ -92,9 +91,9 @@ python3Packages.buildPythonApplication rec {
       such a way that it remains available even when some of the peers
       are unavailable, malfunctioning, or malicious.
     '';
-    homepage = "http://tahoe-lafs.org/";
-    license = [ lib.licenses.gpl2Plus /* or */ "TGPPLv1+" ];
+    homepage = "https://tahoe-lafs.org/";
+    license = [ licenses.gpl2Plus /* or */ "TGPPLv1+" ];
     maintainers = with lib.maintainers; [ MostAwesomeDude ];
-    platforms = lib.platforms.gnu ++ lib.platforms.linux;
+    platforms = platforms.gnu ++ platforms.linux;
   };
 }

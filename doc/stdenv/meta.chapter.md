@@ -134,7 +134,28 @@ Attribute Set `lib.platforms` defines [various common lists](https://github.com/
 This attribute is special in that it is not actually under the `meta` attribute set but rather under the `passthru` attribute set. This is due to how `meta` attributes work, and the fact that they are supposed to contain only metadata, not derivations.
 :::
 
-An attribute set with as values tests. A test is a derivation, which builds successfully when the test passes, and fails to build otherwise. A derivation that is a test needs to have `meta.timeout` defined.
+An attribute set with tests as values. A test is a derivation that builds when the test passes and fails to build otherwise.
+
+You can run these tests with:
+
+```ShellSession
+$ cd path/to/nixpkgs
+$ nix-build -A your-package.tests
+```
+
+#### Package tests
+
+Tests that are part of the source package are often executed in the `installCheckPhase`.
+
+Prefer `passthru.tests` for tests that are introduced in nixpkgs because:
+
+* `passthru.tests` tests the 'real' package, independently from the environment in which it was built
+* we can run `passthru.tests` independently
+* `installCheckPhase` adds overhead to each build
+
+For more on how to write and run package tests, see <xref linkend="sec-package-tests"/>.
+
+#### NixOS tests
 
 The NixOS tests are available as `nixosTests` in parameters of derivations. For instance, the OpenSMTPD derivation includes lines similar to:
 
@@ -147,6 +168,8 @@ The NixOS tests are available as `nixosTests` in parameters of derivations. For 
   };
 }
 ```
+
+NixOS tests run in a VM, so they are slower than regular package tests. For more information see [NixOS module tests](https://nixos.org/manual/nixos/stable/#sec-nixos-tests).
 
 ### `timeout` {#var-meta-timeout}
 

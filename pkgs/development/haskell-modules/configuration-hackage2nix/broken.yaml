@@ -286,7 +286,6 @@ broken-packages:
   - barrie
   - barrier
   - barrier-monad
-  - base16
   - base64-conduit
   - base-compat-migrate
   - base-encoding
@@ -305,7 +304,9 @@ broken-packages:
   - bdo
   - beam
   - beamable
-  - beam-core
+  - beam-mysql
+  - beam-newtype-field
+  - beam-sqlite
   - bech32
   - bed-and-breakfast
   - beeminder-api
@@ -712,6 +713,8 @@ broken-packages:
   - combinatorial-problems
   - combinator-interactive
   - combobuffer
+  - comfort-array-shape
+  - comfort-fftw
   - Command
   - commander
   - Commando
@@ -732,6 +735,7 @@ broken-packages:
   - compilation
   - complex-generic
   - compose-trans
+  - composite-dhall
   - composite-opaleye
   - composition-tree
   - comprehensions-ghc
@@ -925,6 +929,7 @@ broken-packages:
   - data-nat
   - data-object
   - datapacker
+  - data-pdf-fieldreader
   - data-pprint
   - data-quotientref
   - data-reify-cse
@@ -1446,6 +1451,7 @@ broken-packages:
   - fractals
   - fraction
   - frag
+  - Frames-beam
   - Frames-map-reduce
   - franchise
   - fraxl
@@ -1737,6 +1743,7 @@ broken-packages:
   - gtk2hs-rpn
   - gtk3-mac-integration
   - gtkglext
+  - gtk-mac-integration
   - gtksourceview2
   - gtksourceview3
   - gtk-toy
@@ -2226,6 +2233,7 @@ broken-packages:
   - hscd
   - hs-cdb
   - hscdio
+  - hscim
   - hsclock
   - hScraper
   - hscuid
@@ -2485,6 +2493,7 @@ broken-packages:
   - interpolatedstring-qq2
   - interruptible
   - interval
+  - interval-algebra
   - IntFormats
   - int-multimap
   - intricacy
@@ -2522,6 +2531,7 @@ broken-packages:
   - itcli
   - itemfield
   - iteratee
+  - iterative-forward-search
   - iterIO
   - it-has
   - ivory
@@ -2549,6 +2559,7 @@ broken-packages:
   - jenga
   - jenkinsPlugins2nix
   - jespresso
+  - jet-stream
   - jinquantities
   - jml-web-service
   - jni
@@ -2600,6 +2611,7 @@ broken-packages:
   - kalman
   - Kalman
   - kangaroo
+  - karabiner-config
   - karps
   - katip-kafka
   - katip-raven
@@ -2627,7 +2639,6 @@ broken-packages:
   - koellner-phonetic
   - kontra-config
   - kparams
-  - kqueue
   - kraken
   - krapsh
   - Kriens
@@ -2755,6 +2766,7 @@ broken-packages:
   - life-sync
   - lifted-protolude
   - lifter
+  - lifx-lan
   - ligature
   - lilypond
   - Limit
@@ -2821,6 +2833,7 @@ broken-packages:
   - loch
   - log2json
   - log4hs
+  - log-base
   - logentries
   - logger
   - logging-effect-extra-file
@@ -3272,7 +3285,6 @@ broken-packages:
   - no-role-annots
   - notcpp
   - not-gloss-examples
-  - notifications-tray-icon
   - NoTrace
   - now-haskell
   - np-extras
@@ -3673,6 +3685,7 @@ broken-packages:
   - postgres-embedded
   - postgresql-lo-stream
   - postgresql-named
+  - postgresql-resilient
   - postgresql-simple-bind
   - postgresql-simple-named
   - postgresql-simple-sop
@@ -3887,7 +3900,6 @@ broken-packages:
   - read-bounded
   - read-ctags
   - read-io
-  - readline
   - readme-lhs
   - readshp
   - really-simple-xml-parser
@@ -4026,6 +4038,7 @@ broken-packages:
   - robin
   - robots-txt
   - roc-cluster
+  - rocksdb-haskell
   - roku-api
   - rollbar
   - rollbar-client

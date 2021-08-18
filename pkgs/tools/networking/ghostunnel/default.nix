@@ -1,8 +1,7 @@
-{
-  buildGoModule,
-  fetchFromGitHub,
-  lib,
-  nixosTests,
+{ buildGoModule
+, fetchFromGitHub
+, lib
+, nixosTests
 }:
 
 buildGoModule rec {
@@ -27,13 +26,15 @@ buildGoModule rec {
     mv $sourceRoot/certstore $sourceRoot/vendor/ghostunnel/
   '';
 
+  passthru.tests = {
+    nixos = nixosTests.ghostunnel;
+    podman = nixosTests.podman-tls-ghostunnel;
+  };
+
   meta = with lib; {
     description = "A simple TLS proxy with mutual authentication support for securing non-TLS backend applications";
     homepage = "https://github.com/ghostunnel/ghostunnel#readme";
     license = licenses.asl20;
     maintainers = with maintainers; [ roberth ];
   };
-
-  passthru.tests.nixos = nixosTests.ghostunnel;
-  passthru.tests.podman = nixosTests.podman-tls-ghostunnel;
 }

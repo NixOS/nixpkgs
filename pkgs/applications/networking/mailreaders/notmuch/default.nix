@@ -9,16 +9,9 @@
 , withEmacs ? true
 }:
 
-with lib;
-
 stdenv.mkDerivation rec {
-  version = "0.32.2";
   pname = "notmuch";
-
-  passthru = {
-    pythonSourceRoot = "${src.name}/bindings/python";
-    inherit version;
-  };
+  version = "0.32.2";
 
   src = fetchurl {
     url = "https://notmuchmail.org/releases/notmuch-${version}.tar.xz";
@@ -30,7 +23,7 @@ stdenv.mkDerivation rec {
     doxygen                   # (optional) api docs
     pythonPackages.sphinx     # (optional) documentation -> doc/INSTALL
     texinfo                   # (optional) documentation -> doc/INSTALL
-  ] ++ optional withEmacs emacs;
+  ] ++ lib.optional withEmacs emacs;
 
   buildInputs = [
     gnupg                     # undefined dependencies
@@ -41,12 +34,11 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    patchShebangs configure
-    patchShebangs test/
+    patchShebangs configure test/
 
     substituteInPlace lib/Makefile.local \
       --replace '-install_name $(libdir)' "-install_name $out/lib"
-  '' + optionalString withEmacs ''
+  '' + lib.optionalString withEmacs ''
     substituteInPlace emacs/notmuch-emacs-mua \
       --replace 'EMACS:-emacs' 'EMACS:-${emacs}/bin/emacs' \
       --replace 'EMACSCLIENT:-emacsclient' 'EMACSCLIENT:-${emacs}/bin/emacsclient'
@@ -56,16 +48,15 @@ stdenv.mkDerivation rec {
     "--zshcompletiondir=${placeholder "out"}/share/zsh/site-functions"
     "--bashcompletiondir=${placeholder "out"}/share/bash-completion/completions"
     "--infodir=${placeholder "info"}/share/info"
-  ] ++ optional (!withEmacs) "--without-emacs"
-    ++ optional (withEmacs) "--emacslispdir=${placeholder "emacs"}/share/emacs/site-lisp"
-    ++ optional (isNull ruby) "--without-ruby";
+  ] ++ lib.optional (!withEmacs) "--without-emacs"
+    ++ lib.optional withEmacs "--emacslispdir=${placeholder "emacs"}/share/emacs/site-lisp"
+    ++ lib.optional (isNull ruby) "--without-ruby";
 
   # Notmuch doesn't use autoconf and consequently doesn't tag --bindir and
   # friends
   setOutputFlags = false;
   enableParallelBuilding = true;
   makeFlags = [ "V=1" ];
-
 
   outputs = [ "out" "man" "info" ] ++ lib.optional withEmacs "emacs";
 
@@ -78,7 +69,8 @@ stdenv.mkDerivation rec {
     mkdir -p test/test-databases
     ln -s ${test-database} test/test-databases/database-v1.tar.xz
   '';
-  doCheck = !stdenv.hostPlatform.isDarwin && (versionAtLeast gmime.version "3.0.3");
+
+  doCheck = !stdenv.hostPlatform.isDarwin && (lib.versionAtLeast gmime.version "3.0.3");
   checkTarget = "test";
   checkInputs = [
     which dtach openssl bash
@@ -93,7 +85,12 @@ stdenv.mkDerivation rec {
 
   dontGzipMan = true; # already compressed
 
-  meta = {
+  passthru = {
+    pythonSourceRoot = "notmuch-${version}/bindings/python";
+    inherit version;
+  };
+
+  meta = with lib; {
     description = "Mail indexer";
     homepage    = "https://notmuchmail.org/";
     license     = licenses.gpl3Plus;

@@ -140,6 +140,47 @@
           <link linkend="opt-services.mx-puppet-discord.enable">services.mx-puppet-discord</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://www.meshcommander.com/meshcentral2/overview">MeshCentral</link>,
+          a remote administration service (<quote>TeamViewer but
+          self-hosted and with more features</quote>) is now available
+          with a package and a module:
+          <link linkend="opt-services.meshcentral.enable">services.meshcentral.enable</link>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/Arksine/moonraker">moonraker</link>,
+          an API web server for Klipper. Available as
+          <link linkend="opt-services.moonraker.enable">moonraker</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/influxdata/influxdb">influxdb2</link>,
+          a Scalable datastore for metrics, events, and real-time
+          analytics. Available as
+          <link linkend="opt-services.influxdb2.enable">services.influxdb2</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://posativ.org/isso/">isso</link>, a
+          commenting server similar to Disqus. Available as
+          <link linkend="opt-services.isso.enable">isso</link>
+        </para>
+      </listitem>
+    </itemizedlist>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          <link xlink:href="https://www.navidrome.org/">navidrome</link>,
+          a personal music streaming server with subsonic-compatible
+          api. Available as
+          <link linkend="opt-services.navidrome.enable">navidrome</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-incompatibilities">
@@ -147,8 +188,99 @@
     <itemizedlist>
       <listitem>
         <para>
+          The <literal>paperless</literal> module and package have been
+          removed. All users should migrate to the successor
+          <literal>paperless-ng</literal> instead. The Paperless project
+          <link xlink:href="https://github.com/the-paperless-project/paperless/commit/9b0063c9731f7c5f65b1852cb8caff97f5e40ba4">has
+          been archived</link> and advises all users to use
+          <literal>paperless-ng</literal> instead.
+        </para>
+        <para>
+          Users can use the <literal>services.paperless-ng</literal>
+          module as a replacement while noting the following
+          incompatibilities:
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              <literal>services.paperless.ocrLanguages</literal> has no
+              replacement. Users should migrate to
+              <link xlink:href="options.html#opt-services.paperless-ng.extraConfig"><literal>services.paperless-ng.extraConfig</literal></link>
+              instead:
+            </para>
+          </listitem>
+        </itemizedlist>
+        <programlisting language="bash">
+{
+  services.paperless-ng.extraConfig = {
+    # Provide languages as ISO 639-2 codes
+    # separated by a plus (+) sign.
+    # https://en.wikipedia.org/wiki/List_of_ISO_639-2_codes
+    PAPERLESS_OCR_LANGUAGE = &quot;deu+eng+jpn&quot;; # German &amp; English &amp; Japanse
+  };
+}
+</programlisting>
+        <itemizedlist>
+          <listitem>
+            <para>
+              If you previously specified
+              <literal>PAPERLESS_CONSUME_MAIL_*</literal> settings in
+              <literal>services.paperless.extraConfig</literal> you
+              should remove those options now. You now
+              <emphasis>must</emphasis> define those settings in the
+              admin interface of paperless-ng.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Option <literal>services.paperless.manage</literal> no
+              longer exists. Use the script at
+              <literal>${services.paperless-ng.dataDir}/paperless-ng-manage</literal>
+              instead. Note that this script only exists after the
+              <literal>paperless-ng</literal> service has been started
+              at least once.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              After switching to the new system configuration you should
+              run the Django management command to reindex your
+              documents and optionally create a user, if you don’t have
+              one already.
+            </para>
+            <para>
+              To do so, enter the data directory (the value of
+              <literal>services.paperless-ng.dataDir</literal>,
+              <literal>/var/lib/paperless</literal> by default), switch
+              to the paperless user and execute the management command
+              like below:
+            </para>
+            <programlisting>
+$ cd /var/lib/paperless
+$ su paperless -s /bin/sh
+$ ./paperless-ng-manage document_index reindex
+# if not already done create a user account, paperless-ng requires a login
+$ ./paperless-ng-manage createsuperuser
+Username (leave blank to use 'paperless'): my-user-name
+Email address: me@example.com
+Password: **********
+Password (again): **********
+Superuser created successfully.
+</programlisting>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>staticjinja</literal> package has been upgraded
           from 1.0.4 to 3.0.1
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>erigon</literal> ethereum node has moved to a new
+          database format in <literal>2021-05-04</literal>, and requires
+          a full resync
         </para>
       </listitem>
       <listitem>
@@ -607,6 +739,94 @@
           </listitem>
         </itemizedlist>
       </listitem>
+      <listitem>
+        <para>
+          <literal>services.uptimed</literal> now uses
+          <literal>/var/lib/uptimed</literal> as its stateDirectory
+          instead of <literal>/var/spool/uptimed</literal>. Make sure to
+          move all files to the new directory.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Deprecated package aliases in <literal>emacs.pkgs.*</literal>
+          have been removed. These aliases were remnants of the old
+          Emacs package infrastructure. We now use exact upstream names
+          wherever possible.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>programs.neovim.runtime</literal> switched to a
+          <literal>linkFarm</literal> internally, making it impossible
+          to use wildcards in the <literal>source</literal> argument.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>openrazer</literal> and
+          <literal>openrazer-daemon</literal> packages as well as the
+          <literal>hardware.openrazer</literal> module now require users
+          to be members of the <literal>openrazer</literal> group
+          instead of <literal>plugdev</literal>. With this change, users
+          no longer need be granted the entire set of
+          <literal>plugdev</literal> group permissions, which can
+          include permissions other than those required by
+          <literal>openrazer</literal>. This is desirable from a
+          security point of view. The setting
+          <link xlink:href="options.html#opt-services.hardware.openrazer.users"><literal>harware.openrazer.users</literal></link>
+          can be used to add users to the <literal>openrazer</literal>
+          group.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>yambar</literal> package has been split into
+          <literal>yambar</literal> and
+          <literal>yambar-wayland</literal>, corresponding to the xorg
+          and wayland backend respectively. Please switch to
+          <literal>yambar-wayland</literal> if you are on wayland.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>services.minio</literal> module gained an
+          additional option <literal>consoleAddress</literal>, that
+          configures the address and port the web UI is listening, it
+          defaults to <literal>:9001</literal>. To be able to access the
+          web UI this port needs to be opened in the firewall.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>varnish</literal> package was upgraded from 6.3.x
+          to 6.5.x. <literal>varnish60</literal> for the last LTS
+          release is also still available.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>kubernetes</literal> package was upgraded to
+          1.22. The <literal>kubernetes.apiserver.kubeletHttps</literal>
+          option was removed and HTTPS is always used.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The attribute <literal>linuxPackages_latest_hardened</literal>
+          was dropped because the hardened patches lag behind the
+          upstream kernel which made version bumps harder. If you want
+          to use a hardened kernel, please pin it explicitly with a
+          versioned attribute such as
+          <literal>linuxPackages_5_10_hardened</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>nomad</literal> package now defaults to a 1.1.x
+          release instead of 1.0.x
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-notable-changes">
@@ -765,6 +985,24 @@
           <literal>zfs allow your-pool-name</literal> and use
           <literal>zfs unallow syncoid your-pool-name</literal> to clean
           this up.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Zfs: <literal>latestCompatibleLinuxPackages</literal> is now
+          exported on the zfs package. One can use
+          <literal>boot.kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;</literal>
+          to always track the latest compatible kernel with a given
+          version of zfs.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Nginx will use the value of
+          <literal>sslTrustedCertificate</literal> if provided for a
+          virtual host, even if <literal>enableACME</literal> is set.
+          This is useful for providers not using the same certificate to
+          sign OCSP responses and server certificates.
         </para>
       </listitem>
     </itemizedlist>

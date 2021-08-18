@@ -46,5 +46,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers;  [ ramkromberg ];
     platforms = with platforms; linux;
+    broken = stdenv.hostPlatform.isAarch64;
   };
 }

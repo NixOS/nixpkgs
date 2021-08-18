@@ -38,6 +38,7 @@ mapAliases ({
   accounts-qt = libsForQt5.accounts-qt; # added 2015-12-19
   adobeReader = adobe-reader; # added 2013-11-04
   adobe_flex_sdk = apache-flex-sdk; # added 2018-06-01
+  aesop = throw "aesop has been removed from nixpkgs, as it was unmaintained."; # added 2021-08-05
   ag = silver-searcher; # added 2018-04-25
   aircrackng = aircrack-ng; # added 2016-01-14
   aleth = throw "aleth (previously packaged as cpp_ethereum) has been removed; abandoned upstream."; # added 2020-11-30
@@ -52,15 +53,6 @@ mapAliases ({
   ammonite-repl = ammonite; # added 2017-05-02
   amsn = throw "amsn has been removed due to being unmaintained."; # added 2020-12-09
   antimicro = throw "antimicro has been removed as it was broken, see antimicroX instead."; # added 2020-08-06
-  apacheKafka_0_9 = throw "kafka 0.9 is no longer supported. Please upgrade to a newer version."; # added 2020-12-21
-  apacheKafka_0_10 = throw "kafka 0.10 is no longer supported. Please upgrade to a newer version."; # added 2020-12-21
-  apacheKafka_0_11 = throw "kafka 0.11 is no longer supported. Please upgrade to a newer version."; # added 2020-12-21
-  apacheKafka_1_0 = throw "kafka 1.0 is no longer supported. Please upgrade to a newer version."; # added 2020-12-21
-  apacheKafka_1_1 = throw "kafka 1.1 is no longer supported. Please upgrade to a newer version."; # added 2020-12-21
-  apacheKafka_2_0 = throw "kafka 2.0 is no longer supported. Please upgrade to a newer version."; # added 2020-12-21
-  apacheKafka_2_1 = throw "kafka 2.1 is no longer supported. Please upgrade to a newer version."; # added 2020-12-21
-  apacheKafka_2_2 = throw "kafka 2.2 is no longer supported. Please upgrade to a newer version."; # added 2020-12-21
-  apacheKafka_2_3 = throw "kafka 2.3 is no longer supported. Please upgrade to a newer version."; # added 2020-12-21
   arduino_core = arduino-core;  # added 2015-02-04
   arora = throw "arora has been removed."; # added 2020-09-09
   asciidocFull = asciidoc-full;  # added 2014-06-22
@@ -70,6 +62,7 @@ mapAliases ({
   aucdtect = throw "aucdtect: Upstream no longer provides download urls."; # added 2020-12-26
   avldrums-lv2 = x42-avldrums; # added 2020-03-29
   avxsynth = throw "avxsynth was removed because it was broken"; # added 2021-05-18
+  azureus = throw "azureus is now known as vuze and the version in nixpkgs was really outdated"; # added 2021-08-02
   badtouch = authoscope; # Project was renamed, added 20210626
   bar-xft = lemonbar-xft;  # added 2015-01-16
   bashCompletion = bash-completion; # Added 2016-09-28
@@ -189,6 +182,7 @@ mapAliases ({
   debian_devscripts = debian-devscripts; # added 2016-03-23
   deepin = throw "deepin was a work in progress and it has been canceled and removed https://github.com/NixOS/nixpkgs/issues/94870"; # added 2020-08-31
   deepspeech = throw "deepspeech was removed in favor of stt. https://github.com/NixOS/nixpkgs/issues/119496"; # added 2021-05-05
+  deltachat-electron = deltachat-desktop; # added 2021-07-18
   desktop_file_utils = desktop-file-utils; # added 2018-02-25
   devicemapper = lvm2; # added 2018-04-25
   digikam5 = digikam; # added 2017-02-18
@@ -214,6 +208,7 @@ mapAliases ({
   emacsPackages = emacs.pkgs; # added 2020-12-18
   emby = throw "The Emby derivation has been removed, see jellyfin instead for a free software fork."; # added 2019-05-01
   enblendenfuse = enblend-enfuse; # 2015-09-30
+  envelope = throw "envelope has been removed from nixpkgs, as it was unmaintained."; # added 2021-08-05
   esniper = throw "esniper has been removed because upstream no longer maintains it (and it no longer works)"; # added 2021-04-12
   evolution_data_server = evolution-data-server; # added 2018-02-25
   etcdctl = etcd; # added 2018-04-25
@@ -344,6 +339,7 @@ mapAliases ({
   htmlTidy = html-tidy;  # added 2014-12-06
   hydra-flakes = throw "hydra-flakes: Flakes support has been merged into Hydra's master. Please use `hydra-unstable` now."; # added 2020-04-06
   iana_etc = iana-etc;  # added 2017-03-08
+  iasl = throw "iasl has been removed, use acpica-tools instead"; # added 2021-08-08
   icedtea8_web = adoptopenjdk-icedtea-web; # added 2019-08-21
   icedtea_web = adoptopenjdk-icedtea-web; # added 2019-08-21
   idea = jetbrains; # added 2017-04-03
@@ -452,6 +448,20 @@ mapAliases ({
   linuxPackages_xen_dom0_hardened = linuxPackages_hardened;
   linuxPackages_latest_xen_dom0_hardened = linuxPackages_latest_hardened;
 
+  # added 2021-08-16
+  linuxPackages_latest_hardened = throw ''
+    The attribute `linuxPackages_hardened_latest' was dropped because the hardened patches
+    frequently lag behind the upstream kernel. In some cases this meant that this attribute
+    had to refer to an older kernel[1] because the latest hardened kernel was EOL and
+    the latest supported kernel didn't have patches.
+
+    If you want to use a hardened kernel, please check which kernel minors are supported
+    and use a versioned attribute, e.g. `linuxPackages_5_10_hardened'.
+
+    [1] for more context: https://github.com/NixOS/nixpkgs/pull/133587
+  '';
+  linux_latest_hardened = linuxPackages_latest_hardened;
+
   linux-steam-integration = throw "linux-steam-integration has been removed, as the upstream project has been abandoned"; # added 2020-05-22
   loadcaffe = throw "loadcaffe has been removed, as the upstream project has been abandoned"; # added 2020-03-28
   lobster-two = google-fonts; # added 2021-07-22
@@ -477,7 +487,9 @@ mapAliases ({
   mess = mame; # added 2019-10-30
   mcgrid = throw "mcgrid has been removed from nixpkgs, as it's not compatible with rivet 3"; # added 2020-05-23
   mcomix = throw "mcomix has been removed from nixpkgs, as it's unmaintained; try mcomix3 a Python 3 fork"; # added 2019-12-10, modified 2020-11-25
-  mirage = throw "mirage has been femoved from nixpkgs, as it's unmaintained"; # added 2019-12-10
+  mirage = throw "mirage has been removed from nixpkgs, as it's unmaintained"; # added 2019-12-10
+  minergate = throw "minergate has been removed from nixpkgs, because the package is unmaintained and the site has a bad reputation"; # added 2021-08-13
+  minergate-cli = throw "minergatecli has been removed from nixpkgs, because the package is unmaintained and the site has a bad reputation"; # added 2021-08-13
   mopidy-gmusic = throw "mopidy-gmusic has been removed because Google Play Music was discontinued"; # added 2021-03-07
   mopidy-local-images = throw "mopidy-local-images has been removed as it's unmaintained. It's functionality has been merged into the mopidy-local extension."; # added 2020-10-18
   mopidy-local-sqlite = throw "mopidy-local-sqlite has been removed as it's unmaintained. It's functionality has been merged into the mopidy-local extension."; # added 2020-10-18
@@ -530,6 +542,7 @@ mapAliases ({
   nmap-unfree = nmap; # added 2021-04-06
   nologin = shadow; # added 2018-04-25
   nordic-polar = throw "nordic-polar was removed on 2021-05-27, now integrated in nordic"; # added 2021-05-27
+  now-cli = throw "now-cli has been replaced with nodePackages.vercel"; # added 2021-08-05
   nxproxy = nx-libs; # added 2019-02-15
   nylas-mail-bin = throw "nylas-mail-bin was deprecated on 2019-09-11: abandoned by upstream";
   oauth2_proxy = oauth2-proxy; # added 2021-04-18
@@ -537,6 +550,7 @@ mapAliases ({
   oblogout = throw "oblogout has been removed from nixpkgs, as it's archived upstream."; # added 2019-12-10
   octoprint-plugins = throw "octoprint-plugins are now part of the octoprint.python.pkgs package set."; # added 2021-01-24
   ofp = throw "ofp is not compatible with odp-dpdk";
+  olifant = throw "olifant has been removed from nixpkgs, as it was unmaintained."; # added 2021-08-05
   opencl-icd = ocl-icd; # added 2017-01-20
   openconnect_pa = throw "openconnect_pa fork has been discontinued, support for GlobalProtect is now available in openconnect"; # added 2021-05-21
   openexr_ctl = ctl; # added 2018-04-25
@@ -553,6 +567,7 @@ mapAliases ({
   owncloudclient = owncloud-client;  # added 2016-08
   ocz-ssd-guru = throw "ocz-ssd-guru has been removed due to there being no source available"; # added 2021-07-12
   p11_kit = p11-kit; # added 2018-02-25
+  paperless = paperless-ng; # added 2021-06-06
   parity = openethereum; # added 2020-08-01
   parquet-cpp = arrow-cpp; # added 2018-09-08
   pass-otp = pass.withExtensions (ext: [ext.pass-otp]); # added 2018-05-04
@@ -681,9 +696,11 @@ mapAliases ({
   qmk_firmware = throw "qmk_firmware has been removed because it was broken"; # added 2021-04-02
   qr-filetransfer = throw ''"qr-filetransfer" has been renamed to "qrcp"''; # added 2020-12-02
   quake3game = ioquake3; # added 2016-01-14
+  quilter = throw "quilter has been removed from nixpkgs, as it was unmaintained."; # added 2021-08-03
   qvim = throw "qvim has been removed."; # added 2020-08-31
   qweechat = throw "qweechat has been removed because it was broken"; # added 2021-03-08
   qwt6 = libsForQt5.qwt;  # added 2015-12-19
+  qtkeychain = throw "the qtkeychain attribute (qt4 version) has been removes, use the qt5 version: libsForQt5.qtkeychain"; # added 2021-08-04
   qtcurve = libsForQt5.qtcurve;  # added 2020-11-07
   qtpfsgui = throw "qtpfsgui is now luminanceHDR"; # added 2019-06-26
   quaternion-git = throw "quaternion-git has been removed in favor of the stable version 'quaternion'"; # added 2020-04-09
@@ -712,6 +729,7 @@ mapAliases ({
   redkite = throw "redkite was archived by upstream"; # added 2021-04-12
   rkt = throw "rkt was archived by upstream"; # added 2020-05-16
   rpiboot-unstable = rpiboot; # added 2021-07-30
+  rtv = throw "rtv was archived by upstream. Consider using tuir, an actively maintained fork"; # added 2021-08-08
   ruby_2_0_0 = throw "ruby_2_0_0 was deprecated on 2018-02-13: use a newer version of ruby";
   ruby_2_1_0 = throw "ruby_2_1_0 was deprecated on 2018-02-13: use a newer version of ruby";
   ruby_2_2_9 = throw "ruby_2_2_9 was deprecated on 2018-02-13: use a newer version of ruby";
@@ -725,6 +743,8 @@ mapAliases ({
   rubyPackages_2_5 = throw "rubyPackages_2_5 was deprecated in 2021-02: use a newer version of rubyPackages instead";
   rubygems = throw "rubygems was deprecated on 2016-03-02: rubygems is now bundled with ruby";
   rubyMinimal = throw "rubyMinimal was removed due to being unused";
+  runCommandNoCC = runCommand;
+  runCommandNoCCLocal = runCommandLocal;
   runwayml = throw "runwayml is now a webapp"; # added 2021-04-17
   rxvt_unicode-with-plugins = rxvt-unicode; # added 2020-02-02
   rxvt_unicode = rxvt-unicode-unwrapped; # added 2020-02-02
@@ -876,6 +896,7 @@ mapAliases ({
   truecrypt = veracrypt; # added 2018-10-24
   tshark = wireshark-cli; # added 2018-04-25
   tuijam = throw "tuijam has been removed because Google Play Music was discontinued"; # added 2021-03-07
+  turbo-geth = throw "turbo-geth has been renamed to erigon"; # added 20201-08-08
   uberwriter = apostrophe; # added 2020-04-23
   ubootBeagleboneBlack = ubootAmx335xEVM; # added 2020-01-21
   ucsFonts = ucs-fonts; # added 2016-07-15
@@ -892,6 +913,8 @@ mapAliases ({
   v8_3_16_14 = throw "v8_3_16_14 was removed in 2019-11-01: no longer referenced by other packages";
   valadoc = throw "valadoc was deprecated on 2019-10-10: valadoc was merged into vala 0.38";
   vamp = { vampSDK = vamp-plugin-sdk; }; # added 2020-03-26
+  varnish62 = throw "varnish62 was removed from nixpkgs, because it is unmaintained upstream. Please switch to a different release."; # 2021-07-26
+  varnish63 = throw "varnish63 was removed from nixpkgs, because it is unmaintained upstream. Please switch to a different release."; # 2021-07-26
   venus = throw "venus has been removed from nixpkgs, as it's unmaintained"; # added 2021-02-05
   vdirsyncerStable  = vdirsyncer; # added 2020-11-08, see https://github.com/NixOS/nixpkgs/issues/103026#issuecomment-723428168
   vimbWrapper = vimb; # added 2015-01
@@ -1117,7 +1140,7 @@ mapAliases ({
     kgamma5
     kinfocenter
     kmenuedit
-    kscreen kscreenlocker ksshaskpass ksysguard
+    kscreen kscreenlocker ksshaskpass
     kwallet-pam kwayland-integration kwin kwrited
     milou
     oxygen

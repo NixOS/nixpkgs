@@ -758,7 +758,7 @@ let
       POSIX_MQUEUE        = yes;
       FRONTSWAP           = yes;
       FUSION              = yes; # Fusion MPT device support
-      IDE                 = no; # deprecated IDE support
+      IDE                 = whenOlder "5.14" no; # deprecated IDE support, removed in 5.14
       IDLE_PAGE_TRACKING  = yes;
       IRDA_ULTRA          = whenOlder "4.17" yes; # Ultra (connectionless) protocol
 

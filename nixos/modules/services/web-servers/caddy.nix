@@ -8,10 +8,10 @@ let
 
   tlsConfig = {
     apps.tls.automation.policies = [{
-      issuer = {
+      issuers = [{
         inherit (cfg) ca email;
         module = "acme";
-      };
+      }];
     }];
   };
 
@@ -23,23 +23,28 @@ let
 
   # merge the TLS config options we expose with the ones originating in the Caddyfile
   configJSON =
-    let tlsConfigMerge = ''
-      {"apps":
-        {"tls":
-          {"automation":
-            {"policies":
-              (if .[0].apps.tls.automation.policies == .[1]?.apps.tls.automation.policies
-               then .[0].apps.tls.automation.policies
-               else (.[0].apps.tls.automation.policies + .[1]?.apps.tls.automation.policies)
-               end)
+    if cfg.ca != null then
+      let tlsConfigMerge = ''
+        {"apps":
+          {"tls":
+            {"automation":
+              {"policies":
+                (if .[0].apps.tls.automation.policies == .[1]?.apps.tls.automation.policies
+                 then .[0].apps.tls.automation.policies
+                 else (.[0].apps.tls.automation.policies + .[1]?.apps.tls.automation.policies)
+                 end)
+              }
             }
           }
-        }
-      }'';
-    in pkgs.runCommand "caddy-config.json" { } ''
-    ${pkgs.jq}/bin/jq -s '.[0] * ${tlsConfigMerge}' ${adaptedConfig} ${tlsJSON} > $out
-  '';
-in {
+        }'';
+      in
+      pkgs.runCommand "caddy-config.json" { } ''
+        ${pkgs.jq}/bin/jq -s '.[0] * ${tlsConfigMerge}' ${adaptedConfig} ${tlsJSON} > $out
+      ''
+    else
+      adaptedConfig;
+in
+{
   imports = [
     (mkRemovedOptionModule [ "services" "caddy" "agree" ] "this option is no longer necessary for Caddy 2")
   ];
@@ -85,11 +90,24 @@ in {
       '';
     };
 
+    resume = mkOption {
+      default = false;
+      type = types.bool;
+      description = ''
+        Use saved config, if any (and prefer over configuration passed with <option>services.caddy.config</option>).
+      '';
+    };
+
     ca = mkOption {
       default = "https://acme-v02.api.letsencrypt.org/directory";
       example = "https://acme-staging-v02.api.letsencrypt.org/directory";
-      type = types.str;
-      description = "Certificate authority ACME server. The default (Let's Encrypt production server) should be fine for most people.";
+      type = types.nullOr types.str;
+      description = ''
+        Certificate authority ACME server. The default (Let's Encrypt
+        production server) should be fine for most people. Set it to null if
+        you don't want to include any authority (or if you want to write a more
+        fine-graned configuration manually)
+      '';
     };
 
     email = mkOption {
@@ -132,7 +150,7 @@ in {
       startLimitIntervalSec = 14400;
       startLimitBurst = 10;
       serviceConfig = {
-        ExecStart = "${cfg.package}/bin/caddy run --config ${configJSON}";
+        ExecStart = "${cfg.package}/bin/caddy run ${optionalString cfg.resume "--resume"} --config ${configJSON}";
         ExecReload = "${cfg.package}/bin/caddy reload --config ${configJSON}";
         Type = "simple";
         User = cfg.user;

@@ -45,35 +45,33 @@ stdenv.mkDerivation {
 
   configureFlags = [
     (if threadSupport then "--enable-threads" else "--disable-threads")
-    "--with-gmp-prefix=${gmp.dev}"
-    "--with-libffi-prefix=${libffi.dev}"
-  ]
-  ++
-  (lib.optional useBoehmgc
-    "--with-libgc-prefix=${boehmgc.dev}")
-  ++
-  (lib.optional (! noUnicode)
-    "--enable-unicode")
-  ;
+    "--with-gmp-incdir=${lib.getDev gmp}/include"
+    "--with-gmp-libdir=${lib.getLib gmp}/lib"
+    "--with-libffi-incdir=${lib.getDev libffi}/include"
+    "--with-libffi-libdir=${lib.getLib libffi}/lib"
+  ] ++ lib.optionals useBoehmgc [
+    "--with-libgc-incdir=${lib.getDev boehmgc}/include"
+    "--with-libgc-libdir=${lib.getLib boehmgc}/lib"
+  ] ++ lib.optional (!noUnicode) "--enable-unicode";
 
   hardeningDisable = [ "format" ];
 
-  postInstall = let
-    ldArgs = lib.strings.concatMapStringsSep " "
-      (l: ''--prefix NIX_LDFLAGS ' ' "-L${l.lib or l.out or l}/lib"'')
-      ([ gmp libffi ] ++ lib.optional useBoehmgc boehmgc);
-  in ''
+  postInstall = ''
     sed -e 's/@[-a-zA-Z_]*@//g' -i $out/bin/ecl-config
-    wrapProgram "$out/bin/ecl" --prefix PATH ':' "${gcc}/bin" ${ldArgs}
+    wrapProgram "$out/bin/ecl" --prefix PATH ':' "${
+      lib.makeBinPath [
+        gcc                   # for the C compiler
+        gcc.bintools.bintools # for ar
+      ]
+    }"
   '';
 
-  meta = {
-    inherit (s) version;
+  meta = with lib; {
     description = "Lisp implementation aiming to be small, fast and easy to embed";
     homepage = "https://common-lisp.net/project/ecl/";
-    license = lib.licenses.mit ;
-    maintainers = [lib.maintainers.raskin];
-    platforms = lib.platforms.unix;
+    license = licenses.mit ;
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.unix;
     changelog = "https://gitlab.com/embeddable-common-lisp/ecl/-/raw/${s.version}/CHANGELOG";
   };
 }

@@ -1,4 +1,5 @@
-{ pname, ffversion, meta, updateScript ? null
+{ pname, version, meta, updateScript ? null
+, binaryName ? "firefox", application ? "browser"
 , src, unpackPhase ? null, patches ? []
 , extraNativeBuildInputs ? [], extraConfigureFlags ? [], extraMakeFlags ? [], tests ? [] }:
 
@@ -8,7 +9,7 @@
 , yasm, libGLU, libGL, sqlite, unzip, makeWrapper
 , hunspell, libevent, libstartup_notification
 , libvpx_1_8
-, icu67, libpng, jemalloc, glib, pciutils
+, icu69, libpng, jemalloc, glib, pciutils
 , autoconf213, which, gnused, rustPackages, rustPackages_1_45
 , rust-cbindgen, nodejs, nasm, fetchpatch
 , gnum4
@@ -81,17 +82,16 @@ let
   default-toolkit = if stdenv.isDarwin then "cairo-cocoa"
                     else "cairo-gtk3${lib.optionalString waylandSupport "-wayland"}";
 
-  binaryName = "firefox";
   binaryNameCapitalized = lib.toUpper (lib.substring 0 1 binaryName) + lib.substring 1 (-1) binaryName;
 
-  browserName = if stdenv.isDarwin then binaryNameCapitalized else binaryName;
+  applicationName = if stdenv.isDarwin then binaryNameCapitalized else binaryName;
 
   execdir = if stdenv.isDarwin
             then "/Applications/${binaryNameCapitalized}.app/Contents/MacOS"
             else "/bin";
 
   # 78 ESR won't build with rustc 1.47
-  inherit (if lib.versionAtLeast ffversion "82" then rustPackages else rustPackages_1_45)
+  inherit (if lib.versionAtLeast version "82" then rustPackages else rustPackages_1_45)
     rustc cargo;
 
   # Darwin's stdenv provides the default llvmPackages version, match that since
@@ -118,7 +118,7 @@ let
 
   # Disable p11-kit support in nss until our cacert packages has caught up exposing CKA_NSS_MOZILLA_CA_POLICY
   # https://github.com/NixOS/nixpkgs/issues/126065
-  nss_pkg = if lib.versionOlder ffversion "83" then nss_3_53 else nss.override { useP11kit = false; };
+  nss_pkg = if lib.versionOlder version "83" then nss_3_53 else nss.override { useP11kit = false; };
 
   # --enable-release adds -ffunction-sections & LTO that require a big amount of
   # RAM and the 32-bit memory space cannot handle that linking
@@ -129,26 +129,26 @@ let
 in
 
 buildStdenv.mkDerivation ({
-  name = "${pname}-unwrapped-${ffversion}";
-  version = ffversion;
+  name = "${pname}-unwrapped-${version}";
+  inherit version;
 
   inherit src unpackPhase meta;
 
   patches = [
   ] ++
-  lib.optional (lib.versionOlder ffversion "86") ./env_var_for_system_dir-ff85.patch ++
-  lib.optional (lib.versionAtLeast ffversion "86") ./env_var_for_system_dir-ff86.patch ++
-  lib.optional (lib.versionOlder ffversion "83") ./no-buildconfig-ffx76.patch ++
-  lib.optional (lib.versionAtLeast ffversion "90") ./no-buildconfig-ffx90.patch ++
-  lib.optional (ltoSupport && lib.versionOlder ffversion "84") ./lto-dependentlibs-generation-ffx83.patch ++
-  lib.optional (ltoSupport && lib.versionAtLeast ffversion "84" && lib.versionOlder ffversion "86")
+  lib.optional (lib.versionOlder version "86") ./env_var_for_system_dir-ff85.patch ++
+  lib.optional (lib.versionAtLeast version "86") ./env_var_for_system_dir-ff86.patch ++
+  lib.optional (lib.versionOlder version "83") ./no-buildconfig-ffx76.patch ++
+  lib.optional (lib.versionAtLeast version "90") ./no-buildconfig-ffx90.patch ++
+  lib.optional (ltoSupport && lib.versionOlder version "84") ./lto-dependentlibs-generation-ffx83.patch ++
+  lib.optional (ltoSupport && lib.versionAtLeast version "84" && lib.versionOlder version "86")
     (fetchpatch {
       url = "https://hg.mozilla.org/mozilla-central/raw-rev/fdff20c37be3";
       sha256 = "135n9brliqy42lj3nqgb9d9if7x6x9nvvn0z4anbyf89bikixw48";
     })
 
   # This patch adds pipewire support for the ESR release
-  ++ lib.optional (pipewireSupport && lib.versionOlder ffversion "83")
+  ++ lib.optional (pipewireSupport && lib.versionOlder version "83")
     (fetchpatch {
       # https://src.fedoraproject.org/rpms/firefox/blob/master/f/firefox-pipewire-0-3.patch
       url = "https://src.fedoraproject.org/rpms/firefox/raw/e99b683a352cf5b2c9ff198756859bae408b5d9d/f/firefox-pipewire-0-3.patch";
@@ -173,7 +173,7 @@ buildStdenv.mkDerivation ({
     xorg.libXext
     libevent libstartup_notification /* cairo */
     libpng jemalloc glib
-    nasm icu67 libvpx_1_8
+    nasm icu69 libvpx_1_8
     # >= 66 requires nasm for the AV1 lib dav1d
     # yasm can potentially be removed in future versions
     # https://bugzilla.mozilla.org/show_bug.cgi?id=1501796
@@ -185,11 +185,11 @@ buildStdenv.mkDerivation ({
   ++ lib.optional  gssSupport libkrb5
   ++ lib.optionals waylandSupport [ libxkbcommon libdrm ]
   ++ lib.optional  pipewireSupport pipewire
-  ++ lib.optional  (lib.versionAtLeast ffversion "82") gnum4
+  ++ lib.optional  (lib.versionAtLeast version "82") gnum4
   ++ lib.optionals buildStdenv.isDarwin [ CoreMedia ExceptionHandling Kerberos
                                           AVFoundation MediaToolbox CoreLocation
                                           Foundation libobjc AddressBook cups ]
-  ++ lib.optional  (lib.versionOlder ffversion "90") gtk2;
+  ++ lib.optional  (lib.versionOlder version "90") gtk2;
 
   NIX_LDFLAGS = lib.optionalString ltoSupport ''
     -rpath ${llvmPackages.libunwind.out}/lib
@@ -201,14 +201,14 @@ buildStdenv.mkDerivation ({
     rm -rf obj-x86_64-pc-linux-gnu
     substituteInPlace toolkit/xre/glxtest.cpp \
       --replace 'dlopen("libpci.so' 'dlopen("${pciutils}/lib/libpci.so'
-  '' + lib.optionalString (pipewireSupport && lib.versionOlder ffversion "83") ''
+  '' + lib.optionalString (pipewireSupport && lib.versionOlder version "83") ''
     # substitute the /usr/include/ lines for the libraries that pipewire provides.
     # The patch we pick from fedora only contains the generated moz.build files
     # which hardcode the dependency paths instead of running pkg_config.
     substituteInPlace \
       media/webrtc/trunk/webrtc/modules/desktop_capture/desktop_capture_generic_gn/moz.build \
       --replace /usr/include ${pipewire.dev}/include
-  '' + lib.optionalString (lib.versionAtLeast ffversion "80" && lib.versionOlder ffversion "81") ''
+  '' + lib.optionalString (lib.versionAtLeast version "80" && lib.versionOlder version "81") ''
     substituteInPlace dom/system/IOUtils.h \
       --replace '#include "nspr/prio.h"'          '#include "prio.h"'
 
@@ -273,10 +273,13 @@ buildStdenv.mkDerivation ({
   '') + ''
     # AS=as in the environment causes build failure https://bugzilla.mozilla.org/show_bug.cgi?id=1497286
     unset AS
-  '';
+  '' + (lib.optionalString enableOfficialBranding ''
+    export MOZILLA_OFFICIAL=1
+    export BUILD_OFFICIAL=1
+  '');
 
   configureFlags = [
-    "--enable-application=browser"
+    "--enable-application=${application}"
     "--with-system-jpeg"
     "--with-system-zlib"
     "--with-system-libevent"
@@ -325,11 +328,7 @@ buildStdenv.mkDerivation ({
     cd obj-*
   '';
 
-  makeFlags = lib.optionals enableOfficialBranding [
-    "MOZILLA_OFFICIAL=1"
-    "BUILD_OFFICIAL=1"
-  ]
-  ++ lib.optionals ltoSupport [
+  makeFlags = lib.optionals ltoSupport [
     "AR=${buildStdenv.cc.bintools.bintools}/bin/llvm-ar"
     "LLVM_OBJDUMP=${buildStdenv.cc.bintools.bintools}/bin/llvm-objdump"
     "NM=${buildStdenv.cc.bintools.bintools}/bin/llvm-nm"
@@ -357,19 +356,19 @@ buildStdenv.mkDerivation ({
   doInstallCheck = true;
   installCheckPhase = ''
     # Some basic testing
-    "$out${execdir}/${browserName}" --version
+    "$out${execdir}/${applicationName}" --version
   '';
 
   passthru = {
     inherit updateScript;
-    version = ffversion;
+    inherit version;
     inherit alsaSupport;
     inherit pipewireSupport;
     inherit nspr;
     inherit ffmpegSupport;
     inherit gssSupport;
     inherit execdir;
-    inherit browserName;
+    inherit applicationName;
     inherit tests;
     inherit gtk3;
   };

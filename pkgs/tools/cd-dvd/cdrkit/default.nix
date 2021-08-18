@@ -1,10 +1,11 @@
 {lib, stdenv, fetchurl, cmake, libcap, zlib, bzip2, perl}:
 
 stdenv.mkDerivation rec {
-  name = "cdrkit-1.1.11";
+  pname = "cdrkit";
+  version = "1.1.11";
 
   src = fetchurl {
-    url = "http://cdrkit.org/releases/${name}.tar.gz";
+    url = "http://cdrkit.org/releases/cdrkit-${version}.tar.gz";
     sha256 = "1nj7iv3xrq600i37na9a5idd718piiiqbs4zxvpjs66cdrsk1h6i";
   };
 

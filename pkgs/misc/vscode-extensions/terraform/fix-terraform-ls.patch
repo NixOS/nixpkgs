@@ -1,43 +1,19 @@
-diff --git a/out/clientHandler.js b/out/clientHandler.js
-index 7f9716d..a543d60 100644
---- a/out/clientHandler.js
-+++ b/out/clientHandler.js
-@@ -33,8 +33,7 @@ class ClientHandler {
-             this.reporter.sendTelemetryEvent('usePathToBinary');
-         }
-         else {
--            const installPath = path.join(context.extensionPath, 'lsp');
--            this.pathToBinary = path.join(installPath, 'terraform-ls');
-+            this.pathToBinary = 'TERRAFORM-LS-PATH';
-         }
+diff --git a/out/serverPath.js b/out/serverPath.js
+index ffb1b80..990ca2b 100644
+--- a/out/serverPath.js
++++ b/out/serverPath.js
+@@ -8,7 +8,13 @@ exports.CUSTOM_BIN_PATH_OPTION_NAME = 'languageServer.pathToBinary';
+ class ServerPath {
+     constructor(context) {
+         this.context = context;
+-        this.customBinPath = vscode.workspace.getConfiguration('terraform').get(exports.CUSTOM_BIN_PATH_OPTION_NAME);
++
++        const customBinPath = vscode.workspace.getConfiguration('terraform').get(exports.CUSTOM_BIN_PATH_OPTION_NAME);
++        if (!customBinPath) {
++          this.customBinPath = 'TERRAFORM-LS-PATH';
++        } else {
++            this.customBinPath = customBinPath;
++        }
      }
-     startClients(folders) {
-diff --git a/out/extension.js b/out/extension.js
-index 7a271fc..726bbf8 100644
---- a/out/extension.js
-+++ b/out/extension.js
-@@ -149,24 +149,6 @@ function updateLanguageServer(clientHandler, installPath) {
-             updateLanguageServer(clientHandler, installPath);
-         }, 24 * hour);
-         // skip install if a language server binary path is set
--        if (!vscodeUtils_1.config('terraform').get('languageServer.pathToBinary')) {
--            const installer = new languageServerInstaller_1.LanguageServerInstaller(installPath, reporter);
--            const install = yield installer.needsInstall();
--            if (install) {
--                yield clientHandler.stopClients();
--                try {
--                    yield installer.install();
--                }
--                catch (err) {
--                    console.log(err); // for test failure reporting
--                    reporter.sendTelemetryException(err);
--                    throw err;
--                }
--                finally {
--                    yield installer.cleanupZips();
--                }
--            }
--        }
-         return clientHandler.startClients(vscodeUtils_1.prunedFolderNames()); // on repeat runs with no install, this will be a no-op
-     });
- }
+     installPath() {
+         return this.context.asAbsolutePath(INSTALL_FOLDER_NAME);

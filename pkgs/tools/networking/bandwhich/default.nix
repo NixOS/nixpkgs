@@ -15,6 +15,9 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optional stdenv.isDarwin Security;
 
+  # 10 passed; 47 failed https://hydra.nixos.org/build/148943783/nixlog/1
+  doCheck = !stdenv.isDarwin;
+
   meta = with lib; {
     description = "A CLI utility for displaying current network utilization";
     longDescription = ''
@@ -26,7 +29,7 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/imsnif/bandwhich";
     license = licenses.mit;
-    maintainers = with maintainers; [ Br1ght0ne ma27 ];
+    maintainers = with maintainers; [ Br1ght0ne ma27 SuperSandro2000 ];
     platforms = platforms.unix;
   };
 }

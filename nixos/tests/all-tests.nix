@@ -69,6 +69,7 @@ in
   cjdns = handleTest ./cjdns.nix {};
   clickhouse = handleTest ./clickhouse.nix {};
   cloud-init = handleTest ./cloud-init.nix {};
+  cntr = handleTest ./cntr.nix {};
   cockroachdb = handleTestOn ["x86_64-linux"] ./cockroachdb.nix {};
   consul = handleTest ./consul.nix {};
   containers-bridge = handleTest ./containers-bridge.nix {};
@@ -93,6 +94,7 @@ in
   cri-o = handleTestOn ["x86_64-linux"] ./cri-o.nix {};
   custom-ca = handleTest ./custom-ca.nix {};
   croc = handleTest ./croc.nix {};
+  cryptpad = handleTest ./cryptpad.nix {};
   deluge = handleTest ./deluge.nix {};
   dendrite = handleTest ./dendrite.nix {};
   dhparams = handleTest ./dhparams.nix {};
@@ -125,8 +127,10 @@ in
   fancontrol = handleTest ./fancontrol.nix {};
   fcitx = handleTest ./fcitx {};
   ferm = handleTest ./ferm.nix {};
-  firefox = handleTest ./firefox.nix {};
-  firefox-esr = handleTest ./firefox.nix { esr = true; };
+  firefox = handleTest ./firefox.nix { firefoxPackage = pkgs.firefox; };
+  firefox-esr    = handleTest ./firefox.nix { firefoxPackage = pkgs.firefox-esr; }; # used in `tested` job
+  firefox-esr-78 = handleTest ./firefox.nix { firefoxPackage = pkgs.firefox-esr-78; };
+  firefox-esr-91 = handleTest ./firefox.nix { firefoxPackage = pkgs.firefox-esr-91; };
   firejail = handleTest ./firejail.nix {};
   firewall = handleTest ./firewall.nix {};
   fish = handleTest ./fish.nix {};
@@ -223,6 +227,7 @@ in
   latestKernel.hardened = handleTest ./hardened.nix { latestKernel = true; };
   latestKernel.login = handleTest ./login.nix { latestKernel = true; };
   leaps = handleTest ./leaps.nix {};
+  libreddit = handleTest ./libreddit.nix {};
   lidarr = handleTest ./lidarr.nix {};
   libreswan = handleTest ./libreswan.nix {};
   lightdm = handleTest ./lightdm.nix {};
@@ -254,6 +259,7 @@ in
   miniflux = handleTest ./miniflux.nix {};
   minio = handleTest ./minio.nix {};
   misc = handleTest ./misc.nix {};
+  mod_perl = handleTest ./mod_perl.nix {};
   moinmoin = handleTest ./moinmoin.nix {};
   mongodb = handleTest ./mongodb.nix {};
   moodle = handleTest ./moodle.nix {};
@@ -277,6 +283,7 @@ in
   nat.firewall = handleTest ./nat.nix { withFirewall = true; };
   nat.firewall-conntrack = handleTest ./nat.nix { withFirewall = true; withConntrackHelpers = true; };
   nat.standalone = handleTest ./nat.nix { withFirewall = false; };
+  navidrome = handleTest ./navidrome.nix {};
   ncdns = handleTest ./ncdns.nix {};
   ndppd = handleTest ./ndppd.nix {};
   nebula = handleTest ./nebula.nix {};
@@ -300,6 +307,7 @@ in
   nginx-sandbox = handleTestOn ["x86_64-linux"] ./nginx-sandbox.nix {};
   nginx-sso = handleTest ./nginx-sso.nix {};
   nginx-variants = handleTest ./nginx-variants.nix {};
+  nitter = handleTest ./nitter.nix {};
   nix-serve = handleTest ./nix-ssh-serve.nix {};
   nix-ssh-serve = handleTest ./nix-ssh-serve.nix {};
   nixos-generate-config = handleTest ./nixos-generate-config.nix {};
@@ -328,7 +336,7 @@ in
   pam-oath-login = handleTest ./pam-oath-login.nix {};
   pam-u2f = handleTest ./pam-u2f.nix {};
   pantheon = handleTest ./pantheon.nix {};
-  paperless = handleTest ./paperless.nix {};
+  paperless-ng = handleTest ./paperless-ng.nix {};
   pdns-recursor = handleTest ./pdns-recursor.nix {};
   peerflix = handleTest ./peerflix.nix {};
   pgjwt = handleTest ./pgjwt.nix {};

@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, which, autoconf, automake, flex, bison
-, kernel, glibc, perl, libtool_2, libkrb5, fetchpatch }:
+, kernel, glibc, perl, libtool_2, libkrb5 }:
 
 with (import ./srcs.nix {
   inherit fetchurl;
@@ -55,7 +55,7 @@ in stdenv.mkDerivation {
     homepage = "https://www.openafs.org";
     license = licenses.ipl10;
     platforms = platforms.linux;
-    maintainers = [ maintainers.maggesi maintainers.spacefrogg ];
+    maintainers = with maintainers; [ maggesi spacefrogg ];
     broken = versionOlder kernel.version "3.18" || kernel.isHardened;
   };
 }

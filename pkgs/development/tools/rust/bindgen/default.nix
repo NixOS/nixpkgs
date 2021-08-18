@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, rustPlatform, clang, llvmPackages_latest, rustfmt, writeScriptBin
+{ lib, fetchFromGitHub, rustPlatform, clang, llvmPackages_latest, rustfmt, writeTextFile
 , runtimeShell
 , bash
 }:
@@ -38,12 +38,17 @@ rustPlatform.buildRustPackage rec {
 
   doCheck = true;
   checkInputs =
-    let fakeRustup = writeScriptBin "rustup" ''
-      #!${runtimeShell}
-      shift
-      shift
-      exec "$@"
-    '';
+    let fakeRustup = writeTextFile {
+      name = "fake-rustup";
+      executable = true;
+      destination = "/bin/rustup";
+      text = ''
+        #!${runtimeShell}
+        shift
+        shift
+        exec "$@"
+      '';
+    };
   in [
     rustfmt
     fakeRustup # the test suite insists in calling `rustup run nightly rustfmt`

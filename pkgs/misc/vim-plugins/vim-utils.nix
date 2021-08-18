@@ -2,6 +2,8 @@
 { lib, stdenv, vim, vimPlugins, vim_configurable, buildEnv, writeText, writeScriptBin
 , nix-prefetch-hg, nix-prefetch-git
 , fetchFromGitHub, runtimeShell
+, hasLuaModule
+, python3
 }:
 
 /*
@@ -186,7 +188,21 @@ let
 
   nativeImpl = packages:
   (let
-    link = (packageName: dir: pluginPath: "ln -sf ${pluginPath}/share/vim-plugins/* $out/pack/${packageName}/${dir}");
+    # dir is "start" or "opt"
+    linkLuaPlugin = plugin: packageName: dir: ''
+      mkdir -p $out/pack/${packageName}/${dir}/${plugin.pname}/lua
+      ln -sf ${plugin}/share/lua/5.1/* $out/pack/${packageName}/${dir}/${plugin.pname}/lua
+      ln -sf ${plugin}/${plugin.pname}-${plugin.version}-rocks/${plugin.pname}/${plugin.version}/* $out/pack/${packageName}/${dir}/${plugin.pname}/
+    '';
+
+    linkVimlPlugin = pluginPath: packageName: dir:
+      "ln -sf ${pluginPath}/${rtpPath}/* $out/pack/${packageName}/${dir}";
+
+      # (builtins.trace pluginPath )
+      link = pluginPath: if hasLuaModule pluginPath
+        then linkLuaPlugin pluginPath
+        else linkVimlPlugin pluginPath;
+
     packageLinks = (packageName: {start ? [], opt ? []}:
     let
       # `nativeImpl` expects packages to be derivations, not strings (as
@@ -195,13 +211,24 @@ let
       # and can simply pass `null`.
       depsOfOptionalPlugins = lib.subtractLists opt (findDependenciesRecursively opt);
       startWithDeps = findDependenciesRecursively start;
+      allPlugins = lib.unique (startWithDeps ++ depsOfOptionalPlugins);
+      python3Env = python3.withPackages (ps:
+        lib.flatten (builtins.map (plugin: (plugin.python3Dependencies or (_: [])) ps) allPlugins)
+      );
     in
       [ "mkdir -p $out/pack/${packageName}/start" ]
       # To avoid confusion, even dependencies of optional plugins are added
       # to `start` (except if they are explicitly listed as optional plugins).
-      ++ (builtins.map (link packageName "start") (lib.unique (startWithDeps ++ depsOfOptionalPlugins)))
+      ++ (builtins.map (x: link x packageName "start") allPlugins)
       ++ ["mkdir -p $out/pack/${packageName}/opt"]
-      ++ (builtins.map (link packageName "opt") opt)
+      ++ (builtins.map (x: link x packageName "opt") opt)
+      # Assemble all python3 dependencies into a single `site-packages` to avoid doing recursive dependency collection
+      # for each plugin.
+      # This directory is only for python import search path, and will not slow down the startup time.
+      ++ [
+        "mkdir -p $out/pack/${packageName}/start/__python3_dependencies"
+        "ln -s ${python3Env}/${python3Env.sitePackages} $out/pack/${packageName}/start/__python3_dependencies/python3"
+      ]
     );
     packDir = (packages:
       stdenv.mkDerivation {
@@ -217,6 +244,18 @@ let
     set runtimepath^=${packDir packages}
   '');
 
+  /* Generates a vimrc string
+
+    packages is an attrset with {name: { start = [ vim derivations ]; opt = [ vim derivations ]; }
+    Example:
+      vimrcContent {
+
+        packages = { home-manager = { start = [vimPlugins.vim-fugitive]; opt = [];};
+        beforePlugins = '';
+        customRc = ''let mapleader = " "'';
+
+      };
+   */
   vimrcContent = {
     packages ? null,
     vam ? null,

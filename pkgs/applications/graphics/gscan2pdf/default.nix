@@ -38,7 +38,7 @@ perlPackages.buildPerlPackage rec {
       ImagePNGLibpng
       ImageSane
       SetIntSpan
-      PerlMagick
+      ImageMagick
       ConfigGeneral
       ListMoreUtils
       HTMLParser
