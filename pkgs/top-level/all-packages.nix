@@ -23320,6 +23320,8 @@ with pkgs;
 
   anup = callPackage ../applications/misc/anup {};
 
+  anytype = callPackage ../applications/misc/anytype { };
+
   ao = libfive;
 
   apache-directory-studio = callPackage ../applications/networking/apache-directory-studio {};
