@@ -1,5 +1,5 @@
 { stdenv, lib, makeDesktopItem, makeWrapper, patchelf, writeText
-, coreutils, gnugrep, which, git, unzip, libsecret, libnotify
+, coreutils, gnugrep, which, git, unzip, libsecret, libnotify, e2fsprogs
 , vmopts ? null
 }:
 
@@ -78,7 +78,7 @@ with stdenv; lib.makeOverridable mkDerivation rec {
       --prefix PATH : "$out/libexec/${name}:${lib.optionalString (stdenv.isDarwin) "${jdk}/jdk/Contents/Home/bin:"}${lib.makeBinPath [ jdk coreutils gnugrep which git ]}" \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath ([
         # Some internals want libstdc++.so.6
-        stdenv.cc.cc.lib libsecret
+        stdenv.cc.cc.lib libsecret e2fsprogs
         libnotify
       ] ++ extraLdPath)}" \
       --set JDK_HOME "$jdk" \
