@@ -121,6 +121,7 @@ broken-packages:
   - alto
   - alure
   - amazon-emailer
+  - amazonka-contrib-rds-utils
   - amazonka-s3-streaming
   - amazon-products
   - amby
@@ -180,6 +181,7 @@ broken-packages:
   - argparser
   - arguedit
   - arion
+  - arith-encode
   - armada
   - arpa
   - arpack
@@ -467,6 +469,7 @@ broken-packages:
   - butter
   - buttplug-hs-core
   - bv-sized
+  - byline
   - bytable
   - bytearray-parsing
   - bytestring-arbitrary
@@ -793,12 +796,14 @@ broken-packages:
   - consul-haskell
   - Consumer
   - containers-benchmark
+  - containers-unicode-symbols
   - containers-verified
   - ContArrow
   - content-store
   - ContextAlgebra
   - context-free-grammar
   - context-stack
+  - contiguous
   - contiguous-checked
   - continue
   - Contract
@@ -2183,6 +2188,7 @@ broken-packages:
   - HOpenCV
   - hopfield
   - hops
+  - hoq
   - ho-rewriting
   - horizon
   - horname
@@ -2276,6 +2282,7 @@ broken-packages:
   - hsmodetweaks
   - Hsmtlib
   - hsmtpclient
+  - hsnock
   - hs-nombre-generator
   - hsns
   - hsnsq
@@ -2388,6 +2395,7 @@ broken-packages:
   - hunspell-hs
   - hup
   - hurriyet
+  - husky
   - hutton
   - huttons-razor
   - hVOIDP
@@ -2654,6 +2662,7 @@ broken-packages:
   - lagrangian
   - lambda2js
   - lambdaBase
+  - lambdabot-social-plugins
   - lambdabot-utils
   - lambda-bridge
   - lambda-canvas
@@ -3009,6 +3018,7 @@ broken-packages:
   - miku
   - milena
   - mime-directory
+  - miniforth
   - minilens
   - minilight
   - minions
@@ -3025,6 +3035,7 @@ broken-packages:
   - mit-3qvpPyAi6mH
   - mix-arrows
   - mixpanel-client
+  - mkcabal
   - mltool
   - ml-w
   - mm2
@@ -3663,6 +3674,7 @@ broken-packages:
   - polysemy
   - polysemy-zoo
   - polytypeable
+  - pomaps
   - pomohoro
   - ponder
   - pong-server
@@ -3831,6 +3843,7 @@ broken-packages:
   - quarantimer
   - qudb
   - quenya-verb
+  - questioner
   - QuickAnnotate
   - quickbooks
   - quickcheck-property-comb
@@ -3899,6 +3912,7 @@ broken-packages:
   - read-bounded
   - read-ctags
   - read-io
+  - readline-statevar
   - readme-lhs
   - readshp
   - really-simple-xml-parser
@@ -4248,6 +4262,7 @@ broken-packages:
   - shadower
   - shake-bindist
   - shakebook
+  - shake-cabal
   - shake-cabal-build
   - shake-dhall
   - shake-extras
@@ -4605,6 +4620,7 @@ broken-packages:
   - svndump
   - swagger-petstore
   - swagger-test
+  - swearjure
   - swf
   - swift-lda
   - swiss-ephemeris
@@ -4919,6 +4935,7 @@ broken-packages:
   - twilio
   - twine
   - twirp
+  - twitter
   - twitter-feed
   - tx
   - txtblk
@@ -5377,6 +5394,7 @@ broken-packages:
   - yi-solarized
   - yi-spolsky
   - yoda
+  - Yogurt
   - yst
   - yu-core
   - yu-tool
