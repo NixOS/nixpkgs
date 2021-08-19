@@ -13,26 +13,9 @@
 self: super: let
   inherit (super.stdenvAdapters) makeStaticBinaries
                                  makeStaticLibraries
-                                 propagateBuildInputs;
-  inherit (super.lib) foldl optional flip id composeExtensions optionalAttrs optionalString;
-  inherit (super) makeSetupHook;
-
-  # Best effort static binaries. Will still be linked to libSystem,
-  # but more portable than Nix store binaries.
-  makeStaticDarwin = stdenv_: let stdenv = stdenv_.override {
-    # extraBuildInputs are dropped in cross.nix, but darwin still needs them
-    extraBuildInputs = [ self.buildPackages.darwin.CF ];
-  }; in stdenv // {
-    mkDerivation = args: stdenv.mkDerivation (args // {
-      NIX_CFLAGS_LINK = toString (args.NIX_CFLAGS_LINK or "")
-                      + optionalString (stdenv_.cc.isGNU or false) " -static-libgcc";
-      nativeBuildInputs = (args.nativeBuildInputs or []) ++ [ (makeSetupHook {
-        substitutions = {
-          libsystem = "${stdenv.cc.libc}/lib/libSystem.B.dylib";
-        };
-      } ../stdenv/darwin/portable-libsystem.sh) ];
-    });
-  };
+                                 propagateBuildInputs
+                                 makeStaticDarwin;
+  inherit (super.lib) foldl optional flip id composeExtensions;
 
   staticAdapters =
     optional super.stdenv.hostPlatform.isDarwin makeStaticDarwin
@@ -48,24 +31,8 @@ self: super: let
   ;
 
 in {
+  # Do not add new packages here! Instead use `stdenv.hostPlatform.isStatic` to
+  # write conditional code in the original package.
+
   stdenv = foldl (flip id) super.stdenv staticAdapters;
-
-  boost = super.boost.override {
-    # Don’t use new stdenv for boost because it doesn’t like the
-    # --disable-shared flag
-    stdenv = super.stdenv;
-  };
-
-  curl = super.curl.override {
-    # brotli doesn't build static (Mar. 2021)
-    brotliSupport = false;
-    # disable gss becuase of: undefined reference to `k5_bcmp'
-    gssSupport = false;
-  };
-
-  zlib = super.zlib.override {
-    # Don’t use new stdenv zlib because
-    # it doesn’t like the --disable-shared flag
-    stdenv = super.stdenv;
-  };
 }
