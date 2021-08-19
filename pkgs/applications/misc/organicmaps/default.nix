@@ -12,18 +12,19 @@
 , qtbase
 , qtsvg
 , libGLU
+, libGL
 , zlib
 }:
 
 mkDerivation rec {
   pname = "organicmaps";
-  version = "2021.07.08-3";
+  version = "2021.08.19-11-android";
 
   src = fetchFromGitHub {
     owner = "organicmaps";
     repo = "organicmaps";
     rev = version;
-    sha256 = "sha256-R53q+g7WZ//Wk5EGVZn1pyCU+C/DunhDKOIo8k37gdE=";
+    sha256 = "sha256-LNW6YBBr+QoTygZ1ITt5ug8z7iVKrZvUK+noOVxQiUE=";
     fetchSubmodules = true;
   };
 
@@ -46,6 +47,7 @@ mkDerivation rec {
     qtbase
     qtsvg
     libGLU
+    libGL
     zlib
   ];
 
@@ -53,6 +55,8 @@ mkDerivation rec {
   preConfigure = ''
     bash ./configure.sh
   '';
+
+  NIX_LDFLAGS = "-lGL";
 
   postInstall = ''
     install -Dm755 OMaps $out/bin/OMaps
