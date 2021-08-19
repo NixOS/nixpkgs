@@ -16927,6 +16927,21 @@ let
     };
   };
 
+  PerlCriticPulp = buildPerlPackage {
+    pname = "Perl-Critic-Pulp";
+    version = "99";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/K/KR/KRYDE/Perl-Critic-Pulp-99.tar.gz";
+      sha256 = "b8fda842fcbed74d210257c0a284b6dc7b1d0554a47a3de5d97e7d542e23e7fe";
+    };
+    propagatedBuildInputs = [ IOString ListMoreUtils PPI PerlCritic PodMinimumVersion ];
+    meta = {
+      homepage = "http://user42.tuxfamily.org/perl-critic-pulp/index.html";
+      description = "Some add-on policies for Perl::Critic";
+      license = lib.licenses.gpl3Plus;
+    };
+  };
+
   PerlDestructLevel = buildPerlPackage {
     pname = "Perl-Destruct-Level";
     version = "0.02";
