@@ -1,14 +1,18 @@
 { lib
 , buildPythonPackage
+, black
 , cloudpickle
 , cython
 , fetchFromGitHub
+, fetchPypi
 , fvcore
+, hydra-core
 , matplotlib
+, omegaconf
+, pybind11
 , pycocotools
 , pydot
 , pytest
-, pytestrunner
 , pytorch
 , pyyaml
 , tensorflow-tensorboard
@@ -18,21 +22,28 @@
 
 buildPythonPackage rec {
   name = "detectron2";
-  version = "0.2.1";
+  version = "0.5";
 
   src = fetchFromGitHub {
     owner = "facebookresearch";
-    repo = "detectron2";
+    repo = name;
     rev = "v${version}";
-    sha256 = "0icy7pxgj83bir26z6qfb3wxas45jii4agldwf70my2fngp23qpj";
+    sha256 = "15fvf38vaxmnf5yhnn0dk9smf9gmkbs3mp1jfpxzxh4s3r05fvgd";
   };
+
+  patchPhase = ''
+    substituteInPlace setup.py --replace "black==21.4b2" "black>=21.4b2"
+  '';
 
   nativeBuildInputs = [
     which
   ];
 
   propagatedBuildInputs = [
+    black
     cython
+    omegaconf
+    pybind11
     pyyaml
     pytorch
     pydot
@@ -42,13 +53,13 @@ buildPythonPackage rec {
     matplotlib
     pycocotools
     tensorflow-tensorboard
+    hydra-core
   ];
 
   doCheck = false;
 
   checkInputs = [
     pytest
-    pytestrunner
   ];
 
   meta = with lib; {
