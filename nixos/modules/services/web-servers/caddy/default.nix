@@ -4,7 +4,17 @@ with lib;
 
 let
   cfg = config.services.caddy;
-  configFile = pkgs.writeText "Caddyfile" cfg.config;
+  vhostToConfig = vhostName: vhostAttrs: ''
+    ${vhostName} ${builtins.concatStringsSep " " vhostAttrs.serverAliases} {
+      ${vhostAttrs.extraConfig}
+    }
+  '';
+  configFile = pkgs.writeText "Caddyfile" (builtins.concatStringsSep "\n"
+    ([ cfg.config ] ++ (mapAttrsToList vhostToConfig cfg.virtualHosts)));
+
+  formattedConfig = pkgs.runCommand "formattedCaddyFile" { } ''
+    ${cfg.package}/bin/caddy fmt ${configFile} > $out
+  '';
 
   tlsConfig = {
     apps.tls.automation.policies = [{
@@ -17,7 +27,7 @@ let
 
   adaptedConfig = pkgs.runCommand "caddy-config-adapted.json" { } ''
     ${cfg.package}/bin/caddy adapt \
-      --config ${configFile} --adapter ${cfg.adapter} > $out
+      --config ${formattedConfig} --adapter ${cfg.adapter} > $out
   '';
   tlsJSON = pkgs.writeText "tls.json" (builtins.toJSON tlsConfig);
 
@@ -67,6 +77,27 @@ in
         Caddy v2 supports multiple config formats via adapters (see <option>services.caddy.adapter</option>).
       '';
     };
+
+    virtualHosts = mkOption {
+      type = types.attrsOf (types.submodule (import ./vhost-options.nix {
+        inherit config lib;
+      }));
+      default = { };
+      example = literalExample ''
+        {
+          "hydra.example.com" = {
+            serverAliases = [ "www.hydra.example.com" ];
+            extraConfig = ''''''
+              encode gzip
+              log
+              root /srv/http
+            '''''';
+          };
+        };
+      '';
+      description = "Declarative vhost config";
+    };
+
 
     user = mkOption {
       default = "caddy";
