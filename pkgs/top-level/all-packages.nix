@@ -8025,6 +8025,8 @@ with pkgs;
 
   peco = callPackage ../tools/text/peco { };
 
+  pg_activity = callPackage ../development/tools/database/pg_activity { };
+
   pg_checksums = callPackage ../development/tools/database/pg_checksums { };
 
   pg_flame = callPackage ../tools/misc/pg_flame { };
