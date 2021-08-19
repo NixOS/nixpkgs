@@ -8,8 +8,4 @@ attrs:
     (lib.enableFeature kdeIntegration "kf5")
   ];
   patches = [ ../xdg-open-brief.patch ];
-  postPatch = attrs.postPatch + ''
-    substituteInPlace shell/source/unix/exec/shellexec.cxx \
-      --replace /usr/bin/xdg-open ${if kdeIntegration then "kde-open5" else "xdg-open"}
-  '';
 }
