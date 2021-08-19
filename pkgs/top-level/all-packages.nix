@@ -9296,6 +9296,8 @@ with pkgs;
 
   znapzend = callPackage ../tools/backup/znapzend { };
 
+  tar2ext4 = callPackage ../tools/filesystems/tar2ext4 { };
+
   targetcli = callPackage ../os-specific/linux/targetcli { };
 
   target-isns = callPackage ../os-specific/linux/target-isns { };
