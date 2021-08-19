@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "feedgenerator";
-  version = "1.9.1";
+  version = "1.9.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0m6fjnrx3sd0bm6pnbhxxx5ywlwqh8bx0lka386kj28mg3fmm2m2";
+    sha256 = "b06d6941e8fd6a2c9e71791079e86cbe7a3788c72244acc06f0593b49cda379b";
   };
 
   buildInputs = [ glibcLocales ];
