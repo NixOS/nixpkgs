@@ -36,12 +36,6 @@ buildPythonPackage rec {
     requests-mock
   ];
 
-  postPatch = ''
-  # The constraint was removed. No longer needed for > 14.0.0
-  # https://github.com/jupyterhub/oauthenticator/pull/431
-    substituteInPlace test-requirements.txt --replace "pyjwt>=1.7,<2.0" "pyjwt"
-  '';
-
   disabledTests = [
     # Test are outdated, https://github.com/jupyterhub/oauthenticator/issues/432
     "test_azuread"
