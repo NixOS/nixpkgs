@@ -5041,6 +5041,8 @@ with pkgs;
 
   ftop = callPackage ../os-specific/linux/ftop { };
 
+  ftxui = callPackage ../development/libraries/ftxui { };
+
   fsarchiver = callPackage ../tools/archivers/fsarchiver { };
 
   fsfs = callPackage ../tools/filesystems/fsfs { };
