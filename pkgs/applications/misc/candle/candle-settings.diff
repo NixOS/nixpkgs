@@ -1,7 +1,8 @@
 --- a/frmmain.cpp	1969-12-31 19:00:01.000000000 -0500
 +++ b/frmmain.cpp	2021-08-16 22:17:17.502429125 -0400
-@@ -88,1 +88,3 @@
+@@ -88,1 +88,4 @@
 -    m_settingsFileName = qApp->applicationDirPath() + "/settings.ini";
-+    m_settingsFileName = (getenv("HOME") ? getenv("HOME") : "/tmp");
-+    m_settingsFileName.append("/.config/candle/settings.ini");
-+    qDebug() << "settings file:" << m_settingsFileName;
++    // follow XDG standards
++    m_settingsFileName = getenv("XDG_CONFIG_HOME") ? getenv("XDG_CONFIG_HOME") : getenv("HOME") ? getenv("HOME") + QString("/.config") : "/tmp";
++    m_settingsFileName.append("/candle/settings.ini");
++    qDebug() << "Settings file:" << m_settingsFileName;
