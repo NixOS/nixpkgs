@@ -2959,6 +2959,12 @@
     githubId = 50854;
     name = "edef";
   };
+  edlimerkaj = {
+    name = "Edli Merkaj";
+    email = "edli.merkaj@identinet.io";
+    github = "edlimerkaj";
+    githubId = 71988351;
+  };
   edibopp = {
     email = "eduard.bopp@aepsil0n.de";
     github = "edibopp";
