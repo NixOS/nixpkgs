@@ -8709,12 +8709,12 @@ final: prev:
 
   vim-sayonara = buildVimPluginFrom2Nix {
     pname = "vim-sayonara";
-    version = "2017-03-13";
+    version = "2021-08-12";
     src = fetchFromGitHub {
       owner = "mhinz";
       repo = "vim-sayonara";
-      rev = "357135ce127581fab2c0caf45d4b3fec4603aa77";
-      sha256 = "0m4pbpqq7m4rbqj1sxzx3r25znm9m5df6z6kndc6x5c1p27a63pi";
+      rev = "7e774f58c5865d9c10d40396850b35ab95af17c5";
+      sha256 = "0m22zjby54gvpg0s7qbpxdvjx6bcf3xdb58yc90bmf6pxklllc20";
     };
     meta.homepage = "https://github.com/mhinz/vim-sayonara/";
   };

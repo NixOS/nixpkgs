@@ -415,7 +415,7 @@ mhartington/oceanic-next
 mhinz/vim-crates
 mhinz/vim-grepper
 mhinz/vim-janah
-mhinz/vim-sayonara
+mhinz/vim-sayonara@7e774f58c5865d9c10d40396850b35ab95af17c5
 mhinz/vim-signify
 mhinz/vim-startify
 michaeljsmith/vim-indent-object
