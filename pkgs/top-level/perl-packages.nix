@@ -16913,6 +16913,22 @@ let
     };
   };
 
+  PerlCriticCommunity = buildPerlModule {
+    pname = "Perl-Critic-Community";
+    version = "1.0.0";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DB/DBOOK/Perl-Critic-Community-v1.0.0.tar.gz";
+      sha256 = "311b775da4193e9de94cf5225e993cc54dd096ae1e7ef60738cdae1d9b8854e7";
+    };
+    buildInputs = [ ModuleBuildTiny ];
+    propagatedBuildInputs = [ PPI PathTiny PerlCritic PerlCriticPolicyVariablesProhibitLoopOnHash PerlCriticPulp ];
+    meta = {
+      homepage = "https://github.com/Grinnz/Perl-Critic-Freenode";
+      description = "Community-inspired Perl::Critic policies";
+      license = lib.licenses.artistic2;
+    };
+  };
+
   PerlCriticMoose = buildPerlPackage rec {
     pname = "Perl-Critic-Moose";
     version = "1.05";
