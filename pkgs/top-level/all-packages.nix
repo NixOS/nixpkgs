@@ -17485,6 +17485,8 @@ with pkgs;
 
   libvisio = callPackage ../development/libraries/libvisio { };
 
+  libvisio2svg = callPackage ../development/libraries/libvisio2svg { };
+
   libvisual = callPackage ../development/libraries/libvisual { };
 
   libvmaf = callPackage ../development/libraries/libvmaf { };
