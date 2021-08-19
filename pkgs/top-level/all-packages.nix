@@ -4197,10 +4197,6 @@ with pkgs;
     pythonPackages = python3Packages;
     libtorrent-rasterbar = libtorrent-rasterbar-1_2_x.override { python = python3; };
   };
-  deluge-1_x = callPackage ../applications/networking/p2p/deluge/1.nix {
-    pythonPackages = python2Packages;
-    libtorrent-rasterbar = libtorrent-rasterbar-1_1_x;
-  };
   deluge = deluge-2_x;
 
   desktop-file-utils = callPackage ../tools/misc/desktop-file-utils { };
@@ -4256,7 +4252,7 @@ with pkgs;
   };
 
   diffoscope = diffoscopeMinimal.override {
-    enableBloat = true;
+    enableBloat = !stdenv.isDarwin;
   };
 
   diffr = callPackage ../tools/text/diffr {
@@ -9300,6 +9296,8 @@ with pkgs;
 
   znapzend = callPackage ../tools/backup/znapzend { };
 
+  tar2ext4 = callPackage ../tools/filesystems/tar2ext4 { };
+
   targetcli = callPackage ../os-specific/linux/targetcli { };
 
   target-isns = callPackage ../os-specific/linux/target-isns { };
@@ -12855,6 +12853,8 @@ with pkgs;
   pythonDocs = recurseIntoAttrs (callPackage ../development/interpreters/python/cpython/docs {});
 
   pypi2nix = callPackage ../development/tools/pypi2nix {};
+
+  pypi-mirror = callPackage ../development/tools/pypi-mirror {};
 
   setupcfg2nix = python3Packages.callPackage ../development/tools/setupcfg2nix {};
 
