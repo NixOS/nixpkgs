@@ -14,6 +14,7 @@
 , libXp
 , libXpm
 , libXt
+, pkg-config
 }:
 
 stdenv.mkDerivation rec {
@@ -24,6 +25,7 @@ stdenv.mkDerivation rec {
     sha256 = "751ab9917ed0f6232073c193aba74046037e185d73b77bab0f5af3e3ff1da2ac";
   };
 
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     coreutils
     motif
@@ -44,8 +46,6 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = [ "-Wno-format-security" ]
     ++ lib.optionals stdenv.cc.isClang [ "-Wno-implicit-function-declaration" "-O1" ];
-
-  preConfigure = ''configureFlags="$configureFlags --enable-grace-home=$out"'';
 
   configureFlags = [
     "--disable-debug"
