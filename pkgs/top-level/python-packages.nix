@@ -5480,6 +5480,8 @@ in {
 
   plaster-pastedeploy = callPackage ../development/python-modules/plaster-pastedeploy { };
 
+  platformdirs = callPackage ../development/python-modules/platformdirs { };
+
   playsound = callPackage ../development/python-modules/playsound { };
 
   plexapi = callPackage ../development/python-modules/plexapi { };
