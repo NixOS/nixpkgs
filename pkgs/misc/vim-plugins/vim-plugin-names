@@ -20,6 +20,7 @@ andrep/vimacs
 andreshazard/vim-logreview
 AndrewRadev/sideways.vim@main
 AndrewRadev/splitjoin.vim@main
+AndrewRadev/tagalong.vim
 andsild/peskcolor.vim
 andviro/flake8-vim
 andweeb/presence.nvim@main
