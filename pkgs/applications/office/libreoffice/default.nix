@@ -63,8 +63,6 @@ in (mkDrv rec {
     "-fno-visibility-inlines-hidden" # https://bugs.documentfoundation.org/show_bug.cgi?id=78174#c10
   ];
 
-  patches = [ ./xdg-open-brief.patch ];
-
   tarballPath = "external/tarballs";
 
   postUnpack = ''
@@ -92,9 +90,6 @@ in (mkDrv rec {
     libs = list:
       lib.concatMapStringsSep " " (e: "-L${lib.getLib e}/lib") list;
   in ''
-    substituteInPlace shell/source/unix/exec/shellexec.cxx \
-      --replace /usr/bin/xdg-open ${if kdeIntegration then "kde-open5" else "xdg-open"}
-
     # configure checks for header 'gpgme++/gpgmepp_version.h',
     # and if it is found (no matter where) uses a hardcoded path
     # in what presumably is an effort to make it possible to write
