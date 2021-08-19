@@ -12316,4 +12316,10 @@
     github = "zupo";
     githubId = 311580;
   };
+  rski = {
+    name = "rski";
+    email = "rom.skiad+nix@gmail.com";
+    github = "rski";
+    githubId = 2960312;
+  };
 }

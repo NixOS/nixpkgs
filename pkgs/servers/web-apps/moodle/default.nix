@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, writeText, plugins ? [ ] }:
 
 let
-  version = "3.11";
+  version = "3.11.2";
   stableVersion = lib.concatStrings (lib.take 2 (lib.splitVersion version));
 
 in stdenv.mkDerivation rec {
@@ -11,7 +11,7 @@ in stdenv.mkDerivation rec {
   src = fetchurl {
     url =
       "https://download.moodle.org/stable${stableVersion}/${pname}-${version}.tgz";
-    sha256 = "sha256-rZKY26ZPvubSr6nZ+Kguj1uKoEJbF3pEIKjjh6weyYo";
+    sha256 = "sha256-owe/8CVz7+uBrHJQDN4csWVcdk49AvT1ip88lAe/tKg=";
   };
 
   phpConfig = writeText "config.php" ''
