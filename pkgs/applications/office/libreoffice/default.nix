@@ -90,6 +90,9 @@ in (mkDrv rec {
     libs = list:
       lib.concatMapStringsSep " " (e: "-L${lib.getLib e}/lib") list;
   in ''
+    substituteInPlace shell/source/unix/exec/shellexec.cxx \
+      --replace /usr/bin/xdg-open ${if kdeIntegration then "kde-open5" else "xdg-open"}
+
     # configure checks for header 'gpgme++/gpgmepp_version.h',
     # and if it is found (no matter where) uses a hardcoded path
     # in what presumably is an effort to make it possible to write
