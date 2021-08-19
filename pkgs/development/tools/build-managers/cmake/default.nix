@@ -2,6 +2,7 @@
 , bzip2, curlMinimal, expat, libarchive, xz, zlib, libuv, rhash
 , buildPackages
 # darwin attributes
+, SystemConfiguration
 , ps
 , isBootstrap ? false
 , useSharedLibraries ? (!isBootstrap && !stdenv.isCygwin)
@@ -16,12 +17,11 @@ stdenv.mkDerivation rec {
     + lib.optionalString isBootstrap "-boot"
     + lib.optionalString useNcurses "-cursesUI"
     + lib.optionalString withQt5 "-qt5UI";
-  version = "3.19.7";
+  version = "3.21.1";
 
   src = fetchurl {
     url = "https://cmake.org/files/v${lib.versions.majorMinor version}/cmake-${version}.tar.gz";
-    # compare with https://cmake.org/files/v${lib.versions.majorMinor version}/cmake-${version}-SHA-256.txt
-    sha256 = "sha256-WKFfDVagr8zDzFNxI0/Oc/zGyPnb13XYmOUQuDF1WI4=";
+    sha256 = "sha256-+sORUXHU3/JZE5ddcS925prvRL9zi6e5dnk6RYtM/tQ=";
   };
 
   patches = [
@@ -34,7 +34,9 @@ stdenv.mkDerivation rec {
     # Derived from https://github.com/libuv/libuv/commit/1a5d4f08238dd532c3718e210078de1186a5920d
     ./libuv-application-services.patch
 
-  ] ++ lib.optional stdenv.isCygwin ./3.2.2-cygwin.patch;
+  ] ++ lib.optional stdenv.isCygwin ./3.2.2-cygwin.patch
+  # Derived from https://github.com/curl/curl/commit/31f631a142d855f069242f3e0c643beec25d1b51
+  ++ lib.optional (stdenv.isDarwin && isBootstrap) ./remove-systemconfiguration-dep.patch;
 
   outputs = [ "out" ]
     ++ lib.optionals buildDocs [ "man" "info" ];
@@ -51,7 +53,8 @@ stdenv.mkDerivation rec {
   buildInputs = lib.optionals useSharedLibraries [ bzip2 curlMinimal expat libarchive xz zlib libuv rhash ]
     ++ lib.optional useOpenSSL openssl
     ++ lib.optional useNcurses ncurses
-    ++ lib.optional withQt5 qtbase;
+    ++ lib.optional withQt5 qtbase
+    ++ lib.optional (stdenv.isDarwin && !isBootstrap) SystemConfiguration;
 
   propagatedBuildInputs = lib.optional stdenv.isDarwin ps;
 
