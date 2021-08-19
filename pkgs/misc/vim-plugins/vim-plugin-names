@@ -847,6 +847,7 @@ wincent/command-t
 wincent/ferret
 windwp/nvim-autopairs
 winston0410/cmd-parser.nvim
+winston0410/range-highlight.nvim
 wlangstroth/vim-racket
 wsdjeg/vim-fetch
 xavierd/clang_complete

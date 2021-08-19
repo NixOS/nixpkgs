@@ -4631,6 +4631,18 @@ final: prev:
     meta.homepage = "https://github.com/vim-scripts/random.vim/";
   };
 
+  range-highlight-nvim = buildVimPluginFrom2Nix {
+    pname = "range-highlight-nvim";
+    version = "2021-08-03";
+    src = fetchFromGitHub {
+      owner = "winston0410";
+      repo = "range-highlight.nvim";
+      rev = "8b5e8ccb3460b2c3675f4639b9f54e64eaab36d9";
+      sha256 = "1yswni0p1w7ja6cddxyd3m4hi8gsdyh8hm8rlk878b096maxkgw1";
+    };
+    meta.homepage = "https://github.com/winston0410/range-highlight.nvim/";
+  };
+
   ranger-vim = buildVimPluginFrom2Nix {
     pname = "ranger-vim";
     version = "2021-04-25";
