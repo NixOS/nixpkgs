@@ -5481,8 +5481,8 @@ final: prev:
     src = fetchFromGitHub {
       owner = "nvim-telescope";
       repo = "telescope.nvim";
-      rev = "615efe666be25117199ec8c9d475b2ef86ac7015";
-      sha256 = "0wbc1pwrkk5x6fm8zv8s0261ky28w70hjnjzl8m77kl2ib0ld1as";
+      rev = "d6d28dbe324de9826a579155076873888169ba0f";
+      sha256 = "0gxp54b5p1hbaigm7xq0c7dcnq1dbncp80fl8nrmwax34r6rv4d1";
     };
     meta.homepage = "https://github.com/nvim-telescope/telescope.nvim/";
   };
