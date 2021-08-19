@@ -3314,7 +3314,6 @@ broken-packages:
   - OGL
   - ogmarkup
   - oi
-  - oidc-client
   - om-actor
   - omaketex
   - ombra
