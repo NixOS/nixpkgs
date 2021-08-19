@@ -3290,6 +3290,8 @@ with pkgs;
 
   psstop = callPackage ../tools/system/psstop { };
 
+  psst = callPackage ../applications/audio/psst { };
+
   precice = callPackage ../development/libraries/precice { };
 
   pueue = callPackage ../applications/misc/pueue {
