@@ -69,7 +69,7 @@ let
     BUILD_SPHINX_HTML = NO
     BUILD_SPHINX_PDF = NO
   '' + lib.optionalString (!enableProfiledLibs) ''
-    GhcLibWays = "v"
+    GhcLibWays = ${if targetPlatform.isiOS then "v" else "v dyn"}
   '' + lib.optionalString enableRelocatedStaticLibs ''
     GhcLibHcOpts += -fPIC
     GhcRtsHcOpts += -fPIC
