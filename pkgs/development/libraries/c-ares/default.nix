@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
     sha256 = "0h7wjfnk2092glqcp9mqaax7xx0s13m501z1gi0gsjl2vvvd0gfp";
   };
 
+  enableParallelBuilding = true;
+
   meta = with lib; {
     description = "A C library for asynchronous DNS requests";
     homepage = "https://c-ares.haxx.se";
