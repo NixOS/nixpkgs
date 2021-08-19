@@ -63,8 +63,6 @@ in (mkDrv rec {
     "-fno-visibility-inlines-hidden" # https://bugs.documentfoundation.org/show_bug.cgi?id=78174#c10
   ];
 
-  patches = [ ./xdg-open-brief.patch ];
-
   tarballPath = "external/tarballs";
 
   postUnpack = ''
