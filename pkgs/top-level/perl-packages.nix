@@ -16927,6 +16927,20 @@ let
     };
   };
 
+  PerlCriticPolicyVariablesProhibitLoopOnHash = buildPerlPackage {
+    pname = "Perl-Critic-Policy-Variables-ProhibitLoopOnHash";
+    version = "0.008";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/X/XS/XSAWYERX/Perl-Critic-Policy-Variables-ProhibitLoopOnHash-0.008.tar.gz";
+      sha256 = "12f5f0be96ea1bdc7828058577bd1c5c63ca23c17fac9c3709452b3dff5b84e0";
+    };
+    propagatedBuildInputs = [ PerlCritic ];
+    meta = {
+      description = "Don't write loops on hashes, only on keys and values of hashes";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   PerlCriticPulp = buildPerlPackage {
     pname = "Perl-Critic-Pulp";
     version = "99";
