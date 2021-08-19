@@ -19,11 +19,15 @@ stdenv.mkDerivation rec {
   hardeningDisable = lib.optional stdenv.hostPlatform.isStatic "pie";
 
   configurePhase = ''
+  runHook preConfigure
+
   make -f configure.make Makefile.config \
     "OCAMLBUILD_PREFIX=$out" \
     "OCAMLBUILD_BINDIR=$out/bin" \
     "OCAMLBUILD_MANDIR=$out/share/man" \
     "OCAMLBUILD_LIBDIR=$OCAMLFIND_DESTDIR"
+
+  runHook postConfigure
   '';
 
   meta = with lib; {
