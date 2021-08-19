@@ -70,7 +70,7 @@
   ./hardware/tuxedo-keyboard.nix
   ./hardware/ubertooth.nix
   ./hardware/usb-wwan.nix
-  ./hardware/onlykey.nix
+  ./hardware/onlykey/default.nix
   ./hardware/opentabletdriver.nix
   ./hardware/sata.nix
   ./hardware/wooting.nix
