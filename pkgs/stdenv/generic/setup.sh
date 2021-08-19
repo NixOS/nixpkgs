@@ -1,7 +1,7 @@
 set -eu
 set -o pipefail
 
-if [ -n "${BASH_VERSINFO-}" ] && [ "${BASH_VERSINFO-}" -lt 4 ]; then
+if [[ -n "${BASH_VERSINFO-}" && "${BASH_VERSINFO-}" -lt 4 ]]; then
     echo "Detected Bash version that isn't supported by Nixpkgs (${BASH_VERSION})"
     echo "Please install Bash 4 or greater to continue."
     exit 1
@@ -648,11 +648,11 @@ export NIX_BUILD_CORES
 
 # Prevent SSL libraries from using certificates in /etc/ssl, unless set explicitly.
 # Leave it in impure shells for convenience.
-if [ -z "${NIX_SSL_CERT_FILE:-}" ] && [ "${IN_NIX_SHELL:-}" != "impure" ]; then
+if [[ -z "${NIX_SSL_CERT_FILE:-}" && "${IN_NIX_SHELL:-}" != "impure" ]]; then
   export NIX_SSL_CERT_FILE=/no-cert-file.crt
 fi
 # Another variant left for compatibility.
-if [ -z "${SSL_CERT_FILE:-}" ] && [ "${IN_NIX_SHELL:-}" != "impure" ]; then
+if [[ -z "${SSL_CERT_FILE:-}" && "${IN_NIX_SHELL:-}" != "impure" ]]; then
   export SSL_CERT_FILE=/no-cert-file.crt
 fi
 
