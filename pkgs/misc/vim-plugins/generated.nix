@@ -7096,6 +7096,18 @@ final: prev:
     meta.homepage = "https://github.com/tpope/vim-fugitive/";
   };
 
+  vim-gh-line = buildVimPluginFrom2Nix {
+    pname = "vim-gh-line";
+    version = "2021-03-25";
+    src = fetchFromGitHub {
+      owner = "ruanyl";
+      repo = "vim-gh-line";
+      rev = "4ca32f57f5f95cd3436c3f9ee7657a9b9c0ca763";
+      sha256 = "0pfw8jvmxwhdvjcfypiqk2jlk5plqbigjmykbqs1zvaznc2b7z5v";
+    };
+    meta.homepage = "https://github.com/ruanyl/vim-gh-line/";
+  };
+
   vim-ghost = buildVimPluginFrom2Nix {
     pname = "vim-ghost";
     version = "2020-06-19";
