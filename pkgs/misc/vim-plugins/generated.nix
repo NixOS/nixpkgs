@@ -5235,6 +5235,18 @@ final: prev:
     meta.homepage = "https://github.com/nvim-telescope/telescope-fzy-native.nvim/";
   };
 
+  telescope-project-nvim = buildVimPluginFrom2Nix {
+    pname = "telescope-project-nvim";
+    version = "2021-08-03";
+    src = fetchFromGitHub {
+      owner = "nvim-telescope";
+      repo = "telescope-project.nvim";
+      rev = "6f63c15efc4994e54c3240db8ed4089c926083d8";
+      sha256 = "0mda6cak1qqa5h9j5xng8wq81aqfypizmxpfdfqhzjsswwpa9bjy";
+    };
+    meta.homepage = "https://github.com/nvim-telescope/telescope-project.nvim/";
+  };
+
   telescope-symbols-nvim = buildVimPluginFrom2Nix {
     pname = "telescope-symbols-nvim";
     version = "2021-08-07";
