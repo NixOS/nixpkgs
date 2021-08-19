@@ -2542,6 +2542,18 @@ final: prev:
     meta.homepage = "https://github.com/JuliaEditorSupport/julia-vim/";
   };
 
+  kommentary = buildVimPluginFrom2Nix {
+    pname = "kommentary";
+    version = "2021-08-17";
+    src = fetchFromGitHub {
+      owner = "b3nj5m1n";
+      repo = "kommentary";
+      rev = "a5d7cd90059ad99b5e80a1d40d655756d86b5dad";
+      sha256 = "1bgi9dzzlw09llyq09jgnyg7n64s1nk5s5knlkhijrhsw0jmxjkk";
+    };
+    meta.homepage = "https://github.com/b3nj5m1n/kommentary/";
+  };
+
   kotlin-vim = buildVimPluginFrom2Nix {
     pname = "kotlin-vim";
     version = "2021-07-03";
@@ -5425,6 +5437,18 @@ final: prev:
       fetchSubmodules = true;
     };
     meta.homepage = "https://github.com/nvim-telescope/telescope-fzy-native.nvim/";
+  };
+
+  telescope-project-nvim = buildVimPluginFrom2Nix {
+    pname = "telescope-project-nvim";
+    version = "2021-08-03";
+    src = fetchFromGitHub {
+      owner = "nvim-telescope";
+      repo = "telescope-project.nvim";
+      rev = "6f63c15efc4994e54c3240db8ed4089c926083d8";
+      sha256 = "0mda6cak1qqa5h9j5xng8wq81aqfypizmxpfdfqhzjsswwpa9bjy";
+    };
+    meta.homepage = "https://github.com/nvim-telescope/telescope-project.nvim/";
   };
 
   telescope-symbols-nvim = buildVimPluginFrom2Nix {
