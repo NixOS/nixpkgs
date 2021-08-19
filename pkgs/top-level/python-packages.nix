@@ -5540,6 +5540,8 @@ in {
 
   polib = callPackage ../development/python-modules/polib { };
 
+  policy-sentry = callPackage ../development/python-modules/policy-sentry { };
+
   policyuniverse = callPackage ../development/python-modules/policyuniverse { };
 
   polyline = callPackage ../development/python-modules/polyline { };
