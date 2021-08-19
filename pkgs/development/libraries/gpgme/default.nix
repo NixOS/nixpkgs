@@ -21,14 +21,8 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    (fetchpatch { # gpg: Send --with-keygrip when listing keys
-      name = "c4cf527ea227edb468a84bf9b8ce996807bd6992.patch";
-      urls = [
-        "https://files.gnupg.net/file/data/2ufcg7ny5jdnv7hmewb4/PHID-FILE-7iwvryn2btti6txr3bsz/file"
-        "http://git.gnupg.org/cgi-bin/gitweb.cgi?p=gpgme.git;a=patch;h=c4cf527ea227edb468a84bf9b8ce996807bd6992"
-      ];
-      sha256 = "0y0b0lb2nq5p9kx13b59b2jaz157mvflliw1qdvg1v1hynvgb8m4";
-    })
+    # https://dev.gnupg.org/rMc4cf527ea227edb468a84bf9b8ce996807bd6992
+    ./fix_gpg_list_keys.diff
     # https://lists.gnupg.org/pipermail/gnupg-devel/2020-April/034591.html
     (fetchpatch {
       name = "0001-Fix-python-tests-on-non-Linux.patch";
