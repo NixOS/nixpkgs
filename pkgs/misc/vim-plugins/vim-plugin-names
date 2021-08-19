@@ -610,6 +610,7 @@ RRethy/nvim-base16
 RRethy/vim-hexokinase
 RRethy/vim-illuminate
 rstacruz/vim-closer
+ruanyl/vim-gh-line
 ruifm/gitlinker.nvim
 rust-lang/rust.vim
 ryanoasis/vim-devicons
@@ -811,6 +812,7 @@ vim-scripts/ShowMultiBase
 vim-scripts/tabmerge
 vim-scripts/taglist.vim
 vim-scripts/utl.vim
+vim-scripts/vis
 vim-scripts/wombat256.vim
 vim-scripts/YankRing.vim
 vim-syntastic/syntastic
