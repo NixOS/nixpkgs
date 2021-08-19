@@ -1,6 +1,7 @@
 { callPackage }:
 {
   "arcmenu@arcmenu.com" = callPackage ./arcmenu { };
+  "bluetooth-battery@michalw.github.com" = callPackage ./bluetooth-battery-indicator { };
   "caffeine@patapon.info" = callPackage ./caffeine { };
   "clock-override@gnomeshell.kryogenix.org" = callPackage ./clock-override { };
   "dash-to-dock@micxgx.gmail.com" = callPackage ./dash-to-dock { };

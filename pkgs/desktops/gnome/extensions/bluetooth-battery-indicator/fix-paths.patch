@@ -1,0 +1,17 @@
+--- a/constants.js
++++ b/constants.js
+@@ -1,3 +1,3 @@
+ var GETTEXT_DOMAIN = 'bluetooth_battery_indicator';
+ var SETTINGS_ID = 'org.gnome.shell.extensions.bluetooth_battery_indicator';
+-var SCRIPT_PATH = 'Bluetooth_Headset_Battery_Level/bluetooth_battery.py';
++var SCRIPT_PATH = '@bluetooth_battery@';
+--- a/utils.js
++++ b/utils.js
+@@ -36,6 +36,7 @@ function addSignalsHelperMethods(prototype) {
+ }
+ 
+ function getPythonExec() {
++    return '@python@';
+ 	//return ['python', 'python3', 'python2'].find(cmd => GLib.find_program_in_path(cmd));
+ 	return ['python3'].find(cmd => GLib.find_program_in_path(cmd)); //Hotfix for no percentage shown
+ }
