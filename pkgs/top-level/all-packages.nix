@@ -8549,6 +8549,8 @@ with pkgs;
   inherit (callPackage ../development/misc/resholve { })
     resholve resholvePackage;
 
+  restool = callPackage ../os-specific/linux/restool {};
+
   reuse = callPackage ../tools/package-management/reuse { };
 
   rewritefs = callPackage ../os-specific/linux/rewritefs { };
