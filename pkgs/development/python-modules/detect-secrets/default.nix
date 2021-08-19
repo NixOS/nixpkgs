@@ -1,5 +1,5 @@
 { lib
-, buildPythonApplication
+, buildPythonPackage
 , fetchFromGitHub
 , gibberish-detector
 , isPy27
@@ -12,7 +12,7 @@
 , unidiff
 }:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "detect-secrets";
   version = "1.1.0";
   disabled = isPy27;
@@ -70,6 +70,6 @@ buildPythonApplication rec {
     description = "An enterprise friendly way of detecting and preventing secrets in code";
     homepage = "https://github.com/Yelp/detect-secrets";
     license = licenses.asl20;
-    maintainers = [ maintainers.marsam ];
+    maintainers = with maintainers; [ marsam ];
   };
 }
