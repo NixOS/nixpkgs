@@ -20,41 +20,12 @@ let
     inherit (stdenv.hostPlatform) system;
   });
 
-  # extract the nw dependency out of the computed
-  nwDependency = builtins.head (builtins.filter (d: d.packageName == "nw") onlykey.dependencies);
-
-  # In order to satisfy nw's installation of nwjs, create a directory that
-  # includes the tarball or zipfile and place it at a location the installation
-  # script will look for it.
-  #
-  #   Reference:
-  #   https://github.com/nwjs/npm-installer/blob/4e65f25c5c1f119ab2c79aefea1020db7be38bc7/scripts/install.js#L37-L52
-  #
-  nwjsBase =
-    let
-      name =
-        if stdenv.isLinux then "nwjs-v${nwDependency.version}-linux-x64"
-        else if stdenv.isDarwin then "nwjs-v${nwDependency.version}-osx-x64"
-        else throw "platform not supported";
-
-      command =
-        if stdenv.isLinux then "${pkgs.gnutar}/bin/tar --dereference -czf $out/${nwDependency.version}/${name}.tar.gz ${name}"
-        else if stdenv.isDarwin then ""
-        else throw "platform not supported";
-    in
-    runCommand "nwjs-base" { } ''
-      mkdir -p $out/${nwDependency.version}
-      ln -s ${pkgs.nwjs}/share/nwjs ${name}
-      ${command}
-    '';
-
   self = super // {
     "${onlykeyPkg}" = super."${onlykeyPkg}".override (attrs: {
-      # See explanation above regarding the nwjsBase.
-      NWJS_URLBASE = "file://${nwjsBase}/";
-
-      # this is needed to allow us to parse the version of the nw dependency
-      passthru = { inherit (attrs) dependencies; };
+      # when installing packages, nw tries to download nwjs in its postInstall
+      # script. There are currently no other postInstall scripts, so this
+      # should not break other things.
+      npmFlags = attrs.npmFlags or "" + " --ignore-scripts";
 
       # this package requires to be built in order to become runnable.
       postInstall = ''
