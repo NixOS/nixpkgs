@@ -971,8 +971,6 @@ with pkgs;
 
   logseq = callPackage ../applications/misc/logseq { };
 
-  lua-format = callPackage ../tools/misc/lua-format { };
-
   lxterminal = callPackage ../applications/terminal-emulators/lxterminal { };
 
   microcom = callPackage ../applications/terminal-emulators/microcom { };
@@ -7974,6 +7972,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) IOKit;
   };
 
+  otpauth = callPackage ../tools/security/otpauth { };
+
   pcsclite = callPackage ../tools/security/pcsclite {
     inherit (darwin.apple_sdk.frameworks) IOKit;
   };
@@ -9323,6 +9323,8 @@ with pkgs;
   tcptraceroute = callPackage ../tools/networking/tcptraceroute { };
 
   tboot = callPackage ../tools/security/tboot { };
+
+  tagutil = callPackage ../applications/audio/tagutil { };
 
   tcpdump = callPackage ../tools/networking/tcpdump { };
 
@@ -22853,6 +22855,8 @@ with pkgs;
   antiword = callPackage ../applications/office/antiword {};
 
   anup = callPackage ../applications/misc/anup {};
+
+  anytype = callPackage ../applications/misc/anytype { };
 
   ao = libfive;
 
