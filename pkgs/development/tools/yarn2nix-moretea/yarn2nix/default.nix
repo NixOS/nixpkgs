@@ -105,7 +105,8 @@ in rec {
 
     in stdenv.mkDerivation {
       inherit preBuild postBuild name;
-      phases = ["configurePhase" "buildPhase"];
+      dontUnpack = true;
+      dontInstall = true;
       buildInputs = [ yarn nodejs git ] ++ extraBuildInputs;
 
       configurePhase = ''
