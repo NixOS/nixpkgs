@@ -1539,6 +1539,8 @@ in {
 
   cloudsmith-api = callPackage ../development/python-modules/cloudsmith-api { };
 
+  cloudsplaining = callPackage ../development/python-modules/cloudsplaining { };
+
   clustershell = callPackage ../development/python-modules/clustershell { };
 
   clvm = callPackage ../development/python-modules/clvm { };
