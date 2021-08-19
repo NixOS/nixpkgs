@@ -2,14 +2,14 @@
 
 buildPythonPackage rec {
   pname = "unidiff";
-  version = "0.6.0";
+  version = "0.7.0";
 
   # PyPI tarball doesn't ship tests
   src = fetchFromGitHub {
     owner = "matiasb";
     repo = "python-unidiff";
     rev = "v${version}";
-    sha256 = "0farwkw0nbb5h4369pq3i6pp4047hav0h88ba55rzz5k7mr25rgi";
+    sha256 = "1s1l327jqm0r35pn9c83pbw15k66x8klw1lf45xqp8lrdc15cqv5";
   };
 
   meta = with lib; {
