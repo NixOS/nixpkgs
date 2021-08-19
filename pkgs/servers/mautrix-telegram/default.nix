@@ -23,14 +23,14 @@ let
 
 in python.pkgs.buildPythonPackage rec {
   pname = "mautrix-telegram";
-  version = "unstable-2021-08-12";
+  version = "0.10.1";
   disabled = python.pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "tulir";
     repo = pname;
-    rev = "ec64c83cb01791525a39f937f3b847368021dce8";
-    sha256 = "0rg4f4abdddhhf1xpz74y4468dv3mnm7k8nj161r1xszrk9f2n76";
+    rev = "v${version}";
+    sha256 = "sha256-1Dmc7WRlT2ivGkdrGDC1b44DE0ovQKfUR0gDiQE4h5c=";
   };
 
   patches = [ ./0001-Re-add-entrypoint.patch ./0002-Don-t-depend-on-pytest-runner.patch ];

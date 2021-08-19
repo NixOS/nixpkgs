@@ -133,7 +133,7 @@
 , "indium"
 , "insect"
 , "ionic"
-, {"iosevka": "https://github.com/be5invis/Iosevka/archive/v7.2.4.tar.gz"}
+, {"iosevka": "https://github.com/be5invis/Iosevka/archive/v10.0.0.tar.gz"}
 , "jake"
 , "javascript-typescript-langserver"
 , "joplin"

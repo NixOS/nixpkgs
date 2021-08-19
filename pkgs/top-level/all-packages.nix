@@ -5041,6 +5041,8 @@ with pkgs;
 
   ftop = callPackage ../os-specific/linux/ftop { };
 
+  ftxui = callPackage ../development/libraries/ftxui { };
+
   fsarchiver = callPackage ../tools/archivers/fsarchiver { };
 
   fsfs = callPackage ../tools/filesystems/fsfs { };
@@ -16756,6 +16758,8 @@ with pkgs;
 
   libechonest = callPackage ../development/libraries/libechonest { };
 
+  libemf2svg = callPackage ../development/libraries/libemf2svg { };
+
   libev = callPackage ../development/libraries/libev { };
 
   libevent = callPackage ../development/libraries/libevent { };
@@ -17482,6 +17486,8 @@ with pkgs;
   libvirt-glib = callPackage ../development/libraries/libvirt-glib { };
 
   libvisio = callPackage ../development/libraries/libvisio { };
+
+  libvisio2svg = callPackage ../development/libraries/libvisio2svg { };
 
   libvisual = callPackage ../development/libraries/libvisual { };
 
