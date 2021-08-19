@@ -12,6 +12,7 @@ import os
 import stat
 import json
 import requests
+import textwrap
 from distutils.version import LooseVersion
 from pathlib import Path
 from typing import Iterable
@@ -77,7 +78,11 @@ def _call_nix_update(pkg, version):
 
 def _nix_eval(expr: str):
     nixpkgs_path = Path(__file__).parent / '../../../../'
-    return json.loads(subprocess.check_output(['nix', 'eval', '--json', f'(with import {nixpkgs_path} {{}}; {expr})'], text=True))
+    try:
+        output = subprocess.check_output(['nix', 'eval', '--json', f'(with import {nixpkgs_path} {{}}; {expr})'], text=True)
+    except subprocess.CalledProcessError:
+        return None
+    return json.loads(output)
 
 
 def _get_current_package_version(pkg: str):
@@ -109,6 +114,18 @@ def _diff_file(filepath: str, old_version: str, new_version: str):
     click.secho(f'Diff for {filepath} ({old_version} -> {new_version}):', fg='bright_blue', bold=True)
     click.echo(diff_proc.stdout + '\n')
     return
+
+
+def _remove_platforms(rubyenv_dir: Path):
+    for platform in ['arm64-darwin-20', 'x86_64-darwin-18',
+                     'x86_64-darwin-19', 'x86_64-darwin-20',
+                     'x86_64-linux']:
+        with open(rubyenv_dir / 'Gemfile.lock', 'r') as f:
+            for line in f:
+                if platform in line:
+                    subprocess.check_output(
+                        ['bundle', 'lock', '--remove-platform', platform], cwd=rubyenv_dir)
+                    break
 
 
 @click_log.simple_verbosity_option(logger)
@@ -173,10 +190,7 @@ def update(rev):
             f.write(repo.get_file(fn, rev))
 
     subprocess.check_output(['bundle', 'lock'], cwd=rubyenv_dir)
-    for platform in ['arm64-darwin-20', 'x86_64-darwin-18',
-                     'x86_64-darwin-19', 'x86_64-darwin-20',
-                     'x86_64-linux']:
-        subprocess.check_output(['bundle', 'lock', '--remove-platform', platform], cwd=rubyenv_dir)
+    _remove_platforms(rubyenv_dir)
     subprocess.check_output(['bundix'], cwd=rubyenv_dir)
 
     _call_nix_update('discourse', repo.rev2version(rev))
@@ -187,9 +201,13 @@ def update_plugins():
 
     """
     plugins = [
+        {'name': 'discourse-calendar'},
         {'name': 'discourse-canned-replies'},
+        {'name': 'discourse-checklist'},
+        {'name': 'discourse-data-explorer'},
         {'name': 'discourse-github'},
         {'name': 'discourse-math'},
+        {'name': 'discourse-migratepassword', 'owner': 'discoursehosting'},
         {'name': 'discourse-solved'},
         {'name': 'discourse-spoiler-alert'},
         {'name': 'discourse-yearly-review'},
@@ -202,13 +220,59 @@ def update_plugins():
         repo_name = plugin.get('repo_name') or name
 
         repo = DiscourseRepo(owner=owner, repo=repo_name)
+
+        filename = _nix_eval(f'builtins.unsafeGetAttrPos "src" discourse.plugins.{name}')
+        if filename is None:
+            filename = Path(__file__).parent / 'plugins' / name / 'default.nix'
+            filename.parent.mkdir()
+
+            has_ruby_deps = False
+            for line in repo.get_file('plugin.rb', repo.latest_commit_sha).splitlines():
+                if 'gem ' in line:
+                    has_ruby_deps = True
+                    break
+
+            with open(filename, 'w') as f:
+                f.write(textwrap.dedent(f"""
+                         {{ lib, mkDiscoursePlugin, fetchFromGitHub }}:
+
+                         mkDiscoursePlugin {{
+                           name = "{name}";"""[1:] + ("""
+                           bundlerEnvArgs.gemdir = ./.;""" if has_ruby_deps else "") + f"""
+                           src = {fetcher} {{
+                             owner = "{owner}";
+                             repo = "{repo_name}";
+                             rev = "replace-with-git-rev";
+                             sha256 = "replace-with-sha256";
+                           }};
+                           meta = with lib; {{
+                             homepage = "";
+                             maintainers = with maintainers; [ ];
+                             license = licenses.mit; # change to the correct license!
+                             description = "";
+                           }};
+                         }}"""))
+
+            all_plugins_filename = Path(__file__).parent / 'plugins' / 'all-plugins.nix'
+            with open(all_plugins_filename, 'r+') as f:
+                content = f.read()
+                pos = -1
+                while content[pos] != '}':
+                    pos -= 1
+                content = content[:pos] + f'  {name} = callPackage ./{name} {{}};' + os.linesep + content[pos:]
+                f.seek(0)
+                f.write(content)
+                f.truncate()
+
+        else:
+            filename = filename['file']
+
         prev_commit_sha = _nix_eval(f'discourse.plugins.{name}.src.rev')
 
         if prev_commit_sha == repo.latest_commit_sha:
             click.echo(f'Plugin {name} is already at the latest revision')
             continue
 
-        filename = _nix_eval(f'builtins.unsafeGetAttrPos "src" discourse.plugins.{name}')['file']
         prev_hash = _nix_eval(f'discourse.plugins.{name}.src.outputHash')
         new_hash = subprocess.check_output([
             'nix-universal-prefetch', fetcher,
@@ -244,7 +308,9 @@ def update_plugins():
             with open(gemfile, 'a') as f:
                 f.write(gemfile_text)
 
+            subprocess.check_output(['bundle', 'lock', '--add-platform', 'ruby'], cwd=rubyenv_dir)
             subprocess.check_output(['bundle', 'lock', '--update'], cwd=rubyenv_dir)
+            _remove_platforms(rubyenv_dir)
             subprocess.check_output(['bundix'], cwd=rubyenv_dir)
 
 
