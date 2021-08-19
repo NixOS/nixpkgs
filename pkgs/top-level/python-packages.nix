@@ -4685,9 +4685,9 @@ self: super: with self; {
 
   hy = callPackage ../development/python-modules/hy { };
 
-  hydra-core = callPackage ../development/python-modules/hydra-core { };
-
   hydra-check = callPackage ../development/python-modules/hydra-check { };
+
+  hydra-core = callPackage ../development/python-modules/hydra-core { };
 
   hydrawiser = callPackage ../development/python-modules/hydrawiser { };
 
