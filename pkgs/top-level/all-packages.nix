@@ -20543,6 +20543,8 @@ in
 
     it87 = callPackage ../os-specific/linux/it87 {};
 
+    librem-ec-acpi-dkms = callPackage ../os-specific/linux/purism/librem-ec-acpi-dkms.nix {};
+
     asus-wmi-sensors = callPackage ../os-specific/linux/asus-wmi-sensors {};
 
     ena = callPackage ../os-specific/linux/ena {};
