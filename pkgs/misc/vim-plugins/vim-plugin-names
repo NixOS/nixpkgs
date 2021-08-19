@@ -129,6 +129,7 @@ ehamberg/vim-cute-python
 eigenfoo/stan-vim
 eikenb/acp
 elixir-editors/vim-elixir
+ellisonleao/glow.nvim@main
 elmcast/elm-vim
 elzr/vim-json
 embark-theme/vim@main as embark-vim
@@ -494,7 +495,6 @@ noc7c9/vim-iced-coffee-script
 norcalli/nvim-colorizer.lua
 norcalli/nvim-terminal.lua
 norcalli/snippets.nvim
-npxbr/glow.nvim@main
 npxbr/gruvbox.nvim@main
 ntpeters/vim-better-whitespace
 numirias/semshi
