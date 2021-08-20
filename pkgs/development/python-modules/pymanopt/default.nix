@@ -5,7 +5,6 @@
 , scipy
 , autograd
 , nose2
-, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -20,13 +19,14 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ numpy scipy ];
-  checkInputs = [ nose2 autograd pytestCheckHook ];
+  checkInputs = [ nose2 autograd ];
 
-  disabledTestPaths = [
-    "tests/test_problem.py"
-    "tests/test_tensorflow.py"
-    "tests/test_theano.py"
-  ];
+  checkPhase = ''
+    # nose2 doesn't properly support excludes
+    rm tests/test_{problem,tensorflow,theano}.py
+
+    nose2 tests -v
+  '';
 
   pythonImportsCheck = [ "pymanopt" ];
 
