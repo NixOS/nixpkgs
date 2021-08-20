@@ -61,6 +61,7 @@ let
 
       with subtest("Postgresql survives restart (bug #1735)"):
           machine.shutdown()
+          import time
           time.sleep(2)
           machine.start()
           machine.wait_for_unit("postgresql")
