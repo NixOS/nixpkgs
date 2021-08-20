@@ -3,6 +3,8 @@
 , buildPythonPackage
 , setuptools-scm
 , cython
+, pytestCheckHook
+, unittest2
 }:
 
 buildPythonPackage rec {
@@ -20,10 +22,7 @@ buildPythonPackage rec {
     cython
   ];
 
-  # Requires pytest_runner to perform tests, which requires deprecated
-  # features of setuptools. Seems better to not run tests. This should
-  # be fixed upstream.
-  doCheck = false;
+  checkInputs = [ pytestCheckHook unittest2 ];
   pythonImportsCheck = [ "pyclipper" ];
 
   meta = with lib; {
