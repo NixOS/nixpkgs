@@ -30958,6 +30958,8 @@ with pkgs;
 
   openems = callPackage ../applications/science/electronics/openems { };
 
+  openroad = libsForQt5.callPackage ../applications/science/electronics/openroad { };
+
   pcb = callPackage ../applications/science/electronics/pcb { };
 
   qucs = callPackage ../applications/science/electronics/qucs { };
