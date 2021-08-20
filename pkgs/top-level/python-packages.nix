@@ -3208,6 +3208,8 @@ in {
 
   guestfs = callPackage ../development/python-modules/guestfs { };
 
+  gudhi = callPackage ../development/python-modules/gudhi { };
+
   gumath = callPackage ../development/python-modules/gumath { };
 
   gunicorn = callPackage ../development/python-modules/gunicorn { };
@@ -5573,6 +5575,8 @@ in {
 
   postorius = callPackage ../servers/mail/mailman/postorius.nix { };
 
+  pot = callPackage ../development/python-modules/pot { };
+
   potr = callPackage ../development/python-modules/potr { };
 
   power = callPackage ../development/python-modules/power { };
@@ -6272,6 +6276,8 @@ in {
   pymaging = callPackage ../development/python-modules/pymaging { };
 
   pymaging_png = callPackage ../development/python-modules/pymaging_png { };
+
+  pymanopt = callPackage ../development/python-modules/pymanopt { };
 
   pymata-express = callPackage ../development/python-modules/pymata-express { };
 
