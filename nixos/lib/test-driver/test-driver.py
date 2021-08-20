@@ -994,8 +994,10 @@ def _test_symbols() -> Dict[str, Any]:
         subtest=subtest,
         run_tests=run_tests,
         join_all=join_all,
+        retry=retry,
         serial_stdout_off=serial_stdout_off,
         serial_stdout_on=serial_stdout_on,
+        Machine=Machine,  # for typing
     )
     return general_symbols
 
