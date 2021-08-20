@@ -68,6 +68,10 @@ let
     };
   };
   cephConfigMonA = generateCephConfig { daemonConfig = {
+    mds = {
+      enable = true;
+      daemons = [ cfg.monA.name ];
+    };
     mon = {
       enable = true;
       daemons = [ cfg.monA.name ];
@@ -198,6 +202,40 @@ let
         "ceph osd pool delete multi-node-other-test multi-node-other-test --yes-i-really-really-mean-it",
     )
 
+    # Add a metadata service according to https://docs.ceph.com/en/latest/cephfs/add-remove-mds/
+    monA.succeed(
+        "mkdir -p /var/lib/ceph/mds/ceph-${cfg.monA.name}",
+        "ceph auth get-or-create mds.${cfg.monA.name} mon 'profile mds' mgr 'profile mds' mds 'allow *' osd 'allow *' > /var/lib/ceph/mds/ceph-${cfg.monA.name}/keyring",
+        "chown -R ceph:ceph /var/lib/ceph/mds",
+        # Run ceph-mds once to connect it to a mon, otherwise it errors out. Are we missing [mon.N] sections in ceph.conf?
+        #   ceph-mds[881]: failed to fetch mon config (--no-mon-config to skip)
+        #"ceph-mds --cluster ceph -i ${cfg.monA.name} -m ${cfg.monA.ip}:6789",
+        "systemctl start ceph-mds.target",
+    )
+    monA.wait_for_unit("ceph-mds-${cfg.monA.name}.service")
+    monA.wait_until_succeeds("ceph mds stat | grep 'up:standby'")
+
+    # Create a Ceph filesystem according to https://docs.ceph.com/en/latest/cephfs/createfs/
+    monA.succeed(
+        "ceph osd pool create cephfs_data",
+        "ceph osd pool create cephfs_metadata",
+        "ceph fs new cephfs cephfs_metadata cephfs_data",
+    )
+    monA.wait_until_succeeds("ceph mds stat | grep 'up:active'")
+    monA.wait_until_succeeds("ceph -s | grep 'mds: 1/1'")
+    monA.wait_until_succeeds("ceph -s | grep 'HEALTH_OK'")
+
+    # Mount the Ceph filesystem
+    monA.succeed(
+        "ceph auth get-or-create client.cephfs mon 'allow r' osd 'allow *' mds 'allow rwps path=/' > /etc/ceph/ceph.client.cephfs.keyring",
+        "mkdir /cephfs",
+        "mount.ceph :/ /cephfs -o name=cephfs",
+        "mount | grep -q cephfs",
+        "cp /etc/machine-id /cephfs/machine-id",
+    )
+
+    monA.log(monA.execute("mount | grep ceph")[0])
+
     # Shut down ceph on all machines in a very unpolite way
     monA.crash()
     osd0.crash()
@@ -216,6 +254,16 @@ let
     monA.wait_until_succeeds("ceph osd stat | grep -e '3 osds: 3 up[^,]*, 3 in'")
     monA.wait_until_succeeds("ceph -s | grep 'mgr: ${cfg.monA.name}(active,'")
     monA.wait_until_succeeds("ceph -s | grep 'HEALTH_OK'")
+
+    monA.wait_for_unit("ceph-mds-${cfg.monA.name}.service")
+    monA.wait_until_succeeds("ceph -s | grep 'mds: 1/1'")
+
+    # Mount the Ceph filesystem and verify the machine-id
+    monA.succeed(
+        "mount.ceph :/ /cephfs -o name=cephfs",
+        "diff /etc/machine-id /cephfs/machine-id",
+    )
+
   '';
 in {
   name = "basic-multi-node-ceph-cluster";
