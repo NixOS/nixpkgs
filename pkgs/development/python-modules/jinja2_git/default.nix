@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "jinja2-git";
-  version = "1.1.0";
+  version = "unstable-2021-07-20";
   format = "pyproject";
 
   src = fetchFromGitHub {
