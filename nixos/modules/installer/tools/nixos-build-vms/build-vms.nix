@@ -9,16 +9,17 @@ let
     imports = [ module ];
   }) (import networkExpr);
 
+  pkgs = import ../../../../.. { inherit system config; };
+
   testing = import ../../../../lib/testing-python.nix {
-    inherit system;
-    pkgs = import ../../../../.. { inherit system config; };
+    inherit system pkgs;
   };
 
   interactiveDriver = (testing.makeTest { inherit nodes; testScript = "start_all(); join_all();"; }).driverInteractive;
 in
 
 
-pkgs.runCommand "nixos-build-vms" ''
+pkgs.runCommand "nixos-build-vms" { nativeBuildInputs = [ pkgs.makeWrapper ]; } ''
   mkdir -p $out/bin
   ln -s ${interactiveDriver}/bin/nixos-test-driver $out/bin/nixos-test-driver
   ln -s ${interactiveDriver}/bin/nixos-test-driver $out/bin/nixos-run-vms
