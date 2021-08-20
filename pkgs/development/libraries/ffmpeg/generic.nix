@@ -2,6 +2,7 @@
 , alsa-lib, bzip2, fontconfig, freetype, gnutls, libiconv, lame, libass, libogg
 , libssh, libtheora, libva, libdrm, libvorbis, libvpx, xz, libpulseaudio, soxr
 , x264, x265, xvidcore, zlib, libopus, speex, nv-codec-headers, dav1d
+, srt ? null
 , openglSupport ? false, libGLU ? null, libGL ? null
 , libmfxSupport ? false, intel-media-sdk ? null
 , libaomSupport ? false, libaom ? null
@@ -94,6 +95,7 @@ stdenv.mkDerivation rec {
     # Build flags
       "--enable-shared"
       (ifMinVer "0.6" "--enable-pic")
+      (ifMinVer "4.0" (enableFeature (srt != null) "libsrt"))
       (enableFeature runtimeCpuDetectBuild "runtime-cpudetect")
       "--enable-hardcoded-tables"
     ] ++
@@ -171,7 +173,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     bzip2 fontconfig freetype gnutls libiconv lame libass libogg libssh libtheora
-    libvorbis xz soxr x264 x265 xvidcore zlib libopus speex nv-codec-headers
+    libvorbis xz soxr x264 x265 xvidcore zlib libopus speex srt nv-codec-headers
   ] ++ optionals openglSupport [ libGL libGLU ]
     ++ optional libmfxSupport intel-media-sdk
     ++ optional libaomSupport libaom
