@@ -68,6 +68,58 @@ you will still need to commit the modified version of the lock files, but at lea
 
 each tool has an abstraction to just build the node_modules (dependencies) directory. you can always use the stdenv.mkDerivation with the node_modules to build the package (symlink the node_modules directory and then use the package build command). the node_modules abstraction can be also used to build some web framework frontends. For an example of this see how [plausible](https://github.com/NixOS/nixpkgs/blob/master/pkgs/servers/web-apps/plausible/default.nix) is built. mkYarnModules to make the derivation containing node_modules. Then when building the frontend you can just symlink the node_modules directory
 
+## javascript packages inside nixpkgs {#javascript-packages-nixpkgs}
+
+The `pkgs/development/node-packages` folder contains a generated collection of
+[NPM packages](https://npmjs.com/) that can be installed with the Nix package
+manager.
+
+As a rule of thumb, the package set should only provide _end user_ software
+packages, such as command-line utilities. Libraries should only be added to the
+package set if there is a non-NPM package that requires it.
+
+When it is desired to use NPM libraries in a development project, use the
+`node2nix` generator directly on the `package.json` configuration file of the
+project.
+
+The package set provides support for the official stable Node.js versions.
+The latest stable LTS release in `nodePackages`, as well as the latest stable
+Current release in `nodePackages_latest`.
+
+If your package uses native addons, you need to examine what kind of native
+build system it uses. Here are some examples:
+
+- `node-gyp`
+- `node-gyp-builder`
+- `node-pre-gyp`
+
+After you have identified the correct system, you need to override your package
+expression while adding in build system as a build input. For example, `dat`
+requires `node-gyp-build`, so [we override](https://github.com/NixOS/nixpkgs/blob/32f5e5da4a1b3f0595527f5195ac3a91451e9b56/pkgs/development/node-packages/default.nix#L37-L40) its expression in [`default.nix`](https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/node-packages/default.nix):
+
+```nix
+    dat = super.dat.override {
+      buildInputs = [ self.node-gyp-build pkgs.libtool pkgs.autoconf pkgs.automake ];
+      meta.broken = since "12";
+    };
+```
+
+To add a package from NPM to nixpkgs:
+
+1.  Modify `pkgs/development/node-packages/node-packages.json` to add, update
+    or remove package entries to have it included in `nodePackages` and
+    `nodePackages_latest`.
+2.  Run the script: `cd pkgs/development/node-packages && ./generate.sh`.
+3.  Build your new package to test your changes:
+    `cd /path/to/nixpkgs && nix-build -A nodePackages.<new-or-updated-package>`.
+    To build against the latest stable Current Node.js version (e.g. 14.x):
+    `nix-build -A nodePackages_latest.<new-or-updated-package>`
+4.  Add and commit all modified and generated files.
+
+For more information about the generation process, consult the
+[README.md](https://github.com/svanderburg/node2nix) file of the `node2nix`
+tool.
+
 ## Tool specific instructions {#javascript-tool-specific}
 
 ### node2nix {#javascript-node2nix}
