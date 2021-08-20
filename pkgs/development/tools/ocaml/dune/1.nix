@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, ocaml, findlib }:
+{ stdenv, lib, fetchurl, ocaml, findlib, ncurses }:
 
 if !lib.versionAtLeast ocaml.version "4.02"
 || lib.versionAtLeast ocaml.version "4.12"
@@ -13,7 +13,9 @@ stdenv.mkDerivation rec {
     sha256 = "1rkc8lqw30ifjaz8d81la6i8j05ffd0whpxqsbg6dci16945zjvp";
   };
 
-  buildInputs = [ ocaml findlib ];
+  nativeBuildInputs = [ ocaml findlib ];
+  buildInputs = [ ncurses ];
+  strictDeps = true;
 
   buildFlags = [ "release" ];
   makeFlags = [
@@ -22,6 +24,8 @@ stdenv.mkDerivation rec {
   ];
 
   dontAddPrefix = true;
+  dontAddStaticConfigureFlags = true;
+  configurePlatforms = [];
 
   meta = with lib; {
     homepage = "https://dune.build/";

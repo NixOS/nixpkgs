@@ -189,6 +189,8 @@ stdenv.mkDerivation {
 
   configureScript = "./bootstrap.sh";
   configurePlatforms = [];
+  dontDisableStatic = true;
+  dontAddStaticConfigureFlags = true;
   configureFlags = [
     "--includedir=$(dev)/include"
     "--libdir=$(out)/lib"

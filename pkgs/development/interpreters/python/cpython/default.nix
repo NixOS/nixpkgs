@@ -101,6 +101,8 @@ let
 
   version = with sourceVersion; "${major}.${minor}.${patch}${suffix}";
 
+  strictDeps = true;
+
   nativeBuildInputs = optionals (!stdenv.isDarwin) [
     autoreconfHook
   ] ++ optionals (!stdenv.isDarwin && passthru.pythonAtLeast "3.10") [
@@ -287,10 +289,11 @@ in with passthru; stdenv.mkDerivation {
   PYTHONHASHSEED=0;
 
   configureFlags = [
-    "--enable-shared"
     "--without-ensurepip"
     "--with-system-expat"
     "--with-system-ffi"
+  ] ++ optionals (!static) [
+    "--enable-shared"
   ] ++ optionals enableOptimizations [
     "--enable-optimizations"
   ] ++ optionals enableLTO [

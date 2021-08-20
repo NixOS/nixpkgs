@@ -9,25 +9,23 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-K0K4vVRIjWTEvzy3BUtLN70wwdwSvUMeoeTXrYqYD+I=";
   };
 
-  buildInputs = [m4 ncurses ocaml];
+  nativeBuildInputs = [m4 ocaml];
+  buildInputs = [ ncurses ];
 
   patches = [ ./ldconf.patch ./install_topfind.patch ];
 
   dontAddPrefix=true;
+  dontAddStaticConfigureFlags = true;
+  configurePlatforms = [];
 
-  preConfigure=''
-    configureFlagsArray=(
-      -bindir $out/bin
-      -mandir $out/share/man
-      -sitelib $out/lib/ocaml/${ocaml.version}/site-lib
-      -config $out/etc/findlib.conf
-    )
-  '';
+  configureFlags = [
+      "-bindir" "${placeholder "out"}/bin"
+      "-mandir" "${placeholder "out"}/share/man"
+      "-sitelib" "${placeholder "out"}/lib/ocaml/${ocaml.version}/site-lib"
+      "-config" "${placeholder "out"}/etc/findlib.conf"
+  ];
 
-  buildPhase = ''
-    make all
-    make opt
-  '';
+  buildFlags = [ "all" "opt" ];
 
   setupHook = writeText "setupHook.sh" ''
     addOCamlPath () {
@@ -37,6 +35,8 @@ stdenv.mkDerivation rec {
         if test -d "''$1/lib/ocaml/${ocaml.version}/site-lib/stublibs"; then
             export CAML_LD_LIBRARY_PATH="''${CAML_LD_LIBRARY_PATH-}''${CAML_LD_LIBRARY_PATH:+:}''$1/lib/ocaml/${ocaml.version}/site-lib/stublibs"
         fi
+    }
+    createOcamlDestDir () {
         export OCAMLFIND_DESTDIR="''$out/lib/ocaml/${ocaml.version}/site-lib/"
         if test -n "''${createFindlibDestdir-}"; then
           mkdir -p $OCAMLFIND_DESTDIR
@@ -44,6 +44,7 @@ stdenv.mkDerivation rec {
     }
 
     addEnvHooks "$targetOffset" addOCamlPath
+    preConfigureHooks+=(createOcamlDestDir)
   '';
 
   meta = {

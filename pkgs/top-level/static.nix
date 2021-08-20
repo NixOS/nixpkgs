@@ -13,26 +13,9 @@
 self: super: let
   inherit (super.stdenvAdapters) makeStaticBinaries
                                  makeStaticLibraries
-                                 propagateBuildInputs;
-  inherit (super.lib) foldl optional flip id composeExtensions optionalAttrs optionalString;
-  inherit (super) makeSetupHook;
-
-  # Best effort static binaries. Will still be linked to libSystem,
-  # but more portable than Nix store binaries.
-  makeStaticDarwin = stdenv_: let stdenv = stdenv_.override {
-    # extraBuildInputs are dropped in cross.nix, but darwin still needs them
-    extraBuildInputs = [ self.buildPackages.darwin.CF ];
-  }; in stdenv // {
-    mkDerivation = args: stdenv.mkDerivation (args // {
-      NIX_CFLAGS_LINK = toString (args.NIX_CFLAGS_LINK or "")
-                      + optionalString (stdenv_.cc.isGNU or false) " -static-libgcc";
-      nativeBuildInputs = (args.nativeBuildInputs or []) ++ [ (makeSetupHook {
-        substitutions = {
-          libsystem = "${stdenv.cc.libc}/lib/libSystem.B.dylib";
-        };
-      } ../stdenv/darwin/portable-libsystem.sh) ];
-    });
-  };
+                                 propagateBuildInputs
+                                 makeStaticDarwin;
+  inherit (super.lib) foldl optional flip id composeExtensions;
 
   staticAdapters =
     optional super.stdenv.hostPlatform.isDarwin makeStaticDarwin
@@ -47,60 +30,9 @@ self: super: let
     # ++ optional (super.stdenv.hostPlatform.libc == "glibc") ((flip overrideInStdenv) [ self.stdenv.glibc.static ])
   ;
 
-  ocamlFixPackage = b:
-    b.overrideAttrs (o: {
-      configurePlatforms = [ ];
-      dontAddStaticConfigureFlags = true;
-      buildInputs = o.buildInputs ++ o.nativeBuildInputs or [ ];
-      propagatedNativeBuildInputs = o.propagatedBuildInputs or [ ];
-    });
-
-  ocamlStaticAdapter = _: super:
-    self.lib.mapAttrs
-      (_: p: if p ? overrideAttrs then ocamlFixPackage p else p)
-      super
-    // {
-      lablgtk = null; # Currently xlibs cause infinite recursion
-      ocaml = ((super.ocaml.override { useX11 = false; }).overrideAttrs (o: {
-        configurePlatforms = [ ];
-        dontUpdateAutotoolsGnuConfigScripts = true;
-      })).overrideDerivation (o: {
-        preConfigure = ''
-          configureFlagsArray+=("-cc" "$CC" "-as" "$AS" "-partialld" "$LD -r")
-        '';
-        dontAddStaticConfigureFlags = true;
-        configureFlags = [
-          "--no-shared-libs"
-          "-host ${o.stdenv.hostPlatform.config}"
-          "-target ${o.stdenv.targetPlatform.config}"
-        ];
-      });
-    };
-
 in {
+  # Do not add new packages here! Instead use `stdenv.hostPlatform.isStatic` to
+  # write conditional code in the original package.
+
   stdenv = foldl (flip id) super.stdenv staticAdapters;
-
-  boost = super.boost.override {
-    # Don’t use new stdenv for boost because it doesn’t like the
-    # --disable-shared flag
-    stdenv = super.stdenv;
-  };
-
-  curl = super.curl.override {
-    # brotli doesn't build static (Mar. 2021)
-    brotliSupport = false;
-    # disable gss becuase of: undefined reference to `k5_bcmp'
-    gssSupport = false;
-  };
-
-  ocaml-ng = self.lib.mapAttrs (_: set:
-    if set ? overrideScope' then set.overrideScope' ocamlStaticAdapter else set
-  ) super.ocaml-ng;
-
-
-  zlib = super.zlib.override {
-    # Don’t use new stdenv zlib because
-    # it doesn’t like the --disable-shared flag
-    stdenv = super.stdenv;
-  };
 }
