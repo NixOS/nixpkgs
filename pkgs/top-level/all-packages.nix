@@ -4908,7 +4908,9 @@ with pkgs;
 
   libbtbb = callPackage ../development/libraries/libbtbb { };
 
-  lp_solve = callPackage ../applications/science/math/lp_solve { };
+  lp_solve = callPackage ../applications/science/math/lp_solve {
+    inherit (darwin) cctools;
+  };
 
   fabric-installer = callPackage ../tools/games/minecraft/fabric-installer { };
 
@@ -13751,6 +13753,8 @@ with pkgs;
 
   foreman = callPackage ../tools/system/foreman { };
   goreman = callPackage ../tools/system/goreman { };
+
+  fprettify = callPackage ../development/tools/fprettify { };
 
   framac = callPackage ../development/tools/analysis/frama-c { };
 
@@ -31453,6 +31457,8 @@ with pkgs;
   gxemul = callPackage ../misc/emulators/gxemul { };
 
   hatari = callPackage ../misc/emulators/hatari { };
+
+  hck = callPackage ../tools/text/hck { };
 
   helm = callPackage ../applications/audio/helm { };
 

@@ -1,6 +1,4 @@
-{ stdenv
-, lib
-, fetchFromGitHub }:
+{ stdenv, lib, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "disfetch";
@@ -16,7 +14,9 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
     install -Dm755 -t $out/bin disfetch
+    runHook postInstall
   '';
 
   meta = with lib; {
@@ -24,6 +24,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/q60/disfetch";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = [ maintainers.vel ];
+    maintainers = with maintainers; [ vel ];
   };
 }

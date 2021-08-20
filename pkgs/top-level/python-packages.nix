@@ -5009,6 +5009,8 @@ in {
 
   onkyo-eiscp = callPackage ../development/python-modules/onkyo-eiscp { };
 
+  onlykey-solo-python = callPackage ../development/python-modules/onlykey-solo-python { };
+
   onnx = callPackage ../development/python-modules/onnx { };
 
   open-garage = callPackage ../development/python-modules/open-garage { };
@@ -5483,6 +5485,8 @@ in {
   plaster = callPackage ../development/python-modules/plaster { };
 
   plaster-pastedeploy = callPackage ../development/python-modules/plaster-pastedeploy { };
+
+  platformdirs = callPackage ../development/python-modules/platformdirs { };
 
   playsound = callPackage ../development/python-modules/playsound { };
 
