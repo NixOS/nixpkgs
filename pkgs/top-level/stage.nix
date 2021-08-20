@@ -235,7 +235,6 @@ let
       overlays = [ (self': super': {
         pkgsStatic = super';
       })] ++ overlays;
-      crossOverlays = [ (import ./static.nix) ];
     } // lib.optionalAttrs stdenv.hostPlatform.isLinux {
       crossSystem = {
         isStatic = true;
