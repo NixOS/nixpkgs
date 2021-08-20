@@ -1930,7 +1930,7 @@ in {
 
   desktop-notifier = callPackage ../development/python-modules/desktop-notifier { };
 
-  detect-secrets= callPackage ../development/python-modules/detect-secrets { };
+  detect-secrets = callPackage ../development/python-modules/detect-secrets { };
 
   devolo-home-control-api = callPackage ../development/python-modules/devolo-home-control-api { };
 
