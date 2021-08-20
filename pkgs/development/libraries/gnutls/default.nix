@@ -26,7 +26,8 @@ stdenv.mkDerivation rec {
     sha256 = "646e6c5a9a185faa4cea796d378a1ba8e1148dbb197ca6605f95986a25af2752";
   };
 
-  outputs = [ "bin" "dev" "out" "man" "devdoc" ];
+  outputs = [ "bin" "dev" "out" ] ++
+   lib.optionals (!stdenv.hostPlatform.isStatic) ["man" "devdoc" ];
   # Not normally useful docs.
   outputInfo = "devdoc";
   outputDoc  = "devdoc";
@@ -61,7 +62,7 @@ stdenv.mkDerivation rec {
     "--with-guile-site-dir=\${out}/share/guile/site"
     "--with-guile-site-ccache-dir=\${out}/share/guile/site"
     "--with-guile-extension-dir=\${out}/share/guile/site"
-  ];
+  ] ++ lib.optionals stdenv.hostPlatform.isStatic [ "--disable-tests" "--disable-doc" ];
 
   enableParallelBuilding = true;
 
