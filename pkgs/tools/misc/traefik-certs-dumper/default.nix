@@ -1,4 +1,5 @@
 { fetchFromGitHub, buildGoModule, lib }:
+
 buildGoModule rec {
   pname = "traefik-certs-dumper";
   version = "2.7.4";
