@@ -10,7 +10,6 @@
 , importCargoLock
 , rustPlatform
 , callPackage
-, remarshal
 , git
 , rust
 , rustc
