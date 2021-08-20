@@ -75,11 +75,9 @@ stdenv.mkDerivation rec {
     "-DFIRESTARTER_BUILD_TYPE=FIRESTARTER_CUDA"
   ];
 
-  enableParalellBuilding = true;
-
   installPhase = ''
     mkdir -p $out/bin
-    cp src/FIRESTARTER${lib.optionalString withCuda ''_CUDA''} $out/bin/
+    cp src/FIRESTARTER${lib.optionalString withCuda "_CUDA"} $out/bin/
   '';
 
   meta = with lib; {
