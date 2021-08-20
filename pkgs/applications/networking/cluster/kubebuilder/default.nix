@@ -20,13 +20,13 @@ buildGoModule rec {
 
   subPackages = ["cmd"];
 
-  preBuild = ''
-    export buildFlagsArray+=("-ldflags=-X main.kubeBuilderVersion=v${version} \
-        -X main.goos=$GOOS \
-        -X main.goarch=$GOARCH \
-        -X main.gitCommit=v${version} \
-        -X main.buildDate=v${version}")
-  '';
+  ldflags = [
+    "-X main.kubeBuilderVersion=v${version}"
+    "-X main.goos=${go.GOOS}"
+    "-X main.goarch=${go.GOARCH}"
+    "-X main.gitCommit=v${version}"
+    "-X main.buildDate=v${version}"
+  ];
 
   doCheck = true;
 

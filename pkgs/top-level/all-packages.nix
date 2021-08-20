@@ -12541,6 +12541,10 @@ with pkgs;
   clisp = callPackage ../development/interpreters/clisp { };
   clisp-tip = callPackage ../development/interpreters/clisp/hg.nix { };
 
+  clojupyter = callPackage ../applications/editors/jupyter-kernels/clojupyter {
+    jre = jre8;
+  };
+
   clojure = callPackage ../development/interpreters/clojure {
     # set this to an LTS version of java
     jdk = jdk11;
@@ -13993,6 +13997,8 @@ with pkgs;
 
   ko = callPackage ../development/tools/ko { };
 
+  konstraint = callPackage ../development/tools/konstraint { };
+
   krankerl = callPackage ../development/tools/krankerl { };
 
   krew = callPackage ../development/tools/krew { };
@@ -14912,7 +14918,6 @@ with pkgs;
   boost169 = callPackage ../development/libraries/boost/1.69.nix { };
   boost16x = boost169;
   boost170 = callPackage ../development/libraries/boost/1.70.nix { };
-  boost171 = callPackage ../development/libraries/boost/1.71.nix { };
   boost172 = callPackage ../development/libraries/boost/1.72.nix { };
   boost173 = callPackage ../development/libraries/boost/1.73.nix { };
   boost174 = callPackage ../development/libraries/boost/1.74.nix { };
@@ -20216,7 +20221,7 @@ with pkgs;
   };
 
   mysql80 = callPackage ../servers/sql/mysql/8.0.x.nix {
-    inherit (darwin) cctools developer_cmds;
+    inherit (darwin) cctools developer_cmds DarwinTools;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
     boost = boost173; # Configure checks for specific version.
     protobuf = protobuf3_11;
@@ -20424,6 +20429,8 @@ with pkgs;
   radicle-upstream = callPackage ../applications/version-management/git-and-tools/radicle-upstream {};
 
   rake = callPackage ../development/tools/build-managers/rake { };
+
+  rakkess = callPackage ../development/tools/rakkess { };
 
   redis = callPackage ../servers/nosql/redis { };
 
