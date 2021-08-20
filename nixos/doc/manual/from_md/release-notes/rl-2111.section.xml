@@ -882,6 +882,14 @@ Superuser created successfully.
       </listitem>
       <listitem>
         <para>
+          <literal>qtile</literal> hase been updated from
+          <quote>0.16.0</quote> to <quote>0.18.0</quote>, please check
+          <link xlink:href="https://github.com/qtile/qtile/blob/master/CHANGELOG">qtile
+          changelog</link> for changes.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>claws-mail</literal> package now references the
           new GTK+ 3 release branch, major version 4. To use the GTK+ 2
           releases, one can install the
