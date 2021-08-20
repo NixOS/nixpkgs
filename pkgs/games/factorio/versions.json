@@ -28,12 +28,12 @@
         "version": "1.1.37"
       },
       "stable": {
-        "name": "factorio_demo_x64-1.1.37.tar.xz",
+        "name": "factorio_demo_x64-1.1.38.tar.xz",
         "needsAuth": false,
-        "sha256": "06qwx9wd3990d3256y9y5qsxa0936076jgwhinmrlvjp9lxwl4ly",
+        "sha256": "0y53w01dyfmavw1yxbjqjiirmvw32bnf9bqz0isnd72dvkg0kziv",
         "tarDirectory": "x64",
-        "url": "https://factorio.com/get-download/1.1.37/demo/linux64",
-        "version": "1.1.37"
+        "url": "https://factorio.com/get-download/1.1.38/demo/linux64",
+        "version": "1.1.38"
       }
     },
     "headless": {
