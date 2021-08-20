@@ -108,6 +108,20 @@ rec {
     });
   });
 
+  # Puts all the other ones together
+  makeStatic = stdenv: lib.foldl (lib.flip lib.id) stdenv (
+    lib.optional stdenv.hostPlatform.isDarwin makeStaticDarwin
+
+    ++ [ makeStaticLibraries propagateBuildInputs ]
+
+    # Apple does not provide a static version of libSystem or crt0.o
+    # So we can’t build static binaries without extensive hacks.
+    ++ lib.optional (!stdenv.hostPlatform.isDarwin) makeStaticBinaries
+
+    # Glibc doesn’t come with static runtimes by default.
+    # ++ lib.optional (stdenv.hostPlatform.libc == "glibc") ((lib.flip overrideInStdenv) [ self.stdenv.glibc.static ])
+  );
+
 
   /* Modify a stdenv so that all buildInputs are implicitly propagated to
      consuming derivations
