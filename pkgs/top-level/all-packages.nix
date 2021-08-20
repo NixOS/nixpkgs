@@ -26877,6 +26877,8 @@ with pkgs;
 
   qiv = callPackage ../applications/graphics/qiv { };
 
+  premid = callPackage ../applications/misc/premid { };
+
   processing = callPackage ../applications/graphics/processing {
     jdk = oraclejdk8;
   };
