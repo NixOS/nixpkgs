@@ -64,6 +64,11 @@ in
     boot.loader.grub.efiSupport = cfg.efi;
     boot.loader.grub.efiInstallAsRemovable = cfg.efi;
     boot.loader.timeout = 1;
+    boot.loader.grub.extraConfig = ''
+      serial --unit=0 --speed=115200 --word=8 --parity=no --stop=1
+      terminal_output console serial
+      terminal_input console serial
+    '';
 
     boot.initrd.network.enable = true;
 
