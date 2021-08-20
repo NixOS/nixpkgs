@@ -19,7 +19,7 @@
 let
   reuseLibs = enableShared && withAllTargets;
 
-  version = "2.35.1";
+  version = "2.37";
   basename = "binutils";
   # The targetPrefix prepended to binary names to allow multiple binuntils on the
   # PATH to both be usable.
@@ -31,10 +31,11 @@ let
     rev = "708acc851880dbeda1dd18aca4fd0a95b2573b36";
     sha256 = "1kdrz6fki55lm15rwwamn74fnqpy0zlafsida2zymk76n3656c63";
   };
+
   # HACK to ensure that we preserve source from bootstrap binutils to not rebuild LLVM
   normal-src = stdenv.__bootPackages.binutils-unwrapped.src or (fetchurl {
     url = "mirror://gnu/binutils/${basename}-${version}.tar.bz2";
-    sha256 = "sha256-Mg56HQ9G/Nn0E/EEbiFsviO7K85t62xqYzBEJeSLGUI=";
+    sha256 = "sha256-Z/waQDDQjuh3pIZ9PcqzWCgUj4fh/QXabbWF7VoWa9Q=";
   });
 in
 
@@ -48,11 +49,6 @@ stdenv.mkDerivation {
     # Make binutils output deterministic by default.
     ./deterministic.patch
 
-    # Help bfd choose between elf32-littlearm, elf32-littlearm-symbian, and
-    # elf32-littlearm-vxworks in favor of the first.
-    # https://github.com/NixOS/nixpkgs/pull/30484#issuecomment-345472766
-    ./disambiguate-arm-targets.patch
-
     # For some reason bfd ld doesn't search DT_RPATH when cross-compiling. It's
     # not clear why this behavior was decided upon but it has the unfortunate
     # consequence that the linker will fail to find transitive dependencies of
@@ -61,16 +57,6 @@ stdenv.mkDerivation {
     # cross-compiling.
     ./always-search-rpath.patch
 
-    # Fix quadratic slowdown in `strip` performance.
-    # See #129467 and https://sourceware.org/bugzilla/show_bug.cgi?id=28058
-    # Remove when we're on binutils > 2.36.1.
-    # The patch is downloaded from
-    #     https://sourceware.org/git/?p=binutils-gdb.git;a=blobdiff_plain;f=bfd/elf.c;h=af62aadc3d446cd5b1f0201b207c90c22e7809b1;hp=36733e080dd9d9be28b576b246aaf5bd8c8569c7;hb=84fd26d8209e99fc3a432dd0b09b6c053de1ce65;hpb=abe2a28aaa7a2bfd0f3061c72a98eb898976b721
-    # which is the 2.36 backport (using `TRUE` instead of `true` of binutils master commit:
-    #     https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;h=956ea65cd707707c0f725930214cbc781367a831
-    ./bfd-elf-Dont-read-non-existing-secondary-relocs.patch
-
-    ./CVE-2020-35448.patch
   ] ++ lib.optional stdenv.targetPlatform.isiOS ./support-ios.patch
     ++ # This patch was suggested by Nick Clifton to fix
        # https://sourceware.org/bugzilla/show_bug.cgi?id=16177
