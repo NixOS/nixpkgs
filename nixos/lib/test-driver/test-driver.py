@@ -246,7 +246,7 @@ class StartCommand:
     ) -> str:
         display_opts = ""
         display_available = any(x in os.environ for x in ["DISPLAY", "WAYLAND_DISPLAY"])
-        if display_available:
+        if not display_available:
             display_opts += " -nographic"
 
         # qemu options
