@@ -37,8 +37,11 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ numpy scipy ];
   checkInputs = [ pytest ];
 
-  enableParallelBuilding = true;
-  cmakeFlags = "-DCMAKE_BUILD_TYPE=Release -DWITH_GUDHI_PYTHON=ON -DPython_ADDITIONAL_VERSIONS=3";
+  cmakeFlags = [
+    "-DCMAKE_BUILD_TYPE=Release"
+    "-DWITH_GUDHI_PYTHON=ON"
+    "-DPython_ADDITIONAL_VERSIONS=3"
+  ];
 
   preBuild = ''
     cd src/python
@@ -53,7 +56,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Library for Computational Topology and Topological Data Analysis (TDA)";
-    homepage = "https://gudhi.inria.fr/python/3.4.1/";
+    homepage = "https://gudhi.inria.fr/python/latest/";
     downloadPage = "https://github.com/GUDHI/gudhi-devel";
     license = with lib.licenses; [ mit gpl3 ];
     maintainers = with lib.maintainers; [ yl3dy ];
