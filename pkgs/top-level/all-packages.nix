@@ -13994,6 +13994,8 @@ with pkgs;
 
   ko = callPackage ../development/tools/ko { };
 
+  konstraint = callPackage ../development/tools/konstraint { };
+
   krankerl = callPackage ../development/tools/krankerl { };
 
   krew = callPackage ../development/tools/krew { };
