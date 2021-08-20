@@ -14,6 +14,7 @@ $SIG{__WARN__} = sub { warn "warning: ", @_ };
 $SIG{__DIE__}  = sub { die "error: ", @_ };
 
 my $out = $ENV{"out"};
+my $extraPrefix = $ENV{"extraPrefix"};
 
 my @pathsToLink = split ' ', $ENV{"pathsToLink"};
 
@@ -256,7 +257,6 @@ while (scalar(keys %postponed) > 0) {
 
 
 # Create the symlinks.
-my $extraPrefix = $ENV{"extraPrefix"};
 my $nrLinks = 0;
 foreach my $relName (sort keys %symlinks) {
     my ($target, $priority) = @{$symlinks{$relName}};
