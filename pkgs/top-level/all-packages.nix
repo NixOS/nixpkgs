@@ -326,6 +326,8 @@ with pkgs;
 
   deviceTree = callPackage ../os-specific/linux/device-tree {};
 
+  purism-ec-tool = callPackage ../os-specific/linux/purism/ectool.nix {};
+
   enum4linux = callPackage ../tools/security/enum4linux {};
 
   enum4linux-ng = python3Packages.callPackage ../tools/security/enum4linux-ng { };
