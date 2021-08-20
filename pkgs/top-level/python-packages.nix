@@ -5538,6 +5538,8 @@ in {
 
   polib = callPackage ../development/python-modules/polib { };
 
+  policyuniverse = callPackage ../development/python-modules/policyuniverse { };
+
   polyline = callPackage ../development/python-modules/polyline { };
 
   pomegranate = callPackage ../development/python-modules/pomegranate { };
