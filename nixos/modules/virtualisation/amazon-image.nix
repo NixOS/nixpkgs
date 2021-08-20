@@ -140,10 +140,6 @@ in
         copy_bin_and_libs ${pkgs.util-linux}/sbin/swapon
       '';
 
-    # Don't put old configurations in the GRUB menu.  The user has no
-    # way to select them anyway.
-    boot.loader.grub.configurationLimit = 0;
-
     # Allow root logins only using the SSH key that the user specified
     # at instance creation time.
     services.openssh.enable = true;
