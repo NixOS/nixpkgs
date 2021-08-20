@@ -1,14 +1,15 @@
 { lib, stdenv, fetchurl, emacs }:
 
 stdenv.mkDerivation {
-  name = "rect-mark-1.4";
+  pname = "rect-mark";
+  version = "1.4";
 
   src = fetchurl {
     url = "http://emacswiki.org/emacs/download/rect-mark.el";
     sha256 = "0pyyg53z9irh5jdfvh2qp4pm8qrml9r7lh42wfmdw6c7f56qryh8";
   };
 
-  phases = [ "buildPhase" "installPhase"];
+  dontUnpack = true;
 
   buildInputs = [ emacs ];
 
@@ -18,8 +19,10 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
     install -d $out/share/emacs/site-lisp
     install rect-mark.el* $out/share/emacs/site-lisp
+    runHook postInstall
   '';
 
   meta = {
