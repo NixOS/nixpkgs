@@ -112,6 +112,11 @@ let
       fi
     done
 
+    # Use system's icd.d if available and populated
+    if [ -n "$(ls -A /run/opengl-driver/share/vulkan/icd.d/)" ]; then
+      ro_mounts+=(--ro-bind /run/opengl-driver/share/vulkan/icd.d/ /usr/share/vulkan/icd.d/)
+    fi
+
     if [[ -d ${env}/etc ]]; then
       for i in ${env}/etc/*; do
         path="/''${i##*/}"
