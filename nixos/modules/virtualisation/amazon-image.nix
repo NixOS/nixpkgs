@@ -63,7 +63,7 @@ in
     boot.loader.grub.extraPerEntryConfig = mkIf (!cfg.hvm) "root (hd0)";
     boot.loader.grub.efiSupport = cfg.efi;
     boot.loader.grub.efiInstallAsRemovable = cfg.efi;
-    boot.loader.timeout = 0;
+    boot.loader.timeout = 1;
 
     boot.initrd.network.enable = true;
 
