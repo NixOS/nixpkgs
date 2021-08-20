@@ -40,6 +40,7 @@
 , varnish
 , xen
 , yajl
+, IOKit
 # Defaults to `null` for all supported plugins,
 # list of plugin names for a custom build
 , enabledPlugins ? null
@@ -47,8 +48,6 @@
 }:
 
 let
-  inherit (darwin.apple_sdk.frameworks) IOKit;
-
   # Plugins that have dependencies.
   # Please help to extend these!
   plugins = {
