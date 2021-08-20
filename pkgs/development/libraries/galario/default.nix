@@ -49,7 +49,6 @@ stdenv.mkDerivation rec {
   '';
 
   preCheck = ''
-    ${if stdenv.isDarwin then "export DYLD_LIBRARY_PATH=$(pwd)/src/" else "export LD_LIBRARY_PATH=$(pwd)/src/"}
     ${if enablePython then "sed -i -e 's|^#!.*|#!${stdenv.shell}|' python/py.test.sh" else ""}
   '';
 

@@ -22,14 +22,6 @@ stdenv.mkDerivation rec {
 
   checkInputs = [ check ];
 
-  # Hack to be able to run the test, broken because we use
-  # CMAKE_SKIP_BUILD_RPATH to avoid cmake resetting rpath on install
-  preCheck = if stdenv.isDarwin then ''
-    export DYLD_LIBRARY_PATH="$(pwd)''${DYLD_LIBRARY_PATH:+:}$DYLD_LIBRARY_PATH"
-  '' else ''
-    export LD_LIBRARY_PATH="$(pwd)''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
-  '';
-
   preConfigure = ''
     # Enable long long support (required for filezilla)
     sed -ire '/PUGIXML_HAS_LONG_LONG/ s/^\/\///' src/pugiconfig.hpp

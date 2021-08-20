@@ -73,11 +73,6 @@ stdenv.mkDerivation rec {
     patchShebangs ..
   '';
 
-  # needed by tests (so libsimgrid.so is found)
-  preConfigure = ''
-    export LD_LIBRARY_PATH="$PWD/build/lib"
-  '';
-
   doCheck = true;
   preCheck = ''
     # prevent the execution of tests known to fail

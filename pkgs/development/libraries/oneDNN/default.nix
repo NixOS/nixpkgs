@@ -21,12 +21,6 @@ stdenv.mkDerivation rec {
   # Tests fail on some Hydra builders, because they do not support SSE4.2.
   doCheck = false;
 
-  # The test driver doesn't add an RPath to the build libdir
-  preCheck = ''
-    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$PWD/src
-    export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH''${DYLD_LIBRARY_PATH:+:}$PWD/src
-  '';
-
   # The cmake install gets tripped up and installs a nix tree into $out, in
   # addition to the correct install; clean it up.
   postInstall = ''

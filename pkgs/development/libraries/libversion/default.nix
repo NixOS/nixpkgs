@@ -13,9 +13,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  preCheck = ''
-    export LD_LIBRARY_PATH=/build/source/build/libversion/''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH
-  '';
   doCheck = true;
   checkTarget = "test";
 
