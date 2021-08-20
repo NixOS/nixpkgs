@@ -69,10 +69,12 @@ let
     bind = {
       buildInputs = [ curl libxml2 ];
     };
+    buddyinfo = {};
     ceph = {
       buildInputs = [ yajl ];
     };
     cgroups = {};
+    check_uptime = {};
     chrony = {};
     conntrack = {};
     contextswitch = {};
@@ -118,6 +120,7 @@ let
     grpc = {};
     hddtemp = {};
     hugepages = {};
+    infiniband = {};
     intel_pmu = {};
     intel_rdt = {};
     interface = {};
@@ -137,6 +140,7 @@ let
     };
     load = {};
     logfile = {};
+    logparser = {};
     log_logstash = {
       buildInputs = [ yajl ];
     };
@@ -154,6 +158,7 @@ let
     mbmon = {};
     mcelog = {};
     md = {};
+    mdevents = {};
     memcachec = {
       buildInputs = [ libmemcached cyrus_sasl ];
     };
@@ -206,6 +211,7 @@ let
     ovs_stats = {
       buildInputs = [ yajl ];
     };
+    pcie_errors = {};
     perl = {
       buildInputs = [ perl ];
     };
@@ -271,6 +277,7 @@ let
     threshold = {};
     tokyotyrant = {};
     turbostat = {};
+    ubi = {};
     unixsock = {};
     uptime = {};
     users = {};
@@ -293,6 +300,8 @@ let
     write_http = {
       buildInputs = [ curl yajl ];
     };
+    write_influx = {};
+    write_influxdb_udp = {};
     write_kafka = {
       buildInputs = [ yajl rdkafka ];
     };
@@ -312,6 +321,7 @@ let
       buildInputs = [ protobufc riemann_c_client ];
     };
     write_sensu = {};
+    write_syslog = {};
     write_tsdb = {};
     xencpu = {};
     xmms = {};
