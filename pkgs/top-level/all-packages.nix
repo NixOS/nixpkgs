@@ -7689,6 +7689,8 @@ with pkgs;
 
   onlykey-cli = callPackage ../tools/security/onlykey-cli { };
 
+  onlykey = callPackage ../tools/security/onlykey { node_webkit = nwjs; };
+
   openapi-generator-cli = callPackage ../tools/networking/openapi-generator-cli { jre = pkgs.jre_headless; };
   openapi-generator-cli-unstable = callPackage ../tools/networking/openapi-generator-cli/unstable.nix { jre = pkgs.jre_headless; };
 
@@ -8026,6 +8028,8 @@ with pkgs;
   pdnsd = callPackage ../tools/networking/pdnsd { };
 
   peco = callPackage ../tools/text/peco { };
+
+  pg_activity = callPackage ../development/tools/database/pg_activity { };
 
   pg_checksums = callPackage ../development/tools/database/pg_checksums { };
 
