@@ -3730,7 +3730,7 @@ in {
 
   jinja2 = callPackage ../development/python-modules/jinja2 { };
 
-  jinja2_git = callPackage ../development/python-modules/jinja2_git { };
+  jinja2-git = callPackage ../development/python-modules/jinja2-git { };
 
   jinja2_pluralize = callPackage ../development/python-modules/jinja2_pluralize { };
 
