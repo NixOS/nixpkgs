@@ -2,17 +2,17 @@
 
 buildGoModule rec {
   pname = "cloudfoundry-cli";
-  version = "7.2.0";
+  version = "7.3.0";
 
   src = fetchFromGitHub {
     owner = "cloudfoundry";
     repo = "cli";
     rev = "v${version}";
-    sha256 = "0cf5vshyz6j70sv7x43r1404hdcmkzxgdb7514kjilp5z6wsr1nv";
+    sha256 = "sha256-I+4tFAMmmsmi5WH9WKXIja1vVWsPHNGkWbvjWGUCmkU=";
   };
   # vendor directory stale
   deleteVendor = true;
-  vendorSha256 = "0p0s0dr7kpmmnim4fps62vj4zki2qxxdq5ww0fzrf1372xbl4kp2";
+  vendorSha256 = null;
 
   subPackages = [ "." ];
 
