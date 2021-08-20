@@ -26,8 +26,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace "--cov-report= --cov=ot" \
-                ""
+      --replace "--cov-report= --cov=ot" ""
   '';
 
   nativeBuildInputs = [ numpy cython ];
@@ -36,6 +35,8 @@ buildPythonPackage rec {
     ++ lib.optionals enableDimensionalityReduction [ pymanopt autograd ];
   checkInputs = [ matplotlib scikit-learn pytestCheckHook ];
 
+  # To prevent importing of an incomplete package from the build directory
+  # instead of nix store (`ot` is the top-level package name).
   preCheck = ''
     rm -r ot
   '';

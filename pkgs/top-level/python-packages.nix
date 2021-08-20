@@ -5571,7 +5571,7 @@ in {
 
   postorius = callPackage ../servers/mail/mailman/postorius.nix { };
 
-  POT = callPackage ../development/python-modules/POT { };
+  pot = callPackage ../development/python-modules/pot { };
 
   potr = callPackage ../development/python-modules/potr { };
 
