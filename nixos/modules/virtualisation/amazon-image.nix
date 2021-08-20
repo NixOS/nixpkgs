@@ -18,7 +18,15 @@ let
 in
 
 {
-  imports = [ ../profiles/headless.nix ./ec2-data.nix ./amazon-init.nix ];
+  imports = [
+    ../profiles/headless.nix
+    # Note: While we do use the headless profile, we also explicitly
+    # turn on the serial console on ttyS0 below. This is because
+    # AWS does support accessing the serial console:
+    # https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/configure-access-to-serial-console.html
+    ./ec2-data.nix
+    ./amazon-init.nix
+  ];
 
   config = {
 
@@ -140,6 +148,9 @@ in
     # at instance creation time.
     services.openssh.enable = true;
     services.openssh.permitRootLogin = "prohibit-password";
+
+    # Enable the serial console on ttyS0
+    systemd.services."serial-getty@ttyS0".enable = true;
 
     # Creates symlinks for block device names.
     services.udev.packages = [ pkgs.ec2-utils ];
