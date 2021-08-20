@@ -18,10 +18,10 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "man" ];
 
-  nativeBuildInputs = [ cmake perl ];
+  nativeBuildInputs = [ cmake perl pkg-config ];
   buildInputs = [
     alsa-lib libevdev libopus udev SDL2
-    ffmpeg pkg-config xorg.libxcb libvdpau libpulseaudio libcec
+    ffmpeg xorg.libxcb libvdpau libpulseaudio libcec
     xorg.libpthreadstubs curl expat avahi libuuid libva
   ];
 
