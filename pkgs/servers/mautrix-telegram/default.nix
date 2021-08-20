@@ -2,16 +2,26 @@
 , withE2BE ? true
 }:
 
-with python3.pkgs;
-
 let
+  python = python3.override {
+    packageOverrides = self: super: {
+      mautrix = super.mautrix.overridePythonAttrs (oldAttrs: rec {
+        version = "0.10.4";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "ffbc4e29eb56089539b408f8e4c12a5d5a5d11d7fe7d40f8c6279784c618b869";
+        };
+      });
+    };
+  };
+
   # officially supported database drivers
-  dbDrivers = [
+  dbDrivers = with python.pkgs; [
     psycopg2
     # sqlite driver is already shipped with python by default
   ];
 
-in buildPythonPackage rec {
+in with python.pkgs; buildPythonPackage rec {
   pname = "mautrix-telegram";
   version = "0.10.1";
   disabled = python.pythonOlder "3.7";
