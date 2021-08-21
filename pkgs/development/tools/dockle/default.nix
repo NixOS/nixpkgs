@@ -16,9 +16,9 @@ buildGoModule rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ btrfs-progs lvm2 ];
 
-  preBuild = ''
-    buildFlagsArray+=("-ldflags" "-s -w -X main.version=${version}")
-  '';
+  ldflags = [
+    "-s" "-w" "-X main.version=${version}"
+  ];
 
   preCheck = ''
     # Remove tests that use networking
