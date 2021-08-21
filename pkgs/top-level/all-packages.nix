@@ -8554,6 +8554,8 @@ with pkgs;
 
   cntlm = callPackage ../tools/networking/cntlm { };
 
+  cnping = callPackage ../tools/networking/cnping { };
+
   past-time = python3Packages.callPackage ../tools/misc/past-time { };
 
   pastebinit = callPackage ../tools/misc/pastebinit { };
