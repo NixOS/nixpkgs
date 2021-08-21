@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "emuflight-configurator";
-  version = "0.3.6";
+  version = "0.4.0";
 
   src = fetchurl {
     url = "https://github.com/emuflight/EmuConfigurator/releases/download/${version}/emuflight-configurator_${version}_linux64.zip";
-    sha256 = "sha256-egSUd/+RNo0vr2EJibgk9nNnql5sHC11gctUMK+DzW0=";
+    sha256 = "sha256-s5AE+r9Fw6S7IG2cDW2T7vctcYIAY8al7eCFIDjD5oI=";
   };
 
   nativeBuildInputs = [ wrapGAppsHook unzip copyDesktopItems ];
