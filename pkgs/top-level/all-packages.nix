@@ -7693,6 +7693,8 @@ with pkgs;
 
   onioncircuits = callPackage ../tools/security/onioncircuits { };
 
+  onlykey-agent = callPackage ../tools/security/onlykey-agent { };
+
   onlykey-cli = callPackage ../tools/security/onlykey-cli { };
 
   onlykey = callPackage ../tools/security/onlykey { node_webkit = nwjs; };
