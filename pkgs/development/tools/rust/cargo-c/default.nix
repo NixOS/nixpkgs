@@ -1,5 +1,5 @@
 { rustPlatform, stdenv, lib, fetchFromGitHub, fetchurl
-, pkg-config, openssl
+, pkg-config, curl, openssl
 , CoreFoundation, libiconv, Security
 }:
 
@@ -30,9 +30,19 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "0b952xkg0l31laqlhsv3cqdag7v15k9na6xr6q9y8xwy1fjh9gzv";
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl ]
+  nativeBuildInputs = [ pkg-config (lib.getDev curl) ];
+  buildInputs = [ openssl curl ]
   ++ lib.optionals stdenv.isDarwin [ CoreFoundation libiconv Security ];
+
+  # Ensure that we are avoiding build of the curl vendored in curl-sys
+  doInstallCheck = stdenv.hostPlatform.libc == "glibc";
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    ldd "$out/bin/cargo-cbuild" | grep libcurl.so
+
+    runHook postInstallCheck
+  '';
 
   meta = with lib; {
     description = "A cargo subcommand to build and install C-ABI compatibile dynamic and static libraries";
