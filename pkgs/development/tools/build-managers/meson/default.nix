@@ -57,6 +57,12 @@ python3.pkgs.buildPythonApplication rec {
     # unsandboxed non-NixOS builds, see:
     # https://github.com/NixOS/nixpkgs/issues/86131#issuecomment-711051774
     ./boost-Do-not-add-system-paths-on-nix.patch
+
+    # This allows statically built derivations to use
+    # NIX_MESON_DEPENDENCY_STATIC = true which will force meson
+    # to link all dependencies statically (as if all calls to meson's
+    # dependency function were made with the static: true option.
+    ./nix-force-dependency-static.patch
   ];
 
   setupHook = ./setup-hook.sh;

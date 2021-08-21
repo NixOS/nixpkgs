@@ -1,0 +1,17 @@
+Seulement dans b: :
+diff --color -ur a/mesonbuild/dependencies/base.py b/mesonbuild/dependencies/base.py
+--- a/mesonbuild/dependencies/base.py	2021-02-01 21:35:16.000000000 +0100
++++ b/mesonbuild/dependencies/base.py	2021-08-21 19:17:34.680964003 +0200
+@@ -339,7 +339,11 @@
+             self.version_reqs = [self.version_reqs]
+         self.required = kwargs.get('required', True)
+         self.silent = kwargs.get('silent', False)
+-        self.static = kwargs.get('static', False)
++        if 'NIX_MESON_DEPENDENCY_STATIC' in os.environ:
++            self.static = True
++            mlog.log("Forcing static building on typename ", type_name)
++        else:
++            self.static = kwargs.get('static', False)
+         if not isinstance(self.static, bool):
+             raise DependencyException('Static keyword must be boolean')
+         # Is this dependency to be run on the build platform?
