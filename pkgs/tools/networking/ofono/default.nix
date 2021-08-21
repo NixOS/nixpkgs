@@ -46,6 +46,10 @@ stdenv.mkDerivation rec {
     "--enable-external-ell"
   ];
 
+  installFlags = [
+    "SYSCONFDIR=${placeholder "out"}/etc"
+  ];
+
   postInstall = ''
     rm -r $out/etc/ofono
     ln -s /etc/ofono $out/etc/ofono
