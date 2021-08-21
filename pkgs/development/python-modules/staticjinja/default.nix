@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , buildPythonPackage
 , poetry
-, docopt
+, docopt-ng
 , easywatch
 , jinja2
 , pytestCheckHook
@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "staticjinja";
-  version = "3.0.1";
+  version = "4.1.0";
   format = "pyproject";
 
   # No tests in pypi
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "staticjinja";
     repo = pname;
     rev = version;
-    sha256 = "sha256-W4q0vG8Kl2gCmA8UnUbdiGRtghhdnWxIJXFIIa6BogA=";
+    sha256 = "sha256-4IL+7ncJPd1e7k5oFRjQ6yvDjozcBAAZPf88biNTiLU=";
   };
 
   nativeBuildInputs = [
@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     jinja2
-    docopt
+    docopt-ng
     easywatch
   ];
 

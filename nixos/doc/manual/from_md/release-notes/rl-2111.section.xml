@@ -273,7 +273,7 @@ Superuser created successfully.
       <listitem>
         <para>
           The <literal>staticjinja</literal> package has been upgraded
-          from 1.0.4 to 3.0.1
+          from 1.0.4 to 4.1.0
         </para>
       </listitem>
       <listitem>
