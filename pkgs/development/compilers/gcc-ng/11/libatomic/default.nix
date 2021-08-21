@@ -1,6 +1,5 @@
 { lib, stdenv, buildPackages
 , gcc_src, version
-, glibc
 , autoreconfHook269, libiberty
 }:
 
@@ -30,17 +29,22 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     sourceRoot=$(readlink -e "./libatomic")
+    configureScript=$sourceRoot/configure
+    cd $sourceRoot
+
+    sed -i 's/AM_ENABLE_MULTILIB(/AM_ENABLE_MULTILIB(NOPE/' configure.ac
   '';
 
   configurePlatforms = [ "build" "host" ];
   configureFlags = [
     "--disable-dependency-tracking"
-    "--with-threads=single"
+    #"--with-threads=single"
     # $CC cannot link binaries, let alone run then
     "cross_compiling=true"
-    # Do not have dynamic linker without libc
-    "--enable-static"
-    "--disable-shared"
+    "--disable-multilib"
+    ## Do not have dynamic linker without libc
+    #"--enable-static"
+    #"--disable-shared"
   ];
 
   makeFlags = [ "MULTIBUILDTOP:=../" ];

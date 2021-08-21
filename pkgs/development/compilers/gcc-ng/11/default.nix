@@ -105,7 +105,6 @@ let
       ];
       extraBuildCommands = ''
         echo "-B${targetGccLibraries.libgcc}/lib" >> $out/nix-support/cc-cflags
-        echo "-nostdlib++" >> $out/nix-support/cc-cflags
       '' + mkExtraBuildCommands cc;
     };
 
@@ -148,6 +147,7 @@ let
     libada = callPackage ./libada { };
 
     libatomic = callPackage ./libatomic {
+      # TODO should libatomic be built before or after libc?
       stdenv = overrideCC stdenv buildGccTools.gccNoLibstdcxx;
     };
 

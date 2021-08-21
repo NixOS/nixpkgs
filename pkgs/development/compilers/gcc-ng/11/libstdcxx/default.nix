@@ -1,37 +1,21 @@
-{ lib, stdenv, fetchurl, fetchpatch, flex, bison, file }:
+{ lib, stdenv
+, fetchurl, fetchpatch, flex, bison, file
+, gcc_src, version
+}:
 
 stdenv.mkDerivation rec {
-  pname = "libstdc++5";
-  version = "3.3.6";
+  pname = "libstdc++";
+  inherit version;
 
-  src = [
-    (fetchurl {
-      url = "mirror://gcc/releases/gcc-${version}/gcc-core-${version}.tar.bz2";
-      sha256 = "1dpyrpsgakilz2rnh5f8gvrzq5pwzvndacc0df6m04bpqn5fx6sg";
-    })
-    (fetchurl {
-      url = "mirror://gcc/releases/gcc-${version}/gcc-g++-${version}.tar.bz2";
-      sha256 = "14lxl81f7adpc9jxfiwzdxsdzs5zv4piv8xh7f9w910hfzrgvsby";
-    })
-  ];
+  src = gcc_src;
 
   patches = [
-    ./no-sys-dirs.patch
-    (fetchpatch {
-      name = "siginfo.patch";
-      url = "https://raw.githubusercontent.com/archlinux/svntogit-packages/e36ee8ed9bb5942db14cf6249a2ead14974a2bfa/trunk/siginfo.patch";
-      sha256 = "15zldbm33yba293dgrgsbv3j332hkc3iqpyc8fa7zl42mh9qk22j";
-      extraPrefix = "";
-    })
-    (fetchpatch {
-      name = "gcc-3.4.3-no_multilib_amd64.patch";
-      url = "https://raw.githubusercontent.com/archlinux/svntogit-packages/e36ee8ed9bb5942db14cf6249a2ead14974a2bfa/trunk/gcc-3.4.3-no_multilib_amd64.patch";
-      sha256 = "11m5lc51b0addhc4yq4rz0dwpv6k73rrj73wya3lqdk8rly6cjpm";
-      extraPrefix = "";
-    })
-    # Required because of glibc 2.26
-    ./struct-ucontext.patch
+    ../custom-threading-model.patch
   ];
+
+  outputs = [ "out" "dev" ];
+
+  strictDeps = true;
 
   postPatch = ''
     # fix build issue with recent gcc
