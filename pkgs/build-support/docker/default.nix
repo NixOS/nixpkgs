@@ -750,6 +750,9 @@ rec {
         root:x:0:
         nobody:x:65534:
       '')
+      (writeTextDir "etc/nsswitch.conf" ''
+        hosts: files dns
+      '')
       (runCommand "var-empty" { } ''
         mkdir -p $out/var/empty
       '')

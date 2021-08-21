@@ -6656,6 +6656,16 @@
     githubId = 775189;
     name = "Jordi Masip";
   };
+  matdsoupe = {
+    github = "matdsoupe";
+    githubId = 44469426;
+    name = "Matheus de Souza Pessanha";
+    email = "matheus_pessanha2001@outlook.com";
+    keys = [{
+      longkeyid = "rsa4096/0x2671964AB1E06A08";
+      fingerprint = "2F32 CFEF E11A D73B A740  FA47 2671 964A B1E0 6A08";
+    }];
+  };
   matejc = {
     email = "cotman.matej@gmail.com";
     github = "matejc";
@@ -6860,16 +6870,6 @@
     keys = [{
       longkeyid = "rsa2048/0x77BFE531397EDE94";
       fingerprint = "D709 03C8 0BE9 ACDC 14F0  3BFB 77BF E531 397E DE94";
-    }];
-  };
-  mdsp = {
-    github = "Mdsp9070";
-    githubId = 44469426;
-    name = "Matheus de Souza Pessanha";
-    email = "matheus_pessanha2001@outlook.com";
-    keys = [{
-      longkeyid = "rsa4096/6DFD656220A3B849";
-      fingerprint = "2D4D 488F 17FB FF75 664E  C016 6DFD 6562 20A3 B849";
     }];
   };
   meatcar = {
@@ -11811,6 +11811,12 @@
     github = "ylwghst";
     githubId = 26011724;
     name = "Burim Augustin Berisa";
+  };
+  yl3dy = {
+    email = "aleksandr.kiselyov@gmail.com";
+    github = "yl3dy";
+    githubId = 1311192;
+    name = "Alexander Kiselyov";
   };
   yochai = {
     email = "yochai@titat.info";

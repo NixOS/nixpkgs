@@ -2,16 +2,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "just";
-  version = "0.9.8";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "casey";
     repo = pname;
     rev = version;
-    sha256 = "sha256-WT3r6qw/lCZy6hdfAJmoAgUqjSLPVT8fKX4DnqDnhOs=";
+    sha256 = "sha256-dolx2P7bnGiK3azMkwj75+ZA3qYr3rCUSLhMPtK85zA=";
   };
-
-  cargoSha256 = "sha256-0R/9VndP/Oh5/yP7NsBC25jiCSRVNEXhbVksElLXeEc=";
+  cargoSha256 = "sha256-GPetK2uGB4HIPr/3DdTA0HNHELS8V1MqPtpgilubo9k=";
 
   nativeBuildInputs = [ installShellFiles ];
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
@@ -54,6 +53,9 @@ rustPlatform.buildRustPackage rec {
   checkFlags = [
     "--skip=edit" # trying to run "vim" fails as there's no /usr/bin/env or which in the sandbox to find vim and the dependency is not easily patched
     "--skip=run_shebang" # test case very rarely fails with "Text file busy"
+    "--skip=invoke_error_function" # wants JUST_CHOOSER to be fzf
+    "--skip=status_error" # "exit status" instead of "exit code"
+    "--skip=exit_status" # "exit status" instead of "exit code"
   ];
 
   meta = with lib; {

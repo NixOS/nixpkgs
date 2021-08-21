@@ -781,6 +781,16 @@ Superuser created successfully.
       </listitem>
       <listitem>
         <para>
+          The fontconfig service’s dpi option has been removed.
+          Fontconfig should use Xft settings by default so there’s no
+          need to override one value in multiple places. The user can
+          set DPI via ~/.Xresources properly, or at the system level per
+          monitor, or as a last resort at the system level with
+          <literal>services.xserver.dpi</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>yambar</literal> package has been split into
           <literal>yambar</literal> and
           <literal>yambar-wayland</literal>, corresponding to the xorg

@@ -1930,6 +1930,8 @@ in {
 
   desktop-notifier = callPackage ../development/python-modules/desktop-notifier { };
 
+  detect-secrets = callPackage ../development/python-modules/detect-secrets { };
+
   devolo-home-control-api = callPackage ../development/python-modules/devolo-home-control-api { };
 
   devpi-common = callPackage ../development/python-modules/devpi-common { };
@@ -3205,6 +3207,8 @@ in {
   guessit = callPackage ../development/python-modules/guessit { };
 
   guestfs = callPackage ../development/python-modules/guestfs { };
+
+  gudhi = callPackage ../development/python-modules/gudhi { };
 
   gumath = callPackage ../development/python-modules/gumath { };
 
@@ -5538,6 +5542,8 @@ in {
 
   polib = callPackage ../development/python-modules/polib { };
 
+  policyuniverse = callPackage ../development/python-modules/policyuniverse { };
+
   polyline = callPackage ../development/python-modules/polyline { };
 
   pomegranate = callPackage ../development/python-modules/pomegranate { };
@@ -5568,6 +5574,8 @@ in {
   poster3 = callPackage ../development/python-modules/poster3 { };
 
   postorius = callPackage ../servers/mail/mailman/postorius.nix { };
+
+  pot = callPackage ../development/python-modules/pot { };
 
   potr = callPackage ../development/python-modules/potr { };
 
@@ -6268,6 +6276,8 @@ in {
   pymaging = callPackage ../development/python-modules/pymaging { };
 
   pymaging_png = callPackage ../development/python-modules/pymaging_png { };
+
+  pymanopt = callPackage ../development/python-modules/pymanopt { };
 
   pymata-express = callPackage ../development/python-modules/pymata-express { };
 

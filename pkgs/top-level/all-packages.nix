@@ -1476,7 +1476,7 @@ with pkgs;
 
   deskew = callPackage ../applications/graphics/deskew { };
 
-  detect-secrets = python3Packages.callPackage ../development/tools/detect-secrets { };
+  detect-secrets = with python3Packages; toPythonApplication detect-secrets;
 
   dfmt = callPackage ../tools/text/dfmt { };
 
@@ -7689,6 +7689,8 @@ with pkgs;
 
   onlykey-cli = callPackage ../tools/security/onlykey-cli { };
 
+  onlykey = callPackage ../tools/security/onlykey { node_webkit = nwjs; };
+
   openapi-generator-cli = callPackage ../tools/networking/openapi-generator-cli { jre = pkgs.jre_headless; };
   openapi-generator-cli-unstable = callPackage ../tools/networking/openapi-generator-cli/unstable.nix { jre = pkgs.jre_headless; };
 
@@ -8026,6 +8028,8 @@ with pkgs;
   pdnsd = callPackage ../tools/networking/pdnsd { };
 
   peco = callPackage ../tools/text/peco { };
+
+  pg_activity = callPackage ../development/tools/database/pg_activity { };
 
   pg_checksums = callPackage ../development/tools/database/pg_checksums { };
 
@@ -8548,6 +8552,8 @@ with pkgs;
 
   inherit (callPackage ../development/misc/resholve { })
     resholve resholvePackage;
+
+  restool = callPackage ../os-specific/linux/restool {};
 
   reuse = callPackage ../tools/package-management/reuse { };
 
@@ -11495,13 +11501,6 @@ with pkgs;
 
   glslang = callPackage ../development/compilers/glslang { };
 
-  go_1_14 = callPackage ../development/compilers/go/1.14.nix ({
-    inherit (darwin.apple_sdk.frameworks) Security Foundation;
-  } // lib.optionalAttrs (stdenv.cc.isGNU && stdenv.isAarch64) {
-    stdenv = gcc8Stdenv;
-    buildPackages = buildPackages // { stdenv = buildPackages.gcc8Stdenv; };
-  });
-
   go_1_15 = callPackage ../development/compilers/go/1.15.nix ({
     inherit (darwin.apple_sdk.frameworks) Security Foundation;
   } // lib.optionalAttrs (stdenv.cc.isGNU && stdenv.isAarch64) {
@@ -12547,6 +12546,10 @@ with pkgs;
 
   clisp = callPackage ../development/interpreters/clisp { };
   clisp-tip = callPackage ../development/interpreters/clisp/hg.nix { };
+
+  clojupyter = callPackage ../applications/editors/jupyter-kernels/clojupyter {
+    jre = jre8;
+  };
 
   clojure = callPackage ../development/interpreters/clojure {
     # set this to an LTS version of java
@@ -14000,6 +14003,8 @@ with pkgs;
 
   ko = callPackage ../development/tools/ko { };
 
+  konstraint = callPackage ../development/tools/konstraint { };
+
   krankerl = callPackage ../development/tools/krankerl { };
 
   krew = callPackage ../development/tools/krew { };
@@ -14919,7 +14924,6 @@ with pkgs;
   boost169 = callPackage ../development/libraries/boost/1.69.nix { };
   boost16x = boost169;
   boost170 = callPackage ../development/libraries/boost/1.70.nix { };
-  boost171 = callPackage ../development/libraries/boost/1.71.nix { };
   boost172 = callPackage ../development/libraries/boost/1.72.nix { };
   boost173 = callPackage ../development/libraries/boost/1.73.nix { };
   boost174 = callPackage ../development/libraries/boost/1.74.nix { };
@@ -19418,9 +19422,6 @@ with pkgs;
 
   ### DEVELOPMENT / GO MODULES
 
-  buildGo114Package = callPackage ../development/go-packages/generic {
-    go = buildPackages.go_1_14;
-  };
   buildGo115Package = callPackage ../development/go-packages/generic {
     go = buildPackages.go_1_15;
   };
@@ -19430,9 +19431,6 @@ with pkgs;
 
   buildGoPackage = buildGo116Package;
 
-  buildGo114Module = callPackage ../development/go-modules/generic {
-    go = buildPackages.go_1_14;
-  };
   buildGo115Module = callPackage ../development/go-modules/generic {
     go = buildPackages.go_1_15;
   };
@@ -20229,7 +20227,7 @@ with pkgs;
   };
 
   mysql80 = callPackage ../servers/sql/mysql/8.0.x.nix {
-    inherit (darwin) cctools developer_cmds;
+    inherit (darwin) cctools developer_cmds DarwinTools;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
     boost = boost173; # Configure checks for specific version.
     protobuf = protobuf3_11;
@@ -20437,6 +20435,8 @@ with pkgs;
   radicle-upstream = callPackage ../applications/version-management/git-and-tools/radicle-upstream {};
 
   rake = callPackage ../development/tools/build-managers/rake { };
+
+  rakkess = callPackage ../development/tools/rakkess { };
 
   redis = callPackage ../servers/nosql/redis { };
 
@@ -30959,6 +30959,8 @@ with pkgs;
   ngspice = callPackage ../applications/science/electronics/ngspice { };
 
   openems = callPackage ../applications/science/electronics/openems { };
+
+  openroad = libsForQt5.callPackage ../applications/science/electronics/openroad { };
 
   pcb = callPackage ../applications/science/electronics/pcb { };
 
