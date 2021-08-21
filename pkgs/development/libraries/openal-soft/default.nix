@@ -10,21 +10,21 @@ assert alsaSupport -> alsa-lib != null;
 assert pulseSupport -> libpulseaudio != null;
 
 stdenv.mkDerivation rec {
-  version = "1.19.1";
+  version = "1.21.1";
   pname = "openal-soft";
 
   src = fetchFromGitHub {
     owner = "kcat";
     repo = "openal-soft";
-    rev = "${pname}-${version}";
-    sha256 = "0b0g0q1c36nfb289xcaaj3cmyfpiswvvgky3qyalsf9n4dj7vnzi";
+    rev = version;
+    sha256 = "sha256-rgc6kjXaZb6sCR+e9Gu7BEEHIiCHMygpLIeSqgWkuAg=";
   };
 
   # this will make it find its own data files (e.g. HRTF profiles)
   # without any other configuration
   patches = [ ./search-out.patch ];
   postPatch = ''
-    substituteInPlace Alc/helpers.c \
+    substituteInPlace alc/helpers.cpp \
       --replace "@OUT@" $out
   '';
 
