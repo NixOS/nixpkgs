@@ -2180,6 +2180,8 @@ with pkgs;
 
   traefik = callPackage ../servers/traefik { };
 
+  traefik-certs-dumper = callPackage ../tools/misc/traefik-certs-dumper { };
+
   calamares = libsForQt514.callPackage ../tools/misc/calamares {
     python = python3;
     boost = pkgs.boost.override { python = python3; };
@@ -3701,6 +3703,8 @@ with pkgs;
 
   cicero-tui = callPackage ../tools/misc/cicero-tui { };
 
+  cilium-cli = callPackage ../applications/networking/cluster/cilium { };
+
   cipherscan = callPackage ../tools/security/cipherscan {
     openssl = if stdenv.hostPlatform.system == "x86_64-linux"
       then openssl-chacha
@@ -4447,6 +4451,8 @@ with pkgs;
   eid-mw = callPackage ../tools/security/eid-mw {
     autoreconfHook = buildPackages.autoreconfHook269;
   };
+
+  emote = callPackage ../tools/inputmethods/emote { };
 
   engauge-digitizer = libsForQt5.callPackage ../applications/science/math/engauge-digitizer { };
 
@@ -7686,6 +7692,8 @@ with pkgs;
   };
 
   onioncircuits = callPackage ../tools/security/onioncircuits { };
+
+  onlykey-agent = callPackage ../tools/security/onlykey-agent { };
 
   onlykey-cli = callPackage ../tools/security/onlykey-cli { };
 
@@ -20469,6 +20477,8 @@ with pkgs;
   };
 
   roon-bridge = callPackage ../servers/roon-bridge { };
+
+  rpiplay = callPackage ../servers/rpiplay { };
 
   roon-server = callPackage ../servers/roon-server { };
 

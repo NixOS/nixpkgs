@@ -35,7 +35,7 @@ in stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-Wno-error=class-memaccess -Wno-error=deprecated-copy";
 
-  prePatch = lib.optional stdenv.isDarwin ''
+  prePatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace Make.rules.Darwin \
         --replace xcrun ""
   '';

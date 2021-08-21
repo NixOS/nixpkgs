@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage rec {
   # FIXME: GLFW (X11) requires DISPLAY env variable for all tests
   doCheck = false;
 
-  postInstall = optional stdenv.isLinux ''
+  postInstall = optionalString stdenv.isLinux ''
     mkdir -p $out/share/applications
     cp $src/rx.desktop $out/share/applications
     wrapProgram $out/bin/rx --prefix LD_LIBRARY_PATH : ${libGL}/lib

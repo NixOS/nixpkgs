@@ -23,12 +23,12 @@
 }:
 
 let
-  version = "2.3.2";
+  version = "2.3.3";
   src = fetchFromGitHub {
     owner = "micahflee";
     repo = "onionshare";
     rev = "v${version}";
-    sha256 = "sha256-mzLDvvpO82iGDnzY42wx1KCNmAxUgVhpaDVprtb+YOI=";
+    sha256 = "sha256-wU2020RNXlwJ2y9uzcLxIX4EECev1Z9YvNyiBalLj/Y=";
   };
   meta = with lib; {
     description = "Securely and anonymously send and receive files";
@@ -94,6 +94,11 @@ in rec {
       # Tests use the home directory
       export HOME="$(mktemp -d)"
     '';
+
+    disabledTests = [
+      "test_firefox_like_behavior"
+      "test_if_unmodified_since"
+    ];
   };
 
   onionshare-gui = buildPythonApplication {

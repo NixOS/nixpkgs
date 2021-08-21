@@ -834,7 +834,7 @@ self: super: {
   });
 
   vim-xdebug = super.vim-xdebug.overrideAttrs (old: {
-    postInstall = false;
+    postInstall = null;
   });
 
   vim-xkbswitch = super.vim-xkbswitch.overrideAttrs (old: {
