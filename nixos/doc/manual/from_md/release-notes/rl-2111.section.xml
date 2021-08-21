@@ -171,8 +171,6 @@
           <link linkend="opt-services.isso.enable">isso</link>
         </para>
       </listitem>
-    </itemizedlist>
-    <itemizedlist spacing="compact">
       <listitem>
         <para>
           <link xlink:href="https://www.navidrome.org/">navidrome</link>,
@@ -181,8 +179,6 @@
           <link linkend="opt-services.navidrome.enable">navidrome</link>.
         </para>
       </listitem>
-    </itemizedlist>
-    <itemizedlist>
       <listitem>
         <para>
           <link xlink:href="https://docs.fluidd.xyz/">fluidd</link>, a
@@ -219,6 +215,13 @@
           <link xlink:href="https://nats.io/">nats</link>, a high
           performance cloud and edge messaging system. Available as
           <link linkend="opt-services.nats.enable">services.nats</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://git.causal.agency/pounce/about/">pounce</link>,
+          a multi-client, TLS-only IRC bouncer. Available as
+          <link linkend="opt-services.pounce.enable">services.pounce</link>.
         </para>
       </listitem>
     </itemizedlist>

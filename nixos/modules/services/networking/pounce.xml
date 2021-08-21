@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude" version="5.0" xml:id="module-services-networking-pounce">
+  <title>Pounce</title>
+  <para>
+    <link xlink:href="https://git.causal.agency/pounce/about/">Pounce</link>
+    is a multi-client, TLS-only IRC bouncer. Pounce includes the
+    <link xlink:href="https://git.causal.agency/pounce/about/calico.1">Calico</link>
+    dispatcher for serving multiple networks over a single port.
+  </para>
+  <section xml:id="module-services-networking-pounce-quick-start">
+    <title>Basic Usage</title>
+    <para>
+      To support connecting to multiple networks, Pounce will always be
+      configured to serve through Calico. Due to this, each network's
+      bouncer is served at a subdomain of
+      <link linkend="opt-services.pounce.host">services.pounce.host</link>.
+    </para>
+    <para>
+      A complete list of Pounce's options is availiable in the
+      <link xlink:href="https://git.causal.agency/pounce/about/pounce.1">pounce(1)</link>
+      manual page. For additional notes about connecting to various popular
+      networks, see Pounce's
+      <link xlink:href="https://git.causal.agency/pounce/about/QUIRKS.7">QUIRKS(7)</link>
+      document.
+    </para>
+    <para>
+      Pounce must be served over TLS. By default, this module will generate a
+      self-signed certificate valid for 100 years. To disable this, set
+      <link linkend="opt-services.pounce.generateCerts">services.pounce.generateCerts</link>
+      to <literal>false</literal> and point
+      <link linkend="opt-services.pounce.certDir">services.pounce.certDir</link>
+      to a folder containing TLS certificates in the certbot format (a
+      <literal>fullchain.pem</literal> and <literal>privkey.pem</literal> in a
+      folder named the full domain name of the instance). Certificates can be
+      generated with certbot using <command>certbot certonly -d ...</command>,
+      or using NixOS's built-in ACME module.
+    </para>
+    <para>
+      Below is an example configuration which joins #nixos and #nixos-chat on
+      Libera Chat and #ascii.town on tilde.chat. The bouncer for Libera Chat can
+      be reached at <literal>libera.irc.example.org/6697</literal> and the
+      bouncer for tilde.chat is at <literal>tilde.irc.example.org/6697</literal>.
+      Libera Chat is additionally configured to connect with CertFP using a
+      certificate stored at <literal>/var/lib/pounce/certfp/libera.pem</literal>.
+      This certificate can be generated with
+      <literal>pounce -g /var/lib/pounce/certfp/libera.pem</literal>.
+      <programlisting>
+services.pounce = {
+  <link linkend="opt-services.pounce.enable">enable</link> = true;
+  <link linkend="opt-services.pounce.host">host</link> = "irc.example.org";
+  <link linkend="opt-services.pounce.openFirewall">openFirewall</link> = true;
+  <link linkend="opt-services.pounce.networks">networks</link> = {
+    libera = {
+      <link xlink:href="https://git.causal.agency/pounce/about/pounce.1#host">host</link> = "irc.libera.chat";
+      <link xlink:href="https://git.causal.agency/pounce/about/pounce.1#port">port</link> = 6697; # This is the default port. This field can be ommitted.
+      <link xlink:href="https://git.causal.agency/pounce/about/pounce.1#nick">nick</link> = "...";
+      <link xlink:href="https://git.causal.agency/pounce/about/pounce.1#client-cert">client-cert</link> = "/var/lib/pounce/certfp/libera.pem";
+      <link xlink:href="https://git.causal.agency/pounce/about/pounce.1#sasl-external">sasl-external</link> = true;
+      <link xlink:href="https://git.causal.agency/pounce/about/pounce.1#join">join</link> = "#nixos,#nixos-chat";
+    };
+    tilde = {
+      <link xlink:href="https://git.causal.agency/pounce/about/pounce.1#host">host</link> = "irc.tilde.chat";
+      <link xlink:href="https://git.causal.agency/pounce/about/pounce.1#nick">nick</link> = "...";
+      <link xlink:href="https://git.causal.agency/pounce/about/pounce.1#join">join</link> = "#ascii.town";
+    };
+  };
+};</programlisting>
+    </para>
+  </section>
+</chapter>

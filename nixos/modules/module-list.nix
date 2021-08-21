@@ -801,6 +801,7 @@
   ./services/networking/pixiecore.nix
   ./services/networking/pleroma.nix
   ./services/networking/polipo.nix
+  ./services/networking/pounce.nix
   ./services/networking/powerdns.nix
   ./services/networking/pdns-recursor.nix
   ./services/networking/pppd.nix
