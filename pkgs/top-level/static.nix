@@ -98,6 +98,25 @@ in rec {
     stdenv = super.stdenv;
   };
 
+  cups = super.cups.overrideAttrs (old: {
+    # Proper use of pkg-config --static is a better way to do this
+    # the right way, keeping the order correct manually is a pain
+    NIX_LDFLAGS = let
+      libs = [
+        "-lavahi-common"
+        "-ldbus-1"
+        "-lunistring"
+        "-lgnutls"
+        "-lp11-kit"
+        "-lffi"
+        "-ltasn1"
+        "-lhogweed"
+        "-lnettle"
+        "-lgmp"
+      ];
+    in " ${super.lib.concatStringsSep " " libs}";
+  });
+
   curl = super.curl.override {
     # brotli doesn't build static (Mar. 2021)
     brotliSupport = false;
