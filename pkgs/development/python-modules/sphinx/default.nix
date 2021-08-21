@@ -22,7 +22,6 @@
 , sphinxcontrib-websupport
 # check phase
 , html5lib
-, imagemagick
 , pytestCheckHook
 , typed-ast
 }:
@@ -61,7 +60,6 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    imagemagick
     html5lib
     pytestCheckHook
   ] ++ lib.optionals (pythonOlder "3.8") [
@@ -74,6 +72,10 @@ buildPythonPackage rec {
     "test_defaults"
     "test_defaults_json"
     "test_latex_images"
+
+    # requires imagemagick (increases build closure size), doesn't
+    # test anything substantial
+    "test_ext_imgconverter"
   ];
 
   meta = with lib; {
