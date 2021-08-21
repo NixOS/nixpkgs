@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   # Source: https://wooting.helpscoutdocs.com/article/68-wootility-configuring-device-access-for-wootility-under-linux-udev-rules
   src = [ ./wooting.rules ];
 
-  unpackPhase = ":";
+  dontUnpack = true;
 
   installPhase = ''
     install -Dpm644 $src $out/lib/udev/rules.d/70-wooting.rules
