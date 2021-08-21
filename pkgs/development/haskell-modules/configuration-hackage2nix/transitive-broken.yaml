@@ -2114,7 +2114,6 @@ dont-distribute-packages:
  - monetdb-mapi
  - mongrel2-handler
  - monky
- - monomer
  - monte-carlo
  - moo
  - moo-nad
