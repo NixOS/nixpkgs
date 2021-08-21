@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   };
 
   # We have no LTO on i686 since commit 22284b0
-  postPatch = lib.optional stdenv.isi686 ''
+  postPatch = lib.optionalString stdenv.isi686 ''
     substituteInPlace chelper/__init__.py \
       --replace "-flto -fwhole-program " ""
   '';
