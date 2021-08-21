@@ -77,7 +77,7 @@ self: super: let
       });
     };
 
-in {
+in rec {
   stdenv = foldl (flip id) super.stdenv staticAdapters;
 
   boost = super.boost.override {
@@ -129,6 +129,11 @@ in {
     # it doesn’t like the --disable-shared flag
     stdenv = super.stdenv;
   };
+
+  shared-mime-info = super.shared-mime-info.overrideAttrs (old: {
+    NIX_MESON_DEPENDENCY_STATIC = true;
+    buildInputs = (old.buildInputs or []) ++ [ zlib ];
+  });
 
   zlib = super.zlib.override {
     # Don’t use new stdenv zlib because
