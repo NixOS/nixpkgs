@@ -1539,6 +1539,8 @@ in {
 
   cloudsmith-api = callPackage ../development/python-modules/cloudsmith-api { };
 
+  cloudsplaining = callPackage ../development/python-modules/cloudsplaining { };
+
   clustershell = callPackage ../development/python-modules/clustershell { };
 
   clvm = callPackage ../development/python-modules/clvm { };
@@ -5543,6 +5545,8 @@ in {
   poezio = callPackage ../applications/networking/instant-messengers/poezio { };
 
   polib = callPackage ../development/python-modules/polib { };
+
+  policy-sentry = callPackage ../development/python-modules/policy-sentry { };
 
   policyuniverse = callPackage ../development/python-modules/policyuniverse { };
 
