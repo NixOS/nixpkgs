@@ -7595,6 +7595,16 @@
     githubId = 4996739;
     name = "Masayuki Takeda";
   };
+  mth = {
+    name = "Matthias Totschnig";
+    email = "matthias@totschnig.org";
+    github = "matthias-t";
+    githubId = 26206173;
+    keys = [{
+      longkeyid = "rsa4096/0x5261FB421242D9A1";
+      fingerprint = "53FD 487B DAA0 35BA E250  D415 5261 FB42 1242 D9A1";
+    }];
+  };
   MtP = {
     email = "marko.nixos@poikonen.de";
     github = "MtP76";
