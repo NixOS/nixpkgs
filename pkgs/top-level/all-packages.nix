@@ -11035,7 +11035,9 @@ with pkgs;
 
   crossLibcStdenv =
     if stdenv.hostPlatform.useLLVM or false || stdenv.hostPlatform.isDarwin
-    then overrideCC stdenv buildPackages.llvmPackages.clangNoLibc
+      then overrideCC stdenv buildPackages.llvmPackages.clangNoLibc
+    else if stdenv.hostPlatform.useGccNg or false
+      then overrideCC stdenv buildPackages.gccNgPackages.gccNoLibc
     else gccCrossLibcStdenv;
 
   # The GCC used to build libc for the target platform. Normal gccs will be
@@ -11348,6 +11350,9 @@ with pkgs;
 
   gccNgPackages_11 = recurseIntoAttrs (callPackage ../development/compilers/gcc-ng/11 ({
     inherit (stdenvAdapters) overrideCC;
+    # These are the default arguments, but do this to avoid splicing which was
+    # causing infinite recursion.
+    inherit bintools bintoolsNoLibc;
     buildGccTools = buildPackages.gccNgPackages_11.tools;
     targetGccLibraries = targetPackages.gccNgPackages_11.libraries;
   }));

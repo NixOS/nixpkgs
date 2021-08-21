@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = gcc_src;
 
   patches = [
-    ./libgcc-custom-threading-model.patch
+    ../custom-threading-model.patch
   ];
 
   outputs = [ "out" "dev" ];

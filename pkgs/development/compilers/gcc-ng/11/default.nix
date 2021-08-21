@@ -87,7 +87,6 @@ let
         targetGccLibraries.libunwind
       ];
       extraBuildCommands = ''
-        echo "-rtlib=libgcc -Wno-unused-command-line-argument" >> $out/nix-support/cc-cflags
         echo "-B${targetGccLibraries.libgcc}/lib" >> $out/nix-support/cc-cflags
       '' + lib.optionalString (!stdenv.targetPlatform.isWasm) ''
         echo "--unwindlib=libunwind" >> $out/nix-support/cc-cflags
@@ -105,7 +104,6 @@ let
         targetGccLibraries.libgcc
       ];
       extraBuildCommands = ''
-        echo "-rtlib=libgcc" >> $out/nix-support/cc-cflags
         echo "-B${targetGccLibraries.libgcc}/lib" >> $out/nix-support/cc-cflags
         echo "-nostdlib++" >> $out/nix-support/cc-cflags
       '' + mkExtraBuildCommands cc;
@@ -119,7 +117,6 @@ let
         targetGccLibraries.libgcc
       ];
       extraBuildCommands = ''
-        echo "-rtlib=libgcc" >> $out/nix-support/cc-cflags
         echo "-B${targetGccLibraries.libgcc}/lib" >> $out/nix-support/cc-cflags
       '' + mkExtraBuildCommands cc;
     };
@@ -149,6 +146,10 @@ let
     libstdcxxStdenv = overrideCC stdenv buildGccTools.libstdcxxGcc;
 
     libada = callPackage ./libada { };
+
+    libatomic = callPackage ./libatomic {
+      stdenv = overrideCC stdenv buildGccTools.gccNoLibstdcxx;
+    };
 
     libgfortran = callPackage ./libgfortran { };
 
