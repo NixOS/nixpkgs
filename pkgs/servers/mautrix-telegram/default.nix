@@ -2,30 +2,42 @@
 , withE2BE ? true
 }:
 
-with python3.pkgs;
-
 let
+  python = python3.override {
+    packageOverrides = self: super: {
+      mautrix = super.mautrix.overridePythonAttrs (oldAttrs: rec {
+        version = "0.10.4";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "ffbc4e29eb56089539b408f8e4c12a5d5a5d11d7fe7d40f8c6279784c618b869";
+        };
+      });
+    };
+  };
+
   # officially supported database drivers
-  dbDrivers = [
+  dbDrivers = with python.pkgs; [
     psycopg2
     # sqlite driver is already shipped with python by default
   ];
 
-in buildPythonPackage rec {
+in with python.pkgs; buildPythonPackage rec {
   pname = "mautrix-telegram";
-  version = "0.9.0";
-  disabled = pythonOlder "3.7";
+  version = "0.10.1";
+  disabled = python.pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "tulir";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1543ljjl3jg3ayid7ifi4bamqh4gq85pmlbs3m8i7phjbbm7g9dn";
+    sha256 = "sha256-1Dmc7WRlT2ivGkdrGDC1b44DE0ovQKfUR0gDiQE4h5c=";
   };
 
   patches = [ ./0001-Re-add-entrypoint.patch ./0002-Don-t-depend-on-pytest-runner.patch ];
   postPatch = ''
     sed -i -e '/alembic>/d' requirements.txt
+    substituteInPlace requirements.txt \
+      --replace "telethon>=1.22,<1.23" "telethon"
   '';
 
   propagatedBuildInputs = [
