@@ -16923,7 +16923,7 @@ let
     buildInputs = [ ModuleBuildTiny ];
     propagatedBuildInputs = [ PPI PathTiny PerlCritic PerlCriticPolicyVariablesProhibitLoopOnHash PerlCriticPulp ];
     meta = {
-      homepage = "https://github.com/Grinnz/Perl-Critic-Freenode";
+      homepage = "https://github.com/Grinnz/Perl-Critic-Community";
       description = "Community-inspired Perl::Critic policies";
       license = lib.licenses.artistic2;
     };
