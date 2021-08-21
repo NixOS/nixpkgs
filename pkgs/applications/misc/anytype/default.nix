@@ -15,9 +15,8 @@ in
 appimageTools.wrapType2 {
   inherit name src;
 
-  extraPkgs = { pkgs, ... }@args: [
-    pkgs.gnome3.libsecret
-  ] ++ appimageTools.defaultFhsEnvArgs.multiPkgs args;
+  extraPkgs = pkgs: (appimageTools.defaultFhsEnvArgs.multiPkgs pkgs)
+    ++ [ pkgs.libsecret ];
 
   extraInstallCommands = ''
     mv $out/bin/${name} $out/bin/${pname}
