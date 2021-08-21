@@ -36,7 +36,8 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ libdaemon dbus glib expat libiconv libevent ]
-    ++ (with perlPackages; [ perl XMLParser ])
+  ++ lib.optionals (!stdenv.hostPlatform.isStatic)
+      (with perlPackages; [ perl XMLParser ])
     ++ (lib.optional gtk3Support gtk3)
     ++ (lib.optional qt4Support qt4)
     ++ (lib.optional qt5Support qt5);

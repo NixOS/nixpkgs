@@ -80,6 +80,18 @@ self: super: let
 in rec {
   stdenv = foldl (flip id) super.stdenv staticAdapters;
 
+  avahi = super.avahi.overrideAttrs (old: {
+    buildInputs = (old.buildInputs or []) ++ [ super.musl ];
+    nativeBuildInputs = (old.nativeBuildInputs or []) ++
+      [ super.autoreconfHook ];
+    postPatch = (old.postPatch or "") + ''
+      substituteInPlace common/acx_pthread.m4 \
+        --replace '-shared -fPIC ' ""
+      substituteInPlace avahi-daemon/Makefile.am \
+        --replace 'install-data-local:' "disabled:"
+    '';
+  });
+
   boost = super.boost.override {
     # Don’t use new stdenv for boost because it doesn’t like the
     # --disable-shared flag
