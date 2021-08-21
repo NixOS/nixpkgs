@@ -3734,6 +3734,8 @@ in {
 
   jinja2 = callPackage ../development/python-modules/jinja2 { };
 
+  jinja2-git = callPackage ../development/python-modules/jinja2-git { };
+
   jinja2_pluralize = callPackage ../development/python-modules/jinja2_pluralize { };
 
   jinja2_time = callPackage ../development/python-modules/jinja2_time { };
