@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , python
 , fetchFromGitHub
 , buildPythonPackage
@@ -33,5 +34,6 @@ buildPythonPackage rec {
     homepage = "https://mathlab.github.io/PyDMD/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ yl3dy ];
+    broken = stdenv.hostPlatform.isAarch64;
   };
 }
