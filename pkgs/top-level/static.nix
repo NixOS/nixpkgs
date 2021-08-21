@@ -93,6 +93,10 @@ in {
     gssSupport = false;
   };
 
+  glib = super.glib.overrideAttrs (old: {
+    NIX_MESON_DEPENDENCY_STATIC = true;
+  });
+
   libselinux = (super.libselinux.override {
     fts = super.musl-fts;
     enablePython = false;
