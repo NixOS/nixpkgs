@@ -519,6 +519,18 @@ final: prev:
     meta.homepage = "https://github.com/bbchung/clighter8/";
   };
 
+  cmd-parser-nvim = buildVimPluginFrom2Nix {
+    pname = "cmd-parser-nvim";
+    version = "2021-05-30";
+    src = fetchFromGitHub {
+      owner = "winston0410";
+      repo = "cmd-parser.nvim";
+      rev = "70813af493398217cb1df10950ae8b99c58422db";
+      sha256 = "0rfa8cpykarcal8qcfp1dax1kgcbq7bv1ld6r1ia08n9vnqi5vm6";
+    };
+    meta.homepage = "https://github.com/winston0410/cmd-parser.nvim/";
+  };
+
   cmp-buffer = buildVimPluginFrom2Nix {
     pname = "cmp-buffer";
     version = "2021-08-11";
@@ -4619,6 +4631,18 @@ final: prev:
     meta.homepage = "https://github.com/vim-scripts/random.vim/";
   };
 
+  range-highlight-nvim = buildVimPluginFrom2Nix {
+    pname = "range-highlight-nvim";
+    version = "2021-08-03";
+    src = fetchFromGitHub {
+      owner = "winston0410";
+      repo = "range-highlight.nvim";
+      rev = "8b5e8ccb3460b2c3675f4639b9f54e64eaab36d9";
+      sha256 = "1yswni0p1w7ja6cddxyd3m4hi8gsdyh8hm8rlk878b096maxkgw1";
+    };
+    meta.homepage = "https://github.com/winston0410/range-highlight.nvim/";
+  };
+
   ranger-vim = buildVimPluginFrom2Nix {
     pname = "ranger-vim";
     version = "2021-04-25";
@@ -5481,8 +5505,8 @@ final: prev:
     src = fetchFromGitHub {
       owner = "nvim-telescope";
       repo = "telescope.nvim";
-      rev = "615efe666be25117199ec8c9d475b2ef86ac7015";
-      sha256 = "0wbc1pwrkk5x6fm8zv8s0261ky28w70hjnjzl8m77kl2ib0ld1as";
+      rev = "d6d28dbe324de9826a579155076873888169ba0f";
+      sha256 = "0gxp54b5p1hbaigm7xq0c7dcnq1dbncp80fl8nrmwax34r6rv4d1";
     };
     meta.homepage = "https://github.com/nvim-telescope/telescope.nvim/";
   };

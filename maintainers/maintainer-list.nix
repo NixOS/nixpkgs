@@ -11812,6 +11812,12 @@
     githubId = 26011724;
     name = "Burim Augustin Berisa";
   };
+  yl3dy = {
+    email = "aleksandr.kiselyov@gmail.com";
+    github = "yl3dy";
+    githubId = 1311192;
+    name = "Alexander Kiselyov";
+  };
   yochai = {
     email = "yochai@titat.info";
     github = "yochai";

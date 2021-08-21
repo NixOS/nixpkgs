@@ -1476,7 +1476,7 @@ with pkgs;
 
   deskew = callPackage ../applications/graphics/deskew { };
 
-  detect-secrets = python3Packages.callPackage ../development/tools/detect-secrets { };
+  detect-secrets = with python3Packages; toPythonApplication detect-secrets;
 
   dfmt = callPackage ../tools/text/dfmt { };
 
@@ -8552,6 +8552,8 @@ with pkgs;
 
   inherit (callPackage ../development/misc/resholve { })
     resholve resholvePackage;
+
+  restool = callPackage ../os-specific/linux/restool {};
 
   reuse = callPackage ../tools/package-management/reuse { };
 
@@ -30957,6 +30959,8 @@ with pkgs;
   ngspice = callPackage ../applications/science/electronics/ngspice { };
 
   openems = callPackage ../applications/science/electronics/openems { };
+
+  openroad = libsForQt5.callPackage ../applications/science/electronics/openroad { };
 
   pcb = callPackage ../applications/science/electronics/pcb { };
 

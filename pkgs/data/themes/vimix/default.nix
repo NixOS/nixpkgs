@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vimix-gtk-themes";
-  version = "2021-08-09";
+  version = "2021-08-17";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
-    sha256 = "0j6sq7z4zqc9q4hqcq4y9vh4qpgl0v1i353l6rcd6bh1r594rwjm";
+    sha256 = "1pn737w99j4ij8qkgw0rrzhbcqzni73z5wnkfqgqqbhj38rafbpv";
   };
 
   nativeBuildInputs = [
