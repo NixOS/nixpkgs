@@ -97,6 +97,10 @@ in {
     NIX_MESON_DEPENDENCY_STATIC = true;
   });
 
+  json-glib = super.json-glib.overrideAttrs (old: {
+    NIX_MESON_DEPENDENCY_STATIC = true;
+  });
+
   libselinux = (super.libselinux.override {
     fts = super.musl-fts;
     enablePython = false;
