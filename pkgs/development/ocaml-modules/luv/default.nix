@@ -6,12 +6,12 @@
 
 buildDunePackage rec {
   pname = "luv";
-  version = "0.5.9";
+  version = "0.5.10";
   useDune2 = true;
 
   src = fetchurl {
     url = "https://github.com/aantron/luv/releases/download/${version}/luv-${version}.tar.gz";
-    sha256 = "0bbv28vgv5mnfbn1gag5fh3n4d9nkffqy3bif3pf47677c493ym2";
+    sha256 = "0zygir01d6vglfs4b3klnbg90glvyl9agq5xnzn8hmsb6d8z0jqp";
   };
 
   postConfigure = ''

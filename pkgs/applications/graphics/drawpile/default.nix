@@ -2,7 +2,6 @@
 , lib
 , mkDerivation
 , fetchFromGitHub
-, fetchpatch
 , extra-cmake-modules
 
 # common deps

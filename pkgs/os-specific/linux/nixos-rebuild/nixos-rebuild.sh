@@ -26,7 +26,7 @@ rollback=
 upgrade=
 upgrade_all=
 profile=/nix/var/nix/profiles/system
-buildHost=
+buildHost=localhost
 targetHost=
 maybeSudo=()
 

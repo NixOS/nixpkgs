@@ -468,10 +468,6 @@ in
 
     assertions = [
       {
-        assertion = intersectLists cfg.protocols [ "pop3" "imap" ] != [];
-        message = "dovecot needs at least one of the IMAP or POP3 listeners enabled";
-      }
-      {
         assertion = (cfg.sslServerCert == null) == (cfg.sslServerKey == null)
         && (cfg.sslCACert != null -> !(cfg.sslServerCert == null || cfg.sslServerKey == null));
         message = "dovecot needs both sslServerCert and sslServerKey defined for working crypto";

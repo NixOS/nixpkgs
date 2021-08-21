@@ -273,7 +273,7 @@ Superuser created successfully.
       <listitem>
         <para>
           The <literal>staticjinja</literal> package has been upgraded
-          from 1.0.4 to 3.0.1
+          from 1.0.4 to 4.1.0
         </para>
       </listitem>
       <listitem>
@@ -781,6 +781,16 @@ Superuser created successfully.
       </listitem>
       <listitem>
         <para>
+          The fontconfig service’s dpi option has been removed.
+          Fontconfig should use Xft settings by default so there’s no
+          need to override one value in multiple places. The user can
+          set DPI via ~/.Xresources properly, or at the system level per
+          monitor, or as a last resort at the system level with
+          <literal>services.xserver.dpi</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>yambar</literal> package has been split into
           <literal>yambar</literal> and
           <literal>yambar-wayland</literal>, corresponding to the xorg
@@ -868,6 +878,14 @@ Superuser created successfully.
           3.9 introduces many deprecation warnings, please look at the
           <link xlink:href="https://docs.python.org/3/whatsnew/3.9.html">What’s
           New In Python 3.9 post</link> for more information.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>qtile</literal> hase been updated from
+          <quote>0.16.0</quote> to <quote>0.18.0</quote>, please check
+          <link xlink:href="https://github.com/qtile/qtile/blob/master/CHANGELOG">qtile
+          changelog</link> for changes.
         </para>
       </listitem>
       <listitem>

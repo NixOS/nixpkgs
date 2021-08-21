@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
     "-DCMAKE_SKIP_BUILD_RPATH=OFF"
+    "-DUNSAFE_TREAT_WARNINGS_AS_ERRORS=OFF" # disable -Werror
   ];
 
   propagatedBuildInputs = [ openssl ]; # s2n-config has find_dependency(LibCrypto).

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sentry-native";
-  version = "0.4.11";
+  version = "0.4.12";
 
   src = fetchFromGitHub {
     owner = "getsentry";
     repo = "sentry-native";
     rev = version;
-    sha256 = "sha256-kasZ5OAtl32Oxed4BkxvHXEFqEvBaBwyslHO7Ga5TRY=";
+    sha256 = "sha256-ut864o4LHmuHYJszFz7LFoIiSvf6a0S42xmV51CVBQ0=";
   };
 
   nativeBuildInputs = [ cmake ];

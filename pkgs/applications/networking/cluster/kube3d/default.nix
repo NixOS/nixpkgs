@@ -17,10 +17,10 @@ buildGoModule rec {
 
   excludedPackages = "\\(tools\\|docgen\\)";
 
-  preBuild = let t = "github.com/rancher/k3d/v4/version"; in
-    ''
-      buildFlagsArray+=("-ldflags" "-s -w -X ${t}.Version=v${version} -X ${t}.K3sVersion=v${k3sVersion}")
-    '';
+  ldflags = let t = "github.com/rancher/k3d/v4/version"; in
+    [
+      "-s" "-w" "-X ${t}.Version=v${version}" "-X ${t}.K3sVersion=v${k3sVersion}"
+    ];
 
   doCheck = false;
 

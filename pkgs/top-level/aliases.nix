@@ -183,6 +183,14 @@ mapAliases ({
   deepin = throw "deepin was a work in progress and it has been canceled and removed https://github.com/NixOS/nixpkgs/issues/94870"; # added 2020-08-31
   deepspeech = throw "deepspeech was removed in favor of stt. https://github.com/NixOS/nixpkgs/issues/119496"; # added 2021-05-05
   deltachat-electron = deltachat-desktop; # added 2021-07-18
+  deluge-1_x = throw ''
+    Deluge 1.x (deluge-1_x) is no longer supported.
+    Please use Deluge 2.x (deluge-2_x) instead, for example:
+
+        services.deluge.package = pkgs.deluge-2_x;
+
+    Note that it is NOT possible to switch back to Deluge 1.x after this change.
+  ''; # added 2021-08-18
   desktop_file_utils = desktop-file-utils; # added 2018-02-25
   devicemapper = lvm2; # added 2018-04-25
   digikam5 = digikam; # added 2017-02-18
@@ -553,6 +561,7 @@ mapAliases ({
   olifant = throw "olifant has been removed from nixpkgs, as it was unmaintained."; # added 2021-08-05
   opencl-icd = ocl-icd; # added 2017-01-20
   openconnect_pa = throw "openconnect_pa fork has been discontinued, support for GlobalProtect is now available in openconnect"; # added 2021-05-21
+  openelec-dvb-firmware = libreelec-dvb-firmware; # added 2021-05-10
   openexr_ctl = ctl; # added 2018-04-25
   openisns = open-isns; # added 2020-01-28
   openjpeg_1 = throw "openjpeg_1 has been removed, use openjpeg_2 instead"; # added 2021-01-24

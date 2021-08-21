@@ -20,6 +20,7 @@ andrep/vimacs
 andreshazard/vim-logreview
 AndrewRadev/sideways.vim@main
 AndrewRadev/splitjoin.vim@main
+AndrewRadev/tagalong.vim
 andsild/peskcolor.vim
 andviro/flake8-vim
 andweeb/presence.nvim@main
@@ -35,6 +36,7 @@ artur-shaik/vim-javacomplete2
 autozimu/LanguageClient-neovim
 axelf4/vim-strip-trailing-whitespace
 ayu-theme/ayu-vim
+b3nj5m1n/kommentary@main
 bakpakin/fennel.vim
 bazelbuild/vim-bazel
 bbchung/clighter8
@@ -127,6 +129,8 @@ ehamberg/vim-cute-python
 eigenfoo/stan-vim
 eikenb/acp
 elixir-editors/vim-elixir
+ellisonleao/glow.nvim@main
+ellisonleao/gruvbox.nvim@main
 elmcast/elm-vim
 elzr/vim-json
 embark-theme/vim@main as embark-vim
@@ -217,6 +221,7 @@ hrsh7th/cmp-buffer@main
 hrsh7th/cmp-calc@main
 hrsh7th/cmp-emoji@main
 hrsh7th/cmp-nvim-lsp@main
+hrsh7th/cmp-nvim-lua@main
 hrsh7th/cmp-path@main
 hrsh7th/cmp-vsnip@main
 hrsh7th/nvim-cmp@main
@@ -427,7 +432,7 @@ mhartington/oceanic-next
 mhinz/vim-crates
 mhinz/vim-grepper
 mhinz/vim-janah
-mhinz/vim-sayonara
+mhinz/vim-sayonara@7e774f58c5865d9c10d40396850b35ab95af17c5
 mhinz/vim-signify
 mhinz/vim-startify
 michaeljsmith/vim-indent-object
@@ -491,8 +496,6 @@ noc7c9/vim-iced-coffee-script
 norcalli/nvim-colorizer.lua
 norcalli/nvim-terminal.lua
 norcalli/snippets.nvim
-npxbr/glow.nvim@main
-npxbr/gruvbox.nvim@main
 ntpeters/vim-better-whitespace
 numirias/semshi
 nvie/vim-flake8
@@ -507,6 +510,7 @@ nvim-telescope/telescope-frecency.nvim
 nvim-telescope/telescope-fzf-native.nvim@main
 nvim-telescope/telescope-fzf-writer.nvim
 nvim-telescope/telescope-fzy-native.nvim
+nvim-telescope/telescope-project.nvim
 nvim-telescope/telescope-symbols.nvim
 nvim-telescope/telescope-z.nvim@main
 nvim-telescope/telescope.nvim
@@ -610,6 +614,7 @@ RRethy/nvim-base16
 RRethy/vim-hexokinase
 RRethy/vim-illuminate
 rstacruz/vim-closer
+ruanyl/vim-gh-line
 ruifm/gitlinker.nvim
 rust-lang/rust.vim
 ryanoasis/vim-devicons
@@ -811,6 +816,7 @@ vim-scripts/ShowMultiBase
 vim-scripts/tabmerge
 vim-scripts/taglist.vim
 vim-scripts/utl.vim
+vim-scripts/vis
 vim-scripts/wombat256.vim
 vim-scripts/YankRing.vim
 vim-syntastic/syntastic
@@ -840,6 +846,8 @@ will133/vim-dirdiff
 wincent/command-t
 wincent/ferret
 windwp/nvim-autopairs
+winston0410/cmd-parser.nvim
+winston0410/range-highlight.nvim
 wlangstroth/vim-racket
 wsdjeg/vim-fetch
 xavierd/clang_complete

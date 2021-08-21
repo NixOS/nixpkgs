@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     sourceRoot=$sourceRoot/cpp
   '';
 
-  prePatch = lib.optional stdenv.isDarwin ''
+  prePatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace config/Make.rules.Darwin \
         --replace xcrun ""
   '';
