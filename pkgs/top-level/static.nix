@@ -93,6 +93,19 @@ in {
     gssSupport = false;
   };
 
+  libselinux = (super.libselinux.override {
+    fts = super.musl-fts;
+    enablePython = false;
+  }).overrideAttrs (old: {
+    patches = (old.patches or []) ++ [
+      # Patch to disable shared libraries, a cleaner way
+      # would be to fork this to use meson which is much
+      # easier to tweak for static builds using NIX_MESON_DEPENDENCY_STATIC
+      # and/or the mesonShlibsToStaticHook
+      ../os-specific/linux/libselinux/fix-static-build.patch
+    ];
+  });
+
   ocaml-ng = self.lib.mapAttrs (_: set:
     if set ? overrideScope' then set.overrideScope' ocamlStaticAdapter else set
   ) super.ocaml-ng;

@@ -1,0 +1,105 @@
+diff --color -ur a/src/Makefile b/src/Makefile
+--- a/src/Makefile	2019-11-28 13:46:48.000000000 +0100
++++ b/src/Makefile	2021-08-21 20:18:42.554513955 +0200
+@@ -32,7 +32,7 @@
+ endif
+ 
+ LIBA=libselinux.a 
+-TARGET=libselinux.so
++# TARGET=libselinux.so
+ LIBPC=libselinux.pc
+ SWIGIF= selinuxswig_python.i selinuxswig_python_exception.i
+ SWIGRUBYIF= selinuxswig_ruby.i
+@@ -44,7 +44,7 @@
+ SWIGSO=$(PYPREFIX)_selinux.so
+ SWIGFILES=$(SWIGSO) $(SWIGPYOUT)
+ SWIGRUBYSO=$(RUBYPREFIX)_selinux.so
+-LIBSO=$(TARGET).$(LIBVERSION)
++# LIBSO=$(TARGET).$(LIBVERSION)
+ AUDIT2WHYLOBJ=$(PYPREFIX)audit2why.lo
+ AUDIT2WHYSO=$(PYPREFIX)audit2why.so
+ 
+@@ -127,7 +127,7 @@
+ 
+ SWIGRUBY = swig -Wall -ruby -o $(SWIGRUBYCOUT) -outdir ./ $(DISABLE_FLAGS)
+ 
+-all: $(LIBA) $(LIBSO) $(LIBPC)
++all: $(LIBA) $(LIBPC)
+ 
+ pywrap: all selinuxswig_python_exception.i
+ 	CFLAGS="$(CFLAGS) $(SWIG_CFLAGS)" $(PYTHON) setup.py build_ext
+@@ -144,9 +144,9 @@
+ 	$(AR) rcs $@ $^
+ 	$(RANLIB) $@
+ 
+-$(LIBSO): $(LOBJS)
+-	$(CC) $(CFLAGS) $(LDFLAGS) -shared -o $@ $^ $(PCRE_LDLIBS) $(FTS_LDLIBS) -ldl -Wl,$(LD_SONAME_FLAGS)
+-	ln -sf $@ $(TARGET)
++# $(LIBSO): $(LOBJS)
++	# $(CC) $(CFLAGS) $(LDFLAGS) -shared -o $@ $^ $(PCRE_LDLIBS) $(FTS_LDLIBS) -ldl -Wl,$(LD_SONAME_FLAGS)
++	# ln -sf $@ $(TARGET)
+ 
+ $(LIBPC): $(LIBPC).in ../VERSION
+ 	sed -e 's/@VERSION@/$(VERSION)/; s:@prefix@:$(PREFIX):; s:@libdir@:$(LIBDIR):; s:@includedir@:$(INCLUDEDIR):; s:@PCRE_MODULE@:$(PCRE_MODULE):' < $< > $@
+@@ -167,10 +167,10 @@
+ 	test -d $(DESTDIR)$(LIBDIR) || install -m 755 -d $(DESTDIR)$(LIBDIR)
+ 	install -m 644 $(LIBA) $(DESTDIR)$(LIBDIR)
+ 	test -d $(DESTDIR)$(SHLIBDIR) || install -m 755 -d $(DESTDIR)$(SHLIBDIR)
+-	install -m 755 $(LIBSO) $(DESTDIR)$(SHLIBDIR)
++	# install -m 755 $(LIBSO) $(DESTDIR)$(SHLIBDIR)
+ 	test -d $(DESTDIR)$(LIBDIR)/pkgconfig || install -m 755 -d $(DESTDIR)$(LIBDIR)/pkgconfig
+ 	install -m 644 $(LIBPC) $(DESTDIR)$(LIBDIR)/pkgconfig
+-	ln -sf --relative $(DESTDIR)$(SHLIBDIR)/$(LIBSO) $(DESTDIR)$(LIBDIR)/$(TARGET)
++	# ln -sf --relative $(DESTDIR)$(SHLIBDIR)/$(LIBSO) $(DESTDIR)$(LIBDIR)/$(TARGET)
+ 
+ install-pywrap: pywrap
+ 	$(PYTHON) setup.py install --prefix=$(PREFIX) `test -n "$(DESTDIR)" && echo --root $(DESTDIR)`
+@@ -181,8 +181,8 @@
+ 	test -d $(DESTDIR)$(RUBYINSTALL) || install -m 755 -d $(DESTDIR)$(RUBYINSTALL) 
+ 	install -m 755 $(SWIGRUBYSO) $(DESTDIR)$(RUBYINSTALL)/selinux.so
+ 
+-relabel:
+-	/sbin/restorecon $(DESTDIR)$(SHLIBDIR)/$(LIBSO)
++# relabel:
++	# /sbin/restorecon $(DESTDIR)$(SHLIBDIR)/$(LIBSO)
+ 
+ clean-pywrap:
+ 	-rm -f $(SWIGLOBJ) $(SWIGSO) $(AUDIT2WHYLOBJ) $(AUDIT2WHYSO)
+@@ -192,8 +192,8 @@
+ clean-rubywrap:
+ 	-rm -f $(SWIGRUBYLOBJ) $(SWIGRUBYSO)
+ 
+-clean: clean-pywrap clean-rubywrap
+-	-rm -f $(LIBPC) $(OBJS) $(LOBJS) $(LIBA) $(LIBSO) $(TARGET) *.o *.lo *~
++# clean: clean-pywrap clean-rubywrap
++# 	-rm -f $(LIBPC) $(OBJS) $(LOBJS) $(LIBA) $(LIBSO) $(TARGET) *.o *.lo *~
+ 
+ distclean: clean
+ 	rm -f $(GENERATED) $(SWIGFILES)
+diff --color -ur a/utils/Makefile b/utils/Makefile
+--- a/utils/Makefile	2019-11-28 13:46:48.000000000 +0100
++++ b/utils/Makefile	2021-08-21 20:23:09.154510931 +0200
+@@ -43,10 +43,11 @@
+ override LDFLAGS += -L../../libsepol/src -undefined dynamic_lookup
+ endif
+ 
+-override CFLAGS += -I../include -D_GNU_SOURCE $(DISABLE_FLAGS) $(PCRE_CFLAGS)
+-override LDFLAGS += -L../src
+-override LDLIBS += -lselinux
+ PCRE_LDLIBS ?= -lpcre
++FTS_LDLIBS ?= -lfts
++override CFLAGS += -I../include -D_GNU_SOURCE $(DISABLE_FLAGS) $(PCRE_CFLAGS)
++override LDFLAGS += -L../src 
++override LDLIBS += -lselinux $(PCRE_LDLIBS) $(FTS_LDLIBS)
+ 
+ ifeq ($(ANDROID_HOST),y)
+ TARGETS=sefcontext_compile
+@@ -54,7 +55,7 @@
+ TARGETS=$(patsubst %.c,%,$(sort $(wildcard *.c)))
+ endif
+ 
+-sefcontext_compile: LDLIBS += $(PCRE_LDLIBS) ../src/libselinux.a -lsepol
++sefcontext_compile: LDLIBS += ../src/libselinux.a -lsepol
+ 
+ sefcontext_compile: sefcontext_compile.o ../src/regex.o
+ 
