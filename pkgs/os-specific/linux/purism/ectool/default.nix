@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "The Purism EC tool";
     homepage = "https://source.puri.sm/firmware/librem-ec";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     maintainers = [maintainers.avieth];
   };
 }
