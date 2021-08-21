@@ -1539,6 +1539,8 @@ in {
 
   cloudsmith-api = callPackage ../development/python-modules/cloudsmith-api { };
 
+  cloudsplaining = callPackage ../development/python-modules/cloudsplaining { };
+
   clustershell = callPackage ../development/python-modules/clustershell { };
 
   clvm = callPackage ../development/python-modules/clvm { };
@@ -3734,6 +3736,8 @@ in {
 
   jinja2 = callPackage ../development/python-modules/jinja2 { };
 
+  jinja2-git = callPackage ../development/python-modules/jinja2-git { };
+
   jinja2_pluralize = callPackage ../development/python-modules/jinja2_pluralize { };
 
   jinja2_time = callPackage ../development/python-modules/jinja2_time { };
@@ -5541,6 +5545,8 @@ in {
   poezio = callPackage ../applications/networking/instant-messengers/poezio { };
 
   polib = callPackage ../development/python-modules/polib { };
+
+  policy-sentry = callPackage ../development/python-modules/policy-sentry { };
 
   policyuniverse = callPackage ../development/python-modules/policyuniverse { };
 

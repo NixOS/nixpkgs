@@ -5,6 +5,7 @@
 , "@bitwarden/cli"
 , "@hyperspace/cli"
 , "@nestjs/cli"
+, "@squoosh/cli"
 , "@vue/cli"
 , "@webassemblyjs/cli"
 , "@webassemblyjs/repl"
