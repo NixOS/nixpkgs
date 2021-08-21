@@ -56,6 +56,19 @@ in stdenv.mkDerivation rec {
     "LOCALE_ARCHIVE=${glibcLocales}/lib/locale/locale-archive"
   ];
 
+  preConfigure = ''
+    # binutils 2.37 fix
+    fixupList=(
+      "config/cf/Imake.tmpl"
+      "config/util/crayar.sh"
+      "config/util/crayar.sh"
+      "programs/dtwm/Makefile.tmpl"
+    )
+    for toFix in "''${fixupList[@]}"; do
+      substituteInPlace "$toFix" --replace "clq" "cq"
+    done
+  '';
+
   preBuild = ''
     while IFS= read -r -d ''$'\0' i; do
       substituteInPlace "$i" --replace /usr/dt $out/opt/dt
