@@ -22,7 +22,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://downloads.vivaldi.com/${branch}/vivaldi-${branch}_${version}_amd64.deb";
-    sha256 = "14650cf07f5ffc2402562dc8da5d965298f3b404827c9982b8585d336315060c";
+    sha256 = "03062mik6paqp219jz420jsg762jjrfxmj1daq129z2zgzq0qr8l";
   };
 
   unpackPhase = ''
