@@ -127,6 +127,7 @@
   ./programs/cdemu.nix
   ./programs/chromium.nix
   ./programs/clickshare.nix
+  ./programs/cnping.nix
   ./programs/command-not-found/command-not-found.nix
   ./programs/criu.nix
   ./programs/dconf.nix
