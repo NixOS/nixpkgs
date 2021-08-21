@@ -1,6 +1,5 @@
 { lib, stdenv, buildPackages
 , gcc_src, version
-, glibc
 , autoreconfHook269, libiberty
 }:
 
@@ -172,7 +171,10 @@ stdenv.mkDerivation rec {
 
     "--with-system-zlib"
   ] ++ lib.optional (stdenv.hostPlatform.libc == "glibc")
-       "--with-glibc-version=${glibc.version}";
+       # Cheat and use previous stage's glibc to avoid infinite recursion. As
+       # of GCC 11, libgcc only cares if the version is greater than 2.19,
+       # which is quite ancient, so this little lie should be fine.
+       "--with-glibc-version=${buildPackages.glibc.version}";
 
   configurePlatforms = [ "build" "host" ];
   configureFlags = [

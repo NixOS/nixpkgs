@@ -11049,13 +11049,14 @@ with pkgs;
     stripped = false;
   }));
 
-  gccCrossLibcStdenv = overrideCC stdenv buildPackages.gccCrossStageStatic;
+  gccCrossLibcStdenv =
+    if stdenv.hostPlatform.useGccNg or false
+    then overrideCC stdenv buildPackages.gccNgPackages.gccNoLibc
+    else overrideCC stdenv buildPackages.gccCrossStageStatic;
 
   crossLibcStdenv =
     if stdenv.hostPlatform.useLLVM or false || stdenv.hostPlatform.isDarwin
-      then overrideCC stdenv buildPackages.llvmPackages.clangNoLibc
-    else if stdenv.hostPlatform.useGccNg or false
-      then overrideCC stdenv buildPackages.gccNgPackages.gccNoLibc
+    then overrideCC stdenv buildPackages.llvmPackages.clangNoLibc
     else gccCrossLibcStdenv;
 
   # The GCC used to build libc for the target platform. Normal gccs will be
