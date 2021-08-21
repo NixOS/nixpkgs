@@ -105,6 +105,11 @@ in rec {
     gssSupport = false;
   };
 
+  dconf = super.dconf.overrideAttrs (old: {
+    NIX_MESON_DEPENDENCY_STATIC = true;
+    nativeBuildInputs = (old.nativeBuildInputs or []) ++ [ super.mesonShlibsToStaticHook ];
+  });
+
   glib = super.glib.overrideAttrs (old: {
     NIX_MESON_DEPENDENCY_STATIC = true;
   });
