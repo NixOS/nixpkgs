@@ -1,17 +1,12 @@
 { lib, stdenv, fetchFromGitHub, cmake
-, alsaSupport ? !stdenv.isDarwin, alsa-lib ? null
-, pulseSupport ? !stdenv.isDarwin, libpulseaudio ? null
+, alsaSupport ? !stdenv.isDarwin, alsa-lib
+, pulseSupport ? !stdenv.isDarwin, libpulseaudio
 , CoreServices, AudioUnit, AudioToolbox
 }:
 
-with lib;
-
-assert alsaSupport -> alsa-lib != null;
-assert pulseSupport -> libpulseaudio != null;
-
 stdenv.mkDerivation rec {
-  version = "1.21.1";
   pname = "openal-soft";
+  version = "1.21.1";
 
   src = fetchFromGitHub {
     owner = "kcat";
@@ -30,16 +25,15 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = []
-    ++ optional alsaSupport alsa-lib
-    ++ optional pulseSupport libpulseaudio
-    ++ optionals stdenv.isDarwin [ CoreServices AudioUnit AudioToolbox ];
+  buildInputs = lib.optional alsaSupport alsa-lib
+    ++ lib.optional pulseSupport libpulseaudio
+    ++ lib.optionals stdenv.isDarwin [ CoreServices AudioUnit AudioToolbox ];
 
-  NIX_LDFLAGS = toString ([]
-    ++ optional alsaSupport "-lasound"
-    ++ optional pulseSupport "-lpulse");
+  NIX_LDFLAGS = toString (
+    lib.optional alsaSupport "-lasound"
+    ++ lib.optional pulseSupport "-lpulse");
 
-  meta = {
+  meta = with lib; {
     description = "OpenAL alternative";
     homepage = "https://kcat.strangesoft.net/openal.html";
     license = licenses.lgpl2;
