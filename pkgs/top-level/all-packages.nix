@@ -20476,6 +20476,8 @@ with pkgs;
 
   roon-bridge = callPackage ../servers/roon-bridge { };
 
+  rpiplay = callPackage ../servers/rpiplay { };
+
   roon-server = callPackage ../servers/roon-server { };
 
   s6 = skawarePackages.s6;
