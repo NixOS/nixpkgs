@@ -42,7 +42,9 @@ rec {
         python <<EOF
         from pydoc import importfile
         with open('driver-symbols', 'w') as fp:
-          fp.write(','.join(dir(importfile('${testDriverScript}'))))
+          t = importfile('${testDriverScript}')
+          test_symbols = t._test_symbols()
+          fp.write(','.join(test_symbols.keys()))
         EOF
       '';
 

@@ -62,7 +62,7 @@ in {
         zd1211fw
         alsa-firmware
         sof-firmware
-        openelec-dvb-firmware
+        libreelec-dvb-firmware
       ] ++ optional (pkgs.stdenv.hostPlatform.isAarch32 || pkgs.stdenv.hostPlatform.isAarch64) raspberrypiWirelessFirmware
         ++ optionals (versionOlder config.boot.kernelPackages.kernel.version "4.13") [
         rtl8723bs-firmware

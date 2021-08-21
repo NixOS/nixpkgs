@@ -5,11 +5,11 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "aws-sam-cli";
-  version = "1.26.0";
+  version = "1.29.0";
 
   src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "11aqdwhs7wa6cp9zijqi4in3zvwirfnlcy45rrnsq0jdsh3i9hbh";
+    sha256 = "sha256-JXphjERqY5Vj8j2F4Z7FrFJJEpBgK/5236pYfQRVdco=";
   };
 
   # Tests are not included in the PyPI package

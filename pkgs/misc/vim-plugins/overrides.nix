@@ -461,6 +461,10 @@ self: super: {
     configurePhase = "cd vim";
   });
 
+  range-highlight-nvim = super.range-highlight-nvim.overrideAttrs (old: {
+    dependencies = with self; [ cmd-parser-nvim ];
+  });
+
   refactoring-nvim = super.refactoring-nvim.overrideAttrs (old: {
     dependencies = with self; [ nvim-treesitter plenary-nvim ];
   });
@@ -830,7 +834,7 @@ self: super: {
   });
 
   vim-xdebug = super.vim-xdebug.overrideAttrs (old: {
-    postInstall = false;
+    postInstall = null;
   });
 
   vim-xkbswitch = super.vim-xkbswitch.overrideAttrs (old: {

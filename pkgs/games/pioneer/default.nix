@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
     export PIONEER_DATA_DIR="$out/share/pioneer/data";
   '';
 
+  makeFlags = [ "build-data" ];
+
   meta = with lib; {
     description = "A space adventure game set in the Milky Way galaxy at the turn of the 31st century";
     homepage = "https://pioneerspacesim.net";

@@ -10,11 +10,13 @@
 , pytest-openfiles
 , pytest-arraydiff
 , setuptools-scm
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pytest-astropy";
   version = "0.8.0";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
@@ -25,7 +27,9 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  buildInputs = [ pytest ];
+  buildInputs = [
+    pytest
+  ];
 
   propagatedBuildInputs = [
     hypothesis
@@ -38,12 +42,15 @@ buildPythonPackage rec {
   ];
 
   # pytest-astropy is a meta package and has no tests
-  doCheck = false;
+  #doCheck = false;
+  checkPhase = ''
+    # 'doCheck = false;' still invokes the pytestCheckPhase which makes the build fail
+  '';
 
   meta = with lib; {
     description = "Meta-package containing dependencies for testing";
     homepage = "https://astropy.org";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc ];
   };
 }

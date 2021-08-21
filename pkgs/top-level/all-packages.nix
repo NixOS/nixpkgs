@@ -1476,7 +1476,7 @@ with pkgs;
 
   deskew = callPackage ../applications/graphics/deskew { };
 
-  detect-secrets = python3Packages.callPackage ../development/tools/detect-secrets { };
+  detect-secrets = with python3Packages; toPythonApplication detect-secrets;
 
   dfmt = callPackage ../tools/text/dfmt { };
 
@@ -2179,6 +2179,8 @@ with pkgs;
   };
 
   traefik = callPackage ../servers/traefik { };
+
+  traefik-certs-dumper = callPackage ../tools/misc/traefik-certs-dumper { };
 
   calamares = libsForQt514.callPackage ../tools/misc/calamares {
     python = python3;
@@ -3701,6 +3703,8 @@ with pkgs;
 
   cicero-tui = callPackage ../tools/misc/cicero-tui { };
 
+  cilium-cli = callPackage ../applications/networking/cluster/cilium { };
+
   cipherscan = callPackage ../tools/security/cipherscan {
     openssl = if stdenv.hostPlatform.system == "x86_64-linux"
       then openssl-chacha
@@ -4448,6 +4452,8 @@ with pkgs;
     autoreconfHook = buildPackages.autoreconfHook269;
   };
 
+  emote = callPackage ../tools/inputmethods/emote { };
+
   engauge-digitizer = libsForQt5.callPackage ../applications/science/math/engauge-digitizer { };
 
   epubcheck = callPackage ../tools/text/epubcheck { };
@@ -4908,7 +4914,9 @@ with pkgs;
 
   libbtbb = callPackage ../development/libraries/libbtbb { };
 
-  lp_solve = callPackage ../applications/science/math/lp_solve { };
+  lp_solve = callPackage ../applications/science/math/lp_solve {
+    inherit (darwin) cctools;
+  };
 
   fabric-installer = callPackage ../tools/games/minecraft/fabric-installer { };
 
@@ -5040,6 +5048,8 @@ with pkgs;
   };
 
   ftop = callPackage ../os-specific/linux/ftop { };
+
+  ftxui = callPackage ../development/libraries/ftxui { };
 
   fsarchiver = callPackage ../tools/archivers/fsarchiver { };
 
@@ -7683,7 +7693,11 @@ with pkgs;
 
   onioncircuits = callPackage ../tools/security/onioncircuits { };
 
+  onlykey-agent = callPackage ../tools/security/onlykey-agent { };
+
   onlykey-cli = callPackage ../tools/security/onlykey-cli { };
+
+  onlykey = callPackage ../tools/security/onlykey { node_webkit = nwjs; };
 
   openapi-generator-cli = callPackage ../tools/networking/openapi-generator-cli { jre = pkgs.jre_headless; };
   openapi-generator-cli-unstable = callPackage ../tools/networking/openapi-generator-cli/unstable.nix { jre = pkgs.jre_headless; };
@@ -8022,6 +8036,8 @@ with pkgs;
   pdnsd = callPackage ../tools/networking/pdnsd { };
 
   peco = callPackage ../tools/text/peco { };
+
+  pg_activity = callPackage ../development/tools/database/pg_activity { };
 
   pg_checksums = callPackage ../development/tools/database/pg_checksums { };
 
@@ -8544,6 +8560,8 @@ with pkgs;
 
   inherit (callPackage ../development/misc/resholve { })
     resholve resholvePackage;
+
+  restool = callPackage ../os-specific/linux/restool {};
 
   reuse = callPackage ../tools/package-management/reuse { };
 
@@ -11491,13 +11509,6 @@ with pkgs;
 
   glslang = callPackage ../development/compilers/glslang { };
 
-  go_1_14 = callPackage ../development/compilers/go/1.14.nix ({
-    inherit (darwin.apple_sdk.frameworks) Security Foundation;
-  } // lib.optionalAttrs (stdenv.cc.isGNU && stdenv.isAarch64) {
-    stdenv = gcc8Stdenv;
-    buildPackages = buildPackages // { stdenv = buildPackages.gcc8Stdenv; };
-  });
-
   go_1_15 = callPackage ../development/compilers/go/1.15.nix ({
     inherit (darwin.apple_sdk.frameworks) Security Foundation;
   } // lib.optionalAttrs (stdenv.cc.isGNU && stdenv.isAarch64) {
@@ -12544,6 +12555,10 @@ with pkgs;
   clisp = callPackage ../development/interpreters/clisp { };
   clisp-tip = callPackage ../development/interpreters/clisp/hg.nix { };
 
+  clojupyter = callPackage ../applications/editors/jupyter-kernels/clojupyter {
+    jre = jre8;
+  };
+
   clojure = callPackage ../development/interpreters/clojure {
     # set this to an LTS version of java
     jdk = jdk11;
@@ -12663,7 +12678,7 @@ with pkgs;
 
   ### LUA interpreters
   luaInterpreters = callPackage ./../development/interpreters/lua-5 {};
-  inherit (luaInterpreters) lua5_1 lua5_2 lua5_2_compat lua5_3 lua5_3_compat lua5_4 lua5_4_compat luajit_2_1 luajit_2_0;
+  inherit (luaInterpreters) lua5_1 lua5_2 lua5_2_compat lua5_3 lua5_3_compat lua5_4 lua5_4_compat luajit_openresty luajit_2_1 luajit_2_0;
 
   lua5 = lua5_2_compat;
   lua = lua5;
@@ -13755,6 +13770,8 @@ with pkgs;
   foreman = callPackage ../tools/system/foreman { };
   goreman = callPackage ../tools/system/goreman { };
 
+  fprettify = callPackage ../development/tools/fprettify { };
+
   framac = callPackage ../development/tools/analysis/frama-c { };
 
   frame = callPackage ../development/libraries/frame { };
@@ -13998,6 +14015,8 @@ with pkgs;
   khronos-ocl-icd-loader = callPackage ../development/libraries/khronos-ocl-icd-loader {  };
 
   ko = callPackage ../development/tools/ko { };
+
+  konstraint = callPackage ../development/tools/konstraint { };
 
   krankerl = callPackage ../development/tools/krankerl { };
 
@@ -14917,7 +14936,6 @@ with pkgs;
     boost168
     boost169
     boost170
-    boost171
     boost172
     boost173
     boost174
@@ -16764,6 +16782,8 @@ with pkgs;
 
   libechonest = callPackage ../development/libraries/libechonest { };
 
+  libemf2svg = callPackage ../development/libraries/libemf2svg { };
+
   libev = callPackage ../development/libraries/libev { };
 
   libevent = callPackage ../development/libraries/libevent { };
@@ -17491,6 +17511,8 @@ with pkgs;
 
   libvisio = callPackage ../development/libraries/libvisio { };
 
+  libvisio2svg = callPackage ../development/libraries/libvisio2svg { };
+
   libvisual = callPackage ../development/libraries/libvisual { };
 
   libvmaf = callPackage ../development/libraries/libvmaf { };
@@ -18017,7 +18039,11 @@ with pkgs;
 
   opencv = opencv4;
 
-  openexr = callPackage ../development/libraries/openexr { };
+  imath = callPackage ../development/libraries/imath { };
+
+  openexr = openexr_2;
+  openexr_2 = callPackage ../development/libraries/openexr { };
+  openexr_3 = callPackage ../development/libraries/openexr/3.nix { };
 
   openexrid-unstable = callPackage ../development/libraries/openexrid-unstable { };
 
@@ -19416,9 +19442,6 @@ with pkgs;
 
   ### DEVELOPMENT / GO MODULES
 
-  buildGo114Package = callPackage ../development/go-packages/generic {
-    go = buildPackages.go_1_14;
-  };
   buildGo115Package = callPackage ../development/go-packages/generic {
     go = buildPackages.go_1_15;
   };
@@ -19428,9 +19451,6 @@ with pkgs;
 
   buildGoPackage = buildGo116Package;
 
-  buildGo114Module = callPackage ../development/go-modules/generic {
-    go = buildPackages.go_1_14;
-  };
   buildGo115Module = callPackage ../development/go-modules/generic {
     go = buildPackages.go_1_15;
   };
@@ -20229,7 +20249,7 @@ with pkgs;
   };
 
   mysql80 = callPackage ../servers/sql/mysql/8.0.x.nix {
-    inherit (darwin) cctools developer_cmds;
+    inherit (darwin) cctools developer_cmds DarwinTools;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
     boost = boost173; # Configure checks for specific version.
     protobuf = protobuf3_11;
@@ -20438,6 +20458,8 @@ with pkgs;
 
   rake = callPackage ../development/tools/build-managers/rake { };
 
+  rakkess = callPackage ../development/tools/rakkess { };
+
   redis = callPackage ../servers/nosql/redis { };
 
   redstore = callPackage ../servers/http/redstore { };
@@ -20465,6 +20487,8 @@ with pkgs;
   };
 
   roon-bridge = callPackage ../servers/roon-bridge { };
+
+  rpiplay = callPackage ../servers/rpiplay { };
 
   roon-server = callPackage ../servers/roon-server { };
 
@@ -21059,7 +21083,7 @@ with pkgs;
 
   linuxConsoleTools = callPackage ../os-specific/linux/consoletools { };
 
-  openelec-dvb-firmware = callPackage ../os-specific/linux/firmware/openelec-dvb-firmware { };
+  libreelec-dvb-firmware = callPackage ../os-specific/linux/firmware/libreelec-dvb-firmware { };
 
   openiscsi = callPackage ../os-specific/linux/open-iscsi { };
 
@@ -27532,31 +27556,11 @@ with pkgs;
   wrapNeovimUnstable = callPackage ../applications/editors/neovim/wrapper.nix { };
   wrapNeovim = neovim-unwrapped: lib.makeOverridable (neovimUtils.legacyWrapper neovim-unwrapped);
   neovim-unwrapped = callPackage ../applications/editors/neovim {
-    # neovim doesn't build with luajit on aarch64-darwin :
-    # ./luarocks init
-    # PANIC: unprotected error in call to Lua API (module 'luarocks.core.hardcoded' not found:
-    #         no field package.preload['luarocks.core.hardcoded']
-    #         no file '/private/tmp/nix-build-luarocks-3.2.1.drv-0/source/src/luarocks/core/hardcoded.lua'
-    #         no file './luarocks/core/hardcoded.lua'
-    #         no file '/nix/store/3s6c509q9vvq3db87rfi7qa38wzxwz8w-luajit-2.1.0-2021-05-29/share/luajit-2.1.0-beta3/luarocks/core/hardcoded.lua'
-    #         no file '/usr/local/share/lua/5.1/luarocks/core/hardcoded.lua'
-    #         no file '/usr/local/share/lua/5.1/luarocks/core/hardcoded/init.lua'
-    #         no file '/nix/store/3s6c509q9vvq3db87rfi7qa38wzxwz8w-luajit-2.1.0-2021-05-29/share/lua/5.1/luarocks/core/hardcoded.lua'
-    #         no file '/nix/store/3s6c509q9vvq3db87rfi7qa38wzxwz8w-luajit-2.1.0-2021-05-29/share/lua/5.1/luarocks/core/hardcoded/init.lua'
-    #         no file './luarocks/core/hardcoded.so'
-    #         no file '/usr/local/lib/lua/5.1/luarocks/core/hardcoded.so'
-    #         no file '/nix/store/3s6c509q9vvq3db87rfi7qa38wzxwz8w-luajit-2.1.0-2021-05-29/lib/lua/5.1/luarocks/core/hardcoded.so'
-    #         no file '/usr/local/lib/lua/5.1/loadall.so'
-    #         no file './luarocks.so'
-    #         no file '/usr/local/lib/lua/5.1/luarocks.so'
-    #         no file '/nix/store/3s6c509q9vvq3db87rfi7qa38wzxwz8w-luajit-2.1.0-2021-05-29/lib/lua/5.1/luarocks.so'
-    #         no file '/usr/local/lib/lua/5.1/loadall.so')
-    # make: *** [GNUmakefile:57: luarocks] Error 1
-    #
-    # See https://github.com/NixOS/nixpkgs/issues/129099
-    # Possibly related: https://github.com/neovim/neovim/issues/7879
+    # See:
+    #   - https://github.com/NixOS/nixpkgs/issues/129099
+    #   - https://github.com/NixOS/nixpkgs/issues/128959
     lua =
-      if (stdenv.isDarwin && stdenv.isAarch64) then lua5_1 else
+      if (stdenv.isDarwin && stdenv.isAarch64) then luajit_openresty else
       luajit;
   };
 
@@ -30509,6 +30513,8 @@ with pkgs;
 
   openems = callPackage ../applications/science/electronics/openems { };
 
+  openroad = libsForQt5.callPackage ../applications/science/electronics/openroad { };
+
   pcb = callPackage ../applications/science/electronics/pcb { };
 
   qucs = callPackage ../applications/science/electronics/qucs { };
@@ -31006,6 +31012,8 @@ with pkgs;
   gxemul = callPackage ../misc/emulators/gxemul { };
 
   hatari = callPackage ../misc/emulators/hatari { };
+
+  hck = callPackage ../tools/text/hck { };
 
   helm = callPackage ../applications/audio/helm { };
 

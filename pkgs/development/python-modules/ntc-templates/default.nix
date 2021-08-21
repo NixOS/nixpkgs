@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "ntc-templates";
-  version = "2.0.0";
+  version = "2.2.0";
   format = "pyproject";
   disabled = isPy27;
 
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "networktocode";
     repo = pname;
     rev = "v${version}";
-    sha256 = "05ifbzps9jxrrkrqybsdbm67jhynfcjc298pqkhp21q5jwnlrl72";
+    sha256 = "18v47sd301y6zdl5yria0z8s9cx7f9rvj3gq27fd7p7h9lkll984";
   };
 
   nativeBuildInputs = [

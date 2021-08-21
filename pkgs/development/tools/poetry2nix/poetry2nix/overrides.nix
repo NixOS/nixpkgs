@@ -52,6 +52,18 @@ self: super:
     }
   );
 
+  anyio = super.anyio.overridePythonAttrs (old: {
+    postPatch = ''
+      substituteInPlace setup.py --replace 'setup()' 'setup(version="${old.version}")'
+    '';
+  });
+
+  arpeggio = super.arpeggio.overridePythonAttrs (
+    old: {
+      nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ self.pytest-runner ];
+    }
+  );
+
   astroid = super.astroid.overridePythonAttrs (
     old: rec {
       buildInputs = (old.buildInputs or [ ]) ++ [ self.pytest-runner ];
@@ -67,6 +79,14 @@ self: super:
       buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.ffmpeg_4 ];
     }
   );
+
+  backports-entry-points-selectable = super.backports-entry-points-selectable.overridePythonAttrs (old: {
+    postPatch = ''
+      substituteInPlace setup.py --replace \
+        'setuptools.setup()' \
+        'setuptools.setup(version="${old.version}")'
+    '';
+  });
 
   bcrypt = super.bcrypt.overridePythonAttrs (
     old: {
@@ -493,7 +513,7 @@ self: super:
     old: {
       inherit (pkgs.python3Packages.jira) patches;
       buildInputs = (old.buildInputs or [ ]) ++ [
-        self.pytest-runner
+        self.pytestrunner
         self.cryptography
         self.pyjwt
       ];
@@ -620,7 +640,8 @@ self: super:
 
       buildInputs = (old.buildInputs or [ ])
         ++ lib.optional enableGhostscript pkgs.ghostscript
-        ++ lib.optional stdenv.isDarwin [ Cocoa ];
+        ++ lib.optional stdenv.isDarwin [ Cocoa ]
+        ++ [ self.certifi ];
 
       nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [
         pkgs.pkg-config
@@ -962,6 +983,7 @@ self: super:
             ];
 
             PYARROW_BUILD_TYPE = "release";
+            PYARROW_WITH_DATASET = true;
             PYARROW_WITH_PARQUET = true;
             PYARROW_CMAKE_OPTIONS = [
               "-DCMAKE_INSTALL_RPATH=${ARROW_HOME}/lib"
@@ -1263,6 +1285,8 @@ self: super:
     }
   );
 
+  pytest-runner = super.pytest-runner or super.pytestrunner;
+
   pytest-pylint = super.pytest-pylint.overridePythonAttrs (
     old: {
       buildInputs = [ self.pytest-runner ];
@@ -1371,6 +1395,16 @@ self: super:
       doCheck = false; # Circular test dependency
     }
   );
+
+  requests-unixsocket = super.requests-unixsocket.overridePythonAttrs (
+    old: {
+      nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ self.pbr ];
+    }
+  );
+
+  requestsexceptions = super.requestsexceptions.overridePythonAttrs (old: {
+    nativeBuildInputs = old.nativeBuildInputs ++ [ self.pbr ];
+  });
 
   rlp = super.rlp.overridePythonAttrs {
     preConfigure = ''
@@ -1831,4 +1865,58 @@ self: super:
       '';
     });
 
+  marisa-trie = super.marisa-trie.overridePythonAttrs (
+    old: {
+      buildInputs = (old.buildInputs or [ ]) ++ [ self.pytest-runner ];
+    }
+  );
+
+  ua-parser = super.ua-parser.overridePythonAttrs (
+    old: {
+      propagatedBuildInputs = (old.propagatedBuildInputs or [ ]) ++ [ self.pyyaml ];
+    }
+  );
+
+  lazy-object-proxy = super.lazy-object-proxy.overridePythonAttrs (
+    old: {
+      # disable the removal of pyproject.toml, required because of setuptools_scm
+      dontPreferSetupPy = true;
+    }
+  );
+
+  pendulum = super.pendulum.overridePythonAttrs (old: {
+    # Technically incorrect, but fixes the build error..
+    preInstall = lib.optionalString stdenv.isLinux ''
+      mv ./dist/*.whl $(echo ./dist/*.whl | sed s/'manylinux_[0-9]*_[0-9]*'/'manylinux1'/)
+    '';
+  });
+
+  pygraphviz = super.pygraphviz.overridePythonAttrs (old: {
+    nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ pkgs.pkg-config ];
+    buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.graphviz ];
+  });
+
+  pyjsg = super.pyjsg.overridePythonAttrs (old: {
+    buildInputs = (old.buildInputs or [ ]) ++ [ self.pbr ];
+  });
+
+  pyshex = super.pyshex.overridePythonAttrs (old: {
+    buildInputs = (old.buildInputs or [ ]) ++ [ self.pbr ];
+  });
+
+  pyshexc = super.pyshexc.overridePythonAttrs (old: {
+    buildInputs = (old.buildInputs or [ ]) ++ [ self.pbr ];
+  });
+
+  shexjsg = super.shexjsg.overridePythonAttrs (old: {
+    buildInputs = (old.buildInputs or [ ]) ++ [ self.pbr ];
+  });
+
+  sparqlslurper = super.sparqlslurper.overridePythonAttrs (old: {
+    buildInputs = (old.buildInputs or [ ]) ++ [ self.pbr ];
+  });
+
+  tomli = super.tomli.overridePythonAttrs (old: {
+    buildInputs = (old.buildInputs or [ ]) ++ [ self.flit-core ];
+  });
 }

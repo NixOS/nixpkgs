@@ -101,7 +101,7 @@ stdenv.mkDerivation rec {
   ];
 
   # make install attempts to use the just-built cmake
-  preInstall = lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) ''
+  preInstall = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
     sed -i 's|bin/cmake|${buildPackages.cmakeMinimal}/bin/cmake|g' Makefile
   '';
 

@@ -1539,6 +1539,8 @@ in {
 
   cloudsmith-api = callPackage ../development/python-modules/cloudsmith-api { };
 
+  cloudsplaining = callPackage ../development/python-modules/cloudsplaining { };
+
   clustershell = callPackage ../development/python-modules/clustershell { };
 
   clvm = callPackage ../development/python-modules/clvm { };
@@ -1929,6 +1931,8 @@ in {
   descartes = callPackage ../development/python-modules/descartes { };
 
   desktop-notifier = callPackage ../development/python-modules/desktop-notifier { };
+
+  detect-secrets = callPackage ../development/python-modules/detect-secrets { };
 
   devolo-home-control-api = callPackage ../development/python-modules/devolo-home-control-api { };
 
@@ -3206,6 +3210,8 @@ in {
 
   guestfs = callPackage ../development/python-modules/guestfs { };
 
+  gudhi = callPackage ../development/python-modules/gudhi { };
+
   gumath = callPackage ../development/python-modules/gumath { };
 
   gunicorn = callPackage ../development/python-modules/gunicorn { };
@@ -3729,6 +3735,8 @@ in {
   jieba = callPackage ../development/python-modules/jieba { };
 
   jinja2 = callPackage ../development/python-modules/jinja2 { };
+
+  jinja2-git = callPackage ../development/python-modules/jinja2-git { };
 
   jinja2_pluralize = callPackage ../development/python-modules/jinja2_pluralize { };
 
@@ -5009,6 +5017,8 @@ in {
 
   onkyo-eiscp = callPackage ../development/python-modules/onkyo-eiscp { };
 
+  onlykey-solo-python = callPackage ../development/python-modules/onlykey-solo-python { };
+
   onnx = callPackage ../development/python-modules/onnx { };
 
   open-garage = callPackage ../development/python-modules/open-garage { };
@@ -5484,6 +5494,8 @@ in {
 
   plaster-pastedeploy = callPackage ../development/python-modules/plaster-pastedeploy { };
 
+  platformdirs = callPackage ../development/python-modules/platformdirs { };
+
   playsound = callPackage ../development/python-modules/playsound { };
 
   plexapi = callPackage ../development/python-modules/plexapi { };
@@ -5534,6 +5546,10 @@ in {
 
   polib = callPackage ../development/python-modules/polib { };
 
+  policy-sentry = callPackage ../development/python-modules/policy-sentry { };
+
+  policyuniverse = callPackage ../development/python-modules/policyuniverse { };
+
   polyline = callPackage ../development/python-modules/polyline { };
 
   pomegranate = callPackage ../development/python-modules/pomegranate { };
@@ -5564,6 +5580,8 @@ in {
   poster3 = callPackage ../development/python-modules/poster3 { };
 
   postorius = callPackage ../servers/mail/mailman/postorius.nix { };
+
+  pot = callPackage ../development/python-modules/pot { };
 
   potr = callPackage ../development/python-modules/potr { };
 
@@ -6061,7 +6079,9 @@ in {
 
   pygal = callPackage ../development/python-modules/pygal { };
 
-  pygame = callPackage ../development/python-modules/pygame { };
+  pygame = callPackage ../development/python-modules/pygame {
+    inherit (pkgs.darwin.apple_sdk.frameworks) AppKit CoreMIDI;
+  };
 
   pygame_sdl2 = callPackage ../development/python-modules/pygame_sdl2 { };
 
@@ -6264,6 +6284,8 @@ in {
   pymaging = callPackage ../development/python-modules/pymaging { };
 
   pymaging_png = callPackage ../development/python-modules/pymaging_png { };
+
+  pymanopt = callPackage ../development/python-modules/pymanopt { };
 
   pymata-express = callPackage ../development/python-modules/pymata-express { };
 

@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
     "-Dman-pages=enabled"
   ];
 
-  preFixup = lib.optional withMediaPlayer ''
+  preFixup = lib.optionalString withMediaPlayer ''
       cp $src/resources/custom_modules/mediaplayer.py $out/bin/waybar-mediaplayer.py
 
       wrapProgram $out/bin/waybar-mediaplayer.py \
