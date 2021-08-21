@@ -1888,10 +1888,6 @@ EOT
   # https://github.com/google/proto-lens/issues/413
   proto-lens = doJailbreak super.proto-lens;
 
-  # Too strict bounds on profunctors
-  # https://github.com/jcranch/tophat/issues/1
-  tophat = doJailbreak super.tophat;
-
   # 2021-06-20: Outdated upper bounds
   # https://github.com/Porges/email-validate-hs/issues/58
   email-validate = doJailbreak super.email-validate;
