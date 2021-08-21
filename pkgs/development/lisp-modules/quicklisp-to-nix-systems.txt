@@ -163,6 +163,7 @@ lfarm-client
 lfarm-server
 lfarm-ssl
 lift
+lisp-binary
 lisp-namespace
 lla
 local-time
