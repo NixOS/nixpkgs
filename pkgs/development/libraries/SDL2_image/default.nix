@@ -12,8 +12,18 @@ stdenv.mkDerivation rec {
   buildInputs = [ SDL2 libpng libjpeg libtiff giflib libwebp libXpm zlib ]
     ++ lib.optional stdenv.isDarwin Foundation;
 
-
-  configureFlags = lib.optional stdenv.isDarwin "--disable-sdltest";
+  configureFlags = [
+    # Disable dynamically loaded dependencies
+    "--disable-jpg-shared"
+    "--disable-png-shared"
+    "--disable-tif-shared"
+    "--disable-webp-shared"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # Darwin headless will hang when trying to run the SDL test program
+    "--disable-sdltest"
+    # Don't use native macOS frameworks
+    "--disable-imageio"
+  ];
 
   enableParallelBuilding = true;
 
