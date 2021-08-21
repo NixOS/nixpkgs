@@ -114,4 +114,12 @@ in {
     # it doesn’t like the --disable-shared flag
     stdenv = super.stdenv;
   };
+
+  wayland = super.wayland.overrideAttrs (old: {
+    NIX_MESON_DEPENDENCY_STATIC = true;
+    postPatch = (old.postPatch or "") + ''
+      substituteInPlace meson.build \
+        --replace "subdir('tests')" ""
+    '';
+  });
 }
