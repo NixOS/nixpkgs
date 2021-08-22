@@ -65,6 +65,9 @@ stdenv.mkDerivation {
     # cross-compiling.
     ./always-search-rpath.patch
 
+    # Remove on the next release
+    # https://sourceware.org/bugzilla/show_bug.cgi?id=28138
+    ./fix-ld-descriptors.patch
   ] ++ lib.optional stdenv.targetPlatform.isiOS ./support-ios.patch
     ++ # This patch was suggested by Nick Clifton to fix
        # https://sourceware.org/bugzilla/show_bug.cgi?id=16177
