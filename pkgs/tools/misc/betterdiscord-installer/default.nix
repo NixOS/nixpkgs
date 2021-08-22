@@ -24,7 +24,7 @@ in appimageTools.wrapType2 {
 
   meta = with lib; {
     description = "Installer for BetterDiscord";
-    homepage = "https://betterdiscord.net";
+    homepage = "https://betterdiscord.app";
     license = licenses.mit;
     maintainers = [ maintainers.ivar ];
     platforms = [ "x86_64-linux" ];
