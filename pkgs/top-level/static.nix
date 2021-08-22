@@ -150,6 +150,10 @@ in rec {
     ];
   });
 
+  libxkbcommon = super.libxkbcommon.overrideAttrs (old: {
+    NIX_MESON_DEPENDENCY_STATIC = true;
+  });
+
   ocaml-ng = self.lib.mapAttrs (_: set:
     if set ? overrideScope' then set.overrideScope' ocamlStaticAdapter else set
   ) super.ocaml-ng;
