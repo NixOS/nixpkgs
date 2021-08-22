@@ -26,12 +26,10 @@ buildGoPackage rec {
 
   buildInputs = [ btrfs-progs ];
 
-  buildFlags = [ "VERSION=v${version}" "REVISION=${src.rev}" ];
-
   buildPhase = ''
     cd go/src/${goPackagePath}
     patchShebangs .
-    make binaries man $buildFlags
+    make binaries man "VERSION=v${version}" "REVISION=${src.rev}"
   '';
 
   installPhase = ''

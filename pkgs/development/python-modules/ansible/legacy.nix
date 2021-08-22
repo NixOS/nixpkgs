@@ -46,7 +46,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    homepage = "http://www.ansible.com";
+    homepage = "https://www.ansible.com";
     description = "Radically simple IT automation";
     license = [ licenses.gpl3 ] ;
     maintainers = with maintainers; [ joamaki costrouc hexa ];

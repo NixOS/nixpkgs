@@ -463,7 +463,7 @@ in
         default = "common";
         example = "combined";
         description = ''
-          Log format for log files. Possible values are: combined, common, referer, agent.
+          Log format for log files. Possible values are: combined, common, referer, agent, none.
           See <link xlink:href="https://httpd.apache.org/docs/2.4/logs.html"/> for more details.
         '';
       };
