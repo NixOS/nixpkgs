@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "rtsp-simple-server";
-  version = "0.17.1";
+  version = "0.17.2";
 
   src = fetchFromGitHub {
     owner = "aler9";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-8g9taSFEprJEEPM0hrbCf5QDE41uVdgVVIWjhfEICpU=";
+    sha256 = "sha256-z3dT5WtchG3FeWZsqKOPUk9D5G6srr5+DgY0A0nWSzk=";
   };
 
   vendorSha256 = "sha256-buQW5jMnHyHc/oYdmfTnoktFRG3V3SNxn7t5mAwmiJI=";
