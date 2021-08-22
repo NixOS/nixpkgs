@@ -2165,6 +2165,8 @@ in {
 
   docopt = callPackage ../development/python-modules/docopt { };
 
+  docopt-ng = callPackage ../development/python-modules/docopt-ng { };
+
   docplex = callPackage ../development/python-modules/docplex { };
 
   docrep = callPackage ../development/python-modules/docrep { };

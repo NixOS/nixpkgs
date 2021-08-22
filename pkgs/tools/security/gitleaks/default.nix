@@ -16,9 +16,9 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-Cc4DJPpOMHxDcH22S7znYo7QHNRXv8jOJhznu09kaE4=";
 
-  preBuild = ''
-    buildFlagsArray+=("-ldflags" "-s -w -X github.com/zricethezav/gitleaks/v${lib.versions.major version}/version.Version=${version}")
-  '';
+  ldflags = [
+    "-s" "-w" "-X github.com/zricethezav/gitleaks/v${lib.versions.major version}/version.Version=${version}"
+  ];
 
   meta = with lib; {
     description = "Scan git repos (or files) for secrets";
