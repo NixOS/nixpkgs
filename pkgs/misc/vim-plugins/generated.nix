@@ -387,6 +387,18 @@ final: prev:
     meta.homepage = "https://github.com/jlanzarotta/bufexplorer/";
   };
 
+  bufferline-nvim = buildVimPluginFrom2Nix {
+    pname = "bufferline-nvim";
+    version = "2021-08-21";
+    src = fetchFromGitHub {
+      owner = "akinsho";
+      repo = "bufferline.nvim";
+      rev = "35ac1c1e2e6f7cbf6a1ad027d8bf019a284b28d5";
+      sha256 = "1sdq5yjav7ak5lkw0kiz8mwffnxva94w1xav8y8kxy8f95b78a2g";
+    };
+    meta.homepage = "https://github.com/akinsho/bufferline.nvim/";
+  };
+
   BufOnly-vim = buildVimPluginFrom2Nix {
     pname = "BufOnly-vim";
     version = "2010-10-18";
@@ -3778,18 +3790,6 @@ final: prev:
     meta.homepage = "https://github.com/ojroques/nvim-bufdel/";
   };
 
-  nvim-bufferline-lua = buildVimPluginFrom2Nix {
-    pname = "nvim-bufferline-lua";
-    version = "2021-08-21";
-    src = fetchFromGitHub {
-      owner = "akinsho";
-      repo = "nvim-bufferline.lua";
-      rev = "35ac1c1e2e6f7cbf6a1ad027d8bf019a284b28d5";
-      sha256 = "1sdq5yjav7ak5lkw0kiz8mwffnxva94w1xav8y8kxy8f95b78a2g";
-    };
-    meta.homepage = "https://github.com/akinsho/nvim-bufferline.lua/";
-  };
-
   nvim-cm-racer = buildVimPluginFrom2Nix {
     pname = "nvim-cm-racer";
     version = "2017-07-27";
@@ -4052,18 +4052,6 @@ final: prev:
       sha256 = "09hass19v3wrqgxjcr3b59w462lp2nw533zwb1nnmiz99gx1znpx";
     };
     meta.homepage = "https://github.com/norcalli/nvim-terminal.lua/";
-  };
-
-  nvim-toggleterm-lua = buildVimPluginFrom2Nix {
-    pname = "nvim-toggleterm-lua";
-    version = "2021-08-22";
-    src = fetchFromGitHub {
-      owner = "akinsho";
-      repo = "nvim-toggleterm.lua";
-      rev = "5a4429d33cc8f286a0ad30b89084ec5284d6a652";
-      sha256 = "0rflwn9bbnffly5i66n3hxrf9cgbpqphqc2p6bjpxlyydda1vdx3";
-    };
-    meta.homepage = "https://github.com/akinsho/nvim-toggleterm.lua/";
   };
 
   nvim-tree-lua = buildVimPluginFrom2Nix {
@@ -5618,6 +5606,18 @@ final: prev:
       fetchSubmodules = true;
     };
     meta.homepage = "https://github.com/freitass/todo.txt-vim/";
+  };
+
+  toggleterm-nvim = buildVimPluginFrom2Nix {
+    pname = "toggleterm-nvim";
+    version = "2021-08-22";
+    src = fetchFromGitHub {
+      owner = "akinsho";
+      repo = "toggleterm.nvim";
+      rev = "5a4429d33cc8f286a0ad30b89084ec5284d6a652";
+      sha256 = "0rflwn9bbnffly5i66n3hxrf9cgbpqphqc2p6bjpxlyydda1vdx3";
+    };
+    meta.homepage = "https://github.com/akinsho/toggleterm.nvim/";
   };
 
   tokyonight-nvim = buildVimPluginFrom2Nix {
