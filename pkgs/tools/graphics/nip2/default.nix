@@ -1,5 +1,19 @@
-{ lib, stdenv, fetchurl, pkg-config, glib, libxml2, flex, bison, vips, gtk2
-, fftw, gsl, goffice, libgsf }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, glib
+, libxml2
+, flex
+, bison
+, vips
+, gtk2
+, fftw
+, gsl
+, goffice
+, libgsf
+, makeWrapper
+}:
 
 stdenv.mkDerivation rec {
   pname = "nip2";
@@ -11,9 +25,24 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-  [ pkg-config glib libxml2 flex bison vips
-    gtk2 fftw gsl goffice libgsf
-  ];
+    [
+      pkg-config
+      glib
+      libxml2
+      flex
+      bison
+      vips
+      gtk2
+      fftw
+      gsl
+      goffice
+      libgsf
+      makeWrapper
+    ];
+
+  postFixup = ''
+    wrapProgram $out/bin/nip2 --set VIPSHOME "$out"
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/libvips/nip2";
