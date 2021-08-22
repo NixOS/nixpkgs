@@ -31,6 +31,8 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ patchPpdFilesHook ];
 
   installPhase = ''
+    runHook preInstall
+
     tar -xvf ${platform}/Global/English.tar.gz
     install -Dm755 English/rastertokpsl $out/lib/cups/filter/rastertokpsl
     patchelf \
@@ -41,6 +43,8 @@ stdenv.mkDerivation {
     mkdir -p $out/share/cups/model/Kyocera
     cd English
     cp *.ppd $out/share/cups/model/Kyocera
+
+    runHook postInstall
   '';
 
   ppdFileCommands = [ "rastertokpsl" ];
