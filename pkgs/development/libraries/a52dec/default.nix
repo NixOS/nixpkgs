@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "ATSC A/52 stream decoder";
-    homepage = "https://liba52.sourceforge.net/";
+    homepage = "https://liba52.sourceforge.io/";
     platforms = platforms.unix;
     license = licenses.gpl2Plus;
   };
