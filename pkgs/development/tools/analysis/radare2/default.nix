@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , buildPackages
 , pkg-config
 , libusb-compat-0_1
@@ -36,6 +37,14 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "sha256-VS8eG5RXwKtJSLmyaSifopJU7WYGMUcznn+burPqEYE=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2021-3673.patch";
+      url = "https://github.com/radareorg/radare2/commit/d7ea20fb2e1433ebece9f004d87ad8f2377af23d.patch";
+      sha256 = "14vr2chcyx9xrb1krczppwy619fb3k5dnyc4mcg40mvfl70ndbwn";
+    })
+  ];
 
   postInstall = ''
     install -D -m755 $src/binr/r2pm/r2pm $out/bin/r2pm
