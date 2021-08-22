@@ -182,6 +182,16 @@
         </para>
       </listitem>
     </itemizedlist>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          <link xlink:href="https://docs.fluidd.xyz/">fluidd</link>, a
+          Klipper web interface for managing 3d printers using
+          moonraker. Available as
+          <link linkend="opt-services.fluidd.enable">fluidd</link>.
+        </para>
+      </listitem>
+    </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-incompatibilities">
     <title>Backward Incompatibilities</title>
@@ -273,7 +283,7 @@ Superuser created successfully.
       <listitem>
         <para>
           The <literal>staticjinja</literal> package has been upgraded
-          from 1.0.4 to 3.0.1
+          from 1.0.4 to 4.1.0
         </para>
       </listitem>
       <listitem>

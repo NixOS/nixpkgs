@@ -15,9 +15,9 @@ buildGoModule rec {
 
   excludedPackages = "misc";
 
-  preBuild = ''
-    buildFlagsArray+=("-ldflags" "-s -w -X main.version=v${version}")
-  '';
+  ldflags = [
+    "-s" "-w" "-X main.version=v${version}"
+  ];
 
   doInstallCheck = true;
   installCheckPhase = ''

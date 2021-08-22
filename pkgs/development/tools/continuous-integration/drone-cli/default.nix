@@ -9,9 +9,9 @@ buildGoModule rec {
 
   doCheck = false;
 
-  preBuild = ''
-    buildFlagsArray+=("-ldflags" "-X main.version=${version}")
-  '';
+  ldflags = [
+    "-X main.version=${version}"
+  ];
 
   src = fetchFromGitHub {
     owner = "drone";
