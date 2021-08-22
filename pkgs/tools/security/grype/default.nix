@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "grype";
-  version = "0.15.0";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "anchore";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-xiUDyuVNVkVT+kxOEFOq4RKxMc5nNjsom/ZTKzfkOhU=";
+    sha256 = "sha256-Xk+AyCcPQDDKKLT/tkZ2znXbBSBEgmqVqmgGBP/3Oos=";
   };
 
-  vendorSha256 = "sha256-mW3e4WFa9pKSpyTZYmPA2j8nZz+94G2PqdqI0BDo3wc=";
+  vendorSha256 = "sha256-OAzuL1pHLLKgkKjPjupPg7LEz8sY7ehq2PONnjhvzHE=";
 
   propagatedBuildInputs = [ docker ];
 

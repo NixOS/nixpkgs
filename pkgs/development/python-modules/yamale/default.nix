@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "yamale";
-  version = "3.0.4";
+  version = "3.0.8";
 
   disabled = !isPy3k;
 
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "23andMe";
     repo = pname;
     rev = version;
-    sha256 = "1xjvah4r3gpwk4zxql3c9jpllb34k175fm6iq1zvsd2vv2fwf8s2";
+    sha256 = "0bn0himn5fwndaxn205s55bdc4np7lhd940i0lkv0m7ybhbw7dap";
   };
 
   propagatedBuildInputs = [
@@ -28,6 +28,7 @@ buildPythonPackage rec {
   checkInputs = [
     pytest
   ];
+  pythonImportsCheck = [ "yamale" ];
 
   meta = with lib; {
     description = "A schema and validator for YAML";
