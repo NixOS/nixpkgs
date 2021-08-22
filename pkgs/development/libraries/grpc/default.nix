@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "grpc";
-  version = "1.39.0"; # N.B: if you change this, change pythonPackages.grpcio-tools to a matching version too
+  version = "1.39.1"; # N.B: if you change this, change pythonPackages.grpcio-tools to a matching version too
 
   src = fetchFromGitHub {
     owner = "grpc";
     repo = "grpc";
     rev = "v${version}";
-    sha256 = "1wa7n7mf20fnvxqw093kr7a4c7vilcmx9yl3hicnyfcd663jgqvd";
+    sha256 = "1yrr04g6faphh4hwzryqrwzgcr0hqqh05x9mc3vhpzmdkrrbz4zn";
     fetchSubmodules = true;
   };
 
