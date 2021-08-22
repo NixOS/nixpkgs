@@ -119,6 +119,14 @@ callPackage ./common.nix { inherit stdenv; } {
 
       # Get rid of more unnecessary stuff.
       rm -rf $out/var $bin/bin/sln
+
+      # Backwards-compatibility to fix e.g.
+      # "configure: error: Pthreads are required to build libgomp" during `gcc`-build
+      # because it's not actually needed anymore to link against `pthreads` since
+      # it's now part of `libc.so.6` itself, but the gcc build breaks if
+      # this doesn't work.
+      ln -sf $out/lib/libpthread.so.0 $out/lib/libpthread.so
+      ln -sf $out/lib/librt.so.1 $out/lib/librt.so
     ''
       # For some reason these aren't stripped otherwise and retain reference
       # to bootstrap-tools; on cross-arm this stripping would break objects.
