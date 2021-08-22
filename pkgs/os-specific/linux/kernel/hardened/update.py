@@ -226,7 +226,7 @@ for release in repo.get_releases():
     else:
         # Fall back to the latest patch for this major kernel version,
         # skipping patches for kernels newer than the packaged one.
-        if kernel_version > packaged_kernel_version:
+        if '.'.join(str(x) for x in kernel_version) > '.'.join(str(x) for x in packaged_kernel_version):
             continue
         elif (
             kernel_key not in releases or releases[kernel_key].version < version
