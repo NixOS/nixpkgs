@@ -105,6 +105,18 @@ let
       ];
       extraBuildCommands = ''
         echo "-B${targetGccLibraries.libgcc}/lib" >> $out/nix-support/cc-cflags
+        echo "-B${targetGccLibraries.libatomic}/lib" >> $out/nix-support/cc-cflags
+      '' + mkExtraBuildCommands cc;
+    };
+
+    gccNoLibatomic = wrapCCWith rec {
+      cc = tools.gcc-unwrapped;
+      libcxx = null;
+      extraPackages = [
+        targetGccLibraries.libgcc
+      ];
+      extraBuildCommands = ''
+        echo "-B${targetGccLibraries.libgcc}/lib" >> $out/nix-support/cc-cflags
       '' + mkExtraBuildCommands cc;
     };
 
@@ -148,7 +160,7 @@ let
 
     libatomic = callPackage ./libatomic {
       # TODO should libatomic be built before or after libc?
-      stdenv = overrideCC stdenv buildGccTools.gccNoLibstdcxx;
+      stdenv = overrideCC stdenv buildGccTools.gccNoLibatomic;
     };
 
     libgfortran = callPackage ./libgfortran { };

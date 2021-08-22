@@ -1,0 +1,12 @@
+diff --git a/libstdc++-v3/configure.ac b/libstdc++-v3/configure.ac
+index 3c799be82b1..3e15198f2d9 100644
+--- a/libstdc++-v3/configure.ac
++++ b/libstdc++-v3/configure.ac
+@@ -634,7 +634,6 @@ _EOF
+    rm vpsed$$
+    echo 'MULTISUBDIR =' >> $ac_file
+    ml_norecursion=yes
+-   . ${multi_basedir}/config-ml.in
+    AS_UNSET([ml_norecursion])
+ ])
+ 

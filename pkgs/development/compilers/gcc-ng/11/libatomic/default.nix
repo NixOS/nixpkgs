@@ -1,6 +1,6 @@
-{ lib, stdenv, buildPackages
+{ lib, stdenv
 , gcc_src, version
-, autoreconfHook269, libiberty
+, autoreconfHook269
 }:
 
 stdenv.mkDerivation rec {
@@ -17,42 +17,25 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ autoreconfHook269 libiberty ];
+  nativeBuildInputs = [ autoreconfHook269 ];
 
   enableParallelBuilding = true;
 
-  #postUnpack = ''
-  #  mkdir -p ./build
-  #  buildRoot=$(readlink -e "./build")
-  #'';
-
   postPatch = ''
-    sourceRoot=$(readlink -e "./libatomic")
-    configureScript=$sourceRoot/configure
+    sourceRoot=$(readlink -e "./${pname}")
     cd $sourceRoot
 
-    sed -i 's/AM_ENABLE_MULTILIB(/AM_ENABLE_MULTILIB(NOPE/' configure.ac
+    sed -i \
+      -e 's/AM_ENABLE_MULTILIB(/AM_ENABLE_MULTILIB(NOPE/' \
+      configure.ac
   '';
 
   configurePlatforms = [ "build" "host" ];
   configureFlags = [
     "--disable-dependency-tracking"
-    #"--with-threads=single"
-    # $CC cannot link binaries, let alone run then
+    "--with-toolexeclibdir=${builtins.placeholder "out" + "/lib"}"
+    #"--with-threads=posix"
     "cross_compiling=true"
     "--disable-multilib"
-    ## Do not have dynamic linker without libc
-    #"--enable-static"
-    #"--disable-shared"
   ];
-
-  makeFlags = [ "MULTIBUILDTOP:=../" ];
-
-  postInstall = ''
-    moveToOutput "lib/gcc/${stdenv.hostPlatform.config}/${version}/include" "$dev"
-    mkdir -p "$out/lib" "$dev/include"
-    ln -s "$out/lib/gcc/${stdenv.hostPlatform.config}/${version}"/* "$out/lib"
-    ln -s "$dev/lib/gcc/${stdenv.hostPlatform.config}/${version}/include"/* "$dev/include/"
-  '';
 }
