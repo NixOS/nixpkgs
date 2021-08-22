@@ -1,7 +1,8 @@
 { lib, stdenv, fetchFromGitHub, libX11, libXext, libjpeg, libpng, giflib }:
 
 stdenv.mkDerivation {
-  name = "meh-unstable-2018-10-22";
+  pname = "meh";
+  version = "unstable-2018-10-22";
 
   src = fetchFromGitHub {
     owner = "jhawthorn";
