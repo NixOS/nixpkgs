@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-a11y";
-  version = "2.2.0";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-3PaOIadlEdYvfNZJaoAQVDKdSTfUdn+snCa8tHmDFD0=";
+    sha256 = "sha256-lOykY9OTAZHTc4zu4DI347G6ObpnMQReHoTIMsaWhTU=";
   };
 
   patches = [
