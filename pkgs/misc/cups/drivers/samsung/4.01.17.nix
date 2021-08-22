@@ -40,6 +40,8 @@ in stdenv.mkDerivation rec {
   dontStrip = true;
 
   installPhase = ''
+    runHook preInstall
+
     cd Linux/${installationPath}
     mkdir -p $out/lib/cups/{backend,filter}
     install -Dm755 mfp $out/lib/cups/backend/
@@ -72,6 +74,8 @@ in stdenv.mkDerivation rec {
     cd -
     cd ../noarch/at_opt/share/ppd
     cp -r ./* $out/share/cups/model/samsung
+
+    runHook postInstall
   '';
 
   ppdFileCommands = [
