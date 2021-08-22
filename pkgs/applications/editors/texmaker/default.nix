@@ -2,11 +2,11 @@
 
 mkDerivation rec {
   pname = "texmaker";
-  version = "5.1.0";
+  version = "5.1.1";
 
   src = fetchurl {
     url = "http://www.xm1math.net/texmaker/${pname}-${version}.tar.bz2";
-    sha256 = "0zhqq9s5r2w44p7xhlxkj0c10jyx0hji5bjdpgp7xdlrvckr9yf6";
+    sha256 = "sha256-gANJknSWIMN+B0uAOtPil8EbjyWt4E+xOxOseR87Dd4=";
   };
 
   buildInputs = [ qtbase qtscript poppler zlib qtwebengine ];
