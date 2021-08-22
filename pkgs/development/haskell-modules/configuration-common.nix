@@ -1302,6 +1302,17 @@ self: super: {
     doHaddock = false;
     version = "2.0.7";
   });
+  hasura-ekg-core = super.hasura-ekg-core.overrideScope (self: super: {
+    hspec = dontCheck self.hspec_2_8_3;
+    hspec-core = dontCheck self.hspec-core_2_8_3;
+    hspec-discover = dontCheck super.hspec-discover_2_8_3;
+  });
+  hasura-ekg-json = super.hasura-ekg-json.overrideScope (self: super: {
+    ekg-core = self.hasura-ekg-core;
+    hspec = dontCheck self.hspec_2_8_3;
+    hspec-core = dontCheck self.hspec-core_2_8_3;
+    hspec-discover = dontCheck super.hspec-discover_2_8_3;
+  });
   pg-client = overrideCabal (super.pg-client.override {
     resource-pool = self.hasura-resource-pool;
   }) (drv: {
