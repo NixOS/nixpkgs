@@ -337,6 +337,9 @@ in
           '';
           WorkingDirectory = top.dataDir;
         };
+        unitConfig = {
+          StartLimitIntervalSec = 0;
+        };
       };
 
       # Allways include cni plugins
