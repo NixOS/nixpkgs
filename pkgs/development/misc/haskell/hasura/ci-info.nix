@@ -21,4 +21,5 @@ mkDerivation {
   prePatch = "hpack";
   homepage = "https://github.com/hasura/ci-info-hs#readme";
   license = lib.licenses.mit;
+  maintainers = with lib.maintainers; [ lassulus ];
 }
