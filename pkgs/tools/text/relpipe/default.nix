@@ -30,7 +30,7 @@ let
       meta = with lib; {
         maintainers = [ maintainers.MostAwesomeDude ];
         homepage = https://relational-pipes.globalcode.info/;
-        license = licenses.gpl3;
+        license = licenses.gpl3Plus;
         description = "An open data format designed for streaming structured data between two processes";
       };
     };
