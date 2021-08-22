@@ -14,9 +14,9 @@ buildPythonPackage rec {
     sha256 = "sha256-UUcR71e3eAQIQpmWM+AVQxVtgHvrNjaIlHo5pURUln0=";
   };
 
-  propagatedBuildInputs = [
-    cython
-  ];
+  propagatedBuildInputs = [ cython ];
+
+  pythonImportsCheck = [ "memory_allocator" ];
 
   meta = with lib; {
     description = "An extension class to allocate memory easily with cython";
