@@ -68,7 +68,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Declarative continuous deployment for Kubernetes";
     downloadPage = "https://github.com/argoproj/argo-cd";
-    homepage = "https://argoproj.github.io/projects/argo-cd";
+    homepage = "https://argo-cd.readthedocs.io/en/stable/";
     license = licenses.asl20;
     maintainers = with maintainers; [ shahrukh330 superherointj ];
   };
