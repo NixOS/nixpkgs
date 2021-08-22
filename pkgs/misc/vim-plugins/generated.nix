@@ -3910,6 +3910,18 @@ final: prev:
     meta.homepage = "https://github.com/sakhnik/nvim-gdb/";
   };
 
+  nvim-gps = buildVimPluginFrom2Nix {
+    pname = "nvim-gps";
+    version = "2021-08-22";
+    src = fetchFromGitHub {
+      owner = "smiteshp";
+      repo = "nvim-gps";
+      rev = "f365bc331c1fd752429427cdfed4aa142e9fc74f";
+      sha256 = "1phzrw37y9gzcimy5r3phy2x53c9b2q5l3v5ipcx1k4q6pfkh026";
+    };
+    meta.homepage = "https://github.com/smiteshp/nvim-gps/";
+  };
+
   nvim-highlite = buildVimPluginFrom2Nix {
     pname = "nvim-highlite";
     version = "2021-08-21";
