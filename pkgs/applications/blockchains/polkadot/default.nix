@@ -18,7 +18,6 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-WzsaUrqe7F4x+ShqG14kq78MTSWIxIMRa3pdr3RXrwk=";
 
-
   nativeBuildInputs = [ clang ];
 
   LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
