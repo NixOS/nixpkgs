@@ -7347,6 +7347,8 @@ in
 
   onioncircuits = callPackage ../tools/security/onioncircuits { };
 
+  onlykey-agent = callPackage ../tools/security/onlykey-agent { };
+
   onlykey-cli = callPackage ../tools/security/onlykey-cli { };
 
   openapi-generator-cli = callPackage ../tools/networking/openapi-generator-cli { jre = pkgs.jre_headless; };
@@ -19474,7 +19476,7 @@ in
   };
 
   mysql80 = callPackage ../servers/sql/mysql/8.0.x.nix {
-    inherit (darwin) cctools developer_cmds;
+    inherit (darwin) cctools developer_cmds DarwinTools;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
     boost = boost173; # Configure checks for specific version.
     protobuf = protobuf3_7;
