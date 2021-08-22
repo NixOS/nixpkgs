@@ -370,6 +370,7 @@ dont-distribute-packages:
  - XSaiga
  - YACPong
  - Yablog
+ - Yogurt-Standalone
  - Z-Botan
  - Z-IO
  - Z-MessagePack
@@ -467,8 +468,10 @@ dont-distribute-packages:
  - atomic-primops-foreign
  - atp
  - attoparsec-enumerator
+ - attoparsec-ip
  - attoparsec-iteratee
  - attoparsec-text-enumerator
+ - attoparsec-uri
  - atuin
  - audiovisual
  - aura
@@ -626,6 +629,7 @@ dont-distribute-packages:
  - bv-sized-lens
  - bytehash
  - bytelog
+ - bytesmith
  - bytestring-read
  - c0check
  - cabal-bounds
@@ -708,7 +712,9 @@ dont-distribute-packages:
  - claferwiki
  - clash
  - clash-ghc
+ - clash-ghc_1_4_3
  - clash-lib
+ - clash-lib_1_4_3
  - clash-multisignal
  - clash-prelude-quickcheck
  - clash-systemverilog
@@ -790,6 +796,7 @@ dont-distribute-packages:
  - consumers
  - container
  - containers-accelerate
+ - contiguous-fft
  - continuum
  - continuum-client
  - control
@@ -1011,6 +1018,7 @@ dont-distribute-packages:
  - entangle
  - enumerate
  - enumerate-function
+ - enumeration
  - enumerator-fd
  - enumerator-tf
  - ephemeral
@@ -1732,6 +1740,7 @@ dont-distribute-packages:
  - intset
  - invertible-hlist
  - ion
+ - ip
  - ipatch
  - ipc
  - ipld-cid
@@ -1858,6 +1867,8 @@ dont-distribute-packages:
  - lambda-options
  - lambdaFeed
  - lambdaLit
+ - lambdabot
+ - lambdabot-xmpp
  - lambdabot-zulip
  - lambdacms-media
  - lambdacube
@@ -1885,6 +1896,7 @@ dont-distribute-packages:
  - lapack-carray
  - lapack-comfort-array
  - lapack-comfort-array_0_0_1
+ - lapack-hmatrix
  - lapack_0_4
  - lat
  - latex-formulae-hakyll
@@ -2038,6 +2050,7 @@ dont-distribute-packages:
  - markdown-pap
  - markdown2svg
  - markov-processes
+ - markup
  - marmalade-upload
  - marquise
  - marvin
@@ -2395,6 +2408,8 @@ dont-distribute-packages:
  - prednote-test
  - presto-hdbc
  - preview
+ - primitive-containers
+ - primitive-sort
  - primula-board
  - primula-bot
  - proc
@@ -2589,6 +2604,7 @@ dont-distribute-packages:
  - ribosome-root
  - ribosome-test
  - ridley-extras
+ - ring-buffers
  - rio-process-pool
  - riot
  - ripple
@@ -2662,6 +2678,7 @@ dont-distribute-packages:
  - scholdoc
  - scholdoc-citeproc
  - scholdoc-texmath
+ - scientific-notation
  - scion
  - scion-browser
  - scope
@@ -2722,6 +2739,7 @@ dont-distribute-packages:
  - sgf
  - sgrep
  - sha1
+ - shake-ats
  - shake-minify-css
  - shaker
  - shapefile
@@ -2760,6 +2778,7 @@ dont-distribute-packages:
  - smallstring
  - smartword
  - smcdel
+ - smith
  - smith-cli
  - smith-client
  - smtlib2-debug
@@ -3088,6 +3107,8 @@ dont-distribute-packages:
  - urembed
  - uri-enumerator
  - uri-enumerator-file
+ - url-bytes
+ - urlpath
  - usb
  - usb-enumerator
  - usb-hid
@@ -3099,6 +3120,7 @@ dont-distribute-packages:
  - uu-cco-examples
  - uu-cco-hut-parsing
  - uu-cco-uu-parsinglib
+ - uuid-bytes
  - uuid-crypto
  - uvector-algorithms
  - v4l2
@@ -3146,6 +3168,7 @@ dont-distribute-packages:
  - wai-middleware-cache
  - wai-middleware-cache-redis
  - wai-middleware-consul
+ - wai-middleware-content-type
  - wai-middleware-rollbar
  - wai-middleware-route
  - wai-session-tokyocabinet
@@ -3187,6 +3210,7 @@ dont-distribute-packages:
  - wrecker-ui
  - wright
  - writer-cps-full
+ - ws
  - wss-client
  - wtk-gtk
  - wu-wei
