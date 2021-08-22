@@ -288,6 +288,12 @@ Superuser created successfully.
       </listitem>
       <listitem>
         <para>
+          Firefox v91 does not support addons with invalid signature
+          anymore. Firefox ESR needs to be used for nix addon support.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>erigon</literal> ethereum node has moved to a new
           database format in <literal>2021-05-04</literal>, and requires
           a full resync
