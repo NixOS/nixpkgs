@@ -40,6 +40,8 @@ python3.pkgs.buildPythonApplication rec {
   # no tests
   doCheck = false;
 
+  pythonImportsCheck = [ "maestral_qt" ];
+
   meta = with lib; {
     description = "GUI front-end for maestral (an open-source Dropbox client) for Linux";
     license = licenses.mit;
