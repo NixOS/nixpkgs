@@ -163,6 +163,11 @@ let
       stdenv = overrideCC stdenv buildGccTools.gccNoLibatomic;
     };
 
+    libssp = callPackage ./libssp {
+      # TODO should libssp be built before or after libc?
+      stdenv = overrideCC stdenv buildGccTools.gccNoLibatomic;
+    };
+
     libgfortran = callPackage ./libgfortran { };
 
     libstdcxx = callPackage ./libstdcxx {
