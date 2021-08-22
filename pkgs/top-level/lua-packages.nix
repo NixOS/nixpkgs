@@ -9,6 +9,7 @@
 , pcre, oniguruma, gnulib, tre, glibc, sqlite, openssl, expat
 , autoreconfHook, gnum4
 , postgresql, cyrus_sasl
+, arc-icon-theme
 , fetchFromGitHub, which, writeText
 , pkgs
 , lib
@@ -46,6 +47,11 @@ let
       };
     });
 
+  widgetInstallPhase = pname: ''
+    mkdir -p $out/lib/lua/${lua.luaversion}/
+    cp -r . $out/lib/lua/${lua.luaversion}/${pname}/
+    echo -e "package.path = '$out/lib/lua/${lua.luaversion}/?/init.lua;' ..  package.path\nreturn require((...) .. '.init')\n" > $out/lib/lua/${lua.luaversion}/${pname}.lua
+  '';
 
   platformString =
     if stdenv.isDarwin then "macosx"
@@ -132,6 +138,43 @@ with self; {
     };
   };
 
+  awesome-wm-widgets = toLuaModule(stdenv.mkDerivation rec {
+    pname = "awesome-wm-widgets";
+    version = "unstable-2021-09-01";
+
+    src = fetchFromGitHub {
+      owner = "streetturtle";
+      repo = "awesome-wm-widgets";
+      rev = "3b24474de4646519634b842edbc539d49c55abbb";
+      sha256 = "1ms6k0gwc3v44njn8fkmml24vnd62pkw6l7m3psg4zyj06xcm3rb";
+    };
+
+    buildInputs = [ lua ];
+
+    postPatch = ''
+      rm *.png
+      find -depth \( -iname "README.md" \
+        -o -name "example*" \
+        -o -iname "*gif" \
+        -o -iname "*py" \
+        -o -iname "screenshots*" \) -exec rm -r {} \;
+      rm -r experiments
+      for f in $(grep -rnl '/usr/share/icons/Arc'); do
+        substituteInPlace $f --replace '/usr/share/icons/Arc' '${arc-icon-theme}/share/icons/Arc'
+      done
+    '';
+
+    installPhase = widgetInstallPhase pname;
+
+    meta = with lib; {
+      description = "Set of widgets compatible with Awesome Window Manager v.4.3+";
+      homepage    = "https://github.com/streetturtle/awesome-wm-widgets";
+      license     = licenses.mit;
+      maintainers = with maintainers; [ rski ];
+      platforms   = platforms.linux;
+    };
+  });
+
   vicious = toLuaModule(stdenv.mkDerivation rec {
     pname = "vicious";
     version = "2.5.0";
@@ -145,11 +188,7 @@ with self; {
 
     buildInputs = [ lua ];
 
-    installPhase = ''
-      mkdir -p $out/lib/lua/${lua.luaversion}/
-      cp -r . $out/lib/lua/${lua.luaversion}/vicious/
-      printf "package.path = '$out/lib/lua/${lua.luaversion}/?/init.lua;' ..  package.path\nreturn require((...) .. '.init')\n" > $out/lib/lua/${lua.luaversion}/vicious.lua
-    '';
+    installPhase = widgetInstallPhase pname;
 
     meta = with lib; {
       description = "A modular widget library for the awesome window manager";
