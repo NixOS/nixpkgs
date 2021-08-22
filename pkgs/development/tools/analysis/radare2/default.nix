@@ -26,16 +26,31 @@
 , luaBindings ? false
 }:
 
+let
+  # FIXME: how to keep this up-to-date
+  # https://github.com/radareorg/vector35-arch-arm64/
+  arm64 = fetchFromGitHub {
+    owner = "radareorg";
+    repo = "vector35-arch-arm64";
+    rev = "5837915960c2ce862a77c99a374abfb7d18a8534";
+    sha256 = "sha256-bs8wjOX+txB193oqIIZ7yx9pwpVhR3HAaWuDLPLG7m4=";
+  };
+in
 stdenv.mkDerivation rec {
   pname = "radare2";
-  version = "5.3.1";
+  version = "5.4.0";
 
   src = fetchFromGitHub {
     owner = "radare";
     repo = "radare2";
     rev = version;
-    sha256 = "sha256-VS8eG5RXwKtJSLmyaSifopJU7WYGMUcznn+burPqEYE=";
+    sha256 = "sha256-KRHMJ0lW0OF8ejcrigp4caPsuR3iaGcglCYxJSUhGJw=";
   };
+
+  preBuild = ''
+    cp -r ${arm64} libr/asm/arch/arm/v35arm64/arch-arm64
+    chmod -R +w libr/asm/arch/arm/v35arm64/arch-arm64
+  '';
 
   postInstall = ''
     install -D -m755 $src/binr/r2pm/r2pm $out/bin/r2pm

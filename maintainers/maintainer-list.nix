@@ -4247,6 +4247,16 @@
     githubId = 147689;
     name = "Hans-Christian Esperer";
   };
+  hdhog = {
+    name = "Serg Larchenko";
+    email = "hdhog@hdhog.ru";
+    github = "hdhog";
+    githubId = 386666;
+    keys = [{
+      longkeyid = "rsa496/952EACB76703BA63";
+      fingerprint = "A25F 6321 AAB4 4151 4085  9924 952E ACB7 6703 BA63";
+    }];
+  };
   hectorj = {
     email = "hector.jusforgues+nixos@gmail.com";
     github = "hectorj";
@@ -5358,7 +5368,7 @@
   };
   juaningan = {
     email = "juaningan@gmail.com";
-    github = "juaningan";
+    github = "uningan";
     githubId = 810075;
     name = "Juan Rodal";
   };
@@ -5667,6 +5677,16 @@
     github = "kisonecat";
     githubId = 148352;
     name = "Jim Fowler";
+  };
+  kittywitch = {
+    email = "kat@kittywit.ch";
+    github = "kittywitch";
+    githubId = 67870215;
+    name = "kat witch";
+    keys = [{
+      longkeyid = "rsa4096/0x7248991EFA8EFBEE";
+      fingerprint = "01F5 0A29 D4AA 9117 5A11  BDB1 7248 991E FA8E FBEE";
+     }];
   };
   kiwi = {
     email = "envy1988@gmail.com";

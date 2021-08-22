@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
       "/usr/local/lib/pkgconfig" "/nonexistent"
   '';
 
-  preBuild = lib.optional stdenv.isDarwin ''
+  preBuild = lib.optionalString stdenv.isDarwin ''
     substituteInPlace config.h --replace \
       "#define HAVE_STRUCT_STAT_ST_BIRTHTIME 1" \
       "#undef HAVE_STRUCT_STAT_ST_BIRTHTIME"

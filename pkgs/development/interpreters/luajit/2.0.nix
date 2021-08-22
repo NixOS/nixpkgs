@@ -1,6 +1,8 @@
 { self, callPackage, lib }:
 callPackage ./default.nix {
   inherit self;
+  owner = "LuaJIT";
+  repo = "LuaJIT";
   version = "2.0.5-2021-06-08";
   rev = "98f95f69180d48ce49289d6428b46a9ccdd67a46";
   isStable = true;
