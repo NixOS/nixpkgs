@@ -1,5 +1,11 @@
-{ buildPythonPackage, fetchFromGitHub, lib,
-  datasette, pytestCheckHook, pytest, pytest-asyncio, sqlite-utils }:
+{ buildPythonPackage
+, fetchFromGitHub
+, lib
+, datasette
+, pytestCheckHook
+, pytest-asyncio
+, sqlite-utils
+}:
 
 buildPythonPackage rec {
   pname = "datasette-template-sql";
@@ -14,7 +20,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ datasette ];
 
-  checkInputs = [ pytestCheckHook pytest pytest-asyncio sqlite-utils ];
+  checkInputs = [ pytestCheckHook pytest-asyncio sqlite-utils ];
 
   pythonImportsCheck = [ "datasette_template_sql" ];
 
