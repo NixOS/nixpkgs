@@ -30,4 +30,7 @@ buildGoPackage rec {
       -e "s,golang.org/x/crypto/bn256,github.com/agl/pond/bn256cgo,g" \
       -e "s,bn256\.,bn256cgo.,g"
   '';
+
+  # https://hydra.nixos.org/build/150102618/nixlog/2
+  meta.broken = stdenv.isAarch64;
 }
