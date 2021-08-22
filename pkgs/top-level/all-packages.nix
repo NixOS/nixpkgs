@@ -258,6 +258,8 @@ with pkgs;
 
   comedilib = callPackage ../development/libraries/comedilib {  };
 
+  commitlint = nodePackages."@commitlint/cli";
+
   containerpilot = callPackage ../applications/networking/cluster/containerpilot { };
 
   coordgenlibs  = callPackage ../development/libraries/coordgenlibs { };
