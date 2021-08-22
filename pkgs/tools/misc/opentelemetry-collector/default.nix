@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "opentelemetry-collector";
-  version = "0.31.0";
+  version = "0.33.0";
 
   src = fetchFromGitHub {
     owner = "open-telemetry";
     repo = "opentelemetry-collector-contrib";
     rev = "v${version}";
-    sha256 = "sha256-iJL3EFoBtp4UOLm4/b4JBwzK6iZSTE0cb6EzmlziOLk=";
+    sha256 = "sha256-qavqf1qEJD2N33tAuYS9+6dKCqOG5Vxd+eDQurUjef4=";
   };
 
-  vendorSha256 = "sha256-LNlglYys4F7+W7PUmBT9cBnYs7y6AlB9wdaDibaxqC0=";
+  vendorSha256 = "sha256-u21rIHh8L32uMiVSrYcz2TcYHgjG4Abo7HukM071wBg=";
   proxyVendor = true;
 
   subPackages = [ "cmd/otelcontribcol" ];
