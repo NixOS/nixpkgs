@@ -1,29 +1,39 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , pkg-config
 , glib
 , libxml2
 , expat
-, fftw
-, orc
-, lcms
-, imagemagick
-, openexr
-, libtiff
-, libjpeg
-, libgsf
-, libexif
-, libheif
-, librsvg
 , ApplicationServices
 , Foundation
-, python27
-, libpng
+, python3
 , fetchFromGitHub
 , fetchpatch
 , autoreconfHook
 , gtk-doc
 , gobject-introspection
-,
+  # Optional dependencies
+, libjpeg
+, libexif
+, librsvg
+, poppler
+, libgsf
+, libtiff
+, fftw
+, lcms2
+, libpng
+, libimagequant
+, imagemagick
+, pango
+, orc
+, matio
+, cfitsio
+, libwebp
+, openexr
+, openjpeg
+, libjxl
+, openslide
+, libheif
 }:
 
 stdenv.mkDerivation rec {
@@ -54,22 +64,31 @@ stdenv.mkDerivation rec {
   buildInputs = [
     glib
     libxml2
-    fftw
-    orc
-    lcms
-    imagemagick
-    openexr
-    libtiff
-    libjpeg
-    libgsf
-    libexif
-    libheif
-    libpng
-    librsvg
-    python27
-    libpng
     expat
-  ] ++ lib.optionals stdenv.isDarwin [ApplicationServices Foundation];
+    (python3.withPackages (p: [ p.pycairo ]))
+    # Optional dependencies
+    libjpeg
+    libexif
+    librsvg
+    poppler
+    libgsf
+    libtiff
+    fftw
+    lcms2
+    libpng
+    libimagequant
+    imagemagick
+    pango
+    orc
+    matio
+    cfitsio
+    libwebp
+    openexr
+    openjpeg
+    libjxl
+    openslide
+    libheif
+  ] ++ lib.optionals stdenv.isDarwin [ ApplicationServices Foundation ];
 
   # Required by .pc file
   propagatedBuildInputs = [
