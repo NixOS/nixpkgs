@@ -1,11 +1,14 @@
-{ lib, stdenv, fetchhg, cmake, pkg-config, installShellFiles, symlinkJoin,
-  xercesc, libxmlxx, guile_2_2, unixODBC, python36, libjack2 }:
+{ lib, stdenv, fetchhg, cmake, pkg-config, installShellFiles, symlinkJoin
+, xercesc, libxmlxx, guile_2_2, unixODBC, python36, libjack2 }:
+
 # Build instructions: https://relational-pipes.globalcode.info/v_0/release-v0.16.xhtml
 let
+  version = "0.17.1";
   mkRelPipe = { pname, hash, deps }:
+    let name = "relpipe-${pname}"; in
     stdenv.mkDerivation rec {
-      name = "relpipe-${pname}";
-      version = "0.17.1";
+      pname = name;
+      inherit version;
 
       src = fetchhg {
         url = "https://hg.globalcode.info/relpipe/relpipe-${pname}.cpp";
@@ -183,7 +186,7 @@ let
     deps = [ lib-cli lib-common lib-reader libjack2 ];
   };
 in symlinkJoin {
-  name = "relpipe";
+  name = "relpipe-${version}";
   paths = [
     in-fstab in-cli in-xml in-xmltable in-csv in-recfile in-filesystem in-jack
     tr-cut tr-grep tr-sed tr-awk tr-scheme tr-sql tr-python tr-validator
