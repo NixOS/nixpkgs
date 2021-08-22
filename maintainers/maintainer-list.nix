@@ -9542,6 +9542,12 @@
     githubId = 115821;
     name = "Sam Rose";
   };
+  samuela = {
+    email = "skainsworth@gmail.com";
+    github = "samuela";
+    githubId = 226872;
+    name = "Samuel Ainsworth";
+  };
   samueldr = {
     email = "samuel@dionne-riel.com";
     github = "samueldr";
