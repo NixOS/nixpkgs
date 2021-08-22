@@ -72,7 +72,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Radically simple IT automation";
-    homepage = "http://www.ansible.com";
+    homepage = "https://www.ansible.com";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ hexa ];
   };
