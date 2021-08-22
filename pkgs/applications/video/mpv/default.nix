@@ -97,6 +97,8 @@ in stdenv.mkDerivation rec {
   pname = "mpv";
   version = "0.33.1";
 
+  outputs = [ "out" "dev" ];
+
   src = fetchFromGitHub {
     owner  = "mpv-player";
     repo   = "mpv";
@@ -153,8 +155,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     addOpenGLRunpath docutils perl pkg-config python3 wafHook which
-  ]
-    ++ optional swiftSupport swift;
+  ] ++ optional swiftSupport swift;
 
   buildInputs = [
     ffmpeg freetype libass libpthreadstubs
@@ -206,6 +207,9 @@ in stdenv.mkDerivation rec {
     cp TOOLS/umpv $out/bin
     cp $out/share/applications/mpv.desktop $out/share/applications/umpv.desktop
     sed -i '/Icon=/ ! s/mpv/umpv/g' $out/share/applications/umpv.desktop
+
+    substituteInPlace $out/lib/pkgconfig/mpv.pc \
+      --replace "$out/include" "$dev/include"
   '' + optionalString stdenv.isDarwin ''
     mkdir -p $out/Applications
     cp -r build/mpv.app $out/Applications
