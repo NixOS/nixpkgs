@@ -1014,8 +1014,6 @@ with pkgs;
 
   terminator = callPackage ../applications/terminal-emulators/terminator { };
 
-  terminus = callPackage ../applications/terminal-emulators/terminus { };
-
   termite = callPackage ../applications/terminal-emulators/termite/wrapper.nix {
     termite = termite-unwrapped;
   };
