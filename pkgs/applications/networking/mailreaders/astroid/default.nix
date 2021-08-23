@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, cmake, pkg-config, gnome, gmime3, webkitgtk, ronn
-, libsass, notmuch, boost, wrapGAppsHook, glib-networking, protobuf, vim_configurable
+, libsass, notmuch, boost, wrapGAppsHook, glib-networking, protobuf
 , gtkmm3, libpeas, gsettings-desktop-schemas, gobject-introspection, python3
 
 # vim to be used, should support the GUI mode.
