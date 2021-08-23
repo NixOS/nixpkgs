@@ -17657,6 +17657,8 @@ with pkgs;
 
   live555 = callPackage ../development/libraries/live555 { };
 
+  livesplit-core = callPackage ../development/libraries/livesplit-core { };
+
   log4cpp = callPackage ../development/libraries/log4cpp { };
 
   log4cxx = callPackage ../development/libraries/log4cxx { };
