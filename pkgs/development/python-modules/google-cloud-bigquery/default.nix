@@ -53,6 +53,12 @@ buildPythonPackage rec {
     # requires credentials
     "test_bigquery_magic"
     "TestBigQuery"
+    "test_query_retry_539"
+    "test_query_retry_539"
+    "test_list_rows_empty_table"
+    "test_list_rows_page_size"
+    "test_list_rows_scalars"
+    "test_list_rows_scalars_extreme"
     # Mocking of _ensure_bqstorage_client fails
     "test_to_arrow_ensure_bqstorage_client_wo_bqstorage"
     # requires network
