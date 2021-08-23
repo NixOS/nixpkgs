@@ -8335,7 +8335,9 @@ with pkgs;
 
   remarshal = callPackage ../development/tools/remarshal { };
 
-  rehex = callPackage ../applications/editors/rehex { };
+  rehex = callPackage ../applications/editors/rehex {
+    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa IOKit;
+  };
 
   rig = callPackage ../tools/misc/rig {
     stdenv = gccStdenv;
