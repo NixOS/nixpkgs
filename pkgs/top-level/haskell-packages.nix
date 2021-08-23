@@ -94,7 +94,11 @@ in {
       llvmPackages = pkgs.llvmPackages_10;
     };
     ghc921 = callPackage ../development/compilers/ghc/9.2.1.nix {
-      bootPkgs = packages.ghc8102Binary;
+      # aarch64 ghc8102Binary exceeds max output size on hydra
+      bootPkgs = if stdenv.isAarch64 || stdenv.isAarch32 then
+          packages.ghc8102BinaryMinimal
+        else
+          packages.ghc8102Binary;
       inherit (buildPackages.python3Packages) sphinx;
       buildLlvmPackages = buildPackages.llvmPackages_10;
       llvmPackages = pkgs.llvmPackages_10;
