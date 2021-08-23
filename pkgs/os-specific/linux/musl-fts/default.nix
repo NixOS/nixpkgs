@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  setupHook = ../../bsd/netbsd/fts-setup-hook.sh;
+
   meta = with lib; {
     homepage = "https://github.com/void-linux/musl-fts";
     description = "An implementation of fts(3) for musl-libc";
