@@ -5084,9 +5084,9 @@ in {
 
   openwrt-ubus-rpc = callPackage ../development/python-modules/openwrt-ubus-rpc { };
 
-  opt-einsum = callPackage ../development/python-modules/opt-einsum { };
-
   opsdroid_get_image_size = callPackage ../development/python-modules/opsdroid_get_image_size { };
+
+  opt-einsum = callPackage ../development/python-modules/opt-einsum { };
 
   optuna = callPackage ../development/python-modules/optuna { };
 
