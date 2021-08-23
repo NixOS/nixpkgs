@@ -3841,6 +3841,23 @@ let
     };
   };
 
+  CPAN02PackagesSearch = buildPerlModule {
+    pname = "CPAN-02Packages-Search";
+    version = "0.001";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SK/SKAJI/CPAN-02Packages-Search-0.001.tar.gz";
+      sha256 = "02dgqplar99a2i2b08pnapznyp4il70wsvpm8163ywwfwqn1ap37";
+    };
+    buildInputs = [ ModuleBuildTiny ];
+    propagatedBuildInputs = [ TieHandleOffset ];
+    meta = {
+      homepage = "https://github.com/skaji/CPAN-02Packages-Search";
+      description = "Search packages in 02packages.details.txt";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.zakame ];
+    };
+  };
+
   CPANChanges = buildPerlPackage {
     pname = "CPAN-Changes";
     version = "0.400002";
@@ -13226,6 +13243,23 @@ let
     };
   };
 
+  Modulecpmfile = buildPerlModule {
+    pname = "Module-cpmfile";
+    version = "0.002";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SK/SKAJI/Module-cpmfile-0.002.tar.gz";
+      sha256 = "18dxc5wgds1way0dvd6dx5rhc2siyaa38nhpy4gb5v7ldnj3yjc8";
+    };
+    buildInputs = [ ModuleBuildTiny ModuleCPANfile Test2Suite ];
+    propagatedBuildInputs = [ YAMLPP ];
+    meta = {
+      homepage = "https://github.com/skaji/cpmfile";
+      description = "Parse cpmfile";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.zakame ];
+    };
+  };
+
   ModuleBuild = buildPerlPackage {
     pname = "Module-Build";
     version = "0.4231";
@@ -17122,10 +17156,6 @@ let
       description = "Indent and reformat perl scripts";
       license = lib.licenses.gpl2Plus;
     };
-    nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
-    postInstall = lib.optionalString stdenv.isDarwin ''
-      shortenPerlShebang $out/bin/perltidy
-    '';
   };
 
   PHPSerialization = buildPerlPackage {

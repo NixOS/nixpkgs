@@ -69,6 +69,7 @@ mapAliases ({
   batti = throw "batti has been removed from nixpkgs, as it was unmaintained"; # added 2019-12-10
   bazaar = throw "bazaar has been deprecated by breezy."; # added 2020-04-19
   bazaarTools = throw "bazaar has been deprecated by breezy."; # added 2020-04-19
+  bcat = throw "bcat has been removed because upstream is dead"; # added 2021-08-22
   beegfs = throw "beegfs has been removed."; # added 2019-11-24
   bluezFull = bluez; # Added 2019-12-03
   bpftool = bpftools; # Added 2021-05-03
@@ -78,6 +79,7 @@ mapAliases ({
   bootchart = throw "bootchart has been removed from nixpkgs, as it is without a maintainer"; # added 2019-12-10
   bomi = throw "bomi has been removed from nixpkgs since it was broken and abandoned upstream"; # added 2020-12-10
   btrfsProgs = btrfs-progs; # added 2016-01-03
+  bitsnbots = throw "bitsnbots has been removed because it was broken and upstream missing"; # added 2021-08-22
   bittorrentSync = throw "bittorrentSync has been deprecated by resilio-sync."; # added 2019-06-03
   bittorrentSync14 = throw "bittorrentSync14 has been deprecated by resilio-sync."; # added 2019-06-03
   bittorrentSync20 = throw "bittorrentSync20 has been deprecated by resilio-sync."; # added 2019-06-03
@@ -906,6 +908,7 @@ mapAliases ({
   telepathy_qt5 = libsForQt5.telepathy;  # added 2015-12-19
   telepathy_salut = telepathy-salut; # added 2018-02-25
   telnet = inetutils; # added 2018-05-15
+  terminus = throw "terminus has been removed, it was unmaintained in nixpkgs"; # added 2021-08-21
   terraform_1_0_0 = terraform_1_0; # added 2021-06-15
   terraform-provider-ibm = terraform-providers.ibm; # added 2018-09-28
   terraform-provider-libvirt = terraform-providers.libvirt; # added 2018-09-28

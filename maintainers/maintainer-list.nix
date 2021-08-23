@@ -3419,6 +3419,12 @@
     githubId = 454695;
     name = "Artur Taranchiev";
   };
+  exarkun = {
+    email = "exarkun@twistedmatrix.com";
+    github = "exarkun";
+    githubId = 254565;
+    name = "Jean-Paul Calderone";
+  };
   exfalso = {
     email = "0slemi0@gmail.com";
     github = "exfalso";
@@ -4936,6 +4942,12 @@
     email = "duanjingjing@gmail.com";
     github = "jduan";
     githubId = 452450;
+  };
+  jecaro = {
+    email = "jeancharles.quillet@gmail.com";
+    github = "jecaro";
+    githubId = 17029738;
+    name = "Jean-Charles Quillet";
   };
   jefdaj = {
     email = "jefdaj@gmail.com";

@@ -265,7 +265,7 @@ in pythonPackages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Music tagger and library organizer";
-    homepage = "http://beets.io";
+    homepage = "https://beets.io";
     license = licenses.mit;
     maintainers = with maintainers; [ aszlig doronbehar lovesegfault pjones ];
     platforms = platforms.linux;

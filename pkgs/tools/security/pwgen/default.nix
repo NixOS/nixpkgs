@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook }:
+{ lib
+, stdenv
+, autoreconfHook
+, fetchFromGitHub
+}:
 
 stdenv.mkDerivation rec {
   pname = "pwgen";
@@ -6,17 +10,20 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "tytso";
-    repo = "pwgen";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "8d6e94f58655e61d6126290e3eafad4d17d7fba0d0d354239522a740a270bb2f";
+    sha256 = "1j6c6m9fcy24jn8mk989x49yk765xb26lpr8yhpiaqk206wlss2z";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [
+    autoreconfHook
+  ];
 
   meta = with lib; {
     description = "Password generator which creates passwords which can be easily memorized by a human";
-    maintainers = with maintainers; [ ];
-    license = with licenses; [ gpl2Only ];
+    homepage = "https://github.com/tytso/pwgen";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ fab ];
     platforms = platforms.all;
   };
 }

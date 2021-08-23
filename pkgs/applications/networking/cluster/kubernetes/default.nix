@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "kubernetes";
-  version = "1.22.0";
+  version = "1.22.1";
 
   src = fetchFromGitHub {
     owner = "kubernetes";
     repo = "kubernetes";
     rev = "v${version}";
-    sha256 = "sha256-4lqqD3SBLBWrnFWhRzV3QgRLdGRW1Jx/eL6swtHL0Vw=";
+    sha256 = "sha256-coiDKczX5kWw/5A9+p0atPbn2nR0wBBdfXKTw6FYywo=";
   };
 
   nativeBuildInputs = [ removeReferencesTo makeWrapper which go rsync installShellFiles ];
@@ -97,10 +97,5 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
   };
 
-  passthru.tests = with nixosTests.kubernetes; {
-    dns-single-node = dns.singlenode;
-    dns-multi-node = dns.multinode;
-    rbac-single-node = rbac.singlenode;
-    rbac-multi-node = rbac.multinode;
-  };
+  passthru.tests = nixosTests.kubernetes;
 }

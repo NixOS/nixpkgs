@@ -429,6 +429,7 @@ in
 
       startLimitIntervalSec = 60;  # 1 min
       serviceConfig = {
+        Type = "notify";
         ExecStart = "${dovecotPkg}/sbin/dovecot -F";
         ExecReload = "${dovecotPkg}/sbin/doveadm reload";
         Restart = "on-failure";

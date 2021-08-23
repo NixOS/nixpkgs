@@ -95,8 +95,8 @@
 /pkgs/development/perl-modules      @volth @stigtsp
 
 # R
-/pkgs/applications/science/math/R   @peti
-/pkgs/development/r-modules         @peti
+/pkgs/applications/science/math/R   @jbedo @bcdarwin
+/pkgs/development/r-modules         @jbedo @bcdarwin
 
 # Ruby
 /pkgs/development/interpreters/ruby @marsam
