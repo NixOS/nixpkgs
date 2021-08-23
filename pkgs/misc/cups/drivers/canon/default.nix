@@ -19,12 +19,12 @@ let
 
   commonVer = "4.10";
   version = "3.70";
-  dl = "8/0100007658/08";
+  dl = "4/0100010264/01";
 
   versionNoDots = builtins.replaceStrings [ "." ] [ "" ] version;
   src_canon = fetchurl {
-    url = "http://gdlp01.c-wss.com/gds/${dl}/linux-UFRII-drv-v${versionNoDots}-uken-05.tar.gz";
-    sha256 = "0424lvyrsvsb94qga4p4ldis7f714c5yw5ydv3f84mdl2a7papg0";
+    url = "http://gdlp01.c-wss.com/gds/${dl}/linux-UFRII-drv-v${versionNoDots}-uken-07.tar.gz";
+    sha256 = "01nxpg3h1c64p5skxv904fg5c4sblmif486vkij2v62wwn6l65pz";
   };
 
 in
