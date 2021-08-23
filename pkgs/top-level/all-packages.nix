@@ -20629,6 +20629,8 @@ with pkgs;
 
   urserver = callPackage ../servers/urserver { };
 
+  vouch-proxy = callPackage ../servers/vouch-proxy { };
+
   victoriametrics = callPackage ../servers/nosql/victoriametrics { };
 
   virtlyst = libsForQt5.callPackage ../servers/web-apps/virtlyst { };
