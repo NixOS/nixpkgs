@@ -4943,6 +4943,12 @@
     github = "jduan";
     githubId = 452450;
   };
+  jecaro = {
+    email = "jeancharles.quillet@gmail.com";
+    github = "jecaro";
+    githubId = 17029738;
+    name = "Jean-Charles Quillet";
+  };
   jefdaj = {
     email = "jefdaj@gmail.com";
     github = "jefdaj";
