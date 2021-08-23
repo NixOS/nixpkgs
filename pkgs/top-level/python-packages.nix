@@ -4471,6 +4471,8 @@ in {
 
   memcached = callPackage ../development/python-modules/memcached { };
 
+  memory-allocator = callPackage ../development/python-modules/memory-allocator { };
+
   memory_profiler = callPackage ../development/python-modules/memory_profiler { };
 
   mercantile = callPackage ../development/python-modules/mercantile { };
@@ -8921,6 +8923,8 @@ in {
   trytond = callPackage ../development/python-modules/trytond { };
 
   ttp = callPackage ../development/python-modules/ttp { };
+
+  tubes = callPackage ../development/python-modules/tubes { };
 
   tunigo = callPackage ../development/python-modules/tunigo { };
 

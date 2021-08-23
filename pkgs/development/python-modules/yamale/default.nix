@@ -1,8 +1,8 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, isPy3k
-, pytest
+, pythonOlder
+, pytestCheckHook
 , pyyaml
 , ruamel_yaml
 }:
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "yamale";
   version = "3.0.8";
 
-  disabled = !isPy3k;
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "23andMe";
@@ -26,8 +26,9 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    pytest
+    pytestCheckHook
   ];
+
   pythonImportsCheck = [ "yamale" ];
 
   meta = with lib; {

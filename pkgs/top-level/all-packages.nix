@@ -258,6 +258,8 @@ with pkgs;
 
   comedilib = callPackage ../development/libraries/comedilib {  };
 
+  commitlint = nodePackages."@commitlint/cli";
+
   containerpilot = callPackage ../applications/networking/cluster/containerpilot { };
 
   coordgenlibs  = callPackage ../development/libraries/coordgenlibs { };
@@ -6715,6 +6717,8 @@ with pkgs;
   });
 
   np2kai = callPackage ../misc/emulators/np2kai { };
+
+  openipmi = callPackage ../tools/system/openipmi { };
 
   ox = callPackage ../applications/editors/ox { };
 
@@ -15364,6 +15368,8 @@ with pkgs;
 
   filter-audio = callPackage ../development/libraries/filter-audio {};
 
+  filtron = callPackage ../servers/filtron {};
+
   flann = callPackage ../development/libraries/flann { };
 
   flatcc = callPackage ../development/libraries/flatcc { };
@@ -18916,13 +18922,9 @@ with pkgs;
 
   theft = callPackage ../development/libraries/theft { };
 
-  thrift = callPackage ../development/libraries/thrift {
-    inherit (pythonPackages) twisted;
-  };
+  thrift = callPackage ../development/libraries/thrift { };
 
-  thrift-0_10 = callPackage ../development/libraries/thrift/0.10.nix {
-    inherit (pythonPackages) twisted;
-  };
+  thrift-0_10 = callPackage ../development/libraries/thrift/0.10.nix { };
 
   tidyp = callPackage ../development/libraries/tidyp { };
 
@@ -26874,6 +26876,8 @@ with pkgs;
   pqiv = callPackage ../applications/graphics/pqiv { };
 
   qiv = callPackage ../applications/graphics/qiv { };
+
+  premid = callPackage ../applications/misc/premid { };
 
   processing = callPackage ../applications/graphics/processing {
     jdk = oraclejdk8;
