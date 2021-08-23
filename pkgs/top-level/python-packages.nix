@@ -3551,6 +3551,8 @@ in {
 
   iminuit = callPackage ../development/python-modules/iminuit { };
 
+  immutabledict = callPackage ../development/python-modules/immutabledict { };
+
   immutables = callPackage ../development/python-modules/immutables { };
 
   impacket = callPackage ../development/python-modules/impacket { };
@@ -9667,6 +9669,8 @@ in {
   zipp = callPackage ../development/python-modules/zipp { };
 
   zipstream = callPackage ../development/python-modules/zipstream { };
+
+  zipstream-new = callPackage ../development/python-modules/zipstream-new { };
 
   zm-py = callPackage ../development/python-modules/zm-py { };
 
