@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "titlecase";
-  version = "2.2.0";
+  version = "2.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5d97ee51da37fb57c8753b79efa8edfdf3f10c0060de926efee970081e28d52f";
+    sha256 = "9a1595ed9b88f3ce4362a7602ee63cf074e10ac80d1256b32ea1ec5ffa265fa0";
   };
 
   propagatedBuildInputs = [ regex ];
