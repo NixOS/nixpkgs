@@ -1,5 +1,5 @@
 { lib, stdenv
-, gcc_src, version
+, gcc_src, version, gcc_libs_meta
 , autoreconfHook269
 }:
 
@@ -38,4 +38,8 @@ stdenv.mkDerivation rec {
     "cross_compiling=true"
     "--disable-multilib"
   ];
+
+  meta = gcc_libs_meta // {
+    description = gcc_libs_meta.description + " - atomics support";
+  };
 }
