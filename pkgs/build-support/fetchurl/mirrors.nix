@@ -229,13 +229,6 @@
     "http://archives.fedoraproject.org/pub/archive/fedora/"
   ];
 
-  # Old SUSE distributions.  Unfortunately there is no master site,
-  # since SUSE actually delete their old distributions (see
-  # ftp://ftp.suse.com/pub/suse/discontinued/deleted-20070817/README.txt).
-  oldsuse = [
-    "ftp://ftp.gmd.de/ftp.suse.com-discontinued/"
-  ];
-
   # openSUSE.
   opensuse = [
     "http://opensuse.hro.nl/opensuse/distribution/"
