@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = ''Cargo subcommand "release": everything about releasing a rust crate'';
     homepage = "https://github.com/sunng87/cargo-release";
-    license = with licenses; [ mit ];
+    license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ gerschtli ];
   };
 }
