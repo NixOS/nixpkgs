@@ -29,6 +29,7 @@ let
       "-/etc/nsswitch.conf"
       "-/etc/hosts"
       "-/etc/localtime"
+      "-/run/postgresql"
     ];
     BindPaths = [
       cfg.consumptionDir
@@ -60,7 +61,7 @@ let
     ProtectKernelModules = true;
     ProtectKernelTunables = true;
     ProtectProc = "invisible";
-    RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+    RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ];
     RestrictNamespaces = true;
     RestrictRealtime = true;
     RestrictSUIDSGID = true;
