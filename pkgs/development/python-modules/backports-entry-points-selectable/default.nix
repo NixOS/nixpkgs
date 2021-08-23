@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "backports.entry-points-selectable";
-  version = "1.0.4";
+  version = "1.1.0";
 
   src = fetchPypi {
     inherit version;
     # pypi project name and tarball name differ
     pname = builtins.replaceStrings [ "-" ] [ "_" ] pname;
-    sha256 = "4acda84d96855beece3bf9aad9a1030aceb5f744b8ce9af7d5ee6dd672cdd3bd";
+    sha256 = "0shz6rkpidyw3bayad03274p4m1g1qk4j4dfnvd9dhf11qk6i14q";
   };
 
   format = "pyproject";
