@@ -893,6 +893,8 @@ with pkgs;
 
   redfang = callPackage ../tools/networking/redfang { };
 
+  redtimer = callPackage ../tools/misc/redtimer { };
+
   sx-go = callPackage ../tools/security/sx-go { };
 
   tfk8s = callPackage ../tools/misc/tfk8s { };
