@@ -7066,6 +7066,8 @@ with pkgs;
 
   limesurvey = callPackage ../servers/limesurvey { };
 
+  linkedin-matrix = callPackage ../servers/linkedin-matrix { };
+
   linuxquota = callPackage ../tools/misc/linuxquota { };
 
   liquidctl = with python3Packages; toPythonApplication liquidctl;
