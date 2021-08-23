@@ -283,6 +283,7 @@
 
   metalab = [
     "ftp://ftp.gwdg.de/pub/linux/metalab/"
+    "ftp://ftp.metalab.unc.edu/pub/linux/"
   ];
 
   # Bioconductor mirrors (from http://bioconductor.org/about/mirrors)
