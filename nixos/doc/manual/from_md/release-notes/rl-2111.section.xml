@@ -199,6 +199,14 @@
           <link linkend="opt-services.xserver.displayManager.sx.enable">services.xserver.displayManager.sx</link>
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://postfixadmin.sourceforge.io/">postfixadmin</link>,
+          a web based virtual user administration interface for Postfix
+          mail servers. Available as
+          <link linkend="opt-services.postfixadmin.enable">postfixadmin</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-incompatibilities">
