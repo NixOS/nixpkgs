@@ -29,14 +29,14 @@ let
   );
 in
 stdenv.mkDerivation rec {
-  version = "9.3";
+  version = "9.4";
   pname = "sage-src";
 
   src = fetchFromGitHub {
     owner = "sagemath";
     repo = "sage";
     rev = version;
-    sha256 = "sha256-l9DX8jcDdKA7GJ6xU+nBsmlZxrcZ9ZUAJju621ooBEo=";
+    sha256 = "sha256-jqkr4meG02KbTCMsGvyr1UbosS4ZuUJhPXU/InuS+9A=";
   };
 
   # Patches needed because of particularities of nix or the way this is packaged.
@@ -77,64 +77,9 @@ stdenv.mkDerivation rec {
   # be empty since dependencies update all the time.
   packageUpgradePatches = [
     # After updating smypow to (https://trac.sagemath.org/ticket/3360) we can
-    # now set the cache dir to be withing the .sage directory. This is not
+    # now set the cache dir to be within the .sage directory. This is not
     # strictly necessary, but keeps us from littering in the user's HOME.
     ./patches/sympow-cache.patch
-
-    # ignore a deprecation warning for usage of `cmp` in the attrs library in the doctests
-    ./patches/ignore-cmp-deprecation.patch
-
-    # remove use of matplotlib function deprecated in 3.4
-    # https://trac.sagemath.org/ticket/31827
-    (fetchSageDiff {
-      base = "9.3";
-      name = "remove-matplotlib-deprecated-function.patch";
-      rev = "32b2bcaefddc4fa3d2aee6fa690ce1466cbb5948";
-      sha256 = "sha256-SXcUGBMOoE9HpuBzgKC3P6cUmM5MiktXbe/7dVdrfWo=";
-    })
-
-    # pari 2.13 update
-    # https://trac.sagemath.org/ticket/30801
-    #
-    # the last commit in that ticket is
-    # c78b1470fccd915e2fa93f95f2fefba6220fb1f7, but commits after
-    # 10a4531721d2700fd717e2b3a1364508ffd971c3 only deal with 32-bit
-    # and post-26635 breakage, none of which is relevant to us. since
-    # there are post-9.4.beta0 rebases after that, we just skip later
-    # commits.
-    (fetchSageDiff {
-      base = "9.3";
-      name = "pari-2.13.1.patch";
-      rev = "10a4531721d2700fd717e2b3a1364508ffd971c3";
-      sha256 = "sha256-gffWKK9CMREaNOb5zb63iZUgON4FvsPrMQNqe+5ZU9E=";
-    })
-
-    # sympy 1.8 update
-    # https://trac.sagemath.org/ticket/31647
-    (fetchSageDiff {
-      base = "9.4.beta0";
-      name = "sympy-1.8.patch";
-      rev = "fa864b36e15696450c36d54215b1e68183b29d25";
-      sha256 = "sha256-fj/9QEZlVF0fw9NpWflkTuBSKpGjCE6b96ECBgdn77o=";
-    })
-
-    # sphinx 4 update
-    # https://trac.sagemath.org/ticket/31696
-    (fetchSageDiff {
-      base = "9.4.beta3";
-      name = "sphinx-4.patch";
-      rev = "bc84af8c795b7da433d2000afc3626ee65ba28b8";
-      sha256 = "sha256-5Kvs9jarC8xRIU1rdmvIWxQLC25ehiTLJpg5skh8WNM=";
-    })
-
-    # eclib 20210625 update
-    # https://trac.sagemath.org/ticket/31443
-    (fetchSageDiff {
-      base = "9.4.beta3";
-      name = "eclib-20210625.patch";
-      rev = "789550ca04c94acfb1e803251538996a34962038";
-      sha256 = "sha256-VlyEn5hg3joG8t/GwiRfq9TzJ54AoHxLolsNQ3shc2c=";
-    })
   ];
 
   patches = nixPatches ++ bugfixPatches ++ packageUpgradePatches;

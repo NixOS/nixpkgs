@@ -1842,6 +1842,8 @@ in {
 
   datasette = callPackage ../development/python-modules/datasette { };
 
+  datasette-template-sql = callPackage ../development/python-modules/datasette-template-sql { };
+
   datashader = callPackage ../development/python-modules/datashader {
     dask = self.dask.override { withExtraComplete = true; };
   };
@@ -4468,6 +4470,8 @@ in {
   meld3 = callPackage ../development/python-modules/meld3 { };
 
   memcached = callPackage ../development/python-modules/memcached { };
+
+  memory-allocator = callPackage ../development/python-modules/memory-allocator { };
 
   memory_profiler = callPackage ../development/python-modules/memory_profiler { };
 
@@ -8919,6 +8923,8 @@ in {
   trytond = callPackage ../development/python-modules/trytond { };
 
   ttp = callPackage ../development/python-modules/ttp { };
+
+  tubes = callPackage ../development/python-modules/tubes { };
 
   tunigo = callPackage ../development/python-modules/tunigo { };
 

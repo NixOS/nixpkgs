@@ -46,6 +46,9 @@
 # Not needed with buildGoModule
 , goPackagePath ? ""
 
+# needed for buildFlags warning
+, buildFlags ? ""
+
 , ... }@args':
 
 with builtins;
@@ -268,4 +271,6 @@ let
     };
   });
 in
+lib.warnIf (buildFlags != "")
+  "Use the `ldflags` and/or `tags` attributes instead of `buildFlags`"
   package
