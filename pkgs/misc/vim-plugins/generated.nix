@@ -1555,6 +1555,18 @@ final: prev:
     meta.homepage = "https://github.com/editorconfig/editorconfig-vim/";
   };
 
+  editorconfig-nvim = buildVimPluginFrom2Nix {
+    pname = "editorconfig-nvim";
+    version = "2021-08-18";
+    src = fetchFromGitHub {
+      owner = "gpanders";
+      repo = "editorconfig.nvim";
+      rev = "8840aacb025af17e42c6c215a34568f3dbcf94f6";
+      sha256 = "1flr9mhz33bcrqp6iwnvhsz18hrd4ynvh7qdihnpd5qn0mwf034w";
+    };
+    meta.homepage = "https://github.com/gpanders/editorconfig.nvim/";
+  };
+
   elm-vim = buildVimPluginFrom2Nix {
     pname = "elm-vim";
     version = "2020-09-23";
