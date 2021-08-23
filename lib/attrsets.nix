@@ -21,13 +21,18 @@ rec {
        attrByPath ["z" "z"] 6 x
        => 6
   */
-  attrByPath = attrPath: default: e:
-    let attr = head attrPath;
-    in
-      if attrPath == [] then e
-      else if e ? ${attr}
-      then attrByPath (tail attrPath) default e.${attr}
-      else default;
+  attrByPath = attrPath: default:
+    let
+      len = length attrPath;
+      getDepth = n: attr:
+        let
+          name = elemAt attrPath n;
+        in
+        if n == len then attr
+        else if attr ? ${name}
+        then getDepth (n + 1) attr.${name}
+        else default;
+    in getDepth 0;
 
   /* Return if an attribute from nested attribute set exists.
 
@@ -39,14 +44,13 @@ rec {
        => false
 
   */
-  hasAttrByPath = attrPath: e:
-    let attr = head attrPath;
-    in
-      if attrPath == [] then true
-      else if e ? ${attr}
-      then hasAttrByPath (tail attrPath) e.${attr}
-      else false;
-
+  hasAttrByPath = attrPath:
+    let
+      len = length attrPath;
+      checkDepth = n: attr:
+        let name = elemAt attrPath n;
+        in n == len || attr ? ${name} && checkDepth (n + 1) attr.${name};
+    in checkDepth 0;
 
   /* Return nested attribute set in which an attribute is set.
 
@@ -57,11 +61,11 @@ rec {
   setAttrByPath = attrPath: value:
     let
       len = length attrPath;
-      atDepth = n:
+      setDepth = n:
         if n == len
         then value
-        else { ${elemAt attrPath n} = atDepth (n + 1); };
-    in atDepth 0;
+        else { ${elemAt attrPath n} = setDepth (n + 1); };
+    in setDepth 0;
 
   /* Like `attrByPath' without a default value. If it doesn't find the
      path it will throw.
@@ -73,9 +77,9 @@ rec {
        getAttrFromPath ["z" "z"] x
        => error: cannot find attribute `z.z'
   */
-  getAttrFromPath = attrPath: set:
+  getAttrFromPath = attrPath:
     let errorMsg = "cannot find attribute `" + concatStringsSep "." attrPath + "'";
-    in attrByPath attrPath (abort errorMsg) set;
+    in attrByPath attrPath (abort errorMsg);
 
 
   /* Return the specified attributes from a set.

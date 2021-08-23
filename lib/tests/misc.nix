@@ -313,6 +313,21 @@ runTests {
     expected = { success = false; value = false; };
   };
 
+  testGetAttrFromPath = {
+    expr = getAttrFromPath [ "a" "c" "b" ] { a = { c = { b = 1; }; }; };
+    expected = 1;
+  };
+
+  testSetAttrByPath = {
+    expr = setAttrByPath [ "a" "b" ] true;
+    expected = { a = { b = true; }; };
+  };
+
+  testAttrByPathDefault = {
+    expr = attrByPath [ "a" "b" ] 0 { a = { c = "test"; }; };
+    expected = 0;
+  };
+
   testHasAttrByPathTrue = {
     expr = hasAttrByPath ["a" "b"] { a = { b = "yey"; }; };
     expected = true;
