@@ -9,6 +9,11 @@ buildPythonPackage rec {
     sha256 = "011hbbjqjqk6fskb180hfhhsddz3i2a9gz34sf4wy1j2s4my9xy0";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "google-api-core[grpc] >= 1.26.0, < 2.0.0dev" "google-api-core[grpc] >= 1.26.0, < 2.0.1"
+  '';
+
   propagatedBuildInputs = [ google-api-core ];
 
   # No tests in repo
