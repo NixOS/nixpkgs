@@ -77,6 +77,13 @@ in stdenv.mkDerivation rec {
     "--enable-nfc"
     "--enable-sap"
     "--enable-sixaxis"
+    "--enable-btpclient"
+    "--enable-hid2hci"
+    "--enable-logger"
+
+    # To provide ciptool, sdptool, and rfcomm (unmaintained)
+    # superseded by new D-Bus APIs
+    "--enable-deprecated"
   ];
 
   # Work around `make install' trying to create /var/lib/bluetooth.

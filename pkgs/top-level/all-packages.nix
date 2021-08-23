@@ -1014,8 +1014,6 @@ with pkgs;
 
   terminator = callPackage ../applications/terminal-emulators/terminator { };
 
-  terminus = callPackage ../applications/terminal-emulators/terminus { };
-
   termite = callPackage ../applications/terminal-emulators/termite/wrapper.nix {
     termite = termite-unwrapped;
   };
@@ -25341,6 +25339,8 @@ with pkgs;
   inkscape-extensions = recurseIntoAttrs (callPackages ../applications/graphics/inkscape/extensions.nix {});
 
   inspectrum = callPackage ../applications/radio/inspectrum { };
+
+  inputplug = callPackage ../tools/X11/inputplug { };
 
   ion3 = callPackage ../applications/window-managers/ion-3 {
     lua = lua5_1;
