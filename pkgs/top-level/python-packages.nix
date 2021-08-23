@@ -4704,6 +4704,8 @@ in {
 
   mutesync = callPackage ../development/python-modules/mutesync { };
 
+  mutf8 = callPackage ../development/python-modules/mutf8 { };
+
   mwclient = callPackage ../development/python-modules/mwclient { };
 
   mwdblib = callPackage ../development/python-modules/mwdblib { };
