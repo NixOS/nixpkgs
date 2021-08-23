@@ -1,13 +1,12 @@
 { lib, stdenv, fetchurl, unzip }:
 
 stdenv.mkDerivation rec {
-  name = "gocd-server-${version}-${rev}";
-  version = "21.2.0";
-  rev = "12498";
+  pname = "gocd-server";
+  version = "21.2.0-12498";
 
   src = fetchurl {
-    url = "https://download.go.cd/binaries/${version}-${rev}/generic/go-server-${version}-${rev}.zip";
-    sha256 = "a465d23c55bd853636af6cff277b85665054fbd5864a8f13b48b2979f04ccac6";
+    url = "https://download.go.cd/binaries/${version}/generic/go-server-${version}.zip";
+    sha256 = "1ina9kq7jacbnh9qyjl6spxm8l36hmxjgzvcmwv3d1dxalyd4rd4";
   };
 
   meta = with lib; {
@@ -20,9 +19,14 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ unzip ];
 
-  buildCommand = "
-    unzip $src -d $out
-    mv $out/go-server-${version} $out/go-server
-    mkdir -p $out/go-server/conf
-  ";
+  buildCommand =
+    let
+      versionParts = lib.splitString "-" version;
+      baseVersion = lib.lists.elemAt versionParts 0;
+    in
+    ''
+      unzip $src -d $out
+      mv $out/go-server-${baseVersion} $out/go-server
+      mkdir -p $out/go-server/conf
+    '';
 }

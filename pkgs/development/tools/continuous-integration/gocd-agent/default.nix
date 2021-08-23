@@ -1,14 +1,14 @@
 { lib, stdenv, fetchurl, unzip }:
 
 stdenv.mkDerivation rec {
-  name = "gocd-agent-${version}-${rev}";
-  version = "21.2.0";
-  rev = "12498";
+  pname = "gocd-agent";
+  version = "21.2.0-12498";
 
   src = fetchurl {
-    url = "https://download.go.cd/binaries/${version}-${rev}/generic/go-agent-${version}-${rev}.zip";
-    sha256 = "105e38058cb918bf0ff2c8a2458a911fddf2ff347d8e9ba7c9107972d58439f2";
+    url = "https://download.go.cd/binaries/${version}/generic/go-agent-${version}.zip";
+    sha256 = "1wirhkap4y8hr6krp3kx6kzz5p8zj654b8n8y87vy65rih2khphh";
   };
+
   meta = with lib; {
     description = "A continuous delivery server specializing in advanced workflow modeling and visualization";
     homepage = "http://www.go.cd";
@@ -19,8 +19,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ unzip ];
 
-  buildCommand = "
-    unzip $src -d $out
-    mv $out/go-agent-${version} $out/go-agent
-  ";
+  buildCommand =
+    let
+      versionParts = lib.splitString "-" version;
+      baseVersion = lib.lists.elemAt versionParts 0;
+    in
+    ''
+      unzip $src -d $out
+      mv $out/go-agent-${baseVersion} $out/go-agent
+    '';
 }
