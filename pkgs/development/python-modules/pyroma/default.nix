@@ -2,10 +2,10 @@
 , buildPythonPackage
 , fetchFromGitHub
 , docutils
+, python
 , pygments
 , setuptools
 , requests
-, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -26,16 +26,11 @@ buildPythonPackage rec {
     requests
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
-
-  pytestFlagsArray = [ "pyroma/tests.py" ];
-
-  disabledTests = [
-    # PyPI tests require network access
-    "PyPITest"
-  ];
+  # https://github.com/regebro/pyroma/blob/3.2/Makefile#L23
+  # PyPITest requires network access
+  checkPhase = ''
+    ${python.interpreter} -m unittest -k 'not PyPITest' pyroma.tests
+  '';
 
   pythonImportsCheck = [ "pyroma" ];
 
@@ -43,6 +38,6 @@ buildPythonPackage rec {
     description = "Test your project's packaging friendliness";
     homepage = "https://github.com/regebro/pyroma";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ kamadorueda ];
   };
 }
