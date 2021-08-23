@@ -32,18 +32,20 @@ stdenvNoCC.mkDerivation rec {
 
   fixupPhase = ''
     patchShebangs $out/bin
-    wrapProgram $out/bin/rpi-eeprom-update \
-      --set FIRMWARE_ROOT $out/share/rpi-eeprom \
-      ${lib.optionalString stdenvNoCC.isAarch64 "--set VCMAILBOX ${libraspberrypi}/bin/vcmailbox"} \
-      --prefix PATH : "${lib.makeBinPath ([
-        binutils-unwrapped
-        findutils
-        kmod
-        pciutils
-        (placeholder "out")
-      ] ++ lib.optionals stdenvNoCC.isAarch64 [
-        libraspberrypi
-      ])}"
+    for i in rpi-eeprom-update rpi-eeprom-config; do
+      wrapProgram $out/bin/$i \
+        --set FIRMWARE_ROOT $out/share/rpi-eeprom \
+        ${lib.optionalString stdenvNoCC.isAarch64 "--set VCMAILBOX ${libraspberrypi}/bin/vcmailbox"} \
+        --prefix PATH : "${lib.makeBinPath ([
+          binutils-unwrapped
+          findutils
+          kmod
+          pciutils
+          (placeholder "out")
+        ] ++ lib.optionals stdenvNoCC.isAarch64 [
+          libraspberrypi
+        ])}"
+    done
   '';
 
   meta = with lib; {
