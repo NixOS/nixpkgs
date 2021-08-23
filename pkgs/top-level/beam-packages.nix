@@ -1,10 +1,10 @@
-{ callPackage, wxGTK30, buildPackages, wxSupport ? true }:
+{ beam, callPackage, wxGTK30, buildPackages, wxSupport ? true }:
 
-rec {
+with beam; {
   lib = callPackage ../development/beam-modules/lib.nix { };
 
   # Each
-  interpreters = rec {
+  interpreters = with beam.interpreters; {
 
     # R24 is the default version.
     erlang = erlangR24; # The main switch to change default Erlang version.
