@@ -15,12 +15,12 @@ buildGoModule rec {
 
   doCheck = false;
 
-  ldflags = ''
+  ldflags = [
     "-s" "-w"
     "-X github.com/splunk/qbec/internal/commands.version=${version}"
     "-X github.com/splunk/qbec/internal/commands.commit=${src.rev}"
     "-X github.com/splunk/qbec/internal/commands.goVersion=${lib.getVersion go}"
-  '';
+  ];
 
   meta = with lib; {
     description = "Configure kubernetes objects on multiple clusters using jsonnet https://qbec.io";
