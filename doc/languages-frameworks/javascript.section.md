@@ -207,7 +207,7 @@ To fix this we will specify different versions of build inputs to use, as well a
 mkYarnPackage rec {
   pkgConfig = {
     node-sass = {
-      buildInputs = with final;[ python libsass pkgconfig ];
+      buildInputs = with final;[ python libsass pkg-config ];
       postInstall = ''
         LIBSASS_EXT=auto yarn --offline run build
         rm build/config.gypi
