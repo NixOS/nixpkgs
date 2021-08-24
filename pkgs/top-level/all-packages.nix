@@ -5528,7 +5528,10 @@ with pkgs;
   google-cloud-sdk = callPackage ../tools/admin/google-cloud-sdk {
     python = python3;
   };
-  google-cloud-sdk-gce = google-cloud-sdk.override { with-gce = true; };
+  google-cloud-sdk-gce = google-cloud-sdk.override {
+    python = python38;
+    with-gce = true;
+  };
 
   google-fonts = callPackage ../data/fonts/google-fonts { };
 
