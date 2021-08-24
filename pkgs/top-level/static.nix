@@ -196,6 +196,9 @@ in rec {
     buildInputs = (old.buildInputs or []) ++ [ zlib ];
   });
 
+  udev = super.libudev-zero;
+  systemdMinimal = udev;
+
   zlib = super.zlib.override {
     # Don’t use new stdenv zlib because
     # it doesn’t like the --disable-shared flag
