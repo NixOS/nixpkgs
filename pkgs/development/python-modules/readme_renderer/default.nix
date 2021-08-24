@@ -34,6 +34,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTests = [
+    # https://github.com/pypa/readme_renderer/pull/206
+    "test_md_fixtures"
+  ];
+
   pythonImportsCheck = [ "readme_renderer" ];
 
   meta = with lib; {
