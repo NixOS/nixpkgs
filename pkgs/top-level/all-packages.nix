@@ -5185,6 +5185,8 @@ with pkgs;
 
   ghq = callPackage ../applications/version-management/git-and-tools/ghq { };
 
+  gst = callPackage ../applications/version-management/git-and-tools/gst { };
+
   ghr = callPackage ../applications/version-management/git-and-tools/ghr { };
 
   gibberish-detector = with python3Packages; toPythonApplication gibberish-detector;
