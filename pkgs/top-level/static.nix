@@ -140,6 +140,13 @@ in rec {
     NIX_MESON_DEPENDENCY_STATIC = true;
   });
 
+  harfbuzz = super.harfbuzz.overrideAttrs (old: {
+    NIX_MESON_DEPENDENCY_STATIC = true;
+    nativeBuildInputs = (old.nativeBuildInputs or []) ++ [
+      super.mesonShlibsToStaticHook
+    ];
+  });
+
   json-glib = super.json-glib.overrideAttrs (old: {
     NIX_MESON_DEPENDENCY_STATIC = true;
   });
