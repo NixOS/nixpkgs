@@ -989,6 +989,7 @@ with pkgs;
 
   nimmm = callPackage ../applications/terminal-emulators/nimmm { };
 
+
   pikchr = callPackage ../tools/graphics/pikchr { };
 
   roxterm = callPackage ../applications/terminal-emulators/roxterm { };
@@ -31601,6 +31602,8 @@ with pkgs;
   mynewt-newt = callPackage ../tools/package-management/mynewt-newt { };
 
   nar-serve = callPackage ../tools/nix/nar-serve { };
+
+  nhentai = callPackage ../applications/misc/nhentai { pythonPackages = python3Packages; };
 
   inherit (callPackage ../tools/package-management/nix {
       storeDir = config.nix.storeDir or "/nix/store";
