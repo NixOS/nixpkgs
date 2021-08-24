@@ -138,7 +138,7 @@ in
       wantedBy = [ "multi-user.target" ];
       path = [
         pgsql.package
-        pkgs.utillinux
+        pkgs.util-linux
       ];
       script = ''
         set -eu
@@ -177,6 +177,7 @@ in
 
     services.phpfpm.pools.postfixadmin = {
       user = user;
+      phpPackage = pkgs.php74;
       phpOptions = ''
         error_log = 'stderr'
         log_errors = on
