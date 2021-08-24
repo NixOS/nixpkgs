@@ -565,6 +565,8 @@ in {
 
   asgiref = callPackage ../development/python-modules/asgiref { };
 
+  asn1 = callPackage ../development/python-modules/asn1 { };
+
   asn1ate = callPackage ../development/python-modules/asn1ate { };
 
   asn1crypto = callPackage ../development/python-modules/asn1crypto { };
