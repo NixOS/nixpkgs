@@ -80,6 +80,14 @@ self: super: let
 in rec {
   stdenv = foldl (flip id) super.stdenv staticAdapters;
 
+  at-spi2-atk = super.at-spi2-atk.overrideAttrs (old: {
+    NIX_MESON_DEPENDENCY_STATIC = true;
+    nativeBuildInputs = (old.nativeBuildInputs or []) ++ [
+      super.mesonShlibsToStaticHook
+    ];
+    NIX_CFLAGS_COMPILE = "-DG_LOG_DOMAIN=\"\"\"\"";
+  });
+
   at-spi2-core = super.at-spi2-core.overrideAttrs (old: {
     NIX_MESON_DEPENDENCY_STATIC = true;
     nativeBuildInputs = (old.nativeBuildInputs or []) ++ [
