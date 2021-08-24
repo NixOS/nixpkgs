@@ -194,6 +194,13 @@ in rec {
     NIX_MESON_DEPENDENCY_STATIC = true;
   });
 
+  libinput = super.libinput.overrideAttrs (old: {
+    NIX_MESON_DEPENDENCY_STATIC = true;
+    nativeBuildInputs = (old.nativeBuildInputs or []) ++ [
+      super.mesonShlibsToStaticHook
+    ];
+  });
+
   libselinux = (super.libselinux.override {
     fts = super.musl-fts;
     enablePython = false;
