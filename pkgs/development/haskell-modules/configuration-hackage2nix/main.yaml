@@ -91,6 +91,8 @@ default-package-overrides:
   - streamly-bytestring < 0.1.3
   - streamly-lmdb < 0.3.0
   - streamly-process
+  # dhall-nix is not part of stackage, remove if dhall >= 1.40
+  - dhall-nix < 1.1.22
 
 extra-packages:
   - base16-bytestring < 1               # required for cabal-install etc.
