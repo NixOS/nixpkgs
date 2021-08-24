@@ -214,6 +214,13 @@ in rec {
     ];
   });
 
+  libwacom = super.libwacom.overrideAttrs (old: {
+    NIX_MESON_DEPENDENCY_STATIC = true;
+    nativeBuildInputs = (old.nativeBuildInputs or []) ++ [
+      super.mesonShlibsToStaticHook
+    ];
+  });
+
   libxkbcommon = super.libxkbcommon.overrideAttrs (old: {
     NIX_MESON_DEPENDENCY_STATIC = true;
   });
