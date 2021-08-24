@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   version = "1.13.1";
 
   src = fetchurl {
-    url = "https://unbound.net/downloads/${pname}-${version}.tar.gz";
+    url = "https://nlnetlabs.nl/downloads/unbound/unbound-${version}.tar.gz";
     sha256 = "sha256-hQTZe4/FvYlzRcldEW4O4N34yP+ZWQqytL0TJ4yfULg=";
   };
 
