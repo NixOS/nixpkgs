@@ -17309,6 +17309,11 @@ in
 
   mediastreamer-openh264 = callPackage ../development/libraries/mediastreamer/msopenh264.nix { };
 
+  memorymapping = callPackage ../development/libraries/memorymapping { };
+  memorymappingHook = makeSetupHook {
+    deps = [ memorymapping ];
+  } ../development/libraries/memorymapping/setup-hook.sh;
+
   memstream = callPackage ../development/libraries/memstream { };
   memstreamHook = makeSetupHook {
     deps = [ memstream ];
