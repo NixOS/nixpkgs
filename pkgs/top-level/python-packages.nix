@@ -3443,6 +3443,8 @@ in {
 
   hwi = callPackage ../development/python-modules/hwi { };
 
+  hy = callPackage ../development/python-modules/hy { };
+
   hydra = callPackage ../development/python-modules/hydra { };
 
   hydra-check = callPackage ../development/python-modules/hydra-check { };
