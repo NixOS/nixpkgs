@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fastp";
-  version = "0.20.1";
+  version = "0.22.0";
 
   src = fetchFromGitHub {
     owner = "OpenGene";
     repo = "fastp";
     rev = "v${version}";
-    sha256 = "sha256-pANwppkO9pfV9vctB7HmNCzYRtf+Xt+5HMKzvFuvyFM=";
+    sha256 = "sha256-XR76hNz7iGXQYSBbBandHZ+oU3wyTf1AKlu9Xeq/GyE=";
   };
 
   buildInputs = [ zlib ];
