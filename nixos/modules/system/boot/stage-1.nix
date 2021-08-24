@@ -347,7 +347,7 @@ let
       compressorExe = initialRamdisk.compressorExecutableFunction pkgs;
     in pkgs.writeScriptBin "append-initrd-secrets"
       ''
-        #!${pkgs.bash}/bin/bash -e
+        #!/usr/bin/env bash
         function usage {
           echo "USAGE: $0 INITRD_FILE" >&2
           echo "Appends this configuration's secrets to INITRD_FILE" >&2
