@@ -195,9 +195,45 @@ configurePhase = "ln -s $node_modules node_modules";
 
 this will generate a derivation including the node_modules. If you have to build a derivation for an integrated web framework (rails, phoenix..), this is probably the easiest way. [Plausible](https://github.com/NixOS/nixpkgs/blob/master/pkgs/servers/web-apps/plausible/default.nix#L39) offers a good example of how to do this.
 
+#### Overriding dependency behavior
+
+In the `mkYarnPackage` record the property `pkgConfig` can be used to override packages when you encounter problems building.
+
+For instance, say your package is throwing errors when trying to invoke node-sass: `ENOENT: no such file or directory, scandir '/build/source/node_modules/node-sass/vendor'`
+
+To fix this we will specify different versions of build inputs to use, as well as some post install steps to get the software built the way we want:
+
+```nix
+mkYarnPackage rec {
+  pkgConfig = {
+    node-sass = {
+      buildInputs = with final;[ python libsass pkgconfig ];
+      postInstall = ''
+        LIBSASS_EXT=auto yarn --offline run build
+        rm build/config.gypi
+      '';
+    };
+  };
+}
+```
+
 #### Pitfalls {#javascript-yarn2nix-pitfalls}
 
 - if version is missing from upstream package.json, yarn will silently install nothing. In that case, you will need to override package.json as shown in the [package.json section](#javascript-upstream-package-json)
+
+- having trouble with node-gyp? Try adding these lines to the `yarnPreBuild` steps:
+
+  ```nix
+  yarnPreBuild = ''
+    mkdir -p $HOME/.node-gyp/${nodejs.version}
+    echo 9 > $HOME/.node-gyp/${nodejs.version}/installVersion
+    ln -sfv ${nodejs}/include $HOME/.node-gyp/${nodejs.version}
+    export npm_config_nodedir=${nodejs}
+  '';
+  ```
+
+  - The `echo 9` steps comes from this answer: <https://stackoverflow.com/a/49139496>
+  - Exporting the headers in `npm_config_nodedir` comes from this issue: <https://github.com/nodejs/node-gyp/issues/1191#issuecomment-301243919>
 
 ## Outside of nixpkgs {#javascript-outside-nixpkgs}
 
