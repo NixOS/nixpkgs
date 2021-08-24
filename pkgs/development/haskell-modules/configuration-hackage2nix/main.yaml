@@ -63,10 +63,9 @@ core-packages:
 # available on Hackage, `hackage2nix` would generate two packages, `aeson`
 # at version 1.4.6.0 and `aeson_1_5_0_0` at version 1.5.0.0.
 #
-# WARNING: This list is generated semiautomatically based on the most recent
-# LTS package set. If you want to add entries to it, you must do so before the
-# comment saying "# LTS Haskell x.y". Any changes after that comment will be
-# lost the next time `update-stackage.sh` runs.
+# WARNING: We import a list of default-package-overrides from stackage which is
+# tracked in stackage.yaml. Adding conflicting overrides with stackage here will
+# not work.
 default-package-overrides:
   # This was only intended for ghc-7.0.4, and has very old deps, one hidden behind a flag
   - MissingH ==1.4.2.0
