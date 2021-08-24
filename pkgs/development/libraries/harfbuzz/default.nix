@@ -32,7 +32,8 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "harfbuzz${optionalString withIcu "-icu"}-${version}";
+  name = "harfbuzz${optionalString withIcu "-icu"}";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "harfbuzz";
