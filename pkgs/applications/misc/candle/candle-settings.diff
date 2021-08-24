@@ -1,8 +1,14 @@
 --- a/frmmain.cpp	1969-12-31 19:00:01.000000000 -0500
-+++ b/frmmain.cpp	2021-08-16 22:17:17.502429125 -0400
-@@ -88,1 +88,4 @@
++++ b/frmmain.cpp	2021-08-23 15:03:31.120290676 -0400
+@@ -34,0 +35 @@
++#include <QStandardPaths>
+@@ -87,2 +88,7 @@
+-    // Loading settings
 -    m_settingsFileName = qApp->applicationDirPath() + "/settings.ini";
-+    // follow XDG standards
-+    m_settingsFileName = getenv("XDG_CONFIG_HOME") ? getenv("XDG_CONFIG_HOME") : getenv("HOME") ? getenv("HOME") + QString("/.config") : "/tmp";
-+    m_settingsFileName.append("/candle/settings.ini");
++    // Loading settings: Use Qt standard paths for locating the settings file.
++    // (Upstream version tries to store it in the application binary directory.)
++    m_settingsFileName = QStandardPaths::locate(QStandardPaths::ConfigLocation, "candle/settings.ini");
++    if (m_settingsFileName.isEmpty()) {
++      m_settingsFileName = QStandardPaths::writableLocation(QStandardPaths::ConfigLocation) + "/candle/settings.ini";
++    }
 +    qDebug() << "Settings file:" << m_settingsFileName;
