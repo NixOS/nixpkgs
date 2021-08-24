@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "fastapi";
-  version = "0.68.0";
+  version = "0.68.1";
   format = "flit";
 
   src = fetchFromGitHub {
     owner = "tiangolo";
     repo = "fastapi";
     rev = version;
-    sha256 = "00cjkc90h0qlca30g981zvwlxh2wc3rfipw25v667jdl9x5gxv9p";
+    sha256 = "sha256-zwfopyig4ImMbkx89l8SsLW8PzoVcDN5KSd7a7fOnms=";
   };
 
   postPatch = ''
