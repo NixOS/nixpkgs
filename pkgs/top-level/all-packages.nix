@@ -17309,6 +17309,11 @@ in
 
   mediastreamer-openh264 = callPackage ../development/libraries/mediastreamer/msopenh264.nix { };
 
+  memstream = callPackage ../development/libraries/memstream { };
+  memstreamHook = makeSetupHook {
+    deps = [ memstream ];
+  } ../development/libraries/memstream/setup-hook.sh;
+
   menu-cache = callPackage ../development/libraries/menu-cache { };
 
   mergerfs = callPackage ../tools/filesystems/mergerfs { };
