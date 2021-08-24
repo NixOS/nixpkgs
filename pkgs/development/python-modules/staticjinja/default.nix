@@ -1,14 +1,16 @@
 { lib
 , fetchFromGitHub
 , buildPythonPackage
-, poetry
+, poetry-core
 , docopt-ng
 , easywatch
 , jinja2
 , pytestCheckHook
 , pytest-check
+, pythonOlder
 , markdown
 , testVersion
+, tomlkit
 , staticjinja
 }:
 
@@ -16,6 +18,8 @@ buildPythonPackage rec {
   pname = "staticjinja";
   version = "4.1.0";
   format = "pyproject";
+
+  disabled = pythonOlder "3.6";
 
   # No tests in pypi
   src = fetchFromGitHub {
@@ -26,7 +30,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    poetry
+    poetry-core
   ];
 
   propagatedBuildInputs = [
@@ -39,6 +43,7 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-check
     markdown
+    tomlkit
   ];
 
   # The tests need to find and call the installed staticjinja executable
