@@ -12,6 +12,13 @@ let
           sha256 = "ffbc4e29eb56089539b408f8e4c12a5d5a5d11d7fe7d40f8c6279784c618b869";
         };
       });
+      telethon = super.telethon.overridePythonAttrs (oldAttrs: rec {
+        version = "1.21.1";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "sha256-mTyDfvdFrd+XKifXv7oM5Riihj0aUOBzclW3ZNI+DvI=";
+        };
+      });
     };
   };
 
