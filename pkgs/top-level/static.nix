@@ -129,6 +129,13 @@ in rec {
     nativeBuildInputs = (old.nativeBuildInputs or []) ++ [ super.mesonShlibsToStaticHook ];
   });
 
+  gdk-pixbuf = super.gdk-pixbuf.overrideAttrs (old: {
+    NIX_MESON_DEPENDENCY_STATIC = true;
+    nativeBuildInputs = (old.nativeBuildInputs or []) ++ [
+      super.mesonShlibsToStaticHook
+    ];
+  });
+
   glib = super.glib.overrideAttrs (old: {
     NIX_MESON_DEPENDENCY_STATIC = true;
   });
