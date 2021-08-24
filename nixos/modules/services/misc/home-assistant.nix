@@ -285,6 +285,7 @@ in {
           "alarmdecoder"
           "arduino"
           "blackbird"
+          "deconz"
           "dsmr"
           "edl21"
           "elkm1"
