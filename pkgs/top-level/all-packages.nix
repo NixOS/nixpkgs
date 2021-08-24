@@ -12930,6 +12930,8 @@ with pkgs;
 
   red = callPackage ../development/interpreters/red { };
 
+  regexploit = callPackage ../tools/security/regexploit { };
+
   regextester = callPackage ../applications/misc/regextester { };
 
   regina = callPackage ../development/interpreters/regina { };
