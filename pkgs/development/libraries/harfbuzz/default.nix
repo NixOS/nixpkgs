@@ -42,8 +42,7 @@ stdenv.mkDerivation {
   };
 
   postPatch = ''
-    patchShebangs src/*.py
-    patchShebangs test
+    patchShebangs src/*.py test
   '' + lib.optionalString stdenv.isDarwin ''
     # ApplicationServices.framework headers have cast-align warnings.
     substituteInPlace src/hb.hh \
@@ -93,10 +92,9 @@ stdenv.mkDerivation {
     rm "$out"/lib/libharfbuzz.* "$dev/lib/pkgconfig/harfbuzz.pc"
     ln -s {'${harfbuzz.out}',"$out"}/lib/libharfbuzz.la
     ln -s {'${harfbuzz.dev}',"$dev"}/lib/pkgconfig/harfbuzz.pc
-    ${optionalString stdenv.isDarwin ''
-      ln -s {'${harfbuzz.out}',"$out"}/lib/libharfbuzz.dylib
-      ln -s {'${harfbuzz.out}',"$out"}/lib/libharfbuzz.0.dylib
-    ''}
+  '' + optionalString stdenv.isDarwin ''
+    ln -s {'${harfbuzz.out}',"$out"}/lib/libharfbuzz.dylib
+    ln -s {'${harfbuzz.out}',"$out"}/lib/libharfbuzz.0.dylib
   '';
 
   meta = with lib; {
