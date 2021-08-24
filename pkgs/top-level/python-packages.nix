@@ -8635,6 +8635,8 @@ in {
 
   tenacity = callPackage ../development/python-modules/tenacity { };
 
+  tensorboard-data-server = callPackage ../development/python-modules/tensorboard-data-server { };
+
   tensorboard-plugin-profile = callPackage ../development/python-modules/tensorboard-plugin-profile { };
 
   tensorboard-plugin-wit = callPackage ../development/python-modules/tensorboard-plugin-wit {};
