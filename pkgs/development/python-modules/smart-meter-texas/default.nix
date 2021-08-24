@@ -3,13 +3,14 @@
 , pythonOlder
 , fetchFromGitHub
 , aiohttp
+, asn1
 , python-dateutil
 , tenacity
 }:
 
 buildPythonPackage rec {
   pname = "smart-meter-texas";
-  version = "0.4.4";
+  version = "0.4.6";
 
   disabled = pythonOlder "3.6";
 
@@ -17,7 +18,7 @@ buildPythonPackage rec {
     owner = "grahamwetzler";
     repo = "smart-meter-texas";
     rev = "v${version}";
-    sha256 = "sha256-jewibcsqWnl0OQ2oEEOSOcyyDCIGZiG4EZQfuFUbxK4=";
+    sha256 = "sha256-BZb02eIFYCrTDDqeo6FlGpm8LCN/GxcdKGTR5L2/DpE=";
   };
 
   postPatch = ''
@@ -27,6 +28,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiohttp
+    asn1
     python-dateutil
     tenacity
   ];
