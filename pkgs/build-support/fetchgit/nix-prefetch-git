@@ -116,10 +116,8 @@ init_remote(){
 # Return the reference of an hash if it exists on the remote repository.
 ref_from_hash(){
     local hash=$1
-    ref=$(git ls-remote origin | sed -n "\,$hash\t, { s,\(.*\)\t\(.*\),\2,; p; q}")
-    # ref may be "ref" (foo-1.2.3) or "annotated ref" (peeled tag, foo-1.2.3^{})
-    if (echo "$ref" | grep '\^{}$' >/dev/null); then return; fi
-    echo "$ref"
+    git ls-remote origin | sed -n "\,$hash\t, { s,\(.*\)\t\(.*\),\2,; p; q}" | sed 's/\^{}$//'
+    # sed 's/\^{}$//': get tag from peeled tag
 }
 
 debug() {
