@@ -4,13 +4,25 @@
 , callPackage
 }:
 
-with python3.pkgs;
-
 let
-  plugins = python3.pkgs.callPackage ./plugins { };
+  py = python3.override {
+    packageOverrides = self: super:  {
+      twisted = super.twisted.overridePythonAttrs (oldAttrs: rec {
+        version = "21.7.0";
+        src = oldAttrs.src.override {
+          inherit version;
+          extension = "tar.gz";
+          sha256 = "01lh225d7lfnmfx4f4kxwl3963gjc9yg8jfkn1w769v34ia55mic";
+        };
+
+        propagatedBuildInputs = with self; oldAttrs.propagatedBuildInputs ++ [ typing-extensions ];
+      });
+    };
+  };
+  plugins = py.pkgs.callPackage ./plugins { };
   tools = callPackage ./tools { };
 in
-buildPythonApplication rec {
+with py.pkgs; buildPythonApplication rec {
   pname = "matrix-synapse";
   version = "1.39.0";
 
