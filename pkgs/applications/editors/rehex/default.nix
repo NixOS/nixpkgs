@@ -30,13 +30,14 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ pkg-config ]
-    ++ lib.optionals (stdenv.isDarwin) [ libicns ];
+    ++ lib.optionals stdenv.isDarwin [ libicns ];
 
   buildInputs = [ capstone jansson lua5_3 ]
     ++ lib.optionals (!stdenv.isDarwin) [ wxGTK31 ]
     ++ lib.optionals stdenv.isDarwin [ Carbon Cocoa IOKit wxmac ];
 
-  makeFlags = [ "prefix=$(out)" ] ++ lib.optionals stdenv.isDarwin [ "-f Makefile.osx" ];
+  makeFlags = [ "prefix=$(out)" ]
+    ++ lib.optionals stdenv.isDarwin [ "-f Makefile.osx" ];
 
   meta = with lib; {
     description = "Reverse Engineers' Hex Editor";
