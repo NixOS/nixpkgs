@@ -33,6 +33,6 @@ stdenv.mkDerivation rec {
     inherit (src.meta) homepage;
     license = licenses.bsd2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ primeos ];
+    maintainers = with maintainers; [ ];
   };
 }
