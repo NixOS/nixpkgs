@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchurl, makeWrapper, pkg-config, util-linux, which
-, procps, libcap_ng, openssl, python3 , perl
+{ lib, stdenv, fetchurl, fetchpatch, makeWrapper, pkg-config, util-linux, which
+, procps, libcap_ng, openssl, python3, perl, autoconf, automake, libtool
 , kernel ? null }:
 
 with lib;
@@ -16,9 +16,22 @@ in stdenv.mkDerivation rec {
     sha256 = "sha256-ZfQg+VTiUNiV+y2yKhMuHLVgvF4rkFHoNFETSBCOWXo=";
   };
 
+  patches = [
+    (fetchpatch {
+      name = "CVE-2021-36980.patch";
+      url = "https://github.com/openvswitch/ovs/commit/8ce8dc34b5f73b30ce0c1869af9947013c3c6575.patch";
+      sha256 = "1iyaqkiwijl2djjvnnvykh95qlzgvn9hmpszrwzmhwvik5m7b6g6";
+      # we don't run the tests, and the binary example missing from the patch
+      # file upsets the build process
+      excludes = [ "tests/*" ];
+    })
+  ];
+
+  preConfigure = "./boot.sh";
+
   kernel = optional (_kernel != null) _kernel.dev;
 
-  nativeBuildInputs = [ pkg-config makeWrapper ];
+  nativeBuildInputs = [ pkg-config makeWrapper autoconf automake libtool ];
   buildInputs = [ util-linux openssl libcap_ng pythonEnv
                   perl procps which ];
 
