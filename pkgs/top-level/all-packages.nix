@@ -893,6 +893,8 @@ with pkgs;
 
   redfang = callPackage ../tools/networking/redfang { };
 
+  sx-go = callPackage ../tools/security/sx-go { };
+
   tfk8s = callPackage ../tools/misc/tfk8s { };
 
   tnat64 = callPackage ../tools/networking/tnat64 { };
@@ -3954,6 +3956,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Foundation;
   };
 
+  changetower = callPackage ../tools/networking/changetower { };
+
   checkbashisms = callPackage ../development/tools/misc/checkbashisms { };
 
   civetweb = callPackage ../development/libraries/civetweb { };
@@ -5746,6 +5750,8 @@ with pkgs;
   };
 
   gvolicon = callPackage ../tools/audio/gvolicon {};
+
+  gvproxy = callPackage ../tools/networking/gvproxy { };
 
   gzip = callPackage ../tools/compression/gzip { };
 
