@@ -1,0 +1,60 @@
+diff --color -ur a/Makefile b/Makefile
+--- a/Makefile	2021-08-24 19:30:13.431978875 +0200
++++ b/Makefile	2021-08-24 19:31:52.540742338 +0200
+@@ -5,10 +5,10 @@
+ LIBDIR = ${PREFIX}/lib
+ INCLUDEDIR = ${PREFIX}/include
+ PKGCONFIGDIR = ${LIBDIR}/pkgconfig
+-XCFLAGS = ${CPPFLAGS} ${CFLAGS} -std=c99 -fPIC -pthread -D_XOPEN_SOURCE=700 \
++XCFLAGS = ${CPPFLAGS} ${CFLAGS} -std=c99 -pthread -D_XOPEN_SOURCE=700 \
+ 		  -Wall -Wextra -Wpedantic -Wmissing-prototypes -Wstrict-prototypes \
+ 		  -Wno-unused-parameter
+-XLDFLAGS = ${LDFLAGS} -shared -Wl,-soname,libudev.so.1
++XLDFLAGS = ${LDFLAGS}
+ XARFLAGS = -rc
+ 
+ OBJ = \
+@@ -18,7 +18,7 @@
+ 	  udev_monitor.o \
+ 	  udev_enumerate.o
+ 
+-all: libudev.so.1 libudev.a
++all: libudev.a
+ 
+ .c.o:
+ 	${CC} ${XCFLAGS} -c -o $@ $<
+@@ -26,9 +26,6 @@
+ libudev.a: ${OBJ}
+ 	${AR} ${XARFLAGS} $@ ${OBJ}
+ 
+-libudev.so.1: ${OBJ}
+-	${CC} ${XCFLAGS} -o $@ ${OBJ} ${XLDFLAGS}
+-
+ libudev.pc: libudev.pc.in
+ 	libdir="${LIBDIR}"; \
+ 	if [ "$${libdir#${PREFIX}}" != "$$libdir" ]; then \
+@@ -45,22 +42,18 @@
+ 		-e 's|@VERSION@|243|g' \
+ 		libudev.pc.in > libudev.pc
+ 
+-install: libudev.so.1 libudev.a libudev.pc
++install: libudev.a libudev.pc
+ 	mkdir -p         ${DESTDIR}${INCLUDEDIR} ${DESTDIR}${LIBDIR} ${DESTDIR}${PKGCONFIGDIR}
+ 	cp -f udev.h  	 ${DESTDIR}${INCLUDEDIR}/libudev.h
+ 	cp -f libudev.a  ${DESTDIR}${LIBDIR}/libudev.a
+-	cp -f libudev.so.1 ${DESTDIR}${LIBDIR}/libudev.so.1
+-	ln -fs libudev.so.1 ${DESTDIR}${LIBDIR}/libudev.so
+ 	cp -f libudev.pc ${DESTDIR}${PKGCONFIGDIR}/libudev.pc
+ 
+ uninstall:
+ 	rm -f ${DESTDIR}${LIBDIR}/libudev.a \
+-          ${DESTDIR}${LIBDIR}/libudev.so \
+-          ${DESTDIR}${LIBDIR}/libudev.so.1 \
+           ${DESTDIR}${PKGCONFIGDIR}/libudev.pc \
+           ${DESTDIR}${INCLUDEDIR}/libudev.h
+ 
+ clean:
+-	rm -f libudev.so.1 libudev.a libudev.pc ${OBJ}
++	rm -f libudev.a libudev.pc ${OBJ}
+ 
+ .PHONY: all clean install uninstall

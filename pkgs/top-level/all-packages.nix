@@ -22193,6 +22193,8 @@ with pkgs;
 
   eudev = callPackage ../os-specific/linux/eudev { util-linux = util-linuxMinimal; };
 
+  libudev-zero = callPackage ../development/libraries/libudev-zero { };
+
   libudev0-shim = callPackage ../os-specific/linux/libudev0-shim { };
 
   udisks1 = callPackage ../os-specific/linux/udisks/1-default.nix { };
