@@ -8,7 +8,7 @@
 , alsa-lib, at-spi2-core, cups }:
 
 let
-  LD_LIBRARY_PATH = lib.makeLibraryPath
+  LD_LIBRARY_PATH = lib.makeLibraryPath [
   [ glib gtk3 xorg.libXdamage
   xorg.libX11 xorg.libxcb xorg.libXcomposite
   xorg.libXcursor xorg.libXext xorg.libXfixes
@@ -17,7 +17,8 @@ let
   gdk-pixbuf pango cairo
   xorg.libXrandr expat libdrm
   mesa alsa-lib at-spi2-core
-  cups ];
+  cups
+  ];
 in
 stdenv.mkDerivation rec {
   version = "4.0.1";
@@ -45,7 +46,7 @@ stdenv.mkDerivation rec {
     ln -s ${stdenv.cc.cc.lib}/lib/libstdc++.so.6 $out/lib/
     ln -s ${lib.getLib systemd}/lib/libudev.so.1 $out/lib/libudev.so.0
 
-    ${patchelf}/bin/patchelf \
+    patchelf \
       --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       $out/bin/staruml
     wrapProgram $out/bin/staruml \
