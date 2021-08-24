@@ -214,6 +214,14 @@ in rec {
     ];
   });
 
+  libsoup = super.libsoup.overrideAttrs (old: {
+    NIX_MESON_DEPENDENCY_STATIC = true;
+    nativeBuildInputs = (old.nativeBuildInputs or []) ++ [
+      super.mesonShlibsToStaticHook
+    ];
+    NIX_LDFLAGS = (old.NIX_LDFLAGS or "") + " -lidn2 -lunistring";
+  });
+
   libwacom = super.libwacom.overrideAttrs (old: {
     NIX_MESON_DEPENDENCY_STATIC = true;
     nativeBuildInputs = (old.nativeBuildInputs or []) ++ [
