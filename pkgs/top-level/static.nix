@@ -80,6 +80,13 @@ self: super: let
 in rec {
   stdenv = foldl (flip id) super.stdenv staticAdapters;
 
+  at-spi2-core = super.at-spi2-core.overrideAttrs (old: {
+    NIX_MESON_DEPENDENCY_STATIC = true;
+    nativeBuildInputs = (old.nativeBuildInputs or []) ++ [
+      super.mesonShlibsToStaticHook
+    ];
+  });
+
   avahi = super.avahi.overrideAttrs (old: {
     buildInputs = (old.buildInputs or []) ++ [ super.musl ];
     nativeBuildInputs = (old.nativeBuildInputs or []) ++
