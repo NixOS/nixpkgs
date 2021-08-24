@@ -193,6 +193,10 @@ in with passthru; stdenv.mkDerivation {
     # (since it will do a futile invocation of gcc (!) to find
     # libuuid, slowing down program startup a lot).
     (./. + "/${sourceVersion.major}.${sourceVersion.minor}/no-ldconfig.patch")
+    # Make sure that the virtualenv activation scripts are
+    # owner-writable, so venvs can be recreated without permission
+    # errors.
+    ./virtualenv-permissions.patch
   ] ++ optionals mimetypesSupport [
     # Make the mimetypes module refer to the right file
     ./mimetypes.patch
