@@ -18,7 +18,7 @@ buildDunePackage rec {
     owner = "tezos";
     repo = "tezos";
     rev = "v${version}";
-    sha256 = "12cv2cssnw60jbpnh6xjysxgsgcj7d72454k4zs2b8fjx7mkgksk";
+    sha256 = "1ykhz5m5sb2hq04nspbsbq8wspkhimagb5g6yi65hpdbn8f4zr6h";
   };
 
   minimalOCamlVersion = "4.0.8";

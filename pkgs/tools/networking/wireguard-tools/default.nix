@@ -53,6 +53,13 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Tools for the WireGuard secure network tunnel";
+    longDescription = ''
+      Supplies the main userspace tooling for using and configuring WireGuard tunnels, including the wg(8) and wg-quick(8) utilities.
+      - wg : the configuration utility for getting and setting the configuration of WireGuard tunnel interfaces. The interfaces
+        themselves can be added and removed using ip-link(8) and their IP addresses and routing tables can be set using ip-address(8)
+        and ip-route(8). The wg utility provides a series of sub-commands for changing WireGuard-specific aspects of WireGuard interfaces.
+      - wg-quick : an extremely simple script for easily bringing up a WireGuard interface, suitable for a few common use cases.
+    '';
     downloadPage = "https://git.zx2c4.com/wireguard-tools/refs/";
     homepage = "https://www.wireguard.com/";
     license = licenses.gpl2;

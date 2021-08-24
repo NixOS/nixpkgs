@@ -9,13 +9,13 @@
 
 buildPythonApplication rec {
   pname = "enum4linux-ng";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "cddmp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0dhg8cwbdn0vlnchhscx31ay4mgj5p6rf73wzgs8nvqg0shsawmy";
+    sha256 = "1j6qrhrzc4f9crbii4dpgxipngjh5icrhljxf26a7662dd4f7l8q";
   };
 
   propagatedBuildInputs = [
