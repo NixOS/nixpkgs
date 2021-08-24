@@ -4,10 +4,11 @@ let
       # dependencies
       { stdenv, lib, fetchurl, makeWrapper
       , glibc, zlib, readline, openssl, icu, systemd, libossp_uuid
-      , pkg-config, libxml2, tzdata
+      , pkg-config, libxml2, tzdata, llvmPackages_10
 
       # This is important to obtain a version of `libpq` that does not depend on systemd.
-      , enableSystemd ? (lib.versionAtLeast version "9.6" && !stdenv.isDarwin)
+      , enableSystemd ? (!stdenv.hostPlatform.isStatic &&
+                        (lib.versionAtLeast version "9.6" && !stdenv.isDarwin))
       , gssSupport ? with stdenv.hostPlatform; !isWindows && !isStatic, libkrb5
 
 
@@ -23,8 +24,26 @@ let
   let
     atLeast = lib.versionAtLeast version;
     icuEnabled = atLeast "10";
-
-  in stdenv.mkDerivation rec {
+    libcxxIncDir = "${llvmPackages_10.libcxx.dev}/include/c++/v1";
+    libcxxLibDir = "${llvmPackages_10.libcxx.out}/lib";
+    clangCxxFlags = "-nostdinc++ -isystem ${libcxxIncDir}";
+    clangCxxLdflags = "-nostdlib++ -L ${libcxxIncDir} -Wl,-rpath,${libcxxLibDir} -lc++ -lc++abi";
+    icuFixed = if !stdenv.hostPlatform.isStatic then icu else
+    (icu.override { stdenv = llvmPackages_10.stdenv; })
+    .overrideAttrs (old: {
+      preConfigure = ''
+        export CC=${llvmPackages_10.stdenv.cc.targetPrefix}cc
+        export CXX=${llvmPackages_10.stdenv.cc.targetPrefix}c++
+        export CXXFLAGS="${clangCxxFlags}"
+        export LDFLAGS="${clangCxxLdflags}"
+      '';
+      buildInputs = (old.buildInputs or []) ++ (with llvmPackages_10; [
+        libcxx
+        libcxxabi
+      ]);
+      NIX_LDFLAGS = " -lc++ -lc++abi";
+    });
+  in stdenv.mkDerivation (rec {
     pname = "postgresql";
     inherit version;
 
@@ -40,7 +59,7 @@ let
 
     buildInputs =
       [ zlib readline openssl libxml2 ]
-      ++ lib.optionals icuEnabled [ icu ]
+      ++ lib.optionals icuEnabled [ icuFixed ]
       ++ lib.optionals enableSystemd [ systemd ]
       ++ lib.optionals gssSupport [ libkrb5 ]
       ++ lib.optionals (!stdenv.isDarwin) [ libossp_uuid ];
@@ -51,7 +70,7 @@ let
 
     separateDebugInfo = true;
 
-    buildFlags = [ "world" ];
+    buildFlags = lib.optional (!stdenv.hostPlatform.isStatic) "world";
 
     NIX_CFLAGS_COMPILE = "-I${libxml2.dev}/include/libxml2";
 
@@ -79,7 +98,7 @@ let
       ]
       ++ lib.optional stdenv.isLinux (if atLeast "13" then ./patches/socketdir-in-run-13.patch else ./patches/socketdir-in-run.patch);
 
-    installTargets = [ "install-world" ];
+    installTargets = lib.optional (!stdenv.hostPlatform.isStatic) "install-world";
 
     LC_ALL = "C";
 
@@ -164,7 +183,30 @@ let
       knownVulnerabilities = optional (!atLeast "9.4")
         "PostgreSQL versions older than 9.4 are not maintained anymore!";
     };
-  };
+  } // lib.optionalAttrs stdenv.hostPlatform.isStatic {
+    outputs = [ "out" "lib" ];
+    NIX_LDFLAGS = " -lc++ -lc++abi -lz";
+    postPatch = ''
+      makefiles=$(grep -Rl 'all: all-shared-lib')
+      for file in $makefiles; do
+        sed -i 's/all: all-shared-lib/all: /g' $file
+      done
+      sed -i '/all-lib: all-shared-lib/a all-lib: lib$(NAME).pc' src/Makefile.shlib
+      sed -i 's/all-lib: all-shared-lib/all-lib: all-static-lib/g' src/Makefile.shlib
+      sed -i '/install-lib: install-lib-shared/a libdir=${placeholder "lib"}/lib' src/Makefile.shlib
+      sed -i 's/install-lib: install-lib-shared/install-lib: install-lib-static/g' src/Makefile.shlib
+      rm -rf contrib
+      rm -rf src/test
+      sed -i '/test\/.*/d' src/Makefile
+      sed -i 's!makefiles \\!makefiles !g' src/Makefile
+      sed -i '/install-world-contrib-recurse/d' GNUmakefile.in
+      sed -i 's!world-contrib-recurse:!disabled:!g' GNUmakefile.in
+      substituteInPlace GNUmakefile.in \
+        --replace 'contrib,' ""
+      sed -i '/src\/Makefile.custom/d' src/Makefile.global.in
+    '';
+
+  });
 
   postgresqlWithPackages = { postgresql, makeWrapper, buildEnv }: pkgs: f: buildEnv {
     name = "postgresql-and-plugins-${postgresql.version}";
