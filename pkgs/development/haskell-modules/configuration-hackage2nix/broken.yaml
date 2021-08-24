@@ -3194,7 +3194,6 @@ broken-packages:
   - nanomsg-haskell
   - nanoparsec
   - NanoProlog
-  - nanovg
   - nanq
   - naperian
   - naqsha
