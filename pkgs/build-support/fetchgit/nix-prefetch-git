@@ -72,6 +72,8 @@ for arg; do
             --branch-name) argfun=set_branchName;;
             --deepClone) deepClone=true;;
             --quiet) QUIET=true;;
+            --debug) DEBUG=true;;
+            --trace) TRACE=true;;
             --no-deepClone) deepClone=;;
             --leave-dotGit) leaveDotGit=true;;
             --fetch-lfs) fetchLFS=true;;
@@ -114,7 +116,25 @@ init_remote(){
 # Return the reference of an hash if it exists on the remote repository.
 ref_from_hash(){
     local hash=$1
-    git ls-remote origin | sed -n "\,$hash\t, { s,\(.*\)\t\(.*\),\2,; p; q}"
+    ref=$(git ls-remote origin | sed -n "\,$hash\t, { s,\(.*\)\t\(.*\),\2,; p; q}")
+    # ref may be "ref" (foo-1.2.3) or "annotated ref" (peeled tag, foo-1.2.3^{})
+    if (echo "$ref" | grep '\^{}$' >/dev/null); then return; fi
+    echo "$ref"
+}
+
+debug() {
+    if test -n "$DEBUG"; then
+        echo "$@" >&2
+    fi
+}
+
+# Return the next reference after an hash if it exists on the remote repository.
+next_ref_from_hash(){
+    local hash=$1
+    refs_after="$(git ls-remote origin | awk "/$hash/{found=1} found")"
+    debug "found $(echo "$refs_after" | wc -l | awk '{ print $1 - 1 }') refs after the requested hash"
+    # find next non-annotated ref
+    echo "$refs_after" | grep -v '\^{}$' | head -n1 | cut -d$'\t' -f2
 }
 
 # Return the hash of a reference if it exists on the remote repository.
@@ -149,7 +169,40 @@ checkout_hash(){
         hash=$(hash_from_ref "$ref")
     fi
 
+    next_ref=$(next_ref_from_hash "$hash")
+    debug "checkout_hash: find hash with next_ref=$next_ref"
+
+    local FETCH_LOOP_MAX_DEPTH=1000 # TODO? handle "hash not found" and "max depth reached"
+    local FETCH_LOOP_DEPTH_EXPONENT=1.5 # can be float. growing too fast can be wasteful. maybe grow linearly?
+
+    # shallow clone, iterative shallow clone, full clone
     clean_git fetch ${builder:+--progress} --depth=1 origin "$hash" || \
+    for ((depth=2; depth<FETCH_LOOP_MAX_DEPTH; ))
+    do
+        fetch_output=$(clean_git fetch $builder --progress --depth="$depth" origin "$next_ref" 2>&1 | sed 's/^.*\r//')
+        # --progress: force live output
+        # sed 's/^.*\r//': parse live output. \r = clear line
+        # TODO? allow to see live output with --debug. https://stackoverflow.com/questions/12451278
+
+        debug "fetch_output: $fetch_output :fetch_output"
+        fetch_objects_size=$(echo "$fetch_output" | grep 'Receiving objects: ' | cut -d' ' -f5-6) # sample: 12.06 KiB
+        fetch_objects_speed=$(echo "$fetch_output" | grep 'Receiving objects: ' | cut -d' ' -f8-9 | tr -d ,) # sample: 5.15 MiB/s
+        fetch_objects_num=$(echo "$fetch_output" | grep 'Receiving objects: ' | sed -E 's/^.*?\/([0-9]+)\).*$/\1/') # sample: 12345
+        if [ -z "$fetch_objects_size" ]; then
+            echo "fetch loop: depth $depth: received nothing" # TODO why?
+        else
+            echo "fetch loop: depth $depth: received $fetch_objects_num objects = $fetch_objects_size @ $fetch_objects_speed"
+        fi
+
+        local object_type=$(git cat-file -t "$hash" 2>/dev/null)
+        debug "fetch loop: object_type=$object_type"
+        if [[ "$object_type" == "commit" ]] || [[ "$object_type" == "tree" ]]; then
+            echo "fetch loop: done: found object $hash, type $object_type"
+            break
+        fi
+
+        depth=$(echo "$depth" | awk "{print int(\$1 * $FETCH_LOOP_DEPTH_EXPONENT)}") # depth grows exponentially
+    done || \
     clean_git fetch -t ${builder:+--progress} origin || return 1
 
     local object_type=$(git cat-file -t "$hash")
@@ -361,6 +414,10 @@ quiet_mode() {
     exec 3>&2 2>"$errfile"
 }
 
+trace_mode() {
+    set -o xtrace # print cmds
+}
+
 json_escape() {
     local s="$1"
     s="${s//\\/\\\\}" # \
@@ -410,6 +467,10 @@ remove_tmpPath() {
 
 if test -n "$QUIET"; then
     quiet_mode
+fi
+
+if test -n "$TRACE"; then
+    trace_mode
 fi
 
 if test -z "$branchName"; then
