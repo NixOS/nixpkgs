@@ -9,7 +9,7 @@
 
 let
   LD_LIBRARY_PATH = lib.makeLibraryPath [
-  [ glib gtk3 xorg.libXdamage
+  glib gtk3 xorg.libXdamage
   xorg.libX11 xorg.libxcb xorg.libXcomposite
   xorg.libXcursor xorg.libXext xorg.libXfixes
   xorg.libXi xorg.libXrender xorg.libXtst
