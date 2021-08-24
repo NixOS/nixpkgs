@@ -7351,6 +7351,8 @@ in
 
   onlykey-cli = callPackage ../tools/security/onlykey-cli { };
 
+  onlykey = callPackage ../tools/security/onlykey { node_webkit = nwjs; };
+
   openapi-generator-cli = callPackage ../tools/networking/openapi-generator-cli { jre = pkgs.jre_headless; };
   openapi-generator-cli-unstable = callPackage ../tools/networking/openapi-generator-cli/unstable.nix { jre = pkgs.jre_headless; };
 
