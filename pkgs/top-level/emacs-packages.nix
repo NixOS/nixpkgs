@@ -26,7 +26,7 @@
 let
 
   mkElpaPackages = { pkgs, lib }: import ../applications/editors/emacs/elisp-packages/elpa-packages.nix {
-    inherit (pkgs) stdenv texinfo writeText;
+    inherit (pkgs) stdenv texinfo writeText buildPackages;
     inherit lib;
   };
 
