@@ -4640,6 +4640,8 @@ in {
 
   mpi4py = callPackage ../development/python-modules/mpi4py { };
 
+  mpldatacursor = callPackage ../development/python-modules/mpldatacursor { };
+
   mplfinance = callPackage ../development/python-modules/mplfinance { };
 
   mplleaflet = callPackage ../development/python-modules/mplleaflet { };
