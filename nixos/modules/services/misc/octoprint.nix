@@ -122,6 +122,9 @@ in
         ExecStart = "${pluginsEnv}/bin/octoprint serve -b ${cfg.stateDir}";
         User = cfg.user;
         Group = cfg.group;
+        SupplementaryGroups = [
+          "dialout"
+        ];
       };
     };
 
