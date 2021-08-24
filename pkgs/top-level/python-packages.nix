@@ -2995,6 +2995,8 @@ in {
 
   google-cloud-asset = callPackage ../development/python-modules/google-cloud-asset { };
 
+  google-cloud-audit-log = callPackage ../development/python-modules/google-cloud-audit-log { };
+
   google-cloud-automl = callPackage ../development/python-modules/google-cloud-automl { };
 
   google-cloud-bigquery = callPackage ../development/python-modules/google-cloud-bigquery { };
