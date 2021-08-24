@@ -6,6 +6,23 @@ This contains instructions on how to package javascript applications. For instru
 
 The various tools available will be listed in the [tools-overview](#javascript-tools-overview). Some general principles for packaging will follow. Finally some tool specific instructions will be given.
 
+## Getting unstuck / finding code examples
+
+If you find you are lacking inspiration for packing javascript applications, the links below might prove useful.
+Searching online for prior art can be helpful if you are running into solved problems.
+
+### Github
+
+- Searching Nix files for `mkYarnPackage`: <https://github.com/search?q=mkYarnPackage+language%3ANix&type=code>
+
+- Searching just `flake.nix` files for `mkYarnPackage`: <https://github.com/search?q=mkYarnPackage+filename%3Aflake.nix&type=code>
+
+### Gitlab
+
+- Searching Nix files for `mkYarnPackage`: <https://gitlab.com/search?scope=blobs&search=mkYarnPackage+extension%3Anix>
+
+- Searching just `flake.nix` files for `mkYarnPackage`: <https://gitlab.com/search?scope=blobs&search=mkYarnPackage+filename%3Aflake.nix>
+
 ## Tools overview {#javascript-tools-overview}
 
 ## General principles {#javascript-general-principles}
