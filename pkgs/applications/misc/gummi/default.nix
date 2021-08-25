@@ -4,14 +4,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.8.1";
+  version = "0.8.2";
   pname = "gummi";
 
   src = pkgs.fetchFromGitHub {
     owner = "alexandervdm";
     repo = "gummi";
     rev = version;
-    sha256 = "0wxgmzazqiq77cw42i5fn2hc22hhxf5gbpl9g8y3zlnp21lw9y16";
+    sha256 = "sha256-7txAyzJrEoGPjchXstMWIF1Vy+aoba6aa6+JNUYnKQs=";
   };
 
   nativeBuildInputs = [
@@ -32,6 +32,5 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ flokli ];
     platforms = with lib.platforms; linux;
-    inherit version;
   };
 }

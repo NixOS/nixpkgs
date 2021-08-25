@@ -1,8 +1,8 @@
 { lib, stdenv
-, fetchpatch
 , substituteAll
 , fetchurl
 , pkg-config
+, python3
 , freetype
 , expat
 , libxslt
@@ -14,67 +14,21 @@
 
 stdenv.mkDerivation rec {
   pname = "fontconfig";
-  version = "2.13.92";
+  version = "2.13.94";
 
   src = fetchurl {
-    url = "http://fontconfig.org/release/${pname}-${version}.tar.xz";
-    sha256 = "0kkfsvxcvcphm9zcgsh646gix3qn4spz555wa1jp5hbq70l62vjh";
+    url = "https://www.freedesktop.org/software/fontconfig/release/${pname}-${version}.tar.xz";
+    sha256 = "0g004r0bkkqz00mpm3svnnxn7d83158q0yb9ggxryizxfg5m5w55";
   };
-
-  patches = [
-    # Fix fonts not being loaded when missing included configs that have ignore_missing="yes".
-    # https://bugzilla.redhat.com/show_bug.cgi?id=1744377
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/fontconfig/fontconfig/commit/fcada522913e5e07efa6367eff87ace9f06d24c8.patch";
-      sha256 = "1jbm3vw45b3qjnqrh2545v1k8vmb29c09v2wj07jnrq3lnchbvmn";
-    })
-
-    # Register JoyPixels as an emoji font.
-    # https://gitlab.freedesktop.org/fontconfig/fontconfig/merge_requests/67
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/fontconfig/fontconfig/commit/65087ac7ce4cc5f2109967c1380b474955dcb590.patch";
-      sha256 = "1dkrbqx1c1d8yfnx0igvv516wanw2ksrpm3fbpm2h9nw0hccwqvm";
-    })
-
-    # Fix invalid DTD in reset-dirs.
-    # https://gitlab.freedesktop.org/fontconfig/fontconfig/merge_requests/78
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/fontconfig/fontconfig/commit/a4aa66a858f1ecd375c5efe5916398281f73f794.patch";
-      sha256 = "1j4ky8jhpllfm1lh2if34xglh2hl79nsa0xxgzxpj9sx6h4v99j5";
-    })
-
-    # Do not include its tags, they are external now and only cause warnings with old fontconfig clients.
-    # https://gitlab.freedesktop.org/fontconfig/fontconfig/merge_requests/97
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/fontconfig/fontconfig/commit/528b17b2837c3b102acd90cc7548d07bacaccb1f.patch";
-      sha256 = "1zf4wcd2xlprh805jalfy8ja5c2qzgkh4fwd1m9d638nl9gx932m";
-    })
-    # https://gitlab.freedesktop.org/fontconfig/fontconfig/merge_requests/100
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/fontconfig/fontconfig/commit/37c7c748740bf6f2468d59e67951902710240b34.patch";
-      sha256 = "1rz5zrfwhpn9g49wrzzrmdglj78pbvpnw8ksgsw6bxq8l5d84jfr";
-    })
-
-    # Show warning instead of error when encountering unknown attribute in config.
-    # https://gitlab.freedesktop.org/fontconfig/fontconfig/merge_requests/111
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/fontconfig/fontconfig/commit/409b37c62780728755c908991c912a6b16f2389c.patch";
-      sha256 = "zJFh37QErSAINPGFkFVJyhYRP27BuIN7PIgoDl/PIwI=";
-    })
-
-    # Combination of
-    # https://gitlab.freedesktop.org/fontconfig/fontconfig/-/merge_requests/88
-    # https://gitlab.freedesktop.org/fontconfig/fontconfig/-/merge_requests/131
-    ./macos-atomics.h
-  ];
 
   outputs = [ "bin" "dev" "lib" "out" ]; # $out contains all the config
 
   nativeBuildInputs = [
+    autoreconfHook
     gperf
     libxslt
     pkg-config
-    autoreconfHook
+    python3
   ];
 
   buildInputs = [
@@ -84,6 +38,11 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [
     freetype
   ];
+
+  postPatch = ''
+    # Requires networking.
+    sed -i '/check_PROGRAMS += test-crbug1004254/d' test/Makefile.am
+  '';
 
   configureFlags = [
     "--sysconfdir=/etc"

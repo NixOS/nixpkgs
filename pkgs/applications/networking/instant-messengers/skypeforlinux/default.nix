@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, dpkg
-, alsaLib, atk, cairo, cups, curl, dbus, expat, fontconfig, freetype, gdk-pixbuf, glib, glibc, gnome2, gnome
+, alsa-lib, atk, cairo, cups, curl, dbus, expat, fontconfig, freetype, gdk-pixbuf, glib, glibc, gnome2, gnome
 , gtk3, libappindicator-gtk3, libnotify, libpulseaudio, libsecret, libv4l, nspr, nss, pango, systemd, wrapGAppsHook, xorg
 , at-spi2-atk, libuuid, at-spi2-core, libdrm, mesa, libxkbcommon }:
 
@@ -10,7 +10,7 @@ let
   version = "8.69.0.77";
 
   rpath = lib.makeLibraryPath [
-    alsaLib
+    alsa-lib
     atk
     at-spi2-atk
     at-spi2-core

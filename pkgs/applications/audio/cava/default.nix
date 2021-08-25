@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, alsaLib, fftw,
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, alsa-lib, fftw,
   libpulseaudio, ncurses }:
 
 stdenv.mkDerivation rec {
@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   version = "0.7.4";
 
   buildInputs = [
-    alsaLib
+    alsa-lib
     fftw
     libpulseaudio
     ncurses

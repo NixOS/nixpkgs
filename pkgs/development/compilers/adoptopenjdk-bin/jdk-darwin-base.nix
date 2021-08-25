@@ -6,6 +6,8 @@
 , setJavaClassPath
 }:
 
+assert (stdenv.isDarwin && stdenv.isx86_64);
+
 let cpuName = stdenv.hostPlatform.parsed.cpu.name;
     result = stdenv.mkDerivation {
   name = if sourcePerArch.packageType == "jdk"
@@ -23,6 +25,9 @@ let cpuName = stdenv.hostPlatform.parsed.cpu.name;
     cd ..
 
     mv $sourceRoot $out
+
+    # jni.h expects jni_md.h to be in the header search path.
+    ln -s $out/Contents/Home/include/darwin/*_md.h $out/Contents/Home/include/
 
     rm -rf $out/Home/demo
 

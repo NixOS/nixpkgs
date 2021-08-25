@@ -1,6 +1,8 @@
-{ buildPythonApplication, lib, fetchFromGitHub
+{ buildPythonApplication
+, lib
+, fetchFromGitHub
 
-# build inputs
+  # build inputs
 , atk
 , gdk-pixbuf
 , glib-networking
@@ -13,7 +15,7 @@
 , webkitgtk
 , wrapGAppsHook
 
-# python dependencies
+  # python dependencies
 , dbus-python
 , distro
 , evdev
@@ -25,7 +27,7 @@
 , keyring
 , python_magic
 
-# commands that lutris needs
+  # commands that lutris needs
 , xrandr
 , pciutils
 , psmisc
@@ -71,15 +73,16 @@ let
     gstreamer
   ];
 
-in buildPythonApplication rec {
+in
+buildPythonApplication rec {
   pname = "lutris-original";
-  version = "0.5.8.3";
+  version = "0.5.8.4";
 
   src = fetchFromGitHub {
     owner = "lutris";
     repo = "lutris";
     rev = "v${version}";
-    sha256 = "sha256-NnWIP9oEndk/hDo5Z33pkmZ61pxT/ScmZ4YpS2ajK/8=";
+    sha256 = "sha256-5ivXIgDyM9PRvuUhPFPgziXDvggcL+p65kI2yOaiS1M=";
   };
 
   nativeBuildInputs = [ wrapGAppsHook ];

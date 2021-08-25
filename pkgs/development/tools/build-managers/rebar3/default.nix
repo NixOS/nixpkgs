@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub,
+{ lib, stdenv, fetchFromGitHub, fetchpatch,
   fetchHex, erlang, makeWrapper,
   writeScript, common-updater-scripts, coreutils, git, gnused, nix, rebar3-nix }:
 
@@ -38,6 +38,22 @@ let
     buildPhase = ''
       HOME=. escript bootstrap
     '';
+
+
+    patches = [
+      # TODO: remove this on next rebar3 release
+      (fetchpatch {
+        name = "escriptize-erl-libs";
+        url = "https://github.com/erlang/rebar3/commit/11055384dbd5bf7d181bca83a33b0e100275ff21.patch";
+        sha256 = "01xjaqnhmjlxqdgb8ph15wssjq5crdhjslxnndbs5f0kscqpq14c";
+      })
+    ];
+
+    checkPhase = ''
+      HOME=. escript ./rebar3 ct
+    '';
+
+    doCheck = true;
 
     installPhase = ''
       mkdir -p $out/bin
@@ -101,6 +117,9 @@ let
         # instruct rebar3 to always load a certain plugin. It is necessary since
         # REBAR_GLOBAL_CONFIG_DIR doesn't seem to work for this.
         patches = [ ./skip-plugins.patch ./global-plugins.patch ];
+
+        # our patches cause the tests to fail
+        doCheck = false;
       }));
     in stdenv.mkDerivation {
       pname = "rebar3-with-plugins";
@@ -118,9 +137,11 @@ let
           {ok, _} = zip:extract(Archive, [{cwd, "'$out/lib'"}]),
           init:stop(0)
         '
+        cp ${./rebar_ignore_deps.erl} rebar_ignore_deps.erl
+        erlc -o $out/lib/rebar/ebin rebar_ignore_deps.erl
         mkdir -p $out/bin
         makeWrapper ${erlang}/bin/erl $out/bin/rebar3 \
-          --set REBAR_GLOBAL_PLUGINS "${toString globalPluginNames}" \
+          --set REBAR_GLOBAL_PLUGINS "${toString globalPluginNames} rebar_ignore_deps" \
           --suffix-each ERL_LIBS ":" "$out/lib ${toString pluginLibDirs}" \
           --add-flags "+sbtu +A1 -noshell -boot start_clean -s rebar3 main -extra"
       '';

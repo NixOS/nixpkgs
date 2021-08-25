@@ -35,6 +35,10 @@ buildPythonPackage rec {
     sha256 = "1dn7iiavsrhh6i9hcyw0mk8j95r5ym0gbrvdca998hx2rnz5ark6";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py --replace 'geomet>=0.1,<0.3' 'geomet'
+  '';
+
   nativeBuildInputs = [ cython ];
   buildInputs = [ libev ];
   propagatedBuildInputs = [ six geomet ]
@@ -80,6 +84,8 @@ buildPythonPackage rec {
     "_PoolTests"
     # attempts to make connection to localhost
     "test_connection_initialization"
+    # time-sensitive
+    "test_nts_token_performance"
   ];
 
   meta = with lib; {

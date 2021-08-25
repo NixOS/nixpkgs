@@ -1,22 +1,20 @@
 { lib, stdenv, fetchurl, perl, libunwind, buildPackages }:
 
-# libunwind does not have the supportsHost attribute on darwin, thus
-# when this package is evaluated it causes an evaluation error
-assert stdenv.isLinux;
-
 stdenv.mkDerivation rec {
   pname = "strace";
-  version = "5.12";
+  version = "5.13";
 
   src = fetchurl {
     url = "https://strace.io/files/${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-KRce350lL4nJiKTDQN/exmL0WMuMY9hUMdZLq1kR58Q=";
+    sha256 = "sha256-Wsw0iIudUQrWrJFdSo3wj1HPGukg6iRkn2pLuYTQtlY=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ perl ];
 
-  buildInputs = [ perl.out ] ++ lib.optional libunwind.supportsHost libunwind; # support -k
+  # On RISC-V platforms, LLVM's libunwind implementation is unsupported by strace.
+  # The build will silently fall back and -k will not work on RISC-V.
+  buildInputs = [ perl.out libunwind ]; # support -k
 
   postPatch = "patchShebangs --host strace-graph";
 

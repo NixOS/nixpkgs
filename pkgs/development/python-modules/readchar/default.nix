@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchFromGitHub, flake8, pytest, pytestcov, pexpect }:
+{ lib, buildPythonPackage, fetchFromGitHub, flake8, pytest, pytest-cov, pexpect }:
 
 buildPythonPackage rec {
   pname = "readchar";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ flake8 ];
-  checkInputs = [ pytest pytestcov pexpect ];
+  checkInputs = [ pytest pytest-cov pexpect ];
 
   meta = with lib; {
     homepage = "https://github.com/magmax/python-readchar";

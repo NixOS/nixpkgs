@@ -102,8 +102,8 @@ in
 
       plugins = mkOption {
         type = types.listOf types.package;
-        default = with pkgs; [ nagiosPluginsOfficial ssmtp mailutils ];
-        defaultText = "[pkgs.nagiosPluginsOfficial pkgs.ssmtp pkgs.mailutils]";
+        default = with pkgs; [ monitoring-plugins ssmtp mailutils ];
+        defaultText = "[pkgs.monitoring-plugins pkgs.ssmtp pkgs.mailutils]";
         description = "
           Packages to be added to the Nagios <envar>PATH</envar>.
           Typically used to add plugins, but can be anything.

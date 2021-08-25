@@ -28,7 +28,9 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
-    substituteInPlace setup.py --replace '"pytest-runner>=5.2",' ""
+    substituteInPlace setup.py \
+      --replace '"pytest-runner>=5.2",' "" \
+      --replace "pyroute2>=0.5.18,!=0.6.1" "pyroute2"
   '';
 
   checkInputs = [

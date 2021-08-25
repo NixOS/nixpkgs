@@ -54,7 +54,10 @@ let
 
     outputs = [ "bin" "dev" "out" "man" ] ++ optional withDocs "doc";
     setOutputFlags = false;
-    separateDebugInfo = !(stdenv.hostPlatform.useLLVM or false) && stdenv.cc.isGNU;
+    separateDebugInfo =
+      !stdenv.hostPlatform.isDarwin &&
+      !(stdenv.hostPlatform.useLLVM or false) &&
+      stdenv.cc.isGNU;
 
     nativeBuildInputs = [ perl ];
     buildInputs = lib.optional withCryptodev cryptodev
@@ -93,6 +96,8 @@ let
           throw "Not sure what configuration to use for ${stdenv.hostPlatform.config}"
       );
 
+    # OpenSSL doesn't like the `--enable-static` / `--disable-shared` flags.
+    dontAddStaticConfigureFlags = true;
     configureFlags = [
       "shared" # "shared" builds both shared and static libraries
       "--libdir=lib"
@@ -180,6 +185,8 @@ in {
       (if stdenv.hostPlatform.isDarwin
        then ./1.0.2/use-etc-ssl-certs-darwin.patch
        else ./1.0.2/use-etc-ssl-certs.patch)
+    ] ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-darwin") [
+      ./1.0.2/darwin64-arm64.patch
     ];
     extraMeta.knownVulnerabilities = [ "Support for OpenSSL 1.0.2 ended with 2019." ];
   };

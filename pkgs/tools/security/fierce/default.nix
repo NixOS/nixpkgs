@@ -15,7 +15,7 @@ python3.pkgs.buildPythonApplication rec {
     substituteInPlace requirements.txt --replace 'dnspython==1.16.0' 'dnspython'
   '';
 
-  propagatedBuildInputs = [ python3.pkgs.dns ];
+  propagatedBuildInputs = [ python3.pkgs.dnspython ];
 
   # tests require network access
   doCheck = false;

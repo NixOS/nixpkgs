@@ -1,31 +1,41 @@
 { lib
 , stdenv
-, fetchurl
+, fetchFromGitLab
 , autoreconfHook
 , boost
 , gfortran
 , lhapdf
 , ncurses
-, python
+, perl
+, python ? null
 , swig
 , yoda
 , zlib
 , withPython ? false
 }:
 
+let
+  tag = "2823";
+in
+
 stdenv.mkDerivation rec {
   pname = "fastnlo_toolkit";
-  version = "2.3.1pre-2411";
+  version = "2.5.0pre-${tag}";
 
-  src = fetchurl {
-    urls = [
-      "https://fastnlo.hepforge.org/code/v23/${pname}-${version}.tar.gz"
-      "https://sid.ethz.ch/debian/fastnlo/${pname}-${version}.tar.gz"
-    ];
-    sha256 = "0fm9k732pmi3prbicj2yaq815nmcjll95fagjqzf542ng3swpqnb";
-  };
+  src = fetchFromGitLab {
+    domain = "gitlab.etp.kit.edu";
+    owner = "qcd-public";
+    repo = "fastNLO";
+    rev = tag;
+    hash = "sha256-FEKnEnK90tT4BJJ6MLva9lCl3aYzO1YGdx/8Ol2vM7M=";
+  } + /v2.5/toolkit;
 
-  nativeBuildInputs = lib.optional withPython autoreconfHook;
+  postPatch = ''
+    # remove duplicate macro, to fix for autoconf 2.70
+    sed -e '0,/AC_CONFIG_MACRO_DIR\([m4]\)/{/AC_CONFIG_MACRO_DIR/d}' -i configure.ac
+  '';
+
+  nativeBuildInputs = [ autoreconfHook ];
 
   buildInputs = [
     boost
@@ -51,6 +61,16 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  doCheck = true;
+  checkInputs = [
+    perl
+    lhapdf.pdf_sets.CT10nlo
+  ];
+  preCheck = ''
+    patchShebangs --build check
+  '';
+  enableParallelChecking = false;
+
   meta = with lib; {
     homepage = "http://fastnlo.hepforge.org";
     description = "Fast pQCD calculations for hadron-induced processes";
@@ -68,5 +88,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ veprbl ];
     platforms = platforms.unix;
+    broken = stdenv.isAarch64; # failing test "fnlo-tk-stattest.pl"
   };
 }

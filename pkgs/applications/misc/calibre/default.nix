@@ -1,6 +1,7 @@
 { lib
 , mkDerivation
 , fetchurl
+, fetchFromGitHub
 , poppler_utils
 , pkg-config
 , libpng
@@ -21,15 +22,16 @@
 , libmtp
 , xdg-utils
 , removeReferencesTo
+, libstemmer
 }:
 
 mkDerivation rec {
   pname = "calibre";
-  version = "5.17.0";
+  version = "5.24.0";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${version}/${pname}-${version}.tar.xz";
-    hash = "sha256-rdiBL3Y3q/0wFfWGE4jGkWakgV8hA9HjDcKXso6tVrs=";
+    hash = "sha256:18dr577nv7ijw3ar6mrk2xrc54mlrqkaj5jrc6s5sirl0710fdfg";
   };
 
   patches = [
@@ -41,7 +43,7 @@ mkDerivation rec {
   ++ lib.optional (!unrarSupport) ./dont_build_unrar_plugin.patch;
 
   prePatch = ''
-    sed -i "s@\[tool.sip.project\]@[tool.sip.project]\nsip-include-dirs = [\"${python3Packages.pyqt5}/share/sip/PyQt5\"]@g" \
+    sed -i "s@\[tool.sip.project\]@[tool.sip.project]\nsip-include-dirs = [\"${python3Packages.pyqt5}/${python3Packages.python.sitePackages}/PyQt5/bindings\"]@g" \
       setup/build.py
     sed -i "s/\[tool.sip.bindings.pictureflow\]/[tool.sip.bindings.pictureflow]\ntags = [\"${python3Packages.sip.platform_tag}\"]/g" \
       setup/build.py
@@ -64,6 +66,7 @@ mkDerivation rec {
     libjpeg
     libmtp
     libpng
+    libstemmer
     libusb1
     podofo
     poppler_utils
@@ -72,16 +75,19 @@ mkDerivation rec {
     xdg-utils
   ] ++ (
     with python3Packages; [
-      apsw
+      (apsw.overrideAttrs (oldAttrs: rec {
+        setupPyBuildFlags = [ "--enable=load_extension" ];
+      }))
       beautifulsoup4
       cchardet
       css-parser
       cssselect
-      dateutil
+      python-dateutil
       dnspython
       feedparser
       html2text
       html5-parser
+      jeepney
       lxml
       markdown
       mechanize

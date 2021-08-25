@@ -62,6 +62,13 @@ stdenv.mkDerivation rec {
     sed -i -e "s!PKG_CONFIG_PATH=''${PKG_CONFIG_PATH}!PKG_CONFIG_PATH=$(echo "$PKG_CONFIG_PATH" | sed -e 's/./0/g')!" $out/bin/mc
   '';
 
+  postFixup = lib.optionalString (!stdenv.isDarwin) ''
+    # libX11.so is loaded dynamically so autopatch doesn't detect it
+    patchelf \
+      --add-needed ${libX11}/lib/libX11.so \
+      $out/bin/mc
+  '';
+
   meta = with lib; {
     description = "File Manager and User Shell for the GNU Project";
     downloadPage = "https://www.midnight-commander.org/downloads/";

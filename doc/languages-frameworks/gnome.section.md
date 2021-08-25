@@ -8,11 +8,29 @@ Programs in the GNOME universe are written in various languages but they all use
 
 [GSettings](https://developer.gnome.org/gio/stable/GSettings.html) API is often used for storing settings. GSettings schemas are required, to know the type and other metadata of the stored values. GLib looks for `glib-2.0/schemas/gschemas.compiled` files inside the directories of `XDG_DATA_DIRS`.
 
-On Linux, GSettings API is implemented using [dconf](https://wiki.gnome.org/Projects/dconf) backend. You will need to add `dconf` GIO module to `GIO_EXTRA_MODULES` variable, otherwise the `memory` backend will be used and the saved settings will not be persistent.
+On Linux, GSettings API is implemented using [dconf](https://wiki.gnome.org/Projects/dconf) backend. You will need to add `dconf` [GIO module](#ssec-gnome-gio-modules) to `GIO_EXTRA_MODULES` variable, otherwise the `memory` backend will be used and the saved settings will not be persistent.
 
 Last you will need the dconf database D-Bus service itself. You can enable it using `programs.dconf.enable`.
 
 Some applications will also require `gsettings-desktop-schemas` for things like reading proxy configuration or user interface customization. This dependency is often not mentioned by upstream, you should grep for `org.gnome.desktop` and `org.gnome.system` to see if the schemas are needed.
+
+### GIO modules {#ssec-gnome-gio-modules}
+
+GLib’s [GIO](https://developer.gnome.org/gio/stable/ch01.html) library supports several [extension points](https://developer.gnome.org/gio/stable/extending-gio.html). Notably, they allow:
+
+* implementing settings backends (already [mentioned](#ssec-gnome-settings))
+* adding TLS support
+* proxy settings
+* virtual file systems
+
+The modules are typically installed to `lib/gio/modules/` directory of a package and you need to add them to `GIO_EXTRA_MODULES` if you need any of those features.
+
+In particular, we recommend:
+
+* adding `dconf.lib` for any software on Linux that reads [GSettings](#ssec-gnome-settings) (even transitivily through e.g. GTK’s file manager)
+* adding `glib-networking` for any software that accesses network using GIO or libsoup – glib-networking contains a module that implements TLS support and loads system-wide proxy settings
+
+To allow software to use various virtual file systems, `gvfs` package can be also added. But that is usually an optional feature so we typically use `gvfs` from the system (e.g. installed globally using NixOS module).
 
 ### GdkPixbuf loaders {#ssec-gnome-gdk-pixbuf-loaders}
 
@@ -84,7 +102,7 @@ For convenience, it also adds `dconf.lib` for a GIO module implementing a GSetti
 
 - []{#ssec-gnome-hooks-gobject-introspection} `gobject-introspection` setup hook populates `GI_TYPELIB_PATH` variable with `lib/girepository-1.0` directories of dependencies, which is then added to wrapper by `wrapGAppsHook`. It also adds `share` directories of dependencies to `XDG_DATA_DIRS`, which is intended to promote GIR files but it also [pollutes the closures](https://github.com/NixOS/nixpkgs/issues/32790) of packages using `wrapGAppsHook`.
 
-  ::: warning
+  ::: {.warning}
   The setup hook [currently](https://github.com/NixOS/nixpkgs/issues/56943) does not work in expressions with `strictDeps` enabled, like Python packages. In those cases, you will need to disable it with `strictDeps = false;`.
   :::
 

@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, rpmextract, undmg, autoPatchelfHook
-, xorg, gtk3, gnome2, nss, alsaLib, udev, libnotify
+, xorg, gtk3, gnome2, nss, alsa-lib, udev, libnotify
 , wrapGAppsHook }:
 
 let
@@ -35,7 +35,7 @@ let
     nativeBuildInputs = [ rpmextract autoPatchelfHook wrapGAppsHook ];
     buildInputs = (with xorg; [
       libXdamage libXtst libXScrnSaver libxkbfile
-    ]) ++ [ gtk3 nss alsaLib ];
+    ]) ++ [ gtk3 nss alsa-lib ];
 
     runtimeDependencies = [ (lib.getLib udev) libnotify ];
 

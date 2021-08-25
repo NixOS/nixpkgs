@@ -12,7 +12,7 @@ with import ./release-lib.nix { inherit supportedSystems nixpkgsArgs; };
 {
 
   tarball = import ./make-tarball.nix {
-    inherit nixpkgs;
+    inherit nixpkgs supportedSystems;
     officialRelease = false;
   };
 

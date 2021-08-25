@@ -348,7 +348,7 @@ in package-set { inherit pkgs lib callPackage; } self // {
         #       );
         #     });
         #   in
-        #   hpkgs.shellFor {
+        #   haskellPkgs.shellFor {
         #     packages = p: [ p.foo ];
         #     genericBuilderArgsModifier = args: args // { doCheck = true; doBenchmark = true };
         #   }

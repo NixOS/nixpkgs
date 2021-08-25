@@ -1,4 +1,4 @@
-{ lib, stdenv, mkDerivation, fetchFromGitHub, alsaLib, ffmpeg, libjack2, libX11, libXext, libXinerama, qtx11extras
+{ lib, stdenv, mkDerivation, fetchFromGitHub, alsa-lib, ffmpeg, libjack2, libX11, libXext, libXinerama, qtx11extras
 , libXfixes, libGLU, libGL, pkg-config, libpulseaudio, libv4l, qtbase, qttools, cmake, ninja
 }:
 
@@ -27,7 +27,7 @@ mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config cmake ninja ];
   buildInputs = [
-    alsaLib ffmpeg libjack2 libX11 libXext libXfixes libXinerama libGLU libGL
+    alsa-lib ffmpeg libjack2 libX11 libXext libXfixes libXinerama libGLU libGL
     libpulseaudio libv4l qtbase qttools qtx11extras
   ];
 

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "html-tidy";
-  version = "5.7.28";
+  version = "5.8.0";
 
   src = fetchFromGitHub {
     owner = "htacg";
     repo = "tidy-html5";
     rev = version;
-    sha256 = "sha256-Tny53PtaQWAMAEjqw4tKnmGURfZhhwFQNCJr9jjWZQY=";
+    sha256 = "sha256-ZMz0NySxzX2XHiqB8f5asvwjIG6kdIcq8Gb3EbAxBaU=";
   };
 
   nativeBuildInputs = [ cmake libxslt/*manpage*/ ];

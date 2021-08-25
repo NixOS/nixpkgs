@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "lsassy";
-  version = "2.1.3";
+  version = "2.1.5";
 
   src = fetchFromGitHub {
     owner = "Hackndo";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1zig34ymc1h18gjc2ji0w0711im5sm9xm6nydc01c13yfpvvj1rh";
+    sha256 = "15w12asy797dxsz57avbxy6dbi7va9p5jx6i3gm9df9mbj0j3lcc";
   };
 
   propagatedBuildInputs = [

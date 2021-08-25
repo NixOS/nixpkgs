@@ -1,11 +1,9 @@
 { lib, stdenv, fetchFromGitHub
 , libGL, libGLU, freeglut, libX11 }:
 
-let
-  version = "2018-04-19";
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "twilight";
-  inherit version;
+  version = "unstable-2018-04-19";
 
   src = fetchFromGitHub {
     owner = "tweakoz";

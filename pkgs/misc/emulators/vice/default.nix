@@ -1,16 +1,17 @@
-{ lib, stdenv, fetchurl, bison, flex, perl, libpng, giflib, libjpeg, alsaLib, readline, libGLU, libGL, libXaw
+{ lib, stdenv, fetchurl, bison, flex, perl, libpng, giflib, libjpeg, alsa-lib, readline, libGLU, libGL, libXaw
 , pkg-config, gtk2, SDL, autoreconfHook, makeDesktopItem
 }:
 
 stdenv.mkDerivation rec {
-  name = "vice-3.1";
+  pname = "vice";
+  version = "3.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/vice-emu/vice-3.1.tar.gz";
+    url = "mirror://sourceforge/vice-emu/vice-${version}.tar.gz";
     sha256 = "0h0jbml02s2a36hr78dxv1zshmfhxp1wadpcdl09aq416fb1bf1y";
   };
 
-  buildInputs = [ bison flex perl libpng giflib libjpeg alsaLib readline libGLU libGL
+  buildInputs = [ bison flex perl libpng giflib libjpeg alsa-lib readline libGLU libGL
     pkg-config gtk2 SDL autoreconfHook libXaw ];
   dontDisableStatic = true;
   configureFlags = [ "--enable-fullscreen --enable-gnomeui" ];

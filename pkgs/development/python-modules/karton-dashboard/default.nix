@@ -27,7 +27,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace requirements.txt \
-      --replace "Flask==1.1.1" "Flask"
+      --replace "Flask==1.1.1" "Flask" \
+      --replace "prometheus_client==0.9.0" "prometheus-client"
   '';
 
   # Project has no tests. pythonImportsCheck requires MinIO configuration

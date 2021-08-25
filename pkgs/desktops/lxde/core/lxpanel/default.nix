@@ -10,7 +10,7 @@
 , gtk2
 , libX11
 , libfm
-, libwnck
+, libwnck2
 , libXmu
 , libXpm
 , cairo
@@ -20,7 +20,7 @@
 , lxmenu-data
 , wirelesstools
 , curl
-, supportAlsa ? false, alsaLib
+, supportAlsa ? false, alsa-lib
 }:
 
 stdenv.mkDerivation rec {
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     gtk2
     libX11
     libfm
-    libwnck
+    libwnck2
     libXmu
     libXpm
     cairo
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     m4
     wirelesstools
     curl
-  ] ++ lib.optional supportAlsa alsaLib;
+  ] ++ lib.optional supportAlsa alsa-lib;
 
   postPatch = ''
     substituteInPlace src/Makefile.in \

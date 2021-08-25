@@ -1,16 +1,16 @@
 { lib, stdenv, fetchurl, bison, cmake, pkg-config
 , boost, icu, libedit, libevent, lz4, ncurses, openssl, protobuf, re2, readline, zlib, zstd
-, numactl, perl, cctools, CoreServices, developer_cmds, libtirpc, rpcsvc-proto
+, numactl, perl, cctools, CoreServices, developer_cmds, libtirpc, rpcsvc-proto, curl, DarwinTools
 }:
 
 let
 self = stdenv.mkDerivation rec {
   pname = "mysql";
-  version = "8.0.22";
+  version = "8.0.26";
 
   src = fetchurl {
     url = "https://dev.mysql.com/get/Downloads/MySQL-${self.mysqlVersion}/${pname}-${version}.tar.gz";
-    sha256 = "9fd85bb243940ef8234d21384ef421a0962fd4d13406fc1420efa902115ce17a";
+    sha256 = "sha256-293Nx3L4BscRo3MTY6UPPTWeqsnF0UgAhHKKHCzl2k0=";
   };
 
   patches = [
@@ -27,12 +27,12 @@ self = stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    boost icu libedit libevent lz4 ncurses openssl protobuf re2 readline zlib
+    boost curl icu libedit libevent lz4 ncurses openssl protobuf re2 readline zlib
     zstd
   ] ++ lib.optionals stdenv.isLinux [
     numactl libtirpc
   ] ++ lib.optionals stdenv.isDarwin [
-    cctools CoreServices developer_cmds
+    cctools CoreServices developer_cmds DarwinTools
   ];
 
   outputs = [ "out" "static" ];

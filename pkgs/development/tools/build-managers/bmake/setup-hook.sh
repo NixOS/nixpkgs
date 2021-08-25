@@ -1,3 +1,13 @@
+addMakeFlags() {
+    export prefix="$out"
+    export MANDIR="${!outputMan}/share/man"
+    export MANTARGET=man
+    export BINOWN=
+    export STRIP_FLAG=
+}
+
+preConfigureHooks+=(addMakeFlags)
+
 bmakeBuildPhase() {
     runHook preBuild
 

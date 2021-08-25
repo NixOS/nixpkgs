@@ -133,8 +133,8 @@ in
               Nick = "paul";
               AltNick = "paul1";
               LoadModule = [ "chansaver" "controlpanel" ];
-              Network.freenode = {
-                Server = "chat.freenode.net +6697";
+              Network.libera = {
+                Server = "irc.libera.chat +6697";
                 LoadModule = [ "simple_away" ];
                 Chan = {
                   "#nixos" = { Detached = false; };

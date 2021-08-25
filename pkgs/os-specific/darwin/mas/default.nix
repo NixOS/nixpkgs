@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mas";
-  version = "1.8.1";
+  version = "1.8.2";
 
   src = fetchurl {
     url = "https://github.com/mas-cli/mas/releases/download/v${version}/mas.pkg";
-    sha256 = "W/wgg+ETeJPoZ7MoVGH2uJzQiZMLIy3n1JYKUloc3ZU=";
+    sha256 = "HlLQKBVIYKanS6kjkbYdabBi1T0irxE6fNd2H6mDKe4=";
   };
 
   nativeBuildInputs = [ libarchive p7zip ];
@@ -21,17 +21,11 @@ stdenv.mkDerivation rec {
     bsdtar -xf Payload~
   '';
 
-  doBuild = false;
+  dontBuild = true;
 
   installPhase = ''
     mkdir -p $out
-    cp -r ./bin $out
-    cp -r ./Frameworks $out
-  '';
-
-  postFixup = ''
-    install_name_tool -change @rpath/MasKit.framework/Versions/A/MasKit $out/Frameworks/MasKit.framework/Versions/A/MasKit $out/bin/mas
-    install_name_tool -change @rpath/Commandant.framework/Commandant $out/Frameworks/MasKit.framework/Versions/A/Frameworks/Commandant.framework/Versions/A/Commandant $out/bin/mas
+    cp -r ./usr/local/bin $out
   '';
 
   meta = with lib; {

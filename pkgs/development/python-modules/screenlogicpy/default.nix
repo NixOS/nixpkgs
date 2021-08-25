@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "screenlogicpy";
-  version = "0.4.1";
+  version = "0.4.2";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "dieselrabbit";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1rmjxqqbkfcv2xz8ilml799bzffls678fvq784fab2xdv595fndd";
+    sha256 = "158y34d140bh93l143plq53l7n7mcnmqi5mj7hj0j1ljccxpjcnj";
   };
 
   checkInputs = [

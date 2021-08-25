@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, alsaLib
+, alsa-lib
 , fetchFromGitHub
 , fftwFloat
 , freetype
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config meson ninja ];
 
   buildInputs = rpathLibs ++ [
-    alsaLib
+    alsa-lib
     freetype
     libGL
     libX11

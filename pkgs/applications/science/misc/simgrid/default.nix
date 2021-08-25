@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitLab, cmake, perl, python3, boost, valgrind
+{ lib, stdenv, fetchFromGitLab, fetchpatch, cmake, perl, python3, boost, valgrind
 # Optional requirements
 # Lua 5.3 needed and not available now
 #, luaSupport ? false, lua5
@@ -18,17 +18,26 @@ in
 
 stdenv.mkDerivation rec {
   pname = "simgrid";
-  version = "3.27";
+  version = "3.28";
 
   src = fetchFromGitLab {
     domain = "framagit.org";
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "13nwsyk030fhl3srhpc28j5s6594z0m38606f4ygc4qhv9wxw011";
+    sha256 = "0vylwgd4i89bvhbgfay0wq953324dwfmmr8jp9b4vvlc9m0017r9";
   };
 
-  nativeBuildInputs = [ cmake perl python3 boost valgrind ]
+  patches = [
+    (fetchpatch {
+      name = "fix-smpi-dirs-absolute.patch";
+      url = "https://framagit.org/simgrid/simgrid/-/commit/71f01e667577be1076646eb841e0a57bd5388545.patch";
+      sha256 = "0x3y324b6269687zfy43ilc48bwrs4nb7svh2mpg88lrz53rky15";
+    })
+  ];
+
+  propagatedBuildInputs = [ boost ];
+  nativeBuildInputs = [ cmake perl python3 valgrind ]
       ++ optionals fortranSupport [ gfortran ]
       ++ optionals buildJavaBindings [ openjdk ]
       ++ optionals buildDocumentation [ transfig ghostscript doxygen ]
@@ -90,6 +99,9 @@ stdenv.mkDerivation rec {
     cat <<EOW >CTestCustom.cmake
     SET(CTEST_CUSTOM_TESTS_IGNORE smpi-replay-multiple)
     EOW
+
+    # make sure tests are built in parallel (this can be long otherwise)
+    make tests -j $NIX_BUILD_CORES
   '';
 
   meta = {

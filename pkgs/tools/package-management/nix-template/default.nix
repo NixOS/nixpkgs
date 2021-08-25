@@ -1,17 +1,45 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub
+, installShellFiles
+, makeWrapper
+, nix
+, openssl
+, pkg-config
+, Security
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "nix-template";
-  version = "0.1.0";
+  version = "0.1.4";
 
   src = fetchFromGitHub {
+    name = "${pname}-${version}-src";
     owner = "jonringer";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1h6xdvhzg7nb0s82b3r5bsh8bfdb1l5sm7fa24lfwd396xp9yyig";
+    sha256 = "sha256-kNFhSfHUYBUOCXoD6m7thMho4tOIpRHfHGcsW8FTgkc=";
   };
 
-  cargoSha256 = "0hp31b5q4s6grkha2jz55945cbjkqdpvx1l8m49zv5prczhd7mz5";
+  cargoSha256 = "sha256-7PthFLCEt+E/Gx5//aulHYYBKZqapNEWKtKfRlDr3Pw=";
+
+  nativeBuildInputs = [
+    installShellFiles
+    makeWrapper
+    pkg-config
+  ];
+
+  buildInputs = [ openssl ]
+    ++ lib.optional stdenv.isDarwin Security;
+
+  # needed for nix-prefetch-url
+  postInstall = ''
+    wrapProgram $out/bin/nix-template \
+      --prefix PATH : ${lib.makeBinPath [ nix ]}
+
+    installShellCompletion --cmd nix-template \
+      --bash <($out/bin/nix-template completions bash) \
+      --fish <($out/bin/nix-template completions fish) \
+      --zsh <($out/bin/nix-template completions zsh)
+  '';
 
   meta = with lib; {
     description = "Make creating nix expressions easy";

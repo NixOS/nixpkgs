@@ -34,7 +34,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
-    dateutil
+    python-dateutil
     markdown2
     matplotlib
     numpy

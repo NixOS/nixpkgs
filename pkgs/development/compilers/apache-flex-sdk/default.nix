@@ -19,7 +19,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [ jre ];
 
-  buildPhase = ":";
+  dontBuild = true;
 
   postPatch = ''
     shopt -s extglob
@@ -45,7 +45,7 @@ in stdenv.mkDerivation rec {
     cp ${playerglobal} $t/frameworks/libs/player/${playerglobal_ver}/playerglobal.swc
   '';
 
-  fixupPhase = ":";
+  dontFixup = true;
 
   meta = with lib; {
     description = "Flex SDK for Adobe Flash / ActionScript";

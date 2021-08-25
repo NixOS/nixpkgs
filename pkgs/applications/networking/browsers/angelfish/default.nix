@@ -20,17 +20,17 @@
 
 mkDerivation rec {
   pname = "angelfish";
-  version = "21.05";
+  version = "21.06";
 
   src = fetchurl {
     url = "mirror://kde/stable/plasma-mobile/${version}/angelfish-${version}.tar.xz";
-    sha256 = "11jd5dwy0xa7kh5z5rc29xy3wfn20hm31908zjax4x83qqjrm075";
+    sha256 = "sha256-iHgmG/DeaUPnRXlVIU8P/oUcYINienYmR2zI9Q4Yd3s=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    sha256 = "05xvh7yxndqm2bqpm06jsxiv4v02mqxaazll8wllp367qapvr21g";
+    sha256 = "0zh0kli7kav18v9znq2f5jklhf3m1kyb41jzmivjx70g9xyfzlwk";
   };
 
   nativeBuildInputs = [

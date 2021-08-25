@@ -5,7 +5,7 @@
 , waylandSupport ? true
 , x11Support ? true
 
-, ConfigArgParse
+, configargparse
 , rofi
 , wl-clipboard
 , wtype
@@ -26,7 +26,7 @@ buildPythonApplication rec {
 
   # `rofi` and the `waylandSupport` and `x11Support` dependencies
   # contain binaries needed at runtime.
-  propagatedBuildInputs = with lib; [ ConfigArgParse rofi ]
+  propagatedBuildInputs = with lib; [ configargparse rofi ]
     ++ optionals waylandSupport [ wl-clipboard wtype ]
     ++ optionals x11Support [ xdotool xsel ];
 

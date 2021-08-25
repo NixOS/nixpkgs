@@ -1,5 +1,7 @@
 { lib, stdenv
+, runCommand
 , fetchurl
+, fetchpatch
 , perl
 , python3
 , ruby
@@ -34,6 +36,7 @@
 , libidn
 , libedit
 , readline
+, apple_sdk
 , libGL
 , libGLU
 , mesa
@@ -60,7 +63,7 @@ assert enableGeoLocation -> geoclue2 != null;
 
 stdenv.mkDerivation rec {
   pname = "webkitgtk";
-  version = "2.32.1";
+  version = "2.32.3";
 
   outputs = [ "out" "dev" ];
 
@@ -68,7 +71,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://webkitgtk.org/releases/${pname}-${version}.tar.xz";
-    sha256 = "05v9hgpkc6mi2klrd8nqql1n8xzq8rgdz3hvyy369xkhgwqifq8k";
+    sha256 = "sha256-wfSW9axlTv5M72L71PL77u8mWgfF50GeXSkAv+6lLLw=";
   };
 
   patches = lib.optionals stdenv.isLinux [
@@ -78,6 +81,26 @@ stdenv.mkDerivation rec {
       inherit (addOpenGLRunpath) driverLink;
     })
     ./libglvnd-headers.patch
+  ] ++ lib.optionals stdenv.isDarwin [
+    # https://bugs.webkit.org/show_bug.cgi?id=225856
+    (fetchpatch {
+      url = "https://bug-225856-attachments.webkit.org/attachment.cgi?id=428797";
+      sha256 = "sha256-ffo5p2EyyjXe3DxdrvAcDKqxwnoqHtYBtWod+1fOjMU=";
+      excludes = [ "Source/WebCore/ChangeLog" ];
+    })
+
+    # https://bugs.webkit.org/show_bug.cgi?id=225850
+    ./428774.patch # https://bug-225850-attachments.webkit.org/attachment.cgi?id=428774
+    (fetchpatch {
+      url = "https://bug-225850-attachments.webkit.org/attachment.cgi?id=428776";
+      sha256 = "sha256-ryNRYMsk72SL0lNdh6eaAdDV3OT8KEqVq1H0j581jmQ=";
+      excludes = [ "Source/WTF/ChangeLog" ];
+    })
+    (fetchpatch {
+      url = "https://bug-225850-attachments.webkit.org/attachment.cgi?id=428778";
+      sha256 = "sha256-78iP+T2vaIufO8TmIPO/tNDgmBgzlDzalklrOPrtUeo=";
+      excludes = [ "Source/WebKit/ChangeLog" ];
+    })
   ];
 
   preConfigure = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
@@ -96,6 +119,7 @@ stdenv.mkDerivation rec {
     gperf
     ninja
     perl
+    perl.pkgs.FileCopyRecursive # used by copy-user-interface-resources.pl
     pkg-config
     python3
     ruby
@@ -143,7 +167,15 @@ stdenv.mkDerivation rec {
   ]) ++ lib.optionals stdenv.isDarwin [
     libedit
     readline
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optional (stdenv.isDarwin && !stdenv.isAarch64) (
+    # Pull a header that contains a definition of proc_pid_rusage().
+    # (We pick just that one because using the other headers from `sdk` is not
+    # compatible with our C++ standard library. This header is already in
+    # the standard library on aarch64)
+    runCommand "${pname}_headers" {} ''
+      install -Dm444 "${lib.getDev apple_sdk.sdk}"/include/libproc.h "$out"/include/libproc.h
+    ''
+  ) ++ lib.optionals stdenv.isLinux [
     bubblewrap
     libseccomp
     systemd

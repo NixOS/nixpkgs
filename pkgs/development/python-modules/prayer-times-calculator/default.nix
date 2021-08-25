@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "prayer-times-calculator";
-  version = "0.0.4";
+  version = "0.0.5";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "uchagani";
     repo = pname;
     rev = version;
-    sha256 = "053wa0zzfflaxlllh6sxgnrqqx8qyv4jcj85fsiv6n608kw202d5";
+    sha256 = "sha256-wm1r0MK6dx0cJvyQ7ulxvGWyIrNiPV2RXJD/IuKP3+E=";
   };
 
   propagatedBuildInputs = [

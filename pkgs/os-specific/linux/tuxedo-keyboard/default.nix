@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, kernel, linuxHeaders}:
+{ lib, stdenv, fetchFromGitHub, kernel, linuxHeaders }:
 
 stdenv.mkDerivation rec {
   pname = "tuxedo-keyboard-${kernel.version}";
-  version = "3.0.5";
+  version = "3.0.7";
 
   src = fetchFromGitHub {
     owner = "tuxedocomputers";
     repo = "tuxedo-keyboard";
     rev = "v${version}";
-    sha256 = "123ady2bi2dwbajy3pgv10l3g2pyhi5k31c1ii0zcrvl2qqhndck";
+    sha256 = "sha256-JloLwfJfDdVowx1hOehjxPbnaKBCAMn7SZe09SE03HU=";
   };
 
   buildInputs = [ linuxHeaders ];
@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/tuxedocomputers/tuxedo-keyboard/";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
+    broken = stdenv.isAarch64;
     maintainers = [ maintainers.blanky0230 ];
   };
 }

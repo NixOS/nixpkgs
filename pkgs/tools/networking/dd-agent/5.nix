@@ -17,7 +17,7 @@ let
         propagatedBuildInputs = with self; [
           six
           requests
-          websocket_client
+          websocket-client
           ipaddress
           docker_pycreds
           uptime

@@ -114,8 +114,9 @@ with lib.maintainers; {
 
   haskell = {
     members = [
-      maralorn
       cdepillabout
+      expipiplus1
+      maralorn
       sternenseemann
     ];
     scope = "Maintain Haskell packages and infrastructure.";
@@ -131,11 +132,22 @@ with lib.maintainers; {
     scope = "Maintain the Home Assistant ecosystem";
   };
 
+  iog = {
+    members = [
+      cleverca22
+      disassembler
+      jonringer
+      maveru
+      nrdxp
+    ];
+    scope = "Input-Output Global employees, which maintain critical software";
+  };
+
   jitsi = {
     members = [
-      mmilata
       petabyteboy
       ryantm
+      yuka
     ];
     scope = "Maintain Jitsi.";
   };
@@ -155,14 +167,23 @@ with lib.maintainers; {
   matrix = {
     members = [
       ma27
-      pacien
       fadenb
       mguentner
       ekleog
       ralith
       mjlbach
+      dandellion
+      sumnerevans
     ];
     scope = "Maintain the ecosystem around Matrix, a decentralized messenger.";
+  };
+
+  pantheon = {
+    members = [
+      davidak
+      bobby285271
+    ];
+    scope = "Maintain Pantheon desktop environment and platform.";
   };
 
   php = {
@@ -203,5 +224,13 @@ with lib.maintainers; {
       mkaito
     ];
     scope = "Group registration for Serokell employees who collectively maintain packages.";
+  };
+
+  tts = {
+    members = [
+      hexa
+      mic92
+    ];
+    scope = "coqui-ai TTS (formerly Mozilla TTS) and leaf packages";
   };
 }

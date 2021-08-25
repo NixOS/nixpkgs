@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "INSTALLBASE=$(out)/share/gnome-shell/extensions" ];
 
-  uuid = "EasyScreenCast@iacopodeenosee.gmail.com";
+  passthru.extensionUuid = "EasyScreenCast@iacopodeenosee.gmail.com";
 
   meta = with lib; {
     description = "Simplifies the use of the video recording function integrated in gnome shell";

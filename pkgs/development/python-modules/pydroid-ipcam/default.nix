@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "pydroid-ipcam";
-  version = "unstable-2021-04-16";
+  version = "unstable-2021-06-01";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = pname;
-    rev = "9f22682c6f9182aa5e42762f52223337b8b6909c";
-    sha256 = "1lvppyzmwg0fp8zch11j51an4sb074yl9shzanakvjmbqpnif6s6";
+    rev = "3ca14ff178f3506a6a91d8736deea8f06e9ad1c1";
+    sha256 = "0w81pl5fya17hg5xgba2vgxnylfd8jc70il575wdz2pw6z6ihj3s";
   };
 
   propagatedBuildInputs = [

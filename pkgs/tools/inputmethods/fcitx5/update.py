@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i python3 -p nix-prefetch-github python3Packages.requests
+#!nix-shell -i python3 -p nix-update nix-prefetch-github python3Packages.requests
 
 from nix_prefetch_github import *
 import json
@@ -12,8 +12,7 @@ REPOS = [ "libime", "xcb-imdkit", "fcitx5", "fcitx5-gtk", "fcitx5-qt", "fcitx5-c
 OWNER = "fcitx"
 
 def get_latest_tag(repo, owner=OWNER):
-    r = requests.get( 'https://api.github.com/repos/{}/{}/tags'.format(owner,repo)
-                    , auth=('poscat', 'db5e6fd16d0eb8c36385d3d944e058a1178b4265'))
+    r = requests.get('https://api.github.com/repos/{}/{}/tags'.format(owner,repo))
     return r.json()[0].get("name")
 
 def main():

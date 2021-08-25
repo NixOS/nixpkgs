@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , fetchFromGitHub
 , cmake
 , llvmPackages
@@ -7,19 +6,23 @@
 , zlib
 }:
 
-llvmPackages.stdenv.mkDerivation rec {
+let
+  inherit (llvmPackages) stdenv;
+in
+stdenv.mkDerivation rec {
   pname = "zig";
-  version = "0.7.1";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "ziglang";
     repo = pname;
     rev = version;
-    hash = "sha256-rZYv8LFH3M70SyPwPVyul+Um9j82K8GZIepVmaonzPw=";
+    hash = "sha256-bILjcKX8jPl2n1HRYvYRb7jJkobwqmSJ+hHXSn9n2ag=";
   };
 
   nativeBuildInputs = [
-    cmake llvmPackages.llvm.dev
+    cmake
+    llvmPackages.llvm.dev
   ];
   buildInputs = [
     libxml2
@@ -34,13 +37,12 @@ llvmPackages.stdenv.mkDerivation rec {
     export HOME=$TMPDIR;
   '';
 
+  doCheck = true;
   checkPhase = ''
     runHook preCheck
-    ./zig test --cache-dir "$TMPDIR" -I $src/test $src/test/stage1/behavior.zig
+    ./zig test --cache-dir "$TMPDIR" -I $src/test $src/test/behavior.zig
     runHook postCheck
   '';
-
-  doCheck = true;
 
   meta = with lib; {
     homepage = "https://ziglang.org/";
@@ -53,3 +55,4 @@ llvmPackages.stdenv.mkDerivation rec {
     broken = stdenv.isDarwin;
   };
 }
+

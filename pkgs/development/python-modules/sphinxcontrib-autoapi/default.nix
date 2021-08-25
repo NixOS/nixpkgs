@@ -13,12 +13,12 @@
 
 buildPythonPackage rec {
   pname = "sphinx-autoapi";
-  version = "1.7.0";
+  version = "1.8.1";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "48caa054a99c21156e9a1d26559281dc27f86ab8ef8bb6ef160f8cd9f4a0053d";
+    sha256 = "842c0a8f49c824803f7edee31cb1cabd5001a987553bec7b4681283ec9e47d4a";
   };
 
   propagatedBuildInputs = [ astroid jinja2 pyyaml sphinx unidecode ];

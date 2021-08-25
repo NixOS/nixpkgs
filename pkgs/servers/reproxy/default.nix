@@ -1,21 +1,23 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "reproxy";
-  version = "0.6.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "umputun";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-8veGMiRT59oLcMUxERI+2uRQVvbiuXTbrBi1GqoPe0M=";
+    hash = "sha256-zwQZr6BbvJ2Ol5pCLkZ49j0j5KWTK0N8BybvTr8PPeg=";
   };
 
   postPatch = ''
     # Requires network access
     substituteInPlace app/main_test.go \
       --replace "Test_Main" "Skip_Main"
-
+    substituteInPlace app/proxy/proxy_test.go \
+      --replace "TestHttp_matchHandler" "SkipHttp_matchHandler"
+  '' + lib.optionalString stdenv.isDarwin ''
     # Fails on Darwin.
     # https://github.com/umputun/reproxy/issues/77
     substituteInPlace app/discovery/provider/file_test.go \

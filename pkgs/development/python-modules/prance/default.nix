@@ -7,22 +7,22 @@
 , six
 , semver
 , pytestCheckHook
-, pytestcov
-, pytestrunner
+, pytest-cov
+, pytest-runner
 , openapi-spec-validator
 }:
 
 buildPythonPackage rec {
   pname = "prance";
-  version = "0.20.2";
+  version = "0.21.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4ffcddae6218cf6753a02af36ca9fb1c92eec4689441789ee2e9963230882388";
+    sha256 = "43ebe3a5b38f0c65c428427004c4d8ce8d7155ddad50610276c89c192680f138";
   };
 
   buildInputs = [
-    pytestrunner
+    pytest-runner
   ];
 
   propagatedBuildInputs = [
@@ -35,7 +35,7 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytestCheckHook
-    pytestcov
+    pytest-cov
     openapi-spec-validator
   ];
 

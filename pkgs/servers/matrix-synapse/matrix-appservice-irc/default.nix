@@ -10,6 +10,8 @@ let
   };
 in
 ourNodePackages."${packageName}".override {
+  pname = "matrix-appservice-irc";
+
   nativeBuildInputs = [ makeWrapper nodePackages.node-gyp-build ];
 
   postInstall = ''
@@ -18,6 +20,7 @@ ourNodePackages."${packageName}".override {
   '';
 
   passthru.tests.matrix-appservice-irc = nixosTests.matrix-appservice-irc;
+  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     description = "Node.js IRC bridge for Matrix";

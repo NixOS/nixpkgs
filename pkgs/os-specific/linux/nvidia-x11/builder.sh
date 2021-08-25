@@ -20,7 +20,7 @@ buildPhase() {
         sysSrc=$(echo $kernel/lib/modules/$kernelVersion/source)
         sysOut=$(echo $kernel/lib/modules/$kernelVersion/build)
         unset src # used by the nv makefile
-        make IGNORE_PREEMPT_RT_PRESENCE=1 SYSSRC=$sysSrc SYSOUT=$sysOut module -j$NIX_BUILD_CORES
+        make IGNORE_PREEMPT_RT_PRESENCE=1 NV_BUILD_SUPPORTS_HMM=1 SYSSRC=$sysSrc SYSOUT=$sysOut module -j$NIX_BUILD_CORES
 
         cd ..
     fi
@@ -46,11 +46,17 @@ installPhase() {
     fi
 
     # Install systemd power management executables
+    if [ -e systemd/nvidia-sleep.sh ]; then
+        mv systemd/nvidia-sleep.sh ./
+    fi
     if [ -e nvidia-sleep.sh ]; then
         sed -E 's#(PATH=).*#\1"$PATH"#' nvidia-sleep.sh > nvidia-sleep.sh.fixed
         install -Dm755 nvidia-sleep.sh.fixed $out/bin/nvidia-sleep.sh
     fi
 
+    if [ -e systemd/system-sleep/nvidia ]; then
+        mv systemd/system-sleep/nvidia ./
+    fi
     if [ -e nvidia ]; then
         sed -E "s#/usr(/bin/nvidia-sleep.sh)#$out\\1#" nvidia > nvidia.fixed
         install -Dm755 nvidia.fixed $out/lib/systemd/system-sleep/nvidia

@@ -18,6 +18,7 @@ let
     ${lib.optionalString (cfg.zone != "")   "zone=${cfg.zone}"}
     ssl=${boolToStr cfg.ssl}
     wildcard=YES
+    ipv6=${boolToStr cfg.ipv6}
     quiet=${boolToStr cfg.quiet}
     verbose=${boolToStr cfg.verbose}
     ${cfg.extraConfig}
@@ -116,7 +117,15 @@ with lib;
         default = true;
         type = bool;
         description = ''
-          Whether to use to use SSL/TLS to connect to dynamic DNS provider.
+          Whether to use SSL/TLS to connect to dynamic DNS provider.
+        '';
+      };
+
+      ipv6 = mkOption {
+        default = false;
+        type = bool;
+        description = ''
+          Whether to use IPv6.
         '';
       };
 

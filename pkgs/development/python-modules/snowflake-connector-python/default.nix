@@ -25,12 +25,12 @@
 
 buildPythonPackage rec {
   pname = "snowflake-connector-python";
-  version = "2.4.3";
+  version = "2.4.5";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-+jAfUwaofWM5Ef1kk4AEAbBM/UES8/ZzLd4QJfkEQsM=";
+    sha256 = "f5bd11228e192b4754587869ebd85752327ecb945fcc19c2ed1f66958443ad08";
   };
 
   propagatedBuildInputs = [
@@ -58,6 +58,7 @@ buildPythonPackage rec {
     # https://github.com/snowflakedb/snowflake-connector-python/issues/705
     substituteInPlace setup.py \
       --replace "idna>=2.5,<3" "idna" \
+      --replace "certifi<2021.0.0" "certifi" \
       --replace "chardet>=3.0.2,<4" "chardet"
   '';
 

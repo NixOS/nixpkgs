@@ -4,16 +4,8 @@
 , zeromq, pcsclite, readline, libsodium, hidapi
 , randomx, rapidjson
 , CoreData, IOKit, PCSC
-, trezorSupport ? true
-,   libusb1  ? null
-,   protobuf ? null
-,   python3  ? null
+, trezorSupport ? true, libusb1, protobuf, python3
 }:
-
-with lib;
-
-assert stdenv.isDarwin -> IOKit != null;
-assert trezorSupport -> all (x: x!=null) [ libusb1 protobuf python3 ];
 
 stdenv.mkDerivation rec {
   pname = "monero";
@@ -45,8 +37,8 @@ stdenv.mkDerivation rec {
     zeromq pcsclite readline
     libsodium hidapi randomx rapidjson
     protobuf
-  ] ++ optionals stdenv.isDarwin [ IOKit CoreData PCSC ]
-    ++ optionals trezorSupport [ libusb1 protobuf python3 ];
+  ] ++ lib.optionals stdenv.isDarwin [ IOKit CoreData PCSC ]
+    ++ lib.optionals trezorSupport [ libusb1 protobuf python3 ];
 
   cmakeFlags = [
     "-DCMAKE_BUILD_TYPE=Release"
@@ -54,7 +46,7 @@ stdenv.mkDerivation rec {
     "-DBUILD_GUI_DEPS=ON"
     "-DReadline_ROOT_DIR=${readline.dev}"
     "-DRandomX_ROOT_DIR=${randomx}"
-  ] ++ optional stdenv.isDarwin "-DBoost_USE_MULTITHREADED=OFF";
+  ] ++ lib.optional stdenv.isDarwin "-DBoost_USE_MULTITHREADED=OFF";
 
   outputs = [ "out" "source" ];
 

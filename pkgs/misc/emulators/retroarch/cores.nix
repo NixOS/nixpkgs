@@ -1,5 +1,5 @@
 { lib, stdenv, fetchgit, fetchFromGitHub, fetchFromGitLab, fetchpatch, cmake, pkg-config, makeWrapper, python27, python3, retroarch
-, alsaLib, fluidsynth, curl, hidapi, libGLU, gettext, glib, gtk2, portaudio, SDL, SDL_net, SDL2, SDL2_image, libGL
+, alsa-lib, fluidsynth, curl, hidapi, libGLU, gettext, glib, gtk2, portaudio, SDL, SDL_net, SDL2, SDL2_image, libGL
 , ffmpeg, pcre, libevdev, libpng, libjpeg, libzip, udev, libvorbis, snappy, which, hexdump
 , miniupnpc, sfml, xorg, zlib, nasm, libpcap, boost, icu, openssl
 , buildPackages }:
@@ -548,7 +548,7 @@ in with lib.licenses;
     description = "Port of MAME to libretro";
     license = gpl2Plus;
 
-    extraBuildInputs = [ alsaLib libGLU libGL portaudio python27 xorg.libX11 ];
+    extraBuildInputs = [ alsa-lib libGLU libGL portaudio python27 xorg.libX11 ];
     postPatch = ''
       # Prevent the failure during the parallel building of:
       # make -C 3rdparty/genie/build/gmake.linux -f genie.make obj/Release/src/host/lua-5.3.0/src/lgc.o
@@ -617,7 +617,7 @@ in with lib.licenses;
     description = "Port of MAME ~2015 to libretro";
     license = gpl2Plus;
     extraNativeBuildInputs = [ python27 ];
-    extraBuildInputs = [ alsaLib ];
+    extraBuildInputs = [ alsa-lib ];
     makefile = "Makefile";
   };
 
@@ -638,7 +638,7 @@ in with lib.licenses;
     description = "Port of MAME ~2016 to libretro";
     license = gpl2Plus;
     extraNativeBuildInputs = [ python27 ];
-    extraBuildInputs = [ alsaLib ];
+    extraBuildInputs = [ alsa-lib ];
     postPatch = ''
       # Prevent the failure during the parallel building of:
       # make -C 3rdparty/genie/build/gmake.linux -f genie.make obj/Release/src/host/lua-5.3.0/src/lgc.o

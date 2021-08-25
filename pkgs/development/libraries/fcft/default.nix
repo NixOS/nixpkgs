@@ -1,32 +1,42 @@
-{ stdenv, lib, fetchzip, pkg-config, meson, ninja, scdoc
+{ stdenv, lib, fetchFromGitea, pkg-config, meson, ninja, scdoc
 , freetype, fontconfig, pixman, tllist, check
 , withHarfBuzz ? true
 , harfbuzz
 }:
 
+let
+  # Courtesy of sternenseemann and FRidh, commit c9a7fdfcfb420be8e0179214d0d91a34f5974c54
+  mesonFeatureFlag = opt: b: "-D${opt}=${if b then "enabled" else "disabled"}";
+in
+
 stdenv.mkDerivation rec {
   pname = "fcft";
-  version = "2.4.0";
+  version = "2.4.5";
 
-  src = fetchzip {
-    url = "https://codeberg.org/dnkl/fcft/archive/${version}.tar.gz";
-    sha256 = "0z1r0s5s3dr1g4f3ylxfcmy3xb0ax02rw9mg7z8hzh0gxazrpndx";
+  src = fetchFromGitea {
+    domain = "codeberg.org";
+    owner = "dnkl";
+    repo = "fcft";
+    rev = version;
+    sha256 = "0z4bqap88pydkgcxrsvm3fmcyhi9x7z8knliarvdcvqlk7qnyzfh";
   };
 
+  depsBuildBuild = [ pkg-config ];
   nativeBuildInputs = [ pkg-config meson ninja scdoc ];
   buildInputs = [ freetype fontconfig pixman tllist ]
     ++ lib.optional withHarfBuzz harfbuzz;
   checkInputs = [ check ];
 
+  mesonBuildType = "release";
   mesonFlags = [
-    "--buildtype=release"
-    "-Dtext-shaping=${if withHarfBuzz then "enabled" else "disabled"}"
+    (mesonFeatureFlag "text-shaping" withHarfBuzz)
   ];
 
   doCheck = true;
 
   meta = with lib; {
     homepage = "https://codeberg.org/dnkl/fcft";
+    changelog = "https://codeberg.org/dnkl/fcft/releases/tag/${version}";
     description = "Simple library for font loading and glyph rasterization";
     maintainers = with maintainers; [
       fionera

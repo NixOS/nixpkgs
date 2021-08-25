@@ -13,7 +13,7 @@
 , itstool
 , libgweather
 , libsoup
-, libwnck3
+, libwnck
 , libxml2
 , pkg-config
 , polkit
@@ -31,6 +31,13 @@ stdenv.mkDerivation rec {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     hash = "sha256-nxNQde3GZs8rnKkd41xnA+KxdxwQp3B0FPtlbCilmzs=";
   };
+
+  patches = [
+    # Load modules from path in `NIX_GNOME_PANEL_MODULESDIR` environment variable
+    # instead of gnome-panel’s libdir so that the NixOS module can make gnome-panel
+    # load modules from other packages as well.
+    ./modulesdir-env-var.patch
+  ];
 
   # make .desktop Exec absolute
   postPatch = ''
@@ -68,7 +75,7 @@ stdenv.mkDerivation rec {
     gtk3
     libgweather
     libsoup
-    libwnck3
+    libwnck
     polkit
     systemd
   ];

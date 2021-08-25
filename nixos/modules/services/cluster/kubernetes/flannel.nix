@@ -58,7 +58,7 @@ in
     services.kubernetes.addonManager.bootstrapAddons = mkIf ((storageBackend == "kubernetes") && (elem "RBAC" top.apiserver.authorizationMode)) {
 
       flannel-cr = {
-        apiVersion = "rbac.authorization.k8s.io/v1beta1";
+        apiVersion = "rbac.authorization.k8s.io/v1";
         kind = "ClusterRole";
         metadata = { name = "flannel"; };
         rules = [{
@@ -79,7 +79,7 @@ in
       };
 
       flannel-crb = {
-        apiVersion = "rbac.authorization.k8s.io/v1beta1";
+        apiVersion = "rbac.authorization.k8s.io/v1";
         kind = "ClusterRoleBinding";
         metadata = { name = "flannel"; };
         roleRef = {

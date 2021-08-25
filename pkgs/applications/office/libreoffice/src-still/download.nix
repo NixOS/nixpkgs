@@ -721,25 +721,25 @@
     md5name = "505e70834d35383537b6491e7ae8641f1a4bed1876dbfe361201fc80868d88ca-libpng-1.6.37.tar.xz";
   }
   {
-    name = "poppler-0.82.0.tar.xz";
-    url = "https://dev-www.libreoffice.org/src/poppler-0.82.0.tar.xz";
-    sha256 = "234f8e573ea57fb6a008e7c1e56bfae1af5d1adf0e65f47555e1ae103874e4df";
+    name = "poppler-21.01.0.tar.xz";
+    url = "https://dev-www.libreoffice.org/src/poppler-21.01.0.tar.xz";
+    sha256 = "016dde34e5f868ea98a32ca99b643325a9682281500942b7113f4ec88d20e2f3";
     md5 = "";
-    md5name = "234f8e573ea57fb6a008e7c1e56bfae1af5d1adf0e65f47555e1ae103874e4df-poppler-0.82.0.tar.xz";
+    md5name = "016dde34e5f868ea98a32ca99b643325a9682281500942b7113f4ec88d20e2f3-poppler-21.01.0.tar.xz";
   }
   {
-    name = "postgresql-9.2.24.tar.bz2";
-    url = "https://dev-www.libreoffice.org/src/postgresql-9.2.24.tar.bz2";
-    sha256 = "a754c02f7051c2f21e52f8669a421b50485afcde9a581674d6106326b189d126";
+    name = "postgresql-13.1.tar.bz2";
+    url = "https://dev-www.libreoffice.org/src/postgresql-13.1.tar.bz2";
+    sha256 = "12345c83b89aa29808568977f5200d6da00f88a035517f925293355432ffe61f";
     md5 = "";
-    md5name = "a754c02f7051c2f21e52f8669a421b50485afcde9a581674d6106326b189d126-postgresql-9.2.24.tar.bz2";
+    md5name = "12345c83b89aa29808568977f5200d6da00f88a035517f925293355432ffe61f-postgresql-13.1.tar.bz2";
   }
   {
-    name = "Python-3.7.7.tar.xz";
-    url = "https://dev-www.libreoffice.org/src/Python-3.7.7.tar.xz";
-    sha256 = "06a0a9f1bf0d8cd1e4121194d666c4e28ddae4dd54346de6c343206599f02136";
+    name = "Python-3.7.10.tar.xz";
+    url = "https://dev-www.libreoffice.org/src/Python-3.7.10.tar.xz";
+    sha256 = "f8d82e7572c86ec9d55c8627aae5040124fd2203af400c383c821b980306ee6b";
     md5 = "";
-    md5name = "06a0a9f1bf0d8cd1e4121194d666c4e28ddae4dd54346de6c343206599f02136-Python-3.7.7.tar.xz";
+    md5name = "f8d82e7572c86ec9d55c8627aae5040124fd2203af400c383c821b980306ee6b-Python-3.7.10.tar.xz";
   }
   {
     name = "QR-Code-generator-1.4.0.tar.gz";

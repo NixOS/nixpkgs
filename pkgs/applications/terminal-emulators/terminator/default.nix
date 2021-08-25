@@ -27,7 +27,7 @@ python3.pkgs.buildPythonApplication rec {
     intltool
     gobject-introspection
     wrapGAppsHook
-    python3.pkgs.pytestrunner
+    python3.pkgs.pytest-runner
   ];
 
   buildInputs = [

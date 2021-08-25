@@ -14,12 +14,7 @@
 
 let
   pname = "setuptools";
-  version = "54.2.0";
-
-  bootstrap = fetchurl {
-    url = "https://raw.githubusercontent.com/pypa/setuptools/v52.0.0/bootstrap.py";
-    sha256 = "sha256-HzhlnJvMskBfb3kVnYltdnjS63wt1GWd0RK+VQqrJQ8=";
-  };
+  version = "57.2.0";
 
   # Create an sdist of setuptools
   sdist = stdenv.mkDerivation rec {
@@ -29,7 +24,7 @@ let
       owner = "pypa";
       repo = pname;
       rev = "v${version}";
-      sha256 = "sha256-ZHJZiwlWLHP4vf2TLwj/DYB9wjbRp0apVmmjsKCLPq0=";
+      sha256 = "sha256-zFmndVoATNxfvDsacY+gj5bzIbbd/8ldbsJj4qOawTA=";
       name = "${pname}-${version}-source";
     };
 
@@ -38,8 +33,7 @@ let
     ];
 
     buildPhase = ''
-      cp ${bootstrap} bootstrap.py
-      ${python.pythonForBuild.interpreter} bootstrap.py
+      ${python.pythonForBuild.interpreter} setup.py egg_info
       ${python.pythonForBuild.interpreter} setup.py sdist --formats=gztar
 
       # Here we untar the sdist and retar it in order to control the timestamps
@@ -68,7 +62,7 @@ in buildPythonPackage rec {
     (setuptoolsBuildHook.override{setuptools=null; wheel=null;})
   ];
 
-  preBuild = lib.strings.optionalString (!stdenv.hostPlatform.isWindows) ''
+  preBuild = lib.optionalString (!stdenv.hostPlatform.isWindows) ''
     export SETUPTOOLS_INSTALL_WINDOWS_SPECIFIC_FILES=0
   '';
 

@@ -194,7 +194,7 @@ let
       # We need to handle the last column specially here, because it's
       # open-ended (command + args).
       lines = [ labels labelDefaults ] ++ (map (l: init l ++ [""]) masterCf);
-    in fold foldLine (genList (const 0) (length labels)) lines;
+    in foldr foldLine (genList (const 0) (length labels)) lines;
 
     # Pad a string with spaces from the right (opposite of fixedWidthString).
     pad = width: str: let
@@ -203,7 +203,7 @@ let
     in str + optionalString (padWidth > 0) padding;
 
     # It's + 2 here, because that's the amount of spacing between columns.
-    fullWidth = fold (width: acc: acc + width + 2) 0 maxWidths;
+    fullWidth = foldr (width: acc: acc + width + 2) 0 maxWidths;
 
     formatLine = line: concatStringsSep "  " (zipListsWith pad maxWidths line);
 

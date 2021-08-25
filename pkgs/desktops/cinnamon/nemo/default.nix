@@ -17,11 +17,12 @@
 , intltool
 , shared-mime-info
 , cinnamon-translations
+, libgsf
 }:
 
 stdenv.mkDerivation rec {
   pname = "nemo";
-  version = "4.8.6";
+  version = "5.0.3";
 
   # TODO: add plugins support (see https://github.com/NixOS/nixpkgs/issues/78327)
 
@@ -29,7 +30,7 @@ stdenv.mkDerivation rec {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    hash = "sha256-OUv7l+klu5l1Y7m+iHiq/dDyxH3/hT4k7F9gDuUiGds=";
+    sha256 = "sha256-Ah1Rp/o4LPdYm+wj2W5ljjMkCI3PgoAHrlM8yEQP77o=";
   };
 
   outputs = [ "out" "dev" ];
@@ -44,6 +45,7 @@ stdenv.mkDerivation rec {
     libexif
     exempi
     gobject-introspection
+    libgsf
   ];
 
   nativeBuildInputs = [

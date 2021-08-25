@@ -3,7 +3,7 @@ index 9b4a2f5..86f849c 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
 @@ -18,22 +18,19 @@ include(FetchContent)
- 
+ else() 
  FetchContent_Declare(
    pybind11-src
 -  GIT_REPOSITORY https://github.com/pybind/pybind11.git
@@ -11,6 +11,7 @@ index 9b4a2f5..86f849c 100644
 +  SOURCE_DIR @pybind11_src@
  )
  FetchContent_MakeAvailable(pybind11-src)
+ endif()
  
  FetchContent_Declare(
    cxxopts
@@ -23,7 +24,7 @@ index 9b4a2f5..86f849c 100644
  FetchContent_Declare(
    gulrak
 -  GIT_REPOSITORY https://github.com/gulrak/filesystem.git
--  GIT_TAG        v1.5.4
+-  GIT_TAG        v1.5.6
 +  SOURCE_DIR @ghc_filesystem@
  )
  FetchContent_MakeAvailable(gulrak)

@@ -11,11 +11,13 @@ bundlerApp {
       --prefix PATH : ${lib.makeBinPath [ curl ]}
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = with lib; {
     description = "Black box WordPress vulnerability scanner";
-    homepage    = "https://wpscan.org/";
-    license     = licenses.unfreeRedistributable;
+    homepage = "https://wpscan.org/";
+    license = licenses.unfreeRedistributable;
     maintainers = with maintainers; [ nyanloutre manveru ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 }

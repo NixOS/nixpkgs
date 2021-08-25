@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, fetchpatch, libao, libmad, libid3tag, zlib, alsaLib
+{lib, stdenv, fetchurl, fetchpatch, libao, libmad, libid3tag, zlib, alsa-lib
 # Specify default libao output plugin to use (e.g. "alsa", "pulse" …).
 # If null, it will use the libao system default.
 , defaultAudio ? null
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
          "--with-default-audio=${defaultAudio}");
 
   buildInputs = [libao libid3tag libmad zlib]
-    ++ lib.optional stdenv.isLinux alsaLib;
+    ++ lib.optional stdenv.isLinux alsa-lib;
 
   installTargets = [ "install" "install-man" ];
 

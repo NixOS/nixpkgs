@@ -14,7 +14,7 @@ Currently, `makeSnap` does not support creating GUI stubs.
 
 The following expression packages GNU Hello as a Snapcraft snap.
 
-```{#ex-snapTools-buildSnap-hello .nix}
+``` {#ex-snapTools-buildSnap-hello .nix}
 let
   inherit (import <nixpkgs> { }) snapTools hello;
 in snapTools.makeSnap {
@@ -35,7 +35,7 @@ in snapTools.makeSnap {
 
 Graphical programs require many more integrations with the host. This example uses Firefox as an example, because it is one of the most complicated programs we could package.
 
-```{#ex-snapTools-buildSnap-firefox .nix}
+``` {#ex-snapTools-buildSnap-firefox .nix}
 let
   inherit (import <nixpkgs> { }) snapTools firefox;
 in snapTools.makeSnap {

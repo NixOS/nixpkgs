@@ -21,13 +21,13 @@
 stdenv.mkDerivation rec {
   pname = "eid-mw";
   # NOTE: Don't just blindly update to the latest version/tag. Releases are always for a specific OS.
-  version = "5.0.21";
+  version = "5.0.28";
 
   src = fetchFromGitHub {
-    rev = "v${version}";
-    sha256 = "1sz7996q6gd6vbdxqgyx1jwjznpki1k9zbgaj1j1a51y6w0g0kdh";
-    repo = "eid-mw";
     owner = "Fedict";
+    repo = "eid-mw";
+    rev = "v${version}";
+    sha256 = "rrrzw8i271ZZkwY3L6aRw2Nlz+GmDr/1ahYYlUBvtzo=";
   };
 
   nativeBuildInputs = [ autoreconfHook autoconf-archive pkg-config makeWrapper ];
@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Belgian electronic identity card (eID) middleware";
     homepage = "https://eid.belgium.be/en/using_your_eid/installing_the_eid_software/linux/";
-    license = licenses.lgpl3;
+    license = licenses.lgpl3Only;
     longDescription = ''
       Allows user authentication and digital signatures with Belgian ID cards.
       Also requires a running pcscd service and compatible card reader.

@@ -1,8 +1,12 @@
 { lib, stdenv, fetchurl, love, lua, makeWrapper, makeDesktopItem }:
 
-let
+stdenv.mkDerivation rec {
   pname = "sienna";
   version = "1.0c";
+  src = fetchurl {
+    url = "https://github.com/SimonLarsen/${pname}/releases/download/v${version}/${pname}-${version}.love";
+    sha256 = "1x15276fhqspgrrv8fzkp032i2qa8piywc0yy061x59mxhdndzj6";
+  };
 
   icon = fetchurl {
     url = "http://tangramgames.dk/img/thumb/sienna.png";
@@ -19,20 +23,10 @@ let
     categories = "Game;";
   };
 
-in
-
-stdenv.mkDerivation {
-  name = "${pname}-${version}";
-
-  src = fetchurl {
-    url = "https://github.com/SimonLarsen/${pname}/releases/download/v${version}/${pname}-${version}.love";
-    sha256 = "1x15276fhqspgrrv8fzkp032i2qa8piywc0yy061x59mxhdndzj6";
-  };
-
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ lua love ];
 
-  phases = "installPhase";
+  dontUnpack = true;
 
   installPhase =
   ''

@@ -1,7 +1,7 @@
 { frameworks, libs, libobjc, Libsystem, libnetwork }: with frameworks; with libs;
 {
   AGL                              = { inherit Carbon OpenGL; };
-  AVFoundation                     = { inherit ApplicationServices AVFCapture AVFCore CoreGraphics; };
+  AVFoundation                     = { inherit ApplicationServices AVFCapture AVFCore CoreGraphics simd UniformTypeIdentifiers; };
   AVKit                            = {};
   Accelerate                       = { inherit CoreWLAN IOBluetooth; };
   Accessibility                    = {};

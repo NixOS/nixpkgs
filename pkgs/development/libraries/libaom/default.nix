@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libaom";
-  version = "3.1.0";
+  version = "3.1.2";
 
   src = fetchzip {
     url = "https://aomedia.googlesource.com/aom/+archive/v${version}.tar.gz";
-    sha256 = "1v3i34jmbz1p3x8msj3vx46nl6jdzxbkr2lfbh06vard8adb16il";
+    sha256 = "1c7yrhb56qj5c3lz54n1f9cbrvdr32g2yrrdiiy72sib8ycq9hz2";
     stripRoot = false;
   };
 

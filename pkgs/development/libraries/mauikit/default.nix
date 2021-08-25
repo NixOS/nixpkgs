@@ -39,6 +39,6 @@ mkDerivation rec {
     description = "Free and modular front-end framework for developing fast and compelling user experiences";
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ dotlambda ];
-    broken = versionOlder qtbase.version "5.14.0";
+    broken = versionOlder qtbase.version "5.15.0";
   };
 }

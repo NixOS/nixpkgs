@@ -1,19 +1,19 @@
 { lib
 , fetchPypi
 , buildPythonPackage
-, setuptools_scm
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "makefun";
-  version = "1.11.2";
+  version = "1.11.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-2qNQpILtWLVyREPGUUMhkem5ewyDdDh50JExccaigIU=";
+    sha256 = "033eed65e2c1804fca84161a38d1fc8bb8650d32a89ac1c5dc7e54b2b2c2e88c";
   };
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   # Disabling tests for now due to various (transitive) dependencies on modules
   # from @smarie which are, as of yet, not part of nixpkgs. Also introduces

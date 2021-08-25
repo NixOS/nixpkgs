@@ -1,5 +1,5 @@
 { lib, fetchPypi, fetchpatch, buildPythonPackage,
-  setuptools_scm, toml, six, astroid, pytest
+  setuptools-scm, toml, six, astroid, pytest
 }:
 
 buildPythonPackage rec {
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [ setuptools_scm toml six astroid ];
+  propagatedBuildInputs = [ setuptools-scm toml six astroid ];
 
   checkInputs = [ pytest ];
 

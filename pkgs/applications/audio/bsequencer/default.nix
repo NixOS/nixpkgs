@@ -1,12 +1,12 @@
 { lib, stdenv, fetchFromGitHub, xorg, cairo, lv2, pkg-config }:
 
 stdenv.mkDerivation rec {
-  pname = "BSEQuencer";
+  pname = "bsequencer";
   version = "1.8.8";
 
   src = fetchFromGitHub {
     owner = "sjaehn";
-    repo = pname;
+    repo = "BSEQuencer";
     rev = version;
     sha256 = "sha256-OArIMf0XP9CKDdb3H4s8jMzVRjoLFQDPmTS9rS2KW3w=";
   };

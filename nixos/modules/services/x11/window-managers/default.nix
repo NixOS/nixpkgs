@@ -26,6 +26,7 @@ in
     ./leftwm.nix
     ./lwm.nix
     ./metacity.nix
+    ./mlvwm.nix
     ./mwm.nix
     ./openbox.nix
     ./pekwm.nix

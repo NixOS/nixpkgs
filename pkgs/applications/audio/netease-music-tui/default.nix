@@ -1,4 +1,4 @@
-{ fetchFromGitHub, rustPlatform, lib, alsaLib, pkg-config, openssl }:
+{ fetchFromGitHub, rustPlatform, lib, alsa-lib, pkg-config, openssl }:
 
 rustPlatform.buildRustPackage rec {
   pname = "netease-music-tui";
@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   cargoPatches = [ ./cargo-lock.patch ];
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ alsaLib openssl ];
+  buildInputs = [ alsa-lib openssl ];
 
   cargoSha256 = "1pca0sz4rz8qls6k2vhf70ixhnvgk81c4hbx81q3pv106g5k205f";
 

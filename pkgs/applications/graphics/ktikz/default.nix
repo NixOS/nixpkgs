@@ -47,7 +47,6 @@ stdenv.mkDerivation rec {
   QT_PLUGIN_PATH = "${qtbase}/${qtbase.qtPluginPrefix}";
 
   buildInputs = [ qtbase poppler ];
-  enableParallelBuilding = true;
 
   qmakeFlags = [
     "DESKTOP_INSTALL_DIR=${placeholder "out"}/share/applications"

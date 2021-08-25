@@ -10,7 +10,7 @@ let
   # a wrapper that verifies that the configuration is valid
   promtoolCheck = what: name: file:
     if cfg.checkConfig then
-      pkgs.runCommandNoCCLocal
+      pkgs.runCommandLocal
         "${name}-${replaceStrings [" "] [""] what}-checked"
         { buildInputs = [ cfg.package ]; } ''
       ln -s ${file} $out
@@ -19,7 +19,7 @@ let
 
   # Pretty-print JSON to a file
   writePrettyJSON = name: x:
-    pkgs.runCommandNoCCLocal name {} ''
+    pkgs.runCommandLocal name {} ''
       echo '${builtins.toJSON x}' | ${pkgs.jq}/bin/jq . > $out
     '';
 
@@ -323,15 +323,13 @@ let
               HTTP username
             '';
           };
-          password = mkOption {
-            type = types.str;
-            description = ''
-              HTTP password
-            '';
-          };
+          password = mkOpt types.str "HTTP password";
+          password_file = mkOpt types.str "HTTP password file";
         };
       }) ''
-        Optional http login credentials for metrics scraping.
+        Sets the `Authorization` header on every scrape request with the
+        configured username and password.
+        password and password_file are mutually exclusive.
       '';
 
       bearer_token = mkOpt types.str ''
@@ -945,6 +943,7 @@ in {
         RuntimeDirectoryMode = "0700";
         WorkingDirectory = workingDir;
         StateDirectory = cfg.stateDir;
+        StateDirectoryMode = "0700";
       };
     };
   };

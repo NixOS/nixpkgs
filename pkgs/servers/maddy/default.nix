@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "maddy";
-  version = "0.4.4";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "foxcpp";
     repo = "maddy";
     rev = "v${version}";
-    sha256 = "sha256-IhVEb6tjfbWqhQdw1UYxy4I8my2L+eSOCd/BEz0qis0=";
+    sha256 = "sha256-SxJfuNZBtwaILF4zD4hrTANc/GlOG53XVwg3NvKYAkg=";
   };
 
-  vendorSha256 = "sha256-FrKWlZ3pQB+oo+rfHA8AgGRAr7YRUcb064bZGTDSKkk=";
+  vendorSha256 = "sha256-bxKEQaOubjRfLX+dMxVDzLOUInHykUdy9X8wvFE6Va4=";
 
   buildFlagsArray = [ "-ldflags=-s -w -X github.com/foxcpp/maddy.Version=${version}" ];
 

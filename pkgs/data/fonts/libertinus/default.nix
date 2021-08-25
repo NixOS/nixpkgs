@@ -1,29 +1,29 @@
-{ lib, fetchFromGitHub }:
+{ lib, fetchurl }:
 
 let
-  version = "6.9";
-in fetchFromGitHub rec {
+  version = "7.040";
+in fetchurl rec {
   name = "libertinus-${version}";
+  url = "https://github.com/alerque/libertinus/releases/download/v${version}/Libertinus-${version}.tar.xz";
+  sha256 = "0z658r88p52dyrcslv0wlccw0sw7m5jz8nbqizv95nf7bfw96iyk";
 
-  owner  = "alif-type";
-  repo   = "libertinus";
-  rev    = "v${version}";
+  downloadToTemp = true;
+  recursiveHash = true;
 
   postFetch = ''
     tar xf $downloadedFile --strip=1
-    install -m444 -Dt $out/share/fonts/opentype *.otf
-    install -m444 -Dt $out/share/doc/${name}    *.txt
+    install -m644 -Dt $out/share/fonts/opentype static/OTF/*.otf
   '';
-  sha256 = "0765a7w0askkhrjmjk638gcm9h6fcm1jpaza8iw9afr3sz1s0xlq";
 
   meta = with lib; {
-    description = "A fork of the Linux Libertine and Linux Biolinum fonts";
+    description = "The Libertinus font family";
     longDescription = ''
-      Libertinus fonts is a fork of the Linux Libertine and Linux Biolinum fonts
-      that started as an OpenType math companion of the Libertine font family,
-      but grown as a full fork to address some of the bugs in the fonts.
+      The Libertinus font project began as a fork of the Linux Libertine and
+      Linux Biolinum fonts. The original impetus was to add an OpenType math
+      companion to the Libertine font families. Over time it grew into to a
+      full-fledged fork addressing many of the bugs in the Libertine fonts.
     '';
-    homepage = "https://github.com/alif-type/libertinus";
+    homepage = "https://github.com/alerque/libertinus";
     license = licenses.ofl;
     maintainers = with maintainers; [ siddharthist ];
     platforms = platforms.all;

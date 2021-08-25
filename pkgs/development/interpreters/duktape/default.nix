@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, validatePkgConfig }:
 
 stdenv.mkDerivation rec {
   pname = "duktape";
@@ -7,6 +7,8 @@ stdenv.mkDerivation rec {
     url = "http://duktape.org/duktape-${version}.tar.xz";
     sha256 = "19szwxzvl2g65fw95ggvb8h0ma5bd9vvnnccn59hwnc4dida1x4n";
   };
+
+  nativeBuildInputs = [ validatePkgConfig ];
 
   postPatch = ''
     substituteInPlace Makefile.sharedlibrary \
@@ -23,9 +25,10 @@ stdenv.mkDerivation rec {
   installPhase = ''
     install -d $out/bin
     install -m755 duk $out/bin/
-    install -d $out/lib
+    install -d $out/lib/pkgconfig
     install -d $out/include
     make -f Makefile.sharedlibrary install INSTALL_PREFIX=$out
+    substituteAll ${./duktape.pc.in} $out/lib/pkgconfig/duktape.pc
   '';
   enableParallelBuilding = true;
 

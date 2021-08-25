@@ -95,7 +95,7 @@ rec {
      result with the specified separator interspersed between
      elements.
 
-     Type: concatMapStringsSep :: string -> (string -> string) -> [string] -> string
+     Type: concatMapStringsSep :: string -> (a -> string) -> [a] -> string
 
      Example:
         concatMapStringsSep "-" (x: toUpper x)  ["foo" "bar" "baz"]
@@ -112,7 +112,7 @@ rec {
   /* Same as `concatMapStringsSep`, but the mapping function
      additionally receives the position of its argument.
 
-     Type: concatIMapStringsSep :: string -> (int -> string -> string) -> [string] -> string
+     Type: concatIMapStringsSep :: string -> (int -> a -> string) -> [a] -> string
 
      Example:
        concatImapStringsSep "-" (pos: x: toString (x / pos)) [ 6 6 6 ]

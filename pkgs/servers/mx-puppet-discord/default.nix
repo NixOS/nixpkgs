@@ -16,7 +16,10 @@ let
   };
 
 in myNodePackages.package.override {
+  pname = "mx-puppet-discord";
+
   inherit src;
+
   nativeBuildInputs = [ nodePackages.node-pre-gyp pkg-config ];
   buildInputs = [ libjpeg pixman cairo pango ];
 

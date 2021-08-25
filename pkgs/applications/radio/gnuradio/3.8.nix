@@ -16,7 +16,7 @@
 , codec2
 , gsm
 , fftwFloat
-, alsaLib
+, alsa-lib
 , libjack2
 , CoreAudio
 , uhd
@@ -42,14 +42,14 @@
 , versionAttr ? {
   major = "3.8";
   minor = "3";
-  patch = "0";
+  patch = "1";
 }
 # We use our build of volk and not the one bundled with the release
 , fetchSubmodules ? false
 }:
 
 let
-  sourceSha256 = "0lwbj3slhc8bjjvfw7yz45if21hajydgy2vsjvj2barzmhfb37fd";
+  sourceSha256 = "0vd39azp8n576dbqsanax7bgsnxwc80riaxid2ihxs4xzyjmbw9r";
   featuresInfo = {
     # Needed always
     basic = {
@@ -149,7 +149,7 @@ let
     };
     gr-audio = {
       runtime = []
-        ++ lib.optionals stdenv.isLinux [ alsaLib libjack2 ]
+        ++ lib.optionals stdenv.isLinux [ alsa-lib libjack2 ]
         ++ lib.optionals stdenv.isDarwin [ CoreAudio ]
       ;
       cmakeEnableFlag = "GR_AUDIO";
@@ -242,6 +242,7 @@ stdenv.mkDerivation rec {
     # From some reason, if these are not set, libcodec2 and gsm are not
     # detected properly. The issue is reported upstream:
     # https://github.com/gnuradio/gnuradio/issues/4278
+    # The above issue was fixed for GR3.9 without a backporting patch.
     #
     # NOTE: qradiolink needs libcodec2 to be detected in
     # order to build, see https://github.com/qradiolink/qradiolink/issues/67

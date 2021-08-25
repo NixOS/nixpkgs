@@ -32,10 +32,9 @@ python3Packages.buildPythonApplication rec {
     gobject-introspection # Temporary fix, see https://github.com/NixOS/nixpkgs/issues/56943
   ] ++ optional spiceSupport spice-gtk;
 
-  propagatedBuildInputs = with python3Packages;
-    [
-      pygobject3 ipaddress libvirt libxml2 requests
-    ];
+  propagatedBuildInputs = with python3Packages; [
+    pygobject3 ipaddress libvirt libxml2 requests cdrtools
+  ];
 
   patchPhase = ''
     sed -i 's|/usr/share/libvirt/cpu_map.xml|${system-libvirt}/share/libvirt/cpu_map.xml|g' virtinst/capabilities.py

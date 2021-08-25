@@ -65,7 +65,21 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-EZP33U10fchyqy7Jr26vHgUUfWR6xtG3fcMWUII0m9w=";
   };
 
-  postPatch = "patchShebangs .";
+  postPatch = ''
+    patchShebangs --build \
+      build/make/*.sh \
+      build/make/*.pl \
+      build/make/*.pm \
+      test/*.sh \
+      configure
+
+    # When cross-compiling (for aarch64-multiplatform), the compiler errors out on these flags.
+    # Since they're 'just' warnings, it's fine to just remove them.
+    substituteInPlace configure \
+      --replace "check_add_cflags -Wparentheses-equality" "" \
+      --replace "check_add_cflags -Wunreachable-code-loop-increment" "" \
+      --replace "check_cflags -Wshorten-64-to-32 && add_cflags_only -Wshorten-64-to-32" ""
+  '';
 
   outputs = [ "bin" "dev" "out" ];
   setOutputFlags = false;
@@ -131,12 +145,6 @@ stdenv.mkDerivation rec {
                     experimentalFpMbStatsSupport ||
                     experimentalEmulateHardwareSupport) "experimental")
   ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-    #"--extra-cflags="
-    #"--extra-cxxflags="
-    #"--prefix="
-    #"--libc="
-    #"--libdir="
-    "--enable-external-build"
     # libvpx darwin targets include darwin version (ie. ARCH-darwinXX-gcc, XX being the darwin version)
     # See all_platforms: https://github.com/webmproject/libvpx/blob/master/configure
     # Darwin versions: 10.4=8, 10.5=9, 10.6=10, 10.7=11, 10.8=12, 10.9=13, 10.10=14

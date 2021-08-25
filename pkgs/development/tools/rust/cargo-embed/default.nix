@@ -1,22 +1,29 @@
 { lib
-, rustPlatform, fetchFromGitHub
-, libusb1, libftdi1, pkg-config, rustfmt }:
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, libusb1
+, libftdi1
+, pkg-config
+, rustfmt
+, AppKit
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-embed";
-  version = "0.10.1";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "probe-rs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1z8n883cb4jca3phi9x2kwl01xclyr00l8jxgiyd28l2jik78i5k";
+    sha256 = "151zdnv4i0dgkk4w3j2a1sdklcxw07bgqjs7sv6lvkylrx8dfrxa";
   };
 
-  cargoSha256 = "1ir9qngxmja6cm42m40jqbga9mlfjllm23ca26wyigjv3025pi6i";
+  cargoSha256 = "00p2rwqrax99kwadc8bfq8pbcijals2nzpx43wb03kwxl4955wn9";
 
   nativeBuildInputs = [ pkg-config rustfmt ];
-  buildInputs = [ libusb1 libftdi1 ];
+  buildInputs = [ libusb1 libftdi1 ] ++ lib.optionals stdenv.isDarwin [ AppKit ];
 
   cargoBuildFlags = [ "--features=ftdi" ];
 

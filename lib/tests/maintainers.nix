@@ -61,9 +61,9 @@ let
 
   missingGithubIds = lib.concatLists (lib.mapAttrsToList checkMaintainer lib.maintainers);
 
-  success = pkgs.runCommandNoCC "checked-maintainers-success" {} ">$out";
+  success = pkgs.runCommand "checked-maintainers-success" {} ">$out";
 
-  failure = pkgs.runCommandNoCC "checked-maintainers-failure" {
+  failure = pkgs.runCommand "checked-maintainers-failure" {
     nativeBuildInputs = [ pkgs.curl pkgs.jq ];
     outputHash = "sha256:${lib.fakeSha256}";
     outputHAlgo = "sha256";

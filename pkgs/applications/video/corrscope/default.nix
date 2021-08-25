@@ -1,6 +1,8 @@
 { lib
 , mkDerivationWith
 , python3Packages
+, fetchFromGitHub
+, fetchpatch
 , wrapQtAppsHook
 , ffmpeg
 , qtbase
@@ -8,35 +10,40 @@
 
 mkDerivationWith python3Packages.buildPythonApplication rec {
   pname = "corrscope";
-  version = "0.7.0";
+  version = "0.7.1";
 
-  src = python3Packages.fetchPypi {
-    inherit pname version;
-    sha256 = "0m62p3jlbx5dlp3j8wn1ka1sqpffsxbpsgv2h5cvj1n1lsgbss2s";
+  src = fetchFromGitHub {
+    owner = "corrscope";
+    repo = "corrscope";
+    rev = version;
+    sha256 = "0c9kmrw6pcda68li04b5j2kmsgdw1q463qlc32wn96zn9hl82v6m";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace 'attrs>=18.2.0,<19.0.0' 'attrs>=18.2.0' \
-      --replace 'numpy>=1.15,<2.0,!=1.19.4' 'numpy>=1.15,<2.0'
-  '';
+  format = "pyproject";
 
-  nativeBuildInputs = [ wrapQtAppsHook ];
+  patches = [
+    # Remove when bumping past 0.7.1
+    (fetchpatch {
+      name = "0001-Use-poetry-core.patch";
+      url = "https://github.com/corrscope/corrscope/commit/d40d1846dd54b8bccd7b8055d6aece48aacbb943.patch";
+      sha256 = "0xxsbmxdbh3agfm6ww3rpa7ab0ysppan490w0gaqwmwzrxmmdljv";
+    })
+  ];
+
+  nativeBuildInputs = [ wrapQtAppsHook ] ++ (with python3Packages; [ poetry-core ]);
 
   buildInputs = [ ffmpeg qtbase ];
 
-  propagatedBuildInputs = with python3Packages; [ appdirs attrs click matplotlib numpy pyqt5 ruamel_yaml ];
+  propagatedBuildInputs = with python3Packages; [ appdirs atomicwrites attrs click matplotlib numpy pyqt5 ruamel_yaml ];
 
   dontWrapQtApps = true;
 
   preFixup = ''
     makeWrapperArgs+=(
-      --prefix PATH : ${ffmpeg}/bin
+      --prefix PATH : ${lib.makeBinPath [ ffmpeg ]}
       "''${qtWrapperArgs[@]}"
     )
   '';
-
-  preCheck = "export HOME=$TEMP";
 
   meta = with lib; {
     description = "Render wave files into oscilloscope views, featuring advanced correlation-based triggering algorithm";

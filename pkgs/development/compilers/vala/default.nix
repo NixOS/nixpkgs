@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, fetchpatch, pkg-config, flex, bison, libxslt, autoconf, autoreconfHook
-, graphviz, glib, libiconv, libintl, libtool, expat, substituteAll
+, gnome, graphviz, glib, libiconv, libintl, libtool, expat, substituteAll
 }:
 
 let
@@ -69,7 +69,7 @@ let
     # so that it can be used to regenerate documentation.
     patches        = lib.optionals disableGraphviz [ graphvizPatch ./gvc-compat.patch ];
     configureFlags = lib.optional  disableGraphviz "--disable-graphviz";
-    preBuild       = lib.optional  disableGraphviz "buildFlagsArray+=(\"VALAC=$(pwd)/compiler/valac\")";
+    preBuild       = lib.optionalString disableGraphviz "buildFlagsArray+=(\"VALAC=$(pwd)/compiler/valac\")";
 
     outputs = [ "out" "devdoc" ];
 
@@ -88,37 +88,26 @@ let
 
     doCheck = false; # fails, requires dbus daemon
 
-    # Wait for PR #59372
-    # passthru = {
-    #  updateScript = gnome.updateScript {
-    #    attrPath = "${pname}_${lib.versions.major version}_${lib.versions.minor version}";
-    #    packageName = pname;
-    #  };
-    # };
+    passthru = {
+     updateScript = gnome.updateScript {
+       attrPath = "${pname}_${lib.versions.major version}_${lib.versions.minor version}";
+       packageName = pname;
+     };
+    };
 
     meta = with lib; {
       description = "Compiler for GObject type system";
       homepage = "https://wiki.gnome.org/Projects/Vala";
       license = licenses.lgpl21Plus;
       platforms = platforms.unix;
-      maintainers = with maintainers; [ antono jtojnar peterhoeg ];
+      maintainers = with maintainers; [ antono jtojnar peterhoeg maxeaubrey ] ++ teams.pantheon.members;
     };
   });
 
 in rec {
-  vala_0_36 = generic {
-    version = "0.36.20";
-    sha256 = "19v7zjhr9yxkh9lxg46n9gjr0lb7j6v0xqfhrdvgz18xhj3hm5my";
-  };
-
   vala_0_40 = generic {
     version = "0.40.25";
     sha256 = "1pxpack8rrmywlf47v440hc6rv3vi8q9c6niwqnwikxvb2pwf3w7";
-  };
-
-  vala_0_44 = generic {
-    version = "0.44.11";
-    sha256 = "06spdvm9q9k4riq1d2fxkyc8d88bcv460v360465iy1lnj3z9x2s";
   };
 
   vala_0_46 = generic {
@@ -127,18 +116,18 @@ in rec {
   };
 
   vala_0_48 = generic {
-    version = "0.48.17";
-    sha256 = "1wlb4vd7k6hg10s09npglbhfcgjzxkywd4v0l96qhn19m9b8cszj";
+    version = "0.48.18";
+    sha256 = "1pbz4nyrrf9wp8rp953sczx545s4g0h5mars9ynkn788dzs2h3wy";
   };
 
   vala_0_50 = generic {
-    version = "0.50.4";
-    sha256 = "1353j852h04d1x6b4n6lbg3ay40ph0adb9yi25dh74pligx33z2q";
+    version = "0.50.9";
+    sha256 = "0w5ngs90rq7vy21nqfq8drqyb33kxm17j161qvakwpsbjsidv1mn";
   };
 
   vala_0_52 = generic {
-    version = "0.52.2";
-    sha256 = "sha256-OjxGCAO6Zh5RO+PQmEtYPgVHP2AsdfqY6RdVUDcUqXs=";
+    version = "0.52.4";
+    sha256 = "0cfz3xshc9azxx4fn25x9gadnph6jvf1r2wzd7p5krk0a4755ppc";
   };
 
   vala = vala_0_52;

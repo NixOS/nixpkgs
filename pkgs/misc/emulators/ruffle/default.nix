@@ -1,4 +1,4 @@
-{ alsaLib
+{ alsa-lib
 , fetchFromGitHub
 , makeWrapper
 , openssl
@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   buildInputs = [
-    alsaLib
+    alsa-lib
     openssl
     wayland
     xorg.libX11

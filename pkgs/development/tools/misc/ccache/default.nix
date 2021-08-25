@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , substituteAll
 , binutils
-, asciidoc
+, asciidoctor
 , cmake
 , perl
 , zstd
@@ -14,13 +14,13 @@
 
 let ccache = stdenv.mkDerivation rec {
   pname = "ccache";
-  version = "4.3";
+  version = "4.4";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-ZBxDTMUZiZJLIYbvACTFwvlss+IZiMjiL0khfM5hFCM=";
+    hash = "sha256-ZewR1srksfKCxehhAg3i8m+0OvmOSF+24njbtcc1GQY=";
   };
 
   outputs = [ "out" "man" ];
@@ -36,8 +36,14 @@ let ccache = stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ asciidoc cmake perl ];
+  nativeBuildInputs = [ asciidoctor cmake perl ];
   buildInputs = [ zstd ];
+
+  cmakeFlags = [
+    # Build system does not autodetect redis library presence.
+    # Requires explicit flag.
+    "-DREDIS_STORAGE_BACKEND=OFF"
+  ];
 
   doCheck = true;
   checkInputs = [
@@ -50,7 +56,7 @@ let ccache = stdenv.mkDerivation rec {
     runHook preCheck
     export HOME=$(mktemp -d)
     ctest --output-on-failure ${lib.optionalString stdenv.isDarwin ''
-      -E '^(test.nocpp2|test.basedir|test.multi_arch)$'
+      -E '^(test.nocpp2|test.basedir|test.multi_arch|test.trim_dir)$'
     ''}
     runHook postCheck
   '';

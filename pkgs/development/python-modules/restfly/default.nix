@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "restfly";
-  version = "1.3.5";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "stevemcgrath";
     repo = pname;
     rev = version;
-    sha256 = "0cq07wj6g3kg7i4qyjp3n3pv13k9p4p43rd6kn139wsn1mh8fr56";
+    sha256 = "03k1843llpi4ycd450j5x8bd58vxsbfw43p81hsawidsx4c6bk85";
   };
 
   propagatedBuildInputs = [
@@ -30,6 +30,11 @@ buildPythonPackage rec {
     pytest-datafiles
     pytest-vcr
     pytestCheckHook
+  ];
+
+  disabledTests = [
+    # Test requires network access
+    "test_session_ssl_error"
   ];
 
   pythonImportsCheck = [ "restfly" ];

@@ -2,13 +2,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "mpv-playlistmanager";
-  version = "unstable-2021-03-09";
+  version = "unstable-2021-08-17";
 
   src = fetchFromGitHub {
     owner = "jonniek";
     repo = "mpv-playlistmanager";
-    rev = "c15a0334cf6d4581882fa31ddb1e6e7f2d937a3e";
-    sha256 = "uxcvgcSGS61UU8MmuD6qMRqpIa53iasH/vkg1xY7MVc=";
+    rev = "44d6911856a39e9a4057d19b70f21a9bc18bd6a9";
+    sha256 = "IwH6XngfrZlKGDab/ut43hzHeino8DmWzWRX8Av21Sk=";
   };
 
   postPatch = ''

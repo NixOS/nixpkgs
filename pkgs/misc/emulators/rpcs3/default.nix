@@ -4,7 +4,7 @@
 , sdl2Support ? true, SDL2
 , pulseaudioSupport ? true, libpulseaudio
 , waylandSupport ? true, wayland
-, alsaSupport ? true, alsaLib
+, alsaSupport ? true, alsa-lib
 }:
 
 let
@@ -50,7 +50,7 @@ mkDerivation {
     libevdev zlib libusb1 curl python3
   ] ++ lib.optional sdl2Support SDL2
     ++ lib.optional pulseaudioSupport libpulseaudio
-    ++ lib.optional alsaSupport alsaLib
+    ++ lib.optional alsaSupport alsa-lib
     ++ lib.optional waylandSupport wayland;
 
   meta = with lib; {

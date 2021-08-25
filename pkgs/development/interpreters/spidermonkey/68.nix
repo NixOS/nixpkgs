@@ -14,6 +14,15 @@ in stdenv.mkDerivation rec {
     sha256 = "0azdinwqjfv2q37gqpxmfvzsk86pvsi6cjaq1310zs26gric5j1f";
   };
 
+  patches = [
+    # Backport a change from Firefox 75 that fixes finding the
+    # location of clang and libclang.
+    (fetchpatch {
+      url = "https://hg.mozilla.org/mozilla-central/raw-rev/ccd1356fc8f1d0bfa9d896e88d3cc924425623da";
+      sha256 = "005g3mfmal9nw32khrgyiv3221z7pazfhhm2qvgc8d48i2yzj3j0";
+    })
+  ];
+
   outputs = [ "out" "dev" ];
   setOutputFlags = false; # Configure script only understands --includedir
 
@@ -55,9 +64,6 @@ in stdenv.mkDerivation rec {
     "--with-system-zlib"
     "--with-system-icu"
 
-    "--with-libclang-path=${llvmPackages.libclang.lib}/lib"
-    "--with-clang-path=${llvmPackages.clang}/bin/clang"
-
     "--enable-shared-js"
     "--enable-readline"
     # Fedora and Arch disable optimize, but it doesn't seme to be necessary
@@ -90,6 +96,7 @@ in stdenv.mkDerivation rec {
     homepage = "https://developer.mozilla.org/en/SpiderMonkey";
     license = licenses.gpl2; # TODO: MPL/GPL/LGPL tri-license.
     maintainers = [ maintainers.abbradar ];
+    badPlatforms = [ "riscv32-linux" "riscv64-linux" ];
     platforms = platforms.linux;
   };
 }

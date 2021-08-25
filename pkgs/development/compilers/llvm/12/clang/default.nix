@@ -1,4 +1,4 @@
-{ lib, stdenv, llvm_meta, fetch, cmake, libxml2, libllvm, version, clang-tools-extra_src, python3
+{ lib, stdenv, llvm_meta, fetch, substituteAll, cmake, libxml2, libllvm, version, clang-tools-extra_src, python3
 , buildLlvmTools
 , fixDarwinDylibNames
 , enableManpages ? false
@@ -9,7 +9,7 @@ let
     pname = "clang";
     inherit version;
 
-    src = fetch "clang" "1vd9rhhrd8ghdg111lac7w8by71y9l14yh5zxfijsm6lj4p4avp2";
+    src = fetch "clang" "0px4gl27az6cdz6adds89qzdwb1cqpjsfvrldbz9qvpmphrj34bf";
     inherit clang-tools-extra_src;
 
     unpackPhase = ''
@@ -17,6 +17,9 @@ let
       mv clang-* clang
       sourceRoot=$PWD/clang
       unpackFile ${clang-tools-extra_src}
+      mv clang-tools-extra-* $sourceRoot/tools/extra
+      substituteInPlace $sourceRoot/tools/extra/clangd/quality/CompletionModel.cmake \
+        --replace ' ''${CMAKE_SOURCE_DIR}/../clang-tools-extra' ' ''${CMAKE_SOURCE_DIR}/tools/extra'
     '';
 
     nativeBuildInputs = [ cmake python3 ]
@@ -44,6 +47,10 @@ let
       ./purity.patch
       # https://reviews.llvm.org/D51899
       ./gnu-install-dirs.patch
+      (substituteAll {
+        src = ../../clang-11-12-LLVMgold-path.patch;
+        libllvmLibdir = "${libllvm.lib}/lib";
+      })
     ];
 
     postPatch = ''
@@ -59,12 +66,7 @@ let
 
     outputs = [ "out" "lib" "dev" "python" ];
 
-    # Clang expects to find LLVMgold in its own prefix
     postInstall = ''
-      if [ -e ${libllvm.lib}/lib/LLVMgold.so ]; then
-        ln -sv ${libllvm.lib}/lib/LLVMgold.so $lib/lib
-      fi
-
       ln -sv $out/bin/clang $out/bin/cpp
 
       # Move libclang to 'lib' output

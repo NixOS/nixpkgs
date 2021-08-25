@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
   # --whole-archive linker flag is required to be sure that linker
   # correctly chooses strong version of symbol regardless of order of
   # object files at command line.
-  + lib.optionalString stdenv.targetPlatform.isStatic ''
+  + lib.optionalString stdenv.hostPlatform.isStatic ''
     export LDFLAGS=-Wl,--whole-archive
   '';
   meta = {

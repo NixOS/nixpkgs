@@ -10,6 +10,8 @@
 , dot-merlin-reader
 , jq
 , menhir
+, menhirLib
+, menhirSdk
 }:
 
 let
@@ -66,6 +68,8 @@ buildDunePackage {
   checkInputs = [
     jq
     menhir
+    menhirLib
+    menhirSdk
   ];
 
   meta = with lib; {

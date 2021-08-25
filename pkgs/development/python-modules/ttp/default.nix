@@ -19,14 +19,14 @@ let
 in
 buildPythonPackage rec {
   pname = "ttp";
-  version = "0.6.0";
+  version = "0.7.2";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "dmulyalin";
     repo = pname;
     rev = version;
-    sha256 = "08pglwmnhdrsj9rgys1zclhq1h597izb0jq7waahpdabfg25v2sw";
+    sha256 = "sha256-dYjE+EMfCVHLRAqT1KM7o8VEopJ/TwAEMphYXuj38Wk=";
   };
 
   propagatedBuildInputs = [
@@ -76,6 +76,9 @@ buildPythonPackage rec {
     "test_include_attribute_with_yaml_loader"
     # TypeError: string indices must be integers
     "test_lookup_include_yaml"
+    # Missing .xslx files *shrug*
+    "test_excel_formatter_update"
+    "test_excel_formatter_update_using_result_kwargs"
     # missing package n2g
     "test_n2g_formatter"
   ];

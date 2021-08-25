@@ -1,8 +1,7 @@
 { newScope, config, stdenv, fetchurl, makeWrapper
-, llvmPackages_11, llvmPackages_12, ed, gnugrep, coreutils, xdg-utils
+, llvmPackages_12, llvmPackages_13, ed, gnugrep, coreutils, xdg-utils
 , glib, gtk3, gnome, gsettings-desktop-schemas, gn, fetchgit
-, libva ? null
-, pipewire
+, libva, pipewire, wayland
 , gcc, nspr, nss, runCommand
 , lib
 
@@ -20,7 +19,7 @@
 }:
 
 let
-  llvmPackages = llvmPackages_11;
+  llvmPackages = llvmPackages_12;
   stdenv = llvmPackages.stdenv;
 
   callPackage = newScope chromium;
@@ -39,9 +38,9 @@ let
           inherit (upstream-info.deps.gn) url rev sha256;
         };
       });
-    } // lib.optionalAttrs (lib.versionAtLeast upstream-info.version "90") {
-      llvmPackages = llvmPackages_12;
-      stdenv = llvmPackages_12.stdenv;
+    } // lib.optionalAttrs (lib.versionAtLeast upstream-info.version "93") rec {
+      llvmPackages = llvmPackages_13;
+      stdenv = llvmPackages.stdenv;
     });
 
     browser = callPackage ./browser.nix { inherit channel enableWideVine ungoogled; };
@@ -76,8 +75,6 @@ let
     name = "chrome-widevine-cdm";
 
     src = chromeSrc;
-
-    phases = [ "unpackPhase" "patchPhase" "installPhase" "checkPhase" ];
 
     unpackCmd = let
       widevineCdmPath =
@@ -149,9 +146,11 @@ in stdenv.mkDerivation {
     + "chromium${suffix}-${version}";
   inherit version;
 
-  buildInputs = [
+  nativeBuildInputs = [
     makeWrapper ed
+  ];
 
+  buildInputs = [
     # needed for GSETTINGS_SCHEMAS_PATH
     gsettings-desktop-schemas glib gtk3
 
@@ -163,7 +162,7 @@ in stdenv.mkDerivation {
 
   buildCommand = let
     browserBinary = "${chromiumWV}/libexec/chromium/chromium";
-    libPath = lib.makeLibraryPath [ libva pipewire ];
+    libPath = lib.makeLibraryPath [ libva pipewire wayland gtk3 ];
 
   in with lib; ''
     mkdir -p "$out/bin"

@@ -5,13 +5,13 @@
 
 buildPythonPackage rec {
   pname = "playsound";
-  version = "1.2.2";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "TaylorSMarks";
     repo = "playsound";
-    rev = "907f1fe73375a2156f7e0900c4b42c0a60fa1d00";
-    sha256 = "1fh3m115h0c57lj2pfhhqhmsh5awzblb7csi1xc5a6f6slhl059k";
+    rev = "v${version}";
+    sha256 = "0jbq641lmb0apq4fy6r2zyag8rdqgrz8c4wvydzrzmxrp6yx6wyd";
   };
 
   doCheck = false;

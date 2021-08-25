@@ -1,7 +1,8 @@
 { fetchFromGitHub, lib, stdenv, autoreconfHook, intltool, pkg-config, libgnome, libgnomeui, GConf }:
 
 stdenv.mkDerivation {
-  name = "gtetrinet-0.7.11";
+  pname = "gtetrinet";
+  version = "0.7.11";
 
   src = fetchFromGitHub {
     owner = "GNOME";

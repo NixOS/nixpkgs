@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, makeWrapper, makeDesktopItem, wrapGAppsHook, gtk3, gsettings-desktop-schemas
-, zlib , libX11, libXext, libXi, libXrender, libXtst, libGL, alsaLib, cairo, freetype, pango, gdk-pixbuf, glib }:
+, zlib , libX11, libXext, libXi, libXrender, libXtst, libGL, alsa-lib, cairo, freetype, pango, gdk-pixbuf, glib }:
 
 stdenv.mkDerivation rec {
   version = "5.1";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper wrapGAppsHook ];
   buildInputs = [ gsettings-desktop-schemas ] ++ systemLibs;
 
-  systemLibs = [ gtk3 zlib libX11 libXext libXi libXrender libXtst libGL alsaLib cairo freetype pango gdk-pixbuf glib ];
+  systemLibs = [ gtk3 zlib libX11 libXext libXi libXrender libXtst libGL alsa-lib cairo freetype pango gdk-pixbuf glib ];
   systemLibPaths = lib.makeLibraryPath systemLibs;
 
   installPhase = ''

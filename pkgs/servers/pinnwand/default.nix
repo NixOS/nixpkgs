@@ -17,6 +17,14 @@ with python3.pkgs; buildPythonApplication rec {
     sha256 = "046xk2y59wa0pdp7s3hp1gh8sqdw0yl4xab22r2x44iwwcyb0gy5";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'click = "^7.0"' 'click = "*"' \
+      --replace 'docutils = "^0.16"' 'docutils = "*"' \
+      --replace 'sqlalchemy = "^1.3"' 'sqlalchemy = "*"' \
+      --replace 'token-bucket = "^0.2.0"' 'token-bucket = "*"'
+  '';
+
   nativeBuildInputs = [
     poetry-core
   ];
@@ -33,6 +41,11 @@ with python3.pkgs; buildPythonApplication rec {
   ];
 
   checkInputs = [ pytestCheckHook ];
+
+  disabledTests = [
+    # pygments renamed rst to restructuredText, hence a mismatch on this test
+    "test_guess_language"
+  ];
 
   __darwinAllowLocalNetworking = true;
 

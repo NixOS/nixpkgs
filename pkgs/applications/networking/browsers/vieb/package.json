@@ -1,19 +1,20 @@
 {
   "name": "vieb",
   "productName": "Vieb",
-  "version": "4.5.1",
+  "version": "5.3.0",
   "description": "Vim Inspired Electron Browser",
-  "bin": "app.js",
   "main": "app/index.js",
   "scripts": {
-    "test": "jest --coverage --collectCoverageFrom 'app/**/*.js' -u && eslint app && echo 'All good :)'",
-    "dev": "electron app --datafolder ./ViebData/",
-    "start": "electron app",
     "build": "node build.js",
     "buildall": "node build.js --linux --win --mac",
     "buildlinux": "node build.js --linux",
+    "buildmac": "node build.js --mac",
     "buildwin": "node build.js --win",
-    "buildmac": "node build.js --mac"
+    "dev": "electron app --datafolder=./ViebData/",
+    "fix": "eslint --fix app .eslintrc.js build.js",
+    "lint": "eslint app .eslintrc.js build.js",
+    "start": "electron app",
+    "test": "jest --testEnvironment jsdom --coverage --collectCoverageFrom 'app/**/*.js' -u && npm run lint && echo 'All good :)'"
   },
   "repository": "https://github.com/Jelmerro/Vieb",
   "homepage": "https://vieb.dev",
@@ -28,15 +29,18 @@
   "license": "GPL-3.0-or-later",
   "devDependencies": {
     "archiver": "5.3.0",
-    "electron": "12.0.5",
-    "electron-builder": "22.10.5",
-    "eslint": "7.25.0",
-    "eslint-plugin-compat": "^3.9.0",
-    "jest": "26.6.3"
+    "electron": "13.1.4",
+    "electron-builder": "22.11.7",
+    "eslint": "7.29.0",
+    "eslint-plugin-compat": "3.9.0",
+    "eslint-plugin-sort-keys-fix": "1.1.1",
+    "jest": "27.0.6",
+    "jest-environment-jsdom": "27.0.6"
   },
   "dependencies": {
     "7zip-bin": "5.1.1",
-    "@cliqz/adblocker-electron": "1.20.4",
+    "@cliqz/adblocker-electron": "1.22.2",
+    "@cliqz/adblocker-electron-preload": "1.22.2",
     "is-svg": "4.3.1",
     "rimraf": "3.0.2"
   },

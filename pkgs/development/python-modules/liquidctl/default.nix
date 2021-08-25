@@ -9,18 +9,19 @@
 , smbus-cffi
 , i2c-tools
 , pytestCheckHook
+, colorlog
 }:
 
 buildPythonPackage rec {
   pname = "liquidctl";
-  version = "1.6.1";
+  version = "1.7.1";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner  = pname;
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "sha256-FYpr1mYzPc0rOE75fUNjxe/57EWl+zcbIbkqFseDhzI=";
+    sha256 = "sha256-TNDQV1BOVVdvr0XAyWGcwgMbe4mV7J05hQeKVUqVT9s=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -31,6 +32,7 @@ buildPythonPackage rec {
     pyusb
     smbus-cffi
     i2c-tools
+    colorlog
   ];
 
   outputs = [ "out" "man" ];

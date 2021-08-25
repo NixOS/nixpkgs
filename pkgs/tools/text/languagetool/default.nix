@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "LanguageTool";
-  version = "5.3";
+  version = "5.4";
 
   src = fetchzip {
     url = "https://www.languagetool.org/download/${pname}-${version}.zip";
-    sha256 = "1km20ajqb65vkhkrf94zy5srcss66ix8padp7ng59pa8pj11wmi2";
+    sha256 = "sha256-2khadADfzwkW+J0uafPWJ6xUQRSQDm8seiBHueQGmKI=";
   };
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ jre ];

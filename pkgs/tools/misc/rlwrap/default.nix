@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rlwrap";
-  version = "0.45";
+  version = "0.45.2";
 
   src = fetchFromGitHub {
     owner = "hanslub42";
     repo = "rlwrap";
     rev = "v${version}";
-    sha256 = "1ppkjdnxrxh99g4xaiaglm5bmp24006rfahci0cn1g7zwilkjy8s";
+    sha256 = "sha256-ubhAOyswdDG0mFKpnSDDq5f7umyCHsW/m721IHdjNMc=";
   };
 
   postPatch = ''

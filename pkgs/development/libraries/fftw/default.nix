@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, lib, llvmPackages ? null, precision ? "double", perl }:
+{ fetchurl, stdenv, lib, gfortran, llvmPackages ? null, precision ? "double", perl }:
 
 with lib;
 
@@ -24,6 +24,8 @@ stdenv.mkDerivation {
   outputs = [ "out" "dev" "man" ]
     ++ optional withDoc "info"; # it's dev-doc only
   outputBin = "dev"; # fftw-wisdom
+
+  nativeBuildInputs = [ gfortran ];
 
   buildInputs = lib.optionals stdenv.cc.isClang [
     # TODO: This may mismatch the LLVM version sin the stdenv, see #79818.

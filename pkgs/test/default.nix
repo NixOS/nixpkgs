@@ -39,6 +39,7 @@ with pkgs;
 
   rustCustomSysroot = callPackage ./rust-sysroot {};
   buildRustCrate = callPackage ../build-support/rust/build-rust-crate/test { };
+  importCargoLock = callPackage ../build-support/rust/test/import-cargo-lock { };
 
   vim = callPackage ./vim {};
 
@@ -51,6 +52,7 @@ with pkgs;
   cuda = callPackage ./cuda { };
 
   trivial = callPackage ../build-support/trivial-builders/test.nix {};
+  trivial-overriding = callPackage ../build-support/trivial-builders/test-overriding.nix {};
 
   writers = callPackage ../build-support/writers/test.nix {};
 }

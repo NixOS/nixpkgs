@@ -16,8 +16,8 @@
 , substituteAll
 }:
 let
+  name = "zod-engine";
   version = "2011-09-06";
-  name = "zod-engine-${version}";
   src = fetchzip {
     url = "mirror://sourceforge/zod/linux_releases/zod_linux-${version}.tar.gz";
     sha256 = "017v96aflrv07g8j8zk9mq8f8rqxl5228rjff5blq8dxpsv1sx7h";
@@ -37,7 +37,7 @@ let
   hardeningDisable = [ "format" ];
   NIX_LDFLAGS = "-L${libmysqlclient}/lib/mysql";
   zod_engine = stdenv.mkDerivation {
-    inherit name version src nativeBuildInputs buildInputs hardeningDisable NIX_LDFLAGS;
+    inherit version src nativeBuildInputs buildInputs hardeningDisable NIX_LDFLAGS;
     pname = "${name}-engine";
     enableParallelBuilding = true;
     preBuild = "cd zod_src";
@@ -48,7 +48,7 @@ let
     '';
   };
   zod_map_editor = stdenv.mkDerivation {
-    inherit name version src nativeBuildInputs buildInputs hardeningDisable NIX_LDFLAGS;
+    inherit version src nativeBuildInputs buildInputs hardeningDisable NIX_LDFLAGS;
     pname = "${name}-map_editor";
     enableParallelBuilding = true;
     preBuild = "cd zod_src";
@@ -60,7 +60,7 @@ let
     '';
   };
   zod_launcher = stdenv.mkDerivation {
-      inherit name version src nativeBuildInputs buildInputs zod_engine zod_map_editor;
+      inherit version src nativeBuildInputs buildInputs zod_engine zod_map_editor;
       pname = "${name}-launcher";
       # This is necessary because the zod_launcher has terrible fixed-width window
       # the Idea is to apply the scalingFactor to all positions and sizes and I tested 1,2,3 and 4

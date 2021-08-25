@@ -1,7 +1,7 @@
 { lib, buildPythonPackage, fetchPypi, isPy27
 , Babel
 , cssselect
-, dateutil
+, python-dateutil
 , feedparser
 , futures ? null
 , gdata
@@ -52,7 +52,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     Babel
     cssselect
-    dateutil
+    python-dateutil
     feedparser
     gdata
     gnupg

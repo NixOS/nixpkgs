@@ -48,7 +48,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   propagatedBuildInputs = with python3Packages; [
-    setuptools_scm
+    setuptools-scm
     setuptools
     requests
     chardet

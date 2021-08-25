@@ -1,6 +1,6 @@
 # Builder for Agda packages.
 
-{ stdenv, lib, self, Agda, runCommandNoCC, makeWrapper, writeText, ghcWithPackages, nixosTests }:
+{ stdenv, lib, self, Agda, runCommand, makeWrapper, writeText, ghcWithPackages, nixosTests }:
 
 with lib.strings;
 
@@ -15,7 +15,7 @@ let
     '';
     pname = "agdaWithPackages";
     version = Agda.version;
-  in runCommandNoCC "${pname}-${version}" {
+  in runCommand "${pname}-${version}" {
     inherit pname version;
     nativeBuildInputs = [ makeWrapper ];
     passthru = {
@@ -46,6 +46,7 @@ let
 
   defaults =
     { pname
+    , meta
     , buildInputs ? []
     , everythingFile ? "./Everything.agda"
     , libraryName ? pname
@@ -76,6 +77,7 @@ let
           find -not \( -path ${everythingFile} -or -path ${lib.interfaceFile everythingFile} \) -and \( ${concatMapStringsSep " -or " (p: "-name '*.${p}'") (extensions ++ extraExtensions)} \) -exec cp -p --parents -t "$out" {} +
           runHook postInstall
         '';
+        meta = if meta.broken or false then meta // { hydraPlatforms = lib.platforms.none; } else meta;
       };
 in
 {

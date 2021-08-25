@@ -1,7 +1,7 @@
 { lib, buildPythonPackage, fetchFromGitHub, isPy27
 , glibcLocales, git
 , mock, nose, markdown, lxml, typogrify
-, jinja2, pygments, docutils, pytz, unidecode, six, dateutil, feedgenerator
+, jinja2, pygments, docutils, pytz, unidecode, six, python-dateutil, feedgenerator
 , blinker, pillow, beautifulsoup4, markupsafe, pandoc }:
 
 buildPythonPackage rec {
@@ -44,7 +44,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    jinja2 pygments docutils pytz unidecode six dateutil feedgenerator
+    jinja2 pygments docutils pytz unidecode six python-dateutil feedgenerator
     blinker pillow beautifulsoup4 markupsafe lxml
   ];
 

@@ -1,18 +1,18 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder, setuptools_scm }:
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, setuptools-scm }:
 
 buildPythonPackage rec {
   pname = "ufonormalizer";
-  version = "0.5.4";
+  version = "0.6.0";
 
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "11l8475p3nq7azim35l5lck8vrgjgd01plnji6gg1hf9ckswr2pb";
+    sha256 = "0w44qlvg4xks7jb0lf3lhsbylagq956x0wkcal9ix34bz3p7vdxd";
     extension = "zip";
   };
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   meta = with lib; {
     description = "Script to normalize the XML and other data inside of a UFO";

@@ -14,7 +14,7 @@
 
  buildPythonPackage rec {
   pname = "solo-python";
-  version = "0.0.27";
+  version = "0.0.30";
   format = "flit";
   disabled = pythonOlder "3.6"; # only python>=3.6 is supported
 
@@ -22,7 +22,7 @@
     owner = "solokeys";
     repo = pname;
     rev = version;
-    sha256 = "sha256-OCiKa6mnqJGoNCC4KqI+hMw22tzhdN63x9/KujNJqcE=";
+    sha256 = "1i9kybp08qfcdx6m4wl7ij40y1v17mvvhcdg7zglwfakblf69w41";
   };
 
   # replaced pinned fido, with unrestricted fido version
@@ -60,8 +60,5 @@
     homepage = "https://github.com/solokeys/solo-python";
     maintainers = with maintainers; [ wucke13 ];
     license = with licenses; [ asl20 mit ];
-    # solo-python v0.0.27 does not support fido2 >= v0.9
-    # https://github.com/solokeys/solo-python/issues/110
-    broken = true;
   };
 }

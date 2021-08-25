@@ -1,6 +1,5 @@
 { lib, stdenv
 , fetchFromGitHub
-, fetchpatch
 , nix-update-script
 , pantheon
 , meson
@@ -12,6 +11,7 @@
 , libaccounts-glib
 , libexif
 , libgee
+, libhandy
 , geocode-glib
 , gexiv2
 , libgphoto2
@@ -35,7 +35,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-photos";
-  version = "2.7.0";
+  version = "2.7.1";
 
   repoName = "photos";
 
@@ -43,16 +43,8 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "sha256-bTk4shryAWWMrKX3mza6xQ05qpBPf80Ey7fmYgKLUiY=";
+    sha256 = "1dql14k43rv3in451amiwv4z71hz3ailx67hd8gw1ka3yw12128p";
   };
-
-  patches = [
-    # Fix build with latest Vala.
-    (fetchpatch {
-      url = "https://github.com/elementary/photos/commit/27e529fc96da828982563e2e19a6f0cef883a29e.patch";
-      sha256 = "w39wh45VHggCs62TN6wpUEyz/hJ1y7qL1Ox+sp0Pt2s=";
-    })
-  ];
 
   passthru = {
     updateScript = nix-update-script {
@@ -88,6 +80,7 @@ stdenv.mkDerivation rec {
     libgee
     libgphoto2
     libgudev
+    libhandy
     libraw
     librest
     libsoup

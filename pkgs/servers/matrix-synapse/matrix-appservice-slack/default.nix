@@ -13,6 +13,8 @@ let
   };
 in
 nodePackages.package.override {
+  pname = "matrix-appservice-slack";
+
   inherit src;
 
   nativeBuildInputs = [ pkgs.makeWrapper ];

@@ -39,6 +39,22 @@ let newPython = python3.override {
         "test_ec_verify_should_return_false_if_signature_invalid"
       ];
     });
+    # conan needs jinja2<3
+    jinja2 = super.jinja2.overridePythonAttrs (oldAttrs: rec {
+      version = "2.11.3";
+      src = oldAttrs.src.override {
+        inherit version;
+        sha256 = "a6d58433de0ae800347cab1fa3043cebbabe8baa9d29e668f1c768cb87a333c6";
+      };
+    });
+    # old jinja2 needs old markupsafe
+    markupsafe = super.markupsafe.overridePythonAttrs (oldAttrs: rec {
+      version = "1.1.1";
+      src = oldAttrs.src.override {
+        inherit version;
+        sha256 = "29872e92839765e546828bb7754a68c418d927cd064fd4708fab9fe9c8bb116b";
+      };
+    });
   };
 };
 
@@ -56,7 +72,7 @@ in newPython.pkgs.buildPythonApplication rec {
   propagatedBuildInputs = with newPython.pkgs; [
     bottle
     colorama
-    dateutil
+    python-dateutil
     deprecation
     distro
     fasteners
@@ -92,7 +108,8 @@ in newPython.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace conans/requirements.txt \
-      --replace "deprecation>=2.0, <2.1" "deprecation"
+      --replace "deprecation>=2.0, <2.1" "deprecation" \
+      --replace "six>=1.10.0,<=1.15.0" "six>=1.10.0,<=1.16.0"
   '';
 
   meta = with lib; {

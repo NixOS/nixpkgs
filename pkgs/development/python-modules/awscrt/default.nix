@@ -2,7 +2,7 @@
 
 buildPythonPackage rec {
   pname = "awscrt";
-  version = "0.11.13";
+  version = "0.11.24";
 
   buildInputs = lib.optionals stdenv.isDarwin
     (with darwin.apple_sdk.frameworks; [ CoreFoundation Security ]);
@@ -11,7 +11,9 @@ buildPythonPackage rec {
   # https://github.com/NixOS/nixpkgs/issues/39687
   hardeningDisable = lib.optional stdenv.cc.isClang "strictoverflow";
 
-  nativeBuildInputs = [ cmake ] ++ lib.optionals stdenv.isAarch64 ([ gcc10 perl ]);
+  nativeBuildInputs = [ cmake ] ++
+    # gcc <10 is not supported, LLVM on darwin is just fine
+    lib.optionals (!stdenv.isDarwin && stdenv.isAarch64) [ gcc10 perl ];
 
   dontUseCmakeConfigure = true;
 
@@ -21,7 +23,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-G/bf2AzWp8AHL4of0zfX3jIYyTtmTLBIC2ZKiMi19c0=";
+    sha256 = "b8aa68bca404bf0085be0570eff5b542d01f7e8e3c0f9b0859abfe5e070162ff";
   };
 
   meta = with lib; {

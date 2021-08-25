@@ -24,15 +24,15 @@
 
 mkDerivation rec {
   pname = "tellico";
-  version = "3.4";
+  version = "3.4.1";
 
   src = fetchurl {
-    # version 3.3.0 just uses 3.3 in its name
+    # version 3.3.0 just uses 3.3 in its file name
     urls = [
       "https://tellico-project.org/files/tellico-${version}.tar.xz"
       "https://tellico-project.org/files/tellico-${lib.versions.majorMinor version}.tar.xz"
     ];
-    sha256 = "sha256-YXMJrAkfehe3ox4WZ19igyFbXwtjO5wxN3bmgP01jPs=";
+    sha256 = "sha256-+FFN6sO0mvlage8JazyrqNZk4onejz1XJPiOK3gnhWE=";
   };
 
   nativeBuildInputs = [
@@ -63,7 +63,7 @@ mkDerivation rec {
   meta = with lib; {
     description = "Collection management software, free and simple";
     homepage = "https://tellico-project.org/";
-    license = with licenses; [ gpl2 gpl3 ];
+    license = with licenses; [ gpl2Only gpl3Only lgpl2Only ];
     maintainers = with maintainers; [ numkem ];
     platforms = platforms.linux;
   };

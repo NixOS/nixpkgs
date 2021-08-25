@@ -6,22 +6,22 @@
 
 buildGoModule rec {
   pname = "grype";
-  version = "0.12.1";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "anchore";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-NcLXpxPtTwc/ThI/A9wQ9XI2Msxviy1Ipz8TSfcrHbI=";
+    sha256 = "sha256-Xk+AyCcPQDDKKLT/tkZ2znXbBSBEgmqVqmgGBP/3Oos=";
   };
 
-  vendorSha256 = "sha256-9uKtrKcF950ZEvpxJzmIQMwc/f1IlgHF8du+RIxhtKI=";
+  vendorSha256 = "sha256-OAzuL1pHLLKgkKjPjupPg7LEz8sY7ehq2PONnjhvzHE=";
 
   propagatedBuildInputs = [ docker ];
 
-  preBuild = ''
-    buildFlagsArray+=("-ldflags" "-s -w -X github.com/anchore/grype/internal/version.version=${version}")
-  '';
+  ldflags = [
+    "-s" "-w" "-X github.com/anchore/grype/internal/version.version=${version}"
+  ];
 
   # Tests require a running Docker instance
   doCheck = false;

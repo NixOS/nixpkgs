@@ -2,6 +2,8 @@
 , astropy
 , buildPythonPackage
 , fetchPypi
+, importlib-resources
+, jmespath
 , jsonschema
 , numpy
 , packaging
@@ -15,23 +17,26 @@
 
 buildPythonPackage rec {
   pname = "asdf";
-  version = "2.7.3";
+  version = "2.8.1";
   disabled = pythonOlder "3.6";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "11dyr295wn5m2pcynlwj7kgw9xr66msfvwn1m6a5vv13vzj19spp";
+    sha256 = "sha256-bp3fME3FTa5vcj7qUoUEGqvuI2uwSpI13zDcFgWvbJw=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
+    jmespath
     jsonschema
     numpy
     packaging
     pyyaml
     semantic-version
+  ] ++ lib.optionals (pythonOlder "3.9") [
+    importlib-resources
   ];
 
   checkInputs = [
@@ -50,6 +55,6 @@ buildPythonPackage rec {
     description = "Python tools to handle ASDF files";
     homepage = "https://github.com/spacetelescope/asdf";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc ];
   };
 }

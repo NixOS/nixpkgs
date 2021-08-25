@@ -1,7 +1,7 @@
 { mkDerivation, lib, fetchFromGitHub, callPackage
 , pkg-config, cmake, ninja, python3, wrapGAppsHook, wrapQtAppsHook
 , qtbase, qtimageformats, gtk3, libsForQt5, lz4, xxHash
-, ffmpeg, openalSoft, minizip, libopus, alsaLib, libpulseaudio, range-v3
+, ffmpeg, openalSoft, minizip, libopus, alsa-lib, libpulseaudio, range-v3
 , tl-expected, hunspell, glibmm, webkitgtk
 # Transitive dependencies:
 , pcre, xorg, util-linux, libselinux, libsepol, epoxy
@@ -11,7 +11,7 @@
 with lib;
 
 let
-  tg_owt = callPackage ../tdesktop/tg_owt.nix {};
+  tg_owt = callPackage ./tg_owt.nix {};
 in mkDerivation rec {
   pname = "kotatogram-desktop";
   version = "1.4.1";
@@ -37,7 +37,7 @@ in mkDerivation rec {
 
   buildInputs = [
     qtbase qtimageformats gtk3 libsForQt5.kwayland libsForQt5.libdbusmenu lz4 xxHash
-    ffmpeg openalSoft minizip libopus alsaLib libpulseaudio range-v3
+    ffmpeg openalSoft minizip libopus alsa-lib libpulseaudio range-v3
     tl-expected hunspell glibmm webkitgtk
     tg_owt
     # Transitive dependencies:

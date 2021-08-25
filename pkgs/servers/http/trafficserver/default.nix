@@ -49,11 +49,11 @@
 
 stdenv.mkDerivation rec {
   pname = "trafficserver";
-  version = "9.0.1";
+  version = "9.0.2";
 
   src = fetchurl {
     url = "mirror://apache/trafficserver/trafficserver-${version}.tar.bz2";
-    sha256 = "1q164pvfmbqh3gzy3bqy96lwd0fdbhz78r06pd92p7rmkqwx005z";
+    sha256 = "0r05iqmnnjq259nsibncgfrfsr0l4h3hsafizvgfl9zgmrkm6izz";
   };
 
   patches = [
@@ -62,13 +62,6 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       url = "https://github.com/apache/trafficserver/commit/19d3af481cf74c91fbf713fc9d2f8b138ed5fbaf.diff";
       sha256 = "0z1ikgpp00rzrrcqh97931586yn9wbksgai9xlkcjd5cg8gq0150";
-    })
-
-    # Fixes a bug in tspush which pushes incorrect contents to cache
-    # https://github.com/apache/trafficserver/pull/7696
-    (fetchpatch {
-      url = "https://github.com/apache/trafficserver/commit/b08215272872f452787915cd3a8e0b0ea0b88385.diff";
-      sha256 = "0axk8x1xvd8wvpgcxgyqqg7kgxyxwfgwmisq3xnk1da0cqv9cx9f";
     })
   ];
 

@@ -32,7 +32,6 @@ in stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    inherit version;
     description = "The LLVM-based D Compiler";
     homepage = "https://github.com/ldc-developers/ldc";
     # from https://github.com/ldc-developers/ldc/blob/master/LICENSE

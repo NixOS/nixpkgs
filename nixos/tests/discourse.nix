@@ -4,7 +4,7 @@
 #  3. replying to that message via email.
 
 import ./make-test-python.nix (
-  { pkgs, lib, ... }:
+  { pkgs, lib, package ? pkgs.discourse, ... }:
   let
     certs = import ./common/acme/server/snakeoil-certs.nix;
     clientDomain = "client.fake.domain";
@@ -51,9 +51,11 @@ import ./make-test-python.nix (
 
         environment.systemPackages = [ pkgs.jq ];
 
+        services.postgresql.package = pkgs.postgresql_13;
+
         services.discourse = {
           enable = true;
-          inherit admin;
+          inherit admin package;
           hostname = discourseDomain;
           sslCertificate = "${certs.${discourseDomain}.cert}";
           sslCertificateKey = "${certs.${discourseDomain}.key}";

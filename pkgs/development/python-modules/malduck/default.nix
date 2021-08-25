@@ -35,8 +35,14 @@ buildPythonPackage rec {
     yara-python
   ];
 
+  postPatch = ''
+    substituteInPlace requirements.txt \
+      --replace "pefile==2019.4.18" "pefile"
+  '';
+
   # Project has no tests. They will come with the next release
   doCheck = false;
+
   pythonImportsCheck = [ "malduck" ];
 
   meta = with lib; {

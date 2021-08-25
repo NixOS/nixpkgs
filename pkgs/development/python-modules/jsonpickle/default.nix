@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , pytest
-, setuptools_scm
+, setuptools-scm
 , toml
 , importlib-metadata
 }:
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   checkInputs = [ pytest ];
 
   nativeBuildInputs = [
-    setuptools_scm
+    setuptools-scm
     toml
   ];
 

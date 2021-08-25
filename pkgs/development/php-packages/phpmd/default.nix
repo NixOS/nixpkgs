@@ -2,8 +2,6 @@
 let
   pname = "phpmd";
   version = "2.8.2";
-
-  isPhp74 = lib.versionAtLeast php.version "7.4";
 in
 mkDerivation {
   inherit pname version;
@@ -13,7 +11,8 @@ mkDerivation {
     sha256 = "1i8qgzxniw5d8zjpypalm384y7qfczapfq70xmg129laq6xiqlqb";
   };
 
-  phases = [ "installPhase" ];
+  dontUnpack = true;
+
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
@@ -28,6 +27,6 @@ mkDerivation {
     license = licenses.bsd3;
     homepage = "https://phpmd.org/";
     maintainers = teams.php.members;
-    broken = !isPhp74;
+    broken = versionAtLeast php.version "7.4";
   };
 }

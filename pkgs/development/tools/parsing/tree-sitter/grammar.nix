@@ -1,5 +1,7 @@
 { stdenv
 , tree-sitter
+, libcxx
+, lib
 }:
 
 # Build a parser grammar and put the resulting shared object in `$out/parser`
@@ -27,10 +29,12 @@ stdenv.mkDerivation {
       "${source}/${location}"
   ;
 
+  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-I${lib.getDev libcxx}/include/c++/v1";
   buildInputs = [ tree-sitter ];
 
   dontUnpack = true;
-  configurePhase = ":";
+  dontConfigure = true;
+
   buildPhase = ''
     runHook preBuild
     scanner_cc="$src/src/scanner.cc"

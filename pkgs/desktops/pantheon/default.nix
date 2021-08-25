@@ -23,7 +23,7 @@ lib.makeScope pkgs.newScope (self: with self; {
     wingpanel-indicator-session wingpanel-indicator-sound
   ];
 
-  maintainers = with pkgs.lib.maintainers; [ ];
+  maintainers = lib.teams.pantheon.members;
 
   mutter = pkgs.gnome.mutter334;
 
@@ -48,6 +48,8 @@ lib.makeScope pkgs.newScope (self: with self; {
   elementary-files = callPackage ./apps/elementary-files { };
 
   elementary-feedback = callPackage ./apps/elementary-feedback { };
+
+  elementary-mail = callPackage ./apps/elementary-mail { };
 
   elementary-music = callPackage ./apps/elementary-music { };
 

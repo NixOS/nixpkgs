@@ -1,25 +1,52 @@
-{ lib, stdenv, pkg-config, fetchFromGitHub, python3, bash, vala_0_48
-, dockbarx, gtk2, xfce, pythonPackages, wafHook }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, bash
+, dockbarx
+, gobject-introspection
+, keybinder3
+, pkg-config
+, python3Packages
+, vala_0_48
+, wafHook
+, wrapGAppsHook
+, xfce
+}:
 
 stdenv.mkDerivation rec {
   pname = "xfce4-dockbarx-plugin";
   version = "${ver}-${rev}";
   ver = "0.6";
-  rev = "5213876";
+  rev = "5213876151f1836f044e9902a22d1e682144c1e0";
 
   src = fetchFromGitHub {
     owner = "xuzhen";
     repo = "xfce4-dockbarx-plugin";
     rev = rev;
-    sha256 = "0s8bljn4ga2hj480j0jwkc0npp8szbmirmcsys791gk32iq4dasn";
+    sha256 = "sha256-VqtGcBRjvpCO9prVHOv6Gt1rAZtcAgkQkVCoR6ykC2k=";
   };
 
-  pythonPath = [ dockbarx ];
+  pythonPath = [
+    dockbarx
+    python3Packages.pygobject3
+  ];
 
-  nativeBuildInputs = [ pkg-config wafHook ];
-  buildInputs = [ python3 vala_0_48 gtk2 pythonPackages.wrapPython ]
-    ++ (with xfce; [ libxfce4util xfce4-panel xfconf xfce4-dev-tools ])
-    ++ pythonPath;
+  nativeBuildInputs = [
+    gobject-introspection
+    pkg-config
+    python3Packages.wrapPython
+    vala_0_48
+    wafHook
+    wrapGAppsHook
+  ];
+
+  buildInputs = [
+    keybinder3
+    python3Packages.python
+    xfce.xfce4-panel
+    xfce.xfconf
+  ]
+  ++ pythonPath;
 
   postPatch = ''
     substituteInPlace wscript           --replace /usr/share/            "\''${PREFIX}/share/"
@@ -28,14 +55,15 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
     wrapPythonProgramsIn "$out/share/xfce4/panel/plugins" "$out $pythonPath"
   '';
 
   meta = with lib; {
     homepage = "https://github.com/xuzhen/xfce4-dockbarx-plugin";
-    description = "A plugins to embed DockbarX into xfce4-panel";
+    description = "Plugins to embed DockbarX into xfce4-panel";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = [ maintainers.volth ];
+    maintainers = [ maintainers.romildo ];
   };
 }

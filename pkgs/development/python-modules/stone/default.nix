@@ -2,7 +2,7 @@
 , coverage
 , mock
 , ply
-, pytestrunner
+, pytest-runner
 , pytestCheckHook
 , six
 }:
@@ -24,7 +24,7 @@ buildPythonPackage rec {
       --replace "coverage==5.3" "coverage"
   '';
 
-  nativeBuildInputs = [ pytestrunner ];
+  nativeBuildInputs = [ pytest-runner ];
 
   propagatedBuildInputs = [ ply six ];
 

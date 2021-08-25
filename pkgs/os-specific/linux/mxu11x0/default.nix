@@ -32,5 +32,6 @@ stdenv.mkDerivation {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ uralbash ];
     platforms = platforms.linux;
+    broken = kernel.kernelAtLeast "5.4";
   };
 }

@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchPypi, requests, beautifulsoup4, pytest, requests-mock,
-  pytestrunner }:
+  pytest-runner }:
 
 buildPythonPackage rec {
   pname = "favicon";
@@ -10,7 +10,7 @@ buildPythonPackage rec {
     sha256 = "6d6b5a78de2a0d0084589f687f384b2ecd6a6527093fec564403b1a30605d7a8";
   };
 
-  buildInputs = [ pytestrunner ];
+  buildInputs = [ pytest-runner ];
   checkInputs = [ pytest requests-mock ];
   propagatedBuildInputs = [ requests beautifulsoup4 ];
 

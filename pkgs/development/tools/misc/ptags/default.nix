@@ -1,8 +1,9 @@
 { fetchFromGitHub
 , cargo
+, ctags
 , lib
+, makeWrapper
 , rustPlatform
-
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -17,6 +18,14 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "1pz5hvn1iq26i8c2cmqavhnri8h0sn40khrxvcdkj9q47nsj5wcx";
+
+  nativeBuildInputs = [ makeWrapper ];
+
+  postInstall = ''
+    # `ctags` must be accessible in `PATH` for `ptags` to work.
+    wrapProgram "$out/bin/ptags" \
+      --prefix PATH : "${lib.makeBinPath [ ctags ]}"
+  '';
 
   # Sanity check.
   checkPhase = ''

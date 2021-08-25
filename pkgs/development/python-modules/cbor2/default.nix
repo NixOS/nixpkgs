@@ -4,19 +4,19 @@
 , fetchPypi
 , pytestCheckHook
 , pytest-cov
-, setuptools_scm
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "cbor2";
-  version = "5.2.0";
+  version = "5.4.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a33aa2e5534fd74401ac95686886e655e3b2ce6383b3f958199b6e70a87c94bf";
+    sha256 = "1jga5wj3kalf6zj5gyrmy6kwmxxkld52mvcgxc5gb5dmdhpl7gx8";
   };
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   checkInputs = [
     pytest-cov

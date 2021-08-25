@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation rec {
   pname = "emscripten";
-  version = "2.0.1";
+  version = "2.0.10";
 
   llvmEnv = symlinkJoin {
     name = "emscripten-llvm-${version}";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "emscripten-core";
     repo = "emscripten";
-    sha256 = "06dsd819qjv4n2ihrz1mpn5aigmbv0gpkm7iw06wrqx30nzphnpk";
+    sha256 = "0jy4n1pykk9vkm5da9v3qsfrl6j7yhngcazh2792xxs6wzfcs9gk";
     rev = version;
   };
 
@@ -43,10 +43,14 @@ stdenv.mkDerivation rec {
     sed -i '/^def/!s/root_is_writable()/True/' tools/shared.py
     sed -i "/^def check_sanity/a\\  return" tools/shared.py
 
+    # super ugly: monkeypatch to add sysroot/include to the include
+    # path because they are otherwise not part of Nix's clang.
+    sed -i "490a\\ '/include'," tools/shared.py
+
     # required for wasm2c
     ln -s ${nodeModules}/node_modules .
 
-    echo "EMSCRIPTEN_ROOT = '$appdir'" > .emscripten
+    echo "EMSCRIPTEN_ROOT = '$out/share/emscripten'" > .emscripten
     echo "LLVM_ROOT = '${llvmEnv}/bin'" >> .emscripten
     echo "NODE_JS = '${nodejs}/bin/node'" >> .emscripten
     echo "JS_ENGINES = [NODE_JS]" >> .emscripten
@@ -74,7 +78,7 @@ stdenv.mkDerivation rec {
     chmod -R +w $appdir
 
     mkdir -p $out/bin
-    for b in em++ em-config emar embuilder.py emcc emcmake emconfigure emlink.py emmake emranlib emrun emscons; do
+    for b in em++ em-config emar embuilder.py emcc emcmake emconfigure emmake emranlib emrun emscons; do
       makeWrapper $appdir/$b $out/bin/$b \
         --set NODE_PATH ${nodeModules}/node_modules \
         --set EM_EXCLUSIVE_CACHE_ACCESS 1 \
@@ -88,8 +92,12 @@ stdenv.mkDerivation rec {
       # wasm2c doesn't work with PIC
       $out/bin/emcc -s WASM2C -s STANDALONE_WASM $LTO test.c
 
-      for RELOCATABLE in "" "-s RELOCATABLE"; do
-        $out/bin/emcc $RELOCATABLE $LTO test.c
+      for BIND in "" "--bind"; do
+        for MT in "" "-s USE_PTHREADS"; do
+          for RELOCATABLE in "" "-s RELOCATABLE"; do
+            $out/bin/emcc $RELOCATABLE $BIND $MT $LTO test.c
+          done
+        done
       done
     done
     popd

@@ -15,24 +15,25 @@
 , webkitgtk
 , glib-networking
 , librsvg
+, xdg-utils
 , gst_all_1
 }:
 
 stdenv.mkDerivation rec {
   pname = "newsflash";
-  version = "1.4.1";
+  version = "1.4.2";
 
   src = fetchFromGitLab {
     owner = "news-flash";
     repo = "news_flash_gtk";
     rev = version;
-    hash = "sha256-pskmvztKOwutXRHVnW5u68/0DAuV9Gb+Ovp2JbXiMYo=";
+    hash = "sha256-8W158GrvVGu5b3TG5bomK+hAF6jttZuImkmtcZOl91o=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-qq8cZplt5YWUwsXUShMDhQm3RGH2kCEBk64x6bOa50E=";
+    hash = "sha256-zHtD3NVWYQ5njg17Z2YmEttiK2oiq01OiAXIZofIqKI=";
   };
 
   patches = [
@@ -77,6 +78,9 @@ stdenv.mkDerivation rec {
 
     # SVG support for gdk-pixbuf
     librsvg
+
+    # Open links in browser
+    xdg-utils
   ] ++ (with gst_all_1; [
     # Audio & video support for webkitgtk WebView
     gstreamer
@@ -90,5 +94,6 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.com/news-flash/news_flash_gtk";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ kira-bruneau ];
+    platforms = platforms.unix;
   };
 }

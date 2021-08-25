@@ -1,6 +1,7 @@
 # Functions for copying sources to the Nix store.
 { lib }:
 
+# Tested in lib/tests/sources.sh
 let
   inherit (builtins)
     hasContext
@@ -11,14 +12,13 @@ let
     tryEval
     ;
   inherit (lib)
+    boolToString
     filter
     getAttr
     isString
     pathExists
     readFile
     ;
-in
-rec {
 
   # Returns the type of a path: regular (for file), symlink, or directory
   pathType = p: getAttr (baseNameOf p) (readDir (dirOf p));
@@ -84,17 +84,35 @@ rec {
   #
   cleanSourceWith = { filter ? _path: _type: true, src, name ? null }:
     let
-      isFiltered = src ? _isLibCleanSourceWith;
-      origSrc = if isFiltered then src.origSrc else src;
-      filter' = if isFiltered then name: type: filter name type && src.filter name type else filter;
-      name' = if name != null then name else if isFiltered then src.name else "source";
-    in {
-      inherit origSrc;
-      filter = filter';
-      outPath = builtins.path { filter = filter'; path = origSrc; name = name'; };
-      _isLibCleanSourceWith = true;
-      name = name';
+      orig = toSourceAttributes src;
+    in fromSourceAttributes {
+      inherit (orig) origSrc;
+      filter = path: type: filter path type && orig.filter path type;
+      name = if name != null then name else orig.name;
     };
+
+  /*
+    Add logging to a source, for troubleshooting the filtering behavior.
+    Type:
+      sources.trace :: sourceLike -> Source
+  */
+  trace =
+    # Source to debug. The returned source will behave like this source, but also log its filter invocations.
+    src:
+    let
+      attrs = toSourceAttributes src;
+    in
+      fromSourceAttributes (
+        attrs // {
+          filter = path: type:
+            let
+              r = attrs.filter path type;
+            in
+              builtins.trace "${attrs.name}.filter ${path} = ${boolToString r}" r;
+        }
+      ) // {
+        satisfiesSubpathInvariant = src ? satisfiesSubpathInvariant && src.satisfiesSubpathInvariant;
+      };
 
   # Filter sources by a list of regular expressions.
   #
@@ -110,14 +128,26 @@ rec {
       inherit src;
     };
 
-  # Get all files ending with the specified suffices from the given
-  # directory or its descendants.  E.g. `sourceFilesBySuffices ./dir
-  # [".xml" ".c"]'.
-  sourceFilesBySuffices = path: exts:
+  /*
+    Get all files ending with the specified suffices from the given
+    source directory or its descendants, omitting files that do not match
+    any suffix. The result of the example below will include files like
+    `./dir/module.c` and `./dir/subdir/doc.xml` if present.
+
+    Type: sourceLike -> [String] -> Source
+
+    Example:
+      sourceFilesBySuffices ./. [ ".xml" ".c" ]
+  */
+  sourceFilesBySuffices =
+    # Path or source containing the files to be returned
+    src:
+    # A list of file suffix strings
+    exts:
     let filter = name: type:
       let base = baseNameOf (toString name);
       in type == "directory" || lib.any (ext: lib.hasSuffix ext base) exts;
-    in cleanSourceWith { inherit filter; src = path; };
+    in cleanSourceWith { inherit filter src; };
 
   pathIsGitRepo = path: (tryEval (commitIdFromGitRepo path)).success;
 
@@ -177,4 +207,57 @@ rec {
   pathHasContext = builtins.hasContext or (lib.hasPrefix storeDir);
 
   canCleanSource = src: src ? _isLibCleanSourceWith || !(pathHasContext (toString src));
+
+  # -------------------------------------------------------------------------- #
+  # Internal functions
+  #
+
+  # toSourceAttributes : sourceLike -> SourceAttrs
+  #
+  # Convert any source-like object into a simple, singular representation.
+  # We don't expose this representation in order to avoid having a fifth path-
+  # like class of objects in the wild.
+  # (Existing ones being: paths, strings, sources and x//{outPath})
+  # So instead of exposing internals, we build a library of combinator functions.
+  toSourceAttributes = src:
+    let
+      isFiltered = src ? _isLibCleanSourceWith;
+    in
+    {
+      # The original path
+      origSrc = if isFiltered then src.origSrc else src;
+      filter = if isFiltered then src.filter else _: _: true;
+      name = if isFiltered then src.name else "source";
+    };
+
+  # fromSourceAttributes : SourceAttrs -> Source
+  #
+  # Inverse of toSourceAttributes for Source objects.
+  fromSourceAttributes = { origSrc, filter, name }:
+    {
+      _isLibCleanSourceWith = true;
+      inherit origSrc filter name;
+      outPath = builtins.path { inherit filter name; path = origSrc; };
+    };
+
+in {
+  inherit
+    pathType
+    pathIsDirectory
+    pathIsRegularFile
+
+    pathIsGitRepo
+    commitIdFromGitRepo
+
+    cleanSource
+    cleanSourceWith
+    cleanSourceFilter
+    pathHasContext
+    canCleanSource
+
+    sourceByRegex
+    sourceFilesBySuffices
+
+    trace
+    ;
 }

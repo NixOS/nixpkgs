@@ -6,7 +6,7 @@
 , pytest
 , pytestCheckHook
 , numpy
-, setuptools_scm
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    setuptools_scm
+    setuptools-scm
   ];
   buildInputs = [
     pytest

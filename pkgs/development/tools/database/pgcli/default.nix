@@ -6,7 +6,7 @@
 , click
 , configobj
 , humanize
-, prompt_toolkit
+, prompt-toolkit
 , psycopg2
 , pygments
 , sqlparse
@@ -34,7 +34,7 @@ buildPythonApplication rec {
     click
     configobj
     humanize
-    prompt_toolkit
+    prompt-toolkit
     psycopg2
     pygments
     sqlparse

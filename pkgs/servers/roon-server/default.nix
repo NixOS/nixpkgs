@@ -1,5 +1,5 @@
-{ alsaLib
-, alsaUtils
+{ alsa-lib
+, alsa-utils
 , autoPatchelfHook
 , cifs-utils
 , fetchurl
@@ -10,21 +10,21 @@
 , stdenv
 , zlib
 }: stdenv.mkDerivation rec {
-  name = "roon-server";
-  version = "100800790";
+  pname = "roon-server";
+  version = "1.8-814";
 
   # N.B. The URL is unstable. I've asked for them to provide a stable URL but
   # they have ignored me. If this package fails to build for you, you may need
   # to update the version and sha256.
   # c.f. https://community.roonlabs.com/t/latest-roon-server-is-not-available-for-download-on-nixos/118129
   src = fetchurl {
-    url = "https://web.archive.org/web/20210428204513/https://download.roonlabs.com/builds/RoonServer_linuxx64.tar.bz2";
-    sha256 = "1jhj52fmkdgr9qfang1i9qrl1z56h56x07k31n3kllknkv02lc8p";
+    url = "https://web.archive.org/web/20210729154130/http://download.roonlabs.com/builds/RoonServer_linuxx64.tar.bz2";
+    sha256 = "sha256-GbWcgNq+dmzoHNFZyB/QFCvJ7Hh48v8IuGS4WMNlKgI=";
   };
 
   buildInputs = [
-    alsaLib
-    alsaUtils
+    alsa-lib
+    alsa-utils
     cifs-utils
     ffmpeg
     freetype
@@ -48,7 +48,7 @@
         ln -sf $out/RoonMono/bin/mono-sgen $out/RoonMono/bin/${builtins.baseNameOf bin}
       '';
       wrapFix = bin: ''
-        wrapProgram ${bin} --prefix PATH : ${lib.makeBinPath [ alsaUtils cifs-utils ffmpeg ]}
+        wrapProgram ${bin} --prefix PATH : ${lib.makeBinPath [ alsa-utils cifs-utils ffmpeg ]}
       '';
     in
     ''
@@ -64,6 +64,7 @@
 
   meta = with lib; {
     description = "The music player for music lovers";
+    changelog = "https://community.roonlabs.com/c/roon/software-release-notes/18";
     homepage = "https://roonlabs.com";
     license = licenses.unfree;
     maintainers = with maintainers; [ lovesegfault steell ];

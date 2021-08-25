@@ -129,14 +129,15 @@ self = stdenv.mkDerivation {
     ++ optionals buildIde
       (if versionAtLeast "8.10"
        then [ ocamlPackages.lablgtk3-sourceview3 glib gnome.adwaita-icon-theme wrapGAppsHook ]
-       else [ ocamlPackages.lablgtk ]);
+       else [ ocamlPackages.lablgtk ])
+    ++ optional (versionAtLeast "8.14") ocamlPackages.dune_2
+  ;
 
   postPatch = ''
     UNAME=$(type -tp uname)
     RM=$(type -tp rm)
-    substituteInPlace configure --replace "/bin/uname" "$UNAME"
     substituteInPlace tools/beautify-archive --replace "/bin/rm" "$RM"
-    substituteInPlace configure.ml --replace '"md5 -q"' '"md5sum"'
+    ${if !versionAtLeast "8.7" then "substituteInPlace configure.ml --replace \"md5 -q\" \"md5sum\"" else ""}
     ${csdpPatch}
   '';
 
@@ -161,6 +162,7 @@ self = stdenv.mkDerivation {
   prefixKey = "-prefix ";
 
   buildFlags = [ "revision" "coq" "coqide" "bin/votour" ];
+  enableParallelBuilding = true;
 
   createFindlibDestdir = true;
 

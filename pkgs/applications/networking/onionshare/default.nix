@@ -4,6 +4,7 @@
   substituteAll,
   fetchFromGitHub,
   isPy3k,
+  colorama,
   flask,
   flask-httpauth,
   flask-socketio,
@@ -22,12 +23,12 @@
 }:
 
 let
-  version = "2.3.1";
+  version = "2.3.3";
   src = fetchFromGitHub {
     owner = "micahflee";
     repo = "onionshare";
     rev = "v${version}";
-    sha256 = "sha256-H09x3OF6l1HLHukGPvV2rZUjW9fxeKKMZkKbY9a2m9I=";
+    sha256 = "sha256-wU2020RNXlwJ2y9uzcLxIX4EECev1Z9YvNyiBalLj/Y=";
   };
   meta = with lib; {
     description = "Securely and anonymously send and receive files";
@@ -69,6 +70,7 @@ in rec {
     ];
     disable = !isPy3k;
     propagatedBuildInputs = [
+      colorama
       flask
       flask-httpauth
       flask-socketio
@@ -92,6 +94,11 @@ in rec {
       # Tests use the home directory
       export HOME="$(mktemp -d)"
     '';
+
+    disabledTests = [
+      "test_firefox_like_behavior"
+      "test_if_unmodified_since"
+    ];
   };
 
   onionshare-gui = buildPythonApplication {

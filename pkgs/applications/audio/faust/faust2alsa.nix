@@ -1,5 +1,5 @@
 { faust
-, alsaLib
+, alsa-lib
 , atk
 , cairo
 , fontconfig
@@ -15,7 +15,7 @@ faust.wrapWithBuildEnv {
   baseName = "faust2alsa";
 
   propagatedBuildInputs = [
-    alsaLib
+    alsa-lib
     atk
     cairo
     fontconfig

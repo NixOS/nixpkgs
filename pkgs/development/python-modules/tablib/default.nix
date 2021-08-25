@@ -4,7 +4,7 @@
 , pandas
 , setuptools-scm
 , pytest
-, pytestcov
+, pytest-cov
 , pyyaml
 , unicodecsv
 , xlrd
@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools-scm ];
   propagatedBuildInputs = [ xlwt openpyxl pyyaml xlrd odfpy ];
-  checkInputs = [ pytest pytestcov unicodecsv pandas ];
+  checkInputs = [ pytest pytest-cov unicodecsv pandas ];
 
   # test_tablib needs MarkupPy, which isn't packaged yet
   checkPhase = ''

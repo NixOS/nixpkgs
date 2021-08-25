@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "motioneye-client";
-  version = "0.3.6";
+  version = "0.3.11";
   format = "pyproject";
   disabled = pythonOlder "3.8";
 
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "dermotduffy";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0j28rn7059km7q6z1kalp0pjcrd42wcm5mnbi94j93bvfld97w70";
+    sha256 = "0f34ig8njyn7dzy8272m0b1nlnnhir58ar3vx4zps10i0dc32hb2";
   };
 
   nativeBuildInputs = [

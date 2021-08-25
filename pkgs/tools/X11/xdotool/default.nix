@@ -1,16 +1,18 @@
-{ lib, stdenv, fetchurl, pkg-config, libX11, perl, libXtst, xorgproto, libXi, libXinerama, libxkbcommon }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, libX11, perl, libXtst, xorgproto, libXi, libXinerama, libxkbcommon, libXext }:
 
 stdenv.mkDerivation rec {
   pname = "xdotool";
-  version = "3.20160805.1";
+  version = "3.20210804.2";
 
-  src = fetchurl {
-    url = "https://github.com/jordansissel/xdotool/releases/download/v${version}/xdotool-${version}.tar.gz";
-    sha256 = "1a6c1zr86zb53352yxv104l76l8x21gfl2bgw6h21iphxpv5zgim";
+  src = fetchFromGitHub {
+    owner = "jordansissel";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-7N5f/BFtq/m5MsXe7ZCTUTc1yp+JDJNRF1P9qB2l554=";
   };
 
   nativeBuildInputs = [ pkg-config perl ];
-  buildInputs = [ libX11 libXtst xorgproto libXi libXinerama libxkbcommon ];
+  buildInputs = [ libX11 libXtst xorgproto libXi libXinerama libxkbcommon libXext ];
 
   preBuild = ''
     mkdir -p $out/lib

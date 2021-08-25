@@ -1,34 +1,44 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , pkg-config
 , glib
 , libxml2
 , expat
-, fftw
-, orc
-, lcms
-, imagemagick
-, openexr
-, libtiff
-, libjpeg
-, libgsf
-, libexif
-, libheif
-, librsvg
 , ApplicationServices
 , Foundation
-, python27
-, libpng
+, python3
 , fetchFromGitHub
 , fetchpatch
 , autoreconfHook
 , gtk-doc
 , gobject-introspection
-,
+  # Optional dependencies
+, libjpeg
+, libexif
+, librsvg
+, poppler
+, libgsf
+, libtiff
+, fftw
+, lcms2
+, libpng
+, libimagequant
+, imagemagick
+, pango
+, orc
+, matio
+, cfitsio
+, libwebp
+, openexr
+, openjpeg
+, libjxl
+, openslide
+, libheif
 }:
 
 stdenv.mkDerivation rec {
   pname = "vips";
-  version = "8.10.6";
+  version = "8.11.3";
 
   outputs = [ "bin" "out" "man" "dev" ];
 
@@ -36,7 +46,7 @@ stdenv.mkDerivation rec {
     owner = "libvips";
     repo = "libvips";
     rev = "v${version}";
-    sha256 = "sha256-hdpkBC76PnPTN+rnNchLVk1CrhcClTtbaWyUcyUtuAk=";
+    sha256 = "sha256-CWuULuUMBV2VUCZEBg0MzS7rXI8UUkNh5XPV2eA8xt8=";
     # Remove unicode file names which leads to different checksums on HFS+
     # vs. other filesystems because of unicode normalisation.
     extraPostFetch = ''
@@ -54,22 +64,31 @@ stdenv.mkDerivation rec {
   buildInputs = [
     glib
     libxml2
-    fftw
-    orc
-    lcms
-    imagemagick
-    openexr
-    libtiff
-    libjpeg
-    libgsf
-    libexif
-    libheif
-    libpng
-    librsvg
-    python27
-    libpng
     expat
-  ] ++ lib.optionals stdenv.isDarwin [ApplicationServices Foundation];
+    (python3.withPackages (p: [ p.pycairo ]))
+    # Optional dependencies
+    libjpeg
+    libexif
+    librsvg
+    poppler
+    libgsf
+    libtiff
+    fftw
+    lcms2
+    libpng
+    libimagequant
+    imagemagick
+    pango
+    orc
+    matio
+    cfitsio
+    libwebp
+    openexr
+    openjpeg
+    libjxl
+    openslide
+    libheif
+  ] ++ lib.optionals stdenv.isDarwin [ ApplicationServices Foundation ];
 
   # Required by .pc file
   propagatedBuildInputs = [

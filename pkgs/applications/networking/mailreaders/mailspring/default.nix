@@ -2,12 +2,13 @@
 , lib
 , fetchurl
 , autoPatchelfHook
-, alsaLib
+, alsa-lib
 , coreutils
 , db
 , dpkg
 , glib
 , gtk3
+, wrapGAppsHook
 , libkrb5
 , libsecret
 , nss
@@ -28,10 +29,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoPatchelfHook
     dpkg
+    wrapGAppsHook
   ];
 
   buildInputs = [
-    alsaLib
+    alsa-lib
     db
     glib
     gtk3

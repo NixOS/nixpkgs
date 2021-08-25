@@ -1,14 +1,12 @@
 { lib, stdenv, fetchurl, meson, ninja, pkg-config, wrapGAppsHook, python3
 , gettext, gnome, glib, gtk3, libgnome-games-support, gdk-pixbuf }:
 
-let
+stdenv.mkDerivation rec {
   pname = "atomix";
   version = "3.34.0";
-in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/atomix/${lib.versions.majorMinor version}/atomix-${version}.tar.xz";
     sha256 = "0h909a4mccf160hi0aimyicqhq2b0gk1dmqp7qwf87qghfrw6m00";
   };
 

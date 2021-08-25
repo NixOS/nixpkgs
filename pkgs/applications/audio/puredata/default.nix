@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, autoreconfHook, gettext, makeWrapper
-, alsaLib, libjack2, tk, fftw
+, alsa-lib, libjack2, tk, fftw
 }:
 
 stdenv.mkDerivation  rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation  rec {
 
   nativeBuildInputs = [ autoreconfHook gettext makeWrapper ];
 
-  buildInputs = [ alsaLib libjack2 fftw ];
+  buildInputs = [ alsa-lib libjack2 fftw ];
 
   configureFlags = [
     "--enable-alsa"

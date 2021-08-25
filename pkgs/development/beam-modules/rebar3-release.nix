@@ -1,28 +1,34 @@
-{ stdenv, erlang, rebar3WithPlugins, openssl,
-  lib }:
+{ stdenv
+, erlang
+, rebar3WithPlugins
+, openssl
+, lib
+}:
 
-{ name, version
+{ pname
+, version
 , src
-, beamDeps ? []
-, buildPlugins ? []
+, beamDeps ? [ ]
+, buildPlugins ? [ ]
 , checkouts ? null
 , releaseType
-, buildInputs ? []
+, buildInputs ? [ ]
 , setupHook ? null
 , profile ? "default"
 , installPhase ? null
 , buildPhase ? null
 , configurePhase ? null
-, meta ? {}
-, ... }@attrs:
+, meta ? { }
+, ...
+}@attrs:
 
 with lib;
 
 let
   shell = drv: stdenv.mkDerivation {
-          name = "interactive-shell-${drv.name}";
-          buildInputs = [ drv ];
-    };
+    name = "interactive-shell-${drv.pname}";
+    buildInputs = [ drv ];
+  };
 
   customPhases = filterAttrs
     (_: v: v != null)
@@ -38,61 +44,65 @@ let
   };
 
   pkg =
-    assert beamDeps != [] -> checkouts == null;
+    assert beamDeps != [ ] -> checkouts == null;
     self: stdenv.mkDerivation (attrs // {
 
-    name = "${name}-${version}";
-    inherit version;
+      name = "${pname}-${version}";
+      inherit version pname;
 
-    buildInputs = buildInputs ++ [ erlang rebar3 openssl ] ++ beamDeps;
+      buildInputs = buildInputs ++ [ erlang rebar3 openssl ] ++ beamDeps;
 
-    dontStrip = true;
+      # ensure we strip any native binaries (eg. NIFs, ports)
+      stripDebugList = lib.optional (releaseType == "release") "rel";
 
-    inherit src;
+      inherit src;
 
-    configurePhase = ''
-      runHook preConfigure
-      ${lib.optionalString (checkouts != null)
-      "cp --no-preserve=all -R ${checkouts}/_checkouts ."}
-      ${# Prevent rebar3 from trying to manage deps
-      lib.optionalString (beamDeps != [ ]) ''
-        erl -noshell -eval '
-          {ok, Terms0} = file:consult("rebar.config"),
-          Terms = lists:keydelete(deps, 1, Terms0),
-          ok = file:write_file("rebar.config", [io_lib:format("~tp.~n", [T]) || T <- Terms]),
-          init:stop(0)
-        '
-        rm -f rebar.lock
-      ''}
-      runHook postConfigure
-    '';
+      REBAR_IGNORE_DEPS = beamDeps != [ ];
 
-    buildPhase = ''
-      runHook preBuild
-      HOME=. DEBUG=1 rebar3 as ${profile} ${if releaseType == "escript"
-                                            then "escriptize"
-                                            else "release"}
-      runHook postBuild
-    '';
+      configurePhase = ''
+        runHook preConfigure
+        ${lib.optionalString (checkouts != null)
+        "cp --no-preserve=all -R ${checkouts}/_checkouts ."}
+        runHook postConfigure
+      '';
 
-    installPhase = ''
-      runHook preInstall
-      dir=${if releaseType == "escript"
-            then "bin"
-            else "rel"}
-      mkdir -p "$out/$dir"
-      cp -R --preserve=mode "_build/${profile}/$dir" "$out"
-      runHook postInstall
-    '';
+      buildPhase = ''
+        runHook preBuild
+        HOME=. DEBUG=1 rebar3 as ${profile} ${if releaseType == "escript"
+                                              then "escriptize"
+                                              else "release"}
+        runHook postBuild
+      '';
 
-    meta = {
-      inherit (erlang.meta) platforms;
-    } // meta;
+      installPhase = ''
+        runHook preInstall
+        dir=${if releaseType == "escript"
+              then "bin"
+              else "rel"}
+        mkdir -p "$out/$dir" "$out/bin"
+        cp -R --preserve=mode "_build/${profile}/$dir" "$out"
+        ${lib.optionalString (releaseType == "release")
+          "find $out/rel/*/bin -type f -executable -exec ln -s -t $out/bin {} \\;"}
+        runHook postInstall
+      '';
 
-    passthru = {
-      packageName = name;
-      env = shell self;
-   };
-  } // customPhases);
+      postInstall = ''
+        for dir in $out/rel/*/erts-*; do
+          echo "ERTS found in $dir - removing references to erlang to reduce closure size"
+          for f in $dir/bin/{erl,start}; do
+            substituteInPlace "$f" --replace "${erlang}/lib/erlang" "''${dir/\/erts-*/}"
+          done
+        done
+      '';
+
+      meta = {
+        inherit (erlang.meta) platforms;
+      } // meta;
+
+      passthru = ({
+        packageName = pname;
+        env = shell self;
+      } // (if attrs ? passthru then attrs.passthru else { }));
+    } // customPhases);
 in
-  fix pkg
+fix pkg

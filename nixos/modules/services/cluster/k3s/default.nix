@@ -35,8 +35,18 @@ in
 
     token = mkOption {
       type = types.str;
-      description = "The k3s token to use when connecting to the server. This option only makes sense for an agent.";
+      description = ''
+        The k3s token to use when connecting to the server. This option only makes sense for an agent.
+        WARNING: This option will expose store your token unencrypted world-readable in the nix store.
+        If this is undesired use the tokenFile option instead.
+      '';
       default = "";
+    };
+
+    tokenFile = mkOption {
+      type = types.nullOr types.path;
+      description = "File path containing k3s token to use when connecting to the server. This option only makes sense for an agent.";
+      default = null;
     };
 
     docker = mkOption {
@@ -57,6 +67,12 @@ in
       default = false;
       description = "Only run the server. This option only makes sense for a server.";
     };
+
+    configPath = mkOption {
+      type = types.nullOr types.path;
+      default = null;
+      description = "File path containing the k3s YAML config. This is useful when the config is generated (for example on boot).";
+    };
   };
 
   # implementation
@@ -64,12 +80,12 @@ in
   config = mkIf cfg.enable {
     assertions = [
       {
-        assertion = cfg.role == "agent" -> cfg.serverAddr != "";
-        message = "serverAddr should be set if role is 'agent'";
+        assertion = cfg.role == "agent" -> (cfg.configPath != null || cfg.serverAddr != "");
+        message = "serverAddr or configPath (with 'server' key) should be set if role is 'agent'";
       }
       {
-        assertion = cfg.role == "agent" -> cfg.token != "";
-        message = "token should be set if role is 'agent'";
+        assertion = cfg.role == "agent" -> cfg.configPath != null || cfg.tokenFile != null || cfg.token != "";
+        message = "token or tokenFile or configPath (with 'token' or 'token-file' keys) should be set if role is 'agent'";
       }
     ];
 
@@ -81,11 +97,14 @@ in
     # supporting it, or their bundled containerd
     systemd.enableUnifiedCgroupHierarchy = false;
 
+    environment.systemPackages = [ config.services.k3s.package ];
+
     systemd.services.k3s = {
       description = "k3s service";
       after = [ "network.service" "firewall.service" ] ++ (optional cfg.docker "docker.service");
       wants = [ "network.service" "firewall.service" ];
       wantedBy = [ "multi-user.target" ];
+      path = optional config.boot.zfs.enabled config.boot.zfs.package;
       serviceConfig = {
         # See: https://github.com/rancher/k3s/blob/dddbd16305284ae4bd14c0aade892412310d7edc/install.sh#L197
         Type = if cfg.role == "agent" then "exec" else "notify";
@@ -102,7 +121,10 @@ in
             "${cfg.package}/bin/k3s ${cfg.role}"
           ] ++ (optional cfg.docker "--docker")
           ++ (optional cfg.disableAgent "--disable-agent")
-          ++ (optional (cfg.role == "agent") "--server ${cfg.serverAddr} --token ${cfg.token}")
+          ++ (optional (cfg.serverAddr != "") "--server ${cfg.serverAddr}")
+          ++ (optional (cfg.token != "") "--token ${cfg.token}")
+          ++ (optional (cfg.tokenFile != null) "--token-file ${cfg.tokenFile}")
+          ++ (optional (cfg.configPath != null) "--config ${cfg.configPath}")
           ++ [ cfg.extraFlags ]
         );
       };

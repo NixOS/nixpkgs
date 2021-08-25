@@ -4,12 +4,12 @@
 , betamax-matchers
 , mock
 , six
-, pytestrunner
+, pytest-runner
 , prawcore
 , pytest
 , requests-toolbelt
 , update_checker
-, websocket_client
+, websocket-client
 }:
 
 buildPythonPackage rec {
@@ -24,14 +24,14 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    pytestrunner
+    pytest-runner
   ];
 
   propagatedBuildInputs = [
     mock
     prawcore
     update_checker
-    websocket_client
+    websocket-client
   ];
 
   checkInputs = [

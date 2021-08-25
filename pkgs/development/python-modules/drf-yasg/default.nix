@@ -3,7 +3,7 @@
 , fetchPypi
 , inflection
 , ruamel_yaml
-, setuptools_scm
+, setuptools-scm
 , six
 , coreapi
 , djangorestframework
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [
-    setuptools_scm
+    setuptools-scm
   ];
 
   propagatedBuildInputs = [

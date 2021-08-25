@@ -1,8 +1,9 @@
 { lib
 , buildPythonPackage
+, commentjson
 , cryptography
 , fetchFromGitHub
-, poetry
+, poetry-core
 , pytest-aiohttp
 , pytestCheckHook
 , pythonAtLeast
@@ -11,20 +12,22 @@
 
 buildPythonPackage rec {
   pname = "aiohomekit";
-  version = "0.2.62";
+  version = "0.6.2";
   format = "pyproject";
-  disabled = pythonAtLeast "3.9";
 
   src = fetchFromGitHub {
     owner = "Jc2k";
     repo = pname;
     rev = version;
-    sha256 = "sha256-01IzeR0iukPTkz8I7h93wZkgjz6flRAJN8unEX6d+cs=";
+    sha256 = "16lfav83g12vzs3ssfva7chcqqb7xdx54djwfwyn9xcwfaa7cwhw";
   };
 
-  nativeBuildInputs = [ poetry ];
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
   propagatedBuildInputs = [
+    commentjson
     cryptography
     zeroconf
   ];
@@ -34,11 +37,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  # Some test requires network access
-  disabledTests = [
-    "test_remove_pairing"
-    "test_pair"
-    "test_add_and_remove_pairings"
+  disabledTestPaths = [
+    # Tests require network access
+    "tests/test_ip_pairing.py"
   ];
 
   pythonImportsCheck = [ "aiohomekit" ];

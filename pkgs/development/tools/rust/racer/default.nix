@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "racer";
-  version = "2.1.44";
+  version = "2.1.46";
 
   src = fetchFromGitHub {
     owner = "racer-rust";
     repo = "racer";
     rev = "v${version}";
-    sha256 = "sha256-EmxJg2QDpGZ5TbMy9y6P11LdMucBdvewkRewuUzccGM=";
+    sha256 = "sha256-7h1w5Yyt5VN6+pYuTTbdM1Nrd8aDEhPLusxuIsdS+mQ=";
   };
 
-  cargoSha256 = "sha256-kKQnpEashpIwrXubuZIpU+tzxFaUjr6jaVunYPqaHnM=";
+  cargoSha256 = "sha256-fllhB+so6H36b+joW0l+NBtz3PefOKdj6C8qKQPuJpk=";
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = lib.optional stdenv.isDarwin Security;

@@ -1,14 +1,14 @@
 { lib, stdenv, fetchFromGitHub, xorg, cairo, lv2, pkg-config }:
 
 stdenv.mkDerivation rec {
-  pname = "BSlizr";
-  version = "1.2.14";
+  pname = "bslizr";
+  version = "1.2.16";
 
   src = fetchFromGitHub {
     owner = "sjaehn";
-    repo = pname;
+    repo = "BSlizr";
     rev = version;
-    sha256 = "sha256-dut3I68tJWQH+X6acKROqb5HywufeBQ4/HkXFKsA3hY=";
+    sha256 = "sha256-5DvVkTz79CLvZMZ3XnI0COIfxnhERDSvzbVoJAcqNRI=";
   };
 
   nativeBuildInputs = [ pkg-config ];

@@ -1,7 +1,7 @@
 { lib, buildPythonPackage, fetchPypi, pythonOlder
 , importlib-resources
 , jaraco_functools
-, setuptools_scm
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   pythonNamespaces = [ "jaraco" ];
 
-  nativeBuildInputs =[ setuptools_scm ];
+  nativeBuildInputs =[ setuptools-scm ];
   propagatedBuildInputs = [
     jaraco_functools
   ] ++ lib.optional (pythonOlder "3.7") [ importlib-resources ];

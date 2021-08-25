@@ -1,0 +1,33 @@
+From 36ffbb7ad2c535180cae473b470a43f9db4fbdcd Mon Sep 17 00:00:00 2001
+From: Maximilian Bosch <maximilian@mbosch.me>
+Date: Mon, 16 Aug 2021 13:27:28 +0200
+Subject: [PATCH] setup: add homeserver as console script
+
+With this change, it will be added to `$out/bin` in `nixpkgs` directly.
+This became necessary since our old workaround, calling it as script,
+doesn't work anymore since the shebangs were removed[1].
+
+[1] https://github.com/matrix-org/synapse/pull/10415
+---
+ setup.py | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/setup.py b/setup.py
+index c47856351..27f1d842c 100755
+--- a/setup.py
++++ b/setup.py
+@@ -133,6 +133,11 @@ setup(
+     long_description=long_description,
+     long_description_content_type="text/x-rst",
+     python_requires="~=3.6",
++    entry_points={
++        'console_scripts': [
++            'homeserver = synapse.app.homeserver:main'
++        ]
++    },
+     classifiers=[
+         "Development Status :: 5 - Production/Stable",
+         "Topic :: Communications :: Chat",
+-- 
+2.31.1
+

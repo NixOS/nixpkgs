@@ -57,7 +57,7 @@ in {
         description = ''
           Port on which RabbitMQ will listen for AMQP connections.
         '';
-        type = types.int;
+        type = types.port;
       };
 
       dataDir = mkOption {

@@ -17,17 +17,18 @@
 , Cocoa
 , AGL
 , OpenGL
+, withCuda ? false, cudatoolkit
 }:
 
 stdenv.mkDerivation rec {
   pname = "pcl";
-  version = "1.11.1";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "PointCloudLibrary";
     repo = "pcl";
     rev = "${pname}-${version}";
-    sha256 = "1cli2rxqsk6nxp36p5mgvvahjz8hm4fb68yi8cf9nw4ygbcvcwb1";
+    sha256 = "0jhvciaw43y6iqqk7hyxnfhn1b4bsw5fpy04s01r5pkcsjjbdbqc";
   };
 
   nativeBuildInputs = [ pkg-config cmake wrapQtAppsHook ];
@@ -43,11 +44,12 @@ stdenv.mkDerivation rec {
     qtbase
     libXt
   ]
-  ++ lib.optionals stdenv.isDarwin [ Cocoa AGL ];
+  ++ lib.optionals stdenv.isDarwin [ Cocoa AGL ]
+  ++ lib.optionals withCuda [ cudatoolkit ];
 
   cmakeFlags = lib.optionals stdenv.isDarwin [
     "-DOPENGL_INCLUDE_DIR=${OpenGL}/Library/Frameworks"
-  ];
+  ] ++ lib.optionals withCuda [ "-DWITH_CUDA=true" ];
 
   meta = {
     homepage = "https://pointclouds.org/";

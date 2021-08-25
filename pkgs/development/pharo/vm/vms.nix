@@ -11,7 +11,7 @@
 , libGLU, libGL
 , freetype
 , xorg
-, alsaLib
+, alsa-lib
 , cairo
 , libuuid
 , autoreconfHook

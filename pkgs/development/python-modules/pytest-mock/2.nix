@@ -5,7 +5,7 @@
 , isPy3k
 , pytest
 , mock
-, setuptools_scm
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = lib.optional (!isPy3k) mock;
 
   nativeBuildInputs = [
-   setuptools_scm
+   setuptools-scm
   ];
 
   checkInputs = [

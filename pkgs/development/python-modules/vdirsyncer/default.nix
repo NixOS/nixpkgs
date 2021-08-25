@@ -2,11 +2,11 @@
 , buildPythonPackage
 , fetchPypi
 , fetchpatch
-, isPy27
+, pythonOlder
 , click
 , click-log
 , click-threading
-, requests_toolbelt
+, requests-toolbelt
 , requests
 , requests_oauthlib # required for google oauth sync
 , atomicwrites
@@ -14,29 +14,31 @@
 , pytestCheckHook
 , pytest-localserver
 , pytest-subtesthack
-, setuptools_scm
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
-  version = "0.16.8";
+  version = "0.18.0";
   pname = "vdirsyncer";
-  disabled = isPy27;
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bfdb422f52e1d4d60bd0635d203fb59fa7f613397d079661eb48e79464ba13c5";
+    sha256 = "sha256-J7w+1R93STX7ujkpFcjI1M9jmuUaRLZ0aGtJoQJfwgE=";
   };
 
   propagatedBuildInputs = [
-    click click-log click-threading
-    requests_toolbelt
+    atomicwrites
+    click
+    click-log
+    click-threading
     requests
     requests_oauthlib # required for google oauth sync
-    atomicwrites
+    requests-toolbelt
   ];
 
   nativeBuildInputs = [
-    setuptools_scm
+    setuptools-scm
   ];
 
   checkInputs = [
@@ -46,16 +48,8 @@ buildPythonPackage rec {
     pytest-subtesthack
   ];
 
-  patches = [
-    (fetchpatch {
-      name = "update-usage-deprecated-method.patch";
-      url = "https://github.com/pimutils/vdirsyncer/commit/7577fa21177442aacc2d86640ef28cebf1c4aaef.patch";
-      sha256 = "0inkr1wfal20kssij8l5myhpjivxg8wlvhppqc3lvml9d1i75qbh";
-    })
-  ];
-
   postPatch = ''
-    substituteInPlace setup.py --replace "click>=5.0,<6.0" "click"
+    sed -i -e '/--cov/d' -e '/--no-cov/d' setup.cfg
   '';
 
   preCheck = ''
@@ -63,8 +57,9 @@ buildPythonPackage rec {
   '';
 
   disabledTests = [
-    "test_verbosity"
     "test_create_collections" # Flaky test exceeds deadline on hydra: https://github.com/pimutils/vdirsyncer/issues/837
+    "test_request_ssl"
+    "test_verbosity"
   ];
 
   meta = with lib; {

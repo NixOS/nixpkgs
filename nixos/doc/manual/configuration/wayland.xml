@@ -20,4 +20,14 @@
   essential utilities. Now you can start <package>sway</package> from the TTY
   console.
  </para>
+
+ <para>
+  If you are using a wlroots-based compositor, like sway, and want to be able to
+  share your screen, you might want to activate this option:
+<programlisting>
+<xref linkend="opt-xdg.portal.wlr.enable"/> = true;
+</programlisting>
+  and configure Pipewire using <xref linkend="opt-services.pipewire.enable"/>
+  and related options.
+ </para>
 </chapter>

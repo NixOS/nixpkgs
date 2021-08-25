@@ -1,0 +1,17 @@
+--- a/setup.py
++++ b/setup.py
+@@ -36,10 +36,14 @@ LIBRARIES = {
+     "opensuse": OPENSUSE,
+     "fedora": FEDORA,
+     "alpine": ALPINE,
++    "nix": FEDORA,
+ }
+ 
+ 
+ def load_libraries():
++    if os.getenv("NIX_STORE"):
++        return LIBRARIES["nix"]
++
+     try:
+         import distro
+ 

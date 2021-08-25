@@ -18,7 +18,7 @@
 , sqlite
 , sratom
 , suil
-, alsaLib
+, alsa-lib
 , libsndfile
 , soxr
 , flac
@@ -62,6 +62,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "audacity";
+  # nixpkgs-update: no auto update
+  # Humans too! Let's wait to see how the situation with
+  # https://github.com/audacity/audacity/issues/1213 develops before
+  # pulling any updates that are subject to this privacy policy. We
+  # may wish to switch to a fork, but at the time of writing
+  # (2021-07-05) it's too early to tell how well any of the forks will
+  # be maintained.
   version = "3.0.2";
 
   src = fetchFromGitHub {
@@ -109,7 +116,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    alsaLib
+    alsa-lib
     expat
     ffmpeg
     file

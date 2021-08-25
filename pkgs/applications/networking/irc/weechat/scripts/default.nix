@@ -20,4 +20,10 @@
   weechat-autosort = callPackage ./weechat-autosort { };
 
   weechat-otr = callPackage ./weechat-otr { };
+
+  weechat-go = callPackage ./weechat-go { };
+
+  buffer_autoset = callPackage ./buffer_autoset { };
+
+  highmon = callPackage ./highmon { };
 }

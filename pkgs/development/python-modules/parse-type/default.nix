@@ -1,6 +1,6 @@
 { lib, fetchPypi
 , buildPythonPackage, pythonOlder
-, pytest, pytestrunner
+, pytest, pytest-runner
 , parse, six, enum34
 }:
 
@@ -13,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "02wclgiqky06y36b3q07b7ngpks5j0gmgl6n71ac2j2hscc0nsbz";
   };
 
-  checkInputs = [ pytest pytestrunner ];
+  checkInputs = [ pytest pytest-runner ];
   propagatedBuildInputs = [ parse six ] ++ lib.optional (pythonOlder "3.4") enum34;
 
   checkPhase = ''

@@ -40,6 +40,8 @@ buildPythonPackage rec {
     "test_mem_vec_diff_clusters"
     "test_all_points_mem_vec_diff_clusters"
     "test_approx_predict_diff_clusters"
+    # another flaky test https://github.com/scikit-learn-contrib/hdbscan/issues/421
+    "test_hdbscan_boruvka_balltree_matches"
   ];
 
   meta = with lib; {

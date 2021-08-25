@@ -47,7 +47,7 @@
 /*
  *  External libraries options
  */
-, alsaLib ? null # Alsa in/output support
+, alsa-lib ? null # Alsa in/output support
 #, avisynth ? null # Support for reading AviSynth scripts
 , bzip2 ? null
 , celt ? null # CELT decoder
@@ -74,6 +74,7 @@
 , libcaca ? null # Textual display (ASCII art)
 #, libcdio-paranoia ? null # Audio CD grabbing
 , libdc1394 ? null, libraw1394 ? null # IIDC-1394 grabbing (ieee 1394)
+, libdrm ? null # libdrm support
 , libiconv ? null
 #, libiec61883 ? null, libavc1394 ? null # iec61883 (also uses libraw1394)
 , libmfx ? null # Hardware acceleration vis libmfx
@@ -348,6 +349,7 @@ stdenv.mkDerivation rec {
     #(enableFeature (libcaca != null) "libcaca")
     #(enableFeature (cdio-paranoia != null && gplLicensing) "libcdio")
     (enableFeature (if isLinux then libdc1394 != null && libraw1394 != null else false) "libdc1394")
+    (enableFeature ((isLinux || isFreeBSD) && libdrm != null) "libdrm")
     (enableFeature (libiconv != null) "iconv")
     (enableFeature (libjack2 != null) "libjack")
     #(enableFeature (if isLinux then libiec61883 != null && libavc1394 != null && libraw1394 != null else false) "libiec61883")
@@ -404,6 +406,7 @@ stdenv.mkDerivation rec {
     (enableFeature (zlib != null) "zlib")
     (enableFeature (isLinux && vulkan-loader != null) "vulkan")
     (enableFeature (isLinux && vulkan-loader != null && glslang != null) "libglslang")
+    (enableFeature (samba != null && gplLicensing && version3Licensing) "libsmbclient")
     #(enableFeature (zvbi != null && gplLicensing) "libzvbi")
     /*
      * Developer flags
@@ -432,8 +435,9 @@ stdenv.mkDerivation rec {
   ] ++ optionals openglExtlib [ libGL libGLU ]
     ++ optionals nonfreeLicensing [ fdk_aac openssl ]
     ++ optional ((isLinux || isFreeBSD) && libva != null) libva
+    ++ optional ((isLinux || isFreeBSD) && libdrm != null) libdrm
     ++ optional (!isAarch64 && libvmaf != null && version3Licensing) libvmaf
-    ++ optionals isLinux [ alsaLib libraw1394 libv4l vulkan-loader glslang ]
+    ++ optionals isLinux [ alsa-lib libraw1394 libv4l vulkan-loader glslang ]
     ++ optional (isLinux && !isAarch64 && libmfx != null) libmfx
     ++ optional nvenc nv-codec-headers
     ++ optionals stdenv.isDarwin [ Cocoa CoreServices CoreAudio AVFoundation

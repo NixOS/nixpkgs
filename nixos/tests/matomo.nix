@@ -18,7 +18,7 @@ let
       };
       services.mysql = {
         enable = true;
-        package = pkgs.mysql;
+        package = pkgs.mariadb;
       };
       services.nginx.enable = true;
     };

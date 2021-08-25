@@ -5,13 +5,13 @@
 }:
 
 let
-  version = "4.9.10";
+  version = "5.0.2";
 
   subsurfaceSrc = (fetchFromGitHub {
     owner = "Subsurface";
     repo = "subsurface";
     rev = "v${version}";
-    sha256 = "12ndhjplz3cwndwzhfc959dc0i6rm2qf3v2d8n9kba8nj63iblfs";
+    sha256 = "1yay06m8p9qp2ghrg8dxavdq55y09apcgdnb7rihgs3hq86k539n";
     fetchSubmodules = true;
   });
 
@@ -40,13 +40,13 @@ let
   googlemaps = stdenv.mkDerivation rec {
     pname = "googlemaps";
 
-    version = "2018-06-02";
+    version = "2021-03-19";
 
     src = fetchFromGitHub {
       owner = "vladest";
       repo = "googlemaps";
-      rev = "54a357f9590d9cf011bf1713589f66bad65e00eb";
-      sha256 = "159kslp6rj0qznzxijppwvv8jnswlfgf2pw4x8ladi8vp6bzxnzi";
+      rev = "8f7def10c203fd3faa5ef96c5010a7294dca0759";
+      sha256 = "1irz398g45hk6xizwzd07qcx1ln8f7l6bhjh15f56yc20waqpx1x";
     };
 
     nativeBuildInputs = [ qmake ];
@@ -63,8 +63,6 @@ let
       mv *.so ${pluginsSubdir}/geoservices
       mv lib $out/
     '';
-
-    enableParallelBuilding = true;
 
     meta = with lib; {
       inherit (src.meta) homepage;

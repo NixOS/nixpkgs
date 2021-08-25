@@ -21,9 +21,9 @@ import shutil
 import socket
 import subprocess
 import sys
+import telnetlib
 import tempfile
 import time
-import traceback
 import unicodedata
 
 CHAR_TO_KEY = {
@@ -89,9 +89,7 @@ CHAR_TO_KEY = {
     ")": "shift-0x0B",
 }
 
-# Forward references
-log: "Logger"
-machines: "List[Machine]"
+global log, machines, test_script
 
 
 def eprint(*args: object, **kwargs: Any) -> None:
@@ -103,7 +101,6 @@ def make_command(args: list) -> str:
 
 
 def create_vlan(vlan_nr: str) -> Tuple[str, str, "subprocess.Popen[bytes]", Any]:
-    global log
     log.log("starting VDE switch for network {}".format(vlan_nr))
     vde_socket = tempfile.mkdtemp(
         prefix="nixos-test-vde-", suffix="-vde{}.ctl".format(vlan_nr)
@@ -128,18 +125,18 @@ def create_vlan(vlan_nr: str) -> Tuple[str, str, "subprocess.Popen[bytes]", Any]
     return (vlan_nr, vde_socket, vde_process, fd)
 
 
-def retry(fn: Callable) -> None:
+def retry(fn: Callable, timeout: int = 900) -> None:
     """Call the given function repeatedly, with 1 second intervals,
     until it returns True or a timeout is reached.
     """
 
-    for _ in range(900):
+    for _ in range(timeout):
         if fn(False):
             return
         time.sleep(1)
 
     if not fn(True):
-        raise Exception("action timed out")
+        raise Exception(f"action timed out after {timeout} seconds")
 
 
 class Logger:
@@ -246,6 +243,9 @@ def _perform_ocr_on_screenshot(
 
 
 class Machine:
+    def __repr__(self) -> str:
+        return f"<Machine '{self.name}'>"
+
     def __init__(self, args: Dict[str, Any]) -> None:
         if "name" in args:
             self.name = args["name"]
@@ -291,7 +291,12 @@ class Machine:
             net_frontend += "," + args["netFrontendArgs"]
 
         start_command = (
-            "qemu-kvm -m 384 " + net_backend + " " + net_frontend + " $QEMU_OPTS "
+            args.get("qemuBinary", "qemu-kvm")
+            + " -m 384 "
+            + net_backend
+            + " "
+            + net_frontend
+            + " $QEMU_OPTS "
         )
 
         if "hda" in args:
@@ -440,7 +445,7 @@ class Machine:
     def execute(self, command: str) -> Tuple[int, str]:
         self.connect()
 
-        out_command = "( {} ); echo '|!=EOF' $?\n".format(command)
+        out_command = "( set -euo pipefail; {} ); echo '|!=EOF' $?\n".format(command)
         self.shell.send(out_command.encode())
 
         output = ""
@@ -454,6 +459,17 @@ class Machine:
                 status_code = int(match[2])
                 return (status_code, output)
             output += chunk
+
+    def shell_interact(self) -> None:
+        """Allows you to interact with the guest shell
+
+        Should only be used during test development, not in the production test."""
+        self.connect()
+        self.log("Terminal is ready (there is no prompt):")
+        subprocess.run(
+            ["socat", "READLINE", f"FD:{self.shell.fileno()}"],
+            pass_fds=[self.shell.fileno()],
+        )
 
     def succeed(self, *commands: str) -> str:
         """Execute each command and check that it succeeds."""
@@ -482,7 +498,7 @@ class Machine:
                 output += out
         return output
 
-    def wait_until_succeeds(self, command: str) -> str:
+    def wait_until_succeeds(self, command: str, timeout: int = 900) -> str:
         """Wait until a command returns success and return its output.
         Throws an exception on timeout.
         """
@@ -494,7 +510,7 @@ class Machine:
             return status == 0
 
         with self.nested("waiting for success: {}".format(command)):
-            retry(check_success)
+            retry(check_success, timeout)
             return output
 
     def wait_until_fails(self, command: str) -> str:
@@ -894,59 +910,64 @@ class Machine:
 
 
 def create_machine(args: Dict[str, Any]) -> Machine:
-    global log
     args["log"] = log
-    args["redirectSerial"] = os.environ.get("USE_SERIAL", "0") == "1"
     return Machine(args)
 
 
 def start_all() -> None:
-    global machines
     with log.nested("starting all VMs"):
         for machine in machines:
             machine.start()
 
 
 def join_all() -> None:
-    global machines
     with log.nested("waiting for all VMs to finish"):
         for machine in machines:
             machine.wait_for_shutdown()
 
 
-def test_script() -> None:
-    exec(os.environ["testScript"])
-
-
-def run_tests() -> None:
-    global machines
-    tests = os.environ.get("tests", None)
-    if tests is not None:
-        with log.nested("running the VM test script"):
-            try:
-                exec(tests, globals())
-            except Exception as e:
-                eprint("error: ")
-                traceback.print_exc()
-                sys.exit(1)
+def run_tests(interactive: bool = False) -> None:
+    if interactive:
+        ptpython.repl.embed(test_symbols(), {})
     else:
-        ptpython.repl.embed(locals(), globals())
-
-    # TODO: Collect coverage data
-
-    for machine in machines:
-        if machine.is_up():
-            machine.execute("sync")
+        test_script()
+        # TODO: Collect coverage data
+        for machine in machines:
+            if machine.is_up():
+                machine.execute("sync")
 
 
 def serial_stdout_on() -> None:
-    global log
     log._print_serial_logs = True
 
 
 def serial_stdout_off() -> None:
-    global log
     log._print_serial_logs = False
+
+
+class EnvDefault(argparse.Action):
+    """An argpars Action that takes values from the specified
+    environment variable as the flags default value.
+    """
+
+    def __init__(self, envvar, required=False, default=None, nargs=None, **kwargs):  # type: ignore
+        if not default and envvar:
+            if envvar in os.environ:
+                if nargs is not None and (nargs.isdigit() or nargs in ["*", "+"]):
+                    default = os.environ[envvar].split()
+                else:
+                    default = os.environ[envvar]
+                kwargs["help"] = (
+                    kwargs["help"] + f" (default from environment: {default})"
+                )
+        if required and default:
+            required = False
+        super(EnvDefault, self).__init__(
+            default=default, required=required, nargs=nargs, **kwargs
+        )
+
+    def __call__(self, parser, namespace, values, option_string=None):  # type: ignore
+        setattr(namespace, self.dest, values)
 
 
 @contextmanager
@@ -962,26 +983,91 @@ def subtest(name: str) -> Iterator[None]:
     return False
 
 
+def _test_symbols() -> Dict[str, Any]:
+    general_symbols = dict(
+        start_all=start_all,
+        test_script=globals().get("test_script"),  # same
+        machines=globals().get("machines"),  # without being initialized
+        log=globals().get("log"),  # extracting those symbol keys
+        os=os,
+        create_machine=create_machine,
+        subtest=subtest,
+        run_tests=run_tests,
+        join_all=join_all,
+        retry=retry,
+        serial_stdout_off=serial_stdout_off,
+        serial_stdout_on=serial_stdout_on,
+        Machine=Machine,  # for typing
+    )
+    return general_symbols
+
+
+def test_symbols() -> Dict[str, Any]:
+
+    general_symbols = _test_symbols()
+
+    machine_symbols = {m.name: machines[idx] for idx, m in enumerate(machines)}
+    print(
+        "additionally exposed symbols:\n    "
+        + ", ".join(map(lambda m: m.name, machines))
+        + ",\n    "
+        + ", ".join(list(general_symbols.keys()))
+    )
+    return {**general_symbols, **machine_symbols}
+
+
 if __name__ == "__main__":
-    arg_parser = argparse.ArgumentParser()
+    arg_parser = argparse.ArgumentParser(prog="nixos-test-driver")
     arg_parser.add_argument(
         "-K",
         "--keep-vm-state",
         help="re-use a VM state coming from a previous run",
         action="store_true",
     )
-    (cli_args, vm_scripts) = arg_parser.parse_known_args()
+    arg_parser.add_argument(
+        "-I",
+        "--interactive",
+        help="drop into a python repl and run the tests interactively",
+        action="store_true",
+    )
+    arg_parser.add_argument(
+        "--start-scripts",
+        metavar="START-SCRIPT",
+        action=EnvDefault,
+        envvar="startScripts",
+        nargs="*",
+        help="start scripts for participating virtual machines",
+    )
+    arg_parser.add_argument(
+        "--vlans",
+        metavar="VLAN",
+        action=EnvDefault,
+        envvar="vlans",
+        nargs="*",
+        help="vlans to span by the driver",
+    )
+    arg_parser.add_argument(
+        "testscript",
+        action=EnvDefault,
+        envvar="testScript",
+        help="the test script to run",
+        type=pathlib.Path,
+    )
+
+    args = arg_parser.parse_args()
+    testscript = pathlib.Path(args.testscript).read_text()
+
+    global log, machines, test_script
 
     log = Logger()
 
-    vlan_nrs = list(dict.fromkeys(os.environ.get("VLANS", "").split()))
-    vde_sockets = [create_vlan(v) for v in vlan_nrs]
+    vde_sockets = [create_vlan(v) for v in args.vlans]
     for nr, vde_socket, _, _ in vde_sockets:
         os.environ["QEMU_VDE_SOCKET_{}".format(nr)] = vde_socket
 
     machines = [
-        create_machine({"startCommand": s, "keepVmState": cli_args.keep_vm_state})
-        for s in vm_scripts
+        create_machine({"startCommand": s, "keepVmState": args.keep_vm_state})
+        for s in args.start_scripts
     ]
     machine_eval = [
         "{0} = machines[{1}]".format(m.name, idx) for idx, m in enumerate(machines)
@@ -1000,7 +1086,13 @@ if __name__ == "__main__":
                 process.terminate()
         log.close()
 
+    def test_script() -> None:
+        with log.nested("running the VM test script"):
+            symbols = test_symbols()  # call eagerly
+            exec(testscript, symbols, None)
+
+    interactive = args.interactive or (not bool(testscript))
     tic = time.time()
-    run_tests()
+    run_tests(interactive)
     toc = time.time()
     print("test script finished in {:.2f}s".format(toc - tic))

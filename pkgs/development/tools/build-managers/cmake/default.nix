@@ -7,10 +7,11 @@
 , useSharedLibraries ? (!isBootstrap && !stdenv.isCygwin)
 , useOpenSSL ? !isBootstrap, openssl
 , useNcurses ? false, ncurses
-, withQt5 ? false, qtbase
+, withQt5 ? false, qtbase, wrapQtAppsHook
+, buildDocs ? (!isBootstrap && (useNcurses || withQt5)), sphinx, texinfo
 }:
 
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation rec {
   pname = "cmake"
           + lib.optionalString isBootstrap "-boot"
           + lib.optionalString useNcurses "-cursesUI"
@@ -18,7 +19,7 @@ stdenv.mkDerivation (rec {
   version = "3.19.7";
 
   src = fetchurl {
-    url = "${meta.homepage}files/v${lib.versions.majorMinor version}/cmake-${version}.tar.gz";
+    url = "https://cmake.org/files/v${lib.versions.majorMinor version}/cmake-${version}.tar.gz";
     # compare with https://cmake.org/files/v${lib.versions.majorMinor version}/cmake-${version}-SHA-256.txt
     sha256 = "sha256-WKFfDVagr8zDzFNxI0/Oc/zGyPnb13XYmOUQuDF1WI4=";
   };
@@ -35,14 +36,17 @@ stdenv.mkDerivation (rec {
 
   ] ++ lib.optional stdenv.isCygwin ./3.2.2-cygwin.patch;
 
-  outputs = [ "out" ];
+  outputs = [ "out" ]
+    ++ lib.optionals buildDocs [ "man" "info" ];
   setOutputFlags = false;
 
   setupHook = ./setup-hook.sh;
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-  nativeBuildInputs = [ setupHook pkg-config ];
+  nativeBuildInputs = [ setupHook pkg-config ]
+    ++ lib.optionals buildDocs [ texinfo ]
+    ++ lib.optionals withQt5 [ wrapQtAppsHook ];
 
   buildInputs = []
     ++ lib.optionals useSharedLibraries [ bzip2 curlMinimal expat libarchive xz zlib libuv rhash ]
@@ -68,6 +72,11 @@ stdenv.mkDerivation (rec {
     "--docdir=share/doc/${pname}${version}"
   ] ++ (if useSharedLibraries then [ "--no-system-jsoncpp" "--system-libs" ] else [ "--no-system-libs" ]) # FIXME: cleanup
     ++ lib.optional withQt5 "--qt-gui"
+    ++ lib.optionals buildDocs [
+      "--sphinx-build=${sphinx}/bin/sphinx-build"
+      "--sphinx-man"
+      "--sphinx-info"
+    ]
     # Workaround https://gitlab.kitware.com/cmake/cmake/-/issues/20568
     ++ lib.optionals stdenv.hostPlatform.is32bit [
       "CFLAGS=-D_FILE_OFFSET_BITS=64"
@@ -93,7 +102,7 @@ stdenv.mkDerivation (rec {
   ];
 
   # make install attempts to use the just-built cmake
-  preInstall = lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) ''
+  preInstall = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
     sed -i 's|bin/cmake|${buildPackages.cmakeMinimal}/bin/cmake|g' Makefile
   '';
 
@@ -122,5 +131,4 @@ stdenv.mkDerivation (rec {
     maintainers = with maintainers; [ ttuegel lnl7 ];
     license = licenses.bsd3;
   };
-} // (if withQt5 then { dontWrapQtApps = true; } else {})
-)
+}

@@ -32,6 +32,7 @@
 , stdenv
 , wayland
 , wayland-protocols
+, wayland-scanner
 , xkbcomp
 , xkeyboard_config
 , xorgproto
@@ -42,12 +43,21 @@
 stdenv.mkDerivation rec {
 
   pname = "xwayland";
-  version = "21.1.1";
+  version = "21.1.2";
   src = fetchurl {
     url = "mirror://xorg/individual/xserver/${pname}-${version}.tar.xz";
-    sha256 = "sha256-MfJhzlG77namyj7AKqNn/6K176K5hBLfV8zv16GQA84=";
+    sha256 = "sha256-uBy91a1guLetjD7MfsKijJvwIUSGcHNc67UB8Ivr0Ys=";
   };
-  nativeBuildInputs = [ pkg-config meson ninja ];
+
+  depsBuildBuild = [
+    pkg-config
+  ];
+  nativeBuildInputs = [
+    pkg-config
+    meson
+    ninja
+    wayland-scanner
+  ];
   buildInputs = [
     egl-wayland
     epoxy
@@ -83,8 +93,8 @@ stdenv.mkDerivation rec {
     zlib
   ];
   mesonFlags = [
-    "-Dxwayland-eglstream=true"
-    "-Ddefault-font-path=${defaultFontPath}"
+    "-Dxwayland_eglstream=true"
+    "-Ddefault_font_path=${defaultFontPath}"
     "-Dxkb_bin_dir=${xkbcomp}/bin"
     "-Dxkb_dir=${xkeyboard_config}/etc/X11/xkb"
     "-Dxkb_output_dir=${placeholder "out"}/share/X11/xkb/compiled"

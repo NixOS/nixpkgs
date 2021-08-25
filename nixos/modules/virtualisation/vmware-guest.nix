@@ -56,5 +56,7 @@ in
           ${open-vm-tools}/bin/vmware-user-suid-wrapper
         '';
     };
+
+    services.udev.packages = [ open-vm-tools ];
   };
 }

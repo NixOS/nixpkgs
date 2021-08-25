@@ -7,7 +7,7 @@
 , sqlite-fts4
 , tabulate
 , pytestCheckHook
-, pytestrunner
+, pytest-runner
 , black
 , hypothesis
 , sqlite
@@ -15,12 +15,12 @@
 
 buildPythonPackage rec {
   pname = "sqlite-utils";
-  version = "3.6";
+  version = "3.9.1";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-WCqbz0tssy7i76Sg2PeexjDollypPGnOqqfUJOHAFWA=";
+    sha256 = "a08ed62eb269e26ae9c35b9be9cd3d395b0522157e6543128a40cc5302d8aa81";
   };
 
   propagatedBuildInputs = [
@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytestCheckHook
-    pytestrunner
+    pytest-runner
     black
     hypothesis
   ];

@@ -248,7 +248,7 @@ rec {
          then v.__pretty v.val
       else if v == {} then "{ }"
       else if v ? type && v.type == "derivation" then
-        "<derivation ${v.drvPath}>"
+        "<derivation ${v.drvPath or "???"}>"
       else "{" + introSpace
           + libStr.concatStringsSep introSpace (libAttr.mapAttrsToList
               (name: value:

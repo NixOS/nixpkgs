@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, autoconf, automake, bison, libtool, pkg-config, which
-, alsaLib, asio, libjack2, libgig, libsndfile, lv2 }:
+, alsa-lib, asio, libjack2, libgig, libsndfile, lv2 }:
 
 stdenv.mkDerivation rec {
   pname = "linuxsampler";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoconf automake bison libtool pkg-config which ];
 
-  buildInputs = [ alsaLib asio libjack2 libgig libsndfile lv2 ];
+  buildInputs = [ alsa-lib asio libjack2 libgig libsndfile lv2 ];
 
   enableParallelBuilding = true;
 

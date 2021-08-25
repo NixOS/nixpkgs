@@ -1,22 +1,22 @@
 { lib, stdenv, fetchFromGitHub
-, alsaLib, freetype, xorg, curl, libGL, libjack2, gnome
+, alsa-lib, freetype, xorg, curl, libGL, libjack2, gnome
 , pkg-config, makeWrapper
 }:
 
 stdenv.mkDerivation rec {
   pname = "helio-workstation";
-  version = "3.4";
+  version = "3.6";
 
   src = fetchFromGitHub {
     owner = "helio-fm";
     repo = pname;
     rev = version;
     fetchSubmodules = true;
-    sha256 = "sha256-zXsDu/xi7OV6VtnZK9ZJ8uwPeA5uTgNpAQsqe90iwG4=";
+    sha256 = "sha256-qW39g6rQ5VPQ3Hx9NmwLbpZiITnzFZDZlcLkE+pJKPc=";
   };
 
   buildInputs = [
-    alsaLib freetype xorg.libX11 xorg.libXext xorg.libXinerama xorg.libXrandr
+    alsa-lib freetype xorg.libX11 xorg.libXext xorg.libXinerama xorg.libXrandr
     xorg.libXcursor xorg.libXcomposite curl libGL libjack2 gnome.zenity
   ];
 

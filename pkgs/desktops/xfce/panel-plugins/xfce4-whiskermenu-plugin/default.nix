@@ -6,7 +6,7 @@ mkXfceDerivation {
   version = "2.5.3";
   rev-prefix = "v";
   odd-unstable = false;
-  sha256 = "15kcph35pji3l1y81snrmpqzhhpdc9h4nk6cjsjyla51a1s2y3hz";
+  sha256 = "sha256-Hw4vdFChKOqllsxMS2Bi7UL48a3Z6oB8oCPKWwa8bJY=";
 
   nativeBuildInputs = [ cmake ];
 

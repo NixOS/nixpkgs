@@ -19,7 +19,6 @@ stdenv.mkDerivation rec {
     "--with-cblas=-lblas"
   ];
   meta = {
-    inherit version;
     description = "Algorithms for computing exact solutions to dense systems of linear equations over the integers";
     license = lib.licenses.gpl2Plus;
     maintainers = [lib.maintainers.raskin];
