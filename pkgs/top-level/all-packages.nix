@@ -10607,6 +10607,8 @@ with pkgs;
     SDL = SDL_sixel;
   };
 
+  vtune = callPackage ../development/tools/profiling/vtune { };
+
   openconnect = openconnect_gnutls;
 
   openconnect_openssl = callPackage ../tools/networking/openconnect {
