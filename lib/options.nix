@@ -247,7 +247,9 @@ rec {
   showDefs = defs: concatMapStrings (def:
     let
       # Pretty print the value for display, if successful
-      prettyEval = builtins.tryEval (lib.generators.toPretty { depthLimit = 10; } def.value);
+      prettyEval = builtins.tryEval
+        (lib.generators.toPretty { }
+          (lib.generators.withRecursion { depthLimit = 10; throwOnDepthLimit = false; } def.value));
       # Split it into its lines
       lines = filter (v: ! isList v) (builtins.split "\n" prettyEval.value);
       # Only display the first 5 lines, and indent them for better visibility
