@@ -12605,7 +12605,7 @@ with pkgs;
   };
 
   beam = callPackage ./beam-packages.nix { };
-  beam_nox = callPackage ./beam-packages.nix { wxSupport = false; };
+  beam_nox = callPackage ./beam-packages.nix { beam = beam_nox; wxSupport = false; };
 
   inherit (beam.interpreters)
     erlang erlangR24 erlangR23 erlangR22 erlangR21
