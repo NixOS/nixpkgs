@@ -9,15 +9,15 @@
 
 let
   LD_LIBRARY_PATH = lib.makeLibraryPath [
-  glib gtk3 xorg.libXdamage
-  xorg.libX11 xorg.libxcb xorg.libXcomposite
-  xorg.libXcursor xorg.libXext xorg.libXfixes
-  xorg.libXi xorg.libXrender xorg.libXtst
-  nss nspr atk at-spi2-atk dbus
-  gdk-pixbuf pango cairo
-  xorg.libXrandr expat libdrm
-  mesa alsa-lib at-spi2-core
-  cups
+    glib gtk3 xorg.libXdamage
+    xorg.libX11 xorg.libxcb xorg.libXcomposite
+    xorg.libXcursor xorg.libXext xorg.libXfixes
+    xorg.libXi xorg.libXrender xorg.libXtst
+    nss nspr atk at-spi2-atk dbus
+    gdk-pixbuf pango cairo
+    xorg.libXrandr expat libdrm
+    mesa alsa-lib at-spi2-core
+    cups
   ];
 in
 stdenv.mkDerivation rec {
@@ -57,6 +57,7 @@ stdenv.mkDerivation rec {
     description = "A sophisticated software modeler";
     homepage = "https://staruml.io/";
     license = licenses.unfree;
+    maintainers = with maintainers; [ ];
     platforms = [ "x86_64-linux" ];
   };
 }
