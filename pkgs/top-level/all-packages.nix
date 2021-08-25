@@ -1395,6 +1395,10 @@ with pkgs;
 
   catcli = python3Packages.callPackage ../tools/filesystems/catcli { };
 
+  cbqn = callPackage ../development/interpreters/cbqn {
+    stdenv = clangStdenv;
+  };
+
   chezmoi = callPackage ../tools/misc/chezmoi { };
 
   chipsec = callPackage ../tools/security/chipsec {
