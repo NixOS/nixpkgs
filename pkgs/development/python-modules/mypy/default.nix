@@ -29,8 +29,11 @@ buildPythonPackage rec {
 
   # Compile mypy with mypyc, which makes mypy about 4 times faster. The compiled
   # version is also the default in the wheels on Pypi that include binaries.
-  # is64bit: unfortunately the build would exhaust all possible memory on i686-linux.
-  MYPY_USE_MYPYC = stdenv.buildPlatform.is64bit;
+  MYPY_USE_MYPYC =
+    # is64bit: unfortunately the build would exhaust all possible memory on i686-linux.
+    stdenv.buildPlatform.is64bit
+    # Derivation fails to build since v0.900 if mypyc is enabled.
+    && lib.strings.versionOlder version "0.900";
 
   meta = with lib; {
     description = "Optional static typing for Python";
