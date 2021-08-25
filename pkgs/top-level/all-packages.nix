@@ -32020,6 +32020,8 @@ with pkgs;
 
   run-scaled = callPackage ../tools/X11/run-scaled { };
 
+  runiq = callPackage ../tools/text/runiq { };
+
   runit = callPackage ../tools/system/runit { };
 
   refind = callPackage ../tools/bootloaders/refind { };
