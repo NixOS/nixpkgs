@@ -1,5 +1,5 @@
 { lib, mkDerivation, fetchFromGitHub, cmake, doxygen, makeWrapper
-, msgpack, neovim, python3Packages, qtbase }:
+, msgpack, neovim, python3Packages, qtbase, qtsvg }:
 
 mkDerivation rec {
   pname = "neovim-qt-unwrapped";
