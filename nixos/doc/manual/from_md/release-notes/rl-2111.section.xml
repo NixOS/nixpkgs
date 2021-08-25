@@ -182,13 +182,29 @@
         </para>
       </listitem>
     </itemizedlist>
-    <itemizedlist spacing="compact">
+    <itemizedlist>
       <listitem>
         <para>
           <link xlink:href="https://docs.fluidd.xyz/">fluidd</link>, a
           Klipper web interface for managing 3d printers using
           moonraker. Available as
           <link linkend="opt-services.fluidd.enable">fluidd</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/earnestly/sx">sx</link>,
+          a simple alternative to both xinit and startx for starting a
+          Xorg server. Available as
+          <link linkend="opt-services.xserver.displayManager.sx.enable">services.xserver.displayManager.sx</link>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://postfixadmin.sourceforge.io/">postfixadmin</link>,
+          a web based virtual user administration interface for Postfix
+          mail servers. Available as
+          <link linkend="opt-services.postfixadmin.enable">postfixadmin</link>.
         </para>
       </listitem>
     </itemizedlist>
@@ -847,6 +863,15 @@ Superuser created successfully.
           release instead of 1.0.x
         </para>
       </listitem>
+      <listitem>
+        <para>
+          If <literal>exfat</literal> is included in
+          <literal>boot.supportedFilesystems</literal> and when using
+          kernel 5.7 or later, the <literal>exfatprogs</literal>
+          user-space utilities are used instead of
+          <literal>exfat</literal>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-notable-changes">
@@ -1045,6 +1070,13 @@ Superuser created successfully.
           virtual host, even if <literal>enableACME</literal> is set.
           This is useful for providers not using the same certificate to
           sign OCSP responses and server certificates.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>lib.formats.yaml</literal>’s
+          <literal>generate</literal> will not generate JSON anymore,
+          but instead use more of the YAML-specific syntax.
         </para>
       </listitem>
       <listitem>

@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "pysyncthru";
-  version = "0.7.5";
+  version = "0.7.7";
 
   disabled = isPy27;
 
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "nielstron";
     repo = "pysyncthru";
     rev = "release-${version}";
-    sha256 = "122zxwqwx03vaxbhmp3cjibjnkirayz0w68gvslsdr7n9nqv3pgz";
+    sha256 = "1449lbg9dx13p03v6fl2ap0xk5i5wrmy6amx1pl0rgz712p5jmq7";
   };
 
   propagatedBuildInputs = [

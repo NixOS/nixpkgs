@@ -6,11 +6,11 @@
 }:
 mkDerivation rec {
   pname = "vaultenv";
-  version = "0.13.1";
+  version = "0.13.3";
 
   src = fetchzip {
     url = "https://github.com/channable/vaultenv/archive/v${version}.tar.gz";
-    sha256 = "0ycf5skxjns77sgbm8faq9ps9rs2hqznsbzrd51hdkpak56k42cp";
+    sha256 = "sha256-17tdlqG8z4GviI7kkLbktC6SqnQFDdZhWtejscG0n48=";
   };
 
   buildTools = [ hpack ];
