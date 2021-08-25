@@ -212,7 +212,7 @@ in {
   perldevel = common {
     perl = pkgs.perldevel;
     buildPerl = buildPackages.perldevel;
-    version = "5.35.0";
-    sha256 = "0217nbswhkjhw60kng2p64611xna7za681kk30fkriyicd3yph6n";
+    version = "5.35.3";
+    sha256 = "06442zc5rvisl120f58jpy95bkf8f1cc4n577nzihdavlbfmnyyn";
   };
 }
