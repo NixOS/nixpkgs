@@ -133,9 +133,9 @@ let
   modDir = factorio-utils.mkModDirDrv mods;
 
   base = with actual; {
-    name = "factorio-${releaseType}-${version}";
+    pname = "factorio-${releaseType}";
 
-    inherit src;
+    inherit version src;
 
     preferLocalBuild = true;
     dontBuild = true;
