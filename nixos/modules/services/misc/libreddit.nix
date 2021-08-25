@@ -2,14 +2,13 @@
 
 with lib;
 
-  let
-    cfg = config.services.libreddit;
+let
+  cfg = config.services.libreddit;
 
-    args = concatStringsSep " " ([
-      "--port ${toString cfg.port}"
-      "--address ${cfg.address}"
-    ] ++ optional cfg.redirect "--redirect-https");
-
+  args = concatStringsSep " " ([
+    "--port ${toString cfg.port}"
+    "--address ${cfg.address}"
+  ]);
 in
 {
   options = {
@@ -28,12 +27,6 @@ in
         example = 8000;
         type = types.port;
         description = "The port to listen on";
-      };
-
-      redirect = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Enable the redirecting to HTTPS";
       };
 
       openFirewall = mkOption {
