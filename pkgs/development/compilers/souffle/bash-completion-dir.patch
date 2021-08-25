@@ -1,0 +1,16 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -333,12 +333,7 @@ endif()
+ # Installing bash completion file
+ # --------------------------------------------------
+ find_package (bash-completion)
+-if (BASH_COMPLETION_FOUND)
+-    message(STATUS "Using bash completion dir ${BASH_COMPLETION_COMPLETIONSDIR}")
+-else()
+-    set (BASH_COMPLETION_COMPLETIONSDIR "/etc/bash_completion.d")
+-    message (STATUS "Using fallback bash completion dir ${BASH_COMPLETION_COMPLETIONSDIR}")
+-endif()
++set(BASH_COMPLETION_COMPLETIONSDIR "${CMAKE_INSTALL_PREFIX}/share/bash-completion/completions" CACHE PATH "Location of bash_completion.d")
+ 
+ install(
+     FILES "${CMAKE_SOURCE_DIR}/debian/souffle.bash-completion"

@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub
-, perl, ncurses, zlib, sqlite, libffi
-, autoreconfHook, mcpp, bison, flex, doxygen, graphviz
+, bash-completion, perl, ncurses, zlib, sqlite, libffi
+, mcpp, cmake, bison, flex, lsb-release, git, doxygen, graphviz
 , makeWrapper
 }:
 
@@ -10,31 +10,30 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "souffle";
-  version = "2.0.2";
+  version = "2.1";
 
   src = fetchFromGitHub {
     owner  = "souffle-lang";
     repo   = "souffle";
     rev    = version;
-    sha256 = "1fa6yssgndrln8qbbw2j7j199glxp63irfrz1c2y424rq82mm2r5";
+    sha256 = "11x3v78kciz8j8p1j0fppzcyl2lbm6ib4svj6a9cwi836p9h3fma";
   };
 
-  nativeBuildInputs = [ autoreconfHook bison flex mcpp doxygen graphviz makeWrapper perl ];
-  buildInputs = [ ncurses zlib sqlite libffi ];
+  nativeBuildInputs = [ bison cmake flex lsb-release git mcpp doxygen graphviz makeWrapper perl ];
+  buildInputs = [ bash-completion ncurses zlib sqlite libffi ];
 
   # these propagated inputs are needed for the compiled Souffle mode to work,
   # since generated compiler code uses them. TODO: maybe write a g++ wrapper
   # that adds these so we can keep the propagated inputs clean?
   propagatedBuildInputs = [ ncurses zlib sqlite libffi ];
 
-  # see 565a8e73e80a1bedbb6cc037209c39d631fc393f and parent commits upstream for
-  # Wno-error fixes
-  patchPhase = ''
-    substituteInPlace ./src/Makefile.am \
-      --replace '-Werror' '-Werror -Wno-error=deprecated -Wno-error=other'
+  patches = [ ./bash-completion-dir.patch ];
 
-    substituteInPlace configure.ac \
-      --replace "m4_esyscmd([git describe --tags --always | tr -d '\n'])" "${version}"
+  # sic: The Soufflé CMakeLists.txt really does contain 'UNKOWN'. When bumping
+  # this package, check that this is still true.
+  prePatch = ''
+    substituteInPlace ./CMakeLists.txt \
+      --replace 'UNKOWN' '${version}'
   '';
 
   postInstall = ''
