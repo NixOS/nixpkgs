@@ -16923,7 +16923,9 @@ with pkgs;
 
   libliftoff = callPackage ../development/libraries/libliftoff { };
 
-  liblqr1 = callPackage ../development/libraries/liblqr-1 { };
+  liblqr1 = callPackage ../development/libraries/liblqr-1 {
+    inherit (darwin.apple_sdk.frameworks) Carbon;
+  };
 
   liblockfile = callPackage ../development/libraries/liblockfile { };
 
