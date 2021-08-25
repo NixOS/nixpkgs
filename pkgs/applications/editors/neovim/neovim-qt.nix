@@ -19,7 +19,8 @@ mkDerivation rec {
 
   buildInputs = [
     neovim.unwrapped # only used to generate help tags at build time
-    qtbase
+    qt5.qtbase
+    qt5.qtsvg
   ] ++ (with python3Packages; [
     jinja2 python msgpack
   ]);
