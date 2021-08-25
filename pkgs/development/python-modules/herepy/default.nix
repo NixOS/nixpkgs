@@ -20,6 +20,11 @@ buildPythonPackage rec {
     sha256 = "sha256-05x3EQoyv38j4UcixN0sf5BI2oTjfasAIQyZqQSjdPM=";
   };
 
+  postPatch = ''
+    substituteInPlace requirements.txt \
+      --replace "requests==2.25.1" "requests>=2.25.1"
+  '';
+
   propagatedBuildInputs = [
     requests
   ];
