@@ -209,6 +209,27 @@ in rec {
     NIX_LDFLAGS = " -lglib-2.0 -lpcre";
   });
 
+  gtk3 = (super.gtk3.override {
+    trackerSupport = false;
+    withGtkDoc = false;
+    # Symbol overlap between wayland and libXcursor
+    waylandSupport = false;
+    wayland = null;
+    wayland-protocols = null;
+  }).overrideAttrs (old: {
+    NIX_MESON_DEPENDENCY_STATIC = true;
+    nativeBuildInputs = (old.nativeBuildInputs or []) ++ [
+      super.pkg-config
+      super.mesonShlibsToStaticHook
+      gdk-pixbuf
+    ];
+    mesonFlags = (old.mesonFlags or []) ++ [
+      "-Dintrospection=false"
+      "-Dwayland_backend=false"
+    ];
+    NIX_CFLAGS_COMPILE = "-DG_LOG_DOMAIN=\"\"\"\"";
+  });
+
   harfbuzz = super.harfbuzz.overrideAttrs (old: {
     NIX_MESON_DEPENDENCY_STATIC = true;
     nativeBuildInputs = (old.nativeBuildInputs or []) ++ [
