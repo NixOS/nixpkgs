@@ -21689,6 +21689,21 @@ let
     };
   };
 
+  TestSnapshot = buildPerlPackage {
+    pname = "Test-Snapshot";
+    version = "0.06";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/E/ET/ETJ/Test-Snapshot-0.06.tar.gz";
+      sha256 = "f4dd7a9a55baa2247540ae34210cd05a04f9d1061befec97a1c90eda95bfae45";
+    };
+    buildInputs = [ CaptureTiny ];
+    propagatedBuildInputs = [ TextDiff ];
+    meta = {
+      description = "Test against data stored in automatically-named file";
+      license = lib.licenses.artistic2;
+    };
+  };
+
   TestSpec = buildPerlPackage {
     pname = "Test-Spec";
     version = "0.54";
