@@ -18,10 +18,12 @@ buildPythonPackage rec {
     nosetests -e testBind
   '';
 
+  pythonImportsCheck = [ "pyrad" ];
+
   meta = with lib; {
     description = "Python RADIUS Implementation";
     homepage = "https://bitbucket.org/zzzeek/sqlsoup";
-    license = licenses.mit;
+    license = licenses.bsd3;
     maintainers = [ maintainers.globin ];
   };
 }
