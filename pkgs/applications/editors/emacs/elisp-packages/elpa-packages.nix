@@ -66,7 +66,7 @@ self: let
         # actually unpack source of ada-mode and wisi
         # which are both needed to compile the tools
         # we need at runtime
-        phases = "unpackPhase " + old.phases; # not a list, interestingly…
+        dontUnpack = false;
         srcs = [
           super.ada-mode.src
           # ada-mode needs a specific version of wisi, check NEWS or ada-mode's
