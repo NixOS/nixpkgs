@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "censys";
-  version = "2.0.5";
+  version = "2.0.6";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "censys";
     repo = "censys-python";
     rev = "v${version}";
-    sha256 = "sha256-/vMDNHNUY3mpK9jSDPVhuA050rwZF8O6IjTCLqQZIWc=";
+    sha256 = "sha256-Lbd2Pm79n0cFoGHC2rucxgZijzcVYVJJsq1yzqB9QLk=";
   };
 
   nativeBuildInputs = [
@@ -51,8 +51,8 @@ buildPythonPackage rec {
       --replace 'backoff = "^1.11.1"' 'backoff = "*"' \
       --replace 'requests = ">=2.26.0"' 'requests = "*"' \
       --replace 'rich = "^10.6.0"' 'rich = "*"'
-    substituteInPlace pytest.ini --replace \
-      " --cov -rs -p no:warnings" ""
+    substituteInPlace pytest.ini \
+      --replace "--cov" ""
   '';
 
   # The tests want to write a configuration file
