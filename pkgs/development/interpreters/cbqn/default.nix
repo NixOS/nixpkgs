@@ -55,7 +55,7 @@ let
       doCheck = true;
       checkPhase = ''
         # Implement a very rudimentary smoke test
-        echo "↕4" | ./BQN | grep "0 1 2 3"
+        echo "'w'+↕4" | ./BQN | grep "wxyz"
       '' + lib.optionalString fullTestSuite ''
         ./BQN ${libBQN}/test/this.bqn | rg --passthru "All passed!"
       '';
