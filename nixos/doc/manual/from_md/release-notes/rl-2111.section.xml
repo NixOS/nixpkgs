@@ -863,6 +863,15 @@ Superuser created successfully.
           release instead of 1.0.x
         </para>
       </listitem>
+      <listitem>
+        <para>
+          If <literal>exfat</literal> is included in
+          <literal>boot.supportedFilesystems</literal> and when using
+          kernel 5.7 or later, the <literal>exfatprogs</literal>
+          user-space utilities are used instead of
+          <literal>exfat</literal>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-notable-changes">
