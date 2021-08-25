@@ -102,14 +102,20 @@ in {
         echo "file ${cfg.format} $rootDisk" >> $out/nix-support/hydra-build-products
 
        ${pkgs.jq}/bin/jq -n \
-         --arg label ${lib.escapeShellArg config.system.nixos.label} \
+         --arg system_label ${lib.escapeShellArg config.system.nixos.label} \
          --arg system ${lib.escapeShellArg pkgs.stdenv.hostPlatform.system} \
          --arg root_logical_bytes "$(${pkgs.qemu}/bin/qemu-img info --output json "$bootDisk" | ${pkgs.jq}/bin/jq '."virtual-size"')" \
          --arg boot_logical_bytes "$(${pkgs.qemu}/bin/qemu-img info --output json "$rootDisk" | ${pkgs.jq}/bin/jq '."virtual-size"')" \
          --arg root "$rootDisk" \
          --arg boot "$bootDisk" \
-         '$ARGS.named' \
-         > $out/nix-support/image-info.json
+        '{}
+          | .label = $system_label
+          | .system = $system
+          | .disks.boot.logical_bytes = $boot_logical_bytes
+          | .disks.boot.file = $boot
+          | .disks.root.logical_bytes = $root_logical_bytes
+          | .disks.root.file = $root
+          ' > $out/nix-support/image-info.json
       '';
     };
 
@@ -136,12 +142,18 @@ in {
         echo "file ${cfg.format} $diskImage" >> $out/nix-support/hydra-build-products
 
        ${pkgs.jq}/bin/jq -n \
-         --arg label ${lib.escapeShellArg config.system.nixos.label} \
+         --arg system_label ${lib.escapeShellArg config.system.nixos.label} \
          --arg system ${lib.escapeShellArg pkgs.stdenv.hostPlatform.system} \
          --arg logical_bytes "$(${pkgs.qemu}/bin/qemu-img info --output json "$diskImage" | ${pkgs.jq}/bin/jq '."virtual-size"')" \
          --arg file "$diskImage" \
-         '$ARGS.named' \
-         > $out/nix-support/image-info.json
+          '{}
+          | .label = $system_label
+          | .system = $system
+          | .logical_bytes = $logical_bytes
+          | .file = $file
+          | .disks.root.logical_bytes = $logical_bytes
+          | .disks.root.file = $file
+          ' > $out/nix-support/image-info.json
       '';
     };
   in if config.ec2.zfs.enable then zfsBuilder else extBuilder;
