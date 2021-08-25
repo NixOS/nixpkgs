@@ -13,11 +13,6 @@ stdenv.mkDerivation rec {
     sha256 = "0rv8bnyxz89za6gwk9gmdbaf3j7c1j52mip7h81rir288j35m84x";
   };
 
-  patchPhase = ''
-    # https://github.com/DeadSix27/waifu2x-converter-cpp/issues/123
-    sed -i 's:{"PNG",  false},:{"PNG",  true},:' src/main.cpp
-  '';
-
   buildInputs = [
     ocl-icd opencv3 opencl-headers
   ] ++ lib.optional cudaSupport cudatoolkit;
