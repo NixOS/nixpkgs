@@ -1,17 +1,18 @@
 let
   # Allow the entire bootstrap sequence to be overridden
   # if bootstrap == null, we just use the given bytecode and call it a day.
-  usingBytecode = generic: generic {
-    useBytecode = true;
-    testSuitePasses = false;
-  };
-  bootstrapProcess = generic: let
-    phase1 = usingBytecode generic;
-    phase2 = generic { bqn = phase1; };
-    phase3 = generic { bqn = phase2; };
-  in phase3;
-in
-{ stdenv, lib, fetchFromGitHub, bootstrap ? bootstrapProcess, ripgrep }:
+  usingBytecode = generic:
+    generic {
+      useBytecode = true;
+      testSuitePasses = false;
+    };
+  bootstrapProcess = generic:
+    let
+      phase1 = usingBytecode generic;
+      phase2 = generic { bqn = phase1; };
+      phase3 = generic { bqn = phase2; };
+    in phase3;
+in { stdenv, lib, fetchFromGitHub, bootstrap ? bootstrapProcess, ripgrep }:
 
 let
   libBQN = fetchFromGitHub {
@@ -71,7 +72,9 @@ let
         echo "'w'+↕4" | ./BQN | grep "wxyz"
 
         ./BQN ${libBQN}/test/this.bqn \
-          | rg --passthru ${if testSuitePasses then "'All passed'" else "'\\d+ failed'"}
+          | rg --passthru ${
+            if testSuitePasses then "'All passed'" else "'\\d+ failed'"
+          }
       '';
 
       meta = with lib; {
@@ -82,5 +85,4 @@ let
         homepage = "https://mlochbaum.github.io/BQN/";
       };
     };
-in
-  if bootstrap != null then bootstrap generic else usingBytecode generic
+in if bootstrap != null then bootstrap generic else usingBytecode generic
