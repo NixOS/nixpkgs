@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "regex";
-  version = "2021.4.4";
+  version = "2021.8.21";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Uro9P5uULEnX5LwQW7KFUcRAZfE5plBiq3kSvvEMmvs=";
+    sha256 = "sha256-+vCLA0GCj2opuPfdlNXPjMfDm/w+Z7eFFMVLSUtmkVo=";
   };
 
   # Sources for different Python releases are located in same folder
