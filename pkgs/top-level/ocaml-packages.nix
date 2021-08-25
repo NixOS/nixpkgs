@@ -1214,6 +1214,8 @@ let
 
     vg = callPackage ../development/ocaml-modules/vg { };
 
+    vlq = callPackage ../development/ocaml-modules/vlq { };
+
     visitors = callPackage ../development/ocaml-modules/visitors { };
 
     wasm = callPackage ../development/ocaml-modules/wasm { };
