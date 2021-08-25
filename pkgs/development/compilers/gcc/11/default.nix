@@ -152,6 +152,7 @@ stdenv.mkDerivation ({
     else "")
       + lib.optionalString targetPlatform.isAvr ''
             makeFlagsArray+=(
+               '-s' # workaround for hitting hydra log limit
                'LIMITS_H_TEST=false'
             )
           '';
