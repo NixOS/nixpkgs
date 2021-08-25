@@ -25477,6 +25477,8 @@ with pkgs;
 
   kaidan = libsForQt5.callPackage ../applications/networking/instant-messengers/kaidan { };
 
+  kde-gruvbox = callPackage ../data/themes/kde-gruvbox { };
+
   kdeltachat = libsForQt5.callPackage ../applications/networking/instant-messengers/kdeltachat { };
 
   kdevelop-pg-qt = libsForQt5.callPackage ../applications/editors/kdevelop5/kdevelop-pg-qt.nix { };
