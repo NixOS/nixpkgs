@@ -13,20 +13,13 @@
 
 buildPythonPackage rec {
   pname = "pymupdf";
-  version = "1.18.16";
+  version = "1.18.17";
 
   src = fetchPypi {
     pname = "PyMuPDF";
     inherit version;
-    sha256 = "b21e39098fbbe0fdf269fdb2d1dd25a3847bbf22785ee8903d3a5637c2d0b9d7";
+    sha256 = "fa39ee5e91eae77818e07b6bb7e0cb0b402ad88e39a74b08626ce1c2150c5414";
   };
-
-  patchFlags = [ "--binary" "--ignore-whitespace" ];
-  patches = [
-    # Add NIX environment support.
-    # Should be removed next pyMuPDF release.
-    ./nix-support.patch
-  ];
 
   postPatch = ''
     substituteInPlace setup.py \
