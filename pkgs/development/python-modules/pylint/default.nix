@@ -1,13 +1,14 @@
 { stdenv
 , lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pythonOlder
 , installShellFiles
 , astroid
 , isort
 , mccabe
 , toml
+, platformdirs
 , pytest-benchmark
 , pytest-xdist
 , pytestCheckHook
@@ -15,13 +16,15 @@
 
 buildPythonPackage rec {
   pname = "pylint";
-  version = "2.7.4";
+  version = "2.10.2";
 
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "bd38914c7731cdc518634a8d3c5585951302b6e2b6de60fbb3f7a0220e21eeee";
+  src = fetchFromGitHub {
+    owner = "PyCQA";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "06xrv79ns4bsk819iqrhjcb36k925yl2zi93l6sv7r228y0y8jl6";
   };
 
   nativeBuildInputs = [
@@ -32,6 +35,7 @@ buildPythonPackage rec {
     astroid
     isort
     mccabe
+    platformdirs
     toml
   ];
 
