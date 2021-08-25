@@ -40,20 +40,18 @@ let
 in
 py.pkgs.pythonPackages.buildPythonApplication rec {
   pname = "paperless-ng";
-  version = "1.4.5";
+  version = "1.5.0";
 
   src = fetchurl {
     url = "https://github.com/jonaswinkler/paperless-ng/releases/download/ng-${version}/${pname}-${version}.tar.xz";
-    sha256 = "2PJb8j3oimlfiJ3gqjK6uTemzFdtAP2Mlm5RH09bx/E=";
+    sha256 = "oVSq0AWksuWC81MF5xiZ6ZbdKKtqqphmL+xIzJLaDMw=";
   };
 
   format = "other";
 
   # Make bind address configurable
-  # Fix tests with Pillow 8.3.1: https://github.com/jonaswinkler/paperless-ng/pull/1183
-  prePatch = ''
+  postPatch = ''
     substituteInPlace gunicorn.conf.py --replace "bind = '0.0.0.0:8000'" ""
-    substituteInPlace src/paperless_tesseract/parsers.py --replace "return x" "return round(x)"
   '';
 
   propagatedBuildInputs = with py.pkgs.pythonPackages; [

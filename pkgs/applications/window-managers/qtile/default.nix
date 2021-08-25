@@ -10,7 +10,7 @@ let
   pythonPackages = python.pkgs;
 
   unwrapped = pythonPackages.buildPythonPackage rec {
-    name = "qtile-${version}";
+    pname = "qtile";
     version = "0.18.0";
 
     src = fetchFromGitHub {
@@ -61,6 +61,8 @@ let
   };
 in
   (python.withPackages (ps: [ unwrapped ])).overrideAttrs (_: {
+    # otherwise will be exported as "env", this restores `nix search` behavior
+    name = "${unwrapped.pname}-${unwrapped.version}";
     # export underlying qtile package
     passthru = { inherit unwrapped; };
   })

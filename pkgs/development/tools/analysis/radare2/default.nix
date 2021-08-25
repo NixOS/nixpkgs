@@ -27,8 +27,7 @@
 }:
 
 let
-  # FIXME: how to keep this up-to-date
-  # https://github.com/radareorg/vector35-arch-arm64/
+  # FIXME: Compare revision with https://github.com/radareorg/radare2/blob/master/libr/asm/arch/arm/v35arm64/Makefile#L20
   arm64 = fetchFromGitHub {
     owner = "radareorg";
     repo = "vector35-arch-arm64";

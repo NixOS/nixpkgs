@@ -24,6 +24,18 @@ let
     # Override the version of some packages pinned in Home Assistant's setup.py and requirements_all.txt
     (mkOverride "python-slugify" "4.0.1" "69a517766e00c1268e5bbfc0d010a0a8508de0b18d30ad5a1ff357f8ae724270")
 
+    (self: super: {
+      async-upnp-client = super.async-upnp-client.overridePythonAttrs (oldAttrs: rec {
+        version = "0.19.2";
+        src = fetchFromGitHub {
+          owner = "StevenLooman";
+          repo = "async_upnp_client";
+          rev = version;
+          sha256 = "1v8d2lvxihqasn7866zssys16s0lgxkk6ri2dp4rr7wr8g9ixvdr";
+        };
+      });
+    })
+
     # Pinned due to API changes in iaqualink>=2.0, remove after
     # https://github.com/home-assistant/core/pull/48137 was merged
     (self: super: {

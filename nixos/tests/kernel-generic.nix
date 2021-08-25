@@ -6,10 +6,10 @@
 with pkgs.lib;
 
 let
-  makeKernelTest = version: linuxPackages: (import ./make-test-python.nix ({ pkgs, ... }: {
-    name = "kernel-${version}";
+  testsForLinuxPackages = linuxPackages: (import ./make-test-python.nix ({ pkgs, ... }: {
+    name = "kernel-${linuxPackages.kernel.version}";
     meta = with pkgs.lib.maintainers; {
-      maintainers = [ nequissimus ];
+      maintainers = [ nequissimus atemu ];
     };
 
     machine = { ... }:
@@ -23,22 +23,26 @@ let
         assert "${linuxPackages.kernel.modDirVersion}" in machine.succeed("uname -a")
       '';
   }) args);
+  kernels = {
+    inherit (pkgs)
+      linuxPackages_4_4
+      linuxPackages_4_9
+      linuxPackages_4_14
+      linuxPackages_4_19
+      linuxPackages_5_4
+      linuxPackages_5_10
+      linuxPackages_5_13
 
-  packages = pkgs.linuxKernel.packages;
-in
-with pkgs; {
-  linux_4_4 = makeKernelTest "4.4" packages.linux_4_4;
-  linux_4_9 = makeKernelTest "4.9" packages.linux_4_9;
-  linux_4_14 = makeKernelTest "4.14" packages.linux_4_14;
-  linux_4_19 = makeKernelTest "4.19" packages.linux_4_19;
-  linux_5_4 = makeKernelTest "5.4" packages.linux_5_4;
-  linux_5_10 = makeKernelTest "5.10" packages.linux_5_10;
-  linux_5_13 = makeKernelTest "5.13" packages.linux_5_13;
+      linuxPackages_4_14_hardened
+      linuxPackages_4_19_hardened
+      linuxPackages_5_4_hardened
+      linuxPackages_5_10_hardened
 
-  linux_hardened_4_14 = makeKernelTest "4.14" packages.linux_4_14_hardened;
-  linux_hardened_4_19 = makeKernelTest "4.19" packages.linux_4_19_hardened;
-  linux_hardened_5_4 = makeKernelTest "5.4" packages.linux_5_4_hardened;
-  linux_hardened_5_10 = makeKernelTest "5.10" packages.linux_5_10_hardened;
+      linuxPackages_testing;
+  };
 
-  linux_testing = makeKernelTest "testing" linuxPackages_testing;
+in mapAttrs (_: lP: testsForLinuxPackages lP) kernels // {
+  inherit testsForLinuxPackages;
+
+  testsForKernel = kernel: testsForLinuxPackages (pkgs.linuxPackagesFor kernel);
 }
