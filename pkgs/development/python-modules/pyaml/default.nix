@@ -14,13 +14,20 @@ buildPythonPackage rec {
     sha256 = "sha256-oWNtY8R2MooHIT0LcRG7Y1cPGrij7d9gUiYwJQwj2XU=";
   };
 
-  propagatedBuildInputs = [ pyyaml ];
+  propagatedBuildInputs = [
+    pyyaml
+  ];
 
-  checkInputs = [ unidecode ];
+  checkInputs = [
+    unidecode
+  ];
 
-  meta = {
+  pythonImportsCheck = [ "pyaml" ];
+
+  meta = with lib; {
     description = "PyYAML-based module to produce pretty and readable YAML-serialized data";
     homepage = "https://github.com/mk-fg/pretty-yaml";
-    license = lib.licenses.wtfpl;
+    license = licenses.wtfpl;
+    maintainers = with maintainers; [ ];
   };
 }
