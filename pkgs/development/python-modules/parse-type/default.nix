@@ -1,7 +1,10 @@
-{ lib, fetchFromGitHub
-, buildPythonPackage, pythonOlder
-, pytest, pytest-runner
-, parse, six, enum34
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, parse
+, pytestCheckHook
+, pythonOlder
+, six
 }:
 
 buildPythonPackage rec {
@@ -14,8 +17,15 @@ buildPythonPackage rec {
     rev = "v${version}";
     sha256 = "sha256-CJroqJIi5DpmR8i1lr8OJ+234615PhpVUsqK91XOT3E=";
   };
-  checkInputs = [ pytest pytest-runner ];
-  propagatedBuildInputs = [ parse six ] ++ lib.optional (pythonOlder "3.4") enum34;
+
+  propagatedBuildInputs = [
+    parse
+    six
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+  ];
 
   postPatch = ''
     substituteInPlace pytest.ini \
@@ -25,13 +35,11 @@ buildPythonPackage rec {
       --replace "--junit-xml=build/testing/report.xml" ""
   '';
 
-  checkPhase = ''
-    py.test tests
-  '';
+  pythonImportsCheck = [ "parse_type" ];
 
   meta = with lib; {
-    homepage = "https://github.com/jenisys/parse_type";
     description = "Simplifies to build parse types based on the parse module";
+    homepage = "https://github.com/jenisys/parse_type";
     license = licenses.bsd3;
     maintainers = with maintainers; [ alunduil ];
   };
