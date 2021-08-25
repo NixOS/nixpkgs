@@ -54,9 +54,4 @@ rec {
     inherit callPackage;
   };
 
-  luajit_openresty = import ../luajit/openresty.nix {
-    self = luajit_openresty;
-    inherit callPackage;
-  };
-
 }
