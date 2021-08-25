@@ -183,6 +183,32 @@ in rec {
     NIX_MESON_DEPENDENCY_STATIC = true;
   });
 
+  gobject-introspection = super.gobject-introspection.overrideAttrs (old: {
+    outputs = [ "out" "dev" "man" ];
+    NIX_MESON_DEPENDENCY_STATIC = true;
+    nativeBuildInputs = (old.nativeBuildInputs or []) ++ [
+      super.mesonShlibsToStaticHook
+    ];
+    postPatch = (old.postPatch or "") + ''
+      # Disable python bindings as they can't be build statically
+      sed -iE '/^giscanner_pymod = .*/,$d' giscanner/meson.build
+    '';
+    # Moving the GIR_DIR to $out to avoid cyclic dependencies between
+    postConfigure = ''
+      # $out/lib/gobject-introspeciton/libgirepository.a and $dev/share/gir-1.0
+      sed -iE 's=#define GIR_DIR.*=#define GIR_DIR "${placeholder "out"}/share/gir-1.0"=g' config.h
+    '';
+    postFixup = ''
+      mkdir -p "$out/share"
+      mv "$dev/share/gir-1.0" "$out/share"
+    '';
+    mesonFlags = (old.mesonFlags or []) ++ [
+      "-Dbuild_introspection_data=false"
+      "-Dgtk_doc=false"
+    ];
+    NIX_LDFLAGS = " -lglib-2.0 -lpcre";
+  });
+
   harfbuzz = super.harfbuzz.overrideAttrs (old: {
     NIX_MESON_DEPENDENCY_STATIC = true;
     nativeBuildInputs = (old.nativeBuildInputs or []) ++ [
