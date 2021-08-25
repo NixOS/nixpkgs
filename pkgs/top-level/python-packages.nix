@@ -3443,6 +3443,8 @@ in {
 
   hwi = callPackage ../development/python-modules/hwi { };
 
+  hy = callPackage ../development/python-modules/hy { };
+
   hydra = callPackage ../development/python-modules/hydra { };
 
   hydra-check = callPackage ../development/python-modules/hydra-check { };
@@ -4705,6 +4707,8 @@ in {
   mutatormath = callPackage ../development/python-modules/mutatormath { };
 
   mutesync = callPackage ../development/python-modules/mutesync { };
+
+  mutf8 = callPackage ../development/python-modules/mutf8 { };
 
   mwclient = callPackage ../development/python-modules/mwclient { };
 
@@ -5976,6 +5980,8 @@ in {
   pydicom = callPackage ../development/python-modules/pydicom { };
 
   pydispatcher = callPackage ../development/python-modules/pydispatcher { };
+
+  pydmd = callPackage ../development/python-modules/pydmd { };
 
   pydns = callPackage ../development/python-modules/py3dns { };
 

@@ -5,7 +5,7 @@ let
 
   manifests = fetchzip {
     url = "https://github.com/fluxcd/flux2/releases/download/v${version}/manifests.tar.gz";
-    sha256 = "sha256-/uD0hxtTJSr+2tZcwzOIQcEbikHOshWukEBSaK3FiP4=";
+    sha256 = "05khmpbv42wjpkdb4n51pnq678la6hjfhkyy49d0j2kcnvfd1m5p";
     stripRoot = false;
   };
 in
@@ -55,7 +55,6 @@ buildGoModule rec {
     '';
     homepage = "https://fluxcd.io";
     license = licenses.asl20;
-    maintainers = with maintainers; [ jlesquembre ];
-    platforms = platforms.unix;
+    maintainers = with maintainers; [ jlesquembre superherointj ];
   };
 }

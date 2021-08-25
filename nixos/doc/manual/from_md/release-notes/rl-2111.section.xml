@@ -182,13 +182,29 @@
         </para>
       </listitem>
     </itemizedlist>
-    <itemizedlist spacing="compact">
+    <itemizedlist>
       <listitem>
         <para>
           <link xlink:href="https://docs.fluidd.xyz/">fluidd</link>, a
           Klipper web interface for managing 3d printers using
           moonraker. Available as
           <link linkend="opt-services.fluidd.enable">fluidd</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/earnestly/sx">sx</link>,
+          a simple alternative to both xinit and startx for starting a
+          Xorg server. Available as
+          <link linkend="opt-services.xserver.displayManager.sx.enable">services.xserver.displayManager.sx</link>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://postfixadmin.sourceforge.io/">postfixadmin</link>,
+          a web based virtual user administration interface for Postfix
+          mail servers. Available as
+          <link linkend="opt-services.postfixadmin.enable">postfixadmin</link>.
         </para>
       </listitem>
     </itemizedlist>

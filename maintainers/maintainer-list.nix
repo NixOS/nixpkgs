@@ -11355,6 +11355,12 @@
     githubId = 335406;
     name = "David Asabina";
   };
+  vidister = {
+    email = "v@vidister.de";
+    github = "vidister";
+    githubId = 11413574;
+    name = "Fiona Weber";
+  };
   vifino = {
     email = "vifino@tty.sh";
     github = "vifino";

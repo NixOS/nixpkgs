@@ -5532,7 +5532,10 @@ with pkgs;
   google-cloud-sdk = callPackage ../tools/admin/google-cloud-sdk {
     python = python3;
   };
-  google-cloud-sdk-gce = google-cloud-sdk.override { with-gce = true; };
+  google-cloud-sdk-gce = google-cloud-sdk.override {
+    python = python38;
+    with-gce = true;
+  };
 
   google-fonts = callPackage ../data/fonts/google-fonts { };
 
@@ -8339,7 +8342,9 @@ with pkgs;
 
   remarshal = callPackage ../development/tools/remarshal { };
 
-  rehex = callPackage ../applications/editors/rehex { };
+  rehex = callPackage ../applications/editors/rehex {
+    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa IOKit;
+  };
 
   rig = callPackage ../tools/misc/rig {
     stdenv = gccStdenv;
@@ -12929,6 +12934,8 @@ with pkgs;
   rascal = callPackage ../development/interpreters/rascal { };
 
   red = callPackage ../development/interpreters/red { };
+
+  regexploit = callPackage ../tools/security/regexploit { };
 
   regextester = callPackage ../applications/misc/regextester { };
 
@@ -20095,6 +20102,8 @@ with pkgs;
   popa3d = callPackage ../servers/mail/popa3d { };
 
   postfix = callPackage ../servers/mail/postfix { };
+
+  postfixadmin = callPackage ../servers/postfixadmin { };
 
   postsrsd = callPackage ../servers/mail/postsrsd { };
 
