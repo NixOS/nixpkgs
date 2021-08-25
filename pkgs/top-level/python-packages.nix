@@ -2995,6 +2995,8 @@ in {
 
   google-cloud-asset = callPackage ../development/python-modules/google-cloud-asset { };
 
+  google-cloud-audit-log = callPackage ../development/python-modules/google-cloud-audit-log { };
+
   google-cloud-automl = callPackage ../development/python-modules/google-cloud-automl { };
 
   google-cloud-bigquery = callPackage ../development/python-modules/google-cloud-bigquery { };
@@ -8640,6 +8642,8 @@ in {
   tempora = callPackage ../development/python-modules/tempora { };
 
   tenacity = callPackage ../development/python-modules/tenacity { };
+
+  tensorboard-data-server = callPackage ../development/python-modules/tensorboard-data-server { };
 
   tensorboard-plugin-profile = callPackage ../development/python-modules/tensorboard-plugin-profile { };
 
