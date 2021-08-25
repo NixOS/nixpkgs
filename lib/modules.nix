@@ -170,7 +170,7 @@ rec {
                     then throw ''
                       ${baseMsg}
 
-                      It seems as you're trying to declare an option by placing it into `config' rather than `options'!
+                      It seems as if you're trying to declare an option by placing it into `config' rather than `options'!
                     ''
                   else
                     throw ''
