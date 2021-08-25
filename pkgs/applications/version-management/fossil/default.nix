@@ -2,11 +2,10 @@
 , installShellFiles
 , tcl
 , libiconv
-, fetchurl
+, fetchzip
 , zlib
 , openssl
 , readline
-, sqlite
 , ed
 , which
 , tcllib
@@ -15,25 +14,24 @@
 
 stdenv.mkDerivation rec {
   pname = "fossil";
-  version = "2.15.1";
+  version = "2.16";
 
-  src = fetchurl {
-    url = "https://www.fossil-scm.org/index.html/uv/fossil-src-${version}.tar.gz";
-    name = "${pname}-${version}.tar.gz";
-    sha256 = "sha256-gNJ5I8ZjsqLHEPiujNVJhi4E+MBChXBidMNK48jKF9E=";
+  src = fetchzip {
+    url = "https://fossil-scm.org/home/tarball/version-${version}/fossil-${version}.tar.gz";
+    sha256 = "0jxnc3zkza3mc40sb6q0f8bfl2wpxhcmdgr5kv56sbryf8xn2dhr";
+    name = "${pname}-${version}-src";
   };
 
   nativeBuildInputs = [ installShellFiles tcl tcllib ];
 
-  buildInputs = [ zlib openssl readline sqlite which ed ]
+  buildInputs = [ zlib openssl readline which ed ]
     ++ lib.optional stdenv.isDarwin libiconv;
 
   enableParallelBuilding = true;
 
   doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
 
-  configureFlags = [ "--disable-internal-sqlite" ]
-    ++ lib.optional withJson "--json";
+  configureFlags = lib.optional withJson "--json";
 
   preBuild = ''
     export USER=nonexistent-but-specified-user
