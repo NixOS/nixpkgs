@@ -1,17 +1,26 @@
-{ lib, buildPythonPackage, fetchPypi, requests, coverage, unittest2 }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, requests
+, coverage
+, unittest2
+}:
 
 buildPythonPackage rec {
   pname = "codecov";
-  version = "2.1.11";
+  version = "2.1.12";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6cde272454009d27355f9434f4e49f238c0273b216beda8472a65dc4957f473b";
+    sha256 = "sha256-oNpGu1AlQm2ola+Qk43vjuEtN/y8u7wVttxkz368UcE=";
   };
 
-  checkInputs = [ unittest2 ]; # Tests only
+  propagatedBuildInputs = [
+    requests
+    coverage
+  ];
 
-  propagatedBuildInputs = [ requests coverage ];
+  checkInputs = [ unittest2 ];
 
   postPatch = ''
     sed -i 's/, "argparse"//' setup.py
@@ -24,5 +33,6 @@ buildPythonPackage rec {
     description = "Python report uploader for Codecov";
     homepage = "https://codecov.io/";
     license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
   };
 }
