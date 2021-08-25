@@ -303,7 +303,26 @@ rec {
   # TODO: figure out a clever way to integrate location information from
   # something like __unsafeGetAttrPos.
 
-  warn = msg: builtins.trace "[1;31mwarning: ${msg}[0m";
+  /*
+    Print a warning before returning the second argument. This function behaves
+    like `builtins.trace`, but requires a string message and formats it as a
+    warning, including the `warning: ` prefix.
+
+    To get a call stack trace and abort evaluation, set the environment variable
+    `NIX_ABORT_ON_WARN=true` and set the Nix options `--option pure-eval false --show-trace`
+
+    Type: string -> a -> a
+  */
+  warn =
+    if lib.elem (builtins.getEnv "NIX_ABORT_ON_WARN") ["1" "true" "yes"]
+    then msg: builtins.trace "[1;31mwarning: ${msg}[0m" (abort "NIX_ABORT_ON_WARN=true; warnings are treated as unrecoverable errors.")
+    else msg: builtins.trace "[1;31mwarning: ${msg}[0m";
+
+  /*
+    Like warn, but only warn when the first argument is `true`.
+
+    Type: bool -> string -> a -> a
+  */
   warnIf = cond: msg: if cond then warn msg else id;
 
   info = msg: builtins.trace "INFO: ${msg}";
