@@ -6,6 +6,8 @@ let
     "ghc865Binary"
     "ghc8102Binary"
     "ghc8102BinaryMinimal"
+    "ghcjs"
+    "ghcjs810"
     "integer-simple"
     "native-bignum"
     "ghcHEAD"
@@ -107,6 +109,13 @@ in {
       libffi = pkgs.libffi;
     };
 
+    ghcjs = compiler.ghcjs810;
+    ghcjs810 = callPackage ../development/compilers/ghcjs/8.10 {
+      bootPkgs = packages.ghc8107;
+      ghcjsSrcJson = ../development/compilers/ghcjs/8.10/git.json;
+      stage0 = ../development/compilers/ghcjs/8.10/stage0.nix;
+    };
+
     # The integer-simple attribute set contains all the GHC compilers
     # build with integer-simple instead of integer-gmp.
     integer-simple = let
@@ -176,6 +185,14 @@ in {
       buildHaskellPackages = bh.packages.ghcHEAD;
       ghc = bh.compiler.ghcHEAD;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-head.nix { };
+    };
+
+    ghcjs = packages.ghcjs810;
+    ghcjs810 = callPackage ../development/haskell-modules rec {
+      buildHaskellPackages = ghc.bootPkgs;
+      ghc = bh.compiler.ghcjs810;
+      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.10.x.nix { };
+      packageSetConfig = callPackage ../development/haskell-modules/configuration-ghcjs.nix { };
     };
 
     # The integer-simple attribute set contains package sets for all the GHC compilers
