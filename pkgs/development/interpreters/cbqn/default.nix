@@ -22,7 +22,7 @@ let
     sha256 = "1zqfa8pzqhgg1n7xs46fjqhqh3njsyrk9b8lbzcl6ka4rrjkx4j5";
   };
 
-  generic = { useBytecode ? false, bqn ? null, fullTestSuite ? true }:
+  generic = { useBytecode ? false, bqn ? null, testSuitePasses ? true }:
     # Either use bytecode, or have bqn specified.
     assert (bqn != null) == !useBytecode;
 
@@ -33,7 +33,7 @@ let
       inherit src;
       patches = lib.optional useBytecode ./generated.patch;
       nativeBuildInputs = [ bqn ];
-      checkInputs = lib.optional fullTestSuite ripgrep;
+      checkInputs = [ ripgrep ];
 
       buildPhase = (if useBytecode then ''
         echo "Copying bytecode from bootstrap"
@@ -56,8 +56,9 @@ let
       checkPhase = ''
         # Implement a very rudimentary smoke test
         echo "'w'+↕4" | ./BQN | grep "wxyz"
-      '' + lib.optionalString fullTestSuite ''
-        ./BQN ${libBQN}/test/this.bqn | rg --passthru "All passed!"
+
+        ./BQN ${libBQN}/test/this.bqn \
+          | rg --passthru ${if testSuitePasses then "'All passed'" else "'\\d+ failed'"}
       '';
 
       meta = with lib; {
@@ -69,7 +70,7 @@ let
       };
     };
 
-  phase1 = generic { useBytecode = true; fullTestSuite = false; };
+  phase1 = generic { useBytecode = true; testSuitePasses = false; };
   phase2 = generic { bqn = phase1; };
   phase3 = generic { bqn = phase2; };
 in
