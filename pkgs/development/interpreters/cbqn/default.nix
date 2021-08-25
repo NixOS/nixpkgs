@@ -1,4 +1,17 @@
-{ stdenv, lib, fetchFromGitHub, bootstrapped ? true, ripgrep }:
+let
+  # Allow the entire bootstrap sequence to be overridden
+  # if bootstrap == null, we just use the given bytecode and call it a day.
+  usingBytecode = generic: generic {
+    useBytecode = true;
+    testSuitePasses = false;
+  };
+  bootstrapProcess = generic: let
+    phase1 = usingBytecode generic;
+    phase2 = generic { bqn = phase1; };
+    phase3 = generic { bqn = phase2; };
+  in phase3;
+in
+{ stdenv, lib, fetchFromGitHub, bootstrap ? bootstrapProcess, ripgrep }:
 
 let
   libBQN = fetchFromGitHub {
@@ -69,9 +82,5 @@ let
         homepage = "https://mlochbaum.github.io/BQN/";
       };
     };
-
-  phase1 = generic { useBytecode = true; testSuitePasses = false; };
-  phase2 = generic { bqn = phase1; };
-  phase3 = generic { bqn = phase2; };
 in
-  if bootstrapped then phase3 else phase1
+  if bootstrap != null then bootstrap generic else usingBytecode generic
