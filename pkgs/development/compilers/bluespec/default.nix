@@ -43,7 +43,7 @@ in stdenv.mkDerivation rec {
       src/comp/update-build-system.sh \
       src/comp/wrapper.sh \
 
-    # patchShebangs doesn't catch these. 
+    # patchShebangs doesn't catch these.
     substituteInPlace \
         testsuite/findfailures.csh \
         --replace '/bin/tcsh' "${tcsh}/bin/tcsh" \
@@ -107,9 +107,9 @@ in stdenv.mkDerivation rec {
     mv inst/bin $out
     mv inst/lib $out
 
-    # fragile, I know.. 
+    # fragile, I know..
     mkdir -p $doc/share/doc/bsc
-    mv inst/README $doc/share/doc/bsc 
+    mv inst/README $doc/share/doc/bsc
     mv inst/ReleaseNotes.* $doc/share/doc/bsc
     mv inst/doc/*.pdf $doc/share/doc/bsc
   '';
