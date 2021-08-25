@@ -1,5 +1,5 @@
 { lib, buildPackages, runCommand, nettools, bc, bison, flex, perl, rsync, gmp, libmpc, mpfr, openssl
-, libelf, cpio, elfutils, zstd, gawk, python3Minimal
+, libelf, cpio, elfutils, zstd, gawk, python3Minimal, zlib, pahole
 , writeTextFile
 }:
 
@@ -316,9 +316,11 @@ stdenv.mkDerivation ((drvAttrs config stdenv.hostPlatform.linux-kernel kernelPat
       ++ optional  (lib.versionAtLeast version "4.14" && lib.versionOlder version "5.8") libelf
       # Removed util-linuxMinimal since it should not be a dependency.
       ++ optionals (lib.versionAtLeast version "4.16") [ bison flex ]
-      ++ optional  (lib.versionAtLeast version "5.2")  cpio
+      ++ optionals (lib.versionAtLeast version "5.2")  [ cpio pahole ]
       ++ optional  (lib.versionAtLeast version "5.8")  elfutils
       ;
+
+  buildInputs = optional (lib.versionAtLeast version "5.2") zlib;
 
   hardeningDisable = [ "bindnow" "format" "fortify" "stackprotector" "pic" "pie" ];
 
