@@ -18,7 +18,6 @@ buildGoModule rec {
       -s -w
       -X main.Version=v${version}
       -X main.DefaultBuildkitdImage=earthly/buildkitd:v${version}
-      -extldflags -static
   '';
 
   BUILDTAGS = "dfrunmount dfrunsecurity dfsecrets dfssh dfrunnetwork";
