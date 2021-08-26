@@ -1,16 +1,16 @@
 { lib, buildGoModule, fetchFromGitHub }:
 buildGoModule rec {
   pname = "thanos";
-  version = "0.19.0";
+  version = "0.22.0";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "thanos-io";
     repo = "thanos";
-    sha256 = "sha256-FryVKOabokw2+RyD94QLVpC9ZGIHPuSXZf5H+eitj80=";
+    sha256 = "sha256-3jEPfYRewuXTk39sfp6MFKu0LYCzj/VEQTJVUUSkbZk=";
   };
 
-  vendorSha256 = "sha256-GBjPMZ6BwUOKywNf1Bc2WeA14qvKQ0R5gWvVxgO/7Lo=";
+  vendorSha256 = "sha256-rXfYlrTm0Av9Sxq+jdxsxIDvJQIo3rcBTydtiXnifTw=";
 
   doCheck = false;
 

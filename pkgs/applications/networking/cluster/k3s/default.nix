@@ -7,7 +7,6 @@
 , bridge-utils
 , conntrack-tools
 , buildGoPackage
-, git
 , runc
 , kmod
 , libseccomp
@@ -44,8 +43,8 @@ with lib;
 # Those pieces of software we entirely ignore upstream's handling of, and just
 # make sure they're in the path if desired.
 let
-  k3sVersion = "1.21.3+k3s1";     # k3s git tag
-  k3sCommit = "1d1f220fbee9cdeb5416b76b707dde8c231121f2"; # k3s git commit at the above version
+  k3sVersion = "1.21.4+k3s1";     # k3s git tag
+  k3sCommit = "3e250fdbab72d88f7e6aae57446023a0567ffc97"; # k3s git commit at the above version
 
   traefikChartVersion = "9.18.2"; # taken from ./scripts/download at TRAEFIK_VERSION
   k3sRootVersion = "0.9.1";       # taken from ./scripts/download at ROOT_VERSION
@@ -102,7 +101,7 @@ let
   k3sRepo = fetchgit {
     url = "https://github.com/k3s-io/k3s";
     rev = "v${k3sVersion}";
-    sha256 = "sha256-K4HVXFp5cpByEO4dUwmpzOuhsGh1k7X6k5aShCorTjg=";
+    sha256 = "1w7drvk0bmlmqrxh1y6dxjy7dk6bdrl72pkd25lc1ir6wbzb05h9";
   };
   # Stage 1 of the k3s build:
   # Let's talk about how k3s is structured.
