@@ -4664,6 +4664,8 @@ in {
 
   mpmath = callPackage ../development/python-modules/mpmath { };
 
+  mpris-server = callPackage ../development/python-modules/mpris-server { };
+
   mpv = callPackage ../development/python-modules/mpv {
     inherit (pkgs) mpv;
   };
