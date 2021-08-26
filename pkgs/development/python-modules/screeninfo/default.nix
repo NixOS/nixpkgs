@@ -2,12 +2,12 @@
 
 buildPythonApplication rec {
   pname = "screeninfo";
-  version = "0.6.7";
+  version = "0.7";
   disabled = isPy27; # dataclasses isn't available for python2
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1c4bac1ca329da3f68cbc4d2fbc92256aa9bb8ff8583ee3e14f91f0a7baa69cb";
+    sha256 = "12a97c3527e3544ac5dbd7c1204283e2653d655cbd15844c990a83b1b13ef500";
   };
 
   # dataclasses is a compatibility shim for python 3.6 ONLY
