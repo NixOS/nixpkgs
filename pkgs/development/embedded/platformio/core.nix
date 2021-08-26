@@ -9,11 +9,15 @@ let
   python = python3.override {
     packageOverrides = self: super: {
       aiofiles = super.aiofiles.overridePythonAttrs (oldAttrs: rec {
+        pname = "aiofiles";
         version = "0.6.0";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "e0281b157d3d5d59d803e3f4557dcc9a3dff28a4dd4829a9ff478adae50ca092";
+        src = fetchFromGitHub {
+          owner = "Tinche";
+          repo = pname;
+          rev = "v${version}";
+          sha256 = "0w23d88q65m06884pfcps661clr11w9wm701ihx6kfxjwga6fkzf";
         };
+        doCheck = false;
       });
 
       click = super.click.overridePythonAttrs (oldAttrs: rec {

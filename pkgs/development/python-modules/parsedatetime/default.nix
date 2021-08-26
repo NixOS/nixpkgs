@@ -29,11 +29,12 @@ buildPythonPackage rec {
     "testFloat"
   ];
 
-  pythonImportChecks = [ "parsedatetime" ];
+  pythonImportsCheck = [ "parsedatetime" ];
 
   meta = with lib; {
     description = "Parse human-readable date/time text";
     homepage = "https://github.com/bear/parsedatetime";
     license = licenses.asl20;
+    maintainers = with maintainers; [ ];
   };
 }
