@@ -881,6 +881,14 @@ Superuser created successfully.
           <literal>exfat</literal>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          The <literal>todoman</literal> package was upgraded from 3.9.0
+          to 4.0.0. This introduces breaking changes in the
+          <link xlink:href="https://todoman.readthedocs.io/en/stable/configure.html#configuration-file">configuration
+          file</link> format.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-notable-changes">
