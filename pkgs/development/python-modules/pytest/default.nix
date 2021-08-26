@@ -27,6 +27,11 @@ buildPythonPackage rec {
     sha256 = "50bcad0a0b9c5a72c8e4e7c9855a3ad496ca6a881a3641b4260605450772c54b";
   };
 
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "pluggy>=0.12,<1.0.0a1" "pluggy>=0.23,<2.0"
+  '';
+
   nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
