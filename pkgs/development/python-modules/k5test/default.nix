@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "k5test";
-  version = "0.9.2";
+  version = "0.10.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1lqp3jgfngyhaxjgj3n230hn90wsylwilh120yjf62h7b1s02mh8";
+    sha256 = "fc5e7e5e286b2f331c1396c33f2a1cd8cf34e78d8d482168a50ffd8576a1455c";
   };
 
   patches = [
