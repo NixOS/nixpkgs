@@ -20,6 +20,9 @@ buildPythonPackage rec {
     msrest
   ];
 
+  # zero tests run
+  doCheck = false;
+
   pythonImportsCheck = [ "azure.synapse.artifacts" ];
 
   meta = with lib; {
