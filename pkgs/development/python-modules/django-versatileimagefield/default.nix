@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchPypi
 , django
-, python
 , pillow
 , python_magic
 }:
@@ -21,6 +20,8 @@ buildPythonPackage rec {
 
   # tests not included with pypi release
   doCheck = false;
+
+  pythonImportsCheck = [ "versatileimagefield" ];
 
   meta = with lib; {
     description = "Replaces django's ImageField with a more flexible interface";
