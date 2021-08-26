@@ -1,13 +1,13 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, pythonAtLeast
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "aioprocessing";
   version = "1.1.0";
-  disabled = !(pythonAtLeast "3.4");
+  disabled = pythonOlder "3.4";
 
   src = fetchPypi {
     inherit pname version;
@@ -16,6 +16,8 @@ buildPythonPackage rec {
 
   # Tests aren't included in pypi package
   doCheck = false;
+
+  pythonImportsCheck = [ "aioprocessing" ];
 
   meta = {
     description = "A library that integrates the multiprocessing module with asyncio";
