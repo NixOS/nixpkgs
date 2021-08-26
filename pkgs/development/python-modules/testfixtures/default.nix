@@ -12,11 +12,11 @@
 
 buildPythonPackage rec {
   pname = "testfixtures";
-  version = "6.18.0";
+  version = "6.18.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-1L0cT5DqyQpz4b3FnDHQOUPyGNaH88WgnkhHiEGor18=";
+    sha256 = "sha256-CmQic39tibRc3vHi31V29SrQ9QeVYALOECDaqfRCEdY=";
   };
 
   checkInputs = [
