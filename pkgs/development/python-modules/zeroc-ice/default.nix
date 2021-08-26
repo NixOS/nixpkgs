@@ -11,6 +11,8 @@ buildPythonPackage rec {
 
   buildInputs = [ openssl bzip2 ];
 
+  pythonImportsCheck = [ "Ice" ];
+
   meta = with lib; {
     homepage = "https://zeroc.com/";
     license = licenses.gpl2;
