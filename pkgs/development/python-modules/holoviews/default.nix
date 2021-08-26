@@ -40,6 +40,8 @@ buildPythonPackage rec {
   # tests not fully included with pypi release
   doCheck = false;
 
+  pythonImportsCheck = [ "holoviews" ];
+
   meta = with lib; {
     description = "Python data analysis and visualization seamless and simple";
     homepage = "http://www.holoviews.org/";
