@@ -17,7 +17,7 @@ python3Packages.buildPythonPackage rec {
     owner = "hydrusnetwork";
     repo = "hydrus";
     rev = "v${version}";
-    sha256 = "sha256-CSWrmjJ6lFQ6tG403Uf+VAOfvBd1oAhd2kTU/7XA3f0=";
+    sha256 = "1zzrw1fbbbayq322346dqb3a8bzb3xnx1qmdciq01dmlbc3bmza1";
   };
 
   nativeBuildInputs = [
