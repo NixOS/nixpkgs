@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "pymunk";
-  version = "6.1.0";
+  version = "6.2.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "1k1ncrssywvfrbmai7d20h2mg4lzhq16rhw3dkg4ad5nhik3k0sl";
+    sha256 = "1r3jfjg4cpdilrmlyml514hqmjgabyrrs4cvmdr56rylg1sp4gf3";
   };
 
   propagatedBuildInputs = [ cffi ];
@@ -38,6 +38,6 @@ buildPythonPackage rec {
     homepage = "https://www.pymunk.org";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ angustrau ];
-    platforms = platforms.linux ++ [ "x86_64-darwin" ];
+    platforms = platforms.unix;
   };
 }
