@@ -12,28 +12,39 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.53.1";
+  version = "0.54.0";
   pname = "numba";
   disabled = pythonOlder "3.6" || pythonAtLeast "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9cd4e5216acdc66c4e9dab2dfd22ddb5bef151185c070d4a3cd8e78638aff5b0";
+    sha256 = "bad6bd98ab2e41c34aa9c80b8d9737e07d92a53df4f74d3ada1458b0b516ccff";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "1.21" "1.22"
+
+    substituteInPlace numba/__init__.py \
+      --replace "(1, 20)" "(1, 21)"
+  '';
 
   NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-I${lib.getDev libcxx}/include/c++/v1";
 
   propagatedBuildInputs = [ numpy llvmlite setuptools ];
-  pythonImportsCheck = [ "numba" ];
+
   # Copy test script into $out and run the test suite.
   checkPhase = ''
     ${python.interpreter} -m numba.runtests
   '';
+
   # ImportError: cannot import name '_typeconv'
   doCheck = false;
 
+  pythonImportsCheck = [ "numba" ];
+
   meta =  with lib; {
-    homepage = "http://numba.pydata.org/";
+    homepage = "https://numba.pydata.org/";
     license = licenses.bsd2;
     description = "Compiling Python code using LLVM";
     maintainers = with maintainers; [ fridh ];
