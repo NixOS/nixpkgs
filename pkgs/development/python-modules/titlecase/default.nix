@@ -1,4 +1,4 @@
-{ buildPythonPackage, lib, nose, fetchPypi, regex }:
+{ buildPythonPackage, lib, fetchPypi, regex }:
 
 buildPythonPackage rec {
   pname = "titlecase";
@@ -11,11 +11,15 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ regex ];
 
-  checkInputs = [ nose ];
+  # no tests run
+  doCheck = false;
 
-  meta = {
+  pythonImportsCheck = [ "titlecase" ];
+
+  meta = with lib; {
     homepage = "https://github.com/ppannuto/python-titlecase";
     description = "Python Port of John Gruber's titlecase.pl";
-    license = lib.licenses.mit;
+    license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
 }
