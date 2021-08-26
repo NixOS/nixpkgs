@@ -77,8 +77,8 @@ in runBuildTests {
       'false': false
       float: 3.141
       list:
-        - null
-        - null
+      - null
+      - null
       'null': null
       path: ${./formats.nix}
       str: foo

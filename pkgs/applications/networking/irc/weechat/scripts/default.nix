@@ -7,6 +7,8 @@
     inherit (perlPackages) PodParser;
   };
 
+  url_hint = callPackage ./url_hint { };
+
   weechat-matrix-bridge = callPackage ./weechat-matrix-bridge {
     inherit (luaPackages) cjson luaffi;
   };

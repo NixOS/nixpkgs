@@ -5185,6 +5185,8 @@ with pkgs;
 
   ghq = callPackage ../applications/version-management/git-and-tools/ghq { };
 
+  gst = callPackage ../applications/version-management/git-and-tools/gst { };
+
   ghr = callPackage ../applications/version-management/git-and-tools/ghr { };
 
   gibberish-detector = with python3Packages; toPythonApplication gibberish-detector;
@@ -12605,7 +12607,7 @@ with pkgs;
   };
 
   beam = callPackage ./beam-packages.nix { };
-  beam_nox = callPackage ./beam-packages.nix { wxSupport = false; };
+  beam_nox = callPackage ./beam-packages.nix { beam = beam_nox; wxSupport = false; };
 
   inherit (beam.interpreters)
     erlang erlangR24 erlangR23 erlangR22 erlangR21
@@ -23561,6 +23563,8 @@ with pkgs;
 
   du-dust = callPackage ../tools/misc/dust { };
 
+  dutree = callPackage ../tools/misc/dutree { };
+
   devede = callPackage ../applications/video/devede { };
 
   denemo = callPackage ../applications/audio/denemo { };
@@ -31580,6 +31584,8 @@ with pkgs;
   rss-glx = callPackage ../misc/screensavers/rss-glx { };
 
   run-scaled = callPackage ../tools/X11/run-scaled { };
+
+  runiq = callPackage ../tools/text/runiq { };
 
   runit = callPackage ../tools/system/runit { };
 
