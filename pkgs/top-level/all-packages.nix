@@ -31141,6 +31141,8 @@ in
 
   unixcw = callPackage ../applications/radio/unixcw { };
 
+  uxn = callPackage ../misc/uxn { };
+
   vault = callPackage ../tools/security/vault { };
 
   vault-bin = callPackage ../tools/security/vault/vault-bin.nix { };
