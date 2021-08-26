@@ -27,6 +27,16 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ boost curl htmlcxx jsoncpp liboauth rhash tinyxml-2 ];
 
+  doInstallCheck = true;
+  installCheckPhase = ''
+    if [[ "$("$out/bin/${pname}" --version)" == "LGOGDownloader ${version}" ]]; then
+       echo '${pname} smoke check passed'
+     else
+       echo '${pname} smoke check failed'
+       return 1
+     fi
+  '';
+
   meta = with lib; {
     description = "Unofficial downloader to GOG.com for Linux users. It uses the same API as the official GOGDownloader";
     homepage = "https://github.com/Sude-/lgogdownloader";
