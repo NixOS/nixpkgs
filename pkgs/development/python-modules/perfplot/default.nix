@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "perfplot";
-  version = "0.9.6";
+  version = "0.9.8";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "nschloe";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "11f31d6xqxp04693symc2dl8890gjaycrb2a35y5xy023abwir5b";
+    rev = version;
+    sha256 = "17dpgd27ik7ka7xpk3mj3anbjj62lwygy1vxlmrmk8xbhrqkim8d";
   };
   format = "pyproject";
 
