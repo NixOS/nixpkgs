@@ -18,7 +18,7 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-gTObI0pmRUX6Eh5FVdt+5LbckyBuFq1Ly4oPZztazHQ=";
   buildInputs = [ git ];
-  buildFlagsArray = "-ldflags=-X main.Version=${version}";
+  ldflags = [ "-X main.Version=${version}" ];
   doCheck = false;
 
   meta = with lib; {

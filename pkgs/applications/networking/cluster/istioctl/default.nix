@@ -17,14 +17,14 @@ buildGoModule rec {
   nativeBuildInputs = [ installShellFiles ];
 
   # Bundle release metadata
-  buildFlagsArray = let
+  ldflags = let
     attrs = [
       "istio.io/pkg/version.buildVersion=${version}"
       "istio.io/pkg/version.buildStatus=Nix"
       "istio.io/pkg/version.buildTag=${version}"
       "istio.io/pkg/version.buildHub=docker.io/istio"
     ];
-  in ["-ldflags=-s -w ${lib.concatMapStringsSep " " (attr: "-X ${attr}") attrs}"];
+  in ["-s" "-w" "${lib.concatMapStringsSep " " (attr: "-X ${attr}") attrs}"];
 
   subPackages = [ "istioctl/cmd/istioctl" ];
 

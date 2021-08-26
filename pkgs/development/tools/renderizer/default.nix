@@ -11,8 +11,8 @@ buildGoModule rec {
     sha256 = "sha256-jl98LuEsGN40L9IfybJhLnbzoYP/XpwFVQnjrlmDL9A=";
   };
 
-  buildFlagsArray = [
-    "-ldflags=-s -w -X main.version=${version} -X main.commitHash=${src.rev} -X main.date=19700101T000000"
+  ldflags = [
+    "-s" "-w" "-X main.version=${version}" "-X main.commitHash=${src.rev}" "-X main.date=19700101T000000"
   ];
 
   vendorSha256 = null;

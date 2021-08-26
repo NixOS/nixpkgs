@@ -37,12 +37,11 @@ buildGoModule rec {
 
   propagatedBuildInputs = [ libfido2 ];
 
-  buildFlagsArray = ''
-    -ldflags=
-      -X main.GitVersion=${version}
-      -X main.GitVersionFuse=[vendored]
-      -X main.BuildDate=unknown
-  '';
+  ldflags = [
+    "-X main.GitVersion=${version}"
+    "-X main.GitVersionFuse=[vendored]"
+    "-X main.BuildDate=unknown"
+  ];
 
   subPackages = [ "." "gocryptfs-xray" "contrib/statfs" ];
 

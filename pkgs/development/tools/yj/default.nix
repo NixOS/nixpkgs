@@ -13,7 +13,7 @@ buildGoModule rec {
 
   vendorSha256 = "0y0n9fsb85qlpf9slwsxzarmfi98asa4x04qp2r8pagl28l0i8wv";
 
-  buildFlagsArray = [ "-ldflags=-s -w -X main.Version=${version}" ];
+  ldflags = [ "-s" "-w" "-X main.Version=${version}" ];
 
   meta = with lib; {
     description = "Convert YAML <=> TOML <=> JSON <=> HCL";

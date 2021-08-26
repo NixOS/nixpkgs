@@ -13,7 +13,7 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-jIq+oacyT71m78iMZwWOBsBVAY/WxgyH9zRr8GiMGTU=";
 
-  buildFlagsArray = [ "-ldflags= -s -w -X=main.Version=v${version}" ];
+  ldflags = [ "-s" "-w" "-X=main.Version=v${version}" ];
 
   subPackages = [ "cmd/git-chglog" ];
 
@@ -24,4 +24,3 @@ buildGoModule rec {
     maintainers = with maintainers; [ ldenefle ];
   };
 }
-

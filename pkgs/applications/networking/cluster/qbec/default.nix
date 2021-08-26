@@ -15,12 +15,11 @@ buildGoModule rec {
 
   doCheck = false;
 
-  buildFlagsArray = ''
-    -ldflags=
-      -s -w
-      -X github.com/splunk/qbec/internal/commands.version=${version}
-      -X github.com/splunk/qbec/internal/commands.commit=${src.rev}
-      -X github.com/splunk/qbec/internal/commands.goVersion=${lib.getVersion go}
+  ldflags = ''
+    "-s" "-w"
+    "-X github.com/splunk/qbec/internal/commands.version=${version}"
+    "-X github.com/splunk/qbec/internal/commands.commit=${src.rev}"
+    "-X github.com/splunk/qbec/internal/commands.goVersion=${lib.getVersion go}"
   '';
 
   meta = with lib; {

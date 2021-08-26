@@ -25,7 +25,7 @@ buildGoModule rec {
     "cmd/pomerium-cli"
   ];
 
-  buildFlagsArray = let
+  ldflags = let
     # Set a variety of useful meta variables for stamping the build with.
     setVars = {
       Version = "v${version}";
@@ -35,7 +35,7 @@ buildGoModule rec {
     };
     varFlags = concatStringsSep " " (mapAttrsToList (name: value: "-X github.com/pomerium/pomerium/internal/version.${name}=${value}") setVars);
   in [
-    "-ldflags=${varFlags}"
+    "${varFlags}"
   ];
 
   nativeBuildInputs = [

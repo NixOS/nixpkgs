@@ -16,7 +16,7 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-DFDTYT7UK1cYwGeCgeQcJmrCoqGPDzicusRPPUbH0Gs=";
 
-  buildFlagsArray = [ "-ldflags=-s -w -X github.com/timescale/promscale/pkg/version.Version=${version} -X github.com/timescale/promscale/pkg/version.CommitHash=${src.rev}" ];
+  ldflags = [ "-s" "-w" "-X github.com/timescale/promscale/pkg/version.Version=${version}" "-X github.com/timescale/promscale/pkg/version.CommitHash=${src.rev}" ];
 
   doCheck = false; # Requires access to a docker daemon
   doInstallCheck = true;

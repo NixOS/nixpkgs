@@ -15,7 +15,7 @@ buildGoModule rec {
 
   doCheck = false;
 
-  buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version}" ];
+  ldflags = [ "-s" "-w" "-X main.version=${version}" ];
 
   meta = with lib; {
     description = "NextDNS DNS/53 to DoH Proxy";
