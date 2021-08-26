@@ -45,5 +45,6 @@ stdenv.mkDerivation rec {
     description = "An assembler and emulator for the Uxn stack-machine";
     homepage = "https://wiki.xxiivv.com/site/uxn.html";
     licence = licenses.mit;
+    maintainers = [ maintainers.jtrees ];
   };
 }
