@@ -1,68 +1,75 @@
-{ lib, fetchdarcs, python2Packages, libvncserver, zlib
-, gnutls, libvpx, makeDesktopItem, mkDerivationWith }:
+{ lib, python3, libvncserver, xorg, makeDesktopItem, mkDerivationWith
+, fetchdarcs, callPackage }:
 
-mkDerivationWith python2Packages.buildPythonApplication rec {
+with python3.pkgs;
+mkDerivationWith buildPythonApplication rec {
 
   pname = "blink";
-  version = "3.2.0";
+  version = "5.1.7";
 
   src = fetchdarcs {
     url = "http://devel.ag-projects.com/repositories/blink-qt";
-    rev = "release-${version}";
-    sha256 = "19rcwr5scw48qnj79q1pysw95fz9h98nyc3161qy2kph5g7dwkc3";
+    rev = version;
+    sha256 = "sha256-vwUfGfrphEssEceTxkMKSaZkobuZM5o/cLeYMuf9h0U=";
   };
 
-  patches = [ ./pythonpath.patch ];
-  postPatch = ''
-    sed -i 's|@out@|'"''${out}"'|g' blink/resources.py
-  '';
-
-  propagatedBuildInputs = with python2Packages; [
+  propagatedBuildInputs = [
     pyqt5_with_qtwebkit
-    cjson
-    sipsimple
-    twisted
+    python3-application
+    python3-eventlib
+    python3-sipsimple
     google-api-python-client
   ];
 
-  buildInputs = [
-    python2Packages.cython
-    zlib
-    libvncserver
-    libvpx
+  nativeBuildInputs = [
+    cython
   ];
 
-  desktopItem = makeDesktopItem {
-    name = "Blink";
-    exec = "blink";
-    comment = meta.description;
-    desktopName = "Blink";
-    icon = "blink";
-    genericName = "Instant Messaging";
-    categories = "Internet;";
-  };
+  buildInputs = [
+    libvncserver
+    xorg.libxcb
+  ];
+
+  doCheck = false; # there are none, but test discovery dies trying to import a Windows library
+  pythonImportsCheck = [ "blink" ];
 
   dontWrapQtApps = true;
 
+  preFixup = ''
+    wrapQtApp "$out/bin/blink"
+  '';
+
   postInstall = ''
-    mkdir -p "$out/share/applications"
+    ln -s "${desktopItem}/share/applications" "$out/share/applications"
+
     mkdir -p "$out/share/pixmaps"
-    cp "$desktopItem"/share/applications/* "$out/share/applications"
     cp "$out"/share/blink/icons/blink.* "$out/share/pixmaps"
   '';
 
-  preFixup = ''
-    makeWrapperArgs+=(
-      --prefix "LD_LIBRARY_PATH" ":" "${gnutls.out}/lib"
-      "''${qtWrapperArgs[@]}"
-    )
-  '';
+  desktopItem = makeDesktopItem {
+    name = "Blink";
+    desktopName = "Blink";
+    genericName = "SIP client";
+    comment = meta.description;
+    extraDesktopEntries = { X-GNOME-FullName = "Blink SIP client"; };
+    exec = "blink";
+    icon = "blink";
+    startupNotify = false;
+    terminal = false;
+    categories = "Qt;Network;Telephony";
+  };
 
   meta = with lib; {
-    homepage = "http://icanblink.com/";
-    description = "A state of the art, easy to use SIP client for Voice, Video and IM";
+    homepage = "https://icanblink.com/";
+    description = "Fully featured, easy to use SIP client with a Qt based UI";
+    longDescription = ''
+      Blink is a fully featured SIP client written in Python and built on top of
+      SIP SIMPLE client SDK with a Qt based user interface. Blink provides real
+      time applications based on SIP and related protocols for Audio, Video,
+      Instant Messaging, File Transfers, Desktop Sharing and Presence.
+    '';
     platforms = platforms.linux;
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ pSub ];
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ pSub chanley ];
   };
 }
