@@ -15,6 +15,8 @@ buildPythonPackage rec {
   # test require a running redis rerver, which is something we can't do yet
   doCheck = false;
 
+  pythonImportsCheck = [ "rq" ];
+
   propagatedBuildInputs = [ click redis ];
 
   meta = with lib; {
