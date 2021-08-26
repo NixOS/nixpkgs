@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "mattermostdriver";
-  version = "7.3.0";
+  version = "7.3.1";
 
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "17jqcpa1xd9n7bf4d5l7wmscls34kymv27gi17pyyfjxbwk5gsga";
+    sha256 = "bf629c4b8f825bd7196208aa93995ac5077bd60939ba67cca314a7f13c1dbcea";
   };
 
   propagatedBuildInputs = [ websockets requests ];
