@@ -1853,6 +1853,12 @@
     githubId = 1762540;
     name = "Changlin Li";
   };
+  chanley = {
+    email = "charlieshanley@gmail.com";
+    github = "charlieshanley";
+    githubId = 8228888;
+    name = "Charlie Hanley";
+  };
   CharlesHD = {
     email = "charleshdespointes@gmail.com";
     github = "CharlesHD";
