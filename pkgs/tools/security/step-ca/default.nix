@@ -22,7 +22,7 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-cFuLW0qkI/l/TvYwQZA2bLlWYjs1hdbQJ5jU7xiuFZI=";
 
-  buildFlagsArray = [ "-ldflags=-buildid=" ];
+  ldflags = [ "-buildid=" ];
 
   nativeBuildInputs = lib.optionals hsmSupport [ pkg-config ];
 

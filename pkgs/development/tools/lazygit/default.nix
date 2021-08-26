@@ -14,7 +14,7 @@ buildGoModule rec {
   vendorSha256 = null;
   subPackages = [ "." ];
 
-  buildFlagsArray = [ "-ldflags=-X main.version=${version} -X main.buildSource=nix" ];
+  ldflags = [ "-X main.version=${version}" "-X main.buildSource=nix" ];
 
   meta = with lib; {
     description = "Simple terminal UI for git commands";

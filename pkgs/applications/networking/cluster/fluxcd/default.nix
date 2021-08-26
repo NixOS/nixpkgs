@@ -28,7 +28,7 @@ buildGoModule rec {
 
   subPackages = [ "cmd/flux" ];
 
-  buildFlagsArray = [ "-ldflags=-s -w -X main.VERSION=${version}" ];
+  ldflags = [ "-s" "-w" "-X main.VERSION=${version}" ];
 
   postUnpack = ''
     cp -r ${manifests} source/cmd/flux/manifests

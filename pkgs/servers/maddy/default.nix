@@ -13,7 +13,7 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-bxKEQaOubjRfLX+dMxVDzLOUInHykUdy9X8wvFE6Va4=";
 
-  buildFlagsArray = [ "-ldflags=-s -w -X github.com/foxcpp/maddy.Version=${version}" ];
+  ldflags = [ "-s" "-w" "-X github.com/foxcpp/maddy.Version=${version}" ];
 
   subPackages = [ "cmd/maddy" "cmd/maddyctl" ];
 

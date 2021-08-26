@@ -21,7 +21,7 @@ buildGoModule rec {
     cp -r styles $data/share/vale
   '';
 
-  buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version}" ];
+  ldflags = [ "-s" "-w" "-X main.version=${version}" ];
 
   meta = with lib; {
     homepage = "https://docs.errata.ai/vale/about";

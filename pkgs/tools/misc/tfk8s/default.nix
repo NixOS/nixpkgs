@@ -15,8 +15,7 @@ buildGoModule rec {
   vendorSha256 = "sha256-eLPmghs05pMMtys97Ja7YGdVMZmMmiaFeMwzaWNxW0I=";
   runVend = true;
 
-  buildFlagsArray = [
-    "-ldflags="
+  ldflags = [
     "-s"
     "-w"
     "-X main.toolVersion=${tag}"

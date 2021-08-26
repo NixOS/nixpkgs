@@ -19,7 +19,7 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
-  buildFlagsArray = [ "-ldflags=-s -w -X github.com/roboll/helmfile/pkg/app/version.Version=${version}" ];
+  ldflags = [ "-s" "-w" "-X github.com/roboll/helmfile/pkg/app/version.Version=${version}" ];
 
   postInstall = ''
     wrapProgram $out/bin/helmfile \

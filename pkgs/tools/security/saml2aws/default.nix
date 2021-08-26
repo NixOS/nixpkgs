@@ -20,9 +20,9 @@ buildGoModule rec {
 
   subPackages = [ "." "cmd/saml2aws" ];
 
-  buildFlagsArray = ''
-    -ldflags=-X main.Version=${version}
-  '';
+  ldflags = [
+    "-X main.Version=${version}"
+  ];
 
   meta = with lib; {
     description = "CLI tool which enables you to login and retrieve AWS temporary credentials using a SAML IDP";
