@@ -105,7 +105,7 @@ buildPythonPackage rec {
     "test_missing_required_dependency"
     # AssertionError with 1.2.3
     "test_from_coo"
-    # AssertionError with 1.2.4
+    # AssertionError: No common DType exists for the given inputs
     "test_comparison_invalid"
   ] ++ lib.optionals stdenv.isDarwin [
     "test_locale"
