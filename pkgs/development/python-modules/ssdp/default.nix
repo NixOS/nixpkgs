@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "ssdp";
-  version = "1.0.1";
+  version = "1.1.0";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0yhjqs9jyvwmba8fi72xfi9k8pxy11wkz4iywayrg71ka3la49bk";
+    sha256 = "d33575a7360aaead5341cc2ceaf47cc80b2309a7dd167c2ea45d5a5b00851665";
   };
 
   buildInputs = [ pbr ];
