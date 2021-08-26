@@ -13,9 +13,9 @@ buildGoModule rec {
 
   vendorSha256 = "1snmp461h8driy1w1xggk669yxl0sjl1m9pbqm7dwk44yb94zi1q";
 
-  buildFlagsArray = ''
-    -ldflags=-s -w -X=github.com/telepresenceio/telepresence/v2/pkg/version.Version=${src.rev}
-  '';
+  ldflags = [
+    "-s" "-w" "-X=github.com/telepresenceio/telepresence/v2/pkg/version.Version=${src.rev}"
+  ];
 
   subPackages = [ "cmd/telepresence" ];
 

@@ -17,11 +17,10 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
-  buildFlagsArray = ''
-    -ldflags=
-       -X github.com/kopia/kopia/repo.BuildVersion=${version}
-       -X github.com/kopia/kopia/repo.BuildInfo=${src.rev}
-  '';
+  ldflags = [
+    "-X github.com/kopia/kopia/repo.BuildVersion=${version}"
+    "-X github.com/kopia/kopia/repo.BuildInfo=${src.rev}"
+  ];
 
   meta = with lib; {
     homepage = "https://kopia.io";

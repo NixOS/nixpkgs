@@ -6,7 +6,7 @@ buildGoModule rec {
 
   excludedPackages = [ "website" ];
 
-  buildFlagsArray = [ "-ldflags=-s -w -X github.com/elves/elvish/pkg/buildinfo.Version==${version} -X github.com/elves/elvish/pkg/buildinfo.Reproducible=true" ];
+  ldflags = [ "-s" "-w" "-X github.com/elves/elvish/pkg/buildinfo.Version==${version}" "-X github.com/elves/elvish/pkg/buildinfo.Reproducible=true" ];
 
   src = fetchFromGitHub {
     owner = "elves";

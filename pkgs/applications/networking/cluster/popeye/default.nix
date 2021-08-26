@@ -11,12 +11,11 @@ buildGoModule rec {
     sha256 = "sha256-oft1zLLd5TP8S9GMjp5kYaoPoOYnbhJwL2wBerkhp+c=";
   };
 
-  buildFlagsArray = ''
-    -ldflags=
-      -s -w
-      -X github.com/derailed/popeye/cmd.version=${version}
-      -X github.com/derailed/popeye/cmd.commit=${version}
-  '';
+  ldflags = [
+    "-s" "-w"
+    "-X github.com/derailed/popeye/cmd.version=${version}"
+    "-X github.com/derailed/popeye/cmd.commit=${version}"
+  ];
 
   vendorSha256 = "sha256-vUUDLMicop5QzZmAHi5qrc0hx8oV2xWNFHvCWioLhl8=";
 

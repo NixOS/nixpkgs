@@ -15,7 +15,7 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
-  buildFlagsArray = [ "-ldflags=-s -w" ];
+  ldflags = [ "-s" "-w" ];
 
   meta = with lib; {
     description = "Synchronize your DNS to multiple providers from a simple DSL";

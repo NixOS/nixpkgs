@@ -17,8 +17,8 @@ buildGoModule rec {
     "cmd/dex"
   ];
 
-  buildFlagsArray = [
-    "-ldflags=-w -s -X github.com/dexidp/dex/version.Version=${src.rev}"
+  ldflags = [
+    "-w" "-s" "-X github.com/dexidp/dex/version.Version=${src.rev}"
   ];
 
   postInstall = ''

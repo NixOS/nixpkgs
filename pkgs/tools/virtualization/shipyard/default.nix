@@ -12,8 +12,8 @@ buildGoModule rec {
   };
   vendorSha256 = "sha256-tTkPFftPDNXafIjAjNg6V6e/+2S/v5Do/YyAXPaGIqA=";
 
-  buildFlagsArray = [
-    "-ldflags=-s -w -X main.version=${version}"
+  ldflags = [
+    "-s" "-w" "-X main.version=${version}"
   ];
 
   # Tests require a large variety of tools and resources to run including

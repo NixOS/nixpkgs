@@ -16,7 +16,7 @@ buildGoModule rec {
 
   vendorSha256 = "0avnskay23mpl3qkyf1h75rr7szpsxis2bj5pplhwf8q8q0212xf";
 
-  buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version} -X main.commit=${src.rev} -X main.date=unknown" ];
+  ldflags = [ "-s" "-w" "-X main.version=${version}" "-X main.commit=${src.rev}" "-X main.date=unknown" ];
 
   doCheck = false;
 

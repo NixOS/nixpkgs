@@ -17,7 +17,7 @@ buildGoModule rec {
 
   subPackages = [ "cmd/tilt" ];
 
-  buildFlagsArray = [ "-ldflags=-X main.version=${version}" ];
+  ldflags = [ "-X main.version=${version}" ];
 
   meta = with lib; {
     description = "Local development tool to manage your developer instance when your team deploys to Kubernetes in production";
