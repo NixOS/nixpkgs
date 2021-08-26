@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchFromGitHub
 , poetry-core
@@ -28,6 +29,10 @@ buildPythonPackage rec {
   checkInputs = [
     pytest-asyncio
     pytestCheckHook
+  ];
+
+  disabledTests = lib.optionals stdenv.isDarwin [
+    "test_sendfile_file"
   ];
 
   pythonImportsCheck = [ "aiofiles" ];
