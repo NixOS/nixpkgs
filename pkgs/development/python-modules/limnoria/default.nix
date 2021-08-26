@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , isPy27
-, pkgs
+, git
 }:
 
 buildPythonPackage rec {
@@ -15,11 +15,12 @@ buildPythonPackage rec {
     sha256 = "80ca1db9648e7678f81b373dab04d06025ec6532e68a9be773ddbd159de54e4c";
   };
 
-  patchPhase = ''
+  postPatch = ''
     sed -i 's/version=version/version="${version}"/' setup.py
   '';
-  buildInputs = [ pkgs.git ];
+  buildInputs = [ git ];
 
+  # cannot be imported
   doCheck = false;
 
   meta = with lib; {
