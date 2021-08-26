@@ -1792,6 +1792,8 @@ in {
 
   dacite = callPackage ../development/python-modules/dacite { };
 
+  daemons = callPackage ../development/python-modules/daemons { };
+
   daemonize = callPackage ../development/python-modules/daemonize { };
 
   daemonocle = callPackage ../development/python-modules/daemonocle { };
