@@ -3,7 +3,7 @@
 
 buildPythonPackage rec {
   pname = "omegaconf";
-  version = "2.1.0";
+  version = "2.1.1";
 
   disabled = pythonOlder "3.6";
 
@@ -11,7 +11,7 @@ buildPythonPackage rec {
     owner = "omry";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-0aDlqPXELxQ/lnw4Hd9es8ldYhUP/TacH9AIyaffwnI=";
+    sha256 = "0hh6pk4q6nb94bz9rwa6cysf3nj50rmqkjh34pqkh28nzg44afjw";
   };
 
   postPatch = ''
