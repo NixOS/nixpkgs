@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder, google-api-core }:
+{ lib, buildPythonPackage, fetchPypi, google-api-core }:
 
 buildPythonPackage rec {
   pname = "google-cloud-access-context-manager";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Protobufs for Google Access Context Manager.";
+    description = "Protobufs for Google Access Context Manager";
     homepage = "https://github.com/googleapis/python-access-context-manager";
     license = licenses.asl20;
     maintainers = with maintainers; [ austinbutler SuperSandro2000 ];
