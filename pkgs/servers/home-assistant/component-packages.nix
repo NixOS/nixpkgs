@@ -658,7 +658,7 @@
     "profiler" = ps: with ps; [ guppy3 objgraph pyprof2calltree ];
     "progettihwsw" = ps: with ps; [ ]; # missing inputs: progettihwsw
     "proliphix" = ps: with ps; [ ]; # missing inputs: proliphix
-    "prometheus" = ps: with ps; [ aiohttp-cors prometheus_client ];
+    "prometheus" = ps: with ps; [ aiohttp-cors prometheus-client ];
     "prosegur" = ps: with ps; [ pyprosegur ];
     "prowl" = ps: with ps; [ ];
     "proximity" = ps: with ps; [ ];

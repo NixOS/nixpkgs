@@ -53,7 +53,9 @@ mapAliases ({
   HAP-python = hap-python; # added 2021-06-01
   lammps-cython = throw "no longer builds and is unmaintained";
   MechanicalSoup = mechanicalsoup; # added 2021-06-01
+  pam = python-pam; # added 2020-09-07.
   privacyidea = throw "renamed to pkgs.privacyidea"; # added 2021-06-20
+  prometheus_client = prometheus-client; # added 2021-06-10
   prompt_toolkit = prompt-toolkit;
   pylibgen = throw "pylibgen is unmaintained upstreamed, and removed from nixpkgs"; # added 2020-06-20
   pymssql = throw "pymssql has been abandoned upstream."; # added 2020-05-04
@@ -63,7 +65,6 @@ mapAliases ({
   pytestquickcheck = pytest-quickcheck; # added 2021-07-20
   pytestrunner = pytest-runner; # added 2021-01-04
   python-lz4 = lz4; # added 2018-06-01
-  pam = python-pam; # added 2020-09-07.
   pytest_xdist = pytest-xdist; # added 2021-01-04
   python_simple_hipchat = python-simple-hipchat; # added 2021-07-21
   qasm2image = throw "qasm2image is no longer maintained (since November 2018), and is not compatible with the latest pythonPackages.qiskit versions."; # added 2020-12-09

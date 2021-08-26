@@ -22,7 +22,7 @@ python3Packages.buildPythonApplication rec {
     icalendar
     jinja2
     multidict
-    prometheus_client
+    prometheus-client
   ];
 
   passthru.tests.xandikos = nixosTests.xandikos;
