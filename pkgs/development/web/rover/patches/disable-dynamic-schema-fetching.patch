@@ -1,0 +1,13 @@
+diff --git a/crates/rover-client/build.rs b/crates/rover-client/build.rs
+index e049426..cf513b8 100644
+--- a/crates/rover-client/build.rs
++++ b/crates/rover-client/build.rs
+@@ -25,7 +25,7 @@ fn main() -> std::io::Result<()> {
+     let client = Client::new();
+     let etag_path = PathBuf::from(".schema/etag.id");
+ 
+-    let should_update_schema = !(etag_path.exists()) || online::sync::check(None).is_ok();
++    let should_update_schema = false;
+ 
+     if should_update_schema {
+         if !(etag_path.exists()) {
