@@ -40,6 +40,8 @@ buildPythonPackage rec {
     nosetests -v --with-coverage --cover-package=jnpr.junos --cover-inclusive -a unit
   '';
 
+  pythonImportsCheck = [ "jnpr.junos" ];
+
   meta = with lib; {
     homepage = "http://www.github.com/Juniper/py-junos-eznc";
     description = "Junos 'EZ' automation for non-programmers";
