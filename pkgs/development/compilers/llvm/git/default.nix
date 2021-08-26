@@ -264,4 +264,4 @@ let
     };
   });
 
-in { inherit tools libraries; } // libraries // tools
+in { inherit tools libraries release_version; } // libraries // tools
