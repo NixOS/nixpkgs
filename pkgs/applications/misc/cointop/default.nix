@@ -13,7 +13,7 @@ buildGoPackage rec {
 
   goPackagePath = "github.com/miguelmota/cointop";
 
-  buildFlagsArray = [ "-ldflags=-s -w -X ${goPackagePath}/cointop.version=${version}" ];
+  ldflags = [ "-s" "-w" "-X ${goPackagePath}/cointop.version=${version}" ];
 
   meta = with lib; {
     description = "The fastest and most interactive terminal based UI application for tracking cryptocurrencies";
