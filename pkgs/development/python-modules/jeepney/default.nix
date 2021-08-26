@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
+, async-timeout
 , dbus
 , pytest
 , pytest-trio
@@ -12,16 +13,17 @@
 
 buildPythonPackage rec {
   pname = "jeepney";
-  version = "0.7.0";
+  version = "0.7.1";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1237cd64c8f7ac3aa4b3f332c4d0fb4a8216f39eaa662ec904302d4d77de5a54";
+    sha256 = "fa9e232dfa0c498bd0b8a3a73b8d8a31978304dcef0515adc859d4e096f96f4f";
   };
 
   checkInputs = [
+    async-timeout
     dbus
     pytest
     pytest-trio
