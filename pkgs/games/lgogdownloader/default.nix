@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , cmake
 , pkg-config
@@ -23,9 +24,21 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-LywFJCZevlhthOkAZo7JkXcPT9V6Zh28VD/MVQnMQjo=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config help2man ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    help2man
+  ];
 
-  buildInputs = [ boost curl htmlcxx jsoncpp liboauth rhash tinyxml-2 ];
+  buildInputs = [
+    boost
+    curl
+    htmlcxx
+    jsoncpp
+    liboauth
+    rhash
+    tinyxml-2
+  ];
 
   doInstallCheck = true;
   installCheckPhase = ''
