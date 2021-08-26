@@ -4,6 +4,8 @@
 , django
 , flask
 , google-api-core
+, google-cloud-appengine-logging
+, google-cloud-audit-log
 , google-cloud-core
 , google-cloud-testutils
 , mock
@@ -22,7 +24,13 @@ buildPythonPackage rec {
     sha256 = "sha256-SZ7tXxPKuAXIeAsNFKDZMan/HWXvzN2eaHctQOfa1MU=";
   };
 
-  propagatedBuildInputs = [ google-api-core google-cloud-core proto-plus ];
+  propagatedBuildInputs = [
+    google-api-core
+    google-cloud-appengine-logging
+    google-cloud-audit-log
+    google-cloud-core
+    proto-plus
+  ];
 
   checkInputs = [
     django

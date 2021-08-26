@@ -193,6 +193,7 @@ google/vim-jsonnet
 google/vim-maktaba
 gorkunov/smartpairs.vim
 gotcha/vimelette
+gpanders/editorconfig.nvim
 gregsexton/gitv
 gruvbox-community/gruvbox as gruvbox-community
 gu-fan/riv.vim

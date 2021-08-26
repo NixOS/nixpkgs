@@ -72,21 +72,17 @@ in runBuildTests {
       path = ./formats.nix;
     };
     expected = ''
-      {
-        "attrs": {
-          "foo": null
-        },
-        "false": false,
-        "float": 3.141,
-        "list": [
-          null,
-          null
-        ],
-        "null": null,
-        "path": "${./formats.nix}",
-        "str": "foo",
-        "true": true
-      }
+      attrs:
+        foo: null
+      'false': false
+      float: 3.141
+      list:
+      - null
+      - null
+      'null': null
+      path: ${./formats.nix}
+      str: foo
+      'true': true
     '';
   };
 

@@ -3788,6 +3788,7 @@ with pkgs;
   collectd = callPackage ../tools/system/collectd {
     libsigrok = libsigrok_0_3; # not compatible with >= 0.4.0 yet
     jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
+    inherit (darwin.apple_sdk.frameworks) IOKit;
   };
 
   collectd-data = callPackage ../tools/system/collectd/data.nix { };
@@ -5183,6 +5184,8 @@ with pkgs;
   ghostunnel = callPackage ../tools/networking/ghostunnel { };
 
   ghq = callPackage ../applications/version-management/git-and-tools/ghq { };
+
+  gst = callPackage ../applications/version-management/git-and-tools/gst { };
 
   ghr = callPackage ../applications/version-management/git-and-tools/ghr { };
 
@@ -9284,7 +9287,7 @@ with pkgs;
 
   stricat = callPackage ../tools/security/stricat { };
 
-  staruml = callPackage ../tools/misc/staruml { inherit (gnome2) GConf; libgcrypt = libgcrypt_1_5; };
+  staruml = callPackage ../tools/misc/staruml { };
 
   stone-phaser = callPackage ../applications/audio/stone-phaser { };
 
@@ -12604,7 +12607,7 @@ with pkgs;
   };
 
   beam = callPackage ./beam-packages.nix { };
-  beam_nox = callPackage ./beam-packages.nix { wxSupport = false; };
+  beam_nox = callPackage ./beam-packages.nix { beam = beam_nox; wxSupport = false; };
 
   inherit (beam.interpreters)
     erlang erlangR24 erlangR23 erlangR22 erlangR21
@@ -13438,9 +13441,7 @@ with pkgs;
 
   cc-tool = callPackage ../development/embedded/cc-tool { };
 
-  ccache = callPackage ../development/tools/misc/ccache {
-    asciidoc = asciidoc-full;
-  };
+  ccache = callPackage ../development/tools/misc/ccache { };
 
   # Wrapper that works as gcc or g++
   # It can be used by setting in nixpkgs config like this, for example:
@@ -24001,6 +24002,8 @@ with pkgs;
 
   du-dust = callPackage ../tools/misc/dust { };
 
+  dutree = callPackage ../tools/misc/dutree { };
+
   devede = callPackage ../applications/video/devede { };
 
   denemo = callPackage ../applications/audio/denemo { };
@@ -32020,6 +32023,8 @@ with pkgs;
   rss-glx = callPackage ../misc/screensavers/rss-glx { };
 
   run-scaled = callPackage ../tools/X11/run-scaled { };
+
+  runiq = callPackage ../tools/text/runiq { };
 
   runit = callPackage ../tools/system/runit { };
 
