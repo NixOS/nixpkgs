@@ -58,9 +58,7 @@ rec {
      of the next function, and the last function returns the
      final value.
   */
-  pipe = val: functions:
-    let reverseApply = x: f: f x;
-    in builtins.foldl' reverseApply val functions;
+  pipe = builtins.foldl' (x: f: f x);
   /* note please don’t add a function like `compose = flip pipe`.
      This would confuse users, because the order of the functions
      in the list is not clear. With pipe, it’s obvious that it
@@ -308,7 +306,7 @@ rec {
 
   info = msg: builtins.trace "INFO: ${msg}";
 
-  showWarnings = warnings: res: lib.foldr (w: x: warn w x) res warnings;
+  showWarnings = warnings: res: builtins.foldl' warn res warnings;
 
   ## Function annotations
 
@@ -355,21 +353,8 @@ rec {
      toHexString 250 => "FA"
   */
   toHexString = i:
-    let
-      toHexDigit = d:
-        if d < 10
-        then toString d
-        else
-          {
-            "10" = "A";
-            "11" = "B";
-            "12" = "C";
-            "13" = "D";
-            "14" = "E";
-            "15" = "F";
-          }.${toString d};
-    in
-      lib.concatMapStrings toHexDigit (toBaseDigits 16 i);
+    lib.concatMapStrings
+      (builtins.elemAt [ "0" "1" "2" "3" "4" "5" "6" "7" "8" "9" "A" "B" "C" "D" "E" "F" ]) (toBaseDigits 16 i);
 
   /* `toBaseDigits base i` converts the positive integer i to a list of its
      digits in the given base. For example:
