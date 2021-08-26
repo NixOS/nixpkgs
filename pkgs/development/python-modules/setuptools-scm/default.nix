@@ -1,12 +1,15 @@
 { lib, buildPythonPackage, fetchPypi, toml }:
 
 buildPythonPackage rec {
-  pname = "setuptools_scm";
+  pname = "setuptools-scm";
+  # don't update to 6.1.0 or 6.2.0, releases were pulled because of regression
+  # https://github.com/pypa/setuptools_scm/issues/615
   version = "6.0.1";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "d1925a69cb07e9b29416a275b9fadb009a23c148ace905b2fb220649a6c18e92";
+    pname = "setuptools_scm";
+    inherit version;
+    sha256 = "sha256-0ZJaacsH6bKUFqJ1ufrbAJojwUis6QWy+yIGSabBjpI=";
   };
 
   propagatedBuildInputs = [ toml ];
