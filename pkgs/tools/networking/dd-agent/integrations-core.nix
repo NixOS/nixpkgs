@@ -65,7 +65,7 @@ let
     pname = "checks-base";
     sourceRoot = "datadog_checks_base";
     propagatedBuildInputs = with python.pkgs; [
-      requests protobuf prometheus_client uuid simplejson uptime
+      requests protobuf prometheus-client uuid simplejson uptime
     ];
   };
 

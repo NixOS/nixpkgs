@@ -5671,7 +5671,7 @@ in {
 
   progress = callPackage ../development/python-modules/progress { };
 
-  prometheus_client = callPackage ../development/python-modules/prometheus_client { };
+  prometheus-client = callPackage ../development/python-modules/prometheus-client { };
 
   prometheus-flask-exporter = callPackage ../development/python-modules/prometheus-flask-exporter { };
 

@@ -5,7 +5,7 @@
 , flask
 , isPy27
 , nixosTests
-, prometheus_client
+, prometheus-client
 , py-air-control
 , pytestCheckHook
 , setuptools-scm
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     click
     flask
-    prometheus_client
+    prometheus-client
     py-air-control
   ];
 

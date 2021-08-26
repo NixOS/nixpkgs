@@ -23,11 +23,10 @@ buildGoPackage rec {
     makeWrapper
   ];
 
-  buildFlagsArray = [
-    ''-ldflags=
-        -s -w -X ${goPackagePath}/pkg/version.appVersionTag=${version}
-              -X ${goPackagePath}/pkg/version.appVersionRev=${src.rev}
-    ''
+  ldflags = [
+    "-s" "-w"
+    "-X ${goPackagePath}/pkg/version.appVersionTag=${version}"
+    "-X ${goPackagePath}/pkg/version.appVersionRev=${src.rev}"
   ];
 
   # docker-slim tries to create its state dir next to the binary (inside the nix

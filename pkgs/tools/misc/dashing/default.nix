@@ -15,7 +15,7 @@ buildGoPackage rec {
 
   goDeps = ./deps.nix;
 
-  buildFlagsArray = [ "-ldflags=-X main.version=${version}" ];
+  ldflags = [ "-X main.version=${version}" ];
 
   meta = with lib; {
     description = "A Dash Generator Script for Any HTML";
