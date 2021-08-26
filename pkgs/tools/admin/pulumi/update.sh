@@ -3,32 +3,31 @@
 
 # Version of Pulumi from
 # https://www.pulumi.com/docs/get-started/install/versions/
-VERSION="3.10.0"
+VERSION="3.11.0"
 
 # Grab latest release ${VERSION} using get_latest_plugins.sh
 plugins=(
-    "auth0=2.2.0"
-    "aws=4.15.0"
-    "cloudflare=3.4.0"
-    "consul=3.2.0"
-    "datadog=3.3.0"
-    "digitalocean=4.6.0"
-    "docker=3.0.0"
-    "equinix-metal=2.0.0"
-    "gcp=5.15.0"
-    "github=4.2.0"
-    "gitlab=4.1.0"
-    "hcloud=1.2.0"
-    "kubernetes=3.6.0"
-    "linode=3.3.0"
-    "mailgun=3.1.0"
-    "mysql=3.0.0"
-    "openstack=3.3.0"
-    "packet=3.2.2"
-    "postgresql=3.1.0"
-    "random=4.2.0"
-    "vault=4.3.0"
-    "vsphere=4.0.1"
+    "auth0=v2.2.0"
+    "aws=v4.17.0"
+    "cloudflare=v3.4.0"
+    "consul=v3.2.0"
+    "datadog=v4.0.0"
+    "digitalocean=v4.6.0"
+    "docker=v3.0.0"
+    "equinix-metal=v2.0.0"
+    "gcp=v5.16.0"
+    "github=v4.3.0"
+    "gitlab=v4.2.0"
+    "hcloud=v1.3.0"
+    "kubernetes=v3.6.3"
+    "linode=v3.3.1"
+    "mailgun=v3.1.0"
+    "mysql=v3.0.0"
+    "openstack=v3.3.0"
+    "postgresql=v3.1.0"
+    "random=v4.2.0"
+    "vault=v4.3.0"
+    "vsphere=v4.0.1"
 )
 
 function genMainSrc() {
@@ -82,3 +81,4 @@ EOF
   echo "  };"
   echo "}"
 } > data.nix
+
