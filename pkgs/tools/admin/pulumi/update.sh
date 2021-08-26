@@ -5,8 +5,7 @@
 # https://www.pulumi.com/docs/get-started/install/versions/
 VERSION="3.10.0"
 
-# Grab latest release ${VERSION} from
-# https://github.com/pulumi/pulumi-${NAME}/releases
+# Grab latest release ${VERSION} using get_latest_plugins.sh
 plugins=(
     "auth0=2.2.0"
     "aws=4.15.0"
