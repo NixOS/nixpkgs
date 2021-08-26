@@ -632,7 +632,6 @@ broken-packages:
   - cio
   - cipher-blowfish
   - circlehs
-  - circular
   - citeproc-hs
   - cjk
   - cj-token
