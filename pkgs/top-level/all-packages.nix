@@ -20653,6 +20653,10 @@ with pkgs;
 
   virtlyst = libsForQt5.callPackage ../servers/web-apps/virtlyst { };
 
+  virtualenv = with python3Packages; toPythonApplication virtualenv;
+
+  virtualenv-clone = with python3Packages; toPythonApplication virtualenv-clone;
+
   virtuoso6 = callPackage ../servers/sql/virtuoso/6.x.nix {
     openssl = openssl_1_0_2;
   };
