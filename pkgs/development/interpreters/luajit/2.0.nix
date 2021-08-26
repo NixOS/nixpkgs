@@ -6,7 +6,7 @@ callPackage ./default.nix {
   isStable = true;
   sha256 = "0q187vn6bspn9i33hrvfy59mh83nd8jjmik5qkkkc3vls13jxr6z";
   extraMeta = { # this isn't precise but it at least stops the useless Hydra build
-    platforms = with lib; filter (p: p != "aarch64-linux")
+    platforms = with lib; filter (p: !hasPrefix "aarch64-" p)
       (platforms.linux ++ platforms.darwin);
   };
 }
