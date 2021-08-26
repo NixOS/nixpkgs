@@ -3,7 +3,7 @@
 buildPythonPackage rec {
   pname = "pyodbc";
   version = "4.0.32";
-  disabled = isPyPy;  # use pypypdbc instead
+  disabled = isPyPy; # use pypypdbc instead
 
   src = fetchPypi {
     inherit pname version;
@@ -13,6 +13,8 @@ buildPythonPackage rec {
   buildInputs = [ unixODBC ];
 
   doCheck = false; # tests require a database server
+
+  pythonImportsCheck = [ "pyodbc" ];
 
   meta = with lib; {
     description = "Python ODBC module to connect to almost any database";
