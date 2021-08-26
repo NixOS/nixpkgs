@@ -124,7 +124,7 @@ in {
       buildLlvmPackages = buildPackages.llvmPackages_9;
       llvmPackages = pkgs.llvmPackages_9;
     };
-    ghc8106 = callPackage ../development/compilers/ghc/8.10.6.nix {
+    ghc8107 = callPackage ../development/compilers/ghc/8.10.7.nix {
       # aarch64 ghc865Binary gets SEGVs due to haskell#15449 or similar
       bootPkgs = if stdenv.isAarch64 || stdenv.isAarch32 then
           packages.ghc8102BinaryMinimal
@@ -244,9 +244,9 @@ in {
       ghc = bh.compiler.ghc8104;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.10.x.nix { };
     };
-    ghc8106 = callPackage ../development/haskell-modules {
-      buildHaskellPackages = bh.packages.ghc8106;
-      ghc = bh.compiler.ghc8106;
+    ghc8107 = callPackage ../development/haskell-modules {
+      buildHaskellPackages = bh.packages.ghc8107;
+      ghc = bh.compiler.ghc8107;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.10.x.nix { };
     };
     ghcHEAD = callPackage ../development/haskell-modules {
