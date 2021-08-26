@@ -7,14 +7,14 @@ buildGoModule rec {
   pname = "sonobuoy";
   version = "0.53.2"; # Do not forget to update `rev` above
 
-  buildFlagsArray =
+  ldflags =
     let t = "github.com/vmware-tanzu/sonobuoy";
-    in ''
-      -ldflags=
-        -s -X ${t}/pkg/buildinfo.Version=v${version}
-           -X ${t}/pkg/buildinfo.GitSHA=${rev}
-           -X ${t}/pkg/buildDate=unknown
-    '';
+    in [
+      "-s"
+      "-X ${t}/pkg/buildinfo.Version=v${version}"
+      "-X ${t}/pkg/buildinfo.GitSHA=${rev}"
+      "-X ${t}/pkg/buildDate=unknown"
+    ];
 
   src = fetchFromGitHub {
     sha256 = "sha256-8bUZsknG1Z2TKWwtuJtnauK8ibikGphl3oiLXT3PZzY=";

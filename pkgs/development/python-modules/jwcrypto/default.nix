@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "jwcrypto";
-  version = "0.9.1";
+  version = "1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "63531529218ba9869e14ef8c9e7b516865ede3facf9b0ef3d3ba68014da211f9";
+    sha256 = "f88816eb0a41b8f006af978ced5f171f33782525006cdb055b536a40f4d46ac9";
   };
 
   propagatedBuildInputs = [

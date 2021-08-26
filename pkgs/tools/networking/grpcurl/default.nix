@@ -15,7 +15,7 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-nl8vKVhUMSO20qCDyhNkU5cghNy8vIFqSBvLk59nbWg=";
 
-  buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version}" ];
+  ldflags = [ "-s" "-w" "-X main.version=${version}" ];
 
   meta = with lib; {
     description = "Like cURL, but for gRPC: Command-line tool for interacting with gRPC servers";

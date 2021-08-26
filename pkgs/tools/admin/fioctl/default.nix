@@ -15,9 +15,9 @@ buildGoModule rec {
 
   runVend = true;
 
-  buildFlagsArray = ''
-    -ldflags=-s -w -X github.com/foundriesio/fioctl/subcommands/version.Commit=${src.rev}
-  '';
+  ldflags = [
+    "-s" "-w" "-X github.com/foundriesio/fioctl/subcommands/version.Commit=${src.rev}"
+  ];
 
   meta = with lib; {
     description = "A simple CLI to manage your Foundries Factory ";

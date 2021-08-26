@@ -13,7 +13,7 @@ buildGoModule rec {
 
   vendorSha256 = null;
 
-  buildFlagsArray = [ "-ldflags=-s -w -X github.com/VictoriaMetrics/VictoriaMetrics/lib/buildinfo.Version=${version}" ];
+  ldflags = [ "-s" "-w" "-X github.com/VictoriaMetrics/VictoriaMetrics/lib/buildinfo.Version=${version}" ];
 
   passthru.tests = { inherit (nixosTests) victoriametrics; };
 

@@ -15,8 +15,7 @@ buildGoModule rec {
 
   doCheck = false;
 
-  buildFlagsArray = [
-    "-ldflags="
+  ldflags = [
     "-s"
     "-w"
     "-X github.com/open-policy-agent/conftest/internal/commands.version=${version}"

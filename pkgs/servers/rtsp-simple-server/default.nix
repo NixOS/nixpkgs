@@ -19,10 +19,10 @@ buildGoModule rec {
   # Tests need docker
   doCheck = false;
 
-  buildFlagsArray = [
-    # In the future, we might need to switch to `main.Version`, considering:
-    # https://github.com/aler9/rtsp-simple-server/issues/503
-    "-ldflags=-X github.com/aler9/rtsp-simple-server/internal/core.version=v${version}"
+  # In the future, we might need to switch to `main.Version`, considering:
+  # https://github.com/aler9/rtsp-simple-server/issues/503
+  ldflags = [
+    "-X github.com/aler9/rtsp-simple-server/internal/core.version=v${version}"
   ];
 
   meta = with lib; {

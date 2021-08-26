@@ -11,11 +11,11 @@ buildGoModule rec {
     sha256 = "sha256-eVYRbMijOEa+DNCm4w/+WVrTI9607NF9/l5YKkXJuFs=";
   };
 
-  buildFlagsArray = let
+  ldflags = let
     multus = "gopkg.in/intel/multus-cni.v3/pkg/multus";
     commit = "f6298a3a294a79f9fbda0b8f175e521799d5f8d7";
   in [
-    "-ldflags=-s -w -X '${multus}.version=v${version}' -X '${multus}.commit=${commit}'"
+    "-s" "-w" "-X ${multus}.version=v${version}" "-X ${multus}.commit=${commit}"
   ];
 
   preInstall = ''
