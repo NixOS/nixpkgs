@@ -12,23 +12,23 @@
 
 let
   # specVersion taken from: https://www.linode.com/docs/api/openapi.yaml at `info.version`.
-  specVersion = "4.101.0";
+  specVersion = "4.102.0";
   spec = fetchurl {
     url = "https://raw.githubusercontent.com/linode/linode-api-docs/v${specVersion}/openapi.yaml";
-    sha256 = "1l4xi82b2pvkj7p1bq26ax2ava5vnv324j5sw3hvkkqqf1fmpdl5";
+    sha256 = "16njk21gdk8r8a9v607ndw2rs0q6za9ylkgdxmix4j0zvrbrw0qv";
   };
 
 in
 
 buildPythonApplication rec {
   pname = "linode-cli";
-  version = "5.6.0";
+  version = "5.8.1";
 
   src = fetchFromGitHub {
     owner = "linode";
     repo = pname;
     rev = version;
-    sha256 = "sha256-AjO4h0PaE/QFwbwUVNoe98XOPZ24ct0mbLkua5/YsEA=";
+    sha256 = "19lfnwgm09gxk0mcikwl7v4hw2ai2k9lkdjlalz8fsswf81my7h6";
   };
 
   # remove need for git history
