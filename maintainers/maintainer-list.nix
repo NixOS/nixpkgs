@@ -5314,6 +5314,12 @@
     githubId = 20675;
     name = "Joël Perras";
   };
+  jpetrucciani = {
+    email = "j@cobi.dev";
+    github = "jpetrucciani";
+    githubId = 8117202;
+    name = "Jacobi Petrucciani";
+  };
   jpierre03 = {
     email = "nix@prunetwork.fr";
     github = "jpierre03";
@@ -9729,6 +9735,12 @@
     github = "SEbbaDK";
     githubId = 1567527;
     name = "Sebastian Hyberts";
+  };
+  sebbel = {
+    email = "hej@sebastian-ball.de";
+    github = "sebbel";
+    githubId = 1940568;
+    name = "Sebastian Ball";
   };
   sebtm = {
     email = "mail@sebastian-sellmeier.de";

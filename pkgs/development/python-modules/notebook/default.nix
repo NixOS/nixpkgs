@@ -21,7 +21,7 @@
 , requests
 , send2trash
 , pexpect
-, prometheus_client
+, prometheus-client
 , pytestCheckHook
 }:
 
@@ -43,7 +43,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     jinja2 tornado ipython_genutils traitlets jupyter_core send2trash
     jupyter_client nbformat nbconvert ipykernel terminado requests pexpect
-    prometheus_client argon2_cffi
+    prometheus-client argon2_cffi
   ];
 
   # disable warning_filters

@@ -4,20 +4,20 @@
 
 stdenv.mkDerivation rec {
   pname = "inetutils";
-  version = "1.9.4";
+  version = "2.0";
 
   src = fetchurl {
-    url = "mirror://gnu/inetutils/inetutils-${version}.tar.gz";
-    sha256 = "05n65k4ixl85dc6rxc51b1b732gnmm8xnqi424dy9f1nz7ppb3xy";
+    url = "mirror://gnu/inetutils/inetutils-${version}.tar.xz";
+    sha256 = "sha256-5XPVZuVTk5QAmYYuf4mUFkoO0S9ahsM0U4CEK9wSRyI=";
   };
 
   outputs = ["out" "apparmor"];
 
   patches = [
-    ./whois-Update-Canadian-TLD-server.patch
-    ./service-name.patch
     # https://git.congatec.com/yocto/meta-openembedded/commit/3402bfac6b595c622e4590a8ff5eaaa854e2a2a3
     ./inetutils-1_9-PATH_PROCNET_DEV.patch
+    ./whois-Update-ORG-TLD-server.patch
+    ./whois-Update-Indian-TLD-server.patch
   ];
 
   nativeBuildInputs = [ help2man perl /* for `whois' */ ];

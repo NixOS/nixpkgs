@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
     install -Dm0755 knot_exporter $out/bin/knot_exporter
     patchShebangs $out/bin
-    buildPythonPath ${python3.pkgs.prometheus_client}
+    buildPythonPath ${python3.pkgs.prometheus-client}
     patchPythonScript $out/bin/knot_exporter
 
     runHook postInstall
