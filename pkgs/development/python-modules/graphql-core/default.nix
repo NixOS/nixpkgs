@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "graphql-core";
-  version = "3.1.5";
+  version = "3.1.6";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "graphql-python";
     repo = pname;
     rev = "v${version}";
-    sha256 = "055gfvyax781f4zk4pl60y8yd90bnn4rkqh5i48pczaff0lwlfj1";
+    sha256 = "1ip0yrqmnqncgpwvba18x020gkwr7csiw4zdy6mrdnvwf5qyam4x";
   };
 
   checkInputs = [
