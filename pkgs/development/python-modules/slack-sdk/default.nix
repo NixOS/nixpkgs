@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "slack-sdk";
-  version = "3.10.0";
+  version = "3.10.1";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "slackapi";
     repo = "python-slack-sdk";
     rev = "v${version}";
-    sha256 = "sha256-FOpUO9bXrEOgYGmRmAhHnovzBafu6D2ZSLcgw0+0uzs=";
+    sha256 = "1m9jbn5wn892f22lxkxgahlbnwflak50hfjrydblp4agsag94nsg";
   };
 
   propagatedBuildInputs = [
