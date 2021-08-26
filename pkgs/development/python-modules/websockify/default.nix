@@ -15,10 +15,15 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ numpy ];
 
+  # Ran 0 tests in 0.000s
+  doCheck = false;
+
+  pythonImportsCheck = [ "websockify" ];
+
   meta = with lib; {
     description = "WebSockets support for any application/server";
     homepage = "https://github.com/kanaka/websockify";
     license = licenses.lgpl3;
+    maintainers = with maintainers; [ ];
   };
-
 }
