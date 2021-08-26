@@ -4,6 +4,7 @@
 , sourceExtension ? "tar.xz"
 , extraConfigureFlags ? ""
 , postPatch ? null
+, knownVulnerabilities ? [ ]
 , CoreServices
 , Security
 , ...
@@ -44,11 +45,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    inherit version;
     description = "Cryptographic algorithms library";
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.unix;
     license = licenses.bsd2;
+    inherit knownVulnerabilities;
   };
   passthru.updateInfo.downloadPage = "http://files.randombit.net/botan/";
 }

@@ -1,4 +1,4 @@
-{ pkgs, nodejs, stdenv }:
+{ pkgs, nodejs, stdenv, applyPatches, fetchFromGitHub, fetchpatch }:
 
 let
   since = (version: pkgs.lib.versionAtLeast nodejs.version version);
@@ -13,6 +13,30 @@ let
         export NG_CLI_ANALYTICS=false
       '';
     };
+
+    autoprefixer = super.autoprefixer.override {
+      nativeBuildInputs = [ pkgs.makeWrapper ];
+      postInstall = ''
+        wrapProgram "$out/bin/autoprefixer" \
+          --prefix NODE_PATH : ${self.postcss}/lib/node_modules
+      '';
+      passthru.tests = {
+        simple-execution = pkgs.callPackage ./package-tests/autoprefixer.nix { inherit (self) autoprefixer; };
+      };
+    };
+
+    aws-azure-login = super.aws-azure-login.override {
+      meta.platforms = pkgs.lib.platforms.linux;
+      nativeBuildInputs = [ pkgs.makeWrapper ];
+      prePatch = ''
+        export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1
+      '';
+      postInstall = ''
+        wrapProgram $out/bin/aws-azure-login \
+            --set PUPPETEER_EXECUTABLE_PATH ${pkgs.chromium}/bin/chromium
+      '';
+    };
+
     bower2nix = super.bower2nix.override {
       buildInputs = [ pkgs.makeWrapper ];
       postInstall = ''
@@ -22,11 +46,40 @@ let
       '';
     };
 
-    coc-imselect = super.coc-imselect.override {
-      meta.broken = since "10";
+    deltachat-desktop = super."deltachat-desktop-../../applications/networking/instant-messengers/deltachat-desktop".override {
+      meta.broken = true; # use the top-level package instead
     };
 
-    "fast-cli-1.x" = super."fast-cli-1.x".override {
+    fast-cli = super.fast-cli.override ({
+      nativeBuildInputs = [ pkgs.makeWrapper ];
+      prePatch = ''
+        export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1
+      '';
+      postInstall = ''
+        wrapProgram $out/bin/fast \
+          --set PUPPETEER_EXECUTABLE_PATH ${pkgs.chromium.outPath}/bin/chromium
+      '';
+    });
+
+    hyperspace-cli = super."@hyperspace/cli".override {
+      nativeBuildInputs = with pkgs; [
+        makeWrapper
+        libtool
+        autoconf
+        automake
+      ];
+      buildInputs = with pkgs; [
+        nodePackages.node-gyp-build
+        nodejs
+      ];
+      postInstall = ''
+        wrapProgram "$out/bin/hyp" --prefix PATH : ${
+          pkgs.lib.makeBinPath [ pkgs.nodejs ]
+        }
+      '';
+    };
+
+    coc-imselect = super.coc-imselect.override {
       meta.broken = since "10";
     };
 
@@ -47,20 +100,14 @@ let
       };
     });
 
-    bitwarden-cli = pkgs.lib.overrideDerivation super."@bitwarden/cli" (drv: {
+    bitwarden-cli = super."@bitwarden/cli".override (drv: {
       name = "bitwarden-cli-${drv.version}";
+      meta.mainProgram = "bw";
     });
-
-    fast-cli = super."fast-cli-1.x".override {
-      preRebuild = ''
-        # Simply ignore the phantomjs --version check. It seems to need a display but it is safe to ignore
-        sed -i -e "s|console.error('Error verifying phantomjs, continuing', err)|console.error('Error verifying phantomjs, continuing', err); return true;|" node_modules/phantomjs-prebuilt/lib/util.js
-      '';
-      buildInputs = [ pkgs.phantomjs2 ];
-    };
 
     flood = super.flood.override {
       buildInputs = [ self.node-pre-gyp ];
+      meta.mainProgram = "flood";
     };
 
     expo-cli = super."expo-cli".override (attrs: {
@@ -92,6 +139,19 @@ let
       nativeBuildInputs = drv.nativeBuildInputs or [] ++ [ pkgs.psc-package self.pulp ];
     });
 
+    jsonplaceholder = super.jsonplaceholder.override (drv: {
+      buildInputs = [ nodejs ];
+      postInstall = ''
+        exe=$out/bin/jsonplaceholder
+        mkdir -p $out/bin
+        cat >$exe <<EOF
+        #!${pkgs.runtimeShell}
+        exec -a jsonplaceholder ${nodejs}/bin/node $out/lib/node_modules/jsonplaceholder/index.js
+        EOF
+        chmod a+x $exe
+      '';
+    });
+
     makam =  super.makam.override {
       buildInputs = [ pkgs.nodejs pkgs.makeWrapper ];
       postFixup = ''
@@ -102,6 +162,10 @@ let
             else ""
         }
       '';
+    };
+
+    markdownlint-cli = super.markdownlint-cli.override {
+      meta.mainProgram = "markdownlint";
     };
 
     mirakurun = super.mirakurun.override rec {
@@ -134,6 +198,16 @@ let
       '';
     };
 
+    node-gyp = super.node-gyp.override {
+      nativeBuildInputs = [ pkgs.makeWrapper ];
+      # Teach node-gyp to use nodejs headers locally rather that download them form https://nodejs.org.
+      # This is important when build nodejs packages in sandbox.
+      postInstall = ''
+        wrapProgram "$out/bin/node-gyp" \
+          --set npm_config_nodedir ${nodejs}
+      '';
+    };
+
     node-inspector = super.node-inspector.override {
       buildInputs = [ self.node-pre-gyp ];
       meta.broken = since "10";
@@ -141,6 +215,31 @@ let
 
     node2nix = super.node2nix.override {
       buildInputs = [ pkgs.makeWrapper ];
+      # We need to apply a patch to the source, but buildNodePackage doesn't allow patches.
+      # So we pin the patched commit instead. The commit actually contains two other newer commits
+      # since the last (1.9.0) release, but actually this is a good thing since one of them is a
+      # Hydra-specific fix.
+      src = applyPatches {
+        src = fetchFromGitHub {
+          owner = "svanderburg";
+          repo = "node2nix";
+          rev = "node2nix-1.9.0";
+          sha256 = "0l4wp1131nhl9c14cn8bwawb8f77h1nfbnswgi5lp5m3kzkb27jn";
+        };
+
+        patches = [
+          # remove node_ name prefix
+          (fetchpatch {
+            url = "https://github.com/svanderburg/node2nix/commit/b54d45207427ff46e90f16f2f32771fdc8bff5a4.patch";
+            sha256 = "sha256-ubUdF0q3l4xxqZ7f9EiQEUQzyqxi9Q6zsRPETHlfzh8=";
+          })
+          # set meta platform
+          (fetchpatch {
+            url = "https://github.com/svanderburg/node2nix/commit/58736093161f2d237c17e75a96529b018cd0ac64.patch";
+            sha256 = "0sif7803c9g6gjmmdniw5qxrq5igiz9nqdmdrcf1hxfi5x43a32h";
+          })
+        ];
+      };
       postInstall = ''
         wrapProgram "$out/bin/node2nix" --prefix PATH : ${pkgs.lib.makeBinPath [ pkgs.nix ]}
       '';
@@ -183,6 +282,21 @@ let
       '';
     };
 
+    postcss-cli = super.postcss-cli.override {
+      nativeBuildInputs = [ pkgs.makeWrapper ];
+      postInstall = ''
+        wrapProgram "$out/bin/postcss" \
+          --prefix NODE_PATH : ${self.postcss}/lib/node_modules \
+          --prefix NODE_PATH : ${self.autoprefixer}/lib/node_modules
+      '';
+      passthru.tests = {
+        simple-execution = pkgs.callPackage ./package-tests/postcss-cli.nix {
+          inherit (self) postcss-cli;
+        };
+      };
+      meta.mainProgram = "postcss";
+    };
+
     pulp = super.pulp.override {
       # tries to install purescript
       npmFlags = "--ignore-scripts";
@@ -194,6 +308,26 @@ let
         ]}
       '';
     };
+
+    netlify-cli =
+      let
+        esbuild = pkgs.esbuild.overrideAttrs (old: rec {
+          version = "0.13.6";
+
+          src = fetchFromGitHub {
+            owner = "netlify";
+            repo = "esbuild";
+            rev = "v${version}";
+            sha256 = "0asjmqfzdrpfx2hd5hkac1swp52qknyqavsm59j8xr4c1ixhc6n9";
+          };
+
+        });
+      in
+      super.netlify-cli.override {
+        preRebuild = ''
+          export ESBUILD_BINARY_PATH="${esbuild}/bin/esbuild"
+        '';
+      };
 
     ssb-server = super.ssb-server.override {
       buildInputs = [ pkgs.automake pkgs.autoconf self.node-gyp-build ];
@@ -226,6 +360,10 @@ let
         wrapProgram "$out/bin/typescript-language-server" \
           --prefix PATH : ${pkgs.lib.makeBinPath [ self.typescript ]}
       '';
+    };
+
+    teck-programmer = super.teck-programmer.override {
+      buildInputs = [ pkgs.libusb1 ];
     };
 
     vega-cli = super.vega-cli.override {
@@ -268,6 +406,9 @@ let
         libsecret
         self.node-gyp-build
         self.node-pre-gyp
+      ] ++ lib.optionals stdenv.isDarwin [
+        darwin.apple_sdk.frameworks.AppKit
+        darwin.apple_sdk.frameworks.Security
       ];
     };
 
@@ -284,6 +425,17 @@ let
         wrapProgram "$out/bin/yaml-language-server" \
         --prefix NODE_PATH : ${self.prettier}/lib/node_modules
       '';
+    };
+
+    wavedrom-cli = super.wavedrom-cli.override {
+      nativeBuildInputs = [ pkgs.pkg-config self.node-pre-gyp ];
+      # These dependencies are required by
+      # https://github.com/Automattic/node-canvas.
+      buildInputs = with pkgs; [
+        pixman
+        cairo
+        pango
+      ];
     };
   };
 in self

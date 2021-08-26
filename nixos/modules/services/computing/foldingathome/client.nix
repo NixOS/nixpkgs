@@ -49,6 +49,15 @@ in
       '';
     };
 
+    daemonNiceLevel = mkOption {
+      type = types.ints.between (-20) 19;
+      default = 0;
+      description = ''
+        Daemon process priority for FAHClient.
+        0 is the default Unix process priority, 19 is the lowest.
+      '';
+    };
+
     extraArgs = mkOption {
       type = types.listOf types.str;
       default = [];
@@ -70,6 +79,7 @@ in
       serviceConfig = {
         DynamicUser = true;
         StateDirectory = "foldingathome";
+        Nice = cfg.daemonNiceLevel;
         WorkingDirectory = "%S/foldingathome";
       };
     };

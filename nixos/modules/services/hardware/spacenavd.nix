@@ -19,7 +19,6 @@ in {
       wantedBy = [ "graphical.target" ];
       serviceConfig = {
         ExecStart = "${pkgs.spacenavd}/bin/spacenavd -d -l syslog";
-        StandardError = "syslog";
       };
     };
   };

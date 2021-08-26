@@ -1,7 +1,8 @@
 { lib, stdenv, fetchFromGitHub, qmake, qtwebkit, hunspell }:
 
 stdenv.mkDerivation {
-  name = "qtwebkit-plugins-2017-01-25";
+  pname = "qtwebkit-plugins";
+  version = "unstable-2017-01-25";
 
   src = fetchFromGitHub {
     owner = "QupZilla";

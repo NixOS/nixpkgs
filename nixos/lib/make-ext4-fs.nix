@@ -74,11 +74,9 @@ pkgs.stdenv.mkDerivation {
         return 1
       fi
 
-      echo "Resizing to minimum allowed size"
-      resize2fs -M $img
-
-      # And a final fsck, because of the previous truncating.
-      fsck.ext4 -n -f $img
+      # We may want to shrink the file system and resize the image to
+      # get rid of the unnecessary slack here--but see
+      # https://github.com/NixOS/nixpkgs/issues/125121 for caveats.
 
       if [ ${builtins.toString compressImage} ]; then
         echo "Compressing image"

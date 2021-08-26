@@ -1,10 +1,11 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
   baseName = "pythonic-string-reader";
   version = "20180711-git";
 
-  description = ''A simple and unintrusive read table modification that allows for
-simple string literal definition that doesn't require escaping characters.'';
+  description = "A simple and unintrusive read table modification that allows for
+simple string literal definition that doesn't require escaping characters.";
 
   deps = [ args."named-readtables" ];
 

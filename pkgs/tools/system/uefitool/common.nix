@@ -20,8 +20,10 @@ mkDerivation rec {
   buildInputs = [ qtbase ];
   nativeBuildInputs = [ qmake cmake zip ];
 
-  configurePhase = ":";
-  buildPhase = "bash unixbuild.sh";
+  dontConfigure = true;
+  buildPhase = ''
+    bash unixbuild.sh
+  '';
 
   installPhase = ''
     mkdir -p "$out"/bin

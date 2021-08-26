@@ -21,13 +21,13 @@
 
 buildPythonPackage rec {
   pname = "cfn-lint";
-  version = "0.42.0";
+  version = "0.53.0";
 
   src = fetchFromGitHub {
     owner = "aws-cloudformation";
     repo = "cfn-python-lint";
     rev = "v${version}";
-    sha256 = "0cqpq7pxpslpd7am6mp6nmwhsb2p2a5lq3hjjxi8imv3wv7zql98";
+    sha256 = "sha256-UHcbbBoByoxW7+AUxu5mQmcvC3irHPQvBv4CbBXPTNo=";
   };
 
   postPatch = ''
@@ -67,6 +67,9 @@ buildPythonPackage rec {
     "TestQuickStartTemplates"
     # requires git directory
     "test_update_docs"
+    # Tests depend on network access (fails in getaddrinfo)
+    "test_update_resource_specs_python_2"
+    "test_update_resource_specs_python_3"
   ];
 
   pythonImportsCheck = [

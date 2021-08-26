@@ -1,17 +1,17 @@
 { lib, stdenv, fetchurl, makeWrapper
 , xorg, imlib2, libjpeg, libpng
-, curl, libexif, jpegexiforient, perlPackages
+, curl, libexif, jpegexiforient, perl
 , enableAutoreload ? !stdenv.hostPlatform.isDarwin }:
 
 with lib;
 
 stdenv.mkDerivation rec {
   pname = "feh";
-  version = "3.6.3";
+  version = "3.7.1";
 
   src = fetchurl {
     url = "https://feh.finalrewind.org/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-Q3Qg838RYU4AjQZuKjve/Px4FEyCEpmLK6zdXSHqI7Q=";
+    sha256 = "sha256-V6scph9XyWWVh4Bp9VDTb1GFMPiPoxt0zDnNc5+SWLY=";
   };
 
   outputs = [ "out" "man" "doc" ];
@@ -31,14 +31,7 @@ stdenv.mkDerivation rec {
                                --add-flags '--theme=feh'
   '';
 
-  checkInputs = [ perlPackages.perl perlPackages.TestCommand ];
-  preCheck = ''
-    export PERL5LIB="${perlPackages.TestCommand}/${perlPackages.perl.libPrefix}"
-  '';
-  postCheck = ''
-    unset PERL5LIB
-  '';
-
+  checkInputs = lib.singleton (perl.withPackages (p: [ p.TestCommand ]));
   doCheck = true;
 
   meta = {

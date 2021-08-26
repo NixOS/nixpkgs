@@ -17,7 +17,7 @@ buildPythonApplication rec {
     arrow
     icalendar
     glibcLocales
-    prompt_toolkit
+    prompt-toolkit
     urwid
     watchdog
   ];

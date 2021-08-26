@@ -1,10 +1,7 @@
 { lib, stdenv, fetchFromGitHub, cmake, flex, bison }:
-let
-  version = "2.5.5";
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "minizinc";
-  inherit version;
+  version = "2.5.5";
 
   nativeBuildInputs = [ cmake flex bison ];
 

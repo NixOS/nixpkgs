@@ -8,15 +8,16 @@ rec {
       , moby-src
       , runcRev, runcSha256
       , containerdRev, containerdSha256
-      , tiniRev, tiniSha256, buildxSupport ? false
+      , tiniRev, tiniSha256, buildxSupport ? true
       # package dependencies
-      , stdenv, fetchFromGitHub, fetchpatch, buildGoPackage
-      , makeWrapper, installShellFiles, pkg-config
-      , go-md2man, go, containerd, runc, docker-proxy, tini, libtool
-      , sqlite, iproute, lvm2, systemd, docker-buildx
+      , stdenv, fetchFromGitHub, buildGoPackage
+      , makeWrapper, installShellFiles, pkg-config, glibc
+      , go-md2man, go, containerd_1_4, runc, docker-proxy, tini, libtool
+      , sqlite, iproute2, lvm2, systemd, docker-buildx
       , btrfs-progs, iptables, e2fsprogs, xz, util-linux, xfsprogs, git
       , procps, libseccomp
       , nixosTests
+      , clientOnly ? !stdenv.isLinux
     }:
   let
     docker-runc = runc.overrideAttrs (oldAttrs: {
@@ -32,7 +33,7 @@ rec {
       patches = [];
     });
 
-    docker-containerd = containerd.overrideAttrs (oldAttrs: {
+    docker-containerd = containerd_1_4.overrideAttrs (oldAttrs: {
       name = "docker-containerd-${version}";
       inherit version;
       src = fetchFromGitHub {
@@ -55,7 +56,9 @@ rec {
       };
 
       # Do not remove static from make files as we want a static binary
-      patchPhase = "";
+      postPatch = "";
+
+      buildInputs = [ glibc glibc.static ];
 
       NIX_CFLAGS_COMPILE = "-DMINIMAL=ON";
     });
@@ -72,7 +75,11 @@ rec {
       nativeBuildInputs = [ makeWrapper pkg-config go-md2man go libtool installShellFiles ];
       buildInputs = [ sqlite lvm2 btrfs-progs systemd libseccomp ];
 
-      extraPath = optionals (stdenv.isLinux) (makeBinPath [ iproute iptables e2fsprogs xz xfsprogs procps util-linux git ]);
+      extraPath = optionals (stdenv.isLinux) (makeBinPath [ iproute2 iptables e2fsprogs xz xfsprogs procps util-linux git ]);
+
+      postPatch = ''
+        patchShebangs hack/make.sh hack/make/
+      '';
 
       buildPhase = ''
         export GOCACHE="$TMPDIR/go-cache"
@@ -83,11 +90,6 @@ rec {
         export VERSION="${version}"
         ./hack/make.sh dynbinary
         cd -
-      '';
-
-      postPatch = ''
-        patchShebangs .
-        substituteInPlace ./hack/make.sh --replace libsystemd-journal libsystemd
       '';
 
       installPhase = ''
@@ -105,6 +107,8 @@ rec {
 
         # systemd
         install -Dm644 ./contrib/init/systemd/docker.service $out/etc/systemd/system/docker.service
+        substituteInPlace $out/etc/systemd/system/docker.service --replace /usr/bin/dockerd $out/bin/dockerd
+        install -Dm644 ./contrib/init/systemd/docker.socket $out/etc/systemd/system/docker.socket
       '';
 
       DOCKER_BUILDTAGS = []
@@ -114,14 +118,14 @@ rec {
         ++ optional (libseccomp != null) "seccomp";
     });
   in
-    buildGoPackage ((optionalAttrs (stdenv.isLinux) {
+    buildGoPackage ((optionalAttrs (!clientOnly) {
 
     inherit docker-runc docker-containerd docker-proxy docker-tini moby;
 
    }) // rec {
     inherit version rev;
 
-    name = "docker-${version}";
+    pname = "docker";
 
     src = fetchFromGitHub {
       owner = "docker";
@@ -132,12 +136,20 @@ rec {
 
     goPackagePath = "github.com/docker/cli";
 
-    nativeBuildInputs = [ pkg-config go-md2man go libtool installShellFiles ];
-    buildInputs = [
-      makeWrapper
-    ] ++ optionals (stdenv.isLinux) [
+    nativeBuildInputs = [
+      makeWrapper pkg-config go-md2man go libtool installShellFiles
+    ];
+    buildInputs = optionals (!clientOnly) [
       sqlite lvm2 btrfs-progs systemd libseccomp
     ] ++ optionals (buildxSupport) [ docker-buildx ];
+
+    postPatch = ''
+      patchShebangs man scripts/build/
+      substituteInPlace ./scripts/build/.variables --replace "set -eu" ""
+    '' + optionalString buildxSupport ''
+      substituteInPlace ./cli-plugins/manager/manager_unix.go --replace /usr/libexec/docker/cli-plugins \
+          ${lib.strings.makeSearchPathOutput "bin" "libexec/docker/cli-plugins" [docker-buildx]}
+    '';
 
     # Keep eyes on BUILDTIME format - https://github.com/docker/cli/blob/${version}/scripts/build/.variables
     buildPhase = ''
@@ -157,16 +169,6 @@ rec {
       cd -
     '';
 
-    postPatch = ''
-      patchShebangs .
-      substituteInPlace ./scripts/build/.variables --replace "set -eu" ""
-      substituteInPlace ./scripts/docs/generate-man.sh --replace "-v md2man" "-v go-md2man"
-      substituteInPlace ./man/md2man-all.sh            --replace md2man go-md2man
-    '' + optionalString buildxSupport ''
-      substituteInPlace ./cli-plugins/manager/manager_unix.go --replace /usr/libexec/docker/cli-plugins \
-          ${lib.strings.makeSearchPathOutput "bin" "libexec/docker/cli-plugins" [docker-buildx]}
-    '';
-
     outputs = ["out" "man"];
 
     installPhase = ''
@@ -175,9 +177,14 @@ rec {
 
       makeWrapper $out/libexec/docker/docker $out/bin/docker \
         --prefix PATH : "$out/libexec/docker:$extraPath"
-    '' + optionalString (stdenv.isLinux) ''
+    '' + optionalString (!clientOnly) ''
       # symlink docker daemon to docker cli derivation
       ln -s ${moby}/bin/dockerd $out/bin/dockerd
+
+      # systemd
+      mkdir -p $out/etc/systemd/system
+      ln -s ${moby}/etc/systemd/system/docker.service $out/etc/systemd/system/docker.service
+      ln -s ${moby}/etc/systemd/system/docker.socket $out/etc/systemd/system/docker.socket
     '' + ''
       # completion (cli)
       installShellCompletion --bash ./contrib/completion/bash/docker
@@ -197,13 +204,13 @@ rec {
       installManPage man/*/*.[1-9]
     '';
 
-    passthru.tests = { inherit (nixosTests) docker; };
+    passthru.tests = lib.optionals (!clientOnly) { inherit (nixosTests) docker; };
 
     meta = {
       homepage = "https://www.docker.com/";
       description = "An open source project to pack, ship and run any application as a lightweight container";
       license = licenses.asl20;
-      maintainers = with maintainers; [ offline tailhook vdemeester periklis ];
+      maintainers = with maintainers; [ offline tailhook vdemeester periklis mikroskeem maxeaubrey ];
       platforms = with platforms; linux ++ darwin;
     };
 
@@ -214,20 +221,20 @@ rec {
   # Get revisions from
   # https://github.com/moby/moby/tree/${version}/hack/dockerfile/install/*
   docker_20_10 = callPackage dockerGen rec {
-    version = "20.10.2";
+    version = "20.10.8";
     rev = "v${version}";
-    sha256 = "0z0hpm5hrqh7p8my8lmiwpym2shs48my6p0zv2cc34wym0hcly51";
+    sha256 = "sha256-betZIAH4mFpb/OywWyixCjVmy5EGTrg+WbxDXkVRrsI=";
     moby-src = fetchFromGitHub {
       owner = "moby";
       repo = "moby";
       rev = "v${version}";
-      sha256 = "0c2zycpnwj4kh8m8xckv1raj3fx07q9bfaj46rr85jihm4p2dp5w";
+      sha256 = "1pjjdwzad2z337zwby88w5zwl71ch4lcwbw0sy8slvyjv387jjlm";
     };
-    runcRev = "ff819c7e9184c13b7c2607fe6c30ae19403a7aff"; # v1.0.0-rc92
-    runcSha256 = "0r4zbxbs03xr639r7848282j1ybhibfdhnxyap9p76j5w8ixms94";
-    containerdRev = "269548fa27e0089a8b8278fc4fc781d7f65a939b"; # v1.4.3
-    containerdSha256 = "09xvhjg5f8h90w1y94kqqnqzhbhd62dcdd9wb9sdqakisjk6zrl0";
-    tiniRev = "de40ad007797e0dcd8b7126f27bb87401d224240"; # v0.19.0
+    runcRev = "v1.0.1"; # v1.0.1
+    runcSha256 = "1zfa1zr8i9n1915nyv7hyaj7q27cy7fiihk9rr1377ayaqg3mpn5";
+    containerdRev = "v1.4.9"; # v1.4.9
+    containerdSha256 = "1ykikks6ihgg899ibk9m9m0hqrbss0cx7l7z4yjb873b10bacj52";
+    tiniRev = "v0.19.0"; # v0.19.0
     tiniSha256 = "1h20i3wwlbd8x4jr2gz68hgklh0lb0jj7y5xk1wvr8y58fip1rdn";
   };
 }

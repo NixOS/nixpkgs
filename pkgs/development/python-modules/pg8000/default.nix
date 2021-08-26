@@ -8,15 +8,18 @@
 
 buildPythonPackage rec {
   pname = "pg8000";
-  version = "1.18.0";
+  version = "1.21.0";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1nkjxf95ldda41mkmahbikhd1fvxai5lfjb4a5gyhialpz4g5fim";
+    sha256 = "1msj0vk14fbsis8yfk0my1ygpcli9jz3ivwdi9k6ii5i6330i4f9";
   };
 
-  propagatedBuildInputs = [ passlib scramp ];
+  propagatedBuildInputs = [
+    passlib
+    scramp
+  ];
 
   # Tests require a running PostgreSQL instance
   doCheck = false;

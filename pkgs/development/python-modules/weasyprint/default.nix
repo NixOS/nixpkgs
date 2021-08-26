@@ -1,5 +1,6 @@
 { buildPythonPackage,
   fetchPypi,
+  fetchpatch,
   cairosvg,
   pyphen,
   cffi,
@@ -7,16 +8,15 @@
   lxml,
   html5lib,
   tinycss,
-  pygobject2,
   glib,
   pango,
   fontconfig,
   lib, stdenv,
   pytest,
-  pytestrunner,
+  pytest-runner,
   pytest-isort,
   pytest-flake8,
-  pytestcov,
+  pytest-cov,
   isPy3k,
   substituteAll
 }:
@@ -39,13 +39,19 @@ buildPythonPackage rec {
         --replace '[tool:pytest]' '[tool:pytest]\nflake8-ignore = E501'
   '';
 
-  checkInputs = [ pytest pytestrunner pytest-isort pytest-flake8 pytestcov ];
+  checkInputs = [ pytest pytest-runner pytest-isort pytest-flake8 pytest-cov ];
 
   FONTCONFIG_FILE = "${fontconfig.out}/etc/fonts/fonts.conf";
 
-  propagatedBuildInputs = [ cairosvg pyphen cffi cssselect lxml html5lib tinycss pygobject2 ];
+  propagatedBuildInputs = [ cairosvg pyphen cffi cssselect lxml html5lib tinycss ];
 
+  # 47043a1fd7e50a892b9836466f521df85d597c4.patch can be removed after next release of weasyprint, see:
+  # https://github.com/Kozea/WeasyPrint/issues/1333#issuecomment-818062970
   patches = [
+    (fetchpatch {
+      url = "https://github.com/Kozea/WeasyPrint/commit/47043a1fd7e50a892b9836466f521df85d597c44.patch";
+      sha256 = "0l9z0hrav3bcdajlg3vbzljq0lkw7hlj8ppzrq3v21hbj1il1nsb";
+    })
     (substituteAll {
       src = ./library-paths.patch;
       fontconfig = "${fontconfig.lib}/lib/libfontconfig${stdenv.hostPlatform.extensions.sharedLibrary}";

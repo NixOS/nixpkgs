@@ -1,6 +1,6 @@
 { qtModule, qtbase }:
 
 qtModule {
-  name = "qtx11extras";
+  pname = "qtx11extras";
   qtInputs = [ qtbase ];
 }

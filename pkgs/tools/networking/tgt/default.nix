@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, libxslt, libaio, systemd, perl, perlPackages
+{ stdenv, lib, fetchFromGitHub, libxslt, libaio, systemd, perl
 , docbook_xsl, coreutils, lsof, rdma-core, makeWrapper, sg3_utils, util-linux
 }:
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     substituteInPlace $out/sbin/tgt-admin \
-      --replace "#!/usr/bin/perl" "#! ${perl}/bin/perl -I${perlPackages.ConfigGeneral}/${perl.libPrefix}"
+      --replace "#!/usr/bin/perl" "#! ${perl.withPackages (p: [ p.ConfigGeneral ])}/bin/perl"
     wrapProgram $out/sbin/tgt-admin --prefix PATH : \
       ${lib.makeBinPath [ lsof sg3_utils (placeholder "out") ]}
 

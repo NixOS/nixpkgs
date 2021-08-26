@@ -33,6 +33,5 @@ buildGoModule rec {
     inherit (src.meta) homepage;
     license = licenses.apsl20;
     maintainers = with maintainers; [ yurrriq ];
-    platforms = platforms.all;
   };
 }

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, python2, makeWrapper }:
+{ lib, stdenv, fetchurl, python, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "lhapdf";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ python2 ];
+  buildInputs = [ python ];
 
   enableParallelBuilding = true;
 

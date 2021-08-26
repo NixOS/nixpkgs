@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optionals stdenv.isDarwin [ Security ];
 
-  cargoSha256 = "0yxnpnxwis46wz4j5rjzyyzrvh94hn8vzxmmrcmrdz3gkakg77hg";
+  cargoSha256 = "0q27p2hyw6c1fh5x8kwsrw8a1hk6z90z0z3w86ga8ryz53xg4vdi";
 
   meta = with lib; {
     description = "MozillaVPN configuration manager giving Linux, macOS users (among others), access to MozillaVPN";

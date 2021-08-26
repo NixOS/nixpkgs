@@ -1,5 +1,6 @@
-{ buildPythonPackage
-, isPy27
+{ lib
+, buildPythonPackage
+, pythonOlder
 , asn1crypto
 , azure-storage-blob
 , boto3
@@ -10,7 +11,6 @@
 , idna
 , ijson
 , isPy3k
-, lib
 , oscrypto
 , pyarrow
 , pyasn1-modules
@@ -25,19 +25,13 @@
 
 buildPythonPackage rec {
   pname = "snowflake-connector-python";
-  version = "2.3.10";
-  disabled = isPy27;
+  version = "2.4.5";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ad62bfd31e677d39984449d9c68e233da2776b80894a988a2421aad412e4c44f";
+    sha256 = "f5bd11228e192b4754587869ebd85752327ecb945fcc19c2ed1f66958443ad08";
   };
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "'pyOpenSSL>=16.2.0,<20.0.0'," "'pyOpenSSL'," \
-      --replace 'pytz<2021.0' 'pytz'
-  '';
 
   propagatedBuildInputs = [
     azure-storage-blob
@@ -55,16 +49,27 @@ buildPythonPackage rec {
     pytz
     requests
     six
-  ] ++ lib.optionals (!isPy3k) [
     pyarrow
     pyasn1-modules
     urllib3
   ];
 
-  # tests require encrypted secrets, see
+  postPatch = ''
+    # https://github.com/snowflakedb/snowflake-connector-python/issues/705
+    substituteInPlace setup.py \
+      --replace "idna>=2.5,<3" "idna" \
+      --replace "certifi<2021.0.0" "certifi" \
+      --replace "chardet>=3.0.2,<4" "chardet"
+  '';
+
+  # Tests require encrypted secrets, see
   # https://github.com/snowflakedb/snowflake-connector-python/tree/master/.github/workflows/parameters
   doCheck = false;
-  pythonImportsCheck = [ "snowflake" "snowflake.connector" ];
+
+  pythonImportsCheck = [
+    "snowflake"
+    "snowflake.connector"
+  ];
 
   meta = with lib; {
     description = "Snowflake Connector for Python";

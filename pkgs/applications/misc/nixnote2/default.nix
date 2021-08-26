@@ -14,8 +14,6 @@ mkDerivation rec {
 
   buildInputs = [ boost qtbase qtwebkit poppler hunspell ];
 
-  enableParallelBuilding = true;
-
   nativeBuildInputs = [ qmake ];
 
   postPatch = ''

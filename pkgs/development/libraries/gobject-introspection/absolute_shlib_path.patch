@@ -40,7 +40,7 @@
  def _get_option_parser():
      parser = optparse.OptionParser('%prog [options] sources',
                                     version='%prog ' + giscanner.__version__)
-@@ -205,6 +238,10 @@ match the namespace prefix.""")
+@@ -214,6 +247,10 @@ match the namespace prefix.""")
      parser.add_option("", "--filelist",
                        action="store", dest="filelist", default=[],
                        help="file containing headers and sources to be scanned")
@@ -66,7 +66,7 @@
  # This is a what we do for non-la files. We assume that we are on an
  # ELF-like system where ldd exists and the soname extracted with ldd is
  # a filename that can be opened with dlopen().
-@@ -106,7 +112,8 @@ def _resolve_non_libtool(options, binary, libraries):
+@@ -108,7 +114,8 @@ def _resolve_non_libtool(options, binary, libraries):
              output = output.decode("utf-8", "replace")
  
          shlibs = resolve_from_ldd_output(libraries, output)
@@ -76,7 +76,7 @@
  
  
  def sanitize_shlib_path(lib):
-@@ -115,19 +122,18 @@ def sanitize_shlib_path(lib):
+@@ -117,19 +124,18 @@ def sanitize_shlib_path(lib):
      # In case we get relative paths on macOS (like @rpath) then we fall
      # back to the basename as well:
      # https://gitlab.gnome.org/GNOME/gobject-introspection/issues/222
@@ -101,7 +101,7 @@
      if len(patterns) == 0:
          return []
  
-@@ -139,8 +145,11 @@ def resolve_from_ldd_output(libraries, output):
+@@ -141,8 +147,11 @@ def resolve_from_ldd_output(libraries, output):
          if line.endswith(':'):
              continue
          for word in line.split():
@@ -117,7 +117,7 @@
                      shlibs.append(m.group())
 --- a/giscanner/utils.py
 +++ b/giscanner/utils.py
-@@ -111,17 +111,11 @@ def extract_libtool_shlib(la_file):
+@@ -113,16 +113,11 @@ def extract_libtool_shlib(la_file):
      if dlname is None:
          return None
  
@@ -129,8 +129,7 @@
 -        if libdir is None:
 -            return dlbasename
 -        return libdir + '/' + dlbasename
--    # From the comments in extract_libtool(), older libtools had
--    # a path rather than the raw dlname
+-    # Older libtools had a path rather than the raw dlname
 -    return os.path.basename(dlname)
 +    dlbasename = os.path.basename(dlname)
 +    libdir = _extract_libdir_field(la_file)
@@ -139,7 +138,7 @@
 +    return libdir + '/' + dlbasename
  
  
- def extract_libtool(la_file):
+ # Returns arguments for invoking libtool, if applicable, otherwise None
 --- a/tests/scanner/test_shlibs.py
 +++ b/tests/scanner/test_shlibs.py
 @@ -7,6 +7,30 @@ from giscanner.shlibs import resolve_from_ldd_output, sanitize_shlib_path

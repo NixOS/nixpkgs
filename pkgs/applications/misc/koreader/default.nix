@@ -2,26 +2,35 @@
 , fetchurl
 , makeWrapper
 , dpkg
-, luajit
-, gtk3-x11
-, SDL2
 , glib
+, gnutar
+, gtk3-x11
+, luajit
+, sdcv
+, SDL2
 , noto-fonts
 , nerdfonts }:
 let font-droid = nerdfonts.override { fonts = [ "DroidSansMono" ]; };
 in stdenv.mkDerivation rec {
   pname = "koreader";
-  version = "2021.02";
+  version = "2021.03";
 
   src = fetchurl {
     url =
       "https://github.com/koreader/koreader/releases/download/v${version}/koreader-${version}-amd64.deb";
-    sha256 = "0v7jx4a2kz1i1k9jqwcxbgdikflk28cnnp69sbhha8pkkbk8c5wh";
+    sha256 = "sha256-XdCyx+SdcV1QitDVkOl9EZCHpU8Qiwu0qhcXkU6b+9o=";
   };
 
   sourceRoot = ".";
   nativeBuildInputs = [ makeWrapper dpkg ];
-  buildInputs = [ luajit gtk3-x11 SDL2 glib ];
+  buildInputs = [
+    glib
+    gnutar
+    gtk3-x11
+    luajit
+    sdcv
+    SDL2
+  ];
   unpackCmd = "dpkg-deb -x ${src} .";
 
   dontConfigure = true;
@@ -30,7 +39,9 @@ in stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out
     cp -R usr/* $out/
-    cp ${luajit}/bin/luajit $out/lib/koreader/luajit
+    ln -sf ${luajit}/bin/luajit $out/lib/koreader/luajit
+    ln -sf ${sdcv}/bin/sdcv $out/lib/koreader/sdcv
+    ln -sf ${gnutar}/bin/tar $out/lib/koreader/tar
     find $out -xtype l -delete
     for i in ${noto-fonts}/share/fonts/truetype/noto/*; do
         ln -s "$i" $out/lib/koreader/fonts/noto/

@@ -6,26 +6,26 @@
 , pytestCheckHook
 , pythonOlder
 , requests
-, websocket_client
+, websocket-client
 , zeroconf
 }:
 
 buildPythonPackage rec {
   pname = "devolo-home-control-api";
-  version = "0.17.0";
+  version = "0.17.4";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "2Fake";
     repo = "devolo_home_control_api";
     rev = "v${version}";
-    sha256 = "sha256-g82YmlxlBdyNn7KPU+k+J3/P7ABWMMdLXUpXWnCkdpM=";
+    sha256 = "sha256-N/48Q2IEL194vCzrPPuy+mRNejXfkoXy2t2oe0Y6ug4=";
   };
 
   propagatedBuildInputs = [
     requests
     zeroconf
-    websocket_client
+    websocket-client
   ];
 
   checkInputs = [

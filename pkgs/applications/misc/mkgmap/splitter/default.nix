@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   version = "598";
 
   src = fetchurl {
-    url = "http://www.mkgmap.org.uk/download/splitter-r${version}-src.tar.gz";
+    url = "https://www.mkgmap.org.uk/download/splitter-r${version}-src.tar.gz";
     sha256 = "gpbJpDBXA9tmSmx9oKLa7xWtIOHBTYd1iPPgNTC2C2M=";
   };
 
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Utility for splitting OpenStreetMap maps into tiles";
     homepage = "http://www.mkgmap.org.uk";
-    downloadPage = "http://www.mkgmap.org.uk/download/splitter.html";
+    downloadPage = "https://www.mkgmap.org.uk/download/splitter.html";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ sikmir ];
     platforms = platforms.all;

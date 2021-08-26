@@ -4,20 +4,26 @@ with python3Packages;
 
 toPythonModule (buildPythonApplication rec {
   pname = "searx";
-  version = "0.18.0";
+  version = "1.0.0";
 
-  # Can not use PyPI because certain test files are missing.
+  # pypi doesn't receive updates
   src = fetchFromGitHub {
     owner = "searx";
     repo = "searx";
     rev = "v${version}";
-    sha256 = "0idxspvckvsd02v42h4z4wqrfkn1l8n59i91f7pc837cxya8p6hn";
+    sha256 = "0ghkx8g8jnh8yd46p4mlbjn2zm12nx27v7qflr4c8xhlgi0px0mh";
   };
+
+  patches = [
+    # Fix a crash, remove with the next update
+    (fetchpatch {
+      url = "https://github.com/searx/searx/commit/9c10b150963babb7f0b52081693a42b2e61eede9.patch";
+      sha256 = "0svp8799628wja2hq59da6rxqi99am8p6hb8y27ciwzsjz0wwba7";
+    })
+  ];
 
   postPatch = ''
     sed -i 's/==.*$//' requirements.txt
-    # skip failing test
-    sed -i '/test_json_serial(/,+3d' tests/unit/test_standalone_searx.py
   '';
 
   preBuild = ''
@@ -25,16 +31,32 @@ toPythonModule (buildPythonApplication rec {
   '';
 
   propagatedBuildInputs = [
-    pyyaml lxml grequests flaskbabel flask requests
-    gevent speaklater Babel pytz dateutil pygments
-    pyasn1 pyasn1-modules ndg-httpsclient certifi pysocks
-    jinja2 werkzeug
+    Babel
+    certifi
+    python-dateutil
+    flask
+    flaskbabel
+    gevent
+    grequests
+    jinja2
+    langdetect
+    lxml
+    ndg-httpsclient
+    pyasn1
+    pyasn1-modules
+    pygments
+    pysocks
+    pytz
+    pyyaml
+    requests
+    speaklater
+    werkzeug
   ];
 
-  checkInputs = [
-    Babel mock nose2 covCore pep8 plone-testing splinter
-    unittest2 zope_testrunner selenium
-  ];
+  # tests try to connect to network
+  doCheck = false;
+
+  pythonImportsCheck = [ "searx" ];
 
   postInstall = ''
     # Create a symlink for easier access to static data

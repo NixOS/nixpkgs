@@ -9,6 +9,7 @@
 , glib
 , gsettings-desktop-schemas
 , gtk3
+, librsvg
 , libsndfile
 , libxml2
 , libzip
@@ -22,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xournalpp";
-  version = "1.0.20";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "xournalpp";
     repo = pname;
     rev = version;
-    sha256 = "1c7n03xm3m4lwcwxgplkn25i8c6s3i7rijbkcx86br1j4jadcs3k";
+    sha256 = "sha256-FIIpWgWvq1uo/lIQXpOkUTZ6YJPtOtxKF8VjXSgqrlE=";
   };
 
   nativeBuildInputs = [ cmake gettext pkg-config wrapGAppsHook ];
@@ -36,6 +37,7 @@ stdenv.mkDerivation rec {
     [ glib
       gsettings-desktop-schemas
       gtk3
+      librsvg
       libsndfile
       libxml2
       libzip

@@ -1,20 +1,13 @@
 { lib, stdenv, fetchurl, autoreconfHook, tzdata, fetchpatch }:
 
 stdenv.mkDerivation rec {
-  version = "0.4.7";
+  version = "0.4.9";
   pname = "dateutils";
 
   src = fetchurl {
     url = "https://bitbucket.org/hroptatyr/dateutils/downloads/${pname}-${version}.tar.xz";
-    sha256 = "16jr9yjk8wgzfh22hr3z6mp4jm3fkacyibds4jj5xx5yymbm8wj9";
+    sha256 = "1hy96h9imxdbg9y7305mgv4grr6x4qic9xy3vhgh15lvjkcmc0kr";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://bitbucket.org/hroptatyr/dateutils/commits/6813ed94534f2311fbe9164748919e39d60b0190/raw";
-      sha256 = "1zs3iizb172ha56g03rr8kzd8zx6qypiqsc11jw758mliwxk5rgc";
-    })
-  ];
 
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ tzdata ]; # needed for datezone

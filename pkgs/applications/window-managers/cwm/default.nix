@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, libX11, libXinerama, libXrandr, libXft, yacc, pkg-config }:
+{ lib, stdenv, fetchFromGitHub, libX11, libXinerama, libXrandr, libXft, bison, pkg-config }:
 
 stdenv.mkDerivation rec {
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libX11 libXinerama libXrandr libXft yacc ];
+  buildInputs = [ libX11 libXinerama libXrandr libXft bison ];
 
   prePatch = ''sed -i "s@/usr/local@$out@" Makefile'';
 

@@ -6,7 +6,7 @@
 
 buildGoPackage rec {
   pname = "docker-slim";
-  version = "1.34.0";
+  version = "1.36.2";
 
   goPackagePath = "github.com/docker-slim/docker-slim";
 
@@ -14,7 +14,7 @@ buildGoPackage rec {
     owner = "docker-slim";
     repo = "docker-slim";
     rev = version;
-    sha256 = "1ynpd6yb1xc18y528sshd5k9nkz48h1zifj2w4sjh5n0864lna7b";
+    sha256 = "sha256-Q8M8+krPC6WRDCxe88gzX5bDG8x6sJ8TduTKjA85WFA=";
   };
 
   subPackages = [ "cmd/docker-slim" "cmd/docker-slim-sensor" ];
@@ -23,11 +23,10 @@ buildGoPackage rec {
     makeWrapper
   ];
 
-  buildFlagsArray = [
-    ''-ldflags=
-        -s -w -X ${goPackagePath}/pkg/version.appVersionTag=${version}
-              -X ${goPackagePath}/pkg/version.appVersionRev=${src.rev}
-    ''
+  ldflags = [
+    "-s" "-w"
+    "-X ${goPackagePath}/pkg/version.appVersionTag=${version}"
+    "-X ${goPackagePath}/pkg/version.appVersionRev=${src.rev}"
   ];
 
   # docker-slim tries to create its state dir next to the binary (inside the nix

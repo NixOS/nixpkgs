@@ -11,7 +11,7 @@
 , glib
 , libxml2
 
-, gnome3 # To pass updateScript
+, gnome # To pass updateScript
 }:
 
 stdenv.mkDerivation rec {
@@ -29,8 +29,9 @@ stdenv.mkDerivation rec {
   doCheck = false; # fails with "No test data file provided"
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
     };
   };
 

@@ -2,11 +2,11 @@
 
 buildDunePackage rec {
   pname = "ppx_irmin";
-  version = "2.5.1";
+  version = "2.7.2";
 
   src = fetchurl {
     url = "https://github.com/mirage/irmin/releases/download/${version}/irmin-${version}.tbz";
-    sha256 = "131pcgmpys6danprcbxzf4pdsl0ka74bpmmxz8db4507cvxhsz3n";
+    sha256 = "29c68c5001a727aaa7a6842d6204ffa3e24b3544fa4f6af2234cdbfa032f7fdf";
   };
 
   minimumOCamlVersion = "4.08";

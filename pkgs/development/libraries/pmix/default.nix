@@ -2,18 +2,15 @@
 , libtool, flex, libevent, hwloc, munge, zlib, pandoc
 } :
 
-let
-  version = "3.2.2";
-
-in stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "pmix";
-  inherit version;
+  version = "3.2.3";
 
   src = fetchFromGitHub {
     repo = "openpmix";
     owner = "openpmix";
     rev = "v${version}";
-    sha256 = "1rf82z7h76366qknkmralmslsfmihv0r3ymhbgk1axq97ic3g4d7";
+    sha256 = "sha256-w3j4zgEAn6RxIHAvy0B3MPFTV46ocCvc0Z36tN1T+rc=";
   };
 
   postPatch = ''

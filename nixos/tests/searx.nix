@@ -108,7 +108,7 @@ import ./make-test-python.nix ({ pkgs, ...} :
               "${pkgs.curl}/bin/curl --fail http://localhost/searx >&2"
           )
           fancy.succeed(
-              "${pkgs.curl}/bin/curl --fail http://localhost/searx/static/js/bootstrap.min.js >&2"
+              "${pkgs.curl}/bin/curl --fail http://localhost/searx/static/themes/oscar/js/bootstrap.min.js >&2"
           )
     '';
 })

@@ -51,7 +51,7 @@ in {
     nextcloudWithoutMagick = args@{ config, pkgs, lib, ... }:
       lib.mkMerge
       [ (nextcloud args)
-        { services.nextcloud.disableImagemagick = true; } ];
+        { services.nextcloud.enableImagemagick = false; } ];
   };
 
   testScript = { nodes, ... }: let

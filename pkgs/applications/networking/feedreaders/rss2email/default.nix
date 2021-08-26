@@ -1,31 +1,18 @@
-{ pythonPackages, fetchurl, fetchpatch, lib, nixosTests }:
+{ pythonPackages, fetchurl, lib, nixosTests }:
 
 with pythonPackages;
 
 buildPythonApplication rec {
   pname = "rss2email";
-  version = "3.12.2";
+  version = "3.13.1";
 
   propagatedBuildInputs = [ feedparser html2text ];
   checkInputs = [ beautifulsoup4 ];
 
   src = fetchurl {
     url = "mirror://pypi/r/rss2email/${pname}-${version}.tar.gz";
-    sha256 = "12w6x80wsw6xm17fxyymnl45aavsagg932zw621wcjz154vjghjr";
+    sha256 = "3994444766874bb35c9f886da76f3b24be1cb7bbaf40fad12b16f2af80ac1296";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "rss2email-feedparser6.patch";
-      url = "https://github.com/rss2email/rss2email/pull/149/commits/338343c92f956c31ff5249ef4bcf7aeea81f687e.patch";
-      sha256 = "0h8b3g9332vdrkqbh6lp00k97asrhmlxi13zghrgc78ia13czy3z";
-    })
-    (fetchpatch {
-      name = "rss2email-feedparser6-test.patch";
-      url = "https://github.com/rss2email/rss2email/pull/149/commits/8c99651eced3f29f05ba2c0ca02abb8bb9a18967.patch";
-      sha256 = "1scljak6xyqxlilg3j39v4qm9a9jks1bnvnrh62hyf3g53yw2xlg";
-    })
-  ];
 
   outputs = [ "out" "man" "doc" ];
 
@@ -45,8 +32,10 @@ buildPythonApplication rec {
     cp AUTHORS COPYING CHANGELOG README.rst $doc/share/doc/rss2email/
   '';
 
-  postCheck = ''
+  checkPhase = ''
+    runHook preCheck
     env PATH=$out/bin:$PATH python ./test/test.py
+    runHook postCheck
   '';
 
   meta = with lib; {

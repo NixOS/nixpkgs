@@ -13,18 +13,19 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ btrfs-progs ];
 
-  installPhase = ''
-    mkdir -p $out/bin
+  installFlags = [
+    "PREFIX=${placeholder "out"}"
+  ];
+
+  preInstall = ''
     mkdir -p $out/share/man/man8
-    install -m 0755 compsize $out/bin
-    install -m 0444 compsize.8 $out/share/man/man8
   '';
 
   meta = with lib; {
     description = "btrfs: Find compression type/ratio on a file or set of files";
-    homepage    = "https://github.com/kilobyte/compsize";
-    license     = licenses.gpl2Plus;
+    homepage = "https://github.com/kilobyte/compsize";
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ CrazedProgrammer ];
-    platforms   = platforms.linux;
+    platforms = platforms.linux;
   };
 }

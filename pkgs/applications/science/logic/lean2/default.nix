@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, gmp, mpfr, python
+{ lib, stdenv, fetchFromGitHub, cmake, gmp, mpfr, python2
 , gperftools, ninja, makeWrapper }:
 
 stdenv.mkDerivation {
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ cmake makeWrapper ninja ];
-  buildInputs = [ gmp mpfr python gperftools ];
+  buildInputs = [ gmp mpfr python2 gperftools ];
 
   preConfigure = ''
     patchShebangs bin/leantags

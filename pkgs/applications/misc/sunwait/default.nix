@@ -11,6 +11,8 @@ stdenv.mkDerivation {
     sha256 = "0cs8rdcnzsl10zia2k49a6c2z6gvp5rnf31sgn3hn5c7kgy7l3ax";
   };
 
+  makeFlags = [ "C=${stdenv.cc.targetPrefix}c++" ];
+
   installPhase = ''
     install -Dm755 sunwait -t $out/bin
   '';

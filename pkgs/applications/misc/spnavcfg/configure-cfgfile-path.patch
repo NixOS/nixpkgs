@@ -1,0 +1,100 @@
+diff --git a/back.c b/back.c
+index c1810dc..75416fb 100644
+--- a/back.c
++++ b/back.c
+@@ -25,7 +25,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ #include "cfgfile.h"
+ #include "cmd.h"
+ 
+-#define CFGFILE		"/etc/spnavrc"
+ 
+ int get_daemon_pid(void);
+ static int update_cfg(void);
+@@ -127,7 +126,7 @@ int get_daemon_pid(void)
+ 
+ static int update_cfg(void)
+ {
+-	if(write_cfg(CFGFILE, &cfg) == -1) {
++	if(write_cfg(cfg_path(), &cfg) == -1) {
+ 		fprintf(stderr, "failed to update config file\n");
+ 		return -1;
+ 	}
+diff --git a/cfgfile.c b/cfgfile.c
+index 5a9c502..2ea323d 100644
+--- a/cfgfile.c
++++ b/cfgfile.c
+@@ -22,12 +22,40 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ #include <ctype.h>
+ #include <errno.h>
+ #include <fcntl.h>
++#include <unistd.h>
++#include <sys/types.h>
++#include <pwd.h>
+ #include "cfgfile.h"
+ 
+ enum {TX, TY, TZ, RX, RY, RZ};
+ 
+ static const int def_axmap[] = {0, 2, 1, 3, 5, 4};
+ static const int def_axinv[] = {0, 1, 1, 0, 1, 1};
++static char* config_path;
++
++char* cfg_path()
++{
++	char* buf;
++	if((buf = getenv("XDG_CONFIG_HOME"))) {
++		if(config_path == NULL) {
++			config_path = malloc(strlen(buf) + strlen("/spnavrc") + 1);
++			if ( config_path != NULL) {
++				sprintf(config_path, "%s/spnavrc", buf);
++			}
++		};
++		return config_path;
++	} else {
++		if (!(buf = getenv("HOME"))) {
++			struct passwd *pw = getpwuid(getuid());
++			buf = pw->pw_dir;
++		}
++		config_path = malloc(strlen(buf) + strlen("/.config/spnavrc") + 1);
++		if ( config_path != NULL) {
++			sprintf(config_path, "%s/.config/spnavrc", buf);
++		}
++		return config_path;
++	}
++}
+ 
+ void default_cfg(struct cfg *cfg)
+ {
+diff --git a/cfgfile.h b/cfgfile.h
+index dfed8c9..5bb1b2c 100644
+--- a/cfgfile.h
++++ b/cfgfile.h
+@@ -47,6 +47,7 @@ struct cfg {
+ 	int devid[MAX_CUSTOM][2];	/* custom USB vendor/product id list */
+ };
+ 
++char* cfg_path(void);
+ void default_cfg(struct cfg *cfg);
+ int read_cfg(const char *fname, struct cfg *cfg);
+ int write_cfg(const char *fname, struct cfg *cfg);
+diff --git a/front_gtk.c b/front_gtk.c
+index e4c2cd7..6a800a0 100644
+--- a/front_gtk.c
++++ b/front_gtk.c
+@@ -28,8 +28,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ #include "cmd.h"
+ #include "ui.h"
+ 
+-#define CFGFILE		"/etc/spnavrc"
+-
+ #define CHK_AXINV_TRANS_X			"axinv_trans_x"
+ #define CHK_AXINV_TRANS_Y			"axinv_trans_y"
+ #define CHK_AXINV_TRANS_Z			"axinv_trans_z"
+@@ -121,7 +119,7 @@ void frontend(int pfd)
+ 
+ 	gtk_init(&argc, 0);
+ 
+-	read_cfg(CFGFILE, &cfg);
++	read_cfg(cfg_path(), &cfg);
+ 
+ 	create_ui();
+ 

@@ -243,8 +243,10 @@ in
         xlog.journal = true;
     };
 
-    users.users.ncdns =
-      { description = "ncdns daemon user"; };
+    users.users.ncdns = {
+      isSystemUser = true;
+      description = "ncdns daemon user";
+    };
 
     systemd.services.ncdns = {
       description = "ncdns daemon";

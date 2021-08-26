@@ -188,7 +188,8 @@ in
 
     systemd.packages = [ package ];
 
-    # we cannot use DynamicUser as we need the the geoclue user to exist for the dbus policy to work
+    # we cannot use DynamicUser as we need the the geoclue user to exist for the
+    # dbus policy to work
     users = {
       users.geoclue = {
         isSystemUser = true;
@@ -217,6 +218,7 @@ in
         # we can't be part of a system service, and the agent should
         # be okay with the main service coming and going
         wantedBy = [ "default.target" ];
+        unitConfig.ConditionUser = "!@system";
         serviceConfig = {
           Type = "exec";
           ExecStart = "${package}/libexec/geoclue-2.0/demos/agent";
@@ -264,5 +266,7 @@ in
       } // mapAttrs' appConfigToINICompatible cfg.appConfig);
   };
 
-  meta.maintainers = with lib.maintainers; [ worldofpeace ];
+  meta = with lib; {
+    maintainers = with maintainers; [ ] ++ teams.pantheon.members;
+  };
 }

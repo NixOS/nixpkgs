@@ -24,9 +24,9 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gdbm pam readline ncurses gnutls guile texinfo gnum4 sasl fribidi nettools
+    gdbm pam readline ncurses gnutls guile texinfo gnum4 sasl fribidi
     gss libmysqlclient python3
-  ];
+  ] ++ lib.optionals stdenv.isLinux [ nettools ];
 
   patches = [
     ./fix-build-mb-len-max.patch

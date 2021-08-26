@@ -1,28 +1,32 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , isPy3k
-, pythonOlder
 , setuptools
-, aenum
+, pytest-cov
 , pytest
-, pytestcov
 }:
 
 buildPythonPackage rec {
   pname = "pglast";
-  version = "1.17";
+  version = "3.3";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "2979b38ca5f72cfa0a5db78af2f62d04db6a7647ee7f03eac7a67f9e86e3f5f9";
+  # PyPI tarball does not include all the required files
+  src = fetchFromGitHub {
+    owner = "lelit";
+    repo = pname;
+    rev = "v${version}";
+    fetchSubmodules = true;
+    sha256 = "0l7nvbs1x1qil6mc0rxk7925i5xr3nbqnv0vakx3yv911kj3yhgv";
   };
 
   disabled = !isPy3k;
 
-  propagatedBuildInputs = [ setuptools ] ++ lib.optionals (pythonOlder "3.6") [ aenum ];
+  propagatedBuildInputs = [ setuptools ];
 
-  checkInputs = [ pytest pytestcov ];
+  checkInputs = [ pytest pytest-cov ];
+
+  pythonImportsCheck = [ "pglast" ];
 
   checkPhase = ''
     pytest
@@ -31,6 +35,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/lelit/pglast";
     description = "PostgreSQL Languages AST and statements prettifier";
+    changelog = "https://github.com/lelit/pglast/raw/v${version}/CHANGES.rst";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.marsam ];
   };

@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , autoconf
 , automake
 , c-ares
@@ -6,7 +7,7 @@
 , curl
 , doxygen
 , fetchFromGitHub
-, ffmpeg_3
+#, ffmpeg
 , libmediainfo
 , libraw
 , libsodium
@@ -24,30 +25,38 @@
 , unzip
 , wget
 }:
-
 mkDerivation rec {
   pname = "megasync";
-  version = "4.3.5.0";
+  version = "4.5.3.0";
 
   src = fetchFromGitHub {
     owner = "meganz";
     repo = "MEGAsync";
     rev = "v${version}_Linux";
-    sha256 = "0rr1jjy0n5bj1lh6xi3nbbcikvq69j3r9qnajp4mhywr5izpccvs";
+    sha256 = "1lwjmdbqyxx5wd8nx4mc830fna37jad4h93viwfh5x7sxn104js7";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs =
-    [ autoconf automake doxygen lsb-release pkg-config qttools swig unzip ];
+  nativeBuildInputs = [
+    autoconf
+    automake
+    doxygen
+    libtool
+    lsb-release
+    pkg-config
+    qttools
+    swig
+    unzip
+  ];
   buildInputs = [
     c-ares
     cryptopp
     curl
-    ffmpeg_3
+    # temporarily disable until patched for ffmpeg 4.4
+    #ffmpeg
     libmediainfo
     libraw
     libsodium
-    libtool
     libuv
     libzen
     qtbase
@@ -65,7 +74,7 @@ mkDerivation rec {
   ];
 
   postPatch = ''
-    for file in $(find src/ -type f \( -iname configure -o -iname \*.sh  \) ); do
+    for file in $(find src/ -type f \( -iname configure -o -iname \*.sh \) ); do
       substituteInPlace "$file" --replace "/bin/bash" "${stdenv.shell}"
     done
   '';
@@ -86,7 +95,8 @@ mkDerivation rec {
     "--with-cares"
     "--with-cryptopp"
     "--with-curl"
-    "--with-ffmpeg"
+    # temporarily disable until patched for ffmpeg 4.4
+    #"--with-ffmpeg"
     "--without-freeimage" # unreferenced even when found
     "--without-readline"
     "--without-termcap"

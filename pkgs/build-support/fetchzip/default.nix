@@ -5,16 +5,26 @@
 # (e.g. due to minor changes in the compression algorithm, or changes
 # in timestamps).
 
-{ fetchurl, unzip }:
+{ lib, fetchurl, unzip }:
 
 { # Optionally move the contents of the unpacked tree up one level.
   stripRoot ? true
-, url
+, url ? ""
+, urls ? []
 , extraPostFetch ? ""
 , name ? "source"
+, # Allows to set the extension for the intermediate downloaded
+  # file. This can be used as a hint for the unpackCmdHooks to select
+  # an appropriate unpacking tool.
+  extension ? null
 , ... } @ args:
 
-(fetchurl ({
+(fetchurl (let
+  tmpFilename =
+    if extension != null
+    then "download.${extension}"
+    else baseNameOf (if url != "" then url else builtins.head urls);
+in {
   inherit name;
 
   recursiveHash = true;
@@ -27,7 +37,7 @@
       mkdir "$unpackDir"
       cd "$unpackDir"
 
-      renamed="$TMPDIR/${baseNameOf url}"
+      renamed="$TMPDIR/${tmpFilename}"
       mv "$downloadedFile" "$renamed"
       unpackFile "$renamed"
     ''
@@ -53,7 +63,7 @@
     + ''
       chmod 755 "$out"
     '';
-} // removeAttrs args [ "stripRoot" "extraPostFetch" ])).overrideAttrs (x: {
+} // removeAttrs args [ "stripRoot" "extraPostFetch" "extension" ])).overrideAttrs (x: {
   # Hackety-hack: we actually need unzip hooks, too
   nativeBuildInputs = x.nativeBuildInputs ++ [ unzip ];
 })

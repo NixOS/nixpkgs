@@ -34,13 +34,13 @@ self: super: {
 
   kak-ansi = stdenv.mkDerivation rec {
     pname = "kak-ansi";
-    version = "0.2.3";
+    version = "0.2.4";
 
     src = fetchFromGitHub {
       owner = "eraserhd";
       repo = "kak-ansi";
       rev = "v${version}";
-      sha256 = "pO7M3MjKMJQew9O20KALEvsXLuCKPYGGTtuN/q/kj8Q=";
+      sha256 = "kFjTYFy0KF5WWEHU4hHFAnD/03/d3ptjqMMbTSaGImE=";
     };
 
     installPhase = ''

@@ -1,12 +1,12 @@
 { lib, stdenv, fetchurl, dpkg
-, alsaLib, at-spi2-atk, at-spi2-core, atk, cairo, cups, curl, dbus, expat, fontconfig, freetype, glib
+, alsa-lib, at-spi2-atk, at-spi2-core, atk, cairo, cups, curl, dbus, expat, fontconfig, freetype, glib
 , gnome2, gdk-pixbuf, gtk3, pango, libnotify, libsecret, libuuid, libxcb, nspr, nss, systemd, xorg, wrapGAppsHook }:
 
 let
   version = "1.25.0";
 
   rpath = lib.makeLibraryPath [
-    alsaLib
+    alsa-lib
     at-spi2-atk
     at-spi2-core
     atk

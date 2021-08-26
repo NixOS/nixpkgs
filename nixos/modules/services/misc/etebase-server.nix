@@ -8,31 +8,28 @@ let
   pythonEnv = pkgs.python3.withPackages (ps: with ps;
     [ etebase-server daphne ]);
 
-  dbConfig = {
-    sqlite3 = ''
-      engine = django.db.backends.sqlite3
-      name = ${cfg.dataDir}/db.sqlite3
-    '';
-  };
+  iniFmt = pkgs.formats.ini {};
 
-  defaultConfigIni = toString (pkgs.writeText "etebase-server.ini" ''
-    [global]
-    debug = false
-    secret_file = ${if cfg.secretFile != null then cfg.secretFile else ""}
-    media_root = ${cfg.dataDir}/media
-
-    [allowed_hosts]
-    allowed_host1 = ${cfg.host}
-
-    [database]
-    ${dbConfig."${cfg.database.type}"}
-  '');
-
-  configIni = if cfg.customIni != null then cfg.customIni else defaultConfigIni;
+  configIni = iniFmt.generate "etebase-server.ini" cfg.settings;
 
   defaultUser = "etebase-server";
 in
 {
+  imports = [
+    (mkRemovedOptionModule
+      [ "services" "etebase-server" "customIni" ]
+      "Set the option `services.etebase-server.settings' instead.")
+    (mkRemovedOptionModule
+      [ "services" "etebase-server" "database" ]
+      "Set the option `services.etebase-server.settings.database' instead.")
+    (mkRenamedOptionModule
+      [ "services" "etebase-server" "secretFile" ]
+      [ "services" "etebase-server" "settings" "secret_file" ])
+    (mkRenamedOptionModule
+      [ "services" "etebase-server" "host" ]
+      [ "services" "etebase-server" "settings" "allowed_hosts" "allowed_host1" ])
+  ];
+
   options = {
     services.etebase-server = {
       enable = mkOption {
@@ -42,18 +39,10 @@ in
         description = ''
           Whether to enable the Etebase server.
 
-          Once enabled you need to create an admin user using the
-          shell command <literal>etebase-server createsuperuser</literal>.
+          Once enabled you need to create an admin user by invoking the
+          shell command <literal>etebase-server createsuperuser</literal> with
+          the user specified by the <literal>user</literal> option or a superuser.
           Then you can login and create accounts on your-etebase-server.com/admin
-        '';
-      };
-
-      secretFile = mkOption {
-        default = null;
-        type = with types; nullOr str;
-        description = ''
-          The path to a file containing the secret
-          used as django's SECRET_KEY.
         '';
       };
 
@@ -77,15 +66,6 @@ in
         '';
       };
 
-      host = mkOption {
-        type = types.str;
-        default = "0.0.0.0";
-        example = "localhost";
-        description = ''
-          Host to listen on.
-        '';
-      };
-
       unixSocket = mkOption {
         type = with types; nullOr str;
         default = null;
@@ -93,42 +73,81 @@ in
         example = "/run/etebase-server/etebase-server.sock";
       };
 
-      database = {
-        type = mkOption {
-          type = types.enum [ "sqlite3" ];
-          default = "sqlite3";
-          description = ''
-            Database engine to use.
-            Currently only sqlite3 is supported.
-            Other options can be configured using <literal>extraConfig</literal>.
-          '';
+      settings = mkOption {
+        type = lib.types.submodule {
+          freeformType = iniFmt.type;
+
+          options = {
+            global = {
+              debug = mkOption {
+                type = types.bool;
+                default = false;
+                description = ''
+                  Whether to set django's DEBUG flag.
+                '';
+              };
+              secret_file = mkOption {
+                type = with types; nullOr str;
+                default = null;
+                description = ''
+                  The path to a file containing the secret
+                  used as django's SECRET_KEY.
+                '';
+              };
+              static_root = mkOption {
+                type = types.str;
+                default = "${cfg.dataDir}/static";
+                defaultText = "\${config.services.etebase-server.dataDir}/static";
+                description = "The directory for static files.";
+              };
+              media_root = mkOption {
+                type = types.str;
+                default = "${cfg.dataDir}/media";
+                defaultText = "\${config.services.etebase-server.dataDir}/media";
+                description = "The media directory.";
+              };
+            };
+            allowed_hosts = {
+              allowed_host1 = mkOption {
+                type = types.str;
+                default = "0.0.0.0";
+                example = "localhost";
+                description = ''
+                  The main host that is allowed access.
+                '';
+              };
+            };
+            database = {
+              engine = mkOption {
+                type = types.enum [ "django.db.backends.sqlite3" "django.db.backends.postgresql" ];
+                default = "django.db.backends.sqlite3";
+                description = "The database engine to use.";
+              };
+              name = mkOption {
+                type = types.str;
+                default = "${cfg.dataDir}/db.sqlite3";
+                defaultText = "\${config.services.etebase-server.dataDir}/db.sqlite3";
+                description = "The database name.";
+              };
+            };
+          };
         };
-      };
-
-      customIni = mkOption {
-        type = with types; nullOr str;
-        default = null;
+        default = {};
         description = ''
-          Custom etebase-server.ini.
-
-          See <literal>etebase-src/etebase-server.ini.example</literal> for available options.
-
-          Setting this option overrides the default config which is generated from the options
-          <literal>secretFile</literal>, <literal>host</literal> and <literal>database</literal>.
+          Configuration for <package>etebase-server</package>. Refer to
+          <link xlink:href="https://github.com/etesync/server/blob/master/etebase-server.ini.example" />
+          and <link xlink:href="https://github.com/etesync/server/wiki" />
+          for details on supported values.
         '';
-        example = literalExample ''
-          [global]
-          debug = false
-          secret_file = /path/to/secret
-          media_root = /path/to/media
-
-          [allowed_hosts]
-          allowed_host1 = example.com
-
-          [database]
-          engine = django.db.backends.sqlite3
-          name = db.sqlite3
-        '';
+        example = {
+          global = {
+            debug = true;
+            media_root = "/path/to/media";
+          };
+          allowed_hosts = {
+            allowed_host2 = "localhost";
+          };
+        };
       };
 
       user = mkOption {
@@ -166,14 +185,15 @@ in
         WorkingDirectory = cfg.dataDir;
       };
       environment = {
-        PYTHONPATH="${pythonEnv}/${pkgs.python3.sitePackages}";
-        ETEBASE_EASY_CONFIG_PATH="${configIni}";
+        PYTHONPATH = "${pythonEnv}/${pkgs.python3.sitePackages}";
+        ETEBASE_EASY_CONFIG_PATH = configIni;
       };
       preStart = ''
         # Auto-migrate on first run or if the package has changed
         versionFile="${cfg.dataDir}/src-version"
         if [[ $(cat "$versionFile" 2>/dev/null) != ${pkgs.etebase-server} ]]; then
-          ${pythonEnv}/bin/etebase-server migrate
+          ${pythonEnv}/bin/etebase-server migrate --no-input
+          ${pythonEnv}/bin/etebase-server collectstatic --no-input --clear
           echo ${pkgs.etebase-server} > "$versionFile"
         fi
       '';
@@ -191,6 +211,7 @@ in
 
     users = optionalAttrs (cfg.user == defaultUser) {
       users.${defaultUser} = {
+        isSystemUser = true;
         group = defaultUser;
         home = cfg.dataDir;
       };

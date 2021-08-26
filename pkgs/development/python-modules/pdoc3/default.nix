@@ -3,7 +3,7 @@
 , Mako
 , markdown
 , setuptools-git
-, setuptools_scm
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "9df5d931f25f353c69c46819a3bd03ef96dd286f2a70bb1b93a23a781f91faa1";
   };
 
-  nativeBuildInputs = [ setuptools-git setuptools_scm ];
+  nativeBuildInputs = [ setuptools-git setuptools-scm ];
   propagatedBuildInputs = [ Mako markdown ];
 
   meta = with lib; {

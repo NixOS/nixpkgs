@@ -1,18 +1,16 @@
 { qtModule, stdenv, lib, qtbase, qtdeclarative }:
 
-with lib;
-
 qtModule {
-  name = "qttools";
+  pname = "qttools";
   qtInputs = [ qtbase qtdeclarative ];
   outputs = [ "out" "dev" "bin" ];
 
   # fixQtBuiltinPaths overwrites a builtin path we should keep
   postPatch = ''
     sed -i "src/linguist/linguist.pro" \
-        -e '/^cmake_linguist_config_version_file.input =/ s|$$\[QT_HOST_DATA.*\]|${getDev qtbase}|'
+        -e '/^cmake_linguist_config_version_file.input =/ s|$$\[QT_HOST_DATA.*\]|${lib.getDev qtbase}|'
     sed -i "src/qtattributionsscanner/qtattributionsscanner.pro" \
-        -e '/^cmake_qattributionsscanner_config_version_file.input =/ s|$$\[QT_HOST_DATA.*\]|${getDev qtbase}|'
+        -e '/^cmake_qattributionsscanner_config_version_file.input =/ s|$$\[QT_HOST_DATA.*\]|${lib.getDev qtbase}|'
   '';
 
   devTools = [
@@ -34,12 +32,11 @@ qtModule {
     "bin/qthelpconverter"
     "bin/lprodump"
     "bin/qdistancefieldgenerator"
-  ] ++ optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     "bin/macdeployqt"
   ];
 
-  NIX_CFLAGS_COMPILE =
-    lib.optional stdenv.isDarwin ''-DNIXPKGS_QMLIMPORTSCANNER="${qtdeclarative.dev}/bin/qmlimportscanner"'';
+  NIX_CFLAGS_COMPILE = lib.optional stdenv.isDarwin ''-DNIXPKGS_QMLIMPORTSCANNER="${qtdeclarative.dev}/bin/qmlimportscanner"'';
 
   setupHook = ../hooks/qttools-setup-hook.sh;
 }

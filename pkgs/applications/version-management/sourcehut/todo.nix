@@ -1,15 +1,24 @@
-{ lib, fetchgit, buildPythonPackage
-, srht, redis, alembic, pystache
-, pytest, factory_boy }:
+{ lib
+, fetchFromSourcehut
+, buildPythonPackage
+, srht
+, redis
+, alembic
+, pystache
+, pytest
+, factory_boy
+, python
+}:
 
 buildPythonPackage rec {
   pname = "todosrht";
-  version = "0.62.1";
+  version = "0.64.14";
 
-  src = fetchgit {
-    url = "https://git.sr.ht/~sircmpwn/todo.sr.ht";
+  src = fetchFromSourcehut {
+    owner = "~sircmpwn";
+    repo = "todo.sr.ht";
     rev = version;
-    sha256 = "17fsv2z37sjzqzpvx39nc36xln1ayivzjg309d2vmb94aaym4nz2";
+    sha256 = "sha256-huIAhn6h1F5w5ST4/yBwr82kAzyYwhLu+gpRuOQgnsE=";
   };
 
   nativeBuildInputs = srht.nativeBuildInputs;
@@ -23,6 +32,7 @@ buildPythonPackage rec {
 
   preBuild = ''
     export PKGVER=${version}
+    export SRHT_PATH=${srht}/${python.sitePackages}/srht
   '';
 
   # pytest tests fail

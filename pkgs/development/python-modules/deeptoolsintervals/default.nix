@@ -3,7 +3,7 @@
 , fetchPypi
 , pytest
 , zlib
-, lzma
+, xz
 }:
 
 buildPythonPackage rec {
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "1xnl80nblysj6dylj4683wgrfa425rkx4dp5k65hvwdns9pw753x";
   };
 
-  buildInputs = [ zlib lzma ];
+  buildInputs = [ zlib xz ];
 
   checkInputs = [ pytest ];
 

@@ -1,15 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, autoconf-archive, gettext, libtool, intltool, autoconf, automake
+{ lib, stdenv, fetchFromGitLab, autoconf-archive, gettext, libtool, intltool, autoconf, automake
 , glib, gtk3, gtk-doc, libgudev, pkg-config, systemd }:
 
 stdenv.mkDerivation rec {
   pname = "iio-sensor-proxy";
-  version = "2.8";
+  version = "3.0";
 
-  src = fetchFromGitHub {
+  src = fetchFromGitLab {
+    domain = "gitlab.freedesktop.org";
     owner  = "hadess";
     repo   = pname;
     rev    = version;
-    sha256 = "07rzm1z2p6lh4iv5pyp0p2x5805m9gsh19kcsjls3fi25p3a2c00";
+    sha256 = "0ngbz1vkbjci3ml6p47jh6c6caipvbkm8mxrc8ayr6vc2p9l1g49";
   };
 
   configurePhase = ''
@@ -46,6 +47,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3 ;
     maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.linux;
-    inherit version;
   };
 }

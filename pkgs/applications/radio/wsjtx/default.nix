@@ -1,15 +1,15 @@
 { lib, stdenv, fetchurl, asciidoc, asciidoctor, autoconf, automake, cmake,
   docbook_xsl, fftw, fftwFloat, gfortran, libtool, libusb1, qtbase,
-  qtmultimedia, qtserialport, qttools, texinfo, wrapQtAppsHook }:
+  qtmultimedia, qtserialport, qttools, boost, texinfo, wrapQtAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "wsjtx";
-  version = "2.2.2";
+  version = "2.4.0";
 
   # This is a "superbuild" tarball containing both wsjtx and a hamlib fork
   src = fetchurl {
     url = "http://physics.princeton.edu/pulsar/k1jt/wsjtx-${version}.tgz";
-    sha256 = "17agyrhclqyahgdwba8vi9sl7vq03sm00jlyrmjgv34a4czidg0w";
+    sha256 = "sha256-LpfGzI/Hpsp7/K0ZZu2EFVlvWcN0cnAQ1RNAxCMugcg=";
   };
 
   # Hamlib builds with autotools, wsjtx builds with cmake
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     asciidoc asciidoctor autoconf automake cmake docbook_xsl gfortran libtool
     qttools texinfo wrapQtAppsHook
   ];
-  buildInputs = [ fftw fftwFloat libusb1 qtbase qtmultimedia qtserialport ];
+  buildInputs = [ fftw fftwFloat libusb1 qtbase qtmultimedia qtserialport boost ];
 
   # Remove Git dependency from superbuild since sources are included
   patches = [ ./super.patch ];
@@ -36,6 +36,6 @@ stdenv.mkDerivation rec {
     # Older licenses are for the statically-linked hamlib
     license = with licenses; [ gpl3Plus gpl2Plus lgpl21Plus ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ lasandell ];
+    maintainers = with maintainers; [ lasandell numinit ];
   };
 }

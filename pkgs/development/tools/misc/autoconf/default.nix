@@ -6,11 +6,12 @@
 # files.
 
 stdenv.mkDerivation rec {
-  name = "autoconf-2.70";
+  pname = "autoconf";
+  version = "2.71";
 
   src = fetchurl {
-    url = "mirror://gnu/autoconf/${name}.tar.xz";
-    sha256 = "1ipckz0wr2mvhj9n3ys54fmf2aksin6bhqvzl304bn6rc1w257ps";
+    url = "mirror://gnu/autoconf/autoconf-${version}.tar.xz";
+    sha256 = "197sl23irn6s9pd54rxj5vcp5y8dv65jb9yfqgr2g56cxg7q6k7i";
   };
 
   nativeBuildInputs = [ m4 perl ];

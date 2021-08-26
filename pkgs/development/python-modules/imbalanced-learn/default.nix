@@ -4,7 +4,7 @@
 , isPy27
 , pandas
 , pytestCheckHook
-, scikitlearn
+, scikit-learn
 }:
 
 buildPythonPackage rec {
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "0a9xrw4qsh95g85pg2611hvj6xcfncw646si2icaz22haw1x410w";
   };
 
-  propagatedBuildInputs = [ scikitlearn ];
+  propagatedBuildInputs = [ scikit-learn ];
   checkInputs = [ pytestCheckHook pandas ];
   preCheck = ''
     export HOME=$TMPDIR

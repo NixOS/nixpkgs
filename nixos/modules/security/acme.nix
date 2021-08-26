@@ -21,15 +21,51 @@ let
   # The Group can vary depending on what the user has specified in
   # security.acme.certs.<cert>.group on some of the services.
   commonServiceConfig = {
-      Type = "oneshot";
-      User = "acme";
-      Group = mkDefault "acme";
-      UMask = 0022;
-      StateDirectoryMode = 750;
-      ProtectSystem = "full";
-      PrivateTmp = true;
+    Type = "oneshot";
+    User = "acme";
+    Group = mkDefault "acme";
+    UMask = 0022;
+    StateDirectoryMode = 750;
+    ProtectSystem = "strict";
+    ReadWritePaths = [
+      "/var/lib/acme"
+    ];
+    PrivateTmp = true;
 
-      WorkingDirectory = "/tmp";
+    WorkingDirectory = "/tmp";
+
+    CapabilityBoundingSet = [ "" ];
+    DevicePolicy = "closed";
+    LockPersonality = true;
+    MemoryDenyWriteExecute = true;
+    NoNewPrivileges = true;
+    PrivateDevices = true;
+    ProtectClock = true;
+    ProtectHome = true;
+    ProtectHostname = true;
+    ProtectControlGroups = true;
+    ProtectKernelLogs = true;
+    ProtectKernelModules = true;
+    ProtectKernelTunables = true;
+    ProtectProc = "invisible";
+    ProcSubset = "pid";
+    RemoveIPC = true;
+    RestrictAddressFamilies = [
+      "AF_INET"
+      "AF_INET6"
+    ];
+    RestrictNamespaces = true;
+    RestrictRealtime = true;
+    RestrictSUIDSGID = true;
+    SystemCallArchitectures = "native";
+    SystemCallFilter = [
+      # 1. allow a reasonable set of syscalls
+      "@system-service"
+      # 2. and deny unreasonable ones
+      "~@privileged @resources"
+      # 3. then allow the required subset within denied groups
+      "@chown"
+    ];
   };
 
   # In order to avoid race conditions creating the CA for selfsigned certs,
@@ -46,6 +82,7 @@ let
     serviceConfig = commonServiceConfig // {
       StateDirectory = "acme/.minica";
       BindPaths = "/var/lib/acme/.minica:/tmp/ca";
+      UMask = 0077;
     };
 
     # Working directory will be /tmp
@@ -54,8 +91,6 @@ let
         --ca-key ca/key.pem \
         --ca-cert ca/cert.pem \
         --domains selfsigned.local
-
-      chmod 600 ca/*
     '';
   };
 
@@ -152,7 +187,7 @@ let
     );
     renewOpts = escapeShellArgs (
       commonOpts
-      ++ [ "renew" "--reuse-key" ]
+      ++ [ "renew" ]
       ++ optionals data.ocspMustStaple [ "--must-staple" ]
       ++ data.extraLegoRenewFlags
     );
@@ -196,6 +231,7 @@ let
 
       serviceConfig = commonServiceConfig // {
         Group = data.group;
+        UMask = 0027;
 
         StateDirectory = "acme/${cert}";
 
@@ -220,10 +256,12 @@ let
         cat cert.pem chain.pem > fullchain.pem
         cat key.pem fullchain.pem > full.pem
 
-        chmod 640 *
-
         # Group might change between runs, re-apply it
         chown 'acme:${data.group}' *
+
+        # Default permissions make the files unreadable by group + anon
+        # Need to be readable by group
+        chmod 640 *
       '';
     };
 
@@ -340,8 +378,6 @@ let
         fi
 
         mv domainhash.txt certificates/
-        chmod 640 certificates/*
-        chmod -R u=rwX,g=,o= accounts/*
 
         # Group might change between runs, re-apply it
         chown 'acme:${data.group}' certificates/*
@@ -357,6 +393,10 @@ let
           ln -sf fullchain.pem out/cert.pem
           cat out/key.pem out/fullchain.pem > out/full.pem
         fi
+
+        # By default group will have no access to the cert files.
+        # This chmod will fix that.
+        chmod 640 out/*
       '';
     };
   };

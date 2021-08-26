@@ -1,32 +1,36 @@
 { lib, stdenv
 , cmake
-, fetchpatch
 , fetchurl
 , perl
 , zlib
+, groff
+, withBzip2 ? false
+, bzip2
+, withLZMA ? false
+, xz
+, withOpenssl ? false
+, openssl
+, withZstd ? false
+, zstd
 }:
 
 stdenv.mkDerivation rec {
   pname = "libzip";
-  version = "1.7.3";
+  version = "1.8.0";
 
   src = fetchurl {
-    url = "https://www.nih.at/libzip/${pname}-${version}.tar.gz";
-    sha256 = "1k5rihiz7m1ahhjzcbq759hb9crzqkgw78pkxga118y5a32pc8hf";
+    url = "https://libzip.org/download/${pname}-${version}.tar.gz";
+    sha256 = "17l3ygrnbszm3b99dxmw94wcaqpbljzg54h4c0y8ss8aij35bvih";
   };
 
-  # Remove in next release
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/nih-at/libzip/commit/351201419d79b958783c0cfc7c370243165523ac.patch";
-      sha256 = "0d93z98ki0yiaza93268cxkl35y1r7ll9f7l8sivx3nfxj2c1n8a";
-    })
-  ];
+  outputs = [ "out" "dev" "man" ];
 
-  outputs = [ "out" "dev" ];
-
-  nativeBuildInputs = [ cmake perl ];
+  nativeBuildInputs = [ cmake perl groff ];
   propagatedBuildInputs = [ zlib ];
+  buildInputs = lib.optionals withLZMA [ xz ]
+    ++ lib.optionals withBzip2 [ bzip2 ]
+    ++ lib.optionals withOpenssl [ openssl ]
+    ++ lib.optionals withZstd [ zstd ];
 
   preCheck = ''
     # regress/runtest is a generated file
@@ -34,9 +38,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "https://www.nih.at/libzip";
+    homepage = "https://libzip.org/";
     description = "A C library for reading, creating and modifying zip archives";
     license = licenses.bsd3;
     platforms = platforms.unix;
+    changelog = "https://github.com/nih-at/libzip/blob/v${version}/NEWS.md";
   };
 }

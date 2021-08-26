@@ -91,7 +91,7 @@ rec {
   nixFromDockerHub = pullImage {
     imageName = "nixos/nix";
     imageDigest = "sha256:85299d86263a3059cf19f419f9d286cc9f06d3c13146a8ebbb21b3437f598357";
-    sha256 = "07q9y9r7fsd18sy95ybrvclpkhlal12d30ybnf089hq7v1hgxbi7";
+    sha256 = "19fw0n3wmddahzr20mhdqv6jkjn1kanh6n2mrr08ai53dr8ph5n7";
     finalImageTag = "2.2.1";
     finalImageName = "nix";
   };
@@ -463,7 +463,7 @@ rec {
   layeredStoreSymlink =
   let
     target = pkgs.writeTextDir "dir/target" "Content doesn't matter.";
-    symlink = pkgs.runCommandNoCC "symlink" {} "ln -s ${target} $out";
+    symlink = pkgs.runCommand "symlink" {} "ln -s ${target} $out";
   in
     pkgs.dockerTools.buildLayeredImage {
       name = "layeredstoresymlink";
@@ -483,5 +483,62 @@ rec {
     name = "registry-1.docker.io/layered-image";
     tag = "latest";
     config.Cmd = [ "${pkgs.hello}/bin/hello" ];
+  };
+
+  # layered image with files owned by a user other than root
+  layeredImageWithFakeRootCommands = pkgs.dockerTools.buildLayeredImage {
+    name = "layered-image-with-fake-root-commands";
+    tag = "latest";
+    contents = [
+      pkgs.pkgsStatic.busybox
+    ];
+    fakeRootCommands = ''
+      mkdir -p ./home/jane
+      chown 1000 ./home/jane
+    '';
+  };
+
+  # tarball consisting of both bash and redis images
+  mergedBashAndRedis = pkgs.dockerTools.mergeImages [
+    bash
+    redis
+  ];
+
+  # tarball consisting of bash (without tag) and redis images
+  mergedBashNoTagAndRedis = pkgs.dockerTools.mergeImages [
+    bashNoTag
+    redis
+  ];
+
+  # tarball consisting of bash and layered image with different owner of the
+  # /home/jane directory
+  mergedBashFakeRoot = pkgs.dockerTools.mergeImages [
+    bash
+    layeredImageWithFakeRootCommands
+  ];
+
+  helloOnRoot = pkgs.dockerTools.streamLayeredImage {
+    name = "hello";
+    tag = "latest";
+    contents = [
+      (pkgs.buildEnv {
+        name = "hello-root";
+        paths = [ pkgs.hello ];
+      })
+    ];
+    config.Cmd = [ "hello" ];
+  };
+
+  helloOnRootNoStore = pkgs.dockerTools.streamLayeredImage {
+    name = "hello";
+    tag = "latest";
+    contents = [
+      (pkgs.buildEnv {
+        name = "hello-root";
+        paths = [ pkgs.hello ];
+      })
+    ];
+    config.Cmd = [ "hello" ];
+    includeStorePaths = false;
   };
 }

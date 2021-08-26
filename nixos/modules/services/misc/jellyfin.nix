@@ -18,6 +18,7 @@ in
 
       package = mkOption {
         type = types.package;
+        default = pkgs.jellyfin;
         example = literalExample "pkgs.jellyfin";
         description = ''
           Jellyfin package to use.
@@ -28,6 +29,16 @@ in
         type = types.str;
         default = "jellyfin";
         description = "Group under which jellyfin runs.";
+      };
+
+      openFirewall = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Open the default ports in the firewall for the media server. The
+          HTTP/HTTPS ports can be changed in the Web UI, so this option should
+          only be used if they are unchanged.
+        '';
       };
     };
   };
@@ -81,17 +92,10 @@ in
         SystemCallErrorNumber = "EPERM";
         SystemCallFilter = [
           "@system-service"
-
-          "~@chown" "~@cpu-emulation" "~@debug" "~@keyring" "~@memlock" "~@module"
-          "~@obsolete" "~@privileged" "~@setuid"
+          "~@cpu-emulation" "~@debug" "~@keyring" "~@memlock" "~@obsolete" "~@privileged" "~@setuid"
         ];
       };
     };
-
-    services.jellyfin.package = mkDefault (
-      if versionAtLeast config.system.stateVersion "20.09" then pkgs.jellyfin
-        else pkgs.jellyfin_10_5
-    );
 
     users.users = mkIf (cfg.user == "jellyfin") {
       jellyfin = {
@@ -102,6 +106,12 @@ in
 
     users.groups = mkIf (cfg.group == "jellyfin") {
       jellyfin = {};
+    };
+
+    networking.firewall = mkIf cfg.openFirewall {
+      # from https://jellyfin.org/docs/general/networking/index.html
+      allowedTCPPorts = [ 8096 8920 ];
+      allowedUDPPorts = [ 1900 7359 ];
     };
 
   };

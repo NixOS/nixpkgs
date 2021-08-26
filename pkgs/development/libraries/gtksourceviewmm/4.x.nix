@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, gtkmm3, glibmm, gtksourceview4, gnome3 }:
+{ lib, stdenv, fetchurl, pkg-config, gtkmm3, glibmm, gtksourceview4, gnome }:
 
 stdenv.mkDerivation rec {
   pname = "gtksourceviewmm";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "none";
     };

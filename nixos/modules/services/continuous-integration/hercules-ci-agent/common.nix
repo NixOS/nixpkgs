@@ -37,15 +37,22 @@ let
         description = ''
           Number of tasks to perform simultaneously.
 
-          A task is a single derivation build or an evaluation.
+          A task is a single derivation build, an evaluation or an effect run.
           At minimum, you need 2 concurrent tasks for <literal>x86_64-linux</literal>
           in your cluster, to allow for import from derivation.
 
           <literal>concurrentTasks</literal> can be around the CPU core count or lower if memory is
           the bottleneck.
+
+          The optimal value depends on the resource consumption characteristics of your workload,
+          including memory usage and in-task parallelism. This is typically determined empirically.
+
+          When scaling, it is generally better to have a double-size machine than two machines,
+          because each split of resources causes inefficiencies; particularly with regards
+          to build latency because of extra downloads.
         '';
-        type = types.int;
-        default = 4;
+        type = types.either types.ints.positive (types.enum [ "auto" ]);
+        default = "auto";
       };
       workDirectory = mkOption {
         description = ''
@@ -98,7 +105,7 @@ let
       pkgs.stdenv.mkDerivation {
         name = "hercules-ci-check-system-nix-src";
         inherit (config.nix.package) src patches;
-        configurePhase = ":";
+        dontConfigure = true;
         buildPhase = ''
           echo "Checking in-memory pathInfoCache expiry"
           if ! grep 'PathInfoCacheValue' src/libstore/store-api.hh >/dev/null; then
@@ -186,7 +193,18 @@ in
       # even shortly after the previous lookup. This *also* applies to the daemon.
       narinfo-cache-negative-ttl = 0
     '';
-    services.hercules-ci-agent.tomlFile =
-      format.generate "hercules-ci-agent.toml" cfg.settings;
+    services.hercules-ci-agent = {
+      tomlFile =
+        format.generate "hercules-ci-agent.toml" cfg.settings;
+
+      settings.labels = {
+        agent.source =
+          if options.services.hercules-ci-agent.package.highestPrio == (lib.modules.mkOptionDefault { }).priority
+          then "nixpkgs"
+          else lib.mkOptionDefault "override";
+        pkgs.version = pkgs.lib.version;
+        lib.version = lib.version;
+      };
+    };
   };
 }

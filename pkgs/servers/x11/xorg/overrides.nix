@@ -4,7 +4,7 @@
   freetype, tradcpp, fontconfig, meson, ninja, ed, fontforge,
   libGL, spice-protocol, zlib, libGLU, dbus, libunwind, libdrm,
   mesa, udev, bootstrap_cmds, bison, flex, clangStdenv, autoreconfHook,
-  mcpp, epoxy, openssl, pkg-config, llvm_6, libxslt,
+  mcpp, epoxy, openssl, pkg-config, llvm, libxslt,
   ApplicationServices, Carbon, Cocoa, Xplugin
 }:
 
@@ -52,6 +52,10 @@ self: super:
         test -f $ALIASFILE
         cp $ALIASFILE $out/lib/X11/fonts/misc/fonts.alias
       '';
+  });
+
+  fonttosfnt = super.fonttosfnt.overrideAttrs (attrs: {
+    meta = attrs.meta // { license = lib.licenses.mit; };
   });
 
   imake = super.imake.overrideAttrs (attrs: {
@@ -433,7 +437,7 @@ self: super:
   });
 
   xf86videovmware = super.xf86videovmware.overrideAttrs (attrs: {
-    buildInputs =  attrs.buildInputs ++ [ mesa llvm_6 ]; # for libxatracker
+    buildInputs =  attrs.buildInputs ++ [ mesa mesa.driversdev llvm ]; # for libxatracker
     meta = attrs.meta // {
       platforms = ["i686-linux" "x86_64-linux"];
     };
@@ -655,6 +659,7 @@ self: super:
           "--with-xkb-output=$out/share/X11/xkb/compiled"
           "--with-log-dir=/var/log"
           "--enable-glamor"
+          "--with-os-name=Nix" # r13y, embeds the build machine's kernel version otherwise
         ] ++ lib.optionals stdenv.hostPlatform.isMusl [
           "--disable-tls"
         ];
@@ -664,7 +669,7 @@ self: super:
           ( # assert() keeps runtime reference xorgserver-dev in xf86-video-intel and others
             cd "$dev"
             for f in include/xorg/*.h; do
-              sed "1i#line 1 \"${attrs.name}/$f\"" -i "$f"
+              sed "1i#line 1 \"${attrs.pname}-${attrs.version}/$f\"" -i "$f"
             done
           )
         '';
@@ -773,6 +778,14 @@ self: super:
       "--with-launchdaemons-dir=\${out}/LaunchDaemons"
       "--with-launchagents-dir=\${out}/LaunchAgents"
     ];
+    patches = [
+      # don't unset DBUS_SESSION_BUS_ADDRESS in startx
+      (fetchpatch {
+        name = "dont-unset-DBUS_SESSION_BUS_ADDRESS.patch";
+        url = "https://raw.githubusercontent.com/archlinux/svntogit-packages/40f3ac0a31336d871c76065270d3f10e922d06f3/trunk/fs46369.patch";
+        sha256 = "18kb88i3s9nbq2jxl7l2hyj6p56c993hivk8mzxg811iqbbawkp7";
+      })
+    ];
     propagatedBuildInputs = attrs.propagatedBuildInputs or [] ++ [ self.xauth ]
                          ++ lib.optionals isDarwin [ self.libX11 self.xorgproto ];
     postFixup = ''
@@ -800,6 +813,10 @@ self: super:
     };
   });
 
+  xf86videoopenchrome = super.xf86videoopenchrome.overrideAttrs (attrs: {
+    buildInputs = attrs.buildInputs ++ [ self.libXv ];
+  });
+
   xf86videoxgi = super.xf86videoxgi.overrideAttrs (attrs: {
     patches = [
       # fixes invalid open mode
@@ -821,8 +838,10 @@ self: super:
     '';
   });
 
-  xwd = super.xwd.overrideAttrs (attrs: {
-    buildInputs = with self; attrs.buildInputs ++ [libXt];
+  xorgdocs = super.xorgdocs.overrideAttrs (attrs: {
+    # This makes the man pages discoverable by the default man,
+    # since it looks for packages in $PATH
+    postInstall = "mkdir $out/bin";
   });
 
   xrdb = super.xrdb.overrideAttrs (attrs: {
@@ -885,13 +904,16 @@ self: super:
       "fontbhttf"
       "fontbh100dpi"
       "fontbh75dpi"
+
+      # Bigelow & Holmes fonts
+      # https://www.x.org/releases/current/doc/xorg-docs/License.html#Bigelow_Holmes_Inc_and_URW_GmbH_Luxi_font_license
+      "fontbhlucidatypewriter100dpi"
+      "fontbhlucidatypewriter75dpi"
     ];
 
     # unfree, possibly not redistributable
     unfree = [
       # no license, just a copyright notice
-      "fontbhlucidatypewriter100dpi"
-      "fontbhlucidatypewriter75dpi"
       "fontdaewoomisc"
 
       # unclear license, "permission to use"?

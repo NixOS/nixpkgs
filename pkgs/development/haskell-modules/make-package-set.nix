@@ -249,7 +249,7 @@ in package-set { inherit pkgs lib callPackage; } self // {
     # a cabal flag with '--flag=myflag'.
     developPackage =
       { root
-      , name ? builtins.baseNameOf root
+      , name ? if builtins.typeOf root == "path" then builtins.baseNameOf root else ""
       , source-overrides ? {}
       , overrides ? self: super: {}
       , modifier ? drv: drv
@@ -348,7 +348,7 @@ in package-set { inherit pkgs lib callPackage; } self // {
         #       );
         #     });
         #   in
-        #   hpkgs.shellFor {
+        #   haskellPkgs.shellFor {
         #     packages = p: [ p.foo ];
         #     genericBuilderArgsModifier = args: args // { doCheck = true; doBenchmark = true };
         #   }

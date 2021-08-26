@@ -4,8 +4,8 @@ with skawarePackages;
 
 buildPackage {
   pname = "nsss";
-  version = "0.1.0.0";
-  sha256 = "15rxbwf16wm1la079yr2xn4bccjgd7m8dh6r7bpr6s57cj93i2mq";
+  version = "0.1.0.1";
+  sha256 = "1nair10m7fddp50mpqnwj0qiggnh5qmnffmyzxis5l1ixcav1ir0";
 
   description = "An implementation of a subset of the pwd.h, group.h and shadow.h family of functions.";
 

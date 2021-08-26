@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "rpm";
-  version = "4.16.1.2";
+  version = "4.16.1.3";
 
   src = fetchurl {
     url = "http://ftp.rpm.org/releases/rpm-${lib.versions.majorMinor version}.x/rpm-${version}.tar.bz2";
-    sha256 = "1k6ank2aad7r503w12m6m494mxr6iccj52wqhwbc94pwxsf34mw3";
+    sha256 = "07g2g0adgjm29wqy94iqhpp5dk0hacfw1yf7kzycrrxnfbwwfgai";
   };
 
   outputs = [ "out" "dev" "man" ];
@@ -73,8 +73,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "http://www.rpm.org/";
-    license = licenses.gpl2;
+    homepage = "https://www.rpm.org/";
+    license = with licenses; [ gpl2Plus lgpl21Plus ];
     description = "The RPM Package Manager";
     maintainers = with maintainers; [ copumpkin ];
     platforms = platforms.linux ++ platforms.darwin;

@@ -8,11 +8,11 @@ in
 
 stdenv.mkDerivation rec {
   pname  = "xfce4-sensors-plugin";
-  version = "1.3.92";
+  version = "1.4.1";
 
   src = fetchurl {
     url = "mirror://xfce/src/${category}/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
-    sha256 = "04jibw23ibi61f19gc9xy400yhcdiya4px6zp8c7fjq65hyn9iix";
+    sha256 = "sha256-N9DcVp5zXkgqGFRcJOsc4CKdaRDjpNTB3uBoCZkjS+I=";
   };
 
   nativeBuildInputs = [
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://docs.xfce.org/panel-plugins/xfce4-sensors-plugin";
     description = "A panel plug-in for different sensors using acpi, lm_sensors and hddtemp";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = [ maintainers.romildo ];
   };

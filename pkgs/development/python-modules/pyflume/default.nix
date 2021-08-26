@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "pyflume";
-  version = "0.6.2";
+  version = "0.7.0";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ChrisMandich";
     repo = "PyFlume";
     rev = "v${version}";
-    sha256 = "0i181c8722j831bjlcjwv5ccy20hl8zzlv7bfp8w0976gdmv4iz8";
+    sha256 = "129sz33a270v120bzl9l98nmvdzn7ns4cf9w2v18lmzlldbyz2vn";
   };
 
   propagatedBuildInputs = [

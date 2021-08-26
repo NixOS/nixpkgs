@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     description = "Know the forecast of the next hours & days";
     homepage = "https://gitlab.com/bitseater/meteo";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ worldofpeace ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

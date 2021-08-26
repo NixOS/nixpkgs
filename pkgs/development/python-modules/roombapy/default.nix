@@ -1,31 +1,42 @@
-{ buildPythonPackage
+{ lib
+, amqtt
+, buildPythonPackage
 , fetchFromGitHub
-, hbmqtt
-, lib
 , paho-mqtt
-, poetry
+, poetry-core
 , pytest-asyncio
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "roombapy";
-  version = "1.6.2-1";
+  version = "1.6.3";
+  format = "pyproject";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pschmitt";
     repo = "roombapy";
     rev = version;
-    sha256 = "14k7bys479xwpa4alpdwphzmxm3x8kc48nfqnshn1wj94vyxc425";
+    sha256 = "sha256-GkDfIC2jx4Mpguk/Wu45pZw0czhabJwTz58WYSLCOV8=";
   };
 
-  format = "pyproject";
+  nativeBuildInputs = [ poetry-core ];
 
-  nativeBuildInputs = [ poetry ];
   propagatedBuildInputs = [ paho-mqtt ];
 
-  checkInputs = [ hbmqtt pytest-asyncio pytestCheckHook ];
-  pytestFlagsArray = [ "tests/" "--ignore=tests/test_discovery.py" ];
+  checkInputs = [
+    amqtt
+    pytest-asyncio
+    pytestCheckHook
+  ];
+
+  disabledTestPaths = [
+    # Requires network access
+    "tests/test_discovery.py"
+  ];
+
   pythonImportsCheck = [ "roombapy" ];
 
   meta = with lib; {

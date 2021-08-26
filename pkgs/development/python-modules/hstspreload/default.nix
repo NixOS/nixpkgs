@@ -6,14 +6,14 @@
 
 buildPythonPackage rec {
   pname = "hstspreload";
-  version = "2021.2.15";
+  version = "2021.8.1";
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "sethmlarson";
     repo = pname;
     rev = version;
-    sha256 = "sha256-vHq4DjDh7hBNAK/h/KdzqaEgrG5bg7VQ8fVWuxV7vOg=";
+    sha256 = "0si22p461qydh874gkidiar89hrfx7lm7r7g6d1qi7lz8wlwcplv";
   };
 
   # tests require network connection

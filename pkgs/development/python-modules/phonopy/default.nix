@@ -5,22 +5,32 @@
 , pyyaml
 , matplotlib
 , h5py
+, scipy
 , spglib
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "phonopy";
-  version = "2.9.1";
+  version = "2.11.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1jaizhkb59ixknvc75nrhfq51bh75912q8ay36bxpf4g5hzyhw3a";
+    sha256 = "2ab47d3eb53a5265f3567974d29760b510b3312217358b76efc27ade9bd1a9f0";
   };
 
-  propagatedBuildInputs = [ numpy pyyaml matplotlib h5py spglib ];
+  propagatedBuildInputs = [
+    h5py
+    matplotlib
+    numpy
+    pyyaml
+    scipy
+    spglib
+  ];
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [
+    pytestCheckHook
+  ];
 
   # prevent pytest from importing local directory
   preCheck = ''

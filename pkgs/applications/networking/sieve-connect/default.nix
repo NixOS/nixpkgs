@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, perlPackages }:
+{ lib, stdenv, fetchFromGitHub, makeWrapper, perlPackages, installShellFiles }:
 
 stdenv.mkDerivation rec {
   pname = "sieve-connect";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ perlPackages.perl ];
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper installShellFiles ];
 
   preBuild = ''
     # Fixes failing build when not building in git repo
@@ -25,9 +25,9 @@ stdenv.mkDerivation rec {
   buildFlags = [ "PERL5LIB=${perlPackages.makePerlPath [ perlPackages.FileSlurp ]}" "bin" "man" ];
 
   installPhase = ''
-    mkdir -p $out/bin $out/share/man/man1
+    mkdir -p $out/bin
     install -m 755 sieve-connect $out/bin
-    gzip -c sieve-connect.1 > $out/share/man/man1/sieve-connect.1.gz
+    installManPage sieve-connect.1
 
     wrapProgram $out/bin/sieve-connect \
       --prefix PERL5LIB : "${with perlPackages; makePerlPath [

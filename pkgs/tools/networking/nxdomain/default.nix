@@ -2,11 +2,11 @@
 
 buildPythonApplication rec {
   pname = "nxdomain";
-  version = "1.0.1";
+  version = "1.0.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1z9iffggqq2kw6kpnj30shi98cg0bkvkwpglmhnkgwac6g55n2zn";
+    sha256 = "0va7nkbdjgzrf7fnbxkh1140pbc62wyj86rdrrh5wmg3phiziqkb";
   };
 
   propagatedBuildInputs = [ dnspython ];
@@ -23,7 +23,7 @@ buildPythonApplication rec {
     homepage = "https://github.com/zopieux/nxdomain";
     description = "A domain (ad) block list creator";
     platforms = platforms.all;
-    license = licenses.gpl3Plus;
+    license = licenses.gpl3Only;
     maintainers = with maintainers; [ zopieux ];
   };
 }

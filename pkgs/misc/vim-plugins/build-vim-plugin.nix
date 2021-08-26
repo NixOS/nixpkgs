@@ -54,6 +54,7 @@ rec {
     }));
 
   buildVimPluginFrom2Nix = attrs: buildVimPlugin ({
+    # vim plugins may override this
     buildPhase = ":";
     configurePhase =":";
   } // attrs);

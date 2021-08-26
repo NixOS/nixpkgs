@@ -26,13 +26,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sm64ex";
-  version = "unstable-2020-06-19";
+  version = "unstable-2020-10-09";
 
   src = fetchFromGitHub {
     owner = "sm64pc";
     repo = "sm64ex";
-    rev = "f5005418348cf1a53bfa75ff415a513ef0b9b273";
-    sha256 = "0adyshkqk5c4lxhdxc3j6ax4svfka26486qpa5q2gl2nixwg9zxn";
+    rev = "57c203465b2b3eee03dcb796ed1fad07d8283a2c";
+    sha256 = "0k6a3r9f4spa7y2v1lyqs9lwa05lw8xgywllb7w828nal8y33cs6";
   };
 
   nativeBuildInputs = [ python3 pkg-config ];

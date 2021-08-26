@@ -1,12 +1,12 @@
-{ lib, stdenv, fetchurl, makeWrapper, writeText }:
+{ lib, stdenv, fetchurl, writeText }:
 
 stdenv.mkDerivation rec {
   pname = "mediawiki";
-  version = "1.35.1";
+  version = "1.36.1";
 
   src = with lib; fetchurl {
     url = "https://releases.wikimedia.org/mediawiki/${versions.majorMinor version}/${pname}-${version}.tar.gz";
-    sha256 = "05g3mgyi789drhzk3wclkyw4f06mz21q90m2c0z6zshn98fscrcf";
+    sha256 = "0ymda3x58a7ic4bwhbkxc7rskkwn164nplxzq9g4w9qnmwcqnsg6";
   };
 
   prePatch = ''

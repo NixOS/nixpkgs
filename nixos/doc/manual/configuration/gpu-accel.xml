@@ -178,9 +178,9 @@ GPU1:
        Core Next</link> (GCN) GPUs are supported through either radv, which is
        part of <package>mesa</package>, or the <package>amdvlk</package> package.
        Adding the <package>amdvlk</package> package to
-       <xref linkend="opt-hardware.opengl.extraPackages"/> makes both drivers
-       available for applications and lets them choose. A specific driver can
-       be forced as follows:
+       <xref linkend="opt-hardware.opengl.extraPackages"/> makes amdvlk the
+       default driver and hides radv and lavapipe from the device list. A
+       specific driver can be forced as follows:
 
        <programlisting><xref linkend="opt-hardware.opengl.extraPackages"/> = [
          pkgs.<package>amdvlk</package>
@@ -191,10 +191,9 @@ GPU1:
          pkgs.driversi686Linux.<package>amdvlk</package>
        ];
 
-       # For amdvlk
-       <xref linkend="opt-environment.variables"/>.VK_ICD_FILENAMES =
-          "/run/opengl-driver/share/vulkan/icd.d/amd_icd64.json";
-       # For radv
+       # Force radv
+       <xref linkend="opt-environment.variables"/>.AMD_VULKAN_ICD = "RADV";
+       # Or
        <xref linkend="opt-environment.variables"/>.VK_ICD_FILENAMES =
          "/run/opengl-driver/share/vulkan/icd.d/radeon_icd.x86_64.json";
        </programlisting>

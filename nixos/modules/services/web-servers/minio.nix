@@ -4,6 +4,11 @@ with lib;
 
 let
   cfg = config.services.minio;
+
+  legacyCredentials = cfg: pkgs.writeText "minio-legacy-credentials" ''
+    MINIO_ROOT_USER=${cfg.accessKey}
+    MINIO_ROOT_PASSWORD=${cfg.secretKey}
+  '';
 in
 {
   meta.maintainers = [ maintainers.bachp ];
@@ -14,13 +19,19 @@ in
     listenAddress = mkOption {
       default = ":9000";
       type = types.str;
-      description = "Listen on a specific IP address and port.";
+      description = "IP address and port of the server.";
+    };
+
+    consoleAddress = mkOption {
+      default = ":9001";
+      type = types.str;
+      description = "IP address and port of the web UI (console).";
     };
 
     dataDir = mkOption {
-      default = "/var/lib/minio/data";
-      type = types.path;
-      description = "The data directory, for storing the objects.";
+      default = [ "/var/lib/minio/data" ];
+      type = types.listOf types.path;
+      description = "The list of data directories for storing the objects. Use one path for regular operation and the minimum of 4 endpoints for Erasure Code mode.";
     };
 
     configDir = mkOption {
@@ -49,6 +60,17 @@ in
       '';
     };
 
+    rootCredentialsFile = mkOption  {
+      type = types.nullOr types.path;
+      default = null;
+      description = ''
+        File containing the MINIO_ROOT_USER, default is "minioadmin", and
+        MINIO_ROOT_PASSWORD (length >= 8), default is "minioadmin"; in the format of
+        an EnvironmentFile=, as described by systemd.exec(5).
+      '';
+      example = "/etc/nixos/minio-root-credentials";
+    };
+
     region = mkOption {
       default = "us-east-1";
       type = types.str;
@@ -72,29 +94,29 @@ in
   };
 
   config = mkIf cfg.enable {
+    warnings = optional ((cfg.accessKey != "") || (cfg.secretKey != "")) "services.minio.`accessKey` and services.minio.`secretKey` are deprecated, please use services.minio.`rootCredentialsFile` instead.";
+
     systemd.tmpfiles.rules = [
       "d '${cfg.configDir}' - minio minio - -"
-      "d '${cfg.dataDir}' - minio minio - -"
-    ];
+    ] ++ (map (x:  "d '" + x + "' - minio minio - - ") cfg.dataDir);
 
     systemd.services.minio = {
       description = "Minio Object Storage";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
-        ExecStart = "${cfg.package}/bin/minio server --json --address ${cfg.listenAddress} --config-dir=${cfg.configDir} ${cfg.dataDir}";
+        ExecStart = "${cfg.package}/bin/minio server --json --address ${cfg.listenAddress} --console-address ${cfg.consoleAddress} --config-dir=${cfg.configDir} ${toString cfg.dataDir}";
         Type = "simple";
         User = "minio";
         Group = "minio";
         LimitNOFILE = 65536;
+        EnvironmentFile = if (cfg.rootCredentialsFile != null) then cfg.rootCredentialsFile
+                          else if ((cfg.accessKey != "") || (cfg.secretKey != "")) then (legacyCredentials cfg)
+                          else null;
       };
       environment = {
         MINIO_REGION = "${cfg.region}";
         MINIO_BROWSER = "${if cfg.browser then "on" else "off"}";
-      } // optionalAttrs (cfg.accessKey != "") {
-        MINIO_ACCESS_KEY = "${cfg.accessKey}";
-      } // optionalAttrs (cfg.secretKey != "") {
-        MINIO_SECRET_KEY = "${cfg.secretKey}";
       };
     };
 

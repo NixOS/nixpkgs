@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
 , arpack
 , bison
 , blas
@@ -22,22 +21,14 @@
 
 stdenv.mkDerivation rec {
   pname = "igraph";
-  version = "0.9.1";
+  version = "0.9.4";
 
   src = fetchFromGitHub {
     owner = "igraph";
     repo = pname;
     rev = version;
-    sha256 = "sha256-i6Zg6bfHZ9NHwqCouX9m9YqD0VtiWW8DEkxS0hdUyIE=";
+    sha256 = "sha256-tF+cnJRv125bSpZIpABTIHAfJO4TNfSBHjnzpNTbFgk=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "pkg-config-paths.patch";
-      url = "https://github.com/igraph/igraph/commit/980521cc948777df471893f7b6de8f3e3916a3c0.patch";
-      sha256 = "0mbq8v5h90c3dhgmyjazjvva3rn57qhnv7pkc9hlbqdln9gpqg0g";
-    })
-  ];
 
   # Normally, igraph wants us to call bootstrap.sh, which will call
   # tools/getversion.sh. Instead, we're going to put the version directly
@@ -55,7 +46,9 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "doc" ];
 
   nativeBuildInputs = [
+    bison
     cmake
+    flex
     fop
     libxml2
     libxslt
@@ -67,9 +60,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     arpack
-    bison
     blas
-    flex
     glpk
     gmp
     lapack
@@ -86,21 +77,27 @@ stdenv.mkDerivation rec {
     "-DIGRAPH_USE_INTERNAL_GMP=OFF"
     "-DIGRAPH_GLPK_SUPPORT=ON"
     "-DIGRAPH_GRAPHML_SUPPORT=ON"
-    "-DIGRAPH_ENABLE_LTO=ON"
+    "-DIGRAPH_ENABLE_LTO=AUTO"
     "-DIGRAPH_ENABLE_TLS=ON"
     "-DBUILD_SHARED_LIBS=ON"
   ];
 
   doCheck = true;
 
-  preCheck = ''
-    # needed to find libigraph.so
+  # needed to find libigraph, and liblas on darwin
+  preCheck = if stdenv.isDarwin then ''
+    export DYLD_LIBRARY_PATH="${lib.makeLibraryPath [ blas ]}:$PWD/src"
+  '' else ''
     export LD_LIBRARY_PATH="$PWD/src"
   '';
 
   postInstall = ''
     mkdir -p "$out/share"
     cp -r doc "$out/share"
+  '';
+
+  postFixup = lib.optionalString stdenv.isDarwin ''
+    install_name_tool -change libblas.dylib ${blas}/lib/libblas.dylib $out/lib/libigraph.dylib
   '';
 
   meta = with lib; {

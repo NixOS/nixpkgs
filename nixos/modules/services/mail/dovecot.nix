@@ -405,7 +405,7 @@ in
         };
     } // optionalAttrs (cfg.createMailUser && cfg.mailUser != null) {
       ${cfg.mailUser} =
-        { description = "Virtual Mail User"; } // optionalAttrs (cfg.mailGroup != null)
+        { description = "Virtual Mail User"; isSystemUser = true; } // optionalAttrs (cfg.mailGroup != null)
           { group = cfg.mailGroup; };
     };
 
@@ -429,6 +429,7 @@ in
 
       startLimitIntervalSec = 60;  # 1 min
       serviceConfig = {
+        Type = "notify";
         ExecStart = "${dovecotPkg}/sbin/dovecot -F";
         ExecReload = "${dovecotPkg}/sbin/doveadm reload";
         Restart = "on-failure";
@@ -467,10 +468,6 @@ in
     ];
 
     assertions = [
-      {
-        assertion = intersectLists cfg.protocols [ "pop3" "imap" ] != [];
-        message = "dovecot needs at least one of the IMAP or POP3 listeners enabled";
-      }
       {
         assertion = (cfg.sslServerCert == null) == (cfg.sslServerKey == null)
         && (cfg.sslCACert != null -> !(cfg.sslServerCert == null || cfg.sslServerKey == null));

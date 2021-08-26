@@ -1,22 +1,21 @@
 { lib, fetchurl, buildDunePackage }:
 
 buildDunePackage rec {
-
   pname = "ocaml-version";
-  version = "3.0.0";
-
-  minimumOCamlVersion = "4.07";
+  version = "3.1.0";
 
   src = fetchurl {
     url = "https://github.com/ocurrent/ocaml-version/releases/download/v${version}/ocaml-version-v${version}.tbz";
-    sha256 = "15vk8sh50p3f2mbv8z7mqnx76cffri36f2krp25zkkwix8jg7ci4";
+    sha256 = "sha256-rHuhagnY9yISdC85NpgPv667aYx7v2JRgq99ayw83l8=";
   };
 
-  meta = {
+  minimumOCamlVersion = "4.07";
+  useDune2 = true;
+
+  meta = with lib; {
     description = "Manipulate, parse and generate OCaml compiler version strings";
     homepage = "https://github.com/ocurrent/ocaml-version";
-    license = lib.licenses.isc;
-    maintainers = [ lib.maintainers.vbgl ];
+    license = licenses.isc;
+    maintainers = with maintainers; [ vbgl ];
   };
-
 }

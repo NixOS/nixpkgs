@@ -18,7 +18,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://xfce/src/${category}/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
-    sha256 = "0a72kqsjjh45swimqlpyrahdnplp0383v0i4phr4n6g8c1ixyry7";
+    sha256 = "sha256-x2ffY2DoGUsyvCSCPdAAl17boMr+Ulwj14VAKTWe4ig=";
   };
 
   nativeBuildInputs = [
@@ -44,6 +44,7 @@ in stdenv.mkDerivation rec {
     description = "Embed arbitrary app windows on Xfce panel";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
+    broken = true; # unmaintained plugin; no longer compatible with xfce 4.16
     maintainers = [ ];
   };
 }

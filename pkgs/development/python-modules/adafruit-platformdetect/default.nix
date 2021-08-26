@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "adafruit-platformdetect";
-  version = "3.4.1";
+  version = "3.15.3";
 
   src = fetchPypi {
     pname = "Adafruit-PlatformDetect";
     inherit version;
-    sha256 = "31275dcf949c8b00598aaf2b0da65d970a0cba28e7cb45691d5f354b8e82fe85";
+    sha256 = "sha256-cmeCh54dwYwbL1AwGrPwTDp4F6VONclV7iu2Sm1g33Q=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];

@@ -2,12 +2,15 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "usbsdmux";
-  version = "0.1.8";
+  version = "0.2.1";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "0m3d0rs9s5v5hnsjkfybmd8v54gn7rc1dbg5vc48rryhc969pr9f";
+    sha256 = "sha256-gCxwR5jxzkH22B6nxBwAd0HpwWMIj/zp5VROJ0IWq7c=";
   };
+
+  # usbsdmux is not meant to be used as an importable module and has no tests
+  doCheck = false;
 
   meta = with lib; {
     description = "Control software for the LXA USB-SD-Mux";

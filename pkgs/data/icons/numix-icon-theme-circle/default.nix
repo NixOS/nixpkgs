@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "numix-icon-theme-circle";
-  version = "20.09.19";
+  version = "21.04.14";
 
   src = fetchFromGitHub {
     owner = "numixproject";
     repo = pname;
     rev = version;
-    sha256 = "1rqlq5ssxqj0nc0i8av7zprj94km5645xzqi5j5i0sxd3jbmyfjx";
+    sha256 = "1z8c0179r8g0y9zh4383brsfhkcyfy79dc8hw94p9zjn5a66547w";
   };
 
   nativeBuildInputs = [ gtk3 ];
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Numix icon theme (circle version)";
     homepage = "https://numixproject.github.io";
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
     # darwin cannot deal with file names differing only in case
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];

@@ -31,6 +31,7 @@ in {
   ### Packages
 
   inherit gnuradio;
+  inherit (gnuradio) python;
 
   osmosdr = callPackage ../development/gnuradio-modules/osmosdr/default.nix { };
 

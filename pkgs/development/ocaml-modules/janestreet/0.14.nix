@@ -1,30 +1,12 @@
-{ janePackage
-, alcotest
-, angstrom
-, angstrom-async
-, base64
-, cryptokit
-, ctypes
-, dune-configurator
-, faraday
-, inotify
-, js_of_ocaml
-, js_of_ocaml-ppx
-, lambdasoup
-, magic-mime
-, num
-, octavius
-, ppxlib
-, re
-, tyxml
-, uri-sexp
-, zarith
+{ self
+, lib
 , openssl
-, ounit
 , zstd
 }:
 
-rec {
+with self;
+
+{
 
   accessor = janePackage {
     pname = "accessor";
@@ -59,6 +41,7 @@ rec {
     version = "0.14.1";
     hash = "1cdkv34m6czhacivpbb2sasj83fgcid6gnqk30ig9i84z8nh2gw2";
     meta.description = "Accessors for Core types, for use with the Accessor library";
+    meta.broken = lib.versionAtLeast ocaml.version "4.12";
     propagatedBuildInputs = [ accessor_base core_kernel ];
   };
 

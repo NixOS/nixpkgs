@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, tcl, tk, libX11, glibc, which, yacc, flex, imake, xorgproto, gccmakedep }:
+{ lib, stdenv, fetchurl, tcl, tk, libX11, glibc, which, bison, flex, imake, xorgproto, gccmakedep }:
 
 let
   libiconvInc = lib.optionalString stdenv.isLinux "${glibc.dev}/include";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "1pqywkidfpdbj18i03h97f4cimld4fb3mqfy8jjsxs12kihm18fs";
   };
 
-  nativeBuildInputs = [ which yacc flex imake gccmakedep ];
+  nativeBuildInputs = [ which bison flex imake gccmakedep ];
   buildInputs = [ tcl tk libX11 xorgproto ];
   dontUseImakeConfigure = true;
 

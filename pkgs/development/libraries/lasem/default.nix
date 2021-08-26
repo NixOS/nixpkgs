@@ -1,5 +1,5 @@
 { fetchurl, lib, stdenv, pkg-config, intltool, gobject-introspection, glib, gdk-pixbuf
-, libxml2, cairo, pango, gnome3 }:
+, libxml2, cairo, pango, gnome }:
 
 stdenv.mkDerivation rec {
   pname = "lasem";
@@ -22,8 +22,9 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
     };
   };
 

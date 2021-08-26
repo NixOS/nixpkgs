@@ -1,19 +1,39 @@
-{ jdk
-, runCommand
-, patchelf
+{ stdenv
+, jdk
 , lib
+, callPackage
 , modules ? [ "java.base" ]
 }:
 
 let
-  jre = runCommand "${jdk.name}-jre" {
-    nativeBuildInputs = [ patchelf ];
+  jre = stdenv.mkDerivation {
+    name = "${jdk.name}-minimal-jre";
+    version = jdk.version;
+
     buildInputs = [ jdk ];
+
+    dontUnpack = true;
+
+    # Strip more heavily than the default '-S', since if you're
+    # using this derivation you probably care about this.
+    stripDebugFlags = [ "--strip-unneeded" ];
+
+    buildPhase = ''
+      runHook preBuild
+
+      jlink --module-path ${jdk}/lib/openjdk/jmods --add-modules ${lib.concatStringsSep "," modules} --output $out
+
+      runHook postBuild
+    '';
+
+    dontInstall = true;
+
     passthru = {
       home = "${jre}";
+      tests = [
+        (callPackage ./tests/test_jre_minimal.nix {})
+        (callPackage ./tests/test_jre_minimal_with_logging.nix {})
+      ];
     };
-  }   ''
-      jlink --module-path ${jdk}/lib/openjdk/jmods --add-modules ${lib.concatStringsSep "," modules} --output $out
-      patchelf --shrink-rpath $out/bin/* $out/lib/jexec $out/lib/jspawnhelper $out/lib/*.so $out/lib/*/*.so
-  '';
+  };
 in jre

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, unzip, libogg, libvorbis }:
+{ lib, stdenv, fetchurl, libogg, libvorbis }:
 
 stdenv.mkDerivation rec {
   name = "vorbisgain-0.37";
@@ -10,7 +10,6 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  nativeBuildInputs = [ unzip ];
   buildInputs = [ libogg libvorbis ];
 
   patchPhase = ''

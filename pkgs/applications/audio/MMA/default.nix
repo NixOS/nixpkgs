@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, makeWrapper, python3, alsaUtils, timidity }:
+{ lib, stdenv, fetchurl, makeWrapper, python3, alsa-utils, timidity }:
 
   stdenv.mkDerivation rec {
   version = "20.12";
@@ -10,13 +10,13 @@
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ python3 alsaUtils timidity ];
+  buildInputs = [ python3 alsa-utils timidity ];
 
   patchPhase = ''
-    sed -i 's@/usr/bin/aplaymidi@/${alsaUtils}/bin/aplaymidi@g' mma-splitrec
-    sed -i 's@/usr/bin/aplaymidi@/${alsaUtils}/bin/aplaymidi@g' util/mma-splitrec.py
-    sed -i 's@/usr/bin/arecord@/${alsaUtils}/bin/arecord@g' mma-splitrec
-    sed -i 's@/usr/bin/arecord@/${alsaUtils}/bin/arecord@g' util/mma-splitrec.py
+    sed -i 's@/usr/bin/aplaymidi@/${alsa-utils}/bin/aplaymidi@g' mma-splitrec
+    sed -i 's@/usr/bin/aplaymidi@/${alsa-utils}/bin/aplaymidi@g' util/mma-splitrec.py
+    sed -i 's@/usr/bin/arecord@/${alsa-utils}/bin/arecord@g' mma-splitrec
+    sed -i 's@/usr/bin/arecord@/${alsa-utils}/bin/arecord@g' util/mma-splitrec.py
     sed -i 's@/usr/bin/timidity@/${timidity}/bin/timidity@g' mma-splitrec
     sed -i 's@/usr/bin/timidity@/${timidity}/bin/timidity@g' util/mma-splitrec.py
     find . -type f | xargs sed -i 's@/usr/bin/env python@${python3.interpreter}@g'

@@ -1,21 +1,21 @@
 { lib, stdenv, fetchFromGitHub, rustPlatform
-, Security
+, libiconv, Security
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "amber";
-  version = "0.5.8";
+  version = "0.5.9";
 
   src = fetchFromGitHub {
     owner = "dalance";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0j9h9zzg6n4mhq2bqj71k5db595ilbgd9dn6ygmzsm74619q4454";
+    sha256 = "sha256-mmgJCD7kJjvpxyagsoe5CSzqIEZcIiYMAMP3axRphv4=";
   };
 
-  cargoSha256 = "0h47xqqq8f8m28rl1s6r305cf3dvk94aa86j6m0rk535i2jqfvhp";
+  cargoSha256 = "sha256-opRinhTmhZxpAwHNiVOLXL8boQf09Y1NXrWQ6HWQYQ0=";
 
-  buildInputs = lib.optional stdenv.isDarwin Security;
+  buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security ];
 
   meta = with lib; {
     description = "A code search-and-replace tool";

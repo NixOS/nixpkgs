@@ -1,10 +1,11 @@
 { fetchurl, lib, stdenv }:
 
 stdenv.mkDerivation rec {
-  name = "pies-1.3";
+  pname = "pies";
+  version = "1.3";
 
   src = fetchurl {
-    url = "mirror://gnu/pies/${name}.tar.bz2";
+    url = "mirror://gnu/pies/${pname}-${version}.tar.bz2";
     sha256 = "12r7rjjyibjdj08dvwbp0iflfpzl4s0zhn6cr6zj3hwf9gbzgl1g";
   };
 

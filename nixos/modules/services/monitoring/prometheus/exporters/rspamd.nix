@@ -5,21 +5,19 @@ with lib;
 let
   cfg = config.services.prometheus.exporters.rspamd;
 
-  prettyJSON = conf:
-    pkgs.runCommand "rspamd-exporter-config.yml" { } ''
-      echo '${builtins.toJSON conf}' | ${pkgs.buildPackages.jq}/bin/jq '.' > $out
-    '';
+  mkFile = conf:
+    pkgs.writeText "rspamd-exporter-config.yml" (builtins.toJSON conf);
 
   generateConfig = extraLabels: {
     metrics = (map (path: {
-      name = "rspamd_${replaceStrings [ "." " " ] [ "_" "_" ] path}";
-      path = "$.${path}";
+      name = "rspamd_${replaceStrings [ "[" "." " " "]" "\\" "'" ] [ "_" "_" "_" "" "" "" ] path}";
+      path = "{ .${path} }";
       labels = extraLabels;
     }) [
-      "actions.'add header'"
-      "actions.'no action'"
-      "actions.'rewrite subject'"
-      "actions.'soft reject'"
+      "actions['add\\ header']"
+      "actions['no\\ action']"
+      "actions['rewrite\\ subject']"
+      "actions['soft\\ reject']"
       "actions.greylist"
       "actions.reject"
       "bytes_allocated"
@@ -40,18 +38,18 @@ let
     ]) ++ [{
       name = "rspamd_statfiles";
       type = "object";
-      path = "$.statfiles[*]";
+      path = "{.statfiles[*]}";
       labels = recursiveUpdate {
-        symbol = "$.symbol";
-        type = "$.type";
+        symbol = "{.symbol}";
+        type = "{.type}";
       } extraLabels;
       values = {
-        revision = "$.revision";
-        size = "$.size";
-        total = "$.total";
-        used = "$.used";
-        languages = "$.languages";
-        users = "$.users";
+        revision = "{.revision}";
+        size = "{.size}";
+        total = "{.total}";
+        used = "{.used}";
+        languages = "{.languages}";
+        users = "{.users}";
       };
     }];
   };
@@ -76,7 +74,7 @@ in
   };
   serviceOpts.serviceConfig.ExecStart = ''
     ${pkgs.prometheus-json-exporter}/bin/json_exporter \
-      --config.file ${prettyJSON (generateConfig cfg.extraLabels)} \
+      --config.file ${mkFile (generateConfig cfg.extraLabels)} \
       --web.listen-address "${cfg.listenAddress}:${toString cfg.port}" \
       ${concatStringsSep " \\\n  " cfg.extraFlags}
   '';

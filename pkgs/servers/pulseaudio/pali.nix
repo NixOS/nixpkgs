@@ -11,7 +11,7 @@
 , perlPackages
 , xorg
 , libcap
-, alsaLib
+, alsa-lib
 , glib
 , dconf
 , avahi
@@ -129,7 +129,7 @@ stdenv.mkDerivation rec {
       xorg.libXtst
       xorg.xlibsWrapper
     ] ++ lib.optionals stdenv.isLinux [
-      alsaLib
+      alsa-lib
       systemd
       udev
     ] ++ lib.optional airtunesSupport openssl

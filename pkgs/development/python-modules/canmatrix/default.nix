@@ -7,7 +7,7 @@
 , click
 , future
 , pathlib2
-, typing
+, typing ? null
 , lxml
 , xlwt
 , xlrd

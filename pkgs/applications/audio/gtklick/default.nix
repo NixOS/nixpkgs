@@ -1,6 +1,6 @@
-{ lib, fetchurl, pythonPackages, gettext, klick}:
+{ lib, fetchurl, python2Packages, gettext, klick}:
 
-pythonPackages.buildPythonApplication rec {
+python2Packages.buildPythonApplication rec {
   pname = "gtklick";
   version = "0.6.4";
 
@@ -9,7 +9,7 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "7799d884126ccc818678aed79d58057f8cf3528e9f1be771c3fa5b694d9d0137";
   };
 
-  pythonPath = with pythonPackages; [
+  pythonPath = with python2Packages; [
     pyliblo
     pyGtkGlade
   ];

@@ -6,20 +6,20 @@
 
 let
   pname = "cryptomator";
-  version = "1.5.13";
+  version = "1.5.15";
 
   src = fetchFromGitHub {
     owner = "cryptomator";
     repo = "cryptomator";
     rev = version;
-    sha256 = "1s9jl3nl6yfjzmilz9b8azk8592nd39xflzfdf38v6s4iiq86r8j";
+    sha256 = "06n7wda7gfalvsg1rlcm51ss73nlbhh95z6zq18yvn040clkzkij";
   };
 
   icons = fetchFromGitHub {
     owner = "cryptomator";
     repo = "cryptomator-linux";
     rev = version;
-    sha256 = "1x6h6wp6yxnj576874xj3d2jm8jmb7918wprqvlz4sryxhlcssa7";
+    sha256 = "1sqbx858zglv0xkpjya0cpbkxf2hkj1xvxhnir3176y2xyjv6aib";
   };
 
   # perform fake build to make a fixed-output derivation out of the files downloaded from maven central (120MB)
@@ -44,7 +44,7 @@ let
 
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "06q8bqdz3c4i84wxl9z5861zwdsw8jzcvsbgxqrnh8rwi7500sa7";
+    outputHash = "195ysv9l861y9d1lvmvi7wmk172ynlba9n233blpaigq88cjn208";
   };
 
 in stdenv.mkDerivation rec {
@@ -75,7 +75,7 @@ in stdenv.mkDerivation rec {
       --set JAVA_HOME "${jre.home}"
 
     # install desktop entry and icons
-    cp -r ${icons}/resources/appimage/AppDir/usr $out/
+    cp -r ${icons}/resources/appimage/AppDir/usr/* $out/
   '';
 
   nativeBuildInputs = [ autoPatchelfHook maven makeWrapper wrapGAppsHook jdk ];

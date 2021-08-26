@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, atk, glibmm, pkg-config, gnome3 }:
+{ lib, stdenv, fetchurl, atk, glibmm, pkg-config, gnome }:
 
 stdenv.mkDerivation rec {
   pname = "atkmm";
@@ -18,8 +18,9 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
     };
   };
 

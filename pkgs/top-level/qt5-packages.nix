@@ -35,23 +35,28 @@ let
     };
   in (lib.makeOverridable mkPlasma5 attrs);
 
-  kdeApplications = let
-    mkApplications = import ../applications/kde;
+  kdeGear = let
+    mkGear = import ../applications/kde;
     attrs = {
       inherit libsForQt5;
       inherit (pkgs) lib fetchurl;
     };
-  in (lib.makeOverridable mkApplications attrs);
+  in (lib.makeOverridable mkGear attrs);
 
-in (kdeFrameworks // plasma5 // plasma5.thirdParty // kdeApplications // qt5 // {
+in (kdeFrameworks // plasma5 // plasma5.thirdParty // kdeGear // qt5 // {
 
-  inherit kdeFrameworks plasma5 kdeApplications qt5;
+  inherit kdeFrameworks plasma5 kdeGear qt5;
+
+  # Alias for backwards compatibility. Added 2021-05-07.
+  kdeApplications = kdeGear;
 
   ### LIBRARIES
 
   accounts-qt = callPackage ../development/libraries/accounts-qt { };
 
   alkimia = callPackage ../development/libraries/alkimia { };
+
+  applet-window-buttons = callPackage ../development/libraries/applet-window-buttons { };
 
   appstream-qt = callPackage ../development/libraries/appstream/qt.nix { };
 
@@ -75,11 +80,15 @@ in (kdeFrameworks // plasma5 // plasma5.thirdParty // kdeApplications // qt5 // 
 
   kde2-decoration = callPackage ../data/themes/kde2 { };
 
+  kcolorpicker = callPackage ../development/libraries/kcolorpicker { };
+
   kdiagram = callPackage ../development/libraries/kdiagram { };
 
   kdsoap = callPackage ../development/libraries/kdsoap { };
 
   kf5gpgmepp = callPackage ../development/libraries/kf5gpgmepp { };
+
+  kimageannotator = callPackage ../development/libraries/kimageannotator { };
 
   kproperty = callPackage ../development/libraries/kproperty { };
 
@@ -120,6 +129,8 @@ in (kdeFrameworks // plasma5 // plasma5.thirdParty // kdeApplications // qt5 // 
   mapbox-gl-qml = libsForQt5.callPackage ../development/libraries/mapbox-gl-qml { };
 
   mauikit = callPackage ../development/libraries/mauikit { };
+
+  mauikit-filebrowsing = callPackage ../development/libraries/mauikit-filebrowsing { };
 
   mlt = callPackage ../development/libraries/mlt/qt-5.nix { };
 
@@ -165,12 +176,14 @@ in (kdeFrameworks // plasma5 // plasma5.thirdParty // kdeApplications // qt5 // 
     withQt5 = true;
   };
 
+  qtfeedback = callPackage ../development/libraries/qtfeedback { };
+
   qtutilities = callPackage ../development/libraries/qtutilities { };
 
   qtinstaller = callPackage ../development/libraries/qtinstaller { };
 
   qtkeychain = callPackage ../development/libraries/qtkeychain {
-    withQt5 = true;
+    inherit (pkgs.darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
 
   qtpbfimageplugin = callPackage ../development/libraries/qtpbfimageplugin { };

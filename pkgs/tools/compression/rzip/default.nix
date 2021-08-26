@@ -1,9 +1,11 @@
-{lib, stdenv, fetchurl, fetchpatch, bzip2}:
+{ lib, stdenv, fetchurl, fetchpatch, bzip2 }:
 
-stdenv.mkDerivation {
-  name = "rzip-2.1";
+stdenv.mkDerivation rec {
+  pname = "rzip";
+  version = "2.1";
+
   src = fetchurl {
-    url = "mirror://samba/rzip/rzip-2.1.tar.gz";
+    url = "mirror://samba/rzip/rzip-${version}.tar.gz";
     sha256 = "4bb96f4d58ccf16749ed3f836957ce97dbcff3e3ee5fd50266229a48f89815b7";
   };
   buildInputs = [ bzip2 ];
@@ -16,10 +18,11 @@ stdenv.mkDerivation {
     })
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://rzip.samba.org/";
     description = "Compression program";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [ ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
   };
 }

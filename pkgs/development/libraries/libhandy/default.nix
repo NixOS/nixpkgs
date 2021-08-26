@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , meson
 , ninja
@@ -6,35 +7,45 @@
 , gobject-introspection
 , vala
 , gtk-doc
-, docbook_xsl
+, docbook-xsl-nons
 , docbook_xml_dtd_43
 , gtk3
+, enableGlade ? false
 , glade
 , dbus
-, xvfb_run
+, xvfb-run
 , libxml2
 , gdk-pixbuf
 , librsvg
 , hicolor-icon-theme
 , at-spi2-atk
 , at-spi2-core
+, gnome
+, libhandy
+, runCommand
 }:
 
 stdenv.mkDerivation rec {
   pname = "libhandy";
-  version = "1.2.0";
+  version = "1.2.3";
 
-  outputs = [ "out" "dev" "devdoc" "glade" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ] ++ lib.optionals enableGlade [
+    "glade"
+  ];
   outputBin = "dev";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-OfWQriCRDnb+HAYHsuvliXUPRWENau7Fww4u5gKiCyU=";
+    sha256 = "sha256-kuxKWB7BtB3Qek6PqvXVKuN8q7fh+n+UTWyvvllrbWE=";
   };
 
   nativeBuildInputs = [
     docbook_xml_dtd_43
-    docbook_xsl
+    docbook-xsl-nons
     gobject-introspection
     gtk-doc
     libxml2
@@ -46,14 +57,15 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gdk-pixbuf
-    glade
     gtk3
     libxml2
+  ] ++ lib.optionals enableGlade [
+    glade
   ];
 
   checkInputs = [
     dbus
-    xvfb_run
+    xvfb-run
     at-spi2-atk
     at-spi2-core
     librsvg
@@ -62,6 +74,7 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dgtk_doc=true"
+    "-Dglade_catalog=${if enableGlade then "enabled" else "disabled"}"
   ];
 
   # Uses define_variable in pkg-config, but we still need it to use the glade output
@@ -78,6 +91,23 @@ stdenv.mkDerivation rec {
       --config-file=${dbus.daemon}/share/dbus-1/session.conf \
       meson test --print-errorlogs
   '';
+
+  passthru = {
+    updateScript = gnome.updateScript {
+      packageName = pname;
+    };
+  } // lib.optionalAttrs (!enableGlade) {
+    glade =
+      let
+        libhandyWithGlade = libhandy.override {
+          enableGlade = true;
+        };
+      in runCommand "${libhandy.name}-glade" {} ''
+        cp -r "${libhandyWithGlade.glade}" "$out"
+        chmod -R +w "$out"
+        sed -e "s#${libhandyWithGlade.out}#${libhandy.out}#g" -e "s#${libhandyWithGlade.glade}#$out#g" -i $(find "$out" -type f)
+      '';
+  };
 
   meta = with lib; {
     changelog = "https://gitlab.gnome.org/GNOME/libhandy/-/tags/${version}";

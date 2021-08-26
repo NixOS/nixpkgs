@@ -29,11 +29,11 @@
 
 buildPythonPackage rec {
   pname = "sentry-sdk";
-  version = "1.0.0";
+  version = "1.3.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "71de00c9711926816f750bc0f57ef2abbcb1bfbdf5378c601df7ec978f44857a";
+    sha256 = "0v72zzghlk6kvjg7fg4c4mfr1kasnwlpjzk1wyqd864nz9293sgb";
   };
 
   checkInputs = [ blinker botocore chalice django flask tornado bottle rq falcon sqlalchemy werkzeug trytond

@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     description = "Infinitely extensible web-browser (with Lisp development files using WebKitGTK platform port)";
     homepage = "https://nyxt.atlas.engineer";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ lewo ];
+    maintainers = with maintainers; [ lewo payas ];
     platforms = platforms.all;
   };
 }

@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://git.xfce.org/archive/${pname}/snapshot/${pname}-${version}.tar.gz";
-    sha256 = "11k7m41jxkaqmpp5njkixw60q517xnw923mz34dnm1llx9ilvfk8";
+    sha256 = "sha256-aLpNY+qUhmobGb8OkbjtJxQMDO9xSlvurVjNLgOpZ4Y=";
   };
 
   nativeBuildInputs = [
@@ -33,8 +33,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://goodies.xfce.org/projects/panel-plugins/xfce4-hardware-monitor-plugin";
     description = "Hardware monitor plugin for the XFCE4 panel";
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
     platforms = platforms.unix;
+    broken = true; # unmaintained plugin; no longer compatible with xfce 4.16
     maintainers = [ maintainers.romildo ];
   };
 }

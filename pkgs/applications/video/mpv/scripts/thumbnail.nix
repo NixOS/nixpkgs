@@ -1,6 +1,6 @@
-{ fetchFromGitHub, lib, python3, stdenv }:
+{ fetchFromGitHub, lib, python3, stdenvNoCC }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "mpv_thumbnail_script";
   version = "unstable-2020-01-16";
 

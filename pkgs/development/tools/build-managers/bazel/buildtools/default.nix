@@ -1,19 +1,23 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "bazel-buildtools";
-  version = "3.5.0";
-
-  goPackagePath = "github.com/bazelbuild/buildtools";
+  version = "4.0.1";
 
   src = fetchFromGitHub {
     owner = "bazelbuild";
     repo = "buildtools";
     rev = version;
-    sha256 = "179k0kwh7i2azkhk8dw7ac50a05q7n3i29pqaf69yw7jrpbf8k85";
+    sha256 = "0q7b9zh38vblqs5lwhjk28km89p706aky4wv6bwz2vg9gl6bfclq";
   };
 
-  goDeps = ./deps.nix;
+  vendorSha256 = "1w6i1lb72mfdyb901gpl9yc6ql73j5kik6li0j5jv5ab2m3j9qvf";
+
+  preBuild = ''
+    rm -r warn/docs
+  '';
+
+  doCheck = false;
 
   excludedPackages = [ "generatetables" ];
 

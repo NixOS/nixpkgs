@@ -22,13 +22,13 @@ let
   pname = "wire-desktop";
 
   version = {
-    x86_64-darwin = "3.23.4046";
-    x86_64-linux = "3.23.2938";
+    x86_64-darwin = "3.26.4145";
+    x86_64-linux = "3.26.2941";
   }.${system} or throwSystem;
 
   sha256 = {
-    x86_64-darwin = "19k8102chh4yphk89kiz83yarawnzdnsq0hbsqpjdhbmarqjcd9s";
-    x86_64-linux = "1cx5azl5dvya1hf0gayafm4rg6ccmmq978xsgm6lf0rlb4kirj65";
+    x86_64-darwin = "1ck74a9z2mrwmljrqm347bqhjiaf1v0bf1jfnp58cqngh5ygqnf2";
+    x86_64-linux = "01gy84gr0gw5ap7hpy72azaf6hlzac7vxkn5cgad5sfbyzxgjgc9";
   }.${system} or throwSystem;
 
   meta = with lib; {
@@ -51,7 +51,6 @@ let
       arianvp
       kiwi
       toonn
-      worldofpeace
     ];
     platforms = [
       "x86_64-darwin"

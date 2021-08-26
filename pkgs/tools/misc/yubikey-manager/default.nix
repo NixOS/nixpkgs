@@ -1,14 +1,19 @@
-{ python3Packages, fetchurl, lib,
-  yubikey-personalization, libu2f-host, libusb1 }:
+{ python3Packages, fetchFromGitHub, lib, yubikey-personalization, libu2f-host, libusb1 }:
 
 python3Packages.buildPythonPackage rec {
   pname = "yubikey-manager";
-  version = "3.1.2";
+  version = "4.0.5";
 
-  srcs = fetchurl {
-    url = "https://developers.yubico.com/${pname}/Releases/${pname}-${version}.tar.gz";
-    hash = "sha256-dwnIOuu0QyWRl6RSdyQw7dGsAZ4xpXpx6jOpCkp4efE=";
+  src = fetchFromGitHub {
+    repo = "yubikey-manager";
+    rev = version;
+    owner = "Yubico";
+    sha256 = "sha256:0ycp7k6lkxzqwkc16fifhyqaqi7hl3351pwddsn18r5l83jnzdn2";
   };
+
+  format = "pyproject";
+
+  nativeBuildInputs = with python3Packages; [ poetry-core ];
 
   propagatedBuildInputs =
     with python3Packages; [
@@ -42,8 +47,7 @@ python3Packages.buildPythonPackage rec {
       --replace 'compdef _ykman_completion ykman;' '_ykman_completion "$@"'
   '';
 
-  # See https://github.com/NixOS/nixpkgs/issues/29169
-  doCheck = false;
+  checkInputs = with python3Packages; [ pytestCheckHook makefun ];
 
   meta = with lib; {
     homepage = "https://developers.yubico.com/yubikey-manager";

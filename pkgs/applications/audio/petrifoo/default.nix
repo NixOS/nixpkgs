@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, alsaLib, cmake, gtk2, libjack2, libgnomecanvas
+{ lib, stdenv, fetchurl, alsa-lib, cmake, gtk2, libjack2, libgnomecanvas
 , libpthreadstubs, libsamplerate, libsndfile, libtool, libxml2
 , pkg-config, openssl }:
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation  rec {
 
   nativeBuildInputs = [ cmake pkg-config ];
 
-  buildInputs = [ alsaLib gtk2 libjack2 libgnomecanvas libpthreadstubs
+  buildInputs = [ alsa-lib gtk2 libjack2 libgnomecanvas libpthreadstubs
                   libsamplerate libsndfile libtool libxml2 openssl ];
 
   meta = with lib; {

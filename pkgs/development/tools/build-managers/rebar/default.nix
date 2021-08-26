@@ -1,12 +1,8 @@
 { lib, stdenv, fetchurl, erlang }:
 
-
-let
-  version = "2.6.4";
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "rebar";
-  inherit version;
+  version = "2.6.4";
 
   src = fetchurl {
     url = "https://github.com/rebar/rebar/archive/${version}.tar.gz";

@@ -5,7 +5,7 @@
 , pytestCheckHook
 , numpy
 , scipy
-, scikitlearn
+, scikit-learn
 , pandas
 , tqdm
 , slicer
@@ -17,20 +17,20 @@
 
 buildPythonPackage rec {
   pname = "shap";
-  version = "0.36.0";
+  version = "0.39.0";
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "slundberg";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1wxnxvbz6avzzfqjfbcqd4v879hvpq4021v31fhdpccr2q317rr9";
+    sha256 = "065c40k6g8sy6ynzk4k8k7iddl18g2b6kb9kg4m6g7npclmn5wvp";
   };
 
   propagatedBuildInputs = [
     numpy
     scipy
-    scikitlearn
+    scikit-learn
     pandas
     tqdm
     slicer

@@ -1,10 +1,12 @@
 { lib, stdenv, fetchFromGitHub
 , meson, ninja, pkg-config, gettext, libxslt, docbook_xsl_ns
 , libcap, libidn2
+, iproute2
+, apparmorRulesFromClosure
 }:
 
 let
-  version = "20210202";
+  version = "20210722";
   sunAsIsLicense = {
     fullName = "AS-IS, SUN MICROSYSTEMS license";
     url = "https://github.com/iputils/iputils/blob/s${version}/rdisc.c";
@@ -17,8 +19,19 @@ in stdenv.mkDerivation rec {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "08j2hfgnfh31vv9rn1ml7090j2lsvm9wdpdz13rz60rmyzrx9dq3";
+    sha256 = "139fyifsjm0i012rhcx3ra3pxx2wxh77dfd551d8lgiv2mqd742j";
   };
+
+  postPatch = lib.optionalString (!doCheck) ''
+    # There isn't a Meson option for this yet:
+    sed -i '/##### TESTS #####/q' ping/meson.build
+  '';
+
+  outputs = ["out" "apparmor"];
+
+  # We don't have the required permissions inside the build sandbox:
+  # /build/source/build/ping/ping: socket: Operation not permitted
+  doCheck = false;
 
   mesonFlags = [
     "-DBUILD_RARPD=true"
@@ -34,6 +47,28 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ meson ninja pkg-config gettext libxslt.bin docbook_xsl_ns ];
   buildInputs = [ libcap ]
     ++ lib.optional (!stdenv.hostPlatform.isMusl) libidn2;
+  checkInputs = [ iproute2 ];
+
+  postInstall = ''
+    mkdir $apparmor
+    cat >$apparmor/bin.ping <<EOF
+    include <tunables/global>
+    $out/bin/ping {
+      include <abstractions/base>
+      include <abstractions/consoles>
+      include <abstractions/nameservice>
+      include "${apparmorRulesFromClosure { name = "ping"; }
+       ([libcap] ++ lib.optional (!stdenv.hostPlatform.isMusl) libidn2)}"
+      include <local/bin.ping>
+      capability net_raw,
+      network inet raw,
+      network inet6 raw,
+      mr $out/bin/ping,
+      r $out/share/locale/**,
+      r @{PROC}/@{pid}/environ,
+    }
+    EOF
+  '';
 
   meta = with lib; {
     description = "A set of small useful utilities for Linux networking";

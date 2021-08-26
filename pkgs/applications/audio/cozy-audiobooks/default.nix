@@ -8,11 +8,13 @@
 , gtk3
 , gst_all_1
 , gobject-introspection
+, libhandy
 , python3Packages
 , file
 , cairo
 , gettext
-, gnome3
+, gnome
+, pantheon
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -20,7 +22,7 @@ python3Packages.buildPythonApplication rec {
   format = "other"; # no setup.py
 
   pname = "cozy";
-  version = "0.7.2";
+  version = "1.0.3";
 
   # Temporary fix
   # See https://github.com/NixOS/nixpkgs/issues/57029
@@ -31,7 +33,7 @@ python3Packages.buildPythonApplication rec {
     owner = "geigi";
     repo = pname;
     rev = version;
-    sha256 = "0fmbddi4ga0bppwg3rm3yjmf7jgqc6zfslmavnr1pglbzkjhy9fs";
+    sha256 = "0m0xiqpb87pwr3fhy0a4qxg67yjhwchcxj3x2anyy0li4inryxag";
   };
 
   nativeBuildInputs = [
@@ -46,7 +48,9 @@ python3Packages.buildPythonApplication rec {
     gtk3
     cairo
     gettext
-    gnome3.adwaita-icon-theme
+    gnome.adwaita-icon-theme
+    libhandy
+    pantheon.granite
   ] ++ (with gst_all_1; [
     gstreamer
     gst-plugins-good
@@ -70,8 +74,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   postPatch = ''
-    chmod +x meson/post_install.py
-    patchShebangs meson/post_install.py
+    patchShebangs meson/*.py
   '';
 
   postInstall = ''

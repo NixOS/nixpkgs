@@ -1,7 +1,7 @@
 { lib, buildPythonPackage, fetchFromGitHub, python, robotframework, selenium, mockito, robotstatuschecker, approvaltests }:
 
 buildPythonPackage rec {
-  version = "3.3.1";
+  version = "5.1.3";
   pname = "robotframework-seleniumlibrary";
 
   # no tests included in PyPI tarball
@@ -9,7 +9,7 @@ buildPythonPackage rec {
     owner = "robotframework";
     repo = "SeleniumLibrary";
     rev = "v${version}";
-    sha256 = "0dabc5dwx0pwsyiy74d7wj97k72yl28a17sasjzrdq819pyc3dvq";
+    sha256 = "1djlrbrgd7v15xk5w90xk7iy98cr1p2g57k614gvbd298dmnf2wd";
   };
 
   propagatedBuildInputs = [ robotframework selenium ];

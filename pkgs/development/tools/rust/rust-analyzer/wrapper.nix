@@ -1,17 +1,15 @@
-{ lib, rustPlatform, runCommandNoCC, makeWrapper }:
-
-lib.makeOverridable ({
-  unwrapped,
-  pname ? "rust-analyzer",
-  version ? unwrapped.version,
+{ lib, rustPlatform, runCommand, makeWrapper, rust-analyzer-unwrapped
+, pname ? "rust-analyzer"
+, version ? rust-analyzer-unwrapped.version
   # Use name from `RUST_SRC_PATH`
-  rustSrc ? rustPlatform.rustLibSrc,
-}: runCommandNoCC "${pname}-${version}" {
+, rustSrc ? rustPlatform.rustLibSrc
+}:
+runCommand "${pname}-${version}" {
   inherit pname version;
-  inherit (unwrapped) src meta;
+  inherit (rust-analyzer-unwrapped) src meta;
   nativeBuildInputs = [ makeWrapper ];
 } ''
   mkdir -p $out/bin
-  makeWrapper ${unwrapped}/bin/rust-analyzer $out/bin/rust-analyzer \
+  makeWrapper ${rust-analyzer-unwrapped}/bin/rust-analyzer $out/bin/rust-analyzer \
     --set-default RUST_SRC_PATH "${rustSrc}"
-'')
+''

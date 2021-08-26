@@ -1,33 +1,51 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy27, requests, netifaces
-, pytestCheckHook, testtools, requests-mock }:
+{ lib
+, asyncstdlib
+, attrs
+, buildPythonPackage
+, defusedxml
+, fetchFromGitHub
+, httpx
+, netifaces
+, pytest-asyncio
+, pytestCheckHook
+, pytest-httpx
+, pytest-timeout
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "denonavr";
-  version = "0.9.10";
-  disabled = isPy27;
+  version = "0.10.8";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "scarface-4711";
-    repo = "denonavr";
+    repo = pname;
     rev = version;
-    sha256 = "sha256-3ap8F3ayBTpaR98md+gT0+hkIWlFBNxStTGWT5AL//A=";
+    sha256 = "02q76mbmg2rkm4shy2apwbw9pvicy9j5v4zgpjwzxif9yf7m8aqk";
   };
 
   propagatedBuildInputs = [
-    requests
+    asyncstdlib
+    attrs
+    defusedxml
+    httpx
     netifaces
   ];
 
   checkInputs = [
+    pytest-asyncio
     pytestCheckHook
-    testtools
-    requests-mock
+    pytest-httpx
+    pytest-timeout
   ];
 
+  pythonImportsCheck = [ "denonavr" ];
+
   meta = with lib; {
+    description = "Automation Library for Denon AVR receivers";
     homepage = "https://github.com/scarface-4711/denonavr";
-    description = "Automation Library for Denon AVR receivers.";
-    license = licenses.mit;
+    license = with licenses; [ mit ];
     maintainers = with maintainers; [ colemickens ];
   };
 }

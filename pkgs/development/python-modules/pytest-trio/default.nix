@@ -13,11 +13,12 @@ buildPythonPackage rec {
     sha256 = "0bhh2nknhp14jzsx4zzpqm4qnfaihyi65cjf6kf6qgdhc0ax6nf4";
   };
 
+  buildInputs = [ pytest ];
+
   propagatedBuildInputs = [
     trio
     async_generator
     outcome
-    pytest
   ];
 
   checkInputs = [

@@ -7,6 +7,7 @@
 , libevent
 , dns-root-data
 , pkg-config
+, makeWrapper
   #
   # By default unbound will not be built with systemd support. Unbound is a very
   # commmon dependency. The transitive dependency closure of systemd also
@@ -25,14 +26,16 @@
 
 stdenv.mkDerivation rec {
   pname = "unbound";
-  version = "1.13.0";
+  version = "1.13.1";
 
   src = fetchurl {
-    url = "https://unbound.net/downloads/${pname}-${version}.tar.gz";
-    sha256 = "18dj7migq6379hps59793457l81s3z7dll3y0fj6qcmhjlx08m59";
+    url = "https://nlnetlabs.nl/downloads/unbound/unbound-${version}.tar.gz";
+    sha256 = "sha256-hQTZe4/FvYlzRcldEW4O4N34yP+ZWQqytL0TJ4yfULg=";
   };
 
   outputs = [ "out" "lib" "man" ]; # "dev" would only split ~20 kB
+
+  nativeBuildInputs = [ makeWrapper ];
 
   buildInputs = [ openssl nettle expat libevent ]
     ++ lib.optionals withSystemd [ pkg-config systemd ]
@@ -56,10 +59,19 @@ stdenv.mkDerivation rec {
     "--with-libnghttp2=${libnghttp2.dev}"
   ];
 
+  # Remove references to compile-time dependencies that are included in the configure flags
+  postConfigure = let
+    inherit (builtins) storeDir;
+  in ''
+    sed -E '/CONFCMDLINE/ s;${storeDir}/[a-z0-9]{32}-;${storeDir}/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-;g' -i config.h
+  '';
+
   installFlags = [ "configfile=\${out}/etc/unbound/unbound.conf" ];
 
   postInstall = ''
     make unbound-event-install
+    wrapProgram $out/bin/unbound-control-setup \
+      --prefix PATH : ${lib.makeBinPath [ openssl ]}
   '';
 
   preFixup = lib.optionalString (stdenv.isLinux && !stdenv.hostPlatform.isMusl) # XXX: revisit

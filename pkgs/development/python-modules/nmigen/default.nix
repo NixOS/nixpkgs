@@ -3,17 +3,18 @@
 , pythonOlder
 , fetchFromGitHub
 , setuptools
-, setuptools_scm
+, setuptools-scm
 , pyvcd
 , jinja2
 , importlib-resources
 , importlib-metadata
+, git
 
 # for tests
 , pytestCheckHook
-, yosys
 , symbiyosys
 , yices
+, yosys
 }:
 
 buildPythonPackage rec {
@@ -30,21 +31,34 @@ buildPythonPackage rec {
     sha256 = "0cjs9wgmxa76xqmjhsw4fsb2mhgvd85jgs2mrjxqp6fwp8rlgnl1";
   };
 
-  nativeBuildInputs = [ setuptools_scm ];
+  SETUPTOOLS_SCM_PRETEND_VERSION="${realVersion}";
+
+  nativeBuildInputs = [
+    git
+    setuptools-scm
+  ];
 
   propagatedBuildInputs = [
-    setuptools
-    pyvcd
     jinja2
+    pyvcd
+    setuptools
   ] ++
     lib.optional (pythonOlder "3.9") importlib-resources ++
     lib.optional (pythonOlder "3.8") importlib-metadata;
 
-  checkInputs = [ pytestCheckHook yosys symbiyosys yices ];
+  checkInputs = [
+    pytestCheckHook
+    symbiyosys
+    yices
+    yosys
+  ];
 
-  preBuild = ''
-    export SETUPTOOLS_SCM_PRETEND_VERSION="${realVersion}"
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "Jinja2~=2.11" "Jinja2>=2.11"
   '';
+
+  pythonImportsCheck = [ "nmigen" ];
 
   meta = with lib; {
     description = "A refreshed Python toolbox for building complex digital hardware";

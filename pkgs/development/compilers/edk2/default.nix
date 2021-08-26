@@ -5,7 +5,6 @@
   fetchpatch,
   libuuid,
   python3,
-  iasl,
   bc,
   clang_9,
   llvmPackages_9,
@@ -37,13 +36,13 @@ buildType = if stdenv.isDarwin then
 
 edk2 = buildStdenv.mkDerivation {
   pname = "edk2";
-  version = "202011";
+  version = "202102";
 
   # submodules
   src = fetchgit {
     url = "https://github.com/tianocore/edk2";
     rev = "edk2-stable${edk2.version}";
-    sha256 = "1fvlz1z075jr6smq9qa0asy6fxga1gljcfd0764ypzy1mw963c9s";
+    sha256 = "1292hfbqz4wyikdf6glqdy80n9zpy54gnfngqnyv05908hww6h82";
   };
 
   buildInputs = [ libuuid pythonEnv ];

@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, fetchurl, fetchpatch, substituteAll, cmake, makeWrapper, pkg-config
-, curl, ffmpeg_3, glib, libjpeg, libselinux, libsepol, mp4v2, libmysqlclient, mysql, pcre, perl, perlPackages
+, curl, ffmpeg, glib, libjpeg, libselinux, libsepol, mp4v2, libmysqlclient, mariadb, pcre, perl, perlPackages
 , polkit, util-linuxMinimal, x264, zlib
 , coreutils, procps, psmisc, nixosTests }:
 
@@ -122,11 +122,11 @@ in stdenv.mkDerivation rec {
     done
 
     substituteInPlace scripts/zmdbbackup.in \
-      --replace /usr/bin/mysqldump ${mysql.client}/bin/mysqldump
+      --replace /usr/bin/mysqldump ${mariadb.client}/bin/mysqldump
 
     substituteInPlace scripts/zmupdate.pl.in \
-      --replace "'mysql'" "'${mysql.client}/bin/mysql'" \
-      --replace "'mysqldump'" "'${mysql.client}/bin/mysqldump'"
+      --replace "'mysql'" "'${mariadb.client}/bin/mysql'" \
+      --replace "'mysqldump'" "'${mariadb.client}/bin/mysqldump'"
 
     for f in scripts/ZoneMinder/lib/ZoneMinder/Config.pm.in \
              scripts/zmupdate.pl.in \
@@ -138,7 +138,7 @@ in stdenv.mkDerivation rec {
 
     for f in includes/Event.php views/image.php ; do
       substituteInPlace web/$f \
-        --replace "'ffmpeg " "'${ffmpeg_3}/bin/ffmpeg "
+        --replace "'ffmpeg " "'${ffmpeg}/bin/ffmpeg "
     done
 
     substituteInPlace web/includes/functions.php \
@@ -147,7 +147,7 @@ in stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    curl ffmpeg_3 glib libjpeg libselinux libsepol mp4v2 libmysqlclient mysql.client pcre perl polkit x264 zlib
+    curl ffmpeg glib libjpeg libselinux libsepol mp4v2 libmysqlclient mariadb.client pcre perl polkit x264 zlib
     util-linuxMinimal # for libmount
   ] ++ (with perlPackages; [
     # build-time dependencies

@@ -12,7 +12,7 @@ buildGoPackage rec {
 
   goPackagePath = "github.com/Shopify/toxiproxy";
   subPackages = ["cmd" "cli"];
-  buildFlagsArray = "-ldflags=-X github.com/Shopify/toxiproxy.Version=v${version}";
+  ldflags = [ "-X github.com/Shopify/toxiproxy.Version=v${version}" ];
 
   postInstall = ''
     mv $out/bin/cli $out/bin/toxiproxy-cli

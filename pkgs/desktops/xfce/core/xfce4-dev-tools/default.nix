@@ -1,14 +1,27 @@
-{ mkXfceDerivation, autoreconfHook, autoconf, automake
-, glib, gtk-doc, intltool, libtool }:
+{ mkXfceDerivation
+, autoreconfHook
+, libxslt
+, docbook_xsl
+, autoconf
+, automake
+, glib
+, gtk-doc
+, intltool
+, libtool
+}:
 
 mkXfceDerivation {
   category = "xfce";
   pname = "xfce4-dev-tools";
-  version = "4.14.0";
+  version = "4.16.0";
 
-  sha256 = "10hcj88784faqrk08xb538355cla26vdk9ckx158hqdqv38sb42f";
+  sha256 = "sha256-5r9dJfCgXosXoOAtNg1kaPWgFEAmyw/pWTtdG+K1h3A=";
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [
+    autoreconfHook
+    libxslt
+    docbook_xsl
+  ];
 
   propagatedBuildInputs = [
     autoconf
@@ -18,11 +31,6 @@ mkXfceDerivation {
     intltool
     libtool
   ];
-
-  preAutoreconf = ''
-    substitute configure.ac.in configure.ac \
-      --subst-var-by REVISION UNKNOWN
-  '';
 
   setupHook = ./setup-hook.sh;
 

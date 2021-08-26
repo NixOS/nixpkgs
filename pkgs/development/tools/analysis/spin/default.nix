@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, makeWrapper, yacc, gcc
+{ stdenv, lib, fetchurl, makeWrapper, bison, gcc
 , withISpin ? true, tk, swarm, graphviz }:
 
 let
@@ -20,7 +20,7 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ yacc ];
+  buildInputs = [ bison ];
 
   sourceRoot = "Spin/Src${version}";
 
@@ -38,9 +38,9 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Formal verification tool for distributed software systems";
-    homepage = "http://spinroot.com/";
+    homepage = "https://spinroot.com/";
     license = licenses.free;
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ pSub ];
   };
 }

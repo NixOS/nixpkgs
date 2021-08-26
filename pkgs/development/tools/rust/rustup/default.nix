@@ -1,6 +1,18 @@
-{ stdenv, lib, runCommand, patchelf
-, fetchFromGitHub, rustPlatform, makeWrapper
-, pkg-config, curl, zlib, Security, CoreServices }:
+{ stdenv
+, lib
+, runCommand
+, patchelf
+, fetchFromGitHub
+, rustPlatform
+, makeWrapper
+, pkg-config
+, curl
+, zlib
+, Security
+, CoreServices
+, libiconv
+, xz
+}:
 
 let
   libPath = lib.makeLibraryPath [
@@ -10,32 +22,33 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "rustup";
-  version = "1.23.1";
+  version = "1.24.2";
 
   src = fetchFromGitHub {
     owner = "rust-lang";
     repo = "rustup";
     rev = version;
-    sha256 = "1i3ipkq6j47bf9dh9j3axzj6z443jm4j651g38cxyrrx8b2s15x0";
+    sha256 = "sha256-uRCzVeTr5rr0CvE/1Uz7RHcw4Kt/sOItwcbZJBjjNjg=";
   };
 
-  cargoSha256 = "1zkrrg5m0j9rk65g51v2zh404529p9z84qqb7bfyjmgiqlnh48ig";
+  cargoSha256 = "sha256-+E6Wa4QrMG/Ow3KehsxIzLzubXJQxCWo/rowC4MPdgk=";
 
   nativeBuildInputs = [ makeWrapper pkg-config ];
 
   buildInputs = [
-    curl zlib
-  ] ++ lib.optionals stdenv.isDarwin [ CoreServices Security ];
+    curl
+    zlib
+  ] ++ lib.optionals stdenv.isDarwin [ CoreServices Security libiconv xz ];
 
   cargoBuildFlags = [ "--features no-self-update" ];
 
   patches = lib.optionals stdenv.isLinux [
-    (runCommand "0001-dynamically-patchelf-binaries.patch" { CC=stdenv.cc; patchelf = patchelf; libPath = "$ORIGIN/../lib:${libPath}"; } ''
-     export dynamicLinker=$(cat $CC/nix-support/dynamic-linker)
-     substitute ${./0001-dynamically-patchelf-binaries.patch} $out \
-       --subst-var patchelf \
-       --subst-var dynamicLinker \
-       --subst-var libPath
+    (runCommand "0001-dynamically-patchelf-binaries.patch" { CC = stdenv.cc; patchelf = patchelf; libPath = "$ORIGIN/../lib:${libPath}"; } ''
+      export dynamicLinker=$(cat $CC/nix-support/dynamic-linker)
+      substitute ${./0001-dynamically-patchelf-binaries.patch} $out \
+        --subst-var patchelf \
+        --subst-var dynamicLinker \
+        --subst-var libPath
     '')
   ];
 

@@ -1,7 +1,7 @@
 { lib, stdenv, substituteAll, fetchurl
 , zlib ? null, zlibSupport ? true, bzip2, pkg-config, libffi, libunwind, Security
 , sqlite, openssl, ncurses, python, expat, tcl, tk, tix, xlibsWrapper, libX11
-, self, gdbm, db, lzma
+, self, gdbm, db, xz
 , python-setup-hook
 # For the Python package set
 , packageOverrides ? (self: super: {})
@@ -53,7 +53,7 @@ in with passthru; stdenv.mkDerivation rec {
   buildInputs = [
     bzip2 openssl pythonForPypy libffi ncurses expat sqlite tk tcl xlibsWrapper libX11 gdbm db
   ]  ++ optionals isPy3k [
-    lzma
+    xz
   ] ++ optionals (stdenv ? cc && stdenv.cc.libc != null) [
     stdenv.cc.libc
   ] ++ optionals zlibSupport [
@@ -73,6 +73,8 @@ in with passthru; stdenv.mkDerivation rec {
   LD_LIBRARY_PATH = makeLibraryPath (filter (x : x.outPath != stdenv.cc.libc.outPath or "") buildInputs);
 
   patches = [
+    ./dont_fetch_vendored_deps.patch
+
     (substituteAll {
       src = ./tk_tcl_paths.patch;
       inherit tk tcl;
@@ -81,12 +83,18 @@ in with passthru; stdenv.mkDerivation rec {
       tk_libprefix = tk.libPrefix;
       tcl_libprefix = tcl.libPrefix;
     })
+
+    (substituteAll {
+      src = ./sqlite_paths.patch;
+      inherit (sqlite) out dev;
+    })
   ];
 
   postPatch = ''
-    substituteInPlace "lib-python/${if isPy3k then "3/tkinter/tix.py" else "2.7/lib-tk/Tix.py"}" --replace "os.environ.get('TIX_LIBRARY')" "os.environ.get('TIX_LIBRARY') or '${tix}/lib'"
+    substituteInPlace lib_pypy/pypy_tools/build_cffi_imports.py \
+      --replace "multiprocessing.cpu_count()" "$NIX_BUILD_CORES"
 
-    sed -i "s@libraries=\['sqlite3'\]\$@libraries=['sqlite3'], include_dirs=['${sqlite.dev}/include'], library_dirs=['${sqlite.out}/lib']@" lib_pypy/_sqlite3_build.py
+    substituteInPlace "lib-python/${if isPy3k then "3/tkinter/tix.py" else "2.7/lib-tk/Tix.py"}" --replace "os.environ.get('TIX_LIBRARY')" "os.environ.get('TIX_LIBRARY') or '${tix}/lib'"
   '';
 
   buildPhase = ''

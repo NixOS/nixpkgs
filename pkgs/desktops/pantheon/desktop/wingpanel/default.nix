@@ -13,6 +13,7 @@
 , granite
 , gettext
 , mutter
+, mesa
 , json-glib
 , python3
 , elementary-gtk-theme
@@ -55,6 +56,7 @@ stdenv.mkDerivation rec {
     json-glib
     libgee
     mutter
+    mesa # for libEGL
   ];
 
   patches = [

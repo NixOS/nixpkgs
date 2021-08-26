@@ -6,14 +6,14 @@
 }:
 
 buildPythonPackage rec {
-  pname = "ConfigArgParse";
-  version = "1.3";
+  pname = "configargparse";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "bw2";
-    repo = pname;
-    rev = version;
-    sha256 = "147x781lgahn9r3gbhayhx1pf0iysf7q1hnr3kypy3p2k9v7a9mh";
+    repo = "ConfigArgParse";
+    rev = "v${version}";
+    sha256 = "sha256-hzhjrdrXxjksvbHlTnQVsT350g0yuG1F21fElv6bLSA=";
   };
 
   checkInputs = [

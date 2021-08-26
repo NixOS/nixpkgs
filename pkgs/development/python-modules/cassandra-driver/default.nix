@@ -1,7 +1,11 @@
-{ stdenv, lib, buildPythonPackage, fetchFromGitHub, python, pythonOlder
+{ stdenv
+, lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
 , cython
 , eventlet
-, futures
+, futures ? null
 , iana-etc
 , geomet
 , libev
@@ -21,15 +25,19 @@
 
 buildPythonPackage rec {
   pname = "cassandra-driver";
-  version = "3.24.0";
+  version = "3.25.0";
 
   # pypi tarball doesn't include tests
   src = fetchFromGitHub {
     owner = "datastax";
     repo = "python-driver";
     rev = version;
-    sha256 = "1rr69hly5q810xpn8rkzxwzlq55wxxp7kwki9vfri3gh674d2wip";
+    sha256 = "1dn7iiavsrhh6i9hcyw0mk8j95r5ym0gbrvdca998hx2rnz5ark6";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py --replace 'geomet>=0.1,<0.3' 'geomet'
+  '';
 
   nativeBuildInputs = [ cython ];
   buildInputs = [ libev ];
@@ -66,14 +74,18 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [
     "tests/unit"
+  ];
+  disabledTestPaths = [
     # requires puresasl
-    "--ignore=tests/unit/advanced/test_auth.py"
+    "tests/unit/advanced/test_auth.py"
   ];
   disabledTests = [
     # doesn't seem to be intended to be run directly
     "_PoolTests"
     # attempts to make connection to localhost
     "test_connection_initialization"
+    # time-sensitive
+    "test_nts_token_performance"
   ];
 
   meta = with lib; {

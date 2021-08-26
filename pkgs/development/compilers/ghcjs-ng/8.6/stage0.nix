@@ -108,7 +108,7 @@
         base binary bytestring containers ghc-prim ghci-ghcjs
         template-haskell-ghcjs
       ];
-      homepage = "http://github.com/ghcjs";
+      homepage = "https://github.com/ghcjs";
       license = lib.licenses.mit;
     }) {};
 

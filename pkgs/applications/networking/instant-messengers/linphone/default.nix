@@ -10,7 +10,7 @@
 , cyrus_sasl
 , fetchFromGitLab
 , fetchurl
-, ffmpeg_3
+, ffmpeg
 , gdk-pixbuf
 , glib
 , gnused
@@ -37,7 +37,6 @@
 , ortp
 , pango
 , pkg-config
-, python
 , qtbase
 , qtgraphicaleffects
 , qtquickcontrols2
@@ -87,7 +86,7 @@ mkDerivation rec {
     bzrtp
     cairo
     cyrus_sasl
-    ffmpeg_3
+    ffmpeg
     gdk-pixbuf
     glib
     gtk2

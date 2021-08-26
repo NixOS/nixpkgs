@@ -103,16 +103,16 @@ index cbea191..03080da 100644
  	if(connect(s, (struct sockaddr*)&addr, sizeof addr) == -1) {
  		close(s);
 diff --git a/src/spnavd.h b/src/spnavd.h
-index fa0a916..deea4e0 100644
+index fa0a916..2d1c48b 100644
 --- a/src/spnavd.h
 +++ b/src/spnavd.h
-@@ -26,7 +26,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+@@ -26,8 +26,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  #define DEF_CFGFILE		"/etc/spnavrc"
  #define DEF_LOGFILE		"/var/log/spnavd.log"
  
 -#define SOCK_NAME	"/var/run/spnav.sock"
-+#define DEFAULT_SOCK_NAME	"/run/spnav.sock"
-+#define SOCK_NAME_ENV	"SPNAVD_SOCK_LOCATION"
  #define PIDFILE		"/var/run/spnavd.pid"
++#define DEFAULT_SOCK_NAME	"/run/spnav.sock"
  #define SYSLOG_ID	"spnavd"
  
+ /* Multiple devices support */

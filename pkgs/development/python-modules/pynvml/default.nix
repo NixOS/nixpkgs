@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "pynvml";
-  version = "8.0.4";
+  version = "11.0.0";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0pfykj1amqh1rixp90rg85v1nj6qmx89fahqr6ii4zlcckffmm68";
+    sha256 = "sha256-1fxKItNVtAw0HWugqoiKLU0iUxd9JDkA+EAbfmyssbs=";
   };
 
   propagatedBuildInputs = [ cudatoolkit ];

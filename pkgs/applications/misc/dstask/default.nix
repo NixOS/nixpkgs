@@ -36,7 +36,7 @@ buildGoModule rec {
     description = "Command line todo list with super-reliable git sync";
     homepage = src.meta.homepage;
     license = licenses.mit;
-    maintainers = with maintainers; [ stianlagstad foxit64 ];
+    maintainers = with maintainers; [ stianlagstad ];
     platforms = platforms.linux;
   };
 }

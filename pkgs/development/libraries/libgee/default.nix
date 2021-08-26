@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchurl, autoconf, vala, pkg-config, glib, gobject-introspection, gnome3 }:
+{ lib, stdenv, fetchurl, autoconf, vala, pkg-config, glib, gobject-introspection, gnome }:
 
 stdenv.mkDerivation rec {
   pname = "libgee";
-  version = "0.20.3";
+  version = "0.20.4";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1pm525wm11dhwz24m8bpcln9547lmrigl6cxf3qsbg4cr3pyvdfh";
+    sha256 = "03nyf8n7i7f67fsh220g52slmihdk1lv4iwspm7xmkgrj3rink2j";
   };
 
   doCheck = true;
@@ -20,8 +20,9 @@ stdenv.mkDerivation rec {
   PKG_CONFIG_GOBJECT_INTROSPECTION_1_0_TYPELIBDIR = "${placeholder "out"}/lib/girepository-1.0";
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
     };
   };
 

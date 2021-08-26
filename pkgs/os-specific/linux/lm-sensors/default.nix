@@ -20,16 +20,21 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
-    "ETCDIR=${placeholder "out"}/etc"
     "CC=${stdenv.cc.targetPrefix}cc"
     "AR=${stdenv.cc.targetPrefix}ar"
   ] ++ lib.optional sensord "PROG_EXTRA=sensord";
+
+  installFlags = [
+    "ETCDIR=${placeholder "out"}/etc"
+  ];
 
   meta = with lib; {
     homepage = "https://hwmon.wiki.kernel.org/lm_sensors";
     changelog = "https://raw.githubusercontent.com/lm-sensors/lm-sensors/V${dashedVersion}/CHANGES";
     description = "Tools for reading hardware sensors";
     license = with licenses; [ lgpl21Plus gpl2Plus ];
+    maintainers = with maintainers; [ pengmeiyu ];
     platforms = platforms.linux;
+    mainProgram = "sensors";
   };
 }

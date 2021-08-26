@@ -1,14 +1,13 @@
-{ callPackage, openssl, python3, lib, stdenv, enableNpm ? true }:
+{ callPackage, python3, lib, stdenv, enableNpm ? true }:
 
 let
   buildNodejs = callPackage ./nodejs.nix {
-    inherit openssl;
     python = python3;
   };
 in
   buildNodejs {
     inherit enableNpm;
-    version = "14.16.0";
-    sha256 = "19nz2mhmn6ikahxqyna1dn25pb5v3z9vsz9zb2flb6zp2yk4hxjf";
+    version = "14.17.5";
+    sha256 = "1a0zj505nhpfcj19qvjy2hvc5a7gadykv51y0rc6032qhzzsgca2";
     patches = lib.optional stdenv.isDarwin ./bypass-xcodebuild.diff;
   }

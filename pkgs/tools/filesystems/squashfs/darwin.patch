@@ -8,9 +8,9 @@ diff --git a/squashfs-tools/action.c b/squashfs-tools/action.c
 index 4b06ccb..3cad2ab 100644
 --- a/squashfs-tools/action.c
 +++ b/squashfs-tools/action.c
-@@ -38,6 +38,10 @@
- #include <limits.h>
+@@ -39,6 +39,10 @@
  #include <errno.h>
+ #include <ctype.h>
  
 +#ifndef FNM_EXTMATCH /* glibc extension */
 +	#define FNM_EXTMATCH 0
@@ -19,7 +19,7 @@ index 4b06ccb..3cad2ab 100644
  #include "squashfs_fs.h"
  #include "mksquashfs.h"
  #include "action.h"
-@@ -2284,9 +2288,12 @@ static char *get_start(char *s, int n)
+@@ -2414,9 +2418,12 @@ static char *get_start(char *s, int n)
  
  static int subpathname_fn(struct atom *atom, struct action_data *action_data)
  {
@@ -27,7 +27,7 @@ index 4b06ccb..3cad2ab 100644
 +	char *path = strdup(action_data->subpath);
 +	int is_match = fnmatch(atom->argv[0], get_start(path,
  		count_components(atom->argv[0])),
- 		FNM_PATHNAME|FNM_PERIOD|FNM_EXTMATCH) == 0;
+ 		FNM_PATHNAME|FNM_EXTMATCH) == 0;
 +	free(path);
 +	return is_match;
  }
@@ -116,8 +116,8 @@ index a45b77f..3607448 100644
 +#endif
  
  #ifndef linux
- #define __BYTE_ORDER BYTE_ORDER
-@@ -4348,6 +4356,7 @@ void initialise_threads(int readq, int fragq, int bwriteq, int fwriteq,
+ #include <sys/sysctl.h>
+@@ -5022,6 +5030,7 @@ static void initialise_threads(int readq, int fragq, int bwriteq, int fwriteq,
  	sigemptyset(&sigmask);
  	sigaddset(&sigmask, SIGQUIT);
  	sigaddset(&sigmask, SIGHUP);
@@ -125,7 +125,7 @@ index a45b77f..3607448 100644
  	if(pthread_sigmask(SIG_BLOCK, &sigmask, NULL) != 0)
  		BAD_ERROR("Failed to set signal mask in intialise_threads\n");
  
-@@ -5195,6 +5204,35 @@ int get_physical_memory()
+@@ -5760,6 +5769,35 @@ static int get_physical_memory()
  	long long page_size = sysconf(_SC_PAGESIZE);
  	int phys_mem;
  
@@ -161,7 +161,7 @@ index a45b77f..3607448 100644
  	if(num_pages == -1 || page_size == -1) {
  		struct sysinfo sys;
  		int res = sysinfo(&sys);
-@@ -5207,6 +5245,7 @@ int get_physical_memory()
+@@ -5772,6 +5810,7 @@ static int get_physical_memory()
  	}
  
  	phys_mem = num_pages * page_size >> 20;
@@ -173,9 +173,9 @@ diff --git a/squashfs-tools/read_xattrs.c b/squashfs-tools/read_xattrs.c
 index 4debedf..3257c30 100644
 --- a/squashfs-tools/read_xattrs.c
 +++ b/squashfs-tools/read_xattrs.c
-@@ -39,13 +39,13 @@
- #include <endian.h>
- #endif
+@@ -31,13 +31,13 @@
+ #include <stdio.h>
+ #include <string.h>
  
 +#include <stdlib.h>
 +
@@ -206,7 +206,7 @@ index 727f1d5..c1a6183 100644
  #include <sys/types.h>
  #include <sys/time.h>
  #include <sys/resource.h>
-@@ -1080,7 +1084,7 @@ int create_inode(char *pathname, struct inode *i)
+@@ -1175,7 +1179,7 @@ int create_inode(char *pathname, struct inode *i)
  			break;
  		case SQUASHFS_SYMLINK_TYPE:
  		case SQUASHFS_LSYMLINK_TYPE: {
@@ -215,7 +215,7 @@ index 727f1d5..c1a6183 100644
  				{ i->time, 0 },
  				{ i->time, 0 }
  			};
-@@ -1099,8 +1103,7 @@ int create_inode(char *pathname, struct inode *i)
+@@ -1194,8 +1198,7 @@ int create_inode(char *pathname, struct inode *i)
  				goto failed;
  			}
  
@@ -223,16 +223,16 @@ index 727f1d5..c1a6183 100644
 -					AT_SYMLINK_NOFOLLOW);
 +			res = lutimes(pathname, times);
  			if(res == -1) {
- 				EXIT_UNSQUASH_STRICT("create_inode: failed to set time on "
- 					"%s, because %s\n", pathname,
-@@ -2235,6 +2238,7 @@ void initialise_threads(int fragment_buffer_size, int data_buffer_size)
- 	sigemptyset(&sigmask);
- 	sigaddset(&sigmask, SIGQUIT);
- 	sigaddset(&sigmask, SIGHUP);
-+	sigaddset(&sigmask, SIGALRM);
- 	if(pthread_sigmask(SIG_BLOCK, &sigmask, NULL) != 0)
- 		EXIT_UNSQUASH("Failed to set signal mask in initialise_threads"
- 			"\n");
+ 				EXIT_UNSQUASH_STRICT("create_inode: failed to"
+ 					" set time on %s, because %s\n",
+@@ -2683,6 +2686,7 @@ void initialise_threads(int fragment_buffer_size, int data_buffer_size, int cat_
+ 		sigemptyset(&sigmask);
+ 		sigaddset(&sigmask, SIGQUIT);
+ 		sigaddset(&sigmask, SIGHUP);
++		sigaddset(&sigmask, SIGALRM);
+ 		if(pthread_sigmask(SIG_BLOCK, &sigmask, NULL) != 0)
+ 			EXIT_UNSQUASH("Failed to set signal mask in initialise_threads\n");
+ 
 diff --git a/squashfs-tools/unsquashfs.h b/squashfs-tools/unsquashfs.h
 index 934618b..0e680ab 100644
 --- a/squashfs-tools/unsquashfs.h
@@ -245,14 +245,14 @@ index 934618b..0e680ab 100644
 +	#define FNM_EXTMATCH 0
 +#endif
 +
- #ifndef linux
- #define __BYTE_ORDER BYTE_ORDER
- #define __BIG_ENDIAN BIG_ENDIAN
+ #include "endian_compat.h"
+ #include "squashfs_fs.h"
+ #include "unsquashfs_error.h"
 diff --git a/squashfs-tools/unsquashfs_info.c b/squashfs-tools/unsquashfs_info.c
 index c8e2b9b..7d4f7af 100644
 --- a/squashfs-tools/unsquashfs_info.c
 +++ b/squashfs-tools/unsquashfs_info.c
-@@ -97,31 +97,22 @@ void dump_state()
+@@ -96,31 +96,22 @@ void dump_state()
  void *info_thrd(void *arg)
  {
  	sigset_t sigmask;
@@ -289,7 +289,7 @@ index c8e2b9b..7d4f7af 100644
  					"because %s\n", strerror(errno));
  			}
  		}
-@@ -133,8 +124,12 @@ void *info_thrd(void *arg)
+@@ -132,8 +123,12 @@ void *info_thrd(void *arg)
  			/* set one second interval period, if ^\ received
  			   within then, dump queue and cache status */
  			waiting = 1;

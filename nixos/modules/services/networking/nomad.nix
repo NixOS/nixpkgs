@@ -119,7 +119,7 @@ in
       path = cfg.extraPackages ++ (with pkgs; [
         # Client mode requires at least the following:
         coreutils
-        iproute
+        iproute2
         iptables
       ]);
 

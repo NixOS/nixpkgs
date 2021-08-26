@@ -1,6 +1,6 @@
 { lib, stdenv, fetchPypi, buildPythonPackage, pythonOlder, isPy3k
 , pyperclip, six, pyparsing, vim, wcwidth, colorama, attrs
-, contextlib2 ? null, typing ? null, setuptools_scm
+, contextlib2 ? null, typing ? null, setuptools-scm
 , pytest, mock ? null, pytest-mock
 , which, glibcLocales
 }:
@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   LC_ALL="en_US.UTF-8";
 
-  postPatch = lib.optional stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.isDarwin ''
     # Fake the impure dependencies pbpaste and pbcopy
     mkdir bin
     echo '#!${stdenv.shell}' > bin/pbpaste
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   disabled = !isPy3k;
 
   buildInputs = [
-    setuptools_scm
+    setuptools-scm
   ];
 
   propagatedBuildInputs = [

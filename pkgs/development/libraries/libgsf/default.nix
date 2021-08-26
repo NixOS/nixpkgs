@@ -1,5 +1,5 @@
 { fetchurl, lib, stdenv, pkg-config, intltool, gettext, glib, libxml2, zlib, bzip2
-, perl, gdk-pixbuf, libiconv, libintl, gnome3 }:
+, perl, gdk-pixbuf, libiconv, libintl, gnome }:
 
 stdenv.mkDerivation rec {
   pname = "libgsf";
@@ -23,8 +23,9 @@ stdenv.mkDerivation rec {
   preCheck = "patchShebangs ./tests/";
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
     };
   };
 

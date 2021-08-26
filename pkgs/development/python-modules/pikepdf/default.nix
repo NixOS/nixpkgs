@@ -17,18 +17,19 @@
 , python-dateutil
 , python-xmp-toolkit
 , qpdf
+, setuptools
 , setuptools-scm
 , setuptools-scm-git-archive
 }:
 
 buildPythonPackage rec {
   pname = "pikepdf";
-  version = "2.8.0";
+  version = "2.16.1";
   disabled = ! isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "74ff96fddd21cd4c0830eb549137ea9eccbdbff8cef4f684322b9afb8e42ccb5";
+    sha256 = "sha256-4k3/avMfHrcy/LXbRniDXR8xJkOZb9zZ2+uKylK8Dd4=";
   };
 
   buildInputs = [
@@ -58,6 +59,7 @@ buildPythonPackage rec {
     defusedxml
     lxml
     pillow
+    setuptools
   ];
 
   preBuild = ''
@@ -71,5 +73,6 @@ buildPythonPackage rec {
     description = "Read and write PDFs with Python, powered by qpdf";
     license = licenses.mpl20;
     maintainers = [ maintainers.kiwi ];
+    changelog = "https://github.com/pikepdf/pikepdf/blob/${version}/docs/release_notes.rst";
   };
 }

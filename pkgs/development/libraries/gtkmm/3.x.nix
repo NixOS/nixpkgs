@@ -1,30 +1,29 @@
-{ lib, stdenv, fetchurl, pkg-config, gtk3, glibmm, cairomm, pangomm, atkmm, epoxy, gnome3 }:
+{ lib, stdenv, fetchurl, pkg-config, meson, ninja, python3, gtk3, glibmm, cairomm, pangomm, atkmm, epoxy, gnome }:
 
 stdenv.mkDerivation rec {
   pname = "gtkmm";
-  version = "3.24.2";
+  version = "3.24.5";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1hxdnhavjyvbcpxhd5z17l9fj4182028s66lc0s16qqqrldhjwbd";
+    sha256 = "1ri2msp3cmzi6r65ghwb8gfavfaxv0axpwi3q60nm7v8hvg36qw5";
   };
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config meson ninja python3 ];
   buildInputs = [ epoxy ];
 
   propagatedBuildInputs = [ glibmm gtk3 atkmm cairomm pangomm ];
-
-  enableParallelBuilding = true;
 
   # https://bugzilla.gnome.org/show_bug.cgi?id=764521
   doCheck = false;
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       attrPath = "${pname}3";
+      versionPolicy = "odd-unstable";
     };
   };
 
@@ -45,7 +44,7 @@ stdenv.mkDerivation rec {
 
     license = licenses.lgpl2Plus;
 
-    maintainers = with maintainers; [ raskin vcunat ];
+    maintainers = with maintainers; [ raskin ];
     platforms = platforms.unix;
   };
 }

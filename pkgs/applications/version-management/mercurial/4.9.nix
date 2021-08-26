@@ -1,27 +1,25 @@
-{ lib, stdenv, fetchurl, python2Packages, makeWrapper, unzip
+{ lib, stdenv, fetchurl, python2Packages, makeWrapper
 , guiSupport ? false, tk ? null
 , ApplicationServices
-, mercurialSrc ? fetchurl rec {
-    meta.name = "mercurial-${meta.version}";
-    meta.version = "4.9.1";
-    url = "https://mercurial-scm.org/release/${meta.name}.tar.gz";
-    sha256 = "0iybbkd9add066729zg01kwz5hhc1s6lhp9rrnsmzq6ihyxj3p8v";
-  }
 }:
 
 let
   inherit (python2Packages) docutils hg-git dulwich python;
 
-in python2Packages.buildPythonApplication {
+in python2Packages.buildPythonApplication rec {
+  pname = "mercurial";
+  version = "4.9.1";
 
-  inherit (mercurialSrc.meta) name version;
-  src = mercurialSrc;
+  src = fetchurl {
+    url = "https://mercurial-scm.org/release/mercurial-${version}.tar.gz";
+    sha256 = "0iybbkd9add066729zg01kwz5hhc1s6lhp9rrnsmzq6ihyxj3p8v";
+  };
 
   format = "other";
 
   inherit python; # pass it so that the same version can be used in hg2git
 
-  nativeBuildInputs = [ makeWrapper unzip ];
+  nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ docutils ]
     ++ lib.optionals stdenv.isDarwin [ ApplicationServices ];
 
@@ -59,7 +57,6 @@ in python2Packages.buildPythonApplication {
     '';
 
   meta = {
-    inherit (mercurialSrc.meta) version;
     description = "A fast, lightweight SCM system for very large distributed projects";
     homepage = "https://www.mercurial-scm.org";
     downloadPage = "https://www.mercurial-scm.org/release/";
@@ -69,4 +66,3 @@ in python2Packages.buildPythonApplication {
     platforms = lib.platforms.unix;
   };
 }
-

@@ -16,7 +16,7 @@ let
     inherit src version;
     pname = "portmod-rust";
 
-    cargoSha256 = "14p1aywwbkf2pk85sir5g9ni08zam2hid0kaz111718b006nrxh7";
+    cargoHash = "sha256-7Ce+EIbZuOur7iGOUXNWiXReuZO54LQJu+sJPw1CJGg=";
 
     nativeBuildInputs = [ python3Packages.python ];
 
@@ -48,7 +48,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   propagatedBuildInputs = with python3Packages; [
-    setuptools_scm
+    setuptools-scm
     setuptools
     requests
     chardet

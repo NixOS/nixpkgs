@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "liquidprompt";
-  version = "2.0.2";
+  version = "2.0.3";
 
   src = fetchFromGitHub {
     owner = "nojhan";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-FXBClOkGRUey/FnLw3g3uiHUJeNiB4tXqP4Na6CuwIM=";
+    sha256 = "sha256-BY0/lcBxcfIgKXbXZjiEgVdugmo8vD6UWGsjEVq6j6E=";
   };
 
   installPhase = ''

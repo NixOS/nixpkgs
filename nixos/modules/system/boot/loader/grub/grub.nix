@@ -75,7 +75,7 @@ let
              else "${convertedFont}");
     });
 
-  bootDeviceCounters = fold (device: attr: attr // { ${device} = (attr.${device} or 0) + 1; }) {}
+  bootDeviceCounters = foldr (device: attr: attr // { ${device} = (attr.${device} or 0) + 1; }) {}
     (concatMap (args: args.devices) cfg.mirroredBoots);
 
   convertedFont = (pkgs.runCommand "grub-font-converted.pf2" {}
@@ -553,6 +553,8 @@ in
         apply = toString;
         description = ''
           Index of the default menu item to be booted.
+          Can also be set to "saved", which will make GRUB select
+          the menu item that was used at the last boot.
         '';
       };
 
@@ -728,13 +730,17 @@ in
             utillinux = pkgs.util-linux;
             btrfsprogs = pkgs.btrfs-progs;
           };
+          perl = pkgs.perl.withPackages (p: with p; [
+            FileSlurp FileCopyRecursive
+            XMLLibXML XMLSAX XMLSAXBase
+            ListCompare JSON
+          ]);
         in pkgs.writeScript "install-grub.sh" (''
         #!${pkgs.runtimeShell}
         set -e
-        export PERL5LIB=${with pkgs.perlPackages; makePerlPath [ FileSlurp FileCopyRecursive XMLLibXML XMLSAX XMLSAXBase ListCompare JSON ]}
         ${optionalString cfg.enableCryptodisk "export GRUB_ENABLE_CRYPTODISK=y"}
       '' + flip concatMapStrings cfg.mirroredBoots (args: ''
-        ${pkgs.perl}/bin/perl ${install-grub-pl} ${grubConfig args} $@
+        ${perl}/bin/perl ${install-grub-pl} ${grubConfig args} $@
       '') + cfg.extraInstallCommands);
 
       system.build.grub = grub;

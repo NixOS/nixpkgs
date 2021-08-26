@@ -2,6 +2,7 @@
 { name ? "${attrs.pname}-${attrs.version}"
 , namespace
 , version
+, extraNativeBuildInputs ? []
 , extraBuildInputs ? []
 , extraRuntimeDependencies ? []
 , extraInstallPhase ? "", ... } @ attrs:
@@ -10,7 +11,7 @@ toKodiAddon (stdenv.mkDerivation ({
 
   dontStrip = true;
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake ] ++ extraNativeBuildInputs;
   buildInputs = [ kodi kodi-platform libcec_platform ] ++ extraBuildInputs;
 
   inherit extraRuntimeDependencies;

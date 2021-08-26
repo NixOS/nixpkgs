@@ -1,17 +1,36 @@
-{ lib, fetchFromGitHub, pythonPackages }:
+{ lib
+, fetchFromGitHub
+, python3Packages
+, prometheus-alertmanager
+}:
 
-pythonPackages.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "prometheus-xmpp-alerts";
-  version = "0.4.2";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "jelmer";
     repo = pname;
-    rev = version;
-    sha256 = "17aq6v4ahnga82r350kx1y8i7zgikpzmwzaacj7a339kh8hxkh63";
+    rev = "v${version}";
+    sha256 = "0qmmmlcanbrhyyxi32gy3gibgvj7jdjwpa8cf5ci9czvbyxg4rld";
   };
 
-  propagatedBuildInputs = with pythonPackages; [ slixmpp prometheus_client pyyaml ];
+  propagatedBuildInputs = [
+    prometheus-alertmanager
+  ] ++ (with python3Packages; [
+    aiohttp
+    slixmpp
+    prometheus-client
+    pyyaml
+  ]);
+
+  checkInputs = with python3Packages; [
+    pytz
+  ];
+
+  checkPhase = ''
+    ${python3Packages.python.interpreter} -m unittest discover
+  '';
 
   meta = {
     description = "XMPP Web hook for Prometheus";

@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, unixODBC, cmake, postgresql, mysql, sqlite, zlib, libxml2, dpkg, lib, openssl, kerberos, libuuid, patchelf, libiconv, fetchFromGitHub }:
+{ fetchurl, stdenv, unixODBC, cmake, postgresql, mariadb, sqlite, zlib, libxml2, dpkg, lib, openssl, libkrb5, libuuid, patchelf, libiconv, fetchFromGitHub }:
 
 # I haven't done any parameter tweaking.. So the defaults provided here might be bad
 
@@ -79,7 +79,7 @@
     };
 
     nativeBuildInputs = [ cmake ];
-    buildInputs = [ unixODBC mysql ];
+    buildInputs = [ unixODBC mariadb ];
 
     cmakeFlags = [ "-DWITH_UNIXODBC=1" ];
 
@@ -157,7 +157,7 @@
     '';
 
     postFixup = ''
-      patchelf --set-rpath ${lib.makeLibraryPath [ unixODBC openssl.out kerberos libuuid stdenv.cc.cc ]} \
+      patchelf --set-rpath ${lib.makeLibraryPath [ unixODBC openssl.out libkrb5 libuuid stdenv.cc.cc ]} \
         $out/lib/libmsodbcsql-${versionMajor}.${versionMinor}.so.${versionAdditional}
     '';
 

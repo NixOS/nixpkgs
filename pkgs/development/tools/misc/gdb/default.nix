@@ -26,11 +26,11 @@ assert pythonSupport -> python3 != null;
 
 stdenv.mkDerivation rec {
   pname = targetPrefix + basename;
-  version = "10.1";
+  version = "10.2";
 
   src = fetchurl {
     url = "mirror://gnu/gdb/${basename}-${version}.tar.xz";
-    sha256 = "1h32dckz1y8fnyxh22iyw8h3hnhxr79v1ng85px3ljn1xv71wbzq";
+    sha256 = "0aag1c0fw875pvhjg1qp7x8pf6gf92bjv5gcic5716scacyj58da";
   };
 
   postPatch = if stdenv.isDarwin then ''
@@ -61,8 +61,7 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-Wno-format-nonliteral";
 
-  # TODO(@Ericson2314): Always pass "--target" and always prefix.
-  configurePlatforms = [ "build" "host" ] ++ lib.optional (stdenv.targetPlatform != stdenv.hostPlatform) "target";
+  configurePlatforms = [ "build" "host" "target" ];
 
   # GDB have to be built out of tree.
   preConfigure = ''
@@ -72,6 +71,13 @@ stdenv.mkDerivation rec {
   configureScript = "../configure";
 
   configureFlags = with lib; [
+    # Set the program prefix to the current targetPrefix.
+    # This ensures that the prefix always conforms to
+    # nixpkgs' expectations instead of relying on the build
+    # system which only receives `config` which is merely a
+    # subset of the platform description.
+    "--program-prefix=${targetPrefix}"
+
     "--enable-targets=all" "--enable-64-bit-bfd"
     "--disable-install-libbfd"
     "--disable-shared" "--enable-static"

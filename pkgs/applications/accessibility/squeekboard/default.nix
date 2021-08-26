@@ -4,7 +4,7 @@
 , meson
 , ninja
 , pkg-config
-, gnome3
+, gnome
 , glib
 , gtk3
 , wayland
@@ -18,14 +18,14 @@
 
 stdenv.mkDerivation rec {
   pname = "squeekboard";
-  version = "unstable-2021-03-09";
+  version = "1.14.0";
 
   src = fetchFromGitLab {
     domain = "source.puri.sm";
     owner = "Librem5";
     repo = pname;
-    rev = "bffd212e102bf71a94c599aac0359a8d30d19008";
-    sha256 = "1j10zhyb8wyrcbryfj6f3drn9b0l9x0l7hnhy2imnjbfbnwwm4w7";
+    rev = "v${version}";
+    sha256 = "1ayap40pgzcpmfydk5pbf3gwhh26m3cmbk6lyly4jihr9qw7dgb0";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
       cat Cargo.toml.in Cargo.deps > Cargo.toml
     '';
     name = "${pname}-${version}";
-    sha256 = "1qaqiaxqc4x2x5bd31na4c49vbjwrmz5clmgli7733dv55rxxias";
+    sha256 = "0148ynzmapxfrlccikf20ikmi0ssbkn9fl5wi6nh6azflv50pzzn";
   };
 
   nativeBuildInputs = [
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gtk3
-    gnome3.gnome-desktop
+    gnome.gnome-desktop
     wayland
     wayland-protocols
     libxml2

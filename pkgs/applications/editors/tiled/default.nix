@@ -3,19 +3,17 @@
 
 mkDerivation rec {
   pname = "tiled";
-  version = "1.5.0";
+  version = "1.7.2";
 
   src = fetchFromGitHub {
     owner = "bjorn";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Pf9nA5DUAJ+PPNG+oP7RO4/TD8fy4ADsyq625a6cbFk=";
+    sha256 = "sha256-yQWe27zLWOnRQk+MEpuWs8CFP/le3PQ+yziB0ikNang=";
   };
 
   nativeBuildInputs = [ pkg-config qmake ];
   buildInputs = [ python qtbase qttools ];
-
-  enableParallelBuilding = true;
 
   meta = with lib; {
     description = "Free, easy to use and flexible tile map editor";

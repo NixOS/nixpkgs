@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rust-cbindgen";
-  version = "0.17.0";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "eqrion";
     repo = "cbindgen";
     rev = "v${version}";
-    sha256 = "1w9gf6fl1ncm2zlh0p29lislfsd35zd1mhns2mrxl2n734zavaqf";
+    sha256 = "0753dklr5lm1dmk6hy5khh8k3xyr5srfsq11l07685h71j7z0r00";
   };
 
-  cargoSha256 = "12jw1m842gzy0ma4drgmwk1jac663vysllfpl9cglr039j1sfsx2";
+  cargoSha256 = "0qyw0iqin7i31kk23ddsmywk7z0xxpd5n4q6dr6mf44y35a8krm8";
 
   buildInputs = lib.optional stdenv.isDarwin Security;
 

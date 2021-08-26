@@ -1,17 +1,17 @@
 { lib, stdenv, fetchurl, makeDesktopItem, wrapGAppsHook
-, atk, at-spi2-atk, at-spi2-core, alsaLib, cairo, cups, dbus, expat, gdk-pixbuf, glib, gtk3
+, atk, at-spi2-atk, at-spi2-core, alsa-lib, cairo, cups, dbus, expat, gdk-pixbuf, glib, gtk3
 , freetype, fontconfig, nss, nspr, pango, udev, libuuid, libX11, libxcb, libXi
 , libXcursor, libXdamage, libXrandr, libXcomposite, libXext, libXfixes
-, libXrender, libXtst, libXScrnSaver
+, libXrender, libXtst, libXScrnSaver, libxkbcommon, libdrm, mesa
 }:
 
 stdenv.mkDerivation rec {
   pname = "postman";
-  version = "7.36.1";
+  version = "8.10.0";
 
   src = fetchurl {
     url = "https://dl.pstmn.io/download/version/${version}/linux64";
-    sha256 = "sha256-6brThKTAQI3cu3SSqvEIT1nwlQ/jPTP+d/Q/m/Ez5nQ=";
+    sha256 = "05f3eaa229483a7e1f698e6e2ea2031d37687de540d4fad05ce677ac216db24d";
     name = "${pname}.tar.gz";
   };
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     atk
     at-spi2-atk
     at-spi2-core
-    alsaLib
+    alsa-lib
     cairo
     cups
     dbus
@@ -43,10 +43,12 @@ stdenv.mkDerivation rec {
     gtk3
     freetype
     fontconfig
+    mesa
     nss
     nspr
     pango
     udev
+    libdrm
     libuuid
     libX11
     libxcb
@@ -60,6 +62,7 @@ stdenv.mkDerivation rec {
     libXrender
     libXtst
     libXScrnSaver
+    libxkbcommon
   ];
 
   nativeBuildInputs = [ wrapGAppsHook ];

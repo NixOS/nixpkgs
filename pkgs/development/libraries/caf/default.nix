@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "actor-framework";
-  version = "0.18.0";
+  version = "0.18.5";
 
   src = fetchFromGitHub {
     owner = "actor-framework";
     repo = "actor-framework";
     rev = version;
-    sha256 = "1c3spd6vm1h9qhlk5c4fdwi6nbqx5vwz2zvv6qp0rj1hx6xpq3cx";
+    sha256 = "04b4kjisb5wzq6pilh8xzbxn7qcjgppl8k65hfv0zi0ja8fyp1xk";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
     homepage = "http://actor-framework.org/";
     license = licenses.bsd3;
     platforms = platforms.unix;
+    changelog = "https://github.com/actor-framework/actor-framework/raw/${version}/CHANGELOG.md";
     maintainers = with maintainers; [ bobakker tobim ];
   };
 }

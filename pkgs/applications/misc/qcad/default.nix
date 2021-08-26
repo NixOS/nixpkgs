@@ -10,18 +10,20 @@
 , qtsvg
 , qtxmlpatterns
 , qttools
-, lib, stdenv
+, lib
+, stdenv
+, installShellFiles
 }:
 
 mkDerivationWith stdenv.mkDerivation rec {
   pname = "qcad";
-  version = "3.26.0.1";
+  version = "3.26.1.0";
 
   src = fetchFromGitHub {
     owner = "qcad";
     repo = "qcad";
     rev = "v${version}";
-    sha256 = "sha256-V+QlwM8BWmcarwZtqJfc+MYHOZgIH1W5R8m2EHhNJls=";
+    sha256 = "sha256-OWAc7g8DiJR3z6dUF5D0Yo3wnRKd1Xe7D1eq15NRW5c=";
   };
 
   patches = [
@@ -36,7 +38,7 @@ mkDerivationWith stdenv.mkDerivation rec {
         src/3rdparty/qt-labs-qtscriptgenerator-5.14.0/qt-labs-qtscriptgenerator-5.14.0.pro \
         src/3rdparty/qt-labs-qtscriptgenerator-${qtbase.version}/qt-labs-qtscriptgenerator-${qtbase.version}.pro
     fi
- '';
+  '';
 
   qmakeFlags = [
     "MUPARSER_DIR=${muparser}"
@@ -65,15 +67,27 @@ mkDerivationWith stdenv.mkDerivation rec {
     cp -r scripts $out/lib
     cp -r plugins $out/lib/plugins
     cp -r patterns $out/lib/patterns
+    cp -r fonts $out/lib/fonts
+    cp -r libraries $out/lib/libraries
+    cp -r linetypes $out/lib/linetypes
+    cp -r ts $out/lib/ts
 
     # workaround to fix the library browser:
     rm -r $out/lib/plugins/sqldrivers
     ln -s -t $out/lib/plugins ${qtbase}/${qtbase.qtPluginPrefix}/sqldrivers
 
+    rm -r $out/lib/plugins/printsupport
+    ln -s -t $out/lib/plugins ${qtbase}/${qtbase.qtPluginPrefix}/printsupport
+
+    rm -r $out/lib/plugins/imageformats
+    ln -s -t $out/lib/plugins ${qtbase}/${qtbase.qtPluginPrefix}/imageformats
+
     install -Dm644 scripts/qcad_icon.svg $out/share/icons/hicolor/scalable/apps/qcad.svg
 
+    installManPage qcad.1
+
     runHook postInstall
-    '';
+  '';
 
   buildInputs = [
     boost
@@ -89,6 +103,7 @@ mkDerivationWith stdenv.mkDerivation rec {
     pkg-config
     qmake
     qttools
+    installShellFiles
   ];
 
   meta = with lib; {

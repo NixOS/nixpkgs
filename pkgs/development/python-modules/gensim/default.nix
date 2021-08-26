@@ -4,24 +4,24 @@
 , numpy
 , six
 , scipy
-, smart_open
-, scikitlearn, testfixtures, unittest2
+, smart-open
+, scikit-learn, testfixtures, unittest2
 , isPy3k
 }:
 
 buildPythonPackage rec {
   pname = "gensim";
-  version = "3.8.3";
+  version = "4.0.1";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0rx37vnjspjl45v7bj123xwsjfgbwv91v8zpqpli8lgpf42xnskq";
+    sha256 = "b4d0b9562796968684028e06635e0f7aff39ffb33719057fd1667754ea09a6e4";
   };
 
-  propagatedBuildInputs = [ smart_open numpy six scipy ];
+  propagatedBuildInputs = [ smart-open numpy six scipy ];
 
-  checkInputs = [ scikitlearn testfixtures unittest2 ];
+  checkInputs = [ scikit-learn testfixtures unittest2 ];
 
   # Two tests fail.
   #

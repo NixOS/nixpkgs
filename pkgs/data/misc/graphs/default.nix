@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "graphs";
-  version = "20161026";
+  version = "20210214";
 
   src = fetchurl {
     url = "mirror://sageupstream/${pname}/${pname}-${version}.tar.bz2";
-    sha256 = "0a2b5lly9nifphvknz88rrhfbbc8vqnlqcv19zdpfq8h8nnyjbb2";
+    sha256 = "sha256-ByN8DZhTYRUFw4n9e7klAMh0P1YxurtND0Xf2DMvN0E=";
   };
 
   installPhase = ''

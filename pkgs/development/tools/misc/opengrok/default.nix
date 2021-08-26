@@ -27,6 +27,6 @@ stdenv.mkDerivation rec {
     description = "Source code search and cross reference engine";
     homepage = "https://opengrok.github.io/OpenGrok/";
     license = licenses.cddl;
-    maintainers = [ maintainers.lethalman ];
+    maintainers = [ ];
   };
 }

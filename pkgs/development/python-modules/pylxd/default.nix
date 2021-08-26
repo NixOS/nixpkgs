@@ -1,24 +1,48 @@
-{ lib, buildPythonPackage, fetchPypi, pbr, dateutil, ws4py, requests-unixsocket, requests-toolbelt, mock }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, cryptography
+, python-dateutil
+, requests
+, requests-toolbelt
+, requests-unixsocket
+, ws4py
+, ddt
+, mock-services
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "pylxd";
   version = "2.3.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1db88l55q974fm9z5gllx3i8bkj0jzi25xrr5cs6id3bfy4zp8a7";
+  src = fetchFromGitHub {
+    owner = "lxc";
+    repo = "pylxd";
+    rev = version;
+    sha256 = "144frnlsb21mglgyisms790hyrdfx1l91lcd7incch4m4a1cbpp6";
   };
 
   propagatedBuildInputs = [
-    pbr
-    dateutil
-    ws4py
-    requests-unixsocket
+    cryptography
+    python-dateutil
+    requests
     requests-toolbelt
+    requests-unixsocket
+    ws4py
   ];
 
-  # tests require an old version of requests-mock that we do not have a package for
-  doCheck = false;
+  checkInputs = [
+    ddt
+    mock-services
+    pytestCheckHook
+  ];
+
+  disabledTestPaths = [
+    "integration"
+    "migration"
+  ];
+
   pythonImportsCheck = [ "pylxd" ];
 
   meta = with lib; {

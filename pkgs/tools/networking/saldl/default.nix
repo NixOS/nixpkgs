@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "saldl";
-  version = "40";
+  version = "41";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "19ajci5h5gdnrvwf0l7xy5s58z2di68rrvcmqpsmpp4lfr37rk2l";
+    sha256 = "sha256-PAX2MUyBWWU8kGkaeoCJteidgszh7ipwDJbrLXzVsn0=";
   };
 
   nativeBuildInputs = [

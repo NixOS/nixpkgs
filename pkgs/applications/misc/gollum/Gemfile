@@ -1,2 +1,8 @@
 source 'https://rubygems.org'
 gem 'gollum'
+
+gem 'asciidoctor'
+gem 'creole'
+gem 'wikicloth'
+gem 'org-ruby'
+gem 'RedCloth'

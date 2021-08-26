@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "11x8q45jvjvf2dvgclds64mscyg10lva33qinf2hwgc84v3svf1l";
   };
 
+  outputs = [ "out" "dev" "man" ];
+
   # darwin changes configure.ac which means we need to regenerate
   # the configure scripts
   nativeBuildInputs = [ autoreconfHook ];

@@ -4,27 +4,35 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "exa";
-  version = "unstable-2021-01-14";
-
-  cargoSha256 = "1lmjh0grpnx20y6raxnxgjkr92h395r6jk8mm2ypc4cxpxczdqvl";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "ogham";
     repo = pname;
-    rev = "13b91cced4cab012413b25c9d3e30c63548639d0";
-    sha256 = "18y4v1s102lh3gvgjwdd66qlsr75wpwpcj8zsk5y5r95a405dkfm";
+    rev = "v${version}";
+    sha256 = "sha256-vChsy/FrJEzTO5O+XFycPMP3jqOeea/hfsC0jJbqUVI=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config installShellFiles pandoc ];
+  # Cargo.lock is outdated
+  cargoPatches = [ ./update-cargo-lock.diff ];
+
+  cargoSha256 = "sha256-ah8IjShmivS6IWL3ku/4/j+WNr/LdUnh1YJnPdaFdcM=";
+
+  nativeBuildInputs = [
+    cmake pkg-config installShellFiles
+    # ghc is not supported on aarch64-darwin yet.
+  ] ++ lib.optional (stdenv.hostPlatform.system != "aarch64-darwin") pandoc;
+
   buildInputs = [ zlib ]
     ++ lib.optionals stdenv.isDarwin [ libiconv Security ];
 
-  outputs = [ "out" "man" ];
+  outputs = [ "out" ] ++ lib.optional (stdenv.hostPlatform.system != "aarch64-darwin") "man";
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.hostPlatform.system != "aarch64-darwin") ''
     pandoc --standalone -f markdown -t man man/exa.1.md > man/exa.1
     pandoc --standalone -f markdown -t man man/exa_colors.5.md > man/exa_colors.5
     installManPage man/exa.1 man/exa_colors.5
+  '' + ''
     installShellCompletion \
       --name exa completions/completions.bash \
       --name exa.fish completions/completions.fish \
@@ -44,8 +52,9 @@ rustPlatform.buildRustPackage rec {
       for a directory, or recursing into directories with a tree view. exa is
       written in Rust, so it’s small, fast, and portable.
     '';
+    changelog = "https://github.com/ogham/exa/releases/tag/v${version}";
     homepage = "https://the.exa.website";
     license = licenses.mit;
-    maintainers = with maintainers; [ ehegnes lilyball globin ];
+    maintainers = with maintainers; [ ehegnes lilyball globin fortuneteller2k ];
   };
 }

@@ -1,18 +1,24 @@
-{ lib, stdenv, fetchurl, cmake, makeWrapper, python
-, boost, lzma
+{ lib, stdenv, fetchurl, cmake, makeWrapper
+, boost, xz
 , withGog ? false, unar ? null }:
 
 stdenv.mkDerivation rec {
-  name = "innoextract-1.9";
+  pname = "innoextract";
+  version = "1.9";
 
   src = fetchurl {
-    url = "https://constexpr.org/innoextract/files/${name}.tar.gz";
+    url = "https://constexpr.org/innoextract/files/innoextract-${version}.tar.gz";
     sha256 = "09l1z1nbl6ijqqwszdwch9mqr54qb7df0wp2sd77v17dq6gsci33";
   };
 
-  buildInputs = [ python lzma boost ];
+  buildInputs = [ xz boost ];
+
+  # Python is reported as missing during the build, however
+  # including Python does not change the output.
 
   nativeBuildInputs = [ cmake makeWrapper ];
+
+  strictDeps = true;
 
   # we need unar to for multi-archive extraction
   postFixup = lib.optionalString withGog ''

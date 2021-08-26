@@ -30,9 +30,9 @@ with lib;
 
   config = mkIf config.programs.file-roller.enable {
 
-    environment.systemPackages = [ pkgs.gnome3.file-roller ];
+    environment.systemPackages = [ pkgs.gnome.file-roller ];
 
-    services.dbus.packages = [ pkgs.gnome3.file-roller ];
+    services.dbus.packages = [ pkgs.gnome.file-roller ];
 
   };
 

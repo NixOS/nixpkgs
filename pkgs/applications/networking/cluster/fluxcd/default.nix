@@ -1,11 +1,11 @@
 { lib, buildGoModule, fetchFromGitHub, fetchzip, installShellFiles }:
 
 let
-  version = "0.10.0";
+  version = "0.16.2";
 
   manifests = fetchzip {
     url = "https://github.com/fluxcd/flux2/releases/download/v${version}/manifests.tar.gz";
-    sha256 = "Der1Ud27eIV450KkxDTF2frmeKEHKsg6vJgdXE+3548=";
+    sha256 = "05khmpbv42wjpkdb4n51pnq678la6hjfhkyy49d0j2kcnvfd1m5p";
     stripRoot = false;
   };
 in
@@ -19,10 +19,10 @@ buildGoModule rec {
     owner = "fluxcd";
     repo = "flux2";
     rev = "v${version}";
-    sha256 = "iJ6UyHbF4+RvfNoOuHt6X2R6XhpBe+t76deldwY5P2c=";
+    sha256 = "sha256-hP2HQI9Oc7IlzVS5r7yqGAgSgqECOSZVe2B3vO2sgKA=";
   };
 
-  vendorSha256 = "Z0keCr+KZ593c6a/56lYJwOgXu5hrUSn6N3NFf2LDUM=";
+  vendorSha256 = "sha256-6ABnX0GV3HmhpUpPWS0bigubRqpXGoikEeQ/LqO6Ybs=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -55,7 +55,6 @@ buildGoModule rec {
     '';
     homepage = "https://fluxcd.io";
     license = licenses.asl20;
-    maintainers = with maintainers; [ jlesquembre ];
-    platforms = platforms.unix;
+    maintainers = with maintainers; [ jlesquembre superherointj ];
   };
 }

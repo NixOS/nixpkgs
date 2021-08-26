@@ -1,7 +1,8 @@
 { lib, stdenv, fetchurl, perl, curl }:
 
 stdenv.mkDerivation {
-  name = "aws-2019.06.18";
+  pname = "aws";
+  version = "2019.06.18";
 
   src = fetchurl {
     url = "https://raw.github.com/timkay/aws/ac68eb5191c52f069b9aa0c9a99808f8a4430833/aws";

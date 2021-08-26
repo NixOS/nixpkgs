@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sumneko-lua-language-server";
-  version = "1.16.0";
+  version = "2.3.6";
 
   src = fetchFromGitHub {
     owner = "sumneko";
     repo = "lua-language-server";
     rev = version;
-    sha256 = "1fqhvmz7a4qgz3zq6qgpcjhhhm2j4wpx0385n3zcphd9h9s3a9xa";
+    sha256 = "sha256-iwmH4pbeKNkEYsaSd6I7ULSoEMwAtxOanF7vAutuW64=";
     fetchSubmodules = true;
   };
 
@@ -17,13 +17,20 @@ stdenv.mkDerivation rec {
     makeWrapper
   ];
 
+  postPatch = ''
+    # doesn't work on aarch64, already removed on master:
+    # https://github.com/actboy168/bee.lua/commit/fd5ee552c8cff2c48eff72edc0c8db5b7bf1ee2c
+    rm {3rd/luamake/,}3rd/bee.lua/test/test_platform.lua
+    sed /test_platform/d -i {3rd/luamake/,}3rd/bee.lua/test/test.lua
+  '';
+
   preBuild = ''
     cd 3rd/luamake
   '';
 
   ninjaFlags = [
-    "-f ninja/linux.ninja"
-    ];
+    "-fcompile/ninja/linux.ninja"
+  ];
 
   postBuild = ''
     cd ../..
@@ -31,6 +38,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/extras
     cp -r ./{locale,meta,script,*.lua} $out/extras/
     cp ./bin/Linux/{bee.so,lpeglabel.so} $out/extras
@@ -40,6 +49,8 @@ stdenv.mkDerivation rec {
       --add-flags "-E $out/extras/main.lua \
       --logpath='~/.cache/sumneko_lua/log' \
       --metapath='~/.cache/sumneko_lua/meta'"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -1,13 +1,53 @@
-{
-  mkDerivation, lib, kdepimTeam,
-  extra-cmake-modules, kdoctools,
-  akonadi-search, kbookmarks, kcalutils, kcmutils, kcompletion, kconfig,
-  kconfigwidgets, kcoreaddons, kdelibs4support, libkdepim,
-  kdepim-runtime, kguiaddons, ki18n, kiconthemes, kinit, kio, kldap,
-  kmail-account-wizard, kmailtransport, knotifications, knotifyconfig,
-  kontactinterface, kparts, kpty, kservice, ktextwidgets, ktnef, kwallet,
-  kwidgetsaddons, kwindowsystem, kxmlgui, libgravatar, libksieve, mailcommon,
-  messagelib, pim-sieve-editor, qtscript, qtwebengine, akonadi, kdepim-addons
+{ mkDerivation
+, lib
+, akonadi
+, akonadi-import-wizard
+, akonadi-search
+, extra-cmake-modules
+, kaddressbook
+, kbookmarks
+, kcalutils
+, kcmutils
+, kcompletion
+, kconfig
+, kconfigwidgets
+, kcoreaddons
+, kdepim-addons
+, kdepim-runtime
+, kdepimTeam
+, kdoctools
+, kguiaddons
+, ki18n
+, kiconthemes
+, kinit
+, kio
+, kldap
+, kleopatra
+, kmail-account-wizard
+, kmailtransport
+, knotifications
+, knotifyconfig
+, kontactinterface
+, kparts
+, kpty
+, kservice
+, ktextwidgets
+, ktnef
+, kwallet
+, kwidgetsaddons
+, kwindowsystem
+, kxmlgui
+, libgravatar
+, libkdepim
+, libksieve
+, libsecret
+, mailcommon
+, messagelib
+, pim-data-exporter
+, pim-sieve-editor
+, qtkeychain
+, qtscript
+, qtwebengine
 }:
 
 mkDerivation {
@@ -18,13 +58,53 @@ mkDerivation {
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
-    akonadi-search kbookmarks kcalutils kcmutils kcompletion kconfig
-    kconfigwidgets kcoreaddons kdelibs4support kguiaddons ki18n
-    kiconthemes kinit kio kldap kmail-account-wizard kmailtransport libkdepim
-    knotifications knotifyconfig kontactinterface kparts kpty kservice
-    ktextwidgets ktnef kwidgetsaddons kwindowsystem kxmlgui libgravatar
-    libksieve mailcommon messagelib pim-sieve-editor qtscript qtwebengine
+    akonadi-search
+    kbookmarks
+    kcalutils
+    kcmutils
+    kcompletion
+    kconfig
+    kconfigwidgets
+    kcoreaddons
     kdepim-addons
+    kguiaddons
+    ki18n
+    kiconthemes
+    kinit
+    kio
+    kldap
+    kmail-account-wizard
+    kmailtransport
+    knotifications
+    knotifyconfig
+    kontactinterface
+    kparts
+    kpty
+    kservice
+    ktextwidgets
+    ktnef
+    kwidgetsaddons
+    kwindowsystem
+    kxmlgui
+    libgravatar
+    libkdepim
+    libksieve
+    libsecret
+    mailcommon
+    messagelib
+    pim-sieve-editor
+    qtkeychain
+    qtscript
+    qtwebengine
+    akonadi-import-wizard
+    kaddressbook
+    kleopatra
+    pim-data-exporter
   ];
+  outputs = [ "out" "doc" ];
   propagatedUserEnvPkgs = [ kdepim-runtime kwallet akonadi ];
+  postFixup = ''
+    wrapProgram "$out/bin/kmail" \
+      --prefix PATH : "${lib.makeBinPath [ akonadi akonadi-import-wizard kaddressbook kleopatra kmail-account-wizard pim-data-exporter ]}"
+  '';
 }

@@ -12,18 +12,23 @@ in
 
 stdenv.mkDerivation rec {
   pname = "sqlite";
-  version = "3.34.1";
+  version = "3.35.5";
 
   # NB! Make sure to update ./tools.nix src (in the same directory).
   src = fetchurl {
     url = "https://sqlite.org/2021/sqlite-autoconf-${archiveVersion version}.tar.gz";
-    sha256 = "129ynp0qbxrfj1ys9hdi0jk8svds0cwfzl31af7bicqp25cclfra";
+    sha256 = "9StypcMZw+UW7XqS4SMTmm6Hrwii3EPXdXck9hMubbA=";
   };
 
   outputs = [ "bin" "dev" "out" ];
   separateDebugInfo = stdenv.isLinux;
 
   buildInputs = [ zlib ] ++ optionals interactive [ readline ncurses ];
+
+  # required for aarch64 but applied for all arches for simplicity
+  preConfigure = ''
+    patchShebangs configure
+  '';
 
   configureFlags = [ "--enable-threadsafe" ] ++ optional interactive "--enable-readline";
 

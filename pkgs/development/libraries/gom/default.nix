@@ -7,7 +7,7 @@
 , python3
 , sqlite
 , gdk-pixbuf
-, gnome3
+, gnome
 , gobject-introspection
 }:
 
@@ -48,8 +48,9 @@ stdenv.mkDerivation rec {
   doCheck = stdenv.isx86_64;
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
     };
   };
 

@@ -4,6 +4,8 @@
 , django
 , flask
 , google-api-core
+, google-cloud-appengine-logging
+, google-cloud-audit-log
 , google-cloud-core
 , google-cloud-testutils
 , mock
@@ -15,14 +17,20 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-logging";
-  version = "2.3.0";
+  version = "2.6.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b5675ce159db4e9c1d755003b76190460766f426a7c3c1519014cdd5ce66e890";
+    sha256 = "sha256-SZ7tXxPKuAXIeAsNFKDZMan/HWXvzN2eaHctQOfa1MU=";
   };
 
-  propagatedBuildInputs = [ google-api-core google-cloud-core proto-plus ];
+  propagatedBuildInputs = [
+    google-api-core
+    google-cloud-appengine-logging
+    google-cloud-audit-log
+    google-cloud-core
+    proto-plus
+  ];
 
   checkInputs = [
     django

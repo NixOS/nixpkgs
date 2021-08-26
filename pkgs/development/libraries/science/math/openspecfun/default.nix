@@ -1,10 +1,13 @@
-{ lib, stdenv, fetchurl, gfortran }:
+{ lib, stdenv, fetchFromGitHub, gfortran }:
 
-stdenv.mkDerivation {
-  name = "openspecfun-0.5.3";
-  src = fetchurl {
-    url = "https://github.com/JuliaLang/openspecfun/archive/v0.5.3.tar.gz";
-    sha256 = "1rs1bv8jq751fv9vq79890wqf9xlbjc7lvz3ighzyfczbyjcf18m";
+stdenv.mkDerivation rec {
+  pname = "openspecfun";
+  version = "0.5.5";
+  src = fetchFromGitHub {
+    owner = "JuliaLang";
+    repo = "openspecfun";
+    rev = "v${version}";
+    sha256 = "sha256-fX2wc8LHUcF5nN/hiA60ZZ7emRTs0SznOm/0q6lD+Ko=";
   };
 
   makeFlags = [ "prefix=$(out)" ];

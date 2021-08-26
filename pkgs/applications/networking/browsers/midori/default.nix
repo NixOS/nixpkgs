@@ -49,6 +49,10 @@ stdenv.mkDerivation rec {
     libarchive
   ];
 
+  passthru = {
+    inherit gtk3;
+  };
+
   meta = with lib; {
     description = "Lightweight WebKitGTK web browser";
     homepage = "https://www.midori-browser.org/";

@@ -15,6 +15,7 @@
 , json-glib
 , libgda
 , libgpod
+, libhandy
 , libnotify
 , libpeas
 , libsoup
@@ -30,7 +31,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-music";
-  version = "5.0.5";
+  version = "5.1.0";
 
   repoName = "music";
 
@@ -38,7 +39,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "sha256-3GZoBCu9rF+BnNk9APBzKWO1JYg1XYWwrEvwcjWvYDE=";
+    sha256 = "13v7rii9ardyd661s6d4hvvs4ig44v7s3qd1bx7imaigr72gg58b";
   };
 
   passthru = {
@@ -73,6 +74,7 @@ stdenv.mkDerivation rec {
     libgda
     libgee
     libgpod
+    libhandy
     libnotify
     libpeas
     libsignon-glib

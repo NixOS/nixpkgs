@@ -15,9 +15,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   automakeAddFlags = pkgs.makeSetupHook { } ./automakeAddFlags.sh;
 
-  # Samba is a rather heavy dependency
-  gvfs = pkgs.gvfs.override { samba = null; };
-
   #### CORE
 
   exo = callPackage ./core/exo { };
@@ -37,6 +34,8 @@ lib.makeScope pkgs.newScope (self: with self; {
   thunar-archive-plugin = callPackage ./thunar-plugins/archive { };
 
   thunar-dropbox-plugin = callPackage ./thunar-plugins/dropbox { };
+
+  thunar-media-tags-plugin = callPackage ./thunar-plugins/media-tags { };
 
   tumbler = callPackage ./core/tumbler { };
 
@@ -83,7 +82,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   xfce4-terminal = callPackage ./applications/xfce4-terminal { };
 
   xfce4-screenshooter = callPackage ./applications/xfce4-screenshooter {
-    inherit (pkgs.gnome3) libsoup;
+    inherit (pkgs.gnome) libsoup;
   };
 
   xfdashboard = callPackage ./applications/xfdashboard {};
@@ -93,6 +92,8 @@ lib.makeScope pkgs.newScope (self: with self; {
   xfce4-notifyd = callPackage ./applications/xfce4-notifyd { };
 
   xfburn = callPackage ./applications/xfburn { };
+
+  xfce4-panel-profiles = callPackage ./applications/xfce4-panel-profiles { };
 
   #### ART
 
@@ -214,7 +215,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   libxfcegui4 = throw "libxfcegui4 is the deprecated Xfce GUI library. It has been superseded by the libxfce4ui library";
   xinitrc = xfce4-session.xinitrc;
   inherit (pkgs.gnome2) libglade;
-  inherit (pkgs.gnome3) vte gtksourceview;
+  inherit (pkgs.gnome) vte gtksourceview;
   xfce4-mixer-pulse = xfce4-mixer;
   thunar-bare = thunar.override {
     thunarPlugins = [];

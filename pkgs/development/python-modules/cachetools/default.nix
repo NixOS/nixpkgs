@@ -1,18 +1,21 @@
 { lib
 , buildPythonPackage
+, isPy27
 , fetchFromGitHub
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "cachetools";
-  version = "4.2.1";
+  version = "4.2.2";
+
+  disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "tkem";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1b662ph8m2d05d2vi3izgnr6v7h9zfvscfsaaw8nhdmmm15ivfa6";
+    sha256 = "sha256-JTm8ht2Ubn34uQLR0yjUjXSdDQggWfYUlS0T628OUoI=";
   };
 
   checkInputs = [ pytestCheckHook ];

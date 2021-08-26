@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "dante";
-  version = "1.4.2";
+  version = "1.4.3";
 
   src = fetchurl {
     url = "https://www.inet.no/dante/files/${pname}-${version}.tar.gz";
-    sha256 = "1bfafnm445afrmyxvvcl8ckq0p59yzykmr3y8qvryzrscd85g8ms";
+    sha256 = "0pbahkj43rx7rmv2x40mf5p3g3x9d6i2sz7pzglarf54w5ghd2j1";
   };
 
   buildInputs = [ pam libkrb5 cyrus_sasl miniupnpc ];

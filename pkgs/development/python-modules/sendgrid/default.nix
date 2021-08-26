@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "sendgrid";
-  version = "6.6.0";
+  version = "6.8.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = "sendgrid-python";
     rev = version;
-    sha256 = "sha256-R9ASHDIGuPRh4yf0FAlpjUZ6QAakYs35EFSqAPc02Q8=";
+    sha256 = "sha256-rK/GouOv5RMDsn5NrCEtIz5a9wO6YATlhsRuhFuHaXY=";
   };
 
   propagatedBuildInputs = [

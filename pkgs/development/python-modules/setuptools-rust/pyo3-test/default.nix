@@ -17,5 +17,9 @@ callPackage ../../../tools/rust/maturin/pyo3-test/generic.nix {
     rust.rustc
   ]);
 
-  sourceRoot = "source/examples/word-count";
+  preConfigure = ''
+    # sourceRoot puts Cargo.lock in the wrong place due to the
+    # example setup.
+    cd examples/word-count
+  '';
 }

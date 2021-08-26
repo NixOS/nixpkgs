@@ -35,6 +35,7 @@ let
     "tree-sitter-jsdoc"
     "tree-sitter-ql"
     "tree-sitter-embedded-template"
+    "tree-sitter-tsq"
   ];
   knownTreeSitterOrgGrammarReposJson = jsonFile "known-tree-sitter-org-grammar-repos" knownTreeSitterOrgGrammarRepos;
 
@@ -60,6 +61,8 @@ let
     "tree-sitter.github.io"
     # not maintained
     "tree-sitter-razor"
+    # rust library for constructing arbitrary graph structures from source code
+    "tree-sitter-graph"
   ];
   ignoredTreeSitterOrgReposJson = jsonFile "ignored-tree-sitter-org-repos" ignoredTreeSitterOrgRepos;
 
@@ -67,12 +70,20 @@ let
   # If you need a grammar that already exists in the official orga,
   # make sure to give it a different name.
   otherGrammars = {
+    "tree-sitter-comment" = {
+      orga = "stsewd";
+      repo = "tree-sitter-comment";
+    };
     "tree-sitter-nix" = {
       orga = "cstrahan";
       repo = "tree-sitter-nix";
     };
+    "tree-sitter-latex" = {
+      orga = "latex-lsp";
+      repo = "tree-sitter-latex";
+    };
     "tree-sitter-lua" = {
-      orga = "Azganoth";
+      orga = "nvim-treesitter";
       repo = "tree-sitter-lua";
     };
     "tree-sitter-fennel" = {
@@ -90,6 +101,18 @@ let
     "tree-sitter-yaml" = {
       orga = "ikatyang";
       repo = "tree-sitter-yaml";
+    };
+    "tree-sitter-toml" = {
+      orga = "ikatyang";
+      repo = "tree-sitter-toml";
+    };
+    "tree-sitter-zig" = {
+      orga = "GrayJack";
+      repo = "tree-sitter-zig";
+    };
+    "tree-sitter-fish" = {
+      orga = "ram02z";
+      repo = "tree-sitter-fish";
     };
   };
 

@@ -1,19 +1,18 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, pytestCheckHook
 , inetutils
 }:
 
 buildPythonPackage rec {
   pname = "whois";
-  version = "0.9.7";
+  version = "0.9.13";
 
   src = fetchFromGitHub {
     owner = "DannyCork";
     repo = "python-whois";
     rev = version;
-    sha256 = "1rbc4xif4dn455vc8dhxdvwszrb0nik5q9fy12db6mxfx6zikb7z";
+    sha256 = "0y2sfs6nkr2j2crrn81wkfdzn9aphb3iaddya5zd2midlgdqq7bw";
   };
 
   # whois is needed

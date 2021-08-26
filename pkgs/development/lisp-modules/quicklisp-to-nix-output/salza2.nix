@@ -1,10 +1,11 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
   baseName = "salza2";
   version = "2.0.9";
 
-  description = ''Create compressed data in the ZLIB, DEFLATE, or GZIP
-  data formats'';
+  description = "Create compressed data in the ZLIB, DEFLATE, or GZIP
+  data formats";
 
   deps = [ ];
 

@@ -1,4 +1,4 @@
-{ lib, stdenv, autoreconfHook, fetchFromGitHub, pkg-config, enablePython ? false, python, glib }:
+{ lib, stdenv, autoreconfHook, fetchFromGitHub, pkg-config, enablePython ? false, python ? null, glib }:
 
 stdenv.mkDerivation rec {
   pname = "libplist";

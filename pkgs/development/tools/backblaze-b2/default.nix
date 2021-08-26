@@ -1,21 +1,43 @@
 { fetchFromGitHub, lib, python3Packages }:
 
+let
+  python3Packages2 = python3Packages.override {
+    overrides = self: super: {
+      arrow = self.callPackage ../../python-modules/arrow/2.nix { };
+    };
+  };
+in
+let
+  python3Packages = python3Packages2; # two separate let … in to avoid infinite recursion
+in
 python3Packages.buildPythonApplication rec {
   pname = "backblaze-b2";
-  version = "2.1.0";
+  version = "3.0.1";
 
-  src = fetchFromGitHub {
-    owner = "Backblaze";
-    repo = "B2_Command_Line_Tool";
-    rev = "v${version}";
-    sha256 = "1kkpvxqgh5pw4kr8lh5gy9d7960hv9zvajbjiqhj6xgykwbpbgmq";
+  src = python3Packages.fetchPypi {
+    inherit version;
+    pname = "b2";
+    sha256 = "sha256-Zr+5J6MCjfth+5fOSfHXpT/CAgD754ZpS1b1NqeGid8=";
   };
+
+  postPatch = ''
+    substituteInPlace requirements.txt \
+      --replace 'docutils==0.16' 'docutils'
+    substituteInPlace setup.py \
+      --replace 'setuptools_scm<6.0' 'setuptools_scm'
+  '';
 
   propagatedBuildInputs = with python3Packages; [
     b2sdk
     class-registry
     phx-class-registry
     setuptools
+    docutils
+    rst2ansi
+  ];
+
+  nativeBuildInputs = with python3Packages; [
+    setuptools-scm
   ];
 
   checkInputs = with python3Packages; [ pytestCheckHook ];

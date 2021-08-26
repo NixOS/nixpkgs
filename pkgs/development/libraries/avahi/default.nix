@@ -1,5 +1,6 @@
 { fetchurl, fetchpatch, lib, stdenv, pkg-config, libdaemon, dbus, perlPackages
 , expat, gettext, intltool, glib, libiconv, writeShellScriptBin, libevent
+, nixosTests
 , gtk3Support ? false, gtk3 ? null
 , qt4 ? null
 , qt4Support ? false
@@ -76,6 +77,11 @@ stdenv.mkDerivation rec {
     ln -s avahi-compat-howl $out/include/howl
     ln -s avahi-compat-howl.pc $out/lib/pkgconfig/howl.pc
   */
+
+  passthru.tests = {
+    smoke-test = nixosTests.avahi;
+    smoke-test-resolved = nixosTests.avahi-with-resolved;
+  };
 
   meta = with lib; {
     description = "mDNS/DNS-SD implementation";

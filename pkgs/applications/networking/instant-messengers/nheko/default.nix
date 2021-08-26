@@ -7,7 +7,6 @@
 , lmdb
 , lmdbxx
 , libsecret
-, tweeny
 , mkDerivation
 , qtbase
 , qtkeychain
@@ -30,13 +29,13 @@
 
 mkDerivation rec {
   pname = "nheko";
-  version = "0.8.1";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "Nheko-Reborn";
     repo = "nheko";
     rev = "v${version}";
-    sha256 = "1v7k3ifzi05fdr06hmws1wkfl1bmhrnam3dbwahp086vkj0r8524";
+    sha256 = "sha256-w4l91/W6F1FL+Q37qWSjYRHv4vad/10fxdKwfNeEwgw=";
   };
 
   nativeBuildInputs = [
@@ -47,7 +46,6 @@ mkDerivation rec {
 
   buildInputs = [
     nlohmann_json
-    tweeny
     mtxclient
     olm
     boost17x

@@ -56,7 +56,7 @@ in stdenv.mkDerivation {
     description = "Convert MIDI Files to Piano Sheet Music for two hands";
     homepage = "http://midisheetmusic.com";
     license = licenses.gpl2;
-    maintainers = [ maintainers.gnidorah ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

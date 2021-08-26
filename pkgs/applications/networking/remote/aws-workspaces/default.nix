@@ -1,19 +1,19 @@
 { stdenv, lib
 , makeWrapper, dpkg, fetchurl, autoPatchelfHook
-, curl, kerberos, lttng-ust, libpulseaudio, gtk3, openssl_1_1, icu, webkitgtk, librsvg, gdk-pixbuf, libsoup, glib-networking
+, curl, libkrb5, lttng-ust, libpulseaudio, gtk3, openssl_1_1, icu, webkitgtk, librsvg, gdk-pixbuf, libsoup, glib-networking
 }:
 
 stdenv.mkDerivation rec {
   pname = "aws-workspaces";
-  version = "3.1.3.925";
+  version = "3.1.8.1198";
 
   src = fetchurl {
     # ref https://d3nt0h4h6pmmc4.cloudfront.net/ubuntu/dists/bionic/main/binary-amd64/Packages
     urls = [
       "https://d3nt0h4h6pmmc4.cloudfront.net/ubuntu/dists/bionic/main/binary-amd64/workspacesclient_${version}_amd64.deb"
-      "https://web.archive.org/web/20210307233836/https://d3nt0h4h6pmmc4.cloudfront.net/ubuntu/dists/bionic/main/binary-amd64/workspacesclient_${version}_amd64.deb"
+      "https://web.archive.org/web/20210626165043/https://d3nt0h4h6pmmc4.cloudfront.net/ubuntu/dists/bionic/main/binary-amd64/workspacesclient_${version}_amd64.deb"
     ];
-    sha256 = "5b57edb4f6f8c950164fd8104bf62df4c452ab5b16cb65d48db3636959a0f0ad";
+    sha256 = "e784bc4401c2ffaf19f3cc42cb6c6f229c73adba36df49093a1d8cd30c86aaf0";
   };
 
   nativeBuildInputs = [
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     stdenv.cc.cc.lib
-    kerberos
+    libkrb5
     curl
     lttng-ust
     libpulseaudio

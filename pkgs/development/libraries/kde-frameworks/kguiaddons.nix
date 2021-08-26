@@ -1,4 +1,4 @@
-{ mkDerivation, lib
+{ mkDerivation
 , extra-cmake-modules
 , qtbase, qtx11extras, wayland
 }:
@@ -11,9 +11,4 @@ mkDerivation {
   propagatedBuildInputs = [ qtbase ];
 
   outputs = [ "out" "dev" ];
-
-  meta = with lib; {
-    maintainers = [ maintainers.ttuegel ];
-    broken = versionOlder qtbase.version "5.14.0";
-  };
 }

@@ -5,7 +5,7 @@
 , buildPythonPackage
 , isPy37
 , protobuf
-, google-apputils
+, google-apputils ? null
 , six
 , pyext
 , libcxx

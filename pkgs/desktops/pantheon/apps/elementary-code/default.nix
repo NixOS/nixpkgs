@@ -11,11 +11,12 @@
 , gtk3
 , granite
 , libgee
+, libhandy
 , elementary-icon-theme
 , appstream
 , libpeas
 , editorconfig-core-c
-, gtksourceview3
+, gtksourceview4
 , gtkspell3
 , libsoup
 , vte
@@ -24,11 +25,12 @@
 , ctags
 , libgit2-glib
 , wrapGAppsHook
+, polkit
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-code";
-  version = "3.4.1";
+  version = "6.0.0";
 
   repoName = "code";
 
@@ -36,7 +38,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "sha256-4AEayj+K/lOW6jEYmvmdan1kTqqqLL1YzwcU7/3PH5U=";
+    sha256 = "1w1m52mq3zr9alkxk1c0s4ncscka1km5ppd0r6zm86qan9cjwq0f";
   };
 
   passthru = {
@@ -51,6 +53,10 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
+
+    # polkit is needed for ITS rules
+    polkit
+
     python3
     vala
     wrapGAppsHook
@@ -62,10 +68,11 @@ stdenv.mkDerivation rec {
     elementary-icon-theme
     granite
     gtk3
-    gtksourceview3
+    gtksourceview4
     gtkspell3
     libgee
     libgit2-glib
+    libhandy
     libpeas
     libsoup
     vte

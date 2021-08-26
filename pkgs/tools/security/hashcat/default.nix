@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname   = "hashcat";
-  version = "6.1.1";
+  version = "6.2.3";
 
   src = fetchurl {
     url = "https://hashcat.net/files/hashcat-${version}.tar.gz";
-    sha256 = "104z63m7lqbb0sdrxhf9yi15l4a9zwf9m6zs9dbb3gf0nfxl1h9r";
+    sha256 = "sha256-wL4cZpPuHzXHvvH3m/njCpVPcX70LQDjd4eq7/MnHlE=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -28,7 +28,9 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     for f in $out/share/hashcat/OpenCL/*.cl; do
+      # Rewrite files to be included for compilation at runtime for opencl offload
       sed "s|#include \"\(.*\)\"|#include \"$out/share/hashcat/OpenCL/\1\"|g" -i "$f"
+      sed "s|#define COMPARE_\([SM]\) \"\(.*\.cl\)\"|#define COMPARE_\1 \"$out/share/hashcat/OpenCL/\2\"|g" -i "$f"
     done
   '';
 

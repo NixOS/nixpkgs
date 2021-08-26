@@ -1,11 +1,8 @@
 { lib, stdenv, fetchFromGitHub, coreutils, cpio, findutils, gzip, makeWrapper, util-linux }:
 
-let
-  version = "0.6";
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "abootimg";
-  inherit version;
+  version = "0.6";
 
   src = fetchFromGitHub {
     owner = "ggrandou";

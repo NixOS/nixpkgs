@@ -2,7 +2,7 @@
 , lib
 , buildPythonPackage
 , fetchPypi
-, isPy27
+, pythonOlder
 , semantic-version
 , setuptools
 , setuptools-scm
@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "setuptools-rust";
-  version = "0.11.6";
-  disabled = isPy27;
+  version = "0.12.1";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a5b5954909cbc5d66b914ee6763f81fa2610916041c7266105a469f504a7c4ca";
+    sha256 = "647009e924f0ae439c7f3e0141a184a69ad247ecb9044c511dabde232d3d570e";
   };
 
   nativeBuildInputs = [ setuptools-scm ];

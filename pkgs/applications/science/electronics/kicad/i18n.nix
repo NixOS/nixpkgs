@@ -2,13 +2,13 @@
 , cmake
 , gettext
 , src
-, version
 }:
 
 stdenv.mkDerivation {
-  inherit src version;
+  inherit src;
 
   pname = "kicad-i18n";
+  version = builtins.substring 0 10 src.rev;
 
   nativeBuildInputs = [ cmake gettext ];
   meta = with lib; {

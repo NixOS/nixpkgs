@@ -1,4 +1,9 @@
-{ lib, rustPlatform, yabridge }:
+{ lib
+, rustPlatform
+, yabridge
+, makeWrapper
+, wine
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "yabridgectl";
@@ -6,7 +11,7 @@ rustPlatform.buildRustPackage rec {
 
   src = yabridge.src;
   sourceRoot = "source/tools/yabridgectl";
-  cargoHash = "sha256-mSp/IH7ZB7YSOBCFwNtHLYDz7CvWo2sO9VuPdqpl/u0=";
+  cargoHash = "sha256-2x3qB0LbCBUZ4zqKIXPtYdWis+4QANTaJdFvoFbccGE=";
 
   patches = [
     # By default, yabridgectl locates libyabridge.so by using
@@ -17,10 +22,18 @@ rustPlatform.buildRustPackage rec {
 
   patchFlags = [ "-p3" ];
 
+  nativeBuildInputs = [ makeWrapper ];
+
+  postFixup = ''
+    wrapProgram "$out/bin/yabridgectl" \
+      --prefix PATH : ${lib.makeBinPath [ wine ]}
+  '';
+
   meta = with lib; {
     description = "A small, optional utility to help set up and update yabridge for several directories at once";
     homepage = "https://github.com/robbert-vdh/yabridge/tree/master/tools/yabridgectl";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ metadark ];
+    maintainers = with maintainers; [ kira-bruneau ];
+    platforms = yabridge.meta.platforms;
   };
 }

@@ -6,6 +6,8 @@ buildDunePackage rec {
 
   useDune2 = true;
 
+  minimumOCamlVersion = "4.06";
+
   src = fetchurl {
     url = "https://github.com/mirage/mirage-clock/releases/download/v${version}/mirage-clock-v${version}.tbz";
     sha256 = "0cqa07aqkamw0dvis1fl46brvk81zvb92iy5076ik62gv9n5a0mn";

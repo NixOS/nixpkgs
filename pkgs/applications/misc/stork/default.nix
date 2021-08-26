@@ -1,20 +1,26 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
+, openssl
+, pkg-config
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "stork";
-  version = "1.1.0";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "jameslittle230";
     repo = "stork";
     rev = "v${version}";
-    sha256 = "sha256-pBJ9n1pQafXagQt9bnj4N1jriczr47QLtKiv+UjWgTg=";
+    sha256 = "sha256-rox8X+lYiiCXO66JemW+R2I6y/IxdK6qpaiFXYoL6nY=";
   };
 
-  cargoSha256 = "sha256-u8L4ZeST4ExYB2y8E+I49HCy41dOfhR1fgPpcVMVDuk=";
+  cargoSha256 = "sha256-ujmBAld6DCc1l+yUu9qhRF8pS5HoIlstcdPTeTAyyXs=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ openssl ];
 
   meta = with lib; {
     description = "Impossibly fast web search, made for static sites";

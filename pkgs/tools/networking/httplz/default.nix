@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoBuildFlags = [ "--bin httplz" ];
   cargoPatches = [ ./cargo-lock.patch ];
-  cargoSha256 = "1rpwzrr9bvw375vn97y5fqhraqz35d3ani9kfflvn2758x3g8gwf";
+  cargoSha256 = "0r33vg9431jv32r03ryxb3rc4mp6h1kc00d3h1knssfvkwsh31yn";
 
   postInstall = ''
     wrapProgram $out/bin/httplz \

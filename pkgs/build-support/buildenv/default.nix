@@ -74,7 +74,7 @@ runCommand name
     preferLocalBuild = true;
     allowSubstitutes = false;
     # XXX: The size is somewhat arbitrary
-    passAsFile = if builtins.stringLength pkgs >= 128*1024 then [ "pkgs" ] else null;
+    passAsFile = if builtins.stringLength pkgs >= 128*1024 then [ "pkgs" ] else [ ];
   }
   ''
     ${buildPackages.perl}/bin/perl -w ${builder}

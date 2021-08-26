@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, alsaLib, curl, gdk-pixbuf, glib, gtk3, libGLU, libGL,
+{ lib, stdenv, fetchurl, alsa-lib, curl, gdk-pixbuf, glib, gtk3, libGLU, libGL,
   libX11, openssl_1_0_2, ncurses5, SDL, SDL_ttf, unzip, zlib, wrapGAppsHook, autoPatchelfHook }:
 
 with lib;
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   sourceRoot = ".";
 
   buildInputs = [
-    alsaLib
+    alsa-lib
     curl
     gdk-pixbuf
     glib

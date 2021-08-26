@@ -6,20 +6,20 @@
 , libsecret, libsoup, spice-protocol, spice-gtk, epoxy, at-spi2-core
 , openssl, gsettings-desktop-schemas, json-glib, libsodium, webkitgtk, harfbuzz
 # The themes here are soft dependencies; only icons are missing without them.
-, gnome3
+, gnome
 }:
 
 with lib;
 
 stdenv.mkDerivation rec {
   pname = "remmina";
-  version = "1.4.12";
+  version = "1.4.20";
 
   src = fetchFromGitLab {
     owner  = "Remmina";
     repo   = "Remmina";
     rev    = "v${version}";
-    sha256 = "sha256-CjlNEmca4Kob5rdpZa+YfvdOIDDDYfhNsGYqGDxSGKY=";
+    sha256 = "sha256-m3DUaoOD8COxMwCVBTipzCAz3mqIdunEbVPjyjAl9So=";
   };
 
   nativeBuildInputs = [ cmake ninja pkg-config wrapGAppsHook ];
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     pcre2 libdbusmenu-gtk3 libappindicator-gtk3
     libvncserver libpthreadstubs libXdmcp libxkbcommon
     libsecret libsoup spice-protocol spice-gtk epoxy at-spi2-core
-    openssl gnome3.adwaita-icon-theme json-glib libsodium webkitgtk
+    openssl gnome.adwaita-icon-theme json-glib libsodium webkitgtk
     harfbuzz
   ];
 
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     homepage = "https://gitlab.com/Remmina/Remmina";
     description = "Remote desktop client written in GTK";
     maintainers = with maintainers; [ melsigl ryantm ];

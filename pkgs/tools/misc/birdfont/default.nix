@@ -1,17 +1,17 @@
 { lib, stdenv, fetchurl, pkg-config, python3, xmlbird,
-cairo, gdk-pixbuf, libgee, glib, gtk3, webkitgtk, libnotify, sqlite, vala_0_44,
+cairo, gdk-pixbuf, libgee, glib, gtk3, webkitgtk, libnotify, sqlite, vala,
 gobject-introspection, gsettings-desktop-schemas, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "birdfont";
-  version = "2.29.1";
+  version = "2.29.5";
 
   src = fetchurl {
     url = "https://birdfont.org/releases/${pname}-${version}.tar.xz";
-    sha256 = "0620bppcbm9pb8l0d4sc56gfwkr97gw4zjirjz5ikk5lj0m801yi";
+    sha256 = "sha256-eIqq4ehUB4lF89ikrHeN5Akq14nxYMxREZzPSVnv+nU=";
   };
 
-  nativeBuildInputs = [ python3 pkg-config vala_0_44 gobject-introspection wrapGAppsHook ];
+  nativeBuildInputs = [ python3 pkg-config vala gobject-introspection wrapGAppsHook ];
   buildInputs = [ xmlbird libgee cairo gdk-pixbuf glib gtk3 webkitgtk libnotify sqlite gsettings-desktop-schemas ];
 
   postPatch = ''

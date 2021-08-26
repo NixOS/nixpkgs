@@ -17,7 +17,7 @@ in {
       wantedBy    = [ "multi-user.target" ];
       after = [ "xe-linux-distribution.service" ];
       requires = [ "proc-xen.mount" ];
-      path = [ pkgs.coreutils pkgs.iproute ];
+      path = [ pkgs.coreutils pkgs.iproute2 ];
       serviceConfig = {
         PIDFile = "/run/xe-daemon.pid";
         ExecStart = "${pkgs.xe-guest-utilities}/bin/xe-daemon -p /run/xe-daemon.pid";

@@ -4,7 +4,7 @@
 , numpy
 , pillow
 , cython
-, pytestcov
+, pytest-cov
 , pytest
 , fetchpatch
 }:
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ matplotlib numpy pillow ];
 
   # Tests require extra dependencies
-  checkInputs = [ mock pytest pytestcov ];
+  checkInputs = [ mock pytest pytest-cov ];
 
   checkPhase = ''
     PATH=$out/bin:$PATH pytest test

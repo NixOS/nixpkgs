@@ -12,14 +12,14 @@
 
 stdenv.mkDerivation rec {
   pname = "ofono";
-  version = "1.31";
+  version = "1.32";
 
   outputs = [ "out" "dev" ];
 
   src = fetchgit {
     url = "git://git.kernel.org/pub/scm/network/ofono/ofono.git";
     rev = version;
-    sha256 = "033y3vggjxn1c7mw75j452idp7arrdv51axs727f7l3c5lnxqdjy";
+    sha256 = "sha256-bJ7Qgau5soPiptrhcMZ8rWxfprRCTeR7OjQ5HZQ9hbc=";
   };
 
   patches = [
@@ -44,12 +44,12 @@ stdenv.mkDerivation rec {
     "--with-dbusconfdir=${placeholder "out"}/share"
     "--with-systemdunitdir=${placeholder "out"}/lib/systemd/system"
     "--enable-external-ell"
+    "--sysconfdir=/etc"
   ];
 
-  postInstall = ''
-    rm -r $out/etc/ofono
-    ln -s /etc/ofono $out/etc/ofono
-  '';
+  installFlags = [
+    "sysconfdir=${placeholder "out"}/etc"
+  ];
 
   enableParallelBuilding = true;
   enableParallelChecking = false;

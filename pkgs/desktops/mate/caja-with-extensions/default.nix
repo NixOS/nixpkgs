@@ -1,10 +1,10 @@
-{ stdenv, lib, makeWrapper, caja-extensions, caja, extensions ? [ caja-extensions ] }:
+{ stdenv, lib, makeWrapper, caja-extensions, caja, extensions ? [ caja-extensions ], mateUpdateScript }:
 
 stdenv.mkDerivation {
   pname = "${caja.pname}-with-extensions";
   version = caja.version;
 
-  phases = [ "installPhase" ];
+  dontUnpack = true;
 
   nativeBuildInputs = [ makeWrapper ];
 

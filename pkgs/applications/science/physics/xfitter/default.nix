@@ -16,9 +16,6 @@ stdenv.mkDerivation rec {
     ./undefined_behavior.patch
   ];
 
-  # patch needs to updated due to version bump
-  #CXXFLAGS = "-Werror=return-type";
-
   preConfigure =
   # Fix F77LD to workaround for a following build error:
   #
@@ -39,18 +36,17 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ gfortran which ];
   buildInputs =
-    [ apfel apfelgrid applgrid blas lhapdf lapack mela root5 qcdnum libtirpc ]
+    [ apfel apfelgrid applgrid blas lhapdf lapack mela root5 qcdnum ]
     # pdf2yaml requires fmemopen and open_memstream which are not readily available on Darwin
     ++ lib.optional (!stdenv.isDarwin) libyaml
+    ++ lib.optional (stdenv.hostPlatform.libc == "glibc") libtirpc
     ;
   propagatedBuildInputs = [ lynx ];
 
   enableParallelBuilding = true;
 
-  hardeningDisable = [ "format" ];
-
-  NIX_CFLAGS_COMPILE = [ "-I${libtirpc.dev}/include/tirpc" ];
-  NIX_LDFLAGS = [ "-ltirpc" ];
+  NIX_CFLAGS_COMPILE = lib.optional (stdenv.hostPlatform.libc == "glibc") "-I${libtirpc.dev}/include/tirpc";
+  NIX_LDFLAGS = lib.optional (stdenv.hostPlatform.libc == "glibc") "-ltirpc";
 
   meta = with lib; {
     description = "The xFitter project is an open source QCD fit framework ready to extract PDFs and assess the impact of new data";

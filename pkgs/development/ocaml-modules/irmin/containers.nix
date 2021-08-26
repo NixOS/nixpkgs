@@ -1,6 +1,6 @@
 { buildDunePackage
 , irmin, irmin-unix, irmin-git, ppx_irmin, lwt, mtime
-, alcotest, alcotest-lwt
+, alcotest, alcotest-lwt, cacert
 }:
 
 buildDunePackage {
@@ -18,7 +18,7 @@ buildDunePackage {
 
   doCheck = true;
   checkInputs = [
-    alcotest alcotest-lwt
+    alcotest alcotest-lwt cacert
   ];
 
   meta = ppx_irmin.meta // {

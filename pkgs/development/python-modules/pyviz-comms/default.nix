@@ -2,6 +2,7 @@
 , fetchPypi
 , lib
 , param
+, panel
 }:
 
 buildPythonPackage rec {
@@ -10,13 +11,17 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cd9649a9ea9dfcb9b34d78f9a64e1870aa8b6b94de546e2c99c6bb53d64ab5d1";
+    sha256 = "sha256-zZZJqeqd/LmzTXj5pk4YcKqLa5TeVG4smca7U9ZKtdE=";
   };
 
   propagatedBuildInputs = [ param ];
 
   # there are not tests with the package
   doCheck = false;
+
+  passthru.tests = {
+    inherit panel;
+  };
 
   meta = with lib; {
     description = "Launch jobs, organize the output, and dissect the results";

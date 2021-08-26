@@ -5,19 +5,19 @@
 , isPy3k
 , numpy
 , imagecodecs-lite
-, enum34
-, futures
-, pathlib
+, enum34 ? null
+, futures ? null
+, pathlib ? null
 , pytest
 }:
 
 buildPythonPackage rec {
   pname = "tifffile";
-  version = "2020.11.26";
+  version = "2021.6.14";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c712df6f201385fbd3500e26e45dc20fabcbb0c6c1fbfb4c1e44538a9d0269a8";
+    sha256 = "a2f83d82800a8d83cbd04340f9d65a6873a970874947a6b823b1b1238e84cba6";
   };
 
   patches = lib.optional isPy27 ./python2-regex-compat.patch;

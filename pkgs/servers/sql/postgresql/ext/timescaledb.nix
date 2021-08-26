@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, postgresql, openssl }:
+{ lib, stdenv, fetchFromGitHub, cmake, postgresql, openssl, libkrb5 }:
 
 # # To enable on NixOS:
 # config.services.postgresql = {
@@ -8,24 +8,24 @@
 
 stdenv.mkDerivation rec {
   pname = "timescaledb";
-  version = "2.1.0";
+  version = "2.4.1";
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ postgresql openssl ];
+  buildInputs = [ postgresql openssl libkrb5 ];
 
   src = fetchFromGitHub {
     owner  = "timescale";
     repo   = "timescaledb";
     rev    = "refs/tags/${version}";
-    sha256 = "03bsvf5iwgiwxq4p1pxri795n3qm70gvd1sz9p0dxixxsjl34vxf";
+    sha256 = "0nc6nvngp5skz8rasvb7pyi9nlw642iwk19p17lizmw8swdm5nji";
   };
 
-  # -DWARNINGS_AS_ERRORS=OFF to be removed once https://github.com/timescale/timescaledb/issues/2770 is fixed in upstream
-  cmakeFlags = [ "-DSEND_TELEMETRY_DEFAULT=OFF" "-DREGRESS_CHECKS=OFF" "-DWARNINGS_AS_ERRORS=OFF" ];
+  cmakeFlags = [ "-DSEND_TELEMETRY_DEFAULT=OFF" "-DREGRESS_CHECKS=OFF" "-DTAP_CHECKS=OFF" ]
+    ++ lib.optionals stdenv.isDarwin [ "-DLINTER=OFF" ];
 
   # Fix the install phase which tries to install into the pgsql extension dir,
   # and cannot be manually overridden. This is rather fragile but works OK.
-  patchPhase = ''
+  postPatch = ''
     for x in CMakeLists.txt sql/CMakeLists.txt; do
       substituteInPlace "$x" \
         --replace 'DESTINATION "''${PG_SHAREDIR}/extension"' "DESTINATION \"$out/share/postgresql/extension\""
@@ -40,8 +40,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Scales PostgreSQL for time-series data via automatic partitioning across time and space";
     homepage    = "https://www.timescale.com/";
+    changelog   = "https://github.com/timescale/timescaledb/raw/${version}/CHANGELOG.md";
     maintainers = with maintainers; [ volth marsam ];
     platforms   = postgresql.meta.platforms;
     license     = licenses.asl20;
+    broken      = versionOlder postgresql.version "12";
   };
 }

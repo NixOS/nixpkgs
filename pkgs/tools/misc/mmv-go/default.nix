@@ -13,7 +13,7 @@ buildGoModule rec {
 
   vendorSha256 = "0xnrai15ww9lfk02bc9p5ssycwnqkyjj5ch1srh7yvnbw3fakx68";
 
-  buildFlagsArray = [ "-ldflags=-s -w -X main.revision=${src.rev}" ];
+  ldflags = [ "-s" "-w" "-X main.revision=${src.rev}" ];
 
   meta = with lib; {
     homepage = "https://github.com/itchyny/mmv";

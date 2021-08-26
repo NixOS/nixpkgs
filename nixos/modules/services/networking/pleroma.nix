@@ -8,7 +8,7 @@ in {
 
       package = mkOption {
         type = types.package;
-        default = pkgs.pleroma-otp;
+        default = pkgs.pleroma;
         description = "Pleroma package to use.";
       };
 
@@ -75,6 +75,7 @@ in {
         description = "Pleroma user";
         home = cfg.stateDir;
         extraGroups = [ cfg.group ];
+        isSystemUser = true;
       };
       groups."${cfg.group}" = {};
     };

@@ -7,7 +7,7 @@
   },
   "context.modules": [
     {
-      "name": "libpipewire-module-rtkit",
+      "name": "libpipewire-module-rt",
       "args": {},
       "flags": [
         "ifexists",
@@ -24,5 +24,15 @@
       "name": "libpipewire-module-metadata"
     }
   ],
-  "jack.properties": {}
+  "jack.properties": {},
+  "jack.rules": [
+    {
+      "matches": [
+        {}
+      ],
+      "actions": {
+        "update-props": {}
+      }
+    }
+  ]
 }

@@ -8,7 +8,6 @@
 , glib
 , libinput
 , libxml2
-, pandoc
 , pango
 , wayland
 , wayland-protocols
@@ -16,31 +15,39 @@
 , libxcb
 , libxkbcommon
 , xwayland
+, libdrm
+, scdoc
 }:
 
 stdenv.mkDerivation rec {
   pname = "labwc";
-  version = "unstable-2021-02-06";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "johanmalm";
     repo = pname;
-    rev = "4a8fcf5c6d0b730b1e2e17e544ce7d7d3c72cd13";
-    sha256 = "g1ba8dchUN393eis0VAu1bIjQfthDGLaSijSavz4lfU=";
+    rev = version;
+    sha256 = "sha256-v8LGiQG/n1IXeVMPWyiP9MgZzZLW78JftvxnRVTswaM=";
   };
 
-  nativeBuildInputs = [ pkg-config meson ninja pandoc ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    scdoc
+  ];
   buildInputs = [
     cairo
     glib
+    libdrm
     libinput
+    libxcb
+    libxkbcommon
     libxml2
     pango
     wayland
     wayland-protocols
     wlroots
-    libxcb
-    libxkbcommon
     xwayland
   ];
 

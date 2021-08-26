@@ -69,7 +69,14 @@ stdenv.mkDerivation rec {
 #    ./CVE-2019-9232.CVE-2019-9325.CVE-2019-9371.CVE-2019-9433.patch
   ];
 
-  postPatch = "patchShebangs .";
+  postPatch = ''
+    patchShebangs --build \
+      build/make/*.sh \
+      build/make/*.pl \
+      build/make/*.pm \
+      test/*.sh \
+      configure
+  '';
 
   outputs = [ "bin" "dev" "out" ];
   setOutputFlags = false;
@@ -135,11 +142,6 @@ stdenv.mkDerivation rec {
                     experimentalFpMbStatsSupport ||
                     experimentalEmulateHardwareSupport) "experimental")
   ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-    #"--extra-cflags="
-    #"--extra-cxxflags="
-    #"--prefix="
-    #"--libc="
-    #"--libdir="
     "--enable-external-build"
     # libvpx darwin targets include darwin version (ie. ARCH-darwinXX-gcc, XX being the darwin version)
     # See all_platforms: https://github.com/webmproject/libvpx/blob/master/configure

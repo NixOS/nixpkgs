@@ -40,6 +40,11 @@
     Hime: An extremely easy-to-use input method framework.
    </para>
   </listitem>
+  <listitem>
+    <para>
+     Kime: Korean IME
+    </para>
+  </listitem>
  </itemizedlist>
  <section xml:id="module-services-input-methods-ibus">
   <title>IBus</title>
@@ -263,6 +268,23 @@ i18n.inputMethod = {
 <programlisting>
 i18n.inputMethod = {
   <link linkend="opt-i18n.inputMethod.enabled">enabled</link> = "hime";
+};
+</programlisting>
+ </section>
+ <section xml:id="module-services-input-methods-kime">
+  <title>Kime</title>
+
+  <para>
+   Kime is Korean IME. it's built with Rust language and let you get simple, safe, fast Korean typing
+  </para>
+
+  <para>
+   The following snippet can be used to configure Kime:
+  </para>
+
+<programlisting>
+i18n.inputMethod = {
+  <link linkend="opt-i18n.inputMethod.enabled">enabled</link> = "kime";
 };
 </programlisting>
  </section>

@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, pkg-config, dbus, nettle, fetchpatch
-, libidn, libnetfilter_conntrack }:
+, libidn, libnetfilter_conntrack, buildPackages }:
 
 with lib;
 let
@@ -13,11 +13,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "dnsmasq";
-  version = "2.84";
+  version = "2.85";
 
   src = fetchurl {
-    url = "http://www.thekelleys.org.uk/dnsmasq/${pname}-${version}.tar.xz";
-    sha256 = "sha256-YDGVxktzE3YJsH4QJK4LN/ZSsvX+Rn3OZphbPRhQBQw=";
+    url = "https://www.thekelleys.org.uk/dnsmasq/${pname}-${version}.tar.xz";
+    sha256 = "sha256-rZjTgD32h+W5OAgPPSXGKP5ByHh1LQP7xhmXh/7jEvo=";
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
     "BINDIR=$(out)/bin"
     "MANDIR=$(out)/man"
     "LOCALEDIR=$(out)/share/locale"
+    "PKG_CONFIG=${buildPackages.pkg-config}/bin/${buildPackages.pkg-config.targetPrefix}pkg-config"
   ];
 
   hardeningEnable = [ "pie" ];
@@ -72,7 +73,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "An integrated DNS, DHCP and TFTP server for small networks";
-    homepage = "http://www.thekelleys.org.uk/dnsmasq/doc.html";
+    homepage = "https://www.thekelleys.org.uk/dnsmasq/doc.html";
     license = licenses.gpl2;
     platforms = with platforms; linux ++ darwin;
     maintainers = with maintainers; [ eelco fpletz globin ];

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, SDL2, libpng, libjpeg, libtiff, libungif, libwebp, libXpm, zlib, Foundation }:
+{ lib, stdenv, fetchurl, SDL2, libpng, libjpeg, libtiff, giflib, libwebp, libXpm, zlib, Foundation }:
 
 stdenv.mkDerivation rec {
   pname = "SDL2_image";
@@ -9,11 +9,21 @@ stdenv.mkDerivation rec {
     sha256 = "1l0864kas9cwpp2d32yxl81g98lx40dhbdp03dz7sbv84vhgdmdx";
   };
 
-  buildInputs = [ SDL2 libpng libjpeg libtiff libungif libwebp libXpm zlib ]
+  buildInputs = [ SDL2 libpng libjpeg libtiff giflib libwebp libXpm zlib ]
     ++ lib.optional stdenv.isDarwin Foundation;
 
-
-  configureFlags = lib.optional stdenv.isDarwin "--disable-sdltest";
+  configureFlags = [
+    # Disable dynamically loaded dependencies
+    "--disable-jpg-shared"
+    "--disable-png-shared"
+    "--disable-tif-shared"
+    "--disable-webp-shared"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # Darwin headless will hang when trying to run the SDL test program
+    "--disable-sdltest"
+    # Don't use native macOS frameworks
+    "--disable-imageio"
+  ];
 
   enableParallelBuilding = true;
 

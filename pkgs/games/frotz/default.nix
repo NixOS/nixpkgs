@@ -5,6 +5,8 @@
 , libsndfile
 , libvorbis
 , ncurses
+, which
+, pkg-config
 , lib, stdenv }:
 
 stdenv.mkDerivation rec {
@@ -19,6 +21,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-xVC/iE71W/Wdy5aPGH9DtcVAHWCcg3HkEA3iDV6OYUo=";
   };
 
+  nativeBuildInputs = [ which pkg-config ];
   buildInputs = [ libao libmodplug libsamplerate libsndfile libvorbis ncurses ];
   preBuild = ''
     makeFlagsArray+=(

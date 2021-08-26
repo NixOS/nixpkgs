@@ -2,13 +2,9 @@
 , SDL2, libpng, libjpeg, glew, openal, scons, libmad
 }:
 
-let
-  version = "0.9.12";
-
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "endless-sky";
-  inherit version;
+  version = "0.9.12";
 
   src = fetchFromGitHub {
     owner = "endless-sky";

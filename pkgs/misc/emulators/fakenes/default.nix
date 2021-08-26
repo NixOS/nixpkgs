@@ -1,10 +1,12 @@
 {lib, stdenv, fetchurl, allegro, openal, libGLU, libGL, zlib, hawknl, freeglut, libX11,
   libXxf86vm, libXcursor, libXpm }:
 
-stdenv.mkDerivation {
-  name = "fakenes-0.5.9b3";
+stdenv.mkDerivation rec {
+  pname = "fakenes";
+  version = "0.5.9-beta3";
+
   src = fetchurl {
-    url = "mirror://sourceforge/fakenes/fakenes-0.5.9-beta3.tar.gz";
+    url = "mirror://sourceforge/fakenes/fakenes-${version}.tar.gz";
     sha256 = "026h67s4pzc1vma59pmzk02iy379255qbai2q74wln9bxqcpniy4";
   };
 

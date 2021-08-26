@@ -1,7 +1,8 @@
 { lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "hologram-2018-03-19";
+  pname = "hologram";
+  version = "2018-03-19";
   rev = "a7bab58642b530edb75b9cf6c1d834c85822ceac";
 
   src = fetchFromGitHub {
@@ -20,7 +21,7 @@ buildGoPackage rec {
   meta = with lib; {
     homepage = "https://github.com/AdRoll/hologram/";
     description = "Easy, painless AWS credentials on developer laptops";
-    maintainers = with maintainers; [ nand0p ];
+    maintainers = with maintainers; [ ];
     license = licenses.asl20;
   };
 }

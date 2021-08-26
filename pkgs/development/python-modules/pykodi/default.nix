@@ -1,15 +1,28 @@
-{ lib, buildPythonPackage, fetchPypi, aiohttp, jsonrpc-async, jsonrpc-websocket }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, aiohttp
+, jsonrpc-async
+, jsonrpc-websocket
+}:
 
 buildPythonPackage rec {
   pname = "pykodi";
-  version = "0.2.3";
+  version = "0.2.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "099xyn5aql5mdim6kh4hwx0fg1a3bx73qdvwr48nz23cljmmk1m8";
+    sha256 = "1al2q4jiqxjnz0j2xvs2hqzrz6fm3hmda5zjnkp8gdvgchd1cmn7";
   };
 
-  propagatedBuildInputs = [ aiohttp jsonrpc-async jsonrpc-websocket ];
+  propagatedBuildInputs = [
+    aiohttp
+    jsonrpc-async
+    jsonrpc-websocket
+  ];
+
+  # has no tests
+  doCheck = false;
 
   pythonImportsCheck = [ "pykodi" ];
 

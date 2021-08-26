@@ -80,6 +80,8 @@ let self = rec {
 
   steam-launcher = callPackage ../applications/video/kodi-packages/steam-launcher { };
 
+  steam-library = callPackage ../applications/video/kodi-packages/steam-library { };
+
   pdfreader = callPackage ../applications/video/kodi-packages/pdfreader { };
 
   pvr-hts = callPackage ../applications/video/kodi-packages/pvr-hts { };
@@ -94,6 +96,8 @@ let self = rec {
 
   vfs-libarchive = callPackage ../applications/video/kodi-packages/vfs-libarchive { };
 
+  youtube = callPackage ../applications/video/kodi-packages/youtube { };
+
   # addon packages (dependencies)
 
   certifi = callPackage ../applications/video/kodi-packages/certifi { };
@@ -106,6 +110,10 @@ let self = rec {
 
   inputstream-adaptive = callPackage ../applications/video/kodi-packages/inputstream-adaptive { };
 
+  inputstream-ffmpegdirect = callPackage ../applications/video/kodi-packages/inputstream-ffmpegdirect { };
+
+  inputstream-rtmp = callPackage ../applications/video/kodi-packages/inputstream-rtmp { };
+
   inputstreamhelper = callPackage ../applications/video/kodi-packages/inputstreamhelper { };
 
   kodi-six = callPackage ../applications/video/kodi-packages/kodi-six { };
@@ -114,10 +122,16 @@ let self = rec {
 
   requests = callPackage ../applications/video/kodi-packages/requests { };
 
+  requests-cache = callPackage ../applications/video/kodi-packages/requests-cache { };
+
+  routing = callPackage ../applications/video/kodi-packages/routing { };
+
   signals = callPackage ../applications/video/kodi-packages/signals { };
 
   six = callPackage ../applications/video/kodi-packages/six { };
 
   urllib3 = callPackage ../applications/video/kodi-packages/urllib3 { };
+
+  websocket = callPackage ../applications/video/kodi-packages/websocket { };
 
 }; in self

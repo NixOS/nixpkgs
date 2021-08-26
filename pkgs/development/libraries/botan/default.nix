@@ -9,4 +9,8 @@ callPackage ./generic.nix (args // {
   postPatch = ''
     sed -e 's@lang_flags "@&--std=c++11 @' -i src/build-data/cc/{gcc,clang}.txt
   '';
+  knownVulnerabilities = [
+    # https://botan.randombit.net/security.html#id1
+    "2020-03-24: Side channel during CBC padding"
+  ];
 })

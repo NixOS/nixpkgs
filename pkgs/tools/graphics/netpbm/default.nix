@@ -19,7 +19,8 @@
 stdenv.mkDerivation {
   # Determine version and revision from:
   # https://sourceforge.net/p/netpbm/code/HEAD/log/?path=/advanced
-  name = "netpbm-10.92.0";
+  pname = "netpbm";
+  version = "10.92.0";
 
   outputs = [ "bin" "out" "dev" ];
 

@@ -13,9 +13,9 @@ py.buildPythonApplication rec {
 
   buildInputs = [  pythonPackages.wrapPython ];
 
+  dontConfigure = true;
+  dontBuild = true;
   doCheck = false;
-
-  phases = [ "unpackPhase" "patchPhase" "installPhase" ];
 
   unpackPhase = "cp $src pdfdiff.py";
 

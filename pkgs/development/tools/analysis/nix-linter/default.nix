@@ -20,14 +20,14 @@
 }:
 
 mkDerivation rec {
-  pname = "nix-linter-unstable";
-  version = "2020-09-25";
+  pname = "nix-linter";
+  version = "0.2.0.3";
 
   src = fetchFromGitHub {
     owner = "Synthetica9";
     repo = "nix-linter";
-    rev = "2516a8cda41f9bb553a1c3eca38e3dd94ebf53de";
-    sha256 = "07mn2c9v67wsm57jlxv9pqac9hahw4618vngmj2sfbgihx8997kb";
+    rev = "38c4a14681cf3a1e6f098d8b723db503910a28d8";
+    sha256 = "16igk4xnm4mg9mw0zg2zk6s44axia3fs6334fasvjy0c7cjwk4c7";
   };
 
   isLibrary = false;
@@ -35,11 +35,6 @@ mkDerivation rec {
   libraryHaskellDepends = [ fixplate ];
   executableHaskellDepends = [ streamly mtl path pretty-terminal text base aeson cmdargs containers hnix bytestring path-io ];
   testHaskellDepends = [ tasty tasty-hunit tasty-th ];
-
-  # Relax upper bound on hnix https://github.com/Synthetica9/nix-linter/pull/46
-  postPatch = ''
-    substituteInPlace nix-linter.cabal --replace "hnix >=0.8 && < 0.11" "hnix >=0.8"
-  '';
 
   description = "Linter for Nix(pkgs), based on hnix";
   homepage = "https://github.com/Synthetica9/nix-linter";

@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "1password";
-  version = "1.8.0";
+  version = "1.11.2";
   src =
     if stdenv.isLinux then fetchzip {
       url = {
@@ -11,21 +11,21 @@ stdenv.mkDerivation rec {
         "aarch64-linux" = "https://cache.agilebits.com/dist/1P/op/pkg/v${version}/op_linux_arm_v${version}.zip";
       }.${stdenv.hostPlatform.system};
       sha256 = {
-        "i686-linux" = "teoxscan+EZ76Q0sfKT6nt1w/LSsmDoiN2oh+NGO/4A=";
-        "x86_64-linux" = "nRK2GSwhQe5OgcAdR1fg0vUp3fzEkhwU/teIwsEEemw=";
-        "aarch64-linux" = "0932bspm1likky1n0rg15d01gspkm1fns2ma82qyb91yr6d18ddk";
+        "i686-linux" = "0rh5bakj9qd43cf6wj5v46a3h98kcwqyc0f1yw72wvcacvjycyjz";
+        "x86_64-linux" = "00nf0cb8cxk1pvzr1wq778wvikzrlzy38r3rzkq44whdpdj50jzx";
+        "aarch64-linux" = "1gv282z49bj3ln5na4wb1z5455a64cyd54fp5i96k8shaxd0apxf";
       }.${stdenv.hostPlatform.system};
       stripRoot = false;
     } else fetchurl {
-      url = "https://cache.agilebits.com/dist/1P/op/pkg/v${version}/op_darwin_amd64_v${version}.pkg";
-      sha256 = "0pycia75vdfh6gxfd2hr32cxrryfxydid804n0v76l2fpr9v9v3d";
+      url = "https://cache.agilebits.com/dist/1P/op/pkg/v${version}/op_apple_universal_v${version}.pkg";
+      sha256 = "1pqdjr6d23j9fpwgahb0s1ni1bpjv9jajs1hapgq5kdrww2w7nhm";
     };
 
   buildInputs = lib.optionals stdenv.isDarwin [ xar cpio ];
 
   unpackPhase = lib.optionalString stdenv.isDarwin ''
     xar -xf $src
-    zcat Payload | cpio -i
+    zcat op.pkg/Payload | cpio -i
   '';
 
   installPhase = ''

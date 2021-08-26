@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, jre, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  version = "2.4.17";
+  version = "2.4.19";
   pname = "swagger-codegen";
 
   jarfilename = "${pname}-cli-${version}.jar";
@@ -12,15 +12,15 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://repo1.maven.org/maven2/io/swagger/${pname}-cli/${version}/${jarfilename}";
-    sha256 = "06xx42ayh4xqpr71lq1hj7kv1v6m9ld9jm1d15fhs935zqckv32a";
+    sha256 = "04wl5k8k1ziqz7k5w0g7i6zdfn41pbh3k0m8vq434k1886inf8yn";
   };
 
-  phases = [ "installPhase" ];
+  dontUnpack = true;
 
   installPhase = ''
-    install -D "$src" "$out/share/java/${jarfilename}"
+    install -D $src $out/share/java/${jarfilename}
 
-    makeWrapper ${jre}/bin/java $out/bin/swagger-codegen \
+    makeWrapper ${jre}/bin/java $out/bin/${pname} \
       --add-flags "-jar $out/share/java/${jarfilename}"
   '';
 

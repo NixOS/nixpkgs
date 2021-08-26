@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, meson, ninja, pkg-config, gettext, vala, glib, liboauth, gtk3
 , gtk-doc, docbook_xsl, docbook_xml_dtd_43
-, libxml2, gnome3, gobject-introspection, libsoup, totem-pl-parser }:
+, libxml2, gnome, gobject-introspection, libsoup, totem-pl-parser }:
 
 let
   pname = "grilo";
@@ -29,7 +29,7 @@ in stdenv.mkDerivation rec {
   buildInputs = [ glib liboauth gtk3 libxml2 libsoup totem-pl-parser ];
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "none";
     };

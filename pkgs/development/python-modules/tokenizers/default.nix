@@ -49,19 +49,19 @@ let
   };
 in buildPythonPackage rec {
   pname = "tokenizers";
-  version = "0.10.1";
+  version = "0.10.3";
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = pname;
     rev = "python-v${version}";
-    hash = "sha256-N/dKjQwHKmJnB76q8ISQ3cjuW0Z4GqGavnFFx/w9JRQ=";
+    hash = "sha256-X7aUiJJjB2ZDlE8LbK7Pn/15SLTZbP8kb4l9ED7/xvU=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src sourceRoot;
     name = "${pname}-${version}";
-    hash = "sha256-3ICSjtiRfLOj+PXu6mcuDoAtod5uXAcabYWTLxEgI18=";
+    hash = "sha256-gRqxlL6q87sGC0birDhCmGF+CVbfxwOxW6Tl6+5mGoo=";
   };
 
   sourceRoot = "source/bindings/python";
@@ -76,14 +76,11 @@ in buildPythonPackage rec {
     numpy
   ];
 
-  installCheckInputs = [
+  checkInputs = [
     datasets
     pytestCheckHook
     requests
   ];
-
-  doCheck = false;
-  doInstallCheck = true;
 
   postUnpack = ''
     # Add data files for tests, otherwise tests attempt network access.

@@ -1,16 +1,19 @@
 { lib
 , buildPythonPackage
+, pythonOlder
 , fetchPypi
 , wrapio
 }:
 
 buildPythonPackage rec {
   pname = "survey";
-  version = "3.4.2";
+  version = "3.4.3";
+
+  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-aF7ZS5oxeIOb7mJsrusdc3HefcPE+3OTXcJB/pjJxFY=";
+    sha256 = "sha256-TK89quY3bpNIEz1n3Ecew4FnTH6QgeSLdDNV86gq7+I=";
   };
 
   propagatedBuildInputs = [

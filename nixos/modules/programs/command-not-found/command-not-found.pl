@@ -1,4 +1,4 @@
-#! @perl@/bin/perl -w @perlFlags@
+#! @perl@/bin/perl -w
 
 use strict;
 use DBI;

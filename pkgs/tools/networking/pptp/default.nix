@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, perl, ppp, iproute }:
+{ lib, stdenv, fetchurl, perl, ppp, iproute2 }:
 
 stdenv.mkDerivation rec {
   pname = "pptp";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   '';
 
   preConfigure = ''
-    makeFlagsArray=( IP=${iproute}/bin/ip PPPD=${ppp}/sbin/pppd \
+    makeFlagsArray=( IP=${iproute2}/bin/ip PPPD=${ppp}/sbin/pppd \
                      BINDIR=$out/sbin MANDIR=$out/share/man/man8 \
                      PPPDIR=$out/etc/ppp )
   '';

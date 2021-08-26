@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-SLJ4mwBafLGL5pneMTHLc4S4Tgds2xLqByWFH95TK1k=";
   };
 
-  cargoSha256 = "sha256-a+4oOkO90TObfYnq9NZsWy5RmYFYN1BKvUKxpvjiJc8=";
+  cargoSha256 = "sha256-NH33AMuwf4bOF9zZJlONVMYgrrYSBq5VQClYW/rbzsM=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -31,7 +31,7 @@ rustPlatform.buildRustPackage rec {
       "Control various aspects of Microsoft Surface devices on Linux from the Command-Line";
     homepage = "https://github.com/linux-surface/surface-control";
     license = licenses.mit;
-    maintainers = with maintainers; [ winterqt ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

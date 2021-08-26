@@ -18,12 +18,17 @@
 
 buildPythonPackage rec {
   pname = "junos-eznc";
-  version = "2.5.4";
+  version = "2.6.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bf036d0af9ee5c5e4f517cb5fc902fe891fa120e18f459805862c53d4a97193a";
+    sha256 = "2f5de7dedaac8dd71bfea23c6a7d883e29947c91de1ba299a9242e0a4406ee46";
   };
+
+  postPatch = ''
+    substituteInPlace requirements.txt \
+      --replace "ncclient==0.6.9" "ncclient"
+  '';
 
   checkInputs = [ nose ];
 

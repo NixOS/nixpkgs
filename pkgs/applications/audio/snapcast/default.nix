@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, cmake, pkg-config
-, alsaLib, asio, avahi, boost170, flac, libogg, libvorbis, soxr
+, alsa-lib, asio, avahi, boost17x, flac, libogg, libvorbis, soxr
 , nixosTests }:
 
 let
@@ -20,8 +20,8 @@ let
 
   aixlog = dependency {
     name    = "aixlog";
-    version = "1.4.0";
-    sha256  = "0f2bs5j1jjajcpa251dslnwkgglaam3b0cm6wdx5l7mbwvnmib2g";
+    version = "1.5.0";
+    sha256  = "09mnkrans9zmwfxsiwgkm0rba66c11kg5zby9x3rjic34gnmw6ay";
   };
 
   popl = dependency {
@@ -34,20 +34,21 @@ in
 
 stdenv.mkDerivation rec {
   pname = "snapcast";
-  version = "0.23.0";
+  version = "0.25.0";
 
   src = fetchFromGitHub {
     owner  = "badaix";
     repo   = "snapcast";
     rev    = "v${version}";
-    sha256 = "0183hhghzn0fhw2qzc1s009q7miabpcf0pxaqjdscsl8iivxqknd";
+    sha256 = "064pcpr5dsv9hncqkrnxriva4xjv1vcxhvc69h1an8x8vn4dwgmf";
   };
 
-  nativeBuildInputs = [ cmake pkg-config boost170.dev ];
+  nativeBuildInputs = [ cmake pkg-config ];
   # snapcast also supports building against tremor but as we have libogg, that's
   # not needed
   buildInputs = [
-    alsaLib asio avahi flac libogg libvorbis
+    boost17x
+    alsa-lib asio avahi flac libogg libvorbis
     aixlog popl soxr
   ];
 
@@ -64,6 +65,6 @@ stdenv.mkDerivation rec {
     description = "Synchronous multi-room audio player";
     homepage = "https://github.com/badaix/snapcast";
     maintainers = with maintainers; [ fpletz ];
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
   };
 }

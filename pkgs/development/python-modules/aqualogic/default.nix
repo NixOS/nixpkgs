@@ -1,24 +1,36 @@
 { lib
+, aiohttp
 , buildPythonPackage
 , fetchFromGitHub
 , pyserial
 , pytestCheckHook
+, websockets
 }:
 
 buildPythonPackage rec {
   pname = "aqualogic";
-  version = "2.5";
+  version = "3.3";
 
   src = fetchFromGitHub {
     owner = "swilson";
     repo = pname;
     rev = version;
-    sha256 = "sha256-yxd+A5dsB9gBwVlPNjz+IgDHKTktNky84bWZMhA/xa4=";
+    sha256 = "sha256-6YvkSUtBc3Nl/Ap3LjU0IKY2bE4k86XdSoLo+/c8dDs=";
   };
 
-  propagatedBuildInputs = [ pyserial ];
+  propagatedBuildInputs = [
+    pyserial
+    websockets
+  ];
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [
+    aiohttp
+    pytestCheckHook
+  ];
+
+  # With 3.3 the event loop is not terminated after the first test
+  # https://github.com/swilson/aqualogic/issues/9
+  doCheck = false;
 
   pythonImportsCheck = [ "aqualogic" ];
 

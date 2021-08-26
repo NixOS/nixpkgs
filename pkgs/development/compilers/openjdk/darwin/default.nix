@@ -1,5 +1,23 @@
-{ lib, stdenv, fetchurl, unzip, setJavaClassPath, freetype }:
+{ lib, stdenv, fetchurl, unzip, setJavaClassPath }:
 let
+  # Details from https://www.azul.com/downloads/?version=java-16-sts&os=macos&package=jdk
+  # Note that the latest build may differ by platform
+  dist = {
+    x86_64-darwin = {
+      arch = "x64";
+      zuluVersion = "16.30.15";
+      jdkVersion = "16.0.1";
+      sha256 = "1jihn125dmxr9y5h9jq89zywm3z6rbwv5q7msfzsf2wzrr13jh0z";
+    };
+
+    aarch64-darwin = {
+      arch = "aarch64";
+      zuluVersion = "16.30.19";
+      jdkVersion = "16.0.1";
+      sha256 = "1i0bcjx3acb5dhslf6cabdcnd6mrz9728vxw9hb4al5y3f5fll4w";
+    };
+  }."${stdenv.hostPlatform.system}";
+
   jce-policies = fetchurl {
     # Ugh, unversioned URLs... I hope this doesn't change often enough to cause pain before we move to a Darwin source build of OpenJDK!
     url    = "http://cdn.azul.com/zcek/bin/ZuluJCEPolicies.zip";
@@ -7,17 +25,16 @@ let
   };
 
   jdk = stdenv.mkDerivation rec {
-    pname = "zulu15.28.51-ca-jdk";
-    version = "15.0.1";
+    pname = "zulu${dist.zuluVersion}-ca-jdk";
+    version = dist.jdkVersion;
 
     src = fetchurl {
-      url = "https://cdn.azul.com/zulu/bin/${pname}${version}-macosx_x64.tar.gz";
-      sha256 = "0h738pbnwcn7pjp0qyryzazqj5nw5sy2f8l0ycl39crm9ia6akvh";
+      url = "https://cdn.azul.com/zulu/bin/zulu${dist.zuluVersion}-ca-jdk${dist.jdkVersion}-macosx_${dist.arch}.tar.gz";
+      inherit (dist) sha256;
       curlOpts = "-H Referer:https://www.azul.com/downloads/zulu/";
     };
 
     nativeBuildInputs = [ unzip ];
-    buildInputs = [ freetype ];
 
     installPhase = ''
       mkdir -p $out
@@ -42,22 +59,22 @@ let
       mkdir -p $out/nix-support
       printWords ${setJavaClassPath} > $out/nix-support/propagated-build-inputs
 
-      install_name_tool -change /usr/X11/lib/libfreetype.6.dylib ${freetype}/lib/libfreetype.6.dylib $out/lib/libfontmanager.dylib
-
       # Set JAVA_HOME automatically.
       cat <<EOF >> $out/nix-support/setup-hook
       if [ -z "\''${JAVA_HOME-}" ]; then export JAVA_HOME=$out; fi
       EOF
     '';
 
+    # fixupPhase is moving the man to share/man which breaks it because it's a
+    # relative symlink.
+    postFixup = ''
+      ln -nsf ../zulu-${lib.versions.major version}.jdk/Contents/Home/man $out/share/man
+    '';
+
     passthru = {
       home = jdk;
     };
 
-    meta = with lib; {
-      license = licenses.gpl2;
-      platforms = platforms.darwin;
-    };
-
+    meta = import ./meta.nix lib;
   };
 in jdk

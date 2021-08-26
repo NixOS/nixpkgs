@@ -9,6 +9,7 @@
 , snappy
 , zeromq
 , zlib
+, nixosTests
 }:
 
 buildGoModule rec {
@@ -54,11 +55,18 @@ buildGoModule rec {
     cp -r $src/static/css/ $out/share/
   '';
 
+  passthru.tests = {
+    smoke-test = nixosTests.blockbook-frontend;
+  };
+
   meta = with lib; {
     description = "Trezor address/account balance backend";
     homepage = "https://github.com/trezor/blockbook";
     license = licenses.agpl3;
     maintainers = with maintainers; [ mmahut _1000101 ];
     platforms = platforms.unix;
+    # go dependency tecbot/gorocksdb requires rocksdb 5.x but nixpkgs has only rocksdb 6.x
+    # issue in upstream can be tracked here: https://github.com/trezor/blockbook/issues/617
+    broken = true;
   };
 }

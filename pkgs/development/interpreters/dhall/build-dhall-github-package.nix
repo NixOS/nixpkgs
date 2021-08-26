@@ -43,7 +43,7 @@ lib.makePackageOverridable
         "rev"
       ]);
 
-      prefix = lib.optionalString (directory != "") "${directory}/";
+      prefix = lib.optionalString (directory != "") "/${directory}";
 
     in
       buildDhallPackage
@@ -51,9 +51,12 @@ lib.makePackageOverridable
 
             name = versionedName;
 
-            code = "${src}/${prefix}${file}";
+            code = "${src}${prefix}/${file}";
           }
         // lib.optionalAttrs document
-          { documentationRoot = "${src}/${prefix}"; }
+          { documentationRoot = "${src}/${prefix}";
+
+            baseImportUrl = "https://raw.githubusercontent.com/${owner}/${repo}/${rev}${prefix}";
+          }
         )
   )

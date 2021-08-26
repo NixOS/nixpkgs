@@ -7,7 +7,7 @@ makeInstalledTest {
 
   testConfig = {
     programs.dconf.enable = true;
-    services.gnome3.at-spi2-core.enable = true; # needed for dogtail
+    services.gnome.at-spi2-core.enable = true; # needed for dogtail
     environment.systemPackages = with pkgs; [
       # gsettings tool with access to gsettings-desktop-schemas
       (stdenv.mkDerivation {

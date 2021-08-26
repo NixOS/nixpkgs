@@ -5,7 +5,7 @@ with lib;
 let
   cfg = config.services.transmission;
   inherit (config.environment) etc;
-  apparmor = config.security.apparmor.enable;
+  apparmor = config.security.apparmor;
   rootDir = "/run/transmission";
   homeDir = "/var/lib/transmission";
   settingsDir = ".config/transmission-daemon";
@@ -184,8 +184,8 @@ in
 
     systemd.services.transmission = {
       description = "Transmission BitTorrent Service";
-      after = [ "network.target" ] ++ optional apparmor "apparmor.service";
-      requires = optional apparmor "apparmor.service";
+      after = [ "network.target" ] ++ optional apparmor.enable "apparmor.service";
+      requires = optional apparmor.enable "apparmor.service";
       wantedBy = [ "multi-user.target" ];
       environment.CURL_CA_BUNDLE = etc."ssl/certs/ca-certificates.crt".source;
 
@@ -358,95 +358,39 @@ in
       })
     ];
 
-    security.apparmor.profiles = mkIf apparmor [
-      (pkgs.writeText "apparmor-transmission-daemon" ''
-        include <tunables/global>
+    security.apparmor.policies."bin.transmission-daemon".profile = ''
+      include "${pkgs.transmission.apparmor}/bin.transmission-daemon"
+    '';
+    security.apparmor.includes."local/bin.transmission-daemon" = ''
+      r ${config.systemd.services.transmission.environment.CURL_CA_BUNDLE},
 
-        ${pkgs.transmission}/bin/transmission-daemon {
-          include <abstractions/base>
-          include <abstractions/nameservice>
+      owner rw ${cfg.home}/${settingsDir}/**,
+      rw ${cfg.settings.download-dir}/**,
+      ${optionalString cfg.settings.incomplete-dir-enabled ''
+        rw ${cfg.settings.incomplete-dir}/**,
+      ''}
+      ${optionalString cfg.settings.watch-dir-enabled ''
+        rw ${cfg.settings.watch-dir}/**,
+      ''}
+      profile dirs {
+        rw ${cfg.settings.download-dir}/**,
+        ${optionalString cfg.settings.incomplete-dir-enabled ''
+          rw ${cfg.settings.incomplete-dir}/**,
+        ''}
+        ${optionalString cfg.settings.watch-dir-enabled ''
+          rw ${cfg.settings.watch-dir}/**,
+        ''}
+      }
 
-          # NOTE: https://github.com/NixOS/nixpkgs/pull/93457
-          # will remove the need for these by fixing <abstractions/base>
-          r ${etc."hosts".source},
-          r /etc/ld-nix.so.preload,
-          ${lib.optionalString (builtins.hasAttr "ld-nix.so.preload" etc) ''
-            r ${etc."ld-nix.so.preload".source},
-            ${concatMapStrings (p: optionalString (p != "") ("mr ${p},\n"))
-              (splitString "\n" config.environment.etc."ld-nix.so.preload".text)}
-          ''}
-          r ${etc."ssl/certs/ca-certificates.crt".source},
-          r ${pkgs.tzdata}/share/zoneinfo/**,
-          r ${pkgs.stdenv.cc.libc}/share/i18n/**,
-          r ${pkgs.stdenv.cc.libc}/share/locale/**,
-
-          mr ${getLib pkgs.stdenv.cc.cc}/lib/*.so*,
-          mr ${getLib pkgs.stdenv.cc.libc}/lib/*.so*,
-          mr ${getLib pkgs.attr}/lib/libattr*.so*,
-          mr ${getLib pkgs.c-ares}/lib/libcares*.so*,
-          mr ${getLib pkgs.curl}/lib/libcurl*.so*,
-          mr ${getLib pkgs.keyutils}/lib/libkeyutils*.so*,
-          mr ${getLib pkgs.libcap}/lib/libcap*.so*,
-          mr ${getLib pkgs.libevent}/lib/libevent*.so*,
-          mr ${getLib pkgs.libgcrypt}/lib/libgcrypt*.so*,
-          mr ${getLib pkgs.libgpgerror}/lib/libgpg-error*.so*,
-          mr ${getLib pkgs.libkrb5}/lib/lib*.so*,
-          mr ${getLib pkgs.libssh2}/lib/libssh2*.so*,
-          mr ${getLib pkgs.lz4}/lib/liblz4*.so*,
-          mr ${getLib pkgs.nghttp2}/lib/libnghttp2*.so*,
-          mr ${getLib pkgs.openssl}/lib/libcrypto*.so*,
-          mr ${getLib pkgs.openssl}/lib/libssl*.so*,
-          mr ${getLib pkgs.systemd}/lib/libsystemd*.so*,
-          mr ${getLib pkgs.util-linuxMinimal.out}/lib/libblkid.so*,
-          mr ${getLib pkgs.util-linuxMinimal.out}/lib/libmount.so*,
-          mr ${getLib pkgs.util-linuxMinimal.out}/lib/libuuid.so*,
-          mr ${getLib pkgs.xz}/lib/liblzma*.so*,
-          mr ${getLib pkgs.zlib}/lib/libz*.so*,
-
-          r @{PROC}/sys/kernel/random/uuid,
-          r @{PROC}/sys/vm/overcommit_memory,
-          # @{pid} is not a kernel variable yet but a regexp
-          #r @{PROC}/@{pid}/environ,
-          r @{PROC}/@{pid}/mounts,
-          rwk /tmp/tr_session_id_*,
-          r /run/systemd/resolve/stub-resolv.conf,
-
-          r ${pkgs.openssl.out}/etc/**,
-          r ${config.systemd.services.transmission.environment.CURL_CA_BUNDLE},
-          r ${pkgs.transmission}/share/transmission/**,
-
-          owner rw ${cfg.home}/${settingsDir}/**,
-          rw ${cfg.settings.download-dir}/**,
-          ${optionalString cfg.settings.incomplete-dir-enabled ''
-            rw ${cfg.settings.incomplete-dir}/**,
-          ''}
-          ${optionalString cfg.settings.watch-dir-enabled ''
-            rw ${cfg.settings.watch-dir}/**,
-          ''}
-          profile dirs {
-            rw ${cfg.settings.download-dir}/**,
-            ${optionalString cfg.settings.incomplete-dir-enabled ''
-              rw ${cfg.settings.incomplete-dir}/**,
-            ''}
-            ${optionalString cfg.settings.watch-dir-enabled ''
-              rw ${cfg.settings.watch-dir}/**,
-            ''}
-          }
-
-          ${optionalString (cfg.settings.script-torrent-done-enabled &&
-                            cfg.settings.script-torrent-done-filename != "") ''
-            # Stack transmission_directories profile on top of
-            # any existing profile for script-torrent-done-filename
-            # FIXME: to be tested as I'm not sure it works well with NoNewPrivileges=
-            # https://gitlab.com/apparmor/apparmor/-/wikis/AppArmorStacking#seccomp-and-no_new_privs
-            px ${cfg.settings.script-torrent-done-filename} -> &@{dirs},
-          ''}
-
-          # FIXME: enable customizing using https://github.com/NixOS/nixpkgs/pull/93457
-          # include <local/transmission-daemon>
-        }
-      '')
-    ];
+      ${optionalString (cfg.settings.script-torrent-done-enabled &&
+                        cfg.settings.script-torrent-done-filename != "") ''
+        # Stack transmission_directories profile on top of
+        # any existing profile for script-torrent-done-filename
+        # FIXME: to be tested as I'm not sure it works well with NoNewPrivileges=
+        # https://gitlab.com/apparmor/apparmor/-/wikis/AppArmorStacking#seccomp-and-no_new_privs
+        px ${cfg.settings.script-torrent-done-filename} -> &@{dirs},
+      ''}
+    '';
   };
 
   meta.maintainers = with lib.maintainers; [ julm ];

@@ -3,9 +3,8 @@
 , fetchPypi
 , isPy27
 , six
-, pytest_4
-, hypothesis_4
-, pytestrunner
+, pytestCheckHook
+, hypothesis
 }:
 
 buildPythonPackage rec {
@@ -21,11 +20,15 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ six ];
 
-  checkInputs = [ pytestrunner pytest_4 hypothesis_4 ];
+  checkInputs = [ pytestCheckHook hypothesis ];
 
   postPatch = ''
-    substituteInPlace setup.py --replace 'pytest<5' 'pytest'
+    substituteInPlace setup.py \
+      --replace 'pytest<5' 'pytest' \
+      --replace 'hypothesis<5' 'hypothesis'
   '';
+
+  pythonImportsCheck = [ "pyrsistent" ];
 
   meta = with lib; {
     homepage = "https://github.com/tobgu/pyrsistent/";

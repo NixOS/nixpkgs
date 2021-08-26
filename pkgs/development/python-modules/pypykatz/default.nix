@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "pypykatz";
-  version = "0.4.7";
+  version = "0.5.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0il5sj47wyf9gn76alm8v1l63rqw2vsd27v6f7q1dpn0wq209syi";
+    sha256 = "1lyvypi1g4l9fq1f9q05bdn6vq8y5y9ghmb6ziqdycr0lxn7lfdd";
   };
 
   propagatedBuildInputs = [

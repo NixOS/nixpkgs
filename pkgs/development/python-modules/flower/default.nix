@@ -6,23 +6,23 @@
 , mock
 , pytz
 , tornado
-, prometheus_client
+, prometheus-client
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "flower";
-  version = "0.9.7";
+  version = "1.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cf27a254268bb06fd4972408d0518237fcd847f7da4b4cd8055e228150ace8f3";
+    sha256 = "1gcczr04g7wx99h7pxxx1p9n50sbyi0zxrzy7f7m0sf5apxw85rf";
   };
 
   postPatch = ''
     # rely on using example programs (flowers/examples/tasks.py) which
     # are not part of the distribution
     rm tests/load.py
-    substituteInPlace  requirements/default.txt --replace "prometheus_client==0.8.0" "prometheus_client>=0.8.0"
   '';
 
   propagatedBuildInputs = [
@@ -30,10 +30,13 @@ buildPythonPackage rec {
     pytz
     tornado
     humanize
-    prometheus_client
+    prometheus-client
   ];
 
-  checkInputs = [ mock ];
+  checkInputs = [
+    mock
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "flower" ];
 
@@ -41,7 +44,6 @@ buildPythonPackage rec {
     description = "Celery Flower";
     homepage = "https://github.com/mher/flower";
     license = licenses.bsdOriginal;
-    maintainers = [ maintainers.arnoldfarkas ];
-    broken = (celery.version >= "5.0.2"); # currently broken with celery>=5.0 by https://github.com/mher/flower/pull/1021
+    maintainers = with maintainers; [ arnoldfarkas ];
   };
 }

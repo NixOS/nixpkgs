@@ -3,6 +3,7 @@
 , python
 , pythonOlder
 , fetchFromGitLab
+, fetchpatch
 , substituteAll
 , bubblewrap
 , exiftool
@@ -49,6 +50,18 @@ buildPythonPackage rec {
     ./executable-name.patch
     # hardcode path to mat2 executable
     ./tests.patch
+    # remove for next release
+    (fetchpatch {
+      name = "fix-tests-ffmpeg-4.4.patch";
+      url = "https://0xacab.org/jvoisin/mat2/-/commit/c9be50f968212b01f8d8ad85e59e19c3e67d8578.patch";
+      sha256 = "0895dkv6575ps3drdfnli15cggx27n9irjx0axigrm4ql4ma0648";
+    })
+    # fix white space error in the tests for exiftool, remove for next release
+    (fetchpatch {
+      name = "fix-tests-exiftool.patch";
+      url = "https://0xacab.org/jvoisin/mat2/-/commit/6df615281b2a649b85ff7670f6d87d3beed0b977.patch";
+      sha256 = "1gix63n0mzavnqjq5ll0v210z4vdz4f93aq03bfzlgifxcd9vl1x";
+    })
   ];
 
   postPatch = ''

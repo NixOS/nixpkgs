@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "airsonic";
@@ -13,6 +13,10 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/webapps"
     cp "$src" "$out/webapps/airsonic.war"
   '';
+
+  passthru.tests = {
+    airsonic-starts = nixosTests.airsonic;
+  };
 
   meta = with lib; {
     description = "Personal media streamer";

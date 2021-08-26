@@ -3,7 +3,7 @@
 , fetchPypi
 , pkg-config
 , pytest
-, pytestrunner
+, pytest-runner
 , cffi
 , secp256k1
 }:
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  checkInputs = [ pytest pytestrunner ];
+  checkInputs = [ pytest pytest-runner ];
   propagatedBuildInputs = [ cffi secp256k1 ];
 
   # Tests are not included in archive
@@ -44,6 +44,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ludbb/secp256k1-py";
     description = "Python FFI bindings for secp256k1";
     license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ chris-martin ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

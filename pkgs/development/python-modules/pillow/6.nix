@@ -25,5 +25,23 @@ import ./generic.nix (rec {
     '';
     license = "http://www.pythonware.com/products/pil/license.htm";
     maintainers = with maintainers; [ goibhniu prikhi SuperSandro2000 ];
+    knownVulnerabilities = [
+      "CVE-2020-10177"
+      "CVE-2020-10378"
+      "CVE-2020-10379"
+      "CVE-2020-10994"
+      "CVE-2020-11538"
+      "CVE-2020-35653"
+      "CVE-2020-35654"
+      "CVE-2020-35655"
+      "CVE-2021-25289"
+      "CVE-2021-25290"
+      "CVE-2021-25291"
+      "CVE-2021-25292"
+      "CVE-2021-25293"
+      "CVE-2021-27921"
+      "CVE-2021-27922"
+      "CVE-2021-27923"
+    ];
   };
 } // args )

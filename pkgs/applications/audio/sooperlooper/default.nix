@@ -14,7 +14,7 @@
 , rubberband
 , gettext
 , ncurses
-, alsaLib
+, alsa-lib
 , fftw
 }:
 
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     rubberband
     gettext
     ncurses
-    alsaLib
+    alsa-lib
     fftw
   ];
 

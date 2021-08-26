@@ -32,19 +32,23 @@
 , libXft
 , libXcomposite
 , libXScrnSaver
-, alsaLib
+, alsa-lib
 , pulseaudio
 , makeWrapper
+, xdg-utils
 }:
+
+let
+  getFirst = n: v: builtins.concatStringsSep "." (lib.take n (lib.splitString "." v));
+in
 
 stdenv.mkDerivation rec {
   pname = "bluejeans";
-  version = "2.19.0";
-  buildNumber = "61";
+  version = "2.23.0.39";
 
   src = fetchurl {
-    url = "https://swdl.bluejeans.com/desktop-app/linux/${version}/BlueJeans_${version}.${buildNumber}.rpm";
-    sha256 = "163p67dqry256d454qzk4k4b692kz8s9fcvaxd6gi7zvnsd48ikr";
+    url = "https://swdl.bluejeans.com/desktop-app/linux/${getFirst 3 version}/BlueJeans_${version}.rpm";
+    sha256 = "sha256-LGg14KJ/hEnSaSrdTltY9YXv7Nekkfo66uLkxjMx8AI=";
   };
 
   nativeBuildInputs = [ rpmextract makeWrapper ];
@@ -83,7 +87,7 @@ stdenv.mkDerivation rec {
         libXft
         libXcomposite
         libXScrnSaver
-        alsaLib
+        alsa-lib
         pulseaudio
       ];
 
@@ -100,21 +104,25 @@ stdenv.mkDerivation rec {
       --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
       --replace-needed libudev.so.0 libudev.so.1 \
       opt/BlueJeans/bluejeans-v2
+
     patchelf \
       --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
       opt/BlueJeans/resources/BluejeansHelper
 
-    cc $localtime64_stub -shared -o "$out"/opt/BlueJeans/liblocaltime64_stub.so
+    cc $localtime64_stub -shared -o "${placeholder "out"}"/opt/BlueJeans/liblocaltime64_stub.so
 
     makeWrapper $out/opt/BlueJeans/bluejeans-v2 $out/bin/bluejeans \
       --set LD_LIBRARY_PATH "${libPath}":"${placeholder "out"}"/opt/BlueJeans \
-      --set LD_PRELOAD "$out"/opt/BlueJeans/liblocaltime64_stub.so
+      --set LD_PRELOAD "$out"/opt/BlueJeans/liblocaltime64_stub.so \
+      --prefix PATH : ${lib.makeBinPath [ xdg-utils ]}
 
     substituteInPlace "$out"/share/applications/bluejeans-v2.desktop \
       --replace "/opt/BlueJeans/bluejeans-v2" "$out/bin/bluejeans"
 
     patchShebangs "$out"
   '';
+
+  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     description = "Video, audio, and web conferencing that works together with the collaboration tools you use every day";
@@ -124,3 +132,4 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
   };
 }
+

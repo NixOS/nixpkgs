@@ -39,7 +39,6 @@ in
         type = types.package;
         default = pkgs.graylog;
         defaultText = "pkgs.graylog";
-        example = literalExample "pkgs.graylog";
         description = "Graylog package to use.";
       };
 
@@ -138,14 +137,13 @@ in
       "d '${cfg.messageJournalDir}' - ${cfg.user} - - -"
     ];
 
-    systemd.services.graylog = with pkgs; {
+    systemd.services.graylog = {
       description = "Graylog Server";
       wantedBy = [ "multi-user.target" ];
       environment = {
-        JAVA_HOME = jre;
         GRAYLOG_CONF = "${confFile}";
       };
-      path = [ pkgs.jre_headless pkgs.which pkgs.procps ];
+      path = [ pkgs.which pkgs.procps ];
       preStart = ''
         rm -rf /var/lib/graylog/plugins || true
         mkdir -p /var/lib/graylog/plugins -m 755

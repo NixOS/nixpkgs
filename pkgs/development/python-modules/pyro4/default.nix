@@ -7,13 +7,14 @@
 , cloudpickle
 , msgpack
 , isPy27
-, selectors34
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "Pyro4";
   version = "4.80";
+
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
@@ -22,7 +23,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     serpent
-  ] ++ lib.optionals isPy27 [ selectors34 ];
+  ];
 
   buildInputs = [
     dill

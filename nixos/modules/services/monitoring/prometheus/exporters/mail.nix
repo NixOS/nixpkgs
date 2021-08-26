@@ -112,6 +112,24 @@ let
       '';
       description = ''
         List of servers that should be probed.
+
+        <emphasis>Note:</emphasis> if your mailserver has <citerefentry>
+        <refentrytitle>rspamd</refentrytitle><manvolnum>8</manvolnum></citerefentry> configured,
+        it can happen that emails from this exporter are marked as spam.
+
+        It's possible to work around the issue with a config like this:
+        <programlisting>
+        {
+          <link linkend="opt-services.rspamd.locals._name_.text">services.rspamd.locals."multimap.conf".text</link> = '''
+            ALLOWLIST_PROMETHEUS {
+              filter = "email:domain:tld";
+              type = "from";
+              map = "''${pkgs.writeText "allowmap" "domain.tld"}";
+              score = -100.0;
+            }
+          ''';
+        }
+        </programlisting>
       '';
     };
   };

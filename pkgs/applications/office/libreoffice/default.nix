@@ -12,7 +12,7 @@
 , libatomic_ops, graphite2, harfbuzz, libodfgen, libzmf
 , librevenge, libe-book, libmwaw, glm, gst_all_1
 , gdb, commonsLogging, librdf_rasqal, wrapGAppsHook
-, gnome3, glib, ncurses, epoxy, gpgme
+, gnome, glib, ncurses, epoxy, gpgme
 , langs ? [ "ca" "cs" "da" "de" "en-GB" "en-US" "eo" "es" "fr" "hu" "it" "ja" "nl" "pl" "pt" "pt-BR" "ro" "ru" "sl" "zh-CN" ]
 , withHelp ? true
 , kdeIntegration ? false, mkDerivation ? null, qtbase ? null, qtx11extras ? null
@@ -62,8 +62,6 @@ in (mkDrv rec {
     "-I${librdf_rasqal}/include/rasqal" # librdf_redland refers to rasqal.h instead of rasqal/rasqal.h
     "-fno-visibility-inlines-hidden" # https://bugs.documentfoundation.org/show_bug.cgi?id=78174#c10
   ];
-
-  patches = [ ./xdg-open-brief.patch ];
 
   tarballPath = "external/tarballs";
 
@@ -399,7 +397,7 @@ in (mkDrv rec {
       mdds bluez5 libcmis libwps libabw libzmf
       libxshmfence libatomic_ops graphite2 harfbuzz gpgme util-linux
       librevenge libe-book libmwaw glm ncurses epoxy
-      libodfgen CoinMP librdf_rasqal gnome3.adwaita-icon-theme gettext
+      libodfgen CoinMP librdf_rasqal gnome.adwaita-icon-theme gettext
     ]
     ++ (with gst_all_1; [
       gstreamer

@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs = [ solo5 ];
+  propagatedBuildInputs = [ solo5 ];
 
   configurePhase = ''
     runHook preConfigure

@@ -1,16 +1,15 @@
 { lib, stdenv, fetchurl, unzip, runtimeShell }:
 
-stdenv.mkDerivation {
-  name = "avr8-burn-omat-2.1.2";
+stdenv.mkDerivation rec {
+  pname = "avr8-burn-omat";
+  version = "2.1.2";
 
   src = fetchurl {
-    url = "http://avr8-burn-o-mat.aaabbb.de/AVR8_Burn-O-Mat_2_1_2.zip";
+    url = "http://avr8-burn-o-mat.aaabbb.de/AVR8_Burn-O-Mat_${lib.replaceStrings ["."] ["_"] version}.zip";
     sha256 = "02k0fd0cd3y1yqip36wr3bkxbywp8913w4y7jdg6qwqxjnii58ln";
   };
 
   nativeBuildInputs = [ unzip ];
-
-  phases = "unpackPhase installPhase";
 
   # move to nix-support to not create that many symlinks..
   # TODO burnomat tries to read /usr/local/etc/avrdude.conf (but you can edit it within the settings dialog)

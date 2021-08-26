@@ -1,6 +1,6 @@
 { lib, stdenv
 , fetchFromGitLab
-, alsaLib
+, alsa-lib
 , bzip2
 , fftw
 , freeglut
@@ -23,7 +23,7 @@
 }:
 let
   libs = [
-    alsaLib
+    alsa-lib
     bzip2
     fftw
     freeglut
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    alsaLib
+    alsa-lib
     fftw
     freeglut.dev
     freetype

@@ -11,7 +11,7 @@ let
 in stdenv.mkDerivation {
   name = "papertrail-${(import ./gemset.nix).papertrail.version}";
 
-  phases = [ "installPhase" ];
+  dontUnpack = true;
 
   installPhase = ''
     mkdir -p $out/bin

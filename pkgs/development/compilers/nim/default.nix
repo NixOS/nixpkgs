@@ -95,12 +95,12 @@ in {
 
   nim-unwrapped = stdenv.mkDerivation rec {
     pname = "nim-unwrapped";
-    version = "1.4.4";
+    version = "1.4.8";
     strictDeps = true;
 
     src = fetchurl {
       url = "https://nim-lang.org/download/nim-${version}.tar.xz";
-      sha256 = "03k642nnjca0s6jlbn1v4jld51mbkix97jli4ky74gqlxyfp4wvd";
+      hash = "sha256-t5jFd0EdfZW4YxJh27Nnbp0a/Z42dA0ESWagVVtBRBo=";
     };
 
     buildInputs = [ boehmgc openssl pcre readline sqlite ];
@@ -290,6 +290,8 @@ in {
 
       makeWrapper \
         ${nim'}/nim/bin/nim $out/bin/${targetPlatform.config}-nim \
+        --set-default CC $(command -v $CC) \
+        --set-default CXX $(command -v $CXX) \
         $wrapperArgs
       ln -s $out/bin/${targetPlatform.config}-nim $out/bin/nim
 

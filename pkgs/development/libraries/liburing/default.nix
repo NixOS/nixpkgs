@@ -12,6 +12,14 @@ stdenv.mkDerivation rec {
     sha256 = "0has1yd1ns5q5jgcmhrbgwhbwq0wix3p7xv3dyrwdf784p56izkn";
   };
 
+  patches = [
+    # Fix build on 32-bit ARM
+    (fetchpatch {
+      url = "https://github.com/axboe/liburing/commit/808b6c72ab753bda0c300b5683cfd31750d1d49b.patch";
+      sha256 = "1x7a9c5a6rwhfsbjqmhbnwh2aiin6yylckrqdjbzljrprzf11wrd";
+    })
+  ];
+
   separateDebugInfo = true;
   enableParallelBuilding = true;
   # Upstream's configure script is not autoconf generated, but a hand written one.

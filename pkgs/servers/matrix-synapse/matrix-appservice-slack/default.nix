@@ -1,11 +1,10 @@
 { pkgs, nodejs, stdenv, fetchFromGitHub, lib, ... }:
-
 let
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "matrix-appservice-slack";
-    rev = "1.4.0";
-    sha256 = "1xm75rgg7yrz40y2w1njiwfwz17a8wwlvr7a6zyxvkl8cqrgzp6d";
+    rev = "1.8.0";
+    sha256 = "sha256-FA6SMivMnloeZmnUhGx6N+ZLDTZFO3y17xJYclkp5w0=";
   };
 
   nodePackages = import ./node-composition.nix {
@@ -14,6 +13,8 @@ let
   };
 in
 nodePackages.package.override {
+  pname = "matrix-appservice-slack";
+
   inherit src;
 
   nativeBuildInputs = [ pkgs.makeWrapper ];
@@ -25,7 +26,7 @@ nodePackages.package.override {
 
   meta = with lib; {
     description = "A Matrix <--> Slack bridge";
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ beardhatcode ];
     license = licenses.asl20;
   };
 }

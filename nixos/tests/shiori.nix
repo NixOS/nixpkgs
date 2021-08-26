@@ -28,7 +28,7 @@ import ./make-test-python.nix ({ pkgs, lib, ...}:
     machine.wait_for_unit("shiori.service")
     machine.wait_for_open_port(8080)
     machine.succeed("curl --fail http://localhost:8080/")
-    machine.succeed("curl --fail --location http://localhost:8080/ | grep -qi shiori")
+    machine.succeed("curl --fail --location http://localhost:8080/ | grep -i shiori")
 
     with subtest("login"):
         auth_json = machine.succeed(

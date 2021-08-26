@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, fetchgit
 , makeWrapper, autoreconfHook, fetchpatch
 , coreutils, libxml2, gnutls, perl, python3, attr, glib, docutils
-, iproute, readline, lvm2, util-linux, systemd, libpciaccess, gettext
+, iproute2, readline, lvm2, util-linux, systemd, libpciaccess, gettext
 , libtasn1, iptables, ebtables, libgcrypt, yajl, pmutils, libcap_ng, libapparmor
 , dnsmasq, libnl, libpcap, libxslt, xhtml1, numad, numactl, perlPackages
 , curl, libiconv, gmp, zfs, parted, bridge-utils, dmidecode, dbus, libtirpc, rpcsvc-proto, darwin
@@ -9,6 +9,7 @@
 , enableXen ? false, xen ? null
 , enableIscsi ? false, openiscsi
 , enableCeph ? false, ceph
+, enableGlusterfs ? false, glusterfs
 }:
 
 with lib;
@@ -72,6 +73,8 @@ in stdenv.mkDerivation rec {
     openiscsi
   ] ++ optionals enableCeph [
     ceph
+  ] ++ optionals enableGlusterfs [
+    glusterfs
   ] ++ optionals stdenv.isDarwin [
     libiconv gmp
   ];
@@ -85,7 +88,7 @@ in stdenv.mkDerivation rec {
       sed -i meson.build -e "s|conf.set_quoted('${var}',.*|conf.set_quoted('${var}','${value}')|"
     '';
   in ''
-    PATH=${lib.makeBinPath ([ dnsmasq ] ++ optionals stdenv.isLinux [ iproute iptables ebtables-compat lvm2 systemd numad ] ++ optionals enableIscsi [ openiscsi ])}:$PATH
+    PATH=${lib.makeBinPath ([ dnsmasq ] ++ optionals stdenv.isLinux [ iproute2 iptables ebtables-compat lvm2 systemd numad ] ++ optionals enableIscsi [ openiscsi ])}:$PATH
     # the path to qemu-kvm will be stored in VM's .xml and .save files
     # do not use "''${qemu_kvm}/bin/qemu-kvm" to avoid bound VMs to particular qemu derivations
     substituteInPlace src/lxc/lxc_conf.c \
@@ -119,6 +122,7 @@ in stdenv.mkDerivation rec {
     "-Dsecdriver_apparmor=enabled"
     "-Dnumad=enabled"
     "-Dstorage_disk=enabled"
+    (opt "glusterfs" enableGlusterfs)
     (opt "storage_rbd" enableCeph)
   ] ++ optionals stdenv.isDarwin [
     "-Dinit_script=none"
@@ -126,7 +130,7 @@ in stdenv.mkDerivation rec {
 
   postInstall = let
     # Keep the legacy iptables binary for now for backwards compatibility (comment on #109332)
-    binPath = [ iptables ebtables-compat iproute pmutils numad numactl bridge-utils dmidecode dnsmasq ] ++ optionals enableIscsi [ openiscsi ];
+    binPath = [ iptables ebtables-compat iproute2 pmutils numad numactl bridge-utils dmidecode dnsmasq ] ++ optionals enableIscsi [ openiscsi ];
   in ''
     substituteInPlace $out/libexec/libvirt-guests.sh \
       --replace 'ON_BOOT="start"'       'ON_BOOT=''${ON_BOOT:-start}' \

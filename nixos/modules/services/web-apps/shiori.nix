@@ -86,10 +86,7 @@ in {
         SystemCallErrorNumber = "EPERM";
         SystemCallFilter = [
           "@system-service"
-
-          "~@chown" "~@cpu-emulation" "~@debug" "~@ipc" "~@keyring" "~@memlock"
-          "~@module" "~@obsolete" "~@privileged" "~@process" "~@raw-io"
-          "~@resources" "~@setuid"
+          "~@cpu-emulation" "~@debug" "~@keyring" "~@memlock" "~@obsolete" "~@privileged" "~@resources" "~@setuid"
         ];
       };
     };

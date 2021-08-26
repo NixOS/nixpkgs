@@ -21,6 +21,6 @@ buildPythonPackage rec {
     description = "Extensible server fixures for py.test";
     homepage  = "https://github.com/manahl/pytest-plugins";
     license = licenses.mit;
-    maintainers = with maintainers; [ nand0p ];
+    maintainers = with maintainers; [ ];
   };
 }

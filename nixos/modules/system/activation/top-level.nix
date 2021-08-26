@@ -1,4 +1,4 @@
-{ config, lib, pkgs, modules, baseModules, ... }:
+{ config, lib, pkgs, modules, baseModules, specialArgs, ... }:
 
 with lib;
 
@@ -13,7 +13,7 @@ let
   # !!! fix this
   children = mapAttrs (childName: childConfig:
       (import ../../../lib/eval-config.nix {
-        inherit baseModules;
+        inherit lib baseModules specialArgs;
         system = config.nixpkgs.initialSystem;
         modules =
            (optionals childConfig.inheritParentConfig modules)
@@ -113,8 +113,7 @@ let
     configurationName = config.boot.loader.grub.configurationName;
 
     # Needed by switch-to-configuration.
-
-    perl = "${pkgs.perl}/bin/perl " + (concatMapStringsSep " " (lib: "-I${lib}/${pkgs.perl.libPrefix}") (with pkgs.perlPackages; [ FileSlurp NetDBus XMLParser XMLTwig ]));
+    perl = pkgs.perl.withPackages (p: with p; [ FileSlurp NetDBus XMLParser XMLTwig ]);
   };
 
   # Handle assertions and warnings
@@ -126,7 +125,7 @@ let
     else showWarnings config.warnings baseSystem;
 
   # Replace runtime dependencies
-  system = fold ({ oldDependency, newDependency }: drv:
+  system = foldr ({ oldDependency, newDependency }: drv:
       pkgs.replaceDependency { inherit oldDependency newDependency drv; }
     ) baseSystemAssertWarn config.system.replaceRuntimeDependencies;
 

@@ -1,14 +1,23 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, darwin, installShellFiles }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, DiskArbitration
+, Foundation
+, IOKit
+, installShellFiles
+, libiconv
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "bottom";
-  version = "0.5.7";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "ClementTsang";
     repo = pname;
     rev = version;
-    sha256 = "sha256-9L7FtYIaWSOwNQ8zOLvxjt51o8A5MqqfF/iIyJs2TJA=";
+    sha256 = "sha256-hXEaQL4jTd/MfEUVKUTs7oTRAffau1YA/IUUtD+V9KI=";
   };
 
   prePatch = ''
@@ -17,9 +26,14 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs = lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.IOKit;
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    DiskArbitration
+    Foundation
+    IOKit
+    libiconv
+  ];
 
-  cargoSha256 = "sha256-4oH1A88Qn0c6hkE/1b6mTrEIph8xT98j+DkP9/5JALs=";
+  cargoSha256 = "sha256-aeR6fcIWkY4AWZy8tVotUAVRVSiO/0S0DU/A9/ATrF4=";
 
   doCheck = false;
 
@@ -33,5 +47,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ berbiche ];
     platforms = platforms.unix;
+    mainProgram = "btm";
   };
 }

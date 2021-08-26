@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
   ];
 
   preConfigure = "autoreconf -i -f";
+  configureFlags = lib.optional stdenv.isDarwin "--disable-sdltest";
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];
   buildInputs = [ SDL pango ];

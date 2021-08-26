@@ -75,7 +75,7 @@ EOF
     description = "Common Desktop Environment";
     homepage = "https://sourceforge.net/projects/cdesktopenv/";
     license = licenses.lgpl2;
-    maintainers = [ maintainers.gnidorah ];
+    maintainers = [ ];
     platforms = [ "i686-linux" "x86_64-linux" ];
   };
 }

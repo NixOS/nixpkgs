@@ -11,15 +11,15 @@
 , pygments
 , numpy
 , scipy
-, scikitlearn }:
+, scikit-learn }:
 
 buildPythonPackage rec {
   pname = "vowpalwabbit";
-  version = "8.9.0";
+  version = "8.10.2";
 
   src = fetchPypi{
     inherit pname version;
-    sha256 = "37fb7a400f3a7923a04df9921b3eef1bbe96117424ef083dcfed0e4eea77fa08";
+    sha256 = "e9f7d525a6e88ebff41406409a5c31f79bb008f524fc63a61dc74bac6a1ac887";
   };
 
   nativeBuildInputs = [
@@ -36,7 +36,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     numpy
-    scikitlearn
+    scikit-learn
     scipy
   ];
 

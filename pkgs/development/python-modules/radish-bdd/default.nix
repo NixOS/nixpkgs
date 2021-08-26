@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "radish-bdd";
-  version = "0.13.2";
+  version = "0.13.4";
 
   # Pypi package does not have necessary test fixtures.
   src = fetchFromGitHub {
     owner = pname;
     repo = "radish";
     rev = "v${version}";
-    sha256 = "1k7l0j8w221pa6k990x4rfm7km4asx5zy4zpzvh029lb9nw2pp8b";
+    sha256 = "1slfgh61648i009qj8156qipy21a6zm8qzjk00kbm5kk5z9jfryi";
   };
 
   propagatedBuildInputs = [

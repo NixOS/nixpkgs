@@ -67,7 +67,7 @@ in
       };
 
       listen.port = mkOption {
-        type = types.int;
+        type = types.port;
         default = 5000;
         description = ''
           Port on which the sync server listen to.

@@ -31,6 +31,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
+    broken = true; # unmaintained and incompatible with pytest>=6.0
     homepage = "https://github.com/kensho-technologies/pytest-annotate";
     description = "Generate PyAnnotate annotations from your pytest tests";
     license = licenses.asl20;

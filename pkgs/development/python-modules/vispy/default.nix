@@ -1,6 +1,6 @@
 { lib, buildPythonPackage, substituteAll, stdenv,
   fetchPypi, numpy, cython, freetype-py, fontconfig, libGL,
-  setuptools_scm, setuptools-scm-git-archive
+  setuptools-scm, setuptools-scm-git-archive
   }:
 
 buildPythonPackage rec {
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   ];
 
   nativeBuildInputs = [
-    cython setuptools_scm setuptools-scm-git-archive
+    cython setuptools-scm setuptools-scm-git-archive
   ];
 
   propagatedBuildInputs = [
@@ -32,7 +32,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "vispy" ];
 
   meta = with lib; {
-    homepage = "http://vispy.org/index.html";
+    homepage = "https://vispy.org/index.html";
     description = "Interactive scientific visualization in Python";
     license = licenses.bsd3;
     maintainers = with maintainers; [ goertzenator ];

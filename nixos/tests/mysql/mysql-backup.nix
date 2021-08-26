@@ -10,7 +10,7 @@ import ./../make-test-python.nix ({ pkgs, ... } : {
       services.mysql = {
         enable = true;
         initialDatabases = [ { name = "testdb"; schema = ./testdb.sql; } ];
-        package = pkgs.mysql;
+        package = pkgs.mariadb;
       };
 
       services.mysqlBackup = {

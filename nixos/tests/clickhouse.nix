@@ -4,6 +4,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
 
   machine = {
     services.clickhouse.enable = true;
+    virtualisation.memorySize = 4096;
   };
 
   testScript =

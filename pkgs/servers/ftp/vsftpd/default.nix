@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, libcap, openssl, pam }:
 
 stdenv.mkDerivation rec {
-  name = "vsftpd-3.0.3";
+  pname = "vsftpd";
+  version = "3.0.3";
 
   src = fetchurl {
-    url = "https://security.appspot.com/downloads/${name}.tar.gz";
+    url = "https://security.appspot.com/downloads/vsftpd-${version}.tar.gz";
     sha256 = "1xsyjn68k3fgm2incpb3lz2nikffl9by2safp994i272wvv2nkcx";
   };
 
@@ -18,13 +19,18 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile \
       --replace -dirafter "" \
       --replace /usr $out \
-      --replace /etc $out/etc
+      --replace /etc $out/etc \
+      --replace "-Werror" ""
+
 
     mkdir -p $out/sbin $out/man/man{5,8}
   '';
 
+  makeFlags = [
+    "CC=${stdenv.cc.targetPrefix}cc"
+  ];
+
   NIX_LDFLAGS = "-lcrypt -lssl -lcrypto -lpam -lcap";
-  NIX_CFLAGS_COMPILE = "-Wno-error=enum-conversion";
 
   enableParallelBuilding = true;
 

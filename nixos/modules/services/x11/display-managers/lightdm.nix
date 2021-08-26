@@ -69,8 +69,8 @@ let
 
 in
 {
-  meta = {
-    maintainers = with maintainers; [ worldofpeace ];
+  meta = with lib; {
+    maintainers = with maintainers; [ ] ++ teams.pantheon.members;
   };
 
   # Note: the order in which lightdm greeter modules are imported
@@ -284,7 +284,7 @@ in
         password required       pam_deny.so
 
         session  required       pam_succeed_if.so audit quiet_success user = lightdm
-        session  required       pam_env.so conffile=${config.system.build.pamEnvironment} readenv=0
+        session  required       pam_env.so conffile=/etc/pam/environment readenv=0
         session  optional       ${pkgs.systemd}/lib/security/pam_systemd.so
         session  optional       pam_keyinit.so force revoke
         session  optional       pam_permit.so

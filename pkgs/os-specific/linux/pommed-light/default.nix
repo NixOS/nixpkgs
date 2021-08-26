@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , pciutils
 , libconfuse
-, alsaLib
+, alsa-lib
 , audiofile
 , pkg-config
 , zlib
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     pciutils
     libconfuse
-    alsaLib
+    alsa-lib
     audiofile
     zlib
     eject

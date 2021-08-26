@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchFromGitHub
-, setuptools_scm, pytest, cmake
+, setuptools-scm, pytest, cmake
 }:
 
 buildPythonPackage rec {
@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "0kwgp6sqnqnmww5r0dkmyfpi0lmw0iwxz3fnwn2fs8w6bvixzznf";
   };
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   preBuild = ''
     export SETUPTOOLS_SCM_PRETEND_VERSION="${version}"
@@ -27,6 +27,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/gabrielcnr/pytest-datadir";
     description = "pytest plugin for manipulating test data directories and files";
     license = licenses.mit;
-    maintainers = with maintainers; [ metadark ];
+    maintainers = with maintainers; [ kira-bruneau ];
   };
 }
