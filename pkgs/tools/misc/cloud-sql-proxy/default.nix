@@ -16,7 +16,7 @@ buildGoPackage rec {
 
   goDeps = ./deps.nix;
 
-  buildFlagsArray = [ "-ldflags=" "-X main.versionString=${version}" ];
+  ldflags = [ "-X main.versionString=${version}" ];
 
   meta = with lib; {
     description = "An authenticating proxy for Second Generation Google Cloud SQL databases";
