@@ -85,9 +85,9 @@ in {
       jre = mkOption {
         type = types.package;
         default = pkgs.jre8;
-        defaultText = "pkgs.jre8";
+        defaultText = literalExample "pkgs.jre8";
         description = ''
-          jre package to use.
+          JRE package to use.
 
           Airsonic only supports Java 8, airsonic-advanced requires at least
           Java 11.
