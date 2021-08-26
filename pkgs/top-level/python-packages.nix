@@ -1303,6 +1303,8 @@ in {
     inherit (self) python numpy boost;
   });
 
+  caio = callPackage ../development/python-modules/caio { };
+
   cairocffi = callPackage ../development/python-modules/cairocffi { };
 
   cairosvg = callPackage ../development/python-modules/cairosvg { };
