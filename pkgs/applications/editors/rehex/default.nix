@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rehex";
-  version = "0.3.91";
+  version = "0.3.92";
 
   src = fetchFromGitHub {
     owner = "solemnwarning";
     repo = pname;
     rev = version;
-    sha256 = "sha256-lemak/sGff346IOzOnMB4L4TkDRA/1L3KV3VNdWxIFA=";
+    sha256 = "sha256-yZvJlomUpJwDJOBVSl49lU+JE1YMMs/BSzHepXoFlIY=";
   };
 
   postPatch = ''
