@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "aioesphomeapi";
-  version = "7.0.0";
+  version = "8.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "esphome";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-ho/1fpq4yAgmYNERPqs51oqr08ncaN9+GRTUUuGU7ps=";
+    sha256 = "0ip1i7bk0v16bz6jmnf67rbmxj7n0mwjqzzpawqi24k0pfqzppkx";
   };
 
   propagatedBuildInputs = [
