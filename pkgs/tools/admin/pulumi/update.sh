@@ -33,7 +33,7 @@ plugins=(
 )
 
 function genMainSrc() {
-    local url="https://get.pulumi.com/releases/sdk/pulumi-v${VERSION}-$1-x64.tar.gz"
+    local url="https://get.pulumi.com/releases/sdk/pulumi-v${VERSION}-$1.tar.gz"
     local sha256
     sha256=$(nix-prefetch-url "$url")
     echo "      {"
@@ -48,7 +48,7 @@ function genSrcs() {
         local version=${plugVers#*=}
         # url as defined here
         # https://github.com/pulumi/pulumi/blob/06d4dde8898b2a0de2c3c7ff8e45f97495b89d82/pkg/workspace/plugins.go#L197
-        local url="https://api.pulumi.com/releases/plugins/pulumi-resource-${plug}-v${version}-$1-amd64.tar.gz"
+        local url="https://api.pulumi.com/releases/plugins/pulumi-resource-${plug}-${version}-$1.tar.gz"
         local sha256
         sha256=$(nix-prefetch-url "$url")
         echo "      {"
@@ -67,13 +67,18 @@ function genSrcs() {
   pulumiPkgs = {
     x86_64-linux = [
 EOF
-  genMainSrc "linux"
-  genSrcs "linux"
+  genMainSrc "linux-x64"
+  genSrcs "linux-amd64"
   echo "    ];"
   echo "    x86_64-darwin = ["
 
-  genMainSrc "darwin"
-  genSrcs "darwin"
+  genMainSrc "darwin-x64"
+  genSrcs "darwin-amd64"
+  echo "    ];"
+  echo "    aarch64-darwin = ["
+
+  genMainSrc "darwin-arm64"
+  genSrcs "darwin-arm64"
   echo "    ];"
   echo "  };"
   echo "}"
