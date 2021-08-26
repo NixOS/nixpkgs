@@ -23,6 +23,8 @@ buildPythonPackage rec {
   # No tests included nor upstream available.
   doCheck = false;
 
+  pythonImportsCheck = [ "sounddevice" ];
+
   patches = [
     (substituteAll {
       src = ./fix-portaudio-library-path.patch;
