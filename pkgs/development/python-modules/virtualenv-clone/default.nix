@@ -1,22 +1,37 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , virtualenv
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "virtualenv-clone";
   version = "0.5.6";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "997c7d225eabc4d09e77672461f4bdf9f3a8ea9dc9e4a847b0e83dc8bad9573a";
+  src = fetchFromGitHub {
+    owner = "edwardgeorge";
+    repo = pname;
+    rev = version;
+    sha256 = "0xb20fhl99dw5vnyb43sjpj9628nbdnwp5g7m8f2id7w8kpwzvfw";
   };
 
-  propagatedBuildInputs = [ virtualenv ];
+  postPatch = ''
+    substituteInPlace tests/__init__.py \
+      --replace "'virtualenv'" "'${virtualenv}/bin/virtualenv'"
 
-  # tests are not included in pypi tarball and no module to import
-  doCheck = false;
+    substituteInPlace tests/test_virtualenv_sys.py \
+      --replace "'virtualenv'" "'${virtualenv}/bin/virtualenv'"
+  '';
+
+  propagatedBuildInputs = [
+    virtualenv
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/edwardgeorge/virtualenv-clone";
