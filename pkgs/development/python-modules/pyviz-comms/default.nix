@@ -19,6 +19,8 @@ buildPythonPackage rec {
   # there are not tests with the package
   doCheck = false;
 
+  pythonImportsCheck = [ "pyviz_comms" ];
+
   passthru.tests = {
     inherit panel;
   };
