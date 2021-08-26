@@ -6348,6 +6348,12 @@
     githubId = 1104419;
     name = "Lucas Hoffmann";
   };
+  lucasew = {
+    email = "lucas59356@gmail.com";
+    github = "lucasew";
+    githubId = 15693688;
+    name = "Lucas Eduardo Wendt";
+  };
   lde = {
     email = "lilian.deloche@puck.fr";
     github = "lde";
