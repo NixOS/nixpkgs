@@ -1,11 +1,21 @@
-{ lib
-, python3
-, fetchFromGitHub
+{ lib, buildPythonPackage, fetchFromGitHub
+, pythonOlder
+, Babel
+, mock
+, pytestCheckHook
+, click
+, ghp-import
+, importlib-metadata
+, jinja2
+, markdown
+, mergedeep
+, packaging
+, pyyaml
+, pyyaml-env-tag
+, watchdog
 }:
 
-with python3.pkgs;
-
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "mkdocs";
   version = "1.2.1";
   disabled = pythonOlder "3.6";
