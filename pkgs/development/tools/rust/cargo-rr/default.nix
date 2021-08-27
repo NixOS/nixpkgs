@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-rr";
-  version = "0.1.3";
+  version = "temp-disable-filters";
 
   src = fetchFromGitHub {
     owner = "danielzfranklin";
     repo = pname;
     rev = version;
-    sha256 = "01m8fdz9as2fxnzs9csvbc76qxzbb98a66dh7w4a5q855v38g0zy";
+    sha256 = "sha256-7ln7D6KUrUJV0lBPb2SdbvSXjZeJuru+ipyGeICk/p8=";
   };
 
-  cargoSha256 = "0fjs76n6bbbv83s213h2dgsszgxy4hbjsclyk9m81b3bfbmmb9sa";
+  cargoSha256 = "sha256-RAkSCpWG/lr8zymlvQQwq/KWkY+uQXGqWdUn7ySJ8dA=";
 
   passthru = {
     updateScript = nix-update-script {
