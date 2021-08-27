@@ -27884,6 +27884,8 @@ with pkgs;
 
   trojita = libsForQt5.callPackage ../applications/networking/mailreaders/trojita { };
 
+  ttyper = callPackage ../applications/misc/ttyper { };
+
   tudu = callPackage ../applications/office/tudu { };
 
   tuna = python3Packages.callPackage ../os-specific/linux/tuna { };
