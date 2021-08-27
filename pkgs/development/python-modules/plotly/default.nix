@@ -1,12 +1,10 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, decorator
-, nbformat
 , pytz
 , requests
-, retrying
 , six
+, tenacity
 }:
 
 buildPythonPackage rec {
@@ -19,20 +17,19 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    decorator
-    nbformat
     pytz
     requests
-    retrying
     six
+    tenacity
   ];
 
   # No tests in archive
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Python plotting library for collaborative, interactive, publication-quality graphs";
     homepage = "https://plot.ly/python/";
-    license = with lib.licenses; [ mit ];
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ ];
   };
 }
