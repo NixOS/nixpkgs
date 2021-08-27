@@ -61,6 +61,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     maintainers = with maintainers; [ babariviere qyliss ];
     # ld: symbol(s) not found for architecture x86_64
-    broken = stdenv.isDarwin;
+    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 }
