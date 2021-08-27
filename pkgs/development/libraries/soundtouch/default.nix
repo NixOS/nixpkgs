@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "soundtouch";
-  version = "2.2";
+  version = "2.3.0";
 
   src = fetchFromGitLab {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "12i6yg8vvqwyk412lxl2krbfby6hnxld8qxy0k4m5xp4g94jiq4p";
+    sha256 = "sha256-J4+0UktRhNTHffYURImueQ4/zlNH1m8oBSkjy5qVsJY=";
   };
 
   nativeBuildInputs = [ autoconf automake libtool ];
