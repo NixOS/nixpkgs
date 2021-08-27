@@ -248,12 +248,12 @@ rec {
   cdt = buildEclipseUpdateSite rec {
     name = "cdt-${version}";
     # find current version at https://www.eclipse.org/cdt/downloads.php
-    version = "10.2.0";
+    version = "10.3.2";
 
     src = fetchzip {
       stripRoot = false;
-      url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/tools/cdt/releases/10.2/${name}/${name}.zip";
-      sha256 = "1r30cbpbzw3dfcsn54p6sqip86dqhydhsppjgaz60b6z138vzx49";
+      url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/tools/cdt/releases/${lib.versions.majorMinor version}/${name}/${name}.zip";
+      sha256 = "0zrxgb8mkrzc1zm5225hzn8awj9yl5fd2dcr92692g0yg61nv4jd";
     };
 
     meta = with lib; {
