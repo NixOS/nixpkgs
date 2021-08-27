@@ -46,7 +46,9 @@ buildPythonPackage rec {
 
   patches = [
     # Disable check for npm
-    ./disable-npm-install.patch
+    patches/disable-npm-install.patch
+    # Add Unix socket support for redis-host=
+    patches/redis-socket/core/v3-0001-add-Unix-socket-support-for-redis-host.patch
   ];
 
   nativeBuildInputs = [

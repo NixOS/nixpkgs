@@ -1,0 +1,30 @@
+From c0ccc8db051a2f8278edf59b41ed238fa71aa4c0 Mon Sep 17 00:00:00 2001
+From: Julien Moutinho <julm+srht@sourcephile.fr>
+Date: Mon, 23 Aug 2021 18:43:18 +0200
+Subject: [PATCH core.sr.ht v3] add Unix socket support for redis-host=
+
+---
+ srht/redis.py | 11 ++---------
+ 1 file changed, 2 insertions(+), 9 deletions(-)
+
+diff --git a/srht/redis.py b/srht/redis.py
+index 8a9347c..2e91c35 100644
+--- a/srht/redis.py
++++ b/srht/redis.py
+@@ -1,11 +1,4 @@
+-from redis import Redis
++from redis import from_url
+ from srht.config import cfg
+-from urllib.parse import urlparse
+ 
+-url = cfg("sr.ht", "redis-host", "redis://localhost")
+-url = urlparse(url)
+-
+-redis = Redis(host=url.hostname,
+-        port=(url.port or 6379),
+-        password=url.password,
+-        db=int(url.path[1:]) if url.path else 0)
++redis = from_url(cfg("sr.ht", "redis-host", "redis://localhost"))
+-- 
+2.32.0
+

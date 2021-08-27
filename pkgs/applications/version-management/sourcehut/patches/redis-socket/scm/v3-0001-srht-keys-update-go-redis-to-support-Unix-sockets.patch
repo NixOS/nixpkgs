@@ -1,0 +1,61 @@
+From e244cb7398758f91cc6deaabf278a1b6412ee477 Mon Sep 17 00:00:00 2001
+From: Julien Moutinho <julm+srht@sourcephile.fr>
+Date: Fri, 27 Aug 2021 12:48:56 +0200
+Subject: [PATCH scm.sr.ht v3 1/2] srht-keys: update go-redis to support Unix
+ sockets
+
+---
+ srht-keys/srhtkeys.go | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
+
+diff --git a/srht-keys/srhtkeys.go b/srht-keys/srhtkeys.go
+index be925ed..1a300d5 100644
+--- a/srht-keys/srhtkeys.go
++++ b/srht-keys/srhtkeys.go
+@@ -1,6 +1,7 @@
+ package srhtkeys
+ 
+ import (
++	"context"
+ 	"database/sql"
+ 	"encoding/json"
+ 	"errors"
+@@ -12,7 +13,7 @@ import (
+ 	"path"
+ 	"time"
+ 
+-	goredis "github.com/go-redis/redis"
++	goredis "github.com/go-redis/redis/v8"
+ 	"github.com/google/uuid"
+ 	_ "github.com/lib/pq"
+ 	"github.com/vaughan0/go-ini"
+@@ -37,6 +38,8 @@ type MetaSSHKey struct {
+ 	Owner       MetaUser `json:"owner"`
+ }
+ 
++var ctx = context.Background()
++
+ // Stores the SSH key in the database and returns the user's ID.
+ func storeKey(logger *log.Logger, db *sql.DB, key *MetaSSHKey) (int, error) {
+ 	logger.Println("Storing meta.sr.ht key in database")
+@@ -145,7 +148,7 @@ func fetchKeysFromMeta(logger *log.Logger, config ini.File,
+ 	if err != nil {
+ 		logger.Printf("Caching SSH key in redis failed: %v", err)
+ 	} else {
+-		redis.Set(cacheKey, cacheBytes, 7*24*time.Hour)
++		redis.Set(ctx, cacheKey, cacheBytes, 7*24*time.Hour)
+ 	}
+ 
+ 	return key.Owner.Username, userId
+@@ -168,7 +171,7 @@ func UserFromKey(logger *log.Logger, config ini.File,
+ 
+ 	cacheKey := fmt.Sprintf("%s.ssh-keys.%s", service, b64key)
+ 	logger.Printf("Cache key for SSH key lookup: %s", cacheKey)
+-	cacheBytes, err := redis.Get(cacheKey).Bytes()
++	cacheBytes, err := redis.Get(ctx, cacheKey).Bytes()
+ 	var (
+ 		username string
+ 		userId   int
+-- 
+2.32.0
+

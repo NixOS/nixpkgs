@@ -1,0 +1,113 @@
+From 5991960a5d412f0e1bdc505b970248c68b44a720 Mon Sep 17 00:00:00 2001
+From: Julien Moutinho <julm+srht@sourcephile.fr>
+Date: Wed, 15 Sep 2021 19:45:41 +0200
+Subject: [PATCH builds.sr.ht v3 1/2] worker: update go-redis to support Unix
+ sockets
+
+---
+ worker/context.go |  4 ++--
+ worker/main.go    | 11 +++++++----
+ worker/tasks.go   | 10 +++++-----
+ 3 files changed, 14 insertions(+), 11 deletions(-)
+
+diff --git a/worker/context.go b/worker/context.go
+index f84a60c..be54717 100644
+--- a/worker/context.go
++++ b/worker/context.go
+@@ -14,7 +14,7 @@ import (
+ 	"strings"
+ 	"time"
+ 
+-	"github.com/go-redis/redis"
++	goredis "github.com/go-redis/redis/v8"
+ 	"github.com/google/shlex"
+ 	"github.com/pkg/errors"
+ 	"github.com/prometheus/client_golang/prometheus"
+@@ -41,7 +41,7 @@ var (
+ 
+ type WorkerContext struct {
+ 	Db    *sql.DB
+-	Redis *redis.Client
++	Redis *goredis.Client
+ 	Conf  func(section, key string) string
+ }
+ 
+diff --git a/worker/main.go b/worker/main.go
+index 274ba68..e22ab6b 100644
+--- a/worker/main.go
++++ b/worker/main.go
+@@ -1,6 +1,7 @@
+ package main
+ 
+ import (
++	"context"
+ 	"database/sql"
+ 	"flag"
+ 	"log"
+@@ -9,7 +10,7 @@ import (
+ 	"runtime"
+ 	"sync"
+ 
+-	"github.com/go-redis/redis"
++	goredis "github.com/go-redis/redis/v8"
+ 	"github.com/vaughan0/go-ini"
+ 	"git.sr.ht/~sircmpwn/core-go/crypto"
+ 
+@@ -26,6 +27,8 @@ var (
+ 	jobsMutex sync.Mutex
+ )
+ 
++var redisctx = context.Background()
++
+ func main() {
+ 	flag.IntVar(&workers, "workers", runtime.NumCPU(),
+ 		"configure number of workers")
+@@ -68,12 +71,12 @@ func main() {
+ 	if !ok {
+ 		redisHost = "redis://localhost:6379"
+ 	}
+-	ropts, err := redis.ParseURL(redisHost)
++	ropts, err := goredis.ParseURL(redisHost)
+ 	if err != nil {
+ 		panic(err)
+ 	}
+-	localRedis := redis.NewClient(ropts)
+-	if _, err := localRedis.Ping().Result(); err != nil {
++	localRedis := goredis.NewClient(ropts)
++	if _, err := localRedis.Ping(redisctx).Result(); err != nil {
+ 		panic(err)
+ 	}
+ 
+diff --git a/worker/tasks.go b/worker/tasks.go
+index d27bf33..d0c28f1 100644
+--- a/worker/tasks.go
++++ b/worker/tasks.go
+@@ -19,7 +19,7 @@ import (
+ 	"time"
+ 
+ 	"git.sr.ht/~sircmpwn/core-go/auth"
+-	"github.com/go-redis/redis"
++	goredis "github.com/go-redis/redis/v8"
+ 	"github.com/kr/pty"
+ 	"github.com/minio/minio-go/v6"
+ 	"github.com/pkg/errors"
+@@ -39,12 +39,12 @@ var (
+ 	}, []string{"image", "arch"})
+ )
+ 
+-func (ctx *JobContext) Boot(r *redis.Client) func() {
+-	port, err := r.Incr("builds.sr.ht.ssh-port").Result()
++func (ctx *JobContext) Boot(r *goredis.Client) func() {
++	port, err := r.Incr(ctx.Context, "builds.sr.ht.ssh-port").Result()
+ 	if err == nil && port < 22000 {
+-		err = r.Set("builds.sr.ht.ssh-port", 22100, 0).Err()
++		err = r.Set(ctx.Context, "builds.sr.ht.ssh-port", 22100, 0).Err()
+ 	} else if err == nil && port >= 23000 {
+-		err = r.Set("builds.sr.ht.ssh-port", 22000, 0).Err()
++		err = r.Set(ctx.Context, "builds.sr.ht.ssh-port", 22000, 0).Err()
+ 	}
+ 	if err != nil {
+ 		panic(errors.Wrap(err, "assign port"))
+-- 
+2.32.0
+

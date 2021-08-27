@@ -13,23 +13,51 @@
 let
   version = "0.71.6";
 
-  buildWorker = src: buildGoModule {
-    inherit src version;
-    pname = "builds-sr-ht-worker";
-
-    vendorSha256 = "sha256-ZEarWM/33t+pNXUEIpfd/DkBkhu3UUg17Hh8XXWOepA=";
-  };
-in
-buildPythonPackage rec {
-  inherit version;
-  pname = "buildsrht";
-
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "builds.sr.ht";
     rev = version;
     sha256 = "sha256-c2xp2uIP8+WeRMz0efA1H58Nkot65bc03e7rrrZk3jo=";
   };
+
+  worker = buildGoModule {
+    inherit src version;
+    sourceRoot = "source/worker";
+    pname = "buildsrht-worker";
+
+    vendorSha256 = "sha256-iMlCZPCIwhppPAYUi6E8td1BoNaqBuQCI5E83cnEBJ0=";
+
+    # What follows is only to update go-redis,
+    # and thus also using a patched srht-keys.
+    # go.{mod,sum} could be patched directly but that would be less resilient
+    # to changes from upstream, and thus harder to maintain the patching
+    # while it hasn't been merged upstream.
+
+    overrideModAttrs = old: {
+      preBuild = ''
+        go get github.com/go-redis/redis/v8
+        go get github.com/go-redis/redis@none
+        go mod tidy
+      '';
+      # Pass updated go.{mod,sum} from go-modules to worker's vendor/go.{mod,sum}
+      postInstall = ''
+        cp --reflink=auto go.* $out/
+      '';
+    };
+
+    patches = [
+      # Update go-redis to support Unix sockets
+      patches/redis-socket/build/v3-0001-worker-update-go-redis-to-support-Unix-sockets.patch
+    ];
+    patchFlags = ["-p2"];
+    postConfigure = ''
+      cp -v vendor/go.{mod,sum} .
+    '';
+  };
+in
+buildPythonPackage rec {
+  inherit src version;
+  pname = "buildsrht";
 
   nativeBuildInputs = srht.nativeBuildInputs;
 
@@ -53,10 +81,12 @@ buildPythonPackage rec {
 
     cp -r images $out/lib
     cp contrib/submit_image_build $out/bin/builds.sr.ht
-    cp ${buildWorker "${src}/worker"}/bin/worker $out/bin/builds.sr.ht-worker
+    cp ${worker}/bin/worker $out/bin/builds.sr.ht-worker
   '';
 
   pythonImportsCheck = [ "buildsrht" ];
+
+  passthru = { inherit worker; };
 
   meta = with lib; {
     homepage = "https://git.sr.ht/~sircmpwn/builds.sr.ht";

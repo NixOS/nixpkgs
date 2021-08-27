@@ -6,6 +6,7 @@
 , srht
 , pygit2
 , scmsrht
+, srht-keys
 }:
 let
   version = "0.72.47";
@@ -17,31 +18,97 @@ let
     sha256 = "sha256-jk2DFC/fDYN88nofntJrBtYfCWr39YaNv2azH/tdZtQ=";
   };
 
-  buildShell = src: buildGoModule {
+  gitsrht-shell = buildGoModule {
     inherit src version;
+    sourceRoot = "source/gitsrht-shell";
     pname = "gitsrht-shell";
     vendorSha256 = "sha256-aqUFICp0C2reqb2p6JCPAUIRsxzSv0t9BHoNWrTYfqk=";
   };
 
-  buildDispatcher = src: buildGoModule {
+  gitsrht-dispatch = buildGoModule {
     inherit src version;
-    pname = "gitsrht-dispatcher";
+    sourceRoot = "source/gitsrht-dispatch";
+    pname = "gitsrht-dispatch";
     vendorSha256 = "sha256-qWXPHo86s6iuRBhRMtmD5jxnAWKdrWHtA/iSUkdw89M=";
+    patches = [
+      # Add support for supplementary groups
+      patches/redis-socket/git/v3-0003-gitsrht-dispatch-add-support-for-supplementary-gr.patch
+    ];
+    patchFlags = ["-p2"];
   };
 
-  buildKeys = src: buildGoModule {
+  gitsrht-keys = buildGoModule {
     inherit src version;
+    sourceRoot = "source/gitsrht-keys";
     pname = "gitsrht-keys";
-    vendorSha256 = "1d94cqy7x0q0agwg515xxsbl70b3qrzxbzsyjhn1pbyj532brn7f";
+    vendorSha256 = "sha256-m6uIrYDWqGagi+jjfYo4C59SjLqaaXwDq9vO0b9EW6M=";
+
+    # What follows is only to update go-redis,
+    # and thus also using a patched srht-keys.
+    # go.{mod,sum} could be patched directly but that would be less resilient
+    # to changes from upstream, and thus harder to maintain the patching
+    # while it hasn't been merged upstream.
+
+    overrideModAttrs = _: {
+      preBuild = ''
+        # This is a fixed-output derivation so it is not allowed to reference other derivations,
+        # but here srht-keys will be copied to vendor/ by go mod vendor
+        ln -s ${srht-keys} srht-keys
+        go mod edit -replace git.sr.ht/~sircmpwn/scm.sr.ht/srht-keys=$PWD/srht-keys
+        go get github.com/go-redis/redis/v8
+        go get github.com/go-redis/redis@none
+        go mod tidy
+      '';
+      # Pass updated go.{mod,sum} from go-modules to gitsrht-keys' vendor/go.{mod,sum}
+      postInstall = ''
+        cp --reflink=auto go.* $out/
+      '';
+    };
+
+    patches = [
+      # Update go-redis to support Unix sockets
+      patches/redis-socket/git/v3-0001-gitsrht-keys-update-go-redis-to-support-Unix-sock.patch
+    ];
+    patchFlags = ["-p2"];
+    postConfigure = ''
+      cp -v vendor/go.{mod,sum} .
+    '';
   };
 
-  buildUpdateHook = src: buildGoModule {
+  gitsrht-update-hook = buildGoModule {
     inherit src version;
+    sourceRoot = "source/gitsrht-update-hook";
     pname = "gitsrht-update-hook";
-    vendorSha256 = "0fwzqpjv8x5y3w3bfjd0x0cvqjjak23m0zj88hf32jpw49xmjkih";
-  };
+    vendorSha256 = "sha256-UoHxGVYEgTDqFzVQ2Dv6BRT4jVt+/QpNqEH3G2UWFjs=";
 
-  updateHook = buildUpdateHook "${src}/gitsrht-update-hook";
+    # What follows is only to update go-redis
+    # and thus also using a patched srht-keys.
+
+    overrideModAttrs = old: {
+      preBuild = ''
+        # This is a fixed-output derivation so it is not allowed to reference other derivations,
+        # but here srht-keys will be copied to vendor/ by go mod vendor
+        ln -s ${srht-keys} srht-keys
+        go mod edit -replace git.sr.ht/~sircmpwn/scm.sr.ht/srht-keys=$PWD/srht-keys
+        go get github.com/go-redis/redis/v8
+        go get github.com/go-redis/redis@none
+        go mod tidy
+      '';
+      # Pass updated go.{mod,sum} from go-modules to gitsrht-keys' vendor/go.{mod,sum}
+      postInstall = ''
+        cp --reflink=auto go.* $out/
+      '';
+    };
+
+    patches = [
+      # Update go-redis to support Unix sockets
+      patches/redis-socket/git/v3-0002-gitsrht-update-hook-update-go-redis-to-support-Un.patch
+    ];
+    patchFlags = ["-p2"];
+    postConfigure = ''
+      cp -v vendor/go.{mod,sum} .
+    '';
+  };
 
 in
 buildPythonPackage rec {
@@ -63,13 +130,13 @@ buildPythonPackage rec {
 
   postInstall = ''
     mkdir -p $out/bin
-    cp ${buildShell "${src}/gitsrht-shell"}/bin/gitsrht-shell $out/bin/gitsrht-shell
-    cp ${buildDispatcher "${src}/gitsrht-dispatch"}/bin/gitsrht-dispatch $out/bin/gitsrht-dispatch
-    cp ${buildKeys "${src}/gitsrht-keys"}/bin/gitsrht-keys $out/bin/gitsrht-keys
-    cp ${updateHook}/bin/gitsrht-update-hook $out/bin/gitsrht-update-hook
+    cp ${gitsrht-shell}/bin/gitsrht-shell $out/bin/gitsrht-shell
+    cp ${gitsrht-dispatch}/bin/gitsrht-dispatch $out/bin/gitsrht-dispatch
+    cp ${gitsrht-keys}/bin/gitsrht-keys $out/bin/gitsrht-keys
+    cp ${gitsrht-update-hook}/bin/gitsrht-update-hook $out/bin/gitsrht-update-hook
   '';
   passthru = {
-    inherit updateHook;
+    inherit gitsrht-shell gitsrht-dispatch gitsrht-keys gitsrht-update-hook;
   };
 
   pythonImportsCheck = [ "gitsrht" ];
