@@ -3,31 +3,23 @@
 , e2fsprogs, file, findutils, fontforge-fonttools, ffmpeg, fpc, gettext, ghc, ghostscriptX, giflib, gnumeric, gnupg, gnutar
 , gzip, hdf5, imagemagick, jdk, libarchive, libcaca, llvm, lz4, mono, openssh, openssl, pdftk, pgpdump, poppler_utils, qemu, R
 , radare2, sng, sqlite, squashfsTools, tcpdump, odt2txt, unzip, wabt, xxd, xz, zip, zstd
-, fetchpatch
 , enableBloat ? false
 }:
 
 # Note: when upgrading this package, please run the list-missing-tools.sh script as described below!
 python3Packages.buildPythonApplication rec {
   pname = "diffoscope";
-  version = "181";
+  version = "182";
 
   src = fetchurl {
     url = "https://diffoscope.org/archive/diffoscope-${version}.tar.bz2";
-    sha256 = "sha256-wom3/r0oR7K8zdz1GxLImQ4Whc4WpzPGwjqXb39mxw4=";
+    sha256 = "sha256-atWyVMewm+I/SDdE9+z1JYLLVOFDsgps2BL9WgZLlVA=";
   };
 
   outputs = [ "out" "man" ];
 
   patches = [
     ./ignore_links.patch
-
-    # Fixes a minor issue with squashfs >=4.5 (which we already have). Already
-    # in upstream's master, can be removed when updating to 182.
-    (fetchpatch {
-      url = "https://salsa.debian.org/reproducible-builds/diffoscope/-/commit/9e410d6fd4def177c4b5f914e74f72a59fb1a316.patch";
-      sha256 = "sha256-Nj5Up48lfekH8KCPaucDb78QbtJ91O2SNiA4SqBrCBI=";
-    })
   ];
 
   postPatch = ''
