@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     homepage = "https://www.djcbsoftware.nl/code/mu/";
     changelog = "https://github.com/djcb/mu/releases/tag/${version}";
-    maintainers = with maintainers; [ antono peterhoeg ];
+    maintainers = with maintainers; [ antono chvp peterhoeg ];
     platforms = platforms.mesaPlatforms;
   };
 }
