@@ -31,6 +31,8 @@ buildPythonPackage rec {
   # has no tests
   doCheck = false;
 
+  pythonImportsCheck = [ "azure.mgmt.sql" ];
+
   meta = with lib; {
     description = "This is the Microsoft Azure SQL Management Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
