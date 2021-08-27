@@ -28,6 +28,7 @@ stdenvNoCC.mkDerivation rec {
 
     cp rpi-eeprom-config rpi-eeprom-update $out/bin
     cp -r firmware/{beta,critical,old,stable} $out/share/rpi-eeprom
+    cp -P firmware/default firmware/latest $out/share/rpi-eeprom
   '';
 
   fixupPhase = ''
