@@ -1,5 +1,5 @@
 { lib, fetchPypi, buildPythonPackage
-, click, pytest
+, click, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -13,9 +13,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ click ];
 
-  # tries to use /homeless-shelter to mimic container usage, etc
-  #doCheck = false;
-  checkInputs = [ pytest ];
+  checkInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "click_help_colors" ];
 
