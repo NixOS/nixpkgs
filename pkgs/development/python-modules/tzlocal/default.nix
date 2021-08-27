@@ -3,7 +3,7 @@
 
 buildPythonPackage rec {
   pname = "tzlocal";
-  version = "2.1";
+  version = "2.1"; # version needs to be compatible with APScheduler
 
   propagatedBuildInputs = [ pytz ];
 
