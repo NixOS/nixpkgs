@@ -1,5 +1,6 @@
 { stdenv, lib, python3
 , fetchFromGitHub
+, fetchPypi
 , git
 , spdx-license-list-data
 , version, src
@@ -20,12 +21,33 @@ let
         doCheck = false;
       });
 
+      ajsonrpc = super.ajsonrpc.overridePythonAttrs (oldAttrs: rec {
+        pname = "ajsonrpc";
+        version = "1.1.0";
+        src = fetchPypi {
+          inherit pname version;
+          sha256 = "sha256-CgHCtW0gxZho7ZavvEaODNc+KbFW4sAsHtM2Xk5Cuaw=";
+        };
+      });
+
       click = super.click.overridePythonAttrs (oldAttrs: rec {
         version = "7.1.2";
         src = oldAttrs.src.override {
           inherit version;
           sha256 = "06kbzd6sjfkqan3miwj9wqyddfxc2b6hi7p5s4dvqjb3gif2bdfj";
         };
+      });
+
+      starlette = super.starlette.overridePythonAttrs (oldAttrs: rec {
+        pname = "starlette";
+        version = "0.14.2";
+        src = fetchFromGitHub {
+          owner = "encode";
+          repo = pname;
+          rev = version;
+          sha256 = "sha256-Ki5jTEr5w6CrGK6F60E9uvdUlGx8pxdHMpxHvj9D4js=";
+        };
+        doCheck = false;
       });
 
       uvicorn = super.uvicorn.overridePythonAttrs (oldAttrs: rec {
