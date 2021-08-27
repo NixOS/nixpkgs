@@ -6082,6 +6082,8 @@ with pkgs;
 
   inetutils = callPackage ../tools/networking/inetutils { };
 
+  inferno = callPackage ../development/tools/inferno { };
+
   inform6 = callPackage ../development/compilers/inform6 { };
 
   inform7 = callPackage ../development/compilers/inform7 { };
