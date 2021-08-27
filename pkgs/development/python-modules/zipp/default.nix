@@ -2,8 +2,6 @@
 , buildPythonPackage
 , fetchPypi
 , setuptools-scm
-, pytest
-, pytest-flake8
 , more-itertools
 }:
 
@@ -20,12 +18,6 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ more-itertools ];
 
-  checkInputs = [ pytest pytest-flake8 ];
-
-  checkPhase = ''
-    pytest
-  '';
-
   # Prevent infinite recursion with pytest
   doCheck = false;
 
@@ -33,5 +25,6 @@ buildPythonPackage rec {
     description = "Pathlib-compatible object wrapper for zip files";
     homepage = "https://github.com/jaraco/zipp";
     license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
 }
