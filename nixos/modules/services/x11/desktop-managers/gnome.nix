@@ -63,8 +63,10 @@ let
     enableGnomePanel = true;
   } ++ cfg.flashback.customSessions;
 
-  notExcluded = pkg: mkDefault (!(lib.elem pkg config.environment.gnome.excludePackages));
-
+  listContainsPackageByName = list: pkg:
+    foldl' (a: b: a || b) false (
+      map (item: (getName item) == (getName pkg)) list
+    );
 in
 
 {
@@ -128,20 +130,34 @@ in
       [ "services" "xserver" "desktopManager" "gnome3" "flashback" ]
       [ "services" "xserver" "desktopManager" "gnome" "flashback" ]
     )
-    (mkRenamedOptionModule
-      [ "environment" "gnome3" "excludePackages" ]
-      [ "environment" "gnome" "excludePackages" ]
-    )
   ];
 
   options = {
 
-    services.gnome = {
+    services.gnome = let packagesModule = name: {
+      enable = mkEnableOption "GNOME ${name}";
+      include = mkOption {
+        default = [];
+        type = types.listOf types.package;
+        description = "${name} that should be included.";
+      };
+      exclude = mkOption {
+        default = [];
+        type = types.listOf types.package;
+        description = "${name} that should be excluded";
+      };
+      includeDefaults = mkOption {
+        default = true;
+        type = types.bool;
+        description = "Whether the default ${strings.toLower name} should be included";
+      };
+    }; in {
       core-os-services.enable = mkEnableOption "essential services for GNOME3";
       core-shell.enable = mkEnableOption "GNOME Shell services";
-      core-utilities.enable = mkEnableOption "GNOME core utilities";
-      core-developer-tools.enable = mkEnableOption "GNOME core developer tools";
-      games.enable = mkEnableOption "GNOME games";
+
+      core-utilities = packagesModule "Core utilities";
+      core-developer-tools = packagesModule "Developer tools";
+      games = packagesModule "Games";
 
       experimental-features = {
         realtime-scheduling = mkOption {
@@ -269,14 +285,6 @@ in
         };
       };
     };
-
-    environment.gnome.excludePackages = mkOption {
-      default = [];
-      example = literalExample "[ pkgs.gnome.totem ]";
-      type = types.listOf types.package;
-      description = "Which packages gnome should exclude from the default environment";
-    };
-
   };
 
   config = mkMerge [
@@ -486,12 +494,12 @@ in
       };
     })
 
+
     # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/blob/gnome-3-38/elements/core/meta-gnome-core-utilities.bst
-    (mkIf serviceCfg.core-utilities.enable {
-      environment.systemPackages =
-        with pkgs.gnome;
-        removePackagesByName
-          ([
+    (mkIf serviceCfg.core-utilities.enable (
+      let 
+        defaultPackages = if !serviceCfg.core-utilities.includeDefaults then [] else
+          with pkgs.gnome; [
             baobab
             cheese
             eog
@@ -519,72 +527,88 @@ in
             # Since PackageKit Nix support is not there yet,
             # only install gnome-software if flatpak is enabled.
             gnome-software
-          ])
-          config.environment.gnome.excludePackages;
+          ];
+        packages = pkgs.gnome.removePackagesByName (serviceCfg.core-utilities.include ++ defaultPackages) serviceCfg.core-utilities.exclude;
+        isIncluded = listContainsPackageByName packages;
+      in {
+        environment.systemPackages = packages;
 
-      # Enable default program modules
-      # Since some of these have a corresponding package, we only
-      # enable that program module if the package hasn't been excluded
-      # through `environment.gnome.excludePackages`
-      programs.evince.enable = notExcluded pkgs.gnome.evince;
-      programs.file-roller.enable = notExcluded pkgs.gnome.file-roller;
-      programs.geary.enable = notExcluded pkgs.gnome.geary;
-      programs.gnome-disks.enable = notExcluded pkgs.gnome.gnome-disk-utility;
-      programs.gnome-terminal.enable = notExcluded pkgs.gnome.gnome-terminal;
-      programs.seahorse.enable = notExcluded pkgs.gnome.seahorse;
-      services.gnome.sushi.enable = notExcluded pkgs.gnome.sushi;
+        # Enable default program modules
+        # Since some of these have a corresponding package, we only
+        # enable that program module if the package hasn't been excluded
+        # through `environment.gnome.excludePackages`
+        programs.evince.enable = isIncluded pkgs.gnome.evince;
+        programs.file-roller.enable = isIncluded pkgs.gnome.file-roller;
+        programs.geary.enable = isIncluded pkgs.gnome.geary;
+        programs.gnome-disks.enable = isIncluded pkgs.gnome.gnome-disk-utility;
+        programs.gnome-terminal.enable = isIncluded pkgs.gnome.gnome-terminal;
+        programs.seahorse.enable = isIncluded pkgs.gnome.seahorse;
+        services.gnome.sushi.enable = isIncluded pkgs.gnome.sushi;
 
-      # Let nautilus find extensions
-      # TODO: Create nautilus-with-extensions package
-      environment.sessionVariables.NAUTILUS_EXTENSION_DIR = "${config.system.path}/lib/nautilus/extensions-3.0";
+        # Let nautilus find extensions
+        # TODO: Create nautilus-with-extensions package
+        environment.sessionVariables.NAUTILUS_EXTENSION_DIR = "${config.system.path}/lib/nautilus/extensions-3.0";
 
-      # Override default mimeapps for nautilus
-      environment.sessionVariables.XDG_DATA_DIRS = [ "${mimeAppsList}/share" ];
+        # Override default mimeapps for nautilus
+        environment.sessionVariables.XDG_DATA_DIRS = [ "${mimeAppsList}/share" ];
 
-      environment.pathsToLink = [
-        "/share/nautilus-python/extensions"
-      ];
-    })
+        environment.pathsToLink = [
+          "/share/nautilus-python/extensions"
+        ];
+      }
+    ))
 
-    (mkIf serviceCfg.games.enable {
-      environment.systemPackages = (with pkgs.gnome; removePackagesByName [
-        aisleriot
-        atomix
-        five-or-more
-        four-in-a-row
-        gnome-chess
-        gnome-klotski
-        gnome-mahjongg
-        gnome-mines
-        gnome-nibbles
-        gnome-robots
-        gnome-sudoku
-        gnome-taquin
-        gnome-tetravex
-        hitori
-        iagno
-        lightsoff
-        quadrapassel
-        swell-foop
-        tali
-      ] config.environment.gnome.excludePackages);
-    })
+    (mkIf serviceCfg.games.enable (
+      let
+        defaultPackages = if !serviceCfg.games.includeDefaults then [] else
+          with pkgs.gnome; [
+            aisleriot
+            atomix
+            five-or-more
+            four-in-a-row
+            gnome-chess
+            gnome-klotski
+            gnome-mahjongg
+            gnome-mines
+            gnome-nibbles
+            gnome-robots
+            gnome-sudoku
+            gnome-taquin
+            gnome-tetravex
+            hitori
+            iagno
+            lightsoff
+            quadrapassel
+            swell-foop
+            tali
+          ];
+        packages = pkgs.gnome.removePackagesByName (serviceCfg.games.include ++ defaultPackages) serviceCfg.games.exclude;
+      in {
+        environment.systemPackages = packages;
+      }
+    ))
 
     # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/-/blob/3.38.0/elements/core/meta-gnome-core-developer-tools.bst
-    (mkIf serviceCfg.core-developer-tools.enable {
-      environment.systemPackages = (with pkgs.gnome; removePackagesByName [
-        dconf-editor
-        devhelp
-        pkgs.gnome-builder
-        # boxes would make sense in this option, however
-        # it doesn't function well enough to be included
-        # in default configurations.
-        # https://github.com/NixOS/nixpkgs/issues/60908
-        /* gnome-boxes */
-      ] config.environment.gnome.excludePackages);
+    (mkIf serviceCfg.core-developer-tools.enable (
+      let
+        defaultPackages = if !serviceCfg.core-developer-tools.includeDefaults then [] else
+          with pkgs.gnome; [
+            dconf-editor
+            devhelp
+            pkgs.gnome-builder
+            # boxes would make sense in this option, however
+            # it doesn't function well enough to be included
+            # in default configurations.
+            # https://github.com/NixOS/nixpkgs/issues/60908
+            /* gnome-boxes */
+          ];
+        packages = pkgs.gnome.removePackagesByName serviceCfg.core-developer-tools.include serviceCfg.core-developer-tools.exclude;
+        isIncluded = listContainsPackageByName packages;
+      in {
+        environment.systemPackages = packages;
 
-      services.sysprof.enable = notExcluded pkgs.sysprof;
-    })
+        services.sysprof.enable = isIncluded pkgs.sysprof;
+      }
+    ))
   ];
-
 }
