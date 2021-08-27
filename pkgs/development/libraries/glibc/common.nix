@@ -125,6 +125,8 @@ stdenv.mkDerivation ({
 
       /* https://github.com/NixOS/nixpkgs/pull/137601 */
       ./nix-nss-open-files.patch
+
+      ./0001-Revert-Remove-all-usage-of-BASH-or-BASH-in-installed.patch
     ]
     ++ lib.optional stdenv.hostPlatform.isMusl ./fix-rpc-types-musl-conflicts.patch
     ++ lib.optional stdenv.buildPlatform.isDarwin ./darwin-cross-build.patch;
