@@ -161,6 +161,8 @@ let
 
     cfstream = callPackage ../development/ocaml-modules/cfstream { };
 
+    chacha = callPackage ../development/ocaml-modules/chacha { };
+
     charInfo_width = callPackage ../development/ocaml-modules/charInfo_width { };
 
     checkseum = callPackage ../development/ocaml-modules/checkseum { };
