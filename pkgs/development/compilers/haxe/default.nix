@@ -65,7 +65,7 @@ let
         # make wrappers which provide a temporary HAXELIB_PATH with symlinks to multiple repositories HAXELIB_PATH may point to
         for name in haxe haxelib; do
         cat > $out/bin/$name <<EOF
-        #!{bash}/bin/bash
+        #!bash
 
         if [[ "\$HAXELIB_PATH" =~ : ]]; then
           NEW_HAXELIB_PATH="\$(${coreutils}/bin/mktemp -d)"

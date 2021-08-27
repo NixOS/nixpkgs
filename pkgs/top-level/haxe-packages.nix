@@ -28,12 +28,13 @@ let
       ...
     } @ attrs:
       stdenv.mkDerivation (attrs // {
-        name = "${libname}-${version}";
+        pname = libname;
+        inherit version;
 
         buildInputs = (attrs.buildInputs or []) ++ [ haxe neko ]; # for setup-hook.sh to work
         src = fetchzip rec {
           name = "${libname}-${version}";
-          url = "http://lib.haxe.org/files/3.0/${withCommas name}.zip";
+          url = "https://lib.haxe.org/files/3.0/${withCommas name}.zip";
           inherit sha256;
           stripRoot = false;
         };
@@ -52,7 +53,7 @@ let
         '';
 
         meta = {
-          homepage = "http://lib.haxe.org/p/${libname}";
+          homepage = "https://lib.haxe.org/p/${libname}";
           license = lib.licenses.bsd2;
           platforms = lib.platforms.all;
           description = throw "please write meta.description";
@@ -66,6 +67,11 @@ let
       version = "4.2.1";
       sha256 = "10ijb8wiflh46bg30gihg7fyxpcf26gibifmq5ylx0fam4r51lhp";
       postFixup = ''
+        # <xlocale> is not available on both glibc and musl, but it looks that there is no __MUSL__ to detect it
+        substituteInPlace ${placeholder "out"}/lib/haxe/${withCommas libname}/${withCommas version}/src/hx/libs/std/Sys.cpp --replace \
+          '&& !defined(__GLIBC__)' \
+          '&& 0'
+
         for f in ${placeholder "out"}/lib/haxe/${withCommas libname}/${withCommas version}/{,project/libs/nekoapi/}bin/Linux{,64}/*; do
           chmod +w "$f"
           patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker)  "$f" || true
@@ -100,7 +106,7 @@ let
       };
       installPhase = installLibHaxe { libname = pname; inherit version; };
       meta = {
-        homepage = "http://lib.haxe.org/p/${pname}";
+        homepage = "https://lib.haxe.org/p/${pname}";
         platforms = lib.platforms.all;
         description = "Extern definitions for node.js ${version}";
       };

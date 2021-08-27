@@ -1,6 +1,9 @@
 { lib, stdenv, fetchFromGitHub
 , neko
 , nodejs
+, pkgsi686Linux
+, pkgsStatic
+, pkgsMusl
 , llvmPackages
 , python2, python3
 , lua52Packages, lua53Packages, luajitPackages
@@ -89,8 +92,11 @@ let
         installCheckPhase = "${placeholder "out"}/Main";
       })
     {
-      cpp   = { stdenv = stdenv; };
-      clang = { stdenv = llvmPackages.stdenv; };
+      cpp        = { stdenv = stdenv; };
+      cpp-32     = { stdenv = pkgsi686Linux.stdenv; };
+      cpp-static = { stdenv = pkgsStatic.stdenv; };
+      cpp-musl   = { stdenv = pkgsMusl.stdenv; };
+      cpp-clang  = { stdenv = llvmPackages.stdenv; };
     }
   ) // (
     lib.mapAttrs (name: {php}:
