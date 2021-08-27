@@ -15,13 +15,12 @@ buildGoModule rec {
 
   subPackages = ["cmd/skaffold"];
 
-  buildFlagsArray = let t = "github.com/GoogleContainerTools/skaffold/pkg/skaffold"; in  ''
-    -ldflags=
-      -s -w
-      -X ${t}/version.version=v${version}
-      -X ${t}/version.gitCommit=${src.rev}
-      -X ${t}/version.buildDate=unknown
-  '';
+  ldflags = let t = "github.com/GoogleContainerTools/skaffold/pkg/skaffold"; in [
+    "-s" "-w"
+    "-X ${t}/version.version=v${version}"
+    "-X ${t}/version.gitCommit=${src.rev}"
+    "-X ${t}/version.buildDate=unknown"
+  ];
 
   nativeBuildInputs = [ installShellFiles ];
 

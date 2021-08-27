@@ -16,7 +16,7 @@ buildGoModule rec {
   };
 
   vendorSha256 = "17zpiyvf22skfcisflsp6pn56y6a793jcx89kw976fq2x5br1bz7";
-  buildFlagsArray = [ "-ldflags=" "-s -w" ];
+  ldflags = [ "-s" "-w" ];
   nativeBuildInputs = [ makeWrapper ];
 
   postInstall = ''

@@ -46,8 +46,9 @@
 # Not needed with buildGoModule
 , goPackagePath ? ""
 
-# needed for buildFlags warning
+# needed for buildFlags{,Array} warning
 , buildFlags ? ""
+, buildFlagsArray ? ""
 
 , ... }@args':
 
@@ -271,6 +272,6 @@ let
     };
   });
 in
-lib.warnIf (buildFlags != "")
-  "Use the `ldflags` and/or `tags` attributes instead of `buildFlags`"
+lib.warnIf (buildFlags != "" || buildFlagsArray != "")
+  "Use the `ldflags` and/or `tags` attributes instead of `buildFlags`/`buildFlagsArray`"
   package

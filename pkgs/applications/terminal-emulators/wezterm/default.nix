@@ -82,7 +82,7 @@ rustPlatform.buildRustPackage rec {
     install -Dm644 assets/wezterm.appdata.xml $out/share/metainfo/org.wezfurlong.wezterm.appdata.xml
 
     # helper scripts
-    install -Dm644 assets/shell-integration/wezterm.sh $out/share/wezterm/shell-integration/wezterm.sh
+    install -Dm644 assets/shell-integration/wezterm.sh -t $out/etc/profile.d
   '';
 
   preFixup = lib.optionalString stdenv.isLinux ''

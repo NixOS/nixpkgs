@@ -2,18 +2,18 @@
 
 buildGoModule rec {
   pname = "argocd";
-  version = "2.0.5";
-  commit = "4c94d886f56bcb2f9d5b3251fdc049c2d1354b88";
+  version = "2.1.1";
+  commit = "57abbf95ed160c88b2634ec4d37df9555cc74fb3";
   tag = "v${version}";
 
   src = fetchFromGitHub {
     owner = "argoproj";
     repo = "argo-cd";
     rev = tag;
-    sha256 = "sha256-8YymSR15e+6gGGqr5CH4ERHN8RO3wd9NJkM9K7InlFU=";
+    sha256 = "0jh7kh4751kb7439vbbh5f03kcy56phdcvzypjw8n0w239n5xmmc";
   };
 
-  vendorSha256 = "sha256-9dVkGl0gjjMehG2nt1eNpNT5fD9GbJ1mNMzYS8FTm08=";
+  vendorSha256 = "sha256-KtLEN66Q5WpCi+COId+gPu2XHcs5/D04rYLHV6XohzQ=";
 
   nativeBuildInputs = [ packr makeWrapper installShellFiles ];
 
@@ -22,11 +22,10 @@ buildGoModule rec {
     packr
   '';
 
-  buildFlagsArray =
+  ldflags =
     let package_url = "github.com/argoproj/argo-cd/v2/common"; in
     [
-      "-ldflags="
-      "-s -w"
+      "-s" "-w"
       "-X ${package_url}.version=${version}"
       "-X ${package_url}.buildDate=unknown"
       "-X ${package_url}.gitCommit=${commit}"
@@ -46,7 +45,7 @@ buildGoModule rec {
   doInstallCheck = true;
   installCheckPhase = ''
     $out/bin/argocd version --client | grep ${tag} > /dev/null
-    $out/bin/argocd-util version | grep ${tag} > /dev/null
+    $out/bin/argocd-util version --client | grep ${tag} > /dev/null
   '';
 
   installPhase = ''

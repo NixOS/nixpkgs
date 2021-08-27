@@ -14,13 +14,12 @@ buildGoModule rec {
     sha256 = "sha256-oFDTjpcwlvSiAROG/EKYRCD+qKyZXu1gKotBcD0dfvk=";
   };
 
-  buildFlagsArray = ''
-    -ldflags=
-      -s -w
-      -X github.com/vmware-tanzu/velero/pkg/buildinfo.Version=${version}
-      -X github.com/vmware-tanzu/velero/pkg/buildinfo.GitSHA=${commit}
-      -X github.com/vmware-tanzu/velero/pkg/buildinfo.GitTreeState=clean
-  '';
+  ldflags = [
+    "-s" "-w"
+    "-X github.com/vmware-tanzu/velero/pkg/buildinfo.Version=${version}"
+    "-X github.com/vmware-tanzu/velero/pkg/buildinfo.GitSHA=${commit}"
+    "-X github.com/vmware-tanzu/velero/pkg/buildinfo.GitTreeState=clean"
+  ];
 
   vendorSha256 = "sha256-ypgrdv6nVW+AAwyVsiROXs6jGgDTodGrGqiT2s5elOU=";
 

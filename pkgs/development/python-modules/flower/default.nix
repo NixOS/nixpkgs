@@ -6,7 +6,7 @@
 , mock
 , pytz
 , tornado
-, prometheus_client
+, prometheus-client
 , pytestCheckHook
 }:
 
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     pytz
     tornado
     humanize
-    prometheus_client
+    prometheus-client
   ];
 
   checkInputs = [

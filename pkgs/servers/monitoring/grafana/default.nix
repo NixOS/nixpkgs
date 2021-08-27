@@ -43,9 +43,9 @@ buildGoModule rec {
     rm -r scripts/go
   '';
 
-  buildFlagsArray = ''
-    -ldflags=-s -w -X main.version=${version}
-  '';
+  ldflags = [
+    "-s" "-w" "-X main.version=${version}"
+  ];
 
   postInstall = ''
     tar -xvf $srcStatic
