@@ -36,6 +36,7 @@ let
     "influxdb"
     "json"
     "jitsi"
+    "junos"
     "kea"
     "keylight"
     "knot"
