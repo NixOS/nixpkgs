@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p curl jq -I nixpkgs=.
+#!nix-shell -i bash -p curl gnused jq -I nixpkgs=.
 #
 # This script will update the purescript derivation to the latest version.
 
