@@ -212,7 +212,11 @@ for release in repo.get_releases():
     if len(version) < 4:
         continue
 
+    if not (isinstance(version[-2], int)):
+        continue
+
     kernel_version = version[:-1]
+
     kernel_key = major_kernel_version_key(kernel_version)
     try:
         packaged_kernel_version = kernel_versions[kernel_key]

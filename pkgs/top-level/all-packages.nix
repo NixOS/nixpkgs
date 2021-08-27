@@ -13174,6 +13174,8 @@ with pkgs;
 
   ameba = callPackage ../development/tools/ameba { };
 
+  anybadge = with python3Packages; toPythonApplication anybadge;
+
   augeas = callPackage ../tools/system/augeas { };
 
   inherit (callPackage ../tools/admin/ansible { })

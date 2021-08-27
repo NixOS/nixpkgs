@@ -477,6 +477,8 @@ in {
 
   anyascii = callPackage ../development/python-modules/anyascii { };
 
+  anybadge = callPackage ../development/python-modules/anybadge { };
+
   anyio = callPackage ../development/python-modules/anyio { };
 
   anyjson = callPackage ../development/python-modules/anyjson { };
