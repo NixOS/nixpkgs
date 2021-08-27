@@ -19,15 +19,18 @@ stdenv.mkDerivation rec {
     sha256 = "09dhmlbfdwirlmkasa28x69vqs5xndq0lnng6b4if76s6bfxrdvj";
   };
 
-  nativeBuildInputs = [ autoreconfHook makeWrapper pkg-config ];
-  buildInputs = [
-    ncurses cpio gperf jansson
-    cdrkit flex bison qemu pcre augeas libxml2 acl libcap libcap_ng libconfig
-    systemd fuse yajl libvirt gmp readline file hivex db
-    numactl libapparmor getopt perlPackages.ModuleBuild
-    libtirpc
+  strictDeps = true;
+  nativeBuildInputs = [
+    autoreconfHook bison cdrkit cpio flex getopt gperf makeWrapper pkg-config qemu
   ] ++ (with perlPackages; [ perl libintl_perl GetoptLong SysVirt ])
-    ++ (with ocamlPackages; [ ocaml findlib ocamlbuild ocaml_libvirt gettext-stub ounit ])
+    ++ (with ocamlPackages; [ ocaml findlib ]);
+  buildInputs = [
+    ncurses jansson
+    pcre augeas libxml2 acl libcap libcap_ng libconfig
+    systemd fuse yajl libvirt gmp readline file hivex db
+    numactl libapparmor perlPackages.ModuleBuild
+    libtirpc
+  ] ++ (with ocamlPackages; [ ocamlbuild ocaml_libvirt gettext-stub ounit ])
     ++ lib.optional javaSupport jdk;
 
   prePatch = ''
