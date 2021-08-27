@@ -11,9 +11,15 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ setuptools ];
 
+  # no tests executed
+  doCheck = false;
+
+  pythonImportsCheck = [ "babelfish" ];
+
   meta = with lib; {
     homepage = "https://pypi.python.org/pypi/babelfish";
     description = "A module to work with countries and languages";
     license = licenses.bsd3;
+    maintainers = with maintainers; [ ];
   };
 }
