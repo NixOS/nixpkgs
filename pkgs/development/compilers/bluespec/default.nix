@@ -37,7 +37,7 @@ in stdenv.mkDerivation rec {
       src/Verilog/copy_module.pl \
       src/comp/update-build-version.sh \
       src/comp/update-build-system.sh \
-      src/comp/wrapper.sh 
+      src/comp/wrapper.sh
 
     substituteInPlace src/comp/Makefile \
       --replace 'BINDDIR' 'BINDIR' \
