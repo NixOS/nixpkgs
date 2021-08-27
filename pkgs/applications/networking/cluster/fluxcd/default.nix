@@ -1,11 +1,11 @@
 { lib, buildGoModule, fetchFromGitHub, fetchzip, installShellFiles }:
 
 let
-  version = "0.16.2";
+  version = "0.17.0";
 
   manifests = fetchzip {
     url = "https://github.com/fluxcd/flux2/releases/download/v${version}/manifests.tar.gz";
-    sha256 = "05khmpbv42wjpkdb4n51pnq678la6hjfhkyy49d0j2kcnvfd1m5p";
+    sha256 = "15ffb8damn935sfnqpshiyaazpldjcq411xrcfngpp7ncl9vbgwm";
     stripRoot = false;
   };
 in
@@ -19,10 +19,10 @@ buildGoModule rec {
     owner = "fluxcd";
     repo = "flux2";
     rev = "v${version}";
-    sha256 = "sha256-hP2HQI9Oc7IlzVS5r7yqGAgSgqECOSZVe2B3vO2sgKA=";
+    sha256 = "1pw558d64c6ynqnnadhg8vbi4ql6f5y81l9hpxi0ki5myj2kx6an";
   };
 
-  vendorSha256 = "sha256-6ABnX0GV3HmhpUpPWS0bigubRqpXGoikEeQ/LqO6Ybs=";
+  vendorSha256 = "sha256-FUASe7EQ8YVv3R6fPPLtsvMibe00Ox596GoTyKt0S+E=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -33,6 +33,10 @@ buildGoModule rec {
   postUnpack = ''
     cp -r ${manifests} source/cmd/flux/manifests
   '';
+
+  # Required to workaround test error:
+  #   panic: mkdir /homeless-shelter: permission denied
+  HOME="$TMPDIR";
 
   doInstallCheck = true;
   installCheckPhase = ''
