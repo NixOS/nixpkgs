@@ -131,8 +131,8 @@ in {
     '';
   };
   haxe_3_4 = generic {
-    version = "3.4.6";
-    sha256 = "1myc4b8fwp0f9vky17wv45n34a583f5sjvajsc93f5gm1wanp4if";
+    version = "3.4.7";
+    sha256 = "1pwi66bskfr0nr6l326d171b4xb7xvasahlq5y3rwd36k5hpf19b";
     prePatch = ''
       ${defaultPatch}
       sed -i -re 's!(let +prefix_path += +).*( +in)!\1"'"$out/"'"\2!' src/main.ml
@@ -147,7 +147,7 @@ in {
     sha256 = "0rns6d28qzkbai6yyws08yzbyvxfn848nj0fsji7chdi0y7pzzj0";
   };
   haxe_4_2 = generic {
-    version = "4.2.1";
-    sha256 = "sha256-0j6M21dh8DB1gC/bPYNJrVuDbJyqQbP+61ItO5RBUcA=";
+    version = "4.2.3";
+    sha256 = "0i46xdxgaigd0m60p4i8j178qhv2lp9033v08k87947619h0q9xz";
   };
 }
