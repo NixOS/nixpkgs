@@ -4925,6 +4925,16 @@
     };
     version = "1.6.0";
   };
+  sd_notify = {
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "0c9imnjbakx25r2n7widfp00s19ndzmmwax761mx5vbwm9nariyb";
+      type = "gem";
+    };
+    version = "0.1.1";
+  };
   securecompare = {
     groups = ["default"];
     platforms = [];
