@@ -10,9 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "0ckd968aimrxr6w7p6y67xspjbc9yijv7s7pc2yaricxxg26pg3q";
   };
 
-  patchPhase = ''
-    sed -i -e s@/usr@$out@ Makefile
-  '';
+  makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   postInstall = ''
     wrapProgram $out/bin/imapsync --set PERL5LIB $PERL5LIB
