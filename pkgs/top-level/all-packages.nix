@@ -29685,6 +29685,8 @@ with pkgs;
 
   steamcmd = steamPackages.steamcmd;
 
+  steam-acf = callPackage ../tools/games/steam-acf { };
+
   protontricks = python3Packages.callPackage ../tools/package-management/protontricks {
     winetricks = winetricks.override {
       # Remove default build of wine to reduce closure size.
