@@ -1,15 +1,50 @@
-{ mkDerivation, lib, fetchFromGitHub, callPackage
-, pkg-config, cmake, ninja, python3, wrapGAppsHook, wrapQtAppsHook
+{ mkDerivation
+, lib
+, fetchFromGitHub
+, callPackage
+, pkg-config
+, cmake
+, ninja
+, python3
+, wrapGAppsHook
+, wrapQtAppsHook
 , extra-cmake-modules
-, qtbase, qtimageformats, gtk3, kwayland, libdbusmenu, lz4, xxHash
-, ffmpeg, openalSoft, minizip, libopus, alsa-lib, libpulseaudio, range-v3
-, tl-expected, hunspell, glibmm, webkitgtk, jemalloc
+, qtbase
+, qtimageformats
+, gtk3
+, kwayland
+, libdbusmenu
+, lz4
+, xxHash
+, ffmpeg
+, openalSoft
+, minizip
+, libopus
+, alsa-lib
+, libpulseaudio
+, range-v3
+, tl-expected
+, hunspell
+, glibmm
+, webkitgtk
+, jemalloc
 , rnnoise
-# Transitive dependencies:
+  # Transitive dependencies:
 , util-linuxMinimal
-, pcre, libpthreadstubs, libXdmcp, libselinux, libsepol, epoxy
-, at-spi2-core, libXtst, libthai, libdatrie
-, xdg-utils, libsysprof-capture, libpsl, brotli
+, pcre
+, libpthreadstubs
+, libXdmcp
+, libselinux
+, libsepol
+, epoxy
+, at-spi2-core
+, libXtst
+, libthai
+, libdatrie
+, xdg-utils
+, libsysprof-capture
+, libpsl
+, brotli
 }:
 
 # Main reference:
@@ -20,10 +55,11 @@
 # - https://github.com/void-linux/void-packages/blob/master/srcpkgs/telegram-desktop/template
 
 let
-  tg_owt = callPackage ./tg_owt.nix {};
-in mkDerivation rec {
+  tg_owt = callPackage ./tg_owt.nix { };
+in
+mkDerivation rec {
   pname = "telegram-desktop";
-  version = "2.9.0";
+  version = "2.9.3";
   # Note: Update via pkgs/applications/networking/instant-messengers/telegram/tdesktop/update.py
 
   # Telegram-Desktop with submodules
@@ -32,7 +68,7 @@ in mkDerivation rec {
     repo = "tdesktop";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "0964as7rkjq1px6z15z6kmkiz4zw69wmm3namwn940bsja123qls";
+    sha256 = "sha256-ZmhgBL5nbgrNLRmCHocqVNC3KtaLm4LUY1f4Xl8CvB4=";
   };
 
   postPatch = ''
@@ -52,20 +88,52 @@ in mkDerivation rec {
   dontWrapQtApps = true;
 
   nativeBuildInputs = [
-    pkg-config cmake ninja python3 wrapGAppsHook wrapQtAppsHook
+    pkg-config
+    cmake
+    ninja
+    python3
+    wrapGAppsHook
+    wrapQtAppsHook
     extra-cmake-modules
   ];
 
   buildInputs = [
-    qtbase qtimageformats gtk3 kwayland libdbusmenu lz4 xxHash
-    ffmpeg openalSoft minizip libopus alsa-lib libpulseaudio range-v3
-    tl-expected hunspell glibmm webkitgtk jemalloc
+    qtbase
+    qtimageformats
+    gtk3
+    kwayland
+    libdbusmenu
+    lz4
+    xxHash
+    ffmpeg
+    openalSoft
+    minizip
+    libopus
+    alsa-lib
+    libpulseaudio
+    range-v3
+    tl-expected
+    hunspell
+    glibmm
+    webkitgtk
+    jemalloc
     rnnoise
     tg_owt
     # Transitive dependencies:
     util-linuxMinimal # Required for libmount thus not nativeBuildInputs.
-    pcre libpthreadstubs libXdmcp libselinux libsepol epoxy
-    at-spi2-core libXtst libthai libdatrie libsysprof-capture libpsl brotli
+    pcre
+    libpthreadstubs
+    libXdmcp
+    libselinux
+    libsepol
+    epoxy
+    at-spi2-core
+    libXtst
+    libthai
+    libdatrie
+    libsysprof-capture
+    libpsl
+    brotli
   ];
 
   cmakeFlags = [

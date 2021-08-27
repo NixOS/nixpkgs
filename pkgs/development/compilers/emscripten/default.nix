@@ -1,17 +1,17 @@
 { lib, stdenv, fetchFromGitHub, python3, nodejs, closurecompiler
 , jre, binaryen
-, llvmPackages_11
-, symlinkJoin, makeWrapper
+, llvmPackages
+, symlinkJoin, makeWrapper, substituteAll
 , mkYarnModules
 }:
 
 stdenv.mkDerivation rec {
   pname = "emscripten";
-  version = "2.0.10";
+  version = "2.0.27";
 
   llvmEnv = symlinkJoin {
     name = "emscripten-llvm-${version}";
-    paths = with llvmPackages_11; [ clang-unwrapped lld llvm ];
+    paths = with llvmPackages; [ clang-unwrapped clang-unwrapped.lib lld llvm ];
   };
 
   nodeModules = mkYarnModules {
@@ -26,26 +26,31 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "emscripten-core";
     repo = "emscripten";
-    sha256 = "0jy4n1pykk9vkm5da9v3qsfrl6j7yhngcazh2792xxs6wzfcs9gk";
+    sha256 = "1dpfib2nmbvskqlaqw3kvaay69qpa7d155hd4w05c2xgmahmrd4n";
     rev = version;
   };
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ nodejs python3 ];
 
+  patches = [
+    (substituteAll {
+      src = ./0001-emulate-clang-sysroot-include-logic.patch;
+      resourceDir = "${llvmEnv}/lib/clang/${llvmPackages.release_version}/";
+    })
+  ];
+
   buildPhase = ''
+    runHook preBuild
+
     patchShebangs .
 
     # fixes cmake support
     sed -i -e "s/print \('emcc (Emscript.*\)/sys.stderr.write(\1); sys.stderr.flush()/g" emcc.py
 
     # disables cache in user home, use installation directory instead
-    sed -i '/^def/!s/root_is_writable()/True/' tools/shared.py
+    sed -i '/^def/!s/root_is_writable()/True/' tools/config.py
     sed -i "/^def check_sanity/a\\  return" tools/shared.py
-
-    # super ugly: monkeypatch to add sysroot/include to the include
-    # path because they are otherwise not part of Nix's clang.
-    sed -i "490a\\ '/include'," tools/shared.py
 
     # required for wasm2c
     ln -s ${nodeModules}/node_modules .
@@ -66,19 +71,19 @@ stdenv.mkDerivation rec {
     sed -i "s|^EMAR =.*|EMAR='$out/bin/emar'|" tools/shared.py
     sed -i "s|^EMRANLIB =.*|EMRANLIB='$out/bin/emranlib'|" tools/shared.py
 
-    # The tests use the C compiler to compile generated C code,
-    # use the wrapped compiler
-    sed -i 's/shared.CLANG_CC/"cc"/' tests/runner.py
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     appdir=$out/share/emscripten
     mkdir -p $appdir
     cp -r . $appdir
     chmod -R +w $appdir
 
     mkdir -p $out/bin
-    for b in em++ em-config emar embuilder.py emcc emcmake emconfigure emmake emranlib emrun emscons; do
+    for b in em++ em-config emar embuilder.py emcc emcmake emconfigure emmake emranlib emrun emscons emsize; do
       makeWrapper $appdir/$b $out/bin/$b \
         --set NODE_PATH ${nodeModules}/node_modules \
         --set EM_EXCLUSIVE_CACHE_ACCESS 1 \
@@ -107,6 +112,8 @@ stdenv.mkDerivation rec {
     pushd $appdir
     python tests/runner.py test_hello_world
     popd
+
+    runHook postInstall
   '';
 
   meta = with lib; {
