@@ -1247,9 +1247,8 @@ in {
         procps
         gnupg
       ];
-
       serviceConfig = {
-        Type = "simple";
+        Type = "notify";
         User = cfg.user;
         Group = cfg.group;
         TimeoutSec = "infinity";
