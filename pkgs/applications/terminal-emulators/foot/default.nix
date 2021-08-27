@@ -2,7 +2,6 @@
 , lib
 , fetchFromGitea
 , fetchurl
-, fetchpatch
 , runCommand
 , fcft
 , freetype
@@ -28,7 +27,7 @@
 }:
 
 let
-  version = "1.8.2";
+  version = "1.9.0";
 
   # build stimuli file for PGO build and the script to generate it
   # independently of the foot's build, so we can cache the result
@@ -89,6 +88,8 @@ let
   # using a compiler which foot's PGO build supports (clang or gcc)
   doPgo = allowPgo && (stdenv.hostPlatform == stdenv.buildPlatform)
     && compilerName != "unknown";
+
+  terminfoDir = "${placeholder "terminfo"}/share/terminfo";
 in
 stdenv.mkDerivation rec {
   pname = "foot";
@@ -99,17 +100,8 @@ stdenv.mkDerivation rec {
     owner = "dnkl";
     repo = pname;
     rev = version;
-    sha256 = "1k0alz991cslls4926c5gq02pdq0vfw9jfpprh2a1vb59xgikv7h";
+    sha256 = "0mkzq5lbgl5qp5nj8sk5gyg9hrrklmbjdqzlcr2a6rlmilkxlhwm";
   };
-
-  patches = [
-    # Fixes PGO builds with clang
-    (fetchpatch {
-      url = "https://codeberg.org/dnkl/foot/commit/2acd4b34c57659d86dca76c58e4363de9b0a1f17.patch";
-      sha256 = "13xi9ppaqx2p88cxbh6801ry9ral70ylh40agn6ij7pklybs4d7s";
-      includes = [ "pgo/pgo.c" ];
-    })
-  ];
 
   depsBuildBuild = [
     pkg-config
@@ -154,7 +146,15 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Db_lto=true"
-    "-Dterminfo-install-location=${placeholder "terminfo"}/share/terminfo"
+    # Prevent foot from installing its terminfo file into a custom location,
+    # we need to do this manually in postInstall.
+    # See https://codeberg.org/dnkl/foot/pulls/673,
+    # https://codeberg.org/dnkl/foot/src/tag/1.9.0/INSTALL.md#options
+    "-Dterminfo=disabled"
+    # Ensure TERM=foot is used
+    "-Ddefault-terminfo=foot"
+    # Tell foot what to set TERMINFO to
+    "-Dcustom-terminfo-install-location=${terminfoDir}"
   ];
 
   # build and run binary generating PGO profiles,
@@ -174,11 +174,11 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "terminfo" ];
 
-  # make sure nix-env and buildEnv also include the
-  # terminfo output when the package is installed
   postInstall = ''
-    mkdir -p "$out/nix-support"
-    echo "$terminfo" >> "$out/nix-support/propagated-user-env-packages"
+    # build and install foot's terminfo to the standard location
+    # instead of its custom location
+    mkdir -p "${terminfoDir}"
+    tic -o "${terminfoDir}" -x -e foot,foot-direct "$NIX_BUILD_TOP/$sourceRoot/foot.info"
   '';
 
   passthru.tests = {
@@ -189,6 +189,10 @@ stdenv.mkDerivation rec {
     clang-latest-compilation = foot.override {
       inherit (llvmPackages_latest) stdenv;
     };
+
+    noPgo = foot.override {
+      allowPgo = false;
+    };
   };
 
   meta = with lib; {
@@ -198,5 +202,18 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = [ maintainers.sternenseemann ];
     platforms = platforms.linux;
+    # From (presumably) ncurses version 6.3, it will ship a foot
+    # terminfo file. This however won't include some non-standard
+    # capabilities foot's bundled terminfo file contains. Unless we
+    # want to have some features in e. g. vim or tmux stop working,
+    # we need to make sure that the foot terminfo overwrites ncurses'
+    # one. Due to <nixpkgs/nixos/modules/config/system-path.nix>
+    # ncurses is always added to environment.systemPackages on
+    # NixOS with its priority increased by 3, so we need to go
+    # one bigger.
+    # This doesn't matter a lot for local use since foot sets
+    # TERMINFO to a store path, but allows installing foot.terminfo
+    # on remote systems for proper foot terminfo support.
+    priority = (ncurses.meta.priority or 5) + 3 + 1;
   };
 }
