@@ -205,6 +205,7 @@
 , "postcss-cli"
 , "prettier"
 , "prettier-plugin-toml"
+, "prisma"
 , "pscid"
 , "pulp"
 , "purescript-language-server"
