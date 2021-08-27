@@ -4,21 +4,22 @@ let
   # A list of binaries to put into separate outputs
   bins = [
     "geth"
+    "clef"
   ];
 
 in buildGoModule rec {
   pname = "go-ethereum";
-  version = "1.10.6";
+  version = "1.10.8";
 
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-4lapkoxSKdXlD6rmUxnlSKrfH+DeV6/wV05CqJjuzjA=";
+    sha256 = "sha256-r4ifLa4CMZvp0MaCkxWo5rWLEnFdX//mYlC08hndXhQ=";
   };
 
   runVend = true;
-  vendorSha256 = "sha256-5qi01y0SIEI0WRYu2I2RN94QFS8rrlioFvnRqqp6wtk=";
+  vendorSha256 = "sha256-e8aKQMVEEf0BzpdljkOBxznj5P1Go/6EbY9mdhDLyrw=";
 
   doCheck = false;
 
@@ -54,6 +55,6 @@ in buildGoModule rec {
     homepage = "https://geth.ethereum.org/";
     description = "Official golang implementation of the Ethereum protocol";
     license = with licenses; [ lgpl3Plus gpl3Plus ];
-    maintainers = with maintainers; [ adisbladis lionello xrelkd RaghavSood ];
+    maintainers = with maintainers; [ adisbladis lionello RaghavSood ];
   };
 }
