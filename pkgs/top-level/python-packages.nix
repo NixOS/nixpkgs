@@ -8944,9 +8944,7 @@ in {
 
   trimesh = callPackage ../development/python-modules/trimesh { };
 
-  trio = callPackage ../development/python-modules/trio {
-    pytestCheckHook = self.pytestCheckHook_6_1;
-  };
+  trio = callPackage ../development/python-modules/trio { };
 
   trueskill = callPackage ../development/python-modules/trueskill { };
 
