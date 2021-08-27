@@ -1,8 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, python
-, isPy3k
 , msrest
 , msrestazure
 , azure-common
@@ -32,6 +30,8 @@ buildPythonPackage rec {
 
   # has no tests
   doCheck = false;
+
+  pythonImportsCheck = [ "azure.mgmt.loganalytics" ];
 
   meta = with lib; {
     description = "This is the Microsoft Azure Log Analytics Management Client Library";
