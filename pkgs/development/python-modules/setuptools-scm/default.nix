@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, toml }:
+{ lib, buildPythonPackage, fetchPypi, toml, tomli }:
 
 buildPythonPackage rec {
   pname = "setuptools-scm";
@@ -12,7 +12,9 @@ buildPythonPackage rec {
     sha256 = "sha256-0ZJaacsH6bKUFqJ1ufrbAJojwUis6QWy+yIGSabBjpI=";
   };
 
-  propagatedBuildInputs = [ toml ];
+  # TODO: figure out why both toml and tomli are needed when only tomli is listed in setuptools-scm
+  # if not both are listed some packages like zipp silently fallback to a 0.0.0 version number and break version pins in other packages
+  propagatedBuildInputs = [ toml tomli ];
 
   # Requires pytest, circular dependency
   doCheck = false;
