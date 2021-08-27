@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, fetchpatch }:
 
 stdenv.mkDerivation rec {
-  name = "dmidecode-3.2";
+  pname = "dmidecode";
+  version = "3.2";
 
   src = fetchurl {
-    url = "mirror://savannah/dmidecode/${name}.tar.xz";
+    url = "mirror://savannah/dmidecode/dmidecode-${version}.tar.xz";
     sha256 = "1pcfhcgs2ifdjwp7amnsr3lq95pgxpr150bjhdinvl505px0cw07";
   };
 

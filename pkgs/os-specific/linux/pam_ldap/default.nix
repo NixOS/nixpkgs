@@ -1,10 +1,11 @@
 { stdenv, fetchurl, pam, openldap, perl }:
 
 stdenv.mkDerivation rec {
-  name = "pam_ldap-186";
+  pname = "pam_ldap";
+  version = "186";
 
   src = fetchurl {
-    url = "https://www.padl.com/download/${name}.tar.gz";
+    url = "https://www.padl.com/download/pam_ldap-${version}.tar.gz";
     sha256 = "0lv4f7hc02jrd2l3gqxd247qq62z11sp3fafn8lgb8ymb7aj5zn8";
   };
 

@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "numad-0.5";
+  pname = "numad";
+  version = "0.5";
 
   src = fetchurl {
-    url = "https://git.fedorahosted.org/cgit/numad.git/snapshot/${name}.tar.xz";
+    url = "https://git.fedorahosted.org/cgit/numad.git/snapshot/numad-${version}.tar.xz";
     sha256 = "08zd1yc3w00yv4mvvz5sq1gf91f6p2s9ljcd72m33xgnkglj60v4";
   };
 
