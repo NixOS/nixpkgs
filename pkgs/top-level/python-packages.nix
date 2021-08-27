@@ -9311,7 +9311,8 @@ in {
 
   wasm = callPackage ../development/python-modules/wasm { };
 
-  wasmer = callPackage ../development/python-modules/wasmer { };
+  wasmerPackages = pkgs.recurseIntoAttrs (callPackage ../development/python-modules/wasmer { });
+  inherit (self.wasmerPackages) wasmer wasmer-compiler-cranelift wasmer-compiler-llvm wasmer-compiler-singlepass;
 
   watchdog = callPackage ../development/python-modules/watchdog {
     inherit (pkgs.darwin.apple_sdk.frameworks) CoreServices;
