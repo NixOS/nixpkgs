@@ -3621,6 +3621,12 @@
       fingerprint = "2F93 661D AC17 EA98 A104  F780 ECC7 55EE 583C 1672";
     }];
   };
+  flexagoon = {
+    email = "flexagoon@pm.me";
+    github = "flexagoon";
+    githubId = 66178592;
+    name = "Pavel Zolotarevskiy";
+  };
   flexw = {
     email = "felix.weilbach@t-online.de";
     github = "FlexW";
