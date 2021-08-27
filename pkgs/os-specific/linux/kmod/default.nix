@@ -9,11 +9,11 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "kmod";
-  version = "27";
+  version = "29";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/kernel/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "035wzfzjx4nwidk747p8n085mgkvy531ppn16krrajx2dkqzply1";
+    sha256 = "0am54mi5rk72g5q7k6l6f36gw3r9vwgjmyna43ywcjhqmakyx00b";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config libxslt ];
@@ -25,7 +25,7 @@ in stdenv.mkDerivation rec {
     "--with-modulesdirs=${modulesDirs}"
   ] ++ lib.optional withStatic "--enable-static";
 
-  patches = [ ./module-dir.patch ./no-name-field.patch ]
+  patches = [ ./module-dir.patch ]
     ++ lib.optional stdenv.isDarwin ./darwin.patch
     ++ lib.optional withStatic ./enable-static.patch;
 
