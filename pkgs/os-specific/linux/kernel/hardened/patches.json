@@ -13,9 +13,9 @@
     },
     "5.10": {
         "extra": "-hardened1",
-        "name": "linux-hardened-5.10.60-hardened1.patch",
-        "sha256": "0hnc12ypggwln4b5i1zqd9mmhdkcky24xj4jxqp23dwzp03pwfh8",
-        "url": "https://github.com/anthraxx/linux-hardened/releases/download/5.10.60-hardened1/linux-hardened-5.10.60-hardened1.patch"
+        "name": "linux-hardened-5.10.61-hardened1.patch",
+        "sha256": "0hg67w9s6nzfmar8y01cnc46b2m2sa6s1xz85x1z1c46vw9558f0",
+        "url": "https://github.com/anthraxx/linux-hardened/releases/download/5.10.61-hardened1/linux-hardened-5.10.61-hardened1.patch"
     },
     "5.4": {
         "extra": "-hardened1",
