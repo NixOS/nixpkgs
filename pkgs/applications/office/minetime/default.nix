@@ -1,4 +1,4 @@
-{ appimageTools, fetchurl, lib, runCommandNoCC, stdenv, gsettings-desktop-schemas, gtk3, zlib }:
+{ appimageTools, fetchurl, lib, runCommand, stdenv, gsettings-desktop-schemas, gtk3, zlib }:
 
 let
   name = "${pname}-${version}";
@@ -12,7 +12,7 @@ let
     inherit name;
     src = appimage;
   };
-  patched = runCommandNoCC "minetime-patchelf" {} ''
+  patched = runCommand "minetime-patchelf" {} ''
     cp -av ${extracted} $out
 
     x=$out/resources/app.asar.unpacked/services/scheduling/dist/MinetimeSchedulingService

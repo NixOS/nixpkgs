@@ -2,16 +2,16 @@
 , atk, at-spi2-atk, at-spi2-core, alsa-lib, cairo, cups, dbus, expat, gdk-pixbuf, glib, gtk3
 , freetype, fontconfig, nss, nspr, pango, udev, libuuid, libX11, libxcb, libXi
 , libXcursor, libXdamage, libXrandr, libXcomposite, libXext, libXfixes
-, libXrender, libXtst, libXScrnSaver, libdrm, mesa
+, libXrender, libXtst, libXScrnSaver, libxkbcommon, libdrm, mesa
 }:
 
 stdenv.mkDerivation rec {
   pname = "postman";
-  version = "8.4.0";
+  version = "8.10.0";
 
   src = fetchurl {
     url = "https://dl.pstmn.io/download/version/${version}/linux64";
-    sha256 = "040l0g6m8lmjrm0wvq8z13xyddasz7v95v54d658w14gv0n713vw";
+    sha256 = "05f3eaa229483a7e1f698e6e2ea2031d37687de540d4fad05ce677ac216db24d";
     name = "${pname}.tar.gz";
   };
 
@@ -62,6 +62,7 @@ stdenv.mkDerivation rec {
     libXrender
     libXtst
     libXScrnSaver
+    libxkbcommon
   ];
 
   nativeBuildInputs = [ wrapGAppsHook ];

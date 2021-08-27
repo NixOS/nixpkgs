@@ -15,7 +15,7 @@ buildGoModule rec {
   vendorSha256 = null;
 
   # make sure version gets set at compile time
-  buildFlagsArray = [ "-ldflags=-s -w -X main.vshVersion=v${version}" ];
+  ldflags = [ "-s" "-w" "-X main.vshVersion=v${version}" ];
 
   meta = with lib; {
     description = "HashiCorp Vault interactive shell";

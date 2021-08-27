@@ -72,7 +72,7 @@
   ./hardware/tuxedo-keyboard.nix
   ./hardware/ubertooth.nix
   ./hardware/usb-wwan.nix
-  ./hardware/onlykey.nix
+  ./hardware/onlykey/default.nix
   ./hardware/opentabletdriver.nix
   ./hardware/sata.nix
   ./hardware/wooting.nix
@@ -121,6 +121,7 @@
   ./programs/bash-my-aws.nix
   ./programs/bcc.nix
   ./programs/browserpass.nix
+  ./programs/calls.nix
   ./programs/captive-browser.nix
   ./programs/ccache.nix
   ./programs/cdemu.nix
@@ -254,6 +255,7 @@
   ./services/audio/mopidy.nix
   ./services/audio/networkaudiod.nix
   ./services/audio/roon-bridge.nix
+  ./services/audio/navidrome.nix
   ./services/audio/roon-server.nix
   ./services/audio/slimserver.nix
   ./services/audio/snapserver.nix
@@ -459,6 +461,7 @@
   ./services/mail/opensmtpd.nix
   ./services/mail/pfix-srsd.nix
   ./services/mail/postfix.nix
+  ./services/mail/postfixadmin.nix
   ./services/mail/postsrsd.nix
   ./services/mail/postgrey.nix
   ./services/mail/spamassassin.nix
@@ -550,7 +553,7 @@
   ./services/misc/ombi.nix
   ./services/misc/osrm.nix
   ./services/misc/packagekit.nix
-  ./services/misc/paperless.nix
+  ./services/misc/paperless-ng.nix
   ./services/misc/parsoid.nix
   ./services/misc/plex.nix
   ./services/misc/plikd.nix
@@ -766,6 +769,7 @@
   ./services/networking/namecoind.nix
   ./services/networking/nar-serve.nix
   ./services/networking/nat.nix
+  ./services/networking/nats.nix
   ./services/networking/ndppd.nix
   ./services/networking/nebula.nix
   ./services/networking/networkmanager.nix
@@ -951,6 +955,7 @@
   ./services/web-apps/documize.nix
   ./services/web-apps/dokuwiki.nix
   ./services/web-apps/engelsystem.nix
+  ./services/web-apps/fluidd.nix
   ./services/web-apps/galene.nix
   ./services/web-apps/gerrit.nix
   ./services/web-apps/gotify-server.nix
@@ -994,7 +999,7 @@
   ./services/web-apps/youtrack.nix
   ./services/web-apps/zabbix.nix
   ./services/web-servers/apache-httpd/default.nix
-  ./services/web-servers/caddy.nix
+  ./services/web-servers/caddy/default.nix
   ./services/web-servers/darkhttpd.nix
   ./services/web-servers/fcgiwrap.nix
   ./services/web-servers/hitch/default.nix
@@ -1033,6 +1038,7 @@
   ./services/x11/display-managers/sddm.nix
   ./services/x11/display-managers/slim.nix
   ./services/x11/display-managers/startx.nix
+  ./services/x11/display-managers/sx.nix
   ./services/x11/display-managers/xpra.nix
   ./services/x11/fractalart.nix
   ./services/x11/hardware/libinput.nix

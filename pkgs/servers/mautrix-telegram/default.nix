@@ -23,20 +23,23 @@ let
 
 in python.pkgs.buildPythonPackage rec {
   pname = "mautrix-telegram";
-  version = "0.10.0";
+  version = "0.10.1";
   disabled = python.pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "tulir";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-lLVKD+/pKqs8oWBdyL+R1lk22LqQOC9nbMlxhCK39xA=";
+    sha256 = "sha256-1Dmc7WRlT2ivGkdrGDC1b44DE0ovQKfUR0gDiQE4h5c=";
   };
 
   patches = [ ./0001-Re-add-entrypoint.patch ./0002-Don-t-depend-on-pytest-runner.patch ];
   postPatch = ''
     sed -i -e '/alembic>/d' requirements.txt
+    substituteInPlace requirements.txt \
+      --replace "telethon>=1.22,<1.23" "telethon"
   '';
+
 
   propagatedBuildInputs = with python.pkgs; ([
     Mako

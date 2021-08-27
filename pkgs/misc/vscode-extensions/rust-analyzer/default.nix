@@ -4,8 +4,9 @@
 , jq
 , rust-analyzer
 , nodePackages
-, setDefaultServerPath ? true
 , moreutils
+, esbuild
+, setDefaultServerPath ? true
 }:
 
 let
@@ -21,7 +22,7 @@ let
 
     releaseTag = rust-analyzer.version;
 
-    nativeBuildInputs = [ jq moreutils ];
+    nativeBuildInputs = [ jq moreutils esbuild ];
 
     # Follows https://github.com/rust-analyzer/rust-analyzer/blob/41949748a6123fd6061eb984a47f4fe780525e63/xtask/src/dist.rs#L39-L65
     postInstall = ''

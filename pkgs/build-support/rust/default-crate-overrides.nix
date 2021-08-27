@@ -1,7 +1,7 @@
 { lib, stdenv, pkg-config, curl, darwin, libiconv, libgit2, libssh2,
   openssl, sqlite, zlib, dbus, dbus-glib, gdk-pixbuf, cairo, python3,
   libsodium, postgresql, gmp, foundationdb, capnproto, nettle, clang,
-  llvmPackages, ... }:
+  llvmPackages, linux-pam, ... }:
 
 let
   inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
@@ -102,6 +102,10 @@ in
   openssl-sys = attrs: {
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ openssl ];
+  };
+
+  pam-sys = attr: {
+    buildInputs = [ linux-pam ];
   };
 
   pq-sys = attr: {

@@ -1,7 +1,8 @@
 { lib, stdenv, fetchgit, ... }:
 
 stdenv.mkDerivation {
-  name = "loadwatch-1.1-1-g6d2544c";
+  pname = "loadwatch";
+  version = "1.1-1-g6d2544c";
   src = fetchgit {
     url = "git://woffs.de/git/fd/loadwatch.git";
     sha256 = "1bhw5ywvhyb6snidsnllfpdi1migy73wg2gchhsfbcpm8aaz9c9b";

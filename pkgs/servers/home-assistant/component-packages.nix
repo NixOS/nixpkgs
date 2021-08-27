@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2021.8.6";
+  version = "2021.8.8";
   components = {
     "abode" = ps: with ps; [ abodepy ];
     "accuweather" = ps: with ps; [ accuweather ];
@@ -658,7 +658,7 @@
     "profiler" = ps: with ps; [ guppy3 objgraph pyprof2calltree ];
     "progettihwsw" = ps: with ps; [ ]; # missing inputs: progettihwsw
     "proliphix" = ps: with ps; [ ]; # missing inputs: proliphix
-    "prometheus" = ps: with ps; [ aiohttp-cors prometheus_client ];
+    "prometheus" = ps: with ps; [ aiohttp-cors prometheus-client ];
     "prosegur" = ps: with ps; [ pyprosegur ];
     "prowl" = ps: with ps; [ ];
     "proximity" = ps: with ps; [ ];

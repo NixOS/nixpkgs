@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sfm";
-  version = "0.2";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "afify";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-DwXKrSqcebNI5N9REXyMV16W2kr72IH9+sKSVehc5zw=";
+    hash = "sha256-NmafUezwKK9bYPAWDNhegyjqkb4GY/i1WEtQ9puIaig=";
   };
 
   configFile = lib.optionalString (conf!=null) (writeText "config.def.h" conf);

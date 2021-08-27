@@ -28,11 +28,11 @@
 }:
 
 let
-  version = "5.7.28991.0726";
+  version = "5.7.31792.0820";
   srcs = {
     x86_64-linux = fetchurl {
       url = "https://zoom.us/client/${version}/zoom_x86_64.pkg.tar.xz";
-      sha256 = "w1oeMKADG5+7EV1OXyuEbotrwcVywob82KOXKoRUifA=";
+      sha256 = "16p8wn67hb6p9rn684bbpwz8w5knyqw9rv2nnw6cwg949qjv43lm";
     };
   };
 
@@ -101,12 +101,13 @@ stdenv.mkDerivation rec {
     rm $out/bin/zoom
     # Zoom expects "zopen" executable (needed for web login) to be present in CWD. Or does it expect
     # everybody runs Zoom only after cd to Zoom package directory? Anyway, :facepalm:
-    # Also clear Qt environment variables to prevent
-    # zoom from tripping over "foreign" Qt ressources.
+    # Clear Qt paths to prevent tripping over "foreign" Qt resources.
+    # Clear Qt screen scaling settings to prevent over-scaling.
     makeWrapper $out/opt/zoom/ZoomLauncher $out/bin/zoom \
       --run "cd $out/opt/zoom" \
       --unset QML2_IMPORT_PATH \
       --unset QT_PLUGIN_PATH \
+      --unset QT_SCREEN_SCALE_FACTORS \
       --prefix PATH : ${lib.makeBinPath [ coreutils glib.dev pciutils procps util-linux ]} \
       --prefix LD_LIBRARY_PATH ":" ${libs}
 

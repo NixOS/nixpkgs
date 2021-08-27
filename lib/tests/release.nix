@@ -3,7 +3,7 @@
   pkgs ? import ../.. {} // { lib = throw "pkgs.lib accessed, but the lib tests should use nixpkgs' lib path directly!"; }
 }:
 
-pkgs.runCommandNoCC "nixpkgs-lib-tests" {
+pkgs.runCommand "nixpkgs-lib-tests" {
   buildInputs = [
     pkgs.nix
     (import ./check-eval.nix)

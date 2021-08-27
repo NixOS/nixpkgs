@@ -6,7 +6,6 @@
 , nvidiaGpuSupport
 , patchelf
 , nvidia_x11
-, nixosTests
 }:
 
 buildGoPackage rec {
@@ -39,8 +38,6 @@ buildGoPackage rec {
       patchelf --add-needed "${nvidia_x11}/lib/libnvidia-ml.so" "$bin"
     done
   '';
-
-  passthru.tests.nomad = nixosTests.nomad;
 
   meta = with lib; {
     homepage = "https://www.nomadproject.io/";

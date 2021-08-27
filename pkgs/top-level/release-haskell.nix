@@ -50,7 +50,7 @@ let
   # list of all compilers to test specific packages on
   all = with compilerNames; [
     ghc884
-    ghc8104
+    ghc8106
     ghc901
   ];
 
@@ -278,14 +278,14 @@ let
       # Test some statically linked packages to catch regressions
       # and get some cache going for static compilation with GHC.
       # Use integer-simple to avoid GMP linking problems (LGPL)
-      pkgsStatic.haskell.packages.integer-simple.ghc8104 =
+      pkgsStatic.haskell.packages.integer-simple.ghc8106 =
         removePlatforms
           [
             "aarch64-linux" # times out on Hydra
             "x86_64-darwin" # TODO: reenable when static libiconv works on darwin
           ]
           {
-            inherit (packagePlatforms pkgs.pkgsStatic.haskell.packages.integer-simple.ghc8104)
+            inherit (packagePlatforms pkgs.pkgsStatic.haskell.packages.integer-simple.ghc8106)
               hello
               lens
               random
@@ -300,12 +300,12 @@ let
       # package sets (like Cabal, jailbreak-cabal) are
       # working as expected.
       cabal-install = all;
-      Cabal_3_6_0_0 = with compilerNames; [ ghc884 ghc8104 ];
+      Cabal_3_6_0_0 = with compilerNames; [ ghc884 ghc8106 ];
       cabal2nix-unstable = all;
       funcmp = all;
       # Doesn't currently work on ghc-9.0:
       # https://github.com/haskell/haskell-language-server/issues/297
-      haskell-language-server = with compilerNames; [ ghc884 ghc8104 ];
+      haskell-language-server = with compilerNames; [ ghc884 ghc8106 ];
       hoogle = all;
       hsdns = all;
       jailbreak-cabal = all;
@@ -379,7 +379,7 @@ let
         constituents = accumulateDerivations [
           jobs.pkgsMusl.haskell.compiler.ghc8102Binary
           jobs.pkgsMusl.haskell.compiler.ghc884
-          jobs.pkgsMusl.haskell.compiler.ghc8104
+          jobs.pkgsMusl.haskell.compiler.ghc8106
           jobs.pkgsMusl.haskell.compiler.ghc901
         ];
       };
@@ -394,9 +394,9 @@ let
           ];
         };
         constituents = accumulateDerivations [
-          jobs.pkgsStatic.haskell.packages.integer-simple.ghc8104.hello
-          jobs.pkgsStatic.haskell.packages.integer-simple.ghc8104.lens
-          jobs.pkgsStatic.haskell.packages.integer-simple.ghc8104.random
+          jobs.pkgsStatic.haskell.packages.integer-simple.ghc8106.hello
+          jobs.pkgsStatic.haskell.packages.integer-simple.ghc8106.lens
+          jobs.pkgsStatic.haskell.packages.integer-simple.ghc8106.random
         ];
       };
     }

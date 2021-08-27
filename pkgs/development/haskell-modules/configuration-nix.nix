@@ -167,6 +167,7 @@ self: super: builtins.intersectAttrs super {
   mongoDB = dontCheck super.mongoDB;
   network-transport-tcp = dontCheck super.network-transport-tcp;
   network-transport-zeromq = dontCheck super.network-transport-zeromq; # https://github.com/tweag/network-transport-zeromq/issues/30
+  oidc-client = dontCheck super.oidc-client;            # the spec runs openid against google.com
   pipes-mongodb = dontCheck super.pipes-mongodb;        # http://hydra.cryp.to/build/926195/log/raw
   pixiv = dontCheck super.pixiv;
   raven-haskell = dontCheck super.raven-haskell;        # http://hydra.cryp.to/build/502053/log/raw
@@ -223,6 +224,9 @@ self: super: builtins.intersectAttrs super {
 
   # Test suite wants to connect to $DISPLAY.
   hsqml = dontCheck (addExtraLibraries (super.hsqml.override { qt5 = pkgs.qt5Full; }) [pkgs.libGLU pkgs.libGL]);
+
+  # Wants to check against a real DB, Needs freetds
+  odbc = dontCheck (addExtraLibraries super.odbc [ pkgs.freetds ]);
 
   # Tests attempt to use NPM to install from the network into
   # /homeless-shelter. Disabled.

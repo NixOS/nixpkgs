@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "md-toc";
-  version = "8.0.0";
+  version = "8.0.1";
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "frnmst";
     repo = pname;
     rev = version;
-    sha256 = "sha256-w5/oIeA9POth8bMszPH53RK1FM9PhmPdn4w9wxlqQ+g=";
+    sha256 = "sha256-nh9KxjwF+O4n0qVo9yPP6fvKB5XFICh+Ak6oD2fQVdk=";
   };
 
   propagatedBuildInputs = [

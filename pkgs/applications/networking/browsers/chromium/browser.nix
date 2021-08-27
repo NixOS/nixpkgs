@@ -16,7 +16,8 @@ mkChromiumDerivation (base: rec {
     cp -v "$buildPath/"*.so "$buildPath/"*.pak "$buildPath/"*.bin "$libExecPath/"
     cp -v "$buildPath/icudtl.dat" "$libExecPath/"
     cp -vLR "$buildPath/locales" "$buildPath/resources" "$libExecPath/"
-    cp -v "$buildPath/crashpad_handler" "$libExecPath/"
+    ${lib.optionalString (channel != "dev") ''cp -v "$buildPath/crashpad_handler" "$libExecPath/"''}
+    ${lib.optionalString (channel == "dev") ''cp -v "$buildPath/chrome_crashpad_handler" "$libExecPath/"''}
     cp -v "$buildPath/chrome" "$libExecPath/$packageName"
 
     # Swiftshader

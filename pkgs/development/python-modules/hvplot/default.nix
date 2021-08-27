@@ -18,11 +18,11 @@
 
 buildPythonPackage rec {
   pname = "hvplot";
-  version = "0.7.2";
+  version = "0.7.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f0dcfcb5e46ae3c29a646c341435986e332ef38af1057bf7b76abadff0bbaca4";
+    sha256 = "74b269c6e118dd6f7d2a4039e91f16a193638f4119b4358dc6dbd58a2e71e432";
   };
 
   nativeBuildInputs = [

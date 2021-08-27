@@ -10,18 +10,20 @@
 
 buildPythonPackage rec {
   pname = "sounddevice";
-  version = "0.4.1";
+  version = "0.4.2";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f21978921186c0c7183af032fab77b735d824f3e926d76adb3fd0912e289ce0b";
+    sha256 = "1c9b07cff59c837d258002ed806ee134ed367ef11042bd7d283d6ce407bf889c";
   };
 
   propagatedBuildInputs = [ cffi numpy portaudio ];
 
   # No tests included nor upstream available.
   doCheck = false;
+
+  pythonImportsCheck = [ "sounddevice" ];
 
   patches = [
     (substituteAll {

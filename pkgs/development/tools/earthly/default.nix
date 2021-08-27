@@ -13,13 +13,11 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-gydhh/EMSuE/beo+A2CRDdDnQGT6DMjMwthylT339I4=";
 
-  buildFlagsArray = ''
-    -ldflags=
-      -s -w
-      -X main.Version=v${version}
-      -X main.DefaultBuildkitdImage=earthly/buildkitd:v${version}
-      -extldflags -static
-  '';
+  ldflags = [
+    "-s" "-w"
+    "-X main.Version=v${version}"
+    "-X main.DefaultBuildkitdImage=earthly/buildkitd:v${version}"
+  ];
 
   BUILDTAGS = "dfrunmount dfrunsecurity dfsecrets dfssh dfrunnetwork";
   preBuild = ''
@@ -36,6 +34,6 @@ buildGoModule rec {
     homepage = "https://earthly.dev/";
     changelog = "https://github.com/earthly/earthly/releases/tag/v${version}";
     license = licenses.bsl11;
-    maintainers = with maintainers; [ mdsp ];
+    maintainers = with maintainers; [ matdsoupe ];
   };
 }

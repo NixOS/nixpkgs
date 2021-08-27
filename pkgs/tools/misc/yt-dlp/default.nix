@@ -1,4 +1,4 @@
-{ lib, fetchurl, buildPythonPackage
+{ lib, buildPythonPackage
 , zip, ffmpeg, rtmpdump, phantomjs2, atomicparsley, pycryptodome, pandoc
 , fetchFromGitHub
 , websockets, mutagen
@@ -13,13 +13,13 @@ buildPythonPackage rec {
   # The websites yt-dlp deals with are a very moving target. That means that
   # downloads break constantly. Because of that, updates should always be backported
   # to the latest stable release.
-  version = "2021.08.02";
+  version = "2021.08.10";
 
   src = fetchFromGitHub {
     owner = "yt-dlp";
     repo = "yt-dlp";
     rev = version;
-    sha256 = "QEJKOZGVQNXLU8GfTbwBx2Zv3KO++ozTJcXLWxXA4hI=";
+    sha256 = "sha256-8mOjIvbC3AFHCXKV5G66cFy7SM7sULzM8czXcqQKbms=";
   };
 
   nativeBuildInputs = [ installShellFiles makeWrapper ];

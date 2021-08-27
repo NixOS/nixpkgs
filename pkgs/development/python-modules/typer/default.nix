@@ -44,6 +44,9 @@ buildPythonPackage rec {
     homepage = "https://typer.tiangolo.com/";
     description = "Typer, build great CLIs. Easy to code. Based on Python type hints.";
     license = licenses.mit;
+    # is incompatible with click8
+    # https://github.com/tiangolo/typer/issues/280
+    broken = true;
     maintainers = [ maintainers.winpat ];
   };
 }

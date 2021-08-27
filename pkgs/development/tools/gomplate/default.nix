@@ -19,8 +19,7 @@ buildGoModule rec {
     rm net/net_test.go
   '';
 
-  buildFlagsArray = [
-    "-ldflags="
+  ldflags = [
     "-s"
     "-w"
     "-X github.com/${owner}/${pname}/v3/version.Version=${rev}"

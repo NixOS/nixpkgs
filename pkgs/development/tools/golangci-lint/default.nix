@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "golangci-lint";
-  version = "1.41.1";
+  version = "1.42.0";
 
   src = fetchFromGitHub {
     owner = "golangci";
     repo = "golangci-lint";
     rev = "v${version}";
-    sha256 = "sha256-7xokU2uw7oiXhirTKuNfqJ143PlnI7M1zSixT0S6jtE=";
+    sha256 = "sha256-xwJZfWDtA/6HkYZmGyhL/44xU8qLmJ2kk3Uqft0yivE=";
   };
 
-  vendorSha256 = "sha256-s0ZFQJIhF23FtLol1Gegljf6eyGkCmVxTKmHbQBtPvM=";
+  vendorSha256 = "sha256-lOVGyxQcWG99hO+Eff2cNA5gW4DhsDrBY5Ejj0s4v4Q=";
 
   doCheck = false;
 
@@ -19,9 +19,9 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  preBuild = ''
-    buildFlagsArray+=("-ldflags=-s -w -X main.version=${version} -X main.commit=v${version} -X main.date=19700101-00:00:00")
-  '';
+  ldflags = [
+    "-s" "-w" "-X main.version=${version}" "-X main.commit=v${version}" "-X main.date=19700101-00:00:00"
+  ];
 
   postInstall = ''
     for shell in bash zsh; do

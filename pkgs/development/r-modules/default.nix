@@ -328,6 +328,7 @@ let
     RSclient = [ pkgs.openssl.dev ];
     Rserve = [ pkgs.openssl ];
     Rssa = [ pkgs.fftw.dev ];
+    rsvg = [ pkgs.pkg-config ];
     runjags = [ pkgs.jags ];
     RVowpalWabbit = [ pkgs.zlib.dev pkgs.boost ];
     rzmq = [ pkgs.zeromq pkgs.pkg-config ];
@@ -450,6 +451,7 @@ let
     glmnet = [ pkgs.libiconv ];
     mvtnorm = [ pkgs.libiconv ];
     statmod = [ pkgs.libiconv ];
+    rsvg = [ pkgs.librsvg.dev ];
   };
 
   packagesRequireingX = [

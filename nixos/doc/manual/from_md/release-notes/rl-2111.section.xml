@@ -172,14 +172,140 @@
         </para>
       </listitem>
     </itemizedlist>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          <link xlink:href="https://www.navidrome.org/">navidrome</link>,
+          a personal music streaming server with subsonic-compatible
+          api. Available as
+          <link linkend="opt-services.navidrome.enable">navidrome</link>.
+        </para>
+      </listitem>
+    </itemizedlist>
+    <itemizedlist>
+      <listitem>
+        <para>
+          <link xlink:href="https://docs.fluidd.xyz/">fluidd</link>, a
+          Klipper web interface for managing 3d printers using
+          moonraker. Available as
+          <link linkend="opt-services.fluidd.enable">fluidd</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/earnestly/sx">sx</link>,
+          a simple alternative to both xinit and startx for starting a
+          Xorg server. Available as
+          <link linkend="opt-services.xserver.displayManager.sx.enable">services.xserver.displayManager.sx</link>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://postfixadmin.sourceforge.io/">postfixadmin</link>,
+          a web based virtual user administration interface for Postfix
+          mail servers. Available as
+          <link linkend="opt-services.postfixadmin.enable">postfixadmin</link>.
+        </para>
+      </listitem>
+    </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-incompatibilities">
     <title>Backward Incompatibilities</title>
     <itemizedlist>
       <listitem>
         <para>
+          The <literal>paperless</literal> module and package have been
+          removed. All users should migrate to the successor
+          <literal>paperless-ng</literal> instead. The Paperless project
+          <link xlink:href="https://github.com/the-paperless-project/paperless/commit/9b0063c9731f7c5f65b1852cb8caff97f5e40ba4">has
+          been archived</link> and advises all users to use
+          <literal>paperless-ng</literal> instead.
+        </para>
+        <para>
+          Users can use the <literal>services.paperless-ng</literal>
+          module as a replacement while noting the following
+          incompatibilities:
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              <literal>services.paperless.ocrLanguages</literal> has no
+              replacement. Users should migrate to
+              <link xlink:href="options.html#opt-services.paperless-ng.extraConfig"><literal>services.paperless-ng.extraConfig</literal></link>
+              instead:
+            </para>
+          </listitem>
+        </itemizedlist>
+        <programlisting language="bash">
+{
+  services.paperless-ng.extraConfig = {
+    # Provide languages as ISO 639-2 codes
+    # separated by a plus (+) sign.
+    # https://en.wikipedia.org/wiki/List_of_ISO_639-2_codes
+    PAPERLESS_OCR_LANGUAGE = &quot;deu+eng+jpn&quot;; # German &amp; English &amp; Japanse
+  };
+}
+</programlisting>
+        <itemizedlist>
+          <listitem>
+            <para>
+              If you previously specified
+              <literal>PAPERLESS_CONSUME_MAIL_*</literal> settings in
+              <literal>services.paperless.extraConfig</literal> you
+              should remove those options now. You now
+              <emphasis>must</emphasis> define those settings in the
+              admin interface of paperless-ng.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Option <literal>services.paperless.manage</literal> no
+              longer exists. Use the script at
+              <literal>${services.paperless-ng.dataDir}/paperless-ng-manage</literal>
+              instead. Note that this script only exists after the
+              <literal>paperless-ng</literal> service has been started
+              at least once.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              After switching to the new system configuration you should
+              run the Django management command to reindex your
+              documents and optionally create a user, if you don’t have
+              one already.
+            </para>
+            <para>
+              To do so, enter the data directory (the value of
+              <literal>services.paperless-ng.dataDir</literal>,
+              <literal>/var/lib/paperless</literal> by default), switch
+              to the paperless user and execute the management command
+              like below:
+            </para>
+            <programlisting>
+$ cd /var/lib/paperless
+$ su paperless -s /bin/sh
+$ ./paperless-ng-manage document_index reindex
+# if not already done create a user account, paperless-ng requires a login
+$ ./paperless-ng-manage createsuperuser
+Username (leave blank to use 'paperless'): my-user-name
+Email address: me@example.com
+Password: **********
+Password (again): **********
+Superuser created successfully.
+</programlisting>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>staticjinja</literal> package has been upgraded
-          from 1.0.4 to 3.0.1
+          from 1.0.4 to 4.1.0
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Firefox v91 does not support addons with invalid signature
+          anymore. Firefox ESR needs to be used for nix addon support.
         </para>
       </listitem>
       <listitem>
@@ -187,6 +313,15 @@
           The <literal>erigon</literal> ethereum node has moved to a new
           database format in <literal>2021-05-04</literal>, and requires
           a full resync
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>erigon</literal> ethereum node has moved it’s
+          database location in <literal>2021-08-03</literal>, users
+          upgrading must manually move their chaindata (see
+          <link xlink:href="https://github.com/ledgerwatch/erigon/releases/tag/v2021.08.03">release
+          notes</link>).
         </para>
       </listitem>
       <listitem>
@@ -687,6 +822,16 @@
       </listitem>
       <listitem>
         <para>
+          The fontconfig service’s dpi option has been removed.
+          Fontconfig should use Xft settings by default so there’s no
+          need to override one value in multiple places. The user can
+          set DPI via ~/.Xresources properly, or at the system level per
+          monitor, or as a last resort at the system level with
+          <literal>services.xserver.dpi</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>yambar</literal> package has been split into
           <literal>yambar</literal> and
           <literal>yambar-wayland</literal>, corresponding to the xorg
@@ -701,6 +846,53 @@
           configures the address and port the web UI is listening, it
           defaults to <literal>:9001</literal>. To be able to access the
           web UI this port needs to be opened in the firewall.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>varnish</literal> package was upgraded from 6.3.x
+          to 6.5.x. <literal>varnish60</literal> for the last LTS
+          release is also still available.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>kubernetes</literal> package was upgraded to
+          1.22. The <literal>kubernetes.apiserver.kubeletHttps</literal>
+          option was removed and HTTPS is always used.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The attribute <literal>linuxPackages_latest_hardened</literal>
+          was dropped because the hardened patches lag behind the
+          upstream kernel which made version bumps harder. If you want
+          to use a hardened kernel, please pin it explicitly with a
+          versioned attribute such as
+          <literal>linuxPackages_5_10_hardened</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>nomad</literal> package now defaults to a 1.1.x
+          release instead of 1.0.x
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          If <literal>exfat</literal> is included in
+          <literal>boot.supportedFilesystems</literal> and when using
+          kernel 5.7 or later, the <literal>exfatprogs</literal>
+          user-space utilities are used instead of
+          <literal>exfat</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>todoman</literal> package was upgraded from 3.9.0
+          to 4.0.0. This introduces breaking changes in the
+          <link xlink:href="https://todoman.readthedocs.io/en/stable/configure.html#configuration-file">configuration
+          file</link> format.
         </para>
       </listitem>
     </itemizedlist>
@@ -744,6 +936,14 @@
           3.9 introduces many deprecation warnings, please look at the
           <link xlink:href="https://docs.python.org/3/whatsnew/3.9.html">What’s
           New In Python 3.9 post</link> for more information.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>qtile</literal> hase been updated from
+          <quote>0.16.0</quote> to <quote>0.18.0</quote>, please check
+          <link xlink:href="https://github.com/qtile/qtile/blob/master/CHANGELOG">qtile
+          changelog</link> for changes.
         </para>
       </listitem>
       <listitem>
@@ -879,6 +1079,13 @@
           virtual host, even if <literal>enableACME</literal> is set.
           This is useful for providers not using the same certificate to
           sign OCSP responses and server certificates.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>lib.formats.yaml</literal>’s
+          <literal>generate</literal> will not generate JSON anymore,
+          but instead use more of the YAML-specific syntax.
         </para>
       </listitem>
     </itemizedlist>

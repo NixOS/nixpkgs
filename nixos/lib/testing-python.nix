@@ -42,7 +42,9 @@ rec {
         python <<EOF
         from pydoc import importfile
         with open('driver-symbols', 'w') as fp:
-          fp.write(','.join(dir(importfile('${testDriverScript}'))))
+          t = importfile('${testDriverScript}')
+          test_symbols = t._test_symbols()
+          fp.write(','.join(test_symbols.keys()))
         EOF
       '';
 
@@ -186,6 +188,14 @@ rec {
           --set startScripts "''${vmStartScripts[*]}" \
           --set testScript "$out/test-script" \
           --set vlans '${toString vlans}'
+
+        ${lib.optionalString (testScript == "") ''
+          ln -s ${testDriver}/bin/nixos-test-driver $out/bin/nixos-run-vms
+          wrapProgram $out/bin/nixos-run-vms \
+            --set startScripts "''${vmStartScripts[*]}" \
+            --set testScript "${pkgs.writeText "start-all" "start_all(); join_all();"}" \
+            --set vlans '${toString vlans}'
+        ''}
       '');
 
   # Make a full-blown test

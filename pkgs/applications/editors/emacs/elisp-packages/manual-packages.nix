@@ -46,7 +46,7 @@
     pname = "agda-mode";
     version = pkgs.haskellPackages.Agda.version;
 
-    phases = [ "buildPhase" "installPhase" ];
+    dontUnpack = true;
 
     # already byte-compiled by Agda builder
     buildPhase = ''
@@ -211,6 +211,25 @@
     meta = {
       description = "Standalone package providing ott-mode without building ott and with compiled bytecode.";
       inherit (pkgs.haskellPackages.Agda.meta) homepage license;
+    };
+  };
+
+  urweb-mode = self.trivialBuild {
+    pname = "urweb-mode";
+
+    inherit (pkgs.urweb) src version;
+
+    packageRequires = [
+      self.cl-lib
+      self.flycheck
+    ];
+
+    postUnpack = "sourceRoot=$sourceRoot/src/elisp";
+
+    meta = {
+      description = "Major mode for editing Ur/Web";
+      inherit (pkgs.urweb.meta) license homepage;
+      maintainers = [ lib.maintainers.sternenseemann ];
     };
   };
 

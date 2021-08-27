@@ -1,4 +1,4 @@
-{ fetchurl, fetchgit, linkFarm, runCommandNoCC, gnutar }: rec {
+{ fetchurl, fetchgit, linkFarm, runCommand, gnutar }: rec {
   offline_cache = linkFarm "offline" packages;
   packages = [
     {
@@ -651,7 +651,7 @@
           sha256 = "1pa8cqbr758vx1q2ymsmbkp9cz3b7bghxzi90zc4hfq1nzav5w85";
         };
       in
-        runCommandNoCC "Idle.js" { buildInputs = [gnutar]; } ''
+        runCommand "Idle.js" { buildInputs = [gnutar]; } ''
           # Set u+w because tar-fs can't unpack archives with read-only dirs
           # https://github.com/mafintosh/tar-fs/issues/79
           tar cf $out --mode u+w -C ${repo} .
@@ -2403,7 +2403,7 @@
           sha256 = "0b6axzi9kwsd24pcqfk5rmy9nhsdyklpd3z8w9wiynd64435dilz";
         };
       in
-        runCommandNoCC "CodeMirror.git" { buildInputs = [gnutar]; } ''
+        runCommand "CodeMirror.git" { buildInputs = [gnutar]; } ''
           # Set u+w because tar-fs can't unpack archives with read-only dirs
           # https://github.com/mafintosh/tar-fs/issues/79
           tar cf $out --mode u+w -C ${repo} .
@@ -3531,7 +3531,7 @@
           sha256 = "0hlv66cxrqih7spnissl44jd8f8x9dyvzc68fn0g2fwwrnpjjib7";
         };
       in
-        runCommandNoCC "diff-match-patch.git" { buildInputs = [gnutar]; } ''
+        runCommand "diff-match-patch.git" { buildInputs = [gnutar]; } ''
           # Set u+w because tar-fs can't unpack archives with read-only dirs
           # https://github.com/mafintosh/tar-fs/issues/79
           tar cf $out --mode u+w -C ${repo} .
@@ -6203,7 +6203,7 @@
           sha256 = "0d2zf62fmad760rg9hrkyhp03k5apms3fm0mf64yy8q6p3iw7jvw";
         };
       in
-        runCommandNoCC "js-sequence-diagrams.git" { buildInputs = [gnutar]; } ''
+        runCommand "js-sequence-diagrams.git" { buildInputs = [gnutar]; } ''
           # Set u+w because tar-fs can't unpack archives with read-only dirs
           # https://github.com/mafintosh/tar-fs/issues/79
           tar cf $out --mode u+w -C ${repo} .
@@ -6923,7 +6923,7 @@
           sha256 = "036v1a9z79mc961xxx0rw8p6n2w1z8bnqpapgfg2kbw8f87jfxyi";
         };
       in
-        runCommandNoCC "lz-string.git" { buildInputs = [gnutar]; } ''
+        runCommand "lz-string.git" { buildInputs = [gnutar]; } ''
           # Set u+w because tar-fs can't unpack archives with read-only dirs
           # https://github.com/mafintosh/tar-fs/issues/79
           tar cf $out --mode u+w -C ${repo} .
@@ -7323,7 +7323,7 @@
           sha256 = "1rgmap95akwf9z72msxpqcfy95h8pqz9c8vn9xvvibfb5jf46lv0";
         };
       in
-        runCommandNoCC "meta-marked" { buildInputs = [gnutar]; } ''
+        runCommand "meta-marked" { buildInputs = [gnutar]; } ''
           # Set u+w because tar-fs can't unpack archives with read-only dirs
           # https://github.com/mafintosh/tar-fs/issues/79
           tar cf $out --mode u+w -C ${repo} .

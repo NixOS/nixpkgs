@@ -23,8 +23,7 @@ in
     # Remove the symlinks created by symlinkJoin which we need to perform
     # extra actions upon
     postBuild = ''
-      rm $out/bin/helm
-      makeWrapper "${helm}/bin/helm" "$out/bin/helm" "--argv0" "$0" \
+      wrapProgram "$out/bin/helm" \
         "--set" "HELM_PLUGINS" "${pluginsDir}" ${extraMakeWrapperArgs}
     '';
     paths = [ helm pluginsDir ];

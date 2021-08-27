@@ -9,7 +9,7 @@
 let
   withPlugins = plugins: buildPythonPackage {
     name = "${package.name}-with-plugins";
-    phases = [ "installPhase" "fixupPhase" ];
+    dontUnpack = true;
     nativeBuildInputs = [ makeWrapper ];
     propagatedBuildInputs = plugins ++ package.propagatedBuildInputs;
 

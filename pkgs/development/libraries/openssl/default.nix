@@ -185,6 +185,8 @@ in {
       (if stdenv.hostPlatform.isDarwin
        then ./1.0.2/use-etc-ssl-certs-darwin.patch
        else ./1.0.2/use-etc-ssl-certs.patch)
+    ] ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-darwin") [
+      ./1.0.2/darwin64-arm64.patch
     ];
     extraMeta.knownVulnerabilities = [ "Support for OpenSSL 1.0.2 ended with 2019." ];
   };

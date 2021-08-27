@@ -1,16 +1,11 @@
-{ lib, stdenv, fetchurl, openssl, expat, libevent, swig, pythonPackages }:
+{ lib, stdenv, unbound, openssl, expat, libevent, swig, pythonPackages }:
 
 let
   inherit (pythonPackages) python;
 in
 stdenv.mkDerivation rec {
   pname = "pyunbound";
-  version = "1.13.1";
-
-  src = fetchurl {
-    url = "https://nlnetlabs.nl/downloads/unbound/unbound-${version}.tar.gz";
-    sha256 = "sha256-hQTZe4/FvYlzRcldEW4O4N34yP+ZWQqytL0TJ4yfULg=";
-  };
+  inherit (unbound) version src;
 
   nativeBuildInputs = [ swig ];
 

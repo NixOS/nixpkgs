@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "smart-meter-texas";
-  version = "0.4.3";
+  version = "0.4.4";
 
   disabled = pythonOlder "3.6";
 
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "grahamwetzler";
     repo = "smart-meter-texas";
     rev = "v${version}";
-    sha256 = "09n03wbyjh1b1gsiibf17fg86x7k1i1r1kpp94p7w1lcdbmn8v5c";
+    sha256 = "sha256-jewibcsqWnl0OQ2oEEOSOcyyDCIGZiG4EZQfuFUbxK4=";
   };
 
   postPatch = ''

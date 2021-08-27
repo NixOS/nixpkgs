@@ -16,9 +16,9 @@ buildGoModule rec {
   # Don't build and check the integration tests
   excludedPackages = "itest";
 
-  preBuild = ''
-    buildFlagsArray+=("-ldflags" "-s -w -X main.version=v${version}")
-  '';
+  ldflags = [
+    "-s" "-w" "-X main.version=v${version}"
+  ];
 
   preCheck = ''
     # Remove test that requires networking

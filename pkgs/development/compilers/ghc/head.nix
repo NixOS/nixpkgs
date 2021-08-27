@@ -311,6 +311,7 @@ stdenv.mkDerivation (rec {
     homepage = "http://haskell.org/ghc";
     description = "The Glasgow Haskell Compiler";
     maintainers = with lib.maintainers; [ marcweber andres peti ];
+    timeout = 24 * 3600;
     inherit (ghc.meta) license platforms;
     # ghcHEAD times out on aarch64-linux on Hydra.
     hydraPlatforms = builtins.filter (p: p != "aarch64-linux") ghc.meta.platforms;

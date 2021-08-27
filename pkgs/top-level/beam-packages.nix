@@ -1,16 +1,19 @@
-{ callPackage, wxGTK30, buildPackages, wxSupport ? true }:
+{ beam, callPackage, wxGTK30, buildPackages, wxSupport ? true }:
 
-rec {
+with beam; {
   lib = callPackage ../development/beam-modules/lib.nix { };
 
-  # Each
-  interpreters = rec {
+  # R24 is the default version.
+  # The main switch to change default Erlang version.
+  defaultVersion = "erlangR24";
 
-    # R24 is the default version.
-    erlang = erlangR24; # The main switch to change default Erlang version.
-    erlang_odbc = erlangR24_odbc;
-    erlang_javac = erlangR24_javac;
-    erlang_odbc_javac = erlangR24_odbc_javac;
+  # Each
+  interpreters = with beam.interpreters; {
+
+    erlang = beam.interpreters.${defaultVersion};
+    erlang_odbc = beam.interpreters."${defaultVersion}_odbc";
+    erlang_javac = beam.interpreters."${defaultVersion}_javac";
+    erlang_odbc_javac = beam.interpreters."${defaultVersion}_odbc_javac";
 
     # Standard Erlang versions, using the generic builder.
 
@@ -98,7 +101,7 @@ rec {
   # appropriate Erlang/OTP version.
   packages = {
     # Packages built with default Erlang version.
-    erlang = packagesWith interpreters.erlang;
+    erlang = packages.${defaultVersion};
 
     erlangR24 = packagesWith interpreters.erlangR24;
     erlangR23 = packagesWith interpreters.erlangR23;

@@ -158,9 +158,15 @@ let
       (lib.enableFeature enablePlugin "plugin")
     ]
 
-    # Support -m32 on powerpc64le
+    # Support -m32 on powerpc64le/be
     ++ lib.optional (targetPlatform.system == "powerpc64le-linux")
       "--enable-targets=powerpcle-linux"
+    ++ lib.optional (targetPlatform.system == "powerpc64-linux")
+      "--enable-targets=powerpc-linux"
+
+    # Fix "unknown long double size, cannot define BFP_FMT"
+    ++ lib.optional (targetPlatform.isPower && targetPlatform.isMusl)
+      "--disable-decimal-float"
 
     # Optional features
     ++ lib.optional (isl != null) "--with-isl=${isl}"

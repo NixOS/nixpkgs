@@ -195,9 +195,9 @@ rec {
   };
 
   terraform_1_0 = mkTerraform {
-    version = "1.0.4";
-    sha256 = "09g0ln247scv8mj40gxhkij0li62v0rjm2bsgmvl953aj7g3dlh1";
-    vendorSha256 = "07pzqvf9lwgc1fadmyam5hn7arlvzrjsplls445738jpn61854gg";
+    version = "1.0.5";
+    sha256 = "0nhxrlnwg76iiqs9hj6ls54176df78ys3356nxmd9ip8jx9ix47v";
+    vendorSha256 = "08fvp6w8xsv42jjgpr73kyah20g3979rf84ysrq5whvfmrbpzm2f";
     patches = [ ./provider-path-0_15.patch ];
     passthru = { inherit plugins; };
   };

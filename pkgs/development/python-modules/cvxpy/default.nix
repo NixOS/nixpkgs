@@ -36,7 +36,7 @@ buildPythonPackage rec {
   ];
 
   # Required flags from https://github.com/cvxgrp/cvxpy/releases/tag/v1.1.11
-  preBuild = lib.optional useOpenmp ''
+  preBuild = lib.optionalString useOpenmp ''
     export CFLAGS="-fopenmp"
     export LDFLAGS="-lgomp"
   '';

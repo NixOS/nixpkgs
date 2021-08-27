@@ -16,20 +16,17 @@ from dataclasses import dataclass
 import subprocess
 import csv
 import logging
+import textwrap
+from multiprocessing.dummy import Pool
 
-from typing import List
+from typing import List, Tuple
 from pathlib import Path
-
-LOG_LEVELS = {
-    logging.getLevelName(level): level for level in [
-        logging.DEBUG, logging.INFO, logging.WARN, logging.ERROR ]
-}
 
 log = logging.getLogger()
 log.addHandler(logging.StreamHandler())
 
 ROOT = Path(os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))).parent.parent
-from pluginupdate import Editor, parse_args, update_plugins, PluginDesc, CleanEnvironment
+from pluginupdate import Editor, update_plugins, PluginDesc, CleanEnvironment, LOG_LEVELS, Cache
 
 PKG_LIST="maintainers/scripts/luarocks-packages.csv"
 TMP_FILE="$(mktemp)"
@@ -67,11 +64,10 @@ class LuaEditor(Editor):
     def get_current_plugins(self):
         return []
 
-    def load_plugin_spec(self, input_file) -> List[PluginDesc]:
+    def load_plugin_spec(self, input_file) -> List[LuaPlugin]:
         luaPackages = []
         csvfilename=input_file
         log.info("Loading package descriptions from %s", csvfilename)
-
 
         with open(csvfilename, newline='') as csvfile:
             reader = csv.DictReader(csvfile,)
@@ -81,96 +77,114 @@ class LuaEditor(Editor):
                 luaPackages.append(plugin)
         return luaPackages
 
+    def generate_nix(
+        self,
+        results: List[Tuple[LuaPlugin, str]],
+        outfilename: str
+        ):
+
+        with tempfile.NamedTemporaryFile("w+") as f:
+            f.write(HEADER)
+            header2 = textwrap.dedent(
+            # header2 = inspect.cleandoc(
+            """
+                { self, stdenv, lib, fetchurl, fetchgit, ... } @ args:
+                self: super:
+                with self;
+                {
+            """)
+            f.write(header2)
+            for (plugin, nix_expr) in results:
+                f.write(f"{plugin.normalized_name} = {nix_expr}")
+            f.write(FOOTER)
+            f.flush()
+
+            # if everything went fine, move the generated file to its destination
+            # using copy since move doesn't work across disks
+            shutil.copy(f.name, outfilename)
+
+        print(f"updated {outfilename}")
+
     @property
     def attr_path(self):
         return "luaPackages"
 
-    def get_update(self, input_file: str, outfile: str, _: int):
+    def get_update(self, input_file: str, outfile: str, proc: int):
+        _prefetch = generate_pkg_nix
 
         def update() -> dict:
             plugin_specs = self.load_plugin_spec(input_file)
+            sorted_plugin_specs = sorted(plugin_specs, key=lambda v: v.name.lower())
 
-            self.generate_nix(plugin_specs, outfile)
+            try:
+                pool = Pool(processes=proc)
+                results = pool.map(_prefetch, sorted_plugin_specs)
+            finally:
+                pass
+
+            self.generate_nix(results, outfile)
 
             redirects = []
             return redirects
 
         return update
 
-    def rewrite_input(self, *args, **kwargs):
+    def rewrite_input(self, input_file: str, *args, **kwargs):
+        # vim plugin reads the file before update but that shouldn't be our case
         # not implemented yet
+        # fieldnames = ['name', 'server', 'version', 'luaversion', 'maintainers']
+        # input_file = "toto.csv"
+        # with open(input_file, newline='') as csvfile:
+        #     writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        #     writer.writeheader()
+        #     for row in reader:
+        #         # name,server,version,luaversion,maintainers
+        #         plugin = LuaPlugin(**row)
+        #         luaPackages.append(plugin)
         pass
 
-def generate_nix(
-    plugins: List[LuaPlugin],
-    outfilename: str
-    ):
-    sorted_plugins = sorted(plugins, key=lambda v: v.name.lower())
+def generate_pkg_nix(plug: LuaPlugin):
+    '''
+    Generate nix expression for a luarocks package
+    Our cache key associates "p.name-p.version" to its rockspec
+    '''
+    log.debug("Generating nix expression for %s", plug.name)
+    cmd = [ "luarocks", "nix", plug.name]
 
-    # plug = {}
-    # selon le manifest luarocks.org/manifest
-    def _generate_pkg_nix(plug):
-        cmd = [ "luarocks", "nix", plug.name]
-        if plug.server:
-            cmd.append(f"--only-server={plug.server}")
+    if plug.server:
+        cmd.append(f"--only-server={plug.server}")
 
-        if plug.maintainers:
-            cmd.append(f"--maintainers={plug.maintainers}")
+    if plug.maintainers:
+        cmd.append(f"--maintainers={plug.maintainers}")
 
-        if plug.version:
-            cmd.append(plug.version)
+    if plug.version:
+        cmd.append(plug.version)
 
-        if plug.luaversion:
-            with CleanEnvironment():
-                local_pkgs = str(ROOT.resolve())
-                cmd2 = ["nix-build", "--no-out-link", local_pkgs, "-A", f"{plug.luaversion}"]
+    if plug.luaversion:
+        with CleanEnvironment():
+            local_pkgs = str(ROOT.resolve())
+            cmd2 = ["nix-build", "--no-out-link", local_pkgs, "-A", f"{plug.luaversion}"]
 
-                log.debug("running %s", cmd2)
-                lua_drv_path=subprocess.check_output(cmd2, text=True).strip()
-                cmd.append(f"--lua-dir={lua_drv_path}/bin")
+            log.debug("running %s", ' '.join(cmd2))
+            lua_drv_path=subprocess.check_output(cmd2, text=True).strip()
+            cmd.append(f"--lua-dir={lua_drv_path}/bin")
 
-        log.debug("running %s", cmd)
-        output = subprocess.check_output(cmd, text=True)
-        return output
-
-    with tempfile.NamedTemporaryFile("w+") as f:
-        f.write(HEADER)
-        f.write("""
-{ self, stdenv, lib, fetchurl, fetchgit, ... } @ args:
-self: super:
-with self;
-{
-""")
-
-        for plugin in sorted_plugins:
-
-            nix_expr = _generate_pkg_nix(plugin)
-            f.write(f"{plugin.normalized_name} = {nix_expr}"
-            )
-        f.write(FOOTER)
-        f.flush()
-
-        # if everything went fine, move the generated file to its destination
-        # using copy since move doesn't work across disks
-        shutil.copy(f.name, outfilename)
-
-    print(f"updated {outfilename}")
-
-def load_plugin_spec():
-    pass
-
+    log.debug("running %s", cmd)
+    output = subprocess.check_output(cmd, text=True)
+    return (plug, output)
 
 def main():
 
-    editor = LuaEditor("lua", ROOT, '', generate_nix,
+    editor = LuaEditor("lua", ROOT, '',
         default_in = ROOT.joinpath(PKG_LIST),
         default_out = ROOT.joinpath(GENERATED_NIXFILE)
         )
 
-    args = parse_args(editor)
+    parser = editor.create_parser()
+    args = parser.parse_args()
     log.setLevel(LOG_LEVELS[args.debug])
 
-    update_plugins(editor)
+    update_plugins(editor, args)
 
 
 if __name__ == "__main__":

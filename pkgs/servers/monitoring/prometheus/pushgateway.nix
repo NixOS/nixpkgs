@@ -17,15 +17,14 @@ buildGoPackage rec {
   buildUser = "nix@nixpkgs";
   buildDate = "19700101-00:00:00";
 
-  buildFlagsArray = ''
-    -ldflags=
-        -X github.com/prometheus/pushgateway/vendor/github.com/prometheus/common/version.Version=${version}
-        -X github.com/prometheus/pushgateway/vendor/github.com/prometheus/common/version.Revision=${rev}
-        -X github.com/prometheus/pushgateway/vendor/github.com/prometheus/common/version.Branch=${rev}
-        -X github.com/prometheus/pushgateway/vendor/github.com/prometheus/common/version.BuildUser=${buildUser}
-        -X github.com/prometheus/pushgateway/vendor/github.com/prometheus/common/version.BuildDate=${buildDate}
-        -X main.goVersion=${lib.getVersion go}
-  '';
+  ldflags = [
+    "-X github.com/prometheus/pushgateway/vendor/github.com/prometheus/common/version.Version=${version}"
+    "-X github.com/prometheus/pushgateway/vendor/github.com/prometheus/common/version.Revision=${rev}"
+    "-X github.com/prometheus/pushgateway/vendor/github.com/prometheus/common/version.Branch=${rev}"
+    "-X github.com/prometheus/pushgateway/vendor/github.com/prometheus/common/version.BuildUser=${buildUser}"
+    "-X github.com/prometheus/pushgateway/vendor/github.com/prometheus/common/version.BuildDate=${buildDate}"
+    "-X main.goVersion=${lib.getVersion go}"
+  ];
 
   doInstallCheck = true;
   installCheckPhase = ''

@@ -164,6 +164,11 @@ in
     systemd.packages = with pkgs.gnome; [ gdm gnome-session gnome-shell ];
     environment.systemPackages = [ pkgs.gnome.adwaita-icon-theme ];
 
+    # We dont use the upstream gdm service
+    # it has to be disabled since the gdm package has it
+    # https://github.com/NixOS/nixpkgs/issues/108672
+    systemd.services.gdm.enable = false;
+
     systemd.services.display-manager.wants = [
       # Because sd_login_monitor_new requires /run/systemd/machines
       "systemd-machined.service"
@@ -309,7 +314,7 @@ in
         password required       pam_deny.so
 
         session  required       pam_succeed_if.so audit quiet_success user = gdm
-        session  required       pam_env.so conffile=${config.system.build.pamEnvironment} readenv=0
+        session  required       pam_env.so conffile=/etc/pam/environment readenv=0
         session  optional       ${pkgs.systemd}/lib/security/pam_systemd.so
         session  optional       pam_keyinit.so force revoke
         session  optional       pam_permit.so

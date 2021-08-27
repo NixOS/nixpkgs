@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "total-connect-client";
-  version = "0.58";
+  version = "2021.7.1";
 
   src = fetchFromGitHub {
     owner = "craigjmidwinter";
     repo = "total-connect-client";
     rev = version;
-    sha256 = "1dqmgvgvwjh235wghygan2jnfvmn9vz789in2as3asig9cifix9z";
+    sha256 = "sha256-F7qVvQVU6OlVU98zmFSQ1SLVCAx+lhz+cFS//d0SHUQ=";
   };
 
   propagatedBuildInputs = [

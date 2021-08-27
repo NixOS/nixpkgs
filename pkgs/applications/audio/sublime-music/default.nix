@@ -15,14 +15,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "sublime-music";
-  version = "0.11.12";
+  version = "0.11.13";
   format = "pyproject";
 
   src = fetchFromGitLab {
     owner = "sublime-music";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-fcEdpht+xKJRTaD3gKoRdf6O2SAPlZHZ61Jy8bdTKjs=";
+    sha256 = "sha256-NzbQtRcsRVppyuG1UuS3IidSnniUOavf5YoAf/kcZqw=";
   };
 
   nativeBuildInputs = [

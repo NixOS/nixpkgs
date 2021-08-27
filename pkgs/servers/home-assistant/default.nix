@@ -24,6 +24,18 @@ let
     # Override the version of some packages pinned in Home Assistant's setup.py and requirements_all.txt
     (mkOverride "python-slugify" "4.0.1" "69a517766e00c1268e5bbfc0d010a0a8508de0b18d30ad5a1ff357f8ae724270")
 
+    (self: super: {
+      async-upnp-client = super.async-upnp-client.overridePythonAttrs (oldAttrs: rec {
+        version = "0.19.2";
+        src = fetchFromGitHub {
+          owner = "StevenLooman";
+          repo = "async_upnp_client";
+          rev = version;
+          sha256 = "1v8d2lvxihqasn7866zssys16s0lgxkk6ri2dp4rr7wr8g9ixvdr";
+        };
+      });
+    })
+
     # Pinned due to API changes in iaqualink>=2.0, remove after
     # https://github.com/home-assistant/core/pull/48137 was merged
     (self: super: {
@@ -88,6 +100,19 @@ let
       });
     })
 
+    # Pinned due to changes in total-connect-client>0.58 which made the tests fails at the moment
+    (self: super: {
+      total-connect-client = super.total-connect-client.overridePythonAttrs (oldAttrs: rec {
+        version = "0.58";
+        src = fetchFromGitHub {
+          owner = "craigjmidwinter";
+          repo = "total-connect-client";
+          rev = version;
+          sha256 = "1dqmgvgvwjh235wghygan2jnfvmn9vz789in2as3asig9cifix9z";
+        };
+      });
+    })
+
     # home-assistant-frontend does not exist in python3.pkgs
     (self: super: {
       home-assistant-frontend = self.callPackage ./frontend.nix { };
@@ -121,7 +146,7 @@ let
   extraBuildInputs = extraPackages py.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2021.8.6";
+  hassVersion = "2021.8.8";
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "homeassistant";
@@ -138,7 +163,7 @@ in with py.pkgs; buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = version;
-    sha256 = "1hahxvvlk32dbmv2lhn67w1ii5g24znvjqgsq318qv8c2qh5z5ws";
+    sha256 = "1fj16qva04d9qhpnfxxacsp82vqqfha5c2zg4f850kld4qhwrgky";
   };
 
   # leave this in, so users don't have to constantly update their downstream patch handling

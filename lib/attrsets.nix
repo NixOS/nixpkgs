@@ -5,7 +5,7 @@ let
   inherit (builtins) head tail length;
   inherit (lib.trivial) and;
   inherit (lib.strings) concatStringsSep sanitizeDerivationName;
-  inherit (lib.lists) fold foldr concatMap concatLists;
+  inherit (lib.lists) foldr foldl' concatMap concatLists elemAt;
 in
 
 rec {
@@ -55,10 +55,13 @@ rec {
        => { a = { b = 3; }; }
   */
   setAttrByPath = attrPath: value:
-    if attrPath == [] then value
-    else listToAttrs
-      [ { name = head attrPath; value = setAttrByPath (tail attrPath) value; } ];
-
+    let
+      len = length attrPath;
+      atDepth = n:
+        if n == len
+        then value
+        else { ${elemAt attrPath n} = atDepth (n + 1); };
+    in atDepth 0;
 
   /* Like `attrByPath' without a default value. If it doesn't find the
      path it will throw.
@@ -195,7 +198,7 @@ rec {
          ]
   */
   cartesianProductOfSets = attrsOfLists:
-    lib.foldl' (listOfAttrs: attrName:
+    foldl' (listOfAttrs: attrName:
       concatMap (attrs:
         map (listValue: attrs // { ${attrName} = listValue; }) attrsOfLists.${attrName}
       ) listOfAttrs

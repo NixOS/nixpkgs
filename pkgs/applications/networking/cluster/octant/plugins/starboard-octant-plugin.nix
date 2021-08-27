@@ -13,9 +13,9 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-EM0lPwwWJuLD+aqZWshz1ILaeEtUU4wJ0Puwv1Ikgf4=";
 
-  preBuild = ''
-    buildFlagsArray+=("-ldflags" "-s -w")
-  '';
+  ldflags = [
+    "-s" "-w"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/aquasecurity/starboard-octant-plugin";

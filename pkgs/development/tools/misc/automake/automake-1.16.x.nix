@@ -1,6 +1,7 @@
 { lib, stdenv, fetchurl, perl, autoconf }:
 
 stdenv.mkDerivation rec {
+  # When updating, beware of https://github.com/NixOS/nixpkgs/pull/131928#issuecomment-896614165
   name = "automake-1.16.3";
 
   src = fetchurl {

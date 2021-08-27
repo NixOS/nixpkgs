@@ -17,7 +17,7 @@
 , nbconvert
 , send2trash
 , terminado
-, prometheus_client
+, prometheus-client
 , anyio
 , websocket-client
 , requests
@@ -46,7 +46,7 @@ buildPythonPackage rec {
     nbconvert
     send2trash
     terminado
-    prometheus_client
+    prometheus-client
     anyio
     websocket-client
   ];

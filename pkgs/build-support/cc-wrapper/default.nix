@@ -472,7 +472,7 @@ stdenv.mkDerivation {
     + optionalString hostPlatform.isCygwin ''
       hardening_unsupported_flags+=" pic"
     '' + optionalString targetPlatform.isMinGW ''
-      hardening_unsupported_flags+=" stackprotector"
+      hardening_unsupported_flags+=" stackprotector fortify"
     '' + optionalString targetPlatform.isAvr ''
       hardening_unsupported_flags+=" stackprotector pic"
     '' + optionalString (targetPlatform.libc == "newlib") ''

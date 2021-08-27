@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "pymeteireann";
-  version = "0.2";
+  version = "2021.8.0";
 
   src = fetchFromGitHub {
     owner = "DylanGore";
     repo = "PyMetEireann";
     rev = version;
-    sha256 = "1904f8mvv4ghzbniswmdwyj5v71m6y3yn1b4grjvfds05skalm67";
+    sha256 = "1xcfb3f2a2q99i8anpdzq8s743jgkk2a3rpar48b2dhs7l15rbsd";
   };
 
   propagatedBuildInputs = [
