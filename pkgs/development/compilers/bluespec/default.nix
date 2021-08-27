@@ -1,8 +1,6 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch, autoconf, automake, fontconfig
 , gmp-static, gperf, libX11, libpoly, perl, flex, bison, pkg-config, itktcl
 , incrtcl, tcl, tk, verilog, xorg, yices, zlib, ghc, asciidoctor, tex # docs
-, dejagnu, gnum4, time, tcsh # check
-, longTests ? false # WIP
 }:
 
 let
@@ -24,6 +22,7 @@ in stdenv.mkDerivation rec {
 
   outputs = [ "out" "doc" ];
 
+  # https://github.com/B-Lang-org/bsc/pull/278
   patches = [ ./libstp_stub_makefile.patch ];
 
   postUnpack = ''
@@ -34,32 +33,18 @@ in stdenv.mkDerivation rec {
   '';
 
   preBuild = ''
-    # XXX: remove
-    set -x
-
     patchShebangs \
       src/Verilog/copy_module.pl \
       src/comp/update-build-version.sh \
       src/comp/update-build-system.sh \
-      src/comp/wrapper.sh \
-
-    # patchShebangs doesn't catch these.
-    substituteInPlace \
-        testsuite/findfailures.csh \
-        --replace '/bin/tcsh' "${tcsh}/bin/tcsh" \
-        --replace '/bin/csh' "${tcsh}/bin/tcsh"
-
-    substituteInPlace \
-        testsuite/test_list.sh \
-        --replace '/bin/tcsh' "${tcsh}/bin/tcsh" \
-        --replace '/bin/csh' "${tcsh}/bin/tcsh"
+      src/comp/wrapper.sh 
 
     substituteInPlace src/comp/Makefile \
       --replace 'BINDDIR' 'BINDIR' \
       --replace 'install-bsc install-bluetcl' 'install-bsc install-bluetcl $(UTILEXES) install-utils'
 
     # allow running bsc to bootstrap
-    export LD_LIBRARY_PATH=/build/source/inst/lib/SAT
+    export LD_LIBRARY_PATH=$PWD/inst/lib/SAT
   '';
 
   buildInputs = yices.buildInputs ++ [
@@ -80,7 +65,6 @@ in stdenv.mkDerivation rec {
     ghcWithPackages
     perl
     pkg-config
-    tcsh
     tex
   ];
 
@@ -92,15 +76,7 @@ in stdenv.mkDerivation rec {
     "STP_STUB=1"
   ];
 
-  doCheck = true;
-
-  checkInputs = [ dejagnu gnum4 verilog perl time ];
-
-  checkTarget = if longTests then "check-suite" else "check-smoke";
-
-  checkFlags = [
-    "SYSTEMCTEST=0" # no SystemC support yet. Patches welcome!
-  ];
+  checkTarget = "check-smoke";
 
   installPhase = ''
     mkdir -p $out
