@@ -1,5 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi
-, chardet, six}:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, chardet
+, six
+}:
 
 buildPythonPackage rec {
   pname = "python-debian";
@@ -15,8 +19,11 @@ buildPythonPackage rec {
   # No tests in archive
   doCheck = false;
 
-  meta = {
+  pythonImportsCheck = [ "debian" ];
+
+  meta = with lib; {
     description = "Debian package related modules";
-    license = lib.licenses.gpl2;
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ ];
   };
 }
