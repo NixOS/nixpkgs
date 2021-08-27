@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, autoreconfHook, pkg-config
-, libxslt, xz, elf-header
+, libxslt, xz, zstd, elf-header
 , withStatic ? stdenv.hostPlatform.isStatic
 }:
 
@@ -17,11 +17,12 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config libxslt ];
-  buildInputs = [ xz ] ++ lib.optional stdenv.isDarwin elf-header;
+  buildInputs = [ xz zstd ] ++ lib.optional stdenv.isDarwin elf-header;
 
   configureFlags = [
     "--sysconfdir=/etc"
     "--with-xz"
+    "--with-zstd"
     "--with-modulesdirs=${modulesDirs}"
   ] ++ lib.optional withStatic "--enable-static";
 
