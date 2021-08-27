@@ -40,6 +40,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTestPaths = [
+    # AttributeError: 'AsyncGenerator' object has no attribute XXXX
+    "test/test_aioredis2.py"
+  ];
+
   pythonImportsCheck = [ "fakeredis" ];
 
   meta = with lib; {
