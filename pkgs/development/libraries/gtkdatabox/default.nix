@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "GTK widget for displaying large amounts of numerical data";
     homepage = "https://gtkdatabox.sourceforge.io/";
-    license = lib.licenses.lgpl2;
+    license = lib.licenses.lgpl2Only;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ yl3dy ];
   };
