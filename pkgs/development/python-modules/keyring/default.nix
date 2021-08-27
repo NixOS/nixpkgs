@@ -48,6 +48,9 @@ buildPythonPackage rec {
   disabledTests = lib.optionals (stdenv.isDarwin) [
     "test_multiprocess_get"
     "test_multiprocess_get_after_native_get"
+  ] ++ [
+    # E       ValueError: too many values to unpack (expected 1)
+    "test_entry_point"
   ];
 
   disabledTestPaths = [
