@@ -1950,4 +1950,12 @@ EOT
   # 2021-08-18: streamly-posix was released with hspec 2.8.2, but it works with older versions too.
   streamly-posix = doJailbreak super.streamly-posix;
 
+  distribution-nixpkgs = assert super.distribution-nixpkgs.version == "1.6.0";
+    overrideCabal super.distribution-nixpkgs {
+      version = "1.6.1";
+      revision = null;
+      sha256 = "136q893in07iw53m9pqr65h3mrnpvfda272bl4rq1b0z3hzpyhkm";
+      editedCabalFile = null;
+    };
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
