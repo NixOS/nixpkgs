@@ -9,29 +9,19 @@ let
     inherit ruby;
     copyGemFiles = true;
     gemdir = ./.;
-    gemset =
-      let x = import (gemdir + "/gemset.nix");
-      in x // {
-        # grpc expects the AR environment variable to contain `ar rpc`. See the
-        # discussion in nixpkgs #63056.
-        grpc = x.grpc // {
-          patches = [ ../fix-grpc-ar.patch ];
-          dontBuild = false;
-        };
-      };
   };
 in buildGoModule rec {
-  version = "14.1.2";
+  version = "14.2.1";
   pname = "gitaly";
 
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitaly";
     rev = "v${version}";
-    sha256 = "sha256-7OqTOJDQJ/ojHevj/ld8VLjm5ZRQgCGZKchPrAlOSO8=";
+    sha256 = "sha256-B3NtdS1UcT+nYIdoXs+tW2gnXZ0ew+NiIcCNi5z5fOc=";
   };
 
-  vendorSha256 = "sha256-/SZJGRUg0qV7RYCUSGDE/HL9CmzGVffhL6BmZ316tU0=";
+  vendorSha256 = "sha256-WhkNK+V7yXK+le1u8StAKajZIBzVKqV/WIau27oZBXE=";
 
   passthru = {
     inherit rubyEnv;
