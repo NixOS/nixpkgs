@@ -3,7 +3,7 @@
 # build-tools
 , bootPkgs
 , autoconf, autoreconfHook, automake, coreutils, fetchgit, perl, python3, m4, sphinx, xattr
-, bash
+, bash, autoSignDarwinBinariesHook
 
 , libiconv ? null, ncurses
 
@@ -255,6 +255,8 @@ stdenv.mkDerivation (rec {
     ghc bootPkgs.alex bootPkgs.happy bootPkgs.hscolour
   ] ++ lib.optionals enableDocs [
     sphinx
+  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+    autoSignDarwinBinariesHook
   ] ++ lib.optionals stdenv.isDarwin [
     # TODO(@sternenseemann): use XATTR env var once we have
     # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/6447

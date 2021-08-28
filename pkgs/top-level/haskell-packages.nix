@@ -4,8 +4,6 @@ let
   # These are attributes in compiler and packages that don't support integer-simple.
   integerSimpleExcludes = [
     "ghc865Binary"
-    "ghc8102Binary"
-    "ghc8102BinaryMinimal"
     "ghc8105Binary"
     "ghc8105BinaryMinimal"
     "integer-simple"
@@ -50,15 +48,6 @@ in {
 
     ghc865Binary = callPackage ../development/compilers/ghc/8.6.5-binary.nix { };
 
-    ghc8102Binary = callPackage ../development/compilers/ghc/8.10.2-binary.nix {
-      llvmPackages = pkgs.llvmPackages_9;
-    };
-
-    ghc8102BinaryMinimal = callPackage ../development/compilers/ghc/8.10.2-binary.nix {
-      llvmPackages = pkgs.llvmPackages_9;
-      minimal = true;
-    };
-
     ghc8105Binary = callPackage ../development/compilers/ghc/8.10.5-binary.nix {
       llvmPackages = pkgs.llvmPackages_11;
     };
@@ -75,7 +64,7 @@ in {
         # aarch64 ghc865Binary gets SEGVs due to haskell#15449 or similar
         # Musl bindists do not exist for ghc 8.6.5, so we use 8.10.* for them
         else if stdenv.isAarch64 || stdenv.targetPlatform.isMusl then
-          packages.ghc8102BinaryMinimal
+          packages.ghc8105BinaryMinimal
         else
           packages.ghc865Binary;
       inherit (buildPackages.python3Packages) sphinx;
@@ -89,7 +78,7 @@ in {
         # aarch64 ghc865Binary gets SEGVs due to haskell#15449 or similar
         # Musl bindists do not exist for ghc 8.6.5, so we use 8.10.* for them
         else if stdenv.isAarch64 || stdenv.isAarch32 || stdenv.targetPlatform.isMusl then
-          packages.ghc8102BinaryMinimal
+          packages.ghc8105BinaryMinimal
         else
           packages.ghc865Binary;
       inherit (buildPackages.python3Packages) sphinx;
@@ -102,28 +91,27 @@ in {
     };
     ghc901 = callPackage ../development/compilers/ghc/9.0.1.nix {
       # the oldest ghc with aarch64-darwin support is 8.10.5
-      bootPkgs = if stdenv.isDarwin && stdenv.isAarch64 then
+      bootPkgs =
+        # aarch64 ghc8105Binary exceeds max output size on hydra
+        if stdenv.isAarch64 || stdenv.isAarch32 then
           packages.ghc8105BinaryMinimal
-        # aarch64 ghc8102Binary exceeds max output size on hydra
-        else if stdenv.isAarch64 || stdenv.isAarch32 then
-          packages.ghc8102BinaryMinimal
         else
-          packages.ghc8102Binary;
+          packages.ghc8105Binary;
       inherit (buildPackages.python3Packages) sphinx;
       buildLlvmPackages = buildPackages.llvmPackages_10;
       llvmPackages = pkgs.llvmPackages_10;
     };
     ghc921 = callPackage ../development/compilers/ghc/9.2.1.nix {
-      # aarch64 ghc8102Binary exceeds max output size on hydra
+      # aarch64 ghc8105Binary exceeds max output size on hydra
       bootPkgs = if stdenv.isAarch64 || stdenv.isAarch32 then
-          packages.ghc8102BinaryMinimal
+          packages.ghc8105BinaryMinimal
         else
-          packages.ghc8102Binary;
+          packages.ghc8105Binary;
       inherit (buildPackages.python3Packages) sphinx;
       # Need to use apple's patched xattr until
       # https://github.com/xattr/xattr/issues/44 and
       # https://github.com/xattr/xattr/issues/55 are solved.
-      inherit (buildPackages.darwin) xattr;
+      inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
       buildLlvmPackages = buildPackages.llvmPackages_10;
       llvmPackages = pkgs.llvmPackages_10;
     };
@@ -133,7 +121,7 @@ in {
       # Need to use apple's patched xattr until
       # https://github.com/xattr/xattr/issues/44 and
       # https://github.com/xattr/xattr/issues/55 are solved.
-      inherit (buildPackages.darwin) xattr;
+      inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
       buildLlvmPackages = buildPackages.llvmPackages_10;
       llvmPackages = pkgs.llvmPackages_10;
       libffi = pkgs.libffi;
@@ -170,18 +158,6 @@ in {
       buildHaskellPackages = bh.packages.ghc865Binary;
       ghc = bh.compiler.ghc865Binary;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.6.x.nix { };
-      packageSetConfig = bootstrapPackageSet;
-    };
-    ghc8102Binary = callPackage ../development/haskell-modules {
-      buildHaskellPackages = bh.packages.ghc8102Binary;
-      ghc = bh.compiler.ghc8102Binary;
-      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.10.x.nix { };
-      packageSetConfig = bootstrapPackageSet;
-    };
-    ghc8102BinaryMinimal = callPackage ../development/haskell-modules {
-      buildHaskellPackages = bh.packages.ghc8102BinaryMinimal;
-      ghc = bh.compiler.ghc8102BinaryMinimal;
-      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.10.x.nix { };
       packageSetConfig = bootstrapPackageSet;
     };
     ghc8105Binary = callPackage ../development/haskell-modules {
