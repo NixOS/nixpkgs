@@ -7641,6 +7641,8 @@ in {
 
   relatorio = callPackage ../development/python-modules/relatorio { };
 
+  remarshal = callPackage ../development/python-modules/remarshal { };
+
   rencode = callPackage ../development/python-modules/rencode { };
 
   reparser = callPackage ../development/python-modules/reparser { };

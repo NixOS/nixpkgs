@@ -8355,7 +8355,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  remarshal = callPackage ../development/tools/remarshal { };
+  remarshal = with python3Packages; toPythonApplication remarshal;
 
   rehex = callPackage ../applications/editors/rehex {
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa IOKit;
