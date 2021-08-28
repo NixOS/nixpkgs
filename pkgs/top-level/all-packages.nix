@@ -14519,6 +14519,11 @@ with pkgs;
   gnum4 = callPackage ../development/tools/misc/gnum4 { };
   m4 = gnum4;
 
+  # GNU m4 is bootstrap package, so we can't put documentation generation
+  # into the same derivation.
+  gnum4-doc = callPackage ../development/tools/misc/gnum4/doc.nix { };
+  m4-doc = gnum4-doc;
+
   gnumake = callPackage ../development/tools/build-managers/gnumake { };
   gnumake42 = callPackage ../development/tools/build-managers/gnumake/4.2 { };
 
