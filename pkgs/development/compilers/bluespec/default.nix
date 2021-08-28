@@ -94,7 +94,7 @@ in stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  checkInputs = [ 
+  checkInputs = [
     gmp-static
     verilog
   ];
