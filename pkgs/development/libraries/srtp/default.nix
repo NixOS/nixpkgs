@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, pkg-config
-, openssl, libpcap, cmake
+, openssl ? null, libpcap ? null
 }:
 
 with lib;
@@ -16,24 +16,19 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkg-config cmake ];
+  nativeBuildInputs = [ pkg-config ];
 
   # libsrtp.pc references -lcrypto -lpcap without -L
   propagatedBuildInputs = [ openssl libpcap ];
 
-  cmakeFlags = [
-    "-DBUILD_SHARED_LIBS=ON"
-    "-DENABLE_OPENSSL=ON"
-    "-DBUILD_TESTING=ON"
-  ];
+  configureFlags = [
+    "--disable-debug"
+  ] ++ optional (openssl != null) "--enable-openssl";
+
+  buildFlags = [ "shared_library" ];
 
   postInstall = ''
     rm -rf $out/bin
-  '';
-
-  doCheck = true;
-  preCheck = ''
-    export LD_PRELOAD=./libsrtp2.so
   '';
 
   meta = {
