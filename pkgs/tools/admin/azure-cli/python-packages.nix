@@ -87,6 +87,7 @@ let
         postPatch = ''
           substituteInPlace setup.py \
             --replace "azure-mgmt-core>=1.2.0,<1.3.0" "azure-mgmt-core~=1.2" \
+            --replace "requests~=2.25.1" "requests~=2.25" \
             --replace "cryptography>=3.2,<3.4" "cryptography"
         '';
 
@@ -98,7 +99,7 @@ let
           PYTHONPATH=$PWD:$PYTHONPATH HOME=$TMPDIR pytest \
             --ignore=azure/cli/core/tests/test_profile.py \
             --ignore=azure/cli/core/tests/test_generic_update.py \
-            -k 'not metadata_url'
+            -k 'not metadata_url and not test_send_raw_requests'
         '';
 
         pythonImportsCheck = [
@@ -157,7 +158,7 @@ let
         "sha256-39msNYlZeZdn8cJ4LjZw9oxzy0YrNSPVEIN21wnkMKs=";
 
       azure-mgmt-recoveryservices = overrideAzureMgmtPackage super.azure-mgmt-recoveryservices "1.0.0" "zip"
-        "0v0ycyjnnx09jqf958hj2q6zfpsn80bxxm98jf59y8rj09v99rza";
+        "sha256-q4cQjA1c4n2AWDtL+tlmrQcEncvA6awoxkqmu9rmTiI=";
 
       azure-mgmt-recoveryservicesbackup = overrideAzureMgmtPackage super.azure-mgmt-recoveryservicesbackup "0.12.0" "zip"
         "sha256-mrw1Gs3LMOPFiL5mSSrm+g1/dxihplA6ItYHbwljJbM=";
@@ -200,6 +201,9 @@ let
 
       azure-mgmt-iothub = overrideAzureMgmtPackage super.azure-mgmt-iothub "2.0.0" "zip"
         "653a765f0beb6af0c9ecbd290b4101e1b5e0f6450405faf28ab8234c15d8b38b";
+
+      azure-mgmt-iothubprovisioningservices = overrideAzureMgmtPackage super.azure-mgmt-iothubprovisioningservices "0.2.0" "zip"
+        "sha256-jDes/Rwzq6hF8uAwLvcmbK0xy6UDzJkKSGhGWay3uR0=";
 
       azure-mgmt-iotcentral = overrideAzureMgmtPackage super.azure-mgmt-iotcentral "4.1.0" "zip"
         "e6d4810f454c0d63a5e816eaa7e54a073a3f70b2256162ff1c234cfe91783ae6";
