@@ -1,16 +1,15 @@
-{ fetchurl, stdenv, guile, guile-lib, libffi, pkgconfig, glib }:
+{ fetchurl, lib, stdenv, guile, guile-lib, libffi, pkg-config, glib }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "g-wrap";
   version = "1.9.15";
 
   src = fetchurl {
-    url = "mirror://savannah/${pname}/${name}.tar.gz";
+    url = "mirror://savannah/${pname}/${pname}-${version}.tar.gz";
     sha256 = "0ak0bha37dfpj9kmyw1r8fj8nva639aw5xr66wr5gd3l1rqf5xhg";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   # Note: Glib support is optional, but it's quite useful (e.g., it's used by
   # Guile-GNOME).
@@ -20,7 +19,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A wrapper generator for Guile";
     longDescription = ''
       G-Wrap is a tool (and Guile library) for generating function wrappers for

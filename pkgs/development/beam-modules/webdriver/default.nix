@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub, writeText, erlang }:
+{ lib, stdenv, fetchFromGitHub, writeText, erlang }:
 
 let
   shell = drv: stdenv.mkDerivation {
@@ -6,7 +6,7 @@ let
     buildInputs = [ drv ];
   };
 
-  pkg = self: stdenv.mkDerivation rec {
+  pkg = self: stdenv.mkDerivation {
     name = "webdriver";
     version = "0.0.0+build.18.7ceaf1f";
 
@@ -23,13 +23,13 @@ let
 
     buildInputs = [ erlang ];
 
-    installFlags = "PREFIX=$(out)/lib/erlang/lib";
+    installFlags = [ "PREFIX=$(out)/lib/erlang/lib" ];
 
     meta = {
       description = "WebDriver implementation in Erlang";
-      license = stdenv.lib.licenses.mit;
-      homepage = https://github.com/Quviq/webdrv;
-      maintainers = with stdenv.lib.maintainers; [ ericbmerritt ];
+      license = lib.licenses.mit;
+      homepage = "https://github.com/Quviq/webdrv";
+      maintainers = with lib.maintainers; [ ericbmerritt ];
     };
 
     passthru = {
@@ -37,4 +37,4 @@ let
     };
 
 };
-in stdenv.lib.fix pkg
+in lib.fix pkg

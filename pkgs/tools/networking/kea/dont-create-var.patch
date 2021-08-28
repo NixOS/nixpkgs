@@ -1,26 +1,28 @@
 diff --git a/Makefile.am b/Makefile.am
-index 2c0733c..974bb5e 100644
+index 10708e7..d4efd73 100644
 --- a/Makefile.am
 +++ b/Makefile.am
-@@ -135,11 +135,6 @@ cppcheck:
- 		--template '{file}:{line}: check_fail: {message} ({severity},{id})' \
- 		src
+@@ -150,13 +150,6 @@ cppcheck:
+ docs:
+ 	$(MAKE) -C doc/sphinx
  
+-
 -# These steps are necessary during installation
 -install-exec-hook:
 -	mkdir -p $(DESTDIR)${localstatedir}/log/
--	mkdir -p $(DESTDIR)${localstatedir}/run/${PACKAGE_NAME}
+-	mkdir -p $(DESTDIR)${localstatedir}/lib/${PACKAGE_NAME}
+-	mkdir -p $(DESTDIR)${runstatedir}/${PACKAGE_NAME}
 -
  EXTRA_DIST  = tools/path_replacer.sh
  EXTRA_DIST += tools/mk_cfgrpt.sh
  
 diff --git a/src/lib/dhcpsrv/Makefile.am b/src/lib/dhcpsrv/Makefile.am
-index 564f623..7cea9f2 100644
+index a0a0289..ba42f8a 100644
 --- a/src/lib/dhcpsrv/Makefile.am
 +++ b/src/lib/dhcpsrv/Makefile.am
-@@ -352,5 +352,3 @@ libkea_dhcpsrv_parsers_include_HEADERS = \
+@@ -408,5 +408,3 @@ libkea_dhcpsrv_parsers_include_HEADERS = \
+ 	parsers/simple_parser4.h \
  	parsers/simple_parser6.h
- 
  
 -install-data-local:
 -	$(mkinstalldirs) $(DESTDIR)$(dhcp_data_dir)

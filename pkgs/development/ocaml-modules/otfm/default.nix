@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, uutf, result }:
+{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, uutf, result }:
 
 let
   pname = "otfm";
@@ -6,9 +6,9 @@ let
   webpage = "https://erratique.ch/software/${pname}";
 in
 
-assert stdenv.lib.versionAtLeast ocaml.version "4.01.0";
+assert lib.versionAtLeast ocaml.version "4.01.0";
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
 
   name = "ocaml-${pname}-${version}";
 
@@ -23,14 +23,14 @@ stdenv.mkDerivation rec {
 
   inherit (topkg) buildPhase installPhase;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "OpenType font decoder for OCaml";
     longDescription = ''
       Otfm is an in-memory decoder for the OpenType font data format. It
       provides low-level access to font tables and functions to decode some
       of them.
     '';
-    homepage = "${webpage}";
+    homepage = webpage;
     platforms = ocaml.meta.platforms or [];
     license = licenses.bsd3;
     maintainers = [ maintainers.jirkamarsik ];

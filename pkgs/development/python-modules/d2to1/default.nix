@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   meta = with lib;{
     description = "Support for distutils2-like setup.cfg files as package metadata";
-    homepage = https://github.com/embray/d2to1;
+    homepage = "https://github.com/embray/d2to1";
     license = licenses.bsd2;
     maintainers = with maintainers; [ makefu ];
   };

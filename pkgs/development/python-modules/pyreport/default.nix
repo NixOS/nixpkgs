@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , isPy3k
@@ -17,8 +17,8 @@ buildPythonPackage rec {
   # error: invalid command 'test'
   doCheck = false;
 
-  meta = with stdenv.lib; {
-    homepage = https://pypi.python.org/pypi/pyreport;
+  meta = with lib; {
+    homepage = "https://pypi.python.org/pypi/pyreport";
     license = licenses.bsd0;
     description = "Pyreport makes notes out of a python script";
   };

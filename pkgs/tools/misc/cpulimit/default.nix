@@ -1,23 +1,24 @@
-{stdenv, fetchurl}:
+{lib, stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
-  name = "cpulimit-${version}";
-  version = "2.6";
+  pname = "cpulimit";
+  version = "2.7";
 
   src = fetchurl {
-    url = "mirror://sourceforge/limitcpu/${name}.tar.gz";
-    sha256 = "0xf0r6zxaqan1drz61nqf95p2pkiiihpvrjhrr9dx9j3vswyx31g";
+    url = "mirror://sourceforge/limitcpu/${pname}-${version}.tar.gz";
+    sha256 = "sha256-HeBApPikDf6MegJf6YB1ZzRo+8P8zMvCMbx0AvYuxKA=";
   };
 
-  buildFlags = with stdenv;
+  buildFlags = with stdenv; [ (
     if isDarwin then "osx"
     else if isFreeBSD then "freebsd"
-    else "cpulimit";
+    else "cpulimit"
+  ) ];
 
-  installFlags = "PREFIX=$(out)";
+  installFlags = [ "PREFIX=$(out)" ];
 
-  meta = with stdenv.lib; {
-    homepage = http://limitcpu.sourceforge.net/;
+  meta = with lib; {
+    homepage = "http://limitcpu.sourceforge.net/";
     description = "A tool to throttle the CPU usage of programs";
     platforms = with platforms; linux ++ freebsd;
     license = licenses.gpl2;

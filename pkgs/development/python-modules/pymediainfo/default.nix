@@ -1,15 +1,15 @@
-{ stdenv, fetchPypi, buildPythonPackage
+{ lib, stdenv, fetchPypi, buildPythonPackage
 , libmediainfo
 , setuptools_scm
 , pytest, glibcLocales }:
 
 buildPythonPackage rec {
   pname = "pymediainfo";
-  version = "4.0";
+  version = "5.0.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1yjs208c34p2xsc0r8vbi264ii5hixh546718n06b7v670glqjir";
+    sha256 = "ea61a3b0e0ed6de42ebb2233cf1a9312c57dce95101c025f9f081c10ecec48fb";
   };
 
   postPatch = ''
@@ -31,9 +31,9 @@ buildPythonPackage rec {
     py.test -k 'not test_parse_url' tests
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python wrapper for the mediainfo library";
-    homepage = https://github.com/sbraz/pymediainfo;
+    homepage = "https://github.com/sbraz/pymediainfo";
     license = licenses.mit;
     maintainers = with maintainers; [ jfrankenau ];
   };

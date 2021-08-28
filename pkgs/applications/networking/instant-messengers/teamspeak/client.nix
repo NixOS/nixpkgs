@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, makeWrapper, makeDesktopItem, zlib, glib, libpng, freetype, openssl
-, xorg, fontconfig, qtbase, qtwebengine, qtwebchannel, qtsvg, xkeyboard_config, alsaLib
-, libpulseaudio ? null, libredirect, quazip, less, which, unzip, llvmPackages
+{ lib, stdenv, fetchurl, makeWrapper, makeDesktopItem, zlib, glib, libpng, freetype, openssl
+, xorg, fontconfig, qtbase, qtwebengine, qtwebchannel, qtsvg, qtwebsockets, xkeyboard_config
+, alsaLib, libpulseaudio ? null, libredirect, quazip, which, unzip, llvmPackages, writeShellScriptBin
 }:
 
 let
@@ -13,7 +13,7 @@ let
     [ zlib glib libpng freetype xorg.libSM xorg.libICE xorg.libXrender openssl
       xorg.libXrandr xorg.libXfixes xorg.libXcursor xorg.libXinerama
       xorg.libxcb fontconfig xorg.libXext xorg.libX11 alsaLib qtbase qtwebengine qtwebchannel qtsvg
-      libpulseaudio quazip llvmPackages.libcxx llvmPackages.libcxxabi
+      qtwebsockets libpulseaudio quazip llvmPackages.libcxx llvmPackages.libcxxabi
     ];
 
   desktopItem = makeDesktopItem {
@@ -26,21 +26,20 @@ let
     categories = "Network";
   };
 
+  fakeLess = writeShellScriptBin "less" "cat";
+
 in
 
 stdenv.mkDerivation rec {
-  name = "teamspeak-client-${version}";
+  pname = "teamspeak-client";
 
-  version = "3.1.10";
+  version = "3.5.6";
 
   src = fetchurl {
-    urls = [
-      "http://dl.4players.de/ts/releases/${version}/TeamSpeak3-Client-linux_${arch}-${version}.run"
-      "http://teamspeak.gameserver.gamed.de/ts3/releases/${version}/TeamSpeak3-Client-linux_${arch}-${version}.run"
-    ];
+    url = "https://files.teamspeak-services.com/releases/client/${version}/TeamSpeak3-Client-linux_${arch}-${version}.run";
     sha256 = if stdenv.is64bit
-                then "17gylj5pxba14c1c98b5rdyyb87c58z8l8yrd1iw5k293wf7iwv3"
-                else "1bkn3ykrc73wr02qaqwpr4garlqm3424y3dm2fjx6lqcfzm3ms2k";
+                then "sha256:0hjai1bd4mq3g2dlyi0zkn8s4zlgxd38skw77mb78nc4di5gvgpg"
+                else "sha256:1y1c65nap91nv9xkvd96fagqbfl56p9n0rl6iac0i29bkysdmija";
   };
 
   # grab the plugin sdk for the desktop icon
@@ -49,11 +48,11 @@ stdenv.mkDerivation rec {
     sha256 = "1bywmdj54glzd0kffvr27r84n4dsd0pskkbmh59mllbxvj0qwy7f";
   };
 
-  buildInputs = [ makeWrapper less which unzip ];
+  nativeBuildInputs = [ makeWrapper fakeLess which unzip ];
 
   unpackPhase =
     ''
-      echo -e 'q\ny' | sh -xe $src
+      echo -e '\ny' | sh -xe $src
       cd TeamSpeak*
     '';
 
@@ -61,9 +60,10 @@ stdenv.mkDerivation rec {
     ''
       mv ts3client_linux_${arch} ts3client
       echo "patching ts3client..."
+      patchelf --replace-needed libquazip.so ${quazip}/lib/libquazip1-qt5.so ts3client
       patchelf \
         --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-        --set-rpath ${stdenv.lib.makeLibraryPath deps}:$(cat $NIX_CC/nix-support/orig-cc)/${libDir} \
+        --set-rpath ${lib.makeLibraryPath deps}:$(cat $NIX_CC/nix-support/orig-cc)/${libDir} \
         --force-rpath \
         ts3client
     '';
@@ -99,15 +99,15 @@ stdenv.mkDerivation rec {
   dontStrip = true;
   dontPatchELF = true;
 
-  meta = {
+  meta = with lib; {
     description = "The TeamSpeak voice communication tool";
-    homepage = http://teamspeak.com/;
+    homepage = "https://teamspeak.com/";
     license = {
       fullName = "Teamspeak client license";
-      url = http://sales.teamspeakusa.com/licensing.php;
+      url = "https://www.teamspeak.com/en/privacy-and-terms/";
       free = false;
     };
-    maintainers = [ stdenv.lib.maintainers.lhvwb ];
+    maintainers = with maintainers; [ lhvwb lukegb ];
     platforms = [ "i686-linux" "x86_64-linux" ];
   };
 }

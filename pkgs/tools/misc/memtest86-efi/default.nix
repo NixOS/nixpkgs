@@ -1,42 +1,63 @@
-{ lib, stdenv, fetchurl, unzip, libguestfs-with-appliance }:
+{ stdenv
+, lib
+, fetchzip
+, util-linux
+, jq
+, mtools
+}:
 
 stdenv.mkDerivation rec {
   pname = "memtest86-efi";
-  version = "8.0";
+  version = "8.4";
 
-  src = fetchurl {
-    # TODO: The latest version of memtest86 is actually 8.1, but apparently the
-    # company has stopped distributing versioned binaries of memtest86:
+  src = fetchzip {
+    # TODO: We're using the previous version of memtest86 because the
+    # company developing memtest86 has stopped providing a versioned download
+    # link for the latest version:
+    #
     # https://www.passmark.com/forum/memtest86/44494-version-8-1-distribution-file-is-not-versioned?p=44505#post44505
-    # However, it does look like redistribution is okay, so if we had
-    # somewhere to host binaries that we make sure to version, then we could
-    # probably keep up with the latest versions released by the company.
+    #
+    # However, versioned links for the previous version are available, so that
+    # is what is being used.
+    #
+    # It does look like redistribution is okay, so if we had somewhere to host
+    # binaries that we make sure to version, then we could probably keep up
+    # with the latest versions released by the company.
     url = "https://www.memtest86.com/downloads/memtest86-${version}-usb.zip";
-    sha256 = "147mnd7fnx2wvbzscw7pkg9ljiczhz05nb0cjpmww49a0ms4yknw";
+    sha256 = "sha256-jh4FKCYZbOQhRv6B7N8Hmw6RQCQvbBGaGFTMLwM1nk8=";
+    stripRoot = false;
   };
 
-  nativeBuildInputs = [ libguestfs-with-appliance unzip ];
-
-  unpackPhase = ''
-    unzip -q $src -d .
-  '';
+  nativeBuildInputs = [
+    util-linux
+    jq
+    mtools
+  ];
 
   installPhase = ''
-    mkdir -p $out
+    runHook preInstall
 
     # memtest86 is distributed as a bootable USB image.  It contains the actual
     # memtest86 EFI app.
     #
-    # The following command uses libguestfs to extract the actual EFI app from the
-    # usb image so that it can be installed directly on the hard drive.  This creates
-    # the ./BOOT/ directory with the memtest86 EFI app.
-    guestfish --ro --add ./memtest86-usb.img --mount /dev/sda1:/  copy-out /EFI/BOOT .
+    # The following uses sfdisk to calculate the offset of the FAT EFI System
+    # Partition in the disk image, and mcopy to extract the actual EFI app from
+    # the filesystem so that it can be installed directly on the hard drive.
+    IMG=$src/memtest86-usb.img
+    ESP_OFFSET=$(sfdisk --json $IMG | jq -r '
+      # Partition type GUID identifying EFI System Partitions
+      def ESP_GUID: "C12A7328-F81F-11D2-BA4B-00A0C93EC93B";
+      .partitiontable |
+      .sectorsize * (.partitions[] | select(.type == ESP_GUID) | .start)
+    ')
+    mkdir $out
+    mcopy -vsi $IMG@@$ESP_OFFSET ::'/EFI/BOOT/*' $out/
 
-    cp -r BOOT/* $out/
+    runHook postInstall
   '';
 
   meta = with lib; {
-    homepage = http://memtest86.com/;
+    homepage = "http://memtest86.com/";
     downloadPage = "https://www.memtest86.com/download.htm";
     description = "A tool to detect memory errors, to be run from a bootloader";
     longDescription = ''

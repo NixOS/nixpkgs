@@ -1,21 +1,28 @@
-{ stdenvNoCC, lib, buildPackages
-, fetchurl, perl
-, elf-header
+{ stdenvNoCC, lib, buildPackages, fetchurl, perl, elf-header
+, bison ? null, flex ? null, python ? null, rsync ? null
 }:
+
+assert stdenvNoCC.hostPlatform.isAndroid ->
+  (flex != null && bison != null && python != null && rsync != null);
 
 let
   makeLinuxHeaders = { src, version, patches ? [] }: stdenvNoCC.mkDerivation {
     inherit src;
 
-    name = "linux-headers-${version}";
+    pname = "linux-headers";
+    inherit version;
 
-    ARCH = stdenvNoCC.hostPlatform.platform.kernelArch or stdenvNoCC.hostPlatform.kernelArch;
+    ARCH = stdenvNoCC.hostPlatform.linuxArch;
 
     # It may look odd that we use `stdenvNoCC`, and yet explicit depend on a cc.
     # We do this so we have a build->build, not build->host, C compiler.
     depsBuildBuild = [ buildPackages.stdenv.cc ];
     # `elf-header` is null when libc provides `elf.h`.
-    nativeBuildInputs = [ perl elf-header ];
+    nativeBuildInputs = [
+      perl elf-header
+    ] ++ lib.optionals stdenvNoCC.hostPlatform.isAndroid [
+      flex bison python rsync
+    ];
 
     extraIncludeDirs = lib.optional stdenvNoCC.hostPlatform.isPowerPC ["ppc"];
 
@@ -31,36 +38,38 @@ let
       "cc-version:=9999"
       "cc-fullversion:=999999"
       # `$(..)` expanded by make alone
-      "HOSTCC:=$(BUILD_CC)"
-      "HOSTCXX:=$(BUILD_CXX)"
+      "HOSTCC:=$(CC_FOR_BUILD)"
+      "HOSTCXX:=$(CXX_FOR_BUILD)"
     ];
 
     # Skip clean on darwin, case-sensitivity issues.
     buildPhase = lib.optionalString (!stdenvNoCC.buildPlatform.isDarwin) ''
       make mrproper $makeFlags
-    ''
-    # For some reason, doing `make install_headers` twice, first without
-    # INSTALL_HDR_PATH=$out then with, is neccessary to get this to work
-    # for darwin cross. @Ericson2314 has no idea why.
-    + ''
-      make headers_install $makeFlags
-    '';
+    '' + (if stdenvNoCC.hostPlatform.isAndroid then ''
+      make defconfig
+      make headers_install
+    '' else ''
+      make headers $makeFlags
+    '');
 
     checkPhase = ''
       make headers_check $makeFlags
     '';
 
+    # The following command requires rsync:
+    #   make headers_install INSTALL_HDR_PATH=$out $makeFlags
+    # but rsync depends on popt which does not compile on aarch64 without
+    # updateAutotoolsGnuConfigScriptsHook which is not enabled in stage2,
+    # so we replicate it with cp. This also reduces bootstrap closure size.
     installPhase = ''
-      make headers_install INSTALL_HDR_PATH=$out $makeFlags
+      mkdir -p $out
+      cp -r usr/include $out
+      find $out -type f ! -name '*.h' -delete
     ''
     # Some builds (e.g. KVM) want a kernel.release.
-    + '' mkdir -p $out/include/config
-      echo "${version}-default" > $out/include/config/kernel.release
-    ''
-    # These oddly named file records teh `SHELL` passed, which causes bootstrap
-    # tools run-time dependency.
     + ''
-      find "$out" -name '..install.cmd' -print0 | xargs -0 rm
+      mkdir -p $out/include/config
+      echo "${version}-default" > $out/include/config/kernel.release
     '';
 
     meta = with lib; {
@@ -72,16 +81,15 @@ let
 in {
   inherit makeLinuxHeaders;
 
-  linuxHeaders = let version = "4.19.16"; in
+  linuxHeaders = let version = "5.12"; in
     makeLinuxHeaders {
       inherit version;
       src = fetchurl {
-        url = "mirror://kernel/linux/kernel/v4.x/linux-${version}.tar.xz";
-        sha256 = "1pqvn6dsh0xhdpawz4ag27vkw1abvb6sn3869i4fbrz33ww8i86q";
+        url = "mirror://kernel/linux/kernel/v5.x/linux-${version}.tar.xz";
+        sha256 = "sha256-fQ328r8jhNaNC9jh/j4HHWQ2Tc3GAC57XIfJLUj6w2Y=";
       };
       patches = [
          ./no-relocs.patch # for building x86 kernel headers on non-ELF platforms
-         ./no-dynamic-cc-version-check.patch # so we can use `stdenvNoCC`, see `makeFlags` above
       ];
     };
 }

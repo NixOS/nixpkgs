@@ -1,23 +1,23 @@
-{ stdenv, darwin, fetchurl, SDL2 }:
+{ lib, stdenv, darwin, fetchurl, SDL2 }:
 
 stdenv.mkDerivation rec {
-  name = "SDL2_net-${version}";
+  pname = "SDL2_net";
   version = "2.0.1";
 
   src = fetchurl {
-    url = "https://www.libsdl.org/projects/SDL_net/release/${name}.tar.gz";
+    url = "https://www.libsdl.org/projects/SDL_net/release/${pname}-${version}.tar.gz";
     sha256 = "08cxc1bicmyk89kiks7izw1rlx5ng5n6xpy8fy0zxni3b9z8mkhm";
   };
 
-  buildInputs = stdenv.lib.optional stdenv.isDarwin darwin.libobjc;
+  buildInputs = lib.optional stdenv.isDarwin darwin.libobjc;
 
-  configureFlags = stdenv.lib.optional stdenv.isDarwin "--disable-sdltest";
+  configureFlags = lib.optional stdenv.isDarwin "--disable-sdltest";
 
   propagatedBuildInputs = [ SDL2 ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "SDL multiplatform networking library";
-    homepage = https://www.libsdl.org/projects/SDL_net;
+    homepage = "https://www.libsdl.org/projects/SDL_net";
     license = licenses.zlib;
     maintainers = with maintainers; [ MP2E ];
     platforms = platforms.unix;

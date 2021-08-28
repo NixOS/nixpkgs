@@ -1,4 +1,5 @@
 { stdenv
+, pkgsHostHost
 , callPackage
 , fetchgit
 , ghcjsSrcJson ? null
@@ -11,10 +12,9 @@
 , makeWrapper
 , xorg
 , gmp
-, pkgconfig
+, pkg-config
 , gcc
 , lib
-, nodePackages
 , ghcjsDepOverrides ? (_:_:{})
 , haskell
 }:
@@ -34,7 +34,6 @@ let
 
       (callPackage ./common-overrides.nix {
         inherit haskellLib;
-        inherit (bootPkgs) alex happy;
       })
       ghcjsDepOverrides
     ]);
@@ -47,7 +46,7 @@ let
 
     enableShared = true;
 
-    socket-io = nodePackages."socket.io";
+    socket-io = pkgsHostHost.nodePackages."socket.io";
 
     # Relics of the old GHCJS build system
     stage1Packages = [];
@@ -74,7 +73,7 @@ in stdenv.mkDerivation {
       makeWrapper
       xorg.lndir
       gmp
-      pkgconfig
+      pkg-config
     ] ++ lib.optionals stdenv.isDarwin [
       gcc # https://github.com/ghcjs/ghcjs/issues/663
     ];
@@ -106,4 +105,5 @@ in stdenv.mkDerivation {
     meta.platforms = passthru.bootPkgs.ghc.meta.platforms;
     meta.maintainers = [lib.maintainers.elvishjerricco];
     meta.hydraPlatforms = [];
+    meta.broken = true;    # https://hydra.nixos.org/build/129701778
   }

@@ -1,29 +1,31 @@
-{ stdenv, fetchFromGitHub, pythonPackages }:
+{ lib, fetchFromGitHub, python3Packages }:
 
-pythonPackages.buildPythonApplication rec {
-  version = "1.0";
+python3Packages.buildPythonApplication rec {
+  version = "1.0.1";
   pname = "ipgrep";
+
+  disabled = python3Packages.isPy27;
 
   src = fetchFromGitHub {
     owner = "jedisct1";
     repo = pname;
     rev = version;
-    sha256 = "1qaxvbqdalvz05aplhhrg7s4h7yx4clbfd50k46bgavhgcqqv8n3";
+    hash = "sha256-NrhcUFQM+L66KaDRRpAoC+z5s54a+1fqEepTRXVZ5Qs=";
   };
 
   patchPhase = ''
-    mkdir -p ${pname} 
+    mkdir -p ${pname}
     substituteInPlace setup.py \
       --replace "'scripts': []" "'scripts': { '${pname}.py' }"
   '';
 
-  propagatedBuildInputs = with pythonPackages; [
+  propagatedBuildInputs = with python3Packages; [
     pycares
     urllib3
     requests
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Extract, defang, resolve names and IPs from text";
     longDescription = ''
       ipgrep extracts possibly obfuscated host names and IP addresses

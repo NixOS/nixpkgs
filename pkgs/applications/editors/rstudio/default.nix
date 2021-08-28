@@ -1,19 +1,21 @@
-{ stdenv, fetchurl, fetchFromGitHub, makeDesktopItem, cmake, boost, zlib
+{ lib, mkDerivation, fetchurl, fetchpatch, fetchFromGitHub, makeDesktopItem, cmake, boost, zlib
 , openssl, R, qtbase, qtxmlpatterns, qtsensors, qtwebengine, qtwebchannel
 , libuuid, hunspellDicts, unzip, ant, jdk, gnumake, makeWrapper, pandoc
 , llvmPackages
 }:
 
+with lib;
 let
   verMajor = "1";
   verMinor = "2";
-  verPatch = "1335";
+  verPatch = "5042";
   version = "${verMajor}.${verMinor}.${verPatch}";
   ginVer = "2.1.2";
   gwtVer = "2.8.1";
 in
-stdenv.mkDerivation rec {
-  name = "RStudio-${version}";
+mkDerivation rec {
+  pname = "RStudio";
+  inherit version;
 
   nativeBuildInputs = [ cmake unzip ant jdk makeWrapper pandoc ];
 
@@ -24,16 +26,24 @@ stdenv.mkDerivation rec {
     owner = "rstudio";
     repo = "rstudio";
     rev = "v${version}";
-    sha256 = "0jv1d4yznv2lzwp0fdf377vqpg0k2q4z9qvji4sj86fabj835lqd";
+    sha256 = "1n67fa357v51j3z1ma8v2ydfsx3y8n10k2svmfcf4mdzsi8w0kc5";
   };
 
   # Hack RStudio to only use the input R and provided libclang.
-  patches = [ ./r-location.patch ./clang-location.patch ];
+  patches = [ ./r-location.patch ./clang-location.patch
+              (fetchpatch {
+                # Fetch a patch to ensure Rstudio compiles against R
+                # 4.0.0, should be removed next 1.2.X Rstudio update
+                # or possibly 1.3.X
+                url = "https://github.com/rstudio/rstudio/commit/3fb2397c2f208bb8ace0bbaf269481ccb96b5b20.patch";
+                sha256 = "0qpgjy6aash0fc0xbns42cwpj3nsw49nkbzwyq8az01xwg81g0f3";
+              })
+            ];
   postPatch = ''
     substituteInPlace src/cpp/core/r_util/REnvironmentPosix.cpp --replace '@R@' ${R}
     substituteInPlace src/cpp/core/libclang/LibClang.cpp \
-      --replace '@clang@' ${llvmPackages.clang.cc} \
-      --replace '@libclang.so@' ${llvmPackages.clang.cc.lib}/lib/libclang.so
+      --replace '@libclang@' ${llvmPackages.libclang.lib} \
+      --replace '@libclang.so@' ${llvmPackages.libclang.lib}/lib/libclang.so
   '';
 
   ginSrc = fetchurl {
@@ -46,10 +56,16 @@ stdenv.mkDerivation rec {
     sha256 = "19x000m3jwnkqgi6ic81lkzyjvvxcfacw2j0vcfcaknvvagzhyhb";
   };
 
-  hunspellDictionaries = with stdenv.lib; filter isDerivation (attrValues hunspellDicts);
+  hunspellDictionaries = filter isDerivation (unique (attrValues hunspellDicts));
+  # These dicts contain identically-named dict files, so we only keep the
+  # -large versions in case of clashes
+  largeDicts = filter (d: hasInfix "-large-wordlist" d) hunspellDictionaries;
+  otherDicts = filter (d: !(hasAttr "dictFileName" d &&
+                            elem d.dictFileName (map (d: d.dictFileName) largeDicts))) hunspellDictionaries;
+  dictionaries = largeDicts ++ otherDicts;
 
   mathJaxSrc = fetchurl {
-    url = https://s3.amazonaws.com/rstudio-buildtools/mathjax-26.zip;
+    url = "https://s3.amazonaws.com/rstudio-buildtools/mathjax-26.zip";
     sha256 = "0wbcqb9rbfqqvvhqr1pbqax75wp8ydqdyhp91fbqfqp26xzjv6lk";
   };
 
@@ -76,7 +92,7 @@ stdenv.mkDerivation rec {
       mv gwt-${gwtVer} $GWT_LIB_DIR/gwt/${gwtVer}
 
       mkdir dependencies/common/dictionaries
-      for dict in ${builtins.concatStringsSep " " hunspellDictionaries}; do
+      for dict in ${builtins.concatStringsSep " " dictionaries}; do
         for i in "$dict/share/hunspell/"*; do
           ln -sv $i dependencies/common/dictionaries/
         done
@@ -93,12 +109,10 @@ stdenv.mkDerivation rec {
       popd
     '';
 
-  enableParallelBuilding = true;
-
   cmakeFlags = [ "-DRSTUDIO_TARGET=Desktop" "-DQT_QMAKE_EXECUTABLE=$NIX_QT5_TMP/bin/qmake" ];
 
   desktopItem = makeDesktopItem {
-    name = name;
+    name = "${pname}-${version}";
     exec = "rstudio %F";
     icon = "rstudio";
     desktopName = "RStudio";
@@ -108,17 +122,18 @@ stdenv.mkDerivation rec {
     mimeType = "text/x-r-source;text/x-r;text/x-R;text/x-r-doc;text/x-r-sweave;text/x-r-markdown;text/x-r-html;text/x-r-presentation;application/x-r-data;application/x-r-project;text/x-r-history;text/x-r-profile;text/x-tex;text/x-markdown;text/html;text/css;text/javascript;text/x-chdr;text/x-csrc;text/x-c++hdr;text/x-c++src;";
   };
 
+  qtWrapperArgs = [ "--suffix PATH : ${gnumake}/bin" ];
+
   postInstall = ''
-      wrapProgram $out/bin/rstudio --suffix PATH : ${gnumake}/bin
       mkdir $out/share
       cp -r ${desktopItem}/share/applications $out/share
       mkdir $out/share/icons
       ln $out/rstudio.png $out/share/icons
   '';
 
-  meta = with stdenv.lib;
+  meta = with lib;
     { description = "Set of integrated tools for the R language";
-      homepage = https://www.rstudio.com/;
+      homepage = "https://www.rstudio.com/";
       license = licenses.agpl3;
       maintainers = with maintainers; [ ehmry changlinli ciil ];
       platforms = platforms.linux;

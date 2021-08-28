@@ -1,24 +1,32 @@
-{ stdenv, fetchFromGitHub, cmake
+{ lib, stdenv, fetchFromGitHub, cmake
 , alsaSupport ? !stdenv.isDarwin, alsaLib ? null
 , pulseSupport ? !stdenv.isDarwin, libpulseaudio ? null
 , CoreServices, AudioUnit, AudioToolbox
 }:
 
-with stdenv.lib;
+with lib;
 
 assert alsaSupport -> alsaLib != null;
 assert pulseSupport -> libpulseaudio != null;
 
 stdenv.mkDerivation rec {
   version = "1.19.1";
-  name = "openal-soft-${version}";
+  pname = "openal-soft";
 
   src = fetchFromGitHub {
     owner = "kcat";
     repo = "openal-soft";
-    rev = name;
+    rev = "${pname}-${version}";
     sha256 = "0b0g0q1c36nfb289xcaaj3cmyfpiswvvgky3qyalsf9n4dj7vnzi";
   };
+
+  # this will make it find its own data files (e.g. HRTF profiles)
+  # without any other configuration
+  patches = [ ./search-out.patch ];
+  postPatch = ''
+    substituteInPlace Alc/helpers.c \
+      --replace "@OUT@" $out
+  '';
 
   nativeBuildInputs = [ cmake ];
 
@@ -27,13 +35,13 @@ stdenv.mkDerivation rec {
     ++ optional pulseSupport libpulseaudio
     ++ optionals stdenv.isDarwin [ CoreServices AudioUnit AudioToolbox ];
 
-  NIX_LDFLAGS = []
+  NIX_LDFLAGS = toString ([]
     ++ optional alsaSupport "-lasound"
-    ++ optional pulseSupport "-lpulse";
+    ++ optional pulseSupport "-lpulse");
 
   meta = {
     description = "OpenAL alternative";
-    homepage = https://kcat.strangesoft.net/openal.html;
+    homepage = "https://kcat.strangesoft.net/openal.html";
     license = licenses.lgpl2;
     maintainers = with maintainers; [ftrvxmtrx];
     platforms = platforms.unix;

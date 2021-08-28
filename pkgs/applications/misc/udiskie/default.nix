@@ -1,38 +1,50 @@
-{ stdenv, fetchFromGitHub, asciidoc-full, gettext
-, gobject-introspection, gtk3, hicolor-icon-theme, libappindicator-gtk3, libnotify, librsvg
-, udisks2, wrapGAppsHook
-, python3Packages
+{ lib
+, fetchFromGitHub
+, asciidoc-full
+, buildPythonApplication
+, docopt
+, gettext
+, gobject-introspection
+, gtk3
+, keyutils
+, libappindicator-gtk3
+, libnotify
+, librsvg
+, nose
+, pygobject3
+, pyyaml
+, udisks2
+, wrapGAppsHook
 }:
 
-python3Packages.buildPythonApplication rec {
+buildPythonApplication rec {
   pname = "udiskie";
-  version = "1.7.7";
+  version = "2.3.3";
 
   src = fetchFromGitHub {
     owner = "coldfix";
     repo = "udiskie";
-    rev = version;
-    sha256 = "1j17z26vy44il2s9zgchvhq280vq8ag64ddi35f35b444wz2azlb";
+    rev = "v${version}";
+    hash = "sha256-OeNAcL7jd8GiPVUGxWwX4N/G/jzxfyifaoSD/hXXwyM=";
   };
 
   nativeBuildInputs = [
+    asciidoc-full # Man page
     gettext
-    asciidoc-full        # For building man page.
     gobject-introspection
     wrapGAppsHook
   ];
 
   buildInputs = [
-    hicolor-icon-theme
-    librsvg              # required for loading svg icons (udiskie uses svg icons)
     gobject-introspection
-    libnotify
     gtk3
-    udisks2
     libappindicator-gtk3
+    libnotify
+    librsvg # Because it uses SVG icons
+    udisks2
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = [
     docopt
     pygobject3
     pyyaml
@@ -45,19 +57,33 @@ python3Packages.buildPythonApplication rec {
     cp -v doc/udiskie.8 $out/share/man/man8/
   '';
 
-  checkInputs = with python3Packages; [
-    nose
+  checkInputs = [
     keyutils
+    nose
   ];
 
   checkPhase = ''
     nosetests
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
+    homepage = "https://github.com/coldfix/udiskie";
     description = "Removable disk automounter for udisks";
+    longDescription = ''
+      udiskie is a udisks2 front-end that allows to manage removeable media such
+      as CDs or flash drives from userspace.
+
+      Its features include:
+      - automount removable media
+      - notifications
+      - tray icon
+      - command line tools for manual un-/mounting
+      - LUKS encrypted devices
+      - unlocking with keyfiles (requires udisks 2.6.4)
+      - loop devices (mounting iso archives)
+      - password caching (requires python keyutils 0.3)
+    '';
     license = licenses.mit;
-    homepage = https://github.com/coldfix/udiskie;
     maintainers = with maintainers; [ AndersonTorres ];
   };
 }

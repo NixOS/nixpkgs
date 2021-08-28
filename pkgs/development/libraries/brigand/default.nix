@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, cmake }:
+{ lib, stdenv, fetchFromGitHub, cmake }:
 
-stdenv.mkDerivation rec {
-  name = "brigand-${version}";
+stdenv.mkDerivation {
+  pname = "brigand";
   version = "1.3.0";
 
   src = fetchFromGitHub {
@@ -13,14 +13,14 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Instant compile time C++ 11 metaprogramming library";
     longDescription = ''
       Brigand is a light-weight, fully functional, instant-compile time C++ 11 meta-programming library.
       Everything you were doing with Boost.MPL can be done with Brigand. And if that's not the case, open an issue!'';
-    homepage = https://github.com/edouarda/brigand;
+    homepage = "https://github.com/edouarda/brigand";
     license = licenses.boost;
     maintainers = with maintainers; [ pmiddend ];
-    platforms = platforms.linux;
+    platforms = platforms.all;
   };
 }

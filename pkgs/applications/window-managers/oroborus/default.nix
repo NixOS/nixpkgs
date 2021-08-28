@@ -1,16 +1,16 @@
-{ stdenv, fetchurl, pkgconfig
+{ lib, stdenv, fetchurl, pkg-config
 , freetype, fribidi
 , libSM, libICE, libXt, libXaw, libXmu
 , libXext, libXft, libXpm, libXrandr
 , libXrender, xorgproto, libXinerama }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
 
-  name = "oroborus-${version}";
+  pname = "oroborus";
   version = "2.0.20";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ freetype fribidi libSM libICE libXt libXaw libXmu libXext
                   libXft libXpm libXrandr libXrender xorgproto libXinerama ];
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A really minimalistic X window manager";
-    homepage = https://www.oroborus.org/;
+    homepage = "https://www.oroborus.org/";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.AndersonTorres ];
     platforms = platforms.linux;

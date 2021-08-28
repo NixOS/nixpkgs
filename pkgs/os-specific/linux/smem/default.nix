@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, python }:
 
 stdenv.mkDerivation rec {
-  name = "smem-${version}";
+  pname = "smem";
   version = "1.5";
 
   src = fetchurl {
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     '';
 
   meta = {
-    homepage = https://www.selenic.com/smem/;
+    homepage = "https://www.selenic.com/smem/";
     description = "A memory usage reporting tool that takes shared memory into account";
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.eelco ];

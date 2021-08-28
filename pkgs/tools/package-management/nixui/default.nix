@@ -1,4 +1,4 @@
-{ stdenv, pkgs, fetchgit, nix, node_webkit, makeDesktopItem
+{ lib, stdenv, pkgs, fetchgit, nix, node_webkit, makeDesktopItem
 , writeScript }:
 let
   version = "0.2.1";
@@ -24,8 +24,8 @@ let
     genericName = "NixUI";
   };
 in
-stdenv.mkDerivation rec {
-  name = "nixui-${version}";
+stdenv.mkDerivation {
+  pname = "nixui";
   inherit version src;
   installPhase = ''
     mkdir -p $out/bin
@@ -36,9 +36,9 @@ stdenv.mkDerivation rec {
   '';
   meta = {
     description = "NodeWebkit user interface for Nix";
-    homepage = https://github.com/matejc/nixui;
-    license = stdenv.lib.licenses.asl20;
-    maintainers = [ stdenv.lib.maintainers.matejc ];
-    platforms = stdenv.lib.platforms.unix;
+    homepage = "https://github.com/matejc/nixui";
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.matejc ];
+    platforms = lib.platforms.unix;
   };
 }

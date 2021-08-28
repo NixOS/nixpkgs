@@ -1,12 +1,12 @@
 { stdenv, lib, fetchurl, alsaLib, libpulseaudio, undmg }:
 
 let
-  bits = stdenv.lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux") "64";
+  bits = lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux") "64";
   libPath = lib.makeLibraryPath [ stdenv.cc.cc alsaLib libpulseaudio ];
 
 in
 stdenv.mkDerivation rec {
-  name = "fmod-${version}";
+  pname = "fmod";
   version = "4.44.64";
   shortVersion = builtins.replaceStrings [ "." ] [ "" ] version;
 
@@ -35,9 +35,9 @@ stdenv.mkDerivation rec {
     cp -r api/inc $out/include
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Programming library and toolkit for the creation and playback of interactive audio";
-    homepage    = http://www.fmod.org/;
+    homepage    = "http://www.fmod.org/";
     license     = licenses.unfreeRedistributable;
     platforms   = [ "x86_64-linux" "i686-linux" "x86_64-darwin" ];
     maintainers = [ maintainers.lassulus ];

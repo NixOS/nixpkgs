@@ -1,31 +1,34 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , setuptools
 , nose
 , pkgs
-, isPy27
 }:
 
 buildPythonPackage rec {
   pname = "pycdio";
-  version = "2.0.0";
-  disabled = !isPy27;
+  version = "2.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1a1h0lmfl56a2a9xqhacnjclv81nv3906vdylalybxrk4bhrm3hj";
+    sha256 = "01b7vqqfry071p60sabydym7r3m3rxszyqpdbs1qi5rk2sfyblnn";
   };
 
-  prePatch = "sed -i -e '/DRIVER_BSDI/d' pycdio.py";
+  prePatch = ''
+    substituteInPlace setup.py \
+      --replace 'library_dirs=library_dirs' 'library_dirs=[dir.decode("utf-8") for dir in library_dirs]' \
+      --replace 'include_dirs=include_dirs' 'include_dirs=[dir.decode("utf-8") for dir in include_dirs]' \
+      --replace 'runtime_library_dirs=runtime_lib_dirs' 'runtime_library_dirs=[dir.decode("utf-8") for dir in runtime_lib_dirs]'
+  '';
 
   preConfigure = ''
     patchShebangs .
   '';
 
-  nativeBuildInputs = [ nose pkgs.pkgconfig pkgs.swig ];
+  nativeBuildInputs = [ nose pkgs.pkg-config pkgs.swig ];
   buildInputs = [ setuptools pkgs.libcdio ]
-    ++ stdenv.lib.optional stdenv.isDarwin pkgs.libiconv;
+    ++ lib.optional stdenv.isDarwin pkgs.libiconv;
 
   # Run tests using nosetests but first need to install the binaries
   # to the root source directory where they can be found.
@@ -34,10 +37,9 @@ buildPythonPackage rec {
     nosetests
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://www.gnu.org/software/libcdio/;
+  meta = with lib; {
+    homepage = "https://www.gnu.org/software/libcdio/";
     description = "Wrapper around libcdio (CD Input and Control library)";
-    maintainers = with maintainers; [ rycee ];
     license = licenses.gpl3Plus;
   };
 

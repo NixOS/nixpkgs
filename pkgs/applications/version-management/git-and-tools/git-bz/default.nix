@@ -1,9 +1,9 @@
-{ stdenv, fetchgit
+{ lib, stdenv, fetchgit
 , asciidoc, docbook_xml_dtd_45, docbook_xsl, libxslt, makeWrapper, xmlto
-, pythonPackages }:
+, python2Packages }:
 
-stdenv.mkDerivation rec {
-  name = "git-bz-${version}";
+stdenv.mkDerivation {
+  pname = "git-bz";
   version = "3.2015-09-08";
 
   src = fetchgit {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     asciidoc docbook_xml_dtd_45 docbook_xsl libxslt makeWrapper xmlto
   ];
   buildInputs = []
-    ++ (with pythonPackages; [ python pysqlite ]);
+    ++ (with python2Packages; [ python pysqlite ]);
 
   postPatch = ''
     patchShebangs configure
@@ -27,11 +27,11 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/git-bz \
-      --prefix PYTHONPATH : "$(toPythonPath "${pythonPackages.pycrypto}")" \
-      --prefix PYTHONPATH : "$(toPythonPath "${pythonPackages.pysqlite}")"
+      --prefix PYTHONPATH : "$(toPythonPath "${python2Packages.pycrypto}")" \
+      --prefix PYTHONPATH : "$(toPythonPath "${python2Packages.pysqlite}")"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Bugzilla integration for git";
     longDescription = ''
       git-bz is a tool for integrating the Git command line with the
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
       Chromium on Linux.
     '';
     license = licenses.gpl2Plus;
-    homepage = http://git.fishsoup.net/cgit/git-bz/;
+    homepage = "http://git.fishsoup.net/cgit/git-bz/";
 
     platforms = platforms.linux;
   };

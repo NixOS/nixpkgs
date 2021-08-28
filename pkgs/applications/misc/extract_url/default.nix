@@ -5,12 +5,12 @@
 
 let
   perlDeps =
-    [ perlPackages.MIMEtools perlPackages.HTMLParser ]
+    [ perlPackages.MIMETools perlPackages.HTMLParser ]
     ++ lib.optional cursesSupport perlPackages.CursesUI
     ++ lib.optional uriFindSupport perlPackages.URIFind;
 
 in stdenv.mkDerivation rec {
-  name = "extract_url-${version}";
+  pname = "extract_url";
   version = "1.6.2";
 
   src = fetchFromGitHub {
@@ -32,7 +32,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = https://www.memoryhole.net/~kyle/extract_url/;
+    homepage = "https://www.memoryhole.net/~kyle/extract_url/";
     description = "Extracts URLs from MIME messages or plain text";
     license = licenses.bsd2;
     maintainers = [ maintainers.qyliss ];

@@ -1,26 +1,42 @@
-{lib, fetchurl, mercurial, python2Packages}:
+{ lib, fetchurl, python3Packages
+, mercurial, qt5
+}@args:
+let
+  tortoisehgSrc = fetchurl rec {
+    meta.name = "tortoisehg-${meta.version}";
+    meta.version = "5.6";
+    url = "https://www.mercurial-scm.org/release/tortoisehg/targz/tortoisehg-${meta.version}.tar.gz";
+    sha256 = "031bafj88wggpvw0lgvl0djhlbhs9nls9vzwvni8yn0m0bgzc9gr";
+  };
 
-python2Packages.buildPythonApplication rec {
-    name = "tortoisehg-${version}";
-    version = "4.9.1";
-
+  tortoiseMercurial = (mercurial.override {
+    rustSupport = false;
+    re2Support = lib.versionAtLeast tortoisehgSrc.meta.version "5.8";
+  }).overridePythonAttrs (old: rec {
+    inherit (tortoisehgSrc.meta) version;
     src = fetchurl {
-      url = "https://bitbucket.org/tortoisehg/targz/downloads/${name}.tar.gz";
-      sha256 = "0c5gp5wyaiyh8w2zzy1q0f2qv8aa3219shb6swpsdzqr2j9gkk4b";
+      url = "https://mercurial-scm.org/release/mercurial-${version}.tar.gz";
+      sha256 = "1hk2y30zzdnlv8f71kabvh0xi9c7qhp28ksh20vpd0r712sv79yz";
     };
+    patches = [];
+  });
 
-    pythonPath = with python2Packages; [ pyqt4 mercurial qscintilla iniparse ];
+in python3Packages.buildPythonApplication {
+    inherit (tortoisehgSrc.meta) name version;
+    src = tortoisehgSrc;
 
-    propagatedBuildInputs = with python2Packages; [ qscintilla iniparse ];
+    propagatedBuildInputs = with python3Packages; [
+      tortoiseMercurial qscintilla-qt5 iniparse
+    ];
+    nativeBuildInputs = [ qt5.wrapQtAppsHook ];
 
     doCheck = false; # tests fail with "thg: cannot connect to X server"
-    dontStrip = true;
-    buildPhase = "";
-    installPhase = ''
-      ${python2Packages.python.executable} setup.py install --prefix=$out
+    postInstall = ''
       mkdir -p $out/share/doc/tortoisehg
-      cp COPYING.txt $out/share/doc/tortoisehg/Copying.txt.gz
-      ln -s $out/bin/thg $out/bin/tortoisehg     #convenient alias
+      cp COPYING.txt $out/share/doc/tortoisehg/Copying.txt
+      # convenient alias
+      ln -s $out/bin/thg $out/bin/tortoisehg
+      wrapQtApp $out/bin/thg
     '';
 
     checkPhase = ''
@@ -28,9 +44,11 @@ python2Packages.buildPythonApplication rec {
       $out/bin/thg version
     '';
 
+    passthru.mercurial = tortoiseMercurial;
+
     meta = {
       description = "Qt based graphical tool for working with Mercurial";
-      homepage = https://tortoisehg.bitbucket.io/;
+      homepage = "https://tortoisehg.bitbucket.io/";
       license = lib.licenses.gpl2;
       platforms = lib.platforms.linux;
       maintainers = with lib.maintainers; [ danbst ];

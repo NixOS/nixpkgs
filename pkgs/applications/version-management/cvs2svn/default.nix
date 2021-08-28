@@ -1,20 +1,20 @@
 { lib, fetchurl, makeWrapper
 , python2Packages
-, cvs, subversion, git, bazaar
+, cvs, subversion, git, breezy
 }:
 
 python2Packages.buildPythonApplication  rec {
-  name = "cvs2svn-${version}";
+  pname = "cvs2svn";
   version = "2.5.0";
 
   src = fetchurl {
-    url = "http://cvs2svn.tigris.org/files/documents/1462/49543/${name}.tar.gz";
+    url = "http://cvs2svn.tigris.org/files/documents/1462/49543/${pname}-${version}.tar.gz";
     sha256 = "1ska0z15sjhyfi860rjazz9ya1gxbf5c0h8dfqwz88h7fccd22b4";
   };
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
-  checkInputs = [ subversion git bazaar ];
+  checkInputs = [ subversion git breezy ];
 
   checkPhase = "python run-tests.py";
 
@@ -29,7 +29,7 @@ python2Packages.buildPythonApplication  rec {
 
   meta = with lib; {
     description = "A tool to convert CVS repositories to Subversion repositories";
-    homepage = http://cvs2svn.tigris.org/;
+    homepage = "http://cvs2svn.tigris.org/";
     maintainers = [ maintainers.makefu ];
     platforms = platforms.unix;
     license = licenses.asl20;

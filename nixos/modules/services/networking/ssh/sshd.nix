@@ -9,15 +9,15 @@ let
   # This middle-ground solution ensures *an* sshd can do their basic validation
   # on the configuration.
   validationPackage = if pkgs.stdenv.buildPlatform == pkgs.stdenv.hostPlatform
-    then [ cfgc.package ]
-    else [ pkgs.buildPackages.openssh ];
+    then cfgc.package
+    else pkgs.buildPackages.openssh;
 
   sshconf = pkgs.runCommand "sshd.conf-validated" { nativeBuildInputs = [ validationPackage ]; } ''
     cat >$out <<EOL
     ${cfg.extraConfig}
     EOL
 
-    ssh-keygen -f mock-hostkey -N ""
+    ssh-keygen -q -f mock-hostkey -N ""
     sshd -t -f $out -h mock-hostkey
   '';
 
@@ -41,6 +41,10 @@ let
           Warning: If you are using <literal>NixOps</literal> then don't use this
           option since it will replace the key required for deployment via ssh.
         '';
+        example = [
+          "ssh-rsa AAAAB3NzaC1yc2etc/etc/etcjwrsh8e596z6J0l7 example@host"
+          "ssh-ed25519 AAAAC3NzaCetcetera/etceteraJZMfk3QPfQ foo@bar"
+        ];
       };
 
       keyFiles = mkOption {
@@ -74,6 +78,10 @@ let
 in
 
 {
+  imports = [
+    (mkAliasOptionModule [ "services" "sshd" "enable" ] [ "services" "openssh" "enable" ])
+    (mkAliasOptionModule [ "services" "openssh" "knownHosts" ] [ "programs" "ssh" "knownHosts" ])
+  ];
 
   ###### interface
 
@@ -228,15 +236,54 @@ in
         '';
       };
 
+      banner = mkOption {
+        type = types.nullOr types.lines;
+        default = null;
+        description = ''
+          Message to display to the remote user before authentication is allowed.
+        '';
+      };
+
       authorizedKeysFiles = mkOption {
         type = types.listOf types.str;
         default = [];
-        description = "Files from which authorized keys are read.";
+        description = ''
+          Specify the rules for which files to read on the host.
+
+          This is an advanced option. If you're looking to configure user
+          keys, you can generally use <xref linkend="opt-users.users._name_.openssh.authorizedKeys.keys"/>
+          or <xref linkend="opt-users.users._name_.openssh.authorizedKeys.keyFiles"/>.
+
+          These are paths relative to the host root file system or home
+          directories and they are subject to certain token expansion rules.
+          See AuthorizedKeysFile in man sshd_config for details.
+        '';
+      };
+
+      authorizedKeysCommand = mkOption {
+        type = types.str;
+        default = "none";
+        description = ''
+          Specifies a program to be used to look up the user's public
+          keys. The program must be owned by root, not writable by group
+          or others and specified by an absolute path.
+        '';
+      };
+
+      authorizedKeysCommandUser = mkOption {
+        type = types.str;
+        default = "nobody";
+        description = ''
+          Specifies the user under whose account the AuthorizedKeysCommand
+          is run. It is recommended to use a dedicated user that has no
+          other role on the host than running authorized keys commands.
+        '';
       };
 
       kexAlgorithms = mkOption {
         type = types.listOf types.str;
         default = [
+          "curve25519-sha256"
           "curve25519-sha256@libssh.org"
           "diffie-hellman-group-exchange-sha256"
         ];
@@ -247,7 +294,7 @@ in
           Defaults to recommended settings from both
           <link xlink:href="https://stribika.github.io/2015/01/04/secure-secure-shell.html" />
           and
-          <link xlink:href="https://wiki.mozilla.org/Security/Guidelines/OpenSSH#Modern_.28OpenSSH_6.7.2B.29" />
+          <link xlink:href="https://infosec.mozilla.org/guidelines/openssh#modern-openssh-67" />
         '';
       };
 
@@ -268,7 +315,7 @@ in
           Defaults to recommended settings from both
           <link xlink:href="https://stribika.github.io/2015/01/04/secure-secure-shell.html" />
           and
-          <link xlink:href="https://wiki.mozilla.org/Security/Guidelines/OpenSSH#Modern_.28OpenSSH_6.7.2B.29" />
+          <link xlink:href="https://infosec.mozilla.org/guidelines/openssh#modern-openssh-67" />
         '';
       };
 
@@ -289,7 +336,7 @@ in
           Defaults to recommended settings from both
           <link xlink:href="https://stribika.github.io/2015/01/04/secure-secure-shell.html" />
           and
-          <link xlink:href="https://wiki.mozilla.org/Security/Guidelines/OpenSSH#Modern_.28OpenSSH_6.7.2B.29" />
+          <link xlink:href="https://infosec.mozilla.org/guidelines/openssh#modern-openssh-67" />
         '';
       };
 
@@ -337,7 +384,7 @@ in
     };
 
     users.users = mkOption {
-      type = with types; loaOf (submodule userOptions);
+      type = with types; attrsOf (submodule userOptions);
     };
 
   };
@@ -444,11 +491,13 @@ in
     # https://github.com/NixOS/nixpkgs/pull/10155
     # https://github.com/NixOS/nixpkgs/pull/41745
     services.openssh.authorizedKeysFiles =
-      [ ".ssh/authorized_keys" ".ssh/authorized_keys2" "/etc/ssh/authorized_keys.d/%u" ];
+      [ "%h/.ssh/authorized_keys" "%h/.ssh/authorized_keys2" "/etc/ssh/authorized_keys.d/%u" ];
 
     services.openssh.extraConfig = mkOrder 0
       ''
         UsePAM yes
+
+        Banner ${if cfg.banner == null then "none" else pkgs.writeText "ssh_banner" cfg.banner}
 
         AddressFamily ${if config.networking.enableIPv6 then "any" else "inet"}
         ${concatMapStrings (port: ''
@@ -481,6 +530,10 @@ in
         PrintMotd no # handled by pam_motd
 
         AuthorizedKeysFile ${toString cfg.authorizedKeysFiles}
+        ${optionalString (cfg.authorizedKeysCommand != "none") ''
+          AuthorizedKeysCommand ${cfg.authorizedKeysCommand}
+          AuthorizedKeysCommandUser ${cfg.authorizedKeysCommandUser}
+        ''}
 
         ${flip concatMapStrings cfg.hostKeys (k: ''
           HostKey ${k.path}
@@ -502,7 +555,7 @@ in
 
     assertions = [{ assertion = if cfg.forwardX11 then cfgc.setXAuthLocation else true;
                     message = "cannot enable X11 forwarding without setting xauth location";}]
-      ++ flip map cfg.listenAddresses ({ addr, ... }: {
+      ++ forEach cfg.listenAddresses ({ addr, ... }: {
         assertion = addr != null;
         message = "addr must be specified in each listenAddresses entry";
       });

@@ -1,7 +1,7 @@
-{ stdenv, buildGoPackage, fetchgit }:
+{ lib, buildGoPackage, fetchgit }:
 
 buildGoPackage rec {
-  name = "gosu-${version}";
+  pname = "gosu";
   version = "2017-05-09";
   rev = "e87cf95808a7b16208515c49012aa3410bc5bba8";
 
@@ -18,7 +18,7 @@ buildGoPackage rec {
   meta = {
     description= "Tool that avoids TTY and signal-forwarding behavior of sudo and su";
     homepage = "https://github.com/tianon/gosu";
-    license = stdenv.lib.licenses.gpl3;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
   };
 }

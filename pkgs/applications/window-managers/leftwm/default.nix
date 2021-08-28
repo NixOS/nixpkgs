@@ -1,38 +1,37 @@
-{ stdenv, fetchFromGitHub, rustPlatform, libX11, libXinerama, makeWrapper }:
+{ lib, fetchFromGitHub, rustPlatform, libX11, libXinerama, makeWrapper }:
 
-let 
-    rpath = stdenv.lib.makeLibraryPath [ libXinerama libX11 ];
+let
+    rpath = lib.makeLibraryPath [ libXinerama libX11 ];
 in
 
 rustPlatform.buildRustPackage rec {
-    pname = "leftwm";
-    version = "0.1.9";
+  pname = "leftwm";
+  version = "0.2.7";
 
-    src = fetchFromGitHub {
-        owner = "leftwm";
-        repo = "leftwm";
-        rev = "${version}";
-        sha256 = "0ji7m2npkdg27gm33b19rxr50km0gm1h9czi1f425vxq65mlkl4y";
-    };
+  src = fetchFromGitHub {
+    owner = "leftwm";
+    repo = "leftwm";
+    rev = version;
+    sha256 = "sha256-nRPt+Tyfq62o+3KjsXkHQHUMMslHFGNBd3s2pTb7l4w=";
+  };
 
-    buildInputs = [ makeWrapper libX11 libXinerama ];
+  cargoSha256 = "sha256-lmzA7XM8B5QJI4Wo0cKeMR3+np6jT6mdGzTry4g87ng=";
 
-    postInstall = ''
-        wrapProgram $out/bin/leftwm --prefix LD_LIBRARY_PATH : "${rpath}"
-        wrapProgram $out/bin/leftwm-state --prefix LD_LIBRARY_PATH : "${rpath}"
-        wrapProgram $out/bin/leftwm-worker --prefix LD_LIBRARY_PATH : "${rpath}"
-    '';
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ libX11 libXinerama ];
 
-    cargoSha256 = "0mpvfix7bvc84vanha474l4gaq97ac1zy5l77z83m9jg0246yxd6";
+  postInstall = ''
+    wrapProgram $out/bin/leftwm --prefix LD_LIBRARY_PATH : "${rpath}"
+    wrapProgram $out/bin/leftwm-state --prefix LD_LIBRARY_PATH : "${rpath}"
+    wrapProgram $out/bin/leftwm-worker --prefix LD_LIBRARY_PATH : "${rpath}"
+  '';
 
-    # https://github.com/leftwm/leftwm/pull/37
-    cargoPatches = [ ./cargo-lock.patch ];
-
-    meta = {
-        description = "Leftwm - A tiling window manager for the adventurer";
-        homepage = https://github.com/leftwm/leftwm;
-        license = stdenv.lib.licenses.mit;
-        platforms = stdenv.lib.platforms.linux;
-        maintainers = with stdenv.lib.maintainers; [ mschneider ];
-    };
+  meta = with lib; {
+    description = "A tiling window manager for the adventurer";
+    homepage = "https://github.com/leftwm/leftwm";
+    license = licenses.mit;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ mschneider ];
+    changelog = "https://github.com/leftwm/leftwm/blob/${version}/CHANGELOG";
+  };
 }

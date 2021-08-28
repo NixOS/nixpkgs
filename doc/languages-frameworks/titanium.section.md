@@ -1,9 +1,4 @@
----
-title: Titanium
-author: Sander van der Burg
-date: 2018-11-18
----
-# Titanium
+# Titanium {#titanium}
 
 The Nixpkgs repository contains facilities to deploy a variety of versions of
 the [Titanium SDK](https://www.appcelerator.com) versions, a cross-platform

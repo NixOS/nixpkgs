@@ -1,27 +1,25 @@
-{ stdenv, fetchFromGitHub, cmake, python, spirv-headers }:
+{ lib, stdenv, fetchFromGitHub, cmake, python3, spirv-headers }:
 let
   # Update spirv-headers rev in lockstep according to DEPs file
-  version = "2019.1";
+  version = "2020.2";
 in
 
-assert version == spirv-headers.version;
 stdenv.mkDerivation rec {
-  name = "spirv-tools-${version}";
+  pname = "spirv-tools";
   inherit version;
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Tools";
     rev = "v${version}";
-    sha256 = "0vddjzhkrhrm3l3i57nxmq2smv3r1s0ka5ff2kziaahr4hqb479r";
+    sha256 = "00b7xgyrcb2qq63pp3cnw5q1xqx2d9rfn65lai6n6r89s1vh3vg6";
   };
-  enableParallelBuilding = true;
 
-  buildInputs = [ cmake python ];
+  nativeBuildInputs = [ cmake python3 ];
 
   cmakeFlags = [ "-DSPIRV-Headers_SOURCE_DIR=${spirv-headers.src}" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "The SPIR-V Tools project provides an API and commands for processing SPIR-V modules";
     license = licenses.asl20;

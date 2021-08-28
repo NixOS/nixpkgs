@@ -1,27 +1,29 @@
-{ stdenv, fetchurl, alsaLib, expat, glib, libjack2, libXext, libX11, libpng
-, libpthreadstubs, libsmf, libsndfile, lv2, pkgconfig, zita-resampler
+{ lib, stdenv, fetchurl, alsaLib, expat, glib, libjack2, libXext, libX11, libpng
+, libpthreadstubs, libsmf, libsndfile, lv2, pkg-config, zita-resampler
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.9.16";
-  name = "drumgizmo-${version}";
+  version = "0.9.19";
+  pname = "drumgizmo";
 
   src = fetchurl {
-    url = "https://www.drumgizmo.org/releases/${name}/${name}.tar.gz";
-    sha256 = "0ivr61n9gpigsfgn20rh3n09li8sxh1q095r6wiw0shqhn3vaxlg";
+    url = "https://www.drumgizmo.org/releases/${pname}-${version}/${pname}-${version}.tar.gz";
+    sha256 = "18x28vhif0c97xz02k22xwqxxig6fi6j0356mlz2vf7vb25z69kl";
   };
 
   configureFlags = [ "--enable-lv2" ];
 
+  nativeBuildInputs = [ pkg-config ];
+
   buildInputs = [
     alsaLib expat glib libjack2 libXext libX11 libpng libpthreadstubs
-    libsmf libsndfile lv2 pkgconfig zita-resampler
+    libsmf libsndfile lv2 zita-resampler
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An LV2 sample based drum plugin";
-    homepage = https://www.drumgizmo.org;
-    license = licenses.lgpl3;
+    homepage = "https://www.drumgizmo.org";
+    license = licenses.lgpl3Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.goibhniu maintainers.nico202 ];
   };

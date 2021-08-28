@@ -10,27 +10,25 @@ in {
 
     services.fprot = {
       updater = {
-        enable = mkOption {
-          default = false;
-          description = ''
-            Whether to enable automatic F-Prot virus definitions database updates.
-          '';
-        };
+        enable = mkEnableOption "automatic F-Prot virus definitions database updates";
 
         productData = mkOption {
           description = ''
             product.data file. Defaults to the one supplied with installation package.
           '';
+          type = types.path;
         };
 
         frequency = mkOption {
           default = 30;
+          type = types.int;
           description = ''
             Update virus definitions every X minutes.
           '';
         };
 
         licenseKeyfile = mkOption {
+          type = types.path;
           description = ''
             License keyfile. Defaults to the one supplied with installation package.
           '';
@@ -48,26 +46,22 @@ in {
     services.fprot.updater.licenseKeyfile = mkDefault "${pkgs.fprot}/opt/f-prot/license.key";
 
     environment.systemPackages = [ pkgs.fprot ];
-    environment.etc = singleton {
+    environment.etc."f-prot.conf" = {
       source = "${pkgs.fprot}/opt/f-prot/f-prot.conf";
-      target = "f-prot.conf";
     };
 
-    users.users = singleton
-      { name = fprotUser;
-        uid = config.ids.uids.fprot;
+    users.users.${fprotUser} =
+      { uid = config.ids.uids.fprot;
         description = "F-Prot daemon user";
         home = stateDir;
       };
 
-    users.groups = singleton
-      { name = fprotGroup;
-        gid = config.ids.gids.fprot;
-      };
+    users.groups.${fprotGroup} =
+      { gid = config.ids.gids.fprot; };
 
     services.cron.systemCronJobs = [ "*/${toString cfg.updater.frequency} * * * * root start fprot-updater" ];
 
-    systemd.services."fprot-updater" = {
+    systemd.services.fprot-updater = {
       serviceConfig = {
         Type = "oneshot";
         RemainAfterExit = false;

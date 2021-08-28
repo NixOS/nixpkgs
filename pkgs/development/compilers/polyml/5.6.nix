@@ -1,17 +1,18 @@
-{stdenv, fetchurl, autoreconfHook}:
+{lib, stdenv, fetchurl, autoreconfHook}:
 
 let
   version = "5.6";
 in
 
 stdenv.mkDerivation {
-  name = "polyml-${version}";
+  pname = "polyml";
+  inherit version;
 
-  prePatch = stdenv.lib.optionalString stdenv.isDarwin ''
+  prePatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace configure.ac --replace stdc++ c++
   '';
 
-  buildInputs = stdenv.lib.optional stdenv.isDarwin autoreconfHook;
+  buildInputs = lib.optional stdenv.isDarwin autoreconfHook;
 
   src = fetchurl {
     url = "mirror://sourceforge/polyml/polyml.${version}.tar.gz";
@@ -23,11 +24,11 @@ stdenv.mkDerivation {
     longDescription = ''
       Poly/ML is a full implementation of Standard ML.
     '';
-    homepage = https://www.polyml.org/;
-    license = stdenv.lib.licenses.lgpl21;
-    platforms = with stdenv.lib.platforms; linux;
+    homepage = "https://www.polyml.org/";
+    license = lib.licenses.lgpl21;
+    platforms = with lib.platforms; linux;
     maintainers = [ #Add your name here!
-      stdenv.lib.maintainers.z77z
+      lib.maintainers.maggesi
     ];
   };
 }

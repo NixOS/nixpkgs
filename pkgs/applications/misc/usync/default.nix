@@ -1,15 +1,14 @@
-{ stdenv, fetchFromGitHub, scsh, rsync, unison }:
+{ lib, stdenv, fetchFromGitHub, scsh, rsync, unison }:
 
 stdenv.mkDerivation rec {
   pname = "usync";
   version = "0.0.3";
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "ebzzry";
-    repo = pname;
-    rev = "9c87ea8a707a47c3d7f6ef94d07591c5ab594282";
-    sha256 = "1r05gw041fz9dkkb70zd6kqw9dd8dhpv87407qxqg43pd7x47kf4";
+    repo = "usync";
+    rev = "99f11b0c196a81843f55ca3456abcb85149b6d51";
+    sha256 = "16i1q8f0jmfd43rb8d70l2b383vr5ib4kh7iq3yd345q7xjz9c2j";
   };
 
   installPhase = ''
@@ -22,8 +21,8 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/bin/$pname --replace "(unison " "(${unison}/bin/unison "
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/ebzzry/usync;
+  meta = with lib; {
+    homepage = "https://github.com/ebzzry/usync";
     description = "A simple site-to-site synchronization tool";
     license = licenses.mit;
     maintainers = [ maintainers.ebzzry ];

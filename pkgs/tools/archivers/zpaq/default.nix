@@ -1,19 +1,17 @@
-{ stdenv, fetchurl, perl, unzip }:
-stdenv.mkDerivation rec {
-  name = "zpaq-${version}";
-  version = "715";
+{ lib, stdenv, fetchFromGitHub, perl }:
 
-  src = let
-    mungedVersion = with stdenv.lib; concatStrings (splitString "." version);
-  in fetchurl {
-    sha256 = "066l94yyladlfzri877nh2dhkvspagjn3m5bmv725fmhkr9c4pp8";
-    url = "http://mattmahoney.net/dc/zpaq${mungedVersion}.zip";
+stdenv.mkDerivation rec {
+  pname = "zpaq";
+  version = "7.15";
+
+  src = fetchFromGitHub {
+    owner = "zpaq";
+    repo = "zpaq";
+    rev = version;
+    sha256 = "0v44rlg9gvwc4ggr2lhcqll8ppal3dk7zsg5bqwcc5lg3ynk2pz4";
   };
 
-  sourceRoot = ".";
-
   nativeBuildInputs = [ perl /* for pod2man */ ];
-  buildInputs = [ unzip ];
 
   preBuild = let
     CPPFLAGS = with stdenv; ""
@@ -28,9 +26,9 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "PREFIX=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Incremental journaling backup utility and archiver";
-    homepage = http://mattmahoney.net/dc/zpaq.html;
+    homepage = "http://mattmahoney.net/dc/zpaq.html";
     license = licenses.gpl3Plus ;
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;

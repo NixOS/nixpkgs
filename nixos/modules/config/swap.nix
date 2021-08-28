@@ -58,7 +58,7 @@ let
       device = mkOption {
         example = "/dev/sda3";
         type = types.str;
-        description = "Path of the device.";
+        description = "Path of the device or swap file.";
       };
 
       label = mkOption {
@@ -185,7 +185,7 @@ in
           { description = "Initialisation of swap device ${sw.device}";
             wantedBy = [ "${realDevice'}.swap" ];
             before = [ "${realDevice'}.swap" ];
-            path = [ pkgs.utillinux ] ++ optional sw.randomEncryption.enable pkgs.cryptsetup;
+            path = [ pkgs.util-linux ] ++ optional sw.randomEncryption.enable pkgs.cryptsetup;
 
             script =
               ''

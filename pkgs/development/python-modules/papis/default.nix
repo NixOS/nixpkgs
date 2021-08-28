@@ -1,40 +1,51 @@
-{ lib, buildPythonPackage, fetchFromGitHub, xdg_utils
+{ lib, buildPythonPackage, fetchFromGitHub, xdg-utils
 , requests, filetype, pyparsing, configparser, arxiv2bib
 , pyyaml, chardet, beautifulsoup4, colorama, bibtexparser
-, pylibgen, click, python-slugify, habanero, isbnlib
-, prompt_toolkit, pygments
+, click, python-slugify, habanero, isbnlib, typing-extensions
+, prompt_toolkit, pygments, stevedore, tqdm, lxml
+, python-doi, isPy3k, pytestcov
 #, optional, dependencies
-, jinja2, whoosh, pytest
+, whoosh, pytest
 , stdenv
 }:
 
 buildPythonPackage rec {
   pname = "papis";
-  version = "0.8.2";
+  version = "0.11.1";
+  disabled = !isPy3k;
 
   # Missing tests on Pypi
   src = fetchFromGitHub {
     owner = "papis";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0sa4hpgjvqkjcmp9bjr27b5m5jg4pfspdc8nf1ny80sr0kzn72hb";
+    sha256 = "0bbkjyw1fsvvp0380l404h2lys8ib4xqga5s6401k1y1hld28nl6";
   };
 
   propagatedBuildInputs = [
     requests filetype pyparsing configparser arxiv2bib
     pyyaml chardet beautifulsoup4 colorama bibtexparser
-    pylibgen click python-slugify habanero isbnlib
-    prompt_toolkit pygments
+    click python-slugify habanero isbnlib
+    prompt_toolkit pygments typing-extensions
+    stevedore tqdm lxml
+    python-doi
     # optional dependencies
-    jinja2 whoosh
+    whoosh
   ];
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "lxml<=4.3.5" "lxml~=4.3" \
+      --replace "isbnlib>=3.9.1,<3.10" "isbnlib~=3.9" \
+      --replace "python-slugify>=1.2.6,<4" "python-slugify"
+  '';
 
   doCheck = !stdenv.isDarwin;
 
   checkInputs = ([
-    pytest
+    pytest pytestcov
   ]) ++ [
-    xdg_utils
+    xdg-utils
   ];
 
   # most of the downloader tests and 4 other tests require a network connection
@@ -42,12 +53,13 @@ buildPythonPackage rec {
   # fail with 5.x
   checkPhase = ''
     HOME=$(mktemp -d) pytest papis tests --ignore tests/downloaders \
-      -k "not test_get_data and not test_doi_to_data and not test_general and not get_document_url and not test_export_yaml and not test_citations"
+      -k "not test_get_data and not test_doi_to_data and not test_general and not get_document_url \
+      and not test_validate_arxivid and not test_downloader_getter and not match"
   '';
 
   meta = {
     description = "Powerful command-line document and bibliography manager";
-    homepage = http://papis.readthedocs.io/en/latest/;
+    homepage = "https://papis.readthedocs.io/en/latest/";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ nico202 teto ];
   };

@@ -1,9 +1,8 @@
-{ stdenv, fetchurl, jdk }:
+{ lib, stdenv, fetchurl, jdk }:
 
 stdenv.mkDerivation rec {
   pname = "emem";
   version = "0.2.50";
-  name = "${pname}-${version}";
 
   inherit jdk;
 
@@ -29,8 +28,8 @@ EOF
     chmod +x $out/bin/${pname}
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/ebzzry/emem;
+  meta = with lib; {
+    homepage = "https://github.com/ebzzry/emem";
     description = "A trivial Markdown to HTML converter";
     license = licenses.epl10;
     maintainers = [ maintainers.ebzzry ];

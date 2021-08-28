@@ -1,25 +1,56 @@
-{ stdenv, fetchFromGitHub, pantheon, pkgconfig, meson, ninja, vala
-, python3, desktop-file-utils, gtk3, granite, libgee, elementary-icon-theme
-, appstream, libpeas, editorconfig-core-c, gtksourceview3, gtkspell3, libsoup
-, vte, webkitgtk, zeitgeist, ctags, libgit2-glib, wrapGAppsHook }:
+{ lib, stdenv
+, fetchFromGitHub
+, fetchpatch
+, nix-update-script
+, pantheon
+, pkg-config
+, meson
+, ninja
+, vala
+, python3
+, desktop-file-utils
+, gtk3
+, granite
+, libgee
+, elementary-icon-theme
+, appstream
+, libpeas
+, editorconfig-core-c
+, gtksourceview3
+, gtkspell3
+, libsoup
+, vte
+, webkitgtk
+, zeitgeist
+, ctags
+, libgit2-glib
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
-  pname = "code";
-  version = "3.1.1";
+  pname = "elementary-code";
+  version = "3.4.1";
 
-  name = "elementary-${pname}-${version}";
+  repoName = "code";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
+    repo = repoName;
     rev = version;
-    sha256 = "0l469fi5vbcazwfhy320nr8wrzz96jbrqn4hag0kdm16wvf5x1yc";
+    sha256 = "sha256-4AEayj+K/lOW6jEYmvmdan1kTqqqLL1YzwcU7/3PH5U=";
   };
 
+  patches = [
+    # Fix build with latest Vala.
+    (fetchpatch {
+      url = "https://github.com/elementary/code/commit/c50580d3336296823da9a2c50b824f21fde50286.patch";
+      sha256 = "F+ZYlnZWYCU68G4oayLfbTnvSnTb4YA0zHVGD/Uf3KA=";
+    })
+  ];
+
   passthru = {
-    updateScript = pantheon.updateScript {
-      repoName = pname;
-      attrPath = "elementary-${pname}";
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
     };
   };
 
@@ -28,7 +59,7 @@ stdenv.mkDerivation rec {
     desktop-file-utils
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     vala
     wrapGAppsHook
@@ -36,8 +67,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     ctags
-    elementary-icon-theme
     editorconfig-core-c
+    elementary-icon-theme
     granite
     gtk3
     gtksourceview3
@@ -57,7 +88,7 @@ stdenv.mkDerivation rec {
   # ctags needed in path by outline plugin
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix PATH : "${stdenv.lib.makeBinPath [ ctags ]}"
+      --prefix PATH : "${lib.makeBinPath [ ctags ]}"
     )
   '';
 
@@ -66,9 +97,9 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Code editor designed for elementary OS";
-    homepage = https://github.com/elementary/code;
+    homepage = "https://github.com/elementary/code";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

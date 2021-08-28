@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, mpfr, m4, binutils, emacs, zlib, which
+{ lib, stdenv, fetchgit, mpfr, m4, binutils, emacs, zlib, which
 , texinfo, libX11, xorgproto, libXi, gmp, readline, strace
 , libXext, libXt, libXaw, libXmu } :
 
@@ -7,8 +7,8 @@ assert stdenv.cc.isGNU ;
 assert stdenv.cc ? libc ;
 assert stdenv.cc.libc != null ;
 
-stdenv.mkDerivation rec {
-  name = "gcl-${version}";
+stdenv.mkDerivation {
+  pname = "gcl";
   version = "2.6.13pre50";
 
   src = fetchgit {
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "GNU Common Lisp compiler working via GCC";
-    maintainers = [ stdenv.lib.maintainers.raskin ];
-    platforms = stdenv.lib.platforms.linux;
+    maintainers = [ lib.maintainers.raskin ];
+    platforms = lib.platforms.linux;
   };
 }

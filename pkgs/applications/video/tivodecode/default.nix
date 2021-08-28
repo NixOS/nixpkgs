@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 let
   version = "0.2pre4";
@@ -6,16 +6,17 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "tivodecode-${version}";
+  pname = "tivodecode";
+  inherit version;
 
   src = fetchurl {
     url = "mirror://sourceforge/tivodecode/tivodecode/${version}/tivodecode-${version}.tar.gz";
     sha256 = "1pww5r2iygscqn20a1cz9xbfh18p84a6a5ifg4h5nvyn9b63k23q";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Converts a .TiVo file (produced by TiVoToGo) to a normal MPEG file";
-    homepage = http://tivodecode.sourceforge.net;
+    homepage = "http://tivodecode.sourceforge.net";
     platforms = platforms.unix;
     license = licenses.bsd3;
   };

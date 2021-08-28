@@ -1,56 +1,31 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, ocamlbuild, cppo, gen, sequence, qtest, ounit, result
-, qcheck }:
+{ lib, fetchFromGitHub, buildDunePackage, ocaml
+, dune-configurator
+, seq
+, gen, iter, ounit, qcheck, uutf
+}:
 
-let
+buildDunePackage rec {
+  version = "3.4";
+  pname = "containers";
 
-  mkpath = p:
-      "${p}/lib/ocaml/${ocaml.version}/site-lib";
-
-  version = "1.4";
-
-in
-
-stdenv.mkDerivation {
-  name = "ocaml${ocaml.version}-containers-${version}";
+  useDune2 = true;
 
   src = fetchFromGitHub {
     owner = "c-cube";
     repo = "ocaml-containers";
-    rev = "${version}";
-    sha256 = "1wbarxphdrxvy7qsdp4p837h1zrv0z83pgs5lbz2h3kdnyvz2f1i";
+    rev = "v${version}";
+    sha256 = "0ixpy81p6rc3lq71djfndb2sg2hfj20j1jbzzrrmgqsysqdjsgzz";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild cppo gen sequence qtest ounit qcheck ];
+  buildInputs = [ dune-configurator ];
+  propagatedBuildInputs = [ seq ];
 
-  propagatedBuildInputs = [ result ];
-
-  preConfigure = ''
-    # The following is done so that the '#use "topfind"' directive works in the ocaml top-level
-    export HOME="$(mktemp -d)"
-    export OCAML_TOPLEVEL_PATH="${mkpath findlib}"
-    cat <<EOF > $HOME/.ocamlinit
-let () =
-  try Topdirs.dir_directory (Sys.getenv "OCAML_TOPLEVEL_PATH")
-  with Not_found -> ()
-;;
-EOF
-  '';
-
-  configureFlags = [
-    "--enable-unix"
-    "--enable-thread"
-    "--enable-tests"
-    "--enable-docs"
-    "--disable-bench"
-  ];
+  checkInputs = [ gen iter ounit qcheck uutf ];
 
   doCheck = true;
-  checkTarget = "test";
-
-  createFindlibDestdir = true;
 
   meta = {
-    homepage = https://github.com/c-cube/ocaml-containers;
+    homepage = "https://github.com/c-cube/ocaml-containers";
     description = "A modular standard library focused on data structures";
     longDescription = ''
       Containers is a standard library (BSD license) focused on data structures,
@@ -62,7 +37,6 @@ EOF
       It also features optional libraries for dealing with strings, and
       helpers for unix and threads.
     '';
-    license = stdenv.lib.licenses.bsd2;
-    platforms = ocaml.meta.platforms or [];
+    license = lib.licenses.bsd2;
   };
 }

@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "pyxl3";
-  version = "1.0";
+  version = "1.4";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "df413d86664e2d261f67749beffff07eb830ab8c7bbe631d11d4c42f3a5e5fde";
+    sha256 = "ad4cc56bf4b35def33783e6d4783882702111fe8f9a781c63228e2114067c065";
   };
 
   checkInputs = [ unittest2 ];
@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python 3 port of pyxl for writing structured and reusable inline HTML";
-    homepage = https://github.com/gvanrossum/pyxl3;
+    homepage = "https://github.com/gvanrossum/pyxl3";
     license = licenses.asl20;
     maintainers = [ maintainers.costrouc ];
   };

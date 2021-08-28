@@ -1,19 +1,24 @@
-{ stdenv, fetchurl, python2 }:
+{ lib, stdenv, fetchFromGitHub, python3, autoconf, automake, libtool }:
 
 stdenv.mkDerivation rec {
-  name = "ctemplate-${version}";
+  pname = "ctemplate";
+  version = "2.4";
 
-  version = "2.3";
-
-  src = fetchurl {
-    url = "https://github.com/OlafvdSpek/ctemplate/archive/ctemplate-${version}.tar.gz";
-    sha256 = "0mi5g2xlws10z1g4x0cj6kd1r673kkav35pgzyqxa1w47xnwprcr";
+  src = fetchFromGitHub {
+    owner = "OlafvdSpek";
+    repo = "ctemplate";
+    rev = "ctemplate-${version}";
+    sha256 = "1x0p5yym6vvcx70pm8ihnbxxrl2wnblfp72ih5vjyg8mzkc8cxrr";
   };
 
-  buildInputs = [ python2 ];
+  nativeBuildInputs = [ python3 autoconf automake libtool ];
 
   postPatch = ''
     patchShebangs .
+  '';
+
+  preConfigure = ''
+    ./autogen.sh
   '';
 
   meta = {
@@ -23,7 +28,7 @@ stdenv.mkDerivation rec {
       emphasizes separating logic from presentation: it is impossible to
       embed application logic in this template language.
     '';
-    homepage = https://github.com/OlafvdSpek/ctemplate;
-    license = stdenv.lib.licenses.bsd3;
+    homepage = "https://github.com/OlafvdSpek/ctemplate";
+    license = lib.licenses.bsd3;
   };
 }

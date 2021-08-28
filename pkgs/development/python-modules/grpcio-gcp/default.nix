@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , grpcio
@@ -15,9 +15,9 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ grpcio ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "gRPC extensions for Google Cloud Platform";
-    homepage = https://grpc.io;
+    homepage = "https://grpc.io";
     license = licenses.asl20;
     maintainers = [ maintainers.costrouc ];
   };

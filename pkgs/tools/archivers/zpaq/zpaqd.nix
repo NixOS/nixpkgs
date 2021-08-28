@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip }:
+{ lib, stdenv, fetchurl, unzip }:
 
 let
   # Generated upstream information
@@ -11,9 +11,9 @@ let
     sha256="0868lynb45lm79yvx5f10lj5h6bfv0yck8whcls2j080vmk3n7rk";
   };
 
-  compileFlags = stdenv.lib.concatStringsSep " " ([ "-O3" "-DNDEBUG" ]
-    ++ stdenv.lib.optional (stdenv.hostPlatform.isUnix) "-Dunix -pthread"
-    ++ stdenv.lib.optional (!stdenv.hostPlatform.isx86) "-DNOJIT");
+  compileFlags = lib.concatStringsSep " " ([ "-O3" "-DNDEBUG" ]
+    ++ lib.optional (stdenv.hostPlatform.isUnix) "-Dunix -pthread"
+    ++ lib.optional (!stdenv.hostPlatform.isx86) "-DNOJIT");
 in
 stdenv.mkDerivation {
   inherit (s) name version;
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
 
   sourceRoot = ".";
 
-  buildInputs = [ unzip ];
+  nativeBuildInputs = [ unzip ];
 
   buildPhase = ''
     g++ ${compileFlags} -fPIC --shared libzpaq.cpp -o libzpaq.so
@@ -39,7 +39,7 @@ stdenv.mkDerivation {
     cp readme_zpaqd.txt "$out/share/doc/zpaq"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "ZPAQ archive (de)compressor and algorithm development tool";
     license = licenses.gpl3Plus ;
     maintainers = with maintainers; [ raskin ];

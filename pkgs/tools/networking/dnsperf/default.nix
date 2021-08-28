@@ -1,24 +1,30 @@
-{ stdenv, fetchurl, fetchFromGitHub, autoreconfHook
-, bind, zlib, openssl, libcap
+{ lib, stdenv, fetchurl, fetchFromGitHub, autoreconfHook, pkg-config
+, openssl, ldns, libck
 }:
 
 stdenv.mkDerivation rec {
-  name = "dnsperf-${version}";
-  version = "2.2.0";
+  pname = "dnsperf";
+  version = "2.5.2";
 
   # The same as the initial commit of the new GitHub repo (only readme changed).
   src = fetchFromGitHub {
     owner = "DNS-OARC";
     repo = "dnsperf";
     rev = "v${version}";
-    sha256 = "1acbpgk1d7hjs48j3w6xkmyf9xlxhqskjy50a16f9dvjwvvxp84b";
+    sha256 = "0dzi28z7hnyxbibwdsalvd93czf4d5pgmvrbn6hlh52znsn40gbb";
   };
 
   outputs = [ "out" "man" "doc" ];
 
-  nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ bind zlib openssl ]
-    ++ stdenv.lib.optionals stdenv.isLinux [ libcap.lib ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
+
+  buildInputs = [
+    openssl
+    ldns # optional for DDNS (but cheap anyway)
+    libck
+  ];
+
+  doCheck = true;
 
   # For now, keep including the old PDFs as well.
   # https://github.com/DNS-OARC/dnsperf/issues/27
@@ -33,7 +39,7 @@ stdenv.mkDerivation rec {
     cp ./dnsperf-src-*/doc/*.pdf "$doc/share/doc/dnsperf/"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     outputsToInstall = outputs; # The man pages and docs are likely useful to most.
 
     description = "Tools for DNS benchmaring";

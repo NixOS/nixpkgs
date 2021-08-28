@@ -1,15 +1,15 @@
-{stdenv, fetchurl, unzip}:
+{lib, stdenv, fetchurl, unzip}:
 
-stdenv.mkDerivation rec {
-  name = "tnt-${version}";
+stdenv.mkDerivation {
+  pname = "tnt";
   version = "3.0.12";
-  
+
   src = fetchurl {
-    url = https://math.nist.gov/tnt/tnt_3_0_12.zip;
+    url = "https://math.nist.gov/tnt/tnt_3_0_12.zip";
     sha256 = "1bzkfdb598584qlc058n8wqq9vbz714gr5r57401rsa9qaxhk5j7";
   };
 
-  buildInputs = [ unzip ];
+  nativeBuildInputs = [ unzip ];
 
   installPhase = ''
       mkdir -p $out/include
@@ -17,9 +17,9 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = https://math.nist.gov/tnt/;
+    homepage = "https://math.nist.gov/tnt/";
     description = "Template Numerical Toolkit: C++ headers for array and matrices";
-    license = stdenv.lib.licenses.publicDomain;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.publicDomain;
+    platforms = lib.platforms.unix;
   };
 }

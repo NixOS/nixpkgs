@@ -1,11 +1,11 @@
-{ stdenv, fetchFromGitHub, nasm }:
+{ lib, stdenv, fetchFromGitHub, nasm }:
 
 let arch =
   if stdenv.isi686 then "i386"
   else if stdenv.isx86_64 then "x86_64"
   else throw "Unknown architecture";
-in stdenv.mkDerivation rec {
-  name = "grub4dos-${version}";
+in stdenv.mkDerivation {
+  pname = "grub4dos";
   version = "0.4.6a-2019-05-12";
 
   src = fetchFromGitHub {
@@ -33,8 +33,8 @@ in stdenv.mkDerivation rec {
   # make[2]: *** No rule to make target 'pre_stage2_fullsize', needed by 'all-am'.  Stop.
   enableParallelBuilding = false;
 
-  meta = with stdenv.lib; {
-    homepage = http://grub4dos.chenall.net/;
+  meta = with lib; {
+    homepage = "http://grub4dos.chenall.net/";
     description = "GRUB for DOS is the dos extension of GRUB";
     maintainers = with maintainers; [ abbradar ];
     platforms = platforms.linux;

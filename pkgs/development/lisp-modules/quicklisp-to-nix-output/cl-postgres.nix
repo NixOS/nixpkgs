@@ -1,17 +1,18 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''cl-postgres'';
-  version = ''postmodern-20190107-git'';
+  baseName = "cl-postgres";
+  version = "postmodern-20210411-git";
 
   parasites = [ "cl-postgres/simple-date-tests" "cl-postgres/tests" ];
 
-  description = ''Low-level client library for PostgreSQL'';
+  description = "Low-level client library for PostgreSQL";
 
-  deps = [ args."fiveam" args."md5" args."simple-date_slash_postgres-glue" args."split-sequence" args."usocket" ];
+  deps = [ args."alexandria" args."bordeaux-threads" args."cl-base64" args."cl-ppcre" args."fiveam" args."ironclad" args."md5" args."simple-date" args."simple-date_slash_postgres-glue" args."split-sequence" args."uax-15" args."usocket" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/postmodern/2019-01-07/postmodern-20190107-git.tgz'';
-    sha256 = ''030p5kp593p4z7p3k0828dlayglw2si3q187z1fafgpvspp42sd5'';
+    url = "http://beta.quicklisp.org/archive/postmodern/2021-04-11/postmodern-20210411-git.tgz";
+    sha256 = "0q8izkkddmqq5sw55chkx6jrycawgchaknik5i84vynv50zirsbw";
   };
 
   packageName = "cl-postgres";
@@ -20,14 +21,20 @@ rec {
   overrides = x: x;
 }
 /* (SYSTEM cl-postgres DESCRIPTION Low-level client library for PostgreSQL
-    SHA256 030p5kp593p4z7p3k0828dlayglw2si3q187z1fafgpvspp42sd5 URL
-    http://beta.quicklisp.org/archive/postmodern/2019-01-07/postmodern-20190107-git.tgz
-    MD5 3f6f78c4fb0f5a8bb9f13247f1f3d6eb NAME cl-postgres FILENAME cl-postgres
+    SHA256 0q8izkkddmqq5sw55chkx6jrycawgchaknik5i84vynv50zirsbw URL
+    http://beta.quicklisp.org/archive/postmodern/2021-04-11/postmodern-20210411-git.tgz
+    MD5 8a75a05ba9e371f672f2620d40724cb2 NAME cl-postgres FILENAME cl-postgres
     DEPS
-    ((NAME fiveam FILENAME fiveam) (NAME md5 FILENAME md5)
+    ((NAME alexandria FILENAME alexandria)
+     (NAME bordeaux-threads FILENAME bordeaux-threads)
+     (NAME cl-base64 FILENAME cl-base64) (NAME cl-ppcre FILENAME cl-ppcre)
+     (NAME fiveam FILENAME fiveam) (NAME ironclad FILENAME ironclad)
+     (NAME md5 FILENAME md5) (NAME simple-date FILENAME simple-date)
      (NAME simple-date/postgres-glue FILENAME simple-date_slash_postgres-glue)
      (NAME split-sequence FILENAME split-sequence)
-     (NAME usocket FILENAME usocket))
-    DEPENDENCIES (fiveam md5 simple-date/postgres-glue split-sequence usocket)
-    VERSION postmodern-20190107-git SIBLINGS (postmodern s-sql simple-date)
+     (NAME uax-15 FILENAME uax-15) (NAME usocket FILENAME usocket))
+    DEPENDENCIES
+    (alexandria bordeaux-threads cl-base64 cl-ppcre fiveam ironclad md5
+     simple-date simple-date/postgres-glue split-sequence uax-15 usocket)
+    VERSION postmodern-20210411-git SIBLINGS (postmodern s-sql simple-date)
     PARASITES (cl-postgres/simple-date-tests cl-postgres/tests)) */

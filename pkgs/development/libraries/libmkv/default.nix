@@ -1,11 +1,12 @@
-{ stdenv, fetchgit, libtool, autoconf, automake }:
+{ lib, stdenv, fetchFromGitHub, libtool, autoconf, automake }:
 
 stdenv.mkDerivation rec {
-  name = "libmkv-${version}";
+  pname = "libmkv";
   version = "0.6.5.1";
 
-  src = fetchgit {
-    url = https://github.com/saintdev/libmkv.git;
+  src = fetchFromGitHub {
+    owner = "saintdev";
+    repo = pname;
     rev = "refs/tags/${version}";
     sha256 = "0pr9q7yprndl8d15ir7i7cznvmf1yqpvnsyivv763n6wryssq6dl";
   };
@@ -20,9 +21,9 @@ stdenv.mkDerivation rec {
       Library was meant to be an alternative to the official libmatroska library.
       It is written in plain C, and intended to be very portable.
     '';
-    homepage = https://github.com/saintdev/libmkv;
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = [ stdenv.lib.maintainers.wmertens ];
-    platforms = stdenv.lib.platforms.unix;
+    homepage = "https://github.com/saintdev/libmkv";
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.wmertens ];
+    platforms = lib.platforms.unix;
   };
 }

@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, dpkg, gawk, perl, wget, coreutils, utillinux
+{ lib, stdenv, fetchurl, dpkg, gawk, perl, wget, coreutils, util-linux
 , gnugrep, gnutar, gnused, gzip, makeWrapper }:
 # USAGE like this: debootstrap sid /tmp/target-chroot-directory
 # There is also cdebootstrap now. Is that easier to maintain?
-let binPath = stdenv.lib.makeBinPath [
+let binPath = lib.makeBinPath [
     coreutils
     dpkg
     gawk
@@ -14,14 +14,14 @@ let binPath = stdenv.lib.makeBinPath [
     wget
   ];
 in stdenv.mkDerivation rec {
-  name = "debootstrap-${version}";
-  version = "1.0.114";
+  pname = "debootstrap";
+  version = "1.0.124";
 
   src = fetchurl {
     # git clone git://git.debian.org/d-i/debootstrap.git
     # I'd like to use the source. However it's lacking the lanny script ? (still true?)
-    url = "mirror://debian/pool/main/d/debootstrap/debootstrap_${version}.tar.gz";
-    sha256 = "14lw18bhxap1g15q0rhslacj1bcrl69wrqcx6azmbvd92rl4bqd8";
+    url = "mirror://debian/pool/main/d/${pname}/${pname}_${version}.tar.gz";
+    sha256 = "sha256-dwDphksp8WaybFQVPtjCdbRvS5pgRou2B+AZpkwWzY8=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -33,7 +33,7 @@ in stdenv.mkDerivation rec {
 
     substituteInPlace debootstrap \
       --replace 'CHROOT_CMD="chroot '  'CHROOT_CMD="${coreutils}/bin/chroot ' \
-      --replace 'CHROOT_CMD="unshare ' 'CHROOT_CMD="${utillinux}/bin/unshare ' \
+      --replace 'CHROOT_CMD="unshare ' 'CHROOT_CMD="${util-linux}/bin/unshare ' \
       --replace /usr/bin/dpkg ${dpkg}/bin/dpkg \
       --replace '#!/bin/sh' '#!/bin/bash' \
       --subst-var-by VERSION ${version}
@@ -57,11 +57,11 @@ in stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Tool to create a Debian system in a chroot";
-    homepage = https://wiki.debian.org/Debootstrap;
-    license = stdenv.lib.licenses.mit;
-    maintainers = [ stdenv.lib.maintainers.marcweber ];
-    platforms = stdenv.lib.platforms.linux;
+    homepage = "https://wiki.debian.org/Debootstrap";
+    license = licenses.mit;
+    maintainers = with maintainers; [ marcweber ];
+    platforms = platforms.linux;
   };
 }

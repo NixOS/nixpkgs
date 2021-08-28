@@ -8,9 +8,9 @@ let
   printProperties = properties:
     concatMapStrings (propertyName:
       let
-        property = properties."${propertyName}";
+        property = properties.${propertyName};
       in
-      if isList property then "${propertyName}=(${lib.concatMapStrings (elem: "\"${toString elem}\" ") (properties."${propertyName}")})\n"
+      if isList property then "${propertyName}=(${lib.concatMapStrings (elem: "\"${toString elem}\" ") (properties.${propertyName})})\n"
       else "${propertyName}=\"${toString property}\"\n"
     ) (builtins.attrNames properties);
 
@@ -31,7 +31,7 @@ let
 
       ${concatMapStrings (containerName:
         let
-          containerProperties = cfg.containers."${containerName}";
+          containerProperties = cfg.containers.${containerName};
         in
         ''
           cat > ${containerName} <<EOF
@@ -49,10 +49,10 @@ let
 
       ${concatMapStrings (componentName:
         let
-          component = cfg.components."${containerName}"."${componentName}";
+          component = cfg.components.${containerName}.${componentName};
         in
         "ln -s ${component} ${containerName}/${componentName}\n"
-      ) (builtins.attrNames (cfg.components."${containerName}" or {}))}
+      ) (builtins.attrNames (cfg.components.${containerName} or {}))}
     '';
 
   componentsDir = pkgs.stdenv.mkDerivation {
@@ -65,6 +65,19 @@ let
         linkMutableComponents { inherit containerName; }
       ) (builtins.attrNames cfg.components)}
     '';
+  };
+
+  dysnomiaFlags = {
+    enableApacheWebApplication = config.services.httpd.enable;
+    enableAxis2WebService = config.services.tomcat.axis2.enable;
+    enableDockerContainer = config.virtualisation.docker.enable;
+    enableEjabberdDump = config.services.ejabberd.enable;
+    enableMySQLDatabase = config.services.mysql.enable;
+    enablePostgreSQLDatabase = config.services.postgresql.enable;
+    enableTomcatWebApplication = config.services.tomcat.enable;
+    enableMongoDatabase = config.services.mongodb.enable;
+    enableSubversionRepository = config.services.svnserve.enable;
+    enableInfluxDatabase = config.services.influxdb.enable;
   };
 in
 {
@@ -117,6 +130,12 @@ in
         description = "A list of paths containing additional modules that are added to the search folders";
         default = [];
       };
+
+      enableLegacyModules = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Whether to enable Dysnomia legacy process and wrapper modules";
+      };
     };
   };
 
@@ -142,33 +161,48 @@ in
 
     environment.systemPackages = [ cfg.package ];
 
-    dysnomia.package = pkgs.dysnomia.override (origArgs: {
-      enableApacheWebApplication = config.services.httpd.enable;
-      enableAxis2WebService = config.services.tomcat.axis2.enable;
-      enableEjabberdDump = config.services.ejabberd.enable;
-      enableMySQLDatabase = config.services.mysql.enable;
-      enablePostgreSQLDatabase = config.services.postgresql.enable;
-      enableSubversionRepository = config.services.svnserve.enable;
-      enableTomcatWebApplication = config.services.tomcat.enable;
-      enableMongoDatabase = config.services.mongodb.enable;
+    dysnomia.package = pkgs.dysnomia.override (origArgs: dysnomiaFlags // lib.optionalAttrs (cfg.enableLegacyModules) {
+      enableLegacy = builtins.trace ''
+        WARNING: Dysnomia has been configured to use the legacy 'process' and 'wrapper'
+        modules for compatibility reasons! If you rely on these modules, consider
+        migrating to better alternatives.
+
+        More information: https://raw.githubusercontent.com/svanderburg/dysnomia/f65a9a84827bcc4024d6b16527098b33b02e4054/README-legacy.md
+
+        If you have migrated already or don't rely on these Dysnomia modules, you can
+        disable legacy mode with the following NixOS configuration option:
+
+        dysnomia.enableLegacyModules = false;
+
+        In a future version of Dysnomia (and NixOS) the legacy option will go away!
+      '' true;
     });
 
     dysnomia.properties = {
       hostname = config.networking.hostName;
       inherit (config.nixpkgs.localSystem) system;
 
-      supportedTypes = (import "${pkgs.stdenv.mkDerivation {
-        name = "supportedtypes";
-        buildCommand = ''
-          ( echo -n "[ "
-            cd ${cfg.package}/libexec/dysnomia
-            for i in *
-            do
-                echo -n "\"$i\" "
-            done
-            echo -n " ]") > $out
-        '';
-      }}");
+      supportedTypes = [
+        "echo"
+        "fileset"
+        "process"
+        "wrapper"
+
+        # These are not base modules, but they are still enabled because they work with technology that are always enabled in NixOS
+        "systemd-unit"
+        "sysvinit-script"
+        "nixos-configuration"
+      ]
+      ++ optional (dysnomiaFlags.enableApacheWebApplication) "apache-webapplication"
+      ++ optional (dysnomiaFlags.enableAxis2WebService) "axis2-webservice"
+      ++ optional (dysnomiaFlags.enableDockerContainer) "docker-container"
+      ++ optional (dysnomiaFlags.enableEjabberdDump) "ejabberd-dump"
+      ++ optional (dysnomiaFlags.enableInfluxDatabase) "influx-database"
+      ++ optional (dysnomiaFlags.enableMySQLDatabase) "mysql-database"
+      ++ optional (dysnomiaFlags.enablePostgreSQLDatabase) "postgresql-database"
+      ++ optional (dysnomiaFlags.enableTomcatWebApplication) "tomcat-webapplication"
+      ++ optional (dysnomiaFlags.enableMongoDatabase) "mongo-database"
+      ++ optional (dysnomiaFlags.enableSubversionRepository) "subversion-repository";
     };
 
     dysnomia.containers = lib.recursiveUpdate ({
@@ -176,7 +210,7 @@ in
       wrapper = {};
     }
     // lib.optionalAttrs (config.services.httpd.enable) { apache-webapplication = {
-      documentRoot = config.services.httpd.documentRoot;
+      documentRoot = config.services.httpd.virtualHosts.localhost.documentRoot;
     }; }
     // lib.optionalAttrs (config.services.tomcat.axis2.enable) { axis2-webservice = {}; }
     // lib.optionalAttrs (config.services.ejabberd.enable) { ejabberd-dump = {
@@ -184,9 +218,9 @@ in
     }; }
     // lib.optionalAttrs (config.services.mysql.enable) { mysql-database = {
         mysqlPort = config.services.mysql.port;
+        mysqlSocket = "/run/mysqld/mysqld.sock";
       } // lib.optionalAttrs cfg.enableAuthentication {
         mysqlUsername = "root";
-        mysqlPassword = builtins.readFile (config.services.mysql.rootPassword);
       };
     }
     // lib.optionalAttrs (config.services.postgresql.enable) { postgresql-database = {
@@ -198,9 +232,18 @@ in
       tomcatPort = 8080;
     }; }
     // lib.optionalAttrs (config.services.mongodb.enable) { mongo-database = {}; }
+    // lib.optionalAttrs (config.services.influxdb.enable) {
+      influx-database = {
+        influxdbUsername = config.services.influxdb.user;
+        influxdbDataDir = "${config.services.influxdb.dataDir}/data";
+        influxdbMetaDir = "${config.services.influxdb.dataDir}/meta";
+      };
+    }
     // lib.optionalAttrs (config.services.svnserve.enable) { subversion-repository = {
       svnBaseDir = config.services.svnserve.svnBaseDir;
     }; }) cfg.extraContainerProperties;
+
+    boot.extraSystemdUnitPaths = [ "/etc/systemd-mutable/system" ];
 
     system.activationScripts.dysnomia = ''
       mkdir -p /etc/systemd-mutable/system

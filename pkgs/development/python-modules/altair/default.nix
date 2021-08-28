@@ -1,35 +1,62 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, pytest, jinja2, sphinx, vega_datasets, ipython, glibcLocales
-, entrypoints, jsonschema, numpy, pandas, six, toolz, typing
-, pythonOlder, recommonmark }:
+{ lib, buildPythonPackage, fetchPypi, isPy27
+, entrypoints
+, glibcLocales
+, ipython
+, jinja2
+, jsonschema
+, numpy
+, pandas
+, pytest
+, pythonOlder
+, recommonmark
+, six
+, sphinx
+, toolz
+, typing ? null
+, vega_datasets
+}:
 
 buildPythonPackage rec {
   pname = "altair";
-  version = "3.0.0";
+  version = "4.1.0";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0x4zm1xia6sln8dhwd803jlcii2a62fx3rlnj5vsa8g3anfc2v24";
+    sha256 = "0c99q5dy6f275yg1f137ird08wmwc1z8wmvjickkf2mvyka31p9y";
   };
 
-  postPatch = ''
-    # Tests require network
-    rm altair/examples/boxplot_max_min.py altair/examples/line_percent.py
-  '';
+  propagatedBuildInputs = [
+    entrypoints
+    jsonschema
+    numpy
+    pandas
+    six
+    toolz
+    jinja2
+  ] ++ lib.optionals (pythonOlder "3.5") [ typing ];
 
-  checkInputs = [ pytest jinja2 sphinx vega_datasets ipython glibcLocales recommonmark ];
+  checkInputs = [
+    glibcLocales
+    ipython
+    pytest
+    recommonmark
+    sphinx
+    vega_datasets
+  ];
 
-  propagatedBuildInputs = [ entrypoints jsonschema numpy pandas six toolz ]
-    ++ stdenv.lib.optionals (pythonOlder "3.5") [ typing ];
+  pythonImportsCheck = [ "altair" ];
 
   checkPhase = ''
     export LANG=en_US.UTF-8
-    py.test altair --doctest-modules
+    # histogram_responsive.py attempt network access, and cannot be disabled through pytest flags
+    rm altair/examples/histogram_responsive.py
+    pytest --doctest-modules altair
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A declarative statistical visualization library for Python.";
-    homepage = https://github.com/altair-viz/altair;
+    homepage = "https://github.com/altair-viz/altair";
     license = licenses.bsd3;
     maintainers = with maintainers; [ teh ];
     platforms = platforms.unix;

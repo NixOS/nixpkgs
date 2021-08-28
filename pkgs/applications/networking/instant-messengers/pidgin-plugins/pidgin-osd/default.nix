@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pidgin, xosd
+{ lib, stdenv, fetchFromGitHub, pidgin, xosd
 , autoreconfHook } :
 
 stdenv.mkDerivation rec {
@@ -22,8 +22,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ xosd pidgin ];
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/mbroemme/pidgin-osd;
+  meta = with lib; {
+    homepage = "https://github.com/mbroemme/pidgin-osd";
     description = "Plugin for Pidgin which implements on-screen display via libxosd";
     license = licenses.gpl3;
     platforms = platforms.linux;

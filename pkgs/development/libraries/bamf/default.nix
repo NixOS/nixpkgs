@@ -1,37 +1,53 @@
-{ stdenv, autoconf, automake, libtool, gnome3, which, fetchgit, libgtop, libwnck3, glib, vala, pkgconfig
-, libstartup_notification, gobject-introspection, gtk-doc, docbook_xsl
-, xorgserver, dbus, python2, wrapGAppsHook }:
+{ lib, stdenv
+, pantheon
+, autoconf
+, automake
+, libtool
+, gnome
+, which
+, fetchgit
+, libgtop
+, libwnck3
+, glib
+, vala
+, pkg-config
+, libstartup_notification
+, gobject-introspection
+, gtk-doc
+, docbook_xsl
+, xorgserver
+, dbus
+, python3
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
-  name = "bamf-${version}";
+  pname = "bamf";
   version = "0.5.4";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchgit {
-    url = https://git.launchpad.net/~unity-team/bamf;
+    url = "https://git.launchpad.net/~unity-team/bamf";
     rev = version;
     sha256 = "1klvij1wyhdj5d8sr3b16pfixc1yk8ihglpjykg7zrr1f50jfgsz";
   };
 
   nativeBuildInputs = [
+    (python3.withPackages (ps: with ps; [ lxml ])) # Tests
     autoconf
     automake
+    dbus
     docbook_xsl
-    gnome3.gnome-common
+    gnome.gnome-common
     gobject-introspection
     gtk-doc
     libtool
-    pkgconfig
+    pkg-config
     vala
     which
-    # Tests
-    python2
-    python2.pkgs.libxslt
-    python2.pkgs.libxml2
-    dbus
-    xorgserver
     wrapGAppsHook
+    xorgserver
   ];
 
   buildInputs = [
@@ -39,6 +55,11 @@ stdenv.mkDerivation rec {
     libgtop
     libstartup_notification
     libwnck3
+  ];
+
+  patches = [
+    # Port tests and checks to python3 lxml.
+    ./gtester2xunit-python3.patch
   ];
 
   # Fix hard-coded path
@@ -49,14 +70,14 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-    "--enable-headless-tests"
     "--enable-gtk-doc"
+    "--enable-headless-tests"
   ];
 
   # fix paths
   makeFlags = [
-    "INTROSPECTION_GIRDIR=${placeholder ''dev''}/share/gir-1.0/"
-    "INTROSPECTION_TYPELIBDIR=${placeholder ''out''}/lib/girepository-1.0"
+    "INTROSPECTION_GIRDIR=${placeholder "dev"}/share/gir-1.0/"
+    "INTROSPECTION_TYPELIBDIR=${placeholder "out"}/lib/girepository-1.0"
   ];
 
   preConfigure = ''
@@ -66,18 +87,18 @@ stdenv.mkDerivation rec {
   # TODO: Requires /etc/machine-id
   doCheck = false;
 
-  # ignore deprecation errors
-  NIX_CFLAGS_COMPILE = "-Wno-deprecated-declarations";
+  # glib-2.62 deprecations
+  NIX_CFLAGS_COMPILE = "-DGLIB_DISABLE_DEPRECATION_WARNINGS";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Application matching framework";
     longDescription = ''
       Removes the headache of applications matching
       into a simple DBus daemon and c wrapper library.
     '';
-    homepage = https://launchpad.net/bamf;
+    homepage = "https://launchpad.net/bamf";
     license = licenses.lgpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ davidak ];
+    maintainers = with maintainers; [ davidak ] ++ pantheon.maintainers;
   };
 }

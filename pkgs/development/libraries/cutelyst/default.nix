@@ -1,19 +1,19 @@
-{ stdenv, lib, fetchFromGitHub, cmake, pkgconfig, makeWrapper
+{ stdenv, lib, fetchFromGitHub, cmake, pkg-config, wrapQtAppsHook
 , qtbase, libuuid, libcap, uwsgi, grantlee, pcre
 }:
 
 stdenv.mkDerivation rec {
-  name = "cutelyst-${version}";
-  version = "2.7.0";
+  pname = "cutelyst";
+  version = "2.14.2";
 
   src = fetchFromGitHub {
     owner = "cutelyst";
     repo = "cutelyst";
     rev = "v${version}";
-    sha256 = "09cgfpr2k1jp98h1ahxqm5lmv3qbk0bcxpqpill6n5wmq2c8kl8b";
+    sha256 = "sha256-JUffOeUTeaZvEssP5hfSGipeRuQ7FzLF4bOizCFhe5o=";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig makeWrapper ];
+  nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];
   buildInputs = [ qtbase libuuid libcap uwsgi grantlee pcre ];
 
   cmakeFlags = [
@@ -24,22 +24,16 @@ stdenv.mkDerivation rec {
   ];
 
   preBuild = ''
-    export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:`pwd`/Cutelyst:`pwd`/EventLoopEPoll"
+    export LD_LIBRARY_PATH="$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}`pwd`/Cutelyst:`pwd`/EventLoopEPoll"
   '';
 
   postBuild = ''
     unset LD_LIBRARY_PATH
   '';
 
-  postInstall = ''
-    for prog in $out/bin/*; do
-      wrapProgram "$prog" --set QT_PLUGIN_PATH '${qtbase}/${qtbase.qtPluginPrefix}'
-    done
-  '';
-
   meta = with lib; {
     description = "C++ Web Framework built on top of Qt";
-    homepage = https://cutelyst.org/;
+    homepage = "https://cutelyst.org/";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ fpletz ];
   };

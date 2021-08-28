@@ -1,35 +1,80 @@
-{ stdenv, fetchurl, pkgconfig, xorg, alsaLib, libGLU_combined, aalib
-, libvorbis, libtheora, speex, zlib, perl, ffmpeg
-, flac, libcaca, libpulseaudio, libmng, libcdio, libv4l, vcdimager
+{ lib
+, stdenv
+, fetchurl
+, aalib
+, alsaLib
+, ffmpeg
+, flac
+, libGL
+, libGLU
+, libcaca
+, libcdio
+, libmng
 , libmpcdec
+, libpulseaudio
+, libtheora
+, libv4l
+, libvorbis
+, ncurses
+, perl
+, pkg-config
+, speex
+, vcdimager
+, xorg
+, zlib
 }:
 
 stdenv.mkDerivation rec {
-  name = "xine-lib-1.2.9";
+  pname = "xine-lib";
+  version = "1.2.11";
 
   src = fetchurl {
-    url = "mirror://sourceforge/xine/${name}.tar.xz";
-    sha256 = "13clir4qxl2zvsvvjd9yv3yrdhsnvcn5s7ambbbn5dzy9604xcrj";
+    url = "mirror://sourceforge/xine/xine-lib-${version}.tar.xz";
+    sha256 = "sha256-71GyHRDdoQRfp9cRvZFxz9rwpaKHQjO88W/98o7AcAU=";
   };
 
-  nativeBuildInputs = [ pkgconfig perl ];
-
-  buildInputs = [
-    xorg.libX11 xorg.libXv xorg.libXinerama xorg.libxcb xorg.libXext
-    alsaLib libGLU_combined aalib libvorbis libtheora speex perl ffmpeg flac
-    libcaca libpulseaudio libmng libcdio libv4l vcdimager libmpcdec
+  nativeBuildInputs = [
+    pkg-config
+    perl
   ];
-
-  NIX_LDFLAGS = "-lxcb-shm";
-
-  propagatedBuildInputs = [zlib];
+  buildInputs = [
+    aalib
+    alsaLib
+    ffmpeg
+    flac
+    libGL
+    libGLU
+    libcaca
+    libcdio
+    libmng
+    libmpcdec
+    libpulseaudio
+    libtheora
+    libv4l
+    libvorbis
+    ncurses
+    perl
+    speex
+    vcdimager
+    zlib
+  ] ++ (with xorg; [
+    libX11
+    libXext
+    libXinerama
+    libXv
+    libxcb
+  ]);
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
-    homepage = http://www.xine-project.org/;
+  NIX_LDFLAGS = "-lxcb-shm";
+
+
+  meta = with lib; {
+    homepage = "http://www.xinehq.de/";
     description = "A high-performance, portable and reusable multimedia playback engine";
+    license = with licenses; [ gpl2Plus lgpl2Plus ];
+    maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.linux;
-    license = with licenses; [ gpl2 lgpl2 ];
   };
 }

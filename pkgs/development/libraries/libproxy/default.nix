@@ -1,47 +1,72 @@
-{ stdenv, fetchFromGitHub, pkgconfig, cmake, zlib, fetchpatch
-, dbus, networkmanager, spidermonkey_38, pcre, python2, python3
-, SystemConfiguration, CoreFoundation, JavaScriptCore }:
+{ lib, stdenv
+, fetchFromGitHub
+, pkg-config
+, cmake
+, zlib
+, dbus
+, networkmanager
+, spidermonkey_68
+, pcre
+, gsettings-desktop-schemas
+, glib
+, makeWrapper
+, python3
+, SystemConfiguration
+, CoreFoundation
+, JavaScriptCore
+}:
 
 stdenv.mkDerivation rec {
-  name = "libproxy-${version}";
-  version = "0.4.15";
+  pname = "libproxy";
+  version = "0.4.17";
 
   src = fetchFromGitHub {
     owner = "libproxy";
     repo = "libproxy";
     rev = version;
-    sha256 = "10swd3x576pinx33iwsbd4h15fbh2snmfxzcmab4c56nb08qlbrs";
+    sha256 = "0v8q4ln0pd5231kidpi8wpwh0chcjwcmawcki53czlpdrc09z96r";
   };
 
-  outputs = [ "out" "dev" ]; # to deal with propagatedBuildInputs
+  outputs = [ "out" "dev" "py3" ];
 
-  nativeBuildInputs = [ pkgconfig cmake ];
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+    makeWrapper
+  ];
 
-  buildInputs = [ pcre python2 python3 zlib ]
-        ++ (if stdenv.hostPlatform.isDarwin
-            then [ SystemConfiguration CoreFoundation JavaScriptCore ]
-            else [ spidermonkey_38 dbus networkmanager ]);
+  buildInputs = [
+    pcre
+    python3
+    zlib
+  ] ++ (if stdenv.hostPlatform.isDarwin then [
+    SystemConfiguration
+    CoreFoundation
+    JavaScriptCore
+  ] else [
+    glib
+    spidermonkey_68
+    dbus
+    networkmanager
+  ]);
 
-  preConfigure = ''
-    cmakeFlagsArray+=(
-      "-DWITH_MOZJS=ON"
-      "-DPYTHON2_SITEPKG_DIR=$out/${python2.sitePackages}"
-      "-DPYTHON3_SITEPKG_DIR=$out/${python3.sitePackages}"
-    )
+  cmakeFlags = [
+    "-DWITH_MOZJS=ON"
+    "-DWITH_PYTHON2=OFF"
+    "-DPYTHON3_SITEPKG_DIR=${placeholder "py3"}/${python3.sitePackages}"
+  ];
+
+  postFixup = lib.optionalString stdenv.isLinux ''
+    # config_gnome3 uses the helper to find GNOME proxy settings
+    wrapProgram $out/libexec/pxgsettings --prefix XDG_DATA_DIRS : "${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}"
   '';
-
-  patches = stdenv.lib.optional stdenv.isDarwin
-    (fetchpatch {
-      url = "https://github.com/libproxy/libproxy/commit/44158f03f8522116758d335688ed840dfcb50ac8.patch";
-      sha256 = "0axfvb6j7gcys6fkwi9dkn006imhvm3kqr83gpwban8419n0q5v1";
-    });
 
   doCheck = false; # fails 1 out of 10 tests
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.lgpl21;
-    homepage = http://libproxy.github.io/libproxy/;
+    homepage = "http://libproxy.github.io/libproxy/";
     description = "A library that provides automatic proxy configuration management";
   };
 }

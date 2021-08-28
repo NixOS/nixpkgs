@@ -1,10 +1,10 @@
 { buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "mesos-dns-${version}";
+  pname = "mesos-dns";
   version = "0.1.2";
   rev = "v${version}";
-  
+
   goPackagePath = "github.com/mesosphere/mesos-dns";
 
   # Avoid including the benchmarking test helper in the output:

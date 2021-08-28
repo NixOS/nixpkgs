@@ -1,4 +1,4 @@
-{ stdenv, runtimeShell, lib, fetchurl, python, pythonPackages, unzip }:
+{ stdenv, runtimeShell, lib, fetchurl, python2Packages, unzip }:
 
 # This package uses a precompiled "binary" distribution of CuraByDagoma,
 # distributed by the editor.
@@ -13,8 +13,10 @@
 # I guess people owning a 3D printer generally don't use i686.
 # If, however, someone needs it, we certainly can find a solution.
 
-stdenv.mkDerivation rec {
-  name = "curabydagoma-${version}";
+let
+  pythonPackages = python2Packages;
+in stdenv.mkDerivation rec {
+  pname = "curabydagoma";
   # Version is the date, UNIX format
   version = "1520506579";
   # Hash of the user's choice: os, arch, package type...
@@ -26,7 +28,7 @@ stdenv.mkDerivation rec {
   };
   unpackCmd = "unzip $curSrc && tar zxf CuraByDagoma_amd64.tar.gz";
   nativeBuildInputs = [ unzip ];
-  buildInputs = [ python pythonPackages.pyopengl pythonPackages.wxPython pythonPackages.pyserial pythonPackages.numpy ];
+  buildInputs = [ pythonPackages.python pythonPackages.pyopengl pythonPackages.wxPython pythonPackages.pyserial pythonPackages.numpy ];
 
   # Compile all pyc files because the included pyc files may be older than the
   # py files. However, Python doesn't realize that because the packages
@@ -46,7 +48,7 @@ stdenv.mkDerivation rec {
     cat > $out/bin/curabydago <<EOF
     #!${runtimeShell}
     export PYTHONPATH=$PYTHONPATH
-    ${python.out}/bin/python $out/curabydago/cura.py
+    ${pythonPackages.python.interpreter} $out/curabydago/cura.py
     EOF
     chmod a+x $out/bin/curabydago
 
@@ -68,7 +70,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Slicer for 3D printers built by Dagoma";
-    homepage = https://dagoma.fr/cura-by-dagoma.html;
+    homepage = "https://dagoma.fr/cura-by-dagoma.html";
     license = licenses.agpl3;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ tiramiseb ];

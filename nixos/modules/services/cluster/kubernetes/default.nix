@@ -5,6 +5,29 @@ with lib;
 let
   cfg = config.services.kubernetes;
 
+  defaultContainerdConfigFile = pkgs.writeText "containerd.toml" ''
+    version = 2
+    root = "/var/lib/containerd"
+    state = "/run/containerd"
+    oom_score = 0
+
+    [grpc]
+      address = "/run/containerd/containerd.sock"
+
+    [plugins."io.containerd.grpc.v1.cri"]
+      sandbox_image = "pause:latest"
+
+    [plugins."io.containerd.grpc.v1.cri".cni]
+      bin_dir = "/opt/cni/bin"
+      max_conf_num = 0
+
+    [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc]
+      runtime_type = "io.containerd.runc.v2"
+
+    [plugins."io.containerd.grpc.v1.cri".containerd.runtimes."io.containerd.runc.v2".options]
+      SystemdCgroup = true
+  '';
+
   mkKubeConfig = name: conf: pkgs.writeText "${name}-kubeconfig" (builtins.toJSON {
     apiVersion = "v1";
     kind = "Config";
@@ -73,6 +96,10 @@ let
     };
   };
 in {
+
+  imports = [
+    (mkRemovedOptionModule [ "services" "kubernetes" "verbose" ] "")
+  ];
 
   ###### interface
 
@@ -218,14 +245,9 @@ in {
     })
 
     (mkIf cfg.kubelet.enable {
-      virtualisation.docker = {
+      virtualisation.containerd = {
         enable = mkDefault true;
-
-        # kubernetes needs access to logs
-        logDriver = mkDefault "json-file";
-
-        # iptables must be disabled for kubernetes
-        extraOptions = "--iptables=false --ip-masq=false";
+        configFile = mkDefault defaultContainerdConfigFile;
       };
     })
 
@@ -256,40 +278,15 @@ in {
         wantedBy = [ "multi-user.target" ];
       };
 
-      systemd.targets.kube-control-plane-online = {
-        wantedBy = [ "kubernetes.target" ];
-        before = [ "kubernetes.target" ];
-      };
-
-      systemd.services.kube-control-plane-online = rec {
-        description = "Kubernetes control plane is online";
-        wantedBy = [ "kube-control-plane-online.target" ];
-        after = [ "kube-scheduler.service" "kube-controller-manager.service" ];
-        before = [ "kube-control-plane-online.target" ];
-        path = [ pkgs.curl ];
-        preStart = ''
-          until curl -Ssf ${cfg.apiserverAddress}/healthz do
-            echo curl -Ssf ${cfg.apiserverAddress}/healthz: exit status $?
-            sleep 3
-          done
-        '';
-        script = "echo Ok";
-        serviceConfig = {
-          TimeoutSec = "500";
-        };
-      };
-
       systemd.tmpfiles.rules = [
         "d /opt/cni/bin 0755 root root -"
         "d /run/kubernetes 0755 kubernetes kubernetes -"
         "d /var/lib/kubernetes 0755 kubernetes kubernetes -"
       ];
 
-      users.users = singleton {
-        name = "kubernetes";
+      users.users.kubernetes = {
         uid = config.ids.uids.kubernetes;
         description = "Kubernetes user";
-        extraGroups = [ "docker" ];
         group = "kubernetes";
         home = cfg.dataDir;
         createHome = true;
@@ -302,8 +299,6 @@ in {
       services.kubernetes.apiserverAddress = mkDefault ("https://${if cfg.apiserver.advertiseAddress != null
                           then cfg.apiserver.advertiseAddress
                           else "${cfg.masterAddress}:${toString cfg.apiserver.securePort}"}");
-
-      services.kubernetes.kubeconfig.server = mkDefault cfg.apiserverAddress;
     })
   ];
 }

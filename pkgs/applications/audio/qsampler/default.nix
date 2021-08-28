@@ -1,24 +1,24 @@
-{ stdenv, fetchurl, autoconf, automake, libtool, pkgconfig, qttools
-, liblscp, libgig, qtbase }:
+{ lib, fetchurl, autoconf, automake, libtool, pkg-config, qttools
+, liblscp, libgig, qtbase, mkDerivation }:
 
-stdenv.mkDerivation rec {
-  name = "qsampler-${version}";
-  version = "0.5.5";
+mkDerivation rec {
+  pname = "qsampler";
+  version = "0.6.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/qsampler/${name}.tar.gz";
-    sha256 = "1li2p8zknrdr62wlaassfvgski0rlbr3lvrzywbh32dq8j50w8zf";
+    url = "mirror://sourceforge/qsampler/${pname}-${version}.tar.gz";
+    sha256 = "1wr7k739zx2nz00b810f60g9k3y92w05nfci987hw7y2sks9rd8j";
   };
 
-  nativeBuildInputs = [ autoconf automake libtool pkgconfig qttools ];
+  nativeBuildInputs = [ autoconf automake libtool pkg-config qttools ];
   buildInputs = [ liblscp libgig qtbase ];
 
   preConfigure = "make -f Makefile.svn";
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
-    homepage = http://www.linuxsampler.org;
+  meta = with lib; {
+    homepage = "http://www.linuxsampler.org";
     description = "Graphical frontend to LinuxSampler";
     license = licenses.gpl2;
     maintainers = [ maintainers.goibhniu ];

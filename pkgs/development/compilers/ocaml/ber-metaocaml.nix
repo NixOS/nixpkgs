@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , ncurses
 , libX11, xorgproto, buildEnv
 }:
@@ -6,7 +6,7 @@
 let
    useX11 = stdenv.isi686 || stdenv.isx86_64;
    x11deps = [ libX11 xorgproto ];
-   inherit (stdenv.lib) optionals;
+   inherit (lib) optionals;
 
    baseOcamlBranch  = "4.07";
    baseOcamlVersion = "${baseOcamlBranch}.1";
@@ -14,7 +14,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "ber-metaocaml-${version}";
+  pname = "ber-metaocaml";
   version = metaocamlPatch;
 
   src = fetchurl {
@@ -43,21 +43,21 @@ stdenv.mkDerivation rec {
 
   postConfigure = ''
     tar -xvzf $metaocaml
-    cd ${name}
+    cd ${pname}-${version}
     make patch
     cd ..
   '';
 
   buildPhase = ''
     make world
-    make -i install
 
     make bootstrap
     make opt.opt
+    make -i install
     make installopt
     mkdir -p $out/include
     ln -sv $out/lib/ocaml/caml $out/include/caml
-    cd ${name}
+    cd ${pname}-${version}
     make all
   '';
 
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
   '';
 
   checkPhase = ''
-    cd ${name}
+    cd ${pname}-${version}
     make test
     make test-compile
     make test-native
@@ -78,9 +78,9 @@ stdenv.mkDerivation rec {
     nativeCompilers = true;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description     = "Multi-Stage Programming extension for OCaml";
-    homepage        = http://okmij.org/ftp/ML/MetaOCaml.html;
+    homepage        = "http://okmij.org/ftp/ML/MetaOCaml.html";
     license         = with licenses; [ /* compiler */ qpl /* library */ lgpl2 ];
     maintainers     = with maintainers; [ thoughtpolice ];
 

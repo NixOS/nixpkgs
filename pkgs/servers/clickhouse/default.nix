@@ -1,36 +1,54 @@
-{ stdenv, fetchFromGitHub, cmake, libtool
-, boost, capnproto, cctz, clang-unwrapped, double-conversion, gperftools, icu
-, libcpuid, libxml2, lld, llvm, lz4 , mysql, openssl, poco, re2, rdkafka
-, readline, sparsehash, unixODBC, zstd, ninja, jemalloc, brotli, protobuf, xxHash
+{ lib, stdenv, fetchFromGitHub, cmake, libtool, llvm-bintools, ninja
+, boost, brotli, capnproto, cctz, clang-unwrapped, double-conversion
+, icu, jemalloc, libcpuid, libxml2, lld, llvm, lz4, libmysqlclient, openssl, perl
+, poco, protobuf, python3, rapidjson, re2, rdkafka, readline, sparsehash, unixODBC
+, xxHash, zstd
 }:
 
 stdenv.mkDerivation rec {
-  name = "clickhouse-${version}";
-  version = "19.6.2.11";
+  pname = "clickhouse";
+  version = "21.3.11.5";
+
+  broken = stdenv.buildPlatform.is32bit; # not supposed to work on 32-bit https://github.com/ClickHouse/ClickHouse/pull/23959#issuecomment-835343685
 
   src = fetchFromGitHub {
-    owner  = "yandex";
+    owner  = "ClickHouse";
     repo   = "ClickHouse";
-    rev    = "v${version}-stable";
-    sha256 = "0bs38a8dm5x43klx4nc5dwkkxpab12lp2chyvc2y47c75j7rn5d7";
+    rev    = "v${version}-lts";
+    fetchSubmodules = true;
+    sha256 = "sha256-V62Z82p21qtvSOsoXM225/Wkc9F+dvVMz0xpVjhgZVo=";
   };
 
-  nativeBuildInputs = [ cmake libtool ninja ];
+  nativeBuildInputs = [ cmake libtool llvm-bintools ninja ];
   buildInputs = [
-    boost capnproto cctz clang-unwrapped double-conversion gperftools icu
-    libcpuid libxml2 lld llvm lz4 mysql.connector-c openssl poco re2 rdkafka
-    readline sparsehash unixODBC zstd jemalloc brotli protobuf xxHash
-  ];
-
-  cmakeFlags = [
-    "-DENABLE_TESTS=OFF"
-    "-DUNBUNDLED=ON"
-    "-DUSE_STATIC_LIBRARIES=OFF"
+    boost brotli capnproto cctz clang-unwrapped double-conversion
+    icu jemalloc libcpuid libxml2 lld llvm lz4 libmysqlclient openssl perl
+    poco protobuf python3 rapidjson re2 rdkafka readline sparsehash unixODBC
+    xxHash zstd
   ];
 
   postPatch = ''
-    patchShebangs dbms/programs/clang/copy_headers.sh
+    patchShebangs src/
+
+    substituteInPlace src/Storages/System/StorageSystemLicenses.sh \
+      --replace 'git rev-parse --show-toplevel' '$src'
+    substituteInPlace utils/check-style/check-duplicate-includes.sh \
+      --replace 'git rev-parse --show-toplevel' '$src'
+    substituteInPlace utils/check-style/check-ungrouped-includes.sh \
+      --replace 'git rev-parse --show-toplevel' '$src'
+    substituteInPlace utils/generate-ya-make/generate-ya-make.sh \
+      --replace 'git rev-parse --show-toplevel' '$src'
+    substituteInPlace utils/list-licenses/list-licenses.sh \
+      --replace 'git rev-parse --show-toplevel' '$src'
+    substituteInPlace utils/check-style/check-style \
+      --replace 'git rev-parse --show-toplevel' '$src'
   '';
+
+  cmakeFlags = [
+    "-DENABLE_TESTS=OFF"
+    "-DENABLE_EMBEDDED_COMPILER=ON"
+    "-USE_INTERNAL_LLVM_LIBRARY=OFF"
+  ];
 
   postInstall = ''
     rm -rf $out/share/clickhouse-test
@@ -43,8 +61,11 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  meta = with stdenv.lib; {
-    homepage = https://clickhouse.yandex/;
+  # Builds in 7+h with 2 cores, and ~20m with a big-parallel builder.
+  requiredSystemFeatures = [ "big-parallel" ];
+
+  meta = with lib; {
+    homepage = "https://clickhouse.tech/";
     description = "Column-oriented database management system";
     license = licenses.asl20;
     maintainers = with maintainers; [ orivej ];

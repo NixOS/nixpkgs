@@ -8,13 +8,12 @@ let
   ldmcfg = dmcfg.lightdm;
   cfg = ldmcfg.greeters.pantheon;
 
-  xgreeters = pkgs.linkFarm "pantheon-greeter-xgreeters" [{
-    path = "${pkgs.pantheon.elementary-greeter}/share/xgreeters/io.elementary.greeter.desktop";
-    name = "io.elementary.greeter.desktop";
-  }];
-
 in
 {
+  meta = {
+    maintainers = with maintainers; [ ];
+  };
+
   options = {
 
     services.xserver.displayManager.lightdm.greeters.pantheon = {
@@ -33,22 +32,18 @@ in
 
   config = mkIf (ldmcfg.enable && cfg.enable) {
 
-    warnings = [
-      ''
-        The Pantheon greeter is suboptimal in NixOS and can possibly put you in
-        a situation where you cannot start a session when switching desktopManagers.
-      ''
-    ];
-
     services.xserver.displayManager.lightdm.greeters.gtk.enable = false;
 
     services.xserver.displayManager.lightdm.greeter = mkDefault {
-      package = xgreeters;
+      package = pkgs.pantheon.elementary-greeter.xgreeters;
       name = "io.elementary.greeter";
     };
 
+    # Show manual login card.
+    services.xserver.displayManager.lightdm.extraSeatDefaults = "greeter-show-manual-login=true";
+
     environment.etc."lightdm/io.elementary.greeter.conf".source = "${pkgs.pantheon.elementary-greeter}/etc/lightdm/io.elementary.greeter.conf";
-    environment.etc."wingpanel.d/io.elementary.greeter.whitelist".source = "${pkgs.pantheon.elementary-default-settings}/etc/wingpanel.d/io.elementary.greeter.whitelist";
+    environment.etc."wingpanel.d/io.elementary.greeter.allowed".source = "${pkgs.pantheon.elementary-default-settings}/etc/wingpanel.d/io.elementary.greeter.allowed";
 
   };
 }

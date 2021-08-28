@@ -1,16 +1,16 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "untie-${version}";
+  pname = "untie";
   version = "0.3";
   src = fetchurl {
-    url = "http://guichaz.free.fr/untie/files/${name}.tar.bz2";
+    url = "http://guichaz.free.fr/untie/files/${pname}-${version}.tar.bz2";
     sha256 = "1334ngvbi4arcch462mzi5vxvxck4sy1nf0m58116d9xmx83ak0m";
   };
 
-  makeFlags = "PREFIX=$(out)";
+  makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A tool to run processes untied from some of the namespaces";
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;

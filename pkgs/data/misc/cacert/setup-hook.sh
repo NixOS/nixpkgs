@@ -1,7 +1,7 @@
-cacertHook() {
-    export NIX_SSL_CERT_FILE=@out@/etc/ssl/certs/ca-bundle.crt
-    # left for compatibility
-    export SSL_CERT_FILE=@out@/etc/ssl/certs/ca-bundle.crt
-}
+export NIX_SSL_CERT_FILE=@out@/etc/ssl/certs/ca-bundle.crt
 
-addEnvHooks "$targetOffset" cacertHook
+# compatibility
+#  - openssl
+export SSL_CERT_FILE=@out@/etc/ssl/certs/ca-bundle.crt
+#  - Haskell x509-system
+export SYSTEM_CERTIFICATE_PATH=@out@/etc/ssl/certs/ca-bundle.crt

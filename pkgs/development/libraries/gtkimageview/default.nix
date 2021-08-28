@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, pkgconfig, gtk2 }:
+{ fetchurl, lib, stdenv, pkg-config, gtk2 }:
 
 stdenv.mkDerivation rec {
   name = "gtkimageview-1.6.4";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1if3yh5z6nkv5wnkk0qyy9pkk03vn5rqbfk23q87kj39pqscgr37";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ gtk2 ];
 
   preConfigure = ''
@@ -21,19 +21,19 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://wiki.gnome.org/Projects/GTK%2B/GtkImageView";
 
-    description = "Image viewer widget for GTK+";
+    description = "Image viewer widget for GTK";
 
     longDescription =
-      '' GtkImageView is a simple image viewer widget for GTK+.  Similar to
+      '' GtkImageView is a simple image viewer widget for GTK.  Similar to
          the image viewer panes in gThumb or Eye of Gnome.  It makes writing
          image viewing and editing applications easy.  Among its features
          are: mouse and keyboard zooming; scrolling and dragging; adjustable
          interpolation; GIF animation support.
        '';
 
-    license = stdenv.lib.licenses.lgpl2Plus;
+    license = lib.licenses.lgpl2Plus;
 
     maintainers = [ ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , pygments
@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "pudb";
-  version = "2019.1";
+  version = "2020.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "19imrr17jnkd6fd2w1zzh63z0hcipg5b9v2x4svqm5c08p3cyc5c";
+    sha256 = "2ef23d3371439f13fffbe7f8b9fc180a19d4183dc9cab204d878d7c7766464bf";
   };
 
   propagatedBuildInputs = [ pygments urwid ];
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   # Tests fail on python 3 due to writes to the read-only home directory
   doCheck = !isPy3k;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A full-screen, console-based Python debugger";
     license = licenses.mit;
     platforms = platforms.all;

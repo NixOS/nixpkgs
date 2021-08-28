@@ -1,33 +1,25 @@
-{ stdenv, fetchurl, pciutils }:
+{ lib, stdenv, fetchurl
+, autoreconfHook
+, pciutils
+, pkg-config
+, xorg
+}:
 
-stdenv.mkDerivation {
-  name = "radeontool-1.5";
-
-  inherit pciutils;
-
-  # Don't know wether it's a good idea to hardcode the lspci path..
-  # But it will work on nix..
-  postUnpack = ''
-    cd $sourceRoot
-    sed -i "s%lspci%$pciutils/sbin/lspci%g" radeontool.c
-    cd ..
-  '';
+stdenv.mkDerivation rec {
+  pname = "radeontool";
+  version = "1.6.3";
 
   src = fetchurl {
-    url = http://fdd.com/software/radeon/radeontool-1.5.tar.gz;
-    sha256 = "0qbkawhhq0y0gqbbql7q04y0v0hims5c4jkjsbc1y03rf9kr10ar";
+    url = "https://people.freedesktop.org/~airlied/radeontool/${pname}-${version}.tar.gz";
+    sha256 = "0mjk9wr9rsb17yy92j6yi16hfpa6v5r1dbyiy60zp4r125wr63za";
   };
 
-  installPhase = ''
-    mkdir -p $out/bin
-    chmod +x lightwatch.pl
-    cp radeontool lightwatch.pl $out/bin
-  '';
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  buildInputs = [ xorg.libpciaccess ];
 
-  meta = {
-    description = "Control the backlight and external video output of ATI Radeon Mobility graphics cards";
-    homepage = http://fdd.com/software/radeon/;
-    license = stdenv.lib.licenses.zlib;
-    broken = true;
+  meta = with lib; {
+    description = "Lowlevel tools to tweak register and dump state on radeon GPUs";
+    homepage = "https://airlied.livejournal.com/";
+    license = licenses.zlib;
   };
 }

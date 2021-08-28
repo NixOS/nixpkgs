@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , nose
@@ -22,8 +22,8 @@ buildPythonPackage rec {
   # fails with obscure error
   doCheck = !isPy3k;
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/erikrose/nose-progressive;
+  meta = with lib; {
+    homepage = "https://github.com/erikrose/nose-progressive";
     description = "A testrunner with a progress bar and smarter tracebacks";
     license = licenses.mit;
     maintainers = with maintainers; [ domenkozar ];

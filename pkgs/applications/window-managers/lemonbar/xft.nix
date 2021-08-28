@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, perl, libxcb, libXft }:
+{ lib, stdenv, fetchFromGitHub, perl, libxcb, libXft }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "lemonbar-xft-unstable-2016-02-17";
 
   src = fetchFromGitHub {
@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A lightweight xcb based bar with XFT-support";
-    homepage = https://github.com/krypt-n/bar;
+    homepage = "https://github.com/krypt-n/bar";
     license = "Custom";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

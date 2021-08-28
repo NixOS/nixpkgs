@@ -1,11 +1,11 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchgit
 , sphinx
 , isPy3k
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "cliapp";
   version = "1.20150305";
   disabled = isPy3k;
@@ -21,11 +21,11 @@ buildPythonPackage rec {
   # error: invalid command 'test'
   doCheck = false;
 
-  meta = with stdenv.lib; {
-    homepage = http://liw.fi/cliapp/;
+  meta = with lib; {
+    homepage = "https://liw.fi/cliapp/";
     description = "Python framework for Unix command line programs";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ rickynils ];
+    maintainers = [];
   };
 
 }

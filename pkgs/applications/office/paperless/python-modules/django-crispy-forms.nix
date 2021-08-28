@@ -1,15 +1,20 @@
-{ lib, buildPythonPackage, fetchFromGitHub
-, pytest, pytest-django, django }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, pytest-django
+, django
+}:
 
 buildPythonPackage rec {
   pname = "django-crispy-forms";
-  version = "2019.04.21";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "django-crispy-forms";
     repo = "django-crispy-forms";
-    rev = "e25a5326697e5b545689b3a914e516404a6911bb";
-    sha256 = "12zqa76q6i7j47aqvhilivpbdplgp9zw2q8zfcjzlgclrqafaj39";
+    rev = version;
+    sha256 = "0y6kskfxgckb9npcgwx4zrs5n9px159zh9zhinhxi3i7wlriqpf5";
   };
 
   # For reasons unknown, the source dir must contain a dash
@@ -19,17 +24,15 @@ buildPythonPackage rec {
     export sourceRoot=source-
   '';
 
-  checkInputs = [ pytest pytest-django django ];
+  checkInputs = [ django pytest-django pytestCheckHook ];
 
-  checkPhase = ''
-    PYTHONPATH="$(pwd):$PYTHONPATH" \
-    DJANGO_SETTINGS_MODULE=crispy_forms.tests.test_settings \
-      pytest crispy_forms/tests
+  preCheck = ''
+    export DJANGO_SETTINGS_MODULE=crispy_forms.tests.test_settings
   '';
 
   meta = with lib; {
     description = "The best way to have DRY Django forms";
-    homepage = https://github.com/maraujop/django-crispy-forms;
+    homepage = "https://github.com/maraujop/django-crispy-forms";
     license = licenses.mit;
     maintainers = with maintainers; [ earvstedt ];
   };

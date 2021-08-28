@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , pytest
@@ -10,11 +10,11 @@
 }:
 buildPythonPackage rec {
   pname = "pytest-django";
-  version = "3.4.8";
+  version = "4.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1vj2xfb6jl570zmmwlhvfpj7af5q554z72z51ril07gyfkkq6cjd";
+    sha256 = "26f02c16d36fd4c8672390deebe3413678d89f30720c16efb8b2a6bf63b9041f";
   };
 
   nativeBuildInputs = [ pytest setuptools_scm ];
@@ -24,9 +24,9 @@ buildPythonPackage rec {
   # Complicated. Requires Django setup.
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "py.test plugin for testing of Django applications";
-    homepage = https://pytest-django.readthedocs.org/en/latest/;
+    homepage = "https://pytest-django.readthedocs.org/en/latest/";
     license = licenses.bsd3;
   };
 }

@@ -1,20 +1,41 @@
-{ stdenv, fetchurl, itstool, libxml2, gettext, gnome3 }:
+{ lib, stdenv
+, fetchurl
+, gettext
+, gnome
+, itstool
+, libxml2
+, yelp-tools
+}:
 
 stdenv.mkDerivation rec {
   pname = "gnome-user-docs";
-  version = "3.2.2";
+  version = "40.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1ka0nw2kc85p10y8x31v0wv06a88k7qrgafp4ys04y9fzz0rkcjj";
+    url = "mirror://gnome/sources/gnome-user-docs/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    sha256 = "09ld9r29nz64s04fmp3b2wwldmfnwxp4w36dkh7mbz5pdd3z7fwk";
   };
 
-  nativeBuildInputs = [ itstool libxml2 gettext ];
+  nativeBuildInputs = [
+    gettext
+    itstool
+    libxml2
+    yelp-tools
+  ];
+
+  enableParallelBuilding = true;
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
-      attrPath = "gnome3.gnome-user-docs";
     };
+  };
+
+  meta = with lib; {
+    description = "User and system administration help for the GNOME desktop";
+    homepage = "https://help.gnome.org/users/gnome-help/";
+    license = licenses.cc-by-30;
+    maintainers = teams.gnome.members;
+    platforms = platforms.all;
   };
 }

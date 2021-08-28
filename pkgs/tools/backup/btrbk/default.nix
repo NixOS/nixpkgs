@@ -1,16 +1,16 @@
-{ stdenv, fetchurl, coreutils, bash, btrfs-progs, openssh, perl, perlPackages
-, utillinux, asciidoc, makeWrapper }:
+{ lib, stdenv, fetchurl, bash, btrfs-progs, openssh, perl, perlPackages
+, util-linux, asciidoc, asciidoctor, mbuffer, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "btrbk-${version}";
-  version = "0.28.0";
+  pname = "btrbk";
+  version = "0.29.1";
 
   src = fetchurl {
-    url = "https://digint.ch/download/btrbk/releases/${name}.tar.xz";
-    sha256 = "1bqgcbkdd5s3l3ba1ifa9l523r8cr5y3arjdy9f6rmm840kn7xzf";
+    url = "https://digint.ch/download/btrbk/releases/${pname}-${version}.tar.xz";
+    sha256 = "153inyvvnl17hq1w3nsa783havznaykdam2yrj775bmi2wg6fvwn";
   };
 
-  nativeBuildInputs = [ asciidoc makeWrapper ];
+  nativeBuildInputs = [ asciidoc asciidoctor makeWrapper ];
 
   buildInputs = with perlPackages; [ perl DateCalc ];
 
@@ -24,29 +24,23 @@ stdenv.mkDerivation rec {
     # Tainted Mode disables PERL5LIB
     substituteInPlace btrbk --replace "perl -T" "perl"
 
-    # Fix btrbk-mail
-    substituteInPlace contrib/cron/btrbk-mail \
-      --replace "/bin/date" "${coreutils}/bin/date" \
-      --replace "/bin/echo" "${coreutils}/bin/echo" \
-      --replace '$btrbk' 'btrbk'
-
     # Fix SSH filter script
     sed -i '/^export PATH/d' ssh_filter_btrbk.sh
-    substituteInPlace ssh_filter_btrbk.sh --replace logger ${utillinux}/bin/logger
+    substituteInPlace ssh_filter_btrbk.sh --replace logger ${util-linux}/bin/logger
   '';
 
   preFixup = ''
     wrapProgram $out/sbin/btrbk \
       --set PERL5LIB $PERL5LIB \
-      --prefix PATH ':' "${stdenv.lib.makeBinPath [ btrfs-progs bash openssh ]}"
+      --prefix PATH ':' "${lib.makeBinPath [ btrfs-progs bash mbuffer openssh ]}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A backup tool for btrfs subvolumes";
-    homepage = http://digint.ch/btrbk;
+    homepage = "https://digint.ch/btrbk";
     license = licenses.gpl3;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ the-kenny ];
+    maintainers = with maintainers; [ asymmetric ];
     inherit version;
   };
 }

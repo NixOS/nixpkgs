@@ -1,24 +1,24 @@
-{ stdenv, fetchurl, writeText, zlib, rpmextract, patchelf, which }:
+{ lib, stdenv, fetchurl, writeText, zlib, rpmextract, patchelf, which }:
 
 let
   p = if stdenv.is64bit then {
       arch = "x86_64";
       gcclib = "${stdenv.cc.cc.lib}/lib64";
-      sha256 = "1hxsizk3hm1465wkxwdbbcffgi3r64y3r0zsfzsvhvnzx4y5dadm";
+      sha256 = "e4f579963199f05476657f0066beaa32d1261aef2203382f3919e1ed4bc4594e";
     }
     else {
       arch = "i386";
       gcclib = "${stdenv.cc.cc.lib}/lib";
-      sha256 = "1s829q8gy9xgz0jm7w70aljqs2h49x402blqfr9zvn806aprmrm5";
+      sha256 = "69113bf33ba0c57a363305b76361f2866c3b8394b173eed0f49db1f50bfe0373";
     };
 in
 stdenv.mkDerivation rec {
 
-  name = "yandex-disk-${version}";
-  version = "0.1.5.1010";
+  pname = "yandex-disk";
+  version = "0.1.6.1074";
 
   src = fetchurl {
-    url = "https://repo.yandex.ru/yandex-disk/rpm/stable/${p.arch}/${name}-1.fedora.${p.arch}.rpm";
+    url = "https://repo.yandex.ru/yandex-disk/rpm/stable/${p.arch}/${pname}-${version}-1.fedora.${p.arch}.rpm";
     sha256 = p.sha256;
   };
 
@@ -32,12 +32,13 @@ stdenv.mkDerivation rec {
     cd unpacked
     ${rpmextract}/bin/rpmextract $src
 
+    mkdir -p $out/share/bash-completion/completions
     cp -r -t $out/bin usr/bin/*
     cp -r -t $out/share usr/share/*
-    cp -r -t $out/etc etc/*
+    cp -r -t $out/share/bash-completion/completions etc/bash_completion.d/*
 
     sed -i 's@have@${which}/bin/which >/dev/null 2>\&1@' \
-      $out/etc/bash_completion.d/yandex-disk-completion.bash
+      $out/share/bash-completion/completions/yandex-disk-completion.bash
 
     ${patchelf}/bin/patchelf \
       --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
@@ -46,11 +47,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://help.yandex.com/disk/cli-clients.xml;
+    homepage = "https://help.yandex.com/disk/cli-clients.xml";
     description = "A free cloud file storage service";
-    maintainers = with stdenv.lib.maintainers; [ smironov jagajaga ];
+    maintainers = with lib.maintainers; [ smironov jagajaga ];
     platforms = ["i686-linux" "x86_64-linux"];
-    license = stdenv.lib.licenses.unfree;
+    license = lib.licenses.unfree;
     longDescription = ''
       Yandex.Disk console client for Linux lets you manage files on Disk without
       using a window interface or programs that support WebDAV. The advantages

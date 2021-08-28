@@ -1,17 +1,28 @@
-{ stdenv, fetchFromGitHub, python, fontforge }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, python3 }:
 
-stdenv.mkDerivation rec {
-  name = "monoid-${version}";
-  version = "2016-07-21";
+stdenv.mkDerivation {
+  pname = "monoid";
+  version = "2018-06-03";
 
   src = fetchFromGitHub {
     owner = "larsenwork";
     repo = "monoid";
-    rev = "e9d77ec18c337dc78ceae787a673328615f0b120";
-    sha256 = "07h5q6cn6jjpmxp9vyag1bxx481waz344sr2kfs7d37bba8yjydj";
+    rev = "a331c7c5f402c449f623e0d0895bd2fd8dc30ccf";
+    sha256 = "sha256-RV6lxv5CjywTMcuPMj6rdjLKrap7zLJ7niaNeF//U1Y=";
   };
 
-  nativeBuildInputs = [ python fontforge ];
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/larsenwork/monoid/pull/233/commits/f84f2ed61301ee84dadd16351314394f22ebed2f.patch";
+      sha256 = "sha256-CxfFHlR7TB64pvrfzVfUDkPwuRO2UdGOhXwW98c+oQU=";
+    })
+  ];
+
+  nativeBuildInputs = [
+    (python3.withPackages (pp: with pp; [
+      fontforge
+    ]))
+  ];
 
   buildPhase = ''
     local _d=""
@@ -28,8 +39,8 @@ stdenv.mkDerivation rec {
     install -m444 -Dt $out/share/doc            Readme.md
   '';
 
-  meta = with stdenv.lib; {
-    homepage = http://larsenwork.com/monoid;
+  meta = with lib; {
+    homepage = "http://larsenwork.com/monoid";
     description = "Customisable coding font with alternates, ligatures and contextual positioning";
     license = [ licenses.ofl licenses.mit ];
     platforms = platforms.all;

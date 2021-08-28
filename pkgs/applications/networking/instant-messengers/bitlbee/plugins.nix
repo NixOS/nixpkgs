@@ -1,6 +1,6 @@
-{ stdenv, bitlbee }:
+{ lib, stdenv, bitlbee }:
 
-with stdenv.lib;
+with lib;
 
 plugins:
 

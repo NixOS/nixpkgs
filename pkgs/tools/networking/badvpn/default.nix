@@ -1,4 +1,4 @@
-{stdenv, fetchurl, cmake, openssl, nss, pkgconfig, nspr, bash, debug ? false}:
+{lib, stdenv, fetchurl, cmake, openssl, nss, pkg-config, nspr, bash, debug ? false}:
 let
   s = # Generated upstream information
   rec {
@@ -10,15 +10,15 @@ let
     sha256="02b1fra43l75mljkhrq45vcrrqv0znicjn15g7nbqx3jppzbpm5z";
   };
 
-  buildInputs = [
-    cmake openssl nss nspr
-  ];
-  compileFlags = "-O3 ${stdenv.lib.optionalString (!debug) "-DNDEBUG"}";
+
+  compileFlags = "-O3 ${lib.optionalString (!debug) "-DNDEBUG"}";
 in
 stdenv.mkDerivation {
   inherit (s) name version;
-  nativeBuildInputs = [ pkgconfig ];
-  inherit buildInputs;
+  nativeBuildInputs = [ cmake pkg-config ];
+  buildInputs = [
+    openssl nss nspr
+  ];
   src = fetchurl {
     inherit (s) url sha256;
   };
@@ -31,9 +31,9 @@ stdenv.mkDerivation {
 
   meta = {
     inherit (s) version;
-    description = ''A set of network-related (mostly VPN-related) tools'';
-    license = stdenv.lib.licenses.bsd3 ;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    description = "A set of network-related (mostly VPN-related) tools";
+    license = lib.licenses.bsd3 ;
+    maintainers = [lib.maintainers.raskin];
+    platforms = lib.platforms.linux;
   };
 }

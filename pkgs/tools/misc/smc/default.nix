@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, jre, runtimeShell }:
+{ lib, stdenv, fetchurl, jre, runtimeShell }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "smc-6.6.3";
 
   src = fetchurl {
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     chmod a+x "$out/bin/smc"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Generate state machine code from text input (state diagram)";
     longDescription = ''
       SMC (State Machine Compiler) takes a text input file describing states,
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
       SMC can also generate GraphViz state diagrams from the input file.
     '';
-    homepage = http://smc.sourceforge.net/;
+    homepage = "http://smc.sourceforge.net/";
     license = licenses.mpl11;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];

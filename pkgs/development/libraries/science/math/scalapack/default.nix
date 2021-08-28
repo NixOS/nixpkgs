@@ -1,32 +1,30 @@
-{ stdenv, fetchurl, cmake, openssh
-, gfortran, mpi, openblasCompat
+{ lib, stdenv, fetchFromGitHub, cmake, openssh
+, gfortran, mpi, blas, lapack
 } :
 
+assert (!blas.isILP64) && (!lapack.isILP64);
 
 stdenv.mkDerivation rec {
-  name = "scalapack-${version}";
-  version = "2.0.2";
+  pname = "scalapack";
+  version = "2.1.0";
 
-  src = fetchurl {
-    url = "http://www.netlib.org/scalapack/scalapack-${version}.tgz";
-    sha256 = "0p1r61ss1fq0bs8ynnx7xq4wwsdvs32ljvwjnx6yxr8gd6pawx0c";
+  src = fetchFromGitHub {
+    owner = "Reference-ScaLAPACK";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "1c10d18gj3kvpmyv5q246x35hjxaqn4ygy1cygaydhyxnm4klzdj";
   };
 
-  # patch to rename outdated MPI functions
-  patches = [ ./openmpi4.patch ];
-
   nativeBuildInputs = [ cmake openssh ];
-  buildInputs = [ mpi gfortran openblasCompat ];
-
-  enableParallelBuilding = true;
+  buildInputs = [ mpi gfortran blas lapack ];
 
   doCheck = true;
 
   preConfigure = ''
     cmakeFlagsArray+=(
       -DBUILD_SHARED_LIBS=ON -DBUILD_STATIC_LIBS=OFF
-      -DLAPACK_LIBRARIES="-lopenblas"
-      -DBLAS_LIBRARIES="-lopenblas"
+      -DLAPACK_LIBRARIES="-llapack"
+      -DBLAS_LIBRARIES="-lblas"
       )
   '';
 
@@ -38,14 +36,17 @@ stdenv.mkDerivation rec {
     # make sure the test starts even if we have less than 4 cores
     export OMPI_MCA_rmaps_base_oversubscribe=1
 
+    # Fix to make mpich run in a sandbox
+    export HYDRA_IFACE=lo
+
     # Run single threaded
     export OMP_NUM_THREADS=1
 
-    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:`pwd`/lib
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}`pwd`/lib
   '';
 
-  meta = with stdenv.lib; {
-    homepage = http://www.netlib.org/scalapack/;
+  meta = with lib; {
+    homepage = "http://www.netlib.org/scalapack/";
     description = "Library of high-performance linear algebra routines for parallel distributed memory machines";
     license = licenses.bsd3;
     platforms = [ "x86_64-linux" ];

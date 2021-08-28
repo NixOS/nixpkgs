@@ -1,31 +1,57 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy3k, six, unittest2 }:
-
-let
-  testPath =
-    if isPy3k
-    then "test_*_py3.py"
-    else "test_*_py2_py3.py";
-in
+{ lib
+, aiohttp
+, buildPythonPackage
+, fastapi
+, fetchFromGitHub
+, flask
+, httpx
+, mypy-boto3-s3
+, numpy
+, scipy
+, pydantic
+, pytestCheckHook
+, pyyaml
+, six
+}:
 
 buildPythonPackage rec {
   pname = "dependency-injector";
-  version = "3.14.5";
+  version = "4.32.2";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "5e0c73fbec99d2782479f6d8c292be87ed8672eb42b451e7f7a5d52a3458c4e5";
+  src = fetchFromGitHub {
+    owner = "ets-labs";
+    repo = "python-dependency-injector";
+    rev = version;
+    sha256 = "1gkkka0hl2hl4axf3gfm58mzv92bg0frr5jikw8g32hd4q4aagcg";
   };
 
-  propagatedBuildInputs = [ six ];
-  checkInputs = [ unittest2 ];
+  propagatedBuildInputs = [
+    six
+  ];
 
-  checkPhase = ''
-    unit2 discover -s tests/unit -p "${testPath}"
-  '';
+  checkInputs = [
+    aiohttp
+    fastapi
+    flask
+    httpx
+    mypy-boto3-s3
+    numpy
+    pydantic
+    scipy
+    pytestCheckHook
+    pyyaml
+  ];
 
-  meta = with stdenv.lib; {
+  disabledTestPaths = [
+    # There is no unique identifier to disable the one failing test
+    "tests/unit/ext/test_aiohttp_py35.py"
+  ];
+
+  pythonImportsCheck = [ "dependency_injector" ];
+
+  meta = with lib; {
     description = "Dependency injection microframework for Python";
-    homepage = https://github.com/ets-labs/python-dependency-injector;
+    homepage = "https://github.com/ets-labs/python-dependency-injector";
     license = licenses.bsd3;
     maintainers = with maintainers; [ gerschtli ];
   };

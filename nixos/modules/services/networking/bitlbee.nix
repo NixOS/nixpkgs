@@ -48,6 +48,7 @@ in
     services.bitlbee = {
 
       enable = mkOption {
+        type = types.bool;
         default = false;
         description = ''
           Whether to run the BitlBee IRC to other chat network gateway.
@@ -57,6 +58,7 @@ in
       };
 
       interface = mkOption {
+        type = types.str;
         default = "127.0.0.1";
         description = ''
           The interface the BitlBee deamon will be listening to.  If `127.0.0.1',
@@ -67,6 +69,7 @@ in
 
       portNumber = mkOption {
         default = 6667;
+        type = types.int;
         description = ''
           Number of the port BitlBee will be listening to.
         '';
@@ -141,6 +144,7 @@ in
 
       extraSettings = mkOption {
         default = "";
+        type = types.lines;
         description = ''
           Will be inserted in the Settings section of the config file.
         '';
@@ -148,6 +152,7 @@ in
 
       extraDefaults = mkOption {
         default = "";
+        type = types.lines;
         description = ''
           Will be inserted in the Default section of the config file.
         '';
@@ -161,16 +166,14 @@ in
 
   config =  mkMerge [
     (mkIf config.services.bitlbee.enable {
-      users.users = singleton {
-        name = "bitlbee";
+      users.users.bitlbee = {
         uid = bitlbeeUid;
         description = "BitlBee user";
         home = "/var/lib/bitlbee";
         createHome = true;
       };
 
-      users.groups = singleton {
-        name = "bitlbee";
+      users.groups.bitlbee = {
         gid = config.ids.gids.bitlbee;
       };
 

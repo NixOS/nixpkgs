@@ -18,7 +18,7 @@ build-idris-package  {
 
   meta = {
     description = "van Laarhoven lenses for Idris";
-    homepage = https://github.com/HuwCampbell/idris-lens;
+    homepage = "https://github.com/HuwCampbell/idris-lens";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.brainrape ];
   };

@@ -1,6 +1,6 @@
 { fetchMaven }:
 
-rec {
+{
   mavenSharedUtils_0_1 = map (obj: fetchMaven {
     version = "0.1";
     artifactId = "maven-shared-utils";

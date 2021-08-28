@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   baseName = "pps-tools";
@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "redlab-i";
-    repo = "${baseName}";
+    repo = baseName;
     rev = "v${version}";
     sha256 = "1yh9g0l59dkq4ci0wbb03qin3c3cizfngmn9jy1vwm5zm6axlxhf";
   };
@@ -24,9 +24,9 @@ stdenv.mkDerivation rec {
     rm -rf $out/usr/
   '';
 
-  meta = with stdenv.lib;{
+  meta = with lib;{
     description = "User-space tools for LinuxPPS";
-    homepage = http://linuxpps.org/;
+    homepage = "http://linuxpps.org/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ sorki ];

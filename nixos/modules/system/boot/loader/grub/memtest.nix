@@ -1,4 +1,4 @@
-# This module adds Memtest86+ to the GRUB boot menu.
+# This module adds Memtest86+/Memtest86 to the GRUB boot menu.
 
 { config, lib, pkgs, ... }:
 
@@ -6,6 +6,7 @@ with lib;
 
 let
   memtest86 = pkgs.memtest86plus;
+  efiSupport = config.boot.loader.grub.efiSupport;
   cfg = config.boot.loader.grub.memtest86;
 in
 
@@ -18,8 +19,11 @@ in
         default = false;
         type = types.bool;
         description = ''
-          Make Memtest86+, a memory testing program, available from the
-          GRUB boot menu.
+          Make Memtest86+ (or MemTest86 if EFI support is enabled),
+          a memory testing program, available from the
+          GRUB boot menu. MemTest86 is an unfree program, so
+          this requires <literal>allowUnfree</literal> to be set to
+          <literal>true</literal>.
         '';
       };
 
@@ -75,19 +79,38 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = mkMerge [
+    (mkIf (cfg.enable && efiSupport) {
+      assertions = [
+        {
+          assertion = cfg.params == [];
+          message = "Parameters are not available for MemTest86";
+        }
+      ];
 
-    boot.loader.grub.extraEntries =
-      if config.boot.loader.grub.version == 2 then
-        ''
-          menuentry "Memtest86+" {
-            linux16 @bootRoot@/memtest.bin ${toString cfg.params}
-          }
-        ''
-      else
-        throw "Memtest86+ is not supported with GRUB 1.";
+      boot.loader.grub.extraFiles = {
+        "memtest86.efi" = "${pkgs.memtest86-efi}/BOOTX64.efi";
+      };
 
-    boot.loader.grub.extraFiles."memtest.bin" = "${memtest86}/memtest.bin";
+      boot.loader.grub.extraEntries = ''
+        menuentry "Memtest86" {
+          chainloader /memtest86.efi
+        }
+      '';
+    })
 
-  };
+    (mkIf (cfg.enable && !efiSupport) {
+      boot.loader.grub.extraEntries =
+        if config.boot.loader.grub.version == 2 then
+          ''
+            menuentry "Memtest86+" {
+              linux16 @bootRoot@/memtest.bin ${toString cfg.params}
+            }
+          ''
+        else
+          throw "Memtest86+ is not supported with GRUB 1.";
+
+      boot.loader.grub.extraFiles."memtest.bin" = "${memtest86}/memtest.bin";
+    })
+  ];
 }

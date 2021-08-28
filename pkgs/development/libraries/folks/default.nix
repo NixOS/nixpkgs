@@ -1,10 +1,10 @@
 { fetchurl
-, stdenv
-, pkgconfig
+, lib, stdenv
+, pkg-config
 , meson
 , ninja
 , glib
-, gnome3
+, gnome
 , nspr
 , gettext
 , gobject-introspection
@@ -16,42 +16,43 @@
 , nss
 , dbus
 , libgee
-, telepathy-glib
 , evolution-data-server
+, libgdata
 , libsecret
 , db
 , python3
-, python
 , readline
 , gtk3
+, gtk-doc
+, docbook-xsl-nons
+, docbook_xml_dtd_43
+, telepathy-glib
+, telepathySupport ? false
 }:
 
 # TODO: enable more folks backends
 
 stdenv.mkDerivation rec {
   pname = "folks";
-  version = "0.12.1";
+  version = "0.15.2";
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0xfl6rnzhdbmw1q26xiq34cdiy7a9karpi2r7wyplnnz1zaz5a9w";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "08nirjax4m4g4ljr8ksq16wzmrvzq6myqh5rm0dw6pnijqk7nxzg";
   };
-
-  mesonFlags = [
-    # TODO: https://gitlab.gnome.org/GNOME/folks/issues/108
-    "-Ddocs=false"
-  ];
 
   nativeBuildInputs = [
     gettext
     gobject-introspection
     gtk3
+    gtk-doc
+    docbook-xsl-nons
+    docbook_xml_dtd_43
     meson
     ninja
-    pkgconfig
-    python
+    pkg-config
     python3
     vala
   ];
@@ -60,14 +61,14 @@ stdenv.mkDerivation rec {
     db
     dbus-glib
     evolution-data-server
+    libgdata # required for some backends transitively
     libsecret
     libsoup
     libxml2
     nspr
     nss
     readline
-    telepathy-glib
-  ];
+  ] ++ lib.optional telepathySupport telepathy-glib;
 
   propagatedBuildInputs = [
     glib
@@ -77,10 +78,33 @@ stdenv.mkDerivation rec {
 
   checkInputs = [
     dbus
+    (python3.withPackages (pp: with pp; [
+      python-dbusmock
+      # The following possibly need to be propagated by dbusmock
+      # if they are not optional
+      dbus-python
+      pygobject3
+    ]))
   ];
 
-  # TODO: enable tests
-  # doCheck = true;
+  mesonFlags = [
+    "-Ddocs=true"
+    "-Dtelepathy_backend=${lib.boolToString telepathySupport}"
+    # For some reason, the tests are getting stuck on 31/32,
+    # even though the one missing test finishes just fine on next run,
+    # when tests are permuted differently. And another test that
+    # previously passed will be stuck instead.
+    "-Dtests=false"
+  ];
+
+  doCheck = false;
+
+  # Prevents e-d-s add-contacts-stress-test from timing out
+  checkPhase = ''
+    runHook preCheck
+    meson test --timeout-multiplier 4
+    runHook postCheck
+  '';
 
   postPatch = ''
     chmod +x meson_post_install.py
@@ -89,17 +113,17 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "none";
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A library that aggregates people from multiple sources to create metacontacts";
-    homepage = https://wiki.gnome.org/Projects/Folks;
+    homepage = "https://wiki.gnome.org/Projects/Folks";
     license = licenses.lgpl2Plus;
-    maintainers = gnome3.maintainers;
-    platforms = platforms.gnu ++ platforms.linux;  # arbitrary choice
+    maintainers = teams.gnome.members;
+    platforms = platforms.gnu ++ platforms.linux; # arbitrary choice
   };
 }

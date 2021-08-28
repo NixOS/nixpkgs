@@ -1,10 +1,10 @@
-{ stdenv, fetchurl, fontforge }:
+{ lib, stdenv, fetchurl, fontforge }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "linux-libertine-5.3.0";
 
   src = fetchurl {
-    url = mirror://sourceforge/linuxlibertine/5.3.0/LinLibertineSRC_5.3.0_2012_07_02.tgz;
+    url = "mirror://sourceforge/linuxlibertine/5.3.0/LinLibertineSRC_5.3.0_2012_07_02.tgz";
     sha256 = "0x7cz6hvhpil1rh03rax9zsfzm54bh7r4bbrq8rz673gl9h47v0v";
   };
 
@@ -38,9 +38,9 @@ stdenv.mkDerivation rec {
     install -m444 -Dt $out/share/texmf/fonts/map       *.map
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Linux Libertine Fonts";
-    homepage = http://linuxlibertine.sf.net;
+    homepage = "http://linuxlibertine.sf.net";
     maintainers = [ maintainers.volth ];
     license = licenses.ofl;
   };

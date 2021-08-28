@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , libusb1, systemd }:
 
 stdenv.mkDerivation rec {
-  name = "dmrconfig-${version}";
+  pname = "dmrconfig";
   version = "1.1";
 
   src = fetchFromGitHub {
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
       --replace /usr/local/bin/dmrconfig $out/bin/dmrconfig
   '';
 
-  makeFlags = "VERSION=${version} GITCOUNT=0";
+  makeFlags = [ "VERSION=${version}" "GITCOUNT=0" ];
 
   installPhase = ''
     mkdir -p $out/bin $out/lib/udev/rules.d
@@ -29,12 +29,12 @@ stdenv.mkDerivation rec {
     install 99-dmr.rules $out/lib/udev/rules.d/99-dmr.rules
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Configuration utility for DMR radios";
     longDescription = ''
       DMRconfig is a utility for programming digital radios via USB programming cable.
     '';
-    homepage = https://github.com/sergev/dmrconfig;
+    homepage = "https://github.com/sergev/dmrconfig";
     license = licenses.asl20;
     maintainers = [ maintainers.etu ];
     platforms = platforms.linux;

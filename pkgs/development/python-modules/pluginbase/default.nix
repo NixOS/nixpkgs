@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, buildPythonPackage, pytest }:
+{ lib, fetchPypi, buildPythonPackage, pytest }:
 
 buildPythonPackage rec {
   version = "1.0.0";
@@ -16,8 +16,8 @@ buildPythonPackage rec {
     PYTHONPATH=.. pytest
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/mitsuhiko/pluginbase;
+  meta = with lib; {
+    homepage = "https://github.com/mitsuhiko/pluginbase";
     description = "A support library for building plugins sytems in Python";
     license = licenses.bsd3;
     platforms = platforms.all;

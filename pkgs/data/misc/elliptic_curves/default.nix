@@ -1,12 +1,11 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
-, python
+, python2
 }:
 
 stdenv.mkDerivation rec {
   pname = "elliptic_curves";
   version = "0.8";
-  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://sageupstream/${pname}/${pname}-${version}.tar.bz2";
@@ -31,10 +30,10 @@ stdenv.mkDerivation rec {
     export SAGE_SHARE="$out/share"
     export PYTHONPATH=$PWD
 
-    ${python.interpreter} ${spkg-install}
+    ${python2.interpreter} ${spkg-install}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Databases of elliptic curves";
     longDescription = ''
       Includes two databases:
@@ -46,6 +45,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl2;
     platforms = platforms.all;
-    maintainers = with maintainers; [ timokau ];
+    maintainers = teams.sage.members;
   };
 }

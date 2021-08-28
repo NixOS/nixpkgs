@@ -12,16 +12,20 @@
 
 self: super: let
   inherit (super.stdenvAdapters) makeStaticBinaries
-                                 makeStaticLibraries;
-  inherit (super.lib) foldl optional flip id composeExtensions;
+                                 makeStaticLibraries
+                                 propagateBuildInputs;
+  inherit (super.lib) foldl optional flip id composeExtensions optionalAttrs optionalString;
   inherit (super) makeSetupHook;
 
   # Best effort static binaries. Will still be linked to libSystem,
   # but more portable than Nix store binaries.
-  makeStaticDarwin = stdenv: stdenv // {
+  makeStaticDarwin = stdenv_: let stdenv = stdenv_.override {
+    # extraBuildInputs are dropped in cross.nix, but darwin still needs them
+    extraBuildInputs = [ self.buildPackages.darwin.CF ];
+  }; in stdenv // {
     mkDerivation = args: stdenv.mkDerivation (args // {
       NIX_CFLAGS_LINK = toString (args.NIX_CFLAGS_LINK or "")
-                      + " -static-libgcc";
+                      + optionalString (stdenv_.cc.isGNU or false) " -static-libgcc";
       nativeBuildInputs = (args.nativeBuildInputs or []) ++ [ (makeSetupHook {
         substitutions = {
           libsystem = "${stdenv.cc.libc}/lib/libSystem.B.dylib";
@@ -30,133 +34,110 @@ self: super: let
     });
   };
 
-  staticAdapters = [ makeStaticLibraries ]
+  staticAdapters =
+    # makeStaticDarwin must go first so that the extraBuildInputs
+    # override does not recreate mkDerivation, removing subsequent
+    # adapters.
+    optional super.stdenv.hostPlatform.isDarwin makeStaticDarwin
+
+    ++ [ makeStaticLibraries propagateBuildInputs ]
 
     # Apple does not provide a static version of libSystem or crt0.o
     # So we can’t build static binaries without extensive hacks.
     ++ optional (!super.stdenv.hostPlatform.isDarwin) makeStaticBinaries
 
-    ++ optional super.stdenv.hostPlatform.isDarwin makeStaticDarwin
-
     # Glibc doesn’t come with static runtimes by default.
     # ++ optional (super.stdenv.hostPlatform.libc == "glibc") ((flip overrideInStdenv) [ self.stdenv.glibc.static ])
   ;
 
-  # Force everything to link statically.
-  haskellStaticAdapter = self: super: {
-    mkDerivation = attrs: super.mkDerivation (attrs // {
-      enableSharedLibraries = false;
-      enableSharedExecutables = false;
-      enableStaticLibraries = true;
+  removeUnknownConfigureFlags = f: with self.lib;
+    remove "--disable-shared"
+    (remove "--enable-static" f);
+
+  ocamlFixPackage = b:
+    b.overrideAttrs (o: {
+      configurePlatforms = [ ];
+      configureFlags = removeUnknownConfigureFlags (o.configureFlags or [ ]);
+      buildInputs = o.buildInputs ++ o.nativeBuildInputs or [ ];
+      propagatedNativeBuildInputs = o.propagatedBuildInputs or [ ];
     });
-  };
+
+  ocamlStaticAdapter = _: super:
+    self.lib.mapAttrs
+      (_: p: if p ? overrideAttrs then ocamlFixPackage p else p)
+      super
+    // {
+      lablgtk = null; # Currently xlibs cause infinite recursion
+      ocaml = ((super.ocaml.override { useX11 = false; }).overrideAttrs (o: {
+        configurePlatforms = [ ];
+        dontUpdateAutotoolsGnuConfigScripts = true;
+      })).overrideDerivation (o: {
+        preConfigure = ''
+          configureFlagsArray+=("-cc" "$CC" "-as" "$AS" "-partialld" "$LD -r")
+        '';
+        configureFlags = (removeUnknownConfigureFlags o.configureFlags) ++ [
+          "--no-shared-libs"
+          "-host ${o.stdenv.hostPlatform.config}"
+          "-target ${o.stdenv.targetPlatform.config}"
+        ];
+      });
+    };
+
+  llvmStaticAdapter = llvmPackages:
+    llvmPackages // {
+      stdenv = foldl (flip id) llvmPackages.stdenv staticAdapters;
+      libcxxStdenv = foldl (flip id) llvmPackages.libcxxStdenv staticAdapters;
+    };
 
 in {
   stdenv = foldl (flip id) super.stdenv staticAdapters;
 
-  haskell = super.haskell // {
-    packageOverrides = composeExtensions
-      (super.haskell.packageOverrides or (_: _: {}))
-      haskellStaticAdapter;
-  };
+  gcc49Stdenv = foldl (flip id) super.gcc49Stdenv staticAdapters;
+  gcc6Stdenv = foldl (flip id) super.gcc6Stdenv staticAdapters;
+  gcc7Stdenv = foldl (flip id) super.gcc7Stdenv staticAdapters;
+  gcc8Stdenv = foldl (flip id) super.gcc8Stdenv staticAdapters;
+  gcc9Stdenv = foldl (flip id) super.gcc9Stdenv staticAdapters;
 
-  ncurses = super.ncurses.override {
-    enableStatic = true;
-  };
-  libxml2 = super.libxml2.override {
-    enableShared = false;
-    enableStatic = true;
-  };
-  zlib = super.zlib.override {
-    static = true;
-    shared = false;
+  llvmPackages_5 = llvmStaticAdapter super.llvmPackages_5;
+  llvmPackages_6 = llvmStaticAdapter super.llvmPackages_6;
+  llvmPackages_7 = llvmStaticAdapter super.llvmPackages_7;
+  llvmPackages_8 = llvmStaticAdapter super.llvmPackages_8;
+  llvmPackages_9 = llvmStaticAdapter super.llvmPackages_9;
+  llvmPackages_10 = llvmStaticAdapter super.llvmPackages_10;
+  llvmPackages_11 = llvmStaticAdapter super.llvmPackages_11;
+  llvmPackages_12 = llvmStaticAdapter super.llvmPackages_12;
 
-    # Don’t use new stdenv zlib because
-    # it doesn’t like the --disable-shared flag
-    stdenv = super.stdenv;
-  };
-  xz = super.xz.override {
-    enableStatic = true;
-  };
-  busybox = super.busybox.override {
-    enableStatic = true;
-  };
-  libiberty = super.libiberty.override {
-    staticBuild = true;
-  };
-  ipmitool = super.ipmitool.override {
-    static = true;
-  };
-  neon = super.neon.override {
-    static = true;
-    shared = false;
-  };
-  gifsicle = super.gifsicle.override {
-    static = true;
-  };
-  bzip2 = super.bzip2.override {
-    linkStatic = true;
-  };
-  optipng = super.optipng.override {
-    static = true;
-  };
-  openblas = super.openblas.override { enableStatic = true; };
-  openssl = super.openssl.override {
-    static = true;
-
-    # Don’t use new stdenv for openssl because it doesn’t like the
+  boost = super.boost.override {
+    # Don’t use new stdenv for boost because it doesn’t like the
     # --disable-shared flag
     stdenv = super.stdenv;
   };
-  boost = super.boost.override {
-    enableStatic = true;
-    enableShared = false;
+
+  curl = super.curl.override {
+    # brotli doesn't build static (Mar. 2021)
+    brotliSupport = false;
+    # disable gss becuase of: undefined reference to `k5_bcmp'
+    gssSupport = false;
   };
-  gmp = super.gmp.override {
-    withStatic = true;
-  };
-  cdo = super.cdo.override {
-    enable_all_static = true;
-  };
-  gsm = super.gsm.override {
-    staticSupport = true;
-  };
-  parted = super.parted.override {
-    enableStatic = true;
-  };
-  libiconvReal = super.libiconvReal.override {
-    enableShared = false;
-    enableStatic = true;
-  };
+
+  ocaml-ng = self.lib.mapAttrs (_: set:
+    if set ? overrideScope' then set.overrideScope' ocamlStaticAdapter else set
+  ) super.ocaml-ng;
+
+  openssl = super.openssl_1_1.overrideAttrs (o: {
+    # OpenSSL doesn't like the `--enable-static` / `--disable-shared` flags.
+    configureFlags = (removeUnknownConfigureFlags o.configureFlags);
+  });
+
   perl = super.perl.override {
     # Don’t use new stdenv zlib because
     # it doesn’t like the --disable-shared flag
     stdenv = super.stdenv;
   };
-  lz4 = super.lz4.override {
-    enableShared = false;
-    enableStatic = true;
+
+  zlib = super.zlib.override {
+    # Don’t use new stdenv zlib because
+    # it doesn’t like the --disable-shared flag
+    stdenv = super.stdenv;
   };
-
-  darwin = super.darwin // {
-    libiconv = super.darwin.libiconv.override {
-      enableShared = false;
-      enableStatic = true;
-    };
-  };
-
-  llvmPackages_8 = super.llvmPackages_8 // {
-    libraries = super.llvmPackages_8.libraries // rec {
-      libcxxabi = super.llvmPackages_8.libraries.libcxxabi.override {
-        enableShared = false;
-      };
-      libcxx = super.llvmPackages_8.libraries.libcxx.override {
-        enableShared = false;
-        inherit libcxxabi;
-      };
-    };
-  };
-
-  python27 = super.python27.override { static = true; };
-
 }

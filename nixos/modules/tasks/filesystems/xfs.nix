@@ -18,6 +18,7 @@ in
     boot.initrd.extraUtilsCommands = mkIf inInitrd
       ''
         copy_bin_and_libs ${pkgs.xfsprogs.bin}/bin/fsck.xfs
+        copy_bin_and_libs ${pkgs.xfsprogs.bin}/bin/xfs_repair
       '';
 
     # Trick just to set 'sh' after the extraUtils nuke-refs.

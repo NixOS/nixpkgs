@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "This project extends the Application Insights API surface to support Python";
-    homepage = https://github.com/Microsoft/ApplicationInsights-Python;
+    homepage = "https://github.com/Microsoft/ApplicationInsights-Python";
     license = licenses.mit;
     maintainers = with maintainers; [ jonringer ];
   };

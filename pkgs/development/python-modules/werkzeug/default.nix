@@ -1,33 +1,30 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ lib, stdenv, buildPythonPackage, fetchPypi
 , itsdangerous, hypothesis
-, pytest, requests }:
+, pytestCheckHook, requests
+, pytest-timeout
+, isPy3k
+ }:
 
 buildPythonPackage rec {
   pname = "Werkzeug";
-  version = "0.15.2";
+  version = "1.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0a73e8bb2ff2feecfc5d56e6f458f5b99290ef34f565ffb2665801ff7de6af7a";
+    sha256 = "6c80b1e5ad3665290ea39320b91e1be1e0d5f60652b964a3070216de83d2e47c";
   };
 
   propagatedBuildInputs = [ itsdangerous ];
-  checkInputs = [ pytest requests hypothesis ];
+  checkInputs = [ pytestCheckHook requests hypothesis pytest-timeout ];
 
-  # Hi! New version of Werkzeug? Please double-check that this commit is
-  # inclucded, and then remove the following patch.
-  # https://github.com/pallets/werkzeug/commit/1cfdcf9824cb20e362979e8f7734012926492165
-  patchPhase = ''
-    substituteInPlace "tests/test_serving.py" --replace "'python'" "sys.executable"
-  '';
+  disabledTests = lib.optionals stdenv.isDarwin [
+    "test_get_machine_id"
+  ];
 
-  checkPhase = ''
-    pytest ${stdenv.lib.optionalString stdenv.isDarwin "-k 'not test_get_machine_id'"}
-  '';
-
-  meta = with stdenv.lib; {
-    homepage = http://werkzeug.pocoo.org/;
+  meta = with lib; {
+    homepage = "https://palletsprojects.com/p/werkzeug/";
     description = "A WSGI utility library for Python";
     license = licenses.bsd3;
+    maintainers = [ ];
   };
 }

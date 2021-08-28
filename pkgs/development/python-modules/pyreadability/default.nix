@@ -17,7 +17,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    homepage = https://github.com/hyperlinkapp/python-readability;
+    homepage = "https://github.com/hyperlinkapp/python-readability";
     description = "fast python port of arc90's readability tool, updated to match latest readability.js!";
     license = lib.licenses.asl20;
   };

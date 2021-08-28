@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchurl, SDL2, SDL2_ttf }:
+{ lib, stdenv, fetchFromGitHub, fetchurl, SDL2, SDL2_ttf }:
 
 let
   font = fetchurl {
@@ -6,20 +6,22 @@ let
     sha256 = "06n8gq18js0bv4svx84ljzhs9zmi81wy0zqcqj3b4g0rsrkr20a7";
   };
 
-in stdenv.mkDerivation rec {
-  name = "snipes-${version}";
+in stdenv.mkDerivation {
+  pname = "snipes";
   version = "20180930";
 
   src = fetchFromGitHub {
     owner  = "Davidebyzero";
     repo   = "Snipes";
-    rev    = "343e14104b7848eb1f882401888e685b7918ef9f";
-    sha256 = "1rl70d5miak34warbwfv27z11vln4lvf7maqqc78z0gdc5zivdv2";
+    rev    = "594af45108e07aa4159c3babc9b5e53609c3fd6e";
+    sha256 = "0gmh38swm74jmljy0bq27ipqzb4h8y9rzwc1j6harbd9qqz5knac";
   };
 
   postPatch = ''
     substitute config-sample.h config.h \
       --replace SnipesConsole.ttf $out/share/snipes/SnipesConsole.ttf
+    substituteInPlace GNUmakefile \
+      --replace 'CFLAGS=-Werror -Wall' 'CFLAGS=-Wall'
   '';
 
   enableParallelBuilding = true;
@@ -36,9 +38,9 @@ in stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Modern port of the classic 1982 text-mode game Snipes";
-    homepage    = https://www.vogons.org/viewtopic.php?f=7&t=49073;
+    homepage    = "https://www.vogons.org/viewtopic.php?f=7&t=49073";
     license     = licenses.free; # This reverse-engineered source code is released with the original authors' permission.
     maintainers = with maintainers; [ peterhoeg ];
   };

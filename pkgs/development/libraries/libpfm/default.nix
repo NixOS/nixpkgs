@@ -1,12 +1,14 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl
+, enableShared ? !stdenv.hostPlatform.isStatic
+}:
 
-stdenv.mkDerivation rec {
-  version = "4.10.1";
-  name = "libpfm-${version}";
+stdenv.mkDerivation (rec {
+  version = "4.11.0";
+  pname = "libpfm";
 
   src = fetchurl {
-    url = "mirror://sourceforge/perfmon2/libpfm4/${name}.tar.gz";
-    sha256 = "0jabhjx77yppr7x38bkfww6n2a480gj62rw0qp7prhdmg19mf766";
+    url = "mirror://sourceforge/perfmon2/libpfm4/${pname}-${version}.tar.gz";
+    sha256 = "1k7yp6xfsglp2b6271r622sjinlbys0dk24n9iiv656y5f3zi9ax";
   };
 
   makeFlags = [
@@ -16,9 +18,9 @@ stdenv.mkDerivation rec {
     "SYS=${stdenv.hostPlatform.uname.system}"
   ];
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-error" ];
+  NIX_CFLAGS_COMPILE = "-Wno-error";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Helper library to program the performance monitoring events";
     longDescription = ''
       This package provides a library, called libpfm4 which is used to
@@ -30,4 +32,8 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.pierron ];
     platforms = platforms.linux;
   };
+} // lib.optionalAttrs ( ! enableShared )
+{
+  CONFIG_PFMLIB_SHARED = "n";
 }
+)

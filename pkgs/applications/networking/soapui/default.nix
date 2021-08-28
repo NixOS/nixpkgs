@@ -1,7 +1,7 @@
-{ fetchurl, stdenv, writeText, jdk, maven, makeWrapper }:
+{ fetchurl, lib, stdenv, writeText, jdk, maven, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "soapui-${version}";
+  pname = "soapui";
   version = "5.5.0";
 
   src = fetchurl {
@@ -41,9 +41,9 @@ stdenv.mkDerivation rec {
     '')
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The Most Advanced REST & SOAP Testing Tool in the World";
-    homepage = https://www.soapui.org/;
+    homepage = "https://www.soapui.org/";
     license = "SoapUI End User License Agreement";
     maintainers = with maintainers; [ gerschtli ];
     platforms = platforms.all;

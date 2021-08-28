@@ -1,34 +1,36 @@
-{stdenv, fetchurl, cmake, sword, qt4, boost, clucene_core}:
+{ lib, mkDerivation, fetchurl, cmake, pkg-config, sword, boost, clucene_core
+, qtbase, qttools, qtsvg, qtwebkit
+}:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
 
-  version = "2.10.1";
+  version = "2.11.2";
 
-  name = "bibletime-${version}";
+  pname = "bibletime";
 
   src = fetchurl {
-    url = "mirror://sourceforge/bibletime/${name}.tar.xz";
-    sha256 = "14fayy5h1ffjxin669q56fflxn4ij1irgn60cygwx2y02cwxbll6";
+    url = "mirror://sourceforge/bibletime/${pname}-${version}.tar.xz";
+    sha256 = "1s5bvmwbz1gyp3ml8sghpc00h8nhdvx2iyq96iri30kwx1y1jy6i";
   };
 
-  prePatch = ''
-    patchShebangs .;
-  '';
+  nativeBuildInputs = [ cmake pkg-config ];
+  buildInputs = [
+   sword boost clucene_core
+   qtbase qttools qtsvg qtwebkit
+ ];
 
   preConfigure =  ''
     export CLUCENE_HOME=${clucene_core};
     export SWORD_HOME=${sword};
   '';
 
-  buildInputs = [ cmake sword qt4 boost clucene_core ];
-
-  cmakeFlags = "-DUSE_QT_WEBKIT=ON -DCMAKE_BUILD_TYPE=Debug";
+  cmakeFlags = [ "-DUSE_QT_WEBKIT=ON" "-DCMAKE_BUILD_TYPE=Debug" ];
 
   meta = {
     description = "A Qt4 Bible study tool";
-    homepage = http://www.bibletime.info/;
-    platforms = stdenv.lib.platforms.linux;
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = [ stdenv.lib.maintainers.piotr ];
+    homepage = "http://www.bibletime.info/";
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.piotr ];
   };
 }

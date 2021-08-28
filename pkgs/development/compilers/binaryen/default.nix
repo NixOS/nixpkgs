@@ -1,41 +1,35 @@
-{ stdenv, cmake, python, fetchFromGitHub, emscriptenRev ? null }:
-
-let
-  defaultVersion = "84";
-
-  # Map from git revs to SHA256 hashes
-  sha256s = {
-    "version_84" = "189zqc5gp8fm7clsgby9h2s758ijil7ma4liwbf81wnwkb4kqxc0";
-    "1.38.28" = "172s7y5f38736ic8ri3mnbdqcrkadd40a26cxcfwbscc53phl11v";
-  };
-in
+{ lib, stdenv, cmake, python3, fetchFromGitHub, fetchpatch, emscripten }:
 
 stdenv.mkDerivation rec {
-  version = if emscriptenRev == null
-            then defaultVersion
-            else "emscripten-${emscriptenRev}";
-  rev = if emscriptenRev == null
-        then "version_${version}"
-        else emscriptenRev;
-  name = "binaryen-${version}";
+  pname = "binaryen";
+  version = "96";
 
   src = fetchFromGitHub {
     owner = "WebAssembly";
     repo = "binaryen";
-    sha256 =
-      if builtins.hasAttr rev sha256s
-      then builtins.getAttr rev sha256s
-      else null;
-    inherit rev;
+    rev = "version_${version}";
+    sha256 = "1mqpb6yy87aifpbcy0lczi3bp6kddrwi6d0g6lrhjrdxx2kvbdag";
   };
 
-  nativeBuildInputs = [ cmake python ];
+  patches = [
+    # Adds --minimize-wasm-changes option required by emscripten 2.0.1
+    (fetchpatch {
+      url = "https://patch-diff.githubusercontent.com/raw/WebAssembly/binaryen/pull/3044.patch";
+      sha256 = "1hdbc9h9zhh2d3bl4sqv6v9psfmny715612bwpjdln0ibdvc129s";
+    })
+  ];
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/WebAssembly/binaryen;
+  nativeBuildInputs = [ cmake python3 ];
+
+  meta = with lib; {
+    homepage = "https://github.com/WebAssembly/binaryen";
     description = "Compiler infrastructure and toolchain library for WebAssembly, in C++";
     platforms = platforms.all;
     maintainers = with maintainers; [ asppsa ];
     license = licenses.asl20;
+  };
+
+  passthru.tests = {
+    inherit emscripten;
   };
 }

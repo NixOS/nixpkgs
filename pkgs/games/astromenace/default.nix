@@ -1,15 +1,16 @@
-{ fetchurl, stdenv, cmake, xlibsWrapper, libGLU_combined, SDL, openal, freealut, libogg, libvorbis, runtimeShell }:
+{ fetchurl, lib, stdenv, cmake, xlibsWrapper, libGLU, libGL, SDL, openal, freealut, libogg, libvorbis, runtimeShell }:
 
 stdenv.mkDerivation rec {
   version = "1.3.2";
-  name = "astromenace-${version}";
+  pname = "astromenace";
 
   src = fetchurl {
     url = "mirror://sourceforge/openastromenace/astromenace-src-${version}.tar.bz2";
     sha256 = "1rkz6lwjcd5mwv72kf07ghvx6z46kf3xs250mjbmnmjpn7r5sxwv";
   };
 
-  buildInputs = [ cmake xlibsWrapper libGLU_combined SDL openal freealut libogg libvorbis ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ xlibsWrapper libGLU libGL SDL openal freealut libogg libvorbis ];
 
   buildPhase = ''
     cmake ./
@@ -29,8 +30,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Hardcore 3D space shooter with spaceship upgrade possibilities";
-    homepage = https://www.viewizard.com/;
-    license = stdenv.lib.licenses.gpl3;
-    platforms = stdenv.lib.platforms.linux;
+    homepage = "https://www.viewizard.com/";
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
   };
 }

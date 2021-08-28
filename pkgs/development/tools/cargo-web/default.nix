@@ -1,32 +1,27 @@
-{ stdenv, fetchFromGitHub, openssl, perl, pkgconfig, rustPlatform
-, CoreServices, Security, cf-private
+{ lib, stdenv, fetchFromGitHub, openssl, perl, pkg-config, rustPlatform
+, CoreServices, Security
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-web";
-  version = "0.6.25";
+  version = "0.6.26";
 
   src = fetchFromGitHub {
     owner = "koute";
     repo = pname;
     rev = version;
-    sha256 = "0q77bryc7ap8gb4rzp9xk8ngqwxh106qn7899g30lwxycnyii0mf";
+    sha256 = "1dl5brj5fnmxmwl130v36lvy4j64igdpdvjwmxw3jgg2c6r6b7cd";
   };
 
-  cargoSha256 = "1f4sj260q4rlzbajwimya1yhh90hmmbhr47yfg9i8xcv5cg0cqjn";
+  cargoSha256 = "0q7yxvvngfvn4s889qzp1qnsw2c6qy2ryv9vz9cxhmqidx4dg4va";
 
-  nativeBuildInputs = [ openssl perl pkgconfig ];
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [
-    CoreServices Security
-    # Needed for CFURLResourceIsReachable symbols.
-    cf-private
-  ];
+  nativeBuildInputs = [ openssl perl pkg-config ];
+  buildInputs = lib.optionals stdenv.isDarwin [ CoreServices Security ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Cargo subcommand for the client-side Web";
-    homepage = https://github.com/koute/cargo-web;
+    homepage = "https://github.com/koute/cargo-web";
     license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = [ maintainers.kevincox ];
-    platforms = platforms.all;
+    maintainers = with maintainers; [ kevincox ];
   };
 }

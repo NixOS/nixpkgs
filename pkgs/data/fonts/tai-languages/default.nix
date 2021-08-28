@@ -11,7 +11,7 @@ tai-ahom = fetchzip {
   sha256 = "03h8ql9d5bzq4j521j0cz08ddf717bzim1nszh2aar6kn0xqnp9q";
 
   meta = with lib; {
-    homepage = https://github.com/enabling-languages/tai-languages;
+    homepage = "https://github.com/enabling-languages/tai-languages";
     description = "Unicode-compliant Tai Ahom font";
     maintainers = with maintainers; [ mathnerd314 ];
     license = licenses.ofl; # See font metadata

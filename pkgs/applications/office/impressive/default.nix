@@ -2,20 +2,22 @@
 , SDL, ghostscript, pdftk, dejavu_fonts }:
 
 let
-  version = "0.12.0";
+  version = "0.12.1";
   pythonEnv = python2.withPackages (ps: with ps; [pyopengl pygame pillow]);
 in stdenv.mkDerivation {
     # This project was formerly known as KeyJNote.
     # See http://keyj.emphy.de/apple-lawsuit/ for details.
 
-    name = "impressive-${version}";
+    pname = "impressive";
+    inherit version;
 
     src = fetchurl {
       url = "mirror://sourceforge/impressive/Impressive-${version}.tar.gz";
-      sha256 = "0zaqq3yvd296mfr5bxpj2hqlk7vrb0rsbgd4dc1l5ag46giqvivx";
+      sha256 = "1r7ihv41awnlnlry1kymb8fka053wdhzibfwcarn78rr3vs338vl";
     };
 
-    buildInputs = [ makeWrapper pythonEnv ];
+    nativeBuildInputs = [ makeWrapper ];
+    buildInputs = [ pythonEnv ];
 
     configurePhase = ''
       # Let's fail at build time if the library we're substituting in doesn't
@@ -58,11 +60,11 @@ in stdenv.mkDerivation {
         to make a slideshow with your favorite photos.
       '';
 
-      homepage = http://impressive.sourceforge.net/;
+      homepage = "http://impressive.sourceforge.net/";
 
-      license = stdenv.lib.licenses.gpl2;
+      license = lib.licenses.gpl2;
 
       maintainers = with lib.maintainers; [ lheckemann ];
-      platforms = stdenv.lib.platforms.mesaPlatforms;
+      platforms = lib.platforms.mesaPlatforms;
     };
   }

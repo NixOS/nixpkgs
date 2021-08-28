@@ -1,13 +1,14 @@
-{ writeText, stdenv, fetchurl, ncurses }:
+{ writeText, lib, stdenv, fetchurl, ncurses }:
 
 let
   version = "0.6.1";
 in
 stdenv.mkDerivation rec {
-  name = "bwm-ng-${version}";
+  pname = "bwm-ng";
+  inherit version;
 
   src = fetchurl {
-    url = "https://www.gropp.org/bwm-ng/${name}.tar.gz";
+    url = "https://www.gropp.org/bwm-ng/${pname}-${version}.tar.gz";
     sha256 = "1w0dwpjjm9pqi613i8glxrgca3rdyqyp3xydzagzr5ndc34z6z02";
   };
 
@@ -24,7 +25,7 @@ stdenv.mkDerivation rec {
      void sigint(int sig) FUNCATTR_NORETURN;
     -inline void init(void);
     +static inline void init(void);
-     
+
      /* clear stuff and exit */
     --- a/src/options.c
     +++ b/src/options.c
@@ -40,11 +41,11 @@ stdenv.mkDerivation rec {
 
 
   # This code uses inline in the gnu89 sense: see http://clang.llvm.org/compatibility.html#inline
-  NIX_CFLAGS_COMPILE = if stdenv.cc.isClang then "-std=gnu89" else null;
+  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-std=gnu89";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A small and simple console-based live network and disk io bandwidth monitor";
-    homepage = http://www.gropp.org/?id=projects&sub=bwm-ng;
+    homepage = "http://www.gropp.org/?id=projects&sub=bwm-ng";
     license = licenses.gpl2;
     platforms = platforms.unix;
 

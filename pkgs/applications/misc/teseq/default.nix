@@ -1,10 +1,11 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 let
   version = "1.1.1";
 in
 stdenv.mkDerivation {
-  name = "teseq-${version}";
+  pname = "teseq";
+  inherit version;
 
   src = fetchurl {
     url = "mirror://gnu/teseq/teseq-${version}.tar.gz";
@@ -12,11 +13,11 @@ stdenv.mkDerivation {
   };
 
   meta = {
-    homepage = https://www.gnu.org/software/teseq/;
+    homepage = "https://www.gnu.org/software/teseq/";
     description = "Escape sequence illuminator";
-    license = stdenv.lib.licenses.gpl3;
+    license = lib.licenses.gpl3;
 
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.vaibhavsagar ];
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.vaibhavsagar ];
   };
 }

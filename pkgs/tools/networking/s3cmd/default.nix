@@ -1,23 +1,24 @@
-{ stdenv, fetchFromGitHub, python2Packages }:
+{ lib, buildPythonApplication, fetchFromGitHub, python_magic, dateutil }:
 
-python2Packages.buildPythonApplication rec {
-  name = "s3cmd-${version}";
-  version = "2.0.2";
-  
+buildPythonApplication rec {
+  pname = "s3cmd";
+  version = "2.1.0";
+
   src = fetchFromGitHub {
-    owner  = "s3tools";
-    repo   = "s3cmd";
-    rev    = "v${version}";
-    sha256 = "0ninw830309cxga99gjnfghpkywf9kd6yz4wqsq85zni1dv39cdk";
+    owner = "s3tools";
+    repo = "s3cmd";
+    rev = "v${version}";
+    sha256 = "0p6mbgai7f0c12pkw4s7d649gj1f8hywj60pscxvj9jsna3iifhs";
   };
 
-  propagatedBuildInputs = with python2Packages; [ python_magic dateutil ];
+  propagatedBuildInputs = [ python_magic dateutil ];
 
-  meta = with stdenv.lib; {
-    homepage = http://s3tools.org/;
-    description = "A command-line tool to manipulate Amazon S3 buckets";
+  dontUseSetuptoolsCheck = true;
+
+  meta = with lib; {
+    homepage = "https://s3tools.org/s3cmd";
+    description = "Command line tool for managing Amazon S3 and CloudFront services";
     license = licenses.gpl2;
     maintainers = [ maintainers.spwhitt ];
-    platforms = platforms.all;
   };
 }

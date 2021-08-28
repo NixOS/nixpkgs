@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "nms-${version}";
+  pname = "nms";
   version = "0.3.3";
 
   src = fetchFromGitHub {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildFlags = [ "nms" "sneakers" ];
   installFlags = [ "prefix=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/bartobri/no-more-secrets";
     description = ''
       A command line tool that recreates the famous data decryption

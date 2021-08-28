@@ -1,40 +1,48 @@
-{ buildPythonPackage, stdenv, fetchPypi, fetchpatch
-, numpy, pandas, plotly, six, colorlover
-, ipython, ipywidgets, nose
+{ lib, buildPythonPackage, fetchPypi
+, chart-studio
+, colorlover
+, ipython
+, ipywidgets
+, pytest
+, nose
+, numpy
+, pandas
+, six
+, statsmodels
 }:
 
 buildPythonPackage rec {
   pname = "cufflinks";
-  version = "0.15";
+  version = "0.17.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "014098a4568199957198c0a7fe3dbeb3b4010b6de8d692a41fe3b3ac107b660e";
+    sha256 = "0i56062k54dlg5iz3qyl1ykww62mpkp8jr4n450h0c60dm0b7ha8";
   };
 
   propagatedBuildInputs = [
-    numpy pandas plotly six colorlover
-    ipython ipywidgets
+    chart-studio
+    colorlover
+    ipython
+    ipywidgets
+    numpy
+    pandas
+    six
+    statsmodels
   ];
 
-  patches = [
-    # Plotly 3.8 compatibility. Remove with the next release. See https://github.com/santosjorge/cufflinks/pull/178
-    (fetchpatch {
-      url = "https://github.com/santosjorge/cufflinks/commit/cc4c23c2b45b870f6801d1cb0312948e1f73f424.patch";
-      sha256 = "1psl2h7vscpzvb4idr6s175v8znl2mfhkcyhb1926p4saswmghw1";
-    })
-  ];
+  checkInputs = [ pytest nose ];
 
-  checkInputs = [ nose ];
-
+  # ignore tests which are incompatible with pandas>=1.0
+  # https://github.com/santosjorge/cufflinks/issues/236
   checkPhase = ''
-    nosetests -xv tests.py
+    pytest tests.py -k 'not bar_row'
   '';
 
-  meta = {
-    homepage = https://github.com/santosjorge/cufflinks;
+  meta = with lib; {
     description = "Productivity Tools for Plotly + Pandas";
-    license = stdenv.lib.licenses.mit;
-    maintainers = with stdenv.lib.maintainers; [ globin ];
+    homepage = "https://github.com/santosjorge/cufflinks";
+    license = licenses.mit;
+    maintainers = with maintainers; [ globin ];
   };
 }

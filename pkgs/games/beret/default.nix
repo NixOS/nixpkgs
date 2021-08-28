@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, SDL, SDL_image, SDL_ttf, SDL_mixer }:
+{ lib, stdenv, fetchurl, SDL, SDL_image, SDL_ttf, SDL_mixer }:
 
 stdenv.mkDerivation {
   name = "beret-1.2.0";
@@ -6,8 +6,8 @@ stdenv.mkDerivation {
   buildInputs = [ SDL SDL_image SDL_ttf SDL_mixer ];
 
   NIX_CFLAGS_COMPILE = "-I${SDL.dev}/include/SDL";
-  NIX_CFLAGS_LINK = stdenv.lib.optionalString (!stdenv.isDarwin) "-lgcc_s";
-  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin
+  NIX_CFLAGS_LINK = lib.optionalString (!stdenv.isDarwin) "-lgcc_s";
+  NIX_LDFLAGS = lib.optionalString stdenv.isDarwin
     "-framework CoreFoundation -framework OpenGL -framework Cocoa";
 
   patches = [ ./use-home-dir.patch ];
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   '';
 
   src = fetchurl {
-    url = https://gitorious.org/beret/beret/archive-tarball/ae029777;
+    url = "https://gitorious.org/beret/beret/archive-tarball/ae029777";
     name = "beret-1.2.0.tar.gz";
     sha256 = "1rx9z72id1810fgv8mizk8qxwd1kh5xi07fdhmjc62mh3fn38szc";
   };
@@ -29,9 +29,9 @@ stdenv.mkDerivation {
     cp -av tahoma.ttf images music rooms sfx $out/share
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A 2D puzzle-platformer game about a scientist with telekinetic abilities";
-    homepage    = http://kiwisauce.com/beret/;
+    homepage    = "http://kiwisauce.com/beret/";
     license     = licenses.lgpl2;
     maintainers = with maintainers; [ lovek323 ];
     platforms   = platforms.all;

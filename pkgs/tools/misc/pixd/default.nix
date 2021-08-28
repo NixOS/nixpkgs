@@ -1,9 +1,9 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
-  name = "pixd-${version}";
+  pname = "pixd";
   version = "1.0.0";
 
   src = fetchFromGitHub {
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Colourful visualization tool for binary files";
-    homepage = https://github.com/FireyFly/pixd;
+    homepage = "https://github.com/FireyFly/pixd";
     maintainers = [ maintainers.FireyFly ];
     license = licenses.mit;
     platforms = platforms.unix;

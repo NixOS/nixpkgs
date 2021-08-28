@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, ocaml, findlib, ncurses }:
+{ lib, stdenv, fetchurl, ocaml, findlib, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "ocaml-curses-${version}";
+  pname = "ocaml-curses";
   version = "1.0.4";
 
   src = fetchurl {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ ocaml findlib ];
 
   # Fix build for recent ncurses versions
-  NIX_CFLAGS_COMPILE = [ "-DNCURSES_INTERNALS=1" ];
+  NIX_CFLAGS_COMPILE = "-DNCURSES_INTERNALS=1";
 
   createFindlibDestdir = true;
 
@@ -24,9 +24,9 @@ stdenv.mkDerivation rec {
 
   buildPhase = "make all opt";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "OCaml Bindings to curses/ncurses";
-    homepage = https://opam.ocaml.org/packages/curses/curses.1.0.4/;
+    homepage = "https://opam.ocaml.org/packages/curses/curses.1.0.4/";
     license = licenses.gpl2;
     maintainers = [ maintainers.volth ];
     platforms = ocaml.meta.platforms or [];

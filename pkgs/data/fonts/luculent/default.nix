@@ -1,9 +1,9 @@
 { lib, fetchzip }:
 
 let version = "2.0.0"; in
-fetchzip rec {
+fetchzip {
   name = "luculent-${version}";
-  url =  http://www.eastfarthing.com/luculent/luculent.tar.xz;
+  url =  "http://www.eastfarthing.com/luculent/luculent.tar.xz";
 
   postFetch = ''
     tar -xJf $downloadedFile --strip-components=1
@@ -15,7 +15,7 @@ fetchzip rec {
 
   meta = with lib; {
     description = "luculent font";
-    homepage = http://www.eastfarthing.com/luculent/;
+    homepage = "http://www.eastfarthing.com/luculent/";
     license = licenses.ofl;
     maintainers = with maintainers; [ dtzWill ];
     platforms = platforms.all;

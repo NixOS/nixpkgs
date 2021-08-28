@@ -5,16 +5,6 @@ with lib;
 let
   cfg = config.services.spamassassin;
   spamassassin-local-cf = pkgs.writeText "local.cf" cfg.config;
-  spamassassin-init-pre = pkgs.writeText "init.pre" cfg.initPreConf;
-
-  spamdEnv = pkgs.buildEnv {
-    name = "spamd-env";
-    paths = [];
-    postBuild = ''
-      ln -sf ${spamassassin-init-pre} $out/init.pre
-      ln -sf ${spamassassin-local-cf} $out/local.cf
-    '';
-  };
 
 in
 
@@ -22,12 +12,10 @@ in
   options = {
 
     services.spamassassin = {
-      enable = mkOption {
-        default = false;
-        description = "Whether to run the SpamAssassin daemon";
-      };
+      enable = mkEnableOption "the SpamAssassin daemon";
 
       debug = mkOption {
+        type = types.bool;
         default = false;
         description = "Whether to run the SpamAssassin daemon in debug mode";
       };
@@ -65,8 +53,9 @@ in
       };
 
       initPreConf = mkOption {
-        type = types.str;
+        type = with types; either str path;
         description = "The SpamAssassin init.pre config.";
+        apply = val: if builtins.isPath val then val else pkgs.writeText "init.pre" val;
         default =
         ''
           #
@@ -120,40 +109,53 @@ in
   };
 
   config = mkIf cfg.enable {
+    environment.etc."mail/spamassassin/init.pre".source = cfg.initPreConf;
+    environment.etc."mail/spamassassin/local.cf".source = spamassassin-local-cf;
 
     # Allow users to run 'spamc'.
+    environment.systemPackages = [ pkgs.spamassassin ];
 
-    environment = {
-      etc = singleton { source = spamdEnv; target = "spamassassin"; };
-      systemPackages = [ pkgs.spamassassin ];
-    };
-
-    users.users = singleton {
-      name = "spamd";
+    users.users.spamd = {
       description = "Spam Assassin Daemon";
       uid = config.ids.uids.spamd;
       group = "spamd";
     };
 
-    users.groups = singleton {
-      name = "spamd";
+    users.groups.spamd = {
       gid = config.ids.gids.spamd;
     };
 
     systemd.services.sa-update = {
+      # Needs to be able to contact the update server.
+      wants = [ "network-online.target" ];
+      after = [ "network-online.target" ];
+
+      serviceConfig = {
+        Type = "oneshot";
+        User = "spamd";
+        Group = "spamd";
+        StateDirectory = "spamassassin";
+        ExecStartPost = "+${pkgs.systemd}/bin/systemctl -q --no-block try-reload-or-restart spamd.service";
+      };
+
       script = ''
         set +e
-        ${pkgs.su}/bin/su -s "${pkgs.bash}/bin/bash" -c "${pkgs.spamassassin}/bin/sa-update --gpghomedir=/var/lib/spamassassin/sa-update-keys/ --siteconfigpath=${spamdEnv}/" spamd
-
-        v=$?
+        ${pkgs.spamassassin}/bin/sa-update --verbose --gpghomedir=/var/lib/spamassassin/sa-update-keys/
+        rc=$?
         set -e
-        if [ $v -gt 1 ]; then
-          echo "sa-update execution error"
-          exit $v
+
+        if [[ $rc -gt 1 ]]; then
+          # sa-update failed.
+          exit $rc
         fi
-        if [ $v -eq 0 ]; then
-          systemctl reload spamd.service
+
+        if [[ $rc -eq 1 ]]; then
+          # No update was available, exit successfully.
+          exit 0
         fi
+
+        # An update was available and installed. Compile the rules.
+        ${pkgs.spamassassin}/bin/sa-compile
       '';
     };
 
@@ -168,32 +170,22 @@ in
     };
 
     systemd.services.spamd = {
-      description = "Spam Assassin Server";
+      description = "SpamAssassin Server";
 
       wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+      wants = [ "sa-update.service" ];
+      after = [
+        "network.target"
+        "sa-update.service"
+      ];
 
       serviceConfig = {
-        ExecStart = "${pkgs.spamassassin}/bin/spamd ${optionalString cfg.debug "-D"} --username=spamd --groupname=spamd --siteconfigpath=${spamdEnv} --virtual-config-dir=/var/lib/spamassassin/user-%u --allow-tell --pidfile=/run/spamd.pid";
-        ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+        User = "spamd";
+        Group = "spamd";
+        ExecStart = "+${pkgs.spamassassin}/bin/spamd ${optionalString cfg.debug "-D"} --username=spamd --groupname=spamd --virtual-config-dir=%S/spamassassin/user-%u --allow-tell --pidfile=/run/spamd.pid";
+        ExecReload = "+${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+        StateDirectory = "spamassassin";
       };
-
-      # 0 and 1 no error, exitcode > 1 means error:
-      # https://spamassassin.apache.org/full/3.1.x/doc/sa-update.html#exit_codes
-      preStart = ''
-        echo "Recreating '/var/lib/spamasassin' with creating '3.004001' (or similar) and 'sa-update-keys'"
-        mkdir -p /var/lib/spamassassin
-        chown spamd:spamd /var/lib/spamassassin -R
-        set +e
-        ${pkgs.su}/bin/su -s "${pkgs.bash}/bin/bash" -c "${pkgs.spamassassin}/bin/sa-update --gpghomedir=/var/lib/spamassassin/sa-update-keys/ --siteconfigpath=${spamdEnv}/" spamd
-        v=$?
-        set -e
-        if [ $v -gt 1 ]; then
-          echo "sa-update execution error"
-          exit $v
-        fi
-        chown spamd:spamd /var/lib/spamassassin -R
-      '';
     };
   };
 }

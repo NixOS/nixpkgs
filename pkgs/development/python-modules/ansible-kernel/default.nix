@@ -16,7 +16,7 @@
 
 let
   kernelSpecFile = writeText "kernel.json" (builtins.toJSON {
-    argv = [ "${python.interpreter}" "-m" "ansible_kernel" "-f" "{connection_file}" ];
+    argv = [ python.interpreter "-m" "ansible_kernel" "-f" "{connection_file}" ];
     codemirror_mode = "yaml";
     display_name = "Ansible";
     language = "ansible";
@@ -53,7 +53,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "An Ansible kernel for Jupyter";
-    homepage = https://github.com/ansible/ansible-jupyter-kernel;
+    homepage = "https://github.com/ansible/ansible-jupyter-kernel";
     license = licenses.asl20;
     maintainers = [ maintainers.costrouc ];
   };

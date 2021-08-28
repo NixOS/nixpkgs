@@ -1,7 +1,7 @@
-{ stdenv, fetchhg, autoconf, sqlite }:
+{ lib, stdenv, fetchhg, autoconf, sqlite }:
 
 stdenv.mkDerivation rec {
-  name = "vcprompt-${version}";
+  pname = "vcprompt";
   version = "1.2.1";
 
   src = fetchhg {
@@ -17,12 +17,12 @@ stdenv.mkDerivation rec {
     makeFlags="$makeFlags PREFIX=$out"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = ''
       A little C program that prints a short string with barebones information
       about the current working directory for various version control systems
     '';
-    homepage    = http://hg.gerg.ca/vcprompt;
+    homepage    = "http://hg.gerg.ca/vcprompt";
     maintainers = with maintainers; [ cstrahan ];
     platforms   = with platforms; linux ++ darwin;
     license = licenses.gpl2Plus;

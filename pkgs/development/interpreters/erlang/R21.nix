@@ -1,10 +1,6 @@
 { mkDerivation }:
 
-mkDerivation rec {
-  version = "21.3.8.3";
-  sha256 = "1szybirrcpqsl2nmlmpbkxjqnm6i7l7bma87m5cpwi0kpvlxwmcw";
-
-  prePatch = ''
-    substituteInPlace configure.in --replace '`sw_vers -productVersion`' '10.10'
-  '';
+mkDerivation {
+  version = "21.3.8.23";
+  sha256 = "sha256-zIEXn2HuXeRKHfXmm0AAv9rEqqc4gIgaYek0hSUK5YU=";
 }

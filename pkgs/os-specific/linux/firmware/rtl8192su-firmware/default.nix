@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub }:
-with stdenv.lib;
+{ lib, stdenv, fetchFromGitHub }:
+with lib;
 stdenv.mkDerivation {
   name = "rtl8192su-unstable-2016-10-05";
 
@@ -26,9 +26,9 @@ stdenv.mkDerivation {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Firmware for Realtek RTL8188SU/RTL8191SU/RTL8192SU";
-    homepage = https://github.com/chunkeey/rtl8192su;
+    homepage = "https://github.com/chunkeey/rtl8192su";
     license = licenses.unfreeRedistributableFirmware;
     maintainers = with maintainers; [ mic92 ];
     platforms = with platforms; linux;

@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, gtk2, libXft, intltool, automake, autoconf, libtool, pkgconfig }:
+{ lib, stdenv, fetchFromGitHub, gtk2, libXft, intltool, automake, autoconf, libtool, pkg-config }:
 
 stdenv.mkDerivation rec {
-  name = "pcmanx-gtk2-${version}";
+  pname = "pcmanx-gtk2";
   version = "1.3";
 
   src = fetchFromGitHub {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0fbwd149wny67rfhczz4cbh713a1qnswjiz7b6c2bxfcwh51f9rc";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ gtk2 libXft intltool automake autoconf libtool ];
 
   preConfigure = ''
@@ -20,10 +20,10 @@ stdenv.mkDerivation rec {
     cd libltdl; autoreconf; cd ..
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://pcman.ptt.cc;
+  meta = with lib; {
+    homepage = "https://pcman.ptt.cc";
     license = licenses.gpl2;
-    description = "Telnet BBS browser with GTK+ interface";
+    description = "Telnet BBS browser with GTK interface";
     maintainers = [ maintainers.sifmelcara ];
     platforms = platforms.linux;
   };

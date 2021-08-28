@@ -1,39 +1,52 @@
-{ stdenv, fetchFromGitHub, libpulseaudio, python3Packages, extraLibs ? [] }:
+{ lib
+, fetchFromGitHub
+, libpulseaudio
+, libnotify
+, gobject-introspection
+, python3Packages
+, wrapGAppsHook
+, extraLibs ? [] }:
 
 python3Packages.buildPythonApplication rec {
   # i3pystatus moved to rolling release:
   # https://github.com/enkore/i3pystatus/issues/584
-  version = "unstable-2019-02-10";
+  version = "unstable-2020-06-12";
   pname = "i3pystatus";
-  disabled = !python3Packages.isPy3k;
 
-  src = fetchFromGitHub
-  {
+  src = fetchFromGitHub {
     owner = "enkore";
     repo = "i3pystatus";
-    rev = "bcd8f12b18d491029fdd5bd0f433b4500fcdc68e";
-    sha256 = "0gw6sla73cid6gwxn2n4zmsg2svq5flf9zxly6x2rfljizgf0720";
+    rev = "dad5eb0c5c8a2ecd20c37ade4732586c6e53f44b";
+    sha256 = "18ygvkl92yr69kxsym57k1mc90asdxpz4b943i61qr0s4fc5n4mq";
   };
 
-  propagatedBuildInputs = with python3Packages; [ keyring colour netifaces praw psutil basiciw ] ++
-    [ libpulseaudio ] ++ extraLibs;
+  buildInputs = [ libpulseaudio libnotify gobject-introspection ];
 
-  libpulseaudioPath = stdenv.lib.makeLibraryPath [ libpulseaudio ];
-  ldWrapperSuffix = "--suffix LD_LIBRARY_PATH : \"${libpulseaudioPath}\"";
-  # LC_TIME != C results in locale.Error: unsupported locale setting
-  makeWrapperArgs = [ "--set LC_TIME C" ldWrapperSuffix ]; # libpulseaudio.so is loaded manually
+  propagatedBuildInputs = with python3Packages; [
+    keyring colour netifaces psutil basiciw pygobject3
+  ] ++ extraLibs;
+
+  makeWrapperArgs = [
+    # LC_TIME != C results in locale.Error: unsupported locale setting
+    "--set" "LC_TIME" "C"
+    "--suffix" "LD_LIBRARY_PATH" ":" "${lib.makeLibraryPath [ libpulseaudio ]}"
+  ];
+
+  postPatch = ''
+    makeWrapperArgs+=(--set GI_TYPELIB_PATH "$GI_TYPELIB_PATH")
+  '';
 
   postInstall = ''
     makeWrapper ${python3Packages.python.interpreter} $out/bin/${pname}-python-interpreter \
       --prefix PYTHONPATH : "$PYTHONPATH" \
-      ${ldWrapperSuffix}
+      ''${makeWrapperArgs[@]}
   '';
 
   # no tests in tarball
   doCheck = false;
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/enkore/i3pystatus;
+  meta = with lib; {
+    homepage = "https://github.com/enkore/i3pystatus";
     description = "A complete replacement for i3status";
     longDescription = ''
       i3pystatus is a growing collection of python scripts for status output compatible

@@ -1,50 +1,70 @@
-{ stdenv, fetchFromGitHub, python2, cdparanoia, cdrdao, flac
-, sox, accuraterip-checksum, utillinux, substituteAll }:
+{ lib
+, python3
+, fetchFromGitHub
+, libcdio-paranoia
+, cdrdao
+, libsndfile
+, flac
+, sox
+, util-linux
+}:
 
-python2.pkgs.buildPythonApplication rec {
-  name = "whipper-${version}";
-  version = "0.7.3";
+let
+  bins = [ libcdio-paranoia cdrdao flac sox util-linux ];
+in python3.pkgs.buildPythonApplication rec {
+  pname = "whipper";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "whipper-team";
     repo = "whipper";
     rev = "v${version}";
-    sha256 = "0ypbgc458i7yvbyvg6wg6agz5yzlwm1v6zw7fmyq9h59xsv27mpr";
+    sha256 = "00cq03cy5dyghmibsdsq5sdqv3bzkzhshsng74bpnb5lasxp3ia5";
   };
 
-  pythonPath = with python2.pkgs; [
-    pygobject3 musicbrainzngs urllib3 chardet
-    pycdio setuptools mutagen CDDB
-    requests
+  nativeBuildInputs = with python3.pkgs; [
+    setuptools_scm
+    docutils
   ];
 
-  checkInputs = with python2.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
+    musicbrainzngs
+    mutagen
+    pycdio
+    pygobject3
+    ruamel_yaml
+    discid
+    pillow
+  ];
+
+  buildInputs = [ libsndfile ];
+
+  checkInputs = with python3.pkgs; [
     twisted
-  ];
-
-  patches = [
-    (substituteAll {
-      src = ./paths.patch;
-      inherit cdparanoia;
-    })
-  ];
+  ] ++ bins;
 
   makeWrapperArgs = [
-    "--prefix" "PATH" ":" "${stdenv.lib.makeBinPath [ accuraterip-checksum cdrdao utillinux flac sox ]}"
+    "--prefix" "PATH" ":" (lib.makeBinPath bins)
   ];
 
-  # some tests require internet access
-  # https://github.com/JoeLametta/whipper/issues/291
-  doCheck = false;
-
-  preCheck = ''
-    HOME=$TMPDIR
+  preBuild = ''
+    export SETUPTOOLS_SCM_PRETEND_VERSION="${version}"
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/whipper-team/whipper;
+  checkPhase = ''
+    runHook preCheck
+    # disable tests that require internet access
+    # https://github.com/JoeLametta/whipper/issues/291
+    substituteInPlace whipper/test/test_common_accurip.py \
+      --replace "test_AccurateRipResponse" "dont_test_AccurateRipResponse"
+    HOME=$TMPDIR ${python3.interpreter} -m unittest discover
+    runHook postCheck
+  '';
+
+  meta = with lib; {
+    homepage = "https://github.com/whipper-team/whipper";
     description = "A CD ripper aiming for accuracy over speed";
-    maintainers = with maintainers; [ rycee ];
+    maintainers = with maintainers; [ emily ];
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };

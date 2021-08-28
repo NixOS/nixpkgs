@@ -1,43 +1,84 @@
-{ stdenv, lib, fetchurl, makeWrapper, jre, gnused
-, disableRemoteLogging ? true
-}:
+{ lib, stdenv, fetchurl, jre, nixosTests, writeScript, common-updater-scripts, git
+, nixfmt, nix, coreutils, gnused, disableRemoteLogging ? true }:
 
-with stdenv.lib;
-stdenv.mkDerivation rec {
-  name = "ammonite-${version}";
-  version = "1.6.8";
-  scalaVersion = "2.12";
+with lib;
 
-  src = fetchurl {
-    url = "https://github.com/lihaoyi/Ammonite/releases/download/${version}/${scalaVersion}-${version}";
-    sha256 = "1lqc071v5f8dy1da669l0bfw9p8l6yavzlizzig9m441zcrmbj5d";
+let
+  repo = "git@github.com:lihaoyi/Ammonite.git";
+
+  common = { scalaVersion, sha256 }:
+    stdenv.mkDerivation rec {
+      pname = "ammonite";
+      version = "2.3.8";
+
+      src = fetchurl {
+        url =
+          "https://github.com/lihaoyi/Ammonite/releases/download/${version}/${scalaVersion}-${version}";
+        inherit sha256;
+      };
+
+      phases = "installPhase";
+
+      installPhase = ''
+        install -Dm755 $src $out/bin/amm
+        sed -i '0,/java/{s|java|${jre}/bin/java|}' $out/bin/amm
+      '' + optionalString (disableRemoteLogging) ''
+        sed -i "0,/ammonite.Main/{s|ammonite.Main'|ammonite.Main' --no-remote-logging|}" $out/bin/amm
+        sed -i '1i #!/bin/sh' $out/bin/amm
+      '';
+
+      passthru = {
+        tests = { inherit (nixosTests) ammonite; };
+
+        updateScript = writeScript "update.sh" ''
+          #!${stdenv.shell}
+          set -o errexit
+          PATH=${
+            lib.makeBinPath [
+              common-updater-scripts
+              coreutils
+              git
+              gnused
+              nix
+              nixfmt
+            ]
+          }
+          oldVersion="$(nix-instantiate --eval -E "with import ./. {}; lib.getVersion ${pname}" | tr -d '"')"
+          latestTag="$(git -c 'versionsort.suffix=-' ls-remote --exit-code --refs --sort='version:refname' --tags ${repo} '*.*.*' | tail --lines=1 | cut --delimiter='/' --fields=3)"
+          if [ "$oldVersion" != "$latestTag" ]; then
+            nixpkgs="$(git rev-parse --show-toplevel)"
+            default_nix="$nixpkgs/pkgs/development/tools/ammonite/default.nix"
+            update-source-version ${pname}_2_12 "$latestTag" --version-key=version --print-changes
+            sed -i "s|$latestTag|$oldVersion|g" "$default_nix"
+            update-source-version ${pname}_2_13 "$latestTag" --version-key=version --print-changes
+            nixfmt "$default_nix"
+          else
+            echo "${pname} is already up-to-date"
+          fi
+        '';
+      };
+
+      meta = {
+        description = "Improved Scala REPL";
+        longDescription = ''
+          The Ammonite-REPL is an improved Scala REPL, re-implemented from first principles.
+          It is much more featureful than the default REPL and comes
+          with a lot of ergonomic improvements and configurability
+          that may be familiar to people coming from IDEs or other REPLs such as IPython or Zsh.
+        '';
+        homepage = "http://www.lihaoyi.com/Ammonite/";
+        license = licenses.mit;
+        platforms = platforms.all;
+        maintainers = [ maintainers.nequissimus ];
+      };
+    };
+in {
+  ammonite_2_12 = common {
+    scalaVersion = "2.12";
+    sha256 = "1kzk0437h2wd9jhwkvjkiaj6mscz4bh85iv266x9zz4zssb355hs";
   };
-
-  propagatedBuildInputs = [ jre ] ;
-  buildInputs = [ makeWrapper gnused ] ;
-
-  phases = "installPhase";
-
-  installPhase = ''
-    mkdir -p $out/bin
-    cp ${src} $out/bin/amm
-    chmod +x $out/bin/amm
-    ${gnused}/bin/sed -i '0,/java/{s|java|${jre}/bin/java|}' $out/bin/amm
-  '' + optionalString (disableRemoteLogging) ''
-    ${gnused}/bin/sed -i '0,/ammonite.Main/{s|ammonite.Main|ammonite.Main --no-remote-logging|}' $out/bin/amm
-  '';
-
-  meta = {
-    description = "Improved Scala REPL";
-    longDescription = ''
-        The Ammonite-REPL is an improved Scala REPL, re-implemented from first principles.
-        It is much more featureful than the default REPL and comes
-        with a lot of ergonomic improvements and configurability
-        that may be familiar to people coming from IDEs or other REPLs such as IPython or Zsh.
-    '';
-    homepage = http://www.lihaoyi.com/Ammonite/;
-    license = lib.licenses.mit;
-    platforms = lib.platforms.all;
-    maintainers = [ lib.maintainers.nequissimus ];
+  ammonite_2_13 = common {
+    scalaVersion = "2.13";
+    sha256 = "0js84m6yqjd7d77md38z6nk3qzlm1ms8brzczaw05zq2c90pdbz7";
   };
 }

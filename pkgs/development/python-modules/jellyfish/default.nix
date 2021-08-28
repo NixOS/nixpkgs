@@ -8,19 +8,19 @@
 
 buildPythonPackage rec {
   pname = "jellyfish";
-  version = "0.7.1";
+  version = "0.8.2";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1hd1xzw22g1cp2dpf5bbpg8a7iac2v9hw0xrj5n5j83inh5n99br";
+    sha256 = "02q3d9b933hf8lyvg7w7lgmhij8bjs748vjmsfxhabai04a796d4";
   };
 
   checkInputs = [ pytest unicodecsv ];
 
   meta = {
-    homepage = https://github.com/sunlightlabs/jellyfish;
+    homepage = "https://github.com/sunlightlabs/jellyfish";
     description = "Approximate and phonetic matching of strings";
     maintainers = with lib.maintainers; [ koral ];
   };

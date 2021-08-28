@@ -1,8 +1,0 @@
-diff -Naur clang-3.4-orig/tools/extra/CMakeLists.txt clang-3.4/tools/extra/CMakeLists.txt
---- clang-3.4-orig/tools/extra/CMakeLists.txt	2013-11-07 19:08:23.000000000 -0500
-+++ clang-3.4/tools/extra/CMakeLists.txt	2014-01-20 11:47:22.678435223 -0500
-@@ -1,3 +1,4 @@
-+include(CheckLibraryExists)
- check_library_exists(edit el_init "" HAVE_LIBEDIT)
- 
- add_subdirectory(clang-apply-replacements)

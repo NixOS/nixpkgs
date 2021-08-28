@@ -1,27 +1,31 @@
 { lib
 , fetchgit
+, nix-update-script
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , python3
 , gtk3
 , gst_all_1
+, libhandy
 , libsecret
 , libsoup
 , appstream-glib
 , desktop-file-utils
 , totem-pl-parser
-, hicolor-icon-theme
 , gobject-introspection
+, glib-networking
+, gdk-pixbuf
+, glib
+, pango
 , wrapGAppsHook
 , lastFMSupport ? true
-, wikipediaSupport ? true
-, youtubeSupport ? true, youtube-dl
+, youtubeSupport ? true
 }:
 
 python3.pkgs.buildPythonApplication rec  {
   pname = "lollypop";
-  version = "1.0.12";
+  version = "1.4.17";
 
   format = "other";
   doCheck = false;
@@ -30,7 +34,7 @@ python3.pkgs.buildPythonApplication rec  {
     url = "https://gitlab.gnome.org/World/lollypop";
     rev = "refs/tags/${version}";
     fetchSubmodules = true;
-    sha256 = "0jc40p2yw3zp035c87crav2lq0iraf35ag9w26vzmbjvgpvwzb86";
+    sha256 = "sha256-GrznUXIYUTYOKQ1znsCqmBdm5YImCABMK2NGRtx5fSk=";
   };
 
   nativeBuildInputs = [
@@ -39,12 +43,14 @@ python3.pkgs.buildPythonApplication rec  {
     gobject-introspection
     meson
     ninja
-    pkgconfig
+    pkg-config
     wrapGAppsHook
   ];
 
   buildInputs = with gst_all_1; [
-    gobject-introspection
+    gdk-pixbuf
+    glib
+    glib-networking
     gst-libav
     gst-plugins-bad
     gst-plugins-base
@@ -52,8 +58,9 @@ python3.pkgs.buildPythonApplication rec  {
     gst-plugins-ugly
     gstreamer
     gtk3
-    hicolor-icon-theme
+    libhandy
     libsoup
+    pango
     totem-pl-parser
   ] ++ lib.optional lastFMSupport libsecret;
 
@@ -64,7 +71,6 @@ python3.pkgs.buildPythonApplication rec  {
     pygobject3
   ]
   ++ lib.optional lastFMSupport pylast
-  ++ lib.optional wikipediaSupport wikipedia
   ++ lib.optional youtubeSupport youtube-dl
   ;
 
@@ -73,17 +79,34 @@ python3.pkgs.buildPythonApplication rec  {
     patchShebangs meson_post_install.py
   '';
 
-  preFixup = ''
-    buildPythonPath "$out $propagatedBuildInputs"
-    patchPythonScript "$out/libexec/lollypop-sp"
+  postFixup = ''
+    wrapPythonProgramsIn $out/libexec "$out $propagatedBuildInputs"
   '';
 
+  strictDeps = false;
+
+  # Produce only one wrapper using wrap-python passing
+  # gappsWrapperArgs to wrap-python additional wrapper
+  # argument
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = pname;
+    };
+  };
+
+
   meta = with lib; {
-    description = "A modern music player for GNOME";
-    homepage = https://wiki.gnome.org/Apps/Lollypop;
-    license = licenses.gpl3Plus;
     changelog = "https://gitlab.gnome.org/World/lollypop/tags/${version}";
-    maintainers = with maintainers; [ worldofpeace ];
+    description = "A modern music player for GNOME";
+    homepage = "https://wiki.gnome.org/Apps/Lollypop";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ lovesegfault ];
     platforms = platforms.linux;
   };
 }

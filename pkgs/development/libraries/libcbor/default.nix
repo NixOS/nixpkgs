@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, cmake, cmocka }:
+{ lib, stdenv, fetchFromGitHub, cmake, cmocka }:
 
 stdenv.mkDerivation rec {
   pname = "libcbor";
-  version = "2019-02-23";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "PJK";
     repo = pname;
-    rev = "87f977e732ca216682a8583a0e43803eb6b9c028";
-    sha256 = "17p1ahdcpf5d4r472lhciscaqjq4pyxy9xjhqqx8mv646xmyripm";
+    rev = "v${version}";
+    sha256 = "01dv4vxcmbvpphqy16vqiwh25wx11x630js5wfnx7cryarsh9ld7";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -16,11 +16,11 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # needs "-DWITH_TESTS=ON", but fails w/compilation error
 
-  NIX_CFLAGS_COMPILE = [ "-fno-lto" ];
+  cmakeFlags = [ "-DCMAKE_INSTALL_LIBDIR=lib" "-DBUILD_SHARED_LIBS=on" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "CBOR protocol implementation for C and others";
-    homepage = https://github.com/PJK/libcbor;
+    homepage = "https://github.com/PJK/libcbor";
     license = licenses.mit;
     maintainers = with maintainers; [ dtzWill ];
   };

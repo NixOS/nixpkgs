@@ -1,10 +1,23 @@
-{ stdenv, buildPythonPackage, fetchPypi, jinja2, jinja2_pluralize, pygments,
-  six, inflect, mock, nose, coverage, pycodestyle, flake8, pyflakes, git,
-  pylint, pydocstyle, fetchpatch, glibcLocales }:
+{ lib, buildPythonPackage, fetchPypi
+, chardet
+, inflect
+, jinja2
+, jinja2_pluralize
+, pygments
+, six
+# test dependencies
+, coverage
+, mock
+, nose
+, pycodestyle
+, pyflakes
+, pylint
+, pytest
+}:
 
 buildPythonPackage rec {
   pname = "diff_cover";
-  version = "1.0.2";
+  version = "5.0.1";
 
   preCheck = ''
     export LC_ALL=en_US.UTF-8;
@@ -12,24 +25,21 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1wbp0kfv2mjxwnq2jlqmwvb71fywwc4x4azxi7ll5dll6nhjyd61";
+    sha256 = "e80f7a4979b7a9d373903776588279ed2898f17729e608255c4119462c822edb";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "tests-fix.patch";
-      url = "https://github.com/Bachmann1234/diff-cover/commit/85c30959c8ed2aa3848f400095a2418f15bb7777.patch";
-      sha256 = "0xni4syrxww9kdv8495f416vqgfdys4w2hgf5rdi35hy3ybfslh0";
-    })
-  ];
+  propagatedBuildInputs = [ chardet jinja2 jinja2_pluralize pygments six inflect ];
 
-  propagatedBuildInputs = [ jinja2 jinja2_pluralize pygments six inflect ];
+  checkInputs = [ mock coverage pytest nose pylint pyflakes pycodestyle ];
 
-  checkInputs = [ mock nose coverage pycodestyle flake8 pyflakes pylint pydocstyle git glibcLocales ];
+  # ignore tests which try to write files
+  checkPhase = ''
+    pytest -k 'not added_file_pylint_console and not file_does_not_exist'
+  '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Automatically find diff lines that need test coverage";
-    homepage = https://github.com/Bachmann1234/diff-cover;
+    homepage = "https://github.com/Bachmann1234/diff-cover";
     license = licenses.asl20;
     maintainers = with maintainers; [ dzabraev ];
   };

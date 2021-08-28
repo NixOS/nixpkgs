@@ -1,6 +1,6 @@
 { fetchMaven }:
 
-rec {
+{
   mavenPluginDescriptor_2_0_1 = map (obj: fetchMaven {
     version = "2.0.1";
     artifactId = "maven-plugin-descriptor";

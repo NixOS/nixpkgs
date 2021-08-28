@@ -1,12 +1,13 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, common-updater-scripts, coreutils, git, gnused, nix
+, nixfmt, writeScript, nixosTests, jq, cacert, curl }:
 
 stdenv.mkDerivation rec {
-  name = "jenkins-${version}";
-  version = "2.176.1";
+  pname = "jenkins";
+  version = "2.277.4";
 
   src = fetchurl {
     url = "http://mirrors.jenkins.io/war-stable/${version}/jenkins.war";
-    sha256 = "130f9x4fvnf9a9ykf48axj9fgqaj2ssr9jhsflpi1gg78ch6xg4b";
+    sha256 = "19z72d0rkxpvl03aqz102in9ln08r9831lj3ymsgmglk8c37ici6";
   };
 
   buildCommand = ''
@@ -14,11 +15,50 @@ stdenv.mkDerivation rec {
     cp "$src" "$out/webapps/jenkins.war"
   '';
 
-  meta = with stdenv.lib; {
+  passthru = {
+    tests = { inherit (nixosTests) jenkins; };
+
+    updateScript = writeScript "update.sh" ''
+      #!${stdenv.shell}
+      set -o errexit
+      PATH=${
+        lib.makeBinPath [
+          cacert
+          common-updater-scripts
+          coreutils
+          curl
+          git
+          gnused
+          jq
+          nix
+          nixfmt
+        ]
+      }
+
+      core_json="$(curl -s --fail --location https://updates.jenkins.io/stable/update-center.actual.json | jq .core)"
+      oldVersion=$(nix-instantiate --eval -E "with import ./. {}; lib.getVersion jenkins" | tr -d '"')
+
+      version="$(jq -r .version <<<$core_json)"
+      sha256="$(jq -r .sha256 <<<$core_json)"
+      hash="$(nix-hash --type sha256 --to-base32 "$sha256")"
+      url="$(jq -r .url <<<$core_json)"
+
+      if [ ! "$oldVersion" = "$version" ]; then
+        update-source-version jenkins "$version" "$hash" "$url"
+        nixpkgs="$(git rev-parse --show-toplevel)"
+        default_nix="$nixpkgs/pkgs/development/tools/continuous-integration/jenkins/default.nix"
+        nixfmt "$default_nix"
+      else
+        echo "jenkins is already up-to-date"
+      fi
+    '';
+  };
+
+  meta = with lib; {
     description = "An extendable open source continuous integration server";
-    homepage = https://jenkins-ci.org;
+    homepage = "https://jenkins-ci.org";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ coconnor fpletz earldouglas ];
+    maintainers = with maintainers; [ coconnor fpletz earldouglas nequissimus ];
   };
 }

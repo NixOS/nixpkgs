@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, python3Packages }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, python3Packages, libspnav, jq }:
 
 let
 
@@ -6,25 +6,67 @@ let
 
     octoprint = stdenv.mkDerivation rec {
       pname = "Cura-OctoPrintPlugin";
-      version = "3.5.5";
+      version = "3.5.18";
 
       src = fetchFromGitHub {
         owner = "fieldOfView";
         repo = pname;
-        rev = "d05a9a4c1a01c584d5cec4f4b7d170077235467a";
-        sha256 = "0ik69g3kbn7rz2wh0cfq9ww8x222kagd8jvsd4xlqgq4yrf0jk7x";
+        rev = "7bd73946fbf22d18337dc900a81a011ece26bee0";
+        sha256 = "057b2f5f49p96lkh2wsr9w6yh2003x4a85irqsgbzp6igmk8imdn";
       };
-
-      nativeBuildInputs = [ cmake ];
 
       propagatedBuildInputs = with python3Packages; [
         netifaces
       ];
 
-      meta = with stdenv.lib; {
+      installPhase = ''
+        mkdir -p $out/lib/cura/plugins/OctoPrintPlugin
+        cp -rv . $out/lib/cura/plugins/OctoPrintPlugin/
+      '';
+
+      meta = with lib; {
         description = "Enables printing directly to OctoPrint and monitoring the process";
         homepage = "https://github.com/fieldOfView/Cura-OctoPrintPlugin";
         license = licenses.agpl3;
+        maintainers = with maintainers; [ gebner ];
+      };
+    };
+
+    rawmouse = stdenv.mkDerivation rec {
+      pname = "RawMouse";
+      version = "1.1.0";
+
+      src = fetchFromGitHub {
+        owner = "smartavionics";
+        repo = pname;
+        rev = version;
+        sha256 = "0hvi7qwd4xfnqnhbj9dgfjmvv9df7s42asf3fdfxv43n6nx74scw";
+      };
+
+      nativeBuildInputs = [ jq ];
+
+      propagatedBuildInputs = with python3Packages; [
+        hidapi
+      ];
+
+      buildPhase = ''
+        jq 'del(.devices) | .libspnav="${libspnav}/lib/libspnav.so"' \
+          <RawMouse/config.json >RawMouse/config.json.new
+        mv RawMouse/config.json.new RawMouse/config.json
+
+        # remove prebuilt binaries
+        rm -r RawMouse/hidapi
+      '';
+
+      installPhase = ''
+        mkdir -p $out/lib/cura/plugins/RawMouse
+        cp -rv . $out/lib/cura/plugins/RawMouse/
+      '';
+
+      meta = with lib; {
+        description = "Cura plugin for HID mice such as 3Dconnexion spacemouse";
+        homepage = "https://github.com/smartavionics/RawMouse";
+        license = licenses.agpl3Plus;
         maintainers = with maintainers; [ gebner ];
       };
     };

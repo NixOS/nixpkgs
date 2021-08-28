@@ -1,7 +1,7 @@
 { lib, pythonPackages, fetchurl }:
 
 pythonPackages.buildPythonApplication rec {
-  name = "mir.qualia-${version}";
+  pname = "mir.qualia";
   version = "2.0.0";
   doCheck = false; # 2.0.0-released pytests are broken
 
@@ -14,7 +14,7 @@ pythonPackages.buildPythonApplication rec {
 
   meta = {
     description = "Dynamically enable sections of config files";
-    homepage = https://github.com/darkfeline/mir.qualia;
+    homepage = "https://github.com/darkfeline/mir.qualia";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.srhb ] ;
   };

@@ -2,6 +2,8 @@
 , buildPythonPackage
 , isPy3k
 , fetchPypi
+, setuptools_scm
+, setuptools
 , requests
 , lxml
 , beautifulsoup4
@@ -9,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "snscrape";
-  version = "0.2.0";
+  version = "0.3.4";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "02mlpzkvpl2mv30cknq6ngw02y7gj2614qikq25ncrpg5vb903d9";
+    sha256 = "36ba7f95c8bf5202749189f760e591952f19c849379c35ff598aafafe5d0cfef";
   };
 
   # There are no tests; make sure the executable works.
@@ -24,10 +26,11 @@ buildPythonPackage rec {
     snscrape --help
   '';
 
-  propagatedBuildInputs = [ requests lxml beautifulsoup4 ];
+  nativeBuildInputs = [ setuptools_scm ];
+  propagatedBuildInputs = [ setuptools requests lxml beautifulsoup4 ];
 
   meta = with lib; {
-    homepage = https://github.com/JustAnotherArchivist/snscrape;
+    homepage = "https://github.com/JustAnotherArchivist/snscrape";
     description = "A social networking service scraper in Python";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ ivan ];

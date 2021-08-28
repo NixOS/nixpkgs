@@ -1,63 +1,92 @@
-{ stdenv, fetchpatch, fetchurl, python2Packages, librsync, ncftp, gnupg
+{ lib, stdenv
+, fetchurl
+, pythonPackages
+, librsync
+, ncftp
+, gnupg
 , gnutar
 , par2cmdline
-, utillinux
-, rsync, makeWrapper }:
-
-python2Packages.buildPythonApplication rec {
-  name = "duplicity-${version}";
-  version = "0.7.19";
+, util-linux
+, rsync
+, makeWrapper
+, gettext
+}:
+let
+  inherit (lib.versions) majorMinor splitVersion;
+  majorMinorPatch = v: builtins.concatStringsSep "." (lib.take 3 (splitVersion v));
+in
+pythonPackages.buildPythonApplication rec {
+  pname = "duplicity";
+  version = "0.8.17";
 
   src = fetchurl {
-    url = "https://code.launchpad.net/duplicity/${stdenv.lib.versions.majorMinor version}-series/${version}/+download/${name}.tar.gz";
-    sha256 = "0ag9dknslxlasslwfjhqgcqbkb1mvzzx93ry7lch2lfzcdd91am6";
+    url = "https://code.launchpad.net/duplicity/${majorMinor version}-series/${majorMinorPatch version}/+download/duplicity-${version}.tar.gz";
+    sha256 = "114rwkf9b3h4fcagrx013sb7krc4hafbwl9gawjph2wd9pkv2wx2";
   };
-  patches = [
-    ./gnutar-in-test.patch
-    ./use-installed-scripts-in-test.patch
 
-    # The following patches improve the performance of installCheckPhase:
-    # Ensure all duplicity output is captured in tests
-    (fetchpatch {
-      extraPrefix = "";
-      sha256 = "07ay3mmnw8p2j3v8yvcpjsx0rf2jqly9ablwjpmry23dz9f0mxsd";
-      url = "https://bazaar.launchpad.net/~duplicity-team/duplicity/0.8-series/diff/1359.2.1";
-    })
-    # Minimize time spent sleeping between backups
-    (fetchpatch {
-      extraPrefix = "";
-      sha256 = "0v99q6mvikb8sf68gh3s0zg12pq8fijs87fv1qrvdnc8zvs4pmfs";
-      url = "https://bazaar.launchpad.net/~duplicity-team/duplicity/0.8-series/diff/1359.2.2";
-    })
-    # Remove unnecessary sleeping after running backups in tests
-    (fetchpatch {
-      extraPrefix = "";
-      sha256 = "1bmgp4ilq2gwz2k73fxrqplf866hj57lbyabaqpkvwxhr0ch1jiq";
-      url = "https://bazaar.launchpad.net/~duplicity-team/duplicity/0.8-series/diff/1359.2.3";
-    })
-  ] ++ stdenv.lib.optionals stdenv.isLinux [
+  patches = [
+    # We use the tar binary on all platforms.
+    ./gnutar-in-test.patch
+
+    # Our Python infrastructure runs test in installCheckPhase so we need
+    # to make the testing code stop assuming it is run from the source directory.
+    ./use-installed-scripts-in-test.patch
+  ] ++ lib.optionals stdenv.isLinux [
+    # Broken on Linux in Nix' build environment
     ./linux-disable-timezone-test.patch
   ];
 
-  buildInputs = [ librsync makeWrapper python2Packages.wrapPython ];
-  propagatedBuildInputs = with python2Packages; [
-    boto cffi cryptography ecdsa enum idna pygobject3 fasteners
-    ipaddress lockfile paramiko pyasn1 pycrypto six
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
+  nativeBuildInputs = [
+    makeWrapper
+    gettext
+    pythonPackages.wrapPython
+    pythonPackages.setuptools-scm
   ];
+  buildInputs = [
+    librsync
+  ];
+
+  pythonPath = with pythonPackages; [
+    b2sdk
+    boto
+    boto3
+    cffi
+    cryptography
+    ecdsa
+    idna
+    pygobject3
+    fasteners
+    ipaddress
+    lockfile
+    paramiko
+    pyasn1
+    pycrypto
+    pydrive
+    future
+  ] ++ lib.optionals (!isPy3k) [
+    enum
+  ];
+
   checkInputs = [
-    gnupg  # Add 'gpg' to PATH.
-    gnutar  # Add 'tar' to PATH.
-    librsync  # Add 'rdiff' to PATH.
-    par2cmdline  # Add 'par2' to PATH.
-  ] ++ stdenv.lib.optionals stdenv.isLinux [
-    utillinux  # Add 'setsid' to PATH.
-  ] ++ (with python2Packages; [ lockfile mock pexpect ]);
+    gnupg # Add 'gpg' to PATH.
+    gnutar # Add 'tar' to PATH.
+    librsync # Add 'rdiff' to PATH.
+    par2cmdline # Add 'par2' to PATH.
+  ] ++ lib.optionals stdenv.isLinux [
+    util-linux # Add 'setsid' to PATH.
+  ] ++ (with pythonPackages; [
+    lockfile
+    mock
+    pexpect
+    pytest
+    pytestrunner
+  ]);
 
   postInstall = ''
     wrapProgram $out/bin/duplicity \
-      --prefix PATH : "${stdenv.lib.makeBinPath [ gnupg ncftp rsync ]}"
-
-    wrapPythonPrograms
+      --prefix PATH : "${lib.makeBinPath [ gnupg ncftp rsync ]}"
   '';
 
   preCheck = ''
@@ -73,7 +102,7 @@ python2Packages.buildPythonApplication rec {
 
     # Don't run developer-only checks (pep8, etc.).
     export RUN_CODE_TESTS=0
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.isDarwin ''
     # Work around the following error when running tests:
     # > Max open files of 256 is too low, should be >= 1024.
     # > Use 'ulimit -n 1024' or higher to correct.
@@ -85,9 +114,9 @@ python2Packages.buildPythonApplication rec {
   # > OSError: out of pty devices
   doCheck = !stdenv.isDarwin;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Encrypted bandwidth-efficient backup using the rsync algorithm";
-    homepage = https://www.nongnu.org/duplicity;
+    homepage = "https://www.nongnu.org/duplicity";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ peti ];
     platforms = platforms.unix;

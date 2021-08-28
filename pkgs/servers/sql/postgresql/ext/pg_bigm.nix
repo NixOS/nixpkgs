@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, postgresql }:
+{ lib, stdenv, fetchurl, postgresql }:
 
 stdenv.mkDerivation rec {
   pname = "pg_bigm";
@@ -15,14 +15,14 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin    # For buildEnv to setup proper symlinks. See #22653
-    mkdir -p $out/{lib,share/extension}
+    mkdir -p $out/{lib,share/postgresql/extension}
 
     cp *.so      $out/lib
-    cp *.sql     $out/share/extension
-    cp *.control $out/share/extension
+    cp *.sql     $out/share/postgresql/extension
+    cp *.control $out/share/postgresql/extension
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Text similarity measurement and index searching based on bigrams";
     homepage = "https://pgbigm.osdn.jp/";
     maintainers = [ maintainers.marsam ];

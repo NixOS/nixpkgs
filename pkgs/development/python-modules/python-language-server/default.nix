@@ -1,6 +1,6 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, pythonOlder, isPy27
-, configparser, futures, future, jedi, pluggy, python-jsonrpc-server
-, pytest, mock, pytestcov, coverage
+{ lib, buildPythonPackage, fetchFromGitHub, pythonAtLeast, pythonOlder, isPy27
+, backports_functools_lru_cache ? null, configparser ? null, futures ? null, future, jedi, pluggy, python-jsonrpc-server, flake8
+, pytestCheckHook, mock, pytestcov, coverage, setuptools, ujson, flaky
 , # Allow building a limited set of providers, e.g. ["pycodestyle"].
   providers ? ["*"]
   # The following packages are optional and
@@ -21,43 +21,67 @@ in
 
 buildPythonPackage rec {
   pname = "python-language-server";
-  version = "0.26.1";
+  version = "0.36.2";
+  # https://github.com/palantir/python-language-server/issues/896#issuecomment-752790868
+  disabled = pythonAtLeast "3.9";
 
   src = fetchFromGitHub {
     owner = "palantir";
     repo = "python-language-server";
     rev = version;
-    sha256 = "003fy8bbvwibnsnyxw1qwg2rxnhbfylqs67ixr6fdnw6mmrzd6fg";
+    sha256 = "07x6jr4z20jxn03bxblwc8vk0ywha492cgwfhj7q97nb5cm7kx0q";
   };
+
+  postPatch = ''
+    # Reading the changelog I don't expect an API break in pycodestyle and pyflakes
+    substituteInPlace setup.py \
+      --replace "pycodestyle>=2.6.0,<2.7.0" "pycodestyle>=2.6.0,<2.8.0" \
+      --replace "pyflakes>=2.2.0,<2.3.0" "pyflakes>=2.2.0,<2.4.0"
+  '';
+
+  propagatedBuildInputs = [ setuptools jedi pluggy future python-jsonrpc-server ujson ]
+    ++ lib.optional (withProvider "autopep8") autopep8
+    ++ lib.optional (withProvider "mccabe") mccabe
+    ++ lib.optional (withProvider "pycodestyle") pycodestyle
+    ++ lib.optional (withProvider "pydocstyle") pydocstyle
+    ++ lib.optional (withProvider "pyflakes") pyflakes
+    ++ lib.optional (withProvider "pylint") pylint
+    ++ lib.optional (withProvider "rope") rope
+    ++ lib.optional (withProvider "yapf") yapf
+    ++ lib.optional isPy27 configparser
+    ++ lib.optionals (pythonOlder "3.2") [ backports_functools_lru_cache futures ];
 
   # The tests require all the providers, disable otherwise.
   doCheck = providers == ["*"];
 
   checkInputs = [
-    pytest mock pytestcov coverage
+    pytestCheckHook mock pytestcov coverage flaky
+    # Do not propagate flake8 or it will enable pyflakes implicitly
+    flake8
     # rope is technically a dependency, but we don't add it by default since we
     # already have jedi, which is the preferred option
     rope
   ];
 
-  checkPhase = ''
-    HOME=$TEMPDIR pytest
+  dontUseSetuptoolsCheck = true;
+
+  preCheck = ''
+    export HOME=$TEMPDIR
   '';
 
-  propagatedBuildInputs = [ jedi pluggy future python-jsonrpc-server ]
-    ++ stdenv.lib.optional (withProvider "autopep8") autopep8
-    ++ stdenv.lib.optional (withProvider "mccabe") mccabe
-    ++ stdenv.lib.optional (withProvider "pycodestyle") pycodestyle
-    ++ stdenv.lib.optional (withProvider "pydocstyle") pydocstyle
-    ++ stdenv.lib.optional (withProvider "pyflakes") pyflakes
-    ++ stdenv.lib.optional (withProvider "pylint") pylint
-    ++ stdenv.lib.optional (withProvider "rope") rope
-    ++ stdenv.lib.optional (withProvider "yapf") yapf
-    ++ stdenv.lib.optional isPy27 configparser
-    ++ stdenv.lib.optional (pythonOlder "3.2") futures;
+  # Tests failed since update to 0.31.8
+  disabledTests = [
+    "test_pyqt_completion"
+    "test_numpy_completions"
+    "test_pandas_completions"
+    "test_matplotlib_completions"
+    "test_snippet_parsing"
+    "test_numpy_hover"
+    "test_symbols"
+  ] ++ lib.optional isPy27 "test_flake8_lint";
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/palantir/python-language-server;
+  meta = with lib; {
+    homepage = "https://github.com/palantir/python-language-server";
     description = "An implementation of the Language Server Protocol for Python";
     license = licenses.mit;
     maintainers = [ maintainers.mic92 ];

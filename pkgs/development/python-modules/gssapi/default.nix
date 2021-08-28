@@ -1,34 +1,78 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, six, enum34, decorator,
-nose, gss, krb5Full, darwin }:
+{ stdenv
+, lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, six
+, decorator
+, nose
+, krb5Full
+, GSS
+, parameterized
+, shouldbe
+, cython
+, python
+, k5test
+}:
 
 buildPythonPackage rec {
   pname = "gssapi";
-  version = "1.5.1";
+  version = "1.6.12";
+  disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "76c9fda88a7178f41bf6454a06d64054c56b46f0dcbc73307f2e57bb8c25d8cc";
+  src = fetchFromGitHub {
+    owner = "pythongssapi";
+    repo = "python-${pname}";
+    rev = "v${version}";
+    sha256 = "0r6w52vji1095n3wgzjz9ddaqsvsf3f4gal0rv5i62hpqwlbzkn7";
   };
 
   # It's used to locate headers
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "get_output('krb5-config gssapi --prefix')" "'${lib.getDev krb5Full}'"
+      --replace 'get_output(f"{kc} gssapi --prefix")' '"${lib.getDev krb5Full}"'
   '';
 
-  LD_LIBRARY_PATH = "${krb5Full}/lib";
+  nativeBuildInputs = [
+    cython
+    krb5Full
+  ];
 
-  nativeBuildInputs = [ krb5Full ]
-  ++ ( if stdenv.isDarwin then [ darwin.apple_sdk.frameworks.GSS ] else [ gss ] );
+  propagatedBuildInputs =  [
+    decorator
+    six
+  ];
 
-  propagatedBuildInputs =  [ decorator enum34 six ];
+  buildInputs = lib.optionals stdenv.isDarwin [
+    GSS
+  ];
 
-  checkInputs = [ nose ];
+  checkInputs = [
+    k5test
+    nose
+    parameterized
+    shouldbe
+    six
+  ];
 
-  doCheck = false; # No such file or directory: '/usr/sbin/kadmin.local'
+  doCheck = pythonOlder "3.8"  # `shouldbe` not available
+    && !stdenv.isDarwin;  # many failures on darwin
 
-  meta = with stdenv.lib; {
-    homepage = https://pypi.python.org/pypi/gssapi;
+  # skip tests which fail possibly due to be an upstream issue (see
+  # https://github.com/pythongssapi/python-gssapi/issues/220)
+  checkPhase = ''
+    # some tests don't respond to being disabled through nosetests -x
+    echo $'\ndel CredsTestCase.test_add_with_impersonate' >> gssapi/tests/test_high_level.py
+    echo $'\ndel TestBaseUtilities.test_acquire_creds_impersonate_name' >> gssapi/tests/test_raw.py
+    echo $'\ndel TestBaseUtilities.test_add_cred_impersonate_name' >> gssapi/tests/test_raw.py
+
+    export PYTHONPATH="$out/${python.sitePackages}:$PYTHONPATH"
+    ${python.interpreter} setup.py nosetests -e 'ext_test_\d.*'
+  '';
+  pythonImportsCheck = [ "gssapi" ];
+
+  meta = with lib; {
+    homepage = "https://pypi.python.org/pypi/gssapi";
     description = "Python GSSAPI Wrapper";
     license = licenses.mit;
   };

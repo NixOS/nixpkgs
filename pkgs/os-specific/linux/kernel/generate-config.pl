@@ -28,7 +28,7 @@ open ANSWERS, "<$ENV{KERNEL_CONFIG}" or die "Could not open answer file";
 while (<ANSWERS>) {
     chomp;
     s/#.*//;
-    if (/^\s*([A-Za-z0-9_]+)(\?)?\s+(\S+)\s*$/) {
+    if (/^\s*([A-Za-z0-9_]+)(\?)?\s+(.*\S)\s*$/) {
         $answers{$1} = $3;
         $requiredAnswers{$1} = !(defined $2);
     } elsif (!/^\s*$/) {
@@ -40,7 +40,7 @@ close ANSWERS;
 sub runConfig {
 
     # Run `make config'.
-    my $pid = open2(\*IN, \*OUT, "make -C $ENV{SRC} O=$buildRoot config SHELL=bash ARCH=$ENV{ARCH}");
+    my $pid = open2(\*IN, \*OUT, "make -C $ENV{SRC} O=$buildRoot config SHELL=bash ARCH=$ENV{ARCH} CC=$ENV{CC} HOSTCC=$ENV{HOSTCC} HOSTCXX=$ENV{HOSTCXX}");
 
     # Parse the output, look for questions and then send an
     # appropriate answer.
@@ -61,6 +61,12 @@ sub runConfig {
             # Remember choice alternatives ("> 1. bla (FOO)" or " 2. bla (BAR) (NEW)").
             if ($line =~ /^\s*>?\s*(\d+)\.\s+.*?\(([A-Za-z0-9_]+)\)(?:\s+\(NEW\))?\s*$/) {
                 $choices{$2} = $1;
+            } else {
+                # The list of choices has ended without us being
+                # asked. This happens for options where only one value
+                # is valid, for instance. The results can foul up
+                # later options, so forget about it.
+                %choices = ();
             }
 
             $line = "";
@@ -136,10 +142,12 @@ while (<CONFIG>) {
 }
 close CONFIG;
 
+my $ret = 0;
 foreach my $name (sort (keys %answers)) {
     my $f = $requiredAnswers{$name} && $ignoreConfigErrors ne "1"
-        ? sub { die "error: " . $_[0]; } : sub { warn "warning: " . $_[0]; };
+        ? sub { warn "error: " . $_[0]; $ret = -1; } : sub { warn "warning: " . $_[0]; };
     &$f("unused option: $name\n") unless defined $config{$name};
     &$f("option not set correctly: $name (wanted '$answers{$name}', got '$config{$name}')\n")
         if $config{$name} && $config{$name} ne $answers{$name};
 }
+exit $ret;

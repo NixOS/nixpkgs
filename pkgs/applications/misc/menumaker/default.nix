@@ -1,19 +1,19 @@
-{ stdenv, fetchurl, pythonPackages }:
+{ lib, fetchurl, pythonPackages }:
 
 pythonPackages.buildPythonApplication rec {
-  name = "menumaker-${version}";
-  version = "0.99.10";
+  pname = "menumaker";
+  version = "0.99.12";
 
   src = fetchurl {
-    url = "mirror://sourceforge/menumaker/${name}.tar.gz";
-    sha256 = "1mm4cvg3kphkkd8nwrhcg6d9nm5ar7mgc0wf6fxk6zck1l7xn8ky";
+    url = "mirror://sourceforge/menumaker/${pname}-${version}.tar.gz";
+    sha256 = "034v5204bsgkzzk6zfa5ia63q95gln47f7hwf96yvad5hrhmd8z3";
   };
 
   format = "other";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Heuristics-driven menu generator for several window managers";
-    homepage = http://menumaker.sourceforge.net;
+    homepage = "http://menumaker.sourceforge.net";
     license = licenses.bsd2;
     platforms = platforms.unix;
     maintainers = [ maintainers.romildo ];

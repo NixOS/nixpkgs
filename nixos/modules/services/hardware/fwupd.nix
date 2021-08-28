@@ -6,10 +6,27 @@ with lib;
 
 let
   cfg = config.services.fwupd;
+
+  customEtc = {
+    "fwupd/daemon.conf" = {
+      source = pkgs.writeText "daemon.conf" ''
+        [fwupd]
+        DisabledDevices=${lib.concatStringsSep ";" cfg.disabledDevices}
+        DisabledPlugins=${lib.concatStringsSep ";" cfg.disabledPlugins}
+      '';
+    };
+    "fwupd/uefi.conf" = {
+      source = pkgs.writeText "uefi.conf" ''
+        [uefi]
+        OverrideESPMountPoint=${config.boot.loader.efi.efiSysMountPoint}
+      '';
+    };
+  };
+
   originalEtc =
     let
-      mkEtcFile = n: nameValuePair n { source = "${pkgs.fwupd}/etc/${n}"; };
-    in listToAttrs (map mkEtcFile pkgs.fwupd.filesInstalledToEtc);
+      mkEtcFile = n: nameValuePair n { source = "${cfg.package}/etc/${n}"; };
+    in listToAttrs (map mkEtcFile cfg.package.filesInstalledToEtc);
   extraTrustedKeys =
     let
       mkName = p: "pki/fwupd/${baseNameOf (toString p)}";
@@ -24,7 +41,7 @@ let
     "fwupd/remotes.d/fwupd-tests.conf" = {
       source = pkgs.runCommand "fwupd-tests-enabled.conf" {} ''
         sed "s,^Enabled=false,Enabled=true," \
-        "${pkgs.fwupd.installedTests}/etc/fwupd/remotes.d/fwupd-tests.conf" > "$out"
+        "${cfg.package.installedTests}/etc/fwupd/remotes.d/fwupd-tests.conf" > "$out"
       '';
     };
   } else {};
@@ -42,21 +59,21 @@ in {
         '';
       };
 
-      blacklistDevices = mkOption {
-        type = types.listOf types.string;
+      disabledDevices = mkOption {
+        type = types.listOf types.str;
         default = [];
         example = [ "2082b5e0-7a64-478a-b1b2-e3404fab6dad" ];
         description = ''
-          Allow blacklisting specific devices by their GUID
+          Allow disabling specific devices by their GUID
         '';
       };
 
-      blacklistPlugins = mkOption {
-        type = types.listOf types.string;
-        default = [ "test" ];
+      disabledPlugins = mkOption {
+        type = types.listOf types.str;
+        default = [];
         example = [ "udev" ];
         description = ''
-          Allow blacklisting specific plugins
+          Allow disabling specific plugins
         '';
       };
 
@@ -74,43 +91,40 @@ in {
         default = false;
         description = ''
           Whether to enable test remote. This is used by
-          <link xlink:href="https://github.com/hughsie/fwupd/blob/master/data/installed-tests/README.md">installed tests</link>.
+          <link xlink:href="https://github.com/fwupd/fwupd/blob/master/data/installed-tests/README.md">installed tests</link>.
+        '';
+      };
+
+      package = mkOption {
+        type = types.package;
+        default = pkgs.fwupd;
+        description = ''
+          Which fwupd package to use.
         '';
       };
     };
   };
 
+  imports = [
+    (mkRenamedOptionModule [ "services" "fwupd" "blacklistDevices"] [ "services" "fwupd" "disabledDevices" ])
+    (mkRenamedOptionModule [ "services" "fwupd" "blacklistPlugins"] [ "services" "fwupd" "disabledPlugins" ])
+  ];
 
   ###### implementation
   config = mkIf cfg.enable {
-    environment.systemPackages = [ pkgs.fwupd ];
+    # Disable test related plug-ins implicitly so that users do not have to care about them.
+    services.fwupd.disabledPlugins = cfg.package.defaultDisabledPlugins;
 
-    environment.etc = {
-      "fwupd/daemon.conf" = {
-        source = pkgs.writeText "daemon.conf" ''
-          [fwupd]
-          BlacklistDevices=${lib.concatStringsSep ";" cfg.blacklistDevices}
-          BlacklistPlugins=${lib.concatStringsSep ";" cfg.blacklistPlugins}
-        '';
-      };
-      "fwupd/uefi.conf" = {
-        source = pkgs.writeText "uefi.conf" ''
-          [uefi]
-          OverrideESPMountPoint=${config.boot.loader.efi.efiSysMountPoint}
-        '';
-      };
+    environment.systemPackages = [ cfg.package ];
 
-    } // originalEtc // extraTrustedKeys // testRemote;
+    # customEtc overrides some files from the package
+    environment.etc = originalEtc // customEtc // extraTrustedKeys // testRemote;
 
-    services.dbus.packages = [ pkgs.fwupd ];
+    services.dbus.packages = [ cfg.package ];
 
-    services.udev.packages = [ pkgs.fwupd ];
+    services.udev.packages = [ cfg.package ];
 
-    systemd.packages = [ pkgs.fwupd ];
-
-    systemd.tmpfiles.rules = [
-      "d /var/lib/fwupd 0755 root root -"
-    ];
+    systemd.packages = [ cfg.package ];
   };
 
   meta = {

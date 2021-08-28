@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libspotify, alsaLib, readline, pkgconfig, apiKey ? null, unzip, gnused }:
+{ lib, stdenv, fetchurl, libspotify, alsaLib, readline, pkg-config, apiKey ? null, unzip, gnused }:
 
 let
   version = "12.1.51";
@@ -8,7 +8,8 @@ in
 if (stdenv.hostPlatform.system != "x86_64-linux" && stdenv.hostPlatform.system != "x86_64-darwin" && stdenv.hostPlatform.system != "i686-linux")
 then throw "Check https://developer.spotify.com/technologies/libspotify/ for a tarball for your system and add it here"
 else stdenv.mkDerivation {
-  name = "libspotify-${version}";
+  pname = "libspotify";
+  inherit version;
 
   src =
     if stdenv.hostPlatform.system == "x86_64-linux" then
@@ -46,14 +47,14 @@ else stdenv.mkDerivation {
 
 
   # darwin-specific
-  buildInputs = stdenv.lib.optional (stdenv.hostPlatform.system == "x86_64-darwin") unzip;
+  nativeBuildInputs = lib.optional (stdenv.hostPlatform.system == "x86_64-darwin") unzip;
 
   # linux-specific
-  installFlags = stdenv.lib.optionalString (isLinux)
+  installFlags = lib.optional isLinux
     "prefix=$(out)";
-  patchPhase = stdenv.lib.optionalString (isLinux)
+  patchPhase = lib.optionalString isLinux
     "${gnused}/bin/sed -i 's/ldconfig//' Makefile";
-  postInstall = stdenv.lib.optionalString (isLinux)
+  postInstall = lib.optionalString isLinux
     "mv -v share $out";
 
   passthru = {
@@ -61,11 +62,12 @@ else stdenv.mkDerivation {
       then throw ''
         Please visit ${libspotify.meta.homepage} to get an api key then set config.libspotify.apiKey accordingly
       '' else stdenv.mkDerivation {
-        name = "libspotify-samples-${version}";
+        pname = "libspotify-samples";
+        inherit version;
         src = libspotify.src;
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
         buildInputs = [ libspotify readline ]
-          ++ stdenv.lib.optional (!stdenv.isDarwin) alsaLib;
+          ++ lib.optional (!stdenv.isDarwin) alsaLib;
         postUnpack = "sourceRoot=$sourceRoot/share/doc/libspotify/examples";
         patchPhase = "cp ${apiKey} appkey.c";
         installPhase = ''
@@ -80,9 +82,9 @@ else stdenv.mkDerivation {
     inherit apiKey;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Spotify API library";
-    homepage    = https://developer.spotify.com/technologies/libspotify;
+    homepage    = "https://developer.spotify.com/technologies/libspotify";
     maintainers = with maintainers; [ lovek323 ];
     license     = licenses.unfree;
   };

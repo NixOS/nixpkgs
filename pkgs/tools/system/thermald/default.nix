@@ -1,37 +1,73 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, libtool
-, pkgconfig, dbus, dbus-glib, libxml2 }:
+{ autoconf
+, autoconf-archive
+, automake
+, dbus
+, dbus-glib
+, docbook_xml_dtd_412
+, docbook-xsl-nons
+, fetchFromGitHub
+, gtk-doc
+, libevdev
+, libtool
+, libxml2
+, xz
+, pkg-config
+, lib, stdenv
+, upower
+}:
 
 stdenv.mkDerivation rec {
-  name = "thermald-${version}";
-  version = "1.8";
+  pname = "thermald";
+  version = "2.4.3";
+
+  outputs = [ "out" "devdoc" ];
 
   src = fetchFromGitHub {
-    owner = "01org";
+    owner = "intel";
     repo = "thermal_daemon";
     rev = "v${version}";
-    sha256 = "1g1l7k8yxj8bl1ysdx8v6anv1s7xk9j072y44gwki70dy48n7j92";
+    sha256 = "sha256-CPrk2r3C4WG+y3KzWf6xWhfNdDgEigki62iAXu+DccU=";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ autoconf automake libtool dbus dbus-glib libxml2 ];
+  nativeBuildInputs = [
+    autoconf
+    autoconf-archive
+    automake
+    docbook-xsl-nons
+    docbook_xml_dtd_412
+    gtk-doc
+    libtool
+    pkg-config
+  ];
 
-  patchPhase = ''sed -e 's/upstartconfdir = \/etc\/init/upstartconfdir = $(out)\/etc\/init/' -i data/Makefile.am'';
-
-  preConfigure = ''
-    export PKG_CONFIG_PATH="${dbus.dev}/lib/pkgconfig:$PKG_CONFIG_PATH"
-    ./autogen.sh
-  '';
+  buildInputs = [
+    dbus
+    dbus-glib
+    libevdev
+    libxml2
+    xz
+    upower
+  ];
 
   configureFlags = [
-    "--sysconfdir=$(out)/etc" "--localstatedir=/var"
-    "--with-dbus-sys-dir=$(out)/etc/dbus-1/system.d"
-    "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
-    ];
+    "--sysconfdir=${placeholder "out"}/etc"
+    "--localstatedir=/var"
+    "--enable-gtk-doc"
+    "--with-dbus-sys-dir=${placeholder "out"}/share/dbus-1/system.d"
+    "--with-systemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
+  ];
 
-  meta = with stdenv.lib; {
+  preConfigure = "NO_CONFIGURE=1 ./autogen.sh";
+
+  postInstall = ''
+    cp ./data/thermal-conf.xml $out/etc/thermald/
+  '';
+
+  meta = with lib; {
     description = "Thermal Daemon";
-    homepage = https://01.org/linux-thermal-daemon;
-    license = licenses.gpl2;
+    homepage = "https://01.org/linux-thermal-daemon";
+    changelog = "https://github.com/intel/thermal_daemon/blob/master/README.txt";
+    license = licenses.gpl2Plus;
     platforms = [ "x86_64-linux" "i686-linux" ];
     maintainers = with maintainers; [ abbradar ];
   };

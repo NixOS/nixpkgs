@@ -1,45 +1,60 @@
-{ stdenv, fetchurl, pkgconfig, intltool, glib, gtk3, gmime, gnutls,
-  webkitgtk, libesmtp, openssl, libnotify, gtkspell3, gpgme,
-  libcanberra-gtk3, libsecret, gtksourceview, gobject-introspection,
-  hicolor-icon-theme, wrapGAppsHook
+{ lib, stdenv
+, fetchurl
+, glib
+, gmime3
+, gnutls
+, gobject-introspection
+, gpgme
+, gtk3
+, gtksourceview
+, gtkspell3
+, intltool
+, libcanberra-gtk3
+, libesmtp
+, libical
+, libnotify
+, libsecret
+, openssl
+, pkg-config
+, webkitgtk
+, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
-  name = "balsa-${version}";
-  version = "2.5.7";
+  pname = "balsa";
+  version = "2.6.1";
 
   src = fetchurl {
-    url = "https://pawsa.fedorapeople.org/balsa/${name}.tar.bz2";
-    sha256 = "0yfqhfpwm1qnwmbpr6dfn2f5w8a8xxq51pn8ypgg0fw973l1c1nx";
+    url = "https://pawsa.fedorapeople.org/balsa/${pname}-${version}.tar.bz2";
+    sha256 = "1xkxx801p7sbfkn0bh3cz85wra4xf1z1zhjqqc80z1z1nln7fhb4";
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     intltool
     gobject-introspection
-    hicolor-icon-theme
     wrapGAppsHook
   ];
 
   buildInputs = [
     glib
-    gtk3
-    gmime
+    gmime3
     gnutls
-    webkitgtk
-    openssl
-    libnotify
-    gtkspell3
     gpgme
-    libcanberra-gtk3
+    gtk3
     gtksourceview
-    libsecret
+    gtkspell3
+    libcanberra-gtk3
     libesmtp
+    libical
+    libnotify
+    libsecret
+    openssl
+    webkitgtk
   ];
 
   configureFlags = [
     "--with-canberra"
-    "--with-gpgme"
     "--with-gtksourceview"
     "--with-libsecret"
     "--with-ssl"
@@ -52,8 +67,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
-    homepage = http://pawsa.fedorapeople.org/balsa/;
+  meta = with lib; {
+    homepage = "http://pawsa.fedorapeople.org/balsa/";
     description = "An e-mail client for GNOME";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;

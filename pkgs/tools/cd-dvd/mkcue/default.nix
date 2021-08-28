@@ -1,7 +1,7 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "mkcue-${version}";
+  pname = "mkcue";
   version = "1";
 
   src = fetchurl {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   preInstall = "mkdir -pv $out/bin";
   postInstall = "chmod -v +w $out/bin/mkcue";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Generates CUE sheets from a CD TOC";
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;

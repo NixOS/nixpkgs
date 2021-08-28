@@ -1,26 +1,27 @@
-{ stdenv, fetchFromGitHub
-, autoreconfHook, pkgconfig
-, nettle, gnutls, msgpack, readline, libargon2
+{ lib, stdenv, fetchFromGitHub
+, cmake, pkg-config
+, asio, nettle, gnutls, msgpack, readline, libargon2
 }:
 
 stdenv.mkDerivation rec {
-  name = "opendht-${version}";
-  version = "1.8.0";
+  pname = "opendht";
+  version = "2.1.6";
 
   src = fetchFromGitHub {
     owner = "savoirfairelinux";
     repo = "opendht";
-    rev = "${version}";
-    sha256 = "1mj3zsywxphh9wcazyqsldwwn14r77xv9cjsmc0nmcybsl2bwnpl";
+    rev = version;
+    sha256 = "0sjb2a3yqnabwgmmn8gapc1dq9m8vp9z8w85zhsj654i5h3gp6zv";
   };
 
   nativeBuildInputs =
-    [ autoreconfHook
-      pkgconfig
+    [ cmake
+      pkg-config
     ];
 
   buildInputs =
-    [ nettle
+    [ asio
+      nettle
       gnutls
       msgpack
       readline
@@ -29,9 +30,9 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "lib" "dev" "man" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A C++11 Kademlia distributed hash table implementation";
-    homepage    = https://github.com/savoirfairelinux/opendht;
+    homepage    = "https://github.com/savoirfairelinux/opendht";
     license     = licenses.gpl3Plus;
     maintainers = with maintainers; [ taeer olynch thoughtpolice ];
     platforms   = platforms.linux;

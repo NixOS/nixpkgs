@@ -1,12 +1,12 @@
-{ stdenv, buildPythonPackage, fetchPypi, libusb1, pytest }:
+{ lib, stdenv, buildPythonPackage, fetchPypi, libusb1, pytest }:
 
 buildPythonPackage rec {
   pname = "libusb1";
-  version = "1.7";
+  version = "1.9.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "03vylg5mdsxp2nyk8sm7yxmb470hcb92q263dfq8d6b9xp96ckwx";
+    sha256 = "17hqck808m59jv6m2g4hasnay44pycy3y0im01fq9jpr3ymcdbi7";
   };
 
   postPatch = ''
@@ -25,10 +25,10 @@ buildPythonPackage rec {
     py.test -k 'not testUSBPollerThreadExit' usb1/testUSB1.py
   '';
 
-  meta = with stdenv.lib; {
-    homepage    = https://github.com/vpelletier/python-libusb1;
+  meta = with lib; {
+    homepage    = "https://github.com/vpelletier/python-libusb1";
     description = "Python ctype-based wrapper around libusb1";
     license     = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ rnhmjoj ];
+    maintainers = with maintainers; [ prusnak rnhmjoj ];
   };
 }

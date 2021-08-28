@@ -1,9 +1,9 @@
-{ stdenv, fetchurl, which, pkgconfig, gtk2, pcre, glib, libxml2
+{ lib, stdenv, fetchurl, which, pkg-config, gtk2, pcre, glib, libxml2
 , libsoup ? null
 }:
 
 stdenv.mkDerivation rec {
-  name = "hardinfo-${version}";
+  pname = "hardinfo";
   version = "0.5.1";
 
   src = fetchurl {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   # Not adding 'hostname' command, the build shouldn't depend on what the build
   # host is called.
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ which gtk2 pcre glib libxml2 libsoup ];
 
   # Fixes '#error You must compile this program without "-O"'
@@ -40,11 +40,11 @@ stdenv.mkDerivation rec {
     rmdir "$out/usr"
   '';
 
-  meta = with stdenv.lib; {
-    homepage = http://hardinfo.org/;
+  meta = with lib; {
+    homepage = "http://hardinfo.org/";
     description = "Display information about your hardware and operating system";
     license = licenses.gpl2;
     maintainers = with maintainers; [ bjornfor ];
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" "i686-linux" ]; # ARMv7 and AArch64 are unsupported
   };
 }

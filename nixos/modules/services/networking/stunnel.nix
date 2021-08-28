@@ -16,8 +16,12 @@ let
   serverConfig = {
     options = {
       accept = mkOption {
-        type = types.int;
-        description = "On which port stunnel should listen for incoming TLS connections.";
+        type = types.either types.str types.int;
+        description = ''
+          On which [host:]port stunnel should listen for incoming TLS connections.
+          Note that unlike other softwares stunnel ipv6 address need no brackets,
+          so to listen on all IPv6 addresses on port 1234 one would use ':::1234'.
+        '';
       };
 
       connect = mkOption {
@@ -35,12 +39,12 @@ let
   clientConfig = {
     options = {
       accept = mkOption {
-        type = types.string;
+        type = types.str;
         description = "IP:Port on which connections should be accepted.";
       };
 
       connect = mkOption {
-        type = types.string;
+        type = types.str;
         description = "IP:Port destination to connect to.";
       };
 
@@ -57,13 +61,19 @@ let
       };
 
       CAPath = mkOption {
-        type = types.path;
+        type = types.nullOr types.path;
+        default = null;
+        description = "Path to a directory containing certificates to validate against.";
+      };
+
+      CAFile = mkOption {
+        type = types.nullOr types.path;
         default = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
         description = "Path to a file containing certificates to validate against.";
       };
 
       verifyHostname = mkOption {
-        type = with types; nullOr string;
+        type = with types; nullOr str;
         default = null;
         description = "If set, stunnel checks if the provided certificate is valid for the given hostname.";
       };
@@ -88,13 +98,13 @@ in
       };
 
       user = mkOption {
-        type = with types; nullOr string;
+        type = with types; nullOr str;
         default = "nobody";
         description = "The user under which stunnel runs.";
       };
 
       group = mkOption {
-        type = with types; nullOr string;
+        type = with types; nullOr str;
         default = "nogroup";
         description = "The group under which stunnel runs.";
       };
@@ -123,7 +133,6 @@ in
         type = with types; attrsOf (submodule serverConfig);
         example = {
           fancyWebserver = {
-            enable = true;
             accept = 443;
             connect = 8080;
             cert = "/path/to/pem/file";
@@ -196,6 +205,7 @@ in
                verifyChain = ${yesNo v.verifyChain}
                verifyPeer = ${yesNo v.verifyPeer}
                ${optionalString (v.CAPath != null) "CApath = ${v.CAPath}"}
+               ${optionalString (v.CAFile != null) "CAFile = ${v.CAFile}"}
                ${optionalString (v.verifyHostname != null) "checkHost = ${v.verifyHostname}"}
                OCSPaia = yes
 
@@ -216,6 +226,12 @@ in
       };
     };
 
+    meta.maintainers = with maintainers; [
+      # Server side
+      lschuermann
+      # Client side
+      das_j
+    ];
   };
 
 }

@@ -1,11 +1,10 @@
-{ stdenv, buildGoPackage, fetchgit }:
+{ lib, buildGoModule, fetchgit }:
 
-buildGoPackage rec {
-  name = "lint-${version}";
-  version = "20181026-${stdenv.lib.strings.substring 0 7 rev}";
-  rev = "c67002cb31c3a748b7688c27f20d8358b4193582";
-  
-  goPackagePath = "golang.org/x/lint";
+buildGoModule rec {
+  pname = "lint";
+  version = "20201208-${lib.strings.substring 0 7 rev}";
+  rev = "83fdc39ff7b56453e3793356bcff3070b9b96445";
+
   excludedPackages = "testdata";
 
   # we must allow references to the original `go` package, as golint uses
@@ -15,16 +14,15 @@ buildGoPackage rec {
   src = fetchgit {
     inherit rev;
     url = "https://go.googlesource.com/lint";
-    sha256 = "0gymbggskjmphqxqcx4s0vnlcz7mygbix0vhwcwv5r67c0bf6765";
+    sha256 = "sha256-g4Z9PREOxGoN7n/XhutawsITBznJlbz6StXeDYvOQ1c=";
   };
 
-  goDeps = ./deps.nix;
+  vendorSha256 = "sha256-dPadFoymYu2Uw2AXZfbaBfxsN8IWMuK1TrcknHco3Bo=";
 
-  meta = with stdenv.lib; {
-    homepage = https://golang.org;
+  meta = with lib; {
+    homepage = "https://golang.org";
     description = "Linter for Go source code";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ jhillyerd ];
-    platforms = platforms.all;
+    maintainers = with maintainers; [ jhillyerd tomberek ];
   };
 }

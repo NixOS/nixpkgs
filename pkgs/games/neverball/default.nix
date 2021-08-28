@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, SDL2, libGL, libpng, libjpeg, SDL2_ttf, libvorbis, gettext
+{ lib, stdenv, fetchurl, SDL2, libGL, libpng, libjpeg, SDL2_ttf, libvorbis, gettext
 , physfs }:
 
 stdenv.mkDerivation rec {
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libpng SDL2 libGL libjpeg SDL2_ttf libvorbis gettext physfs ];
 
-  dontPatchElf = true;
+  dontPatchELF = true;
 
   patchPhase = ''
     sed -i -e 's@\./data@'$out/share/neverball/data@ share/base_config.h Makefile
@@ -32,10 +32,10 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    homepage = https://neverball.org/;
+    homepage = "https://neverball.org/";
     description = "Tilt the floor to roll a ball";
     license = "GPL";
-    maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; linux;
+    maintainers = with lib.maintainers; [viric];
+    platforms = with lib.platforms; linux;
   };
 }

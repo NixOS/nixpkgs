@@ -1,21 +1,28 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "xxHash-${version}";
-  version = "0.7.0";
+  pname = "xxHash";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "Cyan4973";
     repo = "xxHash";
     rev = "v${version}";
-    sha256 = "19iyr7x0s7in9kp9wrj4iimdx58nv6jndz9x5ndnl07gd90y7jxb";
+    sha256 = "0hpbzdd6kfki5f61g103vp7pfczqkdj0js63avl0ss552jfb8h96";
   };
+
+  # Upstream Makefile does not anticipate that user may not want to
+  # build .so library.
+  postPatch = lib.optionalString stdenv.hostPlatform.isStatic ''
+    sed -i 's/lib: libxxhash.a libxxhash/lib: libxxhash.a/' Makefile
+    sed -i '/LIBXXH) $(DESTDIR/ d' Makefile
+  '';
 
   outputs = [ "out" "dev" ];
 
-  makeFlags = [ "PREFIX=$(out)" "INCLUDEDIR=$(dev)/include" ];
+  makeFlags = [ "PREFIX=$(dev)" "EXEC_PREFIX=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Extremely fast hash algorithm";
     longDescription = ''
       xxHash is an Extremely fast Hash algorithm, running at RAM speed limits.
@@ -24,7 +31,7 @@ stdenv.mkDerivation rec {
       highly portable, and hashes are identical on all platforms (little / big
       endian).
     '';
-    homepage = https://github.com/Cyan4973/xxHash;
+    homepage = "https://github.com/Cyan4973/xxHash";
     license = with licenses; [ bsd2 gpl2 ];
     maintainers = with maintainers; [ orivej ];
     platforms = platforms.unix;

@@ -1,15 +1,15 @@
-{ stdenv, fetchurl, autoconf, automake, libsndfile, libtool, pkgconfig, libuuid }:
+{ lib, stdenv, fetchurl, autoconf, automake, libsndfile, libtool, pkg-config, libuuid }:
 
 stdenv.mkDerivation rec {
-  name = "libgig-${version}";
-  version = "4.1.0";
+  pname = "libgig";
+  version = "4.3.0";
 
   src = fetchurl {
-    url = "https://download.linuxsampler.org/packages/${name}.tar.bz2";
-    sha256 = "02xx6bqxzgkvrawwnzrnxx1ypk244q4kpwfd58266f9ji8kq18h6";
+    url = "https://download.linuxsampler.org/packages/${pname}-${version}.tar.bz2";
+    sha256 = "sha256-oG0Jh4eAxsGd2NucM1RNU6kzV/niexSpg6qrpo//p5Q=";
   };
 
-  nativeBuildInputs = [ autoconf automake libtool pkgconfig ];
+  nativeBuildInputs = [ autoconf automake libtool pkg-config ];
 
   buildInputs = [ libsndfile libuuid ];
 
@@ -17,8 +17,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
-    homepage = http://www.linuxsampler.org;
+  meta = with lib; {
+    homepage = "http://www.linuxsampler.org";
     description = "Gigasampler file access library";
     license = licenses.gpl2;
     maintainers = [ maintainers.goibhniu ];

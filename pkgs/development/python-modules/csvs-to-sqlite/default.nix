@@ -1,27 +1,26 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, pytestrunner
+, isPy3k
 , click
 , dateparser
 , pandas
 , py-lru-cache
 , six
-, pytest
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "csvs-to-sqlite";
-  version = "0.9";
+  version = "1.2";
+  disabled = !isPy3k;
 
   src = fetchFromGitHub {
     owner = "simonw";
     repo = pname;
     rev = version;
-    sha256 = "0js86m4kj70g9n9gagr8l6kgswqllg6hn1xa3yvxwv95i59ihpz5";
+    sha256 = "0p99cg76d3s7jxvigh5ad04dzhmr6g62qzzh4i6h7x9aiyvdhvk4";
   };
-
-  buildInputs = [ pytestrunner ];
 
   propagatedBuildInputs = [
     click
@@ -32,16 +31,12 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    pytest
+    pytestCheckHook
   ];
-
-  checkPhase = ''
-    pytest
-  '';
 
   meta = with lib; {
     description = "Convert CSV files into a SQLite database";
-    homepage = https://github.com/simonw/csvs-to-sqlite;
+    homepage = "https://github.com/simonw/csvs-to-sqlite";
     license = licenses.asl20;
     maintainers = [ maintainers.costrouc ];
   };

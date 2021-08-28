@@ -1,26 +1,26 @@
-{ stdenv, rustPlatform, fetchFromGitHub, lib, Security }:
+{ stdenv, rustPlatform, fetchFromGitHub, lib, libiconv, Security, nixosTests }:
 
 rustPlatform.buildRustPackage rec {
   pname = "wireguard-exporter";
-  version = "2.0.1";
+  version = "3.5.0";
 
   src = fetchFromGitHub {
     owner = "MindFlavor";
     repo = "prometheus_wireguard_exporter";
     rev = version;
-    sha256 = "11yrry8fzalcigqsx1wx371w543gdcsx48fd7dacbrsfl2dk2azp";
+    sha256 = "sha256-LHhqQ0p2qt6ZAdkpY1SEAcGXH47TPhHvlDv+eL8GC58=";
   };
 
-  cargoSha256 = "1wnk39p144zjsdhnyjk6y41xs448bxnbbxkqk53r6i2f2wzrsk2m";
+  cargoSha256 = "sha256-lNFsO7FSmH1+DLM7ID0vn6234qTdtUoaLSnqKcbHoXE=";
 
-  buildInputs = lib.optional stdenv.isDarwin Security;
+  buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security ];
 
-  doCheck = false;
+  passthru.tests = { inherit (nixosTests.prometheus-exporters) wireguard; };
 
   meta = with lib; {
-    description = "A Prometheus exporter for WireGuard, written in Rust.";
+    description = "A Prometheus exporter for WireGuard, written in Rust";
+    homepage = "https://github.com/MindFlavor/prometheus_wireguard_exporter";
     license = licenses.mit;
-    homepage = https://github.com/MindFlavor/prometheus_wireguard_exporter;
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ ma27 globin ];
   };
 }

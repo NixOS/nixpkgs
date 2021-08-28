@@ -111,13 +111,15 @@ in {
   };
 
   config = mkIf (cfg.enable) {
-    users.users = optional (cfg.user == "infinoted")
-      { name = "infinoted";
-        description = "Infinoted user";
-        group = cfg.group;
+    users.users = optionalAttrs (cfg.user == "infinoted")
+      { infinoted = {
+          description = "Infinoted user";
+          group = cfg.group;
+          isSystemUser = true;
+        };
       };
-    users.groups = optional (cfg.group == "infinoted")
-      { name = "infinoted";
+    users.groups = optionalAttrs (cfg.group == "infinoted")
+      { infinoted = { };
       };
 
     systemd.services.infinoted =
@@ -139,14 +141,14 @@ in {
           install -o ${cfg.user} -g ${cfg.group} -m 0600 /dev/null /var/lib/infinoted/infinoted.conf
           cat >>/var/lib/infinoted/infinoted.conf <<EOF
           [infinoted]
-          ${optionalString (cfg.keyFile != null) ''key-file=${cfg.keyFile}''}
-          ${optionalString (cfg.certificateFile != null) ''certificate-file=${cfg.certificateFile}''}
-          ${optionalString (cfg.certificateChain != null) ''certificate-chain=${cfg.certificateChain}''}
+          ${optionalString (cfg.keyFile != null) "key-file=${cfg.keyFile}"}
+          ${optionalString (cfg.certificateFile != null) "certificate-file=${cfg.certificateFile}"}
+          ${optionalString (cfg.certificateChain != null) "certificate-chain=${cfg.certificateChain}"}
           port=${toString cfg.port}
           security-policy=${cfg.securityPolicy}
           root-directory=${cfg.rootDirectory}
           plugins=${concatStringsSep ";" cfg.plugins}
-          ${optionalString (cfg.passwordFile != null) ''password=$(head -n 1 ${cfg.passwordFile})''}
+          ${optionalString (cfg.passwordFile != null) "password=$(head -n 1 ${cfg.passwordFile})"}
 
           ${cfg.extraConfig}
           EOF

@@ -1,6 +1,6 @@
 { fetchMaven }:
 
-rec {
+{
   googleCollections_1_0 = map (obj: fetchMaven {
     version = "1.0";
     artifactId = "google-collections";

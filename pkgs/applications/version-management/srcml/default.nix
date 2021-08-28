@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, cmake, libxml2, libxslt, boost, libarchive, python, antlr,
+{ lib, stdenv, fetchurl, cmake, libxml2, libxslt, boost, libarchive, python, antlr,
   curl
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   version = "0.9.5_beta";
-  name = "srcml-${version}";
+  pname = "srcml";
 
   src = fetchurl {
     url = "http://www.sdml.cs.kent.edu/lmcrs/srcML-${version}-src.tar.gz";
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Infrastructure for exploration, analysis, and manipulation of source code";
-    homepage = https://www.srcml.org;
+    homepage = "https://www.srcml.org";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ leenaars ];
   };

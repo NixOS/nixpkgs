@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, patchelf, gmp }:
+{ lib, stdenv, fetchurl, patchelf, gmp }:
 
 let
   version = "20130715";
@@ -9,35 +9,36 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "mlton-${version}";
+  pname = "mlton";
+  inherit version;
 
   binSrc =
     if stdenv.hostPlatform.system == "i686-linux" then (fetchurl {
-      url = "mirror://sourceforge/project/mlton/mlton/${version}/${name}-1.x86-linux.tgz";
+      url = "mirror://sourceforge/project/mlton/mlton/${version}/${pname}-${version}-1.x86-linux.tgz";
       sha256 = "1kxjjmnw4xk2d9hpvz43w9dvyhb3025k4zvjx785c33nrwkrdn4j";
     })
     else if stdenv.hostPlatform.system == "x86_64-linux" then (fetchurl {
-        url = "mirror://sourceforge/project/mlton/mlton/${version}/${name}-1.amd64-linux.tgz";
+        url = "mirror://sourceforge/project/mlton/mlton/${version}/${pname}-${version}-1.amd64-linux.tgz";
         sha256 = "0fyhwxb4nmpirjbjcvk9f6w67gmn2gkz7xcgz0xbfih9kc015ygn";
     })
     else if stdenv.hostPlatform.system == "x86_64-darwin" then (fetchurl {
-        url = "mirror://sourceforge/project/mlton/mlton/${version}/${name}-1.amd64-darwin.gmp-macports.tgz";
+        url = "mirror://sourceforge/project/mlton/mlton/${version}/${pname}-${version}-1.amd64-darwin.gmp-macports.tgz";
         sha256 = "044wnh9hhg6if886xy805683k0as347xd37r0r1yi4x7qlxzzgx9";
     })
     else throw "Architecture not supported";
 
   codeSrc =
     fetchurl {
-      url = "mirror://sourceforge/project/mlton/mlton/${version}/${name}.src.tgz";
+      url = "mirror://sourceforge/project/mlton/mlton/${version}/${pname}-${version}.src.tgz";
       sha256 = "0v1x2hrh9hiqkvnbq11kf34v4i5a2x0ffxbzqaa8skyl26nmfn11";
     };
 
   srcs = [ binSrc codeSrc ];
 
-  sourceRoot = name;
+  sourceRoot = "${pname}-${version}";
 
   buildInputs = [ gmp ];
-  nativeBuildInputs = stdenv.lib.optional stdenv.isLinux patchelf;
+  nativeBuildInputs = lib.optional stdenv.isLinux patchelf;
 
   makeFlags = [ "all-no-docs" ];
 
@@ -60,9 +61,9 @@ stdenv.mkDerivation rec {
     done
 
     substituteInPlace $(pwd)/../${usr_prefix}/bin/mlton --replace '/${usr_prefix}/lib/mlton' $(pwd)/../${usr_prefix}/lib/mlton
-  '' + stdenv.lib.optionalString stdenv.cc.isClang ''
+  '' + lib.optionalString stdenv.cc.isClang ''
     sed -i "s_	patch -s -p0 <gdtoa.hide-public-fns.patch_	patch -s -p0 <gdtoa.hide-public-fns.patch\n\tsed -i 's|printf(emptyfmt|printf(\"\"|g' ./gdtoa/arithchk.c_" ./runtime/Makefile
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.isDarwin ''
     sed -i 's|XCFLAGS += -I/usr/local/include -I/sw/include -I/opt/local/include||' ./runtime/Makefile
   '';
 
@@ -76,15 +77,15 @@ stdenv.mkDerivation rec {
     chmod u+x $(pwd)/../${usr_prefix}/bin/mlton
 
     # So the builder runs the binary compiler with gmp.
-    export LD_LIBRARY_PATH=${gmp.out}/lib:$LD_LIBRARY_PATH
+    export LD_LIBRARY_PATH=${gmp.out}/lib''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH
 
-  '' + stdenv.lib.optionalString stdenv.isLinux ''
+  '' + lib.optionalString stdenv.isLinux ''
     # Patch ELF interpreter.
     patchelf --set-interpreter ${dynamic_linker} $(pwd)/../${usr_prefix}/lib/mlton/mlton-compile
     for e in mllex mlyacc ; do
       patchelf --set-interpreter ${dynamic_linker} $(pwd)/../${usr_prefix}/bin/$e
     done
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.isDarwin ''
     # Patch libgmp linking
     install_name_tool -change /opt/local/lib/libgmp.10.dylib ${gmp}/lib/libgmp.10.dylib $(pwd)/../${usr_prefix}/lib/mlton/mlton-compile
     install_name_tool -change /opt/local/lib/libgmp.10.dylib ${gmp}/lib/libgmp.10.dylib $(pwd)/../${usr_prefix}/bin/mlyacc

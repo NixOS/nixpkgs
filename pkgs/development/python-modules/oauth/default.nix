@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 }:
@@ -15,8 +15,8 @@ buildPythonPackage rec {
   # No tests included in archive
   doCheck = false;
 
-  meta = with stdenv.lib; {
-    homepage = http://code.google.com/p/oauth;
+  meta = with lib; {
+    homepage = "https://code.google.com/archive/p/oauth/";
     description = "Library for OAuth version 1.0a";
     license = licenses.mit;
   };

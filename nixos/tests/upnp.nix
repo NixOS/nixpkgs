@@ -5,7 +5,7 @@
 # this succeeds an external client will try to connect to the port
 # mapping.
 
-import ./make-test.nix ({ pkgs, ... }:
+import ./make-test-python.nix ({ pkgs, ... }:
 
 let
   internalRouterAddress = "192.168.3.1";
@@ -15,7 +15,7 @@ let
 in
 {
   name = "upnp";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ bobvanderlinden ];
   };
 
@@ -56,9 +56,11 @@ in
           networking.firewall.enable = false;
 
           services.httpd.enable = true;
-          services.httpd.listen = [{ ip = "*"; port = 9000; }];
-          services.httpd.adminAddr = "foo@example.org";
-          services.httpd.documentRoot = "/tmp";
+          services.httpd.virtualHosts.localhost = {
+            listen = [{ ip = "*"; port = 9000; }];
+            adminAddr = "foo@example.org";
+            documentRoot = "/tmp";
+          };
         };
 
       client2 =
@@ -75,20 +77,20 @@ in
   testScript =
     { nodes, ... }:
     ''
-      startAll;
+      start_all()
 
       # Wait for network and miniupnpd.
-      $router->waitForUnit("network-online.target");
-      # $router->waitForUnit("nat");
-      $router->waitForUnit("firewall.service");
-      $router->waitForUnit("miniupnpd");
+      router.wait_for_unit("network-online.target")
+      # $router.wait_for_unit("nat")
+      router.wait_for_unit("firewall.service")
+      router.wait_for_unit("miniupnpd")
 
-      $client1->waitForUnit("network-online.target");
+      client1.wait_for_unit("network-online.target")
 
-      $client1->succeed("upnpc -a ${internalClient1Address} 9000 9000 TCP");
+      client1.succeed("upnpc -a ${internalClient1Address} 9000 9000 TCP")
 
-      $client1->waitForUnit("httpd");
-      $client2->waitUntilSucceeds("curl http://${externalRouterAddress}:9000/");
+      client1.wait_for_unit("httpd")
+      client2.wait_until_succeeds("curl -f http://${externalRouterAddress}:9000/")
     '';
 
 })

@@ -1,14 +1,14 @@
 { stdenv, lib, fetchFromGitHub, autoreconfHook, libsodium }:
 
 stdenv.mkDerivation rec {
-  name = "mkp224o-${version}";
-  version = "1.3.0";
+  pname = "mkp224o";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "cathugger";
     repo = "mkp224o";
     rev = "v${version}";
-    sha256 = "1il12ahcs5pj52hxn4xvpjfz801xcg31zk2jnkl80frzlwq040qi";
+    sha256 = "0b2cn96wg4l8jkkqqp8l2295xlmm2jc8nrw6rdqb5g0zkpfmrxbb";
   };
 
   buildCommand =
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Vanity address generator for tor onion v3 (ed25519) hidden services";
-    homepage = http://cathug2kyi4ilneggumrenayhuhsvrgn6qv2y47bgeet42iivkpynqad.onion/;
+    homepage = "http://cathug2kyi4ilneggumrenayhuhsvrgn6qv2y47bgeet42iivkpynqad.onion/";
     license = licenses.cc0;
     platforms = platforms.linux;
     maintainers = with maintainers; [ volth ];

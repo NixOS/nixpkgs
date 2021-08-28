@@ -1,30 +1,49 @@
-{ stdenv, fetchFromGitLab, meson, ninja, gettext, pkgconfig, libxml2, gtk3, hicolor-icon-theme, wrapGAppsHook }:
+{ lib, stdenv
+, fetchFromGitLab
+, meson
+, ninja
+, gettext
+, pkg-config
+, libxml2
+, gtk3
+, libportal
+, wrapGAppsHook
+}:
 
-let
-  version = "2.3.1";
-in stdenv.mkDerivation {
-  name = "gcolor3-${version}";
+stdenv.mkDerivation rec {
+  pname = "gcolor3";
+  version = "2.4.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "gcolor3";
     rev = "v${version}";
-    sha256 = "10cfzlkflwkb7f51rnrxmgxpfryh1qzvqaydj6lffjq9zvnhigg7";
+    sha256 = "rHIAjk2m3Lkz11obgNZaapa1Zr2GDH7XzgzuAJmq+MU=";
   };
 
-  nativeBuildInputs = [ meson ninja gettext pkgconfig libxml2 wrapGAppsHook ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    gettext
+    pkg-config
+    libxml2 # xml-stripblanks preprocessing of GResource
+    wrapGAppsHook
+  ];
 
-  buildInputs = [ gtk3 hicolor-icon-theme ];
+  buildInputs = [
+    gtk3
+    libportal
+  ];
 
   postPatch = ''
     chmod +x meson_install.sh # patchShebangs requires executable file
     patchShebangs meson_install.sh
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple color chooser written in GTK3";
-    homepage = https://www.hjdskes.nl/projects/gcolor3/;
+    homepage = "https://gitlab.gnome.org/World/gcolor3";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ jtojnar ];
     platforms = platforms.unix;

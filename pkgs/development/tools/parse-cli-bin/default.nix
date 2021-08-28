@@ -1,7 +1,7 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "parse-cli-bin-${version}";
+  pname = "parse-cli-bin";
   version = "3.0.5";
 
   src = fetchurl {
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1iyfizbbxmr87wjgqiwqds51irgw6l3vm9wn89pc3zpj2zkyvf5h";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Parse Command Line Interface";
     homepage    = "https://parse.com";
     platforms   = platforms.linux;

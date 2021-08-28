@@ -1,14 +1,14 @@
-{ stdenv, fetchurl, pkgconfig, openobex, bluez, cmake }:
-   
+{ lib, stdenv, fetchurl, pkg-config, openobex, bluez, cmake }:
+
 stdenv.mkDerivation rec {
-  name = "obexftp-0.24";
-   
+  name = "obexftp-0.24.2";
+
   src = fetchurl {
     url = "mirror://sourceforge/openobex/${name}-Source.tar.gz";
-    sha256 = "0szy7p3y75bd5h4af0j5kf0fpzx2w560fpy4kg3603mz11b9c1xr";
+    sha256 = "18w9r78z78ri5qc8fjym4nk1jfbrkyr789sq7rxrkshf1a7b83yl";
   };
 
-  nativeBuildInputs = [ pkgconfig cmake ];
+  nativeBuildInputs = [ pkg-config cmake ];
 
   buildInputs = [ bluez ];
 
@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
     sed -i 's,^Requires: bluetooth,Requires:,' $out/lib/pkgconfig/obexftp.pc
   '';
 
-  meta = with stdenv.lib; {
-    homepage = http://dev.zuckschwerdt.org/openobex/wiki/ObexFtp;
+  meta = with lib; {
+    homepage = "http://dev.zuckschwerdt.org/openobex/wiki/ObexFtp";
     description = "A library and tool to access files on OBEX-based devices (such as Bluetooth phones)";
     platforms = platforms.linux;
     license = licenses.lgpl2Plus;

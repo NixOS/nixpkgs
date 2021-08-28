@@ -1,9 +1,9 @@
-{ stdenv, fetchzip, perl, pkgconfig, libbson
+{ lib, stdenv, fetchzip, perl, pkg-config, libbson
 , openssl, which, zlib, snappy
 }:
 
 stdenv.mkDerivation rec {
-  name = "mongoc-${version}";
+  pname = "mongoc";
   version = "1.8.0";
 
   src = fetchzip {
@@ -11,15 +11,15 @@ stdenv.mkDerivation rec {
     sha256 = "1vnnk3pwbcmwva1010bl111kdcdx3yb2w7j7a78hhvrm1k9r1wp8";
   };
 
-  nativeBuildInputs = [ pkgconfig which perl ];
+  nativeBuildInputs = [ pkg-config which perl ];
   buildInputs = [ openssl zlib ];
   propagatedBuildInputs = [ libbson snappy ];
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The official C client library for MongoDB";
-    homepage = https://github.com/mongodb/mongo-c-driver;
+    homepage = "https://github.com/mongodb/mongo-c-driver";
     license = licenses.asl20;
     platforms = platforms.all;
   };

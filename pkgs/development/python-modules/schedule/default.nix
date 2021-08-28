@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , mock
@@ -6,18 +6,18 @@
 
 buildPythonPackage rec {
   pname = "schedule";
-  version = "0.6.0";
+  version = "1.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f9fb5181283de4db6e701d476dd01b6a3dd81c38462a54991ddbb9d26db857c9";
+    sha256 = "1654cf70860a6d4d58236c98b0f1bb71521cc2a4bbf031b6cc39c96e77d59a91";
   };
 
   buildInputs = [ mock ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python job scheduling for humans";
-    homepage = https://github.com/dbader/schedule;
+    homepage = "https://github.com/dbader/schedule";
     license = licenses.mit;
   };
 

@@ -1,29 +1,27 @@
 { stdenv, lib, fetchFromGitHub, fetchpatch, jansson }:
 
 stdenv.mkDerivation rec {
-  name = "jshon-20160111.2";
-
-  rev = "a61d7f2f85f4627bc3facdf951746f0fd62334b7";
-  sha256 = "1053w7jbl90q3p5y34pi4i8an1ddsjzwaib5cfji75ivamc5wdmh";
+  pname = "jshon";
+  version = "20170302";
 
   src = fetchFromGitHub {
-    inherit rev sha256;
     owner = "keenerd";
     repo = "jshon";
+    rev = "d919aeaece37962251dbe6c1ee50f0028a5c90e4";
+    sha256 = "1x4zfmsjq0l2y994bxkhx3mn5vzjxxr39iib213zjchi9h6yxvnc";
   };
-
-  patches = [
-    # Fix null termination in read_stream.
-    # https://github.com/keenerd/jshon/issues/53
-    (fetchpatch {
-      url = https://github.com/mbrock/jshon/commit/32288dd186573ceb58164f30be1782d4580466d8.patch;
-      sha256 = "04rss2nprl9nqblc7smq0477n54hm801xgnnmvyzni313i1n6vhl";
-    })
-  ];
 
   buildInputs = [ jansson ];
 
-  patchPhase =
+  patches = [
+    (fetchpatch {
+      # https://github.com/keenerd/jshon/pull/62
+      url = "https://github.com/keenerd/jshon/commit/96b4e9dbf578be7b31f29740b608aa7b34df3318.patch";
+      sha256 = "0kwbn3xb37iqb5y1n8vhzjiwlbg5jmki3f38pzakc24kzc5ksmaa";
+    })
+  ];
+
+  postPatch =
     ''
       substituteInPlace Makefile --replace "/usr/" "/"
     '';
@@ -34,7 +32,7 @@ stdenv.mkDerivation rec {
     '';
 
   meta = with lib; {
-    homepage = http://kmkeen.com/jshon;
+    homepage = "http://kmkeen.com/jshon";
     description = "JSON parser designed for maximum convenience within the shell";
     license = licenses.free;
     platforms = platforms.all;

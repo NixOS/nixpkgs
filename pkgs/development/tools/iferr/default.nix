@@ -4,7 +4,7 @@
 }:
 
 buildGoPackage rec {
-  name = "iferr-unstable-${version}";
+  pname = "iferr-unstable";
   version = "2018-06-15";
   rev = "bb332a3b1d9129b6486c7ddcb7030c11b05cfc88";
 
@@ -20,7 +20,7 @@ buildGoPackage rec {
 
   meta = with lib; {
     description = ''Generate "if err != nil {" block'';
-    homepage = https://github.com/koron/iferr;
+    homepage = "https://github.com/koron/iferr";
     license = licenses.mit;
     maintainers = with maintainers; [ kalbasit ];
     platforms = platforms.linux ++ platforms.darwin;

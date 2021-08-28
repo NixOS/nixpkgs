@@ -1,7 +1,7 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub }:
 
-buildGoPackage rec {
-  name = "pcstat-unstable-${version}";
+buildGoPackage {
+  pname = "pcstat-unstable";
   version = "2017-05-28";
 
   goPackagePath = "github.com/tobert/pcstat";
@@ -15,9 +15,9 @@ buildGoPackage rec {
 
   goDeps = ./deps.nix;
 
-  meta = with stdenv.lib; {
-    description = "Page Cache stat: get page cache stats for files on Linux.";
-    homepage = https://github.com/tobert/pcstat;
+  meta = with lib; {
+    description = "Page Cache stat: get page cache stats for files on Linux";
+    homepage = "https://github.com/tobert/pcstat";
     license = licenses.asl20;
     maintainers = with maintainers; [ aminechikhaoui ];
   };

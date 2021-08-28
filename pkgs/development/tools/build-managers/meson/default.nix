@@ -1,35 +1,20 @@
-{ lib, python3Packages, stdenv, writeTextDir, substituteAll, targetPackages }:
+{ lib
+, python3
 
-let
-  # See https://mesonbuild.com/Reference-tables.html#cpu-families
-  cpuFamilies = {
-    "aarch64" = "aarch64";
-    "armv6l"  = "arm";
-    "armv7l"  = "arm";
-    "i686"    = "x86";
-    "x86_64"  = "x86_64";
-  };
-in
-python3Packages.buildPythonApplication rec {
-  version = "0.49.2";
+, writeTextDir
+, substituteAll
+, fetchpatch
+, installShellFiles
+}:
+
+python3.pkgs.buildPythonApplication rec {
   pname = "meson";
+  version = "0.57.1";
 
-  src = python3Packages.fetchPypi {
+  src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "0ckkzq0kbnnk4rwv20lggm9a4fb5054jbv99i9pwjhid23qy7059";
+    sha256 = "19n8alcpzv6npgp27iqljkmvdmr7s2c7zm8y997j1nlvpa1cgqbj";
   };
-
-  postFixup = ''
-    pushd $out/bin
-    # undo shell wrapper as meson tools are called with python
-    for i in *; do
-      mv ".$i-wrapped" "$i"
-    done
-    popd
-
-    # Do not propagate Python
-    rm $out/nix-support/propagated-build-inputs
-  '';
 
   patches = [
     # Upstream insists on not allowing bindir and other dir options
@@ -37,6 +22,11 @@ python3Packages.buildPythonApplication rec {
     # https://github.com/mesonbuild/meson/issues/2561
     # We remove the check so multiple outputs can work sanely.
     ./allow-dirs-outside-of-prefix.patch
+
+    # Meson is currently inspecting fewer variables than autoconf does, which
+    # makes it harder for us to use setup hooks, etc.  Taken from
+    # https://github.com/mesonbuild/meson/pull/6827
+    ./more-env-vars.patch
 
     # Unlike libtool, vanilla Meson does not pass any information
     # about the path library will be installed to to g-ir-scanner,
@@ -54,51 +44,52 @@ python3Packages.buildPythonApplication rec {
       src = ./fix-rpath.patch;
       inherit (builtins) storeDir;
     })
-  ] ++ lib.optionals stdenv.isDarwin [
-    # We use custom Clang, which makes Meson think *not Apple*, while still
-    # relying on system linker. When it detects standard Clang, Meson will
-    # pass it `-Wl,-O1` flag but optimizations are not recognized by
-    # Mac linker.
-    # https://github.com/mesonbuild/meson/issues/4784
-    ./fix-objc-linking.patch
+
+    # When Meson removes build_rpath from DT_RUNPATH entry, it just writes
+    # the shorter NUL-terminated new rpath over the old one to reduce
+    # the risk of potentially breaking the ELF files.
+    # But this can cause much bigger problem for Nix as it can produce
+    # cut-in-half-by-\0 store path references.
+    # Let’s just clear the whole rpath and hope for the best.
+    ./clear-old-rpath.patch
+
+    # Patch out default boost search paths to avoid impure builds on
+    # unsandboxed non-NixOS builds, see:
+    # https://github.com/NixOS/nixpkgs/issues/86131#issuecomment-711051774
+    ./boost-Do-not-add-system-paths-on-nix.patch
   ];
 
   setupHook = ./setup-hook.sh;
 
-  crossFile = writeTextDir "cross-file.conf" ''
-    [binaries]
-    c = '${targetPackages.stdenv.cc.targetPrefix}cc'
-    cpp = '${targetPackages.stdenv.cc.targetPrefix}c++'
-    ar = '${targetPackages.stdenv.cc.bintools.targetPrefix}ar'
-    strip = '${targetPackages.stdenv.cc.bintools.targetPrefix}strip'
-    pkgconfig = 'pkg-config'
-    ld = '${targetPackages.stdenv.cc.targetPrefix}ld'
-    objcopy = '${targetPackages.stdenv.cc.targetPrefix}objcopy'
-
-    [properties]
-    needs_exe_wrapper = true
-
-    [host_machine]
-    system = '${targetPackages.stdenv.targetPlatform.parsed.kernel.name}'
-    cpu_family = '${cpuFamilies.${targetPackages.stdenv.targetPlatform.parsed.cpu.name}}'
-    cpu = '${targetPackages.stdenv.targetPlatform.parsed.cpu.name}'
-    endian = ${if targetPackages.stdenv.targetPlatform.isLittleEndian then "'little'" else "'big'"}
-  '';
-
   # 0.45 update enabled tests but they are failing
   doCheck = false;
-  # checkInputs = [ ninja pkgconfig ];
+  # checkInputs = [ ninja pkg-config ];
   # checkPhase = "python ./run_project_tests.py";
 
-  inherit (stdenv) cc;
+  postFixup = ''
+    pushd $out/bin
+    # undo shell wrapper as meson tools are called with python
+    for i in *; do
+      mv ".$i-wrapped" "$i"
+    done
+    popd
 
-  isCross = stdenv.targetPlatform != stdenv.hostPlatform;
+    # Do not propagate Python
+    rm $out/nix-support/propagated-build-inputs
+  '';
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installShellCompletion --zsh data/shell-completions/zsh/_meson
+    installShellCompletion --bash data/shell-completions/bash/meson
+  '';
 
   meta = with lib; {
-    homepage = http://mesonbuild.com;
+    homepage = "https://mesonbuild.com";
     description = "SCons-like build system that use python as a front-end language and Ninja as a building backend";
     license = licenses.asl20;
-    maintainers = with maintainers; [ mbe rasendubi ];
+    maintainers = with maintainers; [ jtojnar mbe ];
     platforms = platforms.all;
   };
 }

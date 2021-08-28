@@ -1,15 +1,16 @@
-{ lib, bundlerApp }:
+{ lib, bundlerApp, bundlerUpdateScript }:
 
-bundlerApp rec {
+bundlerApp {
   pname = "solargraph";
-  exes = ["solargraph"  "solargraph-runtime"];
+  exes = [ "solargraph" ];
   gemdir = ./.;
 
+  passthru.updateScript = bundlerUpdateScript "solargraph";
+
   meta = with lib; {
-    description = "IDE tools for the Ruby language";
-    homepage = http://www.github.com/castwide/solargraph;
+    description = "A Ruby language server";
+    homepage = "https://solargraph.org/";
     license = licenses.mit;
-    maintainers = with maintainers; [ worldofpeace ];
-    platforms = platforms.unix;
+    maintainers = with maintainers; [ nicknovitski angristan ];
   };
 }

@@ -7,19 +7,11 @@ let
 
   programs =
     (lib.mapAttrsToList
-      (n: v: (if v ? "program" then v else v // {program=n;}))
+      (n: v: (if v ? program then v else v // {program=n;}))
       wrappers);
 
-  securityWrapper = pkgs.stdenv.mkDerivation {
-    name            = "security-wrapper";
-    phases          = [ "installPhase" "fixupPhase" ];
-    buildInputs     = [ pkgs.libcap pkgs.libcap_ng pkgs.linuxHeaders ];
-    hardeningEnable = [ "pie" ];
-    installPhase = ''
-      mkdir -p $out/bin
-      $CC -Wall -O2 -DWRAPPER_DIR=\"${parentWrapperDir}\" \
-          -lcap-ng -lcap ${./wrapper.c} -o $out/bin/security-wrapper
-    '';
+  securityWrapper = pkgs.callPackage ./wrapper.nix {
+    inherit parentWrapperDir;
   };
 
   ###### Activation script for the setcap wrappers
@@ -74,15 +66,15 @@ let
 
   mkWrappedPrograms =
     builtins.map
-      (s: if (s ? "capabilities")
+      (s: if (s ? capabilities)
           then mkSetcapProgram
                  ({ owner = "root";
                     group = "root";
                   } // s)
           else if
-             (s ? "setuid" && s.setuid) ||
-             (s ? "setgid" && s.setgid) ||
-             (s ? "permissions")
+             (s ? setuid && s.setuid) ||
+             (s ? setgid && s.setgid) ||
+             (s ? permissions)
           then mkSetuidProgram s
           else mkSetuidProgram
                  ({ owner  = "root";
@@ -94,6 +86,10 @@ let
       ) programs;
 in
 {
+  imports = [
+    (lib.mkRemovedOptionModule [ "security" "setuidOwners" ] "Use security.wrappers instead")
+    (lib.mkRemovedOptionModule [ "security" "setuidPrograms" ] "Use security.wrappers instead")
+  ];
 
   ###### interface
 
@@ -156,13 +152,16 @@ in
   config = {
 
     security.wrappers = {
+      # These are mount related wrappers that require the +s permission.
       fusermount.source = "${pkgs.fuse}/bin/fusermount";
       fusermount3.source = "${pkgs.fuse3}/bin/fusermount3";
+      mount.source = "${lib.getBin pkgs.util-linux}/bin/mount";
+      umount.source = "${lib.getBin pkgs.util-linux}/bin/umount";
     };
 
     boot.specialFileSystems.${parentWrapperDir} = {
       fsType = "tmpfs";
-      options = [ "nodev" ];
+      options = [ "nodev" "mode=755" ];
     };
 
     # Make sure our wrapperDir exports to the PATH env variable when
@@ -172,6 +171,14 @@ in
       export PATH="${wrapperDir}:$PATH"
     '';
 
+    security.apparmor.includes."nixos/security.wrappers" = ''
+      include "${pkgs.apparmorRulesFromClosure { name="security.wrappers"; } [
+        securityWrapper
+        pkgs.stdenv.cc.cc
+        pkgs.stdenv.cc.libc
+      ]}"
+    '';
+
     ###### setcap activation script
     system.activationScripts.wrappers =
       lib.stringAfter [ "specialfs" "users" ]
@@ -179,6 +186,8 @@ in
           # Look in the system path and in the default profile for
           # programs to be wrapped.
           WRAPPER_PATH=${config.system.path}/bin:${config.system.path}/sbin
+
+          chmod 755 "${parentWrapperDir}"
 
           # We want to place the tmpdirs for the wrappers to the parent dir.
           wrapperDir=$(mktemp --directory --tmpdir="${parentWrapperDir}" wrappers.XXXXXXXXXX)
@@ -190,6 +199,9 @@ in
             # Atomically replace the symlink
             # See https://axialcorps.com/2013/07/03/atomically-replacing-files-and-directories/
             old=$(readlink -f ${wrapperDir})
+            if [ -e ${wrapperDir}-tmp ]; then
+              rm --force --recursive ${wrapperDir}-tmp
+            fi
             ln --symbolic --force --no-dereference $wrapperDir ${wrapperDir}-tmp
             mv --no-target-directory ${wrapperDir}-tmp ${wrapperDir}
             rm --force --recursive $old

@@ -7,15 +7,14 @@ let inherit (lib) licenses maintainers platforms; in
 args:
 
 let
-  inherit (args) name;
-  version = args.version or srcs."${name}".version;
-  src = args.src or srcs."${name}".src;
+  inherit (args) pname;
+  version = args.version or srcs.${pname}.version;
+  src = args.src or srcs.${pname}.src;
 in
 
 mkDerivation (args // {
-  name = "${name}-${version}";
-  inherit src;
-  patches = args.patches or patches."${name}" or [];
+  inherit pname version src;
+  patches = args.patches or patches.${pname} or [];
 
   nativeBuildInputs = (args.nativeBuildInputs or []) ++ [ perl self.qmake ];
   propagatedBuildInputs = args.qtInputs ++ (args.propagatedBuildInputs or []);
@@ -34,6 +33,8 @@ mkDerivation (args // {
     fixQtBuiltinPaths . '*.pr?'
   '';
 
+  dontWrapQtApps = args.dontWrapQtApps or true;
+
   postFixup = ''
     if [ -d "''${!outputDev}/lib/pkgconfig" ]; then
         find "''${!outputDev}/lib/pkgconfig" -name '*.pc' | while read pc; do
@@ -50,7 +51,7 @@ mkDerivation (args // {
   '';
 
   meta = {
-    homepage = http://www.qt.io;
+    homepage = "http://www.qt.io";
     description = "A cross-platform application framework for C++";
     license = with licenses; [ fdl13 gpl2 lgpl21 lgpl3 ];
     maintainers = with maintainers; [ qknight ttuegel periklis bkchr ];

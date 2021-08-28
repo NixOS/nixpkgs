@@ -11,10 +11,10 @@
   <literal>10.233.0.0/16</literal>. You can get the container’s IPv4 address
   as follows:
 <screen>
-# nixos-container show-ip foo
+<prompt># </prompt>nixos-container show-ip foo
 10.233.4.2
 
-$ ping -c1 10.233.4.2
+<prompt>$ </prompt>ping -c1 10.233.4.2
 64 bytes from 10.233.4.2: icmp_seq=1 ttl=64 time=0.106 ms
 </screen>
  </para>

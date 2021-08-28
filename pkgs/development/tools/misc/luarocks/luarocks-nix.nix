@@ -1,10 +1,11 @@
 { luarocks, fetchFromGitHub }:
 luarocks.overrideAttrs(old: {
   pname = "luarocks-nix";
+  version = "2021-01-22";
   src = fetchFromGitHub {
-    owner = "teto";
-    repo = "luarocks";
-    rev = "595456f1246d66e5bdce0de838d0d6188274991c";
-    sha256 = "14nn0n5a0m516lnbwljy85h7y98zwnfbcyz7hgsm6fn4p8316yz2";
+    owner = "nix-community";
+    repo = "luarocks-nix";
+    rev = "v3.5.0_nix";
+    sha256 = "sha256-Ea3PVkCaUPO/mvVZtHtD1G9T/Yom28M9oN6duY4ovHk=";
   };
 })

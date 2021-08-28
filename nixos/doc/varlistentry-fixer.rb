@@ -15,8 +15,8 @@ require "rexml/document"
 include REXML
 
 if ARGV.length < 1 then
-	$stderr.puts "Needs a filename."
-	exit 1
+  $stderr.puts "Needs a filename."
+  exit 1
 end
 
 filename = ARGV.shift
@@ -51,17 +51,17 @@ $touched = false
 # Generates: --optionnamevalue
 #                   ^^  ^^
 doc.elements.each("//varlistentry/term") do |term|
-	["varname", "function", "option", "replaceable"].each do |prev_name|
-		term.elements.each(prev_name) do |el|
-			if el.next_element and
-					el.next_element.name == "replaceable" and
-					el.next_sibling_node.class == Element
-				then
-				$touched = true
-				term.insert_after(el, Text.new(" "))
-			end
-		end
-	end
+  ["varname", "function", "option", "replaceable"].each do |prev_name|
+    term.elements.each(prev_name) do |el|
+      if el.next_element and
+          el.next_element.name == "replaceable" and
+          el.next_sibling_node.class == Element
+        then
+        $touched = true
+        term.insert_after(el, Text.new(" "))
+      end
+    end
+  end
 end
 
 
@@ -75,17 +75,17 @@ end
 # Generates: -Ipath
 #             ^^
 doc.elements.each("//cmdsynopsis/arg") do |term|
-	["option", "replaceable"].each do |prev_name|
-		term.elements.each(prev_name) do |el|
-			if el.next_element and
-				el.next_element.name == "replaceable" and
-				el.next_sibling_node.class == Element
-			then
-				$touched = true
-				term.insert_after(el, Text.new(" "))
-			end
-		end
-	end
+  ["option", "replaceable"].each do |prev_name|
+    term.elements.each(prev_name) do |el|
+      if el.next_element and
+        el.next_element.name == "replaceable" and
+        el.next_sibling_node.class == Element
+      then
+        $touched = true
+        term.insert_after(el, Text.new(" "))
+      end
+    end
+  end
 end
 
 #  <cmdsynopsis>
@@ -104,21 +104,21 @@ end
 # Generates: [{--profile-name | -p }name]
 #                                   ^^^^
 doc.elements.each("//cmdsynopsis/arg") do |term|
-	["group"].each do |prev_name|
-		term.elements.each(prev_name) do |el|
-			if el.next_element and
-				el.next_element.name == "replaceable" and
-				el.next_sibling_node.class == Element
-			then
-				$touched = true
-				term.insert_after(el, Text.new(" "))
-			end
-		end
-	end
+  ["group"].each do |prev_name|
+    term.elements.each(prev_name) do |el|
+      if el.next_element and
+        el.next_element.name == "replaceable" and
+        el.next_sibling_node.class == Element
+      then
+        $touched = true
+        term.insert_after(el, Text.new(" "))
+      end
+    end
+  end
 end
 
 
 if $touched then
-	doc.context[:attribute_quote] = :quote
-	doc.write(output: File.open(filename, "w"))
+  doc.context[:attribute_quote] = :quote
+  doc.write(output: File.open(filename, "w"))
 end

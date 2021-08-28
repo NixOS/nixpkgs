@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, readline }:
+{ lib, stdenv, fetchFromGitHub, readline }:
 
 stdenv.mkDerivation rec {
-  name = "picoc-${version}";
+  pname = "picoc";
   version = "2015-05-04";
 
   src = fetchFromGitHub {
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   # Tests are currently broken on i686 see
-  # http://hydra.nixos.org/build/24003763/nixlog/1
+  # https://hydra.nixos.org/build/24003763/nixlog/1
   doCheck = if stdenv.isi686 then false else true;
   checkTarget = "test";
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     install -m644 *.h $out/include
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Very small C interpreter for scripting";
     longDescription = ''
       PicoC is a very small C interpreter for scripting. It was originally
@@ -43,8 +43,8 @@ stdenv.mkDerivation rec {
       very sparing of data space. This means it can work well in small embedded
       devices.
     '';
-    homepage = https://github.com/zsaleeba/picoc;
-    downloadPage = https://code.google.com/p/picoc/downloads/list;
+    homepage = "https://github.com/zsaleeba/picoc";
+    downloadPage = "https://code.google.com/p/picoc/downloads/list";
     license = licenses.bsd3;
     platforms = platforms.linux;
   };

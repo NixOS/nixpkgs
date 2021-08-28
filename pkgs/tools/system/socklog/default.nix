@@ -1,9 +1,9 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
-  name = "socklog-${version}";
+  pname = "socklog";
   version = "2.1.0";
 
   src = fetchurl {
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     echo "$NIX_CC/bin/cc -s"                    >src/conf-ld
   '';
 
-  buildPhase = ''package/compile'';
+  buildPhase = "package/compile";
 
   installPhase = ''
     mkdir -p $out/bin
@@ -45,13 +45,13 @@ stdenv.mkDerivation rec {
     mv doc/*.html $doc/share/doc/socklog/html/
   '';
 
-  checkPhase = ''package/check'';
+  checkPhase = "package/check";
 
   doCheck = true;
 
   meta = {
     description = "System and kernel logging services";
-    homepage = http://smarden.org/socklog/;
+    homepage = "http://smarden.org/socklog/";
     license = licenses.publicDomain;
     platforms = platforms.unix;
     maintainers = [ maintainers.joachifm ];

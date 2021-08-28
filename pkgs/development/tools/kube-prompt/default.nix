@@ -1,7 +1,7 @@
 { lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "kube-prompt-${version}";
+  pname = "kube-prompt";
   version = "1.0.5";
   rev = "v${version}";
 
@@ -20,7 +20,7 @@ buildGoPackage rec {
   meta = {
   description = "An interactive kubernetes client featuring auto-complete using go-prompt";
     license = lib.licenses.mit;
-    homepage = https://github.com/c-bata/kube-prompt;
+    homepage = "https://github.com/c-bata/kube-prompt";
     maintainers = [ lib.maintainers.vdemeester ];
   };
 }

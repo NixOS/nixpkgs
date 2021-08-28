@@ -1,34 +1,37 @@
-{ stdenv, fetchFromGitHub
-, meson, ninja, pkgconfig, scdoc
-, wayland, wayland-protocols, libxkbcommon, cairo, gdk_pixbuf, pam
+{ lib, stdenv, fetchFromGitHub
+, meson, ninja, pkg-config, scdoc
+, wayland, wayland-protocols, libxkbcommon, cairo, gdk-pixbuf, pam
 }:
 
 stdenv.mkDerivation rec {
-  name = "swaylock-${version}";
-  version = "1.4";
+  pname = "swaylock";
+  version = "1.5";
 
   src = fetchFromGitHub {
     owner = "swaywm";
     repo = "swaylock";
     rev = version;
-    sha256 = "1ii9ql1mxkk2z69dv6bg1x22nl3a46iww764wqjiv78x08xpk982";
+    sha256 = "0r95p4w11dwm5ra614vddz83r8j7z6gd120z2vcchy7m9b0f15kf";
   };
 
   postPatch = ''
-    sed -iE "s/version: '1\.3',/version: '${version}',/" meson.build
+    substituteInPlace meson.build \
+      --replace "version: '1.4'" "version: '${version}'"
   '';
 
-  nativeBuildInputs = [ meson ninja pkgconfig scdoc ];
-  buildInputs = [ wayland wayland-protocols libxkbcommon cairo gdk_pixbuf pam ];
+  nativeBuildInputs = [ meson ninja pkg-config scdoc ];
+  buildInputs = [ wayland wayland-protocols libxkbcommon cairo gdk-pixbuf pam ];
 
   mesonFlags = [
     "-Dpam=enabled" "-Dgdk-pixbuf=enabled" "-Dman-pages=enabled"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Screen locker for Wayland";
     longDescription = ''
       swaylock is a screen locking utility for Wayland compositors.
+      Important note: If you don't use the Sway module (programs.sway.enable)
+      you need to set "security.pam.services.swaylock = {};" manually.
     '';
     inherit (src.meta) homepage;
     license = licenses.mit;

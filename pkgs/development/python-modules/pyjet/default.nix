@@ -1,12 +1,15 @@
-{ lib, buildPythonPackage, fetchPypi, cython, nose, numpy }:
+{ lib, buildPythonPackage, fetchFromGitHub, cython, pytest, numpy }:
 
 buildPythonPackage rec {
   pname = "pyjet";
-  version = "1.4.0";
+  version = "1.6.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "89ce11cd4541fb573d68fd60a219e5e1bdeb94cfcfffc917b472fde2aa9a5a31";
+  # tests not included in pypi tarball
+  src = fetchFromGitHub {
+    owner = "scikit-hep";
+    repo = pname;
+    rev = version;
+    sha256 = "0b68jnbfk2rw9i1nnwsrbrbgkj7r0w1nw0i9f8fah1wmn78k9csv";
   };
 
   # fix for python37
@@ -19,7 +22,11 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [ numpy ];
-  checkInputs = [ nose ];
+  checkInputs = [ pytest ];
+  checkPhase = ''
+    mv pyjet _pyjet
+    pytest tests/
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/scikit-hep/pyjet";

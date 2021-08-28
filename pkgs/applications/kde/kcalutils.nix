@@ -1,19 +1,19 @@
 {
   mkDerivation, lib, kdepimTeam,
   extra-cmake-modules, kdoctools,
-  grantlee, kcalcore, kconfig, kontactinterface, kcoreaddons, kdelibs4support,
+  grantlee, kcalendarcore, kconfig, kontactinterface, kcoreaddons,
   kidentitymanagement, kpimtextedit,
 }:
 
 mkDerivation {
-  name = "kcalutils";
+  pname = "kcalutils";
   meta = {
     license = with lib.licenses; [ gpl2 lgpl21 fdl12 ];
     maintainers = kdepimTeam;
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
-    grantlee kcalcore kconfig kontactinterface kcoreaddons kdelibs4support
+    grantlee kcalendarcore kconfig kontactinterface kcoreaddons
     kidentitymanagement kpimtextedit
   ];
   outputs = [ "out" "dev" ];

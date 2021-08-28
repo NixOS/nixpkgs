@@ -1,4 +1,4 @@
-{ stdenv, fetchpatch, fetchurl, SDL, SDL_mixer, bulletml }:
+{ lib, stdenv, fetchpatch, fetchurl, SDL, SDL_mixer, bulletml }:
 
 let
   version = "0.23a";
@@ -10,7 +10,8 @@ let
   };
 
 in stdenv.mkDerivation {
-  name = "rrootage-${version}";
+  pname = "rrootage";
+  inherit version;
   src = fetchurl {
     url = "http://downloads.sourceforge.net/rrootage/rRootage-${version}.tar.gz";
     sha256 = "01zzg4ih3kmbhsn1p9zr7g8srv1d2dhrp8cdd86y9qq233idnkln";
@@ -71,7 +72,7 @@ in stdenv.mkDerivation {
     install -m 644 readme_linux "$out"/share/doc/rrootage/README
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Abstract shooter created by Kenta Cho";
     homepage = "http://rrootage.sourceforge.net/";
     license = licenses.bsd2;

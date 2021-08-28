@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, autoreconfHook, pkgconfig, libjpeg, libpng, libX11, zlib }:
+{ lib, stdenv, fetchurl, autoreconfHook, pkg-config, libjpeg, libpng, libX11, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "libxcomp-${version}";
+  pname = "libxcomp";
   version = "3.5.99.16";
 
   src = fetchurl {
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ libjpeg libpng libX11 zlib ];
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   preAutoreconf = ''
     cd nxcomp/
@@ -19,9 +19,9 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "NX compression library";
-    homepage = http://wiki.x2go.org/doku.php/wiki:libs:nx-libs;
+    homepage = "http://wiki.x2go.org/doku.php/wiki:libs:nx-libs";
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

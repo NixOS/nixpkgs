@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libGLU_combined, SDL, SDL_mixer, SDL_image, SDL_ttf }:
+{ lib, stdenv, fetchurl, libGLU, libGL, SDL, SDL_mixer, SDL_image, SDL_ttf }:
 
 stdenv.mkDerivation rec {
   # pf5234 (a developer?) at freenode #egoboo told me that I better use 2.7.3 until
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     cp -v -Rd controls.txt setup.txt players modules basicdat $out/share/${name}
   '';
 
-  buildInputs = [ libGLU_combined SDL SDL_mixer SDL_image SDL_ttf ];
+  buildInputs = [ libGLU libGL SDL SDL_mixer SDL_image SDL_ttf ];
 
   /*
     This big commented thing may be needed for versions 2.8.0 or beyond
@@ -44,18 +44,16 @@ stdenv.mkDerivation rec {
     '';
   */
 
-  NIX_LDFLAGS = [
-    "-lm"
-  ];
+  NIX_LDFLAGS = "-lm";
 
   meta = {
     description = "3D dungeon crawling adventure";
 
-    homepage = http://www.freedink.org/;
-    license = stdenv.lib.licenses.gpl2Plus;
+    homepage = "http://www.freedink.org/";
+    license = lib.licenses.gpl2Plus;
 
     # I take it out of hydra as it does not work as well as I'd like
-    # maintainers = [ stdenv.lib.maintainers.bjg ];
-    # platforms = stdenv.lib.platforms.all;
+    # maintainers = [ lib.maintainers.bjg ];
+    # platforms = lib.platforms.all;
   };
 }

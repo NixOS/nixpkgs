@@ -1,24 +1,24 @@
-{ stdenv, fetchurl, ncurses, xlibsWrapper }:
+{ lib, stdenv, fetchurl, ncurses, xlibsWrapper }:
 
 let
    useX11 = !stdenv.isAarch32 && !stdenv.isMips;
    useNativeCompilers = !stdenv.isMips;
-   inherit (stdenv.lib) optionals optionalString;
+   inherit (lib) optional optionals optionalString;
 in
 
 stdenv.mkDerivation rec {
-  name = "ocaml-${version}";
+  pname = "ocaml";
   version = "4.00.1";
-  
+
   src = fetchurl {
-    url = "https://caml.inria.fr/pub/distrib/ocaml-4.00/${name}.tar.bz2";
+    url = "https://caml.inria.fr/pub/distrib/ocaml-4.00/${pname}-${version}.tar.bz2";
     sha256 = "33c3f4acff51685f5bfd7c260f066645e767d4e865877bf1613c176a77799951";
   };
 
   prefixKey = "-prefix ";
-  configureFlags = ["-no-tk"] ++ optionals useX11 [ "-x11lib" xlibsWrapper ];
-  buildFlags = "world" + optionalString useNativeCompilers " bootstrap world.opt";
-  buildInputs = [ncurses] ++ optionals useX11 [ xlibsWrapper ];
+  configureFlags = [ "-no-tk" ] ++ optionals useX11 [ "-x11lib" xlibsWrapper ];
+  buildFlags = [ "world" ] ++ optionals useNativeCompilers [ "bootstrap" "world.opt" ];
+  buildInputs = [ ncurses ] ++ optional useX11 xlibsWrapper;
   installTargets = "install" + optionalString useNativeCompilers " installopt";
   preConfigure = ''
     CAT=$(type -tp cat)
@@ -33,8 +33,8 @@ stdenv.mkDerivation rec {
     nativeCompilers = useNativeCompilers;
   };
 
-  meta = with stdenv.lib; {
-    homepage = http://caml.inria.fr/ocaml;
+  meta = with lib; {
+    homepage = "http://caml.inria.fr/ocaml";
     branch = "4.00";
     license = with licenses; [
       qpl /* compiler */

@@ -1,15 +1,15 @@
-{ stdenv, fetchFromGitHub, fetchurl, makeWrapper, unzip
+{ lib, stdenv, fetchFromGitHub, fetchurl, makeWrapper, unzip
 , gnumake, gcc-arm-embedded, binutils-arm-embedded
 , dfu-util-axoloti, jdk, ant, libfaketime }:
 
 stdenv.mkDerivation rec {
   version = "1.0.12-2";
-  name = "axoloti-${version}";
+  pname = "axoloti";
 
   src = fetchFromGitHub {
     owner = "axoloti";
     repo = "axoloti";
-    rev = "${version}";
+    rev = version;
     sha256 = "1qffis277wshldr3i939b0r2x3a2mlr53samxqmr2nk1sfm2b4w9";
   };
 
@@ -87,8 +87,8 @@ stdenv.mkDerivation rec {
     makeWrapper ${jdk}/bin/java $out/bin/axoloti --add-flags "-Daxoloti_release=$out/share/axoloti -Daxoloti_runtime=$out/share/axoloti -jar $out/share/axoloti/Axoloti.jar"
   '';
 
-  meta = with stdenv.lib; {
-    homepage = http://www.axoloti.com;
+  meta = with lib; {
+    homepage = "http://www.axoloti.com";
     description = ''
       Sketching embedded digital audio algorithms.
 

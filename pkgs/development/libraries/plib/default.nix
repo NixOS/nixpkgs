@@ -1,4 +1,4 @@
-{ fetchurl, fetchpatch, stdenv, libGLU_combined, freeglut, SDL
+{ fetchurl, fetchpatch, lib, stdenv, libGLU, libGL, freeglut, SDL
 , libXi, libSM, libXmu, libXext, libX11 }:
 
 stdenv.mkDerivation rec {
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   ];
 
   propagatedBuildInputs = [
-    libGLU_combined freeglut SDL
+    libGLU libGL freeglut SDL
 
     # The following libs ought to be propagated build inputs of Mesa.
     libXi libSM libXmu libXext libX11
@@ -42,9 +42,9 @@ stdenv.mkDerivation rec {
       GLUT, or FLTK instead of PLIB's 'PW' windowing library, you can.
     '';
 
-    license = stdenv.lib.licenses.lgpl2Plus;
+    license = lib.licenses.lgpl2Plus;
 
-    homepage = http://plib.sourceforge.net/;
-    platforms = stdenv.lib.platforms.linux;
+    homepage = "http://plib.sourceforge.net/";
+    platforms = lib.platforms.linux;
   };
 }

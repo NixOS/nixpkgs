@@ -1,17 +1,19 @@
-{ stdenv, fetchFromGitHub, git, nettools, perl }:
+{ stdenv, fetchFromGitHub, git, lib, makeWrapper, nettools, perl, perlPackages }:
 
 stdenv.mkDerivation rec {
-  name = "gitolite-${version}";
-  version = "3.6.11";
+  pname = "gitolite";
+  version = "3.6.12";
 
   src = fetchFromGitHub {
     owner = "sitaramc";
     repo = "gitolite";
     rev = "v${version}";
-    sha256 = "1rkj7gknwjlc5ij9w39zf5mr647bm45la57yjczydmvrb8c56yrh";
+    sha256 = "05xw1pmagvkrbzga5pgl3xk9qyc6b5x73f842454f3w9ijspa8zy";
   };
 
-  buildInputs = [ git nettools perl ];
+  buildInputs = [ nettools perl ];
+  nativeBuildInputs = [ makeWrapper ];
+  propagatedBuildInputs = [ git ];
 
   dontBuild = true;
 
@@ -25,15 +27,20 @@ stdenv.mkDerivation rec {
       --replace hostname "${nettools}/bin/hostname"
   '';
 
+  postFixup = ''
+    wrapProgram $out/bin/gitolite-shell \
+      --prefix PATH : ${lib.makeBinPath [ git (perl.withPackages (p: [ p.JSON ])) ]}
+  '';
+
   installPhase = ''
     mkdir -p $out/bin
     perl ./install -to $out/bin
     echo ${version} > $out/bin/VERSION
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Finely-grained git repository hosting";
-    homepage    = http://gitolite.com/gitolite/index.html;
+    homepage    = "https://gitolite.com/gitolite/index.html";
     license     = licenses.gpl2;
     platforms   = platforms.unix;
     maintainers = [ maintainers.thoughtpolice maintainers.lassulus maintainers.tomberek ];

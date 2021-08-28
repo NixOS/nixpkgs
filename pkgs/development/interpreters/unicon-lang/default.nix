@@ -1,13 +1,14 @@
-{ stdenv, fetchurl, unzip, libX11, libXt }:
+{ lib, stdenv, fetchurl, unzip, libX11, libXt, libnsl }:
 
-stdenv.mkDerivation rec {
-  name = "unicon-lang-${version}";
+stdenv.mkDerivation {
+  pname = "unicon-lang";
   version = "11.7";
   src = fetchurl {
     url = "http://unicon.org/dist/uni-2-4-2010.zip";
     sha256 = "1g9l2dfp99dqih2ir2limqfjgagh3v9aqly6x0l3qavx3qkkwf61";
   };
-  buildInputs = [ libX11 libXt unzip ];
+  nativeBuildInputs = [ unzip ];
+  buildInputs = [ libnsl libX11 libXt ];
 
   hardeningDisable = [ "fortify" ];
 
@@ -33,12 +34,11 @@ stdenv.mkDerivation rec {
     cp -r bin $out/
   '';
 
-  meta = with stdenv.lib; {
-    description = ''A very high level, goal-directed, object-oriented, general purpose applications language'';
+  meta = with lib; {
+    description = "A very high level, goal-directed, object-oriented, general purpose applications language";
     maintainers = with maintainers; [ vrthra ];
     platforms = platforms.linux;
     license = licenses.gpl2;
-    homepage = http://unicon.org;
+    homepage = "http://unicon.org";
   };
 }
-

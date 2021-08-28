@@ -1,24 +1,43 @@
-{ stdenv, fetchFromGitHub, pantheon, pkgconfig, meson, ninja, vala
-, desktop-file-utils, python3, gettext, libxml2, gtk3, granite, libgee, gst_all_1
-, libcanberra, clutter-gtk, clutter-gst, elementary-icon-theme, appstream, wrapGAppsHook }:
+{ lib, stdenv
+, fetchFromGitHub
+, nix-update-script
+, pantheon
+, pkg-config
+, meson
+, ninja
+, vala
+, desktop-file-utils
+, python3
+, gettext
+, libxml2
+, gtk3
+, granite
+, libgee
+, gst_all_1
+, libcanberra
+, clutter-gtk
+, clutter-gst
+, elementary-icon-theme
+, appstream
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
-  pname = "camera";
-  version = "1.0.4";
+  pname = "elementary-camera";
+  version = "1.0.6";
 
-  name = "elementary-${pname}-${version}";
+  repoName = "camera";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
+    repo = repoName;
     rev = version;
-    sha256 = "1p532f961cjdg7szmxw7hw3av9v342hv5rx7in3bbhlc7adxflyc";
+    sha256 = "sha256-asl5NdSuLItXebxvqGlSEjwWhdButmka12YQAYkQT44=";
   };
 
   passthru = {
-    updateScript = pantheon.updateScript {
-      repoName = pname;
-      attrPath = "elementary-${pname}";
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
     };
   };
 
@@ -29,7 +48,7 @@ stdenv.mkDerivation rec {
     libxml2
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     vala
     wrapGAppsHook
@@ -54,9 +73,9 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Camera app designed for elementary OS";
-    homepage = https://github.com/elementary/camera;
+    homepage = "https://github.com/elementary/camera";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

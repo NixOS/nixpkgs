@@ -1,20 +1,30 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "pgcenter";
-  version = "0.6.2";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner  = "lesovsky";
     repo   = "pgcenter";
     rev    = "v${version}";
-    sha256 = "0mh0s83gkjhrm9ip5r1bb6y5n0nl1rlh99570yv7p3yvyhmh2292";
+    sha256 = "sha256-ow26wuM7nw/WbeaPVcNm5iYUYLydeujhw+7BcTirPcA=";
   };
 
-  modSha256 = "0kassq52v07zmffs6l066g0d3kfv6wmrh9g5cgk79bmyq13clqjj";
+  vendorSha256 = "sha256-9hYiyZ34atmSL7JvuXyiGU7HR4E6qN7bGZlyU+hP+FU=";
 
-  meta = with stdenv.lib; {
-    homepage = https://pgcenter.org/;
+  subPackages = [ "cmd" ];
+
+  buildFlagsArray = [ "-ldflags=-w -s -X main.gitTag=${src.rev} -X main.gitCommit=${src.rev} -X main.gitBranch=master" ];
+
+  postInstall = ''
+    mv $out/bin/cmd $out/bin/pgcenter
+  '';
+
+  doCheck = false;
+
+  meta = with lib; {
+    homepage = "https://pgcenter.org/";
     description = "Command-line admin tool for observing and troubleshooting PostgreSQL";
     license = licenses.bsd3;
     maintainers = [ maintainers.marsam ];

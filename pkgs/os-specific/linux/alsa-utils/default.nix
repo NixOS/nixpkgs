@@ -1,28 +1,27 @@
-{stdenv, fetchurl, alsaLib, gettext, ncurses, libsamplerate, pciutils, fftw}:
+{lib, stdenv, fetchurl, alsaLib, gettext, makeWrapper, ncurses, libsamplerate, pciutils, which, fftw}:
 
 stdenv.mkDerivation rec {
-  name = "alsa-utils-${version}";
-  version = "1.1.9";
+  pname = "alsa-utils";
+  version = "1.2.4";
 
   src = fetchurl {
-    url = "mirror://alsa/utils/${name}.tar.bz2";
-    sha256 = "0fi11b7r8hg1bdjw74s8sqx8rc4qb310jaj9lsia9labvfyjrpsx";
+    url = "mirror://alsa/utils/${pname}-${version}.tar.bz2";
+    sha256 = "09m4dnn4kplawprd2bl15nwa0b4r1brab3x44ga7f1fyk7aw5zwq";
   };
 
-  patchPhase = ''
-    substituteInPlace alsa-info/alsa-info.sh \
-      --replace "which" "type -p" \
-      --replace "lspci" "${pciutils}/bin/lspci"
-  '';
-  nativeBuildInputs = [ gettext ];
+  nativeBuildInputs = [ gettext makeWrapper ];
   buildInputs = [ alsaLib ncurses libsamplerate fftw ];
 
   configureFlags = [ "--disable-xmlto" "--with-udev-rules-dir=$(out)/lib/udev/rules.d" ];
 
-  installFlags = "ASOUND_STATE_DIR=$(TMPDIR)/dummy";
+  installFlags = [ "ASOUND_STATE_DIR=$(TMPDIR)/dummy" ];
 
-  meta = with stdenv.lib; {
-    homepage = http://www.alsa-project.org/;
+  postFixup = ''
+    wrapProgram $out/bin/alsa-info.sh --prefix PATH : "${lib.makeBinPath [ which pciutils ]}"
+  '';
+
+  meta = with lib; {
+    homepage = "http://www.alsa-project.org/";
     description = "ALSA, the Advanced Linux Sound Architecture utils";
     longDescription = ''
       The Advanced Linux Sound Architecture (ALSA) provides audio and

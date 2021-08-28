@@ -15,7 +15,7 @@ build-idris-package  {
 
   meta = {
     description = "UnionType in Idris";
-    homepage = https://github.com/berewt/UnionType;
+    homepage = "https://github.com/berewt/UnionType";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.brainrape ];
   };

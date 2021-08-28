@@ -118,7 +118,7 @@ in {
       };
 
       serverProperties = mkOption {
-        type = with types; attrsOf (either bool (either int str));
+        type = with types; attrsOf (oneOf [ bool int str ]);
         default = {};
         example = literalExample ''
           {

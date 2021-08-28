@@ -1,26 +1,26 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, python2, perl, yacc, flex
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, python3, perl, bison, flex
 , texinfo, perlPackages
 , openldap, libcap_ng, sqlite, openssl, db, libedit, pam
 , CoreFoundation, Security, SystemConfiguration
 }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
-  name = "heimdal-${version}";
-  version = "7.6.0";
+  pname = "heimdal";
+  version = "7.7.0";
 
   src = fetchFromGitHub {
     owner = "heimdal";
     repo = "heimdal";
     rev = "heimdal-${version}";
-    sha256 = "1i70xas6wddkw2840lk0ah9w6ddx0dzrslby1ggxlwfmcax8rcgp";
+    sha256 = "099qn9b8q20invvi5r8d8q9rnwpcm3nr89hx5rj7gj2ah2x5vgxs";
   };
 
   outputs = [ "out" "dev" "man" "info" ];
 
   patches = [ ./heimdal-make-missing-headers.patch ];
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig python2 perl yacc flex texinfo ]
+  nativeBuildInputs = [ autoreconfHook pkg-config python3 perl bison flex texinfo ]
     ++ (with perlPackages; [ JSON ]);
   buildInputs = optionals (stdenv.isLinux) [ libcap_ng ]
     ++ [ db sqlite openssl libedit openldap pam]

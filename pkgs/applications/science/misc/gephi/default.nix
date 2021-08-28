@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, jdk, maven, javaPackages }:
+{ lib, stdenv, fetchFromGitHub, jdk, maven, javaPackages }:
 
 let
   version = "0.9.2";
@@ -27,8 +27,9 @@ let
     outputHash = "1p7yf97dn0nvr005cbs6vdk3i341s8fya4kfccj8qqad2qgxflif";
   };
 in
-stdenv.mkDerivation rec {
-  name = "gephi-${version}";
+stdenv.mkDerivation {
+  pname = "gephi";
+  inherit version;
 
   inherit src;
 
@@ -54,9 +55,9 @@ stdenv.mkDerivation rec {
     echo "jdkhome=${jdk}" >> $out/etc/gephi.conf
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A platform for visualizing and manipulating large graphs";
-    homepage = https://gephi.org;
+    homepage = "https://gephi.org";
     license = licenses.gpl3;
     maintainers = [ maintainers.taeer ];
     platforms = [ "x86_64-linux" ];

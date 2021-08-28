@@ -74,6 +74,7 @@ in
 
       extraGroups = mkOption {
         default = [];
+        type = types.listOf types.str;
         example = [ "users" ];
         description = "Defines extra groups to which the tomcat user belongs.";
       };
@@ -194,14 +195,10 @@ in
 
   config = mkIf config.services.tomcat.enable {
 
-    users.groups = singleton
-      { name = "tomcat";
-        gid = config.ids.gids.tomcat;
-      };
+    users.groups.tomcat.gid = config.ids.gids.tomcat;
 
-    users.users = singleton
-      { name = "tomcat";
-        uid = config.ids.uids.tomcat;
+    users.users.tomcat =
+      { uid = config.ids.uids.tomcat;
         description = "Tomcat user";
         home = "/homeless-shelter";
         extraGroups = cfg.extraGroups;

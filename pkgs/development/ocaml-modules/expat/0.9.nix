@@ -1,4 +1,4 @@
-{stdenv, fetchurl, ocaml, findlib, ounit, expat}:
+{stdenv, lib, fetchurl, ocaml, findlib, ounit, expat}:
 
 let
   pname = "ocaml-expat";
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
       --replace "gcc" "\$(CC)"
   '';
 
-  configurePhase = "true";  	# Skip configure
+  dontConfigure = true;  	# Skip configure
 
   buildPhase = ''
     make all allopt
@@ -43,9 +43,9 @@ stdenv.mkDerivation rec {
   checkTarget = "testall";
 
   meta = {
-    homepage = http://www.xs4all.nl/~mmzeeman/ocaml/;
+    homepage = "http://www.xs4all.nl/~mmzeeman/ocaml/";
     description = "An ocaml wrapper for the Expat XML parsing library";
-    license = stdenv.lib.licenses.mit;
-    maintainers = [ stdenv.lib.maintainers.roconnor ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.roconnor ];
   };
 }

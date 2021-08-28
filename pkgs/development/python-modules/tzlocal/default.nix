@@ -1,23 +1,26 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchPypi
 , pytz }:
 
 buildPythonPackage rec {
   pname = "tzlocal";
-  version = "1.5.1";
+  version = "2.1";
 
   propagatedBuildInputs = [ pytz ];
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4ebeb848845ac898da6519b9b31879cf13b6626f7184c496037b818e238f2c4e";
+    sha256 = "643c97c5294aedc737780a49d9df30889321cbe1204eac2c2ec6134035a92e44";
   };
 
   # test fail (timezone test fail)
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  pythonImportsCheck = [ "tzlocal" ];
+
+  meta = with lib; {
     description = "Tzinfo object for the local timezone";
-    homepage = https://github.com/regebro/tzlocal;
+    homepage = "https://github.com/regebro/tzlocal";
     license = licenses.cddl;
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "MechanicalSoup";
-  version = "0.11.0";
+  version = "1.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0k59wwk75q7nz6i6gynvzhagy02ql0bv7py3qqcwgjw7607yq4i7";
+    sha256 = "37d3b15c1957917d3ae171561e77f4dd4c08c35eb4500b8781f6e7e1bb6c4d07";
   };
 
   checkInputs = [ pytest pytestrunner requests-mock pytestcov ];
@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A Python library for automating interaction with websites";
-    homepage = https://github.com/hickford/MechanicalSoup;
+    homepage = "https://github.com/hickford/MechanicalSoup";
     license = licenses.mit;
     maintainers = [ maintainers.jgillich ];
   };

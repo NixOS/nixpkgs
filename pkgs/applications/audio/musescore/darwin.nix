@@ -8,8 +8,11 @@ in
 with lib;
 
 stdenv.mkDerivation rec {
-  name = "musescore-darwin-${version}";
-  version = "${concatStringsSep "." versionComponents}";
+  pname = "musescore-darwin";
+  version = concatStringsSep "." versionComponents;
+
+  # The disk image contains the .app and a symlink to /Applications.
+  sourceRoot = "${appName}.app";
 
   src = fetchurl {
     url =  "ftp://ftp.osuosl.org/pub/musescore/releases/MuseScore-${concatStringsSep "." (take 3 versionComponents)}/MuseScore-${version}.dmg";
@@ -23,12 +26,12 @@ stdenv.mkDerivation rec {
     chmod a+x "$out/Applications/${appName}.app/Contents/MacOS/mscore"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Music notation and composition software";
-    homepage = https://musescore.org/;
+    homepage = "https://musescore.org/";
     license = licenses.gpl2;
     platforms = platforms.darwin;
-    maintainers = with maintainers; [ yurrriq ];
-    repositories.git = https://github.com/musescore/MuseScore;
+    maintainers = [];
+    repositories.git = "https://github.com/musescore/MuseScore";
   };
 }

@@ -1,12 +1,12 @@
-{ fetchurl, stdenv, libX11, xorgproto, libXext, libXtst
-, gtk2, libXi, pkgconfig, texinfo }:
+{ fetchurl, lib, stdenv, libX11, xorgproto, libXext, libXtst
+, gtk2, libXi, pkg-config, texinfo }:
 
 stdenv.mkDerivation rec {
   version = "3.19";
-  name = "xnee-${version}";
+  pname = "xnee";
 
   src = fetchurl {
-    url = "mirror://gnu/xnee/${name}.tar.gz";
+    url = "mirror://gnu/xnee/${pname}-${version}.tar.gz";
     sha256 = "04n2lac0vgpv8zsn7nmb50hf3qb56pmj90dmwnivg09gyrf1x92j";
   };
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ libX11 xorgproto libXext libXtst gtk2
-      libXi pkgconfig
+      libXi pkg-config
       texinfo
     ];
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   # `cnee' is linked without `-lXi' and as a consequence has a RUNPATH that
   # lacks libXi.
-  makeFlags = "LDFLAGS=-lXi";
+  makeFlags = [ "LDFLAGS=-lXi" ];
 
   # XXX: Actually tests require an X server.
   doCheck = true;
@@ -45,11 +45,11 @@ stdenv.mkDerivation rec {
          "macros", retype a file.
       '';
 
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
 
-    homepage = https://www.gnu.org/software/xnee/;
+    homepage = "https://www.gnu.org/software/xnee/";
 
-    maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
-    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;  # arbitrary choice
+    maintainers = with lib.maintainers; [ ];
+    platforms = lib.platforms.gnu ++ lib.platforms.linux;  # arbitrary choice
   };
 }

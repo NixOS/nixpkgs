@@ -4,21 +4,22 @@ GEM
     beefcake (1.0.0)
     json (1.8.6)
     mtrc (0.0.4)
+    optimist (3.0.0)
     riemann-client (0.2.6)
       beefcake (>= 0.3.5, <= 1.0.0)
       mtrc (>= 0.0.4)
       trollop (>= 1.16.2)
-    riemann-tools (0.2.13)
+    riemann-tools (0.2.14)
       json (~> 1.8)
-      riemann-client (>= 0.2.6)
-      trollop (>= 1.16.2)
+      optimist (~> 3.0, >= 3.0.0)
+      riemann-client (~> 0.2, >= 0.2.6)
     trollop (2.9.9)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
-  riemann-tools (= 0.2.13)
+  riemann-tools
 
 BUNDLED WITH
-   1.17.2
+   2.1.4

@@ -33,6 +33,7 @@ in {
       };
       configurationDir = mkOption {
         default = "${activemq}/conf";
+        type = types.str;
         description = ''
           The base directory for ActiveMQ's configuration.
           By default, this directory is searched for a file named activemq.xml,
@@ -40,7 +41,7 @@ in {
         '';
       };
       configurationURI = mkOption {
-        type = types.string;
+        type = types.str;
         default = "xbean:activemq.xml";
         description = ''
           The URI that is passed along to the BrokerFactory to
@@ -51,7 +52,7 @@ in {
         '';
       };
       baseDir = mkOption {
-        type = types.string;
+        type = types.str;
         default = "/var/activemq";
         description = ''
           The base directory where ActiveMQ stores its persistent data and logs.
@@ -63,9 +64,11 @@ in {
       javaProperties = mkOption {
         type = types.attrs;
         default = { };
-        example = {
-          "java.net.preferIPv4Stack" = "true";
-        };
+        example = literalExample ''
+          {
+            "java.net.preferIPv4Stack" = "true";
+          }
+        '';
         apply = attrs: {
           "activemq.base" = "${cfg.baseDir}";
           "activemq.data" = "${cfg.baseDir}/data";
@@ -81,7 +84,7 @@ in {
         '';
       };
       extraJavaOptions = mkOption {
-        type = types.string;
+        type = types.separatedString " ";
         default = "";
         example = "-Xmx2G -Xms2G -XX:MaxPermSize=512M";
         description = ''

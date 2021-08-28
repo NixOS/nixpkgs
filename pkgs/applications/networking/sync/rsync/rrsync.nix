@@ -1,19 +1,18 @@
-{ stdenv, fetchurl, perl, rsync }:
+{ lib, stdenv, fetchurl, perl, rsync }:
 
 let
-  base = import ./base.nix { inherit stdenv fetchurl; };
+  base = import ./base.nix { inherit lib fetchurl; };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "rrsync-${base.version}";
 
   src = base.src;
 
-  buildInputs = [ rsync ];
-  nativeBuildInputs = [perl];
+  buildInputs = [ rsync perl ];
 
   # Skip configure and build phases.
   # We just want something from the support directory
-  configurePhase = "true";
+  dontConfigure = true;
   dontBuild = true;
 
   postPatch = ''
@@ -28,6 +27,6 @@ stdenv.mkDerivation rec {
 
   meta = base.meta // {
     description = "A helper to run rsync-only environments from ssh-logins";
-    maintainers = [ stdenv.lib.maintainers.kampfschlaefer ];
+    maintainers = [ lib.maintainers.kampfschlaefer ];
   };
 }

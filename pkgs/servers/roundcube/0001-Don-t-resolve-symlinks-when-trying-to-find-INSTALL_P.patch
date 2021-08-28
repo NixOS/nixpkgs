@@ -18,7 +18,7 @@ index 08e3bb5..b2ad498 100755
  */
  
 -define('INSTALL_PATH', realpath(__DIR__ . '/..') . '/' );
-+define('INSTALL_PATH', __DIR__ . '/../' );
++define('INSTALL_PATH', dirname(dirname($argv[0])).'/');
  
  require_once INSTALL_PATH . 'program/include/clisetup.php';
  

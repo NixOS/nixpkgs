@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, yasm, autoconf, automake, libtool }:
+{ lib, stdenv, fetchurl, yasm, autoconf, automake, libtool }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
-  name = "xvidcore-${version}";
+  pname = "xvidcore";
   version = "1.3.5";
 
   src = fetchurl {
-    url = "http://downloads.xvid.org/downloads/${name}.tar.bz2";
+    url = "http://downloads.xvid.org/downloads/${pname}-${version}.tar.bz2";
     sha256 = "1d0hy1w9sn6491a3vhyf3vmhq4xkn6yd4ralx1191s6qz5wz483w";
   };
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "MPEG-4 video codec for PC";
-    homepage    = https://www.xvid.com/;
+    homepage    = "https://www.xvid.com/";
     license     = licenses.gpl2;
     maintainers = with maintainers; [ codyopel lovek323 ];
     platforms   = platforms.all;

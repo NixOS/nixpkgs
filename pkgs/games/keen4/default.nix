@@ -5,11 +5,11 @@ stdenv.mkDerivation {
   builder = ./builder.sh;
 
   dist = fetchurl {
-    url = http://tarballs.nixos.org/keen4.zip;
+    url = "http://tarballs.nixos.org/keen4.zip";
     sha256 = "12rnc9ksl7v6l8wsxvr26ylkafzq80dbsa7yafzw9pqc8pafkhx1";
   };
 
-  buildInputs = [unzip];
+  nativeBuildInputs = [ unzip ];
 
   inherit dosbox;
 

@@ -1,9 +1,4 @@
----
-title: iOS
-author: Sander van der Burg
-date: 2018-11-18
----
-# iOS
+# iOS {#ios}
 
 This component is basically a wrapper/workaround that makes it possible to
 expose an Xcode installation as a Nix package by means of symlinking to the
@@ -18,7 +13,7 @@ The primary objective of this project is to use the Nix expression language to
 specify how iOS apps can be built from source code, and to automatically spawn
 iOS simulator instances for testing.
 
-This component also makes it possible to use [Hydra](http://nixos.org/hydra),
+This component also makes it possible to use [Hydra](https://nixos.org/hydra),
 the Nix-based continuous integration server to regularly build iOS apps and to
 do wireless ad-hoc installations of enterprise IPAs on iOS devices through
 Hydra.
@@ -217,3 +212,13 @@ xcode.simulateApp {
 
 By providing the result of an `xcode.buildApp {}` function and configuring the
 app bundle id, the app gets deployed automatically and started.
+
+Troubleshooting
+---------------
+In some rare cases, it may happen that after a failure, changes are not picked
+up. Most likely, this is caused by a derived data cache that Xcode maintains.
+To wipe it you can run:
+
+```bash
+$ rm -rf ~/Library/Developer/Xcode/DerivedData
+```

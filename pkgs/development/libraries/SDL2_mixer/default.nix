@@ -1,35 +1,65 @@
-{ stdenv, lib, fetchurl, autoreconfHook, pkgconfig, which
-, SDL2, libogg, libvorbis, smpeg2, flac, libmodplug
-, CoreServices, AudioUnit, AudioToolbox
-, enableNativeMidi ? false, fluidsynth ? null }:
+{ lib, stdenv
+, fetchurl
+, pkg-config
+, AudioToolbox
+, AudioUnit
+, CoreServices
+, SDL2
+, flac
+, fluidsynth
+, libmodplug
+, libogg
+, libvorbis
+, mpg123
+, opusfile
+, smpeg2
+}:
 
 stdenv.mkDerivation rec {
-  name = "SDL2_mixer-${version}";
+  pname = "SDL2_mixer";
   version = "2.0.4";
 
   src = fetchurl {
-    url = "https://www.libsdl.org/projects/SDL_mixer/release/${name}.tar.gz";
+    url = "https://www.libsdl.org/projects/SDL_mixer/release/${pname}-${version}.tar.gz";
     sha256 = "0694vsz5bjkcdgfdra6x9fq8vpzrl8m6q96gh58df7065hw5mkxl";
   };
 
-  preAutoreconf = ''
-    aclocal
-  '';
+  nativeBuildInputs = [ pkg-config ];
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig which ];
+  buildInputs = lib.optionals stdenv.isDarwin [
+    AudioToolbox
+    AudioUnit
+    CoreServices
+  ];
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ CoreServices AudioUnit AudioToolbox ];
+  propagatedBuildInputs = [
+    SDL2
+    flac
+    fluidsynth
+    libmodplug
+    libogg
+    libvorbis
+    mpg123
+    opusfile
+    smpeg2
+  ];
 
-  propagatedBuildInputs = [ SDL2 libogg libvorbis fluidsynth smpeg2 flac libmodplug ];
+  configureFlags = [
+    "--disable-music-ogg-shared"
+    "--disable-music-flac-shared"
+    "--disable-music-mod-modplug-shared"
+    "--disable-music-mp3-mpg123-shared"
+    "--disable-music-opus-shared"
+    "--disable-music-midi-fluidsynth-shared"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "--disable-sdltest"
+    "--disable-smpegtest"
+  ];
 
-  configureFlags = [ "--disable-music-ogg-shared" ]
-    ++ lib.optional enableNativeMidi "--enable-music-native-midi-gpl"
-    ++ lib.optionals stdenv.isDarwin [ "--disable-sdltest" "--disable-smpegtest" ];
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "SDL multi-channel audio mixer library";
     platforms = platforms.unix;
-    homepage = https://www.libsdl.org/projects/SDL_mixer/;
+    homepage = "https://www.libsdl.org/projects/SDL_mixer/";
     maintainers = with maintainers; [ MP2E ];
     license = licenses.zlib;
   };

@@ -11,10 +11,7 @@ with lib;
 
     services.clickhouse = {
 
-      enable = mkOption {
-        default = false;
-        description = "Whether to enable ClickHouse database server.";
-      };
+      enable = mkEnableOption "ClickHouse database server";
 
     };
 
@@ -45,6 +42,7 @@ with lib;
         User = "clickhouse";
         Group = "clickhouse";
         ConfigurationDirectory = "clickhouse-server";
+        AmbientCapabilities = "CAP_SYS_NICE";
         StateDirectory = "clickhouse";
         LogsDirectory = "clickhouse";
         ExecStart = "${pkgs.clickhouse}/bin/clickhouse-server --config-file=${pkgs.clickhouse}/etc/clickhouse-server/config.xml";

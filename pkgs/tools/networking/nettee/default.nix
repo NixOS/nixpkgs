@@ -5,7 +5,8 @@ let
   sha256 = "00xbkp99x9v07r34w7m2p8gak5hdsdbka36n7a733rdrrkgf5z7r";
 
 in stdenv.mkDerivation {
-  name = "nettee-${version}";
+  pname = "nettee";
+  inherit version;
 
   src = fetchurl {
     url = "http://saf.bio.caltech.edu/pub/software/linux_or_unix_tools/beta-nettee-${version}.tar.gz";
@@ -15,7 +16,7 @@ in stdenv.mkDerivation {
   meta = {
     homepage = "http://saf.bio.caltech.edu/nettee.html";
     description = ''Network "tee" program'';
-    license = stdenv.lib.licenses.gpl2;
+    license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ Profpatsch ];
     platforms = lib.platforms.linux;
   };

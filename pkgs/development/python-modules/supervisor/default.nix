@@ -1,27 +1,32 @@
-{ lib, buildPythonPackage, isPy3k, fetchPypi
+{ stdenv, lib, buildPythonPackage, isPy3k, fetchPypi
 , mock
-, meld3
+, pytest
+, setuptools
 }:
+
 buildPythonPackage rec {
   pname = "supervisor";
-  version = "3.3.5";
+  version = "4.2.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1w3ahridzbc6rxfpbyx8lij6pjlcgf2ymzyg53llkjqxalp6sk8v";
+    sha256 = "5b2b8882ec8a3c3733cce6965cc098b6d80b417f21229ab90b18fe551d619f90";
   };
 
-  checkInputs = [ mock ];
+  # wants to write to /tmp/foo which is likely already owned by another
+  # nixbld user on hydra
+  doCheck = !stdenv.isDarwin;
+  checkInputs = [ mock pytest ];
+  checkPhase = ''
+    pytest
+  '';
 
-  propagatedBuildInputs = [ meld3 ];
+  propagatedBuildInputs = [ setuptools ];
 
-  # Supervisor requires Python 2.4 or later but does not work on any version of Python 3.  You are using version 3.6.5 (default, Mar 28 2018, 10:24:30)
-  disabled = isPy3k;
-
-  meta = {
+  meta = with lib; {
     description = "A system for controlling process state under UNIX";
-    homepage = http://supervisord.org/;
-    license = lib.licenses.free; # http://www.repoze.org/LICENSE.txt
-    maintainers = with lib.maintainers; [ zimbatm ];
+    homepage = "http://supervisord.org/";
+    license = licenses.free; # http://www.repoze.org/LICENSE.txt
+    maintainers = with maintainers; [ zimbatm ];
   };
 }

@@ -1,9 +1,9 @@
-{ stdenv, fetchFromGitHub
-, pkgconfig, cmake
+{ lib, stdenv, fetchFromGitHub
+, pkg-config, cmake
 , libpulseaudio, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "pamix-${version}";
+  pname = "pamix";
   version = "1.6";
 
   src = fetchFromGitHub {
@@ -17,12 +17,12 @@ stdenv.mkDerivation rec {
     substituteInPlace CMakeLists.txt --replace "/etc" "$out/etc/xdg"
   '';
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ libpulseaudio ncurses ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Pulseaudio terminal mixer";
-    homepage    = https://github.com/patroclos/PAmix;
+    homepage    = "https://github.com/patroclos/PAmix";
     license     = licenses.mit;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ ericsagnes ];

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libuuid, autoreconfHook }:
+{ lib, stdenv, fetchurl, fetchpatch, libuuid, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   name = "jfsutils-1.1.15";
@@ -13,14 +13,20 @@ stdenv.mkDerivation rec {
     ./hardening-format.patch
     # required for cross-compilation
     ./ar-fix.patch
+    # fix for glibc>=2.28
+    (fetchpatch {
+      name   = "add_sysmacros.patch";
+      url    = "https://sources.debian.org/data/main/j/jfsutils/1.1.15-4/debian/patches/add_sysmacros.patch";
+      sha256 = "1qcwvxs4d0d24w5x98z59arqfx2n7f0d9xaqhjcg6w8n34vkhnyc";
+    })
   ];
 
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ libuuid ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "IBM JFS utilities";
-    homepage = http://jfs.sourceforge.net;
+    homepage = "http://jfs.sourceforge.net";
     license = licenses.gpl3;
     platforms = platforms.linux;
   };

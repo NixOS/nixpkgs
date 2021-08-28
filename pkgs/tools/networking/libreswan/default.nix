@@ -1,67 +1,125 @@
-{ stdenv, fetchurl, makeWrapper,
-  pkgconfig, systemd, gmp, unbound, bison, flex, pam, libevent, libcap_ng, curl, nspr,
-  bash, iproute, iptables, procps, coreutils, gnused, gawk, nss, which, python,
-  docs ? false, xmlto
-  }:
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, nixosTests
+, pkg-config
+, systemd
+, gmp
+, unbound
+, bison
+, flex
+, pam
+, libevent
+, libcap_ng
+, curl
+, nspr
+, bash
+, iproute2
+, iptables
+, procps
+, coreutils
+, gnused
+, gawk
+, nss
+, which
+, python3
+, libselinux
+, ldns
+, xmlto
+, docbook_xml_dtd_412
+, docbook_xsl
+, findXMLCatalogs
+}:
 
 let
-  optional = stdenv.lib.optional;
-  version = "3.18";
-  name = "libreswan-${version}";
-  binPath = stdenv.lib.makeBinPath [
-    bash iproute iptables procps coreutils gnused gawk nss.tools which python
+  # Tools needed by ipsec scripts
+  binPath = lib.makeBinPath [
+    iproute2 iptables procps
+    coreutils gnused gawk
+    nss.tools which
   ];
 in
 
-assert docs -> xmlto != null;
-
-stdenv.mkDerivation {
-  inherit name;
-  inherit version;
+stdenv.mkDerivation rec {
+  pname = "libreswan";
+  version = "4.4";
 
   src = fetchurl {
-    url = "https://download.libreswan.org/${name}.tar.gz";
-    sha256 = "0zginnakxw7m79zrdvfdvliaiyg78zgqfqkks9z5d1rjj5w13xig";
+    url = "https://download.libreswan.org/${pname}-${version}.tar.gz";
+    sha256 = "0xj974yc0y1r7235zl4jhvxqz3bpb8js2fy9ic820zq9swh0lgsz";
   };
 
-  # These flags were added to compile v3.18. Try to lift them when updating.
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=redundant-decls" "-Wno-error=format-nonliteral"
-    # these flags were added to build with gcc7
-    "-Wno-error=implicit-fallthrough"
-    "-Wno-error=format-truncation"
-    "-Wno-error=pointer-compare"
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    bison
+    flex
+    pkg-config
+    xmlto
+    docbook_xml_dtd_412
+    docbook_xsl
+    findXMLCatalogs
   ];
 
-  nativeBuildInputs = [ makeWrapper pkgconfig ];
-  buildInputs = [ bash iproute iptables systemd coreutils gnused gawk gmp unbound bison flex pam libevent
-                  libcap_ng curl nspr nss python ]
-                ++ optional docs xmlto;
+  buildInputs = [
+    systemd coreutils
+    gnused gawk gmp unbound pam libevent
+    libcap_ng curl nspr nss ldns
+    # needed to patch shebangs
+    python3 bash
+  ] ++ lib.optional stdenv.isLinux libselinux;
+
+  patches = [
+    # Fix compilation on aarch64, remove on next update
+    (fetchpatch {
+      url = "https://github.com/libreswan/libreswan/commit/ea50d36d2886e44317ba5ba841de1d1bf91aee6c.patch";
+      sha256 = "1jp89rm9jp55zmiyimyhg7yadj0fwwxaw7i5gyclrs38w3y1aacj";
+    })
+  ];
 
   prePatch = ''
-    # Correct bash path
-    sed -i -e 's|/bin/bash|/usr/bin/env bash|' mk/config.mk
+    # Correct iproute2 path
+    sed -e 's|"/sbin/ip"|"${iproute2}/bin/ip"|' \
+        -e 's|"/sbin/iptables"|"${iptables}/bin/iptables"|' \
+        -i initsystems/systemd/ipsec.service.in \
+           programs/verify/verify.in
 
-    # Fix systemd unit directory, and prevent the makefile from trying to reload the systemd daemon
-    sed -i -e 's|UNITDIR=.*$|UNITDIR=$\{out}/etc/systemd/system/|' -e 's|systemctl --system daemon-reload|true|' initsystems/systemd/Makefile
+    # Prevent the makefile from trying to
+    # reload the systemd daemon or create tmpfiles
+    sed -e 's|systemctl|true|g' \
+        -e 's|systemd-tmpfiles|true|g' \
+        -i initsystems/systemd/Makefile
 
     # Fix the ipsec program from crushing the PATH
-    sed -i -e 's|\(PATH=".*"\):.*$|\1:$PATH|' programs/ipsec/ipsec.in
+    sed -e 's|\(PATH=".*"\):.*$|\1:$PATH|' -i programs/ipsec/ipsec.in
 
     # Fix python script to use the correct python
-    sed -i -e 's|#!/usr/bin/python|#!/usr/bin/env python|' -e 's/^\(\W*\)installstartcheck()/\1sscmd = "ss"\n\0/' programs/verify/verify.in
-  '';
+    sed -e 's/^\(\W*\)installstartcheck()/\1sscmd = "ss"\n\0/' \
+        -i programs/verify/verify.in
 
-  patches = [ ./libreswan-3.18-glibc-2.26.patch ];
+    # Replace wget with curl to save a dependency
+    curlArgs='-s --remote-name-all --output-dir'
+    sed -e "s|wget -q -P|${curl}/bin/curl $curlArgs|g" \
+        -i programs/letsencrypt/letsencrypt.in
+
+    # Patch the Makefile:
+    # 1. correct the pam.d directory install path
+    # 2. do not create the /var/lib/ directory
+    sed -e 's|$(DESTDIR)/etc/pam.d|$(out)/etc/pam.d|' \
+        -e '/test ! -d $(NSSDIR)/,+3d' \
+        -i configs/Makefile
+  '';
 
   # Set appropriate paths for build
   preBuild = "export INC_USRLOCAL=\${out}";
 
   makeFlags = [
     "INITSYSTEM=systemd"
-    (if docs then "all" else "base")
+    "UNITDIR=$(out)/etc/systemd/system/"
+    "TMPFILESDIR=$(out)/lib/tmpfiles.d/"
   ];
 
-  installTargets = [ (if docs then "install" else "install-base") ];
   # Hack to make install work
   installFlags = [
     "FINALVARDIR=\${out}/var"
@@ -69,18 +127,23 @@ stdenv.mkDerivation {
   ];
 
   postInstall = ''
-    for i in $out/bin/* $out/libexec/ipsec/*; do
-      wrapProgram "$i" --prefix PATH ':' "$out/bin:${binPath}"
-    done
+    # Install examples directory (needed for letsencrypt)
+    cp -r docs/examples $out/share/doc/libreswan/examples
   '';
 
-  enableParallelBuilding = true;
+  postFixup = ''
+    # Add a PATH to the main "ipsec" script
+    sed -e '0,/^$/{s||export PATH=${binPath}:$PATH|}' \
+        -i $out/bin/ipsec
+  '';
 
-  meta = with stdenv.lib; {
-    homepage = https://libreswan.org;
+  passthru.tests.libreswan = nixosTests.libreswan;
+
+  meta = with lib; {
+    homepage = "https://libreswan.org";
     description = "A free software implementation of the VPN protocol based on IPSec and the Internet Key Exchange";
-    platforms = platforms.linux ++ platforms.darwin ++ platforms.freebsd;
-    license = licenses.gpl2;
-    maintainers = [ maintainers.afranchuk ];
+    platforms = platforms.linux ++ platforms.freebsd;
+    license = with licenses; [ gpl2Plus mpl20 ] ;
+    maintainers = with maintainers; [ afranchuk rnhmjoj ];
   };
 }

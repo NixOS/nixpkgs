@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pythonPackages }:
+{ lib, fetchFromGitHub, pythonPackages }:
 
 let
   pname = "yrd";
@@ -10,18 +10,18 @@ in pythonPackages.buildPythonApplication {
 
   src = fetchFromGitHub {
     owner = "kpcyrd";
-    repo = "${pname}";
+    repo = pname;
     rev = "v${version}";
     inherit sha256;
   };
 
   propagatedBuildInputs = with pythonPackages; [ argh ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Cjdns swiss army knife";
     maintainers = with maintainers; [ akru ];
     platforms = platforms.linux;
     license = licenses.gpl3;
-    homepage = https://github.com/kpcyrd/yrd;
+    homepage = "https://github.com/kpcyrd/yrd";
   };
 }

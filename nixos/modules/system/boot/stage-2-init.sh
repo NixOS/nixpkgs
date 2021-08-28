@@ -142,7 +142,7 @@ fi
 # Record the boot configuration.
 ln -sfn "$systemConfig" /run/booted-system
 
-# Prevent the booted system form being garbage-collected If it weren't
+# Prevent the booted system from being garbage-collected. If it weren't
 # a gcroot, if we were running a different kernel, switched system,
 # and garbage collected all, we could not load kernel modules anymore.
 ln -sfn /run/booted-system /nix/var/nix/gcroots/booted-system
@@ -167,6 +167,7 @@ exec {logOutFd}>&- {logErrFd}>&-
 
 # Start systemd.
 echo "starting systemd..."
+
 PATH=/run/current-system/systemd/lib/systemd:@fsPackagesPath@ \
-    LOCALE_ARCHIVE=/run/current-system/sw/lib/locale/locale-archive \
-    exec systemd
+    LOCALE_ARCHIVE=/run/current-system/sw/lib/locale/locale-archive @systemdUnitPathEnvVar@ \
+    exec @systemdExecutable@

@@ -1,20 +1,21 @@
-{ stdenv, fetchsvn, pkgconfig, makeDesktopItem, unzip, fpc, lazarus,
-libX11, glib, gtk2, gdk_pixbuf, pango, atk, cairo, openssl }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, makeDesktopItem, unzip, fpc, lazarus,
+libX11, glib, gtk2, gdk-pixbuf, pango, atk, cairo, openssl }:
 
 stdenv.mkDerivation rec {
-  name = "transgui-5.0.1-svn-r${revision}";
-  revision = "988";
+  pname = "transgui";
+  version = "5.18.0";
 
-  src = fetchsvn {
-    url = "https://svn.code.sf.net/p/transgui/code/trunk/";
-    rev = revision;
-    sha256 = "1i6ysxs6d2wsmqi6ha10rl3n562brmhizlanhcfad04i53y8pyxf";
+  src = fetchFromGitHub {
+    owner = "transmission-remote-gui";
+    repo = "transgui";
+    rev = "v${version}";
+    sha256 = "1dyx778756zhvz5sxgdvy49p2c0x44w4nmcfd90wqrmgfknncnf5";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config unzip ];
   buildInputs = [
-    unzip fpc lazarus stdenv.cc
-    libX11 glib gtk2 gdk_pixbuf pango atk cairo openssl
+    fpc lazarus stdenv.cc
+    libX11 glib gtk2 gdk-pixbuf pango atk cairo openssl
   ];
 
   NIX_LDFLAGS = "
@@ -27,9 +28,9 @@ stdenv.mkDerivation rec {
     substituteInPlace restranslator.pas --replace /usr/ $out/
   '';
 
-  patches = [
-    ./r988-compile-fix.patch
-  ];
+  preBuild = ''
+    lazbuild -B transgui.lpr --lazarusdir=${lazarus}/share/lazarus
+  '';
 
   makeFlags = [
     "FPC=fpc"
@@ -37,7 +38,7 @@ stdenv.mkDerivation rec {
     "INSTALL_PREFIX=$(out)"
   ];
 
-  LCL_PLATFORM = "gtk2"; 
+  LCL_PLATFORM = "gtk2";
 
   desktopItem = makeDesktopItem rec {
     name = "transgui";
@@ -47,11 +48,11 @@ stdenv.mkDerivation rec {
     comment = meta.description;
     desktopName = "Transmission Remote GUI";
     genericName = "BitTorrent Client";
-    categories = stdenv.lib.concatStringsSep ";" [
+    categories = lib.concatStringsSep ";" [
       "Application" "Network" "FileTransfer" "P2P" "GTK"
     ];
     startupNotify = "true";
-    mimeType = stdenv.lib.concatStringsSep ";" [
+    mimeType = lib.concatStringsSep ";" [
       "application/x-bittorrent" "x-scheme-handler/magnet"
     ];
   };
@@ -62,14 +63,14 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/share/icons/hicolor/48x48/apps"
     cp transgui.png "$out/share/icons/hicolor/48x48/apps"
     mkdir -p "$out/share/transgui"
-    cp -r "./lang" "$out/share/transgui" 
+    cp -r "./lang" "$out/share/transgui"
   '';
 
-  meta = { 
+  meta = {
     description = "A cross platform front-end for the Transmission Bit-Torrent client";
-    homepage = https://sourceforge.net/p/transgui;
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = with stdenv.lib.maintainers; [ ramkromberg ];
-    platforms = stdenv.lib.platforms.linux;
+    homepage = "https://sourceforge.net/p/transgui";
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ ramkromberg ];
+    platforms = lib.platforms.linux;
   };
 }

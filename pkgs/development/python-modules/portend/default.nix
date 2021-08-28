@@ -1,13 +1,13 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, pytest, setuptools_scm, tempora }:
+{ lib, buildPythonPackage, fetchPypi
+, pytest, setuptools_scm, tempora, pytest-black, pytestcov }:
 
 buildPythonPackage rec {
   pname = "portend";
-  version = "2.3";
+  version = "2.7.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b7ce7d35ea262415297cbfea86226513e77b9ee5f631d3baa11992d663963719";
+    sha256 = "986ed9a278e64a87b5b5f4c21e61c25bebdce9919a92238d9c14c37a7416482b";
   };
 
   postPatch = ''
@@ -18,15 +18,18 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ tempora ];
 
-  checkInputs = [ pytest ];
+  checkInputs = [ pytest pytest-black pytestcov ];
 
   checkPhase = ''
-    py.test
+    py.test --deselect=test_portend.py::TestChecker::test_check_port_listening
   '';
 
-  meta = with stdenv.lib; {
+  # Some of the tests use localhost networking.
+  __darwinAllowLocalNetworking = true;
+
+  meta = with lib; {
     description = "Monitor TCP ports for bound or unbound states";
-    homepage = https://github.com/jaraco/portend;
+    homepage = "https://github.com/jaraco/portend";
     license = licenses.bsd3;
   };
 }

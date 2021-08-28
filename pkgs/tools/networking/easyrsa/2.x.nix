@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, autoreconfHook, makeWrapper
+{ lib, stdenv, fetchurl, autoreconfHook, makeWrapper
 , gnugrep, openssl }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "easyrsa-2.2.0";
 
   src = fetchurl {
@@ -28,9 +28,9 @@ stdenv.mkDerivation rec {
     sed -i "/EASY_RSA=\|OPENSSL=\|GREP=/d" $out/share/easy-rsa/vars
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simple shell based CA utility";
-    homepage = https://openvpn.net/;
+    homepage = "https://openvpn.net/";
     license = licenses.gpl2;
     maintainers = [ maintainers.offline ];
     platforms = platforms.linux;

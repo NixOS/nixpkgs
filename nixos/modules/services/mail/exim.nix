@@ -21,7 +21,7 @@ in
       };
 
       config = mkOption {
-        type = types.string;
+        type = types.lines;
         default = "";
         description = ''
           Verbatim Exim configuration.  This should not contain exim_user,
@@ -30,7 +30,7 @@ in
       };
 
       user = mkOption {
-        type = types.string;
+        type = types.str;
         default = "exim";
         description = ''
           User to use when no root privileges are required.
@@ -42,7 +42,7 @@ in
       };
 
       group = mkOption {
-        type = types.string;
+        type = types.str;
         default = "exim";
         description = ''
           Group to use when no root privileges are required.
@@ -50,7 +50,7 @@ in
       };
 
       spoolDir = mkOption {
-        type = types.string;
+        type = types.path;
         default = "/var/spool/exim";
         description = ''
           Location of the spool directory of exim.
@@ -67,6 +67,13 @@ in
         '';
       };
 
+      queueRunnerInterval = mkOption {
+        type = types.str;
+        default = "5m";
+        description = ''
+          How often to spawn a new queue runner.
+        '';
+      };
     };
 
   };
@@ -87,15 +94,13 @@ in
       systemPackages = [ cfg.package ];
     };
 
-    users.users = singleton {
-      name = cfg.user;
+    users.users.${cfg.user} = {
       description = "Exim mail transfer agent user";
       uid = config.ids.uids.exim;
       group = cfg.group;
     };
 
-    users.groups = singleton {
-      name = cfg.group;
+    users.groups.${cfg.group} = {
       gid = config.ids.gids.exim;
     };
 
@@ -106,7 +111,7 @@ in
       wantedBy = [ "multi-user.target" ];
       restartTriggers = [ config.environment.etc."exim.conf".source ];
       serviceConfig = {
-        ExecStart   = "${cfg.package}/bin/exim -bdf -q30m";
+        ExecStart   = "${cfg.package}/bin/exim -bdf -q${cfg.queueRunnerInterval}";
         ExecReload  = "${coreutils}/bin/kill -HUP $MAINPID";
       };
       preStart = ''

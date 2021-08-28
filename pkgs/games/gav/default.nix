@@ -1,4 +1,4 @@
-{stdenv, fetchurl, SDL, SDL_image, SDL_mixer, SDL_net} :
+{lib, stdenv, fetchurl, SDL, SDL_image, SDL_mixer, SDL_net} :
 
 stdenv.mkDerivation {
   name = "gav-0.9.0";
@@ -19,8 +19,8 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Remake of AV Arcade Volleyball";
-    homepage = http://gav.sourceforge.net/;
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.linux;
+    homepage = "http://gav.sourceforge.net/";
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
 }

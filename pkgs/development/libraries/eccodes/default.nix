@@ -1,11 +1,11 @@
-{ fetchurl, stdenv
+{ fetchurl, lib, stdenv
 , cmake, netcdf, openjpeg, libpng, gfortran
 , enablePython ? false, pythonPackages
 , enablePosixThreads ? false
 , enableOpenMPThreads ? false}:
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
-  name = "eccodes-${version}";
+  pname = "eccodes";
   version = "2.12.5";
 
   src = fetchurl {
@@ -35,19 +35,17 @@ stdenv.mkDerivation rec {
                  "-DENABLE_ECCODES_OMP_THREADS=${if enableOpenMPThreads then "ON" else "OFF"}"
                ];
 
-  enableParallelBuilding = true;
-
   doCheck = true;
 
   # Only do tests that don't require downloading 120MB of testdata
-  checkPhase = stdenv.lib.optionalString (stdenv.isDarwin) ''
+  checkPhase = lib.optionalString (stdenv.isDarwin) ''
     substituteInPlace "tests/include.sh" --replace "set -ea" "set -ea; export DYLD_LIBRARY_PATH=$(pwd)/lib"
   '' + ''
     ctest -R "eccodes_t_(definitions|calendar|unit_tests|md5|uerra|grib_2nd_order_numValues|julian)" -VV
   '';
 
   meta = {
-    homepage = https://confluence.ecmwf.int/display/ECC/;
+    homepage = "https://confluence.ecmwf.int/display/ECC/";
     license = licenses.asl20;
     maintainers = with maintainers; [ knedlsepp ];
     platforms = platforms.unix;

@@ -1,9 +1,8 @@
-{ stdenv, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "first";
   version = "2.0.2";
-  name = pname + "-" + version;
 
   src = fetchPypi {
     inherit pname version;
@@ -12,9 +11,9 @@ buildPythonPackage rec {
 
   doCheck = false; # no tests
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The function you always missed in Python";
-    homepage = https://github.com/hynek/first/;
+    homepage = "https://github.com/hynek/first/";
     license = licenses.mit;
     maintainers = with maintainers; [ zimbatm ];
   };

@@ -23,7 +23,7 @@ buildPythonPackage rec {
     fontDirectories = [ freefont_ttf ];
   };
 
-  checkInputs = [ pytest pytestrunner glibcLocales ];
+  checkInputs = [ numpy pytest pytestrunner glibcLocales ];
   propagatedBuildInputs = [ cairo cffi ] ++ lib.optional withXcffib xcffib;
 
   checkPhase = ''
@@ -31,19 +31,19 @@ buildPythonPackage rec {
   '';
 
   patches = [
-    # OSError: dlopen() failed to load a library: gdk_pixbuf-2.0 / gdk_pixbuf-2.0-0
+    # OSError: dlopen() failed to load a library: gdk-pixbuf-2.0 / gdk-pixbuf-2.0-0
     (substituteAll {
       src = dlopen_patch;
       ext = stdenv.hostPlatform.extensions.sharedLibrary;
       cairo = cairo.out;
       glib = glib.out;
-      gdk_pixbuf = gdk_pixbuf.out;
+      gdk_pixbuf = gdk-pixbuf.out;
     })
     ./fix_test_scaled_font.patch
   ];
 
   meta = with lib; {
-    homepage = https://github.com/SimonSapin/cairocffi;
+    homepage = "https://github.com/SimonSapin/cairocffi";
     license = licenses.bsd3;
     maintainers = with maintainers; [];
     description = "cffi-based cairo bindings for Python";

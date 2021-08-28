@@ -1,4 +1,4 @@
-{ config, lib, pkgs }:
+{ config, lib, pkgs, options }:
 
 with lib;
 
@@ -8,6 +8,15 @@ in
 {
   port = 9154;
   extraOpts = {
+    group = mkOption {
+      type = types.str;
+      description = ''
+        Group under which the postfix exporter shall be run.
+        It should match the group that is allowed to access the
+        <literal>showq</literal> socket in the <literal>queue/public/</literal> directory.
+        Defaults to <literal>services.postfix.setgidGroup</literal> when postfix is enabled.
+      '';
+    };
     telemetryPath = mkOption {
       type = types.str;
       default = "/metrics";
@@ -26,16 +35,20 @@ in
     };
     showqPath = mkOption {
       type = types.path;
-      default = "/var/spool/postfix/public/showq";
-      example = "/var/lib/postfix/queue/public/showq";
+      default = "/var/lib/postfix/queue/public/showq";
+      example = "/var/spool/postfix/public/showq";
       description = ''
-        Path where Postfix places it's showq socket.
+        Path where Postfix places its showq socket.
       '';
     };
     systemd = {
-      enable = mkEnableOption ''
-        reading metrics from the systemd-journal instead of from a logfile
-      '';
+      enable = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Whether to enable reading metrics from the systemd journal instead of from a logfile
+        '';
+      };
       unit = mkOption {
         type = types.str;
         default = "postfix.service";
@@ -62,19 +75,20 @@ in
   };
   serviceOpts = {
     serviceConfig = {
+      DynamicUser = false;
       ExecStart = ''
         ${pkgs.prometheus-postfix-exporter}/bin/postfix_exporter \
           --web.listen-address ${cfg.listenAddress}:${toString cfg.port} \
           --web.telemetry-path ${cfg.telemetryPath} \
-          --postfix.showq_path ${cfg.showqPath} \
+          --postfix.showq_path ${escapeShellArg cfg.showqPath} \
           ${concatStringsSep " \\\n  " (cfg.extraFlags
           ++ optional cfg.systemd.enable "--systemd.enable"
           ++ optional cfg.systemd.enable (if cfg.systemd.slice != null
                                           then "--systemd.slice ${cfg.systemd.slice}"
                                           else "--systemd.unit ${cfg.systemd.unit}")
           ++ optional (cfg.systemd.enable && (cfg.systemd.journalPath != null))
-                       "--systemd.jounal_path ${cfg.systemd.journalPath}"
-          ++ optional (!cfg.systemd.enable) "--postfix.logfile_path ${cfg.logfilePath}")}
+                       "--systemd.journal_path ${escapeShellArg cfg.systemd.journalPath}"
+          ++ optional (!cfg.systemd.enable) "--postfix.logfile_path ${escapeShellArg cfg.logfilePath}")}
       '';
     };
   };

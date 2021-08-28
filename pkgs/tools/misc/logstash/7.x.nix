@@ -1,14 +1,15 @@
 { elk7Version
 , enableUnfree ? true
-, stdenv
+, lib, stdenv
 , fetchurl
 , makeWrapper
+, nixosTests
 , jre
 }:
 
-with stdenv.lib;
+with lib;
 
-stdenv.mkDerivation rec {
+let this = stdenv.mkDerivation rec {
   version = elk7Version;
   name = "logstash-${optionalString (!enableUnfree) "oss-"}${version}";
 
@@ -16,8 +17,8 @@ stdenv.mkDerivation rec {
     url = "https://artifacts.elastic.co/downloads/logstash/${name}.tar.gz";
     sha256 =
       if enableUnfree
-      then "0ls7ia4ldyb7kslmjqhszb30bkammdm5nydc5y7r41zl1zjlhfgc"
-      else "1mpmfnc57vpjk8x3vibamz8lgq163msf20m1bail4hbwhwsmms9i";
+      then "01l6alwgsq6yf0z9d08i0hi8g708nph1vm78nl4xbpg8h964bybj"
+      else "0nlwgaw6rmhp5b68zpp1pzsjs30b0bjzdg8f7xy6rarpk338s8yb";
   };
 
   dontBuild         = true;
@@ -30,6 +31,7 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out
     cp -r {Gemfile*,modules,vendor,lib,bin,config,data,logstash-core,logstash-core-plugin-api} $out
 
@@ -41,13 +43,22 @@ stdenv.mkDerivation rec {
 
     wrapProgram $out/bin/logstash-plugin \
        --set JAVA_HOME "${jre}"
+    runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Logstash is a data pipeline that helps you process logs and other event data from a variety of systems";
-    homepage    = https://www.elastic.co/products/logstash;
+    homepage    = "https://www.elastic.co/products/logstash";
     license     = if enableUnfree then licenses.elastic else licenses.asl20;
     platforms   = platforms.unix;
     maintainers = with maintainers; [ wjlroe offline basvandijk ];
   };
-}
+  passthru.tests =
+    optionalAttrs (!enableUnfree) (
+      assert this.drvPath == nixosTests.elk.ELK-7.elkPackages.logstash.drvPath;
+      {
+        elk = nixosTests.elk.ELK-7;
+      }
+    );
+};
+in this

@@ -1,12 +1,13 @@
-{ stdenv, buildPythonPackage, fetchPypi, unittest2, six }:
+{ lib, buildPythonPackage, fetchPypi, isPy27, unittest2, six }:
 
 buildPythonPackage rec {
   pname = "logilab-common";
-  version = "1.4.2";
+  version = "1.6.1";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cdda9ed0deca7c68f87f7a404ad742e47aaa1ca5956d12988236a5ec3bda13a0";
+    sha256 = "0h0b2vg2xpfbnynrkg2yki4zjpscm6wgm6nhaahb088v98zxqbrk";
   };
 
   propagatedBuildInputs = [ unittest2 six ];
@@ -15,9 +16,9 @@ buildPythonPackage rec {
   # and is not currently in nixos
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python packages and modules used by Logilab ";
-    homepage = https://www.logilab.org/project/logilab-common;
+    homepage = "https://www.logilab.org/project/logilab-common";
     license = licenses.lgpl21;
   };
 }

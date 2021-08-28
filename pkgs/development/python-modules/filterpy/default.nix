@@ -1,15 +1,17 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , numpy
 , scipy
 , matplotlib
 , pytest
+, isPy3k
 }:
 
 buildPythonPackage rec {
   version = "1.4.5";
   pname = "filterpy";
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
@@ -26,8 +28,8 @@ buildPythonPackage rec {
     pytest --ignore=filterpy/common/tests/test_discretization.py
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/rlabbe/filterpy;
+  meta = with lib; {
+    homepage = "https://github.com/rlabbe/filterpy";
     description = "Kalman filtering and optimal estimation library";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];

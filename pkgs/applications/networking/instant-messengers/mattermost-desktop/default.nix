@@ -1,10 +1,14 @@
-{ stdenv, fetchurl, gnome2, gtk3, pango, atk, cairo, gdk_pixbuf, glib,
+{ lib, stdenv, fetchurl, gnome2, gtk3, pango, atk, cairo, gdk-pixbuf, glib,
 freetype, fontconfig, dbus, libX11, xorg, libXi, libXcursor, libXdamage,
 libXrandr, libXcomposite, libXext, libXfixes, libXrender, libXtst,
-libXScrnSaver, nss, nspr, alsaLib, cups, expat, udev }:
+libXScrnSaver, nss, nspr, alsaLib, cups, expat, udev, wrapGAppsHook,
+hicolor-icon-theme, libuuid, at-spi2-core, at-spi2-atk }:
+
 let
-  rpath = stdenv.lib.makeLibraryPath [
+  rpath = lib.makeLibraryPath [
     alsaLib
+    at-spi2-atk
+    at-spi2-core
     atk
     cairo
     cups
@@ -12,11 +16,12 @@ let
     expat
     fontconfig
     freetype
-    gdk_pixbuf
+    gdk-pixbuf
     glib
     gnome2.GConf
     gtk3
     pango
+    libuuid
     libX11
     libXScrnSaver
     libXcomposite
@@ -37,19 +42,19 @@ let
 
 in
   stdenv.mkDerivation rec {
-    name = "mattermost-desktop-${version}";
-    version = "4.2.0";
+    pname = "mattermost-desktop";
+    version = "4.6.2";
 
     src =
       if stdenv.hostPlatform.system == "x86_64-linux" then
         fetchurl {
-          url = "https://releases.mattermost.com/desktop/${version}/${name}-linux-x64.tar.gz";
-          sha256 = "0hka94gwpscjn61032c0grpjv5gjb0j8rkx6pgwci617n29xkyf6";
+          url = "https://releases.mattermost.com/desktop/${version}/${pname}-${version}-linux-x64.tar.gz";
+          sha256 = "0i836bc0gx375a9fm2cdxg84k03zhpx1z6jqxndf2m8pkfsblc3x";
         }
       else if stdenv.hostPlatform.system == "i686-linux" then
         fetchurl {
-          url = "https://releases.mattermost.com/desktop/${version}/${name}-linux-ia32.tar.gz";
-          sha256 = "1nx2sgbnr60h6kn56wv54m7cvyx27d64bfprpb94hqd5c2z21x80";
+          url = "https://releases.mattermost.com/desktop/${version}/${pname}-${version}-linux-ia32.tar.gz";
+          sha256 = "04jv9hkmkh0jipv0fjdprnp5kmkjvf3c0fah6ysi21wmnmp5ab3m";
         }
       else
         throw "Mattermost-Desktop is not currently supported on ${stdenv.hostPlatform.system}";
@@ -58,7 +63,13 @@ in
     dontConfigure = true;
     dontPatchELF = true;
 
+    nativeBuildInputs = [ wrapGAppsHook ];
+
+    buildInputs = [ gtk3 hicolor-icon-theme ];
+
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/share/mattermost-desktop
       cp -R . $out/share/mattermost-desktop
 
@@ -71,16 +82,21 @@ in
       rm $out/share/mattermost-desktop/create_desktop_file.sh
       mkdir -p $out/share/applications
       mv Mattermost.desktop $out/share/applications/Mattermost.desktop
+      substituteInPlace \
+        $out/share/applications/Mattermost.desktop \
+        --replace /share/mattermost-desktop/mattermost-desktop /bin/mattermost-desktop
 
       patchelf \
         --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
         --set-rpath "${rpath}:$out/share/mattermost-desktop" \
         $out/share/mattermost-desktop/mattermost-desktop
+
+      runHook postInstall
     '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Mattermost Desktop client";
-      homepage    = https://about.mattermost.com/;
+      homepage    = "https://about.mattermost.com/";
       license     = licenses.asl20;
       platforms   = [ "x86_64-linux" "i686-linux" ];
       maintainers = [ maintainers.joko ];

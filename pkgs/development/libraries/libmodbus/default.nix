@@ -1,11 +1,11 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "libmodbus-3.1.4";
+  name = "libmodbus-3.1.6";
 
   src = fetchurl {
     url = "http://libmodbus.org/releases/${name}.tar.gz";
-    sha256 = "0drnil8bzd4n4qb0wv3ilm9zvypxvwmzd65w96d6kfm7x6q65j68";
+    sha256 = "05kwz0n5gn9m33cflzv87lz3zp502yp8fpfzbx70knvfl6agmnfp";
   };
 
   configureFlags = [
@@ -18,9 +18,9 @@ stdenv.mkDerivation rec {
     "ac_cv_func_realloc_0_nonnull=yes"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library to send/receive data according to the Modbus protocol";
-    homepage = https://libmodbus.org/;
+    homepage = "https://libmodbus.org/";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];

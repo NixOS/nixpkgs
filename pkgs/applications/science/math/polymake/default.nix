@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , ninja, libxml2, libxslt, readline, perl, gmp, mpfr, boost
 , bliss, ppl, singular, cddlib, lrs, nauty
 , ant, openjdk
@@ -7,7 +7,6 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "polymake";
   version = "3.2.rc4";
 
@@ -29,7 +28,7 @@ stdenv.mkDerivation rec {
     makeWrapper ninja ant perl
   ];
 
-  ninjaFlags = "-C build/Opt";
+  ninjaFlags = [ "-C" "build/Opt" ];
 
   postInstall = ''
     for i in "$out"/bin/*; do
@@ -40,9 +39,9 @@ stdenv.mkDerivation rec {
   meta = {
     inherit version;
     description = "Software for research in polyhedral geometry";
-    license = stdenv.lib.licenses.gpl2 ;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2 ;
+    maintainers = [lib.maintainers.raskin];
+    platforms = lib.platforms.linux;
     homepage = "https://www.polymake.org/doku.php";
   };
 }

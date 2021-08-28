@@ -7,12 +7,11 @@
 
 buildPythonPackage rec {
   pname = "passlib";
-  version = "1.7.1";
-  name    = "${pname}-${version}";
+  version = "1.7.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3d948f64138c25633613f303bcc471126eae67c04d5e3f6b7b8ce6242f8653e0";
+    sha256 = "defd50f72b65c5402ab2c573830a6978e5f202ad0d984793c8dde2c4152ebe04";
   };
 
   checkInputs = [ nose ];
@@ -20,6 +19,6 @@ buildPythonPackage rec {
 
   meta = {
     description = "A password hashing library for Python";
-    homepage    = https://code.google.com/p/passlib/;
+    homepage    = "https://code.google.com/p/passlib/";
   };
 }

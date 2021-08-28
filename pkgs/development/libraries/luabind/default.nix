@@ -1,6 +1,6 @@
-{stdenv, fetchurl, boost-build, lua, boost}:
+{lib, stdenv, fetchurl, boost-build, lua, boost}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "luabind-0.9.1";
 
   src = fetchurl {
@@ -23,9 +23,9 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    homepage = https://github.com/luabind/luabind;
+    homepage = "https://github.com/luabind/luabind";
     description = "A library that helps you create bindings between C++ and Lua";
-    license = stdenv.lib.licenses.mit;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fftw, libsndfile, qtbase, qtmultimedia, qmake }:
+{ mkDerivation, lib, fetchFromGitHub, fftw, libsndfile, qtbase, qtmultimedia, qmake }:
 
 let
 
@@ -9,7 +9,7 @@ let
       repo = "REAPER";
       owner = "gillesdegottex";
     };
-    meta = with stdenv.lib; {
+    meta = with lib; {
      license = licenses.asl20;
     };
   };
@@ -21,13 +21,13 @@ let
       repo = "libqaudioextra";
       owner = "gillesdegottex";
     };
-    meta = with stdenv.lib; {
+    meta = with lib; {
      license = licenses.gpl3Plus;
     };
   };
 
-in stdenv.mkDerivation rec {
-  name = "dfasma-${version}";
+in mkDerivation rec {
+  pname = "dfasma";
   version = "1.4.5";
 
   src = fetchFromGitHub {
@@ -49,7 +49,7 @@ in stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Analyse and compare audio files in time and frequency";
     longDescription = ''
       DFasma is free open-source software to compare audio files by time and
@@ -59,7 +59,7 @@ in stdenv.mkDerivation rec {
       there are basic functionalities to align the signals in time and
       amplitude, this software does not aim to be an audio editor.
     '';
-    homepage = http://gillesdegottex.github.io/dfasma/;
+    homepage = "http://gillesdegottex.github.io/dfasma/";
     license = [ licenses.gpl3Plus reaperFork.meta.license ];
     platforms = platforms.linux;
   };

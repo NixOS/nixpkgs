@@ -1,8 +1,8 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "glide-${version}";
-  version = "0.12.3";
+  pname = "glide";
+  version = "0.13.3";
 
   goPackagePath = "github.com/Masterminds/glide";
 
@@ -15,11 +15,11 @@ buildGoPackage rec {
     rev = "v${version}";
     owner = "Masterminds";
     repo = "glide";
-    sha256 = "0hvfikvxfk94aqms1bdxqxqpamzy0v8binv5jwglzw2sf2437ww0";
+    sha256 = "1wskg1cxqy9sp0738qiiagdw09dbs3swxsk4z6w5hsfiq2h44a54";
   };
 
-  meta = with stdenv.lib; {
-    homepage = https://glide.sh;
+  meta = with lib; {
+    homepage = "https://glide.sh";
     description = "Package management for Go";
     license = licenses.mit;
     maintainers = [ maintainers.rushmorem ];

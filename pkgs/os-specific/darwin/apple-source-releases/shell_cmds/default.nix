@@ -1,7 +1,7 @@
-{ stdenv, appleDerivation, xcbuildHook }:
+{ lib, appleDerivation, xcbuildHook, launchd }:
 
-appleDerivation rec {
-  nativeBuildInputs = [ xcbuildHook ];
+appleDerivation {
+  nativeBuildInputs = [ xcbuildHook launchd ];
 
   patchPhase = ''
     # NOTE: these hashes must be recalculated for each version change
@@ -44,7 +44,7 @@ appleDerivation rec {
   '';
 
   meta = {
-    platforms = stdenv.lib.platforms.darwin;
-    maintainers = with stdenv.lib.maintainers; [ matthewbauer ];
+    platforms = lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ matthewbauer ];
   };
 }

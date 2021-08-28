@@ -1,11 +1,12 @@
-{ stdenv, fetchurl, python2Packages, intltool, libxml2Python }:
+{ lib, stdenv, fetchurl, python2Packages, intltool, libxml2Python }:
 
-with stdenv.lib;
+with lib;
 
 let version = "0.600.4"; in
 
 stdenv.mkDerivation rec {
-  name = "virtinst-${version}";
+  pname = "virtinst";
+  inherit version;
 
   src = fetchurl {
     url = "http://virt-manager.org/download/sources/virtinst/virtinst-${version}.tar.gz";
@@ -37,10 +38,10 @@ stdenv.mkDerivation rec {
     '';
 
   meta = {
-    homepage = http://virt-manager.org;
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = with stdenv.lib.maintainers; [qknight];
+    homepage = "http://virt-manager.org";
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [qknight];
     description = "Command line tool which provides an easy way to provision operating systems into virtual machines";
-    platforms = with stdenv.lib.platforms; linux;
+    platforms = with lib.platforms; linux;
   };
 }

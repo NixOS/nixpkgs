@@ -1,14 +1,14 @@
-{stdenv, fetchurl, jre}:
+{lib, stdenv, fetchurl, jre}:
 
 stdenv.mkDerivation rec {
-  name = "antlr-${version}";
+  pname = "antlr";
   version = "3.4";
   src = fetchurl {
     url ="https://www.antlr3.org/download/antlr-${version}-complete.jar";
     sha256 = "1xqbam8vf04q5fasb0m2n1pn5dbp2yw763sj492ncq04c5mqcglx";
   };
 
-  unpackPhase = "true";
+  dontUnpack = true;
 
   installPhase = ''
     mkdir -p "$out"/{lib/antlr,bin}
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   inherit jre;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Powerful parser generator";
     longDescription = ''
       ANTLR (ANother Tool for Language Recognition) is a powerful parser
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
       frameworks. From a grammar, ANTLR generates a parser that can build and
       walk parse trees.
     '';
-    homepage = https://www.antlr.org/;
+    homepage = "https://www.antlr.org/";
     license = licenses.bsd3;
     platforms = platforms.linux ++ platforms.darwin;
   };

@@ -41,15 +41,11 @@ in
 
     services.prayer = {
 
-      enable = mkOption {
-        default = false;
-        description = ''
-          Whether to run the prayer webmail http server.
-        '';
-      };
+      enable = mkEnableOption "the prayer webmail http server";
 
       port = mkOption {
-        default = "2080";
+        default = 2080;
+        type = types.port;
         description = ''
           Port the prayer http server is listening to.
         '';
@@ -72,17 +68,14 @@ in
   config = mkIf config.services.prayer.enable {
     environment.systemPackages = [ prayer ];
 
-    users.users = singleton
-      { name = prayerUser;
-        uid = config.ids.uids.prayer;
+    users.users.${prayerUser} =
+      { uid = config.ids.uids.prayer;
         description = "Prayer daemon user";
         home = stateDir;
       };
 
-    users.groups = singleton
-      { name = prayerGroup;
-        gid = config.ids.gids.prayer;
-      };
+    users.groups.${prayerGroup} =
+      { gid = config.ids.gids.prayer; };
 
     systemd.services.prayer = {
       wantedBy = [ "multi-user.target" ];

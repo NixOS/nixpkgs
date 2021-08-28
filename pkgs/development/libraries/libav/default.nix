@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, yasm, bzip2, zlib, perl, bash
+{ lib, stdenv, fetchurl, pkg-config, yasm, bzip2, zlib, perl, bash
 , mp3Support    ? true,   lame      ? null
 , speexSupport  ? true,   speex     ? null
 , theoraSupport ? true,   libtheora ? null
@@ -17,7 +17,7 @@
 
 assert faacSupport -> enableUnfree;
 
-let inherit (stdenv.lib) optional hasPrefix enableFeature; in
+let inherit (lib) optional hasPrefix enableFeature; in
 
 /* ToDo:
     - more deps, inspiration: https://packages.ubuntu.com/raring/libav-tools
@@ -33,15 +33,17 @@ let
   };
 
   libavFun = version : sha1 : stdenv.mkDerivation rec {
-    name = "libav-${version}";
+    pname = "libav";
+    inherit version;
 
     src = fetchurl {
-      url = "${meta.homepage}/releases/${name}.tar.xz";
+      url = "${meta.homepage}/releases/${pname}-${version}.tar.xz";
       inherit sha1; # upstream directly provides sha1 of releases over https
     };
 
     patches = []
       ++ optional (vpxSupport && hasPrefix "0.8." version) ./vpxenc-0.8.17-libvpx-1.5.patch
+      ++ optional (vpxSupport && hasPrefix "12." version) ./vpx-12.3-libvpx-1.8.patch
       ;
 
     postPatch = ''
@@ -51,7 +53,7 @@ let
     '';
 
     configurePlatforms = [];
-    configureFlags = assert stdenv.lib.all (x: x!=null) buildInputs; [
+    configureFlags = assert lib.all (x: x!=null) buildInputs; [
       "--arch=${stdenv.hostPlatform.parsed.cpu.name}"
       "--target_os=${stdenv.hostPlatform.parsed.kernel.name}"
       #"--enable-postproc" # it's now a separate package in upstream
@@ -59,7 +61,7 @@ let
       "--enable-avplay"
       "--enable-shared"
       "--enable-runtime-cpudetect"
-      "--cc=cc"
+      "--cc=${stdenv.cc.targetPrefix}cc"
       (enableFeature enableGPL "gpl")
       (enableFeature enableGPL "swscale")
       (enableFeature mp3Support "libmp3lame")
@@ -80,7 +82,7 @@ let
       "--enable-cross-compile"
     ];
 
-  nativeBuildInputs = [ pkgconfig perl ];
+  nativeBuildInputs = [ pkg-config perl ];
     buildInputs = [ lame yasm zlib bzip2 SDL bash ]
       ++ [ perl ] # for install-man target
       ++ optional mp3Support lame
@@ -102,7 +104,7 @@ let
     setOutputFlags = false;
 
     # alltools to build smaller tools, incl. aviocat, ismindex, qt-faststart, etc.
-    buildFlags = "all alltools install-man";
+    buildFlags = [ "all" "alltools" "install-man" ];
 
 
     postInstall = ''
@@ -119,12 +121,16 @@ let
 
     passthru = { inherit vdpauSupport; };
 
-    meta = with stdenv.lib; {
-      homepage = https://libav.org/;
+    meta = with lib; {
+      homepage = "https://libav.org/";
       description = "A complete, cross-platform solution to record, convert and stream audio and video (fork of ffmpeg)";
       license = with licenses; if enableUnfree then unfree #ToDo: redistributable or not?
         else if enableGPL then gpl2Plus else lgpl21Plus;
       platforms = with platforms; linux ++ darwin;
+      knownVulnerabilities =
+        lib.optional (lib.versionOlder version "12.1") "CVE-2017-9051"
+        ++ lib.optionals (lib.versionOlder version "12.3") [ "CVE-2018-5684" "CVE-2018-5766" ]
+        ++ lib.optionals (lib.versionOlder version "12.4") [ "CVE-2019-9717" "CVE-2019-9720" ];
     };
   }; # libavFun
 

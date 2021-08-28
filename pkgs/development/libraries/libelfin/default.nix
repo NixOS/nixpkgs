@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python3, substituteAll }:
+{ lib, stdenv, fetchFromGitHub, python3, substituteAll }:
 
 stdenv.mkDerivation rec {
   pname = "libelfin";
@@ -22,8 +22,8 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/aclements/libelfin/;
+  meta = with lib; {
+    homepage = "https://github.com/aclements/libelfin/";
     license = licenses.mit;
     description = "C++11 ELF/DWARF parser";
     maintainers = with maintainers; [ ma27 ];

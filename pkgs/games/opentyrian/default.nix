@@ -1,7 +1,7 @@
-{stdenv, fetchurl, fetchzip, SDL, SDL_net}:
+{ lib, stdenv, fetchurl, fetchzip, SDL, SDL_net }:
 
 stdenv.mkDerivation rec {
-  name = "opentyrian-${version}";
+  pname = "opentyrian";
   version = "2.1.20130907";
 
   src = fetchurl {
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   data = fetchzip {
-    url = http://sites.google.com/a/camanis.net/opentyrian/tyrian/tyrian21.zip;
+    url = "http://sites.google.com/a/camanis.net/opentyrian/tyrian/tyrian21.zip";
     sha256 = "1biz6hf6s7qrwn8ky0g6p8w7yg715w7yklpn6258bkks1s15hpdb";
   };
 
@@ -29,8 +29,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = ''Open source port of the game "Tyrian"'';
-    homepage = https://bitbucket.org/opentyrian/opentyrian;
+    homepage = "https://bitbucket.org/opentyrian/opentyrian";
     # This does not account of Tyrian data.
-    # license = stdenv.lib.licenses.gpl2;
+    # license = lib.licenses.gpl2;
   };
 }

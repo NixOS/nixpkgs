@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, opencl-clhpp, ocl-icd }:
+{ lib, stdenv, fetchFromGitHub, opencl-clhpp, ocl-icd }:
 
 stdenv.mkDerivation {
   name = "opencl-info-2014-02-21";
@@ -10,17 +10,25 @@ stdenv.mkDerivation {
     sha256 = "114lxgnjg40ivjjszkv4n3f3yq2lbrvywryvbazf20kqmdz7315l";
   };
 
+  patches = [
+    # The cl.hpp header was removed from opencl-clhpp. This patch
+    # updates opencl-info to use the new cp2.hpp header.
+    #
+    # Submitted upstream: https://github.com/marchv/opencl-info/pull/2
+    ./opencl-info-clhpp2.diff
+  ];
+
   buildInputs = [ opencl-clhpp ocl-icd ];
 
-  NIX_LDFLAGS = [ "-lOpenCL" ];
+  NIX_LDFLAGS = "-lOpenCL";
 
   installPhase = ''
     install -Dm755 opencl-info $out/bin/opencl-info
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A tool to dump OpenCL platform/device information";
-    homepage = https://github.com/marchv/opencl-info;
+    homepage = "https://github.com/marchv/opencl-info";
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ abbradar ];

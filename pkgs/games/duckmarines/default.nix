@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, love, lua, makeWrapper, makeDesktopItem }:
+{ lib, stdenv, fetchurl, love, lua, makeWrapper, makeDesktopItem }:
 
 let
   pname = "duckmarines";
@@ -11,8 +11,8 @@ let
 
   desktopItem = makeDesktopItem {
     name = "duckmarines";
-    exec = "${pname}";
-    icon = "${icon}";
+    exec = pname;
+    icon = icon;
     comment = "Duck-themed action puzzle video game";
     desktopName = "Duck Marines";
     genericName = "duckmarines";
@@ -48,13 +48,13 @@ stdenv.mkDerivation rec {
     ln -s ${desktopItem}/share/applications/* $out/share/applications/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Duck-themed action puzzle video game";
     maintainers = with maintainers; [ leenaars ];
     platforms = platforms.linux;
     hydraPlatforms = [];
     license = licenses.free;
-    downloadPage = http://tangramgames.dk/games/duckmarines;
+    downloadPage = "http://tangramgames.dk/games/duckmarines";
   };
 
 }

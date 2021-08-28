@@ -1,41 +1,48 @@
-{ stdenv, lib, fetchurl, zlib, openssl, ncurses, libidn, pcre, libssh, mysql, postgresql
-, withGUI ? false, makeWrapper, pkgconfig, gtk2 }:
+{ stdenv, lib, fetchFromGitHub, zlib, openssl, ncurses, libidn, pcre, libssh, libmysqlclient, postgresql
+, withGUI ? false, makeWrapper, pkg-config, gtk2 }:
 
-let
-  makeDirs = output: subDir: pkgs: lib.concatStringsSep " " (map (path: lib.getOutput output path + "/" + subDir) pkgs);
+stdenv.mkDerivation rec {
+  pname = "thc-hydra";
+  version = "9.2";
 
-in stdenv.mkDerivation rec {
-  name = "thc-hydra-${version}";
-  version = "8.5";
-
-  src = fetchurl {
-    url = "http://www.thc.org/releases/hydra-${version}.tar.gz";
-    sha256 = "0vfx6xwmw0r7nd0s232y7rckcj58fc1iqjgp4s56rakpz22b4yjm";
+  src = fetchFromGitHub {
+    owner = "vanhauser-thc";
+    repo = "thc-hydra";
+    rev = "v${version}";
+    sha256 = "sha256-V9rr5fbJWm0pa+Kp8g95XvLPo/uWcDwyU2goImnIq58=";
   };
 
-  preConfigure = ''
+  postPatch = let
+    makeDirs = output: subDir: lib.concatStringsSep " " (map (path: lib.getOutput output path + "/" + subDir) buildInputs);
+  in ''
     substituteInPlace configure \
-      --replace "\$LIBDIRS" "${makeDirs "lib" "lib" buildInputs}" \
-      --replace "\$INCDIRS" "${makeDirs "dev" "include" buildInputs}" \
+      --replace '$LIBDIRS' "${makeDirs "lib" "lib"}" \
+      --replace '$INCDIRS' "${makeDirs "dev" "include"}" \
       --replace "/usr/include/math.h" "${lib.getDev stdenv.cc.libc}/include/math.h" \
       --replace "libcurses.so" "libncurses.so" \
       --replace "-lcurses" "-lncurses"
   '';
 
-  nativeBuildInputs = lib.optionals withGUI [ pkgconfig makeWrapper ];
-  buildInputs = [ zlib openssl ncurses libidn pcre libssh mysql.connector-c postgresql ]
-                ++ lib.optional withGUI gtk2;
+  nativeBuildInputs = lib.optionals withGUI [ pkg-config makeWrapper ];
+
+  buildInputs = [
+    zlib openssl ncurses libidn pcre libssh libmysqlclient postgresql
+  ] ++ lib.optional withGUI gtk2;
+
+  enableParallelBuilding = true;
+
+  DATADIR = "/share/${pname}";
 
   postInstall = lib.optionalString withGUI ''
     wrapProgram $out/bin/xhydra \
       --add-flags --hydra-path --add-flags "$out/bin/hydra"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A very fast network logon cracker which support many different services";
+    homepage = "https://www.thc.org/thc-hydra/";
     license = licenses.agpl3;
-    homepage = https://www.thc.org/thc-hydra/;
-    maintainers = with maintainers; [offline];
+    maintainers = with maintainers; [ offline ];
     platforms = platforms.linux;
   };
 }

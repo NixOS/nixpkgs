@@ -1,22 +1,23 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, pandoc
-, ethtool, iproute, libnl, udev, python, perl
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, docutils
+, pandoc, ethtool, iproute2, libnl, udev, python3, perl
 } :
 
 let
-  version = "24.0";
+  version = "34.0";
 
 in stdenv.mkDerivation {
-  name = "rdma-core-${version}";
+  pname = "rdma-core";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "linux-rdma";
     repo = "rdma-core";
     rev = "v${version}";
-    sha256 = "038msip4fnd8fh6m0vhnqwsaarp86dbnc9hvf5n19aqhlqbabbdc";
+    sha256 = "sha256-2HFtj595sDmWqAewIMwKMaiSDVVWKdQA9l0QsPcw8qA=";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig pandoc ];
-  buildInputs = [ libnl ethtool iproute udev python perl ];
+  nativeBuildInputs = [ cmake pkg-config pandoc docutils ];
+  buildInputs = [ libnl ethtool iproute2 udev python3 perl ];
 
   cmakeFlags = [
     "-DCMAKE_INSTALL_RUNDIR=/run"
@@ -24,16 +25,28 @@ in stdenv.mkDerivation {
   ];
 
   postPatch = ''
-    substituteInPlace providers/rxe/rxe_cfg.in \
-      --replace ethtool "${ethtool}/bin/ethtool" \
-      --replace 'ip addr' "${iproute}/bin/ip addr" \
-      --replace 'ip link' "${iproute}/bin/ip link"
+    substituteInPlace srp_daemon/srp_daemon.sh.in \
+      --replace /bin/rm rm
   '';
 
-  meta = with stdenv.lib; {
+  postInstall = ''
+    # cmake script is buggy, move file manually
+    mkdir -p $out/${perl.libPrefix}
+    mv $out/share/perl5/* $out/${perl.libPrefix}
+  '';
+
+  postFixup = ''
+    for pls in $out/bin/{ibfindnodesusing.pl,ibidsverify.pl}; do
+      echo "wrapping $pls"
+      substituteInPlace $pls --replace \
+        "${perl}/bin/perl" "${perl}/bin/perl -I $out/${perl.libPrefix}"
+    done
+  '';
+
+  meta = with lib; {
     description = "RDMA Core Userspace Libraries and Daemons";
-    homepage = https://github.com/linux-rdma/rdma-core;
-    license = licenses.gpl2;
+    homepage = "https://github.com/linux-rdma/rdma-core";
+    license = licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ markuskowa ];
   };

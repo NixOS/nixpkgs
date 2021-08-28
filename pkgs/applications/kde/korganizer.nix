@@ -5,13 +5,13 @@
   phonon,
   knewstuff,
   akonadi-calendar, akonadi-contacts, akonadi-notes, akonadi-search,
-  calendarsupport, eventviews, incidenceeditor, kcalutils, kdepim-apps-libs,
+  calendarsupport, eventviews, incidenceeditor, kcalutils,
   kholidays, kidentitymanagement, kldap, kmailtransport, kontactinterface,
-  kpimtextedit, pimcommon,
+  kparts, kpimtextedit, pimcommon,
 }:
 
 mkDerivation {
-  name = "korganizer";
+  pname = "korganizer";
   meta = {
     license = with lib.licenses; [ gpl2 lgpl21 fdl12 ];
     maintainers = kdepimTeam;
@@ -22,8 +22,8 @@ mkDerivation {
     phonon
     knewstuff
     akonadi-calendar akonadi-contacts akonadi-notes akonadi-search
-    calendarsupport eventviews incidenceeditor kcalutils kdepim-apps-libs
+    calendarsupport eventviews incidenceeditor kcalutils
     kholidays kidentitymanagement kldap kmailtransport kontactinterface
-    kpimtextedit pimcommon
+    kparts kpimtextedit pimcommon
   ];
 }

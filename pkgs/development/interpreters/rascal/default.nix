@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, jdk }:
+{ lib, stdenv, fetchurl, makeWrapper, jdk }:
 
 stdenv.mkDerivation rec {
   name = "rascal-0.6.2";
@@ -8,9 +8,10 @@ stdenv.mkDerivation rec {
     sha256 = "1z4mwdbdc3r24haljnxng8znlfg2ihm9bf9zq8apd9a32ipcw4i6";
   };
 
-  buildInputs = [ makeWrapper jdk ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ jdk ];
 
-  unpackPhase = "true";
+  dontUnpack = true;
 
   installPhase =
     ''
@@ -20,10 +21,10 @@ stdenv.mkDerivation rec {
     '';
 
   meta = {
-    homepage = https://www.rascal-mpl.org/;
+    homepage = "https://www.rascal-mpl.org/";
     description = "Command-line REPL for the Rascal metaprogramming language";
-    license = stdenv.lib.licenses.epl10;
-    maintainers = [ stdenv.lib.maintainers.eelco ];
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.epl10;
+    maintainers = [ lib.maintainers.eelco ];
+    platforms = lib.platforms.unix;
   };
 }

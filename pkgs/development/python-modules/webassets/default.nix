@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "webassets";
-  version = "0.12.1";
+  version = "2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1nrqkpb7z46h2b77xafxihqv3322cwqv6293ngaky4j3ff4cing7";
+    sha256 = "1kc1042jydgk54xpgcp0r1ib4gys91nhy285jzfcxj3pfqrk4w8n";
   };
 
   propagatedBuildInputs = [ pyyaml ];
@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Media asset management for Python, with glue code for various web frameworks";
-    homepage = https://github.com/miracle2k/webassets/;
+    homepage = "https://github.com/miracle2k/webassets/";
     license = licenses.bsd2;
     maintainers = with maintainers; [ abbradar ];
   };

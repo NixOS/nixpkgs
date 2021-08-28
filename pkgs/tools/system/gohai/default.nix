@@ -1,7 +1,7 @@
 { lib, buildGoPackage, fetchgit }:
 
 buildGoPackage rec {
-  name = "gohai-${version}";
+  pname = "gohai";
   version = "2018-05-23";
   rev = "60e13eaed98afa238ad6dfc98224c04fbb7b19b1";
 
@@ -21,7 +21,7 @@ buildGoPackage rec {
     license          = licenses.mit;
     maintainers      = [ maintainers.tazjin ];
     platforms        = platforms.unix;
-    repositories.git = git://github.com/DataDog/gohai.git;
+    repositories.git = "git://github.com/DataDog/gohai.git";
 
     longDescription = ''
       Gohai is a tool which collects an inventory of system

@@ -1,57 +1,58 @@
 { monolithic ? true # build monolithic amule
-, daemon ? false # build amule daemon
+, enableDaemon ? false # build amule daemon
 , httpServer ? false # build web interface for the daemon
 , client ? false # build amule remote gui
-, fetchurl, stdenv, zlib, wxGTK, perl, cryptopp, libupnp, gettext, libpng ? null
-, pkgconfig, makeWrapper, libX11 ? null }:
+, fetchFromGitHub
+, stdenv
+, lib
+, cmake
+, zlib
+, wxGTK
+, perl
+, cryptopp
+, libupnp
+, gettext
+, libpng
+, autoreconfHook
+, pkg-config
+, makeWrapper
+, libX11
+}:
 
-assert httpServer -> libpng != null;
-assert client -> libX11 != null;
-with stdenv;
+stdenv.mkDerivation rec {
+  pname = "amule";
+  version = "2.3.3";
 
-mkDerivation rec {
-  name = "aMule-2.3.2";
-
-  src = fetchurl {
-    url = "mirror://sourceforge/amule/${name}.tar.xz";
-    sha256 = "0a1rd33hjl30qyzgb5y8m7dxs38asci3kjnlvims1ky6r3yj0izn";
+  src = fetchFromGitHub {
+    owner = "amule-project";
+    repo = "amule";
+    rev = version;
+    sha256 = "1nm4vxgmisn1b6l3drmz0q04x067j2i8lw5rnf0acaapwlp8qwvi";
   };
 
-  buildInputs =
-    [ zlib wxGTK perl cryptopp libupnp gettext pkgconfig makeWrapper ]
-    ++ lib.optional httpServer libpng
+  nativeBuildInputs = [ cmake gettext makeWrapper pkg-config ];
+
+  buildInputs = [
+    zlib wxGTK perl cryptopp.dev libupnp
+  ] ++ lib.optional httpServer libpng
     ++ lib.optional client libX11;
 
-  # See: https://github.com/amule-project/amule/issues/126
-  patches = [ ./upnp-1.8.patch ];
-
-  enableParallelBuilding = true;
-
-  configureFlags = [
-    "--with-crypto-prefix=${cryptopp}"
-    "--disable-debug"
-    "--enable-optimize"
-    (stdenv.lib.enableFeature monolithic "monolithic")
-    (stdenv.lib.enableFeature daemon "amule-daemon")
-    (stdenv.lib.enableFeature client "amule-gui")
-    (stdenv.lib.enableFeature httpServer "webserver")
+  cmakeFlags = [
+    "-DBUILD_MONOLITHIC=${if monolithic then "ON" else "OFF"}"
+    "-DBUILD_DAEMON=${if enableDaemon then "ON" else "OFF"}"
+    "-DBUILD_REMOTEGUI=${if client then "ON" else "OFF"}"
+    "-DBUILD_WEBSERVER=${if httpServer then "ON" else "OFF"}"
   ];
-
-  postConfigure = ''
-    sed -i "src/libs/ec/file_generator.pl"     \
-        -es'|/usr/bin/perl|${perl}/bin/perl|g'
-  '';
 
   # aMule will try to `dlopen' libupnp and libixml, so help it
   # find them.
   postInstall = lib.optionalString monolithic ''
-    wrapProgram "$out/bin/amule" --prefix LD_LIBRARY_PATH ":" "${libupnp}/lib"
+    wrapProgram $out/bin/amule \
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libupnp ]}
   '';
 
-  meta = {
-    homepage = http://amule.org/;
+  meta = with lib; {
     description = "Peer-to-peer client for the eD2K and Kademlia networks";
-
     longDescription = ''
       aMule is an eMule-like client for the eD2k and Kademlia
       networks, supporting multiple platforms.  Currently aMule
@@ -63,9 +64,11 @@ mkDerivation rec {
       applications.
     '';
 
-    license = stdenv.lib.licenses.gpl2Plus;
-
-    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;  # arbitrary choice
-    maintainers = [ stdenv.lib.maintainers.phreedom ];
+    homepage = "https://github.com/amule-project/amule";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ phreedom ];
+    platforms = platforms.unix;
+    # cmake fails: Cannot specify link libraries for target "wxWidgets::ADV" which is not built by this project.
+    broken = enableDaemon;
   };
 }

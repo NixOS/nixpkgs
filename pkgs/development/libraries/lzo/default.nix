@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{lib, stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
   name = "lzo-2.10";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true; # not cross;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Real-time data (de)compression library";
     longDescription = ''
       LZO is a portable lossless data compression library written in ANSI C.
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
       while still decompressing at this very high speed.
     '';
 
-    homepage = http://www.oberhumer.com/opensource/lzo;
+    homepage = "http://www.oberhumer.com/opensource/lzo";
     license = licenses.gpl2Plus;
 
     platforms = platforms.all;

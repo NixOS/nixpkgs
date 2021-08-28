@@ -1,17 +1,19 @@
-{ stdenv, fetchurl, pkgconfig, intltool, itstool, gnome3, glib, gtk3, gtksourceview3, libwnck3, libgtop, libxml2, libnotify, polkit, upower, wirelesstools, mate, hicolor-icon-theme, wrapGAppsHook }:
+{ lib, stdenv, fetchurl, pkg-config, gettext, itstool, gnome, glib, gtk3, gtksourceview3, libwnck3
+, libgtop, libxml2, libnotify, polkit, upower, wirelesstools, mate, hicolor-icon-theme, wrapGAppsHook
+, mateUpdateScript }:
 
 stdenv.mkDerivation rec {
-  name = "mate-applets-${version}";
-  version = "1.22.1";
+  pname = "mate-applets";
+  version = "1.24.1";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "19sjm2180ir8a264rz8m528qaqjpl3q3cq095ab0sbkp2igksrfx";
+    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0h70i4x3bk017pgv4zn280682wm58vwdjm7kni91ni8rmblnnvyp";
   };
 
   nativeBuildInputs = [
-    pkgconfig
-    intltool
+    pkg-config
+    gettext
     itstool
     wrapGAppsHook
   ];
@@ -19,7 +21,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gtk3
     gtksourceview3
-    gnome3.gucharmap
+    gnome.gucharmap
     libwnck3
     libgtop
     libxml2
@@ -36,9 +38,13 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
-  meta = with stdenv.lib; {
+  enableParallelBuilding = true;
+
+  passthru.updateScript = mateUpdateScript { inherit pname version; };
+
+  meta = with lib; {
     description = "Applets for use with the MATE panel";
-    homepage = https://mate-desktop.org;
+    homepage = "https://mate-desktop.org";
     license = with licenses; [ gpl2Plus lgpl2Plus ];
     platforms = platforms.linux;
     maintainers = [ maintainers.romildo ];

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , httplib2
@@ -21,11 +21,11 @@ buildPythonPackage rec {
   # ServerNotFoundError: Unable to find the server at oauth-sandbox.sevengoslings.net
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/simplegeo/python-oauth2";
     description = "Library for OAuth version 1.0";
     license = licenses.mit;
-    maintainers = with maintainers; [ garbas ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
   };
 

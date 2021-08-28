@@ -1,51 +1,50 @@
-{ buildGoPackage, stdenv, lib, procps, fetchFromGitHub }:
+{ buildGoModule, stdenv, lib, procps, fetchFromGitHub, nixosTests }:
 
 let
   common = { stname, target, postInstall ? "" }:
-    buildGoPackage rec {
-      version = "1.1.4";
-      name = "${stname}-${version}";
+    buildGoModule rec {
+      pname = stname;
+      version = "1.16.0";
 
       src = fetchFromGitHub {
         owner  = "syncthing";
         repo   = "syncthing";
         rev    = "v${version}";
-        sha256 = "0a19l1kp4cwyzcd53v9yzv3ms69gn78gajkyfawafr7ls0i8x82f";
+        sha256 = "sha256-AAJLtykSQLM13I77E7LD1W8hXLvZQ3XqgOWrTBGYn3k=";
       };
 
-      goPackagePath = "github.com/syncthing/syncthing";
+      vendorSha256 = "sha256-cN6Dgztq0/pAwfuBGFtTzK7XKXV7LrkgDGGzjkTDUN8=";
 
-      goDeps = ./deps.nix;
+      doCheck = false;
 
-      patches = [
-        ./add-stcli-target.patch
-      ];
       BUILD_USER="nix";
       BUILD_HOST="nix";
 
       buildPhase = ''
         runHook preBuild
-        pushd go/src/${goPackagePath}
         go run build.go -no-upgrade -version v${version} build ${target}
-        popd
         runHook postBuild
       '';
 
       installPhase = ''
-        pushd go/src/${goPackagePath}
         runHook preInstall
-        install -Dm755 ${target} $bin/bin/${target}
+        install -Dm755 ${target} $out/bin/${target}
         runHook postInstall
-        popd
       '';
 
       inherit postInstall;
 
+      passthru.tests = with nixosTests; {
+        init = syncthing-init;
+        relay = syncthing-relay;
+      };
+
       meta = with lib; {
-        homepage = https://www.syncthing.net/;
+        homepage = "https://syncthing.net/";
         description = "Open Source Continuous File Synchronization";
+        changelog = "https://github.com/syncthing/syncthing/releases/tag/v${version}";
         license = licenses.mpl20;
-        maintainers = with maintainers; [ pshendry joko peterhoeg andrew-d ];
+        maintainers = with maintainers; [ joko peterhoeg andrew-d ];
         platforms = platforms.unix;
       };
     };
@@ -65,26 +64,20 @@ in {
       done
 
     '' + lib.optionalString (stdenv.isLinux) ''
-      mkdir -p $bin/lib/systemd/{system,user}
+      mkdir -p $out/lib/systemd/{system,user}
 
       substitute etc/linux-systemd/system/syncthing-resume.service \
-                 $bin/lib/systemd/system/syncthing-resume.service \
+                 $out/lib/systemd/system/syncthing-resume.service \
                  --replace /usr/bin/pkill ${procps}/bin/pkill
 
       substitute etc/linux-systemd/system/syncthing@.service \
-                 $bin/lib/systemd/system/syncthing@.service \
-                 --replace /usr/bin/syncthing $bin/bin/syncthing
+                 $out/lib/systemd/system/syncthing@.service \
+                 --replace /usr/bin/syncthing $out/bin/syncthing
 
       substitute etc/linux-systemd/user/syncthing.service \
-                 $bin/lib/systemd/user/syncthing.service \
-                 --replace /usr/bin/syncthing $bin/bin/syncthing
+                 $out/lib/systemd/user/syncthing.service \
+                 --replace /usr/bin/syncthing $out/bin/syncthing
     '';
-  };
-
-  syncthing-cli = common {
-    stname = "syncthing-cli";
-
-    target = "stcli";
   };
 
   syncthing-discovery = common {
@@ -101,7 +94,7 @@ in {
 
       substitute cmd/strelaysrv/etc/linux-systemd/strelaysrv.service \
                  $out/lib/systemd/system/strelaysrv.service \
-                 --replace /usr/bin/strelaysrv $bin/bin/strelaysrv
+                 --replace /usr/bin/strelaysrv $out/bin/strelaysrv
     '';
   };
 }

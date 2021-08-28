@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, gmp }:
+{ lib, stdenv, fetchurl, gmp }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "isl-0.11.1"; # CLooG 0.16.3 fails to build with ISL 0.08.
 
   src = fetchurl {
@@ -14,9 +14,9 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    homepage = https://www.kotnet.org/~skimo/isl/;
-    license = stdenv.lib.licenses.lgpl21;
+    homepage = "https://www.kotnet.org/~skimo/isl/";
+    license = lib.licenses.lgpl21;
     description = "A library for manipulating sets and relations of integer points bounded by linear constraints";
-    platforms = stdenv.lib.platforms.all;
+    platforms = lib.platforms.all;
   };
 }

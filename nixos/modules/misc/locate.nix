@@ -7,6 +7,11 @@ let
   isMLocate = hasPrefix "mlocate" cfg.locate.name;
   isFindutils = hasPrefix "findutils" cfg.locate.name;
 in {
+  imports = [
+    (mkRenamedOptionModule [ "services" "locate" "period" ] [ "services" "locate" "interval" ])
+    (mkRemovedOptionModule [ "services" "locate" "includeStore" ] "Use services.locate.prunePaths" )
+  ];
+
   options.services.locate = with types; {
     enable = mkOption {
       type = bool;
@@ -68,7 +73,72 @@ in {
 
     pruneFS = mkOption {
       type = listOf str;
-      default = ["afs" "anon_inodefs" "auto" "autofs" "bdev" "binfmt" "binfmt_misc" "cgroup" "cifs" "coda" "configfs" "cramfs" "cpuset" "debugfs" "devfs" "devpts" "devtmpfs" "ecryptfs" "eventpollfs" "exofs" "futexfs" "ftpfs" "fuse" "fusectl" "gfs" "gfs2" "hostfs" "hugetlbfs" "inotifyfs" "iso9660" "jffs2" "lustre" "misc" "mqueue" "ncpfs" "nnpfs" "ocfs" "ocfs2" "pipefs" "proc" "ramfs" "rpc_pipefs" "securityfs" "selinuxfs" "sfs" "shfs" "smbfs" "sockfs" "spufs" "nfs" "NFS" "nfs4" "nfsd" "sshfs" "subfs" "supermount" "sysfs" "tmpfs" "ubifs" "udf" "usbfs" "vboxsf" "vperfctrfs" ];
+      default = [
+        "afs"
+        "anon_inodefs"
+        "auto"
+        "autofs"
+        "bdev"
+        "binfmt"
+        "binfmt_misc"
+        "cgroup"
+        "cifs"
+        "coda"
+        "configfs"
+        "cramfs"
+        "cpuset"
+        "debugfs"
+        "devfs"
+        "devpts"
+        "devtmpfs"
+        "ecryptfs"
+        "eventpollfs"
+        "exofs"
+        "futexfs"
+        "ftpfs"
+        "fuse"
+        "fusectl"
+        "fuse.sshfs"
+        "gfs"
+        "gfs2"
+        "hostfs"
+        "hugetlbfs"
+        "inotifyfs"
+        "iso9660"
+        "jffs2"
+        "lustre"
+        "misc"
+        "mqueue"
+        "ncpfs"
+        "nnpfs"
+        "ocfs"
+        "ocfs2"
+        "pipefs"
+        "proc"
+        "ramfs"
+        "rpc_pipefs"
+        "securityfs"
+        "selinuxfs"
+        "sfs"
+        "shfs"
+        "smbfs"
+        "sockfs"
+        "spufs"
+        "nfs"
+        "NFS"
+        "nfs4"
+        "nfsd"
+        "sshfs"
+        "subfs"
+        "supermount"
+        "sysfs"
+        "tmpfs"
+        "ubifs"
+        "udf"
+        "usbfs"
+        "vboxsf"
+        "vperfctrfs"
+      ];
       description = ''
         Which filesystem types to exclude from indexing
       '';
@@ -122,13 +192,9 @@ in {
       { LOCATE_PATH = cfg.output;
       };
 
-    warnings = optional (isMLocate && cfg.localuser != null) "mlocate does not support searching as user other than root"
+    warnings = optional (isMLocate && cfg.localuser != null) "mlocate does not support the services.locate.localuser option; updatedb will run as root. (Silence with services.locate.localuser = null.)"
             ++ optional (isFindutils && cfg.pruneNames != []) "findutils locate does not support pruning by directory component"
             ++ optional (isFindutils && cfg.pruneBindMounts) "findutils locate does not support skipping bind mounts";
-
-    # directory creation needs to be separated from main service
-    # because ReadWritePaths fails when the directory doesn't already exist
-    systemd.tmpfiles.rules = [ "d ${dirOf cfg.output} 0755 root root -" ];
 
     systemd.services.update-locatedb =
       { description = "Update Locate Database";
@@ -149,7 +215,7 @@ in {
           ''
           else ''
             exec ${cfg.locate}/bin/updatedb \
-              ${optionalString (cfg.localuser != null && ! isMLocate) ''--localuser=${cfg.localuser}''} \
+              ${optionalString (cfg.localuser != null && ! isMLocate) "--localuser=${cfg.localuser}"} \
               --output=${toString cfg.output} ${concatStringsSep " " cfg.extraFlags}
           '';
         environment = optionalAttrs (!isMLocate) {

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, setJavaClassPath, freetype }:
+{ lib, stdenv, fetchurl, unzip, setJavaClassPath, freetype }:
 let
   jce-policies = fetchurl {
     # Ugh, unversioned URLs... I hope this doesn't change often enough to cause pain before we move to a Darwin source build of OpenJDK!
@@ -7,15 +7,16 @@ let
   };
 
   jdk = stdenv.mkDerivation rec {
-    name = "zulu11.2.3-jdk11.0.1";
+    name = "zulu11.43.21-ca-jdk11.0.9";
 
     src = fetchurl {
       url = "https://cdn.azul.com/zulu/bin/${name}-macosx_x64.tar.gz";
-      sha256 = "1jxnxmy79inwf3146ygry1mzv3dj6yrzqll16j7dpr91x1p3dpqy";
+      sha256 = "1j19fb5mwdkfn6y8wfsnvxsz6wfpcab4xv439fqssxy520n6q4zs";
       curlOpts = "-H Referer:https://www.azul.com/downloads/zulu/zulu-mac/";
     };
 
-    buildInputs = [ unzip freetype ];
+    nativeBuildInputs = [ unzip ];
+    buildInputs = [ freetype ];
 
     installPhase = ''
       mkdir -p $out
@@ -44,7 +45,7 @@ let
 
       # Set JAVA_HOME automatically.
       cat <<EOF >> $out/nix-support/setup-hook
-      if [ -z "\$JAVA_HOME" ]; then export JAVA_HOME=$out; fi
+      if [ -z "\''${JAVA_HOME-}" ]; then export JAVA_HOME=$out; fi
       EOF
     '';
 
@@ -52,7 +53,10 @@ let
       home = jdk;
     };
 
-    meta.platforms = stdenv.lib.platforms.darwin;
+    meta = with lib; {
+      license = licenses.gpl2;
+      platforms = platforms.darwin;
+    };
 
   };
 in jdk

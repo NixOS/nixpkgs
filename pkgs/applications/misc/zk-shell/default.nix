@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pythonPackages }:
+{ lib, fetchFromGitHub, pythonPackages }:
 
 pythonPackages.buildPythonApplication rec {
   version = "1.0.0";
@@ -20,9 +20,9 @@ pythonPackages.buildPythonApplication rec {
 
   meta = {
     description = "A powerful & scriptable shell for Apache ZooKeeper";
-    homepage = https://github.com/rgs1/zk_shell;
-    license = stdenv.lib.licenses.asl20;
-    maintainers = [ stdenv.lib.maintainers.mahe ];
-    platforms = stdenv.lib.platforms.all;
+    homepage = "https://github.com/rgs1/zk_shell";
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.mahe ];
+    platforms = lib.platforms.all;
   };
 }

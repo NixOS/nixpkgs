@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libX11, libXext, libXi, libXmu, libXt, libXtst }:
+{ lib, stdenv, fetchurl, libX11, libXext, libXi, libXmu, libXt, libXtst }:
 
 stdenv.mkDerivation rec {
   name = "imwheel-1.0.0pre12";
@@ -10,12 +10,17 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libX11 libXext libXi libXmu libXt libXtst ];
 
-  postPatch = ''
-    substituteInPlace Makefile.in --replace "ETCDIR = " "ETCDIR = $out"
-    substituteInPlace util.c --replace "/etc/X11/imwheel" "$out/etc/X11/imwheel"
-  '';
+  makeFlags = [
+    "sysconfdir=/etc"
+    "ETCDIR=/etc"
+  ];
 
-  meta = with stdenv.lib; {
+  installFlags = [
+    "sysconfdir=${placeholder "out"}/etc"
+    "ETCDIR=${placeholder "out"}/etc"
+  ];
+
+  meta = with lib; {
     homepage = "http://imwheel.sourceforge.net/";
     description = "Mouse wheel configuration tool for XFree86/Xorg";
     maintainers = with maintainers; [ jhillyerd ];

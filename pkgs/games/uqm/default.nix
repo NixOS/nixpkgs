@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, pkgconfig, libGLU_combined
+{ stdenv, lib, fetchurl, pkg-config, libGLU, libGL
 , SDL, SDL_image, libpng, libvorbis, libogg, libmikmod
 
 , use3DOVideos ? false, requireFile ? null, writeText ? null
@@ -12,7 +12,7 @@ assert use3DOVideos -> requireFile != null && writeText != null
 
 let
   videos = import ./3dovideo.nix {
-    inherit stdenv requireFile writeText fetchurl haskellPackages;
+    inherit stdenv lib requireFile writeText fetchurl haskellPackages;
   };
 
   remixPacks = lib.imap1 (num: sha256: fetchurl rec {
@@ -27,7 +27,7 @@ let
   ];
 
 in stdenv.mkDerivation rec {
-  name = "uqm-${version}";
+  pname = "uqm";
   version = "0.7.0";
 
   src = fetchurl {
@@ -50,8 +50,8 @@ in stdenv.mkDerivation rec {
     sha256 = "10nbvcrr0lc0mxivxfkcbxnibwk3vwmamabrlvwdsjxd9pk8aw65";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ SDL SDL_image libpng libvorbis libogg libmikmod libGLU_combined ];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ SDL SDL_image libpng libvorbis libogg libmikmod libGLU libGL ];
 
   postUnpack = ''
     mkdir -p uqm-${version}/content/packages
@@ -65,9 +65,11 @@ in stdenv.mkDerivation rec {
     ln -s "${videos}" "uqm-${version}/content/addons/3dovideo"
   '';
 
-  # Using _STRINGS_H as include guard conflicts with glibc.
   postPatch = ''
+    # Using _STRINGS_H as include guard conflicts with glibc.
     sed -i -e '/^#/s/_STRINGS_H/_UQM_STRINGS_H/g' src/uqm/comm/*/strings.h
+    # See https://github.com/NixOS/nixpkgs/pull/93560
+    sed -i -e 's,/tmp/,$TMPDIR/,' build/unix/config_functions
   '';
 
   # uqm has a 'unique' build system with a root script incidentally called
@@ -99,8 +101,8 @@ in stdenv.mkDerivation rec {
         - to adapt the code so that people can more easily make their own
           spin-offs, thereby making zillions more people happy!
     '';
-    homepage = http://sc2.sourceforge.net/;
-    license = stdenv.lib.licenses.gpl2;
+    homepage = "http://sc2.sourceforge.net/";
+    license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ jcumming aszlig ];
     platforms = with lib.platforms; linux;
   };

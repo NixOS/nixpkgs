@@ -1,9 +1,8 @@
-{ stdenv, fetchFromGitHub, pythonPackages, httpie }:
+{ lib, fetchFromGitHub, python3Packages, httpie }:
 
-pythonPackages.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "http-prompt";
   version = "1.0.0";
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     rev = "v${version}";
@@ -12,11 +11,11 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "0kngz2izcqjphbrdkg489p0xmf65xjc8ki1a2szcc8sgwc7z74xy";
   };
 
-  propagatedBuildInputs = with pythonPackages; [
+  propagatedBuildInputs = with python3Packages; [
     click
     httpie
     parsimonious
-    prompt_toolkit
+    (python.pkgs.callPackage ../../../development/python-modules/prompt_toolkit/1.nix {})
     pygments
     six
   ];
@@ -25,11 +24,11 @@ pythonPackages.buildPythonApplication rec {
     $out/bin/${pname} --version | grep -q "${version}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An interactive command-line HTTP client featuring autocomplete and syntax highlighting";
-    homepage = https://github.com/eliangcs/http-prompt;
+    homepage = "https://github.com/eliangcs/http-prompt";
     license = licenses.mit;
     maintainers = with maintainers; [ matthiasbeyer ];
-    platforms = platforms.linux; # can only test on linux
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

@@ -1,7 +1,7 @@
 { stdenv, lib, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
-  name = "double-conversion-${version}";
+  pname = "double-conversion";
   version = "3.1.5";
 
   src = fetchFromGitHub {
@@ -20,11 +20,9 @@ stdenv.mkDerivation rec {
     rm BUILD
   '';
 
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Binary-decimal and decimal-binary routines for IEEE doubles";
-    homepage = https://github.com/google/double-conversion;
+    homepage = "https://github.com/google/double-conversion";
     license = licenses.bsd3;
     platforms = platforms.unix;
     maintainers = with maintainers; [ abbradar ];

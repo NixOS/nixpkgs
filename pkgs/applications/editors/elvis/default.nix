@@ -1,6 +1,6 @@
-{ fetchurl, fetchpatch, stdenv, ncurses }:
+{ fetchurl, fetchpatch, lib, stdenv, ncurses }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "elvis-2.2_0";
 
   src = fetchurl {
@@ -39,8 +39,8 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--ioctl=termios" ];
 
   meta = {
-    homepage = http://elvis.vi-editor.org/;
+    homepage = "http://elvis.the-little-red-haired-girl.org/";
     description = "A vi clone for Unix and other operating systems";
-    license = stdenv.lib.licenses.free;
+    license = lib.licenses.free;
   };
 }

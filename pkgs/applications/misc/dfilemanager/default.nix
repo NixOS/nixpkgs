@@ -1,24 +1,25 @@
-{ stdenv, fetchgit, cmake, file, qtbase, qttools, solid }:
+{ lib, mkDerivation, fetchFromGitHub, cmake, file, qtbase, qttools, solid }:
 
-let
-  version = "git-2016-01-10";
-in
-stdenv.mkDerivation {
-  name = "dfilemanager-${version}";
-  src = fetchgit {
-    url = "git://git.code.sf.net/p/dfilemanager/code";
-    rev = "2c5078b05e0ad74c037366be1ab3e6a03492bde4";
-    sha256 = "1qwhnlcc2j8sr1f3v63sxs3m7q7w1xy6c2jqsnznjgm23b5h3hxd";
+mkDerivation {
+  pname = "dfilemanager";
+  version = "git-2020-09-04";
+
+  src = fetchFromGitHub {
+    owner = "probonopd";
+    repo = "dfilemanager";
+    rev = "c592d643d76942dc2c2ccb6e4bfdf53f5e805e48";
+    sha256 = "7hIgaWjjOck5i4QbeVeQK7yrjK4yDoAZ5qY9RhM5ABY=";
   };
 
-  buildInputs = [ cmake qtbase qttools file solid ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ qtbase qttools file solid ];
 
-  cmakeFlags = "-DQT5BUILD=true";
+  cmakeFlags = [ "-DQT5BUILD=true" ];
 
   meta = {
-    homepage = http://dfilemanager.sourceforge.net/;
+    homepage = "http://dfilemanager.sourceforge.net/";
     description = "File manager written in Qt/C++";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.unix;
   };
 }

@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, cmake, boost166 }:
+{ lib, stdenv, fetchFromGitHub, cmake, boost166 }:
 
 stdenv.mkDerivation rec {
-  name = "SkypeExport-${version}";
+  pname = "SkypeExport";
   version = "1.4.0";
 
   src = fetchFromGitHub {
@@ -17,9 +17,9 @@ stdenv.mkDerivation rec {
   preConfigure = "cd src/SkypeExport/_gccbuild/linux";
   installPhase = "install -Dt $out/bin SkypeExport";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Export Skype history to HTML";
-    homepage = https://github.com/Temptin/SkypeExport;
+    homepage = "https://github.com/Temptin/SkypeExport";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ yegortimoshenko ];

@@ -75,8 +75,6 @@
 
     cube = callPackage ./cube.nix {};
 
-    data = callPackage ./data.nix {};
-
     derive = callPackage ./derive.nix {};
 
     descncrunch = callPackage ./descncrunch.nix {};
@@ -102,8 +100,6 @@
     hamt = callPackage ./hamt.nix {};
 
     html = callPackage ./html.nix {};
-
-    heyting-algebra = callPackage ./heyting-algebra.nix {};
 
     hezarfen = callPackage ./hezarfen.nix {};
 
@@ -178,6 +174,8 @@
     tap = callPackage ./tap.nix {};
 
     test = callPackage ./test.nix {};
+
+    tf-random = callPackage ./tfrandom.nix {};
 
     tlhydra = callPackage ./tlhydra.nix {};
 

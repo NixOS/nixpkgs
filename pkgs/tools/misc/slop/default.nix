@@ -1,30 +1,30 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig
-, glew, glm, libGLU_combined, libX11, libXext, libXrender, icu
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config
+, glew, glm, libGLU, libGL, libX11, libXext, libXrender, icu
 , cppcheck
 }:
 
 stdenv.mkDerivation rec {
-  name = "slop-${version}";
-  version = "7.4";
+  pname = "slop";
+  version = "7.5";
 
   src = fetchFromGitHub {
     owner = "naelstrof";
     repo = "slop";
     rev = "v${version}";
-    sha256 = "0fgd8a2dqkg64all0f96sca92sdss9r3pzmv5kck46b99z2325z6";
+    sha256 = "1k8xxb4rj2fylr4vj16yvsf73cyywliz9cy78pl4ibmi03jhg837";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
-  buildInputs = [ glew glm libGLU_combined libX11 libXext libXrender icu ]
-                ++ stdenv.lib.optional doCheck cppcheck;
+  nativeBuildInputs = [ cmake pkg-config ];
+  buildInputs = [ glew glm libGLU libGL libX11 libXext libXrender icu ]
+                ++ lib.optional doCheck cppcheck;
 
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "Queries a selection from the user and prints to stdout";
-    platforms = stdenv.lib.platforms.linux;
-    license = stdenv.lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl3Plus;
     maintainers = with maintainers; [ primeos mbakke ];
   };
 }

@@ -1,7 +1,7 @@
-{ fetchgit, stdenv, smlnj, which }:
+{ fetchgit, lib, stdenv, smlnj, which }:
 
 stdenv.mkDerivation rec {
-  name    = "jonprl-${version}";
+  pname = "jonprl";
   version = "0.1.0";
 
   src = fetchgit {
@@ -26,9 +26,10 @@ stdenv.mkDerivation rec {
       based on Brouwer-realizability & meaning explanations.
       Inspired by Nuprl
     '';
-    homepage = https://github.com/jonsterling/JonPRL;
-    license = stdenv.lib.licenses.mit;
-    maintainers = with stdenv.lib.maintainers; [ puffnfresh ];
-    platforms = stdenv.lib.platforms.linux;
+    homepage = "https://github.com/jonsterling/JonPRL";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ puffnfresh ];
+    platforms = lib.platforms.linux;
+    broken = true;
   };
 }

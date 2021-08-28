@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , boltons
@@ -11,22 +11,21 @@
 
 buildPythonPackage rec {
   pname = "glom";
-  version = "19.1.0";
+  version = "20.11.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5c47dc6dc97bb1c20e5607f3d58eac81e13b16880a284b52d503eea92d7b5fc2";
+    sha256 = "54051072bccc9cdb3ebbd8af0559195137a61d308f04bff19678e4b61350eb12";
   };
 
   propagatedBuildInputs = [ boltons attrs face ];
 
   checkInputs = [ pytest pyyaml ];
-  checkPhase = "pytest glom/test";
+  # test_cli.py checks the output of running "glom"
+  checkPhase = "PATH=$out/bin:$PATH pytest glom/test";
 
-  doCheck = !isPy37; # https://github.com/mahmoud/glom/issues/72
-
-  meta = with stdenv.lib; {
-    homepage = https://github.com/mahmoud/glom;
+  meta = with lib; {
+    homepage = "https://github.com/mahmoud/glom";
     description = "Restructuring data, the Python way";
     longDescription = ''
       glom helps pull together objects from other objects in a

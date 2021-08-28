@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, cmake, coreutils, dbus, freetype, glib, gnused
-, libpthreadstubs, pango, pkgconfig, libpulseaudio, which }:
+{ lib, stdenv, fetchurl, cmake, coreutils, dbus, freetype, glib, gnused
+, libpthreadstubs, pango, pkg-config, libpulseaudio, which }:
 
 stdenv.mkDerivation rec {
-  name = "squeak-${version}";
+  pname = "squeak";
   version = "4.10.2.2614";
 
   src = fetchurl {
@@ -12,12 +12,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ coreutils dbus freetype glib gnused libpthreadstubs
     pango libpulseaudio which ];
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   postPatch = ''
     for i in squeak.in squeak.sh.in; do
       substituteInPlace unix/cmake/$i --replace "PATH=" \
-        "PATH=${stdenv.lib.makeBinPath [ coreutils gnused which ]} #"
+        "PATH=${lib.makeBinPath [ coreutils gnused which ]} #"
     done
   '';
 
@@ -25,11 +25,9 @@ stdenv.mkDerivation rec {
     unix/cmake/configure --prefix=$out --enable-mpg-{mmx,pthreads}
   '';
 
-  enableParallelBuilding = true;
-
   hardeningDisable = [ "format" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Smalltalk programming language and environment";
     longDescription = ''
       Squeak is a full-featured implementation of the Smalltalk programming
@@ -39,8 +37,8 @@ stdenv.mkDerivation rec {
       capabilities. It also includes a customisable framework for creating
       dynamic HTTP servers and interactively extensible Web sites.
     '';
-    homepage = http://squeakvm.org/;
-    downloadPage = http://squeakvm.org/unix/index.html;
+    homepage = "http://squeakvm.org/";
+    downloadPage = "http://squeakvm.org/unix/index.html";
     license = with licenses; [ asl20 mit ];
     platforms = platforms.linux;
   };

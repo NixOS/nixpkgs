@@ -1,10 +1,9 @@
 LibreOffice
 ===========
 
-To generate `libreoffice-srcs.nix`:
+To generate `src-$VARIANT/download.nix`, i.e. list of additional sources that
+the libreoffice build process needs to download:
 
-    nix-shell default-gen-shell.nix --run generate
+    nix-shell gen-shell.nix --argstr variant VARIANT --run generate
 
-To generate `libreoffice-srcs-still.nix`:
-
-    nix-shell still-gen-shell.nix --run generate
+Where VARIANT is either `still` or `fresh`.

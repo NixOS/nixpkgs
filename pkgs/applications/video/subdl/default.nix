@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, python3 }:
+{ lib, stdenv, fetchFromGitHub, python3 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "subdl-0.0pre.2017.11.06";
 
   src = fetchFromGitHub {
@@ -11,16 +11,16 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    homepage = https://github.com/alexanderwink/subdl;
+    homepage = "https://github.com/alexanderwink/subdl";
     description = "A command-line tool to download subtitles from opensubtitles.org";
-    platforms = stdenv.lib.platforms.all;
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = [ stdenv.lib.maintainers.exfalso ];
+    platforms = lib.platforms.all;
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.exfalso ];
   };
 
   buildInputs = [ python3 ];
 
   installPhase = ''
     install -vD subdl $out/bin/subdl
-  '';  
+  '';
 }

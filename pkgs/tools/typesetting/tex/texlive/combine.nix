@@ -2,10 +2,12 @@ params: with params;
 # combine =
 args@{
   pkgFilter ? (pkg: pkg.tlType == "run" || pkg.tlType == "bin" || pkg.pname == "core")
-, extraName ? "combined", ...
+, extraName ? "combined"
+, extraVersion ? ""
+, ...
 }:
 let
-  pkgSet = removeAttrs args [ "pkgFilter" "extraName" ] // {
+  pkgSet = removeAttrs args [ "pkgFilter" "extraName" "extraVersion" ] // {
     # include a fake "core" package
     core.pkgs = [
       (bin.core.out // { pname = "core"; tlType = "bin"; })
@@ -27,30 +29,31 @@ let
       [ "de-macro" "pythontex" "dviasm" "texliveonfly" ];
     pkgNeedsRuby = pkg: pkg.tlType == "run" && pkg.pname == "match-parens";
     extraInputs =
-      lib.optional (lib.any pkgNeedsPython splitBin.wrong) python
+      lib.optional (lib.any pkgNeedsPython splitBin.wrong) python3
       ++ lib.optional (lib.any pkgNeedsRuby splitBin.wrong) ruby;
   };
 
-  # TODO: replace by buitin once it exists
-  fastUnique = comparator: list: with lib;
-    let un_adj = l: if length l < 2 then l
-      else optional (head l != elemAt l 1) (head l) ++ un_adj (tail l);
-    in un_adj (lib.sort comparator list);
-
-  uniqueStrings = fastUnique (a: b: a < b);
+  uniqueStrings = list: lib.sort (a: b: a < b) (lib.unique list);
 
   mkUniqueOutPaths = pkgs: uniqueStrings
     (map (p: p.outPath) (builtins.filter lib.isDerivation pkgs));
 
-in buildEnv {
-  name = "texlive-${extraName}-${bin.texliveYear}";
+in (buildEnv {
+  name = "texlive-${extraName}-${bin.texliveYear}${extraVersion}";
 
   extraPrefix = "/share/texmf";
 
   ignoreCollisions = false;
   paths = pkgList.nonbin;
+  pathsToLink = [
+    "/"
+    "/tex/generic/config" # make it a real directory for scheme-infraonly
+  ];
 
   buildInputs = [ makeWrapper ] ++ pkgList.extraInputs;
+
+  # This is set primarily to help find-tarballs.nix to do its job
+  passthru.packages = pkgList.all;
 
   postBuild = ''
     cd "$out"
@@ -68,24 +71,13 @@ in buildEnv {
       '')
       pkgList.bin
     +
-
-    # Patch texlinks.sh back to 2015 version;
-    # otherwise some bin/ links break, e.g. xe(la)tex.
-  ''
-    (
-      cd "$out/share/texmf/scripts/texlive"
-      local target="$(readlink texlinks.sh)"
-      rm texlinks.sh && cp "$target" texlinks.sh
-      patch --verbose -R texlinks.sh < '${./texlinks.diff}'
-    )
-  '' +
   ''
     export PATH="$out/bin:$out/share/texmf/scripts/texlive:${perl}/bin:$PATH"
     export TEXMFCNF="$out/share/texmf/web2c"
     export TEXMFDIST="$out/share/texmf"
     export TEXMFSYSCONFIG="$out/share/texmf-config"
     export TEXMFSYSVAR="$out/share/texmf-var"
-    export PERL5LIB="$out/share/texmf/scripts/texlive"
+    export PERL5LIB="$out/share/texmf/scripts/texlive:${bin.core.out}/share/texmf-dist/scripts/texlive"
   '' +
     # patch texmf-dist  -> $out/share/texmf
     # patch texmf-local -> $out/share/texmf-local
@@ -128,17 +120,15 @@ in buildEnv {
       mkdir $out/share/texmf-local
     )
   '' +
-    # updmap.cfg seems like not needing changes
-
     # now filter hyphenation patterns, in a hacky way ATM
   (let
     pnames = uniqueStrings (map (p: p.pname) pkgList.splitBin.wrong);
     script =
       writeText "hyphens.sed" (
         # pick up the header
-        "1,/^\% from/p;"
+        "1,/^% from/p;"
         # pick up all sections matching packages that we combine
-        + lib.concatMapStrings (pname: "/^\% from ${pname}:$/,/^\%/p;\n") pnames
+        + lib.concatMapStrings (pname: "/^% from ${pname}:$/,/^%/p;\n") pnames
       );
   in ''
     (
@@ -166,7 +156,8 @@ in buildEnv {
       rm "$link"
       makeWrapper "$target" "$link" \
         --prefix PATH : "$out/bin:${perl}/bin" \
-        --prefix PERL5LIB : "$out/share/texmf/scripts/texlive"
+        --prefix PERL5LIB : "$PERL5LIB" \
+        --set-default TEXMFCNF "$TEXMFCNF"
 
       # avoid using non-nix shebang in $target by calling interpreter
       if [[ "$(head -c 2 "$target")" = "#!" ]]; then
@@ -196,9 +187,6 @@ in buildEnv {
   '' +
   # texlive post-install actions
   ''
-    mkdir -p "$out/share/texmf/scripts/texlive/"
-    ln -s '${bin.core.out}/share/texmf-dist/scripts/texlive/TeXLive' "$out/share/texmf/scripts/texlive/"
-
     for tool in updmap; do
       ln -sf "$out/share/texmf/scripts/texlive/$tool."* "$out/bin/$tool"
     done
@@ -211,10 +199,15 @@ in buildEnv {
     ln -sf fmtutil "$out/bin/mktexfmt"
 
     perl `type -P mktexlsr.pl` ./share/texmf
-    texlinks.sh "$out/bin" && wrapBin
+    ${bin.texlinks} "$out/bin" && wrapBin
     (perl `type -P fmtutil.pl` --sys --all || true) | grep '^fmtutil' # too verbose
-    #texlinks.sh "$out/bin" && wrapBin # do we need to regenerate format links?
+    #${bin.texlinks} "$out/bin" && wrapBin # do we need to regenerate format links?
+
+    # Disable unavailable map files
     echo y | perl `type -P updmap.pl` --sys --syncwithtrees --force
+    # Regenerate the map files (this is optional)
+    perl `type -P updmap.pl` --sys --force
+
     perl `type -P mktexlsr.pl` ./share/texmf-* # to make sure
   '' +
     # install (wrappers for) scripts, based on a list from upstream texlive
@@ -283,6 +276,6 @@ in buildEnv {
   ''
     + bin.cleanBrokenLinks
   ;
-}
+}).overrideAttrs (_: { allowSubstitutes = true; })
 # TODO: make TeX fonts visible by fontconfig: it should be enough to install an appropriate file
 #       similarly, deal with xe(la)tex font visibility?

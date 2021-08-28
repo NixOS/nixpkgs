@@ -3,8 +3,12 @@
 with lib;
 
 let
+  package = if cfg.allowAuxiliaryImperativeNetworks
+    then pkgs.wpa_supplicant_ro_ssids
+    else pkgs.wpa_supplicant;
+
   cfg = config.networking.wireless;
-  configFile = if cfg.networks != {} then pkgs.writeText "wpa_supplicant.conf" ''
+  configFile = if cfg.networks != {} || cfg.extraConfig != "" || cfg.userControlled.enable then pkgs.writeText "wpa_supplicant.conf" ''
     ${optionalString cfg.userControlled.enable ''
       ctrl_interface=DIR=/run/wpa_supplicant GROUP=${cfg.userControlled.group}
       update_config=1''}
@@ -14,8 +18,8 @@ let
         then ''"${psk}"''
         else pskRaw;
       baseAuth = if key != null
-        then ''psk=${key}''
-        else ''key_mgmt=NONE'';
+        then "psk=${key}"
+        else "key_mgmt=NONE";
     in ''
       network={
         ssid="${ssid}"
@@ -38,6 +42,11 @@ in {
         description = ''
           The interfaces <command>wpa_supplicant</command> will use. If empty, it will
           automatically use all wireless interfaces.
+          <warning><para>
+            The automatic discovery of interfaces does not work reliably on boot:
+            it may fail and leave the system without network. When possible, specify
+            a known interface name.
+          </para></warning>
         '';
       };
 
@@ -45,6 +54,16 @@ in {
         type = types.str;
         default = "nl80211,wext";
         description = "Force a specific wpa_supplicant driver.";
+      };
+
+      allowAuxiliaryImperativeNetworks = mkEnableOption "support for imperative & declarative networks" // {
+        description = ''
+          Whether to allow configuring networks "imperatively" (e.g. via
+          <package>wpa_supplicant_gui</package>) and declaratively via
+          <xref linkend="opt-networking.wireless.networks" />.
+
+          Please note that this adds a custom patch to <package>wpa_supplicant</package>.
+        '';
       };
 
       networks = mkOption {
@@ -103,6 +122,13 @@ in {
               description = ''
                 Set this to <literal>true</literal> if the SSID of the network is hidden.
               '';
+              example = literalExample ''
+                { echelon = {
+                    hidden = true;
+                    psk = "abcdefgh";
+                  };
+                }
+              '';
             };
 
             priority = mkOption {
@@ -146,10 +172,13 @@ in {
         '';
         default = {};
         example = literalExample ''
-          { echelon = {
+          { echelon = {                   # SSID with no spaces or special characters
               psk = "abcdefgh";
             };
-            "free.wifi" = {};
+            "echelon's AP" = {            # SSID with spaces and/or special characters
+               psk = "ijklmnop";
+            };
+            "free.wifi" = {};             # Public wireless network
           }
         '';
       };
@@ -201,9 +230,18 @@ in {
       message = ''options networking.wireless."${name}".{psk,pskRaw,auth} are mutually exclusive'';
     });
 
-    environment.systemPackages =  [ pkgs.wpa_supplicant ];
+    warnings =
+      optional (cfg.interfaces == [] && config.systemd.services.wpa_supplicant.wantedBy != [])
+      ''
+        No network interfaces for wpa_supplicant have been configured: the service
+        may randomly fail to start at boot. You should specify at least one using the option
+        networking.wireless.interfaces.
+      '';
 
-    services.dbus.packages = [ pkgs.wpa_supplicant ];
+    environment.systemPackages = [ package ];
+
+    services.dbus.packages = [ package ];
+    services.udev.packages = [ pkgs.crda ];
 
     # FIXME: start a separate wpa_supplicant instance per interface.
     systemd.services.wpa_supplicant = let
@@ -219,31 +257,42 @@ in {
       wantedBy = [ "multi-user.target" ];
       stopIfChanged = false;
 
-      path = [ pkgs.wpa_supplicant ];
+      path = [ package ];
 
-      script = ''
+      script = let
+        configStr = if cfg.allowAuxiliaryImperativeNetworks
+          then "-c /etc/wpa_supplicant.conf -I ${configFile}"
+          else "-c ${configFile}";
+      in ''
+        if [ -f /etc/wpa_supplicant.conf -a "/etc/wpa_supplicant.conf" != "${configFile}" ]
+        then echo >&2 "<3>/etc/wpa_supplicant.conf present but ignored. Generated ${configFile} is used instead."
+        fi
+        iface_args="-s -u -D${cfg.driver} ${configStr}"
         ${if ifaces == [] then ''
           for i in $(cd /sys/class/net && echo *); do
             DEVTYPE=
-            source /sys/class/net/$i/uevent
-            if [ "$DEVTYPE" = "wlan" -o -e /sys/class/net/$i/wireless ]; then
-              ifaces="$ifaces''${ifaces:+ -N} -i$i"
+            UEVENT_PATH=/sys/class/net/$i/uevent
+            if [ -e "$UEVENT_PATH" ]; then
+              source "$UEVENT_PATH"
+              if [ "$DEVTYPE" = "wlan" -o -e /sys/class/net/$i/wireless ]; then
+                args+="''${args:+ -N} -i$i $iface_args"
+              fi
             fi
           done
         '' else ''
-          ifaces="${concatStringsSep " -N " (map (i: "-i${i}") ifaces)}"
+          args="${concatMapStringsSep " -N " (i: "-i${i} $iface_args") ifaces}"
         ''}
-        exec wpa_supplicant -s -u -D${cfg.driver} -c ${configFile} $ifaces
+        exec wpa_supplicant $args
       '';
     };
 
     powerManagement.resumeCommands = ''
-      ${config.systemd.package}/bin/systemctl try-restart wpa_supplicant
+      /run/current-system/systemd/bin/systemctl try-restart wpa_supplicant
     '';
 
     # Restart wpa_supplicant when a wlan device appears or disappears.
     services.udev.extraRules = ''
-      ACTION=="add|remove", SUBSYSTEM=="net", ENV{DEVTYPE}=="wlan", RUN+="${config.systemd.package}/bin/systemctl try-restart wpa_supplicant.service"
+      ACTION=="add|remove", SUBSYSTEM=="net", ENV{DEVTYPE}=="wlan", RUN+="/run/current-system/systemd/bin/systemctl try-restart wpa_supplicant.service"
     '';
   };
 

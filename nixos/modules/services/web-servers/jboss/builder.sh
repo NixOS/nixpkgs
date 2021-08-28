@@ -28,11 +28,11 @@ stop()
 if test "\$1" = start
 then
   trap stop 15
-  
+
   start
 elif test "\$1" = stop
 then
-  stop  
+  stop
 elif test "\$1" = init
 then
   echo "Are you sure you want to create a new server instance (old server instance will be lost!)?"
@@ -42,21 +42,21 @@ then
   then
     exit 1
   fi
-  
+
   rm -rf $serverDir
   mkdir -p $serverDir
   cd $serverDir
   cp -av $jboss/server/default .
   sed -i -e "s|deploy/|$deployDir|" default/conf/jboss-service.xml
-  
+
   if ! test "$useJK" = ""
   then
     sed -i -e 's|<attribute name="UseJK">false</attribute>|<attribute name="UseJK">true</attribute>|' default/deploy/jboss-web.deployer/META-INF/jboss-service.xml
     sed -i -e 's|<Engine name="jboss.web" defaultHost="localhost">|<Engine name="jboss.web" defaultHost="localhost" jvmRoute="node1">|' default/deploy/jboss-web.deployer/server.xml
   fi
-  
+
   # Make files accessible for the server user
-  
+
   chown -R $user $serverDir
   for i in \`find $serverDir -type d\`
   do

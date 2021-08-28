@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, openmp ? null }:
+{ lib, stdenv, fetchurl, openmp ? null }:
 
 stdenv.mkDerivation rec {
-  name = "bsc-${version}";
+  pname = "bsc";
   version = "3.1.0";
 
   src = fetchurl {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildInputs = stdenv.lib.optional stdenv.isDarwin openmp;
+  buildInputs = lib.optional stdenv.isDarwin openmp;
 
   prePatch = ''
     substituteInPlace makefile \
@@ -22,9 +22,9 @@ stdenv.mkDerivation rec {
     makeFlagsArray+=("PREFIX=$out")
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "High performance block-sorting data compression library";
-    homepage = http://libbsc.com/;
+    homepage = "http://libbsc.com/";
     # Later commits changed the licence to Apache2 (no release yet, though)
     license = with licenses; [ lgpl3Plus ];
     platforms = platforms.unix;

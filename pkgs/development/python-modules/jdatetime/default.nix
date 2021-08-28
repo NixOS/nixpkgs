@@ -1,19 +1,19 @@
-{ stdenv, buildPythonPackage, fetchPypi, six }:
+{ lib, buildPythonPackage, fetchPypi, six }:
 
 buildPythonPackage rec {
   pname = "jdatetime";
-  version = "3.2.0";
+  version = "3.6.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "42d0d08c0d36dcf1c4e1ddb1d10338d0dffb94105a02d74b6ea655ee8dd93cc2";
+    sha256 = "a589e35f0dab89283c1a3de9d70ed6cf657932aaed8e8ce1b0e5801aaab1da67";
   };
 
   propagatedBuildInputs = [ six ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Jalali datetime binding for python";
-    homepage = https://pypi.python.org/pypi/jdatetime;
+    homepage = "https://pypi.python.org/pypi/jdatetime";
     license = licenses.psfl;
   };
 }

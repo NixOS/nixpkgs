@@ -1,9 +1,10 @@
-{ stdenv, cmake, extra-cmake-modules, plasma-framework, kwindowsystem, redshift, fetchFromGitHub, }:
+{ lib, stdenv, cmake, extra-cmake-modules, plasma-framework, kwindowsystem, redshift, fetchFromGitHub, }:
 
 let version = "1.0.18"; in
 
 stdenv.mkDerivation {
-  name = "redshift-plasma-applet-${version}";
+  pname = "redshift-plasma-applet";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "kotelnik";
@@ -34,9 +35,11 @@ stdenv.mkDerivation {
     kwindowsystem
   ];
 
-  meta = with stdenv.lib; {
+  dontWrapQtApps = true;
+
+  meta = with lib; {
     description = "KDE Plasma 5 widget for controlling Redshift";
-    homepage = https://github.com/kotelnik/plasma-applet-redshift-control;
+    homepage = "https://github.com/kotelnik/plasma-applet-redshift-control";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ benley zraexy ];

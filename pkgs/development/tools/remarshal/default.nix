@@ -1,22 +1,22 @@
-{ stdenv, python3Packages }:
+{ lib, python3Packages }:
 
 python3Packages.buildPythonApplication rec {
   pname = "remarshal";
-  version = "0.9.1";
+  version = "0.14.0";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "564ffe9cbde85bd28a9c184b90c764abd2003abd6101a30802262198b5c7fc40";
+    sha256 = "16425aa1575a271dd3705d812b06276eeedc3ac557e7fd28e06822ad14cd0667";
   };
 
   propagatedBuildInputs = with python3Packages; [
-    dateutil pytoml pyyaml
+    pyyaml cbor2 dateutil tomlkit u-msgpack-python
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Convert between TOML, YAML and JSON";
     license = licenses.mit;
-    homepage = https://github.com/dbohdan/remarshal;
+    homepage = "https://github.com/dbohdan/remarshal";
     maintainers = with maintainers; [ offline ];
   };
 }

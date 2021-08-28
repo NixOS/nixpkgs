@@ -1,29 +1,51 @@
-{ stdenv
-, buildPythonPackage
-, fetchPypi
-, isPy27
+{ lib , buildPythonPackage, fetchFromGitHub, isPy27
 , falcon
 , requests
+, pytestCheckHook
+, marshmallow
+, mock
+, numpy
 }:
 
 buildPythonPackage rec {
   pname = "hug";
-  version = "2.4.8";
+  version = "2.6.0";
   disabled = isPy27;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "2b33904660d07df3a6a998a52d1a36e2855e56dc9ffc4eddb2158e32d1ce7621";
+  src = fetchFromGitHub {
+    owner = "hugapi";
+    repo = pname;
+    rev = version;
+    sha256 = "05rsv16g7ph100p8kl4l2jba0y4wcpp3xblc02mfp67zp1279vaq";
   };
 
   propagatedBuildInputs = [ falcon requests ];
 
-  # tests are not shipped in the tarball
-  doCheck = false;
+  checkInputs = [ mock marshmallow pytestCheckHook numpy ];
 
-  meta = with stdenv.lib; {
+  postPatch = ''
+    substituteInPlace setup.py --replace '"pytest-runner"' ""
+  '';
+
+  preCheck = ''
+    # some tests need the `hug` CLI on the PATH
+    export PATH=$out/bin:$PATH
+  '';
+
+  disabledTests = [
+    # some tests attempt network access
+    "test_datagram_request"
+    "test_request"
+    # these tests use an unstable test dependency (https://github.com/hugapi/hug/issues/859)
+    "test_marshmallow_custom_context"
+    "test_marshmallow_schema"
+    "test_transform"
+    "test_validate_route_args_negative_case"
+  ];
+
+  meta = with lib; {
     description = "A Python framework that makes developing APIs as simple as possible, but no simpler";
-    homepage = https://github.com/timothycrosley/hug;
+    homepage = "https://github.com/hugapi/hug";
     license = licenses.mit;
   };
 

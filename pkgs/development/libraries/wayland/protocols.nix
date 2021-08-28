@@ -1,26 +1,29 @@
-{ lib, stdenv, fetchurl, pkgconfig
-, wayland
-}:
+{ lib, stdenv, fetchurl, wayland-scanner }:
 
 stdenv.mkDerivation rec {
-  name = "wayland-protocols-${version}";
-  version = "1.17";
+  pname = "wayland-protocols";
+  version = "1.21";
 
   src = fetchurl {
-    url = "https://wayland.freedesktop.org/releases/${name}.tar.xz";
-    sha256 = "0bw1sqixqk2a7mqw630cs4dlgcp5yib90vyikzm3lr05jz7ij4yz";
+    url = "https://wayland.freedesktop.org/releases/${pname}-${version}.tar.xz";
+    sha256 = "1rfdlkzz67qsb955zqb8jbw3m22pl6ppvrvfq8bqiqcb5n24b6dr";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-
-  buildInputs = [ wayland ];
+  nativeBuildInputs = [ wayland-scanner ];
 
   meta = {
     description = "Wayland protocol extensions";
-    homepage    = https://wayland.freedesktop.org/;
-    license     = lib.licenses.mit;
+    longDescription = ''
+      wayland-protocols contains Wayland protocols that add functionality not
+      available in the Wayland core protocol. Such protocols either add
+      completely new functionality, or extend the functionality of some other
+      protocol either in Wayland core, or some other protocol in
+      wayland-protocols.
+    '';
+    homepage    = "https://gitlab.freedesktop.org/wayland/wayland-protocols";
+    license     = lib.licenses.mit; # Expat version
     platforms   = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ primeos ];
   };
 
   passthru.version = version;

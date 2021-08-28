@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, isPy27
 , pyutilib
 , appdirs
 , ply
@@ -11,6 +12,7 @@
 buildPythonPackage rec {
   pname = "pyomo";
   version = "5.6.1";
+  disabled = isPy27; # unable to import pyutilib.th
 
   src = fetchPypi {
     pname = "Pyomo";
@@ -34,7 +36,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Pyomo: Python Optimization Modeling Objects";
-    homepage = http://pyomo.org;
+    homepage = "http://pyomo.org";
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];
   };

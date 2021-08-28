@@ -10,7 +10,6 @@
 stdenv.mkDerivation rec {
   version = "0.9.1";
   pname = "zn_poly";
-  name = "${pname}-${version}";
 
   # sage has picked up the maintenance (bug fixes and building, not development)
   # from the original, now unmaintained project which can be found at
@@ -32,9 +31,9 @@ stdenv.mkDerivation rec {
 
   # name of library file ("libzn_poly.so")
   libbasename = "libzn_poly";
-  libext = "${stdenv.targetPlatform.extensions.sharedLibrary}";
+  libext = stdenv.targetPlatform.extensions.sharedLibrary;
 
-  makeFlags = [ "CC=cc" ];
+  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   # Tuning (either autotuning or with hand-written paramters) is possible
   # but not implemented here.
@@ -66,10 +65,10 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with lib; {
-    homepage = http://web.maths.unsw.edu.au/~davidharvey/code/zn_poly/;
+    homepage = "http://web.maths.unsw.edu.au/~davidharvey/code/zn_poly/";
     description = "Polynomial arithmetic over Z/nZ";
     license = with licenses; [ gpl3 ];
-    maintainers = with maintainers; [ timokau ];
+    maintainers = teams.sage.members;
     platforms = platforms.unix;
   };
 }

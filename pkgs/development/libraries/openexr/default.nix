@@ -1,54 +1,39 @@
-{ lib, stdenv, buildPackages, fetchurl, autoconf, automake, libtool, pkgconfig, zlib, ilmbase, }:
-
-let
-  # Doesn't really do anything when not crosscompiling
-  emulator = stdenv.hostPlatform.emulator buildPackages;
-in
+{ lib
+, stdenv
+, fetchFromGitHub
+, zlib
+, ilmbase
+, fetchpatch
+, cmake
+}:
 
 stdenv.mkDerivation rec {
-  name = "openexr-${version}";
-  version = lib.getVersion ilmbase;
-
-  src = fetchurl {
-    url = "https://github.com/openexr/openexr/releases/download/v${version}/${name}.tar.gz";
-    sha256 = "19jywbs9qjvsbkvlvzayzi81s976k53wg53vw4xj66lcgylb6v7x";
-  };
-
-  patches = [
-    ./bootstrap.patch
-  ];
+  pname = "openexr";
+  version = "2.5.7";
 
   outputs = [ "bin" "dev" "out" "doc" ];
 
-  # Needed because there are some generated sources. Solution: just run them under QEMU.
-  postPatch = ''
-    for file in b44ExpLogTable dwaLookups
-    do
-      # Ecape for both sh and Automake
-      emu=${lib.escapeShellArg (lib.replaceStrings ["$"] ["$$"] emulator)}
-      before="./$file > $file.h"
-      after="$emu $before"
-      substituteInPlace IlmImf/Makefile.am \
-        --replace "$before" "$after"
-    done
+  src = fetchFromGitHub {
+    owner = "AcademySoftwareFoundation";
+    repo = "openexr";
+    rev = "v${version}";
+    sha256 = "1vja0rbilcd1wn184w8nbcmck00n7bfwlddwiaxw8dhj64nx4468";
+  };
 
-    # Make sure the patch succeeded
-    [[ $(grep "$emu" IlmImf/Makefile.am | wc -l) = 2 ]]
-  '';
+  patches = [
+    # Fix pkg-config paths
+    (fetchpatch {
+      url = "https://github.com/AcademySoftwareFoundation/openexr/commit/2f19a01923885fda75ec9d19332de080ec7102bd.patch";
+      sha256 = "1yxmrdzq1x1911wdzwnzr29jmg2r4wd4yx3vhjn0y5dpny0ri5y5";
+    })
+  ];
 
-  preConfigure = ''
-    patchShebangs ./bootstrap
-    ./bootstrap
-  '';
-
-  nativeBuildInputs = [ pkgconfig autoconf automake libtool ];
+  nativeBuildInputs = [ cmake ];
   propagatedBuildInputs = [ ilmbase zlib ];
 
-  enableParallelBuilding = true;
-  doCheck = false; # fails 1 of 1 tests
-
-  meta = with stdenv.lib; {
-    homepage = http://www.openexr.com/;
+  meta = with lib; {
+    description = "A high dynamic-range (HDR) image file format";
+    homepage = "https://www.openexr.com/";
     license = licenses.bsd3;
     platforms = platforms.all;
   };

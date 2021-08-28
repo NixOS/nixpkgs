@@ -8,8 +8,8 @@ systems='linux linux32 osx osx32
 
 if [ $# -eq 0 ]; then
     versions="$(curl http://www.bay12games.com/dwarves/ \
-		   | grep 'DOWNLOAD DWARF FORTRESS' \
-		   | sed 's/.*DOWNLOAD DWARF FORTRESS \([0-9.]*\) .*/\1/')"
+		   | grep 'DWARF FORTRESS CLASSIC ' \
+		   | sed 's/.*DWARF FORTRESS CLASSIC \([0-9.]*\) .*/\1/')"
 else
     versions="$@"
 fi

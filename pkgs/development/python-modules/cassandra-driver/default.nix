@@ -1,70 +1,91 @@
 { stdenv
-, libev
+, lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
+, pythonOlder
 , cython
-, futures
-, six
-, python
-, scales
 , eventlet
-, twisted
+, futures ? null
+, iana-etc
+, geomet
+, libev
 , mock
-, gevent
 , nose
+, pytestCheckHook
 , pytz
 , pyyaml
+, scales
+, six
 , sure
-, pythonOlder
+, gremlinpython
+, gevent
+, twisted
+, libredirect
 }:
 
 buildPythonPackage rec {
   pname = "cassandra-driver";
-  version = "3.17.1";
+  version = "3.25.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1y6pnm7vzg9ip1nbly3i8mmwqmcy8g38ix74vdzvvaxwxil9bmvi";
+  # pypi tarball doesn't include tests
+  src = fetchFromGitHub {
+    owner = "datastax";
+    repo = "python-driver";
+    rev = version;
+    sha256 = "1dn7iiavsrhh6i9hcyw0mk8j95r5ym0gbrvdca998hx2rnz5ark6";
   };
 
-  buildInputs = [
-    libev
-  ];
+  nativeBuildInputs = [ cython ];
+  buildInputs = [ libev ];
+  propagatedBuildInputs = [ six geomet ]
+    ++ lib.optionals (pythonOlder "3.4") [ futures ];
 
-  nativeBuildInputs = [
-    # NOTE: next version will work with cython 0.29
-    # Requires 'Cython!=0.25,<0.29,>=0.20'
-    (cython.overridePythonAttrs(old: rec {
-      pname = "Cython";
-      version = "0.28.3";
-      src = fetchPypi {
-        inherit pname version;
-        sha256 = "1aae6d6e9858888144cea147eb5e677830f45faaff3d305d77378c3cba55f526";
-      };
-    }))
-  ];
-
-  propagatedBuildInputs = [ six ]
-    ++ stdenv.lib.optionals (pythonOlder "3.4") [ futures ];
-
-  postPatch = ''
-    sed -i "s/<=1.0.1//" setup.py
+  # Make /etc/protocols accessible to allow socket.getprotobyname('tcp') in sandbox,
+  # also /etc/resolv.conf is referenced by some tests
+  preCheck = (lib.optionalString stdenv.isLinux ''
+    echo "nameserver 127.0.0.1" > resolv.conf
+    export NIX_REDIRECTS=/etc/protocols=${iana-etc}/etc/protocols:/etc/resolv.conf=$(realpath resolv.conf)
+    export LD_PRELOAD=${libredirect}/lib/libredirect.so
+  '') + ''
+    # increase tolerance for time-based test
+    substituteInPlace tests/unit/io/utils.py --replace 'delta=.15' 'delta=.3'
+  '';
+  postCheck = ''
+    unset NIX_REDIRECTS LD_PRELOAD
   '';
 
-  checkPhase = ''
-    ${python.interpreter} setup.py gevent_nosetests
-    ${python.interpreter} setup.py eventlet_nosetests
-  '';
+  checkInputs = [
+    pytestCheckHook
+    eventlet
+    mock
+    nose
+    pytz
+    pyyaml
+    sure
+    scales
+    gremlinpython
+    gevent
+    twisted
+  ];
 
-  checkInputs = [ scales eventlet twisted mock gevent nose pytz pyyaml sure ];
+  pytestFlagsArray = [
+    "tests/unit"
+  ];
+  disabledTestPaths = [
+    # requires puresasl
+    "tests/unit/advanced/test_auth.py"
+  ];
+  disabledTests = [
+    # doesn't seem to be intended to be run directly
+    "_PoolTests"
+    # attempts to make connection to localhost
+    "test_connection_initialization"
+  ];
 
-  # Could not get tests running
-  doCheck = false;
-
-  meta = with stdenv.lib; {
-    homepage = http://datastax.github.io/python-driver/;
+  meta = with lib; {
     description = "A Python client driver for Apache Cassandra";
+    homepage = "http://datastax.github.io/python-driver";
     license = licenses.asl20;
+    maintainers = with maintainers; [ turion ris ];
   };
-
 }

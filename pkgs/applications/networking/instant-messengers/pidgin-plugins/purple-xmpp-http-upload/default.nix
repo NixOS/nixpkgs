@@ -1,6 +1,6 @@
-{ stdenv, fetchgit, pidgin, glib, libxml2 }:
+{ lib, stdenv, fetchgit, pidgin, glib, libxml2 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "purple-xmpp-upload-2017-12-31";
 
   src = fetchgit {
@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
     install -Dm644 -t $out/lib/purple-2 jabber_http_file_upload.so
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/Junker/purple-xmpp-http-upload;
+  meta = with lib; {
+    homepage = "https://github.com/Junker/purple-xmpp-http-upload";
     description = "HTTP File Upload plugin for libpurple (XMPP Protocol XEP-0363)";
     license = licenses.gpl3;
     platforms = platforms.linux;

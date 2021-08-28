@@ -1,4 +1,4 @@
-{stdenv, buildOcaml, fetchurl, type_conv}:
+{lib, buildOcaml, fetchurl, type_conv}:
 
 buildOcaml rec {
   name = "comparelib";
@@ -13,8 +13,8 @@ buildOcaml rec {
 
   propagatedBuildInputs = [ type_conv ];
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/janestreet/comparelib;
+  meta = with lib; {
+    homepage = "https://github.com/janestreet/comparelib";
     description = "Syntax extension for deriving \"compare\" functions automatically";
     license = licenses.asl20;
     maintainers = [ maintainers.ericbmerritt ];

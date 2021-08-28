@@ -1,34 +1,58 @@
-{ stdenv, fetchurl, pkgconfig, udev, glib, gobject-introspection, gnome3 }:
+{ lib, stdenv
+, fetchurl
+, pkg-config
+, meson
+, ninja
+, udev
+, glib
+, gobject-introspection
+, gnome
+, vala
+}:
 
-let
+stdenv.mkDerivation rec {
   pname = "libgudev";
-in stdenv.mkDerivation rec {
-  name = "libgudev-${version}";
-  version = "232";
+  version = "236";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "ee4cb2b9c573cdf354f6ed744f01b111d4b5bed3503ffa956cefff50489c7860";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "094mgjmwgsgqrr1i0vd20ynvlkihvs3vgbmpbrhswjsrdp86j0z5";
   };
 
-  nativeBuildInputs = [ pkgconfig gobject-introspection ];
-  buildInputs = [ udev glib ];
+  nativeBuildInputs = [
+    pkg-config
+    gobject-introspection
+    meson
+    ninja
+    vala
+  ];
 
-  # There's a dependency cycle with umockdev and the tests fail to LD_PRELOAD anyway.
-  configureFlags = [ "--disable-umockdev" ];
+  buildInputs = [
+    udev
+    glib
+  ];
+
+  mesonFlags = [
+    # There's a dependency cycle with umockdev and the tests fail to LD_PRELOAD anyway
+    "-Dtests=disabled"
+  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    "-Dintrospection=disabled"
+    "-Dvapi=disabled"
+  ];
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "none";
     };
   };
 
-  meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Projects/libgudev;
-    maintainers = [ maintainers.eelco ] ++ gnome3.maintainers;
+  meta = with lib; {
+    description = "A library that provides GObject bindings for libudev";
+    homepage = "https://wiki.gnome.org/Projects/libgudev";
+    maintainers = [ maintainers.eelco ] ++ teams.gnome.members;
     platforms = platforms.linux;
     license = licenses.lgpl2Plus;
   };

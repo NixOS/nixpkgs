@@ -1,7 +1,7 @@
-{ stdenv, fetchzip, autoreconfHook }:
+{ lib, stdenv, fetchzip, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "tio-${version}";
+  pname = "tio";
   version = "1.32";
 
   src = fetchzip {
@@ -11,11 +11,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Serial console TTY";
-    homepage = https://tio.github.io/;
+    homepage = "https://tio.github.io/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ yegortimoshenko ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

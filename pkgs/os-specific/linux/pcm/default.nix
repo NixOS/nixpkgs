@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  version = "201710";
-  name = "pcm-${version}";
+  version = "202101";
+  pname = "pcm";
 
   src = fetchFromGitHub {
     owner = "opcm";
     repo = "pcm";
-    rev = "${version}";
-    sha256 = "02rq8739zwwbfrhagvcgf6qpmnswxl9b0qsld26rg6zp91v2npbj";
+    rev = version;
+    sha256 = "sha256-xiC9XDuFcAzD2lVuzBWUvHy1Z1shEXM2KPFabKvgh1Y=";
   };
 
   installPhase = ''
@@ -16,9 +16,9 @@ stdenv.mkDerivation rec {
     cp pcm*.x $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Processor counter monitor";
-    homepage = https://www.intel.com/software/pcm;
+    homepage = "https://www.intel.com/software/pcm";
     license = licenses.bsd3;
     maintainers = with maintainers; [ roosemberth ];
     platforms = [ "x86_64-linux" ];

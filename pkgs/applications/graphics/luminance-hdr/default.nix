@@ -1,28 +1,31 @@
-{ stdenv, cmake, fetchurl, pkgconfig, boost, exiv2, fftwFloat, gsl
+{ lib, mkDerivation, cmake, fetchFromGitHub, pkg-config
+, boost, exiv2, fftwFloat, gsl
 , ilmbase, lcms2, libraw, libtiff, openexr
-, qtbase, qtdeclarative, qttools, qtwebengine
+, qtbase, qtdeclarative, qttools, qtwebengine, eigen
 }:
 
-stdenv.mkDerivation rec {
-  name = "luminance-hdr-2.5.1";
+mkDerivation rec {
+  pname = "luminance-hdr";
+  version = "2.6.0";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/qtpfsgui/${name}.tar.bz2";
-    sha256 = "15hnyk9yjkkc97dmnrg2ipfgwqxprlcyv2kyvbls4d54zc56x658";
+  src = fetchFromGitHub {
+    owner = "LuminanceHDR";
+    repo = "LuminanceHDR";
+    rev = "v.${version}";
+    sha256 = "1izmgjjp8mgyxv57sjjr05z7g7059ykb5wchlcn4wrnnb6aslnvn";
   };
 
   NIX_CFLAGS_COMPILE = "-I${ilmbase.dev}/include/OpenEXR";
 
-  buildInputs =
-    [
-      qtbase qtdeclarative qttools qtwebengine
-      boost exiv2 fftwFloat gsl ilmbase lcms2 libraw libtiff openexr
-    ];
+  buildInputs = [
+    qtbase qtdeclarative qttools qtwebengine eigen
+    boost exiv2 fftwFloat gsl ilmbase lcms2 libraw libtiff openexr
+  ];
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
-  meta = with stdenv.lib; {
-    homepage = http://qtpfsgui.sourceforge.net/;
+  meta = with lib; {
+    homepage = "http://qtpfsgui.sourceforge.net/";
     description = "A complete open source solution for HDR photography";
     license = licenses.gpl2;
     platforms = platforms.linux;

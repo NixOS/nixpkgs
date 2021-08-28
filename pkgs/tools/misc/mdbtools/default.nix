@@ -1,29 +1,34 @@
-{ stdenv, fetchFromGitHub, glib, readline
-, bison, flex, pkgconfig, autoreconfHook
-, txt2man, which }:
+{ stdenv, lib, fetchFromGitHub, glib, readline
+, bison, flex, pkg-config, autoreconfHook, libxslt, makeWrapper
+, txt2man, which
+}:
 
-let version = "0.7.1";
-in stdenv.mkDerivation {
-  name = "mdbtools-${version}";
+stdenv.mkDerivation rec {
+  pname = "mdbtools";
+  version = "0.9.3";
 
   src = fetchFromGitHub {
-    owner = "brianb";
+    owner = "mdbtools";
     repo = "mdbtools";
-    rev = version;
-    sha256 = "0gwcpp9y09xhs21g7my2fs8ncb8i6ahlyixcx8jd3q97jbzj441l";
+    rev = "v${version}";
+    sha256 = "11cv7hh8j8akpgm1a6pp7im6iacpgx6wzcg9n9rmb41j0fgxamdf";
   };
 
-  nativeBuildInputs = [ pkgconfig bison flex autoreconfHook txt2man which ];
+  configureFlags = [ "--disable-scrollkeeper" ];
+
+  nativeBuildInputs = [
+    pkg-config bison flex autoreconfHook txt2man which
+  ];
+
   buildInputs = [ glib readline ];
 
-  preConfigure = ''
-    sed -e 's@static \(GHashTable [*]mdb_backends;\)@\1@' -i src/libmdb/backend.c
-  '';
+  enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = ".mdb (MS Access) format tools";
-    homepage = http://mdbtools.sourceforge.net;
-    platforms = platforms.unix;
     license = with licenses; [ gpl2 lgpl2 ];
+    maintainers = with maintainers; [ ];
+    platforms = platforms.unix;
+    inherit (src.meta) homepage;
   };
 }

@@ -1,16 +1,16 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , bison, readline }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "2.2.2";
      # The current version of LiE is 2.2.2, which is more or less unchanged
      # since about the year 2000. Minor bugfixes do get applied now and then.
-  name = "lie-${version}";
+  pname = "lie";
 
   meta = {
     description = "A Computer algebra package for Lie group computations";
-    homepage = http://wwwmathlabo.univ-poitiers.fr/~maavl/LiE/;
-    license = stdenv.lib.licenses.lgpl3; # see the website
+    homepage = "http://wwwmathlabo.univ-poitiers.fr/~maavl/LiE/";
+    license = lib.licenses.lgpl3; # see the website
 
     longDescription = ''
       LiE is a computer algebra system that is specialised in computations
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
       characteristics, we refer to the following sources of information.
     ''; # take from the website
 
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
     maintainers = [ ]; # this package is probably not going to change anyway
   };
 

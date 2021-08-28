@@ -1,19 +1,19 @@
-{ stdenv, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "ijson";
-  version = "2.3";
+  version = "3.1.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0x7l9k2dvxzd5mjgiq15nl9b0sxcqy1cqaz744bjwkz4z5mrypzg";
+    sha256 = "1d1003ae3c6115ec9b587d29dd136860a81a23c7626b682e2b5b12c9fd30e4ea";
   };
 
   doCheck = false; # something about yajl
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Iterative JSON parser with a standard Python iterator interface";
-    homepage = "https://github.com/isagalaev/ijson";
+    homepage = "https://github.com/ICRAR/ijson";
     license = licenses.bsd3;
     maintainers = with maintainers; [ rvl ];
   };

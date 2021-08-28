@@ -1,44 +1,39 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , cmake
-, pkgconfig
+, pkg-config
 , libffi
-, llvm_35
+, llvm_6
 , doCheck ? false
 , perl
 }:
 
-let version = "20170519";
-
-in stdenv.mkDerivation {
-  name = "dale-${version}";
+stdenv.mkDerivation {
+  pname = "dale";
+  version = "20181024";
 
   src = fetchFromGitHub {
     owner = "tomhrr";
     repo = "dale";
-    rev = "39e16d8e89fa070de65a673d4462e783d530f95a";
-    sha256 = "0dc5cjahv7lzlp92hidlh83rwgrpgb6xz2pnba2pm5xrv2pnsskl";
+    rev = "f5db8b486f4e7c423fc25941a8315f1209bc0e54";
+    sha256 = "0v4ajrzrqvf279kd7wsd9flrpsav57lzxlwwimk9vnfwh7xpzf9v";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ cmake libffi llvm_35 ]
-             ++ stdenv.lib.optional doCheck perl;
-
-  patches = [ ./link-llvm.patch ];
+  nativeBuildInputs = [ cmake pkg-config llvm_6.dev ];
+  buildInputs = [ libffi llvm_6 ];
 
   inherit doCheck;
+  checkInputs = [ perl ];
 
   checkTarget = "tests";
 
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Lisp-flavoured C";
     longDescription = ''
       Dale is a system (no GC) programming language that uses
       S-expressions for syntax and supports syntactic macros.
     '';
-    homepage = https://github.com/tomhrr/dale;
+    homepage = "https://github.com/tomhrr/dale";
     license = licenses.bsd3;
     maintainers = with maintainers; [ amiloradovsky ];
     platforms = with platforms; [ "i686-linux" "x86_64-linux" ];

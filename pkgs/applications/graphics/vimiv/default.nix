@@ -1,8 +1,8 @@
 { lib, python3Packages, fetchFromGitHub, imagemagick, librsvg, gtk3, jhead
-, hicolor-icon-theme, gnome3
+, gnome
 
 # Test requirements
-, dbus, xvfb_run, xdotool
+, dbus, xvfb-run, xdotool
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -37,8 +37,8 @@ python3Packages.buildPythonApplication rec {
       vimiv/imageactions.py
   '';
 
-  checkInputs = [ python3Packages.nose dbus.daemon xvfb_run xdotool ];
-  buildInputs = [ hicolor-icon-theme gnome3.adwaita-icon-theme librsvg ];
+  checkInputs = [ python3Packages.nose dbus.daemon xvfb-run xdotool ];
+  buildInputs = [ gnome.adwaita-icon-theme librsvg ];
   propagatedBuildInputs = with python3Packages; [ pillow pygobject3 gtk3 ];
 
   makeWrapperArgs = [
@@ -64,7 +64,7 @@ python3Packages.buildPythonApplication rec {
   postInstall = "make DESTDIR=\"$out\" install";
 
   meta = {
-    homepage = https://github.com/karlch/vimiv;
+    homepage = "https://github.com/karlch/vimiv";
     description = "An image viewer with Vim-like keybindings";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;

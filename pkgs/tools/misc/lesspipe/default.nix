@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, substituteAll, perl, file, ncurses }:
+{ lib, stdenv, fetchFromGitHub, substituteAll, perl, file, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "lesspipe-${version}";
-  version = "1.82";
+  pname = "lesspipe";
+  version = "1.85";
 
   buildInputs = [ perl ];
   preConfigure = "patchShebangs .";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "wofr06";
     repo = "lesspipe";
     rev = version;
-    sha256 = "0vb7bpap8vy003ha10hc7hxl17y47sgdnrjpihgqxkn8k0bfqbbq";
+    sha256 = "1v1jdkdq1phc93gdr6mjlk98gipxrkkq4bj8kks0kfdvjgdwkdaa";
   };
 
   patches = [
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A preprocessor for less";
     longDescription = ''
       Usually lesspipe.sh is called as an input filter to less. With the help
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
       plist and archive formats, perl storable data and gpg encrypted files.
       This does require additional helper programs being installed.
     '';
-    homepage = https://github.com/wofr06/lesspipe;
+    homepage = "https://github.com/wofr06/lesspipe";
     platforms = platforms.all;
     license = licenses.gpl2;
     maintainers = [ maintainers.martijnvermaat ];

@@ -1,45 +1,37 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , isPy3k
 , fetchPypi
-, html5lib
 , wcwidth
-, pytest
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "ftfy";
+  version = "5.9";
 
-  version = "5.5.1";
-  # ftfy v5 only supports python3. Since at the moment the only
-  # packages that use ftfy are spacy and textacy which both support
-  # python 2 and 3, they have pinned ftfy to the v4 branch.
-  # I propose to stick to v4 until another package requires v5.
-  # At that point we can make a ftfy_v4 package.
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1ci6xrj4g01a97nymxpv9nj820nlmgzc4ybaz9k46i6bnxzpax7s";
+    sha256 = "8c4fb2863c0b82eae2ab3cf353d9ade268dfbde863d322f78d6a9fd5cefb31e9";
   };
 
   propagatedBuildInputs = [
-    html5lib
     wcwidth
   ];
 
   checkInputs = [
-    pytest
+    pytestCheckHook
   ];
 
-  # We suffix PATH like this because the tests want the ftfy executable
-  checkPhase = ''
-    PATH=$out/bin:$PATH pytest
+  preCheck = ''
+    export PATH=$out/bin:$PATH
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Given Unicode text, make its representation consistent and possibly less broken";
-    homepage = https://github.com/LuminosoInsight/python-ftfy;
+    homepage = "https://github.com/LuminosoInsight/python-ftfy";
     license = licenses.mit;
     maintainers = with maintainers; [ sdll aborsu ];
   };

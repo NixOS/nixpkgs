@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, python, fetchPypi}:
+{ lib, buildPythonPackage, python, fetchPypi}:
 
 buildPythonPackage rec {
   pname = "fastimport";
@@ -13,8 +13,8 @@ buildPythonPackage rec {
     ${python.interpreter} -m unittest discover
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://launchpad.net/python-fastimport;
+  meta = with lib; {
+    homepage = "https://launchpad.net/python-fastimport";
     description = "VCS fastimport/fastexport parser";
     maintainers = with maintainers; [ koral ];
     license = licenses.gpl2Plus;

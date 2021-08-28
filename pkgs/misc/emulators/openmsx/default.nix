@@ -1,32 +1,31 @@
-{ stdenv, fetchFromGitHub, pkgconfig
+{ lib, stdenv, fetchFromGitHub, pkg-config
 , python
 , alsaLib, glew, libGL, libpng
 , libogg, libtheora, libvorbis
-, SDL, SDL_image, SDL_ttf
+, SDL2, SDL2_image, SDL2_ttf
 , freetype, tcl, zlib
 }:
 
 stdenv.mkDerivation rec {
-
-  name = "openmsx-${version}";
-  version = "git-2017-11-02";
+  pname = "openmsx";
+  version = "16.0";
 
   src = fetchFromGitHub {
     owner = "openMSX";
     repo = "openMSX";
-    rev = "eeb74206ae347a3b17e9b99f91f2b4682c5db22c";
-    sha256 = "170amj7k6wjhwx6psbplqljvckvhxxbv3aw72jrdxl1fb8zlnq3s";
+    rev = "RELEASE_${builtins.replaceStrings ["."] ["_"] version}";
+    sha256 = "04sphn9ph378r0qv881riv90cgz58650jcqcwmi1mv6gbcb3img5";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ pkgconfig python ];
+  nativeBuildInputs = [ pkg-config python ];
 
   buildInputs = [ alsaLib glew libGL libpng
     libogg libtheora libvorbis freetype
-    SDL SDL_image SDL_ttf tcl zlib ];
+    SDL2 SDL2_image SDL2_ttf tcl zlib ];
 
   postPatch = ''
-    cp ${./custom-nixos.mk} build/custom.mk
+    cp ${./custom-nix.mk} build/custom.mk
   '';
 
   dontAddPrefix = true;
@@ -35,14 +34,15 @@ stdenv.mkDerivation rec {
   # for providing support to Nixpkgs :)
   TCL_CONFIG="${tcl}/lib/";
 
-  meta = with stdenv.lib; {
-    description = "A MSX emulator";
+  meta = with lib;{
+    description = "The MSX emulator that aims for perfection";
     longDescription = ''
       OpenMSX is an emulator for the MSX home computer system. Its goal is
       to emulate all aspects of the MSX with 100% accuracy.
     '';
-    homepage = https://openmsx.org;
+    homepage = "https://openmsx.org";
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.unix;
+    license = with licenses; [ bsd2 boost gpl2 ];
   };
 }

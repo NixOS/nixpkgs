@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, libtool }:
+{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool }:
 
 stdenv.mkDerivation rec {
-  name = "gumbo-${version}";
+  pname = "gumbo";
   version = "0.10.1";
 
   src = fetchFromGitHub {
@@ -15,11 +15,11 @@ stdenv.mkDerivation rec {
 
   preConfigure = "./autogen.sh";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "C99 HTML parsing algorithm";
-    homepage = https://github.com/google/gumbo-parser;
+    homepage = "https://github.com/google/gumbo-parser";
     maintainers = [ maintainers.nico202 ];
-    platforms = platforms.linux;
+    platforms = with platforms; linux ++ darwin;
     license = licenses.asl20;
   };
 }

@@ -1,22 +1,23 @@
-{ stdenv, fetchFromGitHub, cmake, flex, bison }:
+{ lib, stdenv, fetchFromGitHub, cmake, flex, bison }:
 let
-  version = "2.2.3";
+  version = "2.5.5";
 in
 stdenv.mkDerivation {
-  name = "minizinc-${version}";
+  pname = "minizinc";
+  inherit version;
 
-  buildInputs = [ cmake flex bison ];
+  nativeBuildInputs = [ cmake flex bison ];
 
   src = fetchFromGitHub {
     owner = "MiniZinc";
     repo = "libminizinc";
-    rev = "3d66971a0cad6edbe796f4dd940229d38e5bfe3d"; # tags on the repo are disappearing: See https://github.com/MiniZinc/libminizinc/issues/257
-    sha256 = "1q31y9131aj2lsm34srm8i1s0271qcaaknzvym3r8awynm14saq5";
+    rev = version;
+    sha256 = "sha256-9z2E6KqOys9UUXlXWB4eDhg34kS3PhUB1Dd1F6iGYoE=";
   };
 
-  meta = with stdenv.lib; {
-    homepage = https://www.minizinc.org/;
-    description = "MiniZinc is a medium-level constraint modelling language.";
+  meta = with lib; {
+    homepage = "https://www.minizinc.org/";
+    description = "A medium-level constraint modelling language";
 
     longDescription = ''
       MiniZinc is a medium-level constraint modelling
@@ -27,7 +28,7 @@ stdenv.mkDerivation {
     '';
 
     license = licenses.mpl20;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = [ maintainers.sheenobu ];
   };
 }

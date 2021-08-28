@@ -1,4 +1,4 @@
-{ stdenv, cmake, fetchFromGitHub, zlib, libxml2, libpng
+{ lib, stdenv, cmake, fetchFromGitHub, zlib, libxml2, libpng
 , CoreServices, CoreGraphics, ImageIO, ninja }:
 
 let
@@ -15,8 +15,8 @@ let
     rev    = "c894b9e59f02203dbe4e2be657572cf88c4230c3";
     sha256 = "0wasql7ph5g473zxhc2z47z3pjp42q0dsn4gpijwzbxawid71b4w";
   };
-in stdenv.mkDerivation rec {
-  name    = "xcbuild-${version}";
+in stdenv.mkDerivation {
+  pname = "xcbuild";
 
   # Once a version is released that includes
   # https://github.com/facebook/xcbuild/commit/183c087a6484ceaae860c6f7300caf50aea0d710,
@@ -36,30 +36,35 @@ in stdenv.mkDerivation rec {
     cp -r --no-preserve=all ${linenoise} ThirdParty/linenoise
   '';
 
-  # Avoid a glibc >= 2.25 deprecation warning that gets fatal via -Werror.
-  postPatch = stdenv.lib.optionalString (!stdenv.isDarwin) ''
+  postPatch = lib.optionalString (!stdenv.isDarwin) ''
+    # Avoid a glibc >= 2.25 deprecation warning that gets fatal via -Werror.
     sed 1i'#include <sys/sysmacros.h>' \
       -i Libraries/xcassets/Headers/xcassets/Slot/SystemVersion.h
+  '' + lib.optionalString stdenv.isDarwin ''
+    # Apple Open Sourced LZFSE, but not libcompression, and it isn't
+    # part of an impure framework we can add
+    substituteInPlace Libraries/libcar/Sources/Rendition.cpp \
+      --replace "#if HAVE_LIBCOMPRESSION" "#if 0"
   '';
-
-  enableParallelBuilding = true;
 
   # TODO: instruct cmake not to put it in /usr, rather than cleaning up
   postInstall = ''
     mv $out/usr/* $out
     rmdir $out/usr
+    cp liblinenoise.* $out/lib/
   '';
 
   NIX_CFLAGS_COMPILE = "-Wno-error";
 
   cmakeFlags = [ "-GNinja" ];
 
-  buildInputs = [ cmake zlib libxml2 libpng ninja ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ CoreServices CoreGraphics ImageIO ];
+  nativeBuildInputs = [ cmake ninja ];
+  buildInputs = [ zlib libxml2 libpng ]
+    ++ lib.optionals stdenv.isDarwin [ CoreServices CoreGraphics ImageIO ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Xcode-compatible build tool";
-    homepage = https://github.com/facebook/xcbuild;
+    homepage = "https://github.com/facebook/xcbuild";
     platforms = platforms.unix;
     maintainers = with maintainers; [ copumpkin matthewbauer ];
     license = with licenses; [ bsd2 bsd3 ];

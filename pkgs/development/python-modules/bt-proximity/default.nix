@@ -1,9 +1,9 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub
+{ lib, buildPythonPackage, fetchFromGitHub
 , pybluez }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "bt-proximity";
-  version = "0.0.20180217";
+  version = "0.2";
 
   # pypi only has a pre-compiled wheel and no sources
   src = fetchFromGitHub {
@@ -18,9 +18,11 @@ buildPythonPackage rec {
   # there are no tests
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  pythonImportsCheck = [ "bt_proximity" ];
+
+  meta = with lib; {
     description = "Bluetooth Proximity Detection using Python";
-    homepage = https://github.com/FrederikBolding/bluetooth-proximity;
+    homepage = "https://github.com/FrederikBolding/bluetooth-proximity";
     maintainers = with maintainers; [ peterhoeg ];
     license = licenses.asl20;
   };

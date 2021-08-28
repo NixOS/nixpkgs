@@ -1,20 +1,47 @@
-{ stdenv, fetchurl, pkgconfig, qmake, qtsvg }:
+{ lib, mkDerivation, fetchurl, pkg-config, qmake, qtscript, qtsvg }:
 
-stdenv.mkDerivation rec {
-  name = "vym-${version}";
-  version = "2.6.11";
+mkDerivation rec {
+  pname = "vym";
+  version = "2.7.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/vym/2.6.0/${name}.tar.bz2";
-    sha256 = "1yznlb47jahd662a2blgh1ccwpl5dp5rjz9chsxjzhj3vbkzx3nl";
+    url = "mirror://sourceforge/project/vym/${version}/${pname}-${version}.tar.bz2";
+    sha256 = "0lyf0m4y5kn5s47z4sg10215f3jsn3k1bl389jfbh2f5v4srav4g";
   };
+
+  # Hardcoded paths scattered about all have form share/vym
+  # which is encouraging, although we'll need to patch them (below).
+  qmakeFlags = [
+    "DATADIR=${placeholder "out"}/share"
+    "DOCDIR=${placeholder "out"}/share/doc/vym"
+  ];
+
+  postPatch = ''
+    for x in \
+      exportoofiledialog.cpp \
+      main.cpp \
+      mainwindow.cpp \
+      tex/*.{tex,lyx}; \
+    do
+      substituteInPlace $x \
+        --replace /usr/share/vym $out/share/vym \
+        --replace /usr/local/share/vym $out/share/vym \
+        --replace /usr/share/doc $out/share/doc/vym
+    done
+  '';
 
   hardeningDisable = [ "format" ];
 
-  nativeBuildInputs = [ pkgconfig qmake ];
-  buildInputs = [ qtsvg ];
+  nativeBuildInputs = [ pkg-config qmake ];
+  buildInputs = [ qtscript qtsvg ];
 
-  meta = with stdenv.lib; {
+  postInstall = ''
+    install -Dm755 -t $out/share/man/man1 doc/*.1.gz
+  '';
+
+  dontGzipMan = true;
+
+  meta = with lib; {
     description = "A mind-mapping software";
     longDescription = ''
       VYM (View Your Mind) is a tool to generate and manipulate maps which show your thoughts.
@@ -26,7 +53,7 @@ stdenv.mkDerivation rec {
       While a tree like structure like shown on this page can be drawn by hand or any drawing software
       vym offers much more features to work with such maps.
     '';
-    homepage = http://www.insilmaril.de/vym/;
+    homepage = "http://www.insilmaril.de/vym/";
     license = licenses.gpl2;
     maintainers = [ maintainers.AndersonTorres ];
     platforms = platforms.linux;

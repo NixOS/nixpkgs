@@ -1,8 +1,8 @@
-import ./make-test.nix ({ lib, ... }:
+import ./make-test-python.nix ({ lib, ... }:
 
 with lib;
 
-rec {
+{
   name = "sonarr";
   meta.maintainers = with maintainers; [ etu ];
 
@@ -11,8 +11,8 @@ rec {
     { services.sonarr.enable = true; };
 
   testScript = ''
-    $machine->waitForUnit('sonarr.service');
-    $machine->waitForOpenPort('8989');
-    $machine->succeed("curl --fail http://localhost:8989/");
+    machine.wait_for_unit("sonarr.service")
+    machine.wait_for_open_port("8989")
+    machine.succeed("curl --fail http://localhost:8989/")
   '';
 })

@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, pkgconfig, cmake
+{ lib, stdenv, fetchFromGitHub, pkg-config, cmake
 , eigen, opencv, ceres-solver, cgal, boost, vcg
-, gmp, mpfr, glog, google-gflags, libjpeg_turbo }:
+, gmp, mpfr, glog, gflags, libjpeg_turbo }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "openmvs-unstable-2018-05-26";
 
   src = fetchFromGitHub {
@@ -12,9 +12,9 @@ stdenv.mkDerivation rec {
     sha256 = "12dgkwwfdp24581y3i41gsd1k9hq0aw917q0ja5s0if4qbmc8pni";
   };
 
-  buildInputs = [ eigen opencv ceres-solver cgal boost vcg gmp mpfr glog google-gflags libjpeg_turbo ];
+  buildInputs = [ eigen opencv ceres-solver cgal boost vcg gmp mpfr glog gflags libjpeg_turbo ];
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   preConfigure = ''
     cmakeFlagsArray=(
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
       "-DCERES_DIR=${ceres-solver}/lib/cmake/Ceres/"
     )
   '';
-  
+
   postFixup = ''
     rp=$(patchelf --print-rpath $out/bin/DensifyPointCloud)
     patchelf --set-rpath $rp:$out/lib/OpenMVS $out/bin/DensifyPointCloud
@@ -45,16 +45,14 @@ stdenv.mkDerivation rec {
     rp=$(patchelf --print-rpath $out/bin/TextureMesh)
     patchelf --set-rpath $rp:$out/lib/OpenMVS $out/bin/TextureMesh
   '';
-  
+
   cmakeDir = "./";
 
   dontUseCmakeBuildDir = true;
 
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A library for computer-vision scientists and especially targeted to the Multi-View Stereo reconstruction community";
-    homepage = http://cdcseacave.github.io/openMVS/;
+    homepage = "http://cdcseacave.github.io/openMVS/";
     license = licenses.agpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ mdaiter ];

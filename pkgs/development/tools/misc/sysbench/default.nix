@@ -1,22 +1,27 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, vim, mysql
-, libaio }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config
+, libmysqlclient, libaio
+}:
 
 stdenv.mkDerivation rec {
-  name = "sysbench-1.0.17";
+  pname = "sysbench";
+  version = "1.0.20";
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
-  buildInputs = [ vim mysql.connector-c libaio ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  buildInputs = [ libmysqlclient libaio ];
 
   src = fetchFromGitHub {
     owner = "akopytov";
-    repo = "sysbench";
-    rev = "1.0.17";
-    sha256 = "02i9knvp0bjw6ri848xxiy2dbww2xv70nah9yn67a6zgw617hwa6";
+    repo = pname;
+    rev = version;
+    sha256 = "1sanvl2a52ff4shj62nw395zzgdgywplqvwip74ky8q7s6qjf5qy";
   };
+
+  enableParallelBuilding = true;
 
   meta = {
     description = "Modular, cross-platform and multi-threaded benchmark tool";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
+    homepage = "https://github.com/akopytov/sysbench";
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
   };
 }

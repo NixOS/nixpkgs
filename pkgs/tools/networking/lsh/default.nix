@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gperf, guile, gmp, zlib, liboop, readline, gnum4, pam
+{ lib, stdenv, fetchurl, gperf, guile, gmp, zlib, liboop, readline, gnum4, pam
 , nettools, lsof, procps }:
 
 stdenv.mkDerivation rec {
@@ -42,8 +42,8 @@ stdenv.mkDerivation rec {
       SECSH working group.
     '';
 
-    homepage = http://www.lysator.liu.se/~nisse/lsh/;
-    license = stdenv.lib.licenses.gpl2Plus;
+    homepage = "http://www.lysator.liu.se/~nisse/lsh/";
+    license = lib.licenses.gpl2Plus;
 
     maintainers = [ ];
     platforms = [ "x86_64-linux" ];

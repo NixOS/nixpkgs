@@ -7,21 +7,21 @@
 
 buildPythonPackage rec {
   pname = "jupyterhub-ldapauthenticator";
-  version = "1.2.2";
+  version = "1.3.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5bba2ee246834130c9f86c13d39585b1af21563b814fa03aacb26b6696dd7e20";
+    sha256 = "758081bbdb28b26313bb18c9d8aa2b8fcdc9162e4d3ab196c626567e64f1ab8b";
   };
 
   # No tests implemented
   doCheck = false;
-   
+
   propagatedBuildInputs = [ jupyterhub ldap3 ];
 
   meta = with lib; {
     description = "Simple LDAP Authenticator Plugin for JupyterHub";
-    homepage =  https://github.com/jupyterhub/ldapauthenticator;
+    homepage =  "https://github.com/jupyterhub/ldapauthenticator";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ixxie ];
   };

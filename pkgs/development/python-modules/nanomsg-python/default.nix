@@ -1,6 +1,6 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, nanomsg }:
+{ lib, buildPythonPackage, fetchFromGitHub, nanomsg }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "nanomsg-python";
   version = "1.0.20190114";
 
@@ -16,9 +16,9 @@ buildPythonPackage rec {
   # Tests requires network connections
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Bindings for nanomsg";
-    homepage = https://github.com/tonysimpson/nanomsg-python;
+    homepage = "https://github.com/tonysimpson/nanomsg-python";
     license = licenses.mit;
     maintainers = with maintainers; [ bgamari ];
   };

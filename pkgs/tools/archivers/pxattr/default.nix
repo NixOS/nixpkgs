@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, gcc }:
+{ lib, stdenv, fetchurl, gcc }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "pxattr-2.1.0";
 
   src = fetchurl {
@@ -16,10 +16,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = https://www.lesbonscomptes.com/pxattr/index.html;
+    homepage = "https://www.lesbonscomptes.com/pxattr/index.html";
     description = "Provides a single interface to extended file attributes";
-    maintainers = [ stdenv.lib.maintainers.vrthra ];
-    license = [ stdenv.lib.licenses.mit ];
-    platforms = stdenv.lib.platforms.unix;
+    maintainers = [ lib.maintainers.vrthra ];
+    license = [ lib.licenses.mit ];
+    platforms = lib.platforms.unix;
   };
 }

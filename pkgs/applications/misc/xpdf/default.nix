@@ -1,48 +1,63 @@
-{ enableGUI ? true, enablePDFtoPPM ? true, useT1Lib ? false
-, stdenv, fetchurl, zlib, libpng, freetype ? null, t1lib ? null
-, cmake, qtbase ? null, qtsvg ? null, makeWrapper
+{ enableGUI ? true
+, enablePDFtoPPM ? true
+, enablePrinting ? true
+, lib, stdenv, fetchzip, cmake, makeDesktopItem
+, zlib, libpng, cups ? null, freetype ? null
+, qtbase ? null, qtsvg ? null, wrapQtAppsHook
 }:
 
 assert enableGUI -> qtbase != null && qtsvg != null && freetype != null;
 assert enablePDFtoPPM -> freetype != null;
-assert useT1Lib -> t1lib != null;
+assert enablePrinting -> cups != null;
 
-assert !useT1Lib; # t1lib has multiple unpatched security vulnerabilities
+stdenv.mkDerivation rec {
+  pname = "xpdf";
+  version = "4.03";
 
-stdenv.mkDerivation {
-  name = "xpdf-4.00";
-
-   src = fetchurl {
-    url = http://www.xpdfreader.com/dl/xpdf-4.00.tar.gz;
-    sha256 = "1mhn89738vjva14xr5gblc2zrdgzmpqbbjdflqdmpqv647294ggz";
+  src = fetchzip {
+    url = "https://dl.xpdfreader.com/xpdf-${version}.tar.gz";
+    sha256 = "09yhvmh1vxjy763nnmawynygp5bh3j4i8ixqja64j11676yl77n6";
   };
 
   # Fix "No known features for CXX compiler", see
   # https://cmake.org/pipermail/cmake/2016-December/064733.html and the note at
   # https://cmake.org/cmake/help/v3.10/command/cmake_minimum_required.html
-  patches = stdenv.lib.optional stdenv.isDarwin  ./cmake_version.patch;
+  patches = lib.optional stdenv.isDarwin  ./cmake_version.patch;
 
-  nativeBuildInputs = [ cmake makeWrapper ];
+  nativeBuildInputs =
+    [ cmake ]
+    ++ lib.optional enableGUI wrapQtAppsHook;
 
-  cmakeFlags = ["-DSYSTEM_XPDFRC=/etc/xpdfrc" "-DA4_PAPER=ON"];
+  cmakeFlags = ["-DSYSTEM_XPDFRC=/etc/xpdfrc" "-DA4_PAPER=ON" "-DOPI_SUPPORT=ON"]
+    ++ lib.optional (!enablePrinting) "-DXPDFWIDGET_PRINTING=OFF";
 
   buildInputs = [ zlib libpng ] ++
-    stdenv.lib.optional enableGUI qtbase ++
-    stdenv.lib.optional useT1Lib t1lib ++
-    stdenv.lib.optional enablePDFtoPPM freetype;
+    lib.optional enableGUI qtbase ++
+    lib.optional enablePrinting cups ++
+    lib.optional enablePDFtoPPM freetype;
 
-  # Debian uses '-fpermissive' to bypass some errors on char* constantness.
-  CXXFLAGS = "-O2 -fpermissive";
+  desktopItem = makeDesktopItem {
+    name = "xpdf";
+    desktopName = "Xpdf";
+    comment = "Views Adobe PDF files";
+    icon = "xpdf";
+    exec = "xpdf %f";
+    categories = "Office;";
+    terminal = "false";
+  };
 
-  hardeningDisable = [ "format" ];
-
-  postInstall = stdenv.lib.optionalString (stdenv.isDarwin && enableGUI) ''
-    wrapProgram $out/bin/xpdf \
-      --set QT_PLUGIN_PATH ${qtbase.bin}/${qtbase.qtPluginPrefix}:${qtsvg.bin}/${qtbase.qtPluginPrefix}
+  postInstall = lib.optionalString (!stdenv.isDarwin) ''
+    install -Dm644 ${desktopItem}/share/applications/xpdf.desktop -t $out/share/applications
+    install -Dm644 $src/xpdf-qt/xpdf-icon.svg $out/share/pixmaps/xpdf.svg
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://www.xpdfreader.com;
+  # wrapQtAppsHook broken on macOS (https://github.com/NixOS/nixpkgs/issues/102044)
+  postFixup = lib.optionalString stdenv.isDarwin ''
+    wrapQtApp $out/bin/xpdf
+  '';
+
+  meta = with lib; {
+    homepage = "https://www.xpdfreader.com";
     description = "Viewer for Portable Document Format (PDF) files";
     longDescription = ''
       XPDF includes multiple tools for viewing and processing PDF files.
@@ -57,7 +72,15 @@ stdenv.mkDerivation {
         pdffonts:  lists fonts used in PDF files
         pdfdetach: extracts attached files from PDF files
     '';
-    license = with licenses; [ gpl2 gpl3 ];
+    license = with licenses; [ gpl2Only gpl3Only ];
     platforms = platforms.unix;
+    maintainers = with maintainers; [ sikmir ];
+    knownVulnerabilities = [
+      "CVE-2018-7453: loop in PDF objects"
+      "CVE-2018-16369: loop in PDF objects"
+      "CVE-2019-9587: loop in PDF objects"
+      "CVE-2019-9588: loop in PDF objects"
+      "CVE-2019-16088: loop in PDF objects"
+    ];
   };
 }

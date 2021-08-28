@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python port of Google's language-detection library";
-    homepage = https://github.com/Mimino666/langdetect;
+    homepage = "https://github.com/Mimino666/langdetect";
     license = licenses.asl20;
     maintainers = with maintainers; [ earvstedt ];
   };

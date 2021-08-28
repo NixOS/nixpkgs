@@ -1,9 +1,9 @@
-{ stdenv, fetchurl, qt4, qmake4Hook }:
+{ lib, stdenv, fetchurl, qt4, qmake4Hook }:
 stdenv.mkDerivation rec {
   name = "navipowm-0.2.4";
 
   src = fetchurl {
-    url = mirror://sourceforge/navipowm/NaviPOWM-0.2.4.tar.gz;
+    url = "mirror://sourceforge/navipowm/NaviPOWM-0.2.4.tar.gz";
     sha256 = "1kdih8kwpgcgfh6l6njkr9gq2j5hv39xvzmzgvhip553kn6bss7b";
   };
 
@@ -22,10 +22,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ qmake4Hook ];
 
   meta = {
-    homepage = http://navipowm.sourceforge.net/;
+    homepage = "http://navipowm.sourceforge.net/";
     description = "Car navigation system";
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = with stdenv.lib.maintainers; [ ];
-    platforms = with stdenv.lib.platforms; linux;
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ ];
+    platforms = with lib.platforms; linux;
   };
 }

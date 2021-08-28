@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, postgresql, openssl, zlib, readline }:
+{ lib, stdenv, fetchFromGitHub, postgresql, openssl, zlib, readline }:
 
 stdenv.mkDerivation rec {
-  name = "pg_repack-${version}";
-  version = "1.4.4";
+  pname = "pg_repack";
+  version = "1.4.6";
 
   buildInputs = [ postgresql openssl zlib readline ];
 
@@ -10,16 +10,16 @@ stdenv.mkDerivation rec {
     owner  = "reorg";
     repo   = "pg_repack";
     rev    = "refs/tags/ver_${version}";
-    sha256 = "0ynsmsxfkcp82ccpz2nrgg8wiil8yxqigvw6425lx8v80h5lszbw";
+    sha256 = "01n320cvn0z48ac4mbclpbzspdraaqzzw4xdcns7fj33vqq8nqm7";
   };
 
   installPhase = ''
     install -D bin/pg_repack -t $out/bin/
     install -D lib/pg_repack.so -t $out/lib/
-    install -D lib/{pg_repack--${version}.sql,pg_repack.control} -t $out/share/extension
+    install -D lib/{pg_repack--${version}.sql,pg_repack.control} -t $out/share/postgresql/extension
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Reorganize tables in PostgreSQL databases with minimal locks";
     longDescription = ''
       pg_repack is a PostgreSQL extension which lets you remove bloat from tables and indexes, and optionally restore

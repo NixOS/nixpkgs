@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , setuptools
@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "pex";
-  version = "1.6.7";
+  version = "2.1.34";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1hg30y8b4b96r4skhz2qmsp7li1izcg8854q3fi48rks0kcfx5fw";
+    sha256 = "988e6a4e12933522e0c647da78c6e30fc42e3a172ba52cfb0332affcfc9ee29e";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   # A few more dependencies I don't want to handle right now...
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A library and tool for generating .pex (Python EXecutable) files";
     homepage = "https://github.com/pantsbuild/pex";
     license = licenses.asl20;

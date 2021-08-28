@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, curl, libzip, pkgconfig }:
+{ lib, stdenv, fetchFromGitHub, curl, libzip, pkg-config }:
 
 stdenv.mkDerivation rec {
-  name = "tldr-${version}";
+  pname = "tldr";
   version = "1.3.0";
 
   src = fetchFromGitHub {
@@ -12,19 +12,19 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ curl libzip ];
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
-  makeFlags = ["CC=cc" "LD=cc" "CFLAGS="];
+  makeFlags = ["CC=${stdenv.cc.targetPrefix}cc" "LD=${stdenv.cc.targetPrefix}cc" "CFLAGS="];
 
   installFlags = [ "PREFIX=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simplified and community-driven man pages";
     longDescription = ''
       tldr pages gives common use cases for commands, so you don't need to hunt
       through a man page for the correct flags.
     '';
-    homepage = http://tldr-pages.github.io;
+    homepage = "http://tldr-pages.github.io";
     license = licenses.mit;
     maintainers = with maintainers; [ taeer carlosdagos ];
     platforms = platforms.all;

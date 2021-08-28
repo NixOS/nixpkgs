@@ -1,30 +1,33 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
+, python
 , six
 , pythonOlder
-, mock
 , coverage
 }:
 
 buildPythonPackage rec {
   pname = "nose2";
-  version = "0.8.0";
+  version = "0.10.0";
+
+  # Requires mock 2.0.0 if python < 3.6, but NixPkgs has mock 3.0.5.
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9052f2b46807b63d9bdf68e0768da1f8386368889b50043fd5d0889c470258f3";
+    sha256 = "886ba617a96de0130c54b24479bd5c2d74d5c940d40f3809c3a275511a0c4a60";
   };
 
-  propagatedBuildInputs = [ six coverage ]
-    ++ stdenv.lib.optionals (pythonOlder "3.4") [ mock ];
+  propagatedBuildInputs = [ six coverage ];
 
-  # AttributeError: 'module' object has no attribute 'collector'
-  doCheck = false;
+  checkPhase = ''
+    ${python.interpreter} -m unittest
+  '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "nose2 is the next generation of nicer testing for Python";
-    homepage = https://github.com/nose-devs/nose2;
+    homepage = "https://github.com/nose-devs/nose2";
     license = licenses.bsd0;
   };
 

@@ -1,6 +1,23 @@
-{ stdenv, fetchFromGitHub, pantheon, meson, ninja, pkgconfig, vala
-, libgee, granite, gtk3, libaccounts-glib, libsignon-glib, json-glib
-, librest, webkitgtk, libsoup, switchboard }:
+{ lib, stdenv
+, fetchFromGitHub
+, nix-update-script
+, fetchpatch
+, pantheon
+, meson
+, ninja
+, pkg-config
+, vala_0_46
+, libgee
+, granite
+, gtk3
+, libaccounts-glib
+, libsignon-glib
+, json-glib
+, librest
+, webkitgtk
+, libsoup
+, switchboard
+}:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-onlineaccounts";
@@ -10,20 +27,20 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "03h8ii8zz59fpp4fwlvyx3m3550096fn7a6w612b1rbj3dqhlmh9";
+    sha256 = "sha256-CVYKcRty5bBEMNyoY51JAJQy6uh+U+7IvS6V/1GMCA4=";
   };
 
   passthru = {
-    updateScript = pantheon.updateScript {
-      repoName = pname;
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
     };
   };
 
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
-    vala
+    pkg-config
+    vala_0_46
   ];
 
   buildInputs = [
@@ -39,14 +56,28 @@ stdenv.mkDerivation rec {
     webkitgtk
   ];
 
+  patches = [
+    # Fix build with latest vala
+    (fetchpatch {
+      url = "https://github.com/elementary/switchboard-plug-onlineaccounts/commit/5fa2882f765076d20c6ef4886198a34a05159f8a.patch";
+      sha256 = "1szryyy7shdmbvx9yhpi0bhzaayg7hl6pq2c456j1qf9kfv0m4hf";
+    })
+
+    # fix build with vala 0.48.9
+    (fetchpatch {
+      url = "https://github.com/elementary/switchboard-plug-onlineaccounts/commit/b1853b7427102b8dd94774e1e2cc455f50902263.patch";
+      sha256 = "J3C71GyEHEZWSghGXlwXPHFJRhrvx6i0yvi8NIDb4WE=";
+    })
+  ];
+
   PKG_CONFIG_LIBACCOUNTS_GLIB_PROVIDERFILESDIR = "${placeholder "out"}/share/accounts/providers";
   PKG_CONFIG_LIBACCOUNTS_GLIB_SERVICEFILESDIR = "${placeholder "out"}/share/accounts/services";
   PKG_CONFIG_SWITCHBOARD_2_0_PLUGSDIR = "${placeholder "out"}/lib/switchboard";
 
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Switchboard Online Accounts Plug";
-    homepage = https://github.com/elementary/switchboard-plug-onlineaccounts;
+    homepage = "https://github.com/elementary/switchboard-plug-onlineaccounts";
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

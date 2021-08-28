@@ -1,13 +1,13 @@
-{ stdenv, buildPythonPackage, fetchPypi,
+{ lib, buildPythonPackage, fetchPypi,
   m2r, setuptools_scm, six, attrs }:
 
 buildPythonPackage rec {
-  version = "0.7.0";
+  version = "20.2.0";
   pname = "Automat";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cbd78b83fa2d81fe2a4d23d258e1661dd7493c9a50ee2f1a5b2cac61c1793b0e";
+    sha256 = "7979803c74610e11ef0c0d68a2942b152df52da55336e0c9d58daf1831cbdf33";
   };
 
   buildInputs = [ m2r setuptools_scm ];
@@ -17,8 +17,8 @@ buildPythonPackage rec {
   # this creates a circular dependency.
   doCheck = false;
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/glyph/Automat;
+  meta = with lib; {
+    homepage = "https://github.com/glyph/Automat";
     description = "Self-service finite-state machines for the programmer on the go";
     license = licenses.mit;
     maintainers = [ ];

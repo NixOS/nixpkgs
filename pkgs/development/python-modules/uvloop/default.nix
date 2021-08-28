@@ -1,30 +1,83 @@
 { lib
+, stdenv
 , buildPythonPackage
+, pythonOlder
 , fetchPypi
-, pyopenssl
 , libuv
+, CoreServices
+, ApplicationServices
+# Check Inputs
+, aiohttp
 , psutil
-, isPy27
+, pyopenssl
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "uvloop";
-  version = "0.12.2";
-  disabled = isPy27;
+  version = "0.15.2";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c48692bf4587ce281d641087658eca275a5ad3b63c78297bbded96570ae9ce8f";
+    sha256 = "2bb0624a8a70834e54dde8feed62ed63b50bad7a1265c40d6403a2ac447bce01";
   };
 
-  buildInputs = [ libuv ];
+  buildInputs = [
+    libuv
+  ] ++ lib.optionals stdenv.isDarwin [
+    CoreServices
+    ApplicationServices
+  ];
 
-  checkInputs = [ pyopenssl psutil ];
+  dontUseSetuptoolsCheck = true;
+  checkInputs = [
+    aiohttp
+    pytestCheckHook
+    pyopenssl
+    psutil
+  ];
+
+  pytestFlagsArray = [
+    # from pytest.ini, these are NECESSARY to prevent failures
+    "--capture=no"
+    "--assert=plain"
+    "--strict"
+    "--tb=native"
+  ] ++ lib.optionals (stdenv.isAarch64) [
+    # test gets stuck in epoll_pwait on hydras aarch64 builders
+    # https://github.com/MagicStack/uvloop/issues/412
+    "--deselect" "tests/test_tcp.py::Test_AIO_TCPSSL::test_remote_shutdown_receives_trailing_data"
+  ];
+
+  disabledTestPaths = [
+    # ignore code linting tests
+    "tests/test_sourcecode.py"
+  ];
+
+  # force using installed/compiled uvloop vs source by moving tests to temp dir
+  preCheck = ''
+    export TEST_DIR=$(mktemp -d)
+    cp -r tests $TEST_DIR
+    pushd $TEST_DIR
+  '';
+
+  postCheck = ''
+    popd
+  '';
+
+  pythonImportsCheck = [
+    "uvloop"
+    "uvloop.loop"
+  ];
+
+  # Some of the tests use localhost networking.
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "Fast implementation of asyncio event loop on top of libuv";
-    homepage = http://github.com/MagicStack/uvloop;
+    homepage = "https://github.com/MagicStack/uvloop";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc ];
   };
 }

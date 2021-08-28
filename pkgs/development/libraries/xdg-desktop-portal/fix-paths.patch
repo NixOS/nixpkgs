@@ -1,13 +1,13 @@
 diff --git a/src/notification.c b/src/notification.c
-index 1367114..72ba033 100644
+index 5412609..4243e98 100644
 --- a/src/notification.c
 +++ b/src/notification.c
-@@ -401,7 +401,7 @@ validate_icon_more (GVariant *v)
+@@ -366,7 +366,7 @@
    int status;
    g_autofree char *err = NULL;
    g_autoptr(GError) error = NULL;
 -  const char *icon_validator = LIBEXECDIR "/flatpak-validate-icon";
 +  const char *icon_validator = "@flatpak@/libexec/flatpak-validate-icon";
    const char *args[6];
-
+ 
    if (G_IS_THEMED_ICON (icon))

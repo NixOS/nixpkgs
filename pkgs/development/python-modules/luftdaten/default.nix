@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "luftdaten";
-  version = "0.5.0";
+  version = "0.6.5";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4672f807c0e22bde2606dd887b0358de1da77068d1a1afe6dd8e331d2391b02c";
+    sha256 = "sha256-5SFb+psULyg9UKVY3oJPNLF3TGS/W+Bxoj79iTzReL4=";
   };
 
   propagatedBuildInputs = [ aiohttp async-timeout ];
@@ -16,9 +16,11 @@ buildPythonPackage rec {
   # No tests implemented
   doCheck = false;
 
+  pythonImportsCheck = [ "luftdaten" ];
+
   meta = with lib; {
     description = "Python API for interacting with luftdaten.info";
-    homepage = https://github.com/fabaff/python-luftdaten;
+    homepage = "https://github.com/home-assistant-ecosystem/python-luftdaten";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
   };

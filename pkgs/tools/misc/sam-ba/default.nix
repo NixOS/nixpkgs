@@ -1,17 +1,17 @@
-{ stdenv, fetchzip, libX11, libXScrnSaver, libXext, libXft, libXrender
+{ lib, stdenv, fetchzip, libX11, libXScrnSaver, libXext, libXft, libXrender
 , freetype, zlib, fontconfig
 }:
 
 let
   maybe64 = if stdenv.isx86_64 then "_64" else "";
-  libPath = stdenv.lib.makeLibraryPath
+  libPath = lib.makeLibraryPath
     [ stdenv.cc.cc.lib libX11 libXScrnSaver libXext libXft libXrender freetype
       zlib fontconfig
     ];
 in
 stdenv.mkDerivation rec {
   version = "2.16";
-  name = "sam-ba-${version}";
+  pname = "sam-ba";
 
   src = fetchzip {
     url = "http://www.atmel.com/dyn/resources/prod_documents/sam-ba_${version}_linux.zip";
@@ -36,13 +36,13 @@ stdenv.mkDerivation rec {
   # Do our own thing
   dontPatchELF = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Programming tools for Atmel SAM3/7/9 ARM-based microcontrollers";
     longDescription = ''
       Atmel SAM-BA software provides an open set of tools for programming the
       Atmel SAM3, SAM7 and SAM9 ARM-based microcontrollers.
     '';
-    homepage = http://www.at91.com/linux4sam/bin/view/Linux4SAM/SoftwareTools;
+    homepage = "http://www.at91.com/linux4sam/bin/view/Linux4SAM/SoftwareTools";
     # License in <source>/doc/readme.txt
     license = "BSD-like (partly binary-only)";  # according to Buildroot
     platforms = [ "x86_64-linux" ];  # patchelf fails on i686-linux

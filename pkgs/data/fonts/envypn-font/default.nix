@@ -1,6 +1,8 @@
-{ stdenv, fetchurl, mkfontdir, mkfontscale }:
+{ lib, stdenv, fetchurl, libfaketime
+, fonttosfnt, mkfontscale
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "envypn-font-1.7.1";
 
   src = fetchurl {
@@ -8,33 +10,31 @@ stdenv.mkDerivation rec {
     sha256 = "bda67b6bc6d5d871a4d46565d4126729dfb8a0de9611dae6c68132a7b7db1270";
   };
 
-  nativeBuildInputs = [ mkfontdir mkfontscale ];
+  nativeBuildInputs = [ libfaketime fonttosfnt mkfontscale ];
 
   unpackPhase = ''
     tar -xzf $src --strip-components=1
   '';
 
-  installPhase = ''
-    # install the pcf fonts (for xorg applications)
-    fontDir="$out/share/fonts/envypn"
-    mkdir -p "$fontDir"
-    mv *.pcf.gz "$fontDir"
-
-    cd "$fontDir"
-    mkfontdir
-    mkfontscale
+  buildPhase = ''
+    # convert pcf fonts to otb
+    for i in *e.pcf.gz; do
+      faketime -f "1970-01-01 00:00:01" \
+      fonttosfnt -v -o "$(basename "$i" .pcf.gz)".otb "$i"
+    done
   '';
 
-  outputHashAlgo = "sha256";
-  outputHashMode = "recursive";
-  outputHash = "04sjxfrlvjc2f0679cy4w366mpzbn3fp6gnrjb8vy12vjd1ffnc1";
+  installPhase = ''
+    install -D -m 644 -t "$out/share/fonts/misc" *.otb *.pcf.gz
+    mkfontdir "$out/share/fonts/misc"
+  '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = ''
       Readable bitmap font inspired by Envy Code R
     '';
     homepage = "http://ywstd.fr/p/pj/#envypn";
     license = licenses.miros;
-    platforms = platforms.linux;
+    platforms = platforms.all;
   };
 }

@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, makeWrapper, git }:
+{ lib, stdenv, fetchFromGitHub, makeWrapper, git }:
 
 stdenv.mkDerivation rec {
   pname = "git-standup";
-  version = "2.3.1";
+  version = "2.3.2";
 
   src = fetchFromGitHub {
     owner = "kamranahmedse";
     repo = pname;
     rev = version;
-    sha256 = "0wx9ypyxhpjbrasl6264jmj9fjrpg3gn93dg00cakabz3r7yxxq3";
+    sha256 = "1xnn0jjha56v7l2vj45zzxncl6m5x2hq6nkffgc1bcikhp1pidn7";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -19,10 +19,10 @@ stdenv.mkDerivation rec {
     install -Dm755 -t $out/bin git-standup
 
     wrapProgram $out/bin/git-standup \
-      --prefix PATH : "${stdenv.lib.makeBinPath [ git ]}"
+      --prefix PATH : "${lib.makeBinPath [ git ]}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Recall what you did on the last working day";
     homepage = "https://github.com/kamranahmedse/git-standup";
     license = licenses.mit;

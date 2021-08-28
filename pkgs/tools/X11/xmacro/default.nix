@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, libX11, libXtst, xorgproto, libXi }:
+{ lib, stdenv, fetchurl, libX11, libXtst, xorgproto, libXi }:
 
 stdenv.mkDerivation rec {
-  name = "xmacro-${version}";
+  pname = "xmacro";
   version = "0.4.6";
 
   src = fetchurl {
-    url = "http://download.sarine.nl/xmacro/${name}.tar.gz";
+    url = "http://download.sarine.nl/xmacro/${pname}-${version}.tar.gz";
     sha256 = "1p9jljxyn4j6piljiyi2xv6f8jhjbzhabprp8p0qmqxaxgdipi61";
   };
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libX11 libXtst xorgproto libXi ];
 
   meta = {
-    platforms = stdenv.lib.platforms.linux;
-    license = stdenv.lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2;
   };
 }

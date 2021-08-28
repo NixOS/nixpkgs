@@ -1,18 +1,20 @@
-{ lib, fetchPypi, buildPythonPackage, requests, six }:
+{ lib, fetchPypi, buildPythonPackage, pytestCheckHook, requests, six }:
 
 buildPythonPackage rec {
   pname   = "requests-file";
-  version = "1.4.3";
+  version = "1.5.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1yp2jaxg3v86pia0q512dg3hz6s9y5vzdivsgrba1kds05ial14g";
+    sha256 = "07d74208d3389d01c38ab89ef403af0cfec63957d53a0081d8eca738d0247d8e";
   };
 
   propagatedBuildInputs = [ requests six ];
 
+  checkInputs = [ pytestCheckHook ];
+
   meta = {
-    homepage = https://github.com/dashea/requests-file;
+    homepage = "https://github.com/dashea/requests-file";
     description = "Transport adapter for fetching file:// URLs with the requests python library";
     license = lib.licenses.asl20;
   };

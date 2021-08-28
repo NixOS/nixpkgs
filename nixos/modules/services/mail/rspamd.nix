@@ -60,7 +60,7 @@ let
       };
       type = mkOption {
         type = types.nullOr (types.enum [
-          "normal" "controller" "fuzzy_storage" "rspamd_proxy" "lua" "proxy"
+          "normal" "controller" "fuzzy" "rspamd_proxy" "lua" "proxy"
         ]);
         description = ''
           The type of this worker. The type <literal>proxy</literal> is
@@ -68,7 +68,7 @@ let
           replaced with <literal>rspamd_proxy</literal>.
         '';
         apply = let
-            from = "services.rspamd.workers.\”${name}\".type";
+            from = "services.rspamd.workers.\"${name}\".type";
             files = options.type.files;
             warning = "The option `${from}` defined in ${showFiles files} has enum value `proxy` which has been renamed to `rspamd_proxy`";
           in x: if x == "proxy" then traceWarning warning "rspamd_proxy" else x;
@@ -153,7 +153,7 @@ let
 
       ${concatStringsSep "\n" (mapAttrsToList (name: value: let
           includeName = if name == "rspamd_proxy" then "proxy" else name;
-          tryOverride = if value.extraConfig == "" then "true" else "false";
+          tryOverride = boolToString (value.extraConfig == "");
         in ''
         worker "${value.type}" {
           type = "${value.type}";
@@ -220,7 +220,6 @@ let
 in
 
 {
-
   ###### interface
 
   options = {
@@ -308,7 +307,7 @@ in
       };
 
       user = mkOption {
-        type = types.string;
+        type = types.str;
         default = "rspamd";
         description = ''
           User to use when no root privileges are required.
@@ -316,7 +315,7 @@ in
       };
 
       group = mkOption {
-        type = types.string;
+        type = types.str;
         default = "rspamd";
         description = ''
           Group to use when no root privileges are required.
@@ -331,7 +330,7 @@ in
         };
 
         config = mkOption {
-          type = with types; attrsOf (either bool (either str (listOf str)));
+          type = with types; attrsOf (oneOf [ bool str (listOf str) ]);
           description = ''
             Addon to postfix configuration
           '';
@@ -372,22 +371,23 @@ in
     };
     services.postfix.config = mkIf cfg.postfix.enable cfg.postfix.config;
 
+    systemd.services.postfix.serviceConfig.SupplementaryGroups =
+      mkIf cfg.postfix.enable [ postfixCfg.group ];
+
     # Allow users to run 'rspamc' and 'rspamadm'.
     environment.systemPackages = [ pkgs.rspamd ];
 
-    users.users = singleton {
-      name = cfg.user;
+    users.users.${cfg.user} = {
       description = "rspamd daemon";
       uid = config.ids.uids.rspamd;
       group = cfg.group;
     };
 
-    users.groups = singleton {
-      name = cfg.group;
+    users.groups.${cfg.group} = {
       gid = config.ids.gids.rspamd;
     };
 
-    environment.etc."rspamd".source = rspamdDir;
+    environment.etc.rspamd.source = rspamdDir;
 
     systemd.services.rspamd = {
       description = "Rspamd Service";
@@ -397,22 +397,52 @@ in
       restartTriggers = [ rspamdDir ];
 
       serviceConfig = {
-        ExecStart = "${pkgs.rspamd}/bin/rspamd ${optionalString cfg.debug "-d"} --user=${cfg.user} --group=${cfg.group} --pid=/run/rspamd.pid -c /etc/rspamd/rspamd.conf -f";
+        ExecStart = "${pkgs.rspamd}/bin/rspamd ${optionalString cfg.debug "-d"} -c /etc/rspamd/rspamd.conf -f";
         Restart = "always";
-        RuntimeDirectory = "rspamd";
-        PrivateTmp = true;
-      };
 
-      preStart = ''
-        ${pkgs.coreutils}/bin/mkdir -p /var/lib/rspamd
-        ${pkgs.coreutils}/bin/chown ${cfg.user}:${cfg.group} /var/lib/rspamd
-      '';
+        User = "${cfg.user}";
+        Group = "${cfg.group}";
+        SupplementaryGroups = mkIf cfg.postfix.enable [ postfixCfg.group ];
+
+        RuntimeDirectory = "rspamd";
+        RuntimeDirectoryMode = "0755";
+        StateDirectory = "rspamd";
+        StateDirectoryMode = "0700";
+
+        AmbientCapabilities = [];
+        CapabilityBoundingSet = "";
+        DevicePolicy = "closed";
+        LockPersonality = true;
+        NoNewPrivileges = true;
+        PrivateDevices = true;
+        PrivateMounts = true;
+        PrivateTmp = true;
+        # we need to chown socket to rspamd-milter
+        PrivateUsers = !cfg.postfix.enable;
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectSystem = "strict";
+        RemoveIPC = true;
+        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_UNIX" ];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        SystemCallArchitectures = "native";
+        SystemCallFilter = "@system-service";
+        UMask = "0077";
+      };
     };
   };
   imports = [
     (mkRemovedOptionModule [ "services" "rspamd" "socketActivation" ]
-	     "Socket activation never worked correctly and could at this time not be fixed and so was removed")
+       "Socket activation never worked correctly and could at this time not be fixed and so was removed")
     (mkRenamedOptionModule [ "services" "rspamd" "bindSocket" ] [ "services" "rspamd" "workers" "normal" "bindSockets" ])
     (mkRenamedOptionModule [ "services" "rspamd" "bindUISocket" ] [ "services" "rspamd" "workers" "controller" "bindSockets" ])
+    (mkRemovedOptionModule [ "services" "rmilter" ] "Use services.rspamd.* instead to set up milter service")
   ];
 }

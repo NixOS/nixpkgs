@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, libgcrypt, libnl, pkgconfig, python2Packages, wireless-regdb }:
+{ lib, stdenv, fetchurl, fetchpatch, libgcrypt, libnl, pkg-config, python3Packages, wireless-regdb }:
 
 stdenv.mkDerivation rec {
-  name = "crda-${version}";
+  pname = "crda";
   version = "3.18";
 
   src = fetchurl {
@@ -9,14 +9,30 @@ stdenv.mkDerivation rec {
     url = "http://kernel.org/pub/software/network/crda/crda-${version}.tar.xz";
   };
 
+  patches = [
+    # Switch to Python 3
+    # https://lore.kernel.org/linux-wireless/1437542484-23409-1-git-send-email-ahmed.taahir@gmail.com/
+    (fetchpatch {
+      url = "https://lore.kernel.org/linux-wireless/1437542484-23409-2-git-send-email-ahmed.taahir@gmail.com/raw";
+      sha256 = "0s2n340cgaasvg1k8g9v8xjrbh4y2mcgrhdmv97ja2fs8xjcjbf1";
+    })
+    (fetchpatch {
+      url = "https://lore.kernel.org/linux-wireless/1437542484-23409-3-git-send-email-ahmed.taahir@gmail.com/raw";
+      sha256 = "01dlfw7kqhyx025jxq2l75950b181p9r7i9zkflcwvbzzdmx59md";
+    })
+  ];
+
   buildInputs = [ libgcrypt libnl ];
   nativeBuildInputs = [
-    pkgconfig python2Packages.m2crypto python2Packages.python
+    pkg-config
+    python3Packages.pycrypto
   ];
 
   postPatch = ''
     patchShebangs utils/
-    substituteInPlace Makefile --replace ldconfig true
+    substituteInPlace Makefile \
+      --replace ldconfig true \
+      --replace pkg-config $PKG_CONFIG
     sed -i crda.c \
       -e "/\/usr\/.*\/regulatory.bin/d" \
       -e "s|/lib/crda|${wireless-regdb}/lib/crda|g"
@@ -37,7 +53,12 @@ stdenv.mkDerivation rec {
   doCheck = true;
   checkTarget = "verify";
 
-  meta = with stdenv.lib; {
+  postInstall = ''
+    # The patch installs build header
+    rm $out/include/reglib/keys-gcrypt.h
+  '';
+
+  meta = with lib; {
     description = "Linux wireless Central Regulatory Domain Agent";
     longDescription = ''
       CRDA acts as the udev helper for communication between the kernel and
@@ -50,7 +71,7 @@ stdenv.mkDerivation rec {
 
       to the system configuration.
     '';
-    homepage = http://drvbp1.linux-foundation.org/~mcgrof/rel-html/crda/;
+    homepage = "http://drvbp1.linux-foundation.org/~mcgrof/rel-html/crda/";
     license = licenses.free; # "copyleft-next 0.3.0", as yet without a web site
     platforms = platforms.linux;
   };

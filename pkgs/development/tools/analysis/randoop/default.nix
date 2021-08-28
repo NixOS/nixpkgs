@@ -1,15 +1,15 @@
-{ stdenv, fetchurl, unzip }:
+{ lib, stdenv, fetchurl, unzip }:
 
 stdenv.mkDerivation rec {
-  version = "3.1.5";
-  name = "randoop-${version}";
+  version = "4.2.5";
+  pname = "randoop";
 
   src = fetchurl {
-    url = "https://github.com/randoop/randoop/releases/download/v${version}/${name}.zip";
-    sha256 = "13zspyi9fgnqc90qfqqnj0hb7869l0aixv0vwgj8m4m1hggpadlx";
+    url = "https://github.com/randoop/randoop/releases/download/v${version}/${pname}-${version}.zip";
+    sha256 = "0v3vla3k6csfb8w0j9njrhcjj4n7yh172n9wv6z397f1sa0fs202";
   };
 
-  buildInputs = [ unzip ];
+  nativeBuildInputs = [ unzip ];
 
   installPhase = ''
     mkdir -p $out/lib $out/doc
@@ -18,9 +18,9 @@ stdenv.mkDerivation rec {
     cp README.txt $out/doc
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Automatic test generation for Java";
-    homepage = https://randoop.github.io/randoop/;
+    homepage = "https://randoop.github.io/randoop/";
     license = licenses.mit;
     maintainers = with maintainers; [ pSub ];
     platforms = platforms.linux;

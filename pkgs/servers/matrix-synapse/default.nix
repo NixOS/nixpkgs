@@ -1,87 +1,95 @@
 { lib, stdenv, python3, openssl
-, enableSystemd ? stdenv.isLinux
+, enableSystemd ? stdenv.isLinux, nixosTests
+, enableRedis ? false
+, callPackage
 }:
 
-with python3.pkgs;
-
 let
-  matrix-synapse-ldap3 = buildPythonPackage rec {
-    pname = "matrix-synapse-ldap3";
-    version = "0.1.3";
+  py = python3.override {
+    packageOverrides = self: super:  {
+      twisted = super.twisted.overridePythonAttrs (oldAttrs: rec {
+        version = "21.7.0";
+        src = oldAttrs.src.override {
+          inherit version;
+          extension = "tar.gz";
+          sha256 = "01lh225d7lfnmfx4f4kxwl3963gjc9yg8jfkn1w769v34ia55mic";
+        };
 
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "0a0d1y9yi0abdkv6chbmxr3vk36gynnqzrjhbg26q4zg06lh9kgn";
+        propagatedBuildInputs = with self; oldAttrs.propagatedBuildInputs ++ [ typing-extensions ];
+      });
     };
-
-    propagatedBuildInputs = [ service-identity ldap3 twisted ];
-
-    # ldaptor is not ready for py3 yet
-    doCheck = !isPy3k;
-    checkInputs = [ ldaptor mock ];
   };
-
-in buildPythonApplication rec {
+  plugins = py.pkgs.callPackage ./plugins { };
+  tools = callPackage ./tools { };
+in
+with py.pkgs; buildPythonApplication rec {
   pname = "matrix-synapse";
-  version = "1.0.0";
+  version = "1.41.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1n8hv0zd818z4fx39yz6svb07zsbrh8fd6wfmgvhdxhp6p1vl0wq";
+    sha256 = "sha256-KLsTr8dKp8k7TcrC598ApDib7P0m9evmfdl8jbsZLdc=";
   };
 
   patches = [
-    # adds an entry point for the service
-    ./homeserver-script.patch
+    ./0001-setup-add-homeserver-as-console-script.patch
   ];
 
+  buildInputs = [ openssl ];
+
   propagatedBuildInputs = [
+    authlib
     bcrypt
     bleach
     canonicaljson
     daemonize
     frozendict
+    ijson
     jinja2
     jsonschema
     lxml
-    matrix-synapse-ldap3
     msgpack
     netaddr
     phonenumbers
     pillow
-    (prometheus_client.overrideAttrs (x: {
-      src = fetchPypi {
-        pname = "prometheus_client";
-        version = "0.3.1";
-        sha256 = "093yhvz7lxl7irnmsfdnf2030lkj4gsfkg6pcmy4yr1ijk029g0p";
-      };
-    }))
+    prometheus_client
     psutil
     psycopg2
     pyasn1
+    pyjwt
     pymacaroons
     pynacl
     pyopenssl
     pysaml2
     pyyaml
     requests
+    setuptools
     signedjson
     sortedcontainers
     treq
     twisted
+    typing-extensions
     unpaddedbase64
-  ] ++ lib.optional enableSystemd systemd;
+  ] ++ lib.optional enableSystemd systemd
+    ++ lib.optional enableRedis hiredis;
 
   checkInputs = [ mock parameterized openssl ];
+
+  doCheck = !stdenv.isDarwin;
 
   checkPhase = ''
     PYTHONPATH=".:$PYTHONPATH" ${python3.interpreter} -m twisted.trial tests
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://matrix.org;
+  passthru.tests = { inherit (nixosTests) matrix-synapse; };
+  passthru.plugins = plugins;
+  passthru.tools = tools;
+  passthru.python = python3;
+
+  meta = with lib; {
+    homepage = "https://matrix.org";
     description = "Matrix reference homeserver";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ralith roblabla ekleog pacien ];
+    maintainers = teams.matrix.members;
   };
 }

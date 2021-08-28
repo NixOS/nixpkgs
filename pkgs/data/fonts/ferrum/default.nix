@@ -6,7 +6,7 @@ let
   pname = "ferrum";
 in
 
-fetchzip rec {
+fetchzip {
   name = "${pname}-font-${majorVersion}.${minorVersion}";
 
   url = "http://dotcolon.net/DL/font/${pname}.zip";
@@ -19,7 +19,7 @@ fetchzip rec {
 
   meta = with lib; {
     homepage = "http://dotcolon.net/font/${pname}/";
-    description = "A decorative font.";
+    description = "A decorative font";
     platforms = platforms.all;
     maintainers = with maintainers; [ leenaars ];
     license = licenses.cc0;

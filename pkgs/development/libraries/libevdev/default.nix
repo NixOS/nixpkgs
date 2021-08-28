@@ -1,18 +1,19 @@
-{ stdenv, fetchurl, python }:
+{ lib, stdenv, fetchurl, fetchpatch, python3 }:
 
 stdenv.mkDerivation rec {
-  name = "libevdev-1.6.0";
+  pname = "libevdev";
+  version = "1.11.0";
 
   src = fetchurl {
-    url = "https://www.freedesktop.org/software/libevdev/${name}.tar.xz";
-    sha256 = "057qdrwbhql2lvr4kxljk3yqjsmh65hyrfbr2b681nc7b635q07m";
+    url = "https://www.freedesktop.org/software/${pname}/${pname}-${version}.tar.xz";
+    sha256 = "sha256-Y/TqFImFihCQgOC0C9Q+TgkDoeEuqIjVgduMSVdHwtA=";
   };
 
-  buildInputs = [ python ];
+  nativeBuildInputs = [ python3 ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Wrapper library for evdev devices";
-    homepage = http://www.freedesktop.org/software/libevdev/doc/latest/index.html;
+    homepage = "http://www.freedesktop.org/software/libevdev/doc/latest/index.html";
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = [ maintainers.amorsillo ];

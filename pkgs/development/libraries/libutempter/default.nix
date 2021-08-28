@@ -3,7 +3,7 @@
 with lib;
 
 stdenv.mkDerivation rec {
-  name = "libutempter-${version}";
+  pname = "libutempter";
   version = "1.1.6";
 
   src = fetchurl {

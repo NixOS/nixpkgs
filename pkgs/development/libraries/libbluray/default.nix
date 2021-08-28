@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, fontconfig, autoreconfHook
+{ lib, stdenv, fetchurl, pkg-config, fontconfig, autoreconfHook, DiskArbitration
 , withJava ? false, jdk ? null, ant ? null
 , withAACS ? false, libaacs ? null
 , withBDplus ? false, libbdplus ? null
@@ -6,7 +6,7 @@
 , withFonts ? true, freetype ? null
 }:
 
-with stdenv.lib;
+with lib;
 
 assert withJava -> jdk != null && ant != null;
 assert withAACS -> libaacs != null;
@@ -18,17 +18,17 @@ assert withFonts -> freetype != null;
 # https://wiki.archlinux.org/index.php/BluRay
 
 stdenv.mkDerivation rec {
-  name = "libbluray-${version}";
-  version  = "1.1.1";
+  pname = "libbluray";
+  version  = "1.2.1";
 
   src = fetchurl {
-    url = "http://get.videolan.org/libbluray/${version}/${name}.tar.bz2";
-    sha256 = "0f138xlldzci8wic89i9vpka3mdsn8r78khpnk3wijlbgjhphr0h";
+    url = "http://get.videolan.org/libbluray/${version}/${pname}-${version}.tar.bz2";
+    sha256 = "1v1nmq631j0prih7pjl01ixhhwgrkjpxrjmmc342rsl8g4zyh8sj";
   };
 
   patches = optional withJava ./BDJ-JARFILE-path.patch;
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ]
+  nativeBuildInputs = [ pkg-config autoreconfHook ]
                       ++ optionals withJava [ ant ]
                       ;
 
@@ -36,11 +36,12 @@ stdenv.mkDerivation rec {
                 ++ optional withJava jdk
                 ++ optional withMetadata libxml2
                 ++ optional withFonts freetype
+                ++ optional stdenv.isDarwin DiskArbitration
                 ;
 
   propagatedBuildInputs = optional withAACS libaacs;
 
-  NIX_LDFLAGS = [
+  NIX_LDFLAGS = toString [
     (optionalString withAACS   "-L${libaacs}/lib -laacs")
     (optionalString withBDplus "-L${libbdplus}/lib -lbdplus")
   ];
@@ -49,14 +50,14 @@ stdenv.mkDerivation rec {
     ${optionalString withJava ''export JDK_HOME="${jdk.home}"''}
   '';
 
-  configureFlags =  with stdenv.lib;
+  configureFlags =  with lib;
                     optional (! withJava) "--disable-bdjava-jar"
                  ++ optional (! withMetadata) "--without-libxml2"
                  ++ optional (! withFonts) "--without-freetype"
                  ;
 
-  meta = with stdenv.lib; {
-    homepage = http://www.videolan.org/developers/libbluray.html;
+  meta = with lib; {
+    homepage = "http://www.videolan.org/developers/libbluray.html";
     description = "Library to access Blu-Ray disks for video playback";
     license = licenses.lgpl21;
     maintainers = with maintainers; [ abbradar ];

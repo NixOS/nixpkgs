@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, glibc, dns-root-data } :
+{ lib, stdenv, fetchurl, glibc, dns-root-data } :
 
 let
   version = "1.05";
@@ -11,7 +11,8 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "djbdns-${version}";
+  pname = "djbdns";
+  inherit version;
 
   src = fetchurl {
     url = "https://cr.yp.to/djbdns/djbdns-${version}.tar.gz";
@@ -40,10 +41,10 @@ stdenv.mkDerivation {
     rm -rv djbdns-man;
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A collection of Domain Name System tools";
     longDescription = "Includes software for all the fundamental DNS operations: DNS cache: finding addresses of Internet hosts; DNS server: publishing addresses of Internet hosts; and DNS client: talking to a DNS cache.";
-    homepage = https://cr.yp.to/djbdns.html;
+    homepage = "https://cr.yp.to/djbdns.html";
     license = licenses.publicDomain;
     maintainers = with maintainers; [ jerith666 ];
   };

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , pyopenssl
 , pkgs
@@ -6,8 +6,9 @@
 , python
 }:
 
-buildPythonPackage rec {
-  name = "deskcon-0.3";
+buildPythonPackage {
+  pname = "deskcon";
+  version = "0.3";
   disabled = isPy3k;
 
   src = pkgs.fetchFromGitHub {
@@ -32,9 +33,9 @@ buildPythonPackage rec {
     wrapPythonProgramsIn $out/bin "$out $pythonPath"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Integrates an Android device into a desktop";
-    homepage = https://github.com/screenfreeze/deskcon-desktop;
+    homepage = "https://github.com/screenfreeze/deskcon-desktop";
     license = licenses.gpl3;
   };
 

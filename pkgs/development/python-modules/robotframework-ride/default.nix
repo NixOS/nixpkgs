@@ -1,13 +1,12 @@
-{ stdenv, fetchurl, buildPythonPackage, isPy3k, pygments, wxPython }:
+{ lib, fetchurl, buildPythonPackage, isPy3k, pygments, wxPython }:
 
 buildPythonPackage rec {
   version = "1.2.3";
   pname = "robotframework-ride";
   disabled = isPy3k;
-  name = pname + "-" + version;
 
   src = fetchurl {
-    url = "https://robotframework-ride.googlecode.com/files/${name}.tar.gz";
+    url = "https://robotframework-ride.googlecode.com/files/${pname}-${version}.tar.gz";
     sha256 = "1lf5f4x80f7d983bmkx12sxcizzii21kghs8kf63a1mj022a5x5j";
   };
 
@@ -23,9 +22,9 @@ buildPythonPackage rec {
   # error: invalid command 'test'
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Light-weight and intuitive editor for Robot Framework test case files";
-    homepage = https://code.google.com/p/robotframework-ride/;
+    homepage = "https://code.google.com/p/robotframework-ride/";
     license = licenses.asl20;
     platforms = platforms.linux;
     maintainers = with maintainers; [ bjornfor ];

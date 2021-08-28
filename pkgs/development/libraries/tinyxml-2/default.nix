@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, cmake }:
+{ lib, stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
-  name = "tinyxml-2-${version}";
+  pname = "tinyxml-2";
   version = "6.0.0";
 
   src = fetchFromGitHub {
@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A simple, small, efficient, C++ XML parser";
-    homepage = http://www.grinninglizard.com/tinyxml2/index.html;
-    platforms = stdenv.lib.platforms.unix;
-    license = stdenv.lib.licenses.zlib;
+    homepage = "http://www.grinninglizard.com/tinyxml2/index.html";
+    platforms = lib.platforms.unix;
+    license = lib.licenses.zlib;
   };
 }

@@ -1,14 +1,14 @@
-{ stdenv, fetchurl, autoconf, automake, libtool, autoreconfHook}:
+{ lib, stdenv, fetchurl, autoconf, automake, libtool, autoreconfHook}:
 
 stdenv.mkDerivation rec {
-  name = "CUnit-${version}";
+  pname = "CUnit";
   version = "2.1-3";
 
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [autoconf automake libtool];
 
   src = fetchurl {
-    url = "mirror://sourceforge/cunit/CUnit/${version}/${name}.tar.bz2";
+    url = "mirror://sourceforge/cunit/CUnit/${version}/${pname}-${version}.tar.bz2";
     sha256 = "057j82da9vv4li4z5ri3227ybd18nzyq81f6gsvhifs5z0vr3cpm";
   };
 
@@ -21,9 +21,9 @@ stdenv.mkDerivation rec {
       with a flexible variety of user interfaces.
     '';
 
-    homepage = http://cunit.sourceforge.net/;
+    homepage = "http://cunit.sourceforge.net/";
 
-    license = stdenv.lib.licenses.lgpl2;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.lgpl2;
+    platforms = lib.platforms.unix;
   };
 }

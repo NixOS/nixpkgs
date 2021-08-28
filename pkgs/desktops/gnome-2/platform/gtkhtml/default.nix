@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, pkgconfig, gtk2, intltool,
-GConf, enchant, isocodes, gnome_icon_theme }:
+{ stdenv, fetchurl, pkg-config, gtk2, intltool,
+GConf, enchant, isocodes, gnome-icon-theme }:
 
 stdenv.mkDerivation rec {
   name = "gtkhtml-3.32.2";
@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
   #http://www.mail-archive.com/debian-bugs-rc@lists.debian.org/msg250091.html
   patches = [ ./01_remove-disable-deprecated.patch ];
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ gtk2 intltool GConf enchant isocodes gnome_icon_theme ];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ gtk2 intltool GConf enchant isocodes gnome-icon-theme ];
 
-  NIX_LDFLAGS = [ "-lgthread-2.0" ];
+  NIX_LDFLAGS = "-lgthread-2.0";
 }

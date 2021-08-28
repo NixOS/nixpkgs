@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, ocaml }:
+{ lib, stdenv, fetchurl, ocaml }:
 
 stdenv.mkDerivation rec {
-  name = "cryptoverif-${version}";
-  version = "2.01";
+  pname = "cryptoverif";
+  version = "2.04";
 
   src = fetchurl {
     url    = "http://prosecco.gforge.inria.fr/personal/bblanche/cryptoverif/cryptoverif${version}.tar.gz";
-    sha256 = "122pryci8rsdzv9qszw11g3izh78r2lvd1raahv2j7qmvgi76nab";
+    sha256 = "1mzk6n0g2vdsv38y493zg85lxrpz72b92cmsray3g970xzanqd6s";
   };
 
   buildInputs = [ ocaml ];
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   ** from under $out/libexec. By default, it expects to find the files
   ** in $CWD which doesn't work. */
   patchPhase = ''
-    substituteInPlace ./src/settings.ml \
+    substituteInPlace ./src/syntax.ml \
       --replace \"default\" \"$out/libexec/default\"
   '';
 
@@ -30,8 +30,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Cryptographic protocol verifier in the computational model";
     homepage    = "https://prosecco.gforge.inria.fr/personal/bblanche/cryptoverif/";
-    license     = stdenv.lib.licenses.cecill-b;
-    platforms   = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
+    license     = lib.licenses.cecill-b;
+    platforms   = lib.platforms.unix;
+    maintainers = [ lib.maintainers.thoughtpolice ];
   };
 }

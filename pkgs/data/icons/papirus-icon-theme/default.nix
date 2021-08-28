@@ -1,35 +1,46 @@
-{ stdenv, fetchFromGitHub, gtk3 }:
+{ lib, stdenv, fetchFromGitHub, gtk3, pantheon, breeze-icons, gnome-icon-theme, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
   pname = "papirus-icon-theme";
-  version = "20190521";
+  version = "20210501";
 
   src = fetchFromGitHub {
     owner = "PapirusDevelopmentTeam";
     repo = pname;
     rev = version;
-    sha256 = "192s14bf2ni46jkiifbsl82qy1miy8fnxs2fpqwf6s6jlv9x4zxs";
+    sha256 = "sha256-3KH0oLeCev7WuoIOh4KBTiHTn2/aQlVrW5dpO+LSRT4=";
   };
 
-  nativeBuildInputs = [ gtk3 ];
+  nativeBuildInputs = [
+    gtk3
+  ];
+
+  propagatedBuildInputs = [
+    pantheon.elementary-icon-theme
+    breeze-icons
+    gnome-icon-theme
+    hicolor-icon-theme
+  ];
+
+  dontDropIconThemeCache = true;
 
   installPhase = ''
-     mkdir -p $out/share/icons
-     mv {,e}Papirus* $out/share/icons
-  '';
+    runHook preInstall
+    mkdir -p $out/share/icons
+    mv {,e}Papirus* $out/share/icons
 
-  postFixup = ''
     for theme in $out/share/icons/*; do
       gtk-update-icon-cache $theme
     done
+    runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Papirus icon theme";
-    homepage = https://github.com/PapirusDevelopmentTeam/papirus-icon-theme;
-    license = licenses.lgpl3;
+    homepage = "https://github.com/PapirusDevelopmentTeam/papirus-icon-theme";
+    license = licenses.gpl3Only;
     # darwin gives hash mismatch in source, probably because of file names differing only in case
     platforms = platforms.linux;
-    maintainers = with maintainers; [ romildo ];
+    maintainers = with maintainers; [ romildo fortuneteller2k ];
   };
 }

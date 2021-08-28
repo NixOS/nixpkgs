@@ -1,11 +1,11 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig,
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config,
   gettext, openssl
 }:
 
-with stdenv.lib;
+with lib;
 
-stdenv.mkDerivation rec {
-  name = "notbit-${version}";
+stdenv.mkDerivation {
+  pname = "notbit";
   version = "2018-01-09";
 
   src = fetchFromGitHub {
@@ -15,15 +15,16 @@ stdenv.mkDerivation rec {
     sha256 = "1623n0lvx42mamvb2vwin5i38hh0nxpxzmkr5188ss2x7m20lmii";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   buildInputs = [ openssl gettext ];
 
   meta = {
     description = "A minimal Bitmessage client";
-    homepage = https://github.com/bpeel/notbit;
+    homepage = "https://github.com/bpeel/notbit";
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = with maintainers; [ mog ];
+    broken = true;
   };
 }

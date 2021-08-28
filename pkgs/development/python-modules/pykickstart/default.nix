@@ -1,16 +1,18 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchurl
 , urlgrabber
 , python
+, isPy3k
 }:
 
 buildPythonPackage rec {
   pname = "pykickstart";
   version = "1.99.39";
   md5_path = "d249f60aa89b1b4facd63f776925116d";
+  disabled = isPy3k;
 
-  src = fetchurl rec {
+  src = fetchurl {
     url = "https://src.fedoraproject.org/repo/pkgs/pykickstart/"
     + "${pname}-${version}.tar.gz/${md5_path}/${pname}-${version}.tar.gz";
     sha256 = "e0d0f98ac4c5607e6a48d5c1fba2d50cc804de1081043f9da68cbfc69cad957a";
@@ -27,7 +29,7 @@ buildPythonPackage rec {
     ${python.interpreter} tests/baseclass.py -vv
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://fedoraproject.org/wiki/Pykickstart";
     description = "Read and write Fedora kickstart files";
     license = licenses.gpl2Plus;

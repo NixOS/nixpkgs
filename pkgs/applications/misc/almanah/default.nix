@@ -1,32 +1,75 @@
-{ stdenv, fetchurl, pkgconfig, intltool
-, libxml2, desktop-file-utils, wrapGAppsHook, evolution-data-server, gtkspell3, gpgme, libcryptui
-, glib, gtk3, gtksourceview3, sqlite, cairo, atk, gcr, gnome3 }:
+{ lib, stdenv
+, fetchurl
+, atk
+, cairo
+, desktop-file-utils
+, evolution-data-server
+, evolution
+, gcr
+, gettext
+, glib
+, gnome
+, gpgme
+, gtk3
+, gtksourceview3
+, gtkspell3
+, libcryptui
+, libxml2
+, meson
+, ninja
+, pkg-config
+, python3
+, sqlite
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "almanah";
-  version = "0.11.1";
+  version = "0.12.3";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1g0fyykq8bs3x1xqc0l0bk9zazcrxja784m68myymv1zfqqnp9h0";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "lMpDQOxlGljP66APR49aPbTZnfrGakbQ2ZcFvmiPMFo=";
   };
 
-  nativeBuildInputs = [ pkgconfig intltool libxml2 desktop-file-utils wrapGAppsHook ];
+  nativeBuildInputs = [
+    desktop-file-utils
+    gettext
+    libxml2
+    meson
+    ninja
+    pkg-config
+    python3
+    wrapGAppsHook
+  ];
 
-  buildInputs = [ glib gtk3 gtksourceview3 sqlite cairo atk gcr gtkspell3 evolution-data-server gnome3.evolution gpgme libcryptui ];
+  buildInputs = [
+    atk
+    cairo
+    evolution-data-server
+    gcr
+    glib
+    evolution
+    gpgme
+    gtk3
+    gtksourceview3
+    gtkspell3
+    libcryptui
+    sqlite
+  ];
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "none"; # it is quite odd
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Small GTK application to allow to keep a diary of your life";
-    homepage = https://wiki.gnome.org/Apps/Almanah_Diary;
+    homepage = "https://wiki.gnome.org/Apps/Almanah_Diary";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
   };
 }

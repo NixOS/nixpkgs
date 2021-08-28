@@ -1,6 +1,7 @@
-{ stdenv, pkgconfig, curl, darwin, libiconv, libgit2, libssh2,
-  openssl, sqlite, zlib, dbus, dbus-glib, gdk_pixbuf, cairo, python3,
-  libsodium, postgresql, gmp, foundationdb, ... }:
+{ lib, stdenv, pkg-config, curl, darwin, libiconv, libgit2, libssh2,
+  openssl, sqlite, zlib, dbus, dbus-glib, gdk-pixbuf, cairo, python3,
+  libsodium, postgresql, gmp, foundationdb, capnproto, nettle, clang,
+  llvmPackages, ... }:
 
 let
   inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
@@ -10,29 +11,31 @@ in
     buildInputs = [ cairo ];
   };
 
-  cargo = attrs: {
-    buildInputs = [ openssl zlib curl ]
-      ++ stdenv.lib.optionals stdenv.isDarwin [ CoreFoundation Security libiconv ];
+  capnp-rpc = attrs: {
+    nativeBuildInputs = [ capnproto ];
   };
 
-  cargo-vendor = attrs: {
+  cargo = attrs: {
     buildInputs = [ openssl zlib curl ]
-      ++ stdenv.lib.optionals stdenv.isDarwin [ Security ];
+      ++ lib.optionals stdenv.isDarwin [ CoreFoundation Security libiconv ];
   };
 
   libz-sys = attrs: {
-    buildInputs = [ pkgconfig zlib ];
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ zlib ];
     extraLinkFlags = ["-L${zlib.out}/lib"];
   };
 
   curl-sys = attrs: {
-    buildInputs = [ pkgconfig zlib curl ];
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ zlib curl ];
     propagatedBuildInputs = [ curl zlib ];
     extraLinkFlags = ["-L${zlib.out}/lib"];
   };
 
   dbus = attrs: {
-    buildInputs = [ pkgconfig dbus ];
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ dbus ];
   };
 
   foundationdb-sys = attrs: {
@@ -62,24 +65,34 @@ in
   };
 
   gdk-pixbuf = attrs: {
-    buildInputs = [ gdk_pixbuf ];
+    buildInputs = [ gdk-pixbuf ];
   };
 
   libgit2-sys = attrs: {
     LIBGIT2_SYS_USE_PKG_CONFIG = true;
-    buildInputs = [ pkgconfig openssl zlib libgit2 ];
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ openssl zlib libgit2 ];
   };
 
   libsqlite3-sys = attrs: {
-    buildInputs = [ pkgconfig sqlite ];
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ sqlite ];
   };
 
   libssh2-sys = attrs: {
-    buildInputs = [ pkgconfig openssl zlib libssh2 ];
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ openssl zlib libssh2 ];
   };
 
   libdbus-sys = attrs: {
-    buildInputs = [ pkgconfig dbus ];
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ dbus ];
+  };
+
+  nettle-sys = attrs: {
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ nettle clang ];
+    LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
   };
 
   openssl = attrs: {
@@ -87,11 +100,13 @@ in
   };
 
   openssl-sys = attrs: {
-    buildInputs = [ pkgconfig openssl ];
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ openssl ];
   };
 
   pq-sys = attr: {
-    buildInputs = [ pkgconfig postgresql ];
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ postgresql ];
   };
 
   rink = attrs: {
@@ -103,12 +118,43 @@ in
     propagatedBuildInputs = [ Security ];
   };
 
+  sequoia-openpgp = attrs: {
+    buildInputs = [ gmp ];
+  };
+
+  sequoia-openpgp-ffi = attrs: {
+    buildInputs = [ gmp ];
+  };
+
+  sequoia-ipc = attrs: {
+    buildInputs = [ gmp ];
+  };
+
+  sequoia-guide = attrs: {
+    buildInputs = [ gmp ];
+  };
+
+  sequoia-store = attrs: {
+    nativeBuildInputs = [ capnproto ];
+    buildInputs = [ sqlite gmp ];
+  };
+
+  sequoia-sq = attrs: {
+    buildInputs = [ sqlite gmp ];
+  };
+
+  sequoia-tool = attrs: {
+    nativeBuildInputs = [ capnproto ];
+    buildInputs = [ sqlite gmp ];
+  };
+
   serde_derive = attrs: {
-    buildInputs = stdenv.lib.optional stdenv.isDarwin Security;
+    buildInputs = lib.optional stdenv.isDarwin Security;
   };
 
   thrussh-libsodium = attrs: {
-    buildInputs = [ pkgconfig libsodium ];
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ libsodium ];
   };
 
   xcb = attrs: {

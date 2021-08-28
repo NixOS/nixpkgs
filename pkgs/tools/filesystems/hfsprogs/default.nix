@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, openssl, libbsd }:
+{ lib, stdenv, fetchurl, openssl, libbsd }:
 
 let version = "332.25";
     package_name = "hfsprogs"; in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "${package_name}-${version}";
   srcs = [
     (fetchurl {
@@ -14,6 +14,10 @@ stdenv.mkDerivation rec {
       sha256 = "74c9aeca899ed7f4bf155c65fc45bf0f250c0f6d57360ea953b1d536d9aa45e6";
     })
   ];
+
+  postPatch = ''
+    sed -ie '/sys\/sysctl.h/d' newfs_hfs.tproj/makehfs.c
+  '';
 
   sourceRoot = "diskdev_cmds-" + version;
   patches = [ "../debian/patches/*.patch" ];
@@ -39,7 +43,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "HFS/HFS+ user space utils";
-    license = stdenv.lib.licenses.apsl20;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.apsl20;
+    platforms = lib.platforms.linux;
   };
 }

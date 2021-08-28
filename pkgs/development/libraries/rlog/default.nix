@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation {
   name = "rlog-1.4";
@@ -9,9 +9,9 @@ stdenv.mkDerivation {
   };
 
   meta = {
-    homepage = http://www.arg0.net/rlog;
+    homepage = "https://www.arg0.net/rlog";
     description = "A C++ logging library used in encfs";
-    platforms = stdenv.lib.platforms.linux;
-    license = stdenv.lib.licenses.lgpl3;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.lgpl3;
   };
 }

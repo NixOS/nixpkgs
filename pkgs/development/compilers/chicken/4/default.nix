@@ -1,4 +1,4 @@
-{ newScope } :
+{ lib, newScope } :
 let
   callPackage = newScope self;
 
@@ -18,4 +18,4 @@ let
     egg2nix = callPackage ./egg2nix.nix { };
   };
 
-in self
+in lib.recurseIntoAttrs self

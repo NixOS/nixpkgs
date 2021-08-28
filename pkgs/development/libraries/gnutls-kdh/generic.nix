@@ -1,8 +1,8 @@
-{ config, lib, stdenv, zlib, lzo, libtasn1, nettle, pkgconfig, lzip
+{ config, lib, stdenv, zlib, lzo, libtasn1, nettle, pkg-config, lzip
 , perl, gmp, autogen, libidn, p11-kit, unbound, libiconv
 , guileBindings ? config.gnutls.guile or false, guile
 , tpmSupport ? true, trousers, nettools, gperftools, gperf, gettext, automake
-, yacc, texinfo
+, bison, texinfo
 
 # Version dependent args
 , version, src, patches ? [], postPatch ? "", nativeBuildInputs ? []
@@ -11,11 +11,12 @@
 assert guileBindings -> guile != null;
 let
   # XXX: Gnulib's `test-select' fails on FreeBSD:
-  # http://hydra.nixos.org/build/2962084/nixlog/1/raw .
+  # https://hydra.nixos.org/build/2962084/nixlog/1/raw .
   doCheck = !stdenv.isFreeBSD && !stdenv.isDarwin && lib.versionAtLeast version "3.4";
 in
 stdenv.mkDerivation {
-  name = "gnutls-kdh-${version}";
+  pname = "gnutls-kdh";
+  inherit version;
 
   inherit src patches;
 
@@ -54,19 +55,19 @@ stdenv.mkDerivation {
   enableParallelBuilding = false;
 
   buildInputs = [ lzo lzip nettle libtasn1 libidn p11-kit zlib gmp
-  autogen gperftools gperf gettext automake yacc texinfo ]
+  autogen gperftools gperf gettext automake bison texinfo ]
     ++ lib.optional doCheck nettools
     ++ lib.optional (stdenv.isFreeBSD || stdenv.isDarwin) libiconv
     ++ lib.optional (tpmSupport && stdenv.isLinux) trousers
     ++ [ unbound ]
     ++ lib.optional guileBindings guile;
 
-  nativeBuildInputs = [ perl pkgconfig ] ++ nativeBuildInputs;
+  nativeBuildInputs = [ perl pkg-config ] ++ nativeBuildInputs;
 
   #inherit doCheck;
   doCheck = false;
 
-  # Fixup broken libtool and pkgconfig files
+  # Fixup broken libtool and pkg-config files
   preFixup = lib.optionalString (!stdenv.isDarwin) ''
     sed ${lib.optionalString tpmSupport "-e 's,-ltspi,-L${trousers}/lib -ltspi,'"} \
         -e 's,-lz,-L${zlib.out}/lib -lz,' \
@@ -85,9 +86,10 @@ stdenv.mkDerivation {
        layer. It adds TLS-KDH ciphers: Kerberos + Diffie-Hellman.
     '';
 
-    homepage = https://github.com/arpa2/gnutls-kdh;
+    homepage = "https://github.com/arpa2/gnutls-kdh";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ leenaars ];
     platforms = platforms.all;
+    broken = true;
   };
 }

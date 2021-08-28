@@ -1,8 +1,0 @@
-[Desktop Entry]
-Type=Application
-Name=Instantiate Default elementary dockitems
-Exec=@script@
-StartupNotify=false
-NoDisplay=true
-OnlyShowIn=Pantheon;
-X-GNOME-Autostart-Phase=EarlyInitialization

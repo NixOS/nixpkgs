@@ -1,14 +1,15 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenvNoCC, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
+  # NOTE: this should be updated with linux_rpi
   pname = "raspberrypi-firmware";
-  version = "1.20190401";
+  version = "1.20210303";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "firmware";
     rev = version;
-    sha256 = "13q04n1hf8a52avwfp9dhsn2jpp9ivs1mj37gp0h7a6k9044s2xw";
+    sha256 = "0pgiw93hq4gfph5dnwbi8w59g0f7yhmagwzam971k529mh5yl86m";
   };
 
   installPhase = ''
@@ -16,11 +17,14 @@ stdenv.mkDerivation rec {
     cp -R boot/* $out/share/raspberrypi/boot
   '';
 
-  meta = with stdenv.lib; {
+  dontConfigure = true;
+  dontBuild = true;
+  dontFixup = true;
+
+  meta = with lib; {
     description = "Firmware for the Raspberry Pi board";
-    homepage = https://github.com/raspberrypi/firmware;
+    homepage = "https://github.com/raspberrypi/firmware";
     license = licenses.unfreeRedistributableFirmware; # See https://github.com/raspberrypi/firmware/blob/master/boot/LICENCE.broadcom
-    platforms = [ "armv6l-linux" "armv7l-linux" "aarch64-linux" ];
-    maintainers = with maintainers; [ dezgeg tavyc ];
+    maintainers = with maintainers; [ dezgeg ];
   };
 }

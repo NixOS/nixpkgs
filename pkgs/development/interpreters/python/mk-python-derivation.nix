@@ -4,13 +4,27 @@
 , config
 , python
 , wrapPython
-, setuptools
 , unzip
 , ensureNewerSourcesForZipFilesHook
 # Whether the derivation provides a Python module or not.
 , toPythonModule
 , namePrefix
 , update-python-libraries
+, setuptools
+, flitBuildHook
+, pipBuildHook
+, pipInstallHook
+, pythonCatchConflictsHook
+, pythonImportsCheckHook
+, pythonNamespacesHook
+, pythonRemoveBinBytecodeHook
+, pythonRemoveTestsDirHook
+, setuptoolsBuildHook
+, setuptoolsCheckHook
+, wheelUnpackHook
+, eggUnpackHook
+, eggBuildHook
+, eggInstallHook
 }:
 
 { name ? "${attrs.pname}-${attrs.version}"
@@ -39,7 +53,9 @@
 , disabled ? false
 
 # Raise an error if two packages are installed with the same name
-, catchConflicts ? true
+# TODO: For cross we probably need a different PYTHONPATH, or not
+# add the runtime deps until after buildPhase.
+, catchConflicts ? (python.stdenv.hostPlatform == python.stdenv.buildPlatform)
 
 # Additional arguments to pass to the makeWrapper function, which wraps
 # generated binaries.
@@ -47,6 +63,11 @@
 
 # Skip wrapping of python programs altogether
 , dontWrapPythonPrograms ? false
+
+# Don't use Pip to install a wheel
+# Note this is actually a variable for the pipInstallPhase in pip's setupHook.
+# It's included here to prevent an infinite recursion.
+, dontUsePipInstall ? false
 
 # Skip setting the PYTHONNOUSERSITE environment variable in wrapped programs
 , permitUserSite ? false
@@ -57,11 +78,22 @@
 # However, some packages do provide executables with extensions, and thus bytecode is generated.
 , removeBinBytecode ? true
 
+# Several package formats are supported.
+# "setuptools" : Install a common setuptools/distutils based package. This builds a wheel.
+# "wheel" : Install from a pre-compiled wheel.
+# "flit" : Install a flit package. This builds a wheel.
+# "pyproject": Install a package using a ``pyproject.toml`` file (PEP517). This builds a wheel.
+# "egg": Install a package from an egg.
+# "other" : Provide your own buildPhase and installPhase.
+, format ? "setuptools"
+
 , meta ? {}
 
 , passthru ? {}
 
 , doCheck ? config.doCheckByDefault or false
+
+, disabledTestPaths ? []
 
 , ... } @ attrs:
 
@@ -71,61 +103,91 @@ if disabled
 then throw "${name} not supported for interpreter ${python.executable}"
 else
 
-let self = toPythonModule (python.stdenv.mkDerivation (builtins.removeAttrs attrs [
-    "disabled" "checkInputs" "doCheck" "doInstallCheck" "dontWrapPythonPrograms" "catchConflicts"
-  ] // {
+let
+  inherit (python) stdenv;
 
-  name = namePrefix + name;
+  name_ = name;
 
-  nativeBuildInputs = [
-    python
-    wrapPython
-    ensureNewerSourcesForZipFilesHook
-    setuptools
-#     ++ lib.optional catchConflicts setuptools # If we no longer propagate setuptools
-  ] ++ lib.optionals (lib.hasSuffix "zip" (attrs.src.name or "")) [
-    unzip
-  ] ++ nativeBuildInputs;
+  self = toPythonModule (stdenv.mkDerivation ((builtins.removeAttrs attrs [
+    "disabled" "checkPhase" "checkInputs" "doCheck" "doInstallCheck" "dontWrapPythonPrograms" "catchConflicts" "format"
+    "disabledTestPaths"
+  ]) // {
 
-  buildInputs = buildInputs ++ pythonPath;
+    name = namePrefix + name_;
 
-  # Propagate python and setuptools. We should stop propagating setuptools.
-  propagatedBuildInputs = propagatedBuildInputs ++ [ python setuptools ];
+    nativeBuildInputs = [
+      python
+      wrapPython
+      ensureNewerSourcesForZipFilesHook  # move to wheel installer (pip) or builder (setuptools, flit, ...)?
+      pythonRemoveTestsDirHook
+    ] ++ lib.optionals catchConflicts [
+      setuptools pythonCatchConflictsHook
+    ] ++ lib.optionals removeBinBytecode [
+      pythonRemoveBinBytecodeHook
+    ] ++ lib.optionals (lib.hasSuffix "zip" (attrs.src.name or "")) [
+      unzip
+    ] ++ lib.optionals (format == "setuptools") [
+      setuptoolsBuildHook
+    ] ++ lib.optionals (format == "flit") [
+      flitBuildHook
+    ] ++ lib.optionals (format == "pyproject") [
+      pipBuildHook
+    ] ++ lib.optionals (format == "wheel") [
+      wheelUnpackHook
+    ] ++ lib.optionals (format == "egg") [
+      eggUnpackHook eggBuildHook eggInstallHook
+    ] ++ lib.optionals (!(format == "other") || dontUsePipInstall) [
+      pipInstallHook
+    ] ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [
+      # This is a test, however, it should be ran independent of the checkPhase and checkInputs
+      pythonImportsCheckHook
+    ] ++ lib.optionals (python.pythonAtLeast "3.3") [
+      # Optionally enforce PEP420 for python3
+      pythonNamespacesHook
+    ] ++ nativeBuildInputs;
 
-  inherit strictDeps;
+    buildInputs = buildInputs ++ pythonPath;
 
-  LANG = "${if python.stdenv.isDarwin then "en_US" else "C"}.UTF-8";
+    propagatedBuildInputs = propagatedBuildInputs ++ [ python ];
 
-  # Python packages don't have a checkPhase, only an installCheckPhase
-  doCheck = false;
-  doInstallCheck = doCheck;
-  installCheckInputs = checkInputs;
+    inherit strictDeps;
 
-  postFixup = lib.optionalString (!dontWrapPythonPrograms) ''
-    wrapPythonPrograms
-  '' + lib.optionalString removeBinBytecode ''
-    if [ -d "$out/bin" ]; then
-      rm -rf "$out/bin/__pycache__"                 # Python 3
-      find "$out/bin" -type f -name "*.pyc" -delete # Python 2
-    fi
-  '' + lib.optionalString catchConflicts ''
-    # Check if we have two packages with the same name in the closure and fail.
-    # If this happens, something went wrong with the dependencies specs.
-    # Intentionally kept in a subdirectory, see catch_conflicts/README.md.
-    ${python.pythonForBuild.interpreter} ${./catch_conflicts}/catch_conflicts.py
-  '' + attrs.postFixup or '''';
+    LANG = "${if python.stdenv.isDarwin then "en_US" else "C"}.UTF-8";
 
-  # Python packages built through cross-compilation are always for the host platform.
-  disallowedReferences = lib.optionals (python.stdenv.hostPlatform != python.stdenv.buildPlatform) [ python.pythonForBuild ];
+    # Python packages don't have a checkPhase, only an installCheckPhase
+    doCheck = false;
+    doInstallCheck = attrs.doCheck or true;
+    installCheckInputs = [
+    ] ++ lib.optionals (format == "setuptools") [
+      # Longer-term we should get rid of this and require
+      # users of this function to set the `installCheckPhase` or
+      # pass in a hook that sets it.
+      setuptoolsCheckHook
+    ] ++ checkInputs;
 
-  meta = {
-    # default to python's platforms
-    platforms = python.meta.platforms;
-    isBuildPythonPackage = python.meta.platforms;
-  } // meta;
-}));
+    postFixup = lib.optionalString (!dontWrapPythonPrograms) ''
+      wrapPythonPrograms
+    '' + attrs.postFixup or "";
 
-passthru.updateScript = let
-    filename = builtins.head (lib.splitString ":" self.meta.position);
-  in attrs.passthru.updateScript or [ update-python-libraries filename ];
+    # Python packages built through cross-compilation are always for the host platform.
+    disallowedReferences = lib.optionals (python.stdenv.hostPlatform != python.stdenv.buildPlatform) [ python.pythonForBuild ];
+
+    meta = {
+      # default to python's platforms
+      platforms = python.meta.platforms;
+      isBuildPythonPackage = python.meta.platforms;
+    } // lib.optionalAttrs (attrs?pname) {
+      mainProgram = attrs.pname;
+    } // meta;
+  } // lib.optionalAttrs (attrs?checkPhase) {
+    # If given use the specified checkPhase, otherwise use the setup hook.
+    # Longer-term we should get rid of `checkPhase` and use `installCheckPhase`.
+    installCheckPhase = attrs.checkPhase;
+  } //  lib.optionalAttrs (disabledTestPaths != []) {
+      disabledTestPaths = lib.escapeShellArgs disabledTestPaths;
+  }));
+
+  passthru.updateScript = let
+      filename = builtins.head (lib.splitString ":" self.meta.position);
+    in attrs.passthru.updateScript or [ update-python-libraries filename ];
 in lib.extendDerivation true passthru self

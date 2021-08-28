@@ -1,16 +1,17 @@
-{ stdenv, fetchurl, fetchFromGitHub, buildGoPackage, buildEnv }:
+{ lib, stdenv, fetchurl, fetchFromGitHub, buildGoPackage, buildEnv }:
 
 let
-  version = "5.9.0";
+  version = "5.32.1";
 
   mattermost-server = buildGoPackage rec {
-    name = "mattermost-server-${version}";
+    pname = "mattermost-server";
+    inherit version;
 
     src = fetchFromGitHub {
       owner = "mattermost";
       repo = "mattermost-server";
       rev = "v${version}";
-      sha256 = "08h7n9smv6f1njazn4pl6pwkfmqxn93rzg69h6asicp9c4vad3m2";
+      sha256 = "BssrTfkIxUbXYXIfz9i+5b4rEYSzBim+/riK78m8Bxo=";
     };
 
     goPackagePath = "github.com/mattermost/mattermost-server";
@@ -23,11 +24,12 @@ let
   };
 
   mattermost-webapp = stdenv.mkDerivation {
-    name = "mattermost-webapp-${version}";
+    pname = "mattermost-webapp";
+    inherit version;
 
     src = fetchurl {
       url = "https://releases.mattermost.com/${version}/mattermost-${version}-linux-amd64.tar.gz";
-      sha256 = "19ys5mwmw99fbj44gd00vrl2qj09lrwvj1ihic0fsn6nd3hnx3mw";
+      sha256 = "kRerl3fYRTrotj86AIFSor3GpjhABkCmego1ms9HmkQ=";
     };
 
     installPhase = ''
@@ -46,9 +48,9 @@ in
     name = "mattermost-${version}";
     paths = [ mattermost-server mattermost-webapp ];
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Open-source, self-hosted Slack-alternative";
-      homepage = https://www.mattermost.org;
+      homepage = "https://www.mattermost.org";
       license = with licenses; [ agpl3 asl20 ];
       maintainers = with maintainers; [ fpletz ryantm ];
       platforms = platforms.unix;

@@ -1,4 +1,4 @@
-import ./make-test.nix ({ ... } :
+import ./make-test-python.nix ({ ... } :
 
 let
   node = { pkgs, ... } : {
@@ -26,27 +26,21 @@ in {
 
   testScript = ''
     # Test if rxe interface comes up
-    $server->waitForUnit("default.target");
-    $server->succeed("systemctl status rxe.service");
-    $server->succeed("ibv_devices | grep rxe0");
+    server.wait_for_unit("default.target")
+    server.succeed("systemctl status rxe.service")
+    server.succeed("ibv_devices | grep rxe_eth1")
 
-    $client->waitForUnit("default.target");
+    client.wait_for_unit("default.target")
 
-    # ping pong test
-    $server->succeed("screen -dmS rc_pingpong ibv_rc_pingpong -p 4800 -g0");
-    $client->succeed("sleep 2; ibv_rc_pingpong -p 4800 -g0 server");
+    # ping pong tests
+    for proto in "rc", "uc", "ud", "srq":
+        server.succeed(
+            "screen -dmS {0}_pingpong ibv_{0}_pingpong -p 4800 -s 1024 -g0".format(proto)
+        )
+        client.succeed("sleep 2; ibv_{}_pingpong -p 4800 -s 1024 -g0 server".format(proto))
 
-    $server->succeed("screen -dmS uc_pingpong ibv_uc_pingpong -p 4800 -g0");
-    $client->succeed("sleep 2; ibv_uc_pingpong -p 4800 -g0 server");
-
-    $server->succeed("screen -dmS ud_pingpong ibv_ud_pingpong -p 4800 -s 1024 -g0");
-    $client->succeed("sleep 2; ibv_ud_pingpong -p 4800 -s 1024 -g0 server");
-
-    $server->succeed("screen -dmS srq_pingpong ibv_srq_pingpong -p 4800 -g0");
-    $client->succeed("sleep 2; ibv_srq_pingpong -p 4800 -g0 server");
-
-    $server->succeed("screen -dmS rping rping -s -a server -C 10");
-    $client->succeed("sleep 2; rping -c -a server -C 10");
+    server.succeed("screen -dmS rping rping -s -a server -C 10")
+    client.succeed("sleep 2; rping -c -a server -C 10")
   '';
 })
 

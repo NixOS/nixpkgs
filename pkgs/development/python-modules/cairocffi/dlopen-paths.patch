@@ -1,46 +1,61 @@
-commit 0435bc2577d4b18f54b78b2f5185abb2b2005982
-Author: Alexander V. Nikolaev <avn@avnik.info>
-Date:   Sat Feb 6 08:09:06 2016 +0200
+Patch dlopen() to allow direct paths to all required libs
 
-    Patch dlopen() to allow direct paths to all required libs
-    
-    This patch is NixOS specific
+This is an update of the patch submitted in
+https://github.com/NixOS/nixpkgs/commit/b13e44e094989d3a902f8c73b22e8d3c0cc7acf4
+by Alexander V. Nikolaev <avn@avnik.info>
+
+---
+ cairocffi/__init__.py | 34 ++++++++++++++++------------------
+ 1 file changed, 16 insertions(+), 18 deletions(-)
 
 diff --git a/cairocffi/__init__.py b/cairocffi/__init__.py
-index 6061973..3538a58 100644
+index 307d58c..43c29e3 100644
 --- a/cairocffi/__init__.py
 +++ b/cairocffi/__init__.py
-@@ -21,19 +21,22 @@ VERSION = __version__ = (Path(__file__).parent / 'VERSION').read_text().strip()
- version = '1.16.0'
- version_info = (1, 16, 0)
- 
-+# Use hardcoded soname, because ctypes.util use gcc/objdump which shouldn't be required for runtime
+@@ -21,28 +21,26 @@ VERSION = __version__ = (Path(__file__).parent / 'VERSION').read_text().strip()
+ version = '1.17.2'
+ version_info = (1, 17, 2)
+
++# Use hardcoded soname, because ctypes.util use gcc/objdump which shouldn't be
++# required for runtime
 +_LIBS = {
 +    'cairo': '@cairo@/lib/libcairo@ext@',
 +    'glib-2.0': '@glib@/lib/libglib-2.0@ext@',
 +    'gobject-2.0': '@glib@/lib/libgobject-2.0@ext@',
 +    'gdk_pixbuf-2.0': '@gdk_pixbuf@/lib/libgdk_pixbuf-2.0@ext@',
 +}
- 
--def dlopen(ffi, *names):
-+def dlopen(ffi, name, *names):
++
+
+ def dlopen(ffi, library_names, filenames):
      """Try various names for the same library, for different platforms."""
--    for name in names:
--        for lib_name in (name, 'lib' + name):
--            try:
--                path = ctypes.util.find_library(lib_name)
--                lib = ffi.dlopen(path or lib_name)
--                if lib:
--                    return lib
--            except OSError:
--                pass
--    raise OSError("dlopen() failed to load a library: %s" % ' / '.join(names))
-+    path = _LIBS.get(name, None)
-+    if path:
-+        lib = ffi.dlopen(path)
-+        if lib:
-+            return lib
-+    raise OSError("dlopen() failed to load a library: %s as %s" % (name, path))
- 
- 
- cairo = dlopen(ffi, 'cairo', 'cairo-2', 'cairo-gobject-2', 'cairo.so.2')
+-    exceptions = []
+-
+     for library_name in library_names:
+-        library_filename = find_library(library_name)
+-        if library_filename:
+-            filenames = (library_filename,) + filenames
+-        else:
+-            exceptions.append(
+-                'no library called "{}" was found'.format(library_name))
+-
+-    for filename in filenames:
+-        try:
+-            return ffi.dlopen(filename)
+-        except OSError as exception:  # pragma: no cover
+-            exceptions.append(exception)
+-
+-    error_message = '\n'.join(  # pragma: no cover
+-        str(exception) for exception in exceptions)
+-    raise OSError(error_message)  # pragma: no cover
++        path = _LIBS.get(library_name, None)
++        if path:
++            lib = ffi.dlopen(path)
++            if lib:
++                return lib
++
++    raise OSError("dlopen() failed to load a library: %s as %s" % (library_name, path))
+
+
+ cairo = dlopen(
+--
+2.19.2

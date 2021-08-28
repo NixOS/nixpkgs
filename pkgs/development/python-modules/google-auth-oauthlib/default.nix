@@ -1,41 +1,40 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
-, isPy3k
 , click
 , mock
-, pytest
-, futures
-, google_auth
+, pytestCheckHook
+, google-auth
 , requests_oauthlib
 }:
 
 buildPythonPackage rec {
   pname = "google-auth-oauthlib";
-  version = "0.3.0";
+  version = "0.4.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "03rq2rjac0zh16vsw0q914sp62l9f8fp033wn3191pqd2cchqix0";
+    sha256 = "sha256-CYMsbnUDL5OBjt8a/+R0YSHWQMYlpb75tclq9nbpju4=";
   };
 
-  checkInputs = [
-    click mock pytest
-  ] ++ lib.optionals (!isPy3k) [ futures ];
-
   propagatedBuildInputs = [
-    google_auth requests_oauthlib
+    google-auth
+    requests_oauthlib
   ];
 
-  checkPhase = ''
-    rm -fr tests/__pycache__/
-    py.test
-  '';
+  checkInputs = [
+    click
+    mock
+    pytestCheckHook
+  ];
+
+  disabledTests = lib.optionals stdenv.isDarwin [ "test_run_local_server" ];
 
   meta = with lib; {
     description = "Google Authentication Library: oauthlib integration";
-    homepage = https://github.com/GoogleCloudPlatform/google-auth-library-python-oauthlib;
+    homepage = "https://github.com/GoogleCloudPlatform/google-auth-library-python-oauthlib";
     license = licenses.asl20;
-    maintainers = with maintainers; [ terlar ];
+    maintainers = with maintainers; [ SuperSandro2000 terlar ];
   };
 }

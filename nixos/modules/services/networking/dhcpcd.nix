@@ -19,7 +19,7 @@ let
     map (i: i.name) (filter (i: if i.useDHCP != null then !i.useDHCP else i.ipv4.addresses != [ ]) interfaces)
     ++ mapAttrsToList (i: _: i) config.networking.sits
     ++ concatLists (attrValues (mapAttrs (n: v: v.interfaces) config.networking.bridges))
-    ++ concatLists (attrValues (mapAttrs (n: v: v.interfaces) config.networking.vswitches))
+    ++ flatten (concatMap (i: attrNames (filterAttrs (_: config: config.type != "internal") i.interfaces)) (attrValues config.networking.vswitches))
     ++ concatLists (attrValues (mapAttrs (n: v: v.interfaces) config.networking.bonds))
     ++ config.networking.dhcpcd.denyInterfaces;
 
@@ -59,6 +59,21 @@ let
       # Use the list of allowed interfaces if specified
       ${optionalString (allowInterfaces != null) "allowinterfaces ${toString allowInterfaces}"}
 
+      # Immediately fork to background if specified, otherwise wait for IP address to be assigned
+      ${{
+        background = "background";
+        any = "waitip";
+        ipv4 = "waitip 4";
+        ipv6 = "waitip 6";
+        both = "waitip 4\nwaitip 6";
+        if-carrier-up = "";
+      }.${cfg.wait}}
+
+      ${optionalString (config.networking.enableIPv6 == false) ''
+        # Don't solicit or accept IPv6 Router Advertisements and DHCPv6 if disabled IPv6
+        noipv6
+      ''}
+
       ${cfg.extraConfig}
     '';
 
@@ -71,7 +86,7 @@ let
           # anything ever again ("couldn't resolve ..., giving up on
           # it"), so we silently lose time synchronisation. This also
           # applies to openntpd.
-          ${config.systemd.package}/bin/systemctl try-reload-or-restart ntpd.service openntpd.service chronyd.service || true
+          /run/current-system/systemd/bin/systemctl try-reload-or-restart ntpd.service openntpd.service chronyd.service || true
       fi
 
       ${cfg.runHook}
@@ -146,6 +161,21 @@ in
       '';
     };
 
+    networking.dhcpcd.wait = mkOption {
+      type = types.enum [ "background" "any" "ipv4" "ipv6" "both" "if-carrier-up" ];
+      default = "any";
+      description = ''
+        This option specifies when the dhcpcd service will fork to background.
+        If set to "background", dhcpcd will fork to background immediately.
+        If set to "ipv4" or "ipv6", dhcpcd will wait for the corresponding IP
+        address to be assigned. If set to "any", dhcpcd will wait for any type
+        (IPv4 or IPv6) to be assigned. If set to "both", dhcpcd will wait for
+        both an IPv4 and an IPv6 address before forking.
+        The option "if-carrier-up" is equivalent to "any" if either ethernet
+        is plugged nor WiFi is powered, and to "background" otherwise.
+      '';
+    };
+
   };
 
 
@@ -161,9 +191,10 @@ in
       { description = "DHCP Client";
 
         wantedBy = [ "multi-user.target" ] ++ optional (!hasDefaultGatewaySet) "network-online.target";
-        wants = [ "network.target" "systemd-udev-settle.service" ];
-        before = [ "network.target" ];
-        after = [ "systemd-udev-settle.service" ];
+        wants = [ "network.target" ];
+        before = [ "network-online.target" ];
+
+        restartTriggers = [ exitHook ];
 
         # Stopping dhcpcd during a reconfiguration is undesirable
         # because it brings down the network interfaces configured by
@@ -177,7 +208,7 @@ in
         serviceConfig =
           { Type = "forking";
             PIDFile = "/run/dhcpcd.pid";
-            ExecStart = "@${dhcpcd}/sbin/dhcpcd dhcpcd -w --quiet ${optionalString cfg.persistent "--persistent"} --config ${dhcpcdConf}";
+            ExecStart = "@${dhcpcd}/sbin/dhcpcd dhcpcd --quiet ${optionalString cfg.persistent "--persistent"} --config ${dhcpcdConf}";
             ExecReload = "${dhcpcd}/sbin/dhcpcd --rebind";
             Restart = "always";
           };
@@ -185,16 +216,12 @@ in
 
     environment.systemPackages = [ dhcpcd ];
 
-    environment.etc =
-      [ { source = exitHook;
-          target = "dhcpcd.exit-hook";
-        }
-      ];
+    environment.etc."dhcpcd.exit-hook".source = exitHook;
 
     powerManagement.resumeCommands = mkIf config.systemd.services.dhcpcd.enable
       ''
         # Tell dhcpcd to rebind its interfaces if it's running.
-        ${config.systemd.package}/bin/systemctl reload dhcpcd.service
+        /run/current-system/systemd/bin/systemctl reload dhcpcd.service
       '';
 
   };

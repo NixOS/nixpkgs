@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig
+{ lib, stdenv, fetchFromGitHub, pkg-config
 , python3
 , gsettings-desktop-schemas
 , desktop-file-utils
@@ -16,20 +16,21 @@
 , gst_plugins ? with gst_all_1; [ gst-plugins-good gst-plugins-ugly ]
 }:
 let
-  version = "7.2";
+  version = "7.3";
 
-in stdenv.mkDerivation rec {
-  name = "gradio-${version}";
+in stdenv.mkDerivation {
+  pname = "gradio";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "haecker-felix";
     repo = "gradio";
     rev = "v${version}";
-    sha256 = "0c4vlrfl0ljkiwarpwa8wcfmmihh6a5j4pi4yr0qshyl9xxvxiv3";
+    sha256 = "00982dynl36lpsrx3mkd2a479zsrc8jvwfb8i7pi6w7fzzd8n8bl";
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
 
     meson
     ninja
@@ -54,15 +55,14 @@ in stdenv.mkDerivation rec {
     gsettings-desktop-schemas
   ] ++ gst_plugins;
 
-  enableParallelBuilding = true;
   postInstall = ''
     glib-compile-schemas "$out"/share/glib-2.0/schemas
   '';
 
   patches = [ ./0001-Remove-post-install-script-that-hardcodes-paths.patch ];
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/haecker-felix/gradio;
+  meta = with lib; {
+    homepage = "https://github.com/haecker-felix/gradio";
     description = "A GTK3 app for finding and listening to internet radio stations";
     license = licenses.gpl3;
     platforms = platforms.linux;

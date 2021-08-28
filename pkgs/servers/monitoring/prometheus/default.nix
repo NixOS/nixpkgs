@@ -1,54 +1,81 @@
-{ stdenv, go, buildGoPackage, fetchFromGitHub }:
+{ stdenv, lib, go, buildGoModule, fetchFromGitHub, mkYarnPackage, nixosTests
+, fetchpatch
+}:
 
 let
-  goPackagePath = "github.com/prometheus/prometheus";
-in rec {
-  buildPrometheus = { version, sha256, doCheck ? true, ... }@attrs:
-    let attrs' = builtins.removeAttrs attrs ["version" "sha256"]; in
-      buildGoPackage ({
-        name = "prometheus-${version}";
+  version = "2.27.1";
 
-        inherit goPackagePath;
-
-        src = fetchFromGitHub {
-          rev = "v${version}";
-          owner = "prometheus";
-          repo = "prometheus";
-          inherit sha256;
-        };
-
-        buildFlagsArray = let t = "${goPackagePath}/vendor/github.com/prometheus/common/version"; in ''
-          -ldflags=
-             -X ${t}.Version=${version}
-             -X ${t}.Revision=unknown
-             -X ${t}.Branch=unknown
-             -X ${t}.BuildUser=nix@nixpkgs
-             -X ${t}.BuildDate=unknown
-             -X ${t}.GoVersion=${stdenv.lib.getVersion go}
-        '';
-
-        preInstall = ''
-          mkdir -p "$bin/share/doc/prometheus" "$bin/etc/prometheus"
-          cp -a $src/documentation/* $bin/share/doc/prometheus
-          cp -a $src/console_libraries $src/consoles $bin/etc/prometheus
-        '';
-
-        meta = with stdenv.lib; {
-          description = "Service monitoring system and time series database";
-          homepage = https://prometheus.io;
-          license = licenses.asl20;
-          maintainers = with maintainers; [ benley fpletz ];
-          platforms = platforms.unix;
-        };
-    } // attrs');
-
-  prometheus_1 = buildPrometheus {
-    version = "1.8.2";
-    sha256 = "088flpg3qgnj9afl9vbaa19v2s1d21yxy38nrlv5m7cxwy2pi5pv";
+  src = fetchFromGitHub {
+    rev = "v${version}";
+    owner = "prometheus";
+    repo = "prometheus";
+    sha256 = "0836ygyvld5skjycd7366i6vyf451s6cay5ng6c2fwq0skvp2gj2";
   };
 
-  prometheus_2 = buildPrometheus {
-    version = "2.9.2";
-    sha256 = "1nbvw9ia15ls3l2pydc9hdfs057kjlg0cm8h4w9sjjnsssbikl26";
+  goPackagePath = "github.com/prometheus/prometheus";
+
+  webui = mkYarnPackage {
+    src = "${src}/web/ui/react-app";
+    packageJSON = ./webui-package.json;
+    yarnNix = ./webui-yarndeps.nix;
+
+    # The standard yarn2nix directory management causes build failures with
+    # Prometheus's webui due to using relative imports into node_modules. Use
+    # an extremely simplified version of it instead.
+    configurePhase = "ln -s $node_modules node_modules";
+    buildPhase = "PUBLIC_URL=. yarn build";
+    installPhase = "mv build $out";
+    distPhase = "true";
+  };
+in buildGoModule rec {
+  pname = "prometheus";
+  inherit src version;
+
+  vendorSha256 = "0dq3p7hga7m1aq78har5rr136hlb0kp8zhh2wzqlkxrk1f33w54p";
+
+  excludedPackages = [ "documentation/prometheus-mixin" ];
+
+  postPatch = ''
+    ln -s ${webui.node_modules} web/ui/react-app/node_modules
+    ln -s ${webui} web/ui/static/react
+  '';
+
+  buildFlags = "-tags=builtinassets";
+  buildFlagsArray = let
+    t = "${goPackagePath}/vendor/github.com/prometheus/common/version";
+  in [
+    ''
+      -ldflags=
+         -X ${t}.Version=${version}
+         -X ${t}.Revision=unknown
+         -X ${t}.Branch=unknown
+         -X ${t}.BuildUser=nix@nixpkgs
+         -X ${t}.BuildDate=unknown
+         -X ${t}.GoVersion=${lib.getVersion go}
+    ''
+  ];
+
+  # only run this in the real build, not during the vendor build
+  # this should probably be fixed in buildGoModule
+  preBuild = ''
+    if [ -d vendor ]; then make assets; fi
+  '';
+
+  preInstall = ''
+    mkdir -p "$out/share/doc/prometheus" "$out/etc/prometheus"
+    cp -a $src/documentation/* $out/share/doc/prometheus
+    cp -a $src/console_libraries $src/consoles $out/etc/prometheus
+  '';
+
+  doCheck = !stdenv.isDarwin; # https://hydra.nixos.org/build/130673870/nixlog/1
+
+  passthru.tests = { inherit (nixosTests) prometheus; };
+
+  meta = with lib; {
+    description = "Service monitoring system and time series database";
+    homepage = "https://prometheus.io";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ benley fpletz globin willibutz Frostman ];
+    platforms = platforms.unix;
   };
 }

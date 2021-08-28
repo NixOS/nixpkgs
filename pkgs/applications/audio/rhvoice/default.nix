@@ -1,10 +1,11 @@
-{ stdenv, lib, pkgconfig, fetchFromGitHub, scons
+{ stdenv, lib, pkg-config, fetchFromGitHub, sconsPackages
 , python, glibmm, libpulseaudio, libao }:
 
 let
   version = "unstable-2018-02-10";
-in stdenv.mkDerivation rec {
-  name = "rhvoice-${version}";
+in stdenv.mkDerivation {
+  pname = "rhvoice";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "Olga-Yakovleva";
@@ -14,7 +15,7 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    scons pkgconfig
+    sconsPackages.scons_3_1_2 pkg-config
   ];
 
   buildInputs = [
@@ -32,7 +33,7 @@ in stdenv.mkDerivation rec {
 
   meta = {
     description = "A free and open source speech synthesizer for Russian language and others";
-    homepage = https://github.com/Olga-Yakovleva/RHVoice/wiki;
+    homepage = "https://github.com/Olga-Yakovleva/RHVoice/wiki";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ berce ];
     platforms = with lib.platforms; all;

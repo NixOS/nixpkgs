@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
-  name = "zinnia-${version}";
+stdenv.mkDerivation {
+  pname = "zinnia";
   version = "2016-08-28";
 
   src = fetchFromGitHub {
@@ -15,9 +15,9 @@ stdenv.mkDerivation rec {
     sourceRoot=$(echo */zinnia)
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Online hand recognition system with machine learning";
-    homepage = http://taku910.github.io/zinnia/;
+    homepage = "http://taku910.github.io/zinnia/";
     license = licenses.bsd2;
     platforms = platforms.unix;
     maintainers = [ maintainers.gebner ];

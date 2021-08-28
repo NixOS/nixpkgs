@@ -389,6 +389,7 @@ in
 
       extraConfig = mkOption {
         default = "";
+        type = types.lines;
         description = ''
           Extra lines to be added verbatim to the rippled.cfg configuration file.
         '';
@@ -406,9 +407,8 @@ in
 
   config = mkIf cfg.enable {
 
-    users.users = singleton
-      { name = "rippled";
-        description = "Ripple server user";
+    users.users.rippled =
+      { description = "Ripple server user";
         uid = config.ids.uids.rippled;
         home = cfg.databasePath;
         createHome = true;

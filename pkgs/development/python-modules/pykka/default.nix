@@ -1,26 +1,21 @@
-{ stdenv
-, buildPythonPackage
-, fetchgit
-}:
+{ lib, buildPythonPackage, fetchPypi, pytestCheckHook, pytest-mock }:
 
 buildPythonPackage rec {
-  pname = "pykka";
-  version = "1.2.0";
+  pname = "Pykka";
+  version = "2.0.3";
 
-  src = fetchgit {
-    url = "https://github.com/jodal/pykka.git";
-    rev = "refs/tags/v${version}";
-    sha256 = "0qlfw1054ap0cha1m6dbnq51kjxqxaf338g7jwnwy33b3gr8x0hg";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "4b9d2363365b3455a0204bf163f09bd351d24b938c618c79d975a9510e128e95";
   };
 
-  # There are no tests
-  doCheck = false;
+  checkInputs = [ pytestCheckHook pytest-mock ];
 
-  meta = with stdenv.lib; {
-    homepage = http://www.pykka.org;
+  meta = with lib; {
+    homepage = "https://www.pykka.org/";
     description = "A Python implementation of the actor model";
+    changelog = "https://github.com/jodal/pykka/blob/v${version}/docs/changes.rst";
+    maintainers = [ maintainers.marsam ];
     license = licenses.asl20;
-    maintainers = with maintainers; [ rickynils ];
   };
-
 }

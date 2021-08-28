@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , cmake
 , gbenchmark
@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "prometheus-cpp";
-  version = "0.6.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "jupp0r";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256:1a0gpfmk0z9wgsbzvx823aqbs7w836l0j0rnsxl9ifwgdxnxbl6m";
+    sha256 = "1pjz29ywzfg3blhg2v8fn7gjvq46k3bqn7y0xvmn468ixxhv21fi";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -28,14 +28,20 @@ stdenv.mkDerivation rec {
     "-DUSE_THIRDPARTY_LIBRARIES=OFF"
     "-DCIVETWEB_INCLUDE_DIR=${civetweb.dev}/include"
     "-DCIVETWEB_CXX_LIBRARY=${civetweb}/lib/libcivetweb${stdenv.targetPlatform.extensions.sharedLibrary}"
+    "-DBUILD_SHARED_LIBS=ON"
   ];
 
-  NIX_LDFLAGS = [ "-ldl" ];
+  NIX_LDFLAGS = "-ldl";
+
+  postInstall = ''
+    mkdir -p $out/lib/pkgconfig
+    substituteAll ${./prometheus-cpp.pc.in} $out/lib/pkgconfig/prometheus-cpp.pc
+  '';
 
   meta = {
     description = "Prometheus Client Library for Modern C++";
-    homepage = https://github.com/jupp0r/prometheus-cpp;
-    license = [ stdenv.lib.licenses.mit ];
+    homepage = "https://github.com/jupp0r/prometheus-cpp";
+    license = [ lib.licenses.mit ];
   };
 
 }

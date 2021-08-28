@@ -1,7 +1,7 @@
 { mkDerivation, lib, extra-cmake-modules, kconfig, ki18n, kservice, kxmlgui }:
 
 mkDerivation {
-  name = "libkipi";
+  pname = "libkipi";
   meta = {
     license = with lib.licenses; [ gpl2 lgpl21 bsd3 ];
     maintainers = [ lib.maintainers.ttuegel ];

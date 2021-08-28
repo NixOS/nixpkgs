@@ -1,7 +1,7 @@
 { lib, fetchFromGitHub, buildGoPackage }:
 
 buildGoPackage rec {
-  name = "pachyderm-${version}";
+  pname = "pachyderm";
   version = "1.8.5";
   rev = "v${version}";
 
@@ -17,7 +17,7 @@ buildGoPackage rec {
 
   meta = with lib; {
     description = "Containerized Data Analytics";
-    homepage = https://github.com/pachyderm/pachyderm;
+    homepage = "https://github.com/pachyderm/pachyderm";
     license = licenses.asl20;
     maintainers = with maintainers; [offline];
   };

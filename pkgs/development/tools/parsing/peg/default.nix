@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "peg-0.1.18";
@@ -10,8 +10,9 @@ stdenv.mkDerivation rec {
 
   preBuild="makeFlagsArray+=( PREFIX=$out )";
 
-  meta = with stdenv.lib; {
-    homepage = http://piumarta.com/software/peg/;
+  meta = with lib; {
+    homepage = "http://piumarta.com/software/peg/";
+    description = "Tools for generating recursive-descent parsers: programs that perform pattern matching on text";
     platforms = platforms.all;
     license = licenses.mit;
   };

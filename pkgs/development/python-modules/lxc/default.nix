@@ -1,11 +1,11 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchFromGitHub
 , isPy3k
 , pkgs
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "python-lxc-unstable";
   version = "2016-08-25";
   disabled = isPy3k;
@@ -19,9 +19,9 @@ buildPythonPackage rec {
 
   buildInputs = [ pkgs.lxc ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Out of tree python 2.7 binding for liblxc";
-    homepage = https://github.com/lxc/python2-lxc;
+    homepage = "https://github.com/lxc/python2-lxc";
     license = licenses.lgpl2;
     maintainers = with maintainers; [ mic92 ];
   };

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake }:
+{ lib, stdenv, fetchurl, cmake }:
 
 stdenv.mkDerivation rec {
   name = "soxr-0.1.3";
@@ -8,20 +8,25 @@ stdenv.mkDerivation rec {
     sha256 = "12aql6svkplxq5fjycar18863hcq84c5kx8g6f4rj0lcvigw24di";
   };
 
+  patches = [
+    # Remove once https://sourceforge.net/p/soxr/code/merge-requests/5/ is merged.
+    ./arm64-check.patch
+  ];
+
   outputs = [ "out" "doc" ]; # headers are just two and very small
 
   preConfigure = if stdenv.isDarwin then ''
-    export DYLD_LIBRARY_PATH="$DYLD_LIBRARY_PATH:"`pwd`/build/src
+    export DYLD_LIBRARY_PATH="$DYLD_LIBRARY_PATH''${DYLD_LIBRARY_PATH:+:}"`pwd`/build/src
   '' else ''
-    export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:"`pwd`/build/src
+    export LD_LIBRARY_PATH="$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}"`pwd`/build/src
   '';
 
   nativeBuildInputs = [ cmake ];
 
   meta = {
     description = "An audio resampling library";
-    homepage = http://soxr.sourceforge.net;
-    license = stdenv.lib.licenses.lgpl21Plus;
-    platforms = stdenv.lib.platforms.unix;
+    homepage = "http://soxr.sourceforge.net";
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.unix;
   };
 }

@@ -1,7 +1,6 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
-, pytest_3
 , isPyPy
 }:
 
@@ -16,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "1s4radwf38kdh3jrn5acbidqlr66sx786fkwi0rgq61hn4n2bdqw";
   };
 
-  checkInputs = [ pytest_3 ];
+  doCheck = false;
 
   postPatch = ''
     # fails
@@ -24,9 +23,9 @@ buildPythonPackage rec {
       --replace "test_sending_unicode_data" "noop"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Lightweight SOAP client (Jurko's fork)";
-    homepage = https://bitbucket.org/jurko/suds;
+    homepage = "https://bitbucket.org/jurko/suds";
     license = licenses.lgpl3;
   };
 

@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''myway'';
-  version = ''20181018-git'';
+  baseName = "myway";
+  version = "20200325-git";
 
-  description = ''Sinatra-compatible routing library.'';
+  description = "Sinatra-compatible routing library.";
 
   deps = [ args."alexandria" args."babel" args."cl-ppcre" args."cl-utilities" args."map-set" args."quri" args."split-sequence" args."trivial-features" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/myway/2018-10-18/myway-20181018-git.tgz'';
-    sha256 = ''0ffd92mmir2k6i4771ppqvb3xhqlk2yh5znx7i391vq5ji3k5jij'';
+    url = "http://beta.quicklisp.org/archive/myway/2020-03-25/myway-20200325-git.tgz";
+    sha256 = "07r0mq9n0gmm7n20mkpsnmjvcr4gj9nckpnh1c2mddrb3sag8n15";
   };
 
   packageName = "myway";
@@ -18,9 +19,9 @@ rec {
   overrides = x: x;
 }
 /* (SYSTEM myway DESCRIPTION Sinatra-compatible routing library. SHA256
-    0ffd92mmir2k6i4771ppqvb3xhqlk2yh5znx7i391vq5ji3k5jij URL
-    http://beta.quicklisp.org/archive/myway/2018-10-18/myway-20181018-git.tgz
-    MD5 88adecdaec89ceb262559d443512e545 NAME myway FILENAME myway DEPS
+    07r0mq9n0gmm7n20mkpsnmjvcr4gj9nckpnh1c2mddrb3sag8n15 URL
+    http://beta.quicklisp.org/archive/myway/2020-03-25/myway-20200325-git.tgz
+    MD5 af1fe34c2106303504c7908b25c3b9ce NAME myway FILENAME myway DEPS
     ((NAME alexandria FILENAME alexandria) (NAME babel FILENAME babel)
      (NAME cl-ppcre FILENAME cl-ppcre)
      (NAME cl-utilities FILENAME cl-utilities) (NAME map-set FILENAME map-set)
@@ -29,4 +30,4 @@ rec {
     DEPENDENCIES
     (alexandria babel cl-ppcre cl-utilities map-set quri split-sequence
      trivial-features)
-    VERSION 20181018-git SIBLINGS (myway-test) PARASITES NIL) */
+    VERSION 20200325-git SIBLINGS (myway-test) PARASITES NIL) */

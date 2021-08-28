@@ -1,9 +1,9 @@
-{ stdenv, fetchFromGitHub, cmake, opencv, qtbase, qtsvg }:
+{ lib, stdenv, fetchFromGitHub, cmake, opencv, qtbase, qtsvg }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
 
   version = "0.5";
-  name = "openbr-${version}";
+  pname = "openbr";
 
   src = fetchFromGitHub {
     owner = "biometrics";
@@ -16,14 +16,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  enableParallelBuilding = true;
-
   meta = {
     description = "Open Source Biometric Recognition";
-    homepage = http://openbiometrics.org/;
-    license = stdenv.lib.licenses.asl20;
-    maintainers = with stdenv.lib.maintainers; [flosse];
-    platforms = with stdenv.lib.platforms; linux;
+    homepage = "http://openbiometrics.org/";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [flosse];
+    platforms = with lib.platforms; linux;
     broken = true;
   };
 }

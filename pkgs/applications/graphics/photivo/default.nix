@@ -1,7 +1,7 @@
-{ stdenv, fetchhg, fetchpatch, cmake, qt4, fftw, graphicsmagick_q16,
-  lcms2, lensfun, pkgconfig, libjpeg, exiv2, liblqr1 }:
+{ lib, stdenv, fetchhg, fetchpatch, cmake, qt4, fftw, graphicsmagick_q16,
+  lcms2, lensfun, pkg-config, libjpeg, exiv2, liblqr1 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "photivo-2014-01-25";
 
   src = fetchhg {
@@ -28,14 +28,13 @@ stdenv.mkDerivation rec {
     sed '1i#include <math.h>' -i Sources/filters/ptFilter_StdCurve.cpp
   '';
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [ qt4 fftw graphicsmagick_q16 lcms2 lensfun libjpeg exiv2 liblqr1 ];
 
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     platforms = platforms.linux;
     license = licenses.gpl3;
+    broken = true; # exiv2 0.27.1 FTBFS
   };
 }

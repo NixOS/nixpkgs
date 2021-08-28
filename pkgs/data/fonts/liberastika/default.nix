@@ -17,7 +17,7 @@ in fetchzip rec {
 
   meta = with lib; {
     description = "Liberation Sans fork with improved cyrillic support";
-    homepage = https://sourceforge.net/projects/lib-ka/;
+    homepage = "https://sourceforge.net/projects/lib-ka/";
 
     license = licenses.gpl2;
     platforms = platforms.all;

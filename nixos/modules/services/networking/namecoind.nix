@@ -89,7 +89,7 @@ in
       };
 
       rpc.password = mkOption {
-        type = types.str;
+        type = types.nullOr types.str;
         default = null;
         description = ''
           Password for RPC connections.
@@ -149,21 +149,14 @@ in
 
   config = mkIf cfg.enable {
 
-    services.dnschain.extraConfig = ''
-      [namecoin]
-      config = ${configFile}
-    '';
-
-    users.users = singleton {
-      name = "namecoin";
+    users.users.namecoin = {
       uid  = config.ids.uids.namecoin;
       description = "Namecoin daemon user";
       home = dataDir;
       createHome = true;
     };
 
-    users.groups = singleton {
-      name = "namecoin";
+    users.groups.namecoin = {
       gid  = config.ids.gids.namecoin;
     };
 
@@ -172,10 +165,12 @@ in
       after    = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
 
+      startLimitIntervalSec = 120;
+      startLimitBurst = 5;
       serviceConfig = {
         User  = "namecoin";
         Group = "namecoin";
-        ExecStart  = "${pkgs.altcoins.namecoind}/bin/namecoind -conf=${configFile} -datadir=${dataDir} -printtoconsole";
+        ExecStart  = "${pkgs.namecoind}/bin/namecoind -conf=${configFile} -datadir=${dataDir} -printtoconsole";
         ExecStop   = "${pkgs.coreutils}/bin/kill -KILL $MAINPID";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         Nice = "10";
@@ -183,8 +178,6 @@ in
         TimeoutStopSec     = "60s";
         TimeoutStartSec    = "2s";
         Restart            = "always";
-        StartLimitInterval = "120s";
-        StartLimitBurst    = "5";
       };
 
       preStart = optionalString (cfg.wallet != "${dataDir}/wallet.dat")  ''
@@ -200,5 +193,7 @@ in
     };
 
   };
+
+  meta.maintainers = with lib.maintainers; [ rnhmjoj ];
 
 }

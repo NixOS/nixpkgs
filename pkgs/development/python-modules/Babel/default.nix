@@ -1,26 +1,24 @@
-{ lib, buildPythonPackage, fetchPypi, pytz, pytest, freezegun, glibcLocales }:
+{ stdenv, lib, buildPythonPackage, fetchPypi, pytz, pytestCheckHook, freezegun }:
 
 buildPythonPackage rec {
   pname = "Babel";
-  version = "2.6.0";
+  version = "2.9.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8cba50f48c529ca3fa18cf81fa9403be176d374ac4d60738b839122dfaaa3d23";
+    sha256 = "018yg7g2pa6vjixx1nx41cfispgfi0azzp0a1chlycbj8jsil0ys";
   };
 
   propagatedBuildInputs = [ pytz ];
 
-  checkInputs = [ pytest freezegun glibcLocales ];
+  checkInputs = [ pytestCheckHook freezegun ];
 
-  preCheck = ''
-    export LC_ALL="en_US.UTF-8"
-  '';
+  doCheck = !stdenv.isDarwin;
 
   meta = with lib; {
-    homepage = http://babel.edgewall.org;
+    homepage = "http://babel.edgewall.org";
     description = "A collection of tools for internationalizing Python applications";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ garbas ];
+    maintainers = with maintainers; [ ];
   };
 }

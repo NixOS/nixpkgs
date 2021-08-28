@@ -1,19 +1,28 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pytestCheckHook
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "immutables";
-  version = "0.9";
+  version = "0.15";
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1h7i00x6sdbw62rdipp0kaw1mcrvfipxv0054x1n2r4q4j11q7fp";
+    sha256 = "3713ab1ebbb6946b7ce1387bb9d1d7f5e09c45add58c2a2ee65f963c171e746b";
   };
 
-  meta = {
+  checkInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "immutables" ];
+
+  meta = with lib; {
     description = "An immutable mapping type for Python";
-    homepage = https://github.com/MagicStack/immutables;
-    license = with lib.licenses; [ asl20 ];
-    maintainers = with lib.maintainers; [ catern ];
+    homepage = "https://github.com/MagicStack/immutables";
+    license = with licenses; [ asl20 ];
+    maintainers = with maintainers; [ catern ];
   };
 }

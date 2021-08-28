@@ -1,67 +1,61 @@
-{ stdenv
-, buildPythonPackage
-, isPy27
-, fetchPypi
+{ lib, buildPythonPackage, fetchPypi, isPy27
 , cachetools
-, cld2-cffi
 , cytoolz
-, ftfy
-, ijson
+, jellyfish
 , matplotlib
 , networkx
 , numpy
 , pyemd
 , pyphen
-, python-Levenshtein
+, pytest
 , requests
-, scikitlearn
+, scikit-learn
 , scipy
 , spacy
-, tqdm
-, unidecode
+, srsly
 }:
 
 buildPythonPackage rec {
   pname = "textacy";
-  version = "0.6.3";
+  version = "0.10.1";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "50402545ac92b1a931c2365e341cb35c4ebe5575525f1dcc5265901ff3895a5f";
+    sha256 = "ff72adc6dbb85db6981324e226fff77830da57d7fe7e4adb2cafd9dc2a8bfa7d";
   };
-
-  disabled = isPy27; # 2.7 requires backports.csv
 
   propagatedBuildInputs = [
     cachetools
-    cld2-cffi
     cytoolz
-    ftfy
-    ijson
+    jellyfish
     matplotlib
     networkx
     numpy
     pyemd
     pyphen
-    python-Levenshtein
     requests
-    scikitlearn
+    scikit-learn
     scipy
     spacy
-    tqdm
-    unidecode
+    srsly
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "'ftfy>=4.2.0,<5.0.0'," "'ftfy>=5.0.0',"
+  checkInputs = [ pytest ];
+  # almost all tests have to deal with downloading a dataset, only test pure tests
+  checkPhase = ''
+    pytest tests/test_text_utils.py \
+      tests/test_utils.py \
+      tests/preprocessing \
+      tests/datasets/test_base_dataset.py
   '';
 
-  doCheck = false;  # tests want to download data files
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
+    # scikit-learn in pythonPackages is too new for textacy
+    # remove as soon as textacy support scikit-learn >= 0.24
+    broken = true;
     description = "Higher-level text processing, built on spaCy";
-    homepage = "http://textacy.readthedocs.io/";
+    homepage = "https://textacy.readthedocs.io/";
     license = licenses.asl20;
     maintainers = with maintainers; [ rvl ];
   };

@@ -1,29 +1,23 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "dpic-${version}";
-  version = "2016.01.12";
+  pname = "dpic";
+  version = "2021.01.01";
 
   src = fetchurl {
-    url = "https://ece.uwaterloo.ca/~aplevich/dpic/${name}.tar.gz";
-    sha256 = "0iwwf8shgm8n4drz8mndvk7jga93yy8plnyby3lgk8376g5ps6cz";
+    url = "https://ece.uwaterloo.ca/~aplevich/dpic/${pname}-${version}.tar.gz";
+    sha256 = "sha256-vrBiTQqdaIslDd/WWMbdgornRkZmC2m+RF2J78F5Pm8=";
   };
 
-  phases = [ "unpackPhase" "buildPhase" "installPhase" ];
+  # The prefix passed to configure is not used.
+  makeFlags = [ "DESTDIR=$(out)" ];
 
-  makeFlags = "CC=${stdenv.cc.outPath}/bin/cc";
-
-  installPhase = ''
-    mkdir -p $out/bin
-    cp -fv dpic $out/bin
-  '';
-
-  meta = {
-    homepage = https://ece.uwaterloo.ca/~aplevich/dpic/;
+  meta = with lib; {
     description = "An implementation of the pic little language for creating drawings";
-    license = stdenv.lib.licenses.bsd2;
-    maintainers = [ stdenv.lib.maintainers.aespinosa ];
-    platforms = stdenv.lib.platforms.all;
+    homepage = "https://ece.uwaterloo.ca/~aplevich/dpic/";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ aespinosa ];
+    platforms = platforms.all;
   };
 }
 

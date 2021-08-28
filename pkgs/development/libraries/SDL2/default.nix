@@ -1,7 +1,8 @@
-{ stdenv, config, libGLSupported, fetchurl, pkgconfig
+{ lib, stdenv, config, fetchurl, pkg-config
+, libGLSupported ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
 , openglSupport ? libGLSupported, libGL
 , alsaSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid, alsaLib
-, x11Support ? !stdenv.isCygwin && !stdenv.hostPlatform.isAndroid
+, x11Support ? !stdenv.targetPlatform.isWindows && !stdenv.hostPlatform.isAndroid
 , libX11, xorgproto, libICE, libXi, libXScrnSaver, libXcursor
 , libXinerama, libXext, libXxf86vm, libXrandr
 , waylandSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid
@@ -13,29 +14,42 @@
 , pulseaudioSupport ? config.pulseaudio or stdenv.isLinux && !stdenv.hostPlatform.isAndroid
 , libpulseaudio
 , AudioUnit, Cocoa, CoreAudio, CoreServices, ForceFeedback, OpenGL
-, audiofile, cf-private, libiconv
+, audiofile, libiconv
+, withStatic ? false
 }:
 
 # NOTE: When editing this expression see if the same change applies to
 # SDL expression too
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
-  name = "SDL2-${version}";
-  version = "2.0.9";
+  pname = "SDL2";
+  version = "2.0.14";
 
   src = fetchurl {
-    url = "https://www.libsdl.org/release/${name}.tar.gz";
-    sha256 = "1c94ndagzkdfqaa838yqg589p1nnqln8mv0hpwfhrkbfczf8cl95";
+    url = "https://www.libsdl.org/release/${pname}-${version}.tar.gz";
+    sha256 = "1g1jahknv5r4yhh1xq5sf0md20ybdw1zh1i15lry26sq39bmn8fq";
   };
-
+  dontDisableStatic = withStatic;
   outputs = [ "out" "dev" ];
   outputBin = "dev"; # sdl-config
 
   patches = [ ./find-headers.patch ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  # Fix with mesa 19.2: https://bugzilla.libsdl.org/show_bug.cgi?id=4797
+  postPatch = ''
+    substituteInPlace include/SDL_opengl_glext.h \
+      --replace "typedef ptrdiff_t GLsizeiptr;" "typedef signed long int khronos_ssize_t; typedef khronos_ssize_t GLsizeiptr;" \
+      --replace "typedef ptrdiff_t GLintptr;" "typedef signed long int khronos_intptr_t; typedef khronos_intptr_t GLintptr;"
+
+    substituteInPlace configure \
+      --replace 'WAYLAND_SCANNER=`$PKG_CONFIG --variable=wayland_scanner wayland-scanner`' 'WAYLAND_SCANNER=`pkg-config --variable=wayland_scanner wayland-scanner`'
+  '';
+
+  depsBuildBuild = [ pkg-config ];
+
+  nativeBuildInputs = [ pkg-config ] ++ optionals waylandSupport [ wayland ];
 
   propagatedBuildInputs = dlopenPropagatedBuildInputs;
 
@@ -57,11 +71,7 @@ stdenv.mkDerivation rec {
     ++ dlopenBuildInputs
     ++ optional  ibusSupport ibus
     ++ optional  fcitxSupport fcitx
-    ++ optionals stdenv.isDarwin [
-      AudioUnit Cocoa CoreAudio CoreServices ForceFeedback OpenGL
-      # Needed for NSDefaultRunLoopMode symbols.
-      cf-private
-    ];
+    ++ optionals stdenv.isDarwin [ AudioUnit Cocoa CoreAudio CoreServices ForceFeedback OpenGL ];
 
   enableParallelBuilding = true;
 
@@ -69,11 +79,24 @@ stdenv.mkDerivation rec {
     "--disable-oss"
   ] ++ optional (!x11Support) "--without-x"
     ++ optional alsaSupport "--with-alsa-prefix=${alsaLib.out}/lib"
+    ++ optional stdenv.targetPlatform.isWindows "--disable-video-opengles"
     ++ optional stdenv.isDarwin "--disable-sdltest";
 
+  # We remove libtool .la files when static libs are requested,
+  # because they make the builds of downstream libs like `SDL_tff`
+  # fail with `cannot find -lXext, `-lXcursor` etc. linker errors
+  # because the `.la` files are not pruned if static libs exist
+  # (see https://github.com/NixOS/nixpkgs/commit/fd97db43bcb05e37f6bb77f363f1e1e239d9de53)
+  # and they also don't carry the necessary `-L` paths of their
+  # X11 dependencies.
+  # For static linking, it is better to rely on `pkg-config` `.pc`
+  # files.
   postInstall = ''
-    moveToOutput lib/libSDL2main.a "$dev"
-    rm $out/lib/*.a
+    if [ "$dontDisableStatic" -eq "1" ]; then
+      rm $out/lib/*.la
+    else
+      rm $out/lib/*.a
+    fi
     moveToOutput bin/sdl2-config "$dev"
   '';
 
@@ -104,9 +127,9 @@ stdenv.mkDerivation rec {
 
   passthru = { inherit openglSupport; };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A cross-platform multimedia library";
-    homepage = http://www.libsdl.org/;
+    homepage = "http://www.libsdl.org/";
     license = licenses.zlib;
     platforms = platforms.all;
     maintainers = with maintainers; [ cpages ];

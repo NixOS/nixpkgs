@@ -1,4 +1,4 @@
-{stdenv, fetchurl
+{lib, stdenv, fetchFromGitHub
 , curl, makeWrapper, which, unzip
 , lua
 # for 'luarocks pack'
@@ -9,14 +9,21 @@
 
 stdenv.mkDerivation rec {
   pname = "luarocks";
-  version = "3.0.4";
+  version = "3.2.1";
 
-  src = fetchurl {
-    url="http://luarocks.org/releases/luarocks-${version}.tar.gz";
-    sha256="1pqfzwvjy8dzqg4fqjq2cgqcr00fgrdd7nwzxm7nqmawr83s6dhj";
+  src = fetchFromGitHub {
+    owner = "luarocks";
+    repo = "luarocks";
+    rev = "v${version}";
+    sha256 = "0viiafmb8binksda79ah828q1dfnb6jsqlk7vyndl2xvx9yfn4y2";
   };
 
-  patches = [ ./darwin.patch ];
+  patches = [ ./darwin-3.1.3.patch ];
+
+  postPatch = lib.optionalString stdenv.targetPlatform.isDarwin ''
+    substituteInPlace src/luarocks/core/cfg.lua --subst-var-by 'darwinMinVersion' '${stdenv.targetPlatform.darwinMinVersion}'
+  '';
+
   preConfigure = ''
     lua -e "" || {
         luajit -e "" && {
@@ -60,9 +67,9 @@ stdenv.mkDerivation rec {
     export LUA_PATH="src/?.lua;''${LUA_PATH:-}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit version;
-    description = ''A package manager for Lua'';
+    description = "A package manager for Lua";
     license = licenses.mit ;
     maintainers = with maintainers; [raskin teto];
     platforms = platforms.linux ++ platforms.darwin;

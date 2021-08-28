@@ -1,6 +1,5 @@
-{ stdenv, cleanPackaging, fetchurl }:
-let lib = stdenv.lib;
-in {
+{ lib, stdenv, cleanPackaging, fetchurl }:
+{
   # : string
   pname
   # : string
@@ -19,10 +18,6 @@ in {
   # mostly for moving and deleting files from the build directory
   # : lines
 , postInstall
-  # packages with setup hooks that should be run
-  # (see definition of `makeSetupHook`)
-  # : list drv
-, setupHooks ? []
   # : list Maintainer
 , maintainers ? []
 
@@ -55,7 +50,7 @@ let
   ];
 
 in stdenv.mkDerivation {
-  name = "${pname}-${version}";
+  inherit pname version;
 
   src = fetchurl {
     url = "https://skarnet.org/software/${pname}/${pname}-${version}.tar.gz";
@@ -67,10 +62,11 @@ in stdenv.mkDerivation {
   dontDisableStatic = true;
   enableParallelBuilding = true;
 
-  nativeBuildInputs = setupHooks;
-
   configureFlags = configureFlags ++ [
     "--enable-absolute-paths"
+    # We assume every nix-based cross target has urandom.
+    # This might not hold for e.g. BSD.
+    "--with-sysdep-devurandom=yes"
     (if stdenv.isDarwin
       then "--disable-shared"
       else "--enable-shared")
@@ -101,7 +97,7 @@ in stdenv.mkDerivation {
   meta = {
     homepage = "https://skarnet.org/software/${pname}/";
     inherit description platforms;
-    license = stdenv.lib.licenses.isc;
+    license = lib.licenses.isc;
     maintainers = with lib.maintainers;
       [ pmahoney Profpatsch ] ++ maintainers;
   };

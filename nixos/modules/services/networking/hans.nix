@@ -135,11 +135,11 @@ in
       };
     };
 
-    users.users = singleton {
-      name = hansUser;
+    users.users.${hansUser} = {
       description = "Hans daemon user";
+      isSystemUser = true;
     };
   };
 
-  meta.maintainers = with maintainers; [ gnidorah ];
+  meta.maintainers = with maintainers; [ ];
 }

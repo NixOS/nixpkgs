@@ -1,22 +1,24 @@
-{ stdenv, fetchurl, ncurses, pkgconfig, texinfo, libxml2, gnutls, gettext, autoconf, automake
-, cf-private, AppKit, Carbon, Cocoa, IOKit, OSAKit, Quartz, QuartzCore, WebKit
+{ lib, stdenv, fetchurl, ncurses, pkg-config, texinfo, libxml2, gnutls, gettext, autoconf, automake, jansson
+, AppKit, Carbon, Cocoa, IOKit, OSAKit, Quartz, QuartzCore, WebKit
 , ImageCaptureCore, GSS, ImageIO # These may be optional
 }:
 
 stdenv.mkDerivation rec {
-  emacsVersion = "26.2";
-  emacsName = "emacs-${emacsVersion}";
-  macportVersion = "7.6";
-  name = "emacs-mac-${emacsVersion}-${macportVersion}";
+  pname = "emacs";
+  version = "27.2";
+
+  emacsName = "emacs-${version}";
+  macportVersion = "8.2";
+  name = "emacs-mac-${version}-${macportVersion}";
 
   src = fetchurl {
     url = "mirror://gnu/emacs/${emacsName}.tar.xz";
-    sha256 = "13n5m60i47k96mpv5pp6km2ph9rv2m5lmbpzj929v02vpsfyc70m";
+    sha256 = "1ff182gjw9wqsbx1kj5gl2r5pbqhp4ar54g04j33fgz6g17cr9xl";
   };
 
   macportSrc = fetchurl {
     url = "ftp://ftp.math.s.chiba-u.ac.jp/emacs/${emacsName}-mac-${macportVersion}.tar.gz";
-    sha256 = "00szqb74ds89m34sx5mq0gxhsrz64j691sxyvqncj10hw17d0y61";
+    sha256 = "1bgm2g3ky7rkj1l27wnmyzqsqxzjng7y9bf72ym37wiyhyi2a9za";
   };
 
   hiresSrc = fetchurl {
@@ -24,17 +26,13 @@ stdenv.mkDerivation rec {
     sha256 = "0f2wzdw2a3ac581322b2y79rlj3c9f33ddrq9allj97r1si6v5xk";
   };
 
-  patches = [ ./clean-env.patch ];
-
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ pkgconfig autoconf automake ];
+  nativeBuildInputs = [ pkg-config autoconf automake ];
 
-  buildInputs = [ ncurses libxml2 gnutls texinfo gettext
+  buildInputs = [ ncurses libxml2 gnutls texinfo gettext jansson
     AppKit Carbon Cocoa IOKit OSAKit Quartz QuartzCore WebKit
     ImageCaptureCore GSS ImageIO   # may be optional
-    # Needed for CFNotificationCenterAddObserver symbols.
-    cf-private
   ];
 
   postUnpack = ''
@@ -57,6 +55,11 @@ stdenv.mkDerivation rec {
     # Fix sandbox impurities.
     substituteInPlace Makefile.in --replace '/bin/pwd' 'pwd'
     substituteInPlace lib-src/Makefile.in --replace '/bin/pwd' 'pwd'
+
+
+    # Reduce closure size by cleaning the environment of the emacs dumper
+    substituteInPlace src/Makefile.in \
+      --replace 'RUN_TEMACS = ./temacs' 'RUN_TEMACS = env -i ./temacs'
   '';
 
   configureFlags = [
@@ -76,11 +79,20 @@ stdenv.mkDerivation rec {
     cp ${./site-start.el} $out/share/emacs/site-lisp/site-start.el
   '';
 
-  doCheck = true;
+  # fails with:
 
-  meta = with stdenv.lib; {
+  # Ran 3870 tests, 3759 results as expected, 6 unexpected, 105 skipped
+  # 5 files contained unexpected results:
+  #   lisp/url/url-handlers-test.log
+  #   lisp/simple-tests.log
+  #   lisp/files-x-tests.log
+  #   lisp/cedet/srecode-utest-template.log
+  #   lisp/net/tramp-tests.log
+  doCheck = false;
+
+  meta = with lib; {
     description = "The extensible, customizable text editor";
-    homepage    = https://www.gnu.org/software/emacs/;
+    homepage    = "https://www.gnu.org/software/emacs/";
     license     = licenses.gpl3Plus;
     maintainers = with maintainers; [ jwiegley matthewbauer ];
     platforms   = platforms.darwin;

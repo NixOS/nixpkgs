@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "uucp-1.07";
@@ -27,11 +27,11 @@ stdenv.mkDerivation rec {
          just found one of the finest UUCP implementations available.
       '';
 
-    homepage = https://www.gnu.org/software/uucp/uucp.html;
+    homepage = "https://www.gnu.org/software/uucp/uucp.html";
 
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
 
-    platforms = stdenv.lib.platforms.all;
+    platforms = lib.platforms.all;
     maintainers = [ ];
   };
 }

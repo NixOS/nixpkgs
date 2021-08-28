@@ -1,9 +1,9 @@
-{ stdenv, fetchurl, unzip, libGLU_combined, libX11, SDL, openal, runtimeShell }:
+{ lib, stdenv, fetchurl, unzip, libGLU, libGL, libX11, SDL, openal, runtimeShell }:
 stdenv.mkDerivation rec {
-  name = "tremulous-${version}";
+  pname = "tremulous";
   version = "1.1.0";
   src1 = fetchurl {
-    url = "mirror://sourceforge/tremulous/${name}.zip";
+    url = "mirror://sourceforge/tremulous/${pname}-${version}.zip";
     sha256 = "11w96y7ggm2sn5ncyaffsbg0vy9pblz2av71vqp9725wbbsndfy7";
   };
   # http://tremulous.net/wiki/Client_versions
@@ -15,7 +15,8 @@ stdenv.mkDerivation rec {
     url = "http://releases.mercenariesguild.net/tremded/mg_tremded_source_1.01.tar.gz";
     sha256 = "1njrqlhzjvy9myddzkagszwdcf3m4h08wip888w2rmbshs6kz6ql";
   };
-  buildInputs = [ unzip libGLU_combined libX11 SDL openal ];
+  nativeBuildInputs = [ unzip ];
+  buildInputs = [ libGLU libGL libX11 SDL openal ];
   unpackPhase = ''
     unzip $src1
     cd tremulous
@@ -26,7 +27,7 @@ stdenv.mkDerivation rec {
     cd ..
   '';
   patches = [ ./parse.patch ];
-  patchFlags = "-p 0";
+  patchFlags = [ "-p" "0" ];
   NIX_LD_FLAGS = ''
     -rpath ${stdenv.cc}/lib
     -rpath ${stdenv.cc}/lib64
@@ -57,7 +58,7 @@ stdenv.mkDerivation rec {
     done
   '';
   dontPatchELF = true;
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A game that blends a team based FPS with elements of an RTS";
     longDescription = ''
       Tremulous is a free, open source game that blends a team based FPS with
@@ -69,7 +70,7 @@ stdenv.mkDerivation rec {
       after death. Other structures provide automated base defense (to some
       degree), healing functions and much more...
     '';
-    homepage = http://www.tremulous.net;
+    homepage = "http://www.tremulous.net";
     license = with licenses; [
       gpl2
       cc-by-sa-25 /* media */

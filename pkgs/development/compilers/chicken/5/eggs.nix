@@ -19,12 +19,12 @@ rec {
   };
 
   matchable = eggDerivation {
-    name = "matchable-1.0";
+    name = "matchable-1.1";
 
     src = fetchegg {
       name = "matchable";
-      version = "1.0";
-      sha256 = "01vy2ppq3sq0wirvsvl3dh0bwa5jqs1i6rdjdd7pnwj4nncxd1ga";
+      version = "1.1";
+      sha256 = "084hm5dvbvgnpb32ispkp3hjili8z02hamln860r99jx68jx6j2v";
     };
 
     buildInputs = [
@@ -33,12 +33,12 @@ rec {
   };
 
   srfi-1 = eggDerivation {
-    name = "srfi-1-0.5";
+    name = "srfi-1-0.5.1";
 
     src = fetchegg {
       name = "srfi-1";
-      version = "0.5";
-      sha256 = "0gh1h406xbxwm5gvc5znc93nxp9xjbhyqf7zzga08k5y6igxrlvk";
+      version = "0.5.1";
+      sha256 = "15x0ajdkw5gb3vgs8flzh5g0pzl3wmcpf11iimlm67mw6fxc8p7j";
     };
 
     buildInputs = [
@@ -47,12 +47,12 @@ rec {
   };
 
   srfi-13 = eggDerivation {
-    name = "srfi-13-0.2";
+    name = "srfi-13-0.3";
 
     src = fetchegg {
       name = "srfi-13";
-      version = "0.2";
-      sha256 = "0jazbdnn9bjm7wwxqq7xzqxc9zfvaapq565rf1czj6ayl96yvk3n";
+      version = "0.3";
+      sha256 = "0yaw9i6zhpxl1794pirh168clprjgmsb0xlr96drirjzsslgm3zp";
     };
 
     buildInputs = [
@@ -61,12 +61,12 @@ rec {
   };
 
   srfi-14 = eggDerivation {
-    name = "srfi-14-0.2";
+    name = "srfi-14-0.2.1";
 
     src = fetchegg {
       name = "srfi-14";
-      version = "0.2";
-      sha256 = "13nm4nn1d52nkvhjizy26z3s6q41x1ml4zm847xzf86x1zwvymni";
+      version = "0.2.1";
+      sha256 = "0gc33cx4xll9vsf7fm8jvn3gc0604kn3bbi6jfn6xscqp86kqb9p";
     };
 
     buildInputs = [

@@ -1,27 +1,28 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, wayland, libGL, mesa_noglu, libxkbcommon, cairo, libxcb
+{ lib, stdenv, fetchurl, meson, ninja, pkg-config, wayland
+, libGL, mesa, libxkbcommon, cairo, libxcb
 , libXcursor, xlibsWrapper, udev, libdrm, mtdev, libjpeg, pam, dbus, libinput, libevdev
-, colord, lcms2
+, colord, lcms2, pipewire ? null
 , pango ? null, libunwind ? null, freerdp ? null, vaapi ? null, libva ? null
 , libwebp ? null, xwayland ? null, wayland-protocols
 # beware of null defaults, as the parameters *are* supplied by callPackage by default
 }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
-  name = "weston-${version}";
-  version = "6.0.0";
+  pname = "weston";
+  version = "9.0.0";
 
   src = fetchurl {
-    url = "https://wayland.freedesktop.org/releases/${name}.tar.xz";
-    sha256 = "04p6hal5kalmdp5dxwh2h5qhkkb4dvbsk7l091zvvcq70slj6qsl";
+    url = "https://wayland.freedesktop.org/releases/${pname}-${version}.tar.xz";
+    sha256 = "1zlql0xgiqc3pvgbpnnvj4xvpd91pwva8qf83xfb23if377ddxaw";
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig ];
+  nativeBuildInputs = [ meson ninja pkg-config wayland ];
   buildInputs = [
-    wayland libGL mesa_noglu libxkbcommon cairo libxcb libXcursor xlibsWrapper udev libdrm
+    wayland libGL mesa libxkbcommon cairo libxcb libXcursor xlibsWrapper udev libdrm
     mtdev libjpeg pam dbus libinput libevdev pango libunwind freerdp vaapi libva
     libwebp wayland-protocols
-    colord lcms2
+    colord lcms2 pipewire
   ];
 
   mesonFlags= [
@@ -29,8 +30,8 @@ stdenv.mkDerivation rec {
     "-Dbackend-rdp=${boolToString (freerdp != null)}"
     "-Dxwayland=${boolToString (xwayland != null)}" # Default is true!
     "-Dremoting=false" # TODO
+    "-Dpipewire=${boolToString (pipewire != null)}"
     "-Dimage-webp=${boolToString (libwebp != null)}"
-    "-Dsimple-dmabuf-drm=" # Disables all drivers
     "-Ddemo-clients=false"
     "-Dsimple-clients="
     "-Dtest-junit-xml=false"
@@ -41,10 +42,22 @@ stdenv.mkDerivation rec {
     "-Dxwayland-path=${xwayland.out}/bin/Xwayland"
   ];
 
+  passthru.providedSessions = [ "weston" ];
+
   meta = {
-    description = "Reference implementation of a Wayland compositor";
-    homepage = https://wayland.freedesktop.org/;
-    license = licenses.mit;
+    description = "A lightweight and functional Wayland compositor";
+    longDescription = ''
+      Weston is the reference implementation of a Wayland compositor, as well
+      as a useful environment in and of itself.
+      Out of the box, Weston provides a very basic desktop, or a full-featured
+      environment for non-desktop uses such as automotive, embedded, in-flight,
+      industrial, kiosks, set-top boxes and TVs. It also provides a library
+      allowing other projects to build their own full-featured environments on
+      top of Weston's core. A small suite of example or demo clients are also
+      provided.
+    '';
+    homepage = "https://gitlab.freedesktop.org/wayland/weston";
+    license = licenses.mit; # Expat version
     platforms = platforms.linux;
     maintainers = with maintainers; [ primeos ];
   };

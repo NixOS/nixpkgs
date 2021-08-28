@@ -1,14 +1,14 @@
 {
-  mkDerivation, lib, kdepimTeam,
+  mkDerivation, lib, kdepimTeam, fetchpatch,
   extra-cmake-modules, kdoctools,
   akonadi, akonadi-search, grantlee, grantleetheme, kcmutils, kcompletion,
-  kcrash, kdbusaddons, kdepim-apps-libs, ki18n, kontactinterface, kparts,
+  kcrash, kdbusaddons, ki18n, kontactinterface, kparts,
   kpimtextedit, kxmlgui, libkdepim, libkleo, mailcommon, pimcommon, prison,
   qgpgme, qtbase,
 }:
 
 mkDerivation {
-  name = "kaddressbook";
+  pname = "kaddressbook";
   meta = {
     license = with lib.licenses; [ gpl2 lgpl21 fdl12 ];
     maintainers = kdepimTeam;
@@ -16,7 +16,7 @@ mkDerivation {
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
     akonadi akonadi-search grantlee grantleetheme kcmutils kcompletion kcrash
-    kdbusaddons kdepim-apps-libs ki18n kontactinterface kparts kpimtextedit
+    kdbusaddons ki18n kontactinterface kparts kpimtextedit
     kxmlgui libkdepim libkleo mailcommon pimcommon prison qgpgme qtbase
   ];
 }

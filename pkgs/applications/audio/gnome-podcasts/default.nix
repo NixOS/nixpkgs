@@ -1,52 +1,83 @@
-{ stdenv, fetchurl, fetchpatch, meson, ninja, gettext, cargo, rustc, python3, pkgconfig, gnome3
-, glib, libhandy, gtk3, dbus, openssl, sqlite, gst_all_1, wrapGAppsHook }:
+{ stdenv
+, lib
+, rustPlatform
+, fetchFromGitLab
+, meson
+, ninja
+, gettext
+, python3
+, pkg-config
+, glib
+, libhandy
+, gtk3
+, appstream-glib
+, desktop-file-utils
+, dbus
+, openssl
+, sqlite
+, gst_all_1
+, wrapGAppsHook
+}:
 
-# TODO: build from git for easier updates
-# rustPlatform.buildRustPackage rec {
 stdenv.mkDerivation rec {
-  version = "0.4.6";
-  name = "gnome-podcasts-${version}";
+  pname = "gnome-podcasts";
+  version = "0.4.9";
 
-  src = fetchurl {
-    url = https://gitlab.gnome.org/World/podcasts/uploads/e59ac5d618d7daf4c7f33ba72957c466/gnome-podcasts-0.4.6.tar.xz;
-    sha256 = "0g2rk3w251fp5jwbxs5ya1adv8nsgdqjy1vmfg8qqab6qyndhbrc";
+  src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    owner = "World";
+    repo = "podcasts";
+    rev = version;
+    sha256 = "1ah59ac3xm3sqai8zhil8ar30pviw83cm8in1n4id77rv24xkvgm";
   };
 
-  patches = [
-    # podcasts-data would fail to build because it errors on warnings
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/World/podcasts/commit/7dc1b25ee7fc59a188312d31b1fa00c3110ae63e.patch";
-      sha256 = "03ibbh1snk1391vnni529agqs14lzg5g0axjgpf3gn8dwwh1yvd5";
-    })
-  ];
-
-  # src = fetchFromGitLab {
-  #   domain = "gitlab.gnome.org";
-  #   owner = "World";
-  #   repo = "podcasts";
-  #   rev = version;
-  #   sha256 = "15xj98dhxvys0cnya9488qsfsm0ys1wy69wkc39z8j6hwdm7byq2";
-  # };
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src;
+    name = "${pname}-${version}";
+    sha256 = "1iihpfvkli09ysn46cnif53xizkwzk0m91bljmlzsygp3ip5i5yw";
+  };
 
   nativeBuildInputs = [
-    meson ninja pkgconfig gettext cargo rustc python3 wrapGAppsHook
-  ];
-  buildInputs = [
-    glib gtk3 libhandy dbus openssl sqlite gst_all_1.gstreamer gst_all_1.gst-plugins-base gst_all_1.gst-plugins-bad
+    meson
+    ninja
+    pkg-config
+    gettext
+    python3
+    rustPlatform.rust.cargo
+    rustPlatform.cargoSetupHook
+    rustPlatform.rust.rustc
+    wrapGAppsHook
+    glib
   ];
 
-  # cargoSha256 = "0721b5f700vvvzvmdl8nfjaa6j412q1fjssgrjv8n6rmn9z13d2v";
+  buildInputs = [
+    appstream-glib
+    desktop-file-utils
+    glib
+    gtk3
+    libhandy
+    dbus
+    openssl
+    sqlite
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-bad
+    gst_all_1.gst-plugins-good
+  ];
+
+  # tests require network
+  doCheck = false;
 
   postPatch = ''
     chmod +x scripts/compile-gschema.py # patchShebangs requires executable file
-    patchShebangs scripts/compile-gschema.py
+    patchShebangs scripts/compile-gschema.py scripts/cargo.sh scripts/test.sh
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Listen to your favorite podcasts";
-    homepage = https://wiki.gnome.org/Apps/Podcasts;
-    license = licenses.gpl3;
-    maintainers = gnome3.maintainers;
+    homepage = "https://wiki.gnome.org/Apps/Podcasts";
+    license = licenses.gpl3Plus;
+    maintainers = teams.gnome.members;
     platforms = platforms.unix;
   };
 }

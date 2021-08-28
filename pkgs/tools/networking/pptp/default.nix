@@ -1,30 +1,33 @@
-{ stdenv, fetchurl, perl, ppp, iproute, which }:
+{ lib, stdenv, fetchurl, perl, ppp, iproute2 }:
 
 stdenv.mkDerivation rec {
-  name = "pptp-${version}";
+  pname = "pptp";
   version = "1.10.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/pptpclient/${name}.tar.gz";
+    url = "mirror://sourceforge/pptpclient/${pname}-${version}.tar.gz";
     sha256 = "1x2szfp96w7cag2rcvkdqbsl836ja5148zzfhaqp7kl7wjw2sjc2";
   };
 
-  patchPhase =
-    ''
-      sed -e 's/install -o root/install/' -i Makefile
-    '';
-  preConfigure =
-    ''
-      makeFlagsArray=( IP=${iproute}/bin/ip PPPD=${ppp}/sbin/pppd \
-                       BINDIR=$out/sbin MANDIR=$out/share/man/man8 \
-                       PPPDIR=$out/etc/ppp )
-    '';
+  prePatch = ''
+    substituteInPlace Makefile --replace 'install -o root' 'install'
+  '';
 
-  nativeBuildInputs = [ perl which ];
+  preConfigure = ''
+    makeFlagsArray=( IP=${iproute2}/bin/ip PPPD=${ppp}/sbin/pppd \
+                     BINDIR=$out/sbin MANDIR=$out/share/man/man8 \
+                     PPPDIR=$out/etc/ppp )
+  '';
 
-  meta = with stdenv.lib; {
+  buildInputs = [ perl ];
+
+  postFixup = ''
+    patchShebangs $out
+  '';
+
+  meta = with lib; {
     description = "PPTP client for Linux";
-    homepage = http://pptpclient.sourceforge.net/;
+    homepage = "http://pptpclient.sourceforge.net/";
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

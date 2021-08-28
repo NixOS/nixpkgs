@@ -1,5 +1,16 @@
-{ stdenv, fetchurl, autoreconfHook, docbook_xsl, docbook_xml_dtd_43, gtk-doc, lzip
-, libidn2, libunistring, libxslt, pkgconfig, python3, valgrind
+{ lib, stdenv
+, fetchurl
+, autoreconfHook
+, docbook_xsl
+, docbook_xml_dtd_43
+, gtk-doc
+, lzip
+, libidn2
+, libunistring
+, libxslt
+, pkg-config
+, python3
+, valgrind
 , publicsuffix-list
 }:
 
@@ -12,9 +23,28 @@ stdenv.mkDerivation rec {
     sha256 = "183hadbira0d2zvv8272lspy31dgm9x26z35c61s5axcd5wd9g9i";
   };
 
-  nativeBuildInputs = [ autoreconfHook docbook_xsl docbook_xml_dtd_43 gtk-doc lzip pkgconfig python3 valgrind ];
-  buildInputs = [ libidn2 libunistring libxslt ];
-  propagatedBuildInputs = [ publicsuffix-list ];
+  nativeBuildInputs = [
+    autoreconfHook
+    docbook_xsl
+    docbook_xml_dtd_43
+    gtk-doc
+    lzip
+    pkg-config
+    python3
+    libxslt
+  ] ++ lib.optionals (!stdenv.isDarwin) [
+    valgrind
+  ];
+
+  buildInputs = [
+    libidn2
+    libunistring
+    libxslt
+  ];
+
+  propagatedBuildInputs = [
+    publicsuffix-list
+  ];
 
   postPatch = ''
     patchShebangs src/psl-make-dafsa
@@ -25,20 +55,20 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-    "--disable-static"
-#    "--enable-gtk-doc"
+    # "--enable-gtk-doc"
     "--enable-man"
-    "--enable-valgrind-tests"
     "--with-psl-distfile=${publicsuffix-list}/share/publicsuffix/public_suffix_list.dat"
     "--with-psl-file=${publicsuffix-list}/share/publicsuffix/public_suffix_list.dat"
     "--with-psl-testfile=${publicsuffix-list}/share/publicsuffix/test_psl.txt"
+  ] ++ lib.optionals (!stdenv.isDarwin) [
+    "--enable-valgrind-tests"
   ];
 
   enableParallelBuilding = true;
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "C library for the Publix Suffix List";
     longDescription = ''
       libpsl is a C library for the Publix Suffix List (PSL). A "public suffix"

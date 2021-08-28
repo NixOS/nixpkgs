@@ -1,23 +1,37 @@
-{ stdenv, fetchFromGitHub, pantheon, pkgconfig, meson, ninja, vala, libxml2, desktop-file-utils
-, gtk3, glib, granite, libgee, elementary-icon-theme, wrapGAppsHook }:
+{ lib, stdenv
+, fetchFromGitHub
+, nix-update-script
+, pantheon
+, pkg-config
+, meson
+, ninja
+, vala
+, libxml2
+, desktop-file-utils
+, gtk3
+, glib
+, granite
+, libgee
+, elementary-icon-theme
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
-  pname = "shortcut-overlay";
-  version = "1.0.1";
+  pname = "elementary-shortcut-overlay";
+  version = "1.1.2";
 
-  name = "elementary-${pname}-${version}";
+  repoName = "shortcut-overlay";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
+    repo = repoName;
     rev = version;
-    sha256 = "1ph4rx2l5fn0zh4fjfjlgbgskmzc0lvzqgcv7v4kr5m4rij1p4y4";
+    sha256 = "sha256-TFS29vwDkTtoFcIVAbKskyLemqW9fxE7fQkM61DpDm0=";
   };
 
   passthru = {
-    updateScript = pantheon.updateScript {
-      repoName = pname;
-      attrPath = "elementary-${pname}";
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
     };
   };
 
@@ -26,7 +40,7 @@ stdenv.mkDerivation rec {
     libxml2
     meson
     ninja
-    pkgconfig
+    pkg-config
     vala
     wrapGAppsHook
   ];
@@ -39,9 +53,9 @@ stdenv.mkDerivation rec {
     libgee
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A native OS-wide shortcut overlay to be launched by Gala";
-    homepage = https://github.com/elementary/shortcut-overlay;
+    homepage = "https://github.com/elementary/shortcut-overlay";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

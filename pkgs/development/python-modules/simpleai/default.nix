@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , numpy
@@ -20,8 +20,8 @@ buildPythonPackage rec {
    #No tests in archive
    doCheck = false;
 
-   meta = with stdenv.lib; {
-     homepage = https://github.com/simpleai-team/simpleai;
+   meta = with lib; {
+     homepage = "https://github.com/simpleai-team/simpleai";
      description = "This lib implements many of the artificial intelligence algorithms described on the book 'Artificial Intelligence, a Modern Approach'";
      maintainers = with maintainers; [ NikolaMandic ];
    };

@@ -1,4 +1,4 @@
-{ lib, stdenv, callPackage, runCommand, makeWrapper, ruby }@defs:
+{ lib, callPackage, runCommand, makeWrapper, ruby }@defs:
 
 # Use for simple installation of Ruby tools shipped in a Gem.
 # Start with a Gemfile that includes `gem <toolgem>`
@@ -36,11 +36,12 @@
 let
   basicEnv = (callPackage ../bundled-common {}) args;
 
-  cmdArgs = removeAttrs args [ "pname" "postBuild" "gemConfig" "passthru" ] // {
+  cmdArgs = removeAttrs args [ "pname" "postBuild" "gemConfig" "passthru" "gemset" "gemdir" ] // {
     inherit preferLocalBuild allowSubstitutes; # pass the defaults
 
     buildInputs = buildInputs ++ lib.optional (scripts != []) makeWrapper;
 
+    meta = { platforms = ruby.meta.platforms; } // meta;
     passthru = basicEnv.passthru // {
       inherit basicEnv;
       inherit (basicEnv) env;
@@ -52,7 +53,7 @@ in
     ${(lib.concatMapStrings (x: "ln -s '${basicEnv}/bin/${x}' $out/bin/${x};\n") exes)}
     ${(lib.concatMapStrings (s: "makeWrapper $out/bin/$(basename ${s}) $srcdir/${s} " +
                                 "--set BUNDLE_GEMFILE ${basicEnv.confFiles}/Gemfile "+
-                                "--set BUNDLE_PATH ${basicEnv}/${ruby.gemPath} "+
+                                "--unset BUNDLE_PATH "+
                                 "--set BUNDLE_FROZEN 1 "+
                                 "--set GEM_HOME ${basicEnv}/${ruby.gemPath} "+
                                 "--set GEM_PATH ${basicEnv}/${ruby.gemPath} "+

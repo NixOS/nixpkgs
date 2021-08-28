@@ -1,27 +1,38 @@
-{ stdenv, fetchFromGitHub, pantheon, meson, ninja
-, pkgconfig, vala, libgee, granite, gtk3, switchboard }:
+{ lib, stdenv
+, fetchFromGitHub
+, nix-update-script
+, pantheon
+, meson
+, ninja
+, pkg-config
+, vala
+, libgee
+, granite
+, gtk3
+, switchboard
+}:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-display";
-  version = "2.1.8";
+  version = "2.2.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "1xpgkvcv3bylpaj7c80727vr55vilkgjvnlbw7d5pr56v6mv7n9j";
+    sha256 = "sha256-mjmvuSipCRGg/HSa1n1eLyVU1gERNT2ciqgz/0KqX0Y=";
   };
 
   passthru = {
-    updateScript = pantheon.updateScript {
-      repoName = pname;
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
     };
   };
 
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     vala
   ];
 
@@ -32,11 +43,9 @@ stdenv.mkDerivation rec {
     switchboard
   ];
 
-  PKG_CONFIG_SWITCHBOARD_2_0_PLUGSDIR = "${placeholder ''out''}/lib/switchboard";
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Switchboard Displays Plug";
-    homepage = https://github.com/elementary/switchboard-plug-display;
+    homepage = "https://github.com/elementary/switchboard-plug-display";
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

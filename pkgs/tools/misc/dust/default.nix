@@ -1,25 +1,29 @@
-{ stdenv, fetchFromGitHub, rustPlatform }:
+{ lib, fetchFromGitHub, rustPlatform }:
 
 rustPlatform.buildRustPackage rec {
-  name = "dust-${version}";
-  version = "0.2.3";
+  pname = "du-dust";
+  version = "0.5.4";
 
   src = fetchFromGitHub {
     owner = "bootandy";
     repo = "dust";
     rev = "v${version}";
-    sha256 = "1l8z1daiq2x92449p2ciblcwl0ddgr3vqj2dsd3z8jj3y0z8j51s";
+    sha256 = "1knl7kwngmq598bnlvlq9x8sqp914sv1abfm55kw9f7mja2d6pw0";
+    # Remove unicode file names which leads to different checksums on HFS+
+    # vs. other filesystems because of unicode normalisation.
+    extraPostFetch = ''
+      rm -r $out/tests/test_dir_unicode/
+    '';
   };
 
-  cargoSha256 = "1bby08ijpwb8676pgm87k80s0n0fqsxc3wmz0v8p9s85yzkflnx5";
+  cargoSha256 = "sha256-M/CGsjhErZe4sFs6D5ZW+TWOHVkFtXgidME/GYiM6qA=";
 
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "du + rust = dust. Like du but more intuitive";
-    homepage = https://github.com/bootandy/dust;
+    homepage = "https://github.com/bootandy/dust";
     license = licenses.asl20;
-    maintainers = [ maintainers.infinisil ];
-    platforms = platforms.all;
+    maintainers = with maintainers; [ infinisil SuperSandro2000 ];
   };
 }

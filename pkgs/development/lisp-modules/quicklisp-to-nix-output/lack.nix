@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''lack'';
-  version = ''20181210-git'';
+  baseName = "lack";
+  version = "20201016-git";
 
-  description = ''A minimal Clack'';
+  description = "A minimal Clack";
 
-  deps = [ args."ironclad" args."lack-component" args."lack-util" args."nibbles" ];
+  deps = [ args."alexandria" args."bordeaux-threads" args."ironclad" args."lack-component" args."lack-util" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/lack/2018-12-10/lack-20181210-git.tgz'';
-    sha256 = ''00i36c5r5nk8abqqxhclr9nj6wawpybf5raswpm18h0kpxyf6qz8'';
+    url = "http://beta.quicklisp.org/archive/lack/2020-10-16/lack-20201016-git.tgz";
+    sha256 = "124c3k8116m5gc0rp4vvkqcvz35lglrbwdq4i929hbq65xyx5gan";
   };
 
   packageName = "lack";
@@ -18,14 +19,17 @@ rec {
   overrides = x: x;
 }
 /* (SYSTEM lack DESCRIPTION A minimal Clack SHA256
-    00i36c5r5nk8abqqxhclr9nj6wawpybf5raswpm18h0kpxyf6qz8 URL
-    http://beta.quicklisp.org/archive/lack/2018-12-10/lack-20181210-git.tgz MD5
-    b75ab822b0b1d7fa5ff4d47db3ec80dd NAME lack FILENAME lack DEPS
-    ((NAME ironclad FILENAME ironclad)
+    124c3k8116m5gc0rp4vvkqcvz35lglrbwdq4i929hbq65xyx5gan URL
+    http://beta.quicklisp.org/archive/lack/2020-10-16/lack-20201016-git.tgz MD5
+    8a056801bd99fdd70cdfaf33129f6aeb NAME lack FILENAME lack DEPS
+    ((NAME alexandria FILENAME alexandria)
+     (NAME bordeaux-threads FILENAME bordeaux-threads)
+     (NAME ironclad FILENAME ironclad)
      (NAME lack-component FILENAME lack-component)
-     (NAME lack-util FILENAME lack-util) (NAME nibbles FILENAME nibbles))
-    DEPENDENCIES (ironclad lack-component lack-util nibbles) VERSION
-    20181210-git SIBLINGS
+     (NAME lack-util FILENAME lack-util))
+    DEPENDENCIES
+    (alexandria bordeaux-threads ironclad lack-component lack-util) VERSION
+    20201016-git SIBLINGS
     (lack-component lack-middleware-accesslog lack-middleware-auth-basic
      lack-middleware-backtrace lack-middleware-csrf lack-middleware-mount
      lack-middleware-session lack-middleware-static lack-request lack-response

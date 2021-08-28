@@ -1,6 +1,6 @@
 { fetchMaven }:
 
-rec {
+{
   plexusClassworlds_2_2_2 = map (obj: fetchMaven {
     version = "2.2.2";
     artifactId = "plexus-classworlds";

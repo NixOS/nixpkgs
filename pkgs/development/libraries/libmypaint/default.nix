@@ -1,37 +1,52 @@
-{stdenv, autoconf, automake, fetchFromGitHub, fetchpatch, glib, intltool, json_c, libtool, pkgconfig}:
+{ lib, stdenv
+, autoconf
+, automake
+, fetchFromGitHub
+, glib
+, intltool
+, json_c
+, libtool
+, pkg-config
+, python3
+}:
 
-let
-  version = "1.3.0";
-in stdenv.mkDerivation rec {
-  name = "libmypaint-${version}";
+stdenv.mkDerivation rec {
+  pname = "libmypaint";
+  version = "1.6.1";
+
+  outputs = [ "out" "dev" ];
 
   src = fetchFromGitHub {
     owner = "mypaint";
     repo = "libmypaint";
     rev = "v${version}";
-    sha256 = "0b7aynr6ggigwhjkfzi8x3dwz15blj4grkg9hysbgjh6lvzpy9jc";
+    sha256 = "1ppgpmnhph9h8ayx9776f79a0bxbdszfw9c6bw7c3ffy2yk40178";
   };
 
-  patches = [
-    # build with automake 1.16
-    (fetchpatch {
-      url = https://github.com/mypaint/libmypaint/commit/40d9077a80be13942476f164bddfabe842ab2a45.patch;
-      sha256 = "1dclh7apgvr2bvzy9z3rgas3hk9pf2hpf5h52q94kmx8s4a47qpi";
-    })
+  nativeBuildInputs = [
+    autoconf
+    automake
+    intltool
+    libtool
+    pkg-config
+    python3
   ];
 
-  nativeBuildInputs = [ autoconf automake intltool libtool pkgconfig ];
+  buildInputs = [
+    glib
+  ];
 
-  buildInputs = [ glib ];
-
-  propagatedBuildInputs = [ json_c ]; # for libmypaint.pc
+  # for libmypaint.pc
+  propagatedBuildInputs = [
+    json_c
+  ];
 
   doCheck = true;
 
   preConfigure = "./autogen.sh";
 
-  meta = with stdenv.lib; {
-    homepage = http://mypaint.org/;
+  meta = with lib; {
+    homepage = "http://mypaint.org/";
     description = "Library for making brushstrokes which is used by MyPaint and other projects";
     license = licenses.isc;
     maintainers = with maintainers; [ goibhniu jtojnar ];

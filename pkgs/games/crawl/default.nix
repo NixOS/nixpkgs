@@ -1,34 +1,38 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, which, sqlite, lua5_1, perl, python3, zlib, pkgconfig, ncurses
-, dejavu_fonts, libpng, SDL2, SDL2_image, SDL2_mixer, libGLU_combined, freetype, pngcrush, advancecomp
-, tileMode ? false, enableSound ? tileMode
+{ stdenv, lib, fetchFromGitHub, fetchpatch, which, sqlite, lua5_1, perl, python3, zlib, pkg-config, ncurses
+, dejavu_fonts, libpng, SDL2, SDL2_image, SDL2_mixer, libGLU, libGL, freetype, pngcrush, advancecomp
+, tileMode ? false, enableSound ? tileMode, buildPackages
+
+# MacOS / Darwin builds
+, darwin ? null
 }:
 
 stdenv.mkDerivation rec {
   name = "crawl-${version}${lib.optionalString tileMode "-tiles"}";
-  version = "0.23.2";
+  version = "0.26.1";
 
   src = fetchFromGitHub {
     owner = "crawl";
     repo = "crawl";
     rev = version;
-    sha256 = "1d6mip4rvp81839yf2xm63hf34aza5wg4g5z5hi5275j94szaacs";
+    sha256 = "sha256-lh0lCMZRH+c6jSHjLFDU3wjy6Oyp59ZcPaqg5PWVrkk=";
   };
 
-  patches = [
-    ./crawl_purify.patch  # Patch hard-coded paths
-    (fetchpatch {         # Use a nice high-res app icon
-      url = "https://github.com/crawl/crawl/commit/2aa1166087e44e6585b26cedf1fe81b3f3ba547f.patch";
-      sha256 = "1jqrdv4wy18shg1fdabdb421232hg5micphkixcyzxd1lrmvadg0";
-    })
-  ];
+  # Patch hard-coded paths and remove force library builds
+  patches = [ ./crawl_purify.patch ];
 
-  nativeBuildInputs = [ pkgconfig which perl pngcrush advancecomp ];
+  nativeBuildInputs = [ pkg-config which perl pngcrush advancecomp ];
 
   # Still unstable with luajit
   buildInputs = [ lua5_1 zlib sqlite ncurses ]
                 ++ (with python3.pkgs; [ pyyaml ])
-                ++ lib.optionals tileMode [ libpng SDL2 SDL2_image freetype libGLU_combined ]
-                ++ lib.optional enableSound SDL2_mixer;
+                ++ lib.optionals tileMode [ libpng SDL2 SDL2_image freetype libGLU libGL ]
+                ++ lib.optional enableSound SDL2_mixer
+                ++ (lib.optionals stdenv.isDarwin (
+                  assert (lib.assertMsg (darwin != null) "Must have darwin frameworks available for darwin builds");
+                  with darwin.apple_sdk.frameworks; [
+                    AppKit AudioUnit CoreAudio ForceFeedback Carbon IOKit OpenGL
+                   ]
+                ));
 
   preBuild = ''
     cd crawl-ref/source
@@ -40,8 +44,10 @@ stdenv.mkDerivation rec {
 
   fontsPath = lib.optionalString tileMode dejavu_fonts;
 
-  makeFlags = [ "prefix=$(out)" "FORCE_CC=cc" "FORCE_CXX=c++" "HOSTCXX=c++"
+  makeFlags = [ "prefix=${placeholder "out"}" "FORCE_CC=${stdenv.cc.targetPrefix}cc" "FORCE_CXX=${stdenv.cc.targetPrefix}c++" "HOSTCXX=${buildPackages.stdenv.cc.targetPrefix}c++"
+                "FORCE_PKGCONFIG=y"
                 "SAVEDIR=~/.crawl" "sqlite=${sqlite.dev}"
+                "DATADIR=${placeholder "out"}"
               ] ++ lib.optional tileMode "TILES=y"
                 ++ lib.optional enableSound "SOUND=y";
 
@@ -55,16 +61,16 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Open-source, single-player, role-playing roguelike game";
-    homepage = http://crawl.develz.org/;
+    homepage = "http://crawl.develz.org/";
     longDescription = ''
       Dungeon Crawl: Stone Soup, an open-source, single-player, role-playing
       roguelike game of exploration and treasure-hunting in dungeons filled
       with dangerous and unfriendly monsters in a quest to rescue the
       mystifyingly fabulous Orb of Zot.
     '';
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
     license = with licenses; [ gpl2Plus bsd2 bsd3 mit licenses.zlib cc0 ];
     maintainers = [ maintainers.abbradar ];
   };

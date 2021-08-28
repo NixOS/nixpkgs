@@ -83,7 +83,7 @@ in
 
           See <command>actkbd</command> <filename>README</filename> for documentation.
 
-          The example shows a piece of what <option>sound.enableMediaKeys</option> does when enabled.
+          The example shows a piece of what <option>sound.mediaKeys.enable</option> does when enabled.
         '';
       };
 

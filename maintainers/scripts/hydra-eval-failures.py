@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i python3 -p 'python3.withPackages(ps: with ps; [ requests pyquery click ])'
+#!nix-shell -i python3 -p "python3.withPackages(ps: with ps; [ requests pyquery click ])"
 
 # To use, just execute this script with --help to display help.
 
@@ -11,13 +11,15 @@ import click
 import requests
 from pyquery import PyQuery as pq
 
+def map_dict (f, d):
+    for k,v in d.items():
+        d[k] = f(v)
 
 maintainers_json = subprocess.check_output([
-    'nix-instantiate', '-E', 'import ./maintainers/maintainer-list.nix {}', '--eval', '--json'
+    'nix-instantiate', '-A', 'lib.maintainers', '--eval', '--strict', '--json'
 ])
 maintainers = json.loads(maintainers_json)
-MAINTAINERS = {v: k for k, v in maintainers.items()}
-
+MAINTAINERS = map_dict(lambda v: v.get('github', None), maintainers)
 
 def get_response_text(url):
     return pq(requests.get(url).text)  # IO
@@ -38,37 +40,46 @@ def get_maintainers(attr_name):
             '-A',
             '.'.join(nixname[1:]) + '.meta',
             EVAL_FILE[nixname[0]],
+            '--arg',
+            'nixpkgs',
+            './.',
             '--json'])
         meta = json.loads(meta_json)
-        if meta.get('maintainers'):
-            return [MAINTAINERS[name] for name in meta['maintainers'] if MAINTAINERS.get(name)]
+        return meta.get('maintainers', [])
     except:
        return []
+
+def filter_github_users(maintainers):
+    github_only = []
+    for i in maintainers:
+        if i.get('github'):
+            github_only.append(i)
+    return github_only
 
 def print_build(table_row):
     a = pq(table_row)('a')[1]
     print("- [ ] [{}]({})".format(a.text, a.get('href')), flush=True)
-    
-    maintainers = get_maintainers(a.text)
-    if maintainers:
-        print("  - maintainers: {}".format(", ".join(map(lambda u: '@' + u, maintainers))))
+
+    job_maintainers = filter_github_users(get_maintainers(a.text))
+    if job_maintainers:
+        print("  - maintainers: {}".format(" ".join(map(lambda u: '@' + u.get('github'), job_maintainers))))
     # TODO: print last three persons that touched this file
     # TODO: pinpoint the diff that broke this build, or maybe it's transient or maybe it never worked?
-    
+
     sys.stdout.flush()
 
 @click.command()
 @click.option(
     '--jobset',
-    default="nixos/release-17.09",
-    help='Hydra project like nixos/release-17.09')
+    default="nixos/release-19.09",
+    help='Hydra project like nixos/release-19.09')
 def cli(jobset):
     """
     Given a Hydra project, inspect latest evaluation
     and print a summary of failed builds
     """
 
-    url = "http://hydra.nixos.org/jobset/{}".format(jobset)
+    url = "https://hydra.nixos.org/jobset/{}".format(jobset)
 
     # get the last evaluation
     click.echo(click.style(
@@ -91,6 +102,7 @@ def cli(jobset):
     print('\nDependency failures:')
     for tr in d('img[alt="Dependency failed"]').parents('tr'):
         print_build(tr)
+
 
 
 if __name__ == "__main__":

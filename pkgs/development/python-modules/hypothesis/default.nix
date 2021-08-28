@@ -1,6 +1,14 @@
-{ lib, buildPythonPackage, fetchFromGitHub
-, isPy3k, attrs, coverage, enum34
-, doCheck ? true, pytest, pytest_xdist, flaky, mock
+{ lib
+, buildPythonPackage
+, pythonAtLeast
+, fetchFromGitHub
+, attrs
+, pexpect
+, doCheck ? true
+, pytestCheckHook
+, pytest-xdist
+, sortedcontainers
+, tzdata
 }:
 buildPythonPackage rec {
   # https://hypothesis.readthedocs.org/en/latest/packaging.html
@@ -9,32 +17,40 @@ buildPythonPackage rec {
   # pytz fake_factory django numpy pytest
   # If you need these, you can just add them to your environment.
 
-  version = "4.7.3";
   pname = "hypothesis";
+  version = "5.49.0";
 
   # Use github tarballs that includes tests
   src = fetchFromGitHub {
     owner = "HypothesisWorks";
     repo = "hypothesis-python";
     rev = "hypothesis-python-${version}";
-    sha256 = "03l4hp0p7i2k04arnqkav0ygc23ml46dy3cfrlwviasrj7yzk5hc";
+    sha256 = "1lr9a93vdx70s9i1zazazif5hy8fbqhvwqq402ygpf53yw4lgi2w";
   };
 
   postUnpack = "sourceRoot=$sourceRoot/hypothesis-python";
 
-  propagatedBuildInputs = [ attrs coverage ] ++ lib.optional (!isPy3k) [ enum34 ];
+  propagatedBuildInputs = [
+    attrs
+    sortedcontainers
+  ];
 
-  checkInputs = [ pytest pytest_xdist flaky mock ];
+  checkInputs = [ pytestCheckHook pytest-xdist pexpect ]
+    ++ lib.optional (pythonAtLeast "3.9") tzdata;
+
   inherit doCheck;
 
-  checkPhase = ''
-    rm tox.ini # This file changes how py.test runs and breaks it
-    py.test tests/cover
+  # This file changes how pytest runs and breaks it
+  preCheck = ''
+    rm tox.ini
   '';
+
+  pytestFlagsArray = [ "tests/cover" ];
 
   meta = with lib; {
     description = "A Python library for property based testing";
-    homepage = https://github.com/HypothesisWorks/hypothesis;
+    homepage = "https://github.com/HypothesisWorks/hypothesis";
     license = licenses.mpl20;
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

@@ -1,15 +1,16 @@
-{ stdenv, fetchurl, boost, fastjet, hepmc, lhapdf, rsync, zlib }:
+{ lib, stdenv, fetchurl, boost, fastjet, hepmc, lhapdf, rsync, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "pythia-${version}";
-  version = "8.240";
+  pname = "pythia";
+  version = "8.305";
 
   src = fetchurl {
     url = "http://home.thep.lu.se/~torbjorn/pythia8/pythia${builtins.replaceStrings ["."] [""] version}.tgz";
-    sha256 = "13cd86030j1f00n4xw30g26cgir3a5lsn9n0z13dh1vprbc9ax6j";
+    sha256 = "03rpy2bmx67217fh1spfn36x9xrk0igcj56byki77lgj0y5mz21a";
   };
 
-  buildInputs = [ boost fastjet hepmc zlib rsync lhapdf ];
+  nativeBuildInputs = [ rsync ];
+  buildInputs = [ boost fastjet hepmc zlib lhapdf ];
 
   preConfigure = ''
     patchShebangs ./configure
@@ -17,17 +18,20 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--enable-shared"
-    "--with-hepmc2=${hepmc}"
     "--with-lhapdf6=${lhapdf}"
-  ];
+  ] ++ (if lib.versions.major hepmc.version == "3" then [
+    "--with-hepmc3=${hepmc}"
+  ] else [
+    "--with-hepmc2=${hepmc}"
+  ]);
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     description = "A program for the generation of high-energy physics events";
-    license     = stdenv.lib.licenses.gpl2;
-    homepage    = http://home.thep.lu.se/~torbjorn/Pythia.html;
-    platforms   = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ veprbl ];
+    license = licenses.gpl2Only;
+    homepage = "http://home.thep.lu.se/~torbjorn/Pythia.html";
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ veprbl ];
   };
 }

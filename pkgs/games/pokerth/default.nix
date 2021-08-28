@@ -1,12 +1,11 @@
-{ stdenv, fetchFromGitHub, runCommand, fetchpatch, patchutils, qmake, qtbase
+{ lib, mkDerivation, fetchFromGitHub, runCommand, fetchpatch, patchutils, qmake, qtbase
 , SDL, SDL_mixer, boost, curl, gsasl, libgcrypt, libircclient, protobuf, sqlite
+, wrapQtAppsHook
 , tinyxml2, target ? "client" }:
-
-with stdenv.lib;
 
 let
   hiDPI = fetchpatch {
-    url = https://github.com/pokerth/pokerth/commit/ad8c9cabfb85d8293720d0f14840278d38b5feeb.patch;
+    url = "https://github.com/pokerth/pokerth/commit/ad8c9cabfb85d8293720d0f14840278d38b5feeb.patch";
     sha256 = "192x3lqvd1fanasb95shdygn997qfrpk1k62k1f4j3s5chkwvjig";
   };
 
@@ -15,7 +14,7 @@ let
   '';
 in
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   name = "pokerth-${target}-${version}";
   version = "1.1.2";
 
@@ -39,7 +38,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  nativeBuildInputs = [ qmake ];
+  nativeBuildInputs = [ qmake wrapQtAppsHook ];
 
   buildInputs = [
     SDL
@@ -60,12 +59,12 @@ stdenv.mkDerivation rec {
     "pokerth.pro"
   ];
 
-  NIX_CFLAGS_COMPILE = [ "-I${SDL.dev}/include/SDL" ];
+  NIX_CFLAGS_COMPILE = "-I${SDL.dev}/include/SDL";
 
   enableParallelBuilding = true;
 
-  meta = {
-    homepage = https://www.pokerth.net;
+  meta = with lib; {
+    homepage = "https://www.pokerth.net";
     description = "Poker game ${target}";
     license = licenses.gpl3;
     maintainers = with maintainers; [ obadz yegortimoshenko ];

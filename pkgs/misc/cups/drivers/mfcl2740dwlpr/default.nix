@@ -1,11 +1,11 @@
-{ pkgsi686Linux, stdenv, fetchurl, dpkg, makeWrapper, coreutils, ghostscript, gnugrep, gnused, which, perl }:
+{ pkgsi686Linux, lib, stdenv, fetchurl, dpkg, makeWrapper, coreutils, ghostscript, gnugrep, gnused, which, perl }:
 
 stdenv.mkDerivation rec {
-  name = "mfcl2740dwlpr-${version}";
+  pname = "mfcl2740dwlpr";
   version = "3.2.0-1";
 
   src = fetchurl {
-    url = "https://download.brother.com/welcome/dlf101727/${name}.i386.deb";
+    url = "https://download.brother.com/welcome/dlf101727/${pname}-${version}.i386.deb";
     sha256 = "10a2bc672bd54e718b478f3afc7e47d451557f7d5513167d3ad349a3d00bffaf";
   };
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
       --replace "PRINTER =~" "PRINTER = \"MFCL2740DW\"; #"
 
     wrapProgram $dir/lpd/filter_MFCL2740DW \
-      --prefix PATH : ${stdenv.lib.makeBinPath [
+      --prefix PATH : ${lib.makeBinPath [
         coreutils ghostscript gnugrep gnused which
       ]}
 
@@ -35,9 +35,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Brother MFC-L2740DW lpr driver";
-    homepage = http://www.brother.com/;
-    license = stdenv.lib.licenses.unfree;
+    homepage = "http://www.brother.com/";
+    license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" "i686-linux" ];
-    maintainers = [ stdenv.lib.maintainers.enzime ];
+    maintainers = [ lib.maintainers.enzime ];
   };
 }

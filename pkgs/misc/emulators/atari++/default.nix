@@ -1,23 +1,22 @@
-{ stdenv, fetchurl, libSM, libX11, libICE, SDL, alsaLib, gcc-unwrapped, libXext }:
+{ lib, stdenv, fetchurl, libSM, libX11, libICE, SDL, alsaLib, gcc-unwrapped, libXext }:
 
-with stdenv.lib;
-stdenv.mkDerivation rec{
-  name = "atari++-${version}";
-  version = "1.81";
+stdenv.mkDerivation rec {
+  pname = "atari++";
+  version = "1.83";
 
   src = fetchurl {
-    url = "http://www.xl-project.com/download/atari++_${version}.tar.gz";
-    sha256 = "1sv268dsjddirhx47zaqgqiahy6zjxj7xaiiksd1gjvs4lvf3cdg";
+    url = "http://www.xl-project.com/download/${pname}_${version}.tar.gz";
+    sha256 = "04fm2ic2qi4a52mi72wcaxyrpll4k8vvchx3qrik8rhg3jrxgm47";
   };
 
   buildInputs = [ libSM libX11 SDL libICE alsaLib gcc-unwrapped libXext ];
 
   postFixup = ''
-    patchelf --set-rpath ${stdenv.lib.makeLibraryPath buildInputs} "$out/bin/atari++"
+    patchelf --set-rpath ${lib.makeLibraryPath buildInputs} "$out/bin/atari++"
   '';
 
-  meta = {
-    homepage = http://www.xl-project.com/;
+  meta = with lib; {
+    homepage = "http://www.xl-project.com/";
     description = "An enhanced, cycle-accurated Atari emulator";
     longDescription = ''
       The Atari++ Emulator is a Unix based emulator of the Atari eight
@@ -28,6 +27,6 @@ stdenv.mkDerivation rec{
     '';
     maintainers = [ maintainers.AndersonTorres ];
     license = licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

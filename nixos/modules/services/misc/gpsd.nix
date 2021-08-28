@@ -86,17 +86,13 @@ in
 
   config = mkIf cfg.enable {
 
-    users.users = singleton
-      { name = "gpsd";
-        inherit uid;
+    users.users.gpsd =
+      { inherit uid;
         description = "gpsd daemon user";
         home = "/var/empty";
       };
 
-    users.groups = singleton
-      { name = "gpsd";
-        inherit gid;
-      };
+    users.groups.gpsd = { inherit gid; };
 
     systemd.services.gpsd = {
       description = "GPSD daemon";

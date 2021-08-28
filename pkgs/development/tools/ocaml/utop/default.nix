@@ -1,26 +1,26 @@
-{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, dune
-, lambdaTerm, cppo, makeWrapper
+{ lib, stdenv, fetchurl, ocaml, findlib
+, lambdaTerm, cppo, makeWrapper, buildDunePackage
 }:
 
-if !stdenv.lib.versionAtLeast ocaml.version "4.03"
+if !lib.versionAtLeast ocaml.version "4.03"
 then throw "utop is not available for OCaml ${ocaml.version}"
 else
 
-stdenv.mkDerivation rec {
-  version = "2.3.0";
-  name = "utop-${version}";
+buildDunePackage rec {
+  pname = "utop";
+  version = "2.7.0";
+
+  useDune2 = true;
 
   src = fetchurl {
-    url = "https://github.com/diml/utop/archive/${version}.tar.gz";
-    sha256 = "1g1xf19fhzwsikp33pv1wf6wb2qdc5y7dzqi46h8c4l850cwscjh";
+    url = "https://github.com/ocaml-community/utop/releases/download/${version}/utop-${version}.tbz";
+    sha256 = "sha256-4GisU98mfDzA8vabvCBEBPA2LMTmRyofxUfjJqY8P90=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ ocaml findlib ocamlbuild cppo dune ];
+  buildInputs = [ cppo ];
 
   propagatedBuildInputs = [ lambdaTerm ];
-
-  inherit (dune) installPhase;
 
   postFixup =
    let
@@ -28,8 +28,9 @@ stdenv.mkDerivation rec {
 
      # derivation of just runtime deps so env vars created by
      # setup-hooks can be saved for use at runtime
-     runtime = stdenv.mkDerivation rec {
-       name = "utop-runtime-env-${version}";
+     runtime = stdenv.mkDerivation {
+       pname = "utop-runtime-env";
+       inherit version;
 
        buildInputs = [ findlib ] ++ propagatedBuildInputs;
 
@@ -38,6 +39,7 @@ stdenv.mkDerivation rec {
        installPhase = ''
          mkdir -p "$out"/${path}
          for e in OCAMLPATH CAML_LD_LIBRARY_PATH; do
+           [[ -v "$e" ]] || continue
            printf %s "''${!e}" > "$out"/${path}/$e
          done
        '';
@@ -56,7 +58,7 @@ stdenv.mkDerivation rec {
       --prefix CAML_LD_LIBRARY_PATH ":" "${get "CAML_LD_LIBRARY_PATH"}" \
       --prefix OCAMLPATH ":" "${get "OCAMLPATH"}" \
       --prefix OCAMLPATH ":" $(unset OCAMLPATH; addOCamlPath "$out"; printf %s "$OCAMLPATH") \
-      --add-flags "-I ${findlib}/lib/ocaml/${stdenv.lib.getVersion ocaml}/site-lib"
+      --add-flags "-I ${findlib}/lib/ocaml/${lib.getVersion ocaml}/site-lib"
    done
    '';
 
@@ -67,11 +69,11 @@ stdenv.mkDerivation rec {
 
     It integrates with the tuareg mode in Emacs.
     '';
-    homepage = https://github.com/diml/utop;
-    license = stdenv.lib.licenses.bsd3;
+    homepage = "https://github.com/diml/utop";
+    license = lib.licenses.bsd3;
     platforms = ocaml.meta.platforms or [];
     maintainers = [
-      stdenv.lib.maintainers.gal_bolle
+      lib.maintainers.gal_bolle
     ];
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchFromGitHub
 , lxml
@@ -7,7 +7,7 @@
 , isPy3k
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   version = "1.1.7";
   pname = "python-lpod";
   # lpod library currently does not support Python 3.x
@@ -22,8 +22,8 @@ buildPythonPackage rec {
     sha256 = "1mikvzp27wxkzpr2lii4wg1hhx8h610agckqynvsrdc8v3nw9ciw";
   };
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/lpod/lpod-python/;
+  meta = with lib; {
+    homepage = "https://github.com/lpod/lpod-python/";
     description = "Library implementing the ISO/IEC 26300 OpenDocument Format standard (ODF) ";
     license = licenses.gpl3;
   };

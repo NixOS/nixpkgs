@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, gettext, libiconv, bison, ncurses, perl, autoreconfHook }:
+{ lib, stdenv, fetchFromGitHub, gettext, libiconv, bison, ncurses, perl, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "lifelines";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   ];
   nativeBuildInputs = [ autoreconfHook bison ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Genealogy tool with ncurses interface";
     homepage = "https://lifelines.github.io/lifelines/";
     license = licenses.mit;

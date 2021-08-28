@@ -1,27 +1,25 @@
-{ stdenv, fetchgit, ocaml }:
+{ lib, stdenv, fetchFromGitHub, ocaml }:
 
-let 
-  version = "20170720";
-in
+stdenv.mkDerivation  rec {
+  pname = "coq2html";
+  version = "1.2";
 
-stdenv.mkDerivation {
-  name = "coq2html-${version}";
-
-  src = fetchgit {
-    url = "https://github.com/xavierleroy/coq2html";
-    rev = "e2b94093c6b9a877717f181765e30577de22439e";
-    sha256 = "1x466j0pyjggyz0870pdllv9f5vpnfrgkd0w7ajvm9rkwyp3f610";
+  src = fetchFromGitHub {
+    owner = "xavierleroy";
+    repo = "coq2html";
+    rev = "v${version}";
+    sha256 = "sha256-ty/6A3wivjDCrmlZAcZyaIwQQ+vPBJm9MhtW6nZcV3s=";
   };
 
-  buildInputs = [ ocaml ];
+  nativeBuildInputs = [ ocaml ];
 
   installPhase = ''
     mkdir -p $out/bin
     cp coq2html $out/bin
   '';
 
-  meta = with stdenv.lib; {
-    description = "coq2html is an HTML documentation generator for Coq source files";
+  meta = with lib; {
+    description = "HTML documentation generator for Coq source files";
     longDescription = ''
       coq2html is an HTML documentation generator for Coq source files. It is
       an alternative to the standard coqdoc documentation generator
@@ -30,9 +28,9 @@ stdenv.mkDerivation {
       initially hidden, but can be revealed one by one by clicking on the
       "Proof" keyword.
     '';
-    homepage = https://github.com/xavierleroy/coq2html;
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ jwiegley ];
+    homepage = "https://github.com/xavierleroy/coq2html";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ jwiegley siraben ];
     platforms = platforms.unix;
   };
 }

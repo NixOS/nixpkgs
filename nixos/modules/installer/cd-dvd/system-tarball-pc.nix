@@ -23,13 +23,13 @@ let
     label nixos
       MENU LABEL ^NixOS using nfsroot
       KERNEL bzImage
-      append ip=dhcp nfsroot=/home/pcroot systemConfig=${config.system.build.toplevel} init=${config.system.build.toplevel}/init rw
+      append ip=dhcp nfsroot=/home/pcroot init=${config.system.build.toplevel}/init rw
 
     # I don't know how to make this boot with nfsroot (using the initrd)
     label nixos_initrd
       MENU LABEL NixOS booting the poor ^initrd.
       KERNEL bzImage
-      append initrd=initrd ip=dhcp nfsroot=/home/pcroot systemConfig=${config.system.build.toplevel} init=${config.system.build.toplevel}/init rw
+      append initrd=initrd ip=dhcp nfsroot=/home/pcroot init=${config.system.build.toplevel}/init rw
 
     label memtest
       MENU LABEL ^${pkgs.memtest86.name}
@@ -122,14 +122,13 @@ in
 
   /* fake entry, just to have a happy stage-1. Users
      may boot without having stage-1 though */
-  fileSystems = [
+  fileSystems.fake =
     { mountPoint = "/";
       device = "/dev/something";
-      }
-  ];
+    };
 
   nixpkgs.config = {
-    packageOverrides = p: rec {
+    packageOverrides = p: {
       linux_3_4 = p.linux_3_4.override {
         extraConfig = ''
           # Enable drivers in kernel for most NICs.

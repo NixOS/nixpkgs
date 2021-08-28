@@ -1,16 +1,44 @@
-{ stdenv, pythonPackages, fetchurl, gettext }:
-pythonPackages.buildPythonApplication rec {
+{ lib
+, python3Packages
+, fetchurl
+, gettext
+, gobject-introspection
+, wrapGAppsHook
+, glib
+, gtk3
+, libnotify
+, scandir ? null
+}:
+
+python3Packages.buildPythonApplication rec {
   pname = "bleachbit";
-  version = "2.2";
+  version = "4.0.0";
 
   format = "other";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.bz2";
-    sha256 = "1yj9bc3k6s1aib7znb79h5rybfv691zz4szxkwf9fm9nr0dws603";
+    sha256 = "1dn3h6lr9ldbfpvgq9sdlk972sxhwalgj2f377qbqibm3yfxzpil";
   };
 
-  nativeBuildInputs = [ gettext ];
+  nativeBuildInputs = [
+    gettext
+    gobject-introspection
+    wrapGAppsHook
+  ];
+
+  buildInputs = [
+    glib
+    gtk3
+    libnotify
+  ];
+
+  propagatedBuildInputs = with python3Packages; [
+    chardet
+    pygobject3
+    requests
+    scandir
+  ];
 
   # Patch the many hardcoded uses of /usr/share/ and /usr/bin
   postPatch = ''
@@ -20,15 +48,23 @@ pythonPackages.buildPythonApplication rec {
 
   dontBuild = true;
 
-  installFlags = [ "prefix=${placeholder "out"}" ];
+  installFlags = [
+    "prefix=${placeholder "out"}"
+  ];
 
-  propagatedBuildInputs = with pythonPackages; [ pygtk ];
+  # prevent double wrapping from wrapGApps and wrapPythonProgram
+  dontWrapGApps = true;
+  makeWrapperArgs = [
+    "\${gappsWrapperArgs[@]}"
+  ];
 
-  meta = {
-    homepage = http://bleachbit.sourceforge.net;
+  strictDeps = false;
+
+  meta = with lib; {
+    homepage = "http://bleachbit.sourceforge.net";
     description = "A program to clean your computer";
     longDescription = "BleachBit helps you easily clean your computer to free space and maintain privacy.";
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = with stdenv.lib.maintainers; [ leonardoce ];
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ leonardoce ];
   };
 }

@@ -1,6 +1,7 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
 , python
 , subunit
 , testrepository
@@ -13,27 +14,24 @@
 
 buildPythonPackage rec {
   pname = "mox3";
-  version = "0.26.0";
+  version = "1.1.0";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b13c0b8459d6fb0688f9a4e70feeec43fa2cca05b727fc01156789596e083bb1";
+    sha256 = "8a526b7b9b6341f541a9aef3e08c93fd84a5373fe89d4cc51dd571f085b2363c";
   };
-
-  patchPhase = ''
-    sed -i 's@python@${python.interpreter}@' .testr.conf
-  '';
 
   buildInputs = [ subunit testrepository testtools six ];
   propagatedBuildInputs = [ pbr fixtures ];
 
-  #  FAIL: mox3.tests.test_mox.RegexTest.testReprWithFlags
-  #  ValueError: cannot use LOCALE flag with a str pattern
-  doCheck = !isPy36;
+  # Disabling as several tests dependencies are missing:
+  # https://opendev.org/openstack/mox3/src/branch/master/test-requirements.txt
+  doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Mock object framework for Python";
-    homepage = https://docs.openstack.org/mox3/latest/;
+    homepage = "https://docs.openstack.org/mox3/latest/";
     license = licenses.asl20;
   };
 

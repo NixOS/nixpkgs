@@ -1,8 +1,8 @@
-{ stdenv, buildPythonApplication, fetchFromGitHub
+{ lib, buildPythonApplication, fetchFromGitHub
 , gtk3, wrapGAppsHook, gst_all_1, gobject-introspection
-, python3Packages, gnome3, hicolor-icon-theme }:
+, python3Packages, gnome }:
 
-buildPythonApplication rec {
+buildPythonApplication {
   pname = "gscrabble";
   version = "unstable-2019-03-11";
 
@@ -19,7 +19,7 @@ buildPythonApplication rec {
 
   buildInputs = with gst_all_1; [
     gst-plugins-base gst-plugins-good gst-plugins-ugly gst-plugins-bad
-    hicolor-icon-theme gnome3.adwaita-icon-theme gtk3 gobject-introspection
+    gnome.adwaita-icon-theme gtk3 gobject-introspection
   ];
 
   propagatedBuildInputs = with python3Packages; [ gst-python pygobject3 ];
@@ -30,11 +30,11 @@ buildPythonApplication rec {
       )
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Golden Scrabble crossword puzzle game";
-    homepage = https://github.com/RaaH/gscrabble/;
+    homepage = "https://github.com/RaaH/gscrabble/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.genesis ];
+    maintainers = [ ];
   };
 }

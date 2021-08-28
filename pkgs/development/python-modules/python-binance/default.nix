@@ -1,25 +1,55 @@
-{ lib, buildPythonPackage, fetchPypi
-, pytest, requests-mock, tox
-, autobahn, certifi, chardet, cryptography, dateparser, pyopenssl, requests, service-identity, twisted }:
+{ lib
+, aiohttp
+, buildPythonPackage
+, dateparser
+, fetchFromGitHub
+, pytestCheckHook
+, pythonOlder
+, requests
+, requests-mock
+, six
+, ujson
+, websockets
+}:
 
 buildPythonPackage rec {
-  version = "0.7.1";
   pname = "python-binance";
+  version = "1.0.10";
+  disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "9ce406da68bfbc209ae6852d1b8a2812708d04502f82a61b0c9ca41356cc6ab7";
+  src = fetchFromGitHub {
+    owner = "sammchardy";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "09pq2blvky1ah4k8yc6zkp2g5nkn3awc52ad3lxvj6m33akfzxiv";
   };
 
-  doCheck = false;  # Tries to test multiple interpreters with tox
-  checkInputs = [ pytest requests-mock tox ];
+  propagatedBuildInputs = [
+    aiohttp
+    dateparser
+    requests
+    six
+    ujson
+    websockets
+  ];
 
-  propagatedBuildInputs = [ autobahn certifi chardet cryptography dateparser pyopenssl requests service-identity twisted ];
+  checkInputs = [
+    pytestCheckHook
+    requests-mock
+  ];
 
-  meta = {
+  disabledTestPaths = [
+    # Tests require network access
+    "tests/test_api_request.py"
+    "tests/test_historical_klines.py"
+  ];
+
+  pythonImportsCheck = [ "binance" ];
+
+  meta = with lib; {
     description = "Binance Exchange API python implementation for automated trading";
-    homepage = https://github.com/sammchardy/python-binance;
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.bhipple ];
+    homepage = "https://github.com/sammchardy/python-binance";
+    license = licenses.mit;
+    maintainers = with maintainers; [ bhipple ];
   };
 }

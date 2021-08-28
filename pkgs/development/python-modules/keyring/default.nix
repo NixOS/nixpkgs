@@ -1,33 +1,64 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, setuptools_scm, entrypoints, secretstorage
-, pytest, pytest-flake8 }:
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, setuptools-scm
+, importlib-metadata
+, dbus-python
+, jeepney
+, secretstorage
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "keyring";
-  version = "18.0.1";
+  version = "23.0.1";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "67d6cc0132bd77922725fae9f18366bb314fd8f95ff4d323a4df41890a96a838";
+    sha256 = "045703609dd3fccfcdb27da201684278823b72af515aedec1a8515719a038cb8";
   };
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
-  checkInputs = [ pytest pytest-flake8 ];
+  propagatedBuildInputs = [
+    # this should be optional, however, it has a different API
+    importlib-metadata # see https://github.com/jaraco/keyring/issues/503#issuecomment-798973205
 
-  propagatedBuildInputs = [ entrypoints ] ++ stdenv.lib.optional stdenv.isLinux secretstorage;
+    dbus-python
+    jeepney
+    secretstorage
+  ];
 
-  doCheck = !stdenv.isDarwin;
+  pythonImportsCheck = [
+    "keyring"
+    "keyring.backend"
+  ];
 
-  checkPhase = ''
-    py.test
-  '';
+  checkInputs = [
+    pytestCheckHook
+  ];
 
-  meta = with stdenv.lib; {
+  # Keychain communications isn't possible in our build environment
+  # keyring.errors.KeyringError: Can't get password from keychain: (-25307, 'Unknown Error')
+  disabledTests = lib.optionals (stdenv.isDarwin) [
+    "test_multiprocess_get"
+    "test_multiprocess_get_after_native_get"
+  ];
+
+  disabledTestPaths = [
+    "tests/backends/test_macOS.py"
+  ];
+
+  meta = with lib; {
     description = "Store and access your passwords safely";
-    homepage    = "https://pypi.python.org/pypi/keyring";
-    license     = licenses.psfl;
-    maintainers = with maintainers; [ lovek323 ];
+    homepage    = "https://github.com/jaraco/keyring";
+    license     = licenses.mit;
+    maintainers = with maintainers; [ lovek323 dotlambda ];
     platforms   = platforms.unix;
   };
 }

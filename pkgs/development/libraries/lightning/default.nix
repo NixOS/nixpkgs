@@ -1,14 +1,14 @@
-{ stdenv, fetchurl, libopcodes }:
+{ lib, stdenv, fetchurl, libopcodes }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
 
-  name = "lightning-${version}";
-  version = "2.1.2";
+  pname = "lightning";
+  version = "2.1.3";
 
   src = fetchurl {
-    url = "mirror://gnu/lightning/${name}.tar.gz";
-    sha256 = "0sbs2lm8b9in2m8d52zf0x9gpp40x6r7sl6sha92yq3pr78rwa4v";
+    url = "mirror://gnu/lightning/${pname}-${version}.tar.gz";
+    sha256 = "1jgxbq2cm51dzi3zhz38mmgwdcgs328mfl8iviw8dxn6dn36p1gd";
   };
 
   checkInputs = [ libopcodes ];
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = {
-    homepage = https://www.gnu.org/software/lightning/;
+    homepage = "https://www.gnu.org/software/lightning/";
     description = "Run-time code generation library";
     longDescription = ''
       GNU lightning is a library that generates assembly language code
@@ -27,6 +27,6 @@ stdenv.mkDerivation rec {
     '';
     maintainers = [ maintainers.AndersonTorres ];
     license = licenses.lgpl3Plus;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.all;
   };
 }

@@ -1,7 +1,7 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "haveged-${version}";
+  pname = "haveged";
   version = "1.9.2";
 
   src = fetchurl {
@@ -19,9 +19,9 @@ stdenv.mkDerivation rec {
       of haveged is directed towards improving overall reliability and adaptability while minimizing
       the barriers to using haveged for other tasks.
     '';
-    homepage = http://www.issihosts.com/haveged/;
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = [ stdenv.lib.maintainers.domenkozar ];
-    platforms = stdenv.lib.platforms.unix;
+    homepage = "http://www.issihosts.com/haveged/";
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.domenkozar ];
+    platforms = lib.platforms.unix;
   };
 }

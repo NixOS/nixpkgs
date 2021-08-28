@@ -1,15 +1,14 @@
-{ stdenv, fetchurl, openssl, expat, libevent, swig, pythonPackages }:
+{ lib, stdenv, fetchurl, openssl, expat, libevent, swig, pythonPackages }:
 
 let
   inherit (pythonPackages) python;
 in stdenv.mkDerivation rec {
   pname = "pyunbound";
-  name = "${pname}-${version}";
-  version = "1.9.0";
+  version = "1.9.3";
 
   src = fetchurl {
     url = "http://unbound.net/downloads/unbound-${version}.tar.gz";
-    sha256 = "0bb0p8nbda77ghx20yfl7hqxm9x709223q35465v99i8v4ay27f1";
+    sha256 = "1ykdy62sgzv33ggkmzwx2h0ifm7hyyxyfkb4zckv7gz4f28xsm8v";
   };
 
   buildInputs = [ openssl expat libevent swig python ];
@@ -55,11 +54,12 @@ in stdenv.mkDerivation rec {
     patchelf --replace-needed libunbound.so.2 $out/${python.sitePackages}/libunbound.so.2 $out/${python.sitePackages}/_unbound.so
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python library for Unbound, the validating, recursive, and caching DNS resolver";
     license = licenses.bsd3;
-    homepage = http://www.unbound.net;
+    homepage = "http://www.unbound.net";
     maintainers = with maintainers; [ leenaars ];
-    platforms = stdenv.lib.platforms.unix;
+    platforms = lib.platforms.unix;
+    broken = true;
   };
 }

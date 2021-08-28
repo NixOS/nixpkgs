@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch
+{ lib, stdenv, fetchurl, fetchpatch
 , libtool, autoconf, automake
 , gmp, mpfr, libffi, makeWrapper
 , noUnicode ? false
@@ -23,7 +23,7 @@ let
   ];
   propagatedBuildInputs = [
     libffi gmp mpfr gcc
-  ] ++ stdenv.lib.optionals useBoehmgc [
+  ] ++ lib.optionals useBoehmgc [
     # replaces ecl's own gc which other packages can depend on, thus propagated
     boehmgc
   ];
@@ -42,7 +42,7 @@ stdenv.mkDerivation {
     "--with-libffi-prefix=${libffi.dev}"
     ]
     ++
-    (stdenv.lib.optional (! noUnicode)
+    (lib.optional (! noUnicode)
       "--enable-unicode")
     ;
 
@@ -61,6 +61,7 @@ stdenv.mkDerivation {
       url = "https://git.sagemath.org/sage.git/plain/build/pkgs/ecl/patches/16.1.2-getcwd.patch?id=07d6c37d18811e2b377a9689790a7c5e24da16ba";
       sha256 = "1fbi8gn7rv8nqff5mpaijsrch3k3z7qc5cn4h1vl8qrr8xwqlqhb";
     })
+    ./ecl-1.16.2-libffi-3.3-abi.patch
   ];
 
   hardeningDisable = [ "format" ];
@@ -76,8 +77,8 @@ stdenv.mkDerivation {
   meta = {
     inherit (s) version;
     description = "Lisp implementation aiming to be small, fast and easy to embed";
-    license = stdenv.lib.licenses.mit ;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.mit ;
+    maintainers = [lib.maintainers.raskin];
+    platforms = lib.platforms.unix;
   };
 }

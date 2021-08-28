@@ -1,23 +1,81 @@
-{ stdenv, rustPlatform, fetchFromGitHub }:
+{ lib
+, stdenv
+, rustPlatform
+, fetchCrate
+, installShellFiles
+, makeWrapper
+, pkg-config
+, libgit2
+, oniguruma
+, libiconv
+, Security
+, zlib
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "broot";
-  version = "0.8.0";
+  version = "1.4.0";
 
-  src = fetchFromGitHub {
-    owner = "Canop";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "0xgjpdy12b77hgf0vfgs2ayxaajjv8vs0v8fn4rnrgn3hz8ldhyc";
+  src = fetchCrate {
+    inherit pname version;
+    sha256 = "sha256-6UveXa0rMWt5FbmhB0CsYRMGMXxL8FB/XivB4Ec93PY=";
   };
 
-  cargoSha256 = "1hsrp9xbi6bj3461y58hmzfwakx4vakpzkjvi6174gy8xq7cdvg1";
+  cargoHash = "sha256-c6U1ZOaXZ7RnKD7q0WTkam9gL8SL/naSeHGbB5I82lk=";
 
-  meta = with stdenv.lib; {
+  nativeBuildInputs = [
+    installShellFiles
+    makeWrapper
+    pkg-config
+  ];
+
+  buildInputs = [ libgit2 oniguruma ] ++ lib.optionals stdenv.isDarwin [
+    libiconv
+    Security
+    zlib
+  ];
+
+  RUSTONIG_SYSTEM_LIBONIG = true;
+
+  postPatch = ''
+    # Fill the version stub in the man page. We can't fill the date
+    # stub reproducibly.
+    substitute man/page man/broot.1 \
+      --replace "#version" "${version}"
+  '';
+
+  postInstall = ''
+    # Do not nag users about installing shell integration, since
+    # it is impure.
+    wrapProgram $out/bin/broot \
+      --set BR_INSTALL no
+
+    # Install shell function for bash.
+    $out/bin/broot --print-shell-function bash > br.bash
+    install -Dm0444 -t $out/etc/profile.d br.bash
+
+    # Install shell function for zsh.
+    $out/bin/broot --print-shell-function zsh > br.zsh
+    install -Dm0444 br.zsh $out/share/zsh/site-functions/br
+
+    # Install shell function for fish
+    $out/bin/broot --print-shell-function fish > br.fish
+    install -Dm0444 -t $out/share/fish/vendor_functions.d br.fish
+
+    # install shell completion files
+    OUT_DIR=$releaseDir/build/broot-*/out
+
+    installShellCompletion --bash $OUT_DIR/{br,broot}.bash
+    installShellCompletion --fish $OUT_DIR/{br,broot}.fish
+    installShellCompletion --zsh $OUT_DIR/{_br,_broot}
+
+    installManPage man/broot.1
+  '';
+
+  meta = with lib; {
     description = "An interactive tree view, a fuzzy search, a balanced BFS descent and customizable commands";
     homepage = "https://dystroy.org/broot/";
-    maintainers = with maintainers; [ magnetophon ];
+    maintainers = with maintainers; [ danieldk ];
     license = with licenses; [ mit ];
-    platforms = platforms.all;
   };
 }

@@ -1,16 +1,17 @@
-{ stdenv, fetchurl, perlPackages, makeWrapper, openssl }:
+{ lib, stdenv, fetchurl, perlPackages, makeWrapper, openssl }:
 
 stdenv.mkDerivation rec {
-  name = "sslmate-1.7.0";
+  name = "sslmate-1.7.1";
 
   src = fetchurl {
     url = "https://packages.sslmate.com/other/${name}.tar.gz";
-    sha256 = "0vhppvy5vphipbycfilzxdly7nw12brscz4biawf3bl376yp7ljm";
+    sha256 = "1i56za41cfqlml9g787xqqs0r8jifd3y7ks9nf4k2dhhi4rijkj5";
   };
 
-  makeFlags = "PREFIX=$(out)";
+  makeFlags = [ "PREFIX=$(out)" ];
 
-  buildInputs = [ perlPackages.perl makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ perlPackages.perl ];
 
   postInstall = ''
     wrapProgram $out/bin/sslmate --prefix PERL5LIB : \
@@ -22,8 +23,8 @@ stdenv.mkDerivation rec {
       --prefix PATH : "${openssl.bin}/bin"
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://sslmate.com;
+  meta = with lib; {
+    homepage = "https://sslmate.com";
     maintainers = [ maintainers.domenkozar ];
     description = "Easy to buy, deploy, and manage your SSL certs";
     platforms = platforms.unix;

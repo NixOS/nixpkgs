@@ -1,34 +1,49 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, fetchpatch
 , numpy
 , astropy
 , astropy-healpix
 , astropy-helpers
+, astropy-extension-helpers
 , scipy
+, pytest
+, pytest-astropy
+, setuptools_scm
+, cython
 }:
 
 buildPythonPackage rec {
   pname = "reproject";
-  version = "0.4";
-
-  doCheck = false; # tests require pytest-astropy
+  version = "0.7.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "dbbb18a8b211292c7ce61121b8538fc279540337be1c05cabc7570c5aca6d734";
+    sha256 = "1jsc3ad518vyys5987fr1achq8qvnz8rm80zp5an9qxlwr4zmh4m";
   };
 
-  propagatedBuildInputs = [ numpy astropy astropy-healpix astropy-helpers scipy ];
+  patches = [ (fetchpatch {
+      # Can be removed in next release after 0.7.1
+      # See https://github.com/astropy/reproject/issues/246
+      url = "https://github.com/astropy/reproject/pull/243.patch";
+      sha256 = "0dq3ii39hsrks0b9v306dlqf07dx0hqad8rwajmzw6rfda9m3c2a";
+    })
+  ];
 
-  # Disable automatic update of the astropy-helper module
-  postPatch = ''
-    substituteInPlace setup.cfg --replace "auto_use = True" "auto_use = False"
+  propagatedBuildInputs = [ numpy astropy astropy-healpix astropy-helpers scipy ];
+  nativeBuildInputs = [ astropy-helpers cython astropy-extension-helpers setuptools_scm ];
+  checkInputs = [ pytest pytest-astropy ];
+
+  # Tests must be run in the build directory
+  checkPhase = ''
+    cd build/lib*
+    pytest
   '';
 
   meta = with lib; {
     description = "Reproject astronomical images";
-    homepage = https://reproject.readthedocs.io;
+    homepage = "https://reproject.readthedocs.io";
     license = licenses.bsd3;
     maintainers = [ maintainers.smaret ];
   };

@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, autoreconfHook }:
+{ lib, stdenv, fetchurl, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "ip2location-c-${version}";
+  pname = "ip2location-c";
   version = "7.0.2"; # meta.homepage might change after a major update
 
   src = fetchurl {
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   # databases are available, downloading them for just 1 test seems excessive):
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library to look up locations of host names and IP addresses";
     longDescription = ''
       A C library to find the country, region, city,coordinates,
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
       weather, MCC, MNC, mobile brand name, elevation and usage type of
       any IP address or host name in the IP2Location databases.
     '';
-    homepage = http://www.ip2location.com/developers/c-7;
+    homepage = "http://www.ip2location.com/developers/c-7";
     license = with licenses; [ gpl3Plus lgpl3Plus ];
     platforms = platforms.linux;
   };

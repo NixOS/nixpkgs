@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config
 , libbladeRF, soapysdr
 } :
 
@@ -6,7 +6,8 @@ let
   version = "0.4.1";
 
 in stdenv.mkDerivation {
-  name = "soapybladerf-${version}";
+  pname = "soapybladerf";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "pothosware";
@@ -15,16 +16,16 @@ in stdenv.mkDerivation {
     sha256 = "02wh09850vinqg248fw4lxmx7y857cqmnnb8jm9zhyrsggal0hki";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ libbladeRF soapysdr ];
 
   cmakeFlags = [ "-DSoapySDR_DIR=${soapysdr}/share/cmake/SoapySDR/" ];
 
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/pothosware/SoapyBladeRF;
+  meta = with lib; {
+    homepage = "https://github.com/pothosware/SoapyBladeRF";
     description = "SoapySDR plugin for BladeRF devices";
-    license = licenses.lgpl21;
+    license = licenses.lgpl21Only;
     maintainers = with maintainers; [ markuskowa ];
     platforms = platforms.linux;
   };

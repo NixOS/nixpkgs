@@ -29,7 +29,7 @@ in
       };
 
       nodeName = mkOption {
-        type = types.string;
+        type = types.str;
         default = "riak@127.0.0.1";
         description = ''
           Name of the Erlang node.
@@ -37,7 +37,7 @@ in
       };
 
       distributedCookie = mkOption {
-        type = types.string;
+        type = types.str;
         default = "riak";
         description = ''
           Cookie for distributed node communication.  All nodes in the
@@ -118,7 +118,7 @@ in
       after = [ "network.target" ];
 
       path = [
-        pkgs.utillinux # for `logger`
+        pkgs.util-linux # for `logger`
         pkgs.bash
       ];
 

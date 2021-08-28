@@ -1,31 +1,37 @@
-{ stdenv, fetchFromGitHub, rustPlatform }:
+{ lib
+, nixosTests
+, fetchFromGitHub
+, rustPlatform
+, installShellFiles
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "lsd";
-  version = "0.15.1";
+  version = "0.20.1";
 
   src = fetchFromGitHub {
     owner = "Peltoche";
     repo = pname;
     rev = version;
-    sha256 = "1m8jcmdp66n0vgyzfgknmg4rwc41y9fd4vjgapaggg6lc9cc68gp";
+    sha256 = "sha256-r/Rllu+tgKqz+vkxA8BSN+3V0lUUd6dEATfickQp4+s=";
   };
 
-  cargoSha256 = "095jf63jyd485fk8pl7grvycn7pkwnxdm5lwkmfl9p46m8q1qqr2";
+  cargoSha256 = "sha256-O8P29eYlHgmmAADZ/DgTBmj0ZOa+4u/Oee+TMF+/4Ro=";
 
-  preFixup = ''
-    install -Dm644 -t $out/share/zsh/site-functions/ target/release/build/lsd-*/out/_lsd
-    install -Dm644 -t $out/share/fish/vendor_completions.d/ target/release/build/lsd-*/out/lsd.fish
-    install -Dm644 -t $out/share/bash-completion/completions/ target/release/build/lsd-*/out/lsd.bash
+  nativeBuildInputs = [ installShellFiles ];
+  postInstall = ''
+    installShellCompletion $releaseDir/build/lsd-*/out/{_lsd,lsd.{bash,fish}}
   '';
 
-  # Some tests fail, but Travis ensures a proper build
+  # Found argument '--test-threads' which wasn't expected, or isn't valid in this context
   doCheck = false;
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/Peltoche/lsd;
+  passthru.tests = { inherit (nixosTests) lsd; };
+
+  meta = with lib; {
+    homepage = "https://github.com/Peltoche/lsd";
     description = "The next gen ls command";
     license = licenses.asl20;
-    maintainers = [ maintainers.marsam ];
+    maintainers = with maintainers; [ Br1ght0ne marsam zowoq SuperSandro2000 ];
   };
 }

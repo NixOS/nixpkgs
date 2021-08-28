@@ -1,43 +1,112 @@
-{ stdenv, fetchurl
-, libX11, glib, xorg, fontconfig, freetype
-, zlib, libpng12, libICE, libXrender, cups }:
+{ lib, stdenv
+, mkDerivation
+, fetchurl
+, autoPatchelfHook
+, dpkg
+, wrapGAppsHook
+, wrapQtAppsHook
+, alsaLib
+, atk
+, bzip2
+, cairo
+, cups
+, dbus
+, expat
+, ffmpeg
+, fontconfig
+, freetype
+, gdk-pixbuf
+, glib
+, gperftools
+, gtk2-x11
+, libpng12
+, libtool
+, libuuid
+, libxml2
+, xz
+, nspr
+, nss
+, openssl
+, pango
+, qt4
+, qtbase
+, sqlite
+, unixODBC
+, xorg
+, zlib
+}:
 
-let
-  bits = if stdenv.hostPlatform.system == "x86_64-linux" then "x86_64"
-         else "x86";
-
-  version = "10.1.0.5672";
-in stdenv.mkDerivation rec{
-  name = "wpsoffice-${version}";
+stdenv.mkDerivation rec {
+  pname = "wpsoffice";
+  version = "11.1.0.9615";
 
   src = fetchurl {
-    name = "${name}.tar.xz";
-    url = "http://kdl.cc.ksosoft.com/wps-community/download/a21/wps-office_${version}~a21_${bits}.tar.xz";
-    sha256 = if bits == "x86_64" then
-      "0mi3n9kplf82gd0g2m0np957agy53p4g1qh81pbban49r4n0ajcz" else
-      "1dk400ap5qwdhjvn8lnk602f5akayr391fkljxdkrpn5xac01m97";
+    url = "http://wdl1.pcfg.cache.wpscdn.com/wpsdl/wpsoffice/download/linux/9615/wps-office_11.1.0.9615.XA_amd64.deb";
+    sha256 = "0dpd4njpizclllps3qagipycfws935rhj9k5gmdhjfgsk0ns188w";
   };
+  unpackCmd = "dpkg -x $src .";
+  sourceRoot = ".";
 
-  meta = {
-    description = "Office program originally named Kingsoft Office";
-    homepage = http://wps-community.org/;
-    platforms = [ "i686-linux" "x86_64-linux" ];
+  postUnpack = lib.optionalString (version == "11.1.0.9505") ''
+    # distribution is missing libjsapiservice.so, so we should not let
+    # autoPatchelfHook fail on the following dead libraries
+    rm opt/kingsoft/wps-office/office6/{libjsetapi.so,libjswppapi.so,libjswpsapi.so}
+  '';
+
+  nativeBuildInputs = [ autoPatchelfHook dpkg wrapGAppsHook wrapQtAppsHook ];
+
+  meta = with lib; {
+    description = "Office suite, formerly Kingsoft Office";
+    homepage = "https://www.wps.com/";
+    platforms = [ "x86_64-linux" ];
     hydraPlatforms = [];
-    license = stdenv.lib.licenses.unfreeRedistributable;
+    license = licenses.unfreeRedistributable;
+    maintainers = with maintainers; [ mlatus th0rgal ];
   };
 
-  libPath = stdenv.lib.makeLibraryPath [
-    libX11
-    libpng12
-    glib
-    xorg.libSM
-    xorg.libXext
+  buildInputs = with xorg; [
+    alsaLib
+    atk
+    bzip2
+    cairo
+    dbus.lib
+    expat
+    ffmpeg
     fontconfig
-    zlib
     freetype
+    gdk-pixbuf
+    glib
+    gperftools
+    gtk2-x11
     libICE
-    cups
+    libSM
+    libX11
+    libX11
+    libXScrnSaver
+    libXcomposite
+    libXcursor
+    libXdamage
+    libXext
+    libXfixes
+    libXi
+    libXrandr
     libXrender
+    libXtst
+    libpng12
+    libtool
+    libuuid
+    libxcb
+    libxml2
+    xz
+    nspr
+    nss
+    openssl
+    pango
+    qt4
+    qtbase
+    sqlite
+    unixODBC
+    zlib
   ];
 
   dontPatchELF = true;
@@ -46,34 +115,59 @@ in stdenv.mkDerivation rec{
   # references to nix own build directory
   noAuditTmpdir = true;
 
+  unvendoredLibraries = [
+    # Have to use parts of the vendored qt4
+    #"Qt"
+    "SDL2"
+    "bz2"
+    "avcodec"
+    "avdevice"
+    "avformat"
+    "avutil"
+    "swresample"
+    "swscale"
+    "jpeg"
+    "png"
+    # File saving breaks unless we are using vendored llvmPackages_8.libcxx
+    #"c++"
+    "ssl" "crypto"
+    "nspr"
+    "nss"
+    "odbc"
+    "tcmalloc" # gperftools
+  ];
+
   installPhase = ''
     prefix=$out/opt/kingsoft/wps-office
-    mkdir -p $prefix
-    cp -r . $prefix
-
-    # Avoid forbidden reference error due use of patchelf
-    rm -r $PWD
-
-    mkdir $out/bin
-    for i in wps wpp et; do
-      patchelf \
-        --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-        --force-rpath --set-rpath "$prefix/office6:$libPath" \
-        $prefix/office6/$i
-
-      substitute $prefix/$i $out/bin/$i \
+    mkdir -p $out
+    cp -r opt $out
+    cp -r usr/* $out
+    for lib in $unvendoredLibraries; do
+      rm -v "$prefix/office6/lib$lib"*.so{,.*}
+    done
+    for i in wps wpp et wpspdf; do
+      substituteInPlace $out/bin/$i \
         --replace /opt/kingsoft/wps-office $prefix
-      chmod +x $out/bin/$i
-
-      substituteInPlace $prefix/resource/applications/wps-office-$i.desktop \
+    done
+    for i in $out/share/applications/*;do
+      substituteInPlace $i \
         --replace /usr/bin $out/bin
     done
+  '';
 
-    # China fonts
-    mkdir -p $prefix/resource/fonts/wps-office $out/etc/fonts/conf.d
-    ln -s $prefix/fonts/* $prefix/resource/fonts/wps-office
-    ln -s $prefix/fontconfig/*.conf $out/etc/fonts/conf.d
+  runtimeLibPath = lib.makeLibraryPath [
+    cups.lib
+  ];
 
-    ln -s $prefix/resource $out/share
+  dontWrapQtApps = true;
+  dontWrapGApps = true;
+  postFixup = ''
+    for f in "$out"/bin/*; do
+      echo "Wrapping $f"
+      wrapProgram "$f" \
+        "''${gappsWrapperArgs[@]}" \
+        "''${qtWrapperArgs[@]}" \
+        --suffix LD_LIBRARY_PATH : "$runtimeLibPath"
+    done
   '';
 }

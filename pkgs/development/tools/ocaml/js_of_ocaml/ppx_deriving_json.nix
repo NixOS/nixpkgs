@@ -1,15 +1,11 @@
-{ stdenv, ocaml, findlib, dune, js_of_ocaml-compiler
-, js_of_ocaml, ppx_deriving
+{ buildDunePackage, js_of_ocaml-compiler
+, js_of_ocaml, ppxlib
 }:
 
-stdenv.mkDerivation rec {
-	name = "js_of_ocaml-ppx_deriving_json-${version}";
+buildDunePackage {
+  pname = "js_of_ocaml-ppx_deriving_json";
 
-	inherit (js_of_ocaml-compiler) version src installPhase meta;
+  inherit (js_of_ocaml-compiler) version src meta useDune2;
 
-	buildInputs = [ ocaml findlib dune ];
-
-	propagatedBuildInputs = [ js_of_ocaml ppx_deriving ];
-
-	buildPhase = "dune build -p js_of_ocaml-ppx_deriving_json";
+  propagatedBuildInputs = [ js_of_ocaml ppxlib ];
 }

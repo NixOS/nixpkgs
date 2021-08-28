@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, openssl, zlib, pcre, libxml2, libxslt
-, gd, geoip, gperftools, jemalloc
+{ lib, stdenv, fetchFromGitHub, openssl, zlib, pcre, libxml2, libxslt
+, substituteAll, gd, geoip, gperftools, jemalloc, nixosTests
 , withDebug ? false
 , withMail ? false
 , withStream ? false
@@ -7,23 +7,31 @@
 , ...
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
-  version = "2.3.0";
-  name = "tengine-${version}";
+  version = "2.3.3";
+  pname = "tengine";
 
-  src = fetchurl {
-    url = "https://github.com/alibaba/tengine/archive/${version}.tar.gz";
-    sha256 = "09165sdzad8bjxhnwphbags6yvxnz2rkf14p0w3vgvzssj017kqp";
+  src = fetchFromGitHub {
+    owner = "alibaba";
+    repo = pname;
+    rev = version;
+    sha256 = "0p43qsldwhx4zfwp585x8kps0akrf7b0gxdgf0sh0yqcp7l28gmx";
   };
 
   buildInputs =
     [ openssl zlib pcre libxml2 libxslt gd geoip gperftools jemalloc ]
     ++ concatMap (mod: mod.inputs or []) modules;
 
-  patches = [
+  patches = singleton (substituteAll {
+    src = ../nginx/nix-etag-1.15.4.patch;
+    preInstall = ''
+      export nixStoreDir="$NIX_STORE" nixStoreDirLen="''${#NIX_STORE}"
+    '';
+  }) ++ [
     ./check-resolv-conf.patch
+    ../nginx/nix-skip-check-logs-path.patch
   ];
 
   configureFlags = [
@@ -51,23 +59,31 @@ stdenv.mkDerivation rec {
     "--with-poll_module"
     "--with-google_perftools_module"
     "--with-jemalloc"
-  ] ++ optional withDebug [
+    "--http-log-path=/var/log/nginx/access.log"
+    "--error-log-path=/var/log/nginx/error.log"
+    "--pid-path=/var/log/nginx/nginx.pid"
+    "--http-client-body-temp-path=/var/cache/nginx/client_body"
+    "--http-proxy-temp-path=/var/cache/nginx/proxy"
+    "--http-fastcgi-temp-path=/var/cache/nginx/fastcgi"
+    "--http-uwsgi-temp-path=/var/cache/nginx/uwsgi"
+    "--http-scgi-temp-path=/var/cache/nginx/scgi"
+  ] ++ optionals withDebug [
     "--with-debug"
-  ] ++ optional withMail [
+  ] ++ optionals withMail [
     "--with-mail"
     "--with-mail_ssl_module"
-  ] ++ optional (!withMail) [
+  ] ++ optionals (!withMail) [
     "--without-mail_pop3_module"
     "--without-mail_imap_module"
     "--without-mail_smtp_module"
-  ] ++ optional withStream [
+  ] ++ optionals withStream [
     "--with-stream"
     "--with-stream_ssl_module"
     "--with-stream_realip_module"
     "--with-stream_geoip_module"
     "--with-stream_ssl_preread_module"
     "--with-stream_sni"
-  ] ++ optional (!withStream) [
+  ] ++ optionals (!withStream) [
     "--without-stream_limit_conn_module"
     "--without-stream_access_module"
     "--without-stream_geo_module"
@@ -82,9 +98,8 @@ stdenv.mkDerivation rec {
     ++ optional (with stdenv.hostPlatform; isLinux || isFreeBSD) "--with-file-aio"
     ++ map (mod: "--add-module=${mod.src}") modules;
 
-  NIX_CFLAGS_COMPILE = [
-    "-I${libxml2.dev}/include/libxml2"
-  ] ++ optional stdenv.isDarwin "-Wno-error=deprecated-declarations";
+  NIX_CFLAGS_COMPILE = "-I${libxml2.dev}/include/libxml2 -Wno-error=implicit-fallthrough"
+    + optionalString stdenv.isDarwin " -Wno-error=deprecated-declarations";
 
   preConfigure = (concatMapStringsSep "\n" (mod: mod.preConfigure or "") modules);
 
@@ -96,9 +111,14 @@ stdenv.mkDerivation rec {
     mv $out/sbin $out/bin
   '';
 
+  passthru = {
+    inherit modules;
+    tests = nixosTests.nginx-variants.tengine;
+  };
+
   meta = {
-    description = "A web server based on Nginx and has many advanced features, originated by Taobao.";
-    homepage    = https://tengine.taobao.org;
+    description = "A web server based on Nginx and has many advanced features, originated by Taobao";
+    homepage    = "https://tengine.taobao.org";
     license     = licenses.bsd2;
     platforms   = platforms.all;
     maintainers = with maintainers; [ izorkin ];

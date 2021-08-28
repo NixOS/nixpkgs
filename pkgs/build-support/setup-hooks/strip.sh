@@ -10,7 +10,7 @@ _doStrip() {
     local -ra stripCmds=(STRIP TARGET_STRIP)
 
     # Optimization
-    if [[ "$STRIP" == "$TARGET_STRIP" ]]; then
+    if [[ "${STRIP-}" == "${TARGET_STRIP-}" ]]; then
         dontStripTarget+=1
     fi
 
@@ -20,7 +20,7 @@ _doStrip() {
         local -n stripCmd="${stripCmds[$i]}"
 
         # `dontStrip` disables them all
-        if [[ "$dontStrip" || "$flag" ]] || ! type -f "$stripCmd" 2>/dev/null
+        if [[ "${dontStrip-}" || "${flag-}" ]] || ! type -f "${stripCmd-}" 2>/dev/null
         then continue; fi
 
         stripDebugList=${stripDebugList:-lib lib32 lib64 libexec bin sbin}
@@ -51,7 +51,7 @@ stripDirs() {
 
     if [ -n "${dirs}" ]; then
         header "stripping (with command $cmd and flags $stripFlags) in$dirs"
-        find $dirs -type f -print0 | xargs -0 ${xargsFlags:--r} $cmd $commonStripFlags $stripFlags 2>/dev/null || true
+        find $dirs -type f -exec $cmd $commonStripFlags $stripFlags '{}' \; 2>/dev/null
         stopNest
     fi
 }

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , six
@@ -20,11 +20,11 @@ buildPythonPackage rec {
   # circular dep on webtest
   doCheck = false;
 
-  meta = with stdenv.lib; {
-    homepage = http://pythonpaste.org/wsgiproxy/;
+  meta = with lib; {
+    homepage = "http://pythonpaste.org/wsgiproxy/";
     description = "HTTP proxying tools for WSGI apps";
     license = licenses.mit;
-    maintainers = with maintainers; [ garbas domenkozar ];
+    maintainers = with maintainers; [ domenkozar ];
   };
 
 }

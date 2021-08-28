@@ -1,4 +1,4 @@
-{ jre, stdenv, fetchurl, makeWrapper, makeDesktopItem }:
+{ jre, lib, stdenv, fetchurl, makeWrapper, makeDesktopItem }:
 
 let
 
@@ -14,12 +14,12 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "netlogo-${version}";
-  version = "6.0.4";
+  pname = "netlogo";
+  version = "6.1.1";
 
   src = fetchurl {
     url = "https://ccl.northwestern.edu/netlogo/${version}/NetLogo-${version}-64.tgz";
-    sha256 = "0dcd9df4dfb218826a74f9df42163fa588908a1dfe58864106936f8dfb76acec";
+    sha256 = "1j08df68pgggxqkmpzd369w4h97q0pivmmljdb48hjghx7hacblp";
   };
 
   src1 = fetchurl {
@@ -44,13 +44,13 @@ stdenv.mkDerivation rec {
     cp ${desktopItem}/share/applications/* $out/share/applications
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A multi-agent programmable modeling environment";
     longDescription = ''
       NetLogo is a multi-agent programmable modeling environment. It is used by
       many tens of thousands of students, teachers and researchers worldwide.
     '';
-    homepage = https://ccl.northwestern.edu/netlogo/index.shtml;
+    homepage = "https://ccl.northwestern.edu/netlogo/index.shtml";
     license = licenses.gpl2;
     maintainers = [ maintainers.dpaetzel ];
     platforms = platforms.linux;

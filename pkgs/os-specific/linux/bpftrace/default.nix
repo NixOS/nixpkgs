@@ -1,36 +1,36 @@
-{ stdenv, fetchFromGitHub
-, cmake, pkgconfig, flex, bison
-, llvmPackages, kernel, elfutils, libelf, bcc
+{ lib, stdenv, fetchFromGitHub
+, cmake, pkg-config, flex, bison
+, llvmPackages, kernel, elfutils
+, libelf, libbfd, libbpf, libopcodes, bcc
 }:
 
 stdenv.mkDerivation rec {
-  name = "bpftrace-${version}";
-  version = "0.9";
+  pname = "bpftrace";
+  version = "0.12.1";
 
   src = fetchFromGitHub {
     owner  = "iovisor";
     repo   = "bpftrace";
-    rev    = "refs/tags/v${version}";
-    sha256 = "1kp6as3i67dnw5v3vc1cj5hmrq6c8pjpg9g38g1qcnc9i6drl1r8";
+    rev    = "v${version}";
+    sha256 = "sha256-DZO47AH506DBVH/AuvOF3JfpRxv/D/lmzVg8WOH9Dqo=";
   };
 
-  enableParallelBuilding = true;
-
   buildInputs = with llvmPackages;
-    [ llvm clang-unwrapped
+    [ llvm libclang
       kernel elfutils libelf bcc
+      libbpf libbfd libopcodes
     ];
 
-  nativeBuildInputs = [ cmake pkgconfig flex bison ]
+  nativeBuildInputs = [ cmake pkg-config flex bison llvmPackages.llvm.dev ]
     # libelf is incompatible with elfutils-libelf
-    ++ stdenv.lib.filter (x: x != libelf) kernel.moduleBuildDependencies;
+    ++ lib.filter (x: x != libelf) kernel.moduleBuildDependencies;
 
   # patch the source, *then* substitute on @NIX_KERNEL_SRC@ in the result. we could
   # also in theory make this an environment variable around bpftrace, but this works
   # nicely without wrappers.
   patchPhase = ''
     patch -p1 < ${./fix-kernel-include-dir.patch}
-    substituteInPlace ./src/clang_parser.cpp \
+    substituteInPlace ./src/utils.cpp \
       --subst-var-by NIX_KERNEL_SRC '${kernel.dev}/lib/modules/${kernel.modDirVersion}'
   '';
 
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   #
   cmakeFlags =
     [ "-DBUILD_TESTING=FALSE"
-      "-DLIBBCC_INCLUDE_DIRS=${bcc}/include/bcc"
+      "-DLIBBCC_INCLUDE_DIRS=${bcc}/include"
     ];
 
   # nuke the example/reference output .txt files, for the included tools,
@@ -52,9 +52,9 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "man" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "High-level tracing language for Linux eBPF";
-    homepage    = https://github.com/iovisor/bpftrace;
+    homepage    = "https://github.com/iovisor/bpftrace";
     license     = licenses.asl20;
     maintainers = with maintainers; [ rvl thoughtpolice ];
   };

@@ -1,6 +1,18 @@
-{ stdenv, pkgconfig, fetchurl, python3Packages
-, intltool, itstool, libtool, texinfo, autoreconfHook
-, glib, dotconf, libsndfile
+{ lib, stdenv
+, substituteAll
+, pkg-config
+, fetchurl
+, fetchpatch
+, python3Packages
+, gettext
+, itstool
+, libtool
+, texinfo
+, util-linux
+, autoreconfHook
+, glib
+, dotconf
+, libsndfile
 , withLibao ? true, libao
 , withPulse ? false, libpulseaudio
 , withAlsa ? false, alsaLib
@@ -13,7 +25,7 @@
 }:
 
 let
-  inherit (stdenv.lib) optional optionals;
+  inherit (lib) optional optionals;
   inherit (python3Packages) python pyxdg wrapPython;
 
   # speechd hard-codes espeak, even when built without support for it.
@@ -27,19 +39,51 @@ let
     else
       throw "You need to enable at least one output module.";
 in stdenv.mkDerivation rec {
-  name = "speech-dispatcher-${version}";
-  version = "0.8.8";
+  pname = "speech-dispatcher";
+  version = "0.10.2";
 
   src = fetchurl {
-    url = "http://www.freebsoft.org/pub/projects/speechd/${name}.tar.gz";
-    sha256 = "1wvck00w9ixildaq6hlhnf6wa576y02ac96lp6932h3k1n08jaiw";
+    url = "https://github.com/brailcom/speechd/releases/download/${version}/${pname}-${version}.tar.gz";
+    sha256 = "sha256-sGMZ8gHhXlbGKWZTr1vPwwDLNI6XLVF9+LBurHfq4tw=";
   };
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook intltool libtool itstool texinfo wrapPython ];
+  patches = [
+    (substituteAll {
+      src = ./fix-paths.patch;
+      utillinux = util-linux;
+    })
 
-  buildInputs = [ glib dotconf libsndfile libao libpulseaudio alsaLib python ]
-    ++ optionals withEspeak [ espeak sonic pcaudiolib ]
-    ++ optional withFlite flite
+    # Fix build with Glib 2.68
+    # https://github.com/brailcom/speechd/pull/462
+    (fetchpatch {
+      url = "https://github.com/brailcom/speechd/commit/a2faab416e42cbdf3d73f98578a89eb7a235e25a.patch";
+      sha256 = "8Q7tUdKKBBtgXZZnj59OcJOkrCNeBR9gkBjhKlpW0hQ=";
+    })
+  ];
+
+  nativeBuildInputs = [
+    pkg-config
+    autoreconfHook
+    gettext
+    libtool
+    itstool
+    texinfo
+    wrapPython
+  ];
+
+  buildInputs = [
+    glib
+    dotconf
+    libsndfile
+    libao
+    libpulseaudio
+    alsaLib
+    python
+  ] ++ optionals withEspeak [
+    espeak
+    sonic
+    pcaudiolib
+  ] ++ optional withFlite flite
     ++ optional withPico svox
     # TODO: add flint/festival support with festival-freebsoft-utils package
     # ++ optional withFestival festival-freebsoft-utils
@@ -52,6 +96,7 @@ in stdenv.mkDerivation rec {
   configureFlags = [
     # Audio method falls back from left to right.
     "--with-default-audio-method=\"libao,pulse,alsa,oss\""
+    "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
   ] ++ optional withPulse "--with-pulse"
     ++ optional withAlsa "--with-alsa"
     ++ optional withLibao "--with-libao"
@@ -71,9 +116,11 @@ in stdenv.mkDerivation rec {
     wrapPythonPrograms
   '';
 
-  meta = with stdenv.lib; {
+  enableParallelBuilding = true;
+
+  meta = with lib; {
     description = "Common interface to speech synthesis";
-    homepage = https://devel.freebsoft.org/speechd;
+    homepage = "https://devel.freebsoft.org/speechd";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ berce ];
     platforms = platforms.linux;

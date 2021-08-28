@@ -1,15 +1,17 @@
-{ stdenv, fetchPypi, buildPythonPackage, pycodestyle, glibcLocales }:
+{ lib, fetchPypi, buildPythonPackage, pycodestyle, glibcLocales
+, toml
+}:
 
 buildPythonPackage rec {
   pname = "autopep8";
-  version = "1.4.4";
+  version = "1.5.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4d8eec30cc81bc5617dbf1218201d770dc35629363547f17577c61683ccfb3ee";
+    sha256 = "276ced7e9e3cb22e5d7c14748384a5cf5d9002257c0ed50c0e075b68011bb6d0";
   };
 
-  propagatedBuildInputs = [ pycodestyle ];
+  propagatedBuildInputs = [ pycodestyle toml ];
 
   # One test fails:
   # FAIL: test_recursive_should_not_crash_on_unicode_filename (test.test_autopep8.CommandLineTests)
@@ -19,9 +21,9 @@ buildPythonPackage rec {
 
   LC_ALL = "en_US.UTF-8";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A tool that automatically formats Python code to conform to the PEP 8 style guide";
-    homepage = https://pypi.python.org/pypi/autopep8/;
+    homepage = "https://pypi.python.org/pypi/autopep8/";
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = with maintainers; [ bjornfor ];

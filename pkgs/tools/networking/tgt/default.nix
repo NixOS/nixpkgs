@@ -1,18 +1,21 @@
-{ stdenv, fetchFromGitHub, libxslt, libaio, systemd, perl, perlPackages
-, docbook_xsl }:
+{ stdenv, lib, fetchFromGitHub, libxslt, libaio, systemd, perl
+, docbook_xsl, coreutils, lsof, rdma-core, makeWrapper, sg3_utils, util-linux
+}:
 
 stdenv.mkDerivation rec {
   pname = "tgt";
-  version = "1.0.78";
+  version = "1.0.80";
 
   src = fetchFromGitHub {
     owner = "fujita";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0778silfwvbpqljxdid96nn0vkdii3fszqp6w6w2bn9hdyxhqrjp";
+    sha256 = "sha256-5qBqCHbkL6yw/iT2AtSumw8V0bV74TEyYMRgcPHW2lg=";
   };
 
-  buildInputs = [ libxslt systemd libaio docbook_xsl ];
+  nativeBuildInputs = [ libxslt docbook_xsl makeWrapper ];
+
+  buildInputs = [ systemd libaio ];
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
@@ -31,14 +34,26 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    sed -i 's|#!/usr/bin/perl|#! ${perl}/bin/perl -I${perlPackages.ConfigGeneral}/${perl.libPrefix}|' $out/sbin/tgt-admin
+    substituteInPlace $out/sbin/tgt-admin \
+      --replace "#!/usr/bin/perl" "#! ${perl.withPackages (p: [ p.ConfigGeneral ])}/bin/perl"
+    wrapProgram $out/sbin/tgt-admin --prefix PATH : \
+      ${lib.makeBinPath [ lsof sg3_utils (placeholder "out") ]}
+
+    install -D scripts/tgtd.service $out/etc/systemd/system/tgtd.service
+    substituteInPlace $out/etc/systemd/system/tgtd.service \
+      --replace "/usr/sbin/tgt" "$out/bin/tgt"
+
+    # See https://bugzilla.redhat.com/show_bug.cgi?id=848942
+    sed -i '/ExecStart=/a ExecStartPost=${coreutils}/bin/sleep 5' $out/etc/systemd/system/tgtd.service
   '';
 
   enableParallelBuilding = true;
 
-  meta = {
-    description = "iSCSI Target daemon with rdma support";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
+  meta = with lib; {
+    description = "iSCSI Target daemon with RDMA support";
+    homepage = "http://stgt.sourceforge.net/";
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ johnazoidberg ];
   };
 }

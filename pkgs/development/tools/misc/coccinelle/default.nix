@@ -1,18 +1,18 @@
-{ fetchurl, stdenv, python, ncurses, ocamlPackages, pkgconfig }:
+{ fetchurl, lib, stdenv, python, ncurses, ocamlPackages, pkg-config }:
 
 stdenv.mkDerivation rec {
-  name    = "coccinelle-${version}";
+  pname = "coccinelle";
   version = "1.0.6";
 
   src = fetchurl {
-    url = "http://coccinelle.lip6.fr/distrib/${name}.tgz";
+    url = "http://coccinelle.lip6.fr/distrib/${pname}-${version}.tgz";
     sha256 = "02g9hmwkvfl838zz690yra5jzrqjg6y6ffxkrfcsx790bhkfsll4";
   };
 
   buildInputs = with ocamlPackages; [
     ocaml findlib menhir
     ocaml_pcre pycaml
-    python ncurses pkgconfig
+    python ncurses pkg-config
   ];
 
   doCheck = !stdenv.isDarwin;
@@ -49,9 +49,9 @@ stdenv.mkDerivation rec {
       and others) for finding and fixing bugs in systems code.
     '';
 
-    homepage = http://coccinelle.lip6.fr/;
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
+    homepage = "http://coccinelle.lip6.fr/";
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.thoughtpolice ];
   };
 }

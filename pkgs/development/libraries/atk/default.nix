@@ -1,36 +1,42 @@
-{ stdenv, fetchurl, meson, ninja, gettext, pkgconfig, glib
-, fixDarwinDylibNames, gobject-introspection, gnome3
+{ lib, stdenv, fetchurl, meson, ninja, gettext, pkg-config, glib
+, fixDarwinDylibNames, gobject-introspection, gnome
 }:
 
 let
   pname = "atk";
-  version = "2.32.0";
+  version = "2.36.0";
 in
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1k4i817bd2w5b9z394f2yyx95591l2746wa40am0vvz4gzdgwhfb";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "1217cmmykjgkkim0zr1lv5j13733m4w5vipmy4ivw0ll6rz28xpv";
   };
 
   outputs = [ "out" "dev" ];
 
-  buildInputs = stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
-
-  nativeBuildInputs = [ meson ninja pkgconfig gettext gobject-introspection ];
+  nativeBuildInputs = [ meson ninja pkg-config gettext gobject-introspection glib ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
   propagatedBuildInputs = [
     # Required by atk.pc
     glib
   ];
 
+  patches = [
+    # meson builds an incorrect .pc file
+    # glib should be Requires not Requires.private
+    ./fix_pc.patch
+  ];
+
   doCheck = true;
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
     };
   };
 
@@ -45,12 +51,12 @@ stdenv.mkDerivation rec {
       control running applications.
     '';
 
-    homepage = http://library.gnome.org/devel/atk/;
+    homepage = "http://library.gnome.org/devel/atk/";
 
-    license = stdenv.lib.licenses.lgpl2Plus;
+    license = lib.licenses.lgpl2Plus;
 
-    maintainers = with stdenv.lib.maintainers; [ raskin ];
-    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 
 }

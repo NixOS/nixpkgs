@@ -1,40 +1,62 @@
-{ stdenv
-, buildPythonPackage
-, fetchPypi
-, pytest
+{ lib, buildPythonPackage, fetchPypi, isPyPy
+, dnspython
+, geoip2
+, ipython
 , praw
-, xmltodict
-, pytz
 , pyenchant
 , pygeoip
-, python
-, isPyPy
-, isPy27
+, pytestCheckHook
+, pytz
+, sqlalchemy
+, xmltodict
 }:
 
 buildPythonPackage rec {
   pname = "sopel";
-  version = "6.6.6";
+  version = "7.0.7";
+  disabled = isPyPy;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "dfb6d6c349cbdd463736e4be781cc005efeb1be91dbdc60cc76fda7cad142def";
+    sha256 = "84d42708d176aecfb7b95299af0e484896f5f80df61f43c92d8e7a53de0b2099";
   };
 
-  buildInputs = [ pytest ];
-  propagatedBuildInputs = [ praw xmltodict pytz pyenchant pygeoip ];
+  propagatedBuildInputs = [
+    dnspython
+    geoip2
+    ipython
+    praw
+    pyenchant
+    pygeoip
+    pytz
+    sqlalchemy
+    xmltodict
+  ];
 
-  disabled = isPyPy || isPy27;
-
-  checkPhase = ''
-    ${python.interpreter} test/*.py                                         #*/
+  # remove once https://github.com/sopel-irc/sopel/pull/1653 lands
+  postPatch = ''
+    substituteInPlace requirements.txt \
+      --replace "praw>=4.0.0,<6.0.0" "praw"
   '';
 
-  meta = with stdenv.lib; {
+  checkInputs = [ pytestCheckHook ];
+
+  preCheck = ''
+    export TESTDIR=$(mktemp -d)
+    cp -R ./test $TESTDIR
+    pushd $TESTDIR
+  '';
+
+  postCheck = ''
+    popd
+  '';
+
+  pythonImportsCheck = [ "sopel" ];
+
+  meta = with lib; {
     description = "Simple and extensible IRC bot";
     homepage = "http://sopel.chat";
     license = licenses.efl20;
     maintainers = with maintainers; [ mog ];
   };
-
 }

@@ -1,7 +1,7 @@
-{ stdenv, fetchgit, autoreconfHook }:
+{ lib, stdenv, fetchgit, autoreconfHook }:
 
-stdenv.mkDerivation rec {
-  name = "log4shib-${version}";
+stdenv.mkDerivation {
+  pname = "log4shib";
   version = "1.0.9";
 
   src = fetchgit {
@@ -12,10 +12,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A forked version of log4cpp that has been created for the Shibboleth project";
     maintainers = [ maintainers.jammerful ];
     license = licenses.lgpl21;
-    homepage = http://log4cpp.sf.net;
+    homepage = "http://log4cpp.sf.net";
   };
 }

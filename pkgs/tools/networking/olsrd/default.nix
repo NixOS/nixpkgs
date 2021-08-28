@@ -1,13 +1,24 @@
-{ stdenv, fetchurl, bison, flex }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, bison, flex }:
 
 stdenv.mkDerivation rec {
-  name = "olsrd-${version}";
-  version = "0.9.6.1";
+  pname = "olsrd";
+  version = "0.9.8";
 
-  src = fetchurl {
-    url = "http://www.olsr.org/releases/0.9/${name}.tar.bz2";
-    sha256 = "9cac290e9bff5fc7422110b9ccd972853f10962c962d2f31a63de9c6d1520612";
+  src = fetchFromGitHub {
+    owner = "OLSR";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "1xk355dm5pfjil1j4m724vkdnc178lv6hi6s1g0xgpd59avbx90j";
   };
+
+  patches = [
+    # remove if there's ever an upstream release that incorporates
+    # https://github.com/OLSR/olsrd/pull/87
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/openwrt-routing/packages/b3897386771890ba1b15f672c2fed58630beedef/olsrd/patches/011-bison.patch";
+      sha256 = "04cl4b8dpr1yjs7wa94jcszmkdzpnrn719a5m9nhm7lvfrn1rzd0";
+    })
+  ];
 
   buildInputs = [ bison flex ];
 
@@ -17,9 +28,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "An adhoc wireless mesh routing daemon";
-    license = stdenv.lib.licenses.bsd3;
-    homepage = http://olsr.org/;
-    maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; linux;
+    license = lib.licenses.bsd3;
+    homepage = "http://olsr.org/";
+    maintainers = with lib.maintainers; [viric];
+    platforms = with lib.platforms; linux;
   };
 }

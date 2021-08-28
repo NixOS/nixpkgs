@@ -6,7 +6,7 @@ export CLASSPATH
 addPkgToClassPath () {
     local jar
     for jar in $1/share/java/*.jar; do
-        export CLASSPATH=''${CLASSPATH}''${CLASSPATH:+:}''${jar}
+        export CLASSPATH=''${CLASSPATH-}''${CLASSPATH:+:}''${jar}
     done
 }
 

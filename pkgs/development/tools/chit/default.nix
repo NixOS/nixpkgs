@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform, pkgconfig, openssl
+{ lib, stdenv, fetchFromGitHub, rustPlatform, pkg-config, openssl
 , darwin
 }:
 
@@ -6,24 +6,24 @@ with rustPlatform;
 
 buildRustPackage rec {
   pname = "chit";
-  version = "0.1.14";
+  version = "0.1.15";
 
   src = fetchFromGitHub {
     owner = "peterheesterman";
     repo = pname;
     rev = version;
-    sha256 = "1rzy15xwlf87c8kpy9pwvir6s9z3qc8d9iz4pk0gfdj2il3vmjwv";
+    sha256 = "0iixczy3cad44j2d7zzj8f3lnmp4jwnb0snmwfgiq3vj9wrn28pz";
   };
 
-  cargoSha256 = "1jqnnf4jgjpm1i310hda15423nxfw9frgpmc2kbrs66qcsj7avaw";
+  cargoSha256 = "1y6k24p4m67v5773rzid2r0jwxp9piggrp0462z446hbcam2r4gd";
 
-  nativeBuildInputs = stdenv.lib.optionals stdenv.isLinux [ pkgconfig ];
+  nativeBuildInputs = lib.optionals stdenv.isLinux [ pkg-config ];
   buildInputs = []
-  ++ stdenv.lib.optionals stdenv.isLinux [ openssl ]
-  ++ stdenv.lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ CoreFoundation CoreServices Security ])
+  ++ lib.optionals stdenv.isLinux [ openssl ]
+  ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ CoreFoundation CoreServices Security ])
   ;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Crate help in terminal: A tool for looking up details about rust crates without going to crates.io";
     longDescription = ''
       Chit helps answer these questions:
@@ -36,9 +36,8 @@ buildRustPackage rec {
       * Should i use this crate?
       * How mature is it?
     '';
-    homepage = https://github.com/peterheesterman/chit;
+    homepage = "https://github.com/peterheesterman/chit";
     license = licenses.mit;
     maintainers = [ maintainers.lilyball ];
-    platforms = platforms.all;
   };
 }

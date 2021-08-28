@@ -8,39 +8,45 @@
 <!-- <refmiscinfo class="version"><xi:include href="version.txt" parse="text"/></refmiscinfo> -->
  </refmeta>
  <refnamediv>
-  <refname><command>nixos-enter</command>
-  </refname><refpurpose>run a command in a NixOS chroot environment</refpurpose>
+  <refname><command>nixos-enter</command></refname>
+  <refpurpose>run a command in a NixOS chroot environment</refpurpose>
  </refnamediv>
  <refsynopsisdiv>
   <cmdsynopsis>
-   <command>nixos-enter</command> 
+   <command>nixos-enter</command>
    <arg>
     <arg choice='plain'>
      <option>--root</option>
     </arg>
      <replaceable>root</replaceable>
    </arg>
-    
+
    <arg>
     <arg choice='plain'>
      <option>--system</option>
     </arg>
      <replaceable>system</replaceable>
    </arg>
-    
+
    <arg>
     <arg choice='plain'>
      <option>-c</option>
     </arg>
      <replaceable>shell-command</replaceable>
    </arg>
-    
+
+   <arg>
+    <arg choice='plain'>
+     <option>--silent</option>
+    </arg>
+   </arg>
+
    <arg>
     <arg choice='plain'>
      <option>--help</option>
     </arg>
    </arg>
-    
+
    <arg>
     <arg choice='plain'>
      <option>--</option>
@@ -102,6 +108,16 @@
    </varlistentry>
    <varlistentry>
     <term>
+     <option>--silent</option>
+    </term>
+    <listitem>
+     <para>
+       Suppresses all output from the activation script of the target system.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
      <option>--</option>
     </term>
     <listitem>
@@ -120,13 +136,13 @@
    <filename>/mnt</filename>:
   </para>
 <screen>
-# nixos-enter /mnt
+<prompt># </prompt>nixos-enter --root /mnt
 </screen>
   <para>
    Run a shell command:
   </para>
 <screen>
-# nixos-enter -c 'ls -l /; cat /proc/mounts'
+<prompt># </prompt>nixos-enter -c 'ls -l /; cat /proc/mounts'
 </screen>
   <para>
    Run a non-shell command:

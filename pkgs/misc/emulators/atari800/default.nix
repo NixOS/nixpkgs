@@ -1,17 +1,21 @@
-{ stdenv, fetchurl
-, unzip, zlib, SDL, readline, libGLU_combined, libX11 }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook
+, zlib, SDL, readline, libGLU, libGL, libX11 }:
 
-with stdenv.lib;
-stdenv.mkDerivation rec{
-  name = "atari800-${version}";
-  version = "4.0.0";
+with lib;
+stdenv.mkDerivation rec {
+  pname = "atari800";
+  version = "4.2.0";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/atari800/atari800/${version}/${name}.tar.gz";
-    sha256 = "1dcynsf8i52y7zyg62bkbhl3rdd22ss95zs2s9jm4y5jvn4vks88";
+  src = fetchFromGitHub {
+    owner = "atari800";
+    repo = "atari800";
+    rev = "ATARI800_${replaceChars ["."] ["_"] version}";
+    sha256 = "15l08clqqayi9izrgsz9achan6gl4x57wqsc8mad3yn0xayzz3qy";
   };
 
-  buildInputs = [ unzip zlib SDL readline libGLU_combined libX11 ];
+  nativeBuildInputs = [ autoreconfHook ];
+
+  buildInputs = [ zlib SDL readline libGLU libGL libX11 ];
 
   configureFlags = [
     "--target=default"
@@ -23,10 +27,8 @@ stdenv.mkDerivation rec{
     "--enable-riodevice"
   ];
 
-  preConfigure = "cd src";
-
   meta = {
-    homepage = http://atari800.sourceforge.net/;
+    homepage = "https://atari800.github.io/";
     description = "An Atari 8-bit emulator";
     longDescription = ''
       Atari800 is the emulator of Atari 8-bit computer systems and
@@ -36,6 +38,6 @@ stdenv.mkDerivation rec{
     '';
     maintainers = [ maintainers.AndersonTorres ];
     license = licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

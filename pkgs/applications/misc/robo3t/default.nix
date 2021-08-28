@@ -1,18 +1,23 @@
-{ stdenv, fetchurl, zlib, glib, xorg, dbus, fontconfig, libGL,
+{ lib, stdenv, fetchurl, curl, zlib, glib, xorg, dbus, fontconfig, libGL,
   freetype, xkeyboard_config, makeDesktopItem, makeWrapper }:
 
+let
+  curlWithGnuTls = curl.override { gnutlsSupport = true; sslSupport = false; };
+in
+
 stdenv.mkDerivation rec {
-  name = "robo3t-${version}";
-  version = "1.1.1";
+  pname = "robo3t";
+  version = "1.4.3";
+  rev = "48f7dfd";
 
   src = fetchurl {
-    url = "https://download.robomongo.org/1.1.1/linux/robo3t-${version}-linux-x86_64-c93c6b0.tar.gz";
-    sha256 = "140cn80vg7c8vpdjasqi4b3kyqj4n033lcm3ikz5674x3jr7r5zs";
+    url = "https://github.com/Studio3T/robomongo/releases/download/v${version}/robo3t-${version}-linux-x86_64-${rev}.tar.gz";
+    sha256 = "sha256-pH4q/O3bq45ZZn+s/12iScd0WbfkcLjK4MBdVCMXK00=";
   };
 
   icon = fetchurl {
-    url = "https://github.com/Studio3T/robomongo/raw/${version}/trash/install/linux/robomongo.png";
-    sha256 = "15li8536x600kkfkb3h6mw7y0f2ljkv951pc45dpiw036vldibv2";
+    url = "https://github.com/Studio3T/robomongo/raw/${rev}/install/macosx/robomongo.iconset/icon_128x128.png";
+    sha256 = "sha256-2PkUxBq2ow0wl09k8B6LJJUQ+y4GpnmoAeumKN1u5xg=";
   };
 
   desktopItem = makeDesktopItem {
@@ -22,12 +27,12 @@ stdenv.mkDerivation rec {
     comment = "Query GUI for mongodb";
     desktopName = "Robo3T";
     genericName = "MongoDB management tool";
-    categories = "Development;IDE;mongodb;";
+    categories = "Development;IDE;";
   };
 
   nativeBuildInputs = [makeWrapper];
 
-  ldLibraryPath = stdenv.lib.makeLibraryPath [
+  ldLibraryPath = lib.makeLibraryPath [
     stdenv.cc.cc
     zlib
     glib
@@ -42,6 +47,7 @@ stdenv.mkDerivation rec {
     fontconfig
     freetype
     libGL
+    curlWithGnuTls
   ];
 
   installPhase = ''
@@ -69,10 +75,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = https://robomongo.org/;
+    homepage = "https://robomongo.org/";
     description = "Query GUI for mongodb";
     platforms = [ "x86_64-linux" ];
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = [ stdenv.lib.maintainers.eperuffo ];
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.eperuffo ];
   };
 }

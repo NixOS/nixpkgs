@@ -1,24 +1,51 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, pythonOlder
+, fetchFromGitHub
+, oauthlib
+, requests
+, requests_oauthlib
+, freezegun
+, pytestCheckHook
+, requests-mock
 }:
 
 buildPythonPackage rec {
   pname = "pyatmo";
-  version = "1.10";
+  version = "4.2.3";
+  disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "13ca794416707b8cefcb7584bbfff65a4640fcc2510ad73e818fef94d424fca6";
+  src = fetchFromGitHub {
+    owner = "jabesq";
+    repo = "pyatmo";
+    rev = "v${version}";
+    sha256 = "sha256-hbs+1x/pwv00dhm+1Yj1effddJZHDjs2K3oeBmdCY+k=";
   };
 
-  # Upstream provides no unit tests.
-  doCheck = false;
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "oauthlib~=3.1" "oauthlib" \
+      --replace "requests~=2.24" "requests"
+  '';
+
+  propagatedBuildInputs = [
+    oauthlib
+    requests
+    requests_oauthlib
+  ];
+
+  checkInputs = [
+    freezegun
+    pytestCheckHook
+    requests-mock
+  ];
+
+  pythonImportsCheck = [ "pyatmo" ];
 
   meta = with lib; {
     description = "Simple API to access Netatmo weather station data";
     license = licenses.mit;
-    homepage = https://github.com/jabesq/netatmo-api-python;
+    homepage = "https://github.com/jabesq/netatmo-api-python";
     maintainers = with maintainers; [ delroth ];
   };
 }

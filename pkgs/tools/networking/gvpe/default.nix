@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, openssl, gmp, zlib, iproute, nettools }:
+{ lib, stdenv, fetchurl, openssl, gmp, zlib, iproute2, nettools }:
 
 stdenv.mkDerivation rec {
-  name = "gvpe-${version}";
+  pname = "gvpe";
   version = "3.0";
 
   src = fetchurl {
@@ -20,13 +20,13 @@ stdenv.mkDerivation rec {
     ];
 
   preBuild = ''
-    sed -e 's@"/sbin/ifconfig.*"@"${iproute}/sbin/ip link set $IFNAME address $MAC mtu $MTU"@' -i src/device-linux.C
+    sed -e 's@"/sbin/ifconfig.*"@"${iproute2}/sbin/ip link set $IFNAME address $MAC mtu $MTU"@' -i src/device-linux.C
     sed -e 's@/sbin/ifconfig@${nettools}/sbin/ifconfig@g' -i src/device-*.C
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A protected multinode virtual network";
-    homepage = http://software.schmorp.de/pkg/gvpe.html;
+    homepage = "http://software.schmorp.de/pkg/gvpe.html";
     maintainers = [ maintainers.raskin ];
     platforms = with platforms; linux ++ freebsd;
     license = licenses.gpl2;

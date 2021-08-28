@@ -1,17 +1,18 @@
-{ stdenv, fetchFromGitHub, wxGTK, makeWrapper }:
+{ lib, stdenv, fetchFromGitHub, wxGTK, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name    = "treesheets-${version}";
-  version = "2018-08-18";
+  pname = "treesheets";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner  = "aardappel";
     repo   = "treesheets";
-    rev    = "3af41d99c8f9f32603a36ab64af3560b6d61dd73";
-    sha256 = "147y8ggh3clwjgsi15z8i4jnzlkh8p17mmlg532jym53zzbcva65";
+    rev    = "v${version}";
+    sha256 = "0krsj7i5yr76imf83krz2lmlmpbsvpwqg2d4r0jwxiydjfyj4qr4";
   };
 
-  buildInputs = [ wxGTK makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ wxGTK ];
 
   preConfigure = "cd src";
 
@@ -36,7 +37,7 @@ stdenv.mkDerivation rec {
       --replace "Icon=images/treesheets.svg" "Icon=$out/share/libexec/images/treesheets.svg"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Free Form Data Organizer";
 
     longDescription = ''
@@ -48,7 +49,7 @@ stdenv.mkDerivation rec {
       planning, requirements gathering, presentation of information, etc.
     '';
 
-    homepage    = http://strlen.com/treesheets/;
+    homepage    = "http://strlen.com/treesheets/";
     maintainers = with maintainers; [ obadz avery ];
     platforms   = platforms.linux;
     license     = licenses.zlib;

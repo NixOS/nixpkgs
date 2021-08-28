@@ -1,25 +1,35 @@
-{ stdenv, mkDerivation, fetchFromGitHub, qmake, pkgconfig, udev
-, qtmultimedia, qtscript, alsaLib, ola, libftdi1, libusb
+{ lib, mkDerivation, fetchFromGitHub, fetchpatch, qmake, pkg-config, udev
+, qtmultimedia, qtscript, alsaLib, ola, libftdi1, libusb-compat-0_1
 , libsndfile, libmad
 }:
 
 mkDerivation rec {
-  name = "qlcplus-${version}";
-  version = "4.12.1";
+  pname = "qlcplus";
+  version = "4.12.3";
 
   src = fetchFromGitHub {
     owner = "mcallegari";
     repo = "qlcplus";
     rev = "QLC+_${version}";
-    sha256 = "1kz2zbz7blnm91dysn949bjsy4xqxg658k47p3gbl0pjl58c44hp";
+    sha256 = "PB1Y8N1TrJMcS7A2e1nKjsUlAxOYjdJqBhbyuDCAbGs=";
   };
 
-  nativeBuildInputs = [ qmake pkgconfig ];
+  patches = [
+    (fetchpatch {
+      name = "qt5.15-deprecation-fixes.patch";
+      url = "https://github.com/mcallegari/qlcplus/commit/e4ce4b0226715876e8e9e3b23785d43689b2bb64.patch";
+      sha256 = "1zhrg6ava1nyc97xcx75r02zzkxmar0973w4jwkm5ch3iqa8bqnh";
+    })
+  ];
+
+  nativeBuildInputs = [ qmake pkg-config ];
   buildInputs = [
-    udev qtmultimedia qtscript alsaLib ola libftdi1 libusb libsndfile libmad
+    udev qtmultimedia qtscript alsaLib ola libftdi1 libusb-compat-0_1 libsndfile libmad
   ];
 
   qmakeFlags = [ "INSTALLROOT=$(out)" ];
+
+  NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
 
   postPatch = ''
     patchShebangs .
@@ -35,11 +45,11 @@ mkDerivation rec {
     ln -sf $out/lib/*/libqlcplus* $out/lib
   '';
 
-  meta = with stdenv.lib; {
-    description = "A free and cross-platform software to control DMX or analog lighting systems like moving heads, dimmers, scanners etc.";
+  meta = with lib; {
+    description = "A free and cross-platform software to control DMX or analog lighting systems like moving heads, dimmers, scanners etc";
     maintainers = [ maintainers.globin ];
     license = licenses.asl20;
     platforms = platforms.all;
-    homepage = "http://www.qlcplus.org/";
+    homepage = "https://www.qlcplus.org/";
   };
 }

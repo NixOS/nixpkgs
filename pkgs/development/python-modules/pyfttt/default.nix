@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchPypi
 , requests }:
 
 buildPythonPackage rec {
@@ -15,9 +15,9 @@ buildPythonPackage rec {
   # tests need a server to run against
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Package for sending events to the IFTTT Webhooks Channel";
-    homepage = https://github.com/briandconnelly/pyfttt;
+    homepage = "https://github.com/briandconnelly/pyfttt";
     maintainers = with maintainers; [ peterhoeg ];
     license = licenses.bsd2;
   };

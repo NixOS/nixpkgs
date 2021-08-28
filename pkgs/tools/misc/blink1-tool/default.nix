@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, libusb1, pkgconfig, ... }:
+{ lib, stdenv, fetchurl, libusb1, pkg-config, ... }:
 
 stdenv.mkDerivation rec {
-  name = "blink1-${version}";
+  pname = "blink1";
   version = "1.98a";
 
   src = fetchurl {
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1waci6hccv5i50v5d3z7lx4h224fbkj66ywfynnsgn46w0jm6imv";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libusb1 ];
 
   configurePhase = ''
@@ -22,9 +22,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Command line client for the blink(1) notification light";
-    homepage = https://blink1.thingm.com/;
-    license = stdenv.lib.licenses.cc-by-sa-30;
-    maintainers = [ stdenv.lib.maintainers.cransom ];
-    platforms = stdenv.lib.platforms.linux;
+    homepage = "https://blink1.thingm.com/";
+    license = lib.licenses.cc-by-sa-30;
+    maintainers = [ lib.maintainers.cransom ];
+    platforms = lib.platforms.linux;
   };
 }

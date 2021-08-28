@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , isPy3k
@@ -25,8 +25,8 @@ buildPythonPackage rec {
   # tests are still failing
   doCheck = false;
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/matejc/tarman;
+  meta = with lib; {
+    homepage = "https://github.com/matejc/tarman";
     description = "Archive manager with curses interface";
     license = licenses.bsd0;
   };

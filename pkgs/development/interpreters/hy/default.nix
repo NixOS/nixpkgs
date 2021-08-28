@@ -1,37 +1,37 @@
-{ stdenv, fetchurl, fetchpatch, pythonPackages }:
+{ lib, python3Packages }:
 
-pythonPackages.buildPythonApplication rec {
-  name = "hy-${version}";
-  version = "0.16.0";
+python3Packages.buildPythonApplication rec {
+  pname = "hy";
+  version = "0.19.0";
 
-  src = fetchurl {
-    url = "mirror://pypi/h/hy/${name}.tar.gz";
-    sha256 = "00lq38ppikrpyw38fn5iy9iwrsamsv22507cp146dsjbzkwjpzrd";
+  src = python3Packages.fetchPypi {
+    inherit pname version;
+    sha256 = "05k05qmiiysiwdc05sxmanwhv1crfwbb3l8swxfisbzbvmv1snis";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "bytecode-error-handling.patch";
-      url = "https://github.com/hylang/hy/commit/57326785b97b7b0a89f6258fe3d04dccdc06cfc0.patch";
-      sha256 = "1lxxs7mxbh0kaaa25b1pbqs9d8asyjnlf2n86qg8hzsv32jfcq92";
-      excludes = [ "AUTHORS" "NEWS.rst" ];
-    })
-  ];
+  checkInputs = with python3Packages; [ flake8 pytest ];
 
-  propagatedBuildInputs = with pythonPackages; [
+  propagatedBuildInputs = with python3Packages; [
     appdirs
     astor
     clint
+    colorama
     fastentrypoints
     funcparserlib
     rply
+    pygments
   ];
 
-  meta = {
+  # Hy does not include tests in the source distribution from PyPI, so only test executable.
+  checkPhase = ''
+    $out/bin/hy --help > /dev/null
+  '';
+
+  meta = with lib; {
     description = "A LISP dialect embedded in Python";
-    homepage = http://hylang.org/;
-    license = stdenv.lib.licenses.mit;
-    maintainers = [ stdenv.lib.maintainers.nixy ];
-    platforms = stdenv.lib.platforms.all;
+    homepage = "http://hylang.org/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ nixy ];
+    platforms = platforms.all;
   };
 }

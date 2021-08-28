@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "ratools-${version}";
+  pname = "ratools";
   version = "0.6.2";
 
   src = fetchFromGitHub {
@@ -11,16 +11,16 @@ stdenv.mkDerivation rec {
     sha256 = "07m45bn9lzgbfihmxic23wqp73nxg5ihrvkigr450jq6gzvgwawq";
   };
 
-  makeFlags = "-C src";
+  makeFlags = [ "-C" "src" ];
 
   installPhase = ''
     install -vD bin/* -t $out/bin
     install -vD man/* -t $out/share/man/man8
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A fast, dynamic, multi-threading framework for IPv6 Router Advertisements";
-    homepage = https://github.com/danrl/ratools;
+    homepage = "https://github.com/danrl/ratools";
     license = licenses.asl20;
     platforms = platforms.linux;
     maintainers = [ maintainers.fpletz ];

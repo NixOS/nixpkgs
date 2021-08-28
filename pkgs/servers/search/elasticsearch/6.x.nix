@@ -1,15 +1,15 @@
 { elk6Version
 , enableUnfree ? true
-, stdenv
+, lib, stdenv
 , fetchurl
 , makeWrapper
 , jre_headless
-, utillinux, gnugrep, coreutils
+, util-linux, gnugrep, coreutils
 , autoPatchelfHook
 , zlib
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation (rec {
   version = elk6Version;
@@ -19,8 +19,8 @@ stdenv.mkDerivation (rec {
     url = "https://artifacts.elastic.co/downloads/elasticsearch/${name}.tar.gz";
     sha256 =
       if enableUnfree
-      then "1a88yyl0x4bsx92m3wjsz1fgm76gbfdzcd4bzp2x652rha667vfh"
-      else "04fa0fk25d5yxcjdj0bwqvdrswgwj31fwjvbq4gpg66c6bqwzcn6";
+      then "09dy3iyzk460vra6na6vk7d3mzpbv4cl0pl7kjmybxy947j7hh42"
+      else "0s04xz3j4psyhawvy503sp2nl5s0gswmpd9wfvwnavgcrr23wk39";
   };
 
   patches = [ ./es-home-6.x.patch ];
@@ -35,7 +35,8 @@ stdenv.mkDerivation (rec {
       "ES_CLASSPATH=\"\$ES_CLASSPATH:$out/\$additional_classpath_directory/*\""
   '';
 
-  buildInputs = [ makeWrapper jre_headless utillinux ]
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ jre_headless util-linux ]
              ++ optional enableUnfree zlib;
 
   installPhase = ''
@@ -45,7 +46,7 @@ stdenv.mkDerivation (rec {
     chmod -x $out/bin/*.*
 
     wrapProgram $out/bin/elasticsearch \
-      --prefix PATH : "${makeBinPath [ utillinux gnugrep coreutils ]}" \
+      --prefix PATH : "${makeBinPath [ util-linux gnugrep coreutils ]}" \
       --set JAVA_HOME "${jre_headless}"
 
     wrapProgram $out/bin/elasticsearch-plugin --set JAVA_HOME "${jre_headless}"
@@ -61,7 +62,7 @@ stdenv.mkDerivation (rec {
   };
 } // optionalAttrs enableUnfree {
   dontPatchELF = true;
-  nativeBuildInputs = [ autoPatchelfHook ];
+  nativeBuildInputs = [ makeWrapper autoPatchelfHook ];
   runtimeDependencies = [ zlib ];
   postFixup = ''
     for exe in $(find $out/modules/x-pack-ml/platform/linux-x86_64/bin -executable -type f); do

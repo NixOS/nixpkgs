@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python3Packages, php }:
+{ lib, fetchurl, python3Packages, php }:
 
 python3Packages.buildPythonApplication rec {
   name = "nextcloud-news-updater-${version}";
@@ -15,8 +15,8 @@ python3Packages.buildPythonApplication rec {
 
   meta = {
     description = "Fast parallel feed updater for the Nextcloud news app";
-    homepage = https://github.com/nextcloud/news-updater;
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = with stdenv.lib.maintainers; [ schneefux ];
+    homepage = "https://github.com/nextcloud/news-updater";
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ schneefux ];
   };
 }

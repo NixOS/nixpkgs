@@ -1,42 +1,66 @@
-{ alsaLib, cmake, fetchFromGitHub, glib, gtk2, gettext, libaio, libpng
-, makeWrapper, perl, pkgconfig, portaudio, SDL2, soundtouch, stdenv
-, wxGTK30, zlib }:
+{ alsaLib
+, cmake
+, fetchFromGitHub
+, fmt
+, gcc-unwrapped
+, gettext
+, glib
+, gtk3
+, harfbuzz
+, libaio
+, libpcap
+, libpng
+, libpulseaudio
+, libsamplerate
+, libxml2
+, makeWrapper
+, perl
+, pkg-config
+, portaudio
+, SDL2
+, soundtouch
+, lib, stdenv
+, udev
+, wrapGAppsHook
+, wxGTK
+, zlib
+}:
 
-stdenv.mkDerivation rec {
-  name = "pcsx2-${version}";
-  version = "1.4.0";
+stdenv.mkDerivation {
+  pname = "pcsx2";
+  version = "unstable-2020-11-13";
 
   src = fetchFromGitHub {
     owner = "PCSX2";
     repo = "pcsx2";
-    rev = "v${version}";
-    sha256 = "0s7mxq2cgzwjfsq0vhpz6ljk7wr725nxg48128iyirf85585l691";
+    fetchSubmodules = true;
+    rev = "319287dbe552c8405720b25dfdf5fa518deeee0b";
+    sha256 = "1kswc8vw9hbv2nigp8cxrgf2s0ik7p4i203cbqci8zjmnkaqpsai";
   };
 
-  postPatch = "sed '1i#include \"x86intrin.h\"' -i common/src/x86emitter/cpudetect.cpp";
+  cmakeFlags = [
+    "-DCMAKE_INSTALL_PREFIX=${placeholder "out"}"
+    "-DDISABLE_ADVANCE_SIMD=TRUE"
+    "-DDISABLE_PCSX2_WRAPPER=TRUE"
+    "-DDOC_DIR=${placeholder "out"}/share/doc/pcsx2"
+    "-DGAMEINDEX_DIR=${placeholder "out"}/share/pcsx2"
+    "-DGLSL_SHADER_DIR=${placeholder "out"}/share/pcsx2"
+    "-DGTK3_API=TRUE"
+    "-DPACKAGE_MODE=TRUE"
+    "-DPLUGIN_DIR=${placeholder "out"}/lib/pcsx2"
+    "-DREBUILD_SHADER=TRUE"
+    "-DUSE_LTO=TRUE"
+    "-DwxWidgets_CONFIG_EXECUTABLE=${wxGTK}/bin/wx-config"
+    "-DwxWidgets_INCLUDE_DIRS=${wxGTK}/include"
+    "-DwxWidgets_LIBRARIES=${wxGTK}/lib"
+    "-DXDG_STD=TRUE"
+  ];
 
-  configurePhase = ''
-    mkdir -p build
-    cd build
-
-    cmake \
-      -DBIN_DIR="$out/bin" \
-      -DCMAKE_BUILD_PO=TRUE \
-      -DCMAKE_BUILD_TYPE=Release \
-      -DCMAKE_INSTALL_PREFIX="$out" \
-      -DDISABLE_ADVANCE_SIMD=TRUE \
-      -DDISABLE_PCSX2_WRAPPER=TRUE \
-      -DDOC_DIR="$out/share/doc/pcsx2" \
-      -DGAMEINDEX_DIR="$out/share/pcsx2" \
-      -DGLSL_SHADER_DIR="$out/share/pcsx2" \
-      -DGTK2_GLIBCONFIG_INCLUDE_DIR='${glib.out}/lib/glib-2.0/include' \
-      -DGTK2_GDKCONFIG_INCLUDE_DIR='${gtk2.out}/lib/gtk-2.0/include' \
-      -DGTK2_INCLUDE_DIRS='${gtk2.dev}/include/gtk-2.0' \
-      -DPACKAGE_MODE=TRUE \
-      -DPLUGIN_DIR="$out/lib/pcsx2" \
-      -DREBUILD_SHADER=TRUE \
-      -DXDG_STD=TRUE \
-      ..
+  postPatch = ''
+    substituteInPlace cmake/BuildParameters.cmake \
+      --replace /usr/bin/gcc-ar ${gcc-unwrapped}/bin/gcc-ar \
+      --replace /usr/bin/gcc-nm ${gcc-unwrapped}/bin/gcc-nm \
+      --replace /usr/bin/gcc-ranlib ${gcc-unwrapped}/bin/gcc-ranlib
   '';
 
   postFixup = ''
@@ -44,16 +68,30 @@ stdenv.mkDerivation rec {
       --set __GL_THREADED_OPTIMIZATIONS 1
   '';
 
-  nativeBuildInputs = [ cmake perl pkgconfig ];
+  nativeBuildInputs = [ cmake makeWrapper perl pkg-config wrapGAppsHook ];
 
   buildInputs = [
-    alsaLib glib gettext gtk2 libaio libpng makeWrapper portaudio SDL2
-    soundtouch wxGTK30 zlib
+    alsaLib
+    fmt
+    gettext
+    glib
+    gtk3
+    harfbuzz
+    libaio
+    libpcap
+    libpng
+    libpulseaudio
+    libsamplerate
+    libxml2
+    portaudio
+    SDL2
+    soundtouch
+    udev
+    wxGTK
+    zlib
   ];
 
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Playstation 2 emulator";
     longDescription= ''
       PCSX2 is an open-source PlayStation 2 (AKA PS2) emulator. Its purpose
@@ -62,14 +100,15 @@ stdenv.mkDerivation rec {
       states and PS2 system memory. This allows you to play PS2 games on your
       PC, with many additional features and benefits.
     '';
-    homepage = https://pcsx2.net;
-    maintainers = with maintainers; [ hrdinka ];
+    homepage = "https://pcsx2.net";
+    maintainers = with maintainers; [ hrdinka govanify ];
+    mainProgram = "PCSX2";
 
     # PCSX2's source code is released under LGPLv3+. It However ships
     # additional data files and code that are licensed differently.
     # This might be solved in future, for now we should stick with
     # license.free
     license = licenses.free;
-    platforms = platforms.i686;
+    platforms = platforms.x86;
   };
 }

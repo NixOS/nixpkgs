@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, postgresql }:
+{ lib, stdenv, fetchFromGitHub, postgresql }:
 
 stdenv.mkDerivation rec {
   pname = "temporal_tables";
@@ -14,16 +14,16 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
-    mkdir -p $out/{bin,lib,share/extension}
+    mkdir -p $out/{lib,share/postgresql/extension}
 
     cp *.so      $out/lib
-    cp *.sql     $out/share/extension
-    cp *.control $out/share/extension
+    cp *.sql     $out/share/postgresql/extension
+    cp *.control $out/share/postgresql/extension
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Temporal Tables PostgreSQL Extension ";
-    homepage    = https://github.com/mlt/temporal_tables;
+    homepage    = "https://github.com/mlt/temporal_tables";
     maintainers = with maintainers; [ ggpeti ];
     platforms   = postgresql.meta.platforms;
     license     = licenses.bsd2;

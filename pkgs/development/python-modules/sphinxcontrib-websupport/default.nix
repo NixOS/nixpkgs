@@ -1,25 +1,26 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, sphinxcontrib-serializinghtml
 , six
 }:
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-websupport";
-  version = "1.1.0";
+  version = "1.2.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9de47f375baf1ea07cdb3436ff39d7a9c76042c10a769c52353ec46e4e8fc3b9";
+    sha256 = "4edf0223a0685a7c485ae5a156b6f529ba1ee481a1417817935b20bde1956232";
   };
 
-  propagatedBuildInputs = [ six ];
+  propagatedBuildInputs = [ six sphinxcontrib-serializinghtml ];
 
   doCheck = false;
 
   meta = {
     description = "Sphinx API for Web Apps";
-    homepage = http://sphinx-doc.org/;
+    homepage = "http://sphinx-doc.org/";
     license = lib.licenses.bsd2;
   };
 }

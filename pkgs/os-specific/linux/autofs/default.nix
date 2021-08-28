@@ -1,15 +1,15 @@
-{ stdenv, fetchurl, flex, bison, linuxHeaders, libtirpc, mount, umount, nfs-utils, e2fsprogs
-, libxml2, kerberos, kmod, openldap, sssd, cyrus_sasl, openssl }:
+{ lib, stdenv, fetchurl, flex, bison, linuxHeaders, libtirpc, mount, umount, nfs-utils, e2fsprogs
+, libxml2, libkrb5, kmod, openldap, sssd, cyrus_sasl, openssl, rpcsvc-proto }:
 
 let
-  version = "5.1.5";
+  version = "5.1.6";
   name = "autofs-${version}";
 in stdenv.mkDerivation {
   inherit name;
 
   src = fetchurl {
     url = "mirror://kernel/linux/daemons/autofs/v5/${name}.tar.xz";
-    sha256 = "1nn0z60f49zchpv8yw67fk8hmbjszpnczs0bj2ql2vgxwbcxmbr3";
+    sha256 = "1vya21mb4izj3khcr3flibv7xc15vvx2v0rjfk5yd31qnzcy7pnx";
   };
 
   preConfigure = ''
@@ -28,21 +28,24 @@ in stdenv.mkDerivation {
     unset STRIP # Makefile.rules defines a usable STRIP only without the env var.
   '';
 
+  # configure script is not finding the right path
+  NIX_CFLAGS_COMPILE = [ "-I${libtirpc.dev}/include/tirpc" ];
+
   installPhase = ''
     make install SUBDIRS="lib daemon modules man" # all but samples
     #make install SUBDIRS="samples" # impure!
   '';
 
-  buildInputs = [ linuxHeaders libtirpc libxml2 kerberos kmod openldap sssd
-                  openssl cyrus_sasl ];
+  buildInputs = [ linuxHeaders libtirpc libxml2 libkrb5 kmod openldap sssd
+                  openssl cyrus_sasl rpcsvc-proto ];
 
   nativeBuildInputs = [ flex bison ];
 
   meta = {
     description = "Kernel-based automounter";
-    homepage = https://www.kernel.org/pub/linux/daemons/autofs/;
-    license = stdenv.lib.licenses.gpl2Plus;
+    homepage = "https://www.kernel.org/pub/linux/daemons/autofs/";
+    license = lib.licenses.gpl2Plus;
     executables = [ "automount" ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

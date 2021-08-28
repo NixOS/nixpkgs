@@ -1,30 +1,22 @@
-{ stdenv, lib, fetchFromGitHub, python3Packages, file, less, highlight
-, imagePreviewSupport ? true, w3m ? null}:
-
-with stdenv.lib;
-
-assert imagePreviewSupport -> w3m != null;
+{ lib, fetchFromGitHub, python3Packages, file, less, highlight
+, imagePreviewSupport ? true, w3m }:
 
 python3Packages.buildPythonApplication rec {
-  name = "ranger-${version}";
-  version = "1.9.2";
+  pname = "ranger";
+  version = "1.9.3";
 
   src = fetchFromGitHub {
     owner = "ranger";
     repo = "ranger";
     rev = "v${version}";
-    sha256= "1ws6g8z1m1hfp8bv4msvbaa9f7948p687jmc8h69yib4jkv3qyax";
+    sha256= "1rygfryczanvqxn43lmlkgs04sbqznbvbb9hlbm3h5qgdcl0xlw8";
   };
 
   LC_ALL = "en_US.UTF-8";
 
-  checkInputs = with python3Packages; [ pytest ];
+  checkInputs = with python3Packages; [ pytestCheckHook ];
   propagatedBuildInputs = [ file ]
-    ++ lib.optional (imagePreviewSupport) [ python3Packages.pillow ];
-
-  checkPhase = ''
-    py.test tests
-  '';
+    ++ lib.optionals (imagePreviewSupport) [ python3Packages.pillow ];
 
   preConfigure = ''
     ${lib.optionalString (highlight != null) ''
@@ -32,20 +24,14 @@ python3Packages.buildPythonApplication rec {
         ranger/data/scope.sh
     ''}
 
-    substituteInPlace ranger/data/scope.sh \
-      --replace "/bin/echo" "echo"
-
     substituteInPlace ranger/__init__.py \
-      --replace "DEFAULT_PAGER = 'less'" "DEFAULT_PAGER = '${stdenv.lib.getBin less}/bin/less'"
-
-    for i in ranger/config/rc.conf doc/config/rc.conf ; do
-      substituteInPlace $i --replace /usr/share $out/share
-    done
+      --replace "DEFAULT_PAGER = 'less'" "DEFAULT_PAGER = '${lib.getBin less}/bin/less'"
 
     # give file previews out of the box
     substituteInPlace ranger/config/rc.conf \
+      --replace /usr/share $out/share \
       --replace "#set preview_script ~/.config/ranger/scope.sh" "set preview_script $out/share/doc/ranger/config/scope.sh"
-  '' + optionalString imagePreviewSupport ''
+  '' + lib.optionalString imagePreviewSupport ''
     substituteInPlace ranger/ext/img_display.py \
       --replace /usr/lib/w3m ${w3m}/libexec/w3m
 
@@ -56,9 +42,9 @@ python3Packages.buildPythonApplication rec {
 
   meta =  with lib; {
     description = "File manager with minimalistic curses interface";
-    homepage = http://ranger.github.io/;
-    license = licenses.gpl3;
+    homepage = "https://ranger.github.io/";
+    license = licenses.gpl3Only;
     platforms = platforms.unix;
-    maintainers = [ maintainers.toonn maintainers.magnetophon ];
+    maintainers = with maintainers; [ toonn magnetophon ];
   };
 }

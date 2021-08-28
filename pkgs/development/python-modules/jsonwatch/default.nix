@@ -1,11 +1,11 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchurl
 , six
 , isPyPy
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "jsonwatch";
   version = "0.2.0";
   disabled = isPyPy; # doesn't find setuptools
@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ six ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Like watch -d but for JSON";
     longDescription = ''
       jsonwatch is a command line utility with which you can track

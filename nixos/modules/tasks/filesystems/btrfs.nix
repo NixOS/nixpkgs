@@ -55,7 +55,16 @@ in
     (mkIf enableBtrfs {
       system.fsPackages = [ pkgs.btrfs-progs ];
 
-      boot.initrd.kernelModules = mkIf inInitrd [ "btrfs" "crc32c" ];
+      boot.initrd.kernelModules = mkIf inInitrd [ "btrfs" ];
+      boot.initrd.availableKernelModules = mkIf inInitrd (
+        [ "crc32c" ]
+        ++ optionals (config.boot.kernelPackages.kernel.kernelAtLeast "5.5") [
+          # Needed for mounting filesystems with new checksums
+          "xxhash_generic"
+          "blake2b_generic"
+          "sha256_generic" # Should be baked into our kernel, just to be sure
+        ]
+      );
 
       boot.initrd.extraUtilsCommands = mkIf inInitrd
       ''
@@ -118,12 +127,20 @@ in
           fs' = utils.escapeSystemdPath fs;
         in nameValuePair "btrfs-scrub-${fs'}" {
           description = "btrfs scrub on ${fs}";
+          # scrub prevents suspend2ram or proper shutdown
+          conflicts = [ "shutdown.target" "sleep.target" ];
+          before = [ "shutdown.target" "sleep.target" ];
 
           serviceConfig = {
-            Type = "oneshot";
+            # simple and not oneshot, otherwise ExecStop is not used
+            Type = "simple";
             Nice = 19;
             IOSchedulingClass = "idle";
             ExecStart = "${pkgs.btrfs-progs}/bin/btrfs scrub start -B ${fs}";
+            # if the service is stopped before scrub end, cancel it
+            ExecStop  = pkgs.writeShellScript "btrfs-scrub-maybe-cancel" ''
+              (${pkgs.btrfs-progs}/bin/btrfs scrub status ${fs} | ${pkgs.gnugrep}/bin/grep finished) || ${pkgs.btrfs-progs}/bin/btrfs scrub cancel ${fs}
+            '';
           };
         };
       in listToAttrs (map scrubService cfgScrub.fileSystems);

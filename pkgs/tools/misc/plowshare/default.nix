@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, makeWrapper, curl, recode, spidermonkey }:
+{ lib, stdenv, fetchFromGitHub, makeWrapper, curl, recode, spidermonkey_78 }:
 
 stdenv.mkDerivation rec {
 
-  name = "plowshare-${version}";
+  pname = "plowshare";
   version = "2.1.7";
 
   src = fetchFromGitHub {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "1p8s60dlzaldp006yj710s371aan915asyjhd99188vrj4jj1x79";
   };
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   phases = [ "unpackPhase" "installPhase" "fixupPhase" ];
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     make PREFIX="$out" install
 
     for fn in plow{del,down,list,mod,probe,up}; do
-      wrapProgram "$out/bin/$fn" --prefix PATH : "${stdenv.lib.makeBinPath [ curl recode spidermonkey ]}"
+      wrapProgram "$out/bin/$fn" --prefix PATH : "${lib.makeBinPath [ curl recode spidermonkey_78 ]}"
     done
   '';
 
@@ -28,8 +28,8 @@ stdenv.mkDerivation rec {
     description = ''
       A command-line download/upload tool for popular file sharing websites
     '';
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = with stdenv.lib.maintainers; [ aforemny jfrankenau ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ aforemny jfrankenau ];
+    platforms = lib.platforms.linux;
   };
 }

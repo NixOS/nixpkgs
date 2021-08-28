@@ -1,10 +1,10 @@
 { lib, fetchFromGitHub, rustPlatform
-, openssl, zeromq, czmq, pkgconfig, cmake, zlib }:
+, openssl, zeromq, czmq, pkg-config, cmake, zlib }:
 
 with rustPlatform;
 
 buildRustPackage rec {
-  name = "intecture-agent-${version}";
+  pname = "intecture-agent";
   version = "0.3.1";
 
   src = fetchFromGitHub {
@@ -14,15 +14,15 @@ buildRustPackage rec {
     sha256 = "0j27qdgyxybaixggh7k57mpm6rifimn4z2vydk463msc8b3kgywj";
   };
 
-  cargoSha256 = "093ipd8lg2ngnln55x5j40g2n8f3y8aysgz9rjn95a4npxrg4yxw";
+  cargoSha256 = "0j7yv00ipaa60hpakfj60xrblcyzjwi0lp2hpzz41vq3p9bkigvm";
 
   buildInputs = [ openssl zeromq czmq zlib ];
 
-  nativeBuildInputs = [ pkgconfig cmake ];
+  nativeBuildInputs = [ pkg-config cmake ];
 
   meta = with lib; {
     description = "Authentication client/server for Intecture components";
-    homepage = https://intecture.io;
+    homepage = "https://intecture.io";
     license = licenses.mpl20;
     maintainers = [ maintainers.rushmorem ];
   };

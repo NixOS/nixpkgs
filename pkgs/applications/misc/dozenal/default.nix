@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, ncurses, hdate, lua5_2 }:
+{ lib, stdenv, fetchFromGitHub, ncurses, hdate, lua5_2 }:
 
 stdenv.mkDerivation rec {
   version = "12010904";
-  name = "dozenal-${version}";
+  pname = "dozenal";
   src = fetchFromGitHub {
     owner = "dgoodmaniii";
     repo = "dozenal";
@@ -54,8 +54,8 @@ stdenv.mkDerivation rec {
          Roman numerals.  Arbitrary ranks and symbols may be used.
          Defaults to dozenal Roman numerals.
     '';
-    homepage = https://github.com/dgoodmaniii/dozenal/;
-    maintainers = with stdenv.lib.maintainers; [ CharlesHD ];
-    license = stdenv.lib.licenses.gpl3;
+    homepage = "https://github.com/dgoodmaniii/dozenal/";
+    maintainers = with lib.maintainers; [ CharlesHD ];
+    license = lib.licenses.gpl3;
   };
 }

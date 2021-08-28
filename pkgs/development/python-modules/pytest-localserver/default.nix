@@ -1,9 +1,6 @@
 { buildPythonPackage
 , lib
 , fetchPypi
-, requests
-, pytest
-, six
 , werkzeug
 }:
 
@@ -17,16 +14,16 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ werkzeug ];
-  checkInputs = [ pytest six requests ];
 
-  checkPhase = ''
-    pytest
-  '';
+  # all tests access network: does not work in sandbox
+  doCheck = false;
+  pythonImportsCheck = [ "pytest_localserver" ];
 
-  meta = {
+  meta = with lib; {
     description = "Plugin for the pytest testing framework to test server connections locally";
-    homepage = https://pypi.python.org/pypi/pytest-localserver;
-    license = lib.licenses.mit;
+    homepage = "https://pypi.python.org/pypi/pytest-localserver";
+    license = licenses.mit;
+    maintainers = with maintainers; [ siriobalmelli ];
   };
 }
 

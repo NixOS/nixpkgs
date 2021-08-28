@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , pythonAtLeast
@@ -11,27 +11,27 @@
 , tqdm
 # Advanced image processing (triples size of output)
 , advancedProcessing ? false
-, opencv ? null
+, opencv3 ? null
 , scikitimage ? null
-, scikitlearn ? null
+, scikit-learn ? null
 , scipy ? null
 , matplotlib ? null
 , youtube-dl ? null
 }:
 
 assert advancedProcessing -> (
-  opencv != null && scikitimage != null && scikitlearn != null
+  opencv3 != null && scikitimage != null && scikit-learn != null
   && scipy != null && matplotlib != null && youtube-dl != null);
 
 buildPythonPackage rec {
   pname = "moviepy";
-  version = "1.0.0";
+  version = "1.0.3";
 
   disabled = !(pythonAtLeast "3.4");
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "16c7ffca23d90c76dd7b163f648c8166dfd589b7c180b8ff75aa327ae0a2fc6d";
+    sha256 = "2884e35d1788077db3ff89e763c5ba7bfddbd7ae9108c9bc809e7ba58fa433f5";
   };
 
   # No tests, require network connection
@@ -39,13 +39,13 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     numpy decorator imageio imageio-ffmpeg tqdm requests proglog
-  ] ++ (stdenv.lib.optionals advancedProcessing [
-    opencv scikitimage scikitlearn scipy matplotlib youtube-dl
+  ] ++ (lib.optionals advancedProcessing [
+    opencv3 scikitimage scikit-learn scipy matplotlib youtube-dl
   ]);
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Video editing with Python";
-    homepage = http://zulko.github.io/moviepy/;
+    homepage = "https://zulko.github.io/moviepy/";
     license = licenses.mit;
   };
 

@@ -35,6 +35,16 @@
     Uim: The universal input method, is a library with a XIM bridge.
    </para>
   </listitem>
+  <listitem>
+   <para>
+    Hime: An extremely easy-to-use input method framework.
+   </para>
+  </listitem>
+  <listitem>
+    <para>
+     Kime: Korean IME
+    </para>
+  </listitem>
  </itemizedlist>
  <section xml:id="module-services-input-methods-ibus">
   <title>IBus</title>
@@ -240,5 +250,42 @@ i18n.inputMethod = {
    Note: The <xref linkend="opt-i18n.inputMethod.uim.toolbar"/> option can be
    used to choose uim toolbar.
   </para>
+ </section>
+ <section xml:id="module-services-input-methods-hime">
+  <title>Hime</title>
+
+  <para>
+   Hime is an extremely easy-to-use input method framework. It is lightweight,
+   stable, powerful and supports many commonly used input methods, including
+   Cangjie, Zhuyin, Dayi, Rank, Shrimp, Greek, Korean Pinyin, Latin Alphabet,
+   etc...
+  </para>
+
+  <para>
+   The following snippet can be used to configure Hime:
+  </para>
+
+<programlisting>
+i18n.inputMethod = {
+  <link linkend="opt-i18n.inputMethod.enabled">enabled</link> = "hime";
+};
+</programlisting>
+ </section>
+ <section xml:id="module-services-input-methods-kime">
+  <title>Kime</title>
+
+  <para>
+   Kime is Korean IME. it's built with Rust language and let you get simple, safe, fast Korean typing
+  </para>
+
+  <para>
+   The following snippet can be used to configure Kime:
+  </para>
+
+<programlisting>
+i18n.inputMethod = {
+  <link linkend="opt-i18n.inputMethod.enabled">enabled</link> = "kime";
+};
+</programlisting>
  </section>
 </chapter>

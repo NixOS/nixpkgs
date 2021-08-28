@@ -1,15 +1,15 @@
-{ stdenv, fetchurl, pkgconfig
+{ lib, stdenv, fetchurl, pkg-config
 , zlib, bzip2, libiconv, libxml2, openssl, ncurses, curl, libmilter, pcre2
-, libmspack, systemd
+, libmspack, systemd, Foundation, json_c, check
 }:
 
 stdenv.mkDerivation rec {
-  name = "clamav-${version}";
-  version = "0.101.2";
+  pname = "clamav";
+  version = "0.103.3";
 
   src = fetchurl {
-    url = "https://www.clamav.net/downloads/production/${name}.tar.gz";
-    sha256 = "0d3n4y8i5q594h4cjglmvpk4jd73r9ajpp1bvq5lr9zpdzgyn4ha";
+    url = "https://www.clamav.net/downloads/production/${pname}-${version}.tar.gz";
+    sha256 = "sha256-n249GESfPRo5kncdaWaFJJ36EnNv4rKSmFjyx9gnauk=";
   };
 
   # don't install sample config files into the absolute sysconfdir folder
@@ -17,35 +17,43 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile.in --replace ' etc ' ' '
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
+  enableParallelBuilding = true;
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    zlib bzip2 libxml2 openssl ncurses curl libiconv libmilter pcre2 libmspack
-    systemd
-  ];
+    zlib bzip2 libxml2 openssl ncurses curl libiconv libmilter pcre2 libmspack json_c check
+  ] ++ lib.optional stdenv.isLinux systemd
+    ++ lib.optional stdenv.isDarwin Foundation;
 
   configureFlags = [
     "--libdir=$(out)/lib"
     "--sysconfdir=/etc/clamav"
-    "--with-systemdsystemunitdir=$(out)/lib/systemd"
     "--disable-llvm" # enabling breaks the build at the moment
     "--with-zlib=${zlib.dev}"
     "--with-xml=${libxml2.dev}"
     "--with-openssl=${openssl.dev}"
     "--with-libcurl=${curl.dev}"
+    "--with-libjson=${json_c.dev}"
     "--with-system-libmspack"
     "--enable-milter"
-  ];
+    "--disable-unrar" # disable unrar because it's non-free and requires some extra patching to work properly
+    "--enable-check"
+  ] ++ lib.optional stdenv.isLinux
+    "--with-systemdsystemunitdir=$(out)/lib/systemd";
 
   postInstall = ''
     mkdir $out/etc
     cp etc/*.sample $out/etc
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://www.clamav.net;
+  # Only required for the unit tests
+  hardeningDisable = [ "format" ];
+  doCheck = true;
+
+  meta = with lib; {
+    homepage = "https://www.clamav.net";
     description = "Antivirus engine designed for detecting Trojans, viruses, malware and other malicious threats";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ phreedom robberer qknight fpletz ];
-    platforms = platforms.linux;
+    maintainers = with maintainers; [ phreedom robberer qknight fpletz globin ];
+    platforms = platforms.unix;
   };
 }

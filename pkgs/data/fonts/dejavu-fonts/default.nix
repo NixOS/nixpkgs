@@ -1,4 +1,4 @@
-{ fetchFromGitHub, stdenv, fontforge, perl, perlPackages }:
+{ fetchFromGitHub, lib, stdenv, fontforge, perl, perlPackages }:
 
 let
   version = "2.37";
@@ -12,29 +12,30 @@ let
       This package includes DejaVu Sans, DejaVu Serif, DejaVu Sans Mono, and
       the TeX Gyre DejaVu Math font.
     '';
-    homepage = http://dejavu-fonts.org/wiki/Main_Page;
+    homepage = "http://dejavu-fonts.org/wiki/Main_Page";
 
     # Copyright (c) 2003 by Bitstream, Inc. All Rights Reserved.
     # Copyright (c) 2006 by Tavmjong Bah. All Rights Reserved.
     # DejaVu changes are in public domain
     # See http://dejavu-fonts.org/wiki/License for details
-    license = stdenv.lib.licenses.free;
+    license = lib.licenses.free;
 
-    platforms = stdenv.lib.platforms.all;
+    platforms = lib.platforms.all;
   };
 
   full-ttf = stdenv.mkDerivation {
-    name = "dejavu-fonts-full-${version}";
+    pname = "dejavu-fonts-full";
+    inherit version;
     nativeBuildInputs = [fontforge perl perlPackages.IOString perlPackages.FontTTF];
 
     src = fetchFromGitHub {
       owner = "dejavu-fonts";
       repo = "dejavu-fonts";
-      rev = "version_${stdenv.lib.replaceStrings ["."] ["_"] version}";
+      rev = "version_${lib.replaceStrings ["."] ["_"] version}";
       sha256 = "1xknlg2h287dx34v2n5r33bpcl4biqf0cv7nak657rjki7s0k4bk";
     };
 
-    buildFlags = "full-ttf";
+    buildFlags = [ "full-ttf" ];
 
     preBuild = "patchShebangs scripts";
 
@@ -44,14 +45,16 @@ let
   };
 
   minimal = stdenv.mkDerivation {
-    name = "dejavu-fonts-minimal-${version}";
+    pname = "dejavu-fonts-minimal";
+    inherit version;
     buildCommand = ''
       install -m444 -Dt $out/share/fonts/truetype ${full-ttf}/share/fonts/truetype/DejaVuSans.ttf
     '';
     inherit meta;
   };
 in stdenv.mkDerivation {
-  name = "dejavu-fonts-${version}";
+  pname = "dejavu-fonts";
+  inherit version;
   buildCommand = ''
     install -m444 -Dt $out/share/fonts/truetype ${full-ttf}/share/fonts/truetype/*.ttf
     ln -s --relative --force --target-directory=$out/share/fonts/truetype ${minimal}/share/fonts/truetype/DejaVuSans.ttf

@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, makeDesktopItem, patchelf, zlib, freetype, fontconfig
+{ lib, stdenv, fetchurl, makeDesktopItem, patchelf, zlib, freetype, fontconfig
 , openssl, libXrender, libXrandr, libXcursor, libX11, libXext, libXi
 , libxcb, cups, xkeyboardconfig, runtimeShell
 }:
 
 let
 
-  libPath = stdenv.lib.makeLibraryPath
+  libPath = lib.makeLibraryPath
     [ zlib freetype fontconfig openssl libXrender libXrandr libXcursor libX11
       libXext libXi libxcb cups
     ];
@@ -13,7 +13,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "eagle-${version}";
+  pname = "eagle";
   version = "7.7.0";
 
   src =
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     comment = "Schematic capture and PCB layout";
     desktopName = "Eagle";
     genericName = "Schematic editor";
-    categories = "Application;Development;";
+    categories = "Development;";
   };
 
   buildInputs =
@@ -87,9 +87,9 @@ stdenv.mkDerivation rec {
     ln -s "$out/eagle-${version}/bin/eagleicon50.png" "$out"/share/icons/eagle.png
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Schematic editor and PCB layout tool from CadSoft";
-    homepage = http://www.cadsoftusa.com/;
+    homepage = "http://www.cadsoftusa.com/";
     license = licenses.unfree;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];

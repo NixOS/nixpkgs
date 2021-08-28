@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, ant, jre, jdk, swt, acl, attr }:
+{ lib, stdenv, fetchurl, ant, jre, jdk, swt, acl, attr }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "areca-7.5";
 
   src = fetchurl {
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     substituteInPlace jni/com_myJava_file_metadata_posix_jni_wrapper_FileAccessWrapper.c --replace attr/xattr.h sys/xattr.h
 
     sed -i "s#^PROGRAM_DIR.*#PROGRAM_DIR=$out#g" bin/areca_run.sh
-    sed -i "s#^LIBRARY_PATH.*#LIBRARY_PATH=$out/lib:${stdenv.lib.makeLibraryPath [ swt acl ]}#g" bin/areca_run.sh
+    sed -i "s#^LIBRARY_PATH.*#LIBRARY_PATH=$out/lib:${lib.makeLibraryPath [ swt acl ]}#g" bin/areca_run.sh
 
     # https://sourceforge.net/p/areca/bugs/563/
     substituteInPlace bin/areca_run.sh --replace '[ "$JAVA_IMPL" = "java" ]' \
@@ -44,8 +44,8 @@ stdenv.mkDerivation rec {
     cp COPYING $out
   '';
 
-  meta = with stdenv.lib; {
-    homepage = http://www.areca-backup.org/;
+  meta = with lib; {
+    homepage = "http://www.areca-backup.org/";
     description = "An Open Source personal backup solution";
     license = licenses.gpl2;
     maintainers = with maintainers; [ pSub ];

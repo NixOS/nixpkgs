@@ -1,5 +1,5 @@
 { lib, stdenv, ghc, llvmPackages, packages, symlinkJoin, makeWrapper
-, withLLVM ? false
+, withLLVM ? !(stdenv.hostPlatform.isx86_64 || stdenv.hostPlatform.isPowerPC)
 , postBuild ? ""
 , ghcLibdir ? null # only used by ghcjs, when resolving plugins
 }:
@@ -57,9 +57,8 @@ symlinkJoin {
   # as a dedicated drv attribute, like `compiler-name`
   name = ghc.name + "-with-packages";
   paths = paths ++ [ghc];
+  nativeBuildInputs = [ makeWrapper ];
   postBuild = ''
-    . ${makeWrapper}/nix-support/setup-hook
-
     # wrap compiler executables with correct env variables
 
     for prg in ${ghcCommand} ${ghcCommand}i ${ghcCommand}-${ghc.version} ${ghcCommand}i-${ghc.version}; do
@@ -113,7 +112,7 @@ symlinkJoin {
     # Clean up the old links that may have been (transitively) included by
     # symlinkJoin:
     rm -f $dynamicLinksDir/*
-    for d in $(grep dynamic-library-dirs $packageConfDir/*|awk '{print $2}'|sort -u); do
+    for d in $(grep -Poz "dynamic-library-dirs:\s*\K .+\n" $packageConfDir/*|awk '{print $2}'|sort -u); do
       ln -s $d/*.dylib $dynamicLinksDir
     done
     for f in $packageConfDir/*.conf; do
@@ -123,11 +122,22 @@ symlinkJoin {
       # $dynamicLinksDir
       cp $f $f-tmp
       rm $f
-      sed "s,dynamic-library-dirs: .*,dynamic-library-dirs: $dynamicLinksDir," $f-tmp > $f
+      sed "N;s,dynamic-library-dirs:\s*.*,dynamic-library-dirs: $dynamicLinksDir," $f-tmp > $f
       rm $f-tmp
     done
   '') + ''
-    ${lib.optionalString hasLibraries "$out/bin/${ghcCommand}-pkg recache"}
+    ${lib.optionalString hasLibraries ''
+     # GHC 8.10 changes.
+     # Instead of replacing package.cache[.lock] with the new file,
+     # ghc-pkg is now trying to open the file.  These file are symlink
+     # to another nix derivation, so they are not writable.  Removing
+     # them allow the correct behavior of ghc-pkg recache
+     # See: https://github.com/NixOS/nixpkgs/issues/79441
+     rm $out/lib/${ghc.name}/package.conf.d/package.cache.lock
+     rm $out/lib/${ghc.name}/package.conf.d/package.cache
+
+     $out/bin/${ghcCommand}-pkg recache
+     ''}
     ${# ghcjs will read the ghc_libdir file when resolving plugins.
       lib.optionalString (isGhcjs && ghcLibdir != null) ''
       mkdir -p "${libDir}"

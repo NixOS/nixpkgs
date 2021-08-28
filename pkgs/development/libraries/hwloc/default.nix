@@ -1,13 +1,13 @@
-{ stdenv, fetchurl, pkgconfig, expat, ncurses, pciutils, numactl
+{ lib, stdenv, fetchurl, pkg-config, expat, ncurses, pciutils, numactl
 , x11Support ? false, libX11 ? null, cairo ? null
 }:
 
 assert x11Support -> libX11 != null && cairo != null;
 
-with stdenv.lib;
+with lib;
 
 let
-  version = "2.0.4";
+  version = "2.4.1";
   versmm = versions.major version + "." + versions.minor version;
   name = "hwloc-${version}";
 
@@ -15,8 +15,8 @@ in stdenv.mkDerivation {
   inherit name;
 
   src = fetchurl {
-    url = "http://www.open-mpi.org/software/hwloc/v${versmm}/downloads/${name}.tar.bz2";
-    sha256 = "1aa7s208gdijk19vvzzahyl8pglk1va3yd6kdbpfa5pz5ms0ag35";
+    url = "https://www.open-mpi.org/software/hwloc/v${versmm}/downloads/${name}.tar.bz2";
+    sha256 = "sha256-OSQh5p8mEgyKuV0VH+mJ8rS2nas8dzV0HE4KbX3l3mM=";
   };
 
   configureFlags = [
@@ -25,11 +25,11 @@ in stdenv.mkDerivation {
   ];
 
   # XXX: libX11 is not directly needed, but needed as a propagated dep of Cairo.
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   # Filter out `null' inputs.  This allows users to `.override' the
   # derivation and set optional dependencies to `null'.
-  buildInputs = stdenv.lib.filter (x: x != null)
+  buildInputs = lib.filter (x: x != null)
    ([ expat ncurses ]
      ++  (optionals x11Support [ cairo libX11 ])
      ++  (optionals stdenv.isLinux [ numactl ]));
@@ -78,9 +78,9 @@ in stdenv.mkDerivation {
        more.
     '';
 
-    # http://www.open-mpi.org/projects/hwloc/license.php
+    # https://www.open-mpi.org/projects/hwloc/license.php
     license = licenses.bsd3;
-    homepage = https://www.open-mpi.org/projects/hwloc/;
+    homepage = "https://www.open-mpi.org/projects/hwloc/";
     maintainers = with maintainers; [ fpletz markuskowa ];
     platforms = platforms.all;
   };

@@ -1,7 +1,6 @@
-{ stdenv, fetchFromGitHub, pythonPackages }:
+{ lib, fetchFromGitHub, pythonPackages }:
 
 pythonPackages.buildPythonApplication rec {
-  name = "${pname}-${version}";
   pname = "rpl";
   version = "1.5.7";
 
@@ -15,7 +14,7 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "1xhpgcmq91ivy9ijfyz5ilg51m7fz8ar2077r7gq246j8gbf8ggr";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Replace strings in files";
     homepage    = "https://github.com/kcoyner/rpl";
     license     = licenses.gpl2;

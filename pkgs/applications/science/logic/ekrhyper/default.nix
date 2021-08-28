@@ -1,4 +1,4 @@
-{stdenv, fetchurl, ocaml, perl}:
+{lib, stdenv, fetchurl, ocaml, perl}:
 let
   s = # Generated upstream information
   rec {
@@ -25,8 +25,8 @@ stdenv.mkDerivation {
   meta = {
     inherit (s) version;
     description = "Automated first-order theorem prover";
-    license = stdenv.lib.licenses.gpl2 ;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2 ;
+    maintainers = [lib.maintainers.raskin];
+    platforms = lib.platforms.linux;
   };
 }

@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, unzip }:
+{ lib, stdenv, fetchurl, unzip }:
 
 stdenv.mkDerivation rec {
-  name = "libb64-${version}";
+  pname = "libb64";
   version = "1.2";
 
   src = fetchurl {
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1lxzi6v10qsl2r6633dx0zwqyvy0j19nmwclfd0d7qybqmhqsg9l";
   };
 
-  buildInputs = [ unzip ];
+  nativeBuildInputs = [ unzip ];
 
   installPhase = ''
     mkdir -p $out $out/lib $out/bin $out/include
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   meta = {
     inherit version;
     description = "ANSI C routines for fast base64 encoding/decoding";
-    license = stdenv.lib.licenses.publicDomain;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.publicDomain;
+    platforms = lib.platforms.unix;
   };
 }

@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, kernel, kmod }:
+{ lib, stdenv, fetchurl, kernel, kmod }:
 
 stdenv.mkDerivation rec {
   name = "ixgbevf-${version}-${kernel.version}";
-  version = "4.3.4";
+  version = "4.6.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/e1000/ixgbevf-${version}.tar.gz";
-    sha256 = "122zn9nd8f95bpidiiinc8xaizypkirqs8vlmsdy2iv3w65md9k3";
+    sha256 = "0h8a2g4hm38wmr13gvi2188r7nlv2c5rx6cal9gkf1nh6sla181c";
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
@@ -17,15 +17,18 @@ stdenv.mkDerivation rec {
     cd src
     makeFlagsArray+=(KSRC=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build INSTALL_MOD_PATH=$out MANDIR=/share/man)
     substituteInPlace common.mk --replace /sbin/depmod ${kmod}/bin/depmod
+    # prevent host system kernel introspection
+    substituteInPlace common.mk --replace /boot/System.map /not-exists
   '';
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     description = "Intel 82599 Virtual Function Driver";
-    homepage = https://sourceforge.net/projects/e1000/files/ixgbevf%20stable/;
-    license = stdenv.lib.licenses.gpl2;
+    homepage = "https://sourceforge.net/projects/e1000/files/ixgbevf%20stable/";
+    license = licenses.gpl2;
     priority = 20;
-    broken = (stdenv.lib.versionOlder kernel.version "4.9");
+    # kernels ship ixgbevf driver for a long time already, maybe switch to a newest kernel?
+    broken = versionAtLeast kernel.version "5.2";
   };
 }

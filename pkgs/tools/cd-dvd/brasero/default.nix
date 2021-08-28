@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, pkgconfig, gtk3, itstool, gst_all_1, libxml2, libnotify
+{ stdenv, lib, fetchurl, pkg-config, gtk3, itstool, gst_all_1, libxml2, libnotify
 , libcanberra-gtk3, intltool, dvdauthor, libburn, libisofs
 , vcdimager, wrapGAppsHook, hicolor-icon-theme }:
 
@@ -9,14 +9,14 @@ let
 
 in stdenv.mkDerivation rec {
   version = "${major}.${minor}";
-  name = "brasero-${version}";
+  pname = "brasero";
 
   src = fetchurl {
-    url = "http://download.gnome.org/sources/brasero/${major}/${name}.tar.xz";
+    url = "http://download.gnome.org/sources/brasero/${major}/${pname}-${version}.tar.xz";
     sha256 = "0h90y674j26rvjahb8cc0w79zx477rb6zaqcj26wzvq8kmpic8k8";
   };
 
-  nativeBuildInputs = [ pkgconfig itstool intltool wrapGAppsHook ];
+  nativeBuildInputs = [ pkg-config itstool intltool wrapGAppsHook ];
 
   buildInputs = [ gtk3 libxml2 libnotify libcanberra-gtk3 libburn libisofs
                   hicolor-icon-theme
@@ -36,12 +36,12 @@ in stdenv.mkDerivation rec {
   ];
 
   preFixup = ''
-    gappsWrapperArgs+=(--prefix PATH : "${binpath}" --prefix GST_PLUGIN_SYSTEM_PATH : "$GST_PLUGIN_SYSTEM_PATH")
+    gappsWrapperArgs+=(--prefix PATH : "${binpath}")
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Gnome CD/DVD Burner";
-    homepage = https://wiki.gnome.org/Apps/Brasero;
+    homepage = "https://wiki.gnome.org/Apps/Brasero";
     maintainers = [ maintainers.bdimcheff ];
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

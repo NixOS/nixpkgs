@@ -1,13 +1,14 @@
-{stdenv, fetchgit, perl}:
+{ lib, stdenv, fetchFromGitHub, perl }:
 
-stdenv.mkDerivation rec {
-  name = "colormake-${version}";
+stdenv.mkDerivation {
+  pname = "colormake";
   version = "2.1.0";
 
-  buildInputs = [perl];
+  buildInputs = [ perl ];
 
-  src = fetchgit {
-    url = https://github.com/pagekite/Colormake.git;
+  src = fetchFromGitHub {
+    owner = "pagekite";
+    repo = "Colormake";
     rev = "66544f40d";
     sha256 = "8e714c5540305d169989d9387dbac47b8b9fb2cfb424af7bcd412bfe684dc6d7";
   };
@@ -17,9 +18,11 @@ stdenv.mkDerivation rec {
     cp -fa colormake.pl colormake colormake-short clmake clmake-short $out/bin
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Simple wrapper around make to colorize the output";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.unix;
+    homepage = "https://bre.klaki.net/programs/colormake/";
+    license = licenses.gpl2;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ bhipple ];
   };
 }

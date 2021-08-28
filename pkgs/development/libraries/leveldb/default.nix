@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub, fixDarwinDylibNames, snappy }:
 
 stdenv.mkDerivation rec {
-  name = "leveldb-${version}";
+  pname = "leveldb";
   version = "1.20";
 
   src = fetchFromGitHub {
@@ -11,30 +11,33 @@ stdenv.mkDerivation rec {
     sha256 = "01kxga1hv4wp94agx5vl3ybxfw5klqrdsrb6p6ywvnjmjxm8322y";
   };
 
-  buildPhase = ''
-    make all
+  buildInputs = [ snappy ];
+
+  nativeBuildInputs = lib.optional stdenv.isDarwin fixDarwinDylibNames;
+
+  doCheck = true;
+
+  buildFlags = [ "all" ];
+
+  postPatch = lib.optionalString stdenv.hostPlatform.isStatic ''
+    # remove shared objects from "all" target
+    sed -i '/^all:/ s/$(SHARED_LIBS) $(SHARED_PROGRAMS)//' Makefile
   '';
 
-  installPhase = (stdenv.lib.optionalString stdenv.isDarwin ''
-    for file in out-shared/*.dylib*; do
-      install_name_tool -id $out/lib/$file $file
-    done
-  '') + # XXX consider removing above after transition to cmake in the next release
-  "
-    mkdir -p $out/{bin,lib,include}
+  installPhase = ''
+    runHook preInstall
 
-    cp -r include $out
-    mkdir -p $out/include/leveldb/helpers
-    cp helpers/memenv/memenv.h $out/include/leveldb/helpers
+    install -D -t $out/include/leveldb include/leveldb/*
+    install -D helpers/memenv/memenv.h $out/include/leveldb/helpers
 
-    cp out-shared/lib* $out/lib
-    cp out-static/lib* $out/lib
+    install -D -t $out/lib out-{static,shared}/lib*
+    install -D -t $out/bin out-static/{leveldbutil,db_bench}
 
-    cp out-static/leveldbutil $out/bin
-  ";
+    runHook postInstall
+  '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/google/leveldb;
+  meta = with lib; {
+    homepage = "https://github.com/google/leveldb";
     description = "Fast and lightweight key/value database library by Google";
     license = licenses.bsd3;
     platforms = platforms.all;

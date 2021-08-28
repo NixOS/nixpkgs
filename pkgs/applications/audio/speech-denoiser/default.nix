@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, lv2, meson, ninja }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, lv2, meson, ninja }:
 
 let
   speech-denoiser-src = fetchFromGitHub {
@@ -8,7 +8,7 @@ let
     sha256 = "189l6lz8sz5vr6bjyzgcsrvksl1w6crqsg0q65r94b5yjsmjnpr4";
   };
 
-  rnnoise-nu = stdenv.mkDerivation rec {
+  rnnoise-nu = stdenv.mkDerivation {
     pname = "rnnoise-nu";
     version = "unstable-07-10-2019";
     src = speech-denoiser-src;
@@ -18,23 +18,25 @@ let
     installTargets = [ "install-rnnoise-nu" ];
   };
 in
-stdenv.mkDerivation  rec {
+stdenv.mkDerivation  {
   pname = "speech-denoiser";
   version = "unstable-07-10-2019";
 
   src = speech-denoiser-src;
 
-  nativeBuildInputs = [ pkgconfig meson ninja ];
+  nativeBuildInputs = [ pkg-config meson ninja ];
   buildInputs = [ lv2 rnnoise-nu ];
+
+  mesonFlags = ("--prefix=${placeholder "out"}/lib/lv2");
 
   postPatch = ''
     substituteInPlace meson.build \
       --replace "cc.find_library('rnnoise-nu',dirs: meson.current_source_dir() + '/rnnoise/.libs/',required : true)" "cc.find_library('rnnoise-nu', required : true)"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Speech denoise lv2 plugin based on RNNoise library";
-    homepage = https://github.com/lucianodato/speech-denoiser;
+    homepage = "https://github.com/lucianodato/speech-denoiser";
     license = licenses.lgpl3;
     maintainers = [ maintainers.magnetophon ];
     platforms = platforms.linux;

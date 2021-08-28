@@ -1,8 +1,8 @@
 { callPackage, Foundation, libobjc }:
 
-callPackage ./generic.nix (rec {
+callPackage ./generic.nix ({
   inherit Foundation libobjc;
-  version = "5.20.1.27";
-  sha256 = "15rpwxw642ad1na93k5nj7d2lb24f21kncr924gxr00178a9x0jy";
+  version = "5.20.1.34";
+  sha256 = "12vw5dkhmp1vk9l658pil8jiqirkpdsc5z8dm5mpj595yr6d94fd";
   enableParallelBuilding = true;
 })

@@ -1,20 +1,24 @@
-import ./make-test.nix ({ pkgs, ...} : rec {
+import ./make-test-python.nix ({ lib, ...} : {
   name = "flannel";
 
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with lib.maintainers; {
     maintainers = [ offline ];
   };
 
   nodes = let
-    flannelConfig = {
+    flannelConfig = { pkgs, ... } : {
       services.flannel = {
         enable = true;
+        backend = {
+          Type = "udp";
+          Port = 8285;
+        };
         network = "10.1.0.0/16";
         iface = "eth1";
         etcd.endpoints = ["http://etcd:2379"];
       };
 
-      networking.firewall.allowedUDPPorts = [ 8472 ];
+      networking.firewall.allowedUDPPorts = [ 8285 ];
     };
   in {
     etcd = { ... }: {
@@ -32,25 +36,22 @@ import ./make-test.nix ({ pkgs, ...} : rec {
       networking.firewall.allowedTCPPorts = [ 2379 ];
     };
 
-    node1 = { ... }: {
-      require = [flannelConfig];
-    };
-
-    node2 = { ... }: {
-      require = [flannelConfig];
-    };
+    node1 = flannelConfig;
+    node2 = flannelConfig;
   };
 
   testScript = ''
-    startAll;
+    start_all()
 
-    $node1->waitForUnit("flannel.service");
-    $node2->waitForUnit("flannel.service");
+    node1.wait_for_unit("flannel.service")
+    node2.wait_for_unit("flannel.service")
 
-    my $ip1 = $node1->succeed("ip -4 addr show flannel.1 | grep -oP '(?<=inet).*(?=/)'");
-    my $ip2 = $node2->succeed("ip -4 addr show flannel.1 | grep -oP '(?<=inet).*(?=/)'");
+    node1.wait_until_succeeds("ip l show dev flannel0")
+    ip1 = node1.succeed("ip -4 addr show flannel0 | grep -oP '(?<=inet).*(?=/)'")
+    node2.wait_until_succeeds("ip l show dev flannel0")
+    ip2 = node2.succeed("ip -4 addr show flannel0 | grep -oP '(?<=inet).*(?=/)'")
 
-    $node1->waitUntilSucceeds("ping -c 1 $ip2");
-    $node2->waitUntilSucceeds("ping -c 1 $ip1");
+    node1.wait_until_succeeds(f"ping -c 1 {ip2}")
+    node2.wait_until_succeeds(f"ping -c 1 {ip1}")
   '';
 })

@@ -13,12 +13,12 @@
 assert withGf2x -> gf2x != null;
 
 stdenv.mkDerivation rec {
-  name = "ntl-${version}";
-  version = "11.3.2";
+  pname = "ntl";
+  version = "11.4.4";
 
   src = fetchurl {
     url = "http://www.shoup.net/ntl/ntl-${version}.tar.gz";
-    sha256 = "17bfsvn72zjqfibnxscyf4hbk3inndh4r89jd2zg7mgqmd2k3fl4";
+    sha256 = "sha256-nX9uguEaQJ8VHA3i3rCMDXY7r5g0/d/UMr89IY+AIds=";
   };
 
   buildInputs = [
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     perl # needed for ./configure
   ];
 
-  sourceRoot = "${name}/src";
+  sourceRoot = "${pname}-${version}/src";
 
   enableParallelBuilding = true;
 
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
       else
         "generic" # "chooses options that should be OK for most platforms"
     }"
-    "CXX=c++"
+    "CXX=${stdenv.cc.targetPrefix}c++"
   ] ++ lib.optionals withGf2x [
     "NTL_GF2X_LIB=on"
     "GF2X_PREFIX=${gf2x}"
@@ -66,8 +66,10 @@ stdenv.mkDerivation rec {
     '';
     # Upstream contact: maintainer is victorshoup on GitHub. Alternatively the
     # email listed on the homepage.
-    homepage = http://www.shoup.net/ntl/;
-    maintainers = with maintainers; [ timokau ];
+    homepage = "http://www.shoup.net/ntl/";
+    # also locally at "${src}/doc/tour-changes.html";
+    changelog = "https://www.shoup.net/ntl/doc/tour-changes.html";
+    maintainers = teams.sage.members;
     license = licenses.gpl2Plus;
     platforms = platforms.all;
   };

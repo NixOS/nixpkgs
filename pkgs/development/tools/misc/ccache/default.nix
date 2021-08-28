@@ -1,38 +1,64 @@
-{ stdenv, fetchurl, perl, zlib, makeWrapper }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, substituteAll
+, binutils
+, asciidoc
+, cmake
+, perl
+, zstd
+, bashInteractive
+, xcodebuild
+, makeWrapper
+}:
 
 let ccache = stdenv.mkDerivation rec {
-  name = "ccache-${version}";
-  version = "3.4.1";
+  pname = "ccache";
+  version = "4.3";
 
-  src = fetchurl {
-    sha256 = "1pppi4jbkkj641cdynmc35jaj40jjicw7gj75ran5qs5886jcblc";
-    url = "mirror://samba/ccache/${name}.tar.xz";
+  src = fetchFromGitHub {
+    owner = pname;
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-ZBxDTMUZiZJLIYbvACTFwvlss+IZiMjiL0khfM5hFCM=";
   };
-
-  nativeBuildInputs = [ perl ];
-
-  buildInputs = [ zlib ];
 
   outputs = [ "out" "man" ];
 
-  # non to be fail on filesystems with unconventional blocksizes (zfs on Hydra?)
   patches = [
-    ./fix-debug-prefix-map-suite.patch
-    ./skip-fs-dependent-test.patch
+    # When building for Darwin, test/run uses dwarfdump, whereas on
+    # Linux it uses objdump. We don't have dwarfdump packaged for
+    # Darwin, so this patch updates the test to also use objdump on
+    # Darwin.
+    (substituteAll {
+      src = ./force-objdump-on-darwin.patch;
+      objdump = "${binutils.bintools}/bin/objdump";
+    })
   ];
 
-  postPatch = ''
-    substituteInPlace Makefile.in --replace 'objs) $(extra_libs)' 'objs)'
+  nativeBuildInputs = [ asciidoc cmake perl ];
+  buildInputs = [ zstd ];
+
+  doCheck = true;
+  checkInputs = [
+    # test/run requires the compgen function which is available in
+    # bashInteractive, but not bash.
+    bashInteractive
+  ] ++ lib.optional stdenv.isDarwin xcodebuild;
+
+  checkPhase = ''
+    runHook preCheck
+    export HOME=$(mktemp -d)
+    ctest --output-on-failure ${lib.optionalString stdenv.isDarwin ''
+      -E '^(test.nocpp2|test.basedir|test.multi_arch)$'
+    ''}
+    runHook postCheck
   '';
 
-  doCheck = !stdenv.isDarwin;
-
-  passthru = let
-      unwrappedCC = stdenv.cc.cc;
-    in {
+  passthru = {
     # A derivation that provides gcc and g++ commands, but that
     # will end up calling ccache for the given cacheDir
-    links = extraConfig: stdenv.mkDerivation rec {
+    links = {unwrappedCC, extraConfig}: stdenv.mkDerivation {
       name = "ccache-links";
       passthru = {
         isClang = unwrappedCC.isClang or false;
@@ -47,7 +73,7 @@ let ccache = stdenv.mkDerivation rec {
           local cname="$1"
           if [ -x "${unwrappedCC}/bin/$cname" ]; then
             makeWrapper ${ccache}/bin/ccache $out/bin/$cname \
-              --run ${stdenv.lib.escapeShellArg extraConfig} \
+              --run ${lib.escapeShellArg extraConfig} \
               --add-flags ${unwrappedCC}/bin/$cname
           fi
         }
@@ -71,11 +97,12 @@ let ccache = stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Compiler cache for fast recompilation of C/C++ code";
-    homepage = http://ccache.samba.org/;
-    downloadPage = https://ccache.samba.org/download.html;
+    homepage = "https://ccache.dev";
+    downloadPage = "https://ccache.dev/download.html";
     license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ kira-bruneau r-burns ];
     platforms = platforms.unix;
   };
 };

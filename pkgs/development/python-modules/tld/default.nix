@@ -1,34 +1,45 @@
-{ stdenv, fetchPypi, python }:
+{ lib
+, buildPythonPackage
+, factory_boy
+, faker
+, fetchPypi
+, pytest-cov
+, pytestCheckHook
+, six
+, tox
+}:
 
-python.pkgs.buildPythonPackage rec {
-  pname   = "tld";
-  version = "0.9.3";
+buildPythonPackage rec {
+  pname = "tld";
+  version = "0.12.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0i0prgwrmm157h6fa5bx9wm0m70qq2nhzp743374a94p9s766rpp";
+    sha256 = "0d1lbbg2qdw5jjxks0dqlf69bki5885mhj8ysvgylmrni56hjqqv";
   };
 
-  propagatedBuildInputs = with python.pkgs; [ six ];
-  checkInputs = with python.pkgs; [ factory_boy faker pytest pytestcov tox ];
+  checkInputs = [
+    factory_boy
+    faker
+    pytest-cov
+    pytestCheckHook
+    tox
+  ];
 
-  # https://github.com/barseghyanartur/tld/issues/54
-  disabledTests = stdenv.lib.concatMapStringsSep " and " (s: "not " + s) ([
-    "test_1_update_tld_names"
-    "test_1_update_tld_names_command"
-    "test_2_update_tld_names_module"
-  ]);
-
-  checkPhase = ''
-      export PATH="$PATH:$out/bin"
-      py.test -k '${disabledTests}'
+  # these tests require network access, but disabledTestPaths doesn't work.
+  # the file needs to be `import`ed by another python test file, so it
+  # can't simply be removed.
+  preCheck = ''
+    echo > src/tld/tests/test_commands.py
   '';
+  pythonImportsCheck = [ "tld" ];
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/barseghyanartur/tld;
+  meta = with lib; {
+    homepage = "https://github.com/barseghyanartur/tld";
     description = "Extracts the top level domain (TLD) from the URL given";
-    license = licenses.lgpl21;
-    maintainers = with maintainers; [ genesis ];
+    # https://github.com/barseghyanartur/tld/blob/master/README.rst#license
+    # MPL-1.1 OR GPL-2.0-only OR LGPL-2.1-or-later
+    license = with licenses; [ lgpl21Plus mpl11 gpl2Only ];
+    maintainers = with maintainers; [ fab ];
   };
-
 }

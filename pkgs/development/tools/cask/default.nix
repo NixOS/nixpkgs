@@ -1,19 +1,22 @@
-{ stdenv, fetchurl, python, emacsPackagesNg }:
+{ lib, stdenv, fetchurl, python3, emacs }:
 
 stdenv.mkDerivation rec {
-  name = "cask-${version}";
-  version = "0.8.4";
+  pname = "cask";
 
-  src = fetchurl {
-    url = "https://github.com/cask/cask/archive/v${version}.tar.gz";
-    sha256 = "02f8bb20b33b23fb11e7d2a1d282519dfdb8b3090b9672448b8c2c2cacd3e478";
-  };
+  inherit (emacs.pkgs.melpaStablePackages.cask) src version;
 
   doCheck = true;
-  buildInputs = with emacsPackagesNg; [
+
+  nativeBuildInputs = [ emacs ];
+  buildInputs = with emacs.pkgs; [
     s f dash ansi ecukes servant ert-runner el-mock
     noflet ert-async shell-split-string git package-build
+  ] ++ [
+    python3
   ];
+
+  strictDeps = true;
+
   buildPhase = ''
     emacs --batch -L . -f batch-byte-compile cask.el cask-cli.el
   '';
@@ -29,7 +32,7 @@ stdenv.mkDerivation rec {
     ln -s $out/share/emacs/site-lisp/cask/bin/cask $out/bin/cask
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Project management for Emacs";
     longDescription = ''
       Cask is a project management tool for Emacs that helps automate the
@@ -38,11 +41,9 @@ stdenv.mkDerivation rec {
       Cask can also be used to manage dependencies for your local Emacs configuration.
     '';
 
-    homepage = https://cask.readthedocs.io/en/latest/index.html;
+    homepage = "https://cask.readthedocs.io/en/latest/index.html";
     license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    platforms = platforms.all;
     maintainers = [ maintainers.flexw ];
   };
-
-  nativeBuildInputs = [ emacsPackagesNg.emacs python ];
 }

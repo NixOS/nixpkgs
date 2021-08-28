@@ -1,15 +1,14 @@
-{ stdenv, buildPythonPackage, isPy3k, fetchurl, six, pycurl, cccolutils
+{ lib, buildPythonPackage, isPy3k, fetchurl, six, pycurl, cccolutils
 , koji, rpmfluff }:
 
 buildPythonPackage rec {
   pname = "rpkg";
   version = "1.50";
-  name  = "${pname}-${version}";
 
   disabled = isPy3k;
 
   src = fetchurl {
-    url = "https://releases.pagure.org/rpkg/${name}.tar.gz";
+    url = "https://releases.pagure.org/rpkg/${pname}-${version}.tar.gz";
     sha256 = "0j83bnm9snr3m1mabw2cvd2r7d6kcnkzyz7b9p65fhcc3c7s3rvv";
   };
 
@@ -18,9 +17,9 @@ buildPythonPackage rec {
 
   doCheck = false; # needs /var/lib/rpm database to run tests
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python library for dealing with rpm packaging";
-    homepage = https://pagure.io/fedpkg;
+    homepage = "https://pagure.io/fedpkg";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ ];
   };

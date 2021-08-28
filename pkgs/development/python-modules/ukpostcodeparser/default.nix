@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "UK Postcode parser";
-    homepage    = https://github.com/hamstah/ukpostcodeparser;
+    homepage    = "https://github.com/hamstah/ukpostcodeparser";
     license     = licenses.publicDomain;
     maintainers = with maintainers; [ siddharthist ];
     platforms   = platforms.unix;

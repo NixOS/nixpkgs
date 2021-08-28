@@ -1,10 +1,13 @@
-{ stdenv, substituteAll, fetchFromGitHub, file-roller, gnome-bluetooth }:
+{ lib, stdenv
+, substituteAll
+, fetchFromGitHub
+, file-roller
+, gnome-bluetooth
+}:
 
 stdenv.mkDerivation rec {
   pname = "extra-elementary-contracts";
   version = "2018-08-21";
-
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "worldofpeace";
@@ -16,12 +19,13 @@ stdenv.mkDerivation rec {
   patches = [
     (substituteAll {
       src = ./exec-path.patch;
-      file_roller = "${file-roller}";
-      gnome_bluetooth = "${gnome-bluetooth}";
+      file_roller = file-roller;
+      gnome_bluetooth = gnome-bluetooth;
     })
   ];
 
   dontBuild = true;
+  dontConfigure = true;
 
   installPhase = ''
     mkdir -p $out/share/contractor
@@ -29,9 +33,9 @@ stdenv.mkDerivation rec {
     cp *.contract $out/share/contractor/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Extra contractor files for elementary";
-    homepage = https://github.com/worldofpeace/extra-elementary-contracts;
+    homepage = "https://github.com/worldofpeace/extra-elementary-contracts";
     license = licenses.gpl2;
     maintainers = with maintainers; [ worldofpeace ];
     platforms = platforms.linux;

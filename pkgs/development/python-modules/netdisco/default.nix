@@ -1,27 +1,28 @@
-{ stdenv, buildPythonPackage, isPy3k, fetchPypi, requests, zeroconf, netifaces, pytest }:
+{ lib, buildPythonPackage, isPy3k, fetchPypi, requests, zeroconf, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "netdisco";
-  version = "2.6.0";
+  version = "2.8.3";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2b3aca14a1807712a053f11fd80dc251dd821ee4899aefece515287981817762";
+    sha256 = "sha256-4WS9PiErB6U7QuejTvbrOmnHetbE5S4zaUyhLCbyihM=";
   };
 
-  propagatedBuildInputs = [ requests zeroconf netifaces ];
+  propagatedBuildInputs = [ requests zeroconf ];
 
-  checkInputs = [ pytest ];
+  checkInputs = [ pytestCheckHook ];
 
-  checkPhase = ''
-    py.test
-  '';
+  pythonImportsCheck = [
+    "netdisco"
+    "netdisco.discovery"
+  ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python library to scan local network for services and devices";
-    homepage = https://github.com/home-assistant/netdisco;
+    homepage = "https://github.com/home-assistant/netdisco";
     license = licenses.asl20;
     maintainers = with maintainers; [ dotlambda ];
   };

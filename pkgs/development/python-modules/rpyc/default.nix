@@ -1,25 +1,38 @@
-{ stdenv
+{ lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , nose
 , plumbum
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "rpyc";
-  version = "4.1.0";
+  version = "5.0.1";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1pz90h21f74n8i3cx5ndxm4r3rismkx5qbw1c0cmfci9a3009rq5";
+  src = fetchFromGitHub {
+    owner = "tomerfiliba";
+    repo = pname;
+    rev = version;
+    sha256 = "1g75k4valfjgab00xri4pf8c8bb2zxkhgkpyy44fjk7s5j66daa1";
   };
 
-  propagatedBuildInputs = [ nose plumbum ];
+  propagatedBuildInputs = [ plumbum ];
 
-  meta = with stdenv.lib; {
+  checkInputs = [ pytestCheckHook ];
+
+  # Disable tests that requires network access
+  disabledTests = [
+    "test_api"
+    "test_pruning"
+    "test_rpyc"
+  ];
+  pythonImportsCheck = [ "rpyc" ];
+
+  meta = with lib; {
     description = "Remote Python Call (RPyC), a transparent and symmetric RPC library";
-    homepage = https://rpyc.readthedocs.org;
-    license = licenses.mit;
+    homepage = "https://rpyc.readthedocs.org";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
   };
-
 }

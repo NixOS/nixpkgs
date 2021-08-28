@@ -1,65 +1,66 @@
-{ lib, buildPythonPackage, fetchPypi, callPackage
-, isPy27, isPy34
-, cleo
-, requests
-, cachy
-, requests-toolbelt
-, pyrsistent
-, pyparsing
+{ lib, buildPythonPackage, fetchFromGitHub, isPy27, pythonOlder, fetchpatch
 , cachecontrol
-, pkginfo
+, cachy
+, cleo
+, clikit
 , html5lib
+, httpretty
+, importlib-metadata
+, intreehooks
+, keyring
+, lockfile
+, pexpect
+, pkginfo
+, poetry-core
+, pytestCheckHook
+, pytestcov
+, pytest-mock
+, requests
+, requests-toolbelt
 , shellingham
 , tomlkit
-, typing
-, pathlib2
 , virtualenv
-, functools32
-, pytest
 }:
 
-let
-  cleo6 = cleo.overrideAttrs (oldAttrs: rec {
-    version = "0.6.8";
-    src = fetchPypi {
-      inherit (oldAttrs) pname;
-      inherit version;
-      sha256 = "06zp695hq835rkaq6irr1ds1dp2qfzyf32v60vxpd8rcnxv319l5";
-    };
-  });
-
-  jsonschema3 = callPackage ./jsonschema.nix { };
-
-in buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "poetry";
-  version = "0.12.10";
+  version = "1.1.6";
+  format = "pyproject";
+  disabled = isPy27;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "00npb0jlimnk4r01zkhfmns4843j1hfhd388s326da5pd8n0dq7l";
+  src = fetchFromGitHub {
+    owner = "python-poetry";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-3Nx9xuQMIho+oRjqskHL9eQGKDAWntEGZcWe7evnmNU=";
   };
 
   postPatch = ''
-    substituteInPlace setup.py --replace \
-      "requests-toolbelt>=0.8.0,<0.9.0" \
-      "requests-toolbelt>=0.8.0,<0.10.0"
+    substituteInPlace pyproject.toml \
+     --replace 'importlib-metadata = {version = "^1.6.0", python = "<3.8"}' \
+       'importlib-metadata = {version = ">=1.6", python = "<3.8"}' \
+     --replace 'version = "^21.2.0"' 'version = ">=21.2"'
   '';
 
+  nativeBuildInputs = [ intreehooks ];
+
   propagatedBuildInputs = [
-    cleo6
-    requests
-    cachy
-    requests-toolbelt
-    jsonschema3
-    pyrsistent
-    pyparsing
     cachecontrol
-    pkginfo
+    cachy
+    cleo
+    clikit
     html5lib
+    keyring
+    lockfile
+    pexpect
+    pkginfo
+    poetry-core
+    requests
+    requests-toolbelt
     shellingham
     tomlkit
-  ] ++ lib.optionals (isPy27 || isPy34) [ typing pathlib2 ]
-    ++ lib.optionals isPy27 [ virtualenv functools32 ];
+    virtualenv
+  ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
   postInstall = ''
     mkdir -p "$out/share/bash-completion/completions"
@@ -70,15 +71,36 @@ in buildPythonPackage rec {
     "$out/bin/poetry" completions fish > "$out/share/fish/vendor_completions.d/poetry.fish"
   '';
 
-  # No tests in Pypi tarball
-  doCheck = false;
-  checkInputs = [ pytest ];
-  checkPhase = ''
-    pytest tests
-  '';
+  checkInputs = [ pytestCheckHook httpretty pytest-mock pytestcov ];
+  preCheck = "export HOME=$TMPDIR";
+  disabledTests = [
+    # touches network
+    "git"
+    "solver"
+    "load"
+    "vcs"
+    "prereleases_if_they_are_compatible"
+    "test_executor"
+    # requires git history to work correctly
+    "default_with_excluded_data"
+    # toml ordering has changed
+    "lock"
+    # fs permission errors
+    "test_builder_should_execute_build_scripts"
+  ];
+
+  patches = [
+    # The following patch addresses a minor incompatibility with
+    # pytest-mock.  This is addressed upstream in
+    # https://github.com/python-poetry/poetry/pull/3457
+    (fetchpatch {
+      url = "https://github.com/python-poetry/poetry/commit/8ddceb7c52b3b1f35412479707fa790e5d60e691.diff";
+      sha256 = "yHjFb9xJBLFOqkOZaJolKviTdtST9PMFwH9n8ud2Y+U=";
+    })
+  ];
 
   meta = with lib; {
-    homepage = https://github.com/sdispater/poetry;
+    homepage = "https://python-poetry.org/";
     description = "Python dependency management and packaging made easy";
     license = licenses.mit;
     maintainers = with maintainers; [ jakewaksbaum ];

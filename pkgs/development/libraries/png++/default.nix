@@ -1,15 +1,15 @@
-{ stdenv, fetchurl, libpng
+{ lib, stdenv, fetchurl, libpng
 , docSupport ? true, doxygen ? null
 }:
 assert docSupport -> doxygen != null;
 
 stdenv.mkDerivation rec {
-  name = "pngpp-${version}";
-  version = "0.2.9";
+  pname = "pngpp";
+  version = "0.2.10";
 
   src = fetchurl {
     url = "mirror://savannah/pngpp/png++-${version}.tar.gz";
-    sha256 = "14c74fsc3q8iawf60m74xkkawkqbhd8k8x315m06qaqjcl2nmg5b";
+    sha256 = "1qgf8j25r57wjqlnzdkm8ya5x1bmj6xjvapv8f2visqnmcbg52lr";
   };
 
   doCheck = true;
@@ -21,22 +21,22 @@ stdenv.mkDerivation rec {
 
   postCheck = "cat test/test.log";
 
-  buildInputs = stdenv.lib.optional docSupport doxygen;
+  buildInputs = lib.optional docSupport doxygen;
 
   propagatedBuildInputs = [ libpng ];
 
-  preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
+  preConfigure = lib.optionalString stdenv.isDarwin ''
     substituteInPlace error.hpp --replace "#if (_POSIX_C_SOURCE >= 200112L || _XOPEN_SOURCE >= 600) && !_GNU_SOURCE" "#if (__clang__ || _POSIX_C_SOURCE >= 200112L || _XOPEN_SOURCE >= 600) && !_GNU_SOURCE"
   '' + ''
     sed "s|\(PNGPP := .\)|PREFIX := ''${out}\n\\1|" -i Makefile
   '';
 
-  makeFlags = stdenv.lib.optional docSupport "docs";
+  makeFlags = lib.optional docSupport "docs";
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
-    homepage = https://www.nongnu.org/pngpp/;
+  meta = with lib; {
+    homepage = "https://www.nongnu.org/pngpp/";
     description = "C++ wrapper for libpng library";
     license = licenses.bsd3;
     platforms = platforms.unix;

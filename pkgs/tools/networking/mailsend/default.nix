@@ -1,4 +1,4 @@
-{stdenv, fetchurl, openssl}:
+{lib, stdenv, fetchurl, openssl}:
 let
   s = # Generated upstream information
   rec {
@@ -22,13 +22,20 @@ stdenv.mkDerivation {
   configureFlags = [
     "--with-openssl=${openssl.dev}"
   ];
+
+  patches = [
+    (fetchurl {
+      url = "https://github.com/muquit/mailsend/commit/960df6d7a11eef90128dc2ae660866b27f0e4336.patch";
+      sha256 = "0vz373zcfl19inflybfjwshcq06rvhx0i5g0f4b021cxfhyb1sm0";
+    })
+  ];
   meta = {
     inherit (s) version;
-    description = ''CLI email sending tool'';
-    license = stdenv.lib.licenses.bsd3 ;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
-    homepage = https://github.com/muquit/mailsend;
+    description = "CLI email sending tool";
+    license = lib.licenses.bsd3 ;
+    maintainers = [lib.maintainers.raskin];
+    platforms = lib.platforms.linux;
+    homepage = "https://github.com/muquit/mailsend";
     downloadPage = "https://github.com/muquit/mailsend/releases";
   };
 }

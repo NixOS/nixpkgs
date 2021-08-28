@@ -1,11 +1,10 @@
-{ stdenv, fetchFromGitHub, pkgconfig, autoconf, automake, libtool
+{ lib, stdenv, fetchFromGitHub, pkg-config, autoconf, automake, libtool
 , fftw, fftwSinglePrec, alsaLib, libsndfile, libpulseaudio
 }:
 
 stdenv.mkDerivation rec {
   version = "0.24-1";
   pname = "minimodem";
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "kamalmostafa";
@@ -14,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "1b5xy36fjcp7vkp115dpx4mlmqg2fc7xvxdy648fb8im953bw7ql";
   };
 
-  nativeBuildInputs = [ pkgconfig autoconf automake libtool ];
+  nativeBuildInputs = [ pkg-config autoconf automake libtool ];
   buildInputs = [ fftw fftwSinglePrec alsaLib libsndfile libpulseaudio ];
 
   preConfigure = ''
@@ -33,10 +32,10 @@ stdenv.mkDerivation rec {
     standard FSK protocols such as Bell103, Bell202, RTTY, NOAA SAME, and
     Caller-ID.
     '';
-    homepage = http://www.whence.com/minimodem/;
-    license = stdenv.lib.licenses.gpl3Plus;
-    platforms = with stdenv.lib.platforms; linux;
-    maintainers = with stdenv.lib.maintainers; [ relrod ];
+    homepage = "http://www.whence.com/minimodem/";
+    license = lib.licenses.gpl3Plus;
+    platforms = with lib.platforms; linux;
+    maintainers = with lib.maintainers; [ relrod ];
   };
 }
 

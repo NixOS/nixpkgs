@@ -2,11 +2,11 @@
   mkDerivation, lib,
   extra-cmake-modules, kdoctools,
   gmp, kconfig, kconfigwidgets, kcrash, kguiaddons, ki18n, kinit,
-  knotifications, kxmlgui,
+  knotifications, kxmlgui, mpfr,
 }:
 
 mkDerivation {
-  name = "kcalc";
+  pname = "kcalc";
   meta = {
     license = with lib.licenses; [ gpl2 ];
     maintainers = [ lib.maintainers.fridh ];
@@ -14,6 +14,6 @@ mkDerivation {
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
     gmp kconfig kconfigwidgets kcrash kguiaddons ki18n kinit knotifications
-    kxmlgui
+    kxmlgui mpfr
   ];
 }

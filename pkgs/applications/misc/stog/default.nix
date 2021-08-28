@@ -1,9 +1,9 @@
-{ stdenv, fetchFromGitLab, ocaml, findlib, ocf, ptime,
+{ lib, stdenv, fetchFromGitLab, ocaml, findlib, ocf, ptime,
   uutf, uri, ppx_blob, xtmpl, ocaml_lwt, higlo, omd
 }:
 
 stdenv.mkDerivation rec {
-  name = "stog-${version}";
+  pname = "stog";
   version = "0.18.0";
   src = fetchFromGitLab {
     domain = "framagit.org";
@@ -18,11 +18,11 @@ stdenv.mkDerivation rec {
 
   createFindlibDestdir = true;
 
-  patches = [ ./install.patch ];
+  patches = [ ./install.patch ./uri.patch ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "XML documents and web site compiler";
-    homepage = https://www.good-eris.net/stog;
+    homepage = "https://www.good-eris.net/stog";
     license = licenses.lgpl3;
     platforms = ocaml.meta.platforms or [];
     maintainers = with maintainers; [ regnat ];

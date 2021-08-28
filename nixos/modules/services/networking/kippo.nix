@@ -11,43 +11,43 @@ with lib;
 let
   cfg = config.services.kippo;
 in
-rec {
+{
   options = {
     services.kippo = {
       enable = mkOption {
         default = false;
         type = types.bool;
-        description = ''Enable the kippo honeypot ssh server.'';
+        description = "Enable the kippo honeypot ssh server.";
       };
       port = mkOption {
         default = 2222;
         type = types.int;
-        description = ''TCP port number for kippo to bind to.'';
+        description = "TCP port number for kippo to bind to.";
       };
       hostname = mkOption {
         default = "nas3";
-        type = types.string;
-        description = ''Hostname for kippo to present to SSH login'';
+        type = types.str;
+        description = "Hostname for kippo to present to SSH login";
       };
       varPath = mkOption {
         default = "/var/lib/kippo";
-        type = types.string;
-        description = ''Path of read/write files needed for operation and configuration.'';
+        type = types.path;
+        description = "Path of read/write files needed for operation and configuration.";
       };
       logPath = mkOption {
         default = "/var/log/kippo";
-        type = types.string;
-        description = ''Path of log files needed for operation and configuration.'';
+        type = types.path;
+        description = "Path of log files needed for operation and configuration.";
       };
       pidPath = mkOption {
         default = "/run/kippo";
-        type = types.string;
-        description = ''Path of pid files needed for operation.'';
+        type = types.path;
+        description = "Path of pid files needed for operation.";
       };
       extraConfig = mkOption {
         default = "";
         type = types.lines;
-        description = ''Extra verbatim configuration added to the end of kippo.cfg.'';
+        description = "Extra verbatim configuration added to the end of kippo.cfg.";
       };
     };
 
@@ -73,12 +73,11 @@ rec {
         ${cfg.extraConfig}
     '';
 
-    users.users = singleton {
-      name = "kippo";
+    users.users.kippo = {
       description = "kippo web server privilege separation user";
       uid = 108; # why does config.ids.uids.kippo give an error?
     };
-    users.groups = singleton { name = "kippo";gid=108; };
+    users.groups.kippo.gid = 108;
 
     systemd.services.kippo = with pkgs; {
       description = "Kippo Web Server";
@@ -109,8 +108,8 @@ rec {
 
       serviceConfig.ExecStart = "${pkgs.kippo.twisted}/bin/twistd -y ${pkgs.kippo}/src/kippo.tac --syslog --rundir=${cfg.varPath}/ --pidfile=${cfg.pidPath}/kippo.pid --prefix=kippo -n";
       serviceConfig.PermissionsStartOnly = true;
-      serviceConfig.User = "kippo"; 
-      serviceConfig.Group = "kippo"; 
+      serviceConfig.User = "kippo";
+      serviceConfig.Group = "kippo";
     };
 };
 }

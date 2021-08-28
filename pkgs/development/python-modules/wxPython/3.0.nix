@@ -6,7 +6,7 @@
 , libX11
 , wxGTK
 , wxmac
-, pkgconfig
+, pkg-config
 , buildPythonPackage
 , pyopengl
 , isPy3k
@@ -21,7 +21,6 @@ assert wxGTK.unicode;
 buildPythonPackage rec {
   pname = "wxPython";
   version = "3.0.2.0";
-  name = pname + "-" + version;
 
   disabled = isPy3k || isPyPy;
   doCheck = false;
@@ -31,14 +30,32 @@ buildPythonPackage rec {
     sha256 = "0qfzx3sqx4mwxv99sfybhsij4b5pc03ricl73h4vhkzazgjjjhfm";
   };
 
+  dontUseSetuptoolsBuild = true;
+  dontUsePipInstall = true;
+
   hardeningDisable = [ "format" ];
 
-  nativeBuildInputs = [ pkgconfig ]
+  nativeBuildInputs = [ pkg-config ]
     ++ (lib.optionals (!stdenv.isDarwin) [ wxGTK libX11 ])
-    ++ (lib.optionals stdenv.isDarwin [ wxmac darwin.apple_sdk.frameworks.Cocoa ]);
+    ++ (lib.optionals stdenv.isDarwin [ wxmac ]);
 
   buildInputs = [ ]
     ++ (lib.optionals (!stdenv.isDarwin) [  (wxGTK.gtk) ])
+    ++ (lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+      ApplicationServices
+      AudioToolbox
+      CFNetwork
+      Carbon
+      Cocoa
+      CoreGraphics
+      CoreServices
+      CoreText
+      DiskArbitration
+      IOKit
+      ImageIO
+      OpenGL
+      Security
+    ]))
     ++ (lib.optional openglSupport pyopengl);
 
   preConfigure = ''

@@ -1,9 +1,9 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , aiger
 }:
 
-stdenv.mkDerivation rec {
-  name = "lingeling-${version}";
+stdenv.mkDerivation {
+  pname = "lingeling";
   # This is the version used in satcomp2018, which was
   # relicensed, and also known as version 'bcj'
   version = "pre1_03b4860d";
@@ -39,11 +39,11 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" "lib" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fast SAT solver";
-    homepage    = http://fmv.jku.at/lingeling/;
+    homepage    = "http://fmv.jku.at/lingeling/";
     license     = licenses.mit;
-    platforms   = platforms.linux;
+    platforms   = platforms.unix;
     maintainers = with maintainers; [ thoughtpolice ];
   };
 }

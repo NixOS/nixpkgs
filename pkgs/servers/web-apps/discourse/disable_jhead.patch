@@ -1,0 +1,12 @@
+diff --git a/lib/file_helper.rb b/lib/file_helper.rb
+index d87da5a85e..f5323292d7 100644
+--- a/lib/file_helper.rb
++++ b/lib/file_helper.rb
+@@ -127,6 +127,7 @@ class FileHelper
+         jpegrecompress: false,
+         # Skip looking for gifsicle, svgo binaries
+         gifsicle: false,
++        jhead: false,
+         svgo: false
+       )
+     end

@@ -1,17 +1,19 @@
-{ stdenv, fetchurl, ncurses }:
+{ lib, stdenv, fetchurl, ncurses, pkg-config }:
 
 stdenv.mkDerivation rec {
-  version = "6.4.2";
-  name = "multitail-${version}";
+  version = "6.5.0";
+  pname = "multitail";
 
   src = fetchurl {
-    url = "https://www.vanheusden.com/multitail/${name}.tgz";
-    sha256 = "1zd1r89xkxngl1pdrvsc877838nwkfqkbcgfqm3vglwalxc587dg";
+    url = "https://www.vanheusden.com/multitail/${pname}-${version}.tgz";
+    sha256 = "1vd9vdxyxsccl64ilx542ya5vlw2bpg6gnkq1x8cfqy6vxvmx7dj";
   };
+
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ ncurses ];
 
-  makeFlags = stdenv.lib.optionalString stdenv.isDarwin "-f makefile.macosx";
+  makeFlags = lib.optionals stdenv.isDarwin [ "-f" "makefile.macosx" ];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -19,10 +21,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://www.vanheusden.com/multitail/;
+    homepage = "http://www.vanheusden.com/multitail/";
     description = "tail on Steroids";
-    maintainers = with stdenv.lib.maintainers; [ matthiasbeyer ];
-    platforms = stdenv.lib.platforms.unix;
-    license = stdenv.lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ matthiasbeyer ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.gpl2Plus;
   };
 }

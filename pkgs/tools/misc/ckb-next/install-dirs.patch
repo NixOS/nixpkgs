@@ -1,32 +1,13 @@
 diff --git a/src/daemon/CMakeLists.txt b/src/daemon/CMakeLists.txt
-index 09056a7..1bb4595 100644
+index a04b80c..2969b3b 100644
 --- a/src/daemon/CMakeLists.txt
 +++ b/src/daemon/CMakeLists.txt
-@@ -456,7 +456,7 @@ endif ()
- if (LINUX)
-   install(
-     FILES "${CMAKE_SOURCE_DIR}/linux/udev/99-ckb-daemon.rules"
--    DESTINATION "/etc/udev/rules.d"
-+    DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/udev/rules.d"
-     PERMISSIONS
-     OWNER_READ OWNER_WRITE
-     GROUP_READ
-diff --git a/src/libs/ckb-next/CMakeLists.txt b/src/libs/ckb-next/CMakeLists.txt
-index ecc591c..35de563 100644
---- a/src/libs/ckb-next/CMakeLists.txt
-+++ b/src/libs/ckb-next/CMakeLists.txt
-@@ -75,12 +75,12 @@ if(NOT MACOS)
-         NAMESPACE
-           ${CMAKE_PROJECT_NAME}::
-         DESTINATION
--          "/usr/lib/cmake/${CMAKE_PROJECT_NAME}/${PROJECT_NAME}")
-+          "${CMAKE_INSTALL_PREFIX}/lib/cmake/${CMAKE_PROJECT_NAME}/${PROJECT_NAME}")
- 
+@@ -437,7 +437,7 @@ if ("${CKB_NEXT_INIT_SYSTEM}" STREQUAL "launchd")
+ elseif ("${CKB_NEXT_INIT_SYSTEM}" STREQUAL "systemd")
      install(
-         FILES
-           "cmake/${PROJECT_NAME}Config.cmake"
-           "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}/${PROJECT_NAME}ConfigVersion.cmake"
-         DESTINATION
--          "/usr/lib/cmake/${CMAKE_PROJECT_NAME}/${PROJECT_NAME}")
-+          "${CMAKE_INSTALL_PREFIX}/lib/cmake/${CMAKE_PROJECT_NAME}/${PROJECT_NAME}")
- endif()
+         FILES "${CMAKE_CURRENT_BINARY_DIR}/service/ckb-next-daemon.service"
+-        DESTINATION "${SYSTEMD_UNIT_INSTALL_DIR}"
++        DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/systemd/system"
+         PERMISSIONS
+         OWNER_READ OWNER_WRITE
+         GROUP_READ

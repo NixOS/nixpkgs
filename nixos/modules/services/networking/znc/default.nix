@@ -62,9 +62,9 @@ let
       concatStringsSep "\n" (toLines cfg.config);
 
   semanticTypes = with types; rec {
-    zncAtom = nullOr (either (either int bool) str);
+    zncAtom = nullOr (oneOf [ int bool str ]);
     zncAttr = attrsOf (nullOr zncConf);
-    zncAll = either (either zncAtom (listOf zncAtom)) zncAttr;
+    zncAll = oneOf [ zncAtom (listOf zncAtom) zncAttr ];
     zncConf = attrsOf (zncAll // {
       # Since this is a recursive type and the description by default contains
       # the description of its subtypes, infinite recursion would occur without
@@ -103,8 +103,8 @@ in
       };
 
       dataDir = mkOption {
-        default = "/var/lib/znc/";
-        example = "/home/john/.znc/";
+        default = "/var/lib/znc";
+        example = "/home/john/.znc";
         type = types.path;
         description = ''
           The state directory for ZNC. The config and the modules will be linked
@@ -239,7 +239,7 @@ in
     services.znc = {
       configFile = mkDefault (pkgs.writeText "znc-generated.conf" semanticString);
       config = {
-        Version = (builtins.parseDrvName pkgs.znc.name).version;
+        Version = lib.getVersion pkgs.znc;
         Listener.l.Port = mkDefault 5000;
         Listener.l.SSL = mkDefault true;
       };
@@ -258,6 +258,34 @@ in
         ExecStart = "${pkgs.znc}/bin/znc --foreground --datadir ${cfg.dataDir} ${escapeShellArgs cfg.extraFlags}";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         ExecStop = "${pkgs.coreutils}/bin/kill -INT $MAINPID";
+        # Hardening
+        CapabilityBoundingSet = [ "" ];
+        DevicePolicy = "closed";
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        NoNewPrivileges = true;
+        PrivateDevices = true;
+        PrivateTmp = true;
+        PrivateUsers = true;
+        ProcSubset = "pid";
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectProc = "invisible";
+        ProtectSystem = "strict";
+        ReadWritePaths = [ cfg.dataDir ];
+        RemoveIPC = true;
+        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        SystemCallArchitectures = "native";
+        SystemCallFilter = [ "@system-service" "~@privileged" "~@resources" ];
+        UMask = "0027";
       };
       preStart = ''
         mkdir -p ${cfg.dataDir}/configs
@@ -271,9 +299,8 @@ in
         # Ensure essential files exist.
         if [[ ! -f ${cfg.dataDir}/configs/znc.conf ]]; then
             echo "No znc.conf file found in ${cfg.dataDir}. Creating one now."
-            cp --no-clobber ${cfg.configFile} ${cfg.dataDir}/configs/znc.conf
+            cp --no-preserve=ownership --no-clobber ${cfg.configFile} ${cfg.dataDir}/configs/znc.conf
             chmod u+rw ${cfg.dataDir}/configs/znc.conf
-            chown ${cfg.user} ${cfg.dataDir}/configs/znc.conf
         fi
 
         if [[ ! -f ${cfg.dataDir}/znc.pem ]]; then
@@ -287,20 +314,22 @@ in
       '';
     };
 
-    users.users = optional (cfg.user == defaultUser)
-      { name = defaultUser;
-        description = "ZNC server daemon owner";
-        group = defaultUser;
-        uid = config.ids.uids.znc;
-        home = cfg.dataDir;
-        createHome = true;
+    users.users = optionalAttrs (cfg.user == defaultUser) {
+      ${defaultUser} =
+        { description = "ZNC server daemon owner";
+          group = defaultUser;
+          uid = config.ids.uids.znc;
+          home = cfg.dataDir;
+          createHome = true;
+        };
       };
 
-    users.groups = optional (cfg.user == defaultUser)
-      { name = defaultUser;
-        gid = config.ids.gids.znc;
-        members = [ defaultUser ];
-      };
+    users.groups = optionalAttrs (cfg.user == defaultUser) {
+      ${defaultUser} =
+        { gid = config.ids.gids.znc;
+          members = [ defaultUser ];
+        };
+    };
 
   };
 }

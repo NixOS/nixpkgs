@@ -1,8 +1,12 @@
-{ stdenv
+{ lib
 , fetchurl
-, python27Packages
-, gnome3
+, nix-update-script
+, python3Packages
+, gdk-pixbuf
+, glib
+, gnome
 , gobject-introspection
+, gtk3
 , wrapGAppsHook
 , webkitgtk
 , libnotify
@@ -10,61 +14,65 @@
 , libappindicator
 , intltool
 , wmctrl
-, hicolor-icon-theme
-, xvfb_run
+, xvfb-run
+, librsvg
 }:
 
-python27Packages.buildPythonApplication rec  {
+python3Packages.buildPythonApplication rec {
   pname = "ulauncher";
-  version = "4.4.0.r1";
+  version = "5.9.0";
 
-  # Python 3 support is currently in development
-  # on the dev branch and 5.x.x releases
-  disabled = ! python27Packages.isPy27;
+  disabled = python3Packages.isPy27;
 
   src = fetchurl {
     url = "https://github.com/Ulauncher/Ulauncher/releases/download/${version}/ulauncher_${version}.tar.gz";
-    sha256 = "12v7qpjhf0842ivsfflsl2zlvhiaw25f9ffv7vhnkvrhrmksim9f";
+    sha256 = "sha256-jRCrkJcjUHDd3wF+Hkxg0QaW7YgIh7zM/KZ4TAH84/U=";
   };
 
-  nativeBuildInputs = with python27Packages;  [
+  nativeBuildInputs = with python3Packages; [
     distutils_extra
     intltool
     wrapGAppsHook
   ];
 
   buildInputs = [
-    gnome3.adwaita-icon-theme
+    gdk-pixbuf
+    glib
+    gnome.adwaita-icon-theme
     gobject-introspection
-    hicolor-icon-theme
+    gtk3
     keybinder3
     libappindicator
     libnotify
+    librsvg
     webkitgtk
     wmctrl
   ];
 
-  propagatedBuildInputs = with python27Packages; [
+  propagatedBuildInputs = with python3Packages; [
+    mock
+    mypy
+    mypy-extensions
     dbus-python
-    notify
     pygobject3
     pyinotify
-    pysqlite
     python-Levenshtein
     pyxdg
+    requests
     websocket_client
   ];
 
-  checkInputs = with python27Packages; [
+  checkInputs = with python3Packages; [
     mock
-    pytest_3
+    pytest
     pytest-mock
-    pytestpep8
-    xvfb_run
+    xvfb-run
   ];
 
   patches = [
     ./fix-path.patch
+    ./0001-Adjust-get_data_path-for-NixOS.patch
+    ./fix-extensions.patch
   ];
 
   postPatch = ''
@@ -75,7 +83,7 @@ python27Packages.buildPythonApplication rec  {
   doCheck = false;
 
   preCheck = ''
-    export PYTHONPATH=$PYTHONPATH:$out/${python27Packages.python.sitePackages}
+    export PYTHONPATH=$PYTHONPATH:$out/${python3Packages.python.sitePackages}
   '';
 
   # Simple translation of
@@ -86,20 +94,27 @@ python27Packages.buildPythonApplication rec  {
     # skip tests in invocation that handle paths that
     # aren't nix friendly (i think)
     xvfb-run -s '-screen 0 1024x768x16' \
-      pytest -k 'not TestPath and not test_handle_key_press_event' --pep8 tests
+      pytest -k 'not TestPath and not test_handle_key_press_event' tests
 
     runHook postCheck
   '';
 
   preFixup = ''
-    gappsWrapperArgs+=(--prefix PATH : "${stdenv.lib.makeBinPath [ wmctrl ]}")
+    gappsWrapperArgs+=(--prefix PATH : "${lib.makeBinPath [ wmctrl ]}")
   '';
 
-  meta = with stdenv.lib; {
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = pname;
+    };
+  };
+
+
+  meta = with lib; {
     description = "A fast application launcher for Linux, written in Python, using GTK";
-    homepage = https://ulauncher.io/;
+    homepage = "https://ulauncher.io/";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ aaronjanse worldofpeace ];
+    maintainers = with maintainers; [ aaronjanse ];
   };
 }

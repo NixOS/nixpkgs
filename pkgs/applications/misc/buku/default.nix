@@ -1,14 +1,14 @@
-{ stdenv, python3, fetchFromGitHub }:
+{ lib, python3, fetchFromGitHub }:
 
 with python3.pkgs; buildPythonApplication rec {
-  version = "4.2.2";
+  version = "4.5";
   pname = "buku";
 
   src = fetchFromGitHub {
     owner = "jarun";
     repo = "buku";
     rev = "v${version}";
-    sha256 = "1wy5i1av1s98yr56ybiq66kv0vg48zci3fp91zfgj04nh2966w1w";
+    sha256 = "1lcq5fk8d5j2kfhn9m5l2hk46v7nj4vfa22m1psz35c9zpw4px8q";
   };
 
   checkInputs = [
@@ -18,7 +18,7 @@ with python3.pkgs; buildPythonApplication rec {
     pylint
     flake8
     pyyaml
-    mypy_extensions
+    mypy-extensions
   ];
 
   propagatedBuildInputs = [
@@ -27,15 +27,18 @@ with python3.pkgs; buildPythonApplication rec {
     requests
     urllib3
     flask
+    flask-admin
     flask-api
     flask-bootstrap
     flask-paginate
+    flask-reverse-proxy-fix
     flask_wtf
     arrow
     werkzeug
     click
     html5lib
     vcrpy
+    toml
   ];
 
   postPatch = ''
@@ -54,6 +57,8 @@ with python3.pkgs; buildPythonApplication rec {
       --replace "@pytest.mark.slowtest" "@unittest.skip('skipping')" \
       --replace "self.assertEqual(shorturl, 'http://tny.im/yt')" "" \
       --replace "self.assertEqual(url, 'https://www.google.com')" ""
+    substituteInPlace setup.py \
+      --replace mypy-extensions==0.4.1 mypy-extensions>=0.4.1
   '';
 
   postInstall = ''
@@ -65,11 +70,11 @@ with python3.pkgs; buildPythonApplication rec {
     cp auto-completion/fish/* $out/share/fish/vendor_completions.d
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Private cmdline bookmark manager";
-    homepage = https://github.com/jarun/Buku;
+    homepage = "https://github.com/jarun/Buku";
     license = licenses.gpl3;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ matthiasbeyer infinisil ];
   };
 }

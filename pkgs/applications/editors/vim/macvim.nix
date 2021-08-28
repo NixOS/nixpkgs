@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, runCommand, ncurses, gettext
-, pkgconfig, cscope, ruby, tcl, perl, luajit
+{ lib, stdenv, fetchFromGitHub, runCommand, ncurses, gettext
+, pkg-config, cscope, ruby, tcl, perl, luajit
 , darwin
 
 , usePython27 ? false
@@ -24,33 +24,26 @@ let
   '';
 in
 
-stdenv.mkDerivation rec {
-  name = "macvim-${version}";
+stdenv.mkDerivation {
+  pname = "macvim";
 
-  version = "8.1.1517";
+  version = "8.2.1719";
 
   src = fetchFromGitHub {
     owner = "macvim-dev";
     repo = "macvim";
-    rev = "snapshot-156";
-    sha256 = "17plmqcn49gqwr1km77mkxflrg0f4sn06r3n0fbxa8zcz9zmb1q2";
+    rev = "snapshot-166";
+    sha256 = "1p51q59l1dl5lnf1ms960lm8zfg39p8xq0pdjw6wdyypjj3r8v3v";
   };
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ pkgconfig buildSymlinks ];
+  nativeBuildInputs = [ pkg-config buildSymlinks ];
   buildInputs = [
     gettext ncurses cscope luajit ruby tcl perl python.pkg
   ];
 
-  patches = [ ./macvim.patch ./macvim-sparkle.patch ];
-
-  # The sparkle patch modified the nibs, so we have to recompile them
-  postPatch = ''
-    for nib in MainMenu Preferences; do
-      /usr/bin/ibtool --compile src/MacVim/English.lproj/$nib.nib/keyedobjects.nib src/MacVim/English.lproj/$nib.nib
-    done
-  '';
+  patches = [ ./macvim.patch ];
 
   configureFlags = [
       "--enable-cscope"
@@ -72,23 +65,28 @@ stdenv.mkDerivation rec {
       "--with-tclsh=${tcl}/bin/tclsh"
       "--with-tlib=ncurses"
       "--with-compiledby=Nix"
+      "--disable-sparkle"
   ];
 
-  makeFlags = ''PREFIX=$(out) CPPFLAGS="-Wno-error"'';
+  # Remove references to Sparkle.framework from the project.
+  # It's unused (we disabled it with --disable-sparkle) and this avoids
+  # copying the unnecessary several-megabyte framework into the result.
+  postPatch = ''
+    echo "Patching file src/MacVim/MacVim.xcodeproj/project.pbxproj"
+    sed -e '/Sparkle\.framework/d' -i src/MacVim/MacVim.xcodeproj/project.pbxproj
+  '';
 
   # This is unfortunate, but we need to use the same compiler as Xcode,
   # but Xcode doesn't provide a way to configure the compiler.
-  #
-  # If you're willing to modify the system files, you can do this:
-  #   http://hamelot.co.uk/programming/add-gcc-compiler-to-xcode-6/
-  #
-  # But we don't have that option.
   preConfigure = ''
     CC=/usr/bin/clang
 
     DEV_DIR=$(/usr/bin/xcode-select -print-path)/Platforms/MacOSX.platform/Developer
     configureFlagsArray+=(
-      "--with-developer-dir=$DEV_DIR"
+      --with-developer-dir="$DEV_DIR"
+      LDFLAGS="-L${ncurses}/lib"
+      CPPFLAGS="-isystem ${ncurses.dev}/include"
+      CFLAGS="-Wno-error=implicit-function-declaration"
     )
   ''
   # For some reason having LD defined causes PSMTabBarControl to fail at link-time as it
@@ -96,10 +94,49 @@ stdenv.mkDerivation rec {
   + ''
     unset LD
   ''
+  # When building with nix-daemon, we need to pass -derivedDataPath or else it tries to use
+  # a folder rooted in /var/empty and fails. Unfortunately we can't just pass -derivedDataPath
+  # by itself as this flag requires the use of -scheme or -xctestrun (not sure why), but MacVim
+  # by default just runs `xcodebuild -project src/MacVim/MacVim.xcodeproj`, relying on the default
+  # behavior to build the first target in the project. Experimentally, there seems to be a scheme
+  # called MacVim, so we'll explicitly select that. We also need to specify the configuration too
+  # as the scheme seems to have the wrong default.
+  + ''
+    configureFlagsArray+=(
+      XCODEFLAGS="-scheme MacVim -derivedDataPath $NIX_BUILD_TOP/derivedData"
+      --with-xcodecfg="Release"
+    )
+  ''
   ;
 
+  # Because we're building with system clang, this means we're building against Xcode's SDK and
+  # linking against system libraries. The configure script is picking up Nix Libsystem (via ruby)
+  # so we need to patch that out or we'll get linker issues. The MacVim binary built by Xcode links
+  # against the system anyway so it doesn't really matter that the Vim binary will too. If we
+  # decide that matters, we can always patch it back to the Nix libsystem post-build.
+  # It also picks up libiconv, libunwind, and objc4 from Nix. These seem relatively harmless but
+  # let's strip them out too.
+  #
+  # Note: If we do add a post-build install_name_tool patch, we need to add the
+  # "LDFLAGS=-headerpad_max_install_names" flag to configureFlags and either patch it into the
+  # Xcode project or pass it as a flag to xcodebuild as well.
   postConfigure = ''
-    substituteInPlace src/auto/config.mk --replace "PERL_CFLAGS	=" "PERL_CFLAGS	= -I${darwin.libutil}/include"
+    substituteInPlace src/auto/config.mk \
+      --replace "PERL_CFLAGS	=" "PERL_CFLAGS	= -I${darwin.libutil}/include" \
+      --replace " -L${stdenv.cc.libc}/lib" "" \
+      --replace " -L${darwin.libobjc}/lib" "" \
+      --replace " -L${darwin.libunwind}/lib" "" \
+      --replace " -L${darwin.libiconv}/lib" ""
+
+    # All the libraries we stripped have -osx- in their name as of this time.
+    # Assert now that this pattern no longer appears in config.mk.
+    ( # scope variable
+      while IFS="" read -r line; do
+        if [[ "$line" == LDFLAGS*-osx-* ]]; then
+          echo "WARNING: src/auto/config.mk contains reference to Nix osx library" >&2
+        fi
+      done <src/auto/config.mk
+    )
 
     substituteInPlace src/MacVim/vimrc --subst-var-by CSCOPE ${cscope}/bin/cscope
   '';
@@ -129,11 +166,21 @@ stdenv.mkDerivation rec {
     find $out/share/man \( -name eVim.1 -or -name xxd.1 \) -delete
   '';
 
-  meta = with stdenv.lib; {
+  # We rely on the user's Xcode install to build. It may be located in an arbitrary place, and
+  # it's not clear what system-level components it may require, so for now we'll just allow full
+  # filesystem access. This way the package still can't access the network.
+  sandboxProfile = ''
+    (allow file-read* file-write* process-exec mach-lookup)
+    ; block homebrew dependencies
+    (deny file-read* file-write* process-exec mach-lookup (subpath "/usr/local") (with no-log))
+  '';
+
+  meta = with lib; {
     description = "Vim - the text editor - for macOS";
-    homepage    = https://github.com/macvim-dev/macvim;
+    homepage    = "https://github.com/macvim-dev/macvim";
     license = licenses.vim;
     maintainers = with maintainers; [ cstrahan lilyball ];
     platforms   = platforms.darwin;
+    hydraPlatforms = []; # hydra can't build this as long as we rely on Xcode and sandboxProfile
   };
 }

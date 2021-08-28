@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, qrencode, qt4, libdmtx }:
+{ lib, stdenv, fetchurl, cmake, qrencode, qt4, libdmtx }:
 
 let v = "1.0"; in
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Qt4 library for QR-codes";
-    license = stdenv.lib.licenses.mit;
+    license = lib.licenses.mit;
     inherit (qt4.meta) platforms;
   };
 }

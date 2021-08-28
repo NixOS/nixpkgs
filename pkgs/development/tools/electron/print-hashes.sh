@@ -17,13 +17,23 @@ SYSTEMS=(
     [armv7l-linux]=linux-armv7l
     [aarch64-linux]=linux-arm64
     [x86_64-darwin]=darwin-x64
+    [aarch64-darwin]=darwin-arm64
 )
 
+hashfile="$(nix-prefetch-url --print-path "https://github.com/electron/electron/releases/download/v${VERSION}/SHASUMS256.txt" 2>/dev/null | tail -n1)"
+headers="$(nix-prefetch-url "https://atom.io/download/electron/v${VERSION}/node-v${VERSION}-headers.tar.gz")"
+
+# Entry similar to the following goes in default.nix:
+
+echo "  electron_${VERSION%%.*} = mkElectron \"${VERSION}\" {"
+
 for S in "${!SYSTEMS[@]}"; do
-  HASHES["$S"]=$(nix-prefetch-url "https://github.com/electron/electron/releases/download/v${VERSION}/electron-v${VERSION}-${SYSTEMS[$S]}.zip")
+  hash="$(grep " *electron-v${VERSION}-${SYSTEMS[$S]}.zip$" "$hashfile"|cut -f1 -d' ' || :)"
+  if [[ -n $hash ]]; then
+    echo "    $S = \"$hash\";"
+  fi
 done
 
-for S in "${!HASHES[@]}"; do
-    echo "$S"
-    echo "sha256 = \"${HASHES[$S]}\";"
-done
+echo "    headers = \"$headers\";"
+
+echo "  };"

@@ -1,23 +1,35 @@
-{ stdenv, fetchurl, gnome3 }:
+{ lib, stdenv
+, fetchurl
+, gnome
+, meson
+, python3
+, ninja
+}:
 
 stdenv.mkDerivation rec {
   pname = "mm-common";
-  version = "0.9.12";
+  version = "1.0.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "02vwgv404b56wxy0gnm9xq9fvzgn9dhfqcy2hhl78ljv3v7drzyf";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "07b4s5ckcz9q5gwx8vchim19mhfgl8wysqwi30pndks3m4zrzad2";
   };
 
+  nativeBuildInputs = [
+    meson
+    python3
+    ninja
+  ];
+
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "none";
     };
   };
 
-  meta = with stdenv.lib; {
-    description = "Common build files of GLib/GTK+ C++ bindings";
+  meta = with lib; {
+    description = "Common build files of GLib/GTK C++ bindings";
     longDescription = ''
       The mm-common module provides the build infrastructure and utilities
       shared among the GNOME C++ binding libraries. It is only a required
@@ -25,9 +37,9 @@ stdenv.mkDerivation rec {
       control repository. An installation of mm-common is not required for
       building tarball releases, unless configured to use maintainer-mode.
     '';
-    homepage = https://www.gtkmm.org;
+    homepage = "https://www.gtkmm.org";
     license = licenses.gpl2Plus;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
 }

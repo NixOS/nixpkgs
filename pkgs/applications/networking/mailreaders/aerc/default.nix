@@ -1,28 +1,38 @@
-{ stdenv, buildGoModule, fetchurl
-, go, scdoc
-, python3, perl, w3m, dante
+{ lib, buildGoModule, fetchFromSourcehut
+, ncurses, notmuch, scdoc
+, python3, w3m, dante
 }:
 
 buildGoModule rec {
   pname = "aerc";
-  version = "0.1.1";
+  version = "0.5.2";
 
-  src = fetchurl {
-    url = "https://git.sr.ht/~sircmpwn/aerc/archive/${version}.tar.gz";
-    sha256 = "0rpwjjnaq8mj619ajzyl3kad7sysbz87qz2ds0jyy7kvyzv6r7zb";
+  src = fetchFromSourcehut {
+    owner = "~sircmpwn";
+    repo = pname;
+    rev = version;
+    sha256 = "1ja639qry8h2d6y7qshf62ypkzs2rzady59p81scqh8nx0g9bils";
   };
 
+  runVend = true;
+  vendorSha256 = "9PXdUH0gu8PGaKlRJCUF15W1/LxA+sv3Pwl2UnjYxWY=";
+
+  doCheck = false;
+
   nativeBuildInputs = [
-    go
     scdoc
     python3.pkgs.wrapPython
+  ];
+
+  patches = [
+    ./runtime-sharedir.patch
   ];
 
   pythonPath = [
     python3.pkgs.colorama
   ];
 
-  buildInputs = [ python3 perl ];
+  buildInputs = [ python3 notmuch ];
 
   buildPhase = "
     runHook preBuild
@@ -32,22 +42,21 @@ buildGoModule rec {
 
   installPhase = ''
     runHook preInstall
-    make PREFIX=$out install
+    make PREFIX=$out GOFLAGS="$GOFLAGS -tags=notmuch" install
     wrapPythonProgramsIn $out/share/aerc/filters "$out $pythonPath"
     runHook postInstall
   '';
 
   postFixup = ''
-    wrapProgram $out/bin/aerc --prefix PATH ":" "$out/share/aerc/filters"
+    wrapProgram $out/bin/aerc --prefix PATH ":" \
+      "$out/share/aerc/filters:${lib.makeBinPath [ ncurses ]}"
     wrapProgram $out/share/aerc/filters/html --prefix PATH ":" \
-      ${stdenv.lib.makeBinPath [ w3m dante ]}
+      ${lib.makeBinPath [ w3m dante ]}
   '';
 
-  modSha256 = "0p8lp6xwg6jacrnxzw3q73mqxy9wzj5vs0k1saa48ardqd2f7b00";
-
-  meta = with stdenv.lib; {
-    description = "aerc is an email client for your terminal";
-    homepage = https://aerc-mail.org/;
+  meta = with lib; {
+    description = "An email client for your terminal";
+    homepage = "https://aerc-mail.org/";
     maintainers = with maintainers; [ tadeokondrak ];
     license = licenses.mit;
     platforms = platforms.unix;

@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, libpng, netpbm }:
+{ lib, stdenv, fetchurl, libpng, netpbm }:
 
 stdenv.mkDerivation rec {
-  name = "sng-${version}";
+  pname = "sng";
   version = "1.1.0";
 
   src = fetchurl {
@@ -12,12 +12,12 @@ stdenv.mkDerivation rec {
   buildInputs = [ libpng ];
 
   configureFlags = [
-    "--with-rgbtxt=${netpbm}/share/netpbm/misc/rgb.txt"
+    "--with-rgbtxt=${netpbm.out}/share/netpbm/misc/rgb.txt"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Minilanguage designed to represent the entire contents of a PNG file in an editable form";
-    homepage = http://sng.sourceforge.net/;
+    homepage = "http://sng.sourceforge.net/";
     license = licenses.zlib;
     maintainers = [ maintainers.dezgeg ];
     platforms = platforms.unix;

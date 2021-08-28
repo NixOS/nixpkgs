@@ -1,21 +1,22 @@
-{ stdenv, fetchFromGitHub, makeWrapper, clang, haskellPackages }:
+{ lib, fetchFromGitHub, makeWrapper, clang, haskellPackages }:
 
 haskellPackages.mkDerivation rec {
 
   pname = "carp";
-  version = "unstable-2018-09-15";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "carp-lang";
     repo = "Carp";
-    rev = "cf9286c35cab1c170aa819f7b30b5871b9e812e6";
-    sha256 = "1k6kdxbbaclhi40b9p3fgbkc1x6pc4v0029xjm6gny6pcdci2cli";
+    rev = "v${version}";
+    sha256 = "sha256-nTSMY8bq0b/JvE/XQGDC4St2sqdni12E5WQU5FXnuCg=";
   };
 
-  buildDepends = [ makeWrapper ];
+  buildTools = [ makeWrapper ];
 
   executableHaskellDepends = with haskellPackages; [
-    HUnit blaze-markup blaze-html split cmdargs
+    HUnit blaze-markup blaze-html split ansi-terminal cmark
+    edit-distance hashable open-browser optparse-applicative
   ];
 
   isExecutable = true;
@@ -37,11 +38,11 @@ haskellPackages.mkDerivation rec {
   '';
 
   description = "A statically typed lisp, without a GC, for real-time applications";
-  homepage    = https://github.com/carp-lang/Carp;
-  license     = stdenv.lib.licenses.asl20;
-  maintainers = with stdenv.lib.maintainers; [ jluttine ];
+  homepage    = "https://github.com/carp-lang/Carp";
+  license     = lib.licenses.asl20;
+  maintainers = with lib.maintainers; [ jluttine ];
 
   # Windows not (yet) supported.
-  platforms   = with stdenv.lib.platforms; unix ++ darwin;
+  platforms   = with lib.platforms; unix ++ darwin;
 
 }

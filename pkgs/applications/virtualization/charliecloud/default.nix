@@ -1,22 +1,32 @@
-{ stdenv, fetchFromGitHub, python }:
+{ lib, stdenv, fetchFromGitHub, python3, docker, autoreconfHook, coreutils, makeWrapper, gnused, gnutar, gzip, findutils, sudo, nixosTests }:
 
 stdenv.mkDerivation rec {
 
-  version = "0.9.8";
+  version = "0.23";
   pname = "charliecloud";
 
   src = fetchFromGitHub {
     owner = "hpc";
     repo = "charliecloud";
     rev = "v${version}";
-    sha256 = "1w1wy4sj9zqfysrpf04shhppcf5ap4rp7i3ja81sv2fm27k4m9nl";
+    sha256 = "sha256-JQNidKqJROFVm+O1exTDon1fwU91zONqgKJIpe9gspY=";
   };
 
-  buildInputs = [ python ];
+  nativeBuildInputs = [ autoreconfHook makeWrapper ];
+  buildInputs = [
+    docker
+    (python3.withPackages (ps: [ ps.lark-parser ps.requests ]))
+  ];
+
+  configureFlags = let
+    pythonEnv = python3.withPackages (ps: [ ps.lark-parser ps.requests ]);
+  in [
+    "--with-python=${pythonEnv}/bin/python3"
+  ];
 
   preConfigure = ''
-    substituteInPlace Makefile --replace '/bin/bash' '${stdenv.shell}'
     patchShebangs test/
+    substituteInPlace configure.ac --replace "/usr/bin/env" "${coreutils}/bin/env"
   '';
 
   makeFlags = [
@@ -24,11 +34,15 @@ stdenv.mkDerivation rec {
     "LIBEXEC_DIR=lib/charliecloud"
   ];
 
+  # Charliecloud calls some external system tools.
+  # Here we wrap those deps so they are resolved inside nixpkgs.
   postInstall = ''
-    mkdir -p $out/share/charliecloud
-    mv $out/lib/charliecloud/examples $out/share/charliecloud
-    mv $out/lib/charliecloud/test $out/share/charliecloud
+    for file in $out/bin/* ; do \
+      wrapProgram $file --prefix PATH : ${lib.makeBinPath [ coreutils docker gnused gnutar gzip findutils sudo ]}
+    done
   '';
+
+  passthru.tests.charliecloud = nixosTests.charliecloud;
 
   meta = {
     description = "User-defined software stacks (UDSS) for high-performance computing (HPC) centers";
@@ -39,10 +53,10 @@ stdenv.mkDerivation rec {
       while maintaining access to the performance and functionality already
       on offer.
     '';
-    homepage = https://hpc.github.io/charliecloud;
-    license = stdenv.lib.licenses.asl20;
-    maintainers = [ stdenv.lib.maintainers.bzizou ];
-    platforms = stdenv.lib.platforms.linux;
+    homepage = "https://hpc.github.io/charliecloud";
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.bzizou ];
+    platforms = lib.platforms.linux;
   };
 
 }

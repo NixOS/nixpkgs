@@ -1,21 +1,22 @@
-{ stdenv, buildEnv, fetchzip, mono }:
+{ lib, stdenv, buildEnv, fetchzip, mono }:
 
 let
-  version = "0.10.1";
+  version = "0.12.0";
   drv = stdenv.mkDerivation {
-    name = "keeagent-${version}";
+    pname = "keeagent";
+    inherit version;
 
     src = fetchzip {
-      url = "https://lechnology.com/wp-content/uploads/2018/04/KeeAgent_v0.10.1.zip";
-      sha256 = "0j7az6l9wcr8z66mfplkxwydd4bgz2p2vd69xncf0nxlfb0lshh7";
+      url = "https://lechnology.com/wp-content/uploads/2020/05/KeeAgent_v0.12.0.zip";
+      sha256 = "0fcfbj3yikiv3dmp69236h9r3c416amdq849kn131w1129gb68xd";
       stripRoot = false;
     };
 
     meta = {
       description = "KeePass plugin to allow other programs to access SSH keys stored in a KeePass database for authentication";
       homepage    = "http://lechnology.com/software/keeagent";
-      platforms   = with stdenv.lib.platforms; linux;
-      license     = stdenv.lib.licenses.gpl2;
+      platforms   = with lib.platforms; linux;
+      license     = lib.licenses.gpl2;
       maintainers = [ ];
     };
 

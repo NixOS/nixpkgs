@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python2Packages }:
+{ lib, fetchFromGitHub, python2Packages }:
 
 python2Packages.buildPythonApplication rec {
   program = "grin";
@@ -16,9 +16,9 @@ python2Packages.buildPythonApplication rec {
   buildInputs = with python2Packages; [ nose ];
 
   meta = {
-    homepage = https://github.com/rkern/grin;
+    homepage = "https://github.com/rkern/grin";
     description = "A grep program configured the way I like it";
-    platforms = stdenv.lib.platforms.all;
-    maintainers = [ stdenv.lib.maintainers.sjagoe ];
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.sjagoe ];
   };
 }

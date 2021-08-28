@@ -1,120 +1,143 @@
-{ buildPythonPackage
+{ lib
+, stdenv
+, buildPythonPackage
 , fetchPypi
 , python
-, stdenv
-, pytest
-, glibcLocales
+, isPy38
+, beautifulsoup4
+, bottleneck
 , cython
 , dateutil
-, scipy
-, moto
-, numexpr
-, pytz
-, xlrd
-, bottleneck
-, sqlalchemy
-, lxml
 , html5lib
-, beautifulsoup4
-, hypothesis
+, jinja2
+, lxml
+, numexpr
 , openpyxl
+, pytz
+, scipy
+, sqlalchemy
 , tables
+, xlrd
 , xlwt
+# Test inputs
+, glibcLocales
+, hypothesis
+, pytestCheckHook
+, pytest-xdist
+, pytest-asyncio
+, XlsxWriter
+# Darwin inputs
 , runtimeShell
-, libcxx ? null
+, libcxx
 }:
 
-let
-  inherit (stdenv.lib) optional optionals optionalString;
-  inherit (stdenv) isDarwin;
-
-in buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "pandas";
-  version = "0.24.2";
+  version = "1.2.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "18imlm8xbhcbwy4wa957a1fkamrcb0z988z006jpfda3ki09z4ag";
+    sha256 = "078b4nncn6778ymmqn80j2q6n7fcs4d6bbaraar5nypgbaw10vyz";
   };
 
-  checkInputs = [ pytest glibcLocales moto hypothesis ];
-
   nativeBuildInputs = [ cython ];
-  buildInputs = optional isDarwin libcxx;
+
+  buildInputs = lib.optional stdenv.isDarwin libcxx;
+
   propagatedBuildInputs = [
-    dateutil
-    scipy
-    numexpr
-    pytz
-    xlrd
-    bottleneck
-    sqlalchemy
-    lxml
-    html5lib
     beautifulsoup4
+    bottleneck
+    dateutil
+    html5lib
+    numexpr
+    lxml
     openpyxl
+    pytz
+    scipy
+    sqlalchemy
     tables
+    xlrd
     xlwt
   ];
 
+  checkInputs = [
+    glibcLocales
+    hypothesis
+    jinja2
+    pytest-asyncio
+    pytest-xdist
+    pytestCheckHook
+    XlsxWriter
+  ];
+
+  # Doesn't work with -Werror,-Wunused-command-line-argument
+  # https://github.com/NixOS/nixpkgs/issues/39687
+  hardeningDisable = lib.optional stdenv.cc.isClang "strictoverflow";
+
   # For OSX, we need to add a dependency on libcxx, which provides
   # `complex.h` and other libraries that pandas depends on to build.
-  postPatch = optionalString isDarwin ''
-    cpp_sdk="${libcxx}/include/c++/v1";
+  postPatch = lib.optionalString stdenv.isDarwin ''
+    cpp_sdk="${lib.getDev libcxx}/include/c++/v1";
     echo "Adding $cpp_sdk to the setup.py common_include variable"
     substituteInPlace setup.py \
       --replace "['pandas/src/klib', 'pandas/src']" \
                 "['pandas/src/klib', 'pandas/src', '$cpp_sdk']"
   '';
 
+  doCheck = !stdenv.isAarch64; # upstream doesn't test this architecture
 
-  disabledTests = stdenv.lib.concatMapStringsSep " and " (s: "not " + s) ([
-    # since dateutil 0.6.0 the following fails: test_fallback_plural, test_ambiguous_flags, test_ambiguous_compat
-    # was supposed to be solved by https://github.com/dateutil/dateutil/issues/321, but is not the case
-    "test_fallback_plural"
-    "test_ambiguous_flags"
-    "test_ambiguous_compat"
+  pytestFlagsArray = [
+    "--skip-slow"
+    "--skip-network"
+    "--numprocesses" "0"
+  ];
+
+  disabledTests = [
     # Locale-related
     "test_names"
     "test_dt_accessor_datetime_name_accessors"
     "test_datetime_name_accessors"
-    # Can't import from test folder
-    "test_oo_optimizable"
     # Disable IO related tests because IO data is no longer distributed
     "io"
-    # KeyError Timestamp
-    "test_to_excel"
-  ] ++ optionals isDarwin [
+    # Tries to import from pandas.tests post install
+    "util_in_top_level"
+    # Tries to import compiled C extension locally
+    "test_missing_required_dependency"
+    # AssertionError with 1.2.3
+    "test_from_coo"
+  ] ++ lib.optionals stdenv.isDarwin [
     "test_locale"
     "test_clipboard"
-  ]);
+  ];
 
-  doCheck = !stdenv.isAarch64; # upstream doesn't test this architecture
-
-  checkPhase = ''
-    runHook preCheck
+  # Tests have relative paths, and need to reference compiled C extensions
+  # so change directory where `import .test` is able to be resolved
+  preCheck = ''
+    cd $out/${python.sitePackages}/pandas
+    export LC_ALL="en_US.UTF-8"
+    PYTHONPATH=$out/${python.sitePackages}:$PYTHONPATH
   ''
   # TODO: Get locale and clipboard support working on darwin.
   #       Until then we disable the tests.
-  + optionalString isDarwin ''
+  + lib.optionalString stdenv.isDarwin ''
     # Fake the impure dependencies pbpaste and pbcopy
     echo "#!${runtimeShell}" > pbcopy
     echo "#!${runtimeShell}" > pbpaste
     chmod a+x pbcopy pbpaste
     export PATH=$(pwd):$PATH
-  '' + ''
-    LC_ALL="en_US.UTF-8" py.test $out/${python.sitePackages}/pandas --skip-slow --skip-network -k "$disabledTests"
-    runHook postCheck
   '';
 
-  meta = {
+  pythonImportsCheck = [ "pandas" ];
+
+  meta = with lib; {
     # https://github.com/pandas-dev/pandas/issues/14866
     # pandas devs are no longer testing i686 so safer to assume it's broken
     broken = stdenv.isi686;
-    homepage = http://pandas.pydata.org/;
+    homepage = "https://pandas.pydata.org/";
+    changelog = "https://pandas.pydata.org/docs/whatsnew/index.html";
     description = "Python Data Analysis Library";
-    license = stdenv.lib.licenses.bsd3;
-    maintainers = with stdenv.lib.maintainers; [ raskin fridh knedlsepp ];
-    platforms = stdenv.lib.platforms.unix;
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ raskin fridh knedlsepp ];
+    platforms = platforms.unix;
   };
 }

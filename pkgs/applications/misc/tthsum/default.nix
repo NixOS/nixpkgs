@@ -1,7 +1,7 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "tthsum-${version}";
+  pname = "tthsum";
   version = "1.3.2";
 
   src = fetchurl {
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   doCheck = !stdenv.isDarwin;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An md5sum-alike program that works with Tiger/THEX hashes";
     longDescription = ''
       tthsum generates or checks TTH checksums (root of the THEX hash
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
       The specification of the THEX algorithm is at:
       http://adc.sourceforge.net/draft-jchapweske-thex-02.html
     '';
-    homepage = http://tthsum.devs.nu/;
+    homepage = "http://tthsum.devs.nu/";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.ebzzry ];
     platforms = platforms.unix;

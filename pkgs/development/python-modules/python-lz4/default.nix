@@ -1,29 +1,30 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, pytestrunner
-, pytest
-, psutil
-, setuptools_scm
-, pkgconfig
-, isPy3k
 , future
+, isPy3k
+, pkgconfig
+, psutil
+, pytest
+, pytestcov
+, pytestrunner
+, setuptools_scm
 }:
 
 buildPythonPackage rec {
   pname = "python-lz4";
-  version = "2.1.2";
+  version = "3.1.3";
 
   # get full repository inorder to run tests
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "1kzzdfkrq9nnlh0wssa6ccncvv0sk4wmhivhgyndjxz6d6przl5d";
+    sha256 = "009c4rbyj4cjb8fznccfpr5wrzdmi56wq990yjh22n0z2qqylmkf";
   };
 
-  buildInputs = [ setuptools_scm pkgconfig pytestrunner ];
-  checkInputs = [ pytest psutil ];
+  nativeBuildInputs = [ setuptools_scm pkgconfig pytestrunner ];
+  checkInputs = [ pytest pytestcov psutil ];
   propagatedBuildInputs = lib.optionals (!isPy3k) [ future ];
 
   # give a hint to setuptools_scm on package version
@@ -33,7 +34,7 @@ buildPythonPackage rec {
 
   meta = {
      description = "LZ4 Bindings for Python";
-     homepage = https://github.com/python-lz4/python-lz4;
+     homepage = "https://github.com/python-lz4/python-lz4";
      license = lib.licenses.bsd3;
      maintainers = with lib.maintainers; [ costrouc ];
   };

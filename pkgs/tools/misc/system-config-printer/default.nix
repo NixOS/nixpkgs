@@ -1,47 +1,69 @@
-{ stdenv, fetchurl, udev, intltool, pkgconfig, glib, xmlto, wrapGAppsHook
+{ lib, stdenv, fetchFromGitHub, fetchpatch, udev, intltool, pkg-config, glib, xmlto, wrapGAppsHook
 , docbook_xml_dtd_412, docbook_xsl
-, libxml2, desktop-file-utils, libusb1, cups, gdk_pixbuf, pango, atk, libnotify
-, gobject-introspection, libsecret
+, libxml2, desktop-file-utils, libusb1, cups, gdk-pixbuf, pango, atk, libnotify
+, gobject-introspection, libsecret, packagekit
 , cups-filters
-, pythonPackages
+, python3Packages, autoreconfHook, bash
 }:
 
 stdenv.mkDerivation rec {
-  name = "system-config-printer-${version}";
-  version = "1.5.11";
+  pname = "system-config-printer";
+  version = "1.5.12";
 
-  src = fetchurl {
-    url = "https://github.com/zdohnal/system-config-printer/releases/download/${version}/${name}.tar.xz";
-    sha256 = "1lq0q51bhanirpjjvvh4xiafi8hgpk8r32h0dj6dn3f32z8pib9q";
+  src = fetchFromGitHub {
+    owner = "openPrinting";
+    repo = pname;
+    rev = version;
+    sha256 = "1a812jsd9pb02jbz9bq16qj5j6k2kw44g7s1xdqqkg7061rd7mwf";
   };
 
-  patches = [ ./detect_serverbindir.patch ];
+  prePatch = ''
+    # for automake
+    touch README ChangeLog
+    # for tests
+    substituteInPlace Makefile.am --replace /bin/bash ${bash}/bin/bash
+  '';
+
+  patches = [
+    ./detect_serverbindir.patch
+
+    # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=958104
+    # (Fixes will be included in next upstream release.)
+    (fetchpatch {
+      url = "https://github.com/OpenPrinting/system-config-printer/commit/cf9903466c1a2d18a701f3b5e8c7e03483e1244d.patch";
+      sha256 = "03gpav618w50q90m2kdkgwclc7fv17m493fgjd633zfavb5kqr3n";
+    })
+    (fetchpatch {
+      url = "https://github.com/OpenPrinting/system-config-printer/commit/b9289dfe105bdb502f183f0afe7a115ecae5f2af.patch";
+      sha256 = "12w47hy3ly4phh8jcqxvdnd5sgbnbp8dnscjd7d5y2i43kxj7b23";
+    })
+  ];
 
   buildInputs = [
     glib udev libusb1 cups
-    pythonPackages.python
-    libnotify gobject-introspection gdk_pixbuf pango atk
+    python3Packages.python
+    libnotify gobject-introspection gdk-pixbuf pango atk packagekit
     libsecret
   ];
 
   nativeBuildInputs = [
-    intltool pkgconfig
+    intltool pkg-config
     xmlto libxml2 docbook_xml_dtd_412 docbook_xsl desktop-file-utils
-    pythonPackages.wrapPython
-    wrapGAppsHook
+    python3Packages.wrapPython
+    wrapGAppsHook autoreconfHook
   ];
 
-  pythonPath = with pythonPackages; requiredPythonModules [ pycups pycurl dbus-python pygobject3 requests pycairo pysmbc ];
+  pythonPath = with python3Packages; requiredPythonModules [ pycups pycurl dbus-python pygobject3 requests pycairo pysmbc ];
 
   configureFlags = [
     "--with-udev-rules"
-    "--with-udevdir=$(out)/etc/udev"
-    "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
+    "--with-udevdir=${placeholder "out"}/etc/udev"
+    "--with-systemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
   ];
 
   stripDebugList = [ "bin" "lib" "etc/udev" ];
 
-  doCheck = false; # generates shebangs in check phase, too lazy to fix
+  doCheck = true;
 
   postInstall =
     ''
@@ -54,18 +76,15 @@ stdenv.mkDerivation rec {
       find $out/share/system-config-printer -name \*.py -type f -perm -0100 -print0 | while read -d "" f; do
         patchPythonScript "$f"
       done
+      patchPythonScript $out/etc/udev/udev-add-printer
 
-      # The below line will be unneeded when the next upstream release arrives.
-      sed -i -e "s|/usr/local/bin|$out/bin|" "$out/share/dbus-1/services/org.fedoraproject.Config.Printing.service"
-
-      # Manually expand literal "$(out)", which have failed to expand
-      sed -e "s|ExecStart=\$(out)|ExecStart=$out|" \
-          -i "$out/etc/systemd/system/configure-printer@.service"
+      substituteInPlace $out/etc/udev/rules.d/70-printers.rules \
+        --replace "udev-configure-printer" "$out/etc/udev/udev-configure-printer"
     '';
 
   meta = {
-    homepage = http://cyberelk.net/tim/software/system-config-printer/;
-    platforms = stdenv.lib.platforms.linux;
-    license = stdenv.lib.licenses.gpl2;
+    homepage = "https://github.com/openprinting/system-config-printer";
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2;
   };
 }

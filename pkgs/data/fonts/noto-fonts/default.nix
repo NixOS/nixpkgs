@@ -1,30 +1,47 @@
-{ stdenv, fetchzip, fetchFromGitHub, optipng, cairo, pythonPackages, pkgconfig, pngquant, which, imagemagick }:
+{ stdenv
+, stdenvNoCC
+, lib
+, fetchFromGitHub
+, fetchurl
+, fetchzip
+, cairo
+, python3
+, pkg-config
+, pngquant
+, which
+, imagemagick
+, zopfli
+}:
 
 let
-  mkNoto = { name, weights, sha256, }:
-    let
-      version = "2018-11-30";
-      ref = "85e78f831469323c85847e23f95026c894159135";
-    in
-    fetchzip {
-      name = "${name}-${version}";
-      inherit sha256;
-      url = "https://github.com/googlei18n/noto-fonts/archive/${ref}.zip";
-      postFetch = ''
-        unzip $downloadedFile
-        mkdir -p $out/share/fonts/noto
-        # Also copy unhinted & alpha fonts for better glyph coverage,
-        # if they don't have a hinted version
-        # (see https://groups.google.com/d/msg/noto-font/ZJSkZta4n5Y/tZBnLcPdbS0J)
-        for ttf in noto-fonts-*/{hinted,unhinted,alpha}/*-${weights}.ttf
-        do
-            cp -n "$ttf" -t "$out/share/fonts/noto"
-        done
+  mkNoto = { pname, weights }:
+    stdenvNoCC.mkDerivation {
+      inherit pname;
+      version = "2020-01-23";
+
+      src = fetchFromGitHub {
+        owner = "googlefonts";
+        repo = "noto-fonts";
+        rev = "f4726a2ec36169abd02a6d8abe67c8ff0236f6d8";
+        sha256 = "0zc1r7zph62qmvzxqfflsprazjf6x1qnwc2ma27kyzh6v36gaykw";
+      };
+
+      installPhase = ''
+        # We copy in reverse preference order -- unhinted first, then
+        # hinted -- to get the "best" version of each font while
+        # maintaining maximum coverage.
+        #
+        # TODO: install OpenType, variable versions?
+        local out_ttf=$out/share/fonts/truetype/noto
+        install -m444 -Dt $out_ttf phaseIII_only/unhinted/ttf/*/*-${weights}.ttf
+        install -m444 -Dt $out_ttf phaseIII_only/hinted/ttf/*/*-${weights}.ttf
+        install -m444 -Dt $out_ttf unhinted/*/*-${weights}.ttf
+        install -m444 -Dt $out_ttf hinted/*/*-${weights}.ttf
       '';
-      meta = with stdenv.lib; {
-        inherit version;
+
+      meta = with lib; {
         description = "Beautiful and free fonts for many languages";
-        homepage = https://www.google.com/get/noto/;
+        homepage = "https://www.google.com/get/noto/";
         longDescription =
         ''
           When text is rendered by a computer, sometimes characters are
@@ -39,39 +56,41 @@ let
 
           This package also includes the Arimo, Cousine, and Tinos fonts.
         '';
-        license = licenses.asl20;
+        license = licenses.ofl;
         platforms = platforms.all;
-        maintainers = with maintainers; [ mathnerd314 ];
+        maintainers = with maintainers; [ mathnerd314 emily ];
       };
     };
 in
 
-rec {
+{
   noto-fonts = mkNoto {
-    name = "noto-fonts";
+    pname = "noto-fonts";
     weights = "{Regular,Bold,Light,Italic,BoldItalic,LightItalic}";
-    sha256 = "0kvq5ldip2ra2njlxg9fxj46nfqzq5l3n359d3kwfbsld7hixm2d";
   };
+
   noto-fonts-extra = mkNoto {
-    name = "noto-fonts-extra";
+    pname = "noto-fonts-extra";
     weights = "{Black,Condensed,Extra,Medium,Semi,Thin}*";
-    sha256 = "0l94aiy1b3qirg2mmbagbr0014vqk32za79pzck1acy2hgy716kq";
   };
-  noto-fonts-cjk = let version = "1.004"; in fetchzip {
-    name = "noto-fonts-cjk-${version}";
 
-    # Same as https://noto-website.storage.googleapis.com/pkgs/NotoSansCJK.ttc.zip but versioned & with no extra SIL license file
-    url = "https://raw.githubusercontent.com/googlei18n/noto-cjk/40d9f5b179a59a06b98373c76bdc3e2119e4e6b2/NotoSansCJK.ttc.zip";
-    postFetch = ''
-      mkdir -p $out/share/fonts
-      unzip -j $downloadedFile \*.ttc -d $out/share/fonts/noto
+  noto-fonts-cjk = let zip = fetchzip {
+    url = let rev = "be6c059ac1587e556e2412b27f5155c8eb3ddbe6"; in
+      "https://raw.githubusercontent.com/googlefonts/noto-cjk/${rev}/NotoSansCJK.ttc.zip";
+    # __MACOSX...
+    stripRoot = false;
+    sha256 = "0ik4z2b15i0pghskgfm3adzb0h35fr4gyzvz3bq49hhkhn9h85vi";
+  }; in stdenvNoCC.mkDerivation {
+    pname = "noto-fonts-cjk";
+    version = "2.001";
+
+    buildCommand = ''
+      install -m444 -Dt $out/share/fonts/opentype/noto-cjk ${zip}/*.ttc
     '';
-    sha256 = "0ghw2azqq3nkcxsbvf53qjmrhcfsnry79rq7jsr0wwi2pn7d3dsq";
 
-    meta = with stdenv.lib; {
-      inherit version;
+    meta = with lib; {
       description = "Beautiful and free fonts for CJK languages";
-      homepage = https://www.google.com/get/noto/help/cjk/;
+      homepage = "https://www.google.com/get/noto/help/cjk/";
       longDescription =
       ''
         Noto Sans CJK is a sans serif typeface designed as an intermediate style
@@ -86,26 +105,45 @@ rec {
       '';
       license = licenses.ofl;
       platforms = platforms.all;
-      maintainers = with maintainers; [ mathnerd314 ];
+      maintainers = with maintainers; [ mathnerd314 emily ];
     };
   };
-  noto-fonts-emoji = let version = "2018-08-10-unicode11"; in stdenv.mkDerivation {
-    name = "noto-fonts-emoji-${version}";
+
+  noto-fonts-emoji = let
+    version = "2020-09-16-unicode13_1";
+    emojiPythonEnv =
+      python3.withPackages (p: with p; [ fonttools nototools ]);
+  in stdenv.mkDerivation {
+    pname = "noto-fonts-emoji";
+    version = builtins.replaceStrings [ "_" ] [ "." ] version;
 
     src = fetchFromGitHub {
-      owner = "googlei18n";
+      owner = "googlefonts";
       repo = "noto-emoji";
       rev = "v${version}";
-      sha256 = "1y54zsvwf5pqhcd9cl2zz5l52qyswn6kycvrq03zm5kqqsngbw3p";
+      sha256 = "0659336dp0l2nkac153jpcb9yvp0p3dx1crcyxjd14i8cqkfi2hh";
     };
 
-    buildInputs = [ cairo ];
-    nativeBuildInputs = [ pngquant optipng which cairo pkgconfig imagemagick ]
-                     ++ (with pythonPackages; [ python fonttools nototools ]);
+    nativeBuildInputs = [
+      cairo
+      imagemagick
+      zopfli
+      pngquant
+      which
+      pkg-config
+      emojiPythonEnv
+    ];
 
     postPatch = ''
-      sed -i 's,^PNGQUANT :=.*,PNGQUANT := ${pngquant}/bin/pngquant,' Makefile
-      patchShebangs flag_glyph_name.py
+      patchShebangs *.py
+      patchShebangs third_party/color_emoji/*.py
+      # remove check for virtualenv, since we handle
+      # python requirements using python.withPackages
+      sed -i '/ifndef VIRTUAL_ENV/,+2d' Makefile
+
+      # Make the build verbose so it won't get culled by Hydra thinking that
+      # it somehow got stuck doing nothing.
+      sed -i 's;\t@;\t;' Makefile
     '';
 
     enableParallelBuilding = true;
@@ -115,13 +153,37 @@ rec {
       cp NotoColorEmoji.ttf fonts/NotoEmoji-Regular.ttf $out/share/fonts/noto
     '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       inherit version;
       description = "Color and Black-and-White emoji fonts";
-      homepage = https://github.com/googlei18n/noto-emoji;
+      homepage = "https://github.com/googlefonts/noto-emoji";
       license = with licenses; [ ofl asl20 ];
       platforms = platforms.all;
       maintainers = with maintainers; [ mathnerd314 ];
+    };
+  };
+
+  noto-fonts-emoji-blob-bin = stdenv.mkDerivation rec {
+    pname = "noto-fonts-emoji-blob-bin";
+    version = "2019-06-14-Emoji-12";
+
+    src = fetchurl {
+      url = "https://github.com/C1710/blobmoji/releases/download/v${version}/Blobmoji.ttf";
+      sha256 = "0snvymglmvpnfgsriw2cnnqm0f4llav0jvzir6mpd17mqqhhabbh";
+    };
+
+    dontUnpack = true;
+
+    installPhase = ''
+      install -D $src $out/share/fonts/blobmoji/Blobmoji.ttf
+    '';
+
+    meta = with lib; {
+      description = "Noto Emoji with extended Blob support";
+      homepage = "https://github.com/C1710/blobmoji";
+      license = with licenses; [ ofl asl20 ];
+      platforms = platforms.all;
+      maintainers = with maintainers; [ rileyinman ];
     };
   };
 }

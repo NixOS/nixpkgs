@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, fetchpatch, libxml2, ncurses, bison, flex }:
+{ lib, stdenv, fetchurl, fetchpatch, libxml2, ncurses, bison, flex }:
 
 stdenv.mkDerivation rec {
-  name = "tiptop-${version}";
+  pname = "tiptop";
   version = "2.3.1";
 
   src = fetchurl {
-    url = "${meta.homepage}/releases/${name}.tar.gz";
+    url = "${meta.homepage}/releases/${pname}-${version}.tar.gz";
     sha256 = "10j1138y3cj3hsmfz4w0bmk90523b0prqwi9nhb4z8xvjnf49i2i";
   };
 
@@ -22,11 +22,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ flex bison ];
   buildInputs = [ libxml2 ncurses ];
 
-  NIX_CFLAGS_COMPILE = [ "-I${libxml2.dev}/include/libxml2" ];
+  NIX_CFLAGS_COMPILE = "-I${libxml2.dev}/include/libxml2";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Performance monitoring tool for Linux";
-    homepage = http://tiptop.gforge.inria.fr;
+    homepage = "http://tiptop.gforge.inria.fr";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = [ maintainers.vcunat ];

@@ -1,8 +1,8 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , fetchpatch
 , autoreconfHook
-, pkgconfig
+, pkg-config
 , gupnp
 }:
 
@@ -25,23 +25,23 @@ stdenv.mkDerivation rec {
     # fix build with gupnp 1.2
     # https://github.com/intel/dleyna-core/pull/52
     (fetchpatch {
-      url = https://github.com/intel/dleyna-core/commit/41b2e56f67b6fc9c8c256b86957d281644b9b846.patch;
+      url = "https://github.com/intel/dleyna-core/commit/41b2e56f67b6fc9c8c256b86957d281644b9b846.patch";
       sha256 = "1h758cp65v7qyfpvyqdri7q0gwx85mhdpkb2y8waq735q5q9ib39";
     })
   ];
 
   nativeBuildInputs = [
     autoreconfHook
-    pkgconfig
+    pkg-config
   ];
 
   propagatedBuildInputs = [
     gupnp
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library of utility functions that are used by the higher level dLeyna";
-    homepage = https://01.org/dleyna;
+    homepage = "https://01.org/dleyna";
     maintainers = [ maintainers.jtojnar ];
     platforms = platforms.linux;
     license = licenses.lgpl21;

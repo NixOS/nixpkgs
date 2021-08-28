@@ -1,58 +1,61 @@
-{ stdenv, fetchPypi, python, buildPythonPackage, isPy3k, pycairo, backports_functools_lru_cache
-, which, cycler, dateutil, nose, numpy, pyparsing, sphinx, tornado, kiwisolver
-, freetype, libpng, pkgconfig, mock, pytz, pygobject3
-, enableGhostscript ? true, ghostscript ? null, gtk3
-, enableGtk2 ? false, pygtk ? null, gobject-introspection
+{ lib, stdenv, fetchPypi, writeText, buildPythonPackage, isPy3k, pycairo
+, which, cycler, dateutil, numpy, pyparsing, sphinx, tornado, kiwisolver
+, freetype, qhull, libpng, pkg-config, mock, pytz, pygobject3, gobject-introspection
+, certifi, pillow
+, enableGhostscript ? true, ghostscript, gtk3
 , enableGtk3 ? false, cairo
 # darwin has its own "MacOSX" backend
-, enableTk ? !stdenv.isDarwin, tcl ? null, tk ? null, tkinter ? null, libX11 ? null
-, enableQt ? false, pyqt4
-, libcxx
+, enableTk ? !stdenv.isDarwin, tcl, tk, tkinter
+, enableQt ? false, pyqt5
+# required for headless detection
+, libX11, wayland
 , Cocoa
-, pythonOlder
 }:
 
-assert enableGhostscript -> ghostscript != null;
-assert enableGtk2 -> pygtk != null;
-assert enableTk -> (tcl != null)
-                && (tk != null)
-                && (tkinter != null)
-                && (libX11 != null)
-                ;
-assert enableQt -> pyqt4 != null;
+let
+  interactive = enableTk || enableGtk3 || enableQt;
+in
 
 buildPythonPackage rec {
-  version = "3.0.3";
+  version = "3.4.2";
   pname = "matplotlib";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1dzpgpj34i6lv9wgacqdshai2d237m3vymqrgl52sj1gwf4kblz1";
+    sha256 = "d8d994cefdff9aaba45166eb3de4f5211adb4accac85cbf97137e98f26ea0219";
   };
-
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-I${libcxx}/include/c++/v1";
 
   XDG_RUNTIME_DIR = "/tmp";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ python which sphinx stdenv ]
-    ++ stdenv.lib.optional enableGhostscript ghostscript
-    ++ stdenv.lib.optional stdenv.isDarwin [ Cocoa ];
+  buildInputs = [ which sphinx ]
+    ++ lib.optional enableGhostscript ghostscript
+    ++ lib.optional stdenv.isDarwin [ Cocoa ];
 
   propagatedBuildInputs =
-    [ cycler dateutil nose numpy pyparsing tornado freetype kiwisolver
-      libpng mock pytz ]
-    ++ stdenv.lib.optional (pythonOlder "3.3") backports_functools_lru_cache
-    ++ stdenv.lib.optional enableGtk2 pygtk
-    ++ stdenv.lib.optionals enableGtk3 [ cairo pycairo gtk3 gobject-introspection pygobject3 ]
-    ++ stdenv.lib.optionals enableTk [ tcl tk tkinter libX11 ]
-    ++ stdenv.lib.optionals enableQt [ pyqt4 ];
+    [ cycler dateutil numpy pyparsing tornado freetype qhull
+      kiwisolver certifi libpng mock pytz pillow ]
+    ++ lib.optionals enableGtk3 [ cairo pycairo gtk3 gobject-introspection pygobject3 ]
+    ++ lib.optionals enableTk [ tcl tk tkinter libX11 ]
+    ++ lib.optionals enableQt [ pyqt5 ];
 
-  patches =
-    [ ./basedirlist.patch ];
+  passthru.config = {
+    directories = { basedirlist = "."; };
+    libs = {
+      system_freetype = true;
+      system_qhull = true;
+    } // lib.optionalAttrs stdenv.isDarwin {
+      # LTO not working in darwin stdenv, see #19312
+      enable_lto = false;
+    };
+  };
+  setup_cfg = writeText "setup.cfg" (lib.generators.toINI {} passthru.config);
+  preBuild = ''
+    cp "$setup_cfg" ./setup.cfg
+  '';
 
   # Matplotlib tries to find Tcl/Tk by opening a Tk window and asking the
   # corresponding interpreter object for its library paths. This fails if
@@ -62,33 +65,26 @@ buildPythonPackage rec {
   # script.
   postPatch =
     let
-      inherit (stdenv.lib.strings) substring;
-      tcl_tk_cache = ''"${tk}/lib", "${tcl}/lib", "${substring 0 3 tk.version}"'';
+      tcl_tk_cache = ''"${tk}/lib", "${tcl}/lib", "${lib.strings.substring 0 3 tk.version}"'';
     in
-    stdenv.lib.optionalString enableTk
-      "sed -i '/self.tcl_tk_cache = None/s|None|${tcl_tk_cache}|' setupext.py";
+    lib.optionalString enableTk ''
+      sed -i '/self.tcl_tk_cache = None/s|None|${tcl_tk_cache}|' setupext.py
+    '' + lib.optionalString (stdenv.isLinux && interactive) ''
+      # fix paths to libraries in dlopen calls (headless detection)
+      substituteInPlace src/_c_internal_utils.c \
+        --replace libX11.so.6 ${libX11}/lib/libX11.so.6 \
+        --replace libwayland-client.so.0 ${wayland}/lib/libwayland-client.so.0
+    '';
 
-  checkPhase = ''
-    ${python.interpreter} tests.py
-  '';
-
-  # Test data is not included in the distribution (the `tests` folder
-  # is missing)
+  # Matplotlib needs to be built against a specific version of freetype in
+  # order for all of the tests to pass.
   doCheck = false;
 
-  prePatch = ''
-    # Failing test: ERROR: matplotlib.tests.test_style.test_use_url
-    sed -i 's/test_use_url/fails/' lib/matplotlib/tests/test_style.py
-    # Failing test: ERROR: test suite for <class 'matplotlib.sphinxext.tests.test_tinypages.TestTinyPages'>
-    sed -i 's/TestTinyPages/fails/' lib/matplotlib/sphinxext/tests/test_tinypages.py
-    # Transient errors
-    sed -i 's/test_invisible_Line_rendering/noop/' lib/matplotlib/tests/test_lines.py
-  '';
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python plotting library, making publication quality plots";
     homepage    = "https://matplotlib.org/";
-    maintainers = with maintainers; [ lovek323 ];
+    license     = with licenses; [ psfl bsd0 ];
+    maintainers = with maintainers; [ lovek323 veprbl ];
   };
 
 }

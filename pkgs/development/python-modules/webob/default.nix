@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , nose
@@ -7,18 +7,18 @@
 
 buildPythonPackage rec {
   pname = "WebOb";
-  version = "1.8.5";
+  version = "1.8.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "05aaab7975e0ee8af2026325d656e5ce14a71f1883c52276181821d6d5bf7086";
+    sha256 = "b64ef5141be559cfade448f044fa45c2260351edcb6a8ef6b7e00c7dcef0c323";
   };
 
   propagatedBuildInputs = [ nose pytest ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "WSGI request and response object";
-    homepage = http://pythonpaste.org/webob/;
+    homepage = "http://pythonpaste.org/webob/";
     license = licenses.mit;
   };
 

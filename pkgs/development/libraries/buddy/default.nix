@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, bison }:
+{ lib, stdenv, fetchurl, bison }:
 
 stdenv.mkDerivation rec {
   name = "buddy-2.4";
@@ -11,17 +11,15 @@ stdenv.mkDerivation rec {
   buildInputs = [ bison ];
   patches = [ ./gcc-4.3.3-fixes.patch ];
   configureFlags = [ "CFLAGS=-O3" "CXXFLAGS=-O3" ];
-  NIX_LDFLAGS = [
-    "-lm"
-  ];
+  NIX_LDFLAGS = "-lm";
   doCheck = true;
 
   meta = {
-    homepage = https://sourceforge.net/projects/buddy/;
+    homepage = "https://sourceforge.net/projects/buddy/";
     description = "Binary decision diagram package";
     license = "as-is";
 
-    platforms = stdenv.lib.platforms.unix; # Once had cygwin problems
-    maintainers = [ stdenv.lib.maintainers.peti ];
+    platforms = lib.platforms.unix; # Once had cygwin problems
+    maintainers = [ lib.maintainers.peti ];
   };
 }

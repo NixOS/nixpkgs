@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, ed }:
+{ lib, stdenv, fetchurl, fetchpatch, ed }:
 
 stdenv.mkDerivation rec {
   name = "rcs-5.9.4";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ed ];
 
-  patches = stdenv.lib.optionals stdenv.isDarwin [
+  patches = lib.optionals stdenv.isDarwin [
     # This failure appears unrelated to the subject of the test. This
     # test seems to rely on a bash bug where `test $x -nt $y` ignores
     # subsecond values in timetamps. This bug has been fixed in Bash
@@ -51,12 +51,12 @@ stdenv.mkDerivation rec {
     make $checkFlags check || print_logs_and_fail
   '';
 
-  NIX_CFLAGS_COMPILE = [ "-std=c99" ];
+  NIX_CFLAGS_COMPILE = "-std=c99";
 
-  hardeningDisable = stdenv.lib.optional stdenv.cc.isClang "format";
+  hardeningDisable = lib.optional stdenv.cc.isClang "format";
 
   meta = {
-    homepage = https://www.gnu.org/software/rcs/;
+    homepage = "https://www.gnu.org/software/rcs/";
     description = "Revision control system";
     longDescription =
       '' The GNU Revision Control System (RCS) manages multiple revisions of
@@ -66,8 +66,8 @@ stdenv.mkDerivation rec {
          documentation, graphics, papers, and form letters.
       '';
 
-    license = stdenv.lib.licenses.gpl3Plus;
-    maintainers = with stdenv.lib.maintainers; [ eelco ];
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ eelco ];
+    platforms = lib.platforms.unix;
   };
 }

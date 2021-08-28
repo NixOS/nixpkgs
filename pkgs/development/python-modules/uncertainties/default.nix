@@ -1,21 +1,23 @@
-{ stdenv, fetchPypi, buildPythonPackage, nose, numpy }:
+{ lib, fetchPypi, buildPythonPackage
+, nose, numpy, future
+}:
 
 buildPythonPackage rec {
   pname = "uncertainties";
-  version = "3.1.1";
+  version = "3.1.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "18b184110cbe31303d25a7bc7f73d51b9cb4e15563cb9aa25ccfbd0ebe07d448";
+    sha256 = "00z9xl40czmqk0vmxjvmjvwb41r893l4dad7nj1nh6blw3kw28li";
   };
 
-  buildInputs = [ nose numpy ];
+  propagatedBuildInputs = [ future ];
+  checkInputs = [ nose numpy ];
 
-  # No tests included
-  doCheck = false;
+  checkPhase = "python setup.py nosetests -sv";
 
-  meta = with stdenv.lib; {
-    homepage = https://pythonhosted.org/uncertainties/;
+  meta = with lib; {
+    homepage = "https://pythonhosted.org/uncertainties/";
     description = "Transparent calculations with uncertainties on the quantities involved (aka error propagation)";
     maintainers = with maintainers; [ rnhmjoj ];
     license = licenses.bsd3;

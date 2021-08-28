@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, fetchpatch, ncurses, utmp, pam ? null }:
+{ lib, stdenv, fetchurl, fetchpatch, ncurses, utmp, pam ? null }:
 
 stdenv.mkDerivation rec {
-  name = "screen-${version}";
-  version = "4.6.2";
+  pname = "screen";
+  version = "4.8.0";
 
   src = fetchurl {
-    url = "mirror://gnu/screen/${name}.tar.gz";
-    sha256 = "0fps0fsipfbh7c2cnp7rjw9n79j0ysq21mk8hzifa33a1r924s8v";
+    url = "mirror://gnu/screen/${pname}-${version}.tar.gz";
+    sha256 = "18ascpjzsy70h6hk7wpg8zmzjwgdyrdr7c6z4pg5z4l9hhyv24bf";
   };
 
   configureFlags= [
@@ -16,26 +16,33 @@ stdenv.mkDerivation rec {
     "--enable-colors256"
   ];
 
-  patches = stdenv.lib.optional stdenv.hostPlatform.isMusl
+  patches = [
     (fetchpatch {
-      url = https://gist.githubusercontent.com/yujinakayama/4608863/raw/76b9f89af5e5a2e97d9a0f36aac989fb56cf1447/gistfile1.diff;
+      # Fixes denial of services in encoding.c, remove > 4.8.0
+      name = "CVE-2021-26937.patch";
+      url = "https://salsa.debian.org/debian/screen/-/raw/master/debian/patches/99_CVE-2021-26937.patch";
+      sha256 = "05f3p1c7s83nccwkhmavjzgaysxnvq41c7jffs31ra65kcpabqy0";
+    })
+  ] ++ lib.optional stdenv.hostPlatform.isMusl
+    (fetchpatch {
+      url = "https://gist.githubusercontent.com/yujinakayama/4608863/raw/76b9f89af5e5a2e97d9a0f36aac989fb56cf1447/gistfile1.diff";
       sha256 = "0f9bf83p8zdxaa1pr75jyf5g8xr3r8kv7cyzzbpraa1q4j15ss1p";
       stripLen = 1;
     });
 
-  postPatch = stdenv.lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform)
+  postPatch = lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform)
     # XXX: Awful hack to allow cross-compilation.
     '' sed -i ./configure \
            -e 's/^as_fn_error .. \("cannot run test program while cross compiling\)/$as_echo \1/g'
     ''; # "
 
-  buildInputs = [ ncurses ] ++ stdenv.lib.optional stdenv.isLinux pam
-                            ++ stdenv.lib.optional stdenv.isDarwin utmp;
+  buildInputs = [ ncurses ] ++ lib.optional stdenv.isLinux pam
+                            ++ lib.optional stdenv.isDarwin utmp;
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
-    homepage = https://www.gnu.org/software/screen/;
+  meta = with lib; {
+    homepage = "https://www.gnu.org/software/screen/";
     description = "A window manager that multiplexes a physical terminal";
     license = licenses.gpl2Plus;
 

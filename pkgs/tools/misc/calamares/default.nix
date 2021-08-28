@@ -1,27 +1,25 @@
-{ stdenv, fetchurl, boost, cmake, extra-cmake-modules, kparts, kpmcore
+{ lib, fetchurl, boost, cmake, extra-cmake-modules, kparts, kpmcore
 , kservice, libatasmart, libxcb, libyamlcpp, parted, polkit-qt, python, qtbase
-, qtquickcontrols, qtsvg, qttools, qtwebengine, utillinux, glibc, tzdata
-, ckbcomp, xkeyboard_config
+, qtquickcontrols, qtsvg, qttools, qtwebengine, util-linux, tzdata
+, ckbcomp, xkeyboard_config, mkDerivation
 }:
 
-stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+mkDerivation rec {
   pname = "calamares";
-  version = "3.2.7";
+  version = "3.2.36";
 
   # release including submodule
   src = fetchurl {
-    url = "https://github.com/${pname}/${pname}/releases/download/v${version}/${name}.tar.gz";
-    sha256 = "0dnxas0nca10vbqgspy27gn81izrpl5nqy66zxbkh4pfxmi7zqdk";
+    url = "https://github.com/${pname}/${pname}/releases/download/v${version}/${pname}-${version}.tar.gz";
+    sha256 = "sha256-pgA0mRglIBObNNUQIozNy6EvJQSmHRF+kN4EjqL4tt4=";
   };
 
+  nativeBuildInputs = [ cmake extra-cmake-modules ];
   buildInputs = [
-    boost cmake extra-cmake-modules kparts.dev kpmcore.out kservice.dev
+    boost kparts.dev kpmcore.out kservice.dev
     libatasmart libxcb libyamlcpp parted polkit-qt python qtbase
-    qtquickcontrols qtsvg qttools qtwebengine.dev utillinux
+    qtquickcontrols qtsvg qttools qtwebengine.dev util-linux
   ];
-
-  enableParallelBuilding = false;
 
   cmakeFlags = [
     "-DPYTHON_LIBRARY=${python}/lib/lib${python.libPrefix}.so"
@@ -33,17 +31,13 @@ stdenv.mkDerivation rec {
 
   POLKITQT-1_POLICY_FILES_INSTALL_DIR = "$(out)/share/polkit-1/actions";
 
-  patchPhase = ''
+  postPatch = ''
     sed -e "s,/usr/bin/calamares,$out/bin/calamares," \
         -i calamares.desktop \
         -i com.github.calamares.calamares.policy
 
     sed -e 's,/usr/share/zoneinfo,${tzdata}/share/zoneinfo,' \
-        -i src/modules/locale/timezonewidget/localeconst.h \
         -i src/modules/locale/SetTimezoneJob.cpp
-
-    sed -e 's,/usr/share/i18n/locales,${glibc.out}/share/i18n/locales,' \
-        -i src/modules/locale/timezonewidget/localeconst.h
 
     sed -e 's,/usr/share/X11/xkb/rules/base.lst,${xkeyboard_config}/share/X11/xkb/rules/base.lst,' \
         -i src/modules/keyboard/keyboardwidget/keyboardglobal.h
@@ -55,10 +49,10 @@ stdenv.mkDerivation rec {
         -i CMakeLists.txt
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Distribution-independent installer framework";
-    license = licenses.gpl3;
-    maintainers = with stdenv.lib.maintainers; [ manveru ];
+    license = with licenses; [ gpl3Plus bsd2 ];
+    maintainers = with maintainers; [ manveru ];
     platforms = platforms.linux;
   };
 }

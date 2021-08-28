@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, libtool, pkgconfig, libxml2, deadbeef, glib, gtk3 }:
+{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, pkg-config, libxml2, deadbeef, glib, gtk3 }:
 
 stdenv.mkDerivation rec {
-  name = "deadbeef-headerbar-gtk3-plugin-${version}";
+  pname = "deadbeef-headerbar-gtk3-plugin";
   version = "1.2";
 
   src = fetchFromGitHub {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1v1schvnps7ypjqgcbqi74a45w8r2gbhrawz7filym22h1qr9wn0";
   };
 
-  nativeBuildInputs = [ autoconf automake libtool pkgconfig libxml2 ];
+  nativeBuildInputs = [ autoconf automake libtool pkg-config libxml2 ];
   buildInputs = [ deadbeef glib gtk3 ];
 
   # Choose correct installation path
@@ -20,9 +20,9 @@ stdenv.mkDerivation rec {
 
   preConfigure = "./autogen.sh";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Plug-in that adds GTK 3 header bar to the DeaDBeeF music player";
-    homepage = https://github.com/saivert/ddb_misc_headerbar_GTK3;
+    homepage = "https://github.com/saivert/ddb_misc_headerbar_GTK3";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.jtojnar ];
     platforms = platforms.linux;

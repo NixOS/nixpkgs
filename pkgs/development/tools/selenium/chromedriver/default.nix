@@ -1,34 +1,37 @@
-{ stdenv, fetchurl, cairo, fontconfig, freetype, gdk_pixbuf, glib
-, glibc, gtk2, libX11, makeWrapper, nspr, nss, pango, unzip, gconf
-, libXi, libXrender, libXext
+{ lib, stdenv, fetchurl, unzip, makeWrapper
+, cairo, fontconfig, freetype, gdk-pixbuf, glib
+, glibc, gtk2, libX11, nspr, nss, pango, gconf
+, libxcb, libXi, libXrender, libXext
 }:
+
 let
+  upstream-info = (lib.importJSON ../../../../applications/networking/browsers/chromium/upstream-info.json).stable.chromedriver;
   allSpecs = {
-    "x86_64-linux" = {
+    x86_64-linux = {
       system = "linux64";
-      sha256 = "0iq015nyhdn1z50aj6k2d38cf1vbp59x7qi48aikb4z1h3h1j6a6";
+      sha256 = upstream-info.sha256_linux;
     };
 
-    "x86_64-darwin" = {
+    x86_64-darwin = {
       system = "mac64";
-      sha256 = "0bf59g7vx7qbz9lx6wgk82zjbf8isag1n3lbi0gw4b2bgv8md8ia";
+      sha256 = upstream-info.sha256_darwin;
     };
   };
 
-  spec = allSpecs."${stdenv.hostPlatform.system}"
+  spec = allSpecs.${stdenv.hostPlatform.system}
     or (throw "missing chromedriver binary for ${stdenv.hostPlatform.system}");
 
-  libs = stdenv.lib.makeLibraryPath [
+  libs = lib.makeLibraryPath [
     stdenv.cc.cc.lib
     cairo fontconfig freetype
-    gdk_pixbuf glib gtk2 gconf
+    gdk-pixbuf glib gtk2 gconf
     libX11 nspr nss pango libXrender
-    gconf libXext libXi
+    gconf libxcb libXext libXi
   ];
-in
-stdenv.mkDerivation rec {
-  name = "chromedriver-${version}";
-  version = "2.46";
+
+in stdenv.mkDerivation rec {
+  pname = "chromedriver";
+  version = upstream-info.version;
 
   src = fetchurl {
     url = "https://chromedriver.storage.googleapis.com/${version}/chromedriver_${spec.system}.zip";
@@ -41,16 +44,24 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     install -m755 -D chromedriver $out/bin/chromedriver
-  '' + stdenv.lib.optionalString (!stdenv.isDarwin) ''
+  '' + lib.optionalString (!stdenv.isDarwin) ''
     patchelf --set-interpreter ${glibc.out}/lib/ld-linux-x86-64.so.2 $out/bin/chromedriver
     wrapProgram "$out/bin/chromedriver" --prefix LD_LIBRARY_PATH : "${libs}:\$LD_LIBRARY_PATH"
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://sites.google.com/a/chromium.org/chromedriver;
+  meta = with lib; {
+    homepage = "https://chromedriver.chromium.org/";
     description = "A WebDriver server for running Selenium tests on Chrome";
+    longDescription = ''
+      WebDriver is an open source tool for automated testing of webapps across
+      many browsers. It provides capabilities for navigating to web pages, user
+      input, JavaScript execution, and more. ChromeDriver is a standalone
+      server that implements the W3C WebDriver standard.
+    '';
     license = licenses.bsd3;
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = with maintainers; [ goibhniu marsam primeos ];
+    # Note from primeos: By updating Chromium I also update Google Chrome and
+    # ChromeDriver.
     platforms = attrNames allSpecs;
   };
 }

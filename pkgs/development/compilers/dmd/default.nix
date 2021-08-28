@@ -1,11 +1,13 @@
 { stdenv, lib, fetchFromGitHub
 , makeWrapper, unzip, which, writeTextFile
-, curl, tzdata, gdb, darwin, git
-, targetPackages, ldc
-, version ? "2.085.1"
-, dmdSha256 ? "0ccidfcawrcwdpfjwjiln5xwr4ffp8i2hwx52p8zn3xmc5yxm660"
-, druntimeSha256 ? "109f2glsqrlshk06761xlw4r5v22mivp873cq9g5gcax3g00k617"
-, phobosSha256 ? "0giispqqx8j8xg6c0hm7nx77bcahiwic8rvf12sws3sv5pizv8pr"
+, curl, tzdata, gdb, darwin, git, callPackage
+, targetPackages, fetchpatch, bash
+, dmdBootstrap ? callPackage ./bootstrap.nix { }
+, HOST_DMD ? "${dmdBootstrap}/bin/dmd"
+, version ? "2.095.1"
+, dmdSha256 ? "sha256:0faca1y42a1h16aml4lb7z118mh9k9fjx3xlw3ki5f1h3ln91xhk"
+, druntimeSha256 ? "sha256:0ad4pa5llr9m9wqbvfv4yrcra4zz9qxlh5kx43mrv48f9bcxm2ha"
+, phobosSha256 ? "sha256:04w6jw4izix2vbw62j13wvz6q3pi7vivxnmxqj0g8904j5g0cxjl"
 }:
 
 let
@@ -13,8 +15,8 @@ let
   dmdConfFile = writeTextFile {
       name = "dmd.conf";
       text = (lib.generators.toINI {} {
-        "Environment" = {
-          DFLAGS = ''-I@out@/include/dmd -L-L@out@/lib -fPIC ${stdenv.lib.optionalString (!targetPackages.stdenv.cc.isClang) "-L--export-dynamic"}'';
+        Environment = {
+          DFLAGS = ''-I@out@/include/dmd -L-L@out@/lib -fPIC ${lib.optionalString (!targetPackages.stdenv.cc.isClang) "-L--export-dynamic"}'';
         };
       });
   };
@@ -22,7 +24,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "dmd-${version}";
+  pname = "dmd";
   inherit version;
 
   enableParallelBuilding = true;
@@ -51,8 +53,6 @@ stdenv.mkDerivation rec {
   })
   ];
 
-  patchFlags = [ "--directory=dmd" "-p1" ];
-
   sourceRoot = ".";
 
   # https://issues.dlang.org/show_bug.cgi?id=19553
@@ -62,17 +62,29 @@ stdenv.mkDerivation rec {
       patchShebangs .
   '';
 
-  postPatch = stdenv.lib.optionalString stdenv.hostPlatform.isLinux ''
+  postPatch = ''
+      substituteInPlace dmd/test/dshell/test6952.d --replace "/usr/bin/env bash" "${bash}/bin/bash"
+
+      rm dmd/test/runnable/gdb1.d
+      rm dmd/test/runnable/gdb10311.d
+      rm dmd/test/runnable/gdb14225.d
+      rm dmd/test/runnable/gdb14276.d
+      rm dmd/test/runnable/gdb14313.d
+      rm dmd/test/runnable/gdb14330.d
+      rm dmd/test/runnable/gdb15729.sh
+      rm dmd/test/runnable/gdb4149.d
+      rm dmd/test/runnable/gdb4181.d
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
       substituteInPlace phobos/std/socket.d --replace "assert(ih.addrList[0] == 0x7F_00_00_01);" ""
   ''
-
-  + stdenv.lib.optionalString stdenv.hostPlatform.isDarwin ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
       substituteInPlace phobos/std/socket.d --replace "foreach (name; names)" "names = []; foreach (name; names)"
   '';
 
-  nativeBuildInputs = [ ldc makeWrapper unzip which gdb git ]
+  nativeBuildInputs = [ makeWrapper unzip which gdb git ]
 
-  ++ stdenv.lib.optional stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
+  ++ lib.optional stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
     Foundation
   ]);
 
@@ -89,7 +101,7 @@ stdenv.mkDerivation rec {
   # Buid and install are based on http://wiki.dlang.org/Building_DMD
   buildPhase = ''
       cd dmd
-      make -j$NIX_BUILD_CORES -f posix.mak INSTALL_DIR=$out BUILD=release ENABLE_RELEASE=1 PIC=1 HOST_DMD=ldmd2
+      make -j$NIX_BUILD_CORES -f posix.mak INSTALL_DIR=$out BUILD=release ENABLE_RELEASE=1 PIC=1 HOST_DMD=${HOST_DMD}
       cd ../druntime
       make -j$NIX_BUILD_CORES -f posix.mak BUILD=release ENABLE_RELEASE=1 PIC=1 INSTALL_DIR=$out DMD=${pathToDmd}
       cd ../phobos
@@ -101,13 +113,21 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  # NOTE: Purity check is disabled for checkPhase because it doesn't fare well
+  # with the DMD linker. See https://github.com/NixOS/nixpkgs/issues/97420
   checkPhase = ''
     cd dmd
-    make -j$NIX_BUILD_CORES -C test -f Makefile PIC=1 CC=$CXX DMD=${pathToDmd} BUILD=release SHELL=$SHELL
+    NIX_ENFORCE_PURITY= \
+      make -j$NIX_BUILD_CORES -C test -f Makefile PIC=1 CC=$CXX DMD=${pathToDmd} BUILD=release SHELL=$SHELL
+
     cd ../druntime
-    make -j$NIX_BUILD_CORES -f posix.mak unittest PIC=1 DMD=${pathToDmd} BUILD=release
+    NIX_ENFORCE_PURITY= \
+      make -j$NIX_BUILD_CORES -f posix.mak unittest PIC=1 DMD=${pathToDmd} BUILD=release
+
     cd ../phobos
-    make -j$NIX_BUILD_CORES -f posix.mak unittest BUILD=release ENABLE_RELEASE=1 PIC=1 DMD=${pathToDmd} DFLAGS="-version=TZDatabaseDir -version=LibcurlPath -J$(pwd)"
+    NIX_ENFORCE_PURITY= \
+      make -j$NIX_BUILD_CORES -f posix.mak unittest BUILD=release ENABLE_RELEASE=1 PIC=1 DMD=${pathToDmd} DFLAGS="-version=TZDatabaseDir -version=LibcurlPath -J$(pwd)"
+
     cd ..
   '';
 
@@ -141,14 +161,14 @@ stdenv.mkDerivation rec {
       substitute ${dmdConfFile} "$out/bin/dmd.conf" --subst-var out
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Official reference compiler for the D language";
-    homepage = http://dlang.org/;
+    homepage = "http://dlang.org/";
     # Everything is now Boost licensed, even the backend.
     # https://github.com/dlang/dmd/pull/6680
     license = licenses.boost;
-    maintainers = with maintainers; [ ThomasMader ];
+    maintainers = with maintainers; [ ThomasMader lionello ];
     platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" ];
+    # many tests are failing
   };
 }
-

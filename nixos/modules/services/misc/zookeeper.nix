@@ -76,6 +76,7 @@ in {
       default = ''
         zookeeper.root.logger=INFO, CONSOLE
         log4j.rootLogger=INFO, CONSOLE
+        log4j.logger.org.apache.zookeeper.audit.Log4jAuditLogger=INFO, CONSOLE
         log4j.appender.CONSOLE=org.apache.log4j.ConsoleAppender
         log4j.appender.CONSOLE.layout=org.apache.log4j.PatternLayout
         log4j.appender.CONSOLE.layout.ConversionPattern=[myid:%X{myid}] - %-5p [%t:%C{1}@%L] - %m%n
@@ -121,17 +122,17 @@ in {
 
     systemd.tmpfiles.rules = [
       "d '${cfg.dataDir}' 0700 zookeeper - - -"
+      "Z '${cfg.dataDir}' 0700 zookeeper - - -"
     ];
 
     systemd.services.zookeeper = {
       description = "Zookeeper Daemon";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
-      environment = { ZOOCFGDIR = configDir; };
       serviceConfig = {
         ExecStart = ''
           ${pkgs.jre}/bin/java \
-            -cp "${cfg.package}/lib/*:${cfg.package}/${cfg.package.name}.jar:${configDir}" \
+            -cp "${cfg.package}/lib/*:${configDir}" \
             ${escapeShellArgs cfg.extraCmdLineOptions} \
             -Dzookeeper.datadir.autocreate=false \
             ${optionalString cfg.preferIPv4 "-Djava.net.preferIPv4Stack=true"} \
@@ -142,11 +143,11 @@ in {
       };
       preStart = ''
         echo "${toString cfg.id}" > ${cfg.dataDir}/myid
+        mkdir -p ${cfg.dataDir}/version-2
       '';
     };
 
-    users.users = singleton {
-      name = "zookeeper";
+    users.users.zookeeper = {
       uid = config.ids.uids.zookeeper;
       description = "Zookeeper daemon user";
       home = cfg.dataDir;

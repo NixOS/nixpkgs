@@ -1,22 +1,23 @@
-{ stdenv, fetchurl, fontconfig, libjpeg, libcap, freetype, fribidi, pkgconfig
+{ stdenv, fetchgit, fontconfig, libjpeg, libcap, freetype, fribidi, pkg-config
 , gettext, systemd, perl, lib
 , enableSystemd ? true
 , enableBidi ? true
 }: stdenv.mkDerivation rec {
 
-  name = "vdr-${version}";
-  version = "2.4.0";
+  pname = "vdr";
+  version = "2.4.7";
 
-  src = fetchurl {
-    url = "ftp://ftp.tvdr.de/vdr/${name}.tar.bz2";
-    sha256 = "1klcgy9kr7n6z8d2c77j63bl8hvhx5qnqppg73f77004hzz4kbwk";
+  src = fetchgit {
+    url = "git://git.tvdr.de/vdr.git";
+    rev = version;
+    sha256 = "sha256-hDJ/DemWuLddDvXGqxkSTIqATlWUjolcP7ojjhK2CDk=";
   };
 
   enableParallelBuilding = true;
 
   postPatch = "substituteInPlace Makefile --replace libsystemd-daemon libsystemd";
 
-  buildInputs = [ fontconfig libjpeg libcap freetype ]
+  buildInputs = [ fontconfig libjpeg libcap freetype perl ]
   ++ lib.optional enableSystemd systemd
   ++ lib.optional enableBidi fribidi;
 
@@ -27,7 +28,7 @@
   nativeBuildInputs = [ perl ];
 
   # plugins uses the same build environment as vdr
-  propagatedNativeBuildInputs = [ pkgconfig gettext ];
+  propagatedNativeBuildInputs = [ pkg-config gettext ];
 
   installFlags = [
     "DESTDIR=$(out)"
@@ -46,10 +47,10 @@
   outputs = [ "out" "dev" "man" ];
 
   meta = with lib; {
-    homepage = http://www.tvdr.de/;
+    homepage = "http://www.tvdr.de/";
     description = "Video Disc Recorder";
     maintainers = [ maintainers.ck3d ];
     platforms = [ "i686-linux" "x86_64-linux" ];
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
   };
 }

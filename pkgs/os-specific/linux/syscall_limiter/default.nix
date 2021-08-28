@@ -1,12 +1,12 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , libseccomp
 , perl
 , which
 }:
 
-stdenv.mkDerivation rec {
-  name    = "syscall_limiter-${version}";
+stdenv.mkDerivation {
+  pname = "syscall_limiter";
   version = "2017-01-23";
 
   src = fetchFromGitHub {
@@ -27,9 +27,9 @@ stdenv.mkDerivation rec {
       --replace which ${which}/bin/which
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Start Linux programs with only selected syscalls enabled";
-    homepage    = https://github.com/vi/syscall_limiter;
+    homepage    = "https://github.com/vi/syscall_limiter";
     license     = licenses.mit;
     maintainers = with maintainers; [ obadz ];
     platforms   = platforms.linux;

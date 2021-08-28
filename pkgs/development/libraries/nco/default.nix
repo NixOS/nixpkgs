@@ -1,22 +1,32 @@
-{ stdenv, fetchurl, netcdf, netcdfcxx4, gsl, udunits, antlr, which, curl }:
+{ lib, stdenv, fetchzip, netcdf, netcdfcxx4, gsl, udunits, antlr, which, curl, flex, coreutils }:
 
 stdenv.mkDerivation rec {
-  version = "4.5.5";
-  name = "nco-${version}";
+  version = "4.9.8";
+  pname = "nco";
 
-  buildInputs = [ netcdf netcdfcxx4 gsl udunits antlr which curl ];
+  nativeBuildInputs = [ flex which antlr ];
+  buildInputs = [ netcdf netcdfcxx4 gsl udunits curl coreutils ];
 
-  src = fetchurl {
+  src = fetchzip {
     url = "https://github.com/nco/nco/archive/${version}.tar.gz";
-    sha256 = "bc6f5b976fdfbdec51f2ebefa158fa54672442c2fd5f042ba884f9f32c2ad666";
+    sha256 = "sha256-fOdmM0I/UGhxacofEBfw9UmOOrMDUXs59ca8uvkQKqw=";
   };
 
-  meta = { 
+  prePatch = ''
+    substituteInPlace src/nco/nco_fl_utl.c \
+      --replace "/bin/cp" "${coreutils}/bin/cp"
+    substituteInPlace src/nco/nco_fl_utl.c \
+      --replace "/bin/mv" "${coreutils}/bin/mv"
+  '';
+
+  parallelBuild = true;
+
+  meta = {
     description = "NetCDF Operator toolkit";
     longDescription = "The NCO (netCDF Operator) toolkit manipulates and analyzes data stored in netCDF-accessible formats, including DAP, HDF4, and HDF5";
-    homepage = http://nco.sourceforge.net/;
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = [ stdenv.lib.maintainers.bzizou ];
-    platforms = stdenv.lib.platforms.linux;
+    homepage = "http://nco.sourceforge.net/";
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.bzizou ];
+    platforms = lib.platforms.linux;
   };
 }

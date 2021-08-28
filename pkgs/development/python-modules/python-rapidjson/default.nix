@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
@@ -8,13 +8,13 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.7.0";
+  version = "1.0";
   pname = "python-rapidjson";
   disabled = pythonOlder "3.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d9c1411b25600ea65bb534ad75bf4ab6efd9627abd86872f0e5453ff42220d06";
+    sha256 = "a61fa61e41b0b85ba9e78444242fddcb3be724de1df79314e6b4766b66e4e11c";
   };
 
   LC_ALL="en_US.utf-8";
@@ -28,8 +28,8 @@ buildPythonPackage rec {
     pytest tests
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/python-rapidjson/python-rapidjson;
+  meta = with lib; {
+    homepage = "https://github.com/python-rapidjson/python-rapidjson";
     description = "Python wrapper around rapidjson ";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];

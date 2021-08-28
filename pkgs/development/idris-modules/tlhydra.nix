@@ -20,7 +20,7 @@ build-idris-package  {
 
   meta = {
     description = "Idris parser and serializer/deserealizer for TL language";
-    homepage = https://github.com/Termina1/tlhydra;
+    homepage = "https://github.com/Termina1/tlhydra";
     maintainers = [ lib.maintainers.brainrape ];
   };
 }

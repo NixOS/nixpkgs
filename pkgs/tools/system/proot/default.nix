@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , talloc, docutils, swig, python, coreutils, enablePython ? true }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "proot";
   version = "20190510";
 
@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
     sed -i /CROSS_COMPILE/d src/GNUmakefile
   '';
 
-  buildInputs = [ talloc ] ++ stdenv.lib.optional enablePython python;
-  nativeBuildInputs = [ docutils ] ++ stdenv.lib.optional enablePython swig;
+  buildInputs = [ talloc ] ++ lib.optional enablePython python;
+  nativeBuildInputs = [ docutils ] ++ lib.optional enablePython swig;
 
   enableParallelBuilding = true;
 
@@ -36,8 +36,8 @@ stdenv.mkDerivation rec {
     install -Dm644 doc/proot/man.1 $out/share/man/man1/proot.1
   '';
 
-  meta = with stdenv.lib; {
-    homepage = http://proot-me.github.io;
+  meta = with lib; {
+    homepage = "https://proot-me.github.io";
     description = "User-space implementation of chroot, mount --bind and binfmt_misc";
     platforms = platforms.linux;
     license = licenses.gpl2;

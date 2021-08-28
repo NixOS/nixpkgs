@@ -233,7 +233,7 @@ in
         # In the meantime this at least suppresses a useless graph full of
         # NaNs in the output.
         default = [ "munin_stats" ];
-        type = with types; listOf string;
+        type = with types; listOf str;
         description = ''
           Munin plugins to disable, even if
           <literal>munin-node-configure --suggest</literal> tries to enable
@@ -317,18 +317,16 @@ in
 
     environment.systemPackages = [ pkgs.munin ];
 
-    users.users = [{
-      name = "munin";
+    users.users.munin = {
       description = "Munin monitoring user";
       group = "munin";
       uid = config.ids.uids.munin;
       home = "/var/lib/munin";
-    }];
+    };
 
-    users.groups = [{
-      name = "munin";
+    users.groups.munin = {
       gid = config.ids.gids.munin;
-    }];
+    };
 
   }) (mkIf nodeCfg.enable {
 

@@ -15,7 +15,7 @@ else assert licenseAccepted;
 let maps = callPackage ./maps.nix {};
 in stdenv.mkDerivation rec {
   version = "4.7.1";
-  name = "sc2-headless-${version}";
+  pname = "sc2-headless";
 
   src = fetchurl {
     url = "https://blzdistsc2-a.akamaihd.net/Linux/SC2.${version}.zip";
@@ -49,7 +49,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = {
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
     description = "Starcraft II headless linux client for machine learning research";
     license = {
       fullName = "BLIZZARD® STARCRAFT® II AI AND MACHINE LEARNING LICENSE";

@@ -14,7 +14,7 @@ let
   ];
 
 in stdenv.mkDerivation rec {
-  name = "pdf2odt-${version}";
+  pname = "pdf2odt";
   version = "20170207";
 
   src = fetchFromGitHub {
@@ -38,9 +38,9 @@ in stdenv.mkDerivation rec {
       --prefix PATH : ${path}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "PDF to ODT format converter";
-    homepage    = https://github.com/gutschke/pdf2odt;
+    homepage    = "https://github.com/gutschke/pdf2odt";
     license     = licenses.mit;
     platforms   = platforms.all;
     maintainers = with maintainers; [ peterhoeg ];

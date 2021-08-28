@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   version = "0.4.5";
-  name = "theft-${version}";
+  pname = "theft";
 
   src = fetchFromGitHub {
     owner  = "silentbicycle";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
   checkTarget = "test";
-  
+
   installFlags = [ "PREFIX=$(out)" ];
 
   # fix the libtheft.pc file to use the right installation
@@ -26,8 +26,8 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/lib/pkgconfig/libtheft.pc \
       --replace "/usr/local" "$out"
   '';
-  
-  meta = with stdenv.lib; {
+
+  meta = with lib; {
     description = "A C library for property-based testing";
     homepage    = "https://github.com/silentbicycle/theft/";
     platforms   = platforms.unix;

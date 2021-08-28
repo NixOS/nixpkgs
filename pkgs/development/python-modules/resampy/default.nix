@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchFromGitHub
 , pytest
@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "resampy";
-  version = "0.2.1";
+  version = "0.2.2";
 
   # No tests in PyPi Archive
   src = fetchFromGitHub {
     owner = "bmcfee";
     repo = pname;
     rev = version;
-    sha256 = "0a2bxj042y62dimm2i4vglbhpwbybam07mcl67cb6pmfsw9fbqhj";
+    sha256 = "0qmkxl5sbgh0j73n667vyi7ywzh09iaync91yp1j5rrcmwsn0qfs";
   };
 
   checkInputs = [ pytest pytestcov ];
@@ -29,8 +29,8 @@ buildPythonPackage rec {
     pytest tests
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/bmcfee/resampy;
+  meta = with lib; {
+    homepage = "https://github.com/bmcfee/resampy";
     description = "Efficient signal resampling";
     license = licenses.isc;
   };

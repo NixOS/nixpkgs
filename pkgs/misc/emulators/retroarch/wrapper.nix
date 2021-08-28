@@ -1,16 +1,10 @@
 { stdenv, lib, makeWrapper, retroarch, cores }:
 
-let
-
-  p = builtins.parseDrvName retroarch.name;
-
-in
-
 stdenv.mkDerivation {
-  name = "retroarch-" + p.version;
-  version = p.version;
+  pname = "retroarch";
+  version = lib.getVersion retroarch;
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   buildCommand = ''
     mkdir -p $out/lib

@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, buildPythonPackage, pytest }:
+{ lib, fetchFromGitHub, buildPythonPackage, pytest }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "iso3166";
   version = "0.8";
 
@@ -18,8 +18,8 @@ buildPythonPackage rec {
     py.test
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/deactivated/python-iso3166;
+  meta = with lib; {
+    homepage = "https://github.com/deactivated/python-iso3166";
     description = "Self-contained ISO 3166-1 country definitions";
     license = licenses.mit;
     maintainers = with maintainers; [ zraexy ];

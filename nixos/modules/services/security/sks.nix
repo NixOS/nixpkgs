@@ -108,7 +108,7 @@ in {
       hkpAddress = "'" + (builtins.concatStringsSep " " cfg.hkpAddress) + "'" ;
       hkpPort = builtins.toString cfg.hkpPort;
     in {
-      "sks-db" = {
+      sks-db = {
         description = "SKS database server";
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];

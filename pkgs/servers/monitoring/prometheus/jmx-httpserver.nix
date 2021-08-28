@@ -1,9 +1,9 @@
-{ stdenv, fetchurl, jre, makeWrapper }:
+{ lib, stdenv, fetchurl, jre, makeWrapper }:
 
 let
-  version = "0.10";
+  version = "0.15.0";
   jarName = "jmx_prometheus_httpserver-${version}-jar-with-dependencies.jar";
-  mavenUrl = "http://central.maven.org/maven2/io/prometheus/jmx/jmx_prometheus_httpserver/${version}/${jarName}";
+  mavenUrl = "mirror://maven/io/prometheus/jmx/jmx_prometheus_httpserver/${version}/${jarName}";
 in stdenv.mkDerivation {
   inherit version jarName;
 
@@ -11,10 +11,11 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = mavenUrl;
-    sha256 = "1pvqphrirq48xhmx0aa6vkxz6qy1cx2q6jxsh7rin432iap7j62f";
+    sha256 = "0fr3svn8kjp7bq1wzbkvv5awylwn8b01bngj04zvk7fpzqpgs7mz";
   };
 
-  buildInputs = [ jre makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ jre ];
 
   phases = "installPhase";
 
@@ -25,8 +26,8 @@ in stdenv.mkDerivation {
     makeWrapper "${jre}/bin/java" $out/bin/jmx_prometheus_httpserver --add-flags "-jar $out/libexec/$jarName"
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/prometheus/jmx_exporter;
+  meta = with lib; {
+    homepage = "https://github.com/prometheus/jmx_exporter";
     description = "A process for exposing JMX Beans via HTTP for Prometheus consumption";
     license = licenses.asl20;
     maintainers = [ maintainers.offline ];

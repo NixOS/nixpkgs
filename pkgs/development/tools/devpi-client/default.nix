@@ -1,44 +1,58 @@
-{ stdenv
-, pythonPackages
+{ lib
+, buildPythonApplication
+, fetchPypi
+# buildInputs
 , glibcLocales
+, pkginfo
+, check-manifest
+# propagatedBuildInputs
+, py
+, devpi-common
+, pluggy
+, setuptools
+# CheckInputs
+, pytest
+, pytest-flake8
+, webtest
+, mock
 , devpi-server
+, tox
+, sphinx
+, wheel
 , git
 , mercurial
-} :
+}:
 
-pythonPackages.buildPythonApplication rec {
-  name = "${pname}-${version}";
+buildPythonApplication rec {
   pname = "devpi-client";
-  version = "4.1.0";
+  version = "5.2.1";
 
-  src = pythonPackages.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
-    sha256 = "0f5jkvxx9fl8v5vwbwmplqhjsdfgiib7j3zvn0zxd8krvi2s38fq";
+    sha256 = "74ff365efeaa7b78c9eb7f6d7bd349ccd6252a6cdf879bcb4137ee5ff0fb127a";
   };
 
-  checkInputs = with pythonPackages; [
-                    pytest pytest-flakes webtest mock
-                    devpi-server tox
-                    sphinx wheel git mercurial detox
-                    setuptools
-                    ];
+  buildInputs = [ glibcLocales ];
+
+  propagatedBuildInputs = [ py devpi-common pluggy setuptools check-manifest pkginfo ];
+
+  checkInputs = [
+    pytest pytest-flake8 webtest mock
+    devpi-server tox
+    sphinx wheel git mercurial
+  ];
+
+  # --fast skips tests which try to start a devpi-server improperly
   checkPhase = ''
-    export PATH=$PATH:$out/bin
-    export HOME=$TMPDIR # fix tests failing in sandbox due to "/homeless-shelter"
-
-    # setuptools do not get propagated into the tox call (cannot import setuptools)
-    rm testing/test_test.py
-
-    # test_pypi_index_attributes tries to connect to upstream pypi
-    py.test -k 'not test_pypi_index_attributes' testing
+    HOME=$TMPDIR py.test --fast
   '';
 
   LC_ALL = "en_US.UTF-8";
-  buildInputs = with pythonPackages; [ glibcLocales pkginfo check-manifest ];
-  propagatedBuildInputs = with pythonPackages; [ py devpi-common pluggy setuptools ];
 
-  meta = with stdenv.lib; {
-    homepage = http://doc.devpi.net;
+  __darwinAllowLocalNetworking = true;
+
+  meta = with lib; {
+    homepage = "http://doc.devpi.net";
     description = "Client for devpi, a pypi index server and packaging meta tool";
     license = licenses.mit;
     maintainers = with maintainers; [ lewo makefu ];

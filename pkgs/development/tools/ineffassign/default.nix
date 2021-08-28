@@ -4,12 +4,12 @@
 }:
 
 buildGoPackage rec {
-  name = "ineffassign-unstable-${version}";
+  pname = "ineffassign-unstable";
   version = "2018-09-09";
-	rev = "1003c8bd00dc2869cb5ca5282e6ce33834fed514";
+  rev = "1003c8bd00dc2869cb5ca5282e6ce33834fed514";
 
   goPackagePath = "github.com/gordonklaus/ineffassign";
-  excludedPackages = ''testdata'';
+  excludedPackages = "testdata";
 
   src = fetchFromGitHub {
     inherit rev;
@@ -20,8 +20,8 @@ buildGoPackage rec {
   };
 
   meta = with lib; {
-    description = "Detect ineffectual assignments in Go code.";
-    homepage = https://github.com/gordonklaus/ineffassign;
+    description = "Detect ineffectual assignments in Go code";
+    homepage = "https://github.com/gordonklaus/ineffassign";
     license = licenses.mit;
     maintainers = with maintainers; [ kalbasit ];
     platforms = platforms.linux ++ platforms.darwin;

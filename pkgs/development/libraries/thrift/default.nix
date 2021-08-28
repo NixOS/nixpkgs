@@ -1,37 +1,73 @@
-{ stdenv, fetchurl, boost, zlib, libevent, openssl, python, pkgconfig, bison
-, flex, twisted
+{ lib, stdenv, fetchurl, boost, zlib, libevent, openssl, python, cmake, pkg-config
+, bison, flex, twisted
+, static ? stdenv.hostPlatform.isStatic
 }:
 
 stdenv.mkDerivation rec {
-  name = "thrift-${version}";
-  version = "0.12.0";
+  pname = "thrift";
+  version = "0.14.1";
 
   src = fetchurl {
-    url = "https://archive.apache.org/dist/thrift/${version}/${name}.tar.gz";
-    sha256 = "0a04v7dgm1qzgii7v0sisnljhxc9xpq2vxkka60scrdp6aahjdn3";
+    url = "https://archive.apache.org/dist/thrift/${version}/${pname}-${version}.tar.gz";
+    sha256 = "198c855mjy5byqfb941hiyq2j37baz63f0wcfy4vp8y8v4f5xnhk";
   };
-
-  #enableParallelBuilding = true; problems on hydra
 
   # Workaround to make the python wrapper not drop this package:
   # pythonFull.buildEnv.override { extraLibs = [ thrift ]; }
   pythonPath = [];
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [
-    boost zlib libevent openssl python bison flex twisted
-  ];
+  nativeBuildInputs = [ cmake pkg-config bison flex ];
+  buildInputs = [ boost zlib libevent openssl ]
+    ++ lib.optionals (!static) [ python twisted ];
 
   preConfigure = "export PY_PREFIX=$out";
 
-  # TODO: package boost-test, so we can run the test suite. (Currently it fails
-  # to find libboost_unit_test_framework.a.)
-  configureFlags = [ "--enable-tests=no" ];
-  doCheck = false;
+  cmakeFlags = [
+    "-DBUILD_JAVASCRIPT:BOOL=OFF"
+    "-DBUILD_NODEJS:BOOL=OFF"
 
-  meta = with stdenv.lib; {
+    # FIXME: Fails to link in static mode with undefined reference to
+    # `boost::unit_test::unit_test_main(bool (*)(), int, char**)'
+    "-DBUILD_TESTING:BOOL=${if static then "OFF" else "ON"}"
+  ] ++ lib.optionals static [
+    "-DWITH_STATIC_LIB:BOOL=ON"
+    "-DOPENSSL_USE_STATIC_LIBS=ON"
+  ];
+
+  disabledTests = [
+    "PythonTestSSLSocket"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # tests that hang up in the darwin sandbox
+    "SecurityTest"
+    "SecurityFromBufferTest"
+    "python_test"
+
+    # tests that fail in the darwin sandbox when trying to use network
+    "UnitTests"
+    "TInterruptTest"
+    "TServerIntegrationTest"
+    "processor"
+    "TNonblockingServerTest"
+    "TNonblockingSSLServerTest"
+    "StressTest"
+    "StressTestConcurrent"
+    "StressTestNonBlocking"
+    "PythonThriftTNonblockingServer"
+  ];
+
+  doCheck = !static;
+  checkPhase = ''
+    runHook preCheck
+
+    ${lib.optionalString stdenv.isDarwin "DY"}LD_LIBRARY_PATH=$PWD/lib ctest -E "($(echo "$disabledTests" | tr " " "|"))"
+
+    runHook postCheck
+  '';
+  enableParallelChecking = false;
+
+  meta = with lib; {
     description = "Library for scalable cross-language services";
-    homepage = http://thrift.apache.org/;
+    homepage = "http://thrift.apache.org/";
     license = licenses.asl20;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = [ maintainers.bjornfor ];

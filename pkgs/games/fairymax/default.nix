@@ -1,6 +1,6 @@
-{stdenv, fetchurl}:
+{lib, stdenv, fetchurl}:
 stdenv.mkDerivation rec {
-  name = "fairymax-${version}";
+  pname = "fairymax";
   version = "4.8";
   src = fetchurl {
     url = "http://home.hccnet.nl/h.g.muller/fmax4_8w.c";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     cp ${ini} fmax.ini
   '';
   buildPhase = ''
-    gcc *.c -o fairymax -DINI_FILE='"'"$out/share/fairymax/fmax.ini"'"'
+    $CC *.c -Wno-return-type -o fairymax -DINI_FILE='"'"$out/share/fairymax/fmax.ini"'"'
   '';
   installPhase = ''
     mkdir -p "$out"/{bin,share/fairymax}
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   '';
   meta = {
     inherit version;
-    description = ''A small chess engine supporting fairy pieces'';
+    description = "A small chess engine supporting fairy pieces";
     longDescription = ''
        A version of micro-Max that reads the piece description
        from a file fmax.ini, so that arbitrary fairy pieces can be
@@ -32,9 +32,9 @@ stdenv.mkDerivation rec {
        and board sizes up to 12x8. A Linux port exists in the
        format of a debian package.
     '';
-    license = stdenv.lib.licenses.free ;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
-    homepage = http://home.hccnet.nl/h.g.muller/dwnldpage.html;
+    license = lib.licenses.free ;
+    maintainers = [lib.maintainers.raskin];
+    platforms = lib.platforms.all;
+    homepage = "http://home.hccnet.nl/h.g.muller/dwnldpage.html";
   };
 }

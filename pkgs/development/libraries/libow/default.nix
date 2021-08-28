@@ -1,43 +1,44 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, pkgconfig, libtool }:
+{ lib, stdenv, fetchFromGitHub, autoconf, automake, pkg-config, libtool }:
 
 stdenv.mkDerivation rec {
-  version = "3.2p1";
-  name = "libow-${version}";
+  version = "3.2p4";
+  pname = "libow";
 
   src = fetchFromGitHub {
     owner = "owfs";
     repo = "owfs";
     rev = "v${version}";
-    sha256 = "17jhhvlqzndf7q3xnb8bjf4j0j905c420cbxabwpz8xac3z62vb8";
+    sha256 = "0dln1ar7bxwhpi36sccmpwapy7iz4j097rbf02mgn42lw5vrcg3s";
   };
 
-  nativeBuildInputs = [ autoconf automake pkgconfig ];
+  nativeBuildInputs = [ autoconf automake libtool pkg-config ];
 
-  meta = with stdenv.lib; {
+  preConfigure = ''
+    # Tries to use glibtoolize on Darwin, but it shouldn't for Nix.
+    sed -i -e 's/glibtoolize/libtoolize/g' bootstrap
+    ./bootstrap
+  '';
+
+  configureFlags = [
+    "--disable-owtcl"
+    "--disable-owphp"
+    "--disable-owpython"
+    "--disable-zero"
+    "--disable-owshell"
+    "--disable-owhttpd"
+    "--disable-owftpd"
+    "--disable-owserver"
+    "--disable-owperl"
+    "--disable-owtap"
+    "--disable-owmon"
+    "--disable-owexternal"
+  ];
+
+  meta = with lib; {
     description = "1-Wire File System full library";
-    homepage = http://owfs.org/;
+    homepage = "https://owfs.org/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ disserman ];
     platforms = platforms.unix;
   };
-
-  buildInputs = [ libtool ];
-
-  preConfigure = "./bootstrap";
-
-  configureFlags = [
-      "--disable-owtcl"
-      "--disable-owphp"
-      "--disable-owpython"
-      "--disable-zero"
-      "--disable-owshell"
-      "--disable-owhttpd"
-      "--disable-owftpd"
-      "--disable-owserver"
-      "--disable-owperl"
-      "--disable-owtcl"
-      "--disable-owtap"
-      "--disable-owmon"
-      "--disable-owexternal"
-    ];
 }

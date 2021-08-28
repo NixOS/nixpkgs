@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, unzip, alsaLib, libX11, libXi, SDL2 }:
+{ lib, stdenv, fetchurl, unzip, alsaLib, libX11, libXi, SDL2 }:
 
 let
-  libPath = stdenv.lib.makeLibraryPath [ stdenv.cc.cc alsaLib libX11 libXi SDL2 ];
+  libPath = lib.makeLibraryPath [ stdenv.cc.cc alsaLib libX11 libXi SDL2 ];
   arch =
     if stdenv.isAarch64
     then "arm64"
@@ -12,15 +12,15 @@ let
     else "x86";
 in
 stdenv.mkDerivation rec {
-  name = "SunVox-${version}";
-  version = "1.9.4c";
+  pname = "SunVox";
+  version = "1.9.6c";
 
   src = fetchurl {
     url = "http://www.warmplace.ru/soft/sunvox/sunvox-${version}.zip";
-    sha256 = "19c1a4e28459e31e1a19986f219d4caa4eb2cb5bc9f6aa994abdbb2ebf6ac4ac";
+    sha256 = "10lqbm1grw0sqasx7i6528cishv5ksdf9zbb3ygxd8c1iwaxzhb9";
   };
 
-  buildInputs = [ unzip ];
+  nativeBuildInputs = [ unzip ];
 
   unpackPhase = "unzip $src";
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     ln -s "$bin" $out/bin/sunvox
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Small, fast and powerful modular synthesizer with pattern-based sequencer";
     license = licenses.unfreeRedistributable;
     homepage = "http://www.warmplace.ru/soft/sunvox/";

@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, libsepol, python }:
+{ lib, stdenv, fetchurl, libsepol, python }:
 
 stdenv.mkDerivation rec {
-  name = "sepolgen-${version}";
+  pname = "sepolgen";
   version = "1.2.2";
   inherit (libsepol) se_release se_url;
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     makeFlagsArray+=("PYTHONLIBDIR=lib/${python.libPrefix}/site-packages")
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (libsepol.meta) homepage platforms maintainers;
     description = "SELinux policy generation library";
     license = licenses.gpl2;

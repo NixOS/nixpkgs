@@ -44,45 +44,39 @@ in
 
   config = mkIf cfg.enable {
 
-    services.xserver.desktopManager.session = singleton {
-      name = "mate";
-      bgSupport = true;
-      start = ''
-        # Set GTK_DATA_PREFIX so that GTK+ can find the themes
-        export GTK_DATA_PREFIX=${config.system.path}
+    services.xserver.displayManager.sessionPackages = [
+      pkgs.mate.mate-session-manager
+    ];
 
-        # Find theme engines
-        export GTK_PATH=${config.system.path}/lib/gtk-3.0:${config.system.path}/lib/gtk-2.0
+    services.xserver.displayManager.sessionCommands = ''
+      if test "$XDG_CURRENT_DESKTOP" = "MATE"; then
+          export XDG_MENU_PREFIX=mate-
 
-        export XDG_MENU_PREFIX=mate-
+          # Let caja find extensions
+          export CAJA_EXTENSION_DIRS=$CAJA_EXTENSION_DIRS''${CAJA_EXTENSION_DIRS:+:}${config.system.path}/lib/caja/extensions-2.0
 
-        # Let caja find extensions
-        export CAJA_EXTENSION_DIRS=$CAJA_EXTENSION_DIRS''${CAJA_EXTENSION_DIRS:+:}${config.system.path}/lib/caja/extensions-2.0
-
-        # Let caja extensions find gsettings schemas
-        ${concatMapStrings (p: ''
+          # Let caja extensions find gsettings schemas
+          ${concatMapStrings (p: ''
           if [ -d "${p}/lib/caja/extensions-2.0" ]; then
-            ${addToXDGDirs p}
+              ${addToXDGDirs p}
           fi
-          '')
-          config.environment.systemPackages
-        }
+          '') config.environment.systemPackages}
 
-        # Let mate-panel find applets
-        export MATE_PANEL_APPLETS_DIR=$MATE_PANEL_APPLETS_DIR''${MATE_PANEL_APPLETS_DIR:+:}${config.system.path}/share/mate-panel/applets
-        export MATE_PANEL_EXTRA_MODULES=$MATE_PANEL_EXTRA_MODULES''${MATE_PANEL_EXTRA_MODULES:+:}${config.system.path}/lib/mate-panel/applets
+          # Add mate-control-center paths to some XDG variables because its schemas are needed by mate-settings-daemon, and mate-settings-daemon is a dependency for mate-control-center (that is, they are mutually recursive)
+          ${addToXDGDirs pkgs.mate.mate-control-center}
+      fi
+    '';
 
-        # Add mate-control-center paths to some XDG variables because its schemas are needed by mate-settings-daemon, and mate-settings-daemon is a dependency for mate-control-center (that is, they are mutually recursive)
-        ${addToXDGDirs pkgs.mate.mate-control-center}
+    # Let mate-panel find applets
+    environment.sessionVariables."MATE_PANEL_APPLETS_DIR" = "${config.system.path}/share/mate-panel/applets";
+    environment.sessionVariables."MATE_PANEL_EXTRA_MODULES" = "${config.system.path}/lib/mate-panel/applets";
 
-        ${pkgs.mate.mate-session-manager}/bin/mate-session ${optionalString cfg.debug "--debug"} &
-        waitPID=$!
-      '';
-    };
+    # Debugging
+    environment.sessionVariables.MATE_SESSION_DEBUG = mkIf cfg.debug "1";
 
     environment.systemPackages =
       pkgs.mate.basePackages ++
-      (pkgs.gnome3.removePackagesByName
+      (pkgs.gnome.removePackagesByName
         pkgs.mate.extraPackages
         config.environment.mate.excludePackages) ++
       [
@@ -91,19 +85,25 @@ in
         pkgs.gtk3.out
         pkgs.shared-mime-info
         pkgs.xdg-user-dirs # Update user dirs as described in https://freedesktop.org/wiki/Software/xdg-user-dirs/
+        pkgs.mate.mate-settings-daemon
+        pkgs.yelp # for 'Contents' in 'Help' menus
       ];
 
     programs.dconf.enable = true;
-    services.gnome3.at-spi2-core.enable = true;
-    services.gnome3.gnome-keyring.enable = true;
-    services.gnome3.gnome-settings-daemon.enable = true;
-    services.gnome3.gnome-settings-daemon.package = pkgs.mate.mate-settings-daemon;
-    services.gnome3.gvfs.enable = true;
+    # Shell integration for VTE terminals
+    programs.bash.vteIntegration = mkDefault true;
+    programs.zsh.vteIntegration = mkDefault true;
+
+    # Mate uses this for printing
+    programs.system-config-printer.enable = (mkIf config.services.printing.enable (mkDefault true));
+
+    services.gnome.at-spi2-core.enable = true;
+    services.gnome.gnome-keyring.enable = true;
+    services.udev.packages = [ pkgs.mate.mate-settings-daemon ];
+    services.gvfs.enable = true;
     services.upower.enable = config.powerManagement.enable;
 
-    security.pam.services."mate-screensaver".unixAuth = true;
-
-    environment.variables.GIO_EXTRA_MODULES = [ "${pkgs.gnome3.gvfs}/lib/gio/modules" ];
+    security.pam.services.mate-screensaver.unixAuth = true;
 
     environment.pathsToLink = [ "/share" ];
   };

@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, jre }:
+{ lib, stdenv, fetchurl, jre }:
 stdenv.mkDerivation rec {
-  name = "zxing-${version}";
+  pname = "zxing";
   version = "3.1.0";
   # Maven builds are hard to get right
   core_jar = fetchurl {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "0fzxvvf5dqyrs5m9rqw4ffm9h1s27bi7q3jb1dam34s80q2rp2zq";
   };
   inherit jre;
-  unpackPhase = ''true'';
+  dontUnpack = true;
   installPhase = ''
     mkdir -p "$out/lib/java" "$out/bin"
     cp "${core_jar}" "${javase_jar}" "$out/lib/java"
@@ -25,10 +25,10 @@ stdenv.mkDerivation rec {
   '';
   meta = {
     inherit version;
-    description = ''1D and 2D code reading library'';
-    license = stdenv.lib.licenses.asl20;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
-    homepage = https://github.com/zxing/zxing;
+    description = "1D and 2D code reading library";
+    license = lib.licenses.asl20;
+    maintainers = [lib.maintainers.raskin];
+    platforms = lib.platforms.linux;
+    homepage = "https://github.com/zxing/zxing";
   };
 }

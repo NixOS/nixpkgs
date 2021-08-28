@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, qmake, qtbase }:
+{ mkDerivation, lib, fetchFromGitHub, qmake, qtbase }:
 
-stdenv.mkDerivation rec {
-  name = "rocket-${version}";
+mkDerivation {
+  pname = "rocket";
   version = "2018-06-09";
 
   src = fetchFromGitHub {
@@ -14,14 +14,14 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ qmake ];
   buildInputs = [ qtbase ];
 
-  configurePhase = ":";
+  dontConfigure = true;
 
   installPhase = ''
     mkdir -p $out/bin
     cp -r editor/editor $out/bin/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A tool for synchronizing music and visuals in demoscene productions";
     homepage = "https://github.com/rocket/rocket";
     license = licenses.zlib;

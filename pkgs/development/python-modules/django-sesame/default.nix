@@ -1,26 +1,26 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchFromGitHub
 , django }:
 
 buildPythonPackage rec {
   pname = "django-sesame";
-  version = "1.4";
+  version = "1.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "081q3vd9waiajiipg99flw0vlzk920sz07067v3n5774gx0qhbaa";
+  src = fetchFromGitHub {
+    owner = "aaugustin";
+    repo = pname;
+    rev = version;
+    sha256 = "0k8s44zn2jmasp0w064vrx685fn4pbmdfx8qmhkab1hd5ys6pi44";
   };
 
   checkInputs = [ django ];
 
   checkPhase = ''
-    PYTHONPATH="$(pwd):$PYTHONPATH" \
-    DJANGO_SETTINGS_MODULE=sesame.test_settings \
-      django-admin test sesame
+    make test
   '';
 
   meta = with lib; {
     description = "URLs with authentication tokens for automatic login";
-    homepage = https://github.com/aaugustin/django-sesame;
+    homepage = "https://github.com/aaugustin/django-sesame";
     license = licenses.bsd3;
     maintainers = with maintainers; [ elohmeier ];
   };

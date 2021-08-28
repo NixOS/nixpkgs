@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , pymongo
@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pymongo ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "MongoDB-backed Python dict-like interface";
     homepage = "https://github.com/turicas/mongodict/";
     license = licenses.gpl3;

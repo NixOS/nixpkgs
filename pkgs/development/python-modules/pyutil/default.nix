@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , setuptoolsDarcs
@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "pyutil";
-  version = "3.1.0";
+  version = "3.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8e254aa0a3b59e90515f7bca7ebc467b20a8d3fd2e26b63d196655c075da8d38";
+    sha256 = "8c4d4bf668c559186389bb9bce99e4b1b871c09ba252a756ccaacd2b8f401848";
   };
 
   buildInputs = [ setuptoolsDarcs setuptoolsTrial ] ++ (if doCheck then [ simplejson ] else []);
@@ -24,11 +24,11 @@ buildPythonPackage rec {
   # package, apparently some kind of plugin.
   doCheck = false;
 
-  prePatch = stdenv.lib.optionalString isPyPy ''
+  prePatch = lib.optionalString isPyPy ''
     grep -rl 'utf-8-with-signature-unix' ./ | xargs sed -i -e "s|utf-8-with-signature-unix|utf-8|g"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Pyutil, a collection of mature utilities for Python programmers";
 
     longDescription = ''
@@ -41,7 +41,7 @@ buildPythonPackage rec {
       we're not alone in wanting tools like these.
     '';
 
-    homepage = http://allmydata.org/trac/pyutil;
+    homepage = "http://allmydata.org/trac/pyutil";
     license = licenses.gpl2Plus;
   };
 

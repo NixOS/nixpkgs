@@ -1,9 +1,11 @@
 { lib
 , buildPythonPackage
-, fetchFromGitHub
+, fetchPypi
 , pythonOlder
+, isPy27
+, aenum
 , wrapt
-, typing
+, typing ? null
 , pyserial
 , nose
 , mock
@@ -14,20 +16,15 @@
 
 buildPythonPackage rec {
   pname = "python-can";
-  version = "3.1.0";
+  version = "3.3.4";
 
-  # PyPI tarball is missing some tests and is missing __init__.py in test
-  # directory causing the tests to fail. See:
-  # https://github.com/hardbyte/python-can/issues/518
-  src = fetchFromGitHub {
-    repo = pname;
-    owner = "hardbyte";
-    rev = "v${version}";
-    sha256 = "01lfsh7drm4qvv909x9i0vnhskdh27mcb5xa86sv9m3zfpq8cjis";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "2d3c223b7adc4dd46ce258d4a33b7e0dbb6c339e002faa40ee4a69d5fdce9449";
   };
 
-  propagatedBuildInputs = [ wrapt pyserial ] ++ lib.optional (pythonOlder "3.5") typing;
-  checkInputs = [ nose mock pytest pytest-timeout hypothesis future ];
+  propagatedBuildInputs = [ wrapt pyserial aenum ] ++ lib.optional (pythonOlder "3.5") typing;
+  checkInputs = [ nose mock pytest hypothesis future ];
 
   # Add the scripts to PATH
   checkPhase = ''
@@ -35,7 +32,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    homepage = https://github.com/hardbyte/python-can;
+    homepage = "https://github.com/hardbyte/python-can";
     description = "CAN support for Python";
     license = licenses.lgpl3;
     maintainers = with maintainers; [ sorki ];

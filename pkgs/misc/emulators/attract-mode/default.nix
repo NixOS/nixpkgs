@@ -1,31 +1,31 @@
-{ expat, fetchFromGitHub, ffmpeg, fontconfig, freetype, libarchive, libjpeg
-, libGLU_combined, openal, pkgconfig, sfml, stdenv, zlib
+{ expat, fetchFromGitHub, ffmpeg_3, fontconfig, freetype, libarchive, libjpeg
+, libGLU, libGL, openal, pkg-config, sfml, lib, stdenv, zlib
 }:
 
 stdenv.mkDerivation rec {
-  name = "attract-mode-${version}";
-  version = "2.2.0";
+  pname = "attract-mode";
+  version = "2.6.1";
 
   src = fetchFromGitHub {
     owner = "mickelson";
     repo = "attract";
     rev = "v${version}";
-    sha256 = "1arkfj0q3n1qbq5jwmal0kixxph8lnmv3g9bli36inab4r8zzmp8";
+    sha256 = "16p369j0hanm0l2fiy6h9d9pn0f3qblcy9l39all6h7rfxnhp9ii";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   patchPhase = ''
     sed -i "s|prefix=/usr/local|prefix=$out|" Makefile
   '';
 
   buildInputs = [
-    expat ffmpeg fontconfig freetype libarchive libjpeg libGLU_combined openal sfml zlib
+    expat ffmpeg_3 fontconfig freetype libarchive libjpeg libGLU libGL openal sfml zlib
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A frontend for arcade cabinets and media PCs";
-    homepage = http://attractmode.org;
+    homepage = "http://attractmode.org";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ hrdinka ];
     platforms = with platforms; linux;

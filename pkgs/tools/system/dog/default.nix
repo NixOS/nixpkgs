@@ -1,6 +1,6 @@
-{stdenv, fetchurl}:
+{lib, stdenv, fetchurl}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "dog-1.7";
 
   src = fetchurl {
@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
     cp dog $out/bin
   '';
 
-  meta = with stdenv.lib; {
-    homepage = http://lwn.net/Articles/421072/;
+  meta = with lib; {
+    homepage = "http://lwn.net/Articles/421072/";
     description = "cat replacement";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ qknight ];

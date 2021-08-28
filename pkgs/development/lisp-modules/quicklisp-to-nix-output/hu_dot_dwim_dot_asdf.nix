@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''hu_dot_dwim_dot_asdf'';
-  version = ''20180228-darcs'';
+  baseName = "hu_dot_dwim_dot_asdf";
+  version = "20200925-darcs";
 
-  description = ''Various ASDF extensions such as attached test and documentation system, explicit development support, etc.'';
+  description = "Various ASDF extensions such as attached test and documentation system, explicit development support, etc.";
 
   deps = [ args."uiop" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/hu.dwim.asdf/2018-02-28/hu.dwim.asdf-20180228-darcs.tgz'';
-    sha256 = ''19ak3krzlzbdh8chbimwjca8q4jksaf9v88k86jsdgxchfr0dkld'';
+    url = "http://beta.quicklisp.org/archive/hu.dwim.asdf/2020-09-25/hu.dwim.asdf-20200925-darcs.tgz";
+    sha256 = "1812gk65x8yy8s817zhzga52zvdlagws4sw6a8f6zk7yaaa6br8h";
   };
 
   packageName = "hu.dwim.asdf";
@@ -19,8 +20,8 @@ rec {
 }
 /* (SYSTEM hu.dwim.asdf DESCRIPTION
     Various ASDF extensions such as attached test and documentation system, explicit development support, etc.
-    SHA256 19ak3krzlzbdh8chbimwjca8q4jksaf9v88k86jsdgxchfr0dkld URL
-    http://beta.quicklisp.org/archive/hu.dwim.asdf/2018-02-28/hu.dwim.asdf-20180228-darcs.tgz
-    MD5 a1f3085cbd7ea77f9212112cc8914e86 NAME hu.dwim.asdf FILENAME
+    SHA256 1812gk65x8yy8s817zhzga52zvdlagws4sw6a8f6zk7yaaa6br8h URL
+    http://beta.quicklisp.org/archive/hu.dwim.asdf/2020-09-25/hu.dwim.asdf-20200925-darcs.tgz
+    MD5 feec747077117dd9850db77ed1919c21 NAME hu.dwim.asdf FILENAME
     hu_dot_dwim_dot_asdf DEPS ((NAME uiop FILENAME uiop)) DEPENDENCIES (uiop)
-    VERSION 20180228-darcs SIBLINGS (hu.dwim.asdf.documentation) PARASITES NIL) */
+    VERSION 20200925-darcs SIBLINGS (hu.dwim.asdf.documentation) PARASITES NIL) */

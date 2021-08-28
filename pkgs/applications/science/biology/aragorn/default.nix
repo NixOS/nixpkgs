@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   version = "1.2.38";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   buildPhase = ''
-    gcc -O3 -ffast-math -finline-functions -o aragorn aragorn${version}.c
+    $CC -O3 -ffast-math -finline-functions -o aragorn aragorn${version}.c
   '';
 
   installPhase = ''
@@ -18,9 +18,9 @@ stdenv.mkDerivation rec {
     mkdir -p $out/man/1 && cp aragorn.1 $out/man/1
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Detects tRNA, mtRNA, and tmRNA genes in nucleotide sequences";
-    homepage = http://mbio-serv2.mbioekol.lu.se/ARAGORN/;
+    homepage = "http://mbio-serv2.mbioekol.lu.se/ARAGORN/";
     license = licenses.gpl2;
     maintainers = [ maintainers.bzizou ];
     platforms = platforms.unix;

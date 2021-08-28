@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , isPy3k
 , isPyPy
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   disabled = isPy3k || isPyPy;
 
   src = fetchurl {
-    url = "http://namebench.googlecode.com/files/${pname}-${version}-source.tgz";
+    url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/{pname}/${pname}-${version}-source.tgz";
     sha256 = "09clbcd6wxgk4r6qw7hb78h818mvca7lijigy1mlq5y1f3lgkk1h";
   };
 
@@ -27,16 +27,15 @@ buildPythonPackage rec {
     sed -i "s|import os|import os; os.chdir(\"$out/namebench\")|" "$out/bin/namebench.py"
   '';
 
-  meta = with stdenv.lib; {
-    homepage = http://namebench.googlecode.com/;
+  meta = with lib; {
+    homepage = "https://github.com/google/namebench"; # Formerly https://code.google.com/archive/p/namebench/
     description = "Find fastest DNS servers available";
     license = with licenses; [
       asl20
       # third-party program licenses (embedded in the sources)
-      "LGPL" # Crystal_Clear
-      free # dns
-      asl20 # graphy
-      "BSD" # jinja2
+      lgpl21 # Crystal_Clear
+      isc # dns
+      bsd3 # jinja2
     ];
     longDescription = ''
       It hunts down the fastest DNS servers available for your computer to

@@ -1,38 +1,39 @@
-{ stdenv
+{ lib
 , buildPythonPackage
-, fetchPypi
+, capstone
+, stdenv
 , fetchpatch
+, fetchPypi
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "capstone";
-  version = "3.0.4";
+  version = lib.getVersion capstone;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "945d3b8c3646a1c3914824c416439e2cf2df8969dd722c8979cdcc23b40ad225";
-  };
-
-  patches = [
-    (fetchpatch {
-      stripLen = 2;
-      url = "https://patch-diff.githubusercontent.com/raw/aquynh/capstone/pull/783/commits/23fe9f36622573c747e2bab6119ff245437bf276.patch";
-      sha256 = "0yizqrdlxqxn16873593kdx2vrr7gvvilhgcf9xy6hr0603d3m5r";
-    })
-  ];
+  src = capstone.src;
+  sourceRoot = "${capstone.name}/bindings/python";
 
   postPatch = ''
-    patchShebangs src/make.sh
+    ln -s ${capstone}/lib/libcapstone${stdenv.targetPlatform.extensions.sharedLibrary} prebuilt/
+    ln -s ${capstone}/lib/libcapstone.a prebuilt/
+    substituteInPlace setup.py --replace manylinux1 manylinux2014
   '';
 
-  preCheck = ''
-    mv src/libcapstone.so capstone
+  propagatedBuildInputs = [ setuptools ];
+
+  checkPhase = ''
+    mv capstone capstone.hidden
+    patchShebangs test_*
+    make check
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.capstone-engine.org/";
     license = licenses.bsdOriginal;
-    description = "Capstone disassembly engine";
-    maintainers = with maintainers; [ bennofs ];
+    description = "Python bindings for Capstone disassembly engine";
+    maintainers = with maintainers; [ bennofs ris ];
+    # creates a manylinux2014-x86_64 wheel
+    broken = stdenv.isAarch64;
   };
 }

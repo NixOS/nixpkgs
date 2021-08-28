@@ -1,7 +1,7 @@
-{stdenv, fetchurl, qt4, perl, pkgconfig }:
+{lib, stdenv, fetchurl, qt4, perl, pkg-config }:
 
 stdenv.mkDerivation rec {
-  name = "qshowdiff-${version}";
+  pname = "qshowdiff";
   version = "1.2";
 
   src = fetchurl {
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "027959xbzvi5c2w9y1x122sr5i26k9mvp43banz2wln6gd860n1a";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ qt4 perl ];
 
   configurePhase = ''
@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://qshowdiff.danfis.cz/;
+    homepage = "http://qshowdiff.danfis.cz/";
     description = "Colourful diff viewer";
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
   };
 }

@@ -1,7 +1,8 @@
-{ stdenv, fetchFromGitHub, xcbuildHook, libiconv, Cocoa, ncurses, cf-private }:
+{ lib, stdenv, fetchFromGitHub, xcbuildHook, libiconv, ncurses, Cocoa }:
 
-stdenv.mkDerivation rec {
-  name = "pinentry-mac-0.9.4";
+stdenv.mkDerivation {
+  pname = "pinentry-mac";
+  version = "0.9.4";
 
   src = fetchFromGitHub {
     owner = "matthewbauer";
@@ -11,12 +12,13 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ xcbuildHook ];
+  buildInputs = [ libiconv ncurses Cocoa ];
 
-  buildInputs = [
-    libiconv Cocoa ncurses
-    # Needed for OBJC_CLASS_$_NSArray symbols.
-    cf-private
-  ];
+  preBuild = ''
+    # Only build for what we care about (also allows arm64)
+    substituteInPlace pinentry-mac.xcodeproj/project.pbxproj \
+      --replace "i386 x86_64 ppc" "${stdenv.targetPlatform.darwinArch}"
+  '';
 
   installPhase = ''
     mkdir -p $out/Applications
@@ -29,8 +31,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Pinentry for GPG on Mac";
-    license = stdenv.lib.licenses.gpl2Plus;
-    homepage = https://github.com/GPGTools/pinentry-mac;
-    platforms = stdenv.lib.platforms.darwin;
+    license = lib.licenses.gpl2Plus;
+    homepage = "https://github.com/GPGTools/pinentry-mac";
+    platforms = lib.platforms.darwin;
   };
 }

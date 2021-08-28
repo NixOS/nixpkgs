@@ -1,26 +1,44 @@
-{ stdenv, fetchgit, cmake, perl, go }:
+{ lib
+, stdenv
+, fetchgit
+, cmake
+, ninja
+, perl
+, buildGoModule
+}:
 
 # reference: https://boringssl.googlesource.com/boringssl/+/2661/BUILDING.md
-stdenv.mkDerivation rec {
-  name = "boringssl-${version}";
-  version = "2017-02-23";
+buildGoModule {
+  pname = "boringssl";
+  version = "2021-04-18";
 
   src = fetchgit {
     url    = "https://boringssl.googlesource.com/boringssl";
-    rev    = "be2ee342d3781ddb954f91f8a7e660c6f59e87e5";
-    sha256 = "022zq7wlkhrg6al7drr3555lam3zw5bb10ylf9mznp83s854f975";
+    rev    = "468cde90ca58421d63f4dfeaebcf8bb3fccb4127";
+    sha256 = "0gaqcbvp6r5fq265mckmg0i0rjab0bhxkxcvfxp3ar5dm7q88w39";
   };
 
-  buildInputs = [ cmake perl go ];
-  enableParallelBuilding = true;
-  NIX_CFLAGS_COMPILE = "-Wno-error";
+  nativeBuildInputs = [ cmake ninja perl ];
 
-  makeFlags = [ "GOCACHE=$(TMPDIR)/go-cache" ];
+  vendorSha256 = "sha256-pQpattmS9VmO3ZIQUFn66az8GSmB4IvYhTTCFn6SUmo=";
+
+  # hack to get both go and cmake configure phase
+  # (if we use postConfigure then cmake will loop runHook postConfigure)
+  preBuild = ''
+    cmakeConfigurePhase
+  '';
+
+  buildPhase = ''
+    ninjaBuildPhase
+  '';
+
+  # CMAKE_OSX_ARCHITECTURES is set to x86_64 by Nix, but it confuses boringssl on aarch64-linux.
+  cmakeFlags = [ "-GNinja" ] ++ lib.optionals (stdenv.isLinux) [ "-DCMAKE_OSX_ARCHITECTURES=" ];
 
   installPhase = ''
-    mkdir -p $out/bin $out/include $out/lib
+    mkdir -p $bin/bin $out/include $out/lib
 
-    mv tool/bssl $out/bin
+    mv tool/bssl $bin/bin
 
     mv ssl/libssl.a           $out/lib
     mv crypto/libcrypto.a     $out/lib
@@ -29,10 +47,11 @@ stdenv.mkDerivation rec {
     mv ../include/openssl $out/include
   '';
 
-  meta = with stdenv.lib; {
+  outputs = [ "out" "bin" ];
+
+  meta = with lib; {
     description = "Free TLS/SSL implementation";
     homepage    = "https://boringssl.googlesource.com";
-    platforms   = platforms.all;
     maintainers = [ maintainers.thoughtpolice ];
     license = with licenses; [ openssl isc mit bsd3 ];
   };

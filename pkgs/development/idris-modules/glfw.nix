@@ -10,7 +10,7 @@ build-idris-package  {
 
   idrisDeps = [ effects ];
 
-  nativeBuildInputs = [ pkgs.pkgconfig ];
+  nativeBuildInputs = [ pkgs.pkg-config ];
   extraBuildInputs = [ pkgs.glfw ];
 
   postPatch = ''
@@ -27,7 +27,7 @@ build-idris-package  {
 
   meta = {
     description = "GLFW bindings for Idris";
-    homepage = https://github.com/eckart/glfw-idris;
+    homepage = "https://github.com/eckart/glfw-idris";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.brainrape ];
   };

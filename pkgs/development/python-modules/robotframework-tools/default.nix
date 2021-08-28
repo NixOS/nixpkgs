@@ -1,31 +1,49 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
-, isPy3k
 , robotframework
 , moretools
 , pathpy
 , six
 , zetup
+, modeled
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
-  version = "0.1a115";
+  version = "0.1rc4";
   pname = "robotframework-tools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "04gkn1zpf3rsvbqdxrrjqqi8sa0md9gqwh6n5w2m03fdwjg4lc7q";
+    sha256 = "0377ikajf6c3zcy3lc0kh4w9zmlqyplk2c2hb0yyc7h3jnfnya96";
   };
 
   nativeBuildInputs = [ zetup ];
 
-  propagatedBuildInputs = [ robotframework moretools pathpy six ];
+  propagatedBuildInputs = [
+    robotframework
+    moretools
+    pathpy
+    six
+    modeled
+  ];
 
-  meta = with stdenv.lib; {
+  postPatch = ''
+    # Remove upstream's selfmade approach to collect the dependencies
+    # https://github.com/userzimmermann/robotframework-tools/issues/1
+    substituteInPlace setup.py --replace \
+      "setup_requires=SETUP_REQUIRES + (zfg.SETUP_REQUIRES or [])," ""
+  '';
+
+  checkInputs = [ pytestCheckHook ];
+  pytestFlagsArray = [ "test" ];
+  pythonImportsCheck = [ "robottools" ];
+
+  meta = with lib; {
     description = "Python Tools for Robot Framework and Test Libraries";
-    homepage = https://bitbucket.org/userzimmermann/robotframework-tools;
-    license = licenses.gpl3;
-    broken = isPy3k; # 2019-03-15, missing dependency robotframework-python3
+    homepage = "https://github.com/userzimmermann/robotframework-tools";
+    license = licenses.gpl3Plus;
+    maintainers = [ maintainers.costrouc ];
   };
 }

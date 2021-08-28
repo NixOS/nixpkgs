@@ -24,7 +24,7 @@ rec {
     let arg = (merger init (defaultMergeArg init x));
         # now add the function with composed args already applied to the final attrs
         base = (setAttrMerge "passthru" {} (f arg)
-                        ( z: z // rec {
+                        ( z: z // {
                             function = foldArgs merger f arg;
                             args = (lib.attrByPath ["passthru" "args"] {} z) // x;
                           } ));
@@ -272,6 +272,7 @@ rec {
   imap = imap1;
 
   # Fake hashes. Can be used as hash placeholders, when computing hash ahead isn't trivial
+  fakeHash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   fakeSha256 = "0000000000000000000000000000000000000000000000000000000000000000";
   fakeSha512 = "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000";
 }

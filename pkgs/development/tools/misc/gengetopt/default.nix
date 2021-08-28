@@ -1,17 +1,29 @@
-{ fetchurl, stdenv }:
+{ fetchurl, lib, stdenv, texinfo, help2man }:
 
 stdenv.mkDerivation rec {
-  name = "gengetopt-2.22.6";
+  pname = "gengetopt";
+  version = "2.23";
 
   src = fetchurl {
-    url = "mirror://gnu/gengetopt/${name}.tar.gz";
-    sha256 = "1xq1kcfs6hri101ss4dhym0jn96z4v6jdvx288mfywadc245mc1h";
+    url = "mirror://gnu/${pname}/${pname}-${version}.tar.xz";
+    sha256 = "1b44fn0apsgawyqa4alx2qj5hls334mhbszxsy6rfr0q074swhdr";
   };
 
   doCheck = true;
+  # attempts to open non-existent file
+  preCheck = ''
+    rm tests/test_conf_parser_save.sh
+  '';
 
+  enableParallelBuilding = true;
+
+  nativeBuildInputs = [ texinfo help2man ];
+
+  #Fix, see #28255
   postPatch = ''
-    sed -e 's/set -o posix/set +o posix/' -i configure
+    substituteInPlace configure --replace \
+      'set -o posix' \
+      'set +o posix'
   '';
 
   meta = {
@@ -23,11 +35,11 @@ stdenv.mkDerivation rec {
          fills a struct
       '';
 
-    homepage = https://www.gnu.org/software/gengetopt/;
+    homepage = "https://www.gnu.org/software/gengetopt/";
 
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
 
     maintainers = [ ];
-    platforms = stdenv.lib.platforms.all;
+    platforms = lib.platforms.all;
   };
 }

@@ -1,34 +1,30 @@
-{ stdenv, fetchurl, callPackage, ncurses, gettext, pkgconfig
+{ lib, stdenv, fetchurl, callPackage, ncurses, gettext, pkg-config
 # default vimrc
 , vimrc ? fetchurl {
     name = "default-vimrc";
-    url = https://git.archlinux.org/svntogit/packages.git/plain/trunk/archlinux.vim?id=68f6d131750aa778807119e03eed70286a17b1cb;
+    url = "https://raw.githubusercontent.com/archlinux/svntogit-packages/68f6d131750aa778807119e03eed70286a17b1cb/trunk/archlinux.vim";
     sha256 = "18ifhv5q9prd175q3vxbqf6qyvkk6bc7d2lhqdk0q78i68kv9y0c";
   }
 # apple frameworks
-, cf-private, Carbon, Cocoa
+, Carbon, Cocoa
 }:
 
 let
   common = callPackage ./common.nix {};
 in
-stdenv.mkDerivation rec {
-  name = "vim-${version}";
+stdenv.mkDerivation {
+  pname = "vim";
 
   inherit (common) version src postPatch hardeningDisable enableParallelBuilding meta;
 
-  nativeBuildInputs = [ gettext pkgconfig ];
+  nativeBuildInputs = [ gettext pkg-config ];
   buildInputs = [ ncurses ]
-    ++ stdenv.lib.optionals stdenv.hostPlatform.isDarwin [
-      Carbon Cocoa
-      # Needed for OBJC_CLASS_$_NSArray symbols.
-      cf-private
-    ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Carbon Cocoa ];
 
   configureFlags = [
     "--enable-multibyte"
     "--enable-nls"
-  ] ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "vim_cv_toupper_broken=no"
     "--with-tlib=ncurses"
     "vim_cv_terminfo=yes"

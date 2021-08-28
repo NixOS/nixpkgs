@@ -1,7 +1,7 @@
-{ stdenv, fetchsvn, autoconf, automake }:
+{ lib, stdenv, fetchsvn, autoconf, automake }:
 
 stdenv.mkDerivation rec {
-  name = "spawn-fcgi-${version}";
+  pname = "spawn-fcgi";
   version = "1.6.4";
 
   src = fetchsvn {
@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
     ./autogen.sh
   '';
 
-  meta = with stdenv.lib; {
-    homepage    = "http://redmine.lighttpd.net/projects/spawn-fcgi";
+  meta = with lib; {
+    homepage    = "https://redmine.lighttpd.net/projects/spawn-fcgi";
     description = "Provides an interface to external programs that support the FastCGI interface";
     license     = licenses.bsd3;
     maintainers = with maintainers; [ cstrahan ];

@@ -15,7 +15,7 @@ build-idris-package {
 
   meta = {
     description = "Primitive flat arrays containing Idris values";
-    homepage = https://github.com/idris-hackers/idris-array;
+    homepage = "https://github.com/idris-hackers/idris-array";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.brainrape ];
   };

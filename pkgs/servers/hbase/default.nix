@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, makeWrapper }:
+{ lib, stdenv, fetchurl, makeWrapper }:
 stdenv.mkDerivation rec {
-  name = "hbase-${version}";
+  pname = "hbase";
   version = "0.98.24";
 
   src = fetchurl {
@@ -8,15 +8,15 @@ stdenv.mkDerivation rec {
     sha256 = "0kz72wqsii09v9hxkw10mzyvjhji5sx3l6aijjalgbybavpcxglb";
   };
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
   installPhase = ''
     mkdir -p $out
     cp -R * $out
   '';
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A distributed, scalable, big data store";
-    homepage = https://hbase.apache.org;
+    homepage = "https://hbase.apache.org";
     license = licenses.asl20;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

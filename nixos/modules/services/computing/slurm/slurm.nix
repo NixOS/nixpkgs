@@ -14,18 +14,18 @@ let
       ClusterName=${cfg.clusterName}
       StateSaveLocation=${cfg.stateSaveLocation}
       SlurmUser=${cfg.user}
-      ${optionalString (cfg.controlMachine != null) ''controlMachine=${cfg.controlMachine}''}
-      ${optionalString (cfg.controlAddr != null) ''controlAddr=${cfg.controlAddr}''}
+      ${optionalString (cfg.controlMachine != null) "controlMachine=${cfg.controlMachine}"}
+      ${optionalString (cfg.controlAddr != null) "controlAddr=${cfg.controlAddr}"}
       ${toString (map (x: "NodeName=${x}\n") cfg.nodeName)}
       ${toString (map (x: "PartitionName=${x}\n") cfg.partitionName)}
-      PlugStackConfig=${plugStackConfig}
+      PlugStackConfig=${plugStackConfig}/plugstack.conf
       ProctrackType=${cfg.procTrackType}
       ${cfg.extraConfig}
     '';
 
   plugStackConfig = pkgs.writeTextDir "plugstack.conf"
     ''
-      ${optionalString cfg.enableSrunX11 ''optional ${pkgs.slurm-spank-x11}/lib/x11.so''}
+      ${optionalString cfg.enableSrunX11 "optional ${pkgs.slurm-spank-x11}/lib/x11.so"}
       ${cfg.extraPlugstackConfig}
     '';
 
@@ -34,11 +34,12 @@ let
      ${cfg.extraCgroupConfig}
    '';
 
-  slurmdbdConf = pkgs.writeTextDir "slurmdbd.conf"
+  slurmdbdConf = pkgs.writeText "slurmdbd.conf"
    ''
      DbdHost=${cfg.dbdserver.dbdHost}
      SlurmUser=${cfg.user}
      StorageType=accounting_storage/mysql
+     StorageUser=${cfg.dbdserver.storageUser}
      ${cfg.dbdserver.extraConfig}
    '';
 
@@ -48,7 +49,6 @@ let
     name = "etc-slurm";
     paths = [ configFile cgroupConfig plugStackConfig ] ++ cfg.extraConfigPaths;
   };
-
 in
 
 {
@@ -66,7 +66,7 @@ in
           type = types.bool;
           default = false;
           description = ''
-            Wether to enable the slurm control daemon.
+            Whether to enable the slurm control daemon.
             Note that the standard authentication method is "munge".
             The "munge" service needs to be provided with a password file in order for
             slurm to work properly (see <literal>services.munge.password</literal>).
@@ -86,11 +86,30 @@ in
           '';
         };
 
+        storageUser = mkOption {
+          type = types.str;
+          default = cfg.user;
+          description = ''
+            Database user name.
+          '';
+        };
+
+        storagePassFile = mkOption {
+          type = with types; nullOr str;
+          default = null;
+          description = ''
+            Path to file with database password. The content of this will be used to
+            create the password for the <literal>StoragePass</literal> option.
+          '';
+        };
+
         extraConfig = mkOption {
           type = types.lines;
           default = "";
           description = ''
-            Extra configuration for <literal>slurmdbd.conf</literal>
+            Extra configuration for <literal>slurmdbd.conf</literal> See also:
+            <citerefentry><refentrytitle>slurmdbd.conf</refentrytitle>
+            <manvolnum>8</manvolnum></citerefentry>.
           '';
         };
       };
@@ -103,7 +122,7 @@ in
         type = types.bool;
         default = false;
         description = ''
-          Wether to provide a slurm.conf file.
+          Whether to provide a slurm.conf file.
           Enable this option if you do not run a slurm daemon on this host
           (i.e. <literal>server.enable</literal> and <literal>client.enable</literal> are <literal>false</literal>)
           but you still want to run slurm commands from this host.
@@ -112,7 +131,7 @@ in
 
       package = mkOption {
         type = types.package;
-        default = pkgs.slurm;
+        default = pkgs.slurm.override { enableX11 = ! cfg.enableSrunX11; };
         defaultText = "pkgs.slurm";
         example = literalExample "pkgs.slurm-full";
         description = ''
@@ -178,9 +197,14 @@ in
           If enabled srun will accept the option "--x11" to allow for X11 forwarding
           from within an interactive session or a batch job. This activates the
           slurm-spank-x11 module. Note that this option also enables
-          'services.openssh.forwardX11' on the client.
+          <option>services.openssh.forwardX11</option> on the client.
 
           This option requires slurm to be compiled without native X11 support.
+          The default behavior is to re-compile the slurm package with native X11
+          support disabled if this option is set to true.
+
+          To use the native X11 support add <literal>PrologFlags=X11</literal> in <option>extraConfig</option>.
+          Note that this method will only work RSA SSH host keys.
         '';
       };
 
@@ -250,11 +274,30 @@ in
         '';
       };
 
+      etcSlurm = mkOption {
+        type = types.path;
+        internal = true;
+        default = etcSlurm;
+        description = ''
+          Path to directory with slurm config files. This option is set by default from the
+          Slurm module and is meant to make the Slurm config file available to other modules.
+        '';
+      };
 
     };
 
   };
 
+  imports = [
+    (mkRemovedOptionModule [ "services" "slurm" "dbdserver" "storagePass" ] ''
+      This option has been removed so that the database password is not exposed via the nix store.
+      Use services.slurm.dbdserver.storagePassFile to provide the database password.
+    '')
+    (mkRemovedOptionModule [ "services" "slurm" "dbdserver" "configFile" ] ''
+      This option has been removed. Use services.slurm.dbdserver.storagePassFile
+      and services.slurm.dbdserver.extraConfig instead.
+    '')
+  ];
 
   ###### implementation
 
@@ -274,7 +317,7 @@ in
           #!/bin/sh
           if [ -z "$SLURM_CONF" ]
           then
-            SLURM_CONF="${etcSlurm}/slurm.conf" "$EXE" "\$@"
+            SLURM_CONF="${cfg.etcSlurm}/slurm.conf" "$EXE" "\$@"
           else
             "$EXE" "\$0"
           fi
@@ -318,6 +361,7 @@ in
         ExecStart = "${wrappedSlurm}/bin/slurmd";
         PIDFile = "/run/slurmd.pid";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+        LimitMEMLOCK = "infinity";
       };
 
       preStart = ''
@@ -348,19 +392,32 @@ in
       '';
     };
 
-    systemd.services.slurmdbd = mkIf (cfg.dbdserver.enable) {
+    systemd.services.slurmdbd = let
+      # slurm strips the last component off the path
+      configPath = "$RUNTIME_DIRECTORY/slurmdbd.conf";
+    in mkIf (cfg.dbdserver.enable) {
       path = with pkgs; [ wrappedSlurm munge coreutils ];
 
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" "munged.service" "mysql.service" ];
       requires = [ "munged.service" "mysql.service" ];
 
-      # slurm strips the last component off the path
-      environment.SLURM_CONF = "${slurmdbdConf}/slurm.conf";
+      preStart = ''
+        install -m 600 -o ${cfg.user} -T ${slurmdbdConf} ${configPath}
+        ${optionalString (cfg.dbdserver.storagePassFile != null) ''
+          echo "StoragePass=$(cat ${cfg.dbdserver.storagePassFile})" \
+            >> ${configPath}
+        ''}
+      '';
+
+      script = ''
+        export SLURM_CONF=${configPath}
+        exec ${cfg.package}/bin/slurmdbd -D
+      '';
 
       serviceConfig = {
-        Type = "forking";
-        ExecStart = "${cfg.package}/bin/slurmdbd";
+        RuntimeDirectory = "slurmdbd";
+        Type = "simple";
         PIDFile = "/run/slurmdbd.pid";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
       };

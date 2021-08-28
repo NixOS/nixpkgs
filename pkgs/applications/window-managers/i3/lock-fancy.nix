@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, coreutils, scrot, imagemagick, gawk
+{ lib, stdenv, fetchFromGitHub, coreutils, scrot, imagemagick, gawk
 , i3lock-color, getopt, fontconfig
 }:
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "00lqsvz1knb8iqy8lnkn3sf4c2c4nzb0smky63qf48m8za5aw9b1";
   };
   patchPhase = ''
-    sed -i -e "s|(mktemp)|(${coreutils}/bin/mktemp)|" i3lock-fancy
+    sed -i -e "s|mktemp|${coreutils}/bin/mktemp|" i3lock-fancy
     sed -i -e "s|'rm -f |'${coreutils}/bin/rm -f |" i3lock-fancy
     sed -i -e "s|scrot -z |${scrot}/bin/scrot -z |" i3lock-fancy
     sed -i -e "s|convert |${imagemagick.out}/bin/convert |" i3lock-fancy
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     sed -i -e 's|icon="/usr/share/i3lock-fancy/icons/lock.png"|icon="'$out'/share/i3lock-fancy/icons/lock.png"|' i3lock-fancy
     sed -i -e "s|getopt |${getopt}/bin/getopt |" i3lock-fancy
     sed -i -e "s|fc-match |${fontconfig.bin}/bin/fc-match |" i3lock-fancy
-    sed -i -e "s|shot=(import -window root)|shot=(${scrot}/bin/scrot -z)|" i3lock-fancy
+    sed -i -e "s|shot=(import -window root)|shot=(${scrot}/bin/scrot -z -o)|" i3lock-fancy
     rm Makefile
   '';
   installPhase = ''
@@ -31,10 +31,10 @@ stdenv.mkDerivation rec {
     cp i3lock-fancy $out/bin/i3lock-fancy
     cp icons/lock*.png $out/share/i3lock-fancy/icons
   '';
-  meta = with stdenv.lib; {
-    description = "i3lock is a bash script that takes a screenshot of the desktop, blurs the background and adds a lock icon and text.";
-    homepage = https://github.com/meskarune/i3lock-fancy;
-    maintainers = with maintainers; [ garbas ];
+  meta = with lib; {
+    description = "i3lock is a bash script that takes a screenshot of the desktop, blurs the background and adds a lock icon and text";
+    homepage = "https://github.com/meskarune/i3lock-fancy";
+    maintainers = with maintainers; [ ];
     license = licenses.mit;
     platforms = platforms.linux;
   };

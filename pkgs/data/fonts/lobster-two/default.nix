@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{lib, stdenv, fetchurl}:
 
 let
 
@@ -50,15 +50,15 @@ let
 in
 
   stdenv.mkDerivation rec {
-    name = "lobstertwo-${version}";
+    pname = "lobstertwo";
     version = "1.006";
 
     phases = ["installPhase"];
 
     installPhase = ''
       mkdir -p $out/share/fonts/opentype
-      mkdir -p $out/share/doc/${name}
-      cp -v ${fontlog.file} $out/share/doc/${name}/${fontlog.name}
+      mkdir -p $out/share/doc/${pname}-${version}
+      cp -v ${fontlog.file} $out/share/doc/${pname}-${version}/${fontlog.name}
       cp -v ${bold.file} $out/share/fonts/opentype/${bold.name}
       cp -v ${boldItalic.file} $out/share/fonts/opentype/${boldItalic.name}
       cp -v ${italic.file} $out/share/fonts/opentype/${italic.name}
@@ -69,8 +69,8 @@ in
     outputHashMode = "recursive";
     outputHash = "0if9l8pzwgfnbdjg5yblcy08dwn9yj3wzz29l0fycia46xlzd4ym";
 
-    meta = with stdenv.lib; {
-      homepage = https://github.com/librefonts/lobstertwo;
+    meta = with lib; {
+      homepage = "https://github.com/librefonts/lobstertwo";
       description = "Script font with many ligatures";
       license = licenses.ofl;
       platforms = platforms.all;

@@ -1,4 +1,5 @@
 { runCommand
+, lib
 , stdenv
 , storeDir ? builtins.storeDir
 , writeScript
@@ -7,7 +8,7 @@
 , bash
 , vmTools
 , gawk
-, utillinux
+, util-linux
 , runtimeShell
 , e2fsprogs }:
 
@@ -47,7 +48,7 @@ rec {
         runScriptFile = shellScript "run-script.sh" runScript;
         result = vmTools.runInLinuxVM (
           runCommand "singularity-image-${name}.img" {
-            buildInputs = [ singularity e2fsprogs utillinux gawk ];
+            buildInputs = [ singularity e2fsprogs util-linux gawk ];
             layerClosure = writeReferencesToFile layer;
             preVM = vmTools.createEmptyImage {
               size = diskSize;
@@ -59,11 +60,12 @@ rec {
             mkdir disk
             mkfs -t ext3 -b 4096 /dev/${vmTools.hd}
             mount /dev/${vmTools.hd} disk
-            cd disk
+            mkdir -p disk/img
+            cd disk/img
             mkdir proc sys dev
 
             # Run root script
-            ${stdenv.lib.optionalString (runAsRoot != null) ''
+            ${lib.optionalString (runAsRoot != null) ''
               mkdir -p ./${storeDir}
               mount --rbind ${storeDir} ./${storeDir}
               unshare -imnpuf --mount-proc chroot ./ ${runAsRootFile}
@@ -84,8 +86,12 @@ rec {
               done
             done
 
-            # Create runScript
-            ln -s ${runScriptFile} singularity
+            # Create runScript and link shell
+            if [ ! -e bin/sh ]; then
+              ln -s ${runtimeShell} bin/sh
+            fi
+            mkdir -p .singularity.d
+            ln -s ${runScriptFile} .singularity.d/runscript
 
             # Fill out .singularity.d
             mkdir -p .singularity.d/env
@@ -94,7 +100,8 @@ rec {
             cd ..
             mkdir -p /var/singularity/mnt/{container,final,overlay,session,source}
             echo "root:x:0:0:System administrator:/root:/bin/sh" > /etc/passwd
-            singularity build $out ./disk
+            echo > /etc/resolv.conf
+            TMPDIR=$(pwd -P) singularity build $out ./img
           '');
 
     in result;

@@ -12,7 +12,7 @@ let
   # command-line to launch oauth2_proxy.
   providerSpecificOptions = {
     azure = cfg: {
-      azure.tenant = cfg.azure.tenant;
+      azure-tenant = cfg.azure.tenant;
       resource = cfg.azure.resource;
     };
 
@@ -44,6 +44,7 @@ let
     pass-access-token = passAccessToken;
     pass-basic-auth = passBasicAuth;
     pass-host-header = passHostHeader;
+    reverse-proxy = reverseProxy;
     proxy-prefix = proxyPrefix;
     profile-url = profileURL;
     redeem-url = redeemURL;
@@ -65,8 +66,8 @@ let
   } // lib.optionalAttrs (cfg.htpasswd.file != null) {
     display-htpasswd-file = cfg.htpasswd.displayForm;
   } // lib.optionalAttrs tls.enable {
-    tls-cert = tls.certificate;
-    tls-key = tls.key;
+    tls-cert-file = tls.certificate;
+    tls-key-file = tls.key;
     https-address = tls.httpsAddress;
   } // (getProviderOptions cfg cfg.provider) // cfg.extraConfig;
 
@@ -89,23 +90,30 @@ in
 
     package = mkOption {
       type = types.package;
-      default = pkgs.oauth2_proxy;
-      defaultText = "pkgs.oauth2_proxy";
+      default = pkgs.oauth2-proxy;
+      defaultText = "pkgs.oauth2-proxy";
       description = ''
-        The package that provides oauth2_proxy.
+        The package that provides oauth2-proxy.
       '';
     };
 
     ##############################################
     # PROVIDER configuration
+    # Taken from: https://github.com/oauth2-proxy/oauth2-proxy/blob/master/providers/providers.go
     provider = mkOption {
       type = types.enum [
         "google"
-        "github"
         "azure"
+        "facebook"
+        "github"
+        "keycloak"
         "gitlab"
         "linkedin"
-        "myusa"
+        "login.gov"
+        "bitbucket"
+        "nextcloud"
+        "digitalocean"
+        "oidc"
       ];
       default = "google";
       description = ''
@@ -284,7 +292,7 @@ in
     ####################################################
     # UPSTREAM Configuration
     upstream = mkOption {
-      type = with types; coercedTo string (x: [x]) (listOf string);
+      type = with types; coercedTo str (x: [x]) (listOf str);
       default = [];
       description = ''
         The http url(s) of the upstream endpoint or <literal>file://</literal>
@@ -338,7 +346,9 @@ in
         type = types.nullOr types.str;
         default = null;
         description = ''
-          An optional cookie domain to force cookies to.
+          Optional cookie domains to force cookies to (ie: `.yourcompany.com`).
+          The longest domain matching the request's host will be used (or the shortest
+          cookie domain if there is no match).
         '';
         example = ".yourcompany.com";
       };
@@ -433,6 +443,17 @@ in
       '';
     };
 
+    reverseProxy = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        In case when running behind a reverse proxy, controls whether headers
+        like <literal>X-Real-Ip</literal> are accepted. Usage behind a reverse
+        proxy will require this flag to be set to avoid logging the reverse
+        proxy IP address.
+      '';
+    };
+
     proxyPrefix = mkOption {
       type = types.str;
       default = "/oauth2";
@@ -503,7 +524,7 @@ in
       type = types.nullOr types.str;
       default = null;
       description = ''
-      	Profile access endpoint.
+        Profile access endpoint.
       '';
     };
 
@@ -517,16 +538,17 @@ in
 
     extraConfig = mkOption {
       default = {};
+      type = types.attrsOf types.anything;
       description = ''
-        Extra config to pass to oauth2_proxy.
+        Extra config to pass to oauth2-proxy.
       '';
     };
 
     keyFile = mkOption {
-      type = types.nullOr types.string;
+      type = types.nullOr types.path;
       default = null;
       description = ''
-        oauth2_proxy allows passing sensitive configuration via environment variables.
+        oauth2-proxy allows passing sensitive configuration via environment variables.
         Make a file that contains lines like
         OAUTH2_PROXY_CLIENT_SECRET=asdfasdfasdf.apps.googleuserscontent.com
         and specify the path here.
@@ -546,6 +568,7 @@ in
 
     users.users.oauth2_proxy = {
       description = "OAuth2 Proxy";
+      isSystemUser = true;
     };
 
     systemd.services.oauth2_proxy = {
@@ -557,7 +580,7 @@ in
       serviceConfig = {
         User = "oauth2_proxy";
         Restart = "always";
-        ExecStart = "${cfg.package.bin}/bin/oauth2_proxy ${configString}";
+        ExecStart = "${cfg.package}/bin/oauth2-proxy ${configString}";
         EnvironmentFile = mkIf (cfg.keyFile != null) cfg.keyFile;
       };
     };

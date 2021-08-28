@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, openldap }:
+{ lib, stdenv, fetchurl, openldap }:
 
 stdenv.mkDerivation rec {
-  name = "adtool-${version}";
+  pname = "adtool";
   version = "1.3.3";
 
   src = fetchurl {
-    url = "https://gp2x.org/adtool/${name}.tar.gz";
+    url = "https://gp2x.org/adtool/${pname}-${version}.tar.gz";
     sha256  = "1awmpjamrwivi69i0j2fyrziy9s096ckviqd9c4llc3990mfsn4n";
   };
 
@@ -30,9 +30,9 @@ stdenv.mkDerivation rec {
   # It requires an LDAP server for tests
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Active Directory administration utility for Unix";
-    homepage = https://gp2x.org/adtool;
+    homepage = "https://gp2x.org/adtool";
     license = licenses.gpl2;
     maintainers = with maintainers; [ peterhoeg ];
   };

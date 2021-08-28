@@ -1,20 +1,20 @@
-{ stdenv, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "cogapp";
-  version = "2.5.1";
+  version = "3.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f8cf2288fb5a2087eb4a00d8b347ddc86e9058d4ab26b8c868433eb401adfe1c";
+    sha256 = "5e5da2bcfc4e4750c66cecb80ea4eaed1ef4fddd3787c989d4f5bfffb1152d6a";
   };
 
   # there are no tests
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A code generator for executing Python snippets in source files";
-    homepage = http://nedbatchelder.com/code/cog;
+    homepage = "http://nedbatchelder.com/code/cog";
     license = licenses.mit;
     maintainers = with maintainers; [ lovek323 ];
   };

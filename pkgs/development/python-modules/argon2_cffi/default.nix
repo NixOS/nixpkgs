@@ -12,11 +12,12 @@
 
 buildPythonPackage rec {
   pname = "argon2_cffi";
-  version = "19.1.0";
+  version = "20.1.0";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "81548a27b919861040cb928a350733f4f9455dd67c7d1ba92eb5960a1d7f8b26";
+    pname = "argon2-cffi";
+    inherit version;
+    sha256 = "0zgr4mnnm0p4i99023safb0qb8cgvl202nly1rvylk2b7qnrn0nq";
   };
 
   propagatedBuildInputs = [ cffi six ] ++ lib.optional (!isPy3k) enum34;
@@ -27,7 +28,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Secure Password Hashes for Python";
-    homepage    = https://argon2-cffi.readthedocs.io/;
+    homepage    = "https://argon2-cffi.readthedocs.io/";
     license     = licenses.mit;
   };
 }

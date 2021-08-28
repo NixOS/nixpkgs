@@ -1,14 +1,14 @@
-{ stdenv, buildPythonPackage, fetchPypi, pyyaml, openssh
+{ lib, buildPythonPackage, fetchPypi, pyyaml, openssh
 , nose, bc, hostname, coreutils, bash, gnused
 }:
 
 buildPythonPackage rec {
   pname = "ClusterShell";
-  version = "1.8.1";
+  version = "1.8.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e913efb4fe017eed9731d5ad8be397509e7f1966e6cb6441ee2bce074b16b310";
+    sha256 = "0ebc1925c1aed94f99d74cbc0230215127ade80a25240133204094faa74bc41b";
   };
 
   propagatedBuildInputs = [ pyyaml ];
@@ -80,9 +80,9 @@ buildPythonPackage rec {
     tests/*.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Scalable Python framework for cluster administration";
-    homepage = https://cea-hpc.github.io/clustershell;
+    homepage = "https://cea-hpc.github.io/clustershell";
     license = licenses.lgpl21;
     maintainers = [ maintainers.alexvorobiev ];
   };

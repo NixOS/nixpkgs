@@ -1,21 +1,30 @@
 self: super: {
 
-    postgis = super.callPackage ./ext/postgis.nix {
-        gdal = self.gdal.override {
-            postgresql = self.postgresql;
-            poppler = self.poppler_0_61;
-        };
+    age = super.callPackage ./ext/age.nix {
+      bison = self.bison_3_5;
     };
+
+    periods = super.callPackage ./ext/periods.nix { };
+
+    postgis = super.callPackage ./ext/postgis.nix { };
 
     pg_auto_failover = super.callPackage ./ext/pg_auto_failover.nix { };
 
     pg_bigm = super.callPackage ./ext/pg_bigm.nix { };
+
+    pg_ed25519 = super.callPackage ./ext/pg_ed25519.nix { };
 
     pg_repack = super.callPackage ./ext/pg_repack.nix { };
 
     pg_similarity = super.callPackage ./ext/pg_similarity.nix { };
 
     pgroonga = super.callPackage ./ext/pgroonga.nix { };
+
+    pgvector = super.callPackage ./ext/pgvector.nix { };
+
+    plpgsql_check = super.callPackage ./ext/plpgsql_check.nix { };
+
+    plr = super.callPackage ./ext/plr.nix { };
 
     plv8 = super.callPackage ./ext/plv8.nix {
         v8 = super.callPackage ../../../development/libraries/v8/plv8_6_x.nix {
@@ -37,6 +46,8 @@ self: super: {
 
     pipelinedb = super.callPackage ./ext/pipelinedb.nix { };
 
+    smlar = super.callPackage ./ext/smlar.nix { };
+
     temporal_tables = super.callPackage ./ext/temporal_tables.nix { };
 
     timescaledb = super.callPackage ./ext/timescaledb.nix { };
@@ -50,4 +61,6 @@ self: super: {
     pg_partman = super.callPackage ./ext/pg_partman.nix { };
 
     pg_safeupdate = super.callPackage ./ext/pg_safeupdate.nix { };
+
+    repmgr = super.callPackage ./ext/repmgr.nix { };
 }

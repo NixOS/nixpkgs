@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , fetchPypi
 , buildPythonPackage
 , persistent
@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "BTrees";
-  version = "4.5.1";
+  version = "4.7.2";
 
   buildInputs = [ transaction ];
   propagatedBuildInputs = [ persistent zope_interface ];
@@ -23,12 +23,12 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "dcc096c3cf92efd6b9365951f89118fd30bc209c9af83bf050a28151a9992786";
+    sha256 = "7ce4a5eb5c135bcb5c06b5bd1ca6fd7fd39d8631306182307ed8bc30d3033846";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Scalable persistent components";
-    homepage = http://packages.python.org/BTrees;
+    homepage = "http://packages.python.org/BTrees";
     license = licenses.zpl21;
   };
 }

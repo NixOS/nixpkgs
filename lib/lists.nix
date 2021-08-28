@@ -1,9 +1,9 @@
 # General list operations.
 
 { lib }:
-with lib.trivial;
 let
   inherit (lib.strings) toInt;
+  inherit (lib.trivial) compare min;
 in
 rec {
 
@@ -20,6 +20,19 @@ rec {
         => [ "foo" ]
   */
   singleton = x: [x];
+
+  /*  Apply the function to each element in the list. Same as `map`, but arguments
+      flipped.
+
+      Type: forEach :: [a] -> (a -> b) -> [b]
+
+      Example:
+        forEach [ 1 2 ] (x:
+          toString x
+        )
+        => [ "1" "2" ]
+  */
+  forEach = xs: f: map f xs;
 
   /* “right fold” a binary function `op` between successive elements of
      `list` with `nul' as the starting value, i.e.,
@@ -60,8 +73,8 @@ rec {
        lconcat [ "a" "b" "c" ]
        => "zabc"
        # different types
-       lstrange = foldl (str: int: str + toString (int + 1)) ""
-       strange [ 1 2 3 4 ]
+       lstrange = foldl (str: int: str + toString (int + 1)) "a"
+       lstrange [ 1 2 3 4 ]
        => "a2345"
   */
   foldl = op: nul: list:
@@ -75,7 +88,7 @@ rec {
   /* Strict version of `foldl`.
 
      The difference is that evaluation is forced upon access. Usually used
-     with small whole results (in contract with lazily-generated list or large
+     with small whole results (in contrast with lazily-generated list or large
      lists where only a part is consumed.)
 
      Type: foldl' :: (b -> a -> b) -> b -> [a] -> b
@@ -228,7 +241,7 @@ rec {
 
   /* Return a singleton list or an empty list, depending on a boolean
      value.  Useful when building lists with optional elements
-     (e.g. `++ optional (system == "i686-linux") flashplayer').
+     (e.g. `++ optional (system == "i686-linux") firefox').
 
      Type: optional :: bool -> a -> [a]
 
@@ -446,11 +459,11 @@ rec {
       if length list < 2
       then # finish
            { result =  list; }
-      else if dfsthis ? "cycle"
+      else if dfsthis ? cycle
            then # there's a cycle, starting from the current vertex, return it
                 { cycle = reverseList ([ dfsthis.cycle ] ++ dfsthis.visited);
                   inherit (dfsthis) loops; }
-           else if toporest ? "cycle"
+           else if toporest ? cycle
                 then # there's a cycle somewhere else in the graph, return it
                      toporest
                 # Slow, but short. Can be made a bit faster with an explicit stack.
@@ -616,7 +629,9 @@ rec {
       crossLists (x:y: "${toString x}${toString y}") [[1 2] [3 4]]
       => [ "13" "14" "23" "24" ]
   */
-  crossLists = f: foldl (fs: args: concatMap (f: map f args) fs) [f];
+  crossLists = builtins.trace
+    "lib.crossLists is deprecated, use lib.cartesianProductOfSets instead"
+    (f: foldl (fs: args: concatMap (f: map f args) fs) [f]);
 
 
   /* Remove duplicate elements from the list. O(n^2) complexity.
@@ -627,13 +642,7 @@ rec {
        unique [ 3 2 3 4 ]
        => [ 3 2 4 ]
    */
-  unique = list:
-    if list == [] then
-      []
-    else
-      let
-        x = head list;
-      in [x] ++ unique (remove x list);
+ unique = foldl' (acc: e: if elem e acc then acc else acc ++ [ e ]) [];
 
   /* Intersects list 'e' and another list. O(nm) complexity.
 

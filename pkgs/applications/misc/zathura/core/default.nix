@@ -1,22 +1,20 @@
-{ stdenv, fetchurl, meson, ninja, wrapGAppsHook, pkgconfig
+{ lib, stdenv, fetchurl, meson, ninja, wrapGAppsHook, pkg-config
 , appstream-glib, desktop-file-utils, python3
-, gtk, girara, gettext, libxml2
+, gtk, girara, gettext, libxml2, check
 , sqlite, glib, texlive, libintl, libseccomp
 , file, librsvg
-, gtk-mac-integration, synctexSupport ? true
+, gtk-mac-integration
 }:
 
-assert synctexSupport -> texlive != null;
-
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
-  name = "zathura-core-${version}";
-  version = "0.4.3";
+  pname = "zathura";
+  version = "0.4.7";
 
   src = fetchurl {
-    url = "https://pwmt.org/projects/zathura/download/zathura-${version}.tar.xz";
-    sha256 = "0hgx5x09i6d0z45llzdmh4l348fxh1y102sb1w76f2fp4r21j4ky";
+    url = "https://pwmt.org/projects/${pname}/download/${pname}-${version}.tar.xz";
+    sha256 = "1rx1fk9s556fk59lmqgvhwrmv71ashh89bx9adjq46wq5gzdn4p0";
   };
 
   outputs = [ "bin" "man" "dev" "out" ];
@@ -26,27 +24,31 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dsqlite=enabled"
     "-Dmagic=enabled"
-    # "-Dseccomp=enabled"
     "-Dmanpages=enabled"
     "-Dconvert-icon=enabled"
-  ] ++ optional synctexSupport "-Dsynctex=enabled";
+    "-Dsynctex=enabled"
+    # Make sure tests are enabled for doCheck
+    "-Dtests=enabled"
+  ] ++ optional (!stdenv.isLinux) "-Dseccomp=disabled";
 
   nativeBuildInputs = [
-    meson ninja pkgconfig desktop-file-utils python3.pkgs.sphinx
-    gettext wrapGAppsHook libxml2
-  ] ++ optional stdenv.isLinux appstream-glib;
+    meson ninja pkg-config desktop-file-utils python3.pkgs.sphinx
+    gettext wrapGAppsHook libxml2 check appstream-glib
+  ];
 
   buildInputs = [
     gtk girara libintl sqlite glib file librsvg
-  ] ++ optional synctexSupport texlive.bin.core
-    ++ optional stdenv.isLinux libseccomp
+    texlive.bin.core
+  ] ++ optional stdenv.isLinux libseccomp
     ++ optional stdenv.isDarwin gtk-mac-integration;
 
+  doCheck = !stdenv.isDarwin;
+
   meta = {
-    homepage = https://pwmt.org/projects/zathura/;
+    homepage = "https://git.pwmt.org/pwmt/zathura";
     description = "A core component for zathura PDF viewer";
     license = licenses.zlib;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ garbas ];
+    maintainers = with maintainers; [ globin ];
   };
 }

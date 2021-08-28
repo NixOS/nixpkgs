@@ -1,5 +1,5 @@
 { stdenv, fetchurl, lib, file
-, pkgconfig
+, pkg-config
 , gtkVersion ? "3", gtk2 ? null, gtk3 ? null }:
 
 with lib;
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "b2d2e44c10313d5c9cd60db455d520f80b36dc39562df079a3f29495e8f9447f";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ (if gtkVersion == "2" then gtk2 else gtk3) ];
 
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A set of symbols and convenience functions for Ayatana indicators";
-    homepage = https://launchpad.net/libindicator;
+    homepage = "https://launchpad.net/libindicator";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = [ maintainers.msteen ];

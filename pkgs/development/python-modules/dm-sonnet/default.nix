@@ -1,5 +1,6 @@
 { lib
 , fetchFromGitHub
+, bazel_0_26
 , buildBazelPackage
 , buildPythonPackage
 , git
@@ -11,20 +12,23 @@
 , wrapt
 , tensorflow
 , tensorflow-probability
+, tensorflow-estimator
 }:
 
 let
-  version = "1.30";
+  version = "1.33";
 
   # first build all binaries and generate setup.py using bazel
-  bazel-build = buildBazelPackage rec {
+  bazel-build = buildBazelPackage {
+    bazel = bazel_0_26;
+
     name = "dm-sonnet-bazel-${version}";
 
     src = fetchFromGitHub {
       owner = "deepmind";
       repo = "sonnet";
       rev = "v${version}";
-      sha256 = "1dli4a4arx2gmb4p676pfibvnpag9f13znisrk9381g7xpqqmaw6";
+      sha256 = "1nqsja1s8jrkq6v1whgh7smk17313mjr9vs3k5c1m8px4yblzhqc";
     };
 
     nativeBuildInputs = [
@@ -35,7 +39,7 @@ let
     bazelTarget = ":install";
 
     fetchAttrs = {
-      sha256 = "1qwq6xp6gdmy8f0k96q3nsgqs56adrbgq39g5smwik6griwfx9mr";
+      sha256 = "09dzxs2v5wpiaxrz7qj257q1fbx0gxwbk0jyx58n81m5kys7yj9k";
     };
 
     buildAttrs = {
@@ -54,7 +58,7 @@ let
   };
 
 # now use pip to install the package prepared by bazel
-in buildPythonPackage rec {
+in buildPythonPackage {
   pname = "dm-sonnet";
   inherit version;
 
@@ -68,6 +72,7 @@ in buildPythonPackage rec {
     wrapt
     tensorflow
     tensorflow-probability
+    tensorflow-estimator
   ];
 
   # not sure how to properly run the real test suite -- through bazel?
@@ -77,7 +82,7 @@ in buildPythonPackage rec {
 
   meta = with lib; {
     description = "TensorFlow-based neural network library";
-    homepage = https://sonnet.dev;
+    homepage = "https://sonnet.dev";
     license = licenses.asl20;
     maintainers = with maintainers; [ timokau ];
     platforms = platforms.linux;

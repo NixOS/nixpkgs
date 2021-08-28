@@ -1,7 +1,7 @@
 {
-  mkDerivation, lib, copyPathsToStore, propagate,
+  mkDerivation, lib, propagate,
   extra-cmake-modules,
-  kwayland, libXrandr, qtx11extras
+  kwayland, libXrandr, qtbase, qtx11extras
 }:
 
 mkDerivation {
@@ -9,7 +9,9 @@ mkDerivation {
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [ kwayland libXrandr qtx11extras ];
   outputs = [ "out" "dev" ];
-  patches = copyPathsToStore (lib.readPathsFromFile ./. ./series);
+  patches = [
+    ./libkscreen-backends-path.patch
+  ];
   preConfigure = ''
     NIX_CFLAGS_COMPILE+=" -DNIXPKGS_LIBKSCREEN_BACKENDS=\"''${!outputBin}/$qtPluginPrefix/kf5/kscreen\""
   '';

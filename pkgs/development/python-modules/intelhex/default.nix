@@ -1,28 +1,26 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, fetchpatch
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "intelhex";
-  version = "2.2.1";
+  version = "2.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0ckqjbxd8gwcg98gfzpn4vq1qxzfvq3rdbrr1hikj1nmw08qb780";
+    sha256 = "sha256-iStzYacZ9JRSN9qMz3VOlRPbMvViiFJ4WuoQjc0lAJM=";
   };
 
-  patches = [
-    # patch the tests to check for the correct version string (2.2.1)
-    (fetchpatch {
-      url = "https://patch-diff.githubusercontent.com/raw/bialix/intelhex/pull/26.patch";
-      sha256 = "1f3f2cyf9ipb9zdifmjs8rqhg028dhy91vabxxn3l7br657s8r2l";
-    })
-  ];
+  checkInputs = [ pytestCheckHook ];
+
+  pytestFlagsArray = [ "intelhex/test.py" ];
+
+  pythonImportsCheck = [ "intelhex" ];
 
   meta = {
-    homepage = https://github.com/bialix/intelhex;
+    homepage = "https://github.com/bialix/intelhex";
     description = "Python library for Intel HEX files manipulations";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ pjones ];

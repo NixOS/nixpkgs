@@ -1,60 +1,54 @@
-{ stdenv, fetchurl, fetchpatch, lib, pkgconfig, utillinux, libcap, libtirpc, libevent
-, sqlite, kerberos, kmod, libuuid, keyutils, lvm2, systemd, coreutils, tcp_wrappers
-, python3
+{ stdenv, fetchurl, fetchpatch, lib, pkg-config, util-linux, libcap, libtirpc, libevent
+, sqlite, libkrb5, kmod, libuuid, keyutils, lvm2, systemd, coreutils, tcp_wrappers
+, python3, buildPackages, nixosTests, rpcsvc-proto
+, enablePython ? true
 }:
 
 let
-  statdPath = lib.makeBinPath [ systemd utillinux coreutils ];
+  statdPath = lib.makeBinPath [ systemd util-linux coreutils ];
 in
 
 stdenv.mkDerivation rec {
-  name = "nfs-utils-${version}";
-  version = "2.3.4";
+  pname = "nfs-utils";
+  version = "2.5.1";
 
   src = fetchurl {
-    url = "https://kernel.org/pub/linux/utils/nfs-utils/${version}/${name}.tar.xz";
-    sha256 = "1kcn11glc3rma1gvykbk1s542mgz36ipi7yqxlk9jyh8hsiqncpq";
+    url = "https://kernel.org/pub/linux/utils/nfs-utils/${version}/${pname}-${version}.tar.xz";
+    sha256 = "1i1h3n2m35q9ixs1i2qf1rpjp10cipa3c25zdf1xj1vaw5q8270g";
   };
 
   # libnfsidmap is built together with nfs-utils from the same source,
   # put it in the "lib" output, and the headers in "dev"
   outputs = [ "out" "dev" "lib" "man" ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config buildPackages.stdenv.cc rpcsvc-proto ];
 
   buildInputs = [
     libtirpc libcap libevent sqlite lvm2
-    libuuid keyutils kerberos tcp_wrappers
-    python3
-  ];
+    libuuid keyutils libkrb5 tcp_wrappers
+  ] ++ lib.optional enablePython python3;
 
   enableParallelBuilding = true;
 
   preConfigure =
     ''
       substituteInPlace configure \
-        --replace '$dir/include/gssapi' ${lib.getDev kerberos}/include/gssapi \
-        --replace '$dir/bin/krb5-config' ${lib.getDev kerberos}/bin/krb5-config
+        --replace '$dir/include/gssapi' ${lib.getDev libkrb5}/include/gssapi \
+        --replace '$dir/bin/krb5-config' ${lib.getDev libkrb5}/bin/krb5-config
     '';
 
   configureFlags =
     [ "--enable-gss"
+      "--enable-svcgss"
       "--with-statedir=/var/lib/nfs"
-      "--with-krb5=${lib.getLib kerberos}"
+      "--with-krb5=${lib.getLib libkrb5}"
       "--with-systemd=${placeholder "out"}/etc/systemd/system"
       "--enable-libmount-mount"
       "--with-pluginpath=${placeholder "lib"}/lib/libnfsidmap" # this installs libnfsidmap
-    ]
-    ++ lib.optional (stdenv ? glibc) "--with-rpcgen=${stdenv.glibc.bin}/bin/rpcgen";
+      "--with-rpcgen=${buildPackages.rpcsvc-proto}/bin/rpcgen"
+    ];
 
-  patches = [
-    # Fixes build on i686.
-    (fetchpatch {
-      name = "sqlite.c-Use-PRIx64-macro-to-print-64-bit-integers.patch";
-      url = "http://git.linux-nfs.org/?p=steved/nfs-utils.git;a=commitdiff_plain;h=a8133e1fd174267536cd459e19cfe0a1cbbe037c;hp=a709f25c1da4a2fb44a1f3fd060298fbbd88aa3c";
-      sha256 = "03azkw13xhp8f49777p08xziy0d7crz65qrisjbkzjnx1wczdqy5";
-    })
-  ] ++ lib.optionals stdenv.hostPlatform.isMusl [
+  patches = lib.optionals stdenv.hostPlatform.isMusl [
     (fetchpatch {
       url = "https://raw.githubusercontent.com/alpinelinux/aports/cb880042d48d77af412d4688f24b8310ae44f55f/main/nfs-utils/0011-exportfs-only-do-glibc-specific-hackery-on-glibc.patch";
       sha256 = "0rrddrykz8prk0dcgfvmnz0vxn09dbgq8cb098yjjg19zz6d7vid";
@@ -102,6 +96,9 @@ stdenv.mkDerivation rec {
         -e "s,/sbin/modprobe,${kmod}/bin/modprobe,g" \
         -e "s,/usr/sbin,$out/bin,g" \
         $out/etc/systemd/system/*
+    '' + lib.optionalString (!enablePython) ''
+      # Remove all scripts that require python (currently mountstats and nfsiostat)
+      grep -l /usr/bin/python $out/bin/* | xargs -I {} rm -v {}
     '';
 
   # One test fails on mips.
@@ -109,9 +106,15 @@ stdenv.mkDerivation rec {
   # https://bugzilla.kernel.org/show_bug.cgi?id=203793
   doCheck = false;
 
-  disallowedReferences = [ (lib.getDev kerberos) ];
+  disallowedReferences = [ (lib.getDev libkrb5) ];
 
-  meta = with stdenv.lib; {
+  passthru.tests = {
+    nfs3-simple = nixosTests.nfs3.simple;
+    nfs4-simple = nixosTests.nfs4.simple;
+    nfs4-kerberos = nixosTests.nfs4.kerberos;
+  };
+
+  meta = with lib; {
     description = "Linux user-space NFS utilities";
 
     longDescription = ''
@@ -120,7 +123,7 @@ stdenv.mkDerivation rec {
       daemons.
     '';
 
-    homepage = https://linux-nfs.org/;
+    homepage = "https://linux-nfs.org/";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ abbradar ];

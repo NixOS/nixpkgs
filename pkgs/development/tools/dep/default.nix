@@ -1,8 +1,8 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "dep-${version}";
-  version = "0.5.1";
+  pname = "dep";
+  version = "0.5.4";
   rev = "v${version}";
 
   goPackagePath = "github.com/golang/dep";
@@ -12,16 +12,15 @@ buildGoPackage rec {
     inherit rev;
     owner = "golang";
     repo = "dep";
-    sha256 = "1a5vq5v3ikg6iysbywxr5hcjnbv76nzhk50rd3iq3v2fnyq38dv2";
+    sha256 = "02akzbjar1v01rdal746vk6mklff29yk2mqfyjk1zrs0mlg38ygd";
   };
 
   buildFlagsArray = ("-ldflags=-s -w -X main.commitHash=${rev} -X main.version=${version}");
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/golang/dep;
+  meta = with lib; {
+    homepage = "https://github.com/golang/dep";
     description = "Go dependency management tool";
     license = licenses.bsd3;
-    platforms = platforms.all;
     maintainers = with maintainers; [ carlsverre rvolosatovs ];
   };
 }

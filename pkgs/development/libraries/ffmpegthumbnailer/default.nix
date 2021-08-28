@@ -1,24 +1,25 @@
-{ fetchFromGitHub, stdenv, ffmpeg, cmake, libpng, pkgconfig, libjpeg
+{ fetchFromGitHub, lib, stdenv, ffmpeg, cmake, libpng, pkg-config, libjpeg
 }:
 
 stdenv.mkDerivation rec {
-  name = "ffmpegthumbnailer-${version}";
-  version = "2.2.0";
+  pname = "ffmpegthumbnailer";
+  version = "2.2.2";
 
   src = fetchFromGitHub {
     owner = "dirkvdb";
     repo = "ffmpegthumbnailer";
     rev = version;
-    sha256 = "0kl8aa547icy9b05njps02a8sw4yn4f8fzs228kig247sn09s4cp";
+    sha256 = "1bakbr714j7yxdal1f5iq0gcl4cxggbbgj227ihdh5kvygqlwich";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ ffmpeg libpng libjpeg ];
+  cmakeFlags = [ "-DENABLE_THUMBNAILER=ON" ];
 
-  meta = with stdenv.lib;  {
-    homepage = https://github.com/dirkvdb/ffmpegthumbnailer;
+  meta = with lib;  {
+    homepage = "https://github.com/dirkvdb/ffmpegthumbnailer";
     description = "A lightweight video thumbnailer";
-    longDescription = "FFmpegthumbnailer is a lightweight video 
+    longDescription = "FFmpegthumbnailer is a lightweight video
         thumbnailer that can be used by file managers to create thumbnails
         for your video files. The thumbnailer uses ffmpeg o decode frames
         from the video files, so supported videoformats depend on the
@@ -27,7 +28,7 @@ stdenv.mkDerivation rec {
         The only dependencies are ffmpeg and libpng.
     ";
     platforms = platforms.linux;
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = [ maintainers.jagajaga ];
   };
 

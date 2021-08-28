@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "libre-caslon-${version}";
+  pname = "libre-caslon";
   version = "1.002";
 
   srcs = [
@@ -26,19 +26,19 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/share/fonts/opentype
-    mkdir -p $out/share/doc/${name}
+    mkdir -p $out/share/doc/${pname}-${version}
     cp -v "libre-caslon-text-${version}-src/fonts/OTF/"*.otf $out/share/fonts/opentype/
     cp -v "libre-caslon-display-${version}-src/fonts/OTF/"*.otf $out/share/fonts/opentype/
-    cp -v libre-caslon-text-${version}-src/README.md libre-caslon-text-${version}-src/FONTLOG.txt $out/share/doc/${name}
+    cp -v libre-caslon-text-${version}-src/README.md libre-caslon-text-${version}-src/FONTLOG.txt $out/share/doc/${pname}-${version}
   '';
 
   outputHashAlgo = "sha256";
   outputHashMode = "recursive";
   outputHash = "05aajwny99yqzn1nnq1blx6h7rl54x056y12hyawfbigkzxhscns";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Caslon fonts based on hand-lettered American Caslons of 1960s";
-    homepage = http://www.impallari.com/librecaslon;
+    homepage = "http://www.impallari.com/librecaslon";
     license = licenses.ofl;
     maintainers = with maintainers; [ cmfwyp ];
     platforms = platforms.all;

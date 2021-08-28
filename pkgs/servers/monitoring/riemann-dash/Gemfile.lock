@@ -35,4 +35,4 @@ DEPENDENCIES
   riemann-dash (= 0.2.14)
 
 BUNDLED WITH
-   1.17.2
+   2.1.4

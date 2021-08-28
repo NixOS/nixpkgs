@@ -1,41 +1,53 @@
-{ stdenv, fetchurl, perl, zlib }:
+{ lib, stdenv
+, cmake
+, fetchpatch
+, fetchurl
+, perl
+, zlib
+, groff
+, withBzip2 ? false
+, bzip2
+, withLZMA ? false
+, xz
+, withOpenssl ? false
+, openssl
+}:
 
 stdenv.mkDerivation rec {
-  name = "libzip-${version}";
-  version = "1.3.0";
+  pname = "libzip";
+  version = "1.7.3";
 
   src = fetchurl {
-    url = "https://www.nih.at/libzip/${name}.tar.gz";
-    sha256 = "1633dvjc08zwwhzqhnv62rjf1abx8y5njmm8y16ik9iwd07ka6d9";
+    url = "https://libzip.org/download/${pname}-${version}.tar.gz";
+    sha256 = "1k5rihiz7m1ahhjzcbq759hb9crzqkgw78pkxga118y5a32pc8hf";
   };
 
-  postPatch = ''
-    patchShebangs test-driver
-    patchShebangs man/handle_links
-  '';
+  # Remove in next release
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/nih-at/libzip/commit/351201419d79b958783c0cfc7c370243165523ac.patch";
+      sha256 = "0d93z98ki0yiaza93268cxkl35y1r7ll9f7l8sivx3nfxj2c1n8a";
+    })
+  ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" "man" ];
 
-  nativeBuildInputs = [ perl ];
+  nativeBuildInputs = [ cmake perl groff ];
   propagatedBuildInputs = [ zlib ];
+  buildInputs = lib.optionals withLZMA [ xz ]
+    ++ lib.optionals withBzip2 [ bzip2 ]
+    ++ lib.optionals withOpenssl [ openssl ];
 
   preCheck = ''
-    # regress/runtests is a generated file
+    # regress/runtest is a generated file
     patchShebangs regress
   '';
 
-  # At least mysqlWorkbench cannot find zipconf.h; I think also openoffice
-  # had this same problem.  This links it somewhere that mysqlworkbench looks.
-  postInstall = ''
-    mkdir -p $dev/lib
-    mv $out/lib/libzip $dev/lib/libzip
-    ( cd $dev/include ; ln -s ../lib/libzip/include/zipconf.h zipconf.h )
-  '';
-
-  meta = with stdenv.lib; {
-    homepage = https://www.nih.at/libzip;
+  meta = with lib; {
+    homepage = "https://libzip.org/";
     description = "A C library for reading, creating and modifying zip archives";
     license = licenses.bsd3;
     platforms = platforms.unix;
+    changelog = "https://github.com/nih-at/libzip/blob/v${version}/NEWS.md";
   };
 }

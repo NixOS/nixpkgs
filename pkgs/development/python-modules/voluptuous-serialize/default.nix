@@ -1,33 +1,35 @@
-{ stdenv, buildPythonPackage, isPy3k, fetchPypi, voluptuous, pytest }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, isPy3k
+, pytestCheckHook
+, voluptuous
+}:
 
 buildPythonPackage rec  {
   pname = "voluptuous-serialize";
-  version = "2.1.0";
+  version = "2.4.0";
 
   disabled = !isPy3k;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "d30fef4f1aba251414ec0b315df81a06da7bf35201dcfb1f6db5253d738a154f";
+  src = fetchFromGitHub {
+    owner = "home-assistant-libs";
+    repo = pname;
+    rev = version;
+    sha256 = "1km2y1xaagkdvsy3bmi1sc040x5yyfdw6llmwdv9z8nz67m9v1ya";
   };
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = [ voluptuous ];
+
+  checkInputs = [
+    pytestCheckHook
     voluptuous
   ];
 
-  checkInputs = [
-    pytest
-  ];
+  pythonImportsCheck = [ "voluptuous_serialize" ];
 
-  checkPhase = ''
-    py.test
-  '';
-
-  # no tests in PyPI tarball
-  doCheck = false;
-
-  meta = with stdenv.lib; {
-    homepage = https://github.com/balloob/voluptuous-serialize;
+  meta = with lib; {
+    homepage = "https://github.com/home-assistant-libs/voluptuous-serialize";
     license = licenses.asl20;
     description = "Convert Voluptuous schemas to dictionaries so they can be serialized";
     maintainers = with maintainers; [ etu ];

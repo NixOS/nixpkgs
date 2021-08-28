@@ -1,14 +1,15 @@
-{ stdenv, fetchFromGitLab, autoreconfHook, pkgconfig, parallel
-, sassc, inkscape, libxml2, gnome2, gdk_pixbuf, librsvg, gtk-engine-murrine
+{ lib, stdenv, fetchFromGitLab, autoreconfHook, pkg-config, parallel
+, sassc, inkscape, libxml2, glib, gdk-pixbuf, librsvg, gtk-engine-murrine
 , cinnamonSupport ? true
 , gnomeFlashbackSupport ? true
 , gnomeShellSupport ? true
 , openboxSupport ? true
 , xfceSupport ? true
+, mateSupport ? true, gtk3, marco
 , gtkNextSupport ? false
 , plankSupport ? false
 , steamSupport ? false
-, telegramSupport ? false, zip ? null
+, telegramSupport ? false, zip
 , tweetdeckSupport ? false
 , selectionColor ? null # Primary color for 'selected-items' (Default: #3F51B5 = Indigo500)
 , accentColor ? null # Secondary color for notifications and OSDs (Default: #7986CB = Indigo300)
@@ -16,34 +17,33 @@
 , destructionColor ? null # Tertiary color for 'destructive' buttons (Default: #F44336 = Red500)
 }:
 
-assert telegramSupport -> zip != null;
-
 stdenv.mkDerivation rec {
   pname = "plata-theme";
-  version = "0.8.3";
+  version = "0.9.8";
 
   src = fetchFromGitLab {
     owner = "tista500";
     repo = "plata-theme";
     rev = version;
-    sha256 = "0ibgymdrw91lnng76lb0x55zg6nm9f2vap19wk7qsq3bcw6ny2zi";
+    sha256 = "1sqmydvx36f6r4snw22s2q4dvcyg30jd7kg7dibpzqn3njfkkfag";
   };
 
   preferLocalBuild = true;
 
   nativeBuildInputs = [
     autoreconfHook
-    pkgconfig
+    pkg-config
     parallel
     sassc
     inkscape
     libxml2
-    gnome2.glib.dev
+    glib.dev
   ]
-  ++ stdenv.lib.optional telegramSupport zip;
+  ++ lib.optionals mateSupport [ gtk3 marco ]
+  ++ lib.optional telegramSupport zip;
 
   buildInputs = [
-    gdk_pixbuf
+    gdk-pixbuf
     librsvg
   ];
 
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
 
   configureFlags =
     let
-      inherit (stdenv.lib) enableFeature optional;
+      inherit (lib) enableFeature optional;
       withOptional = value: feat: optional (value != null) "--with-${feat}=${value}";
     in [
       "--enable-parallel"
@@ -62,6 +62,7 @@ stdenv.mkDerivation rec {
       (enableFeature gnomeShellSupport "gnome")
       (enableFeature openboxSupport "openbox")
       (enableFeature xfceSupport "xfce")
+      (enableFeature mateSupport "mate")
       (enableFeature gtkNextSupport "gtk_next")
       (enableFeature plankSupport "plank")
       (enableFeature steamSupport "airforsteam")
@@ -80,9 +81,9 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
-    description = "A Gtk+ theme based on Material Design Refresh";
-    homepage = https://gitlab.com/tista500/plata-theme;
+  meta = with lib; {
+    description = "A GTK theme based on Material Design Refresh";
+    homepage = "https://gitlab.com/tista500/plata-theme";
     license = with licenses; [ gpl2 cc-by-sa-40 ];
     platforms = platforms.linux;
     maintainers = [ maintainers.tadfisher ];

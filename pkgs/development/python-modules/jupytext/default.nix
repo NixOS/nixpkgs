@@ -1,46 +1,58 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, testfixtures
-, pyyaml
-, mock
+, fetchFromGitHub
+, pythonOlder
+, GitPython
+, jupyter-packaging
+, jupyter_client
+, jupyterlab
+, markdown-it-py
+, mdit-py-plugins
 , nbformat
-, pytest
+, notebook
+, pytestCheckHook
+, pyyaml
+, toml
 }:
 
 buildPythonPackage rec {
   pname = "jupytext";
-  version = "1.1.3";
+  version = "1.11.2";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1klcx333kpgb5gbaasmz07brqjxvls3l5dpj0kv9cfsd76cq17yh";
+  disabled = pythonOlder "3.6";
+
+  src = fetchFromGitHub {
+    owner = "mwouts";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-S2SKAC2oT4VIVMMDbu/Puo87noAgnQs1hh88JphutA8=";
   };
 
+  buildInputs = [ jupyter-packaging jupyterlab ];
   propagatedBuildInputs = [
-    pyyaml
+    markdown-it-py
+    mdit-py-plugins
     nbformat
-    testfixtures
-  ];
-  checkInputs = [
-    pytest
-  ];
-  # setup.py checks for those even though they're not needed at runtime (only
-  # for tests), thus not propagated
-  buildInputs = [
-    mock
-    pytest
+    pyyaml
+    toml
   ];
 
-  # requires test notebooks which are not shipped with the pypi release
-  doCheck = false;
-  checkPhase = ''
-    py.test
-  '';
+  checkInputs = [
+    pytestCheckHook
+    GitPython
+    jupyter_client
+    notebook
+  ];
+  # Tests that use a Jupyter notebook require $HOME to be writable.
+  HOME = "$TMPDIR";
+  # Pre-commit tests expect the source directory to be a Git repository.
+  pytestFlagsArray = [ "--ignore-glob='tests/test_pre_commit_*.py'" ];
+  pythonImportsCheck = [ "jupytext" "jupytext.cli" ];
 
   meta = with lib; {
     description = "Jupyter notebooks as Markdown documents, Julia, Python or R scripts";
-    homepage = https://github.com/mwouts/jupytext;
+    homepage = "https://github.com/mwouts/jupytext";
     license = licenses.mit;
     maintainers = with maintainers; [ timokau ];
   };

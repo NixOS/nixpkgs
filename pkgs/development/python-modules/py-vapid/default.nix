@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "py-vapid";
-  version = "1.5.0";
+  version = "1.8.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1b3g4ljkpi6ka5n63bl5y47r3qhxjmr6qfamqwxnmna2567b5las";
+    sha256 = "9e8de790cce397d9bc567a2148c3c5d88740f668342c59aaff9ed004f716a111";
   };
 
   propagatedBuildInputs = [ cryptography ];
@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "VAPID is a voluntary standard for WebPush subscription providers";
-    homepage = https://github.com/mozilla-services/vapid;
+    homepage = "https://github.com/mozilla-services/vapid";
     license = licenses.mpl20;
   };
 }

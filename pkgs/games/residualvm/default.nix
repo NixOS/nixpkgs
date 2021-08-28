@@ -1,15 +1,13 @@
-{ stdenv, fetchurl, SDL, zlib, libmpeg2, libmad, libogg, libvorbis, flac, alsaLib
-, libGLSupported
-, openglSupport ? libGLSupported, libGLU_combined ? null
+{ lib, stdenv, fetchurl, SDL, zlib, libmpeg2, libmad, libogg, libvorbis, flac, alsaLib
+, libGLSupported ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
+, openglSupport ? libGLSupported, libGLU, libGL ? null
 }:
 
-assert openglSupport -> libGLU_combined != null;
-
-with stdenv.lib;
+assert openglSupport -> libGL != null && libGLU != null;
 
 stdenv.mkDerivation rec {
   version = "0.1.1";
-  name = "residualvm-${version}";
+  pname = "residualvm";
 
   src = fetchurl {
     url = "mirror://sourceforge/residualvm/residualvm-${version}-sources.tar.bz2";
@@ -17,15 +15,15 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ stdenv SDL zlib libmpeg2 libmad libogg libvorbis flac alsaLib ]
-    ++ optional openglSupport libGLU_combined;
+    ++ lib.optionals openglSupport [ libGL libGLU ];
 
   configureFlags = [ "--enable-all-engines" ];
 
-  meta = {
+  meta = with lib; {
     description = "Interpreter for LucasArts' Lua-based 3D adventure games";
-    homepage = http://residualvm.org/;
-    repositories.git = https://github.com/residualvm/residualvm.git;
+    homepage = "http://residualvm.org/";
+    repositories.git = "https://github.com/residualvm/residualvm.git";
     license = licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

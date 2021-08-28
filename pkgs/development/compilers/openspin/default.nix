@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
-  name = "openspin-${version}";
+stdenv.mkDerivation {
+  pname = "openspin";
   version = "unstable-2018-10-02";
 
   src = fetchFromGitHub {
@@ -16,9 +16,9 @@ stdenv.mkDerivation rec {
     mv build/openspin $out/bin/openspin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Compiler for SPIN/PASM languages for Parallax Propeller MCU";
-    homepage = https://github.com/parallaxinc/OpenSpin;
+    homepage = "https://github.com/parallaxinc/OpenSpin";
     license = licenses.mit;
     maintainers = [ maintainers.redvers ];
     platforms = platforms.all;

@@ -1,32 +1,49 @@
-{ stdenv, lib, meson, ninja, fetchFromGitHub
-, pkgconfig, zathura_core, cairo , gtk-mac-integration, girara, mupdf }:
+{ stdenv, lib, meson, ninja, fetchurl, fetchpatch
+, cairo
+, girara
+, gtk-mac-integration
+, gumbo
+, jbig2dec
+, libjpeg
+, mupdf
+, openjpeg
+, pkg-config
+, zathura_core
+}:
 
 stdenv.mkDerivation rec {
-  version = "0.3.4";
-  name = "zathura-pdf-mupdf-${version}";
+  version = "0.3.6";
+  pname = "zathura-pdf-mupdf";
 
-  # pwmt.org server was down at the time of last update
-  # src = fetchurl {
-  #   url = "https://pwmt.org/projects/zathura-pdf-mupdf/download/${name}.tar.xz";
-  #   sha256 = "1zbaqimav4wfgimpy3nfzl10qj7vyv23rdy2z5z7z93jwbp2rc2j";
-  # };
-  src = fetchFromGitHub {
-    owner = "pwmt";
-    repo = "zathura-pdf-mupdf";
-    rev = version;
-    sha256 = "1m4w4jrybpjmx6pi33a5saxzmfd8rrym2k13jpd1fv543s17d9dy";
+  src = fetchurl {
+    url = "https://pwmt.org/projects/${pname}/download/${pname}-${version}.tar.xz";
+    sha256 = "1r3v37k9fl2rxipvacgxr36llywvy7n20a25h3ajlyk70697sa66";
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig ];
+  nativeBuildInputs = [ meson ninja pkg-config ];
 
   buildInputs = [
-    zathura_core girara mupdf cairo
+    cairo
+    girara
+    gumbo
+    jbig2dec
+    libjpeg
+    mupdf
+    openjpeg
+    zathura_core
   ] ++ lib.optional stdenv.isDarwin gtk-mac-integration;
+
+  mesonFlags = [
+    "-Dlink-external=true"
+  ];
+
+  # avoid: undefined symbol: gumbo_destroy_output
+  NIX_LDFLAGS = [ "-lgumbo" ];
 
   PKG_CONFIG_ZATHURA_PLUGINDIR= "lib/zathura";
 
   meta = with lib; {
-    homepage = https://pwmt.org/projects/zathura-pdf-mupdf/;
+    homepage = "https://pwmt.org/projects/zathura-pdf-mupdf/";
     description = "A zathura PDF plugin (mupdf)";
     longDescription = ''
       The zathura-pdf-mupdf plugin adds PDF support to zathura by

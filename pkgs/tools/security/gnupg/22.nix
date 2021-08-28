@@ -1,41 +1,50 @@
-{ fetchurl, stdenv, pkgconfig, libgcrypt, libassuan, libksba, libgpgerror
-, libiconv, npth, gettext, texinfo, pcsclite, sqlite
-, buildPackages
+{ fetchurl, fetchpatch, lib, stdenv, pkg-config, libgcrypt, libassuan, libksba
+, libgpgerror, libiconv, npth, gettext, texinfo, buildPackages
 
 # Each of the dependencies below are optional.
 # Gnupg can be built without them at the cost of reduced functionality.
-, pinentry ? null, guiSupport ? true
-, adns ? null, gnutls ? null, libusb ? null, openldap ? null
-, readline ? null, zlib ? null, bzip2 ? null
+, guiSupport ? true, enableMinimal ? false
+, adns ? null , bzip2 ? null , gnutls ? null , libusb1 ? null , openldap ? null
+, pcsclite ? null , pinentry ? null , readline ? null , sqlite ? null , zlib ?
+null
 }:
 
-with stdenv.lib;
+with lib;
 
-assert guiSupport -> pinentry != null;
+assert guiSupport -> pinentry != null && enableMinimal == false;
 
 stdenv.mkDerivation rec {
-  name = "gnupg-${version}";
+  pname = "gnupg";
 
-  version = "2.2.16";
+  version = "2.2.27";
 
   src = fetchurl {
-    url = "mirror://gnupg/gnupg/${name}.tar.bz2";
-    sha256 = "1jqlzp9b3kpfp1dkjqskm67jjrhvf9nh3lzf45321p7m9d2qvgkc";
+    url = "mirror://gnupg/gnupg/${pname}-${version}.tar.bz2";
+    sha256 = "1693s2rp9sjwvdslj94n03wnb6rxysjy0dli0q1698af044h1ril";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config texinfo ];
   buildInputs = [
-    libgcrypt libassuan libksba libiconv npth gettext texinfo
-    readline libusb gnutls adns openldap zlib bzip2 sqlite
+    libgcrypt libassuan libksba libiconv npth gettext
+    readline libusb1 gnutls adns openldap zlib bzip2 sqlite
   ];
 
   patches = [
     ./fix-libusb-include-path.patch
+    ./0001-dirmngr-Only-use-SKS-pool-CA-for-SKS-pool.patch
+    ./tests-add-test-cases-for-import-without-uid.patch
+    ./allow-import-of-previously-known-keys-even-without-UI.patch
+    ./accept-subkeys-with-a-good-revocation-but-no-self-sig.patch
   ];
-  postPatch = stdenv.lib.optionalString stdenv.isLinux ''
-    sed -i 's,"libpcsclite\.so[^"]*","${stdenv.lib.getLib pcsclite}/lib/libpcsclite.so",g' scd/scdaemon.c
-  ''; #" fix Emacs syntax highlighting :-(
+  postPatch = ''
+    sed -i 's,hkps://hkps.pool.sks-keyservers.net,hkps://keys.openpgp.org,g' configure doc/dirmngr.texi doc/gnupg.info-1
+    # Fix broken SOURCE_DATE_EPOCH usage - remove on the next upstream update
+    sed -i 's/$SOURCE_DATE_EPOCH/''${SOURCE_DATE_EPOCH}/' doc/Makefile.am
+    sed -i 's/$SOURCE_DATE_EPOCH/''${SOURCE_DATE_EPOCH}/' doc/Makefile.in
+  '' + lib.optionalString ( stdenv.isLinux && pcsclite != null) ''
+    sed -i 's,"libpcsclite\.so[^"]*","${lib.getLib pcsclite}/lib/libpcsclite.so",g' scd/scdaemon.c
+  '';
 
   pinentryBinaryPath = pinentry.binaryPath or "bin/pinentry";
   configureFlags = [
@@ -46,7 +55,14 @@ stdenv.mkDerivation rec {
     "--with-npth-prefix=${npth}"
   ] ++ optional guiSupport "--with-pinentry-pgm=${pinentry}/${pinentryBinaryPath}";
 
-  postInstall = ''
+  postInstall = if enableMinimal
+  then ''
+    rm -r $out/{libexec,sbin,share}
+    for f in `find $out/bin -type f -not -name gpg`
+    do
+      rm $f
+    done
+  '' else ''
     mkdir -p $out/lib/systemd/user
     for f in doc/examples/systemd-user/*.{service,socket} ; do
       substitute $f $out/lib/systemd/user/$(basename $f) \
@@ -55,10 +71,13 @@ stdenv.mkDerivation rec {
 
     # add gpg2 symlink to make sure git does not break when signing commits
     ln -s $out/bin/gpg $out/bin/gpg2
+
+    # Make libexec tools available in PATH
+    ln -s -t $out/bin $out/libexec/*
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://gnupg.org;
+  meta = with lib; {
+    homepage = "https://gnupg.org";
     description = "Modern (2.1) release of the GNU Privacy Guard, a GPL OpenPGP implementation";
     license = licenses.gpl3Plus;
     longDescription = ''

@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, pkgconfig, libxml2, llvm }:
+{ fetchurl, lib, stdenv, pkg-config, libxml2, llvm, perl }:
 
 stdenv.mkDerivation rec {
   name = "sparse-0.5.0";
@@ -12,15 +12,15 @@ stdenv.mkDerivation rec {
     sed -i Makefile -e "s|^PREFIX=.*$|PREFIX=$out|g"
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libxml2 llvm ];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ libxml2 llvm perl ];
   doCheck = true;
 
   meta = {
     description = "Semantic parser for C";
     homepage    = "https://git.kernel.org/cgit/devel/sparse/sparse.git/";
-    license     = stdenv.lib.licenses.mit;
-    platforms   = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
+    license     = lib.licenses.mit;
+    platforms   = lib.platforms.linux;
+    maintainers = [ lib.maintainers.thoughtpolice ];
   };
 }

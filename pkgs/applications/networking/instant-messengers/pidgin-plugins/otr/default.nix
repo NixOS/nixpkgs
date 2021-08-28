@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libotr, pidgin, intltool } :
+{ lib, stdenv, fetchurl, libotr, pidgin, intltool } :
 
 stdenv.mkDerivation rec {
   name = "pidgin-otr-4.0.2";
@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libotr pidgin intltool ];
 
-  meta = with stdenv.lib; {
-    homepage = https://otr.cypherpunks.ca/;
+  meta = with lib; {
+    homepage = "https://otr.cypherpunks.ca/";
     description = "Plugin for Pidgin 2.x which implements OTR Messaging";
     license = licenses.gpl2;
     platforms = platforms.linux;

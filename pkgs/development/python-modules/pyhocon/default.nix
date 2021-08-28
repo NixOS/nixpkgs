@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 # Runtime inputs:
 , pyparsing
 # Check inputs:
@@ -10,11 +10,13 @@
 
 buildPythonPackage rec {
   pname = "pyhocon";
-  version = "0.3.51";
+  version = "0.3.53";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "10l014br012fa583rnj3wqf6g9gmljamcwpw4snqwwg15i0dmkll";
+  src = fetchFromGitHub {
+    owner = "chimpler";
+    repo = "pyhocon";
+    rev = version;
+    sha256 = "1lr56piiasnq1aiwli8ldw2wc3xjfck8az991mr5rdbqqsrh9vkv";
   };
 
   propagatedBuildInputs = [ pyparsing ];
@@ -26,7 +28,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    homepage = https://github.com/chimpler/pyhocon/;
+    homepage = "https://github.com/chimpler/pyhocon/";
     description = "HOCON parser for Python";
     # Long description copied from
     # https://github.com/chimpler/pyhocon/blob/55a9ea3ebeeac5764bdebebfbeacbf099f64db26/setup.py

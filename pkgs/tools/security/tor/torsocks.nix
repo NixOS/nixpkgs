@@ -1,7 +1,7 @@
-{ stdenv, fetchgit, autoreconfHook, libcap }:
+{ lib, stdenv, fetchgit, fetchurl, autoreconfHook, libcap }:
 
 stdenv.mkDerivation rec {
-  name = "torsocks-${version}";
+  pname = "torsocks";
   version = "2.3.0";
 
   src = fetchgit {
@@ -12,10 +12,19 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
+  patches = lib.optional stdenv.isDarwin
+    (fetchurl {
+       url = "https://trac.torproject.org/projects/tor/raw-attachment/ticket/28538/0001-Fix-macros-for-accept4-2.patch";
+       sha256 = "97881f0b59b3512acc4acb58a0d6dfc840d7633ead2f400fad70dda9b2ba30b0";
+     });
+
   postPatch = ''
     # Patch torify_app()
     sed -i \
       -e 's,\(local app_path\)=`which $1`,\1=`type -P $1`,' \
+      src/bin/torsocks.in
+  '' + lib.optionalString stdenv.isLinux ''
+    sed -i \
       -e 's,\(local getcap\)=.*,\1=${libcap}/bin/getcap,' \
       src/bin/torsocks.in
   '';
@@ -25,10 +34,10 @@ stdenv.mkDerivation rec {
 
   meta = {
     description      = "Wrapper to safely torify applications";
-    homepage         = https://github.com/dgoulet/torsocks;
-    repositories.git = https://git.torproject.org/torsocks.git;
-    license          = stdenv.lib.licenses.gpl2;
-    platforms        = stdenv.lib.platforms.unix;
-    maintainers      = with stdenv.lib.maintainers; [ phreedom thoughtpolice ];
+    homepage         = "https://github.com/dgoulet/torsocks";
+    repositories.git = "https://git.torproject.org/torsocks.git";
+    license          = lib.licenses.gpl2;
+    platforms        = lib.platforms.unix;
+    maintainers      = with lib.maintainers; [ phreedom thoughtpolice ];
   };
 }

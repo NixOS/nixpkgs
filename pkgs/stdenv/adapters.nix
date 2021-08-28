@@ -15,7 +15,7 @@ rec {
   # Used to override packages in stdenv like Make.  Should not be used
   # for other dependencies.
   overrideInStdenv = stdenv: pkgs:
-    stdenv.override (prev: { allowedRequisites = null; extraBuildInputs = prev.extraBuildInputs or [] ++ pkgs; });
+    stdenv.override (prev: { allowedRequisites = null; extraBuildInputs = (prev.extraBuildInputs or []) ++ pkgs; });
 
 
   # Override the setup script of stdenv.  Useful for testing new
@@ -34,7 +34,7 @@ rec {
   makeStaticBinaries = stdenv:
     let stdenv' = if stdenv.hostPlatform.libc != "glibc" then stdenv else
       stdenv.override (prev: {
-          extraBuildInputs = prev.extraBuildInputs or [] ++ [
+          extraBuildInputs = (prev.extraBuildInputs or []) ++ [
               stdenv.glibc.static
             ];
         });
@@ -60,9 +60,22 @@ rec {
           "--enable-static"
           "--disable-shared"
         ];
+        cmakeFlags = (args.cmakeFlags or []) ++ [ "-DBUILD_SHARED_LIBS:BOOL=OFF" ];
         mesonFlags = (args.mesonFlags or []) ++ [ "-Ddefault_library=static" ];
       });
     };
+
+
+  /* Modify a stdenv so that all buildInputs are implicitly propagated to
+     consuming derivations
+  */
+  propagateBuildInputs = stdenv: stdenv //
+    { mkDerivation = args: stdenv.mkDerivation (args // {
+        propagatedBuildInputs = (args.propagatedBuildInputs or []) ++ (args.buildInputs or []);
+        buildInputs = [];
+      });
+    };
+
 
   /* Modify a stdenv so that the specified attributes are added to
      every derivation returned by its mkDerivation function.
@@ -97,7 +110,7 @@ rec {
   */
   replaceMaintainersField = stdenv: pkgs: maintainers: stdenv //
     { mkDerivation = args:
-        stdenv.lib.recursiveUpdate
+        pkgs.lib.recursiveUpdate
           (stdenv.mkDerivation args)
           { meta.maintainers = maintainers; };
     };

@@ -1,10 +1,10 @@
-{ stdenv, fetchFromGitHub, cmake, irrlicht, libpng, bzip2, curl, libogg, jsoncpp
-, libjpeg, libXxf86vm, libGLU_combined, openal, libvorbis, sqlite, luajit
-, freetype, gettext, doxygen, ncurses, graphviz, xorg
-, leveldb, postgresql, hiredis
+{ lib, stdenv, fetchFromGitHub, cmake, irrlicht, libpng, bzip2, curl, libogg, jsoncpp
+, libjpeg, libXxf86vm, libGLU, libGL, openal, libvorbis, sqlite, luajit
+, freetype, gettext, doxygen, ncurses, graphviz, xorg, gmp, libspatialindex
+, leveldb, postgresql, hiredis, libiconv, OpenGL, OpenAL ? openal, Carbon, Cocoa
 }:
 
-with stdenv.lib;
+with lib;
 
 let
   boolToCMake = b: if b then "ON" else "OFF";
@@ -24,7 +24,8 @@ let
       };
     };
   in stdenv.mkDerivation {
-    name = "minetest-${version}";
+    pname = "minetest";
+    inherit version;
 
     src = sources.src;
 
@@ -39,15 +40,18 @@ let
       "-DOpenGL_GL_PREFERENCE=GLVND"
     ];
 
-    NIX_CFLAGS_COMPILE = [ "-DluaL_reg=luaL_Reg" ]; # needed since luajit-2.1.0-beta3
+    NIX_CFLAGS_COMPILE = "-DluaL_reg=luaL_Reg"; # needed since luajit-2.1.0-beta3
 
     nativeBuildInputs = [ cmake doxygen graphviz ];
 
     buildInputs = [
       irrlicht luajit jsoncpp gettext freetype sqlite curl bzip2 ncurses
+      gmp libspatialindex
+    ] ++ optionals stdenv.isDarwin [
+      libiconv OpenGL OpenAL Carbon Cocoa
     ] ++ optionals buildClient [
-      libpng libjpeg libGLU_combined openal libogg libvorbis xorg.libX11 libXxf86vm
-    ] ++ optional buildServer [
+      libpng libjpeg libGLU libGL openal libogg libvorbis xorg.libX11 libXxf86vm
+    ] ++ optionals buildServer [
       leveldb postgresql hiredis
     ];
 
@@ -56,11 +60,11 @@ let
       cp -rv ${sources.data}/* $out/share/minetest/games/minetest_game/
     '';
 
-    meta = with stdenv.lib; {
-      homepage = http://minetest.net/;
+    meta = with lib; {
+      homepage = "http://minetest.net/";
       description = "Infinite-world block sandbox game";
       license = licenses.lgpl21Plus;
-      platforms = platforms.linux;
+      platforms = platforms.linux ++ platforms.darwin;
       maintainers = with maintainers; [ pyrolagus fpletz ];
     };
   };
@@ -72,9 +76,9 @@ let
   };
 
   v5 = {
-    version = "5.0.1";
-    sha256 = "11i8fqjpdggqfdlx440k5758zy0nbf9phxan9r63mavc7mph88ay";
-    dataSha256 = "1hw3n7qqpasq6bivxhq01kr0d58w0gp46s0baxixp1fakd79p8a7";
+    version = "5.4.1";
+    sha256 = "062ilb7s377q3hwfhl8q06vvcw2raydz5ljzlzwy2dmyzmdcndb8";
+    dataSha256 = "0i45lbnikvgj9kxdp0yphpjjwjcgp4ibn49xkj78j5ic1s9n8jd4";
   };
 
 in {

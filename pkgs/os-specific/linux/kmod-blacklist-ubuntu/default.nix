@@ -1,10 +1,11 @@
-{ stdenv, fetchurl, gnugrep, findutils }:
+{ lib, stdenv, fetchurl, gnugrep, findutils }:
 
 let
   version = "22-1.1ubuntu1"; # Zesty
 
 in stdenv.mkDerivation {
-  name = "kmod-blacklist-${version}";
+  pname = "kmod-blacklist";
+  inherit version;
 
   src = fetchurl {
     url = "https://launchpad.net/ubuntu/+archive/primary/+files/kmod_${version}.debian.tar.xz";
@@ -29,9 +30,10 @@ in stdenv.mkDerivation {
       --replace " xargs " " ${findutils}/bin/xargs "
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://packages.ubuntu.com/source/zesty/kmod;
+  meta = with lib; {
+    homepage = "https://packages.ubuntu.com/source/zesty/kmod";
     description = "Linux kernel module blacklists from Ubuntu";
     platforms = platforms.linux;
+    license = with licenses; [ gpl2Plus lgpl21Plus ];
   };
 }

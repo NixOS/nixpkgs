@@ -1,68 +1,58 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, httptools
-, aiofiles
-, websockets
-, multidict
-, uvloop
-, ujson
-, pytest
-, gunicorn
-, pytestcov
-, aiohttp
-, beautifulsoup4
-, pytest-sanic
-, pytest-sugar
-, pytest-benchmark
+{ lib, buildPythonPackage, fetchPypi, doCheck ? true
+, aiofiles, httptools, multidict, sanic-routing, ujson, uvloop, websockets
+, pytestCheckHook, beautifulsoup4, gunicorn, uvicorn, sanic-testing
+, pytest-benchmark, pytest-sanic, pytest-sugar, pytestcov
 }:
 
 buildPythonPackage rec {
   pname = "sanic";
-  version = "19.3.1";
+  version = "21.3.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ce434eb154872ca64493a6c3a288f11fd10bca0de7be7bf9f1d0d063185e51ec";
+    sha256 = "1cbd12b9138b3ca69656286b0be91fff02b826e8cb72dd76a2ca8c5eb1288d8e";
   };
 
+  postPatch = ''
+    # Loosen dependency requirements.
+    substituteInPlace setup.py \
+      --replace '"pytest==5.2.1"' '"pytest"' \
+      --replace '"gunicorn==20.0.4"' '"gunicorn"' \
+      --replace '"pytest-sanic",' ""
+    # Patch a request headers test to allow brotli encoding
+    # (we build httpx with brotli support, upstream doesn't).
+    substituteInPlace tests/test_headers.py \
+      --replace "deflate\r\n" "deflate, br\r\n"
+  '';
+
   propagatedBuildInputs = [
-    httptools
-    aiofiles
-    websockets
-    multidict
-    uvloop
-    ujson
+    sanic-routing httptools uvloop ujson aiofiles websockets multidict
   ];
 
   checkInputs = [
-    pytest
-    gunicorn
-    pytestcov
-    aiohttp
-    beautifulsoup4
-    pytest-sanic
-    pytest-sugar
-    pytest-benchmark
+    sanic-testing gunicorn pytestcov beautifulsoup4 pytest-sanic pytest-sugar
+    pytest-benchmark pytestCheckHook uvicorn
   ];
 
-  postConfigure = ''
-    substituteInPlace setup.py \
-      --replace "websockets>=6.0,<7.0" "websockets"
-  '';
+  inherit doCheck;
 
-  # 10/500 tests ignored due to missing directory and
-  # requiring network access
-  checkPhase = ''
-    pytest --ignore tests/test_blueprints.py \
-           --ignore tests/test_routes.py \
-           --ignore tests/test_worker.py
-  '';
+  disabledTests = [
+    # No "examples" directory in pypi distribution
+    "test_gunicorn"
+    "test_zero_downtime"
+    # flaky
+    "test_keep_alive_client_timeout"
+    "test_reloader_live"
+  ];
+
+  __darwinAllowLocalNetworking = true;
+
+  pythonImportsCheck = [ "sanic" ];
 
   meta = with lib; {
     description = "A microframework based on uvloop, httptools, and learnings of flask";
-    homepage = http://github.com/channelcat/sanic/;
+    homepage = "https://github.com/sanic-org/sanic/";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc AluisioASG ];
   };
 }

@@ -1,46 +1,53 @@
-{ stdenv, fetchurl, makeWrapper, makeDesktopItem
-, atk, cairo, gdk_pixbuf, glib, gnome2, gtk2, libGLU_combined, pango, xorg
-, lsb-release, freetype, fontconfig, pangox_compat, polkit, polkit_gnome }:
+{ lib, stdenv, fetchurl, makeWrapper, makeDesktopItem, genericUpdater, writeShellScript
+, atk, cairo, gdk-pixbuf, glib, gnome2, gtk2, libGLU, libGL, pango, xorg, minizip
+, lsb-release, freetype, fontconfig, polkit, polkit_gnome
+, pulseaudio }:
 
 let
-  sha256 = {
-    "x86_64-linux" = "08kdxsg9npb1nmlr2jyq7p238735kqkp7c5xckxn6rc4cp12n2y2";
-    "i686-linux"   = "11r5d4234zbkkgyrd7q9x3w7s7lailnq7z4x8cnhpr8vipzrg7h2";
-  }."${stdenv.hostPlatform.system}" or (throw "system ${stdenv.hostPlatform.system} not supported");
-
-  arch = {
-    "x86_64-linux" = "amd64";
-    "i686-linux"   = "i686";
-  }."${stdenv.hostPlatform.system}" or (throw "system ${stdenv.hostPlatform.system} not supported");
-
   description = "Desktop sharing application, providing remote support and online meetings";
 
-  desktopItem = makeDesktopItem rec {
-    name = "anydesk";
+  desktopItem = makeDesktopItem {
+    name = "AnyDesk";
     exec = "@out@/bin/anydesk";
     icon = "anydesk";
-    desktopName = "anydesk";
+    desktopName = "AnyDesk";
     genericName = description;
-    categories = "Application;Network;";
+    categories = "Network;";
     startupNotify = "false";
   };
 
 in stdenv.mkDerivation rec {
-  name = "anydesk-${version}";
-  version = "4.0.1";
+  pname = "anydesk";
+  version = "6.1.1";
 
   src = fetchurl {
-    url = "https://download.anydesk.com/linux/${name}-${arch}.tar.gz";
-    inherit sha256;
+    urls = [
+      "https://download.anydesk.com/linux/${pname}-${version}-amd64.tar.gz"
+      "https://download.anydesk.com/linux/generic-linux/${pname}-${version}-amd64.tar.gz"
+    ];
+    sha256 = "1ai58fsivb8al1279bayl800qavy0kfj40rjhf87g902ap3p4bhh";
+  };
+
+  passthru = {
+    updateScript = genericUpdater {
+      inherit pname version;
+      versionLister = writeShellScript "anydesk-versionLister" ''
+        echo "# Versions for $1:" >> "$2"
+        curl -s https://anydesk.com/en/downloads/linux \
+          | grep "https://[a-z0-9._/-]*-amd64.tar.gz" -o \
+          | uniq \
+          | sed 's,.*/anydesk-\(.*\)-amd64.tar.gz,\1,g'
+      '';
+    };
   };
 
   buildInputs = [
-    atk cairo gdk_pixbuf glib gtk2 stdenv.cc.cc pango
-    gnome2.gtkglext libGLU_combined freetype fontconfig
-    pangox_compat polkit polkit_gnome
+    atk cairo gdk-pixbuf glib gtk2 stdenv.cc.cc pango
+    gnome2.gtkglext libGLU libGL minizip freetype
+    fontconfig polkit polkit_gnome pulseaudio
   ] ++ (with xorg; [
-    libxcb libX11 libXdamage libXext libXfixes libXi libXmu
-    libXrandr libXtst libXt libICE libSM
+    libxcb libxkbfile libX11 libXdamage libXext libXfixes libXi libXmu
+    libXrandr libXtst libXt libICE libSM libXrender
   ]);
 
   nativeBuildInputs = [ makeWrapper ];
@@ -50,8 +57,8 @@ in stdenv.mkDerivation rec {
 
     mkdir -p $out/bin $out/share/{applications,doc/anydesk,icons/hicolor}
     install -m755 anydesk $out/bin/anydesk
-    cp changelog copyright README $out/share/doc/anydesk
-    cp -r icons/* $out/share/icons/hicolor/
+    cp copyright README $out/share/doc/anydesk
+    cp -r icons/hicolor/* $out/share/icons/hicolor/
     cp ${desktopItem}/share/applications/*.desktop $out/share/applications
 
     runHook postInstall
@@ -60,21 +67,26 @@ in stdenv.mkDerivation rec {
   postFixup = ''
     patchelf \
       --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-      --set-rpath "${stdenv.lib.makeLibraryPath buildInputs}" \
+      --set-rpath "${lib.makeLibraryPath buildInputs}" \
+      $out/bin/anydesk
+
+    # pangox is not actually necessary (it was only added as a part of gtkglext)
+    patchelf \
+      --remove-needed libpangox-1.0.so.0 \
       $out/bin/anydesk
 
     wrapProgram $out/bin/anydesk \
-      --prefix PATH : ${stdenv.lib.makeBinPath [ lsb-release ]}
+      --prefix PATH : ${lib.makeBinPath [ lsb-release ]}
 
     substituteInPlace $out/share/applications/*.desktop \
       --subst-var out
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit description;
-    homepage = https://www.anydesk.com;
+    homepage = "https://www.anydesk.com";
     license = licenses.unfree;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ peterhoeg ];
+    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [ shyim ];
   };
 }

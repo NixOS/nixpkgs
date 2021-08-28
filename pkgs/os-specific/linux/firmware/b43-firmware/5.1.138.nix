@@ -1,9 +1,10 @@
-{ stdenv, fetchurl, b43FirmwareCutter }:
+{ lib, stdenv, fetchurl, b43FirmwareCutter }:
 
 let version = "5.100.138"; in
 
 stdenv.mkDerivation {
-  name = "b43-firmware-${version}";
+  pname = "b43-firmware";
+  inherit version;
 
   src = fetchurl {
     url = "http://www.lwfinger.com/b43-firmware/broadcom-wl-${version}.tar.bz2";
@@ -21,8 +22,8 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Firmware for cards supported by the b43 kernel module";
-    homepage = http://wireless.kernel.org/en/users/Drivers/b43;
-    license = stdenv.lib.licenses.unfree;
+    homepage = "http://wireless.kernel.org/en/users/Drivers/b43";
+    license = lib.licenses.unfree;
   };
 }
 

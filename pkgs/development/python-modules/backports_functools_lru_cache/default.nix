@@ -2,24 +2,37 @@
 , buildPythonPackage
 , fetchPypi
 , setuptools_scm
-, pythonOlder
+, isPy3k
+, pytest
+, pytest-black
+, pytest-flake8
+, pytestcov
 }:
 
-if !(pythonOlder "3.3") then null else buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "backports.functools_lru_cache";
-  version = "1.5";
+  version = "1.6.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9d98697f088eb1b0fa451391f91afb5e3ebde16bbdb272819fd091151fda4f1a";
+    sha256 = "d84e126e2a29e4fde8931ff8131240bbf30a0e7dbcc3897a8dbd8ea5ac11419c";
   };
 
-  buildInputs = [ setuptools_scm ];
-  doCheck = false; # No proper test
+  nativeBuildInputs = [ setuptools_scm ];
+
+  checkInputs = [ pytest pytest-flake8 pytest-black pytestcov ];
+  # ironically, they fail a linting test, and pytest.ini forces that test suite
+  checkPhase = ''
+    rm backports/functools_lru_cache.py
+    pytest -k 'not format'
+  '';
+
+  # Test fail on Python 2
+  doCheck = isPy3k;
 
   meta = {
     description = "Backport of functools.lru_cache";
-    homepage = https://github.com/jaraco/backports.functools_lru_cache;
+    homepage = "https://github.com/jaraco/backports.functools_lru_cache";
     license = lib.licenses.mit;
   };
 }

@@ -1,11 +1,11 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "pod2mdoc-${version}";
+  pname = "pod2mdoc";
   version = "0.0.10";
 
   src = fetchurl {
-    url = "http://mdocml.bsd.lv/pod2mdoc/snapshots/${name}.tgz";
+    url = "http://mdocml.bsd.lv/pod2mdoc/snapshots/${pname}-${version}.tgz";
     sha256 = "0nwa9zv9gmfi5ysz1wfm60kahc7nv0133n3dfc2vh2y3gj8mxr4f";
   };
 
@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
     install -m 0444 pod2mdoc.1 $out/share/man/man1
   '';
 
-  meta = with stdenv.lib; {
-    homepage = http://mdocml.bsd.lv/;
+  meta = with lib; {
+    homepage = "http://mdocml.bsd.lv/";
     description = "converter from POD into mdoc";
     license = licenses.isc;
     platforms = platforms.all;

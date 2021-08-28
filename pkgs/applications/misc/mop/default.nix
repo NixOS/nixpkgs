@@ -1,7 +1,7 @@
-{ stdenv, buildGoPackage, fetchgit }:
+{ lib, buildGoPackage, fetchgit }:
 
 buildGoPackage rec {
-  name = "mop-${version}";
+  pname = "mop";
   version = "0.2.0";
   rev = "bc666ec165d08b43134f7ec0bf29083ad5466243";
 
@@ -22,10 +22,9 @@ buildGoPackage rec {
     sha256 = "0zp51g9i8rw6acs4vnrxclbxa5z1v0a0m1xx27szszp0rphcczkx";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simple stock tracker implemented in go";
-    homepage =  https://github.com/mop-tracker/mop;
+    homepage =  "https://github.com/mop-tracker/mop";
     license = licenses.mit;
-    platforms = platforms.all;
   };
 }

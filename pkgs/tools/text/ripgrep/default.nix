@@ -1,42 +1,56 @@
-{ stdenv, fetchFromGitHub, rustPlatform, asciidoc, docbook_xsl, libxslt
+{ lib, stdenv
+, fetchFromGitHub
+, rustPlatform
+, asciidoctor
+, installShellFiles
+, pkg-config
 , Security
-, withPCRE2 ? false, pcre2 ? null
+, withPCRE2 ? true
+, pcre2
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "ripgrep";
-  version = "11.0.1";
+  version = "12.1.1";
 
   src = fetchFromGitHub {
     owner = "BurntSushi";
     repo = pname;
     rev = version;
-    sha256 = "0vak82d4vyw0w8agswbyxa6g3zs2h9mxm2xjw0xs9qccvmi7whbb";
+    sha256 = "1hqps7l5qrjh9f914r5i6kmcz6f1yb951nv4lby0cjnp5l253kps";
   };
 
-  cargoSha256 = "1k1wg27p7w8b3cgygnkr6yhsc4hpnvrpa227s612vy2zfcmgb1kx";
+  cargoSha256 = "1nyfxma2vwfq6r614ng8qq8vanb540a5z0ibs85wz5sjm3hp1l4f";
 
-  cargoBuildFlags = stdenv.lib.optional withPCRE2 "--features pcre2";
+  cargoBuildFlags = lib.optional withPCRE2 "--features pcre2";
 
-  nativeBuildInputs = [ asciidoc docbook_xsl libxslt ];
-  buildInputs = (stdenv.lib.optional withPCRE2 pcre2)
-    ++ (stdenv.lib.optional stdenv.isDarwin Security);
+  nativeBuildInputs = [ asciidoctor installShellFiles ]
+    ++ lib.optional withPCRE2 pkg-config;
+  buildInputs = lib.optional withPCRE2 pcre2
+    ++ lib.optional stdenv.isDarwin Security;
 
   preFixup = ''
-    mkdir -p "$out/man/man1"
-    cp target/release/build/ripgrep-*/out/rg.1 "$out/man/man1/"
+    installManPage $releaseDir/build/ripgrep-*/out/rg.1
 
-    mkdir -p "$out/share/"{bash-completion/completions,fish/vendor_completions.d,zsh/site-functions}
-    cp target/release/build/ripgrep-*/out/rg.bash "$out/share/bash-completion/completions/"
-    cp target/release/build/ripgrep-*/out/rg.fish "$out/share/fish/vendor_completions.d/"
-    cp "$src/complete/_rg" "$out/share/zsh/site-functions/"
+    installShellCompletion $releaseDir/build/ripgrep-*/out/rg.{bash,fish}
+    installShellCompletion --zsh complete/_rg
   '';
 
-  meta = with stdenv.lib; {
+  doInstallCheck = true;
+  installCheckPhase = ''
+    file="$(mktemp)"
+    echo "abc\nbcd\ncde" > "$file"
+    $out/bin/rg -N 'bcd' "$file"
+    $out/bin/rg -N 'cd' "$file"
+  '' + lib.optionalString withPCRE2 ''
+    echo '(a(aa)aa)' | $out/bin/rg -P '\((a*|(?R))*\)'
+  '';
+
+  meta = with lib; {
     description = "A utility that combines the usability of The Silver Searcher with the raw speed of grep";
-    homepage = https://github.com/BurntSushi/ripgrep;
+    homepage = "https://github.com/BurntSushi/ripgrep";
     license = with licenses; [ unlicense /* or */ mit ];
-    maintainers = [ maintainers.tailhook ];
-    platforms = platforms.all;
+    maintainers = with maintainers; [ tailhook globin ma27 zowoq ];
+    mainProgram = "rg";
   };
 }

@@ -1,23 +1,23 @@
-{ stdenv, fetchFromGitHub, rustPlatform }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, darwin }:
 
 rustPlatform.buildRustPackage rec {
   pname = "pazi";
-  version = "0.2.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "euank";
     repo = pname;
     rev = "v${version}";
-    sha256 = "12z2vyzmyxfq1krbbrjar7c2gvyq1969v16pb2pm7f4g4k24g0c8";
+    sha256 = "0z8x70mwg0mvz6iap92gil37d4kpg5dizlyfx3zk7984ynycgap8";
   };
 
-  cargoSha256 = "1w97jvlamxlxkqpim5iyayhbsqvg3rqds2nxq1fk5imj4hbi3681";
+  buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
-  cargoPatches = [ ./cargo-lock.patch ];
+  cargoSha256 = "1iamlp5519h8mmgd4964cvyp7mmnqdg2d3qj5v7yzilyp4nz15jc";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An autojump \"zap to directory\" helper";
-    homepage = https://github.com/euank/pazi;
+    homepage = "https://github.com/euank/pazi";
     license = licenses.gpl3;
     maintainers = with maintainers; [ bbigras ];
   };

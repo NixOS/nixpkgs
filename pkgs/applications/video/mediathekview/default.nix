@@ -1,29 +1,33 @@
-{ stdenv, fetchurl, makeWrapper, jre }:
+{ lib, stdenv, fetchurl, makeWrapper, jre }:
 
 stdenv.mkDerivation rec {
-  version = "13.2.1";
-  name = "mediathekview-${version}";
+  version = "13.7.1";
+  pname = "mediathekview";
   src = fetchurl {
-    url = "https://download.mediathekview.de/stabil/MediathekView-${version}.tar.gz";
-    sha256 = "11wg6klviig0h7pprfaygamsgqr7drqra2s4yxgfak6665033l2a";
+    url = "https://download.mediathekview.de/stabil/MediathekView-${version}-linux.tar.gz";
+    sha256 = "sha256-yFPyj1Mbgj2eJv4DpvfOtPyTbL9gMAXC5TzSx8AV27o=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
-    mkdir -p $out/{lib,bin,share/mediathekview}
+    mkdir -p $out/{bin,lib}
 
-    install -m644 MediathekView.jar $out/
-    install -m644 -t $out/lib lib/*
-    install -m755 bin/flv.sh $out/share/mediathekview
+    install -m644 MediathekView.jar $out/lib
 
     makeWrapper ${jre}/bin/java $out/bin/mediathek \
-      --add-flags "-cp '$out/lib/*' -jar $out/MediathekView.jar"
-    '';
+      --add-flags "-Xmx1G --enable-preview -jar $out/lib/MediathekView.jar"
 
-  meta = with stdenv.lib; {
+    makeWrapper ${jre}/bin/java $out/bin/MediathekView \
+      --add-flags "-Xmx1G --enable-preview -jar $out/lib/MediathekView.jar"
+
+    makeWrapper ${jre}/bin/java $out/bin/MediathekView_ipv4 \
+      --add-flags "-Xmx1G --enable-preview -Djava.net.preferIPv4Stack=true -jar $out/lib/MediathekView.jar"
+  '';
+
+  meta = with lib; {
     description = "Offers access to the Mediathek of different tv stations (ARD, ZDF, Arte, etc.)";
-    homepage = https://mediathekview.de/;
+    homepage = "https://mediathekview.de/";
     license = licenses.gpl3;
     maintainers = with maintainers; [ moredread ];
     platforms = platforms.all;

@@ -1,12 +1,12 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  version = "1.2.0";
-  name = "htpdate-${version}";
+  version = "1.2.2";
+  pname = "htpdate";
 
   src = fetchurl {
-    url = "http://www.vervest.org/htp/archive/c/${name}.tar.xz";
-    sha256 = "00xwppq3aj951m0srjvxmr17kiaaflyjmbfkvpnfs3jvqhzczci2";
+    url = "http://www.vervest.org/htp/archive/c/${pname}-${version}.tar.xz";
+    sha256 = "0mgr350qwgzrdrwkb9kaj6z7l6hn6a2pwh7sacqvnal5fyc9a7sz";
   };
 
   makeFlags = [
@@ -17,9 +17,9 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Utility to fetch time and set the system clock over HTTP";
-    homepage = http://www.vervest.org/htp/;
+    homepage = "http://www.vervest.org/htp/";
     platforms = platforms.linux;
     license = licenses.gpl2Plus;
   };

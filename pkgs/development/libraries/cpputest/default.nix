@@ -1,19 +1,19 @@
-{stdenv, fetchurl}:
+{lib, stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
-  version = "3.8";
-  name = "cpputest-${version}";
+  pname = "cpputest";
+  version = "4.0";
 
   src = fetchurl {
-    url = "https://github.com/cpputest/cpputest/releases/download/v${version}/${name}.tar.gz";
-    sha256 = "0mk48xd3klyqi7wf3f4wn4zqxxzmvrhhl32r25jzrixzl72wq7f8";
+    url = "https://github.com/cpputest/cpputest/releases/download/v${version}/${pname}-${version}.tar.gz";
+    sha256 = "1xslavlb1974y5xvs8n1j9zkk05dlw8imy4saasrjlmibl895ii1";
   };
 
-  meta = {
-    homepage = http://cpputest.github.io/;
+  meta = with lib; {
+    homepage = "https://cpputest.github.io/";
     description = "Unit testing and mocking framework for C/C++";
-    platforms = stdenv.lib.platforms.linux ;
-    license = stdenv.lib.licenses.bsd3;
-    maintainers = [ stdenv.lib.maintainers.juliendehos ];
+    platforms = platforms.all;
+    license = licenses.bsd3;
+    maintainers = [ maintainers.juliendehos ];
   };
 }

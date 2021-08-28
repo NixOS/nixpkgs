@@ -1,16 +1,16 @@
-{stdenv, fetchsvn, SDL, libGLU_combined, openal, libvorbis, freealut, SDL_image}:
+{lib, stdenv, fetchsvn, SDL, libGLU, libGL, openal, libvorbis, freealut, SDL_image}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "blackshades-svn-110";
   src = fetchsvn {
-    url = svn://svn.icculus.org/blackshades/trunk;
+    url = "svn://svn.icculus.org/blackshades/trunk";
     rev = "110";
     sha256 = "0kbrh1dympk8scjxr6av24qs2bffz44l8qmw2m5gyqf4g3rxf6ra";
   };
 
   NIX_LDFLAGS = "-lSDL_image";
 
-  buildInputs = [ SDL SDL_image libGLU_combined openal libvorbis freealut ];
+  buildInputs = [ SDL SDL_image libGLU libGL openal libvorbis freealut ];
 
   patchPhase = ''
     sed -i -e s,Data/,$out/opt/$name/Data/,g \
@@ -25,10 +25,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://icculus.org/blackshades/;
+    homepage = "http://icculus.org/blackshades/";
     description = "Protect the VIP";
-    license = stdenv.lib.licenses.free;
-    maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; linux;
+    license = lib.licenses.free;
+    maintainers = with lib.maintainers; [viric];
+    platforms = with lib.platforms; linux;
   };
 }

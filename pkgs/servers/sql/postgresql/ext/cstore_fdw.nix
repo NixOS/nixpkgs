@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, postgresql, protobufc }:
+{ lib, stdenv, fetchFromGitHub, postgresql, protobufc }:
 
 stdenv.mkDerivation rec {
-  name = "cstore_fdw-${version}";
-  version = "1.6.2";
+  pname = "cstore_fdw";
+  version = "1.7.0";
 
   nativeBuildInputs = [ protobufc ];
   buildInputs = [ postgresql ];
@@ -11,20 +11,20 @@ stdenv.mkDerivation rec {
     owner  = "citusdata";
     repo   = "cstore_fdw";
     rev    = "refs/tags/v${version}";
-    sha256 = "0kdmzpbhhjdg4p6i5963h7qbs88jzgpqc52gz450h7hwb9ckpv74";
+    sha256 = "129mpq8rq16jg7idh6c1j6nij64iywrs7wl3cn02bdb3h8f19z1b";
   };
 
   installPhase = ''
-    mkdir -p $out/{lib,share/extension}
+    mkdir -p $out/{lib,share/postgresql/extension}
 
     cp *.so      $out/lib
-    cp *.sql     $out/share/extension
-    cp *.control $out/share/extension
+    cp *.sql     $out/share/postgresql/extension
+    cp *.control $out/share/postgresql/extension
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Columnar storage for PostgreSQL";
-    homepage    = https://www.citusdata.com/;
+    homepage    = "https://www.citusdata.com/";
     maintainers = with maintainers; [ thoughtpolice ];
     platforms   = postgresql.meta.platforms;
     license     = licenses.asl20;

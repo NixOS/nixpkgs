@@ -1,4 +1,18 @@
-{ stdenv, fetchFromGitHub, pantheon, meson, python3, ninja, pkgconfig, vala, glib, libgee, dbus, glib-networking, wrapGAppsHook }:
+{ lib, stdenv
+, fetchFromGitHub
+, nix-update-script
+, pantheon
+, meson
+, python3
+, ninja
+, pkg-config
+, vala
+, glib
+, libgee
+, dbus
+, glib-networking
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "contractor";
@@ -8,12 +22,12 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "1jzqv7pglhhyrkj1pfk1l624zn1822wyl5dp6gvwn4sk3iqxwwhl";
+    sha256 = "sha256-FHLecRxTE8v3M7cV6rkQKNhPhKFhuhvkzB5C+u7Z+Ms=";
   };
 
   passthru = {
-    updateScript = pantheon.updateScript {
-      repoName = pname;
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
     };
   };
 
@@ -21,7 +35,7 @@ stdenv.mkDerivation rec {
     dbus
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     vala
     wrapGAppsHook
@@ -33,11 +47,11 @@ stdenv.mkDerivation rec {
     libgee
   ];
 
-  PKG_CONFIG_DBUS_1_SESSION_BUS_SERVICES_DIR = "share/dbus-1/services";
+  PKG_CONFIG_DBUS_1_SESSION_BUS_SERVICES_DIR = "${placeholder "out"}/share/dbus-1/services";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A desktop-wide extension service used by elementary OS";
-    homepage = https://github.com/elementarycontractor;
+    homepage = "https://github.com/elementary/contractor";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

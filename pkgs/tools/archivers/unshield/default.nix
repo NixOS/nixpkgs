@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, cmake, zlib, openssl }:
+{ lib, stdenv, fetchFromGitHub, cmake, zlib, openssl }:
 
 stdenv.mkDerivation rec {
-  name = "unshield-${version}";
+  pname = "unshield";
   version = "1.4.3";
 
   src = fetchFromGitHub {
@@ -15,9 +15,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ zlib openssl ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tool and library to extract CAB files from InstallShield installers";
-    homepage = https://github.com/twogood/unshield;
+    homepage = "https://github.com/twogood/unshield";
     license = licenses.mit;
     platforms = platforms.linux;
   };

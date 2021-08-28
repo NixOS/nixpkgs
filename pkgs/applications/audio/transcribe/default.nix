@@ -1,19 +1,14 @@
-{ stdenv, fetchzip, wrapGAppsHook, alsaLib, atk, cairo, gdk_pixbuf
+{ stdenv, fetchzip, lib, wrapGAppsHook, alsaLib, atk, cairo, gdk-pixbuf
 , glib, gst_all_1,  gtk3, libSM, libX11, libpng12, pango, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "transcribe-${version}";
-  version = "8.72";
+  pname = "transcribe";
+  version = "9.00";
 
-  src = if stdenv.hostPlatform.system == "i686-linux" then
+  src = if stdenv.hostPlatform.system == "x86_64-linux" then
     fetchzip {
-      url = "https://www.seventhstring.com/xscribe/downlinux32/xscsetup.tar.gz";
-      sha256 = "1h5l7ry9c9awpxfnd29b0wm973ifrhj17xl5d2fdsclw2swsickb";
-    }
-  else if stdenv.hostPlatform.system == "x86_64-linux" then
-    fetchzip {
-      url = "https://www.seventhstring.com/xscribe/downlinux64/xsc64setup.tar.gz";
-      sha256 = "1rpd3ppnx5i5yrnfbjrx7h7dk48kwl99i9lnpa75ap7nxvbiznm0";
+      url = "https://www.seventhstring.com/xscribe/downlo/xscsetup-9.00.0.tar.gz";
+      sha256 = "0mgjx0hnps3jmc2d9hkskxbmwcqf7f9jx595j5sc501br1l84sdf";
     }
   else throw "Platform not supported";
 
@@ -24,8 +19,8 @@ stdenv.mkDerivation rec {
 
   dontPatchELF = true;
 
-  libPath = with gst_all_1; stdenv.lib.makeLibraryPath [
-    stdenv.cc.cc glib gtk3 atk pango cairo gdk_pixbuf alsaLib
+  libPath = with gst_all_1; lib.makeLibraryPath [
+    stdenv.cc.cc glib gtk3 atk pango cairo gdk-pixbuf alsaLib
     libX11 libSM libpng12 gstreamer gst-plugins-base zlib
   ];
 
@@ -34,9 +29,7 @@ stdenv.mkDerivation rec {
     cp transcribe $out/libexec
     cp xschelp.htb readme_gtk.html $out/share/doc
     cp -r gtkicons $out/share/icons
-
     ln -s $out/share/doc/xschelp.htb $out/libexec
-
     patchelf \
       --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) \
       $out/libexec/transcribe
@@ -53,7 +46,7 @@ stdenv.mkDerivation rec {
     ln -s $out/libexec/transcribe $out/bin/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Software to help transcribe recorded music";
     longDescription = ''
       The Transcribe! application is an assistant for people who want
@@ -64,10 +57,8 @@ stdenv.mkDerivation rec {
       has many transcription-specific features not found on
       conventional music players.
     '';
-    homepage = https://www.seventhstring.com/xscribe/;
+    homepage = "https://www.seventhstring.com/xscribe/";
     license = licenses.unfree;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ michalrus ];
-    broken = true;
   };
 }

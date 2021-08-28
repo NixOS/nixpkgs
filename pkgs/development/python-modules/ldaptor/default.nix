@@ -2,34 +2,37 @@
 , buildPythonPackage
 , fetchPypi
 , twisted
-, pycrypto
+, passlib
 , pyopenssl
 , pyparsing
+, service-identity
 , zope_interface
 , isPy3k
+, python
 }:
 
 buildPythonPackage rec {
   pname = "ldaptor";
-  version = "16.0.1";
+  version = "21.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6b9ebe5814e9e7091703c4e3bfeae73b46508b4678e2ff403cddaedf8213815d";
+    sha256 = "sha256-jEnrGTddSqs+W4NYYGFODLF+VrtaIOGHSAj6W+xno1g=";
   };
 
   propagatedBuildInputs = [
-    twisted pycrypto pyopenssl pyparsing zope_interface
+    twisted passlib pyopenssl pyparsing service-identity zope_interface
   ];
 
-  disabled = isPy3k;
+  disabled = !isPy3k;
 
-  # TypeError: None is neither bytes nor unicode
-  doCheck = false;
+  checkPhase = ''
+    ${python.interpreter} -m twisted.trial ldaptor
+  '';
 
   meta = {
     description = "A Pure-Python Twisted library for LDAP";
-    homepage = https://github.com/twisted/ldaptor;
+    homepage = "https://github.com/twisted/ldaptor";
     license = lib.licenses.mit;
   };
 }

@@ -1,7 +1,7 @@
-{lib, buildPythonPackage, fetchPypi, pytest, cram, bash}:
+{ lib, buildPythonPackage, fetchPypi, pytest, cram, bash }:
 
 buildPythonPackage rec {
-  version = "0.2.0";
+  version = "0.2.2";
   pname = "pytest-cram";
 
   checkInputs = [ pytest ];
@@ -9,8 +9,8 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "006p5dr3q794sbwwmxmdls3nwq0fvnyrxxmc03pgq8n74chl71qn";
-    extension = "zip";
+    sha256 = "0405ymmrsv6ii2qhq35nxfjkb402sdb6d13xnk53jql3ybgmiqq0";
+    extension = "tar.gz";
   };
 
   postPatch = ''
@@ -22,12 +22,12 @@ buildPythonPackage rec {
   # the imported and collected modules are different.
   checkPhase = ''
     rm pytest_cram/tests/__init__.py
-    pytest pytest_cram
+    pytest pytest_cram/ --ignore=pytest_cram/tests/test_examples.py
   '';
 
   meta = {
     description = "Test command-line applications with pytest and cram";
-    homepage = https://github.com/tbekolay/pytest-cram;
+    homepage = "https://github.com/tbekolay/pytest-cram";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jluttine ];
   };

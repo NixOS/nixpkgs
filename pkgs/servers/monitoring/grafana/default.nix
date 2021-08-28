@@ -1,9 +1,8 @@
-{ lib, buildGoPackage, fetchurl, fetchFromGitHub, phantomjs2 }:
+{ lib, buildGoModule, fetchurl, fetchFromGitHub, nixosTests }:
 
-buildGoPackage rec {
-  version = "6.2.2";
-  name = "grafana-${version}";
-  goPackagePath = "github.com/grafana/grafana";
+buildGoModule rec {
+  pname = "grafana";
+  version = "7.5.10";
 
   excludedPackages = [ "release_publisher" ];
 
@@ -11,33 +10,47 @@ buildGoPackage rec {
     rev = "v${version}";
     owner = "grafana";
     repo = "grafana";
-    sha256 = "16sf9g79crwjarmspc35lab47vfnw59rjn2vcrgrz8y3l466qn8p";
+    sha256 = "sha256-e+Nkw9TLQoJfJUSXEGvqqWJMcwjNoN0JoB/zfIPHxYw=";
   };
 
   srcStatic = fetchurl {
-    url = "https://s3-us-west-2.amazonaws.com/grafana-releases/release/grafana-${version}.linux-amd64.tar.gz";
-    sha256 = "12w309bgii0qsjc7p6zssliy8y2jkixhf8g464f4mr8pnkx1yamz";
+    url = "https://dl.grafana.com/oss/release/grafana-${version}.linux-amd64.tar.gz";
+    sha256 = "sha256-xwbd5Qu+btRSqowXCVhmceOGiXiSHeBamJi0Tx79zsc=";
   };
 
+  vendorSha256 = "sha256-FdotpFi1ee92mCX59bBuqzCyjIq6yujWixReYxmKbS8=";
+
+  # grafana-aws-sdk is specified with two versions which causes a problem later:
+  # go: inconsistent vendoring in /build/source:
+  #  github.com/grafana/grafana-aws-sdk@v0.3.0: is explicitly required in go.mod, but not marked as explicit in vendor/modules.txt
+  # Remove the older one here to fix this.
   postPatch = ''
+    substituteInPlace go.mod \
+      --replace 'github.com/grafana/grafana-aws-sdk v0.3.0' ""
+
     substituteInPlace pkg/cmd/grafana-server/main.go \
       --replace 'var version = "5.0.0"'  'var version = "${version}"'
   '';
 
-  preBuild = "export GOPATH=$GOPATH:$NIX_BUILD_TOP/go/src/${goPackagePath}/Godeps/_workspace";
+  # main module (github.com/grafana/grafana) does not contain package github.com/grafana/grafana/scripts/go
+  # main module (github.com/grafana/grafana) does not contain package github.com/grafana/grafana/dashboard-schemas
+  preBuild = ''
+    rm -r dashboard-schemas scripts/go
+  '';
 
   postInstall = ''
     tar -xvf $srcStatic
-    mkdir -p $bin/share/grafana
-    mv grafana-*/{public,conf,tools} $bin/share/grafana/
-    ln -sf ${phantomjs2}/bin/phantomjs $bin/share/grafana/tools/phantomjs/phantomjs
+    mkdir -p $out/share/grafana
+    mv grafana-*/{public,conf,tools} $out/share/grafana/
   '';
+
+  passthru.tests = { inherit (nixosTests) grafana; };
 
   meta = with lib; {
     description = "Gorgeous metric viz, dashboards & editors for Graphite, InfluxDB & OpenTSDB";
     license = licenses.asl20;
-    homepage = https://grafana.org/;
-    maintainers = with maintainers; [ offline fpletz willibutz ];
+    homepage = "https://grafana.com";
+    maintainers = with maintainers; [ offline fpletz willibutz globin ma27 Frostman ];
     platforms = platforms.linux;
   };
 }

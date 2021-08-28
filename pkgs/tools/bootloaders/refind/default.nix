@@ -1,10 +1,10 @@
-{ stdenv, fetchurl, gnu-efi }:
+{ lib, stdenv, fetchurl, gnu-efi }:
 
 let
   archids = {
-    "x86_64-linux" = { hostarch = "x86_64"; efiPlatform = "x64"; };
-    "i686-linux" = rec { hostarch = "ia32"; efiPlatform = hostarch; };
-    "aarch64-linux" = rec { hostarch = "aarch64"; efiPlatform = "aa64"; };
+    x86_64-linux = { hostarch = "x86_64"; efiPlatform = "x64"; };
+    i686-linux = rec { hostarch = "ia32"; efiPlatform = hostarch; };
+    aarch64-linux = { hostarch = "aarch64"; efiPlatform = "aa64"; };
   };
 
   inherit
@@ -13,16 +13,16 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "refind-${version}";
-  version = "0.11.4";
-  srcName = "refind-src-${version}";
+  pname = "refind";
+  version = "0.13.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/refind/${version}/${srcName}.tar.gz";
-    sha256 = "1bjd0dl77bc5k6g3kc7s8m57vpbg2zscph9qh84xll9rc10g3fir";
+    url = "mirror://sourceforge/project/refind/${version}/${pname}-src-${version}.tar.gz";
+    sha256 = "1yjni0mr3rqrrk4ynwb8i0whpqhd56cck4mxd97qmxn7wbr826i9";
   };
 
   patches = [
+    # Removes hardcoded toolchain for aarch64, allowing successful aarch64 builds.
     ./0001-toolchain.patch
   ];
 
@@ -43,6 +43,8 @@ stdenv.mkDerivation rec {
   buildFlags = [ "gnuefi" "fs_gnuefi" ];
 
   installPhase = ''
+    runHook preInstall
+
     install -d $out/bin/
     install -d $out/share/refind/drivers_${efiPlatform}/
     install -d $out/share/refind/tools_${efiPlatform}/
@@ -101,9 +103,11 @@ stdenv.mkDerivation rec {
     sed -i 's,`which \(.*\)`,`type -p \1`,g' $out/bin/refind-install
     sed -i 's,`which \(.*\)`,`type -p \1`,g' $out/bin/refind-mvrefind
     sed -i 's,`which \(.*\)`,`type -p \1`,g' $out/bin/refind-mkfont
+
+    runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A graphical {,U}EFI boot manager";
     longDescription = ''
       rEFInd is a graphical boot manager for EFI- and UEFI-based
@@ -120,8 +124,8 @@ stdenv.mkDerivation rec {
       runtime makes it very easy to use, particularly when paired with
       Linux kernels that provide EFI stub support.
     '';
-    homepage = http://refind.sourceforge.net/;
-    maintainers = [ maintainers.AndersonTorres ];
+    homepage = "http://refind.sourceforge.net/";
+    maintainers = with maintainers; [ AndersonTorres samueldr ];
     platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" ];
     license = licenses.gpl3Plus;
   };

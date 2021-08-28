@@ -1,37 +1,55 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig
-, python, yasm, gst-plugins-base, orc, bzip2
-, gettext, withSystemLibav ? true, libav ? null
+{ stdenv
+, lib
+, fetchurl
+, meson
+, ninja
+, pkg-config
+, python3
+, gst-plugins-base
+, gettext
+, libav
 }:
 
 # Note that since gst-libav-1.6, libav is actually ffmpeg. See
 # https://gstreamer.freedesktop.org/releases/1.6/ for more info.
 
-assert withSystemLibav -> libav != null;
-
 stdenv.mkDerivation rec {
-  name = "gst-libav-${version}";
-  version = "1.14.4";
-
-  meta = {
-    homepage = https://gstreamer.freedesktop.org;
-    license = stdenv.lib.licenses.lgpl2Plus;
-    platforms = stdenv.lib.platforms.unix;
-  };
+  pname = "gst-libav";
+  version = "1.18.4";
 
   src = fetchurl {
-    url = "${meta.homepage}/src/gst-libav/${name}.tar.xz";
-    sha256 = "1nk5g24z2xx5kaw5cg8dv8skdc516inahmkymcz8bxqxj28qbmyz";
+    url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
+    sha256 = "15n3x3vhshqa3icw93g4vqmqd46122anzqvfxwn6q8famlxlcjil";
   };
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = with stdenv.lib;
-    [ meson ninja gettext pkgconfig python ]
-    ++ optional (!withSystemLibav) yasm
-    ;
+  nativeBuildInputs = [
+    meson
+    ninja
+    gettext
+    pkg-config
+    python3
+  ];
 
-  buildInputs = with stdenv.lib;
-    [ gst-plugins-base orc bzip2 ]
-    ++ optional withSystemLibav libav
-    ;
+  buildInputs = [
+    gst-plugins-base
+    libav
+  ];
+
+  mesonFlags = [
+    "-Ddoc=disabled" # `hotdoc` not packaged in nixpkgs as of writing
+  ];
+
+  postPatch = ''
+    patchShebangs \
+      scripts/extract-release-date-from-doap-file.py
+  '';
+
+  meta = with lib; {
+    description = "FFmpeg/libav plugin for GStreamer";
+    homepage = "https://gstreamer.freedesktop.org";
+    license = licenses.lgpl2Plus;
+    platforms = platforms.unix;
+  };
 }

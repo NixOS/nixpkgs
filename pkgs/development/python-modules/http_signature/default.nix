@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , isPy3k
@@ -17,8 +17,8 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pycrypto ];
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/atl/py-http-signature;
+  meta = with lib; {
+    homepage = "https://github.com/atl/py-http-signature";
     description = "Simple secure signing for HTTP requests using http-signature";
     license = licenses.mit;
   };

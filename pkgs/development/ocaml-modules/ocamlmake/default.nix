@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{stdenv, lib, fetchurl}:
 
 let
 
@@ -6,7 +6,8 @@ let
   sha256 = "99ff58080ed154cc4bd70f915fe4760dffb026a1c0447caa0b3bdb982b24b0a8";
 
 in stdenv.mkDerivation {
-  name = "ocaml-make-${version}";
+  pname = "ocaml-make";
+  inherit version;
 
   src = fetchurl {
     url = "https://bitbucket.org/mmottl/ocaml-makefile/downloads/ocaml-makefile-${version}.tar.gz";
@@ -21,9 +22,9 @@ in stdenv.mkDerivation {
   setupHook = ./setup-hook.sh;
 
   meta = {
-    homepage = http://www.ocaml.info/home/ocaml_sources.html;
+    homepage = "http://www.ocaml.info/home/ocaml_sources.html";
     description = "Generic OCaml Makefile for GNU Make";
     license = "LGPL";
-    platforms = stdenv.lib.platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

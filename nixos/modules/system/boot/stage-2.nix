@@ -4,20 +4,26 @@ with lib;
 
 let
 
+  useHostResolvConf = config.networking.resolvconf.enable && config.networking.useHostResolvConf;
+
   bootStage2 = pkgs.substituteAll {
     src = ./stage-2-init.sh;
     shellDebug = "${pkgs.bashInteractive}/bin/bash";
     shell = "${pkgs.bash}/bin/bash";
+    inherit (config.boot) systemdExecutable extraSystemdUnitPaths;
     isExecutable = true;
     inherit (config.nix) readOnlyStore;
-    inherit (config.networking) useHostResolvConf;
+    inherit useHostResolvConf;
     inherit (config.system.build) earlyMountScript;
-    path = lib.makeBinPath [
+    path = lib.makeBinPath ([
       pkgs.coreutils
-      pkgs.utillinux
-      pkgs.openresolv
-    ];
+      pkgs.util-linux
+    ] ++ lib.optional useHostResolvConf pkgs.openresolv);
     fsPackagesPath = lib.makeBinPath config.system.fsPackages;
+    systemdUnitPathEnvVar = lib.optionalString (config.boot.extraSystemdUnitPaths != [])
+      ("SYSTEMD_UNIT_PATH="
+      + builtins.concatStringsSep ":" config.boot.extraSystemdUnitPaths
+      + ":"); # If SYSTEMD_UNIT_PATH ends with an empty component (":"), the usual unit load path will be appended to the contents of the variable
     postBootCommands = pkgs.writeText "local-cmds"
       ''
         ${config.boot.postBootCommands}
@@ -71,6 +77,24 @@ in
         '';
       };
 
+      systemdExecutable = mkOption {
+        default = "systemd";
+        type = types.str;
+        description = ''
+          The program to execute to start systemd. Typically
+          <literal>systemd</literal>, which will find systemd in the
+          PATH.
+        '';
+      };
+
+      extraSystemdUnitPaths = mkOption {
+        default = [];
+        type = types.listOf types.str;
+        description = ''
+          Additional paths that get appended to the SYSTEMD_UNIT_PATH environment variable
+          that can contain mutable unit files.
+        '';
+      };
     };
 
   };

@@ -41,6 +41,10 @@ self: super: {
   unix = null;
   xhtml = null;
 
+  # Needs Cabal 3.0.x.
+  cabal-install = super.cabal-install.overrideScope (self: super: { Cabal = self.Cabal_3_2_1_0; });
+  jailbreak-cabal = super.jailbreak-cabal.override { Cabal = self.Cabal_3_2_1_0; };
+
   # https://github.com/tibbe/unordered-containers/issues/214
   unordered-containers = dontCheck super.unordered-containers;
 
@@ -60,6 +64,7 @@ self: super: {
   monad-par = dontCheck super.monad-par;  # https://github.com/simonmar/monad-par/issues/66
   github = dontCheck super.github; # hspec upper bound exceeded; https://github.com/phadej/github/pull/341
   binary-orphans = dontCheck super.binary-orphans; # tasty upper bound exceeded; https://github.com/phadej/binary-orphans/commit/8ce857226595dd520236ff4c51fa1a45d8387b33
+  rebase = doJailbreak super.rebase; # time ==1.9.* is too low
 
   # https://github.com/jgm/skylighting/issues/55
   skylighting-core = dontCheck super.skylighting-core;
@@ -67,25 +72,38 @@ self: super: {
   # Break out of "yaml >=0.10.4.0 && <0.11": https://github.com/commercialhaskell/stack/issues/4485
   stack = doJailbreak super.stack;
 
-  # Needs a recent version from the "develop" branch of the upstream git
-  # repository to compile with ghc 8.6.4.
-  liquid-fixpoint = assert super.liquid-fixpoint.version == "0.7.0.7"; overrideSrc super.liquid-fixpoint {
-    src = pkgs.fetchFromGitHub {
-      owner = "ucsd-progsys";
-      repo = "liquid-fixpoint";
-      rev = "42c027ab9ae47907c588a2f1f9c05a5e0aa881e9";
-      sha256 = "17qmzq1vx7h04yd38drr6sh6hys3q2rz62qh3pna9kbxlcnikkqf";
-    };
-    version = "0.8.0.2-pre-release";
-  };
-  liquidhaskell = assert super.liquidhaskell.version == "0.8.2.4"; overrideSrc super.liquidhaskell {
-    src = pkgs.fetchFromGitHub {
-      owner = "ucsd-progsys";
-      repo = "liquidhaskell";
-      rev = "46f11e8faef006e70d39572d08419283b1280b88";
-      sha256 = "10z5r6g5acd43bsak762kwhy33ff262zmhs0wga545nbg29q1fyp";
-    };
-    version = "0.8.6.0-pre-release";
-  };
+  # Newer versions don't compile.
+  resolv = self.resolv_0_1_1_2;
+
+  # cabal2nix needs the latest version of Cabal, and the one
+  # hackage-db uses must match, so take the latest
+  cabal2nix = super.cabal2nix.overrideScope (self: super: { Cabal = self.Cabal_3_2_1_0; });
+
+  # cabal2spec needs a recent version of Cabal
+  cabal2spec = super.cabal2spec.overrideScope (self: super: { Cabal = self.Cabal_3_2_1_0; });
+
+  # Builds only with ghc-8.8.x and beyond.
+  policeman = markBroken super.policeman;
+
+  # https://github.com/pikajude/stylish-cabal/issues/12
+  stylish-cabal = doDistribute (markUnbroken (super.stylish-cabal.override { haddock-library = self.haddock-library_1_7_0; }));
+  haddock-library_1_7_0 = dontCheck super.haddock-library_1_7_0;
+
+  # ghc versions prior to 8.8.x needs additional dependency to compile successfully.
+  ghc-lib-parser-ex = addBuildDepend super.ghc-lib-parser-ex self.ghc-lib-parser;
+
+  # This became a core library in ghc 8.10., so we don‘t have an "exception" attribute anymore.
+  exceptions = super.exceptions_0_10_4;
+
+  # Older compilers need the latest ghc-lib to build this package.
+  hls-hlint-plugin = addBuildDepend super.hls-hlint-plugin self.ghc-lib;
+
+  # vector 0.12.2 indroduced doctest checks that don‘t work on older compilers
+  vector = dontCheck super.vector;
+
+  mmorph = super.mmorph_1_1_3;
+
+  # https://github.com/haskellari/time-compat/issues/23
+  time-compat = dontCheck super.time-compat;
 
 }

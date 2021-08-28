@@ -1,7 +1,7 @@
-{stdenv, fetchFromGitHub, rpm}:
+{lib, stdenv, fetchFromGitHub, rpm}:
 
 stdenv.mkDerivation rec {
-  name = "epm-${version}";
+  pname = "epm";
   version = "4.4";
 
   src = fetchFromGitHub {
@@ -17,9 +17,9 @@ stdenv.mkDerivation rec {
     sed -i 's/README/README.md/' Makefile
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The ESP Package Manager generates distribution archives for a variety of platforms";
-    homepage = https://www.msweet.org/projects.php?Z2;
+    homepage = "https://www.msweet.org/projects.php?Z2";
     license = licenses.gpl2;
     maintainers = with maintainers; [ pSub ];
     platforms = platforms.unix;

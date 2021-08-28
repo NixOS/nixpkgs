@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, makeWrapper, spidermonkey }:
+{ lib, stdenv, fetchFromGitHub, makeWrapper, spidermonkey_78 }:
 
-stdenv.mkDerivation rec {
-  name = "jsawk-${version}";
+stdenv.mkDerivation {
+  pname = "jsawk";
   version = "1.5-pre";
   src = fetchFromGitHub {
     owner = "micha";
@@ -10,19 +10,19 @@ stdenv.mkDerivation rec {
     sha256 = "0z3vdr3c8nvdrrxkjv9b4xg47mdb2hsknxpimw6shgwbigihapyr";
   };
   dontBuild = true;
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
   installPhase = ''
     mkdir -p $out/bin
     cp $src/jsawk $out/bin/
     wrapProgram $out/bin/jsawk \
-      --prefix PATH : "${spidermonkey}/bin"
+      --prefix PATH : "${spidermonkey_78}/bin"
   '';
 
   meta = {
-    description = "Jsawk is like awk, but for JSON";
-    homepage = https://github.com/micha/jsawk;
-    license = stdenv.lib.licenses.publicDomain;
-    maintainers = with stdenv.lib.maintainers; [ puffnfresh ];
-    platforms = stdenv.lib.platforms.unix;
+    description = "Like awk, but for JSON";
+    homepage = "https://github.com/micha/jsawk";
+    license = lib.licenses.publicDomain;
+    maintainers = with lib.maintainers; [ puffnfresh ];
+    platforms = lib.platforms.unix;
   };
 }

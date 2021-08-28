@@ -1,19 +1,19 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchFromGitHub
 , cython
 , python
 }:
+
 buildPythonPackage rec {
   pname = "cymem";
-  version = "2.0.2";
-  name = pname + "-" + version;
+  version = "2.0.3";
 
   src = fetchFromGitHub {
     owner = "explosion";
     repo = "cymem";
     rev = "v${version}";
-    sha256 = "109i67vwgql9za8mfvgbrd6rgraz4djkvpzb4gqvzl13214s6ava";
+    sha256 = "0cqz6whq4zginxjnh4cfqlsh535p4qz295ymvjchp71fv8mz11f6";
   };
 
   propagatedBuildInputs = [
@@ -30,9 +30,9 @@ buildPythonPackage rec {
     ${python.interpreter} -m unittest discover -p "*test*"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Cython memory pool for RAII-style memory management";
-    homepage = https://github.com/explosion/cymem;
+    homepage = "https://github.com/explosion/cymem";
     license = licenses.mit;
     maintainers = with maintainers; [ sdll ];
     };

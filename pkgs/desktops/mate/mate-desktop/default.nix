@@ -1,30 +1,34 @@
-{ stdenv, fetchurl, pkgconfig, intltool, isocodes, gnome3, gtk3, wrapGAppsHook }:
+{ lib, stdenv, fetchurl, pkg-config, gettext, isocodes, gnome, gtk3, dconf, wrapGAppsHook, mateUpdateScript }:
 
 stdenv.mkDerivation rec {
-  name = "mate-desktop-${version}";
-  version = "1.22.1";
+  pname = "mate-desktop";
+  version = "1.24.1";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1hr4r69855csqrcaqpbcyplsy4cwjfz7gabps2pzkh5132jycfr0";
+    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1nd1dn8mm1z6x4r68a25q4vzys1a6fmbzc94ss1z1n1872pczs6i";
   };
 
   nativeBuildInputs = [
-    pkgconfig
-    intltool
+    pkg-config
+    gettext
     wrapGAppsHook
   ];
 
   buildInputs = [
-    gnome3.dconf
+    dconf
     gtk3
     isocodes
   ];
 
-  meta = with stdenv.lib; {
+  enableParallelBuilding = true;
+
+  passthru.updateScript = mateUpdateScript { inherit pname version; };
+
+  meta = with lib; {
     description = "Library with common API for various MATE modules";
-    homepage = https://mate-desktop.org;
-    license = licenses.gpl2;
+    homepage = "https://mate-desktop.org";
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.romildo ];
   };

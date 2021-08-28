@@ -1,7 +1,6 @@
-{ stdenv, fetchFromGitHub, buildGoPackage }:
+{ lib, fetchFromGitHub, buildGoPackage }:
 
 buildGoPackage rec {
-  name    = "${pname}-${version}";
   pname   = "amazon-ecs-agent";
   version = "1.18.0";
 
@@ -15,7 +14,7 @@ buildGoPackage rec {
     sha256 = "1l6c2if6wpjmq2hh6k818w38s1rsbwgd6igqy948dwcrb1g1mixr";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The agent that runs on AWS EC2 container instances and starts containers on behalf of Amazon ECS";
     homepage    = "https://github.com/aws/amazon-ecs-agent";
     license     = licenses.asl20;

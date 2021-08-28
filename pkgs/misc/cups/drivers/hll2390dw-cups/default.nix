@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, makeWrapper
+{ lib, stdenv, fetchurl, makeWrapper
 , cups
 , dpkg
 , a2ps, ghostscript, gnugrep, gnused, coreutils, file, perl, which
 }:
 
 stdenv.mkDerivation rec {
-  name = "hll2390dw-cups-${version}";
+  pname = "hll2390dw-cups";
   version = "4.0.0-1";
 
   src = fetchurl {
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ cups ghostscript dpkg a2ps ];
 
-  unpackPhase = "true";
+  dontUnpack = true;
 
   installPhase = ''
     dpkg-deb -x $src $out
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     ; do
       #substituteInPlace $f \
       wrapProgram $f \
-        --prefix PATH : ${stdenv.lib.makeBinPath [
+        --prefix PATH : ${lib.makeBinPath [
           coreutils ghostscript gnugrep gnused
         ]}
     done
@@ -56,15 +56,15 @@ stdenv.mkDerivation rec {
     ln -s $out/opt/brother/Printers/HLL2390DW/cupswrapper/brother-HLL2390DW-cups-en.ppd $out/share/cups/model/
 
     wrapProgram $out/opt/brother/Printers/HLL2390DW/lpd/lpdfilter \
-      --prefix PATH ":" ${ stdenv.lib.makeBinPath [ ghostscript a2ps file gnused gnugrep coreutils which ] }
+      --prefix PATH ":" ${ lib.makeBinPath [ ghostscript a2ps file gnused gnugrep coreutils which ] }
     '';
 
-  meta = with stdenv.lib; {
-    homepage = http://www.brother.com/;
+  meta = with lib; {
+    homepage = "http://www.brother.com/";
     description = "Brother HL-L2390DW combined print driver";
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    downloadPage = http://support.brother.com/g/b/downloadlist.aspx?c=us_ot&lang=en&prod=hll2390dw_us&os=128;
+    downloadPage = "http://support.brother.com/g/b/downloadlist.aspx?c=us_ot&lang=en&prod=hll2390dw_us&os=128";
     maintainers = [ maintainers.samueldr ];
   };
 }

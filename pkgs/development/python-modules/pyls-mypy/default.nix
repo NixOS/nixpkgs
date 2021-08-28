@@ -1,33 +1,49 @@
-{ lib, buildPythonPackage, fetchFromGitHub
+{ lib, buildPythonPackage, fetchFromGitHub, isPy27
 , future, python-language-server, mypy, configparser
-, pytest, mock, isPy3k, pytestcov, coverage
+, pytestCheckHook, mock, pytestcov, coverage
+, fetchpatch
 }:
 
 buildPythonPackage rec {
   pname = "pyls-mypy";
-  version = "0.1.3";
+  version = "0.1.8";
 
   src = fetchFromGitHub {
     owner = "tomv564";
     repo = "pyls-mypy";
     rev = version;
-    sha256 = "0v7ghcd1715lxlfq304b7xhchp31ahdd89lf6za4n0l59dz74swh";
+    sha256 = "14giyvcrq4w3asm1nyablw70zkakkcsr76chk5a41alxlk4l2alb";
   };
 
-  disabled = !isPy3k;
+  # presumably tests don't find typehints ?
+  doCheck = false;
 
-  checkPhase = ''
-    HOME=$TEMPDIR pytest
+  disabledTests = [
+    "test_parse_line_without_line"
+  ];
+
+  preCheck = ''
+    export HOME=$TEMPDIR
   '';
 
-  checkInputs = [ pytest mock pytestcov coverage ];
+  patches = [
+    # makes future optional
+    (fetchpatch {
+      url = "https://github.com/tomv564/pyls-mypy/commit/2949582ff5f39b1de51eacc92de6cfacf1b5ab75.patch";
+      sha256 = "0bqkvdy5mxyi46nhq5ryynf465f68b6ffy84hmhxrigkapz085g5";
+    })
+  ];
+
+  checkInputs = [ mock pytestcov coverage pytestCheckHook ];
 
   propagatedBuildInputs = [
-    mypy python-language-server future configparser
+    mypy python-language-server configparser
+  ] ++ lib.optional (isPy27) [
+    future
   ];
 
   meta = with lib; {
-    homepage = https://github.com/tomv564/pyls-mypy;
+    homepage = "https://github.com/tomv564/pyls-mypy";
     description = "Mypy plugin for the Python Language Server";
     license = licenses.mit;
     maintainers = [ maintainers.mic92 ];

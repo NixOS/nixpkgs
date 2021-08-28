@@ -1,12 +1,12 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
 
-  name = "f-prot-${version}";
+  pname = "f-prot";
   version = "6.2.1";
 
   src = fetchurl {
-    url = http://files.f-prot.com/files/unix-trial/fp-Linux.x86.32-ws.tar.gz;
+    url = "http://files.f-prot.com/files/unix-trial/fp-Linux.x86.32-ws.tar.gz";
     sha256 = "0qlsrkanf0inplwv1i6hqbimdg91syf5ggd1vahsm9lhivmnr0v5";
   };
 
@@ -32,8 +32,8 @@ stdenv.mkDerivation rec {
     cp doc/man/fpupdate.8 $out/share/man/man8
   '';
 
-  meta = with stdenv.lib; {
-    homepage = http://www.f-prot.com;
+  meta = with lib; {
+    homepage = "http://www.f-prot.com";
     description = "A popular proprietary antivirus program";
     license = licenses.unfree;
     maintainers = [ maintainers.phreedom ];

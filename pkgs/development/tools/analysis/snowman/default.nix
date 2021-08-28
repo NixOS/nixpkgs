@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, cmake, boost, qtbase }:
+{ lib, mkDerivation, fetchFromGitHub, cmake, boost, qtbase }:
 
-stdenv.mkDerivation rec {
-  name = "snowman-${version}";
+mkDerivation rec {
+  pname = "snowman";
   version = "0.1.3";
 
   src = fetchFromGitHub {
@@ -19,9 +19,7 @@ stdenv.mkDerivation rec {
     export sourceRoot=$sourceRoot/src
   '';
 
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Native code to C/C++ decompiler";
     homepage = "http://derevenets.com/";
 

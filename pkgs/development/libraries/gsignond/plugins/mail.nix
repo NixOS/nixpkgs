@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab, pkgconfig, meson, ninja, vala, glib, gsignond, gobject-introspection }:
+{ lib, stdenv, fetchFromGitLab, pkg-config, meson, ninja, vala, glib, gsignond, gobject-introspection }:
 
 stdenv.mkDerivation rec {
   pname = "gsignond-plugin-mail";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     gobject-introspection
     meson
     ninja
-    pkgconfig
+    pkg-config
     vala
   ];
 
@@ -26,11 +26,11 @@ stdenv.mkDerivation rec {
 
   PKG_CONFIG_GSIGNOND_GPLUGINSDIR = "${placeholder "out"}/lib/gsignond/gplugins";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Plugin for the Accounts-SSO gSignOn daemon that handles E-Mail credentials";
-    homepage = https://gitlab.com/accounts-sso/gsignond-plugin-mail;
+    homepage = "https://gitlab.com/accounts-sso/gsignond-plugin-mail";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ worldofpeace ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

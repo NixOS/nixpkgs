@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , isPy3k
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "0b04b2d4d11b464ff1efd42a9ea9f8136187d59f4076f57c9ba95361d41cd7ed";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Job queue server";
     homepage = "https://github.com/pediapress/qserve";
     license = licenses.bsd3;

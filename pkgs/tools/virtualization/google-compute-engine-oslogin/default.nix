@@ -1,48 +1,56 @@
 { stdenv
-, fetchFromGitHub
+, lib
+, bashInteractive
 , curl
+, fetchFromGitHub
 , json_c
+, nixosTests
 , pam
 }:
 
 stdenv.mkDerivation rec {
-  name = "google-compute-engine-oslogin-${version}";
-  version = "1.4.3";
+  pname = "google-compute-engine-oslogin";
+  version = "20210429.00";
 
   src = fetchFromGitHub {
-    repo = "compute-image-packages";
     owner = "GoogleCloudPlatform";
-    rev = "2ccfe80f162a01b5b7c3316ca37981fc8b3fc32a";
-    sha256 = "036g7609ni164rmm68pzi47vrywfz2rcv0ad67gqf331pvlr92x1";
+    repo = "guest-oslogin";
+    rev = version;
+    sha256 = "eHAg9K5oxcygEzqaac81jSFHF+zsW6uB7q2Kfo9hSrA=";
   };
-  sourceRoot = "source/google_compute_engine_oslogin";
 
   postPatch = ''
     # change sudoers dir from /var/google-sudoers.d to /run/google-sudoers.d (managed through systemd-tmpfiles)
-    substituteInPlace pam_module/pam_oslogin_admin.cc --replace /var/google-sudoers.d /run/google-sudoers.d
+    substituteInPlace src/pam/pam_oslogin_admin.cc --replace /var/google-sudoers.d /run/google-sudoers.d
     # fix "User foo not allowed because shell /bin/bash does not exist"
-    substituteInPlace utils/oslogin_utils.cc --replace /bin/bash ${stdenv.shell}
+    substituteInPlace src/include/compat.h --replace /bin/bash ${bashInteractive}/bin/bash
   '';
 
   buildInputs = [ curl.dev pam ];
 
-  NIX_CFLAGS_COMPILE="-I${json_c.dev}/include/json-c";
-  NIX_CFLAGS_LINK="-L${json_c}/lib";
+  NIX_CFLAGS_COMPILE = "-I${json_c.dev}/include/json-c";
+  NIX_CFLAGS_LINK = "-L${json_c}/lib";
 
-  installPhase = ''
-    mkdir -p $out/{bin,lib}
+  makeFlags = [
+    "VERSION=${version}"
+    "DESTDIR=${placeholder "out"}"
+    "PREFIX=/"
+    "BINDIR=/bin"
+    "LIBDIR=/lib"
+    "PAMDIR=/lib"
+    "MANDIR=/share/man"
+  ];
 
-    install -Dm755 libnss_cache_google-compute-engine-oslogin-${version}.so $out/lib/libnss_cache_oslogin.so.2
-    install -Dm755 libnss_google-compute-engine-oslogin-${version}.so $out/lib/libnss_oslogin.so.2
+  enableParallelBuilding = true;
 
-    install -Dm755 pam_oslogin_admin.so pam_oslogin_login.so $out/lib
-    install -Dm755 google_{oslogin_nss_cache,authorized_keys} $out/bin
-  '';
+  passthru.tests = {
+    inherit (nixosTests) google-oslogin;
+  };
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/GoogleCloudPlatform/compute-image-packages;
+  meta = with lib; {
+    homepage = "https://github.com/GoogleCloudPlatform/compute-image-packages";
     description = "OS Login Guest Environment for Google Compute Engine";
     license = licenses.asl20;
-    maintainers = with maintainers; [ adisbladis flokli ];
+    maintainers = with maintainers; [ flokli ];
   };
 }

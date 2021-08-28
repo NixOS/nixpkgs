@@ -46,6 +46,11 @@ let
   '';
 in
 {
+  imports = [
+    (mkRenamedOptionModule [ "services" "murmur" "welcome" ] [ "services" "murmur" "welcometext" ])
+    (mkRemovedOptionModule [ "services" "murmur" "pidfile" ] "Hardcoded to /run/murmur/murmurd.pid now")
+  ];
+
   options = {
     services.murmur = {
       enable = mkOption {
@@ -102,6 +107,13 @@ in
         type = types.str;
         default = "";
         description = "Host to bind to. Defaults binding on all addresses.";
+      };
+
+      package = mkOption {
+        type = types.package;
+        default = pkgs.murmur;
+        defaultText = "pkgs.murmur";
+        description = "Overridable attribute of the murmur package to use.";
       };
 
       password = mkOption {
@@ -234,7 +246,35 @@ in
       extraConfig = mkOption {
         type = types.lines;
         default = "";
-        description = "Extra configuration to put into mumur.ini.";
+        description = "Extra configuration to put into murmur.ini.";
+      };
+
+      environmentFile = mkOption {
+        type = types.nullOr types.path;
+        default = null;
+        example = "/var/lib/murmur/murmurd.env";
+        description = ''
+          Environment file as defined in <citerefentry>
+          <refentrytitle>systemd.exec</refentrytitle><manvolnum>5</manvolnum>
+          </citerefentry>.
+
+          Secrets may be passed to the service without adding them to the world-readable
+          Nix store, by specifying placeholder variables as the option value in Nix and
+          setting these variables accordingly in the environment file.
+
+          <programlisting>
+            # snippet of murmur-related config
+            services.murmur.password = "$MURMURD_PASSWORD";
+          </programlisting>
+
+          <programlisting>
+            # content of the environment file
+            MURMURD_PASSWORD=verysecretpassword
+          </programlisting>
+
+          Note that this file needs to be available on the host on which
+          <literal>murmur</literal> is running.
+        '';
       };
     };
   };
@@ -245,20 +285,33 @@ in
       home            = "/var/lib/murmur";
       createHome      = true;
       uid             = config.ids.uids.murmur;
+      group           = "murmur";
+    };
+    users.groups.murmur = {
+      gid             = config.ids.gids.murmur;
     };
 
     systemd.services.murmur = {
       description = "Murmur Chat Service";
       wantedBy    = [ "multi-user.target" ];
       after       = [ "network-online.target "];
+      preStart    = ''
+        ${pkgs.envsubst}/bin/envsubst \
+          -o /run/murmur/murmurd.ini \
+          -i ${configFile}
+      '';
 
       serviceConfig = {
         # murmurd doesn't fork when logging to the console.
-        Type      = if forking then "forking" else "simple";
-        PIDFile   = mkIf forking "/run/murmur/murmurd.pid";
-        RuntimeDirectory = mkIf forking "murmur";
-        User      = "murmur";
-        ExecStart = "${pkgs.murmur}/bin/murmurd -ini ${configFile}";
+        Type = if forking then "forking" else "simple";
+        PIDFile = mkIf forking "/run/murmur/murmurd.pid";
+        EnvironmentFile = mkIf (cfg.environmentFile != null) cfg.environmentFile;
+        ExecStart = "${cfg.package}/bin/murmurd -ini /run/murmur/murmurd.ini";
+        Restart = "always";
+        RuntimeDirectory = "murmur";
+        RuntimeDirectoryMode = "0700";
+        User = "murmur";
+        Group = "murmur";
       };
     };
   };

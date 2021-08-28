@@ -1,4 +1,14 @@
-{ stdenv, lib, runCommand, haskellPackages, nodePackages, perlPackages, python2Packages, python3Packages, writers, writeText }:
+{ glib
+, haskellPackages
+, lib
+, nodePackages
+, perlPackages
+, python2Packages
+, python3Packages
+, runCommand
+, writers
+, writeText
+}:
 with writers;
 let
 
@@ -17,6 +27,12 @@ let
 
     dash = writeDashBin "test_writers" ''
      test '~' = '~' && echo 'success'
+    '';
+
+    rust = writeRustBin "test_writers" {} ''
+      fn main(){
+        println!("success")
+      }
     '';
 
     haskell = writeHaskellBin "test_writers" { libraries = [ haskellPackages.acme-default ]; } ''
@@ -49,8 +65,10 @@ let
     python2 = writePython2Bin "test_writers" { libraries = [ python2Packages.enum ]; } ''
       from enum import Enum
 
+
       class Test(Enum):
           a = "success"
+
 
       print Test.a
     '';
@@ -70,9 +88,19 @@ let
      if [[ "test" == "test" ]]; then echo "success"; fi
     '';
 
-    c = writeC "test_c" { libraries = [ ]; } ''
+    c = writeC "test_c" { libraries = [ glib.dev ]; } ''
+      #include <gio/gio.h>
       #include <stdio.h>
       int main() {
+        GApplication *application = g_application_new ("hello.world", G_APPLICATION_FLAGS_NONE);
+        g_application_register (application, NULL, NULL);
+        GNotification *notification = g_notification_new ("Hello world!");
+        g_notification_set_body (notification, "This is an example notification.");
+        GIcon *icon = g_themed_icon_new ("dialog-information");
+        g_notification_set_icon (notification, icon);
+        g_object_unref (icon);
+        g_object_unref (notification);
+        g_object_unref (application);
         printf("success\n");
         return 0;
       }
@@ -112,8 +140,10 @@ let
     python2 = writePython2 "test_python2" { libraries = [ python2Packages.enum ]; } ''
       from enum import Enum
 
+
       class Test(Enum):
           a = "success"
+
 
       print Test.a
     '';
@@ -125,6 +155,14 @@ let
         - test: success
       """)
       print(y[0]['test'])
+    '';
+
+    python2NoLibs = writePython2 "test_python2_no_libs" {} ''
+      print("success")
+    '';
+
+    python3NoLibs = writePython3 "test_python3_no_libs" {} ''
+      print("success")
     '';
   };
 
@@ -156,11 +194,11 @@ let
 
 in runCommand "test-writers" {
   passthru = { inherit writeTest bin simple; };
-  meta.platforms = stdenv.lib.platforms.all;
+  meta.platforms = lib.platforms.all;
 } ''
   ${lib.concatMapStringsSep "\n" (test: writeTest "success" "${test}/bin/test_writers") (lib.attrValues bin)}
-  ${lib.concatMapStringsSep "\n" (test: writeTest "success" "${test}") (lib.attrValues simple)}
-  ${lib.concatMapStringsSep "\n" (test: writeTest "success" "${test}") (lib.attrValues path)}
+  ${lib.concatMapStringsSep "\n" (test: writeTest "success" test) (lib.attrValues simple)}
+  ${lib.concatMapStringsSep "\n" (test: writeTest "success" test) (lib.attrValues path)}
 
   echo 'nix-writers successfully tested' >&2
   touch $out

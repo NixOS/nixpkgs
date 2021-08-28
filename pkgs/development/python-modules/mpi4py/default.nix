@@ -1,23 +1,23 @@
-{ stdenv, fetchPypi, fetchpatch, python, buildPythonPackage, mpi, openssh }:
+{ lib, fetchPypi, fetchpatch, python, buildPythonPackage, mpi, openssh }:
 
 buildPythonPackage rec {
   pname = "mpi4py";
-  version = "3.0.1";
+  version = "3.0.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0ld8rjmsjr0dklvj2g1gr3ax32sdq0xjxyh0cspknc1i36waajb5";
+    sha256 = "012d716c8b9ed1e513fcc4b18e5af16a8791f51e6d1716baccf988ad355c5a1f";
   };
+
+  patches = [ (fetchpatch {
+    name = "disable-broken-test"; # upstream patch
+    url = "https://github.com/mpi4py/mpi4py/commit/e13cc3ee59ec6ec2c6ee20e384e1e649d5027e8a.patch";
+    sha256 = "0iwknrhxnfmsqjj8ahpn50c8pcdyv9p3wmcqi1jhr4i5y7lnmvvx";
+  })];
 
   passthru = {
     inherit mpi;
   };
-
-  patches = [ ( fetchpatch {
-    # Upstream patch to ensure compatibility with openmpi-4.0.1
-    url = "https://github.com/mpi4py/mpi4py/commit/42f5e35a6a90454516c11131549a08cd766edbb0.patch";
-    sha256 = "1dm0i3amwj1cddzz1m9ssd7qp655c8rv1wzjs9ww3kzd90fm4w72";
-  })];
 
   postPatch = ''
     substituteInPlace test/test_spawn.py --replace \
@@ -49,10 +49,9 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ mpi openssh ];
 
-  meta = {
-    description =
-      "Python bindings for the Message Passing Interface standard";
-    homepage = http://code.google.com/p/mpi4py/;
-    license = stdenv.lib.licenses.bsd3;
+  meta = with lib; {
+    description = "Python bindings for the Message Passing Interface standard";
+    homepage = "https://bitbucket.org/mpi4py/mpi4py/";
+    license = licenses.bsd3;
   };
 }

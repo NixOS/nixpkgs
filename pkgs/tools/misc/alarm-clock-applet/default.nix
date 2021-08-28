@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub
-, pkgconfig
+{ lib, stdenv, fetchFromGitHub
+, pkg-config
 , autoconf
 , automake111x
 , libtool
@@ -8,6 +8,7 @@
 , gtk2
 , gst_all_1
 , gnome2
+, gnome-icon-theme
 , libnotify
 , libxml2
 , libunique
@@ -18,7 +19,7 @@
 
 stdenv.mkDerivation rec {
   version = "0.3.4";
-  name = "alarm-clock-applet-${version}";
+  pname = "alarm-clock-applet";
 
   src = fetchFromGitHub {
     owner = "joh";
@@ -28,7 +29,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     intltool
     automake111x
     autoconf
@@ -46,7 +47,7 @@ stdenv.mkDerivation rec {
     gtk2
     gst_all_1.gstreamer
     gnome2.GConf
-    gnome2.gnome_icon_theme
+    gnome-icon-theme
     libnotify
     libxml2
     libunique
@@ -56,8 +57,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
-    homepage = http://alarm-clock.pseudoberries.com/;
+  meta = with lib; {
+    homepage = "http://alarm-clock.pseudoberries.com/";
     description = "A fully-featured alarm clock for your GNOME panel or equivalent";
     license = licenses.gpl2;
     platforms = platforms.linux;

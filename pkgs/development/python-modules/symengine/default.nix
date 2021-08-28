@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "symengine";
-  version = "0.4.0";
+  version = "0.7.0.post3";
 
   src = fetchFromGitHub {
     owner = "symengine";
     repo = "symengine.py";
     rev = "v${version}";
-    sha256 = "07i9rwxphi4zgwc7y6f6qvq73iym2cx4k1bpd7rmd3wkpgrrfxqx";
+    sha256 = "1hpwnnv6f7f2wj33zaaj3i2r0d0qj0jwm3fd4ayicj0rvqya50rx";
   };
 
   postConfigure = ''
@@ -28,7 +28,9 @@ buildPythonPackage rec {
       --replace "SET(CYTHON_BIN cython" "SET(CYTHON_BIN ${cython}/bin/cython"
   '';
 
-  buildInputs = [ cython cmake ];
+  nativeBuildUnputs = [ cmake ];
+
+  buildInputs = [ cython ];
 
   checkInputs = [ pytest sympy ];
 
@@ -45,7 +47,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python library providing wrappers to SymEngine";
-    homepage = https://github.com/symengine/symengine.py;
+    homepage = "https://github.com/symengine/symengine.py";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];
   };

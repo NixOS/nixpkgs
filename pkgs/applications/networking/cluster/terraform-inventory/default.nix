@@ -1,7 +1,7 @@
-{ stdenv, buildGoPackage, fetchFromGitHub}:
+{ lib, buildGoPackage, fetchFromGitHub}:
 
 buildGoPackage rec {
-  name = "terraform-inventory-${version}";
+  pname = "terraform-inventory";
   version = "0.7-pre";
   rev = "v${version}";
 
@@ -18,10 +18,9 @@ buildGoPackage rec {
 
   goDeps = ./deps.nix;
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/adammck/terraform-inventory;
+  meta = with lib; {
+    homepage = "https://github.com/adammck/terraform-inventory";
     description = "Terraform state to ansible inventory adapter";
-    platforms = platforms.all;
     license = licenses.mit;
     maintainers = with maintainers; [ htr ];
   };

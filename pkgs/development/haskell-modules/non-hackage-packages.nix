@@ -7,9 +7,53 @@
 # files.
 self: super: {
 
-  multi-ghc-travis = throw ("haskellPackages.multi-ghc-travis has been renamed"
-    + "to haskell-ci, which is now on hackage");
+  dconf2nix = self.callPackage ../tools/haskell/dconf2nix/dconf2nix.nix { };
+
+  ldgallery-compiler = self.callPackage ../../tools/graphics/ldgallery/compiler { };
+
+  # Used by maintainers/scripts/regenerate-hackage-packages.sh, and generated
+  # from the latest master instead of the current version on Hackage.
+  cabal2nix-unstable = self.callPackage ./cabal2nix-unstable.nix { };
 
   # https://github.com/channable/vaultenv/issues/1
   vaultenv = self.callPackage ../tools/haskell/vaultenv { };
+
+  # spago is not released to Hackage.
+  # https://github.com/spacchetti/spago/issues/512
+  spago = self.callPackage ../tools/purescript/spago/spago.nix { };
+
+  nix-output-monitor = self.callPackage ../../tools/nix/nix-output-monitor { };
+
+  # cabal2nix --revision <rev> https://github.com/hasura/ci-info-hs.git
+  ci-info = self.callPackage ../misc/haskell/hasura/ci-info {};
+  # cabal2nix --revision <rev> https://github.com/hasura/pg-client-hs.git
+  pg-client = self.callPackage ../misc/haskell/hasura/pg-client {};
+  # cabal2nix --revision <rev> https://github.com/hasura/graphql-parser-hs.git
+  graphql-parser = self.callPackage ../misc/haskell/hasura/graphql-parser {};
+  # cabal2nix  --subpath server --maintainer offline --no-check --revision 1.2.1 https://github.com/hasura/graphql-engine.git
+  graphql-engine = self.callPackage ../misc/haskell/hasura/graphql-engine {};
+
+  # Unofficial fork until PRs are merged https://github.com/pcapriotti/optparse-applicative/pulls/roberth
+  # cabal2nix --maintainer roberth https://github.com/hercules-ci/optparse-applicative.git > pkgs/development/misc/haskell/hercules-ci-optparse-applicative.nix
+  hercules-ci-optparse-applicative = self.callPackage ../misc/haskell/hercules-ci-optparse-applicative.nix {};
+
+  #
+  # Backports
+  #
+
+  # This file overrides packages in `hackage-packages.nix`.
+
+  # Backport arion, to support Podman instead of Docker, for those who need NixOS-based containers.
+  # Generated with:
+  # nix-shell -I nixpkgs=$PWD -p cabal-install -p cabal2nix --run 'cabal update; cabal2nix cabal://arion-compose > pkgs/applications/virtualization/arion/arion-compose.nix'
+  arion-compose = self.callPackage ../../applications/virtualization/arion/arion-compose.nix {};
+  # cabal2nix cabal://ap-normalize-0.1.0.1
+  ap-normalize = self.callPackage ../misc/haskell/ap-normalize {};
+  # cabal2nix cabal://distribution-nixpkgs
+  distribution-nixpkgs_1_6_0 = self.callPackage ../misc/haskell/distribution-nixpkgs.nix {};
+  # cabal2nix cabal://cabal2nix-2.18.0
+  cabal2nix = self.callPackage ../misc/haskell/cabal2nix.nix {
+    distribution-nixpkgs = self.distribution-nixpkgs_1_6_0;
+  };
+
 }

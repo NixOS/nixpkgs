@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libgcrypt, libgpgerror, yacc, flex }:
+{ lib, stdenv, fetchurl, libgcrypt, libgpgerror, bison, flex }:
 
 # library that allows libbluray to play AACS protected bluray disks
 # libaacs does not infringe DRM's right or copyright. See the legal page of the website for more info.
@@ -8,20 +8,20 @@
 # https://wiki.archlinux.org/index.php/BluRay
 
 stdenv.mkDerivation rec {
-  name = "libaacs-${version}";
-  version  = "0.9.0";
+  pname = "libaacs";
+  version  = "0.11.0";
 
   src = fetchurl {
-    url = "http://get.videolan.org/libaacs/${version}/${name}.tar.bz2";
-    sha256 = "1kms92i0c7i1yl659kqjf19lm8172pnpik5lsxp19xphr74vvq27";
+    url = "http://get.videolan.org/libaacs/${version}/${pname}-${version}.tar.bz2";
+    sha256 = "11skjqjlldmbjkyxdcz4fmcn6y4p95r1xagbcnjy4ndnzf0l723d";
   };
 
   buildInputs = [ libgcrypt libgpgerror ];
 
-  nativeBuildInputs = [ yacc flex ];
+  nativeBuildInputs = [ bison flex ];
 
-  meta = with stdenv.lib; {
-    homepage = https://www.videolan.org/developers/libaacs.html;
+  meta = with lib; {
+    homepage = "https://www.videolan.org/developers/libaacs.html";
     description = "Library to access AACS protected Blu-Ray disks";
     license = licenses.lgpl21;
     maintainers = with maintainers; [ abbradar ];

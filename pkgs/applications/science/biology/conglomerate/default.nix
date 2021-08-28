@@ -1,9 +1,9 @@
-{ stdenv, fetchFromGitHub, cmake, coreutils, perlPackages, bicpl, libminc, zlib, minc_tools,
+{ lib, stdenv, fetchFromGitHub, cmake, coreutils, perlPackages, bicpl, libminc, zlib, minc_tools,
   makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "conglomerate";
-  name  = "${pname}-2017-09-10";
+  version = "unstable-2017-09-10";
 
   src = fetchFromGitHub {
     owner  = "BIC-MNI";
@@ -16,16 +16,19 @@ stdenv.mkDerivation rec {
   buildInputs = [ libminc zlib bicpl ];
   propagatedBuildInputs = [ coreutils minc_tools ] ++ (with perlPackages; [ perl GetoptTabular MNI-Perllib ]);
 
-  cmakeFlags = [ "-DLIBMINC_DIR=${libminc}/lib/" "-DBICPL_DIR=${bicpl}/lib/" ];
+  cmakeFlags = [
+    "-DLIBMINC_DIR=${libminc}/lib/cmake"
+    "-DBICPL_DIR=${bicpl}/lib"
+  ];
 
   postFixup = ''
     for p in $out/bin/*; do
-      wrapProgram $p --prefix PERL5LIB : $PERL5LIB --set PATH "${stdenv.lib.makeBinPath [ coreutils minc_tools ]}";
+      wrapProgram $p --prefix PERL5LIB : $PERL5LIB --set PATH "${lib.makeBinPath [ coreutils minc_tools ]}";
     done
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/BIC-MNI/conglomerate;
+  meta = with lib; {
+    homepage = "https://github.com/BIC-MNI/conglomerate";
     description = "More command-line utilities for working with MINC files";
     maintainers = with maintainers; [ bcdarwin ];
     platforms = platforms.unix;

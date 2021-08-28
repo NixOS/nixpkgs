@@ -1,19 +1,27 @@
-{ stdenv, fetchurl, autoreconfHook, xz }:
+{ stdenv, lib, fetchurl, autoreconfHook, xz, coreutils }:
 
 stdenv.mkDerivation rec {
-  name = "libunwind-${version}";
-  version = "1.3.1";
+  pname = "libunwind";
+  version = "1.4.0";
 
   src = fetchurl {
-    url = "mirror://savannah/libunwind/${name}.tar.gz";
-    sha256 = "1y0l08k6ak1mqbfj6accf9s5686kljwgsl4vcqpxzk5n74wpm6a3";
+    url = "mirror://savannah/libunwind/${pname}-${version}.tar.gz";
+    sha256 = "0dc46flppifrv2z0mrdqi60165ghxm1wk0g47vcbyzjdplqwjnfz";
   };
 
   patches = [ ./backtrace-only-with-glibc.patch ];
 
+  postPatch = lib.optionalString stdenv.hostPlatform.isMusl ''
+    substituteInPlace configure.ac --replace "-lgcc_s" "-lgcc_eh"
+  '';
+
   nativeBuildInputs = [ autoreconfHook ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" "devman" ];
+
+  # Without latex2man, no man pages are installed despite being
+  # prebuilt in the source tarball.
+  configureFlags = [ "LATEX2MAN=${coreutils}/bin/true" ];
 
   propagatedBuildInputs = [ xz ];
 
@@ -25,8 +33,8 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # fails
 
-  meta = with stdenv.lib; {
-    homepage = https://www.nongnu.org/libunwind;
+  meta = with lib; {
+    homepage = "https://www.nongnu.org/libunwind";
     description = "A portable and efficient API to determine the call-chain of a program";
     maintainers = with maintainers; [ orivej ];
     platforms = platforms.linux;

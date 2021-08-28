@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, automake, autoconf, libtool, flex, bison, texinfo, fetchpatch
+{ lib, stdenv, fetchurl, automake, autoconf, libtool, flex, bison, texinfo, fetchpatch
 
 # Optional Dependencies
 , ncurses ? null
@@ -52,8 +52,8 @@ stdenv.mkDerivation rec {
     ln -sv $out/lib/libgpm.so.2 $out/lib/libgpm.so
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://www.nico.schottelius.org/software/gpm/;
+  meta = with lib; {
+    homepage = "https://www.nico.schottelius.org/software/gpm/";
     description = "A daemon that provides mouse support on the Linux console";
     license = licenses.gpl2;
     platforms = platforms.linux ++ platforms.cygwin;

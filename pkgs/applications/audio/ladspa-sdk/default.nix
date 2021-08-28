@@ -1,16 +1,16 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 stdenv.mkDerivation rec {
-  name = "ladspa-sdk-${version}";
-  version = "1.13";
+  pname = "ladspa-sdk";
+  version = "1.15";
   src = fetchurl {
     url = "https://www.ladspa.org/download/ladspa_sdk_${version}.tgz";
-    sha256 = "0srh5n2l63354bc0srcrv58rzjkn4gv8qjqzg8dnq3rs4m7kzvdm";
+    sha256 = "1vgx54cgsnc3ncl9qbgjbmq12c444xjafjkgr348h36j16draaa2";
   };
 
   patchPhase = ''
     cd src
-    sed -i 's@/usr/@$(out)/@g'  makefile
-    sed -i 's@-mkdirhier@mkdir -p@g'  makefile
+    sed -i 's@/usr/@$(out)/@g'  Makefile
+    sed -i 's@-mkdirhier@mkdir -p@g'  Makefile
   '';
 
   meta = {
@@ -20,9 +20,9 @@ stdenv.mkDerivation rec {
       ten example LADSPA plugins and
       three example programs (applyplugin, analyseplugin and listplugins).
     '';
-    homepage = http://www.ladspa.org/ladspa_sdk/overview.html;
-    license = stdenv.lib.licenses.lgpl2;
-    maintainers = [ stdenv.lib.maintainers.magnetophon ];
-    platforms = stdenv.lib.platforms.linux;
+    homepage = "http://www.ladspa.org/ladspa_sdk/overview.html";
+    license = lib.licenses.lgpl2;
+    maintainers = [ lib.maintainers.magnetophon ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -223,6 +223,7 @@ in {
         group = "jackaudio";
         extraGroups = [ "audio" ];
         description = "JACK Audio system service user";
+        isSystemUser = true;
       };
       # http://jackaudio.org/faq/linux_rt_config.html
       security.pam.loginLimits = [
@@ -245,6 +246,9 @@ in {
         description = "JACK Audio Connection Kit";
         serviceConfig = {
           User = "jackaudio";
+          SupplementaryGroups = lib.optional
+            (config.hardware.pulseaudio.enable
+            && !config.hardware.pulseaudio.systemWide) "users";
           ExecStart = "${cfg.jackd.package}/bin/jackd ${lib.escapeShellArgs cfg.jackd.extraOptions}";
           LimitRTPRIO = 99;
           LimitMEMLOCK = "infinity";
@@ -286,5 +290,5 @@ in {
 
   ];
 
-  meta.maintainers = [ maintainers.gnidorah ];
+  meta.maintainers = [ ];
 }

@@ -1,22 +1,38 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, pytest }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "boltons";
-  version = "2019-01-07";
+  version = "20.2.1";
 
   # No tests in PyPi Tarball
   src = fetchFromGitHub {
     owner = "mahmoud";
     repo = "boltons";
-    rev = "3584ac9399f227a2a11b74153140ee171fd49783";
-    sha256 = "13xngjw249sk4vmr5kqqnia0npw0kpa0gm020a4dqid0cjyvj0rv";
+    rev = version;
+    sha256 = "0vw0h0z81gfxgjfijqiza92ic0siv9xy65mklgj5d0dzr1k9waw8";
   };
 
-  checkInputs = [ pytest ];
-  checkPhase = "pytest tests";
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/mahmoud/boltons/commit/754afddf141ea26956c88c7e13fe5e7ca7942654.patch";
+      sha256 = "14kcq8pl4pmgcnlnmj1sh1yrksgym0kn0kgz2648g192svqkbpz8";
+    })
+  ];
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/mahmoud/boltons;
+  checkInputs = [ pytestCheckHook ];
+  disabledTests = [
+    # This test is broken without this PR, which has not yet been merged
+    # https://github.com/mahmoud/boltons/pull/283
+    "test_frozendict_ior"
+  ];
+
+  meta = with lib; {
+    homepage = "https://github.com/mahmoud/boltons";
     description = "220+ constructs, recipes, and snippets extending (and relying on nothing but) the Python standard library";
     longDescription = ''
       Boltons is a set of over 220 BSD-licensed, pure-Python utilities

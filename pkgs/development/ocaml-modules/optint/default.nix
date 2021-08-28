@@ -1,28 +1,20 @@
-{ stdenv, fetchurl, ocaml, findlib, dune }:
+{ lib, buildDunePackage, fetchurl }:
 
-if !stdenv.lib.versionAtLeast ocaml.version "4.02"
-then throw "optint is not available for OCaml ${ocaml.version}"
-else
-
-stdenv.mkDerivation rec {
-  version = "0.0.2";
-  name = "ocaml${ocaml.version}-optint-${version}";
+buildDunePackage rec {
+  minimumOCamlVersion = "4.07";
+  version = "0.1.0";
+  pname = "optint";
   src = fetchurl {
-    url = "https://github.com/mirage/optint/releases/download/v0.0.2/optint-v0.0.2.tbz";
-    sha256 = "1lmb7nycmkr05y93slqi98i1lcs1w4kcngjzjwz7i230qqjpw9w1";
+    url = "https://github.com/mirage/optint/releases/download/v${version}/optint-v${version}.tbz";
+    sha256 = "27847660223c16cc7eaf8fcd9d5589a0b802114330a2529578f8007d3b01185d";
   };
 
-  buildInputs = [ ocaml findlib dune ];
-
-  buildPhase = "dune build";
-
-  inherit (dune) installPhase;
+  useDune2 = true;
 
   meta = {
     homepage = "https://github.com/mirage/optint";
     description = "Abstract type of integer between x64 and x86 architecture";
-    license = stdenv.lib.licenses.mit;
-    maintainers = [ stdenv.lib.maintainers.vbgl ];
-    inherit (ocaml.meta) platforms;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.vbgl ];
   };
 }

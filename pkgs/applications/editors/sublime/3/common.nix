@@ -1,24 +1,20 @@
 { buildVersion, x32sha256, x64sha256, dev ? false }:
 
-{ fetchurl, stdenv, xorg, glib, glibcLocales, gtk2, gtk3, cairo, pango, libredirect, makeWrapper, wrapGAppsHook
-, pkexecPath ? "/run/wrappers/bin/pkexec", gksuSupport ? false, gksu
+{ fetchurl, lib, stdenv, xorg, glib, glibcLocales, gtk3, cairo, pango, libredirect, makeWrapper, wrapGAppsHook
+, pkexecPath ? "/run/wrappers/bin/pkexec"
 , writeScript, common-updater-scripts, curl, gnugrep
 , openssl, bzip2, bash, unzip, zip
 }:
 
-assert gksuSupport -> gksu != null;
-
 let
   pname = "sublimetext3";
-  packageAttribute = "sublime3${stdenv.lib.optionalString dev "-dev"}";
+  packageAttribute = "sublime3${lib.optionalString dev "-dev"}";
   binaries = [ "sublime_text" "plugin_host" "crash_reporter" ];
   primaryBinary = "sublime_text";
   primaryBinaryAliases = [ "subl" "sublime" "sublime3" ];
   downloadUrl = "https://download.sublimetext.com/sublime_text_3_build_${buildVersion}_${arch}.tar.bz2";
-  downloadArchiveType = "tar.bz2";
-  versionUrl = "https://www.sublimetext.com/${if dev then "3dev" else "3"}";
-  versionFile = "pkgs/applications/editors/sublime/3/packages.nix";
-  usesGtk2 = stdenv.lib.versionOlder buildVersion "3181";
+  versionUrl = "https://download.sublimetext.com/latest/${if dev then "dev" else "stable"}";
+  versionFile = builtins.toString ./packages.nix;
   archSha256 =
     if stdenv.hostPlatform.system == "i686-linux" then
       x32sha256
@@ -30,24 +26,22 @@ let
     else
       "x64";
 
-  libPath = stdenv.lib.makeLibraryPath [ xorg.libX11 glib (if usesGtk2 then gtk2 else gtk3) cairo pango ];
-  redirects = [ "/usr/bin/pkexec=${pkexecPath}" ]
-    ++ stdenv.lib.optional gksuSupport "/usr/bin/gksudo=${gksu}/bin/gksudo";
+  libPath = lib.makeLibraryPath [ xorg.libX11 glib gtk3 cairo pango ];
+  redirects = [ "/usr/bin/pkexec=${pkexecPath}" ];
 in let
   binaryPackage = stdenv.mkDerivation {
     pname = "${pname}-bin";
     version = buildVersion;
 
     src = fetchurl {
-      name = "${pname}-bin-${buildVersion}.${downloadArchiveType}";
       url = downloadUrl;
       sha256 = archSha256;
     };
 
     dontStrip = true;
     dontPatchELF = true;
-    buildInputs = stdenv.lib.optionals (!usesGtk2) [ glib gtk3 ]; # for GSETTINGS_SCHEMAS_PATH
-    nativeBuildInputs = [ zip unzip makeWrapper ] ++ stdenv.lib.optional (!usesGtk2) wrapGAppsHook;
+    buildInputs = [ glib gtk3 ]; # for GSETTINGS_SCHEMAS_PATH
+    nativeBuildInputs = [ zip unzip makeWrapper wrapGAppsHook ];
 
     # make exec.py in Default.sublime-package use own bash with an LD_PRELOAD instead of "/bin/bash"
     patchPhase = ''
@@ -72,11 +66,11 @@ in let
       for binary in ${ builtins.concatStringsSep " " binaries }; do
         patchelf \
           --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-          --set-rpath ${libPath}:${stdenv.cc.cc.lib}/lib${stdenv.lib.optionalString stdenv.is64bit "64"} \
+          --set-rpath ${libPath}:${stdenv.cc.cc.lib}/lib${lib.optionalString stdenv.is64bit "64"} \
           $binary
       done
 
-      # Rewrite pkexec|gksudo argument. Note that we can't delete bytes in binary.
+      # Rewrite pkexec argument. Note that we cannot delete bytes in binary.
       sed -i -e 's,/bin/cp\x00,cp\x00\x00\x00\x00\x00\x00,g' ${primaryBinary}
 
       runHook postBuild
@@ -99,16 +93,16 @@ in let
 
     postFixup = ''
       wrapProgram $out/sublime_bash \
-        --set LD_PRELOAD "${stdenv.cc.cc.lib}/lib${stdenv.lib.optionalString stdenv.is64bit "64"}/libgcc_s.so.1"
+        --set LD_PRELOAD "${stdenv.cc.cc.lib}/lib${lib.optionalString stdenv.is64bit "64"}/libgcc_s.so.1"
 
       wrapProgram $out/${primaryBinary} \
         --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
         --set NIX_REDIRECTS ${builtins.concatStringsSep ":" redirects} \
         --set LOCALE_ARCHIVE "${glibcLocales.out}/lib/locale/locale-archive" \
-        ${stdenv.lib.optionalString (!usesGtk2) ''"''${gappsWrapperArgs[@]}"''}
+        "''${gappsWrapperArgs[@]}"
 
       # Without this, plugin_host crashes, even though it has the rpath
-      wrapProgram $out/plugin_host --prefix LD_PRELOAD : ${stdenv.cc.cc.lib}/lib${stdenv.lib.optionalString stdenv.is64bit "64"}/libgcc_s.so.1:${openssl.out}/lib/libssl.so:${bzip2.out}/lib/libbz2.so
+      wrapProgram $out/plugin_host --prefix LD_PRELOAD : ${stdenv.cc.cc.lib}/lib${lib.optionalString stdenv.is64bit "64"}/libgcc_s.so.1:${openssl.out}/lib/libssl.so:${bzip2.out}/lib/libbz2.so
     '';
   };
 in stdenv.mkDerivation (rec {
@@ -137,11 +131,16 @@ in stdenv.mkDerivation (rec {
   passthru.updateScript = writeScript "${pname}-update-script" ''
     #!${stdenv.shell}
     set -o errexit
-    PATH=${stdenv.lib.makeBinPath [ common-updater-scripts curl gnugrep ]}
+    PATH=${lib.makeBinPath [ common-updater-scripts curl gnugrep ]}
 
-    latestVersion=$(curl -s ${versionUrl} | grep -Po '(?<=<p class="latest"><i>Version:</i> Build )([0-9]+)')
+    latestVersion=$(curl -s ${versionUrl})
 
-    for platform in ${stdenv.lib.concatStringsSep " " meta.platforms}; do
+    if [[ "${buildVersion}" = "$latestVersion" ]]; then
+        echo "The new version same as the old version."
+        exit 0
+    fi
+
+    for platform in ${lib.concatStringsSep " " meta.platforms}; do
         # The script will not perform an update when the version attribute is up to date from previous platform run
         # We need to clear it before each run
         update-source-version ${packageAttribute}.${primaryBinary} 0 0000000000000000000000000000000000000000000000000000000000000000 --file=${versionFile} --version-key=buildVersion --system=$platform
@@ -149,10 +148,10 @@ in stdenv.mkDerivation (rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Sophisticated text editor for code, markup and prose";
-    homepage = https://www.sublimetext.com/;
-    maintainers = with maintainers; [ wmertens demin-dmitriy zimbatm ];
+    homepage = "https://www.sublimetext.com/";
+    maintainers = with maintainers; [ jtojnar wmertens demin-dmitriy zimbatm ];
     license = licenses.unfree;
     platforms = [ "x86_64-linux" "i686-linux" ];
   };

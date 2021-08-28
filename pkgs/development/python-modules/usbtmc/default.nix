@@ -1,9 +1,8 @@
-{ stdenv, fetchurl, buildPythonPackage, pyusb }:
+{ lib, fetchurl, buildPythonPackage, pyusb }:
 
 buildPythonPackage rec {
   pname = "usbtmc";
   version = "0.8";
-  name = pname + "-" + version;
 
   src = fetchurl {
     url = "https://github.com/python-ivi/python-usbtmc/archive/v${version}.tar.gz";
@@ -12,9 +11,9 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pyusb ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python implementation of the USBTMC instrument control protocol";
-    homepage = http://alexforencich.com/wiki/en/python-usbtmc/start;
+    homepage = "http://alexforencich.com/wiki/en/python-usbtmc/start";
     license = licenses.mit;
     maintainers = with maintainers; [ bjornfor ];
   };

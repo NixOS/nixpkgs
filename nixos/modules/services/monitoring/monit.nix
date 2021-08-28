@@ -23,7 +23,7 @@ in
 
     environment.systemPackages = [ pkgs.monit ];
 
-    environment.etc."monitrc" = {
+    environment.etc.monitrc = {
       text = cfg.config;
       mode = "0400";
     };
@@ -39,8 +39,10 @@ in
         KillMode = "process";
         Restart = "always";
       };
-      restartTriggers = [ config.environment.etc."monitrc".source ];
+      restartTriggers = [ config.environment.etc.monitrc.source ];
     };
 
   };
+
+  meta.maintainers = with maintainers; [ ryantm ];
 }

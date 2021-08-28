@@ -2,36 +2,29 @@
 , qtbase, qttools, sqlite }:
 
 mkDerivation rec {
-  version = "3.11.2";
   pname = "sqlitebrowser";
+  version = "3.12.1";
 
   src = fetchFromGitHub {
-    repo   = pname;
-    owner  = pname;
-    rev    = "v${version}";
-    sha256 = "0ydd5fg76d5d23byac1f7f8mzx3brmd0cnnkd58qpmlzi7p9hcvx";
+    owner = pname;
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "0ray6cscx2qil1dfi7hmpijmq3kba49wn430ih1q4fkz9psjvrz1";
   };
 
-  buildInputs = [ qtbase sqlite ];
+  # We should be using qscintilla from nixpkgs instead of the vendored version,
+  # but qscintilla is currently in a bit of a mess as some consumers expect a
+  # -qt4 or -qt5 prefix while others do not.
+  # We *really* should get that cleaned up.
+  buildInputs = [ antlr qtbase sqlite ];
 
-  nativeBuildInputs = [ cmake antlr qttools ];
-
-  # Use internal `qscintilla` rather than our package to fix the build
-  # (https://github.com/sqlitebrowser/sqlitebrowser/issues/1348#issuecomment-374170936).
-  # This can probably be removed when https://github.com/NixOS/nixpkgs/pull/56034 is merged.
-  cmakeFlags = [ "-DFORCE_INTERNAL_QSCINTILLA=ON" ];
-
-  NIX_LDFLAGS = [
-    "-lQt5PrintSupport"
-  ];
-
-  enableParallelBuilding = true;
+  nativeBuildInputs = [ cmake qttools ];
 
   meta = with lib; {
     description = "DB Browser for SQLite";
-    homepage = http://sqlitebrowser.org/;
+    homepage = "https://sqlitebrowser.org/";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ ma27 ];
-    platforms = platforms.linux; # can only test on linux
+    maintainers = with maintainers; [ peterhoeg ];
+    platforms = platforms.unix;
   };
 }

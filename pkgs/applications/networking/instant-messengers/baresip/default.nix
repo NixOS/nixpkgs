@@ -1,25 +1,25 @@
-{stdenv, fetchurl, zlib, openssl, libre, librem, pkgconfig, gst_all_1
+{ lib, stdenv, fetchurl, zlib, openssl, libre, librem, pkg-config, gst_all_1
 , cairo, mpg123, alsaLib, SDL, libv4l, celt, libsndfile, srtp, ffmpeg
-, gsm, speex, portaudio, spandsp, libuuid, ccache, libvpx
+, gsm, speex, portaudio, spandsp, libuuid, libvpx
 }:
 stdenv.mkDerivation rec {
-  version = "0.6.2";
-  name = "baresip-${version}";
+  version = "0.6.5";
+  pname = "baresip";
   src=fetchurl {
     url = "http://www.creytiv.com/pub/baresip-${version}.tar.gz";
-    sha256 = "1qi8im5sc3jbpic1sn46mmd98y0pckpnngf4n8dqdp76m4gf3yp1";
+    sha256 = "13di0ycdcr2q2a20mjvyaqfmvk5xldwqaxklqsz7470jnbc5n0rb";
   };
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [zlib openssl libre librem cairo mpg123
     alsaLib SDL libv4l celt libsndfile srtp ffmpeg gsm speex portaudio spandsp libuuid
-    ccache libvpx
+    libvpx
   ] ++ (with gst_all_1; [ gstreamer gst-libav gst-plugins-base gst-plugins-bad gst-plugins-good ]);
   makeFlags = [
     "LIBRE_MK=${libre}/share/re/re.mk"
     "LIBRE_INC=${libre}/include/re"
     "LIBRE_SO=${libre}/lib"
     "LIBREM_PATH=${librem}"
-    ''PREFIX=$(out)''
+    "PREFIX=$(out)"
     "USE_VIDEO=1"
     "CCACHE_DISABLE=1"
 
@@ -33,18 +33,18 @@ stdenv.mkDerivation rec {
     "USE_BV32=" "USE_COREAUDIO=" "USE_G711=1" "USE_G722=1" "USE_G722_1="
     "USE_ILBC=" "USE_OPUS=" "USE_SILK="
   ]
-  ++ stdenv.lib.optional (stdenv.cc.cc != null) "SYSROOT_ALT=${stdenv.cc.cc}"
-  ++ stdenv.lib.optional (stdenv.cc.libc != null) "SYSROOT=${stdenv.cc.libc}"
+  ++ lib.optional (stdenv.cc.cc != null) "SYSROOT_ALT=${stdenv.cc.cc}"
+  ++ lib.optional (stdenv.cc.libc != null) "SYSROOT=${stdenv.cc.libc}"
   ;
 
   NIX_CFLAGS_COMPILE='' -I${librem}/include/rem -I${gsm}/include/gsm
     -DHAVE_INTTYPES_H -D__GLIBC__
     -D__need_timeval -D__need_timespec -D__need_time_t '';
   meta = {
-    homepage = http://www.creytiv.com/baresip.html;
-    platforms = with stdenv.lib.platforms; linux;
-    maintainers = with stdenv.lib.maintainers; [raskin];
-    license = stdenv.lib.licenses.bsd3;
+    homepage = "http://www.creytiv.com/baresip.html";
+    platforms = with lib.platforms; linux;
+    maintainers = with lib.maintainers; [raskin];
+    license = lib.licenses.bsd3;
     inherit version;
     downloadPage = "http://www.creytiv.com/pub/";
     updateWalker = true;

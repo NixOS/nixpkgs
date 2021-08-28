@@ -1,44 +1,90 @@
-{ stdenv, fetchPypi, buildPythonPackage, fetchpatch
-, more-itertools, six
-, pytest, pytestcov, portend
-, backports_unittest-mock
-, backports_functools_lru_cache }:
+{ lib
+, stdenv
+, fetchPypi
+, buildPythonPackage
+, isPy3k
+, jaraco_functools
+, jaraco_text
+, more-itertools
+, portend
+, pyopenssl
+, pytestCheckHook
+, pytestcov
+, pytest-mock
+, requests
+, requests-toolbelt
+, requests-unixsocket
+, setuptools_scm
+, setuptools-scm-git-archive
+, six
+, trustme
+}:
 
 buildPythonPackage rec {
   pname = "cheroot";
-  version = "6.3.3";
+  version = "8.5.2";
+
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8e3ac15e1efffc81425a693e99b3c09d7ea4bf947255d8d4c38e2cf76f3a4d25";
+    sha256 = "f137d03fd5155b1364bea557a7c98168665c239f6c8cedd8f80e81cdfac01567";
   };
 
-  patches = fetchpatch {
-    name = "cheroot-fix-setup-python3.patch";
-    url = "https://git.archlinux.org/svntogit/community.git/plain/trunk/cheroot-fix-setup-python3.patch?h=packages/python-cheroot&id=9b33cb0885b3c0d91adeacae23761a4321eb0e64";
-    sha256 = "1rlgz0qln536y00mfqlf0i9hz3f53id73wh47cg5q2vcsw1w2bpc";
-  };
+  nativeBuildInputs = [ setuptools_scm setuptools-scm-git-archive ];
 
-  propagatedBuildInputs = [ more-itertools six backports_functools_lru_cache ];
+  propagatedBuildInputs = [
+    # install_requires
+    jaraco_functools
 
-  checkInputs = [ pytest pytestcov portend backports_unittest-mock ];
+    more-itertools
+    six
+  ];
 
-# Disable testmon, it needs pytest-testmon, which we do not currently have in nikpkgs,
-# and is only used to skip some tests that are already known to work.
-  postPatch = ''
-    substituteInPlace "./pytest.ini" --replace "--testmon" ""
-    substituteInPlace setup.py --replace "use_scm_version=True" "version=\"${version}\"" \
-  --replace "'setuptools_scm>=1.15.0'," "" \
-  --replace "'setuptools_scm_git_archive>=1.0'," "" \
+  checkInputs = [
+    jaraco_text
+    portend
+    pyopenssl
+    pytestCheckHook
+    pytestcov
+    pytest-mock
+    requests
+    requests-toolbelt
+    requests-unixsocket
+    trustme
+  ];
+
+  # Disable doctest plugin because times out
+  # Disable xdist (-n arg) because it's incompatible with testmon
+  # Deselect test_bind_addr_unix on darwin because times out
+  # Deselect test_http_over_https_error on darwin because builtin cert fails
+  # Disable warnings-as-errors because of deprecation warnings from socks on python 3.7
+  # Disable pytest-testmon because it doesn't work
+  # adds many other pytest utilities which aren't necessary like linting
+  preCheck = ''
+    rm pytest.ini
   '';
 
-  checkPhase = ''
-    py.test cheroot
-  '';
+  disabledTests = [
+    "tls" # touches network
+    "peercreds_unix_sock" # test urls no longer allowed
+  ] ++ lib.optionals stdenv.isDarwin [
+    "http_over_https_error"
+    "bind_addr_unix"
+  ];
 
-  meta = with stdenv.lib; {
+  disabledTestPaths = [
+    # avoid attempting to use 3 packages not available on nixpkgs
+    # (jaraco.apt, jaraco.context, yg.lockfile)
+    "cheroot/test/test_wsgi.py"
+  ];
+
+  # Some of the tests use localhost networking.
+  __darwinAllowLocalNetworking = true;
+
+  meta = with lib; {
     description = "High-performance, pure-Python HTTP";
-    homepage = https://github.com/cherrypy/cheroot;
+    homepage = "https://github.com/cherrypy/cheroot";
     license = licenses.mit;
   };
 }

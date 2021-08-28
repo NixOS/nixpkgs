@@ -1,43 +1,55 @@
 { lib
-, fetchPypi
-, buildPythonPackage
-, pythonOlder
-, withVoice ? true, libopus
 , aiohttp
-, websockets
+, buildPythonPackage
+, fetchFromGitHub
+, libopus
 , pynacl
+, pythonOlder
+, withVoice ? true
 }:
 
 buildPythonPackage rec {
   pname = "discord.py";
-  version = "0.16.12";
+  version = "1.7.2";
+  disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "17fb8814100fbaf7a79468baa432184db6cef3bbea4ad194fe297c7407d50108";
+  src = fetchFromGitHub {
+    owner = "Rapptz";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-NY1/RKp8w9gAqGYXnCNhNZqR/inGMvUvxjJ1MMs62B8=";
   };
 
-  propagatedBuildInputs = [ aiohttp websockets pynacl ];
+  propagatedBuildInputs = [
+    aiohttp
+  ] ++ lib.optionalString withVoice [
+    libopus
+    pynacl
+  ];
+
   patchPhase = ''
-    substituteInPlace "requirements.txt" \
-      --replace "aiohttp>=1.0.0,<1.1.0" "aiohttp"
-  '' + lib.optionalString withVoice ''
     substituteInPlace "discord/opus.py" \
       --replace "ctypes.util.find_library('opus')" "'${libopus}/lib/libopus.so.0'"
   '';
 
-  disabled = pythonOlder "3.5";
-
-  # No tests in archive
+  # Only have integration tests with discord
   doCheck = false;
 
-  meta = {
-    description = "A python wrapper for the Discord API";
-    homepage    = "https://discordpy.rtfd.org/";
-    license     = lib.licenses.mit;
+  pythonImportsCheck = [
+    "discord"
+    "discord.file"
+    "discord.member"
+    "discord.user"
+    "discord.state"
+    "discord.guild"
+    "discord.webhook"
+    "discord.ext.commands.bot"
+  ];
 
-    # discord.py requires websockets<4.0
-    # See https://github.com/Rapptz/discord.py/issues/973
-    broken = true;
+  meta = with lib; {
+    description = "Python wrapper for the Discord API";
+    homepage = "https://discordpy.rtfd.org/";
+    maintainers = [ maintainers.ivar ];
+    license = licenses.mit;
   };
 }

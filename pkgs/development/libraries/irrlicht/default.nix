@@ -1,14 +1,18 @@
-{ stdenv, fetchzip, libGLU_combined, unzip, libXrandr, libX11, libXxf86vm }:
+{ lib, stdenv, fetchzip, libGLU, libGL, libXrandr, libX11, libXxf86vm }:
 
+let
+  common = import ./common.nix { inherit fetchzip; };
+in
 
 stdenv.mkDerivation rec {
-  name = "irrlicht-${version}";
-  version = "1.8.4";
+  pname = common.pname;
+  version = common.version;
 
-  src = fetchzip {
-    url = "mirror://sourceforge/irrlicht/${name}.zip";
-    sha256 = "02sq067fn4xpf0lcyb4vqxmm43qg2nxx770bgrl799yymqbvih5f";
-  };
+  src = common.src;
+
+  postPatch = ''
+    sed -ie '/sys\/sysctl.h/d' source/Irrlicht/COSOperator.cpp
+  '';
 
   preConfigure = ''
     cd source/Irrlicht
@@ -23,12 +27,12 @@ stdenv.mkDerivation rec {
     mkdir -p $out/lib
   '';
 
-  buildInputs = [ unzip libGLU_combined libXrandr libX11 libXxf86vm ];
+  buildInputs = [ libGLU libGL libXrandr libX11 libXxf86vm ];
 
   meta = {
-    homepage = http://irrlicht.sourceforge.net/;
-    license = stdenv.lib.licenses.zlib;
+    homepage = "http://irrlicht.sourceforge.net/";
+    license = lib.licenses.zlib;
     description = "Open source high performance realtime 3D engine written in C++";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

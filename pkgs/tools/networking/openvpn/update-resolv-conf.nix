@@ -3,7 +3,7 @@
 let
   binPath = lib.makeBinPath [ coreutils openresolv systemd ];
 
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   name = "update-resolv-conf-2017-06-21";
 
   src = fetchFromGitHub {
@@ -24,9 +24,9 @@ in stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Script to update your /etc/resolv.conf with DNS settings that come from the received push dhcp-options";
-    homepage = https://github.com/masterkorp/openvpn-update-resolv-conf/;
+    homepage = "https://github.com/masterkorp/openvpn-update-resolv-conf/";
     maintainers = with maintainers; [ abbradar ];
     license = licenses.gpl2;
     platforms = platforms.unix;

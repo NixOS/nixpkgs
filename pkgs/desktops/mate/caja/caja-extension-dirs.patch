@@ -1,11 +1,24 @@
+From 35e9e6a6f3ba6cbe62a3957044eb67864f5d8e66 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Jos=C3=A9=20Romildo=20Malaquias?= <malaquias@gmail.com>
+Date: Tue, 11 Feb 2020 17:49:13 -0300
+Subject: [PATCH] Look for caja extentions at $CAJA_EXTENTSION_DIRS
+
+CAJA_EXTENSION_DIRS is a list of paths where caja extensions are
+looked for. It is needed for distributions like NixOS that do not
+install all extensions in the same directory. In NixOS each package is
+installed in a self contained directory.
+---
+ libcaja-private/caja-module.c | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+
 diff --git a/libcaja-private/caja-module.c b/libcaja-private/caja-module.c
-index 023c22e..414913b 100644
+index d54d7cf..9794e56 100644
 --- a/libcaja-private/caja-module.c
 +++ b/libcaja-private/caja-module.c
-@@ -258,11 +258,25 @@ caja_module_setup (void)
+@@ -258,11 +258,25 @@ void
+ caja_module_setup (void)
  {
      static gboolean initialized = FALSE;
-     GList *res;
 +    gchar *caja_extension_dirs;
 +    gchar **dir_vector;
  
@@ -28,3 +41,6 @@ index 023c22e..414913b 100644
          load_module_dir (CAJA_EXTENSIONDIR);
  
          eel_debug_call_at_shutdown (free_module_objects);
+-- 
+2.25.0
+

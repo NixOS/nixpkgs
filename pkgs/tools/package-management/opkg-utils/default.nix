@@ -1,6 +1,6 @@
-{ stdenv, fetchgit }:
+{ lib, stdenv, fetchgit }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "opkg-utils-20141030";
 
   # No releases, only a git tree
@@ -14,9 +14,9 @@ stdenv.mkDerivation rec {
     makeFlagsArray+=(PREFIX="$out")
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Helper scripts for use with the opkg package manager";
-    homepage = http://git.yoctoproject.org/cgit/cgit.cgi/opkg-utils/;
+    homepage = "http://git.yoctoproject.org/cgit/cgit.cgi/opkg-utils/";
     license = licenses.gpl2;
     platforms = platforms.all;
     maintainers = [ maintainers.bjornfor ];

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gtk, openssl }:
+{ lib, stdenv, fetchurl, pkg-config, gtk, openssl }:
 
 stdenv.mkDerivation rec {
   name = "macopix-1.7.4";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0sgnr0wrw3hglcnsyvipll7icfv69ssmyw584zfhk1rgramlkzyb";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ gtk openssl ];
 
   preConfigure = ''
@@ -18,12 +18,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  NIX_LDFLAGS = [ "-lX11" ];
+  NIX_LDFLAGS = "-lX11";
 
   meta = {
     description = "Mascot Constructive Pilot for X";
-    homepage = http://rosegray.sakura.ne.jp/macopix/index-e.html;
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.linux;
+    homepage = "http://rosegray.sakura.ne.jp/macopix/index-e.html";
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
 }

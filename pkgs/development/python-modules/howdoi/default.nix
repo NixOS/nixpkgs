@@ -2,29 +2,41 @@
 , buildPythonPackage
 , fetchPypi
 , six
-, requests-cache
 , pygments
 , pyquery
+, cachelib
+, appdirs
+, keep
 }:
 
 buildPythonPackage rec {
   pname = "howdoi";
-  version = "1.1.14";
+  version = "2.0.14";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b85b8e551bf47ff157392660f0fc5b9eb3eacb78516a5823f7b774ec61955db5";
+    sha256 = "9416be3c8a319fc0764a743a2ad05fa374876dab71dbe15ce86c3a05ece44a0a";
   };
 
-  propagatedBuildInputs = [ six requests-cache pygments pyquery ];
+  postPatch = ''
+    substituteInPlace setup.py --replace 'cachelib==0.1' 'cachelib'
+  '';
 
+  propagatedBuildInputs = [ six pygments pyquery cachelib appdirs keep ];
+
+  # author hasn't included page_cache directory (which allows tests to run without
+  # external requests) in pypi tarball. github repo doesn't have release revisions
+  # clearly tagged. re-enable tests when either is sorted.
+  doCheck = false;
   preCheck = ''
+    mv howdoi _howdoi
     export HOME=$(mktemp -d)
   '';
+  pythonImportsCheck = [ "howdoi" ];
 
   meta = with lib; {
     description = "Instant coding answers via the command line";
-    homepage = https://pypi.python.org/pypi/howdoi;
+    homepage = "https://pypi.python.org/pypi/howdoi";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];
   };

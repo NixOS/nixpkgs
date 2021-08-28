@@ -1,34 +1,59 @@
-{ stdenv, fetchurl, cmake
-, smartSupport ? false, libatasmart }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, libyamlcpp
+, pkg-config
+, procps
+, coreutils
+, smartSupport ? false, libatasmart
+}:
 
 stdenv.mkDerivation rec {
-  name = "thinkfan-${version}";
-  version = "0.9.3";
+  pname = "thinkfan";
+  version = "1.2.1";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/thinkfan/thinkfan-${version}.tar.gz";
-    sha256 = "0nz4c48f0i0dljpk5y33c188dnnwg8gz82s4grfl8l64jr4n675n";
+  src = fetchFromGitHub {
+    owner = "vmatare";
+    repo = "thinkfan";
+    rev = version;
+    sha256 = "18vgm5w5pjnpipa34j4x87q10695w2jnqwvc2f027afy7mnzw7kz";
   };
 
-  nativeBuildInputs = [ cmake ];
+  postPatch = ''
+    # fix hardcoded install path
+    substituteInPlace CMakeLists.txt --replace /etc $out/etc
 
-  buildInputs = stdenv.lib.optional smartSupport libatasmart;
-
-  cmakeFlags = stdenv.lib.optional smartSupport "-DUSE_ATASMART=ON";
-
-  installPhase = ''
-    install -Dm755 {.,$out/bin}/thinkfan
-
-    cd "$NIX_BUILD_TOP"; cd "$sourceRoot" # attempt to be a bit robust
-    install -Dm644 {.,$out/share/doc/thinkfan}/README
-    cp -R examples $out/share/doc/thinkfan
-    install -Dm644 {src,$out/share/man/man1}/thinkfan.1
+    # fix command paths in unit files
+    for unit in rcscripts/systemd/*; do
+      substituteInPlace "$unit" \
+        --replace /bin/kill ${procps}/bin/kill \
+        --replace /usr/bin/pkill ${procps}/bin/pkill \
+        --replace /usr/bin/sleep ${coreutils}/bin/sleep
+    done
   '';
 
+  cmakeFlags = [
+    "-DCMAKE_INSTALL_DOCDIR=share/doc/${pname}"
+    "-DUSE_NVML=OFF"
+    # force install unit files
+    "-DSYSTEMD_FOUND=ON"
+  ] ++ lib.optional smartSupport "-DUSE_ATASMART=ON";
+
+  nativeBuildInputs = [ cmake pkg-config ];
+
+  buildInputs = [ libyamlcpp ] ++ lib.optional smartSupport libatasmart;
+
   meta = {
-    license = stdenv.lib.licenses.gpl3;
-    homepage = http://thinkfan.sourceforge.net/;
-    maintainers = with stdenv.lib.maintainers; [ domenkozar ];
-    platforms = stdenv.lib.platforms.linux;
+    description = "A simple, lightweight fan control program";
+    longDescription = ''
+      Thinkfan is a minimalist fan control program. Originally designed
+      specifically for IBM/Lenovo Thinkpads, it now supports any kind of
+      system via the sysfs hwmon interface (/sys/class/hwmon).
+    '';
+    license = lib.licenses.gpl3Plus;
+    homepage = "https://github.com/vmatare/thinkfan";
+    maintainers = with lib.maintainers; [ domenkozar rnhmjoj ];
+    platforms = lib.platforms.linux;
   };
 }

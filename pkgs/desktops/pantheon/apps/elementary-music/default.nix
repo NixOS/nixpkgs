@@ -1,27 +1,58 @@
-{ stdenv, fetchFromGitHub, pantheon, pkgconfig, meson
-, ninja, vala, desktop-file-utils, gtk3, granite
-, python3, libgee, clutter-gtk, json-glib, libgda, libgpod
-, libnotify, libpeas, libsoup, zeitgeist, gst_all_1, taglib
-, libdbusmenu, libsignon-glib, libaccounts-glib
-, elementary-icon-theme, wrapGAppsHook }:
+{ lib, stdenv
+, fetchFromGitHub
+, fetchpatch
+, nix-update-script
+, pantheon
+, pkg-config
+, meson
+, ninja
+, vala
+, desktop-file-utils
+, gtk3
+, granite
+, python3
+, libgee
+, clutter-gtk
+, json-glib
+, libgda
+, libgpod
+, libnotify
+, libpeas
+, libsoup
+, zeitgeist
+, gst_all_1
+, taglib
+, libdbusmenu
+, libsignon-glib
+, libaccounts-glib
+, elementary-icon-theme
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
-  pname = "music";
-  version = "5.0.4";
+  pname = "elementary-music";
+  version = "5.0.5";
 
-  name = "elementary-${pname}-${version}";
+  repoName = "music";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
+    repo = repoName;
     rev = version;
-    sha256 = "02qjsf9xnfh043xbls9mll2r1wcdvclw60x8wysv12rhbm90gwvp";
+    sha256 = "sha256-3GZoBCu9rF+BnNk9APBzKWO1JYg1XYWwrEvwcjWvYDE=";
   };
 
+  patches = [
+    # Fix build with latest Vala.
+    (fetchpatch {
+      url = "https://github.com/elementary/music/commit/9ed3bbb3a0d68e289a772b4603f58e52a4973316.patch";
+      sha256 = "fFO97SQzTc2fYFJFGfFPSUCdkCgZxfX1fjDQ7GH4BUs=";
+    })
+  ];
+
   passthru = {
-    updateScript = pantheon.updateScript {
-      repoName = pname;
-      attrPath = "elementary-${pname}";
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
     };
   };
 
@@ -29,7 +60,7 @@ stdenv.mkDerivation rec {
     desktop-file-utils
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     vala
     wrapGAppsHook
@@ -51,9 +82,9 @@ stdenv.mkDerivation rec {
     libgda
     libgee
     libgpod
-    libsignon-glib
     libnotify
     libpeas
+    libsignon-glib
     libsoup
     taglib
     zeitgeist
@@ -68,9 +99,9 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Music player and library designed for elementary OS";
-    homepage = https://github.com/elementary/music;
+    homepage = "https://github.com/elementary/music";
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

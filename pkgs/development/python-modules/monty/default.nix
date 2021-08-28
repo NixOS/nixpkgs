@@ -1,31 +1,41 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, nose
+, pythonOlder
+, msgpack
+, pytestCheckHook
 , numpy
-, six
-, ruamel_yaml
-, msgpack-python
-, coverage
-, coveralls
+, pydantic
 , pymongo
-, lsof
+, ruamel_yaml
+, tqdm
 }:
 
 buildPythonPackage rec {
   pname = "monty";
-  version = "1.0.4";
+  version = "2021.3.3";
+  disabled = pythonOlder "3.5"; # uses type annotations
 
   # No tests in Pypi
   src = fetchFromGitHub {
     owner = "materialsvirtuallab";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0vqaaz0dw0ypl6sfwbycpb0qs3ap04c4ghbggklxih66spdlggh6";
+    sha256 = "1nbv0ys0fv70rgzskkk8gsfr9dsmm7ykim5wv36li840zsj83b1l";
   };
 
-  checkInputs = [ lsof nose numpy msgpack-python coverage coveralls pymongo];
-  propagatedBuildInputs = [ six ruamel_yaml ];
+  propagatedBuildInputs = [
+    ruamel_yaml
+    tqdm
+    msgpack
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+    numpy
+    pydantic
+    pymongo
+  ];
 
   preCheck = ''
     substituteInPlace tests/test_os.py \
@@ -39,7 +49,7 @@ buildPythonPackage rec {
       standard library. Examples include useful utilities like transparent support for zipped files, useful design
       patterns such as singleton and cached_class, and many more.
     ";
-    homepage = https://github.com/materialsvirtuallab/monty;
+    homepage = "https://github.com/materialsvirtuallab/monty";
     license = licenses.mit;
     maintainers = with maintainers; [ psyanticy ];
   };

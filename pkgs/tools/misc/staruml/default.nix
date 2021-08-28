@@ -1,16 +1,15 @@
-{ stdenv, fetchurl, makeWrapper
+{ stdenv, lib, fetchurl, makeWrapper
 , dpkg, patchelf
-, gtk2, glib, gdk_pixbuf, alsaLib, nss, nspr, GConf, cups, libgcrypt, dbus, systemd
+, gtk2, glib, gdk-pixbuf, alsaLib, nss, nspr, GConf, cups, libgcrypt, dbus, systemd
 , libXdamage, expat }:
 
 let
-  inherit (stdenv) lib;
   LD_LIBRARY_PATH = lib.makeLibraryPath
-    [ glib gtk2 gdk_pixbuf alsaLib nss nspr GConf cups libgcrypt dbus libXdamage expat ];
+    [ glib gtk2 gdk-pixbuf alsaLib nss nspr GConf cups libgcrypt dbus libXdamage expat ];
 in
 stdenv.mkDerivation rec {
   version = "2.8.1";
-  name = "staruml-${version}";
+  pname = "staruml";
 
   src =
     if stdenv.hostPlatform.system == "i686-linux" then fetchurl {
@@ -35,7 +34,7 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out/lib
     ln -s ${stdenv.cc.cc.lib}/lib/libstdc++.so.6 $out/lib/
-    ln -s ${systemd.lib}/lib/libudev.so.1 $out/lib/libudev.so.0
+    ln -s ${lib.getLib systemd}/lib/libudev.so.1 $out/lib/libudev.so.0
 
     for binary in StarUML Brackets-node; do
       ${patchelf}/bin/patchelf \
@@ -46,9 +45,9 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A sophisticated software modeler";
-    homepage = http://staruml.io/;
+    homepage = "https://staruml.io/";
     license = licenses.unfree;
     platforms = [ "i686-linux" "x86_64-linux" ];
   };

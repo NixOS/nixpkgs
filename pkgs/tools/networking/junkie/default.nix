@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, libpcap, guile, openssl }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, libpcap, guile, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "junkie";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0kfdjgch667gfb3qpiadd2dj3fxc7r19nr620gffb1ahca02wq31";
   };
   buildInputs = [ libpcap guile openssl ];
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   configureFlags = [
     "GUILELIBDIR=\${out}/share/guile/site"
     "GUILECACHEDIR=\${out}/lib/guile/ccache"
@@ -20,9 +20,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Deep packet inspection swiss-army knife";
     homepage = "https://github.com/rixed/junkie";
-    license = stdenv.lib.licenses.agpl3Plus;
-    maintainers = [ stdenv.lib.maintainers.rixed ];
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.agpl3Plus;
+    maintainers = [ lib.maintainers.rixed ];
+    platforms = lib.platforms.unix;
     longDescription = ''
       Junkie is a network sniffer like Tcpdump or Wireshark, but designed to
       be easy to program and extend.

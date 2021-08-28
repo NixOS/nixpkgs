@@ -1,13 +1,14 @@
-{ stdenv, fetchurl, pkgconfig
+{ lib, stdenv, fetchurl, pkg-config
 , libjpeg, libtiff, libpng, freetype
 , fltk, gtk
 , libX11, libXext, libICE
 , dbus
+, fetchpatch
 }:
 
 stdenv.mkDerivation rec {
 
-  name = "afterstep-${version}";
+  pname = "afterstep";
   version = "2.2.12";
   sourceName = "AfterStep-${version}";
 
@@ -16,15 +17,22 @@ stdenv.mkDerivation rec {
     sha256 = "1j7vkx1ig4kzwffdxnkqv3kld9qi3sam4w2nhq18waqjsi8xl5gz";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  patches = [
+    (fetchpatch {
+      url = "https://salsa.debian.org/debian/afterstep/raw/master/debian/patches/44-Fix-build-with-gcc-5.patch";
+      sha256 = "1vipy2lzzd2gqrsqk85pwgcdhargy815fxlbn57hsm45zglc3lj4";
+    })
+  ];
+
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libjpeg libtiff libpng freetype fltk gtk libX11 libXext libICE dbus dbus ];
 
-  # A strange type of bug: dbus is not immediately found by pkgconfig
+  # A strange type of bug: dbus is not immediately found by pkg-config
   preConfigure = ''
      export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(pkg-config dbus-1 --cflags)"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A NEXTStep-inspired window manager";
     longDescription = ''
       AfterStep is a window manager for the Unix X Window
@@ -34,7 +42,7 @@ stdenv.mkDerivation rec {
       for flexibility of desktop configuration, improving aestetics,
       and efficient use of system resources.
     '';
-    homepage = http://www.afterstep.org/;
+    homepage = "http://www.afterstep.org/";
     license = licenses.gpl2;
     maintainers = [ maintainers.AndersonTorres ];
     platforms = platforms.linux;

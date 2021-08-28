@@ -1,22 +1,26 @@
-{ stdenv, fetchurl, pkgconfig, systemd
+{ lib, stdenv, fetchurl, pkg-config, systemd
 , boost, libsodium, libedit, re2
-, net_snmp, lua, protobuf, openssl }: stdenv.mkDerivation rec {
-  name = "dnsdist-${version}";
-  version = "1.3.2";
+, net-snmp, lua, protobuf, openssl, zlib, h2o
+}:
+
+stdenv.mkDerivation rec {
+  pname = "dnsdist";
+  version = "1.5.2";
 
   src = fetchurl {
     url = "https://downloads.powerdns.com/releases/dnsdist-${version}.tar.bz2";
-    sha256 = "1i3b1vpk9a8zbx9aby2s1ckkzhlvzgn11hcgj3b8x2j1b9771rqb";
+    sha256 = "sha256-K9e1M9Lae7RWY8amLkftDS8Zigd/WNxzDEY7eXNjZ0k=";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ systemd boost libsodium libedit re2 net_snmp lua protobuf openssl ];
+  nativeBuildInputs = [ pkg-config protobuf ];
+  buildInputs = [ systemd boost libsodium libedit re2 net-snmp lua openssl zlib h2o ];
 
   configureFlags = [
-    "--enable-libsodium"
-    "--enable-re2"
+    "--with-libsodium"
+    "--with-re2"
     "--enable-dnscrypt"
     "--enable-dns-over-tls"
+    "--enable-dns-over-https"
     "--with-protobuf=yes"
     "--with-net-snmp"
     "--disable-dependency-tracking"
@@ -26,10 +30,12 @@
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  enableParallelBuilding = true;
+
+  meta = with lib; {
     description = "DNS Loadbalancer";
     homepage = "https://dnsdist.org";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ das_j ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

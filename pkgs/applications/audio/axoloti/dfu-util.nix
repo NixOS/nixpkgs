@@ -1,18 +1,18 @@
-{ stdenv, fetchurl, pkgconfig, libusb1-axoloti }:
+{ lib, stdenv, fetchurl, pkg-config, libusb1-axoloti }:
 
 stdenv.mkDerivation rec {
-  name="dfu-util-${version}";
+  pname = "dfu-util";
   version = "0.8";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libusb1-axoloti ];
 
   src = fetchurl {
-    url = "http://dfu-util.sourceforge.net/releases/${name}.tar.gz";
+    url = "http://dfu-util.sourceforge.net/releases/${pname}-${version}.tar.gz";
     sha256 = "0n7h08avlzin04j93m6hkq9id6hxjiiix7ff9gc2n89aw6dxxjsm";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Device firmware update (DFU) USB programmer";
     longDescription = ''
       dfu-util is a program that implements the host (PC) side of the USB
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
       phones. With dfu-util you are able to download firmware to your device or
       upload firmware from it.
     '';
-    homepage = http://dfu-util.sourceforge.net;
+    homepage = "http://dfu-util.sourceforge.net";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = [ ];

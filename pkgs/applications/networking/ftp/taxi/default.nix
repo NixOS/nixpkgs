@@ -1,35 +1,48 @@
-{ stdenv, fetchFromGitHub, pantheon, pkgconfig, meson, ninja, python3
-, gtk3, libgee, libsoup, libsecret, gobject-introspection, wrapGAppsHook }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, gobject-introspection
+, gtk3
+, libgee
+, libsecret
+, libsoup
+, meson
+, ninja
+, nix-update-script
+, pantheon
+, pkg-config
+, python3
+, vala
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "taxi";
-  version = "0.0.1";
-
-  name = "${pname}-${version}";
+  version = "0.0.1-unstable=2020-09-03";
 
   src = fetchFromGitHub {
     owner = "Alecaddd";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "01c552w68576pnsyqbwy3hjhbww6vys3r3s0wxjdiscjqj1aawqg";
+    rev = "74aade67fd9ba9e5bc10c950ccd8d7e48adc2ea1";
+    sha256 = "sha256-S/FeKJxIdA30CpfFVrQsALdq7Gy4F4+P50Ky5tmqKvM=";
   };
 
   nativeBuildInputs = [
-    pantheon.vala
     gobject-introspection
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
+    vala
     wrapGAppsHook
   ];
 
   buildInputs = [
-    pantheon.granite
-    libgee
     gtk3
+    libgee
     libsecret
     libsoup
+    pantheon.granite
   ];
 
   postPatch = ''
@@ -37,11 +50,15 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
+    homepage = "https://github.com/Alecaddd/taxi";
     description = "The FTP Client that drives you anywhere";
-    homepage    = https://github.com/Alecaddd/taxi;
-    license     = licenses.gpl3Plus;
-    maintainers = with maintainers; [ worldofpeace ];
-    platforms   = platforms.linux;
+    license = licenses.lgpl3Plus;
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = platforms.linux;
+  };
+
+  passthru.updateScript = nix-update-script {
+    attrPath = pname;
   };
 }

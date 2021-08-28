@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, dpkg, which
+{ fetchurl, lib, stdenv, mkDerivation, dpkg, which
 , makeWrapper
 , alsaLib
 , desktop-file-utils
@@ -90,8 +90,9 @@ let
 
 in
 
-stdenv.mkDerivation {
-  name = "mendeley-${version}";
+mkDerivation {
+  pname = "mendeley";
+  inherit version;
 
   src = fetchurl {
     url = url;
@@ -103,7 +104,9 @@ stdenv.mkDerivation {
 
   propagatedUserEnvPkgs = [ gconf ];
 
-  unpackPhase = "true";
+  dontUnpack = true;
+
+  dontWrapQtApps = true;
 
   installPhase = ''
     dpkg-deb -x $src $out
@@ -111,12 +114,12 @@ stdenv.mkDerivation {
 
     interpreter=$(patchelf --print-interpreter $(readlink -f $(which patchelf)))
     patchelf --set-interpreter $interpreter \
-             --set-rpath ${stdenv.lib.makeLibraryPath deps}:$out/lib \
+             --set-rpath ${lib.makeLibraryPath deps}:$out/lib \
              $out/bin/mendeleydesktop
 
-    wrapProgram $out/bin/mendeleydesktop \
+    wrapQtApp $out/bin/mendeleydesktop \
       --add-flags "--unix-distro-build" \
-      ${stdenv.lib.optionalString autorunLinkHandler # ignore errors installing the link handler
+      ${lib.optionalString autorunLinkHandler # ignore errors installing the link handler
       ''--run "$out/bin/install-mendeley-link-handler.sh $out/bin/mendeleydesktop ||:"''}
 
     # Remove bundled qt bits
@@ -125,16 +128,16 @@ stdenv.mkDerivation {
 
     # Patch up link handler script
     wrapProgram $out/bin/install-mendeley-link-handler.sh \
-      --prefix PATH ':' ${stdenv.lib.makeBinPath [ which gconf desktop-file-utils ] }
+      --prefix PATH ':' ${lib.makeBinPath [ which gconf desktop-file-utils ] }
   '';
 
   dontStrip = true;
-  dontPatchElf = true;
+  dontPatchELF = true;
 
   updateScript = import ./update.nix { inherit writeScript runtimeShell; };
 
-  meta = with stdenv.lib; {
-    homepage = https://www.mendeley.com;
+  meta = with lib; {
+    homepage = "https://www.mendeley.com";
     description = "A reference manager and academic social network";
     license = licenses.unfree;
     platforms = [ "x86_64-linux" "i686-linux" ];

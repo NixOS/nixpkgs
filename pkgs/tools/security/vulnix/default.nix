@@ -1,18 +1,22 @@
-{ stdenv, pythonPackages, nix, ronn }:
+{ lib
+, python3Packages
+, nix
+, ronn
+}:
 
-pythonPackages.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "vulnix";
-  version = "1.8.1";
+  version = "1.9.6";
 
-  src = pythonPackages.fetchPypi {
+  src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "1kpwqsnz7jisi622halzl4s5q42d76nbq6ra800gscnfx48hqw9r";
+    sha256 = "0anyxmqgn4kx102l3qjhh1f2b0cg7mnlapfhriyjw0zyy5gyqvng";
   };
 
   outputs = [ "out" "doc" "man" ];
   nativeBuildInputs = [ ronn ];
 
-  checkInputs = with pythonPackages; [
+  checkInputs = with python3Packages; [
     freezegun
     pytest
     pytestcov
@@ -21,12 +25,12 @@ pythonPackages.buildPythonApplication rec {
 
   propagatedBuildInputs = [
     nix
-  ] ++ (with pythonPackages; [
+  ] ++ (with python3Packages; [
     click
     colorama
-    lxml
     pyyaml
     requests
+    setuptools
     toml
     zodb
   ]);
@@ -44,10 +48,10 @@ pythonPackages.buildPythonApplication rec {
 
   dontStrip = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "NixOS vulnerability scanner";
-    homepage = https://github.com/flyingcircusio/vulnix;
+    homepage = "https://github.com/flyingcircusio/vulnix";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ckauhaus plumps ];
+    maintainers = with maintainers; [ ckauhaus ];
   };
 }

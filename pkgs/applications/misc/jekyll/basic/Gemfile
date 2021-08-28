@@ -1,8 +1,6 @@
 source "https://rubygems.org"
 gem "jekyll"
 # jekyll alone might be enough for most use-cases
-gem "rouge"
-gem "activesupport", "~> 4.2"
 gem "jekyll-avatar"
 gem "jekyll-mentions"
 gem "jekyll-seo-tag"

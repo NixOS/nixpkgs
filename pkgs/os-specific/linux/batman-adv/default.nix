@@ -1,13 +1,14 @@
-{ stdenv, fetchurl, kernel }:
+{ lib, stdenv, fetchurl, kernel }:
 
-let base = "batman-adv-2019.2"; in
+let cfg = import ./version.nix; in
 
 stdenv.mkDerivation rec {
-  name = "${base}-${kernel.version}";
+  pname = "batman-adv";
+  version = "${cfg.version}-${kernel.version}";
 
   src = fetchurl {
-    url = "http://downloads.open-mesh.org/batman/releases/${base}/${base}.tar.gz";
-    sha256 = "1j5day3hia5nd21kb3msjblrybfr5sjnhrx7h5bb5ll8rykgdhvh";
+    url = "http://downloads.open-mesh.org/batman/releases/${pname}-${cfg.version}/${pname}-${cfg.version}.tar.gz";
+    sha256 = cfg.sha256.${pname};
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
@@ -21,10 +22,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = https://www.open-mesh.org/projects/batman-adv/wiki/Wiki;
+    homepage = "https://www.open-mesh.org/projects/batman-adv/wiki/Wiki";
     description = "B.A.T.M.A.N. routing protocol in a linux kernel module for layer 2";
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = with stdenv.lib.maintainers; [ fpletz ];
-    platforms = with stdenv.lib.platforms; linux;
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ fpletz hexa ];
+    platforms = with lib.platforms; linux;
   };
 }

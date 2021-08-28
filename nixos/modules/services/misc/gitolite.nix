@@ -27,7 +27,10 @@ in
         type = types.str;
         default = "/var/lib/gitolite";
         description = ''
-          Gitolite home directory (used to store all the repositories).
+          The gitolite home directory used to store all repositories. If left as the default value
+          this directory will automatically be created before the gitolite server starts, otherwise
+          the sysadmin is responsible for ensuring the directory exists with appropriate ownership
+          and permissions.
         '';
       };
 
@@ -143,21 +146,35 @@ in
     users.users.${cfg.user} = {
       description     = "Gitolite user";
       home            = cfg.dataDir;
-      createHome      = true;
       uid             = config.ids.uids.gitolite;
       group           = cfg.group;
       useDefaultShell = true;
     };
-    users.groups."${cfg.group}".gid = config.ids.gids.gitolite;
+    users.groups.${cfg.group}.gid = config.ids.gids.gitolite;
 
-    systemd.services."gitolite-init" = {
+    systemd.services.gitolite-init = {
       description = "Gitolite initialization";
       wantedBy    = [ "multi-user.target" ];
       unitConfig.RequiresMountsFor = cfg.dataDir;
 
-      serviceConfig.User = "${cfg.user}";
-      serviceConfig.Type = "oneshot";
-      serviceConfig.RemainAfterExit = true;
+      environment = {
+        GITOLITE_RC = ".gitolite.rc";
+        GITOLITE_RC_DEFAULT = "${rcDir}/gitolite.rc.default";
+      };
+
+      serviceConfig = mkMerge [
+        (mkIf (cfg.dataDir == "/var/lib/gitolite") {
+          StateDirectory = "gitolite gitolite/.gitolite gitolite/.gitolite/logs";
+          StateDirectoryMode = "0750";
+        })
+        {
+          Type = "oneshot";
+          User = cfg.user;
+          Group = cfg.group;
+          WorkingDirectory = "~";
+          RemainAfterExit = true;
+        }
+      ];
 
       path = [ pkgs.gitolite pkgs.git pkgs.perl pkgs.bash pkgs.diffutils config.programs.ssh.package ];
       script =
@@ -187,11 +204,6 @@ in
           '';
       in
         ''
-          cd ${cfg.dataDir}
-          mkdir -p .gitolite/logs
-
-          GITOLITE_RC=.gitolite.rc
-          GITOLITE_RC_DEFAULT=${rcDir}/gitolite.rc.default
           if ( [[ ! -e "$GITOLITE_RC" ]] && [[ ! -L "$GITOLITE_RC" ]] ) ||
              ( [[ -f "$GITOLITE_RC" ]] && diff -q "$GITOLITE_RC" "$GITOLITE_RC_DEFAULT" >/dev/null ) ||
              ( [[ -L "$GITOLITE_RC" ]] && [[ "$(readlink "$GITOLITE_RC")" =~ ^/nix/store/ ]] )
@@ -215,6 +227,6 @@ in
     };
 
     environment.systemPackages = [ pkgs.gitolite pkgs.git ]
-        ++ optional cfg.enableGitAnnex pkgs.gitAndTools.git-annex;
+        ++ optional cfg.enableGitAnnex pkgs.git-annex;
   });
 }

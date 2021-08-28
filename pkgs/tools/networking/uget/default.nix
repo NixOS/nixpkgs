@@ -1,18 +1,18 @@
-{ stdenv, fetchurl, pkgconfig, intltool, openssl, curl, libnotify,
-  libappindicator-gtk3, gst_all_1, gtk3, gnome3, wrapGAppsHook, aria2 ? null
+{ lib, stdenv, fetchurl, pkg-config, intltool, openssl, curl, libnotify,
+  libappindicator-gtk3, gst_all_1, gtk3, dconf, wrapGAppsHook, aria2 ? null
 }:
 
 stdenv.mkDerivation rec {
-  name = "uget-${version}";
-  version = "2.2.2";
+  pname = "uget";
+  version = "2.2.3-1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/urlget/${name}.tar.gz";
-    sha256 = "1hmzk907blgzc1z6wv4zbzqrwad06zfm1rqc3svh5garxw8z7xsw";
+    url = "mirror://sourceforge/urlget/${pname}-${version}.tar.gz";
+    sha256 = "0jchvgkkphhwp2z7vd4axxr9ns8b6vqc22b2z8a906qm8916wd8i";
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     intltool
     wrapGAppsHook
   ];
@@ -23,18 +23,18 @@ stdenv.mkDerivation rec {
     libnotify
     libappindicator-gtk3
     gtk3
-    (stdenv.lib.getLib gnome3.dconf)
+    (lib.getLib dconf)
   ]
   ++ (with gst_all_1; [ gstreamer gst-plugins-base gst-plugins-good ])
-  ++ (stdenv.lib.optional (aria2 != null) aria2);
+  ++ (lib.optional (aria2 != null) aria2);
 
   enableParallelBuilding = true;
 
-  preFixup = stdenv.lib.optionalString (aria2 != null)
+  preFixup = lib.optionalString (aria2 != null)
                ''gappsWrapperArgs+=(--suffix PATH : "${aria2}/bin")'';
 
-  meta = with stdenv.lib; {
-    description = "Download manager using gtk+ and libcurl";
+  meta = with lib; {
+    description = "Download manager using GTK and libcurl";
     longDescription = ''
       uGet is a VERY Powerful download manager application with a large
       inventory of features but is still very light-weight and low on
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
       thinking that it "might be too powerful" because remember power is good
       and lightweight power is uGet!
     '';
-    homepage = http://www.ugetdm.com;
+    homepage = "http://www.ugetdm.com";
     license = licenses.lgpl21;
     platforms = platforms.unix;
     maintainers = with maintainers; [ romildo ];

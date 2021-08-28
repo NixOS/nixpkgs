@@ -10,7 +10,7 @@
   expression language. It’s not complete. In particular, there are many other
   built-in functions. See the
   <link
-xlink:href="http://nixos.org/nix/manual/#chap-writing-nix-expressions">Nix
+xlink:href="https://nixos.org/nix/manual/#chap-writing-nix-expressions">Nix
   manual</link> for the rest.
  </para>
 

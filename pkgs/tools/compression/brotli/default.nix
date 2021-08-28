@@ -1,21 +1,31 @@
-{ stdenv, fetchFromGitHub, cmake }:
+{ lib, stdenv, fetchFromGitHub, cmake, fetchpatch
+, staticOnly ? stdenv.hostPlatform.isStatic
+}:
 
 # ?TODO: there's also python lib in there
 
 stdenv.mkDerivation rec {
-  name = "brotli-${version}";
-  version = "1.0.7";
+  pname = "brotli";
+  version = "1.0.9";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "brotli";
     rev = "v" + version;
-    sha256 = "1811b55wdfg4kbsjcgh1kc938g118jpvif97ilgrmbls25dfpvvw";
+    sha256 = "z6Dhrabav1MDQ4rAcXaDv0aN+qOoh9cvoXZqEWBB13c=";
   };
 
   nativeBuildInputs = [ cmake ];
 
-  cmakeFlags = [];
+  patches = lib.optional staticOnly (fetchpatch {
+    # context from https://github.com/google/brotli/pull/655
+    # updated patch from https://github.com/google/brotli/pull/655
+    url = "https://github.com/google/brotli/commit/47a554804ceabb899ae924aaee54df806053d0d1.patch";
+    sha256 = "sOeXNVsCaBSD9i82GRUDrkyreGeQ7qaJWjjy/uLL0/0=";
+  });
+
+  cmakeFlags = []
+    ++ lib.optional staticOnly "-DBUILD_SHARED_LIBS=OFF";
 
   outputs = [ "out" "dev" "lib" ];
 
@@ -25,7 +35,14 @@ stdenv.mkDerivation rec {
 
   # This breaks on Darwin because our cmake hook tries to make a build folder
   # and the wonderful bazel BUILD file is already there (yay case-insensitivity?)
-  prePatch = "rm BUILD";
+  prePatch = ''
+      rm BUILD
+
+      # Upstream fixed this reference to runtime-path after the release
+      # and with this references g++ complains about invalid option -R
+      sed -i 's/ -R''${libdir}//' scripts/libbrotli*.pc.in
+      cat scripts/libbrotli*.pc.in
+    '';
 
   # Don't bother with "man" output for now,
   # it currently only makes the manpages hard to use.
@@ -35,7 +52,7 @@ stdenv.mkDerivation rec {
     cp ../docs/*.3 $out/share/man/man3/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (src.meta) homepage;
 
     description = "A generic-purpose lossless compression algorithm and tool";
@@ -54,7 +71,7 @@ stdenv.mkDerivation rec {
       '';
 
     license = licenses.mit;
-    maintainers = [ maintainers.vcunat ];
+    maintainers = with maintainers; [ freezeboy ];
     platforms = platforms.all;
   };
 }

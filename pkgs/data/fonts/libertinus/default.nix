@@ -23,7 +23,7 @@ in fetchFromGitHub rec {
       that started as an OpenType math companion of the Libertine font family,
       but grown as a full fork to address some of the bugs in the fonts.
     '';
-    homepage = https://github.com/alif-type/libertinus;
+    homepage = "https://github.com/alif-type/libertinus";
     license = licenses.ofl;
     maintainers = with maintainers; [ siddharthist ];
     platforms = platforms.all;

@@ -1,13 +1,13 @@
-{ stdenv, fetchPypi, openssl, buildPythonPackage
+{ lib, fetchPypi, openssl, buildPythonPackage
 , pytest, dnspython, pynacl, authres, python }:
 
 buildPythonPackage rec {
   pname = "dkimpy";
-  version = "0.9.2";
+  version = "1.0.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "83d5ddc1b83304dbccba1dc7b9e0ee37bec4269bb9ad5779480991525c3811d6";
+    sha256 = "9a2420bf09af686736773153fca32a02ae11ecbe24b540c26104628959f91121";
 };
 
   checkInputs = [ pytest ];
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     ${python.interpreter} ./test.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "DKIM + ARC email signing/verification tools + Python module";
     longDescription = ''
       Python module that implements DKIM (DomainKeys Identified Mail) email
@@ -31,7 +31,7 @@ buildPythonPackage rec {
       records. This version also supports the experimental Authenticated
       Received Chain (ARC) protocol.
     '';
-    homepage = https://launchpad.net/dkimpy;
+    homepage = "https://launchpad.net/dkimpy";
     license = licenses.bsd3;
     maintainers = with maintainers; [ leenaars ];
   };

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, xorgproto, libX11, libXrender
+{ lib, stdenv, fetchurl, xorgproto, libX11, libXrender
 , gmp, libjpeg, libpng
 , expat, gettext, perl, guile
 , SDL, SDL_image, SDL_mixer, SDL_ttf
@@ -6,11 +6,11 @@
 , libogg, libvorbis, libcaca, csound, cunit } :
 
 stdenv.mkDerivation rec {
-  name = "liquidwar6-${version}";
+  pname = "liquidwar6";
   version = "0.6.3902";
 
   src = fetchurl {
-    url = "mirror://gnu/liquidwar6/${name}.tar.gz";
+    url = "mirror://gnu/liquidwar6/${pname}-${version}.tar.gz";
     sha256 = "1976nnl83d8wspjhb5d5ivdvdxgb8lp34wp54jal60z4zad581fn";
   };
 
@@ -36,9 +36,9 @@ stdenv.mkDerivation rec {
   # To avoid problems finding SDL_types.h.
   configureFlags = [ "CFLAGS=-I${SDL.dev}/include/SDL" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Quick tactics game";
-    homepage = https://www.gnu.org/software/liquidwar6/;
+    homepage = "https://www.gnu.org/software/liquidwar6/";
     maintainers = [ maintainers.raskin ];
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

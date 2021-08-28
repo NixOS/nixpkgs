@@ -1,7 +1,7 @@
 { lib, fetchzip }:
 
 let
-  version = "1.2";
+  version = "1.3";
 in fetchzip {
   name = "mononoki-${version}";
 
@@ -12,10 +12,10 @@ in fetchzip {
     unzip -j $downloadedFile -d $out/share/fonts/mononoki
   '';
 
-  sha256 = "19y4xg7ilm21h9yynyrwcafdqn05zknpmmjrb37qim6p0cy2glff";
+  sha256 = "sha256-K2uOpJRmQ1NcDZfh6rorCF0MvGHFCsSW8J7Ue9OC/OY=";
 
   meta = with lib; {
-    homepage = https://github.com/madmalik/mononoki;
+    homepage = "https://github.com/madmalik/mononoki";
     description = "A font for programming and code review";
     license = licenses.ofl;
     platforms = platforms.all;

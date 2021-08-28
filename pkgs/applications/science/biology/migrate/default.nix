@@ -1,4 +1,4 @@
-{ gccStdenv, fetchurl, zlib, openmpi }:
+{ lib, gccStdenv, fetchurl, zlib, mpi }:
 
 gccStdenv.mkDerivation rec {
   version = "3.7.2";
@@ -9,14 +9,14 @@ gccStdenv.mkDerivation rec {
     sha256 = "1p2364ffjc56i82snzvjpy6pkf6wvqwvlvlqxliscx2c303fxs8v";
   };
 
-  buildInputs = [ zlib openmpi ];
-  setSourceRoot = ''sourceRoot=$(echo */src)'';
+  buildInputs = [ zlib mpi ];
+  setSourceRoot = "sourceRoot=$(echo */src)";
   buildFlags = [ "thread" "mpis" ];
   preInstall = "mkdir -p $out/man/man1";
 
-  meta = with gccStdenv.lib; {
+  meta = with lib; {
     description = "Estimates population size, migration, population splitting parameters using genetic/genomic data";
-    homepage = https://peterbeerli.com/migrate-html5/index.html;
+    homepage = "https://peterbeerli.com/migrate-html5/index.html";
     license = licenses.mit;
     maintainers = [ maintainers.bzizou ];
     platforms = platforms.unix;

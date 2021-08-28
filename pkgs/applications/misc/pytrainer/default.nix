@@ -1,63 +1,89 @@
-{ stdenv, fetchFromGitHub, perl, python, sqlite, gpsbabel
-, withWebKit ? false }:
+{ lib
+, python3
+, fetchFromGitHub
+, gdk-pixbuf
+, gnome
+, gpsbabel
+, glib-networking
+, glibcLocales
+, gobject-introspection
+, gtk3
+, perl
+, sqlite
+, tzdata
+, webkitgtk
+, wrapGAppsHook
+, xvfb-run
+}:
 
 let
-
-  # Pytrainer needs a matplotlib with GTK backend. Also ensure we are
-  # using the pygtk with glade support as needed by pytrainer.
-  matplotlibGtk = python.pkgs.matplotlib.override {
-    enableGtk2 = true;
-    pygtk = python.pkgs.pyGtkGlade;
+  python = python3.override {
+    packageOverrides = (self: super: {
+      matplotlib = super.matplotlib.override {
+        enableGtk3 = true;
+      };
+    });
   };
-
-in
-
-python.pkgs.buildPythonApplication rec {
-  name = "pytrainer-${version}";
-  version = "1.12.1";
+in python.pkgs.buildPythonApplication rec {
+  pname = "pytrainer";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "pytrainer";
     repo = "pytrainer";
     rev = "v${version}";
-    sha256 = "0rzf8kks96qzlknh6g3b9pjq04j7qk6rmz58scp7sck8xz9rjbwx";
+    sha256 = "sha256-i3QC6ct7tS8B0QQjtVqPcd03LLIxo6djQe4YX35syzk=";
   };
 
-  namePrefix = "";
-
-  patches = [
-    # The test fails in the UTC timezone and C locale.
-    ./fix-test-tz.patch
-
-    # The existing use of pywebkitgtk shows raw HTML text instead of
-    # map. This patch solves the problems by showing the file from a
-    # string, which allows setting an explicit MIME type.
-    ./pytrainer-webkit.patch
+  propagatedBuildInputs = with python.pkgs; [
+    sqlalchemy_migrate
+    python-dateutil
+    matplotlib
+    lxml
+    setuptools
+    requests
+    gdal
   ];
 
-  postPatch = ''
-    substituteInPlace ./setup.py \
-      --replace "'mysqlclient'," ""
-  '';
+  nativeBuildInputs = [
+    gobject-introspection
+    wrapGAppsHook
+  ];
 
-  propagatedBuildInputs = with python.pkgs; [
-    dateutil lxml matplotlibGtk pyGtkGlade sqlalchemy sqlalchemy_migrate psycopg2
-  ] ++ stdenv.lib.optional withWebKit [ pywebkitgtk ];
+  buildInputs = [
+    sqlite
+    gtk3
+    webkitgtk
+    glib-networking
+    gnome.adwaita-icon-theme
+    gdk-pixbuf
+  ];
 
-  buildInputs = [ perl gpsbabel sqlite ];
+  makeWrapperArgs = [
+    "--prefix" "PATH" ":" (lib.makeBinPath [ perl gpsbabel ])
+  ];
 
-  # This package contains no binaries to patch or strip.
-  dontPatchELF = true;
-  dontStrip = true;
+  checkInputs = [
+    glibcLocales
+    perl
+    xvfb-run
+  ] ++ (with python.pkgs; [
+    mysqlclient
+    psycopg2
+  ]);
 
   checkPhase = ''
-    ${python.interpreter} -m unittest discover
+    env HOME=$TEMPDIR TZDIR=${tzdata}/share/zoneinfo \
+      TZ=Europe/Kaliningrad \
+      LC_ALL=en_US.UTF-8 \
+      xvfb-run -s '-screen 0 800x600x24' \
+      ${python3.interpreter} setup.py test
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/pytrainer/pytrainer/wiki;
+  meta = with lib; {
+    homepage = "https://github.com/pytrainer/pytrainer";
     description = "Application for logging and graphing sporting excursions";
-    maintainers = [ maintainers.rycee ];
+    maintainers = with maintainers; [ rycee dotlambda ];
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };

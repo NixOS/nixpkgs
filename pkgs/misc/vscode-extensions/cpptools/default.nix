@@ -1,4 +1,7 @@
-{ stdenv, fetchzip, vscode-utils, jq, mono, clang-tools, writeScript, runtimeShell
+{ lib, vscode-utils
+, fetchurl, unzip
+, mono, writeScript, runtimeShell
+, jq, clang-tools
 , gdbUseFixed ? true, gdb # The gdb default setting will be fixed to specified. Use version from `PATH` otherwise.
 }:
 
@@ -30,27 +33,6 @@ assert gdbUseFixed -> null != gdb;
 let
   gdbDefaultsTo = if gdbUseFixed then "${gdb}/bin/gdb" else "gdb";
 
-  langComponentBinaries = stdenv.mkDerivation {
-    name = "cpptools-language-component-binaries";
-
-    src = fetchzip {
-      # Follow https://go.microsoft.com/fwlink/?linkid=2037608
-      url = "https://download.visualstudio.microsoft.com/download/pr/97ed3eeb-b31e-421c-92dc-4f3a98af301e/069a1e6ab1b4b017853a7e9e08067744/bin_linux.zip";
-      sha256 = "19flm4vcrg89x0b20bd0g45apabzfqgvcpjddnmyk312jc242gmb";
-    };
-
-    patchPhase = ''
-      elfInterpreter="${stdenv.glibc.out}/lib/ld-linux-x86-64.so.2"
-      patchelf --set-interpreter "$elfInterpreter" ./Microsoft.VSCode.CPP.Extension.linux
-      patchelf --set-interpreter "$elfInterpreter" ./Microsoft.VSCode.CPP.IntelliSense.Msvc.linux
-      chmod a+x ./Microsoft.VSCode.CPP.Extension.linux ./Microsoft.VSCode.CPP.IntelliSense.Msvc.linux
-    '';
-
-    installPhase = ''
-      mkdir -p "$out/bin"
-      find . -mindepth 1 -maxdepth 1 | xargs cp -a -t "$out/bin"
-    '';
-  };
 
   openDebugAD7Script = writeScript "OpenDebugAD7" ''
     #!${runtimeShell}
@@ -64,12 +46,17 @@ let
   '';
 in
 
-vscode-utils.buildVscodeMarketplaceExtension {
+vscode-utils.buildVscodeMarketplaceExtension rec {
   mktplcRef = {
     name = "cpptools";
     publisher = "ms-vscode";
-    version = "0.23.1";
-    sha256 = "08kfzvyl8vgjmhqzpp7pxw0gd87jr5g7z15ag4cpcil4inq4c8k3";
+    version = "1.0.1";
+  };
+
+  vsix = fetchurl {
+    name = "${mktplcRef.publisher}-${mktplcRef.name}.zip";
+    url = "https://github.com/microsoft/vscode-cpptools/releases/download/${mktplcRef.version}/cpptools-linux.vsix";
+    sha256 = "1lb5pza2ny1ydan19596amabs1np10nq08yqsfbvvfw7zbg4gnyc";
   };
 
   buildInputs = [
@@ -77,38 +64,35 @@ vscode-utils.buildVscodeMarketplaceExtension {
   ];
 
   postPatch = ''
-    mv ./package.json ./package_ori.json
+    mv ./package.json ./package_orig.json
 
     # 1. Add activation events so that the extension is functional. This listing is empty when unpacking the extension but is filled at runtime.
-    # 2. Patch `packages.json` so that nix's *gdb* is used as default value for `miDebuggerPath`.
-    cat ./package_ori.json | \
+    # 2. Patch `package.json` so that nix's *gdb* is used as default value for `miDebuggerPath`.
+    cat ./package_orig.json | \
       jq --slurpfile actEvts ${./package-activation-events.json} '(.activationEvents) = $actEvts[0]' | \
       jq '(.contributes.debuggers[].configurationAttributes | .attach , .launch | .properties.miDebuggerPath | select(. != null) | select(.default == "/usr/bin/gdb") | .default) = "${gdbDefaultsTo}"' > \
       ./package.json
 
-    # Patch `packages.json` so that nix's *gdb* is used as default value for `miDebuggerPath`.
-    substituteInPlace "./package.json" \
-      --replace "\"default\": \"/usr/bin/gdb\"" "\"default\": \"${gdbDefaultsTo}\""
-
     # Prevent download/install of extensions
     touch "./install.lock"
 
-    # Move unused files out of the way.
-    mv ./debugAdapters/bin/OpenDebugAD7.exe.config ./debugAdapters/bin/OpenDebugAD7.exe.config.unused
-
-    # Combining the language component binaries as part of our package.
-    find "${langComponentBinaries}/bin" -mindepth 1 -maxdepth 1 | xargs cp -p -t "./bin"
-
     # Mono runtimes from nix package (used by generated `OpenDebugAD7`).
-    rm "./debugAdapters/OpenDebugAD7"
+    mv ./debugAdapters/OpenDebugAD7 ./debugAdapters/OpenDebugAD7_orig
     cp -p "${openDebugAD7Script}" "./debugAdapters/OpenDebugAD7"
 
     # Clang-format from nix package.
-    mkdir -p "./LLVM"
+    mv  ./LLVM/ ./LLVM_orig
+    mkdir "./LLVM/"
     find "${clang-tools}" -mindepth 1 -maxdepth 1 | xargs ln -s -t "./LLVM"
+
+    # Patching  cpptools and cpptools-srv
+    elfInterpreter="$(cat $NIX_CC/nix-support/dynamic-linker)"
+    patchelf --set-interpreter "$elfInterpreter" ./bin/cpptools
+    patchelf --set-interpreter "$elfInterpreter" ./bin/cpptools-srv
+    chmod a+x ./bin/cpptools{-srv,}
   '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       license = licenses.unfree;
       maintainers = [ maintainers.jraygauthier ];
       # A 32 bit linux would also be possible with some effort (specific download of binaries +

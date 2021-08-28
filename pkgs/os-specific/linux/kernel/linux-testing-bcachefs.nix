@@ -1,13 +1,15 @@
-{ stdenv, buildPackages, fetchgit, fetchpatch, perl, buildLinux, ... } @ args:
+{ lib, buildPackages, fetchFromGitHub, fetchpatch, perl, buildLinux, ... } @ args:
 
-buildLinux (args // rec {
-  version = "5.0.2019.05.29";
-  modDirVersion = "5.0.0";
+buildLinux (args // {
+  version = "5.9.0-2020.11.20";
+  modDirVersion = "5.9.0";
 
-  src = fetchgit {
-    url = "https://evilpiepirate.org/git/bcachefs.git";
-    rev = "7e42539c80470cb655bbc46cd0f144de6c644523";
-    sha256 = "0f7z3awfzdg56rby6z8dh9v9bzyyfn53zgwxmk367mfi0wqk49d2";
+  src = fetchFromGitHub {
+    owner = "koverstreet";
+    repo = "bcachefs";
+    # commit does not exist on any branch on the target repository
+    rev = "6a505b63ed3003faf5000f19fd08bbd477d93fbc";
+    sha256 = "1rf34gzv9npafp1c3i6lymk3b0gnqp4rb0wl33pw6yrpgnsry3cc";
   };
 
   extraConfig = "BCACHEFS_FS m";
@@ -15,7 +17,7 @@ buildLinux (args // rec {
   extraMeta = {
     branch = "master";
     hydraPlatforms = []; # Should the testing kernels ever be built on Hydra?
-    maintainers = with stdenv.lib.maintainers; [ davidak chiiruno ];
+    maintainers = with lib.maintainers; [ davidak chiiruno ];
     platforms = [ "x86_64-linux" ];
   };
 

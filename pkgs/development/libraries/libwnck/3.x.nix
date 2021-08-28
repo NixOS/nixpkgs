@@ -1,38 +1,76 @@
-{ stdenv, fetchurl, pkgconfig, libX11, gtk3, intltool, gobject-introspection, gnome3 }:
+{ lib, stdenv
+, fetchurl
+, fetchpatch
+, meson
+, ninja
+, pkg-config
+, gtk-doc
+, docbook_xsl
+, docbook_xml_dtd_412
+, libX11
+, glib
+, gtk3
+, pango
+, cairo
+, libXres
+, libstartup_notification
+, gettext
+, gobject-introspection
+, gnome
+}:
 
-let
+stdenv.mkDerivation rec {
   pname = "libwnck";
-  version = "3.30.0";
-in stdenv.mkDerivation rec{
-  name = "${pname}-${version}";
-
-  src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0f9lvhm3w25046dqq8xyg7nzggxpmdriwrb661nng05a8qk0svdc";
-  };
+  version = "3.36.0";
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "dev";
 
-  configureFlags = [ "--enable-introspection" ];
+  src = fetchurl {
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0pwjdhca9lz2n1gf9b60xf0m6ipf9snp8rqf9csj4pgdnd882l5w";
+  };
 
-  nativeBuildInputs = [ pkgconfig intltool gobject-introspection ];
-  propagatedBuildInputs = [ libX11 gtk3 ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    gettext
+    gobject-introspection
+    gtk-doc
+    docbook_xsl
+    docbook_xml_dtd_412
+  ];
 
-  PKG_CONFIG_GOBJECT_INTROSPECTION_1_0_GIRDIR = "${placeholder "dev"}/share/gir-1.0";
-  PKG_CONFIG_GOBJECT_INTROSPECTION_1_0_TYPELIBDIR = "${placeholder "out"}/lib/girepository-1.0";
+  buildInputs = [
+    libX11
+    libstartup_notification
+    pango
+    cairo
+    libXres
+  ];
+
+  propagatedBuildInputs = [
+    glib
+    gtk3
+  ];
+
+  mesonFlags = [
+    "-Dgtk_doc=true"
+  ];
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
-      attrPath = "gnome3.${pname}";
+      attrPath = "${pname}${lib.versions.major version}";
+      versionPolicy = "odd-unstable";
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library to manage X windows and workspaces (via pagers, tasklists, etc.)";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.worldofpeace ];
+    maintainers = [ ];
   };
 }

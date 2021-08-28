@@ -1,9 +1,9 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, libtool, pkgconfig, gnome3
+{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, pkg-config, gnome
 , gtk-doc, gtk3, libX11, libXext, libXrender, gobject-introspection
 }:
 
 stdenv.mkDerivation rec {
-  name = "keybinder3-${version}";
+  pname = "keybinder3";
   version = "0.3.2";
 
   src = fetchFromGitHub {
@@ -13,9 +13,9 @@ stdenv.mkDerivation rec {
     sha256 = "196ibn86j54fywfwwgyh89i9wygm4vh7ls19fn20vrnm6ijlzh9r";
   };
 
-  nativeBuildInputs = [ autoconf automake libtool pkgconfig ];
+  nativeBuildInputs = [ autoconf automake libtool pkg-config ];
   buildInputs = [
-    gnome3.gnome-common gtk-doc gtk3
+    gnome.gnome-common gtk-doc gtk3
     libX11 libXext libXrender gobject-introspection
   ];
 
@@ -23,9 +23,9 @@ stdenv.mkDerivation rec {
     ./autogen.sh --prefix="$out"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library for registering global key bindings";
-    homepage = https://github.com/kupferlauncher/keybinder/;
+    homepage = "https://github.com/kupferlauncher/keybinder/";
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = [ maintainers.cstrahan ];

@@ -1,9 +1,8 @@
-{ stdenv, substituteAll, fetchFromGitHub, gnused, ncurses, xorg, rlwrap }:
+{ lib, stdenv, substituteAll, fetchFromGitHub, gnused, ncurses, xorg, rlwrap }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "stumpish";
   version = "0.0.1";
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "stumpwm";
@@ -34,8 +33,8 @@ stdenv.mkDerivation rec {
     cp util/stumpish/stumpish $out/bin
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/stumpwm/stumpwm-contrib;
+  meta = with lib; {
+    homepage = "https://github.com/stumpwm/stumpwm-contrib";
     description = "STUMPwm Interactive SHell";
     license = licenses.gpl2;
     maintainers = [ maintainers.ebzzry ];

@@ -1,16 +1,16 @@
 { fetchurl, stdenv, lib
-, enableStatic ? stdenv.hostPlatform.useAndroidPrebuilt
-, enableShared ? !stdenv.hostPlatform.useAndroidPrebuilt
+, enableStatic ? stdenv.hostPlatform.isStatic
+, enableShared ? !stdenv.hostPlatform.isStatic
 }:
 
 # assert !stdenv.hostPlatform.isLinux || stdenv.hostPlatform != stdenv.buildPlatform; # TODO: improve on cross
 
 stdenv.mkDerivation rec {
-  name = "libiconv-${version}";
+  pname = "libiconv";
   version = "1.16";
 
   src = fetchurl {
-    url = "mirror://gnu/libiconv/${name}.tar.gz";
+    url = "mirror://gnu/libiconv/${pname}-${version}.tar.gz";
     sha256 = "016c57srqr0bza5fxjxfrx6aqxkqy0s3gkhcg7p7fhk5i6sv38g6";
   };
 
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
       applications.
     '';
 
-    homepage = https://www.gnu.org/software/libiconv/;
+    homepage = "https://www.gnu.org/software/libiconv/";
     license = lib.licenses.lgpl2Plus;
 
     maintainers = [ ];

@@ -1,22 +1,22 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, libX11, libXrandr, glib, colord }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, libX11, libXrandr, glib, colord }:
 
 stdenv.mkDerivation rec {
-  name = "xiccd-${version}";
-  version = "0.2.4";
+  pname = "xiccd";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "agalakhov";
     repo = "xiccd";
     rev = "v${version}";
-    sha256 = "0dhv913njzm80g5lwak5znmxllfa6rrkifwja8vk133lyxnarqra";
+    sha256 = "159fyz5535lcabi5bzmxgmjdgxlqcjaiqgzr00mi3ax0i5fdldwn";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ libX11 libXrandr glib colord ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "X color profile daemon";
-    homepage = https://github.com/agalakhov/xiccd;
+    homepage = "https://github.com/agalakhov/xiccd";
     license = licenses.gpl3;
     maintainers = with maintainers; [ abbradar ];
     platforms = platforms.linux;

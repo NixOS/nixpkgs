@@ -1,7 +1,7 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "dhcping-${version}";
+  pname = "dhcping";
   version = "1.2";
 
   src = fetchurl {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Send DHCP request to find out if a DHCP server is running";
     longDescription = ''
       dhcping sends either a DHCPREQUEST or DHCPINFORM packet to the server
@@ -25,8 +25,8 @@ stdenv.mkDerivation rec {
       privileges are dropped as soon as the program has bound itself to that
       port.
     '';
-    homepage = http://www.mavetju.org/unix/general.php;
+    homepage = "http://www.mavetju.org/unix/general.php";
     license = licenses.bsd2;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

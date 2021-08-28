@@ -1,18 +1,18 @@
-{ stdenv, fetchurl, gfortran, openblas }:
+{ lib, stdenv, fetchurl, gfortran, blas, lapack }:
 
 let
-  int_t = if openblas.blas64 then "int64_t" else "int32_t";
+  int_t = if blas.isILP64 then "int64_t" else "int32_t";
 in
 stdenv.mkDerivation rec {
   version = "4.2.1";
-  name = "suitesparse-${version}";
+  pname = "suitesparse";
   src = fetchurl {
     url = "http://www.cise.ufl.edu/research/sparse/SuiteSparse/SuiteSparse-${version}.tar.gz" ;
     sha256 = "1ga69637x7kdkiy3w3lq9dvva7220bdangv2lch2wx1hpi83h0p8";
   };
 
   nativeBuildInputs = [ gfortran ];
-  buildInputs = [ openblas ];
+  buildInputs = [ blas lapack ];
 
   preConfigure = ''
     mkdir -p $out/lib
@@ -29,12 +29,12 @@ stdenv.mkDerivation rec {
     "PREFIX=\"$(out)\""
     "INSTALL_LIB=$(out)/lib"
     "INSTALL_INCLUDE=$(out)/include"
-    "BLAS=-lopenblas"
-    "LAPACK="
+    "BLAS=-lblas"
+    "LAPACK=-llapack"
   ];
 
-  meta = with stdenv.lib; {
-    homepage = http://faculty.cse.tamu.edu/davis/suitesparse.html;
+  meta = with lib; {
+    homepage = "http://faculty.cse.tamu.edu/davis/suitesparse.html";
     description = "A suite of sparse matrix algorithms";
     license = with licenses; [ bsd2 gpl2Plus lgpl21Plus ];
     maintainers = with maintainers; [ ttuegel ];

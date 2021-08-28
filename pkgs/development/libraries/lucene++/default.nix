@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, cmake, boost, gtest }:
+{ lib, stdenv, fetchurl, cmake, boost, gtest }:
 
 stdenv.mkDerivation rec {
-  name = "lucene++-${version}";
+  pname = "lucene++";
   version = "3.0.7";
 
   src = fetchurl {
@@ -17,16 +17,16 @@ stdenv.mkDerivation rec {
   '';
 
   cmakeFlags = [ "-DGTEST_INCLUDE_DIR=${gtest}/include" ];
-  buildInputs = [ cmake boost gtest ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ boost gtest ];
 
-  enableParallelBuilding = true;
   doCheck = true;
   checkTarget = "test";
 
   meta = {
     description = "C++ port of the popular Java Lucene search engine";
-    homepage = https://github.com/luceneplusplus/LucenePlusPlus;
-    license = with stdenv.lib.licenses; [ asl20 lgpl3Plus ];
-    platforms = stdenv.lib.platforms.linux;
+    homepage = "https://github.com/luceneplusplus/LucenePlusPlus";
+    license = with lib.licenses; [ asl20 lgpl3Plus ];
+    platforms = lib.platforms.linux;
   };
 }

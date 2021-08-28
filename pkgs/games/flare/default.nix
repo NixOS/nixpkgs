@@ -1,10 +1,10 @@
-{ lib, buildEnv, callPackage, makeWrapper }:
+{ lib, buildEnv, callPackage, makeWrapper, Cocoa }:
 
 buildEnv {
-  name = "flare-1.10";
+  name = "flare-1.11";
 
   paths = [
-    (callPackage ./engine.nix {})
+    (callPackage ./engine.nix { inherit Cocoa; })
     (callPackage ./game.nix {})
   ];
 
@@ -16,7 +16,7 @@ buildEnv {
 
   meta = with lib; {
     description = "Fantasy action RPG using the FLARE engine";
-    homepage = "http://flarerpg.org/";
+    homepage = "https://flarerpg.org/";
     maintainers = [ maintainers.aanderse ];
     license = [ licenses.gpl3 licenses.cc-by-sa-30 ];
     platforms = platforms.unix;

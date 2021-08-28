@@ -51,6 +51,6 @@ in
 
   ###### implementation
 
-  config.powerManagement.powerDownCommands = lines;
+  config.powerManagement.powerUpCommands = lines;
 
 }

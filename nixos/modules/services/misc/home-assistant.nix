@@ -11,6 +11,9 @@ let
     (recursiveUpdate defaultConfig cfg.config) else cfg.config));
   configFile = pkgs.runCommand "configuration.yaml" { preferLocalBuild = true; } ''
     ${pkgs.remarshal}/bin/json2yaml -i ${configJSON} -o $out
+    # Hack to support custom yaml objects,
+    # i.e. secrets: https://www.home-assistant.io/docs/configuration/secrets/
+    sed -i -e "s/'\!\([a-z_]\+\) \(.*\)'/\!\1 \2/;s/^\!\!/\!/;" $out
   '';
 
   lovelaceConfigJSON = pkgs.writeText "ui-lovelace.json"
@@ -60,7 +63,7 @@ let
   };
 
 in {
-  meta.maintainers = with maintainers; [ dotlambda ];
+  meta.maintainers = teams.home-assistant.members;
 
   options.services.home-assistant = {
     enable = mkEnableOption "Home Assistant";
@@ -93,14 +96,33 @@ in {
 
     config = mkOption {
       default = null;
-      type = with types; nullOr attrs;
+      # Migrate to new option types later: https://github.com/NixOS/nixpkgs/pull/75584
+      type =  with lib.types; let
+          valueType = nullOr (oneOf [
+            bool
+            int
+            float
+            str
+            (lazyAttrsOf valueType)
+            (listOf valueType)
+          ]) // {
+            description = "Yaml value";
+            emptyValue.value = {};
+          };
+        in valueType;
       example = literalExample ''
         {
           homeassistant = {
             name = "Home";
+            latitude = "!secret latitude";
+            longitude = "!secret longitude";
+            elevation = "!secret elevation";
+            unit_system = "metric";
             time_zone = "UTC";
           };
-          frontend = { };
+          frontend = {
+            themes = "!include_dir_merge_named themes";
+          };
           http = { };
           feedreader.urls = [ "https://nixos.org/blogs.xml" ];
         }
@@ -108,6 +130,8 @@ in {
       description = ''
         Your <filename>configuration.yaml</filename> as a Nix attribute set.
         Beware that setting this option will delete your previous <filename>configuration.yaml</filename>.
+        <link xlink:href="https://www.home-assistant.io/docs/configuration/secrets/">Secrets</link>
+        are encoded as strings as shown in the example.
       '';
     };
 
@@ -159,8 +183,14 @@ in {
     };
 
     package = mkOption {
-      default = pkgs.home-assistant;
-      defaultText = "pkgs.home-assistant";
+      default = pkgs.home-assistant.overrideAttrs (oldAttrs: {
+        doInstallCheck = false;
+      });
+      defaultText = literalExample ''
+        pkgs.home-assistant.overrideAttrs (oldAttrs: {
+          doInstallCheck = false;
+        })
+      '';
       type = types.package;
       example = literalExample ''
         pkgs.home-assistant.override {
@@ -168,10 +198,11 @@ in {
         }
       '';
       description = ''
-        Home Assistant package to use.
+        Home Assistant package to use. By default the tests are disabled, as they take a considerable amout of time to complete.
         Override <literal>extraPackages</literal> or <literal>extraComponents</literal> in order to add additional dependencies.
         If you specify <option>config</option> and do not set <option>autoExtraComponents</option>
         to <literal>false</literal>, overriding <literal>extraComponents</literal> will have no effect.
+        Avoid <literal>home-assistant.overridePythonAttrs</literal> if you use <literal>autoExtraComponents</literal>.
       '';
     };
 
@@ -214,16 +245,86 @@ in {
         rm -f "${cfg.configDir}/ui-lovelace.yaml"
         ln -s ${lovelaceConfigFile} "${cfg.configDir}/ui-lovelace.yaml"
       '');
-      serviceConfig = {
-        ExecStart = "${package}/bin/hass --config '${cfg.configDir}'";
+      serviceConfig = let
+        # List of capabilities to equip home-assistant with, depending on configured components
+        capabilities = [
+          # Empty string first, so we will never accidentally have an empty capability bounding set
+          # https://github.com/NixOS/nixpkgs/issues/120617#issuecomment-830685115
+          ""
+        ] ++ (unique (optionals (useComponent "bluetooth_tracker" || useComponent "bluetooth_le_tracker") [
+          # Required for interaction with hci devices and bluetooth sockets
+          # https://www.home-assistant.io/integrations/bluetooth_le_tracker/#rootless-setup-on-core-installs
+          "CAP_NET_ADMIN"
+          "CAP_NET_RAW"
+        ] ++ lib.optionals (useComponent "emulated_hue") [
+          # Alexa looks for the service on port 80
+          # https://www.home-assistant.io/integrations/emulated_hue
+          "CAP_NET_BIND_SERVICE"
+        ] ++ lib.optionals (useComponent "nmap_tracker") [
+          # https://www.home-assistant.io/integrations/nmap_tracker#linux-capabilities
+          "CAP_NET_ADMIN"
+          "CAP_NET_BIND_SERVICE"
+          "CAP_NET_RAW"
+        ]));
+      in {
+        ExecStart = "${package}/bin/hass --runner --config '${cfg.configDir}'";
+        ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         User = "hass";
         Group = "hass";
         Restart = "on-failure";
-        ProtectSystem = "strict";
-        ReadWritePaths = "${cfg.configDir}";
+        RestartForceExitStatus = "100";
+        SuccessExitStatus = "100";
         KillSignal = "SIGINT";
+
+        # Hardening
+        AmbientCapabilities = capabilities;
+        CapabilityBoundingSet = capabilities;
+        DeviceAllow = [
+          "char-ttyACM rw"
+          "char-ttyAMA rw"
+          "char-ttyUSB rw"
+        ];
+        DevicePolicy = "closed";
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        NoNewPrivileges = true;
         PrivateTmp = true;
+        PrivateUsers = false; # prevents gaining capabilities in the host namespace
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectProc = "invisible";
+        ProcSubset = "all";
+        ProtectSystem = "strict";
         RemoveIPC = true;
+        ReadWritePaths = let
+          # Allow rw access to explicitly configured paths
+          cfgPath = [ "config" "homeassistant" "allowlist_external_dirs" ];
+          value = attrByPath cfgPath [] cfg;
+          allowPaths = if isList value then value else singleton value;
+        in [ "${cfg.configDir}" ] ++ allowPaths;
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+          "AF_NETLINK"
+          "AF_UNIX"
+        ] ++ optionals (useComponent "bluetooth_tracker" || useComponent "bluetooth_le_tracker") [
+          "AF_BLUETOOTH"
+        ];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        SupplementaryGroups = [ "dialout" ];
+        SystemCallArchitectures = "native";
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged"
+        ];
+        UMask = "0077";
       };
       path = [
         "/run/wrappers" # needed for ping

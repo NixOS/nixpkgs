@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ... }:
+import ./make-test-python.nix ({ pkgs, ... }:
 
 {
   name = "samba";
@@ -8,7 +8,7 @@ import ./make-test.nix ({ pkgs, ... }:
   nodes =
     { client =
         { pkgs, ... }:
-        { fileSystems = pkgs.lib.mkVMOverride
+        { virtualisation.fileSystems =
             { "/public" = {
                 fsType = "cifs";
                 device = "//server/public";
@@ -36,12 +36,12 @@ import ./make-test.nix ({ pkgs, ... }:
 
   testScript =
     ''
-      $server->start;
-      $server->waitForUnit("samba.target");
-      $server->succeed("mkdir -p /public; echo bar > /public/foo");
+      server.start()
+      server.wait_for_unit("samba.target")
+      server.succeed("mkdir -p /public; echo bar > /public/foo")
 
-      $client->start;
-      $client->waitForUnit("remote-fs.target");
-      $client->succeed("[[ \$(cat /public/foo) = bar ]]");
+      client.start()
+      client.wait_for_unit("remote-fs.target")
+      client.succeed("[[ $(cat /public/foo) = bar ]]")
     '';
 })

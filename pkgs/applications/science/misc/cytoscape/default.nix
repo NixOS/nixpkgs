@@ -1,15 +1,25 @@
-{ stdenv, fetchurl, jre, makeWrapper }:
+{ lib, stdenv, fetchurl, jre, makeWrapper, substituteAll, coreutils }:
 
 stdenv.mkDerivation rec {
-  name = "cytoscape-${version}";
-  version = "3.7.1";
+  pname = "cytoscape";
+  version = "3.8.2";
 
   src = fetchurl {
-    url = "https://github.com/cytoscape/cytoscape/releases/download/${version}/${name}.tar.gz";
-    sha256 = "1mhsngbwbgdwl70wj7850zg94534lasihwv2ryifardm35mkh48k";
+    url = "https://github.com/cytoscape/cytoscape/releases/download/${version}/${pname}-unix-${version}.tar.gz";
+    sha256 = "0zgsq9qnyvmq96pgf7372r16rm034fd0r4qa72xi9zbd4f2r7z8w";
   };
 
-  buildInputs = [jre makeWrapper];
+  patches = [
+    # By default, gen_vmoptions.sh tries to store custom options in $out/share
+    # at run time. This patch makes sure $HOME is used instead.
+    (substituteAll {
+      src = ./gen_vmoptions_to_homedir.patch;
+      inherit coreutils;
+    })
+  ];
+
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ jre ];
 
   installPhase = ''
     mkdir -pv $out/{share,bin}
@@ -25,10 +35,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://www.cytoscape.org;
+    homepage = "http://www.cytoscape.org";
     description = "A general platform for complex network analysis and visualization";
-    license = stdenv.lib.licenses.lgpl21;
-    maintainers = [stdenv.lib.maintainers.mimadrid];
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.lgpl21;
+    maintainers = [lib.maintainers.mimame];
+    platforms = lib.platforms.unix;
   };
 }

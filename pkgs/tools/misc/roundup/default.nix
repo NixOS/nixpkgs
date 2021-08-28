@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, ronn, shocco }:
+{ lib, stdenv, fetchFromGitHub, ronn, shocco }:
 
 stdenv.mkDerivation rec {
-  name = "roundup-${version}";
+  pname = "roundup";
   version = "0.0.6";
 
   src = fetchFromGitHub {
@@ -28,9 +28,9 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A unit testing tool for running test plans which are written in any POSIX shell";
-    homepage = http://bmizerany.github.io/roundup/;
+    homepage = "http://bmizerany.github.io/roundup/";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
     platforms = platforms.all;

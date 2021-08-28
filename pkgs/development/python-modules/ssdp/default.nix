@@ -1,13 +1,16 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
+, isPy27
 , pbr
 , pytest
+, isPy3k
 }:
 
 buildPythonPackage rec {
   pname = "ssdp";
   version = "1.0.1";
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
@@ -16,10 +19,12 @@ buildPythonPackage rec {
 
   buildInputs = [ pbr ];
   checkInputs = [ pytest ];
-  propagatedBuildInputs = [ ];
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/codingjoe/ssdp;
+  # test suite uses new async primitives
+  doCheck = !isPy27;
+
+  meta = with lib; {
+    homepage = "https://github.com/codingjoe/ssdp";
     description = "Python asyncio library for Simple Service Discovery Protocol (SSDP).";
     license = licenses.mit;
   };

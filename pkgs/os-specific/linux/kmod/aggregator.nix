@@ -1,4 +1,4 @@
-{ stdenv, kmod, modules, buildEnv, name ? "kernel-modules" }:
+{ stdenvNoCC, kmod, modules, buildEnv, name ? "kernel-modules" }:
 
 buildEnv {
   inherit name;
@@ -7,7 +7,7 @@ buildEnv {
 
   postBuild =
     ''
-      source ${stdenv}/setup
+      source ${stdenvNoCC}/setup
 
       if ! test -d "$out/lib/modules"; then
         echo "No modules found."
@@ -29,7 +29,7 @@ buildEnv {
       # kernel version number, otherwise depmod will use `uname -r'.
       if test -w $out/lib/modules/$kernelVersion; then
           rm -f $out/lib/modules/$kernelVersion/modules.!(builtin*|order*)
-          ${kmod}/bin/depmod -b $out -a $kernelVersion
+          ${kmod}/bin/depmod -b $out -C $out/etc/depmod.d -a $kernelVersion
       fi
     '';
 }

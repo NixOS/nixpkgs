@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, rsync, ocamlPackages }:
+{ lib, stdenv, fetchurl, rsync, ocamlPackages }:
 
 stdenv.mkDerivation rec {
-  name = "abella-${version}";
+  pname = "abella";
   version = "2.0.6";
 
   src = fetchurl {
-    url = "http://abella-prover.org/distributions/${name}.tar.gz";
+    url = "http://abella-prover.org/distributions/${pname}-${version}.tar.gz";
     sha256 = "164q9gngckg6q69k13lwx2pq3cnc9ckw1qi8dnpxqfjgwfqr7xyi";
   };
 
@@ -30,9 +30,9 @@ stdenv.mkDerivation rec {
       of programming languages and other logical systems which manipulate
       objects with binding.
     '';
-    homepage = http://abella-prover.org/;
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = with stdenv.lib.maintainers; [ bcdarwin ciil ];
-    platforms = stdenv.lib.platforms.unix;
+    homepage = "http://abella-prover.org/";
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ bcdarwin ciil ];
+    platforms = lib.platforms.unix;
   };
 }

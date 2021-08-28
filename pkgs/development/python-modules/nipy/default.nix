@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     sha256 = "1pn731nsczrx198i2gadffqmfbhviglrclv6xxwhnbv6w5hfs2yk";
   };
 
-  buildInputs = stdenv.lib.optional doCheck [ nose ];
+  buildInputs = lib.optional doCheck [ nose ];
   propagatedBuildInputs = [ matplotlib nibabel numpy scipy sympy ];
 
   checkPhase = ''    # wants to be run in a different directory
@@ -40,8 +40,8 @@ buildPythonPackage rec {
   # nipy.tests.test_scripts.test_nipy_3_4d         # ditto re.: `nipy_3_4d` script
   doCheck = false;
 
-  meta = with stdenv.lib; {
-    homepage = https://nipy.org/nipy/;
+  meta = with lib; {
+    homepage = "https://nipy.org/nipy";
     description = "Software for structural and functional neuroimaging analysis";
     license = licenses.bsd3;
   };

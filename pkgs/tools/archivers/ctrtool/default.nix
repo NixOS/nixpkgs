@@ -1,26 +1,27 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "ctrtool";
-  version = "0.15";
+  version = "0.7";
 
   src = fetchFromGitHub {
-    owner  = "profi200";
+    owner  = "jakcron";
     repo   = "Project_CTR";
-    rev    = version;
-    sha256 = "1l6z05x18s1crvb283yvynlwsrpa1pdx1nbijp99plw06p88h4va";
+    rev    = "ctrtool-v${version}";
+    sha256 = "07aayck82w5xcp3si35d7ghybmrbqw91fqqvmbpjrjcixc6m42z7";
   };
 
   sourceRoot = "source/ctrtool";
 
+  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" "CXX=${stdenv.cc.targetPrefix}c++"];
   enableParallelBuilding = true;
 
   installPhase = "
     mkdir $out/bin -p
-    cp ctrtool $out/bin/ctrtool
+    cp ctrtool${stdenv.hostPlatform.extensions.executable} $out/bin/
   ";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     license = licenses.mit;
     description = "A tool to extract data from a 3ds rom";
     platforms = platforms.linux;

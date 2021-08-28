@@ -1,7 +1,7 @@
 { lib, fetchFromGitHub, buildGoPackage }:
 
 buildGoPackage rec {
-  name = "oci-image-tool-${version}";
+  pname = "oci-image-tool";
   version = "1.0.0-rc1";
 
   goPackagePath = "github.com/opencontainers/image-tools";
@@ -16,7 +16,7 @@ buildGoPackage rec {
 
   meta = {
     description = "A collection of tools for working with the OCI image format specification";
-    homepage = https://github.com/opencontainers/image-tools;
+    homepage = "https://github.com/opencontainers/image-tools";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ nzhang-zh ];
   };

@@ -1,9 +1,10 @@
-{ stdenv, fetchurl, rpmextract }:
+{ lib, stdenv, fetchurl, rpmextract }:
 let
   version = "20160218";
 in
 stdenv.mkDerivation {
-  name = "postscript-lexmark-${version}";
+  pname = "postscript-lexmark";
+  inherit version;
 
   src = fetchurl {
     url = "https://www.openprinting.org/download/printdriver/components/lsb3.2/main/RPMS/noarch/openprinting-ppds-postscript-lexmark-${version}-1lsb3.2.noarch.rpm";
@@ -29,8 +30,8 @@ stdenv.mkDerivation {
     cp -r opt/OpenPrinting-Lexmark/doc $out/doc
   '';
 
-  meta = with stdenv.lib; {
-    homepage = http://www.openprinting.org/driver/Postscript-Lexmark/;
+  meta = with lib; {
+    homepage = "http://www.openprinting.org/driver/Postscript-Lexmark/";
     description = "Lexmark Postscript Drivers";
     platforms = platforms.linux;
   };

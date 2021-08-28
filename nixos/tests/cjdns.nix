@@ -17,14 +17,13 @@ let
 
 in
 
-import ./make-test.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, ...} : {
   name = "cjdns";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ ehmry ];
   };
 
-  nodes = rec
-    { # Alice finds peers over over ETHInterface.
+  nodes = { # Alice finds peers over over ETHInterface.
       alice =
         { ... }:
         { imports = [ basicConfig ];
@@ -84,36 +83,39 @@ import ./make-test.nix ({ pkgs, ...} : {
 
   testScript =
     ''
-      startAll;
+      import re
 
-      $alice->waitForUnit("cjdns.service");
-      $bob->waitForUnit("cjdns.service");
-      $carol->waitForUnit("cjdns.service");
+      start_all()
 
-      sub cjdnsIp {
-          my ($machine) = @_;
-          my $ip = (split /[ \/]+/, $machine->succeed("ip -o -6 addr show dev tun0"))[3];
-          $machine->log("has ip $ip");
-          return $ip;
-      }
+      alice.wait_for_unit("cjdns.service")
+      bob.wait_for_unit("cjdns.service")
+      carol.wait_for_unit("cjdns.service")
 
-      my $aliceIp6 = cjdnsIp $alice;
-      my $bobIp6   = cjdnsIp $bob;
-      my $carolIp6 = cjdnsIp $carol;
+
+      def cjdns_ip(machine):
+          res = machine.succeed("ip -o -6 addr show dev tun0")
+          ip = re.split("\s+|/", res)[3]
+          machine.log("has ip {}".format(ip))
+          return ip
+
+
+      alice_ip6 = cjdns_ip(alice)
+      bob_ip6 = cjdns_ip(bob)
+      carol_ip6 = cjdns_ip(carol)
 
       # ping a few times each to let the routing table establish itself
 
-      $alice->succeed("ping -c 4 $carolIp6");
-      $bob->succeed("ping -c 4 $carolIp6");
+      alice.succeed("ping -c 4 {}".format(carol_ip6))
+      bob.succeed("ping -c 4 {}".format(carol_ip6))
 
-      $carol->succeed("ping -c 4 $aliceIp6");
-      $carol->succeed("ping -c 4 $bobIp6");
+      carol.succeed("ping -c 4 {}".format(alice_ip6))
+      carol.succeed("ping -c 4 {}".format(bob_ip6))
 
-      $alice->succeed("ping -c 4 $bobIp6");
-      $bob->succeed("ping -c 4 $aliceIp6");
+      alice.succeed("ping -c 4 {}".format(bob_ip6))
+      bob.succeed("ping -c 4 {}".format(alice_ip6))
 
-      $alice->waitForUnit("httpd.service");
+      alice.wait_for_unit("httpd.service")
 
-      $bob->succeed("curl --fail -g http://[$aliceIp6]");
+      bob.succeed("curl --fail -g http://[{}]".format(alice_ip6))
     '';
 })

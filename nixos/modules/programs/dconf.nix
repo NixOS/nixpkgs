@@ -4,10 +4,24 @@ with lib;
 
 let
   cfg = config.programs.dconf;
-
-  mkDconfProfile = name: path:
-    { source = path; target = "dconf/profile/${name}"; };
-
+  cfgDir = pkgs.symlinkJoin {
+    name = "dconf-system-config";
+    paths = map (x: "${x}/etc/dconf") cfg.packages;
+    postBuild = ''
+      mkdir -p $out/profile
+      mkdir -p $out/db
+    '' + (
+      concatStringsSep "\n" (
+        mapAttrsToList (
+          name: path: ''
+            ln -s ${path} $out/profile/${name}
+          ''
+        ) cfg.profiles
+      )
+    ) + ''
+      ${pkgs.dconf}/bin/dconf update $out/db
+    '';
+  };
 in
 {
   ###### interface
@@ -19,26 +33,34 @@ in
       profiles = mkOption {
         type = types.attrsOf types.path;
         default = {};
-        description = "Set of dconf profile files.";
+        description = "Set of dconf profile files, installed at <filename>/etc/dconf/profiles/<replaceable>name</replaceable></filename>.";
         internal = true;
       };
 
+      packages = mkOption {
+        type = types.listOf types.package;
+        default = [];
+        description = "A list of packages which provide dconf profiles and databases in <filename>/etc/dconf</filename>.";
+      };
     };
   };
 
   ###### implementation
 
   config = mkIf (cfg.profiles != {} || cfg.enable) {
-    environment.etc = optionals (cfg.profiles != {})
-      (mapAttrsToList mkDconfProfile cfg.profiles);
+    environment.etc.dconf = mkIf (cfg.profiles != {} || cfg.packages != []) {
+      source = cfgDir;
+    };
 
-    services.dbus.packages = [ pkgs.gnome3.dconf ];
+    services.dbus.packages = [ pkgs.dconf ];
 
-    environment.variables.GIO_EXTRA_MODULES = optional cfg.enable
-      "${pkgs.gnome3.dconf.lib}/lib/gio/modules";
-    # https://github.com/NixOS/nixpkgs/pull/31891
-    #environment.variables.XDG_DATA_DIRS = optional cfg.enable
-    #  "$(echo ${pkgs.gsettings-desktop-schemas}/share/gsettings-schemas/gsettings-desktop-schemas-*)";
+    systemd.packages = [ pkgs.dconf ];
+
+    # For dconf executable
+    environment.systemPackages = [ pkgs.dconf ];
+
+    # Needed for unwrapped applications
+    environment.variables.GIO_EXTRA_MODULES = mkIf cfg.enable [ "${pkgs.dconf.lib}/lib/gio/modules" ];
   };
 
 }

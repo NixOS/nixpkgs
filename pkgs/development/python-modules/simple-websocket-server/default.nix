@@ -1,6 +1,6 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub }:
+{ lib, buildPythonPackage, fetchFromGitHub }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "simple-websocket-server";
   version = "20180414";
   src = fetchFromGitHub {
@@ -12,9 +12,9 @@ buildPythonPackage rec {
 
   doCheck = false; # no tests
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A python based websocket server that is simple and easy to use";
-    homepage = https://github.com/dpallot/simple-websocket-server/;
+    homepage = "https://github.com/dpallot/simple-websocket-server/";
     license = licenses.mit;
     maintainers = with maintainers; [ rvolosatovs ];
     platforms = platforms.all;

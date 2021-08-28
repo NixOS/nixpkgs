@@ -1,15 +1,15 @@
-{ mkDerivation, lib, fetchFromGitHub, autoreconfHook, perl, pkgconfig
+{ mkDerivation, lib, fetchFromGitHub, autoreconfHook, perl, pkg-config
 , libtool, openssl, qtbase, qttools }:
 
 mkDerivation rec {
-  name = "xca-${version}";
-  version = "2.1.2";
+  pname = "xca";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner  = "chris2511";
     repo   = "xca";
     rev    = "RELEASE.${version}";
-    sha256 = "0slfqmz0b01lwmrv4h78hmrsdrhcyc7sjzsxcw05ylgmhvdq3dw9";
+    sha256 = "0na2816lkfkkvssh9kmf5vwy6x8kd4x7h138jzy61wrvs69vhnbi";
   };
 
   postPatch = ''
@@ -19,13 +19,13 @@ mkDerivation rec {
 
   buildInputs = [ libtool openssl qtbase ];
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig qttools ];
+  nativeBuildInputs = [ autoreconfHook pkg-config qttools ];
 
   enableParallelBuilding = true;
 
   meta = with lib; {
     description = "An x509 certificate generation tool, handling RSA, DSA and EC keys, certificate signing requests (PKCS#10) and CRLs";
-    homepage    = https://hohnstaedt.de/xca/;
+    homepage    = "https://hohnstaedt.de/xca/";
     license     = licenses.bsd3;
     maintainers = with maintainers; [ offline peterhoeg ];
     platforms   = platforms.all;

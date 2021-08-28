@@ -1,15 +1,32 @@
-{ appimageTools, fetchurl, lib, gsettings-desktop-schemas, gtk3 }:
+{ appimageTools, fetchurl, lib, runCommandNoCC, stdenv, gsettings-desktop-schemas, gtk3, zlib }:
 
 let
-  pname = "minetime";
-  version = "1.5.1";
-in
-appimageTools.wrapType2 rec {
   name = "${pname}-${version}";
-  src = fetchurl {
-    url = "https://github.com/marcoancona/MineTime/releases/download/v${version}/${name}-x86_64.AppImage";
-    sha256 = "0099cq4p7j01bzs7q79y9xi7g6ji17v9g7cykfjggwsgqfmvd0hz";
+  pname = "minetime";
+  version = "1.8.10";
+  appimage = fetchurl {
+    url = "https://github.com/marcoancona/MineTime/releases/download/v${version}/${name}.AppImage";
+    sha256 = "1a80lgk6v9kv9xb2y3i08gk25jm0pqyl57kfr5p1rbc33prhmcgw";
   };
+  extracted = appimageTools.extractType2 {
+    inherit name;
+    src = appimage;
+  };
+  patched = runCommandNoCC "minetime-patchelf" {} ''
+    cp -av ${extracted} $out
+
+    x=$out/resources/app.asar.unpacked/services/scheduling/dist/MinetimeSchedulingService
+    chmod +w $x
+
+    patchelf \
+      --set-interpreter ${stdenv.cc.bintools.dynamicLinker} \
+      --replace-needed libz.so.1 ${zlib}/lib/libz.so.1 \
+      $x
+  '';
+in
+appimageTools.wrapAppImage rec {
+  inherit name;
+  src = patched;
 
   profile = ''
     export LC_ALL=C.UTF-8
@@ -17,12 +34,14 @@ appimageTools.wrapType2 rec {
   '';
 
   multiPkgs = null; # no 32bit needed
-  extraPkgs = appimageTools.defaultFhsEnvArgs.multiPkgs;
+  extraPkgs = ps:
+    appimageTools.defaultFhsEnvArgs.multiPkgs ps
+    ++ (with ps; [ at-spi2-core at-spi2-atk libsecret libnotify ]);
   extraInstallCommands = "mv $out/bin/{${name},${pname}}";
 
   meta = with lib; {
     description = "Modern, intuitive and smart calendar application";
-    homepage = https://minetime.ai;
+    homepage = "https://minetime.ai";
     license = licenses.unfree;
     # Should be cross-platform, but for now we just grab the appimage
     platforms = [ "x86_64-linux" ];

@@ -5,29 +5,39 @@
 , idna
 , outcome
 , contextvars
-, pytest
+, pytestCheckHook
 , pyopenssl
 , trustme
 , sniffio
+, stdenv
 , jedi
 , pylint
+, astor
+, yapf
 }:
 
 buildPythonPackage rec {
   pname = "trio";
-  version = "0.11.0";
-  disabled = pythonOlder "3.5";
+  version = "0.18.0";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3796774aedbf5be581c68f98c79b565654876de6e9a01c6a95e3ec6cd4e4b4c3";
+    sha256 = "0xm0bd1rrlb4l9q0nf2n1wg7xh42ljdnm4i4j0651zi73zk6m9l7";
   };
 
-  checkInputs = [ pytest pyopenssl trustme jedi pylint ];
+  checkInputs = [ astor pytestCheckHook pyopenssl trustme jedi pylint yapf ];
   # It appears that the build sandbox doesn't include /etc/services, and these tests try to use it.
-  checkPhase = ''
-    HOME="$(mktemp -d)" py.test -k 'not test_getnameinfo and not test_SocketType_resolve and not test_getprotobyname and not test_waitpid'
-  '';
+  disabledTests = [
+    "getnameinfo"
+    "SocketType_resolve"
+    "getprotobyname"
+    "waitpid"
+    "static_tool_sees_all_symbols"
+    # tests pytest more than python
+    "fallback_when_no_hook_claims_it"
+  ];
+
   propagatedBuildInputs = [
     attrs
     sortedcontainers
@@ -37,9 +47,12 @@ buildPythonPackage rec {
     sniffio
   ] ++ lib.optionals (pythonOlder "3.7") [ contextvars ];
 
+  # tests are failing on Darwin
+  doCheck = !stdenv.isDarwin;
+
   meta = {
     description = "An async/await-native I/O library for humans and snake people";
-    homepage = https://github.com/python-trio/trio;
+    homepage = "https://github.com/python-trio/trio";
     license = with lib.licenses; [ mit asl20 ];
     maintainers = with lib.maintainers; [ catern ];
   };

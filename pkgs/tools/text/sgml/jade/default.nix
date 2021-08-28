@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gnum4 }:
+{ lib, stdenv, fetchurl, gnum4 }:
 
 stdenv.mkDerivation rec {
   name = "jade-${version}-${debpatch}";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gnum4 ];
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-deprecated" ];
+  NIX_CFLAGS_COMPILE = "-Wno-deprecated";
 
   preInstall = ''
     install -d -m755 "$out"/lib
@@ -32,8 +32,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "James Clark's DSSSL Engine";
     license = "custom";
-    homepage = http://www.jclark.com/jade/;
-    platforms = with stdenv.lib.platforms; linux;
-    maintainers = with stdenv.lib.maintainers; [ e-user ];
+    homepage = "http://www.jclark.com/jade/";
+    platforms = with lib.platforms; linux;
+    maintainers = with lib.maintainers; [ e-user ];
   };
 }

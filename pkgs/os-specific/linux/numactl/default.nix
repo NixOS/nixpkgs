@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, autoreconfHook }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "numactl-${version}";
-  version = "2.0.12";
+  pname = "numactl";
+  version = "2.0.14";
 
   src = fetchFromGitHub {
-    owner = "numactl";
-    repo = "numactl";
+    owner = pname;
+    repo = pname;
     rev = "v${version}";
-    sha256 = "0crhpxwakp0gvd7wwpbkfd3brnrdf89lkbf03axnbrs0b6kaygg2";
+    sha256 = "0hahpdp5xqy9cbg251bdxqkml341djn2h856g435h4ngz63sr9fs";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
@@ -17,15 +17,17 @@ stdenv.mkDerivation rec {
     patchShebangs test
   '';
 
+  LDFLAGS = lib.optionalString stdenv.hostPlatform.isRiscV "-latomic";
+
   # You probably shouldn't ever run these! They will reconfigure Linux
   # NUMA settings, which on my build machine makes the rest of package
   # building ~5% slower until reboot. Ugh!
   doCheck = false; # never ever!
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library and tools for non-uniform memory access (NUMA) machines";
-    homepage = https://github.com/numactl/numactl;
+    homepage = "https://github.com/numactl/numactl";
     license = with licenses; [ gpl2 lgpl21 ]; # libnuma is lgpl21
-    platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" ];
+    platforms = platforms.linux;
   };
 }

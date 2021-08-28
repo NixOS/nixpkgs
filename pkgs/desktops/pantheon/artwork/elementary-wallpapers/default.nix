@@ -1,35 +1,40 @@
-{ stdenv, fetchFromGitHub, pantheon }:
+{ lib, stdenv
+, fetchFromGitHub
+, nix-update-script
+, pantheon
+, meson
+, ninja
+, gettext
+}:
 
 stdenv.mkDerivation rec {
-  pname = "wallpapers";
-  version = "5.3";
+  pname = "elementary-wallpapers";
+  version = "5.5.0";
 
-  name = "elementary-${pname}-${version}";
+  repoName = "wallpapers";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
+    repo = repoName;
     rev = version;
-    sha256 = "1i0zf9gzhwm8hgq5cp1xnxipqjvgzd9wfiicz612hgp6ivc0z0ag";
+    sha256 = "sha256-Q5sYDXqFhiTu8nABmyND3L8bIXd1BJ3GZQ9TL3SzwzA=";
   };
 
+  nativeBuildInputs = [
+    gettext
+    meson
+    ninja
+  ];
+
   passthru = {
-    updateScript = pantheon.updateScript {
-      repoName = pname;
-      attrPath = "elementary-${pname}";
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
     };
   };
 
-  dontBuild = true;
-
-  installPhase = ''
-    mkdir -p $out/share/backgrounds/elementary
-    cp -av *.jpg $out/share/backgrounds/elementary
-  '';
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Collection of wallpapers for elementary";
-    homepage = https://github.com/elementary/wallpapers;
+    homepage = "https://github.com/elementary/wallpapers";
     license = licenses.publicDomain;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

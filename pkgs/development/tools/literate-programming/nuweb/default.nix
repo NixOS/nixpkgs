@@ -1,13 +1,13 @@
-{stdenv, fetchurl, tex}:
+{lib, stdenv, fetchurl, tex}:
 
-stdenv.mkDerivation rec{
+stdenv.mkDerivation rec {
 
-  name = "nuweb-${version}";
-  version = "1.58";
+  pname = "nuweb";
+  version = "1.60";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/nuweb/${name}.tar.gz";
-    sha256 = "0q51i3miy15fv4njjp82yws01qfjxvqx5ly3g3vh8z3h7iq9p47y";
+    url = "mirror://sourceforge/project/nuweb/${pname}-${version}.tar.gz";
+    sha256 = "08xmwq48biy2c1fr8wnyknyvqs9jfsj42cb7fw638xqv35f0xxvl";
   };
 
   buildInputs = [ tex ];
@@ -20,19 +20,19 @@ stdenv.mkDerivation rec{
     make nuweb.pdf nuwebdoc.pdf all
   '';
   installPhase = ''
-    install -d $out/bin $out/share/man/man1 $out/share/doc/${name} $out/share/emacs/site-lisp
+    install -d $out/bin $out/share/man/man1 $out/share/doc/${pname}-${version} $out/share/emacs/site-lisp
     cp nuweb $out/bin
     cp nuweb.el $out/share/emacs/site-lisp
     gzip -c nuweb.1 > $out/share/man/man1/nuweb.1.gz
-    cp htdocs/index.html nuweb.w nuweb.pdf nuwebdoc.pdf README $out/share/doc/${name}
+    cp htdocs/index.html nuweb.w nuweb.pdf nuwebdoc.pdf README $out/share/doc/${pname}-${version}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple literate programming tool";
-    homepage = http://nuweb.sourceforge.net;
+    homepage = "http://nuweb.sourceforge.net";
     license = licenses.free;
     maintainers = [ maintainers.AndersonTorres ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
 # TODO: nuweb.el Emacs integration

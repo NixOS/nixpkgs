@@ -27,11 +27,13 @@ in
       };
 
       key = mkOption {
-        type = types.string;
+        type = types.str;
         default = "";
-        description = "HMAC url validation key (hexadecimal encoded).
-	Leave blank to disable. Without validation key, anyone can
-	submit proxy requests. Leave blank to disable.";
+        description = ''
+          HMAC url validation key (hexadecimal encoded).
+          Leave blank to disable. Without validation key, anyone can
+          submit proxy requests. Leave blank to disable.
+        '';
         defaultText = "No HMAC url validation. Generate with echo -n somevalue | openssl dgst -sha1 -hmac somekey";
       };
 
@@ -56,7 +58,7 @@ in
       };
 
       listenAddress = mkOption {
-        type = types.string;
+        type = types.str;
         default = "127.0.0.1";
         description = "The address on which the service listens";
         defaultText = "127.0.0.1 (localhost)";
@@ -74,6 +76,7 @@ in
       { description = "Morty user";
         createHome = true;
         home = "/var/lib/morty";
+        isSystemUser = true;
       };
 
     systemd.services.morty =
@@ -84,10 +87,10 @@ in
         serviceConfig = {
           User = "morty";
           ExecStart = ''${cfg.package}/bin/morty              \
-	    -listen ${cfg.listenAddress}:${toString cfg.port} \
-	    ${optionalString cfg.ipv6 "-ipv6"}                \
-	    ${optionalString (cfg.key != "") "-key " + cfg.key} \
-	  '';
+            -listen ${cfg.listenAddress}:${toString cfg.port} \
+            ${optionalString cfg.ipv6 "-ipv6"}                \
+            ${optionalString (cfg.key != "") "-key " + cfg.key} \
+          '';
         };
       };
     environment.systemPackages = [ cfg.package ];

@@ -5,16 +5,17 @@
 
 buildPythonPackage rec {
   pname = "decorator";
-  version = "4.3.2";
+  version = "4.4.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "33cd704aea07b4c28b3eb2c97d288a06918275dac0ecebdaf1bc8a48d98adb9e";
+    sha256 = "1rxzhk5zwiggk45hl53zydvy70lk654kg0nc1p54090p402jz9p3";
   };
 
-  meta = {
-    homepage = https://pypi.python.org/pypi/decorator;
+  meta = with lib; {
+    homepage = "https://pypi.python.org/pypi/decorator";
     description = "Better living through Python with decorators";
     license = lib.licenses.mit;
+    maintainers = [ maintainers.costrouc ];
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, wxGTK, libX11, readline }:
+{ lib, stdenv, fetchgit, wxGTK, libX11, readline }:
 
 let
   # BOSSA needs a "bin2c" program to embed images.
@@ -7,17 +7,17 @@ let
   bin2c = stdenv.mkDerivation {
     name = "bossa-bin2c";
     src = ./bin2c.c;
-    unpackPhase = "true";
-    buildPhase = ''cc $src -o bin2c'';
-    installPhase = ''mkdir -p $out/bin; cp bin2c $out/bin/'';
+    dontUnpack = true;
+    buildPhase = "cc $src -o bin2c";
+    installPhase = "mkdir -p $out/bin; cp bin2c $out/bin/";
   };
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "bossa-1.8";
 
   src = fetchgit {
-    url = https://github.com/shumatech/BOSSA;
+    url = "https://github.com/shumatech/BOSSA";
     rev = "3be622ca0aa6214a2fc51c1ec682c4a58a423d62";
     sha256 = "19ik86qbffcb04cgmi4mnascbkck4ynfj87ha65qdk6fmp5q35vm";
   };
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     cp bin/bossa{c,sh,} $out/bin/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A flash programming utility for Atmel's SAM family of flash-based ARM microcontrollers";
     longDescription = ''
       BOSSA is a flash programming utility for Atmel's SAM family of
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
       Atmel's SAM-BA software. BOSSA is an acronym for Basic Open
       Source SAM-BA Application to reflect that goal.
     '';
-    homepage = http://www.shumatech.com/web/products/bossa;
+    homepage = "http://www.shumatech.com/web/products/bossa";
     license = licenses.bsd3;
     platforms = platforms.linux;
   };

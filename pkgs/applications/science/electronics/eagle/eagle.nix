@@ -1,23 +1,23 @@
-{ stdenv, fetchurl, makeDesktopItem
+{ lib, stdenv, mkDerivation, fetchurl, makeDesktopItem
 , libXrender, libXrandr, libXcursor, libX11, libXext, libXi, libxcb
  , libGL, glib, nss, nspr, expat, alsaLib
 , qtbase, qtdeclarative, qtsvg, qtlocation, qtwebchannel, qtwebengine
 }:
 
 let
-  libPath = stdenv.lib.makeLibraryPath
+  libPath = lib.makeLibraryPath
     [ libXrender libXrandr libXcursor libX11 libXext libXi libxcb
       libGL glib nss nspr expat alsaLib
       qtbase qtdeclarative qtsvg qtlocation qtwebchannel qtwebengine
     ];
   in
-  stdenv.mkDerivation rec {
-    name = "eagle-${version}";
-    version = "9.3.2";
+  mkDerivation rec {
+    pname = "eagle";
+    version = "9.6.2";
 
     src = fetchurl {
       url = "https://eagle-updates.circuits.io/downloads/${builtins.replaceStrings ["."] ["_"] version}/Autodesk_EAGLE_${version}_English_Linux_64bit.tar.gz";
-      sha256 = "0xrrd2d86gxrkbqvssbg8zki40hk05h48w73b0hv7wnc7wg1msir";
+      sha256 = "18syygnskl286kn8aqfzzdsyzq59d2w19y1h1ynyxsnrvkyv71h0";
     };
 
     desktopItem = makeDesktopItem {
@@ -27,7 +27,7 @@ let
       comment = "Schematic capture and PCB layout";
       desktopName = "Eagle";
       genericName = "Schematic editor";
-      categories = "Application;Development;";
+      categories = "Development;";
     };
 
     buildInputs =
@@ -35,9 +35,6 @@ let
         libGL glib nss nspr expat alsaLib
         qtbase qtdeclarative qtsvg qtlocation qtwebchannel qtwebengine
       ];
-
-    doConfigure = false;
-    doBuild = false;
 
     installPhase = ''
       # Extract eagle tarball
@@ -69,13 +66,13 @@ let
       # Make desktop item
       mkdir -p "$out"/share/applications
       cp "$desktopItem"/share/applications/* "$out"/share/applications/
-      mkdir -p "$out"/share/icons
-      ln -s "$out/eagle-${version}/bin/eagle-logo.png" "$out"/share/icons/eagle.png
+      mkdir -p "$out"/share/pixmaps
+      ln -s "$out/eagle-${version}/bin/eagle-logo.png" "$out"/share/pixmaps/eagle.png
     '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Schematic editor and PCB layout tool from Autodesk (formerly CadSoft)";
-      homepage = https://www.autodesk.com/products/eagle/overview;
+      homepage = "https://www.autodesk.com/products/eagle/overview";
       license = licenses.unfree;
       platforms = [ "x86_64-linux" ];
       maintainers = [ maintainers.rittelle ];

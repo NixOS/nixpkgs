@@ -1,53 +1,52 @@
-{ lib, fetchFromGitHub, buildGoPackage, btrfs-progs, go-md2man, utillinux }:
+{ lib
+, fetchFromGitHub
+, buildGoModule
+, btrfs-progs
+, go-md2man
+, installShellFiles
+, util-linux
+, nixosTests
+}:
 
-with lib;
+buildGoModule rec {
+  pname = "containerd";
+  version = "1.5.4";
 
-buildGoPackage rec {
-  name = "containerd-${version}";
-  version = "1.2.6";
+  outputs = [ "out" "man" ];
 
   src = fetchFromGitHub {
     owner = "containerd";
     repo = "containerd";
     rev = "v${version}";
-    sha256 = "0sp5mn5wd3xma4svm6hf67hyhiixzkzz6ijhyjkwdrc4alk81357";
+    sha256 = "sha256-VV1cxA8tDRiPDxKV8OGu3T7sgutmyL+VPNqTeFcVjJA=";
   };
 
-  goPackagePath = "github.com/containerd/containerd";
-  outputs = [ "bin" "out" "man" ];
+  vendorSha256 = null;
 
-  hardeningDisable = [ "fortify" ];
+  nativeBuildInputs = [ go-md2man installShellFiles util-linux ];
 
-  buildInputs = [ btrfs-progs go-md2man utillinux ];
-  buildFlags = "VERSION=v${version}";
+  buildInputs = [ btrfs-progs ];
 
-  BUILDTAGS = []
-    ++ optional (btrfs-progs == null) "no_btrfs";
+  buildFlags = [ "VERSION=v${version}" "REVISION=${src.rev}" ];
+
+  BUILDTAGS = lib.optionals (btrfs-progs == null) [ "no_btrfs" ];
 
   buildPhase = ''
-    cd go/src/${goPackagePath}
     patchShebangs .
-    make binaries
+    make binaries man $buildFlags
   '';
 
   installPhase = ''
-    for b in bin/*; do
-      install -Dm555 $b $bin/$b
-    done
-
-    make man
-    manRoot="$man/share/man"
-    mkdir -p "$manRoot"
-    for manFile in man/*; do
-      manName="$(basename "$manFile")" # "docker-build.1"
-      number="$(echo $manName | rev | cut -d'.' -f1 | rev)"
-      mkdir -p "$manRoot/man$number"
-      gzip -c "$manFile" > "$manRoot/man$number/$manName.gz"
-    done
+    install -Dm555 bin/* -t $out/bin
+    installManPage man/*.[1-9]
+    installShellCompletion --bash contrib/autocomplete/ctr
+    installShellCompletion --zsh --name _ctr contrib/autocomplete/zsh_autocomplete
   '';
 
-  meta = {
-    homepage = https://containerd.io/;
+  passthru.tests = { inherit (nixosTests) docker; };
+
+  meta = with lib; {
+    homepage = "https://containerd.io/";
     description = "A daemon to control runC";
     license = licenses.asl20;
     maintainers = with maintainers; [ offline vdemeester ];

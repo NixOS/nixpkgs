@@ -1,10 +1,10 @@
 # You can specify some extra mirrors and a cache DB via options
-{stdenvNoCC, monotone, defaultDBMirrors ? [], cacheDB ? "./mtn-checkout.db"}:
+{lib, stdenvNoCC, monotone, defaultDBMirrors ? [], cacheDB ? "./mtn-checkout.db"}:
 # dbs is a list of strings
 # each is an url for sync
 
 # selector is mtn selector, like h:org.example.branch
-# 
+#
 {name ? "mtn-checkout", dbs ? [], sha256
 , selector ? "h:" + branch, branch}:
 
@@ -19,7 +19,7 @@ stdenvNoCC.mkDerivation {
   dbs = defaultDBMirrors ++ dbs;
   inherit branch cacheDB name selector;
 
-  impureEnvVars = stdenvNoCC.lib.fetchers.proxyImpureEnvVars;
+  impureEnvVars = lib.fetchers.proxyImpureEnvVars;
 
 }
 

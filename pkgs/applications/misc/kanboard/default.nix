@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "kanboard-${version}";
-  version = "1.2.9";
+  pname = "kanboard";
+  version = "1.2.19";
 
   src = fetchFromGitHub {
     owner = "kanboard";
     repo = "kanboard";
     rev = "v${version}";
-    sha256 = "1hdr95cpxgdzrzhffs63gdl0g7122ma2zg8bkqwp42p5xphx0xan";
+    sha256 = "sha256-48U3eRg6obRjgK06SKN2g1+0wocqm2aGyXO2yZw5fs8=";
   };
 
   dontBuild = true;
@@ -18,10 +18,10 @@ stdenv.mkDerivation rec {
     cp -rv . $out/share/kanboard
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Kanban project management software";
-    homepage = https://kanboard.net;
+    homepage = "https://kanboard.net";
     license = licenses.mit;
-    maintainers = with maintainers; [ fpletz ];
+    maintainers = with maintainers; [ fpletz lheckemann ];
   };
 }

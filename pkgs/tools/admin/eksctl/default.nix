@@ -1,40 +1,41 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "eksctl";
-  version = "0.1.35";
+  version = "0.48.0";
 
   src = fetchFromGitHub {
     owner = "weaveworks";
-    repo = "eksctl";
+    repo = pname;
     rev = version;
-    sha256 = "0b3s7vh85k68wawmsdp96q9l4yhikwhyjn1c7cwxys0aia4i8wkv";
+    sha256 = "sha256-jhf+FIhKkROyNUYh96zFrzxE5hVFnxF6xrTwvivj9B8=";
   };
 
-  goPackagePath = "github.com/weaveworks/eksctl";
+  vendorSha256 = "sha256-U5NAhhum+VsSlhB3pHMmnkaqjWvZJw4BDHVIo4YIkrY=";
+
+  doCheck = false;
 
   subPackages = [ "cmd/eksctl" ];
 
-  buildFlags =
-  ''
-    -ldflags=-s
-    -ldflags=-w
-    -tags netgo
-    -tags release
-  '';
+  buildFlags = [ "-tags netgo" "-tags release" ];
 
-  postInstall =
-  ''
-    mkdir -p "$bin/share/"{bash-completion/completions,zsh/site-functions}
-    $bin/bin/eksctl completion bash > "$bin/share/bash-completion/completions/eksctl"
-    $bin/bin/eksctl completion zsh > "$bin/share/zsh/site-functions/_eksctl"
+  buildFlagsArray = [
+    "-ldflags=-s -w -X github.com/weaveworks/eksctl/pkg/version.gitCommit=${src.rev} -X github.com/weaveworks/eksctl/pkg/version.buildDate=19700101-00:00:00"
+  ];
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    for shell in bash fish zsh; do
+      $out/bin/eksctl completion $shell > eksctl.$shell
+      installShellCompletion eksctl.$shell
+    done
   '';
 
   meta = with lib; {
     description = "A CLI for Amazon EKS";
     homepage = "https://github.com/weaveworks/eksctl";
     license = licenses.asl20;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ xrelkd ];
+    maintainers = with maintainers; [ xrelkd Chili-Man ];
   };
 }

@@ -1,22 +1,47 @@
-{ stdenv, fetchurl, pkgconfig, libsidplayfp }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, autoreconfHook
+, perl
+, pkg-config
+, libsidplayfp
+, alsaSupport ? stdenv.hostPlatform.isLinux
+, alsaLib
+, pulseSupport ? stdenv.hostPlatform.isLinux
+, libpulseaudio
+, out123Support ? stdenv.hostPlatform.isDarwin
+, mpg123
+}:
 
 stdenv.mkDerivation rec {
-  version = "1.4.4";
-  name = "sidplayfp-${version}";
+  pname = "sidplayfp";
+  version = "2.1.1";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/sidplay-residfp/sidplayfp/1.4/${name}.tar.gz";
-    sha256 = "0arsrg3f0fsinal22qjmj3r6500bcbgqnx26fsz049ldl716kz1m";
+  src = fetchFromGitHub {
+    owner = "libsidplayfp";
+    repo = "sidplayfp";
+    rev = "v${version}";
+    sha256 = "0s3xmg3yzfqbsnlh2y46w7b5jim5zq7mshs6hx03q8wdr75cvwh4";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libsidplayfp ];
+  nativeBuildInputs = [ autoreconfHook perl pkg-config ];
 
-  meta = with stdenv.lib; {
+  buildInputs = [ libsidplayfp ]
+    ++ lib.optional alsaSupport alsaLib
+    ++ lib.optional pulseSupport libpulseaudio
+    ++ lib.optional out123Support mpg123;
+
+  configureFlags = lib.optionals out123Support [
+    "--with-out123"
+  ];
+
+  enableParallelBuilding = true;
+
+  meta = with lib; {
     description = "A SID player using libsidplayfp";
-    homepage = https://sourceforge.net/projects/sidplay-residfp/;
+    homepage = "https://github.com/libsidplayfp/sidplayfp";
     license = with licenses; [ gpl2Plus ];
-    maintainers = with maintainers; [ dezgeg ];
-    platforms = with platforms; linux;
+    maintainers = with maintainers; [ dezgeg OPNA2608 ];
+    platforms = platforms.all;
   };
 }

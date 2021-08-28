@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , cmake
 , asio
@@ -6,8 +6,8 @@
 , patches
 }:
 
-stdenv.mkDerivation rec {
-  name = "restbed-${version}";
+stdenv.mkDerivation {
+  pname = "restbed";
   version = "2016-09-15";
 
   src = fetchFromGitHub {
@@ -19,13 +19,10 @@ stdenv.mkDerivation rec {
 
   inherit patches;
 
-  buildInputs = [
-    cmake
-    asio
-    openssl
-  ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ asio openssl ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "HTTP framework for building networked applications";
     longDescription = ''
       HTTP framework for building networked applications that require seamless
@@ -33,7 +30,7 @@ stdenv.mkDerivation rec {
       business processes. Targeting mobile, tablet, desktop, and embedded
       production environments.
     '';
-    homepage = https://corvusoft.co.uk/;
+    homepage = "https://corvusoft.co.uk/";
     license = licenses.agpl3;
     maintainers = with maintainers; [ taeer ];
     platforms = platforms.linux;

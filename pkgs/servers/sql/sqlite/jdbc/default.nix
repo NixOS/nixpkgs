@@ -1,8 +1,7 @@
-{ stdenv, fetchMavenArtifact }:
+{ lib, stdenv, fetchMavenArtifact }:
 
 stdenv.mkDerivation rec {
   pname = "sqlite-jdbc";
-  name = "${pname}-${version}";
   version = "3.25.2";
 
   src = fetchMavenArtifact {
@@ -15,10 +14,10 @@ stdenv.mkDerivation rec {
   phases = [ "installPhase" ];
 
   installPhase = ''
-    install -m444 -D ${src}/share/java/*${name}.jar "$out/share/java/${name}.jar"
+    install -m444 -D ${src}/share/java/*${pname}-${version}.jar "$out/share/java/${pname}-${version}.jar"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/xerial/sqlite-jdbc";
     description = "Library for accessing and creating SQLite database files in Java";
     license = licenses.asl20;

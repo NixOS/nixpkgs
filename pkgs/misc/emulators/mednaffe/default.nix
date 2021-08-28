@@ -1,30 +1,43 @@
-{ stdenv, fetchFromGitHub, makeWrapper, autoreconfHook, pkgconfig, wrapGAppsHook
-, gtk2 ? null, gtk3 ? null, mednafen }:
-
-with stdenv.lib;
+{ stdenv
+, lib
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, mednafen
+, gtk2 ? null
+, gtk3 ? null
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
-  name = "mednaffe-${version}";
-  version = "0.8.6";
+  pname = "mednaffe";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "AmatCoder";
     repo = "mednaffe";
-    rev = "v${version}";
-    sha256 = "13l7gls430dcslpan39k0ymdnib2v6crdsmn6bs9k9g30nfnqi6m";
+    rev = version;
+    sha256 = "sha256-YU8PHnQHAsY90LN/WDugi4WhsuZGBj/z3BS4o69qMS4=";
   };
 
-  nativeBuildInputs = [ autoreconfHook makeWrapper pkgconfig wrapGAppsHook ];
+  nativeBuildInputs = [ autoreconfHook pkg-config wrapGAppsHook ];
   buildInputs = [ gtk2 gtk3 mednafen ];
 
-  configureFlags = [ (enableFeature (gtk3 != null) "gtk3") ];
-  postInstall = "wrapProgram $out/bin/mednaffe --set PATH ${mednafen}/bin";
+  configureFlags = [ (lib.enableFeature (gtk3 != null) "gtk3") ];
 
-  meta = {
+  dontWrapGApps = true;
+
+  postInstall = ''
+    wrapProgram $out/bin/mednaffe \
+      --prefix PATH ':' "${mednafen}/bin" \
+      "''${gappsWrapperArgs[@]}"
+   '';
+
+  meta = with lib; {
     description = "GTK-based frontend for mednafen emulator";
-    homepage = https://github.com/AmatCoder/mednaffe;
+    homepage = "https://github.com/AmatCoder/mednaffe";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ sheenobu yegortimoshenko ];
+    maintainers = with maintainers; [ sheenobu yegortimoshenko AndersonTorres ];
     platforms = platforms.linux;
   };
 }

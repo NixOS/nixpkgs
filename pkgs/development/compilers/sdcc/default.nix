@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, autoconf, bison, boost, flex, texinfo, zlib, gputils ? null
+{ lib, stdenv, fetchurl, autoconf, bison, boost, flex, texinfo, zlib, gputils ? null
 , excludePorts ? [] }:
 
-with stdenv.lib;
+with lib;
 
 let
   # choices: mcs51 z80 z180 r2k r3ka gbz80 tlcs90 ds390 ds400 pic14 pic16 hc08 s08 stm8
@@ -9,15 +9,17 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "sdcc-${version}";
-  version = "3.8.0";
+  pname = "sdcc";
+  version = "4.1.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/sdcc/sdcc-src-${version}.tar.bz2";
-    sha256 = "08dvvdxd99hb50wvs8m986v3scfj1rdjw18js7pk5n3vxf6nccdk";
+    sha256 = "0gskzli17ghnn5qllvn4d56qf9bvvclqjh63nnj63p52smvggvc1";
   };
 
-  buildInputs = [ autoconf bison boost flex gputils texinfo zlib ];
+  buildInputs = [ boost gputils texinfo zlib ];
+
+  nativeBuildInputs = [ autoconf bison flex ];
 
   configureFlags = map (f: "--disable-${f}-port") excludedPorts;
 
@@ -31,9 +33,9 @@ stdenv.mkDerivation rec {
       Rabbit 3000A). Work is in progress on supporting the Microchip PIC16 and
       PIC18 targets. It can be retargeted for other microprocessors.
     '';
-    homepage = http://sdcc.sourceforge.net/;
-    license = with licenses; if (gputils == null) then gpl2 else unfreeRedistributable;
+    homepage = "http://sdcc.sourceforge.net/";
+    license = with licenses; if (gputils == null) then gpl2Plus else unfreeRedistributable;
     maintainers = with maintainers; [ bjornfor yorickvp ];
-    platforms = platforms.linux;
+    platforms = platforms.all;
   };
 }

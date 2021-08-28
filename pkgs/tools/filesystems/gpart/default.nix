@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, autoreconfHook }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "gpart-${version}";
+  pname = "gpart";
   version = "0.3";
 
   # GitHub repository 'collating patches for gpart from all distributions':
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "Guess PC-type hard disk partitions";
     longDescription = ''

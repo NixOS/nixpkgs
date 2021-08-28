@@ -6,7 +6,7 @@
 , scipy
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "tess";
   version = "unstable-2019-05-07";
 
@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A module for calculating and analyzing Voronoi tessellations";
-    homepage = https://tess.readthedocs.org;
+    homepage = "https://tess.readthedocs.org";
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];
   };

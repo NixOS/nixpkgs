@@ -1,17 +1,17 @@
-{stdenv, fetchurl, qtbase, qtx11extras, ncurses, xorg, zlib, python27Packages}:
+{lib, stdenv, fetchurl, qtbase, qtx11extras, ncurses5, xorg, zlib, python27Packages}:
 stdenv.mkDerivation {
   name = "fdr-4.2.3";
   src = fetchurl {
-    url = https://www.cs.ox.ac.uk/projects/fdr/downloads/fdr-3789-linux-x86_64.tar.gz;
+    url = "https://www.cs.ox.ac.uk/projects/fdr/downloads/fdr-3789-linux-x86_64.tar.gz";
     sha256 = "0n2yqichym5xdawlgk3r7yha88k7ycnx6585jfrcm7043sls1i88";
   };
 
-  libPath = stdenv.lib.makeLibraryPath [
+  libPath = lib.makeLibraryPath [
     stdenv.cc.cc
     python27Packages.python
     qtbase
     qtx11extras
-    ncurses
+    ncurses5
     xorg.libX11
     xorg.libXft
     zlib
@@ -26,8 +26,7 @@ stdenv.mkDerivation {
     rm -r lib/qt_plugins
 
     cp -r * "$out"
-    # Hack around lack of libtinfo in NixOS
-    ln -s ${ncurses.out}/lib/libncursesw.so.6 $out/lib/libtinfo.so.5
+    ln -s ${ncurses5.out}/lib/libtinfo.so.5 $out/lib/libtinfo.so.5
     ln -s ${qtbase.bin}/${qtbase.qtPluginPrefix} $out/lib/qt_plugins
     ln -s ${zlib.out}/lib/libz.so.1 $out/lib/libz.so.1
 
@@ -59,8 +58,8 @@ stdenv.mkDerivation {
     done
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://www.cs.ox.ac.uk/projects/fdr/;
+  meta = with lib; {
+    homepage = "https://www.cs.ox.ac.uk/projects/fdr/";
     description = "The CSP refinement checker";
     license = licenses.unfreeRedistributable;
     platforms = platforms.linux;

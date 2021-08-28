@@ -1,6 +1,6 @@
-{ fetchurl, fetchpatch, stdenv, autoconf, libpcap, ncurses, pkgconfig, glib }:
+{ fetchurl, fetchpatch, lib, stdenv, autoconf, libpcap, ncurses, pkg-config, glib }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "jnettop-0.13.0";
 
   src = fetchurl {
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1855np7c4b0bqzhf1l1dyzxb90fpnvrirdisajhci5am6als31z9";
   };
 
-  nativeBuildInputs = [ pkgconfig autoconf ];
+  nativeBuildInputs = [ pkg-config autoconf ];
   buildInputs = [ libpcap ncurses glib ];
 
   patches = [
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  preConfigure = '' autoconf '';
+  preConfigure = "autoconf ";
 
   meta = {
     description = "Network traffic visualizer";
@@ -30,8 +30,8 @@ stdenv.mkDerivation rec {
       by bandwidth they use.
     '';
 
-    homepage = http://jnettop.kubs.info/;
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.unix;
+    homepage = "http://jnettop.kubs.info/";
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
   };
 }

@@ -1,9 +1,9 @@
-{ stdenv, fetchFromGitHub
+{ lib, mkDerivation, fetchFromGitHub
 , qtbase, qtmultimedia, qtsvg, qtx11extras
-, pkgconfig, cmake, gettext
+, pkg-config, cmake, gettext
 }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "kvirc";
   version = "5.0.0";
 
@@ -19,10 +19,10 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    pkgconfig cmake gettext
+    pkg-config cmake gettext
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Advanced IRC Client";
     homepage = "http://www.kvirc.net/";
     license = licenses.gpl2;

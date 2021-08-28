@@ -1,13 +1,21 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "duktape-${version}";
-  version = "2.3.0";
+  pname = "duktape";
+  version = "2.6.0";
   src = fetchurl {
     url = "http://duktape.org/duktape-${version}.tar.xz";
-    sha256 = "1s5g8lg0dga6x3rcq328a6hsd2sk2vzwq9zfmskjh5h6n8x2yvpd";
+    sha256 = "19szwxzvl2g65fw95ggvb8h0ma5bd9vvnnccn59hwnc4dida1x4n";
   };
 
+  postPatch = ''
+    substituteInPlace Makefile.sharedlibrary \
+      --replace 'gcc' '${stdenv.cc.targetPrefix}cc' \
+      --replace 'g++' '${stdenv.cc.targetPrefix}c++'
+    substituteInPlace Makefile.cmdline \
+      --replace 'gcc' '${stdenv.cc.targetPrefix}cc' \
+      --replace 'g++' '${stdenv.cc.targetPrefix}c++'
+  '';
   buildPhase = ''
     make -f Makefile.sharedlibrary
     make -f Makefile.cmdline
@@ -21,12 +29,12 @@ stdenv.mkDerivation rec {
   '';
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An embeddable Javascript engine, with a focus on portability and compact footprint";
-    homepage = https://duktape.org/;
-    downloadPage = https://duktape.org/download.html;
+    homepage = "https://duktape.org/";
+    downloadPage = "https://duktape.org/download.html";
     license = licenses.mit;
     maintainers = [ maintainers.fgaz ];
-    platforms = platforms.linux;
+    platforms = platforms.all;
   };
 }

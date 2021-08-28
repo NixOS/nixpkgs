@@ -1,4 +1,4 @@
-{ pkgs, stdenv, fetchFromGitHub, erlang, rebar, makeWrapper,
+{ pkgs, lib, stdenv, fetchFromGitHub, erlang, makeWrapper,
   coreutils, curl, bash, debugInfo ? false }:
 
 { baseName ? "elixir"
@@ -10,7 +10,7 @@
 } @ args:
 
 let
-  inherit (stdenv.lib) getVersion versionAtLeast;
+  inherit (lib) getVersion versionAtLeast optional;
 
 in
   assert versionAtLeast (getVersion erlang) minimumOTPVersion;
@@ -20,26 +20,19 @@ in
 
     inherit src version;
 
-    buildInputs = [ erlang rebar makeWrapper ];
+    nativeBuildInputs = [ makeWrapper ];
+    buildInputs = [ erlang ];
 
-    LOCALE_ARCHIVE = stdenv.lib.optionalString stdenv.isLinux
-      "${pkgs.glibcLocales}/lib/locale/locale-archive";
-    LANG = "en_US.UTF-8";
-    LC_TYPE = "en_US.UTF-8";
+    LANG = "C.UTF-8";
+    LC_TYPE = "C.UTF-8";
 
     setupHook = ./setup-hook.sh;
 
     inherit debugInfo;
 
-    buildFlags = if debugInfo
-      then "ERL_COMPILER_OPTIONS=debug_info"
-      else "";
+    buildFlags = optional debugInfo "ERL_COMPILER_OPTIONS=debug_info";
 
     preBuild = ''
-      # The build process uses ./rebar. Link it to the nixpkgs rebar
-      rm -vf rebar
-      ln -s ${rebar}/bin/rebar rebar
-
       patchShebangs lib/elixir/generate_app.escript || true
 
       substituteInPlace Makefile \
@@ -54,8 +47,7 @@ in
        b=$(basename $f)
         if [ "$b" = mix ]; then continue; fi
         wrapProgram $f \
-          --prefix PATH ":" "${stdenv.lib.makeBinPath [ erlang coreutils curl bash ]}" \
-          --set CURL_CA_BUNDLE /etc/ssl/certs/ca-certificates.crt
+          --prefix PATH ":" "${lib.makeBinPath [ erlang coreutils curl bash ]}"
       done
 
       substituteInPlace $out/bin/mix \
@@ -63,8 +55,8 @@ in
     '';
 
     pos = builtins.unsafeGetAttrPos "sha256" args;
-    meta = with stdenv.lib; {
-      homepage = https://elixir-lang.org/;
+    meta = with lib; {
+      homepage = "https://elixir-lang.org/";
       description = "A functional, meta-programming aware language built on top of the Erlang VM";
 
       longDescription = ''
@@ -77,6 +69,6 @@ in
 
       license = licenses.epl10;
       platforms = platforms.unix;
-      maintainers = with maintainers; [ the-kenny havvy couchemar ankhers ];
+      maintainers = teams.beam.members;
     };
   })

@@ -1,11 +1,10 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, libtool, pkgconfig
+{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, pkg-config
 , libxml2, nettle
 , withGTK3 ? true, gtk3 }:
 
 stdenv.mkDerivation rec {
   pname = "stoken";
   version = "0.92";
-  name = "${pname}-${version}";
   src = fetchFromGitHub {
     owner = "cernekee";
     repo = pname;
@@ -21,17 +20,17 @@ stdenv.mkDerivation rec {
     autoconf
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     autoconf automake libtool
     libxml2 nettle
-  ] ++ stdenv.lib.optional withGTK3 gtk3;
+  ] ++ lib.optional withGTK3 gtk3;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Software Token for Linux/UNIX";
-    homepage = https://github.com/cernekee/stoken;
+    homepage = "https://github.com/cernekee/stoken";
     license = licenses.lgpl21Plus;
-    maintainers = [ maintainers.fuuzetsu ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }

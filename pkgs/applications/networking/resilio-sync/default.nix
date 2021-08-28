@@ -1,21 +1,23 @@
-{ stdenv, fetchurl, ... }:
+{ lib, stdenv, fetchurl, ... }:
 
 let
   arch = {
-    "x86_64-linux" = "x64";
-    "i686-linux" = "i386";
+    x86_64-linux = "x64";
+    i686-linux = "i386";
+    aarch64-linux = "arm64";
   }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
-  libPath = stdenv.lib.makeLibraryPath [ stdenv.cc.libc ];
+  libPath = lib.makeLibraryPath [ stdenv.cc.libc ];
 
 in stdenv.mkDerivation rec {
-  name = "resilio-sync-${version}";
-  version = "2.6.3";
+  pname = "resilio-sync";
+  version = "2.7.2";
 
   src = fetchurl {
     url = "https://download-cdn.resilio.com/${version}/linux-${arch}/resilio-sync_${arch}.tar.gz";
     sha256 = {
-      "x86_64-linux" = "114k7dsxn7lzv6mjq9alsqxypvkah4lmjn5w6brbvgd6m6pdwslz";
-      "i686-linux"   = "1dh0hxbd33bs51xib3qwxw58h9j30v0dc10b4x4rwkbgsj11nc83";
+      x86_64-linux = "0gar5lzv1v4yqmypwqsjnfb64vffzn8mw9vnjr733fgf1pmr57hf";
+      i686-linux   = "1bws7r86h1vysjkhyvp2zk8yvxazmlczvhjlcayldskwq48iyv6w";
+      aarch64-linux = "0j8wk5cf8bcaaqxi8gnqf1mpv8nyfjyr4ibls7jnn2biqq767af2";
     }.${stdenv.hostPlatform.system};
   };
 
@@ -29,9 +31,9 @@ in stdenv.mkDerivation rec {
       --set-rpath ${libPath} "$out/bin/rslsync"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Automatically sync files via secure, distributed technology";
-    homepage    = https://www.resilio.com/;
+    homepage    = "https://www.resilio.com/";
     license     = licenses.unfreeRedistributable;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ domenkozar thoughtpolice cwoac ];

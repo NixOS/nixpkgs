@@ -1,26 +1,49 @@
-{ stdenv
-, fetchurl, alsaLib
+{ lib, stdenv
+, fetchurl
+, makeWrapper
+, alsaLib
+, perl
+, withConplay ? !stdenv.targetPlatform.isWindows
 }:
 
 stdenv.mkDerivation rec {
-  name = "mpg123-1.25.10";
+  name = "mpg123-1.26.5";
 
   src = fetchurl {
     url = "mirror://sourceforge/mpg123/${name}.tar.bz2";
-    sha256 = "08vhp8lz7d9ybhxcmkq3adwfryhivfvp0745k4r9kgz4wap3f4vc";
+    sha256 = "sha256-UCqX4Nk1vn432YczgCHY8wG641wohPKoPVnEtSRm7wY=";
   };
 
-  buildInputs = stdenv.lib.optional (!stdenv.isDarwin) alsaLib;
+  outputs = [ "out" ] ++ lib.optionals withConplay [ "conplay" ];
 
-  configureFlags = stdenv.lib.optional
+  nativeBuildInputs = lib.optionals withConplay [ makeWrapper ];
+
+  buildInputs = lib.optionals withConplay [ perl ]
+    ++ lib.optionals (!stdenv.isDarwin && !stdenv.targetPlatform.isWindows) [ alsaLib ];
+
+  configureFlags = lib.optional
     (stdenv.hostPlatform ? mpg123)
     "--with-cpu=${stdenv.hostPlatform.mpg123.cpu}";
 
-  meta = {
+  postInstall = lib.optionalString withConplay ''
+    mkdir -p $conplay/bin
+    mv scripts/conplay $conplay/bin/
+  '';
+
+  preFixup = lib.optionalString withConplay ''
+    patchShebangs $conplay/bin/conplay
+  '';
+
+  postFixup = lib.optionalString withConplay ''
+    wrapProgram $conplay/bin/conplay \
+      --prefix PATH : $out/bin
+  '';
+
+  meta = with lib; {
     description = "Fast console MPEG Audio Player and decoder library";
-    homepage = http://mpg123.org;
-    license = stdenv.lib.licenses.lgpl21;
-    maintainers = [ stdenv.lib.maintainers.ftrvxmtrx ];
-    platforms = stdenv.lib.platforms.unix;
+    homepage = "https://mpg123.org";
+    license = licenses.lgpl21;
+    maintainers = [ maintainers.ftrvxmtrx ];
+    platforms = platforms.all;
   };
 }

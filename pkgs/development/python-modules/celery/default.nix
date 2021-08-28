@@ -1,37 +1,43 @@
-{ stdenv, buildPythonPackage, fetchPypi, iana-etc, libredirect
-, case, pytest, boto3, moto, kombu, billiard, pytz, anyjson, amqp, eventlet
+{ lib, buildPythonPackage, fetchPypi
+, billiard, click, click-didyoumean, click-plugins, click-repl, kombu, pytz, vine
+, boto3, case, moto, pytest, pytest-celery, pytest-subtests, pytest-timeout
 }:
 
 buildPythonPackage rec {
   pname = "celery";
-  version = "4.3.0";
+  version = "5.0.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4c4532aa683f170f40bd76f928b70bc06ff171a959e06e71bf35f2f9d6031ef9";
+    sha256 = "f4efebe6f8629b0da2b8e529424de376494f5b7a743c321c8a2ddc2b1414921c";
   };
 
   postPatch = ''
     substituteInPlace requirements/test.txt \
-      --replace "moto==1.3.7" moto \
-      --replace "pytest>=4.3.1,<4.4.0" pytest
+      --replace "moto==1.3.7" moto
   '';
 
-  # make /etc/protocols accessible to fix socket.getprotobyname('tcp') in sandbox
-  preCheck = stdenv.lib.optionalString stdenv.isLinux ''
-    export NIX_REDIRECTS=/etc/protocols=${iana-etc}/etc/protocols \
-      LD_PRELOAD=${libredirect}/lib/libredirect.so
-  '';
-  postCheck = stdenv.lib.optionalString stdenv.isLinux ''
-    unset NIX_REDIRECTS LD_PRELOAD
+  propagatedBuildInputs = [ billiard click click-didyoumean click-plugins click-repl kombu pytz vine ];
+
+  checkInputs = [ boto3 case moto pytest pytest-celery pytest-subtests pytest-timeout ];
+
+  # ignore test that's incompatible with pytest5
+  # test_eventlet touches network
+  # test_mongodb requires pymongo
+  # test_multi tries to create directories under /var
+  checkPhase = ''
+    pytest -k 'not restore_current_app_fallback and not msgpack and not on_apply and not pytest' \
+      --ignore=t/unit/contrib/test_pytest.py \
+      --ignore=t/unit/concurrency/test_eventlet.py \
+      --ignore=t/unit/bin/test_multi.py \
+      --ignore=t/unit/apps/test_multi.py \
+      --ignore=t/unit/backends/test_mongodb.py
   '';
 
-  checkInputs = [ case pytest boto3 moto ];
-  propagatedBuildInputs = [ kombu billiard pytz anyjson amqp eventlet ];
-
-  meta = with stdenv.lib; {
-    homepage = https://github.com/celery/celery/;
+  meta = with lib; {
+    homepage = "https://github.com/celery/celery/";
     description = "Distributed task queue";
     license = licenses.bsd3;
+    maintainers = [ ];
   };
 }

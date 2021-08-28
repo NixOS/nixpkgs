@@ -7,6 +7,11 @@ let
 
 in
   {
+    imports = [
+      (mkRenamedOptionModule [ "hardware" "ckb" "enable" ] [ "hardware" "ckb-next" "enable" ])
+      (mkRenamedOptionModule [ "hardware" "ckb" "package" ] [ "hardware" "ckb-next" "package" ])
+    ];
+
     options.hardware.ckb-next = {
       enable = mkEnableOption "the Corsair keyboard/mouse driver";
 
@@ -38,7 +43,6 @@ in
         serviceConfig = {
           ExecStart = "${cfg.package}/bin/ckb-next-daemon ${optionalString (cfg.gid != null) "--gid=${builtins.toString cfg.gid}"}";
           Restart = "on-failure";
-          StandardOutput = "syslog";
         };
       };
     };

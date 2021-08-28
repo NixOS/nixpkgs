@@ -1,23 +1,47 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, libxml2, xdg-desktop-portal, gtk3, glib, wrapGAppsHook, gsettings-desktop-schemas }:
+{ lib, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, libxml2
+, xdg-desktop-portal
+, gtk3
+, gnome
+, glib
+, wrapGAppsHook
+, gsettings-desktop-schemas
+}:
 
 stdenv.mkDerivation rec {
   pname = "xdg-desktop-portal-gtk";
-  version = "1.2.0";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "flatpak";
     repo = pname;
     rev = version;
-    sha256 = "1vgnsahljzrjcdjzv1dxhp2rf709pnf8595an82llnylwa8rdp1j";
+    sha256 = "0987fwsdgkcd3mh3scvg2kyg4ay1rr5w16js4pl3pavw9yhl9lbi";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig libxml2 xdg-desktop-portal wrapGAppsHook ];
-  buildInputs = [ glib gtk3 gsettings-desktop-schemas ];
+  nativeBuildInputs = [
+    autoreconfHook
+    libxml2
+    pkg-config
+    wrapGAppsHook
+    xdg-desktop-portal
+  ];
 
-  meta = with stdenv.lib; {
+  buildInputs = [
+    glib
+    gsettings-desktop-schemas # settings exposed by settings portal
+    gtk3
+    gnome.gnome-desktop
+    gnome.gnome-settings-daemon # schemas needed for settings api (mostly useless now that fonts were moved to g-d-s)
+  ];
+
+  meta = with lib; {
     description = "Desktop integration portals for sandboxed apps";
     maintainers = with maintainers; [ jtojnar ];
     platforms = platforms.linux;
-    license = licenses.lgpl21;
+    license = licenses.lgpl2Plus;
   };
 }

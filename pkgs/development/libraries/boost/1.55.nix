@@ -1,6 +1,6 @@
 { callPackage, fetchurl, ... } @ args:
 
-callPackage ./generic.nix (args // rec {
+callPackage ./generic.nix (args // {
   version = "1.55.0";
 
   patches = [ ./clang-math.patch ./clang-math-2.patch ./gcc-5.patch ];

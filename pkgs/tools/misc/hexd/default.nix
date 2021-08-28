@@ -1,9 +1,9 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
-  name = "hexd-${version}";
+  pname = "hexd";
   version = "1.0.0";
 
   src = fetchFromGitHub {
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Colourful, human-friendly hexdump tool";
-    homepage = https://github.com/FireyFly/hexd;
+    homepage = "https://github.com/FireyFly/hexd";
     maintainers = [ maintainers.FireyFly ];
     license = licenses.mit;
     platforms = platforms.unix;

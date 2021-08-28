@@ -1,25 +1,32 @@
-{ stdenv, buildPythonPackage, fetchPypi,
-  requests, mt-940, sepaxml, bleach, isPy3k }:
+{ lib, buildPythonPackage, fetchFromGitHub, isPy27
+, bleach
+, mt-940
+, requests
+, sepaxml
+, pytestCheckHook
+, pytest-mock
+}:
 
 buildPythonPackage rec {
-  version = "2.1.1";
+  version = "3.0.1";
   pname = "fints";
-  disabled = !isPy3k;
+  disabled = isPy27;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "06p6p0xxw0n10hmf7z4k1l29fya0sja433s6lasjr1bal5asdhaq";
+  src = fetchFromGitHub {
+    owner = "raphaelm";
+    repo = "python-fints";
+    rev = "v${version}";
+    sha256 = "sha256-P9+3QuB5c7WMjic2fSp8pwXrOUHIrLThvfodtbBXLMY=";
   };
 
   propagatedBuildInputs = [ requests mt-940 sepaxml bleach ];
 
-  # no tests included in PyPI package
-  doCheck = false;
+  checkInputs = [ pytestCheckHook pytest-mock ];
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/raphaelm/python-fints/;
+  meta = with lib; {
+    homepage = "https://github.com/raphaelm/python-fints/";
     description = "Pure-python FinTS (formerly known as HBCI) implementation";
-    license = licenses.lgpl3;
-    maintainers = with maintainers; [ elohmeier ];
+    license = licenses.lgpl3Only;
+    maintainers = with maintainers; [ elohmeier dotlambda ];
   };
 }

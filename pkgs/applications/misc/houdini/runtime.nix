@@ -1,9 +1,9 @@
-{ stdenv, requireFile, zlib, libpng, libSM, libICE, fontconfig, xorg, libGLU, libGL, alsaLib, dbus, xkeyboardconfig, bc }:
+{ lib, stdenv, requireFile, zlib, libpng, libSM, libICE, fontconfig, xorg, libGLU, libGL, alsaLib, dbus, xkeyboardconfig, bc, addOpenGLRunpath }:
 
 let
   ld_library_path = builtins.concatStringsSep ":" [
     "${stdenv.cc.cc.lib}/lib64"
-    (stdenv.lib.makeLibraryPath [
+    (lib.makeLibraryPath [
       libGLU
       libGL
       xorg.libXmu
@@ -24,19 +24,20 @@ let
       zlib
       libpng
       dbus
+      addOpenGLRunpath.driverLink
     ])
   ];
   license_dir = "~/.config/houdini";
 in
 stdenv.mkDerivation rec {
-  version = "17.0.352";
-  name = "houdini-runtime-${version}";
+  version = "17.5.327";
+  pname = "houdini-runtime";
   src = requireFile rec {
     name = "houdini-${version}-linux_x86_64_gcc6.3.tar.gz";
-    sha256 = "0cl5fkgaplb0cvv7mli06ffc9j4ngpy8hl5zqabj3d645gcgafjg";
+    sha256 = "1byigmhmby8lgi2vmgxy9jlrrqk7jyr507zqkihq5bv8kfsanv1x";
     message = ''
       This nix expression requires that ${name} is already part of the store.
-      Download it from https://sidefx.com and add it to the nix store with:
+      Download it from https://www.sidefx.com and add it to the nix store with:
 
           nix-prefetch-url <URL>
 
@@ -77,10 +78,11 @@ stdenv.mkDerivation rec {
   '';
   meta = {
     description = "3D animation application software";
-    homepage = https://sidefx.com;
-    license = stdenv.lib.licenses.unfree;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.canndrew ];
+    homepage = "https://www.sidefx.com";
+    license = lib.licenses.unfree;
+    platforms = lib.platforms.linux;
+    hydraPlatforms = [ ]; # requireFile src's should be excluded
+    maintainers = [ lib.maintainers.canndrew ];
   };
 }
 

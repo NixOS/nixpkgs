@@ -1,4 +1,4 @@
-{ lib, runCommand, R, rstudio, makeWrapper, recommendedPackages, packages, qtbase }:
+{ lib, runCommand, R, rstudio, wrapQtAppsHook, recommendedPackages, packages, qtbase }:
 
 let
   qtVersion = with lib.versions; "${major qtbase.version}.${minor qtbase.version}";
@@ -7,7 +7,8 @@ runCommand (rstudio.name + "-wrapper") {
   preferLocalBuild = true;
   allowSubstitutes = false;
 
-  nativeBuildInputs = [makeWrapper];
+  nativeBuildInputs = [wrapQtAppsHook];
+  dontWrapQtApps = true;
 
   buildInputs = [R rstudio] ++ recommendedPackages ++ packages;
 
@@ -29,6 +30,6 @@ echo -n ".libPaths(c(.libPaths(), \"" >> $out/$fixLibsR
 echo -n $R_LIBS_SITE | sed -e 's/:/", "/g' >> $out/$fixLibsR
 echo -n "\"))" >> $out/$fixLibsR
 echo >> $out/$fixLibsR
-makeWrapper ${rstudio}/bin/rstudio $out/bin/rstudio --set R_PROFILE_USER $out/$fixLibsR \
-  --prefix QT_PLUGIN_PATH : ${qtbase}/lib/qt-${qtVersion}/plugins
+makeQtWrapper ${rstudio}/bin/rstudio $out/bin/rstudio \
+  --set R_PROFILE_USER $out/$fixLibsR
 ''

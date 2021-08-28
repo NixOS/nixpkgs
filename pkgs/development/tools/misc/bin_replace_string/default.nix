@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, libelf, txt2man }:
+{ lib, stdenv, fetchurl, libelf, txt2man }:
 
-stdenv.mkDerivation rec {
-  name = "bin_replace_string-${version}";
+stdenv.mkDerivation {
+  pname = "bin_replace_string";
   version = "0.2";
 
   src = fetchurl {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Edit precompiled binaries";
     longDescription = ''
       bin_replace_string edits C-style strings in precompiled binaries. This is
@@ -23,8 +23,8 @@ stdenv.mkDerivation rec {
       binaries, bin_replace_string may only replace a given C-string with a
       shorter C-string.
     '';
-    homepage = http://ohnopub.net/~ohnobinki/bin_replace_string/;
-    downloadPage = ftp://ohnopub.net/mirror/;
+    homepage = "http://ohnopub.net/~ohnobinki/bin_replace_string/";
+    downloadPage = "ftp://ohnopub.net/mirror/";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };

@@ -1,7 +1,7 @@
-{ stdenv, buildGoPackage, fetchgit }:
+{ lib, buildGoPackage, fetchgit }:
 
 buildGoPackage rec {
-  name = "cloud-sql-proxy-${version}";
+  pname = "cloud-sql-proxy";
   version = "1.13";
 
   goPackagePath = "github.com/GoogleCloudPlatform/cloudsql-proxy";
@@ -18,11 +18,10 @@ buildGoPackage rec {
 
   buildFlagsArray = [ "-ldflags=" "-X main.versionString=${version}" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An authenticating proxy for Second Generation Google Cloud SQL databases";
     homepage = "https://${goPackagePath}";
     license = licenses.asl20;
     maintainers = [ maintainers.nicknovitski ];
-    platforms = platforms.all;
   };
 }

@@ -1,10 +1,10 @@
-{ stdenv, fetchFromGitHub, pkgconfig, gdk_pixbuf, gtk2 }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, gdk-pixbuf, gtk2 }:
 
 stdenv.mkDerivation rec {
   name = "trayer-1.1.8";
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ gdk_pixbuf gtk2 ];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ gdk-pixbuf gtk2 ];
 
   src = fetchFromGitHub {
     owner = "sargon";
@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/sargon/trayer-srg;
+  meta = with lib; {
+    homepage = "https://github.com/sargon/trayer-srg";
     license = licenses.mit;
     description = "A lightweight GTK2-based systray for UNIX desktop";
     platforms = platforms.linux;

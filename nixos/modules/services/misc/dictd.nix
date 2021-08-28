@@ -27,7 +27,7 @@ in
         default = with pkgs.dictdDBs; [ wiktionary wordnet ];
         defaultText = "with pkgs.dictdDBs; [ wiktionary wordnet ]";
         example = literalExample "[ pkgs.dictdDBs.nld2eng ]";
-        description = ''List of databases to make available.'';
+        description = "List of databases to make available.";
       };
 
     };
@@ -45,18 +45,14 @@ in
     # get the command line client on system path to make some use of the service
     environment.systemPackages = [ pkgs.dict ];
 
-    users.users = singleton
-      { name = "dictd";
-        group = "dictd";
+    users.users.dictd =
+      { group = "dictd";
         description = "DICT.org dictd server";
         home = "${dictdb}/share/dictd";
         uid = config.ids.uids.dictd;
       };
 
-    users.groups = singleton
-      { name = "dictd";
-        gid = config.ids.gids.dictd;
-      };
+    users.groups.dictd.gid = config.ids.gids.dictd;
 
     systemd.services.dictd = {
       description = "DICT.org Dictionary Server";

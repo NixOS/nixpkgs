@@ -1,36 +1,20 @@
-{ stdenv, fetchurl, glibcLocales, python3 }:
+{ lib, python3 }:
 
-let
-  python = python3.override {
-    packageOverrides = self: super: {
+python3.pkgs.buildPythonApplication rec {
+  version = "0.17.0";
+  pname = "khard";
 
-      # https://github.com/pimutils/khal/issues/780
-      python-dateutil = super.python-dateutil.overridePythonAttrs (oldAttrs: rec {
-        version = "2.6.1";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "891c38b2a02f5bb1be3e4793866c8df49c7d19baabf9c1bad62547e0b4866aca";
-        };
-      });
-
-    };
+  src = python3.pkgs.fetchPypi {
+    inherit pname version;
+    sha256 = "062nv4xkfsjc11k9m52dh6xjn9z68a4a6x1s8z05wwv4jbp1lkhn";
   };
 
-in with python.pkgs; buildPythonApplication rec {
-  version = "0.13.0";
-  name = "khard-${version}";
-  namePrefix = "";
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  nativeBuildInputs = [
+    python3.pkgs.setuptools-scm
+  ];
 
-  src = fetchurl {
-    url = "https://github.com/scheibler/khard/archive/v${version}.tar.gz";
-    sha256 = "06b9xcdg1na6mxa2pnlh0wfsk02k2h6hlki089aaikbg8k8ykj8f";
-  };
-
-  # setup.py reads the UTF-8 encoded readme.
-  LC_ALL = "en_US.UTF-8";
-  buildInputs = [ glibcLocales ];
-
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3.pkgs; [
     atomicwrites
     configobj
     vobject
@@ -43,13 +27,15 @@ in with python.pkgs; buildPythonApplication rec {
     install -D misc/zsh/_khard $out/share/zsh/site-functions/_khard
   '';
 
-  # Fails; but there are no tests anyway.
-  doCheck = false;
+  preCheck = ''
+    # see https://github.com/scheibler/khard/issues/263
+    export COLUMNS=80
+  '';
 
   meta = {
-    homepage = https://github.com/scheibler/khard;
+    homepage = "https://github.com/scheibler/khard";
     description = "Console carddav client";
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = with stdenv.lib.maintainers; [ matthiasbeyer ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ matthiasbeyer ];
   };
 }

@@ -1,20 +1,21 @@
 { lib
 , buildPythonApplication
 , fetchPypi
-, paramiko
-, configparser
+, setuptools
 }:
 
 buildPythonApplication rec {
   pname = "pyznap";
-  version = "1.1.2";
+  version = "1.6.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9ac0da5d7f6461d1d6f128362786e297144b415f9e3a2f1835642ab3dda82d55";
+    sha256 = "88bf1d6de2c11f14acbdfa01b61eb95c94f95d829ddebdaee3786b64ccb93ae3";
   };
 
-  propagatedBuildInputs = [ configparser paramiko ];
+  propagatedBuildInputs = [
+    setuptools
+  ];
 
   # tests aren't included in the PyPI packages
   doCheck = false;

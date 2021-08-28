@@ -3,17 +3,15 @@
 with pythonPackages;
 
 buildPythonApplication rec {
-  name = "${pname}-${version}";
   pname = "rss2email";
-  version = "3.9"; # TODO: on next bump, the manpage will be updated.
-  # Update nixos/modules/services/mail/rss2email.nix to point to it instead of
-  # to the online r2e.1
+  version = "3.13";
 
-  propagatedBuildInputs = [ feedparser beautifulsoup4 html2text ];
+  propagatedBuildInputs = [ feedparser html2text ];
+  checkInputs = [ beautifulsoup4 ];
 
   src = fetchurl {
-    url = "mirror://pypi/r/rss2email/${name}.tar.gz";
-    sha256 = "02wj9zhmc2ym8ba1i0z9pm1c622z2fj7fxwagnxbvpr1402ahmr5";
+    url = "mirror://pypi/r/rss2email/${pname}-${version}.tar.gz";
+    sha256 = "09vp2y0ibv20y9yysniv6njzigif4h74pkj31l2a8xw5g19gclna";
   };
 
   outputs = [ "out" "man" "doc" ];
@@ -31,20 +29,20 @@ buildPythonApplication rec {
 
     # copy documentation
     mkdir -p $doc/share/doc/rss2email
-    cp AUTHORS COPYING CHANGELOG README $doc/share/doc/rss2email/
+    cp AUTHORS COPYING CHANGELOG README.rst $doc/share/doc/rss2email/
   '';
 
-  # The tests currently fail, see
-  # https://github.com/rss2email/rss2email/issues/14
-  # postCheck = ''
-  #   env PYTHONPATH=.:$PYTHONPATH python ./test/test.py
-  # '';
+  checkPhase = ''
+    runHook preCheck
+    env PATH=$out/bin:$PATH python ./test/test.py
+    runHook postCheck
+  '';
 
   meta = with lib; {
-    description = "A tool that converts RSS/Atom newsfeeds to email.";
-    homepage = https://pypi.python.org/pypi/rss2email;
+    description = "A tool that converts RSS/Atom newsfeeds to email";
+    homepage = "https://pypi.python.org/pypi/rss2email";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ jb55 Profpatsch ];
+    maintainers = with maintainers; [ jb55 Profpatsch ekleog ];
   };
   passthru.tests = {
     smoke-test = nixosTests.rss2email;

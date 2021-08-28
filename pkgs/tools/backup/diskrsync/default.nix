@@ -1,32 +1,29 @@
-{ buildGoPackage, fetchFromGitHub, stdenv, openssh, makeWrapper }:
+{ buildGoPackage, fetchFromGitHub, lib, openssh, makeWrapper }:
 
 buildGoPackage rec {
-
-  name = "${pname}-${version}";
   pname = "diskrsync";
-  version = "unstable-2018-02-03";
+  version = "unstable-2019-01-02";
 
   src = fetchFromGitHub {
     owner = "dop251";
     repo = pname;
-    rev = "2f36bd6e5084ce16c12a2ee216ebb2939a7d5730";
-    sha256 = "1rpfk7ds4lpff30aq4d8rw7g9j4bl2hd1bvcwd1pfxalp222zkxn";
+    rev = "e8598ef71038527a8a77d1a6cf2a73cfd96d9139";
+    sha256 = "1dqpmc4hp81knhdk3mrmwdr66xiibsvj5lagbm5ciajg9by45mcs";
   };
 
   goPackagePath = "github.com/dop251/diskrsync";
   goDeps = ./deps.nix;
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   preFixup = ''
-    wrapProgram "$bin/bin/diskrsync" --argv0 diskrsync --prefix PATH : ${openssh}/bin
+    wrapProgram "$out/bin/diskrsync" --argv0 diskrsync --prefix PATH : ${openssh}/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Rsync for block devices and disk images";
-    homepage = https://github.com/dop251/diskrsync;
+    homepage = "https://github.com/dop251/diskrsync";
     license = licenses.mit;
-    platforms = platforms.all;
     maintainers = with maintainers; [ jluttine ];
   };
 

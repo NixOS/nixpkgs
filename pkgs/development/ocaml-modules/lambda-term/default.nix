@@ -1,20 +1,19 @@
-{ stdenv, fetchurl, libev, buildDunePackage, zed, lwt_log, lwt_react }:
+{ lib, fetchFromGitHub, buildDunePackage, zed, lwt_log, lwt_react, mew_vi }:
 
 buildDunePackage rec {
   pname = "lambda-term";
-  version = "1.13";
+  version = "3.1.0";
 
-  minimumOCamlVersion = "4.02";
+  useDune2 = true;
 
-  src = fetchurl {
-    url = "https://github.com/diml/${pname}/archive/${version}.tar.gz";
-    sha256 = "1hy5ryagqclgdm9lzh1qil5mrynlypv7mn6qm858hdcnmz9zzn0l";
+  src = fetchFromGitHub {
+    owner = "ocaml-community";
+    repo = pname;
+    rev = version;
+    sha256 = "1k0ykiz0vhpyyj9fkss29ajas4fh1xh449j702xkvayqipzj1mkg";
   };
 
-  buildInputs = [ libev ];
-  propagatedBuildInputs = [ zed lwt_log lwt_react ];
-
-  hasSharedObjects = true;
+  propagatedBuildInputs = [ zed lwt_log lwt_react mew_vi ];
 
   meta = { description = "Terminal manipulation library for OCaml";
     longDescription = ''
@@ -32,10 +31,10 @@ buildDunePackage rec {
     console applications.
     '';
 
-    homepage = https://github.com/diml/lambda-term;
-    license = stdenv.lib.licenses.bsd3;
+    inherit (src.meta) homepage;
+    license = lib.licenses.bsd3;
     maintainers = [
-      stdenv.lib.maintainers.gal_bolle
+      lib.maintainers.gal_bolle
     ];
   };
 }

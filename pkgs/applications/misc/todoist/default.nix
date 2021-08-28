@@ -1,20 +1,22 @@
 { lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
-  name = "todoist-${version}";
-  version = "0.13.1";
+  pname = "todoist";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "sachaos";
     repo = "todoist";
     rev = "v${version}";
-    sha256 = "1kwvlsjr2a7wdhlwpxxpdh87wz8k9yjwl59vl2g7ya6m0rvhd3mc";
+    sha256 = "0d3c621jaqxd6i58xm6nvi0avrh5mk23r169i95bn73igzw62w33";
   };
 
-  modSha256 = "09n6abyaqwz4zcdz8934rvpbxhp4v2nmm5v739kkcc98c3h93i64";
+  vendorSha256 = "0cznb8glh36dwyyn1gx1ggkwa9zffrrxg52k78brnaczsl0rsmky";
+
+  doCheck = false;
 
   meta = {
-    homepage = https://github.com/sachaos/todoist;
+    homepage = "https://github.com/sachaos/todoist";
     description = "Todoist CLI Client";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, python3 }:
+{ lib, stdenv, fetchFromGitHub, cmake, python3 }:
 # Like many google projects, shaderc doesn't gracefully support separately compiled dependencies, so we can't easily use
 # the versions of glslang and spirv-tools used by vulkan-loader. Exact revisions are taken from
 # https://github.com/google/shaderc/blob/known-good/known_good.json
@@ -8,24 +8,24 @@ let
   glslang = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "glslang";
-    rev = "d3692c701b1265955221aa0d6ebc656bc4442b2a";
-    sha256 = "11cvwbzlpr4zrcmmyd9h0kbfhmhr6r696ydmn0yp1jrixby4bmji";
+    rev = "3ee5f2f1d3316e228916788b300d786bb574d337";
+    sha256 = "1l5h9d92mzd35pgs0wibqfg7vbl771lwnvdlcsyhf6999khn5dzv";
   };
   spirv-tools = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Tools";
-    rev = "08cc49ec59c3ff4d6bd4bb4f2097ede35e802158";
-    sha256 = "1xhgcppx02fp3nr7654mr3qrgy1fxlxdyl87jhmn3k9jf24gmmmz";
+    rev = "b63f0e5ed3e818870968ebf6af73317127fd07b0";
+    sha256 = "1chv30azfp76nha428ivg4ixrij6d8pxj5kn3jam87gmkmgc9zhm";
   };
   spirv-headers = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Headers";
-    rev = "8b911bd2ba37677037b38c9bd286c7c05701bcda";
-    sha256 = "0qdnj34bkagszyvci6ifpqd7iqvybhmqzvc9lvqnls44qg90aqh2";
+    rev = "979924c8bc839e4cb1b69d03d48398551f369ce7";
+    sha256 = "07vyjlblpm4zhfds612h86lnz0qvrj5qqw5z2zzfa3m9fax7cm85";
   };
 in stdenv.mkDerivation rec {
-  name = "shaderc-${version}";
-  version = "2019.0";
+  pname = "shaderc";
+  version = "2020.2";
 
   outputs = [ "out" "lib" "bin" "dev" "static" ];
 
@@ -33,7 +33,7 @@ in stdenv.mkDerivation rec {
     owner = "google";
     repo = "shaderc";
     rev = "v${version}";
-    sha256 = "1l5mmyxhzsbp0a6y2d86i8jmf46c6bjgjkdgkr5l8hmhflmm7gi2";
+    sha256 = "1sxz8872x3rdlrhmbn83r1vniq4j51jnk0ka3447fq68il4myf1w";
   };
 
   patchPhase = ''
@@ -48,15 +48,11 @@ in stdenv.mkDerivation rec {
     moveToOutput "lib/*.a" $static
   '';
 
-  preConfigure = ''cmakeFlags="$cmakeFlags -DCMAKE_INSTALL_BINDIR=$bin/bin"'';
-
-  enableParallelBuilding = true;
-
   cmakeFlags = [ "-DSHADERC_SKIP_TESTS=ON" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (src.meta) homepage;
-    description = "A collection of tools, libraries and tests for shader compilation.";
+    description = "A collection of tools, libraries and tests for shader compilation";
     license = [ licenses.asl20 ];
   };
 }

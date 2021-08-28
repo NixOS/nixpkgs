@@ -1,23 +1,62 @@
-{ stdenv, buildGo110Package, fetchFromGitHub }:
+{ lib
+, stdenv
+, substituteAll
+, buildGoModule
+, fetchFromGitHub
+, makeDesktopItem
+, makeWrapper
+, libnotify
+, olm
+, pulseaudio
+, sound-theme-freedesktop
+}:
 
-buildGo110Package rec {
-  name = "gomuks-${version}";
-  version = "2018-07-10";
-
-  goPackagePath = "maunium.net/go/gomuks";
+buildGoModule rec {
+  pname = "gomuks";
+  version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "tulir";
-    repo = "gomuks";
-    rev = "68db26bcace31297471641fe95f8882e301f5699";
-    sha256 = "0dagdvsvn8nwqsvjbqk1c6gg2q1m40869nayrkwm3ndg2xkfdpm6";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "0g0aa6h6bm00mdgkb38wm66rcrhqfvs2xj9rl04bwprsa05q5lca";
   };
 
-  meta = with stdenv.lib; {
-    homepage = https://maunium.net/go/gomuks/;
+  vendorSha256 = "14ya5advpv4q5il235h5dxy8c2ap2yzrvqs0sjqgw0v1vm6vpwdx";
+
+  doCheck = false;
+
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ olm ];
+
+  # Upstream issue: https://github.com/tulir/gomuks/issues/260
+  patches = lib.optional stdenv.isLinux (substituteAll {
+    src = ./hardcoded_path.patch;
+    soundTheme = sound-theme-freedesktop;
+  });
+
+  postInstall = ''
+    cp -r ${
+      makeDesktopItem {
+        name = "net.maunium.gomuks.desktop";
+        exec = "@out@/bin/gomuks";
+        terminal = "true";
+        desktopName = "Gomuks";
+        genericName = "Matrix client";
+        categories = "Network;Chat";
+        comment = meta.description;
+      }
+    }/* $out/
+    substituteAllInPlace $out/share/applications/*
+    wrapProgram $out/bin/gomuks \
+      --prefix PATH : "${lib.makeBinPath (lib.optionals stdenv.isLinux [ libnotify pulseaudio ])}"
+  '';
+
+  meta = with lib; {
+    homepage = "https://maunium.net/go/gomuks/";
     description = "A terminal based Matrix client written in Go";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ tilpner ];
+    license = licenses.agpl3Plus;
+    maintainers = with maintainers; [ chvp emily ];
     platforms = platforms.unix;
   };
 }

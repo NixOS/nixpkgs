@@ -1,4 +1,4 @@
-{ lib, bundlerApp }:
+{ lib, bundlerApp, bundlerUpdateScript }:
 
 bundlerApp {
   pname = "taskjuggler";
@@ -9,11 +9,13 @@ bundlerApp {
     "tj3ts_receiver" "tj3ts_sender" "tj3ts_summary" "tj3webd"
   ];
 
+  passthru.updateScript = bundlerUpdateScript "taskjuggler";
+
   meta = with lib; {
     description = "A modern and powerful project management tool";
-    homepage    = http://taskjuggler.org/;
+    homepage    = "https://taskjuggler.org/";
     license     = licenses.gpl2;
     platforms   = platforms.unix;
-    maintainers = [ maintainers.manveru ];
+    maintainers = with maintainers; [ manveru nicknovitski ];
   };
 }

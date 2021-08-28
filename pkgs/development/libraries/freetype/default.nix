@@ -1,6 +1,6 @@
-{ stdenv, fetchurl
-, buildPackages
-, pkgconfig, which, makeWrapper
+{ lib, stdenv, fetchurl
+, buildPackages, pkgsHostHost
+, pkg-config, which, makeWrapper
 , zlib, bzip2, libpng, gnumake, glib
 
 , # FreeType supports LCD filtering (colloquially referred to as sub-pixel rendering).
@@ -10,13 +10,13 @@
 }:
 
 let
-  inherit (stdenv.lib) optional optionalString;
+  inherit (lib) optional optionalString;
 
 in stdenv.mkDerivation rec {
   pname = "freetype";
-  version = "2.10.0";
+  version = "2.10.4";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A font rendering engine";
     longDescription = ''
       FreeType is a portable and efficient library for rendering fonts. It
@@ -25,20 +25,21 @@ in stdenv.mkDerivation rec {
       autofit which can be used instead of hinting instructions included in
       fonts.
     '';
-    homepage = https://www.freetype.org/;
+    homepage = "https://www.freetype.org/";
     license = licenses.gpl2Plus; # or the FreeType License (BSD + advertising clause)
     platforms = platforms.all;
     maintainers = with maintainers; [ ttuegel ];
   };
 
   src = fetchurl {
-    url = "mirror://savannah/${pname}/${pname}-${version}.tar.bz2";
-    sha256 = "01mybx78n3n9dhzylbrdy42wxdwfn8rp514qdkzjy6b5ij965k7w";
+    url = "mirror://savannah/${pname}/${pname}-${version}.tar.xz";
+    sha256 = "112pyy215chg7f7fmp2l9374chhhpihbh8wgpj5nj6avj3c59a46";
   };
 
   propagatedBuildInputs = [ zlib bzip2 libpng ]; # needed when linking against freetype
+
   # dependence on harfbuzz is looser than the reverse dependence
-  nativeBuildInputs = [ pkgconfig which makeWrapper ]
+  nativeBuildInputs = [ pkg-config which makeWrapper ]
     # FreeType requires GNU Make, which is not part of stdenv on FreeBSD.
     ++ optional (!stdenv.isLinux) gnumake;
 
@@ -49,7 +50,7 @@ in stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  configureFlags = [ "--disable-static" "--bindir=$(dev)/bin" "--enable-freetype-config" ];
+  configureFlags = [ "--bindir=$(dev)/bin" "--enable-freetype-config" ];
 
   # native compiler to generate building tool
   CC_BUILD = "${buildPackages.stdenv.cc}/bin/cc";
@@ -63,7 +64,7 @@ in stdenv.mkDerivation rec {
 
   postInstall = glib.flattenInclude + ''
     substituteInPlace $dev/bin/freetype-config \
-      --replace ${buildPackages.pkgconfig} ${pkgconfig}
+      --replace ${buildPackages.pkg-config} ${pkgsHostHost.pkg-config}
 
     wrapProgram "$dev/bin/freetype-config" \
       --set PKG_CONFIG_PATH "$PKG_CONFIG_PATH:$dev/lib/pkgconfig"

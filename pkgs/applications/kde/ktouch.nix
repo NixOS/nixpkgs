@@ -3,12 +3,13 @@
 , kconfig, kconfigwidgets, kcoreaddons, kdeclarative, ki18n
 , kitemviews, kcmutils, kio, knewstuff, ktexteditor, kwidgetsaddons
 , kwindowsystem, kxmlgui, qtscript, qtdeclarative, kqtquickcharts
-, qtx11extras, qtgraphicaleffects, qtxmlpatterns, xorg
+, qtx11extras, qtgraphicaleffects, qtxmlpatterns, qtquickcontrols2
+, xorg
 }:
 
 
   mkDerivation {
-    name = "ktouch";
+    pname = "ktouch";
     meta = {
       license = lib.licenses.gpl2;
       maintainers = [ lib.maintainers.schmittlauch ];
@@ -19,7 +20,7 @@
       kconfig kconfigwidgets kcoreaddons kdeclarative ki18n
       kitemviews kcmutils kio knewstuff ktexteditor kwidgetsaddons
       kwindowsystem kxmlgui qtscript qtdeclarative kqtquickcharts
-      qtx11extras qtgraphicaleffects qtxmlpatterns
+      qtx11extras qtgraphicaleffects qtxmlpatterns qtquickcontrols2
       xorg.libxkbfile xorg.libxcb
     ];
 

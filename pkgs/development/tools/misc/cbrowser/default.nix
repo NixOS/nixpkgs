@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, tk, makeWrapper }:
+{ fetchurl, lib, stdenv, tk, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "cbrowser-0.8";
@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
 
   patches = [ ./backslashes-quotes.diff ];
 
-  buildInputs = [ tk makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ tk ];
 
   installPhase = ''
     mkdir -p $out/bin $out/share/${name}
@@ -23,12 +24,12 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Tcl/Tk GUI front-end to cscope";
 
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
 
-    homepage = https://sourceforge.net/projects/cbrowser/;
+    homepage = "https://sourceforge.net/projects/cbrowser/";
 
-    maintainers = with stdenv.lib.maintainers; [viric];
+    maintainers = with lib.maintainers; [viric];
 
-    platforms = with stdenv.lib.platforms; linux;
+    platforms = with lib.platforms; linux;
   };
 }

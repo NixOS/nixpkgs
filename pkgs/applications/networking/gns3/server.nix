@@ -1,38 +1,16 @@
-{ stable, branch, version, sha256Hash }:
+{ stable, branch, version, sha256Hash, mkOverride, commonOverrides }:
 
-{ stdenv, python3, fetchFromGitHub }:
+{ lib, python3, fetchFromGitHub }:
 
 let
-  python = if stable then python3.override {
-    packageOverrides = self: super: {
-      async-timeout = super.async-timeout.overridePythonAttrs (oldAttrs: rec {
-        version = "2.0.1";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "1l3kg062m02mph6rf9rdv8r5c5n356clxa6b6mrn0i77vk9g9kq0";
-        };
-      });
-      aiohttp = super.aiohttp.overridePythonAttrs (oldAttrs: rec {
-        version = "2.3.10";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "8adda6583ba438a4c70693374e10b60168663ffa6564c5c75d3c7a9055290964";
-        };
-        propagatedBuildInputs = with self; [ async-timeout attrs chardet multidict yarl idna-ssl ];
-        doCheck = false;
-      });
-      aiohttp-cors = super.aiohttp-cors.overridePythonAttrs (oldAttrs: rec {
-        version = "0.6.0";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "1r0mb4dw0dc1lpi54dk5vxqs06nyhvagp76lyrvk7rd94z5mjkd4";
-        };
-        propagatedBuildInputs = with self; [ aiohttp ]
-          ++ stdenv.lib.optional (pythonOlder "3.5") typing;
-      });
-    };
-  } else python3;
+  defaultOverrides = commonOverrides ++ [
+    (mkOverride "aiofiles" "0.5.0"
+      "98e6bcfd1b50f97db4980e182ddd509b7cc35909e903a8fe50d8849e02d815af")
+  ];
 
+  python = python3.override {
+    packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) defaultOverrides;
+  };
 in python.pkgs.buildPythonPackage {
   pname = "gns3-server";
   inherit version;
@@ -45,15 +23,15 @@ in python.pkgs.buildPythonPackage {
   };
 
   postPatch = ''
-    # Only 2.x is problematic:
-    sed -iE "s/prompt-toolkit==1.0.15/prompt-toolkit<2.0.0/" requirements.txt
+    substituteInPlace requirements.txt \
+      --replace "aiohttp==3.6.2" "aiohttp>=3.6.2"
   '';
 
   propagatedBuildInputs = with python.pkgs; [
-    aiohttp-cors yarl aiohttp multidict
-    jinja2 psutil zipstream raven jsonschema
-    (python.pkgs.callPackage ../../../development/python-modules/prompt_toolkit/1.nix {})
-  ] ++ stdenv.lib.optional (!stable) [ distro async_generator aiofiles ];
+    aiohttp-cors yarl aiohttp multidict setuptools
+    jinja2 psutil zipstream sentry-sdk jsonschema distro async_generator aiofiles
+    prompt_toolkit py-cpuinfo
+  ];
 
   # Requires network access
   doCheck = false;
@@ -62,16 +40,17 @@ in python.pkgs.buildPythonPackage {
     rm $out/bin/gns3loopback # For Windows only
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Graphical Network Simulator 3 server (${branch} release)";
     longDescription = ''
       The GNS3 server manages emulators such as Dynamips, VirtualBox or
       Qemu/KVM. Clients like the GNS3 GUI control the server using a HTTP REST
       API.
     '';
-    homepage = https://www.gns3.com/;
+    homepage = "https://www.gns3.com/";
+    changelog = "https://github.com/GNS3/gns3-server/releases/tag/v${version}";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ primeos ];
+    maintainers = with maintainers; [ ];
   };
 }

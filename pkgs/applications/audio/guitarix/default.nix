@@ -1,44 +1,114 @@
-{ stdenv, fetchurl, gettext, intltool, pkgconfig, python2
-, avahi, bluez, boost, eigen, fftw, glib, glib-networking
-, glibmm, gsettings-desktop-schemas, gtkmm2, libjack2
-, ladspaH, libav, librdf, libsndfile, lilv, lv2, serd, sord, sratom
-, wrapGAppsHook, zita-convolver, zita-resampler, curl, wafHook
+{ lib, stdenv
+, fetchurl
+, fetchpatch
+, avahi
+, bluez
+, boost
+, curl
+, eigen
+, fftw
+, gettext
+, glib
+, glib-networking
+, glibmm
+, gnome
+, gsettings-desktop-schemas
+, gtk3
+, gtkmm3
+, hicolor-icon-theme
+, intltool
+, ladspaH
+, libjack2
+, libsndfile
+, lilv
+, lrdf
+, lv2
+, pkg-config
+, python2
+, sassc
+, serd
+, sord
+, sratom
+, wafHook
+, wrapGAppsHook
+, zita-convolver
+, zita-resampler
 , optimizationSupport ? false # Enable support for native CPU extensions
 }:
 
 let
-  inherit (stdenv.lib) optional;
+  inherit (lib) optional;
 in
 
 stdenv.mkDerivation rec {
-  name = "guitarix-${version}";
-  version = "0.38.1";
+  pname = "guitarix";
+  version = "0.42.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/guitarix/guitarix2-${version}.tar.xz";
-    sha256 = "0bw7xnrx062nwb1bfj9x660h7069ncmz77szcs8icpqxrvhs7z80";
+    sha256 = "101c2hdpipj3s6rmva5wf3q9hfjv7bkyzi7s8sgaiys8f7h4czkr";
   };
 
-  nativeBuildInputs = [ gettext intltool wrapGAppsHook pkgconfig python2 wafHook ];
-
-  buildInputs = [
-    avahi bluez boost eigen fftw glib glibmm glib-networking.out
-    gsettings-desktop-schemas gtkmm2 libjack2 ladspaH libav librdf
-    libsndfile lilv lv2 serd sord sratom zita-convolver
-    zita-resampler curl
+  patches = [
+    (fetchpatch {
+      name = "guitarix-gcc11.patch";
+      url = "https://github.com/brummer10/guitarix/commit/d8f003484c57d808682025dfb07a7a1fb848afdc.patch";
+      stripLen = 1;
+      sha256 = "1qhlbf18cn6m9jdz3741nrdfqvznjna3daqmn9l10k5nd3asy4il";
+    })
   ];
 
+  nativeBuildInputs = [
+    gettext
+    hicolor-icon-theme
+    intltool
+    pkg-config
+    python2
+    wafHook
+    wrapGAppsHook
+  ];
+
+  buildInputs = [
+    avahi
+    bluez
+    boost
+    curl
+    eigen
+    fftw
+    glib
+    glib-networking.out
+    glibmm
+    gnome.adwaita-icon-theme
+    gsettings-desktop-schemas
+    gtk3
+    gtkmm3
+    ladspaH
+    libjack2
+    libsndfile
+    lilv
+    lrdf
+    lv2
+    sassc
+    serd
+    sord
+    sratom
+    zita-convolver
+    zita-resampler
+  ];
+
+  # this doesnt build, probably because we have the wrong faust version:
+  #       "--faust"
+  # aproved versions are 2.20.2 and 2.15.11
   wafConfigureFlags = [
+    "--no-faust"
+    "--no-font-cache-update"
     "--shared-lib"
     "--no-desktop-update"
     "--enable-nls"
-    "--no-faust" # todo: find out why --faust doesn't work
     "--install-roboto-font"
-    "--includeresampler"
-    "--convolver-ffmpeg"
   ] ++ optional optimizationSupport "--optimization";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A virtual guitar amplifier for Linux running with JACK";
     longDescription = ''
         guitarix is a virtual guitar amplifier for Linux running with
@@ -62,7 +132,7 @@ stdenv.mkDerivation rec {
       clean-sounds, nice overdrive, fat distortion and a diversity of
       crazy sounds never heard before.
     '';
-    homepage = http://guitarix.sourceforge.net/;
+    homepage = "http://guitarix.sourceforge.net/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ astsmtl goibhniu ];
     platforms = platforms.linux;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, qt4, cmake }:
+{ lib, stdenv, fetchurl, qt4, cmake }:
 
 let
   baseName = "libdbusmenu-qt";
@@ -18,9 +18,11 @@ stdenv.mkDerivation {
   buildInputs = [ qt4 ];
   nativeBuildInputs = [ cmake ];
 
-  cmakeFlags = "-DWITH_DOC=OFF";
+  cmakeFlags = [ "-DWITH_DOC=OFF" ];
 
-  meta = with stdenv.lib; {
+  dontWrapQtApps = true;
+
+  meta = with lib; {
     description = "Provides a Qt implementation of the DBusMenu spec";
     inherit homepage;
     inherit (qt4.meta) platforms;

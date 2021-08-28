@@ -1,19 +1,19 @@
-{ stdenv, fetchFromGitHub }:
+{ lib
+, stdenv
+, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
-  name = "google-fonts-${version}";
-  version = "2018-07-13";
+stdenv.mkDerivation {
+  pname = "google-fonts";
+  version = "unstable-2021-01-19";
+
+  outputs = [ "out" "adobeBlank" ];
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "fonts";
-    rev = "3ca591dae7372a26e254ec6d22e7b453813b9530";
-    sha256 = "01ak3dzw2kihwa0dy27x8vvpiscd66mnkf61vj1xn29m4g48y0lr";
+    rev = "a3a831f0fe44cd58465c6937ea06873728f2ba0d";
+    sha256 = "19abx2bj7mkysv2ihr43m3kpyf6kv6v2qjlm1skxc82rb72xqhix";
   };
-
-  outputHashAlgo = "sha256";
-  outputHashMode = "recursive";
-  outputHash = "1pzm26794nwdbsvjnczpfchxiqa1n1zhp517g6g39wfm1nfszz83";
 
   phases = [ "unpackPhase" "patchPhase" "installPhase" ];
 
@@ -23,11 +23,9 @@ stdenv.mkDerivation rec {
     # directories. This causes non-determinism in the install since
     # the installation order of font files with the same name is not
     # fixed.
-    rm -rv ofl/alefhebrew \
-      ofl/misssaintdelafield \
-      ofl/mrbedford \
-      ofl/siamreap \
-      ofl/terminaldosislight
+    rm -rv ofl/cabincondensed \
+           ofl/signikanegative \
+           ofl/signikanegativesc
 
     if find . -name "*.ttf" | sed 's|.*/||' | sort | uniq -c | sort -n | grep -v '^.*1 '; then
       echo "error: duplicate font names"
@@ -36,12 +34,15 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    adobeBlankDest=$adobeBlank/share/fonts/truetype
+    install -m 444 -Dt $adobeBlankDest ofl/adobeblank/AdobeBlank-Regular.ttf
+    rm -r ofl/adobeblank
     dest=$out/share/fonts/truetype
     find . -name '*.ttf' -exec install -m 444 -Dt $dest '{}' +
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://fonts.google.com;
+  meta = with lib; {
+    homepage = "https://fonts.google.com";
     description = "Font files available from Google Fonts";
     license = with licenses; [ asl20 ofl ufl ];
     platforms = platforms.all;

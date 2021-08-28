@@ -1,25 +1,29 @@
-{ stdenv, fetchurl, pkgconfig, libxml2, glibmm, perl }:
+{ lib, stdenv, fetchurl, pkg-config, libxml2, glibmm, perl }:
 
 stdenv.mkDerivation rec {
-  name = "libxml++-${maj_ver}.${min_ver}";
-  maj_ver = "3.0";
-  min_ver = "1";
+  pname = "libxml++";
+  version = "3.0.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/libxml++/${maj_ver}/${name}.tar.xz";
+    url = "mirror://gnome/sources/libxml++/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "19kik79fmg61nv0by0a5f9wchrcfjwzvih4v2waw01hqflhqvp0r";
   };
 
-  outputs = [ "out" "devdoc" ];
+  outputs = [ "out" "dev" "doc" "devdoc" ];
 
-  nativeBuildInputs = [ pkgconfig perl ];
+  nativeBuildInputs = [ pkg-config perl ];
 
   buildInputs = [ glibmm ];
 
   propagatedBuildInputs = [ libxml2 ];
 
-  meta = with stdenv.lib; {
-    homepage = http://libxmlplusplus.sourceforge.net/;
+  postFixup = ''
+    substituteInPlace $dev/lib/pkgconfig/libxml++-3.0.pc \
+      --replace 'docdir=''${datarootdir}' "docdir=$doc/share"
+  '';
+
+  meta = with lib; {
+    homepage = "http://libxmlplusplus.sourceforge.net/";
     description = "C++ wrapper for the libxml2 XML parser library, version 3";
     license = licenses.lgpl2Plus;
     platforms = platforms.unix;

@@ -1,45 +1,71 @@
-{ stdenv, fetchFromGitHub
-, meson, ninja, pkgconfig, python3, libgee, gsettings-desktop-schemas
-, gnome3, pantheon, gobject-introspection, wrapGAppsHook
-, gtk3, json-glib, glib, glib-networking, hicolor-icon-theme
+{ lib, stdenv
+, fetchFromGitHub
+, nix-update-script
+, fetchpatch
+, vala
+, meson
+, ninja
+, pkg-config
+, python3
+, libgee
+, gsettings-desktop-schemas
+, gnome
+, pantheon
+, wrapGAppsHook
+, gtk3
+, json-glib
+, glib
+, glib-networking
+, libhandy
 }:
 
-let
+stdenv.mkDerivation rec {
   pname = "tootle";
-  version = "0.2.0";
-in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  version = "1.0";
 
   src = fetchFromGitHub {
     owner = "bleakgrey";
     repo = pname;
     rev = version;
-    sha256 = "1z3wyx316nns6gi7vlvcfmalhvxncmvcmmlgclbv6b6hwl5x2ysi";
+    sha256 = "NRM7GiJA8c5z9AvXpGXtMl4ZaYN2GauEIbjBmoY4pdo=";
   };
 
   nativeBuildInputs = [
-    gobject-introspection
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
-    pantheon.vala
+    vala
     wrapGAppsHook
   ];
+
   buildInputs = [
-    gtk3 pantheon.granite json-glib glib glib-networking hicolor-icon-theme
-    libgee gnome3.libsoup gsettings-desktop-schemas
+    glib
+    glib-networking
+    gnome.libsoup
+    gsettings-desktop-schemas
+    gtk3
+    json-glib
+    libgee
+    pantheon.granite
+    libhandy
   ];
 
   postPatch = ''
-    chmod +x ./meson/post_install.py
-    patchShebangs ./meson/post_install.py
+    chmod +x meson/post_install.py
+    patchShebangs meson/post_install.py
   '';
 
-  meta = with stdenv.lib; {
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = pname;
+    };
+  };
+
+  meta = with lib; {
     description = "Simple Mastodon client designed for elementary OS";
-    homepage    = https://github.com/bleakgrey/tootle;
-    license     = licenses.gpl3;
+    homepage = "https://github.com/bleakgrey/tootle";
+    license = licenses.gpl3;
     maintainers = with maintainers; [ dtzWill ];
   };
 }

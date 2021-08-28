@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perlPackages, lib, runCommand, postfix }:
+{ fetchurl, perlPackages, lib, runCommand, postfix }:
 
 let
     mk-perl-flags = inputs: lib.concatStringsSep " " (map (dep: "-I ${dep}/${perlPackages.perl.libPrefix}") inputs);
@@ -15,9 +15,9 @@ in runCommand name {
     url = "https://postgrey.schweikert.ch/pub/${name}.tar.gz";
     sha256 = "1xx51xih4711vrvc6d57il9ccallbljj5zhgqdb07jzmz11rakgz";
   };
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A postfix policy server to provide greylisting";
-    homepage = https://postgrey.schweikert.ch/;
+    homepage = "https://postgrey.schweikert.ch/";
     platforms = postfix.meta.platforms;
     license = licenses.gpl2;
   };

@@ -1,10 +1,9 @@
-{ stdenv, buildPythonPackage, fetchPypi, pytest, pytestcov, mock, pytestpep8
+{ lib, buildPythonPackage, fetchPypi, pytest, pytestcov, mock
 , pytest_xdist, covCore, glibcLocales }:
 
 buildPythonPackage rec {
   pname = "dyn";
   version = "1.8.1";
-  name  = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
@@ -17,7 +16,6 @@ buildPythonPackage rec {
     pytest
     pytestcov
     mock
-    pytestpep8
     pytest_xdist
     covCore
   ];
@@ -26,7 +24,7 @@ buildPythonPackage rec {
 
   LC_ALL="en_US.UTF-8";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Dynect dns lib";
     homepage = "https://dyn.readthedocs.org/en/latest/intro.html";
     license = licenses.bsd3;

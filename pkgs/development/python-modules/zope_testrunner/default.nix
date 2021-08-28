@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , zope_interface
@@ -10,20 +10,20 @@
 
 buildPythonPackage rec {
   pname = "zope.testrunner";
-  version = "4.9.2";
+  version = "5.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f2aa89531db6b7546e46be9d6113ac835a075f4dcb26e32c7276f4f30d4b14a5";
+    sha256 = "39a5ba631830703ea011383447135063db6d182794487dda9b8c1f515bb70b0f";
   };
 
   propagatedBuildInputs = [ zope_interface zope_exceptions zope_testing six ];
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = false; # custom test modifies sys.path
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A flexible test runner with layer support";
-    homepage = https://pypi.python.org/pypi/zope.testrunner;
+    homepage = "https://pypi.python.org/pypi/zope.testrunner";
     license = licenses.zpl20;
     maintainers = [ maintainers.goibhniu ];
   };

@@ -23,7 +23,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ aiolifx ];
 
   meta = with lib; {
-    homepage = https://github.com/amelchio/aiolifx_effects;
+    homepage = "https://github.com/amelchio/aiolifx_effects";
     license = licenses.mit;
     description = "Light effects (pulse, colorloop ...) for LIFX lights running on aiolifx";
     maintainers = with maintainers; [ netixx ];

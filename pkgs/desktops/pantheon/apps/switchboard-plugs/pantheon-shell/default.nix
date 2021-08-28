@@ -1,21 +1,21 @@
-{ stdenv, fetchFromGitHub, pantheon, meson, ninja, pkgconfig, vala
+{ lib, stdenv, fetchFromGitHub, nix-update-script, pantheon, meson, ninja, pkg-config, vala, glib
 , libgee, granite, gexiv2, elementary-settings-daemon, gtk3, gnome-desktop
-, gala, wingpanel, plank, switchboard, gettext, bamf }:
+, gala, wingpanel, elementary-dock, switchboard, gettext, bamf, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-pantheon-shell";
-  version = "2.8.1";
+  version = "2.8.4";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "1vrnzxqzl84k8gbrais4j1jyap10kvil4cr769jpr3q3bkbblwrw";
+    sha256 = "sha256-CHl+4mVjrDg2gusrWOCfI++DZMWKLdvHxG3ZWMjZ2to=";
   };
 
   passthru = {
-    updateScript = pantheon.updateScript {
-      repoName = pname;
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
     };
   };
 
@@ -23,38 +23,28 @@ stdenv.mkDerivation rec {
     gettext
     meson
     ninja
-    pkgconfig
+    pkg-config
     vala
   ];
 
   buildInputs = [
     bamf
-    gexiv2
-    gnome-desktop
+    elementary-dock
     elementary-settings-daemon
+    gala
+    gexiv2
+    glib
+    gnome-desktop
     granite
     gtk3
     libgee
-    plank
     switchboard
+    wingpanel
   ];
 
-  patches = [
-    ./backgrounds.patch # Having https://github.com/elementary/switchboard-plug-pantheon-shell/issues/166 would make this patch uneeded
-    ./hardcode-gsettings.patch
-  ];
-
-  postPatch = ''
-    substituteInPlace src/Views/Appearance.vala --subst-var-by GALA_GSETTINGS_PATH ${gala}/share/gsettings-schemas/${gala.name}/glib-2.0/schemas
-    substituteInPlace src/Views/Appearance.vala --subst-var-by WINGPANEL_GSETTINGS_PATH ${wingpanel}/share/gsettings-schemas/${wingpanel.name}/glib-2.0/schemas
-  '';
-
-
-  PKG_CONFIG_SWITCHBOARD_2_0_PLUGSDIR = "${placeholder ''out''}/lib/switchboard";
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Switchboard Desktop Plug";
-    homepage = https://github.com/elementary/switchboard-plug-pantheon-shell;
+    homepage = "https://github.com/elementary/switchboard-plug-pantheon-shell";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

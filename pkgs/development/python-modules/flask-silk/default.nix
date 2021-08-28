@@ -1,10 +1,10 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchFromGitHub
 , flask
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "Flask-Silk";
   version = "2018-06-28";
 
@@ -21,10 +21,10 @@ buildPythonPackage rec {
     flask
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Adds silk icons to your Flask application or module, or extension";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ timokau ];
-    homepage = https://github.com/sublee/flask-silk;
+    maintainers = teams.sage.members;
+    homepage = "https://github.com/sublee/flask-silk";
   };
 }

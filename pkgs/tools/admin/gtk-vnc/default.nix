@@ -1,42 +1,69 @@
-{ stdenv, fetchurl, gobject-introspection
-, gnutls, cairo, libtool, glib, pkgconfig
-, cyrus_sasl, intltool, libpulseaudio
-, libgcrypt, gtk3, vala, gnome3
-, python3 }:
+{ lib
+, stdenv
+, fetchurl
+, meson
+, ninja
+, gobject-introspection
+, gnutls
+, cairo
+, glib
+, pkg-config
+, cyrus_sasl
+, libpulseaudio
+, libgcrypt
+, gtk3
+, vala
+, gettext
+, perl
+, gnome
+, gdk-pixbuf
+, zlib
+}:
 
 stdenv.mkDerivation rec {
-  name = "gtk-vnc-${version}";
-  version = "0.9.0";
+  pname = "gtk-vnc";
+  version = "1.2.0";
 
   outputs = [ "out" "bin" "man" "dev" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gtk-vnc/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1dya1wc9vis8h0fv625pii1n70cckf1xjg1m2hndz989d118i6is";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0jmr6igyzcj2wmx5v5ywaazvdz3hx6a6rys26yb4l4s71l281bvs";
   };
 
   nativeBuildInputs = [
-    python3 pkgconfig intltool libtool gobject-introspection vala
-  ];
-  buildInputs = [
-    gnutls cairo glib libgcrypt cyrus_sasl libpulseaudio gtk3
+    meson
+    ninja
+    pkg-config
+    gobject-introspection
+    vala
+    gettext
+    perl # for pod2man
   ];
 
-  configureFlags = [
-    "--with-examples"
+  buildInputs = [
+    gnutls
+    cairo
+    gdk-pixbuf
+    zlib
+    glib
+    libgcrypt
+    cyrus_sasl
+    libpulseaudio
+    gtk3
   ];
 
   passthru = {
-    updateScript = gnome3.updateScript {
-      packageName = "gtk-vnc";
+    updateScript = gnome.updateScript {
+      packageName = pname;
       versionPolicy = "none";
     };
   };
 
-  meta = with stdenv.lib; {
-    description = "A GTK VNC widget";
-    homepage = https://wiki.gnome.org/Projects/gtk-vnc;
-    license = licenses.lgpl21;
+  meta = with lib; {
+    description = "GTK VNC widget";
+    homepage = "https://wiki.gnome.org/Projects/gtk-vnc";
+    license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ raskin offline ];
     platforms = platforms.linux;
   };

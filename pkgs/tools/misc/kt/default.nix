@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, buildGoPackage }:
+{ lib, fetchFromGitHub, buildGoPackage }:
 
 buildGoPackage rec {
-  name = "kt-${version}";
+  pname = "kt";
   version = "12.1.0";
 
   src = fetchFromGitHub {
@@ -13,9 +13,9 @@ buildGoPackage rec {
 
   goPackagePath = "github.com/fgeller/kt";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Kafka command line tool";
-    homepage = https://github.com/fgeller/kt;
+    homepage = "https://github.com/fgeller/kt";
     maintainers = with maintainers; [ utdemir ];
     platforms = with platforms; unix;
     license = licenses.mit;

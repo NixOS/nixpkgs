@@ -1,46 +1,87 @@
-{ stdenv, fetchFromGitHub, gnugrep
+{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, bash, gnugrep
 , fixDarwinDylibNames
 , file
-, legacySupport ? false }:
+, legacySupport ? false
+, static ? stdenv.hostPlatform.isStatic
+}:
 
 stdenv.mkDerivation rec {
-  name = "zstd-${version}";
-  version = "1.4.0";
+  pname = "zstd";
+  version = "1.4.9";
 
   src = fetchFromGitHub {
-    sha256 = "1gfxi3ymgavjfxh84rhfjan7l4pymwfrn051nwc7n0s3mxp09m6v";
-    rev = "v${version}";
-    repo = "zstd";
     owner = "facebook";
+    repo = "zstd";
+    rev = "v${version}";
+    sha256 = "18alxnym54gswsmsr5ra82q4k1q5fyzsyx0jykb2sk2nkpvx7334";
   };
 
-  buildInputs = stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
+  nativeBuildInputs = [ cmake ]
+   ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
+  buildInputs = lib.optional stdenv.hostPlatform.isUnix bash;
 
-  makeFlags = [
-    "ZSTD_LEGACY_SUPPORT=${if legacySupport then "1" else "0"}"
+  patches = [
+    # This patches makes sure we do not attempt to use the MD5 implementation
+    # of the host platform when running the tests
+    ./playtests-darwin.patch
+    # https://github.com/facebook/zstd/pull/2606
+    (fetchpatch {
+      name = "test-memory-usage.diff";
+      url = "https://github.com/facebook/zstd/commit/6f40571ae2feb8bfa0a56f9871b6ee3084085fc2.diff";
+      sha256 = "1484k5b99wplv9vjvvxjn88l13hlay6bynhq3zh1nd34whyi1kd0";
+    })
   ];
+
+
+  postPatch = lib.optionalString (!static) ''
+    substituteInPlace build/cmake/CMakeLists.txt \
+      --replace 'message(SEND_ERROR "You need to build static library to build tests")' ""
+    substituteInPlace build/cmake/tests/CMakeLists.txt \
+      --replace 'libzstd_static' 'libzstd_shared'
+    sed -i \
+      "1aexport ${lib.optionalString stdenv.isDarwin "DY"}LD_LIBRARY_PATH=$PWD/build_/lib" \
+      tests/playTests.sh
+  '';
+
+  cmakeFlags = lib.attrsets.mapAttrsToList
+    (name: value: "-DZSTD_${name}:BOOL=${if value then "ON" else "OFF"}") {
+      BUILD_SHARED = !static;
+      BUILD_STATIC = static;
+      PROGRAMS_LINK_SHARED = !static;
+      LEGACY_SUPPORT = legacySupport;
+      BUILD_TESTS = doCheck;
+    };
+
+  cmakeDir = "../build/cmake";
+  dontUseCmakeBuildDir = true;
+  preConfigure = ''
+    mkdir -p build_ && cd $_
+  '';
 
   checkInputs = [ file ];
-  doCheck = true;
-  preCheck = ''
-    substituteInPlace tests/playTests.sh \
-      --replace 'MD5SUM="md5 -r"' 'MD5SUM="md5sum"'
+  doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
+  checkPhase = ''
+    runHook preCheck
+    # Patch shebangs for playTests
+    patchShebangs ../programs/zstdgrep
+    ctest -R playTests # The only relatively fast test.
+    runHook postCheck
   '';
-
-  installFlags = [
-    "PREFIX=$(out)"
-  ];
 
   preInstall = ''
-    substituteInPlace programs/zstdgrep \
+    substituteInPlace ../programs/zstdgrep \
       --replace ":-grep" ":-${gnugrep}/bin/grep" \
-      --replace ":-zstdcat" ":-$out/bin/zstdcat"
+      --replace ":-zstdcat" ":-$bin/bin/zstdcat"
 
-    substituteInPlace programs/zstdless \
-      --replace "zstdcat" "$out/bin/zstdcat"
+    substituteInPlace ../programs/zstdless \
+      --replace "zstdcat" "$bin/bin/zstdcat"
   '';
 
-  meta = with stdenv.lib; {
+  outputs = [ "bin" "dev" ]
+    ++ lib.optional stdenv.hostPlatform.isUnix "man"
+    ++ [ "out" ];
+
+  meta = with lib; {
     description = "Zstandard real-time compression algorithm";
     longDescription = ''
       Zstd, short for Zstandard, is a fast lossless compression algorithm,
@@ -51,11 +92,11 @@ stdenv.mkDerivation rec {
       speed is preserved and remain roughly the same at all settings, a
       property shared by most LZ compression algorithms, such as zlib.
     '';
-    homepage = https://facebook.github.io/zstd/;
-    # The licence of the CLI programme is GPLv2+, that of the library BSD-2.
-    license = with licenses; [ gpl2Plus bsd2 ];
+    homepage = "https://facebook.github.io/zstd/";
+    changelog = "https://github.com/facebook/zstd/blob/v${version}/CHANGELOG";
+    license = with licenses; [ bsd3 ]; # Or, at your opinion, GPL-2.0-only.
 
-    platforms = platforms.unix;
+    platforms = platforms.all;
     maintainers = with maintainers; [ orivej ];
   };
 }

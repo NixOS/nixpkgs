@@ -1,6 +1,7 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchFromGitHub
+, stdenv
 , zlib
 , xz
 , ncompress
@@ -9,29 +10,49 @@
 , gnutar
 , p7zip
 , cabextract
-, lzma
+, cramfsprogs
+, cramfsswap
+, sasquatch
+, squashfsTools
+, matplotlib
+, nose
 , pycrypto
-, pyqtgraph ? null }:
+, pyqtgraph
+, visualizationSupport ? false }:
 
-let visualizationSupport = (pyqtgraph != null);
-in
 buildPythonPackage rec {
-  name = "binwalk-${version}";
-  version = "2.1.1";
+  pname = "binwalk";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
-    owner = "devttys0";
+    owner = "ReFirmLabs";
     repo = "binwalk";
-    rev = "291a03595d17f848c73b74cb6ca508da782cd8f7";
-    sha256 = "0grid93yz6i6jb2zggrqncp5awdf7qi88j5y2k7dq0k9r6b8zydw";
+    rev = "v${version}";
+    sha256 = "108mj4jjffdmaz6wjvglbv44j7fkhspaxz1rj2bi1fcnwsri5wsm";
   };
 
-  propagatedBuildInputs = [ zlib xz ncompress gzip bzip2 gnutar p7zip cabextract lzma pycrypto ]
-    ++ stdenv.lib.optional visualizationSupport pyqtgraph;
+  propagatedBuildInputs = [ zlib xz ncompress gzip bzip2 gnutar p7zip cabextract squashfsTools xz pycrypto ]
+  ++ lib.optionals visualizationSupport [ matplotlib pyqtgraph ]
+  ++ lib.optionals (!stdenv.isDarwin) [ cramfsprogs cramfsswap sasquatch ];
 
-  meta = with stdenv.lib; {
-    homepage = "http://binwalk.org";
+  # setup.py only installs version.py during install, not test
+  postPatch = ''
+    echo '__version__ = "${version}"' > src/binwalk/core/version.py
+  '';
+
+  # binwalk wants to access ~/.config/binwalk/magic
+  preCheck = ''
+    HOME=$(mktemp -d)
+  '';
+
+  checkInputs = [ nose ];
+
+  pythonImportsCheck = [ "binwalk" ];
+
+  meta = with lib; {
+    homepage = "https://github.com/ReFirmLabs/binwalk";
     description = "A tool for searching a given binary image for embedded files";
     maintainers = [ maintainers.koral ];
+    license = licenses.mit;
   };
 }

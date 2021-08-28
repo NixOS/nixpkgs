@@ -11,7 +11,7 @@ let
     ''
       default-lease-time 600;
       max-lease-time 7200;
-      authoritative;
+      ${optionalString (!cfg.authoritative) "not "}authoritative;
       ddns-update-style interim;
       log-facility local1; # see dhcpd.nix
 
@@ -176,11 +176,25 @@ let
       '';
     };
 
+    authoritative = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Whether the DHCP server shall send DHCPNAK messages to misconfigured
+        clients. If this is not done, clients may be unable to get a correct
+        IP address after changing subnets until their old lease has expired.
+      '';
+    };
+
   };
 
 in
 
 {
+
+  imports = [
+    (mkRenamedOptionModule [ "services" "dhcpd" ] [ "services" "dhcpd4" ])
+  ];
 
   ###### interface
 

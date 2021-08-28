@@ -1,13 +1,13 @@
-{ stdenv, fetchurl, pkgconfig, libX11, libXtst, qt4 }:
+{ lib, stdenv, fetchurl, pkg-config, libX11, libXtst, qt4 }:
 stdenv.mkDerivation rec {
   name = "qjoypad-4.1.0";
   src = fetchurl {
     url = "mirror://sourceforge/qjoypad/${name}.tar.gz";
     sha256 = "1jlm7i26nfp185xrl41kz5z6fgvyj51bjpz48cg27xx64y40iamm";
   };
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libX11 libXtst qt4 ];
-  NIX_LDFLAGS = [ "-lX11" ];
+  NIX_LDFLAGS = "-lX11";
   patchPhase = ''
     cd src
     substituteInPlace config --replace /bin/bash ${stdenv.shell}
@@ -32,9 +32,9 @@ stdenv.mkDerivation rec {
       of gaming devices in Linux, and makes the Linux gaming
       experience just a little bit nicer.
     '';
-    homepage = http://qjoypad.sourceforge.net;
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = with stdenv.lib.maintainers; [ astsmtl ];
-    platforms = with stdenv.lib.platforms; linux;
+    homepage = "http://qjoypad.sourceforge.net";
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ astsmtl ];
+    platforms = with lib.platforms; linux;
   };
 }

@@ -2,7 +2,7 @@
 
 let
   version = "20180721";
-in fetchFromGitHub rec {
+in fetchFromGitHub {
   name = "ia-writer-duospace-${version}";
 
   owner = "iaolo";
@@ -18,7 +18,7 @@ in fetchFromGitHub rec {
 
   meta = with lib; {
     description = "iA Writer Duospace Typeface";
-    homepage = https://ia.net/topics/in-search-of-the-perfect-writing-font;
+    homepage = "https://ia.net/topics/in-search-of-the-perfect-writing-font";
     license = licenses.ofl;
     platforms = platforms.all;
     maintainers = [ maintainers.marsam ];

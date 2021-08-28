@@ -1,36 +1,31 @@
-{ stdenv, pythonPackages, fetchpatch }:
+{ lib, fetchFromGitHub, pythonPackages, installShellFiles }:
 
 with pythonPackages;
 
 buildPythonApplication rec {
-  pname = "td-watson";
-  version = "1.5.2";
+  pname = "watson";
+  version = "2.0.1";
 
-  src = fetchPypi {
-    inherit version pname;
-    sha256 = "6e03d44a9278807fe5245e9ed0943f13ffb88e11249a02655c84cb86260b27c8";
+  src = fetchFromGitHub {
+    owner = "TailorDev";
+    repo = "Watson";
+    rev = version;
+    sha256 = "0radf5afyphmzphfqb4kkixahds2559nr3yaqvni4xrisdaiaymz";
   };
 
-  # uses tox, test invocation fails
-  doCheck = true;
-  checkPhase = ''
-    py.test -vs tests
- '';
+  postInstall = ''
+    installShellCompletion --bash --name watson watson.completion
+    installShellCompletion --zsh --name _watson watson.zsh-completion
+  '';
 
-  patches = [
-    (fetchpatch {
-      url = https://github.com/TailorDev/Watson/commit/f5760c71cbc22de4e12ede8f6f7257515a9064d3.patch;
-      sha256 = "0s9h26915ilpbd0qhmvk77r3gmrsdrl5l7dqxj0l5q66fp0z6b0g";
-    })
-  ];
+  checkInputs = [ pytestCheckHook pytest-mock mock pytest-datafiles ];
+  propagatedBuildInputs = [ arrow click click-didyoumean requests ];
+  nativeBuildInputs = [ installShellFiles ];
 
-  checkInputs = [ py pytest pytest-datafiles mock pytest-mock pytestrunner ];
-  propagatedBuildInputs = [ requests click arrow ];
-
-  meta = with stdenv.lib; {
-    homepage = https://tailordev.github.io/Watson/;
+  meta = with lib; {
+    homepage = "https://tailordev.github.io/Watson/";
     description = "A wonderful CLI to track your time!";
     license = licenses.mit;
-    maintainers = with maintainers; [ mguentner ] ;
+    maintainers = with maintainers; [ mguentner nathyong oxzi ];
   };
 }

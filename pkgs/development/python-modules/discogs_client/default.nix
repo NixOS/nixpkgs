@@ -1,17 +1,17 @@
-{ stdenv, buildPythonPackage, fetchPypi, requests, oauthlib }:
+{ lib, buildPythonPackage, fetchPypi, requests, oauthlib }:
 
 buildPythonPackage rec {
   pname = "discogs-client";
-  version = "2.2.2";
+  version = "2.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1n23xy33fdp3dq0hhfdg0lx4z7rhdi74ik8v1mc7rql1jbxl7bmf";
+    sha256 = "cc979fcbb5283f74d388c7111c8ed6bef920b01614a014d6b1c5d6fbb554bfc3";
   };
 
   propagatedBuildInputs = [ requests oauthlib ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Official Python API client for Discogs";
     license = licenses.bsd2;
     homepage = "https://github.com/discogs/discogs_client";

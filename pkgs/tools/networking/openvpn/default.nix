@@ -1,78 +1,89 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig
-, iproute, lzo, openssl, pam
-, useSystemd ? stdenv.isLinux, systemd ? null, utillinux ? null
-, pkcs11Support ? false, pkcs11helper ? null,
+{ lib, stdenv
+, fetchurl
+, pkg-config
+, makeWrapper
+, runtimeShell
+, iproute2
+, lzo
+, openssl
+, pam
+, useSystemd ? stdenv.isLinux
+, systemd
+, util-linux
+, pkcs11Support ? false
+, pkcs11helper
 }:
 
-assert useSystemd -> (systemd != null);
-assert pkcs11Support -> (pkcs11helper != null);
-
-with stdenv.lib;
-
+with lib;
 let
-  # There is some fairly brittle string substitutions going on to replace paths,
-  # so please verify this script in case you are upgrading it
+  # Check if the script needs to have other binaries wrapped when changing this.
   update-resolved = fetchurl {
-    url = "https://raw.githubusercontent.com/jonathanio/update-systemd-resolved/v1.2.7/update-systemd-resolved";
-    sha256 = "12zfzh42apwbj7ks5kfxf3far7kaghlby4yapbhn00q8pbdlw7pq";
+    url = "https://raw.githubusercontent.com/jonathanio/update-systemd-resolved/v1.3.0/update-systemd-resolved";
+    sha256 = "021qzv1k0zxgv1rmyfpqj3zlzqr28xa7zff1n7vrbjk36ijylpsc";
   };
 
-in stdenv.mkDerivation rec {
-  name = "openvpn-${version}";
-  version = "2.4.7";
+  generic = { version, sha256 }:
+    let
+      withIpRoute = stdenv.isLinux && (versionOlder version "2.5");
+    in
+    stdenv.mkDerivation
+      rec {
+        pname = "openvpn";
+        inherit version;
 
-  src = fetchurl {
-    url = "https://swupdate.openvpn.net/community/releases/${name}.tar.xz";
-    sha256 = "0j7na936isk9j8nsdrrbw7wmy09inmjqvsb8mw8az7k61xbm6bx4";
+        src = fetchurl {
+          url = "https://swupdate.openvpn.net/community/releases/${pname}-${version}.tar.xz";
+          inherit sha256;
+        };
+
+        nativeBuildInputs = [ makeWrapper pkg-config ];
+
+        buildInputs = [ lzo openssl ]
+          ++ optional stdenv.isLinux pam
+          ++ optional withIpRoute iproute2
+          ++ optional useSystemd systemd
+          ++ optional pkcs11Support pkcs11helper;
+
+        configureFlags = optionals withIpRoute [
+          "--enable-iproute2"
+          "IPROUTE=${iproute2}/sbin/ip"
+        ]
+        ++ optional useSystemd "--enable-systemd"
+        ++ optional pkcs11Support "--enable-pkcs11"
+        ++ optional stdenv.isDarwin "--disable-plugin-auth-pam";
+
+        postInstall = ''
+          mkdir -p $out/share/doc/openvpn/examples
+          cp -r sample/sample-config-files/ $out/share/doc/openvpn/examples
+          cp -r sample/sample-keys/ $out/share/doc/openvpn/examples
+          cp -r sample/sample-scripts/ $out/share/doc/openvpn/examples
+        '' + optionalString useSystemd ''
+          install -Dm555 ${update-resolved} $out/libexec/update-systemd-resolved
+          wrapProgram $out/libexec/update-systemd-resolved \
+            --prefix PATH : ${makeBinPath [ runtimeShell iproute2 systemd util-linux ]}
+        '';
+
+        enableParallelBuilding = true;
+
+        meta = with lib; {
+          description = "A robust and highly flexible tunneling application";
+          downloadPage = "https://openvpn.net/community-downloads/";
+          homepage = "https://openvpn.net/";
+          license = licenses.gpl2;
+          maintainers = with maintainers; [ viric peterhoeg ];
+          platforms = platforms.unix;
+        };
+      };
+
+in
+{
+  openvpn_24 = generic {
+    version = "2.4.11";
+    sha256 = "06s4m0xvixjhd3azrzbsf4j86kah4xwr2jp6cmcpc7db33rfyyg5";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-
-  buildInputs = [ lzo openssl ]
-                  ++ optionals stdenv.isLinux [ pam iproute ]
-                  ++ optional useSystemd systemd
-                  ++ optional pkcs11Support pkcs11helper;
-
-  patches = [
-    ( fetchpatch {
-      url = "https://sources.debian.org/data/main/o/openvpn/2.4.7-1/debian/patches/fix-pkcs11-helper-hang.patch";
-      sha256 = "0c8jzbfsmb0mm9f7kkjxac1hk8q6igm267s687vx3mdqs1wys6bm";
-    })
-  ];
-
-  configureFlags = optionals stdenv.isLinux [
-    "--enable-iproute2"
-    "IPROUTE=${iproute}/sbin/ip" ]
-    ++ optional useSystemd "--enable-systemd"
-    ++ optional pkcs11Support "--enable-pkcs11"
-    ++ optional stdenv.isDarwin "--disable-plugin-auth-pam";
-
-  postInstall = ''
-    mkdir -p $out/share/doc/openvpn/examples
-    cp -r sample/sample-config-files/ $out/share/doc/openvpn/examples
-    cp -r sample/sample-keys/ $out/share/doc/openvpn/examples
-    cp -r sample/sample-scripts/ $out/share/doc/openvpn/examples
-
-    ${optionalString useSystemd ''
-      install -Dm755 ${update-resolved} $out/libexec/update-systemd-resolved
-
-      substituteInPlace $out/libexec/update-systemd-resolved \
-        --replace '/usr/bin/env bash' '${stdenv.shell} -e' \
-        --replace 'busctl call'       '${getBin systemd}/bin/busctl call' \
-        --replace '(ip '              '(${getBin iproute}/bin/ip ' \
-        --replace 'logger '           '${getBin utillinux}/bin/logger '
-    ''}
-  '';
-
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
-    description = "A robust and highly flexible tunneling application";
-    downloadPage = "https://openvpn.net/index.php/open-source/downloads.html";
-    homepage = https://openvpn.net/;
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ viric ];
-    platforms = platforms.unix;
-    updateWalker = true;
+  openvpn = generic {
+    version = "2.5.2";
+    sha256 = "sha256-sSdDg2kB82Xvr4KrJJOWfhshwh60POmo2hACoXycHcg=";
   };
 }

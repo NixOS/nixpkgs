@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, autoreconfHook }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook }:
 
-stdenv.mkDerivation rec {
-  name = "gpp-${version}";
+stdenv.mkDerivation {
+  pname = "gpp";
   version = "2.25";
 
   src = fetchFromGitHub {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   installCheckPhase = "$out/bin/gpp --help";
   doInstallCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "General-purpose preprocessor with customizable syntax";
     homepage = "https://logological.org/gpp";
     license = licenses.lgpl3;

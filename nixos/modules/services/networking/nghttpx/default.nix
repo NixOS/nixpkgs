@@ -60,7 +60,7 @@ let
       # NB: nghttpx doesn't accept "tls", you must omit "no-tls" for
       # the default behavior of turning on TLS.
       params1 = lib.remove "tls" params0;
-          
+
       sections          = [ host] ++ params1;
       formattedSections = lib.concatStringsSep ";" sections;
     in
@@ -90,14 +90,15 @@ in
 { imports = [
     ./nghttpx-options.nix
   ];
-  
+
   config = lib.mkIf cfg.enable {
 
     users.groups.nghttpx = { };
     users.users.nghttpx = {
       group = config.users.groups.nghttpx.name;
+      isSystemUser = true;
     };
-      
+
 
     systemd.services = {
       nghttpx = {

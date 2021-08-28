@@ -1,16 +1,17 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "p910nd-${version}";
+  pname = "p910nd";
   version = "0.97";
 
   src = fetchurl {
     sha256 = "0vy2qf386dif1nqznmy3j953mq7c4lk6j2hgyzkbmfi4msiq1jaa";
-    url = "mirror://sourceforge/p910nd/${name}.tar.bz2";
+    url = "mirror://sourceforge/p910nd/${pname}-${version}.tar.bz2";
   };
 
   postPatch = ''
-    sed -e "s|/usr||g" -i Makefile
+    substituteInPlace Makefile --replace "/usr" ""
+    substituteInPlace Makefile --replace "gcc" "${stdenv.cc.targetPrefix}cc"
   '';
 
   makeFlags = [ "DESTDIR=$(out)" "BINDIR=/bin" ];
@@ -24,7 +25,7 @@ stdenv.mkDerivation rec {
     mv $out/etc $out/share/doc/examples
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Small printer daemon passing jobs directly to the printer";
     longDescription = ''
       p910nd is a small printer daemon intended for diskless platforms that
@@ -36,9 +37,9 @@ stdenv.mkDerivation rec {
       the AppSocket protocol and has the scheme socket://. LPRng also supports
       this protocol and the syntax is lp=remotehost%9100 in /etc/printcap.
     '';
-    homepage = http://p910nd.sourceforge.net/;
-    downloadPage = https://sourceforge.net/projects/p910nd/;
+    homepage = "http://p910nd.sourceforge.net/";
+    downloadPage = "https://sourceforge.net/projects/p910nd/";
     license = licenses.gpl2;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

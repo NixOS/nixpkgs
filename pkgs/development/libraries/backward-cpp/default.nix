@@ -1,7 +1,7 @@
 { stdenv, lib, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "backward-${version}";
+  pname = "backward";
   version = "1.3";
 
   src = fetchFromGitHub {
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     description = "Beautiful stack trace pretty printer for C++";
     homepage = "https://github.com/bombela/backward-cpp";
     license = licenses.mit;
-    platforms = platforms.linux;
+    platforms = platforms.all;
     maintainers = with maintainers; [ cstrahan ];
   };
 }

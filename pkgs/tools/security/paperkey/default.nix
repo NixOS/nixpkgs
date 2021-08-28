@@ -1,11 +1,11 @@
-{ fetchurl, stdenv }:
+{ fetchurl, lib, stdenv }:
 
 stdenv.mkDerivation rec {
-  name = "paperkey-${version}";
+  pname = "paperkey";
   version = "1.6";
 
   src = fetchurl {
-    url = "https://www.jabberwocky.com/software/paperkey/${name}.tar.gz";
+    url = "https://www.jabberwocky.com/software/paperkey/${pname}-${version}.tar.gz";
     sha256 = "1xq5gni6gksjkd5avg0zpd73vsr97appksfx0gx2m38s4w9zsid2";
   };
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Store OpenPGP or GnuPG on paper";
     longDescription = ''
       A reasonable way to achieve a long term backup of OpenPGP (GnuPG, PGP, etc)

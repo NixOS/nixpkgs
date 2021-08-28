@@ -1,15 +1,15 @@
 { stdenv, acl, attr, autoconf, automake, bash, bc, coreutils, e2fsprogs
 , fetchgit, fio, gawk, keyutils, killall, lib, libaio, libcap, libtool
 , libuuid, libxfs, lvm2, openssl, perl, procps, quota
-, time, utillinux, which, writeScript, xfsprogs, runtimeShell }:
+, time, util-linux, which, writeScript, xfsprogs, runtimeShell }:
 
 stdenv.mkDerivation {
-  name = "xfstests-2018-04-11";
+  name = "xfstests-2019-09-08";
 
   src = fetchgit {
     url = "git://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git";
-    rev = "fdf6d4bc862bb3269c95986fdaf1c59271762ad6";
-    sha256 = "16j1kcmj0xq6s2qw4hll5r5cz7q4vbbsy2nh1g5aaq7xsl3h8mhb";
+    rev = "0837e907988a5f410cae0ae714f42f9c4242e072";
+    sha256 = "1f5cv0vwc1g9difzp69k49rc5nfd08y72vdg318j25nv3rwv7wc9";
   };
 
   nativeBuildInputs = [
@@ -23,6 +23,9 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   patchPhase = ''
+    substituteInPlace Makefile \
+      --replace "cp include/install-sh ." "cp -f include/install-sh ."
+
     # Patch the destination directory
     sed -i include/builddefs.in -e "s|^PKG_LIB_DIR\s*=.*|PKG_LIB_DIR=$out/lib/xfstests|"
 
@@ -93,13 +96,13 @@ stdenv.mkDerivation {
 
     export PATH=${lib.makeBinPath [acl attr bc e2fsprogs fio gawk keyutils
                                    libcap lvm2 perl procps killall quota
-                                   utillinux which xfsprogs]}:$PATH
+                                   util-linux which xfsprogs]}:$PATH
     exec ./check "$@"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Torture test suite for filesystems";
-    homepage = https://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git/;
+    homepage = "https://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git/";
     license = licenses.gpl2;
     maintainers = [ maintainers.dezgeg ];
     platforms = platforms.linux;

@@ -1,17 +1,33 @@
-{ stdenv, go, buildGoModule, fetchgit }:
+{ lib, buildGoModule, fetchgit }:
 
 buildGoModule rec {
-  name = "gotools-unstable-${version}";
-  version = "2019-06-03";
-  rev = "8aaa1484dc108aa23dcf2d4a09371c0c9e280f6b";
+  pname = "gotools-unstable";
+  version = "2021-01-13";
+  rev = "8b4aab62c064010e8e875d2e5a8e63a96fefc87d";
 
   src = fetchgit {
     inherit rev;
     url = "https://go.googlesource.com/tools";
-    sha256 = "0sa41fi38b6pvz7jjr6vqrd152qjvmbcagm1qdxw41vqcdw3ljx3";
+    sha256 = "1cmnm9fl2a6hiplj8s6x0l3czcw4xh3j3lvzbgccnp1l8kz8q2vm";
   };
 
-  modSha256 = "0cm7fwb1k5hvbhh86kagzsw5vwgkr6dr7glhbjxg5xaahlhx2w5w";
+  # The gopls folder contains a Go submodule which causes a build failure.
+  # Given that, we can't have the gopls binary be part of the gotools
+  # derivation.
+  #
+  # The attribute "gopls" provides the gopls binary.
+  #
+  # Related
+  #
+  # * https://github.com/NixOS/nixpkgs/pull/85868
+  # * https://github.com/NixOS/nixpkgs/issues/88716
+  postPatch = ''
+    rm -rf gopls
+  '';
+
+  vendorSha256 = "18qpjmmjpk322fvf81cafkpl3spv7hpdpymhympmld9isgzggfyz";
+
+  doCheck = false;
 
   postConfigure = ''
     # Make the builtin tools available here
@@ -24,15 +40,14 @@ buildGoModule rec {
   '';
 
   excludedPackages = "\\("
-    + stdenv.lib.concatStringsSep "\\|" ([ "testdata" ] ++ stdenv.lib.optionals (stdenv.lib.versionAtLeast go.meta.branch "1.5") [ "vet" "cover" ])
+    + lib.concatStringsSep "\\|" ([ "testdata" "vet" "cover" ])
     + "\\)";
 
   # Set GOTOOLDIR for derivations adding this to buildInputs
   postInstall = ''
     mkdir -p $out/nix-support
-    substituteAll ${../../go-modules/tools/setup-hook.sh} $out/nix-support/setup-hook.tmp
-    cat $out/nix-support/setup-hook.tmp >> $out/nix-support/setup-hook
-    rm $out/nix-support/setup-hook.tmp
+    substitute ${../../go-modules/tools/setup-hook.sh} $out/nix-support/setup-hook \
+      --subst-var-by bin $out
   '';
 
   # Do not copy this without a good reason for enabling

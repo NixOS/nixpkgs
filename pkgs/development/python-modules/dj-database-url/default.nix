@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Use Database URLs in your Django Application";
-    homepage = https://github.com/kennethreitz/dj-database-url;
+    homepage = "https://github.com/kennethreitz/dj-database-url";
     license = licenses.bsd2;
   };
 }

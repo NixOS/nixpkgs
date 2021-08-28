@@ -1,0 +1,61 @@
+diff --git a/src/services/log.js b/src/services/log.js
+index b4c39e99..4c249154 100644
+--- a/src/services/log.js
++++ b/src/services/log.js
+@@ -1,14 +1,5 @@
+ "use strict";
+ 
+-const fs = require('fs');
+-const dataDir = require('./data_dir');
+-
+-if (!fs.existsSync(dataDir.LOG_DIR)) {
+-    fs.mkdirSync(dataDir.LOG_DIR, 0o700);
+-}
+-
+-let logFile = null;
+-
+ const SECOND = 1000;
+ const MINUTE = 60 * SECOND;
+ const HOUR = 60 * MINUTE;
+@@ -16,41 +7,7 @@ const DAY = 24 * HOUR;
+ 
+ const NEW_LINE = process.platform === "win32" ? '\r\n' : '\n';
+ 
+-let todaysMidnight = null;
+-
+-initLogFile();
+-
+-function getTodaysMidnight() {
+-    const now = new Date();
+-
+-    return new Date(now.getFullYear(), now.getMonth(), now.getDate());
+-}
+-
+-function initLogFile() {
+-    todaysMidnight = getTodaysMidnight();
+-
+-    const path = dataDir.LOG_DIR + '/trilium-' + formatDate() + '.log';
+-
+-    if (logFile) {
+-        logFile.end();
+-    }
+-
+-    logFile = fs.createWriteStream(path, {flags: 'a'});
+-}
+-
+-function checkDate(millisSinceMidnight) {
+-    if (millisSinceMidnight >= DAY) {
+-        initLogFile();
+-    }
+-}
+-
+ function log(str) {
+-    const millisSinceMidnight = Date.now() - todaysMidnight.getTime();
+-
+-    checkDate(millisSinceMidnight);
+-
+-    logFile.write(formatTime(millisSinceMidnight) + ' ' + str + NEW_LINE);
+-
+     console.log(str);
+ }
+ 

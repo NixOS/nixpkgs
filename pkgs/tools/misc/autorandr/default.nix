@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , python3Packages
 , fetchFromGitHub
 , systemd
@@ -6,10 +6,11 @@
 
 let
   python = python3Packages.python;
-  version = "1.8.1";
+  version = "1.11";
 in
   stdenv.mkDerivation {
-    name = "autorandr-${version}";
+    pname = "autorandr";
+    inherit version;
 
     buildInputs = [ python ];
 
@@ -20,6 +21,8 @@ in
         --replace '["xrandr"]' '["${xrandr}/bin/xrandr"]'
     '';
 
+    outputs = [ "out" "man" ];
+
     installPhase = ''
       runHook preInstall
       make install TARGETS='autorandr' PREFIX=$out
@@ -28,12 +31,14 @@ in
 
       make install TARGETS='autostart_config' PREFIX=$out DESTDIR=$out
 
+      make install TARGETS='manpage' PREFIX=$man
+
       ${if systemd != null then ''
         make install TARGETS='systemd udev' PREFIX=$out DESTDIR=$out \
           SYSTEMD_UNIT_DIR=/lib/systemd/system \
           UDEV_RULES_DIR=/etc/udev/rules.d
         substituteInPlace $out/etc/udev/rules.d/40-monitor-hotplug.rules \
-          --replace /bin/systemctl "${systemd}/bin/systemctl"
+          --replace /bin/systemctl "/run/current-system/systemd/bin/systemctl"
       '' else ''
         make install TARGETS='pmutils' DESTDIR=$out \
           PM_SLEEPHOOKS_DIR=/lib/pm-utils/sleep.d
@@ -47,15 +52,15 @@ in
     src = fetchFromGitHub {
       owner = "phillipberndt";
       repo = "autorandr";
-      rev = "${version}";
-      sha256 = "1bp1cqkrpg77rjyh4lq1agc719fmxn92jkiicf6nbhfl8kf3l3vy";
+      rev = version;
+      sha256 = "0rmnqk2bi6bbd2if1rll37mlzlqxzmnazfffdhcpzskxwyaj4yn5";
     };
 
-    meta = {
-      homepage = https://github.com/phillipberndt/autorandr/;
+    meta = with lib; {
+      homepage = "https://github.com/phillipberndt/autorandr/";
       description = "Automatically select a display configuration based on connected devices";
-      license = stdenv.lib.licenses.gpl3Plus;
-      maintainers = [ stdenv.lib.maintainers.coroa ];
-      platforms = stdenv.lib.platforms.unix;
+      license = licenses.gpl3Plus;
+      maintainers = with maintainers; [ coroa globin ];
+      platforms = platforms.unix;
     };
   }

@@ -23,7 +23,7 @@ in {
 
       mpd = {
         host = mkOption {
-          type = types.string;
+          type = types.str;
           default = "localhost";
           description = "The host where MPD is listening.";
           example = "localhost";

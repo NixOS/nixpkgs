@@ -1,13 +1,13 @@
-{ stdenv, fetchurl, libXmu, libXt, libX11, libXext, libXxf86vm, libjack2
+{ lib, stdenv, fetchurl, libXmu, libXt, libX11, libXext, libXxf86vm, libjack2
 , makeWrapper
 }:
 
 let
-  rpath = stdenv.lib.makeLibraryPath
+  rpath = lib.makeLibraryPath
     [ libXmu libXt libX11 libXext libXxf86vm libjack2 ];
 in
 stdenv.mkDerivation rec {
-  name = "baudline-${version}";
+  pname = "baudline";
   version = "1.08";
 
   src =
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     else
       throw "baudline isn't supported (yet?) on ${stdenv.hostPlatform.system}";
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   # Prebuilt binary distribution.
   # "patchelf --set-rpath" seems to break the application (cannot start), using
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Scientific signal analysis application";
     longDescription = ''
       Baudline is a time-frequency browser designed for scientific
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
       displays, and continuous capture tools for hunting down and studying
       elusive signal characteristics.
     '';
-    homepage = http://www.baudline.com/;
+    homepage = "http://www.baudline.com/";
     # See http://www.baudline.com/faq.html#licensing_terms.
     # (Do NOT (re)distribute on hydra.)
     license = licenses.unfree;

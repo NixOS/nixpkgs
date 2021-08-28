@@ -1,18 +1,18 @@
-{stdenv, fetchurl}:
+{lib, stdenv, fetchurl}:
 
 stdenv.mkDerivation {
   name = "sysklogd-1.5.1";
 
   src = fetchurl {
-    url = http://www.infodrom.org/projects/sysklogd/download/sysklogd-1.5.1.tar.gz;
+    url = "http://www.infodrom.org/projects/sysklogd/download/sysklogd-1.5.1.tar.gz";
     sha256 = "00f2wy6f0qng7qzga4iicyzl9j8b7mp6mrpfky5jxj93ms2w2rji";
   };
 
-  patches = [ ./systemd.patch ./union-wait.patch ];
+  patches = [ ./systemd.patch ./union-wait.patch ./fix-includes-for-musl.patch ];
 
   NIX_CFLAGS_COMPILE = "-DSYSV";
 
-  installFlags = "BINDIR=$(out)/sbin MANDIR=$(out)/share/man INSTALL=install";
+  installFlags = [ "BINDIR=$(out)/sbin" "MANDIR=$(out)/share/man" "INSTALL=install" ];
 
   preConfigure =
     ''
@@ -21,8 +21,9 @@ stdenv.mkDerivation {
 
   preInstall = "mkdir -p $out/share/man/man5/ $out/share/man/man8/ $out/sbin";
 
-  meta = {
+  meta = with lib; {
     description = "A system logging daemon";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = platforms.linux;
+    license = licenses.gpl2;
   };
 }

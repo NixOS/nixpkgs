@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, ncurses }:
+{ lib, stdenv, fetchFromGitHub, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "ttyplot-${version}";
+  pname = "ttyplot";
   version = "1.4";
 
   src = fetchFromGitHub {
@@ -22,9 +22,9 @@ stdenv.mkDerivation rec {
     cp ttyplot $out/bin/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple general purpose plotting utility for tty with data input from stdin";
-    homepage = https://github.com/tenox7/ttyplot;
+    homepage = "https://github.com/tenox7/ttyplot";
     license = licenses.unlicense;
     maintainers = with maintainers; [ lassulus ];
   };

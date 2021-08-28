@@ -1,8 +1,9 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
+, nix-update-script
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , gtk3
 , glib
 , intltool
@@ -33,7 +34,8 @@ stdenv.mkDerivation rec {
     intltool
     meson
     ninja
-    pkgconfig
+    pkg-config
+    wrapGAppsHook
   ];
 
   buildInputs = [
@@ -45,7 +47,6 @@ stdenv.mkDerivation rec {
     libXext
     libXxf86vm
     systemd
-    wrapGAppsHook
   ];
 
   mesonFlags = [
@@ -64,8 +65,14 @@ stdenv.mkDerivation rec {
     ${glib.dev}/bin/glib-compile-schemas $out/share/glib-2.0/schemas
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/the-cavalry/light-locker;
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = pname;
+    };
+  };
+
+  meta = with lib; {
+    homepage = "https://github.com/the-cavalry/light-locker";
     description = "A simple session-locker for LightDM";
     longDescription = ''
       A simple locker (forked from gnome-screensaver) that aims to

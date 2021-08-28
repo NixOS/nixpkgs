@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, qtbase, qtsvg, qmake, pkgconfig, boost, wirelesstools, iw, qwt, makeWrapper }:
+{ lib, stdenv, fetchurl, qtbase, qtsvg, qmake, pkg-config, boost, wirelesstools, iw, qwt, wrapQtAppsHook }:
 
 stdenv.mkDerivation rec {
-  name = "linssid-${version}";
+  pname = "linssid";
   version = "2.7";
 
   src = fetchurl {
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "13d35rlcjncd8lx3khkgn9x8is2xjd5fp6ns5xsn3w6l4xj9b4gl";
   };
 
-  nativeBuildInputs = [ pkgconfig qmake makeWrapper ];
+  nativeBuildInputs = [ pkg-config qmake wrapQtAppsHook ];
   buildInputs = [ qtbase qtsvg boost qwt ];
 
   patches = [ ./0001-unbundled-qwt.patch ];
@@ -26,15 +26,12 @@ stdenv.mkDerivation rec {
     rm -fr qwt-lib
   '';
 
-  postInstall = ''
-    wrapProgram $out/bin/linssid \
-      --prefix QT_PLUGIN_PATH : ${qtbase}/${qtbase.qtPluginPrefix} \
-      --prefix PATH : ${stdenv.lib.makeBinPath [ wirelesstools iw ]}  
-      '';
+  qtWrapperArgs =
+    [ ''--prefix PATH : ${lib.makeBinPath [ wirelesstools iw ]}'' ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Graphical wireless scanning for Linux";
-    homepage = https://sourceforge.net/projects/linssid/;
+    homepage = "https://sourceforge.net/projects/linssid/";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];

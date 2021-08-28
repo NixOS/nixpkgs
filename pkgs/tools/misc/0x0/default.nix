@@ -1,7 +1,7 @@
-{ stdenv, xsel, curl, fetchFromGitLab, makeWrapper}:
+{ lib, stdenv, xsel, curl, fetchFromGitLab, makeWrapper}:
 
-stdenv.mkDerivation rec {
-  name = "0x0-${version}";
+stdenv.mkDerivation {
+  pname = "0x0";
   version = "2018-06-24";
 
   src = fetchFromGitLab {
@@ -11,20 +11,21 @@ stdenv.mkDerivation rec {
     sha256 = "1qpylyxrisy3p2lyirfarfj5yzrdjgsgxwf8gqwljpcjn207hr72";
   };
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     install -Dm755 0x0 $out/bin/0x0
 
     patchShebangs $out/bin/0x0
     wrapProgram $out/bin/0x0 \
-      --prefix PATH : '${stdenv.lib.makeBinPath [ curl xsel ]}'
+      --prefix PATH : '${lib.makeBinPath [ curl xsel ]}'
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A client for 0x0.st";
     homepage = "https://gitlab.com/somasis/scripts/";
     maintainers = [ maintainers.ar1a ];
     license = licenses.unlicense;
+    platforms = platforms.unix;
   };
 }

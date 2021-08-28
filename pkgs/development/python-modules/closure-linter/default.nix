@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchgit
 , isPy3k
@@ -8,7 +8,7 @@
 /* There is a project called "closure-linter" on PyPI that is the
    same as this, but it does not appear to be owned by Google.
    So we're pulling from Google's GitHub repo instead. */
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "closure-linter";
   version = "2.3.19";
 
@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ gflags ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Checks JavaScript files against Google's style guide.";
     homepage = "https://developers.google.com/closure/utilities/";
     license = with licenses; [ asl20 ];

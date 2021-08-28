@@ -13,6 +13,18 @@ let
   )) + ".1");
 in
 {
+
+  imports = [
+    (mkRenamedOptionModule [ "services" "kubernetes" "apiserver" "admissionControl" ] [ "services" "kubernetes" "apiserver" "enableAdmissionPlugins" ])
+    (mkRenamedOptionModule [ "services" "kubernetes" "apiserver" "address" ] ["services" "kubernetes" "apiserver" "bindAddress"])
+    (mkRenamedOptionModule [ "services" "kubernetes" "apiserver" "port" ] ["services" "kubernetes" "apiserver" "insecurePort"])
+    (mkRemovedOptionModule [ "services" "kubernetes" "apiserver" "publicAddress" ] "")
+    (mkRenamedOptionModule [ "services" "kubernetes" "etcd" "servers" ] [ "services" "kubernetes" "apiserver" "etcd" "servers" ])
+    (mkRenamedOptionModule [ "services" "kubernetes" "etcd" "keyFile" ] [ "services" "kubernetes" "apiserver" "etcd" "keyFile" ])
+    (mkRenamedOptionModule [ "services" "kubernetes" "etcd" "certFile" ] [ "services" "kubernetes" "apiserver" "etcd" "certFile" ])
+    (mkRenamedOptionModule [ "services" "kubernetes" "etcd" "caFile" ] [ "services" "kubernetes" "apiserver" "etcd" "caFile" ])
+  ];
+
   ###### interface
   options.services.kubernetes.apiserver = with lib.types; {
 
@@ -133,7 +145,7 @@ in
     extraOpts = mkOption {
       description = "Kubernetes apiserver extra command line options.";
       default = "";
-      type = str;
+      type = separatedString " ";
     };
 
     extraSANs = mkOption {
@@ -226,14 +238,40 @@ in
       type = int;
     };
 
+    apiAudiences = mkOption {
+      description = ''
+        Kubernetes apiserver ServiceAccount issuer.
+      '';
+      default = "api,https://kubernetes.default.svc";
+      type = str;
+    };
+
+    serviceAccountIssuer = mkOption {
+      description = ''
+        Kubernetes apiserver ServiceAccount issuer.
+      '';
+      default = "https://kubernetes.default.svc";
+      type = str;
+    };
+
+    serviceAccountSigningKeyFile = mkOption {
+      description = ''
+        Path to the file that contains the current private key of the service
+        account token issuer. The issuer will sign issued ID tokens with this
+        private key.
+      '';
+      type = path;
+    };
+
     serviceAccountKeyFile = mkOption {
       description = ''
-        Kubernetes apiserver PEM-encoded x509 RSA private or public key file,
-        used to verify ServiceAccount tokens. By default tls private key file
-        is used.
+        File containing PEM-encoded x509 RSA or ECDSA private or public keys,
+        used to verify ServiceAccount tokens. The specified file can contain
+        multiple keys, and the flag can be specified multiple times with
+        different files. If unspecified, --tls-private-key-file is used.
+        Must be specified when --service-account-signing-key is provided
       '';
-      default = null;
-      type = nullOr path;
+      type = path;
     };
 
     serviceClusterIpRange = mkOption {
@@ -290,32 +328,11 @@ in
   ###### implementation
   config = mkMerge [
 
-    (let
-
-      apiserverPaths = filter (a: a != null) [
-        cfg.clientCaFile
-        cfg.etcd.caFile
-        cfg.etcd.certFile
-        cfg.etcd.keyFile
-        cfg.kubeletClientCaFile
-        cfg.kubeletClientCertFile
-        cfg.kubeletClientKeyFile
-        cfg.serviceAccountKeyFile
-        cfg.tlsCertFile
-        cfg.tlsKeyFile
-      ];
-      etcdPaths = filter (a: a != null) [
-        config.services.etcd.trustedCaFile
-        config.services.etcd.certFile
-        config.services.etcd.keyFile
-      ];
-
-    in mkIf cfg.enable {
+    (mkIf cfg.enable {
         systemd.services.kube-apiserver = {
           description = "Kubernetes APIServer Service";
-          wantedBy = [ "kube-control-plane-online.target" ];
-          after = [ "certmgr.service" ];
-          before = [ "kube-control-plane-online.target" ];
+          wantedBy = [ "kubernetes.target" ];
+          after = [ "network.target" ];
           serviceConfig = {
             Slice = "kubernetes.slice";
             ExecStart = ''${top.package}/bin/kube-apiserver \
@@ -366,8 +383,10 @@ in
               ${optionalString (cfg.runtimeConfig != "")
                 "--runtime-config=${cfg.runtimeConfig}"} \
               --secure-port=${toString cfg.securePort} \
-              ${optionalString (cfg.serviceAccountKeyFile!=null)
-                "--service-account-key-file=${cfg.serviceAccountKeyFile}"} \
+              --api-audiences=${toString cfg.apiAudiences} \
+              --service-account-issuer=${toString cfg.serviceAccountIssuer} \
+              --service-account-signing-key-file=${cfg.serviceAccountSigningKeyFile} \
+              --service-account-key-file=${cfg.serviceAccountKeyFile} \
               --service-cluster-ip-range=${cfg.serviceClusterIpRange} \
               --storage-backend=${cfg.storageBackend} \
               ${optionalString (cfg.tlsCertFile != null)
@@ -386,15 +405,6 @@ in
             Restart = "on-failure";
             RestartSec = 5;
           };
-          unitConfig.ConditionPathExists = apiserverPaths;
-        };
-
-        systemd.paths.kube-apiserver = mkIf top.apiserver.enable {
-          wantedBy = [ "kube-apiserver.service" ];
-          pathConfig = {
-            PathExists = apiserverPaths;
-            PathChanged = apiserverPaths;
-          };
         };
 
         services.etcd = {
@@ -406,18 +416,6 @@ in
           initialCluster = mkDefault ["${top.masterAddress}=https://${top.masterAddress}:2380"];
           name = mkDefault top.masterAddress;
           initialAdvertisePeerUrls = mkDefault ["https://${top.masterAddress}:2380"];
-        };
-
-        systemd.services.etcd = {
-          unitConfig.ConditionPathExists = etcdPaths;
-        };
-
-        systemd.paths.etcd = {
-          wantedBy = [ "etcd.service" ];
-          pathConfig = {
-            PathExists = etcdPaths;
-            PathChanged = etcdPaths;
-          };
         };
 
         services.kubernetes.addonManager.bootstrapAddons = mkIf isRBACEnabled {

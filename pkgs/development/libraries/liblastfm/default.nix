@@ -1,29 +1,36 @@
-{ stdenv, fetchurl, qt4, pkgconfig, libsamplerate, fftwSinglePrec, which, cmake
+{ lib, stdenv, fetchFromGitHub, fetchpatch, pkg-config, which, cmake
+, fftwSinglePrec, libsamplerate, qtbase
 , darwin }:
 
-let version = "1.0.9"; in
-
 stdenv.mkDerivation rec {
-  name = "liblastfm-${version}";
+  pname = "liblastfm-unstable";
+  version = "2019-08-23";
 
-  # Upstream does not package git tags as tarballs. Get tarball from github.
-  src = fetchurl {
-    url = "https://github.com/lastfm/liblastfm/tarball/${version}";
-    name = "${name}.tar.gz";
-    sha256 = "09qiaxsxw6g2m7mvkffpfsi5wis8nl1x4lgnk0sa30859z54iw53";
+  src = fetchFromGitHub {
+    owner = "lastfm";
+    repo = "liblastfm";
+    rev = "2ce2bfe1879227af8ffafddb82b218faff813db9";
+    sha256 = "1crih9xxf3rb109aqw12bjqv47z28lvlk2dpvyym5shf82nz6yd0";
   };
 
-  prefixKey = "--prefix ";
-  propagatedBuildInputs = [ qt4 libsamplerate fftwSinglePrec ];
-  nativeBuildInputs = [ pkgconfig which cmake ];
-  buildInputs = stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.SystemConfiguration;
+  patches = [(fetchpatch {
+    url = "https://github.com/lastfm/liblastfm/commit/9c5d072b55f2863310e40291677e6397e9cbc3c2.patch";
+    name = "0001-Remove-deprecated-staging-server-and-fix-test-for-QT5-at-Ubuntu-19.10.patch";
+    sha256 = "04r14prydxshjgfws3pjajjmp2msszhjjs1mjh8s66yg29vq620l";
+  })];
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/lastfm/liblastfm;
-    repositories.git = git://github.com/lastfm/liblastfm.git;
+  nativeBuildInputs = [ pkg-config which cmake ];
+  buildInputs = [ fftwSinglePrec libsamplerate qtbase ]
+    ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.SystemConfiguration;
+
+  dontWrapQtApps = true;
+
+  meta = with lib; {
+    homepage = "https://github.com/lastfm/liblastfm";
+    repositories.git = "git://github.com/lastfm/liblastfm.git";
     description = "Official LastFM library";
-    inherit (qt4.meta) platforms;
-    maintainers =  [ maintainers.phreedom ];
+    platforms = platforms.unix;
+    maintainers = [ maintainers.phreedom ];
     license = licenses.gpl3;
   };
 }

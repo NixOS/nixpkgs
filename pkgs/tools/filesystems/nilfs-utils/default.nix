@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, libuuid, libselinux }:
+{ lib, stdenv, fetchurl, fetchpatch, libuuid, libselinux }:
 let
   sourceInfo = rec {
     version = "2.2.7";
@@ -8,7 +8,7 @@ let
     name = "${baseName}-${version}";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   src = fetchurl {
     url = sourceInfo.url;
     sha256 = sourceInfo.sha256;
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-libmount"
-  ] ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     # AC_FUNC_MALLOC is broken on cross builds.
     "ac_cv_func_malloc_0_nonnull=yes"
     "ac_cv_func_realloc_0_nonnull=yes"
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     find . -name .libs | xargs rm -rf
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "NILFS utilities";
     maintainers = [ maintainers.raskin ];
     platforms = platforms.linux;

@@ -1,18 +1,18 @@
-{ stdenv, lib, fetchzip, autoconf, automake, cups, glib, libxml2, libusb, libtool
+{ stdenv, lib, fetchzip, autoconf, automake, cups, glib, libxml2, libusb1, libtool
 , withDebug ? false }:
 
-stdenv.mkDerivation rec {
-  name = "cnijfilter2-${version}";
+stdenv.mkDerivation {
+  pname = "cnijfilter2";
 
-  version = "5.30";
+  version = "6.00";
 
   src = fetchzip {
-    url = "http://gdlp01.c-wss.com/gds/9/0100007129/01/cnijfilter2-source-5.30-1.tar.gz";
-    sha256 = "0gnl9arwmkblljsczspcgggx85a19vcmhmbjfyv1bq236yqixv5c";
+    url = "https://gdlp01.c-wss.com/gds/9/0100010739/01/cnijfilter2-source-6.00-1.tar.gz";
+    sha256 = "1n4vq44zya0n4a7jvq3yyqy7dcvc2911cjvxmq48zqicb2xdgafr";
   };
 
   buildInputs = [
-    cups automake autoconf glib libxml2 libusb libtool
+    cups automake autoconf glib libxml2 libusb1 libtool
   ];
 
   # lgmon3's --enable-libdir flag is used soley for specifying in which
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
       cd lgmon3
       substituteInPlace src/Makefile.am \
         --replace /usr/include/libusb-1.0 \
-                  ${libusb.dev}/include/libusb-1.0
+                  ${libusb1.dev}/include/libusb-1.0
       ./autogen.sh --prefix=$out --enable-progpath=$out/bin \
                    --datadir=$out/share \
                    --enable-libdir=/var/cache/cups
@@ -114,10 +114,21 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Canon InkJet printer drivers for the MG7500, MG6700, MG6600, MG5600, MG2900, MB2000, MB2300, iB4000, MB5000, MB5300, iP110, E450, MX490, E480, MG7700, MG6900, MG6800, MG5700, MG3600, and G3000 series.";
-    homepage = http://support-th.canon-asia.com/contents/TH/EN/0100712901.html;
+    description = "Canon InkJet printer drivers for many Pixma series printers.";
+    longDescription = ''
+      Canon InjKet printer drivers for series E200, E300, E3100, E3300, E4200, E450, E470, E480,
+      G3000, G3010, G4000, G4010, G5000, G5080, G6000, G6050, G6080, G7000, G7050, G7080, GM2000,
+      GM2080, GM4000, GM4080, iB4000, iB4100, iP110, MB2000, MB2100, MB2300, MB2700, MB5000,
+      MB5100, MB5300, MB5400, MG2900, MG3000, MG3600, MG5600, MG5700, MG6600, MG6700, MG6800,
+      MG6900, MG7500, MG7700, MX490, TR4500, TR703, TR7500, TR7530, TR8500, TR8530, TR8580, TR9530,
+      TS200, TS300, TS3100, TS3300, TS5000, TS5100, TS5300, TS5380, TS6000, TS6100, TS6130, TS6180,
+      TS6200, TS6230, TS6280, TS6300, TS6330, TS6380, TS700, TS708, TS7330, TS8000, TS8100, TS8130,
+      TS8180, TS8200, TS8230, TS8280, TS8300, TS8330, TS8380, TS9000, TS9100, TS9180, TS9500,
+      TS9580, XK50, XK60, XK70, XK80.
+    '';
+    homepage = "https://hk.canon/en/support/0101048401/1";
     license = licenses.unfree;
-    platforms = platforms.linux;
+    platforms = [ "i686-linux" "x86_64-linux" ];
     maintainers = with maintainers; [ cstrahan ];
   };
 }

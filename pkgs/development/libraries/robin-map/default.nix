@@ -1,23 +1,23 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , cmake
 }:
 
 stdenv.mkDerivation rec {
   pname = "robin-map";
-  version = "0.6.1";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "Tessil";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0blvvbr14f0drbd6dp0cs8x4ng3ppb5i72dmhk43ylg6yjgh4fhq";
+    sha256 = "1li70vwsksva9c4yly90hjafgqfixi1g6d52qq9p6r60vqc4pkjj";
   };
 
   nativeBuildInputs = [ cmake ];
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/Tessil/robin-map;
+  meta = with lib; {
+    homepage = "https://github.com/Tessil/robin-map";
     description = "C++ implementation of a fast hash map and hash set using robin hood hashing";
     license = licenses.mit;
     maintainers = with maintainers; [ goibhniu jtojnar ];

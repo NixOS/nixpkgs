@@ -1,22 +1,28 @@
-{ stdenv, fetchPypi, buildPythonPackage, greenlet }:
+{ lib, fetchPypi, buildPythonPackage, greenlet }:
 
 buildPythonPackage rec {
   pname = "meinheld";
-  version = "0.6.1";
+  version = "1.0.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0rg5878njn66cc0x2fwrakikz24946r0cxxl6j8vvz5phd4zygi9";
+    sha256 = "008c76937ac2117cc69e032dc69cea9f85fc605de9bac1417f447c41c16a56d6";
   };
+
+  patchPhase = ''
+    # Allow greenlet-1.0.0.
+    # See https://github.com/mopemope/meinheld/pull/123
+    substituteInPlace setup.py --replace "greenlet>=0.4.5,<0.5" "greenlet>=0.4.5,<2.0.0"
+  '';
 
   propagatedBuildInputs = [ greenlet ];
 
   # No tests
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "High performance asynchronous Python WSGI Web Server";
-    homepage = http://meinheld.org/;
+    homepage = "https://meinheld.org/";
     license = licenses.bsd3;
   };
 }

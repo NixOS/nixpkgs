@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, fetchpatch, pkgconfig, fuse, adb }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, pkg-config, fuse, adb }:
 
 stdenv.mkDerivation rec {
-  name = "adbfs-rootless-${version}";
+  pname = "adbfs-rootless";
   version = "2016-10-02";
 
   src = fetchFromGitHub {
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ fuse ];
 
   postPatch = ''
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     install -D adbfs $out/bin/adbfs
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Mount Android phones on Linux with adb, no root required";
     inherit (src.meta) homepage;
     license = licenses.bsd3;

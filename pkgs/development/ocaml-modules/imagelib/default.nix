@@ -1,26 +1,28 @@
-{ stdenv, fetchFromGitHub, which, ocaml, findlib, ocamlbuild, decompress }:
+{ lib, fetchurl, buildDunePackage
+, decompress, stdlib-shims, alcotest
+}:
 
-stdenv.mkDerivation rec {
-  version = "20171028";
-  name = "ocaml${ocaml.version}-imagelib-${version}";
-  src = fetchFromGitHub {
-    owner = "rlepigre";
-    repo = "ocaml-imagelib";
-    rev = "ocaml-imagelib_${version}";
-    sha256 = "1frkrgcrv4ybdmqcfxpfsywx0hm1arxgxp32n8kzky6qip1g0zxf";
+buildDunePackage rec {
+  minimumOCamlVersion = "4.07";
+  version = "20210402";
+  pname = "imagelib";
+
+  useDune2 = true;
+
+  src = fetchurl {
+    url = "https://github.com/rlepigre/ocaml-imagelib/releases/download/${version}/imagelib-${version}.tbz";
+    sha256 = "b3c8ace02b10b36b6c60b3ce3ae0b9109d4a861916ec320c59cc1194f4cc86e3";
   };
 
-  buildInputs = [ which ocaml findlib ocamlbuild ];
+  propagatedBuildInputs = [ decompress stdlib-shims ];
 
-  propagatedBuildInputs = [ decompress ];
-
-  createFindlibDestdir = true;
+  doCheck = true;
+  checkInputs = [ alcotest ];
 
   meta = {
     description = "Image formats such as PNG and PPM in OCaml";
-    license = stdenv.lib.licenses.lgpl3;
-    maintainers = [ stdenv.lib.maintainers.vbgl ];
-    inherit (src.meta) homepage;
-    inherit (ocaml.meta) platforms;
+    license = lib.licenses.lgpl3;
+    maintainers = [ lib.maintainers.vbgl ];
+    homepage = "https://github.com/rlepigre/ocaml-imagelib";
   };
 }

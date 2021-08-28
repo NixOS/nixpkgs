@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, ncurses }:
+{ lib, stdenv, fetchFromGitHub, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "2048-in-terminal-${version}";
+  pname = "2048-in-terminal";
   version = "2017-11-29";
 
   src = fetchFromGitHub {
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   '';
   installFlags = [ "DESTDIR=$(out)/bin" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "Animated console version of the 2048 game";
     license = licenses.mit;

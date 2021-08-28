@@ -1,0 +1,16 @@
+diff --git a/SConstruct b/SConstruct
+index 32cb644..0b3a208 100644
+--- a/SConstruct
++++ b/SConstruct
+@@ -225,6 +225,11 @@ if env['PLATFORM'] == 'posix':
+                     ["asound", "alsa/asoundlib.h"],
+                     ["openal", "AL/al.h"]]
+
++env.Append(ENV={'PATH': ' ' + os.environ['PATH'], })
++env.Append(LIBPATH=ARGUMENTS.get('LIBPATH', '').split(':'))
++env.Append(CCFLAGS=' ' + os.environ.get('NIX_CFLAGS_COMPILE',''))
++env.Append(CCFLAGS=' -DNULL=0')
++
+ ################################################################################
+ # Make sure we have these libraries availible
+

@@ -1,9 +1,9 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , autoreconfHook, intltool
-, gtk, pkgconfig, flex }:
+, gtk, pkg-config, flex }:
 
 stdenv.mkDerivation rec {
-  name = "galculator-${version}";
+  pname = "galculator";
   version = "2.1.4";
 
   src = fetchFromGitHub {
@@ -13,10 +13,10 @@ stdenv.mkDerivation rec {
     sha256 = "0q0hb62f266709ncyq96bpx4a40a1i6dc5869byvd7x285sx1c2w";
   };
 
-  nativeBuildInputs = [ autoreconfHook intltool pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook intltool pkg-config ];
   buildInputs = [ gtk flex ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A GTK 2/3 algebraic and RPN calculator";
     longDescription = ''
       galculator is a GTK 2 / GTK 3 based calculator. Its main features include:
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
       - Binary arithmetic of configurable bit length and signedness
       - Quad-precision floating point arithmetic, and 112-bit binary arithmetic
     '';
-    homepage = http://galculator.sourceforge.net/;
+    homepage = "http://galculator.sourceforge.net/";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.AndersonTorres ];
     platforms = platforms.linux;

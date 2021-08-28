@@ -1,7 +1,7 @@
-{ stdenv, fetchzip, fltk, zlib, xdg_utils, xorg, libjpeg, libGL }:
+{ lib, stdenv, fetchzip, fltk, zlib, xdg-utils, xorg, libjpeg, libGL }:
 
 stdenv.mkDerivation rec {
-  name = "eureka-editor-${version}";
+  pname = "eureka-editor";
   version = "1.21";
   shortver = "121";
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "0fpj13aq4wh3f7473cdc5jkf1c71jiiqmjc0ihqa0nm3hic1d4yv";
   };
 
-  buildInputs = [ fltk zlib xdg_utils libjpeg xorg.libXinerama libGL ];
+  buildInputs = [ fltk zlib xdg-utils libjpeg xorg.libXinerama libGL ];
 
   enableParallelBuilding = true;
 
@@ -29,11 +29,12 @@ stdenv.mkDerivation rec {
     cp misc/eureka.6 $out/man/man6
   '';
 
-  meta = with stdenv.lib; {
-    homepage = http://eureka-editor.sourceforge.net;
+  meta = with lib; {
+    homepage = "http://eureka-editor.sourceforge.net";
     description = "A map editor for the classic DOOM games, and a few related games such as Heretic and Hexen";
     license = licenses.gpl2;
     platforms = platforms.all;
+    broken = stdenv.isDarwin;
     maintainers = with maintainers; [ neonfuz ];
   };
 }

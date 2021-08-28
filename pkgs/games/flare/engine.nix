@@ -1,20 +1,21 @@
-{ stdenv, fetchFromGitHub, cmake, SDL2, SDL2_image, SDL2_mixer, SDL2_ttf }:
+{ lib, stdenv, fetchFromGitHub, cmake, SDL2, SDL2_image, SDL2_mixer, SDL2_ttf, Cocoa }:
 
 stdenv.mkDerivation rec {
   pname = "flare-engine";
-  version = "1.10";
+  version = "1.11";
 
   src = fetchFromGitHub {
     owner = "flareteam";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0fm7jmxl86h8199nazdi9ivsrhcv9gcymhz1l5c6l2f4d0aqdqiq";
+    sha256 = "1j6raymz128miq517h9drks4gj79dajw3lsr0msqxz0z3zm6cc4n";
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ SDL2 SDL2_image SDL2_mixer SDL2_ttf ];
+  buildInputs = [ SDL2 SDL2_image SDL2_mixer SDL2_ttf ]
+    ++ lib.optional stdenv.isDarwin Cocoa;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Free/Libre Action Roleplaying Engine";
     homepage = "https://github.com/flareteam/flare-engine";
     maintainers = [ maintainers.aanderse ];

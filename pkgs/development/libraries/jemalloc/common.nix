@@ -1,5 +1,5 @@
 { version, sha256 }:
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 # By default, jemalloc puts a je_ prefix onto all its symbols on OSX, which
 # then stops downstream builds (mariadb in particular) from detecting it. This
 # option should remove the prefix and give us a working jemalloc.
@@ -9,14 +9,14 @@
 , disableInitExecTls ? false
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
-  name = "jemalloc-${version}";
+  pname = "jemalloc";
   inherit version;
 
   src = fetchurl {
-    url = "https://github.com/jemalloc/jemalloc/releases/download/${version}/${name}.tar.bz2";
+    url = "https://github.com/jemalloc/jemalloc/releases/download/${version}/${pname}-${version}.tar.bz2";
     inherit sha256;
   };
 
@@ -24,14 +24,21 @@ stdenv.mkDerivation rec {
   configureFlags = []
     ++ optional stripPrefix "--with-jemalloc-prefix="
     ++ optional disableInitExecTls "--disable-initial-exec-tls"
+    # jemalloc is unable to correctly detect transparent hugepage support on
+    # ARM (https://github.com/jemalloc/jemalloc/issues/526), and the default
+    # kernel ARMv6/7 kernel does not enable it, so we explicitly disable support
+    ++ optionals (stdenv.isAarch32 && versionOlder version "5") [
+      "--disable-thp"
+      "je_cv_thp=no"
+    ]
   ;
 
   doCheck = true;
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
-    homepage = http://jemalloc.net;
+  meta = with lib; {
+    homepage = "http://jemalloc.net";
     description = "General purpose malloc(3) implementation";
     longDescription = ''
       malloc(3)-compatible memory allocator that emphasizes fragmentation

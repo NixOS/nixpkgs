@@ -1,18 +1,10 @@
-{ stdenv, fetchFromGitHub, fetchpatch, duktape, curl, pcre, readline, openssl, perl, html-tidy }:
+{ lib, stdenv, fetchFromGitHub, duktape, curl, pcre, readline, openssl, perl, html-tidy }:
 
 stdenv.mkDerivation rec {
-  name = "edbrowse-${version}";
-  version = "3.7.4";
+  pname = "edbrowse";
+  version = "3.7.7";
 
   buildInputs = [ curl pcre readline openssl duktape perl html-tidy ];
-
-  patches = [
-    # Fix build against recent libcurl
-    (fetchpatch {
-      url = https://github.com/CMB/edbrowse/commit/5d2b9e21fdf019f461ebe62738d615428d5db963.diff;
-      sha256 = "167q8n0syj3iv6lxrbpv4kvb63j4byj4qxrxayy08bah3pss3gky";
-    })
-  ];
 
   postPatch = ''
     for i in ./tools/*.pl
@@ -21,15 +13,18 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  makeFlags = "-C src prefix=$(out)";
+  makeFlags = [
+    "-C" "src"
+    "prefix=${placeholder "out"}"
+  ];
 
   src = fetchFromGitHub {
     owner = "CMB";
     repo = "edbrowse";
     rev = "v${version}";
-    sha256 = "0i9ivyfy1dd16c89f392kwx6wxgkkpyq2hl32jhzra0fb0zyl0k6";
+    sha256 = "0cw9d60mdhwna57r1vxn53s8gl81rr3cxnvm769ifq3xyh49vfcf";
   };
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Command Line Editor Browser";
     longDescription = ''
       Edbrowse is a combination editor, browser, and mail client that is 100% text based.
@@ -39,8 +34,8 @@ stdenv.mkDerivation rec {
       edbrowse can also tap into databases through odbc. It was primarily written by Karl Dahlke.
       '';
     license = licenses.gpl1Plus;
-    homepage = http://edbrowse.org/;
-    maintainers = [ maintainers.schmitthenner maintainers.vrthra ];
+    homepage = "https://edbrowse.org/";
+    maintainers = with maintainers; [ schmitthenner vrthra equirosa ];
     platforms = platforms.linux;
   };
 }

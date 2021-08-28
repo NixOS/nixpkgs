@@ -1,4 +1,4 @@
-{ autoconf, fetchurl, makedepend, perl, python, stdenv, unzip, zip }:
+{ autoconf, fetchurl, makedepend, perl, python3, lib, stdenv, zip }:
 
 stdenv.mkDerivation rec {
   name = "jscoverage-0.5.1";
@@ -12,7 +12,9 @@ stdenv.mkDerivation rec {
     ./jsfalse_to_null.patch
   ];
 
-  buildInputs = [ autoconf makedepend perl python unzip zip ];
+  nativeBuildInputs = [ perl python3 zip ];
+
+  strictDeps = true;
 
   # It works without MOZ_FIX_LINK_PATHS, circumventing an impurity
   # issue.  Maybe we could kick js/ (spidermonkey) completely and
@@ -45,8 +47,8 @@ stdenv.mkDerivation rec {
     GNU/Linux.
     '';
 
-    homepage = http://siliconforks.com/jscoverage/;
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
+    homepage = "http://siliconforks.com/jscoverage/";
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "cbor";
@@ -13,10 +13,10 @@ buildPythonPackage rec {
   # https://github.com/brianolson/cbor_py/issues/6
   doCheck = false;
 
-  meta = with stdenv.lib; {
-    homepage = https://bitbucket.org/bodhisnarkva/cbor;
+  meta = with lib; {
+    homepage = "https://bitbucket.org/bodhisnarkva/cbor";
     description = "Concise Binary Object Representation (CBOR) library";
     license = licenses.asl20;
-    maintainers = with maintainers; [ geistesk ];
+    maintainers = with maintainers; [ oxzi ];
   };
 }

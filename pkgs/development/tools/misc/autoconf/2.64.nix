@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, m4, perl }:
+{ lib, stdenv, fetchurl, m4, perl }:
 
 stdenv.mkDerivation rec {
   name = "autoconf-2.64";
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   doInstallCheck = false; # fails
 
   meta = {
-    homepage = https://www.gnu.org/software/autoconf/;
+    homepage = "https://www.gnu.org/software/autoconf/";
     description = "Part of the GNU Build System";
 
     longDescription = ''
@@ -44,8 +44,8 @@ stdenv.mkDerivation rec {
       can use, in the form of M4 macro calls.
     '';
 
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
 
-    platforms = stdenv.lib.platforms.all;
+    platforms = lib.platforms.all;
   };
 }

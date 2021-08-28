@@ -1,26 +1,32 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
-  name = "kustomize-${version}";
-  version = "2.0.3";
-  # rev is the 2.0.3 commit, mainly for kustomize version command output
-  rev = "a6f65144121d1955266b0cd836ce954c04122dc8";
+buildGoModule rec {
+  pname = "kustomize";
+  version = "4.1.3";
+  # rev is the commit of the tag, mainly for kustomize version command output
+  rev = "9e8e7a7fe99ec9fbf801463e8607928322fc5245";
 
-  goPackagePath = "sigs.k8s.io/kustomize";
-
-  buildFlagsArray = let t = "${goPackagePath}/pkg/commands/misc"; in ''
-    -ldflags=
-      -s -X ${t}.kustomizeVersion=${version}
-         -X ${t}.gitCommit=${rev}
-         -X ${t}.buildDate=unknown
-  '';
+  buildFlagsArray = let t = "sigs.k8s.io/kustomize/api/provenance"; in
+    ''
+      -ldflags=
+        -s -X ${t}.version=${version}
+           -X ${t}.gitCommit=${rev}
+    '';
 
   src = fetchFromGitHub {
-    sha256 = "1dfkpx9rllj1bzm5f52bx404kdds3zx1h38yqri9ha3p3pcb1bbb";
-    rev = "v${version}";
-    repo = "kustomize";
     owner = "kubernetes-sigs";
+    repo = pname;
+    rev = "kustomize/v${version}";
+    sha256 = "sha256-NPWKInDHOoelWqDrUn/AlRItI4e8J6dbBxgLW078ecs=";
   };
+
+  # TODO: Remove once https://github.com/kubernetes-sigs/kustomize/pull/3708 got merged.
+  doCheck = false;
+
+  # avoid finding test and development commands
+  sourceRoot = "source/kustomize";
+
+  vendorSha256 = "sha256-6maEpEPEV436NrVnVlvWV1q6YywGVILXbxn8Z8Ku/hs=";
 
   meta = with lib; {
     description = "Customization of kubernetes YAML configurations";
@@ -29,8 +35,8 @@ buildGoPackage rec {
       multiple purposes, leaving the original YAML untouched and usable
       as is.
     '';
-    homepage = https://github.com/kubernetes-sigs/kustomize;
+    homepage = "https://github.com/kubernetes-sigs/kustomize";
     license = licenses.asl20;
-    maintainers = with maintainers; [ carlosdagos vdemeester periklis zaninime ];
+    maintainers = with maintainers; [ carlosdagos vdemeester periklis zaninime Chili-Man saschagrunert ];
   };
 }

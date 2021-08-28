@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, fetchpatch }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch }:
 
 stdenv.mkDerivation rec {
-  name = "omping-${version}";
+  pname = "omping";
   version = "0.0.5";
 
   src = fetchFromGitHub {
@@ -26,8 +26,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
-    description = "Open Multicast Ping (omping) is a tool for testing IPv4/IPv6 multicast connectivity on a LAN.";
+  meta = with lib; {
+    description = "Open Multicast Ping (omping) is a tool for testing IPv4/IPv6 multicast connectivity on a LAN";
     license = licenses.mit;
     platforms = platforms.unix;
     inherit (src.meta) homepage;

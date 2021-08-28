@@ -1,4 +1,4 @@
-{stdenv, fetchurl, motif, ncurses, libX11, libXt}:
+{lib, stdenv, fetchurl, motif, ncurses, libX11, libXt}:
 
 stdenv.mkDerivation rec {
   name = "ddd-3.3.12";
@@ -11,10 +11,12 @@ stdenv.mkDerivation rec {
 
   patches = [ ./gcc44.patch ];
 
+  NIX_CFLAGS_COMPILE = "-fpermissive";
+
   meta = {
-    homepage = https://www.gnu.org/software/ddd;
+    homepage = "https://www.gnu.org/software/ddd";
     description = "Graphical front-end for command-line debuggers";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
   };
 }

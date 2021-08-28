@@ -1,20 +1,39 @@
-{ stdenv, fetchFromGitHub, pantheon, wrapGAppsHook, pkgconfig, meson, ninja
-, vala, gala, gtk3, libgee, granite, gettext, mutter, json-glib, python3 }:
+{ lib, stdenv
+, fetchFromGitHub
+, nix-update-script
+, pantheon
+, wrapGAppsHook
+, pkg-config
+, meson
+, ninja
+, vala
+, gala
+, gtk3
+, libgee
+, granite
+, gettext
+, mutter
+, mesa
+, json-glib
+, python3
+, elementary-gtk-theme
+, elementary-icon-theme
+}:
 
 stdenv.mkDerivation rec {
   pname = "wingpanel";
-  version = "2.2.5";
+  version = "2.3.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "15pl3km8jfmlgrrb2fcabdd0rkc849arz6sc3vz6azzpln7gxbq7";
+    sha256 = "sha256-mXi600gufUK81Uks9p4+al0tCI7H9KpizZGyoomp42s=";
   };
 
   passthru = {
-    updateScript = pantheon.updateScript {
-      repoName = pname;
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
     };
   };
 
@@ -22,19 +41,22 @@ stdenv.mkDerivation rec {
     gettext
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     vala
     wrapGAppsHook
   ];
 
   buildInputs = [
+    elementary-gtk-theme
+    elementary-icon-theme
     gala
     granite
     gtk3
     json-glib
     libgee
     mutter
+    mesa # for libEGL
   ];
 
   patches = [
@@ -46,13 +68,20 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
-  meta = with stdenv.lib; {
+  preFixup = ''
+    gappsWrapperArgs+=(
+      # this theme is required
+      --prefix XDG_DATA_DIRS : "${elementary-gtk-theme}/share"
+    )
+  '';
+
+  meta = with lib; {
     description = "The extensible top panel for Pantheon";
     longDescription = ''
       Wingpanel is an empty container that accepts indicators as extensions,
       including the applications menu.
     '';
-    homepage = https://github.com/elementary/wingpanel;
+    homepage = "https://github.com/elementary/wingpanel";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

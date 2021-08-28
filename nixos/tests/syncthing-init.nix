@@ -1,10 +1,10 @@
-import ./make-test.nix ({ lib, pkgs, ... }: let
+import ./make-test-python.nix ({ lib, pkgs, ... }: let
 
   testId = "7CFNTQM-IMTJBHJ-3UWRDIU-ZGQJFR6-VCXZ3NB-XUH3KZO-N52ITXR-LAIYUAU";
 
 in {
   name = "syncthing-init";
-  meta.maintainers = with pkgs.stdenv.lib.maintainers; [ lassulus ];
+  meta.maintainers = with pkgs.lib.maintainers; [ lassulus ];
 
   machine = {
     services.syncthing = {
@@ -22,9 +22,10 @@ in {
   };
 
   testScript = ''
-    $machine->waitForUnit("syncthing-init.service");
-    $machine->succeed("cat /var/lib/syncthing/config.xml") =~ /${testId}/ or die;
-    $machine->succeed("cat /var/lib/syncthing/config.xml") =~ /testFolder/ or die;
+    machine.wait_for_unit("syncthing-init.service")
+    config = machine.succeed("cat /var/lib/syncthing/.config/syncthing/config.xml")
+
+    assert "testFolder" in config
+    assert "${testId}" in config
   '';
 })
-

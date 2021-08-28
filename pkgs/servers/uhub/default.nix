@@ -1,10 +1,10 @@
-{ stdenv, fetchpatch, fetchFromGitHub, cmake, openssl, sqlite, pkgconfig, systemd
+{ lib, stdenv, fetchpatch, fetchFromGitHub, cmake, openssl, sqlite, pkg-config, systemd
 , tlsSupport ? false }:
 
 assert tlsSupport -> openssl != null;
 
 stdenv.mkDerivation rec {
-  name = "uhub-${version}";
+  pname = "uhub";
   version = "0.5.0";
 
   src = fetchFromGitHub {
@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
     sha256 = "0zdbxfvw7apmfhqgsfkfp4pn9iflzwdn0zwvzymm5inswfc00pxg";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ cmake sqlite systemd ] ++ stdenv.lib.optional tlsSupport openssl;
+  nativeBuildInputs = [ cmake pkg-config ];
+  buildInputs = [ sqlite systemd ] ++ lib.optional tlsSupport openssl;
 
   outputs = [ "out"
     "mod_example"
@@ -44,14 +44,14 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  cmakeFlags = ''
-    -DSYSTEMD_SUPPORT=ON
-    ${if tlsSupport then "-DSSL_SUPPORT=ON" else "-DSSL_SUPPORT=OFF"}
-  '';
+  cmakeFlags = [
+    "-DSYSTEMD_SUPPORT=ON"
+    (if tlsSupport then "-DSSL_SUPPORT=ON" else "-DSSL_SUPPORT=OFF")
+  ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "High performance peer-to-peer hub for the ADC network";
-    homepage = https://www.uhub.org/;
+    homepage = "https://www.uhub.org/";
     license = licenses.gpl3;
     maintainers = [ maintainers.ehmry ];
     platforms = platforms.unix;

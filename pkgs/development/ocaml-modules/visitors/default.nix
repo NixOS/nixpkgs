@@ -1,23 +1,27 @@
-{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, cppo, ppx_tools, ppx_deriving, result }:
+{ lib, buildDunePackage, fetchFromGitLab, ppxlib, ppx_deriving, result }:
 
-stdenv.mkDerivation {
-  name = "ocaml${ocaml.version}-visitors-20180513";
+buildDunePackage rec {
+  pname = "visitors";
+  version = "20210316";
 
-  src = fetchurl {
-    url = http://gallium.inria.fr/~fpottier/visitors/visitors-20180513.tar.gz;
-    sha256 = "12j8n9fkl43sd0j78x2zqix8m1vinswl2jgwndd62vmx98f5rl1v";
+  useDune2 = true;
+
+  minimumOCamlVersion = "4.08";
+
+  src = fetchFromGitLab {
+    owner = "fpottier";
+    repo = pname;
+    rev = version;
+    domain = "gitlab.inria.fr";
+    sha256 = "12d45ncy3g9mpcs6n58aq6yzs5qz662msgcr7ccms9jhiq44m8f7";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild cppo ];
-  propagatedBuildInputs = [ ppx_tools ppx_deriving result ];
+  propagatedBuildInputs = [ ppxlib ppx_deriving result ];
 
-  createFindlibDestdir = true;
-
-  meta = with stdenv.lib; {
-    homepage = https://gitlab.inria.fr/fpottier/visitors;
+  meta = with lib; {
+    homepage = "https://gitlab.inria.fr/fpottier/visitors";
     license = licenses.lgpl21;
     description = "An OCaml syntax extension (technically, a ppx_deriving plugin) which generates object-oriented visitors for traversing and transforming data structures";
-    inherit (ocaml.meta) platforms;
     maintainers = [ maintainers.marsam ];
   };
 }

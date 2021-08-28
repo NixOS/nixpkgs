@@ -1,7 +1,6 @@
-{ stdenv, fetchFromGitHub, pkgconfig, cimg, imagemagick }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, cimg, imagemagick }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "pHash";
   version = "0.9.4";
 
@@ -11,7 +10,7 @@ stdenv.mkDerivation rec {
   # at runtime
   propagatedBuildInputs = [ imagemagick ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   configureFlags = ["--enable-video-hash=no" "--enable-audio-hash=no"];
   postInstall = ''
@@ -25,13 +24,13 @@ stdenv.mkDerivation rec {
     sha256 = "0y4gknfkns5sssfaj0snyx29752my20xmxajg6xggijx0myabbv0";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit version;
     description = "Compute the perceptual hash of an image";
     license = licenses.gpl3;
     maintainers = [maintainers.imalsogreg];
     platforms = platforms.all;
-    homepage = http://www.phash.org;
+    homepage = "http://www.phash.org";
     downloadPage = "https://github.com/clearscene/pHash";
     updateWalker = true;
   };

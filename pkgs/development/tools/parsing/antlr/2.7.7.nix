@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jdk, python2 }:
+{ lib, stdenv, fetchurl, jdk, python2 }:
 
 stdenv.mkDerivation {
   name = "antlr-2.7.7";
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   buildInputs = [ jdk ];
   nativeBuildInputs = [ python2 ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Powerful parser generator";
     longDescription = ''
       ANTLR (ANother Tool for Language Recognition) is a powerful parser
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
       frameworks. From a grammar, ANTLR generates a parser that can build and
       walk parse trees.
     '';
-    homepage = https://www.antlr.org/;
+    homepage = "https://www.antlr.org/";
     license = licenses.bsd3;
     platforms = platforms.unix;
   };

@@ -4,14 +4,14 @@
 , lib }:
 
 python.pkgs.buildPythonApplication rec {
-  version = "1.1.1";
+  version = "1.1.9";
   pname = "fdroidserver";
 
   src = fetchFromGitLab {
     owner = "fdroid";
     repo = "fdroidserver";
     rev = version;
-    sha256 = "0m618rvjh8h8hnbafrxsdkw8m5r2wnkz7whqnh60jh91h3yr0kzs";
+    sha256 = "098dcg8jdi4q1prfjmd2lbhcyzb8fmmfhbxhid4kqx8vcv7r0iql";
   };
 
   patchPhase = ''
@@ -23,6 +23,7 @@ python.pkgs.buildPythonApplication rec {
     ${python.interpreter} setup.py compile_catalog
   '';
   postInstall = ''
+    patchShebangs gradlew-fdroid
     install -m 0755 gradlew-fdroid $out/bin
   '';
 
@@ -48,8 +49,11 @@ python.pkgs.buildPythonApplication rec {
     ruamel_yaml
   ];
 
+  # no tests
+  doCheck = false;
+
   meta = with lib; {
-    homepage = https://f-droid.org;
+    homepage = "https://f-droid.org";
     description = "Server and tools for F-Droid, the Free Software repository system for Android";
     license = licenses.agpl3;
     maintainers = [ lib.maintainers.pmiddend ];

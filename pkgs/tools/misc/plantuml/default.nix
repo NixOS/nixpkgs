@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, makeWrapper, jre, graphviz }:
+{ lib, stdenv, fetchurl, makeWrapper, jre, graphviz }:
 
 stdenv.mkDerivation rec {
-  version = "1.2019.6";
-  name = "plantuml-${version}";
+  version = "1.2021.3";
+  pname = "plantuml";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/plantuml/${version}/plantuml.${version}.jar";
-    sha256 = "0sxpk7n96a3vwf0dlf62zs0rgm01gf36k62rbr8cyjf62qgf61lb";
+    sha256 = "sha256-Kx2fTx71oVkAgsytl1OFBcENMnJ1ZHmg8qvYDFTSS2M=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -23,12 +23,12 @@ stdenv.mkDerivation rec {
     $out/bin/plantuml -help
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Draw UML diagrams using a simple and human readable text description";
-    homepage = http://plantuml.sourceforge.net/;
+    homepage = "http://plantuml.sourceforge.net/";
     # "plantuml -license" says GPLv3 or later
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ bjornfor ];
+    maintainers = with maintainers; [ bjornfor Mogria ];
     platforms = platforms.unix;
   };
 }

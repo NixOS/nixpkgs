@@ -8,8 +8,7 @@ with lib;
 let
 
   requiredPackages = map (pkg: setPrio ((pkg.meta.priority or 5) + 3) pkg)
-    [ config.nix.package
-      pkgs.acl
+    [ pkgs.acl
       pkgs.attr
       pkgs.bashInteractive # bash with ncurses support
       pkgs.bzip2
@@ -30,20 +29,24 @@ let
       pkgs.xz
       pkgs.less
       pkgs.libcap
-      pkgs.nano
       pkgs.ncurses
       pkgs.netcat
-      pkgs.nix-info
       config.programs.ssh.package
-      pkgs.perl
+      pkgs.mkpasswd
       pkgs.procps
-      pkgs.rsync
-      pkgs.strace
       pkgs.su
       pkgs.time
-      pkgs.utillinux
-      pkgs.which # 88K size
+      pkgs.util-linux
+      pkgs.which
+      pkgs.zstd
     ];
+
+    defaultPackages = map (pkg: setPrio ((pkg.meta.priority or 5) + 3) pkg)
+      [ pkgs.nano
+        pkgs.perl
+        pkgs.rsync
+        pkgs.strace
+      ];
 
 in
 
@@ -64,6 +67,29 @@ in
           configuration.  (The latter is the main difference with
           installing them in the default profile,
           <filename>/nix/var/nix/profiles/default</filename>.
+        '';
+      };
+
+      defaultPackages = mkOption {
+        type = types.listOf types.package;
+        default = defaultPackages;
+        example = literalExample "[]";
+        description = ''
+          Set of default packages that aren't strictly neccessary
+          for a running system, entries can be removed for a more
+          minimal NixOS installation.
+
+          Note: If <package>pkgs.nano</package> is removed from this list,
+          make sure another editor is installed and the
+          <literal>EDITOR</literal> environment variable is set to it.
+          Environment variables can be set using
+          <option>environment.variables</option>.
+
+          Like with systemPackages, packages are installed to
+          <filename>/run/current-system/sw</filename>. They are
+          automatically available to all users, and are
+          automatically updated every time you rebuild the system
+          configuration.
         '';
       };
 
@@ -106,7 +132,7 @@ in
 
   config = {
 
-    environment.systemPackages = requiredPackages;
+    environment.systemPackages = requiredPackages ++ config.environment.defaultPackages;
 
     environment.pathsToLink =
       [ "/bin"
@@ -116,6 +142,7 @@ in
         "/lib" # FIXME: remove and update debug-info.nix
         "/sbin"
         "/share/emacs"
+        "/share/hunspell"
         "/share/nano"
         "/share/org"
         "/share/themes"
@@ -124,6 +151,8 @@ in
         "/share/kservices5"
         "/share/kservicetypes5"
         "/share/kxmlgui5"
+        "/share/systemd"
+        "/share/thumbnailers"
       ];
 
     system.path = pkgs.buildEnv {
@@ -135,6 +164,9 @@ in
       # outputs TODO: note that the tools will often not be linked by default
       postBuild =
         ''
+          # Remove wrapped binaries, they shouldn't be accessible via PATH.
+          find $out/bin -maxdepth 1 -name ".*-wrapped" -type l -delete
+
           if [ -x $out/bin/glib-compile-schemas -a -w $out/share/glib-2.0/schemas ]; then
               $out/bin/glib-compile-schemas $out/share/glib-2.0/schemas
           fi

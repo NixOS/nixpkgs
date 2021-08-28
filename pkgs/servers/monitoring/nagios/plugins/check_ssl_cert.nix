@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, file, openssl, makeWrapper, which, curl, fetchpatch }:
+{ lib, stdenv, fetchFromGitHub, file, openssl, makeWrapper, which, curl, fetchpatch }:
 
 stdenv.mkDerivation rec {
-  name = "check_ssl_cert-${version}";
+  pname = "check_ssl_cert";
   version = "1.80.0";
 
   src = fetchFromGitHub {
@@ -25,10 +25,10 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/check_ssl_cert \
-      --prefix PATH : "${stdenv.lib.makeBinPath [ openssl file which curl ]}"
+      --prefix PATH : "${lib.makeBinPath [ openssl file which curl ]}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Nagios plugin to check the CA and validity of an X.509 certificate";
     license = licenses.gpl3;
     platforms = platforms.all;

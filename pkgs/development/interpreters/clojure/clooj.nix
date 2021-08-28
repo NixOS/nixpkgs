@@ -1,9 +1,10 @@
-{ stdenv, fetchurl, jre, makeWrapper }:
+{ lib, stdenv, fetchurl, jre, makeWrapper }:
 
 let version = "0.4.4"; in
 
 stdenv.mkDerivation {
-  name = "clooj-${version}";
+  pname = "clooj";
+  inherit version;
 
   jar = fetchurl {
     # mirrored as original mediafire.com source does not work without user interaction
@@ -11,7 +12,7 @@ stdenv.mkDerivation {
     sha256 = "0hbc29bg2a86rm3sx9kvj7h7db9j0kbnrb706wsfiyk3zi3bavnd";
   };
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   phases = "installPhase";
 
@@ -23,7 +24,8 @@ stdenv.mkDerivation {
 
   meta = {
     description = "A lightweight IDE for Clojure";
-    homepage = https://github.com/arthuredelstein/clooj;
-    license = stdenv.lib.licenses.bsd3;
+    homepage = "https://github.com/arthuredelstein/clooj";
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.all;
   };
 }

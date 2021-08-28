@@ -1,31 +1,50 @@
-{ stdenv, fetchurl, pkgconfig, libvirt, glib, libxml2, intltool, libtool, yajl
-, nettle, libgcrypt, pythonPackages, gobject-introspection, libcap_ng, numactl
-, xen, libapparmor, vala
+{ lib
+, stdenv
+, fetchurl
+, meson
+, ninja
+, pkg-config
+, gobject-introspection
+, gettext
+, gtk-doc
+, docbook-xsl-nons
+, vala
+, libcap_ng
+, libvirt
+, libxml2
 }:
 
-let
-  inherit (pythonPackages) python pygobject2;
-in stdenv.mkDerivation rec {
-  name = "libvirt-glib-2.0.0";
+stdenv.mkDerivation rec {
+  name = "libvirt-glib-4.0.0";
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "https://libvirt.org/sources/glib/${name}.tar.gz";
-    sha256 = "0six9ckmvlwwyavyjkgc262qkpvfqgi8rjij7cyk00bmqq8c9s4l";
+    url = "https://libvirt.org/sources/glib/${name}.tar.xz";
+    sha256 = "hCP3Bp2qR2MHMh0cEeLswoU0DNMsqfwFIHdihD7erL0=";
   };
 
-  nativeBuildInputs = [ pkgconfig vala ];
-  buildInputs = [
-    libvirt glib libxml2 intltool libtool yajl nettle libgcrypt
-    python pygobject2 gobject-introspection libcap_ng numactl libapparmor
-  ] ++ stdenv.lib.optionals stdenv.isx86_64 [
-    xen
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    gettext
+    gtk-doc
+    docbook-xsl-nons
+    vala
+    gobject-introspection
   ];
 
-  enableParallelBuilding = true;
+  buildInputs = [
+    libcap_ng
+    libvirt
+    libxml2
+    gobject-introspection
+  ];
 
-  meta = with stdenv.lib; {
+  strictDeps = true;
+
+  meta = with lib; {
     description = "Library for working with virtual machines";
     longDescription = ''
       libvirt-glib wraps libvirt to provide a high-level object-oriented API better
@@ -35,7 +54,7 @@ in stdenv.mkDerivation rec {
       - libvirt-gconfig - GObjects for manipulating libvirt XML documents
       - libvirt-gobject - GObjects for managing libvirt objects
     '';
-    homepage = http://libvirt.org/;
+    homepage = "https://libvirt.org/";
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;
   };

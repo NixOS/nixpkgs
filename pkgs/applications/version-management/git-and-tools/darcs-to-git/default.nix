@@ -1,7 +1,7 @@
-{ stdenv, fetchgit, ruby, gnugrep, diffutils, git, darcs }:
+{ lib, stdenv, fetchgit, ruby, gnugrep, diffutils, git, darcs }:
 
-stdenv.mkDerivation rec {
-  name = "darcs-to-git-${version}";
+stdenv.mkDerivation {
+  pname = "darcs-to-git";
   version = "2015-06-04";
 
   src = fetchgit {
@@ -73,8 +73,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Converts a Darcs repository into a Git repository";
-    homepage = http://www.sanityinc.com/articles/converting-darcs-repositories-to-git;
-    license = stdenv.lib.licenses.mit;
-    platforms = stdenv.lib.platforms.unix;
+    homepage = "http://www.sanityinc.com/articles/converting-darcs-repositories-to-git";
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
   };
 }

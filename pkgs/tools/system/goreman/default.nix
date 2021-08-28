@@ -1,6 +1,6 @@
 { lib, buildGoPackage, fetchFromGitHub }:
 buildGoPackage rec {
-  name = "goreman-${version}";
+  pname = "goreman";
   version = "0.2.1";
 
   goPackagePath = "github.com/mattn/goreman";

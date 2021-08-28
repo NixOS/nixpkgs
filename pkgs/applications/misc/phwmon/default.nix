@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitLab, pythonPackages }:
+{ lib, stdenv, fetchFromGitLab, pythonPackages }:
 
-stdenv.mkDerivation rec {
-  name = "phwmon-${version}";
+stdenv.mkDerivation {
+  pname = "phwmon";
   version = "2017-04-10";
 
   src = fetchFromGitLab {
@@ -16,11 +16,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ pythonPackages.pygtk pythonPackages.psutil ];
 
   pythonPath = [ pythonPackages.pygtk pythonPackages.psutil ];
-  
+
   patchPhase = ''
     substituteInPlace install.sh --replace "/usr/local" "$out"
   '';
-    
+
   installPhase = ''
     mkdir -p $out/bin $out/share/applications
     ./install.sh
@@ -31,10 +31,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = https://gitlab.com/o9000/phwmon;
+    homepage = "https://gitlab.com/o9000/phwmon";
     description = "Hardware monitor (CPU, memory, network and disk I/O) for the system tray";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.romildo ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.romildo ];
   };
 }

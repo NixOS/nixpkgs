@@ -5,6 +5,10 @@
 with lib;
 
 {
+  meta = {
+    maintainers = with maintainers; [ ];
+  };
+
   ###### interface
 
   options = {

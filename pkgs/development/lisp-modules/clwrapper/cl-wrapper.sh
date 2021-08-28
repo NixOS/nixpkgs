@@ -8,7 +8,12 @@ eval "$NIX_LISP_PREHOOK"
 NIX_LISP_COMMAND="$1"
 shift
 
-[ -z "$NIX_LISP" ] && NIX_LISP="${NIX_LISP_COMMAND##*/}"
+if [ -z "$NIX_LISP" ]; then
+    while [ -h "${NIX_LISP_COMMAND}" ]; do
+        NIX_LISP_COMMAND="$(readlink -n "${NIX_LISP_COMMAND}")"
+    done
+    NIX_LISP="${NIX_LISP_COMMAND##*/}"
+fi
 
 export NIX_LISP NIX_LISP_LOAD_FILE NIX_LISP_EXEC_CODE NIX_LISP_COMMAND NIX_LISP_FINAL_PARAMETERS
 
@@ -90,8 +95,8 @@ nix_lisp_run_single_form(){
 nix_lisp_build_system(){
         NIX_LISP_FINAL_PARAMETERS=(
              "$NIX_LISP_EXEC_CODE" "(progn
-               (asdf:make :$1)
-               (loop for s in (list $(for i in $3; do echo ":$i"; done)) do (asdf:make s)))"
+               (asdf:load-system :$1)
+               (loop for s in (list $(for i in $3; do echo ":$i"; done)) do (asdf:load-system s)))"
              "$NIX_LISP_EXEC_CODE" "(progn
                (setf (asdf/system:component-entry-point (asdf:find-system :$1)) ${2:-nil})
                #+cffi(setf cffi:*foreign-library-directories*
@@ -101,23 +106,29 @@ nix_lisp_build_system(){
                                 :separator \":\")
                        for l in sb-alien::*shared-objects*
                        for ns := (sb-alien::shared-object-namestring l)
+                       do (format *error-output* \"Searching alien object ~s in ~s~%\"
+                               ns libpath)
                        do (and (> (length ns) 0) (not (equal (elt ns 0) \"/\"))
                                (let*
                                  ((prefix (find-if (lambda (s) (probe-file (format nil \"~a/~a\" s ns))) libpath))
                                   (fullpath (and prefix (format nil \"~a/~a\" prefix ns))))
                                   (when fullpath
+                                     (format *error-output* \"Found: ~s~%\" fullpath)
                                      (setf
                                        (sb-alien::shared-object-namestring l) fullpath
                                        (sb-alien::shared-object-pathname l) (probe-file fullpath)))))
                    )
+           $4
            (asdf:perform (quote asdf:program-op) :$1)
         )")
 }
 
 eval "$NIX_LISP_PRELAUNCH_HOOK"
 
-[ -z "$NIX_LISP_SKIP_CODE" ] && "$NIX_LISP_COMMAND" $NIX_LISP_EARLY_OPTIONS \
-	$NIX_LISP_EXEC_CODE "${NIX_LISP_ASDF_LOAD:-"(load \"$NIX_LISP_ASDF/lib/common-lisp/asdf/build/asdf.$NIX_LISP_FASL_TYPE\")"}" \
-	$NIX_LISP_EXEC_CODE "$NIX_LISP_ASDF_REGISTRY_CODE" \
-	${NIX_LISP_FINAL_PARAMETERS[*]:+"${NIX_LISP_FINAL_PARAMETERS[@]}"} \
-	"$@"
+if [ -z "$NIX_LISP_SKIP_CODE" ]; then
+    "$NIX_LISP_COMMAND" $NIX_LISP_EARLY_OPTIONS \
+	                $NIX_LISP_EXEC_CODE "${NIX_LISP_ASDF_LOAD:-"(load \"$NIX_LISP_ASDF/lib/common-lisp/asdf/build/asdf.$NIX_LISP_FASL_TYPE\")"}" \
+	                $NIX_LISP_EXEC_CODE "$NIX_LISP_ASDF_REGISTRY_CODE" \
+	                ${NIX_LISP_FINAL_PARAMETERS[*]:+"${NIX_LISP_FINAL_PARAMETERS[@]}"} \
+	                "$@"
+fi

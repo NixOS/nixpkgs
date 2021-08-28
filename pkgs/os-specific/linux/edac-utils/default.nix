@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, perl, makeWrapper
+{ lib, stdenv, fetchFromGitHub, perl, makeWrapper
 , sysfsutils, dmidecode, kmod }:
 
 stdenv.mkDerivation {
@@ -25,11 +25,11 @@ stdenv.mkDerivation {
 
   postInstall = ''
     wrapProgram "$out/sbin/edac-ctl" \
-      --set PATH ${stdenv.lib.makeBinPath [ dmidecode kmod ]}
+      --set PATH ${lib.makeBinPath [ dmidecode kmod ]}
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/grondo/edac-utils;
+  meta = with lib; {
+    homepage = "https://github.com/grondo/edac-utils";
     description = "Handles the reporting of hardware-related memory errors";
     license = licenses.gpl2;
     platforms = platforms.linux;

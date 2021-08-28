@@ -6,7 +6,6 @@ let
   cfg = config.services.datadog-agent;
 
   ddConf = {
-    dd_url              = "https://app.datadoghq.com";
     skip_ssl_validation = false;
     confd_path          = "/etc/datadog-agent/conf.d";
     additional_checksd  = "/etc/datadog-agent/checks.d";
@@ -14,6 +13,8 @@ let
   }
   // optionalAttrs (cfg.logLevel != null) { log_level = cfg.logLevel; }
   // optionalAttrs (cfg.hostname != null) { inherit (cfg) hostname; }
+  // optionalAttrs (cfg.ddUrl != null) { dd_url = cfg.ddUrl; }
+  // optionalAttrs (cfg.site != null) { site = cfg.site; }
   // optionalAttrs (cfg.tags != null ) { tags = concatStringsSep ", " cfg.tags; }
   // optionalAttrs (cfg.enableLiveProcessCollection) { process_config = { enabled = "true"; }; }
   // optionalAttrs (cfg.enableTraceAgent) { apm_config = { enabled = true; }; }
@@ -22,9 +23,9 @@ let
   # Generate Datadog configuration files for each configured checks.
   # This works because check configurations have predictable paths,
   # and because JSON is a valid subset of YAML.
-  makeCheckConfigs = entries: mapAttrsToList (name: conf: {
-    source = pkgs.writeText "${name}-check-conf.yaml" (builtins.toJSON conf);
-    target = "datadog-agent/conf.d/${name}.d/conf.yaml";
+  makeCheckConfigs = entries: mapAttrs' (name: conf: {
+    name = "datadog-agent/conf.d/${name}.d/conf.yaml";
+    value.source = pkgs.writeText "${name}-check-conf.yaml" (builtins.toJSON conf);
   }) entries;
 
   defaultChecks = {
@@ -34,17 +35,18 @@ let
 
   # Assemble all check configurations and the top-level agent
   # configuration.
-  etcfiles = with pkgs; with builtins; [{
-    source = writeText "datadog.yaml" (toJSON ddConf);
-    target = "datadog-agent/datadog.yaml";
-  }] ++ makeCheckConfigs (cfg.checks // defaultChecks);
+  etcfiles = with pkgs; with builtins;
+  { "datadog-agent/datadog.yaml" = {
+      source = writeText "datadog.yaml" (toJSON ddConf);
+    };
+  } // makeCheckConfigs (cfg.checks // defaultChecks);
 
   # Apply the configured extraIntegrations to the provided agent
   # package. See the documentation of `dd-agent/integrations-core.nix`
   # for detailed information on this.
-  datadogPkg = cfg.package.overrideAttrs(_: {
-    python = (pkgs.datadog-integrations-core cfg.extraIntegrations).python;
-  });
+  datadogPkg = cfg.package.override {
+    pythonPackages = pkgs.datadog-integrations-core cfg.extraIntegrations;
+  };
 in {
   options.services.datadog-agent = {
     enable = mkOption {
@@ -60,7 +62,7 @@ in {
       defaultText = "pkgs.datadog-agent";
       description = ''
         Which DataDog v6 agent package to use. Note that the provided
-        package is expected to have an overridable `python`-attribute
+        package is expected to have an overridable `pythonPackages`-attribute
         which configures the Python environment with the Datadog
         checks.
       '';
@@ -76,6 +78,27 @@ in {
       type = types.path;
     };
 
+    ddUrl = mkOption {
+      description = ''
+        Custom dd_url to configure the agent with. Useful if traffic to datadog
+        needs to go through a proxy.
+        Don't use this to point to another datadog site (EU) - use site instead.
+      '';
+      default = null;
+      example = "http://haproxy.example.com:3834";
+      type = types.nullOr types.str;
+    };
+
+    site = mkOption {
+      description = ''
+        The datadog site to point the agent towards.
+        Set to datadoghq.eu to point it to their EU site.
+      '';
+      default = null;
+      example = "datadoghq.eu";
+      type = types.nullOr types.str;
+    };
+
     tags = mkOption {
       description = "The tags to mark this Datadog agent";
       example = [ "test" "service" ];
@@ -87,7 +110,7 @@ in {
       description = "The hostname to show in the Datadog dashboard (optional)";
       default = null;
       example = "mymachine.mydomain";
-      type = types.uniq (types.nullOr types.string);
+      type = types.nullOr types.str;
     };
 
     logLevel = mkOption {
@@ -202,9 +225,9 @@ in {
     };
   };
   config = mkIf cfg.enable {
-    environment.systemPackages = [ datadogPkg pkgs.sysstat pkgs.procps pkgs.iproute ];
+    environment.systemPackages = [ datadogPkg pkgs.sysstat pkgs.procps pkgs.iproute2 ];
 
-    users.extraUsers.datadog = {
+    users.users.datadog = {
       description = "Datadog Agent User";
       uid = config.ids.uids.datadog;
       group = "datadog";
@@ -212,11 +235,11 @@ in {
       createHome = true;
     };
 
-    users.extraGroups.datadog.gid = config.ids.gids.datadog;
+    users.groups.datadog.gid = config.ids.gids.datadog;
 
     systemd.services = let
       makeService = attrs: recursiveUpdate {
-        path = [ datadogPkg pkgs.python pkgs.sysstat pkgs.procps pkgs.iproute ];
+        path = [ datadogPkg pkgs.python pkgs.sysstat pkgs.procps pkgs.iproute2 ];
         wantedBy = [ "multi-user.target" ];
         serviceConfig = {
           User = "datadog";
@@ -224,7 +247,7 @@ in {
           Restart = "always";
           RestartSec = 2;
         };
-        restartTriggers = [ datadogPkg ] ++ map (etc: etc.source) etcfiles;
+        restartTriggers = [ datadogPkg ] ++  map (x: x.source) (attrValues etcfiles);
       } attrs;
     in {
       datadog-agent = makeService {

@@ -1,14 +1,21 @@
-{ stdenv, buildDunePackage, cohttp, ocaml_lwt, uri, ppx_sexp_conv, logs }:
+{ lib, buildDunePackage, cohttp, ocaml_lwt, uri, ppx_sexp_conv, logs, sexplib0 }:
 
-if !stdenv.lib.versionAtLeast cohttp.version "0.99"
-then cohttp
-else
+buildDunePackage {
+  pname = "cohttp-lwt";
+  inherit (cohttp)
+    version
+    src
+    useDune2
+    minimumOCamlVersion
+    ;
 
-buildDunePackage rec {
-	pname = "cohttp-lwt";
-	inherit (cohttp) version src meta;
+  buildInputs = [ ppx_sexp_conv ];
 
-	buildInputs = [ uri ppx_sexp_conv ];
+  propagatedBuildInputs = [
+    cohttp ocaml_lwt logs sexplib0 uri
+  ];
 
-	propagatedBuildInputs = [ cohttp ocaml_lwt logs ];
+  meta = cohttp.meta // {
+    description = "CoHTTP implementation using the Lwt concurrency library";
+  };
 }

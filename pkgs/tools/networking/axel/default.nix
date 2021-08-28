@@ -1,25 +1,28 @@
-{ stdenv, fetchurl, autoreconfHook, pkgconfig, gettext, libssl }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, autoconf-archive
+, pkg-config, gettext, libssl, txt2man }:
 
 stdenv.mkDerivation rec {
-  name = "axel-${version}";
-  version = "2.17.1";
+  pname = "axel";
+  version = "2.17.10";
 
-  src = fetchurl {
-  url = "https://github.com/axel-download-accelerator/axel/releases/download/v${version}/${name}.tar.xz";
-    sha256 = "1mwyps6yvrjxp7mpzc0a2hwr2pw050c63fc9aqjzdzjjw123dfrn";
+  src = fetchFromGitHub {
+    owner = "axel-download-accelerator";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "01mpfkz98r2fx4n0gyi3b4zvlyfd5bxydp2wh431lnj0ahrsiikp";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config autoconf-archive txt2man ];
 
   buildInputs = [ gettext libssl ];
 
-  installFlags = [ "ETCDIR=$(out)/etc" ];
+  installFlags = [ "ETCDIR=${placeholder "out"}/etc" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Console downloading program with some features for parallel connections for faster downloading";
     homepage = "https://github.com/axel-download-accelerator/axel";
     maintainers = with maintainers; [ pSub ];
-    platforms = with platforms; linux;
+    platforms = with platforms; unix;
     license = licenses.gpl2;
   };
 }

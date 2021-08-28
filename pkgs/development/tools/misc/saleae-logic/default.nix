@@ -6,7 +6,7 @@
 #
 # In NixOS, simply add this package to services.udev.packages.
 
-{ stdenv, fetchurl, unzip, glib, libSM, libICE, gtk2, libXext, libXft
+{ lib, stdenv, fetchurl, unzip, glib, libSM, libICE, gtk2, libXext, libXft
 , fontconfig, libXrender, libXfixes, libX11, libXi, libXrandr, libXcursor
 , freetype, libXinerama, libxcb, zlib, pciutils
 , makeDesktopItem, xkeyboardconfig, dbus, runtimeShell, libGL
@@ -14,7 +14,7 @@
 
 let
 
-  libPath = stdenv.lib.makeLibraryPath [
+  libPath = lib.makeLibraryPath [
     glib libSM libICE gtk2 libXext libXft fontconfig libXrender libXfixes libX11
     libXi libXrandr libXcursor freetype libXinerama libxcb zlib stdenv.cc.cc.lib
     dbus libGL
@@ -27,7 +27,6 @@ assert stdenv.hostPlatform.system == "x86_64-linux";
 stdenv.mkDerivation rec {
   pname = "saleae-logic";
   version = "1.2.18";
-  name = "${pname}-${version}";
 
   src = fetchurl {
     name = "saleae-logic-${version}-64bit.zip";
@@ -42,10 +41,10 @@ stdenv.mkDerivation rec {
     comment = "Software for Saleae logic analyzers";
     desktopName = "Saleae Logic";
     genericName = "Logic analyzer";
-    categories = "Application;Development";
+    categories = "Development";
   };
 
-  buildInputs = [ unzip ];
+  nativeBuildInputs = [ unzip ];
 
   installPhase = ''
     # Copy prebuilt app to $out
@@ -88,9 +87,9 @@ stdenv.mkDerivation rec {
     cp Drivers/99-SaleaeLogic.rules "$out/etc/udev/rules.d/"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Software for Saleae logic analyzers";
-    homepage = http://www.saleae.com/;
+    homepage = "https://www.saleae.com/";
     license = licenses.unfree;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];

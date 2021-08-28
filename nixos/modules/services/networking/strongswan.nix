@@ -4,7 +4,7 @@ let
 
   inherit (builtins) toFile;
   inherit (lib) concatMapStringsSep concatStringsSep mapAttrsToList
-                mkIf mkEnableOption mkOption types;
+                mkIf mkEnableOption mkOption types literalExample;
 
   cfg = config.services.strongswan;
 
@@ -79,19 +79,21 @@ in
     connections = mkOption {
       type = types.attrsOf (types.attrsOf types.str);
       default = {};
-      example = {
-        "%default" = {
-          keyexchange = "ikev2";
-          keyingtries = "1";
-        };
-        roadwarrior = {
-          auto       = "add";
-          leftcert   = "/run/keys/moonCert.pem";
-          leftid     = "@moon.strongswan.org";
-          leftsubnet = "10.1.0.0/16";
-          right      = "%any";
-        };
-      };
+      example = literalExample ''
+        {
+          "%default" = {
+            keyexchange = "ikev2";
+            keyingtries = "1";
+          };
+          roadwarrior = {
+            auto       = "add";
+            leftcert   = "/run/keys/moonCert.pem";
+            leftid     = "@moon.strongswan.org";
+            leftsubnet = "10.1.0.0/16";
+            right      = "%any";
+          };
+        }
+      '';
       description = ''
         A set of connections and their options for the ‘conn xxx’
         sections of the <filename>ipsec.conf</filename> file.
@@ -150,9 +152,8 @@ in
     systemd.services.strongswan = {
       description = "strongSwan IPSec Service";
       wantedBy = [ "multi-user.target" ];
-      path = with pkgs; [ kmod iproute iptables utillinux ]; # XXX Linux
-      wants = [ "keys.target" ];
-      after = [ "network-online.target" "keys.target" ];
+      path = with pkgs; [ kmod iproute2 iptables util-linux ]; # XXX Linux
+      after = [ "network-online.target" ];
       environment = {
         STRONGSWAN_CONF = strongswanConf { inherit setup connections ca secretsFile managePlugins enabledPlugins; };
       };

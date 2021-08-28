@@ -1,7 +1,7 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "compile-daemon-unstable-${version}";
+  pname = "compile-daemon-unstable";
   version = "2017-03-08";
   rev = "d447e567232bcb84cedd3b2be012c7127f31f469";
 
@@ -16,7 +16,7 @@ buildGoPackage rec {
 
   goDeps = ./deps.nix;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Very simple compile daemon for Go";
     license = licenses.bsd2;
     maintainers = with maintainers; [ ];

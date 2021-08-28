@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, cups, ... }:
 
 stdenv.mkDerivation rec {
-  name = "cups-dymo-${version}";
+  pname = "cups-dymo";
   version = "1.4.0.5";
 
   # exposed version and 'real' version may differ
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "CUPS Linux drivers and SDK for DYMO printers";
-    homepage = http://www.dymo.com/;
+    homepage = "https://www.dymo.com/";
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ makefu ];
   };

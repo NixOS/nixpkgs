@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , disabledIf
 , isPy3k
@@ -9,9 +9,9 @@
 }:
 
 disabledIf (isPy3k || isPyPy)
-  (buildPythonPackage rec {
+  (buildPythonPackage {
     # TODO: Qt5 support
-    name = "qscintilla-${version}";
+    pname = "qscintilla";
     version = pkgs.qscintilla.version;
     format = "other";
 
@@ -34,7 +34,7 @@ disabledIf (isPy3k || isPyPy)
           --sipdir $out/share/sip
     '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "A Python binding to QScintilla, Qt based text editing control";
       license = licenses.lgpl21Plus;
       maintainers = with maintainers; [ danbst ];

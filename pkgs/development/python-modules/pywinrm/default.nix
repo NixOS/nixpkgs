@@ -1,6 +1,8 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, isPy38
+, kerberos
 , mock
 , pytest
 , requests
@@ -11,21 +13,25 @@
 
 buildPythonPackage rec {
   pname = "pywinrm";
-  version = "0.3.0";
+  version = "0.4.1";
+  disabled = isPy38;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "799fc3e33fec8684443adf5778860388289102ea4fa1458f1bf307d167855573";
+    sha256 = "4ede5c6c85b53780ad0dbf9abef2fa2ea58f44c82256a84a63eae5f1205cea81";
   };
 
   checkInputs = [ mock pytest ];
-  propagatedBuildInputs = [ requests requests_ntlm six xmltodict ];
+  propagatedBuildInputs = [ requests requests_ntlm six kerberos xmltodict ];
 
   meta = with lib; {
     description = "Python library for Windows Remote Management";
-    homepage = https://github.com/diyan/pywinrm/;
+    homepage = "https://github.com/diyan/pywinrm";
     license = licenses.mit;
-    maintainers = with maintainers; [ elasticdog ];
+    maintainers = with maintainers; [
+      elasticdog
+      kamadorueda
+    ];
     platforms = platforms.all;
   };
 }

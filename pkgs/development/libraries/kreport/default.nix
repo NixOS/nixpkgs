@@ -7,10 +7,9 @@
 mkDerivation rec {
   pname = "kreport";
   version = "3.2.0";
-  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://kde/stable/${pname}/src/${name}.tar.xz";
+    url = "mirror://kde/stable/${pname}/src/${pname}-${version}.tar.xz";
     sha256 = "1mycsvkz5rphi9df2i4ch4ykvprd4m76acsdzs3zis2ljrqnsw92";
   };
 

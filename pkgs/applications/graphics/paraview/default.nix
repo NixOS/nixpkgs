@@ -1,71 +1,91 @@
-{
-stdenv, fetchFromGitHub, cmake, makeWrapper
-,qtbase, qttools, python, libGLU_combined
-,libXt, qtx11extras, qtxmlpatterns
-}:
+{ boost, cmake, fetchFromGitHub, ffmpeg, qtbase, qtx11extras,
+  qttools, qtxmlpatterns, qtsvg, gdal, gfortran, libXt, makeWrapper,
+  mkDerivation, ninja, mpi, python3, lib, tbb, libGLU, libGL }:
 
-stdenv.mkDerivation rec {
-  name = "paraview-${version}";
-  version = "5.6.0";
+mkDerivation rec {
+  pname = "paraview";
+  version = "5.8.0";
 
-  # fetching from GitHub instead of taking an "official" source
-  # tarball because of missing submodules there
   src = fetchFromGitHub {
     owner = "Kitware";
     repo = "ParaView";
     rev = "v${version}";
-    sha256 = "1j13yfdgcv4yzfr449i4c8r4rs1c9zr6qd3igr4vv3ani8zixkzi";
+    sha256 = "1mka6wwg9mbkqi3phs29mvxq6qbc44sspbm4awwamqhilh4grhrj";
     fetchSubmodules = true;
   };
 
-  cmakeFlags = [
-    "-DPARAVIEW_ENABLE_PYTHON=ON"
-    "-DPARAVIEW_INSTALL_DEVELOPMENT_FILES=ON"
-    "-DPARAVIEW_ENABLE_EMBEDDED_DOCUMENTATION=OFF"
-    "-DOpenGL_GL_PREFERENCE=GLVND"
-  ];
+  # Avoid error: format not a string literal and
+  # no format arguments [-Werror=format-security]
+  preConfigure = ''
+    substituteInPlace VTK/Common/Core/vtkLogger.h \
+      --replace 'vtkLogScopeF(verbosity_name, __func__)' 'vtkLogScopeF(verbosity_name, "%s", __func__)'
+
+    substituteInPlace VTK/Common/Core/vtkLogger.h \
+      --replace 'vtkVLogScopeF(level, __func__)' 'vtkVLogScopeF(level, "%s", __func__)'
+  '';
+
+  # Find the Qt platform plugin "minimal"
+  patchPhase = ''
+    export QT_PLUGIN_PATH=${qtbase.bin}/${qtbase.qtPluginPrefix}
+  '';
 
   # During build, binaries are called that rely on freshly built
   # libraries.  These reside in build/lib, and are not found by
   # default.
   preBuild = ''
-    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PWD/lib:$PWD/VTK/ThirdParty/vtkm/vtk-m/lib
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$PWD/lib:$PWD/VTK/ThirdParty/vtkm/vtk-m/lib
   '';
 
-  enableParallelBuilding = true;
+  cmakeFlags = [
+    "-DCMAKE_BUILD_TYPE=Release"
+    "-DPARAVIEW_ENABLE_FFMPEG=ON"
+    "-DPARAVIEW_ENABLE_GDAL=ON"
+    "-DPARAVIEW_ENABLE_MOTIONFX=ON"
+    "-DPARAVIEW_ENABLE_VISITBRIDGE=ON"
+    "-DPARAVIEW_ENABLE_XDMF3=ON"
+    "-DPARAVIEW_INSTALL_DEVELOPMENT_FILES=ON"
+    "-DPARAVIEW_USE_MPI=ON"
+    "-DPARAVIEW_USE_PYTHON=ON"
+    "-DVTK_SMP_IMPLEMENTATION_TYPE=TBB"
+    "-DVTKm_ENABLE_MPI=ON"
+    "-DCMAKE_INSTALL_LIBDIR=lib"
+    "-DCMAKE_INSTALL_INCLUDEDIR=include"
+    "-DCMAKE_INSTALL_BINDIR=bin"
+    "-DOpenGL_GL_PREFERENCE=GLVND"
+    "-GNinja"
+  ];
 
   nativeBuildInputs = [
     cmake
     makeWrapper
+    ninja
+    gfortran
   ];
 
   buildInputs = [
-    python
-    python.pkgs.numpy
-    libGLU_combined
+    libGLU libGL
     libXt
+    mpi
+    tbb
+    boost
+    ffmpeg
+    gdal
     qtbase
     qtx11extras
     qttools
     qtxmlpatterns
+    qtsvg
   ];
 
-  # Paraview links into the Python library, resolving symbolic links on the way,
-  # so we need to put the correct sitePackages (with numpy) back on the path
-  postInstall = ''
-    wrapProgram $out/bin/paraview \
-      --set PYTHONPATH "${python.pkgs.numpy}/${python.sitePackages}"
-    wrapProgram $out/bin/pvbatch \
-      --set PYTHONPATH "${python.pkgs.numpy}/${python.sitePackages}"
-    wrapProgram $out/bin/pvpython \
-      --set PYTHONPATH "${python.pkgs.numpy}/${python.sitePackages}"
-  '';
+  propagatedBuildInputs = [
+    (python3.withPackages (ps: with ps; [ numpy matplotlib mpi4py ]))
+  ];
 
-  meta = {
-    homepage = http://www.paraview.org/;
+  meta = with lib; {
+    homepage = "https://www.paraview.org/";
     description = "3D Data analysis and visualization application";
-    license = stdenv.lib.licenses.free;
-    maintainers = with stdenv.lib.maintainers; [guibert];
-    platforms = with stdenv.lib.platforms; linux;
+    license = licenses.free;
+    maintainers = with maintainers; [ guibert ];
+    platforms = platforms.linux;
   };
 }

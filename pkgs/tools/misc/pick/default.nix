@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, ncurses, pkgconfig }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, ncurses, pkg-config }:
 
 stdenv.mkDerivation rec {
-  name = "pick-${version}";
+  pname = "pick";
   version = "2.0.2";
 
   src = fetchFromGitHub {
@@ -13,9 +13,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses ];
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "Fuzzy text selection utility";
     license = licenses.mit;

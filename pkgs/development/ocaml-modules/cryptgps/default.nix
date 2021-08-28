@@ -1,11 +1,11 @@
-{stdenv, fetchurl, ocaml, findlib}:
+{stdenv, lib, fetchurl, ocaml, findlib}:
 
-if stdenv.lib.versionAtLeast ocaml.version "4.06"
+if lib.versionAtLeast ocaml.version "4.06"
 then throw "cryptgps is not available for OCaml ${ocaml.version}"
 else
 
-stdenv.mkDerivation rec {
-  name = "ocaml-cryptgps-${version}";
+stdenv.mkDerivation {
+  pname = "ocaml-cryptgps";
   version = "0.2.1";
 
   src = fetchurl {
@@ -15,12 +15,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ocaml findlib];
 
-  configurePhase = "true";	# Skip configure phase
+  dontConfigure = true;	# Skip configure phase
 
   createFindlibDestdir = true;
 
   meta = {
-    homepage = http://projects.camlcity.org/projects/cryptgps.html;
+    homepage = "http://projects.camlcity.org/projects/cryptgps.html";
     description = "Cryptographic functions for OCaml";
     longDescription = ''
       This library implements the symmetric cryptographic algorithms
@@ -28,10 +28,10 @@ stdenv.mkDerivation rec {
       i.e. this is not a binding to some C library, but the implementation
       itself.
     '';
-    license = stdenv.lib.licenses.mit;
+    license = lib.licenses.mit;
     platforms = ocaml.meta.platforms or [];
     maintainers = [
-      stdenv.lib.maintainers.z77z
+      lib.maintainers.maggesi
     ];
   };
 }

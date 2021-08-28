@@ -1,28 +1,21 @@
-{ stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, isPy3k
-, pkgs
-, urlgrabber
-, m2crypto
-, pyyaml
-, lxml
+{ lib, buildPythonPackage, fetchFromGitHub, bashInteractive, urlgrabber
+, m2crypto, rpm, chardet
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "osc";
-  version = "0.163.0-40-gb4b1ec7";
-  disabled = isPy3k;    # urlgrabber doesn't support python-3.x
+  version = "0.170.0";
 
   src = fetchFromGitHub {
     owner = "openSUSE";
     repo = "osc";
-    rev = "b4b1ec7b64d4f9bb42f140754519221b810e232c";
-    sha256 = "01z1b15x9vzhd7j94f6n3g50h5br7lwz86akgic0wpp41zv37jad";
+    rev = version;
+    sha256 = "10dj9kscz59qm8rw5084gf0m8ail2rl7r8rg66ij92x88wvi9mbz";
   };
 
-  buildInputs = [ pkgs.bashInteractive ]; # needed for bash-completion helper
-  propagatedBuildInputs = [ urlgrabber m2crypto pyyaml lxml ];
+  buildInputs = [ bashInteractive ]; # needed for bash-completion helper
+  checkInputs = [ rpm ];
+  propagatedBuildInputs = [ urlgrabber m2crypto chardet ];
 
   postInstall = ''
     ln -s $out/bin/osc-wrapper.py $out/bin/osc
@@ -37,7 +30,8 @@ buildPythonPackage {
     EOF
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
+    homepage = "https://github.com/openSUSE/osc";
     description = "opensuse-commander with svn like handling";
     maintainers = [ maintainers.peti ];
     license = licenses.gpl2;

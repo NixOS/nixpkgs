@@ -1,8 +1,8 @@
-{ stdenv, lib, fetchFromGitHub, cmake, pkgconfig, autoPatchelfHook
+{ stdenv, lib, fetchFromGitHub, cmake, pkg-config, autoPatchelfHook
 , qtbase, libvirt, cutelyst, grantlee }:
 
 stdenv.mkDerivation rec {
-  name = "virtlyst-${version}";
+  pname = "virtlyst";
   version = "1.2.0";
 
   src = fetchFromGitHub {
@@ -12,8 +12,10 @@ stdenv.mkDerivation rec {
     sha256 = "1vgjai34hqppkpl0ryxkyhpm9dsx1chs3bii3wc3h40hl80n6dgy";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig autoPatchelfHook ];
+  nativeBuildInputs = [ cmake pkg-config autoPatchelfHook ];
   buildInputs = [ qtbase libvirt cutelyst grantlee ];
+
+  dontWrapQtApps = true;
 
   installPhase = ''
     mkdir -p $out/lib
@@ -25,7 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Web interface to manage virtual machines with libvirt";
-    homepage = https://github.com/cutelyst/Virtlyst;
+    homepage = "https://github.com/cutelyst/Virtlyst";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ fpletz ];
   };

@@ -1,6 +1,7 @@
 { mkDerivation
 , lib
 , fetchurl
+, fetchpatch
 , extra-cmake-modules
 , kdoctools
 , kbookmarks
@@ -27,15 +28,13 @@
 , phonon
 }:
 
-let
+mkDerivation rec {
   pname = "konversation";
-  version = "1.7.5";
-in mkDerivation rec {
-  name = "${pname}-${version}";
+  version = "1.7.7";
 
   src = fetchurl {
-    url = "mirror://kde/stable/${pname}/${version}/src/${name}.tar.xz";
-    sha256 = "0h098yhlp36ls6pdvs2r93ig8dv4fys62m0h6wxccprb0qrpbgv0";
+    url = "mirror://kde/stable/${pname}/${version}/src/${pname}-${version}.tar.xz";
+    sha256 = "R+wWHBOFmBqLmdKMQZ6Iskgj3AG2j7FiOJSBiXTCGKc=";
   };
 
   buildInputs = [
@@ -73,6 +72,6 @@ in mkDerivation rec {
     description = "Integrated IRC client for KDE";
     license = with lib.licenses; [ gpl2 ];
     maintainers = with lib.maintainers; [ fridh ];
-    homepage = https://konversation.kde.org;
+    homepage = "https://konversation.kde.org";
   };
 }

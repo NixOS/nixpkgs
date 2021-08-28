@@ -1,21 +1,29 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
+, requests
+, google-auth
+, google-auth-oauthlib
 }:
 
 buildPythonPackage rec {
-  version = "3.1.0";
+  version = "3.7.0";
   pname = "gspread";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f7ce6c06250f694976c3cd4944e3b607b0810b93383839e5b67c7199ce2f0d3d";
+    sha256 = "4bda4ab8c5edb9e41cf4ae40d4d5fb30447522b4e43608e05c01351ab1b96912";
   };
 
-  meta = with stdenv.lib; {
+  propagatedBuildInputs = [ requests google-auth google-auth-oauthlib ];
+
+  meta = with lib; {
     description = "Google Spreadsheets client library";
     homepage = "https://github.com/burnash/gspread";
     license = licenses.mit;
   };
+
+  # No tests included
+  doCheck = false;
 
 }

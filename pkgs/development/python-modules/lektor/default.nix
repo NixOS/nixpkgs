@@ -12,13 +12,14 @@
 , flask
 , pyopenssl
 , ndg-httpsclient
-, pytest
-, pytestcov
+, pytestCheckHook
+, pytest-cov
 , pytest-mock
 , pytest-pylint
 , pytest-click
 , isPy27
 , functools32
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -34,16 +35,12 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     click watchdog exifread requests mistune inifile Babel jinja2
-    flask pyopenssl ndg-httpsclient
+    flask pyopenssl ndg-httpsclient setuptools
   ] ++ lib.optionals isPy27 [ functools32 ];
 
   checkInputs = [
-    pytest pytestcov pytest-mock pytest-pylint pytest-click
+    pytestCheckHook pytest-cov pytest-mock pytest-pylint pytest-click
   ];
-
-  checkPhase = ''
-    pytest
-  '';
 
   # many errors -- tests assume inside of git repo, linting errors 13/317 fail
   doCheck = false;

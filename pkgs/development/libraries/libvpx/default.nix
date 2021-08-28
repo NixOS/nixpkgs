@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, perl, yasm
+{ lib, stdenv, fetchFromGitHub, perl, yasm
 , vp8DecoderSupport ? true # VP8 decoder
 , vp8EncoderSupport ? true # VP8 encoder
 , vp9DecoderSupport ? true # VP9 decoder
@@ -40,7 +40,7 @@
 
 let
   inherit (stdenv) is64bit isMips isDarwin isCygwin;
-  inherit (stdenv.lib) enableFeature optional optionals;
+  inherit (lib) enableFeature optional optionals;
 in
 
 assert vp8DecoderSupport || vp8EncoderSupport || vp9DecoderSupport || vp9EncoderSupport;
@@ -55,17 +55,17 @@ assert vp9HighbitdepthSupport -> (vp9DecoderSupport || vp9EncoderSupport);
 assert isCygwin -> unitTestsSupport && webmIOSupport && libyuvSupport;
 
 stdenv.mkDerivation rec {
-  name = "libvpx-${version}";
-  version = "1.7.0";
+  pname = "libvpx";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "webmproject";
-    repo = "libvpx";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "0vvh89hvp8qg9an9vcmwb7d9k3nixhxaz6zi65qdjnd0i56kkcz6";
+    sha256 = "sha256-EZP33U10fchyqy7Jr26vHgUUfWR6xtG3fcMWUII0m9w=";
   };
 
-  patchPhase = ''patchShebangs .'';
+  postPatch = "patchShebangs .";
 
   outputs = [ "bin" "dev" "out" ];
   setOutputFlags = false;
@@ -114,7 +114,7 @@ stdenv.mkDerivation rec {
     (if isDarwin || isCygwin then
        "--enable-static --disable-shared"
      else
-       "--disable-static --enable-shared")
+       "--enable-shared")
     (enableFeature smallSupport "small")
     (enableFeature postprocVisualizerSupport "postproc-visualizer")
     (enableFeature unitTestsSupport "unit-tests")
@@ -140,7 +140,7 @@ stdenv.mkDerivation rec {
     # libvpx darwin targets include darwin version (ie. ARCH-darwinXX-gcc, XX being the darwin version)
     # See all_platforms: https://github.com/webmproject/libvpx/blob/master/configure
     # Darwin versions: 10.4=8, 10.5=9, 10.6=10, 10.7=11, 10.8=12, 10.9=13, 10.10=14
-    "--force-target=${stdenv.hostPlatform.config}${
+    "--force-target=${stdenv.hostPlatform.parsed.cpu.name}-${stdenv.hostPlatform.parsed.kernel.name}${
             if stdenv.hostPlatform.isDarwin then
               if      stdenv.hostPlatform.osxMinVersion == "10.10" then "14"
               else if stdenv.hostPlatform.osxMinVersion == "10.9"  then "13"
@@ -161,13 +161,17 @@ stdenv.mkDerivation rec {
   buildInputs = [ ]
     ++ optionals unitTestsSupport [ coreutils curl ];
 
+  NIX_LDFLAGS = [
+    "-lpthread" # fixes linker errors
+  ];
+
   enableParallelBuilding = true;
 
   postInstall = ''moveToOutput bin "$bin" '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "WebM VP8/VP9 codec SDK";
-    homepage    = https://www.webmproject.org/;
+    homepage    = "https://www.webmproject.org/";
     license     = licenses.bsd3;
     maintainers = with maintainers; [ codyopel ];
     platforms   = platforms.all;

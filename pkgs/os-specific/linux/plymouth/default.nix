@@ -1,65 +1,111 @@
-{ stdenv, fetchurl, autoreconfHook, pkgconfig, libxslt, docbook_xsl
-, gtk3, udev, systemd
+{ lib
+, stdenv
+, fetchpatch
+, fetchFromGitLab
+, pkg-config
+, autoreconfHook
+, libxslt
+, docbook-xsl-nons
+, gettext
+, gtk3
+, systemd
+, pango
+, cairo
+, libdrm
 }:
 
 stdenv.mkDerivation rec {
-  name = "plymouth-${version}";
-  version = "0.9.4";
+  pname = "plymouth-unstable";
+  version = "2020-12-07";
 
-  src = fetchurl {
-    url = "https://www.freedesktop.org/software/plymouth/releases/${name}.tar.xz";
-    sha256 = "0l8kg7b2vfxgz9gnrn0v2w4jvysj2cirp0nxads5sy05397pl6aa";
+  outputs = [
+    "out"
+    "dev"
+  ];
+
+  src = fetchFromGitLab {
+    domain = "gitlab.freedesktop.org";
+    owner = "plymouth";
+    repo = "plymouth";
+    rev = "c4ced2a2d70edea7fbb95274aa1d01d95928df1b";
+    sha256 = "7CPuKMA0fTt8DBsaA4Td74kHT/O7PW8N3awP04nUnOI=";
   };
 
   nativeBuildInputs = [
-    autoreconfHook pkgconfig libxslt docbook_xsl
+    autoreconfHook
+    docbook-xsl-nons
+    gettext
+    libxslt
+    pkg-config
   ];
 
   buildInputs = [
-    gtk3 udev systemd
+    cairo
+    gtk3
+    libdrm
+    pango
+    systemd
+  ];
+
+  patches = [
+    # KillMode=none is deprecated
+    # https://gitlab.freedesktop.org/plymouth/plymouth/-/issues/123
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/plymouth/plymouth/-/commit/b406b0895a95949db2adfedaeda451f36f2b51c3.patch";
+      sha256 = "/UBImNuFO0G/oxlttjGIXon8YXMXlc9XU8uVuR9QuxY=";
+    })
   ];
 
   postPatch = ''
     sed -i \
-      -e "s#\$(\$PKG_CONFIG --variable=systemdsystemunitdir systemd)#$out/etc/systemd/system#g" \
       -e "s#plymouthplugindir=.*#plymouthplugindir=/etc/plymouth/plugins/#" \
       -e "s#plymouththemedir=.*#plymouththemedir=/etc/plymouth/themes#" \
       -e "s#plymouthpolicydir=.*#plymouthpolicydir=/etc/plymouth/#" \
+      -e "s#plymouthconfdir=.*#plymouthconfdir=/etc/plymouth/#" \
       configure.ac
-
-    configureFlags="
-      --prefix=$out
-      --bindir=$out/bin
-      --sbindir=$out/sbin
-      --exec-prefix=$out
-      --libdir=$out/lib
-      --libexecdir=$out/lib
-      --sysconfdir=/etc
-      --with-systemdunitdir=$out/etc/systemd/system
-      --localstatedir=/var
-      --with-logo=/etc/plymouth/logo.png
-      --with-background-color=0x000000
-      --with-background-start-color-stop=0x000000
-      --with-background-end-color-stop=0x000000
-      --with-release-file=/etc/os-release
-      --without-system-root-install
-      --without-rhgb-compat-link
-      --enable-tracing
-      --enable-systemd-integration
-      --enable-pango
-      --enable-gdm-transition
-      --enable-gtk"
-
-    installFlags="
-      plymouthd_defaultsdir=$out/share/plymouth
-      plymouthd_confdir=$out/etc/plymouth"
   '';
 
-  meta = with stdenv.lib; {
-    homepage = http://www.freedesktop.org/wiki/Software/Plymouth;
-    description = "A graphical boot animation";
-    license = licenses.gpl2;
-    maintainers = [ maintainers.goibhniu ];
+  configurePlatforms = [ "host" ];
+
+  configureFlags = [
+    "--enable-documentation"
+    "--enable-drm"
+    "--enable-gtk"
+    "--enable-pango"
+    "--enable-systemd-integration"
+    "--enable-tracing"
+    "--localstatedir=/var"
+    "--sysconfdir=/etc"
+    "--with-background-color=0x000000"
+    "--with-background-end-color-stop=0x000000"
+    "--with-background-start-color-stop=0x000000"
+    "--with-logo=/etc/plymouth/logo.png"
+    "--with-release-file=/etc/os-release"
+    "--with-runtimedir=/run"
+    "--with-systemdunitdir=${placeholder "out"}/etc/systemd/system"
+    "--without-rhgb-compat-link"
+    "--without-system-root-install"
+    "ac_cv_path_SYSTEMD_ASK_PASSWORD_AGENT=${lib.getBin systemd}/bin/systemd-tty-ask-password-agent"
+  ];
+
+  installFlags = [
+    "localstatedir=\${TMPDIR}"
+    "plymouthd_confdir=${placeholder "out"}/etc/plymouth"
+    "plymouthd_defaultsdir=${placeholder "out"}/share/plymouth"
+    "sysconfdir=${placeholder "out"}/etc"
+  ];
+
+  postInstall = ''
+    # Makes a symlink to /usr/share/pixmaps/system-logo-white.png
+    # We'll handle it in the nixos module.
+    rm $out/share/plymouth/themes/spinfinity/header-image.png
+  '';
+
+  meta = with lib; {
+    homepage = "https://www.freedesktop.org/wiki/Software/Plymouth/";
+    description = "Boot splash and boot logger";
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.goibhniu teams.gnome.members ];
     platforms = platforms.linux;
   };
 }

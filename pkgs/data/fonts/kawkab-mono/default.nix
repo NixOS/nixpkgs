@@ -1,6 +1,6 @@
 { lib, fetchzip }:
 
-fetchzip rec {
+fetchzip {
   name = "kawkab-mono-20151015";
 
   url = "http://makkuk.com/kawkab-mono/downloads/kawkab-mono-0.1.zip";
@@ -14,7 +14,7 @@ fetchzip rec {
 
   meta = {
     description = "An arab fixed-width font";
-    homepage = https://makkuk.com/kawkab-mono/;
+    homepage = "https://makkuk.com/kawkab-mono/";
     license = lib.licenses.ofl;
   };
 }

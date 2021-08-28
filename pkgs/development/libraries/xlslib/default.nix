@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, autoreconfHook, unzip }:
+{ lib, stdenv, fetchurl, autoreconfHook, unzip }:
 
 stdenv.mkDerivation rec {
-  name = "xlslib-${version}";
+  pname = "xlslib";
   version = "2.5.0";
 
   src = fetchurl {
@@ -15,9 +15,9 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "C++/C library to construct Excel .xls files in code";
-    homepage = https://sourceforge.net/projects/xlslib/;
+    homepage = "https://sourceforge.net/projects/xlslib/";
     license = licenses.bsd2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ abbradar ];

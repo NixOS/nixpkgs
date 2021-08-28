@@ -1,11 +1,12 @@
-{ stdenv, fetchFromGitHub, makeWrapper, makeDesktopItem, pkgconfig, cmake, qt5
-, bluez, ffmpeg, libao, libGLU_combined, pcre, gettext, libXrandr, libusb, lzo
-, libpthreadstubs, libXext, libXxf86vm, libXinerama, libSM, libXdmcp, readline
-, openal, udev, libevdev, portaudio, curl, alsaLib, miniupnpc, enet, mbedtls
-, soundtouch, sfml, vulkan-loader ? null, libpulseaudio ? null
+{ lib, stdenv, fetchFromGitHub, makeDesktopItem, pkg-config, cmake
+, wrapQtAppsHook, qtbase, bluez, ffmpeg, libao, libGLU, libGL, pcre, gettext
+, libXrandr, libusb1, lzo, libpthreadstubs, libXext, libXxf86vm, libXinerama
+, libSM, libXdmcp, readline, openal, udev, libevdev, portaudio, curl, alsaLib
+, miniupnpc, enet, mbedtls, soundtouch, sfml
+, vulkan-loader ? null, libpulseaudio ? null
 
 # - Inputs used for Darwin
-, CoreBluetooth, cf-private, ForceFeedback, IOKit, OpenGL, libpng, hidapi }:
+, CoreBluetooth, ForceFeedback, IOKit, OpenGL, libpng, hidapi }:
 
 let
   desktopItem = makeDesktopItem {
@@ -19,29 +20,28 @@ let
     startupNotify = "false";
   };
 in stdenv.mkDerivation rec {
-  name = "dolphin-emu-${version}";
-  version = "5.0-9976";
+  pname = "dolphin-emu";
+  version = "5.0-14002";
 
   src = fetchFromGitHub {
     owner = "dolphin-emu";
     repo = "dolphin";
-    rev = "63f30cc44da248b0226e1c8724b3e53ecf4c768f";
-    sha256 = "0lkf571kzmw26fybl1lqpvhc81jkbh4hcvi3766bb7mvvzapkybd";
+    rev = "53222560650e4a99eceafcd537d4e04d1c50b3a6";
+    sha256 = "1m71gk9hm011fpv5hmpladf7abkylmawgr60d0czkr276pzg04ky";
   };
 
-  enableParallelBuilding = true;
-  nativeBuildInputs = [ cmake pkgconfig ]
-  ++ stdenv.lib.optionals stdenv.isLinux [ makeWrapper ];
+  nativeBuildInputs = [ cmake pkg-config ]
+  ++ lib.optional stdenv.isLinux wrapQtAppsHook;
 
   buildInputs = [
-    curl ffmpeg libao libGLU_combined pcre gettext libpthreadstubs libpulseaudio
+    curl ffmpeg libao libGLU libGL pcre gettext libpthreadstubs libpulseaudio
     libXrandr libXext libXxf86vm libXinerama libSM readline openal libXdmcp lzo
-    portaudio libusb libpng hidapi miniupnpc enet mbedtls soundtouch sfml
-    qt5.qtbase
-  ] ++ stdenv.lib.optionals stdenv.isLinux [
+    portaudio libusb1 libpng hidapi miniupnpc enet mbedtls soundtouch sfml
+    qtbase
+  ] ++ lib.optionals stdenv.isLinux [
     bluez udev libevdev alsaLib vulkan-loader
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [
-    CoreBluetooth cf-private OpenGL ForceFeedback IOKit
+  ] ++ lib.optionals stdenv.isDarwin [
+    CoreBluetooth OpenGL ForceFeedback IOKit
   ];
 
   cmakeFlags = [
@@ -50,14 +50,18 @@ in stdenv.mkDerivation rec {
     "-DDOLPHIN_WC_REVISION=${src.rev}"
     "-DDOLPHIN_WC_DESCRIBE=${version}"
     "-DDOLPHIN_WC_BRANCH=master"
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     "-DOSX_USE_DEFAULT_SEARCH_PATH=True"
   ];
 
+  qtWrapperArgs = lib.optionals stdenv.isLinux [
+    "--prefix LD_LIBRARY_PATH : ${vulkan-loader}/lib"
+  ];
+
   # - Allow Dolphin to use nix-provided libraries instead of building them
-  preConfigure = ''
+  postPatch = ''
     sed -i -e 's,DISTRIBUTOR "None",DISTRIBUTOR "NixOS",g' CMakeLists.txt
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.isDarwin ''
     sed -i -e 's,if(NOT APPLE),if(true),g' CMakeLists.txt
     sed -i -e 's,if(LIBUSB_FOUND AND NOT APPLE),if(LIBUSB_FOUND),g' \
       CMakeLists.txt
@@ -66,18 +70,15 @@ in stdenv.mkDerivation rec {
   postInstall = ''
     cp -r ${desktopItem}/share/applications $out/share
     ln -sf $out/bin/dolphin-emu $out/bin/dolphin-emu-master
-  '' + stdenv.lib.optionalString stdenv.isLinux ''
-    wrapProgram $out/bin/dolphin-emu-nogui \
-      --prefix LD_LIBRARY_PATH : ${vulkan-loader}/lib
-    wrapProgram $out/bin/dolphin-emu \
-      --prefix LD_LIBRARY_PATH : ${vulkan-loader}/lib
+  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
+    install -D $src/Data/51-usb-device.rules $out/etc/udev/rules.d/51-usb-device.rules
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://dolphin-emu.org";
     description = "Gamecube/Wii/Triforce emulator for x86_64 and ARMv8";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ MP2E ];
+    maintainers = with maintainers; [ MP2E ashkitten ];
     branch = "master";
     # x86_32 is an unsupported platform.
     # Enable generic build if you really want a JIT-less binary.

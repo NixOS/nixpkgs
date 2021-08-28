@@ -1,4 +1,10 @@
-{ stdenv, lib, edk2, nasm, iasl, seabios, openssl, secureBoot ? false }:
+{ stdenv, lib, edk2, util-linux, nasm, iasl
+, csmSupport ? false, seabios ? null
+, secureBoot ? false
+, httpSupport ? false
+}:
+
+assert csmSupport -> seabios != null;
 
 let
 
@@ -11,82 +17,51 @@ let
   else
     throw "Unsupported architecture";
 
-  version = (builtins.parseDrvName edk2.name).version;
-
-  src = edk2.src;
+  version = lib.getVersion edk2;
 in
 
-stdenv.mkDerivation (edk2.setup projectDscPath {
+edk2.mkDerivation projectDscPath {
   name = "OVMF-${version}";
-
-  inherit src;
 
   outputs = [ "out" "fd" ];
 
-  # TODO: properly include openssl for secureBoot
-  buildInputs = [nasm iasl] ++ stdenv.lib.optionals (secureBoot == true) [ openssl ];
+  buildInputs = [ util-linux nasm iasl ];
 
-  hardeningDisable = [ "stackprotector" "pic" "fortify" ];
+  hardeningDisable = [ "format" "stackprotector" "pic" "fortify" ];
 
-  unpackPhase = ''
-    # $fd is overwritten during the build
-    export OUTPUT_FD=$fd
+  buildFlags =
+    lib.optional secureBoot "-DSECURE_BOOT_ENABLE=TRUE"
+    ++ lib.optionals csmSupport [ "-D CSM_ENABLE" "-D FD_SIZE_2MB" ]
+    ++ lib.optionals httpSupport [ "-DNETWORK_HTTP_ENABLE=TRUE" "-DNETWORK_HTTP_BOOT_ENABLE=TRUE" ];
 
-    for file in \
-      "${src}"/{UefiCpuPkg,MdeModulePkg,IntelFrameworkModulePkg,PcAtChipsetPkg,FatBinPkg,EdkShellBinPkg,MdePkg,ShellPkg,OptionRomPkg,IntelFrameworkPkg,FatPkg,CryptoPkg,SourceLevelDebugPkg};
-    do
-      ln -sv "$file" .
-    done
-
-    ${if stdenv.isAarch64 then ''
-      ln -sv ${src}/ArmPkg .
-      ln -sv ${src}/ArmPlatformPkg .
-      ln -sv ${src}/ArmVirtPkg .
-      ln -sv ${src}/EmbeddedPkg .
-      ln -sv ${src}/OvmfPkg .
-    '' else if seabios != null then ''
-        cp -r ${src}/OvmfPkg .
-        chmod +w OvmfPkg/Csm/Csm16
-        cp ${seabios}/Csm16.bin OvmfPkg/Csm/Csm16/Csm16.bin
-    '' else ''
-        ln -sv ${src}/OvmfPkg .
-    ''}
-
-    ${lib.optionalString secureBoot ''
-      ln -sv ${src}/SecurityPkg .
-      ln -sv ${src}/CryptoPkg .
-    ''}
+  postPatch = lib.optionalString csmSupport ''
+    cp ${seabios}/Csm16.bin OvmfPkg/Csm/Csm16/Csm16.bin
   '';
-
-  buildPhase = if stdenv.isAarch64 then ''
-      build -n $NIX_BUILD_CORES
-    '' else if seabios == null then ''
-      build -n $NIX_BUILD_CORES ${lib.optionalString secureBoot "-DSECURE_BOOT_ENABLE=TRUE"}
-    '' else ''
-      build -n $NIX_BUILD_CORES -D CSM_ENABLE -D FD_SIZE_2MB ${lib.optionalString secureBoot "-DSECURE_BOOT_ENABLE=TRUE"}
-    '';
 
   postFixup = if stdenv.isAarch64 then ''
     mkdir -vp $fd/FV
     mkdir -vp $fd/AAVMF
     mv -v $out/FV/QEMU_{EFI,VARS}.fd $fd/FV
 
-    # Uses Fedora dir layout: https://src.fedoraproject.org/cgit/rpms/edk2.git/tree/edk2.spec
-    # FIXME: why is it different from Debian dir layout? https://anonscm.debian.org/cgit/pkg-qemu/edk2.git/tree/debian/rules
-    dd of=$fd/AAVMF/QEMU_EFI-pflash.raw       if=/dev/zero bs=1M    count=64
-    dd of=$fd/AAVMF/QEMU_EFI-pflash.raw       if=$fd/FV/QEMU_EFI.fd conv=notrunc
-    dd of=$fd/AAVMF/vars-template-pflash.raw if=/dev/zero bs=1M    count=64
+    # Use Debian dir layout: https://salsa.debian.org/qemu-team/edk2/blob/debian/debian/rules
+    dd of=$fd/FV/AAVMF_CODE.fd  if=/dev/zero bs=1M    count=64
+    dd of=$fd/FV/AAVMF_CODE.fd  if=$fd/FV/QEMU_EFI.fd conv=notrunc
+    dd of=$fd/FV/AAVMF_VARS.fd  if=/dev/zero bs=1M    count=64
+
+    # Also add symlinks for Fedora dir layout: https://src.fedoraproject.org/cgit/rpms/edk2.git/tree/edk2.spec
+    ln -s $fd/FV/AAVMF_CODE.fd $fd/AAVMF/QEMU_EFI-pflash.raw
+    ln -s $fd/FV/AAVMF_VARS.fd $fd/AAVMF/vars-template-pflash.raw
   '' else ''
-    mkdir -vp $OUTPUT_FD/FV
-    mv -v $out/FV/OVMF{,_CODE,_VARS}.fd $OUTPUT_FD/FV
+    mkdir -vp $fd/FV
+    mv -v $out/FV/OVMF{,_CODE,_VARS}.fd $fd/FV
   '';
 
   dontPatchELF = true;
 
   meta = {
     description = "Sample UEFI firmware for QEMU and KVM";
-    homepage = https://github.com/tianocore/tianocore.github.io/wiki/OVMF;
-    license = stdenv.lib.licenses.bsd2;
-    platforms = ["x86_64-linux" "i686-linux" "aarch64-linux"];
+    homepage = "https://github.com/tianocore/tianocore.github.io/wiki/OVMF";
+    license = lib.licenses.bsd2;
+    platforms = ["x86_64-linux" "i686-linux" "aarch64-linux" "x86_64-darwin"];
   };
-})
+}

@@ -57,7 +57,7 @@ in {
     nodeEnv = mkOption {
       description = "The node environment to run in (development, production, etc.)";
 
-      type = types.string;
+      type = types.str;
 
       default = "production";
     };

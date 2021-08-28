@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, varnish, libmhash, docutils }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, varnish, libmhash, docutils }:
 
 stdenv.mkDerivation rec {
   version = "1.0.2";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0jwkqqalydn0pwfdhirl5zjhbc3hldvhh09hxrahibr72fgmgpbx";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig docutils ];
+  nativeBuildInputs = [ autoreconfHook pkg-config docutils ];
   buildInputs = [ varnish libmhash ];
 
   postPatch = ''
@@ -21,11 +21,13 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "VMOD_DIR=$(out)/lib/varnish/vmods" ];
 
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=deprecated-declarations" ];
+
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Digest and HMAC vmod";
-    homepage = https://github.com/varnish/libvmod-digest;
+    homepage = "https://github.com/varnish/libvmod-digest";
     inherit (varnish.meta) license platforms maintainers;
   };
 }

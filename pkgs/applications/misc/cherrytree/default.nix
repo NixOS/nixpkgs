@@ -1,50 +1,38 @@
-{ stdenv, fetchurl, pythonPackages, gettext }:
+{ lib, fetchFromGitHub, python2Packages, gettext }:
 
-with stdenv.lib;
-stdenv.mkDerivation rec {
+python2Packages.buildPythonApplication rec {
+  pname = "cherrytree";
+  version = "0.39.4";
 
-  name = "cherrytree-${version}";
-  version = "0.38.8";
+  src = fetchFromGitHub {
+    owner = "giuspen";
+    repo = "cherrytree";
+    rev = version;
+    sha256 = "1wycgn1f3b858qb6kn2bsaabak8n52qkpd24w54xz6fjizlnw7x0";
 
-  src = fetchurl {
-    url = "https://www.giuspen.com/software/${name}.tar.xz";
-    sha256 = "1ns87xl2sgrf3nha4xkhp0xcxlycqszlp6xdrn95lg6vzm0fa8dg";
   };
 
-  buildInputs = with pythonPackages;
-  [ python gettext wrapPython pygtk dbus-python pygtksourceview ];
+  nativeBuildInputs = [ gettext ];
 
-  pythonPath = with pythonPackages;
-  [ pygtk dbus-python pygtksourceview ];
+  propagatedBuildInputs = with python2Packages; [ pygtk dbus-python pygtksourceview ];
 
   patches = [ ./subprocess.patch ];
 
-  installPhase = ''
-    python setup.py install --prefix="$out"
-
-    for file in "$out"/bin/*; do
-        wrapProgram "$file" \
-            --prefix PYTHONPATH : "$(toPythonPath $out):$PYTHONPATH"
-    done
-  '';
-
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "An hierarchical note taking application";
     longDescription = ''
-      Cherrytree is an hierarchical note taking application,
-      featuring rich text, syntax highlighting and powerful search
-      capabilities. It organizes all information in units called
-      "nodes", as in a tree, and can be very useful to store any piece
-      of information, from tables and links to pictures and even entire
-      documents. All those little bits of information you have scattered
-      around your hard drive can be conveniently placed into a
-      Cherrytree document where you can easily find it.
+      Cherrytree is an hierarchical note taking application, featuring rich
+      text, syntax highlighting and powerful search capabilities. It organizes
+      all information in units called "nodes", as in a tree, and can be very
+      useful to store any piece of information, from tables and links to
+      pictures and even entire documents. All those little bits of information
+      you have scattered around your hard drive can be conveniently placed into
+      a Cherrytree document where you can easily find it.
     '';
-    homepage = http://www.giuspen.com/cherrytree;
+    homepage = "http://www.giuspen.com/cherrytree";
     license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.AndersonTorres ];
+    maintainers = with maintainers; [ ];
   };
 }

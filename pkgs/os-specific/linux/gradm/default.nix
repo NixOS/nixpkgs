@@ -1,15 +1,15 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , bison, flex
 , pam
 }:
 
 stdenv.mkDerivation rec {
-  name    = "gradm-${version}";
-  version = "3.1-201608131257";
+  pname = "gradm";
+  version = "3.1-202102241600";
 
   src  = fetchurl {
-    url    = "http://grsecurity.net/stable/${name}.tar.gz";
-    sha256 = "0y5565rhil5ciprwz7nx4s4ah7dsxx7zrkg42dbq0mcg8m316xrb";
+    url    = "https://grsecurity.net/stable/${pname}-${version}.tar.gz";
+    sha256 = "02ni34hpggv00140p9gvh0lqi173zdddd2qhfi96hyr1axd5pl50";
   };
 
   nativeBuildInputs = [ bison flex ];
@@ -39,12 +39,12 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/etc/udev/rules.d"
   '';
 
-  postInstall = ''rmdir $out/dev'';
+  postInstall = "rmdir $out/dev";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "grsecurity RBAC administration and policy analysis utility";
     homepage    = "https://grsecurity.net";
-    license     = licenses.gpl2;
+    license     = licenses.gpl2Only;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ thoughtpolice joachifm ];
   };

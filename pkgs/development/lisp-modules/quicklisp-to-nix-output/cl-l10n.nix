@@ -1,17 +1,18 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''cl-l10n'';
-  version = ''20161204-darcs'';
+  baseName = "cl-l10n";
+  version = "20161204-darcs";
 
   parasites = [ "cl-l10n/test" ];
 
-  description = ''Portable CL Locale Support'';
+  description = "Portable CL Locale Support";
 
   deps = [ args."alexandria" args."babel" args."bordeaux-threads" args."cl-fad" args."cl-l10n-cldr" args."cl-ppcre" args."closer-mop" args."closure-common" args."cxml" args."flexi-streams" args."hu_dot_dwim_dot_stefil" args."iterate" args."local-time" args."metabang-bind" args."parse-number" args."puri" args."trivial-features" args."trivial-gray-streams" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-l10n/2016-12-04/cl-l10n-20161204-darcs.tgz'';
-    sha256 = ''1r8jgwks21az78c5kdxgw5llk9ml423vjkv1f93qg1vx3zma6vzl'';
+    url = "http://beta.quicklisp.org/archive/cl-l10n/2016-12-04/cl-l10n-20161204-darcs.tgz";
+    sha256 = "1r8jgwks21az78c5kdxgw5llk9ml423vjkv1f93qg1vx3zma6vzl";
   };
 
   packageName = "cl-l10n";

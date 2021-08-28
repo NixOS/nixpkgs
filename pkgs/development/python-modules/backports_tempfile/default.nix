@@ -29,6 +29,6 @@ buildPythonPackage rec {
   meta = {
     description = "Backport of new features in Python's tempfile module";
     license = lib.licenses.psfl;
-    homepage = https://github.com/pjdelport/backports.tempfile;
+    homepage = "https://github.com/pjdelport/backports.tempfile";
   };
 }

@@ -1,39 +1,35 @@
-{ stdenv, fetchFromGitHub, gettext, makeWrapper, tcl, which, writeScript
-, ncurses, perl , cyrus_sasl, gss, gpgme, kerberos, libidn, libxml2, notmuch, openssl
-, lmdb, libxslt, docbook_xsl, docbook_xml_dtd_42, mailcap, runtimeShell
+{ lib, stdenv, fetchFromGitHub, gettext, makeWrapper, tcl, which, fetchpatch
+, ncurses, perl , cyrus_sasl, gss, gpgme, libkrb5, libidn, libxml2, notmuch, openssl
+, lmdb, libxslt, docbook_xsl, docbook_xml_dtd_42, w3m, mailcap, sqlite, zlib
 }:
 
-let
-  muttWrapper = writeScript "mutt" ''
-    #!${runtimeShell} -eu
-
-    echo 'The neomutt project has renamed the main binary from `mutt` to `neomutt`.'
-    echo ""
-    echo 'This wrapper is provided for compatibility purposes only. You should start calling `neomutt` instead.'
-    echo ""
-    read -p 'Press any key to launch NeoMutt...' -n1 -s
-    exec neomutt "$@"
-  '';
-
-in stdenv.mkDerivation rec {
-  version = "20180716";
-  name = "neomutt-${version}";
+stdenv.mkDerivation rec {
+  version = "20210205";
+  pname = "neomutt";
 
   src = fetchFromGitHub {
     owner  = "neomutt";
     repo   = "neomutt";
-    rev    = "neomutt-${version}";
-    sha256 = "0im2kkahkr04q04irvcimfawxi531ld6wrsa92r2m7l10gmijkl8";
+    rev    = version;
+    sha256 = "sha256-ADg/+gmndOiuQHsncOzS5K4chthXeUFz6RRJsrZNeZY=";
   };
 
+  patches = [
+    (fetchpatch {
+      name = "CVE-2021-32055.patch";
+      url = "https://github.com/neomutt/neomutt/commit/fa1db5785e5cfd9d3cd27b7571b9fe268d2ec2dc.patch";
+      sha256 = "0bb7gisjynq3w7hhl6vxa469h609bcz6fkdi8vf740pqrwhk68yn";
+    })
+  ];
+
   buildInputs = [
-    cyrus_sasl gss gpgme kerberos libidn ncurses
+    cyrus_sasl gss gpgme libkrb5 libidn ncurses
     notmuch openssl perl lmdb
-    mailcap
+    mailcap sqlite
   ];
 
   nativeBuildInputs = [
-    docbook_xsl docbook_xml_dtd_42 gettext libxml2 libxslt.bin makeWrapper tcl which
+    docbook_xsl docbook_xml_dtd_42 gettext libxml2 libxslt.bin makeWrapper tcl which zlib w3m
   ];
 
   enableParallelBuilding = true;
@@ -51,17 +47,16 @@ in stdenv.mkDerivation rec {
 
     # allow neomutt to map attachments to their proper mime.types if specified wrongly
     # and use a far more comprehensive list than the one shipped with neomutt
-    substituteInPlace sendlib.c \
+    substituteInPlace send/sendlib.c \
       --replace /etc/mime.types ${mailcap}/etc/mime.types
+  '';
 
-    # The string conversion tests all fail with the first version of neomutt
-    # that has tests (20180223) as well as 20180716 so we disable them for now.
-    # I don't know if that is related to the tests or our build environment.
-    # Try again with a later release.
-    sed -i '/rfc2047/d' test/Makefile.autosetup test/main.c
+  preBuild = ''
+    export HOME=$(mktemp -d)
   '';
 
   configureFlags = [
+    "--enable-autocrypt"
     "--gpgme"
     "--gss"
     "--lmdb"
@@ -70,8 +65,12 @@ in stdenv.mkDerivation rec {
     "--sasl"
     "--with-homespool=mailbox"
     "--with-mailpath="
+    # To make it not reference .dev outputs. See:
+    # https://github.com/neomutt/neomutt/pull/2367
+    "--disable-include-path-in-cflags"
     # Look in $PATH at runtime, instead of hardcoding /usr/bin/sendmail
     "ac_cv_path_SENDMAIL=sendmail"
+    "--zlib"
   ];
 
   # Fix missing libidn in mutt;
@@ -80,19 +79,32 @@ in stdenv.mkDerivation rec {
   NIX_LDFLAGS = "-lidn";
 
   postInstall = ''
-    cp ${muttWrapper} $out/bin/mutt
     wrapProgram "$out/bin/neomutt" --prefix PATH : "$out/libexec/neomutt"
   '';
 
   doCheck = true;
 
-  checkTarget = "test";
+  preCheck = ''
+    cp -r ${fetchFromGitHub {
+      owner = "neomutt";
+      repo = "neomutt-test-files";
+      rev = "8629adab700a75c54e8e28bf05ad092503a98f75";
+      sha256 = "1ci04nqkab9mh60zzm66sd6mhsr6lya8wp92njpbvafc86vvwdlr";
+    }} $(pwd)/test-files
+    chmod -R +w test-files
+    (cd test-files && ./setup.sh)
 
-  meta = with stdenv.lib; {
+    export NEOMUTT_TEST_DIR=$(pwd)/test-files
+  '';
+
+  checkTarget = "test";
+  postCheck = "unset NEOMUTT_TEST_DIR";
+
+  meta = with lib; {
     description = "A small but very powerful text-based mail client";
-    homepage    = http://www.neomutt.org;
+    homepage    = "http://www.neomutt.org";
     license     = licenses.gpl2Plus;
-    maintainers = with maintainers; [ cstrahan erikryb jfrankenau vrthra ];
+    maintainers = with maintainers; [ cstrahan erikryb jfrankenau vrthra ma27 ];
     platforms   = platforms.unix;
   };
 }

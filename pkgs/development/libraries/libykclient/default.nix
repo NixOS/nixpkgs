@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, help2man, curl }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, help2man, curl }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "libykclient";
   version = "unstable-2019-03-18";
   src = fetchFromGitHub {
@@ -10,12 +10,12 @@ stdenv.mkDerivation rec {
     sha256 = "01b19jgv2lypih6lhw9yjjsfl8q1ahl955vhr2ai8ccshh0050yj";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig help2man ];
+  nativeBuildInputs = [ autoreconfHook pkg-config help2man ];
   buildInputs = [ curl ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Yubikey C client library";
-    homepage = https://developers.yubico.com/yubico-c-client;
+    homepage = "https://developers.yubico.com/yubico-c-client";
     license = licenses.bsd2;
     maintainers = with maintainers; [ dtzWill ];
   };

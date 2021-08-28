@@ -2,22 +2,22 @@
 
 let
   pname = "agave";
-  version = "10";
+  version = "35";
 in fetchurl {
   name = "${pname}-${version}";
-  url = "https://github.com/agarick/agave/releases/download/v${version}/agave-r.ttf";
+  url = "https://github.com/agarick/agave/releases/download/v${version}/Agave-Regular.ttf";
 
   downloadToTemp = true;
   recursiveHash = true;
   postFetch = ''
-    install -D $downloadedFile $out/share/fonts/truetype/agave-r.ttf
+    install -D $downloadedFile $out/share/fonts/truetype/Agave-Regular.ttf
   '';
 
-  sha256 = "1mfj6a9sp00mjz7420yyrbbs5bqks3fz2slwgcppklxnz0890r9f";
+  sha256 = "10shwsl1illdafnc352j439lklrxksip1vlh4jc934cr9qf4c1fz";
 
   meta = with lib; {
     description = "truetype monospaced typeface designed for X environments";
-    homepage = https://b.agaric.net/page/agave;
+    homepage = "https://b.agaric.net/page/agave";
     license = licenses.mit;
     maintainers = with maintainers; [ dtzWill ];
     platforms = platforms.all;

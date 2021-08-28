@@ -1,4 +1,4 @@
-{ stdenv, lib, makeWrapper, pkgconfig, mono, dotnetbuildhelpers }:
+{ stdenv, lib, makeWrapper, pkg-config, mono, dotnetbuildhelpers }:
 
 attrsOrig @
 { baseName
@@ -19,7 +19,7 @@ attrsOrig @
     attrs = {
       name = "${baseName}-${version}";
 
-      nativeBuildInputs = [ pkgconfig ];
+      nativeBuildInputs = [ pkg-config ];
       buildInputs = [
         mono
         dotnetbuildhelpers
@@ -29,9 +29,9 @@ attrsOrig @
       configurePhase = ''
         runHook preConfigure
 
-        [ -z "$dontPlacateNuget" ] && placate-nuget.sh
-        [ -z "$dontPlacatePaket" ] && placate-paket.sh
-        [ -z "$dontPatchFSharpTargets" ] && patch-fsharp-targets.sh
+        [ -z "''${dontPlacateNuget-}" ] && placate-nuget.sh
+        [ -z "''${dontPlacatePaket-}" ] && placate-paket.sh
+        [ -z "''${dontPatchFSharpTargets-}" ] && patch-fsharp-targets.sh
 
         runHook postConfigure
       '';
@@ -69,7 +69,7 @@ attrsOrig @
 
         cp -rv ${arrayToShell outputFiles} "''${outputFilesArray[@]}" "$target"
 
-        if [ -z "$dontRemoveDuplicatedDlls" ]
+        if [ -z "''${dontRemoveDuplicatedDlls-}" ]
         then
           pushd "$out"
           remove-duplicated-dlls.sh

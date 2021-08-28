@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, buildDunePackage, defaultVersion ? "0.11.0" }:
+{ lib, fetchFromGitHub, buildDunePackage, defaultVersion ? "0.11.0" }:
 
 { pname, version ? defaultVersion, hash, ...}@args:
 
@@ -14,6 +14,8 @@ buildDunePackage (args // {
     sha256 = hash;
   };
 
-  meta.license = stdenv.lib.licenses.asl20;
-  meta.homepage = "https://github.com/janestreet/${pname}";
+  meta = {
+    license = lib.licenses.asl20;
+    homepage = "https://github.com/janestreet/${pname}";
+  } // args.meta;
 })

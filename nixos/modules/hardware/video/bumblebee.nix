@@ -40,7 +40,7 @@ in
         default = "wheel";
         example = "video";
         type = types.str;
-        description = ''Group for bumblebee socket'';
+        description = "Group for bumblebee socket";
       };
 
       connectDisplay = mkOption {

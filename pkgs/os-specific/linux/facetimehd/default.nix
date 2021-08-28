@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, kernel }:
+{ stdenv, lib, fetchFromGitHub, kernel }:
 
 # facetimehd is not supported for kernels older than 3.19";
-assert stdenv.lib.versionAtLeast kernel.version "3.19";
+assert lib.versionAtLeast kernel.version "3.19";
 
 let
   # Note: When updating this revision:
@@ -14,11 +14,11 @@ let
   #    e. see if the module loads back (apps using the camera won't
   #       recover and will have to be restarted) and the camera
   #       still works.
-  srcParams = if (stdenv.lib.versionAtLeast kernel.version "4.8") then
+  srcParams = if (lib.versionAtLeast kernel.version "4.8") then
     { # Use mainline branch
-      version = "unstable-2016-10-09";
-      rev = "887d0f531ef7b91457be519474136c3355c5132b";
-      sha256 = "0bayahnxar1q6wvf9cb6p8gsfw98w0wqp715hs4r7apmddwk9v7n";
+      version = "unstable-2020-04-16";
+      rev = "82626d4892eeb9eb704538bf0dc49a00725ff451";
+      sha256 = "118z6vjvhhcwvs4n3sgwwdagys9w718b8nkh6l9ic93732vv7cqx";
     }
   else
     { # Use master branch (broken on 4.8)
@@ -44,18 +44,18 @@ stdenv.mkDerivation rec {
   '';
 
   hardeningDisable = [ "pic" ];
-  
+
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
   makeFlags = [
     "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/patjak/bcwc_pcie;
+  meta = with lib; {
+    homepage = "https://github.com/patjak/bcwc_pcie";
     description = "Linux driver for the Facetime HD (Broadcom 1570) PCIe webcam";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ womfoo grahamc ];
+    maintainers = with maintainers; [ womfoo grahamc kraem ];
     platforms = [ "i686-linux" "x86_64-linux" ];
   };
 }

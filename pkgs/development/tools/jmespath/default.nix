@@ -1,9 +1,9 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "jmespath-${version}";
+  pname = "jmespath";
   version = "0.2.2";
-  rev = "${version}";
+  rev = version;
 
   goPackagePath = "github.com/jmespath/go-jmespath";
 
@@ -13,9 +13,9 @@ buildGoPackage rec {
     repo = "go-jmespath";
     sha256 = "0f4j0m44limnjd6q5fk152g6jq2a5cshcdms4p3a1br8pl9wp5fb";
   };
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A JMESPath implementation in Go";
-    homepage = https://github.com/jmespath/go-jmespath;
+    homepage = "https://github.com/jmespath/go-jmespath";
     maintainers = with maintainers; [ cransom ];
     license = licenses.asl20;
   };

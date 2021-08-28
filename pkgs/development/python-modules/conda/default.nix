@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "OS-agnostic, system-level binary package manager";
-    homepage = https://github.com/conda/conda;
+    homepage = "https://github.com/conda/conda";
     license = lib.licenses.bsd3;
   };
 

@@ -1,19 +1,18 @@
-{stdenv, fetchurl, ncurses, tcl, openssl, pam, kerberos
+{lib, stdenv, fetchurl, ncurses, tcl, openssl, pam, libkrb5
 , openldap
 }:
 
-# NOTE: Please check if any changes here are applicable to ../realpine/ as well
 stdenv.mkDerivation rec {
-  name = "alpine-${version}";
-  version = "2.21";
+  pname = "alpine";
+  version = "2.24";
 
   src = fetchurl {
-    url = "http://alpine.freeiz.com/alpine/release/src/${name}.tar.xz";
-    sha256 = "0f3llxrmaxw7w9w6aixh752md3cdc91mwfmbarkm8s413f4bcc30";
+    url = "http://alpine.x10host.com/alpine/release/src/${pname}-${version}.tar.xz";
+    sha256 = "1vxw19nx10y7nx01d9i6gah2f3y5r2idbq56l13bdqi91bx9y6k5";
   };
 
   buildInputs = [
-    ncurses tcl openssl pam kerberos openldap
+    ncurses tcl openssl pam libkrb5 openldap
   ];
 
   hardeningDisable = [ "format" ];
@@ -21,13 +20,14 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--with-ssl-include-dir=${openssl.dev}/include/openssl"
     "--with-passfile=.pine-passfile"
+    "--with-c-client-target=slx"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Console mail reader";
-    license = stdenv.lib.licenses.asl20;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
-    homepage = https://www.washington.edu/alpine/;
+    license = licenses.asl20;
+    maintainers = with maintainers; [ raskin ];
+    platforms = platforms.linux;
+    homepage = "http://alpine.x10host.com/";
   };
 }

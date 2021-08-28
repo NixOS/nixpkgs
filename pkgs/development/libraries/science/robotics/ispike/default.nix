@@ -1,24 +1,22 @@
-{ stdenv, fetchurl, cmake, boost
-}:
+{ lib, stdenv, fetchurl, cmake, boost }:
 
 stdenv.mkDerivation rec {
-  name = "ispike-${version}";
+  pname = "ispike";
   version = "2.1.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/ispike/${name}.tar.gz";
+    url = "mirror://sourceforge/ispike/${pname}-${version}.tar.gz";
     sha256 = "0khrxp43bi5kisr8j4lp9fl4r5marzf7b4inys62ac108sfb28lp";
   };
 
-  buildInputs = [ cmake boost ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ boost ];
 
   meta = {
     description = "Spiking neural interface between iCub and a spiking neural simulator";
-    homepage = https://sourceforge.net/projects/ispike/;
-    license = stdenv.lib.licenses.lgpl3;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.nico202 ];
+    homepage = "https://sourceforge.net/projects/ispike/";
+    license = lib.licenses.lgpl3;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.nico202 ];
   };
-
-  
 }

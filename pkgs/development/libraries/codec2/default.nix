@@ -1,25 +1,23 @@
-{ stdenv, fetchsvn, cmake } :
+{ lib, stdenv, fetchFromGitHub, cmake }:
 
-let
-  version = "0.8";
+stdenv.mkDerivation rec {
+  pname = "codec2";
+  version = "0.9.2";
 
-in stdenv.mkDerivation {
-  name = "codec2-${version}";
-
-  src = fetchsvn {
-    url = "https://svn.code.sf.net/p/freetel/code/codec2/branches/${version}";
-    sha256 = "0qbyaqdn37253s30n6m2ric8nfdsxhkslb9h572kdx18j2yjccki";
+  src = fetchFromGitHub {
+    owner = "drowe67";
+    repo = "codec2";
+    rev = "v${version}";
+    sha256 = "1jpvr7bra8srz8jvnlbmhf8andbaavq5v01qjnp2f61za93rzwba";
   };
-
-  enableParallelBuilding = true;
 
   nativeBuildInputs = [ cmake ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Speech codec designed for communications quality speech at low data rates";
-    homepage = http://www.rowetel.com/blog/?page_id=452;
-    license = licenses.lgpl21;
-    platforms = platforms.linux;
+    homepage = "http://www.rowetel.com/blog/?page_id=452";
+    license = licenses.lgpl21Only;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ markuskowa ];
   };
 }

@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, libclthreads, libX11, libXft, xorg, pkgconfig }:
+{ lib, stdenv, fetchurl, libclthreads, libX11, libXft, xorg, pkg-config }:
 
 stdenv.mkDerivation rec {
-  name = "libclxclient-${version}";
+  pname = "libclxclient";
   version = "3.9.2";
 
   src = fetchurl {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libclthreads libX11 libXft xorg.xorgproto ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   NIX_CFLAGS_COMPILE = "-I${xorg.xorgproto}/include -I${libXft.dev}/include";
 
@@ -39,9 +39,9 @@ stdenv.mkDerivation rec {
     ln $out/lib/libclxclient.so $out/lib/libclxclient.so.3
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Zita X11 library";
-    homepage = http://kokkinizita.linuxaudio.org/linuxaudio/downloads/index.html;
+    homepage = "http://kokkinizita.linuxaudio.org/linuxaudio/downloads/index.html";
     license = licenses.lgpl21;
     maintainers = with maintainers; [ magnetophon ];
     platforms = platforms.linux;

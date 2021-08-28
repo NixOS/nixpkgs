@@ -1,17 +1,39 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gtk3, glib, libxml2, libsecret, poppler, itstool, hicolor-icon-theme, mate, wrapGAppsHook }:
+{ lib, stdenv
+, fetchurl
+, pkg-config
+, gettext
+, gtk3
+, glib
+, libxml2
+, libsecret
+, poppler
+, itstool
+, hicolor-icon-theme
+, texlive
+, mate
+, wrapGAppsHook
+, enableEpub ? true, webkitgtk
+, enableDjvu ? true, djvulibre
+, enablePostScript ? true, libspectre
+, enableXps ? true, libgxps
+, enableImages ? false
+, mateUpdateScript
+}:
+
+with lib;
 
 stdenv.mkDerivation rec {
-  name = "atril-${version}";
-  version = "1.22.1";
+  pname = "atril";
+  version = "1.24.1";
 
   src = fetchurl {
-    url = "https://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0i2wgsksgwhrmajj1lay3iym4dcyj8cdd813yh5mrfz4rkv49190";
+    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "06nyicj96dqcv035yqnzmm6pk3m35glxj0ny6lk1vwqkk2l750xl";
   };
 
   nativeBuildInputs = [
-    pkgconfig
-    intltool
+    pkg-config
+    gettext
     wrapGAppsHook
   ];
 
@@ -25,16 +47,34 @@ stdenv.mkDerivation rec {
     mate.caja
     mate.mate-desktop
     hicolor-icon-theme
-  ];
+    texlive.bin.core  # for synctex, used by the pdf back-end
+  ]
+  ++ optionals enableDjvu [ djvulibre ]
+  ++ optionals enableEpub [ webkitgtk ]
+  ++ optionals enablePostScript [ libspectre ]
+  ++ optionals enableXps [ libgxps ]
+  ;
+
+  configureFlags = [ ]
+    ++ optionals (enableDjvu) [ "--enable-djvu" ]
+    ++ optionals (enableEpub) [ "--enable-epub" ]
+    ++ optionals (enablePostScript) [ "--enable-ps" ]
+    ++ optionals (enableXps) [ "--enable-xps" ]
+    ++ optionals (enableImages) [ "--enable-pixbuf" ];
 
   NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
   makeFlags = [ "cajaextensiondir=$$out/lib/caja/extensions-2.0" ];
 
-  meta = {
+  enableParallelBuilding = true;
+
+  passthru.updateScript = mateUpdateScript { inherit pname version; };
+
+  meta = with lib; {
     description = "A simple multi-page document viewer for the MATE desktop";
-    homepage = https://mate-desktop.org;
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.unix;
+    homepage = "https://mate-desktop.org";
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.romildo ];
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, kernel }:
+{ lib, stdenv, fetchurl, kernel }:
 
 stdenv.mkDerivation rec {
   pname = "lttng-modules-${version}";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "pic" ];
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=implicit-function-declaration" ];
+  NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
 
   preConfigure = ''
     export KERNELDIR="${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
@@ -25,9 +25,9 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Linux kernel modules for LTTng tracing";
-    homepage = https://lttng.org/;
+    homepage = "https://lttng.org/";
     license = with licenses; [ lgpl21 gpl2 mit ];
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];

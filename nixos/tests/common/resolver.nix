@@ -18,7 +18,7 @@
       defining this option needs to be explicitly imported.
 
       The reason this option exists is for the
-      <filename>nixos/tests/common/letsencrypt</filename> module, which
+      <filename>nixos/tests/common/acme/server</filename> module, which
       needs that option to disable the resolver once the user has set its own
       resolver.
     '';

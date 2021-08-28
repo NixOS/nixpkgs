@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, which, cudatoolkit, addOpenGLRunpath }:
+{ lib, stdenv, fetchFromGitHub, which, cudatoolkit, addOpenGLRunpath }:
 
 stdenv.mkDerivation rec {
   name = "nccl-${version}-cuda-${cudatoolkit.majorVersion}";
-  version = "2.4.2-1";
+  version = "2.7.8-1";
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "nccl";
     rev = "v${version}";
-    sha256 = "0aa4gv51nbmmdhx6vp40l249m4arp30sijrn6kwxdfi1k9kajiq5";
+    sha256 = "0xxiwaw239dc9g015fka3k1nvm5zyl00dzgxnwzkang61dys9wln";
   };
 
   outputs = [ "out" "dev" ];
@@ -38,9 +38,9 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Multi-GPU and multi-node collective communication primitives for NVIDIA GPUs";
-    homepage = https://developer.nvidia.com/nccl;
+    homepage = "https://developer.nvidia.com/nccl";
     license = licenses.bsd3;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ mdaiter orivej ];

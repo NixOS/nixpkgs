@@ -1,4 +1,4 @@
-{stdenv, makeWrapper, fetchurl, perl, openssl, perlPackages }:
+{lib, stdenv, makeWrapper, fetchurl, perl, openssl, perlPackages }:
 
 stdenv.mkDerivation rec {
   name = "imapsync-1.727";
@@ -24,8 +24,8 @@ stdenv.mkDerivation rec {
     IOSocketInet6 NTLM
   ];
 
-  meta = with stdenv.lib; {
-    homepage = http://www.linux-france.org/prj/imapsync/;
+  meta = with lib; {
+    homepage = "http://www.linux-france.org/prj/imapsync/";
     description = "Mail folder synchronizer between IMAP servers";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

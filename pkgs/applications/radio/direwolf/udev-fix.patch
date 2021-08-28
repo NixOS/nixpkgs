@@ -1,0 +1,11 @@
+--- direwolf/conf/CMakeLists.txt.orig	2020-12-04 11:12:59.739390894 -0600
++++ direwolf/conf/CMakeLists.txt	2020-12-04 11:23:09.146594795 -0600
+@@ -26,7 +26,7 @@
+ 
+ # install udev rules for CM108
+ if(LINUX)
+-  install(FILES "${CUSTOM_CONF_DIR}/99-direwolf-cmedia.rules" DESTINATION /etc/udev/rules.d/)
++  install(FILES "${CUSTOM_CONF_DIR}/99-direwolf-cmedia.rules" DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/udev/rules.d/")
+ endif()
+ 
+ install(FILES "${CMAKE_BINARY_DIR}/direwolf.conf" DESTINATION ${INSTALL_CONF_DIR})

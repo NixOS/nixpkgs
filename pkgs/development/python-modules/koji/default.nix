@@ -1,21 +1,21 @@
-{ stdenv, fetchurl, buildPythonPackage, pycurl, six, rpm, dateutil }:
+{ lib, fetchurl, buildPythonPackage, isPy3k, pycurl, six, rpm, dateutil }:
 
 buildPythonPackage rec {
   pname = "koji";
-  version = "1.13.0";
+  version = "1.14.3";
   format = "other";
 
   src = fetchurl {
     url = "https://releases.pagure.org/koji/${pname}-${version}.tar.bz2";
-    sha256 = "18b18rcbdqqw33g7h20hf5bpbci2ixdi05yda1fvpv30c1kkzd8w";
+    sha256 = "0a3kn3qvspvx15imgzzzjsbvw6bqmbk29apbliqwifa9cj7pvb40";
   };
 
   propagatedBuildInputs = [ pycurl six rpm dateutil ];
 
   # Judging from SyntaxError
-  #disabled = isPy3k;
+  disabled = isPy3k;
 
-  makeFlags = "DESTDIR=$(out)";
+  makeFlags = [ "DESTDIR=$(out)" ];
 
   postInstall = ''
     mv $out/usr/* $out/
@@ -23,8 +23,10 @@ buildPythonPackage rec {
     rm -rf $out/nix
   '';
 
-  meta = {
-    maintainers = [ ];
-    platforms = stdenv.lib.platforms.unix;
+  meta = with lib; {
+    description = "An RPM-based build system";
+    homepage = "https://pagure.io/koji";
+    license = licenses.lgpl21;
+    platforms = platforms.unix;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "10sjarhprs6s4zandndg720528rcnd4xk8dl48pjj7li1q9c30vm";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Delete files securely";
     longDescription = ''
       srm (secure rm) is a command-line compatible rm(1) which
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
       provide drop in security for users who wish to prevent recovery
       of deleted information, even if the machine is compromised.
     '';
-    homepage = http://srm.sourceforge.net;
+    homepage = "http://srm.sourceforge.net";
     license = licenses.mit;
     maintainers = with maintainers; [ edwtjo ];
     platforms = platforms.unix;

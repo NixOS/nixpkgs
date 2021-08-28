@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchPypi
 , stompclient, python-daemon, redis, pid, pytest, six, click, coverage
 , sqlalchemy }:
 
@@ -17,9 +17,9 @@ buildPythonPackage rec {
   # The teste data is not included in the distribution
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simple, lightweight, and easily extensible STOMP message broker";
-    homepage = http://code.google.com/p/coilmq/;
+    homepage = "https://github.com/hozn/coilmq/";
     license = licenses.asl20;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , pytest
@@ -21,9 +21,9 @@ buildPythonPackage rec {
   buildInputs = [ pytest ];
   propagatedBuildInputs = [ jinja2 matplotlib numpy requests six ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Python client library for the Lightning data visualization server";
-    homepage = http://lightning-viz.org;
+    homepage = "http://lightning-viz.org";
     license = licenses.mit;
   };
 

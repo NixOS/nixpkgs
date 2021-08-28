@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, luaPackages, cairo, librsvg, cmake, imagemagick, pkgconfig, gdk_pixbuf
+{ lib, stdenv, fetchFromGitHub, luaPackages, cairo, librsvg, cmake, imagemagick, pkg-config, gdk-pixbuf
 , xorg, libstartup_notification, libxdg_basedir, libpthreadstubs
 , xcb-util-cursor, makeWrapper, pango, gobject-introspection
 , which, dbus, nettools, git, doxygen
@@ -12,8 +12,11 @@
 # needed for beautiful.gtk to work
 assert gtk3Support -> gtk3 != null;
 
-with luaPackages; stdenv.mkDerivation rec {
-  name = "awesome-${version}";
+stdenv.mkDerivation rec {
+  lgi = luaPackages.lgi;
+  lua = luaPackages.lua;
+  ldoc = luaPackages.ldoc;
+  pname = "awesome";
   version = "4.3";
 
   src = fetchFromGitHub {
@@ -28,7 +31,7 @@ with luaPackages; stdenv.mkDerivation rec {
     doxygen
     imagemagick
     makeWrapper
-    pkgconfig
+    pkg-config
     xmlto docbook_xml_dtd_45
     docbook_xsl findXMLCatalogs
     asciidoctor
@@ -40,17 +43,20 @@ with luaPackages; stdenv.mkDerivation rec {
   FONTCONFIG_FILE = toString fontsConf;
 
   propagatedUserEnvPkgs = [ hicolor-icon-theme ];
-  buildInputs = [ cairo librsvg dbus gdk_pixbuf gobject-introspection
+  buildInputs = [ cairo librsvg dbus gdk-pixbuf gobject-introspection
                   git lgi libpthreadstubs libstartup_notification
                   libxdg_basedir lua nettools pango xcb-util-cursor
                   xorg.libXau xorg.libXdmcp xorg.libxcb xorg.libxshmfence
                   xorg.xcbutil xorg.xcbutilimage xorg.xcbutilkeysyms
                   xorg.xcbutilrenderutil xorg.xcbutilwm libxkbcommon
                   xcbutilxrm ]
-                  ++ stdenv.lib.optional gtk3Support gtk3;
+                  ++ lib.optional gtk3Support gtk3;
 
-  #cmakeFlags = "-DGENERATE_MANPAGES=ON";
-  cmakeFlags = "-DOVERRIDE_VERSION=${version}";
+  cmakeFlags = [
+    #"-DGENERATE_MANPAGES=ON"
+    "-DOVERRIDE_VERSION=${version}"
+  ] ++ lib.optional luaPackages.isLuaJIT "-DLUA_LIBRARY=${lua}/lib/libluajit-5.1.so"
+  ;
 
   GI_TYPELIB_PATH = "${pango.out}/lib/girepository-1.0";
   # LUA_CPATH and LUA_PATH are used only for *building*, see the --search flags
@@ -76,11 +82,11 @@ with luaPackages; stdenv.mkDerivation rec {
     inherit lua;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Highly configurable, dynamic window manager for X";
-    homepage    = https://awesomewm.org/;
+    homepage    = "https://awesomewm.org/";
     license     = licenses.gpl2Plus;
-    maintainers = with maintainers; [ lovek323 rasendubi ndowens ];
+    maintainers = with maintainers; [ lovek323 rasendubi ];
     platforms   = platforms.linux;
   };
 }

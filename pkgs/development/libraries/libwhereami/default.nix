@@ -1,32 +1,28 @@
-{ stdenv, fetchFromGitHub, cmake, boost, curl, leatherman }:
+{ lib, stdenv, fetchFromGitHub, cmake, boost, curl, leatherman }:
 
 stdenv.mkDerivation rec {
-  name = "libwhereami-${version}";
-  version = "0.2.2";
+  pname = "libwhereami";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
-    sha256 = "084n153jaq8fmhjififk0xlx1d1i3lclnw2j3ly8bixvc392vzly";
+    sha256 = "05fc28dri2h858kxbvldk5b6wd5is3fjcdsiqj3nxf95i66bb3xp";
     rev = version;
     repo = "libwhereami";
     owner = "puppetlabs";
   };
 
-  # post gcc7, upstream bug: https://tickets.puppetlabs.com/browse/FACT-1828
-  NIX_CFLAGS_COMPILE = "-Wno-error=deprecated";
+  NIX_CFLAGS_COMPILE = "-Wno-error";
 
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [ boost curl leatherman ];
 
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "Library to report hypervisor information from inside a VM";
     license = licenses.asl20;
     maintainers = [ maintainers.womfoo ];
-    platforms = platforms.linux;
-    badPlatforms = platforms.arm;
+    platforms = with platforms; [ "i686-linux" "x86_64-linux" "x86_64-darwin" ]; # fails on aarch64
   };
 
 }

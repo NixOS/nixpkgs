@@ -1,8 +1,7 @@
 # Deprecated aliases - for backward compatibility
+lib:
 
-lib: overriden:
-
-with overriden;
+final: prev:
 
 let
   # Removing recurseForDerivation prevents derivations of aliased attribute
@@ -21,21 +20,26 @@ let
 
   # Make sure that we are not shadowing something from
   # all-packages.nix.
-  checkInPkgs = n: alias: if builtins.hasAttr n overriden
+  checkInPkgs = n: alias: if builtins.hasAttr n prev
                           then throw "Alias ${n} is still in vim-plugins"
                           else alias;
 
   mapAliases = aliases:
-     lib.mapAttrs (n: alias: removeDistribute
+    lib.mapAttrs (n: alias: removeDistribute
                              (removeRecurseForDerivations
                               (checkInPkgs n alias)))
                      aliases;
-in
 
-mapAliases {
+  deprecations = lib.mapAttrs (old: info:
+    throw "${old} was renamed to ${info.new} on ${info.date}. Please update to ${info.new}."
+  ) (builtins.fromJSON (builtins.readFile ./deprecated.json));
+
+in
+mapAliases (with prev; {
   airline             = vim-airline;
   alternative         = a-vim; # backwards compat, added 2014-10-21
   bats                = bats-vim;
+  BufOnly             = BufOnly-vim;
   calendar            = calendar-vim;
   coffee-script       = vim-coffee-script;
   coffeeScript        = vim-coffee-script; # backwards compat, added 2014-10-18
@@ -67,7 +71,7 @@ mapAliases {
   ghc-mod-vim         = ghcmod-vim;
   ghcmod              = ghcmod-vim;
   goyo                = goyo-vim;
-  Gist                = gist-vim;
+  Gist                = vim-gist;
   gitgutter           = vim-gitgutter;
   gundo               = gundo-vim;
   Gundo               = gundo-vim; # backwards compat, added 2015-10-03
@@ -133,7 +137,6 @@ mapAliases {
   wombat256           = wombat256-vim; # backwards compat, added 2015-7-8
   yankring            = YankRing-vim;
   Yankring            = YankRing-vim;
-  YouCompleteMe       = youcompleteme;
   xterm-color-table   = xterm-color-table-vim;
   zeavim              = zeavim-vim;
-}
+} // deprecations)

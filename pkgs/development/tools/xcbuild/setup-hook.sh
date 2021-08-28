@@ -20,7 +20,7 @@ xcbuildInstallPhase () {
 }
 
 buildPhase=xcbuildBuildPhase
-if [ -z "$installPhase" ]; then
+if [ -z "${installPhase-}" ]; then
     installPhase=xcbuildInstallPhase
 fi
 

@@ -7,7 +7,7 @@ let
 
   efi = config.boot.loader.efi;
 
-  gummibootBuilder = pkgs.substituteAll {
+  systemdBootBuilder = pkgs.substituteAll {
     src = ./systemd-boot-builder.py;
 
     isExecutable = true;
@@ -22,12 +22,25 @@ let
 
     editor = if cfg.editor then "True" else "False";
 
+    configurationLimit = if cfg.configurationLimit == null then 0 else cfg.configurationLimit;
+
     inherit (cfg) consoleMode;
 
     inherit (efi) efiSysMountPoint canTouchEfiVariables;
 
     memtest86 = if cfg.memtest86.enable then pkgs.memtest86-efi else "";
   };
+
+  checkedSystemdBootBuilder = pkgs.runCommand "systemd-boot" {
+    nativeBuildInputs = [ pkgs.mypy ];
+  } ''
+    install -m755 ${systemdBootBuilder} $out
+    mypy \
+      --no-implicit-optional \
+      --disallow-untyped-calls \
+      --disallow-untyped-defs \
+      $out
+  '';
 in {
 
   imports =
@@ -54,6 +67,19 @@ in {
         gaining root access by passing init=/bin/sh as a kernel
         parameter. However, it is enabled by default for backwards
         compatibility.
+      '';
+    };
+
+    configurationLimit = mkOption {
+      default = null;
+      example = 120;
+      type = types.nullOr types.int;
+      description = ''
+        Maximum number of latest generations in the boot menu.
+        Useful to prevent boot partition running out of disk space.
+
+        <literal>null</literal> means no limit i.e. all generations
+        that were not garbage collected yet.
       '';
     };
 
@@ -116,7 +142,7 @@ in {
     boot.loader.supportsInitrdSecrets = true;
 
     system = {
-      build.installBootLoader = gummibootBuilder;
+      build.installBootLoader = checkedSystemdBootBuilder;
 
       boot.loader.id = "systemd-boot";
 

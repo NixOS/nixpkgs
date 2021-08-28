@@ -2,20 +2,20 @@
 
 buildPythonPackage rec {
   pname = "tweepy";
-  version = "3.7.0";
+  version = "3.10.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fe85a79f58a01dd335968523b91c5fce760e7fe78bf25a6e71c72204fe499d0b";
+    sha256 = "76e6954b806ca470dda877f57db8792fff06a0beba0ed43efc3805771e39f06a";
   };
 
   doCheck = false;
   propagatedBuildInputs = [ requests six requests_oauthlib ];
 
   meta = with lib; {
-    homepage = https://github.com/tweepy/tweepy;
+    homepage = "https://github.com/tweepy/tweepy";
     description = "Twitter library for python";
     license = licenses.mit;
-    maintainers = with maintainers; [ garbas ];
+    maintainers = with maintainers; [ ];
   };
 }

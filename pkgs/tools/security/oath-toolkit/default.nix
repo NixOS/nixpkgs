@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab, pam, xmlsec, autoreconfHook, pkgconfig, libxml2, gtk-doc, perl, gengetopt, bison, help2man }:
+{ lib, stdenv, fetchurl, pam, xmlsec }:
 
 let
   securityDependency =
@@ -6,34 +6,20 @@ let
     else pam;
 
 in stdenv.mkDerivation rec {
-  name = "oath-toolkit-2.6.2";
+  pname = "oath-toolkit";
+  version = "2.6.6";
 
-  src = fetchFromGitLab {
-    owner = "oath-toolkit";
-    repo = "oath-toolkit";
-    rev = "0dffdec9c5af5c89a5af43add29d8275eefe7414";
-    sha256 = "0n2sl444723f1k0sjmc0mzdwslx51yxac39c2cx2bl3ykacgfv74";
+  src = fetchurl {
+    url = "mirror://savannah/${pname}/${pname}-${version}.tar.gz";
+    sha256 = "0v4lrgip08b8xlivsfn3mwql3nv8hmcpzrn6pi3xp88vqwav6s7x";
   };
 
-  buildInputs = [ securityDependency libxml2 perl gengetopt bison ];
+  buildInputs = [ securityDependency ];
 
-  nativeBuildInputs = [ autoreconfHook gtk-doc help2man pkgconfig ];
-
-  # man file generation fails when true
-  enableParallelBuilding = false;
-
-  configureFlags = [ "--disable-pskc" ];
-
-  # Replicate the steps from cfg.mk
-  preAutoreconf = ''
-    printf "gdoc_MANS =\ngdoc_TEXINFOS =\n" > liboath/man/Makefile.gdoc
-    printf "gdoc_MANS =\ngdoc_TEXINFOS =\n" > libpskc/man/Makefile.gdoc
-    touch ChangeLog
-  '';
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Components for building one-time password authentication systems";
-    homepage = https://www.nongnu.org/oath-toolkit/;
+    homepage = "https://www.nongnu.org/oath-toolkit/";
+    maintainers = with maintainers; [ schnusch ];
     platforms = with platforms; linux ++ darwin;
   };
 }

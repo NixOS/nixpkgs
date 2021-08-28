@@ -1,84 +1,32 @@
-{ stdenv, fetchurl, fetchpatch, darwin
+{ lib, stdenv, fetchurl, fetchpatch, darwin, callPackage
 , autoreconfHook
-, pkgconfig
-, curl
-, iptables
-, jdk
-, libapparmor
-, libatasmart
-, libcap_ng
-, libcredis
-, libdbi
-, libgcrypt
-, libmemcached, cyrus_sasl
-, libmicrohttpd
-, libmodbus
-, libnotify, gdk_pixbuf
-, liboping
-, libpcap
-, libsigrok
-, libvirt
-, libxml2
+, pkg-config
 , libtool
-, lm_sensors
-, lvm2
-, mysql
-, numactl
-, postgresql
-, protobufc
-, python
-, rabbitmq-c
-, riemann_c_client
-, rrdtool
-, udev
-, varnish
-, yajl
-, net_snmp
-, hiredis
-, libmnl
-, mosquitto
-, rdkafka
-, mongoc
-}:
+, ...
+}@args:
+let
+  plugins = callPackage ./plugins.nix args;
+in
 stdenv.mkDerivation rec {
-  version = "5.8.1";
-  name = "collectd-${version}";
+  version = "5.12.0";
+  pname = "collectd";
 
   src = fetchurl {
-    url = "https://collectd.org/files/${name}.tar.bz2";
-    sha256 = "1njk8hh56gb755xafsh7ahmqr9k2d4lam4ddj7s7fqz0gjigv5p7";
+    url = "https://collectd.org/files/${pname}-${version}.tar.bz2";
+    sha256 = "1mh97afgq6qgmpvpr84zngh58m0sl1b4wimqgvvk376188q09bjv";
   };
 
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/rpv-tomsk/collectd/commit/d5a3c020d33cc33ee8049f54c7b4dffcd123bf83.patch";
-      sha256 = "1n65zw4d2k2bxapayaaw51ym7hy72a0cwi2abd8jgxcw3d0m5g15";
-    })
-  ];
-
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  nativeBuildInputs = [ pkg-config autoreconfHook ];
   buildInputs = [
-    curl libdbi libgcrypt libmemcached
-    cyrus_sasl libnotify gdk_pixbuf liboping libpcap libvirt
-    libxml2 postgresql protobufc rrdtool
-    varnish yajl jdk libtool python hiredis libmicrohttpd
-    riemann_c_client mosquitto rdkafka mongoc
-  ] ++ stdenv.lib.optionals (mysql != null) [ mysql.connector-c
-  ] ++ stdenv.lib.optionals stdenv.isLinux [
-    iptables libatasmart libcredis libmodbus libsigrok
-    lm_sensors lvm2 rabbitmq-c udev net_snmp libmnl
-    # those might be no longer required when https://github.com/NixOS/nixpkgs/pull/51767
-    # is merged
-    libapparmor numactl libcap_ng
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.IOKit
+    libtool
+  ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.ApplicationServices
-  ];
+  ] ++ plugins.buildInputs;
 
   configureFlags = [
     "--localstatedir=/var"
     "--disable-werror"
-  ];
+  ] ++ plugins.configureFlags;
 
   # do not create directories in /var during installPhase
   postConfigure = ''
@@ -93,9 +41,9 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Daemon which collects system performance statistics periodically";
-    homepage = https://collectd.org;
+    homepage = "https://collectd.org";
     license = licenses.gpl2;
     platforms = platforms.unix;
     maintainers = with maintainers; [ bjornfor fpletz ];

@@ -1,23 +1,22 @@
-{ stdenv, cmake, fetchurl, pkgconfig, SDL, SDL_mixer, SDL_net }:
+{ lib, stdenv, cmake, fetchurl, pkg-config, SDL, SDL_mixer, SDL_net, wxGTK30 }:
 
 stdenv.mkDerivation rec {
-  name = "odamex-0.7.0";
+  pname = "odamex";
+  version = "0.8.2";
+
   src = fetchurl {
-    url = mirror://sourceforge/odamex/odamex-src-0.7.0.tar.bz2;
-    sha256 = "0cb6p58yv55kdyfj7s9n9xcwpvxrj8nyc6brw9jvwlc5n4y3cd5a";
+    url = "mirror://sourceforge/${pname}/${pname}-src-${version}.tar.bz2";
+    sha256 = "0d4v1l7kghkz1xz92jxlx50x3iy94z7ix1i3209m5j5545qzxrqq";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ cmake SDL SDL_mixer SDL_net ];
-
-  enableParallelBuilding = true;
+  nativeBuildInputs = [ cmake pkg-config ];
+  buildInputs = [ SDL SDL_mixer SDL_net wxGTK30 ];
 
   meta = {
-    homepage = http://odamex.net/;
+    homepage = "http://odamex.net/";
     description = "A client/server port for playing old-school Doom online";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ MP2E ];
-    broken = true;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ MP2E ];
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre, unzip, makeWrapper }:
+{ lib, stdenv, fetchurl, jre, unzip, makeWrapper }:
 
 # Note:
 # - User config dir is hard coded by upstream to $HOME/.imagej on linux systems
@@ -7,15 +7,15 @@
 #    on linux systems, but we here do not attempt to fix it.)
 
 let
-  imagej150 = stdenv.mkDerivation rec {
-    name = "imagej-${version}";
+  imagej150 = stdenv.mkDerivation {
+    pname = "imagej";
     version = "150";
 
     src = fetchurl {
       url = "https://wsr.imagej.net/distros/cross-platform/ij150.zip";
       sha256 = "97aba6fc5eb908f5160243aebcdc4965726693cb1353d9c0d71b8f5dd832cb7b";
     };
-    buildInputs = [ unzip makeWrapper ];
+    nativeBuildInputs = [ makeWrapper unzip ];
     inherit jre;
 
     # JAR files that are intended to be used by other packages
@@ -31,8 +31,8 @@ let
       makeWrapper ${jre}/bin/java $out/bin/imagej \
         --add-flags "-jar $out/share/java/ij.jar -ijpath $out/share"
     '';
-    meta = with stdenv.lib; {
-      homepage = https://imagej.nih.gov/ij/;
+    meta = with lib; {
+      homepage = "https://imagej.nih.gov/ij/";
       description = "Image processing and analysis in Java";
       longDescription = ''
         ImageJ is a public domain Java image processing program

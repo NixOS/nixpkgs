@@ -1,19 +1,19 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "libdsk-${version}";
-  version = "1.5.10";
+  pname = "libdsk";
+  version = "1.5.15";
 
   src = fetchurl {
-    url = "https://www.seasip.info/Unix/LibDsk/${name}.tar.gz";
-    sha256 = "0ndkwyf8dp252v4yhqphvi32gmz9m5kkdqwv0aw92cz7mfbnp36g";
+    url = "https://www.seasip.info/Unix/LibDsk/${pname}-${version}.tar.gz";
+    sha256 = "sha256-7VjVgGRy3+SE+9mdPpBKiNzv1tg2akXpkHfv2dVoODs=";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A library for accessing discs and disc image files";
-    homepage = http://www.seasip.info/Unix/LibDsk/;
+    homepage = "http://www.seasip.info/Unix/LibDsk/";
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.genesis ];
-    platforms = platforms.linux;
+    maintainers = [ ];
+    platforms = platforms.unix;
   };
 }

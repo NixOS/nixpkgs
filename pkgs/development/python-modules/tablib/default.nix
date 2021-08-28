@@ -1,29 +1,38 @@
-{ buildPythonPackage, stdenv, fetchPypi, pytest, unicodecsv, pandas
-, xlwt, openpyxl, pyyaml, xlrd, odfpy, fetchpatch
+{ buildPythonPackage, lib, fetchPypi, isPy27
+, odfpy
+, openpyxl
+, pandas
+, setuptools-scm
+, pytest
+, pytestcov
+, pyyaml
+, unicodecsv
+, xlrd
+, xlwt
 }:
 
 buildPythonPackage rec {
   pname = "tablib";
-  version = "0.12.1";
+  version = "3.0.0";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "11wxchj0qz77dn79yiq30k4b4gsm429f4bizk4lm4rb63nk51kxq";
+    sha256 = "f83cac08454f225a34a305daa20e2110d5e6335135d505f93bc66583a5f9c10d";
   };
 
-  checkInputs = [ pytest unicodecsv pandas ];
+  nativeBuildInputs = [ setuptools-scm ];
   propagatedBuildInputs = [ xlwt openpyxl pyyaml xlrd odfpy ];
+  checkInputs = [ pytest pytestcov unicodecsv pandas ];
 
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/kennethreitz/tablib/commit/0e51a2d0944022af186d2dcd34c0ab3c47141ba5.patch";
-      sha256 = "0lbbl871zdn5vpgqyjkil0c2ap3b5hz19rmihhyvrx7m4mlh1aij";
-    })
-  ];
+  # test_tablib needs MarkupPy, which isn't packaged yet
+  checkPhase = ''
+    pytest --ignore tests/test_tablib.py
+  '';
 
-  meta = with stdenv.lib; {
-    description = "Tablib: format-agnostic tabular dataset library";
-    homepage = http://python-tablib.org;
+  meta = with lib; {
+    description = "Format-agnostic tabular dataset library";
+    homepage = "https://python-tablib.org";
     license = licenses.mit;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , requests
@@ -7,12 +7,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.12.5";
+  version = "0.12.6";
   pname = "CacheControl";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cef77effdf51b43178f6a2d3b787e3734f98ade253fa3187f3bb7315aaa42ff7";
+    sha256 = "be9aa45477a134aee56c8fac518627e1154df063e85f67d4f83ce0ccc23688e8";
   };
 
   checkInputs = [ pytest ];
@@ -25,8 +25,8 @@ buildPythonPackage rec {
     pytest tests
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/ionrock/cachecontrol;
+  meta = with lib; {
+    homepage = "https://github.com/ionrock/cachecontrol";
     description = "Httplib2 caching for requests";
     license = licenses.asl20;
     maintainers = [ maintainers.costrouc ];

@@ -1,9 +1,9 @@
-{ stdenv, kernel }:
+{ lib, stdenv, kernel }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   inherit (kernel) version src;
 
-  name = "freefall-${version}";
+  pname = "freefall";
 
   postPatch = ''
     cd tools/laptop/freefall
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (kernel.meta) homepage license;
 
     description = "Free-fall protection for spinning HP/Dell laptop hard drives";

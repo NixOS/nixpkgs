@@ -1,29 +1,50 @@
-{ buildPythonApplication, lib, fetchFromGitHub
-, dateutil, pyyaml, openpyxl, xlrd, h5py, fonttools, lxml, pandas, pyshp
+{ buildPythonApplication
+, lib
+, fetchFromGitHub
+, dateutil
+, pyyaml
+, openpyxl
+, xlrd
+, h5py
+, fonttools
+, lxml
+, pandas
+, pyshp
+, setuptools
+, withPcap ? true, dpkt ? null, dnslib ? null
 }:
 buildPythonApplication rec {
-  name = "${pname}-${version}";
   pname = "visidata";
-  version = "1.5.2";
+  version = "2.4";
 
   src = fetchFromGitHub {
     owner = "saulpw";
     repo = "visidata";
     rev = "v${version}";
-    sha256 = "19gs8i6chrrwibz706gib5sixx1cjgfzh7v011kp3izcrn524mc0";
+    sha256 = "0mvf2603d9b0s6rh7sl7mg4ipbh0nk05xgh1078mwvx31qjsmq1i";
   };
 
-  propagatedBuildInputs = [dateutil pyyaml openpyxl xlrd h5py fonttools
-    lxml pandas pyshp ];
+  propagatedBuildInputs = [
+    dateutil
+    pyyaml
+    openpyxl
+    xlrd
+    h5py
+    fonttools
+    lxml
+    pandas
+    pyshp
+    setuptools
+  ] ++ lib.optionals withPcap [ dpkt dnslib ];
 
   doCheck = false;
 
   meta = {
     inherit version;
     description = "Interactive terminal multitool for tabular data";
-    license = lib.licenses.gpl3 ;
-    maintainers = [lib.maintainers.raskin];
-    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.raskin ];
     homepage = "http://visidata.org/";
+    changelog = "https://github.com/saulpw/visidata/blob/v${version}/CHANGELOG.md";
   };
 }

@@ -1,20 +1,26 @@
-{ stdenv, fetchurl, intltool }:
+{ lib, stdenv, fetchurl, meson, ninja, gettext, mateUpdateScript }:
 
 stdenv.mkDerivation rec {
-  name = "mate-backgrounds-${version}";
-  version = "1.22.0";
+  pname = "mate-backgrounds";
+  version = "1.24.2";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1j9ch04qi2q4mdcvb92w667ra9hpfdf2bfpi1dpw0nbph7r6qvj9";
+    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1ixb2vlm3dr52ibp4ggrbkf38m3q6i5lxjg4ix82gxbb6h6a3gp5";
   };
 
-  nativeBuildInputs = [ intltool ];
+  nativeBuildInputs = [
+    gettext
+    meson
+    ninja
+  ];
 
-  meta = with stdenv.lib; {
+  passthru.updateScript = mateUpdateScript { inherit pname version; };
+
+  meta = with lib; {
     description = "Background images and data for MATE";
-    homepage = https://mate-desktop.org;
-    license = licenses.gpl2;
+    homepage = "https://mate-desktop.org";
+    license = with licenses; [ gpl2Plus cc-by-sa-40 ];
     platforms = platforms.unix;
     maintainers = [ maintainers.romildo ];
   };

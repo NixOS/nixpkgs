@@ -2,18 +2,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "svgbob";
-  version = "unstable-2018-10-05";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "ivanceras";
     repo = pname;
-    rev = "43fb0364e989d0e9a7656b148c947d47cc769622";
-    sha256 = "1imjj57dx1af3wrs214yzaa2qfk8ld00nj3nx4z450gw2xjjj1gw";
+    rev = "0febc4377134a2ea3b3cd43ebdf5ea688a0e7432";
+    sha256 = "1n0w5b3fjgbczy1iw52172x1p3y1bvw1qpz77fkaxkhrkgfd7vwr";
   };
-
   sourceRoot = "source/svgbob_cli";
+  postPatch = ''
+    substituteInPlace ../svgbob/src/lib.rs \
+      --replace '#![deny(warnings)]' ""
+  '';
 
-  cargoSha256 = "0mnq1s809f394x83gjv9zljr07c94k48zkrwxs6ibi19shgmrnnd";
+  cargoSha256 = "1jyycr95gjginx6bzmay9b5dbpnbwdqbv13w1qy58znicsmh3v8a";
 
   # Test tries to build outdated examples
   doCheck = false;
@@ -23,6 +26,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/ivanceras/svgbob";
     license = licenses.asl20;
     maintainers = [ maintainers.marsam ];
-    platforms = platforms.all;
   };
 }

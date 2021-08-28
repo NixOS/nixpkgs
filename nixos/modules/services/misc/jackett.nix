@@ -34,6 +34,13 @@ in
         default = "jackett";
         description = "Group under which Jackett runs.";
       };
+
+      package = mkOption {
+        type = types.package;
+        default = pkgs.jackett;
+        defaultText = "pkgs.jackett";
+        description = "Jackett package to use.";
+      };
     };
   };
 
@@ -51,7 +58,7 @@ in
         Type = "simple";
         User = cfg.user;
         Group = cfg.group;
-        ExecStart = "${pkgs.jackett}/bin/Jackett --NoUpdates --DataFolder '${cfg.dataDir}'";
+        ExecStart = "${cfg.package}/bin/Jackett --NoUpdates --DataFolder '${cfg.dataDir}'";
         Restart = "on-failure";
       };
     };

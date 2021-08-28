@@ -1,7 +1,7 @@
-{ stdenv, fetchzip }:
+{ lib, stdenv, fetchzip }:
 
 stdenv.mkDerivation rec {
-  name = "migu-${version}";
+  pname = "migu";
   version = "20150712";
 
   srcs = [
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  unpackPhase = ":";
+  dontUnpack = true;
 
   installPhase = ''
     find $srcs -name '*.ttf' | xargs install -m644 --target $out/share/fonts/truetype/migu -D
@@ -33,9 +33,9 @@ stdenv.mkDerivation rec {
   outputHashMode = "recursive";
   outputHash = "0nbpn21cxdd6gsgr3fadzjsnz84f2swpf81wmscmjgvd56ngndzh";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A high-quality Japanese font based on modified M+ fonts and IPA fonts";
-    homepage = http://mix-mplus-ipa.osdn.jp/migu/;
+    homepage = "http://mix-mplus-ipa.osdn.jp/migu/";
     license = licenses.ipa;
     maintainers = [ maintainers.mikoim ];
   };

@@ -1,17 +1,17 @@
-{ stdenv, fetchurl, fetchpatch, qmake, qttools, qtbase, poppler }:
+{ lib, mkDerivation, fetchurl, fetchpatch, qmake, qttools, qtbase, poppler }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   version = "2.1.3";
-  name = "diffpdf-${version}";
+  pname = "diffpdf";
 
   src = fetchurl {
-    url = "http://www.qtrac.eu/${name}.tar.gz";
+    url = "http://www.qtrac.eu/${pname}-${version}.tar.gz";
     sha256 = "0cr468fi0d512jjj23r5flfzx957vibc9c25gwwhi0d773h2w566";
   };
 
   patches = [
     (fetchpatch {
-      url = https://raw.githubusercontent.com/gentoo/gentoo/9b971631588ff46e7c2d501bc35cd0d9ce2d98e2/app-text/diffpdf/files/diffpdf-2.1.3-qt5.patch;
+      url = "https://raw.githubusercontent.com/gentoo/gentoo/9b971631588ff46e7c2d501bc35cd0d9ce2d98e2/app-text/diffpdf/files/diffpdf-2.1.3-qt5.patch";
       sha256 = "0sax8gcqcmzf74hmdr3rarqs4nsxmml9qmh6pqyjmgl3lypxhafg";
     })
     ./fix_path_poppler_qt5.patch
@@ -31,10 +31,9 @@ stdenv.mkDerivation rec {
     install -Dpm755 -D diffpdf $out/bin/diffpdf
     install -Dpm644 -D diffpdf.1 $out/share/man/man1/diffpdf.1
 
-    install -dpm755 $out/share/doc/${name} $out/share/licenses/${name} $out/share/icons $out/share/pixmaps $out/share/applications
-    install -Dpm644 CHANGES README help.html $out/share/doc/${name}/
-    install -Dpm644 gpl-2.0.txt $out/share/licenses/${name}/
-    install -Dpm644 images/icon.png $out/share/icons/diffpdf.png
+    install -dpm755 $out/share/doc/${pname}-${version} $out/share/licenses/${pname}-${version} $out/share/icons $out/share/pixmaps $out/share/applications
+    install -Dpm644 CHANGES README help.html $out/share/doc/${pname}-${version}/
+    install -Dpm644 gpl-2.0.txt $out/share/licenses/${pname}-${version}/
     install -Dpm644 images/icon.png $out/share/pixmaps/diffpdf.png
 
     cat > $out/share/applications/diffpdf.desktop <<EOF
@@ -50,11 +49,11 @@ stdenv.mkDerivation rec {
     '';
 
   meta = {
-    homepage = http://www.qtrac.eu/diffpdfc.html;
+    homepage = "http://www.qtrac.eu/diffpdfc.html";
     description = "Tool for diffing pdf files visually or textually";
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = with stdenv.lib.maintainers; [ tstrobel ];
-    platforms = with stdenv.lib.platforms; linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ tstrobel ];
+    platforms = with lib.platforms; linux;
     inherit version;
   };
 }

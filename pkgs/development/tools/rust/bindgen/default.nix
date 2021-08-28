@@ -1,27 +1,33 @@
-{ stdenv, fetchFromGitHub, rustPlatform, clang, llvmPackages, rustfmt, writeScriptBin,
-  runtimeShell }:
+{ lib, fetchFromGitHub, rustPlatform, clang, llvmPackages, rustfmt, writeScriptBin
+, runtimeShell
+, bash
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "rust-bindgen";
-  version = "0.49.0";
+  version = "0.57.0";
+
+  RUSTFLAGS = "--cap-lints warn"; # probably OK to remove after update
 
   src = fetchFromGitHub {
     owner = "rust-lang";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0i1lh8z0jpf8gcfqxig8kl6wzjrkwb3jkad5ghb6ppkdkpr94jq4";
+    sha256 = "sha256-0d8+Rkb4h1DoFUQ7u2/kPR/fUUz0YvI+hNT4iXL3mxY=";
   };
 
-  cargoSha256 = "0v3slbah0s1w75s38x1akvshcxsi1s810yybd9faday7biwmdbmj";
+  cargoSha256 = "0r60smhlx1992a1s1k5sxjpdqllb2xsqcimgx3ldp5fdkfphk3cw";
 
-  libclang = llvmPackages.libclang.lib; #for substituteAll
+  #for substituteAll
+  libclang = llvmPackages.libclang.lib;
+  inherit bash;
 
   buildInputs = [ libclang ];
 
   propagatedBuildInputs = [ clang ]; # to populate NIX_CXXSTDLIB_COMPILE
 
   configurePhase = ''
-    export LIBCLANG_PATH="${libclang}/lib"
+    export LIBCLANG_PATH="${libclang.lib}/lib"
   '';
 
   postInstall = ''
@@ -48,16 +54,17 @@ rustPlatform.buildRustPackage rec {
     patchShebangs .
   '';
 
-  meta = with stdenv.lib; {
-    description = "C and C++ binding generator";
+  meta = with lib; {
+    description = "Automatically generates Rust FFI bindings to C (and some C++) libraries";
     longDescription = ''
       Bindgen takes a c or c++ header file and turns them into
       rust ffi declarations.
       As with most compiler related software, this will only work
       inside a nix-shell with the required libraries as buildInputs.
     '';
-    homepage = https://github.com/rust-lang/rust-bindgen;
+    homepage = "https://github.com/rust-lang/rust-bindgen";
     license = with licenses; [ bsd3 ];
-    maintainers = [ maintainers.ralith ];
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ johntitor ralith ];
   };
 }

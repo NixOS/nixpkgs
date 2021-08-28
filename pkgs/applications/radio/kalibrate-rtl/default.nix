@@ -1,6 +1,6 @@
-{ stdenv, fetchgit, autoreconfHook, pkgconfig, fftw, rtl-sdr, libusb1 }:
+{ lib, stdenv, fetchgit, autoreconfHook, pkg-config, fftw, rtl-sdr, libusb1 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "kalibrate-rtl-20131214";
 
   # There are no tags/releases, so use the latest commit from git master.
@@ -11,10 +11,10 @@ stdenv.mkDerivation rec {
     sha256 = "1spbfflkqnw9s8317ppsf7b1nnkicqsmaqsnz1zf8i49ix70i6kn";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ fftw rtl-sdr libusb1 ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Calculate local oscillator frequency offset in RTL-SDR devices";
     longDescription = ''
       Kalibrate, or kal, can scan for GSM base stations in a given frequency
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
       This package is for RTL-SDR devices.
     '';
-    homepage = https://github.com/steve-m/kalibrate-rtl;
+    homepage = "https://github.com/steve-m/kalibrate-rtl";
     license = licenses.bsd2;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];

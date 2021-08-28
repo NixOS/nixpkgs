@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, python
+{ lib, stdenv, fetchFromGitHub, python2
 , unzip, makeWrapper }:
 let
-  python' = python.override {
+  python' = python2.override {
     packageOverrides = self: super: {
       docker = self.buildPythonPackage rec {
         name = "docker-${version}";
@@ -19,10 +19,9 @@ let
           requests
           websocket_client
           ipaddress
-          backports_ssl_match_hostname
           docker_pycreds
           uptime
-        ];
+        ] ++ lib.optionals (self.pythonOlder "3.7") [ backports_ssl_match_hostname ];
 
         # due to flake8
         doCheck = false;
@@ -40,7 +39,7 @@ let
 
 in stdenv.mkDerivation rec {
   version = "5.11.2";
-  name = "dd-agent-${version}";
+  pname = "dd-agent";
 
   src = fetchFromGitHub {
     owner  = "datadog";
@@ -51,8 +50,8 @@ in stdenv.mkDerivation rec {
 
   patches = [ ./40103-iostat-fix.patch ];
 
+  nativeBuildInputs = [ unzip ];
   buildInputs = [
-    unzip
     makeWrapper
   ] ++ (with python'.pkgs; [
     requests
@@ -83,7 +82,7 @@ in stdenv.mkDerivation rec {
 
     cat > $out/bin/dd-jmxfetch <<EOF
     #!/usr/bin/env bash
-    exec ${python}/bin/python $out/agent/jmxfetch.py $@
+    exec ${python'.interpreter} $out/agent/jmxfetch.py $@
     EOF
     chmod a+x $out/bin/dd-jmxfetch
 
@@ -104,9 +103,9 @@ in stdenv.mkDerivation rec {
       Event collector for the DataDog analysis service
       -- v5 Python implementation
     '';
-    homepage    = https://www.datadoghq.com;
-    license     = stdenv.lib.licenses.bsd3;
-    platforms   = stdenv.lib.platforms.all;
-    maintainers = with stdenv.lib.maintainers; [ thoughtpolice domenkozar ];
+    homepage    = "https://www.datadoghq.com";
+    license     = lib.licenses.bsd3;
+    platforms   = lib.platforms.all;
+    maintainers = with lib.maintainers; [ thoughtpolice domenkozar ];
   };
 }

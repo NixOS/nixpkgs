@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, fetchpatch, ncurses, boost }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, ncurses, boost }:
 
 stdenv.mkDerivation rec {
-  name = "bastet-${version}";
+  pname = "bastet";
   version = "0.43.2";
   buildInputs = [ ncurses boost ];
 
@@ -27,9 +27,9 @@ stdenv.mkDerivation rec {
     cp bastet.6 "$out"/share/man/man6
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tetris clone with 'bastard' block-choosing AI";
-    homepage = http://fph.altervista.org/prog/bastet.html;
+    homepage = "http://fph.altervista.org/prog/bastet.html";
     license = licenses.gpl3;
     maintainers = [ maintainers.dezgeg ];
     platforms = platforms.linux;

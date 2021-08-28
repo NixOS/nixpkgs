@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, fetchpatch }:
+{ lib, stdenv, fetchurl, fetchpatch }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "3.3.2";
   pname = "enhanced-ctorrent-dhn";
 
@@ -27,9 +27,9 @@ stdenv.mkDerivation rec {
       CTorrent, a BitTorrent client implemented in C++, with bugfixes and
       performance enhancements.
     '';
-    homepage = http://www.rahul.net/dholmes/ctorrent/;
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.devhell ];
+    homepage = "http://www.rahul.net/dholmes/ctorrent/";
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.devhell ];
   };
 }

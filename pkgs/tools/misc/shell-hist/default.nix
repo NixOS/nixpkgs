@@ -11,13 +11,12 @@ rustPlatform.buildRustPackage {
     sha256 = "0kc128xnnp1d56if70vfv0w3qnwhljhbnvzwwb7hfm3x2m0vqrqf";
   };
 
-  cargoSha256 = "1nqnkzwqk879qy1261g1gds668xz6islhzq7chzhilaqpmvf6039";
+  cargoSha256 = "1b2cfs03vlaz7jnr67ilgjfi7cm59izpcdi6pyvbzv8s46z2dysp";
 
   meta = with lib; {
     description = "Inspect your shell history";
     homepage = "https://github.com/jamesmunns/shell-hist";
     license = with licenses; [ mit /* or */ asl20 ];
     maintainers = [ maintainers.spacekookie ];
-    platforms = platforms.all;
   };
 }

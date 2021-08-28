@@ -1,7 +1,7 @@
-{ stdenv, fetchzip, bzip2, openssl, zlib }:
+{ lib, stdenv, fetchzip, bzip2, openssl, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "imgpatchtools-${version}";
+  pname = "imgpatchtools";
   version = "0.3";
 
   src = fetchzip {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   installPhase = "install -Dt $out/bin bin/*";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tools to manipulate Android OTA archives";
     longDescription = ''
       This package is useful for Android development. In particular, it can be
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
       utility. It also includes other, related, but arguably more advanced tools
       for OTA manipulation.
     '';
-    homepage = https://github.com/erfanoabdi/imgpatchtools;
+    homepage = "https://github.com/erfanoabdi/imgpatchtools";
     license = licenses.gpl3;
     maintainers = with maintainers; [ yegortimoshenko ];
     platforms = platforms.linux;

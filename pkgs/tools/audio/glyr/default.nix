@@ -1,24 +1,24 @@
-{ stdenv, fetchFromGitHub, cmake
-, curl, glib, sqlite, pkgconfig }:
+{ lib, stdenv, fetchFromGitHub, cmake
+, curl, glib, sqlite, pkg-config }:
 
 stdenv.mkDerivation rec {
   version = "1.0.10";
-  name = "glyr-${version}";
+  pname = "glyr";
 
   src = fetchFromGitHub {
     owner = "sahib";
     repo = "glyr";
-    rev = "${version}";
+    rev = version;
     sha256 = "1miwbqzkhg0v3zysrwh60pj9sv6ci4lzq2vq2hhc6pc6hdyh8xyr";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ sqlite glib curl ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     license = licenses.lgpl3;
     description = "A music related metadata searchengine";
-    homepage = https://github.com/sahib/glyr;
+    homepage = "https://github.com/sahib/glyr";
     maintainers = [ maintainers.sternenseemann ];
     platforms = platforms.unix;
   };

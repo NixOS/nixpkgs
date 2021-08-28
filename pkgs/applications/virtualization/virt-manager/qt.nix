@@ -1,18 +1,18 @@
-{ mkDerivation, lib, fetchFromGitHub, cmake, pkgconfig
+{ mkDerivation, lib, fetchFromGitHub, fetchpatch, cmake, pkg-config
 , qtbase, qtmultimedia, qtsvg, qttools, krdc
 , libvncserver, libvirt, pcre, pixman, qtermwidget, spice-gtk, spice-protocol
-, libselinux, libsepol, utillinux
+, libselinux, libsepol, util-linux
 }:
 
 mkDerivation rec {
-  name = "virt-manager-qt-${version}";
-  version = "0.70.91";
+  pname = "virt-manager-qt";
+  version = "0.72.97";
 
   src = fetchFromGitHub {
     owner  = "F1ash";
     repo   = "qt-virt-manager";
-    rev    = "${version}";
-    sha256 = "1z2kq88lljvr24z1kizvg3h7ckf545h4kjhhrjggkr0w4wjjwr43";
+    rev    = version;
+    sha256 = "0b2bx7ah35glcsiv186sc9cqdrkhg1vs9jz036k9byk61np0cb1i";
   };
 
   cmakeFlags = [
@@ -20,16 +20,24 @@ mkDerivation rec {
     "-DQTERMWIDGET_INCLUDE_DIRS=${qtermwidget}/include/qtermwidget5"
   ];
 
+  patches = [
+    (fetchpatch {
+      # drop with next update
+      url = "https://github.com/F1ash/qt-virt-manager/commit/0d338b037ef58c376d468c1cd4521a34ea181edd.patch";
+      sha256 = "1wjqyc5wsnxfwwjzgqjr9hcqhd867amwhjd712qyvpvz8x7p2s24";
+    })
+  ];
+
   buildInputs = [
     qtbase qtmultimedia qtsvg krdc
     libvirt libvncserver pcre pixman qtermwidget spice-gtk spice-protocol
-    libselinux libsepol utillinux
+    libselinux libsepol util-linux
   ];
 
-  nativeBuildInputs = [ cmake pkgconfig qttools ];
+  nativeBuildInputs = [ cmake pkg-config qttools ];
 
   meta = with lib; {
-    homepage    = https://f1ash.github.io/qt-virt-manager;
+    homepage    = "https://f1ash.github.io/qt-virt-manager";
     description = "Desktop user interface for managing virtual machines (QT)";
     longDescription = ''
       The virt-manager application is a desktop user interface for managing

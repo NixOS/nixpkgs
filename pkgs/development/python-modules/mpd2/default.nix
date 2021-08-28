@@ -1,29 +1,33 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
+, python
 , mock
 }:
 
 buildPythonPackage rec {
-  pname = "mpd2";
-  version = "0.5.5";
+  pname = "python-mpd2";
+  version = "3.0.4";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1gfrxf71xll1w6zb69znqg5c9j0g7036fsalkvqprh2id640cl3a";
+    sha256 = "1r8saq1460yfa0sxfrvxqs2r453wz2xchlc9gzbpqznr49786rvs";
   };
 
   buildInputs = [ mock ];
-  patchPhase = ''
-    sed -i -e '/tests_require/d' \
-        -e 's/cmdclass.*/test_suite="mpd_test",/' setup.py
+
+  checkPhase = ''
+    ${python.interpreter} -m unittest mpd.tests
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Python client module for the Music Player Daemon";
     homepage = "https://github.com/Mic92/python-mpd2";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ rvl mic92 ];
+    maintainers = with maintainers; [ rvl mic92 hexa ];
   };
 
 }

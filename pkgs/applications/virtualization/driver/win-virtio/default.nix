@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, p7zip }:
+{ lib, stdenv, fetchurl, p7zip }:
 stdenv.mkDerivation rec {
-  name = "win-virtio-${version}";
+  pname = "win-virtio";
   version = "0.1.141-1";
 
   phases = [ "buildPhase" "installPhase" ];
@@ -25,11 +25,11 @@ stdenv.mkDerivation rec {
                 {input="viorng"; output="viorng";}
                ];
     in
-      stdenv.lib.concatStringsSep "\n" ((map (copy "amd64" "w8.1") virtio) ++ (map (copy "x86" "w8.1") virtio));
+      lib.concatStringsSep "\n" ((map (copy "amd64" "w8.1") virtio) ++ (map (copy "x86" "w8.1") virtio));
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Windows VirtIO Drivers";
-    homepage = https://fedoraproject.org/wiki/Windows_Virtio_Drivers;
+    homepage = "https://fedoraproject.org/wiki/Windows_Virtio_Drivers";
     maintainers = [ maintainers.tstrobel ];
     platforms = platforms.linux;
   };

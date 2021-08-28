@@ -1,12 +1,12 @@
 { coreutils, dpkg, fetchurl, file, ghostscript, gnugrep, gnused,
-makeWrapper, perl, pkgs, stdenv, which }:
+makeWrapper, perl, pkgs, lib, stdenv, which }:
 
 stdenv.mkDerivation rec {
-  name = "mfcl8690cdwlpr-${version}";
+  pname = "mfcl8690cdwlpr";
   version = "1.3.0-0";
 
   src = fetchurl {
-    url = "http://download.brother.com/welcome/dlf103241/${name}.i386.deb";
+    url = "http://download.brother.com/welcome/dlf103241/${pname}-${version}.i386.deb";
     sha256 = "0x8zd4b1psmw1znp2ibncs37xm5mljcy9yza2rx8jm8lp0a3l85v";
   };
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
       --replace "PRINTER =~" "PRINTER = \"mfcl8690cdw\"; #"
 
     wrapProgram $filter \
-      --prefix PATH : ${stdenv.lib.makeBinPath [
+      --prefix PATH : ${lib.makeBinPath [
       coreutils file ghostscript gnugrep gnused which
       ]}
 
@@ -37,9 +37,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Brother MFC-L8690CDW LPR printer driver";
-    homepage = http://www.brother.com/;
-    license = stdenv.lib.licenses.unfree;
-    maintainers = [ stdenv.lib.maintainers.fuzzy-id ];
+    homepage = "http://www.brother.com/";
+    license = lib.licenses.unfree;
+    maintainers = [ lib.maintainers.fuzzy-id ];
     platforms = [ "i686-linux" ];
   };
 }

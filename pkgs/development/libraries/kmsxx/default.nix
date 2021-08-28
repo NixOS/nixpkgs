@@ -1,31 +1,29 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, libdrm, python }:
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, libdrm
+, withPython ? false, python ? null }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "kmsxx";
-  version = "2018-10-23";
-  name = pname + "-" + version;
+  version = "2020-08-04";
 
   src = fetchFromGitHub {
     owner = "tomba";
     repo = "kmsxx";
     fetchSubmodules = true;
-    rev = "c0093c91f0fa2fd6a5b9d1b206a6f44dcd55bfb5";
-    sha256 = "03rv92r938nxb4k4gwcvxy76jnhxdx6x60b58jws83285hd9rgkf";
+    rev = "38bee3092f2d477f1baebfcae464f888d3d04bbe";
+    sha256 = "0xz4m9bk0naawxwpx5cy1j3cm6c8c9m5y551csk88y88x1g0z0xh";
   };
 
-  enableParallelBuilding = true;
+  cmakeFlags = lib.optional (!withPython) "-DKMSXX_ENABLE_PYTHON=OFF";
 
-  nativeBuildInputs = [ cmake pkgconfig ];
-  buildInputs = [ libdrm python ];
+  nativeBuildInputs = [ cmake pkg-config ];
+  buildInputs = [ libdrm ] ++ lib.optionals withPython [ python ];
 
-  pythonPath = [ ];
-  passthru.python = python;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "C++11 library, utilities and python bindings for Linux kernel mode setting";
-    homepage = https://github.com/tomba/kmsxx;
+    homepage = "https://github.com/tomba/kmsxx";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ gnidorah ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
+    broken = true; # marked broken 2021-03-26
   };
 }

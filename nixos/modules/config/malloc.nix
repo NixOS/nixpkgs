@@ -6,7 +6,7 @@ let
 
   # The set of alternative malloc(3) providers.
   providers = {
-    "graphene-hardened" = rec {
+    graphene-hardened = {
       libPath = "${pkgs.graphene-hardened-malloc}/lib/libhardened_malloc.so";
       description = ''
         An allocator designed to mitigate memory corruption attacks, such as
@@ -14,7 +14,7 @@ let
       '';
     };
 
-    "jemalloc" = {
+    jemalloc = {
       libPath = "${pkgs.jemalloc}/lib/libjemalloc.so";
       description = ''
         A general purpose allocator that emphasizes fragmentation avoidance
@@ -22,8 +22,8 @@ let
       '';
     };
 
-    "scudo" = {
-      libPath = "${pkgs.llvmPackages.compiler-rt}/lib/linux/libclang_rt.scudo-x86_64.so";
+    scudo = {
+      libPath = "${pkgs.llvmPackages_latest.compiler-rt}/lib/linux/libclang_rt.scudo-x86_64.so";
       description = ''
         A user-mode allocator based on LLVM Sanitizer’s CombinedAllocator,
         which aims at providing additional mitigations against heap based
@@ -32,7 +32,7 @@ let
     };
   };
 
-  providerConf = providers."${cfg.provider}";
+  providerConf = providers.${cfg.provider};
 
   # An output that contains only the shared library, to avoid
   # needlessly bloating the system closure
@@ -79,19 +79,20 @@ in
         and/or service failure.
         </para>
         </warning>
-
-        <note>
-        <para>
-        Changing this option does not affect the current session.
-        </para>
-        </note>
       '';
     };
   };
 
   config = mkIf (cfg.provider != "libc") {
-    environment.variables.LD_PRELOAD = providerLibPath;
-    systemd.extraConfig = "DefaultEnvironment=\"LD_PRELOAD=${providerLibPath}\"";
-    systemd.user.extraConfig = "DefaultEnvironment=\"LD_PRELOAD=${providerLibPath}\"";
+    environment.etc."ld-nix.so.preload".text = ''
+      ${providerLibPath}
+    '';
+    security.apparmor.includes = {
+      "abstractions/base" = ''
+        r /etc/ld-nix.so.preload,
+        r ${config.environment.etc."ld-nix.so.preload".source},
+        mr ${providerLibPath},
+      '';
+    };
   };
 }

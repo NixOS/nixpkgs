@@ -1,21 +1,21 @@
 { stdenv, appleDerivation, lib
-, Librpcsvc, apple_sdk, pam, CF, openbsm }:
+, libutil, Librpcsvc, apple_sdk, pam, CF, openbsm }:
 
-appleDerivation rec {
+appleDerivation {
   # xcbuild fails with:
   # /nix/store/fc0rz62dh8vr648qi7hnqyik6zi5sqx8-xcbuild-wrapper/nix-support/setup-hook: line 1:  9083 Segmentation fault: 11  xcodebuild OTHER_CFLAGS="$NIX_CFLAGS_COMPILE" OTHER_CPLUSPLUSFLAGS="$NIX_CFLAGS_COMPILE" OTHER_LDFLAGS="$NIX_LDFLAGS" build
   # see issue facebook/xcbuild#188
   # buildInputs = [ xcbuild ];
 
-  buildInputs = [ Librpcsvc apple_sdk.frameworks.OpenDirectory pam CF
+  buildInputs = [ libutil Librpcsvc apple_sdk.frameworks.OpenDirectory pam CF
                   apple_sdk.frameworks.IOKit openbsm ];
   # NIX_CFLAGS_COMPILE = lib.optionalString hostPlatform.isi686 "-D__i386__"
   #                    + lib.optionalString hostPlatform.isx86_64 "-D__x86_64__"
   #                    + lib.optionalString hostPlatform.isAarch32 "-D__arm__";
   NIX_CFLAGS_COMPILE = [ "-DDAEMON_UID=1"
                          "-DDAEMON_GID=1"
-                         "-DDEFAULT_AT_QUEUE=\'a\'"
-                         "-DDEFAULT_BATCH_QUEUE=\'b\'"
+                         "-DDEFAULT_AT_QUEUE='a'"
+                         "-DDEFAULT_BATCH_QUEUE='b'"
                          "-DPERM_PATH=\"/usr/lib/cron/\""
                          "-DOPEN_DIRECTORY"
                          "-DNO_DIRECT_RPC"
@@ -35,6 +35,11 @@ appleDerivation rec {
       --replace bsm/audit_session.h bsm/audit.h
     substituteInPlace login.tproj/login_audit.c \
       --replace bsm/audit_session.h bsm/audit.h
+  '' + lib.optionalString stdenv.isAarch64 ''
+    substituteInPlace sysctl.tproj/sysctl.c \
+      --replace "GPROF_STATE" "0"
+    substituteInPlace login.tproj/login.c \
+      --replace "defined(__arm__)" "defined(__arm__) || defined(__arm64__)"
   '';
 
   buildPhase = ''
@@ -98,7 +103,7 @@ appleDerivation rec {
   '';
 
   meta = {
-    platforms = stdenv.lib.platforms.darwin;
-    maintainers = with stdenv.lib.maintainers; [ shlevy matthewbauer ];
+    platforms = lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ shlevy matthewbauer ];
   };
 }

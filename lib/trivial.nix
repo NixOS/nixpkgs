@@ -29,6 +29,43 @@ rec {
     # Value to ignore
     y: x;
 
+  /* Pipes a value through a list of functions, left to right.
+
+     Type: pipe :: a -> [<functions>] -> <return type of last function>
+     Example:
+       pipe 2 [
+         (x: x + 2)  # 2 + 2 = 4
+         (x: x * 2)  # 4 * 2 = 8
+       ]
+       => 8
+
+       # ideal to do text transformations
+       pipe [ "a/b" "a/c" ] [
+
+         # create the cp command
+         (map (file: ''cp "${src}/${file}" $out\n''))
+
+         # concatenate all commands into one string
+         lib.concatStrings
+
+         # make that string into a nix derivation
+         (pkgs.runCommand "copy-to-out" {})
+
+       ]
+       => <drv which copies all files to $out>
+
+     The output type of each function has to be the input type
+     of the next function, and the last function returns the
+     final value.
+  */
+  pipe = val: functions:
+    let reverseApply = x: f: f x;
+    in builtins.foldl' reverseApply val functions;
+  /* note please don’t add a function like `compose = flip pipe`.
+     This would confuse users, because the order of the functions
+     in the list is not clear. With pipe, it’s obvious that it
+     goes first-to-last. With `compose`, not so much.
+  */
 
   ## Named versions corresponding to some builtin operators.
 
@@ -121,7 +158,7 @@ rec {
     seq deepSeq genericClosure;
 
 
-  ## nixpks version strings
+  ## nixpkgs version strings
 
   /* Returns the current full nixpkgs version number. */
   version = release + versionSuffix;
@@ -134,7 +171,7 @@ rec {
      On each release the first letter is bumped and a new animal is chosen
      starting with that new letter.
   */
-  codeName = "Loris";
+  codeName = "Okapi";
 
   /* Returns the current nixpkgs version suffix as string. */
   versionSuffix =
@@ -154,7 +191,7 @@ rec {
     let
       revisionFile = "${toString ./..}/.git-revision";
       gitRepo      = "${toString ./..}/.git";
-    in if lib.pathIsDirectory gitRepo
+    in if lib.pathIsGitRepo gitRepo
        then lib.commitIdFromGitRepo gitRepo
        else if lib.pathExists revisionFile then lib.fileContents revisionFile
        else default;
@@ -244,6 +281,12 @@ rec {
   importJSON = path:
     builtins.fromJSON (builtins.readFile path);
 
+  /* Reads a TOML file.
+
+     Type :: path -> any
+  */
+  importTOML = path:
+    builtins.fromTOML (builtins.readFile path);
 
   ## Warnings
 
@@ -254,12 +297,15 @@ rec {
   # Usage:
   # {
   #   foo = lib.warn "foo is deprecated" oldFoo;
+  #   bar = lib.warnIf (bar == "") "Empty bar is deprecated" bar;
   # }
   #
   # TODO: figure out a clever way to integrate location information from
   # something like __unsafeGetAttrPos.
 
   warn = msg: builtins.trace "[1;31mwarning: ${msg}[0m";
+  warnIf = cond: msg: if cond then warn msg else id;
+
   info = msg: builtins.trace "INFO: ${msg}";
 
   showWarnings = warnings: res: lib.fold (w: x: warn w x) res warnings;
@@ -288,11 +334,65 @@ rec {
      has the same return type and semantics as builtins.functionArgs.
      setFunctionArgs : (a → b) → Map String Bool.
   */
-  functionArgs = f: f.__functionArgs or (builtins.functionArgs f);
+  functionArgs = f:
+    if f ? __functor
+    then f.__functionArgs or (lib.functionArgs (f.__functor f))
+    else builtins.functionArgs f;
 
   /* Check whether something is a function or something
      annotated with function args.
   */
   isFunction = f: builtins.isFunction f ||
     (f ? __functor && isFunction (f.__functor f));
+
+  /* Convert the given positive integer to a string of its hexadecimal
+     representation. For example:
+
+     toHexString 0 => "0"
+
+     toHexString 16 => "10"
+
+     toHexString 250 => "FA"
+  */
+  toHexString = i:
+    let
+      toHexDigit = d:
+        if d < 10
+        then toString d
+        else
+          {
+            "10" = "A";
+            "11" = "B";
+            "12" = "C";
+            "13" = "D";
+            "14" = "E";
+            "15" = "F";
+          }.${toString d};
+    in
+      lib.concatMapStrings toHexDigit (toBaseDigits 16 i);
+
+  /* `toBaseDigits base i` converts the positive integer i to a list of its
+     digits in the given base. For example:
+
+     toBaseDigits 10 123 => [ 1 2 3 ]
+
+     toBaseDigits 2 6 => [ 1 1 0 ]
+
+     toBaseDigits 16 250 => [ 15 10 ]
+  */
+  toBaseDigits = base: i:
+    let
+      go = i:
+        if i < base
+        then [i]
+        else
+          let
+            r = i - ((i / base) * base);
+            q = (i - r) / base;
+          in
+            [r] ++ go q;
+    in
+      assert (base >= 2);
+      assert (i >= 0);
+      lib.reverseList (go i);
 }

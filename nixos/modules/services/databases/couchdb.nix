@@ -4,19 +4,17 @@ with lib;
 
 let
   cfg = config.services.couchdb;
-  useVersion2 = strings.versionAtLeast (strings.getVersion cfg.package) "2.0";
   configFile = pkgs.writeText "couchdb.ini" (
     ''
       [couchdb]
       database_dir = ${cfg.databaseDir}
       uri_file = ${cfg.uriFile}
       view_index_dir = ${cfg.viewIndexDir}
-    '' + (if useVersion2 then
-    ''
+    '' + (optionalString (cfg.adminPass != null) ''
+      [admins]
+      ${cfg.adminUser} = ${cfg.adminPass}
+    '' + ''
       [chttpd]
-    '' else
-    ''
-      [httpd]
     '') +
     ''
       port = ${toString cfg.port}
@@ -25,8 +23,7 @@ let
       [log]
       file = ${cfg.logFile}
     '');
-  executable = if useVersion2 then "${cfg.package}/bin/couchdb"
-    else ''${cfg.package}/bin/couchdb -a ${configFile} -a ${pkgs.writeText "couchdb-extra.ini" cfg.extraConfig} -a ${cfg.configFile}'';
+  executable = "${cfg.package}/bin/couchdb";
 
 in {
 
@@ -54,9 +51,26 @@ in {
         '';
       };
 
+      adminUser = mkOption {
+        type = types.str;
+        default = "admin";
+        description = ''
+          Couchdb (i.e. fauxton) account with permission for all dbs and
+          tasks.
+        '';
+      };
+
+      adminPass = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          Couchdb (i.e. fauxton) account with permission for all dbs and
+          tasks.
+        '';
+      };
 
       user = mkOption {
-        type = types.string;
+        type = types.str;
         default = "couchdb";
         description = ''
           User account under which couchdb runs.
@@ -64,7 +78,7 @@ in {
       };
 
       group = mkOption {
-        type = types.string;
+        type = types.str;
         default = "couchdb";
         description = ''
           Group account under which couchdb runs.
@@ -106,7 +120,7 @@ in {
       };
 
       bindAddress = mkOption {
-        type = types.string;
+        type = types.str;
         default = "127.0.0.1";
         description = ''
           Defines the IP address by which CouchDB will be accessible.
@@ -138,7 +152,7 @@ in {
       };
 
       configFile = mkOption {
-        type = types.string;
+        type = types.path;
         description = ''
           Configuration file for persisting runtime changes. File
           needs to be readable and writable from couchdb user/group.
@@ -155,12 +169,11 @@ in {
 
     environment.systemPackages = [ cfg.package ];
 
-    services.couchdb.configFile = mkDefault
-      (if useVersion2 then "/var/lib/couchdb/local.ini" else "/var/lib/couchdb/couchdb.ini");
+    services.couchdb.configFile = mkDefault "/var/lib/couchdb/local.ini";
 
     systemd.tmpfiles.rules = [
       "d '${dirOf cfg.uriFile}' - ${cfg.user} ${cfg.group} - -"
-      "d '${dirOf cfg.logFile}' - ${cfg.user} ${cfg.group} - -"
+      "f '${cfg.logFile}' - ${cfg.user} ${cfg.group} - -"
       "d '${cfg.databaseDir}' -  ${cfg.user} ${cfg.group} - -"
       "d '${cfg.viewIndexDir}' -  ${cfg.user} ${cfg.group} - -"
     ];
@@ -169,13 +182,11 @@ in {
       description = "CouchDB Server";
       wantedBy = [ "multi-user.target" ];
 
-      preStart =
-        ''
+      preStart = ''
         touch ${cfg.configFile}
-        touch -a ${cfg.logFile}
-        '';
+      '';
 
-      environment = mkIf useVersion2 {
+      environment = {
         # we are actually specifying 4 configuration files:
         # 1. the preinstalled default.ini
         # 2. the module configuration

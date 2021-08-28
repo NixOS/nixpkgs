@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , isPy3k
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   # No tests are included in archive
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "library for generating Excel 97/2000/XP/2003 and OpenOffice Calc compatible spreadsheets.";
     homepage = "https://sourceforge.net/projects/pyexcelerator";
     license = licenses.bsdOriginal;

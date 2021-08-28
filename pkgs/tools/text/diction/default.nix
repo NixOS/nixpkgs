@@ -1,11 +1,11 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "diction-${version}";
+  pname = "diction";
   version = "1.13";
 
   src = fetchurl {
-    url = "http://www.moria.de/~michael/diction/${name}.tar.gz";
+    url = "http://www.moria.de/~michael/diction/${pname}-${version}.tar.gz";
     sha256 = "08fi971b8qa4xycxbgb42i6b5ms3qx9zpp5hwpbxy2vypfs0wph9";
   };
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
       characteristics of a document, including sentence length and other
       readability measures.
     '';
-    license = stdenv.lib.licenses.gpl3Plus;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
   };
 }

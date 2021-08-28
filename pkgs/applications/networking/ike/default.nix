@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, cmake, openssl, libedit, flex, bison, qt4, makeWrapper
-, gcc, nettools, iproute, linuxHeaders }:
+{ lib, stdenv, fetchurl, fetchpatch, cmake, openssl, libedit, flex, bison, qt4, makeWrapper
+, gcc, nettools, iproute2, linuxHeaders }:
 
 # NOTE: use $out/etc/iked.conf as sample configuration and also set: dhcp_file "/etc/iked.dhcp";
 # launch with "iked -f /etc/iked.conf"
@@ -8,14 +8,30 @@
 # so I'm sticking with 3.4
 
 stdenv.mkDerivation rec {
-  name = "ike-2.2.1";
+  pname = "ike";
+  version = "2.2.1";
 
   src = fetchurl {
-    url = "https://www.shrew.net/download/ike/${name}-release.tgz";
+    url = "https://www.shrew.net/download/ike/${pname}-${version}-release.tgz";
     sha256 = "0fhyr2psd93b0zf7yfb72q3nqnh65mymgq5jpjcsj9jv5kfr6l8y";
   };
 
-  buildInputs = [ cmake openssl libedit flex bison qt4 makeWrapper nettools iproute ];
+  patches = [
+    # required for openssl 1.1.x compatibility
+    (fetchpatch {
+      name = "openssl-1.1.0.patch";
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/openssl-1.1.0.patch?h=ike&id=3a56735ddc26f750df4720f4baba0728bb4cb458";
+      sha256 = "1hw8q4xy858rivpjkq5288q3mc75d52bg4w3n30y99h05wik0h51";
+    })
+  ];
+
+  nativeBuildInputs = [ cmake flex bison makeWrapper ];
+  buildInputs = [ openssl libedit qt4 nettools iproute2 ];
+
+  postPatch = ''
+    # fix build with bison3
+    sed -i 's/define "parser_class_name"/define parser_class_name/' source/iked/conf.parse.yy
+  '';
 
   configurePhase = ''
     mkdir -p $out/{bin,sbin,lib}
@@ -31,15 +47,15 @@ stdenv.mkDerivation rec {
   installPhase = ''
     make install
     for file in "$out"/bin/* "$out"/sbin/*; do
-        wrapProgram $file --prefix LD_LIBRARY_PATH ":" "$out/lib:${stdenv.lib.makeLibraryPath [ openssl gcc.cc stdenv.cc.libc libedit qt4 ]}"
+        wrapProgram $file --prefix LD_LIBRARY_PATH ":" "$out/lib:${lib.makeLibraryPath [ openssl gcc.cc stdenv.cc.libc libedit qt4 ]}"
     done
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://www.shrew.net/software;
+  meta = with lib; {
+    homepage = "https://www.shrew.net/software";
     description = "IPsec Client for FreeBSD, NetBSD and many Linux based operating systems";
     platforms = platforms.unix;
-    maintainers = [ maintainers.domenkozar ];
+    maintainers = [ ];
     license = licenses.sleepycat;
   };
 }

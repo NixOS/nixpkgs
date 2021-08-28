@@ -1,12 +1,12 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "tinyscheme-${version}";
-  version = "1.41";
+  pname = "tinyscheme";
+  version = "1.42";
 
   src = fetchurl {
-    url = "mirror://sourceforge/tinyscheme/${name}.tar.gz";
-    sha256 = "168rk4zrlhsknbvldq2jsgabpwlqkx6la44gkqmijmf7jhs11h7a";
+    url = "mirror://sourceforge/tinyscheme/${pname}-${version}.tar.gz";
+    sha256 = "sha256-F7Cxv/0i89SdWDPiKhILM5A50s/aC0bW/FHdLwG0B60=";
   };
 
   patchPhase = ''
@@ -19,13 +19,13 @@ stdenv.mkDerivation rec {
     cp scheme $out/bin/tinyscheme
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Lightweight Scheme implementation";
     longDescription = ''
       TinyScheme is a lightweight Scheme interpreter that implements as large a
       subset of R5RS as was possible without getting very large and complicated.
     '';
-    homepage = http://tinyscheme.sourceforge.net/;
+    homepage = "http://tinyscheme.sourceforge.net/";
     license = licenses.bsdOriginal;
     maintainers = [ maintainers.ebzzry ];
     platforms = platforms.unix;

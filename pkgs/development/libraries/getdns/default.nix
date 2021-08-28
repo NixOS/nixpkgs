@@ -1,26 +1,22 @@
-{ stdenv, fetchurl, libtool, unbound, libidn, m4, file
-, openssl, doxygen, autoreconfHook, automake }:
+{ lib, stdenv, fetchurl, unbound, libidn2, openssl, doxygen, cmake }:
 
 stdenv.mkDerivation rec {
   pname = "getdns";
-  name = "${pname}-${version}";
-  version = "1.5.1";
+  version = "1.6.0";
+  versionRewrite = builtins.splitVersion version;
 
   src = fetchurl {
-    url = "https://getdnsapi.net/releases/${pname}-1-5-1/${pname}-${version}.tar.gz";
-    sha256 = "5686e61100599c309ce03535f9899a5a3d94a82cc08d10718e2cd73ad3dc28af";
+    url = "https://getdnsapi.net/releases/${pname}-${
+        builtins.concatStringsSep "-" versionRewrite
+      }/${pname}-${version}.tar.gz";
+    sha256 = "0jhg7258wz287kjymimvdvv04n69lwxdc3sb62l2p453f5s77ra0";
   };
 
-  nativeBuildInputs = [ libtool m4 autoreconfHook automake file ];
+  nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ unbound libidn openssl doxygen ];
+  buildInputs = [ unbound libidn2 openssl doxygen ];
 
-  patchPhase = ''
-    substituteInPlace m4/acx_openssl.m4 \
-      --replace /usr/local/ssl ${openssl.dev}
-    '';
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A modern asynchronous DNS API";
     longDescription = ''
       getdns is an implementation of a modern asynchronous DNS API; the
@@ -32,9 +28,9 @@ stdenv.mkDerivation rec {
       interface that enables end-to-end trust in the DNS architecture, and which will
       inspire application developers to implement innovative security solutions in
       their applications.
-'';
-    homepage = https://getdnsapi.net;
-    maintainers = with maintainers; [ leenaars ];
+    '';
+    homepage = "https://getdnsapi.net";
+    maintainers = with maintainers; [ leenaars ehmry ];
     license = licenses.bsd3;
     platforms = platforms.all;
   };

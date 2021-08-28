@@ -1,14 +1,14 @@
-{ stdenv, lib, fetchurl, pkgconfig, removeReferencesTo
-, libevent, readline, net_snmp, openssl
+{ stdenv, lib, fetchurl, pkg-config, removeReferencesTo
+, libevent, readline, net-snmp, openssl
 }:
 
 stdenv.mkDerivation rec {
-  name = "lldpd-${version}";
-  version = "1.0.3";
+  pname = "lldpd";
+  version = "1.0.11";
 
   src = fetchurl {
-    url = "https://media.luffy.cx/files/lldpd/${name}.tar.gz";
-    sha256 = "0q63wiaan85a6d204jgk87w6dw5c9x0rb2z7pwb580b8a4wyvz1r";
+    url = "https://media.luffy.cx/files/lldpd/${pname}-${version}.tar.gz";
+    sha256 = "sha256-tR0VcA+678t/uFw1BrSdMxc6DxXXAPkz7wRAZ7QtRuQ=";
   };
 
   configureFlags = [
@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
     "--with-systemdsystemunitdir=\${out}/lib/systemd/system"
   ];
 
-  nativeBuildInputs = [ pkgconfig removeReferencesTo ];
-  buildInputs = [ libevent readline net_snmp openssl ];
+  nativeBuildInputs = [ pkg-config removeReferencesTo ];
+  buildInputs = [ libevent readline net-snmp openssl ];
 
   enableParallelBuilding = true;
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "802.1ab implementation (LLDP) to help you locate neighbors of all your equipments";
-    homepage = https://vincentbernat.github.io/lldpd/;
+    homepage = "https://vincentbernat.github.io/lldpd/";
     license = licenses.isc;
     maintainers = with maintainers; [ fpletz ];
     platforms = platforms.linux;

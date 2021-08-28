@@ -178,16 +178,15 @@ in {
 
       serviceConfig = {
         Type = "notify";
-        ExecStart = "${pkgs.etcd.bin}/bin/etcd";
+        ExecStart = "${pkgs.etcd}/bin/etcd";
         User = "etcd";
         LimitNOFILE = 40000;
       };
     };
 
-    environment.systemPackages = [ pkgs.etcdctl ];
+    environment.systemPackages = [ pkgs.etcd ];
 
-    users.users = singleton {
-      name = "etcd";
+    users.users.etcd = {
       uid = config.ids.uids.etcd;
       description = "Etcd daemon user";
       home = cfg.dataDir;

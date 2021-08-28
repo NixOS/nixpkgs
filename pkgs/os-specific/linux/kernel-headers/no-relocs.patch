@@ -1,13 +1,7 @@
-diff --git a/arch/x86/Makefile b/arch/x86/Makefile
-index fad55160dcb9..a48c8331cbb2 100644
 --- a/arch/x86/Makefile
 +++ b/arch/x86/Makefile
-@@ -239,7 +239,7 @@ ifdef CONFIG_RETPOLINE
- endif
- 
+@@ -231,3 +231,3 @@ endif
  archscripts: scripts_basic
 -	$(Q)$(MAKE) $(build)=arch/x86/tools relocs
 +	$(Q)$(MAKE) $(build)=arch/x86/tools
  
- ###
- # Syscall table generation

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, SDL, libGLU_combined, zlib, libpng, libvorbis, libmikmod, SDL_sound } :
+{lib, stdenv, fetchurl, SDL, libGLU, libGL, zlib, libpng, libvorbis, libmikmod, SDL_sound } :
 
 stdenv.mkDerivation rec {
   name = "gltron-0.70";
@@ -17,13 +17,13 @@ stdenv.mkDerivation rec {
   # The build fails, unless we disable the default -Wall -Werror
   configureFlags = [ "--disable-warn" ];
 
-  buildInputs = [ SDL libGLU_combined zlib libpng libvorbis libmikmod SDL_sound ];
+  buildInputs = [ SDL libGLU libGL zlib libpng libvorbis libmikmod SDL_sound ];
 
   meta = {
-    homepage = http://www.gltron.org/;
+    homepage = "http://www.gltron.org/";
     description = "Game based on the movie Tron";
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [viric];
+    platforms = with lib.platforms; linux;
   };
 }

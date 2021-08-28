@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, emacs }:
+{ fetchurl, lib, stdenv, emacs }:
 
 stdenv.mkDerivation rec {
   name = "idutils-4.6";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
        sed -i '/gets is a security hole/d' lib/stdio.in.h
     '';
 
-  buildInputs = stdenv.lib.optional stdenv.isLinux emacs;
+  buildInputs = lib.optional stdenv.isLinux emacs;
 
   doCheck = !stdenv.isDarwin;
 
@@ -45,10 +45,11 @@ stdenv.mkDerivation rec {
       contents of certain character strings.
     '';
 
-    homepage = https://www.gnu.org/software/idutils/;
-    license = stdenv.lib.licenses.gpl3Plus;
+    homepage = "https://www.gnu.org/software/idutils/";
+    license = lib.licenses.gpl3Plus;
 
     maintainers = [ ];
-    platforms = stdenv.lib.platforms.all;
+    platforms = lib.platforms.all;
+    broken = true;
   };
 }

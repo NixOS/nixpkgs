@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub, zip, love, lua, makeWrapper, makeDesktopItem }:
+{ lib, stdenv, fetchurl, fetchFromGitHub, zip, love, lua, makeWrapper, makeDesktopItem }:
 
 let
   pname = "orthorobot";
@@ -11,8 +11,8 @@ let
 
   desktopItem = makeDesktopItem {
     name = "orthorobot";
-    exec = "${pname}";
-    icon = "${icon}";
+    exec = pname;
+    icon = icon;
     comment = "Robot game";
     desktopName = "Orthorobot";
     genericName = "orthorobot";
@@ -21,7 +21,7 @@ let
 
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "${pname}-${version}";
 
   src = fetchFromGitHub {
@@ -46,12 +46,12 @@ stdenv.mkDerivation rec {
     chmod +x $out/bin/${pname}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Recharge the robot";
     maintainers = with maintainers; [ leenaars ];
     platforms = platforms.linux;
     license = licenses.free;
-    downloadPage = http://stabyourself.net/orthorobot/;
+    downloadPage = "http://stabyourself.net/orthorobot/";
   };
 
 }

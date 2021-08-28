@@ -11,27 +11,6 @@ let
 
   cfg = config.programs.bash;
 
-  bashCompletion = optionalString cfg.enableCompletion ''
-    # Check whether we're running a version of Bash that has support for
-    # programmable completion. If we do, enable all modules installed in
-    # the system and user profile in obsolete /etc/bash_completion.d/
-    # directories. Bash loads completions in all
-    # $XDG_DATA_DIRS/bash-completion/completions/
-    # on demand, so they do not need to be sourced here.
-    if shopt -q progcomp &>/dev/null; then
-      . "${pkgs.bash-completion}/etc/profile.d/bash_completion.sh"
-      nullglobStatus=$(shopt -p nullglob)
-      shopt -s nullglob
-      for p in $NIX_PROFILES; do
-        for m in "$p/etc/bash_completion.d/"*; do
-          . $m
-        done
-      done
-      eval "$nullglobStatus"
-      unset nullglobStatus p m
-    fi
-  '';
-
   bashAliases = concatStringsSep "\n" (
     mapAttrsFlatten (k: v: "alias ${k}=${escapeShellArg v}")
       (filterAttrs (k: v: v != null) cfg.shellAliases)
@@ -40,6 +19,10 @@ let
 in
 
 {
+  imports = [
+    (mkRemovedOptionModule [ "programs" "bash" "enable" ] "")
+  ];
+
   options = {
 
     programs.bash = {
@@ -98,7 +81,7 @@ in
           if [ "$TERM" != "dumb" -o -n "$INSIDE_EMACS" ]; then
             PROMPT_COLOR="1;31m"
             let $UID && PROMPT_COLOR="1;32m"
-            if [ -n "$INSIDE_EMACS" ]; then
+            if [ -n "$INSIDE_EMACS" -o "$TERM" == "eterm" -o "$TERM" == "eterm-color" ]; then
               # Emacs term mode doesn't support xterm title escape sequence (\e]0;)
               PS1="\n\[\033[$PROMPT_COLOR\][\u@\h:\w]\\$\[\033[0m\] "
             else
@@ -115,12 +98,13 @@ in
         type = types.lines;
       };
 
-      enableCompletion = mkOption {
-        default = true;
+      promptPluginInit = mkOption {
+        default = "";
         description = ''
-          Enable Bash completion for all interactive bash shells.
+          Shell script code used to initialise bash prompt plugins.
         '';
-        type = types.bool;
+        type = types.lines;
+        internal = true;
       };
 
     };
@@ -151,7 +135,7 @@ in
         set +h
 
         ${cfg.promptInit}
-        ${bashCompletion}
+        ${cfg.promptPluginInit}
         ${bashAliases}
 
         ${cfge.interactiveShellInit}
@@ -159,7 +143,7 @@ in
 
     };
 
-    environment.etc."profile".text =
+    environment.etc.profile.text =
       ''
         # /etc/profile: DO NOT EDIT -- this file has been generated automatically.
         # This file is read for login shells.
@@ -184,7 +168,7 @@ in
         fi
       '';
 
-    environment.etc."bashrc".text =
+    environment.etc.bashrc.text =
       ''
         # /etc/bashrc: DO NOT EDIT -- this file has been generated automatically.
 
@@ -212,7 +196,7 @@ in
 
     # Configuration for readline in bash. We use "option default"
     # priority to allow user override using both .text and .source.
-    environment.etc."inputrc".source = mkOptionDefault ./inputrc;
+    environment.etc.inputrc.source = mkOptionDefault ./inputrc;
 
     users.defaultUserShell = mkDefault pkgs.bashInteractive;
 
@@ -220,9 +204,6 @@ in
       "/etc/bash_completion.d"
       "/share/bash-completion"
     ];
-
-    environment.systemPackages = optional cfg.enableCompletion
-      pkgs.nix-bash-completions;
 
     environment.shells =
       [ "/run/current-system/sw/bin/bash"

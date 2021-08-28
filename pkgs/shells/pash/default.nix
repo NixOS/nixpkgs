@@ -1,9 +1,9 @@
-{ stdenv, fetchFromGitHub, buildDotnetPackage }:
+{ lib, fetchFromGitHub, buildDotnetPackage }:
 
-buildDotnetPackage rec {
+buildDotnetPackage {
   baseName = "pash";
   version = "git-2016-07-06";
-  
+
   src = fetchFromGitHub {
     owner = "Pash-Project";
     repo = "Pash";
@@ -15,9 +15,9 @@ buildDotnetPackage rec {
 
   outputFiles = [ "Source/PashConsole/bin/Release/*" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An open source implementation of Windows PowerShell";
-    homepage = https://github.com/Pash-Project/Pash;
+    homepage = "https://github.com/Pash-Project/Pash";
     maintainers = [ maintainers.fornever maintainers.vrthra ];
     platforms = platforms.all;
     license = with licenses; [ bsd3 gpl3 ];

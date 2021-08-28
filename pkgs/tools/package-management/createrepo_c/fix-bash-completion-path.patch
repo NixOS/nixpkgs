@@ -1,11 +1,11 @@
---- createrepo_c-0.10.0-src.orig/CMakeLists.txt	2017-03-19 11:01:02.703173617 +0100
-+++ createrepo_c-0.10.0-src/CMakeLists.txt	2017-03-19 11:02:38.617448248 +0100
-@@ -100,7 +100,7 @@
- 
- pkg_check_modules(BASHCOMP bash-completion)
- if (BASHCOMP_FOUND)
--    execute_process(COMMAND ${PKG_CONFIG_EXECUTABLE} --variable=completionsdir bash-completion OUTPUT_VARIABLE BASHCOMP_DIR OUTPUT_STRIP_TRAILING_WHITESPACE)
-+    SET(BASHCOMP_DIR "@BASHCOMP_DIR@")
-     message("Bash completion directory: ${BASHCOMP_DIR}")
-     INSTALL(FILES createrepo_c.bash DESTINATION ${BASHCOMP_DIR} RENAME createrepo_c)
-     INSTALL(CODE "
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -117,7 +117,7 @@ OPTION(ENABLE_BASHCOMP "Install Bash autocompletions?" ON)
+ IF (ENABLE_BASHCOMP)
+     pkg_check_modules(BASHCOMP bash-completion)
+     IF (BASHCOMP_FOUND)
+-        execute_process(COMMAND ${PKG_CONFIG_EXECUTABLE} --variable=completionsdir bash-completion OUTPUT_VARIABLE BASHCOMP_DIR OUTPUT_STRIP_TRAILING_WHITESPACE)
++        SET(BASHCOMP_DIR "@BASHCOMP_DIR@")
+         message("Bash completion directory: ${BASHCOMP_DIR}")
+         INSTALL(FILES createrepo_c.bash DESTINATION ${BASHCOMP_DIR} RENAME createrepo_c)
+         INSTALL(CODE "

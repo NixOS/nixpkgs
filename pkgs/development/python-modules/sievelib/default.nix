@@ -12,8 +12,14 @@ buildPythonPackage rec {
 
   patches = [
     (fetchpatch {
+      name = "pip-10-pip-req.patch";
       url = "https://github.com/tonioo/sievelib/commit/1deef0e2bf039a0e817ea6f19aaf1947dc9fafbc.patch";
       sha256 = "0vaj73mcij9dism8vfaai82irh8j1b2n8gf9jl1a19d2l26jrflk";
+    })
+    (fetchpatch {
+      name = "requirements-in-setup-py.patch";
+      url = "https://github.com/tonioo/sievelib/commit/91f40ec226ea288e98379da01672a46dabd89fc9.patch";
+      sha256 = "0hph89xn16r353rg6f05bh0cgigmwdc736bya089qc03jhssrgns";
     })
   ];
 
@@ -23,7 +29,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Client-side Sieve and Managesieve library written in Python";
-    homepage    = https://github.com/tonioo/sievelib;
+    homepage    = "https://github.com/tonioo/sievelib";
     license     = lib.licenses.mit;
     maintainers = with lib.maintainers; [ leenaars ];
     longDescription = ''

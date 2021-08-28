@@ -1,8 +1,8 @@
-{ config, stdenv, fetchurl, pkgconfig, freetype, yasm, ffmpeg
+{ config, lib, stdenv, fetchurl, pkg-config, freetype, yasm, ffmpeg
 , aalibSupport ? true, aalib ? null
 , fontconfigSupport ? true, fontconfig ? null, freefont_ttf ? null
 , fribidiSupport ? true, fribidi ? null
-, x11Support ? true, libX11 ? null, libXext ? null, libGLU_combined ? null
+, x11Support ? true, libX11 ? null, libXext ? null, libGLU, libGL ? null
 , xineramaSupport ? true, libXinerama ? null
 , xvSupport ? true, libXv ? null
 , alsaSupport ? stdenv.isLinux, alsaLib ? null
@@ -21,6 +21,7 @@
 , jackaudioSupport ? false, libjack2 ? null
 , pulseSupport ? config.pulseaudio or false, libpulseaudio ? null
 , bs2bSupport ? false, libbs2b ? null
+, v4lSupport ? false, libv4l ? null
 # For screenshots
 , libpngSupport ? true, libpng ? null
 , libjpegSupport ? true, libjpeg ? null
@@ -32,7 +33,7 @@
 assert fontconfigSupport -> (fontconfig != null);
 assert (!fontconfigSupport) -> (freefont_ttf != null);
 assert fribidiSupport -> (fribidi != null);
-assert x11Support -> (libX11 != null && libXext != null && libGLU_combined != null);
+assert x11Support -> (libX11 != null && libXext != null && libGLU != null && libGL != null);
 assert xineramaSupport -> (libXinerama != null && x11Support);
 assert xvSupport -> (libXv != null && x11Support);
 assert alsaSupport -> alsaLib != null;
@@ -53,26 +54,28 @@ assert pulseSupport -> libpulseaudio != null;
 assert bs2bSupport -> libbs2b != null;
 assert libpngSupport -> libpng != null;
 assert libjpegSupport -> libjpeg != null;
+assert v4lSupport -> libv4l != null;
 
 let
 
   codecs_src =
     let
-      dir = http://www.mplayerhq.hu/MPlayer/releases/codecs/;
+      dir = "http://www.mplayerhq.hu/MPlayer/releases/codecs/";
+      version = "20071007";
     in
     if stdenv.hostPlatform.system == "i686-linux" then fetchurl {
-      url = "${dir}/essential-20071007.tar.bz2";
+      url = "${dir}/essential-${version}.tar.bz2";
       sha256 = "18vls12n12rjw0mzw4pkp9vpcfmd1c21rzha19d7zil4hn7fs2ic";
     } else if stdenv.hostPlatform.system == "x86_64-linux" then fetchurl {
-      url = "${dir}/essential-amd64-20071007.tar.bz2";
+      url = "${dir}/essential-amd64-${version}.tar.bz2";
       sha256 = "13xf5b92w1ra5hw00ck151lypbmnylrnznq9hhb0sj36z5wz290x";
     } else if stdenv.hostPlatform.system == "powerpc-linux" then fetchurl {
-      url = "${dir}/essential-ppc-20071007.tar.bz2";
+      url = "${dir}/essential-ppc-${version}.tar.bz2";
       sha256 = "18mlj8dp4wnz42xbhdk1jlz2ygra6fbln9wyrcyvynxh96g1871z";
     } else null;
 
   codecs = if codecs_src != null then stdenv.mkDerivation {
-    name = "MPlayer-codecs-essential-20071007";
+    pname = "MPlayer-codecs-essential";
 
     src = codecs_src;
 
@@ -81,7 +84,7 @@ let
       cp -prv * $out
     '';
 
-    meta.license = stdenv.lib.licenses.unfree;
+    meta.license = lib.licenses.unfree;
   } else null;
 
   crossBuild = stdenv.hostPlatform != stdenv.buildPlatform;
@@ -89,11 +92,12 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "mplayer-1.3.0";
+  pname = "mplayer";
+  version = "1.4";
 
   src = fetchurl {
-    url = "http://www.mplayerhq.hu/MPlayer/releases/MPlayer-1.3.0.tar.xz";
-    sha256 = "0hwqn04bdknb2ic88xd75smffxx63scvz0zvwvjb56nqj9n89l1s";
+    url = "http://www.mplayerhq.hu/MPlayer/releases/MPlayer-${version}.tar.xz";
+    sha256 = "0j5mflr0wnklxsvnpmxvk704hscyn2785hvvihj2i3a7b3anwnc2";
   };
 
   prePatch = ''
@@ -102,14 +106,16 @@ stdenv.mkDerivation rec {
     rm -rf ffmpeg
   '';
 
+  patches = [ ./svn-r38199-ffmpeg44fix.patch ];
+
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ pkgconfig yasm ];
-  buildInputs = with stdenv.lib;
+  nativeBuildInputs = [ pkg-config yasm ];
+  buildInputs = with lib;
     [ freetype ffmpeg ]
     ++ optional aalibSupport aalib
     ++ optional fontconfigSupport fontconfig
     ++ optional fribidiSupport fribidi
-    ++ optionals x11Support [ libX11 libXext libGLU_combined ]
+    ++ optionals x11Support [ libX11 libXext libGLU libGL ]
     ++ optional alsaSupport alsaLib
     ++ optional xvSupport libXv
     ++ optional theoraSupport libtheora
@@ -130,11 +136,12 @@ stdenv.mkDerivation rec {
     ++ optional libpngSupport libpng
     ++ optional libjpegSupport libjpeg
     ++ optional bs2bSupport libbs2b
+    ++ optional v4lSupport libv4l
     ++ (with darwin.apple_sdk.frameworks; optionals stdenv.isDarwin [ Cocoa OpenGL ])
     ;
 
   configurePlatforms = [ ];
-  configureFlags = with stdenv.lib; [
+  configureFlags = with lib; [
     "--enable-freetype"
     (if fontconfigSupport then "--enable-fontconfig" else "--disable-fontconfig")
     (if x11Support then "--enable-x11 --enable-gl" else "--disable-x11 --disable-gl")
@@ -154,6 +161,7 @@ stdenv.mkDerivation rec {
     (if x264Support then "--enable-x264 --disable-x264-lavc" else "--disable-x264 --enable-x264-lavc")
     (if jackaudioSupport then "" else "--disable-jack")
     (if pulseSupport then "--enable-pulse" else "--disable-pulse")
+    (if v4lSupport then "--enable-v4l2 --enable-tv-v4l2" else "--disable-v4l2 --disable-tv-v4l2")
     "--disable-xanim"
     "--disable-ivtv"
     "--disable-xvid --disable-xvid-lavc"
@@ -180,7 +188,7 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     configureFlagsArray+=(
       "--cc=$CC"
-      "--host-cc=$BUILD_CC"
+      "--host-cc=$CC_FOR_BUILD"
       "--as=$AS"
       "--nm=$NM"
       "--ar=$AR"
@@ -193,18 +201,19 @@ stdenv.mkDerivation rec {
     echo CONFIG_MPEGAUDIODSP=yes >> config.mak
   '';
 
-  NIX_LDFLAGS = with stdenv.lib;
+  NIX_LDFLAGS = with lib; toString (
        optional  fontconfigSupport "-lfontconfig"
     ++ optional  fribidiSupport "-lfribidi"
     ++ optionals x11Support [ "-lX11" "-lXext" ]
-    ;
+    ++ [ "-lfreetype" ]
+  );
 
-  installTargets = [ "install" ] ++ stdenv.lib.optional x11Support "install-gui";
+  installTargets = [ "install" ] ++ lib.optional x11Support "install-gui";
 
   enableParallelBuilding = true;
 
   # Provide a reasonable standard font when not using fontconfig. Maybe we should symlink here.
-  postInstall = stdenv.lib.optionalString (!fontconfigSupport)
+  postInstall = lib.optionalString (!fontconfigSupport)
     ''
       mkdir -p $out/share/mplayer
       cp ${freefont_ttf}/share/fonts/truetype/FreeSans.ttf $out/share/mplayer/subfont.ttf
@@ -215,9 +224,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A movie player that supports many video formats";
-    homepage = http://mplayerhq.hu;
+    homepage = "http://mplayerhq.hu";
     license = "GPL";
-    maintainers = [ stdenv.lib.maintainers.eelco ];
-    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
+    maintainers = [ lib.maintainers.eelco ];
+    platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];
   };
 }

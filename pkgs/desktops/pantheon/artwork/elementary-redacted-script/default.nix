@@ -1,6 +1,9 @@
-{ stdenv, fetchFromGitHub, pantheon }:
+{ lib, stdenv
+, fetchFromGitHub
+, pantheon
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "elementary-redacted-script";
   version = "unstable-2016-06-03";
 
@@ -18,9 +21,9 @@ stdenv.mkDerivation rec {
     cp -a truetype/*.ttf $out/share/fonts/truetype/redacted-elementary
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Font for concealing text";
-    homepage = https://github.com/png2378/redacted-elementary;
+    homepage = "https://github.com/png2378/redacted-elementary";
     license = licenses.ofl;
     maintainers = pantheon.maintainers;
     platforms = platforms.linux;

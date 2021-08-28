@@ -20,8 +20,8 @@ let
     wildcard=YES
     quiet=${boolToStr cfg.quiet}
     verbose=${boolToStr cfg.verbose}
-    ${lib.concatStringsSep "," cfg.domains}
     ${cfg.extraConfig}
+    ${lib.concatStringsSep "," cfg.domains}
   '';
 
 in
@@ -29,6 +29,14 @@ in
 with lib;
 
 {
+
+  imports = [
+    (mkChangedOptionModule [ "services" "ddclient" "domain" ] [ "services" "ddclient" "domains" ]
+      (config:
+        let value = getAttrFromPath [ "services" "ddclient" "domain" ] config;
+        in if value != "" then [ value ] else []))
+    (mkRemovedOptionModule [ "services" "ddclient" "homeDir" ] "")
+  ];
 
   ###### interface
 

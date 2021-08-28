@@ -16,7 +16,7 @@
 # See the NixOS manual for how to run this test:
 # https://nixos.org/nixos/manual/index.html#sec-running-nixos-tests-interactively
 
-import ./make-test.nix ({ pkgs, ...} :
+import ./make-test-python.nix ({ pkgs, ...} :
 
 let
   allowESP = "iptables --insert INPUT --protocol ESP --jump ACCEPT";
@@ -31,7 +31,7 @@ let
   proposals     = [ "aes128-sha256-x25519" ];
 in {
   name = "strongswan-swanctl";
-  meta.maintainers = with pkgs.stdenv.lib.maintainers; [ basvandijk ];
+  meta.maintainers = with pkgs.lib.maintainers; [ basvandijk ];
   nodes = {
 
     alice = { ... } : {
@@ -65,16 +65,16 @@ in {
           enable = true;
           swanctl = {
             connections = {
-              "rw" = {
+              rw = {
                 local_addrs = [ moonIp ];
-                local."main" = {
+                local.main = {
                   auth = "psk";
                 };
-                remote."main" = {
+                remote.main = {
                   auth = "psk";
                 };
                 children = {
-                  "net" = {
+                  net = {
                     local_ts = [ vlan0 ];
                     updown = "${strongswan}/libexec/ipsec/_updown iptables";
                     inherit esp_proposals;
@@ -85,8 +85,8 @@ in {
               };
             };
             secrets = {
-              ike."carol" = {
-                id."main" = carolIp;
+              ike.carol = {
+                id.main = carolIp;
                 inherit secret;
               };
             };
@@ -107,19 +107,19 @@ in {
           enable = true;
           swanctl = {
             connections = {
-              "home" = {
+              home = {
                 local_addrs = [ carolIp ];
                 remote_addrs = [ moonIp ];
-                local."main" = {
+                local.main = {
                   auth = "psk";
                   id = carolIp;
                 };
-                remote."main" = {
+                remote.main = {
                   auth = "psk";
                   id = moonIp;
                 };
                 children = {
-                  "home" = {
+                  home = {
                     remote_ts = [ vlan0 ];
                     start_action = "trap";
                     updown = "${strongswan}/libexec/ipsec/_updown iptables";
@@ -131,8 +131,8 @@ in {
               };
             };
             secrets = {
-              ike."moon" = {
-                id."main" = moonIp;
+              ike.moon = {
+                id.main = moonIp;
                 inherit secret;
               };
             };
@@ -142,7 +142,7 @@ in {
 
   };
   testScript = ''
-    startAll();
-    $carol->waitUntilSucceeds("ping -c 1 alice");
+    start_all()
+    carol.wait_until_succeeds("ping -c 1 alice")
   '';
 })

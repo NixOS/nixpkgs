@@ -1,20 +1,20 @@
-{ stdenv, fetchurl, pkgconfig, cmake
+{ lib, stdenv, fetchurl, pkg-config, cmake
 , perl, gmp, libtap, gperf
 , perlPackages, python3 }:
 
-with stdenv.lib;
-stdenv.mkDerivation rec{
+with lib;
+stdenv.mkDerivation rec {
 
-  name = "freecell-solver-${version}";
+  pname = "freecell-solver";
   version = "4.18.0";
 
   src = fetchurl {
-    url = "https://fc-solve.shlomifish.org/downloads/fc-solve/${name}.tar.xz";
+    url = "https://fc-solve.shlomifish.org/downloads/fc-solve/${pname}-${version}.tar.xz";
     sha256 = "1cmaib69pijmcpvgjvrdry8j4xys8l906l80b8z21vvyhdwrfdnn";
   };
 
   nativeBuildInputs = [
-    cmake perl pkgconfig
+    cmake perl pkg-config
   ] ++ (with perlPackages; TaskFreecellSolverTesting.buildInputs ++ [
     GamesSolitaireVerify StringShellQuote TaskFreecellSolverTesting TemplateToolkit
   ]);
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec{
       Off, Forecell, and Seahaven Towers, as well as Simple Simon
       boards.
     '';
-    homepage = https://fc-solve.shlomifish.org/;
+    homepage = "https://fc-solve.shlomifish.org/";
     license = licenses.mit;
     maintainers = [ maintainers.AndersonTorres ];
     platforms = platforms.unix;

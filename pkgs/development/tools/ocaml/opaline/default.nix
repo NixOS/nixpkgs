@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, ocamlPackages }:
+{ lib, stdenv, fetchFromGitHub, ocamlPackages }:
 
 stdenv.mkDerivation rec {
   version = "0.3.2";
-  name = "opaline-${version}";
+  pname = "opaline";
 
   src = fetchFromGitHub {
     owner = "jaapb";
@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "OPAm Light INstaller Engine";
-    license = stdenv.lib.licenses.mit;
-    maintainers = [ stdenv.lib.maintainers.vbgl ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.vbgl ];
     inherit (src.meta) homepage;
     inherit (ocamlPackages.ocaml.meta) platforms;
   };

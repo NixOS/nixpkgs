@@ -10,7 +10,7 @@ fetchzip {
   sha256 = "1pqyj5r5jc7dk8yyzl7i6qq2m9zvahcjj49a66wwzdby5zyw8dqv";
 
   meta = with lib; {
-    homepage = https://bitbucket.org/OorNaattaan/sampradaya/;
+    homepage = "https://bitbucket.org/OorNaattaan/sampradaya/";
     description = "Unicode-compliant Grantha font";
     maintainers = with maintainers; [ mathnerd314 ];
     license = licenses.ofl; # See font metadata

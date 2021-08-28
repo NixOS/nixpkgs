@@ -7,17 +7,26 @@ with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "mycli";
-  version = "1.19.0";
+  version = "1.24.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0x5vzl4vvirqy03fnjwkamhzrqkknlajamwz1rmbnqh4bfmijh9m";
+    sha256 = "sha256-dI2Yvj2llI9TlMFbs35ijYeFuGqoTovZyRh+ILhNMmY=";
   };
 
-  patches = [ ./fix-tests.patch ];
-
   propagatedBuildInputs = [
-    pymysql configobj sqlparse prompt_toolkit pygments click pycrypto cli-helpers
+    cli-helpers
+    click
+    configobj
+    importlib-resources
+    paramiko
+    prompt_toolkit
+    pyaes
+    pycrypto
+    pygments
+    pymysql
+    pyperclip
+    sqlparse
   ];
 
   checkInputs = [ pytest mock glibcLocales ];
@@ -26,17 +35,25 @@ buildPythonApplication rec {
     export HOME=.
     export LC_ALL="en_US.UTF-8"
 
-    py.test
+    py.test \
+      --ignore=mycli/packages/paramiko_stub/__init__.py
   '';
 
-  meta = {
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "sqlparse>=0.3.0,<0.4.0" "sqlparse" \
+      --replace "importlib_resources >= 5.0.0" "importlib_resources"
+  '';
+
+  meta = with lib; {
     inherit version;
     description = "Command-line interface for MySQL";
     longDescription = ''
       Rich command-line interface for MySQL with auto-completion and
       syntax highlighting.
     '';
-    homepage = http://mycli.net;
-    license = lib.licenses.bsd3;
+    homepage = "http://mycli.net";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ jojosch ];
   };
 }

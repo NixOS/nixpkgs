@@ -1,57 +1,44 @@
-{ stdenv
+{ lib
 , buildPythonPackage
-, pathlib
+, isPy27
 , fetchPypi
+, imageio-ffmpeg
+, numpy
 , pillow
 , psutil
-, imageio-ffmpeg
-, pytest
-, numpy
-, isPy3k
-, ffmpeg
-, futures
-, enum34
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "imageio";
-  version = "2.5.0";
+  version = "2.9.0";
+  disabled = isPy27;
 
   src = fetchPypi {
-    sha256 = "1bdcrr5190jvk0msw2lswj4pbdhrcggjpj8m6q2a2mrxzjnmmrj2";
+    sha256 = "52ddbaeca2dccf53ba2d6dec5676ca7bc3b2403ef8b37f7da78b7654bb3e10f0";
     inherit pname version;
   };
 
-  checkInputs = [ pytest psutil ] ++ stdenv.lib.optionals isPy3k [
-    imageio-ffmpeg ffmpeg
-    ];
-  propagatedBuildInputs = [ numpy pillow ] ++ stdenv.lib.optionals (!isPy3k) [
-    futures
-    enum34
-    pathlib
+  propagatedBuildInputs = [
+    imageio-ffmpeg
+    numpy
+    pillow
   ];
 
-  checkPhase = ''
+  checkInputs = [
+    psutil
+    pytestCheckHook
+  ];
+
+  preCheck = ''
     export IMAGEIO_USERDIR="$TMP"
     export IMAGEIO_NO_INTERNET="true"
     export HOME="$(mktemp -d)"
-    py.test
   '';
 
-  # For some reason, importing imageio also imports xml on Nix, see
-  # https://github.com/imageio/imageio/issues/395
-
-  # Also, there are tests that test the downloading of ffmpeg if it's not installed.
-  # "Uncomment" those by renaming.
-  postPatch = ''
-    substituteInPlace tests/test_meta.py --replace '"urllib",' "\"urllib\",\"xml\","
-    substituteInPlace tests/test_ffmpeg.py --replace 'test_get_exe_installed' 'get_exe_installed'
-  '';
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library for reading and writing a wide range of image, video, scientific, and volumetric data formats";
-    homepage = http://imageio.github.io/;
+    homepage = "http://imageio.github.io/";
     license = licenses.bsd2;
   };
-
 }

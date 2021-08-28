@@ -1,39 +1,39 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, bash, go-bindata}:
+{ lib, fetchzip, buildGoModule, go-bindata, nixosTests }:
 
-buildGoPackage rec {
-  name = "traefik-${version}";
-  version = "1.7.10";
+buildGoModule rec {
+  pname = "traefik";
+  version = "2.4.13";
 
-  goPackagePath = "github.com/containous/traefik";
-
-  src = fetchFromGitHub {
-    owner = "containous";
-    repo = "traefik";
-    rev = "v${version}";
-    sha256 = "1bfnwrwr27hywlv09a4z8ma70af6p6l3jcdpf8wg3aw5brznv9cq";
+  src = fetchzip {
+    url = "https://github.com/traefik/traefik/releases/download/v${version}/traefik-v${version}.src.tar.gz";
+    sha256 = "sha256-kGCzw8B7fCh6oh0ziB1eBedWEeGOBJVBvUf++TK/Lo0=";
+    stripRoot = false;
   };
 
-  buildInputs = [ go-bindata bash ];
+  vendorSha256 = "sha256-jn4Ud+MrX7no+s69LAAbDOoFg1yIQ2lmoy8r37JIVz8=";
 
-  buildPhase = ''
-    runHook preBuild
-    (
-      cd go/src/github.com/containous/traefik
-      bash ./script/make.sh generate
+  doCheck = false;
 
-      CODENAME=$(awk -F "=" '/CODENAME=/ { print $2}' script/binary)
-      go build -ldflags "\
-        -X github.com/containous/traefik/version.Version=${version} \
-        -X github.com/containous/traefik/version.Codename=$CODENAME \
-      " -a -o $bin/bin/traefik ./cmd/traefik
-    )
-    runHook postBuild
+  subPackages = [ "cmd/traefik" ];
+
+  nativeBuildInputs = [ go-bindata ];
+
+  passthru.tests = { inherit (nixosTests) traefik; };
+
+  preBuild = ''
+    go generate
+
+    CODENAME=$(awk -F "=" '/CODENAME=/ { print $2}' script/binary)
+
+    buildFlagsArray+=("-ldflags=\
+      -X github.com/traefik/traefik/v2/pkg/version.Version=${version} \
+      -X github.com/traefik/traefik/v2/pkg/version.Codename=$CODENAME")
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://traefik.io;
+  meta = with lib; {
+    homepage = "https://traefik.io";
     description = "A modern reverse proxy";
     license = licenses.mit;
-    maintainers = with maintainers; [ hamhut1066 vdemeester ];
+    maintainers = with maintainers; [ vdemeester ];
   };
 }

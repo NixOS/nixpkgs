@@ -1,45 +1,78 @@
-{ stdenv, fetchurl, cmake, qt5, zlib, taglib, pkgconfig, pcre, gst_all_1 }:
+{ mkDerivation
+, cmake
+, fetchFromGitLab
+, nix-update-script
+, gst_all_1
+, lib
+, libpulseaudio
+, ninja
+, pcre
+, pkg-config
+, qtbase
+, qttools
+, taglib
+, zlib
+, python3
+}:
 
 let
-  version = "1.1.1-git1-20180828";
+  py = python3.withPackages (ps: with ps; [
+    pydbus
+  ]);
 in
-stdenv.mkDerivation {
-  name = "sayonara-player-${version}";
+mkDerivation rec {
+  pname = "sayonara";
+  version = "1.6.0-beta7";
 
-  src = fetchurl {
-    url = "https://sayonara-player.com/sw/sayonara-player-${version}.tar.gz";
-    sha256 = "0rvy47qvavrp03zjdrw025dmq9fq5aaii3q1qq8b94byarl0c5kn";
+  src = fetchFromGitLab {
+    owner = "luciocarreras";
+    repo = "sayonara-player";
+    rev = version;
+    sha256 = "14svszfldx32vn937rszd21rgl31vb5kzs0hnrg41ygx0br61rvd";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
-  buildInputs = with qt5; with gst_all_1;
-      [ gstreamer gst-plugins-base gst-plugins-good gst-plugins-ugly
-        pcre qtbase qttools taglib zlib
-      ];
+  nativeBuildInputs = [ cmake ninja pkg-config qttools ];
 
-  # CMake Error at src/GUI/Resources/Icons/cmake_install.cmake:49 (file):
-  #   file cannot create directory: /usr/share/icons.  Maybe need administrative
-  #   privileges.
-  # Call Stack (most recent call first):
-  #   src/GUI/Resources/cmake_install.cmake:50 (include)
-  #   src/GUI/cmake_install.cmake:50 (include)
-  #   src/cmake_install.cmake:59 (include)
-  #   cmake_install.cmake:42 (include)
-  postPatch = ''
-    substituteInPlace src/GUI/Resources/Icons/CMakeLists.txt \
-      --replace "/usr/share" "$out/share"
-  '';
+  buildInputs = [
+    libpulseaudio
+    pcre
+    qtbase
+    taglib
+    zlib
+    py
+  ]
+  ++ (with gst_all_1; [
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+    gst-plugins-ugly
+  ]);
 
-  # [ 65%] Building CXX object src/Components/Engine/CMakeFiles/say_comp_engine.dir/AbstractPipeline.cpp.o
-  # /tmp/nix-build-sayonara-player-1.0.0-git5-20180115.drv-0/sayonara-player/src/Components/Engine/AbstractPipeline.cpp:28:32: fatal error: gst/app/gstappsink.h: No such file or directory
-  #  #include <gst/app/gstappsink.h>
+  # we carry the patched taglib 1.11.1 that doesn't break ogg but sayonara just
+  # checks for the version
+  cmakeFlags = [
+    "-DWITH_SYSTEM_TAGLIB=ON"
+  ];
+
+  # gstreamer cannot otherwise be found
   NIX_CFLAGS_COMPILE = "-I${gst_all_1.gst-plugins-base.dev}/include/gstreamer-1.0";
 
-  meta = with stdenv.lib;
-    { description = "Sayonara music player";
-      homepage = https://sayonara-player.com/;
-      license = licenses.gpl3;
-      platforms = platforms.linux;
-      maintainers = [ maintainers.deepfire ];
+  postInstall = ''
+    qtWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")
+  '';
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = pname;
     };
+  };
+
+  meta = with lib; {
+    description = "Sayonara music player";
+    homepage = "https://sayonara-player.com/";
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ deepfire ];
+    platforms = platforms.unix;
+  };
 }

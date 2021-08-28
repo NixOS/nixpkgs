@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cabextract }:
+{ lib, stdenv, fetchurl, cabextract }:
 
 let
 
@@ -18,7 +18,7 @@ let
   ];
 
   eula = fetchurl {
-    url = http://corefonts.sourceforge.net/eula.htm;
+    url = "http://corefonts.sourceforge.net/eula.htm";
     sha256 = "1aqbcnl032g2hd7iy56cs022g47scb0jxxp3mm206x1yqc90vs1c";
   };
 
@@ -59,10 +59,10 @@ stdenv.mkDerivation {
 
   outputHashAlgo = "sha256";
   outputHashMode = "recursive";
-  outputHash = "0baadsrgpqj15fgjmcn0aim0k0nk7mvivcxinw1zwg61kkcwhalx";
+  outputHash = "089d2m9bvaacj36qdq77pcazji0sbbr796shic3k52cpxkjnzbwh";
 
-  meta = with stdenv.lib; {
-    homepage = http://corefonts.sourceforge.net/;
+  meta = with lib; {
+    homepage = "http://corefonts.sourceforge.net/";
     description = "Microsoft's TrueType core fonts for the Web";
     platforms = platforms.all;
     license = licenses.unfreeRedistributable;

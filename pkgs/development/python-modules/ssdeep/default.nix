@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , pkgs
@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "ssdeep";
-  version = "3.3";
+  version = "3.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "255de1f034652b3ed21920221017e70e570b1644f9436fea120ae416175f4ef5";
+    sha256 = "0px8k4fjbkjb717bg2v7rjhm4iclrxzq7sh0hfqs55f4ddqi0m8v";
   };
 
   buildInputs = [ pkgs.ssdeep pytestrunner ];
@@ -24,8 +24,8 @@ buildPythonPackage rec {
   # tests repository does not include required files
   doCheck = false;
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/DinoTools/python-ssdeep;
+  meta = with lib; {
+    homepage = "https://github.com/DinoTools/python-ssdeep";
     description = "Python wrapper for the ssdeep library";
     license = licenses.lgpl3;
   };

@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, libxcb }:
+{ lib, stdenv, fetchFromGitHub, libxcb }:
 
 stdenv.mkDerivation rec {
-  name = "wmutils-opt-${version}";
+  pname = "wmutils-opt";
   version = "1.0";
 
   src = fetchFromGitHub {
@@ -15,9 +15,9 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "PREFIX=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Optional addons to wmutils";
-    homepage = https://github.com/wmutils/opt;
+    homepage = "https://github.com/wmutils/opt";
     license = licenses.isc;
     maintainers = with maintainers; [ vifino ];
     platforms = platforms.unix;

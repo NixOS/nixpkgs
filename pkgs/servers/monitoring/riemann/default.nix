@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, makeWrapper, jre }:
+{ lib, stdenv, fetchurl, makeWrapper, jre }:
 
 stdenv.mkDerivation rec {
-  name = "riemann-${version}";
-  version = "0.3.2";
+  pname = "riemann";
+  version = "0.3.6";
 
   src = fetchurl {
-    url = "https://github.com/riemann/riemann/releases/download/${version}/${name}.tar.bz2";
-    sha256 = "0vq7yr048sqy8dgs9l3kn1q6s3hhlhs5551hj445cng8z6n4bc4v";
+    url = "https://github.com/riemann/riemann/releases/download/${version}/${pname}-${version}.tar.bz2";
+    sha256 = "0hz69rka4f9h8i8cnswfz80fs0nm7j5436iiyd5i8lzd2avj4bps";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -24,11 +24,11 @@ stdenv.mkDerivation rec {
     wrapProgram "$out/bin/riemann" --prefix PATH : "${jre}/bin"
   '';
 
-  meta = with stdenv.lib; {
-    homepage = http://riemann.io/;
+  meta = with lib; {
+    homepage = "http://riemann.io/";
     description = "A network monitoring system";
     license = licenses.epl10;
     platforms = platforms.all;
-    maintainers = [ maintainers.rickynils ];
+    maintainers = [];
   };
 }

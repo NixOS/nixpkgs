@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, ncurses }:
+{ lib, stdenv, fetchFromGitHub, ncurses }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "hackertyper";
   version = "2.1";
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     $out/bin/hackertyper -v
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A C rewrite of hackertyper.net";
     homepage = "https://github.com/Hurricane996/Hackertyper";
     license = licenses.gpl3;

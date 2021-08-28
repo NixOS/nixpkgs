@@ -1,24 +1,36 @@
-{ stdenv
+{ lib
 , buildPythonPackage
+, python
 , fetchPypi
 , pythonOlder
+, django
+, mock
+, isort
+, isPy3k
 }:
 
 buildPythonPackage rec {
   pname = "django-taggit";
-  version = "0.23.0";
-  disabled = pythonOlder "2.7";
+  version = "1.3.0";
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a21cbe7e0879f1364eef1c88a2eda89d593bf000ebf51c3f00423c6927075dce";
+    sha256 = "4a833bf71f4c2deddd9745924eee53be1c075d7f0020a06f12e29fa3d752732d";
   };
 
-  doCheck = false;
+  propagatedBuildInputs = [ isort django ];
 
-  meta = with stdenv.lib; {
+  checkInputs = [ mock ];
+  checkPhase = ''
+    # prove we're running tests against installed package, not build dir
+    rm -r taggit
+    ${python.interpreter} -m django test --settings=tests.settings
+  '';
+
+  meta = with lib; {
     description = "django-taggit is a reusable Django application for simple tagging";
-    homepage = https://github.com/alex/django-taggit/tree/master/;
+    homepage = "https://github.com/alex/django-taggit/tree/master/";
     license = licenses.bsd2;
     maintainers = with maintainers; [ desiderius ];
   };

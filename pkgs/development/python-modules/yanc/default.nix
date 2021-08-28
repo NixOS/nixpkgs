@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, pythonOlder, fetchPypi, nose }:
+{ lib, buildPythonPackage, pythonOlder, fetchPypi, nose }:
 
 buildPythonPackage rec {
   pname = "yanc";
@@ -18,9 +18,9 @@ buildPythonPackage rec {
     nosetests .
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Yet another nose colorer";
-    homepage = https://github.com/0compute/yanc;
+    homepage = "https://github.com/0compute/yanc";
     license = licenses.gpl3;
     maintainers = with maintainers; [ jluttine ];
   };

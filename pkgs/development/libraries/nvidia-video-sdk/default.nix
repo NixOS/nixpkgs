@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, unzip }:
+{ lib, stdenv, fetchurl, unzip }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "nvidia-video-sdk-6.0.1";
 
   src = fetchurl {
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "08h1vnqsv22js9v3pyim5yb80z87baxb7s2g5gsvvjax07j7w8h5";
   };
 
-  buildInputs = [ unzip ];
+  nativeBuildInputs = [ unzip ];
 
   # We only need the header files. The library files are
   # in the nvidia_x11 driver.
@@ -18,9 +18,9 @@ stdenv.mkDerivation rec {
     cp -R Samples/common/inc/* $out/include
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The NVIDIA Video Codec SDK";
-    homepage = https://developer.nvidia.com/nvidia-video-codec-sdk;
+    homepage = "https://developer.nvidia.com/nvidia-video-codec-sdk";
     license = licenses.unfree;
   };
 }

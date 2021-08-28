@@ -1,63 +1,92 @@
-{ stdenv, lib, fetchurl, coursier, jdk, jre, python, makeWrapper }:
+{ stdenv
+, fetchurl
+, coursier
+, autoPatchelfHook
+, installShellFiles
+, jre
+, lib
+, zlib
+}:
 
-let
-  baseName = "bloop";
-  version = "1.2.5";
-  deps = stdenv.mkDerivation {
-    name = "${baseName}-deps-${version}";
-    buildCommand = ''
+stdenv.mkDerivation rec {
+  pname = "bloop";
+  version = "1.4.8";
+
+  bloop-coursier-channel = fetchurl {
+    url = "https://github.com/scalacenter/bloop/releases/download/v${version}/bloop-coursier.json";
+    sha256 = "1hfd5gc98bp4p4m85jva2mlkh10q10n9s5136z8620mmjq93rx70";
+  };
+
+  bloop-bash = fetchurl {
+    url = "https://github.com/scalacenter/bloop/releases/download/v${version}/bash-completions";
+    sha256 = "1ldxlqv353gvhdn4yq7z506ywvnjv6fjsi8wigwhzg89876pwsys";
+  };
+
+  bloop-fish = fetchurl {
+    url = "https://github.com/scalacenter/bloop/releases/download/v${version}/fish-completions";
+    sha256 = "1pa8h81l2498q8dbd83fzipr99myjwxpy8xdgzhvqzdmfv6aa4m0";
+  };
+
+  bloop-zsh = fetchurl {
+    url = "https://github.com/scalacenter/bloop/releases/download/v${version}/zsh-completions";
+    sha256 = "1xzg0qfkjdmzm3mvg82mc4iia8cl7b6vbl8ng4ir2xsz00zjrlsq";
+  };
+
+  bloop-coursier = stdenv.mkDerivation rec {
+    name = "${pname}-coursier-${version}";
+
+    platform = if stdenv.isLinux && stdenv.isx86_64 then "x86_64-pc-linux"
+               else if stdenv.isDarwin && stdenv.isx86_64 then "x86_64-apple-darwin"
+               else throw "unsupported platform";
+
+    phases = [ "installPhase" ];
+    installPhase = ''
       export COURSIER_CACHE=$(pwd)
-      ${coursier}/bin/coursier fetch ch.epfl.scala:bloop-frontend_2.12:${version} \
-        -r "bintray:scalameta/maven" \
-        -r "bintray:scalacenter/releases" \
-        -r "https://oss.sonatype.org/content/repositories/staging" > deps
-      mkdir -p $out/share/java
-      cp $(< deps) $out/share/java/
-    '';
+      export COURSIER_JVM_CACHE=$(pwd)
+
+      mkdir channel
+      ln -s ${bloop-coursier-channel} channel/bloop.json
+      ${coursier}/bin/coursier install --install-dir $out --install-platform ${platform} --default-channels=false --channel channel --only-prebuilt=true bloop
+
+      # Remove binary part of the coursier launcher script to make derivation output hash stable
+      sed -i '5,$ d' $out/bloop
+   '';
+
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash     = "19373fyb0g7irrdzb1vsjmyv5xj84qwbcfb6lm076px7wfyn0w1c";
-  };
-in
-stdenv.mkDerivation rec {
-  name = "${baseName}-${version}";
-
-  # Fetched from https://github.com/scalacenter/bloop/releases/download/v${version}/install.py
-  nailgunCommit = "0c325237";
-
-  buildInputs = [ jdk makeWrapper deps ];
-
-  phases = [ "installPhase" ];
-
-  client = fetchurl {
-    url = "https://raw.githubusercontent.com/scalacenter/nailgun/${nailgunCommit}/pynailgun/ng.py";
-    sha256 = "0qjw4nsyb4cxg96jj1yv5c0ivcxvmscxxqfzll5w9p1pjb30bq0n";
+    outputHash = if stdenv.isLinux && stdenv.isx86_64 then "1cs3ng6bj9s7xf6c4xaiqgg5qr34abnipfgc44sy2ljklr7x0jwa"
+      else if stdenv.isDarwin && stdenv.isx86_64 then "0l9vqvzcmxya1s04cps96skw4dslh3i3ks73dl53ing50zb0ga9r"
+      else throw "unsupported platform";
   };
 
-  zshCompletion = fetchurl {
-    url = "https://raw.githubusercontent.com/scalacenter/bloop/v${version}/etc/zsh/_bloop";
-    sha256 = "1id6f1fgy2rk0q5aad6ffivhbxa94fallzsc04l9n0y1s2xdhqpm";
-  };
+  dontUnpack = true;
+  nativeBuildInputs = [ autoPatchelfHook installShellFiles ];
+  buildInputs = [ stdenv.cc.cc.lib zlib ];
+  propagatedBuildInputs = [ jre ];
 
   installPhase = ''
+    export COURSIER_CACHE=$(pwd)
+    export COURSIER_JVM_CACHE=$(pwd)
+
     mkdir -p $out/bin
-    mkdir -p $out/share/zsh/site-functions
+    cp ${bloop-coursier}/bloop $out/bloop
+    cp ${bloop-coursier}/.bloop.aux $out/.bloop.aux
+    ln -s $out/bloop $out/bin/bloop
 
-    cp ${client} $out/bin/blp-client
-    cp ${zshCompletion} $out/share/zsh/site-functions/_bloop
-    chmod +x $out/bin/blp-client
+    # patch the bloop launcher so that it works when symlinked
+    sed "s|\$(dirname \"\$0\")|$out|" -i $out/bloop
 
-    makeWrapper ${jre}/bin/java $out/bin/blp-server \
-      --prefix PATH : ${lib.makeBinPath [ jdk ]} \
-      --add-flags "-cp $CLASSPATH bloop.Server"
-    makeWrapper $out/bin/blp-client $out/bin/bloop \
-      --prefix PATH : ${lib.makeBinPath [ python ]}
+    #Install completions
+    installShellCompletion --name bloop --bash ${bloop-bash}
+    installShellCompletion --name _bloop --zsh ${bloop-zsh}
+    installShellCompletion --name bloop.fish --fish ${bloop-fish}
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://scalacenter.github.io/bloop/;
+  meta = with lib; {
+    homepage = "https://scalacenter.github.io/bloop/";
     license = licenses.asl20;
-    description = "Bloop is a Scala build server and command-line tool to make the compile and test developer workflows fast and productive in a build-tool-agnostic way.";
+    description = "A Scala build server and command-line tool to make the compile and test developer workflows fast and productive in a build-tool-agnostic way";
+    platforms = [ "x86_64-linux" "x86_64-darwin" ];
     maintainers = with maintainers; [ tomahna ];
   };
 }

@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, tcl, tk, libX11, zlib, makeWrapper }:
+{ lib, stdenv, fetchurl, tcl, tk, libX11, zlib, makeWrapper }:
 
-stdenv.mkDerivation rec {
-  name = "scid-${version}";
+stdenv.mkDerivation {
+  pname = "scid";
   version = "4.3";
 
   src = fetchurl {
@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0zb5qp04x8w4gn2kvfdfq2p44kmzfcqn7v167dixz6nlyxg41hrw";
   };
 
-  buildInputs = [ tcl tk libX11 zlib makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ tcl tk libX11 zlib ];
 
   prePatch = ''
     sed -i -e '/^ *set headerPath *{/a ${tcl}/include ${tk}/include' \
@@ -51,7 +52,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Chess database with play and training functionality";
-    homepage = http://scid.sourceforge.net/;
-    license = stdenv.lib.licenses.gpl2;
+    homepage = "http://scid.sourceforge.net/";
+    license = lib.licenses.gpl2;
   };
 }

@@ -1,11 +1,12 @@
-{ stdenv, fetchurl
-, gfortran, openblas
-, mpi ? null, scalapack
+{ lib, stdenv, fetchurl
+, gfortran, blas, lapack, scalapack
+, useMpi ? false
+, mpi
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "4.1-b3";
-  name = "siesta-${version}";
+  pname = "siesta";
 
   src = fetchurl {
     url = "https://launchpad.net/siesta/4.1/4.1-b3/+download/siesta-4.1-b3.tar.gz";
@@ -16,8 +17,8 @@ stdenv.mkDerivation rec {
     inherit mpi;
   };
 
-  buildInputs = [ openblas gfortran ]
-    ++ (stdenv.lib.optionals (mpi != null) [ mpi scalapack ]);
+  buildInputs = [ blas lapack gfortran ]
+    ++ lib.optionals useMpi [ mpi scalapack ];
 
   enableParallelBuilding = true;
 
@@ -29,15 +30,15 @@ stdenv.mkDerivation rec {
     cp gfortran.make arch.make
   '';
 
-  preBuild = if (mpi != null) then ''
+  preBuild = if useMpi then ''
     makeFlagsArray=(
         CC="mpicc" FC="mpifort"
         FPPFLAGS="-DMPI" MPI_INTERFACE="libmpi_f90.a" MPI_INCLUDE="."
-        COMP_LIBS="" LIBS="-lopenblas -lscalapack"
+        COMP_LIBS="" LIBS="-lblas -llapack -lscalapack"
     );
   '' else ''
     makeFlagsArray=(
-      COMP_LIBS="" LIBS="-lopenblas"
+      COMP_LIBS="" LIBS="-lblas -llapack"
     );
   '';
 
@@ -46,7 +47,7 @@ stdenv.mkDerivation rec {
     cp -a siesta $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A first-principles materials simulation code using DFT";
     longDescription = ''
          SIESTA is both a method and its computer program
@@ -61,7 +62,7 @@ stdenv.mkDerivation rec {
          matching the quality of other approaches, such as plane-wave
          and all-electron methods.
       '';
-    homepage = https://www.quantum-espresso.org/;
+    homepage = "https://www.quantum-espresso.org/";
     license = licenses.gpl2;
     platforms = [ "x86_64-linux" ];
     maintainers = [ maintainers.costrouc ];

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , python3Packages
 , python3
 , fetchFromGitHub
@@ -6,8 +6,8 @@
 , makeWrapper
 } :
 
-stdenv.mkDerivation rec {
-  name = "fusee-launcher-${version}";
+stdenv.mkDerivation {
+  pname = "fusee-launcher";
   version = "unstable-2018-07-14";
 
   src = fetchFromGitHub {
@@ -32,8 +32,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ python3 python3Packages.pyusb ];
   pythonPath = with python3Packages; [ pyusb ];
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/Cease-and-DeSwitch/fusee-launcher;
+  meta = with lib; {
+    homepage = "https://github.com/Cease-and-DeSwitch/fusee-launcher";
     description = "Work-in-progress launcher for one of the Tegra X1 bootROM exploits";
     license = licenses.gpl2;
     maintainers = with maintainers; [ pneumaticat ];

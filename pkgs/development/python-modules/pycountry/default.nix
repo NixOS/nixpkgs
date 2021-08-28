@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 ,
@@ -6,15 +6,15 @@
 
 buildPythonPackage rec {
   pname = "pycountry";
-  version = "18.12.8";
+  version = "20.7.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1phn1av57jbm166facjk6r8gw4pf886q4wymjc443k8m5c5h5i4f";
+    sha256 = "0hnbabsmqimx5hqh0jbd2f64i8fhzhhbrvid57048hs5sd9ll241";
   };
 
-  meta = with stdenv.lib; {
-    homepage = https://bitbucket.org/flyingcircus/pycountry;
+  meta = with lib; {
+    homepage = "https://bitbucket.org/flyingcircus/pycountry";
     description = "ISO country, subdivision, language, currency and script definitions and their translations";
     license = licenses.lgpl2;
   };

@@ -1,23 +1,39 @@
-{ lib, buildPythonPackage, fetchPypi
-, cryptography, ecdsa
-, pytestrunner, pytestcov, pytest }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, cryptography
+, ecdsa
+, pytest-cov
+, pytestCheckHook
+, pythonOlder
+}:
 
 buildPythonPackage rec {
-  pname = "PyJWT";
-  version = "1.7.1";
+  pname = "pyjwt";
+  version = "2.1.0";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "8d59a976fb773f3e6a39c85636357c4f0e242707394cadadd9814f5cbaa20e96";
+    pname = "PyJWT";
+    inherit version;
+    sha256 = "sha256-+6ROeJi7yhYKKytQH0koJPyDgkhdOm8Rul0MGTfOYTA=";
   };
 
-  propagatedBuildInputs = [ cryptography ecdsa ];
+  propagatedBuildInputs = [
+    cryptography
+    ecdsa
+  ];
 
-  checkInputs = [ pytestrunner pytestcov pytest ];
+  checkInputs = [
+    pytest-cov
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [ "jwt" ];
 
   meta = with lib; {
     description = "JSON Web Token implementation in Python";
-    homepage = https://github.com/jpadilla/pyjwt;
+    homepage = "https://github.com/jpadilla/pyjwt";
     license = licenses.mit;
     maintainers = with maintainers; [ prikhi ];
   };

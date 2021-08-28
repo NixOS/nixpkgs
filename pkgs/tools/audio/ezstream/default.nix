@@ -1,20 +1,20 @@
-{ stdenv, fetchurl, libiconv, libshout, taglib, libxml2, pkgconfig }:
+{ lib, stdenv, fetchurl, libiconv, libshout, taglib, libxml2, pkg-config }:
 
 stdenv.mkDerivation rec {
-  name = "ezstream-${version}";
+  pname = "ezstream";
   version = "0.6.0";
 
   src = fetchurl {
-    url = "https://ftp.osuosl.org/pub/xiph/releases/ezstream/${name}.tar.gz";
+    url = "https://ftp.osuosl.org/pub/xiph/releases/ezstream/${pname}-${version}.tar.gz";
     sha256 = "f86eb8163b470c3acbc182b42406f08313f85187bd9017afb8b79b02f03635c9";
   };
 
   buildInputs = [ libiconv libshout taglib libxml2 ];
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A command line source client for Icecast media streaming servers";
     longDescription = ''
       Ezstream is a command line source client for Icecast media
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
       from standard input without reencoding and thus requires only
       very little CPU resources.
     '';
-    homepage = http://icecast.org/ezstream/;
+    homepage = "https://icecast.org/ezstream/";
     license = licenses.gpl2;
     maintainers = [ maintainers.barrucadu ];
     platforms = platforms.all;

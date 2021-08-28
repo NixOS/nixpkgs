@@ -1,25 +1,36 @@
-{ stdenv, buildPythonPackage, fetchPypi, pytest, psycopg2, click, sqlparse }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pytestCheckHook
+, psycopg2
+, click
+, configobj
+, sqlparse
+}:
 
 buildPythonPackage rec {
   pname = "pgspecial";
-  version = "1.11.5";
+  version = "1.12.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0yvlxv9vy0hbfgf0xcwl7wh5hg6cl86arsv1ip3kvn9znn6x8kgl";
+    sha256 = "b68feb0005f57861573d3fbb82c5c777950decfbb2d1624af57aec825db02c02";
   };
 
-  checkInputs = [ pytest psycopg2 ];
-  propagatedBuildInputs = [ click sqlparse ];
+  propagatedBuildInputs = [
+    click
+    sqlparse
+    psycopg2
+  ];
 
-  checkPhase = ''
-    find tests -name \*.pyc -delete
-    py.test tests
-  '';
+  checkInputs = [
+    configobj
+    pytestCheckHook
+  ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Meta-commands handler for Postgres Database";
-    homepage = https://pypi.python.org/pypi/pgspecial;
+    homepage = "https://pypi.python.org/pypi/pgspecial";
     license = licenses.bsd3;
   };
 }

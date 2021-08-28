@@ -1,6 +1,6 @@
-{ stdenv, fetchgit }:
+{ lib, stdenv, fetchgit }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "memtest86+";
   version = "5.01-coreboot-002";
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "all" ];
 
-  buildFlags = "memtest.bin";
+  buildFlags = [ "memtest.bin" ];
 
   doCheck = false; # fails
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://www.memtest.org/";
     description = "A tool to detect memory errors";
-    license = stdenv.lib.licenses.gpl2;
+    license = lib.licenses.gpl2;
     platforms = [ "x86_64-linux" "i686-linux" ];
   };
 }

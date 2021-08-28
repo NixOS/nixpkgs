@@ -1,45 +1,41 @@
-{ stdenv, fetchFromGitHub, fetchpatch
-, cmake, pkgconfig, SDL2, SDL, SDL2_ttf, openssl, spice-protocol, fontconfig
-, libX11, freefont_ttf, nettle, libconfig
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, SDL2, SDL2_ttf, spice-protocol
+, fontconfig, libX11, freefont_ttf, nettle, libpthreadstubs, libXau, libXdmcp
+, libXi, libXext, wayland, wayland-protocols, libffi, libGLU, libXScrnSaver
+, expat, libbfd
 }:
 
 stdenv.mkDerivation rec {
-  name = "looking-glass-client-${version}";
-  version = "a12";
+  pname = "looking-glass-client";
+  version = "B3";
 
   src = fetchFromGitHub {
     owner = "gnif";
     repo = "LookingGlass";
     rev = version;
-    sha256 = "0r6bvl9q94039r6ff4f2bg8si95axx9w8bf1h1qr5730d2kv5yxq";
+    sha256 = "1vmabjzn85p0brdian9lbpjq39agzn8k0limn8zjm713lh3n3c0f";
+    fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [
-    SDL SDL2 SDL2_ttf openssl spice-protocol fontconfig
-    libX11 freefont_ttf nettle libconfig cmake
+    SDL2 SDL2_ttf spice-protocol fontconfig libX11 freefont_ttf nettle
+    libpthreadstubs libXau libXdmcp libXi libXext wayland wayland-protocols
+    libffi libGLU libXScrnSaver expat libbfd
   ];
 
   patches = [
-    # Fix obsolete spice header usage. Remove with the next release. See https://github.com/gnif/LookingGlass/pull/126
-    (fetchpatch {
-      url = "https://github.com/gnif/LookingGlass/commit/2567447b24b28458ba0f09c766a643ad8d753255.patch";
-      sha256 = "04j2h75rpxd71szry15f31r6s0kgk96i8q9khdv9q3i2fvkf242n";
-      stripLen = 1;
-    })
+    # error: ‘h’ may be used uninitialized in this function [-Werror=maybe-uninitialized]
+    # Fixed upstream in master in 8771103abbfd04da9787dea760405364af0d82de, but not in B3.
+    # Including our own patch here since upstream commit patch doesnt apply cleanly on B3
+    ./0001-client-all-fix-more-maybe-uninitialized-when-O3-is-i.patch
   ];
-
-  enableParallelBuilding = true;
+  patchFlags = "-p2";
 
   sourceRoot = "source/client";
+  NIX_CFLAGS_COMPILE = "-mavx"; # Fix some sort of AVX compiler problem.
 
-  installPhase = ''
-    mkdir -p $out/bin
-    mv looking-glass-client $out/bin
-  '';
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A KVM Frame Relay (KVMFR) implementation";
     longDescription = ''
       Looking Glass is an open source application that allows the use of a KVM
@@ -48,9 +44,9 @@ stdenv.mkDerivation rec {
       step required to move away from dual booting with other operating systems
       for legacy programs that require high performance graphics.
     '';
-    homepage = https://looking-glass.hostfission.com/;
+    homepage = "https://looking-glass.io/";
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.pneumaticat ];
+    maintainers = with maintainers; [ alexbakker ];
     platforms = [ "x86_64-linux" ];
   };
 }

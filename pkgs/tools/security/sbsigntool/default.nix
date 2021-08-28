@@ -1,10 +1,10 @@
-{ stdenv
-, fetchgit, autoconf, automake, pkgconfig, help2man
+{ lib, stdenv
+, fetchgit, autoconf, automake, pkg-config, help2man
 , openssl, libuuid, gnu-efi, libbfd
 }:
 
-stdenv.mkDerivation rec {
-  name = "sbsigntool-${version}";
+stdenv.mkDerivation {
+  pname = "sbsigntool";
   version = "0.9.1";
 
   src = fetchgit {
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   prePatch = "patchShebangs .";
 
-  nativeBuildInputs = [ autoconf automake pkgconfig help2man ];
+  nativeBuildInputs = [ autoconf automake pkg-config help2man ];
   buildInputs = [ openssl libuuid libbfd gnu-efi ];
 
   configurePhase = ''
@@ -42,9 +42,9 @@ stdenv.mkDerivation rec {
     make install
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tools for maintaining UEFI signature databases";
-    homepage    = http://jk.ozlabs.org/docs/sbkeysync-maintaing-uefi-key-databases;
+    homepage    = "http://jk.ozlabs.org/docs/sbkeysync-maintaing-uefi-key-databases";
     maintainers = [ maintainers.tstrobel ];
     platforms   = [ "x86_64-linux" ]; # Broken on i686
     license     = licenses.gpl3;

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , paste
@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ paste six ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "WSGIProxy gives tools to proxy arbitrary(ish) WSGI requests to other";
     homepage = "http://pythonpaste.org/wsgiproxy/";
     license = licenses.mit;

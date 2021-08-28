@@ -1,24 +1,68 @@
-{ stdenv, fetchPypi, buildPythonPackage
-, urllib3, idna, chardet, certifi
-, pytest }:
+{ lib
+, buildPythonPackage
+, certifi
+, chardet
+, fetchPypi
+, idna
+, pytest-mock
+, pytest-xdist
+, pytestCheckHook
+, urllib3
+, isPy27
+}:
 
 buildPythonPackage rec {
   pname = "requests";
-  version = "2.21.0";
+  version = "2.25.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "502a824f31acdacb3a35b6690b5fbf0bc41d63a24a45c4004352b0242707598e";
+    sha256 = "sha256-J5c91KkEpPE7JjoZyGbBO5KjntHJZGVfAl8/jT11uAQ=";
   };
 
-  nativeBuildInputs = [ pytest ];
-  propagatedBuildInputs = [ urllib3 idna chardet certifi ];
-  # sadly, tests require networking
-  doCheck = false;
+  postPatch = ''
+    # Use latest idna
+    substituteInPlace setup.py --replace ",<3" ""
+  '';
 
-  meta = with stdenv.lib; {
-    description = "An Apache2 licensed HTTP library, written in Python, for human beings";
-    homepage = http://docs.python-requests.org/en/latest/;
+  propagatedBuildInputs = [
+    certifi
+    chardet
+    idna
+    urllib3
+  ];
+
+  checkInputs = [
+    pytest-mock
+    pytest-xdist
+    pytestCheckHook
+  ];
+
+  # AttributeError: 'KeywordMapping' object has no attribute 'get'
+  doCheck = !isPy27;
+
+  disabledTests = [
+    # Disable tests that require network access and use httpbin
+    "requests.api.request"
+    "requests.models.PreparedRequest"
+    "requests.sessions.Session"
+    "requests"
+    "test_redirecting_to_bad_url"
+    "test_requests_are_updated_each_time"
+    "test_should_bypass_proxies_pass_only_hostname"
+    "test_urllib3_pool_connection_closed"
+    "test_urllib3_retries"
+    "test_use_proxy_from_environment"
+    "TestRequests"
+    "TestTimeout"
+  ];
+
+  pythonImportsCheck = [ "requests" ];
+
+  meta = with lib; {
+    description = "Simple HTTP library for Python";
+    homepage = "http://docs.python-requests.org/en/latest/";
     license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
   };
 }

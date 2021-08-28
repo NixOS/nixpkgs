@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, gfortran, perl }:
+{ lib, stdenv, fetchurl, gfortran, perl }:
 
 stdenv.mkDerivation rec {
-  name = "hoppet-${version}";
+  pname = "hoppet";
   version = "1.2.0";
 
   src = fetchurl {
-    url = "https://hoppet.hepforge.org/downloads/${name}.tgz";
+    url = "https://hoppet.hepforge.org/downloads/${pname}-${version}.tgz";
     sha256 = "0j7437rh4xxbfzmkjr22ry34xm266gijzj6mvrq193fcsfzipzdz";
   };
 
@@ -18,10 +18,10 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Higher Order Perturbative Parton Evolution Toolkit";
     license     = licenses.gpl2;
-    homepage    = https://hoppet.hepforge.org;
+    homepage    = "https://hoppet.hepforge.org";
     platforms   = platforms.unix;
     maintainers = with maintainers; [ veprbl ];
   };

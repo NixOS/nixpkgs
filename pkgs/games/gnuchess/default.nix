@@ -1,28 +1,35 @@
-{stdenv, fetchurl, flex}:
+{lib, stdenv, fetchurl, flex, makeWrapper}:
 let
   s = # Generated upstream information
   rec {
     baseName="gnuchess";
-    version="6.2.5";
+    version="6.2.8";
     name="${baseName}-${version}";
     url="mirror://gnu/chess/${name}.tar.gz";
-    sha256="00j8s0npgfdi41a0mr5w9qbdxagdk2v41lcr42rwl1jp6miyk6cs";
+    sha256="0irqb0wl30c2i1rs8f6mm1c89l7l9nxxv7533lr408h1m36lc16m";
   };
   buildInputs = [
     flex
   ];
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   inherit (s) name version;
   src = fetchurl {
     inherit (s) url sha256;
   };
   inherit buildInputs;
+  nativeBuildInputs = [ makeWrapper ];
+
+  postInstall = ''
+    wrapProgram $out/bin/gnuchessx --set PATH "$out/bin"
+    wrapProgram $out/bin/gnuchessu --set PATH "$out/bin"
+  '';
+
   meta = {
     inherit (s) version;
     description = "GNU Chess engine";
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.unix;
-    license = stdenv.lib.licenses.gpl3Plus;
+    maintainers = [lib.maintainers.raskin];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.gpl3Plus;
   };
 }

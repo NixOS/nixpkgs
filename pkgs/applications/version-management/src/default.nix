@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, python, rcs, git, makeWrapper }:
+{ lib, stdenv, fetchurl, python, rcs, git, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "src-${version}";
-  version = "1.26";
+  pname = "src";
+  version = "1.28";
 
   src = fetchurl {
-    url = "http://www.catb.org/~esr/src/${name}.tar.gz";
-    sha256 = "06npsnf2bfjgcs7wilhcqn24zn286nyy4qyp3yp88zapkxzlap23";
+    url = "http://www.catb.org/~esr/src/${pname}-${version}.tar.gz";
+    sha256 = "1fkr5z3mlj13djz9w1sb644wc7r1fywz52qq97byw1yyw0bqyi7f";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
       --suffix PATH ":" "${rcs}/bin"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simple single-file revision control";
     longDescription = ''
       SRC, acronym of Simple Revision Control, is RCS/SCCS reloaded with a

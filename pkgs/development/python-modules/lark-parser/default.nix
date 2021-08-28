@@ -1,28 +1,39 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, python
+, regex
 }:
 
 buildPythonPackage rec {
   pname = "lark-parser";
-  version = "0.7.1";
+  version = "0.11.3";
 
   src = fetchFromGitHub {
     owner = "lark-parser";
     repo = "lark";
     rev = version;
-    sha256 = "17h7s0yc8jyjmlcwsaw93ijl982ws3p8nxif2dc3rv01dqhf0xx1";
+    sha256 = "1ggvlzpdzlrxl46fgi8cfq2rzlwn21shpdkm4pknnhfjlsinv913";
   };
 
-  # tests of Nearley support require js2py
-  preCheck = ''
-    rm -r tests/test_nearley
+  # Optional import, but fixes some re known bugs & allows advanced regex features
+  propagatedBuildInputs = [ regex ];
+
+  checkPhase = ''
+    runHook preCheck
+
+    # Official way to run the tests. Runs unittest internally.
+    # pytest produces issues with some test resource paths (relies on __main__)
+    ${python.interpreter} -m tests
+
+    runHook postCheck
   '';
 
-  meta = {
+  meta = with lib; {
     description = "A modern parsing library for Python, implementing Earley & LALR(1) and an easy interface";
-    homepage = https://github.com/lark-parser/lark;
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ fridh ];
+    homepage = "https://lark-parser.readthedocs.io/";
+    changelog = "https://github.com/lark-parser/lark/releases/tag/${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fridh drewrisinger ];
   };
 }

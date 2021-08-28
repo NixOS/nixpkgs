@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 }:
@@ -12,7 +12,7 @@ buildPythonPackage rec {
     sha256 = "321b033d07f2a4136d3ec762eac9f16a10ccd60f53c0c91af90217ace7ba1f19";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Helpers to pass trusted data to untrusted environments and back";
     homepage = "https://pypi.python.org/pypi/itsdangerous/";
     license = licenses.bsd0;

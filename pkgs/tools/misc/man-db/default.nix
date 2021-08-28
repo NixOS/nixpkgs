@@ -1,33 +1,46 @@
-{ stdenv, fetchurl, pkgconfig, libpipeline, db, groff, libiconv, makeWrapper, buildPackages }:
+{ lib, stdenv, fetchurl, pkg-config, libpipeline, db, groff, libiconv, makeWrapper, buildPackages }:
 
 stdenv.mkDerivation rec {
-  name = "man-db-2.7.5";
+  name = "man-db-2.9.4";
 
   src = fetchurl {
     url = "mirror://savannah/man-db/${name}.tar.xz";
-    sha256 = "056a3il7agfazac12yggcg4gf412yq34k065im0cpfxbcw6xskaw";
+    sha256 = "sha256-tmyZ7frRatkoyIn4fPdjgCY8FgkyPCgLOp5pY/2xZ1Y=";
   };
 
   outputs = [ "out" "doc" ];
   outputMan = "out"; # users will want `man man` to work
 
-  nativeBuildInputs = [ pkgconfig makeWrapper groff ]
-    ++ stdenv.lib.optionals doCheck checkInputs;
+  nativeBuildInputs = [ pkg-config makeWrapper groff ];
   buildInputs = [ libpipeline db groff ]; # (Yes, 'groff' is both native and build input)
   checkInputs = [ libiconv /* for 'iconv' binary */ ];
 
+  patches = [ ./systemwide-man-db-conf.patch ];
+
   postPatch = ''
-    substituteInPlace src/man_db.conf.in \
-      --replace "/usr/local/share" "/run/current-system/sw/share" \
-      --replace "/usr/share" "/run/current-system/sw/share"
+    # Remove all mandatory manpaths. Nixpkgs makes no requirements on
+    # these directories existing.
+    sed -i 's/^MANDATORY_MANPATH/# &/' src/man_db.conf.in
+
+    # Add Nix-related manpaths
+    echo "MANPATH_MAP	/nix/var/nix/profiles/default/bin	/nix/var/nix/profiles/default/share/man" >> src/man_db.conf.in
+
+    # Add mandb locations for the above
+    echo "MANDB_MAP	/nix/var/nix/profiles/default/share/man	/var/cache/man/nixpkgs" >> src/man_db.conf.in
   '';
 
   configureFlags = [
     "--disable-setuid"
+    "--disable-cache-owner"
     "--localstatedir=/var"
-    # Don't try /etc/man_db.conf by default, so we avoid error messages.
-    "--with-config-file=\${out}/etc/man_db.conf"
-    "--with-systemdtmpfilesdir=\${out}/lib/tmpfiles.d"
+    "--with-config-file=${placeholder "out"}/etc/man_db.conf"
+    "--with-systemdtmpfilesdir=${placeholder "out"}/lib/tmpfiles.d"
+    "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
+    "--with-pager=less"
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin [
+    "ac_cv_func__set_invalid_parameter_handler=no"
+    "ac_cv_func_posix_fadvise=no"
+    "ac_cv_func_mempcpy=no"
   ];
 
   preConfigure = ''
@@ -43,7 +56,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  postFixup = stdenv.lib.optionalString (buildPackages.groff != groff) ''
+  postFixup = lib.optionalString (buildPackages.groff != groff) ''
     # Check to make sure none of the outputs depend on build-time-only groff:
     for outName in $outputs; do
       out=''${!outName}
@@ -57,12 +70,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  doCheck = !stdenv.hostPlatform.isMusl; /* iconv binary */
+  doCheck = !stdenv.hostPlatform.isMusl /* iconv binary */ && !stdenv.hostPlatform.isDarwin;
 
-  meta = with stdenv.lib; {
-    homepage = http://man-db.nongnu.org;
+  meta = with lib; {
+    homepage = "http://man-db.nongnu.org";
     description = "An implementation of the standard Unix documentation system accessed using the man command";
     license = licenses.gpl2;
-    platforms = platforms.linux;
+    platforms = lib.platforms.unix;
   };
 }

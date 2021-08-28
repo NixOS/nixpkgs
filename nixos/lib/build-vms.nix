@@ -3,8 +3,10 @@
   minimal ? false
 , # Ignored
   config ? null
-  # Nixpkgs, for qemu, lib and more
-, pkgs
+, # Nixpkgs, for qemu, lib and more
+  pkgs
+, # !!! See comment about args in lib/modules.nix
+  specialArgs ? {}
 , # NixOS configuration to add to the VMs
   extraConfigurations ? []
 }:
@@ -15,9 +17,6 @@ with import ../lib/qemu-flags.nix { inherit pkgs; };
 rec {
 
   inherit pkgs;
-
-  qemu = pkgs.qemu_test;
-
 
   # Build a virtual network from an attribute set `{ machine1 =
   # config1; ... machineN = configN; }', where `machineX' is the
@@ -31,13 +30,19 @@ rec {
     nodes: configurations:
 
     import ./eval-config.nix {
-      inherit system;
+      inherit system specialArgs;
       modules = configurations ++ extraConfigurations;
       baseModules =  (import ../modules/module-list.nix) ++
         [ ../modules/virtualisation/qemu-vm.nix
           ../modules/testing/test-instrumentation.nix # !!! should only get added for automated test runs
           { key = "no-manual"; documentation.nixos.enable = false; }
-          { key = "qemu"; system.build.qemu = qemu; }
+          { key = "no-revision";
+            # Make the revision metadata constant, in order to avoid needless retesting.
+            # The human version (e.g. 21.05-pre) is left as is, because it is useful
+            # for external modules that test with e.g. nixosTest and rely on that
+            # version number.
+            config.system.nixos.revision = mkForce "constant-nixos-revision";
+          }
           { key = "nodes"; _module.args.nodes = nodes; }
         ] ++ optional minimal ../modules/testing/minimal-kernel.nix;
     };
@@ -54,11 +59,11 @@ rec {
 
       machinesNumbered = zipLists machines (range 1 254);
 
-      nodes_ = flip map machinesNumbered (m: nameValuePair m.fst
+      nodes_ = forEach machinesNumbered (m: nameValuePair m.fst
         [ ( { config, nodes, ... }:
             let
               interfacesNumbered = zipLists config.virtualisation.vlans (range 1 255);
-              interfaces = flip map interfacesNumbered ({ fst, snd }:
+              interfaces = forEach interfacesNumbered ({ fst, snd }:
                 nameValuePair "eth${toString snd}" { ipv4.addresses =
                   [ { address = "192.168.${toString fst}.${toString m.snd}";
                       prefixLength = 24;
@@ -67,7 +72,7 @@ rec {
             in
             { key = "ip-address";
               config =
-                { networking.hostName = m.fst;
+                { networking.hostName = mkDefault m.fst;
 
                   networking.interfaces = listToAttrs interfaces;
 
@@ -88,7 +93,7 @@ rec {
                          "${config.networking.hostName}\n"));
 
                   virtualisation.qemu.options =
-                    flip map interfacesNumbered
+                    forEach interfacesNumbered
                       ({ fst, snd }: qemuNICFlags snd fst m.snd);
                 };
             }

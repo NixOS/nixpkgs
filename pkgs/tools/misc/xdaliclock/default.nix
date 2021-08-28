@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, libX11, xorgproto, libXt, libICE, libSM, libXext }:
+{ lib, stdenv, fetchurl, libX11, xorgproto, libXt, libICE, libSM, libXext }:
 
 stdenv.mkDerivation rec {
-  name = "xdaliclock-${version}";
+  pname = "xdaliclock";
   version = "2.44";
 
   src = fetchurl {
-    url="https://www.jwz.org/xdaliclock/${name}.tar.gz";
+    url="https://www.jwz.org/xdaliclock/${pname}-${version}.tar.gz";
     sha256 = "1gsgnsm6ql0mcg9zpdkhws3g23r3a92bc3rpg4qbgbmd02nvj3c0";
   };
 
@@ -19,11 +19,11 @@ stdenv.mkDerivation rec {
     mkdir -vp $out/bin $out/share/man/man1
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A clock application that morphs digits when they are changed";
-    maintainers = with maintainers; [ raskin rycee ];
+    maintainers = with maintainers; [ raskin ];
     platforms = with platforms; linux ++ freebsd;
     license = licenses.free; #TODO BSD on Gentoo, looks like MIT
-    downloadPage = http://www.jwz.org/xdaliclock/;
+    downloadPage = "http://www.jwz.org/xdaliclock/";
   };
 }

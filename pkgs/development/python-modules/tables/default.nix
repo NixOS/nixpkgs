@@ -1,27 +1,38 @@
-{ stdenv, fetchPypi, python, buildPythonPackage
-, cython, bzip2, lzo, numpy, numexpr, hdf5, six, c-blosc }:
+{ lib, fetchPypi, python, buildPythonPackage, isPy38
+, cython, bzip2, lzo, numpy, numexpr, hdf5, six, c-blosc, mock }:
 
 buildPythonPackage rec {
-  version = "3.4.4";
+  version = "3.6.1";
   pname = "tables";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bdc5c073712af2a43babd139c4855fc99496bb2c3f3f5d1b4770a985e6f9ce29";
+    sha256 = "0j8vnxh2m5n0cyk9z3ndcj5n1zj5rdxgc1gb78bqlyn2lyw75aa9";
   };
 
-  buildInputs = [ hdf5 cython bzip2 lzo c-blosc ];
-  propagatedBuildInputs = [ numpy numexpr six ];
+  nativeBuildInputs = [ cython ];
+
+  buildInputs = [ hdf5 bzip2 lzo c-blosc ];
+  propagatedBuildInputs = [ numpy numexpr six mock ];
+
+  # When doing `make distclean`, ignore docs
+  postPatch = ''
+    substituteInPlace Makefile --replace "src doc" "src"
+  '';
+
+  # Regenerate C code with Cython
+  preBuild = ''
+    make distclean
+  '';
 
   # The setup script complains about missing run-paths, but they are
   # actually set.
-  setupPyBuildFlags =
-    [ "--hdf5=${hdf5}"
-      "--lzo=${lzo}"
-      "--bzip2=${bzip2.dev}"
-      "--blosc=${c-blosc}"
-    ];
-
+  setupPyBuildFlags = [
+    "--hdf5=${lib.getDev hdf5}"
+    "--lzo=${lib.getDev lzo}"
+    "--bzip2=${lib.getDev bzip2}"
+    "--blosc=${lib.getDev c-blosc}"
+  ];
   # Run the test suite.
   # It requires the build path to be in the python search path.
   # These tests take quite some time.
@@ -49,9 +60,9 @@ buildPythonPackage rec {
   # Disable tests until the failure described above is fixed.
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Hierarchical datasets for Python";
-    homepage = http://www.pytables.org/;
-    license = stdenv.lib.licenses.bsd2;
+    homepage = "http://www.pytables.org/";
+    license = licenses.bsd2;
   };
 }

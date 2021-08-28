@@ -1,20 +1,20 @@
-{ stdenv, buildPythonPackage, fetchPypi, fetchpatch, python
+{ lib, stdenv, buildPythonPackage, fetchPypi, fetchpatch, python
 , unittest2, scripttest, pytz, mock
 , testtools, pbr, tempita, decorator, sqlalchemy
 , six, sqlparse, testrepository
 }:
 buildPythonPackage rec {
   pname = "sqlalchemy-migrate";
-  version = "0.12.0";
+  version = "0.13.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1bngmbcry97kwhrxwm0d74zg9qg7gmiws6rd78xshyfgpcqdmylc";
+    sha256 = "1y0lcqii7b4vp7yh9dyxrl4i77hi8jkkw7d06mgdw2h458ljxh0b";
   };
 
   # See: https://review.openstack.org/#/c/608382/
   patches = [ (fetchpatch {
-    url = https://github.com/openstack/sqlalchemy-migrate/pull/18.patch;
+    url = "https://github.com/openstack/sqlalchemy-migrate/pull/18.patch";
     sha256 = "1qyfq2m7w7xqf0r9bc2x42qcra4r9k9l9g1jy5j0fvlb6bvvjj07";
   }) ];
 
@@ -40,8 +40,8 @@ buildPythonPackage rec {
     ${python.interpreter} setup.py test
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/openstack/sqlalchemy-migrate;
+  meta = with lib; {
+    homepage = "https://github.com/openstack/sqlalchemy-migrate";
     description = "Schema migration tools for SQLAlchemy";
     license = licenses.asl20;
     maintainers = with maintainers; [ makefu ];

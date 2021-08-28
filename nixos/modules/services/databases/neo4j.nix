@@ -16,14 +16,14 @@ let
       ''}
       dbms.ssl.policy.${name}.client_auth=${conf.clientAuth}
       ${if length (splitString "/" conf.privateKey) > 1 then
-        ''dbms.ssl.policy.${name}.private_key=${conf.privateKey}''
+        "dbms.ssl.policy.${name}.private_key=${conf.privateKey}"
       else
-        ''dbms.ssl.policy.${name}.private_key=${conf.baseDirectory}/${conf.privateKey}''
+        "dbms.ssl.policy.${name}.private_key=${conf.baseDirectory}/${conf.privateKey}"
       }
       ${if length (splitString "/" conf.privateKey) > 1 then
-        ''dbms.ssl.policy.${name}.public_certificate=${conf.publicCertificate}''
+        "dbms.ssl.policy.${name}.public_certificate=${conf.publicCertificate}"
       else
-        ''dbms.ssl.policy.${name}.public_certificate=${conf.baseDirectory}/${conf.publicCertificate}''
+        "dbms.ssl.policy.${name}.public_certificate=${conf.baseDirectory}/${conf.publicCertificate}"
       }
       dbms.ssl.policy.${name}.revoked_dir=${conf.revokedDir}
       dbms.ssl.policy.${name}.tls_versions=${concatStringsSep "," conf.tlsVersions}
@@ -102,6 +102,18 @@ let
   '';
 
 in {
+
+  imports = [
+    (mkRenamedOptionModule [ "services" "neo4j" "host" ] [ "services" "neo4j" "defaultListenAddress" ])
+    (mkRenamedOptionModule [ "services" "neo4j" "listenAddress" ] [ "services" "neo4j" "defaultListenAddress" ])
+    (mkRenamedOptionModule [ "services" "neo4j" "enableBolt" ] [ "services" "neo4j" "bolt" "enable" ])
+    (mkRenamedOptionModule [ "services" "neo4j" "enableHttps" ] [ "services" "neo4j" "https" "enable" ])
+    (mkRenamedOptionModule [ "services" "neo4j" "certDir" ] [ "services" "neo4j" "directories" "certificates" ])
+    (mkRenamedOptionModule [ "services" "neo4j" "dataDir" ] [ "services" "neo4j" "directories" "home" ])
+    (mkRemovedOptionModule [ "services" "neo4j" "port" ] "Use services.neo4j.http.listenAddress instead.")
+    (mkRemovedOptionModule [ "services" "neo4j" "boltPort" ] "Use services.neo4j.bolt.listenAddress instead.")
+    (mkRemovedOptionModule [ "services" "neo4j" "httpsPort" ] "Use services.neo4j.https.listenAddress instead.")
+  ];
 
   ###### interface
 
@@ -638,8 +650,7 @@ in {
 
       environment.systemPackages = [ cfg.package ];
 
-      users.users = singleton {
-        name = "neo4j";
+      users.users.neo4j = {
         uid = config.ids.uids.neo4j;
         description = "Neo4j daemon user";
         home = cfg.directories.home;

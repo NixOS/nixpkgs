@@ -1,32 +1,32 @@
 {
   "linux-386": {
     "sys": "linux-386",
-    "url": "https://bin.equinox.io/a/6i2VnqLBZqg/ngrok-2.3.29-linux-386",
-    "sha256": "c0859f783e66a661dc1490e0cec95dfcce0ae77deaf0aa1838613afcbd8f9451",
-    "version": "2.3.29"
+    "url": "https://bin.equinox.io/a/bjFaKy3TSAg/ngrok-2.3.35-linux-386",
+    "sha256": "1fdd1c057c3c31044400ef6ade20ad3f10bce415ad33ccfb4bc2fd83bb36f62f",
+    "version": "2.3.35"
   },
   "linux-amd64": {
     "sys": "linux-amd64",
-    "url": "https://bin.equinox.io/a/6ws4BqFTLXR/ngrok-2.3.29-linux-amd64",
-    "sha256": "625e85af6d366be4cc54ba296a6e66d3311b99db36e6ea5fe7f88941874daabb",
-    "version": "2.3.29"
+    "url": "https://bin.equinox.io/a/52fZaxjGg9n/ngrok-2.3.35-linux-amd64",
+    "sha256": "b456608239cdf4b5119916c62a87640667d1cb1900c53faed89e3dacc1fe4679",
+    "version": "2.3.35"
   },
   "linux-arm": {
     "sys": "linux-arm",
-    "url": "https://bin.equinox.io/a/3Qx4EX7AtXt/ngrok-2.3.29-linux-arm",
-    "sha256": "8a2ec453b407bb0983d22819f3b76044100870888cc976fbf76ced18e6f66fa7",
-    "version": "2.3.29"
+    "url": "https://bin.equinox.io/a/2cUd5mRRjoF/ngrok-2.3.35-linux-arm",
+    "sha256": "94d88311e9b2baea615d9fe7c6921ac0167040ec66aa0d0cbb856c027d617f1f",
+    "version": "2.3.35"
   },
   "linux-arm64": {
     "sys": "linux-arm64",
-    "url": "https://bin.equinox.io/a/7qbe9PkG69E/ngrok-2.3.29-linux-arm64",
-    "sha256": "c49a9c95dc0128e8129f9b7291b5049a45d13f27bb309ca8af59e498f98b97d0",
-    "version": "2.3.29"
+    "url": "https://bin.equinox.io/a/k2qx6ipHqpb/ngrok-2.3.35-linux-arm64",
+    "sha256": "fd07f5c449f1c1444606bbc9d06fa6b649325ddf0b3e6dac6f32d785a886f170",
+    "version": "2.3.35"
   },
   "darwin-amd64": {
     "sys": "darwin-amd64",
-    "url": "https://bin.equinox.io/a/eqL9fYWPxoV/ngrok-2.3.29-darwin-amd64",
-    "sha256": "916ad7b4706e4c770eb58667c5beabf227daa1ad35bbbee41883eb2bce3f254b",
-    "version": "2.3.29"
+    "url": "https://bin.equinox.io/a/jKkD2Wcds2L/ngrok-2.3.35-darwin-amd64",
+    "sha256": "dd74a6be1a155c41ff06aadad910196cae13e06ab997bc0b144288b2da568f2a",
+    "version": "2.3.35"
   }
 }

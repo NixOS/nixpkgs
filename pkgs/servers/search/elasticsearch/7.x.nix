@@ -1,15 +1,15 @@
 { elk7Version
 , enableUnfree ? true
-, stdenv
+, lib, stdenv
 , fetchurl
 , makeWrapper
 , jre_headless
-, utillinux, gnugrep, coreutils
+, util-linux, gnugrep, coreutils
 , autoPatchelfHook
 , zlib
 }:
 
-with stdenv.lib;
+with lib;
 let
   info = splitString "-" stdenv.hostPlatform.system;
   arch = elemAt info 0;
@@ -17,12 +17,12 @@ let
   shas =
     if enableUnfree
     then {
-      "x86_64-linux"  = "1jkfllafcjqhfydsy90jx2ghpv5cmm6gabv206niwg9qc6y6r1ik";
-      "x86_64-darwin" = "1lgyxq3yahdww0wpqmpc1mz57kmk5hy2drb1dha69k9l0ibmjf18";
+      x86_64-linux  = "1s27bzx5y8vcd95qrw6av3fhyxb45219x9ahwaxa2cygmbpighrp";
+      x86_64-darwin = "1ia3byir3i5qaarmcaysrg3dhnxjmxnf0m0kzyf61g9aiy87gb7q";
     }
     else {
-      "x86_64-linux"  = "0pg22wi2xcjla44azfvn9c58r4xq3x9jiwh7qb0d8f3nv30vfd10";
-      "x86_64-darwin" = "0d9xg3bf06mr7mw2bd16gb2xrfjncrhj19846rrj4j5gb2qjz0x2";
+      x86_64-linux  = "005i7d7ag10qkn7bkx7md50iihvcvc84hay2j94wvsm7yghhbmi3";
+      x86_64-darwin = "01f81720rbzdqc0g1xymhz2lflldfbnb0rh7mpki99pss28vj9sh";
     };
 in
 stdenv.mkDerivation (rec {
@@ -31,7 +31,7 @@ stdenv.mkDerivation (rec {
 
   src = fetchurl {
     url = "https://artifacts.elastic.co/downloads/elasticsearch/${name}-${plat}-${arch}.tar.gz";
-    sha256 = shas."${stdenv.hostPlatform.system}" or (throw "Unknown architecture");
+    sha256 = shas.${stdenv.hostPlatform.system} or (throw "Unknown architecture");
   };
 
   patches = [ ./es-home-6.x.patch ];
@@ -46,7 +46,8 @@ stdenv.mkDerivation (rec {
       "ES_CLASSPATH=\"\$ES_CLASSPATH:$out/\$additional_classpath_directory/*\""
   '';
 
-  buildInputs = [ makeWrapper jre_headless utillinux ]
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ jre_headless util-linux ]
              ++ optional enableUnfree zlib;
 
   installPhase = ''
@@ -56,7 +57,7 @@ stdenv.mkDerivation (rec {
     chmod +x $out/bin/*
 
     wrapProgram $out/bin/elasticsearch \
-      --prefix PATH : "${makeBinPath [ utillinux coreutils gnugrep ]}" \
+      --prefix PATH : "${makeBinPath [ util-linux coreutils gnugrep ]}" \
       --set JAVA_HOME "${jre_headless}"
 
     wrapProgram $out/bin/elasticsearch-plugin --set JAVA_HOME "${jre_headless}"
@@ -72,7 +73,7 @@ stdenv.mkDerivation (rec {
   };
 } // optionalAttrs enableUnfree {
   dontPatchELF = true;
-  nativeBuildInputs = [ autoPatchelfHook ];
+  nativeBuildInputs = [ makeWrapper autoPatchelfHook ];
   runtimeDependencies = [ zlib ];
   postFixup = ''
     for exe in $(find $out/modules/x-pack-ml/platform/linux-x86_64/bin -executable -type f); do

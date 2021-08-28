@@ -1,6 +1,5 @@
-{ buildPackages, runCommand, nettools, bc, bison, flex, perl, rsync, gmp, libmpc, mpfr, openssl
-, libelf, cpio
-, utillinux
+{ lib, buildPackages, runCommand, nettools, bc, bison, flex, perl, rsync, gmp, libmpc, mpfr, openssl
+, libelf, cpio, elfutils, zstd, gawk
 , writeTextFile
 }:
 
@@ -15,6 +14,7 @@ let
     echo "}" >> $out
   '').outPath;
 in {
+  lib,
   # Allow overriding stdenv on each buildLinux call
   stdenv,
   # The kernel version
@@ -29,12 +29,18 @@ in {
   configfile,
   # Manually specified nixexpr representing the config
   # If unspecified, this will be autodetected from the .config
-  config ? stdenv.lib.optionalAttrs allowImportFromDerivation (readConfig configfile),
+  config ? lib.optionalAttrs allowImportFromDerivation (readConfig configfile),
   # Custom seed used for CONFIG_GCC_PLUGIN_RANDSTRUCT if enabled. This is
   # automatically extended with extra per-version and per-config values.
   randstructSeed ? "",
   # Use defaultMeta // extraMeta
   extraMeta ? {},
+
+  # for module compatibility
+  isZen      ? false,
+  isLibre    ? false,
+  isHardened ? false,
+
   # Whether to utilize the controversial import-from-derivation feature to parse the config
   allowImportFromDerivation ? false,
   # ignored
@@ -42,11 +48,11 @@ in {
 }:
 
 let
-  inherit (stdenv.lib)
+  inherit (lib)
     hasAttr getAttr optional optionals optionalString optionalAttrs maintainers platforms;
 
   # Dependencies that are required to build kernel modules
-  moduleBuildDependencies = optional (stdenv.lib.versionAtLeast version "4.14") libelf;
+  moduleBuildDependencies = optional (lib.versionAtLeast version "4.14") libelf;
 
   installkernel = writeTextFile { name = "installkernel"; executable=true; text = ''
     #!${stdenv.shell} -e
@@ -57,10 +63,10 @@ let
 
   commonMakeFlags = [
     "O=$(buildRoot)"
-  ] ++ stdenv.lib.optionals (stdenv.hostPlatform.platform ? kernelMakeFlags)
-    stdenv.hostPlatform.platform.kernelMakeFlags;
+  ] ++ lib.optionals (stdenv.hostPlatform.linux-kernel ? makeFlags)
+    stdenv.hostPlatform.linux-kernel.makeFlags;
 
-  drvAttrs = config_: platform: kernelPatches: configfile:
+  drvAttrs = config_: kernelConf: kernelPatches: configfile:
     let
       config = let attrName = attr: "CONFIG_" + attr; in {
         isSet = attr: hasAttr (attrName attr) config;
@@ -82,11 +88,15 @@ let
 
       installsFirmware = (config.isEnabled "FW_LOADER") &&
         (isModular || (config.isDisabled "FIRMWARE_IN_KERNEL")) &&
-        (stdenv.lib.versionOlder version "4.14");
+        (lib.versionOlder version "4.14");
     in (optionalAttrs isModular { outputs = [ "out" "dev" ]; }) // {
       passthru = {
         inherit version modDirVersion config kernelPatches configfile
           moduleBuildDependencies stdenv;
+        inherit isZen isHardened isLibre;
+        isXen = lib.warn "The isXen attribute is deprecated. All Nixpkgs kernels that support it now have Xen enabled." true;
+        kernelOlder = lib.versionOlder version;
+        kernelAtLeast = lib.versionAtLeast version;
       };
 
       inherit src;
@@ -94,7 +104,9 @@ let
       patches =
         map (p: p.patch) kernelPatches
         # Required for deterministic builds along with some postPatch magic.
-        ++ optional (stdenv.lib.versionAtLeast version "4.13") ./randstruct-provide-seed.patch;
+        ++ optional (lib.versionAtLeast version "4.13") ./randstruct-provide-seed.patch
+        # Fixes determinism by normalizing metadata for the archive of kheaders
+        ++ optional (lib.versionAtLeast version "5.2" && lib.versionOlder version "5.4") ./gen-kheaders-metadata.patch;
 
       prePatch = ''
         for mf in $(find -name Makefile -o -name Makefile.include -o -name install.sh); do
@@ -102,7 +114,14 @@ let
             sed -i "$mf" -e 's|/usr/bin/||g ; s|/bin/||g ; s|/sbin/||g'
         done
         sed -i Makefile -e 's|= depmod|= ${buildPackages.kmod}/bin/depmod|'
-        sed -i scripts/ld-version.sh -e "s|/usr/bin/awk|${buildPackages.gawk}/bin/awk|"
+
+        # Don't include a (random) NT_GNU_BUILD_ID, to make the build more deterministic.
+        # This way kernels can be bit-by-bit reproducible depending on settings
+        # (e.g. MODULE_SIG and SECURITY_LOCKDOWN_LSM need to be disabled).
+        # See also https://kernelnewbies.org/BuildId
+        sed -i Makefile -e 's|--build-id|--build-id=none|'
+
+        patchShebangs scripts/ld-version.sh
       '';
 
       postPatch = ''
@@ -152,7 +171,7 @@ let
 
       buildFlags = [
         "KBUILD_BUILD_VERSION=1-NixOS"
-        platform.kernelTarget
+        kernelConf.target
         "vmlinux"  # for "perf" and things like that
       ] ++ optional isModular "modules";
 
@@ -162,22 +181,26 @@ let
       ] ++ (optional isModular "INSTALL_MOD_PATH=$(out)")
       ++ optional installsFirmware "INSTALL_FW_PATH=$(out)/lib/firmware";
 
+      preInstall = ''
+        installFlagsArray+=("-j$NIX_BUILD_CORES")
+      '';
+
       # Some image types need special install targets (e.g. uImage is installed with make uinstall)
-      installTargets = [ (
-        if platform ? kernelInstallTarget then platform.kernelInstallTarget
-        else if platform.kernelTarget == "uImage" then "uinstall"
-        else if platform.kernelTarget == "zImage" || platform.kernelTarget == "Image.gz" then "zinstall"
-        else "install"
-      ) ];
+      installTargets = [
+        (kernelConf.installTarget or (
+          /**/ if kernelConf.target == "uImage" then "uinstall"
+          else if kernelConf.target == "zImage" || kernelConf.target == "Image.gz" then "zinstall"
+          else "install"))
+      ];
 
       postInstall = (optionalString installsFirmware ''
         mkdir -p $out/lib/firmware
-      '') + (if (platform ? kernelDTB && platform.kernelDTB) then ''
+      '') + (if (kernelConf.DTB or false) then ''
         make $makeFlags "''${makeFlagsArray[@]}" dtbs dtbs_install INSTALL_DTBS_PATH=$out/dtbs
       '' else "") + (if isModular then ''
         mkdir -p $dev
         cp vmlinux $dev/
-        if [ -z "$dontStrip" ]; then
+        if [ -z "''${dontStrip-}" ]; then
           installFlagsArray+=("INSTALL_MOD_STRIP=1")
         fi
         make modules_install $makeFlags "''${makeFlagsArray[@]}" \
@@ -190,7 +213,6 @@ let
         # To save space, exclude a bunch of unneeded stuff when copying.
         (cd .. && rsync --archive --prune-empty-dirs \
             --exclude='/build/' \
-            --exclude='/Documentation/' \
             * $dev/lib/modules/${modDirVersion}/source/)
 
         cd $dev/lib/modules/${modDirVersion}/source
@@ -229,10 +251,10 @@ let
         rm -fR drivers
 
         # Keep all headers
-        find .  -type f -name '*.h' -print0 | xargs -0 chmod u-w
+        find .  -type f -name '*.h' -print0 | xargs -0 -r chmod u-w
 
         # Keep linker scripts (they are required for out-of-tree modules on aarch64)
-        find .  -type f -name '*.lds' -print0 | xargs -0 chmod u-w
+        find .  -type f -name '*.lds' -print0 | xargs -0 -r chmod u-w
 
         # Keep root and arch-specific Makefiles
         chmod u-w Makefile
@@ -242,7 +264,7 @@ let
         chmod u-w -R scripts
 
         # Delete everything not kept
-        find . -type f -perm -u=w -print0 | xargs -0 rm
+        find . -type f -perm -u=w -print0 | xargs -0 -r rm
 
         # Delete empty directories
         find -empty -type d -delete
@@ -261,11 +283,11 @@ let
           "The Linux kernel" +
           (if kernelPatches == [] then "" else
             " (with patches: "
-            + stdenv.lib.concatStringsSep ", " (map (x: x.name) kernelPatches)
+            + lib.concatStringsSep ", " (map (x: x.name) kernelPatches)
             + ")");
-        license = stdenv.lib.licenses.gpl2;
-        homepage = https://www.kernel.org/;
-        repositories.git = https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git;
+        license = lib.licenses.gpl2Only;
+        homepage = "https://www.kernel.org/";
+        repositories.git = "https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git";
         maintainers = [
           maintainers.thoughtpolice
         ];
@@ -275,20 +297,23 @@ let
     };
 in
 
-assert stdenv.lib.versionAtLeast version "4.14" -> libelf != null;
-assert stdenv.lib.versionAtLeast version "4.15" -> utillinux != null;
-stdenv.mkDerivation ((drvAttrs config stdenv.hostPlatform.platform kernelPatches configfile) // {
-  name = "linux-${version}";
+assert (lib.versionAtLeast version "4.14" && lib.versionOlder version "5.8") -> libelf != null;
+assert lib.versionAtLeast version "5.8" -> elfutils != null;
+
+stdenv.mkDerivation ((drvAttrs config stdenv.hostPlatform.linux-kernel kernelPatches configfile) // {
+  pname = "linux";
+  inherit version;
 
   enableParallelBuilding = true;
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ perl bc nettools openssl rsync gmp libmpc mpfr ]
-      ++ optional  (stdenv.hostPlatform.platform.kernelTarget == "uImage") buildPackages.ubootTools
-      ++ optional  (stdenv.lib.versionAtLeast version "4.14") libelf
-      ++ optional  (stdenv.lib.versionAtLeast version "4.15") utillinux
-      ++ optionals (stdenv.lib.versionAtLeast version "4.16") [ bison flex ]
-      ++ optional  (stdenv.lib.versionAtLeast version "5.2")  cpio
+  nativeBuildInputs = [ perl bc nettools openssl rsync gmp libmpc mpfr gawk zstd ]
+      ++ optional  (stdenv.hostPlatform.linux-kernel.target == "uImage") buildPackages.ubootTools
+      ++ optional  (lib.versionAtLeast version "4.14" && lib.versionOlder version "5.8") libelf
+      # Removed util-linuxMinimal since it should not be a dependency.
+      ++ optionals (lib.versionAtLeast version "4.16") [ bison flex ]
+      ++ optional  (lib.versionAtLeast version "5.2")  cpio
+      ++ optional  (lib.versionAtLeast version "5.8")  elfutils
       ;
 
   hardeningDisable = [ "bindnow" "format" "fortify" "stackprotector" "pic" "pie" ];
@@ -297,10 +322,10 @@ stdenv.mkDerivation ((drvAttrs config stdenv.hostPlatform.platform kernelPatches
   makeFlags = commonMakeFlags ++ [
     "CC=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc"
     "HOSTCC=${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}cc"
-    "ARCH=${stdenv.hostPlatform.platform.kernelArch}"
-  ] ++ stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "ARCH=${stdenv.hostPlatform.linuxArch}"
+  ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) [
     "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
   ];
 
-  karch = stdenv.hostPlatform.platform.kernelArch;
+  karch = stdenv.hostPlatform.linuxArch;
 })

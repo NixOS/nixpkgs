@@ -1,16 +1,13 @@
 { stdenv, glibc, flex, bison, cmake
 , version, src, meta }:
 stdenv.mkDerivation {
-  name = "scyther-cli-${version}";
+  pname = "scyther-cli";
+  inherit version;
 
   inherit src meta;
 
-  buildInputs = [
-    cmake
-    glibc.static
-    flex
-    bison
-  ];
+  nativeBuildInputs = [ cmake flex bison ];
+  buildInputs = [ glibc.static ];
 
   patchPhase = ''
     # Since we're not in a git dir, the normal command this project uses to create this file wouldn't work

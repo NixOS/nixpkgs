@@ -1,27 +1,32 @@
-{ stdenv
+{ lib
 , fetchPypi
 , buildPythonPackage
+, pythonOlder
 , multidict
 , pytestrunner
 , pytest
+, typing-extensions
 , idna
 }:
 
 buildPythonPackage rec {
   pname = "yarl";
-  version = "1.3.0";
+  version = "1.6.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "024ecdc12bc02b321bc66b41327f930d1c2c543fa9a561b39861da9388ba7aa9";
+    sha256 = "8a9066529240171b68893d60dca86a763eae2139dd42f42106b03cf4b426bf10";
   };
 
   checkInputs = [ pytest pytestrunner ];
-  propagatedBuildInputs = [ multidict idna ];
+  propagatedBuildInputs = [ multidict idna ]
+    ++ lib.optionals (pythonOlder "3.8") [
+      typing-extensions
+    ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Yet another URL library";
-    homepage = https://github.com/aio-libs/yarl/;
+    homepage = "https://github.com/aio-libs/yarl/";
     license = licenses.asl20;
     maintainers = with maintainers; [ dotlambda ];
   };

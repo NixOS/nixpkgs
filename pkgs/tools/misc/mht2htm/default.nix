@@ -1,10 +1,10 @@
-{ stdenv, fetchurl, unzip, fpc, lazarus }:
+{ lib, stdenv, fetchurl, unzip, fpc, lazarus }:
 
 let
   date = "07.apr.2016";
 
 in stdenv.mkDerivation rec {
-  name = "mht2mht-${version}";
+  pname = "mht2mht";
   version = "1.8.1.35";
 
   src = fetchurl {
@@ -33,9 +33,9 @@ in stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Convert .mht files to .html";
-    homepage    = http://pgm.bpalanka.com/mht2htm.html;
+    homepage    = "http://pgm.bpalanka.com/mht2htm.html";
     license     = licenses.gpl3;
     maintainers = with maintainers; [ peterhoeg ];
     platforms   = platforms.all;

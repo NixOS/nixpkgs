@@ -1,5 +1,6 @@
 { buildPythonPackage,
   fetchPypi,
+  fetchpatch,
   cairosvg,
   pyphen,
   cffi,
@@ -7,11 +8,10 @@
   lxml,
   html5lib,
   tinycss,
-  pygobject2,
   glib,
   pango,
   fontconfig,
-  stdenv,
+  lib, stdenv,
   pytest,
   pytestrunner,
   pytest-isort,
@@ -23,11 +23,15 @@
 
 buildPythonPackage rec {
   pname = "weasyprint";
-  version = "47";
+  version = "52";
   disabled = !isPy3k;
 
-  # ignore failing pytest
-  checkPhase = "pytest -k 'not test_font_stretch'";
+  # excluded test needs the Ahem font
+  checkPhase = ''
+    runHook preCheck
+    pytest -k 'not test_font_stretch'
+    runHook postCheck
+  '';
 
   # ignore failing flake8-test
   prePatch = ''
@@ -39,9 +43,15 @@ buildPythonPackage rec {
 
   FONTCONFIG_FILE = "${fontconfig.out}/etc/fonts/fonts.conf";
 
-  propagatedBuildInputs = [ cairosvg pyphen cffi cssselect lxml html5lib tinycss pygobject2 ];
+  propagatedBuildInputs = [ cairosvg pyphen cffi cssselect lxml html5lib tinycss ];
 
+  # 47043a1fd7e50a892b9836466f521df85d597c4.patch can be removed after next release of weasyprint, see:
+  # https://github.com/Kozea/WeasyPrint/issues/1333#issuecomment-818062970
   patches = [
+    (fetchpatch {
+      url = "https://github.com/Kozea/WeasyPrint/commit/47043a1fd7e50a892b9836466f521df85d597c44.patch";
+      sha256 = "0l9z0hrav3bcdajlg3vbzljq0lkw7hlj8ppzrq3v21hbj1il1nsb";
+    })
     (substituteAll {
       src = ./library-paths.patch;
       fontconfig = "${fontconfig.lib}/lib/libfontconfig${stdenv.hostPlatform.extensions.sharedLibrary}";
@@ -55,11 +65,11 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "WeasyPrint";
-    sha256 = "0hd1zwrkfnj7g0jaaf6jvarlj6l5imar6ar78zxdgv17a3s3k3dg";
+    sha256 = "0rwf43111ws74m8b1alkkxzz57g0np3vmd8as74adwnxslfcg4gs";
   };
 
-  meta = with stdenv.lib; {
-    homepage = https://weasyprint.org/;
+  meta = with lib; {
+    homepage = "https://weasyprint.org/";
     description = "Converts web documents to PDF";
     license = licenses.bsd3;
     maintainers = with maintainers; [ elohmeier ];

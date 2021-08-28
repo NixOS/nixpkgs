@@ -1,21 +1,51 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, gettext, gnome3, dbus
-, glib, libgudev, udisks2, libgcrypt, libcap, polkit
-, libgphoto2, avahi, libarchive, fuse, libcdio
-, libxml2, libxslt, docbook_xsl, docbook_xml_dtd_42, samba, libmtp
-, gnomeSupport ? false, gnome, gcr, wrapGAppsHook
-, libimobiledevice, libbluray, libcdio-paranoia, libnfs, openssh
-, libsecret, libgdata, python3
+{ lib, stdenv
+, fetchurl
+, meson
+, ninja
+, pkg-config
+, gettext
+, dbus
+, glib
+, libgudev
+, udisks2
+, libgcrypt
+, libcap
+, polkit
+, libgphoto2
+, avahi
+, libarchive
+, fuse3
+, libcdio
+, libxml2
+, libxslt
+, docbook_xsl
+, docbook_xml_dtd_42
+, samba
+, libmtp
+, gnomeSupport ? false
+, gnome
+, gcr
+, glib-networking
+, gnome-online-accounts
+, wrapGAppsHook
+, libimobiledevice
+, libbluray
+, libcdio-paranoia
+, libnfs
+, openssh
+, libsecret
+, libgdata
+, python3
+, gsettings-desktop-schemas
 }:
 
-let
+stdenv.mkDerivation rec {
   pname = "gvfs";
-  version = "1.40.1";
-in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  version = "1.48.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1cfnzamr4mvgpf6yhm28lh9cafy9z6842s8jpbqnfizfxybg8ylj";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1hlxl6368h6nyqp1888szxs9hnpcw98k3h23dgqi29xd38klzsmj";
   };
 
   postPatch = ''
@@ -26,30 +56,59 @@ in stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [
-    meson ninja python3
-    pkgconfig gettext wrapGAppsHook
-    libxml2 libxslt docbook_xsl docbook_xml_dtd_42
+    meson
+    ninja
+    python3
+    pkg-config
+    gettext
+    wrapGAppsHook
+    libxml2
+    libxslt
+    docbook_xsl
+    docbook_xml_dtd_42
   ];
 
   buildInputs = [
-    glib libgudev udisks2 libgcrypt dbus
-    libgphoto2 avahi libarchive fuse libcdio
-    samba libmtp libcap polkit libimobiledevice libbluray
-    libcdio-paranoia libnfs openssh
-    # ToDo: a ligther version of libsoup to have FTP/HTTP support?
-  ] ++ stdenv.lib.optionals gnomeSupport (with gnome; [
-    libsoup gcr
+    glib
+    libgudev
+    udisks2
+    libgcrypt
+    dbus
+    libgphoto2
+    avahi
+    libarchive
+    fuse3
+    libcdio
+    samba
+    libmtp
+    libcap
+    polkit
+    libimobiledevice
+    libbluray
+    libcdio-paranoia
+    libnfs
+    openssh
+    gsettings-desktop-schemas
+    # TODO: a ligther version of libsoup to have FTP/HTTP support?
+  ] ++ lib.optionals gnomeSupport [
+    gnome.libsoup
+    gcr
     glib-networking # TLS support
-    gnome-online-accounts libsecret libgdata
-  ]);
+    gnome-online-accounts
+    libsecret
+    libgdata
+  ];
 
   mesonFlags = [
     "-Dsystemduserunitdir=${placeholder "out"}/lib/systemd/user"
     "-Dtmpfilesdir=no"
-  ] ++ stdenv.lib.optionals (!gnomeSupport) [
-    "-Dgcr=false" "-Dgoa=false" "-Dkeyring=false" "-Dhttp=false"
+  ] ++ lib.optionals (!gnomeSupport) [
+    "-Dgcr=false"
+    "-Dgoa=false"
+    "-Dkeyring=false"
+    "-Dhttp=false"
     "-Dgoogle=false"
-  ] ++ stdenv.lib.optionals (samba == null) [
+  ] ++ lib.optionals (samba == null) [
     # Xfce don't want samba
     "-Dsmb=false"
   ];
@@ -58,15 +117,16 @@ in stdenv.mkDerivation rec {
   doInstallCheck = doCheck;
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Virtual Filesystem support library" + optionalString gnomeSupport " (full GNOME support)";
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.lethalman ] ++ gnome3.maintainers;
+    maintainers = [ ] ++ teams.gnome.members;
   };
 }

@@ -11,7 +11,7 @@ in {
     device = mkOption {
       description = "Use the given device as keyboard input event device instead of /dev/input/eventX default.";
       default = null;
-      type = types.nullOr types.string;
+      type = types.nullOr types.str;
       example = "/dev/input/event15";
     };
   };

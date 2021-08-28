@@ -1,23 +1,24 @@
-{ stdenv, fetchFromGitHub, meson, ninja, pkgconfig
-, glib, systemd, udev, libevdev, gitMinimal, check, valgrind, swig, python3 }:
+{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config
+, glib, systemd, udev, libevdev, gitMinimal, check, valgrind, swig, python3
+, json-glib, libunistring }:
 
 stdenv.mkDerivation rec {
-  name = "libratbag-${version}";
-  version = "0.9.905";
+  pname = "libratbag";
+  version = "0.15";
 
   src = fetchFromGitHub {
     owner  = "libratbag";
     repo   = "libratbag";
     rev    = "v${version}";
-    sha256 = "0bh1nf9sv7wka0vh5bz9krf2cfxz0rr64hrpdm7imsb6cn39k01y";
+    sha256 = "0z6ps5aqwjmbdvahs80fh9cdgcvp4q4w3kfycmzv4kzgzihjki7b";
   };
 
   nativeBuildInputs = [
-    meson ninja pkgconfig gitMinimal swig check valgrind
+    meson ninja pkg-config gitMinimal swig check valgrind
   ];
 
   buildInputs = [
-    glib systemd udev libevdev
+    glib systemd udev libevdev json-glib libunistring
     (python3.withPackages (ps: with ps; [ evdev pygobject3 ]))
   ];
 
@@ -25,9 +26,9 @@ stdenv.mkDerivation rec {
     "-Dsystemd-unit-dir=./lib/systemd/system/"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Configuration library for gaming mice";
-    homepage    = https://github.com/libratbag/libratbag;
+    homepage    = "https://github.com/libratbag/libratbag";
     license     = licenses.mit;
     maintainers = with maintainers; [ mvnetbiz ];
     platforms   = platforms.linux;

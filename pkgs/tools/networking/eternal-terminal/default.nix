@@ -1,24 +1,41 @@
-{ stdenv, fetchFromGitHub, cmake, ninja, gflags, libsodium, protobuf }:
+{ lib, stdenv
+, fetchFromGitHub
+, cmake
+, gflags
+, libsodium
+, openssl
+, protobuf
+, zlib
+}:
 
 stdenv.mkDerivation rec {
-  name = "eternal-terminal-${version}";
-  version = "5.1.10";
+  pname = "eternal-terminal";
+  version = "6.1.7";
 
   src = fetchFromGitHub {
     owner = "MisterTea";
-    repo = "EternalTCP";
-    rev = "refs/tags/et-v${version}";
-    sha256 = "0jh89229bd9s82h3aj6faaybwr5xvnk8w2kgz47gq263pz021zpl";
+    repo = "EternalTerminal";
+    rev = "et-v${version}";
+    sha256 = "0jpm1ilr1qfz55y4mqp75v4q433qla5jhi1b8nsmx48srs7f0j2q";
   };
 
-  nativeBuildInputs = [ cmake ninja ];
-  buildInputs = [ gflags libsodium protobuf ];
+  cmakeFlags= [
+    "-DDISABLE_VCPKG=TRUE"
+    "-DDISABLE_SENTRY=TRUE"
+    "-DDISABLE_CRASH_LOG=TRUE"
+  ];
 
-  meta = with stdenv.lib; {
+  CXXFLAGS = lib.optional stdenv.cc.isClang "-std=c++17";
+  LDFLAGS = lib.optional stdenv.cc.isClang "-lc++fs";
+
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ gflags openssl zlib libsodium protobuf ];
+
+  meta = with lib; {
     description = "Remote shell that automatically reconnects without interrupting the session";
     license = licenses.asl20;
-    homepage = https://mistertea.github.io/EternalTerminal/;
+    homepage = "https://eternalterminal.dev/";
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = [ maintainers.dezgeg ];
+    maintainers = with maintainers; [ dezgeg pingiun ];
   };
 }

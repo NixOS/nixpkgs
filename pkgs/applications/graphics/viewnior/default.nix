@@ -1,28 +1,38 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, gtk2, libpng, exiv2, lcms
-, intltool, gettext, shared-mime-info, glib, gdk_pixbuf, perl}:
+{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, desktop-file-utils, gtk2, libpng, exiv2, lcms
+, intltool, gettext, shared-mime-info, glib, gdk-pixbuf, perl}:
 
 stdenv.mkDerivation rec {
-  name = "viewnior-${version}";
-  version = "1.6";
+  pname = "viewnior";
+  version = "1.7";
 
   src = fetchFromGitHub {
-    owner = "xsisqox";
+    owner = "hellosiyan";
     repo = "Viewnior";
-    rev = name;
-    sha256 = "06ppv3r85l3id4ij6h4y5fgm3nib2587fdrdv9fccyi75zk7fs0p";
+    rev = "${pname}-${version}";
+    sha256 = "0y4hk3vq8psba5k615w18qj0kbdfp5w0lm98nv5apy6hmcpwfyig";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
-  buildInputs =
-    [ pkgconfig gtk2 libpng exiv2 lcms intltool gettext
-      shared-mime-info glib gdk_pixbuf perl
-    ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    desktop-file-utils
+    intltool
+    gettext
+  ];
 
-  preFixup = ''
-    rm $out/share/icons/*/icon-theme.cache
-  '';
+  buildInputs = [
+    gtk2
+    libpng
+    exiv2
+    lcms
+    shared-mime-info
+    glib
+    gdk-pixbuf
+    perl
+  ];
 
-  meta = {
+  meta = with lib; {
     description = "Fast and simple image viewer";
     longDescription =
       '' Viewnior is insipred by big projects like Eye of Gnome, because of it's
@@ -31,13 +41,9 @@ stdenv.mkDerivation rec {
          with the quality of it's functions. The program is made with better integration
          in mind (follows Gnome HIG2).
       '';
-
-    license = stdenv.lib.licenses.gpl3;
-
-    homepage = http://siyanpanayotov.com/project/viewnior/;
-
-    maintainers = [ stdenv.lib.maintainers.smironov ];
-
-    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;
+    license = licenses.gpl3;
+    homepage = "http://siyanpanayotov.com/project/viewnior/";
+    maintainers = with maintainers; [ smironov artturin ];
+    platforms = platforms.gnu ++ platforms.linux;
   };
 }

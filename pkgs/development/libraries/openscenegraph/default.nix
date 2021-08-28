@@ -1,8 +1,8 @@
-{ stdenv, lib, fetchFromGitHub, cmake, pkgconfig, doxygen,
-  libX11, libXinerama, libXrandr, libGLU_combined,
+{ stdenv, lib, fetchFromGitHub, cmake, pkg-config, doxygen,
+  libX11, libXinerama, libXrandr, libGLU, libGL,
   glib, ilmbase, libxml2, pcre, zlib,
+  AGL, Carbon, Cocoa, Foundation,
   jpegSupport ? true, libjpeg,
-  jasperSupport ? true, jasper,
   exrSupport ? false, openexr,
   gifSupport ? true, giflib,
   pngSupport ? true, libpng,
@@ -26,23 +26,22 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "openscenegraph-${version}";
-  version = "3.6.3";
+  pname = "openscenegraph";
+  version = "3.6.5";
 
   src = fetchFromGitHub {
     owner = "openscenegraph";
     repo = "OpenSceneGraph";
-    rev = "d011ca4e8d83549a3688bf6bb8cd468dd9684822";
-    sha256 = "0h32z15sa8sbq276j0iib0n707m8bs4p5ji9z2ah411446paad9q";
+    rev = "OpenSceneGraph-${version}";
+    sha256 = "00i14h82qg3xzcyd8p02wrarnmby3aiwmz0z43l50byc9f8i05n1";
   };
 
-  nativeBuildInputs = [ pkgconfig cmake doxygen ];
+  nativeBuildInputs = [ pkg-config cmake doxygen ];
 
   buildInputs = [
-    libX11 libXinerama libXrandr libGLU_combined
+    libX11 libXinerama libXrandr libGLU libGL
     glib ilmbase libxml2 pcre zlib
   ] ++ lib.optional jpegSupport libjpeg
-    ++ lib.optional jasperSupport jasper
     ++ lib.optional exrSupport openexr
     ++ lib.optional gifSupport giflib
     ++ lib.optional pngSupport libpng
@@ -62,17 +61,16 @@ stdenv.mkDerivation rec {
     ++ lib.optional sdlSupport SDL2
     ++ lib.optionals restSupport [ asio boost ]
     ++ lib.optionals withExamples [ fltk wxGTK ]
+    ++ lib.optionals stdenv.isDarwin [ AGL Carbon Cocoa Foundation ]
   ;
-
-  enableParallelBuilding = true;
 
   cmakeFlags = lib.optional (!withApps) "-DBUILD_OSG_APPLICATIONS=OFF" ++ lib.optional withExamples "-DBUILD_OSG_EXAMPLES=ON";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A 3D graphics toolkit";
-    homepage = http://www.openscenegraph.org/;
-    maintainers = [ maintainers.raskin ];
-    platforms = platforms.linux;
+    homepage = "http://www.openscenegraph.org/";
+    maintainers = with maintainers; [ aanderse raskin ];
+    platforms = with platforms; linux ++ darwin;
     license = "OpenSceneGraph Public License - free LGPL-based license";
   };
 }

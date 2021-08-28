@@ -1,27 +1,32 @@
-{ stdenv, fetchurl, gawk }:
+{ lib, stdenv, fetchurl, gawk }:
 
 let startFPC = import ./binary.nix { inherit stdenv fetchurl; }; in
 
 stdenv.mkDerivation rec {
-  version = "3.0.0";
-  name = "fpc-${version}";
+  version = "3.2.0";
+  pname = "fpc";
 
   src = fetchurl {
     url = "mirror://sourceforge/freepascal/fpcbuild-${version}.tar.gz";
-    sha256 = "1v40bjp0kvsi8y0mndqvvhnsqjfssl2w6wpfww51j4rxblfkp4fm";
+    sha256 = "0f38glyn3ffmqww432snhx2b8wyrq0yj1njkp4zh56lqrvm19fgr";
   };
 
   buildInputs = [ startFPC gawk ];
+  glibc = stdenv.cc.libc.out;
 
-  preConfigure =
-    if stdenv.hostPlatform.system == "i686-linux" || stdenv.hostPlatform.system == "x86_64-linux" then ''
-      sed -e "s@'/lib/ld-linux[^']*'@'''@" -i fpcsrc/compiler/systems/t_linux.pas
-      sed -e "s@'/lib64/ld-linux[^']*'@'''@" -i fpcsrc/compiler/systems/t_linux.pas
-    '' else "";
+  # Patch paths for linux systems. Other platforms will need their own patches.
+  patches = [
+    ./mark-paths.patch # mark paths for later substitution in postPatch
+  ];
+  postPatch = ''
+    # substitute the markers set by the mark-paths patch
+    substituteInPlace fpcsrc/compiler/systems/t_linux.pas --subst-var-by dynlinker-prefix "${glibc}"
+    substituteInPlace fpcsrc/compiler/systems/t_linux.pas --subst-var-by syslibpath "${glibc}/lib"
+  '';
 
-  makeFlags = "NOGDB=1 FPC=${startFPC}/bin/fpc";
+  makeFlags = [ "NOGDB=1" "FPC=${startFPC}/bin/fpc" ];
 
-  installFlags = "INSTALL_PREFIX=\${out}";
+  installFlags = [ "INSTALL_PREFIX=\${out}" ];
 
   postInstall = ''
     for i in $out/lib/fpc/*/ppc*; do
@@ -35,9 +40,9 @@ stdenv.mkDerivation rec {
     bootstrap = startFPC;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Free Pascal Compiler from a source distribution";
-    homepage = https://www.freepascal.org;
+    homepage = "https://www.freepascal.org";
     maintainers = [ maintainers.raskin ];
     license = with licenses; [ gpl2 lgpl2 ];
     platforms = platforms.linux;

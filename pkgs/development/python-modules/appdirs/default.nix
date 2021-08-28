@@ -5,16 +5,16 @@
 
 buildPythonPackage rec {
   pname = "appdirs";
-  version = "1.4.3";
+  version = "1.4.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9e5896d1372858f8dd3344faf4e5014d21849c756c8d5701f78f8a103b372d92";
+    sha256 = "7d5d0167b2b1ba821647616af46a749d1c653740dd0d2415100fe26e27afdf41";
   };
 
   meta = {
     description = "A python module for determining appropriate platform-specific dirs";
-    homepage = https://github.com/ActiveState/appdirs;
+    homepage = "https://github.com/ActiveState/appdirs";
     license = lib.licenses.mit;
   };
 }

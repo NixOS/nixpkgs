@@ -1,36 +1,34 @@
-{ stdenv, fetchFromGitHub, cmake, kernel
-, luajit, zlib, ncurses, perl, jsoncpp, libb64, openssl, curl, jq, gcc, elfutils, tbb, c-ares, protobuf, grpc
+{ lib, stdenv, fetchFromGitHub, cmake, kernel, installShellFiles
+, luajit, ncurses, perl, jsoncpp, libb64, openssl, curl, jq, gcc, elfutils, tbb, protobuf, grpc
 }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
-  name = "sysdig-${version}";
-  version = "0.26.1";
+  pname = "sysdig";
+  version = "0.27.1";
 
   src = fetchFromGitHub {
     owner = "draios";
     repo = "sysdig";
     rev = version;
-    sha256 = "0mvm14s5lyxddf6fcfwrv7vd8r8vfw9z4447jl5mcvji2rnyywqz";
+    sha256 = "sha256-lYjMvxMIReANNwMr62u881Nugrs9piOaN3EmrvGzRns=";
   };
 
-  nativeBuildInputs = [ cmake perl ];
+  nativeBuildInputs = [ cmake perl installShellFiles ];
   buildInputs = [
-    zlib luajit ncurses jsoncpp libb64 openssl curl jq gcc elfutils tbb c-ares protobuf grpc
-  ] ++ optional (kernel != null) kernel.moduleBuildDependencies;
+    luajit ncurses jsoncpp libb64 openssl curl jq gcc elfutils tbb protobuf grpc
+  ] ++ optionals (kernel != null) kernel.moduleBuildDependencies;
 
   hardeningDisable = [ "pic" ];
 
   cmakeFlags = [
     "-DUSE_BUNDLED_DEPS=OFF"
     "-DSYSDIG_VERSION=${version}"
+    "-DCREATE_TEST_TARGETS=OFF"
   ] ++ optional (kernel == null) "-DBUILD_DRIVER=OFF";
 
   # needed since luajit-2.1.0-beta3
-  NIX_CFLAGS_COMPILE = [
-    "-DluaL_reg=luaL_Reg"
-    "-DluaL_getn(L,i)=((int)lua_objlen(L,i))"
-  ];
+  NIX_CFLAGS_COMPILE = "-DluaL_reg=luaL_Reg -DluaL_getn(L,i)=((int)lua_objlen(L,i))";
 
   preConfigure = ''
     cmakeFlagsArray+=(-DCMAKE_EXE_LINKER_FLAGS="-ltbb -lcurl")
@@ -40,19 +38,28 @@ stdenv.mkDerivation rec {
     export KERNELDIR="${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   '';
 
-  postInstall = optionalString (kernel != null) ''
-    make install_driver
-    kernel_dev=${kernel.dev}
-    kernel_dev=''${kernel_dev#/nix/store/}
-    kernel_dev=''${kernel_dev%%-linux*dev*}
-    if test -f "$out/lib/modules/${kernel.modDirVersion}/extra/sysdig-probe.ko"; then
-        sed -i "s#$kernel_dev#................................#g" $out/lib/modules/${kernel.modDirVersion}/extra/sysdig-probe.ko
-    else
-        xz -d $out/lib/modules/${kernel.modDirVersion}/extra/sysdig-probe.ko.xz
-        sed -i "s#$kernel_dev#................................#g" $out/lib/modules/${kernel.modDirVersion}/extra/sysdig-probe.ko
-        xz $out/lib/modules/${kernel.modDirVersion}/extra/sysdig-probe.ko
-    fi
-  '';
+  postInstall =
+    ''
+      # Fix the bash completion location
+      installShellCompletion --bash $out/etc/bash_completion.d/sysdig
+      rm $out/etc/bash_completion.d/sysdig
+      rmdir $out/etc/bash_completion.d
+      rmdir $out/etc
+    ''
+    + optionalString (kernel != null) ''
+      make install_driver
+      kernel_dev=${kernel.dev}
+      kernel_dev=''${kernel_dev#/nix/store/}
+      kernel_dev=''${kernel_dev%%-linux*dev*}
+      if test -f "$out/lib/modules/${kernel.modDirVersion}/extra/sysdig-probe.ko"; then
+          sed -i "s#$kernel_dev#................................#g" $out/lib/modules/${kernel.modDirVersion}/extra/sysdig-probe.ko
+      else
+          xz -d $out/lib/modules/${kernel.modDirVersion}/extra/sysdig-probe.ko.xz
+          sed -i "s#$kernel_dev#................................#g" $out/lib/modules/${kernel.modDirVersion}/extra/sysdig-probe.ko
+          xz $out/lib/modules/${kernel.modDirVersion}/extra/sysdig-probe.ko
+      fi
+    '';
+
 
   meta = {
     description = "A tracepoint-based system tracing tool for Linux (with clients for other OSes)";

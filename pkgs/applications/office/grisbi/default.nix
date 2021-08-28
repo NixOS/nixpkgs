@@ -1,21 +1,36 @@
-{ fetchurl, stdenv, gtk, pkgconfig, libgsf, libofx, intltool, wrapGAppsHook
-, hicolor-icon-theme, libsoup, gnome3 }:
+{ fetchurl
+, lib, stdenv
+, gtk
+, pkg-config
+, libgsf
+, libofx
+, intltool
+, wrapGAppsHook
+, libsoup
+, gnome
+}:
 
 stdenv.mkDerivation rec {
-  name = "grisbi-${version}";
-  version = "1.2.1";
+  pname = "grisbi";
+  version = "2.0.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/grisbi/${name}.tar.bz2";
-    sha1 = "1159c5491967fa7afd251783013579ffb45b891b";
+    url = "mirror://sourceforge/grisbi/${pname}-${version}.tar.bz2";
+    sha256 = "sha256-hFLiVHyEekCP9btO75e5ni70ZcLhjbBGCBjF2gERIqs=";
   };
 
-  nativeBuildInputs = [ pkgconfig wrapGAppsHook ];
-  buildInputs = [ gtk libgsf libofx intltool hicolor-icon-theme libsoup
-    gnome3.adwaita-icon-theme ];
+  nativeBuildInputs = [ pkg-config wrapGAppsHook ];
+  buildInputs = [
+    gtk
+    libgsf
+    libofx
+    intltool
+    libsoup
+    gnome.adwaita-icon-theme
+  ];
 
-  meta = with stdenv.lib; {
-    description = "A personnal accounting application.";
+  meta = with lib; {
+    description = "A personnal accounting application";
     longDescription = ''
       Grisbi is an application written by French developers, so it perfectly
       respects French accounting rules. Grisbi can manage multiple accounts,
@@ -24,7 +39,7 @@ stdenv.mkDerivation rec {
       management and other information that make Grisbi adapted for
       associations.
     '';
-    homepage = "http://grisbi.org";
+    homepage = "https://grisbi.org";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ layus ];
     platforms = platforms.linux;

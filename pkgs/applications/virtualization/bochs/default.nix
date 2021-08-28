@@ -1,6 +1,6 @@
-{ stdenv, fetchurl
-, pkgconfig, libtool
-, gtk2, libGLU_combined, readline, libX11, libXpm
+{ lib, stdenv, fetchurl
+, pkg-config, libtool
+, gtk2, libGLU, libGL, readline, libX11, libXpm
 , docbook_xml_dtd_45, docbook_xsl
 , sdlSupport ? true, SDL2 ? null
 , termSupport ? true, ncurses ? null
@@ -15,21 +15,25 @@ assert wxSupport -> (gtk2 != null && wxGTK != null);
 assert wgetSupport -> (wget != null);
 assert curlSupport -> (curl != null);
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
 
-  name = "bochs-${version}";
-  version = "2.6.9";
+  pname = "bochs";
+  version = "2.6.11";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/bochs/bochs/${version}/${name}.tar.gz";
-    sha256 = "1379cq4cnfprhw8mgh60i0q9j8fz8d7n3d5fnn2g9fdiv5znfnzf";
+    url = "mirror://sourceforge/project/bochs/bochs/${version}/${pname}-${version}.tar.gz";
+    sha256 = "0ql8q6y1k356li1g9gbvl21448mlxphxxi6kjb2b3pxvzd0pp2b3";
   };
 
-  patches = [ ./bochs-2.6.9-glibc-2.26.patch ];
+  patches = [
+    ./bochs-2.6.11-glibc-2.26.patch
+    ./fix-build-smp.patch
+    ./bochs_fix_narrowing_conv_warning.patch
+  ];
 
-  buildInputs = with stdenv.lib;
-  [ pkgconfig libtool gtk2 libGLU_combined readline libX11 libXpm docbook_xml_dtd_45 docbook_xsl ]
+  buildInputs =
+  [ pkg-config libtool gtk2 libGLU libGL readline libX11 libXpm docbook_xml_dtd_45 docbook_xsl ]
   ++ optionals termSupport [ ncurses ]
   ++ optionals sdlSupport [ SDL2 ]
   ++ optionals wxSupport [ wxGTK ]
@@ -118,9 +122,9 @@ stdenv.mkDerivation rec {
       in C++, that runs on most popular platforms. It includes emulation of the
       Intel x86 CPU, common I/O devices, and a custom BIOS.
     '';
-    homepage = http://bochs.sourceforge.net/;
+    homepage = "http://bochs.sourceforge.net/";
     license = licenses.lgpl2Plus;
-    maintainers = [ maintainers.AndersonTorres ];
+    maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.unix;
   };
 }

@@ -1,31 +1,56 @@
-{ stdenv, pkgconfig, curl, openssl, zlib, fetchFromGitHub, rustPlatform }:
+{ stdenv, lib, runCommand, patchelf, makeWrapper, pkg-config, curl
+, openssl, gmp, zlib, fetchFromGitHub, rustPlatform, libiconv }:
+
+let
+  libPath = lib.makeLibraryPath [ gmp ];
+in
 
 rustPlatform.buildRustPackage rec {
-  name = "elan-${version}";
-  version = "0.7.5";
-
-  cargoSha256 = "0lc320m3vw76d6pa5wp6c9jblac6lmyf9qqnxmsnkn4ixdhnghsd";
+  pname = "elan";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
-    owner = "kha";
+    owner = "leanprover";
     repo = "elan";
     rev = "v${version}";
-    sha256 = "1147f3lzr6lgvf580ppspn20bdwnf6l8idh1h5ana0p0lf5a0dn1";
+    sha256 = "sha256-nK4wvxK5Ne1+4kaMts6pIr5FvXBgXJsGdn68gGEZUdk=";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  cargoSha256 = "sha256-ptSbpq1ePNWmdBGfKtqFGfkdimDjU0YEo4F8VPtQMt4=";
 
-  buildInputs = [ curl zlib openssl ];
+  nativeBuildInputs = [ pkg-config makeWrapper ];
+
+  OPENSSL_NO_VENDOR = 1;
+  buildInputs = [ curl zlib openssl ]
+    ++ lib.optional stdenv.isDarwin libiconv;
 
   cargoBuildFlags = [ "--features no-self-update" ];
+
+  patches = lib.optionals stdenv.isLinux [
+    # Run patchelf on the downloaded binaries.
+    # This necessary because Lean 4 now dynamically links to GMP.
+    (runCommand "0001-dynamically-patchelf-binaries.patch" {
+        CC = stdenv.cc;
+        patchelf = patchelf;
+        libPath = "$ORIGIN/../lib:${libPath}";
+      } ''
+     export dynamicLinker=$(cat $CC/nix-support/dynamic-linker)
+     substitute ${./0001-dynamically-patchelf-binaries.patch} $out \
+       --subst-var patchelf \
+       --subst-var dynamicLinker \
+       --subst-var libPath
+    '')
+  ];
 
   postInstall = ''
     pushd $out/bin
     mv elan-init elan
-    for link in lean leanpkg leanchecker; do
+    for link in lean leanpkg leanchecker leanc leanmake; do
       ln -s elan $link
     done
     popd
+
+    wrapProgram $out/bin/elan --prefix "LD_LIBRARY_PATH" : "${libPath}"
 
     # tries to create .elan
     export HOME=$(mktemp -d)
@@ -35,9 +60,9 @@ rustPlatform.buildRustPackage rec {
     $out/bin/elan completions zsh >  "$out/share/zsh/site-functions/_elan"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Small tool to manage your installations of the Lean theorem prover";
-    homepage = "https://github.com/Kha/elan";
+    homepage = "https://github.com/leanprover/elan";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ gebner ];
   };

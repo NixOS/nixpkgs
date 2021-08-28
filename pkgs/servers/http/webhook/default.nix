@@ -1,8 +1,8 @@
 { lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "webhook-${version}";
-  version = "2.6.8";
+  pname = "webhook";
+  version = "2.8.0";
 
   goPackagePath = "github.com/adnanh/webhook";
   excludedPackages = [ "test" ];
@@ -11,11 +11,11 @@ buildGoPackage rec {
     owner = "adnanh";
     repo = "webhook";
     rev = version;
-    sha256 = "05q6nv04ml1gr4k79czg03i3ifl05xq29iapkgrl3k0a36czxlgs";
+    sha256 = "0n03xkgwpzans0cymmzb0iiks8mi2c76xxdak780dk0jbv6qgp5i";
   };
 
   meta = with lib; {
-    homepage = https://github.com/adnanh/webhook;
+    homepage = "https://github.com/adnanh/webhook";
     license = [ licenses.mit ];
     description = "incoming webhook server that executes shell commands";
   };

@@ -13,9 +13,7 @@
  <para>
   It sets <xref linkend="opt-services.xserver.enable"/>,
   <xref linkend="opt-services.xserver.displayManager.sddm.enable"/>,
-  <xref linkend="opt-services.xserver.desktopManager.plasma5.enable"/> (
-  <link linkend="opt-services.xserver.desktopManager.plasma5.enableQt4Support">
-  without Qt4 Support</link>), and
+  <xref linkend="opt-services.xserver.desktopManager.plasma5.enable"/>, and
   <xref linkend="opt-services.xserver.libinput.enable"/> to true. It also
   includes glxinfo and firefox in the system packages list.
  </para>

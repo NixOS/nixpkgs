@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, fetchpatch, SDL, libpng, libjpeg, libtiff, libungif, libXpm }:
+{ lib, stdenv, fetchurl, fetchpatch, SDL, libpng, libjpeg, libtiff, giflib, libXpm }:
 
 stdenv.mkDerivation rec {
-  name = "SDL_image-${version}";
+  pname = "SDL_image";
   version = "1.2.12";
 
   src = fetchurl {
-    url    = "https://www.libsdl.org/projects/SDL_image/release/${name}.tar.gz";
+    url    = "https://www.libsdl.org/projects/SDL_image/release/${pname}-${version}.tar.gz";
     sha256 = "16an9slbb8ci7d89wakkmyfvp7c0cval8xw4hkg0842nhhlp540b";
   };
 
@@ -17,11 +17,16 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  configureFlags = stdenv.lib.optional stdenv.isDarwin "--disable-sdltest";
+  configureFlags = [
+    # Disable its dynamic loading or dlopen will fail because of no proper rpath
+    "--disable-jpg-shared"
+    "--disable-png-shared"
+    "--disable-tif-shared"
+  ] ++ lib.optional stdenv.isDarwin "--disable-sdltest";
 
-  buildInputs = [ SDL libpng libjpeg libtiff libungif libXpm ];
+  buildInputs = [ SDL libpng libjpeg libtiff giflib libXpm ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "SDL image library";
     homepage    = "http://www.libsdl.org/projects/SDL_image/";
     maintainers = with maintainers; [ lovek323 ];

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , fetchFromGitHub
 , fetchpatch
 # Python bits:
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   patches = [
     # Render "front matter", used in our RFC template and elsewhere
     (fetchpatch {
-      url = https://github.com/joeyespo/grip/pull/249.patch;
+      url = "https://github.com/joeyespo/grip/pull/249.patch";
       sha256 = "07za5iymfv647dfrvi6hhj54a96hgjyarys51zbi08c51shqyzpg";
     })
   ];
@@ -42,9 +42,9 @@ buildPythonPackage rec {
       py.test -xm "not assumption"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Preview GitHub Markdown files like Readme locally before committing them";
-    homepage = https://github.com/joeyespo/grip;
+    homepage = "https://github.com/joeyespo/grip";
     license = licenses.mit;
     maintainers = with maintainers; [ koral ];
   };

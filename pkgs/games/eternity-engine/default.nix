@@ -1,19 +1,17 @@
-{ stdenv, cmake, libGL, SDL, SDL_mixer, SDL_net, fetchFromGitHub, makeWrapper }:
+{ lib, stdenv, cmake, libGL, SDL, SDL_mixer, SDL_net, fetchFromGitHub, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "eternity-engine-${version}";
+  pname = "eternity-engine";
   version = "3.42.02";
   src = fetchFromGitHub {
     owner = "team-eternity";
     repo = "eternity";
-    rev = "${version}";
+    rev = version;
     sha256 = "00kpq4k23hjmzjaymw3sdda7mqk8fjq6dzf7fmdal9fm7lfmj41k";
   };
 
   nativeBuildInputs = [ cmake makeWrapper ];
   buildInputs = [ libGL SDL SDL_mixer SDL_net ];
-
-  enableParallelBuilding = true;
 
   installPhase = ''
     install -Dm755 source/eternity $out/lib/eternity/eternity
@@ -23,10 +21,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://doomworld.com/eternity;
+    homepage = "http://doomworld.com/eternity";
     description = "New school Doom port by James Haley";
-    license = stdenv.lib.licenses.gpl3;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ MP2E ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ MP2E ];
   };
 }

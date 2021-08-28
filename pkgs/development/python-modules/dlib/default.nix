@@ -1,4 +1,7 @@
-{ buildPythonPackage, dlib, python, pytest, avxSupport ? true }:
+{ buildPythonPackage, stdenv, lib, dlib, python, pytest, more-itertools
+, sse4Support ? stdenv.hostPlatform.sse4_1Support
+, avxSupport ? stdenv.hostPlatform.avxSupport
+}:
 
 buildPythonPackage {
   inherit (dlib) name src nativeBuildInputs buildInputs meta;
@@ -10,9 +13,20 @@ buildPythonPackage {
     ${python.interpreter} nix_run_setup test --no USE_AVX_INSTRUCTIONS
   '';
 
-  setupPyBuildFlags = [ "--${if avxSupport then "yes" else "no"} USE_AVX_INSTRUCTIONS" ];
+  setupPyBuildFlags = [
+    "--set USE_SSE4_INSTRUCTIONS=${if sse4Support then "yes" else "no"}"
+    "--set USE_AVX_INSTRUCTIONS=${if avxSupport then "yes" else "no"}"
+  ];
 
   patches = [ ./build-cores.patch ];
 
-  checkInputs = [ pytest ];
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "more-itertools<6.0.0" "more-itertools" \
+      --replace "pytest==3.8" "pytest"
+  '';
+
+  checkInputs = [ pytest more-itertools ];
+
+  dontUseCmakeConfigure = true;
 }

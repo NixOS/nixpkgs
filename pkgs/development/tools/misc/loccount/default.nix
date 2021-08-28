@@ -1,6 +1,6 @@
-{ stdenv, buildGoPackage, fetchFromGitLab }:
+{ lib, buildGoPackage, fetchFromGitLab }:
 buildGoPackage rec {
-  name = "loccount-${version}";
+  pname = "loccount";
   version = "1.2";
 
   goPackagePath = "gitlab.com/esr/loccount";
@@ -13,7 +13,7 @@ buildGoPackage rec {
     sha256 = "18z7ai7wy2k9yd3w65d37apfqs3h9bc2c15y7v1bydppi44zfsdk";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Re-implementation of sloccount in Go";
     longDescription = ''
       loccount is a re-implementation of David A. Wheeler's sloccount tool

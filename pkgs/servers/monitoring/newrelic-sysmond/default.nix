@@ -1,7 +1,7 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "newrelic-sysmond-${version}";
+  pname = "newrelic-sysmond";
   version = "2.3.0.132";
 
   src = fetchurl {
@@ -16,9 +16,9 @@ stdenv.mkDerivation rec {
       $out/bin/nrsysmond
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "System-wide monitoring for newrelic";
-    homepage = https://newrelic.com/;
+    homepage = "https://newrelic.com/";
     license = licenses.unfree;
     platforms = platforms.linux;
     maintainers = with maintainers; [ lnl7 ];

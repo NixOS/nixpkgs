@@ -1,19 +1,18 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, cf-private, Cocoa }:
+{ stdenv, lib, buildGoPackage, fetchFromGitHub
+, Cocoa ? null }:
 
 buildGoPackage rec {
-  name = "noti-${version}";
-  version = "3.1.0";
+  pname = "noti";
+  version = "3.5.0";
 
   src = fetchFromGitHub {
     owner = "variadico";
     repo = "noti";
-    rev = "${version}";
-    sha256 = "1chsqfqk0pnhx5k2nr4c16cpb8m6zv69l1jvv4v4903zgfzcm823";
+    rev = version;
+    sha256 = "12r9wawwl6x0rfv1kahwkamfa0pjq24z60az9pn9nsi2z1rrlwkd";
   };
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Cocoa cf-private /* For OBJC_CLASS_$_NSDate */ ];
-  # TODO: Remove this when we update apple_sdk
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionals stdenv.isDarwin [ "-fno-objc-arc" ];
+  buildInputs = lib.optional stdenv.isDarwin Cocoa;
 
   goPackagePath = "github.com/variadico/noti";
 
@@ -22,21 +21,19 @@ buildGoPackage rec {
   '';
 
   postInstall = ''
-    mkdir -p $out/share/man/man{1,5}/
-    cp $src/docs/man/noti.1      $out/share/man/man1/
-    cp $src/docs/man/noti.yaml.5 $out/share/man/man5/
+    install -Dm444 -t $out/share/man/man1 $src/docs/man/*.1
+    install -Dm444 -t $out/share/man/man5 $src/docs/man/*.5
   '';
 
-  meta = with stdenv.lib; {
-    description = "Monitor a process and trigger a notification.";
+  meta = with lib; {
+    description = "Monitor a process and trigger a notification";
     longDescription = ''
       Monitor a process and trigger a notification.
 
       Never sit and wait for some long-running process to finish. Noti can alert you when it's done. You can receive messages on your computer or phone.
     '';
-    homepage = https://github.com/variadico/noti;
+    homepage = "https://github.com/variadico/noti";
     license = licenses.mit;
-    maintainers = [ maintainers.stites ];
-    platforms = platforms.all;
+    maintainers = with maintainers; [ stites marsam ];
   };
 }

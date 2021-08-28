@@ -1,21 +1,93 @@
-{ stdenv, fetchurl, pythonPackages }:
+{ lib, fetchFromGitHub, python3Packages, docutils }:
 
-pythonPackages.buildPythonApplication rec {
-  name = "httpie-1.0.2";
+python3Packages.buildPythonApplication rec {
+  pname = "httpie";
+  version = "2.4.0";
 
-  src = fetchurl {
-    url = "mirror://pypi/h/httpie/${name}.tar.gz";
-    sha256 = "1ax22jh5lpjywpj7lsl072wdhr1pxiqzmxhyph5diwxxzs2nqrzw";
+  src = fetchFromGitHub {
+    owner = "httpie";
+    repo = "httpie";
+    rev = version;
+    sha256 = "00lafjqg9nfnak0nhcr2l2hzzkwn2y6qv0wdkm6r6f69snizy3hf";
   };
 
-  propagatedBuildInputs = with pythonPackages; [ pygments requests ];
+  patches = [
+    ./strip-venv.patch
+  ];
 
-  doCheck = false;
+  outputs = [ "out" "doc" "man" ];
 
-  meta = {
+  nativeBuildInputs = [ docutils ];
+
+  propagatedBuildInputs = with python3Packages; [ pygments requests requests-toolbelt setuptools ];
+
+  checkInputs = with python3Packages; [
+    mock
+    pytest
+    pytest-httpbin
+    pytestCheckHook
+  ];
+
+  postInstall = ''
+    # install completions
+    install -Dm555 \
+      extras/httpie-completion.bash \
+      $out/share/bash-completion/completions/http.bash
+    install -Dm555 \
+      extras/httpie-completion.fish \
+      $out/share/fish/vendor_completions.d/http.fish
+
+    mkdir -p $man/share/man/man1
+
+    docdir=$doc/share/doc/httpie
+    mkdir -p $docdir/html
+
+    cp AUTHORS.rst CHANGELOG.rst CONTRIBUTING.rst $docdir
+
+    # helpfully, the readme has a `no-web` class to exclude
+    # the parts that are not relevant for offline docs
+
+    # this one build link was not marked however
+    sed -e 's/^|build|//g' -i README.rst
+
+    toHtml() {
+      rst2html5 \
+        --strip-elements-with-class=no-web \
+        --title=http \
+        --no-generator \
+        --no-datestamp \
+        --no-source-link \
+        "$1" \
+        "$2"
+    }
+
+    toHtml README.rst $docdir/html/index.html
+    toHtml CHANGELOG.rst $docdir/html/CHANGELOG.html
+    toHtml CONTRIBUTING.rst $docdir/html/CONTRIBUTING.html
+
+    rst2man \
+      --strip-elements-with-class=no-web \
+      --title=http \
+      --no-generator \
+      --no-datestamp \
+      --no-source-link \
+      README.rst \
+      $man/share/man/man1/http.1
+  '';
+
+  # the tests call rst2pseudoxml.py from docutils
+  preCheck = ''
+    export PATH=${docutils}/bin:$PATH
+  '';
+
+  checkPhase = ''
+    py.test ./httpie ./tests --doctest-modules --verbose ./httpie ./tests -k 'not test_chunked and not test_verbose_chunked and not test_multipart_chunked and not test_request_body_from_file_by_path_chunked'
+  '';
+
+  meta = with lib; {
     description = "A command line HTTP client whose goal is to make CLI human-friendly";
-    homepage = https://httpie.org/;
-    license = stdenv.lib.licenses.bsd3;
-    maintainers = with stdenv.lib.maintainers; [ antono relrod schneefux ];
+    homepage = "https://httpie.org/";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ antono relrod schneefux SuperSandro2000 ];
   };
 }

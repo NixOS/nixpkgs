@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, readline
+{ lib, stdenv, fetchurl, readline
 , compat ? false
 , callPackage
 , packageOverrides ? (self: super: {})
@@ -11,13 +11,22 @@
 let
 luaPackages = callPackage ../../lua-modules {lua=self; overrides=packageOverrides;};
 
+plat = if stdenv.isLinux then "linux"
+       else if stdenv.isDarwin then "macosx"
+       else if stdenv.hostPlatform.isMinGW then "mingw"
+       else if stdenv.isFreeBSD then "freebsd"
+       else if stdenv.isSunOS then "solaris"
+       else if stdenv.hostPlatform.isBSD then "bsd"
+       else if stdenv.hostPlatform.isUnix then "posix"
+       else "generic";
+
 self = stdenv.mkDerivation rec {
   pname = "lua";
   luaversion = with sourceVersion; "${major}.${minor}";
   version = "${luaversion}.${sourceVersion.patch}";
 
   src = fetchurl {
-    url = "https://www.lua.org/ftp/${pname}-${luaversion}.tar.gz";
+    url = "https://www.lua.org/ftp/${pname}-${version}.tar.gz";
     sha256 = hash;
   };
 
@@ -29,6 +38,14 @@ self = stdenv.mkDerivation rec {
 
   inherit patches;
 
+  postPatch = lib.optionalString (!stdenv.isDarwin) ''
+    # Add a target for a shared library to the Makefile.
+    sed -e '1s/^/LUA_SO = liblua.so/' \
+        -e 's/ALL_T *= */&$(LUA_SO) /' \
+        -i src/Makefile
+    cat ${./lua-dso.make} >> src/Makefile
+  '';
+
   # see configurePhase for additional flags (with space)
   makeFlags = [
     "INSTALL_TOP=${placeholder "out"}"
@@ -36,18 +53,17 @@ self = stdenv.mkDerivation rec {
     "R=${version}"
     "LDFLAGS=-fPIC"
     "V=${luaversion}"
-  ] ++ (if stdenv.isDarwin then [
-    "PLAT=macosx"
-  ] else [
-    "PLAT=linux"
-  ])
-  ;
+    "PLAT=${plat}"
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "RANLIB=${stdenv.cc.targetPrefix}ranlib"
+  ];
 
   configurePhase = ''
     runHook preConfigure
 
-    makeFlagsArray+=(CFLAGS="-DLUA_USE_LINUX -O2 -fPIC${if compat then " -DLUA_COMPAT_ALL" else ""}" )
-    makeFlagsArray+=(${stdenv.lib.optionalString stdenv.isDarwin "CC=\"$CC\""})
+    makeFlagsArray+=(CFLAGS='-O2 -fPIC${lib.optionalString compat " -DLUA_COMPAT_ALL"} $(${
+      if lib.versionAtLeast luaversion "5.2" then "SYSCFLAGS" else "MYCFLAGS"})' )
+    makeFlagsArray+=(${lib.optionalString stdenv.isDarwin "CC=\"$CC\""}${lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) " 'AR=${stdenv.cc.targetPrefix}ar rcu'"})
 
     installFlagsArray=( TO_BIN="lua luac" INSTALL_DATA='cp -d' \
       TO_LIB="${if stdenv.isDarwin then "liblua.${version}.dylib" else "liblua.a liblua.so liblua.so.${luaversion} liblua.so.${version}"}" )
@@ -77,10 +93,12 @@ self = stdenv.mkDerivation rec {
     Description: An Extensible Extension Language
     Version: ${version}
     Requires:
-    Libs: -L$out/lib -llua -lm
+    Libs: -L$out/lib -llua
     Cflags: -I$out/include
     EOF
+    ln -s "$out/lib/pkgconfig/lua.pc" "$out/lib/pkgconfig/lua-${luaversion}.pc"
     ln -s "$out/lib/pkgconfig/lua.pc" "$out/lib/pkgconfig/lua${luaversion}.pc"
+    ln -s "$out/lib/pkgconfig/lua.pc" "$out/lib/pkgconfig/lua${lib.replaceStrings [ "." ] [ "" ] luaversion}.pc"
   '';
 
   passthru = rec {
@@ -94,7 +112,7 @@ self = stdenv.mkDerivation rec {
   };
 
   meta = {
-    homepage = http://www.lua.org;
+    homepage = "http://www.lua.org";
     description = "Powerful, fast, lightweight, embeddable scripting language";
     longDescription = ''
       Lua combines simple procedural syntax with powerful data
@@ -104,8 +122,8 @@ self = stdenv.mkDerivation rec {
       management with incremental garbage collection, making it ideal
       for configuration, scripting, and rapid prototyping.
     '';
-    license = stdenv.lib.licenses.mit;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
   };
 };
 in self

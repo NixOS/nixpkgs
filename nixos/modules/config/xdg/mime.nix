@@ -2,6 +2,10 @@
 
 with lib;
 {
+  meta = {
+    maintainers = teams.freedesktop.members;
+  };
+
   options = {
     xdg.mime.enable = mkOption {
       type = types.bool;

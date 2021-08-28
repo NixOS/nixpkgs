@@ -1,21 +1,21 @@
-{ stdenv, fetchurl, pkgconfig
+{ lib, stdenv, fetchurl, pkg-config
 , freetype, fribidi
 , libXext, libXft, libXpm, libXrandr, libXrender, xorgproto
 , libXinerama
 , imlib2 }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
 
-  name = "fluxbox-${version}";
+  pname = "fluxbox";
   version = "1.3.7";
 
   src = fetchurl {
-    url = "mirror://sourceforge/fluxbox/${name}.tar.xz";
+    url = "mirror://sourceforge/fluxbox/${pname}-${version}.tar.xz";
     sha256 = "1h1f70y40qd225dqx937vzb4k2cz219agm1zvnjxakn5jkz7b37w";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ freetype fribidi libXext libXft libXpm libXrandr libXrender xorgproto libXinerama imlib2 ];
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     substituteInPlace util/fluxbox-generate_menu.in \
       --subst-var-by PREFIX "$out"
   '';
-  
+
   meta = {
     description = "Full-featured, light-resource X window manager";
     longDescription = ''
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
       fast, desktop experience. It is written in C++ and licensed
       under MIT license.
     '';
-    homepage = http://fluxbox.org/;
+    homepage = "http://fluxbox.org/";
     license = licenses.mit;
     maintainers = [ maintainers.AndersonTorres ];
     platforms = platforms.linux;

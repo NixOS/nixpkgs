@@ -1,4 +1,4 @@
-{ buildPythonPackage, stdenv, fetchPypi }:
+{ buildPythonPackage, lib, fetchPypi, setuptools }:
 
 buildPythonPackage rec {
   pname = "face_recognition_models";
@@ -12,8 +12,10 @@ buildPythonPackage rec {
   # no module named `tests` as no tests are available
   doCheck = false;
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/ageitgey/face_recognition_models;
+  propagatedBuildInputs = [ setuptools ];
+
+  meta = with lib; {
+    homepage = "https://github.com/ageitgey/face_recognition_models";
     license = licenses.cc0;
     maintainers = with maintainers; [ ma27 ];
     description = "Trained models for the face_recognition python library";

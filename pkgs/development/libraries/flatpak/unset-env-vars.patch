@@ -1,6 +1,8 @@
+diff --git a/common/flatpak-run.c b/common/flatpak-run.c
+index 8d52d3a5..81700183 100644
 --- a/common/flatpak-run.c
 +++ b/common/flatpak-run.c
-@@ -1192,6 +1192,7 @@ static const ExportData default_exports[] = {
+@@ -1232,6 +1232,7 @@ static const ExportData default_exports[] = {
    {"PERLLIB", NULL},
    {"PERL5LIB", NULL},
    {"XCURSOR_PATH", NULL},

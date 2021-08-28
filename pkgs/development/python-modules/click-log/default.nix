@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, click }:
+{ lib, buildPythonPackage, fetchPypi, click }:
 
 buildPythonPackage rec {
   pname = "click-log";
@@ -11,8 +11,8 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ click ];
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/click-contrib/click-log/;
+  meta = with lib; {
+    homepage = "https://github.com/click-contrib/click-log/";
     description = "Logging integration for Click";
     license = licenses.mit;
     maintainers = with maintainers; [ ];

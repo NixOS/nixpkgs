@@ -1,9 +1,9 @@
-{ stdenv, fetchurl, pkgconfig, doxygen, cmake, readline }:
+{ lib, stdenv, fetchurl, pkg-config, doxygen, cmake, readline }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
 
-  name = "lolcode-${version}";
+  pname = "lolcode";
   version = "0.11.2";
 
   src = fetchurl {
@@ -11,14 +11,14 @@ stdenv.mkDerivation rec {
     sha256 = "1li7ikcrs7wqah7gqkirg0k61n6pm12w7pydin966x1sdn9na46b";
   };
 
-  nativeBuildInputs = [ pkgconfig cmake doxygen ];
+  nativeBuildInputs = [ pkg-config cmake doxygen ];
   buildInputs = [ readline ];
 
   # Maybe it clashes with lci scientific logic software package...
   postInstall = "mv $out/bin/lci $out/bin/lolcode-lci";
 
   meta = {
-    homepage = http://lolcode.org;
+    homepage = "http://lolcode.org";
     description = "An esoteric programming language";
     longDescription = ''
       LOLCODE is a funny esoteric  programming language, a bit Pascal-like,
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl3;
     maintainers = [ maintainers.AndersonTorres ];
-    platforms = stdenv.lib.platforms.unix;
+    platforms = lib.platforms.unix;
   };
 
 }

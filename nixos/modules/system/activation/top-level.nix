@@ -1,4 +1,4 @@
-{ config, lib, pkgs, modules, baseModules, ... }:
+{ config, lib, pkgs, modules, baseModules, specialArgs, ... }:
 
 with lib;
 
@@ -11,20 +11,16 @@ let
   # you can provide an easy way to boot the same configuration
   # as you use, but with another kernel
   # !!! fix this
-  cloner = inheritParent: list:
-    map (childConfig:
+  children = mapAttrs (childName: childConfig:
       (import ../../../lib/eval-config.nix {
-        inherit baseModules;
+        inherit baseModules specialArgs;
+        system = config.nixpkgs.initialSystem;
         modules =
-           (optionals inheritParent modules)
+           (optionals childConfig.inheritParentConfig modules)
         ++ [ ./no-clone.nix ]
-        ++ [ childConfig ];
+        ++ [ childConfig.configuration ];
       }).config.system.build.toplevel
-    ) list;
-
-  children =
-     cloner false config.nesting.children
-  ++ cloner true config.nesting.clone;
+    ) config.specialisation;
 
   systemBuilder =
     let
@@ -46,8 +42,8 @@ let
 
         ln -s ${kernelPath} $out/kernel
         ln -s ${config.system.modulesTree} $out/kernel-modules
-        ${optionalString (pkgs.stdenv.hostPlatform.platform.kernelDTB or false) ''
-          ln -s ${config.boot.kernelPackages.kernel}/dtbs $out/dtbs
+        ${optionalString (config.hardware.deviceTree.package != null) ''
+          ln -s ${config.hardware.deviceTree.package} $out/dtbs
         ''}
 
         echo -n "$kernelParams" > $out/kernel-params
@@ -74,14 +70,11 @@ let
       echo -n "$configurationName" > $out/configuration-name
       echo -n "systemd ${toString config.systemd.package.interfaceVersion}" > $out/init-interface-version
       echo -n "$nixosLabel" > $out/nixos-version
-      echo -n "${pkgs.stdenv.hostPlatform.system}" > $out/system
+      echo -n "${config.boot.kernelPackages.stdenv.hostPlatform.system}" > $out/system
 
-      mkdir $out/fine-tune
-      childCount=0
-      for i in $children; do
-        childCount=$(( childCount + 1 ))
-        ln -s $i $out/fine-tune/child-$childCount
-      done
+      mkdir $out/specialisation
+      ${concatStringsSep "\n"
+      (mapAttrsToList (name: path: "ln -s ${path} $out/specialisation/${name}") children)}
 
       mkdir $out/bin
       export localeArchive="${config.i18n.glibcLocales}/lib/locale/locale-archive"
@@ -99,19 +92,17 @@ let
   # `switch-to-configuration' that activates the configuration and
   # makes it bootable.
   baseSystem = pkgs.stdenvNoCC.mkDerivation {
-    name = let hn = config.networking.hostName;
-               nn = if (hn != "") then hn else "unnamed";
-        in "nixos-system-${nn}-${config.system.nixos.label}";
+    name = "nixos-system-${config.system.name}-${config.system.nixos.label}";
     preferLocalBuild = true;
     allowSubstitutes = false;
     buildCommand = systemBuilder;
 
-    inherit (pkgs) utillinux coreutils;
+    inherit (pkgs) coreutils;
     systemd = config.systemd.package;
     shell = "${pkgs.bash}/bin/sh";
     su = "${pkgs.shadow.su}/bin/su";
+    utillinux = pkgs.util-linux;
 
-    inherit children;
     kernelParams = config.boot.kernelParams;
     installBootLoader =
       config.system.build.installBootLoader
@@ -122,8 +113,7 @@ let
     configurationName = config.boot.loader.grub.configurationName;
 
     # Needed by switch-to-configuration.
-
-    perl = "${pkgs.perl}/bin/perl " + (concatMapStringsSep " " (lib: "-I${lib}/${pkgs.perl.libPrefix}") (with pkgs.perlPackages; [ FileSlurp NetDBus XMLParser XMLTwig ]));
+    perl = pkgs.perl.withPackages (p: with p; [ FileSlurp NetDBus XMLParser XMLTwig ]);
   };
 
   # Handle assertions and warnings
@@ -142,6 +132,11 @@ let
 in
 
 {
+  imports = [
+    (mkRemovedOptionModule [ "nesting" "clone" ] "Use `specialisation.«name» = { inheritParentConfig = true; configuration = { ... }; }` instead.")
+    (mkRemovedOptionModule [ "nesting" "children" ] "Use `specialisation.«name».configuration = { ... }` instead.")
+  ];
+
   options = {
 
     system.build = mkOption {
@@ -153,26 +148,35 @@ in
       '';
     };
 
-    nesting.children = mkOption {
-      default = [];
+    specialisation = mkOption {
+      default = {};
+      example = lib.literalExample "{ fewJobsManyCores.configuration = { nix.buildCores = 0; nix.maxJobs = 1; }; }";
       description = ''
-        Additional configurations to build.
+        Additional configurations to build. If
+        <literal>inheritParentConfig</literal> is true, the system
+        will be based on the overall system configuration.
+
+        To switch to a specialised configuration
+        (e.g. <literal>fewJobsManyCores</literal>) at runtime, run:
+
+        <screen>
+        <prompt># </prompt>sudo /run/current-system/specialisation/fewJobsManyCores/bin/switch-to-configuration test
+        </screen>
       '';
-    };
+      type = types.attrsOf (types.submodule (
+        { ... }: {
+          options.inheritParentConfig = mkOption {
+            type = types.bool;
+            default = true;
+            description = "Include the entire system's configuration. Set to false to make a completely differently configured system.";
+          };
 
-    nesting.clone = mkOption {
-      default = [];
-      description = ''
-        Additional configurations to build based on the current
-        configuration which then has a lower priority.
-
-        To switch to a cloned configuration (e.g. <literal>child-1</literal>)
-        at runtime, run
-
-        <programlisting>
-        # sudo /run/current-system/fine-tune/child-1/bin/switch-to-configuration test
-        </programlisting>
-      '';
+          options.configuration = mkOption {
+            default = {};
+            description = "Arbitrary NixOS configuration options.";
+          };
+        })
+      );
     };
 
     system.boot.loader.id = mkOption {
@@ -185,7 +189,7 @@ in
 
     system.boot.loader.kernelFile = mkOption {
       internal = true;
-      default = pkgs.stdenv.hostPlatform.platform.kernelTarget;
+      default = pkgs.stdenv.hostPlatform.linux-kernel.target;
       type = types.str;
       description = ''
         Name of the kernel file to be passed to the bootloader.
@@ -256,6 +260,21 @@ in
         List of packages to override without doing a full rebuild.
         The original derivation and replacement derivation must have the same
         name length, and ideally should have close-to-identical directory layout.
+      '';
+    };
+
+    system.name = mkOption {
+      type = types.str;
+      default =
+        if config.networking.hostName == ""
+        then "unnamed"
+        else config.networking.hostName;
+      defaultText = '''networking.hostName' if non empty else "unnamed"'';
+      description = ''
+        The name of the system used in the <option>system.build.toplevel</option> derivation.
+        </para><para>
+        That derivation has the following name:
+        <literal>"nixos-system-''${config.system.name}-''${config.system.nixos.label}"</literal>
       '';
     };
 

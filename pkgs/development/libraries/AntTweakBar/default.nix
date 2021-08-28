@@ -1,9 +1,10 @@
-{ stdenv, fetchurl, unzip, xorg, libGLU_combined }:
+{ lib, stdenv, fetchurl, unzip, xorg, libGLU, libGL }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "AntTweakBar-1.16";
 
-  buildInputs = [ unzip xorg.libX11 libGLU_combined ];
+  nativeBuildInputs = [ unzip ];
+  buildInputs = [ xorg.libX11 libGLU libGL ];
 
   src = fetchurl {
     url = "mirror://sourceforge/project/anttweakbar/AntTweakBar_116.zip";
@@ -25,9 +26,9 @@ stdenv.mkDerivation rec {
       (compatibility and core profiles), DirectX 9, DirectX 10 or DirectX 11
       to interactively tweak parameters on-screen
     '';
-    homepage = http://anttweakbar.sourceforge.net/;
-    license = stdenv.lib.licenses.zlib;
-    maintainers = [ stdenv.lib.maintainers.razvan ];
-    platforms = stdenv.lib.platforms.linux;
+    homepage = "http://anttweakbar.sourceforge.net/";
+    license = lib.licenses.zlib;
+    maintainers = [ lib.maintainers.razvan ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -1,10 +1,10 @@
-{ stdenv, fetchurl, gtk2, gdk_pixbuf, atk, pango, glib, cairo, freetype
+{ lib, stdenv, fetchurl, gtk2, gdk-pixbuf, atk, pango, glib, cairo, freetype
 , fontconfig, libxml2, gnome2 }:
 
 let
 
-  libPath = stdenv.lib.makeLibraryPath
-    [ stdenv.cc.libc stdenv.cc.cc gtk2 gdk_pixbuf atk pango glib cairo
+  libPath = lib.makeLibraryPath
+    [ stdenv.cc.libc stdenv.cc.cc gtk2 gdk-pixbuf atk pango glib cairo
       freetype fontconfig libxml2 gnome2.gtksourceview
     ] + ":${stdenv.cc.cc.lib}/lib64:$out/libexec";
 
@@ -19,12 +19,12 @@ let
 
 in
 stdenv.mkDerivation rec {
-  name    = "verifast-${version}";
-  version = "18.02";
+  pname = "verifast";
+  version = "19.12";
 
   src = fetchurl {
-    url    = "https://github.com/verifast/verifast/releases/download/${version}/${name}-linux.tar.gz";
-    sha256 = "19050be23b6d5e471690421fee59f84c58b29e38379fb86b8f3713a206a4423e";
+    url    = "https://github.com/verifast/verifast/releases/download/${version}/${pname}-${version}-linux.tar.gz";
+    sha256 = "169kshjq4cf4i9v92azv0xaflrnik5686w7fwcgdhd6qkbzflzl6";
   };
 
   dontStrip = true;
@@ -43,8 +43,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Verification for C and Java programs via separation logic";
     homepage    = "http://people.cs.kuleuven.be/~bart.jacobs/verifast/";
-    license     = stdenv.lib.licenses.msrla;
+    license     = lib.licenses.mit;
     platforms   = [ "x86_64-linux" ];
-    maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
+    maintainers = [ lib.maintainers.thoughtpolice ];
   };
 }

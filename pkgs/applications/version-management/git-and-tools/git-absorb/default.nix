@@ -1,22 +1,32 @@
-{ stdenv, fetchFromGitHub, rustPlatform, libiconv, Security }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, installShellFiles, libiconv, Security }:
 
 rustPlatform.buildRustPackage rec {
-  name = "git-absorb-${version}";
-  version = "0.3.0";
+  pname = "git-absorb";
+  version = "0.6.6";
 
   src = fetchFromGitHub {
     owner  = "tummychow";
-    repo   = "git-absorb";
+    repo   = pname;
     rev    = "refs/tags/${version}";
-    sha256 = "1dm442lyk7f44bshm2ajync5pzdwvdc5xfpw2lkvjzxflmh5572z";
+    sha256 = "04v10bn24acify34vh5ayymsr1flcyb05f3az9k1s2m6nlxy5gb9";
   };
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ libiconv Security ];
+  nativeBuildInputs = [ installShellFiles ];
 
-  cargoSha256 = "0q40qcki49dw23n3brgdz5plvigmsf61jm0kfy48j89mijih8zy7";
+  buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security ];
 
-  meta = with stdenv.lib; {
-    inherit (src.meta) homepage;
+  cargoSha256 = "0dax6wkbyk5p8p0mm406vfgmqfmfxzyzqps6yk8fachi61x12ja6";
+
+  postInstall = ''
+    installManPage Documentation/git-absorb.1
+    for shell in bash zsh fish; do
+      $out/bin/git-absorb --gen-completions $shell > git-absorb.$shell
+      installShellCompletion git-absorb.$shell
+    done
+  '';
+
+  meta = with lib; {
+    homepage = "https://github.com/tummychow/git-absorb";
     description = "git commit --fixup, but automatic";
     license = [ licenses.bsd3 ];
     maintainers = [ maintainers.marsam ];

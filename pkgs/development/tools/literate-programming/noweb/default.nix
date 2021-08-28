@@ -1,29 +1,83 @@
-{stdenv, fetchurl, gawk}:
+{ lib, stdenv, fetchFromGitHub, nawk, groff, icon-lang, useIcon ? true }:
 
-stdenv.mkDerivation {
-  name = "noweb-2.11b";
-  src = fetchurl {
-    urls = [ "http://ftp.de.debian.org/debian/pool/main/n/noweb/noweb_2.11b.orig.tar.gz"
-             "ftp://www.eecs.harvard.edu/pub/nr/noweb.tgz"
-          ];
-    sha256 = "10hdd6mrk26kyh4bnng4ah5h1pnanhsrhqa7qwqy6dyv3rng44y9";
+lib.fix (noweb: stdenv.mkDerivation rec {
+  pname = "noweb";
+  version = "2.12";
+
+  src = fetchFromGitHub {
+    owner = "nrnrnr";
+    repo = "noweb";
+    rev = "v${builtins.replaceStrings ["."] ["_"] version}";
+    sha256 = "1160i2ghgzqvnb44kgwd6s3p4jnk9668rmc15jlcwl7pdf3xqm95";
   };
+
+  sourceRoot = "source/src";
+
+  patches = [
+    # Remove FAQ
+    ./no-FAQ.patch
+  ];
+
+  postPatch = ''
+    substituteInPlace Makefile --replace 'strip' '${stdenv.cc.targetPrefix}strip'
+  '';
+
+  nativeBuildInputs = [ groff ] ++ lib.optionals useIcon [ icon-lang ];
+  buildInputs = [ nawk ];
+
   preBuild = ''
-    mkdir -p $out/lib/noweb
-    cd src
-    makeFlags="BIN=$out/bin LIB=$out/lib/noweb MAN=$out/share/man TEXINPUTS=$out/share/texmf/tex/latex"
+    mkdir -p "$out/lib/noweb"
   '';
-  preInstall=''mkdir -p $out/share/texmf/tex/latex'';
-  postInstall= ''
-    substituteInPlace $out/bin/cpif --replace "PATH=/bin:/usr/bin" ""
-    for f in $out/bin/{noweb,nountangle,noroots,noroff,noindex} \
-             $out/lib/noweb/{toroff,btdefn,totex,noidx,unmarkup,toascii,tohtml,emptydefn}; do
-      substituteInPlace $f --replace "nawk" "${gawk}/bin/awk"
-    done
-  '';
-  patches = [ ./no-FAQ.patch ];
 
-  meta = {
-    platforms = stdenv.lib.platforms.linux;
+  makeFlags = lib.optionals useIcon [
+    "LIBSRC=icon"
+    "ICONC=icont"
+  ] ++ [ "CC=${stdenv.cc.targetPrefix}cc" ];
+
+  preInstall = ''
+    mkdir -p "$tex/tex/latex/noweb"
+    installFlagsArray+=(                                   \
+        "BIN=${placeholder "out"}/bin"                     \
+        "ELISP=${placeholder "out"}/share/emacs/site-lisp" \
+        "LIB=${placeholder "out"}/lib/noweb"               \
+        "MAN=${placeholder "out"}/share/man"               \
+        "TEXINPUTS=${placeholder "tex"}/tex/latex/noweb"   \
+    )
+  '';
+
+  installTargets = [ "install-code" "install-tex" "install-elisp" ];
+
+  postInstall = ''
+    substituteInPlace "$out/bin/cpif" --replace "PATH=/bin:/usr/bin" ""
+
+    for f in $out/bin/no{index,roff,roots,untangle,web} \
+             $out/lib/noweb/to{ascii,html,roff,tex} \
+             $out/lib/noweb/{bt,empty}defn \
+             $out/lib/noweb/{noidx,pipedocs,unmarkup}; do
+        # NOTE: substituteInPlace breaks Icon binaries, so make sure the script
+        #       uses (n)awk before calling.
+        if grep -q nawk "$f"; then
+            substituteInPlace "$f" --replace "nawk" "${nawk}/bin/awk"
+        fi
+    done
+
+    # HACK: This is ugly, but functional.
+    PATH=$out/bin:$PATH make -BC xdoc
+    make "''${installFlagsArray[@]}" install-man
+
+    ln -s "$tex" "$out/share/texmf"
+  '';
+
+  outputs = [ "out" "tex" ];
+
+  tlType = "run";
+  passthru.pkgs = [ noweb.tex ];
+
+  meta = with lib; {
+    description = "A simple, extensible literate-programming tool";
+    homepage = "https://www.cs.tufts.edu/~nr/noweb";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ yurrriq ];
+    platforms = with platforms; linux ++ darwin;
   };
-}
+})

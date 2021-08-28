@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, xercesc, getopt }:
+{ lib, stdenv, fetchurl, xercesc, getopt }:
 
 let
   platform = if stdenv.isLinux then "linux" else
              if stdenv.isDarwin then "macosx" else
              throw "Unsupported platform";
 in stdenv.mkDerivation rec {
-  name = "xalan-c-${version}";
+  pname = "xalan-c";
   version = "1.11";
 
   src = fetchurl {
@@ -23,10 +23,10 @@ in stdenv.mkDerivation rec {
   buildInputs = [ xercesc getopt ];
 
   meta = {
-    homepage = http://xalan.apache.org/;
+    homepage = "http://xalan.apache.org/";
     description = "A XSLT processor for transforming XML documents";
-    license = stdenv.lib.licenses.asl20;
-    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
-    maintainers = [ stdenv.lib.maintainers.jagajaga ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = [ lib.maintainers.jagajaga ];
   };
 }

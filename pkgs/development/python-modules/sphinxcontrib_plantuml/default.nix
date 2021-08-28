@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , sphinx
@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-plantuml";
-  version = "0.15";
+  version = "0.20";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "06yl6aiw8gpq3wmi6wxy5lahfgbbmlw6nchq9h1ssi5lipwaxn7a";
+    sha256 = "041d8f79599522949eda129146a60955d0b7544963790411106fff6f9f3daab4";
   };
 
   # No tests included.
@@ -19,9 +19,9 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ sphinx plantuml ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Provides a Sphinx domain for embedding UML diagram with PlantUML";
-    homepage = https://bitbucket.org/birkenfeld/sphinx-contrib;
+    homepage = "https://github.com/sphinx-contrib/plantuml/";
     license = with licenses; [ bsd2 ];
   };
 

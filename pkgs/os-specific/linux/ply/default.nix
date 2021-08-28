@@ -1,12 +1,13 @@
-{ stdenv, kernel, fetchFromGitHub, autoreconfHook, yacc, flex, p7zip }:
+{ lib, stdenv, kernel, fetchFromGitHub, autoreconfHook, bison, flex, p7zip, rsync }:
 
-assert kernel != null -> stdenv.lib.versionAtLeast kernel.version "4.0";
+assert kernel != null -> lib.versionAtLeast kernel.version "4.0";
 
 let
   version = "1.0.beta1-9e810b1";
 in stdenv.mkDerivation {
-  name = "ply-${version}";
-  nativeBuildInputs = [ autoreconfHook flex yacc p7zip ];
+  pname = "ply";
+  inherit version;
+  nativeBuildInputs = [ autoreconfHook flex bison p7zip rsync ];
 
   src = fetchFromGitHub {
     owner = "iovisor";
@@ -32,9 +33,9 @@ in stdenv.mkDerivation {
     ./autogen.sh --prefix=$out
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "dynamic Tracing in Linux";
-    homepage = https://wkz.github.io/ply/;
+    homepage = "https://wkz.github.io/ply/";
     license = [ licenses.gpl2 ];
     maintainers = with maintainers; [ mic92 mbbx6spp ];
   };

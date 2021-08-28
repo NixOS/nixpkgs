@@ -29,12 +29,12 @@ stdenv.mkDerivation rec {
               sha256 = "0j0aq8dgzmb210xdrh0v3d4nblskl3zsckl8bzf1a603wcx085cg";
             };
 
-  buildInputs = lib.optional stdenv.isDarwin unzip;
+  nativeBuildInputs = lib.optional stdenv.isDarwin unzip;
 
   buildPhase = lib.optionalString (!stdenv.isDarwin) ''
     patchelf \
       --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      --set-rpath "${stdenv.lib.makeLibraryPath [ freetype fontconfig stdenv.cc.cc stdenv.cc.cc openssl ]}" \
+      --set-rpath "${lib.makeLibraryPath [ freetype fontconfig stdenv.cc.cc stdenv.cc.cc openssl ]}" \
       bin/phantomjs
   '';
 
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
       - Network Monitoring
     '';
 
-    homepage = http://phantomjs.org/;
+    homepage = "https://phantomjs.org/";
     license = lib.licenses.bsd3;
 
     maintainers = [ lib.maintainers.bluescreen303 ];

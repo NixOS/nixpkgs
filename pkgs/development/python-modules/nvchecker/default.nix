@@ -1,29 +1,63 @@
-{ stdenv, buildPythonPackage, fetchPypi, pythonOlder, pytest, setuptools, structlog, pytest-asyncio, pytest_xdist, flaky, tornado, pycurl }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, pythonOlder
+, pytestCheckHook
+, setuptools
+, packaging
+, toml
+, structlog
+, appdirs
+, pytest-asyncio
+, flaky
+, tornado
+, pycurl
+, aiohttp
+, pytest-httpbin
+, docutils
+, installShellFiles
+}:
 
 buildPythonPackage rec {
   pname = "nvchecker";
-  version = "1.4.3";
+  version = "2.3";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0v340wkq4sn9pvcpjh076l8mcqkn3nrn7if8p6iysk02bjxvknbv";
+  # Tests not included in PyPI tarball
+  src = fetchFromGitHub {
+    owner = "lilydjwg";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "0ikqjlw6v7va69i8qskj1lf07ik84q4n3qgsb7khk520gv2ks3sx";
   };
 
-  propagatedBuildInputs = [ setuptools structlog tornado pycurl ];
-  checkInputs = [ pytest pytest-asyncio pytest_xdist flaky ];
+  patches = [
+    # Fix test that fail in sandbox build. See https://github.com/lilydjwg/nvchecker/pull/179
+    (fetchpatch {
+      url = "https://github.com/lilydjwg/nvchecker/commit/7366d82bfc3dcf231f7908e259bf2437cf7dafd5.patch";
+      sha256 = "0pwrwa2wyy4i668lk2mqzzy6y3xi08mq3w520b4954kfm07g75a9";
+    })
+  ];
 
-  # Disable tests for now, because our version of pytest seems to be too new
-  # https://github.com/lilydjwg/nvchecker/commit/42a02efec84824a073601e1c2de30339d251e4c7
-  doCheck = false;
+  nativeBuildInputs = [ installShellFiles docutils ];
+  propagatedBuildInputs = [ setuptools packaging toml structlog appdirs tornado pycurl aiohttp ];
+  checkInputs = [ pytestCheckHook pytest-asyncio flaky pytest-httpbin ];
 
-  checkPhase = ''
-    py.test
+  disabled = pythonOlder "3.7";
+
+  postBuild = ''
+    patchShebangs docs/myrst2man.py
+    make -C docs man
   '';
 
-  disabled = pythonOlder "3.5";
+  postInstall = ''
+    installManPage docs/_build/man/nvchecker.1
+  '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/lilydjwg/nvchecker;
+  pytestFlagsArray = [ "-m 'not needs_net'" ];
+
+  meta = with lib; {
+    homepage = "https://github.com/lilydjwg/nvchecker";
     description = "New version checker for software";
     license = licenses.mit;
     maintainers = with maintainers; [ marsam ];

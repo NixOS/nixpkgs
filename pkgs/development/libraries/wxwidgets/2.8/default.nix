@@ -1,27 +1,28 @@
-{ stdenv, fetchurl, pkgconfig, gtk2, libXinerama, libSM, libXxf86vm, xorgproto
-, gstreamer, gst-plugins-base, GConf, libX11, cairo
-, libGLSupported
-, withMesa ? libGLSupported, libGLU ? null, libGL ? null
+{ lib, stdenv, fetchurl, pkg-config, gtk2, libXinerama, libSM, libXxf86vm, xorgproto
+, libX11, cairo
+, libGLSupported ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
+, withMesa ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
+, libGLU ? null, libGL ? null
 , compat24 ? false, compat26 ? true, unicode ? true,
 }:
 
 assert withMesa -> libGLU != null && libGL != null;
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   version = "2.8.12.1";
-  name = "wxGTK-${version}";
+  pname = "wxGTK";
 
   src = fetchurl {
     url = "mirror://sourceforge/wxpython/wxPython-src-${version}.tar.bz2";
     sha256 = "1l1w4i113csv3bd5r8ybyj0qpxdq83lj6jrc5p7cc10mkwyiagqz";
   };
 
-  buildInputs = [ gtk2 libXinerama libSM libXxf86vm xorgproto gstreamer gst-plugins-base GConf libX11 cairo ]
+  buildInputs = [ gtk2 libXinerama libSM libXxf86vm xorgproto libX11 cairo ]
     ++ optional withMesa libGLU;
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   hardeningDisable = [ "format" ];
 
@@ -43,7 +44,7 @@ stdenv.mkDerivation rec {
     + optionalString withMesa "${libGLU.out}/lib ${libGL.out}/lib ";
 
   # Work around a bug in configure.
-  NIX_CFLAGS_COMPILE = [ "-DHAVE_X11_XLIB_H=1" "-lX11" "-lcairo" "-Wno-narrowing" ];
+  NIX_CFLAGS_COMPILE = "-DHAVE_X11_XLIB_H=1 -lX11 -lcairo -Wno-narrowing";
 
   preConfigure = "
     substituteInPlace configure --replace 'SEARCH_INCLUDE=' 'DUMMY_SEARCH_INCLUDE='
@@ -68,7 +69,7 @@ stdenv.mkDerivation rec {
   meta = {
     platforms = platforms.linux;
     license = licenses.wxWindows;
-    homepage = https://www.wxwidgets.org/;
+    homepage = "https://www.wxwidgets.org/";
     description = "a C++ library that lets developers create applications for Windows, macOS, Linux and other platforms with a single code base";
     longDescription = "wxWidgets gives you a single, easy-to-use API for writing GUI applications on multiple platforms that still utilize the native platform's controls and utilities. Link with the appropriate library for your platform and compiler, and your application will adopt the look and feel appropriate to that platform. On top of great GUI functionality, wxWidgets gives you: online help, network programming, streams, clipboard and drag and drop, multithreading, image loading and saving in a variety of popular formats, database support, HTML viewing and printing, and much more.";
   };

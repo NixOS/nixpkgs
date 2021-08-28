@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, fuse }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "9pfs-20150918";
 
   src = fetchFromGitHub {
@@ -9,6 +9,10 @@ stdenv.mkDerivation rec {
     rev = "7f4ca4cd750d650c1215b92ac3cc2a28041960e4";
     sha256 = "007s2idsn6bspmfxv1qabj39ggkgvn6gwdbhczwn04lb4c6gh3xc";
   };
+
+  # Upstream development has stopped and is no longer accepting patches
+  # https://github.com/mischief/9pfs/pull/3
+  patches = [ ./fix-darwin-build.patch ];
 
   preConfigure =
     ''
@@ -22,10 +26,10 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    homepage = https://github.com/mischief/9pfs;
+    homepage = "https://github.com/mischief/9pfs";
     description = "FUSE-based client of the 9P network filesystem protocol";
     maintainers = [ lib.maintainers.eelco ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
     license = with lib.licenses; [ lpl-102 bsd2 ];
   };
 }

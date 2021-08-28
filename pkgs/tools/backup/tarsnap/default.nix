@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, zlib, e2fsprogs }:
+{ lib, stdenv, fetchurl, openssl, zlib, e2fsprogs }:
 
 let
   zshCompletion = fetchurl {
@@ -7,7 +7,7 @@ let
   };
 in
 stdenv.mkDerivation rec {
-  name = "tarsnap-${version}";
+  pname = "tarsnap";
   version = "1.0.39";
 
   src = fetchurl {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   };
 
   preConfigure = ''
-    configureFlags="--with-bash-completion-dir=$out/etc/bash_completion.d"
+    configureFlags="--with-bash-completion-dir=$out/share/bash-completion/completions"
   '';
 
   patchPhase = ''
@@ -29,13 +29,13 @@ stdenv.mkDerivation rec {
     install -m 444 -D ${zshCompletion} $out/share/zsh/site-functions/_tarsnap
   '';
 
-  buildInputs = [ openssl zlib ] ++ stdenv.lib.optional stdenv.isLinux e2fsprogs ;
+  buildInputs = [ openssl zlib ] ++ lib.optional stdenv.isLinux e2fsprogs ;
 
   meta = {
     description = "Online backups for the truly paranoid";
     homepage    = "http://www.tarsnap.com/";
-    license     = "tarsnap";
-    platforms   = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ thoughtpolice roconnor ];
+    license     = lib.licenses.unfree;
+    platforms   = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ thoughtpolice roconnor ];
   };
 }

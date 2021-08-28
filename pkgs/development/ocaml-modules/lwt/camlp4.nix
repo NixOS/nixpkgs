@@ -15,6 +15,8 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ camlp4 ];
 
+  preBuild = "rm META.lwt_camlp4";
+
   meta = {
     description = "Camlp4 syntax extension for Lwt (deprecated)";
     license = lib.licenses.lgpl21;

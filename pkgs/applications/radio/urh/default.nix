@@ -1,25 +1,34 @@
-{ stdenv, fetchFromGitHub, python3Packages
-, hackrf, rtl-sdr, airspy, limesuite }:
+{ lib, fetchFromGitHub, python3Packages
+, hackrf, rtl-sdr, airspy, limesuite, libiio
+, qt5
+, USRPSupport ? false, uhd }:
 
 python3Packages.buildPythonApplication rec {
   pname = "urh";
-  version = "2.7.0";
+  version = "2.9.1";
 
   src = fetchFromGitHub {
     owner = "jopohl";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0yxv38p8a2srk9c55jj96vcib6m6pb6m485ysfg2ilwjzipx2ab0";
+    sha256 = "0s8zlq2bx6hp8c522rkxj9kbkf3a0qj6iyg7q9dcxmcl3q2sanq9";
   };
 
-  buildInputs = [ hackrf rtl-sdr airspy limesuite ];
+  nativeBuildInputs = [ qt5.wrapQtAppsHook ];
+  buildInputs = [ hackrf rtl-sdr airspy limesuite libiio ]
+    ++ lib.optional USRPSupport uhd;
+
   propagatedBuildInputs = with python3Packages; [
-    pyqt5 numpy psutil cython pyzmq
+    pyqt5 numpy psutil cython pyzmq pyaudio setuptools
   ];
+
+  postFixup = ''
+    wrapQtApp $out/bin/urh
+  '';
 
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/jopohl/urh";
     description = "Universal Radio Hacker: investigate wireless protocols like a boss";
     license = licenses.gpl3;

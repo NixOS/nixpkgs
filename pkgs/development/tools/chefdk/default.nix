@@ -1,20 +1,21 @@
-{ lib, bundlerEnv, ruby_2_4, perl, autoconf }:
+{ lib, bundlerEnv, bundlerUpdateScript, ruby, perl, autoconf }:
 
 bundlerEnv {
-  # Last updated via:
-  # nix-shell -p bundix -p gcc -p libxml2 -p zlib --run "bundix -mdl"
-  name = "chefdk-2.4.17";
+  name = "chef-dk-4.13.3";
 
-  ruby = ruby_2_4;
+  inherit ruby;
   gemdir = ./.;
 
   buildInputs = [ perl autoconf ];
 
+  passthru.updateScript = bundlerUpdateScript "chefdk";
+
   meta = with lib; {
     description = "A streamlined development and deployment workflow for Chef platform";
-    homepage    = https://downloads.chef.io/chef-dk/;
+    homepage    = "https://downloads.chef.io/chef-dk/";
     license     = licenses.asl20;
-    maintainers = with maintainers; [ offline ];
+    maintainers = with maintainers; [ offline nicknovitski ];
     platforms   = platforms.unix;
+    badPlatforms = [ "aarch64-linux" ];
   };
 }

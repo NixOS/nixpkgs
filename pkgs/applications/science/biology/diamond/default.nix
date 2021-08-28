@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, cmake, zlib }:
+{ lib, stdenv, fetchurl, cmake, zlib }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "diamond-0.8.36";
 
   src = fetchurl {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ zlib ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Accelerated BLAST compatible local sequence aligner";
     longDescription = ''
       A sequence aligner for protein and translated DNA
@@ -31,10 +31,10 @@ stdenv.mkDerivation rec {
       "Fast and sensitive protein alignment using DIAMOND",
       Nature Methods 12, 59-60 (2015).
         '';
-    homepage = https://github.com/bbuchfink/diamond;
+    homepage = "https://github.com/bbuchfink/diamond";
     license = {
       fullName = "University of Tuebingen, Benjamin Buchfink";
-      url = https://raw.githubusercontent.com/bbuchfink/diamond/master/src/COPYING;
+      url = "https://raw.githubusercontent.com/bbuchfink/diamond/master/src/COPYING";
     };
     maintainers = [ maintainers.metabar ];
   };

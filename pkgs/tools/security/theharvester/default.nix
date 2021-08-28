@@ -1,40 +1,57 @@
-{ stdenv, fetchFromGitHub, makeWrapper, python3Packages }:
+{ lib
+, fetchFromGitHub
+, python3
+}:
 
-stdenv.mkDerivation rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "theHarvester";
-  version = "3.0.6";
+  version = "3.2.3";
 
   src = fetchFromGitHub {
     owner = "laramies";
     repo = pname;
     rev = version;
-    sha256 = "0f33a7sfb5ih21yp1wspb03fxsls1m14yizgrw0srfirm2a6aa0c";
+    sha256 = "02jhk34znpvq522pqr3x4c0rljw37x62znwycijf1zx81dpbn4rm";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  propagatedBuildInputs = with python3.pkgs; [
+    aiodns
+    aiohttp
+    aiomultiprocess
+    aiosqlite
+    beautifulsoup4
+    censys
+    certifi
+    dns
+    gevent
+    grequests
+    lxml
+    netaddr
+    plotly
+    pyppeteer
+    pyyaml
+    requests
+    retrying
+    shodan
+    texttable
+    uvloop
+  ];
 
-  # add dependencies
-  propagatedBuildInputs = with python3Packages; [ requests beautifulsoup4 plotly ];
+  checkInputs = [ python3.pkgs.pytest ];
 
-  installPhase = ''
-    # create dirs
-    mkdir -p $out/share/${pname} $out/bin
+  checkPhase = "runHook preCheck ; pytest tests/test_myparser.py ; runHook postCheck";
+  # We don't run other tests (discovery modules) because they require network access
 
-    # move project code
-    mv * $out/share/${pname}/
-
-    # make project runnable
-    chmod +x $out/share/${pname}/theHarvester.py
-    ln -s $out/share/${pname}/theHarvester.py $out/bin
-
-    wrapProgram "$out/bin/theHarvester.py" --prefix PYTHONPATH : $out/share/${pname}:$PYTHONPATH
-  '';
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Gather E-mails, subdomains and names from different public sources";
+    longDescription = ''
+      theHarvester is a very simple, yet effective tool designed to be used in the early
+      stages of a penetration test. Use it for open source intelligence gathering and
+      helping to determine an entity's external threat landscape on the internet. The tool
+      gathers emails, names, subdomains, IPs, and URLs using multiple public data sources.
+    '';
     homepage = "https://github.com/laramies/theHarvester";
-    platforms = platforms.all;
-    maintainers = with maintainers; [ treemo ];
-    license = licenses.gpl2;
+    maintainers = with maintainers; [ c0bw3b treemo ];
+    license = licenses.gpl2Only;
   };
 }

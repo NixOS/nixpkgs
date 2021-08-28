@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , ed, autoreconfHook
 }:
 
@@ -13,21 +13,26 @@ stdenv.mkDerivation rec {
   patches = [
     # https://git.savannah.gnu.org/cgit/patch.git/patch/?id=f290f48a621867084884bfff87f8093c15195e6a
     ./CVE-2018-6951.patch
-    (fetchurl {
-      url = https://sources.debian.org/data/main/p/patch/2.7.6-2/debian/patches/Allow_input_files_to_be_missing_for_ed-style_patches.patch;
-      sha256 = "0iw0lk0yhnhvfjzal48ij6zdr92mgb84jq7fwryy1hdhi47hhq64";
-    })
-    (fetchurl { # CVE-2018-1000156
-      url = https://sources.debian.org/data/main/p/patch/2.7.6-2/debian/patches/Fix_arbitrary_command_execution_in_ed-style_patches.patch;
-      sha256 = "1bpy16n3hm5nv9xkrn6c4wglzsdzj3ss1biq16w9kfv48p4hx2vg";
-    })
+
+    # https://git.savannah.gnu.org/cgit/patch.git/patch/?id=b5a91a01e5d0897facdd0f49d64b76b0f02b43e1
+    ./Allow_input_files_to_be_missing_for_ed-style_patches.patch
+
+    # https://git.savannah.gnu.org/cgit/patch.git/patch/?id=123eaff0d5d1aebe128295959435b9ca5909c26d
+    ./CVE-2018-1000156.patch
+
     # https://git.savannah.gnu.org/cgit/patch.git/commit/?id=9c986353e420ead6e706262bf204d6e03322c300
     ./CVE-2018-6952.patch
+
+    # https://git.savannah.gnu.org/cgit/patch.git/patch/?id=dce4683cbbe107a95f1f0d45fabc304acfb5d71a
+    ./CVE-2019-13636.patch
+
+    # https://git.savannah.gnu.org/cgit/patch.git/patch/?id=3fcd042d26d70856e826a42b5f93dc4854d80bf0
+    ./CVE-2019-13638-and-CVE-2018-20969.patch
   ];
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  configureFlags = stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  configureFlags = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "ac_cv_func_strnlen_working=yes"
   ];
 
@@ -43,11 +48,11 @@ stdenv.mkDerivation rec {
          more original files, producing patched versions.
       '';
 
-    homepage = https://savannah.gnu.org/projects/patch;
+    homepage = "https://savannah.gnu.org/projects/patch";
 
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
 
     maintainers = [ ];
-    platforms = stdenv.lib.platforms.all;
+    platforms = lib.platforms.all;
   };
 }

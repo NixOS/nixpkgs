@@ -1,19 +1,19 @@
-{ stdenv, fetchurl, ocamlPackages, libGLU_combined, freeglut
-, mysql, mpfr, gmp, libtiff, libjpeg, libpng, giflib
+{ lib, stdenv, fetchurl, ocamlPackages, libGLU, libGL, freeglut, giflib
+, libmysqlclient, mpfr, gmp, libtiff, libjpeg, libpng
 }:
 
 stdenv.mkDerivation {
   name = "glsurf-3.3.1";
 
   src = fetchurl {
-    url = "https://lama.univ-savoie.fr/~raffalli/glsurf/glsurf-3.3.1.tar.gz";
+    url = "https://raffalli.eu/~christophe/glsurf/glsurf-3.3.1.tar.gz";
     sha256 = "0w8xxfnw2snflz8wdr2ca9f5g91w5vbyp1hwlx1v7vg83d4bwqs7";
   };
 
-  buildInputs = [ freeglut libGLU_combined mysql.connector-c mpfr gmp
-    libtiff libjpeg libpng giflib ]
+  buildInputs = [ freeglut libGLU libGL libmysqlclient mpfr giflib gmp
+    libtiff libjpeg libpng ]
   ++ (with ocamlPackages; [
-    ocaml findlib ocaml_mysql lablgl camlimages_4_0 mlgmpidl
+    ocaml findlib ocaml_mysql lablgl camlimages_4_1_2 mlgmpidl
   ]);
 
   installPhase = ''
@@ -24,8 +24,8 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = http://www.lama.univ-savoie.fr/~raffalli/glsurf;
+    homepage = "https://raffalli.eu/~christophe/glsurf/";
     description = "A program to draw implicit surfaces and curves";
-    license = stdenv.lib.licenses.lgpl21;
+    license = lib.licenses.gpl2Plus;
   };
 }

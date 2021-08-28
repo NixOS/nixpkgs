@@ -1,6 +1,6 @@
 { pkgs, mkDerivation }:
 
-mkDerivation rec {
+mkDerivation {
   baseName = "erlang";
   version = "16B02.basho10";
 
@@ -27,7 +27,7 @@ mkDerivation rec {
   installTargets = "install";
   postInstall = let
     manpages = pkgs.fetchurl {
-      url = "http://www.erlang.org/download/otp_doc_man_R16B02.tar.gz";
+      url = "https://www.erlang.org/download/otp_doc_man_R16B02.tar.gz";
       sha256 = "12apxjmmd591y9g9bhr97z5jbd1jarqg7wj0y2sqhl21hc1yp75p";
     };
   in ''
@@ -42,7 +42,7 @@ mkDerivation rec {
   '';
 
   meta = {
-    homepage = https://github.com/basho/otp/;
+    homepage = "https://github.com/basho/otp/";
     description = "Programming language used for massively scalable soft real-time systems, Basho fork";
 
     longDescription = ''
@@ -59,7 +59,7 @@ mkDerivation rec {
     knownVulnerabilities = [ "CVE-2017-1000385" ];
 
     platforms = ["x86_64-linux" "x86_64-darwin"];
-    license = pkgs.stdenv.lib.licenses.asl20;
-    maintainers = with pkgs.stdenv.lib.maintainers; [ mdaiter ];
+    license = pkgs.lib.licenses.asl20;
+    maintainers = with pkgs.lib.maintainers; [ mdaiter ];
   };
 }

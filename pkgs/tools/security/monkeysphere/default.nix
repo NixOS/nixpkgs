@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper
+{ lib, stdenv, fetchurl, makeWrapper
 , perl, libassuan, libgcrypt
 , perlPackages, lockfileProgs, gnupg, coreutils
 # For the tests:
@@ -13,7 +13,7 @@ let
     patches = oldAttrs.patches ++ [ ./openssh-nixos-sandbox.patch ];
   });
 in stdenv.mkDerivation rec {
-  name = "monkeysphere-${version}";
+  pname = "monkeysphere";
   version = "0.44";
 
   # The patched OpenSSH binary MUST NOT be used (except in the check phase):
@@ -32,20 +32,20 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ perl libassuan libgcrypt ]
-    ++ stdenv.lib.optional doCheck
+    ++ lib.optional doCheck
       ([ gnupg opensshUnsafe which socat cpio hexdump procps lockfileProgs ] ++
       (with perlPackages; [ CryptOpenSSLRSA CryptOpenSSLBignum ]));
 
-  makeFlags = ''
-    PREFIX=/
-    DESTDIR=$(out)
-  '';
+  makeFlags = [
+    "PREFIX=/"
+    "DESTDIR=$(out)"
+  ];
 
   # The tests should be run (and succeed) when making changes to this package
   # but they aren't enabled by default because they "drain" entropy (GnuPG
   # still uses /dev/random).
   doCheck = false;
-  preCheck = stdenv.lib.optionalString doCheck ''
+  preCheck = lib.optionalString doCheck ''
     patchShebangs tests/
     patchShebangs src/
     sed -i \
@@ -64,12 +64,12 @@ in stdenv.mkDerivation rec {
               CryptOpenSSLRSA
               CryptOpenSSLBignum
             ])
-          + stdenv.lib.optionalString
+          + lib.optionalString
               (builtins.length runtimeDeps > 0)
-              " --prefix PATH : ${stdenv.lib.makeBinPath runtimeDeps}";
+              " --prefix PATH : ${lib.makeBinPath runtimeDeps}";
         wrapMonkeysphere = runtimeDeps: program:
           "wrapProgram $out/bin/${program} ${wrapperArgs runtimeDeps}\n";
-        wrapPrograms = runtimeDeps: programs: stdenv.lib.concatMapStrings
+        wrapPrograms = runtimeDeps: programs: lib.concatMapStrings
           (wrapMonkeysphere runtimeDeps)
           programs;
     in wrapPrograms [ gnupg ] [ "monkeysphere-authentication" "monkeysphere-host" ]
@@ -84,8 +84,8 @@ in stdenv.mkDerivation rec {
         done
       '';
 
-  meta = with stdenv.lib; {
-    homepage = http://web.monkeysphere.info/;
+  meta = with lib; {
+    homepage = "http://web.monkeysphere.info/";
     description = "Leverage the OpenPGP web of trust for SSH and TLS authentication";
     longDescription = ''
       The Monkeysphere project's goal is to extend OpenPGP's web of
@@ -97,7 +97,7 @@ in stdenv.mkDerivation rec {
       familiar with, such as your web browser0 or secure shell.
     '';
     license = licenses.gpl3Plus;
-    platforms = platforms.all;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ primeos ];
   };
 }

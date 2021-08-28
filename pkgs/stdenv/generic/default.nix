@@ -1,6 +1,15 @@
 let lib = import ../../../lib; in lib.makeOverridable (
 
-{ name ? "stdenv", preHook ? "", initialPath, cc, shell
+{ name ? "stdenv", preHook ? "", initialPath
+
+, # If we don't have a C compiler, we might either have `cc = null` or `cc =
+  # throw ...`, but if we do have a C compiler we should definiely have `cc !=
+  # null`.
+  #
+  # TODO(@Ericson2314): Add assert without creating infinite recursion
+  hasCC ? cc != null, cc
+
+, shell
 , allowedRequisites ? null, extraAttrs ? {}, overrides ? (self: super: {}), config
 
 , # The `fetchurl' to use for downloading curl and its dependencies
@@ -44,6 +53,7 @@ let lib = import ../../../lib; in lib.makeOverridable (
 let
   defaultNativeBuildInputs = extraNativeBuildInputs ++
     [ ../../build-support/setup-hooks/move-docs.sh
+      ../../build-support/setup-hooks/make-symlinks-relative.sh
       ../../build-support/setup-hooks/compress-man-pages.sh
       ../../build-support/setup-hooks/strip.sh
       ../../build-support/setup-hooks/patch-shebangs.sh
@@ -51,13 +61,18 @@ let
     ]
       # FIXME this on Darwin; see
       # https://github.com/NixOS/nixpkgs/commit/94d164dd7#commitcomment-22030369
-    ++ lib.optional hostPlatform.isLinux ../../build-support/setup-hooks/audit-tmpdir.sh
+    ++ lib.optionals hostPlatform.isLinux [
+      ../../build-support/setup-hooks/audit-tmpdir.sh
+      ../../build-support/setup-hooks/move-systemd-user-units.sh
+    ]
     ++ [
       ../../build-support/setup-hooks/multiple-outputs.sh
       ../../build-support/setup-hooks/move-sbin.sh
       ../../build-support/setup-hooks/move-lib64.sh
       ../../build-support/setup-hooks/set-source-date-epoch-to-latest.sh
-      cc
+      ../../build-support/setup-hooks/reproducible-builds.sh
+      # TODO use lib.optional instead
+      (if hasCC then cc else null)
     ];
 
   defaultBuildInputs = extraBuildInputs;
@@ -68,6 +83,11 @@ let
     lib.optionalAttrs (allowedRequisites != null) {
       allowedRequisites = allowedRequisites
         ++ defaultNativeBuildInputs ++ defaultBuildInputs;
+    }
+    // lib.optionalAttrs (config.contentAddressedByDefault or false) {
+      __contentAddressed = true;
+      outputHashAlgo = "sha256";
+      outputHashMode = "recursive";
     }
     // {
       inherit name;
@@ -87,16 +107,18 @@ let
       # TODO: This really wants to be in stdenv/darwin but we don't have hostPlatform
       # there (yet?) so it goes here until then.
       preHook = preHook+ lib.optionalString buildPlatform.isDarwin ''
-        export NIX_BUILD_DONT_SET_RPATH=1
+        export NIX_DONT_SET_RPATH_FOR_BUILD=1
       '' + lib.optionalString (hostPlatform.isDarwin || (hostPlatform.parsed.kernel.execFormat != lib.systems.parse.execFormats.elf && hostPlatform.parsed.kernel.execFormat != lib.systems.parse.execFormats.macho)) ''
         export NIX_DONT_SET_RPATH=1
         export NIX_NO_SELF_RPATH=1
+      '' + lib.optionalString (hostPlatform.isDarwin && hostPlatform.isMacOS) ''
+        export MACOSX_DEPLOYMENT_TARGET=${hostPlatform.darwinMinVersion}
       ''
       # TODO this should be uncommented, but it causes stupid mass rebuilds. I
       # think the best solution would just be to fixup linux RPATHs so we don't
       # need to set `-rpath` anywhere.
       # + lib.optionalString targetPlatform.isDarwin ''
-      #   export NIX_TARGET_DONT_SET_RPATH=1
+      #   export NIX_DONT_SET_RPATH_FOR_TARGET=1
       # ''
       ;
 
@@ -108,7 +130,7 @@ let
       __impureHostDeps = __stdenvImpureHostDeps;
     })
 
-    // rec {
+    // {
 
       meta = {
         description = "The default build environment for Unix packages in Nixpkgs";
@@ -122,30 +144,33 @@ let
 
       # Utility flags to test the type of platform.
       inherit (hostPlatform)
-        isDarwin isLinux isSunOS isCygwin isFreeBSD isOpenBSD
+        isDarwin isLinux isSunOS isCygwin isBSD isFreeBSD isOpenBSD
         isi686 isx86_32 isx86_64
         is32bit is64bit
         isAarch32 isAarch64 isMips isBigEndian;
-      isArm = lib.warn
-        "`stdenv.isArm` is deprecated after 18.03. Please use `stdenv.isAarch32` instead"
-        hostPlatform.isAarch32;
 
-      # The derivation's `system` is `buildPlatform.system`.
-      inherit (buildPlatform) system;
+      # Override `system` so that packages can get the system of the host
+      # platform through `stdenv.system`. `system` is originally set to the
+      # build platform within the derivation above so that Nix directs the build
+      # to correct type of machine.
+      inherit (hostPlatform) system;
 
       inherit (import ./make-derivation.nix {
         inherit lib config stdenv;
       }) mkDerivation;
 
-      # For convenience, bring in the library functions in lib/ so
-      # packages don't have to do that themselves.
-      inherit lib;
+      # Slated for removal in 21.11
+      lib = if config.allowAliases or true then builtins.trace
+        ( "Warning: `stdenv.lib` is deprecated and will be removed in the next release."
+         + " Please use `lib` instead."
+         + " For more information see https://github.com/NixOS/nixpkgs/issues/108938")
+        lib else throw "`stdenv.lib` is a deprecated alias for `lib`";
 
       inherit fetchurlBoot;
 
       inherit overrides;
 
-      inherit cc;
+      inherit cc hasCC;
     }
 
     # Propagate any extra attributes.  For instance, we use this to

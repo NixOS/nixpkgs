@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, perl, autoconf, automake, libtool }:
+{ lib, stdenv, fetchFromGitHub, perl, autoconf, automake, libtool }:
 
 stdenv.mkDerivation rec {
-  name = "qqwing-${version}";
+  pname = "qqwing";
   version = "1.3.4";
 
   src = fetchFromGitHub {
@@ -25,8 +25,8 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "prefix=$(out)" "tgz" ];
 
-  meta = with stdenv.lib; {
-    homepage = https://qqwing.com;
+  meta = with lib; {
+    homepage = "https://qqwing.com";
     description = "Sudoku generating and solving software";
     license = licenses.gpl2;
     platforms = platforms.linux;

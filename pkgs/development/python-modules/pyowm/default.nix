@@ -1,29 +1,42 @@
-{ lib, buildPythonPackage, fetchPypi, requests, geojson }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, geojson
+, pysocks
+, pythonOlder
+, requests
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "pyowm";
-  version = "2.10.0";
+  version = "3.2.0";
+  disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "8fd41a18536f4d6c432bc6d9ea69994efb1ea9b43688cf19523659b6f4d86cf7";
+  src = fetchFromGitHub {
+    owner = "csparpa";
+    repo = pname;
+    rev = version;
+    sha256 = "0sq8rxcgdiayl5gy4qhkvvsdq1d93sbzn0nfg8f1vr8qxh8qkfq4";
   };
 
-  propagatedBuildInputs = [ requests geojson ];
+  propagatedBuildInputs = [
+    geojson
+    pysocks
+    requests
+  ];
 
-  # This may actually break the package.
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "requests>=2.18.2,<2.19" "requests"  \
-      --replace "geojson>=2.3.0,<2.4" "geojson<2.5,>=2.3.0"
-  '';
+  checkInputs = [ pytestCheckHook ];
 
-  # No tests in archive
-  doCheck = false;
+  # Run only tests which don't require network access
+  pytestFlagsArray = [ "tests/unit" ];
+
+  pythonImportsCheck = [ "pyowm" ];
 
   meta = with lib; {
-    description = "A Python wrapper around the OpenWeatherMap web API";
-    homepage = https://pyowm.readthedocs.io/;
+    description = "Python wrapper around the OpenWeatherMap web API";
+    homepage = "https://pyowm.readthedocs.io/";
     license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
   };
 }

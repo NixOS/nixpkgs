@@ -1,19 +1,20 @@
-{ stdenv, autoconf, automake, curl, fetchurl, jdk, jre, makeWrapper, nettools
+{ lib, stdenv, autoconf, automake, curl, fetchurl, jdk8, makeWrapper, nettools
 , python, git
 }:
 
-with stdenv.lib;
+let jdk = jdk8; jre = jdk8.jre; in
 
 stdenv.mkDerivation rec {
-  name = "opentsdb-${version}";
-  version = "2.3.1";
+  pname = "opentsdb";
+  version = "2.4.0";
 
   src = fetchurl {
-    url = "https://github.com/OpenTSDB/opentsdb/releases/download/v${version}/${name}.tar.gz";
-    sha256 = "1lf1gynr11silla4bsrkwqv023dxirsb88ncs2qmc2ng35593fjd";
+    url = "https://github.com/OpenTSDB/opentsdb/releases/download/v${version}/${pname}-${version}.tar.gz";
+    sha256 = "0b0hilqmgz6n1q7irp17h48v8fjpxhjapgw1py8kyav1d51s7mm2";
   };
 
-  buildInputs = [ autoconf automake curl jdk makeWrapper nettools python git ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ autoconf automake curl jdk nettools python git ];
 
   preConfigure = ''
     patchShebangs ./build-aux/
@@ -26,11 +27,14 @@ stdenv.mkDerivation rec {
       --set JAVA "${jre}/bin/java"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Time series database with millisecond precision";
-    homepage = http://opentsdb.net;
+    homepage = "http://opentsdb.net";
     license = licenses.lgpl21Plus;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ maintainers.ocharles ];
+    platforms = lib.platforms.linux;
+    maintainers = [ ];
+    knownVulnerabilities = [
+      "CVE-2020-35476" # https://github.com/OpenTSDB/opentsdb/issues/2051
+    ];
   };
 }

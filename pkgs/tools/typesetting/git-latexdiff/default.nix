@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitLab, git, bash }:
+{ lib, stdenv, fetchFromGitLab, git, bash }:
 
 stdenv.mkDerivation rec {
   version = "1.3.0";
-  name = "git-latexdiff-${version}";
+  pname = "git-latexdiff";
 
   src = fetchFromGitLab {
     sha256 = "05fnhr1pqvj8l25vi9hdccwfk4mv2f0pfhn05whbdvf66gyl4fs9";
@@ -29,9 +29,9 @@ stdenv.mkDerivation rec {
     chmod +x $prefix/bin/git-latexdiff
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "View diff on LaTeX source files on the generated PDF files";
-    homepage = https://gitlab.com/git-latexdiff/git-latexdiff;
+    homepage = "https://gitlab.com/git-latexdiff/git-latexdiff";
     maintainers = [ ];
     license = licenses.bsd3; # https://gitlab.com/git-latexdiff/git-latexdiff/issues/9
     platforms = platforms.unix;

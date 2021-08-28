@@ -1,19 +1,20 @@
-{ stdenv, fetchurl, guileSupport ? false, pkgconfig ? null , guile ? null }:
+{ lib, stdenv, fetchurl, guileSupport ? false, pkg-config ? null , guile ? null }:
 
-assert guileSupport -> ( pkgconfig != null && guile != null );
+assert guileSupport -> ( pkg-config != null && guile != null );
 
 let
   version = "4.2.1";
 in
 stdenv.mkDerivation {
-  name = "gnumake-${version}";
+  pname = "gnumake";
+  inherit version;
 
   src = fetchurl {
     url = "mirror://gnu/make/make-${version}.tar.bz2";
     sha256 = "12f5zzyq2w56g95nni65hc0g5p7154033y2f3qmjvd016szn5qnn";
   };
 
-  patchFlags = "-p0";
+  patchFlags = [ "-p0" ];
   patches = [
     # Purity: don't look for library dependencies (of the form `-lfoo') in /lib
     # and /usr/lib. It's a stupid feature anyway. Likewise, when searching for
@@ -24,10 +25,10 @@ stdenv.mkDerivation {
     ./glibc-2.27-glob.patch
   ];
 
-  nativeBuildInputs = stdenv.lib.optionals guileSupport [ pkgconfig ];
-  buildInputs = stdenv.lib.optionals guileSupport [ guile ];
+  nativeBuildInputs = lib.optionals guileSupport [ pkg-config ];
+  buildInputs = lib.optionals guileSupport [ guile ];
 
-  configureFlags = stdenv.lib.optional guileSupport "--with-guile"
+  configureFlags = lib.optional guileSupport "--with-guile"
 
     # Make uses this test to decide whether it should keep track of
     # subseconds. Apple made this possible with APFS and macOS 10.13.
@@ -36,12 +37,12 @@ stdenv.mkDerivation {
     # a second. So, tell Make to ignore nanoseconds in mtime here by
     # overriding the autoconf test for the struct.
     # See https://github.com/NixOS/nixpkgs/issues/51221 for discussion.
-    ++ stdenv.lib.optional stdenv.isDarwin "ac_cv_struct_st_mtim_nsec=no";
+    ++ lib.optional stdenv.isDarwin "ac_cv_struct_st_mtim_nsec=no";
 
   outputs = [ "out" "man" "info" ];
 
-  meta = with stdenv.lib; {
-    homepage = https://www.gnu.org/software/make/;
+  meta = with lib; {
+    homepage = "https://www.gnu.org/software/make/";
     description = "A tool to control the generation of non-source files from sources";
     license = licenses.gpl3Plus;
 

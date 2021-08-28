@@ -1,6 +1,7 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , fetchpatch
+, libmysqlclient
 # Excerpt from glpk's INSTALL file:
 # This feature allows the exact simplex solver to use the GNU MP
 # bignum library. If it is disabled, the exact simplex solver uses the
@@ -14,18 +15,20 @@ assert withGmp -> gmp != null;
 
 stdenv.mkDerivation rec {
   version = "4.65";
-  name = "glpk-${version}";
+  pname = "glpk";
 
   src = fetchurl {
-    url = "mirror://gnu/glpk/${name}.tar.gz";
+    url = "mirror://gnu/glpk/${pname}-${version}.tar.gz";
     sha256 = "040sfaa9jclg2nqdh83w71sv9rc1sznpnfiripjdyr48cady50a2";
   };
 
-  buildInputs = stdenv.lib.optionals withGmp [
-    gmp
-  ];
+  buildInputs =
+    [ libmysqlclient
+    ] ++ lib.optionals withGmp [
+      gmp
+    ];
 
-  configureFlags = stdenv.lib.optionals withGmp [
+  configureFlags = lib.optionals withGmp [
     "--with-gmp"
   ];
 
@@ -47,9 +50,16 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  postPatch =
+    # Do not hardcode the include path for libmysqlclient.
+    ''
+      substituteInPlace configure \
+        --replace '-I/usr/include/mysql' '$(mysql_config --include)'
+    '';
+
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     description = "The GNU Linear Programming Kit";
 
     longDescription =
@@ -59,10 +69,10 @@ stdenv.mkDerivation rec {
          programming language and organized in the form of a library.
       '';
 
-    homepage = https://www.gnu.org/software/glpk/;
-    license = stdenv.lib.licenses.gpl3Plus;
+    homepage = "https://www.gnu.org/software/glpk/";
+    license = licenses.gpl3Plus;
 
-    maintainers = with stdenv.lib.maintainers; [ bjg timokau ];
-    platforms = stdenv.lib.platforms.all;
+    maintainers = with maintainers; [ bjg ] ++ teams.sage.members;
+    platforms = platforms.all;
   };
 }

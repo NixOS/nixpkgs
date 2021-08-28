@@ -1,25 +1,34 @@
-{ stdenv, fetchurl
-, attr, keyutils, libaio, libapparmor, libbsd, libcap, libgcrypt, lksctp-tools, zlib
+{ lib, stdenv, fetchurl
+, attr, judy, keyutils, libaio, libapparmor, libbsd, libcap, libgcrypt, lksctp-tools, zlib
 }:
 
 stdenv.mkDerivation rec {
   pname = "stress-ng";
-  version = "0.09.58";
+  version = "0.12.04";
 
   src = fetchurl {
     url = "https://kernel.ubuntu.com/~cking/tarballs/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "1rlll6wl0i0m21idfr3xr99pfgnb9wf9i35hsb0frmrpcvls06za";
+    sha256 = "sha256-tONL2o207TfjO3qGG8Bq13y70jTWMjbaLLWPAuPzIY4=";
   };
 
+  postPatch = ''
+    sed -i '/\#include <bsd\/string.h>/i #undef HAVE_STRLCAT\n#undef HAVE_STRLCPY' stress-ng.h
+  ''; # needed because of Darwin patch on libbsd
+
   # All platforms inputs then Linux-only ones
-  buildInputs = [ libbsd libgcrypt zlib ]
-    ++ stdenv.lib.optionals stdenv.hostPlatform.isLinux [
+  buildInputs = [ judy libbsd libgcrypt zlib ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       attr keyutils libaio libapparmor libcap lksctp-tools
     ];
 
-  postPatch = ''
-    substituteInPlace Makefile --replace "/usr" ""
-  '';
+  makeFlags = [
+    "BINDIR=${placeholder "out"}/bin"
+    "MANDIR=${placeholder "out"}/share/man/man1"
+    "JOBDIR=${placeholder "out"}/share/stress-ng/example-jobs"
+    "BASHDIR=${placeholder "out"}/share/bash-completion/completions"
+  ];
+
+  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isMusl "-D_LINUX_SYSINFO_H=1";
 
   # Won't build on i686 because the binary will be linked again in the
   # install phase without checking the dependencies. This will prevent
@@ -27,9 +36,7 @@ stdenv.mkDerivation rec {
   # mystery, though. :-(
   enableParallelBuilding = (!stdenv.isi686);
 
-  installFlags = [ "DESTDIR=${placeholder "out"}" ];
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Stress test a computer system";
     longDescription = ''
       stress-ng will stress test a computer system in various selectable ways. It

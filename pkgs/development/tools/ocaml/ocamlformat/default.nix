@@ -1,35 +1,60 @@
-{ stdenv, fetchFromGitHub, ocamlPackages }:
+{ lib, fetchurl, fetchzip, callPackage }:
 
-with ocamlPackages; buildDunePackage rec {
-  pname = "ocamlformat";
-  version = "0.8";
+let mkOCamlformat = callPackage ./generic.nix; in
 
-  minimumOCamlVersion = "4.05";
+# Older versions should be removed when their usage decrease
+# This script scraps Github looking for OCamlformat's options and versions usage:
+#  https://gist.github.com/Julow/110dc94308d6078225e0665e3eccd433
 
-  src = fetchFromGitHub {
-    owner = "ocaml-ppx";
-    repo = pname;
-    rev = version;
-    sha256 = "1i7rsbs00p43362yv7z7dw0qsnv7vjf630qk676qvfg7kg422w6j";
+rec {
+  ocamlformat_0_11_0 = mkOCamlformat {
+    version = "0.11.0";
   };
 
-  buildInputs = [
-    base
-    cmdliner
-    fpath
-    ocaml-migrate-parsetree
-    stdio
-  ];
-
-  configurePhase = ''
-    patchShebangs tools/gen_version.sh
-    tools/gen_version.sh src/Version.ml version
-  '';
-
-  meta = {
-    inherit (src.meta) homepage;
-    description = "Auto-formatter for OCaml code";
-    maintainers = [ stdenv.lib.maintainers.Zimmi48 ];
-    license = stdenv.lib.licenses.mit;
+  ocamlformat_0_12 = mkOCamlformat {
+    version = "0.12";
   };
+
+  ocamlformat_0_13_0 = mkOCamlformat rec {
+    version = "0.13.0";
+    tarballName = "ocamlformat-${version}-2.tbz";
+  };
+
+  ocamlformat_0_14_0 = mkOCamlformat {
+    version = "0.14.0";
+  };
+
+  ocamlformat_0_14_1 = mkOCamlformat {
+    version = "0.14.1";
+  };
+
+  ocamlformat_0_14_2 = mkOCamlformat {
+    version = "0.14.2";
+  };
+
+  ocamlformat_0_14_3 = mkOCamlformat {
+    version = "0.14.3";
+  };
+
+  ocamlformat_0_15_0 = mkOCamlformat {
+    version = "0.15.0";
+  };
+
+  ocamlformat_0_15_1 = mkOCamlformat {
+    version = "0.15.1";
+  };
+
+  ocamlformat_0_16_0 = mkOCamlformat {
+    version = "0.16.0";
+  };
+
+  ocamlformat_0_17_0 = mkOCamlformat {
+    version = "0.17.0";
+  };
+
+  ocamlformat_0_18_0 = mkOCamlformat {
+    version = "0.18.0";
+  };
+
+  ocamlformat = ocamlformat_0_18_0;
 }

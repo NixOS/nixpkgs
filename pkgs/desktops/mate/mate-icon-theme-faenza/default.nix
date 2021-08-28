@@ -1,17 +1,19 @@
-{ stdenv, fetchurl, autoreconfHook, gtk3, mate, hicolor-icon-theme }:
+{ lib, stdenv, fetchurl, autoreconfHook, gtk3, mate, hicolor-icon-theme, mateUpdateScript }:
 
 stdenv.mkDerivation rec {
-  name = "mate-icon-theme-faenza-${version}";
+  pname = "mate-icon-theme-faenza";
   version = "1.20.0";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "000vr9cnbl2qlysf2gyg1lsjirqdzmwrnh6d3hyrsfc0r2vh4wna";
   };
 
   nativeBuildInputs = [ autoreconfHook gtk3 ];
 
-  buildInputs = [ mate.mate-icon-theme hicolor-icon-theme ];
+  propagatedBuildInputs = [ mate.mate-icon-theme hicolor-icon-theme ];
+
+  dontDropIconThemeCache = true;
 
   postInstall = ''
     for theme in "$out"/share/icons/*; do
@@ -19,11 +21,15 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = {
+  enableParallelBuilding = true;
+
+  passthru.updateScript = mateUpdateScript { inherit pname version; };
+
+  meta = with lib; {
     description = "Faenza icon theme from MATE";
-    homepage = https://mate-desktop.org;
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.romildo ];
+    homepage = "https://mate-desktop.org";
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.romildo ];
   };
 }

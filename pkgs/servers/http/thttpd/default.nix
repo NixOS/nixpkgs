@@ -1,11 +1,11 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "thttpd-${version}";
+  pname = "thttpd";
   version = "2.29";
 
   src = fetchurl {
-    url = "https://acme.com/software/thttpd/${name}.tar.gz";
+    url = "https://acme.com/software/thttpd/${pname}-${version}.tar.gz";
     sha256 = "15x3h4b49wgfywn82i3wwbf38mdns94mbi4ma9xiwsrjv93rzh4r";
   };
 
@@ -22,8 +22,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Tiny/turbo/throttling HTTP server";
-    homepage = http://www.acme.com/software/thttpd/;
-    license = stdenv.lib.licenses.bsd2;
-    platforms = stdenv.lib.platforms.linux;
+    homepage = "http://www.acme.com/software/thttpd/";
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.linux;
   };
 }

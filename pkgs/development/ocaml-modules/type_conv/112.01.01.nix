@@ -1,4 +1,4 @@
-{stdenv, fetchurl, buildOcaml}:
+{ lib, fetchurl, buildOcaml}:
 
 buildOcaml rec {
   minimumSupportedOcamlVersion = "4.02";
@@ -12,9 +12,9 @@ buildOcaml rec {
   };
 
   meta = {
-    homepage = https://github.com/janestreet/type_conv/;
+    homepage = "https://github.com/janestreet/type_conv/";
     description = "Support library for preprocessor type conversions";
-    license = stdenv.lib.licenses.asl20;
-    maintainers = with stdenv.lib.maintainers; [ z77z ericbmerritt ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ maggesi ericbmerritt ];
   };
 }

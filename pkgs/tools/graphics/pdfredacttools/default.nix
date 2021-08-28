@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python2Packages, imagemagick, exiftool, file, ghostscript }:
+{ lib, fetchFromGitHub, python2Packages, imagemagick, exiftool, file, ghostscript }:
 
 python2Packages.buildPythonApplication rec {
   pname = "pdf-redact-tools";
@@ -19,11 +19,11 @@ python2Packages.buildPythonApplication rec {
 
   propagatedBuildInputs = [ imagemagick exiftool ghostscript ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Redact and strip metadata from documents before publishing";
     longDescription = ''
-	PDF Redact Tools helps with securely redacting and stripping metadata
-	from documents before publishing. Note that this is not a security tool.
+        PDF Redact Tools helps with securely redacting and stripping metadata
+        from documents before publishing. Note that this is not a security tool.
         It uses ImageMagick to parse PDFs.  While ImageMagick is a versatile tool, it has
         a history of several security bugs. A malicious PDF could exploit a bug in
         ImageMagick to take over your computer. If you're working with potentially

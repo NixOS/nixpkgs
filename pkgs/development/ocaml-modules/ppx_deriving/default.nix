@@ -1,41 +1,55 @@
-{ stdenv, ocaml, findlib, ocamlbuild, fetchzip
-, cppo, ppx_tools, ppx_derivers, result, ounit, ocaml-migrate-parsetree
+{ lib
+, fetchurl
+, buildDunePackage
+, cppo
+, ppxlib
+, ppx_derivers
+, result
+, ounit
+, ocaml-migrate-parsetree
+, ocaml-migrate-parsetree-2-1
 }:
 
-if !stdenv.lib.versionAtLeast ocaml.version "4.02"
-then throw "ppx_deriving is not available for OCaml ${ocaml.version}"
-else
-
-let param =
-  if ocaml.version == "4.03.0"
-  then {
-    version = "4.1";
-    sha256 = "0cy9p8d8cbcxvqyyv8fz2z9ypi121zrgaamdlp4ld9f3jnwz7my9";
-    extraPropagatedBuildInputs = [];
+let params =
+  if lib.versionAtLeast ppxlib.version "0.20" then {
+    version = "5.2.1";
+    sha256 = "11h75dsbv3rs03pl67hdd3lbim7wjzh257ij9c75fcknbfr5ysz9";
+    useOMP2 = true;
+  } else if lib.versionAtLeast ppxlib.version "0.15" then {
+    version = "5.1";
+    sha256 = "1i64fd7qrfzbam5hfbl01r0sx4iihsahcwqj13smmrjlnwi3nkxh";
+    useOMP2 = false;
   } else {
-    version = "4.2.1";
-    sha256 = "1yhhjnncbbb7fsif7qplndh01s1xd72dqm8f3jkgx9y4ariqqvf9";
-    extraPropagatedBuildInputs = [ ocaml-migrate-parsetree ppx_derivers ];
-}; in
+    version = "5.0";
+    sha256 = "0fkzrn4pdyvf1kl0nwvhqidq01pnq3ql8zk1jd56hb0cxaw851w3";
+    useOMP2 = false;
+  }
+; in
 
-stdenv.mkDerivation rec {
-  name = "ocaml${ocaml.version}-ppx_deriving-${version}";
-  inherit (param) version;
+buildDunePackage rec {
+  pname = "ppx_deriving";
+  inherit (params) version;
 
-  src = fetchzip {
-    url = "https://github.com/ocaml-ppx/ppx_deriving/archive/v${version}.tar.gz";
-    inherit (param) sha256;
+  useDune2 = true;
+
+  src = fetchurl {
+    url = "https://github.com/ocaml-ppx/ppx_deriving/releases/download/v${version}/ppx_deriving-v${version}.tbz";
+    inherit (params) sha256;
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild cppo ounit ];
-  propagatedBuildInputs = param.extraPropagatedBuildInputs ++
-    [ ppx_tools result ];
+  buildInputs = [ ppxlib cppo ];
+  propagatedBuildInputs = [
+    (if params.useOMP2
+    then ocaml-migrate-parsetree-2-1
+    else ocaml-migrate-parsetree)
+    ppx_derivers
+    result
+  ];
 
-  createFindlibDestdir = true;
+  doCheck = true;
+  checkInputs = [ ounit ];
 
-  installPhase = "OCAMLPATH=$OCAMLPATH:`ocamlfind printconf destdir` make install";
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "deriving is a library simplifying type-driven code generation on OCaml >=4.02.";
     maintainers = [ maintainers.maurer ];
     license = licenses.mit;

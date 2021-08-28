@@ -19,11 +19,13 @@ buildPythonPackage rec {
     sha256 = "1hslzzinpwc1zqhbpllqh3sllmiyk69pcycl7ahr0rz3micgwczj";
   };
 
-  propagatedBuildInputs = [ pytest py-cpuinfo ] ++ lib.optional (pythonOlder "3.4") [ pathlib statistics ];
+  buildInputs = [ pytest ];
+
+  propagatedBuildInputs = [ py-cpuinfo ] ++ lib.optionals (pythonOlder "3.4") [ pathlib statistics ];
 
   meta = {
     description = "Py.test fixture for benchmarking code";
-    homepage = https://github.com/ionelmc/pytest-benchmark;
+    homepage = "https://github.com/ionelmc/pytest-benchmark";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ costrouc ];
   };

@@ -16,9 +16,14 @@ let
 in
 
 {
+  imports = [
+    (mkRenamedOptionModule [ "services" "xserver" "desktopManager" "e19" "enable" ] [ "services" "xserver" "desktopManager" "enlightenment" "enable" ])
+  ];
+
   options = {
 
     services.xserver.desktopManager.enlightenment.enable = mkOption {
+      type = types.bool;
       default = false;
       description = "Enable the Enlightenment desktop environment.";
     };
@@ -27,15 +32,14 @@ in
 
   config = mkIf cfg.enable {
 
-    environment.systemPackages = [
-      e.efl e.enlightenment
-      e.terminology e.econnman
-      pkgs.xorg.xauth # used by kdesu
-      pkgs.gtk2 # To get GTK+'s themes.
-      pkgs.tango-icon-theme
-
-      pkgs.gnome2.gnome_icon_theme
-      pkgs.xorg.xcursorthemes
+    environment.systemPackages = with pkgs; [
+      enlightenment.econnman
+      enlightenment.efl
+      enlightenment.enlightenment
+      enlightenment.ephoto
+      enlightenment.rage
+      enlightenment.terminology
+      xorg.xcursorthemes
     ];
 
     environment.pathsToLink = [
@@ -45,15 +49,10 @@ in
       "/share/locale"
     ];
 
-    services.xserver.desktopManager.session = [
-    { name = "Enlightenment";
-      start = ''
-        # Set GTK_DATA_PREFIX so that GTK+ can find the themes
-        export GTK_DATA_PREFIX=${config.system.path}
-        # find theme engines
-        export GTK_PATH=${config.system.path}/lib/gtk-3.0:${config.system.path}/lib/gtk-2.0
-        export XDG_MENU_PREFIX=e-
+    services.xserver.displayManager.sessionPackages = [ pkgs.enlightenment.enlightenment ];
 
+    services.xserver.displayManager.sessionCommands = ''
+      if test "$XDG_CURRENT_DESKTOP" = "Enlightenment"; then
         export GST_PLUGIN_PATH="${GST_PLUGIN_PATH}"
 
         # make available for D-BUS user services
@@ -61,17 +60,17 @@ in
 
         # Update user dirs as described in http://freedesktop.org/wiki/Software/xdg-user-dirs/
         ${pkgs.xdg-user-dirs}/bin/xdg-user-dirs-update
+      fi
+    '';
 
-        exec ${e.enlightenment}/bin/enlightenment_start
-      '';
-    }];
+    # Wrappers for programs installed by enlightenment that should be setuid
+    security.wrappers = {
+      enlightenment_ckpasswd.source = "${pkgs.enlightenment.enlightenment}/lib/enlightenment/utils/enlightenment_ckpasswd";
+      enlightenment_sys.source = "${pkgs.enlightenment.enlightenment}/lib/enlightenment/utils/enlightenment_sys";
+      enlightenment_system.source = "${pkgs.enlightenment.enlightenment}/lib/enlightenment/utils/enlightenment_system";
+    };
 
-    security.wrappers = (import "${e.enlightenment}/e-wrappers.nix").security.wrappers;
-
-    environment.etc = singleton
-      { source = xcfg.xkbDir;
-        target = "X11/xkb";
-      };
+    environment.etc."X11/xkb".source = xcfg.xkbDir;
 
     fonts.fonts = [ pkgs.dejavu_fonts pkgs.ubuntu_font_family ];
 

@@ -1,20 +1,36 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, aiohttp, jsonrpc-base }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, aiohttp
+, jsonrpc-base
+, pytest-asyncio
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "jsonrpc-websocket";
-  version = "1.0.1";
+  version = "3.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e74e490fefa3b8f33620fca98f7cd9a53fb765b9ed6f78360482a3f364230885";
+    sha256 = "0fmw8xjzlhi7r84swn4w3njy389qqll5ad5ljdq5n2wpg424k98h";
   };
 
-  propagatedBuildInputs = [ aiohttp jsonrpc-base ];
+  propagatedBuildInputs = [
+    aiohttp
+    jsonrpc-base
+  ];
 
-  meta = with stdenv.lib; {
+  checkInputs = [
+    pytestCheckHook
+    pytest-asyncio
+  ];
+
+  pytestFlagsArray = [ "tests.py" ];
+
+  meta = with lib; {
     description = "A JSON-RPC websocket client library for asyncio";
-    homepage = https://github.com/armills/jsonrpc-websocket;
+    homepage = "https://github.com/emlove/jsonrpc-websocket";
     license = licenses.bsd3;
     maintainers = with maintainers; [ peterhoeg ];
   };

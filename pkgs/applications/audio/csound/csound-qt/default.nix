@@ -1,15 +1,15 @@
-{ stdenv, csound, desktop-file-utils,
+{ lib, stdenv, csound, desktop-file-utils,
   fetchFromGitHub, python, python-qt, qmake,
   qtwebengine, qtxmlpatterns, rtmidi, fetchpatch }:
 
 stdenv.mkDerivation rec {
-  name = "csound-qt-${version}";
+  pname = "csound-qt";
   version = "0.9.6-beta3";
 
   src = fetchFromGitHub {
     owner = "CsoundQt";
     repo = "CsoundQt";
-    rev = "${version}";
+    rev = version;
     sha256 = "007jhkh0k6qk52r77i067999dwdiimazix6ggp2hvyc4pj6n5dip";
   };
 
@@ -40,9 +40,11 @@ stdenv.mkDerivation rec {
                  "SHARE_DIR=${placeholder "out"}/share"
                  ];
 
-  meta = with stdenv.lib; {
-    description = "CsoundQt is a frontend for Csound with editor, integrated help, widgets and other features.";
-    homepage = https://csoundqt.github.io/;
+  dontWrapQtApps = true;
+
+  meta = with lib; {
+    description = "CsoundQt is a frontend for Csound with editor, integrated help, widgets and other features";
+    homepage = "https://csoundqt.github.io/";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ hlolli ];

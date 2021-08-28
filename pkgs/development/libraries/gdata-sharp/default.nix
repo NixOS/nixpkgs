@@ -1,9 +1,9 @@
-{ stdenv, fetchsvn, pkgconfig, mono, dotnetPackages }:
+{ lib, stdenv, fetchsvn, pkg-config, mono, dotnetPackages }:
 
 let
   newtonsoft-json = dotnetPackages.NewtonsoftJson;
-in stdenv.mkDerivation rec {
-  name = "gdata-sharp-${version}";
+in stdenv.mkDerivation {
+  pname = "gdata-sharp";
   version = "2.2.0.0";
 
   src = fetchsvn {
@@ -12,7 +12,7 @@ in stdenv.mkDerivation rec {
     sha256 = "0b0rvgg3xsbbg2fdrpz0ywsy9rcahlyfskndaagd3yzm83gi6bhk";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ mono newtonsoft-json ];
 
   sourceRoot = "svn-r1217/clients/cs";
@@ -26,8 +26,8 @@ in stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with stdenv.lib; {
-    homepage = https://code.google.com/archive/p/google-gdata/;
+  meta = with lib; {
+    homepage = "https://code.google.com/archive/p/google-gdata/";
 
     description = "The Google Data APIs";
     longDescription = ''
@@ -37,5 +37,6 @@ in stdenv.mkDerivation rec {
 
     license = licenses.asl20;
     platforms = platforms.linux;
+    broken = true;
   };
 }

@@ -23,7 +23,7 @@ let
       <listen-socket>
         <port>${toString cfg.listen.port}</port>
         <bind-address>${cfg.listen.address}</bind-address>
-      </listen-socket>   
+      </listen-socket>
 
       <security>
         <chroot>0</chroot>
@@ -47,7 +47,7 @@ in {
       enable = mkEnableOption "Icecast server";
 
       hostname = mkOption {
-        type = types.str;
+        type = types.nullOr types.str;
         description = "DNS name or IP address that will be used for the stream directory lookups or possibily the playlist generation if a Host header is not provided.";
         default = config.networking.domain;
       };
@@ -70,7 +70,7 @@ in {
         description = "Base directory used for logging.";
         default = "/var/log/icecast";
       };
-      
+
       listen = {
         port = mkOption {
           type = types.int;

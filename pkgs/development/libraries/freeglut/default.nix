@@ -1,19 +1,21 @@
-{ stdenv, fetchurl, libXi, libXrandr, libXxf86vm, libGL, libGLU, xlibsWrapper, cmake }:
+{ lib, stdenv, fetchurl, libXi, libXrandr, libXxf86vm, libGL, libGLU, xlibsWrapper, cmake }:
 
-let version = "3.0.0";
+let version = "3.2.1";
 in stdenv.mkDerivation {
-  name = "freeglut-${version}";
+  pname = "freeglut";
+  inherit version;
 
   src = fetchurl {
     url = "mirror://sourceforge/freeglut/freeglut-${version}.tar.gz";
-    sha256 = "18knkyczzwbmyg8hr4zh8a1i5ga01np2jzd1rwmsh7mh2n2vwhra";
+    sha256 = "0s6sk49q8ijgbsrrryb7dzqx2fa744jhx1wck5cz5jia2010w06l";
   };
 
   outputs = [ "out" "dev" ];
 
-  buildInputs = [ libXi libXrandr libXxf86vm libGL libGLU xlibsWrapper cmake ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ libXi libXrandr libXxf86vm libGL libGLU xlibsWrapper ];
 
-  cmakeFlags = stdenv.lib.optionals stdenv.isDarwin [
+  cmakeFlags = lib.optionals stdenv.isDarwin [
                  "-DOPENGL_INCLUDE_DIR=${libGL}/include"
                  "-DOPENGL_gl_LIBRARY:FILEPATH=${libGL}/lib/libGL.dylib"
                  "-DOPENGL_glu_LIBRARY:FILEPATH=${libGLU}/lib/libGLU.dylib"
@@ -21,9 +23,7 @@ in stdenv.mkDerivation {
                  "-DFREEGLUT_BUILD_STATIC:BOOL=OFF"
                ];
 
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Create and manage windows containing OpenGL contexts";
     longDescription = ''
       FreeGLUT is an open source alternative to the OpenGL Utility Toolkit
@@ -33,7 +33,7 @@ in stdenv.mkDerivation {
       intended to be a full replacement for GLUT, and has only a few
       differences.
     '';
-    homepage = http://freeglut.sourceforge.net/;
+    homepage = "http://freeglut.sourceforge.net/";
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = [ maintainers.bjornfor ];

@@ -1,16 +1,17 @@
-{ stdenv, fetchurl, pkgconfig, glib, gtkmm2 }:
+{ lib, stdenv, fetchurl, pkg-config, glib, gtkmm2 }:
 
 let version = "1.6.1";
 in
 stdenv.mkDerivation rec {
-  name = "nitrogen-${version}";
+  pname = "nitrogen";
+  inherit version;
 
   src = fetchurl {
-    url = "http://projects.l3ib.org/nitrogen/files/${name}.tar.gz";
+    url = "http://projects.l3ib.org/nitrogen/files/${pname}-${version}.tar.gz";
     sha256 = "0zc3fl1mbhq0iyndy4ysmy8vv5c7xwf54rbgamzfhfvsgdq160pl";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ glib gtkmm2 ];
 
@@ -26,9 +27,9 @@ stdenv.mkDerivation rec {
       multi-head with Xinerama. Wallpapers are browsable with a convenient GUI,
       and settings are stored in a human-readable config file.
     '';
-    homepage = https://github.com/l3ib/nitrogen;
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.auntie ];
+    homepage = "https://github.com/l3ib/nitrogen";
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.auntie ];
   };
 }

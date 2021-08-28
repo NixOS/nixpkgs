@@ -1,9 +1,8 @@
-{ config, stdenv
+{ config, lib, stdenv
 , fetchFromGitHub
 , fetchpatch
 , which
 , cmake
-, clang
 , llvmPackages
 , libunwind
 , gettext
@@ -18,7 +17,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "coreclr-${version}";
+  pname = "coreclr";
   version = "2.0.7";
 
   src = fetchFromGitHub {
@@ -31,12 +30,12 @@ stdenv.mkDerivation rec {
   patches = [
     (fetchpatch {
       # glibc 2.26
-      url = https://github.com/dotnet/coreclr/commit/a8f83b615708c529b112898e7d2fbc3f618b26ee.patch;
+      url = "https://github.com/dotnet/coreclr/commit/a8f83b615708c529b112898e7d2fbc3f618b26ee.patch";
       sha256 = "047ph5gip4z2h7liwdxsmpnlaq0sd3hliaw4nyqjp647m80g3ffq";
     })
     (fetchpatch {
       # clang 5
-      url = https://github.com/dotnet/coreclr/commit/9b22e1a767dee38f351001c5601f56d78766a43e.patch;
+      url = "https://github.com/dotnet/coreclr/commit/9b22e1a767dee38f351001c5601f56d78766a43e.patch";
       sha256 = "1w1lxw5ryvhq8m5m0kv880c4bh6y9xdgypkr76sqbh3v568yghzg";
     })
   ];
@@ -44,7 +43,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     which
     cmake
-    clang
+    llvmPackages.clang
   ];
 
   buildInputs = [
@@ -91,8 +90,8 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/dotnet/core/;
+  meta = with lib; {
+    homepage = "https://github.com/dotnet/core/";
     description = ".NET is a general purpose development platform";
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ kuznero ];

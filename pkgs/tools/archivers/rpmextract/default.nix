@@ -1,12 +1,12 @@
-{ stdenv, rpm, cpio, substituteAll }:
+{ lib, stdenv, rpm, cpio, substituteAll }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "rpmextract";
 
   buildCommand = ''
     install -Dm755 $script $out/bin/rpmextract
   '';
-    
+
   script = substituteAll {
     src = ./rpmextract.sh;
     isExecutable = true;
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     inherit (stdenv) shell;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Script to extract RPM archives";
     platforms = platforms.all;
     license = licenses.gpl2;

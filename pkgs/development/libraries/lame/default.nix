@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , nasmSupport ? true, nasm ? null # Assembly optimizations
 , cpmlSupport ? true # Compaq's fast math library
 #, efenceSupport ? false, libefence ? null # Use ElectricFence for malloc debugging
@@ -20,13 +20,13 @@ let
   mkFlag = optSet: flag: if optSet then "--enable-${flag}" else "--disable-${flag}";
 in
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
-  name = "lame-${version}";
+  pname = "lame";
   version = "3.100";
 
   src = fetchurl {
-    url = "mirror://sourceforge/lame/${name}.tar.gz";
+    url = "mirror://sourceforge/lame/${pname}-${version}.tar.gz";
     sha256 = "07nsn5sy3a8xbmw1bidxnsj5fj6kg9ai04icmqw40ybkp353dznx";
   };
 
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A high quality MPEG Audio Layer III (MP3) encoder";
-    homepage    = http://lame.sourceforge.net;
+    homepage    = "http://lame.sourceforge.net";
     license     = licenses.lgpl2;
     maintainers = with maintainers; [ codyopel fpletz ];
     platforms   = platforms.all;

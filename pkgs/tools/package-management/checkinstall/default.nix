@@ -1,4 +1,4 @@
-{stdenv, fetchurl, gettext}:
+{lib, stdenv, fetchurl, gettext}:
 
 assert stdenv.isLinux && stdenv ? glibc;
 
@@ -6,7 +6,7 @@ stdenv.mkDerivation {
   name = "checkinstall-1.6.2";
 
   src = fetchurl {
-    url = http://www.asic-linux.com.mx/~izto/checkinstall/files/source/checkinstall-1.6.2.tar.gz;
+    url = "http://www.asic-linux.com.mx/~izto/checkinstall/files/source/checkinstall-1.6.2.tar.gz";
     sha256 = "1x4kslyvfd6lm6zd1ylbq2pjxrafb77ydfjaqi16sa5qywn1jqfw";
   };
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation {
     ./set-buildroot.patch
   ]
 
-  ++ stdenv.lib.optional (stdenv.hostPlatform.system == "x86_64-linux") 
+  ++ lib.optional (stdenv.hostPlatform.system == "x86_64-linux")
     # Force use of old memcpy so that installwatch works on Glibc <
     # 2.14.
     ./use-old-memcpy.patch;
@@ -65,10 +65,13 @@ stdenv.mkDerivation {
     '';
 
   meta = {
-    homepage = http://checkinstall.izto.org/;
+    homepage = "http://checkinstall.izto.org/";
     description = "A tool for automatically generating Slackware, RPM or Debian packages when doing `make install'";
-    maintainers = [ stdenv.lib.maintainers.eelco ];
-    platforms = stdenv.lib.platforms.linux;
-    license = stdenv.lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.eelco ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2;
+    knownVulnerabilities = [
+      "CVE-2020-25031"
+    ];
   };
 }

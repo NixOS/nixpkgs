@@ -1,7 +1,7 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "mednafen-server-${version}";
+  pname = "mednafen-server";
   version = "0.5.2";
 
   src = fetchurl {
@@ -11,11 +11,11 @@ stdenv.mkDerivation rec {
 
   postInstall = "install -m 644 -Dt $out/share/mednafen-server standard.conf";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Netplay server for Mednafen";
-    homepage = https://mednafen.github.io/;
+    homepage = "https://mednafen.github.io/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ AndersonTorres ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

@@ -1,4 +1,5 @@
-{ stdenv
+{ lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
 , openssl
@@ -9,10 +10,9 @@
 , pretend
 , flaky
 , glibcLocales
+, six
+, fetchpatch
 }:
-
-with stdenv.lib;
-
 
 let
   # https://github.com/pyca/pyopenssl/issues/791
@@ -46,26 +46,31 @@ let
     # These tests, we disable always.
     "test_set_default_verify_paths"
     "test_fallback_default_verify_paths"
+    # https://github.com/pyca/pyopenssl/issues/768
+    "test_wantWriteError"
   ] ++ (
-    optionals (hasPrefix "libressl" openssl.meta.name) failingLibresslTests
+    lib.optionals (lib.hasPrefix "libressl" openssl.meta.name) failingLibresslTests
   ) ++ (
-    optionals (versionAtLeast (getVersion openssl.name) "1.1") failingOpenSSL_1_1Tests
+    lib.optionals (lib.versionAtLeast (lib.getVersion openssl.name) "1.1") failingOpenSSL_1_1Tests
+  ) ++ (
+    # https://github.com/pyca/pyopenssl/issues/974
+    lib.optionals stdenv.is32bit [ "test_verify_with_time" ]
   );
 
   # Compose the final string expression, including the "-k" and the single quotes.
-  testExpression = optionalString (disabledTests != [])
-    "-k 'not ${concatStringsSep " and not " disabledTests}'";
+  testExpression = lib.optionalString (disabledTests != [])
+    "-k 'not ${lib.concatStringsSep " and not " disabledTests}'";
 
 in
 
-
 buildPythonPackage rec {
-  pname = "pyOpenSSL";
-  version = "19.0.0";
+  pname = "pyopenssl";
+  version = "20.0.1";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "aeca66338f6de19d1aa46ed634c3b9ae519a64b458f8468aec688e7e3c20f200";
+    pname = "pyOpenSSL";
+    inherit version;
+    sha256 = "4c231c759543ba02560fcd2480c48dcec4dae34c9da7d3747c508227e0624b51";
   };
 
   outputs = [ "out" "dev" ];
@@ -77,12 +82,12 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  # Seems to fail unpredictably on Darwin. See http://hydra.nixos.org/build/49877419/nixlog/1
+  # Seems to fail unpredictably on Darwin. See https://hydra.nixos.org/build/49877419/nixlog/1
   # for one example, but I've also seen ContextTests.test_set_verify_callback_exception fail.
   doCheck = !stdenv.isDarwin;
 
   nativeBuildInputs = [ openssl ];
-  propagatedBuildInputs = [ cryptography pyasn1 idna ];
+  propagatedBuildInputs = [ cryptography pyasn1 idna six ];
 
   checkInputs = [ pytest pretend flaky glibcLocales ];
 }

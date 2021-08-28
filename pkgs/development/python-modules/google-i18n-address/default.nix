@@ -1,22 +1,23 @@
-{ buildPythonPackage, fetchPypi, lib, requests, pytest, pytestcov, mock }:
+{ buildPythonPackage, fetchPypi, pythonAtLeast, lib, requests, pytestCheckHook, mock }:
 
 buildPythonPackage rec {
   pname = "google-i18n-address";
-  version = "2.3.4";
+  version = "2.4.0";
+  disabled = pythonAtLeast "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0f1j1lp9bmllkzhciw0lxi7ipm8w461n0p97mz9714br0cs9glm1";
+    sha256 = "8454a58f254a29988b8d1ca9ab663fd28a1f392a3d29b844d8824807db6333d7";
   };
 
   propagatedBuildInputs = [ requests ];
 
-  checkInputs = [ pytest pytestcov mock ];
+  checkInputs = [ pytestCheckHook mock ];
 
   meta = with lib; {
     description = "Google's i18n address data packaged for Python";
-    homepage = https://pypi.org/project/google-i18n-address/;
-    maintainers = with maintainers; [ ma27 ];
+    homepage = "https://github.com/mirumee/google-i18n-address";
+    maintainers = with maintainers; [ SuperSandro2000 ];
     license = licenses.bsd3;
   };
 }

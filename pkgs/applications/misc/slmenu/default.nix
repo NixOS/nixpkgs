@@ -1,6 +1,6 @@
-{stdenv, fetchhg}:
+{lib, stdenv, fetchhg}:
 let
-  s = 
+  s =
   rec {
     baseName = "slmenu";
     version = "hg-${date}";
@@ -19,12 +19,12 @@ stdenv.mkDerivation {
   src = fetchhg {
     inherit (s) url sha256;
   };
-  makeFlags = ''PREFIX=$(out)'';
+  makeFlags = [ "PREFIX=$(out)" ];
   meta = {
     inherit (s) version;
-    description = ''A console dmenu-like tool'';
-    license = stdenv.lib.licenses.mit;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    description = "A console dmenu-like tool";
+    license = lib.licenses.mit;
+    maintainers = [lib.maintainers.raskin];
+    platforms = lib.platforms.linux;
   };
 }

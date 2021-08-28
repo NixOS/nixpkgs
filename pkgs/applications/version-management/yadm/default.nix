@@ -1,38 +1,47 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub, git, gnupg, installShellFiles }:
 
-let version = "1.12.0"; in
-stdenv.mkDerivation {
-  name = "yadm-${version}";
+stdenv.mkDerivation rec {
+  pname = "yadm";
+  version = "3.1.0";
+
+  buildInputs = [ git gnupg ];
+
+  nativeBuildInputs = [ installShellFiles ];
 
   src = fetchFromGitHub {
     owner  = "TheLocehiliosan";
     repo   = "yadm";
-    rev    = "${version}";
-    sha256 = "0873jgks7dpfkj5km1jchxdrhf7lia70p0f8zsrh9p4crj5f4pc6";
+    rev    = version;
+    sha256 = "0ga0p28nvqilswa07bzi93adk7wx6d5pgxlacr9wl9v1h6cds92s";
   };
 
-  buildCommand = ''
-    mkdir -p $out/bin
-    mkdir -p $out/share/man/man1
-    mkdir -p $out/share/zsh/site-functions
-    mkdir -p $out/share/bash-completion/completions
-    sed -e 's:/bin/bash:/usr/bin/env bash:' $src/yadm > $out/bin/yadm
-    chmod 755 $out/bin/yadm
-    install -m 644 $src/yadm.1 $out/share/man/man1/yadm.1
-    install -m644 $src/completion/yadm.zsh_completion $out/share/zsh/site-functions/_yadm
-    install -m644 $src/completion/yadm.bash_completion $out/share/bash-completion/completions/yadm.bash
+  dontConfigure = true;
+  dontBuild = true;
+
+  installPhase = ''
+    runHook preInstall
+    install -Dt $out/bin yadm
+    runHook postInstall
+  '';
+
+  postInstall = ''
+    installManPage yadm.1
+    installShellCompletion --cmd yadm \
+      --zsh completion/zsh/_yadm \
+      --bash completion/bash/yadm
   '';
 
   meta = {
-    homepage = https://github.com/TheLocehiliosan/yadm;
+    homepage = "https://github.com/TheLocehiliosan/yadm";
     description = "Yet Another Dotfiles Manager";
     longDescription = ''
-    yadm is a dotfile management tool with 3 main features: Manages files across
-    systems using a single Git repository. Provides a way to use alternate files on
-    a specific OS or host. Supplies a method of encrypting confidential data so it
-    can safely be stored in your repository.
+      yadm is a dotfile management tool with 3 main features:
+      * Manages files across systems using a single Git repository.
+      * Provides a way to use alternate files on a specific OS or host.
+      * Supplies a method of encrypting confidential data so it can safely be stored in your repository.
     '';
-    license = stdenv.lib.licenses.gpl3;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ abathur ];
+    platforms = lib.platforms.unix;
   };
 }

@@ -1,30 +1,33 @@
-{ lib, python3Packages, fetchFromGitLab }:
+{ lib, python3Packages, fetchFromGitHub }:
 
-with python3Packages;
-
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "reuse";
-  version = "0.3.4";
+  version = "0.12.1";
 
-  src = fetchFromGitLab {
-    owner = "reuse";
-    repo = "reuse";
+  src = fetchFromGitHub {
+    owner = "fsfe";
+    repo = "reuse-tool";
     rev = "v${version}";
-    sha256 = "07acv02wignrsfhym2i3dhlcs501yj426lnff2cjampl6m5cgsk3";
+    sha256 = "0ql0krnz0fmq405r2qrm9ysm3cvmqfw14j06pny6na7qshibj78z";
   };
 
-  propagatedBuildInputs = [ chardet debian pygit2 ];
+  propagatedBuildInputs = with python3Packages; [
+    binaryornot
+    boolean-py
+    debian
+    jinja2
+    license-expression
+    requests
+    setuptools
+    setuptools_scm
+  ];
 
-  checkInputs = [ pytest jinja2 ];
-
-  # Some path based tests are currently broken under nix
-  checkPhase = ''
-    pytest tests -k "not test_lint_none and not test_lint_ignore_debian and not test_lint_twice_path"
-  '';
+  checkInputs = with python3Packages; [ pytestCheckHook ];
 
   meta = with lib; {
     description = "A tool for compliance with the REUSE Initiative recommendations";
-    license = with licenses; [ cc-by-sa-40 cc0 gpl3 ];
+    homepage = "https://github.com/fsfe/reuse-tool";
+    license = with licenses; [ asl20 cc-by-sa-40 cc0 gpl3Plus ];
     maintainers = [ maintainers.FlorianFranzen ];
   };
 }

@@ -1,27 +1,36 @@
-{ stdenv, fetchFromGitHub, perl }:
+{ lib, stdenv, fetchFromGitHub, perl }:
 
 stdenv.mkDerivation rec {
-  name = "mysqltuner-${version}";
-  version = "1.7.13";
+  pname = "mysqltuner";
+  version = "1.7.21";
 
   src = fetchFromGitHub {
-    owner  = "major";
-    repo   = "MySQLTuner-perl";
-    rev    = version;
-    sha256 = "0zxm2hjvgznbbmsqb8bpcgzc0yq1ikxz1gckirp95ibxid3jdham";
+    owner = "major";
+    repo = "MySQLTuner-perl";
+    rev = version;
+    sha256 = "sha256-Yv1XjD8sZcmGr2SVD6TEElUH7vspJ61WwQwfXLOrao0=";
   };
+
+  postPatch = ''
+    substituteInPlace mysqltuner.pl \
+      --replace '/usr/share' "$out/share"
+  '';
 
   buildInputs = [ perl ];
 
   installPhase = ''
-    mkdir -p $out/bin
-    install -m0755 mysqltuner.pl $out/bin/mysqltuner
+    runHook preInstall
+
+    install -Dm0555 mysqltuner.pl $out/bin/mysqltuner
+    install -Dm0444 -t $out/share/mysqltuner basic_passwords.txt vulnerabilities.csv
+
+    runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Make recommendations for increased performance and stability of MariaDB/MySQL";
-    homepage = http://mysqltuner.com;
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ peterhoeg ];
+    homepage = "http://mysqltuner.com";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ peterhoeg shamilton ];
   };
 }

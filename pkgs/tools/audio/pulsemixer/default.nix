@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, python3, libpulseaudio }:
+{ lib, stdenv, fetchFromGitHub, python3, libpulseaudio }:
 
 stdenv.mkDerivation rec {
   pname = "pulsemixer";
-  version = "1.5.0";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "GeorgeFilipkin";
     repo = pname;
     rev = version;
-    sha256 = "162nfpyqn4gp45x332a73n07c118vispz3jicin4p67x3f8f0g3j";
+    sha256 = "1jagx9zmz5pfsld8y2rj2kqg6ww9f6vqiawfy3vhqc49x3xx92p4";
   };
 
   inherit libpulseaudio;
@@ -25,9 +25,9 @@ stdenv.mkDerivation rec {
       --replace "libpulse.so.0" "$libpulseaudio/lib/libpulse.so.0"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Cli and curses mixer for pulseaudio";
-    homepage = https://github.com/GeorgeFilipkin/pulsemixer;
+    homepage = "https://github.com/GeorgeFilipkin/pulsemixer";
     license = licenses.mit;
     maintainers = [ maintainers.woffs ];
     platforms = platforms.all;

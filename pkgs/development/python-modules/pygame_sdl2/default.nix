@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchurl, isPy27
+{ lib, buildPythonPackage, fetchurl, isPy27
 , cython, SDL2, SDL2_image, SDL2_ttf, SDL2_mixer, libjpeg, libpng }:
 
 buildPythonPackage rec {
@@ -34,7 +34,7 @@ buildPythonPackage rec {
       ln -s pygame-sdl2 pygame_sdl2 || true ; )
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A reimplementation of parts of pygame API using SDL2";
     homepage    = "https://github.com/renpy/pygame_sdl2";
     # Some parts are also available under Zlib License

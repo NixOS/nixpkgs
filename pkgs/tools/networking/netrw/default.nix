@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , checksumType ? "built-in"
 , libmhash ? null
 , openssl ? null
@@ -8,15 +8,15 @@ assert checksumType == "mhash" -> libmhash != null;
 assert checksumType == "openssl" -> openssl != null;
 
 stdenv.mkDerivation rec {
-  name = "netrw-${version}";
+  pname = "netrw";
   version = "1.3.2";
 
   configureFlags = [
     "--with-checksum=${checksumType}"
   ];
 
-  buildInputs = stdenv.lib.optional (checksumType == "mhash") libmhash
-             ++ stdenv.lib.optional (checksumType == "openssl") openssl;
+  buildInputs = lib.optional (checksumType == "mhash") libmhash
+             ++ lib.optional (checksumType == "openssl") openssl;
 
   src = fetchurl {
     urls = [
@@ -28,8 +28,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Simple tool for transporting data over the network";
-    license = stdenv.lib.licenses.gpl2;
-    homepage = https://mamuti.net/netrw/index.en.html;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.gpl2;
+    homepage = "https://mamuti.net/netrw/index.en.html";
+    platforms = lib.platforms.unix;
   };
 }

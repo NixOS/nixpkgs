@@ -1,11 +1,11 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "ddrutility-${version}";
+  pname = "ddrutility";
   version = "2.8";
 
   src = fetchurl {
-    url = "mirror://sourceforge/ddrutility/${name}.tar.gz";
+    url = "mirror://sourceforge/ddrutility/${pname}-${version}.tar.gz";
     sha256 = "023g7f2sfv5cqk3iyss4awrw3b913sy5423mn5zvlyrri5hi2cac";
   };
 
@@ -15,9 +15,9 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "DESTDIR=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A set of utilities for hard drive data rescue";
-    homepage = https://sourceforge.net/projects/ddrutility/;
+    homepage = "https://sourceforge.net/projects/ddrutility/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ orivej ];

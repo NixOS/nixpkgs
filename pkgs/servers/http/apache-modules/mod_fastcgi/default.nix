@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, apacheHttpd }:
+{ lib, stdenv, fetchurl, apacheHttpd }:
 
 let
   version = "2.4.7.1";
@@ -10,7 +10,8 @@ let
     };
 in
 stdenv.mkDerivation {
-  name = "mod_fastcgi-${version}";
+  pname = "mod_fastcgi";
+  inherit version;
 
   src = fetchurl {
     url = "https://github.com/FastCGI-Archives/mod_fastcgi/archive/${version}.tar.gz";
@@ -27,7 +28,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = https://github.com/FastCGI-Archives/mod_fastcgi;
+    homepage = "https://github.com/FastCGI-Archives/mod_fastcgi";
     description = "Provide support for the FastCGI protocol";
 
     longDescription = ''
@@ -41,7 +42,7 @@ stdenv.mkDerivation {
       more scalable.
     '';
 
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.peti ];
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.peti ];
   };
 }

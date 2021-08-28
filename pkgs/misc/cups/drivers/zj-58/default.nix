@@ -1,9 +1,8 @@
-{stdenv, fetchFromGitHub, cups}:
+{lib, stdenv, fetchFromGitHub, cups}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "cups-zj-58";
   version = "2018-02-22";
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "klirichek";
@@ -19,9 +18,9 @@ stdenv.mkDerivation rec {
     install -D ZJ-58.ppd $out/share/cups/model/zjiang/ZJ-58.ppd
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "CUPS filter for thermal printer Zjiang ZJ-58";
-    homepage = https://github.com/klirichek/zj-58;
+    homepage = "https://github.com/klirichek/zj-58";
     platforms = platforms.linux;
     maintainers = with maintainers; [ makefu ];
     license = licenses.bsd2;

@@ -1,5 +1,5 @@
-{ stdenv, fetchbzr
-, pkgconfig, systemd, autoreconfHook
+{ lib, stdenv, fetchbzr
+, pkg-config, systemd, autoreconfHook
 , glib, dbus-glib, json-glib
 , gtk3, libindicator-gtk3, libdbusmenu-gtk3, libappindicator-gtk3 }:
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "1f0jdyqqb5g86zdpbcyn16x94yjigsfiv2kf73dvni5rp1vafbq1";
   };
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  nativeBuildInputs = [ pkg-config autoreconfHook ];
 
   buildInputs = [
     glib dbus-glib json-glib systemd
@@ -47,9 +47,9 @@ stdenv.mkDerivation rec {
     rm -rf $out/share/upstart
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Indicator to take menus from applications and place them in the panel";
-    homepage = https://launchpad.net/indicator-application;
+    homepage = "https://launchpad.net/indicator-application";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = [ maintainers.msteen ];

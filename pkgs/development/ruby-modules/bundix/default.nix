@@ -6,13 +6,13 @@ buildRubyGem rec {
 
   name = "${gemName}-${version}";
   gemName = "bundix";
-  version = "2.4.2";
+  version = "2.5.1";
 
   src = fetchFromGitHub {
-    owner = "manveru";
+    owner = "nix-community";
     repo = "bundix";
     rev = version;
-    sha256 = "03jhj1dy0ljrymjnpi6mcxn36a29qxr835l1lc11879jjzvnr2ax";
+    sha256 = "sha256-iMp6Yj7TSWDqge3Lw855/igOWdTIuFH1LGeIN/cpq7U=";
   };
 
   buildInputs = [ ruby bundler ];
@@ -36,9 +36,9 @@ buildRubyGem rec {
       The output is then usable by the bundlerEnv derivation to list all the
       dependencies of a ruby package.
     '';
-    homepage = https://github.com/manveru/bundix;
+    homepage = "https://github.com/manveru/bundix";
     license = "MIT";
-    maintainers = with lib.maintainers; [ manveru qyliss zimbatm ];
+    maintainers = with lib.maintainers; [ manveru marsam zimbatm ];
     platforms = lib.platforms.all;
   };
 }

@@ -1,23 +1,36 @@
-{ stdenv, pkgconfig, python3, fetchhg, gtk3, glib, gdbm, gtkspell3, itstool, libappindicator-gtk3, perlPackages, glibcLocales, meson, ninja }:
+{ lib, stdenv
+, pkg-config
+, python3
+, fetchFromGitLab
+, gtk3
+, glib
+, gdbm
+, gtkspell3
+, ofono
+, itstool
+, libayatana-appindicator-gtk3
+, perlPackages
+, meson
+, ninja
+}:
 
 stdenv.mkDerivation rec {
-  name = "modem-manager-gui-${version}";
-  version = "0.0.19.1";
+  pname = "modem-manager-gui";
+  version = "0.0.20";
 
-  src = fetchhg {
-    url = https://linuxonly@bitbucket.org/linuxonly/modem-manager-gui;
-    rev = "version ${version}";
-    sha256 = "11iibh36567814h2bz41sa1072b86p1l13xyj670pwkh9k8kw8fd";
+  src = fetchFromGitLab {
+    domain = "salsa.debian.org";
+    owner = "debian";
+    repo = "modem-manager-gui";
+    rev = "upstream%2F${version}";
+    sha256 = "1pjx4rbsxa7gcs628yjkwb0zqrm5xq8pkmp0cfk4flfk1ryflmgr";
   };
 
-  LC_ALL = "en_US.utf-8";
-
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     python3
     perlPackages.Po4a
     itstool
-    glibcLocales
     meson
     ninja
   ];
@@ -27,24 +40,25 @@ stdenv.mkDerivation rec {
     glib
     gdbm
     gtkspell3
-    libappindicator-gtk3
+    ofono
+    libayatana-appindicator-gtk3
   ];
 
   postPatch = ''
     patchShebangs man/manhelper.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An app to send/receive SMS, make USSD requests, control mobile data usage and more";
     longDescription = ''
-      A simple GTK+ based GUI compatible with Modem manager, Wader and oFono
+      A simple GTK based GUI compatible with Modem manager, Wader and oFono
       system services able to control EDGE/3G/4G broadband modem specific
       functions. You can check balance of your SIM card, send or receive SMS
       messages, control mobile traffic consumption and more.
     '';
-    homepage = https://linuxonly.ru/page/modem-manager-gui;
+    homepage = "https://linuxonly.ru/page/modem-manager-gui";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ ahuzik ];
+    maintainers = with maintainers; [ ahuzik galagora ];
     platforms = platforms.linux;
   };
 }

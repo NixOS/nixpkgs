@@ -1,12 +1,11 @@
-{ stdenv, fetchurl, jdk, jre, makeWrapper }:
+{ lib, stdenv, fetchurl, jdk, jre, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "elasticmq-server";
   version = "0.14.6";
-  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "https://s3-eu-west-1.amazonaws.com/softwaremill-public/${name}.jar";
+    url = "https://s3-eu-west-1.amazonaws.com/softwaremill-public/${pname}-${version}.jar";
     sha256 = "1cp2pmkc6gx7gr6109jlcphlky5rr6s1wj528r6hyhzdc01sjhhz";
   };
 
@@ -25,7 +24,7 @@ stdenv.mkDerivation rec {
       --add-flags "-jar $out/share/elasticmq-server/elasticmq-server.jar"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/softwaremill/elasticmq";
     description = "Message queueing system with Java, Scala and Amazon SQS-compatible interfaces";
     license = licenses.asl20;

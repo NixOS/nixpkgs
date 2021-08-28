@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, autoreconfHook, pkgconfig, libdrm, libva }:
+{ lib, stdenv, fetchurl, autoreconfHook, pkg-config, libdrm, libva }:
 
 stdenv.mkDerivation rec {
-  name = "cmrt-${version}";
+  pname = "cmrt";
   version = "1.0.6";
 
   src = fetchurl {
@@ -9,12 +9,12 @@ stdenv.mkDerivation rec {
     sha256 = "1q7651nvvcqhph5rgfhklm71zqd0c405mrh3wx0cfzvil82yj8na";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   buildInputs = [ libdrm libva ];
 
-  meta = with stdenv.lib; {
-    homepage = https://01.org/linuxmedia;
+  meta = with lib; {
+    homepage = "https://01.org/linuxmedia";
     description = "Intel C for Media Runtime";
     longDescription = "Media GPU kernel manager for Intel G45 & HD Graphics family";
     license = licenses.mit;

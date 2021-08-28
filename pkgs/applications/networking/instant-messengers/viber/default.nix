@@ -1,22 +1,25 @@
-{fetchurl, stdenv, dpkg, makeWrapper,
- alsaLib, cups, curl, dbus, expat, fontconfig, freetype, glib, gst_all_1, harfbuzz, libcap,
- libpulseaudio, libxml2, libxslt, libGLU_combined, nspr, nss, openssl, systemd, wayland, xorg, zlib, ...
+{fetchurl, lib, stdenv, dpkg, makeWrapper,
+ alsaLib, cups, curl, dbus, expat, fontconfig, freetype, glib, gst_all_1,
+ harfbuzz, libcap, libGL, libGLU, libpulseaudio, libxkbcommon, libxml2, libxslt,
+ nspr, nss, openssl, systemd, wayland, xorg, zlib, ...
 }:
 
-stdenv.mkDerivation rec {
-  name = "viber-${version}";
-  version = "7.0.0.1035";
+stdenv.mkDerivation {
+  pname = "viber";
+  version = "13.3.1.22";
 
   src = fetchurl {
-    url = "https://download.cdn.viber.com/cdn/desktop/Linux/viber.deb";
-    sha256 = "06mp2wvqx4y6rd5gs2mh442qcykjrrvwnkhlpx0lara331i2p0lj";
+    # Official link: https://download.cdn.viber.com/cdn/desktop/Linux/viber.deb
+    url = "http://web.archive.org/web/20210602004133/https://download.cdn.viber.com/cdn/desktop/Linux/viber.deb";
+    sha256 = "0rs26x0lycavybn6k1hbb5kzms0zzcmxlrmi4g8k7vyafj6s8dqh";
   };
 
-  buildInputs = [ dpkg makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ dpkg ];
 
-  unpackPhase = "true";
+  dontUnpack = true;
 
-  libPath = stdenv.lib.makeLibraryPath [
+  libPath = lib.makeLibraryPath [
       alsaLib
       cups
       curl
@@ -29,10 +32,11 @@ stdenv.mkDerivation rec {
       gst_all_1.gstreamer
       harfbuzz
       libcap
+      libGLU libGL
       libpulseaudio
+      libxkbcommon
       libxml2
       libxslt
-      libGLU_combined
       nspr
       nss
       openssl
@@ -78,7 +82,8 @@ stdenv.mkDerivation rec {
     wrapProgram $out/opt/viber/Viber \
       --set QT_PLUGIN_PATH "$out/opt/viber/plugins" \
       --set QT_XKB_CONFIG_ROOT "${xorg.xkeyboardconfig}/share/X11/xkb" \
-      --set QTCOMPOSE "${xorg.libX11.out}/share/X11/locale"
+      --set QTCOMPOSE "${xorg.libX11.out}/share/X11/locale" \
+      --set QML2_IMPORT_PATH "$out/opt/viber/qml"
     ln -s $out/opt/viber/Viber $out/bin/viber
 
     mv $out/usr/share $out/share
@@ -94,11 +99,11 @@ stdenv.mkDerivation rec {
   dontPatchELF = true;
 
   meta = {
-    homepage = http://www.viber.com;
+    homepage = "http://www.viber.com";
     description = "An instant messaging and Voice over IP (VoIP) app";
-    license = stdenv.lib.licenses.unfree;
+    license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with stdenv.lib.maintainers; [ jagajaga ];
+    maintainers = with lib.maintainers; [ jagajaga ];
   };
 
 }

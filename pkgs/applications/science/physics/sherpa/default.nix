@@ -1,13 +1,17 @@
-{ stdenv, fetchurl, gfortran, hepmc, fastjet, lhapdf, rivet, sqlite }:
+{ lib, stdenv, fetchurl, gfortran, hepmc2, fastjet, lhapdf, rivet, sqlite }:
 
 stdenv.mkDerivation rec {
-  name = "sherpa-${version}";
-  version = "2.2.6";
+  pname = "sherpa";
+  version = "2.2.10";
 
   src = fetchurl {
     url = "https://www.hepforge.org/archive/sherpa/SHERPA-MC-${version}.tar.gz";
-    sha256 = "1cagkkz1pjl0pdf85w1qkwhx0afi3kxm1vnmfavq1zqhss7fc57i";
+    sha256 = "1iwa17s8ipj6a2b8zss5csb1k5y9s5js38syvq932rxcinbyjsl4";
   };
+
+  postPatch = lib.optional (stdenv.hostPlatform.libc == "glibc") ''
+    sed -ie '/sys\/sysctl.h/d' ATOOLS/Org/Run_Parameter.C
+  '';
 
   buildInputs = [ gfortran sqlite lhapdf rivet ];
 
@@ -15,19 +19,18 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-sqlite3=${sqlite.dev}"
-    "--enable-hepmc2=${hepmc}"
+    "--enable-hepmc2=${hepmc2}"
     "--enable-fastjet=${fastjet}"
     "--enable-lhapdf=${lhapdf}"
     "--enable-rivet=${rivet}"
+    "--enable-pythia"
   ];
 
-  CXXFLAGS = "-std=c++11"; # needed for rivet on OSX
-
-  meta = {
+  meta = with lib; {
     description = "Simulation of High-Energy Reactions of PArticles in lepton-lepton, lepton-photon, photon-photon, lepton-hadron and hadron-hadron collisions";
-    license     = stdenv.lib.licenses.gpl2;
-    homepage    = https://gitlab.com/sherpa-team/sherpa;
-    platforms   = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ veprbl ];
+    license = licenses.gpl2;
+    homepage = "https://gitlab.com/sherpa-team/sherpa";
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ veprbl ];
   };
 }

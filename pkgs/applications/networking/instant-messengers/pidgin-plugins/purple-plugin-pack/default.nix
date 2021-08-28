@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pidgin, intltool, python } :
+{ lib, stdenv, fetchurl, pidgin, intltool, python } :
 
 stdenv.mkDerivation rec {
   name = "purple-plugin-pack-2.7.0";
@@ -9,8 +9,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pidgin intltool python ];
 
-  meta = with stdenv.lib; {
-    homepage = https://bitbucket.org/rekkanoryo/purple-plugin-pack;
+  meta = with lib; {
+    homepage = "https://bitbucket.org/rekkanoryo/purple-plugin-pack";
     description = "Plugin pack for Pidgin 2.x";
     license = licenses.gpl2;
     platforms = platforms.linux;

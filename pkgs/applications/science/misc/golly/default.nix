@@ -1,15 +1,15 @@
-{stdenv, fetchurl, wxGTK, perl, python2, zlib, libGLU_combined, libX11}:
+{lib, stdenv, fetchurl, wxGTK, perl, python2, zlib, libGLU, libGL, libX11}:
 stdenv.mkDerivation rec {
   pname = "golly";
-  version = "3.2";
+  version = "3.3";
 
   src = fetchurl {
-    sha256 = "0cg9mbwmf4q6qxhqlnzrxh9y047banxdb8pd3hgj3smmja2zf0jd";
+    sha256 = "1j3ksnar4rdam4xiyspgyrs1pifbvxfxkrn65brkwxpx39mpgzc8";
     url="mirror://sourceforge/project/golly/golly/golly-${version}/golly-${version}-src.tar.gz";
   };
 
   buildInputs = [
-    wxGTK perl python2 zlib libGLU_combined libX11
+    wxGTK perl python2 zlib libGLU libGL libX11
   ];
 
   setSourceRoot = ''
@@ -31,9 +31,9 @@ stdenv.mkDerivation rec {
   meta = {
     inherit version;
     description = "Cellular automata simulation program";
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2;
+    maintainers = [lib.maintainers.raskin];
+    platforms = lib.platforms.linux;
     downloadPage = "https://sourceforge.net/projects/golly/files/golly";
   };
 }

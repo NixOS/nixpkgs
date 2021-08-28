@@ -1,14 +1,14 @@
 { alsaLib, autoPatchelfHook, fetchurl, gtk3, libnotify
-, makeDesktopItem, makeWrapper, nss, stdenv, udev, xdg_utils
+, makeDesktopItem, makeWrapper, nss, lib, stdenv, udev, xdg-utils
 , xorg
 }:
 
-with stdenv.lib;
+with lib;
 
 let
   bits = "x86_64";
 
-  version = "4.7.3";
+  version = "4.11.3";
 
   desktopItem = makeDesktopItem rec {
     name = "Wavebox";
@@ -21,11 +21,12 @@ let
 
   tarball = "Wavebox_${replaceStrings ["."] ["_"] (toString version)}_linux_${bits}.tar.gz";
 
-in stdenv.mkDerivation rec {
-  name = "wavebox-${version}";
+in stdenv.mkDerivation {
+  pname = "wavebox";
+  inherit version;
   src = fetchurl {
     url = "https://github.com/wavebox/waveboxapp/releases/download/v${version}/${tarball}";
-    sha256 = "1yg2lib4h5illz0ss4hvr78s4v1cjbxlczjzaw6bqigyk95smm23";
+    sha256 = "0z04071lq9bfyrlg034fmvd4346swgfhxbmsnl12m7c2m2b9z784";
   };
 
   # don't remove runtime deps
@@ -39,7 +40,7 @@ in stdenv.mkDerivation rec {
     alsaLib gtk3 nss
   ];
 
-  runtimeDependencies = [ udev.lib libnotify ];
+  runtimeDependencies = [ (getLib udev) libnotify ];
 
   installPhase = ''
     mkdir -p $out/bin $out/opt/wavebox
@@ -53,12 +54,12 @@ in stdenv.mkDerivation rec {
 
   postFixup = ''
     makeWrapper $out/opt/wavebox/Wavebox $out/bin/wavebox \
-      --prefix PATH : ${xdg_utils}/bin
+      --prefix PATH : ${xdg-utils}/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Wavebox messaging application";
-    homepage = https://wavebox.io;
+    homepage = "https://wavebox.io";
     license = licenses.mpl20;
     maintainers = with maintainers; [ rawkode ];
     platforms = ["x86_64-linux"];

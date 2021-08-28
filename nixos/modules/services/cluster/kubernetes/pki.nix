@@ -20,6 +20,7 @@ let
         size = 2048;
     };
     CN = top.masterAddress;
+    hosts = [top.masterAddress] ++ cfg.cfsslAPIExtraSANs;
   });
 
   cfsslAPITokenBaseName = "apitoken.secret";
@@ -27,11 +28,12 @@ let
   certmgrAPITokenPath = "${top.secretsPath}/${cfsslAPITokenBaseName}";
   cfsslAPITokenLength = 32;
 
-  clusterAdminKubeconfig = with cfg.certs.clusterAdmin; {
-    server = top.apiserverAddress;
-    certFile = cert;
-    keyFile = key;
-  };
+  clusterAdminKubeconfig = with cfg.certs.clusterAdmin;
+    top.lib.mkKubeConfig "cluster-admin" {
+        server = top.apiserverAddress;
+        certFile = cert;
+        keyFile = key;
+    };
 
   remote = with config.services; "https://${kubernetes.masterAddress}:${toString cfssl.port}";
 in
@@ -63,6 +65,15 @@ in
       '';
       default = true;
       type = bool;
+    };
+
+    cfsslAPIExtraSANs = mkOption {
+      description = ''
+        Extra x509 Subject Alternative Names to be added to the cfssl API webserver TLS cert.
+      '';
+      default = [];
+      example = [ "subdomain.example.com" ];
+      type = listOf str;
     };
 
     genCfsslAPIToken = mkOption {
@@ -118,11 +129,6 @@ in
     cfsslCertPathPrefix = "${config.services.cfssl.dataDir}/cfssl";
     cfsslCert = "${cfsslCertPathPrefix}.pem";
     cfsslKey = "${cfsslCertPathPrefix}-key.pem";
-
-    certmgrPaths = [
-      top.caFile
-      certmgrAPITokenPath
-    ];
   in
   {
 
@@ -172,44 +178,18 @@ in
         chown cfssl "${cfsslAPITokenPath}" && chmod 400 "${cfsslAPITokenPath}"
       '')]);
 
-    systemd.targets.cfssl-online = {
-      wantedBy = [ "network-online.target" ];
-      after = [ "cfssl.service" "network-online.target" "cfssl-online.service" ];
-    };
-
-    systemd.services.cfssl-online = {
-      description = "Wait for ${remote} to be reachable.";
-      wantedBy = [ "cfssl-online.target" ];
-      before = [ "cfssl-online.target" ];
-      path = [ pkgs.curl ];
-      preStart = ''
-        until curl --fail-early -fskd '{}' ${remote}/api/v1/cfssl/info -o /dev/null; do
-          echo curl ${remote}/api/v1/cfssl/info: exit status $?
-          sleep 2
-        done
-      '';
-      script = "echo Ok";
-      serviceConfig = {
-        TimeoutSec = "300";
-      };
-    };
-
     systemd.services.kube-certmgr-bootstrap = {
       description = "Kubernetes certmgr bootstrapper";
-      wantedBy = [ "cfssl-online.target" ];
-      after = [ "cfssl-online.target" ];
-      before = [ "certmgr.service" ];
-      path = with pkgs; [ curl cfssl ];
+      wantedBy = [ "certmgr.service" ];
+      after = [ "cfssl.target" ];
       script = concatStringsSep "\n" [''
         set -e
-
-        mkdir -p $(dirname ${certmgrAPITokenPath})
-        mkdir -p $(dirname ${top.caFile})
 
         # If there's a cfssl (cert issuer) running locally, then don't rely on user to
         # manually paste it in place. Just symlink.
         # otherwise, create the target file, ready for users to insert the token
 
+        mkdir -p $(dirname ${certmgrAPITokenPath})
         if [ -f "${cfsslAPITokenPath}" ]; then
           ln -fs "${cfsslAPITokenPath}" "${certmgrAPITokenPath}"
         else
@@ -217,18 +197,15 @@ in
         fi
       ''
       (optionalString (cfg.pkiTrustOnBootstrap) ''
-        if [ ! -s "${top.caFile}" ]; then
-          until test -s ${top.caFile}.json; do
-            sleep 2
-            curl --fail-early -fskd '{}' ${remote}/api/v1/cfssl/info -o ${top.caFile}.json
-          done
-          cfssljson -f ${top.caFile}.json -stdout >${top.caFile}
-          rm ${top.caFile}.json
+        if [ ! -f "${top.caFile}" ] || [ $(cat "${top.caFile}" | wc -c) -lt 1 ]; then
+          ${pkgs.curl}/bin/curl --fail-early -f -kd '{}' ${remote}/api/v1/cfssl/info | \
+            ${pkgs.cfssl}/bin/cfssljson -stdout >${top.caFile}
         fi
       '')
       ];
       serviceConfig = {
-        TimeoutSec = "500";
+        RestartSec = "10s";
+        Restart = "on-failure";
       };
     };
 
@@ -252,7 +229,8 @@ in
             };
             private_key = cert.privateKeyOptions;
             request = {
-              inherit (cert) CN hosts;
+              hosts = [cert.CN] ++ cert.hosts;
+              inherit (cert) CN;
               key = {
                 algo = "rsa";
                 size = 2048;
@@ -264,28 +242,35 @@ in
           mapAttrs mkSpec cfg.certs;
       };
 
-      systemd.services.certmgr = {
-        wantedBy = [ "cfssl-online.target" ];
-        after = [ "cfssl-online.target" "kube-certmgr-bootstrap.service" ];
-        preStart = ''
-          while ! test -s ${certmgrAPITokenPath} ; do
-            sleep 1
-            echo Waiting for ${certmgrAPITokenPath}
-          done
-        '';
-        unitConfig.ConditionPathExists = certmgrPaths;
-      };
+      #TODO: Get rid of kube-addon-manager in the future for the following reasons
+      # - it is basically just a shell script wrapped around kubectl
+      # - it assumes that it is clusterAdmin or can gain clusterAdmin rights through serviceAccount
+      # - it is designed to be used with k8s system components only
+      # - it would be better with a more Nix-oriented way of managing addons
+      systemd.services.kube-addon-manager = mkIf top.addonManager.enable (mkMerge [{
+        environment.KUBECONFIG = with cfg.certs.addonManager;
+          top.lib.mkKubeConfig "addon-manager" {
+            server = top.apiserverAddress;
+            certFile = cert;
+            keyFile = key;
+          };
+        }
 
-      systemd.paths.certmgr = {
-        wantedBy = [ "certmgr.service" ];
-        pathConfig = {
-          PathExists = certmgrPaths;
-          PathChanged = certmgrPaths;
-        };
-      };
+        (optionalAttrs (top.addonManager.bootstrapAddons != {}) {
+          serviceConfig.PermissionsStartOnly = true;
+          preStart = with pkgs;
+          let
+            files = mapAttrsToList (n: v: writeText "${n}.json" (builtins.toJSON v))
+              top.addonManager.bootstrapAddons;
+          in
+          ''
+            export KUBECONFIG=${clusterAdminKubeconfig}
+            ${kubectl}/bin/kubectl apply -f ${concatStringsSep " \\\n -f " files}
+          '';
+        })]);
 
-      environment.etc.${cfg.etcClusterAdminKubeconfig}.source = mkIf (cfg.etcClusterAdminKubeconfig != null)
-        (top.lib.mkKubeConfig "cluster-admin" clusterAdminKubeconfig);
+      environment.etc.${cfg.etcClusterAdminKubeconfig}.source = mkIf (!isNull cfg.etcClusterAdminKubeconfig)
+        clusterAdminKubeconfig;
 
       environment.systemPackages = mkIf (top.kubelet.enable || top.proxy.enable) [
       (pkgs.writeScriptBin "nixos-kubernetes-node-join" ''
@@ -311,22 +296,38 @@ in
           exit 1
         fi
 
-        do_restart=$(test -s ${certmgrAPITokenPath} && echo -n y || echo -n n)
-
         echo $token > ${certmgrAPITokenPath}
         chmod 600 ${certmgrAPITokenPath}
 
-        if [ y = $do_restart ]; then
-          echo "Restarting certmgr..." >&1
-          systemctl restart certmgr
-        fi
+        echo "Restarting certmgr..." >&1
+        systemctl restart certmgr
 
-        echo "Node joined succesfully" >&1
+        echo "Waiting for certs to appear..." >&1
+
+        ${optionalString top.kubelet.enable ''
+          while [ ! -f ${cfg.certs.kubelet.cert} ]; do sleep 1; done
+          echo "Restarting kubelet..." >&1
+          systemctl restart kubelet
+        ''}
+
+        ${optionalString top.proxy.enable ''
+          while [ ! -f ${cfg.certs.kubeProxyClient.cert} ]; do sleep 1; done
+          echo "Restarting kube-proxy..." >&1
+          systemctl restart kube-proxy
+        ''}
+
+        ${optionalString top.flannel.enable ''
+          while [ ! -f ${cfg.certs.flannelClient.cert} ]; do sleep 1; done
+          echo "Restarting flannel..." >&1
+          systemctl restart flannel
+        ''}
+
+        echo "Node joined succesfully"
       '')];
 
       # isolate etcd on loopback at the master node
       # easyCerts doesn't support multimaster clusters anyway atm.
-      services.etcd = mkIf top.apiserver.enable (with cfg.certs.etcd; {
+      services.etcd = with cfg.certs.etcd; {
         listenClientUrls = ["https://127.0.0.1:2379"];
         listenPeerUrls = ["https://127.0.0.1:2380"];
         advertiseClientUrls = ["https://etcd.local:2379"];
@@ -335,10 +336,18 @@ in
         certFile = mkDefault cert;
         keyFile = mkDefault key;
         trustedCaFile = mkDefault caCert;
-      });
+      };
       networking.extraHosts = mkIf (config.services.etcd.enable) ''
         127.0.0.1 etcd.${top.addons.dns.clusterDomain} etcd.local
       '';
+
+      services.flannel = with cfg.certs.flannelClient; {
+        kubeconfig = top.lib.mkKubeConfig "flannel" {
+          server = top.apiserverAddress;
+          certFile = cert;
+          keyFile = key;
+        };
+      };
 
       services.kubernetes = {
 
@@ -353,31 +362,19 @@ in
           tlsCertFile = mkDefault cert;
           tlsKeyFile = mkDefault key;
           serviceAccountKeyFile = mkDefault cfg.certs.serviceAccount.cert;
+          serviceAccountSigningKeyFile = mkDefault cfg.certs.serviceAccount.key;
           kubeletClientCaFile = mkDefault caCert;
           kubeletClientCertFile = mkDefault cfg.certs.apiserverKubeletClient.cert;
           kubeletClientKeyFile = mkDefault cfg.certs.apiserverKubeletClient.key;
           proxyClientCertFile = mkDefault cfg.certs.apiserverProxyClient.cert;
           proxyClientKeyFile = mkDefault cfg.certs.apiserverProxyClient.key;
         });
-        addonManager = mkIf top.addonManager.enable {
-          kubeconfig = with cfg.certs.addonManager; {
-            certFile = mkDefault cert;
-            keyFile = mkDefault key;
-          };
-          bootstrapAddonsKubeconfig = clusterAdminKubeconfig;
-        };
         controllerManager = mkIf top.controllerManager.enable {
           serviceAccountKeyFile = mkDefault cfg.certs.serviceAccount.key;
           rootCaFile = cfg.certs.controllerManagerClient.caCert;
           kubeconfig = with cfg.certs.controllerManagerClient; {
             certFile = mkDefault cert;
             keyFile = mkDefault key;
-          };
-        };
-        flannel = mkIf top.flannel.enable {
-          kubeconfig = with cfg.certs.flannelClient; {
-            certFile = cert;
-            keyFile = key;
           };
         };
         scheduler = mkIf top.scheduler.enable {

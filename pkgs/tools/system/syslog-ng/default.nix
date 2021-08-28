@@ -1,24 +1,20 @@
-{ stdenv, fetchurl, openssl, libcap, curl, which
-, eventlog, pkgconfig, glib, python, systemd, perl
+{ lib, stdenv, fetchurl, openssl, libcap, curl, which
+, eventlog, pkg-config, glib, python, systemd, perl
 , riemann_c_client, protobufc, pcre, libnet
 , json_c, libuuid, libivykis, mongoc, rabbitmq-c
 , libesmtp
 }:
 
-let
-  pname = "syslog-ng";
-in
-
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
-  version = "3.21.1";
+  pname = "syslog-ng";
+  version = "3.28.1";
 
   src = fetchurl {
-    url = "https://github.com/balabit/${pname}/releases/download/${name}/${name}.tar.gz";
-    sha256 = "09fdjschp3shy8xp0hh5fh6qv25433zd0biv0igkmkvrmnjks5ld";
+    url = "https://github.com/${pname}/${pname}/releases/download/${pname}-${version}/${pname}-${version}.tar.gz";
+    sha256 = "1s56q8k69sdrqsh3y9lr4di01fqw7xb49wr0dz75jmz084yg8kmg";
   };
 
-  nativeBuildInputs = [ pkgconfig which ];
+  nativeBuildInputs = [ pkg-config which ];
 
   buildInputs = [
     libcap
@@ -58,11 +54,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
-    homepage = https://www.balabit.com/network-security/syslog-ng/;
+  meta = with lib; {
+    homepage = "https://www.syslog-ng.com";
     description = "Next-generation syslogd with advanced networking and filtering capabilities";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ rickynils  fpletz ];
+    maintainers = with maintainers; [ fpletz ];
     platforms = platforms.linux;
   };
 }

@@ -1,17 +1,16 @@
 /* TeX Live user docs
   - source: ../../../../../doc/languages-frameworks/texlive.xml
-  - current html: http://nixos.org/nixpkgs/manual/#sec-language-texlive
+  - current html: https://nixos.org/nixpkgs/manual/#sec-language-texlive
 */
 { stdenv, lib, fetchurl, runCommand, writeText, buildEnv
-, callPackage, ghostscriptX, harfbuzz, poppler_min
-, makeWrapper, python, ruby, perl
+, callPackage, ghostscriptX, harfbuzz
+, makeWrapper, python3, ruby, perl
 , useFixedHashes ? true
 , recurseIntoAttrs
 }:
 let
   # various binaries (compiled)
   bin = callPackage ./bin.nix {
-    poppler = poppler_min; # otherwise depend on various X stuff
     ghostscript = ghostscriptX;
     harfbuzz = harfbuzz.override {
       withIcu = true; withGraphite2 = true;
@@ -25,7 +24,7 @@ let
   # function for creating a working environment from a set of TL packages
   combine = import ./combine.nix {
     inherit bin combinePkgs buildEnv lib makeWrapper writeText
-      stdenv python ruby perl;
+      stdenv python3 ruby perl;
     ghostscript = ghostscriptX; # could be without X, probably, but we use X above
   };
 
@@ -38,9 +37,6 @@ let
     clean = removeSelfDep (orig // {
       # overrides of texlive.tlpdb
 
-      dvidvi = orig.dvidvi // {
-        hasRunfiles = false; # only contains docs that's in bin.core.doc already
-      };
       texlive-msg-translations = orig.texlive-msg-translations // {
         hasRunfiles = false; # only *.po for tlmgr
       };
@@ -69,7 +65,7 @@ let
 
   flatDeps = pname: attrs:
     let
-      version = attrs.version or bin.texliveYear;
+      version = attrs.version or (builtins.toString attrs.revision);
       mkPkgV = tlType: let
         pkg = attrs // {
           sha512 = attrs.sha512.${tlType};
@@ -84,15 +80,21 @@ let
             # the fake derivations are used for filtering of hyphenation patterns
           else { inherit pname version; tlType = "run"; }
         )]
-        ++ lib.optional (attrs.sha512 ? "doc") (mkPkgV "doc")
-        ++ lib.optional (attrs.sha512 ? "source") (mkPkgV "source")
+        ++ lib.optional (attrs.sha512 ? doc) (mkPkgV "doc")
+        ++ lib.optional (attrs.sha512 ? source) (mkPkgV "source")
         ++ lib.optional (bin ? ${pname})
             ( bin.${pname} // { inherit pname; tlType = "bin"; } )
         ++ combinePkgs (attrs.deps or {});
     };
 
+  snapshot = {
+    year = "2021";
+    month = "04";
+    day = "08";
+  };
+
   # create a derivation that contains an unpacked upstream TL package
-  mkPkg = { pname, tlType, version, sha512, postUnpack ? "", stripPrefix ? 1, ... }@args:
+  mkPkg = { pname, tlType, revision, version, sha512, postUnpack ? "", stripPrefix ? 1, ... }@args:
     let
       # the basename used by upstream (without ".tar.xz" suffix)
       urlName = pname + lib.optionalString (tlType != "run") ".${tlType}";
@@ -100,16 +102,20 @@ let
       fixedHash = fixedHashes.${tlName} or null; # be graceful about missing hashes
 
       urls = args.urls or (if args ? url then [ args.url ] else
-              map (up: "${up}/${urlName}.tar.xz") urlPrefixes
-            );
+        map (up: "${up}/${urlName}.r${toString revision}.tar.xz") urlPrefixes);
 
-      # Upstream refuses to distribute stable tarballs,
-      # so we host snapshots on IPFS or on our own servers.
-      # Common packages should get served from the binary cache anyway.
-      # See discussions, e.g. https://github.com/NixOS/nixpkgs/issues/24683
+      # The tarballs on CTAN mirrors for the current release are constantly
+      # receiving updates, so we can't use those directly. Stable snapshots
+      # need to be used instead. Ideally, for the release branches of NixOS we
+      # should be switching to the tlnet-final versions
+      # (https://tug.org/historic/).
       urlPrefixes = args.urlPrefixes or [
-        http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/2018/tlnet-final/archive
-        ftp://tug.org/texlive/historic/2018/tlnet-final/archive
+        # tlnet-final snapshot
+        #"http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/2019/tlnet-final/archive"
+        #"ftp://tug.org/texlive/historic/2019/tlnet-final/archive"
+
+        # Daily snapshots hosted by one of the texlive release managers
+        "https://texlive.info/tlnet-archive/${snapshot.year}/${snapshot.month}/${snapshot.day}/tlnet/archive"
       ];
 
       src = fetchurl { inherit urls sha512; };
@@ -125,6 +131,7 @@ let
 
     in if sha512 == "" then
       # hash stripped from pkgs.nix to save space -> fetch&unpack in a single step
+      # currently unused as we prefer to keep the sha512 hashes for reproducibility
       fetchurl {
         inherit urls;
         sha1 = if fixedHash == null then throw "TeX Live package ${tlName} is missing hash!"
@@ -138,8 +145,7 @@ let
         // passthru
 
     else runCommand "texlive-${tlName}"
-      ( { # lots of derivations, not meant to be cached
-          preferLocalBuild = true; allowSubstitutes = false;
+      ( {
           inherit passthru;
         } // lib.optionalAttrs (fixedHash != null) {
           outputHash = fixedHash;
@@ -168,17 +174,16 @@ in
           addMetaAttrs rec {
             description = "TeX Live environment for ${pname}";
             platforms = lib.platforms.all;
-            hydraPlatforms = lib.optionals
-              (lib.elem pname ["scheme-small" "scheme-basic"]) platforms;
-            maintainers = with lib.maintainers;  [ vcunat veprbl ];
+            maintainers = with lib.maintainers;  [ veprbl ];
           }
           (combine {
             ${pname} = attrs;
             extraName = "combined" + lib.removePrefix "scheme" pname;
+            extraVersion = ".${snapshot.year}${snapshot.month}${snapshot.day}";
           })
         )
         { inherit (tl)
-            scheme-basic scheme-context scheme-full scheme-gust
+            scheme-basic scheme-context scheme-full scheme-gust scheme-infraonly
             scheme-medium scheme-minimal scheme-small scheme-tetex;
         }
     );

@@ -11,14 +11,14 @@
 # }
 # (This advice was tested on 2010 August 2.)
 
-{ stdenv, fetchurl, cups, gcc, ghostscript, glibc, patchelf }:
+{ lib, stdenv, fetchurl, cups, gcc, ghostscript, glibc, patchelf }:
 
 # Do not bump lightly! Visit <http://www.bchemnet.com/suldr/supported.html>
 # to see what will break when upgrading. Consider a new versioned attribute.
 let
-  cups' = stdenv.lib.getLib cups;
+  cups' = lib.getLib cups;
 in stdenv.mkDerivation rec {
-  name = "samsung-UnifiedLinuxDriver-${version}";
+  pname = "samsung-UnifiedLinuxDriver";
   version = "4.00.39";
 
   src = fetchurl {
@@ -34,9 +34,9 @@ in stdenv.mkDerivation rec {
 
   builder = ./builder.sh;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Samsung's Linux printing drivers; includes binaries without source code";
-    homepage = http://www.samsung.com/;
+    homepage = "http://www.samsung.com/";
     license = licenses.unfree;
     platforms = platforms.linux;
     broken = true;   # libscmssc.so and libmfp.so can't find their library dependencies at run-time

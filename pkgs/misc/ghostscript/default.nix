@@ -1,4 +1,4 @@
-{ config, stdenv, lib, fetchurl, pkgconfig, zlib, expat, openssl, autoconf
+{ config, stdenv, lib, fetchurl, pkg-config, zlib, expat, openssl, autoconf
 , libjpeg, libpng, libtiff, freetype, fontconfig, libpaper, jbig2dec
 , libiconv, ijs, lcms2, fetchpatch
 , cupsSupport ? config.ghostscript.cups or (!stdenv.isDarwin), cups ? null
@@ -9,10 +9,6 @@ assert x11Support -> xlibsWrapper != null;
 assert cupsSupport -> cups != null;
 
 let
-  version = "9.${ver_min}";
-  ver_min = "26";
-  sha512 = "0z2mvsh06qgnxl7p9isw7swg8jp8xcx3rnbqk727avw7ammvfh8785d2bn5i4fhz8y45ka3cpgp7b598m06yq5zawijhcnzkq187nrx";
-
   fonts = stdenv.mkDerivation {
     name = "ghostscript-fonts";
 
@@ -36,38 +32,28 @@ let
 
 in
 stdenv.mkDerivation rec {
-  name = "ghostscript-${version}";
+  pname = "ghostscript";
+  version = "9.53.3";
 
   src = fetchurl {
-    url = "https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs9${ver_min}/${name}.tar.xz";
-    inherit sha512;
+    url = "https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs9${lib.versions.minor version}${lib.versions.patch version}/${pname}-${version}.tar.xz";
+    sha512 = "2vif3vgxa5wma16yxvhhkymk4p309y5204yykarq94r5rk890556d2lj5w7acnaa2ymkym6y0zd4vq9sy9ca2346igg2c6dxqkjr0zb";
   };
 
   patches = [
+    (fetchpatch {
+      url = "https://github.com/ArtifexSoftware/ghostpdl/commit/41ef9a0bc36b9db7115fbe9623f989bfb47bbade.patch";
+      sha256 = "1qpc6q1fpxshqc0mqgg36kng47kgljk50bmr8p7wn21jgfkh7m8w";
+    })
     ./urw-font-files.patch
     ./doc-no-ref.diff
-    (fetchpatch {
-      name = "CVE-2019-6116";
-      url = "http://git.ghostscript.com/?p=ghostpdl.git;a=patch;h=d3537a54740d78c5895ec83694a07b3e4f616f61";
-      sha256 = "1hr8bpi87bbg1kvv28kflmfh1dhzxw66p9q0ddvbrj72qd86p3kx";
-    })
-    (fetchpatch {
-      name = "CVE-2019-3839-part-1";
-      url = "http://git.ghostscript.com/?p=ghostpdl.git;a=patch;h=4ec9ca74bed49f2a82acb4bf430eae0d8b3b75c9";
-      sha256 = "0gn1n9fq5msrxxzspidcnmykp1iv3yvx5485fddmgrslr52ngcf9";
-    })
-    (fetchpatch {
-      name = "CVE-2019-3839-part-2";
-      url = "http://git.ghostscript.com/?p=ghostpdl.git;a=patch;h=db24f253409d5d085c2760c814c3e1d3fa2dac59";
-      sha256 = "1h6kpwc6ryr6jlxjr6bfnvmmf8x0kqmyjlx3hggqjs23n0wsr9p9";
-    })
   ];
 
   outputs = [ "out" "man" "doc" ];
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ pkgconfig autoconf ];
+  nativeBuildInputs = [ pkg-config autoconf ];
   buildInputs =
     [ zlib expat openssl
       libjpeg libpng libtiff freetype fontconfig libpaper jbig2dec
@@ -85,15 +71,19 @@ stdenv.mkDerivation rec {
     sed "s@^ZLIBDIR=.*@ZLIBDIR=${zlib.dev}/include@" -i configure.ac
 
     autoconf
-  '' + lib.optionalString cupsSupport ''
-    configureFlags="$configureFlags --with-cups-serverbin=$out/lib/cups --with-cups-serverroot=$out/etc/cups --with-cups-datadir=$out/share/cups"
   '';
 
-  configureFlags =
-    [ "--with-system-libtiff"
-      "--enable-dynamic"
-    ] ++ lib.optional x11Support "--with-x"
-      ++ lib.optional cupsSupport "--enable-cups";
+  configureFlags = [
+    "--with-system-libtiff"
+    "--enable-dynamic"
+  ]
+  ++ lib.optional x11Support "--with-x"
+  ++ lib.optionals cupsSupport [
+    "--enable-cups"
+    "--with-cups-serverbin=$(out)/lib/cups"
+    "--with-cups-serverroot=$(out)/etc/cups"
+    "--with-cups-datadir=$(out)/share/cups"
+  ];
 
   doCheck = true;
 
@@ -106,24 +96,31 @@ stdenv.mkDerivation rec {
 
     cp -r Resource "$out/share/ghostscript/${version}"
 
-    mkdir -p "$doc/share/doc/ghostscript"
-    mv "$doc/share/doc/${version}" "$doc/share/doc/ghostscript/"
-
     ln -s "${fonts}" "$out/share/ghostscript/fonts"
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.isDarwin ''
     for file in $out/lib/*.dylib* ; do
       install_name_tool -id "$file" $file
     done
   '';
 
+  # dynamic library name only contains maj.min, eg. '9.53'
+  dylib_version = lib.versions.majorMinor version;
   preFixup = lib.optionalString stdenv.isDarwin ''
-    install_name_tool -change libgs.dylib.${version} $out/lib/libgs.dylib.${version} $out/bin/gs
+    install_name_tool -change libgs.dylib.$dylib_version $out/lib/libgs.dylib.$dylib_version $out/bin/gs
   '';
 
-  passthru = { inherit version; };
+  # validate dynamic linkage
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    $out/bin/gs --version
+
+    runHook postInstallCheck
+  '';
 
   meta = {
-    homepage = https://www.ghostscript.com/;
+    homepage = "https://www.ghostscript.com/";
     description = "PostScript interpreter (mainline version)";
 
     longDescription = ''
@@ -135,9 +132,9 @@ stdenv.mkDerivation rec {
       of output drivers for various file formats and printers.
     '';
 
-    license = stdenv.lib.licenses.agpl3;
+    license = lib.licenses.agpl3;
 
-    platforms = stdenv.lib.platforms.all;
-    maintainers = [ stdenv.lib.maintainers.viric ];
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.viric ];
   };
 }

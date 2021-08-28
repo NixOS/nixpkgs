@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, imlib2, libX11 }:
+{ lib, stdenv, fetchFromGitHub, imlib2, libX11 }:
 
-stdenv.mkDerivation rec {
-  name = "ssocr-${version}";
+stdenv.mkDerivation {
+  pname = "ssocr";
   version = "unstable-2018-08-11";
 
   src = fetchFromGitHub {
@@ -11,13 +11,13 @@ stdenv.mkDerivation rec {
     sha256 = "0yzprwflky9a7zxa3zic7gvdwqg0zy49zvrqkdxng2k1ng78k3s7";
   };
 
-  nativeBuildInputs = [ imlib2 libX11 ]; 
+  nativeBuildInputs = [ imlib2 libX11 ];
 
   installFlags = [ "PREFIX=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Seven Segment Optical Character Recognition";
-    homepage = https://github.com/auerswal/ssocr;
+    homepage = "https://github.com/auerswal/ssocr";
     license = licenses.gpl3;
     maintainers = [ maintainers.kroell ];
   };

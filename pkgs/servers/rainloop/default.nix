@@ -1,10 +1,10 @@
-{ stdenv, fetchurl, unzip, dataPath ? "/etc/rainloop" }: let
+{ lib, stdenv, fetchurl, unzip, pkgs, dataPath ? "/var/lib/rainloop" }: let
   common = { edition, sha256 }:
     stdenv.mkDerivation (rec {
-      name = "rainloop-${edition}-${version}";
-      version = "1.12.1";
+      pname = "rainloop${lib.optionalString (edition != "") "-${edition}"}";
+      version = "1.14.0";
 
-      buildInputs = [ unzip ];
+      nativeBuildInputs = [ unzip ];
 
       unpackPhase = ''
         mkdir rainloop
@@ -12,33 +12,48 @@
       '';
 
       src = fetchurl {
-        url = "https://github.com/RainLoop/rainloop-webmail/releases/download/v${version}/rainloop-${edition}${stdenv.lib.optionalString (edition != "") "-"}${version}.zip";
+        url = "https://github.com/RainLoop/rainloop-webmail/releases/download/v${version}/rainloop-${edition}${lib.optionalString (edition != "") "-"}${version}.zip";
         sha256 = sha256;
       };
+
+      includeScript = pkgs.writeText "include.php" ''
+        <?php
+
+        /**
+         * @return string
+         */
+        function __get_custom_data_full_path()
+        {
+          $v = getenv('RAINLOOP_DATA_DIR', TRUE);
+          return $v === FALSE ? '${dataPath}' : $v;
+        }
+      '';
 
       installPhase = ''
         mkdir $out
         cp -r rainloop/* $out
         rm -rf $out/data
-        ln -s ${dataPath} $out/data
+        cp ${includeScript} $out/include.php
+        mkdir $out/data
+        chmod 700 $out/data
       '';
 
-      meta = with stdenv.lib; {
+      meta = with lib; {
         description = "Simple, modern & fast web-based email client";
         homepage = "https://www.rainloop.net";
-        downloadPage = https://github.com/RainLoop/rainloop-webmail/releases;
-        license = licenses.agpl3;
+        downloadPage = "https://github.com/RainLoop/rainloop-webmail/releases";
+        license = with licenses; if edition == "" then unfree else agpl3;
         platforms = platforms.all;
         maintainers = with maintainers; [ das_j ];
       };
     });
-  in {
-    rainloop-community = common {
-      edition = "community";
-      sha256 = "06w1vxqpcj2j8dzzjqh6azala8l46hzy85wcvqbjdlj5w789jzsx";
-    };
-    rainloop-standard = common {
-      edition = "";
-      sha256 = "1fbnpk7l2fbmzn31vx36caqg9xm40g4hh4mv3s8d70slxwhlscw0";
-    };
-  }
+in {
+  rainloop-community = common {
+    edition = "community";
+    sha256 = "0a8qafm4khwj8cnaiaxvjb9073w6fr63vk1b89nks4hmfv10jn6y";
+  };
+  rainloop-standard = common {
+    edition = "";
+    sha256 = "0961g4mci080f7y98zx9r4qw620l4z3na1ivvlyhhr1v4dywqvch";
+  };
+}
