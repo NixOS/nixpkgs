@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, which
-, gettext, libffi, libiconv, libtasn1
+{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, which
+, gettext, libffi, libiconv, libtasn1, bash-completion
 }:
 
 stdenv.mkDerivation rec {
@@ -21,17 +21,15 @@ stdenv.mkDerivation rec {
   # at the same time, libtasn1 in buildInputs provides the libasn1 library
   # to link against for the target platform.
   # hence, libtasn1 is required in both native and build inputs.
-  nativeBuildInputs = [ autoreconfHook pkg-config which libtasn1 ];
+  nativeBuildInputs = [ meson ninja pkg-config which libtasn1 ];
   buildInputs = [ gettext libffi libiconv libtasn1 ];
+  propagatedBuildInputs = [ bash-completion ];
 
-  autoreconfPhase = ''
-    NOCONFIGURE=1 ./autogen.sh
-  '';
-
-  configureFlags = [
-    "--sysconfdir=/etc"
-    "--localstatedir=/var"
-    "--with-trust-paths=/etc/ssl/certs/ca-certificates.crt"
+  mesonFlags = [
+    "-Dsystem_config=/etc"
+    "-Dtrust_paths=/etc/ssl/certs/ca-certificates.crt"
+    "-Dsystemd=disabled"
+    "-Dbashcompdir=${placeholder "out"}/share/bash-completion/completions"
   ];
 
   enableParallelBuilding = true;
