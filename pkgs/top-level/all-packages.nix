@@ -9937,7 +9937,9 @@ with pkgs;
     openssl = openssl_1_0_2;
   };
 
-  waifu2x-converter-cpp = callPackage ../tools/graphics/waifu2x-converter-cpp { };
+  waifu2x-converter-cpp = callPackage ../tools/graphics/waifu2x-converter-cpp {
+    inherit (darwin.apple_sdk.frameworks) OpenCL;
+  };
 
   wakatime = pythonPackages.callPackage ../tools/misc/wakatime { };
 
@@ -13343,7 +13345,13 @@ with pkgs;
 
   buildBazelPackage = callPackage ../build-support/build-bazel-package { };
 
-  bear = callPackage ../development/tools/build-managers/bear { };
+  bear = callPackage ../development/tools/build-managers/bear {
+    # error: no viable constructor or deduction guide for deduction of template arguments of 'map'
+    stdenv = if stdenv.hostPlatform.system == "x86_64-darwin" then
+        llvmPackages_11.stdenv
+      else
+        stdenv;
+  };
 
   bin_replace_string = callPackage ../development/tools/misc/bin_replace_string { };
 
@@ -24684,6 +24692,8 @@ with pkgs;
   pixelnuke = callPackage ../applications/graphics/pixelnuke { };
 
   pmbootstrap = python3Packages.callPackage ../tools/misc/pmbootstrap/default.nix { };
+
+  shepherd = nodePackages."@nerdwallet/shepherd";
 
   slack = callPackage ../applications/networking/instant-messengers/slack { };
 

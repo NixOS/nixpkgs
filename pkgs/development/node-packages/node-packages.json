@@ -6,6 +6,7 @@
 , "@commitlint/cli"
 , "@commitlint/config-conventional"
 , "@hyperspace/cli"
+, "@nerdwallet/shepherd"
 , "@nestjs/cli"
 , "@squoosh/cli"
 , "@vue/cli"
