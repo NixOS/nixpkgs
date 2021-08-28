@@ -97,6 +97,12 @@ in {
     if set ? overrideScope' then set.overrideScope' ocamlStaticAdapter else set
   ) super.ocaml-ng;
 
+  p11-kit = super.p11-kit.overrideAttrs (old: {
+    postPatch = (old.postPatch or "") + ''
+      sed -i '/install_data(pkcs11_conf_example/,+1d' p11-kit/meson.build
+    '';
+  });
+
   perl = super.perl.override {
     # Don’t use new stdenv zlib because
     # it doesn’t like the --disable-shared flag

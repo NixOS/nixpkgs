@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, which
-, gettext, libffi, libiconv, libtasn1, bash-completion
+, gettext, libffi, libiconv, libtasn1, bash-completion, mesonShlibsToStaticHook
 }:
 
 stdenv.mkDerivation rec {
@@ -21,7 +21,8 @@ stdenv.mkDerivation rec {
   # at the same time, libtasn1 in buildInputs provides the libasn1 library
   # to link against for the target platform.
   # hence, libtasn1 is required in both native and build inputs.
-  nativeBuildInputs = [ meson ninja pkg-config which libtasn1 ];
+  nativeBuildInputs = [ meson ninja pkg-config which libtasn1 ] ++
+    lib.optional (stdenv.hostPlatform.isStatic) [ mesonShlibsToStaticHook ];
   buildInputs = [ gettext libffi libiconv libtasn1 ];
   propagatedBuildInputs = [ bash-completion ];
 
