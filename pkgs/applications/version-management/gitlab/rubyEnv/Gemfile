@@ -49,7 +49,7 @@ gem 'omniauth-shibboleth', '~> 1.3.0'
 gem 'omniauth-twitter', '~> 1.4'
 gem 'omniauth_crowd', '~> 2.4.0'
 gem 'omniauth-authentiq', '~> 0.3.3'
-gem 'gitlab-omniauth-openid-connect', '~> 0.4.0', require: 'omniauth_openid_connect'
+gem 'gitlab-omniauth-openid-connect', '~> 0.8.0', require: 'omniauth_openid_connect'
 gem 'omniauth-salesforce', '~> 1.0.5'
 gem 'omniauth-atlassian-oauth2', '~> 0.2.0'
 gem 'rack-oauth2', '~> 1.16.0'
@@ -223,7 +223,7 @@ gem 're2', '~> 1.2.0'
 gem 'version_sorter', '~> 2.2.4'
 
 # Export Ruby Regex to Javascript
-gem 'js_regex', '~> 3.4'
+gem 'js_regex', '~> 3.7'
 
 # User agent parsing
 gem 'device_detector'
@@ -310,7 +310,7 @@ gem 'pg_query', '~> 2.1'
 gem 'premailer-rails', '~> 1.10.3'
 
 # LabKit: Tracing and Correlation
-gem 'gitlab-labkit', '~> 0.20.0'
+gem 'gitlab-labkit', '~> 0.21.0'
 # Thrift is a dependency of gitlab-labkit, we want a version higher than 0.14.0
 # because of https://gitlab.com/gitlab-org/gitlab/-/issues/321900
 gem 'thrift', '>= 0.14.0'
@@ -335,9 +335,11 @@ gem 'method_source', '~> 1.0', require: false
 gem 'webrick', '~> 1.6.1', require: false
 gem 'prometheus-client-mmap', '~> 0.12.0', require: 'prometheus/client'
 
+gem 'warning', '~> 1.2.0'
+
 group :development do
   gem 'lefthook', '~> 0.7.0', require: false
-  gem 'solargraph', '~> 0.42', require: false
+  gem 'solargraph', '~> 0.43', require: false
 
   gem 'letter_opener_web', '~> 1.4.0'
 
@@ -358,7 +360,7 @@ group :development, :test do
   gem 'awesome_print', require: false
 
   gem 'database_cleaner', '~> 1.7.0'
-  gem 'factory_bot_rails', '~> 6.1.0'
+  gem 'factory_bot_rails', '~> 6.2.0'
   gem 'rspec-rails', '~> 5.0.1'
 
   # Prevent occasions where minitest is not bundled in packaged versions of ruby (see #3826)
@@ -394,7 +396,7 @@ group :development, :test do
 end
 
 group :development, :test, :danger do
-  gem 'gitlab-dangerfiles', '~> 2.2.2', require: false
+  gem 'gitlab-dangerfiles', '~> 2.3.0', require: false
 end
 
 group :development, :test, :coverage do
@@ -472,12 +474,12 @@ end
 gem 'spamcheck', '~> 0.1.0'
 
 # Gitaly GRPC protocol definitions
-gem 'gitaly', '~> 14.1.0.pre.rc3'
+gem 'gitaly', '~> 14.2.0.pre.rc2'
 
 # KAS GRPC protocol definitions
 gem 'kas-grpc', '~> 0.0.2'
 
-gem 'grpc', '~> 1.30.2'
+gem 'grpc', '~> 1.38.0'
 
 gem 'google-protobuf', '~> 3.17.1'
 
@@ -487,8 +489,8 @@ gem 'toml-rb', '~> 2.0'
 gem 'flipper', '~> 0.21.0'
 gem 'flipper-active_record', '~> 0.21.0'
 gem 'flipper-active_support_cache_store', '~> 0.21.0'
-gem 'unleash', '~> 0.1.5'
-gem 'gitlab-experiment', '~> 0.6.1'
+gem 'unleash', '~> 3.2.2'
+gem 'gitlab-experiment', '~> 0.6.4'
 
 # Structured logging
 gem 'lograge', '~> 0.5'
@@ -521,7 +523,7 @@ gem 'valid_email', '~> 0.1'
 
 # JSON
 gem 'json', '~> 2.3.0'
-gem 'json_schemer', '~> 0.2.12'
+gem 'json_schemer', '~> 0.2.18'
 gem 'oj', '~> 3.10.6'
 gem 'multi_json', '~> 1.14.1'
 gem 'yajl-ruby', '~> 1.4.1', require: 'yajl'
@@ -532,3 +534,5 @@ gem 'webauthn', '~> 2.3'
 gem 'ipaddress', '~> 0.8.3'
 
 gem 'parslet', '~> 1.8'
+
+gem 'sd_notify'
