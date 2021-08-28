@@ -1,11 +1,27 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, autoconf, automake, fontconfig
-, gmp-static, gperf, libX11, libpoly, perl, flex, bison, pkg-config, itktcl
-, incrtcl, tcl, tk, verilog, xorg, yices, zlib, ghc, asciidoctor, tex # docs
-}:
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoconf
+, automake
+, fontconfig
+, libX11
+, perl
+, flex
+, bison
+, pkg-config
+, tcl
+, tk
+, xorg
+, yices
+, zlib
+, ghc
+, gmp-static
+, verilog
+, asciidoctor
+, tex }:
 
 let
-  ghcWithPackages =
-    ghc.withPackages (g: (with g; [ old-time regex-compat syb split ]));
+  ghcWithPackages = ghc.withPackages (g: (with g; [ old-time regex-compat syb split ]));
 
 in stdenv.mkDerivation rec {
   pname = "bluespec";
@@ -74,6 +90,13 @@ in stdenv.mkDerivation rec {
     "NOGIT=1" # https://github.com/B-Lang-org/bsc/issues/12
     "LDCONFIG=ldconfig" # https://github.com/B-Lang-org/bsc/pull/43
     "STP_STUB=1"
+  ];
+
+  doCheck = true;
+
+  checkInputs = [ 
+    gmp-static
+    verilog
   ];
 
   checkTarget = "check-smoke";
