@@ -2,7 +2,7 @@
 
 # build-tools
 , bootPkgs
-, autoconf, automake, coreutils, fetchurl, perl, python3, m4, sphinx
+, autoconf, automake, coreutils, fetchurl, perl, python3, m4, sphinx, xattr
 , bash
 
 , libiconv ? null, ncurses
@@ -238,6 +238,10 @@ stdenv.mkDerivation (rec {
     ghc bootPkgs.alex bootPkgs.happy bootPkgs.hscolour
   ] ++ lib.optionals enableDocs [
     sphinx
+  ] ++ lib.optionals stdenv.isDarwin [
+    # TODO(@sternenseemann): use XATTR env var after backport of
+    # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/6447
+    xattr
   ];
 
   # For building runtime libs
