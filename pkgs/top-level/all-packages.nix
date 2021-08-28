@@ -1016,6 +1016,8 @@ with pkgs;
 
   terminator = callPackage ../applications/terminal-emulators/terminator { };
 
+  terminal-colors = callPackage ../applications/misc/terminal-colors { };
+
   termite = callPackage ../applications/terminal-emulators/termite/wrapper.nix {
     termite = termite-unwrapped;
   };
@@ -3990,6 +3992,8 @@ with pkgs;
   cloogppl = callPackage ../development/libraries/cloog-ppl { };
 
   cloud-utils = callPackage ../tools/misc/cloud-utils { };
+
+  cloudlist = callPackage ../tools/security/cloudlist { };
 
   cobalt = callPackage ../applications/misc/cobalt {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
@@ -28761,6 +28765,8 @@ with pkgs;
   clonehero = pkgs.callPackage ../games/clonehero/fhs-wrapper.nix { };
 
   crispyDoom = callPackage ../games/crispy-doom { };
+
+  vintagestory = callPackage ../games/vintagestory/default.nix { };
 
   cri-o = callPackage ../applications/virtualization/cri-o/wrapper.nix { };
   cri-o-unwrapped = callPackage ../applications/virtualization/cri-o { };
