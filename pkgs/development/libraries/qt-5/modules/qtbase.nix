@@ -11,7 +11,7 @@
 , libXcursor, libXext, libXi, libXrender, libinput, libjpeg, libpng
 , libxcb, libxkbcommon, libxml2, libxslt, openssl, pcre16, pcre2, sqlite, udev
 , xcbutil, xcbutilimage, xcbutilkeysyms, xcbutilrenderutil, xcbutilwm
-, zlib
+, zlib, libglvnd, llvmPackages_10
 
   # optional dependencies
 , cups ? null, libmysqlclient ? null, postgresql ? null
@@ -34,18 +34,41 @@ let
   compareVersion = v: builtins.compareVersions version v;
   qmakeCacheName = if compareVersion "5.12.4" < 0 then ".qmake.cache" else ".qmake.stash";
   debugSymbols = debug || developerBuild;
-in
 
-stdenv.mkDerivation {
+  libcxxIncDir = "${llvmPackages_10.libcxx.dev}/include/c++/v1";
+  libcxxLibDir = "${llvmPackages_10.libcxx.out}/lib";
+  clangCxxFlags = "-nostdinc++ -isystem ${libcxxIncDir}";
+  clangCxxLdflags = "-nostdlib++ -L ${libcxxIncDir} -Wl,-rpath,${libcxxLibDir} -lc++ -lc++abi";
+
+  # Building with libc++ implies that all statically linked c++ deps are also
+  # linked with it.
+  icuFixed = if !stdenv.hostPlatform.isStatic then icu else
+  (icu.override { stdenv = llvmPackages_10.stdenv; })
+  .overrideAttrs (old: {
+    preConfigure = ''
+      export CC=${llvmPackages_10.stdenv.cc.targetPrefix}cc
+      export CXX=${llvmPackages_10.stdenv.cc.targetPrefix}c++
+      export CXXFLAGS="${clangCxxFlags}"
+      export LDFLAGS="${clangCxxLdflags}"
+    '';
+    buildInputs = (old.buildInputs or []) ++ (with llvmPackages_10; [
+      libcxx
+      libcxxabi
+    ]);
+    NIX_LDFLAGS = " -lc++ -lc++abi";
+  });
+
+stage1 = llvmPackages_10.stdenv.mkDerivation ({
   pname = "qtbase";
   inherit qtCompatVersion src version;
   debug = debugSymbols;
 
-  propagatedBuildInputs = [
+  buildInputs = [
+    python3
     libxml2 libxslt openssl sqlite zlib
 
     # Text rendering
-    harfbuzz icu
+    harfbuzz icuFixed
 
     # Image formats
     libjpeg libpng
@@ -56,7 +79,8 @@ stdenv.mkDerivation {
       AGL AppKit ApplicationServices Carbon Cocoa CoreAudio CoreBluetooth
       CoreLocation CoreServices DiskArbitration Foundation OpenGL
       libobjc libiconv MetalKit IOKit
-    ] else [
+    ] else ([
+      libinput
       dbus glib udev
 
       # Text rendering
@@ -65,19 +89,17 @@ stdenv.mkDerivation {
       # X11 libs
       libX11 libXcomposite libXext libXi libXrender libxcb libxkbcommon xcbutil
       xcbutilimage xcbutilkeysyms xcbutilrenderutil xcbutilwm
-    ] ++ lib.optional libGLSupported libGL
-  );
-
-  buildInputs = [ python3 ]
-    ++ lib.optionals (!stdenv.isDarwin)
-    (
-      [ libinput ]
-      ++ lib.optional withGtk3 gtk3
+    ] ++ lib.optional withGtk3 gtk3)
+      ++ lib.optional libGLSupported libGL
     )
     ++ lib.optional developerBuild gdb
     ++ lib.optional (cups != null) cups
     ++ lib.optional (libmysqlclient != null) libmysqlclient
-    ++ lib.optional (postgresql != null) postgresql;
+    ++ lib.optional (postgresql != null) postgresql
+    ++ lib.optionals (stdenv.hostPlatform.isStatic) [
+      llvmPackages_10.libcxx
+      llvmPackages_10.libcxxabi
+    ];
 
   nativeBuildInputs = [ bison flex gperf lndir perl pkg-config which ]
     ++ lib.optionals stdenv.isDarwin [ xcbuild ];
@@ -113,6 +135,22 @@ stdenv.mkDerivation {
     sed -i '/PATHS.*NO_DEFAULT_PATH/ d' src/corelib/Qt5CoreMacros.cmake
     sed -i 's/NO_DEFAULT_PATH//' src/gui/Qt5GuiConfigExtras.cmake.in
     sed -i '/PATHS.*NO_DEFAULT_PATH/ d' mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
+  '' + lib.optionalString stdenv.hostPlatform.isStatic ''
+    sed -iE 's/^QMAKE_COMPILER.*/QMAKE_COMPILER = cc/g' mkspecs/common/g++-base.conf
+    sed -iE 's!^QMAKE_CC.*!QMAKE_CC = ${llvmPackages_10.stdenv.cc}/bin/${llvmPackages_10.stdenv.cc.targetPrefix}cc!g' mkspecs/common/clang.conf
+    sed -iE 's!^QMAKE_CXX.*!QMAKE_CXX = ${llvmPackages_10.stdenv.cc}/bin/${llvmPackages_10.stdenv.cc.targetPrefix}c++!g' mkspecs/common/clang.conf
+    sed -iE 's!^QMAKE_AR.*!QMAKE_AR = ${llvmPackages_10.stdenv.cc.targetPrefix}ar cqs!g' mkspecs/common/linux.conf
+    substituteInPlace .qmake.conf \
+      --replace 'CONFIG += warning_clean' \
+                'CONFIG += warning_clean c++11'
+
+    sed -iE 's!^QMAKE_CXXFLAGS.*!QMAKE_CXXFLAGS += ${clangCxxFlags}!g'\
+      mkspecs/linux-clang-libc++/qmake.conf
+    sed -iE 's!^QMAKE_LFLAGS.*!QMAKE_LFLAGS += ${clangCxxLdflags}!g'\
+      mkspecs/linux-clang-libc++/qmake.conf
+
+    sed -iE 's!^#define QT_SOCKLEN_T.*int!#define QT_SOCKLEN_T socklen_t!g' \
+      mkspecs/linux-clang/qplatformdefs.h
   '' + (
     if stdenv.isDarwin then ''
         sed -i \
@@ -191,7 +229,9 @@ stdenv.mkDerivation {
   PSQL_LIBS = lib.optionalString (postgresql != null) "-L${postgresql.lib}/lib -lpq";
 
   # TODO Remove obsolete and useless flags once the build will be totally mastered
-  configureFlags = [
+  configureFlags =
+    lib.optional stdenv.hostPlatform.isStatic "-static"
+  ++ [
     "-plugindir $(out)/$(qtPluginPrefix)"
     "-qmldir $(out)/$(qtQmlPrefix)"
     "-docdir $(out)/$(qtDocPrefix)"
@@ -211,14 +251,17 @@ stdenv.mkDerivation {
     "-gui"
     "-widgets"
     "-opengl desktop"
+  ] ++ lib.optionals stdenv.hostPlatform.isStatic [
+    "-I" "${libglvnd.dev}/include"
+  ] ++
+  [
     "-icu"
-    "-L" "${icu.out}/lib"
-    "-I" "${icu.dev}/include"
-    "-pch"
+    "-L" "${icuFixed.out}/lib"
+    "-I" "${icuFixed.dev}/include"
   ] ++ lib.optional debugSymbols "-debug"
-    ++ lib.optionals (compareVersion "5.11.0" < 0) [
-    "-qml-debug"
-  ] ++ lib.optionals (compareVersion "5.9.0" < 0) [
+    ++ lib.optional (!stdenv.hostPlatform.isStatic) "-pch"
+    ++ lib.optional (compareVersion "5.11.0" < 0) "-qml-debug"
+    ++ lib.optionals (compareVersion "5.9.0" < 0) [
     "-c++11"
     "-no-reduce-relocations"
   ] ++ lib.optionals developerBuild [
@@ -269,10 +312,17 @@ stdenv.mkDerivation {
       "-qt-libpng"
       "-no-framework"
     ] else [
-      "-${lib.optionalString (compareVersion "5.9.0" < 0) "no-"}rpath"
+      "-${lib.optionalString (stdenv.hostPlatform.isStatic || compareVersion "5.9.0" < 0) "no-"}rpath"
     ] ++ lib.optional (compareVersion "5.15.0" < 0) "-system-xcb"
       ++ [
       "-xcb"
+    ] ++
+    lib.optionals (stdenv.hostPlatform.isStatic) [
+      "-platform linux-clang-libc++"
+      "-feature-std-atomic64"
+      "-L" "${libxcb.out}/lib"
+      "-I" "${libxcb.dev}/include"
+    ] ++ [
       "-qpa xcb"
       "-L" "${libX11.out}/lib"
       "-I" "${libX11.out}/include"
@@ -303,14 +353,17 @@ stdenv.mkDerivation {
     ] ++ lib.optionals (cups != null) [
       "-L" "${cups.lib}/lib"
       "-I" "${cups.dev}/include"
-    ] ++ lib.optionals (libmysqlclient != null) [
+    ] ++ lib.optionals (libmysqlclient != null)
+    (if stdenv.hostPlatform.isStatic then [
+      "-L" "${libmysqlclient.out}/lib/mysql"
+      "-I" "${libmysqlclient.dev}/include/mysql"
+    ] else [
       "-L" "${libmysqlclient}/lib"
       "-I" "${libmysqlclient}/include"
-    ]
+    ])
   );
 
-  # Move selected outputs.
-  postInstall = ''
+  postInstall = lib.optionalString (!stdenv.hostPlatform.isStatic) ''
     moveToOutput "mkspecs" "$dev"
   '';
 
@@ -326,7 +379,7 @@ stdenv.mkDerivation {
     "bin/uic"
   ];
 
-  postFixup = ''
+  postFixup = lib.optionalString (!stdenv.hostPlatform.isStatic) ''
     # Don't retain build-time dependencies like gdb.
     sed '/QMAKE_DEFAULT_.*DIRS/ d' -i $dev/mkspecs/qconfig.pri
     fixQtModulePaths "''${!outputDev}/mkspecs/modules"
@@ -336,6 +389,7 @@ stdenv.mkDerivation {
     moveQtDevTools
     moveToOutput bin "$dev"
 
+  '' + ''
     # fixup .pc file (where to find 'moc' etc.)
     sed -i "$dev/lib/pkgconfig/Qt5Core.pc" \
       -e "/^host_bins=/ c host_bins=$dev/bin"
@@ -354,4 +408,55 @@ stdenv.mkDerivation {
     broken = stdenv.isDarwin && (compareVersion "5.9.0" < 0);
   };
 
+} // lib.optionalAttrs stdenv.hostPlatform.isStatic {
+  configurePlatforms = [];
+  NIX_LDFLAGS = " -lc++ -lc++abi";
+});
+# The postInstall and postFixup don't seem to work
+# for the static build and considering the build time
+# it's just easier to separate the build from the fixup
+# and do/tweak it in a second/final stage.
+in stdenv.mkDerivation {
+  pname = "qtbase-final";
+  inherit version;
+
+  outputs = [ "bin" "dev" "out" ];
+  dontUnpack = true;
+
+  buildPhase = "";
+
+  nativeBuildInputs = [ lndir ];
+
+  fix_qt_builtin_paths = ../hooks/fix-qt-builtin-paths.sh;
+  fix_qt_module_paths = ../hooks/fix-qt-module-paths.sh;
+  preHook = ''
+    . "$fix_qt_builtin_paths"
+    . "$fix_qt_module_paths"
+    . ${../hooks/move-qt-dev-tools.sh}
+    . ${../hooks/fix-qmake-libtool.sh}
+  '';
+  installPhase = ''
+    mkdir "$out"
+    mkdir "$bin"
+    mkdir "$dev"
+    cpFromDirToDir() {
+      find "$1" -maxdepth 1 -mindepth 1 -exec cp --no-preserve=mode,ownership -r {} "$2" \;
+    }
+    cpFromDirToDir "${stage1.out}" "$out"
+    cpFromDirToDir "${stage1.bin}" "$bin"
+    cpFromDirToDir "${stage1.dev}" "$dev"
+    mv "$dev/mkspecs" mkspecs.old
+    moveToOutput "mkspecs" "$dev"
+    cpFromDirToDir "mkspecs.old" "$dev/mkspecs"
+    rm -rf mkspecs.old
+
+    # Don't retain build-time dependencies like gdb.
+    sed '/QMAKE_DEFAULT_.*DIRS/ d' -i $dev/mkspecs/qconfig.pri
+    fixQtModulePaths "''${!outputDev}/mkspecs/modules"
+    fixQtBuiltinPaths "''${!outputDev}" '*.pr?'
+    # Move development tools to $dev
+    moveToOutput bin "$dev"
+
+    chmod -R 0555 "$dev/bin"
+  '';
 }

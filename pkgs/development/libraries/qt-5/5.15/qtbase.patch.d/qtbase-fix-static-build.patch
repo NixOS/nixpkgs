@@ -1,0 +1,77 @@
+diff --color -ur a/src/corelib/configure.json b/src/corelib/configure.json
+--- a/src/corelib/configure.json	2020-10-27 09:02:11.000000000 +0100
++++ b/src/corelib/configure.json	2021-09-01 12:38:32.310356819 +0200
+@@ -155,7 +155,7 @@
+             "headers": [ "atomic", "cstdint" ],
+             "sources": [
+                 "",
+-                "-latomic"
++                "-latomic -lc++"
+             ]
+         },
+         "librt": {
+diff --color -ur a/src/gui/configure.json b/src/gui/configure.json
+--- a/src/gui/configure.json	2020-10-27 09:02:11.000000000 +0100
++++ b/src/gui/configure.json	2021-09-01 12:38:32.311356857 +0200
+@@ -303,7 +303,7 @@
+             },
+             "headers": "harfbuzz/hb.h",
+             "sources": [
+-                "-lharfbuzz"
++                "-lharfbuzz -lgraphite2"
+             ]
+         },
+         "imf": {
+@@ -446,7 +446,8 @@
+             ],
+             "sources": [
+                 { "type": "pkgConfig", "args": "gl", "condition": "!config.darwin" },
+-                { "type": "makeSpec", "spec": "OPENGL" }
++                { "type": "makeSpec", "spec": "OPENGL" },
++				"-lGLdispatch"
+             ]
+         },
+         "opengl_es2": {
+@@ -588,8 +589,7 @@
+             },
+             "headers": "xcb/xcb.h",
+             "sources": [
+-                { "type": "pkgConfig", "args": "xcb >= 1.11" },
+-                "-lxcb"
++                "-lxcb -lXau -lXdmcp"
+             ]
+         },
+         "xcb_icccm": {
+diff --color -ur a/src/plugins/sqldrivers/configure.json b/src/plugins/sqldrivers/configure.json
+--- a/src/plugins/sqldrivers/configure.json	2020-10-27 09:02:11.000000000 +0100
++++ b/src/plugins/sqldrivers/configure.json	2021-09-01 13:50:06.943343623 +0200
+@@ -71,7 +71,7 @@
+                 { "type": "mysqlConfig", "query": "--libs", "cleanlibs": true },
+                 { "type": "mysqlConfig", "query": "--libs_r", "cleanlibs": false },
+                 { "type": "mysqlConfig", "query": "--libs", "cleanlibs": false },
+-                { "libs": "-lmysqlclient_r", "condition": "!config.win32" },
++                { "libs": "-lmysqlclient_r -lssl -lcrypto -lz", "condition": "!config.win32" },
+                 { "libs": "-llibmariadb", "condition": "config.win32" },
+                 { "libs": "-llibmysql", "condition": "config.win32" },
+                 { "libs": "-lmariadb", "condition": "!config.win32" },
+@@ -91,7 +91,7 @@
+                 { "type": "pkgConfig", "args": "libpq" },
+                 { "type": "psqlConfig" },
+                 { "type": "psqlEnv", "libs": "-llibpq -lws2_32 -ladvapi32", "condition": "config.win32" },
+-                { "type": "psqlEnv", "libs": "-lpq", "condition": "!config.win32" }
++                { "libs": "-lpq -lssl -lcrypto -lpgcommon -lpgport", "condition": "!config.win32" }
+             ]
+         },
+         "tds": {
+diff --color -ur a/src/printsupport/configure.json b/src/printsupport/configure.json
+--- a/src/printsupport/configure.json	2020-10-27 09:02:11.000000000 +0100
++++ b/src/printsupport/configure.json	2021-09-01 12:38:32.313356933 +0200
+@@ -21,7 +21,7 @@
+             },
+             "headers": "cups/cups.h",
+             "sources": [
+-                "-lcups"
++                "-lcups -lz -lavahi-client -lavahi-common -ldbus-1 -lgnutls -lunistring -lp11-kit -lffi -lhogweed -lgmp -lnettle -ltasn1"
+             ]
+         }
+     },

@@ -111,7 +111,8 @@ let
         url = "https://codereview.qt-project.org/gitweb?p=qt/qtbase.git;a=patch;h=049e14870c13235cd066758f29c42dc96c1ccdf8";
         sha256 = "1cb2hwi859hds0fa2cbap014qaa7mah9p0rcxcm2cvj2ybl33qfc";
       })
-    ];
+    ] ++ lib.optional (stdenv.hostPlatform.isStatic)
+          ./qtbase.patch.d/qtbase-fix-static-build.patch;
     qtdeclarative = [ ./qtdeclarative.patch ];
     qtscript = [ ./qtscript.patch ];
     qtserialport = [ ./qtserialport.patch ];
