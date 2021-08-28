@@ -348,7 +348,6 @@ in
           "quotactl"
         ];
         SystemCallArchitectures = "native";
-        SystemCallErrorNumber = "EPERM";
       };
     };
 
