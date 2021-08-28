@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation rec {
   pname = "telescope";
-  version = "0.4.1";
+  version = "0.5.1";
 
   src = fetchurl {
     url = "https://github.com/omar-polo/telescope/releases/download/${version}/telescope-${version}.tar.gz";
-    sha256 = "086zps4nslv5isfw1b5gvms7vp3fglm7x1a6ks0h0wxarzj350bl";
+    sha256 = "1fgv7gg2lwrjcihq6mkraqm10a6a7h430ikrjpcwfcpv1gvj8ckz";
   };
 
   nativeBuildInputs = [
