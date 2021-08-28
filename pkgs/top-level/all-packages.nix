@@ -441,10 +441,12 @@ with pkgs;
 
   fetchfossil = callPackage ../build-support/fetchfossil { };
 
-  fetchgit = callPackage ../build-support/fetchgit {
+  fetchgit = (callPackage ../build-support/fetchgit {
     git = buildPackages.gitMinimal;
     cacert = buildPackages.cacert;
     git-lfs = buildPackages.git-lfs;
+  }) // { # fetchgit is a function, so we use // instead of passthru.
+    tests = callPackages ../build-support/fetchgit/tests.nix {};
   };
 
   fetchgitLocal = callPackage ../build-support/fetchgitlocal { };
