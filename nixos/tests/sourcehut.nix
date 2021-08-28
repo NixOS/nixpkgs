@@ -12,10 +12,20 @@ import ./make-test-python.nix ({ pkgs, ... }:
     services.sourcehut = {
       enable = true;
       services = [ "meta" ];
-      originBase = "sourcehut";
-      settings."sr.ht".service-key =   "8888888888888888888888888888888888888888888888888888888888888888";
-      settings."sr.ht".network-key = "0000000000000000000000000000000000000000000=";
-      settings.webhooks.private-key = "0000000000000000000000000000000000000000000=";
+      redis.enable = true;
+      postgresql.enable = true;
+      meta.enable = true;
+      settings."sr.ht" = {
+        global-domain = "sourcehut";
+        service-key = pkgs.writeText "service-key" "8b327279b77e32a3620e2fc9aabce491cc46e7d821fd6713b2a2e650ce114d01";
+        network-key = pkgs.writeText "network-key" "cEEmc30BRBGkgQZcHFksiG7hjc6_dK1XR2Oo5Jb9_nQ=";
+      };
+      settings.webhooks.private-key = pkgs.writeText "webhook-key" "Ra3IjxgFiwG9jxgp4WALQIZw/BMYt30xWiOsqD0J7EA=";
+    };
+    services.postgresql = {
+      enable = true;
+      enableTCPIP = false;
+      settings.unix_socket_permissions = "0770";
     };
   };
 
