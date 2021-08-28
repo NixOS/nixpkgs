@@ -269,8 +269,6 @@ in
         # Create rootDir in the host's mount namespace.
         RuntimeDirectory = [(baseNameOf rootDir)];
         RuntimeDirectoryMode = "755";
-        # Avoid mounting rootDir in the own rootDir of ExecStart='s mount namespace.
-        InaccessiblePaths = ["-+${rootDir}"];
         # This is for BindPaths= and BindReadOnlyPaths=
         # to allow traversal of directories they create in RootDirectory=.
         UMask = "0066";
