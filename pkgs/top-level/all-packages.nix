@@ -28125,6 +28125,8 @@ in
 
   crispyDoom = callPackage ../games/crispy-doom { };
 
+  vintagestory = callPackage ../games/vintagestory/default.nix { };
+
   cri-o = callPackage ../applications/virtualization/cri-o/wrapper.nix { };
   cri-o-unwrapped = callPackage ../applications/virtualization/cri-o { };
 
