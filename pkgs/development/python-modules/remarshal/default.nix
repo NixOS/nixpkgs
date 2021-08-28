@@ -1,5 +1,4 @@
 { lib, buildPythonApplication, fetchPypi
-
 , cbor2
 , python-dateutil
 , pyyaml
