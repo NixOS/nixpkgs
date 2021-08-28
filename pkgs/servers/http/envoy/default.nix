@@ -127,8 +127,9 @@ buildBazelPackage rec {
   ];
 
   passthru.tests = {
-    # No tests for Envoy itself (yet), but it's tested as a core component of Pomerium.
-    inherit (nixosTests) pomerium;
+    envoy = nixosTests.envoy;
+    # tested as a core component of Pomerium
+    pomerium = nixosTests.pomerium;
   };
 
   meta = with lib; {

@@ -1527,6 +1527,13 @@
       </listitem>
       <listitem>
         <para>
+          A new module was added for the Envoy reverse proxy, providing
+          the options <literal>services.envoy.enable</literal> and
+          <literal>services.envoy.settings</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The option <literal>services.duplicati.dataDir</literal> has
           been added to allow changing the location of duplicati’s
           files.
