@@ -37,11 +37,11 @@
 
 stdenv.mkDerivation rec {
   pname = "root";
-  version = "6.24.02";
+  version = "6.24.06";
 
   src = fetchurl {
     url = "https://root.cern.ch/download/root_v${version}.source.tar.gz";
-    sha256 = "sha256-BQfhCV4nnMxyQPZR0llmAkMlF5+oWhJZtpS1ZyOtfBw=";
+    sha256 = "sha256-kH9p9LrKHk8w7rSXlZjKdZm2qoA8oEboDiW2u6oO9SI=";
   };
 
   nativeBuildInputs = [ makeWrapper cmake pkg-config git ];
