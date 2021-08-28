@@ -2,13 +2,10 @@
 , fetchFromGitHub
 , lib
 , openssl
-, file
-, rpm
 , pkg-config
 , stdenv
-, curl
 , Security
-, runCommand
+, SystemConfiguration
 }:
 rustPlatform.buildRustPackage rec {
   pname = "sentry-cli";
@@ -25,7 +22,7 @@ rustPlatform.buildRustPackage rec {
   # Needed to get openssl-sys to use pkgconfig.
   OPENSSL_NO_VENDOR = 1;
 
-  buildInputs = [ openssl file rpm ] ++ lib.optionals stdenv.isDarwin [ Security curl ];
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security SystemConfiguration ];
   nativeBuildInputs = [ pkg-config ];
 
   cargoSha256 = "sha256-iV3D4ka8Sg1FMRne3A6npmZm3hFP9Qi/NdmT62BtO+8=";
@@ -33,8 +30,8 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     homepage = "https://docs.sentry.io/cli/";
     license = licenses.bsd3;
-    description = "A command line utility to work with Sentry.";
+    description = "A command line utility to work with Sentry";
+    changelog = "https://github.com/getsentry/sentry-cli/raw/${version}/CHANGELOG.md";
     maintainers = with maintainers; [ rizary ];
-    platforms = platforms.unix;
   };
 }
