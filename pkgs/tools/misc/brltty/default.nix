@@ -2,6 +2,7 @@
 , tcl, acl, kmod, coreutils, shadow, util-linux, udev
 , alsaSupport ? stdenv.isLinux, alsa-lib
 , systemdSupport ? stdenv.isLinux, systemd
+, espeak-ngSupport ? true, espeak-ng
 }:
 
 stdenv.mkDerivation rec {
@@ -13,10 +14,12 @@ stdenv.mkDerivation rec {
     sha256 = "14psxwlvgyi2fj1zh8rfykyjcjaya8xa7yg574bxd8y8n49n8hvb";
   };
 
-  nativeBuildInputs = [ pkg-config python3.pkgs.cython tcl ];
-  buildInputs = [ bluez ]
+  nativeBuildInputs = [ pkg-config python3.pkgs.cython tcl ]
+    ++ lib.optional espeak-ngSupport espeak-ng;
+  buildInputs = [ bluez espeak-ng ]
     ++ lib.optional alsaSupport alsa-lib
-    ++ lib.optional systemdSupport systemd;
+    ++ lib.optional systemdSupport systemd
+    ++ lib.optional espeak-ngSupport espeak-ng;
 
   meta = {
     description = "Access software for a blind person using a braille display";
@@ -46,7 +49,10 @@ stdenv.mkDerivation rec {
     "--with-writable-directory=/run/brltty"
     "--with-updatable-directory=/var/lib/brltty"
     "--with-api-socket-path=/var/lib/BrlAPI"
-  ];
+  ] ++ lib.optional espeak-ngSupport [
+      "--with-espeak_ng=$espeak-ng"
+      "--with-speech-driver=en"
+    ];
   installFlags = [ "install-systemd" "install-udev" "install-polkit" ];
 
   preConfigure = ''
