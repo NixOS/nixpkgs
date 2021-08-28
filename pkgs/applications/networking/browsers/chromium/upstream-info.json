@@ -18,22 +18,22 @@
     }
   },
   "beta": {
-    "version": "93.0.4577.58",
-    "sha256": "1i9ygy99lg9h0qyl46c02id9d1ig3brkvr8va0blpf7h8pg9251s",
-    "sha256bin64": "16cyn74sxz8lwdyb7x3z115czk9xvs67bb2bbnhrhnaszhhrzs4j",
+    "version": "94.0.4606.20",
+    "sha256": "0wp9fdw7jkrzhaz8dils7k1ssd6v7kkiz4y9l81s37xxi3xj1drg",
+    "sha256bin64": "0ahc09qv78vmx72kqhjj2lwcniqn9q73vkc1b9lyv184ai3269sq",
     "deps": {
       "gn": {
-        "version": "2021-07-08",
+        "version": "2021-08-11",
         "url": "https://gn.googlesource.com/gn",
-        "rev": "24e2f7df92641de0351a96096fb2c490b2436bb8",
-        "sha256": "1lwkyhfhw0zd7daqz466n7x5cddf0danr799h4jg3s0yvd4galjl"
+        "rev": "69ec4fca1fa69ddadae13f9e6b7507efa0675263",
+        "sha256": "031znmkbm504iim5jvg3gmazj4qnkfc7zg8aymjsij18fhf7piz0"
       }
     }
   },
   "dev": {
-    "version": "94.0.4606.20",
-    "sha256": "0wp9fdw7jkrzhaz8dils7k1ssd6v7kkiz4y9l81s37xxi3xj1drg",
-    "sha256bin64": "059rn0jj2cajrxx57gmr0ndkgixgfqazb73rxbprqj4857w4d5da",
+    "version": "95.0.4621.4",
+    "sha256": "06fgdyg3bychqhf31fikk7s4qp3rc7hmsvm6p2bj9ascd6kzjzx8",
+    "sha256bin64": "1bvkdrc7cznb9xrnld642qj3z7vbyin9xbq0pp6kqva4gck41cyn",
     "deps": {
       "gn": {
         "version": "2021-08-11",

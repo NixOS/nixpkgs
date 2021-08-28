@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-media";
-  version = "7.0.0";
+  version = "8.0.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "b45e82a594ed91cd5aa7a5cd5d01f038b7ac3cf12233e7ba2beaaa3477900e8e";
+    sha256 = "c08e687c0afa061a3e05acaf29ce81e737480d592b07e0de5f77e9a7f9f00c00";
   };
 
   propagatedBuildInputs = [
@@ -30,6 +30,8 @@ buildPythonPackage rec {
 
   # has no tests
   doCheck = false;
+
+  pythonImportsCheck = [ "azure.mgmt.media" ];
 
   meta = with lib; {
     description = "This is the Microsoft Azure Media Services Client Library";

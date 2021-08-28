@@ -1016,6 +1016,8 @@ with pkgs;
 
   terminator = callPackage ../applications/terminal-emulators/terminator { };
 
+  terminal-colors = callPackage ../applications/misc/terminal-colors { };
+
   termite = callPackage ../applications/terminal-emulators/termite/wrapper.nix {
     termite = termite-unwrapped;
   };
@@ -3991,6 +3993,8 @@ with pkgs;
 
   cloud-utils = callPackage ../tools/misc/cloud-utils { };
 
+  cloudlist = callPackage ../tools/security/cloudlist { };
+
   cobalt = callPackage ../applications/misc/cobalt {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
@@ -4496,6 +4500,8 @@ with pkgs;
   sonota = callPackage ../tools/misc/sonota { };
 
   sonobuoy = callPackage ../applications/networking/cluster/sonobuoy { };
+
+  soupault = callPackage ../tools/typesetting/soupault { };
 
   strawberry = libsForQt5.callPackage ../applications/audio/strawberry { };
 
@@ -13171,6 +13177,8 @@ with pkgs;
   altair = callPackage ../development/tools/altair-graphql-client { };
 
   ameba = callPackage ../development/tools/ameba { };
+
+  anybadge = with python3Packages; toPythonApplication anybadge;
 
   augeas = callPackage ../tools/system/augeas { };
 
@@ -27882,6 +27890,8 @@ with pkgs;
 
   trojita = libsForQt5.callPackage ../applications/networking/mailreaders/trojita { };
 
+  ttyper = callPackage ../applications/misc/ttyper { };
+
   tudu = callPackage ../applications/office/tudu { };
 
   tuna = python3Packages.callPackage ../os-specific/linux/tuna { };
@@ -29194,6 +29204,8 @@ with pkgs;
   clonehero = pkgs.callPackage ../games/clonehero/fhs-wrapper.nix { };
 
   crispyDoom = callPackage ../games/crispy-doom { };
+
+  vintagestory = callPackage ../games/vintagestory/default.nix { };
 
   cri-o = callPackage ../applications/virtualization/cri-o/wrapper.nix { };
   cri-o-unwrapped = callPackage ../applications/virtualization/cri-o { };

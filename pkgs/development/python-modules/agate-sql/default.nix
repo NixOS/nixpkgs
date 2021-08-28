@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "agate-sql";
-  version = "0.5.6";
+  version = "0.5.7";
 
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "056dc9e587fbdfdf3f1c9950f4793a5ee87622c19deba31aa0a6d6681816dcde";
+    sha256 = "7622c1f243b5a9a5efddfe28c36eeeb30081e43e3eb72e8f3da22c2edaecf4d8";
   };
 
   propagatedBuildInputs = [ agate sqlalchemy ];
