@@ -6,6 +6,7 @@
 , msrest
 , msrestazure
 , azure-common
+, azure-mgmt-core
 , azure-mgmt-nspkg
 }:
 
@@ -23,6 +24,7 @@ buildPythonPackage rec {
     msrest
     msrestazure
     azure-common
+    azure-mgmt-core
     azure-mgmt-nspkg
   ];
 
