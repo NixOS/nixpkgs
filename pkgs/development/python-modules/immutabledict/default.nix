@@ -7,21 +7,15 @@
 
 buildPythonPackage rec {
   pname = "immutabledict";
-  version = "2.1.0";
+  version = "2.2.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "corenting";
     repo = "immutabledict";
     rev = "v${version}";
-    sha256 = "1n71154nfb6vr41iv00xcwkxmwnn1vwzbr3s23bjvlhvmnjb48a8";
+    sha256 = "sha256-Jf7ad3ImPfEvCBrUZ1NVXMCBqwLmd0hwpKfe9rVsehc=";
   };
-
-  # https://github.com/corenting/immutabledict/issues/56
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "poetry.masonry.api" "poetry.core.masonry.api"
-  '';
 
   nativeBuildInputs = [
     poetry-core
