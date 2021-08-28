@@ -8,7 +8,7 @@ in
 
 with haskellLib;
 
-self: super: {
+self: super: ({
 
   # the tests for shell-conduit on Darwin illegitimatey assume non-GNU echo
   # see: https://github.com/psibi/shell-conduit/issues/12
@@ -253,4 +253,11 @@ self: super: {
   # Otherwise impure gcc is used, which is Apple's weird wrapper
   c2hsc = addTestToolDepends super.c2hsc [ pkgs.gcc ];
 
-}
+} // lib.optionalAttrs pkgs.stdenv.isAarch64 {  # aarch64-darwin
+
+  # https://github.com/fpco/unliftio/issues/87
+  unliftio = dontCheck super.unliftio;
+
+  # https://github.com/fpco/inline-c/issues/127
+  inline-c-cpp = dontCheck super.inline-c-cpp;
+})
