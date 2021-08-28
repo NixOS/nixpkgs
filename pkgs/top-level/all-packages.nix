@@ -24309,7 +24309,9 @@ with pkgs;
 
   foo-yc20 = callPackage ../applications/audio/foo-yc20 { };
 
-  fossil = callPackage ../applications/version-management/fossil { };
+  fossil = callPackage ../applications/version-management/fossil {
+    sqlite = sqlite.override { enableDeserialize = true; };
+  };
 
   freebayes = callPackage ../applications/science/biology/freebayes { };
 
