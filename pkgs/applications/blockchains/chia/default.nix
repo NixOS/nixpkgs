@@ -5,7 +5,7 @@
 , python3Packages
 }:
 
-python3Packages.buildPythonApplication rec {
+let chia = python3Packages.buildPythonApplication rec {
   pname = "chia";
   version = "1.2.5";
 
@@ -64,6 +64,10 @@ python3Packages.buildPythonApplication rec {
     pytestCheckHook
   ];
 
+  # Testsuite is expensive and non-deterministic, so it is available in
+  # passthru.tests instead.
+  doCheck = false;
+
   disabledTests = [
     "test_spend_through_n"
     "test_spend_zero_coin"
@@ -86,6 +90,10 @@ python3Packages.buildPythonApplication rec {
     export HOME=`mktemp -d`
   '';
 
+  passthru.tests = {
+    chiaWithTests = chia.overrideAttrs (_: { doCheck = true; });
+  };
+
   meta = with lib; {
     homepage = "https://www.chia.net/";
     description = "Chia is a modern cryptocurrency built from scratch, designed to be efficient, decentralized, and secure.";
@@ -93,4 +101,5 @@ python3Packages.buildPythonApplication rec {
     maintainers = teams.chia.members;
     platforms = platforms.all;
   };
-}
+};
+in chia
