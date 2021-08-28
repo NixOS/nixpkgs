@@ -132,6 +132,13 @@ with pkgs;
       ../build-support/setup-hooks/autoreconf.sh
   ) { };
 
+  mesonShlibsToStaticHook = callPackage (
+      { makeSetupHook }:
+      makeSetupHook
+        { deps = []; }
+        ../build-support/setup-hooks/meson-shlibs-to-static.sh
+  ) { };
+
   autoreconfHook264 = autoreconfHook.override {
     autoconf = autoconf264;
     automake = automake111x;
