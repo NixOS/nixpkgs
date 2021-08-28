@@ -119,6 +119,24 @@ with pkgs;
     callTest = t: t.test;
   };
 
+  ### Traversal for package tests
+
+  # Whereas most tests can be run with `nix-build -A my-package.tests`, this
+  # does not work for tests on a __functor attrset.
+  # TODO: enable these on hydra.nixos.org?
+  packageTests = let
+    getTests = attrs:
+      if builtins.typeOf attrs != "set"
+      then {}
+      else if lib.isDerivation attrs
+        then lib.recurseIntoAttrs attrs.tests or {}
+        else if attrs?__functor
+        then lib.recurseIntoAttrs attrs.tests or {}
+        else lib.mapAttrs (k: if k == "recurseForDerivations" then v: v else getTests) attrs;
+    in
+      getTests pkgs;
+
+
   ### BUILD SUPPORT
 
   auditBlasHook = makeSetupHook
