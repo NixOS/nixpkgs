@@ -14939,6 +14939,8 @@ with pkgs;
     autoreconfHook = buildPackages.autoreconfHook269;
   };
 
+  libbf = callPackage ../development/libraries/libbf { };
+
   libopcodes = callPackage ../development/libraries/libopcodes {
     autoreconfHook = buildPackages.autoreconfHook269;
   };
@@ -17807,6 +17809,8 @@ with pkgs;
   movit = callPackage ../development/libraries/movit { };
 
   mosquitto = callPackage ../servers/mqtt/mosquitto { };
+
+  mpdecimal = callPackage ../development/libraries/mpdecimal { };
 
   mps = callPackage ../development/libraries/mps { };
 
