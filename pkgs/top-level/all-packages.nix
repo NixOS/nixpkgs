@@ -25124,6 +25124,8 @@ with pkgs;
 
   pmbootstrap = python3Packages.callPackage ../tools/misc/pmbootstrap/default.nix { };
 
+  shepherd = nodePackages."@nerdwallet/shepherd";
+
   slack = callPackage ../applications/networking/instant-messengers/slack { };
 
   slack-cli = callPackage ../tools/networking/slack-cli { };
