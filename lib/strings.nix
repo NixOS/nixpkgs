@@ -23,7 +23,6 @@ rec {
     isList
     isAttrs
     isPath
-    isString
     match
     parseDrvName
     readFile
@@ -912,10 +911,13 @@ rec {
      string interpolations and in most functions that expect a string.
    */
   isStringLike = x:
-    isString x ||
+    builtins.isString x ||
     isPath x ||
     x ? outPath ||
     x ? __toString;
+
+  /* Check whether something can be used as a string */
+  isString = isStringLike;
 
   /* Check whether a value is a store path.
 
