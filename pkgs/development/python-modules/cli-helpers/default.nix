@@ -1,37 +1,37 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
-, backports_csv
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
 , configobj
 , mock
-, pytest
+, pytestCheckHook
 , tabulate
-, terminaltables
 , wcwidth
 }:
 
 buildPythonPackage rec {
   pname = "cli_helpers";
-  version = "2.1.0";
+  version = "2.2.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "dd6f164310f7d86fa3da1f82043a9c784e44a02ad49be932a80624261e56979b";
+  # PyPi only carries py3 wheel
+  src = fetchFromGitHub {
+    owner = "dbcli";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "19npq8snc3ycbjapqdjp7274rcj9rszf1c7iyp346rclb6w6ay6j";
   };
 
   propagatedBuildInputs = [
     configobj
-    terminaltables
     tabulate
     wcwidth
-  ] ++ (lib.optionals isPy27 [ backports_csv ]);
+  ];
 
-  # namespace collision between backport.csv and backports.configparser
-  doCheck = !isPy27;
+  disabled = pythonOlder "3.6";
 
-  checkInputs = [ pytest mock ];
+  checkInputs = [ pytestCheckHook mock ];
 
-  checkPhase = ''
-    py.test
-  '';
+  pythonImportsCheck = [ "cli_helpers" ];
 
   meta = with lib; {
     description = "Python helpers for common CLI tasks";
@@ -56,7 +56,8 @@ buildPythonPackage rec {
       Read the documentation at http://cli-helpers.rtfd.io
     '';
     homepage = "https://cli-helpers.readthedocs.io/en/stable/";
-    license = licenses.bsd3 ;
+    license = licenses.bsd3;
+    changelog = "https://github.com/dbcli/cli_helpers/raw/v${version}/CHANGELOG";
     maintainers = [ maintainers.kalbasit ];
   };
 }
