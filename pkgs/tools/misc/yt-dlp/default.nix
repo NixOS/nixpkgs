@@ -1,12 +1,11 @@
-{ lib, buildPythonPackage
-, zip, ffmpeg, rtmpdump, phantomjs2, atomicparsley, pycryptodome, pandoc
-, fetchFromGitHub
+{ lib, buildPythonPackage, fetchPypi
+, ffmpeg, rtmpdump, phantomjs2, atomicparsley, pycryptodome
 , websockets, mutagen
 , ffmpegSupport ? true
 , rtmpSupport ? true
 , phantomjsSupport ? false
 , hlsEncryptedSupport ? true
-, installShellFiles, makeWrapper }:
+}:
 
 buildPythonPackage rec {
   pname = "yt-dlp";
@@ -15,15 +14,18 @@ buildPythonPackage rec {
   # to the latest stable release.
   version = "2021.08.10";
 
-  src = fetchFromGitHub {
-    owner = "yt-dlp";
-    repo = "yt-dlp";
-    rev = version;
-    sha256 = "sha256-8mOjIvbC3AFHCXKV5G66cFy7SM7sULzM8czXcqQKbms=";
+  src = fetchPypi {
+    inherit pname;
+    version = builtins.replaceStrings [ ".0" ] [ "." ] version;
+    sha256 = "8da1bf4dc4641d37d137443c4783109ee8393caad5e0d270d9d1d534e8f25240";
   };
 
-  nativeBuildInputs = [ installShellFiles makeWrapper ];
-  buildInputs = [ zip pandoc ];
+  # build_lazy_extractors assumes this directory exists but it is not present in
+  # the PyPI package
+  postPatch = ''
+    mkdir -p ytdlp_plugins/extractor
+  '';
+
   propagatedBuildInputs = [ websockets mutagen ]
     ++ lib.optional hlsEncryptedSupport pycryptodome;
 
@@ -48,6 +50,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/yt-dlp/yt-dlp/";
     description = "Command-line tool to download videos from YouTube.com and other sites (youtube-dl fork)";
+    changelog = "https://github.com/yt-dlp/yt-dlp/raw/${version}/Changelog.md";
     longDescription = ''
       yt-dlp is a youtube-dl fork based on the now inactive youtube-dlc.
 
@@ -56,7 +59,7 @@ buildPythonPackage rec {
       youtube-dl is released to the public domain, which means
       you can modify it, redistribute it or use it however you like.
     '';
-    license = licenses.publicDomain;
+    license = licenses.unlicense;
     maintainers = with maintainers; [ mkg20001 ];
   };
 }
