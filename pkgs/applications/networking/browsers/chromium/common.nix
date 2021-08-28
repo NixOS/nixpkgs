@@ -1,6 +1,8 @@
 { stdenv, lib, fetchurl, fetchpatch
 # Channel data:
 , channel, upstream-info
+# Helper functions:
+, chromiumVersionAtLeast, versionRange
 
 # Native build inputs:
 , ninja, pkg-config
@@ -105,18 +107,6 @@ let
   buildType = "Release";
   buildPath = "out/${buildType}";
   libExecPath = "$out/libexec/${packageName}";
-
-  warnObsoleteVersionConditional = min-version: result:
-    let ungoogled-version = (importJSON ./upstream-info.json).ungoogled-chromium.version;
-    in warnIf (versionAtLeast ungoogled-version min-version) "chromium: ungoogled version ${ungoogled-version} is newer than a conditional bounded at ${min-version}. You can safely delete it."
-      result;
-  chromiumVersionAtLeast = min-version:
-    let result = versionAtLeast upstream-info.version min-version;
-    in  warnObsoleteVersionConditional min-version result;
-  versionRange = min-version: upto-version:
-    let inherit (upstream-info) version;
-        result = versionAtLeast version min-version && versionOlder version upto-version;
-    in warnObsoleteVersionConditional upto-version result;
 
   ungoogler = ungoogled-chromium {
     inherit (upstream-info.deps.ungoogled-patches) rev sha256;
