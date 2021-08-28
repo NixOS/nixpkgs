@@ -22,10 +22,13 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    glib
     meson
     ninja
     pkg-config
+  ];
+
+  buildInputs = [
+    glib
   ];
 
   propagatedBuildInputs = [
