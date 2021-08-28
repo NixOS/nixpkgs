@@ -24,6 +24,6 @@ buildPythonPackage rec {
     description = "Fast Base64 encoding/decoding";
     homepage = "https://github.com/mayeut/pybase64";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ ];
   };
 }
