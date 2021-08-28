@@ -82,6 +82,8 @@ with self; with super; {
 
   dateparser = callPackage ../development/python-modules/dateparser/0.x.nix { };
 
+  decorator = callPackage ../development/python-modules/decorator/4.nix { };
+
   deskcon = callPackage ../development/python-modules/deskcon { };
 
   django_evolution = callPackage ../development/python-modules/django_evolution { };
