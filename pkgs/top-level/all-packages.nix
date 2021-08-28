@@ -31866,6 +31866,8 @@ with pkgs;
 
   nut = callPackage ../applications/misc/nut { };
 
+  nhentai = callPackage ../applications/misc/nhentai { };
+
   nvd = callPackage ../tools/package-management/nvd { };
 
   solfege = python3Packages.callPackage ../misc/solfege { };
