@@ -304,6 +304,8 @@ in buildPythonPackage rec {
   passthru = {
     inherit cudaSupport;
     cudaArchList = final_cudaArchList;
+    # At least for 1.9.0 `torch.fft` is unavailable unless BLAS provider is MKL. This attribute allows for easy detection of its availability.
+    blasProvider = blas.provider;
   };
 
   meta = with lib; {
