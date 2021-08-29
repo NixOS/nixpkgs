@@ -11,7 +11,6 @@
 , libhandy
 , libdazzle
 , python3Packages
-, file
 , cairo
 , gettext
 , gnome
