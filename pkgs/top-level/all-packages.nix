@@ -13439,6 +13439,8 @@ with pkgs;
 
   buck = callPackage ../development/tools/build-managers/buck { };
 
+  build2 = callPackage ../development/tools/build-managers/build2 { };
+
   buildkite-agent = callPackage ../development/tools/continuous-integration/buildkite-agent { };
 
   buildkite-agent-metrics = callPackage ../servers/monitoring/buildkite-agent-metrics { };
