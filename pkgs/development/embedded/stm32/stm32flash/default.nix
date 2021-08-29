@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "stm32flash";
-  version = "0.5";
+  version = "0.6";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "01p396daqw3zh6nijffbfbwyqza33bi2k4q3m5yjzs02xwi99alp";
+    sha256 = "sha256-7ptA1NPlzSi5k+CK4qLDxVm2vqhzDNfh1Acn3tsd2gk=";
   };
 
   buildFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
