@@ -3598,7 +3598,7 @@ with pkgs;
 
   bud = callPackage ../tools/networking/bud { };
 
-  bump2version = python37Packages.callPackage ../applications/version-management/git-and-tools/bump2version { };
+  bump2version = python3Packages.callPackage ../applications/version-management/git-and-tools/bump2version { };
 
   bumpver = callPackage ../applications/version-management/bumpver { };
 
