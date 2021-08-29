@@ -11,14 +11,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ elfutils ];
 
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p "$out/bin"
-    cp dwz "$out/bin"
-
-    runHook postInstall
-  '';
+  makeFlags = [ "prefix=${placeholder "out"}" ];
 
   meta = with lib; {
     homepage = "https://sourceware.org/dwz/";
