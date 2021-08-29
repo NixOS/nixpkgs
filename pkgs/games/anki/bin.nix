@@ -5,13 +5,21 @@ let
   # Update hashes for both Linux and Darwin!
   version = "2.1.46";
 
-  unpacked = stdenv.mkDerivation {
-    inherit pname version;
-
-    src = fetchurl {
+  sources = {
+    linux = fetchurl {
       url = "https://github.com/ankitects/anki/releases/download/${version}/anki-${version}-linux.tar.bz2";
       sha256 = "1jzpf42fqhfbjr95k7bpsnf34sfinamp6v828y0sapa4gzfvwkkz";
     };
+    darwin = fetchurl {
+      url = "https://github.com/ankitects/anki/releases/download/${version}/anki-${version}-mac.dmg";
+      sha256 = "003cmh5qdj5mkrpm51n0is872faj99dqfkaaxyyrn6x03s36l17y";
+    };
+  };
+
+  unpacked = stdenv.mkDerivation {
+    inherit pname version;
+
+    src = sources.linux;
 
     installPhase = ''
       runHook preInstall
@@ -32,6 +40,8 @@ let
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
     maintainers = with maintainers; [ atemu ];
   };
+
+  passthru = { inherit sources; };
 in
 
 if stdenv.isLinux then buildFHSUserEnv (appimageTools.defaultFhsEnvArgs // {
@@ -51,14 +61,11 @@ if stdenv.isLinux then buildFHSUserEnv (appimageTools.defaultFhsEnvArgs // {
       $out/share/
   '';
 
-  inherit meta;
+  inherit meta passthru;
 }) else stdenv.mkDerivation {
-  inherit pname version;
+  inherit pname version passthru;
 
-  src = fetchurl {
-    url = "https://github.com/ankitects/anki/releases/download/${version}/anki-${version}-mac.dmg";
-    sha256 = "003cmh5qdj5mkrpm51n0is872faj99dqfkaaxyyrn6x03s36l17y";
-  };
+  src = sources.darwin;
 
   nativeBuildInputs = [ undmg ];
   sourceRoot = ".";
