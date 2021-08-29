@@ -27,6 +27,8 @@ mkDerivation rec {
   ];
 
   qtWrapperArgs = [
+    # MuseScore JACK backend loads libjack at runtime.
+    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libjack2 ]}"
     # Work around crash on update from 3.4.2 to 3.5.0
     # https://bugreports.qt.io/browse/QTBUG-85967
     "--set QML_DISABLE_DISK_CACHE 1"

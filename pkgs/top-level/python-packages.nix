@@ -477,6 +477,8 @@ in {
 
   anyascii = callPackage ../development/python-modules/anyascii { };
 
+  anybadge = callPackage ../development/python-modules/anybadge { };
+
   anyio = callPackage ../development/python-modules/anyio { };
 
   anyjson = callPackage ../development/python-modules/anyjson { };
@@ -7638,6 +7640,8 @@ in {
   reikna = callPackage ../development/python-modules/reikna { };
 
   relatorio = callPackage ../development/python-modules/relatorio { };
+
+  remarshal = callPackage ../development/python-modules/remarshal { };
 
   rencode = callPackage ../development/python-modules/rencode { };
 

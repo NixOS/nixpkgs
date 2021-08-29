@@ -12,13 +12,13 @@ in
 
 llvmPackages.stdenv.mkDerivation {
   pname = "c2ffi-${c2ffiBranch}";
-  version = "unstable-2021-04-15";
+  version = "unstable-2021-06-15";
 
   src = fetchFromGitHub {
     owner = "rpav";
     repo = "c2ffi";
-    rev = "0255131f80b21334e565231331c2b451b6bba8c4";
-    sha256 = "0ihysgqjyg5xwi098hxf15lpdi6g4nwpzczp495is912c48fy6b6";
+    rev = "f50243926a0afb589de1078a073ac08910599582";
+    sha256 = "UstGicFzFY0/Jge5HGYTPwYSnh9OUBY5346ObZYfR54=";
   };
 
   passthru.updateScript = unstableGitUpdater {

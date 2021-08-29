@@ -6,6 +6,8 @@ let
     "ghc865Binary"
     "ghc8102Binary"
     "ghc8102BinaryMinimal"
+    "ghc8105Binary"
+    "ghc8105BinaryMinimal"
     "integer-simple"
     "native-bignum"
     "ghcHEAD"
@@ -57,10 +59,22 @@ in {
       minimal = true;
     };
 
+    ghc8105Binary = callPackage ../development/compilers/ghc/8.10.5-binary.nix {
+      llvmPackages = pkgs.llvmPackages_11;
+    };
+
+    ghc8105BinaryMinimal = callPackage ../development/compilers/ghc/8.10.5-binary.nix {
+      llvmPackages = pkgs.llvmPackages_11;
+      minimal = true;
+    };
+
     ghc884 = callPackage ../development/compilers/ghc/8.8.4.nix {
-      # aarch64 ghc865Binary gets SEGVs due to haskell#15449 or similar
-      # Musl bindists do not exist for ghc 8.6.5, so we use 8.10.* for them
-      bootPkgs = if stdenv.isAarch64 || stdenv.targetPlatform.isMusl then
+      # the oldest ghc with aarch64-darwin support is 8.10.5
+      bootPkgs = if stdenv.isDarwin && stdenv.isAarch64 then
+          packages.ghc8105BinaryMinimal
+        # aarch64 ghc865Binary gets SEGVs due to haskell#15449 or similar
+        # Musl bindists do not exist for ghc 8.6.5, so we use 8.10.* for them
+        else if stdenv.isAarch64 || stdenv.targetPlatform.isMusl then
           packages.ghc8102BinaryMinimal
         else
           packages.ghc865Binary;
@@ -69,9 +83,12 @@ in {
       llvmPackages = pkgs.llvmPackages_7;
     };
     ghc8106 = callPackage ../development/compilers/ghc/8.10.6.nix {
-      # aarch64 ghc865Binary gets SEGVs due to haskell#15449 or similar
-      # Musl bindists do not exist for ghc 8.6.5, so we use 8.10.* for them
-      bootPkgs = if stdenv.isAarch64 || stdenv.isAarch32 || stdenv.targetPlatform.isMusl then
+      # the oldest ghc with aarch64-darwin support is 8.10.5
+      bootPkgs = if stdenv.isDarwin && stdenv.isAarch64 then
+          packages.ghc8105BinaryMinimal
+        # aarch64 ghc865Binary gets SEGVs due to haskell#15449 or similar
+        # Musl bindists do not exist for ghc 8.6.5, so we use 8.10.* for them
+        else if stdenv.isAarch64 || stdenv.isAarch32 || stdenv.targetPlatform.isMusl then
           packages.ghc8102BinaryMinimal
         else
           packages.ghc865Binary;
@@ -79,13 +96,16 @@ in {
       # Need to use apple's patched xattr until
       # https://github.com/xattr/xattr/issues/44 and
       # https://github.com/xattr/xattr/issues/55 are solved.
-      inherit (buildPackages.darwin) xattr;
+      inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
       buildLlvmPackages = buildPackages.llvmPackages_9;
       llvmPackages = pkgs.llvmPackages_9;
     };
     ghc901 = callPackage ../development/compilers/ghc/9.0.1.nix {
-      # aarch64 ghc8102Binary exceeds max output size on hydra
-      bootPkgs = if stdenv.isAarch64 || stdenv.isAarch32 then
+      # the oldest ghc with aarch64-darwin support is 8.10.5
+      bootPkgs = if stdenv.isDarwin && stdenv.isAarch64 then
+          packages.ghc8105BinaryMinimal
+        # aarch64 ghc8102Binary exceeds max output size on hydra
+        else if stdenv.isAarch64 || stdenv.isAarch32 then
           packages.ghc8102BinaryMinimal
         else
           packages.ghc8102Binary;
@@ -143,6 +163,18 @@ in {
     ghc8102BinaryMinimal = callPackage ../development/haskell-modules {
       buildHaskellPackages = bh.packages.ghc8102BinaryMinimal;
       ghc = bh.compiler.ghc8102BinaryMinimal;
+      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.10.x.nix { };
+      packageSetConfig = bootstrapPackageSet;
+    };
+    ghc8105Binary = callPackage ../development/haskell-modules {
+      buildHaskellPackages = bh.packages.ghc8105Binary;
+      ghc = bh.compiler.ghc8105Binary;
+      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.10.x.nix { };
+      packageSetConfig = bootstrapPackageSet;
+    };
+    ghc8105BinaryMinimal = callPackage ../development/haskell-modules {
+      buildHaskellPackages = bh.packages.ghc8105BinaryMinimal;
+      ghc = bh.compiler.ghc8105BinaryMinimal;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.10.x.nix { };
       packageSetConfig = bootstrapPackageSet;
     };

@@ -1016,6 +1016,8 @@ with pkgs;
 
   terminator = callPackage ../applications/terminal-emulators/terminator { };
 
+  terminal-colors = callPackage ../applications/misc/terminal-colors { };
+
   termite = callPackage ../applications/terminal-emulators/termite/wrapper.nix {
     termite = termite-unwrapped;
   };
@@ -3991,6 +3993,8 @@ with pkgs;
 
   cloud-utils = callPackage ../tools/misc/cloud-utils { };
 
+  cloudlist = callPackage ../tools/security/cloudlist { };
+
   cobalt = callPackage ../applications/misc/cobalt {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
@@ -4497,6 +4501,8 @@ with pkgs;
 
   sonobuoy = callPackage ../applications/networking/cluster/sonobuoy { };
 
+  soupault = callPackage ../tools/typesetting/soupault { };
+
   strawberry = libsForQt5.callPackage ../applications/audio/strawberry { };
 
   tealdeer = callPackage ../tools/misc/tealdeer {
@@ -4593,7 +4599,9 @@ with pkgs;
 
   choose = callPackage ../tools/text/choose { };
 
-  emscripten = callPackage ../development/compilers/emscripten { };
+  emscripten = callPackage ../development/compilers/emscripten {
+    llvmPackages = llvmPackages_13;
+  };
 
   emscriptenPackages = recurseIntoAttrs (callPackage ./emscripten-packages.nix { });
 
@@ -6077,6 +6085,8 @@ with pkgs;
   industrializer = callPackage ../applications/audio/industrializer { };
 
   inetutils = callPackage ../tools/networking/inetutils { };
+
+  inferno = callPackage ../development/tools/inferno { };
 
   inform6 = callPackage ../development/compilers/inform6 { };
 
@@ -8347,7 +8357,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  remarshal = callPackage ../development/tools/remarshal { };
+  remarshal = with python3Packages; toPythonApplication remarshal;
 
   rehex = callPackage ../applications/editors/rehex {
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa IOKit;
@@ -9920,7 +9930,7 @@ with pkgs;
   };
 
   sentry-cli = callPackage ../development/tools/sentry-cli {
-    inherit (darwin.apple_sdk.frameworks) Security;
+    inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
 
   sentry-native = callPackage ../development/libraries/sentry-native { };
@@ -9929,7 +9939,9 @@ with pkgs;
     openssl = openssl_1_0_2;
   };
 
-  waifu2x-converter-cpp = callPackage ../tools/graphics/waifu2x-converter-cpp { };
+  waifu2x-converter-cpp = callPackage ../tools/graphics/waifu2x-converter-cpp {
+    inherit (darwin.apple_sdk.frameworks) OpenCL;
+  };
 
   wakatime = pythonPackages.callPackage ../tools/misc/wakatime { };
 
@@ -13170,6 +13182,8 @@ with pkgs;
 
   ameba = callPackage ../development/tools/ameba { };
 
+  anybadge = with python3Packages; toPythonApplication anybadge;
+
   augeas = callPackage ../tools/system/augeas { };
 
   inherit (callPackage ../tools/admin/ansible { })
@@ -13333,7 +13347,13 @@ with pkgs;
 
   buildBazelPackage = callPackage ../build-support/build-bazel-package { };
 
-  bear = callPackage ../development/tools/build-managers/bear { };
+  bear = callPackage ../development/tools/build-managers/bear {
+    # error: no viable constructor or deduction guide for deduction of template arguments of 'map'
+    stdenv = if stdenv.hostPlatform.system == "x86_64-darwin" then
+        llvmPackages_11.stdenv
+      else
+        stdenv;
+  };
 
   bin_replace_string = callPackage ../development/tools/misc/bin_replace_string { };
 
@@ -23885,10 +23905,12 @@ with pkgs;
   dd-agent = callPackage ../tools/networking/dd-agent/5.nix { };
   datadog-agent = callPackage ../tools/networking/dd-agent/datadog-agent.nix {
     pythonPackages = datadog-integrations-core {};
+    invoke = python3Packages.invoke;
+    pyaml = python3Packages.pyaml;
   };
   datadog-process-agent = callPackage ../tools/networking/dd-agent/datadog-process-agent.nix { };
   datadog-integrations-core = extras: callPackage ../tools/networking/dd-agent/integrations-core.nix {
-    python = python27;
+    python = python3;
     extraIntegrations = extras;
   };
 
@@ -25113,6 +25135,8 @@ with pkgs;
   pixelnuke = callPackage ../applications/graphics/pixelnuke { };
 
   pmbootstrap = python3Packages.callPackage ../tools/misc/pmbootstrap/default.nix { };
+
+  shepherd = nodePackages."@nerdwallet/shepherd";
 
   slack = callPackage ../applications/networking/instant-messengers/slack { };
 
@@ -27880,6 +27904,8 @@ with pkgs;
 
   trojita = libsForQt5.callPackage ../applications/networking/mailreaders/trojita { };
 
+  ttyper = callPackage ../applications/misc/ttyper { };
+
   tudu = callPackage ../applications/office/tudu { };
 
   tuna = python3Packages.callPackage ../os-specific/linux/tuna { };
@@ -29192,6 +29218,8 @@ with pkgs;
   clonehero = pkgs.callPackage ../games/clonehero/fhs-wrapper.nix { };
 
   crispyDoom = callPackage ../games/crispy-doom { };
+
+  vintagestory = callPackage ../games/vintagestory/default.nix { };
 
   cri-o = callPackage ../applications/virtualization/cri-o/wrapper.nix { };
   cri-o-unwrapped = callPackage ../applications/virtualization/cri-o { };
