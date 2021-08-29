@@ -37,7 +37,7 @@ let
     do sleep 1; done
 
     curl() {
-        ${pkgs.curl}/bin/curl -sS -H "X-API-Key: $api_key" \
+        ${pkgs.curl}/bin/curl -sSLk -H "X-API-Key: $api_key" \
             --retry 1000 --retry-delay 1 --retry-all-errors \
             "$@"
     }
