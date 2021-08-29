@@ -434,6 +434,15 @@ in {
         defaultText = literalExample "dataDir${optionalString cond " + \"/.config/syncthing\""}";
       };
 
+      extraFlags = mkOption {
+        type = types.listOf types.str;
+        default = [];
+        example = [ "--reset-deltas" ];
+        description = ''
+          Extra flags passed to the syncthing command in the service definition.
+        '';
+      };
+
       openDefaultPorts = mkOption {
         type = types.bool;
         default = false;
@@ -526,7 +535,7 @@ in {
             ${cfg.package}/bin/syncthing \
               -no-browser \
               -gui-address=${cfg.guiAddress} \
-              -home=${cfg.configDir}
+              -home=${cfg.configDir} ${escapeShellArgs cfg.extraFlags}
           '';
           MemoryDenyWriteExecute = true;
           NoNewPrivileges = true;
