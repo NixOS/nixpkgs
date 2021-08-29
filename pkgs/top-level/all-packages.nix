@@ -9059,6 +9059,8 @@ with pkgs;
 
   ssh-chat = callPackage ../applications/networking/instant-messengers/ssh-chat { };
 
+  ssh-to-age = callPackage ../tools/security/ssh-to-age { };
+
   ssh-to-pgp = callPackage ../tools/security/ssh-to-pgp { };
 
   suricata = callPackage ../applications/networking/ids/suricata {
