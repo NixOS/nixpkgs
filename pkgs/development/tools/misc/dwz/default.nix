@@ -12,8 +12,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ elfutils ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/bin"
     cp dwz "$out/bin"
+
+    runHook postInstall
   '';
 
   meta = with lib; {
