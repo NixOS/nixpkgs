@@ -44,6 +44,13 @@ let
     "lagda.tex"
   ];
 
+  filterAgdaBuildInputs = builtins.filter (p: p ? isAgdaDerivation);
+
+  shellFor = agdaDrv: mkShell {
+    buildInputs = [ (withPackages (filterAgdaBuildInputs agdaDrv.buildInputs)) ];
+    inputsFrom = agdaDrv.buildInputs ++ agdaDrv.nativeBuildInputs;
+  };
+
   defaults =
     { pname
     , meta
@@ -56,7 +63,7 @@ let
     , extraExtensions ? []
     , ...
     }: let
-      agdaWithArgs = withPackages (builtins.filter (p: p ? isAgdaDerivation) buildInputs);
+      agdaWithArgs = withPackages (filterAgdaBuildInputs buildInputs);
     in
       {
         inherit libraryName libraryFile;
@@ -81,7 +88,7 @@ let
       };
 in
 {
-  mkDerivation = args: stdenv.mkDerivation (args // defaults args);
+  mkDerivation = args: (lib.extends (self: super: super // { env = shellFor super; }) stdenv.mkDerivation (args // defaults args));
 
-  inherit withPackages withPackages';
+  inherit withPackages withPackages' shellFor;
 }
