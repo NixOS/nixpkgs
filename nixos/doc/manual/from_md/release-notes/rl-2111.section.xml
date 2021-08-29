@@ -1088,6 +1088,15 @@ Superuser created successfully.
           but instead use more of the YAML-specific syntax.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          GNOME desktop environment now enables
+          <literal>QGnomePlatform</literal> as the Qt platform theme,
+          which should avoid crashes when opening file chooser dialogs
+          in Qt apps by using XDG desktop portal. Additionally, it will
+          make the apps fit better visually.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
 </section>
