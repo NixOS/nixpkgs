@@ -1,0 +1,14 @@
+diff --git a/SConstruct b/SConstruct
+index 2421399..ba39254 100644
+--- a/SConstruct
++++ b/SConstruct
+@@ -147,6 +147,9 @@ def create_base_env(vars):
+     env_args["package_name"]="RHVoice"
+     env_args["CPPDEFINES"]=[("RHVOICE","1")]
+     env=Environment(**env_args)
++    env.PrependENVPath("PATH", os.environ["PATH"])
++    env["ENV"]["PKG_CONFIG_PATH"]=os.environ["PKG_CONFIG_PATH"]
++    env["RPATH"]=env["libdir"]
+     env["package_version"]=get_version(env["release"])
+     env.Append(CPPDEFINES=("PACKAGE",env.subst(r'\"$package_name\"')))
+     env.Append(CPPDEFINES=("VERSION",env.subst(r'\"$package_version\"')))

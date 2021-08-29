@@ -1,0 +1,14 @@
+diff --git a/lib/stdint.in.h b/lib/stdint.in.h
+index 889bca7..15d39b0 100644
+--- a/lib/stdint.in.h
++++ b/lib/stdint.in.h
+@@ -74,7 +74,8 @@
+      in <inttypes.h> would reinclude us, skipping our contents because
+      _@GUARD_PREFIX@_STDINT_H is defined.
+      The include_next requires a split double-inclusion guard.  */
+-# @INCLUDE_NEXT@ @NEXT_STDINT_H@
++# include <inttypes.h>
++// # @INCLUDE_NEXT@ @NEXT_STDINT_H@
+ #endif
+ 
+ #if ! defined _@GUARD_PREFIX@_STDINT_H && ! defined _GL_JUST_INCLUDE_SYSTEM_STDINT_H

@@ -1,0 +1,54 @@
+--- a/build.xml	(revision 597)
++++ a/build.xml	(working copy)
+@@ -207,12 +207,12 @@
+ 		<property name="svn.version.build" value="unknown"/>
+ 
+ 		<propertyfile file="${build.classes}/splitter-version.properties">
+-			<entry key="svn.version" value="${svn.version.build}" />
+-			<entry key="build.timestamp" value="${build.timestamp}" />
++			<entry key="svn.version" value="@version@" />
++			<entry key="build.timestamp" value="unknown" />
+ 		</propertyfile>
+ 	</target>
+ 
+-  <target name="compile" depends="prepare, resolve-compile" description="main compilation">
++  <target name="compile" depends="prepare" description="main compilation">
+     <javac srcdir="${src}" destdir="${build.classes}" debug="yes" includeantruntime="false">
+       <include name="**/*.java"/>
+       <classpath refid="classpath"/>
+@@ -219,7 +219,7 @@
+     </javac>
+   </target>
+ 
+-  <target name="compile.tests" depends="prepare, resolve-test" description="test compilation">
++  <target name="compile.tests" depends="prepare" description="test compilation">
+     <javac srcdir="${test}" destdir="${build.test-classes}" debug="yes" includeantruntime="false">
+       <include name="**/*.java"/>
+       <classpath refid="test.classpath"/>
+@@ -261,7 +261,7 @@
+ 	  <fail if="junit.failure" message="Test failed.  See test-reports/index.html"/>
+ 	</target>
+ 
+-  <target name="dist" depends="build, check-version, version-file" description="Make the distribution area">
++  <target name="dist" depends="build, version-file" description="Make the distribution area">
+ 
+     <mkdir dir="${dist}"/>
+     <mkdir dir="${dist}/doc/api"/>
+@@ -324,7 +324,7 @@
+ 	</target>
+ 
+ 	<!-- Main -->
+-  <target name="build" depends="compile,compile.tests,run.tests">
++  <target name="build" depends="compile">
+     <copy todir="${build.classes}">
+       <fileset dir="${resources}">
+         <include name="*.properties"/>
+@@ -349,7 +349,7 @@
+ 			ignoreerrors="true"/>
+ 	</target>
+  
+-	<target name="run.func-tests" depends="compile,compile.tests,obtain-test-input-files" description="Run the functional tests">
++	<target name="run.func-tests" depends="compile,compile.tests" description="Run the functional tests">
+ 		<mkdir dir="tmp/report"/>
+ 		<junit printsummary="yes" failureproperty="junit.failure" forkmode="once">
+ 	

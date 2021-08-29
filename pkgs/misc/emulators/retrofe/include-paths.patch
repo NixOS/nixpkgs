@@ -1,0 +1,11 @@
+diff -ur RetroFE.1/RetroFE/Source/CMakeLists.txt RetroFE.2/RetroFE/Source/CMakeLists.txt
+--- RetroFE.1/RetroFE/Source/CMakeLists.txt	2016-02-21 14:52:36.726070602 +0100
++++ RetroFE.2/RetroFE/Source/CMakeLists.txt	2016-02-21 14:38:43.036249029 +0100
+@@ -59,6 +59,7 @@
+ set(RETROFE_INCLUDE_DIRS
+ 	"${GLIB2_INCLUDE_DIRS}"
+ 	"${GSTREAMER_INCLUDE_DIRS}"
++	"${GSTREAMER_BASE_INCLUDE_DIRS}"
+ 	"${SDL2_INCLUDE_DIRS}"
+ 	"${SDL2_IMAGE_INCLUDE_DIRS}"
+ 	"${SDL2_MIXER_INCLUDE_DIRS}"

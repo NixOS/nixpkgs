@@ -1,0 +1,27 @@
+{ lib, stdenv, fetchurl, readline, gmp, zlib }:
+
+stdenv.mkDerivation rec {
+  version = "6.3.3";
+  pname = "yap";
+
+  src = fetchurl {
+    url = "https://www.dcc.fc.up.pt/~vsc/Yap/${pname}-${version}.tar.gz";
+    sha256 = "0y7sjwimadqsvgx9daz28c9mxcx9n1znxklih9xg16k6n54v9qxf";
+  };
+
+  buildInputs = [ readline gmp zlib ];
+
+  configureFlags = [ "--enable-tabling=yes" ];
+
+  NIX_CFLAGS_COMPILE = "-fpermissive";
+
+  meta = {
+    homepage = "http://www.dcc.fc.up.pt/~vsc/Yap/";
+    description = "A ISO-compatible high-performance Prolog compiler";
+    license = lib.licenses.artistic2;
+
+    maintainers = [ lib.maintainers.peti ];
+    platforms = lib.platforms.linux;
+    broken = !stdenv.is64bit;   # the linux 32 bit build fails.
+  };
+}

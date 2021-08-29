@@ -1,0 +1,13 @@
+Don't build Ninja, we use our own.
+
+--- a/utils/build-presets.ini
++++ b/utils/build-presets.ini
+@@ -745,7 +745,7 @@ swiftpm
+ 
+ dash-dash
+ 
+-build-ninja
++# build-ninja
+ install-swift
+ install-lldb
+ install-llbuild

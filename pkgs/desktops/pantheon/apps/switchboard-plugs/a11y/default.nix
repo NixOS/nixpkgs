@@ -1,0 +1,62 @@
+{ lib, stdenv
+, substituteAll
+, fetchFromGitHub
+, nix-update-script
+, pantheon
+, meson
+, ninja
+, pkg-config
+, vala
+, libgee
+, granite
+, gtk3
+, switchboard
+, onboard
+}:
+
+stdenv.mkDerivation rec {
+  pname = "switchboard-plug-a11y";
+  version = "2.2.0";
+
+  src = fetchFromGitHub {
+    owner = "elementary";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-3PaOIadlEdYvfNZJaoAQVDKdSTfUdn+snCa8tHmDFD0=";
+  };
+
+  patches = [
+    (substituteAll {
+      src = ./fix-paths.patch;
+      inherit onboard;
+    })
+  ];
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
+
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    vala
+  ];
+
+  buildInputs = [
+    granite
+    gtk3
+    libgee
+    switchboard
+  ];
+
+  meta = with lib; {
+    description = "Switchboard Universal Access Plug";
+    homepage = "https://github.com/elementary/switchboard-plug-a11y";
+    license = licenses.lgpl3Plus;
+    platforms = platforms.linux;
+    maintainers = pantheon.maintainers;
+  };
+}

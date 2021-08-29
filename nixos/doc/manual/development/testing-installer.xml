@@ -1,0 +1,22 @@
+<chapter xmlns="http://docbook.org/ns/docbook"
+        xmlns:xlink="http://www.w3.org/1999/xlink"
+        xmlns:xi="http://www.w3.org/2001/XInclude"
+        version="5.0"
+        xml:id="ch-testing-installer">
+ <title>Testing the Installer</title>
+ <para>
+  Building, burning, and booting from an installation CD is rather tedious, so
+  here is a quick way to see if the installer works properly:
+<screen>
+<prompt># </prompt>mount -t tmpfs none /mnt
+<prompt># </prompt>nixos-generate-config --root /mnt
+<prompt>$ </prompt>nix-build '&lt;nixpkgs/nixos>' -A config.system.build.nixos-install
+<prompt># </prompt>./result/bin/nixos-install</screen>
+  To start a login shell in the new NixOS installation in
+  <filename>/mnt</filename>:
+<screen>
+<prompt>$ </prompt>nix-build '&lt;nixpkgs/nixos>' -A config.system.build.nixos-enter
+<prompt># </prompt>./result/bin/nixos-enter
+</screen>
+ </para>
+</chapter>

@@ -1,0 +1,40 @@
+From 9aaac67e3c3bf40ef3efc3b07b1655f72c8c54aa Mon Sep 17 00:00:00 2001
+From: Dmitry Kalinkin <dmitry.kalinkin@gmail.com>
+Date: Mon, 7 Dec 2020 12:32:31 -0500
+Subject: [PATCH 2/6] Revert "QCocoaDrag::drag - make sure clipboard is ours
+ and populated"
+
+This reverts commit 720e2e0c92ca6635c5f05f318770a70cf653c1c7.
+---
+ src/plugins/platforms/cocoa/qcocoadrag.mm | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/src/plugins/platforms/cocoa/qcocoadrag.mm b/src/plugins/platforms/cocoa/qcocoadrag.mm
+index a506126c72..c6ee4323ce 100644
+--- a/src/plugins/platforms/cocoa/qcocoadrag.mm
++++ b/src/plugins/platforms/cocoa/qcocoadrag.mm
+@@ -131,10 +131,6 @@ Qt::DropAction QCocoaDrag::drag(QDrag *o)
+     m_drag = o;
+     m_executed_drop_action = Qt::IgnoreAction;
+ 
+-    QMacPasteboard dragBoard(CFStringRef(NSPasteboardNameDrag), QMacInternalPasteboardMime::MIME_DND);
+-    m_drag->mimeData()->setData(QLatin1String("application/x-qt-mime-type-name"), QByteArray("dummy"));
+-    dragBoard.setMimeData(m_drag->mimeData(), QMacPasteboard::LazyRequest);
+-
+     if (maybeDragMultipleItems())
+         return m_executed_drop_action;
+ 
+@@ -143,6 +139,10 @@ Qt::DropAction QCocoaDrag::drag(QDrag *o)
+     NSImage *dragImage = [NSImage imageFromQImage:pm.toImage()];
+     Q_ASSERT(dragImage);
+ 
++    QMacPasteboard dragBoard(CFStringRef(NSPasteboardNameDrag), QMacInternalPasteboardMime::MIME_DND);
++    m_drag->mimeData()->setData(QLatin1String("application/x-qt-mime-type-name"), QByteArray("dummy"));
++    dragBoard.setMimeData(m_drag->mimeData(), QMacPasteboard::LazyRequest);
++
+     NSPoint event_location = [m_lastEvent locationInWindow];
+     NSWindow *theWindow = [m_lastEvent window];
+     Q_ASSERT(theWindow);
+-- 
+2.21.0
+

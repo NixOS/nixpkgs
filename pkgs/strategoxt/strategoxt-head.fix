@@ -1,4 +1,0 @@
-App(
-  IncludeFix("strategoxt/strategoxt.fix")
-  , [("rev", "3395")]
-)

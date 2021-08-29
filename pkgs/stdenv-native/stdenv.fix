@@ -1,8 +1,0 @@
-Package(
-  [ ("name", "stdenv-native")
-  , ("build", Relative("stdenv-native/stdenv-build.sh"))
-
-  , ("setup", Relative("stdenv-native/setup.sh"))
-  , ("baseenv", IncludeFix("baseenv/baseenv.fix"))
-  ]
-)
