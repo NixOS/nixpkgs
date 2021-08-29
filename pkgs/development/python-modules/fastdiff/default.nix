@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, wasmer, wasmer-compiler-cranelift, pytestCheckHook, pytest-benchmark }:
+{ stdenv, lib, buildPythonPackage, fetchPypi, wasmer, wasmer-compiler-cranelift, pytestCheckHook, pytest-benchmark }:
 
 buildPythonPackage rec {
   pname = "fastdiff";
@@ -27,5 +27,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/syrusakbary/fastdiff";
     license = licenses.mit;
     maintainers = with maintainers; [ SuperSandro2000 ];
+    # resulting compiled object panics at import
+    broken = stdenv.is32bit;
   };
 }
