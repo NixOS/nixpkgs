@@ -102,6 +102,14 @@ done
 
 # Get the path of the NixOS configuration file.
 if [[ -z $NIXOS_CONFIG ]]; then
+    for ((i = 0; i < ${#extraBuildFlags[@]}; i++)); do
+        if [[ ${extraBuildFlags[$i]} == nixos-config=*  ]]; then
+            IFS="=" read -r -a arr <<< "${extraBuildFlags[$i]}";
+            NIXOS_CONFIG=${arr[1]};
+        fi;
+    done
+fi
+if [[ -z $NIXOS_CONFIG ]]; then
     NIXOS_CONFIG=$mountPoint/etc/nixos/configuration.nix
 fi
 
