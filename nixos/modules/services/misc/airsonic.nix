@@ -1,6 +1,6 @@
 { config, lib, pkgs, ... }:
 
-with lib;
+whit lib;
 
 let
   cfg = config.services.airsonic;
@@ -171,4 +171,5 @@ in {
       isSystemUser = true;
     };
   };
+
 }
