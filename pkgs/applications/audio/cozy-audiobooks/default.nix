@@ -9,6 +9,7 @@
 , gst_all_1
 , gobject-introspection
 , libhandy
+, libdazzle
 , python3Packages
 , file
 , cairo
@@ -22,7 +23,7 @@ python3Packages.buildPythonApplication rec {
   format = "other"; # no setup.py
 
   pname = "cozy";
-  version = "1.0.3";
+  version = "1.1.2";
 
   # Temporary fix
   # See https://github.com/NixOS/nixpkgs/issues/57029
@@ -33,7 +34,7 @@ python3Packages.buildPythonApplication rec {
     owner = "geigi";
     repo = pname;
     rev = version;
-    sha256 = "0m0xiqpb87pwr3fhy0a4qxg67yjhwchcxj3x2anyy0li4inryxag";
+    sha256 = "sha256-QENn8mFMk06/Uj8QJo0mJQ7frJNcv5RVNJwDB+H/LkI=";
   };
 
   nativeBuildInputs = [
@@ -49,6 +50,7 @@ python3Packages.buildPythonApplication rec {
     cairo
     gettext
     gnome.adwaita-icon-theme
+    libdazzle
     libhandy
     pantheon.granite
   ] ++ (with gst_all_1; [
