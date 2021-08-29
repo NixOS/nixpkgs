@@ -30907,6 +30907,8 @@ with pkgs;
 
   honeytrap = callPackage ../tools/security/honeytrap { };
 
+  kissat = callPackage ../applications/science/logic/kissat {};
+
   tini = callPackage ../applications/virtualization/tini {};
 
   ifstat-legacy = callPackage ../tools/networking/ifstat-legacy { };
