@@ -2,12 +2,12 @@
 
 callPackage (import ../../../browsers/firefox/common.nix rec {
   pname = "thunderbird";
-  ffversion = "91.0";
+  ffversion = "91.0.1";
   application = "comm/mail";
   binaryName = pname;
   src = fetchurl {
     url = "mirror://mozilla/thunderbird/releases/${ffversion}/source/thunderbird-${ffversion}.source.tar.xz";
-    sha512 = "f3fcaff97b37ef41850895e44fbd2f42b0f1cb982542861bef89ef7ee606c6332296d61f666106be9455078933a2844c46bf243b71cc4364d9ff457d9c808a7a";
+    sha512 = "54e1f3233c544cf28302496512aaf2a5fb5486aab070680e82cefbdd1d12a33867c638ced61e43958bae47e40ff551592a2cf4d537f98c22ed1df31c5d5bb09c";
   };
   patches = [
     ./no-buildconfig-90.patch
