@@ -33083,6 +33083,8 @@ with pkgs;
   nixos-icons = callPackage ../data/misc/nixos-artwork/icons.nix { };
   nixos-grub2-theme = callPackage ../data/misc/nixos-artwork/grub2-theme.nix { };
 
+  nixos-nspawn = callPackage ../tools/virtualization/nixos-nspawn { };
+
   nixos-container = callPackage ../tools/virtualization/nixos-container { };
 
   nixos-generators = callPackage ../tools/nix/nixos-generators { };
