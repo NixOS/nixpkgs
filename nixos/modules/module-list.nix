@@ -288,6 +288,7 @@
   ./services/backup/zfs-replication.nix
   ./services/backup/znapzend.nix
   ./services/blockchain/ethereum/geth.nix
+  ./services/blockchain/ethereum/lighthouse.nix
   ./services/backup/zrepl.nix
   ./services/cluster/hadoop/default.nix
   ./services/cluster/k3s/default.nix
