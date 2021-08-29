@@ -48,7 +48,6 @@ let
     # PrivateNetwork = true;
     PrivateTmp = true;
     PrivateUsers = true;
-    ProcSubset = "pid";
     ProtectClock = true;
     # Breaks if the home dir of the user is in /home
     # Also does not add much value in combination with the TemporaryFileSystem.
@@ -61,6 +60,8 @@ let
     ProtectKernelModules = true;
     ProtectKernelTunables = true;
     ProtectProc = "invisible";
+    # django-q reads /proc/stat for CPU and memory information
+    ProcSubset = "all";
     RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ];
     RestrictNamespaces = true;
     RestrictRealtime = true;
