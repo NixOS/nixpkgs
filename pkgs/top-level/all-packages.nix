@@ -24994,7 +24994,7 @@ in
 
   mediainfo-gui = callPackage ../applications/misc/mediainfo-gui { };
 
-  mediathekview = callPackage ../applications/video/mediathekview { };
+  mediathekview = callPackage ../applications/video/mediathekview { jre = adoptopenjdk-hotspot-bin-15; };
 
   megapixels = callPackage ../applications/graphics/megapixels { };
 
