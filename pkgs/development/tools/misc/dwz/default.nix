@@ -18,6 +18,6 @@ stdenv.mkDerivation rec {
     description = "DWARF optimization and duplicate removal tool";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ jbcrail ];
-    platforms = platforms.all;
+    platforms = platforms.linux;
   };
 }
