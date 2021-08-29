@@ -8,11 +8,26 @@
 , makeWrapper
 , nodePackages
 , pkg-config
+, rustPlatform
 , stdenv
 , CoreServices
 }:
 
 let
+  libdeltachat' = libdeltachat.overrideAttrs (old: rec {
+    version = "1.56.0";
+    src = fetchFromGitHub {
+      owner = "deltachat";
+      repo = "deltachat-core-rust";
+      rev = version;
+      sha256 = "07vcwbvpzcnvpls0hmpapi7v1npca8ydbx2i235k26xym8il89b7";
+    };
+    cargoDeps = rustPlatform.fetchCargoTarball {
+      inherit src;
+      name = "${old.pname}-${version}";
+      sha256 = "0pb1rcv45xa95ziqap94yy52fy02vh401iqsgi18nm1j6iyyngc8";
+    };
+  });
   electronExec = if stdenv.isDarwin then
     "${electron}/Applications/Electron.app/Contents/MacOS/Electron"
   else
@@ -37,7 +52,7 @@ in nodePackages.deltachat-desktop.override rec {
   ];
 
   buildInputs = [
-    libdeltachat
+    libdeltachat'
   ] ++ lib.optionals stdenv.isDarwin [
     CoreServices
   ];
