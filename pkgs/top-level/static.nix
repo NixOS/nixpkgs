@@ -178,6 +178,13 @@ in rec {
     '';
   });
 
+  pango = super.pango.overrideAttrs (old: {
+    NIX_MESON_DEPENDENCY_STATIC = true;
+    nativeBuildInputs = (old.nativeBuildInputs or []) ++ [
+      super.mesonShlibsToStaticHook
+    ];
+  });
+
   perl = super.perl.override {
     # Don’t use new stdenv zlib because
     # it doesn’t like the --disable-shared flag
