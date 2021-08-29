@@ -253,6 +253,22 @@ let
         gcc.abi = "elfv2";
       };
     });
+
+    pkgsMerge = let
+      gen = name: paths: self.buildEnv {
+        inherit name paths;
+        ignoreCollisions = true;
+        meta.mainProgram = let last = self.lib.last paths;
+          in last.meta.mainProgram or (builtins.parseDrvName last.name).name;
+
+        # Use lists not attrsets because order matters
+        passthru = builtins.mapAttrs (n: v:
+          gen (if builtins.length paths > 5
+            then "merged-environment"
+            else name + "-${n}") (paths ++ [v])
+        ) self;
+      };
+      in gen "merged" [];
   };
 
   # The complete chain of package set builders, applied from top to bottom.
