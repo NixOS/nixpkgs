@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, pkg-config, libxml2, ncurses, libsigcxx, libpar2
-, gnutls, libgcrypt, zlib, openssl }:
+, gnutls, libgcrypt, zlib, openssl, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "nzbget";
@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
                   libgcrypt zlib openssl ];
 
   enableParallelBuilding = true;
+
+  passthru.tests = { inherit (nixosTests) nzbget; };
 
   meta = with lib; {
     homepage = "https://nzbget.net";
