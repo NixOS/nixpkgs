@@ -228,6 +228,8 @@ with pkgs;
 
   cen64 = callPackage ../misc/emulators/cen64 { };
 
+  uxn = callPackage ../misc/emulators/uxn { };
+
   cereal = callPackage ../development/libraries/cereal { };
 
   cewl = callPackage ../tools/security/cewl { };
