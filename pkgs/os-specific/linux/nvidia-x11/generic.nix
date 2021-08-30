@@ -75,7 +75,12 @@ let
     kernel = if libsOnly then null else kernel.dev;
     kernelVersion = if libsOnly then null else kernel.modDirVersion;
 
-    makeFlags = optionals (!libsOnly) kernel.makeFlags;
+    makeFlags = optionals (!libsOnly) (kernel.makeFlags ++ [
+      "IGNORE_PREEMPT_RT_PRESENCE=1"
+      "NV_BUILD_SUPPORTS_HMM=1"
+      "SYSSRC=${kernel.dev}/lib/modules/${kernel.modDirVersion}/source"
+      "SYSOUT=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+    ]);
 
     hardeningDisable = [ "pic" "format" ];
 
