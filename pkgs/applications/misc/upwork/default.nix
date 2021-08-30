@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "upwork";
-  version = "5.6.7.13";
+  version = "5.6.8.0";
 
   src = fetchurl {
-    url = "https://upwork-usw2-desktopapp.upwork.com/binaries/v5_6_7_13_9f0e0a44a59e4331/${pname}_${version}_amd64.deb";
-    sha256 = "f1d3168cda47f77100192ee97aa629e2452fe62fb364dd59ad361adbc0d1da87";
+    url = "https://upwork-usw2-desktopapp.upwork.com/binaries/v5_6_8_0_836f43f6f6be4149/${pname}_${version}_amd64.deb";
+    sha256 = "b3a52f773d633837882dc107b206006325722ca5d5d5a1e8bdf5453f872e1b6f";
   };
 
   dontWrapGApps = true;
