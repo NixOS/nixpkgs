@@ -1,11 +1,10 @@
 { pkgName, version, pkgSha256 }:
 { lib, stdenv, fetchurl, cmake, pkg-config, buildInputs, drvParams ? {} }:
 let name = "${pkgName}-${version}";
-    ext = if lib.versionAtLeast version "3.2.5" then ".xz" else ".bz2";
 in stdenv.mkDerivation ({
   inherit name buildInputs;
   src = fetchurl {
-    url = "mirror://sourceforge/cdemu/${name}.tar${ext}";
+    url = "mirror://sourceforge/cdemu/${name}.tar.xz";
     sha256 = pkgSha256;
   };
   nativeBuildInputs = [ pkg-config cmake ];
