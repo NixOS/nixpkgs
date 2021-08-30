@@ -1,10 +1,11 @@
 { pkgName, version, pkgSha256 }:
 { lib, stdenv, fetchurl, cmake, pkg-config, buildInputs, drvParams ? {} }:
 let name = "${pkgName}-${version}";
+    ext = if lib.versionAtLeast version "3.2.5" then ".xz" else ".bz2";
 in stdenv.mkDerivation ({
   inherit name buildInputs;
   src = fetchurl {
-    url = "mirror://sourceforge/cdemu/${name}.tar.bz2";
+    url = "mirror://sourceforge/cdemu/${name}.tar${ext}";
     sha256 = pkgSha256;
   };
   nativeBuildInputs = [ pkg-config cmake ];
@@ -29,7 +30,7 @@ in stdenv.mkDerivation ({
 
       Optical media emulated by CDemu can be mounted within Linux. Automounting is also allowed.
     '';
-    homepage = "http://cdemu.sourceforge.net/";
+    homepage = "https://cdemu.sourceforge.io/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with lib.maintainers; [ bendlas ];
