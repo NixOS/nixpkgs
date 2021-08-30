@@ -47,6 +47,10 @@
 # enabling LTO on *-darwin causes python3 to fail when linking.
 , enableLTO ? stdenv.is64bit && stdenv.isLinux
 , reproducibleBuild ? false
+# enabling LTO with musl and dynamic linking fails with a linker error although it should
+# be possible as alpine is doing it: https://github.com/alpinelinux/aports/blob/a8ccb04668c7729e0f0db6c6ff5f25d7519e779b/main/python3/APKBUILD#L82
+, enableLTO ? stdenv.is64bit && stdenv.isLinux && !(stdenv.hostPlatform.isMusl && !stdenv.hostPlatform.isStatic)
+, reproducibleBuild ? false
 , pythonAttr ? "python${sourceVersion.major}${sourceVersion.minor}"
 }:
 

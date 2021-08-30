@@ -37,6 +37,7 @@ in {
         config = {
           # Don't inherit adminuser since "root" is supposed to be the default
           inherit adminpass;
+          dbtableprefix = "nixos_";
         };
         autoUpdateApps = {
           enable = true;

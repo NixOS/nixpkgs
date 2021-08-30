@@ -226,8 +226,8 @@ in {
             ${optionalString (! cfg.localDiscovery) "--profile=server"}
         else
           ${if cfg.localDiscovery
-            then "ipfs config profile apply local-discovery"
-            else "ipfs config profile apply server"
+            then "ipfs --offline config profile apply local-discovery"
+            else "ipfs --offline config profile apply server"
           }
         fi
       '' + optionalString cfg.autoMount ''
