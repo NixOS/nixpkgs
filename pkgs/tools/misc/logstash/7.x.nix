@@ -10,17 +10,28 @@
 
 with lib;
 
-let this = stdenv.mkDerivation rec {
-  # FIXME 7.10 is not available on the mirror
-  version = "7.9.3";
-  name = "logstash-${optionalString (!enableUnfree) "oss-"}${version}";
+let
+  info = splitString "-" stdenv.hostPlatform.system;
+  arch = elemAt info 0;
+  plat = elemAt info 1;
+  shas =
+    if enableUnfree
+    then {
+      x86_64-linux = "sha256-5qv4fbFpLf6aduD7wyxXQ6FsCeUqrszRisNBx44vbMY=";
+      x86_64-darwin = "sha256-7H+Xpo8qF1ZZMkR5n92PVplEN4JsBEYar91zHQhE+Lo=";
+    }
+    else {
+      x86_64-linux = "sha256-jiV2yGPwPgZ5plo3ftImVDLSOsk/XBzFkeeALSObLhU=";
+      x86_64-darwin = "sha256-UYG+GGr23eAc2GgNX/mXaGU0WKMjiQMPpD1wUvAVz0A=";
+    };
+in
+stdenv.mkDerivation rec {
+  version = elk7Version;
+  pname = "logstash${optionalString (!enableUnfree) "-oss"}";
 
   src = fetchurl {
-    url = "https://artifacts.elastic.co/downloads/logstash/${name}.tar.gz";
-    sha256 =
-      if enableUnfree
-      then "sha256-YM17/LqsMLH15YZp+0pqbEUzmAcCUpIwWT7o+MJN1QE="
-      else "sha256-5HEs/2bi8m64P0R8aHGgyFJCqiFxs1aBF59Wzg9STCM=";
+    url = "https://artifacts.elastic.co/downloads/logstash/${pname}-${version}-${plat}-${arch}.tar.gz";
+    sha256 = shas.${stdenv.hostPlatform.system} or (throw "Unknown architecture");
   };
 
   dontBuild = true;
@@ -63,5 +74,4 @@ let this = stdenv.mkDerivation rec {
         elk = nixosTests.elk.ELK-7;
       }
     );
-};
-in this
+}

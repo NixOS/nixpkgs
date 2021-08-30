@@ -29,11 +29,11 @@ let
 
 in
 stdenv.mkDerivation rec {
-  name = "kibana-${optionalString (!enableUnfree) "oss-"}${version}";
+  pname = "kibana${optionalString (!enableUnfree) "-oss"}";
   version = elk7Version;
 
   src = fetchurl {
-    url = "https://artifacts.elastic.co/downloads/kibana/${name}-${plat}-${arch}.tar.gz";
+    url = "https://artifacts.elastic.co/downloads/kibana/${pname}-${version}-${plat}-${arch}.tar.gz";
     sha256 = shas.${stdenv.hostPlatform.system} or (throw "Unknown architecture");
   };
 
