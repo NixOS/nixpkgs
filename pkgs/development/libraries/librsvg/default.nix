@@ -12,10 +12,12 @@
 , ApplicationServices
 , Foundation
 , libobjc
+, rustPlatform
 , rustc
 , cargo
 , gnome
 , vala
+, withIntrospection ? stdenv.hostPlatform == stdenv.buildPlatform
 , gobject-introspection
 , nixosTests
 }:
@@ -31,6 +33,8 @@ stdenv.mkDerivation rec {
     sha256 = "//thsIzVKCqq4UegKzBRZqdCb60iqLlCdwjw8vxCbrw=";
   };
 
+  cargoVendorDir = "vendor";
+
   strictDeps = true;
 
   depsBuildBuild = [ pkg-config ];
@@ -41,6 +45,8 @@ stdenv.mkDerivation rec {
     rustc
     cargo
     vala
+    rustPlatform.cargoSetupHook
+  ] ++ lib.optionals withIntrospection [
     gobject-introspection
   ] ++ lib.optionals stdenv.isDarwin [
     ApplicationServices
@@ -52,6 +58,7 @@ stdenv.mkDerivation rec {
     bzip2
     pango
     libintl
+  ] ++ lib.optionals withIntrospection [
     gobject-introspection
   ] ++ lib.optionals stdenv.isDarwin [
     libobjc
@@ -64,12 +71,12 @@ stdenv.mkDerivation rec {
   ];
 
   configureFlags = [
-    "--enable-introspection"
-  ] ++ lib.optionals (!stdenv.isDarwin) [
+    (lib.enableFeature withIntrospection "introspection")
+
     # Vapi does not build on MacOS.
     # https://github.com/NixOS/nixpkgs/pull/117081#issuecomment-827782004
-    "--enable-vala"
-  ] ++ [
+    (lib.enableFeature (withIntrospection && !stdenv.isDarwin) "vala")
+
     "--enable-installed-tests"
     "--enable-always-build-tests"
   ] ++ lib.optional stdenv.isDarwin "--disable-Bsymbolic";
@@ -101,11 +108,11 @@ stdenv.mkDerivation rec {
         -i gdk-pixbuf-loader/librsvg.thumbnailer.in
   '';
 
-  # Merge gdkpixbuf and librsvg loaders
-  postInstall = ''
-    mv $GDK_PIXBUF/loaders.cache $GDK_PIXBUF/loaders.cache.tmp
-    cat ${gdk-pixbuf.out}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache $GDK_PIXBUF/loaders.cache.tmp > $GDK_PIXBUF/loaders.cache
-    rm $GDK_PIXBUF/loaders.cache.tmp
+  # Not generated when cross compiling.
+  postInstall = lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+    # Merge gdkpixbuf and librsvg loaders
+    cat ${gdk-pixbuf.out}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache $GDK_PIXBUF/loaders.cache > $GDK_PIXBUF/loaders.cache.tmp
+    mv $GDK_PIXBUF/loaders.cache.tmp $GDK_PIXBUF/loaders.cache
   '';
 
   passthru = {
