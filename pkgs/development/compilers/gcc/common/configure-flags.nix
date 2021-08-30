@@ -133,7 +133,7 @@ let
       "--with-system-zlib"
       "--enable-static"
       "--enable-languages=${
-        lib.concatStrings (lib.intersperse ","
+        lib.concatStringsSep ","
           (  lib.optional langC        "c"
           ++ lib.optional langCC       "c++"
           ++ lib.optional langD        "d"
@@ -146,7 +146,6 @@ let
           ++ lib.optionals crossDarwin [ "objc" "obj-c++" ]
           ++ lib.optional langJit      "jit"
           )
-        )
       }"
     ]
 

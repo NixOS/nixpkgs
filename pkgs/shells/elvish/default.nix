@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "elvish";
-  version = "0.16.1";
+  version = "0.16.3";
 
   excludedPackages = [ "website" ];
 
@@ -12,10 +12,10 @@ buildGoModule rec {
     owner = "elves";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-i7RJiR1Mta2TrWBSUk0WM3InMV2cwbdlp3KHUdZgQ8I=";
+    sha256 = "1na2fswqp4rbgvlagz9nj3cmlxavlhi2gj6k6jpjq05mcbkxr3bd";
   };
 
-  vendorSha256 = "sha256-5tZwGrp/L9L+pf/yp8zlbb0voe60+if+NNf8ua2MujI=";
+  vendorSha256 = "06rx09vs08d9arim53al73z22hb40xj2101kbvafz6wbyp6pqws1";
 
   doCheck = false;
 
@@ -29,7 +29,6 @@ buildGoModule rec {
     homepage = "https://elv.sh/";
     license = licenses.bsd2;
     maintainers = with maintainers; [ vrthra AndersonTorres ];
-    platforms = with platforms; linux ++ darwin;
   };
 
   passthru = {

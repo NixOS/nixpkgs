@@ -8,7 +8,7 @@ let
   # If not running a fancy desktop environment, the cursor is likely set to
   # the default `cursor.pcf` bitmap font. This is 17px wide, so it's very
   # small and almost invisible on 4K displays.
-  fontcursormisc_hidpi = pkgs.xorg.fontcursormisc.overrideAttrs (old:
+  fontcursormisc_hidpi = pkgs.xorg.fontxfree86type1.overrideAttrs (old:
     let
       # The scaling constant is 230/96: the scalable `left_ptr` glyph at
       # about 23 points is rendered as 17px, on a 96dpi display.

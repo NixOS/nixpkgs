@@ -9930,7 +9930,7 @@ with pkgs;
   };
 
   sentry-cli = callPackage ../development/tools/sentry-cli {
-    inherit (darwin.apple_sdk.frameworks) Security;
+    inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
 
   sentry-native = callPackage ../development/libraries/sentry-native { };
@@ -24343,6 +24343,8 @@ with pkgs;
 
   geany = callPackage ../applications/editors/geany { };
   geany-with-vte = callPackage ../applications/editors/geany/with-vte.nix { };
+
+  genact = callPackage ../applications/misc/genact { };
 
   genxword = callPackage ../applications/misc/genxword { };
 
