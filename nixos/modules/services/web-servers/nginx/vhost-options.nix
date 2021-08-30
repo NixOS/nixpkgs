@@ -43,7 +43,24 @@ with lib;
         IPv6 addresses must be enclosed in square brackets.
         Note: this option overrides <literal>addSSL</literal>
         and <literal>onlySSL</literal>.
+
+        If you only want to set the addresses manually and not
+        the ports, take a look at <literal>listenAddresses</literal>
       '';
+    };
+
+    listenAddresses = mkOption {
+      type = with types; listOf str;
+
+      description = ''
+        Listen addresses for this virtual host.
+        Compared to <literal>listen</literal> this only sets the addreses
+        and the ports are choosen automatically.
+
+        Note: This option overrides <literal>enableIPv6</literal>
+      '';
+      default = [];
+      example = [ "127.0.0.1" "::1" ];
     };
 
     enableACME = mkOption {
@@ -145,7 +162,7 @@ with lib;
     sslTrustedCertificate = mkOption {
       type = types.nullOr types.path;
       default = null;
-      example = "/var/root.cert";
+      example = "\${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
       description = "Path to root SSL certificate for stapling and client certificates.";
     };
 

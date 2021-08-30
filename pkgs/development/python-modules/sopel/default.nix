@@ -13,12 +13,12 @@
 
 buildPythonPackage rec {
   pname = "sopel";
-  version = "7.1.0";
+  version = "7.1.3";
   disabled = isPyPy;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "74057d4c86cff744b1f1062f3a9c4ae99eb4f1b17048ceb083293d5f4c7e989b";
+    sha256 = "0f9e673a7eac9dd3619c2e398e58fa2d8117afca5adb550ba07c66e16a90dbdb";
   };
 
   propagatedBuildInputs = [
@@ -36,7 +36,8 @@ buildPythonPackage rec {
   # remove once https://github.com/sopel-irc/sopel/pull/1653 lands
   postPatch = ''
     substituteInPlace requirements.txt \
-      --replace "praw>=4.0.0,<6.0.0" "praw"
+      --replace "praw>=4.0.0,<6.0.0" "praw" \
+      --replace "sqlalchemy<1.4" "sqlalchemy"
   '';
 
   checkInputs = [ pytestCheckHook ];

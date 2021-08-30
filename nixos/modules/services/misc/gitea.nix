@@ -522,6 +522,9 @@ in
           (umask 027; gitea_setup)
         ''}
 
+        # run migrations/init the database
+        ${gitea}/bin/gitea migrate
+
         # update all hooks' binary paths
         ${gitea}/bin/gitea admin regenerate hooks
 

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "xorriso-${version}";
-  version = "1.5.2";
+  version = "1.5.4.pl02";
 
   src = fetchurl {
     url = "mirror://gnu/xorriso/${name}.tar.gz";
-    sha256 = "1rqpzj95f70jfwpn4lamasfgqpizjsipz12aprdhri777b4zas9v";
+    sha256 = "sha256-Psc5PUqdy/X3QwnCikFfVSJ+xidwuVrpk6yNejsVKXI=";
   };
 
   doCheck = true;

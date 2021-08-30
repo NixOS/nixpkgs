@@ -32,9 +32,9 @@ let
       description = "Bind address for ${name} endpoint.";
     };
     port = mkOption {
-      type = types.int;
+      type = types.port;
       default = port;
-      description = "Bind port for ${name} endoint.";
+      description = "Bind port for ${name} endpoint.";
     };
   };
 

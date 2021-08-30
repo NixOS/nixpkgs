@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , geopy
 , imageio
+, lxml
 , pillow
 , pytestCheckHook
 , python-dateutil
@@ -11,19 +12,20 @@
 
 buildPythonPackage rec {
   pname = "env-canada";
-  version = "0.4.1";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "michaeldavie";
     repo = "env_canada";
     rev = "v${version}";
-    sha256 = "0v1wmjvi05i6mjh6yxqigbf2spf7842198yp98f7h0nyfjmz96hn";
+    sha256 = "0dgw2mf760r1y0mq8bcvx6y3bcqpaf8p97rzf7pd0pbwvwrcsj3n";
   };
 
   propagatedBuildInputs = [
     aiohttp
     geopy
     imageio
+    lxml
     pillow
     python-dateutil
   ];

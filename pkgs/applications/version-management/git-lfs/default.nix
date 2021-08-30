@@ -15,7 +15,7 @@ buildGoPackage rec {
 
   nativeBuildInputs = [ ronn installShellFiles ];
 
-  buildFlagsArray = [ "-ldflags=-s -w -X ${goPackagePath}/config.Vendor=${version} -X ${goPackagePath}/config.GitCommit=${src.rev}" ];
+  ldflags = [ "-s" "-w" "-X ${goPackagePath}/config.Vendor=${version}" "-X ${goPackagePath}/config.GitCommit=${src.rev}" ];
 
   subPackages = [ "." ];
 

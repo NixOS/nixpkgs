@@ -790,6 +790,7 @@ let
       MODVERSIONS        = whenOlder "4.9" yes;
       MOUSE_ELAN_I2C_SMBUS = yes;
       MOUSE_PS2_ELANTECH = yes; # Elantech PS/2 protocol extension
+      MOUSE_PS2_VMMOUSE  = yes;
       MTRR_SANITIZER     = yes;
       NET_FC             = yes; # Fibre Channel driver support
       # GPIO on Intel Bay Trail, for some Chromebook internal eMMC disks

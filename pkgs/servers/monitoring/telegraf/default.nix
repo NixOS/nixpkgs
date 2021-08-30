@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "telegraf";
-  version = "1.19.1";
+  version = "1.19.3";
 
   excludedPackages = "test";
 
@@ -12,14 +12,15 @@ buildGoModule rec {
     owner = "influxdata";
     repo = "telegraf";
     rev = "v${version}";
-    sha256 = "sha256-8shyNKwSg3pUxfQsIHBNnIaks/86vHuHN/SroDE3QFU=";
+    sha256 = "sha256-14nwSLCurI9vNgZwad3qc2/yrvpc8Og8jojTCAfJ5F0=";
   };
 
-  vendorSha256 = "sha256-jP6P2NShzlFCptCQ04XY4cIrONNArwthiEONEo32Btw=";
+  vendorSha256 = "sha256-J48ezMi9+PxohDKFhBpbcu6fdojlZPXnQQw2IcyimTA=";
+  proxyVendor = true;
 
-  preBuild = ''
-    buildFlagsArray+=("-ldflags=-w -s -X main.version=${version}")
-  '';
+  ldflags = [
+    "-w" "-s" "-X main.version=${version}"
+  ];
 
   passthru.tests = { inherit (nixosTests) telegraf; };
 

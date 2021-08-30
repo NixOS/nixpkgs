@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, isPy27
+, fetchFromGitHub
 , substituteAll
 , git
 , gitdb
@@ -11,13 +10,15 @@
 }:
 
 buildPythonPackage rec {
-  pname = "GitPython";
-  version = "3.1.19";
-  disabled = isPy27;
+  pname = "gitpython";
+  version = "3.1.20";
+  disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0lqf5plm02aw9zl73kffk7aa4mp4girm3f2yfk27nmmmjsdh7x0q";
+  src = fetchFromGitHub {
+    owner = "gitpython-developers";
+    repo = "GitPython";
+    rev = version;
+    sha256 = "1ygrxn8br2ff87j02ibijxzxa0ax9lgjdviwddslqxiarfggik9h";
   };
 
   patches = [

@@ -22,12 +22,11 @@ buildGoModule rec {
 
   subPackages = [ "cmd/yggdrasil" "cmd/yggdrasilctl" ];
 
-  buildFlagsArray = ''
-    -ldflags=
-      -X github.com/yggdrasil-network/yggdrasil-go/src/version.buildVersion=${version}
-      -X github.com/yggdrasil-network/yggdrasil-go/src/version.buildName=${pname}
-      -s -w
-  '';
+  ldflags = [
+    "-X github.com/yggdrasil-network/yggdrasil-go/src/version.buildVersion=${version}"
+    "-X github.com/yggdrasil-network/yggdrasil-go/src/version.buildName=${pname}"
+    "-s" "-w"
+  ];
 
   passthru.tests.basic = nixosTests.yggdrasil;
 

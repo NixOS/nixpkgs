@@ -29,7 +29,7 @@
 , withMediaSession ? true
 , gstreamerSupport ? true, gst_all_1 ? null
 , ffmpegSupport ? true, ffmpeg ? null
-, bluezSupport ? true, bluez ? null, sbc ? null, libopenaptx ? null, ldacbt ? null, fdk_aac ? null
+, bluezSupport ? true, bluez ? null, sbc ? null, libfreeaptx ? null, ldacbt ? null, fdk_aac ? null
 , nativeHspSupport ? true
 , nativeHfpSupport ? true
 , ofonoSupport ? true
@@ -48,7 +48,7 @@ let
 
   self = stdenv.mkDerivation rec {
     pname = "pipewire";
-    version = "0.3.32";
+    version = "0.3.33";
 
     outputs = [
       "out"
@@ -66,7 +66,7 @@ let
       owner = "pipewire";
       repo = "pipewire";
       rev = version;
-      sha256 = "0f5hkypiy1qjqj3frzz128668hzbi0fqmj0j21z7rp51y62dapnp";
+      sha256 = "sha256-HP2HcGjrLw0+8pO1upvJQk32v+bifYpi5Rtod0TbBis=";
     };
 
     patches = [
@@ -110,7 +110,7 @@ let
       systemd
     ] ++ lib.optionals gstreamerSupport [ gst_all_1.gst-plugins-base gst_all_1.gstreamer ]
     ++ lib.optional ffmpegSupport ffmpeg
-    ++ lib.optionals bluezSupport [ bluez libopenaptx ldacbt sbc fdk_aac ]
+    ++ lib.optionals bluezSupport [ bluez libfreeaptx ldacbt sbc fdk_aac ]
     ++ lib.optional pulseTunnelSupport libpulseaudio
     ++ lib.optional zeroconfSupport avahi;
 
@@ -209,7 +209,7 @@ let
       homepage = "https://pipewire.org/";
       license = licenses.mit;
       platforms = platforms.linux;
-      maintainers = with maintainers; [ jtojnar ];
+      maintainers = with maintainers; [ jtojnar kranzes ];
     };
   };
 

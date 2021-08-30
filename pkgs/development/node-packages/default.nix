@@ -46,6 +46,10 @@ let
       '';
     };
 
+    deltachat-desktop = super."deltachat-desktop-../../applications/networking/instant-messengers/deltachat-desktop".override {
+      meta.broken = true; # use the top-level package instead
+    };
+
     fast-cli = super.fast-cli.override ({
       nativeBuildInputs = [ pkgs.makeWrapper ];
       prePatch = ''
@@ -191,6 +195,16 @@ let
           --add-flags "start" \
           --run "cd $out/lib/node_modules/mirakurun" \
           --prefix PATH : ${pkgs.lib.makeBinPath runtimeDeps}
+      '';
+    };
+
+    node-gyp = super.node-gyp.override {
+      nativeBuildInputs = [ pkgs.makeWrapper ];
+      # Teach node-gyp to use nodejs headers locally rather that download them form https://nodejs.org.
+      # This is important when build nodejs packages in sandbox.
+      postInstall = ''
+        wrapProgram "$out/bin/node-gyp" \
+          --set npm_config_nodedir ${nodejs}
       '';
     };
 

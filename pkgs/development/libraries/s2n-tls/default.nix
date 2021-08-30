@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "s2n-tls";
-  version = "1.0.1";
+  version = "1.0.16";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-V/ZtO6t+Jxu/HmAEVzjkXuGWbZFwkGLsab1UCSG2tdk=";
+    sha256 = "sha256-gF4VhNEq/gpxXqOKvBtWZ5iZ3Jf98vSuSZYUu8r1jKA=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
     "-DCMAKE_SKIP_BUILD_RPATH=OFF"
+    "-DUNSAFE_TREAT_WARNINGS_AS_ERRORS=OFF" # disable -Werror
   ];
 
   propagatedBuildInputs = [ openssl ]; # s2n-config has find_dependency(LibCrypto).

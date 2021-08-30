@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "flufl.lock";
-  version = "5.0.5";
+  version = "5.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1bnapkg99r6mixn3kh314bqcfk8q54y0cvhjpj87j7dhjpsakfpz";
+    sha256 = "1ylahys50vaj7iw6dhlx3gg7vs8cms9sbyvscd06clnk6lqk78ad";
   };
 
   propagatedBuildInputs = [ atpublic psutil ];

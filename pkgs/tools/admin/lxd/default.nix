@@ -19,13 +19,13 @@ let
 in
 buildGoPackage rec {
   pname = "lxd";
-  version = "4.16";
+  version = "4.17";
 
   goPackagePath = "github.com/lxc/lxd";
 
   src = fetchurl {
     url = "https://linuxcontainers.org/downloads/lxd/lxd-${version}.tar.gz";
-    sha256 = "1da9avmxs8sy92d9nrdgry2x685ral58zgf89yr88qxc0llbzq7r";
+    sha256 = "1kzmgyg5kw3zw9qa6jabld6rmb53b6yy69h7y9znsdlf74jllljl";
   };
 
   postPatch = ''
@@ -72,7 +72,7 @@ buildGoPackage rec {
     description = "Daemon based on liblxc offering a REST API to manage containers";
     homepage = "https://linuxcontainers.org/lxd/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ fpletz wucke13 ];
+    maintainers = with maintainers; [ fpletz wucke13 marsam ];
     platforms = platforms.linux;
   };
 }

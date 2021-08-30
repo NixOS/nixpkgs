@@ -309,7 +309,7 @@ let
     Rglpk = [ pkgs.glpk ];
     RGtk2 = [ pkgs.gtk2.dev ];
     rhdf5 = [ pkgs.zlib ];
-    Rhdf5lib = [ pkgs.zlib ];
+    Rhdf5lib = [ pkgs.zlib.dev ];
     Rhpc = [ pkgs.zlib pkgs.bzip2.dev pkgs.icu pkgs.xz.dev pkgs.mpi pkgs.pcre.dev ];
     Rhtslib = [ pkgs.zlib.dev pkgs.automake pkgs.autoconf pkgs.bzip2.dev pkgs.xz.dev pkgs.curl.dev ];
     rjags = [ pkgs.jags ];
@@ -328,6 +328,7 @@ let
     RSclient = [ pkgs.openssl.dev ];
     Rserve = [ pkgs.openssl ];
     Rssa = [ pkgs.fftw.dev ];
+    rsvg = [ pkgs.pkg-config ];
     runjags = [ pkgs.jags ];
     RVowpalWabbit = [ pkgs.zlib.dev pkgs.boost ];
     rzmq = [ pkgs.zeromq pkgs.pkg-config ];
@@ -450,6 +451,7 @@ let
     glmnet = [ pkgs.libiconv ];
     mvtnorm = [ pkgs.libiconv ];
     statmod = [ pkgs.libiconv ];
+    rsvg = [ pkgs.librsvg.dev ];
   };
 
   packagesRequireingX = [

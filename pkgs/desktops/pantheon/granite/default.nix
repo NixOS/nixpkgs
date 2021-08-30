@@ -46,14 +46,11 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
   ];
 
-  buildInputs = [
+  propagatedBuildInputs = [
     glib
+    gsettings-desktop-schemas # is_clock_format_12h uses "org.gnome.desktop.interface clock-format"
     gtk3
     libgee
-  ];
-
-  propagatedBuildInputs = [
-    gsettings-desktop-schemas # is_clock_format_12h uses "org.gnome.desktop.interface clock-format"
   ];
 
   postPatch = ''

@@ -24,5 +24,15 @@
       "name": "libpipewire-module-metadata"
     }
   ],
-  "jack.properties": {}
+  "jack.properties": {},
+  "jack.rules": [
+    {
+      "matches": [
+        {}
+      ],
+      "actions": {
+        "update-props": {}
+      }
+    }
+  ]
 }

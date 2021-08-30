@@ -360,7 +360,6 @@ let
         systemd.services.prometheus-kea-exporter.after = [ "kea-dhcp6-server.service" ];
 
         services.kea = {
-          enable = true;
           dhcp6 = {
             enable = true;
             settings = {

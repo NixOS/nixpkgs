@@ -75,8 +75,6 @@ stdenv.mkDerivation {
     inherit (source) sha256;
   };
 
-  phases = "unpackPhase installPhase";
-
   libPath = lib.makeLibraryPath
     [ stdenv.cc.cc
       alsa-lib
@@ -171,7 +169,7 @@ stdenv.mkDerivation {
 
   passthru.updateScript = import ./../../browsers/firefox-bin/update.nix {
     inherit writeScript xidel coreutils gnused gnugrep curl gnupg runtimeShell;
-    name = "thunderbird-bin-${version}";
+    pname = "thunderbird-bin";
     baseName = "thunderbird";
     channel = "release";
     basePath = "pkgs/applications/networking/mailreaders/thunderbird-bin";

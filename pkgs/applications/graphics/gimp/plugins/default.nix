@@ -53,8 +53,13 @@ let
   );
 
   scriptDerivation = {src, ...}@attrs : pluginDerivation ({
-    phases = [ "extraLib" "installPhase" ];
-    installPhase = "installScripts ${src}";
+    prePhases = "extraLib";
+    dontUnpack = true;
+    installPhase = ''
+      runHook preInstall
+      installScripts ${src}
+      runHook postInstall
+    '';
   } // attrs);
 in
 {

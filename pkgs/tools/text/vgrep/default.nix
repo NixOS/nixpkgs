@@ -13,7 +13,7 @@ buildGoModule rec {
 
   vendorSha256 = null;
 
-  buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version}" ];
+  ldflags = [ "-s" "-w" "-X main.version=${version}" ];
 
   nativeBuildInputs = [ go-md2man installShellFiles ];
 

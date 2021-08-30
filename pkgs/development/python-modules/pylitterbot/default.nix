@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "pylitterbot";
-  version = "2021.7.2";
+  version = "2021.8.0";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "natekspencer";
     repo = pname;
     rev = version;
-    sha256 = "0hnjqj9n2sq1jhiwdrw2aayhyz94cwjxniiak2h1nxh2q0nzigh3";
+    sha256 = "sha256-Z7/j5ZZd8cOJhY/GfKUcDSJZvmU/TR/KDK60j1eYsik=";
   };
 
   propagatedBuildInputs = [

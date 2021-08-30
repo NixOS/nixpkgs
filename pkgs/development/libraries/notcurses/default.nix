@@ -1,13 +1,26 @@
-{ stdenv, cmake, pkg-config, pandoc, libunistring, ncurses, ffmpeg, readline,
-  fetchFromGitHub, lib,
-  multimediaSupport ? true
+{ stdenv
+, cmake
+, pkg-config
+, pandoc
+, libunistring
+, ncurses
+, ffmpeg
+, readline
+, fetchFromGitHub
+, lib
+, multimediaSupport ? true
 }:
-let
-  version = "2.3.8";
-in
-stdenv.mkDerivation {
+
+stdenv.mkDerivation rec {
   pname = "notcurses";
-  inherit version;
+  version = "2.3.8";
+
+  src = fetchFromGitHub {
+    owner = "dankamongmen";
+    repo = "notcurses";
+    rev = "v${version}";
+    sha256 = "sha256-CTMFXTmOnBUCm0KdVNBoDT08arr01XTHdELFiTayk3E=";
+  };
 
   outputs = [ "out" "dev" ];
 
@@ -16,20 +29,11 @@ stdenv.mkDerivation {
   buildInputs = [ libunistring ncurses readline ]
     ++ lib.optional multimediaSupport ffmpeg;
 
-  cmakeFlags =
-    [ "-DUSE_QRCODEGEN=OFF" ]
+  cmakeFlags = [ "-DUSE_QRCODEGEN=OFF" ]
     ++ lib.optional (!multimediaSupport) "-DUSE_MULTIMEDIA=none";
 
-  src = fetchFromGitHub {
-    owner  = "dankamongmen";
-    repo   = "notcurses";
-    rev    = "v${version}";
-    sha256 = "sha256-CTMFXTmOnBUCm0KdVNBoDT08arr01XTHdELFiTayk3E=";
-  };
-
-  meta = {
+  meta = with lib; {
     description = "blingful TUIs and character graphics";
-
     longDescription = ''
       A library facilitating complex TUIs on modern terminal emulators,
       supporting vivid colors, multimedia, and Unicode to the maximum degree
@@ -39,11 +43,9 @@ stdenv.mkDerivation {
       It is not a source-compatible X/Open Curses implementation, nor a
       replacement for NCURSES on existing systems.
     '';
-
     homepage = "https://github.com/dankamongmen/notcurses";
-
-    license = lib.licenses.asl20;
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ jb55 ];
+    license = licenses.asl20;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ jb55 ];
   };
 }

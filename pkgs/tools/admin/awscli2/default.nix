@@ -3,13 +3,14 @@ let
   py = python3.override {
     packageOverrides = self: super: {
       botocore = super.botocore.overridePythonAttrs (oldAttrs: rec {
-        version = "2.0.0dev122";
+        version = "2.0.0dev138";
         src = fetchFromGitHub {
           owner = "boto";
           repo = "botocore";
-          rev = "8dd916418c8193f56226b7772f263b2435eae27a";
-          sha256 = "sha256-iAZmqnffqrmFuxlQyOpEQzSCcL/hRAjuXKulOXoy4hY=";
+          rev = "5f1971d2d9d2cf7090a8b71650ab40712319bca3";
+          sha256 = "sha256-onptN++MDJrit3sIEXCX9oRJ0qQ5xzmI6J2iABiK7RA";
         };
+        propagatedBuildInputs = super.botocore.propagatedBuildInputs ++ [py.pkgs.awscrt];
       });
       prompt-toolkit = super.prompt-toolkit.overridePythonAttrs (oldAttrs: rec {
         version = "2.0.10";
@@ -24,13 +25,13 @@ let
 in
 with py.pkgs; buildPythonApplication rec {
   pname = "awscli2";
-  version = "2.2.14"; # N.B: if you change this, change botocore to a matching version too
+  version = "2.2.30"; # N.B: if you change this, change botocore to a matching version too
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-cli";
     rev = version;
-    sha256 = "sha256-LU9Tqzdi8ULZ5y3FbfSXdrip4NcxFkXRCTpVGo05LcM=";
+    sha256 = "sha256-OPxo5RjdDCTPntiJInUtgcU43Nn5JEUbwRJXeBl/yYQ";
   };
 
   patches = [
@@ -42,7 +43,7 @@ with py.pkgs; buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "awscrt==0.11.13" "awscrt" \
+      --replace "awscrt==0.11.24" "awscrt" \
       --replace "colorama>=0.2.5,<0.4.4" "colorama" \
       --replace "cryptography>=3.3.2,<3.4.0" "cryptography" \
       --replace "docutils>=0.10,<0.16" "docutils" \

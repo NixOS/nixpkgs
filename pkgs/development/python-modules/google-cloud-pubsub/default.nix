@@ -4,7 +4,7 @@
 , pytestCheckHook
 , google-api-core
 , google-cloud-testutils
-, grpc_google_iam_v1
+, grpc-google-iam-v1
 , libcst
 , mock
 , proto-plus
@@ -13,15 +13,15 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-pubsub";
-  version = "2.5.0";
+  version = "2.7.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8706557b71532c76aec48409dcac189caac47cf2decb8850ae75694bf70326b2";
+    sha256 = "d52d386617c110c35043f6ff37ccb50d9f37c75b1e5586409ed64a3e8ae61038";
   };
 
   propagatedBuildInputs = [
-    grpc_google_iam_v1
+    grpc-google-iam-v1
     google-api-core
     libcst
     proto-plus

@@ -12,12 +12,12 @@ let
 in
 python3Packages.buildPythonApplication rec {
   pname = "backblaze-b2";
-  version = "2.5.0";
+  version = "3.0.1";
 
   src = python3Packages.fetchPypi {
     inherit version;
     pname = "b2";
-    sha256 = "0sh9k9fnj73ydqnk056m01xkilpxh7f4597cnczqhy21lxzr3d45";
+    sha256 = "sha256-Zr+5J6MCjfth+5fOSfHXpT/CAgD754ZpS1b1NqeGid8=";
   };
 
   postPatch = ''

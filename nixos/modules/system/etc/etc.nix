@@ -8,10 +8,7 @@ let
 
   etc' = filter (f: f.enable) (attrValues config.environment.etc);
 
-  etc = pkgs.runCommand "etc" {
-    preferLocalBuild = true;
-    allowSubstitutes = false;
-
+  etc = pkgs.runCommandLocal "etc" {
     # This is needed for the systemd module
     passthru.targets = map (x: x.target) etc';
   } /* sh */ ''

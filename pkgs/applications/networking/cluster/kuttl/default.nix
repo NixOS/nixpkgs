@@ -2,24 +2,24 @@
 
 buildGoModule rec {
   pname = "kuttl";
-  version = "0.11.0";
+  version = "0.11.1";
   cli = "kubectl-kuttl";
 
   src = fetchFromGitHub {
     owner  = "kudobuilder";
     repo   = "kuttl";
     rev    = "v${version}";
-    sha256 = "sha256-42acx1UcvuzDZX2A33zExhhdNqWGkN0i6FR/Kx76WVM=";
+    sha256 = "sha256-jvearvhl2fQV5OOVmvf3C4MjE//wkVs8Ly9BIwv15/8=";
   };
 
-  vendorSha256 = "sha256-TUNFUI7Lj7twJhM3bIdL6ElygIVFOlRut1MoFwVRGeo=";
+  vendorSha256 = "sha256-EytHUfr6RbgXowYlfuajvNt9VwmGmvw9TBRtwYMAIh4=";
 
   subPackages = [ "cmd/kubectl-kuttl" ];
 
-  buildFlagsArray = ''
-    -ldflags=-s -w
-    -X  github.com/kudobuilder/kuttl/pkg/version.gitVersion=${version}
-  '';
+  ldflags = [
+    "-s" "-w"
+    "-X github.com/kudobuilder/kuttl/pkg/version.gitVersion=${version}"
+  ];
 
   meta = with lib; {
     description = "The KUbernetes Test TooL (KUTTL) provides a declarative approach to testing production-grade Kubernetes operators";

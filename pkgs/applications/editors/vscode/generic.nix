@@ -22,7 +22,7 @@ let
     inherit pname version src sourceRoot;
 
     passthru = {
-      inherit executableName tests updateScript;
+      inherit executableName longName tests updateScript;
       fhs = fhs {};
       fhsWithPackages = f: fhs { additionalPkgs = f; };
     };

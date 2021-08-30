@@ -59,6 +59,9 @@ stdenv.mkDerivation rec {
     cp -a usr/share/* $out/share
     cp -a opt/balenaEtcher/{locales,resources} $out/share/${pname}
 
+    substituteInPlace $out/share/applications/balena-etcher-electron.desktop \
+      --replace /opt/balenaEtcher/balena-etcher-electron ${pname}
+
     runHook postInstall
   '';
 

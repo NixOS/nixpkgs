@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   pname = "example-unfree-package";
   version = "1.0";
 
-  phases = [ "installPhase" "fixupPhase" ];
+  dontUnpack = true;
 
   installPhase = ''
     mkdir -p $out/bin

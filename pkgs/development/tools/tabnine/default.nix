@@ -1,26 +1,23 @@
 { stdenv, lib, fetchurl, unzip }:
-
 let
-  version = "3.5.15";
-  src =
-    if stdenv.hostPlatform.system == "x86_64-darwin" then
-      fetchurl
-        {
-          url = "https://update.tabnine.com/bundles/${version}/x86_64-apple-darwin/TabNine.zip";
-          sha256 = "sha256-JrDAF/3yPGJXwonWIvaKf0dw4GQf3U2wbf5iF4QUXco=";
-        }
-    else if stdenv.hostPlatform.system == "x86_64-linux" then
-      fetchurl
-        {
-          url = "https://update.tabnine.com/bundles/${version}/x86_64-unknown-linux-musl/TabNine.zip";
-          sha256 = "sha256-fgVVJ+J4w+Z3Kmryixp844xlLFiRs5PSAcD/wrcXF1w=";
-        }
-    else throw "Not supported on ${stdenv.hostPlatform.system}";
+  platform =
+    if stdenv.hostPlatform.system == "x86_64-linux" then {
+      name = "x86_64-unknown-linux-musl";
+      sha256 = "sha256-uy3+/+XMq56rO75mmSeOmE1HW7hhefaGwfY/QJPk3Ok=";
+    } else if stdenv.hostPlatform.system == "x86_64-darwin" then {
+      name = "x86_64-apple-darwin";
+      sha256 = "sha256-EK7FbRzgaCXviOuBcRf/ElllRdakhDmOLsKkwrIEhBU=";
+    } else throw "Not supported on ${stdenv.hostPlatform.system}";
 in
 stdenv.mkDerivation rec {
   pname = "tabnine";
+  # You can check the latest version with `curl -sS https://update.tabnine.com/bundles/version`
+  version = "3.5.49";
 
-  inherit version src;
+  src = fetchurl {
+    url = "https://update.tabnine.com/bundles/${version}/${platform.name}/TabNine.zip";
+    inherit (platform) sha256;
+  };
 
   dontBuild = true;
 
@@ -38,6 +35,8 @@ stdenv.mkDerivation rec {
     install -Dm755 WD-TabNine $out/bin/WD-TabNine
     runHook postInstall
   '';
+
+  passthru.platform = platform.name;
 
   meta = with lib; {
     homepage = "https://tabnine.com";

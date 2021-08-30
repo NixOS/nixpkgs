@@ -1,5 +1,5 @@
 { gcc9Stdenv, lib, stdenv, fetchFromGitHub, cmake, gettext, pkg-config, gpgme, libsolv, openssl, check
-, json_c, libmodulemd, libsmartcols, sqlite, librepo, libyaml, rpm }:
+, json_c, libmodulemd, libsmartcols, sqlite, librepo, libyaml, rpm, zchunk }:
 
 gcc9Stdenv.mkDerivation rec {
   pname = "libdnf";
@@ -26,6 +26,7 @@ gcc9Stdenv.mkDerivation rec {
     libsmartcols
     libyaml
     libmodulemd
+    zchunk
   ];
 
   propagatedBuildInputs = [
@@ -51,7 +52,6 @@ gcc9Stdenv.mkDerivation rec {
     "-DWITH_GTKDOC=OFF"
     "-DWITH_HTML=OFF"
     "-DWITH_BINDINGS=OFF"
-    "-DWITH_ZCHUNK=OFF"
   ];
 
   meta = with lib; {

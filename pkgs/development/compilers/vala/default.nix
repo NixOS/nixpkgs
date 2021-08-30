@@ -69,7 +69,7 @@ let
     # so that it can be used to regenerate documentation.
     patches        = lib.optionals disableGraphviz [ graphvizPatch ./gvc-compat.patch ];
     configureFlags = lib.optional  disableGraphviz "--disable-graphviz";
-    preBuild       = lib.optional  disableGraphviz "buildFlagsArray+=(\"VALAC=$(pwd)/compiler/valac\")";
+    preBuild       = lib.optionalString disableGraphviz "buildFlagsArray+=(\"VALAC=$(pwd)/compiler/valac\")";
 
     outputs = [ "out" "devdoc" ];
 

@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   LC_ALL="en_US.UTF-8";
 
-  postPatch = lib.optional stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.isDarwin ''
     # Fake the impure dependencies pbpaste and pbcopy
     mkdir bin
     echo '#!${stdenv.shell}' > bin/pbpaste

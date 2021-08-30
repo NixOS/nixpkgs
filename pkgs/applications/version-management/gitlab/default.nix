@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, fetchpatch, fetchFromGitLab, bundlerEnv
 , ruby, tzdata, git, nettools, nixosTests, nodejs, openssl
 , gitlabEnterprise ? false, callPackage, yarn
-, fixup_yarn_lock, replace, file
+, fixup_yarn_lock, replace, file, cacert
 }:
 
 let
@@ -22,12 +22,6 @@ let
     gemset =
       let x = import (gemdir + "/gemset.nix");
       in x // {
-        # grpc expects the AR environment variable to contain `ar rpc`. See the
-        # discussion in nixpkgs #63056.
-        grpc = x.grpc // {
-          patches = [ ./fix-grpc-ar.patch ];
-          dontBuild = false;
-        };
         # the openssl needs the openssl include files
         openssl = x.openssl // {
           buildInputs = [ openssl ];
@@ -51,7 +45,7 @@ let
     pname = "gitlab-assets";
     inherit version src;
 
-    nativeBuildInputs = [ rubyEnv.wrappedRuby rubyEnv.bundler nodejs yarn git ];
+    nativeBuildInputs = [ rubyEnv.wrappedRuby rubyEnv.bundler nodejs yarn git cacert ];
 
     # Since version 12.6.0, the rake tasks need the location of git,
     # so we have to apply the location patches here too.

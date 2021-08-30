@@ -3,18 +3,25 @@
 
 stdenv.mkDerivation rec {
   pname = "lnav";
-  version = "0.9.0";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "tstack";
     repo = "lnav";
     rev = "v${version}";
-    sha256 = "1frdrr3yjlk2fns3ny0qbr30rpswhwlvv3kyhdl3l6a0q5cqaqsg";
+    sha256 = "sha256-hAFyMypGC065aRgX2L4LdyFGpZ/LnX5SjA2iQv5Iuas=";
   };
 
+  patches = [ ./0001-Forcefully-disable-docs-build.patch ];
+  postPatch = ''
+    substituteInPlace Makefile.am \
+      --replace "SUBDIRS = src test" "SUBDIRS = src"
+  '';
+
+  enableParallelBuilding = true;
+
+  nativeBuildInputs = [ autoconf automake ];
   buildInputs = [
-    autoconf
-    automake
     zlib
     bzip2
     ncurses
@@ -23,10 +30,6 @@ stdenv.mkDerivation rec {
     sqlite
     curl
   ];
-
-  postPatch = ''
-    sed -ie '/DUMP_INTERNALS/d' src/Makefile.am
-  '';
 
   preConfigure = ''
     ./autogen.sh

@@ -1,28 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, kernel, libdrm }:
+{ lib, stdenv, fetchFromGitHub, kernel, libdrm }:
 
 stdenv.mkDerivation rec {
   pname = "evdi";
-  version = "unstable-2021-06-11";
+  version = "unstable-2021-07-07";
 
   src = fetchFromGitHub {
     owner = "DisplayLink";
     repo = pname;
-    rev = "65e12fca334f2f42396f4e8d16592d53cab34dd6";
-    sha256 = "sha256-81IfdYKadKT7vRdkmxzfGo4KHa4UJ8uJ0K6djQCr22U=";
+    rev = "b0b2c80eb63f9b858b71afa772135f434aea192a";
+    sha256 = "sha256-io+CbZovGjEJjwtmARFH23Djt933ONoHMDoea+i6xFo=";
   };
-
-  # Linux 5.13 support
-  # The patches break compilation for older kernels
-  patches = lib.optional (kernel.kernelAtLeast "5.13") [
-    (fetchpatch {
-      url = "https://github.com/DisplayLink/evdi/commit/c5f5441d0a115d2cfc8125b8bafaa05b2edc7938.patch";
-      sha256 = "sha256-tWYgBrRh3mXPebhUygOvJ07V87g9JU66hREriACfEVI=";
-    })
-    (fetchpatch {
-      url = "https://github.com/DisplayLink/evdi/commit/5f04d2e2df4cfd21dc15d31f1152c6a66fa48a78.patch";
-      sha256 = "sha256-690/eUiEVWvnT/YAVgKcLo86dgolF9giWRuPxXpL+eQ=";
-    })
-  ];
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 

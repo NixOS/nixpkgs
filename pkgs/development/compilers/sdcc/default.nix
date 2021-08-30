@@ -23,6 +23,12 @@ stdenv.mkDerivation rec {
 
   configureFlags = map (f: "--disable-${f}-port") excludedPorts;
 
+  preConfigure = ''
+    if test -n "''${dontStrip-}"; then
+      export STRIP=none
+    fi
+  '';
+
   meta = {
     description = "Small Device C Compiler";
     longDescription = ''

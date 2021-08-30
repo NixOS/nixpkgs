@@ -1,11 +1,11 @@
 { lib, stdenv, fetchurl }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "dyncall";
   version = "1.2";
 
   src = fetchurl {
-    url = "https://www.dyncall.org/r1.2/dyncall-1.2.tar.gz";
+    url = "https://www.dyncall.org/r${version}/dyncall-${version}.tar.gz";
     # https://www.dyncall.org/r1.2/SHA256
     sha256 = "sha256-6IFUwCQ0IVYHBPXHKUr73snpka+gYB1a3/UELqgYCNc=";
   };

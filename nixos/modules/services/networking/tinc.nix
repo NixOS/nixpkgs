@@ -427,9 +427,12 @@ in
       nameValuePair ("tinc.${network}") ({
         description = "Tinc daemon user for ${network}";
         isSystemUser = true;
+        group = "tinc.${network}";
       })
     );
-
+    users.groups = flip mapAttrs' cfg.networks (network: _:
+      nameValuePair "tinc.${network}" {}
+    );
   };
 
   meta.maintainers = with maintainers; [ minijackson ];

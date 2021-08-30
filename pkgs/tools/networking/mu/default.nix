@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mu";
-  version = "1.6.1";
+  version = "1.6.5";
 
   src = fetchFromGitHub {
     owner  = "djcb";
     repo   = "mu";
     rev    = version;
-    sha256 = "7mSP1F2RxW0CEDRWbMzDRfoehrr24b11sCLM2gQFjuI=";
+    sha256 = "ZHEUJiEJzQzSwWgY07dDflY5GRiD1We435htY/7IOdQ=";
   };
 
   postPatch = lib.optionalString (batchSize != null) ''
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     homepage = "https://www.djcbsoftware.nl/code/mu/";
     changelog = "https://github.com/djcb/mu/releases/tag/${version}";
-    maintainers = with maintainers; [ antono peterhoeg ];
+    maintainers = with maintainers; [ antono chvp peterhoeg ];
     platforms = platforms.mesaPlatforms;
   };
 }

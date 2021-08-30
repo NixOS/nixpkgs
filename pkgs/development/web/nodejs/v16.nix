@@ -8,6 +8,7 @@ let
 in
   buildNodejs {
     inherit enableNpm;
-    version = "16.6.0";
-    sha256 = "1ndrqx3k5m62r7nzl5za59m33bx10541n7xbaxxz7088ifh18msw";
+    version = "16.8.0";
+    sha256 = "14k3njj382im3q4k6dhsxdk07gs81hw2k0nrixfvlw1964k04ydq";
+    patches = [ ./disable-darwin-v8-system-instrumentation.patch ];
   }

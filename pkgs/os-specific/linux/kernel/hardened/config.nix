@@ -88,7 +88,7 @@ assert (versionAtLeast version "4.9");
   INET_MPTCP_DIAG   = option no;
 
   # Use -fstack-protector-strong (gcc 4.9+) for best stack canary coverage.
-  CC_STACKPROTECTOR_REGULAR = whenOlder "4.18" no;
+  CC_STACKPROTECTOR_REGULAR = lib.mkForce (whenOlder "4.18" no);
   CC_STACKPROTECTOR_STRONG  = whenOlder "4.18" yes;
 
   # Detect out-of-bound reads/writes and use-after-free

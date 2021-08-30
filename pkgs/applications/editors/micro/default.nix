@@ -2,22 +2,22 @@
 
 buildGoModule rec {
   pname = "micro";
-  version = "2.0.9";
+  version = "2.0.10";
 
   src = fetchFromGitHub {
     owner = "zyedidia";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-8QtucdamxVwHuuhQhVQuvTNbqY5p97LKSB23617p4ow=";
+    sha256 = "sha256-hVFmViwGXuYVAKaCkzK/LHjCi8AtLu0tsPpT61glxys=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
 
   subPackages = [ "cmd/micro" ];
 
-  vendorSha256 = "sha256-bkD125ePdKcVgmNilOMZgUK6A8KWxaBOGKs8AvvIboI=";
+  vendorSha256 = "sha256-YcAKl4keizkbgQLAZGiCG3CGpNTNad8EvOJEXLX2s0s=";
 
-  buildFlagsArray = [ "-ldflags=-s -w -X github.com/zyedidia/micro/v2/internal/util.Version=${version} -X github.com/zyedidia/micro/v2/internal/util.CommitHash=${src.rev}" ];
+  ldflags = [ "-s" "-w" "-X github.com/zyedidia/micro/v2/internal/util.Version=${version}" "-X github.com/zyedidia/micro/v2/internal/util.CommitHash=${src.rev}" ];
 
   postInstall = ''
     installManPage assets/packaging/micro.1

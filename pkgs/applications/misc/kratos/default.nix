@@ -15,7 +15,7 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
-  buildFlags = [ "-tags sqlite" ];
+  tags = [ "sqlite" ];
 
   doCheck = false;
 

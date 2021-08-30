@@ -28,6 +28,12 @@
       ]
     },
     {
+      "name": "BAA 100",
+      "no-features": [
+        "hw-volume"
+      ]
+    },
+    {
       "name": "JBL Endurance RUN BT",
       "no-features": [
         "msbc-alt1",
@@ -186,6 +192,35 @@
     {
       "sysname": "Linux",
       "release": "~^5\\.(8|9|10)\\.",
+      "no-features": [
+        "msbc-alt1"
+      ]
+    },
+    {
+      "sysname": "Linux",
+      "release": "~^5\\.12\\.(1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17)($|[^0-9])"
+    },
+    {
+      "sysname": "Linux",
+      "release": "~^5\\.12\\.",
+      "no-features": [
+        "msbc-alt1"
+      ]
+    },
+    {
+      "sysname": "Linux",
+      "release": "~^5\\.13\\.(1|2)($|[^0-9])"
+    },
+    {
+      "sysname": "Linux",
+      "release": "~^5\\.13\\.",
+      "no-features": [
+        "msbc-alt1"
+      ]
+    },
+    {
+      "sysname": "Linux",
+      "release": "~^5\\.14\\.",
       "no-features": [
         "msbc-alt1"
       ]

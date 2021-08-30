@@ -87,6 +87,7 @@ mkDerivation rec {
       feedparser
       html2text
       html5-parser
+      jeepney
       lxml
       markdown
       mechanize

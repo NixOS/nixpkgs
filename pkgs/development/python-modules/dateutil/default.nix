@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "python-dateutil";
-  version = "2.8.1";
+  version = "2.8.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "73ebfe9dbf22e832286dafa60473e4cd239f8592f699aa5adaf10050e6e1823c";
+    sha256 = "sha256-ASPKzBYnrhnd88J6XeW9Z+5FhvvdZEDZdI+Ku0g9PoY=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];

@@ -58,6 +58,7 @@ stdenv.mkDerivation (overridable // {
   configurePhase = attrs.configurePhase or ''
     runHook preConfigure
 
+    ${./mix-configure-hook.sh}
     # this is needed for projects that have a specific compile step
     # the dependency needs to be compiled in order for the task
     # to be available

@@ -15,13 +15,13 @@
 
 buildPythonPackage rec {
   pname = "hass-nabucasa";
-  version = "0.44.0";
+  version = "0.46.0";
 
   src = fetchFromGitHub {
     owner = "nabucasa";
     repo = pname;
     rev = version;
-    sha256 = "sha256-cfKuqkIgmbo7/kUIpJFbckyQ0uDrxXmdsI7qORX0PWc=";
+    sha256 = "109ma1qlhifj5hs530zfnvc6mqv5grfmcq3s57wawq9nzq0gpfy8";
   };
 
   propagatedBuildInputs = [

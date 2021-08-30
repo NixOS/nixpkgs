@@ -4,16 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "argyllcms";
-  version = "2.1.2";
+  version = "2.2.0";
 
   src = fetchzip {
     # Kind of flacky URL, it was reaturning 406 and inconsistent binaries for a
     # while on me. It might be good to find a mirror
     url = "https://www.argyllcms.com/Argyll_V${version}_src.zip";
-    sha256 = "1bsi795kphr1a8l2kvvm9qfkvgfpimds4ijalnmg23wnr8691md1";
-
-    # The argyllcms web server doesn't like curl ...
-    curlOpts = "--user-agent 'Mozilla/5.0'";
+    sha256 = "sha256-EcVwYJfJbWWXl58O3ulsrWgUYTgR4uWdMgb0Z140Pu4=";
   };
 
   patches = [ ./gcc5.patch ];

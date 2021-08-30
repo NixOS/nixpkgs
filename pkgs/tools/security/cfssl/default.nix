@@ -34,11 +34,10 @@ buildGoModule rec {
     popd
   '';
 
-  buildFlagsArray = ''
-    -ldflags=
-      -s -w
-      -X github.com/cloudflare/cfssl/cli/version.version=v${version}
-  '';
+  ldflags = [
+    "-s" "-w"
+    "-X github.com/cloudflare/cfssl/cli/version.version=v${version}"
+  ];
 
   meta = with lib; {
     homepage = "https://cfssl.org/";

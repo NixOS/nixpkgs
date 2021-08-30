@@ -1,7 +1,8 @@
 { lib, stdenv, fetchhg, openssl, pcre-cpp, qt4, boost, pkcs11helper }:
 
 stdenv.mkDerivation {
-  name = "meo-20121113";
+  pname = "meo";
+  version = "20121113";
 
   src = fetchhg {
     url = "http://oss.stamfest.net/hg/meo";

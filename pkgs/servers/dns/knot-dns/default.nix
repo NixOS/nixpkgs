@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "knot-dns";
-  version = "3.1.0";
+  version = "3.1.1";
 
   src = fetchurl {
     url = "https://secure.nic.cz/files/knot-dns/knot-${version}.tar.xz";
-    sha256 = "54323712e3cbc3d4c70a15777818fd2ff0de30cebb6c22e2946372b15b2653ed";
+    sha256 = "75bfb1acaca774ed3dd781dc74780298dc0fd51b54e4b61015e7487d6cd2067c";
   };
 
   outputs = [ "bin" "out" "dev" ];
@@ -26,12 +26,6 @@ stdenv.mkDerivation rec {
     ./dont-create-run-time-dirs.patch
     ./runtime-deps.patch
   ];
-
-  # Disable knotd journal tests on platforms that don't use 4k sysconf(_SC_PAGESIZE).
-  # The journal most likely works fine, but some of the tests currently don't.
-  postPatch = lib.optionalString (doCheck && stdenv.isDarwin && stdenv.isAarch64) ''
-    sed '/^\tknot\/test_journal\>/d' -i tests/Makefile.am
-  '';
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];
   buildInputs = [

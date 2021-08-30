@@ -17,7 +17,7 @@ buildGoModule rec {
 
   subPackages = [ "cmd/pack" ];
 
-  buildFlagsArray = [ "-ldflags=-s -w -X github.com/buildpacks/pack.Version=${version}" ];
+  ldflags = [ "-s" "-w" "-X github.com/buildpacks/pack.Version=${version}" ];
 
   postInstall = ''
     installShellCompletion --bash --name pack.bash $(PACK_HOME=$PWD $out/bin/pack completion --shell bash)

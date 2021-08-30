@@ -72,9 +72,9 @@ let
 
   policies = {
     DisableAppUpdate = true;
-  };
+  } // config.firefox.policies or {};
 
-  policiesJson = writeText "no-update-firefox-policy.json" (builtins.toJSON { inherit policies; });
+  policiesJson = writeText "firefox-policies.json" (builtins.toJSON { inherit policies; });
 
   defaultSource = lib.findFirst (sourceMatches "en-US") {} sources;
 
@@ -88,8 +88,6 @@ stdenv.mkDerivation {
   inherit pname version;
 
   src = fetchurl { inherit (source) url sha256; };
-
-  phases = [ "unpackPhase" "patchPhase" "installPhase" "fixupPhase" ];
 
   libPath = lib.makeLibraryPath
     [ stdenv.cc.cc
@@ -189,7 +187,7 @@ stdenv.mkDerivation {
   # update with:
   # $ nix-shell maintainers/scripts/update.nix --argstr package firefox-bin-unwrapped
   passthru.updateScript = import ./update.nix {
-    inherit pname version channel writeScript xidel coreutils gnused gnugrep gnupg curl runtimeShell;
+    inherit pname channel writeScript xidel coreutils gnused gnugrep gnupg curl runtimeShell;
     baseUrl =
       if channel == "devedition"
         then "http://archive.mozilla.org/pub/devedition/releases/"
@@ -203,7 +201,6 @@ stdenv.mkDerivation {
       url = "http://www.mozilla.org/en-US/foundation/trademarks/policy/";
     };
     platforms = builtins.attrNames mozillaPlatforms;
-    timeout = 86400; # 24 hours (increased from the Hydra default of 10h, c.f. #129115)
     maintainers = with maintainers; [ taku0 lovesegfault ];
   };
 }

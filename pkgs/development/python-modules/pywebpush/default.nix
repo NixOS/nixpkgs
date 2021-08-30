@@ -14,11 +14,11 @@
 
 buildPythonPackage rec {
   pname = "pywebpush";
-  version = "1.13.0";
+  version = "1.14.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "97ef000a685cd1f63d9d3553568508508904bfe419485df2b83b025d94e9ae54";
+    sha256 = "sha256-bDbhZ5JoIZ5pO6lA2yvyVMJAygJmTeECtyaa/DxUVzE=";
   };
 
   propagatedBuildInputs = [
@@ -35,6 +35,8 @@ buildPythonPackage rec {
     mock
     pytestCheckHook
   ];
+
+  pythonImportsCheck = [ "pywebpush" ];
 
   meta = with lib; {
     description = "Webpush Data encryption library for Python";

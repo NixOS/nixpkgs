@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   # Remove a test that fails to statically link (undefined reference to png and
   # freetype symbols)
-  postConfigure = lib.optionals static ''
+  postConfigure = lib.optionalString static ''
     sed -e '/freetype freetype.c/d' -i ../tests/examples/CMakeLists.txt
   '';
 

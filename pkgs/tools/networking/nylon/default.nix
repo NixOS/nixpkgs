@@ -6,10 +6,11 @@ let
     paths = [ libevent.dev libevent.out ];
   };
 in
-stdenv.mkDerivation {
-  name = "nylon-1.21";
+stdenv.mkDerivation rec {
+  pname = "nylon";
+  version = "1.21";
   src = fetchurl {
-    url = "https://monkey.org/~marius/nylon/nylon-1.21.tar.gz";
+    url = "https://monkey.org/~marius/nylon/nylon-${version}.tar.gz";
     sha256 = "34c132b005c025c1a5079aae9210855c80f50dc51dde719298e1113ad73408a4";
   };
 

@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, leptonica, zlib, libwebp, giflib, libjpeg, libpng, libtiff }:
 
-stdenv.mkDerivation {
-  name = "jbig2enc-0.28";
+stdenv.mkDerivation rec {
+  pname = "jbig2enc";
+  version = "0.28";
 
   src = fetchurl {
-    url = "https://github.com/agl/jbig2enc/archive/0.28-dist.tar.gz";
+    url = "https://github.com/agl/jbig2enc/archive/${version}-dist.tar.gz";
     sha256 = "1wc0lmqz4jag3rhhk1xczlqpfv2qqp3fz7wzic2lba3vsbi1rrw3";
   };
 

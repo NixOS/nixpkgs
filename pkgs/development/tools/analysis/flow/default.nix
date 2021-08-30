@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "flow";
-  version = "0.156.0";
+  version = "0.158.0";
 
   src = fetchFromGitHub {
-    owner  = "facebook";
-    repo   = "flow";
-    rev    = "refs/tags/v${version}";
-    sha256 = "sha256-aV5qcXxNLljeM3MrXg8ptAST8ARCb3kR83oy5G9fbak=";
+    owner = "facebook";
+    repo = "flow";
+    rev = "v${version}";
+    sha256 = "sha256-Wl+Jux20gtl+upaKcFF3ub5TetNUf2GwfenH+Ddvqfw=";
   };
 
   installPhase = ''

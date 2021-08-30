@@ -30,13 +30,13 @@ let
   ];
 in stdenv.mkDerivation rec {
   pname = "gjs";
-  version = "1.68.1";
+  version = "1.68.2";
 
   outputs = [ "out" "dev" "installedTests" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gjs/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0w2cbfpmc6alz7z8ycchhlkn586av5y8zk2xmgwzq10i0k13xyig";
+    sha256 = "sha256-cP8CraaC8TAzjsXMTFEQPcDlyrjVN+t2sYHsUSpl7jA=";
   };
 
   patches = [
@@ -126,6 +126,7 @@ in stdenv.mkDerivation rec {
 
     updateScript = gnome.updateScript {
       packageName = "gjs";
+      versionPolicy = "odd-unstable";
     };
   };
 

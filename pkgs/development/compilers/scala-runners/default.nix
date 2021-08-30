@@ -1,16 +1,17 @@
-{ stdenv, lib, fetchFromGitHub, jre, coursier }:
+{ stdenv, lib, fetchFromGitHub, coursier }:
 
 stdenv.mkDerivation rec {
   pname = "scala-runners";
-  version = "unstable-2020-02-02";
+  version = "unstable-2021-07-28";
 
   src = fetchFromGitHub {
     repo = pname;
     owner = "dwijnand";
-    rev = "95e03c9f9de0fe0ab61eeb6dea2a364f9d081d31";
-    sha256 = "0mvlc6fxsh5d6gsyak9n3g98g4r061n8pir37jpiqb7z00m9lfrx";
+    rev = "9bf096ca81f4974d7327e291eac291e22b344a8f";
+    sha256 = "032fds5nr102h1lc81n9jc60jmxzivi4md4hcjrlqn076hfhj4ax";
   };
 
+  dontBuild = true;
   installPhase = ''
     mkdir -p $out/bin $out/lib
     sed -ie "s| cs | ${coursier}/bin/coursier |" scala-runner

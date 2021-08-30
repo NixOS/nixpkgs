@@ -10,12 +10,11 @@ rec {
     stdenv = pkgs.emscriptenStdenv;
   }).overrideDerivation
     (old: {
-      nativeBuildInputs = [ autoreconfHook pkg-config ];
+      nativeBuildInputs = [ pkg-config cmake ];
       propagatedBuildInputs = [ zlib ];
-      buildInputs = old.buildInputs ++ [ automake autoconf ];
       configurePhase = ''
         HOME=$TMPDIR
-        emconfigure ./configure --prefix=$out 
+        emcmake cmake . $cmakeFlags -DCMAKE_INSTALL_PREFIX=$out -DCMAKE_INSTALL_INCLUDEDIR=$dev/include
       '';
       checkPhase = ''
         echo "================= testing json_c using node ================="
@@ -26,7 +25,7 @@ rec {
           `pkg-config zlib --cflags` \
           `pkg-config zlib --libs` \
           -I . \
-          .libs/libjson-c.so \
+          libjson-c.a \
           -o ./test1.js
 
         echo "Using node to execute the test which basically outputs an error on stderr which we grep for" 
@@ -163,7 +162,7 @@ rec {
         echo "Compiling a custom test"
         set -x
         emcc -O2 -s EMULATE_FUNCTION_POINTER_CASTS=1 test/example.c -DZ_SOLO \
-        libz.so.${old.version} -I . -o example.js
+        -L. libz.so.${old.version} -I . -o example.js
 
         echo "Using node to execute the test"
         ${pkgs.nodejs}/bin/node ./example.js 

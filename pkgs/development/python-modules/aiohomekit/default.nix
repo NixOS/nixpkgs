@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "aiohomekit";
-  version = "0.5.1";
+  version = "0.6.2";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "Jc2k";
     repo = pname;
     rev = version;
-    sha256 = "sha256-Fo9KWBcN6Y/fa7vkWugSer5L7+hOWz99+hw6Hz1LAMM=";
+    sha256 = "16lfav83g12vzs3ssfva7chcqqb7xdx54djwfwyn9xcwfaa7cwhw";
   };
 
   nativeBuildInputs = [

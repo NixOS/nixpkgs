@@ -18,6 +18,6 @@ rustPlatform.buildRustPackage rec {
     description = "The CLI text viewer tool that works like less command on small pane within the terminal window";
     license = licenses.mit;
     homepage = "https://github.com/ryochack/peep";
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ ];
   };
 }

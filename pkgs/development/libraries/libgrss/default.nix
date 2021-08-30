@@ -1,11 +1,8 @@
 { lib, stdenv, fetchurl, fetchpatch, pkg-config, vala, gobject-introspection, gtk-doc, docbook_xsl, docbook_xml_dtd_412, glib, libxml2, libsoup, gnome }:
 
-let
-  version = "0.7.0";
+stdenv.mkDerivation rec {
   pname = "libgrss";
-in
-stdenv.mkDerivation {
-  name = "${pname}-${version}";
+  version = "0.7.0";
 
   outputs = [ "out" "dev" "devdoc" ];
 

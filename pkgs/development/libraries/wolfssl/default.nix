@@ -48,6 +48,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.wolfssl.com/";
     platforms = platforms.all;
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ fab mcmtroffaes ];
+    maintainers = with maintainers; [ fab ];
   };
 }

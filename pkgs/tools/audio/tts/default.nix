@@ -16,13 +16,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "tts";
-  version = "0.1.3";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "coqui-ai";
     repo = "TTS";
     rev = "v${version}";
-    sha256 = "0akhiaaqz53bf5zyps3vgjifmgh5wvcc9r4lrq9hmj3dds03vkjq";
+    sha256 = "sha256-FlxR1bPkUZT3SPuWiK0oAuI9dKfurEZurB0NhyDgOyY=";
   };
 
   postPatch = ''
@@ -40,6 +40,7 @@ python3.pkgs.buildPythonApplication rec {
     anyascii
     coqpit
     flask
+    fsspec
     gruut
     gdown
     inflect
@@ -104,6 +105,7 @@ python3.pkgs.buildPythonApplication rec {
     "tests/vocoder_tests/test_vocoder_tf_melgan_generator.py"
     "tests/tts_tests/test_tacotron2_tf_model.py"
     # RuntimeError: fft: ATen not compiled with MKL support
+    "tests/tts_tests/test_vits_train.py"
     "tests/vocoder_tests/test_fullband_melgan_train.py"
     "tests/vocoder_tests/test_hifigan_train.py"
     "tests/vocoder_tests/test_melgan_train.py"

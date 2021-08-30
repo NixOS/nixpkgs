@@ -83,10 +83,8 @@ stdenv.mkDerivation rec {
     moveToOutput bin/notmuch-emacs-mua $emacs
   '';
 
-  dontGzipMan = true; # already compressed
-
   passthru = {
-    pythonSourceRoot = "${src.name}/bindings/python";
+    pythonSourceRoot = "notmuch-${version}/bindings/python";
     inherit version;
   };
 
