@@ -1,6 +1,6 @@
 { stdenv, lib, fetchFromGitLab
-, autoreconfHook, pkg-config, python3, addOpenGLRunpath
-, libX11, libXext, xorgproto
+, meson, ninja, pkg-config, python3, addOpenGLRunpath, libxcb
+, libX11, libXext, xorgproto, libXau, libXdmcp, mesonShlibsToStaticHook
 }:
 
 stdenv.mkDerivation rec {
@@ -15,16 +15,22 @@ stdenv.mkDerivation rec {
     sha256 = "06y7m486kgg566krbhb0gvmpzy6ayd98psnrmmkrnw8p513lg8k3";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config python3 addOpenGLRunpath ];
-  buildInputs = [ libX11 libXext xorgproto ];
+  patches = [ ./nm-path-option.patch ];
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  nativeBuildInputs = [ meson ninja pkg-config python3 addOpenGLRunpath ]
+    ++ lib.optional stdenv.hostPlatform.isStatic mesonShlibsToStaticHook;
+  buildInputs = [ libX11 libXext xorgproto libxcb libXau libXdmcp ];
+
+  postPatch = ''
+    substituteInPlace meson.build \
+      --replace "subdir('tests')" ""
+  '' + lib.optionalString stdenv.isDarwin ''
     substituteInPlace src/GLX/Makefile.am \
-      --replace "-Wl,-Bsymbolic " ""
+    --replace "-Wl,-Bsymbolic " ""
     substituteInPlace src/EGL/Makefile.am \
-      --replace "-Wl,-Bsymbolic " ""
+    --replace "-Wl,-Bsymbolic " ""
     substituteInPlace src/GLdispatch/Makefile.am \
-      --replace "-Xlinker --version-script=$(VERSION_SCRIPT)" "-Xlinker"
+    --replace "-Xlinker --version-script=$(VERSION_SCRIPT)" "-Xlinker"
   '';
 
   NIX_CFLAGS_COMPILE = toString ([
@@ -35,11 +41,13 @@ stdenv.mkDerivation rec {
     "-Wno-error=array-bounds"
   ] ++ lib.optional stdenv.cc.isClang "-Wno-error");
 
-  configureFlags  = []
-    # Indirectly: https://bugs.freedesktop.org/show_bug.cgi?id=35268
-    ++ lib.optional stdenv.hostPlatform.isMusl "--disable-tls"
-    # Remove when aarch64-darwin asm support is upstream: https://gitlab.freedesktop.org/glvnd/libglvnd/-/issues/216
-    ++ lib.optional (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) "--disable-asm";
+  NIX_LDFLAGS = "-lxcb -lXau -lXdmcp";
+
+  mesonFlags  = [ "-Dnm-path=${stdenv.cc.targetPrefix}nm" ]
+  # Indirectly: https://bugs.freedesktop.org/show_bug.cgi?id=35268
+  ++ lib.optional stdenv.hostPlatform.isMusl "-Dtls=disabled"
+  # Remove when aarch64-darwin asm support is upstream: https://gitlab.freedesktop.org/glvnd/libglvnd/-/issues/216
+  ++ lib.optional (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) "-Dasm=disabled";
 
   outputs = [ "out" "dev" ];
 
@@ -66,6 +74,6 @@ stdenv.mkDerivation rec {
     changelog = "https://gitlab.freedesktop.org/glvnd/libglvnd/-/tags/v${version}";
     license = with licenses; [ mit bsd1 bsd3 gpl3Only asl20 ];
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ primeos ];
+    maintainers = with maintainers; [ primeos shamilton ];
   };
 }
