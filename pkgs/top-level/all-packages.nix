@@ -20095,6 +20095,8 @@ with pkgs;
     buildGoModule = buildGo115Module;
   };
 
+  oauth2l = callPackage ../tools/security/oauth2l { };
+
   openbgpd = callPackage ../servers/openbgpd { };
 
   openafs_1_8 = callPackage ../servers/openafs/1.8 { tsmbac = null; ncurses = null; };
