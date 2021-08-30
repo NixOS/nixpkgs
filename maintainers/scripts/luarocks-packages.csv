@@ -29,7 +29,6 @@ lpty,,,,,,
 lrexlib-gnu,,,,,,
 lrexlib-pcre,,,,,,vyp
 lrexlib-posix,,,,,,
-ltermbox,,,,,,
 lua-cjson,,,,,,
 lua-cmsgpack,,,,,,
 lua-iconv,,,,,,

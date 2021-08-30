@@ -146,10 +146,6 @@ with super;
     ];
   });
 
-  ltermbox = super.ltermbox.override( {
-    disabled = !isLua51 || isLuaJIT;
-  });
-
   lua-iconv = super.lua-iconv.override({
     buildInputs = [
       pkgs.libiconv

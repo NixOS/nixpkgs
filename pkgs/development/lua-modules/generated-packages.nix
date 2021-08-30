@@ -609,24 +609,6 @@ lrexlib-posix = buildLuarocksPackage {
   };
 };
 
-ltermbox = buildLuarocksPackage {
-  pname = "ltermbox";
-  version = "0.2-1";
-
-  src = fetchurl {
-    url    = "https://luarocks.org/ltermbox-0.2-1.src.rock";
-    sha256 = "08jqlmmskbi1ml1i34dlmg6hxcs60nlm32dahpxhcrgjnfihmyn8";
-  };
-  disabled = (luaOlder "5.1");
-  propagatedBuildInputs = [ lua ];
-
-  meta = {
-    homepage = "http://code.google.com/p/termbox";
-    description = "A termbox library package";
-    license.fullName = "New BSD License";
-  };
-};
-
 lua-cjson = buildLuarocksPackage {
   pname = "lua-cjson";
   version = "2.1.0.6-1";
