@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "zarr";
-  version = "2.9.3";
+  version = "2.9.4";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "274d2c1642fab6b4ddd4e465df3cdd456a5f821ed9a425a075436b1d2110bf36";
+    sha256 = "5544c47bc2a35f8e8af58bee92378518018b484ba550e997759d18f40fa75719";
   };
 
   nativeBuildInputs = [
