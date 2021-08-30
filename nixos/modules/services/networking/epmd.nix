@@ -28,7 +28,7 @@ in
     listenStream = mkOption
       {
         type = types.str;
-        default = null;
+        default = "[::]:4369";
         description = ''
           the listenStream used by the systemd socket.
           see https://www.freedesktop.org/software/systemd/man/systemd.socket.html#ListenStream= for more informations.
@@ -41,7 +41,7 @@ in
   ###### implementation
   config = mkIf cfg.enable {
     assertions = [{
-      assertion = cfg.listenStream == null -> config.networking.enableIPv6;
+      assertion = cfg.listenStream == "[::]:4369" -> config.networking.enableIPv6;
       message = "epmd listens by default on ipv6, enable ipv6 or change config.services.epmd.listenStream";
     }];
     systemd.sockets.epmd = rec {
@@ -49,7 +49,7 @@ in
       wantedBy = [ "sockets.target" ];
       before = wantedBy;
       socketConfig = {
-        ListenStream = if cfg.listenStream != null then cfg.listenStream else "[::]:4369";
+        ListenStream = cfg.listenStream;
         Accept = "false";
       };
     };
