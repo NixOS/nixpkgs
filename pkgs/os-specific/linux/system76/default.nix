@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, kernel }:
 let
-  version = "1.0.9";
-  sha256 = "0i4825y2vd679kdjv30ifzj1i1066d3x37z4lgk39hx16993k162";
+  version = "1.0.12";
+  sha256 = "0k098zkxa8spj5rbmzpndxs0cf5i2n22g3ym6kq4j43kvs18x6c7";
 in
 stdenv.mkDerivation {
   name = "system76-module-${version}-${kernel.version}";
