@@ -88,7 +88,7 @@ rec {
         downloadPage = "https://gradle.org/next-steps/?version=${version}";
         license = licenses.asl20;
         platforms = platforms.unix;
-        maintainers = with maintainers; [ lorenzleutgeb ];
+        maintainers = with maintainers; [ lorenzleutgeb liff ];
       };
     };
 
