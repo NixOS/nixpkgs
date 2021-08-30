@@ -11,15 +11,16 @@ assertExecutable() {
 # makeWrapper EXECUTABLE OUT_PATH ARGS
 
 # ARGS:
-# --argv0       NAME    : set name of executed process to NAME
-#                         (otherwise it’s called …-wrapped)
-# --set         VAR VAL : add VAR with value VAL to the executable’s
-#                         environment
-# --set-default VAR VAL : like --set, but only adds VAR if not already set in
-#                         the environment
-# --unset       VAR     : remove VAR from the environment
-# --run         COMMAND : run command before the executable
-# --add-flags   FLAGS   : add FLAGS to invocation of executable
+# --argv0           NAME    : set name of executed process to NAME
+#                             (otherwise it’s called …-wrapped)
+# --set             VAR VAL : add VAR with value VAL to the executable’s
+#                             environment
+# --set-default     VAR VAL : like --set, but only adds VAR if not already set in
+#                             the environment
+# --unset           VAR     : remove VAR from the environment
+# --run             COMMAND : run command before the executable
+# --add-flags       FLAGS   : add FLAGS to invocation of executable before the executable; e.g. `FLAGS $@`
+# --add-post-flags  FLAGS   : add FLAGS behind the argument array passed to the executable; e.g. `$@ FLAGS`
 
 # --prefix          ENV SEP VAL   : suffix/prefix ENV with VAL, separated by SEP
 # --suffix
@@ -31,7 +32,7 @@ makeWrapper() {
     local original="$1"
     local wrapper="$2"
     local params varName value command separator n fileNames
-    local argv0 flagsBefore flags
+    local argv0 flagsBefore flagsAfter flags
 
     assertExecutable "$original"
 
@@ -98,6 +99,10 @@ makeWrapper() {
             flags="${params[$((n + 1))]}"
             n=$((n + 1))
             flagsBefore="$flagsBefore $flags"
+        elif [[ "$p" == "--add-post-flags" ]]; then
+            flags="${params[$((n + 1))]}"
+            n=$((n + 1))
+            flagsAfter="$flagsAfter $flags"
         elif [[ "$p" == "--argv0" ]]; then
             argv0="${params[$((n + 1))]}"
             n=$((n + 1))
@@ -107,7 +112,7 @@ makeWrapper() {
     done
 
     echo exec ${argv0:+-a \"$argv0\"} \""$original"\" \
-         "$flagsBefore" '"$@"' >> "$wrapper"
+         "$flagsBefore" '"$@"' "$flagsAfter" >> "$wrapper"
 
     chmod +x "$wrapper"
 }
