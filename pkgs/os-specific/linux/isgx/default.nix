@@ -38,6 +38,8 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  enableParallelBuilding = true;
+
   meta = with lib; {
     description = "Intel SGX Linux Driver";
     longDescription = ''
