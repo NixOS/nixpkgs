@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , isPy27
 , fetchPypi
@@ -18,13 +19,13 @@
 
 buildPythonPackage rec {
   pname = "ansible-lint";
-  version = "5.0.8";
+  version = "5.1.2";
   disabled = isPy27;
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-tnuWKEB66bwVuwu3H3mHG99ZP+/msGhMDMRL5fyQgD8=";
+    sha256 = "sha256:0ifwic5sdf9140z296vbprgkx7v46v80xdrvr6m71w749a9bwyvz";
   };
 
   nativeBuildInputs = [
@@ -77,6 +78,8 @@ buildPythonPackage rec {
     # create symlink like in the git repo so test_included_tasks does not fail
     ln -s ../roles examples/playbooks/roles
   '';
+
+  doCheck = !stdenv.isDarwin;
 
   disabledTests = [
     # requires network
