@@ -31,7 +31,12 @@ stdenv.mkDerivation rec {
     sha256 = "//thsIzVKCqq4UegKzBRZqdCb60iqLlCdwjw8vxCbrw=";
   };
 
+  strictDeps = true;
+
+  depsBuildBuild = [ pkg-config ];
+
   nativeBuildInputs = [
+    gdk-pixbuf
     pkg-config
     rustc
     cargo
@@ -47,6 +52,7 @@ stdenv.mkDerivation rec {
     bzip2
     pango
     libintl
+    gobject-introspection
   ] ++ lib.optionals stdenv.isDarwin [
     libobjc
   ];
