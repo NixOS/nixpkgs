@@ -5,7 +5,7 @@ buildFHSUserEnv rec {
 
   targetPkgs = pkgs: with pkgs; [
     libGLU libGL alsa-lib fontconfig zlib libpng dbus nss nspr expat pciutils
-    libxkbcommon libudev tbb
+    libxkbcommon libudev0-shim tbb
   ] ++ (with xorg; [
     libICE libSM libXmu libXi libXext libX11 libXrender libXcursor libXfixes
     libXrender libXcomposite libXdamage libXtst libxcb libXScrnSaver
