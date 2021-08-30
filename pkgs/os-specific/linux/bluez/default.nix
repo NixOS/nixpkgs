@@ -21,11 +21,11 @@
   ];
 in stdenv.mkDerivation rec {
   pname = "bluez";
-  version = "5.60";
+  version = "5.61";
 
   src = fetchurl {
     url = "mirror://kernel/linux/bluetooth/${pname}-${version}.tar.xz";
-    sha256 = "sha256-cQmZWA0B7lnsWF5efAf9lO3e3AAaom/nRkxUb52UUwQ=";
+    sha256 = "sha256-g6/WxSF5VUv+q7y1OP7C62vpCorDxAhxtJ162LScQjs=";
   };
 
   buildInputs = [
