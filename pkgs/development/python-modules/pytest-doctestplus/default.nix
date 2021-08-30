@@ -1,18 +1,17 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, isPy27
-, six
+, pythonOlder
+, packaging
 , pytest
 , pytestCheckHook
-, numpy
 , setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "pytest-doctestplus";
   version = "0.10.1";
-  disabled = isPy27; # abandoned upstream
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -22,17 +21,28 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     setuptools-scm
   ];
+
   buildInputs = [
     pytest
   ];
 
   propagatedBuildInputs = [
-    six
-    numpy
+    packaging
   ];
 
   checkInputs = [
     pytestCheckHook
+  ];
+
+  disabledTests = [
+    # ERROR: usage: __main__.py [options] [file_or_dir] [file_or_dir] [...]
+    # __main__.py: error: unrecognized arguments: --remote-data
+    "test_remote_data_url"
+    "test_remote_data_float_cmp"
+    "test_remote_data_ignore_whitespace"
+    "test_remote_data_ellipsis"
+    "test_remote_data_requires"
+    "test_remote_data_ignore_warnings"
   ];
 
   meta = with lib; {
