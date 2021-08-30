@@ -15169,6 +15169,20 @@ let
     };
   };
 
+  NetINET6Glue = buildPerlPackage {
+    pname = "Net-INET6Glue";
+    version = "0.604";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SU/SULLR/Net-INET6Glue-0.604.tar.gz";
+      sha256 = "05xvbdrqq88npzg14bjm9wmjykzplwirzcm8rp61852hz6c67hwh";
+    };
+    meta = {
+      homepage = "https://github.com/noxxi/p5-net-inet6glue";
+      description = "Make common modules IPv6 ready by hotpatching";
+      license = lib.licenses.artistic1;
+    };
+  };
+
   NetAddrIP = buildPerlPackage {
     pname = "NetAddr-IP";
     version = "4.079";
