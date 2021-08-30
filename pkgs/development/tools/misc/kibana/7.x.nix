@@ -4,14 +4,14 @@
 , stdenv
 , makeWrapper
 , fetchurl
-, nodejs-10_x
+, nodejs-14_x
 , coreutils
 , which
 }:
 
 with lib;
 let
-  nodejs = nodejs-10_x;
+  nodejs = nodejs-14_x;
   inherit (builtins) elemAt;
   info = splitString "-" stdenv.hostPlatform.system;
   arch = elemAt info 0;
