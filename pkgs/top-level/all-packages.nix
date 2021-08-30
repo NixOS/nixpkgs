@@ -21339,9 +21339,7 @@ with pkgs;
 
     acpi_call = callPackage ../os-specific/linux/acpi-call {};
 
-    akvcam = callPackage ../os-specific/linux/akvcam {
-      inherit (qt5) qmake;
-    };
+    akvcam = callPackage ../os-specific/linux/akvcam { };
 
     amdgpu-pro = callPackage ../os-specific/linux/amdgpu-pro { };
 
