@@ -3442,6 +3442,18 @@ final: prev:
     meta.homepage = "https://github.com/Shougo/neomru.vim/";
   };
 
+  neon = buildVimPluginFrom2Nix {
+    pname = "neon";
+    version = "2021-07-30";
+    src = fetchFromGitHub {
+      owner = "rafamadriz";
+      repo = "neon";
+      rev = "5c6d24504e2177a709ad16ae9e89ab5732327ad8";
+      sha256 = "1p7g3204hjj52qnm5vdvh425r4xh0y8bsyfivpnp4zgz44rqd6v3";
+    };
+    meta.homepage = "https://github.com/rafamadriz/neon/";
+  };
+
   neorg = buildVimPluginFrom2Nix {
     pname = "neorg";
     version = "2021-08-26";
