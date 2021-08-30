@@ -165,21 +165,7 @@ builtins.removeAttrs attrs ["disabled" "checkInputs" "externalDeps" "extraVariab
   # @-patterns do not capture formal argument default values, so we need to
   # explicitly inherit this for it to be available as a shell variable in the
   # builder
-  # inherit rockspecFilename;
   inherit rocksSubdir;
-
-  # enabled only for src.rock
-  # setSourceRoot= let
-  #   # name_only= lib.getName name;
-  #   name_only= pname;
-  # in
-  #   # if this is a rockFile
-  #   lib.optionalString (knownRockspec == null  ) ''
-  #   # format is rockspec_basename/source_basename
-  #   # rockspec can set it via spec.source.dir
-  #   folder=$(find . -mindepth 2 -maxdepth 2 -type d -path '*${name_only}*/*'|head -n1)
-  #   sourceRoot="$folder"
-  # '';
 
   configurePhase = ''
     runHook preConfigure
@@ -194,13 +180,13 @@ builtins.removeAttrs attrs ["disabled" "checkInputs" "externalDeps" "extraVariab
   + lib.optionalString (rockspecFilename == null) ''
     rockspecFilename="${generatedRockspecFilename}"
   ''
-  # + lib.optionalString (knownRockspec != null) ''
+  + lib.optionalString (knownRockspec != null) ''
 
-  #   # prevents the following type of error:
-  #   # Inconsistency between rockspec filename (42fm1b3d7iv6fcbhgm9674as3jh6y2sh-luv-1.22.0-1.rockspec) and its contents (luv-1.22.0-1.rockspec)
-  #   rockspecFilename="$TMP/$(stripHash ''${knownRockspec})"
-  #   cp ''${knownRockspec} "$rockspecFilename"
-  # ''
+    # prevents the following type of error:
+    # Inconsistency between rockspec filename (42fm1b3d7iv6fcbhgm9674as3jh6y2sh-luv-1.22.0-1.rockspec) and its contents (luv-1.22.0-1.rockspec)
+    rockspecFilename="$TMP/$(stripHash ''${knownRockspec})"
+    cp ''${knownRockspec} "$rockspecFilename"
+  ''
   + ''
     runHook postConfigure
   '';
@@ -239,9 +225,7 @@ builtins.removeAttrs attrs ["disabled" "checkInputs" "externalDeps" "extraVariab
 
     nix_debug "ROCKSPEC $rockspecFilename"
     nix_debug "cwd: $PWD"
-    set -x
     $LUAROCKS make --deps-mode=all --tree=$out ''${rockspecFilename}
-    set +x
 
     runHook postInstall
   '';

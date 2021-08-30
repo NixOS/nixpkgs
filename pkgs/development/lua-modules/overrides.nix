@@ -114,13 +114,13 @@ with super;
       pkgs.glib
       pkgs.gobject-introspection
     ];
-    # patches = [
-    #   (pkgs.fetchpatch {
-    #     name = "lgi-find-cairo-through-typelib.patch";
-    #     url = "https://github.com/psychon/lgi/commit/46a163d9925e7877faf8a4f73996a20d7cf9202a.patch";
-    #     sha256 = "0gfvvbri9kyzhvq3bvdbj2l6mwvlz040dk4mrd5m9gz79f7w109c";
-    #   })
-    # ];
+    patches = [
+      (pkgs.fetchpatch {
+        name = "lgi-find-cairo-through-typelib.patch";
+        url = "https://github.com/psychon/lgi/commit/46a163d9925e7877faf8a4f73996a20d7cf9202a.patch";
+        sha256 = "0gfvvbri9kyzhvq3bvdbj2l6mwvlz040dk4mrd5m9gz79f7w109c";
+      })
+    ];
 
     # there is only a rockspec.in in the repo, the actual rockspec must be generated
     preConfigure = ''
@@ -349,6 +349,19 @@ with super;
     '';
   });
 
+  std-_debug = super.std-_debug.overrideAttrs(oa: {
+    # run make to generate lib/std/_debug/version.lua
+    preConfigure = ''
+      make all
+    '';
+  });
+
+  std-normalize = super.std-normalize.overrideAttrs(oa: {
+    # run make to generate lib/std/_debug/version.lua
+    preConfigure = ''
+      make all
+    '';
+  });
 
   # aliases
   cjson = super.lua-cjson;

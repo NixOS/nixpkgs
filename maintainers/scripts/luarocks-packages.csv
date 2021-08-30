@@ -20,6 +20,7 @@ http,,,,0.3-0,,vcunat
 inspect,,,,,,
 ldbus,,,http://luarocks.org/dev,,,
 ldoc,https://github.com/stevedonovan/LDoc.git,,,,,
+lgi,,,,,,
 linenoise,https://github.com/hoelzro/lua-linenoise.git,,,,,
 ljsyscall,,,,,lua5_1,lblasc
 lpeg,,,,,,vyp
@@ -82,5 +83,5 @@ readline,,,,,,
 say,https://github.com/Olivine-Labs/say.git,,,,,
 std._debug,https://github.com/lua-stdlib/_debug.git,,,,,
 std.normalize,git://github.com/lua-stdlib/normalize.git,,,,,
-stdlib,https://github.com/lua-stdlib/lua-stdlib.git,,,,,vyp
+stdlib,,,,41.2.2,,vyp
 vstruct,https://github.com/ToxicFrog/vstruct.git,,,,,
