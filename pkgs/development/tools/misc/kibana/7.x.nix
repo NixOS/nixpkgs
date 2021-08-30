@@ -19,12 +19,12 @@ let
   shas =
     if enableUnfree
     then {
-      x86_64-linux = "1wq4fc2fifkg1qz7nxdfb4yi2biay8cgdz7kl5k0p37sxn0sbkja";
-      x86_64-darwin = "06346kj7bv49py49pmmnmh8m24322m88v1af19909pj9cxgd0p6v";
+      x86_64-linux = "sha256-lTPBppKm51zgKSQtSdO0PgZ/aomvaStwqwYYGNPY4Bo=";
+      x86_64-darwin = "sha256-d7xHmoASiywDlZCJX/CfUX1VIi4iOcDrqvK0su54MJc=";
     }
     else {
-      x86_64-linux = "0ygpmcm6wdcnvw8azwqc5257lyic7yw31rqvm2pw3afhpha62lpj";
-      x86_64-darwin = "0xy81g0bhxp47p29kkkh5llfzqkzqzr5dk50ap2hy0hjw33ld6g1";
+      x86_64-linux = "sha256-+pkKpiXBpLHs72KKNtMJbqipw6eu5XC1xu/iLFCHGRQ=";
+      x86_64-darwin = "sha256-CyJ5iRXaPgXO2lyy+E24OcGtb9V3e1gMZRIu25bVyzk=";
     };
 
 in

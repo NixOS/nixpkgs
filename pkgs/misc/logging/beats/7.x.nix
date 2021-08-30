@@ -8,7 +8,7 @@ let beat = package: extraArgs: buildGoPackage (rec {
     owner = "elastic";
     repo = "beats";
     rev = "v${version}";
-    sha256 = "192ygz3ppfah8d2b811x67jfqhcr5ivz7qh4vwrd729rjfr0bbgb";
+    sha256 = "sha256-zr0a0LBR4G9okS2pUixDYtYZ0yCp4G6j08jx/zlIKOA=";
   };
 
   goPackagePath = "github.com/elastic/beats";
