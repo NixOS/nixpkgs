@@ -21263,6 +21263,13 @@ with pkgs;
     ];
   };
 
+  linux_5_14 = callPackage ../os-specific/linux/kernel/linux-5.14.nix {
+    kernelPatches = [
+      kernelPatches.bridge_stp_helper
+      kernelPatches.request_key_helper
+    ];
+  };
+
   linux-rt_5_10 = callPackage ../os-specific/linux/kernel/linux-rt-5.10.nix {
     kernelPatches = [
       kernelPatches.bridge_stp_helper
@@ -21553,7 +21560,7 @@ with pkgs;
 
   # Update this when adding the newest kernel major version!
   # And update linux_latest_for_hardened below if the patches are already available
-  linuxPackages_latest = linuxPackages_5_13;
+  linuxPackages_latest = linuxPackages_5_14;
   linux_latest = linuxPackages_latest.kernel;
 
   # Realtime kernel packages.
@@ -21578,6 +21585,7 @@ with pkgs;
   linuxPackages_5_4 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_4);
   linuxPackages_5_10 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_10);
   linuxPackages_5_13 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_13);
+  linuxPackages_5_14 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_14);
 
   # When adding to the list above:
   # - Update linuxPackages_latest to the latest version
