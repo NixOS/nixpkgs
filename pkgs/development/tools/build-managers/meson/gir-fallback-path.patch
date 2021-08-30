@@ -1,6 +1,6 @@
 --- a/mesonbuild/modules/gnome.py
 +++ b/mesonbuild/modules/gnome.py
-@@ -807,6 +807,13 @@ class GnomeModule(ExtensionModule):
+@@ -911,6 +911,13 @@ class GnomeModule(ExtensionModule):
          if fatal_warnings:
              scan_command.append('--warn-error')
  
@@ -11,6 +11,6 @@
 +        if fallback_libpath is not None and isinstance(fallback_libpath, str) and len(fallback_libpath) > 0 and fallback_libpath[0] == "/":
 +            scan_command += ['--fallback-library-path=' + fallback_libpath]
 +
-         scan_target = self._make_gir_target(state, girfile, scan_command, depends, kwargs)
+         generated_files = [f for f in libsources if isinstance(f, (GeneratedList, CustomTarget, CustomTargetIndex))]
  
-         typelib_output = '%s-%s.typelib' % (ns, nsversion)
+         scan_target = self._make_gir_target(state, girfile, scan_command, generated_files, depends, 
