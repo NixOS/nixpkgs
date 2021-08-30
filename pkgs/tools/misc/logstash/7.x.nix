@@ -11,15 +11,16 @@
 with lib;
 
 let this = stdenv.mkDerivation rec {
-  version = elk7Version;
+  # FIXME 7.10 is not available on the mirror
+  version = "7.9.3";
   name = "logstash-${optionalString (!enableUnfree) "oss-"}${version}";
 
   src = fetchurl {
     url = "https://artifacts.elastic.co/downloads/logstash/${name}.tar.gz";
     sha256 =
       if enableUnfree
-      then "01l6alwgsq6yf0z9d08i0hi8g708nph1vm78nl4xbpg8h964bybj"
-      else "0nlwgaw6rmhp5b68zpp1pzsjs30b0bjzdg8f7xy6rarpk338s8yb";
+      then "sha256-YM17/LqsMLH15YZp+0pqbEUzmAcCUpIwWT7o+MJN1QE="
+      else "sha256-5HEs/2bi8m64P0R8aHGgyFJCqiFxs1aBF59Wzg9STCM=";
   };
 
   dontBuild = true;
