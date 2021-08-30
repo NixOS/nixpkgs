@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, asciidoc, docbook_xsl, libxslt, pkg-config }:
+{ lib, stdenv, fetchFromGitHub, pkg-config }:
 
 with lib;
 
@@ -12,17 +12,11 @@ stdenv.mkDerivation rec {
     sha256 = "13kc68vkrzg89khir6ayyxgbnmz16dhippcnw09hhzxivf5ayzpy";
   };
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ asciidoc docbook_xsl libxslt ];
   makeFlags = [ "debug=no" ];
-
-  postPatch = ''
-    export PREFIX=$out
-    cd src
-    sed -ie 's#--no-xmllint#--no-xmllint --xsltproc-opts="--nonet"#g' Makefile
-  '';
 
   preConfigure = ''
     export version="v${version}"
+    export PREFIX=$out
   '';
 
   enableParallelBuilding = true;
