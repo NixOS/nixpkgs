@@ -40,25 +40,6 @@ alt-getopt = buildLuarocksPackage {
   };
 };
 
-ansicolors = buildLuarocksPackage {
-  pname = "ansicolors";
-  version = "1.0.2-3";
-
-  src = fetchurl {
-    url    = "https://github.com/kikito/ansicolors.lua/archive/v1.0.2.tar.gz";
-    sha256 = "0r4xi57njldmar9pn77l0vr5701rpmilrm51spv45lz0q9js8xps";
-  };
-
-  disabled = (luaOlder "5.1");
-  propagatedBuildInputs = [ lua ];
-
-  meta = {
-    homepage = "https://github.com/kikito/ansicolors.lua";
-    description = "Library for color Manipulation.";
-    license.fullName = "MIT <http://opensource.org/licenses/MIT>";
-  };
-};
-
 argparse = buildLuarocksPackage {
   pname = "argparse";
   version = "scm-2";

@@ -1,6 +1,5 @@
 name,src,ref,server,version,luaversion,maintainers
 alt-getopt,,,,,,arobyn
-ansicolors,https://github.com/kikito/ansicolors.lua,,,,,
 bit32,,,,5.3.0-1,lua5_1,lblasc
 argparse,https://github.com/luarocks/argparse.git,,,,,
 basexx,https://github.com/teto/basexx.git,,,,,
