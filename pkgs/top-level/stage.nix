@@ -237,8 +237,7 @@ let
       })] ++ overlays;
       crossOverlays = [ (import ./static.nix) ];
     } // lib.optionalAttrs stdenv.hostPlatform.isLinux {
-      ${if stdenv.hostPlatform == stdenv.buildPlatform
-        then "localSystem" else "crossSystem"} = {
+      crossSystem = {
         isStatic = true;
         parsed = stdenv.hostPlatform.parsed // {
           abi = {

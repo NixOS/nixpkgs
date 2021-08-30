@@ -4,4 +4,4 @@ addHaxeLibPath() {
   fi
 }
 
-addEnvHooks "$targetOffset" addHaxeLibPath
+addEnvHooks "$hostOffset" addHaxeLibPath
