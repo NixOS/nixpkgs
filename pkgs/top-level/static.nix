@@ -132,6 +132,34 @@ in rec {
     in " ${super.lib.concatStringsSep " " libs}";
   });
 
+  cairo = super.cairo.overrideAttrs (old: {
+    postPatch = (old.postPatch or "") + ''
+      substituteInPlace config.h.in \
+        --replace '#undef HAVE_XRENDERCREATECONICALGRADIENT' \
+                  '#define HAVE_XRENDERCREATECONICALGRADIENT 1' \
+        --replace '#undef HAVE_XRENDERCREATERADIALGRADIENT' \
+                  '#define HAVE_XRENDERCREATERADIALGRADIENT 1' \
+        --replace '#undef HAVE_XRENDERCREATELINEARGRADIENT' \
+                  '#define HAVE_XRENDERCREATELINEARGRADIENT 1'
+      rm -rf test
+      substituteInPlace configure \
+        --replace 'test/Makefile' "" \
+        --replace 'test/pdiff/Makefile' ""
+    '';
+    postConfigure = ''
+      substituteInPlace Makefile \
+        --replace 'am__append_1 = boilerplate test perf' \
+                  'am__append_1 = boilerplate' \
+        --replace 'DIST_SUBDIRS = src doc util boilerplate test perf' \
+                  'DIST_SUBDIRS = src doc util boilerplate'
+    '';
+    buildInputs = (old.buildInputs or []) ++ [ super.libglvnd ];
+    configureFlags = (old.configureFlags or []) ++ [
+      "--disable-glx"
+    ];
+    NIX_LDFLAGS = " -lGLdispatch";
+  });
+
   curl = super.curl.override {
     # brotli doesn't build static (Mar. 2021)
     brotliSupport = false;
