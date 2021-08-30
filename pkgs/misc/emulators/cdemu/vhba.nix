@@ -12,8 +12,6 @@ stdenv.mkDerivation rec {
   makeFlags = [ "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build" "INSTALL_MOD_PATH=$(out)" ];
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  hardeningDisable = [ "pic" ];
-
   meta = with lib; {
     description = "Provides a Virtual (SCSI) HBA";
     homepage = "http://cdemu.sourceforge.net/about/vhba/";
