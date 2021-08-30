@@ -75,6 +75,8 @@ let
     kernel = if libsOnly then null else kernel.dev;
     kernelVersion = if libsOnly then null else kernel.modDirVersion;
 
+    makeFlags = optionals (!libsOnly) kernel.makeFlags;
+
     hardeningDisable = [ "pic" "format" ];
 
     dontStrip = true;
