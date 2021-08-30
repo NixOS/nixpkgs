@@ -1,0 +1,25 @@
+diff -ur a/meson.build b/meson.build
+--- a/meson.build	2021-07-28 15:08:35.490095306 +0200
++++ b/meson.build	2021-07-28 15:26:30.108102819 +0200
+@@ -37,7 +37,7 @@
+ cc = meson.get_compiler('c')
+ prog_py = import('python').find_installation()
+ files_symbols_check = files('bin/symbols-check.py')
+-prog_nm = find_program('nm')
++prog_nm = find_program(get_option('nm-path'))
+ 
+ message('Host CPU family: @0@'.format(host_machine.cpu_family()))
+ message('Host CPU: @0@'.format(host_machine.cpu()))
+diff -ur a/meson_options.txt b/meson_options.txt
+--- a/meson_options.txt	2021-07-28 15:08:35.490095306 +0200
++++ b/meson_options.txt	2021-07-28 15:26:50.876044187 +0200
+@@ -80,3 +80,9 @@
+   type : 'feature',
+   description : 'Allow vendor libraries to patch OpenGL entrypoint functions.'
+ )
++option(
++  'nm-path',
++  type : 'string',
++  description : 'path to nm',
++  value : 'nm'
++)
