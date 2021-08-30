@@ -99,6 +99,9 @@ buildPythonPackage rec {
     })
   ];
 
+  # allow for package to use pep420's native namespaces
+  pythonNamespaces = [ "poetry" ];
+
   meta = with lib; {
     homepage = "https://python-poetry.org/";
     description = "Python dependency management and packaging made easy";
