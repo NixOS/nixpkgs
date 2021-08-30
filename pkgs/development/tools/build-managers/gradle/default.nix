@@ -66,9 +66,9 @@ rec {
   gradle_latest = gradle_7;
 
   gradle_7 = gradleGen (gradleSpec {
-    version = "7.1.1";
-    nativeVersion = "0.22-milestone-16";
-    sha256 = "0p9nss2xywwhjbpdcyma3d0ijvkav9hzmldpkcp447ch92cqd2xz";
+    version = "7.2";
+    nativeVersion = "0.22-milestone-21";
+    sha256 = "1pg6w5czysywsgdvmll5bwd2p6y99cn5sn3gw69cps9mkjd710gm";
   });
 
   gradle_6_8 = gradleGen (gradleSpec {
