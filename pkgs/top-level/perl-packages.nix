@@ -7983,7 +7983,7 @@ let
     };
     propagatedBuildInputs = [ TextGlob ];
     meta = {
-      license = lib.licenses.free; # Same as Perl
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
@@ -7997,7 +7997,7 @@ let
     meta = {
       maintainers = teams.deshaw.members;
       description = "simple filename and pathname matching";
-      license = lib.licenses.free; # Same as Perl
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
@@ -8213,7 +8213,7 @@ let
     })];
     propagatedBuildInputs = [ ClassAccessor ];
     meta = {
-      license = lib.licenses.free; # Same as Perl
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
       description = "Pid File Manipulation";
       maintainers = teams.deshaw.members;
     };
