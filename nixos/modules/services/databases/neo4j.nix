@@ -36,7 +36,7 @@ let
     # General
     dbms.allow_upgrade=${boolToString cfg.allowUpgrade}
     dbms.default_listen_address=${cfg.defaultListenAddress}
-    dbms.read_only=${boolToString cfg.readOnly}
+    dbms.databases.default_to_read_only=${boolToString cfg.readOnly}
     ${optionalString (cfg.workerCount > 0) ''
       dbms.threads.worker_count=${toString cfg.workerCount}
     ''}
@@ -59,6 +59,7 @@ let
     ${optionalString (cfg.http.enable) ''
       dbms.connector.http.enabled=${boolToString cfg.https.enable}
       dbms.connector.http.listen_address=${cfg.http.listenAddress}
+      dbms.connector.http.advertised_address=${cfg.http.listenAddress}
     ''}
     ${optionalString (!cfg.http.enable) ''
       # It is not possible to disable the HTTP connector. To fully prevent
@@ -71,10 +72,12 @@ let
     # HTTPS Connector
     dbms.connector.https.enabled=${boolToString cfg.https.enable}
     dbms.connector.https.listen_address=${cfg.https.listenAddress}
+    dbms.connector.https.advertised_address=${cfg.https.listenAddress}
 
     # BOLT Connector
     dbms.connector.bolt.enabled=${boolToString cfg.bolt.enable}
     dbms.connector.bolt.listen_address=${cfg.bolt.listenAddress}
+    dbms.connector.bolt.advertised_address=${cfg.bolt.listenAddress}
     dbms.connector.bolt.tls_level=${cfg.bolt.tlsLevel}
 
     # SSL Policies
