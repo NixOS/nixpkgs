@@ -6,7 +6,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "libva-${lib.optionalString minimal "minimal-"}${version}";
+  pname = "libva" + lib.optionalString minimal "minimal";
   version = "2.12.0";
 
   src = fetchFromGitHub {
