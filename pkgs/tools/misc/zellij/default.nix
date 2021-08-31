@@ -6,20 +6,21 @@
 , pkg-config
 , libiconv
 , openssl
+, expect
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "zellij";
-  version = "0.15.0";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "zellij-org";
     repo = "zellij";
     rev = "v${version}";
-    sha256 = "sha256-IcpCE9mqR7H1+gRhHyscvXhYHOynJFtOyrSr1FiMxFc=";
+    sha256 = "sha256-2DYNgPURQzHaR8wHKEzuXSzubrxsQHpl3H3ko4okY7M=";
   };
 
-  cargoSha256 = "sha256-22ggPs4iVOI1LKHtW5skfSO7J/FLF8EinvcyHVO14Dw=";
+  cargoSha256 = "sha256-AxtXWBfOzdLCpRchaQJbBBs+6rIyF+2ralOflRvkY4k=";
 
   nativeBuildInputs = [ installShellFiles pkg-config ];
 
@@ -31,9 +32,9 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     installShellCompletion --cmd $pname \
-      --bash <($out/bin/zellij setup --generate-completion bash) \
-      --fish <($out/bin/zellij setup --generate-completion fish) \
-      --zsh <($out/bin/zellij setup --generate-completion zsh)
+      --bash <(${expect}/bin/unbuffer $out/bin/zellij setup --generate-completion bash) \
+      --fish <(${expect}/bin/unbuffer $out/bin/zellij setup --generate-completion fish) \
+      --zsh <(${expect}/bin/unbuffer $out/bin/zellij setup --generate-completion zsh)
   '';
 
   meta = with lib; {
