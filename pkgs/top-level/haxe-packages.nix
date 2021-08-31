@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchzip, fetchFromGitHub, haxe, neko }:
+{ stdenv, lib, fetchzip, fetchFromGitHub, haxe, neko, libuv, SDL2, zlib, libjpeg, libpng, libvorbis, mesa_glu, openal, mbedtls }:
 
 let
   self = haxePackages;
