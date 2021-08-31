@@ -938,6 +938,8 @@ with pkgs;
     inherit (lxqt) qtermwidget;
   };
 
+  darktile = callPackage ../applications/terminal-emulators/darktile { };
+
   eterm = callPackage ../applications/terminal-emulators/eterm { };
 
   evilvte = callPackage ../applications/terminal-emulators/evilvte (config.evilvte or {});
