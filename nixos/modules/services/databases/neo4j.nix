@@ -652,6 +652,6 @@ in {
     };
 
   meta = {
-    maintainers = with lib.maintainers; [ patternspandemic jonringer ];
+    maintainers = with lib.maintainers; [ patternspandemic jonringer erictapen ];
   };
 }
