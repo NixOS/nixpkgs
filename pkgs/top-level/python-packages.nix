@@ -1858,6 +1858,8 @@ in {
 
   dateparser = callPackage ../development/python-modules/dateparser { };
 
+  dateutils = callPackage ../development/python-modules/dateutils { };
+
   datrie = callPackage ../development/python-modules/datrie { };
 
   dawg-python = callPackage ../development/python-modules/dawg-python { };
