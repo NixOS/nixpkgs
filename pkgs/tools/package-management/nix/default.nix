@@ -240,13 +240,13 @@ in rec {
     #    git diff OLD..NEW -- $(find . -name \*.nix | grep -v test)
     pname = "nix";
     version = "2.4${suffix}";
-    suffix = "pre20210830_${lib.substring 0 7 src.rev}";
+    suffix = "pre20210831_${lib.substring 0 7 src.rev}";
 
     src = fetchFromGitHub {
-      owner = "NixOS";
+      owner = "hercules-ci";
       repo = "nix";
-      rev = "50a35860ee9237d341948437c5f70a7f0987d393";
-      sha256 = "sha256-eljjEPJdLK3aDskF7qX4YM/6KCq+w9nr+IKhrKW/AIQ=";
+      rev = "5d51df2fbe005ae37714541bb13e037e6fe28a81";
+      sha256 = "sha256:0dxz40wjbb851k2j3hixxvvk2z0ykyjhdpyry25cba6r289c560j";
     };
 
     boehmgc = boehmgc_nixUnstable;
