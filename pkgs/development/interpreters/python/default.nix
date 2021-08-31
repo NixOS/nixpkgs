@@ -123,10 +123,10 @@ with pkgs;
       sourceVersion = {
         major = "3";
         minor = "8";
-        patch = "11";
+        patch = "12";
         suffix = "";
       };
-      sha256 = "1chg8b0m1yrz50lizid20zha0dmj40z0iih3jqcrg7pyxca126pv";
+      sha256 = "1si8hw2xpagh4iji89zdx69p3dv5mjqwwbx2x2sl6lrp41jaglxi";
     };
     python39 = {
       sourceVersion = {
