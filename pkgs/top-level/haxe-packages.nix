@@ -111,5 +111,56 @@ let
         description = "Extern definitions for node.js ${version}";
       };
     };
+
+    hashlink = stdenv.mkDerivation rec {
+      pname = "hashlink";
+      version = "1.11";
+      src = fetchFromGitHub {
+        owner = "HaxeFoundation";
+        repo = pname;
+        rev = version;
+        sha256 = "1bgx8pr062xsy81ygbakm3v033d68dqqx0dgfs0dczdqy8q0039k";
+      };
+      nativeBuildInputs = [ haxe ];
+      buildInputs = [ libuv zlib libpng SDL2 libvorbis libjpeg mesa_glu openal mbedtls ];
+      postBuild = ''
+        (cd other/haxelib; haxe --neko run.n Run.hx)
+      '';
+      doCheck = true;
+      checkPhase = ''
+        ( # simulate `haxelib dev hashlink other/haxelib`
+          devrepo=$(mktemp -d)
+          mkdir -p                    "$devrepo/hashlink"
+          echo $(pwd)/other/haxelib > "$devrepo/hashlink/.dev"
+          export HAXELIB_PATH="$HAXELIB_PATH:$devrepo"
+          haxelib list
+
+          # Run bytecode
+          haxe -hl hello.hl -cp other/tests -main HelloWorld -D interp
+          ./hl hello.hl
+
+          # Generate C-code
+          haxe -hl src/_main.c -cp other/tests -main HelloWorld
+          make hlc
+          ./hlc
+        )
+      '';
+      installPhase = ''
+        install  -Dm755 -t ${placeholder "out"}/bin                                     hl
+        install  -Dm755 -t ${placeholder "out"}/lib                                     libhl.so *.hdll
+
+        # install hashlink support lib
+        install  -Dm444 -t ${placeholder "out"}/lib/haxe/hashlink/${withCommas "0.1.0"} other/haxelib/haxelib.json other/haxelib/run.n other/haxelib/Run.hx
+        echo "0.1.0" >     ${placeholder "out"}/lib/haxe/hashlink/.current
+
+        # install files to include in generated C-code
+        cp -r "$src/src" ${placeholder "out"}/include
+      '';
+      meta = {
+        description = "Virtual machine for Haxe";
+        platforms = lib.platforms.linux;
+      };
+    };
+
   };
 in self

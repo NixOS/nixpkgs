@@ -29,6 +29,17 @@ let
       doInstallCheck = true;
       installCheckPhase = "haxe run.hxml";
     };
+
+    neko-bytecode = stdenv.mkDerivation {
+      pname = "haxe-example-neko-bytecode";
+      inherit (haxePackages.haxe) version;
+      inherit src;
+      nativeBuildInputs = [ haxePackages.haxe neko ];
+      buildPhase = "haxe build-executable.hxml";
+      installPhase = "install -Dm444 -t ${placeholder "out"} dist/neko/build.n";
+      doInstallCheck = true;
+      installCheckPhase = "neko ${placeholder "out"}/build.n";
+    };
     neko-exe = stdenv.mkDerivation {
       pname = "haxe-example-neko-exe";
       inherit (haxePackages.haxe) version;
@@ -39,16 +50,31 @@ let
       doInstallCheck = true;
       installCheckPhase = "${placeholder "out"}/build";
     };
-    neko-n = stdenv.mkDerivation {
-      pname = "haxe-example-neko-n";
+
+    hashlink-bytecode = stdenv.mkDerivation {
+      pname = "haxe-example-hashlink-bytecode";
       inherit (haxePackages.haxe) version;
       inherit src;
-      nativeBuildInputs = [ haxePackages.haxe neko ];
-      buildPhase = "haxe build-executable.hxml";
-      installPhase = "install -Dm444 -t ${placeholder "out"} dist/neko/build.n";
+      nativeBuildInputs = [ haxePackages.haxe haxePackages.hashlink ];
+      buildPhase = "haxe -hl Main.hl -cp src -main Main";
+      installPhase = "install -Dm444 -t ${placeholder "out"} Main.hl";
       doInstallCheck = true;
-      installCheckPhase = "neko ${placeholder "out"}/build.n";
+      installCheckPhase = "hl ${placeholder "out"}/Main.hl";
     };
+    hashlink-exe = stdenv.mkDerivation {
+      pname = "haxe-example-hashlink-exe";
+      inherit (haxePackages.haxe) version;
+      inherit src;
+      nativeBuildInputs = [ haxePackages.haxe haxePackages.hashlink ];
+      buildPhase = ''
+        haxe -hl src/_main.c -cp src -main Main
+        gcc -Wall -O3 -Isrc -lhl -o hlc src/_main.c
+      '';
+      installPhase = "install -D -t ${placeholder "out"} hlc";
+      doInstallCheck = true;
+      installCheckPhase = "${placeholder "out"}/hlc";
+    };
+
     js = stdenv.mkDerivation {
       pname = "haxe-example-js";
       inherit (haxePackages.haxe) version;
