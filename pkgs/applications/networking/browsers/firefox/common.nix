@@ -1,6 +1,8 @@
 { pname, version, meta, updateScript ? null
 , binaryName ? "firefox", application ? "browser"
-, src, unpackPhase ? null, patches ? []
+, src, unpackPhase ? null, postUnpack ? null, patches ? []
+, allowOfficialBranding ? true
+, extraLib ? null
 , extraNativeBuildInputs ? [], extraConfigureFlags ? [], extraMakeFlags ? [], tests ? [] }:
 
 { lib, stdenv, pkg-config, pango, perl, python3, zip
@@ -69,7 +71,7 @@
 # > Therefor, as long as you keep the patch queue sane and you don't alter
 # > the experience of Firefox users, you won't have any issues using the
 # > official branding.
-, enableOfficialBranding ? true
+, enableOfficialBranding ? allowOfficialBranding
 }:
 
 assert stdenv.cc.libc or null != null;
@@ -132,7 +134,7 @@ buildStdenv.mkDerivation ({
   name = "${pname}-unwrapped-${version}";
   inherit version;
 
-  inherit src unpackPhase meta;
+  inherit src unpackPhase postUnpack meta;
 
   patches = [
   ] ++
@@ -364,6 +366,7 @@ buildStdenv.mkDerivation ({
     inherit version;
     inherit alsaSupport;
     inherit pipewireSupport;
+    inherit extraLib;
     inherit nspr;
     inherit ffmpegSupport;
     inherit gssSupport;

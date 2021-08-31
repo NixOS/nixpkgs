@@ -24681,6 +24681,8 @@ with pkgs;
   firefox-wayland = wrapFirefox firefox-unwrapped { forceWayland = true; };
   firefox-esr-78 = wrapFirefox firefox-esr-78-unwrapped { };
   firefox-esr-91 = wrapFirefox firefox-esr-91-unwrapped { };
+  librewolf-unwrapped = firefoxPackages.librewolf;
+  librewolf = wrapFirefox librewolf-unwrapped { libName = "librewolf"; };
 
   firefox-esr = firefox-esr-78;
   firefox-esr-unwrapped = firefoxPackages.firefox-esr-78;

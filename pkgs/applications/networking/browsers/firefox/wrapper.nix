@@ -340,6 +340,13 @@ let
         #   END EXTRA PREF CHANGES  #
         #                           #
         #############################
+      '' + lib.optionalString (! (isNull browser.extraLib)) ''
+        # additional files included from forks; ensure policies.json,
+        # prefs and mozilla.cfg are still set up correctly.
+        #
+        # TODO: This is a band-aid for librewolf, we should design the
+        # whole wrapper better for this use case.
+        cp -r ${browser.extraLib}/* "$out/lib/${libName}/"
       '';
 
       preferLocalBuild = true;
