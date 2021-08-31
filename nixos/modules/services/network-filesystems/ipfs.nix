@@ -192,6 +192,9 @@ in
     environment.systemPackages = [ cfg.package ];
     environment.variables.IPFS_PATH = cfg.dataDir;
 
+    # https://github.com/lucas-clemente/quic-go/wiki/UDP-Receive-Buffer-Size
+    boot.kernel.sysctl."net.core.rmem_max" = mkDefault 2500000;
+
     programs.fuse = mkIf cfg.autoMount {
       userAllowOther = true;
     };
