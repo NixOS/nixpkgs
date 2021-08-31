@@ -50,7 +50,6 @@ let
    ''}
 
     # Directories (read and write)
-    dbms.directories.home=${cfg.directories.home}
     dbms.directories.data=${cfg.directories.data}
     dbms.directories.logs=${cfg.directories.home}/logs
     dbms.directories.run=${cfg.directories.home}/run
