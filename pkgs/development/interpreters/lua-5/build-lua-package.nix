@@ -7,10 +7,8 @@
 }:
 
 {
-# name ? "${attrs.pname}-${attrs.version}"
-pname,
-
-version
+pname
+, version
 
 # by default prefix `name` e.g. "lua5.2-${name}"
 , namePrefix ? if lua.pkgs.isLuaJIT
@@ -62,7 +60,7 @@ version
 
 # relative to srcRoot, path to the rockspec to use when using rocks
 , rockspecFilename ? null
-  # "../*.rockspec"
+# relative to srcRoot, path to folder that contains the expected rockspec
 , rockspecDir ?  "."
 
 # must be set for packages that don't have a rock
@@ -174,8 +172,6 @@ builtins.removeAttrs attrs ["disabled" "checkInputs" "externalDeps" "extraVariab
     ${luarocks_content}
     EOF
     export LUAROCKS_CONFIG="$PWD/${luarocks_config}";
-    echo "pwd: $PWD"
-
   ''
   + lib.optionalString (rockspecFilename == null) ''
     rockspecFilename="${generatedRockspecFilename}"
