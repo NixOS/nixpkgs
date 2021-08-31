@@ -68,4 +68,5 @@ mixRelease rec {
     platforms = platforms.unix;
     maintainers = teams.beam.members;
   };
+  passthru.updateScript = ./update.sh;
 }
