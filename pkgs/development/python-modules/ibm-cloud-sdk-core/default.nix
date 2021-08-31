@@ -1,11 +1,8 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, codecov
 , pyjwt
-, pylint
 , pytestCheckHook
-, pytest-cov
 , python-dateutil
 , requests
 , responses
@@ -21,23 +18,20 @@ buildPythonPackage rec {
     sha256 = "c855d0111dd570f36497cdb8c11510ae8d14fb70698f20529e19f88485266233";
   };
 
-  checkInputs = [
-    codecov
-    pylint
-    pytestCheckHook
-    pytest-cov
-    responses
-    tox
-  ];
-
   propagatedBuildInputs = [
     pyjwt
     python-dateutil
     requests
   ];
 
-  # Various tests try to access credential files which are not included with the source distribution
+  checkInputs = [
+    pytestCheckHook
+    responses
+    tox
+  ];
+
   disabledTests = [
+    # Various tests try to access credential files which are not included with the source distribution
     "test_configure_service"
     "test_cp4d_authenticator"
     "test_cwd"
@@ -49,6 +43,12 @@ buildPythonPackage rec {
     "test_iam"
     "test_read_external_sources_2"
     "test_retry_config_external"
+    # assertion error due to requests brotli support
+    "test_http_client"
+  ];
+
+  disabledTestPaths = [
+    "test/test_container_token_manager.py"
   ];
 
   meta = with lib; {
