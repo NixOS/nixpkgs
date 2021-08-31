@@ -1,0 +1,129 @@
+From f36e1d9ea6b34ae1ed2bd481e56ce93174652061 Mon Sep 17 00:00:00 2001
+From: Samuel Dionne-Riel <samuel@dionne-riel.com>
+Date: Thu, 29 Aug 2019 15:11:04 -0400
+Subject: [PATCH 2/2] make_ext4fs: allow setting a specific UUID
+
+The UUID was previously only reproducibly generated using a combination
+of a fixed namespace and the label of the partition. This change allows
+projects to specify a desired UUID instead.
+
+Signed-off-by: Samuel Dionne-Riel <samuel@dionne-riel.com>
+---
+ ext4_sb.h          |  3 +++
+ ext4_utils.c       | 13 ++++++++++++-
+ make_ext4fs.c      |  5 +++++
+ make_ext4fs_main.c |  9 +++++++--
+ 4 files changed, 27 insertions(+), 3 deletions(-)
+
+diff --git a/ext4_sb.h b/ext4_sb.h
+index d6416a7..68f5cb1 100644
+--- a/ext4_sb.h
++++ b/ext4_sb.h
+@@ -18,6 +18,7 @@
+ #define _EXT4_UTILS_EXT4_SB_H_
+ 
+ #include "ext4_kernel_headers.h"
++#include <stdbool.h>
+ 
+ #define EXT4_SUPER_MAGIC 0xEF53
+ 
+@@ -42,6 +43,8 @@ struct fs_info {
+ 	uint32_t reserve_pcnt;
+ 	const char *label;
+ 	uint8_t no_journal;
++	bool with_uuid;
++	uint8_t uuid[16];
+ };
+ 
+ int ext4_parse_sb(struct ext4_super_block *sb, struct fs_info *info);
+diff --git a/ext4_utils.c b/ext4_utils.c
+index 1a886d7..7d3fd43 100644
+--- a/ext4_utils.c
++++ b/ext4_utils.c
+@@ -221,7 +221,13 @@ void ext4_fill_in_sb()
+ 	sb->s_feature_compat = info.feat_compat;
+ 	sb->s_feature_incompat = info.feat_incompat;
+ 	sb->s_feature_ro_compat = info.feat_ro_compat;
+-	generate_uuid("extandroid/make_ext4fs", info.label, sb->s_uuid);
++	if (info.with_uuid) {
++		memset(sb->s_uuid, 0, sizeof(sb->s_uuid));
++		memcpy(sb->s_uuid, info.uuid, sizeof(sb->s_uuid));
++	}
++	else {
++		generate_uuid("extandroid/make_ext4fs", info.label, sb->s_uuid);
++	}
+ 	memset(sb->s_volume_name, 0, sizeof(sb->s_volume_name));
+ 	strncpy(sb->s_volume_name, info.label, sizeof(sb->s_volume_name));
+ 	memset(sb->s_last_mounted, 0, sizeof(sb->s_last_mounted));
+@@ -521,6 +527,11 @@ int read_ext(int fd, int verbose)
+ 		printf("    Inodes per group: %d\n", info.inodes_per_group);
+ 		printf("    Inode size: %d\n", info.inode_size);
+ 		printf("    Label: %s\n", info.label);
++		if (info.with_uuid) {
++			char uuid[UUID_STR_LEN] = { 0 };
++			uuid_to_string(info.uuid, uuid);
++			printf("    UUID: %s\n", uuid);
++		}
+ 		printf("    Blocks: %"PRIu64"\n", aux_info.len_blocks);
+ 		printf("    Block groups: %d\n", aux_info.groups);
+ 		printf("    Reserved block group size: %d\n", info.bg_desc_reserve_blocks);
+diff --git a/make_ext4fs.c b/make_ext4fs.c
+index 051052b..f486eed 100644
+--- a/make_ext4fs.c
++++ b/make_ext4fs.c
+@@ -451,6 +451,11 @@ int make_ext4fs_internal(int fd, const char *_directory,
+ 	printf("    Inode size: %d\n", info.inode_size);
+ 	printf("    Journal blocks: %d\n", info.journal_blocks);
+ 	printf("    Label: %s\n", info.label);
++	if (info.with_uuid) {
++		char uuid[UUID_STR_LEN] = { 0 };
++		uuid_to_string(info.uuid, uuid);
++		printf("    UUID: %s\n", uuid);
++	}
+ 
+ 	ext4_create_fs_aux_info();
+ 
+diff --git a/make_ext4fs_main.c b/make_ext4fs_main.c
+index 88254c3..e957a03 100644
+--- a/make_ext4fs_main.c
++++ b/make_ext4fs_main.c
+@@ -27,6 +27,7 @@
+ 
+ #include "ext4_utils.h"
+ #include "canned_fs_config.h"
++#include "uuid.h"
+ 
+ extern struct fs_info info;
+ 
+@@ -35,7 +36,7 @@ static void usage(char *path)
+ {
+ 	fprintf(stderr, "%s [ -l <len> ] [ -j <journal size> ] [ -b <block_size> ]\n", basename(path));
+ 	fprintf(stderr, "    [ -g <blocks per group> ] [ -i <inodes> ] [ -I <inode size> ]\n");
+-	fprintf(stderr, "    [ -m <reserved blocks percent> ] [ -L <label> ] [ -f ]\n");
++	fprintf(stderr, "    [ -m <reserved blocks percent> ] [ -L <label> ] [ -U <uuid> ] [ -f ]\n");
+ 	fprintf(stderr, "    [ -S file_contexts ] [ -C fs_config ] [ -T timestamp ]\n");
+ 	fprintf(stderr, "    [ -z | -s ] [ -w ] [ -c ] [ -J ] [ -v ] [ -B <block_list_file> ]\n");
+ 	fprintf(stderr, "    <filename> [<directory>]\n");
+@@ -58,7 +59,7 @@ int main(int argc, char **argv)
+ 	time_t fixed_time = -1;
+ 	FILE* block_list_file = NULL;
+ 
+-	while ((opt = getopt(argc, argv, "l:j:b:g:i:I:L:T:C:B:m:fwzJsctv")) != -1) {
++	while ((opt = getopt(argc, argv, "l:j:b:g:i:I:L:T:C:B:m:U:fwzJsctv")) != -1) {
+ 		switch (opt) {
+ 		case 'l':
+ 			info.len = parse_num(optarg);
+@@ -81,6 +82,10 @@ int main(int argc, char **argv)
+ 		case 'L':
+ 			info.label = optarg;
+ 			break;
++		case 'U':
++			info.with_uuid = true;
++			parse_uuid(optarg, info.uuid);
++			break;
+ 		case 'f':
+ 			force = 1;
+ 			break;
+-- 
+2.25.3
+
