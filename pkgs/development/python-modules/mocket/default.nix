@@ -19,18 +19,13 @@
 
 buildPythonPackage rec {
   pname = "mocket";
-  version = "3.9.42";
+  version = "3.9.44";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1vvlbnbypd4z1pjlvhwhd89fn0mis5acfx4v25f1mfl04k63ffah";
+    sha256 = "sha256-oeDYzhSzUXxtYhcLjXAmsi1v9vY5qCE/U9YOYxdQxrg=";
   };
-
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "decorator>=4.0.0,<5" "decorator>=4.0.0,<6"
-  '';
 
   propagatedBuildInputs = [
     decorator
@@ -59,8 +54,6 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # incompatible with decorator>=5
-    "test_patch"
     # tests that require network access (like DNS lookups)
     "test_truesendall"
     "test_truesendall_with_chunk_recording"
