@@ -89,6 +89,12 @@ in
         description = "Whether IPFS should try to mount /ipfs and /ipns at startup.";
       };
 
+      autoMigrate = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Whether IPFS should try to run the fs-repo-migration at startup.";
+      };
+
       ipfsMountDir = mkOption {
         type = types.str;
         default = "/ipfs";
@@ -243,6 +249,8 @@ in
         ipfs --offline config Mounts.FuseAllowOther --json true
         ipfs --offline config Mounts.IPFS ${cfg.ipfsMountDir}
         ipfs --offline config Mounts.IPNS ${cfg.ipnsMountDir}
+      '' + optionalString cfg.autoMigrate ''
+        ${pkgs.ipfs-migrator}/bin/fs-repo-migrations -y
       '' + concatStringsSep "\n" (collect
         isString
         (mapAttrsRecursive
