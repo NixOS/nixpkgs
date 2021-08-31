@@ -12739,6 +12739,8 @@ with pkgs;
 
   mujs = callPackage ../development/interpreters/mujs { };
 
+  ngn-k = callPackage ../development/interpreters/ngn-k { };
+
   octave = callPackage ../development/interpreters/octave {
     python = python3;
     mkDerivation = stdenv.mkDerivation;
