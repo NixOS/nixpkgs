@@ -12188,6 +12188,20 @@ let
      };
   };
 
+  LWPUserAgentCached = buildPerlPackage {
+    pname = "LWP-UserAgent-Cached";
+    version = "0.08";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/O/OL/OLEG/LWP-UserAgent-Cached-0.08.tar.gz";
+      hash = "sha256-Pc5atMeAQWVs54Vk92Az5b0ew4b1TS57MHQK5I7nh8M=";
+    };
+    propagatedBuildInputs = [ LWP ];
+    meta = {
+      description = "LWP::UserAgent with simple caching mechanism";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   LWPUserAgentDNSHosts = buildPerlModule {
     pname = "LWP-UserAgent-DNS-Hosts";
     version = "0.14";
