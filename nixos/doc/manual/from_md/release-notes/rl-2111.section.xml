@@ -214,6 +214,13 @@
           <link xlink:href="options.html#opt-services.soju.enable">services.soju</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://nats.io/">nats</link>, a high
+          performance cloud and edge messaging system. Available as
+          <link linkend="opt-services.nats.enable">services.nats</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-incompatibilities">
