@@ -21947,6 +21947,8 @@ with pkgs;
 
   pipes = callPackage ../misc/screensavers/pipes { };
 
+  pipes-rs = callPackage ../misc/screensavers/pipes-rs { };
+
   pipework = callPackage ../os-specific/linux/pipework { };
 
   pktgen = callPackage ../os-specific/linux/pktgen { };
