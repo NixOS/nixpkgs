@@ -22,7 +22,7 @@
       </listitem>
       <listitem>
         <para>
-          kOps now defaults to 1.21.0, which uses containerd as the
+          kOps now defaults to 1.21.1, which uses containerd as the
           default runtime.
         </para>
       </listitem>
