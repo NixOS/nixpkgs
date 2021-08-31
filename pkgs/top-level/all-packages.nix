@@ -17424,6 +17424,8 @@ with pkgs;
 
   libspiro = callPackage ../development/libraries/libspiro {};
 
+  libspng = callPackage ../development/libraries/libspng { };
+
   libssh = callPackage ../development/libraries/libssh { };
 
   libssh2 = callPackage ../development/libraries/libssh2 { };
