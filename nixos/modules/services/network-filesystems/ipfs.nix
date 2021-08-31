@@ -4,7 +4,7 @@ let
   cfg = config.services.ipfs;
   opt = options.services.ipfs;
 
-  ipfsFlags = toString ([
+  ipfsFlags =         ([
     (optionalString cfg.autoMount "--mount")
     (optionalString cfg.enableGC "--enable-gc")
     (optionalString (cfg.serviceFdlimit != null) "--manage-fdlimit=false")
