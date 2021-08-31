@@ -2,9 +2,13 @@
 
 , coreutils
 , git
+, libiconv
 , ncurses
 , rustPlatform
 , sqlite
+, stdenv
+, Security
+, SystemConfiguration
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -33,6 +37,10 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     ncurses
     sqlite
+  ] ++ lib.optionals (stdenv.isDarwin) [
+    Security
+    SystemConfiguration
+    libiconv
   ];
 
   preCheck = ''
