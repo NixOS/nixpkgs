@@ -70,12 +70,20 @@ let
   # If you need a grammar that already exists in the official orga,
   # make sure to give it a different name.
   otherGrammars = {
+    "tree-sitter-comment" = {
+      orga = "stsewd";
+      repo = "tree-sitter-comment";
+    };
     "tree-sitter-nix" = {
       orga = "cstrahan";
       repo = "tree-sitter-nix";
     };
+    "tree-sitter-latex" = {
+      orga = "latex-lsp";
+      repo = "tree-sitter-latex";
+    };
     "tree-sitter-lua" = {
-      orga = "Azganoth";
+      orga = "nvim-treesitter";
       repo = "tree-sitter-lua";
     };
     "tree-sitter-fennel" = {
@@ -101,6 +109,10 @@ let
     "tree-sitter-zig" = {
       orga = "GrayJack";
       repo = "tree-sitter-zig";
+    };
+    "tree-sitter-fish" = {
+      orga = "ram02z";
+      repo = "tree-sitter-fish";
     };
   };
 

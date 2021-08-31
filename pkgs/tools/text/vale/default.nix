@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "vale";
-  version = "2.10.2";
+  version = "2.10.5";
 
   subPackages = [ "cmd/vale" ];
   outputs = [ "out" "data" ];
@@ -11,17 +11,17 @@ buildGoModule rec {
     owner  = "errata-ai";
     repo   = "vale";
     rev    = "v${version}";
-    sha256 = "0cpq2pv6d67fdnm2qbb7p9amk0as8bm4knkywak8fsqadxfadx80";
+    sha256 = "sha256-SxNM63MCtsBmjzFbO/leCQwWWew5nN8wTUdmzHkx7dQ=";
   };
 
-  vendorSha256 = "14zimsl0f7sxqqka00krix3q2mxdcpk8n2zh7bz8awjwzn4kg8m3";
+  vendorSha256 = "sha256-3rCrRA9OKG2/wUlVvkG9lynJZOYFVqMkUZpGpW89KZc=";
 
   postInstall = ''
     mkdir -p $data/share/vale
     cp -r styles $data/share/vale
   '';
 
-  buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version}" ];
+  ldflags = [ "-s" "-w" "-X main.version=${version}" ];
 
   meta = with lib; {
     homepage = "https://docs.errata.ai/vale/about";

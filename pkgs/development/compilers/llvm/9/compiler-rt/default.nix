@@ -1,4 +1,4 @@
-{ lib, stdenv, llvm_meta, version, fetch, cmake, python3, llvm, libcxxabi }:
+{ lib, stdenv, llvm_meta, version, fetch, cmake, python3, libllvm, libcxxabi }:
 
 let
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   inherit version;
   src = fetch "compiler-rt" "0xwh79g3zggdabxgnd0bphry75asm1qz7mv3hcqihqwqr6aspgy2";
 
-  nativeBuildInputs = [ cmake python3 llvm.dev ];
+  nativeBuildInputs = [ cmake python3 libllvm.dev ];
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin libcxxabi;
 
   NIX_CFLAGS_COMPILE = [
@@ -104,5 +104,6 @@ stdenv.mkDerivation {
     # "All of the code in the compiler-rt project is dual licensed under the MIT
     # license and the UIUC License (a BSD-like license)":
     license = with lib.licenses; [ mit ncsa ];
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
   };
 }

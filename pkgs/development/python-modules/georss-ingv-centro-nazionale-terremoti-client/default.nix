@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "georss-ingv-centro-nazionale-terremoti-client";
-  version = "0.4";
+  version = "0.5";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "exxamalte";
     repo = "python-georss-ingv-centro-nazionale-terremoti-client";
     rev = "v${version}";
-    sha256 = "06qhxczznckb208bnfly0q5099scq1yj5rk67a6fqczpsmzcln6x";
+    sha256 = "1pd0qsr0n8f1169p2nz8s0zrbrxh0rdzaxdb3jmdymzp4xz28wb0";
   };
 
   propagatedBuildInputs = [

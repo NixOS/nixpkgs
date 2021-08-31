@@ -1,9 +1,8 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch, pkg-config, file, fuse, libmtp }:
 
-let version = "0.5"; in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "jmtpfs";
-  inherit version;
+  version = "0.5";
 
   src = fetchFromGitHub {
     sha256 = "1pm68agkhrwgrplrfrnbwdcvx5lrivdmqw8pb5gdmm3xppnryji1";

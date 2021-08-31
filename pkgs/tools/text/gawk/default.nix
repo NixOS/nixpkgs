@@ -19,10 +19,11 @@ let
   inherit (lib) optional;
 in
 stdenv.mkDerivation rec {
-  name = "gawk-5.1.0";
+  pname = "gawk";
+  version = "5.1.0";
 
   src = fetchurl {
-    url = "mirror://gnu/gawk/${name}.tar.xz";
+    url = "mirror://gnu/gawk/gawk-${version}.tar.xz";
     sha256 = "1gc2cccqy1x1bf6rhwlmd8q7dz7gnam6nwgl38bxapv6qm5flpyg";
   };
 

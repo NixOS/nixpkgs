@@ -8,6 +8,14 @@ in
     configureFlags = drv.configureFlags or [] ++ ["-fembed_data_files"];
     buildDepends = drv.buildDepends or [] ++ [haskellPackages.file-embed];
     buildTools = (drv.buildTools or []) ++ [ removeReferencesTo ];
+    patches = (drv.patches or []) ++ [
+      # Support citerefentry DocBook element.
+      # https://github.com/jgm/pandoc/pull/7437
+      (fetchpatch {
+        url = "https://github.com/jgm/pandoc/commit/06408d08e5ccf06a6a04c9b77470e6a67d98e52c.patch";
+        sha256 = "gOtrWVylzwgu0YLD4SztqlXxtaXXGOf8nTqLwUBS7qs=";
+      })
+    ];
   })).overrideAttrs (drv: {
 
     # These libraries are still referenced, because they generate

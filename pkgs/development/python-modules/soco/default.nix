@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "soco";
-  version = "0.22.3";
+  version = "0.23.3";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "SoCo";
     repo = "SoCo";
     rev = "v${version}";
-    sha256 = "sha256-RCWXXk5aQQYqyxm65M96XBoMS5UlYqyAz3aM/DVghRw=";
+    sha256 = "sha256-T6gDImH/HfHg8e1YzUYB8zr2GJHRtF6vdYm2cSiXSb0=";
   };
 
   propagatedBuildInputs = [

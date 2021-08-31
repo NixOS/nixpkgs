@@ -4,14 +4,13 @@
 , fetchFromGitHub
 , flit
 , pytestCheckHook
-, pytestcov
 , numpy
 , scipy
 }:
 
 buildPythonPackage rec {
   pname = "threadpoolctl";
-  version = "2.1.0";
+  version = "2.2.0";
 
   disabled = isPy27;
   format = "flit";
@@ -20,10 +19,10 @@ buildPythonPackage rec {
     owner = "joblib";
     repo = pname;
     rev = version;
-    sha256 = "0sl6mp3b2gb0dvqkhnkmrp2g3r5c7clyyyxzq44xih6sw1pgx9df";
+    sha256 = "7UUjbX1IpXtUAgN48Db43Zr1u360UETSUnIHD6rQRLs=";
   };
 
-  checkInputs = [ pytestCheckHook pytestcov numpy scipy ];
+  checkInputs = [ pytestCheckHook numpy scipy ];
 
   meta = with lib; {
     homepage = "https://github.com/joblib/threadpoolctl";

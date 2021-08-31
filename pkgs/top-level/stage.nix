@@ -65,7 +65,12 @@
 
 let
   stdenvAdapters = self: super:
-    let res = import ../stdenv/adapters.nix self; in res // {
+    let
+      res = import ../stdenv/adapters.nix {
+        inherit lib config;
+        pkgs = self;
+      };
+    in res // {
       stdenvAdapters = res;
     };
 
@@ -151,7 +156,7 @@ let
   otherPackageSets = self: super: {
     # This maps each entry in lib.systems.examples to its own package
     # set. Each of these will contain all packages cross compiled for
-    # that target system. For instance, pkgsCross.rasberryPi.hello,
+    # that target system. For instance, pkgsCross.raspberryPi.hello,
     # will refer to the "hello" package built for the ARM6-based
     # Raspberry Pi.
     pkgsCross = lib.mapAttrs (n: crossSystem:
@@ -169,6 +174,7 @@ let
       # so we don't need to check hostPlatform != buildPlatform.
       crossSystem = stdenv.hostPlatform // {
         useLLVM = true;
+        linker = "lld";
       };
     };
 
@@ -238,6 +244,8 @@ let
             gnu = lib.systems.parse.abis.musl;
             gnueabi = lib.systems.parse.abis.musleabi;
             gnueabihf = lib.systems.parse.abis.musleabihf;
+            musleabi = lib.systems.parse.abis.musleabi;
+            musleabihf = lib.systems.parse.abis.musleabihf;
           }.${stdenv.hostPlatform.parsed.abi.name}
             or lib.systems.parse.abis.musl;
         };

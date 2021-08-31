@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     license     = licenses.bsd3;
   };
 
-  phases = "installPhase";
+  dontUnpack = true;
 
   installPhase = ''
     mkdir -p "$out/bin"

@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, ncurses, openssl, flex, bison, less, miscfiles }:
 
-stdenv.mkDerivation {
-  name = "bsd-games-2.17";
+stdenv.mkDerivation rec {
+  pname = "bsd-games";
+  version = "2.17";
 
   src = fetchurl {
-    url = "ftp://metalab.unc.edu/pub/Linux/games/bsd-games-2.17.tar.gz";
+    url = "ftp://metalab.unc.edu/pub/Linux/games/bsd-games-${version}.tar.gz";
     sha256 = "0q7zdyyfvn15y0w4g54kq3gza89h61py727m8slmw73cxx594vq6";
   };
 

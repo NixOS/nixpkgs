@@ -1,9 +1,9 @@
 diff --git a/graphviz/backend.py b/graphviz/backend.py
-index d2c4b97..f7175cd 100644
+index b66e616..3da4ef0 100644
 --- a/graphviz/backend.py
 +++ b/graphviz/backend.py
-@@ -122,7 +122,7 @@ def command(engine, format_, filepath=None, renderer=None, formatter=None):
-         raise ValueError('unknown formatter: %r' % formatter)
+@@ -124,7 +124,7 @@ def command(engine: str, format_: str, filepath=None,
+         raise ValueError(f'unknown formatter: {formatter!r}')
  
      output_format = [f for f in (format_, renderer, formatter) if f is not None]
 -    cmd = ['dot', '-K%s' % engine, '-T%s' % ':'.join(output_format)]
@@ -11,7 +11,7 @@ index d2c4b97..f7175cd 100644
  
      if filepath is None:
          rendered = None
-@@ -275,7 +275,7 @@ def unflatten(source,
+@@ -297,7 +297,7 @@ def unflatten(source: str,
      if fanout and stagger is None:
          raise RequiredArgumentError('fanout given without stagger')
  
@@ -20,8 +20,8 @@ index d2c4b97..f7175cd 100644
      if stagger is not None:
          cmd += ['-l', str(stagger)]
      if fanout:
-@@ -304,7 +304,7 @@ def version():
-         Graphviz Release version entry format
+@@ -332,7 +332,7 @@ def version() -> typing.Tuple[int, ...]:
+         Graphviz Release version entry format:
          https://gitlab.com/graphviz/graphviz/-/blob/f94e91ba819cef51a4b9dcb2d76153684d06a913/gen_version.py#L17-20
      """
 -    cmd = ['dot', '-V']
@@ -30,19 +30,19 @@ index d2c4b97..f7175cd 100644
                   stdout=subprocess.PIPE,
                   stderr=subprocess.STDOUT)
 diff --git a/tests/test_backend.py b/tests/test_backend.py
-index d10ef1a..e4aba58 100644
+index e0a0e1c..681f178 100644
 --- a/tests/test_backend.py
 +++ b/tests/test_backend.py
-@@ -52,7 +52,7 @@ def test_run_encoding_mocked(mocker, Popen, input=u'sp\xe4m', encoding='utf-8'):
+@@ -54,7 +54,7 @@ def test_run_encoding_mocked(mocker, Popen, input='sp\xe4m', encoding='utf-8'):
          m.decode.assert_called_once_with(encoding)
  
  
--@pytest.exe
+-@pytest.mark.exe
 +@pytest.mark.skip(reason='empty $PATH has no effect')
  @pytest.mark.usefixtures('empty_path')
  @pytest.mark.parametrize('func, args', [
      (render, ['dot', 'pdf', 'nonfilepath']),
-@@ -146,7 +146,7 @@ def test_render_mocked(capsys, mocker, Popen, quiet):  # noqa: N803
+@@ -148,7 +148,7 @@ def test_render_mocked(capsys, mocker, Popen, quiet):  # noqa: N803
  
      assert render('dot', 'pdf', 'nonfilepath', quiet=quiet) == 'nonfilepath.pdf'
  
@@ -51,8 +51,8 @@ index d10ef1a..e4aba58 100644
                                    stdout=subprocess.PIPE,
                                    stderr=subprocess.PIPE,
                                    cwd=None, startupinfo=mocker.ANY)
-@@ -208,7 +208,7 @@ def test_pipe_pipe_invalid_data_mocked(mocker, py2, Popen, quiet):  # noqa: N803
-     assert e.value.stdout is mocker.sentinel.out
+@@ -211,7 +211,7 @@ def test_pipe_pipe_invalid_data_mocked(mocker, Popen, quiet):  # noqa: N803
+     assert e.value.stdout is out
      e.value.stdout = mocker.sentinel.new_stdout
      assert e.value.stdout is mocker.sentinel.new_stdout
 -    Popen.assert_called_once_with(['dot', '-Kdot', '-Tpng'],
@@ -62,7 +62,7 @@ index d10ef1a..e4aba58 100644
                                    stderr=subprocess.PIPE,
 @@ -231,7 +231,7 @@ def test_pipe_mocked(capsys, mocker, Popen, quiet):  # noqa: N803
  
-     assert pipe('dot', 'png', b'nongraph', quiet=quiet) is mocker.sentinel.out
+     assert pipe('dot', 'png', b'nongraph', quiet=quiet) == b'stdout'
  
 -    Popen.assert_called_once_with(['dot', '-Kdot', '-Tpng'],
 +    Popen.assert_called_once_with(['@graphviz@/bin/dot', '-Kdot', '-Tpng'],

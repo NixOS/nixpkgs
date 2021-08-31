@@ -5,20 +5,20 @@
 , django
 , setuptools-scm
 , django-configurations
-, pytest_xdist
+, pytest-xdist
 , six
 }:
 buildPythonPackage rec {
   pname = "pytest-django";
-  version = "4.1.0";
+  version = "4.4.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "26f02c16d36fd4c8672390deebe3413678d89f30720c16efb8b2a6bf63b9041f";
+    sha256 = "b5171e3798bf7e3fc5ea7072fe87324db67a4dd9f1192b037fed4cc3c1b7f455";
   };
 
   nativeBuildInputs = [ pytest setuptools-scm ];
-  checkInputs = [ pytest django-configurations pytest_xdist six ];
+  checkInputs = [ pytest django-configurations pytest-xdist six ];
   propagatedBuildInputs = [ django ];
 
   # Complicated. Requires Django setup.

@@ -1,0 +1,64 @@
+From 208fe98f10c580a5a2fb6a8cfdd56de109073925 Mon Sep 17 00:00:00 2001
+From: Frederik Rietdijk <fridh@fridh.nl>
+Date: Sat, 17 Jul 2021 18:36:27 +0200
+Subject: [PATCH] hardcode path to libgomp
+
+---
+ omp/__init__.py | 40 ++++------------------------------------
+ 1 file changed, 4 insertions(+), 36 deletions(-)
+
+diff --git a/omp/__init__.py b/omp/__init__.py
+index bddae3063..9ba3678d8 100644
+--- a/omp/__init__.py
++++ b/omp/__init__.py
+@@ -69,43 +69,11 @@ class OpenMP(object):
+ 
+     def init_not_msvc(self):
+         """ Find OpenMP library and try to load if using ctype interface. """
+-        # find_library() does not search automatically LD_LIBRARY_PATH
+-        paths = os.environ.get('LD_LIBRARY_PATH', '').split(':')
++        libgomp_path = "@gomp@"
+ 
+-        for libomp_name in self.get_libomp_names():
+-            if cxx is None or sys.platform == 'win32':
+-                # Note: Clang supports -print-file-name, but not yet for
+-                # clang-cl as of v12.0.0 (April '21)
+-                continue
+-
+-            cmd = [cxx, '-print-file-name=' + libomp_name]
+-            # the subprocess can fail in various ways in that case just give up
+-            try:
+-                path = os.path.dirname(check_output(cmd).decode().strip())
+-                if path:
+-                    paths.append(path)
+-            except (OSError, CalledProcessError):
+-                pass
+-
+-        # Try to load find libgomp shared library using loader search dirs
+-        libgomp_path = find_library("gomp")
+-
+-        # Try to use custom paths if lookup failed
+-        for path in paths:
+-            if libgomp_path:
+-                break
+-            path = path.strip()
+-            if os.path.isdir(path):
+-                libgomp_path = find_library(os.path.join(str(path), "libgomp"))
+-
+-        if not libgomp_path:
+-            raise ImportError("I can't find a shared library for libgomp,"
+-                              " you may need to install it or adjust the "
+-                              "LD_LIBRARY_PATH environment variable.")
+-        else:
+-            # Load the library (shouldn't fail with an absolute path right?)
+-            self.libomp = ctypes.CDLL(libgomp_path)
+-            self.version = 45
++        # Load the library (shouldn't fail with an absolute path right?)
++        self.libomp = ctypes.CDLL(libgomp_path)
++        self.version = 45
+ 
+     def __getattr__(self, name):
+         """
+-- 
+2.32.0
+

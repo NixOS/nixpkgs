@@ -16,7 +16,7 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
-  buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version}" ];
+  ldflags = [ "-s" "-w" "-X main.version=${version}" ];
 
   meta = with lib; {
     description = "Quickly clone an entire org/users repositories into one directory";

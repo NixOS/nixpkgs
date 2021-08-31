@@ -5,11 +5,10 @@
 , buildPythonPackage
 , libiconv
 }:
-let
+
+buildPythonPackage rec {
   pname = "wasmer";
   version = "1.0.0";
-in buildPythonPackage rec {
-  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "wasmerio";

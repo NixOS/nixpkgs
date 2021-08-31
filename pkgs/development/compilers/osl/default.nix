@@ -1,6 +1,6 @@
 { clangStdenv, lib, fetchFromGitHub, cmake, zlib, openexr,
 openimageio, llvm, boost165, flex, bison, partio, pugixml,
-util-linux, python
+util-linux, python3
 }:
 
 let boost_static = boost165.override { enableStatic = true; };
@@ -26,7 +26,7 @@ in clangStdenv.mkDerivation rec {
      zlib openexr openimageio llvm
      partio pugixml
      util-linux # needed just for hexdump
-     python # CMake doesn't check this?
+     python3 # CMake doesn't check this?
   ];
   # TODO: How important is partio? CMake doesn't seem to find it
   meta = with lib; {

@@ -5,13 +5,15 @@ assert lib.versionAtLeast python3.version "3.5";
 let
   publisher = "vadimcn";
   pname = "vscode-lldb";
-  version = "1.6.4";
+  version = "1.6.5";
+
+  vscodeExtUniqueId = "${publisher}.${pname}";
 
   src = fetchFromGitHub {
     owner = "vadimcn";
     repo = "vscode-lldb";
     rev = "v${version}";
-    sha256 = "sha256-utElXMAJG8X7jFmY/oyrWOCkOiNG3jZHrf04vTBTi7M=";
+    sha256 = "sha256-ppiEWFKJiUtlF8LSqBb8Xvg26B+wHcIZJhU+ANE4J2k=";
   };
 
   lldb = callPackage ./lldb.nix {};
@@ -23,13 +25,13 @@ let
     # It will pollute the build environment of `buildRustPackage`.
     cargoPatches = [ ./reset-cargo-config.patch ];
 
-    cargoSha256 = "sha256-ZbD/+QWvpi88bHoSvDG0FKcsTsnthYR1SYkkJhqBbbU=";
+    cargoSha256 = "sha256-ksRFlbtrFAbcX/Pc6rgWUHVl859GVUOvNckxM7Q971U=";
 
     nativeBuildInputs = [ makeWrapper ];
 
     buildAndTestSubdir = "adapter";
 
-    cargoFlags = [
+    cargoBuildFlags = [
       "--lib"
       "--bin=codelldb"
       "--features=weak-linkage"
@@ -41,10 +43,10 @@ let
 
   nodeDeps = nodePackages."vscode-lldb-build-deps-../../misc/vscode-extensions/vscode-lldb/build-deps";
 
-in stdenv.mkDerivation rec {
-  name = "vscode-extension-${pname}";
-  inherit src;
-  vscodeExtUniqueId = "${publisher}.${pname}";
+in stdenv.mkDerivation {
+  pname = "vscode-extension-${publisher}-${pname}";
+  inherit src version vscodeExtUniqueId;
+
   installPrefix = "share/vscode/extensions/${vscodeExtUniqueId}";
 
   nativeBuildInputs = [ cmake nodejs unzip makeWrapper ];
@@ -97,6 +99,5 @@ in stdenv.mkDerivation rec {
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ oxalica ];
     platforms = platforms.all;
-    broken = stdenv.isDarwin; # Build failed on x86_64-darwin currently.
   };
 }

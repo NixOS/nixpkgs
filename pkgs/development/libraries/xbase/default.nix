@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl }:
 
-stdenv.mkDerivation {
-  name = "xbase-3.1.2";
+stdenv.mkDerivation rec {
+  pname = "xbase";
+  version = "3.1.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/xdb/xbase64-3.1.2.tar.gz";
+    url = "mirror://sourceforge/xdb/xbase64-${version}.tar.gz";
     sha256 = "17287kz1nmmm64y7zp9nhhl7slzlba09h6cc83w4mvsqwd9w882r";
   };
 

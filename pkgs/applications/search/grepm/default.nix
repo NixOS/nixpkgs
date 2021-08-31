@@ -9,7 +9,7 @@ stdenv.mkDerivation {
     sha256 = "0ppprhfw06779hz1b10qvq62gsw73shccsav982dyi6xmqb6jqji";
   };
 
-  phases = [ "installPhase" ];
+  dontUnpack = true;
 
   buildInputs = [ perlPackages.grepmail mutt ];
 

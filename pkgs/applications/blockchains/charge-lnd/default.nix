@@ -2,13 +2,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "charge-lnd";
-  version = "0.1.2";
+  version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "accumulator";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1m1ic69aj2vlnjlp4ckan8n67r01nfysvq4w6nny32wjkr0zvphr";
+    sha256 = "1cj8ggahnbn55wlkxzf5b9n8rvm30mc95vgcw8b60pzs47q6vncp";
   };
 
   propagatedBuildInputs = with python3Packages; [

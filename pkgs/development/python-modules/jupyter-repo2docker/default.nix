@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, pythonAtLeast
+{ lib, buildPythonPackage, fetchPypi, pythonOlder
 , docker
 , escapism
 , jinja2
@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   version = "2021.3.0";
   pname = "jupyter-repo2docker";
-  disabled = !(pythonAtLeast "3.4");
+  disabled = pythonOlder "3.4";
 
   src = fetchPypi {
     inherit pname version;

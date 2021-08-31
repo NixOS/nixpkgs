@@ -13,7 +13,7 @@
 
 buildGoModule rec {
   pname = "gopass";
-  version = "1.12.6";
+  version = "1.12.8";
 
   nativeBuildInputs = [ installShellFiles makeWrapper ];
 
@@ -21,16 +21,16 @@ buildGoModule rec {
     owner = "gopasspw";
     repo = pname;
     rev = "v${version}";
-    sha256 = "17y9indpgqqx261bqvckfqq1q2zciahssaalaa5c5hb6bnw5ls52";
+    sha256 = "0f3nnhipx2p8w04rxva0pcf7g1nhr4f5bz5dbvr2m76lkiaz5q3v";
   };
 
-  vendorSha256 = "106rn0bkvzf2fw21f6wpiya88ysj8sfc2zkkm47iqr23d2202i4b";
+  vendorSha256 = "14khs15k9d5m5dms3l4a5bi0s3zl1irm0i4s9pf86gpyz7b55l6a";
 
   subPackages = [ "." ];
 
   doCheck = false;
 
-  buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version} -X main.commit=${src.rev}" ];
+  ldflags = [ "-s" "-w" "-X main.version=${version}" "-X main.commit=${src.rev}" ];
 
   wrapperPath = lib.makeBinPath (
     [
@@ -60,7 +60,7 @@ buildGoModule rec {
     homepage = "https://www.gopass.pw/";
     license = licenses.mit;
     maintainers = with maintainers; [ andir rvolosatovs ];
-    changelog = "https://github.com/gopasspw/gopass/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/gopasspw/gopass/raw/v${version}/CHANGELOG.md";
 
     longDescription = ''
       gopass is a rewrite of the pass password manager in Go with the aim of

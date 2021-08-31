@@ -8,6 +8,7 @@
 , dpkg
 , glib
 , gtk3
+, wrapGAppsHook
 , libkrb5
 , libsecret
 , nss
@@ -28,6 +29,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoPatchelfHook
     dpkg
+    wrapGAppsHook
   ];
 
   buildInputs = [

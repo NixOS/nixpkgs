@@ -1,12 +1,12 @@
 { lib, stdenv, fetchurl, ncurses, gettext, openssl, withGeolocation ? true, libmaxminddb }:
 
 stdenv.mkDerivation rec {
-  version = "1.5";
+  version = "1.5.1";
   pname = "goaccess";
 
   src = fetchurl {
     url = "https://tar.goaccess.io/goaccess-${version}.tar.gz";
-    sha256 = "sha256-liJtXfiXAyg+NBCcF+G07v4kBKWefHaitu76EPOqwWE=";
+    sha256 = "sha256-iEF+eOYrcN45gLdiKRHk/NcZw2YPADyIeWjnGWw5lw8=";
   };
 
   configureFlags = [

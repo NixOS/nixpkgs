@@ -16,7 +16,12 @@ let
   fetchSageDiff = { base, name, rev, sha256, ...}@args: (
     fetchpatch ({
       inherit name sha256;
-      url = "https://git.sagemath.org/sage.git/patch?id2=${base}&id=${rev}";
+
+      # We used to use
+      # "https://git.sagemath.org/sage.git/patch?id2=${base}&id=${rev}"
+      # but the former way does not squash multiple patches together.
+      url = "https://github.com/sagemath/sage/compare/${base}...${rev}.diff";
+
       # We don't care about sage's own build system (which builds all its dependencies).
       # Exclude build system changes to avoid conflicts.
       excludes = [ "build/*" ];
@@ -24,14 +29,14 @@ let
   );
 in
 stdenv.mkDerivation rec {
-  version = "9.3";
+  version = "9.4";
   pname = "sage-src";
 
   src = fetchFromGitHub {
     owner = "sagemath";
     repo = "sage";
     rev = version;
-    sha256 = "sha256-l9DX8jcDdKA7GJ6xU+nBsmlZxrcZ9ZUAJju621ooBEo=";
+    sha256 = "sha256-jqkr4meG02KbTCMsGvyr1UbosS4ZuUJhPXU/InuS+9A=";
   };
 
   # Patches needed because of particularities of nix or the way this is packaged.
@@ -72,40 +77,9 @@ stdenv.mkDerivation rec {
   # be empty since dependencies update all the time.
   packageUpgradePatches = [
     # After updating smypow to (https://trac.sagemath.org/ticket/3360) we can
-    # now set the cache dir to be withing the .sage directory. This is not
+    # now set the cache dir to be within the .sage directory. This is not
     # strictly necessary, but keeps us from littering in the user's HOME.
     ./patches/sympow-cache.patch
-
-    # ignore a deprecation warning for usage of `cmp` in the attrs library in the doctests
-    ./patches/ignore-cmp-deprecation.patch
-
-    # sphinx 3.5 pretty-prints code slightly differently than sphinx
-    # 3.1--3.3. a similar patch is available at the sphinx 4 ticket
-    # (https://trac.sagemath.org/ticket/31696), but sphinx 3.5 uses
-    # <code> tags while sphinx 4 uses <span> tags so we cannot just
-    # import the patch from trac.
-    ./patches/sphinx-3.5-code-output.patch
-
-    # remove use of matplotlib function deprecated in 3.4
-    # https://trac.sagemath.org/ticket/31827
-    (fetchSageDiff {
-      base = "9.3";
-      name = "remove-matplotlib-deprecated-function.patch";
-      rev = "32b2bcaefddc4fa3d2aee6fa690ce1466cbb5948";
-      sha256 = "sha256-SXcUGBMOoE9HpuBzgKC3P6cUmM5MiktXbe/7dVdrfWo=";
-    })
-
-    # https://trac.sagemath.org/ticket/30801. this patch has
-    # positive_review but has not been merged upstream yet, so we
-    # don't use fetchSageDiff because it returns a file that contains
-    # each commit as a separate patch instead of a single diff, and
-    # some commits from the pari update branch are already in 9.3.rc5
-    # (auto-resolvable merge conflicts).
-    (fetchpatch {
-      name = "pari-2.13.1.patch";
-      url = "https://github.com/sagemath/sagetrac-mirror/compare/d6c5cd9be78cc448ee4c54bac93385b1244a234c...10a4531721d2700fd717e2b3a1364508ffd971c3.diff";
-      sha256 = "sha256-zMjRMEReoiTvmt+vvV0Ij1jtyLSLwSXBEVXqgvmq1D4=";
-    })
   ];
 
   patches = nixPatches ++ bugfixPatches ++ packageUpgradePatches;

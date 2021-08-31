@@ -7,7 +7,7 @@
 , libjpeg
 , libpng
 , libtiff
-, opencolorio
+, opencolorio_1
 , openexr
 , robin-map
 , unzip
@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "openimageio";
-  version = "2.2.12.0";
+  version = "2.2.17.0";
 
   src = fetchFromGitHub {
     owner = "OpenImageIO";
     repo = "oiio";
     rev = "Release-${version}";
-    sha256 = "16z8lnsqhljbfaarfwx9rc95p0a9wxf4p271j6kxdfknjb88p56i";
+    sha256 = "0jqpb1zci911wdm928addsljxx8zsh0gzbhv9vbw6man4wi93h6h";
   };
 
   outputs = [ "bin" "out" "dev" "doc" ];
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     libjpeg
     libpng
     libtiff
-    opencolorio
+    opencolorio_1
     openexr
     robin-map
     fmt

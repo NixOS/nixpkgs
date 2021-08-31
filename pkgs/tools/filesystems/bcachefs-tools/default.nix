@@ -1,18 +1,34 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, attr, libuuid, libscrypt, libsodium, keyutils
-, liburcu, zlib, libaio, udev, zstd, lz4, valgrind, python3Packages, nixosTests
-, fuseSupport ? false, fuse3 ? null }:
-
-assert fuseSupport -> fuse3 != null;
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, docutils
+, libuuid
+, libscrypt
+, libsodium
+, keyutils
+, liburcu
+, zlib
+, libaio
+, zstd
+, lz4
+, python3Packages
+, udev
+, valgrind
+, nixosTests
+, fuse3
+, fuseSupport ? false
+}:
 
 stdenv.mkDerivation {
   pname = "bcachefs-tools";
-  version = "2020-11-17";
+  version = "unstable-2021-07-08";
 
   src = fetchFromGitHub {
     owner = "koverstreet";
     repo = "bcachefs-tools";
-    rev = "41bec63b265a38dd9fa168b6042ea5bf07135048";
-    sha256 = "1y3187kpw1bmnl97isv28k2sw8cmrnsn31a0dw745adwm0n7z6fj";
+    rev = "050d5f7bcf08bd02f5077a1c5559f352fa449e1e";
+    sha256 = "15bl9ni0ckmvs5d7hi6v26z690rrmkb7dx00skn6gwq87ffz3imw";
   };
 
   postPatch = ''
@@ -22,7 +38,7 @@ stdenv.mkDerivation {
                 "INITRAMFS_DIR=${placeholder "out"}/etc/initramfs-tools"
   '';
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config docutils ];
 
   buildInputs = [
     libuuid libscrypt libsodium keyutils liburcu zlib libaio
@@ -48,6 +64,6 @@ stdenv.mkDerivation {
     homepage = "https://bcachefs.org/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ davidak chiiruno ];
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" ]; # does not build on aarch64, see https://github.com/koverstreet/bcachefs-tools/issues/39
   };
 }

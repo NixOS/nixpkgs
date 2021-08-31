@@ -1,35 +1,42 @@
-{ lib, fetchFromGitHub, proot, patchelf, fakechroot, runc, simplejson, pycurl, coreutils, nose, mock, buildPythonApplication }:
+{ lib
+, fetchFromGitHub
+, singularity
+, python3Packages
+}:
 
-buildPythonApplication rec {
-
-  version = "1.1.3";
+python3Packages.buildPythonApplication rec {
   pname = "udocker";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "indigo-dc";
-    repo = "udocker" ;
+    repo = "udocker";
     rev = "v${version}";
-    sha256 = "1c8y1p3brj987drikwrby8m1hdr40ja4anx0p4xsij3ll2h62w6z";
+    sha256 = "0dfsjgidsnah8nrclrq10yz3ja859123z81kq4zdifbrhnrn5a2x";
   };
 
-  buildInputs = [ proot patchelf fakechroot runc simplejson pycurl coreutils ];
+  # crun patchelf proot runc fakechroot
+  # are download statistically linked during runtime
+  buildInputs = [
+    singularity
+  ] ++ (with python3Packages; [
+    pytest-runner
+    pycurl
+  ]);
 
-  postPatch = ''
-      substituteInPlace udocker.py --replace /usr/sbin:/sbin:/usr/bin:/bin $PATH
-      substituteInPlace udocker.py --replace /bin/chmod ${coreutils}/bin/chmod
-      substituteInPlace udocker.py --replace /bin/rm ${coreutils}/bin/rm
-      substituteInPlace tests/unit_tests.py --replace /bin/rm ${coreutils}/bin/rm
-      substituteInPlace udocker.py --replace "autoinstall = True" "autoinstall = False"
-  '';
-
-  checkInputs = [
-    nose
-    mock
+  checkInputs = with python3Packages; [
+    pytestCheckHook
   ];
 
-  checkPhase = ''
-    NOSE_EXCLUDE=test_03_create_repo,test_04_is_repo,test_02__get_group_from_host nosetests -v tests/unit_tests.py
-  '';
+  disabledTests = [
+    "test_05__get_volume_bindings"
+  ];
+
+  disabledTestPaths = [
+    # Network
+    "tests/unit/test_curl.py"
+    "tests/unit/test_dockerioapi.py"
+  ];
 
   meta = with lib; {
     description = "basic user tool to execute simple docker containers in user space without root privileges";

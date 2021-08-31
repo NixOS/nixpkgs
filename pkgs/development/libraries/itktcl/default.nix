@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, tcl, tk, incrtcl }:
 
-stdenv.mkDerivation rec {
+tcl.mkTclDerivation rec {
   pname = "itk-tcl";
   version = "4.1.0";
 
@@ -9,11 +9,10 @@ stdenv.mkDerivation rec {
     sha256 = "1iy964jfgsfnc1agk1w6bbm44x18ily8d4wmr7cc9z9f4acn2r6s";
   };
 
-  buildInputs = [ tcl tk incrtcl ];
+  buildInputs = [ tk incrtcl ];
   enableParallelBuilding = true;
 
   configureFlags = [
-    "--with-tcl=${tcl}/lib"
     "--with-tk=${tk}/lib"
     "--with-itcl=${incrtcl}/lib"
     "--with-tkinclude=${tk.dev}/include"

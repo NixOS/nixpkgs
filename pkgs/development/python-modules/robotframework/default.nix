@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "robotframework";
-  version = "4.0.1";
+  version = "4.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "1nkph0slrhss6y52y8jgbdc6m8hbqjilrwp3r00wwyqdifrfa1i6";
+    sha256 = "09k008252x3l4agl9f8ai4a9mn0dp3m5s81mp1hnsf0hribb0s96";
   };
 
   checkInputs = [ jsonschema ];

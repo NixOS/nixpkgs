@@ -1,10 +1,7 @@
 { lib, mkDerivation, fetchFromGitHub, qtbase, qtwebengine, qtwebkit, qmake, minizinc }:
-let
-  version = "2.5.3";
-in
-mkDerivation {
+mkDerivation rec {
   pname = "minizinc-ide";
-  inherit version;
+  version = "2.5.3";
 
   nativeBuildInputs = [ qmake ];
   buildInputs = [ qtbase qtwebengine qtwebkit ];
@@ -19,7 +16,6 @@ mkDerivation {
 
   sourceRoot = "source/MiniZincIDE";
 
-  enableParallelBuilding = true;
   dontWrapQtApps = true;
 
   postInstall = ''

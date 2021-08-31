@@ -1,9 +1,8 @@
 { lib, stdenv, fetchurl, libXi, libXrandr, libXxf86vm, libGL, libGLU, xlibsWrapper, cmake }:
 
-let version = "3.2.1";
-in stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "freeglut";
-  inherit version;
+  version = "3.2.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/freeglut/freeglut-${version}.tar.gz";

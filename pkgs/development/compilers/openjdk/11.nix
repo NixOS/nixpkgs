@@ -11,8 +11,8 @@
 let
   major = "11";
   minor = "0";
-  update = "10";
-  build = "9";
+  update = "12";
+  build = "7";
 
   openjdk = stdenv.mkDerivation rec {
     pname = "openjdk" + lib.optionalString headless "-headless";
@@ -22,7 +22,7 @@ let
       owner = "openjdk";
       repo = "jdk${major}u";
       rev = "jdk-${version}";
-      sha256 = "06pm3hpz4ggiqwvkgzxr39y9kga7vk4flakfznz5979bvgb926vw";
+      sha256 = "0s8g6gj5vhm7hbp05cqaxasjrkwr41fm634qim8q6slklm4pkkli";
     };
 
     nativeBuildInputs = [ pkg-config autoconf unzip ];
@@ -39,6 +39,7 @@ let
       ./read-truststore-from-env-jdk10.patch
       ./currency-date-range-jdk10.patch
       ./increase-javadoc-heap.patch
+      ./fix-library-path-jdk11.patch
     ] ++ lib.optionals (!headless && enableGnome2) [
       ./swing-use-gtk-jdk10.patch
     ];
@@ -136,14 +137,7 @@ let
 
     disallowedReferences = [ openjdk11-bootstrap ];
 
-    meta = with lib; {
-      homepage = "http://openjdk.java.net/";
-      license = licenses.gpl2;
-      description = "The open-source Java Development Kit";
-      maintainers = with maintainers; [ edwtjo asbachb ];
-      platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" "armv7l-linux" "armv6l-linux" ];
-      mainProgram = "java";
-    };
+    meta = import ./meta.nix lib;
 
     passthru = {
       architecture = "";

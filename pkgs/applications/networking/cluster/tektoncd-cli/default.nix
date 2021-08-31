@@ -2,20 +2,18 @@
 
 buildGoModule rec {
   pname = "tektoncd-cli";
-  version = "0.19.0";
+  version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "tektoncd";
     repo = "cli";
     rev = "v${version}";
-    sha256 = "sha256-fWcHjpfbpj2lrJ0FawhQJuSxAEX1WwOY7m+CAgag4qk=";
+    sha256 = "sha256-aVR1xNmL6M/m+1znt70vrCtuABCqDz0sDp8mDFI2uIg=";
   };
 
   vendorSha256 = null;
 
-  preBuild = ''
-    buildFlagsArray+=("-ldflags" "-s -w -X github.com/tektoncd/cli/pkg/cmd/version.clientVersion=${version}")
-  '';
+  ldflags = [ "-s" "-w" "-X github.com/tektoncd/cli/pkg/cmd/version.clientVersion=${version}" ];
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -27,7 +25,7 @@ buildGoModule rec {
     # Some tests try to write to the home dir
     export HOME="$TMPDIR"
     # Change the golden files to match our desired version
-    sed -i "s/dev/${version}/" pkg/cmd/version/testdata/TestGetVersions-*.golden
+    sed -i "s/dev/${version}/" pkg/cmd/version/testdata/{TestGetVersions-,TestGetComponentVersions/}*.golden
   '';
 
   postInstall = ''
@@ -43,8 +41,7 @@ buildGoModule rec {
   installCheckPhase = ''
     runHook preInstallCheck
     $out/bin/tkn --help
-    # New tkn version functionality outputs empty https://github.com/tektoncd/cli/issues/1389
-    # $out/bin/tkn version | grep "Client version: ${version}"
+    $out/bin/tkn version | grep "Client version: ${version}"
     runHook postInstallCheck
   '';
 

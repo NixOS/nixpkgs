@@ -1,17 +1,17 @@
-{ lib, python3Packages, fetchFromGitHub }:
+{ lib, python3, fetchFromGitHub }:
 
-python3Packages.buildPythonPackage rec {
+python3.pkgs.buildPythonPackage rec {
   pname = "mautrix-signal";
-  version = "0.1.1";
+  version = "unstable-2021-08-12";
 
   src = fetchFromGitHub {
     owner = "tulir";
     repo = "mautrix-signal";
-    rev = "v${version}";
-    sha256 = "11snsl7i407855h39g1fgk26hinnq0inr8sjrgd319li0d3jwzxl";
+    rev = "a592baaaa6c9ab7ec29edc84f069b9e9e2fc1b03";
+    sha256 = "0rvidf4ah23x8m7k7hbkwm2xrs838wnli99gh99b5hr6fqmacbwl";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = with python3.pkgs; [
     CommonMark
     aiohttp
     asyncpg
@@ -19,7 +19,7 @@ python3Packages.buildPythonPackage rec {
     mautrix
     phonenumbers
     pillow
-    prometheus_client
+    prometheus-client
     pycryptodome
     python-olm
     python_magic
@@ -41,7 +41,7 @@ python3Packages.buildPythonPackage rec {
     " > $out/bin/mautrix-signal
     chmod +x $out/bin/mautrix-signal
     wrapProgram $out/bin/mautrix-signal \
-      --set PATH ${python3Packages.python}/bin \
+      --set PATH ${python3}/bin \
       --set PYTHONPATH "$PYTHONPATH"
   '';
 

@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "bear";
-  version = "3.0.9";
+  version = "3.0.13";
 
   src = fetchFromGitHub {
     owner = "rizsotto";
     repo = pname;
     rev = version;
-    sha256 = "xac8PYo3qYjtQbDy8piOz5BQQpcVlAvMCv1qHrVZmPQ=";
+    sha256 = "sha256-oMrTH3GjxiLBKX0i3ZuV+bNqpA7PkoAQAb/08Q/uELs=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
@@ -49,6 +49,9 @@ stdenv.mkDerivation rec {
     ./no-double-relative.patch
   ];
 
+  # 'path' is unavailable: introduced in macOS 10.15
+  CXXFLAGS = lib.optional (stdenv.hostPlatform.system == "x86_64-darwin") "-D_LIBCPP_DISABLE_AVAILABILITY";
+
   meta = with lib; {
     description = "Tool that generates a compilation database for clang tooling";
     longDescription = ''
@@ -59,8 +62,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/rizsotto/Bear";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
-    maintainers = [ maintainers.babariviere ];
-    # ld: symbol(s) not found for architecture x86_64
-    broken = stdenv.isDarwin;
+    maintainers = with maintainers; [ babariviere qyliss ];
   };
 }

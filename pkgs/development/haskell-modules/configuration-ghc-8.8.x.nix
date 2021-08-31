@@ -41,13 +41,6 @@ self: super: {
   unix = null;
   xhtml = null;
 
-  # Hasura 1.3.1
-  # Because of ghc-heap-view, profiling needs to be disabled.
-  graphql-engine = overrideCabal (super.graphql-engine) (drv: {
-     # GHC 8.8.x needs a revert of https://github.com/hasura/graphql-engine/commit/a77bb0570f4210fb826985e17a84ddcc4c95d3ea
-     patches = [ ./patches/hasura-884-compat.patch ];
-  });
-
   # GHC 8.8.x can build haddock version 2.23.*
   haddock = self.haddock_2_23_1;
   haddock-api = self.haddock-api_2_23_1;
@@ -136,7 +129,5 @@ self: super: {
   # vector 0.12.2 indroduced doctest checks that don‘t work on older compilers
   vector = dontCheck super.vector;
 
-  # hackage-db 2.1.1 is incompatible with Cabal < 3.4
-  # See https://github.com/NixOS/cabal2nix/issues/501
-  hackage-db = super.hackage-db_2_1_0;
+  ghc-api-compat = super.ghc-api-compat_8_6;
 }

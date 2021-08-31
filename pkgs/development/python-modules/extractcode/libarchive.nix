@@ -6,21 +6,22 @@
 , bzip2
 , expat
 , lz4
-, lzma
+, xz
 , zlib
 , zstd
 , plugincode
 , pytestCheckHook
 }:
+
 buildPythonPackage rec {
   pname = "extractcode-libarchive";
-  version = "21.4.4";
+  version = "21.5.31";
 
   src = fetchFromGitHub {
     owner = "nexB";
     repo = "scancode-plugins";
     rev = "v${version}";
-    sha256 = "xnUGDMS34iMVMGo/nZwRarGzzbj3X4Rt+YHvvKpmy6A=";
+    sha256 = "02qinla281fc6pmg5xzsrmqnf9js76f2qcbf98zq7m2dkn70as4w";
   };
 
   sourceRoot = "source/builtins/extractcode_libarchive-linux";
@@ -34,7 +35,7 @@ buildPythonPackage rec {
     ln -s ${lib.getLib bzip2}/lib/libbz2.so libbz2-la3511.so.1.0
     ln -s ${lib.getLib expat}/lib/libexpat.so libexpat-la3511.so.1
     ln -s ${lib.getLib lz4}/lib/liblz4.so liblz4-la3511.so.1
-    ln -s ${lib.getLib lzma}/lib/liblzma.so liblzma-la3511.so.5
+    ln -s ${lib.getLib xz}/lib/liblzma.so liblzma-la3511.so.5
     ln -s ${lib.getLib zlib}/lib/libz.so libz-la3511.so.1
     ln -s ${lib.getLib zstd}/lib/libzstd.so libzstd-la3511.so.1
 

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "alsa-plugins";
-  version = "1.2.2";
+  version = "1.2.5";
 
   src = fetchurl {
     url = "mirror://alsa/plugins/${pname}-${version}.tar.bz2";
-    sha256 = "0z9k3ssbfk2ky2w13avgyf202j1drsz9sv3834bp33cj1i2hc3qw";
+    sha256 = "086z2g2f95570vfvp9d5bakib4k18fb4bszf3lgx3j6j6f2gkvj2";
   };
 
   nativeBuildInputs = [ pkg-config ];

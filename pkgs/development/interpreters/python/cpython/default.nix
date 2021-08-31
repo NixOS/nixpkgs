@@ -39,6 +39,15 @@
 , includeSiteCustomize ? true
 , static ? stdenv.hostPlatform.isStatic
 , enableOptimizations ? false
+# enableNoSemanticInterposition is a subset of the enableOptimizations flag that doesn't harm reproducibility.
+# clang starts supporting `-fno-sematic-interposition` with version 10
+, enableNoSemanticInterposition ? (!stdenv.cc.isClang || (stdenv.cc.isClang && lib.versionAtLeast stdenv.cc.version "10"))
+# enableLTO is a subset of the enableOptimizations flag that doesn't harm reproducibility.
+# enabling LTO on 32bit arch causes downstream packages to fail when linking
+# enabling LTO on *-darwin causes python3 to fail when linking.
+# enabling LTO with musl and dynamic linking fails with a linker error although it should
+# be possible as alpine is doing it: https://github.com/alpinelinux/aports/blob/a8ccb04668c7729e0f0db6c6ff5f25d7519e779b/main/python3/APKBUILD#L82
+, enableLTO ? stdenv.is64bit && stdenv.isLinux && !(stdenv.hostPlatform.isMusl && !stdenv.hostPlatform.isStatic)
 , reproducibleBuild ? true
 , pythonAttr ? "python${sourceVersion.major}${sourceVersion.minor}"
 }:
@@ -100,6 +109,8 @@ let
   ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     buildPackages.stdenv.cc
     pythonForBuild
+  ] ++ optionals (stdenv.cc.isClang && enableLTO) [
+    stdenv.cc.cc.libllvm.out
   ];
 
   buildInputs = filter (p: p != null) ([
@@ -190,6 +201,10 @@ in with passthru; stdenv.mkDerivation {
     # (since it will do a futile invocation of gcc (!) to find
     # libuuid, slowing down program startup a lot).
     (./. + "/${sourceVersion.major}.${sourceVersion.minor}/no-ldconfig.patch")
+    # Make sure that the virtualenv activation scripts are
+    # owner-writable, so venvs can be recreated without permission
+    # errors.
+    ./virtualenv-permissions.patch
   ] ++ optionals mimetypesSupport [
     # Make the mimetypes module refer to the right file
     ./mimetypes.patch
@@ -208,7 +223,7 @@ in with passthru; stdenv.mkDerivation {
     # * https://bugs.python.org/issue35523
     # * https://github.com/python/cpython/commit/e6b247c8e524
     ./3.7/no-win64-workaround.patch
-  ] ++ optionals (isPy37 || isPy38 || isPy39) [
+  ] ++ optionals (pythonAtLeast "3.7") [
     # Fix darwin build https://bugs.python.org/issue34027
     ./3.7/darwin-libutil.patch
   ] ++ optionals (pythonOlder "3.8") [
@@ -227,7 +242,7 @@ in with passthru; stdenv.mkDerivation {
     (
       if isPy35 then
         ./3.5/python-3.x-distutils-C++.patch
-      else if isPy37 || isPy38 || isPy39 then
+      else if pythonAtLeast "3.7" then
         ./3.7/python-3.x-distutils-C++.patch
       else
         fetchpatch {
@@ -274,6 +289,8 @@ in with passthru; stdenv.mkDerivation {
     "--with-system-ffi"
   ] ++ optionals enableOptimizations [
     "--enable-optimizations"
+  ] ++ optionals enableLTO [
+    "--with-lto"
   ] ++ optionals (pythonOlder "3.7") [
     # This is unconditionally true starting in CPython 3.7.
     "--with-threads"
@@ -323,6 +340,17 @@ in with passthru; stdenv.mkDerivation {
     export DETERMINISTIC_BUILD=1;
   '' + optionalString stdenv.hostPlatform.isMusl ''
     export NIX_CFLAGS_COMPILE+=" -DTHREAD_STACK_SIZE=0x100000"
+  '' +
+
+  # enableNoSemanticInterposition essentially sets that CFLAG -fno-semantic-interposition
+  # which changes how symbols are looked up. This essentially means we can't override
+  # libpython symbols via LD_PRELOAD anymore. This is common enough as every build
+  # that uses --enable-optimizations has the same "issue".
+  #
+  # The Fedora wiki has a good article about their journey towards enabling this flag:
+  # https://fedoraproject.org/wiki/Changes/PythonNoSemanticInterpositionSpeedup
+  optionalString enableNoSemanticInterposition ''
+    export CFLAGS_NODIST="-fno-semantic-interposition"
   '';
 
   setupHook = python-setup-hook sitePackages;

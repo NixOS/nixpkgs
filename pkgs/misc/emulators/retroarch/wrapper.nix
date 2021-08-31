@@ -31,7 +31,7 @@ stdenv.mkDerivation {
     inherit license homepage platforms maintainers;
     description = description
                   + " (with cores: "
-                  + lib.concatStrings (lib.intersperse ", " (map (x: ""+x.name) cores))
+                  + lib.concatStringsSep ", " (map (x: ""+x.name) cores)
                   + ")";
   };
 }

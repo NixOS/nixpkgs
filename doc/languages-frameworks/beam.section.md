@@ -212,7 +212,7 @@ in
 Usually, we need to create a `shell.nix` file and do our development inside of the environment specified therein. Just install your version of Erlang and any other interpreters, and then use your normal build tools. As an example with Elixir:
 
 ```nix
-{ pkgs ? import "<nixpkgs"> {} }:
+{ pkgs ? import <nixpkgs> {} }:
 
 with pkgs;
 
@@ -241,7 +241,7 @@ let
     git
     # replace with beam.packages.erlang.elixir_1_11 if you need
     beam.packages.erlang.elixir
-    nodejs-15_x
+    nodejs
     postgresql_13
     # only used for frontend dependencies
     # you are free to use yarn2nix as well

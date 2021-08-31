@@ -27,6 +27,7 @@ in
   dropDerivationAttrs ? [],
   useDune2ifVersion ? (x: false),
   useDune2 ? false,
+  opam-name ? "coq-${pname}",
   ...
 }@args:
 let
@@ -34,7 +35,7 @@ let
     "version" "fetcher" "repo" "owner" "domain" "releaseRev"
     "displayVersion" "defaultVersion" "useMelquiondRemake"
     "release" "extraBuildInputs" "extraPropagatedBuildInputs" "namePrefix"
-    "meta" "useDune2ifVersion" "useDune2"
+    "meta" "useDune2ifVersion" "useDune2" "opam-name"
     "extraInstallFlags" "setCOQBIN" "mlPlugin"
     "dropAttrs" "dropDerivationAttrs" "keepAttrs" ] ++ dropAttrs) keepAttrs;
   fetch = import ../coq/meta-fetch/default.nix
@@ -90,9 +91,14 @@ stdenv.mkDerivation (removeAttrs ({
     extraInstallFlags;
 })
 // (optionalAttrs useDune2 {
+  buildPhase = ''
+    runHook preBuild
+    dune build -p ${opam-name} ''${enableParallelBuilding:+-j $NIX_BUILD_CORES}
+    runHook postBuild
+  '';
   installPhase = ''
     runHook preInstall
-    dune install --prefix=$out
+    dune install ${opam-name} --prefix=$out
     mv $out/lib/coq $out/lib/TEMPORARY
     mkdir $out/lib/coq/
     mv $out/lib/TEMPORARY $out/lib/coq/${coq.coq-version}

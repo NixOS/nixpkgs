@@ -45,13 +45,11 @@ stdenv.mkDerivation rec {
     xorgserver
   ];
 
-  preConfigure = ''
-    mkdir -p $out/share/X11/xorg.conf.d
-    configureFlags="--with-xorg-module-dir=$out/lib/xorg/modules
-    --with-sdkdir=$out/include/xorg --with-xorg-conf-dir=$out/share/X11/xorg.conf.d"
-  '';
-
-  CFLAGS = "-I${pixman}/include/pixman-1";
+  configureFlags = [
+    "--with-xorg-module-dir=${placeholder "out"}/lib/xorg/modules"
+    "--with-sdkdir=${placeholder "out"}/include/xorg"
+    "--with-xorg-conf-dir=${placeholder "out"}/share/X11/xorg.conf.d"
+  ];
 
   meta = with lib; {
     maintainers = with maintainers; [ goibhniu fortuneteller2k ];

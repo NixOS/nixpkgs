@@ -3,7 +3,7 @@ pkgs: with pkgs.lib;
 rec {
 
   # Copy configuration files to avoid having the entire sources in the system closure
-  copyFile = filePath: pkgs.runCommandNoCC (builtins.unsafeDiscardStringContext (builtins.baseNameOf filePath)) {} ''
+  copyFile = filePath: pkgs.runCommand (builtins.unsafeDiscardStringContext (builtins.baseNameOf filePath)) {} ''
     cp ${filePath} $out
   '';
 
@@ -27,7 +27,7 @@ rec {
       # *not* a parent of b.device. If we add a slash at the end of each string,
       # though, this is not a problem: "/aaa/" is not a prefix of "/aaaa/".
       normalisePath = path: "${path}${optionalString (!(hasSuffix "/" path)) "/"}";
-      normalise = mount: mount // { device = normalisePath mount.device;
+      normalise = mount: mount // { device = normalisePath (toString mount.device);
                                     mountPoint = normalisePath mount.mountPoint;
                                     depends = map normalisePath mount.depends;
                                   };

@@ -98,6 +98,29 @@ in
         EnvironmentFile = if cfg.adminCredentialsFile == null
         then defaultCredentials
         else cfg.adminCredentialsFile;
+        # Hardening
+        CapabilityBoundingSet = [ "" ];
+        DeviceAllow = [ "" ];
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        PrivateDevices = true;
+        PrivateUsers = true;
+        ProcSubset = "pid";
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectProc = "invisible";
+        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        SystemCallArchitectures = "native";
+        SystemCallFilter = [ "@system-service" "~@privileged" "~@resources" ];
+        UMask = "0077";
       };
 
       environment = cfg.config;

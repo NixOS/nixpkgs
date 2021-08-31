@@ -7,7 +7,7 @@
 , which
 , fetchgit
 , libgtop
-, libwnck3
+, libwnck
 , glib
 , vala
 , pkg-config
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     glib
     libgtop
     libstartup_notification
-    libwnck3
+    libwnck
   ];
 
   patches = [

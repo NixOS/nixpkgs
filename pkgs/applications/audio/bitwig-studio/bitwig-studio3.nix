@@ -34,6 +34,8 @@ stdenv.mkDerivation rec {
   ldLibraryPath = lib.strings.makeLibraryPath buildInputs;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp -r opt/bitwig-studio $out/libexec
     ln -s $out/libexec/bitwig-studio $out/bin/bitwig-studio
@@ -41,6 +43,8 @@ stdenv.mkDerivation rec {
     substitute usr/share/applications/bitwig-studio.desktop \
       $out/share/applications/bitwig-studio.desktop \
       --replace /usr/bin/bitwig-studio $out/bin/bitwig-studio
+
+      runHook postInstall
   '';
 
   postFixup = ''
@@ -57,7 +61,7 @@ stdenv.mkDerivation rec {
       wrapProgram $f \
         "''${gappsWrapperArgs[@]}" \
         --prefix PATH : "${binPath}" \
-        --prefix LD_LIBRARY_PATH : "${ldLibraryPath}"
+        --suffix LD_LIBRARY_PATH : "${ldLibraryPath}"
     done
 
   '';

@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pymfy";
-  version = "0.10.1";
+  version = "0.11.0";
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "tetienne";
     repo = "somfy-open-api";
     rev = "v${version}";
-    sha256 = "sha256-xX7vNBQaYPdnsukFcQyEa2G1XIvf9ehADNXbLUUCRoU=";
+    sha256 = "0wpjwjmywfyqgwvfa5kwcjpaljc32qa088kk88nl9nqdvc31mzhv";
   };
 
   nativeBuildInputs = [ poetry-core ];

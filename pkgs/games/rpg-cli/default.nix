@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rpg-cli";
-  version = "0.4.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "facundoolano";
     repo = pname;
     rev = version;
-    sha256 = "0rbj27zd7ydkvnyszd56hazj64aqqrwn34fsy4jymk50lvicwxjg";
+    sha256 = "sha256-R0Yaxe7Z1gPH0pvfytl5lOJKDZi4hN/upY/baMLc3Aw=";
   };
 
-  cargoSha256 = "sha256-VftJgRqrFwTElp2/e+zQYZOLZPjbc9C8SZ4DlBEtRvQ=";
+  cargoSha256 = "sha256-pvhZlj1uy5DZV+RBnqkUlVQPdQqGhh0YLE9aGFS3s1g=";
 
   # tests assume the authors macbook, and thus fail
   doCheck = false;

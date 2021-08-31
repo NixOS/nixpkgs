@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "faraday";
-  version = "0.2.3-alpha";
+  version = "0.2.5-alpha";
 
   src = fetchFromGitHub {
     owner = "lightninglabs";
     repo = "faraday";
     rev = "v${version}";
-    sha256 = "16cqaslsbwda23b5n0sfppybd3ma4ch545100ydxrwac4zhrq4kq";
+    sha256 = "16mz333a6awii6g46gr597j31jmgws4285s693q0b87fl1ggj2zz";
   };
 
-  vendorSha256 = "1hh99nfprlmhkc36arg3w1kxby59i2l7n258cp40niv7bjn37hrq";
+  vendorSha256 = "1nclmvypxp5436q6qaagp1k5bfmaia7hsykw47va0pijlsvsbmck";
 
   subPackages = [ "cmd/frcli" "cmd/faraday" ];
 
@@ -22,6 +22,6 @@ buildGoModule rec {
     description = "LND Channel Management Tools";
     homepage = "https://github.com/lightninglabs/faraday";
     license = licenses.mit;
-    maintainers = with maintainers; [ proofofkeags ];
+    maintainers = with maintainers; [ proofofkeags prusnak ];
   };
 }

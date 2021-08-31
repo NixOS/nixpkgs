@@ -2,10 +2,11 @@
 , pkg-config }:
 
 stdenv.mkDerivation rec {
-  name = "soprano-2.9.4";
+  pname = "soprano";
+  version = "2.9.4";
 
   src = fetchurl {
-    url = "mirror://sourceforge/soprano/${name}.tar.bz2";
+    url = "mirror://sourceforge/soprano/${pname}-${version}.tar.bz2";
     sha256 = "1rg0x7yg0a1cbnxz7kqk52580wla8jbnj4d4r3j7l7g7ajyny1k4";
   };
 

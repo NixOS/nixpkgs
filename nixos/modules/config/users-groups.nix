@@ -324,7 +324,7 @@ let
 
   };
 
-  groupOpts = { name, ... }: {
+  groupOpts = { name, config, ... }: {
 
     options = {
 
@@ -358,6 +358,10 @@ let
 
     config = {
       name = mkDefault name;
+
+      members = mapAttrsToList (n: u: u.name) (
+        filterAttrs (n: u: elem config.name u.extraGroups) cfg.users
+      );
     };
 
   };
@@ -396,7 +400,7 @@ let
     };
   };
 
-  idsAreUnique = set: idAttr: !(fold (name: args@{ dup, acc }:
+  idsAreUnique = set: idAttr: !(foldr (name: args@{ dup, acc }:
     let
       id = builtins.toString (builtins.getAttr idAttr (builtins.getAttr name set));
       exists = builtins.hasAttr id acc;
@@ -419,12 +423,7 @@ let
           initialPassword initialHashedPassword;
         shell = utils.toShellPath u.shell;
       }) cfg.users;
-    groups = mapAttrsToList (n: g:
-      { inherit (g) name gid;
-        members = g.members ++ (mapAttrsToList (n: u: u.name) (
-          filterAttrs (n: u: elem g.name u.extraGroups) cfg.users
-        ));
-      }) cfg.groups;
+    groups = attrValues cfg.groups;
   });
 
   systemShells =

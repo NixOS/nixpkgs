@@ -1,12 +1,9 @@
 { lib, stdenv, fetchurl, readline, bison }:
 
-let
-  version = "0.9.1";
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
 
   pname = "es";
-  inherit version;
+  version = "0.9.1";
 
   src = fetchurl {
     url = "https://github.com/wryun/es-shell/releases/download/v${version}/es-${version}.tar.gz";

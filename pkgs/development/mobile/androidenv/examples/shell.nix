@@ -3,7 +3,7 @@
   # This example pins nixpkgs: https://nix.dev/tutorials/towards-reproducibility-pinning-nixpkgs.html
   /*nixpkgsSource ? (builtins.fetchTarball {
     name = "nixpkgs-20.09";
-    url = https://github.com/NixOS/nixpkgs/archive/20.09.tar.gz;
+    url = "https://github.com/NixOS/nixpkgs/archive/20.09.tar.gz";
     sha256 = "1wg61h4gndm3vcprdcg7rc4s1v3jkm5xd7lw8r2f67w502y94gcy";
   }),
   pkgs ? import nixpkgsSource {},
@@ -41,7 +41,7 @@ let
   # If you copy this example out of nixpkgs, something like this will work:
   /*androidEnvNixpkgs = fetchTarball {
     name = "androidenv";
-    url = https://github.com/NixOS/nixpkgs/archive/<fill me in from Git>.tar.gz;
+    url = "https://github.com/NixOS/nixpkgs/archive/<fill me in from Git>.tar.gz";
     sha256 = "<fill me in with nix-prefetch-url --unpack>";
   };
 

@@ -7,6 +7,7 @@
 , patches ? []
 , postConfigure ? null
 , postBuild ? null
+, staticOnly ? stdenv.hostPlatform.isStatic
 }:
 let
 luaPackages = callPackage ../../lua-modules {lua=self; overrides=packageOverrides;};
@@ -38,7 +39,7 @@ self = stdenv.mkDerivation rec {
 
   inherit patches;
 
-  postPatch = lib.optionalString (!stdenv.isDarwin) ''
+  postPatch = lib.optionalString (!stdenv.isDarwin && !staticOnly) ''
     # Add a target for a shared library to the Makefile.
     sed -e '1s/^/LUA_SO = liblua.so/' \
         -e 's/ALL_T *= */&$(LUA_SO) /' \
@@ -56,6 +57,10 @@ self = stdenv.mkDerivation rec {
     "PLAT=${plat}"
     "CC=${stdenv.cc.targetPrefix}cc"
     "RANLIB=${stdenv.cc.targetPrefix}ranlib"
+    # Lua links with readline wich depends on ncurses. For some reason when
+    # building pkgsStatic.lua it fails because symbols from ncurses are not
+    # found. Adding ncurses here fixes the problem.
+    "MYLIBS=-lncurses"
   ];
 
   configurePhase = ''
@@ -66,7 +71,8 @@ self = stdenv.mkDerivation rec {
     makeFlagsArray+=(${lib.optionalString stdenv.isDarwin "CC=\"$CC\""}${lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) " 'AR=${stdenv.cc.targetPrefix}ar rcu'"})
 
     installFlagsArray=( TO_BIN="lua luac" INSTALL_DATA='cp -d' \
-      TO_LIB="${if stdenv.isDarwin then "liblua.${version}.dylib" else "liblua.a liblua.so liblua.so.${luaversion} liblua.so.${version}"}" )
+      TO_LIB="${if stdenv.isDarwin then "liblua.${version}.dylib"
+                else ("liblua.a" + lib.optionalString (!staticOnly) " liblua.so liblua.so.${luaversion} liblua.so.${version}" )}" )
 
     runHook postConfigure
   '';

@@ -1,6 +1,7 @@
 { lib, buildPythonPackage, fetchPypi, isPy27
 , aiodns
 , aiohttp
+, flask
 , mock
 , msrest
 , pytest
@@ -14,14 +15,14 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.15.0";
+  version = "1.16.0";
   pname = "azure-core";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "197917b98fec661c35392e32abec4f690ac2117371a814e25e57c224ce23cf1f";
+    sha256 = "b1c7d2e01846074f258c8b2e592239aef836a2b1c27d8d0e8491a2c7e2906ef4";
   };
 
   propagatedBuildInputs = [
@@ -32,6 +33,7 @@ buildPythonPackage rec {
   checkInputs = [
     aiodns
     aiohttp
+    flask
     mock
     msrest
     pytest
@@ -51,6 +53,8 @@ buildPythonPackage rec {
     # wants network
     "tests/async_tests/test_streaming_async.py"
     "tests/test_streaming.py"
+    # testserver tests require being in a very specific working directory to make it work
+    "tests/testserver_tests/"
   ];
 
   meta = with lib; {

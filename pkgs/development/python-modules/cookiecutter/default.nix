@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchPypi, isPyPy
-, pytest, pytestcov, pytest-mock, freezegun
+, pytest, pytest-cov, pytest-mock, freezegun
 , jinja2, future, binaryornot, click, whichcraft, poyo, jinja2_time, requests
 , python-slugify }:
 
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "sha256-a5pNcoguJDvgd6c5fQ8fdv5mzz35HzEV27UzDiFPpFc=";
   };
 
-  checkInputs = [ pytest pytestcov pytest-mock freezegun ];
+  checkInputs = [ pytest pytest-cov pytest-mock freezegun ];
   propagatedBuildInputs = [
     jinja2 future binaryornot click whichcraft poyo jinja2_time requests python-slugify
   ];

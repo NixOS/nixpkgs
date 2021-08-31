@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pytest-subprocess";
-  version = "1.1.0";
+  version = "1.1.1";
 
   disabled = pythonOlder "3.6";
 
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "aklajnert";
     repo = "pytest-subprocess";
     rev = version;
-    sha256 = "sha256-r6WNDdvZAHMG1kPtLJlCwvhbVG1gC1NEvRfta+Chxnk=";
+    sha256 = "sha256-o8wDZhNHGPV1BQ5Zi2kFNlWq5w0cqebaJUhUUwTK6So=";
   };
 
   buildInputs = [
@@ -29,10 +29,6 @@ buildPythonPackage rec {
     pytestCheckHook
     docutils
     pygments
-  ];
-
-  disabledTests = [
-    "test_multiple_wait" # https://github.com/aklajnert/pytest-subprocess/issues/36
   ];
 
   meta = with lib; {

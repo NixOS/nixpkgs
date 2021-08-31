@@ -4,7 +4,8 @@
 
 
 stdenv.mkDerivation {
-  name = "onscripter-en-20110930";
+  pname = "onscripter-en";
+  version = "20110930";
 
   src = fetchurl {
     # The website is not available now.

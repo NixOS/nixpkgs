@@ -5,7 +5,7 @@
 , pyjwt
 , pylint
 , pytestCheckHook
-, pytestcov
+, pytest-cov
 , python-dateutil
 , requests
 , responses
@@ -14,18 +14,18 @@
 
 buildPythonPackage rec {
   pname = "ibm-cloud-sdk-core";
-  version = "3.9.0";
+  version = "3.10.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1gwx0z6yqlym9af6wnzq5alcrx8pfsywxn18a0yxhm1j00rkyh2i";
+    sha256 = "ab9520be99066ec41a24e31ac653c28953adc8fc349f0fa53a598e1802a79cd6";
   };
 
   checkInputs = [
     codecov
     pylint
     pytestCheckHook
-    pytestcov
+    pytest-cov
     responses
     tox
   ];
@@ -38,9 +38,17 @@ buildPythonPackage rec {
 
   # Various tests try to access credential files which are not included with the source distribution
   disabledTests = [
-    "test_iam" "test_cwd" "test_configure_service" "test_get_authenticator"
-    "test_read_external_sources_2" "test_files_duplicate_parts" "test_files_list"
-    "test_files_dict" "test_retry_config_external" "test_gzip_compression_external"
+    "test_configure_service"
+    "test_cp4d_authenticator"
+    "test_cwd"
+    "test_files_dict"
+    "test_files_duplicate_parts"
+    "test_files_list"
+    "test_get_authenticator"
+    "test_gzip_compression_external"
+    "test_iam"
+    "test_read_external_sources_2"
+    "test_retry_config_external"
   ];
 
   meta = with lib; {

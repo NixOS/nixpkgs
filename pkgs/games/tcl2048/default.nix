@@ -1,27 +1,20 @@
 { lib, stdenv, fetchurl, tcl, tcllib, runtimeShell }:
 
-stdenv.mkDerivation {
-  name = "tcl2048-0.4.0";
+tcl.mkTclDerivation rec {
+  pname = "tcl2048";
+  version = "0.4.0";
 
   src = fetchurl {
-    url = "https://raw.githubusercontent.com/dbohdan/2048.tcl/v0.4.0/2048.tcl";
+    url = "https://raw.githubusercontent.com/dbohdan/2048.tcl/v${version}/2048.tcl";
     sha256 = "53f5503efd7f029b2614b0f9b1e3aac6c0342735a3c9b811d74a5135fee3e89e";
   };
 
-  phases = "installPhase";
+  buildInputs = [ tcllib ];
+  dontUnpack = true;
 
   installPhase = ''
     mkdir -pv $out/bin
-    cp $src $out/2048.tcl
-    cat > $out/bin/2048 << EOF
-    #!${runtimeShell}
-
-    # wrapper for tcl2048
-    export TCLLIBPATH="${tcllib}/lib/tcllib${tcllib.version}"
-    ${tcl}/bin/tclsh $out/2048.tcl
-    EOF
-
-    chmod +x $out/bin/2048
+    install -m 755 $src $out/bin/2048
   '';
 
   meta = {

@@ -25,7 +25,7 @@ with lib;
 
           Either <literal>configFile</literal> or <literal>config</literal> must be specified.
 
-          See <link xlink:href="https://v2ray.com/en/configuration/overview.html"/>.
+          See <link xlink:href="https://www.v2fly.org/en_US/config/overview.html"/>.
         '';
       };
 
@@ -47,7 +47,7 @@ with lib;
 
           Either `configFile` or `config` must be specified.
 
-          See <link xlink:href="https://v2ray.com/en/configuration/overview.html"/>.
+          See <link xlink:href="https://www.v2fly.org/en_US/config/overview.html"/>.
         '';
       };
     };

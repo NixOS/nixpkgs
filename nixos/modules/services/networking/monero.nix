@@ -110,7 +110,7 @@ in
       };
 
       rpc.port = mkOption {
-        type = types.int;
+        type = types.port;
         default = 18081;
         description = ''
           Port the RPC server will bind to.

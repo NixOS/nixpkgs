@@ -1,9 +1,8 @@
-{ buildPythonPackage
+{ lib
+, buildPythonPackage
 , fetchFromGitHub
-, fetchPypi
 , git
-, isPy27
-, lib
+, pythonOlder
 , pytestCheckHook
 , ruamel_yaml
 , toml
@@ -11,19 +10,25 @@
 
 buildPythonPackage rec {
   pname = "pre-commit-hooks";
-  version = "3.4.0";
-  disabled = isPy27;
+  version = "4.0.1";
+  disabled = pythonOlder "3.6";
 
-  # fetchPypi does not provide tests
   src = fetchFromGitHub {
     owner = "pre-commit";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1aqkmprdc2lhds9c59pkkf2js65j63197flanaggk7cm8k0kz7zs";
+    sha256 = "sha256-Rg2I79r0Pp3AUgT6mD+kEdm+5CEGgdmFn6G3xcU6fnk=";
   };
 
-  propagatedBuildInputs = [ toml ruamel_yaml ];
-  checkInputs = [ git pytestCheckHook ];
+  propagatedBuildInputs = [
+    ruamel_yaml
+    toml
+  ];
+
+  checkInputs = [
+    git
+    pytestCheckHook
+  ];
 
   # the tests require a functional git installation which requires a valid HOME
   # directory.
@@ -33,6 +38,8 @@ buildPythonPackage rec {
     git config --global user.name "Nix Builder"
     git config --global user.email "nix-builder@nixos.org"
   '';
+
+  pythonImportsCheck = [ "pre_commit_hooks" ];
 
   meta = with lib; {
     description = "Some out-of-the-box hooks for pre-commit";

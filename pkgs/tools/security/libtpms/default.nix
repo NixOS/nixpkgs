@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libtpms";
-  version = "0.8.3";
+  version = "0.8.4";
 
   src = fetchFromGitHub {
     owner = "stefanberger";
     repo = "libtpms";
     rev = "v${version}";
-    sha256 = "sha256-D6lYOVlgtBY6C07YqbG6TPnDKrUoEj82Ra6GK/HB7X8=";
+    sha256 = "sha256-9e7O9SE7e8D6ULXhICabNCrL+QTH55jQm0AI7DVteE0=";
   };
 
   nativeBuildInputs = [

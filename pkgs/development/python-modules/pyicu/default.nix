@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "PyICU";
-  version = "2.7.3";
+  version = "2.7.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1jv1pds94agvn3zs33a8p8f0mk7f5pjwmczmg1s05ri5p0kzk4h8";
+    sha256 = "c0655302e2aea16f9acefe04152f74e5d7d70542e9e15c89ee8d763c8e097f56";
   };
 
   nativeBuildInputs = [ icu68 ]; # for icu-config, but should be replaced with pkg-config

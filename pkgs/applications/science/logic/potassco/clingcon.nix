@@ -32,7 +32,6 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    inherit version;
     description = "Extension of clingo to handle constraints over integers";
     license = lib.licenses.gpl3; # for now GPL3, next version MIT!
     platforms = lib.platforms.unix;

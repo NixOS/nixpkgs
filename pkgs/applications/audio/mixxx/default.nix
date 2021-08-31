@@ -1,58 +1,142 @@
-{ lib, mkDerivation, fetchurl, fetchFromGitHub, chromaprint
-, fftw, flac, faad2, glibcLocales, mp4v2
-, libid3tag, libmad, libopus, libshout, libsndfile, libusb1, libvorbis
-, libGLU, libxcb, lilv, lv2, opusfile
-, pkg-config, portaudio, portmidi, protobuf, qtbase, qtscript, qtsvg
-, qtx11extras, rubberband, sconsPackages, sqlite, taglib, upower, vamp-plugin-sdk
+{ lib
+, stdenv
+, mkDerivation
+, fetchurl
+, fetchFromGitHub
+, chromaprint
+, cmake
+, faad2
+, ffmpeg
+, fftw
+, flac
+, glibcLocales
+, hidapi
+, lame
+, libebur128
+, libGLU
+, libid3tag
+, libkeyfinder
+, libmad
+, libmodplug
+, libopus
+, libsecret
+, libshout
+, libsndfile
+, libusb1
+, libvorbis
+, libxcb
+, lilv
+, lv2
+, mp4v2
+, opusfile
+, pcre
+, pkg-config
+, portaudio
+, portmidi
+, protobuf
+, qtbase
+, qtkeychain
+, qtscript
+, qtsvg
+, qtx11extras
+, rubberband
+, serd
+, sord
+, soundtouch
+, sratom
+, sqlite
+, taglib
+, upower
+, vamp-plugin-sdk
+, wavpack
 }:
 
-let
-  # Because libshout 2.4.2 and newer seem to break streaming in mixxx, build it
-  # with 2.4.1 instead.
-  libshout241 = libshout.overrideAttrs (o: rec {
-    name = "libshout-2.4.1";
-    src = fetchurl {
-      url = "http://downloads.xiph.org/releases/libshout/${name}.tar.gz";
-      sha256 = "0kgjpf8jkgyclw11nilxi8vyjk4s8878x23qyxnvybbgqbgbib7k";
-    };
-  });
-in
 mkDerivation rec {
   pname = "mixxx";
-  version = "2.2.4";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "mixxxdj";
     repo = "mixxx";
-    rev = "release-${version}";
-    sha256 = "1dj9li8av9b2kbm76jvvbdmihy1pyrw0s4xd7dd524wfhwr1llxr";
+    rev = version;
+    sha256 = "18sx4l3zzbn5142xfv5bp0crdd615a5728fkprqacnx3zpa144x6";
   };
 
-  nativeBuildInputs = [ sconsPackages.scons_3_1_2 ];
+  nativeBuildInputs = [ cmake pkg-config ];
+
   buildInputs = [
-    chromaprint fftw flac faad2 glibcLocales mp4v2 libid3tag libmad libopus libshout241 libsndfile
-    libusb1 libvorbis libxcb libGLU lilv lv2 opusfile pkg-config portaudio portmidi protobuf qtbase qtscript qtsvg
-    qtx11extras rubberband sqlite taglib upower vamp-plugin-sdk
-  ];
-
-  enableParallelBuilding = true;
-
-  sconsFlags = [
-    "build=release"
-    "qtdir=${qtbase}"
-    "faad=1"
-    "opus=1"
+    chromaprint
+    faad2
+    ffmpeg
+    fftw
+    flac
+    glibcLocales
+    hidapi
+    lame
+    libebur128
+    libGLU
+    libid3tag
+    libkeyfinder
+    libmad
+    libmodplug
+    libopus
+    libsecret
+    libshout
+    libsndfile
+    libusb1
+    libvorbis
+    libxcb
+    lilv
+    lv2
+    mp4v2
+    opusfile
+    pcre
+    portaudio
+    portmidi
+    protobuf
+    qtbase
+    qtkeychain
+    qtscript
+    qtsvg
+    qtx11extras
+    rubberband
+    serd
+    sord
+    soundtouch
+    sratom
+    sqlite
+    taglib
+    upower
+    vamp-plugin-sdk
+    wavpack
   ];
 
   qtWrapperArgs = [
     "--set LOCALE_ARCHIVE ${glibcLocales}/lib/locale/locale-archive"
   ];
 
+  # mixxx installs udev rules to DATADIR instead of SYSCONFDIR
+  # let's disable this and install udev rules manually via postInstall
+  # see https://github.com/mixxxdj/mixxx/blob/2.3.0/CMakeLists.txt#L1381-L1392
+  cmakeFlags = [
+    "-DINSTALL_USER_UDEV_RULES=OFF"
+  ];
+
+  postInstall = lib.optionalString stdenv.isLinux ''
+    rules="$src/res/linux/mixxx-usb-uaccess.rules"
+    if [ ! -f "$rules" ]; then
+        echo "$rules is missing, must update the Nix file."
+        exit 1
+    fi
+    mkdir -p "$out/lib/udev/rules.d"
+    cp "$rules" "$out/lib/udev/rules.d/69-mixxx-usb-uaccess.rules"
+  '';
+
   meta = with lib; {
     homepage = "https://mixxx.org";
     description = "Digital DJ mixing software";
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.goibhniu maintainers.bfortz ];
+    maintainers = with maintainers; [ goibhniu bfortz ];
     platforms = platforms.linux;
   };
 }

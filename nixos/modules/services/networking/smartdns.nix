@@ -54,6 +54,7 @@ in {
 
     systemd.packages = [ pkgs.smartdns ];
     systemd.services.smartdns.wantedBy = [ "multi-user.target" ];
+    systemd.services.smartdns.restartTriggers = [ confFile ];
     environment.etc."smartdns/smartdns.conf".source = confFile;
     environment.etc."default/smartdns".source =
       "${pkgs.smartdns}/etc/default/smartdns";

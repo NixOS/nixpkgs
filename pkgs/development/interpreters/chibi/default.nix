@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, makeWrapper }:
 let
-  version = "0.9.1";
+  version = "0.10";
   name = "chibi-scheme-${version}";
 in
 stdenv.mkDerivation {
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
     owner = "ashinn";
     repo = "chibi-scheme";
     rev = version;
-    sha256 = "0nd63i924ifh39cba1hd4sbi6vh1cb73v97nrn4bf8rrjh3k8pdi";
+    sha256 = "sha256-7vDxcnXhq1wJSLFHGxtwh+H+KWxh6B0JXSMPzSmQFXo=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

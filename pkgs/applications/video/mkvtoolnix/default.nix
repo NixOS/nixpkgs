@@ -1,69 +1,141 @@
-{ lib, stdenv, fetchFromGitLab, pkg-config, autoconf, automake, libiconv, drake
-, ruby, docbook_xsl, file, xdg-utils, gettext, expat, boost, libebml, zlib
-, fmt, libmatroska, libogg, libvorbis, flac, libxslt, cmark, pcre2
+{ lib
+, stdenv
+, fetchFromGitLab
+, pkg-config
+, autoreconfHook
+, qmake
+, rake
+, boost
+, cmark
+, docbook_xsl
+, expat
+, file
+, flac
+, fmt
+, gettext
+, gmp
+, gtest
+, libdvdread
+, libebml
+, libiconv
+, libmatroska
+, libogg
+, libvorbis
+, libxslt
+, nlohmann_json
+, pugixml
+, qtbase
+, qtmultimedia
+, xdg-utils
+, zlib
 , withGUI ? true
-  , qtbase ? null
-  , qtmultimedia ? null
-  , wrapQtAppsHook ? null
+, wrapQtAppsHook
 }:
 
-assert withGUI -> qtbase != null && qtmultimedia != null && wrapQtAppsHook != null;
+let
+  inherit (lib) enableFeature optional optionals optionalString;
 
-with lib;
+  phase = name: args:
+    ''
+      runHook pre${name}
 
+      rake ${args}
+
+      runHook post${name}
+    '';
+
+in
 stdenv.mkDerivation rec {
   pname = "mkvtoolnix";
-  version = "56.0.0";
+  version = "60.0.0";
 
   src = fetchFromGitLab {
-    owner  = "mbunkus";
-    repo   = "mkvtoolnix";
-    rev    = "release-${version}";
-    sha256 = "0nhpp1zkggxqjj7lhj6as5mcjcz5yk3l1d1xcgs7i9153blam1yj";
+    owner = "mbunkus";
+    repo = "mkvtoolnix";
+    rev = "release-${version}";
+    sha256 = "sha256-WtEC/EH0G1Tm6OK6hmVRzloLkO8mxxOYYZY7k/Wi2zE=";
   };
 
   nativeBuildInputs = [
-    pkg-config autoconf automake gettext
-    drake ruby docbook_xsl libxslt
-  ];
+    autoreconfHook
+    docbook_xsl
+    gettext
+    gtest
+    libxslt
+    pkg-config
+    rake
+  ]
+  ++ optional withGUI wrapQtAppsHook;
 
+  # 1. qtbase and qtmultimedia are needed without the GUI
+  # 2. we have utf8cpp in nixpkgs but it doesn't find it
   buildInputs = [
-    expat file xdg-utils boost libebml zlib fmt
-    libmatroska libogg libvorbis flac cmark pcre2
-  ] ++ optional  stdenv.isDarwin libiconv
-    ++ optionals withGUI [ qtbase qtmultimedia wrapQtAppsHook ];
+    boost
+    expat
+    file
+    flac
+    fmt
+    gmp
+    libdvdread
+    libebml
+    libmatroska
+    libogg
+    libvorbis
+    nlohmann_json
+    pugixml
+    qtbase
+    qtmultimedia
+    xdg-utils
+    zlib
+  ]
+  ++ optional withGUI cmark
+  ++ optional stdenv.isDarwin libiconv;
 
-  preConfigure = "./autogen.sh; patchShebangs .";
-  buildPhase   = "drake -j $NIX_BUILD_CORES";
-  installPhase = "drake install -j $NIX_BUILD_CORES";
+  # autoupdate is not needed but it silences a ton of pointless warnings
+  postPatch = ''
+    patchShebangs . > /dev/null
+    autoupdate configure.ac ac/*.m4
+  '';
 
   configureFlags = [
-    "--enable-magic"
+    "--disable-debug"
+    "--disable-precompiled-headers"
+    "--disable-profiling"
+    "--disable-static-qt"
     "--enable-optimization"
     "--with-boost-libdir=${boost.out}/lib"
-    "--disable-debug"
-    "--disable-profiling"
-    "--disable-precompiled-headers"
-    "--disable-static-qt"
-    "--with-gettext"
     "--with-docbook-xsl-root=${docbook_xsl}/share/xml/docbook-xsl"
-    (enableFeature withGUI "qt")
+    "--with-gettext"
+    (enableFeature withGUI "gui")
   ];
+
+  buildPhase = phase "Build" "";
+
+  installPhase = phase "Install" "install";
+
+  doCheck = true;
+
+  checkPhase = phase "Check" "tests:run_unit";
 
   CXXFLAGS = optional stdenv.cc.isClang "-std=c++17";
   LDFLAGS = optional stdenv.cc.isClang "-lc++fs";
 
   dontWrapQtApps = true;
+
+  # Avoid Qt 5.12 problem on Big Sur: https://bugreports.qt.io/browse/QTBUG-87014
+  qtWrapperArgs = lib.optionals stdenv.isDarwin [
+    "--set QT_MAC_WANTS_LAYER 1"
+  ];
+
   postFixup = optionalString withGUI ''
     wrapQtApp $out/bin/mkvtoolnix-gui
   '';
 
   meta = with lib; {
     description = "Cross-platform tools for Matroska";
-    homepage    = "http://www.bunkus.org/videotools/mkvtoolnix/";
-    license     = licenses.gpl2Only;
+    homepage = "https://mkvtoolnix.download/";
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ codyopel rnhmjoj ];
-    platforms   = platforms.linux
-      ++ optionals (!withGUI) platforms.darwin;
+    platforms = platforms.unix;
   };
 }

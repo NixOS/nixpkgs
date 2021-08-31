@@ -17,18 +17,14 @@
 
 buildGoModule rec {
   pname = "podman";
-  version = "3.1.2";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman";
     rev = "v${version}";
-    sha256 = "sha256-PS41e7myv5xCSJIeT+SRj4rLVCXpthq7KeHisYoSiOE=";
+    sha256 = "sha256-EDNpGDjsXULwtUYFLh4u6gntK//rsLLpYgpxRt4R1kc=";
   };
-
-  patches = [
-    ./remove-unconfigured-runtime-warn.patch
-  ];
 
   vendorSha256 = null;
 
@@ -61,18 +57,16 @@ buildGoModule rec {
   installPhase = ''
     runHook preInstall
   '' + lib.optionalString stdenv.isDarwin ''
-    mv bin/{podman-remote,podman}
+    mv bin/{darwin/podman,podman}
   '' + ''
     install -Dm555 bin/podman $out/bin/podman
     installShellCompletion --bash completions/bash/*
     installShellCompletion --fish completions/fish/*
     installShellCompletion --zsh completions/zsh/*
     MANDIR=$man/share/man make install.man-nobuild
-  '' + lib.optionalString stdenv.isLinux ''
     install -Dm644 cni/87-podman-bridge.conflist -t $out/etc/cni/net.d
     install -Dm644 contrib/tmpfile/podman.conf -t $out/lib/tmpfiles.d
     install -Dm644 contrib/systemd/system/podman.{socket,service} -t $out/lib/systemd/system
-  '' + ''
     runHook postInstall
   '';
 

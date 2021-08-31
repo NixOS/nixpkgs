@@ -1,12 +1,12 @@
-{ lib, stdenv, fetchurl, pkg-config, gettext, itstool, glib, libwnck3, librsvg, libxml2, dconf, gtk3, mate, hicolor-icon-theme, gobject-introspection, wrapGAppsHook, mateUpdateScript }:
+{ lib, stdenv, fetchurl, pkg-config, gettext, itstool, glib, libwnck, librsvg, libxml2, dconf, gtk3, mate, hicolor-icon-theme, gobject-introspection, wrapGAppsHook, mateUpdateScript }:
 
 stdenv.mkDerivation rec {
   pname = "mate-panel";
-  version = "1.24.2";
+  version = "1.26.0";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1sj851h71nq4ssrsd4k5b0vayxmspl5x3rhf488b2xpcj81vmi9h";
+    sha256 = "0r7a8wy9p2x6r0c4qaa81qhhjc080rxnc6fznz7i6fkv2z91wbh9";
   };
 
   nativeBuildInputs = [
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glib
-    libwnck3
+    libwnck
     librsvg
     libxml2
     gtk3

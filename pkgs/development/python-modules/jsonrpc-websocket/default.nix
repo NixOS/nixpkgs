@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "jsonrpc-websocket";
-  version = "3.0.0";
+  version = "3.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0fmw8xjzlhi7r84swn4w3njy389qqll5ad5ljdq5n2wpg424k98h";
+    sha256 = "eeaaac2330f6f1cdafd378ddf5287a47a7c8609ab212a2f576121c1e61c7a344";
   };
 
   propagatedBuildInputs = [

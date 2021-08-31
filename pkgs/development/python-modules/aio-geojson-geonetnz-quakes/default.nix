@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "aio-geojson-geonetnz-quakes";
-  version = "0.12";
+  version = "0.13";
 
   src = fetchFromGitHub {
     owner = "exxamalte";
     repo = "python-aio-geojson-geonetnz-quakes";
     rev = "v${version}";
-    sha256 = "166gvcc1rzigb822k1373y18k54x5aklikr8sc7hyml5vz937xr7";
+    sha256 = "sha256-M1QleYVPqLFjxBmOlNJdydxDTk0JJf+GYVtOTC3YUTA=";
   };
 
   propagatedBuildInputs = [

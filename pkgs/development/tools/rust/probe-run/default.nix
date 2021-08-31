@@ -3,16 +3,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "probe-run";
-  version = "0.2.2";
+  version = "0.2.5";
 
   src = fetchFromGitHub {
     owner = "knurling-rs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "avaGBIKldr+1Zwq+7NOHt2wldmY/6Lb6bi9uVHZFI5Q=";
+    sha256 = "0bj5arngc49mdz1i7bbg4l7rb741x7dhalpdxrn55vzlvgbig8fv";
   };
 
-  cargoSha256 = "HmDKfb8F6sGnaX64FR3No2GbBYm4bVopbjs8d35WiZQ=";
+  cargoSha256 = "1kqgl1f91aa7kz1yprpyf9pl1vp4ahhw8ka5hrvfvk5i5i54pigz";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libusb1 ]

@@ -1,5 +1,5 @@
 { pname, version, src, branchName
-, stdenv, lib, fetchFromGitHub, fetchpatch, wrapQtAppsHook
+, stdenv, lib, wrapQtAppsHook
 , cmake, pkg-config
 , libpulseaudio, libjack2, alsa-lib, sndio
 , vulkan-loader, vulkan-headers
@@ -9,7 +9,7 @@
 , glslang
 , boost173
 , catch2
-, fmt
+, fmt_8
 , SDL2
 , udev
 , libusb1
@@ -29,18 +29,11 @@ stdenv.mkDerivation rec {
     glslang
     boost173
     catch2
-    fmt
+    fmt_8
     SDL2
     udev
     libusb1
     ffmpeg
-  ];
-
-  patches = [
-    (fetchpatch { # Without this, yuzu tries to read version info from .git which is not present.
-      url = "https://raw.githubusercontent.com/pineappleEA/Pineapple-Linux/28cbf656e3188b80eda0031d0b2713708ecd630f/inject-git-info.patch";
-      sha256 = "1zxh5fwdr7jl0aagb3yfwd0995vyyk54f0f748f7c4rqvg6867fd";
-    })
   ];
 
   cmakeFlags = [
@@ -50,10 +43,11 @@ stdenv.mkDerivation rec {
     "-DENABLE_QT_TRANSLATION=ON"
     "-DYUZU_USE_QT_WEB_ENGINE=ON"
     "-DUSE_DISCORD_PRESENCE=ON"
-    # Shows errors about not being able to find .git at runtime if you do not set these
-    "-DGIT_BRANCH=\"\""
-    "-DGIT_DESC=\"\""
   ];
+
+  # This changes `ir/opt` to `ir/var/empty` in `externals/dynarmic/src/dynarmic/CMakeLists.txt`
+  # making the build fail, as that path does not exist
+  dontFixCmake = true;
 
   preConfigure = ''
     # Trick the configure system. This prevents a check for submodule directories.
@@ -61,8 +55,8 @@ stdenv.mkDerivation rec {
 
     # see https://github.com/NixOS/nixpkgs/issues/114044, setting this through cmakeFlags does not work.
     cmakeFlagsArray+=(
-      "-DTITLE_BAR_FORMAT_IDLE=\"yuzu ${branchName} ${version}\""
-      "-DTITLE_BAR_FORMAT_RUNNING=\"yuzu ${branchName} ${version} \| \{3\}\""
+      "-DTITLE_BAR_FORMAT_IDLE=yuzu ${branchName} ${version}"
+      "-DTITLE_BAR_FORMAT_RUNNING=yuzu ${branchName} ${version} | {3}"
     )
   '';
 
@@ -87,5 +81,6 @@ stdenv.mkDerivation rec {
     ];
     maintainers = with maintainers; [ ivar joshuafern ];
     platforms = platforms.linux;
+    broken = stdenv.isAarch64; # Currently aarch64 is not supported.
   };
 }

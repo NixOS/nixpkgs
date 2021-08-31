@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, fetchurl, makeWrapper, makeDesktopItem, linkFarmFromDrvs
 , dotnet-sdk_5, dotnetPackages, dotnetCorePackages, cacert
 , libX11, libgdiplus, ffmpeg
-, SDL2_mixer, openal, libsoundio, sndio
+, SDL2_mixer, openal, libsoundio, sndio, pulseaudio
 , gtk3, gobject-introspection, gdk-pixbuf, wrapGAppsHook
 }:
 
@@ -15,16 +15,17 @@ let
     openal
     libsoundio
     sndio
+    pulseaudio
   ];
 in stdenv.mkDerivation rec {
   pname = "ryujinx";
-  version = "1.0.6893"; # Versioning is based off of the official appveyor builds: https://ci.appveyor.com/project/gdkchan/ryujinx
+  version = "1.0.6954"; # Versioning is based off of the official appveyor builds: https://ci.appveyor.com/project/gdkchan/ryujinx
 
   src = fetchFromGitHub {
     owner = "Ryujinx";
     repo = "Ryujinx";
-    rev = "fb65f392d1c4b0e01f22b6ddebcc8317ba9769c3";
-    sha256 = "0ncrcbwyirz21j81vc6yvcjc2fn8nc5ilrfczclq6f8cpy09c3y8";
+    rev = "31cbd09a75a9d5f4814c3907a060e0961eb2bb15";
+    sha256 = "00qql0wmlzs722s0igip3v0yjlqhc31jcr7nghwibcqrmx031azk";
   };
 
   nativeBuildInputs = [ dotnet-sdk_5 dotnetPackages.Nuget cacert makeWrapper wrapGAppsHook gobject-introspection gdk-pixbuf ];
@@ -79,9 +80,13 @@ in stdenv.mkDerivation rec {
       --output $out/lib/ryujinx
     shopt -s extglob
 
+    # TODO: fix this hack https://github.com/Ryujinx/Ryujinx/issues/2349
+    mkdir -p $out/lib/sndio-6
+    ln -s ${sndio}/lib/libsndio.so $out/lib/sndio-6/libsndio.so.6
+
     makeWrapper $out/lib/ryujinx/Ryujinx $out/bin/Ryujinx \
       --set DOTNET_ROOT "${dotnetCorePackages.net_5_0}" \
-      --suffix LD_LIBRARY_PATH : "${lib.makeLibraryPath runtimeDeps}" \
+      --suffix LD_LIBRARY_PATH : "${builtins.concatStringsSep ":" [ (lib.makeLibraryPath runtimeDeps) "$out/lib/sndio-6" ]}" \
       ''${gappsWrapperArgs[@]}
 
     for i in 16 32 48 64 96 128 256 512 1024; do

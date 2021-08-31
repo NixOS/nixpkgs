@@ -1,9 +1,9 @@
 diff --git a/src/dbus.cpp b/src/dbus.cpp
-index 0acccc3..7dd7c49 100644
+index 44ffafc..9baf57b 100644
 --- a/src/dbus.cpp
 +++ b/src/dbus.cpp
-@@ -157,7 +157,7 @@ bool dbus_manager::init(const std::string& requested_player) {
-         m_requested_player = "org.mpris.MediaPlayer2." + requested_player;
+@@ -162,7 +162,7 @@ bool dbus_manager::init(const std::string& requested_player) {
+         return true;
      }
  
 -    if (!m_dbus_ldr.IsLoaded() && !m_dbus_ldr.Load("libdbus-1.so.3")) {
@@ -22,11 +22,11 @@ index 25c65bf..87488d5 100644
 -std::shared_ptr<libx11_loader> g_x11(new libx11_loader("libX11.so.6"));
 +std::shared_ptr<libx11_loader> g_x11(new libx11_loader("@libX11@/lib/libX11.so.6"));
 diff --git a/src/logging.cpp b/src/logging.cpp
-index f2c4271..d33e793 100644
+index ee8600b..c7c91a0 100644
 --- a/src/logging.cpp
 +++ b/src/logging.cpp
-@@ -17,7 +17,10 @@ string exec(string command) {
-    string result = "";
+@@ -19,7 +19,10 @@ string exec(string command) {
+ #ifdef __gnu_linux__
  
     // Open pipe to file
 +   char* originalPath = getenv("PATH");

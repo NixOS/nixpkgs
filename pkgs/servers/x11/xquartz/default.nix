@@ -95,7 +95,8 @@ let
     ];
   };
 in stdenv.mkDerivation {
-  name = "xquartz-${lib.getVersion xorg.xorgserver}";
+  pname = "xquartz";
+  version = lib.getVersion xorg.xorgserver;
 
   nativeBuildInputs = [ ruby makeWrapper ];
 

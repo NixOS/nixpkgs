@@ -5,7 +5,7 @@
 , stdenv
 , numpydoc
 , pytestCheckHook
-, python-lz4
+, lz4
 , setuptools
 , sphinx
 }:
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ sphinx numpydoc pytestCheckHook ];
-  propagatedBuildInputs = [ python-lz4 setuptools ];
+  propagatedBuildInputs = [ lz4 setuptools ];
 
   pytestFlagsArray = [ "joblib/test" ];
   disabledTests = [

@@ -63,7 +63,7 @@ let
       description = "Low-latency, high quality voice chat software";
       homepage = "https://mumble.info";
       license = licenses.bsd3;
-      maintainers = with maintainers; [ petabyteboy infinisil ];
+      maintainers = with maintainers; [ petabyteboy infinisil felixsinger ];
       platforms = platforms.linux;
     };
   });
@@ -104,7 +104,7 @@ let
   server = source: generic {
     type = "murmur";
 
-    postPatch = lib.optional iceSupport ''
+    postPatch = lib.optionalString iceSupport ''
       grep -Rl '/usr/share/Ice' . | xargs sed -i 's,/usr/share/Ice/,${zeroc-ice.dev}/share/ice/,g'
     '';
 

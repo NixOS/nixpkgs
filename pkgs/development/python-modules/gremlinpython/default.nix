@@ -2,10 +2,11 @@
 , buildPythonPackage
 , fetchFromGitHub
 , aenum
+, aiohttp
 , importlib-metadata
 , isodate
+, nest-asyncio
 , six
-, tornado
 , pytestCheckHook
 , mock
 , pyhamcrest
@@ -14,20 +15,20 @@
 
 buildPythonPackage rec {
   pname = "gremlinpython";
-  version = "3.4.10";
+  version = "3.5.1";
 
   # pypi tarball doesn't include tests
   src = fetchFromGitHub {
     owner = "apache";
     repo = "tinkerpop";
     rev = version;
-    sha256 = "0i9lkrwbsmpx1h9480vf97pibm2v37sgw2qm2r1c0i8gg5bcmhj3";
+    sha256 = "1vlhxq0f2hanhkv6f17dxgbwr7gnbnh1kkkq0lxcwkbm2l0rdrlr";
   };
-  sourceRoot = "source/gremlin-python/src/main/jython";
+  sourceRoot = "source/gremlin-python/src/main/python";
   postPatch = ''
     substituteInPlace setup.py \
       --replace 'aenum>=1.4.5,<3.0.0' 'aenum' \
-      --replace 'tornado>=4.4.1,<6.0' 'tornado' \
+      --replace 'aiohttp>=3.7.0,<=3.7.4' 'aiohttp' \
       --replace 'PyHamcrest>=1.9.0,<2.0.0' 'PyHamcrest' \
       --replace 'radish-bdd==0.8.6' 'radish-bdd' \
       --replace 'mock>=3.0.5,<4.0.0' 'mock' \
@@ -42,9 +43,10 @@ buildPythonPackage rec {
   ];
   propagatedBuildInputs = [
     aenum
+    aiohttp
     isodate
+    nest-asyncio
     six
-    tornado
   ];
 
   checkInputs = [

@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "dsmr-parser";
-  version = "0.29";
+  version = "0.30";
 
   src = fetchFromGitHub {
     owner = "ndokter";
     repo = "dsmr_parser";
     rev = "v${version}";
-    sha256 = "11d6cwmabzc8p6jkqwj72nrj7p6cxbvr0x3jdrxyx6zki8chyw4p";
+    sha256 = "sha256-3RXku0L/XQFarECxY1LSs2TwSOlJAOiS6yEepHCGL5U=";
   };
 
   propagatedBuildInputs = [

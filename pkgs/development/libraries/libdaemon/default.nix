@@ -1,10 +1,11 @@
 {lib, stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
-  name = "libdaemon-0.14";
+  pname = "libdaemon";
+  version = "0.14";
 
   src = fetchurl {
-    url = "${meta.homepage}/${name}.tar.gz";
+    url = "http://0pointer.de/lennart/projects/libdaemon/${pname}-${version}.tar.gz";
     sha256 = "0d5qlq5ab95wh1xc87rqrh1vx6i8lddka1w3f1zcqvcqdxgyn8zx";
   };
 

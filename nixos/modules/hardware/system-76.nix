@@ -34,6 +34,25 @@ let
       wantedBy = [ "multi-user.target" ];
     };
   };
+
+  power-pkg = config.boot.kernelPackages.system76-power;
+  powerConfig = mkIf cfg.power-daemon.enable {
+    # Make system76-power usable by root from the command line.
+    environment.systemPackages = [ power-pkg ];
+
+    services.dbus.packages = [ power-pkg ];
+
+    systemd.services.system76-power = {
+      description = "System76 Power Daemon";
+      serviceConfig = {
+        ExecStart = "${power-pkg}/bin/system76-power daemon";
+        Restart = "on-failure";
+        Type = "dbus";
+        BusName = "com.system76.PowerDaemon";
+      };
+      wantedBy = [ "multi-user.target" ];
+    };
+  };
 in {
   options = {
     hardware.system76 = {
@@ -52,8 +71,15 @@ in {
         description = "Whether to make the system76 out-of-tree kernel modules available";
         type = types.bool;
       };
+
+      power-daemon.enable = mkOption {
+        default = cfg.enableAll;
+        example = true;
+        description = "Whether to enable the system76 power daemon";
+        type = types.bool;
+      };
     };
   };
 
-  config = mkMerge [ moduleConfig firmwareConfig ];
+  config = mkMerge [ moduleConfig firmwareConfig powerConfig ];
 }

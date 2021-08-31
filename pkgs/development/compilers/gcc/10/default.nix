@@ -156,7 +156,9 @@ stdenv.mkDerivation ({
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ texinfo which gettext ]
-    ++ (optional (perl != null) perl);
+    ++ (optional (perl != null) perl)
+    ++ (optional langAda gnatboot)
+    ;
 
   # For building runtime libs
   depsBuildTarget =
@@ -177,7 +179,6 @@ stdenv.mkDerivation ({
     # The builder relies on GNU sed (for instance, Darwin's `sed' fails with
     # "-i may not be used with stdin"), and `stdenvNative' doesn't provide it.
     ++ (optional hostPlatform.isDarwin gnused)
-    ++ (optional langAda gnatboot)
     ;
 
   depsTargetTarget = optional (!crossStageStatic && threadsCross != null) threadsCross;

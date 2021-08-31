@@ -20,13 +20,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "ulauncher";
-  version = "5.9.0";
+  version = "5.11.0";
 
   disabled = python3Packages.isPy27;
 
   src = fetchurl {
     url = "https://github.com/Ulauncher/Ulauncher/releases/download/${version}/ulauncher_${version}.tar.gz";
-    sha256 = "sha256-jRCrkJcjUHDd3wF+Hkxg0QaW7YgIh7zM/KZ4TAH84/U=";
+    sha256 = "sha256-xEM7sG0NRWouDu6NxNA94WTycykEhPI4ByjDk2yjHjo=";
   };
 
   nativeBuildInputs = with python3Packages; [
@@ -59,7 +59,7 @@ python3Packages.buildPythonApplication rec {
     python-Levenshtein
     pyxdg
     requests
-    websocket_client
+    websocket-client
   ];
 
   checkInputs = with python3Packages; [

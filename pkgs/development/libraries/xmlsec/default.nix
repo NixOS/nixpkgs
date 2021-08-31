@@ -4,16 +4,13 @@
 , openssl, nss_3_53, lib, runCommandCC, writeText }:
 
 lib.fix (self:
-let
-  version = "1.2.31";
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "xmlsec";
-  inherit version;
+  version = "1.2.32";
 
   src = fetchurl {
     url = "https://www.aleksey.com/xmlsec/download/xmlsec1-${version}.tar.gz";
-    sha256 = "mxC8Uswx5PdhYuOXXlDbJrcatJxXHYELMRymJr5aCyY=";
+    sha256 = "sha256-44NwKFMjYATlsI5CS4r+m1P+nzGqp6U4LznZUz63wEM=";
   };
 
   patches = [

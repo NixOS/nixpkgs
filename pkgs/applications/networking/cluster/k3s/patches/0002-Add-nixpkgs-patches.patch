@@ -1,21 +1,19 @@
-From 1891be119e298ef7c86347a6b74d40ff539cf06e Mon Sep 17 00:00:00 2001
-From: Euan Kemp <euank@euank.com>
-Date: Sun, 31 May 2020 19:02:37 -0700
-Subject: [PATCH 2/2] Add nixpkgs patches
-
-These patches let us re-use the upstream build scripts when building for
-nix.
----
- scripts/build       | 20 ++++----------------
- scripts/package-cli | 10 ++++++----
- 2 files changed, 10 insertions(+), 20 deletions(-)
-
+-Subject: [PATCH 2/2] Add nixpkgs patches
+-Original patch by: Euan Kemp <euank@euank.com>
+-Adapted by: superherointj
+-
+-This patch allows us to re-use upstream build scripts when building for nix.
+----
+- 2 files changed:
+-   scripts/build
+-   scripts/package-cli
+-
 diff --git a/scripts/build b/scripts/build
-index 4ca6333c4a..df15f7db1d 100755
+index 2f3d1dc496..4f4e5aa897 100755
 --- a/scripts/build
 +++ b/scripts/build
 @@ -12,7 +12,8 @@ PKG_CONTAINERD="github.com/containerd/containerd"
- PKG_RANCHER_CONTAINERD="github.com/rancher/containerd"
+ PKG_K3S_CONTAINERD="github.com/k3s-io/containerd"
  PKG_CRICTL="github.com/kubernetes-sigs/cri-tools"
  
 -buildDate=$(date -u '+%Y-%m-%dT%H:%M:%SZ')
@@ -24,7 +22,7 @@ index 4ca6333c4a..df15f7db1d 100755
  
  VENDOR_PREFIX="${PKG}/vendor/"
  VERSIONFLAGS="
-@@ -92,17 +93,7 @@ cleanup() {
+@@ -89,17 +90,7 @@ cleanup() {
  }
  
  INSTALLBIN=$(pwd)/bin
@@ -43,23 +41,23 @@ index 4ca6333c4a..df15f7db1d 100755
  # echo Building agent
  # CGO_ENABLED=1 "${GO}" build -tags "$TAGS" -ldflags "$VERSIONFLAGS $LDFLAGS $STATIC" -o bin/k3s-agent ./cmd/agent/main.go
  echo Building server
-@@ -118,10 +109,7 @@ ln -s containerd ./bin/ctr
+@@ -116,10 +107,7 @@ ln -s containerd ./bin/ctr
  #CGO_ENABLED=1 "${GO}" build -tags "$TAGS" -ldflags "$VERSIONFLAGS $LDFLAGS $STATIC_SQLITE" -o bin/ctr ./cmd/ctr/main.go
  # echo Building containerd
  # CGO_ENABLED=0 "${GO}" build -tags "$TAGS" -ldflags "$VERSIONFLAGS $LDFLAGS $STATIC" -o bin/containerd ./cmd/containerd/
 -echo Building runc
--rm -f ./vendor/github.com/opencontainers/runc/runc
--make EXTRA_LDFLAGS="-w -s" BUILDTAGS="$RUNC_TAGS" -C ./vendor/github.com/opencontainers/runc $RUNC_STATIC
--cp -f ./vendor/github.com/opencontainers/runc/runc ./bin/runc
+-rm -f ./build/src/github.com/opencontainers/runc/runc
+-make GOPATH=$(pwd)/build EXTRA_LDFLAGS="-w -s" BUILDTAGS="$RUNC_TAGS" -C ./build/src/github.com/opencontainers/runc $RUNC_STATIC
+-cp -f ./build/src/github.com/opencontainers/runc/runc ./bin/runc
 +# nixpkgs: we build runc separately
  
  echo Building containerd-shim
  rm -f ./vendor/github.com/containerd/containerd/bin/containerd-shim
 diff --git a/scripts/package-cli b/scripts/package-cli
-index d1aad638d9..90479b6fa1 100755
+index ab4a6dac63..044b5587d0 100755
 --- a/scripts/package-cli
 +++ b/scripts/package-cli
-@@ -49,15 +49,18 @@ fi
+@@ -50,15 +50,17 @@ fi
  
  CMD_NAME=dist/artifacts/k3s${BIN_SUFFIX}
  
@@ -81,4 +79,3 @@ index d1aad638d9..90479b6fa1 100755
 -./scripts/build-upload ${CMD_NAME} ${COMMIT}
 +# nixpkgs: skip uploading
 +# ./scripts/build-upload ${CMD_NAME} ${COMMIT}
-+

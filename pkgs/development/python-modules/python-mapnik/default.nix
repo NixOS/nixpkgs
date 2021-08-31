@@ -1,26 +1,29 @@
 { lib
 , buildPythonPackage
+, fetchFromGitHub
 , isPyPy
 , python
-, pkgs
 , pillow
 , pycairo
+, pkg-config
+, boost
+, cairo
+, harfbuzz
+, icu
+, libjpeg
+, libpng
+, libtiff
+, libwebp
+, mapnik
+, proj
+, zlib
 }:
 
-let
-  boost = pkgs.boost.override {
-    enablePython = true;
-    inherit python;
-  };
-  mapnik = pkgs.mapnik.override {
-    inherit python boost;
-  };
-
-in buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "python-mapnik";
   version = "unstable-2020-02-24";
 
-  src = pkgs.fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "mapnik";
     repo = "python-mapnik";
     rev = "7da019cf9eb12af8f8aa88b7d75789dfcd1e901b";
@@ -29,10 +32,8 @@ in buildPythonPackage rec {
 
   disabled = isPyPy;
   doCheck = false; # doesn't find needed test data files
-  preBuild = let
-    pythonVersion = with lib.versions; "${major python.version}${minor python.version}";
-  in ''
-    export BOOST_PYTHON_LIB="boost_python${pythonVersion}"
+  preBuild = ''
+    export BOOST_PYTHON_LIB="boost_python${"${lib.versions.major python.version}${lib.versions.minor python.version}"}"
     export BOOST_THREAD_LIB="boost_thread"
     export BOOST_SYSTEM_LIB="boost_system"
     export PYCAIRO=true
@@ -40,7 +41,7 @@ in buildPythonPackage rec {
 
   nativeBuildInputs = [
     mapnik # for mapnik_config
-    pkgs.pkgconfig
+    pkg-config
   ];
 
   patches = [
@@ -50,7 +51,6 @@ in buildPythonPackage rec {
   buildInputs = [
     mapnik
     boost
-  ] ++ (with pkgs; [
     cairo
     harfbuzz
     icu
@@ -60,15 +60,16 @@ in buildPythonPackage rec {
     libwebp
     proj
     zlib
-  ]);
+  ];
+
   propagatedBuildInputs = [ pillow pycairo ];
 
-  pythonImportsCheck = [ "mapnik" ] ;
+  pythonImportsCheck = [ "mapnik" ];
 
   meta = with lib; {
     description = "Python bindings for Mapnik";
+    maintainers = with maintainers; [ ];
     homepage = "https://mapnik.org";
-    license  = licenses.lgpl21;
+    license = licenses.lgpl21;
   };
-
 }

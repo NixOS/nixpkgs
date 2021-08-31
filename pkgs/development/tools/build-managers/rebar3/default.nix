@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub,
+{ lib, stdenv, fetchFromGitHub, fetchpatch,
   fetchHex, erlang, makeWrapper,
   writeScript, common-updater-scripts, coreutils, git, gnused, nix, rebar3-nix }:
 
@@ -38,6 +38,16 @@ let
     buildPhase = ''
       HOME=. escript bootstrap
     '';
+
+
+    patches = [
+      # TODO: remove this on next rebar3 release
+      (fetchpatch {
+        name = "escriptize-erl-libs";
+        url = "https://github.com/erlang/rebar3/commit/11055384dbd5bf7d181bca83a33b0e100275ff21.patch";
+        sha256 = "01xjaqnhmjlxqdgb8ph15wssjq5crdhjslxnndbs5f0kscqpq14c";
+      })
+    ];
 
     checkPhase = ''
       HOME=. escript ./rebar3 ct

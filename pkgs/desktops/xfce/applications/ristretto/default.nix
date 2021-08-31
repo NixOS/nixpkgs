@@ -6,7 +6,7 @@ mkXfceDerivation {
   pname = "ristretto";
   version = "0.11.0";
 
-  sha256 = "07np4n6kg6lpd7acrb4aga3l6502c8lhjzf867b38n90cx1nh5gf";
+  sha256 = "sha256-7hVoQ2cgWTTWMch9CSliAhRDh3qKrMzUaZeaN40l1x4=";
 
   buildInputs = [ glib gtk3 libexif libxfce4ui libxfce4util xfconf ];
 

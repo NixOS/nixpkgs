@@ -1,14 +1,15 @@
 { lib, stdenv, fetchurl, pkg-config, autoreconfHook, glib, jansson }:
 
 stdenv.mkDerivation rec {
-  name = "xnbd-0.4.0";
+  pname = "xnbd";
+  version = "0.4.0";
 
   src = fetchurl {
-    url = "https://bitbucket.org/hirofuchi/xnbd/downloads/${name}.tgz";
+    url = "https://bitbucket.org/hirofuchi/xnbd/downloads/xnbd-${version}.tgz";
     sha256 = "00wkvsa0yaq4mabczcbfpj6rjvp02yahw8vdrq8hgb3wpm80x913";
   };
 
-  sourceRoot = "${name}/trunk";
+  sourceRoot = "xnbd-${version}/trunk";
 
   patches = [ ./0001-Fix-build-for-glibc-2.28.patch ];
 

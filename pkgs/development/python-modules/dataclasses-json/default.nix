@@ -1,25 +1,41 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, stringcase
+, fetchFromGitHub
 , typing-inspect
 , marshmallow-enum
+, hypothesis
+, mypy
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "dataclasses-json";
-  version = "0.5.2";
+  version = "0.5.5";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "56ec931959ede74b5dedf65cf20772e6a79764d20c404794cce0111c88c085ff";
+  src = fetchFromGitHub {
+    owner = "lidatong";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-b8oWl8AteVuGYb4E+M9aDS2ERgnKN8wS17Y/Bs7ajcI=";
   };
 
   propagatedBuildInputs = [
-    stringcase
     typing-inspect
     marshmallow-enum
   ];
+
+  checkInputs = [
+    hypothesis
+    mypy
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # AssertionError: Type annotations check failed
+    "test_type_hints"
+  ];
+
+  pythonImportsCheck = [ "dataclasses_json" ];
 
   meta = with lib; {
     description = "Simple API for encoding and decoding dataclasses to and from JSON";

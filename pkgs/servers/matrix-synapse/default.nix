@@ -12,16 +12,15 @@ let
 in
 buildPythonApplication rec {
   pname = "matrix-synapse";
-  version = "1.35.1";
+  version = "1.41.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-MJ3RG60rWbcfQxhj34k99AFg8TsPd3ECEw/x2+xU1js=";
+    sha256 = "sha256-KLsTr8dKp8k7TcrC598ApDib7P0m9evmfdl8jbsZLdc=";
   };
 
   patches = [
-    # adds an entry point for the service
-    ./homeserver-script.patch
+    ./0001-setup-add-homeserver-as-console-script.patch
   ];
 
   buildInputs = [ openssl ];
@@ -41,7 +40,7 @@ buildPythonApplication rec {
     netaddr
     phonenumbers
     pillow
-    prometheus_client
+    prometheus-client
     psutil
     psycopg2
     pyasn1
@@ -60,7 +59,7 @@ buildPythonApplication rec {
     typing-extensions
     unpaddedbase64
   ] ++ lib.optional enableSystemd systemd
-    ++ lib.optional enableRedis hiredis;
+    ++ lib.optionals enableRedis [ hiredis txredisapi ];
 
   checkInputs = [ mock parameterized openssl ];
 

@@ -6,6 +6,8 @@ let
   cfg = config.services.grafana;
   opt = options.services.grafana;
   declarativePlugins = pkgs.linkFarm "grafana-plugins" (builtins.map (pkg: { name = pkg.pname; path = pkg; }) cfg.declarativePlugins);
+  useMysql = cfg.database.type == "mysql";
+  usePostgresql = cfg.database.type == "postgres";
 
   envOptions = {
     PATHS_DATA = cfg.dataDir;
@@ -94,7 +96,7 @@ let
         description = "Name of the datasource. Required.";
       };
       type = mkOption {
-        type = types.enum ["graphite" "prometheus" "cloudwatch" "elasticsearch" "influxdb" "opentsdb" "mysql" "mssql" "postgres" "loki"];
+        type = types.str;
         description = "Datasource type. Required.";
       };
       access = mkOption {
@@ -292,7 +294,7 @@ in {
     port = mkOption {
       description = "Listening port.";
       default = 3000;
-      type = types.int;
+      type = types.port;
     };
 
     socket = mkOption {
@@ -635,7 +637,7 @@ in {
     systemd.services.grafana = {
       description = "Grafana Service Daemon";
       wantedBy = ["multi-user.target"];
-      after = ["networking.target"];
+      after = ["networking.target"] ++ lib.optional usePostgresql "postgresql.service" ++ lib.optional useMysql "mysql.service";
       environment = {
         QT_QPA_PLATFORM = "offscreen";
       } // mapAttrs' (n: v: nameValuePair "GF_${n}" (toString v)) envOptions;

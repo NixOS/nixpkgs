@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitLab, fetchpatch, pkg-config, meson, ninja
+{ lib, stdenv, fetchFromGitLab, pkg-config, meson, ninja
 , git, criterion, gtk3, libconfig, gnuplot, opencv, json-glib
 , fftwFloat, cfitsio, gsl, exiv2, librtprocess, wcslib, ffmpeg
 , libraw, libtiff, libpng, libjpeg, libheif, ffms, wrapGAppsHook
@@ -6,22 +6,14 @@
 
 stdenv.mkDerivation rec {
   pname = "siril";
-  version = "0.99.8.1";
+  version = "0.99.10.1";
 
   src = fetchFromGitLab {
     owner = "free-astro";
     repo = pname;
     rev = version;
-    sha256 = "0h3slgpj6zdc0rwmyr9zb0vgf53283hpwb7h26skdswmggsk90i5";
+    sha256 = "sha256-gqV+pJNaU+GnYiUo/imofgNdeM+AtDg/pSH7aoqhkYA=";
   };
-
-  patches = [
-    # Backport fix for broken build on glib-2.68
-    (fetchpatch {
-      url = "https://gitlab.com/free-astro/siril/-/commit/d319fceca5b00f156e1c5e3512d3ac1f41beb16a.diff";
-      sha256 = "00lq9wq8z48ly3hmkgzfqbdjaxr0hzyl2qwbj45bdnxfwqragh5m";
-    })
-  ];
 
   nativeBuildInputs = [
     meson ninja pkg-config git criterion wrapGAppsHook
@@ -47,7 +39,8 @@ stdenv.mkDerivation rec {
     homepage = "https://www.siril.org/";
     description = "Astrophotographic image processing tool";
     license = licenses.gpl3Plus;
+    changelog = "https://gitlab.com/free-astro/siril/-/blob/HEAD/ChangeLog";
     maintainers = with maintainers; [ hjones2199 ];
-    platforms = [ "x86_64-linux" ];
+    platforms = platforms.linux;
   };
 }

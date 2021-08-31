@@ -1,34 +1,50 @@
 { lib
-, python3
+, python3Packages
 , fetchFromGitHub
 , wrapQtAppsHook
 , borgbackup
+, qt5
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "vorta";
-  version = "0.7.6";
+  version = "0.7.8";
 
   src = fetchFromGitHub {
     owner = "borgbase";
     repo = "vorta";
     rev = "v${version}";
-    sha256 = "sha256-bzhabRVgl1eLTS4KtFkn4xw2KDTZJyFU6zCJdHW5IGE=";
+    sha256 = "sha256-qNBswy1dsCE6TEQLr/r7nnZWegDD8BD9pMkcpcuT7Q0=";
   };
-
-  postPatch = ''
-    sed -i -e '/setuptools_git/d' -e '/pytest-runner/d' setup.cfg
-  '';
 
   nativeBuildInputs = [ wrapQtAppsHook ];
 
-  propagatedBuildInputs = with python3.pkgs; [
-    paramiko peewee pyqt5 python-dateutil APScheduler psutil qdarkstyle
-    secretstorage appdirs setuptools
+  propagatedBuildInputs = with python3Packages; [
+    paramiko
+    peewee
+    pyqt5
+    python-dateutil
+    APScheduler
+    psutil
+    qdarkstyle
+    secretstorage
+    appdirs
+    setuptools
   ];
 
-  # QT setup in tests broken.
-  doCheck = false;
+  postPatch = ''
+    substituteInPlace setup.cfg \
+    --replace setuptools_git "" \
+    --replace pytest-runner ""
+
+    substituteInPlace src/vorta/assets/metadata/com.borgbase.Vorta.desktop \
+    --replace Exec=vorta "Exec=$out/bin/vorta" \
+    --replace com.borgbase.Vorta "com.borgbase.Vorta-symbolic"
+  '';
+
+  postInstall = ''
+    install -Dm644 src/vorta/assets/metadata/com.borgbase.Vorta.desktop $out/share/applications/com.borgbase.Vorta.desktop
+  '';
 
   preFixup = ''
     makeWrapperArgs+=(
@@ -36,6 +52,37 @@ python3.pkgs.buildPythonApplication rec {
       --prefix PATH : ${lib.makeBinPath [ borgbackup ]}
     )
   '';
+
+  checkInputs = with python3Packages; [
+    pytest-qt
+    pytest-mock
+    pytestCheckHook
+  ];
+
+  preCheck = ''
+    export HOME=$(mktemp -d)
+    # For tests/test_misc.py::test_autostart
+    mkdir -p $HOME/.config/autostart
+    export QT_PLUGIN_PATH="${qt5.qtbase.bin}/${qt5.qtbase.qtPluginPrefix}"
+    export QT_QPA_PLATFORM=offscreen
+  '';
+
+  disabledTestPaths = [
+    "tests/test_archives.py"
+    "tests/test_borg.py"
+    "tests/test_lock.py"
+    "tests/test_notifications.py"
+  ];
+
+  disabledTests = [
+    "diff_archives_dict_issue-Users"
+    "diff_archives-test"
+    "test_repo_unlink"
+    "test_repo_add_success"
+    "test_ssh_dialog"
+    "test_create"
+    "test_scheduler_create_backup"
+  ];
 
   meta = with lib; {
     license = licenses.gpl3Only;

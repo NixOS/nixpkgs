@@ -7,7 +7,7 @@
 , curl
 , doxygen
 , fetchFromGitHub
-  #, ffmpeg
+#, ffmpeg
 , libmediainfo
 , libraw
 , libsodium
@@ -27,13 +27,13 @@
 }:
 mkDerivation rec {
   pname = "megasync";
-  version = "4.4.0.0";
+  version = "4.5.3.0";
 
   src = fetchFromGitHub {
     owner = "meganz";
     repo = "MEGAsync";
     rev = "v${version}_Linux";
-    sha256 = "1xggca7283943070mmpsfhh7c9avy809h0kgmf7497f4ca5zkg2y";
+    sha256 = "1lwjmdbqyxx5wd8nx4mc830fna37jad4h93viwfh5x7sxn104js7";
     fetchSubmodules = true;
   };
 

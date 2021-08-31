@@ -1,11 +1,12 @@
 { lib, stdenv, fetchurl, unzip }:
 
-stdenv.mkDerivation {
-  name = "nvidia-video-sdk-6.0.1";
+stdenv.mkDerivation rec {
+  pname = "nvidia-video-sdk";
+  version = "6.0.1";
 
   src = fetchurl {
     url = "https://developer.nvidia.com/video-sdk-601";
-    name = "nvidia_video_sdk_6.0.1.zip";
+    name = "nvidia_video_sdk_${version}.zip";
     sha256 = "08h1vnqsv22js9v3pyim5yb80z87baxb7s2g5gsvvjax07j7w8h5";
   };
 

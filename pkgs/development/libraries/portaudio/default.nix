@@ -1,31 +1,33 @@
-{ lib, stdenv, fetchurl, alsa-lib, pkg-config, libjack2
-, AudioUnit, AudioToolbox, CoreAudio, CoreServices, Carbon }:
+{ lib
+, stdenv
+, fetchurl
+, alsa-lib
+, pkg-config
+, AudioUnit
+, AudioToolbox
+, CoreAudio
+, CoreServices
+, Carbon }:
 
-stdenv.mkDerivation {
-  name = "portaudio-190600-20161030";
+stdenv.mkDerivation rec {
+  pname = "portaudio";
+  version =  "190700_20210406";
 
   src = fetchurl {
-    url = "http://www.portaudio.com/archives/pa_stable_v190600_20161030.tgz";
-    sha256 = "04qmin6nj144b8qb9kkd9a52xfvm0qdgm8bg8jbl7s3frmyiv8pm";
+    url = "http://files.portaudio.com/archives/pa_stable_v${version}.tgz";
+    sha256 = "1vrdrd42jsnffh6rq8ap2c6fr4g9fcld89z649fs06bwqx1bzvs7";
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libjack2 ]
-    ++ lib.optional (!stdenv.isDarwin) alsa-lib;
+  buildInputs = lib.optional (!stdenv.isDarwin) alsa-lib;
 
   configureFlags = [ "--disable-mac-universal" "--enable-cxx" ];
 
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=nullability-inferred-on-nested-type -Wno-error=nullability-completeness-on-arrays";
+  postConfigure = ''
+    substituteInPlace Makefile --replace "-Werror" ""
+  '';
 
   propagatedBuildInputs = lib.optionals stdenv.isDarwin [ AudioUnit AudioToolbox CoreAudio CoreServices Carbon ];
-
-  patchPhase = lib.optionalString stdenv.isDarwin ''
-    sed -i '50 i\
-      #include <CoreAudio/AudioHardware.h>\
-      #include <CoreAudio/AudioHardwareBase.h>\
-      #include <CoreAudio/AudioHardwareDeprecated.h>' \
-      include/pa_mac_core.h
-  '';
 
   # not sure why, but all the headers seem to be installed by the make install
   installPhase = ''

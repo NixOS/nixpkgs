@@ -15,18 +15,18 @@
 , pyopenssl
 , pyyaml
 , requests
-, requests_toolbelt
+, requests-toolbelt
 , terminaltables
-, websocket_client
+, websocket-client
 }:
 
 buildPythonPackage rec {
   pname = "gradient";
-  version = "1.4.3";
+  version = "1.5.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a8fa91669c97440049132119019e90d0a9cf09e96352cf43c7c6ca244894bd4e";
+    sha256 = "fee5016afe5e61a640bb9d7e234a10926c17c9e83c876b617438ff5f5ce039ad";
   };
 
   postPatch = ''
@@ -53,9 +53,9 @@ buildPythonPackage rec {
     pyopenssl
     pyyaml
     requests
-    requests_toolbelt
+    requests-toolbelt
     terminaltables
-    websocket_client
+    websocket-client
   ];
 
   # tries to use /homeless-shelter to mimic container usage, etc

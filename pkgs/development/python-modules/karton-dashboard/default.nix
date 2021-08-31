@@ -4,7 +4,7 @@
 , flask
 , karton-core
 , mistune
-, prometheus_client
+, prometheus-client
 }:
 
 buildPythonPackage rec {
@@ -22,12 +22,13 @@ buildPythonPackage rec {
     flask
     karton-core
     mistune
-    prometheus_client
+    prometheus-client
   ];
 
   postPatch = ''
     substituteInPlace requirements.txt \
-      --replace "Flask==1.1.1" "Flask"
+      --replace "Flask==1.1.1" "Flask" \
+      --replace "prometheus-client==0.9.0" "prometheus-client"
   '';
 
   # Project has no tests. pythonImportsCheck requires MinIO configuration

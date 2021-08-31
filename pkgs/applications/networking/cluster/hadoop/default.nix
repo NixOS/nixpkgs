@@ -109,7 +109,7 @@ let
         '';
 
         meta = with lib; {
-          homepage = "http://hadoop.apache.org/";
+          homepage = "https://hadoop.apache.org/";
           description = "Framework for distributed processing of large data sets across clusters of computers";
           license = licenses.asl20;
 

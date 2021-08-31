@@ -1,15 +1,15 @@
 { gcc9Stdenv, lib, stdenv, fetchFromGitHub, cmake, gettext, pkg-config, gpgme, libsolv, openssl, check
-, json_c, libmodulemd, libsmartcols, sqlite, librepo, libyaml, rpm }:
+, json_c, libmodulemd, libsmartcols, sqlite, librepo, libyaml, rpm, zchunk }:
 
 gcc9Stdenv.mkDerivation rec {
   pname = "libdnf";
-  version = "0.62.0";
+  version = "0.63.1";
 
   src = fetchFromGitHub {
     owner = "rpm-software-management";
     repo = pname;
     rev = version;
-    sha256 = "sha256-Se15VmBbzt/NASjrA25RdpHDVIG/GOSqn6ibpBe752g=";
+    sha256 = "sha256-SwkqFSAl99fQoXT96BPRqKFqJg3HEziiT+jXcugPyxM=";
   };
 
   nativeBuildInputs = [
@@ -26,6 +26,7 @@ gcc9Stdenv.mkDerivation rec {
     libsmartcols
     libyaml
     libmodulemd
+    zchunk
   ];
 
   propagatedBuildInputs = [
@@ -51,7 +52,6 @@ gcc9Stdenv.mkDerivation rec {
     "-DWITH_GTKDOC=OFF"
     "-DWITH_HTML=OFF"
     "-DWITH_BINDINGS=OFF"
-    "-DWITH_ZCHUNK=OFF"
   ];
 
   meta = with lib; {

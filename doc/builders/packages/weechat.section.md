@@ -41,7 +41,7 @@ weechat.override {
   configure = { availablePlugins, ... }: {
     init = ''
       /set foo bar
-      /server add freenode chat.freenode.org
+      /server add libera irc.libera.chat
     '';
   };
 }

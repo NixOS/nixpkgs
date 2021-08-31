@@ -2,7 +2,7 @@
 , buildPythonPackage
 , isPy27
 , fetchFromGitHub
-, pytestCheckHook , pytestcov , numba
+, pytestCheckHook , pytest-cov , numba
 , numpy
 , scikit-learn
 , scipy
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     scipy
   ];
 
-  checkInputs = [ pytestCheckHook pytestcov matplotlib seaborn ];
+  checkInputs = [ pytestCheckHook pytest-cov matplotlib seaborn ];
   disabledTestPaths = [
     "docs"
     "benchmarks"

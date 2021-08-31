@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "hyprspace";
-  version = "0.1.2";
+  version = "0.1.6";
 
   propagatedBuildInputs = lib.optional stdenv.isDarwin iproute2mac;
 
@@ -10,10 +10,10 @@ buildGoModule rec {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-YQJaK6i4GWEGSlf/1+hzjVhdN6ZjZC55v8w9KEedNg4=";
+    sha256 = "sha256-g0oyI3jnqQADyOrpnK4IvpFQPEwNrpvyDS+DhBDXZGg=";
   };
 
-  vendorSha256 = "sha256-ErqK2jDTpqUyvll+epdGKRYCJvyvCa90W1GVbbhF0a4=";
+  vendorSha256 = "sha256-rw75xNBBV58F+HBVtD/EslPWxZxLbI3/mJVdJF4usKI=";
 
   meta = with lib; {
     description = "A Lightweight VPN Built on top of Libp2p for Truly Distributed Networks.";

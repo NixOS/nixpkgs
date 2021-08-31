@@ -8,13 +8,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "svtplay-dl";
-  version = "3.9.1";
+  version = "4.2";
 
   src = fetchFromGitHub {
     owner = "spaam";
     repo = "svtplay-dl";
     rev = version;
-    sha256 = "0b207l3dnkpixjhxzis77cfhwd5mjiwrmj8cngxpx2wl1i83xw54";
+    sha256 = "1bsinf2r07g8c03mcw4gprl92wmysyaa81s8wyck0c6wdq3hcsnp";
   };
 
   pythonPaths = [ cryptography pyyaml requests ];
@@ -41,6 +41,13 @@ in stdenv.mkDerivation rec {
   doCheck = true;
   checkPhase = ''
     sh scripts/run-tests.sh -2
+  '';
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+    $out/bin/svtplay-dl --help > /dev/null
+    runHook postInstallCheck
   '';
 
   meta = with lib; {

@@ -1,18 +1,21 @@
-{ stdenv, makeWrapper, runCommandNoCC, lib, nixosTests, writeShellScript
-, fetchFromGitHub, bundlerEnv, ruby, replace, gzip, gnutar, git, cacert
-, util-linux, gawk, imagemagick, optipng, pngquant, libjpeg, jpegoptim
-, gifsicle, libpsl, redis, postgresql, which, brotli, procps, rsync
-, nodePackages, v8
-}:
+{ stdenv, pkgs, makeWrapper, runCommand, lib, writeShellScript
+, fetchFromGitHub, bundlerEnv, callPackage
+
+, ruby, replace, gzip, gnutar, git, cacert, util-linux, gawk
+, imagemagick, optipng, pngquant, libjpeg, jpegoptim, gifsicle, libpsl
+, redis, postgresql, which, brotli, procps, rsync, nodePackages, v8
+
+, plugins ? []
+}@args:
 
 let
-  version = "2.7.0";
+  version = "2.7.7";
 
   src = fetchFromGitHub {
     owner = "discourse";
     repo = "discourse";
     rev = "v${version}";
-    sha256 = "sha256-w26pwGDL2j7qbporUzZATgw7E//E6xwahCbXv35QNnc=";
+    sha256 = "sha256-rhcTQyirgPX0ITjgotJAYLLSU957GanxAYYhy9j123U=";
   };
 
   runtimeDeps = [
@@ -46,7 +49,46 @@ let
     UNICORN_LISTENER = "/run/discourse/sockets/unicorn.sock";
   };
 
-  rake = runCommandNoCC "discourse-rake" {
+  mkDiscoursePlugin =
+    { name ? null
+    , pname ? null
+    , version ? null
+    , meta ? null
+    , bundlerEnvArgs ? {}
+    , preserveGemsDir ? false
+    , src
+    , ...
+    }@args:
+    let
+      rubyEnv = bundlerEnv (bundlerEnvArgs // {
+        inherit name pname version ruby;
+      });
+    in
+      stdenv.mkDerivation (builtins.removeAttrs args [ "bundlerEnvArgs" ] // {
+        pluginName = if name != null then name else "${pname}-${version}";
+        dontConfigure = true;
+        dontBuild = true;
+        installPhase = ''
+          runHook preInstall
+          mkdir -p $out
+          cp -r * $out/
+        '' + lib.optionalString (bundlerEnvArgs != {}) (
+          if preserveGemsDir then ''
+            cp -r ${rubyEnv}/lib/ruby/gems/* $out/gems/
+          ''
+          else ''
+            if [[ -e $out/gems ]]; then
+              echo "Warning: The repo contains a 'gems' directory which will be removed!"
+              echo "         If you need to preserve it, set 'preserveGemsDir = true'."
+              rm -r $out/gems
+            fi
+            ln -sf ${rubyEnv}/lib/ruby/gems $out/gems
+          '' + ''
+          runHook postInstall
+        '');
+      });
+
+  rake = runCommand "discourse-rake" {
     nativeBuildInputs = [ makeWrapper ];
   } ''
     mkdir -p $out/bin
@@ -119,6 +161,18 @@ let
       brotli
       procps
       nodePackages.uglify-js
+      nodePackages.terser
+    ];
+
+    patches = [
+      # Use the Ruby API version in the plugin gem path, to match the
+      # one constructed by bundlerEnv
+      ./plugin_gem_api_version.patch
+
+      # Change the path to the auto generated plugin assets, which
+      # defaults to the plugin's directory and isn't writable at the
+      # time of asset generation
+      ./auto_generated_path.patch
     ];
 
     # We have to set up an environment that is close enough to
@@ -147,6 +201,8 @@ let
       # Create a temporary home dir to stop bundler from complaining
       mkdir $NIX_BUILD_TOP/tmp_home
       export HOME=$NIX_BUILD_TOP/tmp_home
+
+      ${lib.concatMapStringsSep "\n" (p: "ln -sf ${p} plugins/${p.pluginName or ""}") plugins}
 
       export RAILS_ENV=production
 
@@ -195,6 +251,19 @@ let
       # Log Unicorn messages to the journal and make request timeout
       # configurable
       ./unicorn_logging_and_timeout.patch
+
+      # Use the Ruby API version in the plugin gem path, to match the
+      # one constructed by bundlerEnv
+      ./plugin_gem_api_version.patch
+
+      # Use mv instead of rename, since rename doesn't work across
+      # device boundaries
+      ./use_mv_instead_of_rename.patch
+
+      # Change the path to the auto generated plugin assets, which
+      # defaults to the plugin's directory and isn't writable at the
+      # time of asset generation
+      ./auto_generated_path.patch
     ];
 
     postPatch = ''
@@ -203,8 +272,6 @@ let
       # warnings and means we don't have to link back to lib from the
       # state directory.
       find config -type f -execdir sed -Ei "s,(\.\./)+(lib|app)/,$out/share/discourse/\2/," {} \;
-
-      ${replace}/bin/replace-literal -f -r -e 'File.rename(temp_destination, destination)' "FileUtils.mv(temp_destination, destination)" .
     '';
 
     buildPhase = ''
@@ -212,7 +279,6 @@ let
 
       mv config config.dist
       mv public public.dist
-      mv plugins plugins.dist
 
       runHook postBuild
     '';
@@ -228,8 +294,8 @@ let
       ln -sf /run/discourse/config $out/share/discourse/config
       ln -sf /run/discourse/assets/javascripts/plugins $out/share/discourse/app/assets/javascripts/plugins
       ln -sf /run/discourse/public $out/share/discourse/public
-      ln -sf /run/discourse/plugins $out/share/discourse/plugins
       ln -sf ${assets} $out/share/discourse/public.dist/assets
+      ${lib.concatMapStringsSep "\n" (p: "ln -sf ${p} $out/share/discourse/plugins/${p.pluginName or ""}") plugins}
 
       runHook postInstall
     '';
@@ -243,9 +309,11 @@ let
     };
 
     passthru = {
-      inherit rubyEnv runtimeEnv runtimeDeps rake;
+      inherit rubyEnv runtimeEnv runtimeDeps rake mkDiscoursePlugin;
+      enabledPlugins = plugins;
+      plugins = callPackage ./plugins/all-plugins.nix { inherit mkDiscoursePlugin; };
       ruby = rubyEnv.wrappedRuby;
-      tests = nixosTests.discourse;
+      tests = import ../../../../nixos/tests/discourse.nix { package = pkgs.discourse.override args; };
     };
   };
 in discourse

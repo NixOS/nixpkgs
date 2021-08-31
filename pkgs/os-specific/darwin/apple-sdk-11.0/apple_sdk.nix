@@ -141,6 +141,15 @@ in rec {
         cp -r ${MacOSX-SDK}/usr/include/libDER $out/include
       '';
     };
+
+    simd = stdenv.mkDerivation {
+      name = "apple-lib-simd";
+      dontUnpack = true;
+      installPhase = ''
+        mkdir -p $out/include
+        cp -r ${MacOSX-SDK}/usr/include/simd $out/include
+      '';
+    };
   };
 
   overrides = super: {
@@ -151,6 +160,9 @@ in rec {
     # This framework doesn't exist in newer SDKs (somewhere around 10.13), but
     # there are references to it in nixpkgs.
     QuickTime = throw "QuickTime framework not available";
+
+    # Seems to be appropriate given https://developer.apple.com/forums/thread/666686
+    JavaVM = super.JavaNativeFoundation;
   };
 
   bareFrameworks = (

@@ -1,12 +1,12 @@
 { lib, buildRebar3, fetchFromGitHub }:
 buildRebar3 rec {
   name = "rebar3_nix";
-  version = "0.1.0";
+  version = "0.1.1";
   src = fetchFromGitHub {
     owner = "erlang-nix";
     repo = name;
     rev = "v${version}";
-    sha256 = "17w8m4aqqgvhpx3xyc7x2qzsrd3ybzc83ay50zs1gyd1b8csh2wf";
+    sha256 = "10ijc06qvv5hqv0qy3w7mbv9pshdb8bvy0f3phr1vd5hksbk731y";
   };
 
   meta = {

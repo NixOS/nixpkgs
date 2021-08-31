@@ -55,11 +55,11 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "hottext";
-  version = "1.3";
+  version = "1.4";
 
   src = fetchurl {
     url = "https://git.sr.ht/~ehmry/hottext/archive/v${version}.tar.gz";
-    sha256 = "sha256-iz7Z2x0/yi/E6gGFkYgq/yZDOxrZGwQmumPoO9kckLQ=";
+    sha256 = "sha256-hIUofi81zowSMbt1lUsxCnVzfJGN3FEiTtN8CEFpwzY=";
   };
 
   nativeBuildInputs = [ nim ];
@@ -67,7 +67,7 @@ in stdenv.mkDerivation rec {
 
   nimFlags = [ "-d:release" ] ++ map (lib: "--path:${lib}/src") nimLibs;
 
-  HOTTEXT_FONT_PATH = "${gentium}/share/fonts/truetype/GentiumPlus-R.ttf";
+  HOTTEXT_FONT_PATH = "${gentium}/share/fonts/truetype/GentiumPlus-Regular.ttf";
 
   buildPhase = ''
     runHook preBuild

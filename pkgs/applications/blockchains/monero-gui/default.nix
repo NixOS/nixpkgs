@@ -9,13 +9,8 @@
 , boost, libunwind, libsodium, pcsclite
 , randomx, zeromq, libgcrypt, libgpgerror
 , hidapi, rapidjson, quirc
-, trezorSupport ? true
-,   libusb1
-,   protobuf
-,   python3
+, trezorSupport ? true, libusb1, protobuf, python3
 }:
-
-with lib;
 
 stdenv.mkDerivation rec {
   pname = "monero-gui";
@@ -30,7 +25,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake pkg-config wrapQtAppsHook
-    (getDev qttools)
+    (lib.getDev qttools)
   ];
 
   buildInputs = [
@@ -41,8 +36,8 @@ stdenv.mkDerivation rec {
     randomx libgcrypt libgpgerror
     boost libunwind libsodium pcsclite
     zeromq hidapi rapidjson quirc
-  ] ++ optionals trezorSupport [ libusb1 protobuf python3 ]
-    ++ optionals stdenv.isDarwin [ qtmacextras ];
+  ] ++ lib.optionals trezorSupport [ libusb1 protobuf python3 ]
+    ++ lib.optionals stdenv.isDarwin [ qtmacextras ];
 
   postUnpack = ''
     # copy monero sources here
@@ -98,7 +93,7 @@ stdenv.mkDerivation rec {
     done;
   '';
 
-  meta = {
+  meta = with lib; {
     description  = "Private, secure, untraceable currency";
     homepage     = "https://getmonero.org/";
     license      = licenses.bsd3;

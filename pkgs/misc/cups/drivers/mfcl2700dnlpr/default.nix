@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ dpkg makeWrapper ];
 
-  phases = [ "installPhase" ];
+  dontUnpack = true;
 
   installPhase = ''
     dpkg-deb -x $src $out

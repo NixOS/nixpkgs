@@ -1,5 +1,5 @@
 # TODO check that no license information gets lost
-{ callPackage, config, lib, vimUtils, vim, darwin, llvmPackages }:
+{ callPackage, config, lib, vimUtils, vim, darwin, llvmPackages, luaPackages }:
 
 let
 
@@ -7,7 +7,15 @@ let
 
   inherit (lib) extends;
 
-  initialPackages = self: {};
+  initialPackages = self: {
+    # Convert derivation to a vim plugin.
+    toVimPlugin = drv:
+      drv.overrideAttrs(oldAttrs: {
+        passthru = (oldAttrs.passthru or {}) // {
+          vimPlugin = true;
+        };
+      });
+  };
 
   plugins = callPackage ./generated.nix {
     inherit buildVimPluginFrom2Nix;
@@ -22,7 +30,7 @@ let
   overrides = callPackage ./overrides.nix {
     inherit (darwin.apple_sdk.frameworks) Cocoa CoreFoundation CoreServices;
     inherit buildVimPluginFrom2Nix;
-    inherit llvmPackages;
+    inherit llvmPackages luaPackages;
   };
 
   aliases = if (config.allowAliases or true) then (import ./aliases.nix lib) else final: prev: {};

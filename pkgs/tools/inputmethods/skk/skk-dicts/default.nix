@@ -33,7 +33,8 @@ stdenv.mkDerivation {
   srcs = [ small medium large edict assoc ];
   nativeBuildInputs = [ skktools ] ++ lib.optional stdenv.isDarwin libiconv;
 
-  phases = [ "installPhase" ];
+  dontUnpack = true;
+
   installPhase = ''
     function dictname() {
       src=$1

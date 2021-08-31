@@ -3,6 +3,7 @@ MD_TARGETS=$(addsuffix .xml, $(basename $(shell find . -type f -regex '.*\.md$$'
 PANDOC ?= pandoc
 
 pandoc_media_dir = media
+# NOTE: Keep in sync with NixOS manual (/nixos/doc/manual/md-to-db.sh).
 # TODO: Remove raw-attribute when we can get rid of DocBook altogether.
 pandoc_commonmark_enabled_extensions = +attributes+fenced_divs+footnotes+bracketed_spans+definition_lists+pipe_tables+raw_attribute
 pandoc_flags = --extract-media=$(pandoc_media_dir) \
@@ -101,10 +102,10 @@ functions/library/generated: doc-support/result
 %.section.xml: %.section.md
 	$(PANDOC) $^ -t docbook \
 		$(pandoc_flags) \
-	| cat  > $@
+		-o $@
 
 %.chapter.xml: %.chapter.md
 	$(PANDOC) $^ -t docbook \
 		--top-level-division=chapter \
 		$(pandoc_flags) \
-	| cat  > $@
+		-o $@

@@ -1,26 +1,43 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform
-, darwin, fontconfig, harfbuzz, openssl, pkg-config }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, darwin
+, fontconfig
+, harfbuzz
+, openssl
+, pkg-config
+, makeWrapper
+, biber
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "tectonic";
-  version = "0.5.2";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "tectonic-typesetting";
     repo = "tectonic";
     rev = "tectonic@${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-JQ78N+cfk1D6xZixoUvYiLP6ZwovBn/ro1CZoutBwp8=";
+    sha256 = "sha256-CMvT9DouwERhDtBsLDesxN/QgEEfXLgtJaQLjq+SzOI=";
   };
 
-  cargoSha256 = "sha256-disJme0UM6U+yWjGsPya0xDvW6iQsipqMkEALeJ99xU=";
+  cargoSha256 = "sha256-zGsb49yt6SRFfvNHZY+RpjihGpV9ziLsg9BII7WTX2Y=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config makeWrapper ];
 
   buildInputs = [ fontconfig harfbuzz openssl ]
     ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ ApplicationServices Cocoa Foundation ]);
 
-  postInstall = lib.optionalString stdenv.isLinux ''
+  # Tectonic runs biber when it detects it needs to run it, see:
+  # https://github.com/tectonic-typesetting/tectonic/releases/tag/tectonic%400.7.0
+  postInstall = ''
+    wrapProgram $out/bin/tectonic \
+      --prefix PATH "${lib.getBin biber}/bin"
+  '' + lib.optionalString stdenv.isLinux ''
+    substituteInPlace dist/appimage/tectonic.desktop \
+      --replace Exec=tectonic Exec=$out/bin/tectonic
     install -D dist/appimage/tectonic.desktop -t $out/share/applications/
     install -D dist/appimage/tectonic.svg -t $out/share/icons/hicolor/scalable/apps/
   '';

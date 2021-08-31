@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-sql";
-  version = "2.1.0";
+  version = "3.0.1";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "5474387ec3417b0a277de2b42c6d1992256a6a9717ca1ada0e8dad01238b9919";
+    sha256 = "129042cc011225e27aee6ef2697d585fa5722e5d1aeb0038af6ad2451a285457";
   };
 
   propagatedBuildInputs = [
@@ -30,6 +30,8 @@ buildPythonPackage rec {
 
   # has no tests
   doCheck = false;
+
+  pythonImportsCheck = [ "azure.mgmt.sql" ];
 
   meta = with lib; {
     description = "This is the Microsoft Azure SQL Management Client Library";

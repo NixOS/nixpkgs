@@ -1,4 +1,4 @@
-{ config, stdenv, fetchurl, lib, iasl, dev86, pam, libxslt, libxml2, wrapQtAppsHook
+{ config, stdenv, fetchurl, lib, acpica-tools, dev86, pam, libxslt, libxml2, wrapQtAppsHook
 , libX11, xorgproto, libXext, libXcursor, libXmu, libIDL, SDL, libcap, libGL
 , libpng, glib, lvm2, libXrandr, libXinerama, libopus, qtbase, qtx11extras
 , qttools, qtsvg, qtwayland, pkg-config, which, docbook_xsl, docbook_xml_dtd_43
@@ -23,24 +23,14 @@ let
   buildType = "release";
   # Use maintainers/scripts/update.nix to update the version and all related hashes or
   # change the hashes in extpack.nix and guest-additions/default.nix as well manually.
-  version = "6.1.22";
-
-  iasl' = iasl.overrideAttrs (old: rec {
-    inherit (old) pname;
-    version = "20190108";
-    src = fetchurl {
-      url = "https://acpica.org/sites/acpica/files/acpica-unix-${version}.tar.gz";
-      sha256 = "0bqhr3ndchvfhxb31147z8gd81dysyz5dwkvmp56832d0js2564q";
-    };
-    NIX_CFLAGS_COMPILE = old.NIX_CFLAGS_COMPILE + " -Wno-error=stringop-truncation";
-  });
+  version = "6.1.26";
 in stdenv.mkDerivation {
   pname = "virtualbox";
   inherit version;
 
   src = fetchurl {
     url = "https://download.virtualbox.org/virtualbox/${version}/VirtualBox-${version}.tar.bz2";
-    sha256 = "99816d2a15205d49362a31e8ffeb8262d2fa0678c751dfd0a7c43b2faca8be49";
+    sha256 = "0212602eea878d6c9fd7f4a3e0182da3e4505f31d25f5539fb8f7b1fbe366195";
   };
 
   outputs = [ "out" "modsrc" ];
@@ -52,7 +42,7 @@ in stdenv.mkDerivation {
   dontWrapQtApps = true;
 
   buildInputs =
-    [ iasl' dev86 libxslt libxml2 xorgproto libX11 libXext libXcursor libIDL
+    [ acpica-tools dev86 libxslt libxml2 xorgproto libX11 libXext libXcursor libIDL
       libcap glib lvm2 alsa-lib curl libvpx pam makeself perl
       libXmu libpng libopus python ]
     ++ optional javaBindings jdk
@@ -104,6 +94,9 @@ in stdenv.mkDerivation {
     })
   ++ [
     ./qtx11extras.patch
+    # Temporary workaround for broken build
+    # https://www.virtualbox.org/pipermail/vbox-dev/2021-July/015670.html
+    ./fix-configure-pkgconfig-qt.patch
   ];
 
   postPatch = ''

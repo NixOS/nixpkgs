@@ -1,6 +1,6 @@
 { lib, buildPythonPackage, fetchPypi, pythonAtLeast, pythonOlder, click
 , click-completion, factory_boy, faker, inquirer, notify-py, pbr, pendulum
-, ptable, pytestCheckHook, pytestcov, pytest-mock, requests, twine
+, ptable, pytestCheckHook, pytest-cov, pytest-mock, requests, twine
 , validate-email }:
 
 buildPythonPackage rec {
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [ pbr twine ];
-  checkInputs = [ pbr pytestCheckHook pytestcov pytest-mock faker factory_boy ];
+  checkInputs = [ pbr pytestCheckHook pytest-cov pytest-mock faker factory_boy ];
 
   preCheck = ''
     export TOGGL_API_TOKEN=your_api_token

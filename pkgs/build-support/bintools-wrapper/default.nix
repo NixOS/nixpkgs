@@ -208,6 +208,8 @@ stdenv.mkDerivation {
       else if targetPlatform.isAlpha then "alpha"
       else if targetPlatform.isVc4 then "vc4"
       else if targetPlatform.isOr1k then "or1k"
+      else if targetPlatform.isM68k then "m68k"
+      else if targetPlatform.isS390 then "s390"
       else if targetPlatform.isRiscV then "lriscv"
       else throw "unknown emulation for platform: ${targetPlatform.config}";
     in if targetPlatform.useLLVM or false then ""

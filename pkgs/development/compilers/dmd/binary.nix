@@ -43,7 +43,6 @@ in stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    inherit version;
     description = "Digital Mars D Compiler Package";
     # As of 2.075 all sources and binaries use the boost license
     license = licenses.boost;

@@ -28,7 +28,7 @@ let cfg = config.services.subsonic; in {
       };
 
       port = mkOption {
-        type = types.int;
+        type = types.port;
         default = 4040;
         description = ''
           The port on which Subsonic will listen for
@@ -37,7 +37,7 @@ let cfg = config.services.subsonic; in {
       };
 
       httpsPort = mkOption {
-        type = types.int;
+        type = types.port;
         default = 0;
         description = ''
           The port on which Subsonic will listen for

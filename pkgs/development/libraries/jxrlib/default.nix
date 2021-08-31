@@ -13,7 +13,10 @@ stdenv.mkDerivation rec {
     sha256 = "0rk3hbh00nw0wgbfbqk1szrlfg3yq7w6ar16napww3nrlm9cj65w";
   };
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace "cc" "$CC"
+  '' + lib.optionalString stdenv.isDarwin ''
     substituteInPlace Makefile \
       --replace '-shared' '-dynamiclib -undefined dynamic_lookup' \
       --replace '.so' '.dylib'

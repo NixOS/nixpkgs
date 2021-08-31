@@ -281,7 +281,7 @@ in
       createLocalPostgreSQL = databaseActuallyCreateLocally && cfg.database.type == "postgresql";
       createLocalMySQL = databaseActuallyCreateLocally && cfg.database.type == "mysql";
 
-      mySqlCaKeystore = pkgs.runCommandNoCC "mysql-ca-keystore" {} ''
+      mySqlCaKeystore = pkgs.runCommand "mysql-ca-keystore" {} ''
         ${pkgs.jre}/bin/keytool -importcert -trustcacerts -alias MySQLCACert -file ${cfg.database.caCert} -keystore $out -storepass notsosecretpassword -noprompt
       '';
 
@@ -553,7 +553,7 @@ in
 
       jbossCliScript = pkgs.writeText "jboss-cli-script" (mkJbossScript keycloakConfig');
 
-      keycloakConfig = pkgs.runCommandNoCC "keycloak-config" {
+      keycloakConfig = pkgs.runCommand "keycloak-config" {
         nativeBuildInputs = [ cfg.package ];
       } ''
         export JBOSS_BASE_DIR="$(pwd -P)";

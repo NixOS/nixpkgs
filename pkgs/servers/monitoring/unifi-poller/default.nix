@@ -13,13 +13,13 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-LOBkdyfsw7ua6TsLglO5jdR9NWo5Df8rnQ8MH+eIz4g=";
 
-  buildFlagsArray = ''
-    -ldflags=-w -s
-      -X github.com/prometheus/common/version.Branch=master
-      -X github.com/prometheus/common/version.BuildDate=unknown
-      -X github.com/prometheus/common/version.Revision=${src.rev}
-      -X github.com/prometheus/common/version.Version=${version}-0
-  '';
+  ldflags = [
+    "-w" "-s"
+    "-X github.com/prometheus/common/version.Branch=master"
+    "-X github.com/prometheus/common/version.BuildDate=unknown"
+    "-X github.com/prometheus/common/version.Revision=${src.rev}"
+    "-X github.com/prometheus/common/version.Version=${version}-0"
+  ];
 
   meta = with lib; {
     description = "Collect ALL UniFi Controller, Site, Device & Client Data - Export to InfluxDB or Prometheus";

@@ -5,7 +5,7 @@ mkXfceDerivation {
   pname = "xfce4-terminal";
   version = "0.8.10";
 
-  sha256 = "0v58qcrdpqpd2nbwlc4ra7j9nkvfzfhb1zcp1kggbn627q86i0ql";
+  sha256 = "sha256-FINoED7C2PXeDJf9sKD7bk+b5FGZMMqXFe3i2zLDqGw=";
 
   nativeBuildInputs = [ libxslt docbook_xml_dtd_45 docbook_xsl ];
 

@@ -1,18 +1,17 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , ifaddr
 , poetry-core
 , pythonOlder
 , requests
 , six
-, websocket_client
+, websocket-client
 }:
 
 buildPythonPackage rec {
   pname = "roonapi";
-  version = "0.0.37";
+  version = "0.0.38";
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
@@ -20,7 +19,7 @@ buildPythonPackage rec {
     owner = "pavoni";
     repo = "pyroon";
     rev = version;
-    sha256 = "1hxr473z9h3kb91m3ygina58pfwfyjsv1yb29spxmnbzvk34rzzz";
+    sha256 = "sha256-vXx7MgoGjBPdx7uKUtAVqlXphPJYt5SyuTo2JlKia60=";
   };
 
   nativeBuildInputs = [
@@ -31,16 +30,7 @@ buildPythonPackage rec {
     ifaddr
     requests
     six
-    websocket_client
-  ];
-
-  patches = [
-    # Switch to poetry-core, https://github.com/pavoni/pyroon/pull/43
-    (fetchpatch {
-      name = "use-peotry-core.patch";
-      url = "https://github.com/pavoni/pyroon/commit/16f890314683a6c2700fa4da5c937559e2e24bea.patch";
-      sha256 = "047bhimr72rwqqyjy7jkfzacdc2ycy81wbmgnvf7xyhgjw1jyvh5";
-    })
+    websocket-client
   ];
 
   # Tests require access to the Roon API

@@ -42,6 +42,14 @@ let
     nativeBuildInputs = nativeBuildInputs ++ [ elixir hex ];
     propagatedBuildInputs = propagatedBuildInputs ++ beamDeps;
 
+    configurePhase = attrs.configurePhase or ''
+      runHook preConfigure
+
+      ${./mix-configure-hook.sh}
+
+      runHook postConfigure
+    '';
+
     buildPhase = attrs.buildPhase or ''
       runHook preBuild
       export HEX_HOME="$TEMPDIR/hex"
@@ -83,3 +91,4 @@ let
   });
 in
 fix pkg
+

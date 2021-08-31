@@ -49,7 +49,7 @@ buildPythonPackage rec {
     description = "A static content management system";
     homepage    = "https://www.getlektor.com/";
     license     = licenses.bsd0;
-    maintainers = with maintainers; [ vozz costrouc ];
+    maintainers = with maintainers; [ costrouc ];
   };
 
 }

@@ -46,7 +46,6 @@
 /nixos/default.nix          @nbp @infinisil
 /nixos/lib/from-env.nix     @nbp @infinisil
 /nixos/lib/eval-config.nix  @nbp @infinisil
-/nixos/doc @ryantm
 /nixos/doc/manual/configuration/abstractions.xml      @nbp
 /nixos/doc/manual/configuration/config-file.xml       @nbp
 /nixos/doc/manual/configuration/config-syntax.xml     @nbp
@@ -82,13 +81,13 @@
 /pkgs/development/interpreters/python/conda                 @DavHau
 
 # Haskell
-/doc/languages-frameworks/haskell.section.md  @cdepillabout @sternenseemann @maralorn
-/maintainers/scripts/haskell                  @cdepillabout @sternenseemann @maralorn
-/pkgs/development/compilers/ghc               @cdepillabout @sternenseemann @maralorn
-/pkgs/development/haskell-modules             @cdepillabout @sternenseemann @maralorn
-/pkgs/test/haskell                            @cdepillabout @sternenseemann @maralorn
-/pkgs/top-level/release-haskell.nix           @cdepillabout @sternenseemann @maralorn
-/pkgs/top-level/haskell-packages.nix          @cdepillabout @sternenseemann @maralorn
+/doc/languages-frameworks/haskell.section.md  @cdepillabout @sternenseemann @maralorn @expipiplus1
+/maintainers/scripts/haskell                  @cdepillabout @sternenseemann @maralorn @expipiplus1
+/pkgs/development/compilers/ghc               @cdepillabout @sternenseemann @maralorn @expipiplus1
+/pkgs/development/haskell-modules             @cdepillabout @sternenseemann @maralorn @expipiplus1
+/pkgs/test/haskell                            @cdepillabout @sternenseemann @maralorn @expipiplus1
+/pkgs/top-level/release-haskell.nix           @cdepillabout @sternenseemann @maralorn @expipiplus1
+/pkgs/top-level/haskell-packages.nix          @cdepillabout @sternenseemann @maralorn @expipiplus1
 
 # Perl
 /pkgs/development/interpreters/perl @volth @stigtsp
@@ -96,8 +95,8 @@
 /pkgs/development/perl-modules      @volth @stigtsp
 
 # R
-/pkgs/applications/science/math/R   @peti
-/pkgs/development/r-modules         @peti
+/pkgs/applications/science/math/R   @jbedo @bcdarwin
+/pkgs/development/r-modules         @jbedo @bcdarwin
 
 # Ruby
 /pkgs/development/interpreters/ruby @marsam

@@ -41,6 +41,7 @@
 , pango
 , runtimeShell
 , writeScript
+, xdg-utils
 , xidel
 }:
 
@@ -73,8 +74,6 @@ stdenv.mkDerivation {
     url = "https://download-installer.cdn.mozilla.net/pub/thunderbird/releases/${version}/${source.arch}/${source.locale}/thunderbird-${version}.tar.bz2";
     inherit (source) sha256;
   };
-
-  phases = "unpackPhase installPhase";
 
   libPath = lib.makeLibraryPath
     [ stdenv.cc.cc
@@ -164,12 +163,13 @@ stdenv.mkDerivation {
         --set MOZ_LEGACY_PROFILES 1 \
         --set MOZ_ALLOW_DOWNGRADE 1 \
         --prefix PATH : "${lib.getBin gnupg}/bin" \
+        --prefix PATH : "${lib.getBin xdg-utils}/bin" \
         --prefix LD_LIBRARY_PATH : "${lib.getLib gpgme}/lib"
     '';
 
   passthru.updateScript = import ./../../browsers/firefox-bin/update.nix {
     inherit writeScript xidel coreutils gnused gnugrep curl gnupg runtimeShell;
-    name = "thunderbird-bin-${version}";
+    pname = "thunderbird-bin";
     baseName = "thunderbird";
     channel = "release";
     basePath = "pkgs/applications/networking/mailreaders/thunderbird-bin";

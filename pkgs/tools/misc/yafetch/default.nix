@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "yafetch";
-  version = "unstable-2021-06-01";
+  version = "unstable-2021-07-18";
 
   src = fetchFromGitLab {
     owner = "cyberkitty";
     repo = pname;
-    rev = "d9bbc1e4abca87028f898473c9a265161af3c287";
-    sha256 = "0hyb5k7drnm9li720z1fdvz7b15xgf7n6yajnz1j98day3k88bqk";
+    rev = "f3efbca54df1ffea22cc40034114af141ccff9c1";
+    sha256 = "1cxhrjy9vzq87rzql4dcknkwca7nydysp1p1x4fh1qfw79dfdmxw";
   };
 
   # Use the provided NixOS logo automatically
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.com/cyberkitty/yafetch";
     description = "Yet another fetch clone written in C++";
     license = licenses.gpl2Only;
-    maintainers = [ maintainers.ivar ];
+    maintainers = with maintainers; [ ivar ashley ];
     platforms = platforms.linux;
   };
 }
