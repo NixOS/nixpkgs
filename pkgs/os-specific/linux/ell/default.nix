@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchgit
+, fetchpatch
 , autoreconfHook
 , pkg-config
 , dbus
@@ -16,6 +17,18 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "sha256-GgQhSzVqGCpljWewtevCc9rpkks7devRNp5TN+5JNN4=";
   };
+  patches = [
+    (fetchpatch {
+      name = "fix-test-cipher-without-AF_ALG-kernel.patch";
+      url = "https://git.kernel.org/pub/scm/libs/ell/ell.git/patch/?id=6b18c5d0128fbb8cea19a4622429a75ed992ba69";
+      sha256 = "sha256-yg8RtQ26V+pr44MH7JN2GypFiHmEbdF5AeJabqRAVZw=";
+    })
+    (fetchpatch {
+      name = "fix-test-uuid-without-AF_ALG-kernel.patch";
+      url = "https://git.kernel.org/pub/scm/libs/ell/ell.git/patch/?id=093c8122c7aa3543c89fa8f5056660903ad241d1";
+      sha256 = "sha256-iShbf3lhFES537deCk21FixN+uzJUGXB31JukTHH6zk=";
+    })
+  ];
 
   nativeBuildInputs = [
     pkg-config
