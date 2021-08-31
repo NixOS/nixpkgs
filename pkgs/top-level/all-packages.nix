@@ -228,6 +228,8 @@ with pkgs;
 
   cen64 = callPackage ../misc/emulators/cen64 { };
 
+  uxn = callPackage ../misc/emulators/uxn { };
+
   cereal = callPackage ../development/libraries/cereal { };
 
   cewl = callPackage ../tools/security/cewl { };
@@ -4616,7 +4618,7 @@ with pkgs;
   # The latest version used by elasticsearch, logstash, kibana and the the beats from elastic.
   # When updating make sure to update all plugins or they will break!
   elk6Version = "6.8.3";
-  elk7Version = "7.5.1";
+  elk7Version = "7.10.2";
 
   elasticsearch6 = callPackage ../servers/search/elasticsearch/6.x.nix {
     util-linux = util-linuxMinimal;
@@ -4629,12 +4631,12 @@ with pkgs;
   };
   elasticsearch7 = callPackage ../servers/search/elasticsearch/7.x.nix {
     util-linux = util-linuxMinimal;
-    jre_headless = jre8_headless; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
+    jre_headless = jdk11_headless; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
   elasticsearch7-oss = callPackage ../servers/search/elasticsearch/7.x.nix {
     enableUnfree = false;
     util-linux = util-linuxMinimal;
-    jre_headless = jre8_headless; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
+    jre_headless = jdk11_headless; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
   elasticsearch = elasticsearch6;
   elasticsearch-oss = elasticsearch6-oss;
@@ -13745,6 +13747,8 @@ with pkgs;
 
   drush = callPackage ../development/tools/misc/drush { };
 
+  dwz = callPackage ../development/tools/misc/dwz { };
+
   easypdkprog = callPackage ../development/embedded/easypdkprog { };
 
   editorconfig-checker = callPackage ../development/tools/misc/editorconfig-checker { };
@@ -21261,6 +21265,13 @@ with pkgs;
     ];
   };
 
+  linux_5_14 = callPackage ../os-specific/linux/kernel/linux-5.14.nix {
+    kernelPatches = [
+      kernelPatches.bridge_stp_helper
+      kernelPatches.request_key_helper
+    ];
+  };
+
   linux-rt_5_10 = callPackage ../os-specific/linux/kernel/linux-rt-5.10.nix {
     kernelPatches = [
       kernelPatches.bridge_stp_helper
@@ -21339,9 +21350,7 @@ with pkgs;
 
     acpi_call = callPackage ../os-specific/linux/acpi-call {};
 
-    akvcam = callPackage ../os-specific/linux/akvcam {
-      inherit (qt5) qmake;
-    };
+    akvcam = callPackage ../os-specific/linux/akvcam { };
 
     amdgpu-pro = callPackage ../os-specific/linux/amdgpu-pro { };
 
@@ -21553,7 +21562,7 @@ with pkgs;
 
   # Update this when adding the newest kernel major version!
   # And update linux_latest_for_hardened below if the patches are already available
-  linuxPackages_latest = linuxPackages_5_13;
+  linuxPackages_latest = linuxPackages_5_14;
   linux_latest = linuxPackages_latest.kernel;
 
   # Realtime kernel packages.
@@ -21578,6 +21587,7 @@ with pkgs;
   linuxPackages_5_4 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_4);
   linuxPackages_5_10 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_10);
   linuxPackages_5_13 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_13);
+  linuxPackages_5_14 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_14);
 
   # When adding to the list above:
   # - Update linuxPackages_latest to the latest version

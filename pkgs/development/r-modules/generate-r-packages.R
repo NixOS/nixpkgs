@@ -48,8 +48,7 @@ escapeName <- function(name) {
 }
 
 formatPackage <- function(name, version, sha256, depends, imports, linkingTo) {
-    name <- escapeName(name)
-    attr <- gsub(".", "_", name, fixed=TRUE)
+    attr <- gsub(".", "_", escapeName(name), fixed=TRUE)
     options(warn=5)
     depends <- paste( if (is.na(depends)) "" else gsub("[ \t\n]+", "", depends)
                     , if (is.na(imports)) "" else gsub("[ \t\n]+", "", imports)
