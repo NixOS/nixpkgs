@@ -5255,7 +5255,9 @@ with pkgs;
 
   git-big-picture = callPackage ../applications/version-management/git-and-tools/git-big-picture { };
 
-  git-branchless = callPackage ../applications/version-management/git-and-tools/git-branchless { };
+  git-branchless = callPackage ../applications/version-management/git-and-tools/git-branchless {
+    inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
+  };
 
   inherit (haskellPackages) git-brunch;
 
