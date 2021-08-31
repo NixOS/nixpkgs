@@ -5,8 +5,6 @@ with lib;
 let
   cfg = config.services.elasticsearch;
 
-  es6 = builtins.compareVersions cfg.package.version "6" >= 0;
-
   esConfig = ''
     network.host: ${cfg.listenAddress}
     cluster.name: ${cfg.cluster_name}
@@ -147,9 +145,7 @@ in
       path = [ pkgs.inetutils ];
       environment = {
         ES_HOME = cfg.dataDir;
-        ES_JAVA_OPTS = toString (optional (!es6) [ "-Des.path.conf=${configDir}" ]
-          ++ cfg.extraJavaOptions);
-      } // optionalAttrs es6 {
+        ES_JAVA_OPTS = toString cfg.extraJavaOptions;
         ES_PATH_CONF = configDir;
       };
       serviceConfig = {
@@ -188,7 +184,7 @@ in
         rm -f "${configDir}/logging.yml"
         cp ${loggingConfigFile} ${configDir}/${loggingConfigFilename}
         mkdir -p ${configDir}/scripts
-        ${optionalString es6 "cp ${cfg.package}/config/jvm.options ${configDir}/jvm.options"}
+        cp ${cfg.package}/config/jvm.options ${configDir}/jvm.options
         # redirect jvm logs to the data directory
         mkdir -m 0700 -p ${cfg.dataDir}/logs
         ${pkgs.sd}/bin/sd 'logs/gc.log' '${cfg.dataDir}/logs/gc.log' ${configDir}/jvm.options \
