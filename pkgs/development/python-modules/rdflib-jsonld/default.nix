@@ -17,5 +17,7 @@ buildPythonPackage rec {
     license = licenses.bsdOriginal;
     description = "rdflib extension adding JSON-LD parser and serializer";
     maintainers = [ maintainers.koslambrou ];
+    # incomptiable with rdflib 6.0.0, half of the test suite fails with import and atrribute errors
+    broken = true;
   };
 }
