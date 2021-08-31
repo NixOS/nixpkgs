@@ -5,36 +5,41 @@ let
   opt = options.services.ipfs;
 
   ipfsFlags = toString ([
-    (optionalString  cfg.autoMount                   "--mount")
-    (optionalString  cfg.enableGC                    "--enable-gc")
-    (optionalString (cfg.serviceFdlimit != null)     "--manage-fdlimit=false")
-    (optionalString (cfg.defaultMode == "offline")   "--offline")
+    (optionalString cfg.autoMount "--mount")
+    (optionalString cfg.enableGC "--enable-gc")
+    (optionalString (cfg.serviceFdlimit != null) "--manage-fdlimit=false")
+    (optionalString (cfg.defaultMode == "offline") "--offline")
     (optionalString (cfg.defaultMode == "norouting") "--routing=none")
   ] ++ cfg.extraFlags);
 
   splitMulitaddr = addrRaw: lib.tail (lib.splitString "/" addrRaw);
 
-  multiaddrToListenStream = addrRaw: let
+  multiaddrToListenStream = addrRaw:
+    let
       addr = splitMulitaddr addrRaw;
       s = builtins.elemAt addr;
-    in if s 0 == "ip4" && s 2 == "tcp"
-      then "${s 1}:${s 3}"
+    in
+    if s 0 == "ip4" && s 2 == "tcp"
+    then "${s 1}:${s 3}"
     else if s 0 == "ip6" && s 2 == "tcp"
-      then "[${s 1}]:${s 3}"
+    then "[${s 1}]:${s 3}"
     else if s 0 == "unix"
-      then "/${lib.concatStringsSep "/" (lib.tail addr)}"
+    then "/${lib.concatStringsSep "/" (lib.tail addr)}"
     else null; # not valid for listen stream, skip
 
-  multiaddrToListenDatagram = addrRaw: let
+  multiaddrToListenDatagram = addrRaw:
+    let
       addr = splitMulitaddr addrRaw;
       s = builtins.elemAt addr;
-    in if s 0 == "ip4" && s 2 == "udp"
-      then "${s 1}:${s 3}"
+    in
+    if s 0 == "ip4" && s 2 == "udp"
+    then "${s 1}:${s 3}"
     else if s 0 == "ip6" && s 2 == "udp"
-      then "[${s 1}]:${s 3}"
+    then "[${s 1}]:${s 3}"
     else null; # not valid for listen datagram, skip
 
-in {
+in
+{
 
   ###### interface
 
@@ -65,9 +70,10 @@ in {
 
       dataDir = mkOption {
         type = types.str;
-        default = if versionAtLeast config.system.stateVersion "17.09"
-                  then "/var/lib/ipfs"
-                  else "/var/lib/ipfs/.ipfs";
+        default =
+          if versionAtLeast config.system.stateVersion "17.09"
+          then "/var/lib/ipfs"
+          else "/var/lib/ipfs/.ipfs";
         description = "The data dir for IPFS";
       };
 
@@ -137,7 +143,7 @@ in {
           These are applied last, so may override configuration set by other options in this module.
           Keep in mind that this configuration is stateful; i.e., unsetting anything in here does not reset the value to the default!
         '';
-        default = {};
+        default = { };
         example = {
           Datastore.StorageMax = "100GB";
           Discovery.MDNS.Enabled = false;
@@ -153,7 +159,7 @@ in {
       extraFlags = mkOption {
         type = types.listOf types.str;
         description = "Extra flags passed to the IPFS daemon";
-        default = [];
+        default = [ ];
       };
 
       localDiscovery = mkOption {
@@ -168,7 +174,7 @@ in {
         type = types.nullOr types.int;
         default = null;
         description = "The fdlimit for the IPFS systemd unit or <literal>null</literal> to have the daemon attempt to manage it";
-        example = 64*1024;
+        example = 64 * 1024;
       };
 
       startWhenNeeded = mkOption {
@@ -235,24 +241,25 @@ in {
         ipfs --offline config Mounts.IPFS ${cfg.ipfsMountDir}
         ipfs --offline config Mounts.IPNS ${cfg.ipnsMountDir}
       '' + concatStringsSep "\n" (collect
-            isString
-            (mapAttrsRecursive
-              (path: value:
-              # Using heredoc below so that the value is never improperly quoted
-              ''
-                read value <<EOF
-                ${builtins.toJSON value}
-                EOF
-                ipfs --offline config --json "${concatStringsSep "." path}" "$value"
-              '')
-              ({ Addresses.API = cfg.apiAddress;
-                 Addresses.Gateway = cfg.gatewayAddress;
-                 Addresses.Swarm = cfg.swarmAddress;
-              } //
-              cfg.extraConfig))
-          );
+        isString
+        (mapAttrsRecursive
+          (path: value:
+            # Using heredoc below so that the value is never improperly quoted
+            ''
+              read value <<EOF
+              ${builtins.toJSON value}
+              EOF
+              ipfs --offline config --json "${concatStringsSep "." path}" "$value"
+            '')
+          ({
+            Addresses.API = cfg.apiAddress;
+            Addresses.Gateway = cfg.gatewayAddress;
+            Addresses.Swarm = cfg.swarmAddress;
+          } //
+          cfg.extraConfig))
+      );
       serviceConfig = {
-        ExecStart = ["" "${cfg.package}/bin/ipfs daemon ${ipfsFlags}"];
+        ExecStart = [ "" "${cfg.package}/bin/ipfs daemon ${ipfsFlags}" ];
         User = cfg.user;
         Group = cfg.group;
       } // optionalAttrs (cfg.serviceFdlimit != null) { LimitNOFILE = cfg.serviceFdlimit; };
@@ -263,12 +270,16 @@ in {
     systemd.sockets.ipfs-gateway = {
       wantedBy = [ "sockets.target" ];
       socketConfig = {
-        ListenStream = let
+        ListenStream =
+          let
             fromCfg = multiaddrToListenStream cfg.gatewayAddress;
-          in [ "" ] ++ lib.optional (fromCfg != null) fromCfg;
-        ListenDatagram = let
+          in
+          [ "" ] ++ lib.optional (fromCfg != null) fromCfg;
+        ListenDatagram =
+          let
             fromCfg = multiaddrToListenDatagram cfg.gatewayAddress;
-          in [ "" ] ++ lib.optional (fromCfg != null) fromCfg;
+          in
+          [ "" ] ++ lib.optional (fromCfg != null) fromCfg;
       };
     };
 
@@ -276,9 +287,11 @@ in {
       wantedBy = [ "sockets.target" ];
       # We also include "%t/ipfs.sock" because there is no way to put the "%t"
       # in the multiaddr.
-      socketConfig.ListenStream = let
+      socketConfig.ListenStream =
+        let
           fromCfg = multiaddrToListenStream cfg.apiAddress;
-        in [ "" "%t/ipfs.sock" ] ++ lib.optional (fromCfg != null) fromCfg;
+        in
+        [ "" "%t/ipfs.sock" ] ++ lib.optional (fromCfg != null) fromCfg;
     };
 
   };
