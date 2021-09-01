@@ -144,6 +144,13 @@ let
       ];
     };
 
+    linux_5_14 = callPackage ../os-specific/linux/kernel/linux-5.14.nix {
+      kernelPatches = [
+        kernelPatches.bridge_stp_helper
+        kernelPatches.request_key_helper
+      ];
+    };
+
     linux_testing = callPackage ../os-specific/linux/kernel/linux-testing.nix {
       kernelPatches = [
         kernelPatches.bridge_stp_helper
@@ -217,9 +224,7 @@ let
 
     acpi_call = callPackage ../os-specific/linux/acpi-call {};
 
-    akvcam = callPackage ../os-specific/linux/akvcam {
-      inherit (pkgs.qt5) qmake;
-    };
+    akvcam = callPackage ../os-specific/linux/akvcam { };
 
     amdgpu-pro = callPackage ../os-specific/linux/amdgpu-pro { };
 
@@ -448,6 +453,7 @@ let
     linux_5_4 = recurseIntoAttrs (packagesFor kernels.linux_5_4);
     linux_5_10 = recurseIntoAttrs (packagesFor kernels.linux_5_10);
     linux_5_13 = recurseIntoAttrs (packagesFor kernels.linux_5_13);
+    linux_5_14 = recurseIntoAttrs (packagesFor kernels.linux_5_14);
   };
 
   rtPackages = {
@@ -492,7 +498,7 @@ let
   packageAliases = {
     linux_default = packages.linux_5_10;
     # Update this when adding the newest kernel major version!
-    linux_latest = packages.linux_5_13;
+    linux_latest = packages.linux_5_14;
     linux_mptcp = packages.linux_mptcp_95;
     linux_rt_default = packages.linux_rt_5_4;
     linux_rt_latest = packages.linux_rt_5_11;
@@ -545,4 +551,3 @@ in
   buildLinux = attrs: callPackage ../os-specific/linux/kernel/generic.nix attrs;
 
 }
-
