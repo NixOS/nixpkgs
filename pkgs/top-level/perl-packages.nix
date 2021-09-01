@@ -19799,6 +19799,22 @@ let
     };
   };
 
+  SyntaxKeywordTry = buildPerlModule {
+    pname = "Syntax-Keyword-Try";
+    version = "0.25";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/Syntax-Keyword-Try-0.25.tar.gz";
+      sha256 = "0xd82gcpcrnmwxsbk7x0ainmyybdc087g6j69hrpy80j0asnq2f5";
+    };
+    propagatedBuildInputs = [ XSParseKeyword ];
+    perlPreHook = lib.optionalString stdenv.isDarwin "export LD=$CC";
+    meta = {
+      description = "A try/catch/finally syntax for perl";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.zakame ];
+    };
+  };
+
   SysMmap = buildPerlPackage {
     pname = "Sys-Mmap";
     version = "0.20";
