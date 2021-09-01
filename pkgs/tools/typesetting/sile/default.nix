@@ -39,11 +39,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "sile";
-  version = "0.10.15";
+  version = "0.11.0";
 
   src = fetchurl {
     url = "https://github.com/sile-typesetter/sile/releases/download/v${version}/${pname}-${version}.tar.xz";
-    sha256 = "0p1w3s6j34qi93aycqmqggfm277n90z90nlmm1j3qizxxwq5gda9";
+    sha256 = "14b0y41r2djybr71qdgyjxqggi1mzfrslxiwz0czzz5yiz7ffqkh";
   };
 
   configureFlags = [
@@ -109,6 +109,7 @@ stdenv.mkDerivation rec {
       such as InDesign.
     '';
     homepage = "https://sile-typesetter.org/";
+    changelog = "https://github.com/sile-typesetter/sile/raw/v${version}/CHANGELOG.md";
     platforms = platforms.unix;
     broken = stdenv.isDarwin;   # https://github.com/NixOS/nixpkgs/issues/23018
     maintainers = with maintainers; [ doronbehar alerque ];
