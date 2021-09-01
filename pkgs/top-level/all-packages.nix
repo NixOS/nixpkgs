@@ -455,6 +455,8 @@ with pkgs;
 
   fetchMavenArtifact = callPackage ../build-support/fetchmavenartifact { };
 
+  figma = callPackage ../applications/graphics/figma {};
+
   find-cursor = callPackage ../tools/X11/find-cursor { };
 
   flare-floss = callPackage ../tools/security/flare-floss { };
