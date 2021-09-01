@@ -9138,6 +9138,8 @@ with pkgs;
 
   sqliteman = callPackage ../applications/misc/sqliteman { };
 
+  sqls = callPackage ../applications/misc/sqls { };
+
   stdman = callPackage ../data/documentation/stdman { };
 
   steck = callPackage ../servers/pinnwand/steck.nix { };
