@@ -23,7 +23,7 @@ let
   offloadCfg = pCfg.offload;
   primeEnabled = syncCfg.enable || offloadCfg.enable;
   nvidiaPersistencedEnabled =  cfg.nvidiaPersistenced;
-  nvidiaSettings =  cfg.nvidiaSettings;
+  nvidiaSettings = cfg.nvidiaSettings;
 in
 
 {
