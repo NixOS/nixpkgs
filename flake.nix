@@ -5,6 +5,7 @@
 
   outputs = { self }:
     let
+      jobs = import .pkgs/development/java-modules/junit/default.nix
       jobs = import ./pkgs/top-level/release.nix {
         nixpkgs = self;
       };
@@ -24,8 +25,8 @@
       forAllSystems = f: lib.genAttrs systems (system: f system);
     
     
-    jobs = import .pkgs/development/java-modules/junit/default.nix
     
+    In
  
     {
       lib = lib.extend (final: prev: {
