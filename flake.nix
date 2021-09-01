@@ -22,7 +22,9 @@
       ];
 
       forAllSystems = f: lib.genAttrs systems (system: f system);
-
+    
+    
+    include  export .pkgs/development/java-modules/junit/default.nix
     in
     {
       lib = lib.extend (final: prev: {
