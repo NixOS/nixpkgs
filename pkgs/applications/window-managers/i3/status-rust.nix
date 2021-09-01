@@ -40,7 +40,7 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     mkdir -p $out/share
-    cp -R files/* $out/share
+    cp -R examples files/* $out/share
   '';
 
   postFixup = ''
