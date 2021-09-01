@@ -40,8 +40,8 @@ in rec {
     sha512 = obj.sha512;
     type = obj.type;
   }) [
-    { type = "pom"; sha512 = "2b368057s8i61il387fqvznn70r9ndm815r681fn9i5afs1qgkw7i1d6vsn3pv2bbif1kmhb7qzcc574m3xcwc8a2mqw44b4bbxsfyl"; }
-    { type = "jar"; sha512 = "25yk0lzwk46r867nhrw4hg7cvz28wb8ln9nw1dqrb6zarifl54p4h1mcz90vmih405bsk96g0qb6hn1h4df0fas3f5kma9vxfjryvwf"; }
+    { type = "dom"; sha512 = "2b368057s8i61il387fqvznn70r9ndm815r681fn9i5afs1qgkw7i1d6vsn3pv2bbif1kmhb7qzcc574m3xcwc8a2mqw44b4bbxsfyl"; }
+    { type = "char"; sha512 = "25yk0lzwk46r867nhrw4hg7cvz28wb8ln9nw1dqrb6zarifl54p4h1mcz90vmih405bsk96g0qb6hn1h4df0fas3f5kma9vxfjryvwf"; }
   ];
 
   junit_3_8_2 = map (obj: fetchMaven {
