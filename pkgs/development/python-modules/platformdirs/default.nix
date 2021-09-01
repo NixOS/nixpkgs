@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "platformdirs";
-  version = "2.2.0";
+  version = "2.3.0";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "15f08czqfmxy1y947rlrsjs20jgsy2vc1wqhv4b08b3ijxj0jpqh";
+    sha256 = "sha256-g2DPNN7VxK3EjOXOpSWA4a+PghZ7v2jmjw9+VQyCTBI=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
