@@ -141,6 +141,6 @@ rec {
   });
 
   nvim_with_lua_packages = runTest nvimWithLuaPackages ''
-    ${nvimWithLuaPackages}/bin/nvim -n -i NONE --noplugin -es
+    ${nvimWithLuaPackages}/bin/nvim -i NONE --noplugin -es
   '';
 })
