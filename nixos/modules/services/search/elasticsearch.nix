@@ -189,6 +189,9 @@ in
         cp ${loggingConfigFile} ${configDir}/${loggingConfigFilename}
         mkdir -p ${configDir}/scripts
         ${optionalString es6 "cp ${cfg.package}/config/jvm.options ${configDir}/jvm.options"}
+        # redirect jvm logs to the data directory
+        mkdir -m 0700 -p ${cfg.dataDir}/logs
+        ${pkgs.sd}/bin/sd 'logs/gc.log' '${cfg.dataDir}/logs/gc.log' ${configDir}/jvm.options \
 
         if [ "$(id -u)" = 0 ]; then chown -R elasticsearch:elasticsearch ${cfg.dataDir}; fi
       '';
