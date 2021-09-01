@@ -139,6 +139,8 @@ let
       callPackage = self.newScope { inherit qtCompatVersion qtModule srcs; };
     in {
 
+      inherit callPackage qtCompatVersion qtModule srcs;
+
       mkDerivationWith =
         import ../mkDerivation.nix
         { inherit lib; inherit debug; inherit (self) wrapQtAppsHook; };

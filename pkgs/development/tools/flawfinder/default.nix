@@ -1,16 +1,15 @@
 { lib
 , fetchurl
-, installShellFiles
 , python3
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "flawfinder";
-  version = "2.0.18";
+  version = "2.0.19";
 
   src = fetchurl {
     url = "https://dwheeler.com/flawfinder/flawfinder-${version}.tar.gz";
-    sha256 = "1hk2y13fd2a5gf42a1hk45hw6pbls715wi9k1yh3c3wyhvbyylba";
+    sha256 = "sha256-/lUJgdNwq/oKKWcTRswLA4Ipqb2QsjnqsPAfEiEt9hg=";
   };
 
   # Project is using a combination of bash/Python for the tests
