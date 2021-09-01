@@ -19,9 +19,9 @@ rec {
   */
   # TODO(Profpatsch): add tests that check stderr
   assertMsg = pred: msg:
-    if pred
-    then true
-    else builtins.trace msg false;
+       pred
+         true
+         builtins.trace msg false;
 
   /* Specialized `assertMsg` for checking if val is one of the elements
      of a list. Useful for checking enums.
