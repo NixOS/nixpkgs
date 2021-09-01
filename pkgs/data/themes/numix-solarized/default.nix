@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "numix-solarized-gtk-theme";
-  version = "20210522";
+  version = "20210831";
 
   src = fetchFromGitHub {
     owner = "Ferdi265";
     repo = pname;
     rev = version;
-    sha256 = "0hin73fmfir4w1z0j87k5hahhf2blhcq4r7gf89gz4slnl18cvjh";
+    sha256 = "1q8qhpw0hfv625sm626zp4vbz2106b0g5m11ygk87s6kbxrfg6lr";
   };
 
   nativeBuildInputs = [ python3 sassc glib gdk-pixbuf inkscape ];
@@ -24,7 +24,8 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     runHook preInstall
-    for theme in *.colors; do
+    for theme in colors/*.colors; do
+      theme="''${theme##*/}"
       make THEME="''${theme/.colors/}" install
     done
     runHook postInstall
