@@ -99,8 +99,8 @@ with self; {
 
   luarocks-nix = callPackage ../development/tools/misc/luarocks/luarocks-nix.nix { };
 
-  luxio = buildLuaPackage rec {
-    name = "luxio-${version}";
+  luxio = buildLuaPackage {
+    pname = "luxio";
     version = "13";
 
     src = fetchurl {
