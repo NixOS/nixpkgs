@@ -1,31 +1,51 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, isPy27
+, fetchFromGitHub
 , pbr
-, pytest
-, isPy3k
+, pytestCheckHook
+, pythonOlder
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "ssdp";
   version = "1.1.0";
-  disabled = !isPy3k;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "d33575a7360aaead5341cc2ceaf47cc80b2309a7dd167c2ea45d5a5b00851665";
+  disabled = pythonOlder "3.6";
+
+  src = fetchFromGitHub {
+    owner = "codingjoe";
+    repo = pname;
+    rev = version;
+    sha256 = "19d2b5frpq2qkfkpz173wpjk5jwhkjpk75p8q92nm8iv41nrzljy";
   };
 
-  buildInputs = [ pbr ];
-  checkInputs = [ pytest ];
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
-  # test suite uses new async primitives
-  doCheck = !isPy27;
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
+
+  buildInputs = [
+    pbr
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "pytest-runner" "" \
+      --replace "--cov=ssdp" ""
+  '';
+
+  pythonImportsCheck = [ "ssdp" ];
 
   meta = with lib; {
+    description = "Python asyncio library for Simple Service Discovery Protocol (SSDP)";
     homepage = "https://github.com/codingjoe/ssdp";
-    description = "Python asyncio library for Simple Service Discovery Protocol (SSDP).";
     license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
   };
 }
