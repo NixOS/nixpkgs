@@ -1025,9 +1025,9 @@ with pkgs;
   };
   termite-unwrapped = callPackage ../applications/terminal-emulators/termite { };
 
-  termonad-with-packages = callPackage ../applications/terminal-emulators/termonad {
-    inherit (haskellPackages) ghcWithPackages;
-  };
+  termonad-with-packages = callPackage ../applications/terminal-emulators/termonad { };
+
+  termonad = termonad-with-packages;
 
   termsyn = callPackage ../data/fonts/termsyn { };
 
