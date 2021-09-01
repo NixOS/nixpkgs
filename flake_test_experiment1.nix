@@ -47,8 +47,8 @@
                       { virtualisation.useBootLoader = true; }
                       ({ config, ... }: {
                         virtualisation.useEFIBoot =
-                          config.boot.loader.systemd-boot.enable ||
-                          config.boot.loader.efi.canTouchEfiVariables;
+                                .boot.loader.systemd-boot.enable ||
+                                .boot.loader.efi.canTouchEfiVariables;
                       })
                     ];
                   })).config;
@@ -74,8 +74,8 @@
               map addModuleDeclarationFile modules ++ [
                 {
                   system.nixos.versionSuffix =
-                    ".${final.substring 0 8 (self.lastModifiedDate or self.lastModified or "19700101")}.${self.shortRev or "dirty"}";
-                  system.nixos.revision = final.mkIf (self ? rev) self.rev;
+                    ".${final.substring 0 8 (   .lastModifiedDate or .lastModified or "19700101")}.${self.shortRev or "dirty"}";
+                  system.nixos.revision =     .mkIf (self ? rev) self.rev;
 
                   system.build = {
                     vm = vmConfig.system.build.vm;
