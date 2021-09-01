@@ -27,20 +27,29 @@
 , callPackage
 , nixosTests
 , withMediaSession ? true
-, gstreamerSupport ? true, gst_all_1 ? null
-, ffmpegSupport ? true, ffmpeg ? null
-, bluezSupport ? true, bluez ? null, sbc ? null, libfreeaptx ? null, ldacbt ? null, fdk_aac ? null
+, gstreamerSupport ? true
+, gst_all_1 ? null
+, ffmpegSupport ? true
+, ffmpeg ? null
+, bluezSupport ? true
+, bluez ? null
+, sbc ? null
+, libfreeaptx ? null
+, ldacbt ? null
+, fdk_aac ? null
 , nativeHspSupport ? true
 , nativeHfpSupport ? true
 , ofonoSupport ? true
 , hsphfpdSupport ? true
-, pulseTunnelSupport ? true, libpulseaudio ? null
-, zeroconfSupport ? true, avahi ? null
+, pulseTunnelSupport ? true
+, libpulseaudio ? null
+, zeroconfSupport ? true
+, avahi ? null
 }:
 
 let
   fontsConf = makeFontsConf {
-    fontDirectories = [];
+    fontDirectories = [ ];
   };
 
   mesonEnable = b: if b then "enabled" else "disabled";
@@ -48,7 +57,7 @@ let
 
   self = stdenv.mkDerivation rec {
     pname = "pipewire";
-    version = "0.3.33";
+    version = "0.3.34";
 
     outputs = [
       "out"
@@ -66,7 +75,7 @@ let
       owner = "pipewire";
       repo = "pipewire";
       rev = version;
-      sha256 = "sha256-HP2HcGjrLw0+8pO1upvJQk32v+bifYpi5Rtod0TbBis=";
+      sha256 = "sha256-ZFARA7YuDnpObGLWbgy1Rk+wzmAxHEMuHQkb6tWD0s0=";
     };
 
     patches = [
@@ -213,4 +222,5 @@ let
     };
   };
 
-in self
+in
+self
