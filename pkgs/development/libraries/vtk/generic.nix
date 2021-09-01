@@ -73,8 +73,9 @@ in stdenv.mkDerivation rec {
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
     "-DCMAKE_INSTALL_BINDIR=bin"
+  ] ++ optionals enableQt [
+    "-D${if lib.versionOlder version "9.0" then "VTK_Group_Qt:BOOL=ON" else "VTK_GROUP_ENABLE_Qt:STRING=YES"}"
   ]
-    ++ optionals enableQt [ "-DVTK_Group_Qt:BOOL=ON" ]
     ++ optionals stdenv.isDarwin [ "-DOPENGL_INCLUDE_DIR=${OpenGL}/Library/Frameworks" ]
     ++ optionals enablePython [
       "-DVTK_WRAP_PYTHON:BOOL=ON"
