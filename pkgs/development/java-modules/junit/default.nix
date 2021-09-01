@@ -51,8 +51,8 @@ in rec {
     sha512 = obj.sha512;
     type = obj.type;
   }) [
-    { type = "pom"; sha512 = "01npyfwl1f44l44x92cvqqcp58sckcjraf78dav6zgag3x6ispd9gz594nhpqckmjw0hlrkbqfxnzdcq1mlsj9rw6zyq4wk5ch8rl5j"; }
-    { type = "jar"; sha512 = "2jcih102666lcm7b23rgs5cd59ww49m78c8mja52mrcm25630zw28rjqkj5lsws18k5jf75div9wkd1sxcvwvq5cvvphgyg7550i8r9"; }
+    { type = "dom"; sha512 = "01npyfwl1f44l44x92cvqqcp58sckcjraf78dav6zgag3x6ispd9gz594nhpqckmjw0hlrkbqfxnzdcq1mlsj9rw6zyq4wk5ch8rl5j"; }
+    { type = "char"; sha512 = "2jcih102666lcm7b23rgs5cd59ww49m78c8mja52mrcm25630zw28rjqkj5lsws18k5jf75div9wkd1sxcvwvq5cvvphgyg7550i8r9"; }
   ];
 
   junit_4_12 = junitGen {
