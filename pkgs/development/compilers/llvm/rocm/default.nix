@@ -1,4 +1,4 @@
-{ lib, buildPackages, fetchFromGitHub, callPackage, wrapCCWith }:
+{ stdenv, lib, buildPackages, fetchFromGitHub, callPackage, wrapCCWith, overrideCC }:
 
 let
   version = "4.1.0";
@@ -23,12 +23,33 @@ in rec {
     '';
   };
 
+  clangNoCompilerRt = wrapCCWith rec {
+    cc = clang-unwrapped;
+    extraBuildCommands = ''
+      clang_version=`${cc}/bin/clang -v 2>&1 | grep "clang version " | grep -E -o "[0-9.-]+"`
+      rsrc="$out/resource-root"
+      mkdir "$rsrc"
+      ln -s "${cc}/lib/clang/$clang_version/include" "$rsrc"
+      echo "-resource-dir=$rsrc" >> $out/nix-support/cc-cflags
+      echo "--gcc-toolchain=${stdenv.cc.cc}" >> $out/nix-support/cc-cflags
+      echo "-Wno-unused-command-line-argument" >> $out/nix-support/cc-cflags
+      rm $out/nix-support/add-hardening.sh
+      touch $out/nix-support/add-hardening.sh
+    '';
+  };
+
   clang-unwrapped = callPackage ./clang.nix {
     inherit lld llvm version;
     src = "${src}/clang";
   };
 
-  lld = callPackage ./lld {
+  compiler-rt = callPackage ./compiler-rt {
+    inherit version llvm;
+    src = "${src}/compiler-rt";
+    stdenv = overrideCC stdenv clangNoCompilerRt;
+  };
+
+  lld = callPackage ./lld.nix {
     inherit llvm version;
     src = "${src}/lld";
     buildLlvmTools = buildPackages.llvmPackages_rocm;
