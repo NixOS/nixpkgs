@@ -27,25 +27,30 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
+    desktop-file-utils
+    gettext
+    glib
+    itstool
+    libxml2
     meson
     ninja
     pkg-config
-    vala
-    gettext
-    itstool
-    libxml2
-    desktop-file-utils
-    wrapGAppsHook
     python3
+    vala
+    wrapGAppsHook
+    # Prevents “error: Package `libhandy-1' not found in specified Vala API
+    # directories or GObject-Introspection GIR directories”, even though it
+    # should only be a runtime dependency.
+    libhandy
   ];
 
   buildInputs = [
     gtk3
     libhandy
     glib
-    gnome.adwaita-icon-theme
   ];
 
+  strictDeps = true;
   doCheck = true;
 
   passthru = {
