@@ -2,15 +2,17 @@
 , buildPythonPackage
 , fetchPypi
 , substituteAll
-, six
 , krb5Full
 , findutils
 , which
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "k5test";
   version = "0.10.0";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
@@ -27,17 +29,15 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [
-    six
-  ];
-
   # No tests
   doCheck = false;
+
+  pythonImportsCheck = [ "k5test" ];
 
   meta = with lib; {
     description = "Library for setting up self-contained Kerberos 5 environment";
     homepage = "https://github.com/pythongssapi/k5test";
     license = licenses.mit;
-    maintainers = [ ];
+    maintainers = with maintainers; [ ];
   };
 }
