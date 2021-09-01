@@ -23730,6 +23730,8 @@ with pkgs;
     inherit (python3Packages) python wrapPython pygments markdown;
   };
 
+  chatty = callPackage ../applications/networking/instant-messengers/chatty { };
+
   chirp = callPackage ../applications/radio/chirp { };
 
   browsh = callPackage ../applications/networking/browsers/browsh { };
