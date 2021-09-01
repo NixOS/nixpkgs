@@ -143,6 +143,15 @@ in
       '';
     };
 
+    hardware.nvidia.nvidiaSettings = mkOption {
+      default = true;
+      type = types.bool;
+      description = ''
+        Whether to add nvidia-settings, NVIDIA's GUI configuration tool, to
+        systemPackages.
+      '';
+    };
+
     hardware.nvidia.nvidiaPersistenced = mkOption {
       default = false;
       type = types.bool;
@@ -279,7 +288,8 @@ in
     hardware.opengl.extraPackages = optional offloadCfg.enable nvidia_x11.out;
     hardware.opengl.extraPackages32 = optional offloadCfg.enable nvidia_x11.lib32;
 
-    environment.systemPackages = [ nvidia_x11.bin nvidia_x11.settings ]
+    environment.systemPackages = [ nvidia_x11.bin ]
+      ++ optionals nvidiaSettings [ nvidia_x11.settings ]
       ++ optionals nvidiaPersistencedEnabled [ nvidia_x11.persistenced ];
 
     systemd.packages = optional cfg.powerManagement.enable nvidia_x11.out;
