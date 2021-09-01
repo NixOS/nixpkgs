@@ -867,6 +867,8 @@ with pkgs;
     inherit (plasma5Packages) kdialog;
   };
 
+  akku = callPackage ../tools/package-management/akku { };
+
   albert = libsForQt5.callPackage ../applications/misc/albert {};
 
   arch-install-scripts = callPackage ../tools/misc/arch-install-scripts {};
