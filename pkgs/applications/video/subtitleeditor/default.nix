@@ -3,13 +3,9 @@
   libsigcxx, libxmlxx, xdg-utils, isocodes, wrapGAppsHook
 }:
 
-let
-  version = "0.54.0";
-in
-
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "subtitleeditor";
-  inherit version;
+  version = "0.54.0";
 
   src = fetchFromGitHub {
     owner = "kitone";

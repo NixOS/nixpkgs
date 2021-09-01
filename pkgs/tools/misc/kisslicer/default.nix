@@ -26,8 +26,6 @@ stdenv.mkDerivation {
     stripRoot = false;
   };
 
-  phases = [ "unpackPhase" "installPhase" "fixupPhase" ];
-
   buildInputs = [
     makeWrapper
     libGLU libGL

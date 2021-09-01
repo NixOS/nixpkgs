@@ -1,4 +1,6 @@
 { lib, buildFHSUserEnv, lutris-unwrapped
+, extraPkgs ? pkgs: [ ]
+, extraLibraries ? pkgs: [ ]
 , steamSupport ? true
 }:
 
@@ -87,7 +89,8 @@ in buildFHSUserEnv {
     soundfont-fluid bzip2 game-music-emu
   ] ++ qt5Deps pkgs
     ++ gnomeDeps pkgs
-    ++ lib.optional steamSupport pkgs.steam;
+    ++ lib.optional steamSupport pkgs.steam
+    ++ extraPkgs pkgs;
 
   multiPkgs = pkgs: with pkgs; [
     # Common
@@ -110,7 +113,8 @@ in buildFHSUserEnv {
 
     # Winetricks
     fribidi
-  ] ++ xorgDeps pkgs;
+  ] ++ xorgDeps pkgs
+    ++ extraLibraries pkgs;
 
   extraInstallCommands = ''
     mkdir -p $out/share

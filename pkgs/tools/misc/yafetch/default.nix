@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "yafetch";
-  version = "unstable-2021-06-15";
+  version = "unstable-2021-07-18";
 
   src = fetchFromGitLab {
     owner = "cyberkitty";
     repo = pname;
-    rev = "423a7d1f1ef8f0e4caf586710828620d3cb593e3";
-    sha256 = "184yy7i8ca2fh6d1rxyhxi9gqb57fpz7ia0i56dl1zhg769m8b99";
+    rev = "f3efbca54df1ffea22cc40034114af141ccff9c1";
+    sha256 = "1cxhrjy9vzq87rzql4dcknkwca7nydysp1p1x4fh1qfw79dfdmxw";
   };
 
   # Use the provided NixOS logo automatically

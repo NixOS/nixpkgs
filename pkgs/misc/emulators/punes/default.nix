@@ -12,18 +12,20 @@
 , ffmpeg
 , libGLU
 , alsa-lib
+, libX11
+, libXrandr
 , sndio
 }:
 
 mkDerivation rec {
   pname = "punes";
-  version = "unstable-2021-06-05";
+  version = "unstable-2021-07-19";
 
   src = fetchFromGitHub {
     owner = "punesemu";
     repo = "puNES";
-    rev = "07fd123f62b2d075894a0cc966124db7b427b791";
-    sha256 = "1wxff7b397ayd2s2v14w6a0zfgklc7y0kv3mkz1gg5x47mnll24l";
+    rev = "15ab85dabb220889419df0c249c06f3db2b09dc0";
+    sha256 = "1w0c5lfdl9ha4sxxva6hcpcaa444px6x25471q37l69n71rmjpy8";
   };
 
   postPatch = ''
@@ -34,7 +36,7 @@ mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook cmake pkg-config qttools ];
 
   buildInputs = [ ffmpeg qtbase qtsvg libGLU ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib libX11 libXrandr ]
     ++ lib.optionals stdenv.hostPlatform.isBSD [ sndio ];
 
   dontUseCmakeConfigure = true;

@@ -1,5 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, makeWrapper
+, openssh
+}:
 buildGoModule rec {
   pname = "zrepl";
   version = "0.4.0";
@@ -15,10 +19,17 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
+  nativeBuildInputs = [
+    makeWrapper
+  ];
+
   postInstall = ''
     mkdir -p $out/lib/systemd/system
     substitute dist/systemd/zrepl.service $out/lib/systemd/system/zrepl.service \
       --replace /usr/local/bin/zrepl $out/bin/zrepl
+
+    wrapProgram $out/bin/zrepl \
+      --prefix PATH : ${lib.makeBinPath [ openssh ]}
   '';
 
   meta = with lib; {

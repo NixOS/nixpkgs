@@ -23,7 +23,7 @@ in stdenv.mkDerivation rec {
 
   src = srcs.richclient;
 
-  phases = "installPhase";
+  dontUnpack = true;
 
   nativeBuildInputs = [ makeWrapper ];
 

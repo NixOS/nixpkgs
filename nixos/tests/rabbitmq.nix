@@ -7,7 +7,12 @@ import ./make-test-python.nix ({ pkgs, ... }: {
   };
 
   machine = {
-    services.rabbitmq.enable = true;
+    services.rabbitmq = {
+      enable = true;
+      managementPlugin.enable = true;
+    };
+    # Ensure there is sufficient extra disk space for rabbitmq to be happy
+    virtualisation.diskSize = 1024;
   };
 
   testScript = ''
@@ -17,5 +22,6 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     machine.wait_until_succeeds(
         'su -s ${pkgs.runtimeShell} rabbitmq -c "rabbitmqctl status"'
     )
+    machine.wait_for_open_port("15672")
   '';
 })

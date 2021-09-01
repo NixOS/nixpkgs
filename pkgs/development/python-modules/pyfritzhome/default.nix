@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pyfritzhome";
-  version = "0.6.1";
+  version = "0.6.2";
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "hthiery";
     repo = "python-fritzhome";
     rev = version;
-    sha256 = "sha256-CEoXb7D/8Iksw4aJYNqANkmfhd0yxIIuabaTdWI3RNc=";
+    sha256 = "1hwxq9w5qmiky8gpp623nabmydr3yv6hvgzk24fdbmkglfp6ja1v";
   };
 
   propagatedBuildInputs = [ requests ];
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   ];
 
   checkPhase = ''
-    nosetests --with-coverage
+    nosetests
   '';
 
   pythonImportsCheck = [ "pyfritzhome" ];

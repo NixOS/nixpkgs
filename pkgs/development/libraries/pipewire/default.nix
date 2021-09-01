@@ -14,6 +14,7 @@
 , dbus
 , alsa-lib
 , libjack2
+, libusb1
 , udev
 , libva
 , libsndfile
@@ -26,27 +27,37 @@
 , callPackage
 , nixosTests
 , withMediaSession ? true
-, gstreamerSupport ? true, gst_all_1 ? null
-, ffmpegSupport ? true, ffmpeg ? null
-, bluezSupport ? true, bluez ? null, sbc ? null, libopenaptx ? null, ldacbt ? null, fdk_aac ? null
+, gstreamerSupport ? true
+, gst_all_1 ? null
+, ffmpegSupport ? true
+, ffmpeg ? null
+, bluezSupport ? true
+, bluez ? null
+, sbc ? null
+, libfreeaptx ? null
+, ldacbt ? null
+, fdk_aac ? null
 , nativeHspSupport ? true
 , nativeHfpSupport ? true
 , ofonoSupport ? true
 , hsphfpdSupport ? true
-, pulseTunnelSupport ? true, libpulseaudio ? null
-, zeroconfSupport ? true, avahi ? null
+, pulseTunnelSupport ? true
+, libpulseaudio ? null
+, zeroconfSupport ? true
+, avahi ? null
 }:
 
 let
   fontsConf = makeFontsConf {
-    fontDirectories = [];
+    fontDirectories = [ ];
   };
 
   mesonEnable = b: if b then "enabled" else "disabled";
+  mesonList = l: "[" + lib.concatStringsSep "," l + "]";
 
   self = stdenv.mkDerivation rec {
     pname = "pipewire";
-    version = "0.3.30";
+    version = "0.3.34";
 
     outputs = [
       "out"
@@ -64,7 +75,7 @@ let
       owner = "pipewire";
       repo = "pipewire";
       rev = version;
-      sha256 = "sha256-DnaPvZoDaegjtJNKBmCJEAZe5FQBnSER79FPnxiWQUE=";
+      sha256 = "sha256-ZFARA7YuDnpObGLWbgy1Rk+wzmAxHEMuHQkb6tWD0s0=";
     };
 
     patches = [
@@ -96,6 +107,7 @@ let
       dbus
       glib
       libjack2
+      libusb1
       libsndfile
       ncurses
       udev
@@ -107,7 +119,7 @@ let
       systemd
     ] ++ lib.optionals gstreamerSupport [ gst_all_1.gst-plugins-base gst_all_1.gstreamer ]
     ++ lib.optional ffmpegSupport ffmpeg
-    ++ lib.optionals bluezSupport [ bluez libopenaptx ldacbt sbc fdk_aac ]
+    ++ lib.optionals bluezSupport [ bluez libfreeaptx ldacbt sbc fdk_aac ]
     ++ lib.optional pulseTunnelSupport libpulseaudio
     ++ lib.optional zeroconfSupport avahi;
 
@@ -122,6 +134,7 @@ let
       "-Dmedia-session-prefix=${placeholder "mediaSession"}"
       "-Dlibjack-path=${placeholder "jack"}/lib"
       "-Dlibcamera=disabled"
+      "-Droc=disabled"
       "-Dlibpulse=${mesonEnable pulseTunnelSupport}"
       "-Davahi=${mesonEnable zeroconfSupport}"
       "-Dgstreamer=${mesonEnable gstreamerSupport}"
@@ -133,6 +146,7 @@ let
       "-Dbluez5-backend-hsphfpd=${mesonEnable hsphfpdSupport}"
       "-Dsysconfdir=/etc"
       "-Dpipewire_confdata_dir=${placeholder "lib"}/share/pipewire"
+      "-Dsession-managers=${mesonList (lib.optional withMediaSession "media-session")}"
     ];
 
     FONTCONFIG_FILE = fontsConf; # Fontconfig error: Cannot load default config file
@@ -187,6 +201,7 @@ let
           paths-out-media-session = [
             "nix-support/etc/pipewire/media-session.d/alsa-monitor.conf.json"
             "nix-support/etc/pipewire/media-session.d/bluez-monitor.conf.json"
+            "nix-support/etc/pipewire/media-session.d/bluez-hardware.conf.json"
             "nix-support/etc/pipewire/media-session.d/media-session.conf.json"
             "nix-support/etc/pipewire/media-session.d/v4l2-monitor.conf.json"
           ];
@@ -203,8 +218,9 @@ let
       homepage = "https://pipewire.org/";
       license = licenses.mit;
       platforms = platforms.linux;
-      maintainers = with maintainers; [ jtojnar ];
+      maintainers = with maintainers; [ jtojnar kranzes ];
     };
   };
 
-in self
+in
+self

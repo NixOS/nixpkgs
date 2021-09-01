@@ -16,10 +16,9 @@ let
 
     goPackagePath = "github.com/mattermost/mattermost-server";
 
-    buildFlagsArray = ''
-      -ldflags=
-        -X ${goPackagePath}/model.BuildNumber=nixpkgs-${version}
-    '';
+    ldflags = [
+      "-X ${goPackagePath}/model.BuildNumber=nixpkgs-${version}"
+    ];
 
   };
 

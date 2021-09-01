@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , wrapQtAppsHook
 , cmake
 , qhull
@@ -18,27 +17,19 @@
 , Cocoa
 , AGL
 , OpenGL
+, withCuda ? false, cudatoolkit
 }:
 
 stdenv.mkDerivation rec {
   pname = "pcl";
-  version = "1.11.1";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "PointCloudLibrary";
     repo = "pcl";
     rev = "${pname}-${version}";
-    sha256 = "1cli2rxqsk6nxp36p5mgvvahjz8hm4fb68yi8cf9nw4ygbcvcwb1";
+    sha256 = "0jhvciaw43y6iqqk7hyxnfhn1b4bsw5fpy04s01r5pkcsjjbdbqc";
   };
-
-  patches = [
-    # Support newer QHull versions (2020.2)
-    # Backport of https://github.com/PointCloudLibrary/pcl/pull/4540
-    (fetchpatch {
-      url = "https://raw.githubusercontent.com/conda-forge/pcl-feedstock/0b1eff402994a3fb891b44659c261e7e85c8d915/recipe/4540.patch";
-      sha256 = "0hhvw6ajigzrarn95aicni73zd3sdgnb8rc3wgjrrg19xs84z138";
-    })
-  ];
 
   nativeBuildInputs = [ pkg-config cmake wrapQtAppsHook ];
   buildInputs = [
@@ -53,11 +44,12 @@ stdenv.mkDerivation rec {
     qtbase
     libXt
   ]
-  ++ lib.optionals stdenv.isDarwin [ Cocoa AGL ];
+  ++ lib.optionals stdenv.isDarwin [ Cocoa AGL ]
+  ++ lib.optionals withCuda [ cudatoolkit ];
 
   cmakeFlags = lib.optionals stdenv.isDarwin [
     "-DOPENGL_INCLUDE_DIR=${OpenGL}/Library/Frameworks"
-  ];
+  ] ++ lib.optionals withCuda [ "-DWITH_CUDA=true" ];
 
   meta = {
     homepage = "https://pointclouds.org/";

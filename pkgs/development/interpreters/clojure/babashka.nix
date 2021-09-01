@@ -2,17 +2,17 @@
 
 stdenv.mkDerivation rec {
   pname = "babashka";
-  version = "0.4.5";
+  version = "0.5.1";
 
   reflectionJson = fetchurl {
     name = "reflection.json";
     url = "https://github.com/babashka/${pname}/releases/download/v${version}/${pname}-${version}-reflection.json";
-    sha256 = "sha256-TVFdGFXclJE9GpolKzTGSmeianBdb2Yp3kbNUWlddPw=";
+    sha256 = "1mx89rrkxyn7s8nfif0564gjrpc299wzl0wfq9qx8blc6a1438a9";
   };
 
   src = fetchurl {
     url = "https://github.com/babashka/${pname}/releases/download/v${version}/${pname}-${version}-standalone.jar";
-    sha256 = "sha256-SnKs30c6VTp1yzW2Glooi6ghSUIZgF6nsob1hDljTA8=";
+    sha256 = "0rp6lam3psnk12j69z8qp1ixyp7zvvjahn18mvkmc38naml0p514";
   };
 
   dontUnpack = true;
@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
           "-J-Dclojure.spec.skip-macros=true"
           "-J-Dclojure.compiler.direct-linking=true"
           "-H:IncludeResources=BABASHKA_VERSION"
+          "-H:IncludeResources=META-INF/babashka/.*"
           "-H:IncludeResources=SCI_VERSION"
           "-H:ReflectionConfigurationFiles=${reflectionJson}"
           "--initialize-at-build-time"
@@ -52,6 +53,7 @@ stdenv.mkDerivation rec {
           "--no-server"
           "--report-unsupported-elements-at-runtime"
           "--initialize-at-run-time=org.postgresql.sspi.SSPIClient"
+          "--initialize-at-run-time=org.httpkit.client.ClientSslEngineFactory\$SSLHolder"
           "--native-image-info"
           "--verbose"
           "-H:ServiceLoaderFeatureExcludeServices=javax.sound.sampled.spi.AudioFileReader"

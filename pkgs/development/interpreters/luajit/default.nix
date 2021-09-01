@@ -1,6 +1,8 @@
 { lib, stdenv, fetchFromGitHub, buildPackages
 , name ? "luajit-${version}"
 , isStable
+, owner
+, repo
 , sha256
 , rev
 , version
@@ -41,9 +43,7 @@ in
 stdenv.mkDerivation rec {
   inherit name version;
   src = fetchFromGitHub {
-    owner  = "LuaJIT";
-    repo   = "LuaJIT";
-    inherit sha256 rev;
+    inherit owner repo sha256 rev;
   };
 
   luaversion = "5.1";

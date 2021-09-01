@@ -1,50 +1,63 @@
-{ stdenv, fetchFromGitHub, cmake, jsoncpp, libuuid, zlib, openssl, lib }:
+{ stdenv, fetchFromGitHub, cmake, jsoncpp, libossp_uuid, zlib, lib
+# optional but of negligible size
+, openssl, brotli, c-ares
+# optional databases
+, sqliteSupport ? true, sqlite
+, postgresSupport ? false, postgresql
+, redisSupport ? false, hiredis
+, mysqlSupport ? false, libmysqlclient, mariadb }:
 
 stdenv.mkDerivation rec {
   pname = "drogon";
-  version = "1.6.0";
+  version = "1.7.2";
 
   src = fetchFromGitHub {
-    owner = "an-tao";
+    owner = "drogonframework";
     repo = "drogon";
     rev = "v${version}";
-    sha256 = "0ncdlsi3zhmpdwh83d52npb1b2q982y858yl88zl2nfq4zhcm3wa";
+    sha256 = "0g2fm8xb2gi7qaib6mxvg6k6y4g2d0a2jg4k5qvsjbd0n7j8746j";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ cmake ];
 
   cmakeFlags = [
-    # examples are used in the test during installCheckPhase, otherwise they are unnecessary
-    "-DBUILD_EXAMPLES=${if doInstallCheck then "ON" else "OFF"}"
+    "-DBUILD_TESTING=${if doInstallCheck then "ON" else "OFF"}"
+    "-DBUILD_EXAMPLES=OFF"
   ];
 
   propagatedBuildInputs = [
     jsoncpp
-    libuuid
+    libossp_uuid
     zlib
     openssl
-  ];
+    brotli
+    c-ares
+  ] ++ lib.optional sqliteSupport sqlite
+    ++ lib.optional postgresSupport postgresql
+    ++ lib.optional redisSupport hiredis
+    # drogon uses mariadb for mysql (see https://github.com/drogonframework/drogon/wiki/ENG-02-Installation#Library-Dependencies)
+    ++ lib.optional mysqlSupport [ libmysqlclient mariadb ];
 
   patches = [
-    # this part of the test fails because it attempts to configure a CMake project that uses find_package on itself
-    # the rest of the test runs fine because it uses executables that are built in buildPhase when BUILD_EXAMPLES is enabled
-    ./no_cmake_test.patch
+    # this part of the test would normally fail because it attempts to configure a CMake project that uses find_package on itself
+    # this patch makes drogon and trantor visible to the test
+    ./fix_find_package.patch
   ];
 
+  # modifying PATH here makes drogon_ctl visible to the test
   installCheckPhase = ''
     cd ..
-    patchShebangs test.sh
-    ./test.sh
+    PATH=$PATH:$out/bin bash test.sh
   '';
 
   doInstallCheck = true;
 
   meta = with lib; {
-    homepage = "https://github.com/an-tao/drogon";
+    homepage = "https://github.com/drogonframework/drogon";
     description = "C++14/17 based HTTP web application framework";
     license = licenses.mit;
-    maintainers = [ maintainers.urlordjames ];
+    maintainers = with maintainers; [ urlordjames ];
     platforms = platforms.all;
   };
 }

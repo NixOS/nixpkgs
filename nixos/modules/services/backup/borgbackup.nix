@@ -102,7 +102,7 @@ let
   mkWrapperDrv = {
       original, name, set ? {}
     }:
-    pkgs.runCommandNoCC "${name}-wrapper" {
+    pkgs.runCommand "${name}-wrapper" {
       buildInputs = [ pkgs.makeWrapper ];
     } (with lib; ''
       makeWrapper "${original}" "$out/bin/${name}" \

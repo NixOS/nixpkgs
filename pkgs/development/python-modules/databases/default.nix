@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "databases";
-  version = "0.4.3";
+  version = "0.5.0";
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "encode";
     repo = pname;
     rev = version;
-    sha256 = "0aq88k7d9036cy6qvlfv9p2dxd6p6fic3j0az43gn6k1ardhdsgf";
+    sha256 = "sha256-HNSPLmZTXZL1e5E9VJiXnQuO2WiXLYOveNTlFqdlTG8=";
   };
 
   propagatedBuildInputs = [

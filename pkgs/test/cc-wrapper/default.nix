@@ -35,8 +35,7 @@ in stdenv.mkDerivation {
       printf "checking whether compiler builds valid static C binaries... " >&2
       $CC ${staticLibc} -static -o cc-static ${./cc-main.c}
       ./cc-static
-      # our glibc does not have pie enabled yet.
-      ${lib.optionalString (stdenv.hostPlatform.isMusl && stdenv.cc.isGNU) ''
+      ${lib.optionalString (stdenv.cc.isGNU && lib.versionAtLeast (lib.getVersion stdenv.cc.name) "8.0.0") ''
         printf "checking whether compiler builds valid static pie C binaries... " >&2
         $CC ${staticLibc} -static-pie -o cc-static-pie ${./cc-main.c}
         ./cc-static-pie

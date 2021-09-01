@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "peg-0.1.18";
+  pname = "peg";
+  version = "0.1.18";
 
   src = fetchurl {
-    url = "${meta.homepage}/${name}.tar.gz";
+    url = "${meta.homepage}/${pname}-${version}.tar.gz";
     sha256 = "114h1y4k8fwcq9m0hfk33dsp7ah8zxzjjzlk71x4iirzczfkn690";
   };
 

@@ -68,27 +68,107 @@ Erlang.mk functions similarly to Rebar3, except we use `buildErlangMk` instead o
 
 `mixRelease` is used to make a release in the mix sense. Dependencies will need to be fetched with `fetchMixDeps` and passed to it.
 
-#### mixRelease - Elixir Phoenix example {#mixrelease---elixir-phoenix-example}
+#### mixRelease - Elixir Phoenix example {#mix-release-elixir-phoenix-example}
 
-Here is how your `default.nix` file would look.
+there are 3 steps, frontend dependencies (javascript), backend dependencies (elixir) and the final derivation that puts both of those together
+
+##### mixRelease - Frontend dependencies (javascript) {#mix-release-javascript-deps}
+
+for phoenix projects, inside of nixpkgs you can either use yarn2nix (mkYarnModule) or node2nix. An example with yarn2nix can be found [here](https://github.com/NixOS/nixpkgs/blob/master/pkgs/servers/web-apps/plausible/default.nix#L39). An example with node2nix will follow. To package something outside of nixpkgs, you have alternatives like [npmlock2nix](https://github.com/nix-community/npmlock2nix) or [nix-npm-buildpackage](https://github.com/serokell/nix-npm-buildpackage)
+
+##### mixRelease - backend dependencies (mix) {#mix-release-mix-deps}
+
+There are 2 ways to package backend dependencies. With mix2nix and with a fixed-output-derivation (FOD).
+
+###### mix2nix {#mix2nix}
+
+mix2nix is a cli tool available in nixpkgs. it will generate a nix expression from a mix.lock file. It is quite standard in the 2nix tool series.
+
+Note that currently mix2nix can't handle git dependencies inside the mix.lock file. If you have git dependencies, you can either add them manually (see [example](https://github.com/NixOS/nixpkgs/blob/master/pkgs/servers/pleroma/default.nix#L20)) or use the FOD method.
+
+The advantage of using mix2nix is that nix will know your whole dependency graph. On a dependency update, this won't trigger a full rebuild and download of all the dependencies, where FOD will do so.
+
+practical steps:
+
+- run `mix2nix > mix_deps.nix` in the upstream repo.
+- pass `mixNixDeps = with pkgs; import ./mix_deps.nix { inherit lib beamPackages; };` as an argument to mixRelease.
+
+If there are git depencencies.
+
+- You'll need to fix the version artificially in mix.exs and regenerate the mix.lock with fixed version (on upstream). This will enable you to run `mix2nix > mix_deps.nix`.
+- From the mix_deps.nix file, remove the dependencies that had git versions and pass them as an override to the import function.
+
+```nix
+  mixNixDeps = import ./mix.nix {
+    inherit beamPackages lib;
+    overrides = (final: prev: {
+      # mix2nix does not support git dependencies yet,
+      # so we need to add them manually
+      prometheus_ex = beamPackages.buildMix rec {
+        name = "prometheus_ex";
+        version = "3.0.5";
+
+        # Change the argument src with the git src that you actually need
+        src = fetchFromGitLab {
+          domain = "git.pleroma.social";
+          group = "pleroma";
+          owner = "elixir-libraries";
+          repo = "prometheus.ex";
+          rev = "a4e9beb3c1c479d14b352fd9d6dd7b1f6d7deee5";
+          sha256 = "1v0q4bi7sb253i8q016l7gwlv5562wk5zy3l2sa446csvsacnpjk";
+        };
+        # you can re-use the same beamDeps argument as generated
+        beamDeps = with final; [ prometheus ];
+      };
+  });
+};
+```
+
+You will need to run the build process once to fix the sha256 to correspond to your new git src.
+
+###### FOD {#fixed-output-derivation}
+
+A fixed output derivation will download mix dependencies from the internet. To ensure reproducibility, a hash will be supplied. Note that mix is relatively reproducible. An FOD generating a different hash on each run hasn't been observed (as opposed to npm where the chances are relatively high). See [elixir_ls](https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/beam-modules/elixir_ls.nix) for a usage example of FOD.
+
+Practical steps
+
+- start with the following argument to mixRelease
+
+```nix
+  mixFodDeps = fetchMixDeps {
+    pname = "mix-deps-${pname}";
+    inherit src version;
+    sha256 = lib.fakeSha256;
+  };
+```
+
+The first build will complain about the sha256 value, you can replace with the suggested value after that.
+
+Note that if after you've replaced the value, nix suggests another sha256, then mix is not fetching the dependencies reproducibly. An FOD will not work in that case and you will have to use mix2nix.
+
+##### mixRelease - example {#mix-release-example}
+
+Here is how your `default.nix` file would look for a phoenix project.
 
 ```nix
 with import <nixpkgs> { };
 
 let
+  # beam.interpreters.erlangR23 is available if you need a particular version
   packages = beam.packagesWith beam.interpreters.erlang;
+
+  pname = "your_project";
+  version = "0.0.1";
+
   src = builtins.fetchgit {
     url = "ssh://git@github.com/your_id/your_repo";
     rev = "replace_with_your_commit";
   };
 
-  pname = "your_project";
-  version = "0.0.1";
-  mixEnv = "prod";
-
+  # if using mix2nix you can use the mixNixDeps attribute
   mixFodDeps = packages.fetchMixDeps {
     pname = "mix-deps-${pname}";
-    inherit src mixEnv version;
+    inherit src version;
     # nix will complain and tell you the right value to replace this with
     sha256 = lib.fakeSha256;
     # if you have build time environment variables add them here
@@ -97,45 +177,19 @@ let
 
   nodeDependencies = (pkgs.callPackage ./assets/default.nix { }).shell.nodeDependencies;
 
-  frontEndFiles = stdenvNoCC.mkDerivation {
-    pname = "frontend-${pname}";
-
-    nativeBuildInputs = [ nodejs ];
-
-    inherit version src;
-
-    buildPhase = ''
-      cp -r ./assets $TEMPDIR
-
-      mkdir -p $TEMPDIR/assets/node_modules/.cache
-      cp -r ${nodeDependencies}/lib/node_modules $TEMPDIR/assets
-      export PATH="${nodeDependencies}/bin:$PATH"
-
-      cd $TEMPDIR/assets
-      webpack --config ./webpack.config.js
-      cd ..
-    '';
-
-    installPhase = ''
-      cp -r ./priv/static $out/
-    '';
-
-    outputHashAlgo = "sha256";
-    outputHashMode = "recursive";
-    # nix will complain and tell you the right value to replace this with
-    outputHash = lib.fakeSha256;
-
-    impureEnvVars = lib.fetchers.proxyImpureEnvVars;
-  };
-
-
 in packages.mixRelease {
-  inherit src pname version mixEnv mixFodDeps;
+  inherit src pname version mixFodDeps;
   # if you have build time environment variables add them here
   MY_ENV_VAR="my_value";
-  preInstall = ''
-    mkdir -p ./priv/static
-    cp -r ${frontEndFiles} ./priv/static
+
+  postBuild = ''
+    ln -sf ${nodeDependencies}/lib/node_modules assets/node_modules
+    npm run deploy --prefix ./assets
+
+    # for external task you need a workaround for the no deps check flag
+    # https://github.com/phoenixframework/phoenix/issues/2690
+    mix do deps.loadpaths --no-deps-check, phx.digest
+    mix phx.digest --no-deps-check
   '';
 }
 ```
@@ -165,6 +219,8 @@ in
   systemd.services.${release_name} = {
     wantedBy = [ "multi-user.target" ];
     after = [ "network.target" "postgresql.service" ];
+    # note that if you are connecting to a postgres instance on a different host
+    # postgresql.service should not be included in the requires.
     requires = [ "network-online.target" "postgresql.service" ];
     description = "my app";
     environment = {
@@ -201,6 +257,7 @@ in
     path = [ pkgs.bash ];
   };
 
+  # in case you have migration scripts or you want to use a remote shell
   environment.systemPackages = [ release ];
 }
 ```
@@ -212,19 +269,14 @@ in
 Usually, we need to create a `shell.nix` file and do our development inside of the environment specified therein. Just install your version of Erlang and any other interpreters, and then use your normal build tools. As an example with Elixir:
 
 ```nix
-{ pkgs ? import "<nixpkgs"> {} }:
+{ pkgs ? import <nixpkgs> {} }:
 
 with pkgs;
-
 let
-
-  elixir = beam.packages.erlangR22.elixir_1_9;
-
+  elixir = beam.packages.erlangR24.elixir_1_12;
 in
 mkShell {
   buildInputs = [ elixir ];
-
-  ERL_INCLUDE_PATH="${erlang}/lib/erlang/usr/include";
 }
 ```
 
@@ -241,7 +293,7 @@ let
     git
     # replace with beam.packages.erlang.elixir_1_11 if you need
     beam.packages.erlang.elixir
-    nodejs-15_x
+    nodejs
     postgresql_13
     # only used for frontend dependencies
     # you are free to use yarn2nix as well
@@ -264,6 +316,7 @@ let
     # TODO: not sure how to make hex available without installing it afterwards.
     mix local.hex --if-missing
     export LANG=en_US.UTF-8
+    # keep your shell history in iex
     export ERL_AFLAGS="-kernel shell_history enabled"
 
     # postges related

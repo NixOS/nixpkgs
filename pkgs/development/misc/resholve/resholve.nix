@@ -43,7 +43,7 @@ python27Packages.buildPythonApplication {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  propagatedBuildInputs = [ deps.oildev python27Packages.ConfigArgParse ];
+  propagatedBuildInputs = [ deps.oildev python27Packages.configargparse ];
 
   patchPhase = ''
     for file in resholve; do

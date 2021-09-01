@@ -4,14 +4,14 @@
 
 buildDunePackage rec {
   minimumOCamlVersion = "4.07";
-  version = "20210402";
+  version = "20210511";
   pname = "imagelib";
 
   useDune2 = true;
 
   src = fetchurl {
     url = "https://github.com/rlepigre/ocaml-imagelib/releases/download/${version}/imagelib-${version}.tbz";
-    sha256 = "b3c8ace02b10b36b6c60b3ce3ae0b9109d4a861916ec320c59cc1194f4cc86e3";
+    sha256 = "1cb94ea3731dc994c205940c9434543ce3f2470cdcb2e93a3e02ed793e80d480";
   };
 
   propagatedBuildInputs = [ decompress stdlib-shims ];

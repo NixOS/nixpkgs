@@ -6,6 +6,7 @@
 , libsodium
 , cffi
 , hypothesis
+, six
 }:
 
 buildPythonPackage rec {
@@ -23,8 +24,12 @@ buildPythonPackage rec {
     libsodium
   ];
 
-  propagatedBuildInputs = [
+  propagatedNativeBuildInputs = [
     cffi
+  ];
+
+  propagatedBuildInputs = [
+    six
   ];
 
   checkInputs = [
@@ -37,7 +42,6 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "nacl" ];
 
   meta = with lib; {
-    maintainers = with maintainers; [ va1entin ];
     description = "Python binding to the Networking and Cryptography (NaCl) library";
     homepage = "https://github.com/pyca/pynacl/";
     license = licenses.asl20;

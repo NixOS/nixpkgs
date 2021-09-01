@@ -19,10 +19,6 @@ rec {
 
     patches =
       lib.optionals stdenv.isDarwin [ ./5.2.darwin.patch ];
-
-    postBuild = lib.optionalString (!stdenv.isDarwin) ''
-      ( cd src; make $makeFlags "''${makeFlagsArray[@]}" liblua.so )
-    '';
   };
 
   lua5_3_compat = lua5_3.override({
@@ -55,6 +51,11 @@ rec {
 
   luajit_2_1 = import ../luajit/2.1.nix {
     self = luajit_2_1;
+    inherit callPackage;
+  };
+
+  luajit_openresty = import ../luajit/openresty.nix {
+    self = luajit_openresty;
     inherit callPackage;
   };
 

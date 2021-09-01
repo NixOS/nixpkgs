@@ -19,7 +19,7 @@ let
     ${ethtool} -s ${interface} ${methodParameter {inherit method password;}}
   '';
 
-  concatStrings = fold (x: y: x + y) "";
+  concatStrings = foldr (x: y: x + y) "";
   lines = concatStrings (map (l: line l) interfaces);
 
 in
@@ -31,6 +31,20 @@ in
 
     services.wakeonlan.interfaces = mkOption {
       default = [ ];
+      type = types.listOf (types.submodule { options = {
+        interface = mkOption {
+          type = types.str;
+          description = "Interface to enable for Wake-On-Lan.";
+        };
+        method = mkOption {
+          type = types.enum [ "magicpacket" "password"];
+          description = "Wake-On-Lan method for this interface.";
+        };
+        password = mkOption {
+          type = types.strMatching "[a-fA-F0-9]{2}:([a-fA-F0-9]{2}:){4}[a-fA-F0-9]{2}";
+          description = "The password has the shape of six bytes in hexadecimal separated by a colon each.";
+        };
+      };});
       example = [
         {
           interface = "eth0";

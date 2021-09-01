@@ -178,7 +178,7 @@ in
       radvd = 139;
       zookeeper = 140;
       dnsmasq = 141;
-      uhub = 142;
+      #uhub = 142; # unused
       yandexdisk = 143;
       mxisd = 144; # was once collectd
       consul = 145;
@@ -187,6 +187,7 @@ in
       #seeks = 148; # removed 2020-06-21
       prosody = 149;
       i2pd = 150;
+      systemd-coredump = 151;
       systemd-network = 152;
       systemd-resolve = 153;
       systemd-timesync = 154;
@@ -229,7 +230,7 @@ in
       grafana = 196;
       skydns = 197;
       # ripple-rest = 198; # unused, removed 2017-08-12
-      nix-serve = 199;
+      # nix-serve = 199; # unused, removed 2020-12-12
       tvheadend = 200;
       uwsgi = 201;
       gitit = 202;
@@ -347,6 +348,8 @@ in
       #mailman = 316;  # removed 2019-08-30
       zigbee2mqtt = 317;
       # shadow = 318; # unused
+      hqplayer = 319;
+      moonraker = 320;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
@@ -649,6 +652,8 @@ in
       #mailman = 316;  # removed 2019-08-30
       zigbee2mqtt = 317;
       shadow = 318;
+      hqplayer = 319;
+      moonraker = 320;
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal

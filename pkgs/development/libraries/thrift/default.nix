@@ -1,15 +1,15 @@
-{ lib, stdenv, fetchurl, boost, zlib, libevent, openssl, python, cmake, pkg-config
-, bison, flex, twisted
+{ lib, stdenv, fetchurl, boost, zlib, libevent, openssl, python3, cmake, pkg-config
+, bison, flex
 , static ? stdenv.hostPlatform.isStatic
 }:
 
 stdenv.mkDerivation rec {
   pname = "thrift";
-  version = "0.14.1";
+  version = "0.14.2";
 
   src = fetchurl {
     url = "https://archive.apache.org/dist/thrift/${version}/${pname}-${version}.tar.gz";
-    sha256 = "198c855mjy5byqfb941hiyq2j37baz63f0wcfy4vp8y8v4f5xnhk";
+    sha256 = "sha256-QZG/wLdJDiDMafn03G6ZH7thLUVRqp7vHb9/TEfOVU0=";
   };
 
   # Workaround to make the python wrapper not drop this package:
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config bison flex ];
   buildInputs = [ boost zlib libevent openssl ]
-    ++ lib.optionals (!static) [ python twisted ];
+    ++ lib.optionals (!static) [ (python3.withPackages (ps: [ps.twisted])) ];
 
   preConfigure = "export PY_PREFIX=$out";
 

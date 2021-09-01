@@ -99,7 +99,6 @@ let
       homepage = "https://github.com/ethereum/solidity";
       license = licenses.gpl3;
       maintainers = with maintainers; [ dbrock akru lionello sifmelcara ];
-      inherit version;
     };
   };
 in

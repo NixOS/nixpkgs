@@ -32,7 +32,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "vispy" ];
 
   meta = with lib; {
-    homepage = "http://vispy.org/index.html";
+    homepage = "https://vispy.org/index.html";
     description = "Interactive scientific visualization in Python";
     license = licenses.bsd3;
     maintainers = with maintainers; [ goertzenator ];

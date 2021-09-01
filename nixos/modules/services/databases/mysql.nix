@@ -48,7 +48,7 @@ in
       };
 
       port = mkOption {
-        type = types.int;
+        type = types.port;
         default = 3306;
         description = "Port of MySQL.";
       };

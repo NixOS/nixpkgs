@@ -20,7 +20,8 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "email-git-2016-01-31";
+  pname = "email-git";
+  version = "unstable-2016-01-31";
   src = eMailSrc;
 
   buildInputs = [ openssl ];

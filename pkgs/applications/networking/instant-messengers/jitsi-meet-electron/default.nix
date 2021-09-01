@@ -2,20 +2,17 @@
 , fetchurl
 , appimageTools
 , makeWrapper
-, electron_12
+, electron
 , xorg
 }:
 
-let
-  electron = electron_12;
-in
 stdenv.mkDerivation rec {
   pname = "jitsi-meet-electron";
-  version = "2.8.6";
+  version = "2.8.10";
 
   src = fetchurl {
     url = "https://github.com/jitsi/jitsi-meet-electron/releases/download/v${version}/jitsi-meet-x86_64.AppImage";
-    sha256 = "sha256-kLX8SZERlyNVSvszkV/fkQh/Z/Z20PAPJ9eug2oKlqI=";
+    sha256 = "sha256-k++vumbhcMl9i4s8f04zOUAfYlA1g477FjrGuEGSD1U=";
     name = "${pname}-${version}.AppImage";
   };
 

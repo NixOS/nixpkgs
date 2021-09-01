@@ -21,7 +21,7 @@
       ar p "$src" data.tar.xz | tar xJ
     '';
 
-    buildPhase = ":";
+    dontBuild = true;
 
     installPhase = ''
       mkdir -p $out/bin $out/share/sweep-visualizer

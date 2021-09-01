@@ -3,7 +3,7 @@ library(data.table)
 library(parallel)
 cl <- makeCluster(10)
 
-biocVersion <- 3.11
+biocVersion <- 3.12
 snapshotDate <- Sys.Date()-1
 
 mirrorUrls <- list( bioc=paste0("http://bioconductor.statistik.tu-dortmund.de/packages/", biocVersion, "/bioc/src/contrib/")
@@ -48,8 +48,7 @@ escapeName <- function(name) {
 }
 
 formatPackage <- function(name, version, sha256, depends, imports, linkingTo) {
-    name <- escapeName(name)
-    attr <- gsub(".", "_", name, fixed=TRUE)
+    attr <- gsub(".", "_", escapeName(name), fixed=TRUE)
     options(warn=5)
     depends <- paste( if (is.na(depends)) "" else gsub("[ \t\n]+", "", depends)
                     , if (is.na(imports)) "" else gsub("[ \t\n]+", "", imports)

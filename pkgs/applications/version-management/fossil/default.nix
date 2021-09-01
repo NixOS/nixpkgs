@@ -18,10 +18,7 @@ stdenv.mkDerivation rec {
   version = "2.15.1";
 
   src = fetchurl {
-    urls =
-      [
-        "https://www.fossil-scm.org/index.html/uv/fossil-src-${version}.tar.gz"
-      ];
+    url = "https://www.fossil-scm.org/index.html/uv/fossil-src-${version}.tar.gz";
     name = "${pname}-${version}.tar.gz";
     sha256 = "sha256-gNJ5I8ZjsqLHEPiujNVJhi4E+MBChXBidMNK48jKF9E=";
   };

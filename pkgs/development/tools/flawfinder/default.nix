@@ -1,30 +1,21 @@
 { lib
-, stdenv
 , fetchurl
-, installShellFiles
 , python3
 }:
 
-stdenv.mkDerivation rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "flawfinder";
-  version = "2.0.15";
+  version = "2.0.19";
 
   src = fetchurl {
     url = "https://dwheeler.com/flawfinder/flawfinder-${version}.tar.gz";
-    sha256 = "01j4szy8gwvikrfzfayfayjnc1za0jxsnxp5fsa6d06kn69wyr8a";
+    sha256 = "sha256-/lUJgdNwq/oKKWcTRswLA4Ipqb2QsjnqsPAfEiEt9hg=";
   };
 
-  nativeBuildInputs = [ installShellFiles ];
+  # Project is using a combination of bash/Python for the tests
+  doCheck = false;
 
-  buildInputs = [ python3 ];
-
-  installPhase = ''
-    runHook preInstall
-    mkdir -p $out/bin
-    cp ${pname} $out/bin
-    installManPage flawfinder.1
-    runHook postInstall
-  '';
+  pythonImportsCheck = [ "flawfinder" ];
 
   meta = with lib; {
     description = "Tool to examines C/C++ source code for security flaws";

@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv, squashfsTools, xorg, alsa-lib, makeWrapper, openssl, freetype
+{ fetchurl, lib, stdenv, squashfsTools, xorg, alsa-lib, makeWrapper, wrapGAppsHook, openssl, freetype
 , glib, pango, cairo, atk, gdk-pixbuf, gtk3, cups, nspr, nss, libpng, libnotify
 , libgcrypt, systemd, fontconfig, dbus, expat, ffmpeg, curl, zlib, gnome
 , at-spi2-atk, at-spi2-core, libpulseaudio, libdrm, mesa, libxkbcommon
@@ -82,7 +82,7 @@ stdenv.mkDerivation {
     sha512 = "dabb55d2ba41f977b6d3f03bfcf147d11785136dd1277efc62011c8371ef25cc04531266bd16608639b9b6a500c1a18a45f44ba7a43e17ab5ac139e36eff7149";
   };
 
-  nativeBuildInputs = [ makeWrapper squashfsTools ];
+  nativeBuildInputs = [ makeWrapper wrapGAppsHook squashfsTools ];
 
   dontStrip = true;
   dontPatchELF = true;
@@ -108,6 +108,9 @@ stdenv.mkDerivation {
     fi
     runHook postUnpack
   '';
+
+  # Prevent double wrapping
+  dontWrapGApps = true;
 
   installPhase =
     ''
@@ -138,6 +141,7 @@ stdenv.mkDerivation {
 
       librarypath="${lib.makeLibraryPath deps}:$libdir"
       wrapProgram $out/share/spotify/spotify \
+        ''${gappsWrapperArgs[@]} \
         --prefix LD_LIBRARY_PATH : "$librarypath" \
         --prefix PATH : "${gnome.zenity}/bin"
 

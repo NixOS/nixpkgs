@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "requests-pkcs12";
-  version = "1.9";
+  version = "1.12";
 
   src = fetchFromGitHub {
     owner = "m-click";
     repo = "requests_pkcs12";
     rev = version;
-    sha256 = "09nm3c6v911d1vwwi0f7mzapbkq7rnsl7026pb13j6ma8pkxznms";
+    sha256 = "sha256-fMmca3QNr9UBpSHcVf0nHmGmvkW99bnmigHcWj0D2g0=";
   };
 
   propagatedBuildInputs = [

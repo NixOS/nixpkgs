@@ -28,15 +28,20 @@
 
 buildPythonPackage rec {
   pname = "matrix-nio";
-  version = "0.18.1";
+  version = "0.18.3";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "poljar";
     repo = "matrix-nio";
     rev = version;
-    sha256 = "QHNirglqSxGMmbST96LUp9MHoGj0yAwLoTRlsbMqwaM=";
+    sha256 = "1sjdqzlk8vgv0748ayhnadw1bip3i4bfga4knb94cfkd3s4rgb39";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'aiofiles = "^0.6.0"' 'aiofiles = "*"'
+  '';
 
   nativeBuildInputs = [
     git

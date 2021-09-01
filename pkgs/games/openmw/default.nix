@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , cmake
 , pkg-config
+, wrapQtAppsHook
 , openscenegraph
 , mygui
 , bullet
@@ -37,7 +38,7 @@ mkDerivation rec {
     sha256 = "0rm32zsmxvr6b0jjihfj543skhicbw5kg6shjx312clhlm035w2x";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];
 
   buildInputs = [
     SDL2
@@ -56,8 +57,6 @@ mkDerivation rec {
     # as of 0.46, openmw is broken with GLVND
     "-DOpenGL_GL_PREFERENCE=LEGACY"
   ];
-
-  dontWrapQtApps = true;
 
   meta = with lib; {
     description = "An unofficial open source engine reimplementation of the game Morrowind";

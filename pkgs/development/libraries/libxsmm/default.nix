@@ -4,11 +4,9 @@
 , enableStatic ? stdenv.hostPlatform.isStatic
 }:
 
-let
-  version = "1.16.1";
-in stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "libxsmm";
-  inherit version;
+  version = "1.16.1";
 
   src = fetchFromGitHub {
     owner = "hfp";

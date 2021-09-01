@@ -7,10 +7,14 @@ import json
 import os
 import re
 import subprocess
+import sys
 
 from codecs import iterdecode
 from datetime import datetime
 from urllib.request import urlopen, Request
+
+
+DEFAULT_NIX = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'git/default.nix')
 
 
 def get_latest_chromium_build():
@@ -39,6 +43,16 @@ def get_commit(ref):
         return json.loads(http_response.read().decode())
 
 
+def get_current_revision():
+    """Get the current revision of llvmPackages_git."""
+    with open(DEFAULT_NIX) as f:
+        for line in f:
+            rev = re.search(r'^  rev = "(.*)";', line)
+            if rev:
+                return rev.group(1)
+    sys.exit(1)
+
+
 def nix_prefetch_url(url, algo='sha256'):
     """Prefetches the content of the given URL."""
     print(f'nix-prefetch-url {url}')
@@ -55,16 +69,24 @@ clang_revision = re.search(r"^CLANG_REVISION = '(.+)'$", clang_update_script, re
 clang_commit_short = re.search(r"llvmorg-[0-9]+-init-[0-9]+-g([0-9a-f]{8})", clang_revision).group(1)
 release_version = re.search(r"^RELEASE_VERSION = '(.+)'$", clang_update_script, re.MULTILINE).group(1)
 commit = get_commit(clang_commit_short)
+if get_current_revision() == commit["sha"]:
+    print('No new update available.')
+    sys.exit(0)
 date = datetime.fromisoformat(commit['commit']['committer']['date'].rstrip('Z')).date().isoformat()
 version = f'unstable-{date}'
 print('Prefetching source tarball...')
 hash = nix_prefetch_url(f'https://github.com/llvm/llvm-project/archive/{commit["sha"]}.tar.gz')
 print('Updating default.nix...')
-default_nix = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'git/default.nix')
-with fileinput.FileInput(default_nix, inplace=True) as f:
+with fileinput.FileInput(DEFAULT_NIX, inplace=True) as f:
     for line in f:
+        if match := re.search(r'^  rev-version = "unstable-(.+)";', line):
+                old_date = match.group(1)
         result = re.sub(r'^  release_version = ".+";', f'  release_version = "{release_version}";', line)
         result = re.sub(r'^  rev = ".*";', f'  rev = "{commit["sha"]}";', result)
         result = re.sub(r'^  rev-version = ".+";', f'  rev-version = "{version}";', result)
         result = re.sub(r'^    sha256 = ".+";', f'    sha256 = "{hash}";', result)
         print(result, end='')
+# Commit the result:
+commit_message = f"llvmPackages_git: {old_date} -> {date}"
+subprocess.run(['git', 'add', DEFAULT_NIX], check=True)
+subprocess.run(['git', 'commit', '--file=-'], input=commit_message.encode(), check=True)

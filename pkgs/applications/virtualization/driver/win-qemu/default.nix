@@ -4,7 +4,7 @@ stdenv.mkDerivation  {
   name = "win-qemu-0.1.105-1";
   version = "0.1.105-1";
 
-  phases = [ "buildPhase" "installPhase" ];
+  dontUnpack = true;
 
   src = fetchurl {
     url = "https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/archive-virtio/virtio-win-0.1.105-1/virtio-win.iso";

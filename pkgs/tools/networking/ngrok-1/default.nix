@@ -27,7 +27,7 @@ buildGoPackage rec {
     export sourceRoot=$sourceRoot/src/ngrok
   '';
 
-  buildFlags = [ "-tags release" ];
+  tags = [ "release" ];
 
   meta = {
     homepage = "https://ngrok.com/";

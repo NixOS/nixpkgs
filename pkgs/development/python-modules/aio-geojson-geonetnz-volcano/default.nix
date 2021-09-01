@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "aio-geojson-geonetnz-volcano";
-  version = "0.5";
+  version = "0.6";
 
   src = fetchFromGitHub {
     owner = "exxamalte";
     repo = "python-aio-geojson-geonetnz-volcano";
     rev = "v${version}";
-    sha256 = "0x4i9gjwb2j788aw4j47bxin0d2ma3khssprq4ga3cjzx2qjwjvn";
+    sha256 = "0n97kij2fprzajh57sy1z57kaqiil7pd5y67lq2hqm2cnvkar5ci";
   };
 
   propagatedBuildInputs = [

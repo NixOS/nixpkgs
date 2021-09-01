@@ -88,19 +88,19 @@ let
   fteLibPath = makeLibraryPath [ stdenv.cc.cc gmp ];
 
   # Upstream source
-  version = "10.0.17";
+  version = "10.5.5";
 
   lang = "en-US";
 
   srcs = {
     x86_64-linux = fetchurl {
       url = "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz";
-      sha256 = "13x38n1cvqmxjz0jf2fda8lx2k25szzmg7gvv08z3q5na7109m2m";
+      sha256 = "0847lib2z21fgb7x5szwvprc77fhdpmp4z5d6n1sk6d40dd34spn";
     };
 
     i686-linux = fetchurl {
       url = "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux32-${version}_${lang}.tar.xz";
-      sha256 = "0f0ndwmzh732svwbcf1lbxlvdxw4i4d56w9xdl5fxd4n7ivqml1q";
+      sha256 = "0i26fb0r234nrwnvb2c9vk9yn869qghq0n4qlm1d7mr62dy6prxa";
     };
   };
 in
@@ -310,6 +310,13 @@ stdenv.mkDerivation rec {
     # Font cache files capture store paths; clear them out on the off
     # chance that TBB would continue using old font files.
     rm -rf "\$HOME/.cache/fontconfig"
+
+    # Manually specify data paths (by default TB attempts to create these in the store)
+    {
+      echo "user_pref(\"extensions.torlauncher.toronionauthdir_path\", \"\$HOME/TorBrowser/Data/Tor/onion-auth\");"
+      echo "user_pref(\"extensions.torlauncher.torrc_path\", \"\$HOME/TorBrowser/Data/Tor/torrc\");"
+      echo "user_pref(\"extensions.torlauncher.tordatadir_path\", \"\$HOME/TorBrowser/Data/Tor\");"
+    } >> "\$HOME/TorBrowser/Data/Browser/profile.default/prefs.js"
 
     # Lift-off
     #

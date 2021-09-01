@@ -43,13 +43,13 @@
 
 stdenv.mkDerivation rec {
   pname = "389-ds-base";
-  version = "2.0.5";
+  version = "2.0.7";
 
   src = fetchFromGitHub {
     owner = "389ds";
     repo = pname;
     rev = "${pname}-${version}";
-    sha256 = "sha256-H0G8py4sB+2CSZKyCIb2TCIXOpnPx7udWUEK4Tg5TD8=";
+    sha256 = "sha256-aM1qo+yHrCFespPWHv2f25ooqQVCIZGaZS43dY6kiC4=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config doxygen ];
@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
       six
       pyasn1
       pyasn1-modules
-      dateutil
+      python-dateutil
       argcomplete
       libselinux
     ]))

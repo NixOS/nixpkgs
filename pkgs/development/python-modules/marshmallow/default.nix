@@ -36,5 +36,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/marshmallow-code/marshmallow";
     license = licenses.mit;
+    maintainers = with maintainers; [ cript0nauta ];
   };
+
 }

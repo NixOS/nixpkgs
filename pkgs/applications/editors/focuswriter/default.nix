@@ -12,8 +12,6 @@ mkDerivation rec {
   nativeBuildInputs = [ pkg-config qmake qttools ];
   buildInputs = [ hunspell qtbase qtmultimedia ];
 
-  enableParallelBuilding = true;
-
   qmakeFlags = [ "PREFIX=/" ];
   installFlags = [ "INSTALL_ROOT=$(out)" ];
 

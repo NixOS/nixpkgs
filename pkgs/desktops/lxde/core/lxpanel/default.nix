@@ -10,7 +10,7 @@
 , gtk2
 , libX11
 , libfm
-, libwnck
+, libwnck2
 , libXmu
 , libXpm
 , cairo
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     gtk2
     libX11
     libfm
-    libwnck
+    libwnck2
     libXmu
     libXpm
     cairo

@@ -10,6 +10,9 @@
 # Go linker flags, passed to go via -ldflags
 , ldflags ? []
 
+# Go tags, passed to go via -tag
+, tags ? []
+
 # A function to override the go-modules derivation
 , overrideModAttrs ? (_oldAttrs : {})
 
@@ -26,6 +29,10 @@
 # Whether to run the vend tool to regenerate the vendor directory.
 # This is useful if any dependency contain C files.
 , runVend ? false
+# Whether to fetch (go mod download) and proxy the vendor directory.
+# This is useful if any dependency has case-insensitive conflicts
+# which will produce platform dependant `vendorSha256` checksums.
+, proxyVendor ? false
 
 # We want parallel builds by default
 , enableParallelBuilding ? true
@@ -39,9 +46,15 @@
 # Not needed with buildGoModule
 , goPackagePath ? ""
 
+# needed for buildFlags{,Array} warning
+, buildFlags ? ""
+, buildFlagsArray ? ""
+
 , ... }@args':
 
 with builtins;
+
+assert (runVend == true && proxyVendor == true) -> throw "can't use `runVend` and `proxyVendor` together";
 
 assert goPackagePath != "" -> throw "`goPackagePath` is not needed with `buildGoModule`";
 
@@ -94,6 +107,9 @@ let
     ${if runVend then ''
       echo "running 'vend' to rewrite vendor folder"
       ${vend}/bin/vend
+    '' else if proxyVendor then ''
+      mkdir -p "''${GOPATH}/pkg/mod/cache/download"
+      go mod download
     '' else ''
       go mod vendor
     ''}
@@ -106,8 +122,12 @@ let
     installPhase = args.modInstallPhase or ''
       runHook preInstall
 
-      # remove cached lookup results and tiles
+    ${if proxyVendor then ''
+      rm -rf "''${GOPATH}/pkg/mod/cache/download/sumdb"
+      cp -r --reflink=auto "''${GOPATH}/pkg/mod/cache/download" $out
+    '' else ''
       cp -r --reflink=auto vendor $out
+    ''}
 
       runHook postInstall
     '';
@@ -127,7 +147,7 @@ let
     inherit (go) GOOS GOARCH;
 
     GO111MODULE = "on";
-    GOFLAGS = [ "-mod=vendor" ] ++ lib.optionals (!allowGoReference) [ "-trimpath" ];
+    GOFLAGS = lib.optionals (!proxyVendor) [ "-mod=vendor" ] ++ lib.optionals (!allowGoReference) [ "-trimpath" ];
 
     configurePhase = args.configurePhase or ''
       runHook preConfigure
@@ -135,11 +155,15 @@ let
       export GOCACHE=$TMPDIR/go-cache
       export GOPATH="$TMPDIR/go"
       export GOSUMDB=off
-      export GOPROXY=off
       cd "$modRoot"
     '' + lib.optionalString (go-modules != "") ''
-      rm -rf vendor
-      cp -r --reflink=auto ${go-modules} vendor
+      ${if proxyVendor then ''
+        export GOPROXY=file://${go-modules}
+      '' else ''
+        export GOPROXY=off
+        rm -rf vendor
+        cp -r --reflink=auto ${go-modules} vendor
+      ''}
     '' + ''
 
       runHook postConfigure
@@ -156,7 +180,7 @@ let
         echo "$d" | grep -q "\(/_\|examples\|Godeps\|testdata\)" && return 0
         [ -n "$excludedPackages" ] && echo "$d" | grep -q "$excludedPackages" && return 0
         local OUT
-        if ! OUT="$(go $cmd $buildFlags "''${buildFlagsArray[@]}" ''${ldflags:+-ldflags="$ldflags"} -v -p $NIX_BUILD_CORES $d 2>&1)"; then
+        if ! OUT="$(go $cmd $buildFlags "''${buildFlagsArray[@]}" ''${tags:+-tags=${lib.concatStringsSep "," tags}} ''${ldflags:+-ldflags="$ldflags"} -v -p $NIX_BUILD_CORES $d 2>&1)"; then
           if ! echo "$OUT" | grep -qE '(no( buildable| non-test)?|build constraints exclude all) Go (source )?files'; then
             echo "$OUT" >&2
             return 1
@@ -214,7 +238,7 @@ let
       runHook preCheck
 
       for pkg in $(getGoDirs test); do
-        buildGoDir test "$pkg"
+        buildGoDir test $checkFlags "$pkg"
       done
 
       runHook postCheck
@@ -236,6 +260,8 @@ let
 
     passthru = passthru // { inherit go go-modules vendorSha256 ; };
 
+    enableParallelBuilding = enableParallelBuilding;
+
     meta = {
       # Add default meta information
       platforms = go.meta.platforms or lib.platforms.all;
@@ -246,4 +272,6 @@ let
     };
   });
 in
+lib.warnIf (buildFlags != "" || buildFlagsArray != "")
+  "Use the `ldflags` and/or `tags` attributes instead of `buildFlags`/`buildFlagsArray`"
   package

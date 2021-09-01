@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
+    python3
     pkg-config
     wafHook
     libxslt
@@ -37,6 +38,11 @@ stdenv.mkDerivation rec {
     "--bundled-libraries=NONE"
     "--builtin-libraries=replace"
   ];
+
+  # python-config from build Python gives incorrect values when cross-compiling.
+  # If python-config is not found, the build falls back to using the sysconfig
+  # module, which works correctly in all cases.
+  PYTHON_CONFIG = "/invalid";
 
   meta = with lib; {
     description = "The trivial database";

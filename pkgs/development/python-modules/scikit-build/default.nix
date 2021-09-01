@@ -15,9 +15,9 @@
 , ninja
 , pathpy
 , pytest
-, pytestcov
+, pytest-cov
 , pytest-mock
-, pytestrunner
+, pytest-runner
 , pytest-virtualenv
 , requests
 , six
@@ -26,11 +26,11 @@
 
 buildPythonPackage rec {
   pname = "scikit-build";
-  version = "0.11.1";
+  version = "0.12.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0p4smkl2rbpl00m5va5qa8hp2hqb3284p2cs6k8zlmi4kgbdyh6s";
+    sha256 = "f851382c469bcd9a8c98b1878bcfdd13b68556279d2fd9a329be41956ae5a7fe";
   };
 
   propagatedBuildInputs = [
@@ -48,9 +48,9 @@ buildPythonPackage rec {
     ninja
     pathpy
     pytest
-    pytestcov
+    pytest-cov
     pytest-mock
-    pytestrunner
+    pytest-runner
     pytest-virtualenv
     requests
     six

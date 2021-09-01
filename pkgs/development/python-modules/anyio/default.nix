@@ -3,6 +3,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
+, setuptools-scm
 , idna
 , sniffio
 , typing-extensions
@@ -18,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "anyio";
-  version = "3.1.0";
+  version = "3.3.0";
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
@@ -26,8 +27,16 @@ buildPythonPackage rec {
     owner = "agronholm";
     repo = pname;
     rev = version;
-    sha256 = "sha256-zQiSAQN7cp1s+8hDTvYaMkHUXV1ccNwIsl2IOztH7J8=";
+    sha256 = "sha256-bMnAijFLXZSgTWsalT/J4sJ0Jrc1kFaQHJArwXnQFaQ=";
   };
+
+  preBuild = ''
+    export SETUPTOOLS_SCM_PRETEND_VERSION=${version}
+  '';
+
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
   propagatedBuildInputs = [
     idna
@@ -48,8 +57,13 @@ buildPythonPackage rec {
     mock
   ];
 
+  disabledTests = [
+    # block devices access
+    "test_is_block_device"
+  ];
+
   disabledTestPaths = [
-     # lots of DNS lookups
+    # lots of DNS lookups
     "tests/test_sockets.py"
   ] ++ lib.optionals stdenv.isDarwin [
     # darwin sandboxing limitations

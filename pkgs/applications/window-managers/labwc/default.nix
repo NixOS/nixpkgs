@@ -21,29 +21,34 @@
 
 stdenv.mkDerivation rec {
   pname = "labwc";
-  version = "unstable-2021-03-15";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "johanmalm";
     repo = pname;
-    rev = "fddeb74527e5b860d9c1a91a237d390041c758b6";
-    sha256 = "0rhniv5j4bypqxxj0nbpa3hclmn8znal9rldv0mrgbizn3wsbs54";
+    rev = version;
+    sha256 = "sha256-v8LGiQG/n1IXeVMPWyiP9MgZzZLW78JftvxnRVTswaM=";
   };
 
-  nativeBuildInputs = [ pkg-config meson ninja scdoc ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    scdoc
+  ];
   buildInputs = [
     cairo
     glib
+    libdrm
     libinput
+    libxcb
+    libxkbcommon
     libxml2
     pango
     wayland
     wayland-protocols
     wlroots
-    libxcb
-    libxkbcommon
     xwayland
-    libdrm
   ];
 
   mesonFlags = [ "-Dxwayland=enabled" ];

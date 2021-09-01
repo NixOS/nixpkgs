@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "python-gitlab";
-  version = "2.8.0";
+  version = "2.10.0";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0081jgjgqi4mqpr436ivw2q571hxi3hv2pa8d0z0nfl13s6lldpk";
+    sha256 = "sha256-N2s+mCOBzsc0RxxQKz2ixueFio300DyZNJnmp1k5UOY=";
   };
 
   propagatedBuildInputs = [

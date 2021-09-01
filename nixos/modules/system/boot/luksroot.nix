@@ -621,6 +621,8 @@ in
               Whether to allow TRIM requests to the underlying device. This option
               has security implications; please read the LUKS documentation before
               activating it.
+              This option is incompatible with authenticated encryption (dm-crypt
+              stacked over dm-integrity).
             '';
           };
 

@@ -41,6 +41,7 @@ let
     "armv6l" = "arm";
     "armv7l" = "arm";
     "powerpc64le" = "ppc64le";
+    "mips" = "mips";
   }.${platform.parsed.cpu.name} or (throw "Unsupported system");
 
   # We need a target compiler which is still runnable at build time,
@@ -50,11 +51,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "go";
-  version = "1.16.5";
+  version = "1.16.7";
 
   src = fetchurl {
     url = "https://dl.google.com/go/go${version}.src.tar.gz";
-    sha256 = "sha256-e/p+WQjHzJ512l3fMGbXy88/2fpRlFhRMl7rwX9QuoA=";
+    sha256 = "sha256-Gp8olNPYeHKfcEUHLzC+zr4kNSTPL85OCnskix4GVKw=";
   };
 
   # perl is used for testing go vet

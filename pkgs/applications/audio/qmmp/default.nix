@@ -29,10 +29,11 @@
 # handle that.
 
 mkDerivation rec {
-  name = "qmmp-1.4.4";
+  pname = "qmmp";
+  version = "1.4.4";
 
   src = fetchurl {
-    url = "http://qmmp.ylsoftware.com/files/${name}.tar.bz2";
+    url = "https://qmmp.ylsoftware.com/files/${pname}-${version}.tar.bz2";
     sha256 = "sha256-sZRZVhCf2ceETuV4AULA0kVkuIMn3C+aYdKThqvPnVQ=";
   };
 

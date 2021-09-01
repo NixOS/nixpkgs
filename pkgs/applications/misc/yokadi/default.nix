@@ -1,4 +1,4 @@
-{ lib, fetchurl, buildPythonApplication, dateutil,
+{ lib, fetchurl, buildPythonApplication, python-dateutil,
   sqlalchemy, setproctitle, icalendar }:
 
 buildPythonApplication rec {
@@ -11,7 +11,7 @@ buildPythonApplication rec {
   };
 
   propagatedBuildInputs = [
-    dateutil
+    python-dateutil
     sqlalchemy
     setproctitle
     icalendar

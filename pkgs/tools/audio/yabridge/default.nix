@@ -1,7 +1,6 @@
 { lib
-, stdenv
+, multiStdenv
 , fetchFromGitHub
-, fetchpatch
 , substituteAll
 , meson
 , ninja
@@ -9,6 +8,7 @@
 , wine
 , boost
 , libxcb
+, pkgsi686Linux
 }:
 
 let
@@ -56,16 +56,16 @@ let
       sha256 = "sha256-39pvfcg4fvf7DAbAPzEHA1ja1LFL6r88nEwNYwaDC8w=";
     };
   };
-in stdenv.mkDerivation rec {
+in multiStdenv.mkDerivation rec {
   pname = "yabridge";
-  version = "3.2.0";
+  version = "3.5.2";
 
   # NOTE: Also update yabridgectl's cargoHash when this is updated
   src = fetchFromGitHub {
     owner = "robbert-vdh";
     repo = pname;
     rev = version;
-    hash = "sha256-UT6st0Rc6HOaObE3N+qlPZZ8U1gl/MFLU0mjFuScdes=";
+    hash = "sha256-SLiksc8lQo2A5sefKbcaJyhi8vPdp2p2Jbc7bvM0sDw=";
   };
 
   # Unpack subproject sources
@@ -80,13 +80,6 @@ in stdenv.mkDerivation rec {
   )'';
 
   patches = [
-    # Fix for wine 6.8+ (remove patch in next release):
-    (fetchpatch {
-      url = "https://github.com/robbert-vdh/yabridge/commit/5577c4bfd842c60a8ae8ce2889bbfeb53a51c62b.patch";
-      sha256 = "sha256-bTT08iWwDBVqi2PZPa7oal7/MqVu8t2Bh1gpjFMqLvQ=";
-      excludes = [ "CHANGELOG.md" ];
-    })
-
     # Hard code wine path so wine version is correct in logs
     (substituteAll {
       src = ./hardcode-wine.patch;
@@ -117,6 +110,7 @@ in stdenv.mkDerivation rec {
 
   mesonFlags = [
     "--cross-file" "cross-wine.conf"
+    "-Dwith-bitbridge=true"
 
     # Requires CMake and is unnecessary
     "-Dtomlplusplus:GENERATE_CMAKE_CONFIG=disabled"
@@ -126,11 +120,16 @@ in stdenv.mkDerivation rec {
     "-Dtomlplusplus:BUILD_TESTS=disabled"
   ];
 
+  preConfigure = ''
+    sed -i "214s|xcb.*|xcb_32bit_dep = winegcc.find_library('xcb', dirs: [ '${lib.getLib pkgsi686Linux.xorg.libxcb}/lib', ])|" meson.build
+    sed -i "192 i '${lib.getLib pkgsi686Linux.boost}/lib'," meson.build
+  '';
+
   installPhase = ''
     runHook preInstall
     mkdir -p "$out/bin" "$out/lib"
-    cp yabridge-group.exe{,.so} "$out/bin"
-    cp yabridge-host.exe{,.so} "$out/bin"
+    cp yabridge-group*.exe{,.so} "$out/bin"
+    cp yabridge-host*.exe{,.so} "$out/bin"
     cp libyabridge-vst2.so "$out/lib"
     cp libyabridge-vst3.so "$out/lib"
     runHook postInstall

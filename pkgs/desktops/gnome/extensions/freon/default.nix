@@ -4,7 +4,10 @@ stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-freon";
   version = "44";
 
-  uuid = "freon@UshakovVasilii_Github.yahoo.com";
+  passthru = {
+    extensionUuid = "freon@UshakovVasilii_Github.yahoo.com";
+    extensionPortalSlug = "freon";
+  };
 
   src = fetchFromGitHub {
     owner = "UshakovVasilii";
@@ -17,14 +20,14 @@ stdenv.mkDerivation rec {
 
   buildPhase = ''
     runHook preBuild
-    glib-compile-schemas --strict --targetdir=${uuid}/schemas ${uuid}/schemas
+    glib-compile-schemas --strict --targetdir="freon@UshakovVasilii_Github.yahoo.com/schemas" "freon@UshakovVasilii_Github.yahoo.com/schemas"
     runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
     mkdir -p $out/share/gnome-shell/extensions
-    cp -r ${uuid} $out/share/gnome-shell/extensions
+    cp -r "freon@UshakovVasilii_Github.yahoo.com" $out/share/gnome-shell/extensions
     runHook postInstall
   '';
 

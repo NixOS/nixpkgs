@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, pkg-config, bluez, fuse, obexftp }:
 
 stdenv.mkDerivation rec {
-  name = "obexfs-0.12";
+  pname = "obexfs";
+  version = "0.12";
 
   src = fetchurl {
-    url = "mirror://sourceforge/openobex/${name}.tar.gz";
+    url = "mirror://sourceforge/openobex/obexfs-${version}.tar.gz";
     sha256 = "1g3krpygk6swa47vbmp9j9s8ahqqcl9ra8r25ybgzv2d9pmjm9kj";
   };
 

@@ -1,5 +1,5 @@
 { lib, buildPythonApplication, fetchFromGitHub, makeWrapper, cmake
-, pytestrunner, pytest, six, pyparsing, asn1ate }:
+, pytest-runner, pytest, six, pyparsing, asn1ate }:
 
 buildPythonApplication rec {
   pname = "asn2quickder";
@@ -19,7 +19,7 @@ buildPythonApplication rec {
   dontUseCmakeConfigure = true;
 
   nativeBuildInputs = [ makeWrapper cmake ];
-  checkInputs = [ pytestrunner pytest ];
+  checkInputs = [ pytest-runner pytest ];
 
   propagatedBuildInputs = [ pyparsing asn1ate six ];
 

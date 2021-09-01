@@ -34,6 +34,10 @@ stdenv.mkDerivation rec {
     ddccontrol-db
   ];
 
+  configureFlags = [
+    "--with-systemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
+  ];
+
   prePatch = ''
     oldPath="\$""{datadir}/ddccontrol-db"
     newPath="${ddccontrol-db}/share/ddccontrol-db"

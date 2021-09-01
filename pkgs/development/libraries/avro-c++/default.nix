@@ -1,10 +1,8 @@
 { lib, stdenv, fetchurl, cmake, boost, python2}:
 
-let version = "1.8.2"; in
-
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "avro-c++";
-  inherit version;
+  version = "1.8.2";
 
   src = fetchurl {
     url = "mirror://apache/avro/avro-${version}/cpp/avro-cpp-${version}.tar.gz";

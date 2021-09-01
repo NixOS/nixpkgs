@@ -2,20 +2,25 @@
 
 buildGoModule rec {
   pname = "helm";
-  version = "3.6.1";
+  version = "3.6.3";
+  gitCommit = "ee407bdf364942bcb8e8c665f82e15aa28009b71";
 
   src = fetchFromGitHub {
     owner = "helm";
     repo = "helm";
     rev = "v${version}";
-    sha256 = "sha256-MXMgCqdFNRMJaStoFMx8BO8OI1B7FqSETk0zW6a/vbE=";
+    sha256 = "sha256-DfMI50eQsMHRX8S5rBzF3qlSfJizlYQyofA7HPkD4EQ=";
   };
   vendorSha256 = "sha256-PTAyRG6PZK+vaiheUd3oiu4iBGlnFjoCrci0CYbXjBk=";
 
   doCheck = false;
 
   subPackages = [ "cmd/helm" ];
-  buildFlagsArray = [ "-ldflags=-w -s -X helm.sh/helm/v3/internal/version.version=v${version}" ];
+  ldflags = [
+    "-w" "-s"
+    "-X helm.sh/helm/v3/internal/version.version=v${version}"
+    "-X helm.sh/helm/v3/internal/version.gitCommit=${gitCommit}"
+  ];
 
   nativeBuildInputs = [ installShellFiles ];
   postInstall = ''

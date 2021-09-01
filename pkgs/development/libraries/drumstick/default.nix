@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "drumstick";
-  version = "2.2.1";
+  version = "2.3.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/drumstick/${version}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-UxXUEkO5qXPIjw99BdkAspikR9Nlu32clf28cTyf+W4=";
+    sha256 = "sha256-0DUFmL8sifxbC782CYT4eoe4m1kq8T1tEs3YNy8iQuc=";
   };
 
   patches = [

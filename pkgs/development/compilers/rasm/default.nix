@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "0.117";
 
   src = fetchurl {
-    url = "www.roudoudou.com/export/cpc/rasm/${pname}_v0117_src.zip";
+    url = "http://www.roudoudou.com/export/cpc/rasm/${pname}_v0117_src.zip";
     sha256 = "1hwily4cfays59qm7qd1ax48i7cpbxhs5l9mfpyn7m2lxsfqrl3z";
   };
 

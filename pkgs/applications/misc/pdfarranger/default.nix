@@ -29,7 +29,7 @@ python3Packages.buildPythonApplication rec {
     pikepdf
     img2pdf
     setuptools
-    dateutil
+    python-dateutil
   ];
 
   # incompatible with wrapGAppsHook

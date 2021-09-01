@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tint2";
-  version = "17.0";
+  version = "17.0.1";
 
   src = fetchFromGitLab {
     owner = "o9000";
     repo = "tint2";
     rev = version;
-    sha256 = "1gy5kki7vqrj43yl47cw5jqwmj45f7a8ppabd5q5p1gh91j7klgm";
+    sha256 = "sha256-yiXdG0qYcdol2pA1L9ii4XiLZyyUAl8/EJop48OLoXs=";
   };
 
   nativeBuildInputs = [

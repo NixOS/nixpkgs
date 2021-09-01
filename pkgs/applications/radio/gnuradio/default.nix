@@ -22,6 +22,7 @@
 , uhd
 , SDL
 , gsl
+, soapysdr
 , libsodium
 , libsndfile
 , libunwind
@@ -44,14 +45,14 @@
 , pname ? "gnuradio"
 , versionAttr ? {
   major = "3.9";
-  minor = "1";
+  minor = "2";
   patch = "0";
 }
 , fetchSubmodules ? false
 }:
 
 let
-  sourceSha256 = "0zydmrr3gkaqiv4jv8f42awrfzs177bqb349q34rnr6j3d32z2vp";
+  sourceSha256 = "01wyqazrpphmb0fl69j93k0w4vm4d1l4177m1fyg7qx8hzia0aaq";
   featuresInfo = {
     # Needed always
     basic = {
@@ -205,6 +206,12 @@ let
     gr-network = {
       cmakeEnableFlag = "GR_NETWORK";
     };
+    gr-soapy = {
+      cmakeEnableFlag = "GR_SOAPY";
+      runtime = [
+        soapysdr
+      ];
+    };
   };
   shared = (import ./shared.nix {
     inherit
@@ -233,6 +240,7 @@ stdenv.mkDerivation rec {
     src
     nativeBuildInputs
     buildInputs
+    cmakeFlags
     disallowedReferences
     stripDebugList
     doCheck
@@ -248,25 +256,9 @@ stdenv.mkDerivation rec {
   } // lib.optionalAttrs (hasFeature "gr-qtgui" features) {
     inherit (libsForQt5) qwt;
   };
-  cmakeFlags = shared.cmakeFlags
-    # From some reason, if these are not set, libcodec2 and gsm are not
-    # detected properly.
-    ++ lib.optionals (hasFeature "gr-vocoder" features) [
-      "-DLIBCODEC2_FOUND=TRUE"
-      "-DLIBCODEC2_LIBRARIES=${codec2}/lib/libcodec2.so"
-      "-DLIBCODEC2_INCLUDE_DIRS=${codec2}/include"
-      "-DLIBCODEC2_HAS_FREEDV_API=ON"
-      "-DLIBGSM_FOUND=TRUE"
-      "-DLIBGSM_LIBRARIES=${gsm}/lib/libgsm.so"
-      "-DLIBGSM_INCLUDE_DIRS=${gsm}/include/gsm"
-    ]
-  ;
 
   postInstall = shared.postInstall
     # This is the only python reference worth removing, if needed.
-    # Even if python support is enabled, and we don't care about this
-    # reference, pybind's path is not properly set. See:
-    # https://github.com/gnuradio/gnuradio/issues/4380
     + lib.optionalString (!hasFeature "python-support" features) ''
       ${removeReferencesTo}/bin/remove-references-to -t ${python} $out/lib/cmake/gnuradio/GnuradioConfig.cmake
       ${removeReferencesTo}/bin/remove-references-to -t ${python} $(readlink -f $out/lib/libgnuradio-runtime.so)

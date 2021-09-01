@@ -2,49 +2,71 @@
 , backoff
 , buildPythonPackage
 , fetchFromGitHub
-, pytestCheckHook
-, requests
-, pytestcov
-, requests-mock
+, importlib-metadata
 , parameterized
+, poetry-core
+, pytestCheckHook
+, pythonOlder
+, requests
+, requests-mock
+, responses
+, rich
 }:
 
 buildPythonPackage rec {
   pname = "censys";
-  version = "1.1.1";
+  version = "2.0.6";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "censys";
     repo = "censys-python";
-    rev = version;
-    sha256 = "06jwk0ps80fjzbsy24qn5bsggfpgn4ccjzjz65cdh0ap1mfvh5jf";
+    rev = "v${version}";
+    sha256 = "sha256-Lbd2Pm79n0cFoGHC2rucxgZijzcVYVJJsq1yzqB9QLk=";
   };
+
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
   propagatedBuildInputs = [
     backoff
     requests
+    rich
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    importlib-metadata
   ];
 
   checkInputs = [
-    pytestcov
+    parameterized
     pytestCheckHook
     requests-mock
-    parameterized
+    responses
   ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'backoff = "^1.11.1"' 'backoff = "*"' \
+      --replace 'requests = ">=2.26.0"' 'requests = "*"' \
+      --replace 'rich = "^10.6.0"' 'rich = "*"'
+    substituteInPlace pytest.ini \
+      --replace "--cov" ""
+  '';
 
   # The tests want to write a configuration file
   preCheck = ''
     export HOME=$(mktemp -d)
     mkdir -p $HOME
-    '';
-  # All other tests require an API key
-  pytestFlagsArray = [ "tests/test_config.py" ];
+  '';
+
   pythonImportsCheck = [ "censys" ];
 
   meta = with lib; {
     description = "Python API wrapper for the Censys Search Engine (censys.io)";
     homepage = "https://github.com/censys/censys-python";
     license = with licenses; [ asl20 ];
-    maintainers = [ maintainers.fab ];
+    maintainers = with maintainers; [ fab ];
   };
 }

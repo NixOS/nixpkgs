@@ -24,14 +24,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.4.10.1";
+  version = "0.4.10.2";
   pname = "freeorion";
 
   src = fetchFromGitHub {
     owner = "freeorion";
     repo = "freeorion";
     rev = "v${version}";
-    sha256 = "sha256-Itt2JIStx+JsnMMBvbeJXSEJpaS/pd1UMvPGNd50k7I=";
+    sha256 = "sha256-k/YwTg0N2b70igfqRuFl/zwxMQhD2QjbapsazYbi0Ik=";
   };
 
   buildInputs = [
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     makeWrapper
   ];
 
-  # as of 0.4.10.1 FreeOrion doesn't work with "-DOpenGL_GL_PREFERENCE=GLVND"
+  # as of 0.4.10.2 FreeOrion doesn't work with "-DOpenGL_GL_PREFERENCE=GLVND"
   cmakeFlags = [ "-DOpenGL_GL_PREFERENCE=LEGACY" ];
 
   postInstall = ''

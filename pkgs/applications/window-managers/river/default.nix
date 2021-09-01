@@ -12,19 +12,20 @@
 , pixman
 , udev
 , libevdev
+, libinput
 , libX11
 , libGL
 }:
 
 stdenv.mkDerivation rec {
   pname = "river";
-  version = "unstable-2021-06-06";
+  version = "unstable-2021-08-03";
 
   src = fetchFromGitHub {
     owner = "ifreund";
     repo = pname;
-    rev = "0e9dc089d14e2b5c923d483c62d342af29493cf0";
-    sha256 = "sha256-2rIZYr9Y+IBrox5MVrPpHeI8OVSXHsMZmcCagsX56lU=";
+    rev = "2fc0875a3e17a0328d14d0c6323bd8022d5b15de";
+    sha256 = "sha256-Cs9RRubxy0DY6ILRZY36HtcoqBvzbN7NEfpREq1KBBQ=";
     fetchSubmodules = true;
   };
 
@@ -38,6 +39,7 @@ stdenv.mkDerivation rec {
     pixman
     udev
     libevdev
+    libinput
     libX11
     libGL
   ];

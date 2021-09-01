@@ -30,6 +30,9 @@ in
       package = lib.mkOption {
         type = lib.types.package;
         default = pkgs.discourse;
+        apply = p: p.override {
+          plugins = lib.unique (p.enabledPlugins ++ cfg.plugins);
+        };
         defaultText = "pkgs.discourse";
         description = ''
           The discourse package to use.
@@ -356,7 +359,7 @@ in
           };
 
           port = lib.mkOption {
-            type = lib.types.int;
+            type = lib.types.port;
             default = 25;
             description = ''
               The port of the SMTP server Discourse should use to
@@ -472,21 +475,16 @@ in
       plugins = lib.mkOption {
         type = lib.types.listOf lib.types.package;
         default = [];
-        example = ''
-          [
-            (pkgs.fetchFromGitHub {
-              owner = "discourse";
-              repo = "discourse-spoiler-alert";
-              rev = "e200cfa571d252cab63f3d30d619b370986e4cee";
-              sha256 = "0ya69ix5g77wz4c9x9gmng6l25ghb5xxlx3icr6jam16q14dzc33";
-            })
+        example = lib.literalExample ''
+          with config.services.discourse.package.plugins; [
+            discourse-canned-replies
+            discourse-github
           ];
         '';
         description = ''
-          <productname>Discourse</productname> plugins to install as a
-          list of derivations. As long as a plugin supports the
-          standard install method, packaging it should only require
-          fetching its source with an appropriate fetcher.
+          Plugins to install as part of
+          <productname>Discourse</productname>, expressed as a list of
+          derivations.
         '';
       };
 
@@ -731,8 +729,6 @@ in
 
           cp -r ${cfg.package}/share/discourse/config.dist/* /run/discourse/config/
           cp -r ${cfg.package}/share/discourse/public.dist/* /run/discourse/public/
-          cp -r ${cfg.package}/share/discourse/plugins.dist/* /run/discourse/plugins/
-          ${lib.concatMapStringsSep "\n" (p: "ln -sf ${p} /run/discourse/plugins/") cfg.plugins}
           ln -sf /var/lib/discourse/uploads /run/discourse/public/uploads
           ln -sf /var/lib/discourse/backups /run/discourse/public/backups
 
@@ -775,7 +771,6 @@ in
           "tmp"
           "assets/javascripts/plugins"
           "public"
-          "plugins"
           "sockets"
         ];
         RuntimeDirectoryMode = 0750;

@@ -105,9 +105,9 @@ in import ./make-test-python.nix ({ lib, ... }: {
         security.acme.certs."a.example.test".keyType = "ec384";
         security.acme.certs."a.example.test".postRun = ''
           set -euo pipefail
-          touch test
-          chown root:root test
-          echo testing > test
+          touch /home/test
+          chown root:root /home/test
+          echo testing > /home/test
         '';
       };
 
@@ -330,30 +330,38 @@ in import ./make-test-python.nix ({ lib, ... }: {
 
       with subtest("Can request certificate with HTTPS-01 challenge"):
           webserver.wait_for_unit("acme-finished-a.example.test.target")
-          check_fullchain(webserver, "a.example.test")
-          check_issuer(webserver, "a.example.test", "pebble")
-          check_connection(client, "a.example.test")
 
       with subtest("Certificates and accounts have safe + valid permissions"):
           group = "${nodes.webserver.config.security.acme.certs."a.example.test".group}"
           webserver.succeed(
-              f"test $(stat -L -c \"%a %U %G\" /var/lib/acme/a.example.test/* | tee /dev/stderr | grep '640 acme {group}' | wc -l) -eq 5"
+              f"test $(stat -L -c '%a %U %G' /var/lib/acme/a.example.test/*.pem | tee /dev/stderr | grep '640 acme {group}' | wc -l) -eq 5"
           )
           webserver.succeed(
-              f"test $(stat -L -c \"%a %U %G\" /var/lib/acme/.lego/a.example.test/**/* | tee /dev/stderr | grep '640 acme {group}' | wc -l) -eq 5"
+              f"test $(stat -L -c '%a %U %G' /var/lib/acme/.lego/a.example.test/**/a.example.test* | tee /dev/stderr | grep '600 acme {group}' | wc -l) -eq 4"
           )
           webserver.succeed(
-              f"test $(stat -L -c \"%a %U %G\" /var/lib/acme/a.example.test | tee /dev/stderr | grep '750 acme {group}' | wc -l) -eq 1"
+              f"test $(stat -L -c '%a %U %G' /var/lib/acme/a.example.test | tee /dev/stderr | grep '750 acme {group}' | wc -l) -eq 1"
           )
           webserver.succeed(
-              f"test $(find /var/lib/acme/accounts -type f -exec stat -L -c \"%a %U %G\" {{}} \\; | tee /dev/stderr | grep -v '600 acme {group}' | wc -l) -eq 0"
+              f"test $(find /var/lib/acme/accounts -type f -exec stat -L -c '%a %U %G' {{}} \\; | tee /dev/stderr | grep -v '600 acme {group}' | wc -l) -eq 0"
           )
 
+      with subtest("Certs are accepted by web server"):
+          webserver.succeed("systemctl start nginx.service")
+          check_fullchain(webserver, "a.example.test")
+          check_issuer(webserver, "a.example.test", "pebble")
+          check_connection(client, "a.example.test")
+
+      # Selfsigned certs tests happen late so we aren't fighting the system init triggering cert renewal
       with subtest("Can generate valid selfsigned certs"):
           webserver.succeed("systemctl clean acme-a.example.test.service --what=state")
           webserver.succeed("systemctl start acme-selfsigned-a.example.test.service")
           check_fullchain(webserver, "a.example.test")
           check_issuer(webserver, "a.example.test", "minica")
+          # Check selfsigned permissions
+          webserver.succeed(
+              f"test $(stat -L -c '%a %U %G' /var/lib/acme/a.example.test/*.pem | tee /dev/stderr | grep '640 acme {group}' | wc -l) -eq 5"
+          )
           # Will succeed if nginx can load the certs
           webserver.succeed("systemctl start nginx-config-reload.service")
 
@@ -375,7 +383,9 @@ in import ./make-test-python.nix ({ lib, ... }: {
           switch_to(webserver, "cert-change")
           webserver.wait_for_unit("acme-finished-a.example.test.target")
           check_connection_key_bits(client, "a.example.test", "384")
-          webserver.succeed("grep testing /var/lib/acme/a.example.test/test")
+          webserver.succeed("grep testing /home/test")
+          # Clean to remove the testing file (and anything else messy we did)
+          webserver.succeed("systemctl clean acme-a.example.test.service --what=state")
 
       with subtest("Correctly implements OCSP stapling"):
           switch_to(webserver, "ocsp-stapling")

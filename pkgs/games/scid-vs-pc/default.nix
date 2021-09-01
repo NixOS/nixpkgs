@@ -2,11 +2,11 @@
 
 tcl.mkTclDerivation rec {
   pname = "scid-vs-pc";
-  version = "4.21";
+  version = "4.22";
 
   src = fetchurl {
     url = "mirror://sourceforge/scidvspc/scid_vs_pc-${version}.tgz";
-    sha256 = "1lsm5s2hlhqbmwm6f38jlg2kc4j6lwp86lg6z3w6nc3jibzgvsay";
+    sha256 = "sha256-PSHDPrfhJI/DyEVQLo8Ckargqf/iUG5PgvUbO/4WNJM=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -42,6 +42,7 @@ tcl.mkTclDerivation rec {
 
   dontPatchShebangs = true;
 
+  # TODO: can this use tclWrapperArgs?
   postFixup = ''
     sed -i -e '1c#!'"$out"'/bin/tcscid' "$out/bin/scidpgn"
     sed -i -e '1c#!${tk}/bin/wish' "$out/bin/sc_remote"

@@ -186,11 +186,6 @@ GEM
     jwt (2.2.3)
     kgio (2.11.3)
     libv8-node (15.14.0.1)
-    libv8-node (15.14.0.1-arm64-darwin-20)
-    libv8-node (15.14.0.1-x86_64-darwin-18)
-    libv8-node (15.14.0.1-x86_64-darwin-19)
-    libv8-node (15.14.0.1-x86_64-darwin-20)
-    libv8-node (15.14.0.1-x86_64-linux)
     listen (3.5.1)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
@@ -214,7 +209,7 @@ GEM
       rack (>= 1.1.3)
     method_source (1.0.0)
     mini_mime (1.1.0)
-    mini_portile2 (2.5.1)
+    mini_portile2 (2.5.3)
     mini_racer (0.4.0)
       libv8-node (~> 15.14.0.0)
     mini_scheduler (0.13.0)
@@ -232,7 +227,7 @@ GEM
     multipart-post (2.1.1)
     mustache (1.1.1)
     nio4r (2.5.7)
-    nokogiri (1.11.5)
+    nokogiri (1.11.7)
       mini_portile2 (~> 2.5.0)
       racc (~> 1.4)
     nokogumbo (2.0.5)
@@ -267,7 +262,7 @@ GEM
     omniauth-twitter (1.4.0)
       omniauth-oauth (~> 1.1)
       rack
-    onebox (2.2.15)
+    onebox (2.2.17)
       addressable (~> 2.7.0)
       htmlentities (~> 4.3)
       multi_json (~> 1.11)
@@ -465,12 +460,7 @@ GEM
     zeitwerk (2.4.2)
 
 PLATFORMS
-  arm64-darwin-20
   ruby
-  x86_64-darwin-18
-  x86_64-darwin-19
-  x86_64-darwin-20
-  x86_64-linux
 
 DEPENDENCIES
   actionmailer (= 6.1.3.2)
@@ -600,4 +590,4 @@ DEPENDENCIES
   yaml-lint
 
 BUNDLED WITH
-   2.2.16
+   2.2.20

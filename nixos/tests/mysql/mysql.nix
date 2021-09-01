@@ -98,7 +98,7 @@ import ./../make-test-python.nix ({ pkgs, ...} : {
         }];
         services.mysql.settings = {
           mysqld = {
-            plugin-load-add = [ "ha_rocksdb.so" ];
+            plugin-load-add = [ "ha_mroonga.so" "ha_rocksdb.so" ];
           };
         };
         services.mysql.package = pkgs.mariadb;
@@ -170,6 +170,20 @@ import ./../make-test-python.nix ({ pkgs, ...} : {
     )
     mariadb.succeed(
         "echo 'use testdb; select test_id from tests;' | sudo -u testuser mysql -u testuser -N | grep 42"
+    )
+
+    # Check if Mroonga plugin works
+    mariadb.succeed(
+        "echo 'use testdb; create table mroongadb (test_id INT, PRIMARY KEY (test_id)) ENGINE = Mroonga;' | sudo -u testuser mysql -u testuser"
+    )
+    mariadb.succeed(
+        "echo 'use testdb; insert into mroongadb values (25);' | sudo -u testuser mysql -u testuser"
+    )
+    mariadb.succeed(
+        "echo 'use testdb; select test_id from mroongadb;' | sudo -u testuser mysql -u testuser -N | grep 25"
+    )
+    mariadb.succeed(
+        "echo 'use testdb; drop table mroongadb;' | sudo -u testuser mysql -u testuser"
     )
 
     # Check if RocksDB plugin works

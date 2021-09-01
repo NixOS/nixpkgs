@@ -7,10 +7,10 @@ in
 rec {
   firefox = common rec {
     pname = "firefox";
-    ffversion = "89.0.1";
+    version = "91.0.2";
     src = fetchurl {
-      url = "mirror://mozilla/firefox/releases/${ffversion}/source/firefox-${ffversion}.source.tar.xz";
-      sha512 = "67da387b3b6c5a110c83208f9a15d6064adf423bbebfb0fcad2d85f6c4b615b27da0cbd5486b817f0d5e040bc3e70d74d9af72599b24384397fef1dd153bd3f3";
+      url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
+      sha512 = "82084799524db6661d97d9942a01ca9edec2fae6b503c9dd2d79fca78bfef4ee0a888e5f5cf4cfa2b91d9c9392658bb8218bae2b9bec0fbcacfe73a174a4dbe7";
     };
 
     meta = {
@@ -21,21 +21,46 @@ rec {
       badPlatforms = lib.platforms.darwin;
       broken = stdenv.buildPlatform.is32bit; # since Firefox 60, build on 32-bit platforms fails with "out of memory".
                                              # not in `badPlatforms` because cross-compilation on 64-bit machine might work.
+      maxSilent = 14400; # 4h, double the default of 7200s (c.f. #129212, #129115)
       license = lib.licenses.mpl20;
     };
     tests = [ nixosTests.firefox ];
     updateScript = callPackage ./update.nix {
       attrPath = "firefox-unwrapped";
-      versionKey = "ffversion";
+    };
+  };
+
+  firefox-esr-91 = common rec {
+    pname = "firefox-esr";
+    version = "91.0.1esr";
+    src = fetchurl {
+      url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
+      sha512 = "79703b3ec615d10957350719b2c034df10fd47d140c3557cd7de665ef4430973b97c1906d5408ddaf8855c1424e87eb9b1b568322ad8fbdb956fca219a865d66";
+    };
+
+    meta = {
+      description = "A web browser built from Firefox Extended Support Release source tree";
+      homepage = "http://www.mozilla.com/en-US/firefox/";
+      maintainers = with lib.maintainers; [ hexa ];
+      platforms = lib.platforms.unix;
+      badPlatforms = lib.platforms.darwin;
+      broken = stdenv.buildPlatform.is32bit; # since Firefox 60, build on 32-bit platforms fails with "out of memory".
+                                             # not in `badPlatforms` because cross-compilation on 64-bit machine might work.
+      license = lib.licenses.mpl20;
+    };
+    tests = [ nixosTests.firefox-esr-91 ];
+    updateScript = callPackage ./update.nix {
+      attrPath = "firefox-esr-91-unwrapped";
+      versionSuffix = "esr";
     };
   };
 
   firefox-esr-78 = common rec {
     pname = "firefox-esr";
-    ffversion = "78.11.0esr";
+    version = "78.13.0esr";
     src = fetchurl {
-      url = "mirror://mozilla/firefox/releases/${ffversion}/source/firefox-${ffversion}.source.tar.xz";
-      sha512 = "d02fc2eda587155b1c54ca12a6c5cde220a29f41f154f1c9b71ae8f966d8cc9439201a5b241e03fc0795b74e2479f7aa5d6b69f70b7639432e5382f321f7a6f4";
+      url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
+      sha512 = "78a5dc8713ab879ebfc3b8fd7a8219844d06f0d897342fdf9a11471633d98e148ff85cf10e561899df4910b94a33b57709b64788df4621a8c0b83eb9a7102cef";
     };
 
     meta = {
@@ -48,11 +73,10 @@ rec {
                                              # not in `badPlatforms` because cross-compilation on 64-bit machine might work.
       license = lib.licenses.mpl20;
     };
-    tests = [ nixosTests.firefox-esr ];
+    tests = [ nixosTests.firefox-esr-78 ];
     updateScript = callPackage ./update.nix {
       attrPath = "firefox-esr-78-unwrapped";
       versionSuffix = "esr";
-      versionKey = "ffversion";
     };
   };
 }

@@ -1,5 +1,5 @@
 { mkXfceDerivation, exo, librsvg, dbus-glib, epoxy, gtk3, libXdamage
-, libstartup_notification, libxfce4ui, libxfce4util, libwnck3
+, libstartup_notification, libxfce4ui, libxfce4util, libwnck
 , libXpresent, xfconf }:
 
 mkXfceDerivation {
@@ -19,7 +19,7 @@ mkXfceDerivation {
     libstartup_notification
     libxfce4ui
     libxfce4util
-    libwnck3
+    libwnck
     libXpresent
     xfconf
   ];

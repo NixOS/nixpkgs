@@ -7,22 +7,21 @@
 
 buildGoModule rec {
   pname = "usql";
-  version = "0.9.1";
+  version = "0.9.3";
 
   src = fetchFromGitHub {
     owner = "xo";
     repo = "usql";
     rev = "v${version}";
-    sha256 = "sha256-fcKn4kHIRvMdgGFKDNQg49YxLc0Y5j/8VwKoDLiXbEU=";
+    sha256 = "sha256-NHeJSWrcX4hYBJpZu/UjQ1ZWfcUnWFCV0Meo+XveDOw=";
   };
 
-  vendorSha256 = "sha256-uAV8NLnqXjIDILfnbbkVr2BOIucQ8vX89KI5yIkVtus=";
+  vendorSha256 = "sha256-EsLLBhyOcupx5LrJyWWMu4RAGWDKo3keflyZOASKldE=";
 
   buildInputs = [ unixODBC icu ];
 
   # These tags and flags are copied from build-release.sh
-  buildFlags = [ "-tags" ];
-  buildFlagsArray = [
+  tags = [
     "most"
     "sqlite_app_armor"
     "sqlite_fts5"

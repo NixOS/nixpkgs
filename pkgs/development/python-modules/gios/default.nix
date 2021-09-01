@@ -2,6 +2,7 @@
 , aiohttp
 , aioresponses
 , buildPythonPackage
+, dacite
 , fetchFromGitHub
 , pytest-asyncio
 , pytest-error-for-skips
@@ -11,18 +12,19 @@
 
 buildPythonPackage rec {
   pname = "gios";
-  version = "1.0.1";
+  version = "2.0.0";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "bieniu";
     repo = pname;
     rev = version;
-    sha256 = "031z5j1j961pcw8s4ajj5z2xn2jxb2hyfn3x3bxbaagwl9a5qkvn";
+    sha256 = "1xbbp08ssan0b9j6s3vzg8cn421avc0xvahx5fvrb8kcbzkg8ssl";
   };
 
   propagatedBuildInputs = [
     aiohttp
+    dacite
   ];
 
   checkInputs = [

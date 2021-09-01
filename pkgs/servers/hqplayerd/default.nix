@@ -4,6 +4,7 @@
 , cairo
 , fetchurl
 , flac
+, gcc11
 , gnome
 , gssdp
 , gupnp
@@ -16,13 +17,11 @@
 
 stdenv.mkDerivation rec {
   pname = "hqplayerd";
-  version = "4.24.1-62";
+  version = "4.25.2-66";
 
   src = fetchurl {
-    # FIXME: use the fc34 sources when we get glibc 2.33 in nixpkgs
-    # c.f. https://github.com/NixOS/nixpkgs/pull/111616
-    url = "https://www.signalyst.eu/bins/${pname}/fc33/${pname}-${version}.fc33.x86_64.rpm";
-    sha256 = "sha256-lnejPkw6X3wRtjXTsdipEy6yZCEsDARhLPnySIltHXs=";
+    url = "https://www.signalyst.eu/bins/${pname}/fc34/${pname}-${version}.fc34.x86_64.rpm";
+    sha256 = "sha256-BZGtv/Bumkltk6fJw3+RG1LZc3pGpd8e4DvgLxOTvcQ=";
   };
 
   unpackPhase = ''
@@ -35,6 +34,7 @@ stdenv.mkDerivation rec {
     alsa-lib
     cairo
     flac
+    gcc11.cc.lib
     gnome.rygel
     gssdp
     gupnp
@@ -53,32 +53,37 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     cp ./usr/bin/hqplayerd $out/bin
 
+    # main configuration
+    mkdir -p $out/etc/hqplayer
+    cp ./etc/hqplayer/hqplayerd.xml $out/etc/hqplayer/
+
     # udev rules
     mkdir -p $out/etc/udev/rules.d
-    cp ./etc/udev/rules.d/50-taudio2.rules $out/etc/udev/rules.d
+    cp ./etc/udev/rules.d/50-taudio2.rules $out/etc/udev/rules.d/
 
     # kernel module cfgs
     mkdir -p $out/etc/modules-load.d
-    cp ./etc/modules-load.d/taudio2.conf $out/etc/modules-load.d
+    cp ./etc/modules-load.d/taudio2.conf $out/etc/modules-load.d/
 
     # systemd service file
     mkdir -p $out/lib/systemd/system
-    cp ./usr/lib/systemd/system/hqplayerd.service $out/lib/systemd/system
+    cp ./usr/lib/systemd/system/hqplayerd.service $out/lib/systemd/system/
 
     # documentation
     mkdir -p $out/share/doc/hqplayerd
-    cp ./usr/share/doc/hqplayerd/* $out/share/doc/hqplayerd
+    cp ./usr/share/doc/hqplayerd/* $out/share/doc/hqplayerd/
 
     # misc service support files
-    mkdir -p $out/var/lib/hqplayerd
-    cp -r ./var/hqplayer/web $out/var/lib/hqplayerd
+    mkdir -p $out/var/lib/hqplayer
+    cp -r ./var/lib/hqplayer/web $out/var/lib/hqplayer
 
     runHook postInstall
   '';
 
   postInstall = ''
     substituteInPlace $out/lib/systemd/system/hqplayerd.service \
-      --replace /usr/bin/hqplayerd $out/bin/hqplayerd
+      --replace /usr/bin/hqplayerd $out/bin/hqplayerd \
+      --replace "NetworkManager-wait-online.service" ""
   '';
 
   postFixup = ''

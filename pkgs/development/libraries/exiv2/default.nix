@@ -10,6 +10,7 @@
 , doxygen
 , graphviz
 , libxslt
+, libiconv
 }:
 
 stdenv.mkDerivation rec {
@@ -32,6 +33,8 @@ stdenv.mkDerivation rec {
     graphviz
     libxslt
   ];
+
+  buildInputs = lib.optional stdenv.isDarwin libiconv;
 
   propagatedBuildInputs = [
     expat

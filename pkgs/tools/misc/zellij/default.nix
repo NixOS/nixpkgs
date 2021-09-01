@@ -1,21 +1,29 @@
-{ lib, fetchFromGitHub, rustPlatform, stdenv, installShellFiles, libiconv }:
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, stdenv
+, installShellFiles
+, pkg-config
+, libiconv
+, openssl
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "zellij";
-  version = "0.13.0";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "zellij-org";
-    repo = pname;
+    repo = "zellij";
     rev = "v${version}";
-    sha256 = "sha256-m7rAlFMhkX6+l+OceZ/RnusdhGew+Rjp7AmZ7vo2wr0=";
+    sha256 = "sha256-IcpCE9mqR7H1+gRhHyscvXhYHOynJFtOyrSr1FiMxFc=";
   };
 
-  cargoSha256 = "sha256-iTPOlbS3gWlJ8E2VB7z/kOsOJcngPGof7R5cH3Z0xk0=";
+  cargoSha256 = "sha256-22ggPs4iVOI1LKHtW5skfSO7J/FLF8EinvcyHVO14Dw=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [ installShellFiles pkg-config ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
 
   preCheck = ''
     HOME=$TMPDIR

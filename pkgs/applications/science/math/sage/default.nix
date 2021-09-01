@@ -38,8 +38,8 @@ let
     ];
     language = "sagemath";
     # just one 16x16 logo is available
-    logo32 = "${sage-src}/doc/common/themes/sage/static/sageicon.png";
-    logo64 = "${sage-src}/doc/common/themes/sage/static/sageicon.png";
+    logo32 = "${sage-src}/src/doc/common/themes/sage/static/sageicon.png";
+    logo64 = "${sage-src}/src/doc/common/themes/sage/static/sageicon.png";
   };
 
   three = callPackage ./threejs-sage.nix { };

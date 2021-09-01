@@ -6,8 +6,8 @@ index bbafa134..227d3e06 100644
              # access.allowed to list an array of paths of allowed
              # apps.
              #access.allowed = [
--            #    @media_session_path@
-+            #    <media_session_path>
+-            #    @session_manager_path@
++            #    <session_manager_path>
              #]
  
              # An array of rejected paths.
@@ -15,8 +15,8 @@ index bbafa134..227d3e06 100644
      # but it is better to start it as a systemd service.
      # Run the session manager with -h for options.
      #
--    @comment@{ path = "@media_session_path@"  args = "" }
-+    @comment@{ path = "<media_session_path>"  args = "" }
+-    @comment@{ path = "@session_manager_path@"  args = "@session_manager_args@" }
++    @comment@{ path = "<session_manager_path>"  args = "@session_manager_args@" }
      #
      # You can optionally start the pulseaudio-server here as well
      # but it is better to start it as a systemd service.

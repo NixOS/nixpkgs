@@ -1,6 +1,4 @@
-{ lib, stdenv, fetchurl }:
-
-with lib;
+{ lib, stdenv, fetchurl, fetchFromGitHub }:
 
 let
     # The x86-64-modern may need to be refined further in the future
@@ -12,28 +10,29 @@ let
            if stdenv.isi686 then "x86-32" else
            if stdenv.isAarch64 then "armv8" else
            "unknown";
-    version = "13";
 
-    nnueFile = "nn-62ef826d1a6d.nnue";
+    nnueFile = "nn-3475407dc199.nnue";
     nnue = fetchurl {
       name = nnueFile;
       url = "https://tests.stockfishchess.org/api/nn/${nnueFile}";
-      sha256 = "0qsy9rr4zgxrpgwhwbi96z01a2560am2b00q2klbj4bd39nq5vv2";
+      sha256 = "sha256-NHVAfcGZc+pERnZ4Y0zOAj1iDkGXcMERzIk3/maJ7Ic=";
     };
 in
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "stockfish";
-  inherit version;
+  version = "14";
 
-  src = fetchurl {
-    url = "https://github.com/official-stockfish/Stockfish/archive/sf_${version}.tar.gz";
-    sha256 = "0qhxp2w543psanzhzn8jhfafx8aip57v9nsvafbwa5xynchlgl8m";
+  src = fetchFromGitHub {
+    owner = "official-stockfish";
+    repo = "Stockfish";
+    rev = "sf_${version}";
+    sha256 = "sha256-fX0Tr1yqjmNRSxmisFRKUY1E5//qF3zAfJ8innAeyxA=";
   };
 
   # This addresses a linker issue with Darwin
   # https://github.com/NixOS/nixpkgs/issues/19098
-  preBuild = optionalString stdenv.isDarwin ''
+  preBuild = lib.optionalString stdenv.isDarwin ''
     sed -i.orig '/^\#\#\# 3.*Link Time Optimization/,/^\#\#\# 3/d' Makefile
   '';
 
@@ -48,14 +47,14 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://stockfishchess.org/";
     description = "Strong open source chess engine";
     longDescription = ''
       Stockfish is one of the strongest chess engines in the world. It is also
       much stronger than the best human chess grandmasters.
       '';
-    maintainers = with maintainers; [ luispedro peti ];
+    maintainers = with maintainers; [ luispedro peti siraben ];
     platforms = ["x86_64-linux" "i686-linux" "x86_64-darwin" "aarch64-linux"];
     license = licenses.gpl2;
   };

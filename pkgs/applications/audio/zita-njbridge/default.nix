@@ -1,12 +1,12 @@
 { lib, stdenv, fetchurl, libjack2, zita-resampler }:
 
 stdenv.mkDerivation rec {
-  version = "0.4.4";
+  version = "0.4.8";
   pname = "zita-njbridge";
 
   src = fetchurl {
     url = "https://kokkinizita.linuxaudio.org/linuxaudio/downloads/${pname}-${version}.tar.bz2";
-    sha256 = "1l8rszdjhp0gq7mr54sdgfs6y6cmw11ssmqb1v9yrkrz5rmwzg8j";
+    sha256 = "sha256-EBF2oL1AfKt7/9Mm6NaIbBtlshK8M/LvuXsD+SbEeQc=";
   };
 
   buildInputs = [ libjack2 zita-resampler ];

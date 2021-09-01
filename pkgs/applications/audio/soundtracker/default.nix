@@ -1,7 +1,7 @@
 { lib, stdenv
 , fetchurl
 , pkg-config
-, autoconf
+, autoreconfHook
 , gtk2
 , alsa-lib
 , SDL
@@ -12,21 +12,43 @@
 
 stdenv.mkDerivation rec {
   pname = "soundtracker";
-  version = "1.0.1";
+  version = "1.0.2.1";
 
   src = fetchurl {
     # Past releases get moved to the "old releases" directory.
     # Only the latest release is at the top level.
     # Nonetheless, only the name of the file seems to affect which file is
     # downloaded, so this path should be fine both for old and current releases.
-    url = "mirror://sourceforge/soundtracker/soundtracker-${version}.tar.bz2";
-    sha256 = "0m5iiqccch6w53khpvdldz59zymw13vmwqc5ggx3sn41riwbd6ks";
+    url = "mirror://sourceforge/soundtracker/soundtracker-${version}.tar.xz";
+    sha256 = "0nh0dwz8nldc040q6n06vlazhss8ms42r2dffhjcrqj3hbrvfx82";
   };
+
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # Darwin binutils don't support D option for ar
+    # ALSA macros are missing on Darwin, causing error
+    substituteInPlace configure.ac \
+      --replace ARFLAGS=crD ARFLAGS=cru \
+      --replace AM_PATH_ALSA '#AM_PATH_ALSA'
+    # Avoid X11-specific workaround code on more than just Windows
+    substituteInPlace app/keys.c \
+      --replace '!defined(_WIN32)' '!defined(_WIN32) && !defined(__APPLE__)'
+    # "The application with bundle ID (null) is running setugid(), which is not allowed."
+    sed -i -e '/seteuid/d' -e '/setegid/d' app/main.c
+  '';
+
+  configureFlags = [
+    "--with-graphics-backend=gdk"
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "--disable-alsa"
+  ];
+
+  enableParallelBuilding = true;
 
   nativeBuildInputs = [
     pkg-config
-    autoconf
+    autoreconfHook
   ];
+
   buildInputs = [
     gtk2
     SDL
@@ -34,8 +56,6 @@ stdenv.mkDerivation rec {
     audiofile
     goocanvas
   ] ++ lib.optional stdenv.isLinux alsa-lib;
-
-  hardeningDisable = [ "format" ];
 
   meta = with lib; {
     description = "A music tracking tool similar in design to the DOS program FastTracker and the Amiga legend ProTracker";
@@ -51,7 +71,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;
-    # gdk/gdkx.h not found
-    broken = stdenv.isDarwin;
   };
 }

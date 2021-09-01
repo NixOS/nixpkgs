@@ -5,30 +5,28 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "knockpy";
-  version = "5.0.0";
+  version = "5.1.0";
   disabled = python3.pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "guelfoweb";
     repo = "knock";
     rev = version;
-    sha256 = "1h7sibdxx8y53xm1wydyng418n4j6baiys257msq03cs04jlm7h9";
+    sha256 = "sha256-4W6/omGPmQFuZ/2AVNgCs2q0ti/P8OY4o7b4/g9q+Rc=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
     beautifulsoup4
     colorama
+    matplotlib
+    networkx
+    pyqt5
     requests
   ];
 
-  postPatch = ''
-    # https://github.com/guelfoweb/knock/pull/95
-    substituteInPlace setup.py \
-      --replace "bs4" "beautifulsoup4"
-  '';
-
   # Project has no tests
   doCheck = false;
+
   pythonImportsCheck = [ "knockpy" ];
 
   meta = with lib; {

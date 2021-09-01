@@ -1,30 +1,29 @@
 { lib, stdenv, fetchFromSourcehut
-, SDL, SDL_image, libGLU, libGL, openal, libvorbis, freealut }:
+, SDL, stb, libGLU, libGL, openal, libvorbis, freealut }:
 
 stdenv.mkDerivation rec {
   pname = "blackshades";
-  version = "1.1.1";
+  version = "1.3.1";
 
   src = fetchFromSourcehut {
     owner = "~cnx";
     repo = pname;
     rev = version;
-    sha256 = "1gx43hcqahbd21ib8blhzmsrwqfzx4qy7f10ck0mh2zc4bfihz64";
+    sha256 = "0yzp74ynkcp6hh5m4zmvrgx5gwm186hq7p3m7qkww54qdyijb3rv";
   };
 
-  buildInputs = [ SDL SDL_image libGLU libGL openal libvorbis freealut ];
+  buildInputs = [ SDL stb libGLU libGL openal libvorbis freealut ];
 
-  patchPhase = ''
+  postPatch = ''
     sed -i -e s,Data/,$out/share/$pname/,g \
       -e s,Data:,$out/share/$pname/,g \
       src/*.cpp
   '';
 
   installPhase = ''
-    mkdir -p $out/bin $out/share/doc/$pname
+    mkdir -p $out/bin $out/share
     cp build/blackshades $out/bin
     cp -R Data $out/share/$pname
-    cp README.md $out/share/doc/$pname
   '';
 
   meta = {

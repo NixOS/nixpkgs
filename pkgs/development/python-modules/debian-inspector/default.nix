@@ -2,30 +2,25 @@
 , buildPythonPackage
 , fetchPypi
 , pythonAtLeast
-, fetchpatch
 , chardet
 , attrs
 , commoncode
 , pytestCheckHook
+, setuptools-scm
 }:
+
 buildPythonPackage rec {
   pname = "debian-inspector";
-  version = "0.9.10";
+  version = "21.5.25";
 
   src = fetchPypi {
     pname = "debian_inspector";
     inherit version;
-    sha256 = "fd29a02b925a4de0d7bb00c29bb05f19715a304bc10ef7b9ad06a93893dc3a8c";
+    sha256 = "1d3xaqw00kav85nk29qm2yqb73bkyqf185fs1q0vgd7bnap9wqaw";
   };
 
-  patches = lib.optionals (pythonAtLeast "3.9") [
-    # https://github.com/nexB/debian-inspector/pull/15
-    # fixes tests on Python 3.9
-    (fetchpatch {
-      name = "drop-encoding-argument.patch";
-      url = "https://github.com/nexB/debian-inspector/commit/ff991cdb788671ca9b81f1602b70a439248fd1aa.patch";
-      sha256 = "bm3k7vb9+Rm6+YicQEeDOOUVut8xpDaNavG+t2oLZkI=";
-    })
+  nativeBuildInputs = [
+    setuptools-scm
   ];
 
   dontConfigure = true;

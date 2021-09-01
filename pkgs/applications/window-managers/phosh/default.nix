@@ -8,6 +8,8 @@
 , wrapGAppsHook
 , libhandy
 , libxkbcommon
+, libgudev
+, callaudiod
 , pulseaudio
 , glib
 , gtk3
@@ -24,47 +26,20 @@
 , networkmanager
 , polkit
 , libsecret
-, writeText
 }:
 
-let
-  gvc = fetchFromGitLab {
-    domain = "gitlab.gnome.org";
-    owner = "GNOME";
-    repo = "libgnome-volume-control";
-    rev = "ae1a34aafce7026b8c0f65a43c9192d756fe1057";
-    sha256 = "0a4qh5pgyjki904qf7qmvqz2ksxb0p8xhgl2aixfbhixn0pw6saw";
-  };
-
-  executable = writeText "phosh" ''
-    PHOC_INI=@out@/share/phosh/phoc.ini
-    GNOME_SESSION_ARGS="--disable-acceleration-check --session=phosh --debug"
-
-    if [ -f /etc/phosh/phoc.ini ]; then
-      PHOC_INI=/etc/phosh/phoc.ini
-    elif  [ -f /etc/phosh/rootston.ini ]; then
-      # honor old configs
-      PHOC_INI=/etc/phosh/rootston.ini
-    fi
-
-    # Run gnome-session through a login shell so it picks
-    # variables from /etc/profile.d (XDG_*)
-    [ -n "$WLR_BACKENDS" ] || WLR_BACKENDS=drm,libinput
-    export WLR_BACKENDS
-    exec "${phoc}/bin/phoc" -C "$PHOC_INI" \
-      -E "bash -lc 'XDG_DATA_DIRS=$XDG_DATA_DIRS:\$XDG_DATA_DIRS ${gnome.gnome-session}/bin/gnome-session $GNOME_SESSION_ARGS'"
-  '';
-
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "phosh";
-  version = "0.10.2";
+  version = "0.13.1";
 
   src = fetchFromGitLab {
-    domain = "source.puri.sm";
-    owner = "Librem5";
+    domain = "gitlab.gnome.org";
+    group = "World";
+    owner = "Phosh";
     repo = pname;
     rev = "v${version}";
-    sha256 = "07i8wpzl7311dcf9s57s96qh1v672c75wv6cllrxx7fsmpf8fhx4";
+    fetchSubmodules = true; # including gvc and libcall-ui which are designated as subprojects
+    sha256 = "sha256-dKQK4mGe/dvNlca/XMDeq1Q4dH/WBF/rtiUh8RssF5c=";
   };
 
   nativeBuildInputs = [
@@ -80,6 +55,8 @@ in stdenv.mkDerivation rec {
     libhandy
     libsecret
     libxkbcommon
+    libgudev
+    callaudiod
     pulseaudio
     glib
     gcr
@@ -104,10 +81,7 @@ in stdenv.mkDerivation rec {
   # Temporarily disabled - Test is broken (SIGABRT)
   doCheck = false;
 
-  postUnpack = ''
-    rmdir $sourceRoot/subprojects/gvc
-    ln -s ${gvc} $sourceRoot/subprojects/gvc
-  '';
+  mesonFlags = [ "-Dsystemd=true" "-Dcompositor=${phoc}/bin/phoc" ];
 
   postPatch = ''
     chmod +x build-aux/post_install.py
@@ -123,15 +97,11 @@ in stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
-  # Replace the launcher script with ours
-  postInstall = ''
-    substituteAll ${executable} $out/bin/phosh
-  '';
-
   # Depends on GSettings schemas in gnome-shell
   preFixup = ''
     gappsWrapperArgs+=(
       --prefix XDG_DATA_DIRS : "${gnome.gnome-shell}/share/gsettings-schemas/${gnome.gnome-shell.name}"
+      --set GNOME_SESSION "${gnome.gnome-session}/bin/gnome-session"
     )
   '';
 
@@ -150,9 +120,9 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A pure Wayland shell prototype for GNOME on mobile devices";
-    homepage = "https://source.puri.sm/Librem5/phosh";
+    homepage = "https://gitlab.gnome.org/World/Phosh/phosh";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ archseer jtojnar masipcat zhaofengli ];
+    maintainers = with maintainers; [ jtojnar masipcat zhaofengli ];
     platforms = platforms.linux;
   };
 }

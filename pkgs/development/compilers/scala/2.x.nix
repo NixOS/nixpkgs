@@ -1,5 +1,5 @@
-{ stdenv, lib, fetchurl, makeWrapper, jre, gnugrep, coreutils
-, writeScript, common-updater-scripts, git, gnused, nix, nixfmt, majorVersion }:
+{ stdenv, lib, fetchurl, makeWrapper, jre, gnugrep, coreutils, writeScript
+, common-updater-scripts, git, gnused, nix, nixfmt, majorVersion }:
 
 with lib;
 
@@ -20,8 +20,8 @@ let
     };
 
     "2.12" = {
-      version = "2.12.13";
-      sha256 = "17548sx7liskkadqiqaajmwp2w7bh9m2d8hp2mwyg8yslmjx4pcc";
+      version = "2.12.14";
+      sha256 = "/X4+QDIogBOinAoUR8WX+vew5Jl2LA2YHbIQmel4BCY=";
       pname = "scala_2_12";
     };
 

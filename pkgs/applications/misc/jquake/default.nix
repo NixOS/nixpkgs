@@ -1,4 +1,6 @@
-{ lib, stdenv, fetchurl, copyDesktopItems, makeDesktopItem, unzip, jre8 }:
+{ lib, stdenv, fetchurl, copyDesktopItems, makeDesktopItem, unzip, jre8
+, logOutput ? false
+}:
 
 stdenv.mkDerivation rec {
   pname = "jquake";
@@ -14,10 +16,9 @@ stdenv.mkDerivation rec {
   sourceRoot = ".";
 
   postPatch = ''
-    # JQuake emits a lot of debug-like messages in console, but I
-    # don't think it's in our interest to void them by default. Log them at
-    # the appropriate level.
-    sed -i "/^java/ s/$/\ | logger -p user.debug/" JQuake.sh
+    # JQuake emits a lot of debug-like messages on stdout. Either drop the output
+    # stream entirely or log them at 'user.debug' level.
+    sed -i "/^java/ s/$/ ${if logOutput then "| logger -p user.debug" else "> \\/dev\\/null"}/" JQuake.sh
 
     # By default, an 'errors.log' file is created in the current directory.
     # cd into a temporary directory and let it be created there.

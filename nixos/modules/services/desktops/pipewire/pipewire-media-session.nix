@@ -15,6 +15,7 @@ let
   defaults = {
     alsa-monitor = (builtins.fromJSON (builtins.readFile ./alsa-monitor.conf.json));
     bluez-monitor = (builtins.fromJSON (builtins.readFile ./bluez-monitor.conf.json));
+    bluez-hardware = (builtins.fromJSON (builtins.readFile ./bluez-hardware.conf.json));
     media-session = (builtins.fromJSON (builtins.readFile ./media-session.conf.json));
     v4l2-monitor = (builtins.fromJSON (builtins.readFile ./v4l2-monitor.conf.json));
   };
@@ -22,6 +23,7 @@ let
   configs = {
     alsa-monitor = recursiveUpdate defaults.alsa-monitor cfg.config.alsa-monitor;
     bluez-monitor = recursiveUpdate defaults.bluez-monitor cfg.config.bluez-monitor;
+    bluez-hardware = defaults.bluez-hardware;
     media-session = recursiveUpdate defaults.media-session cfg.config.media-session;
     v4l2-monitor = recursiveUpdate defaults.v4l2-monitor cfg.config.v4l2-monitor;
   };
@@ -119,6 +121,10 @@ in {
     environment.etc."pipewire/media-session.d/bluez-monitor.conf" =
       mkIf config.services.pipewire.pulse.enable {
         source = json.generate "bluez-monitor.conf" configs.bluez-monitor;
+      };
+    environment.etc."pipewire/media-session.d/bluez-hardware.conf" =
+      mkIf config.services.pipewire.pulse.enable {
+        source = json.generate "bluez-hardware.conf" configs.bluez-hardware;
       };
 
     environment.etc."pipewire/media-session.d/with-jack" =

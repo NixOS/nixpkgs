@@ -9,20 +9,20 @@
 
 buildGoModule rec {
   pname = "shellhub-agent";
-  version = "0.7.1";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "shellhub-io";
     repo = "shellhub";
     rev = "v${version}";
-    sha256 = "0fgkjv7p2p0k58ifs77qfy0ni2yhrmk8rqyysjxq0im6j3f3az11";
+    sha256 = "02ka7acynkwkml2pavlv4j5vkm6x5aq5sfxgydv26qzs39f1wdgc";
   };
 
   modRoot = "./agent";
 
-  vendorSha256 = "1avl5xvav9y2vni5w3ksvrcz67x2kkadqw9p1cfq5rkjny1c2jrg";
+  vendorSha256 = "18z3vwcwkyj6hcvl35qmj034237h9l18dvcbx1hxry7qdwv807c9";
 
-  buildFlagsArray = [ "-ldflags=-s -w -X main.AgentVersion=v${version}" ];
+  ldflags = [ "-s" "-w" "-X main.AgentVersion=v${version}" ];
 
   passthru = {
     updateScript = genericUpdater {

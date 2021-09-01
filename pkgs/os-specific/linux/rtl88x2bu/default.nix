@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
   '';
 
+  enableParallelBuilding = true;
+
   meta = with lib; {
     description = "Realtek rtl88x2bu driver";
     homepage = "https://github.com/morrownr/88x2bu";

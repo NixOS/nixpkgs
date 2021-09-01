@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "scheme-bytestructures";
-  version = "1.0.7";
+  version = "1.0.10";
 
   src = fetchFromGitHub {
     owner = "TaylanUB";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0q0habjiy3h9cigb7q1br9kz6z212dn2ab31f6dgd3rrmsfn5rvb";
+    sha256 = "04oDvwvzTRzAVyywbcCm3Ug3p3xNbxjI7nOKYakEZZI=";
   };
 
   postConfigure = ''
@@ -34,6 +34,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/TaylanUB/scheme-bytestructures";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ ethancedwards8 ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

@@ -4,6 +4,7 @@ if [ -x "@runtimeShell@" ]; then export SHELL="@runtimeShell@"; fi;
 
 set -e
 set -o pipefail
+shopt -s inherit_errexit
 
 export PATH=@path@:$PATH
 
@@ -25,7 +26,7 @@ rollback=
 upgrade=
 upgrade_all=
 profile=/nix/var/nix/profiles/system
-buildHost=
+buildHost=localhost
 targetHost=
 maybeSudo=()
 
@@ -139,7 +140,7 @@ buildHostCmd() {
     if [ -z "$buildHost" ]; then
         "$@"
     elif [ -n "$remoteNix" ]; then
-        ssh $SSHOPTS "$buildHost" env PATH="$remoteNix":'$PATH' "${maybeSudo[@]}" "$@"
+        ssh $SSHOPTS "$buildHost" "${maybeSudo[@]}" env PATH="$remoteNix":'$PATH' "$@"
     else
         ssh $SSHOPTS "$buildHost" "${maybeSudo[@]}" "$@"
     fi
@@ -519,7 +520,7 @@ if [ "$action" = switch -o "$action" = boot -o "$action" = test -o "$action" = d
 fi
 
 
-if [ "$action" = build-vm ]; then
+if [ "$action" = build-vm -o "$action" = build-vm-with-bootloader ]; then
     cat >&2 <<EOF
 
 Done.  The virtual machine can be started by running $(echo $pathToConfig/bin/run-*-vm)

@@ -19,13 +19,13 @@ let
 in
 buildGoPackage rec {
   pname = "lxd";
-  version = "4.15";
+  version = "4.17";
 
   goPackagePath = "github.com/lxc/lxd";
 
   src = fetchurl {
     url = "https://linuxcontainers.org/downloads/lxd/lxd-${version}.tar.gz";
-    sha256 = "sha256-UXipGNWclBKgr0r0wav85Gnhp2SXkTvDFr9gKJWismU=";
+    sha256 = "1kzmgyg5kw3zw9qa6jabld6rmb53b6yy69h7y9znsdlf74jllljl";
   };
 
   postPatch = ''
@@ -39,6 +39,9 @@ buildGoPackage rec {
     rm _dist/src/github.com/lxc/lxd
     cp -r _dist/src/* ../../..
     popd
+
+    # required for go-dqlite. See: https://github.com/lxc/lxd/pull/8939
+    export CGO_LDFLAGS_ALLOW="(-Wl,-wrap,pthread_create)|(-Wl,-z,now)"
 
     makeFlagsArray+=("-tags libsqlite3")
   '';
@@ -69,7 +72,7 @@ buildGoPackage rec {
     description = "Daemon based on liblxc offering a REST API to manage containers";
     homepage = "https://linuxcontainers.org/lxd/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ fpletz wucke13 ];
+    maintainers = with maintainers; [ fpletz wucke13 marsam ];
     platforms = platforms.linux;
   };
 }

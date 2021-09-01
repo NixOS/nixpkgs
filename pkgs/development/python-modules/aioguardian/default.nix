@@ -15,13 +15,13 @@
 
 buildPythonPackage rec {
   pname = "aioguardian";
-  version = "1.0.7";
+  version = "1.0.8";
 
   src = fetchFromGitHub {
     owner = "bachya";
     repo = pname;
     rev = version;
-    sha256 = "sha256-KMhq86hcqoYloS/6VHsl+3KVEZBbN97ABrZlmEr32Z8=";
+    sha256 = "0nqsacg0yrsqr6qax4486ffk8r88ra5yixxd6r88jwscm2bmjg3p";
   };
 
   format = "pyproject";
@@ -44,15 +44,6 @@ buildPythonPackage rec {
     pytest-asyncio
     pytestCheckHook
   ];
-
-  postPatch = ''
-    # https://github.com/bachya/aioguardian/pull/66
-    substituteInPlace pyproject.toml \
-      --replace 'asyncio_dgram = "^1.0.1"' 'asyncio_dgram = "^2.0.0"'
-    # https://github.com/bachya/aioguardian/pull/67
-    substituteInPlace pyproject.toml \
-      --replace "poetry>=0.12" "poetry-core"
-  '';
 
   disabledTestPaths = [ "examples/" ];
 

@@ -2,9 +2,10 @@
 , asysocks
 , buildPythonPackage
 , colorama
-, fetchPypi
+, fetchFromGitHub
 , minikerberos
-, prompt_toolkit
+, prompt-toolkit
+, pycryptodomex
 , pythonOlder
 , six
 , tqdm
@@ -14,19 +15,22 @@
 
 buildPythonPackage rec {
   pname = "aiosmb";
-  version = "0.2.48";
+  version = "0.2.50";
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1b5bqpl8wbs0nm6025wlz4n5sns6ca1x6kgw9wx227flwf3qjlgm";
+  src = fetchFromGitHub {
+    owner = "skelsec";
+    repo = pname;
+    rev = version;
+    sha256 = "016pylxqmzm1hn1mvx6jhxvgckdqpf993sd1bki07pblmm4ikl6q";
   };
 
   propagatedBuildInputs = [
     asysocks
     colorama
     minikerberos
-    prompt_toolkit
+    prompt-toolkit
+    pycryptodomex
     six
     tqdm
     winacl
@@ -35,6 +39,7 @@ buildPythonPackage rec {
 
   # Project doesn't have tests
   doCheck = false;
+
   pythonImportsCheck = [ "aiosmb" ];
 
   meta = with lib; {

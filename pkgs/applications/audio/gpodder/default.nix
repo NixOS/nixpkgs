@@ -29,8 +29,14 @@ python3Packages.buildPythonApplication rec {
     glibcLocales
   ];
 
+  # as of 2021-07, the gobject-introspection setup hook does not
+  # work with `strictDeps` enabled, thus for proper `wrapGAppsHook`
+  # it needs to be disabled explicitly. https://github.com/NixOS/nixpkgs/issues/56943
+  strictDeps = false;
+
   buildInputs = [
     python3
+    gtk3
     gobject-introspection
     gnome.adwaita-icon-theme
   ];
@@ -49,7 +55,6 @@ python3Packages.buildPythonApplication rec {
     eyeD3
     podcastparser
     html5lib
-    gtk3
   ];
 
   makeFlags = [

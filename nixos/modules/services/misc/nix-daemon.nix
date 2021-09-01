@@ -458,7 +458,7 @@ in
                 description = "The flake reference to which <option>from></option> is to be rewritten.";
               };
               flake = mkOption {
-                type = types.unspecified;
+                type = types.nullOr types.attrs;
                 default = null;
                 example = literalExample "nixpkgs";
                 description = ''

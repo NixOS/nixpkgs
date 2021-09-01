@@ -20,14 +20,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gnome-feeds";
-  version = "0.16.1";
+  version = "0.16.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "gfeeds";
     rev = version;
-    sha256 = "10hq06nx7lcm3dqq34qkxc6k6383mvjs7pxii9y9995d9kk5a49k";
+    sha256 = "sha256-66dwVR9owg050aHCHJek7jYnT+/yyCKo4AaUE0hCqBA=";
   };
 
   format = "other";
@@ -51,7 +51,7 @@ python3.pkgs.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3.pkgs; [
     beautifulsoup4
-    dateutil
+    python-dateutil
     feedparser
     html5lib
     listparser

@@ -157,6 +157,13 @@ stdenv.mkDerivation {
       url = "https://github.com/systemd/systemd/commit/ab1aa6368a883bce88e3162fee2bea14aacedf23.patch";
       sha256 = "1b280l5jrjsg8qhsang199mpqjhkpix4c8bm3blknjnq9iv43add";
     })
+
+    # Fix CVE-2021-33910, disclosed 2021-07-20
+    (fetchpatch {
+      name = "CVE-2021-33910.patch";
+      url = "https://github.com/systemd/systemd/commit/441e0115646d54f080e5c3bb0ba477c892861ab9.patch";
+      sha256 = "1g1lk95igaadg67kah9bpi4zsc01rg398sd1247ghjsvl5hxn4v4";
+    })
   ];
 
   postPatch = ''

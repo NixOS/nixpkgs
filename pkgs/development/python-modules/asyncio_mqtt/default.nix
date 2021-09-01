@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "asyncio_mqtt";
-  version = "0.8.1";
+  version = "0.10.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c1b3bea68a35c83d290a89903079ffb311106195cd56867e201633a1ee1cad0c";
+    sha256 = "0s94dvgh1fazycppki5m6f9d60hc4ykhqfznlzpwl4dzknxplpsz";
   };
 
   propagatedBuildInputs = [

@@ -107,6 +107,23 @@
     </varlistentry>
   </variablelist>
   <para>
+    In addition, these arguments are recognised by the live image only:
+  </para>
+  <variablelist>
+    <varlistentry>
+      <term>
+        <literal>live.nixos.passwd=password</literal>
+      </term>
+      <listitem>
+        <para>
+          Set the password for the <literal>nixos</literal> live user.
+          This can be used for SSH access if there are issues using the
+          terminal.
+        </para>
+      </listitem>
+    </varlistentry>
+  </variablelist>
+  <para>
     Notice that for <literal>boot.shell_on_fail</literal>,
     <literal>boot.debug1</literal>,
     <literal>boot.debug1devices</literal>, and

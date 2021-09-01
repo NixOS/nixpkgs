@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "free42";
-  version = "3.0.4";
+  version = "3.0.6";
 
   src = fetchFromGitHub {
     owner = "thomasokken";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-ZoW5gBAUp/5U8Is3Nhx+SHY4d0F3PGOS1/WOokKRnCU=";
+    sha256 = "sha256-PIHokB7GlGtx1A0IqFX9+HA/Vab1CDpVS/qhk/y8Nzk=";
   };
 
   nativeBuildInputs = [ copyDesktopItems pkg-config ];

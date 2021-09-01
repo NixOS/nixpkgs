@@ -129,7 +129,15 @@ rustPlatform.buildRustPackage rec {
 ```
 
 This will retrieve the dependencies using fixed-output derivations from
-the specified lockfile.
+the specified lockfile. Note that setting `cargoLock.lockFile` doesn't
+add a `Cargo.lock` to your `src`, and a `Cargo.lock` is still required
+to build a rust package. A simple fix is to use:
+
+```nix
+postPatch = ''
+  cp ${./Cargo.lock} Cargo.lock
+'';
+```
 
 The output hash of each dependency that uses a git source must be
 specified in the `outputHashes` attribute. For example:
@@ -144,7 +152,7 @@ rustPlatform.buildRustPackage rec {
     outputHashes = {
       "finalfusion-0.14.0" = "17f4bsdzpcshwh74w5z119xjy2if6l2wgyjy56v621skr2r8y904";
     };
-  }
+  };
 
   # ...
 }

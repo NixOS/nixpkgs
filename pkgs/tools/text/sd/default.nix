@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, Security
+{ lib, stdenv, fetchFromGitHub, rustPlatform, installShellFiles, Security
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -14,7 +14,16 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "1iwgy9zzdxay6hb9pz47jchy03jrsy5csxijlq4i228qhqnvq1lr";
 
+  nativeBuildInputs = [ installShellFiles ];
+
   buildInputs = lib.optionals stdenv.isDarwin [ Security ];
+
+  preFixup = ''
+    installManPage $releaseDir/build/sd-*/out/sd.1
+
+    installShellCompletion $releaseDir/build/sd-*/out/sd.{bash,fish}
+    installShellCompletion --zsh $releaseDir/build/sd-*/out/_sd
+  '';
 
   meta = with lib; {
     description = "Intuitive find & replace CLI (sed alternative)";

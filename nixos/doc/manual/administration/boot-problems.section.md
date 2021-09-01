@@ -30,6 +30,12 @@ If NixOS fails to boot, there are a number of kernel command line parameters tha
 
 : Make systemd very verbose and send log messages to the console instead of the journal. For more parameters recognised by systemd, see systemd(1).
 
+In addition, these arguments are recognised by the live image only:
+
+`live.nixos.passwd=password`
+
+: Set the password for the `nixos` live user. This can be used for SSH access if there are issues using the terminal.
+
 Notice that for `boot.shell_on_fail`, `boot.debug1`, `boot.debug1devices`, and `boot.debug1mounts`, if you did **not** select "start the new shell as pid 1", and you `exit` from the new shell, boot will proceed normally from the point where it failed, as if you'd chosen "ignore the error and continue".
 
 If no login prompts or X11 login screens appear (e.g. due to hanging dependencies), you can press Alt+ArrowUp. If you’re lucky, this will start rescue mode (described above). (Also note that since most units have a 90-second timeout before systemd gives up on them, the `agetty` login prompts should appear eventually unless something is very wrong.)

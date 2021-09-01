@@ -2,8 +2,23 @@
 
 with pythonPackages;
 
-buildPythonApplication rec {
+let
+  # Watson is currently not compatible with Click 8. See the following
+  # upstream issues / MRs:
+  #
+  # https://github.com/TailorDev/Watson/issues/430
+  # https://github.com/TailorDev/Watson/pull/432
+  #
+  # Workaround the issue by providing click 7 explicitly.
+  click7 = pythonPackages.callPackage ../../../development/python-modules/click/7.nix {};
+  click7-didyoumean = click-didyoumean.override {
+    click = click7;
+  };
+in buildPythonApplication rec {
   pname = "watson";
+
+  # When you update Watson, please check whether the Click 7
+  # workaround above can go away.
   version = "2.0.1";
 
   src = fetchFromGitHub {
@@ -19,7 +34,7 @@ buildPythonApplication rec {
   '';
 
   checkInputs = [ pytestCheckHook pytest-mock mock pytest-datafiles ];
-  propagatedBuildInputs = [ arrow click click-didyoumean requests ];
+  propagatedBuildInputs = [ arrow click7 click7-didyoumean requests ];
   nativeBuildInputs = [ installShellFiles ];
 
   meta = with lib; {

@@ -18,7 +18,7 @@ stdenv.mkDerivation {
     zlib
   ];
 
-  phases = [ "unpackPhase" "installPhase" ];
+  dontConfigure = true;
   installPhase = ''
     mkdir -p "$out"
 

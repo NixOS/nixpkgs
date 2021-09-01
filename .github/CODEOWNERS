@@ -46,7 +46,6 @@
 /nixos/default.nix          @nbp @infinisil
 /nixos/lib/from-env.nix     @nbp @infinisil
 /nixos/lib/eval-config.nix  @nbp @infinisil
-/nixos/doc @ryantm
 /nixos/doc/manual/configuration/abstractions.xml      @nbp
 /nixos/doc/manual/configuration/config-file.xml       @nbp
 /nixos/doc/manual/configuration/config-syntax.xml     @nbp
@@ -96,8 +95,8 @@
 /pkgs/development/perl-modules      @volth @stigtsp
 
 # R
-/pkgs/applications/science/math/R   @peti
-/pkgs/development/r-modules         @peti
+/pkgs/applications/science/math/R   @jbedo @bcdarwin
+/pkgs/development/r-modules         @jbedo @bcdarwin
 
 # Ruby
 /pkgs/development/interpreters/ruby @marsam

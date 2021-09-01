@@ -62,6 +62,7 @@ let
           marsam
           timstott
           zimbatm
+          maxeaubrey
         ];
       };
     } // attrs');
@@ -194,9 +195,9 @@ rec {
   };
 
   terraform_1_0 = mkTerraform {
-    version = "1.0.0";
-    sha256 = "sha256-ddcT/I2Qn1pKFyhXgh+CcD3fSv2steSNmjyyiS2SE/o=";
-    vendorSha256 = "sha256-oFvoEsDunJR4IULdGwS6nHBKWEgUehgT+nNM41W/GYo=";
+    version = "1.0.5";
+    sha256 = "0nhxrlnwg76iiqs9hj6ls54176df78ys3356nxmd9ip8jx9ix47v";
+    vendorSha256 = "08fvp6w8xsv42jjgpr73kyah20g3979rf84ysrq5whvfmrbpzm2f";
     patches = [ ./provider-path-0_15.patch ];
     passthru = { inherit plugins; };
   };

@@ -1,4 +1,6 @@
-{ config, lib, stdenv
+{ config
+, lib
+, stdenv
 , mkDerivation
 , fetchFromGitHub
 , addOpenGLRunpath
@@ -41,7 +43,8 @@
 let
   inherit (lib) optional optionals;
 
-in mkDerivation rec {
+in
+mkDerivation rec {
   pname = "obs-studio";
   version = "27.0.0";
 
@@ -61,7 +64,13 @@ in mkDerivation rec {
     ./Change-product_version-to-user_agent_product.patch
   ];
 
-  nativeBuildInputs = [ addOpenGLRunpath cmake pkg-config ];
+  nativeBuildInputs = [
+    addOpenGLRunpath
+    cmake
+    pkg-config
+    makeWrapper
+  ]
+  ++ optional scriptingSupport swig;
 
   buildInputs = [
     curl
@@ -81,10 +90,9 @@ in mkDerivation rec {
     wayland
     x264
     libvlc
-    makeWrapper
     mbedtls
   ]
-  ++ optionals scriptingSupport [ luajit swig python3 ]
+  ++ optionals scriptingSupport [ luajit python3 ]
   ++ optional alsaSupport alsa-lib
   ++ optional pulseaudioSupport libpulseaudio
   ++ optional pipewireSupport pipewire;
@@ -132,7 +140,7 @@ in mkDerivation rec {
     '';
     homepage = "https://obsproject.com";
     maintainers = with maintainers; [ jb55 MP2E V ];
-    license = licenses.gpl2;
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    license = licenses.gpl2Plus;
+    platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
   };
 }

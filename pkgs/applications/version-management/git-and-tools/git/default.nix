@@ -25,7 +25,7 @@ assert sendEmailSupport -> perlSupport;
 assert svnSupport -> perlSupport;
 
 let
-  version = "2.31.1";
+  version = "2.32.0";
   svn = subversionClient.override { perlBindings = perlSupport; };
 
   gitwebPerlLibs = with perlPackages; [ CGI HTMLParser CGIFast FCGI FCGIProcManager HTMLTagCloud ];
@@ -37,7 +37,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-    sha256 = "10367n5sv4nsgaxy486pbp7nscx34vjk8vrb06jm9ffm8ix42qcz";
+    sha256 = "08rnm3ipjqdd2n31dw7mxl3iv9g4nxgc409krmz892a37kd43a38";
   };
 
   outputs = [ "out" ] ++ lib.optional withManual "doc";
@@ -290,11 +290,13 @@ stdenv.mkDerivation {
       fi
     }
 
-    # Shared permissions are forbidden in sandbox builds.
-    disable_test t0001-init shared
+    # Shared permissions are forbidden in sandbox builds:
+    substituteInPlace t/test-lib.sh \
+      --replace "test_set_prereq POSIXPERM" ""
+    # TODO: Investigate while these still fail (without POSIXPERM):
+    disable_test t0001-init 'shared overrides system'
+    disable_test t0001-init 'init honors global core.sharedRepository'
     disable_test t1301-shared-repo
-    disable_test t5324-split-commit-graph 'split commit-graph respects core.sharedrepository'
-    disable_test t4129-apply-samemode 'do not use core.sharedRepository for working tree files'
 
     # Our patched gettext never fallbacks
     disable_test t0201-gettext-fallbacks
@@ -335,8 +337,11 @@ stdenv.mkDerivation {
 
   stripDebugList = [ "lib" "libexec" "bin" "share/git/contrib/credential/libsecret" ];
 
-  passthru.tests = {
-    buildbot-integration = nixosTests.buildbot;
+  passthru = {
+    shellPath = "/bin/git-shell";
+    tests = {
+      buildbot-integration = nixosTests.buildbot;
+    };
   };
 
   meta = {
