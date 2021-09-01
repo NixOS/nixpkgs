@@ -31,7 +31,7 @@ buildPythonPackage rec {
   pytestFlagsArray = [ "-W ignore::DeprecationWarning" "tests/" ];
 
   meta = with lib; {
-    description = "Differentiate, compile, and transform Numpy code.";
+    description = "Differentiate, compile, and transform Numpy code";
     homepage    = "https://github.com/google/jax";
     license     = licenses.asl20;
     maintainers = with maintainers; [ samuela ];
