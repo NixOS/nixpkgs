@@ -12170,6 +12170,8 @@ with pkgs;
 
   rocm-thunk = callPackage ../development/libraries/rocm-thunk { };
 
+  rocminfo = callPackage ../development/tools/rocminfo { };
+
   rtags = callPackage ../development/tools/rtags {
     inherit (darwin) apple_sdk;
   };
