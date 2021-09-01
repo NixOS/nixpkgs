@@ -39,8 +39,8 @@ stdenv.mkDerivation rec {
     vala
     wrapGAppsHook
     # Prevents “error: Package `libhandy-1' not found in specified Vala API
-    # directories or GObject-Introspection GIR directories”, even though it
-    # should only be a runtime dependency.
+    # directories or GObject-Introspection GIR directories” with strictDeps,
+    # even though it should only be a runtime dependency.
     libhandy
   ];
 
@@ -50,7 +50,6 @@ stdenv.mkDerivation rec {
     glib
   ];
 
-  strictDeps = true;
   doCheck = true;
 
   passthru = {
