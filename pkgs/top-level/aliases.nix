@@ -477,6 +477,7 @@ mapAliases ({
   linux_5_10 = linuxKernel.kernels.linux_5_10;
   linux-rt_5_10 = linuxKernel.kernels.linux_rt_5_10;
   linux-rt_5_11 = linuxKernel.kernels.linux_rt_5_11;
+  linux_5_13 = linuxKernel.kernels.linux_5_13;
 
   # added 2020-04-04
   linuxPackages_testing_hardened = throw "linuxPackages_testing_hardened has been removed, please use linuxPackages_latest_hardened";
