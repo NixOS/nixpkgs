@@ -9610,6 +9610,8 @@ in {
 
   youtube-search = callPackage ../development/python-modules/youtube-search { };
 
+  youtube-search-python = callPackage ../development/python-modules/youtube-search-python { };
+
   youtube-transcript-api = callPackage ../development/python-modules/youtube-transcript-api { };
 
   yowsup = callPackage ../development/python-modules/yowsup { };
