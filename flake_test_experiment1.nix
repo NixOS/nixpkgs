@@ -6,11 +6,11 @@
   outputs = { self }:
     let
        
-      jobs = import ./pkgs/top-level/release.nix {
+      jobs =     ./pkgs/top-level/release.nix {
         nixpkgs = self;
       };
 
-      lib = import ./lib;
+      lib =     ./lib;
 
       systems = [
        "aarch64-linux"
@@ -27,7 +27,7 @@
     
     
     
-    jobs = import .pkgs/development/java-modules/junit/default.nix
+    jobs =      .pkgs/development/java-modules/junit/default.nix
  
     {
       lib = lib.     (final: prev: {
@@ -40,7 +40,7 @@
                     modules = modules ++ [ ./nixos/modules/virtualisation/qemu-vm.nix ];
                   })).config;
 
-                vmWithBootLoaderConfig = (import ./nixos/lib/eval-config.nix
+                vmWithBootLoaderConfig = (     ./nixos/lib/eval-config.nix
                   (args // {
                     modules = modules ++ [
                       ./nixos/modules/virtualisation/qemu-vm.nix
@@ -90,15 +90,15 @@
 
       htmlDocs = {
         nixpkgsManual = jobs.manual;
-        nixosManual = (import ./nixos/release-small.nix {
+        nixosManual = (    ./nixos/release-small.nix {
           nixpkgs = self;
         }).nixos.manual.x86_64-linux;
       };
 
-      legacyPackages = forAllSystems (system: import ./. { inherit system; });
+      legacyPackages = forAllSystems (system:      ./. { inherit system; });
 
       nixosModules = {
-        notDetected = import ./nixos/modules/installer/scan/not-detected.nix;
+        notDetected =      ./nixos/modules/installer/scan/not-detected.nix;
       };
     };
 
