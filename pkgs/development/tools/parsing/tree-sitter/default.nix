@@ -90,8 +90,9 @@ let
           in
           {
             name =
-              (lib.strings.removePrefix "tree-sitter-"
-                (lib.strings.removeSuffix "-grammar" name))
+              (lib.strings.replaceStrings ["-"] ["_"]
+                (lib.strings.removePrefix "tree-sitter-"
+                  (lib.strings.removeSuffix "-grammar" name)))
               + stdenv.hostPlatform.extensions.sharedLibrary;
             path = "${drv}/parser";
           }
