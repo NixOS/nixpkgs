@@ -86,7 +86,7 @@
           });
       });
 
-      checks.x86_64-linux.tarball = jobs.tarball;
+      checks.system.tarball = jobs.tarball;
 
       htmlDocs = {
         nixpkgsManual = jobs.manual;
