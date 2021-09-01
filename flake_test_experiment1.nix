@@ -47,8 +47,8 @@
                       { virtualisation.useBootLoader = true; }
                       ({ config, ... }: {
                         virtualisation.useEFIBoot =
-                                .boot.loader.systemd-boot.enable ||
-                                .boot.loader.efi.canTouchEfiVariables;
+                                 boot.loader.systemd-boot.enable ||
+                                 boot.loader.efi.canTouchEfiVariables;
                       })
                     ];
                   })).config;
