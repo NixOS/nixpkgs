@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "abseil-cpp";
-  version = "20210324.1";
+  version = "20210324.2";
 
   src = fetchFromGitHub {
     owner = "abseil";
     repo = "abseil-cpp";
     rev = version;
-    sha256 = "16w63brfwgiayiyhvawsnr14xyy5hpp68k8fj0z6yk0bjzw6jvjw";
+    sha256 = "0g9rbhk3mwjdfxk7cscd04vm8fphd5flz9yykpgvyy1nwa34zk3x";
   };
 
   patches = [
