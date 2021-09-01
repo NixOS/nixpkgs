@@ -31,6 +31,7 @@
 , libjpeg
 , libtiff
 , libpng
+, tbb
 , Cocoa
 , CoreSymbolication
 , OpenGL
@@ -67,6 +68,7 @@ stdenv.mkDerivation rec {
     libpng
     nlohmann_json
     python.pkgs.numpy
+    tbb
   ]
   ++ lib.optionals (!stdenv.isDarwin) [ libX11 libXpm libXft libXext libGLU libGL ]
   ++ lib.optionals (stdenv.isDarwin) [ Cocoa CoreSymbolication OpenGL ]
@@ -131,7 +133,7 @@ stdenv.mkDerivation rec {
     "-Dfftw3=OFF"
     "-Dfitsio=OFF"
     "-Dfortran=OFF"
-    "-Dimt=OFF"
+    "-Dimt=ON"
     "-Dgfal=OFF"
     "-Dgviz=OFF"
     "-Dhdfs=OFF"
