@@ -5566,6 +5566,8 @@ in {
 
   poetry-core = callPackage ../development/python-modules/poetry-core { };
 
+  poetry-semver = callPackage ../development/python-modules/poetry-semver { };
+
   poezio = callPackage ../applications/networking/instant-messengers/poezio { };
 
   polib = callPackage ../development/python-modules/polib { };
