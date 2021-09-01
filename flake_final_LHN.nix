@@ -71,7 +71,7 @@
                   };
 
               in
-              map addModuleDeclarationFile modules ++ [
+                  addModuleDeclarationFile modules ++ [
                 {
                   system.nixos.versionSuffix =
                     ".${final.substring 0 8 (   .lastModifiedDate or .lastModified or "19700101")}.${self.shortRev or "dirty"}";
