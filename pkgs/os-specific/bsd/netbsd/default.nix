@@ -166,6 +166,15 @@ in lib.makeScopeWithSplicing
       ./compat-setup-hook.sh
     ];
 
+    preConfigure = ''
+      make include/.stamp configure nbtool_config.h.in defs.mk.in
+    '';
+
+    configurePlatforms = [ "build" "host" ];
+    configureFlags = [
+      "--cache-file=config.cache"
+    ];
+
     # the build system re-runs `./configure` with `HOST_CC` (which is their
     # name for Build CC) as a compiler to make `defs.mk`, which is installed
     depsBuildBuild = [ buildPackages.stdenv.cc ] ++ commonDeps;
@@ -187,7 +196,10 @@ in lib.makeScopeWithSplicing
     ];
     RENAME = "-D";
 
-    patches = [ ./compat.patch ];
+    patches = [
+      ./compat-cxx-safe-header.patch
+      ./compat-dont-configure-twice.patch
+    ];
 
     postInstall = ''
       mv $out/include/compat/* $out/include
