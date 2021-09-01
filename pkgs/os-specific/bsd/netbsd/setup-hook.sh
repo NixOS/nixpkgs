@@ -7,4 +7,9 @@ mergeNetBSDSourceDir() {
   done
 }
 
+addNetBSDMakeFlags() {
+  makeFlags="INCSDIR=${!outputDev}/include $makeFlags"
+}
+
 postUnpackHooks+=(mergeNetBSDSourceDir)
+preConfigureHooks+=(addNetBSDMakeFlags)
