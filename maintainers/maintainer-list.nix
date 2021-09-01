@@ -12400,4 +12400,10 @@
     github = "rski";
     githubId = 2960312;
   };
+  staccato = {
+    name = "staccato";
+    email = "moveq@riseup.net";
+    github = "staccato";
+    githubId = 86573128;
+  };
 }

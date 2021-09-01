@@ -9751,4 +9751,6 @@ in {
   zwave-js-server-python = callPackage ../development/python-modules/zwave-js-server-python { };
 
   zxcvbn = callPackage ../development/python-modules/zxcvbn { };
+
+  rstcheck = callPackage ../development/python-modules/rstcheck { };
 }
