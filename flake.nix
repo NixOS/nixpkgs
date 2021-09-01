@@ -25,7 +25,8 @@
     
     
     jobs = import .pkgs/development/java-modules/junit/default.nix
-    in
+    
+ 
     {
       lib = lib.extend (final: prev: {
         nixosSystem = { modules, ... } @ args:
