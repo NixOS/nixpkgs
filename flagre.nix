@@ -101,4 +101,4 @@
         notDetected = import ./nixos/modules/installer/scan/not-detected.nix;
       };
     };
-}
+};
