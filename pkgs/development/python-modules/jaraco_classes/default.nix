@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchFromGitHub, isPy27
-, setuptools-scm, toml
+, setuptools-scm
 , more-itertools
 , pytestCheckHook
 }:
@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
-  nativeBuildInputs = [ setuptools-scm toml ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [ more-itertools ];
 

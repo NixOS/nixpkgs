@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "djangorestframework_simplejwt";
-  version = "4.7.1";
+  version = "4.8.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c0e9b617da337becb55e67935eb992fad84f861418e7ab5fb3e77a3fd18d4137";
+    sha256 = "153c973c5c154baf566be431de8527c2bd62557fde7373ebcb0f02b73b28e07a";
   };
 
   propagatedBuildInputs = [ django djangorestframework pyjwt ];

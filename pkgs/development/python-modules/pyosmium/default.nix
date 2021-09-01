@@ -1,10 +1,10 @@
 { lib, buildPythonPackage, fetchFromGitHub, cmake, python
 , libosmium, protozero, boost, expat, bzip2, zlib, pybind11
-, nose, shapely, pythonOlder, isPyPy, lz4 }:
+, nose, shapely, pythonOlder, isPyPy, lz4, requests }:
 
 buildPythonPackage rec {
   pname = "pyosmium";
-  version = "3.1.3";
+  version = "3.2.0";
 
   disabled = pythonOlder "3.4" || isPyPy;
 
@@ -12,11 +12,12 @@ buildPythonPackage rec {
     owner = "osmcode";
     repo = pname;
     rev = "v${version}";
-    sha256 = "11ma8nr7k2ixwwb55fiqvrj5qbmpgkyfk0canz4l0m8b7rcw3qsc";
+    sha256 = "0s9h1blz4vrgcvdiikbpi2d4cy69kg2s8ki4dzampm1s0pa92if5";
   };
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ libosmium protozero boost expat bzip2 zlib pybind11 lz4 ];
+  propagatedBuildInputs = [ requests ];
 
   preBuild = "cd ..";
 

@@ -2,6 +2,7 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
+, fetchpatch
 # propagatedBuildInputs
 , Babel
 , alabaster
@@ -37,6 +38,14 @@ buildPythonPackage rec {
     rev = "v${version}";
     sha256 = "sha256-0QdgHFX4r40BDHjpi9R40lXqT4n5ZgrIny+w070LZPE=";
   };
+
+  patches = [
+    (fetchpatch {
+      # Fix tests with pygments 2.10
+      url = "https://github.com/sphinx-doc/sphinx/commit/bde6c8d2effc56dc8b9098abee796167f972c306.patch";
+      sha256 = "0d0ddhgrrh7z9ix0f3zrc2gjb4d73f6ffm98zl62fzv5l4fd00lr";
+    })
+  ];
 
   propagatedBuildInputs = [
     Babel

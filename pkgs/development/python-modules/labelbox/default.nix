@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "labelbox";
-  version = "2.6.0";
+  version = "3.2.0";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "Labelbox";
     repo = "labelbox-python";
     rev = "V${version}";
-    sha256 = "1lkvc926i3c7isqhaja6k013qgla44cdhvkx76gpdyywq53i9mcb";
+    sha256 = "0vp1lk7hipa4ixa1zcy99r9b5xb1gv54h4i0izx6fv4zf9m0gmw1";
   };
 
   propagatedBuildInputs = [

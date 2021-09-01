@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "IMDbPY";
-  version = "2020.9.25";
+  version = "2021.4.18";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1p3j9j1jcgbw4626cvgpryhvczy9gzlg0laz6lflgq17m129gin2";
+    sha256 = "af57f03638ba3b8ab3d696bfef0eeaf6414385c85f09260aba0a16b32174853f";
   };
 
   patches = [ ./sql_error.patch ]; # Already fixed in master, but not yet in the current release. This can be removed upon the next version update

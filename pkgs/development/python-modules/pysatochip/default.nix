@@ -1,17 +1,35 @@
-{ lib, buildPythonPackage, fetchPypi, pyscard, ecdsa, pyaes
-, pythonOlder }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, certifi
+, cryptography
+, ecdsa
+, pyaes
+, pyopenssl
+, pyscard
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "pysatochip";
-  version = "0.11.4";
+  version = "0.12.3";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Jj/zZIS9aXmZ2xdi29Eun7iRIrIk9oBlrtN9+6opIMo=";
+    sha256 = "24db358a65c0402c299c0c62efcfbbfc98e494181cd30d3996949ac667d5b4d4";
   };
 
-  propagatedBuildInputs = [ pyscard ecdsa pyaes ];
+  postPatch = ''
+    substituteInPlace requirements.txt \
+      --replace "cryptography==3.3.2" "cryptography" \
+      --replace "ecdsa==0.15" "ecdsa" \
+      --replace "pyopenssl==20.0.0" "pyopenssl"
+  '';
+
+  propagatedBuildInputs = [ cryptography ecdsa pyaes pyopenssl pyscard ];
+
+  checkInputs = [ certifi ];
 
   pythonImportsCheck = [ "pysatochip" ];
 

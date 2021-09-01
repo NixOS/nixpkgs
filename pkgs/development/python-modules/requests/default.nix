@@ -1,4 +1,5 @@
 { lib
+, brotli
 , brotlicffi
 , buildPythonPackage
 , certifi
@@ -11,6 +12,7 @@
 , pytestCheckHook
 , urllib3
 , isPy27
+, isPy3k
 , trustme
 }:
 
@@ -34,12 +36,15 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
-    brotlicffi
     certifi
-    charset-normalizer
     chardet
     idna
     urllib3
+  ] ++ lib.optionals (isPy3k) [
+    brotlicffi
+    charset-normalizer
+  ] ++ lib.optionals (isPy27) [
+    brotli
   ];
 
   checkInputs = [

@@ -1,11 +1,8 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, codecov
 , pyjwt
-, pylint
 , pytestCheckHook
-, pytest-cov
 , python-dateutil
 , requests
 , responses
@@ -14,21 +11,12 @@
 
 buildPythonPackage rec {
   pname = "ibm-cloud-sdk-core";
-  version = "3.10.0";
+  version = "3.11.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ab9520be99066ec41a24e31ac653c28953adc8fc349f0fa53a598e1802a79cd6";
+    sha256 = "c855d0111dd570f36497cdb8c11510ae8d14fb70698f20529e19f88485266233";
   };
-
-  checkInputs = [
-    codecov
-    pylint
-    pytestCheckHook
-    pytest-cov
-    responses
-    tox
-  ];
 
   propagatedBuildInputs = [
     pyjwt
@@ -36,8 +24,14 @@ buildPythonPackage rec {
     requests
   ];
 
-  # Various tests try to access credential files which are not included with the source distribution
+  checkInputs = [
+    pytestCheckHook
+    responses
+    tox
+  ];
+
   disabledTests = [
+    # Various tests try to access credential files which are not included with the source distribution
     "test_configure_service"
     "test_cp4d_authenticator"
     "test_cwd"
@@ -49,6 +43,12 @@ buildPythonPackage rec {
     "test_iam"
     "test_read_external_sources_2"
     "test_retry_config_external"
+    # assertion error due to requests brotli support
+    "test_http_client"
+  ];
+
+  disabledTestPaths = [
+    "test/test_container_token_manager.py"
   ];
 
   meta = with lib; {

@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "simplejson";
-  version = "3.17.4";
+  version = "3.17.5";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-JfVTY2D0WBR89dbF+hOS9kcs/v7Dql/p0cXyLQyXGEc=";
+    sha256 = "1vljsd5bk12gasadkxcddwhmp38fj64x1aqi4frk3frq9lp8h3a1";
   };
 
   checkInputs = [

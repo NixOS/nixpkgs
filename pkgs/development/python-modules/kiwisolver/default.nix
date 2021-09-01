@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "kiwisolver";
-  version = "1.3.1";
+  version = "1.3.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "950a199911a8d94683a6b10321f9345d5a3a8433ec58b217ace979e18f16e248";
+    sha256 = "fc4453705b81d03568d5b808ad8f09c77c47534f6ac2e72e733f9ca4714aa75c";
   };
 
   NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-I${lib.getDev libcxx}/include/c++/v1";

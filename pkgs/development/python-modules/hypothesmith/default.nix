@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "hypothesmith";
-  version = "0.1.8";
+  version = "0.1.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-+f8EexXE7TEs49pX6idXD4bWtTzhKvnyXlnmV2oAQQo=";
+    sha256 = "039fd6aa0102f89df9df7ad4cff70aa8068678c13c3be2713c92568917317a04";
   };
 
   propagatedBuildInputs = [ hypothesis lark-parser libcst ];

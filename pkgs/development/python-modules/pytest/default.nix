@@ -19,13 +19,18 @@
 
 buildPythonPackage rec {
   pname = "pytest";
-  version = "6.2.4";
+  version = "6.2.5";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "50bcad0a0b9c5a72c8e4e7c9855a3ad496ca6a881a3641b4260605450772c54b";
+    sha256 = "131b36680866a76e6781d13f101efb86cf674ebb9762eb70d3082b6f29889e89";
   };
+
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "pluggy>=0.12,<1.0.0a1" "pluggy>=0.23,<2.0"
+  '';
 
   nativeBuildInputs = [ setuptools-scm ];
 
