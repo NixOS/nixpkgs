@@ -328,7 +328,7 @@ let
         # preparing for autoconfig
         mkdir -p "$out/lib/${libName}/defaults/pref"
 
-        echo 'pref("general.config.filename", "mozilla.cfg");' > "$out/lib/${libName}/defaults/pref/autoconfig.js"
+        echo 'pref("general.config.filename", "librewolf.cfg");' > "$out/lib/${libName}/defaults/pref/autoconfig.js"
         echo 'pref("general.config.obscure_value", 0);' >> "$out/lib/${libName}/defaults/pref/autoconfig.js"
 
         cat > "$out/lib/${libName}/mozilla.cfg" < ${mozillaCfg}
