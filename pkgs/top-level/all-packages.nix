@@ -10611,6 +10611,8 @@ with pkgs;
 
   nix-bash-completions = callPackage ../shells/bash/nix-bash-completions { };
 
+  yarn-bash-completion = callPackage ../shells/bash/yarn-completion { };
+
   undistract-me = callPackage ../shells/bash/undistract-me { };
 
   dash = callPackage ../shells/dash { };
