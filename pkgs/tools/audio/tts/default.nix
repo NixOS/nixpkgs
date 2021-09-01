@@ -16,20 +16,22 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "tts";
-  version = "0.2.0";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "coqui-ai";
     repo = "TTS";
     rev = "v${version}";
-    sha256 = "sha256-FlxR1bPkUZT3SPuWiK0oAuI9dKfurEZurB0NhyDgOyY=";
+    sha256 = "sha256-7YMNxZ15qQowEE0tE6x/LbtirNGp7h9OLyS1JSl9x2A=";
   };
 
   postPatch = ''
-    sed -i -e 's!librosa==[^"]*!librosa!' requirements.txt
-    sed -i -e 's!numba==[^"]*!numba!' requirements.txt
-    sed -i -e 's!numpy==[^"]*!numpy!' requirements.txt
-    sed -i -e 's!umap-learn==[^"]*!umap-learn!' requirements.txt
+    sed -i requirements.txt \
+      -e 's!librosa==[^"]*!librosa!' \
+      -e 's!mecab-python3==[^"]*!mecab-python3!' \
+      -e 's!numba==[^"]*!numba!' \
+      -e 's!numpy==[^"]*!numpy!' \
+      -e 's!umap-learn==[^"]*!umap-learn!'
   '';
 
   nativeBuildInputs = with python3.pkgs; [

@@ -24,5 +24,6 @@ stdenv.mkDerivation rec {
     license = licenses.isc;
     maintainers = with maintainers; [ flokli hexa ];
     platforms = platforms.linux;
+    broken = kernel.kernelAtLeast "5.14";
   };
 }

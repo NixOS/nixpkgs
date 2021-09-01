@@ -37,7 +37,7 @@ let
     do sleep 1; done
 
     curl() {
-        ${pkgs.curl}/bin/curl -sS -H "X-API-Key: $api_key" \
+        ${pkgs.curl}/bin/curl -sSLk -H "X-API-Key: $api_key" \
             --retry 1000 --retry-delay 1 --retry-all-errors \
             "$@"
     }
@@ -46,7 +46,7 @@ let
     old_cfg=$(curl ${cfg.guiAddress}/rest/config)
 
     # generate the new config by merging with the NixOS config options
-    new_cfg=$(echo "$old_cfg" | ${pkgs.jq}/bin/jq -c '. * {
+    new_cfg=$(printf '%s\n' "$old_cfg" | ${pkgs.jq}/bin/jq -c '. * {
         "devices": (${builtins.toJSON devices}${optionalString (! cfg.overrideDevices) " + .devices"}),
         "folders": (${builtins.toJSON folders}${optionalString (! cfg.overrideFolders) " + .folders"})
     } * ${builtins.toJSON cfg.extraOptions}')

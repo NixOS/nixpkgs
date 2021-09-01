@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "duplicati";
-  version = "2.0.6.1";
+  version = "2.0.6.3";
   channel = "beta";
-  build_date = "2021-05-03";
+  build_date = "2021-06-17";
 
   src = fetchzip {
     url = "https://github.com/duplicati/duplicati/releases/download/v${version}-${version}_${channel}_${build_date}/duplicati-${version}_${channel}_${build_date}.zip";
-    sha256 = "09537hswpicsx47vfdm78j3h7vvjd7nqjd2461jrln57nl7v7dac";
+    sha256 = "sha256-usMwlmer6rLgP46wGVkaAIocUW4MjuEpVWdX7rRcghg=";
     stripRoot = false;
   };
 

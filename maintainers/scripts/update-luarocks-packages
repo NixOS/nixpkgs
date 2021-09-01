@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -p nix-prefetch-git luarocks-nix python3 python3Packages.GitPython nix -i python3
+#!nix-shell update-luarocks-shell.nix -i python3
 
 # format:
 # $ nix run nixpkgs.python3Packages.black -c black update.py
@@ -19,7 +19,7 @@ import logging
 import textwrap
 from multiprocessing.dummy import Pool
 
-from typing import List, Tuple
+from typing import List, Tuple, Optional
 from pathlib import Path
 
 log = logging.getLogger()
@@ -50,10 +50,21 @@ FOOTER="""
 @dataclass
 class LuaPlugin:
     name: str
-    version: str
-    server: str
-    luaversion: str
-    maintainers: str
+    '''Name of the plugin, as seen on luarocks.org'''
+    src: str
+    '''address to the git repository'''
+    ref: Optional[str]
+    '''git reference (branch name/tag)'''
+    version: Optional[str]
+    '''Set it to pin a package '''
+    server: Optional[str]
+    '''luarocks.org registers packages under different manifests.
+    Its value can be 'http://luarocks.org/dev'
+    '''
+    luaversion: Optional[str]
+    '''Attribue of the lua interpreter if a package is available only for a specific lua version'''
+    maintainers: Optional[str]
+    ''' Optional string listing maintainers separated by spaces'''
 
     @property
     def normalized_name(self) -> str:
@@ -149,16 +160,33 @@ def generate_pkg_nix(plug: LuaPlugin):
     Our cache key associates "p.name-p.version" to its rockspec
     '''
     log.debug("Generating nix expression for %s", plug.name)
-    cmd = [ "luarocks", "nix", plug.name]
+    cmd = [ "luarocks", "nix"]
 
-    if plug.server:
-        cmd.append(f"--only-server={plug.server}")
 
     if plug.maintainers:
         cmd.append(f"--maintainers={plug.maintainers}")
 
-    if plug.version:
-        cmd.append(plug.version)
+    # updates plugin directly from its repository
+    print("server: [%s]" % plug.server)
+    # if plug.server == "src":
+    if plug.src != "":
+        if plug.src is None:
+            msg = "src must be set when 'version' is set to \"src\" for package %s" % plug.name
+            log.error(msg)
+            raise RuntimeError(msg)
+        log.debug("Updating from source %s", plug.src)
+        cmd.append(plug.src)
+    # update the plugin from luarocks
+    else:
+        cmd.append(plug.name)
+        if plug.version and plug.version != "src":
+
+            cmd.append(plug.version)
+
+    #
+    if plug.server != "src" and plug.server:
+        cmd.append(f"--only-server={plug.server}")
+
 
     if plug.luaversion:
         with CleanEnvironment():
@@ -169,7 +197,7 @@ def generate_pkg_nix(plug: LuaPlugin):
             lua_drv_path=subprocess.check_output(cmd2, text=True).strip()
             cmd.append(f"--lua-dir={lua_drv_path}/bin")
 
-    log.debug("running %s", cmd)
+    log.debug("running %s", ' '.join(cmd))
     output = subprocess.check_output(cmd, text=True)
     return (plug, output)
 
@@ -191,3 +219,4 @@ if __name__ == "__main__":
 
     main()
 
+#  vim: set ft=python noet fdm=manual fenc=utf-8 ff=unix sts=0 sw=4 ts=4 :
