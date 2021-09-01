@@ -2957,6 +2957,12 @@ with pkgs;
 
   inklecate = callPackage ../development/compilers/inklecate {};
 
+  intensity-normalization = callPackage ../applications/science/biology/intensity-normalization {
+    inherit (python3Packages)
+      buildPythonPackage fetchPypi pythonOlder pytestCheckHook
+      matplotlib nibabel numpy scikit-fuzzy scikitimage scikit-learn scipy statsmodels;
+  };
+
   interactsh = callPackage ../tools/misc/interactsh { };
 
   interlock = callPackage ../servers/interlock {};
