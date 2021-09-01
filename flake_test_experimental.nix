@@ -30,12 +30,12 @@
     jobs = import .pkgs/development/java-modules/junit/default.nix
  
     {
-      lib = lib.extend (final: prev: {
+      lib = lib.     (     : prev: {
         nixosSystem = { modules, ... } @ args:
           import ./nixos/lib/eval-config.nix (args // {
             modules =
               let
-                vmConfig = (import ./nixos/lib/eval-config.nix
+                vmConfig = (      ./nixos/lib/eval-config.nix
                   (args // {
                     modules = modules ++ [ ./nixos/modules/virtualisation/qemu-vm.nix ];
                   })).config;
