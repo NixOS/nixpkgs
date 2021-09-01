@@ -30,7 +30,7 @@
     jobs = import .pkgs/development/java-modules/junit/default.nix
  
     {
-      lib = lib.     (     : prev: {
+      lib = lib.     (final: prev: {
         nixosSystem = { modules, ... } @ args:
           import ./nixos/lib/eval-config.nix (args // {
             modules =
