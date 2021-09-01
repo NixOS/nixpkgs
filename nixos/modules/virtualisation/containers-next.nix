@@ -195,7 +195,7 @@ let
           Ephemeral = yesNo config.ephemeral;
           KillSignal = "SIGRTMIN+3";
           X-ActivationStrategy = config.activation.strategy;
-          PrivateUsers = mkDefault "yes";
+          PrivateUsers = mkDefault "pick";
         }
         (mkIf (!config.ephemeral) {
           LinkJournal = mkDefault "guest";
@@ -500,14 +500,13 @@ in {
           inherit (cfg.${container}) activation;
         in nameValuePair "systemd-nspawn@${container}" {
           preStart = mkBefore ''
-            mkdir -p /var/lib/machines/${container}/{etc,var}
+            mkdir -p /var/lib/machines/${container}/{etc,var,nix/var/nix}
             touch /var/lib/machines/${container}/etc/{os-release,machine-id} || true
           '';
 
           partOf = [ "machines.target" ];
           before = [ "machines.target" ];
 
-          #unitConfig.RequiresMountsFor = "/var/lib/machines/${container}";
           serviceConfig = mkMerge [
             {
               # Inherit settings from `systemd-nspawn@.service`.
@@ -538,7 +537,7 @@ in {
                 then "${activation.reloadScript}"
                 else "${pkgs.writeShellScriptBin "activate" ''
                   pid=$(machinectl show ${container} --value --property Leader)
-                  ${pkgs.util-linux}/bin/nsenter -t "$pid" -m -u -i -n -p \
+                  ${pkgs.util-linux}/bin/nsenter -t "$pid" -m -u -U -i -n -p \
                     -- ${images.${container}.container.config.system.build.toplevel}/bin/switch-to-configuration test
                 ''}/bin/activate";
             })
