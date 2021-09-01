@@ -5,7 +5,7 @@
 
   outputs = { self }:
     let
-      jobs = import .pkgs/development/java-modules/junit/default.nix
+       
       jobs = import ./pkgs/top-level/release.nix {
         nixpkgs = self;
       };
@@ -26,7 +26,7 @@
     
     
     
-    In
+    jobs = import .pkgs/development/java-modules/junit/default.nix
  
     {
       lib = lib.extend (final: prev: {
