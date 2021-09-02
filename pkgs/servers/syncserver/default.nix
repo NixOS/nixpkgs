@@ -14,27 +14,44 @@ let
           sha256 = "1vvymhf6ydc885ygqiqpa39xr9v302i1l6nzirjnczqy9llyqvpj";
         };
       });
+
+      pyramid = super.pyramid.overridePythonAttrs (oldAttrs: {
+        # Depends on webtest, which is not supported on Python 2.
+        checkInputs = [];
+        doCheck = false;
+      });
     };
   };
 
 # buildPythonPackage is necessary for syncserver to work with gunicorn or paster scripts
 in python.pkgs.buildPythonPackage rec {
   pname = "syncserver";
-  version = "1.8.0";
+  version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "mozilla-services";
     repo = "syncserver";
     rev = version;
-    sha256 = "0hxjns9hz7a8r87iqr1yfvny4vwj1rlhwcf8bh7j6lsf92mkmgy8";
+    sha256 = "0s13pbzjldpiyz6hgw5djwnwd8q7dai6c28vrb1vqanxhrfm1rwb";
   };
 
   # There are no tests
   doCheck = false;
 
   propagatedBuildInputs = with python.pkgs; [
-    cornice gunicorn pyramid requests simplejson sqlalchemy mozsvc tokenserver
-    serversyncstorage configparser
+    cornice
+    gunicorn
+    pyramid
+    requests
+    sqlalchemy
+    configparser
+    mozsvc
+    futures
+    soupsieve
+    umemcache
+    tokenserver
+    serversyncstorage
+    google-cloud-spanner
   ];
 
   meta = with lib; {
