@@ -6624,7 +6624,7 @@ with pkgs;
   };
 
   meilisearch = callPackage ../servers/search/meilisearch {
-    inherit (darwin.apple_sdk.frameworks) IOKit Security;
+    inherit (darwin.apple_sdk.frameworks) Security;
   };
 
   memtester = callPackage ../tools/system/memtester { };
