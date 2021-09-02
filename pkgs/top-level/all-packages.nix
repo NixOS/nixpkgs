@@ -12166,8 +12166,7 @@ with pkgs;
     inherit (llvmPackages_rocm) clang-unwrapped llvm;
   };
 
-  # Python >= 3.8 still gives a bunch of warnings.
-  rocm-smi = python37.pkgs.callPackage ../tools/system/rocm-smi { };
+  rocm-smi = python3Packages.callPackage ../tools/system/rocm-smi { };
 
   rocm-thunk = callPackage ../development/libraries/rocm-thunk { };
 
