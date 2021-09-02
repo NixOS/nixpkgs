@@ -1,7 +1,6 @@
 { lib
 , dbus
 , stdenv
-, ffmpeg
 , gst_all_1
 , xorg
 , libdrm
@@ -24,8 +23,12 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 ./weylus $out/bin/weylus
     copyDesktopItems ./weylus.desktop
+
+    runHook postInstall
   '';
 
   buildInputs = [

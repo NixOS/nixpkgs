@@ -199,6 +199,7 @@
   ./programs/vim.nix
   ./programs/wavemon.nix
   ./programs/waybar.nix
+  ./programs/weylus.nix
   ./programs/wireshark.nix
   ./programs/wshowkeys.nix
   ./programs/xfs_quota.nix
