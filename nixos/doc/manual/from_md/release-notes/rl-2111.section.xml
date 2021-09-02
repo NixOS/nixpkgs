@@ -207,6 +207,13 @@
           <link linkend="opt-services.postfixadmin.enable">postfixadmin</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://sr.ht/~emersion/soju">soju</link>, a
+          user-friendly IRC bouncer. Available as
+          <link xlink:href="options.html#opt-services.soju.enable">services.soju</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-incompatibilities">
@@ -1118,6 +1125,15 @@ Superuser created successfully.
           review the
           <link xlink:href="https://mariadb.com/kb/en/changes-and-improvements-in-mariadb-connector-c-32/">upstream
           release notes</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          GNOME desktop environment now enables
+          <literal>QGnomePlatform</literal> as the Qt platform theme,
+          which should avoid crashes when opening file chooser dialogs
+          in Qt apps by using XDG desktop portal. Additionally, it will
+          make the apps fit better visually.
         </para>
       </listitem>
     </itemizedlist>
