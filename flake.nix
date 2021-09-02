@@ -92,8 +92,6 @@
 
       legacyPackages = forAllSystems (system: import ./. { inherit system; });
 
-      nixosModules = {
-        notDetected = import ./nixos/modules/installer/scan/not-detected.nix;
-      };
+      nixosModules = import ./nixos/modules/flake-module-list.nix;
     };
 }
