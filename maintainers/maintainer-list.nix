@@ -10250,6 +10250,12 @@
     githubId = 8668915;
     name = "Stephane Schitter";
   };
+  staccato = {
+    name = "staccato";
+    email = "moveq@riseup.net";
+    github = "staccato";
+    githubId = 86573128;
+  };
   steell = {
     email = "steve@steellworks.com";
     github = "Steell";

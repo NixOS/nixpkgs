@@ -18,5 +18,6 @@ buildPythonPackage rec {
     description = "Checks syntax of reStructuredText and code blocks nested within it";
     homepage = "https://github.com/myint/rstcheck";
     license = licenses.mit;
+    maintainers = with maintainers; [ staccato ];
   };
 }
