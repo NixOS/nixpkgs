@@ -54,4 +54,12 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+
+  meta = with lib; {
+    description = "ROCm fork of the LLVM Compiler runtime libraries";
+    homepage = "https://github.com/RadeonOpenCompute/llvm-project";
+    license = licenses.ncsa;
+    maintainers = with maintainers; [ acowley danieldk lovesegfault ];
+    platforms = platforms.linux;
+  };
 }

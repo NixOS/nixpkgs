@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchFromGitHub
 , cmake
 , python3
@@ -91,7 +92,7 @@ in stdenv.mkDerivation rec {
     description = "ROCm fork of the LLVM compiler infrastructure";
     homepage = "https://github.com/RadeonOpenCompute/llvm-project";
     license = with licenses; [ ncsa ];
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ acowley danieldk lovesegfault ];
     platforms = platforms.linux;
   };
 }
