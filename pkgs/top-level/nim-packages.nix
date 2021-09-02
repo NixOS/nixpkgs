@@ -26,11 +26,17 @@ lib.makeScope newScope (self:
 
     karax = callPackage ../development/nim-packages/karax { };
 
+    lscolors = callPackage ../development/nim-packages/lscolors { };
+
     markdown = callPackage ../development/nim-packages/markdown { };
 
     nimcrypto = callPackage ../development/nim-packages/nimcrypto { };
 
+    nimbox = callPackage ../development/nim-packages/nimbox { };
+
     nimsimd = callPackage ../development/nim-packages/nimsimd { };
+
+    noise = callPackage ../development/nim-packages/noise { };
 
     packedjson = callPackage ../development/nim-packages/packedjson { };
 
