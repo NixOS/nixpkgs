@@ -9,6 +9,9 @@ lib.makeScope newScope (self:
       callPackage ../development/nim-packages/build-nim-package { };
     fetchNimble = callPackage ../development/nim-packages/fetch-nimble { };
 
+    astpatternmatching =
+      callPackage ../development/nim-packages/astpatternmatching { };
+
     bumpy = callPackage ../development/nim-packages/bumpy { };
 
     chroma = callPackage ../development/nim-packages/chroma { };
@@ -18,6 +21,8 @@ lib.makeScope newScope (self:
     frosty = callPackage ../development/nim-packages/frosty { };
 
     jester = callPackage ../development/nim-packages/jester { };
+
+    jsonschema = callPackage ../development/nim-packages/jsonschema { };
 
     karax = callPackage ../development/nim-packages/karax { };
 
