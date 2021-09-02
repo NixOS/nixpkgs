@@ -420,6 +420,27 @@ in
     };
   };
 
+  octolapse = buildPlugin rec {
+    pname = "Octolapse";
+    version = "0.4.1";
+
+    src = fetchFromGitHub {
+      owner = "FormerLurker";
+      repo = pname;
+      rev = "v${version}";
+      sha256 = "13q20g7brabplc198jh67lk65rn140r8217iak9b2jy3in8fggv4";
+    };
+
+    propagatedBuildInputs = with super; [ awesome-slugify setuptools pillow sarge six psutil file_read_backwards ];
+
+    meta = with lib; {
+      description = "Stabilized timelapses for Octoprint";
+      homepage = "https://github.com/FormerLurker/OctoLapse";
+      license = licenses.agpl3Plus;
+      maintainers = with maintainers; [ illustris j0hax ];
+    };
+  };
+
   octoprint-dashboard = buildPlugin rec {
     pname = "OctoPrint-Dashboard";
     version = "1.18.3";
