@@ -5,7 +5,7 @@
 
 stdenv.mkDerivation rec {
   pname = "ntfs3g";
-  version = "2017.3.23";
+  version = "2021.8.22";
 
   outputs = [ "out" "dev" "man" "doc" ];
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://tuxera.com/opensource/ntfs-3g_ntfsprogs-${version}.tgz";
-    sha256 = "1mb228p80hv97pgk3myyvgp975r9mxq56c6bdn1n24kngcfh4niy";
+    sha256 = "55b883aa05d94b2ec746ef3966cb41e66bed6db99f22ddd41d1b8b94bb202efb";
   };
 
   patchPhase = ''
