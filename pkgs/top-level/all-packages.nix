@@ -867,6 +867,8 @@ with pkgs;
     inherit (plasma5Packages) kdialog;
   };
 
+  akku = callPackage ../tools/package-management/akku { };
+
   albert = libsForQt5.callPackage ../applications/misc/albert {};
 
   arch-install-scripts = callPackage ../tools/misc/arch-install-scripts {};
@@ -2180,9 +2182,7 @@ with pkgs;
     '';
   });
 
-  caddy = callPackage ../servers/caddy {
-    buildGoModule = buildGo115Module;
-  };
+  caddy = callPackage ../servers/caddy { };
 
   traefik = callPackage ../servers/traefik { };
 
@@ -4129,6 +4129,8 @@ with pkgs;
   daemon = callPackage ../tools/system/daemon { };
 
   daemonize = callPackage ../tools/system/daemonize { };
+
+  danger-gitlab = callPackage ../applications/version-management/danger-gitlab { };
 
   daq = callPackage ../applications/networking/ids/daq { };
 
@@ -10608,6 +10610,8 @@ with pkgs;
   gradle-completion = callPackage ../shells/zsh/gradle-completion { };
 
   nix-bash-completions = callPackage ../shells/bash/nix-bash-completions { };
+
+  yarn-bash-completion = callPackage ../shells/bash/yarn-completion { };
 
   undistract-me = callPackage ../shells/bash/undistract-me { };
 
@@ -23725,6 +23729,8 @@ with pkgs;
   cgit = callPackage ../applications/version-management/git-and-tools/cgit {
     inherit (python3Packages) python wrapPython pygments markdown;
   };
+
+  chatty = callPackage ../applications/networking/instant-messengers/chatty { };
 
   chirp = callPackage ../applications/radio/chirp { };
 
