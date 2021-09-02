@@ -8512,6 +8512,8 @@ in {
 
   stem = callPackage ../development/python-modules/stem { };
 
+  stestr = callPackage ../development/python-modules/stestr { };
+
   stevedore = callPackage ../development/python-modules/stevedore { };
 
   stm32loader = callPackage ../development/python-modules/stm32loader { };
