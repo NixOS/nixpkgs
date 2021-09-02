@@ -431,10 +431,7 @@ in
       sha256 = "13q20g7brabplc198jh67lk65rn140r8217iak9b2jy3in8fggv4";
     };
 
-    # Test fails due to code executed on import, see #136513
-    #pythonImportsCheck = [ "octoprint_octolapse" ];
-
-    propagatedBuildInputs = with super; [ awesome-slugify setuptools pillow sarge six psutil file-read-backwards ];
+    propagatedBuildInputs = with super; [ awesome-slugify setuptools pillow sarge six psutil file_read_backwards ];
 
     meta = with lib; {
       description = "Stabilized timelapses for Octoprint";
