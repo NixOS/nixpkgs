@@ -1,6 +1,6 @@
 { lib, buildPythonApplication, fetchPypi
 , installShellFiles, pbr
-, flake8, mock, pycodestyle, pylint, tox
+, flake8, mock, pycodestyle, pylint, tox, stestr
 , nix-update-script
 , testVersion, git-machete
 }:
@@ -16,10 +16,7 @@ buildPythonApplication rec {
 
   nativeBuildInputs = [ installShellFiles pbr ];
 
-  # TODO: Add missing check inputs (2019-11-22):
-  # - stestr
-  doCheck = false;
-  checkInputs = [ flake8 mock pycodestyle pylint tox ];
+  checkInputs = [ flake8 mock pycodestyle pylint tox stestr ];
 
   postInstall = ''
       installShellCompletion --bash --name git-machete completion/git-machete.completion.bash
