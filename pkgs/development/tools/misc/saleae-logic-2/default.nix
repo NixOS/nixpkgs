@@ -1,10 +1,10 @@
 { lib, fetchurl, appimageTools, gtk3 }:
 let
   name = "saleae-logic-2";
-  version = "2.3.33";
+  version = "2.3.37";
   src = fetchurl {
     url = "https://downloads.saleae.com/logic2/Logic-${version}-master.AppImage";
-    sha256 = "09vypl03gj58byk963flskzkhl4qrd9qw1kh0sywbqnzbzvj5cgm";
+    sha256 = "0jclzd4s1r6h2p1r0vhmzz3jnwpp7d41g70lcamrsxidxrmm8d45";
   };
 in
 appimageTools.wrapType2 {
