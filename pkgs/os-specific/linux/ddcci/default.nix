@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "ddcci-driver";
-  version = "0.3.3";
+  version = "0.4.1";
   name = "${pname}-${kernel.version}-${version}";
 
   src = fetchFromGitLab {
     owner = "${pname}-linux";
     repo = "${pname}-linux";
     rev = "v${version}";
-    sha256 = "0vkkja3ykjil783zjpwp0vz7jy2fp9ccazzi3afd4fjk8gldin7f";
+    sha256 = "sha256-zw1K8ewQmuyU0avixxyOQxFHia6GLW0ysLw6zhioGuI=";
   };
 
   hardeningDisable = [ "pic" ];
