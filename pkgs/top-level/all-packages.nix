@@ -14364,6 +14364,8 @@ with pkgs;
     lua = lua5;
   } // (config.radare or {}));
 
+  ran = callPackage ../servers/http/ran { };
+
   retry = callPackage ../tools/system/retry { };
 
   rizin = pkgs.callPackage ../development/tools/analysis/rizin { };
