@@ -1,6 +1,13 @@
-{ lib, buildPythonPackage, fetchPypi
-, ffmpeg, rtmpdump, phantomjs2, atomicparsley, pycryptodome
-, websockets, mutagen
+{ lib
+, buildPythonPackage
+, fetchPypi
+, ffmpeg
+, rtmpdump
+, phantomjs2
+, atomicparsley
+, pycryptodome
+, websockets
+, mutagen
 , ffmpegSupport ? true
 , rtmpSupport ? true
 , phantomjsSupport ? false
@@ -12,12 +19,12 @@ buildPythonPackage rec {
   # The websites yt-dlp deals with are a very moving target. That means that
   # downloads break constantly. Because of that, updates should always be backported
   # to the latest stable release.
-  version = "2021.08.10";
+  version = "2021.9.2";
 
   src = fetchPypi {
     inherit pname;
     version = builtins.replaceStrings [ ".0" ] [ "." ] version;
-    sha256 = "8da1bf4dc4641d37d137443c4783109ee8393caad5e0d270d9d1d534e8f25240";
+    sha256 = "sha256-yn53zbBVuiaD31sIB6qxweEgy+AsjzXZ0yk9lNva6mM=";
   };
 
   # build_lazy_extractors assumes this directory exists but it is not present in
@@ -33,12 +40,14 @@ buildPythonPackage rec {
   # - ffmpeg: post-processing & transcoding support
   # - rtmpdump: download files over RTMP
   # - atomicparsley: embedding thumbnails
-  makeWrapperArgs = let
+  makeWrapperArgs =
+    let
       packagesToBinPath = [ atomicparsley ]
         ++ lib.optional ffmpegSupport ffmpeg
         ++ lib.optional rtmpSupport rtmpdump
         ++ lib.optional phantomjsSupport phantomjs2;
-    in [ ''--prefix PATH : "${lib.makeBinPath packagesToBinPath}"'' ];
+    in
+    [ ''--prefix PATH : "${lib.makeBinPath packagesToBinPath}"'' ];
 
   setupPyBuildFlags = [
     "build_lazy_extractors"
