@@ -6844,6 +6844,8 @@ with pkgs;
 
   mathpix-snipping-tool = callPackage ../tools/misc/mathpix-snipping-tool { };
 
+  matrix-conduit = callPackage ../servers/matrix-conduit { };
+
   /* Python 3.8 is currently broken with matrix-synapse since `python38Packages.bleach` fails
     (https://github.com/NixOS/nixpkgs/issues/76093) */
   matrix-synapse = callPackage ../servers/matrix-synapse { /*python3 = python38;*/ };
