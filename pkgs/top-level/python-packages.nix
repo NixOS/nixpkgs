@@ -2568,7 +2568,9 @@ in {
 
   fints = callPackage ../development/python-modules/fints { };
 
-  fiona = callPackage ../development/python-modules/fiona { };
+  fiona = callPackage ../development/python-modules/fiona {
+    gdal = pkgs.gdal_2;
+  };
 
   fipy = callPackage ../development/python-modules/fipy { };
 
