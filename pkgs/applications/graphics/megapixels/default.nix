@@ -4,6 +4,7 @@
 , meson
 , ninja
 , pkg-config
+, glib
 , wrapGAppsHook
 , epoxy
 , gtk4
@@ -35,13 +36,23 @@ stdenv.mkDerivation rec {
     sha256 = "0jnfzwvq58p4ksyifma10i158r2fb7fv72ymibgcxbnx596xpjb2";
   };
 
-  nativeBuildInputs = [ meson ninja pkg-config wrapGAppsHook ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    glib
+    wrapGAppsHook
+  ];
 
   buildInputs = [
     epoxy
     gtk4
     zbar
   ];
+
+  postInstall = ''
+    glib-compile-schemas $out/share/glib-2.0/schemas
+  '';
 
   preFixup = optionalString (tiffSupport || jpgSupport) ''
     gappsWrapperArgs+=(
