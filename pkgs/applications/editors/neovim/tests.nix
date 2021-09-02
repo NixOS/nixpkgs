@@ -132,4 +132,15 @@ rec {
     extraName = "-pathogen";
     configure.pathogen.pluginNames = [ "vim-nix" ];
   };
+
+  nvimWithLuaPackages = wrapNeovim2 "with-lua-packages" (makeNeovimConfig {
+    extraLuaPackages = ps: [ps.mpack];
+    customRC = ''
+      lua require("mpack")
+    '';
+  });
+
+  nvim_with_lua_packages = runTest nvimWithLuaPackages ''
+    ${nvimWithLuaPackages}/bin/nvim -i NONE --noplugin -es
+  '';
 })

@@ -13238,6 +13238,8 @@ with pkgs;
 
   arpa2cm = callPackage ../development/tools/build-managers/arpa2cm { };
 
+  arpa2common = callPackage ../development/libraries/arpa2common { };
+
   asn2quickder = python2Packages.callPackage ../development/tools/asn2quickder {};
 
   astyle = callPackage ../development/tools/misc/astyle { };
@@ -18510,7 +18512,7 @@ with pkgs;
 
   qrupdate = callPackage ../development/libraries/qrupdate { };
 
-  qgnomeplatform =  libsForQt514.callPackage ../development/libraries/qgnomeplatform { };
+  qgnomeplatform = libsForQt5.callPackage ../development/libraries/qgnomeplatform { };
 
   randomx = callPackage ../development/libraries/randomx { };
 
@@ -23729,6 +23731,8 @@ with pkgs;
   cgit = callPackage ../applications/version-management/git-and-tools/cgit {
     inherit (python3Packages) python wrapPython pygments markdown;
   };
+
+  chatty = callPackage ../applications/networking/instant-messengers/chatty { };
 
   chirp = callPackage ../applications/radio/chirp { };
 

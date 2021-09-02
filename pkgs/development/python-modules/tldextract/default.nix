@@ -14,12 +14,12 @@
 
 buildPythonPackage rec {
   pname   = "tldextract";
-  version = "3.1.1";
+  version = "3.1.2";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-HViDxJbaOoqnHR9NpIYs43TcfM9F5Ltn3rIBbsNPjTM=";
+    sha256 = "sha256-0gNMNVhlH32P2t6oP7aBBQstZi3GegDZUDJtyQIClEQ=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
