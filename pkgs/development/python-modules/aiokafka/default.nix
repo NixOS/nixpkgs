@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "aiokafka";
-  version = "0.7.1";
+  version = "0.7.2";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-D89ppIUliJJMDuCySrZUyN6Rlm01gFskz6ayHmqploc=";
+    sha256 = "1jyx80havb2iiiyrny33rl7av9cbjzyax25m7lm6z0ymij9pbvqg";
   };
 
   nativeBuildInputs = [
