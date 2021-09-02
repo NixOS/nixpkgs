@@ -2833,7 +2833,7 @@ with pkgs;
 
   gitjacker = callPackage ../tools/security/gitjacker { };
 
-  gixy = callPackage ../tools/admin/gixy { };
+  gixy = with python3Packages; toPythonApplication gixy;
 
   glpaper = callPackage ../development/tools/glpaper { };
 

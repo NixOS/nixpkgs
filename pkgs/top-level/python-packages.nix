@@ -2949,6 +2949,8 @@ in {
 
   git-sweep = callPackage ../development/python-modules/git-sweep { };
 
+  gixy = callPackage ../development/python-modules/gixy { };
+
   glances-api = callPackage ../development/python-modules/glances-api { };
 
   glasgow = callPackage ../development/python-modules/glasgow { };

@@ -1,11 +1,19 @@
-{ lib, fetchFromGitHub, python3 }:
+{ lib, fetchFromGitHub, buildPythonPackage
+, pythonAtLeast
+, isPy27
+, nose
+, cached-property
+, configargparse
+, jinja2
+, pyparsing
+, six }:
 
-python3.pkgs.buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "gixy";
   version = "0.1.20";
 
   # package is only compatible with python 2.7 and 3.5+
-  disabled = with python3.pkgs; !(pythonAtLeast "3.5" || isPy27);
+  disabled = !(pythonAtLeast "3.5" || isPy27);
 
   # fetching from GitHub because the PyPi source is missing the tests
   src = fetchFromGitHub {
@@ -19,13 +27,15 @@ python3.pkgs.buildPythonApplication rec {
     sed -ie '/argparse/d' setup.py
   '';
 
-  propagatedBuildInputs = with python3.pkgs; [
+  checkInputs = [
+    nose
+  ];
+
+  propagatedBuildInputs = [
     cached-property
     configargparse
-    pyparsing
     jinja2
-    nose
-    setuptools
+    pyparsing
     six
   ];
 
