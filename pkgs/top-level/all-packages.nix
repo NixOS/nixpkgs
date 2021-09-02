@@ -31433,6 +31433,8 @@ with pkgs;
 
   emu2 = callPackage ../misc/emulators/emu2 { };
 
+  apt = callPackage ../tools/package-management/apt { };
+
   dpkg = callPackage ../tools/package-management/dpkg { };
 
   dumb = callPackage ../misc/dumb { };
