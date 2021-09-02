@@ -1,4 +1,4 @@
-{ lib, fetchurl, appimageTools }:
+{ lib, fetchurl, appimageTools, gtk3 }:
 let
   name = "saleae-logic-2";
   version = "2.3.33";
@@ -11,11 +11,47 @@ appimageTools.wrapType2 {
   inherit name src;
 
   extraInstallCommands =
-    let appimageContents = appimageTools.extractType2 { inherit name src; }; in
-    ''
-      mkdir -p $out/etc/udev/rules.d
-      cp ${appimageContents}/resources/linux/99-SaleaeLogic.rules $out/etc/udev/rules.d/
-    '';
+    let
+      appimageContents = appimageTools.extractType2 { inherit name src; };
+    in
+      ''
+        mkdir -p $out/etc/udev/rules.d
+        cp ${appimageContents}/resources/linux/99-SaleaeLogic.rules $out/etc/udev/rules.d/
+      '';
+
+  profile = ''
+    export XDG_DATA_DIRS="${gtk3}/share/gsettings-schemas/${gtk3.name}''${XDG_DATA_DIRS:+:"''$XDG_DATA_DIRS"}"
+  '';
+
+  extraPkgs = pkgs: with pkgs; [
+    wget
+    unzip
+    glib
+    xorg.libX11
+    xorg.libxcb
+    xorg.libXcomposite
+    xorg.libXcursor
+    xorg.libXdamage
+    xorg.libXext
+    xorg.libXfixes
+    xorg.libXi
+    xorg.libXrender
+    xorg.libXtst
+    nss
+    nspr
+    dbus
+    gdk-pixbuf
+    gtk3
+    pango
+    atk
+    cairo
+    expat
+    xorg.libXrandr
+    xorg.libXScrnSaver
+    alsa-lib
+    at-spi2-core
+    cups
+  ];
 
   meta = with lib; {
     homepage = "https://www.saleae.com/";
