@@ -12,13 +12,15 @@ let
   # Parse a git source into different components.
   parseGit = src:
     let
-      parts = builtins.match ''git\+([^?]+)(\?rev=(.*))?#(.*)?'' src;
-      rev = builtins.elemAt parts 2;
+      parts = builtins.match ''git\+([^?]+)(\?(rev|tag|branch)=(.*))?#(.*)?'' src;
+      rev =
+        if builtins.elemAt parts 2 == "rev" then
+          builtins.elemAt parts 3 else null;
     in
     if parts == null then null
     else {
       url = builtins.elemAt parts 0;
-      sha = builtins.elemAt parts 3;
+      sha = builtins.elemAt parts 4;
     } // lib.optionalAttrs (rev != null) { inherit rev; };
 
   packages = (builtins.fromTOML (builtins.readFile lockFile)).package;
