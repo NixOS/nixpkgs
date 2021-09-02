@@ -9,12 +9,12 @@ in fetchzip {
 
   postFetch = ''
     mkdir -p $out/share/fonts
-    unzip -j $downloadedFile Helvetica\ Neue\ LT\ Std/\*.otf -d $out/share/fonts/opentype
+    unzip -j $downloadedFile "Helvetica Neue LT Std/*.otf" -d $out/share/fonts/opentype
   '';
 
   sha256 = "0ampp9vf9xw0sdppl4lb9i9h75ywljhdcqmzh45mx2x9m7h6xgg9";
 
-  meta = {
+  meta = with lib; {
     homepage = "https://web.archive.org/web/20190926040940/http://www.ephifonts.com/free-helvetica-font-helvetica-neue-lt-std.html";
     description = "Helvetica Neue LT Std font";
     longDescription = ''
@@ -28,8 +28,8 @@ in fetchzip {
       font. The numbers are well spaced and defined with high accuracy. The
       punctuation marks are heavily detailed as well.
     '';
-    license = lib.licenses.unfree;
-    maintainers = [ lib.maintainers.romildo ];
-    platforms = lib.platforms.all;
+    license = licenses.unfree;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ romildo ];
   };
 }
