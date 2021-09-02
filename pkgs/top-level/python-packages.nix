@@ -9628,6 +9628,8 @@ in {
 
   z3c-checkversions = callPackage ../development/python-modules/z3c-checkversions { };
 
+  z3c_testsetup = callPackage ../development/python-modules/z3c_testsetup { };
+
   z3 = (toPythonModule (pkgs.z3.override {
     inherit python;
   })).python;
