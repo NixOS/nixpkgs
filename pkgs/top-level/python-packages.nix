@@ -9662,6 +9662,8 @@ in {
 
   zerorpc = callPackage ../development/python-modules/zerorpc { };
 
+  zest_releaser = callPackage ../development/python-modules/zest_releaser { };
+
   zetup = callPackage ../development/python-modules/zetup { };
 
   zfec = callPackage ../development/python-modules/zfec { };
