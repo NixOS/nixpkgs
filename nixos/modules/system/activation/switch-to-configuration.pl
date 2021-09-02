@@ -136,6 +136,14 @@ sub fingerprintUnit {
     return abs_path($s) . (-f "${s}.d/overrides.conf" ? " " . abs_path "${s}.d/overrides.conf" : "");
 }
 
+# Activate the new configuration (i.e., update /etc, make accounts,
+# and so on).
+if ($action ne "dry-activate") {
+    my $res = 0;
+    print STDERR "activating the configuration...\n";
+    system("$out/activate", "$out") == 0 or $res = 2;
+}
+
 # Figure out what units need to be stopped, started, restarted or reloaded.
 my (%unitsToStop, %unitsToSkip, %unitsToStart, %unitsToRestart, %unitsToReload);
 
@@ -382,12 +390,6 @@ if (scalar (keys %unitsToStop) > 0) {
 
 print STDERR "NOT restarting the following changed units: ", join(", ", sort(keys %unitsToSkip)), "\n"
     if scalar(keys %unitsToSkip) > 0;
-
-# Activate the new configuration (i.e., update /etc, make accounts,
-# and so on).
-my $res = 0;
-print STDERR "activating the configuration...\n";
-system("$out/activate", "$out") == 0 or $res = 2;
 
 # Restart systemd if necessary. Note that this is done using the
 # current version of systemd, just in case the new one has trouble
