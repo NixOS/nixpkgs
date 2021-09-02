@@ -10611,6 +10611,8 @@ with pkgs;
 
   nix-bash-completions = callPackage ../shells/bash/nix-bash-completions { };
 
+  yarn-bash-completion = callPackage ../shells/bash/yarn-completion { };
+
   undistract-me = callPackage ../shells/bash/undistract-me { };
 
   dash = callPackage ../shells/dash { };
@@ -23282,6 +23284,8 @@ with pkgs;
   cgit = callPackage ../applications/version-management/git-and-tools/cgit {
     inherit (python3Packages) python wrapPython pygments markdown;
   };
+
+  chatty = callPackage ../applications/networking/instant-messengers/chatty { };
 
   chirp = callPackage ../applications/radio/chirp { };
 
