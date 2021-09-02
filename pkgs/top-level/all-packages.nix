@@ -7319,6 +7319,8 @@ with pkgs;
 
   mydumper = callPackage ../tools/backup/mydumper { };
 
+  mylvmbackup = callPackage ../tools/backup/mylvmbackup { };
+
   mysql2pgsql = callPackage ../tools/misc/mysql2pgsql { };
 
   mysqltuner = callPackage ../tools/misc/mysqltuner { };
