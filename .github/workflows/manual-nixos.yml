@@ -1,4 +1,4 @@
-name: "Build NixOS manual"
+"name: "Build NixOS manual"
 
 permissions: read-all
 
@@ -28,4 +28,5 @@ jobs:
           name: nixpkgs-ci
           signingKey: '${{ secrets.CACHIX_SIGNING_KEY }}'
       - name: Building NixOS manual
-        run: NIX_PATH=nixpkgs=$(pwd) nix-build --option restrict-eval true nixos/release.nix -A manual.x86_64-linux
+        run: NIX_PATH=nixpkgs=$(pwd) nix-build --option restrict-eval true nixos/release.nix -A manual.x86_64-linux"
+ https://github.com/NixOS/nixpkgs/actions/runs/1194366038/workflow#:~:text=name%3A%20%22Build%20NixOS,manual.x86_64-linux
