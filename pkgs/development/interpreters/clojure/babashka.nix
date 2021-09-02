@@ -2,17 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "babashka";
-  version = "0.5.1";
-
-  reflectionJson = fetchurl {
-    name = "reflection.json";
-    url = "https://github.com/babashka/${pname}/releases/download/v${version}/${pname}-${version}-reflection.json";
-    sha256 = "1mx89rrkxyn7s8nfif0564gjrpc299wzl0wfq9qx8blc6a1438a9";
-  };
+  version = "0.6.0";
 
   src = fetchurl {
     url = "https://github.com/babashka/${pname}/releases/download/v${version}/${pname}-${version}-standalone.jar";
-    sha256 = "0rp6lam3psnk12j69z8qp1ixyp7zvvjahn18mvkmc38naml0p514";
+    sha256 = "sha256-W7zcTs0nTw1ed04ev7WKAMyBd/2n4Mezo5kh0sHFyyc=";
   };
 
   dontUnpack = true;
@@ -27,43 +21,18 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     runHook preBuild
 
-    # https://github.com/babashka/babashka/blob/77daea7362d8e2562c89c315b1fbcefde6fa56a5/script/compile
+    # https://github.com/babashka/babashka/blob/v0.6.0/script/compile#L41-L52
     args=("-jar" "$BABASHKA_JAR"
           "-H:Name=$BABASHKA_BINARY"
-          "${lib.optionalString stdenv.isDarwin ''-H:-CheckToolchain''}"
           "-H:+ReportExceptionStackTraces"
-          "-J-Dclojure.spec.skip-macros=true"
-          "-J-Dclojure.compiler.direct-linking=true"
-          "-H:IncludeResources=BABASHKA_VERSION"
-          "-H:IncludeResources=META-INF/babashka/.*"
-          "-H:IncludeResources=SCI_VERSION"
-          "-H:ReflectionConfigurationFiles=${reflectionJson}"
-          "--initialize-at-build-time"
           # "-H:+PrintAnalysisCallTree"
           # "-H:+DashboardAll"
           # "-H:DashboardDump=reports/dump"
           # "-H:+DashboardPretty"
           # "-H:+DashboardJson"
-          "-H:Log=registerResource:"
-          "-H:EnableURLProtocols=http,https,jar"
-          "--enable-all-security-services"
-          "-H:+JNI"
           "--verbose"
           "--no-fallback"
-          "--no-server"
-          "--report-unsupported-elements-at-runtime"
-          "--initialize-at-run-time=org.postgresql.sspi.SSPIClient"
-          "--initialize-at-run-time=org.httpkit.client.ClientSslEngineFactory\$SSLHolder"
           "--native-image-info"
-          "--verbose"
-          "-H:ServiceLoaderFeatureExcludeServices=javax.sound.sampled.spi.AudioFileReader"
-          "-H:ServiceLoaderFeatureExcludeServices=javax.sound.midi.spi.MidiFileReader"
-          "-H:ServiceLoaderFeatureExcludeServices=javax.sound.sampled.spi.MixerProvider"
-          "-H:ServiceLoaderFeatureExcludeServices=javax.sound.sampled.spi.FormatConversionProvider"
-          "-H:ServiceLoaderFeatureExcludeServices=javax.sound.sampled.spi.AudioFileWriter"
-          "-H:ServiceLoaderFeatureExcludeServices=javax.sound.midi.spi.MidiDeviceProvider"
-          "-H:ServiceLoaderFeatureExcludeServices=javax.sound.midi.spi.SoundbankReader"
-          "-H:ServiceLoaderFeatureExcludeServices=javax.sound.midi.spi.MidiFileWriter"
           "$BABASHKA_XMX")
 
      native-image ''${args[@]}
@@ -113,6 +82,7 @@ stdenv.mkDerivation rec {
     - Library support via popular tools like the clojure CLI
     '';
     homepage = "https://github.com/babashka/babashka";
+    changelog = "https://github.com/babashka/babashka/blob/v${version}/CHANGELOG.md";
     license = licenses.epl10;
     platforms = graalvm11-ce.meta.platforms;
     maintainers = with maintainers; [
