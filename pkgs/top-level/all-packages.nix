@@ -19018,6 +19018,8 @@ with pkgs;
 
   tremor = callPackage ../development/libraries/tremor { };
 
+  triehash = callPackage ../tools/misc/triehash { };
+
   trillian = callPackage ../tools/misc/trillian {
     buildGoModule = buildGo115Module;
   };
