@@ -2,6 +2,9 @@
 
 with lib;
 
+let
+  cfg = config.boot;
+in
 {
 
   ###### interface
@@ -24,6 +27,14 @@ with lib;
       '';
     };
 
+    boot.tmpOnTmpfsSize = mkOption {
+      type = types.str;
+      default = "50%";
+      description = ''
+        Size of tmpfs in percentage.
+      '';
+    };
+
   };
 
   ###### implementation
@@ -35,7 +46,7 @@ with lib;
         what = "tmpfs";
         where = "/tmp";
         type = "tmpfs";
-        mountConfig.Options = [ "mode=1777" "strictatime" "rw" "nosuid" "nodev" "size=50%" ];
+        mountConfig.Options = [ "mode=1777" "strictatime" "rw" "nosuid" "nodev" "size=${cfg.tmpOnTmpfsSize}" ];
       }
     ];
 
