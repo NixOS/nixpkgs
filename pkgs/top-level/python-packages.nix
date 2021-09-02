@@ -3833,6 +3833,8 @@ in {
 
   j2cli = callPackage ../development/python-modules/j2cli { };
 
+  jaeger-client = callPackage ../development/python-modules/jaeger-client { };
+
   janus = callPackage ../development/python-modules/janus { };
 
   jaraco_classes = callPackage ../development/python-modules/jaraco_classes { };
