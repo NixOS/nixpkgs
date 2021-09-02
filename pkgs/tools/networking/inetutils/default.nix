@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "inetutils";
-  version = "2.0";
+  version = "2.2";
 
   src = fetchurl {
     url = "mirror://gnu/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-5XPVZuVTk5QAmYYuf4mUFkoO0S9ahsM0U4CEK9wSRyI=";
+    sha256 = "sha256-1Uf2kXLfc6/vaRoPeIYoD9eBrOoo3vT/S0shIIaonYA";
   };
 
   outputs = ["out" "apparmor"];
@@ -16,8 +16,6 @@ stdenv.mkDerivation rec {
   patches = [
     # https://git.congatec.com/yocto/meta-openembedded/commit/3402bfac6b595c622e4590a8ff5eaaa854e2a2a3
     ./inetutils-1_9-PATH_PROCNET_DEV.patch
-    ./whois-Update-ORG-TLD-server.patch
-    ./whois-Update-Indian-TLD-server.patch
   ];
 
   nativeBuildInputs = [ help2man perl /* for `whois' */ ];
