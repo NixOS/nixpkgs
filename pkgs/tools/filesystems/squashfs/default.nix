@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , zlib
 , xz
 , lz4
@@ -27,6 +28,12 @@ stdenv.mkDerivation rec {
     # c37bb4da4a5fa8c1cf114237ba364692dd522262, can be removed
     # when upgrading to the next version after 4.4
     ./0001-Mksquashfs-add-no-hardlinks-option.patch
+    (fetchpatch {
+      name = "CVE-2021-40153.patch";
+      url = "https://github.com/plougher/squashfs-tools/commit/79b5a555058eef4e1e7ff220c344d39f8cd09646.patch";
+      excludes = [ "squashfs-tools/unsquashfs.c" ];
+      sha256 = "1sqc076a2dp8w4pfpdmak0xy4ic364ln2ayngcbp5mp3k3jl3rlr";
+    })
   ] ++ lib.optional stdenv.isDarwin ./darwin.patch;
 
   buildInputs = [ zlib xz zstd lz4 lzo ];
