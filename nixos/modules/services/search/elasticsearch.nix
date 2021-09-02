@@ -5,8 +5,6 @@ with lib;
 let
   cfg = config.services.elasticsearch;
 
-  es6 = builtins.compareVersions cfg.package.version "6" >= 0;
-
   esConfig = ''
     network.host: ${cfg.listenAddress}
     cluster.name: ${cfg.cluster_name}
@@ -36,7 +34,8 @@ let
     postBuild = "${pkgs.coreutils}/bin/mkdir -p $out/plugins";
   };
 
-in {
+in
+{
 
   ###### interface
 
@@ -116,20 +115,20 @@ in {
 
     extraCmdLineOptions = mkOption {
       description = "Extra command line options for the elasticsearch launcher.";
-      default = [];
+      default = [ ];
       type = types.listOf types.str;
     };
 
     extraJavaOptions = mkOption {
       description = "Extra command line options for Java.";
-      default = [];
+      default = [ ];
       type = types.listOf types.str;
       example = [ "-Djava.net.preferIPv4Stack=true" ];
     };
 
     plugins = mkOption {
       description = "Extra elasticsearch plugins";
-      default = [];
+      default = [ ];
       type = types.listOf types.package;
       example = lib.literalExample "[ pkgs.elasticsearchPlugins.discovery-ec2 ]";
     };
@@ -146,9 +145,7 @@ in {
       path = [ pkgs.inetutils ];
       environment = {
         ES_HOME = cfg.dataDir;
-        ES_JAVA_OPTS = toString ( optional (!es6) [ "-Des.path.conf=${configDir}" ]
-                                  ++ cfg.extraJavaOptions);
-      } // optionalAttrs es6 {
+        ES_JAVA_OPTS = toString cfg.extraJavaOptions;
         ES_PATH_CONF = configDir;
       };
       serviceConfig = {
@@ -187,7 +184,10 @@ in {
         rm -f "${configDir}/logging.yml"
         cp ${loggingConfigFile} ${configDir}/${loggingConfigFilename}
         mkdir -p ${configDir}/scripts
-        ${optionalString es6 "cp ${cfg.package}/config/jvm.options ${configDir}/jvm.options"}
+        cp ${cfg.package}/config/jvm.options ${configDir}/jvm.options
+        # redirect jvm logs to the data directory
+        mkdir -m 0700 -p ${cfg.dataDir}/logs
+        ${pkgs.sd}/bin/sd 'logs/gc.log' '${cfg.dataDir}/logs/gc.log' ${configDir}/jvm.options \
 
         if [ "$(id -u)" = 0 ]; then chown -R elasticsearch:elasticsearch ${cfg.dataDir}; fi
       '';
