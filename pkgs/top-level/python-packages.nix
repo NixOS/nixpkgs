@@ -4413,6 +4413,8 @@ in {
 
   marshmallow-sqlalchemy = callPackage ../development/python-modules/marshmallow-sqlalchemy { };
 
+  martian = callPackage ../development/python-modules/martian { };
+
   mask-rcnn = callPackage ../development/python-modules/mask-rcnn { };
 
   mastodon-py = callPackage ../development/python-modules/mastodon-py { };
