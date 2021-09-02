@@ -8778,6 +8778,8 @@ in {
 
   thinc = callPackage ../development/python-modules/thinc { };
 
+  threadloop = callPackage ../development/python-modules/threadloop { };
+
   threadpool = callPackage ../development/python-modules/threadpool { };
 
   threadpoolctl = callPackage ../development/python-modules/threadpoolctl { };
