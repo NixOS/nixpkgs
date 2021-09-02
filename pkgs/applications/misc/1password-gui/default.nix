@@ -2,7 +2,7 @@
 , stdenv
 , fetchurl
 , makeWrapper
-, alsa-lib
+, alsaLib
 , at-spi2-atk
 , at-spi2-core
 , atk
@@ -33,11 +33,11 @@
 }:
 stdenv.mkDerivation rec {
   pname = "1password";
-  version = "8.1.1";
+  version = "8.2.0";
 
   src = fetchurl {
     url = "https://downloads.1password.com/linux/tar/stable/x86_64/1password-${version}.x64.tar.gz";
-    sha256 = "0y39sfhj9xrgprh01i9apzfkqzm6pdhjc8x59x5p5djjjvxbcwmy";
+    sha256 = "517813056c8ad4d32a865b0ecd20613ce3e268b1cefdd28bb74921aaf6ded7c2";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
 
   installPhase =
     let rpath = lib.makeLibraryPath [
-      alsa-lib
+      alsaLib
       at-spi2-atk
       at-spi2-core
       atk
@@ -112,7 +112,7 @@ stdenv.mkDerivation rec {
     description = "Multi-platform password manager";
     homepage = "https://1password.com/";
     license = licenses.unfree;
-    maintainers = with maintainers; [ timstott savannidgerinel ];
+    maintainers = with maintainers; [ timstott savannidgerinel jcdickinson ];
     platforms = [ "x86_64-linux" ];
   };
 }
