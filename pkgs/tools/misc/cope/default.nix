@@ -2,7 +2,7 @@
 
 perlPackages.buildPerlPackage rec {
   pname = "cope";
-  version = "unstable-2021-01-29";
+  version = "unstable-2015-01-29";
 
   src = fetchFromGitHub {
     owner = "lotrfan";
