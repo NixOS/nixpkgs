@@ -652,6 +652,8 @@ with self; with super; {
 
   wxPython = self.wxPython30;
 
+  venusian = callPackage ../development/python-modules/venusian/1.2.0.nix { };
+
   vcrpy = callPackage ../development/python-modules/vcrpy/3.nix { };
 
   xcaplib = callPackage ../development/python-modules/xcaplib { };
