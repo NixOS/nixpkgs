@@ -12150,7 +12150,6 @@ with pkgs;
 
   rocm-comgr = callPackage ../development/libraries/rocm-comgr {
     inherit (llvmPackages_rocm) clang lld llvm;
-    device-libs = rocm-device-libs;
   };
 
   rocm-device-libs = callPackage ../development/libraries/rocm-device-libs {
