@@ -12064,6 +12064,7 @@ with pkgs;
 
   inherit (callPackages ../development/compilers/nim { })
     nim-unwrapped nimble-unwrapped nim;
+  nimPackages = recurseIntoAttrs nim.pkgs;
 
   nrpl = callPackage ../development/tools/nrpl { };
 
