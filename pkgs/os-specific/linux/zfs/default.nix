@@ -55,11 +55,6 @@ let
 
       postPatch = optionalString buildKernel ''
         patchShebangs scripts
-
-        # https://github.com/openzfs/zfs/issues/10107
-        substituteInPlace ./config/kernel.m4 \
-          --replace "make modules" "make CC=$CC modules"
-
         # The arrays must remain the same length, so we repeat a flag that is
         # already part of the command and therefore has no effect.
         substituteInPlace ./module/os/linux/zfs/zfs_ctldir.c \
