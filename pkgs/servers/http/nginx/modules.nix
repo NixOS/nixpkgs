@@ -1,4 +1,4 @@
-{ fetchFromGitHub, lib, pkgs }:
+{ fetchFromGitHub, fetchFromGitLab, lib, pkgs }:
 
 let
 
@@ -31,6 +31,29 @@ in
       sha256 = "0yf34s11vgkcl03wbl6gjngm3p9hs8vvm7hkjkwhjh39vkk2a7cy";
     };
     inputs = [ pkgs.openssl ];
+  };
+
+  auth-a2aclr = {
+    src = fetchFromGitLab {
+      name = "auth-a2aclr";
+      owner = "arpa2";
+      repo = "nginx-auth-a2aclr";
+      rev = "bbabf9480bb2b40ac581551883a18dfa6522dd63";
+      sha256 = "sha256-h2LgMhreCgod+H/bNQzY9BvqG9ezkwikwWB3T6gHH04=";
+    };
+    inputs = [
+      (pkgs.arpa2common.overrideAttrs
+        (old: rec {
+          version = "0.7.1";
+
+          src = fetchFromGitLab {
+            owner = "arpa2";
+            repo = "arpa2common";
+            rev = "v${version}";
+            sha256 = "sha256-8zVsAlGtmya9EK4OkGUMu2FKJRn2Q3bg2QWGjqcii64=";
+          };
+        }))
+    ];
   };
 
   aws-auth = {
