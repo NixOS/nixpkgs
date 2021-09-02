@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, perl, libunwind, buildPackages }:
+{ li, stdenv, fetchurl, perl, libunwind, buildPackages }:
 
 stdenv.mkDerivation rec {
   pname = "strace";
