@@ -6624,6 +6624,8 @@ with pkgs;
 
   matrix-corporal = callPackage ../servers/matrix-corporal { };
 
+  mautrix-facebook = callPackage ../servers/mautrix-facebook { };
+
   mautrix-signal = recurseIntoAttrs (callPackage ../servers/mautrix-signal { });
 
   mautrix-telegram = recurseIntoAttrs (callPackage ../servers/mautrix-telegram { });
