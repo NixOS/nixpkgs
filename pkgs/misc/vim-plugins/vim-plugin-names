@@ -799,6 +799,7 @@ vim-erlang/vim-erlang-tags
 vim-pandoc/vim-pandoc
 vim-pandoc/vim-pandoc-after
 vim-pandoc/vim-pandoc-syntax
+vim-python/python-syntax
 vim-ruby/vim-ruby
 vim-scripts/a.vim
 vim-scripts/align
