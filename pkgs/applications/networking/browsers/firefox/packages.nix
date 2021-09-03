@@ -143,14 +143,12 @@ rec {
     postUnpack = ''
       cp -r ${lwPatches}/source_files/browser "$sourceRoot"
       chmod -R u+w "$sourceRoot/browser"
+
+      # Apply the librewolf patches to create our source tree
+      find '${lwPatches}/patches' -name '*.patch' -printf 'applying patch %p\n' -exec patch -p1 {} \;
     '';
 
-    patches = let
-      readSubdir = subdir:
-        filter (hasSuffix ".patch")
-        (map (path: "${lwPatches}/${subdir}/${path}")
-          (attrNames (readDir "${lwPatches}/${subdir}")));
-    in (readSubdir "patches") ++ (readSubdir "patches/sed-patches") ++ [
+    patches = [
       # An additional patch to fix a wayland compilation issue
       # that librewolf tickles out
       (fetchpatch {
