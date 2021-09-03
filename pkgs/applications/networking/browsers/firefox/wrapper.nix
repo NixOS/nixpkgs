@@ -41,6 +41,9 @@ let
     # https://github.com/mozilla/policy-templates#enterprisepoliciesenabled
     , extraPolicies ? {}
     , libName ? "firefox" # Important for tor package or the like
+    # For forks (distributions?) that set policies and other
+    # configuration in usr/lib
+    , extraLib ? browser.extraLib or null
     , nixExtensions ? null
     }:
 
@@ -340,13 +343,13 @@ let
         #   END EXTRA PREF CHANGES  #
         #                           #
         #############################
-      '' + lib.optionalString (! (isNull browser.extraLib)) ''
+      '' + lib.optionalString (! (isNull extraLib)) ''
         # additional files included from forks; ensure policies.json,
         # prefs and mozilla.cfg are still set up correctly.
         #
         # TODO: This is a band-aid for librewolf, we should design the
         # whole wrapper better for this use case.
-        cp -r ${browser.extraLib}/* "$out/lib/${libName}/"
+        cp -r ${extraLib}/* "$out/lib/${libName}/"
       '';
 
       preferLocalBuild = true;
