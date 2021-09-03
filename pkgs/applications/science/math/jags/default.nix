@@ -6,7 +6,11 @@ stdenv.mkDerivation rec {
     url = "mirror://sourceforge/mcmc-jags/${name}.tar.gz";
     sha256 = "1z3icccg2ic56vmhyrpinlsvpq7kcaflk1731rgpvz9bk1bxvica";
   };
-  buildInputs = [gfortran blas lapack];
+
+  nativeBuildInputs = [ gfortran ];
+
+  buildInputs = [ blas lapack ];
+
   configureFlags = [ "--with-blas=-lblas" "--with-lapack=-llapack" ];
 
   meta = with lib; {
