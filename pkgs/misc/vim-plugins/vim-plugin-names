@@ -854,6 +854,7 @@ whonore/Coqtail
 will133/vim-dirdiff
 wincent/command-t
 wincent/ferret
+wincent/terminus
 windwp/nvim-autopairs
 winston0410/cmd-parser.nvim
 winston0410/range-highlight.nvim

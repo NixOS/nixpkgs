@@ -5594,6 +5594,18 @@ final: prev:
     meta.homepage = "https://github.com/jacoborus/tender.vim/";
   };
 
+  terminus = buildVimPluginFrom2Nix {
+    pname = "terminus";
+    version = "2021-06-12";
+    src = fetchFromGitHub {
+      owner = "wincent";
+      repo = "terminus";
+      rev = "e8bc19c8156d955762c31d0964eeb7c84889f42e";
+      sha256 = "1w4wc6y72mk80ivv55hs8liwa8fnhkyvly8dnny1jhfzs3bbk8kg";
+    };
+    meta.homepage = "https://github.com/wincent/terminus/";
+  };
+
   termwrapper-nvim = buildVimPluginFrom2Nix {
     pname = "termwrapper.nvim";
     version = "2021-03-28";
