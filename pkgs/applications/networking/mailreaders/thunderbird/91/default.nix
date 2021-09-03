@@ -11,6 +11,12 @@ callPackage (import ../../../browsers/firefox/common.nix rec {
   };
   patches = [
     ./no-buildconfig-90.patch
+
+    # There is a bug in Thunderbird 91 where add-ons are required
+    # to be signed when the build is run with default settings.
+    # https://bugzilla.mozilla.org/show_bug.cgi?id=1727113
+    # https://phabricator.services.mozilla.com/D124361
+    ./D124361.diff
   ];
 
   meta = with lib; {
