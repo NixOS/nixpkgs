@@ -27,6 +27,11 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
+  # powershell looks for liblttng-ust.so.0 as of 7.1.4
+  postInstall = ''
+    ln -s $out/lib/liblttng-ust.so.1 $out/lib/liblttng-ust.so.0
+  '';
+
   propagatedBuildInputs = [ liburcu ];
 
   enableParallelBuilding = true;
