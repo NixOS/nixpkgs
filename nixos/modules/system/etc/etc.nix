@@ -55,7 +55,7 @@ let
     mkdir -p "$out/etc"
     ${concatMapStringsSep "\n" (etcEntry: escapeShellArgs [
       "makeEtcEntry"
-      etcEntry.source
+      "${etcEntry.source}"
       etcEntry.target
       etcEntry.mode
       etcEntry.user
