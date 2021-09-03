@@ -1456,7 +1456,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) PCSC;
   };
 
-  cozy = callPackage ../applications/audio/cozy-audiobooks { };
+  cozy = callPackage ../applications/audio/cozy { };
 
   cpuid = callPackage ../os-specific/linux/cpuid { };
 
