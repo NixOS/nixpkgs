@@ -31534,7 +31534,9 @@ with pkgs;
 
   hatari = callPackage ../misc/emulators/hatari { };
 
-  hck = callPackage ../tools/text/hck { };
+  hck = callPackage ../tools/text/hck {
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
+  };
 
   helm = callPackage ../applications/audio/helm { };
 
