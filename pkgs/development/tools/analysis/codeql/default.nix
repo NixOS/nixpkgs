@@ -1,14 +1,4 @@
-{ lib, stdenv
-, fetchzip
-, zlib
-, xorg
-, freetype
-, alsa-lib
-, jdk11
-, curl
-, lttng-ust
-, autoPatchelfHook
-}:
+{ lib, stdenv, fetchzip, zlib, xorg, freetype, jdk11, curl, autoPatchelfHook }:
 
 stdenv.mkDerivation rec {
   pname = "codeql";
@@ -31,12 +21,9 @@ stdenv.mkDerivation rec {
     xorg.libXtst
     xorg.libXrender
     freetype
-    alsa-lib
     jdk11
     stdenv.cc.cc.lib
     curl
-    lttng-ust
-    autoPatchelfHook
   ];
 
   installPhase = ''
