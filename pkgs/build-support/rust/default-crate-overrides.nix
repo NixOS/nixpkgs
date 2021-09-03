@@ -3,7 +3,6 @@
 , pkg-config
 , curl
 , darwin
-, libiconv
 , libgit2
 , libssh2
 , openssl
@@ -40,7 +39,7 @@ in
 
   cargo = attrs: {
     buildInputs = [ openssl zlib curl ]
-      ++ lib.optionals stdenv.isDarwin [ CoreFoundation Security libiconv ];
+      ++ lib.optionals stdenv.isDarwin [ CoreFoundation Security ];
   };
 
   libz-sys = attrs: {
