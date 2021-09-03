@@ -1020,9 +1020,11 @@ broken-packages:
   - dgim
   - dgs
   - dhall-check
+  - dhall-csv
   - dhall-fly
   - dhall-text
   - dhall-to-cabal
+  - dhall-toml
   - dhcp-lease-parser
   - dhrun
   - dia-base
@@ -2534,6 +2536,7 @@ broken-packages:
   - IsNull
   - iso8601-duration
   - isobmff
+  - isocline
   - isotope
   - itcli
   - itemfield
@@ -4800,6 +4803,7 @@ broken-packages:
   - th-traced
   - thumbnail-plus
   - tianbar
+  - ticket-management
   - TicTacToe
   - tictactoe3d
   - tidal-midi
@@ -5327,6 +5331,7 @@ broken-packages:
   - yandex-translate
   - yaop
   - yap
+  - yapb
   - yarr
   - yaya-test
   - yaya-unsafe-test
