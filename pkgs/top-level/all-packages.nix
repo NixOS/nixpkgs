@@ -7271,6 +7271,8 @@ with pkgs;
 
   mscgen = callPackage ../tools/graphics/mscgen { };
 
+  metabigor = callPackage ../tools/security/metabigor { };
+
   metasploit = callPackage ../tools/security/metasploit { };
 
   ms-sys = callPackage ../tools/misc/ms-sys { };
