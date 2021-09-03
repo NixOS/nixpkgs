@@ -5185,6 +5185,18 @@ final: prev:
     meta.homepage = "https://github.com/srcery-colors/srcery-vim/";
   };
 
+  sslsecure-vim = buildVimPluginFrom2Nix {
+    pname = "sslsecure.vim";
+    version = "2017-07-27";
+    src = fetchFromGitHub {
+      owner = "chr4";
+      repo = "sslsecure.vim";
+      rev = "a1ddb42bf7ebbe9db48109bb89433492754833cf";
+      sha256 = "1wjrpfphr6wwikrii2jxrw2l8523zzfbnrr6pjivj6ml86b38yk4";
+    };
+    meta.homepage = "https://github.com/chr4/sslsecure.vim/";
+  };
+
   stan-vim = buildVimPluginFrom2Nix {
     pname = "stan-vim";
     version = "2021-05-28";

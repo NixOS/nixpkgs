@@ -62,6 +62,7 @@ chikatoike/concealedyank.vim
 chikatoike/sourcemap.vim
 chkno/vim-haskell-module-name
 chr4/nginx.vim
+chr4/sslsecure.vim
 chrisbra/CheckAttach
 chrisbra/csv.vim
 chrisbra/NrrwRgn
