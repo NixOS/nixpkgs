@@ -9,7 +9,7 @@
 
 , python2, python3, perl, pkg-config
 , nspr, systemd, libkrb5
-, util-linux, alsaLib
+, util-linux, alsa-lib
 , bison, gperf
 , glib, gtk3, dbus-glib
 , glibc
@@ -42,7 +42,6 @@ buildFun:
 with lib;
 
 let
-  jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   python2WithPackages = python2.withPackages(ps: with ps; [
     ply jinja2 setuptools
   ]);
@@ -75,15 +74,16 @@ let
     in attrs: concatStringsSep " " (attrValues (mapAttrs toFlag attrs));
 
   # https://source.chromium.org/chromium/chromium/src/+/master:build/linux/unbundle/replace_gn_files.py
-  gnSystemLibraries = [
+  gnSystemLibraries = lib.optionals (!chromiumVersionAtLeast "93") [
     "ffmpeg"
+    "snappy"
+  ] ++ [
     "flac"
     "libjpeg"
     "libpng"
     "libwebp"
     "libxslt"
     "opus"
-    "snappy"
     "zlib"
   ];
 
@@ -143,13 +143,12 @@ let
 
     buildInputs = defaultDependencies ++ [
       nspr nss systemd
-      util-linux alsaLib
+      util-linux alsa-lib
       bison gperf libkrb5
       glib gtk3 dbus-glib
       libXScrnSaver libXcursor libXtst libxshmfence libGLU libGL
       mesa # required for libgbm
       pciutils protobuf speechd libXdamage at-spi2-core
-      jre
       pipewire
       libva
       libdrm wayland mesa.drivers libxkbcommon
@@ -164,7 +163,6 @@ let
       ./patches/widevine-79.patch # For bundling Widevine (DRM), might be replaceable via bundle_widevine_cdm=true in gnFlags
       # Fix the build by adding a missing dependency (s. https://crbug.com/1197837):
       ./patches/fix-missing-atspi2-dependency.patch
-      ./patches/closure_compiler-Use-the-Java-binary-from-the-system.patch
     ] ++ lib.optionals (chromiumVersionAtLeast "93") [
       # We need to revert this patch to build M93 with LLVM 12.
       (githubPatch {
@@ -205,7 +203,7 @@ let
       substituteInPlace services/audio/audio_sandbox_hook_linux.cc \
         --replace \
           '/usr/share/alsa/' \
-          '${alsaLib}/share/alsa/' \
+          '${alsa-lib}/share/alsa/' \
         --replace \
           '/usr/lib/x86_64-linux-gnu/gconv/' \
           '${glibc}/lib/gconv/' \
@@ -226,9 +224,10 @@ let
       sed -i -e 's,/usr,/run/current-system/sw,' chrome/common/chrome_paths.cc
 
       patchShebangs .
-      # use our own nodejs
+      # Link to our own Node.js and Java (required during the build):
       mkdir -p third_party/node/linux/node-linux-x64/bin
       ln -s "$(command -v node)" third_party/node/linux/node-linux-x64/bin/node
+      ln -s "${jre8}/bin/java" third_party/jdk/current/bin/
 
       # Allow building against system libraries in official builds
       sed -i 's/OFFICIAL_BUILD/GOOGLE_CHROME_BUILD/' tools/generate_shim_headers/generate_shim_headers.py
@@ -243,25 +242,12 @@ let
     '';
 
     gnFlags = mkGnFlags ({
+      # Main build and toolchain settings:
       is_official_build = true;
       custom_toolchain = "//build/toolchain/linux/unbundle:default";
       host_toolchain = "//build/toolchain/linux/unbundle:default";
-      system_wayland_scanner_path = "${wayland}/bin/wayland-scanner";
-
       use_sysroot = false;
-      use_gnome_keyring = gnomeKeyringSupport;
-      use_gio = gnomeSupport;
-      # ninja: error: '../../native_client/toolchain/linux_x86/pnacl_newlib/bin/x86_64-nacl-objcopy',
-      # needed by 'nacl_irt_x86_64.nexe', missing and no known rule to make it
-      enable_nacl = false;
-      # Enabling the Widevine component here doesn't affect whether we can
-      # redistribute the chromium package; the Widevine component is either
-      # added later in the wrapped -wv build or downloaded from Google.
-      enable_widevine = true;
-      use_cups = cupsSupport;
-      # Provides the enable-webrtc-pipewire-capturer flag to support Wayland screen capture.
-      rtc_use_pipewire = true;
-
+      system_wayland_scanner_path = "${wayland}/bin/wayland-scanner";
       treat_warnings_as_errors = false;
       clang_use_chrome_plugins = false;
       blink_symbol_level = 0;
@@ -272,6 +258,21 @@ let
       # Note: The API key is for NixOS/nixpkgs use ONLY.
       # For your own distribution, please get your own set of keys.
       google_api_key = "AIzaSyDGi15Zwl11UNe6Y-5XW_upsfyw31qwZPI";
+
+      # Optional features:
+      use_cups = cupsSupport;
+      use_gio = gnomeSupport;
+      use_gnome_keyring = gnomeKeyringSupport;
+
+      # Feature overrides:
+      # Native Client support was deprecated in 2020 and support will end in June 2021:
+      enable_nacl = false;
+      # Enabling the Widevine component here doesn't affect whether we can
+      # redistribute the chromium package; the Widevine component is either
+      # added later in the wrapped -wv build or downloaded from Google:
+      enable_widevine = true;
+      # Provides the enable-webrtc-pipewire-capturer flag to support Wayland screen capture:
+      rtc_use_pipewire = true;
     } // optionalAttrs proprietaryCodecs {
       # enable support for the H.264 codec
       proprietary_codecs = true;
@@ -280,14 +281,6 @@ let
     } // optionalAttrs pulseSupport {
       use_pulseaudio = true;
       link_pulseaudio = true;
-      # Disable PGO (defaults to 2 since M89) because it fails without additional changes:
-      # error: Could not read profile ../../chrome/build/pgo_profiles/chrome-linux-master-1610647094-405a32bcf15e5a84949640f99f84a5b9f61e2f2e.profdata: Unsupported instrumentation profile format version
-      chrome_pgo_phase = 0;
-      # Disable build with TFLite library because it fails without additional changes:
-      # ninja: error: '../../chrome/test/data/simple_test.tflite', needed by 'test_data/simple_test.tflite', missing and no known rule to make it
-      # Note: chrome/test/data/simple_test.tflite is in the Git repository but not in chromium-90.0.4400.8.tar.xz
-      # See also chrome/services/machine_learning/README.md
-      build_with_tflite_lib = false;
     } // optionalAttrs ungoogled {
       chrome_pgo_phase = 0;
       enable_hangout_services_extension = false;
