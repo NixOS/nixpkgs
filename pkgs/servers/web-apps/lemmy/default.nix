@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "lemmy-server";
-  version = "0.11.2";
+  version = "0.11.3";
 
   src = fetchFromGitHub {
     owner = "LemmyNet";
     repo = "lemmy";
     rev = version;
-    sha256 = "sha256-wDRBeAYjPpAd3DL99fH4Yng994hGmAmxlBqzOeXTP88=";
+    sha256 = "sha256-AFVipxzKwNiillVmMA+Q7nMKajN9mzw37mBpqzf+XpM=";
   };
 
-  cargoSha256 = "sha256-7wF5mUjSeJvCNLZcR6XB31RX2RLOOEyTGpOQxg+NcWk=";
+  cargoSha256 = "sha256-nxuynzQRUqne1KZIvP152afWbG2Zb9zyCqy7Bx4PeJ8=";
 
   buildInputs = [ postgresql ]
     ++ lib.optionals stdenv.isDarwin [ libiconv Security ];
@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage rec {
   OPENSSL_INCLUDE_DIR = "${openssl.dev}/include";
 
   meta = with lib; {
-    description = "Ultra relevant and instant full-text search API";
+    description = "🐀 Building a federated alternative to reddit in rust";
     homepage = "https://join-lemmy.org/";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ happysalada ];
