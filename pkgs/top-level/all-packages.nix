@@ -7576,6 +7576,8 @@ with pkgs;
     graphicalSupport = true;
   };
 
+  nmap-formatter = callPackage ../tools/security/nmap-formatter { };
+
   nmapsi4 = libsForQt514.callPackage ../tools/security/nmap/qt.nix { };
 
   nnn = callPackage ../applications/misc/nnn { };
