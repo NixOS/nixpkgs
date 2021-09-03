@@ -42,9 +42,7 @@ stdenv.mkDerivation rec {
 
   installTargets = lib.optionals stdenv.isDarwin [ "install-staticlib" "install-shlib" ];
 
-  buildInputs = [ gfortran ];
-
-  nativeBuildInputs = [ which ];
+  nativeBuildInputs = [ which gfortran ];
 
   meta = with lib; {
     description = "Library for fast updating of qr and cholesky decompositions";
