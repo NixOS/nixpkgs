@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Semantic code analysis engine";
-    homepage = "https://semmle.com/codeql";
+    homepage = "https://codeql.github.com";
     maintainers = [ maintainers.dump_stack ];
     license = licenses.unfree;
   };
