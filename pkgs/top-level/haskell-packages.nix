@@ -6,8 +6,8 @@ let
     "ghc865Binary"
     "ghc8102Binary"
     "ghc8102BinaryMinimal"
-    "ghc8105Binary"
-    "ghc8105BinaryMinimal"
+    "ghc8107Binary"
+    "ghc8107BinaryMinimal"
     "integer-simple"
     "native-bignum"
     "ghcHEAD"
@@ -59,11 +59,11 @@ in {
       minimal = true;
     };
 
-    ghc8105Binary = callPackage ../development/compilers/ghc/8.10.5-binary.nix {
+    ghc8107Binary = callPackage ../development/compilers/ghc/8.10.7-binary.nix {
       llvmPackages = pkgs.llvmPackages_11;
     };
 
-    ghc8105BinaryMinimal = callPackage ../development/compilers/ghc/8.10.5-binary.nix {
+    ghc8107BinaryMinimal = callPackage ../development/compilers/ghc/8.10.7-binary.nix {
       llvmPackages = pkgs.llvmPackages_11;
       minimal = true;
     };
@@ -71,7 +71,7 @@ in {
     ghc884 = callPackage ../development/compilers/ghc/8.8.4.nix {
       # the oldest ghc with aarch64-darwin support is 8.10.5
       bootPkgs = if stdenv.isDarwin && stdenv.isAarch64 then
-          packages.ghc8105BinaryMinimal
+          packages.ghc8107BinaryMinimal
         # aarch64 ghc865Binary gets SEGVs due to haskell#15449 or similar
         # Musl bindists do not exist for ghc 8.6.5, so we use 8.10.* for them
         else if stdenv.isAarch64 || stdenv.targetPlatform.isMusl then
@@ -82,10 +82,10 @@ in {
       buildLlvmPackages = buildPackages.llvmPackages_7;
       llvmPackages = pkgs.llvmPackages_7;
     };
-    ghc8106 = callPackage ../development/compilers/ghc/8.10.6.nix {
+    ghc8107 = callPackage ../development/compilers/ghc/8.10.7.nix {
       # the oldest ghc with aarch64-darwin support is 8.10.5
       bootPkgs = if stdenv.isDarwin && stdenv.isAarch64 then
-          packages.ghc8105BinaryMinimal
+          packages.ghc8107BinaryMinimal
         # aarch64 ghc865Binary gets SEGVs due to haskell#15449 or similar
         # Musl bindists do not exist for ghc 8.6.5, so we use 8.10.* for them
         else if stdenv.isAarch64 || stdenv.isAarch32 || stdenv.targetPlatform.isMusl then
@@ -103,7 +103,7 @@ in {
     ghc901 = callPackage ../development/compilers/ghc/9.0.1.nix {
       # the oldest ghc with aarch64-darwin support is 8.10.5
       bootPkgs = if stdenv.isDarwin && stdenv.isAarch64 then
-          packages.ghc8105BinaryMinimal
+          packages.ghc8107BinaryMinimal
         # aarch64 ghc8102Binary exceeds max output size on hydra
         else if stdenv.isAarch64 || stdenv.isAarch32 then
           packages.ghc8102BinaryMinimal
@@ -113,9 +113,27 @@ in {
       buildLlvmPackages = buildPackages.llvmPackages_10;
       llvmPackages = pkgs.llvmPackages_10;
     };
+    ghc921 = callPackage ../development/compilers/ghc/9.2.1.nix {
+      # aarch64 ghc8102Binary exceeds max output size on hydra
+      bootPkgs = if stdenv.isAarch64 || stdenv.isAarch32 then
+          packages.ghc8102BinaryMinimal
+        else
+          packages.ghc8102Binary;
+      inherit (buildPackages.python3Packages) sphinx;
+      # Need to use apple's patched xattr until
+      # https://github.com/xattr/xattr/issues/44 and
+      # https://github.com/xattr/xattr/issues/55 are solved.
+      inherit (buildPackages.darwin) xattr;
+      buildLlvmPackages = buildPackages.llvmPackages_10;
+      llvmPackages = pkgs.llvmPackages_10;
+    };
     ghcHEAD = callPackage ../development/compilers/ghc/head.nix {
       bootPkgs = packages.ghc901; # no binary yet
       inherit (buildPackages.python3Packages) sphinx;
+      # Need to use apple's patched xattr until
+      # https://github.com/xattr/xattr/issues/44 and
+      # https://github.com/xattr/xattr/issues/55 are solved.
+      inherit (buildPackages.darwin) xattr;
       buildLlvmPackages = buildPackages.llvmPackages_10;
       llvmPackages = pkgs.llvmPackages_10;
       libffi = pkgs.libffi;
@@ -166,15 +184,15 @@ in {
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.10.x.nix { };
       packageSetConfig = bootstrapPackageSet;
     };
-    ghc8105Binary = callPackage ../development/haskell-modules {
-      buildHaskellPackages = bh.packages.ghc8105Binary;
-      ghc = bh.compiler.ghc8105Binary;
+    ghc8107Binary = callPackage ../development/haskell-modules {
+      buildHaskellPackages = bh.packages.ghc8107Binary;
+      ghc = bh.compiler.ghc8107Binary;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.10.x.nix { };
       packageSetConfig = bootstrapPackageSet;
     };
-    ghc8105BinaryMinimal = callPackage ../development/haskell-modules {
-      buildHaskellPackages = bh.packages.ghc8105BinaryMinimal;
-      ghc = bh.compiler.ghc8105BinaryMinimal;
+    ghc8107BinaryMinimal = callPackage ../development/haskell-modules {
+      buildHaskellPackages = bh.packages.ghc8107BinaryMinimal;
+      ghc = bh.compiler.ghc8107BinaryMinimal;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.10.x.nix { };
       packageSetConfig = bootstrapPackageSet;
     };
@@ -183,15 +201,20 @@ in {
       ghc = bh.compiler.ghc884;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.8.x.nix { };
     };
-    ghc8106 = callPackage ../development/haskell-modules {
-      buildHaskellPackages = bh.packages.ghc8106;
-      ghc = bh.compiler.ghc8106;
+    ghc8107 = callPackage ../development/haskell-modules {
+      buildHaskellPackages = bh.packages.ghc8107;
+      ghc = bh.compiler.ghc8107;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.10.x.nix { };
     };
     ghc901 = callPackage ../development/haskell-modules {
       buildHaskellPackages = bh.packages.ghc901;
       ghc = bh.compiler.ghc901;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.0.x.nix { };
+    };
+    ghc921 = callPackage ../development/haskell-modules {
+      buildHaskellPackages = bh.packages.ghc921;
+      ghc = bh.compiler.ghc921;
+      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.2.x.nix { };
     };
     ghcHEAD = callPackage ../development/haskell-modules {
       buildHaskellPackages = bh.packages.ghcHEAD;
