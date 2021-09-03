@@ -46,14 +46,14 @@ in stdenv.mkDerivation rec {
   '';
 
   buildInputs = [ zlib ]
-    ++ lib.optionals fortranSupport [ gfortran ]
     ++ lib.optionals stdenv.isLinux [ libnl numactl pmix ucx ]
     ++ lib.optionals cudaSupport [ cudatoolkit ]
     ++ [ libevent hwloc ]
     ++ lib.optional (stdenv.isLinux || stdenv.isFreeBSD) rdma-core
     ++ lib.optional fabricSupport [ libpsm2 libfabric ];
 
-  nativeBuildInputs = [ perl ];
+  nativeBuildInputs = [ perl ]
+    ++ lib.optionals fortranSupport [ gfortran ];
 
   configureFlags = lib.optional (!cudaSupport) "--disable-mca-dso"
     ++ lib.optional (!fortranSupport) "--disable-mpi-fortran"
