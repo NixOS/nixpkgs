@@ -30373,6 +30373,8 @@ with pkgs;
 
   conglomerate = callPackage ../applications/science/biology/conglomerate { };
 
+  dalfox = callPackage ../tools/security/dalfox { };
+
   dcm2niix = callPackage ../applications/science/biology/dcm2niix { };
 
   deepdiff = with python3Packages; toPythonApplication deepdiff;
