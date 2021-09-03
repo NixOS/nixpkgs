@@ -61,6 +61,7 @@ mkDerivation rec {
     ninja
     pkg-config
     pyside2-tools
+    gfortran
     wrapQtAppsHook
   ];
 
@@ -69,7 +70,6 @@ mkDerivation rec {
     boost
     coin3d
     eigen
-    gfortran
     gts
     hdf5
     libGLU
