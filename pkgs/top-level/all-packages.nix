@@ -16328,6 +16328,8 @@ with pkgs;
 
   judy = callPackage ../development/libraries/judy { };
 
+  kddockwidgets = libsForQt5.callPackage ../development/libraries/kddockwidgets { };
+
   keybinder = callPackage ../development/libraries/keybinder {
     automake = automake111x;
     lua = lua5_1;
@@ -18550,6 +18552,8 @@ with pkgs;
   rttr = callPackage ../development/libraries/rttr { };
 
   rubberband = callPackage ../development/libraries/rubberband { };
+
+  rustc-demangle = callPackage ../development/libraries/rustc-demangle { };
 
   s2geometry = callPackage ../development/libraries/s2geometry { };
 
