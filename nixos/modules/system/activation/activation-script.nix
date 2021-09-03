@@ -17,6 +17,41 @@ let
     '';
   });
 
+  systemActivationScript = set: onlyDry: let
+    set' = filterAttrs (_: v: onlyDry -> v.supportsDryActivation) (mapAttrs (_: v: if isString v then (noDepEntry v) // { supportsDryActivation = false; } else v) set);
+    withHeadlines = addAttributeName set';
+  in
+    ''
+      #!${pkgs.runtimeShell}
+
+      systemConfig='@out@'
+
+      export PATH=/empty
+      for i in ${toString path}; do
+          PATH=$PATH:$i/bin:$i/sbin
+      done
+
+      _status=0
+      trap "_status=1 _localstatus=\$?" ERR
+
+      # Ensure a consistent umask.
+      umask 0022
+
+      ${textClosureMap id (withHeadlines) (attrNames withHeadlines)}
+
+    '' + optionalString (!onlyDry) ''
+      # Make this configuration the current configuration.
+      # The readlink is there to ensure that when $systemConfig = /system
+      # (which is a symlink to the store), /run/current-system is still
+      # used as a garbage collection root.
+      ln -sfn "$(readlink -f "$systemConfig")" /run/current-system
+
+      # Prevent the current configuration from being garbage-collected.
+      ln -sfn /run/current-system /nix/var/nix/gcroots/current-system
+
+      exit $_status
+    '';
+
   path = with pkgs; map getBin
     [ coreutils
       gnugrep
@@ -28,7 +63,7 @@ let
       util-linux # needed for mount and mountpoint
     ];
 
-  scriptType = with types;
+  scriptType = withDry: with types;
     let scriptOptions =
       { deps = mkOption
           { type = types.listOf types.str;
@@ -38,6 +73,19 @@ let
         text = mkOption
           { type = types.lines;
             description = "The content of the script.";
+          };
+      } // optionalAttrs withDry {
+        supportsDryActivation = mkOption
+          { type = types.bool;
+            default = false;
+            description = ''
+              Whether this activation script supports being dry-activated.
+              These activation scripts will also be executed on dry-activate
+              activations with the environment variable
+              <literal>NIXOS_ACTION</literal> being set to <literal>dry-activate
+              </literal>.  it's important that these activation scripts  don't
+              modify anything about the system when the variable is set.
+            '';
           };
       };
     in either str (submodule { options = scriptOptions; });
@@ -74,45 +122,17 @@ in
         idempotent and fast.
       '';
 
-      type = types.attrsOf scriptType;
-
-      apply = set: {
-        script =
-          ''
-            #! ${pkgs.runtimeShell}
-
-            systemConfig=@out@
-
-            export PATH=/empty
-            for i in ${toString path}; do
-                PATH=$PATH:$i/bin:$i/sbin
-            done
-
-            _status=0
-            trap "_status=1 _localstatus=\$?" ERR
-
-            # Ensure a consistent umask.
-            umask 0022
-
-            ${
-              let
-                set' = mapAttrs (n: v: if isString v then noDepEntry v else v) set;
-                withHeadlines = addAttributeName set';
-              in textClosureMap id (withHeadlines) (attrNames withHeadlines)
-            }
-
-            # Make this configuration the current configuration.
-            # The readlink is there to ensure that when $systemConfig = /system
-            # (which is a symlink to the store), /run/current-system is still
-            # used as a garbage collection root.
-            ln -sfn "$(readlink -f "$systemConfig")" /run/current-system
-
-            # Prevent the current configuration from being garbage-collected.
-            ln -sfn /run/current-system /nix/var/nix/gcroots/current-system
-
-            exit $_status
-          '';
+      type = types.attrsOf (scriptType true);
+      apply = set: set // {
+        script = systemActivationScript set false;
       };
+    };
+
+    system.dryActivationScript = mkOption {
+      description = "The shell script that is to be run when dry-activating a system.";
+      readOnly = true;
+      internal = true;
+      default = systemActivationScript (removeAttrs config.system.activationScripts [ "script" ]) true;
     };
 
     system.userActivationScripts = mkOption {
@@ -137,7 +157,7 @@ in
         idempotent and fast.
       '';
 
-      type = with types; attrsOf scriptType;
+      type = with types; attrsOf (scriptType false);
 
       apply = set: {
         script = ''
