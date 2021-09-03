@@ -50,6 +50,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         };
       };
     };
+  };
 
     testScript = { nodes, ... }:
       let
