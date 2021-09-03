@@ -16,7 +16,8 @@ index 4bcf227f0e75..9ed1d6eea6ff 100644
 -HOSTLIB=	nbcompat
 +LIB=	nbcompat
  
- .include <bsd.hostinit.mk>
+-.include <bsd.hostinit.mk>
++.include <bsd.own.mk>
  
 @@ -94,63 +94,37 @@ include/.stamp:
  
