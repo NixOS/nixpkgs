@@ -19828,6 +19828,8 @@ in
 
   jetty = callPackage ../servers/http/jetty { };
 
+  jibri = callPackage ../servers/jibri { };
+
   jicofo = callPackage ../servers/jicofo { };
 
   jitsi-meet = callPackage ../servers/web-apps/jitsi-meet { };
