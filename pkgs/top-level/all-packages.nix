@@ -6352,7 +6352,7 @@ with pkgs;
 
   keeperrl = callPackage ../games/keeperrl { };
 
-  kexectools = callPackage ../os-specific/linux/kexectools { };
+  kexec-tools = callPackage ../os-specific/linux/kexec-tools { };
 
   keepkey_agent = with python3Packages; toPythonApplication keepkey_agent;
 
