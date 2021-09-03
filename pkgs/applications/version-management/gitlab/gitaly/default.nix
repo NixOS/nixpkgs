@@ -10,9 +10,13 @@ let
     copyGemFiles = true;
     gemdir = ./.;
   };
-in buildGoModule rec {
   version = "14.2.1";
+  gitaly_package = "gitlab.com/gitlab-org/gitaly/v${lib.versions.major version}";
+in
+
+buildGoModule {
   pname = "gitaly";
+  inherit version;
 
   src = fetchFromGitLab {
     owner = "gitlab-org";
@@ -27,6 +31,10 @@ in buildGoModule rec {
     inherit rubyEnv;
   };
 
+  buildFlagsArray = [
+    "-ldflags= -X ${gitaly_package}/internal/version.version=${version} -X ${gitaly_package}/internal/version.moduleVersion=${version}"
+  ];
+
   buildFlags = [ "-tags=static,system_libgit2" ];
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ rubyEnv.wrappedRuby libgit2 openssl zlib pcre http-parser ];
@@ -35,6 +43,7 @@ in buildGoModule rec {
   postInstall = ''
     mkdir -p $ruby
     cp -rv $src/ruby/{bin,lib,proto,git-hooks} $ruby
+    mv $out/bin/gitaly-git2go $out/bin/gitaly-git2go-${version}
   '';
 
   outputs = [ "out" "ruby" ];
