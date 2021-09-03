@@ -29914,6 +29914,8 @@ with pkgs;
     inherit (gnome) zenity;
   };
 
+  protonup = with python3Packages; toPythonApplication protonup;
+
   sdlpop = callPackage ../games/sdlpop { };
 
   stepmania = callPackage ../games/stepmania {
