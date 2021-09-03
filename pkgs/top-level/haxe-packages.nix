@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchzip, fetchFromGitHub, haxe, neko, libuv, SDL2, zlib, libjpeg, libpng, libvorbis, mesa_glu, openal, mbedtls }:
+{ stdenv, lib, fetchzip, fetchFromGitHub, haxe, neko, libuv, SDL2, zlib, libjpeg, libpng, libvorbis, libGL, libGLU, openal, mbedtls, mesa, sqlite }:
 
 let
   self = haxePackages;
@@ -24,7 +24,7 @@ let
       libname,
       version,
       sha256,
-      meta,
+      meta ? {},
       ...
     } @ attrs:
       stdenv.mkDerivation (attrs // {
@@ -54,10 +54,8 @@ let
 
         meta = {
           homepage = "https://lib.haxe.org/p/${libname}";
-          license = lib.licenses.bsd2;
           platforms = lib.platforms.all;
-          description = throw "please write meta.description";
-        } // attrs.meta;
+        } // attrs.meta or {};
       });
 
     inherit haxe;
@@ -112,6 +110,18 @@ let
       };
     };
 
+    heaps = self.buildHaxeLib {
+      libname = "heaps";
+      version = "1.9.1";
+      sha256 = "0lmnr3yxknwwawafgv2nwkijvgi0w4smrikv2224gwv1g8m0i4cb";
+    };
+
+    format = self.buildHaxeLib {
+      libname = "format";
+      version = "3.5.0";
+      sha256 = "1w6b77f0x0kswvpzhfqxiz9pkk3flgzmzyv6s2qy3qpvwdpppxp6";
+    };
+
     hashlink = stdenv.mkDerivation rec {
       pname = "hashlink";
       version = "1.11";
@@ -121,18 +131,32 @@ let
         rev = version;
         sha256 = "1bgx8pr062xsy81ygbakm3v033d68dqqx0dgfs0dczdqy8q0039k";
       };
-      nativeBuildInputs = [ haxe ];
-      buildInputs = [ libuv zlib libpng SDL2 libvorbis libjpeg mesa_glu openal mbedtls ];
-      postBuild = ''
-        (cd other/haxelib; haxe --neko run.n Run.hx)
+      nativeBuildInputs = [ haxe patchelfLatest ];
+      buildInputs = [ libuv zlib libpng SDL2 libvorbis libjpeg libGL libGLU openal mbedtls mesa sqlite ];
+
+      buildPhase = ''
+        make LIBOPENGL=-lGL
+        ( cd other/haxelib; haxe --neko run.n Run.hx )
+        ( cd libs/mesa;     make mesa.hdll LLVM_LIBDIR=${mesa.llvmPackages.llvm.lib}/lib MESA_LIBS='-L${mesa.osmesa}/lib -L${mesa}/lib -lGL -lglapi -lOSMesa' )
       '';
-      doCheck = true;
-      checkPhase = ''
-        ( # simulate `haxelib dev hashlink other/haxelib`
-          devrepo=$(mktemp -d)
-          mkdir -p                    "$devrepo/hashlink"
-          echo $(pwd)/other/haxelib > "$devrepo/hashlink/.dev"
-          export HAXELIB_PATH="$HAXELIB_PATH:$devrepo"
+
+      installPhase = ''
+        install  -Dm755 -t ${placeholder "out"}/bin hl
+        install  -Dm755 -t ${placeholder "out"}/lib libhl.so *.hdll
+
+        # install hashlink support lib
+        mkdir -p ${placeholder "out"}/lib/haxe/hashlink/${withCommas version}  ; cp -r other/haxelib/haxelib.json other/haxelib/run.n other/haxelib/Run.hx  ${placeholder "out"}/lib/haxe/hashlink/${withCommas version}  ; echo "${version}" > ${placeholder "out"}/lib/haxe/hashlink/.current
+        mkdir -p ${placeholder "out"}/lib/haxe/hlsdl/${withCommas version}     ; cp -r libs/sdl/haxelib.json      libs/sdl/sdl                              ${placeholder "out"}/lib/haxe/hlsdl/${withCommas version}     ; echo "${version}" > ${placeholder "out"}/lib/haxe/hlsdl/.current
+        mkdir -p ${placeholder "out"}/lib/haxe/hlopenal/${withCommas version}  ; cp -r libs/openal/haxelib.json   libs/openal/openal                        ${placeholder "out"}/lib/haxe/hlopenal/${withCommas version}  ; echo "${version}" > ${placeholder "out"}/lib/haxe/hlopenal/.current
+
+        # install files to include in generated C-code
+        cp -r "$src/src" ${placeholder "out"}/include
+      '';
+
+      doInstallCheck = true;
+      installCheckInputs = [ self.heaps self.format ];
+      installCheckPhase = ''
+        ( export HAXELIB_PATH="$HAXELIB_PATH:${placeholder "out"}/lib/haxe"
           haxelib list
 
           # Run bytecode
@@ -143,19 +167,17 @@ let
           haxe -hl src/_main.c -cp other/tests -main HelloWorld
           make hlc
           ./hlc
+
+          # Build mesa example
+          ( cd libs/mesa
+            substituteInPlace sample/Test.hx --replace h3d.scene.DirLight h3d.scene.fwd.DirLight  # fix for news `heaps`
+            haxe -cp sample -lib hlsdl -lib heaps -hl test.hl -main Test -D usegl -D usesys )
+
+          # it should fail with "Uncaught exception: Failed to create window"
+          ./hl libs/mesa/test.hl  || true
         )
       '';
-      installPhase = ''
-        install  -Dm755 -t ${placeholder "out"}/bin                                     hl
-        install  -Dm755 -t ${placeholder "out"}/lib                                     libhl.so *.hdll
 
-        # install hashlink support lib
-        install  -Dm444 -t ${placeholder "out"}/lib/haxe/hashlink/${withCommas "0.1.0"} other/haxelib/haxelib.json other/haxelib/run.n other/haxelib/Run.hx
-        echo "0.1.0" >     ${placeholder "out"}/lib/haxe/hashlink/.current
-
-        # install files to include in generated C-code
-        cp -r "$src/src" ${placeholder "out"}/include
-      '';
       meta = {
         description = "Virtual machine for Haxe";
         platforms = lib.platforms.linux;
