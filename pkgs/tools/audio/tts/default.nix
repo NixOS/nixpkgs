@@ -1,7 +1,7 @@
 { lib
-, python3Packages
-, fetchFromGitHub
 , python3
+, fetchFromGitHub
+, fetchpatch
 }:
 
 # USAGE:
@@ -9,60 +9,59 @@
 # # pick your favorite vocoder/tts model
 # $ tts-server --model_name tts_models/en/ljspeech/glow-tts --vocoder_name vocoder_models/universal/libri-tts/fullband-melgan
 #
+# If you upgrade from an old version you may have to delete old models from ~/.local/share/tts
+#
 # For now, for deployment check the systemd unit in the pull request:
 #   https://github.com/NixOS/nixpkgs/pull/103851#issue-521121136
-#
 
-python3Packages.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "tts";
-  # until https://github.com/mozilla/TTS/issues/424 is resolved
-  # we treat released models as released versions:
-  # https://github.com/mozilla/TTS/wiki/Released-Models
-  version = "0.0.9";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
-    owner = "mozilla";
+    owner = "coqui-ai";
     repo = "TTS";
-    rev = "df5899daf4ba4ec89544edf94f9c2e105c544461";
-    sha256 = "sha256-lklG8DqG04LKJY93z2axeYhW8gtpbRG41o9ow2gJjuA=";
+    rev = "v${version}";
+    sha256 = "sha256-7YMNxZ15qQowEE0tE6x/LbtirNGp7h9OLyS1JSl9x2A=";
   };
 
-  preBuild = ''
-    # numba jit tries to write to its cache directory
-    export HOME=$TMPDIR
-    # we only support pytorch models right now
-    sed -i -e '/tensorflow/d' requirements.txt
-
-    sed -i -e 's!librosa==[^"]*!librosa!' requirements.txt setup.py
-    sed -i -e 's!unidecode==[^"]*!unidecode!' requirements.txt setup.py
-    sed -i -e 's!bokeh==[^"]*!bokeh!' requirements.txt setup.py
-    sed -i -e 's!numba==[^"]*!numba!' requirements.txt setup.py
-    # Not required for building/installation but for their development/ci workflow
-    sed -i -e '/pylint/d' requirements.txt
-    sed -i -e '/cardboardlint/d' requirements.txt setup.py
+  postPatch = ''
+    sed -i requirements.txt \
+      -e 's!librosa==[^"]*!librosa!' \
+      -e 's!mecab-python3==[^"]*!mecab-python3!' \
+      -e 's!numba==[^"]*!numba!' \
+      -e 's!numpy==[^"]*!numpy!' \
+      -e 's!umap-learn==[^"]*!umap-learn!'
   '';
 
-  nativeBuildInputs = [ python3Packages.cython ];
+  nativeBuildInputs = with python3.pkgs; [
+    cython
+  ];
 
-  propagatedBuildInputs = with python3Packages; [
-    matplotlib
-    scipy
-    pytorch
+  propagatedBuildInputs = with python3.pkgs; [
+    anyascii
+    coqpit
     flask
-    attrdict
-    bokeh
-    soundfile
-    tqdm
-    librosa
-    unidecode
-    umap-learn
-    phonemizer
-    tensorboardx
-    fuzzywuzzy
-    inflect
+    fsspec
+    gruut
     gdown
+    inflect
+    jieba
+    librosa
+    matplotlib
+    mecab-python3
+    numba
+    pandas
+    pypinyin
     pysbd
-    pyworld
+    pytorch
+    scipy
+    soundfile
+    tensorboardx
+    tensorflow
+    tqdm
+    umap-learn
+    unidic-lite
   ];
 
   postInstall = ''
@@ -70,38 +69,56 @@ python3Packages.buildPythonApplication rec {
     # cython modules are not installed for some reasons
     (
       cd TTS/tts/layers/glow_tts/monotonic_align
-      ${python3Packages.python.interpreter} setup.py install --prefix=$out
+      ${python3.interpreter} setup.py install --prefix=$out
     )
   '';
 
-  checkInputs = with python3Packages; [ pytestCheckHook ];
+  checkInputs = with python3.pkgs; [
+    pytest-sugar
+    pytestCheckHook
+  ];
 
   disabledTests = [
     # RuntimeError: fft: ATen not compiled with MKL support
     "test_torch_stft"
     "test_stft_loss"
     "test_multiscale_stft_loss"
-    # AssertionErrors that I feel incapable of debugging
-    "test_phoneme_to_sequence"
-    "test_text2phone"
-    "test_parametrized_gan_dataset"
+    # Requires network acccess to download models
+    "test_synthesize"
   ];
 
   preCheck = ''
     # use the installed TTS in $PYTHONPATH instead of the one from source to also have cython modules.
     mv TTS{,.old}
+    export PATH=$out/bin:$PATH
+
+    # numba tries to write to HOME directory
+    export HOME=$TMPDIR
+
+    for file in $(grep -rl 'python TTS/bin' tests); do
+      substituteInPlace "$file" \
+        --replace "python TTS/bin" "${python3.interpreter} $out/lib/${python3.libPrefix}/site-packages/TTS/bin"
+    done
   '';
 
-  pytestFlagsArray = [
+  disabledTestPaths = [
     # requires tensorflow
-    "--ignore=tests/test_tacotron2_tf_model.py"
-    "--ignore=tests/test_vocoder_tf_melgan_generator.py"
-    "--ignore=tests/test_vocoder_tf_pqmf.py"
+    "tests/vocoder_tests/test_vocoder_tf_pqmf.py"
+    "tests/vocoder_tests/test_vocoder_tf_melgan_generator.py"
+    "tests/tts_tests/test_tacotron2_tf_model.py"
+    # RuntimeError: fft: ATen not compiled with MKL support
+    "tests/tts_tests/test_vits_train.py"
+    "tests/vocoder_tests/test_fullband_melgan_train.py"
+    "tests/vocoder_tests/test_hifigan_train.py"
+    "tests/vocoder_tests/test_melgan_train.py"
+    "tests/vocoder_tests/test_multiband_melgan_train.py"
+    "tests/vocoder_tests/test_parallel_wavegan_train.py"
   ];
 
   meta = with lib; {
-    homepage = "https://github.com/mozilla/TTS";
-    description = "Deep learning for Text to Speech";
+    homepage = "https://github.com/coqui-ai/TTS";
+    changelog = "https://github.com/coqui-ai/TTS/releases/tag/v${version}";
+    description = "Deep learning toolkit for Text-to-Speech, battle-tested in research and production";
     license = licenses.mpl20;
     maintainers = with maintainers; [ hexa mic92 ];
   };

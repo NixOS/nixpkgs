@@ -10,6 +10,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     ];
 
     services.xserver.enable = true;
+    sound.enable = true;
     environment.systemPackages = [ pkgs.shattered-pixel-dungeon ];
   };
 

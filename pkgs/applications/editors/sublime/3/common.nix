@@ -2,7 +2,6 @@
 
 { fetchurl, lib, stdenv, xorg, glib, glibcLocales, gtk3, cairo, pango, libredirect, makeWrapper, wrapGAppsHook
 , pkexecPath ? "/run/wrappers/bin/pkexec"
-, writeScript, common-updater-scripts, curl, gnugrep
 , openssl, bzip2, bash, unzip, zip
 }:
 
@@ -109,7 +108,7 @@ in stdenv.mkDerivation (rec {
   inherit pname;
   version = buildVersion;
 
-  phases = [ "installPhase" ];
+  dontUnpack = true;
 
   ${primaryBinary} = binaryPackage;
 
@@ -125,26 +124,6 @@ in stdenv.mkDerivation (rec {
       size=$(basename $directory)
       mkdir -p "$out/share/icons/hicolor/$size/apps"
       ln -s ''$${primaryBinary}/Icon/$size/* $out/share/icons/hicolor/$size/apps
-    done
-  '';
-
-  passthru.updateScript = writeScript "${pname}-update-script" ''
-    #!${stdenv.shell}
-    set -o errexit
-    PATH=${lib.makeBinPath [ common-updater-scripts curl gnugrep ]}
-
-    latestVersion=$(curl -s ${versionUrl})
-
-    if [[ "${buildVersion}" = "$latestVersion" ]]; then
-        echo "The new version same as the old version."
-        exit 0
-    fi
-
-    for platform in ${lib.concatStringsSep " " meta.platforms}; do
-        # The script will not perform an update when the version attribute is up to date from previous platform run
-        # We need to clear it before each run
-        update-source-version ${packageAttribute}.${primaryBinary} 0 0000000000000000000000000000000000000000000000000000000000000000 --file=${versionFile} --version-key=buildVersion --system=$platform
-        update-source-version ${packageAttribute}.${primaryBinary} $latestVersion --file=${versionFile} --version-key=buildVersion --system=$platform
     done
   '';
 

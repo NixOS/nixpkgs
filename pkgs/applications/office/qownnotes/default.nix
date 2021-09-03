@@ -1,27 +1,28 @@
-{  mkDerivation, lib, fetchurl, qmake, qttools, qtbase, qtsvg, qtdeclarative, qtxmlpatterns, qtwayland, qtwebsockets, stdenv /* for isLinux */ }:
+{ mkDerivation, lib, stdenv, fetchurl, qmake, qttools, qtbase, qtsvg, qtdeclarative, qtxmlpatterns, qtwebsockets, qtx11extras
+, qtwayland }:
 
 mkDerivation rec {
   pname = "qownnotes";
-  version = "20.2.5";
+  version = "21.7.4";
 
   src = fetchurl {
     url = "https://download.tuxfamily.org/${pname}/src/${pname}-${version}.tar.xz";
-    # Can grab official version like so:
-    # $ curl https://download.tuxfamily.org/qownnotes/src/qownnotes-20.2.5.tar.xz.sha256
-    sha256 = "c26d2a86a521cd243ec0a4788e7627e91cb5877dace73d93dd7d35dd02e9e4c5";
+    # Fetch the checksum of current version with curl:
+    # curl https://download.tuxfamily.org/qownnotes/src/qownnotes-<version>.tar.xz.sha256
+    sha256 = "3957dc623b419582ef7ccc5cb04b8f97bed4e96e8ecc2e99bef9dca7ce255b8e";
   };
 
   nativeBuildInputs = [ qmake qttools ];
-  buildInputs = [
-    qtbase qtsvg qtdeclarative qtxmlpatterns qtwebsockets
-  ] ++ lib.optional stdenv.isLinux qtwayland;
+
+  buildInputs = [ qtbase qtsvg qtdeclarative qtxmlpatterns qtwebsockets qtx11extras ]
+    ++ lib.optionals stdenv.isLinux [ qtwayland ];
 
   meta = with lib; {
-    description = "Plain-text file notepad and todo-list manager with markdown support and ownCloud / Nextcloud integration";
-
+    description = "Plain-text file notepad and todo-list manager with markdown support and Nextcloud/ownCloud integration.";
+    longDescription = "QOwnNotes is a plain-text file notepad and todo-list manager with markdown support and Nextcloud/ownCloud integration.";
     homepage = "https://www.qownnotes.org/";
-    platforms = platforms.all;
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ dtzWill ];
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ dtzWill totoroot ];
+    platforms = platforms.linux;
   };
 }

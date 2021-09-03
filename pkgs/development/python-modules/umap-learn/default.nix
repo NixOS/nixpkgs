@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , nose
 , numpy
-, scikitlearn
+, scikit-learn
 , scipy
 , numba
 , pynndescent
@@ -13,27 +13,27 @@
 
 buildPythonPackage rec {
   pname = "umap-learn";
-  version = "0.5.0";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "lmcinnes";
     repo = "umap";
     rev = version;
-    sha256 = "sha256-2Z5RDi4bz8hh8zMwkcCQY9NrGaVd1DJEBOmrCl2oSvM=";
+    sha256 = "0favphngcz5jvyqs06x07hk552lvl9qx3vka8r4x0xmv88gsg349";
   };
+
+  propagatedBuildInputs = [
+    numpy
+    scikit-learn
+    scipy
+    numba
+    pynndescent
+  ];
 
   checkInputs = [
     nose
     tensorflow
     pytestCheckHook
-  ];
-
-  propagatedBuildInputs = [
-    numpy
-    scikitlearn
-    scipy
-    numba
-    pynndescent
   ];
 
   preCheck = ''

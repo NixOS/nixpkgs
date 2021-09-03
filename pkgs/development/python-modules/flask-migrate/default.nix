@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "Flask-Migrate";
-  version = "2.7.0";
+  version = "3.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ae2f05671588762dd83a21d8b18c51fe355e86783e24594995ff8d7380dffe38";
+    sha256 = "00m76kgdkk0w5bfq8hbqszpyaqk0yxdvmz4s67lvd36pc7wfhhjd";
   };
 
   checkInputs = [ flask_script ] ++ lib.optional isPy3k glibcLocales;

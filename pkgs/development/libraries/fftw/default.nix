@@ -1,4 +1,15 @@
-{ fetchurl, stdenv, lib, llvmPackages ? null, precision ? "double", perl }:
+{ fetchurl
+, stdenv
+, lib
+, gfortran
+, perl
+, llvmPackages ? null
+, precision ? "double"
+, enableAvx ? stdenv.hostPlatform.avxSupport
+, enableAvx2 ? stdenv.hostPlatform.avx2Support
+, enableAvx512 ? stdenv.hostPlatform.avx512Support
+, enableFma ? stdenv.hostPlatform.fmaSupport
+}:
 
 with lib;
 
@@ -25,6 +36,8 @@ stdenv.mkDerivation {
     ++ optional withDoc "info"; # it's dev-doc only
   outputBin = "dev"; # fftw-wisdom
 
+  nativeBuildInputs = [ gfortran ];
+
   buildInputs = lib.optionals stdenv.cc.isClang [
     # TODO: This may mismatch the LLVM version sin the stdenv, see #79818.
     llvmPackages.openmp
@@ -38,6 +51,10 @@ stdenv.mkDerivation {
     # all x86_64 have sse2
     # however, not all float sizes fit
     ++ optional (stdenv.isx86_64 && (precision == "single" || precision == "double") )  "--enable-sse2"
+    ++ optional enableAvx "--enable-avx"
+    ++ optional enableAvx2 "--enable-avx2"
+    ++ optional enableAvx512 "--enable-avx512"
+    ++ optional enableFma "--enable-fma"
     ++ [ "--enable-openmp" ]
     # doc generation causes Fortran wrapper generation which hard-codes gcc
     ++ optional (!withDoc) "--disable-doc";

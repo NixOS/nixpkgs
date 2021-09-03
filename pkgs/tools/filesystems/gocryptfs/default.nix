@@ -1,40 +1,54 @@
 { lib
+, stdenv
 , buildGoModule
 , fetchFromGitHub
 , openssl
 , pandoc
 , pkg-config
+, libfido2
 }:
+
+let
+  # pandoc is currently broken on aarch64-darwin
+  # because of missing ghc
+  brokenPandoc = stdenv.isDarwin && stdenv.isAarch64;
+in
 
 buildGoModule rec {
   pname = "gocryptfs";
-  version = "1.8.0";
+  version = "2.1";
 
   src = fetchFromGitHub {
     owner = "rfjakob";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1acalwrr5xqhpqca3gypj0s68w6vpckxmg5z5gfgh8wx6nqx4aw9";
+    sha256 = "sha256-nACBEOL/vnqxdAGI37k9bxgQKgpi35/tsuCxsQ9I2sw=";
   };
 
-  runVend = true;
-  vendorSha256 = "0z3y51sgr1rmr23jpc5h5d5lw14p3qzv48rc7zj7qa4rd5cfhsgi";
+  vendorSha256 = "sha256-Q/oBT5xdLpgQCIk7KES6c8+BaCQVUIwCwVufl4oTFRs=";
 
-  nativeBuildInputs = [ pandoc pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+  ] ++ lib.optionals (!brokenPandoc) [
+    pandoc
+  ];
+
   buildInputs = [ openssl ];
 
-  buildFlagsArray = ''
-    -ldflags=
-      -X main.GitVersion=${version}
-      -X main.GitVersionFuse=[vendored]
-      -X main.BuildDate=unknown
-  '';
+  propagatedBuildInputs = [ libfido2 ];
+
+  ldflags = [
+    "-X main.GitVersion=${version}"
+    "-X main.GitVersionFuse=[vendored]"
+    "-X main.BuildDate=unknown"
+  ];
 
   subPackages = [ "." "gocryptfs-xray" "contrib/statfs" ];
 
-  postBuild = ''
+  postBuild = lib.optionalString (!brokenPandoc) ''
     pushd Documentation/
     mkdir -p $out/share/man/man1
+    # taken from Documentation/MANPAGE-render.bash
     pandoc MANPAGE.md -s -t man -o $out/share/man/man1/gocryptfs.1
     pandoc MANPAGE-XRAY.md -s -t man -o $out/share/man/man1/gocryptfs-xray.1
     pandoc MANPAGE-STATFS.md -s -t man -o $out/share/man/man1/statfs.1

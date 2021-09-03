@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, esr ? false, ... }: {
+import ./make-test-python.nix ({ pkgs, firefoxPackage, ... }: {
   name = "firefox";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ eelco shlevy ];
@@ -8,9 +8,10 @@ import ./make-test-python.nix ({ pkgs, esr ? false, ... }: {
     { pkgs, ... }:
 
     { imports = [ ./common/x11.nix ];
-      environment.systemPackages =
-        (if esr then [ pkgs.firefox-esr ] else [ pkgs.firefox ])
-        ++ [ pkgs.xdotool ];
+      environment.systemPackages = [
+        firefoxPackage
+        pkgs.xdotool
+      ];
 
       # Need some more memory to record audio.
       virtualisation.memorySize = "500";
@@ -46,7 +47,7 @@ import ./make-test-python.nix ({ pkgs, esr ? false, ... }: {
 
       systemd.services.audio-recorder = {
         description = "Record NixOS test audio to /tmp/record.wav";
-        script = "${pkgs.alsaUtils}/bin/arecord -D recorder -f S16_LE -r48000 /tmp/record.wav";
+        script = "${pkgs.alsa-utils}/bin/arecord -D recorder -f S16_LE -r48000 /tmp/record.wav";
       };
 
     };

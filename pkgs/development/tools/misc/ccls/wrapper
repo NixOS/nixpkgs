@@ -1,12 +1,9 @@
 #! @shell@ -e
 
-initString="--init={\"clang\":{\"extraArgs\": [@standard_library_includes@"
-
-if [ "${NIX_CFLAGS_COMPILE}" != "" ]; then
-  read -a cflags_array <<< ${NIX_CFLAGS_COMPILE}
-  initString+=$(printf ', \"%s\"' "${cflags_array[@]}")
-fi
-
-initString+="]}}"
+printf -v extraArgs ',\"%s\"' \
+  $(cat @clang@/nix-support/libc-cflags \
+        @clang@/nix-support/libcxx-cxxflags) \
+  ${NIX_CFLAGS_COMPILE}
+initString="--init={\"clang\":{\"extraArgs\":[${extraArgs:1}],\"resourceDir\":\"@clang@/resource-root\"}}"
 
 exec -a "$0" "@out@/bin/@wrapped@" "${initString}" "$@"

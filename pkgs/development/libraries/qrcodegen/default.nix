@@ -1,13 +1,13 @@
 { lib, stdenv, fetchFromGitHub }:
 stdenv.mkDerivation rec {
   pname = "qrcodegen";
-  version = "1.6.0";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "nayuki";
     repo = "QR-Code-generator";
     rev = "v${version}";
-    sha256 = "0iq9sv9na0vg996aqrxrjn9rrbiyy7sc9vslw945p3ky22pw3lql";
+    sha256 = "sha256-WH6O3YE/+NNznzl52TXZYL+6O25GmKSnaFqDDhRl4As=";
   };
 
   preBuild = "cd c";

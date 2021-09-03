@@ -4,7 +4,7 @@
 
 buildPythonPackage rec {
   pname = "django-jinja";
-  version = "2.7.0";
+  version = "2.9.0";
 
   meta = {
     description = "Simple and nonobstructive jinja2 integration with Django";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d56ecddaa6d3caf508509aae5a979ebd8a3427477c34fcbcac14bf8389a21a12";
+    sha256 = "69433ea312264a541acf1e3e9748e44783ad33381e48e6a7230762e02f005276";
   };
 
   buildInputs = [ django pytz tox ];

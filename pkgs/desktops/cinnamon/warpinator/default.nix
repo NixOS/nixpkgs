@@ -17,7 +17,6 @@ python3.pkgs.buildPythonApplication rec  {
   version = "1.0.8";
 
   format = "other";
-  doCheck = false;
 
   src = fetchFromGitHub {
     owner = "linuxmint";

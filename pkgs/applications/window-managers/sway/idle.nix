@@ -1,25 +1,20 @@
 { lib, stdenv, fetchFromGitHub
-, meson, ninja, pkg-config, scdoc
+, meson, ninja, pkg-config, scdoc, wayland-scanner
 , wayland, wayland-protocols, systemd
 }:
 
 stdenv.mkDerivation rec {
   pname = "swayidle";
-  version = "1.6";
+  version = "1.7";
 
   src = fetchFromGitHub {
     owner = "swaywm";
     repo = "swayidle";
     rev = version;
-    sha256 = "1nd3v8r9549lykdwh4krldfl59lzaspmmai5k1icy7dvi6kkr18r";
+    sha256 = "0ziya8d5pvvxg16jhy4i04pvq11bdvj68gz5q654ar4dldil17nn";
   };
 
-  postPatch = ''
-    substituteInPlace meson.build \
-      --replace "version: '1.5'" "version: '${version}'"
-  '';
-
-  nativeBuildInputs = [ meson ninja pkg-config scdoc ];
+  nativeBuildInputs = [ meson ninja pkg-config scdoc wayland-scanner ];
   buildInputs = [ wayland wayland-protocols systemd ];
 
   mesonFlags = [ "-Dman-pages=enabled" "-Dlogind=enabled" ];

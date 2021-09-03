@@ -18,7 +18,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Standard ML Compiler and Toolkit";
     homepage = "https://elsman.com/mlkit/";
+    changelog = "https://github.com/melsman/mlkit/blob/v${version}/NEWS.md";
     license = licenses.gpl2Plus;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ athas ];
   };
 }

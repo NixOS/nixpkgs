@@ -28,7 +28,7 @@ let
     sha256 = "1jh4h12qchsba03dx03mrvs4r8g9qfjn56xm56jqzgqf7r209xq9";
   };
 in stdenv.mkDerivation rec {
-  name = "laminar";
+  pname = "laminar";
   version = "1.0";
   src = fetchurl {
     url = "https://github.com/ohwgiles/laminar/archive/${version}.tar.gz";
@@ -58,7 +58,7 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Lightweight and modular continuous integration service";
     homepage = "https://laminar.ohwg.net";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ kaction maralorn ];
   };

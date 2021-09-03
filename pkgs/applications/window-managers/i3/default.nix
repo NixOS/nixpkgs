@@ -1,7 +1,7 @@
 { fetchurl, lib, stdenv, pkg-config, makeWrapper, meson, ninja, installShellFiles, libxcb, xcbutilkeysyms
 , xcbutil, xcbutilwm, xcbutilxrm, libstartup_notification, libX11, pcre, libev
 , yajl, xcb-util-cursor, perl, pango, perlPackages, libxkbcommon
-, xorgserver, xvfb_run }:
+, xorgserver, xvfb-run }:
 
 stdenv.mkDerivation rec {
   pname = "i3";
@@ -19,12 +19,10 @@ stdenv.mkDerivation rec {
     libstartup_notification libX11 pcre libev yajl xcb-util-cursor perl pango
     perlPackages.AnyEventI3 perlPackages.X11XCB perlPackages.IPCRun
     perlPackages.ExtUtilsPkgConfig perlPackages.InlineC
-    xorgserver xvfb_run
+    xorgserver xvfb-run
   ];
 
   configureFlags = [ "--disable-builddir" ];
-
-  enableParallelBuilding = true;
 
   postPatch = ''
     patchShebangs .

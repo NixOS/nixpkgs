@@ -1,4 +1,4 @@
-{ coreutils, fetchFromGitHub, file, libcaca, makeWrapper, python, openssl, qrencode, lib, stdenv, yubikey-manager }:
+{ coreutils, fetchFromGitHub, file, libcaca, makeWrapper, python3, openssl, qrencode, lib, stdenv, yubikey-manager }:
 
 stdenv.mkDerivation rec {
   pname = "gen-oath-safe";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
         file
         libcaca.bin
         openssl.bin
-        python
+        python3
         qrencode
         yubikey-manager
       ];

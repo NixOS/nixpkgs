@@ -7,7 +7,7 @@
 , dconf
 , glib
 , gtk3
-, libwnck3
+, libwnck
 , libX11
 , libXfixes
 , libXi
@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
     libXi
     libdbusmenu-gtk3
     libgee
-    libwnck3
+    libwnck
     pango
   ];
 

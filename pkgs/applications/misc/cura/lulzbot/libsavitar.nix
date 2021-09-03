@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, pythonOlder, fetchgit, cmake, sip }:
+{ lib, buildPythonPackage, pythonOlder, fetchgit, cmake, sip_4 }:
 
 buildPythonPackage {
   pname = "libsavitar-lulzbot";
@@ -19,7 +19,7 @@ buildPythonPackage {
 
   nativeBuildInputs = [ cmake ];
 
-  propagatedBuildInputs = [ sip ];
+  propagatedBuildInputs = [ sip_4 ];
 
   disabled = pythonOlder "3.4.0";
 

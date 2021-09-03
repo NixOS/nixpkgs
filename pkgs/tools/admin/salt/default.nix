@@ -7,11 +7,11 @@
 }:
 python3.pkgs.buildPythonApplication rec {
   pname = "salt";
-  version = "3002.5";
+  version = "3003.3";
 
   src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "1bqranhanxcxjc1qcc6cm95f4xxag0ic9g61dq352hqh6m1l1ay8";
+    sha256 = "pvnIyLXiYA6oYgtKZzcd4XYRvrT42X5LubCzCKN+0eI=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -31,6 +31,8 @@ python3.pkgs.buildPythonApplication rec {
   postPatch = ''
     substituteInPlace "salt/utils/rsax931.py" \
       --subst-var-by "libcrypto" "${openssl.out}/lib/libcrypto.so"
+    substituteInPlace requirements/base.txt \
+      --replace contextvars ""
   '';
 
   # The tests fail due to socket path length limits at the very least;

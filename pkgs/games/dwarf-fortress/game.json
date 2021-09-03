@@ -121,5 +121,19 @@
     "legacy_s": "19ai7lvxx0y3iha9qrbl5krric547rzs6vm4ibk8x61vv97jrbd8",
     "legacy32": "0lli6s1g7yj3p3h26ajgq3h619n88qn6s7amyz6z8w7hyzfi7wij",
     "legacy32_s": "1wzxbzgln9pmsk2nchrl94d2yd09xdgynmjl4qwcaqzkrnf3sfqc"
+  },
+  "0.47.05": {
+    "linux": "18zwmz2nsgwjxbr2yd9jcrgw6l5b481hh1848cgn5nfpnzdscx5c",
+    "linux32": "1jbav7ghsjsxd6cdp6f2x5qn83zc8707dqan5sp73fp6mbj2jasl",
+    "osx": "092z1vhc5sbdc5irggdz5ai7rxifmg4yhy33aicpsjcnvcmajydw",
+    "osx32": "0lpbwfiagp0zp280aw3fmj8938w5fc5r9gibzk2h86jy63ps29ww",
+    "win": "0bbk7j3d4h2wn9hmbsbbbbr0ajf3ddlprxfaajfbnbiyv72cpn9s",
+    "win_s": "0nl7c9dpfx7jjpy7y52z8h3kiy4cpax1m58apbcfyy95an4jz8s4",
+    "win32": "08ka1lklly82h4mr770y9p0a21x9dx6jqvjgxdsxj5979f26il1v",
+    "win32_s": "06w844zxzx3lfykibgkk4gbg4xymnqraj1ikv4mzlv31l727a1x4",
+    "legacy": "042a0gbad3cp5dwhnrzg3vr9w48b8ybqgxgw5i9rk4c1i0gjjpw2",
+    "legacy_s": "1rb7h8lzlsjs08rvhhl3nwbrpj54zijijp4y0qdp4vyzsig6nisk",
+    "legacy32": "0ayw09x9smihh8qp5pdvr6vvhwkvcqz36h3lh4g1b5kzxj7g9cyf",
+    "legacy32_s": "10gfxlysfs9gyi1mv52idp5xk45g9h517g2jq4a8cqp2j7594v9c"
   }
 }

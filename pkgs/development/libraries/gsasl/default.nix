@@ -1,14 +1,15 @@
-{ fetchurl, lib, stdenv, libidn, kerberos }:
+{ fetchurl, lib, stdenv, libidn, libkrb5 }:
 
 stdenv.mkDerivation rec {
-  name = "gsasl-1.10.0";
+  pname = "gsasl";
+  version = "1.10.0";
 
   src = fetchurl {
-    url = "mirror://gnu/gsasl/${name}.tar.gz";
+    url = "mirror://gnu/gsasl/${pname}-${version}.tar.gz";
     sha256 = "sha256-hby9juYJWt54cCY6KOvLiDL1Qepzk5dUlJJgFcB1aNM=";
   };
 
-  buildInputs = [ libidn kerberos ];
+  buildInputs = [ libidn libkrb5 ];
 
   configureFlags = [ "--with-gssapi-impl=mit" ];
 

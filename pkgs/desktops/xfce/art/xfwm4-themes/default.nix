@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://xfce/src/${category}/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
-    sha256 = "0xfmdykav4rf6gdxbd6fhmrfrvbdc1yjihz7r7lba0wp1vqda51j";
+    sha256 = "sha256-MhTV8A6XA7XoyefDKH1gbe3scoXOtNXbMy6TraZv1XU=";
   };
 
   passthru.updateScript = xfce.updateScript {
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.xfce.org/";
     description = "Themes for Xfce";
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
     platforms = platforms.linux;
     maintainers = [ maintainers.volth ];
   };

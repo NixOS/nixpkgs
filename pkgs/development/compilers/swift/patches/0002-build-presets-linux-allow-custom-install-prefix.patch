@@ -1,8 +1,8 @@
-allow custom install prefix
+Use custom install prefix.
 
---- a/utils/build-presets.ini	2019-04-11 14:51:40.060259462 +0200
-+++ b/utils/build-presets.ini	2019-04-11 15:16:17.471137969 +0200
-@@ -752,7 +752,7 @@
+--- a/utils/build-presets.ini
++++ b/utils/build-presets.ini
+@@ -788,7 +788,7 @@
  install-swiftpm
  install-xctest
  install-libicu

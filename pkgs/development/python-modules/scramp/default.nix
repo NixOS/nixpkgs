@@ -2,23 +2,32 @@
 , asn1crypto
 , buildPythonPackage
 , fetchFromGitHub
+, pytest-mock
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "scramp";
-  version = "1.2.2";
+  version = "1.4.1";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "tlocke";
     repo = "scramp";
     rev = version;
-    sha256 = "sha256-d/kfrhvU96eH8TQX7n1hVRclEFWLseEvOxiR6VaOdrg=";
+    sha256 = "sha256-HEt2QxNHX9Oqx+o0++ZtS61SVHra3nLAqv7NbQWVV+E=";
   };
 
-  propagatedBuildInputs = [ asn1crypto ];
+  propagatedBuildInputs = [
+    asn1crypto
+  ];
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [
+    pytest-mock
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "scramp" ];
 

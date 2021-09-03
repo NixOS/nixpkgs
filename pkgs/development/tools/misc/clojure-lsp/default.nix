@@ -1,39 +1,30 @@
-{ lib, stdenv, callPackage, fetchFromGitHub, leiningen, openjdk11
-, graalvm11-ce, babashka }:
+{ lib, stdenv, graalvm11-ce, babashka, fetchurl, fetchFromGitHub, clojure }:
 
-let
+stdenv.mkDerivation rec {
   pname = "clojure-lsp";
-  version = "2021.02.14-19.46.47";
-  leiningen11 = leiningen.override ({ jdk = openjdk11; });
+  version = "2021.07.12-12.30.59";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "sha256-Zj7/8RcuxCy2xdd+5jeOb1GTsQsX0EVW32k32fA6uf4=";
+    sha256 = "0iky3yh548xn28285x8gnjzc00f3i2b415wb2dhd9p9y2bgzhkld";
   };
 
-  repository = callPackage ./repository.nix {
-    inherit src pname version;
-    leiningen = leiningen11;
+  jar = fetchurl {
+    url = "https://github.com/clojure-lsp/clojure-lsp/releases/download/${version}/clojure-lsp.jar";
+    sha256 = "02k1k0slh1lm7k43d52jvgl0fdyp9gcr8csbr6yi71qbhy0axrmp";
   };
-in stdenv.mkDerivation rec {
-  inherit src pname version;
-
-  postPatch = ''
-    # Hack to set maven cache in another directory since MAVEN_OPTS doesn't work
-    substituteInPlace project.clj \
-      --replace ":main" ":local-repo \"${repository}\" :main"
-  '';
 
   GRAALVM_HOME = graalvm11-ce;
+  CLOJURE_LSP_JAR = jar;
+  CLOJURE_LSP_XMX = "-J-Xmx4g";
 
-  buildInputs = [ graalvm11-ce leiningen11 repository ];
+  buildInputs = [ graalvm11-ce clojure ];
 
   buildPhase = with lib; ''
     runHook preBuild
 
-    export LEIN_HOME="$(mktemp -d)"
     bash ./graalvm/native-unix-compile.sh
 
     runHook postBuild
@@ -51,16 +42,18 @@ in stdenv.mkDerivation rec {
   checkPhase = ''
     runHook preCheck
 
-    ${babashka}/bin/bb ./integration-test/run-all.clj ./clojure-lsp
+    export HOME="$(mktemp -d)"
+    ./clojure-lsp --version | fgrep -q '${version}'
+    ${babashka}/bin/bb integration-test/run-all.clj ./clojure-lsp
 
     runHook postCheck
   '';
 
   meta = with lib; {
     description = "Language Server Protocol (LSP) for Clojure";
-    homepage = "https://github.com/snoe/clojure-lsp";
+    homepage = "https://github.com/clojure-lsp/clojure-lsp";
     license = licenses.mit;
-    maintainers = [ maintainers.ericdallo ];
+    maintainers = with maintainers; [ ericdallo babariviere ];
     platforms = graalvm11-ce.meta.platforms;
   };
 }

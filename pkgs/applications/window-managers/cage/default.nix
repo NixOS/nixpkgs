@@ -1,31 +1,27 @@
 { lib, stdenv, fetchFromGitHub
-, meson, ninja, pkg-config, wayland, scdoc, makeWrapper
-, wlroots, wayland-protocols, pixman, libxkbcommon
-, systemd, libGL, libX11
+, meson, ninja, pkg-config, wayland-scanner, scdoc, makeWrapper
+, wlroots, wayland, wayland-protocols, pixman, libxkbcommon
+, systemd, libGL, libX11, mesa
 , xwayland ? null
 , nixosTests
 }:
 
 stdenv.mkDerivation rec {
   pname = "cage";
-  version = "0.1.2.1";
+  version = "0.1.4";
 
   src = fetchFromGitHub {
     owner = "Hjdskes";
     repo = "cage";
     rev = "v${version}";
-    sha256 = "1i4rm3dpmk7gkl6hfs6a7vwz76ba7yqcdp63nlrdbnq81m9cy2am";
+    sha256 = "0vm96gxinhy48m3x9p1sfldyd03w3gk6iflb7n9kn06j1vqyswr6";
   };
 
-  postPatch = ''
-    substituteInPlace meson.build --replace \
-      "0.1.2" "${version}"
-  '';
-
-  nativeBuildInputs = [ meson ninja pkg-config wayland scdoc makeWrapper ];
+  nativeBuildInputs = [ meson ninja pkg-config wayland-scanner scdoc makeWrapper ];
 
   buildInputs = [
     wlroots wayland wayland-protocols pixman libxkbcommon
+    mesa # for libEGL headers
     systemd libGL libX11
   ];
 

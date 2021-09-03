@@ -5,7 +5,7 @@
 , jupyter_client
 , ipython
 , ipykernel
-, prompt_toolkit
+, prompt-toolkit
 , pygments
 }:
 
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     jupyter_client
     ipython
     ipykernel
-    prompt_toolkit
+    prompt-toolkit
     pygments
   ];
 

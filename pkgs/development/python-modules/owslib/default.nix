@@ -1,15 +1,15 @@
-{ lib, buildPythonPackage, fetchPypi, dateutil, requests, pytz, pyproj , pytest, pyyaml } :
+{ lib, buildPythonPackage, fetchPypi, python-dateutil, requests, pytz, pyproj , pytest, pyyaml } :
 buildPythonPackage rec {
   pname = "OWSLib";
-  version = "0.21.0";
+  version = "0.25.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "408d40b3a6a210bcb3f3609b607960eeedaa63ffd574dde7896906691c354814";
+    sha256 = "20d79bce0be10277caa36f3134826bd0065325df0301a55b2c8b1c338d8d8f0a";
   };
 
   buildInputs = [ pytest ];
-  propagatedBuildInputs = [ dateutil pyproj pytz requests pyyaml ];
+  propagatedBuildInputs = [ python-dateutil pyproj pytz requests pyyaml ];
 
   # 'tests' dir not included in pypy distribution archive.
   doCheck = false;

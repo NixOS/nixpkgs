@@ -3,7 +3,7 @@ config:
 
 # Xen
 , bison, bzip2, checkpolicy, dev86, figlet, flex, gettext, glib
-, iasl, libaio, libiconv, libuuid, ncurses, openssl, perl
+, acpica-tools, libaio, libiconv, libuuid, ncurses, openssl, perl
 , python2Packages
 # python2Packages.python
 , xz, yajl, zlib
@@ -13,7 +13,7 @@ config:
 
 # Scripts
 , coreutils, gawk, gnused, gnugrep, diffutils, multipath-tools
-, iproute, inetutils, iptables, bridge-utils, openvswitch, nbd, drbd
+, iproute2, inetutils, iptables, bridge-utils, openvswitch, nbd, drbd
 , lvm2, util-linux, procps, systemd
 
 # Documentation
@@ -31,7 +31,7 @@ let
   scriptEnvPath = concatMapStringsSep ":" (x: "${x}/bin") [
     which perl
     coreutils gawk gnused gnugrep diffutils util-linux multipath-tools
-    iproute inetutils iptables bridge-utils openvswitch nbd drbd
+    iproute2 inetutils iptables bridge-utils openvswitch nbd drbd
   ];
 
   withXenfiles = f: concatStringsSep "\n" (mapAttrsToList f config.xenfiles);
@@ -71,7 +71,7 @@ stdenv.mkDerivation (rec {
     cmake which
 
     # Xen
-    bison bzip2 checkpolicy dev86 figlet flex gettext glib iasl libaio
+    bison bzip2 checkpolicy dev86 figlet flex gettext glib acpica-tools libaio
     libiconv libuuid ncurses openssl perl python2Packages.python xz yajl zlib
 
     # oxenstored

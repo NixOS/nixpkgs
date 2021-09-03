@@ -30,6 +30,7 @@ rec {
         int
         float
         str
+        path
         (attrsOf valueType)
         (listOf valueType)
       ]) // {
@@ -37,7 +38,7 @@ rec {
       };
     in valueType;
 
-    generate = name: value: pkgs.runCommandNoCC name {
+    generate = name: value: pkgs.runCommand name {
       nativeBuildInputs = [ pkgs.jq ];
       value = builtins.toJSON value;
       passAsFile = [ "value" ];
@@ -47,16 +48,42 @@ rec {
 
   };
 
-  # YAML has been a strict superset of JSON since 1.2
-  yaml = {}:
-    let jsonSet = json {};
-    in jsonSet // {
-      type = jsonSet.type // {
+  yaml = {}: {
+
+    generate = name: value: pkgs.runCommand name {
+        nativeBuildInputs = [ pkgs.remarshal ];
+        value = builtins.toJSON value;
+        passAsFile = [ "value" ];
+      } ''
+        json2yaml "$valuePath" "$out"
+      '';
+
+    type = with lib.types; let
+      valueType = nullOr (oneOf [
+        bool
+        int
+        float
+        str
+        path
+        (attrsOf valueType)
+        (listOf valueType)
+      ]) // {
         description = "YAML value";
       };
-    };
+    in valueType;
 
-  ini = { listsAsDuplicateKeys ? false, ... }@args: {
+  };
+
+  ini = {
+    # Represents lists as duplicate keys
+    listsAsDuplicateKeys ? false,
+    # Alternative to listsAsDuplicateKeys, converts list to non-list
+    # listToValue :: [IniAtom] -> IniAtom
+    listToValue ? null,
+    ...
+    }@args:
+    assert !listsAsDuplicateKeys || listToValue == null;
+    {
 
     type = with lib.types; let
 
@@ -74,12 +101,25 @@ rec {
           coercedTo singleIniAtom lib.singleton (listOf singleIniAtom) // {
             description = singleIniAtom.description + " or a list of them for duplicate keys";
           }
+        else if listToValue != null then
+          coercedTo singleIniAtom lib.singleton (nonEmptyListOf singleIniAtom) // {
+            description = singleIniAtom.description + " or a non-empty list of them";
+          }
         else
           singleIniAtom;
 
     in attrsOf (attrsOf iniAtom);
 
-    generate = name: value: pkgs.writeText name (lib.generators.toINI args value);
+    generate = name: value:
+      let
+        transformedValue =
+          if listToValue != null
+          then
+            lib.mapAttrs (section: lib.mapAttrs (key: val:
+              if lib.isList val then listToValue val else val
+            )) value
+          else value;
+      in pkgs.writeText name (lib.generators.toINI (removeAttrs args ["listToValue"]) transformedValue);
 
   };
 
@@ -90,6 +130,7 @@ rec {
         int
         float
         str
+        path
         (attrsOf valueType)
         (listOf valueType)
       ] // {
@@ -97,7 +138,7 @@ rec {
       };
     in valueType;
 
-    generate = name: value: pkgs.runCommandNoCC name {
+    generate = name: value: pkgs.runCommand name {
       nativeBuildInputs = [ pkgs.remarshal ];
       value = builtins.toJSON value;
       passAsFile = [ "value" ];

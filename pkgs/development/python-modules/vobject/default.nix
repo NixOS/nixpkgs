@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPyPy, python, dateutil }:
+{ lib, buildPythonPackage, fetchPypi, isPyPy, python, python-dateutil }:
 
 buildPythonPackage rec {
   version = "0.9.6.1";
@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   disabled = isPyPy;
 
-  propagatedBuildInputs = [ dateutil ];
+  propagatedBuildInputs = [ python-dateutil ];
 
   checkPhase = "${python.interpreter} tests.py";
 

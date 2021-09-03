@@ -1,5 +1,5 @@
 { autoconf, automake, boost, cbor-diag, cddl, fetchFromGitHub, file, libctemplate, libmaxminddb
-, libpcap, libtins, libtool, lzma, openssl, pkg-config, lib, stdenv, tcpdump, wireshark-cli
+, libpcap, libtins, libtool, xz, openssl, pkg-config, lib, stdenv, tcpdump, wireshark-cli
 }:
 
 stdenv.mkDerivation rec {
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     libpcap
     openssl
     libtins
-    lzma
+    xz
     libctemplate
     libmaxminddb
   ];

@@ -1,26 +1,36 @@
 { mkDerivation
-, lib, stdenv
+, lib
+, stdenv
 , fetchFromGitHub
+, nix-update-script
 , qmake
+, pkg-config
 , qtbase
 , qtmultimedia
 , libvorbis
+, rtmidi
 }:
 
 mkDerivation rec {
   pname = "ptcollab";
-  version = "0.3.5.1";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "yuxshao";
     repo = "ptcollab";
     rev = "v${version}";
-    sha256 = "1ahfxjm1chz8k65rs7rgn4s2bgippq58fjcxl8fr21pzn718wqf1";
+    sha256 = "sha256-AeIjc+FoFsTcyWl261GvyySIHP107rL4JkuMXFhnPbk=";
   };
 
-  nativeBuildInputs = [ qmake ];
+  nativeBuildInputs = [ qmake pkg-config ];
 
-  buildInputs = [ qtbase qtmultimedia libvorbis ];
+  buildInputs = [ qtbase qtmultimedia libvorbis rtmidi ];
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = pname;
+    };
+  };
 
   meta = with lib; {
     description = "Experimental pxtone editor where you can collaborate with friends";

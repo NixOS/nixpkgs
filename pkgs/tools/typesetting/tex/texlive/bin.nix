@@ -3,7 +3,7 @@
 , zlib, libiconv, libpng, libX11
 , freetype, gd, libXaw, icu, ghostscript, libXpm, libXmu, libXext
 , perl, perlPackages, python3Packages, pkg-config
-, poppler, libpaper, graphite2, zziplib, harfbuzz, potrace, gmp, mpfr
+, libpaper, graphite2, zziplib, harfbuzz, potrace, gmp, mpfr
 , brotli, cairo, pixman, xorg, clisp, biber, woff2, xxHash
 , makeWrapper, shortenPerlShebang
 }:
@@ -14,24 +14,22 @@
 let
   withSystemLibs = map (libname: "--with-system-${libname}");
 
-  year = "2020";
+  year = "2021";
   version = year; # keep names simple for now
 
   common = {
     src = fetchurl {
       urls = [
-        "http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${year}/texlive-${year}0406-source.tar.xz"
-              "ftp://tug.ctan.org/pub/tex/historic/systems/texlive/${year}/texlive-${year}0406-source.tar.xz"
+        "http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${year}/texlive-${year}0325-source.tar.xz"
+              "ftp://tug.ctan.org/pub/tex/historic/systems/texlive/${year}/texlive-${year}0325-source.tar.xz"
       ];
-      sha256 = "0y4h4j2qg714srhvf1hvn165w7sanr1j2vzrsgc23kxvrc43sbz3";
+      sha256 = "0jsq1p66l46k2qq0gbqmx25flj2nprsz4wrd1ybn286p11kdkvvs";
     };
 
     prePatch = ''
       for i in texk/kpathsea/mktex*; do
         sed -i '/^mydir=/d' "$i"
       done
-      cp -pv texk/web2c/pdftexdir/pdftoepdf{-poppler0.86.0,}.cc
-      cp -pv texk/web2c/pdftexdir/pdftosrc{-poppler0.83.0,}.cc
     '';
 
     configureFlags = [
@@ -43,9 +41,8 @@ let
     ]
       ++ withSystemLibs [
       # see "from TL tree" vs. "Using installed"  in configure output
-      "zziplib" "xpdf" "poppler" "mpfr" "gmp"
+      "zziplib" "mpfr" "gmp"
       "pixman" "potrace" "gd" "freetype2" "libpng" "libpaper" "zlib"
-        # beware: xpdf means to use stuff from poppler :-/
     ];
 
     # clean broken links to stuff not built
@@ -73,7 +70,7 @@ core = stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    /*teckit*/ zziplib poppler mpfr gmp
+    /*teckit*/ zziplib mpfr gmp
     pixman gd freetype libpng libpaper zlib
     perl
   ];
@@ -82,7 +79,7 @@ core = stdenv.mkDerivation rec {
 
   preConfigure = ''
     rm -r libs/{cairo,freetype2,gd,gmp,graphite2,harfbuzz,icu,libpaper,libpng} \
-      libs/{lua53,luajit,mpfr,pixman,poppler,xpdf,zlib,zziplib}
+      libs/{lua53,luajit,mpfr,pixman,zlib,zziplib}
     mkdir WorkDir
     cd WorkDir
   '';
@@ -146,7 +143,7 @@ core = stdenv.mkDerivation rec {
     description = "Basic binaries for TeX Live";
     homepage    = "http://www.tug.org/texlive";
     license     = lib.licenses.gpl2;
-    maintainers = with maintainers; [ vcunat veprbl lovek323 raskin jwiegley ];
+    maintainers = with maintainers; [ veprbl lovek323 raskin jwiegley ];
     platforms   = platforms.all;
   };
 };
@@ -178,7 +175,7 @@ core-big = stdenv.mkDerivation { #TODO: upmendex
     luajit = lib.optionalString withLuaJIT ",luajit";
   in ''
     mkdir ./WorkDir && cd ./WorkDir
-    for path in libs/{teckit,lua53${luajit}} texk/web2c; do
+    for path in libs/{pplib,teckit,lua53${luajit}} texk/web2c; do
       (
         if [[ "$path" =~ "libs/lua" ]]; then
           extraConfig="--enable-static --disable-shared"
@@ -188,6 +185,12 @@ core-big = stdenv.mkDerivation { #TODO: upmendex
 
         mkdir -p "$path" && cd "$path"
         "../../../$path/configure" $configureFlags $extraConfig
+
+        if [[ "$path" =~ "libs/pplib" ]]; then
+          # TODO: revert for texlive 2022
+          # ../../../texk/web2c/luatexdir/luamd5/md5lib.c:197:10: fatal error: 'utilsha.h' file not found
+          make ''${enableParallelBuilding:+-j''${NIX_BUILD_CORES} -l''${NIX_BUILD_CORES}}
+        fi
       )
     done
   '';
@@ -247,18 +250,17 @@ chktex = stdenv.mkDerivation {
 
 dvisvgm = stdenv.mkDerivation rec {
   pname = "texlive-dvisvgm.bin";
-  version = "2.11";
-  # TODO: dvisvgm was switched to build from upstream sources
-  # to address https://github.com/NixOS/nixpkgs/issues/104847
-  # We might want to consider reverting that change in the future.
+  inherit version;
 
-  src = fetchurl {
-    url = "https://github.com/mgieseki/dvisvgm/releases/download/${version}/dvisvgm-${version}.tar.gz";
-    sha256 = "12b6h0h8rc487yjh3sq9zsdabm9cs2vqcrb0znnfi8277f87zf3j";
-  };
+  inherit (common) src;
+
+  preConfigure = "cd texk/dvisvgm";
+
+  configureFlags = common.configureFlags
+    ++ [ "--with-system-kpathsea" ];
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ core/*kpathsea*/ brotli ghostscript zlib freetype woff2 potrace xxHash ];
+  buildInputs = [ core brotli ghostscript zlib freetype woff2 potrace xxHash ];
 
   enableParallelBuilding = true;
 };
@@ -307,7 +309,7 @@ latexindent = perlPackages.buildPerlPackage rec {
   preConfigure = ''
     touch Makefile.PL
   '';
-  buildPhase = ":";
+  dontBuild = true;
   installPhase = ''
     install -D ./scripts/latexindent/latexindent.pl "$out"/bin/latexindent
     mkdir -p "$out"/${perl.libPrefix}

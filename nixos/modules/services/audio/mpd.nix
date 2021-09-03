@@ -213,7 +213,9 @@ in {
       description = "Music Player Daemon Socket";
       wantedBy = [ "sockets.target" ];
       listenStreams = [
-        "${optionalString (cfg.network.listenAddress != "any") "${cfg.network.listenAddress}:"}${toString cfg.network.port}"
+        (if pkgs.lib.hasPrefix "/" cfg.network.listenAddress
+          then cfg.network.listenAddress
+          else "${optionalString (cfg.network.listenAddress != "any") "${cfg.network.listenAddress}:"}${toString cfg.network.port}")
       ];
       socketConfig = {
         Backlog = 5;
@@ -231,14 +233,15 @@ in {
         {
           User = "${cfg.user}";
           ExecStart = "${pkgs.mpd}/bin/mpd --no-daemon /run/mpd/mpd.conf";
-          ExecStartPre = pkgs.writeShellScript "mpd-start-pre" ''
+          ExecStartPre = pkgs.writeShellScript "mpd-start-pre" (''
             set -euo pipefail
             install -m 600 ${mpdConf} /run/mpd/mpd.conf
-            ${optionalString (cfg.credentials != [])
-            "${pkgs.replace}/bin/replace-literal -fe ${
-              concatStringsSep " -a " (imap0 (i: c: "\"{{password-${toString i}}}\" \"$(cat ${c.passwordFile})\"") cfg.credentials)
-            } /run/mpd/mpd.conf"}
-          '';
+          '' + optionalString (cfg.credentials != [])
+            (concatStringsSep "\n"
+              (imap0
+                (i: c: ''${pkgs.replace-secret}/bin/replace-secret '{{password-${toString i}}}' '${c.passwordFile}' /run/mpd/mpd.conf'')
+                cfg.credentials))
+          );
           RuntimeDirectory = "mpd";
           Type = "notify";
           LimitRTPRIO = 50;

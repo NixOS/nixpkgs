@@ -1,6 +1,6 @@
 { lib, stdenv
 , fetchurl
-, python
+, python2
 }:
 
 stdenv.mkDerivation rec {
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     export SAGE_SHARE="$out/share"
     export PYTHONPATH=$PWD
 
-    ${python.interpreter} ${spkg-install}
+    ${python2.interpreter} ${spkg-install}
   '';
 
   meta = with lib; {

@@ -1,29 +1,28 @@
-{ stdenv, lib, buildGoModule, fetchFromGitHub, makeWrapper, iproute, nettools }:
+{ stdenv, lib, buildGoModule, fetchFromGitHub, makeWrapper, iproute2, nettools }:
 
 buildGoModule rec {
   pname = "mackerel-agent";
-  version = "0.71.1";
+  version = "0.72.1";
 
   src = fetchFromGitHub {
     owner = "mackerelio";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-xEUIfmQX7I+I2wi53vc1JZYDweY9OAAUd2TZJ125+iw=";
+    sha256 = "sha256-pUbZY+TjSZNOrmRarYVUDI0HoIUMY0LacdFSdqQ/7D4=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
   checkInputs = lib.optionals (!stdenv.isDarwin) [ nettools ];
-  buildInputs = lib.optionals (!stdenv.isDarwin) [ iproute ];
+  buildInputs = lib.optionals (!stdenv.isDarwin) [ iproute2 ];
 
-  vendorSha256 = "sha256-yomxALecP+PycelOmwrteK/LoW7wsst7os+jcbF46Bs=";
+  vendorSha256 = "sha256-trVfF4voye6CQ5WK78yBT86fgSUFyxaCtsZx6kXgYGE=";
 
   subPackages = [ "." ];
 
-  buildFlagsArray = ''
-    -ldflags=
-    -X=main.version=${version}
-    -X=main.gitcommit=v${version}
-  '';
+  ldflags = [
+    "-X=main.version=${version}"
+    "-X=main.gitcommit=v${version}"
+  ];
 
   postInstall = ''
     wrapProgram $out/bin/mackerel-agent \
@@ -37,6 +36,5 @@ buildGoModule rec {
     homepage = "https://github.com/mackerelio/mackerel-agent";
     license = licenses.asl20;
     maintainers = with maintainers; [ midchildan ];
-    platforms = platforms.all;
   };
 }

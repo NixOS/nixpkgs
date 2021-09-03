@@ -88,13 +88,7 @@ stdenv.mkDerivation rec {
   ;
 
   patches = [
-    # Julia recompiles a precompiled file if the mtime stored *in* the
-    # .ji file differs from the mtime of the .ji file.  This
-    # doesn't work in Nix because Nix changes the mtime of files in
-    # the Nix store to 1. So patch Julia to accept mtimes of 1.
-    ./allow_nix_mtime.patch
-    ./diagonal-test.patch
-    ./use-system-utf8proc-julia-1.0.patch
+    ./patches/1.0/use-system-utf8proc-julia-1.0.patch
   ];
 
   postPatch = ''
@@ -139,7 +133,7 @@ stdenv.mkDerivation rec {
       "prefix=$(out)"
       "SHELL=${stdenv.shell}"
 
-      "USE_SYSTEM_BLAS=1"
+      (lib.optionalString (!stdenv.isDarwin) "USE_SYSTEM_BLAS=1")
       "USE_BLAS64=${if blas.isILP64 then "1" else "0"}"
 
       "USE_SYSTEM_LAPACK=1"
@@ -183,6 +177,8 @@ stdenv.mkDerivation rec {
     sed -e '/[$](DESTDIR)[$](docdir)/d' -i Makefile
     export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}
   '';
+
+  enableParallelBuilding = true;
 
   postInstall = ''
     # Symlink shared libraries from LD_LIBRARY_PATH into lib/julia,

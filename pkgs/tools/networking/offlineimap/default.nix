@@ -1,16 +1,39 @@
-{ lib, fetchFromGitHub, python2Packages,
-  asciidoc, cacert, libxml2, libxslt, docbook_xsl }:
+{ lib
+, fetchFromGitHub
+, python2Packages
+, asciidoc
+, cacert
+, docbook_xsl
+, installShellFiles
+, libxml2
+, libxslt
+}:
 
 python2Packages.buildPythonApplication rec {
-  version = "7.3.3";
+  version = "7.3.4";
   pname = "offlineimap";
 
   src = fetchFromGitHub {
     owner = "OfflineIMAP";
     repo = "offlineimap";
     rev = "v${version}";
-    sha256 = "1gg8ry67i20qapj4z20am9bm67m2q28kixcj7ja75m897vhzarnq";
+    sha256 = "sha256-sra2H0+5+LAIU3+uJnii+AYA05nuDyKVMW97rbaFOfI=";
   };
+
+  nativeBuildInputs = [
+    asciidoc
+    docbook_xsl
+    installShellFiles
+    libxml2
+    libxslt
+  ];
+
+  propagatedBuildInputs = with python2Packages; [
+    six
+    kerberos
+    rfc6555
+    pysocks
+  ];
 
   postPatch = ''
     # Skip xmllint to stop failures due to no network access
@@ -20,21 +43,19 @@ python2Packages.buildPythonApplication rec {
     sed -i offlineimap/utils/distro.py -e '/def get_os_sslcertfile():/a\ \ \ \ return "${cacert}/etc/ssl/certs/ca-bundle.crt"'
   '';
 
-  doCheck = false;
-
-  nativeBuildInputs = [ asciidoc libxml2 libxslt docbook_xsl ];
-  propagatedBuildInputs = with python2Packages; [ six kerberos rfc6555 pysocks ];
-
   postInstall = ''
     make -C docs man
-    install -D -m 644 docs/offlineimap.1 ''${!outputMan}/share/man/man1/offlineimap.1
-    install -D -m 644 docs/offlineimapui.7 ''${!outputMan}/share/man/man7/offlineimapui.7
+    installManPage docs/offlineimap.1
+    installManPage docs/offlineimapui.7
   '';
 
-  meta = {
+  # Test requires credentials
+  doCheck = false;
+
+  meta = with lib; {
     description = "Synchronize emails between two repositories, so that you can read the same mailbox from multiple computers";
     homepage = "http://offlineimap.org";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ endocrimes ];
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ endocrimes ];
   };
 }

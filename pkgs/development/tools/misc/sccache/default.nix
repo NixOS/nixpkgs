@@ -11,9 +11,9 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1kygk7ilv7la36kv4jdn1ird7f3896wgr88kyqf0iagfqkzb2vsb";
   };
 
-  cargoSha256 = "1cfdwf00jgwsv0f72427asid1xr57s56jk5xj489dgppvgy7wdbj";
+  cargoSha256 = "1f42cqaqnjwi9k4ihqil6z2dqh5dnf76x54gk7mndzkrfg3rl573";
 
-  cargoBuildFlags = [ "--features=dist-client,dist-server" ];
+  cargoBuildFlags = lib.optionals (!stdenv.isDarwin) [ "--features=dist-client,dist-server" ];
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ] ++ lib.optional stdenv.isDarwin Security;
@@ -27,6 +27,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/mozilla/sccache";
     maintainers = with maintainers; [ doronbehar ];
     license = licenses.asl20;
-    platforms = [ "x86_64-linux" ];
   };
 }

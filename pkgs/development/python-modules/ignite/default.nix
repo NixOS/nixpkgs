@@ -2,29 +2,30 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pytestCheckHook
-, pytest_xdist
+, pytest-xdist
+, torchvision
 , pythonOlder
 , matplotlib
 , mock
 , pytorch
 , pynvml
-, scikitlearn
+, scikit-learn
 , tqdm
 }:
 
 buildPythonPackage rec {
   pname = "ignite";
-  version = "0.4.2";
+  version = "0.4.6";
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = pname;
     rev = "v${version}";
-    sha256 = "00vcmhnp14s54g386izgaxzrdr2nqv3pz9nvpyiwrn33zawr308z";
+    sha256 = "sha256-dlKGXjUUnyYmPDilo0LQg9OkSkBnMYNgzlFLIfI0T6I=";
   };
 
-  checkInputs = [ pytestCheckHook matplotlib mock pytest_xdist ];
-  propagatedBuildInputs = [ pytorch scikitlearn tqdm pynvml ];
+  checkInputs = [ pytestCheckHook matplotlib mock pytest-xdist torchvision ];
+  propagatedBuildInputs = [ pytorch scikit-learn tqdm pynvml ];
 
   # runs succesfully in 3.9, however, async isn't correctly closed so it will fail after test suite.
   doCheck = pythonOlder "3.9";
@@ -33,8 +34,14 @@ buildPythonPackage rec {
   # models, which doesn't work in the sandbox.
   # avoid tests which need special packages
   pytestFlagsArray = [
+    "--ignore=tests/ignite/contrib/handlers/test_clearml_logger.py"
+    "--ignore=tests/ignite/contrib/handlers/test_lr_finder.py"
     "--ignore=tests/ignite/contrib/handlers/test_trains_logger.py"
+    "--ignore=tests/ignite/metrics/nlp/test_bleu.py"
+    "--ignore=tests/ignite/metrics/nlp/test_rouge.py"
+    "--ignore=tests/ignite/metrics/gan" # requires pytorch_fid; tries to download model to $HOME
     "--ignore=tests/ignite/metrics/test_dill.py"
+    "--ignore=tests/ignite/metrics/test_psnr.py"
     "--ignore=tests/ignite/metrics/test_ssim.py"
     "tests/"
   ];
@@ -42,16 +49,17 @@ buildPythonPackage rec {
   # disable tests which need specific packages
   disabledTests = [
     "idist"
-    "tensorboard"
     "mlflow"
+    "tensorboard"
+    "test_integration"
+    "test_output_handler" # needs mlflow
+    "test_pbar" # slight output differences
+    "test_setup_clearml_logging"
+    "test_setup_neptune"
+    "test_setup_plx"
+    "test_write_results"
     "trains"
     "visdom"
-    "test_setup_neptune"
-    "test_output_handler" # needs mlflow
-    "test_integration"
-    "test_pbar" # slight output differences
-    "test_write_results"
-    "test_setup_plx"
   ];
 
   meta = with lib; {

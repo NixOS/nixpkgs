@@ -18,6 +18,7 @@
 , python3
 , libnotify
 , libical
+, libgdata
 , evolution-data-server
 , appstream-glib
 , elementary-icon-theme
@@ -67,6 +68,7 @@ stdenv.mkDerivation rec {
     libgee
     libical
     libnotify
+    libgdata # required by some dependency transitively
   ];
 
   postPatch = ''

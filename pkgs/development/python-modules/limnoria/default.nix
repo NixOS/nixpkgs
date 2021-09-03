@@ -2,24 +2,25 @@
 , buildPythonPackage
 , fetchPypi
 , isPy27
-, pkgs
+, git
 }:
 
 buildPythonPackage rec {
   pname = "limnoria";
-  version = "2021.01.15";
+  version = "2021.07.21";
   disabled = isPy27; # abandoned upstream
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5d7109fc779c44070e3c57186eae59b133014835d5fe15b262fa9438d7599c81";
+    sha256 = "80ca1db9648e7678f81b373dab04d06025ec6532e68a9be773ddbd159de54e4c";
   };
 
-  patchPhase = ''
+  postPatch = ''
     sed -i 's/version=version/version="${version}"/' setup.py
   '';
-  buildInputs = [ pkgs.git ];
+  buildInputs = [ git ];
 
+  # cannot be imported
   doCheck = false;
 
   meta = with lib; {

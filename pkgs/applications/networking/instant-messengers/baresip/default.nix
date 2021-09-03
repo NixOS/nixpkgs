@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, zlib, openssl, libre, librem, pkg-config, gst_all_1
-, cairo, mpg123, alsaLib, SDL, libv4l, celt, libsndfile, srtp, ffmpeg_3
+, cairo, mpg123, alsa-lib, SDL, libv4l, celt, libsndfile, srtp, ffmpeg
 , gsm, speex, portaudio, spandsp, libuuid, libvpx
 }:
 stdenv.mkDerivation rec {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [zlib openssl libre librem cairo mpg123
-    alsaLib SDL libv4l celt libsndfile srtp ffmpeg_3 gsm speex portaudio spandsp libuuid
+    alsa-lib SDL libv4l celt libsndfile srtp ffmpeg gsm speex portaudio spandsp libuuid
     libvpx
   ] ++ (with gst_all_1; [ gstreamer gst-libav gst-plugins-base gst-plugins-bad gst-plugins-good ]);
   makeFlags = [
@@ -45,7 +45,6 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; linux;
     maintainers = with lib.maintainers; [raskin];
     license = lib.licenses.bsd3;
-    inherit version;
     downloadPage = "http://www.creytiv.com/pub/";
     updateWalker = true;
     downloadURLRegexp = "/baresip-.*[.]tar[.].*";

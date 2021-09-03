@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, bison, flex, gperf, ncurses, pythonPackages }:
+{ lib, stdenv, fetchurl, pkg-config, bison, flex, gperf, ncurses, python3, bash }:
 
 stdenv.mkDerivation rec {
   basename = "kconfig-frontends";
@@ -10,16 +10,14 @@ stdenv.mkDerivation rec {
     url = "http://ymorin.is-a-geek.org/download/${basename}/${name}.tar.xz";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ bison flex gperf ncurses pythonPackages.python pythonPackages.wrapPython ];
+  nativeBuildInputs = [ bison flex gperf pkg-config ];
+  buildInputs = [ bash ncurses python3 ];
+
+  strictDeps = true;
 
   configureFlags = [
     "--enable-frontends=conf,mconf,nconf"
   ];
-
-  postInstall = ''
-    wrapPythonPrograms
-  '';
 
   NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=format-security";
 

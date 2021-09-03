@@ -3,16 +3,16 @@
 , pythonSupport ? enableShared && stdenv.buildPlatform == stdenv.hostPlatform
 , icuSupport ? false, icu ? null
 , enableShared ? stdenv.hostPlatform.libc != "msvcrt"
-, enableStatic ? !enableShared,
+, enableStatic ? !enableShared
 }:
 
 stdenv.mkDerivation rec {
   pname = "libxml2";
-  version = "2.9.10";
+  version = "2.9.12";
 
   src = fetchurl {
     url = "http://xmlsoft.org/sources/${pname}-${version}.tar.gz";
-    sha256 = "07xynh8hcxb2yb1fs051xrgszjvj37wnxvxgsj10rzmqzy9y3zma";
+    sha256 = "14hxwzmf5xqppx77z7i0ni9lpzg1a84dqpf8j8l1fvy570g6imn8";
   };
   patches = [
     # Upstream bugs:
@@ -27,27 +27,12 @@ stdenv.mkDerivation rec {
     #   https://github.com/NixOS/nixpkgs/pull/63174
     #   https://github.com/NixOS/nixpkgs/pull/72342
     ./utf8-xmlErrorFuncHandler.patch
+
+    # Work around lxml API misuse.
+    # https://gitlab.gnome.org/GNOME/libxml2/issues/255
     (fetchpatch {
-      name = "CVE-2019-20388.patch";
-      url = "https://gitlab.gnome.org/GNOME/libxml2/commit/6088a74bcf7d0c42e24cff4594d804e1d3c9fbca.patch";
-      sha256 = "070s7al2r2k92320h9cdfc2097jy4kk04d0disc98ddc165r80jl";
-    })
-    (fetchpatch {
-      name = "CVE-2020-7595.patch";
-      url = "https://gitlab.gnome.org/GNOME/libxml2/commit/0e1a49c8907645d2e155f0d89d4d9895ac5112b5.patch";
-      sha256 = "0klvaxkzakkpyq0m44l9xrpn5kwaii194sqsivfm6zhnb9hhl15l";
-    })
-    (fetchpatch {
-      name = "CVE-2020-24977.patch";
-      url = "https://gitlab.gnome.org/GNOME/libxml2/commit/50f06b3efb638efb0abd95dc62dca05ae67882c2.patch";
-      sha256 = "093f1ic5qfiq8nk9mc6b8p1qcs8m9hir3ardr6r5il4zi2dnjrj4";
-    })
-    # Fix compatibility with Python 3.9.
-    # https://gitlab.gnome.org/GNOME/libxml2/-/issues/149
-    (fetchpatch {
-      name = "python39.patch";
-      url = "https://gitlab.gnome.org/nwellnhof/libxml2/-/commit/e4fb36841800038c289997432ca547c9bfef9db1.patch";
-      sha256 = "0h3vpy9fg3339b14qa64640ypp65z3hrrrmpjl8qm72srkp24ci5";
+      url = "https://gitlab.gnome.org/GNOME/libxml2/commit/85b1792e37b131e7a51af98a37f92472e8de5f3f.patch";
+      sha256 = "epqlNs2S0Zczox3KyCB6R2aJKh87lXydlZ0x6tLHweE=";
     })
   ];
 
@@ -74,6 +59,10 @@ stdenv.mkDerivation rec {
     (lib.withFeature icuSupport "icu")
     (lib.withFeatureAs pythonSupport "python" python)
   ];
+
+  preConfigure = lib.optionalString (lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11") ''
+    MACOSX_DEPLOYMENT_TARGET=10.16
+  '';
 
   enableParallelBuilding = true;
 

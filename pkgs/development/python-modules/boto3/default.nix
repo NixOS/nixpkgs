@@ -4,7 +4,7 @@
 , botocore
 , jmespath
 , s3transfer
-, futures
+, futures ? null
 , docutils
 , nose
 , mock
@@ -13,11 +13,11 @@
 
 buildPythonPackage rec {
   pname = "boto3";
-  version = "1.17.30"; # N.B: if you change this, change botocore and awscli to a matching version
+  version = "1.17.97"; # N.B: if you change this, change botocore and awscli to a matching version
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-05wEtR5gGX9VA/hInwQ7yQSYFWfMhDHTiTZ3Z9w/1a4=";
+    sha256 = "0ab5afc51461c30f27aebef944211d16f47697b98ff8d2e2f6e49e59584853bb";
   };
 
   propagatedBuildInputs = [ botocore jmespath s3transfer ] ++ lib.optionals (!isPy3k) [ futures ];
@@ -34,6 +34,8 @@ buildPythonPackage rec {
 
   # Network access
   doCheck = false;
+
+  pythonImportsCheck = [ "boto3" ];
 
   meta = {
     homepage = "https://github.com/boto/boto3";

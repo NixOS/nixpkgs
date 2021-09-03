@@ -2,18 +2,15 @@
 , docbook_xml_dtd_45, git, docbook_xsl, libxml2, libxslt, coreutils, gawk
 , gnugrep, gnused, jq, nix }:
 
-let
-  binPath = lib.makeBinPath [ coreutils gawk git gnugrep gnused jq nix ];
-
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "nix-prefetch";
-  version = "0.4.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "msteen";
     repo = "nix-prefetch";
     rev = version;
-    sha256 = "11792677zyi06jw641xi9aywwgh9002b8406w6qids212c14va6n";
+    sha256 = "0bwv6x651gyq703pywrhb7lfby6xwnd1iwnrzzjihipn7x3v2hz9";
     # the stat call has to be in a subshell or we get the current date
     extraPostFetch = ''
       echo $(stat -c %Y $out) > $out/.timestamp
@@ -55,7 +52,7 @@ in stdenv.mkDerivation rec {
     install -Dm555 -t $lib src/*.sh
     install -Dm444 -t $lib lib/*
     makeWrapper $lib/main.sh $out/bin/${pname} \
-      --prefix PATH : ${binPath}
+      --prefix PATH : ${lib.makeBinPath [ coreutils gawk git gnugrep gnused jq nix ]}
 
     installManPage doc/nix-prefetch.?
 
@@ -69,6 +66,7 @@ in stdenv.mkDerivation rec {
     description = "Prefetch any fetcher function call, e.g. package sources";
     license = licenses.mit;
     maintainers = with maintainers; [ msteen ];
-    inherit (src.meta) homepage;
+    homepage = "https://github.com/msteen/nix-prefetch";
+    platforms = platforms.all;
   };
 }

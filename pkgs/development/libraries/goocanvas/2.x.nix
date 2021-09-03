@@ -1,10 +1,8 @@
 { lib, stdenv, fetchurl, pkg-config, gettext, gtk-doc, gobject-introspection, python2, gtk3, cairo, glib }:
 
-let
-  version = "2.0.4";
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "goocanvas";
-  inherit version;
+  version = "2.0.4";
 
   outputs = [ "out" "dev" "devdoc" ];
 

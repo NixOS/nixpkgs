@@ -8,7 +8,11 @@ stdenv.mkDerivation rec {
     sha256 = "0hh4jl590jv3v830p77r3jcrnpndy7p2b8ajai3ldpnx2913jfhp";
   };
 
-  patchPhase = ''
+  patches = [
+    ./sw_vers-CFPriv.patch
+  ];
+
+  postPatch = ''
     substituteInPlace Makefile \
       --replace gcc cc
   '';

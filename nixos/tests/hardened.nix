@@ -33,18 +33,7 @@ import ./make-test-python.nix ({ pkgs, latestKernel ? false, ... } : {
 
   testScript =
     let
-      hardened-malloc-tests = pkgs.stdenv.mkDerivation {
-        name = "hardened-malloc-tests-${pkgs.graphene-hardened-malloc.version}";
-        src = pkgs.graphene-hardened-malloc.src;
-        buildPhase = ''
-          cd test/simple-memory-corruption
-          make -j4
-        '';
-
-        installPhase = ''
-          find . -type f -executable -exec install -Dt $out/bin '{}' +
-        '';
-      };
+      hardened-malloc-tests = pkgs.graphene-hardened-malloc.ld-preload-tests;
     in
     ''
       machine.wait_for_unit("multi-user.target")
@@ -107,20 +96,7 @@ import ./make-test-python.nix ({ pkgs, latestKernel ? false, ... } : {
           machine.fail("systemctl kexec")
 
 
-      # Test hardened memory allocator
-      def runMallocTestProg(prog_name, error_text):
-          text = "fatal allocator error: " + error_text
-          if not text in machine.fail(
-              "${hardened-malloc-tests}/bin/"
-              + prog_name
-              + " 2>&1"
-          ):
-              raise Exception("Hardened malloc does not work for {}".format(error_text))
-
-
       with subtest("The hardened memory allocator works"):
-          runMallocTestProg("double_free_large", "invalid free")
-          runMallocTestProg("unaligned_free_small", "invalid unaligned free")
-          runMallocTestProg("write_after_free_small", "detected write after free")
+          machine.succeed("${hardened-malloc-tests}/bin/run-tests")
     '';
 })

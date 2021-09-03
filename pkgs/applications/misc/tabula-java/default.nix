@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "tabula-java";
-  version = "1.0.4";
+  version = "1.0.5";
 
   src = fetchurl {
     url = "https://github.com/tabulapdf/tabula-java/releases/download/v${version}/tabula-${version}-jar-with-dependencies.jar";
-    sha256 = "12d0jcc3j0q8jbqv0gzfiif7c8ig37834vb8yq0jnyr0s72k30xw";
+    sha256 = "sha256-IWHj//ZZOdfOCBJHnPnKNoYNtWl/f8H6ARYe1AkqB0U=";
   };
 
   buildInputs = [ makeWrapper ];

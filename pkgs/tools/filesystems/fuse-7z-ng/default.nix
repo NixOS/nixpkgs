@@ -25,7 +25,6 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    inherit version;
     inherit (src.homepage);
     description = "A FUSE-based filesystem that uses the p7zip library";
     longDescription = ''

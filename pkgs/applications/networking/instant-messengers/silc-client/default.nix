@@ -4,14 +4,12 @@
 # Enabling the plugin and using it with a recent irssi, segafults on join:
 # http://marc.info/?l=silc-devel&m=125610477802211
 
-let
-  basename = "silc-client-1.1.11";
-in
-stdenv.mkDerivation {
-  name = basename + lib.optionalString enablePlugin "-irssi-plugin";
+stdenv.mkDerivation rec {
+  pname = "silc-client" + lib.optionalString enablePlugin "-irssi-plugin";
+  version = "1.1.11";
 
   src = fetchurl {
-    url = "mirror://sourceforge/silc/silc/client/sources/${basename}.tar.bz2";
+    url = "mirror://sourceforge/silc/silc/client/sources/silc-client-${version}.tar.bz2";
     sha256 = "13cp3fmdnj8scjak0d2xal3bfvs2k7ssrwdhp0zl6jar5rwc7prn";
   };
 

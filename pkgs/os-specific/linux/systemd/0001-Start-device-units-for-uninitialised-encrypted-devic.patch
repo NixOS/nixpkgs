@@ -1,7 +1,7 @@
-From dd2ec741aaa7c587eb7719bbf4b305fe28168b77 Mon Sep 17 00:00:00 2001
+From 2f4a5e9c9ef1cd57662e8bd4c24e1029a00d55b5 Mon Sep 17 00:00:00 2001
 From: Eelco Dolstra <eelco.dolstra@logicblox.com>
 Date: Tue, 8 Jan 2013 15:46:30 +0100
-Subject: [PATCH 01/18] Start device units for uninitialised encrypted devices
+Subject: [PATCH 01/19] Start device units for uninitialised encrypted devices
 
 This is necessary because the NixOS service that initialises the
 filesystem depends on the appearance of the device unit.  Also, this
@@ -13,7 +13,7 @@ unit.  (However, this ignores the fsck unit, so it's not perfect...)
  1 file changed, 4 deletions(-)
 
 diff --git a/rules.d/99-systemd.rules.in b/rules.d/99-systemd.rules.in
-index d2f595d18e..941a7c1ba3 100644
+index 7c22eefdb7..e3a55e00b5 100644
 --- a/rules.d/99-systemd.rules.in
 +++ b/rules.d/99-systemd.rules.in
 @@ -17,10 +17,6 @@ SUBSYSTEM=="ubi", TAG+="systemd"
@@ -28,5 +28,5 @@ index d2f595d18e..941a7c1ba3 100644
  SUBSYSTEM=="block", ENV{ID_PART_GPT_AUTO_ROOT}=="1", ENV{ID_FS_TYPE}!="crypto_LUKS", SYMLINK+="gpt-auto-root"
  SUBSYSTEM=="block", ENV{ID_PART_GPT_AUTO_ROOT}=="1", ENV{ID_FS_TYPE}=="crypto_LUKS", SYMLINK+="gpt-auto-root-luks"
 -- 
-2.29.2
+2.30.1
 

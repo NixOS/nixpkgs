@@ -63,7 +63,7 @@ let
 
       preSetup = mkOption {
         example = literalExample ''
-          ${pkgs.iproute}/bin/ip netns add foo
+          ${pkgs.iproute2}/bin/ip netns add foo
         '';
         default = "";
         type = with types; coercedTo (listOf str) (concatStringsSep "\n") lines;
@@ -198,7 +198,32 @@ let
         example = "demo.wireguard.io:12913";
         type = with types; nullOr str;
         description = ''Endpoint IP or hostname of the peer, followed by a colon,
-        and then a port number of the peer.'';
+        and then a port number of the peer.
+
+        Warning for endpoints with changing IPs:
+        The WireGuard kernel side cannot perform DNS resolution.
+        Thus DNS resolution is done once by the <literal>wg</literal> userspace
+        utility, when setting up WireGuard. Consequently, if the IP address
+        behind the name changes, WireGuard will not notice.
+        This is especially common for dynamic-DNS setups, but also applies to
+        any other DNS-based setup.
+        If you do not use IP endpoints, you likely want to set
+        <option>networking.wireguard.dynamicEndpointRefreshSeconds</option>
+        to refresh the IPs periodically.
+        '';
+      };
+
+      dynamicEndpointRefreshSeconds = mkOption {
+        default = 0;
+        example = 5;
+        type = with types; int;
+        description = ''
+          Periodically re-execute the <literal>wg</literal> utility every
+          this many seconds in order to let WireGuard notice DNS / hostname
+          changes.
+
+          Setting this to <literal>0</literal> disables periodic reexecution.
+        '';
       };
 
       persistentKeepalive = mkOption {
@@ -219,17 +244,6 @@ let
 
   };
 
-  generatePathUnit = name: values:
-    assert (values.privateKey == null);
-    assert (values.privateKeyFile != null);
-    nameValuePair "wireguard-${name}"
-      {
-        description = "WireGuard Tunnel - ${name} - Private Key";
-        requiredBy = [ "wireguard-${name}.service" ];
-        before = [ "wireguard-${name}.service" ];
-        pathConfig.PathExists = values.privateKeyFile;
-      };
-
   generateKeyServiceUnit = name: values:
     assert values.generatePrivateKeyFile;
     nameValuePair "wireguard-${name}-key"
@@ -238,7 +252,7 @@ let
         wantedBy = [ "wireguard-${name}.service" ];
         requiredBy = [ "wireguard-${name}.service" ];
         before = [ "wireguard-${name}.service" ];
-        path = with pkgs; [ wireguard ];
+        path = with pkgs; [ wireguard-tools ];
 
         serviceConfig = {
           Type = "oneshot";
@@ -246,22 +260,31 @@ let
         };
 
         script = ''
-          mkdir --mode 0644 -p "${dirOf values.privateKeyFile}"
+          set -e
+
+          # If the parent dir does not already exist, create it.
+          # Otherwise, does nothing, keeping existing permisions intact.
+          mkdir -p --mode 0755 "${dirOf values.privateKeyFile}"
+
           if [ ! -f "${values.privateKeyFile}" ]; then
-            touch "${values.privateKeyFile}"
-            chmod 0600 "${values.privateKeyFile}"
-            wg genkey > "${values.privateKeyFile}"
-            chmod 0400 "${values.privateKeyFile}"
+            # Write private key file with atomically-correct permissions.
+            (set -e; umask 077; wg genkey > "${values.privateKeyFile}")
           fi
         '';
       };
 
-  generatePeerUnit = { interfaceName, interfaceCfg, peer }:
+  peerUnitServiceName = interfaceName: publicKey: dynamicRefreshEnabled:
     let
       keyToUnitName = replaceChars
         [ "/" "-"    " "     "+"     "="      ]
         [ "-" "\\x2d" "\\x20" "\\x2b" "\\x3d" ];
-      unitName = keyToUnitName peer.publicKey;
+      unitName = keyToUnitName publicKey;
+      refreshSuffix = optionalString dynamicRefreshEnabled "-refresh";
+    in
+      "wireguard-${interfaceName}-peer-${unitName}${refreshSuffix}";
+
+  generatePeerUnit = { interfaceName, interfaceCfg, peer }:
+    let
       psk =
         if peer.presharedKey != null
           then pkgs.writeText "wg-psk" peer.presharedKey
@@ -270,7 +293,12 @@ let
       dst = interfaceCfg.interfaceNamespace;
       ip = nsWrap "ip" src dst;
       wg = nsWrap "wg" src dst;
-    in nameValuePair "wireguard-${interfaceName}-peer-${unitName}"
+      dynamicRefreshEnabled = peer.dynamicEndpointRefreshSeconds != 0;
+      # We generate a different name (a `-refresh` suffix) when `dynamicEndpointRefreshSeconds`
+      # to avoid that the same service switches `Type` (`oneshot` vs `simple`),
+      # with the intent to make scripting more obvious.
+      serviceName = peerUnitServiceName interfaceName peer.publicKey dynamicRefreshEnabled;
+    in nameValuePair serviceName
       {
         description = "WireGuard Peer - ${interfaceName} - ${peer.publicKey}";
         requires = [ "wireguard-${interfaceName}.service" ];
@@ -278,38 +306,61 @@ let
         wantedBy = [ "multi-user.target" "wireguard-${interfaceName}.service" ];
         environment.DEVICE = interfaceName;
         environment.WG_ENDPOINT_RESOLUTION_RETRIES = "infinity";
-        path = with pkgs; [ iproute wireguard-tools ];
+        path = with pkgs; [ iproute2 wireguard-tools ];
 
-        serviceConfig = {
-          Type = "oneshot";
-          RemainAfterExit = true;
-        };
+        serviceConfig =
+          if !dynamicRefreshEnabled
+            then
+              {
+                Type = "oneshot";
+                RemainAfterExit = true;
+              }
+            else
+              {
+                Type = "simple"; # re-executes 'wg' indefinitely
+                # Note that `Type = "oneshot"` services with `RemainAfterExit = true`
+                # cannot be used with systemd timers (see `man systemd.timer`),
+                # which is why `simple` with a loop is the best choice here.
+                # It also makes starting and stopping easiest.
+              };
 
         script = let
-          wg_setup = "${wg} set ${interfaceName} peer ${peer.publicKey}" +
-            optionalString (psk != null) " preshared-key ${psk}" +
-            optionalString (peer.endpoint != null) " endpoint ${peer.endpoint}" +
-            optionalString (peer.persistentKeepalive != null) " persistent-keepalive ${toString peer.persistentKeepalive}" +
-            optionalString (peer.allowedIPs != []) " allowed-ips ${concatStringsSep "," peer.allowedIPs}";
+          wg_setup = concatStringsSep " " (
+            [ ''${wg} set ${interfaceName} peer "${peer.publicKey}"'' ]
+            ++ optional (psk != null) ''preshared-key "${psk}"''
+            ++ optional (peer.endpoint != null) ''endpoint "${peer.endpoint}"''
+            ++ optional (peer.persistentKeepalive != null) ''persistent-keepalive "${toString peer.persistentKeepalive}"''
+            ++ optional (peer.allowedIPs != []) ''allowed-ips "${concatStringsSep "," peer.allowedIPs}"''
+          );
           route_setup =
             optionalString interfaceCfg.allowedIPsAsRoutes
               (concatMapStringsSep "\n"
                 (allowedIP:
-                  "${ip} route replace ${allowedIP} dev ${interfaceName} table ${interfaceCfg.table}"
+                  ''${ip} route replace "${allowedIP}" dev "${interfaceName}" table "${interfaceCfg.table}"''
                 ) peer.allowedIPs);
         in ''
           ${wg_setup}
           ${route_setup}
+
+          ${optionalString (peer.dynamicEndpointRefreshSeconds != 0) ''
+            # Re-execute 'wg' periodically to notice DNS / hostname changes.
+            # Note this will not time out on transient DNS failures such as DNS names
+            # because we have set 'WG_ENDPOINT_RESOLUTION_RETRIES=infinity'.
+            # Also note that 'wg' limits its maximum retry delay to 20 seconds as of writing.
+            while ${wg_setup}; do
+              sleep "${toString peer.dynamicEndpointRefreshSeconds}";
+            done
+          ''}
         '';
 
         postStop = let
           route_destroy = optionalString interfaceCfg.allowedIPsAsRoutes
             (concatMapStringsSep "\n"
               (allowedIP:
-                "${ip} route delete ${allowedIP} dev ${interfaceName} table ${interfaceCfg.table}"
+                ''${ip} route delete "${allowedIP}" dev "${interfaceName}" table "${interfaceCfg.table}"''
               ) peer.allowedIPs);
         in ''
-          ${wg} set ${interfaceName} peer ${peer.publicKey} remove
+          ${wg} set "${interfaceName}" peer "${peer.publicKey}" remove
           ${route_destroy}
         '';
       };
@@ -333,7 +384,7 @@ let
         after = [ "network.target" "network-online.target" ];
         wantedBy = [ "multi-user.target" ];
         environment.DEVICE = name;
-        path = with pkgs; [ kmod iproute wireguard-tools ];
+        path = with pkgs; [ kmod iproute2 wireguard-tools ];
 
         serviceConfig = {
           Type = "oneshot";
@@ -345,23 +396,25 @@ let
 
           ${values.preSetup}
 
-          ${ipPreMove} link add dev ${name} type wireguard
-          ${optionalString (values.interfaceNamespace != null && values.interfaceNamespace != values.socketNamespace) "${ipPreMove} link set ${name} netns ${ns}"}
+          ${ipPreMove} link add dev "${name}" type wireguard
+          ${optionalString (values.interfaceNamespace != null && values.interfaceNamespace != values.socketNamespace) ''${ipPreMove} link set "${name}" netns "${ns}"''}
 
           ${concatMapStringsSep "\n" (ip:
-            "${ipPostMove} address add ${ip} dev ${name}"
+            ''${ipPostMove} address add "${ip}" dev "${name}"''
           ) values.ips}
 
-          ${wg} set ${name} private-key ${privKey} ${
-            optionalString (values.listenPort != null) " listen-port ${toString values.listenPort}"}
+          ${concatStringsSep " " (
+            [ ''${wg} set "${name}" private-key "${privKey}"'' ]
+            ++ optional (values.listenPort != null) ''listen-port "${toString values.listenPort}"''
+          )}
 
-          ${ipPostMove} link set up dev ${name}
+          ${ipPostMove} link set up dev "${name}"
 
           ${values.postSetup}
         '';
 
         postStop = ''
-          ${ipPostMove} link del dev ${name}
+          ${ipPostMove} link del dev "${name}"
           ${values.postShutdown}
         '';
       };
@@ -371,7 +424,7 @@ let
       nsList = filter (ns: ns != null) [ src dst ];
       ns = last nsList;
     in
-      if (length nsList > 0 && ns != "init") then "ip netns exec ${ns} ${cmd}" else cmd;
+      if (length nsList > 0 && ns != "init") then ''ip netns exec "${ns}" "${cmd}"'' else cmd;
 in
 
 {
@@ -444,9 +497,6 @@ in
       // (listToAttrs (map generatePeerUnit all_peers))
       // (mapAttrs' generateKeyServiceUnit
       (filterAttrs (name: value: value.generatePrivateKeyFile) cfg.interfaces));
-
-    systemd.paths = mapAttrs' generatePathUnit
-      (filterAttrs (name: value: value.privateKeyFile != null) cfg.interfaces);
 
   });
 

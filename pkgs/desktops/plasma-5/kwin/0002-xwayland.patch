@@ -1,17 +1,17 @@
-From d584b075d71c4486710c0bbed6d44038f2ff5075 Mon Sep 17 00:00:00 2001
+From 5c90dd84f541bd4789525f12f12ad24411b99018 Mon Sep 17 00:00:00 2001
 From: Thomas Tuegel <ttuegel@mailbox.org>
 Date: Mon, 27 Jan 2020 05:31:23 -0600
-Subject: [PATCH 2/2] xwayland
+Subject: [PATCH 2/3] xwayland
 
 ---
- xwl/xwayland.cpp | 2 +-
+ src/xwl/xwayland.cpp | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/xwl/xwayland.cpp b/xwl/xwayland.cpp
-index 5f17d39..b4b69ba 100644
---- a/xwl/xwayland.cpp
-+++ b/xwl/xwayland.cpp
-@@ -145,7 +145,7 @@ void Xwayland::init()
+diff --git a/src/xwl/xwayland.cpp b/src/xwl/xwayland.cpp
+index 57efdde..a211a58 100644
+--- a/src/xwl/xwayland.cpp
++++ b/src/xwl/xwayland.cpp
+@@ -124,7 +124,7 @@ void Xwayland::start()
  
      m_xwaylandProcess = new Process(this);
      m_xwaylandProcess->setProcessChannelMode(QProcess::ForwardedErrorChannel);
@@ -21,5 +21,5 @@ index 5f17d39..b4b69ba 100644
      env.insert("WAYLAND_SOCKET", QByteArray::number(wlfd));
      env.insert("EGL_PLATFORM", QByteArrayLiteral("DRM"));
 -- 
-2.23.1
+2.29.2
 

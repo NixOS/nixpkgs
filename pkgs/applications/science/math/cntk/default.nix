@@ -33,6 +33,9 @@ in stdenv.mkDerivation rec {
   # Force OpenMPI to use g++ in PATH.
   OMPI_CXX = "g++";
 
+  # Uses some deprecated tensorflow functions
+  NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
+
   buildInputs = [ openblas opencv3 libzip boost protobuf mpi ]
              ++ lib.optional cudaSupport cudatoolkit
              ++ lib.optional cudnnSupport cudnn;
@@ -40,7 +43,7 @@ in stdenv.mkDerivation rec {
   configureFlags = [
     "--with-opencv=${opencv3}"
     "--with-libzip=${libzip.dev}"
-    "--with-openblas=${openblas}"
+    "--with-openblas=${openblas.dev}"
     "--with-boost=${boost.dev}"
     "--with-protobuf=${protobuf}"
     "--with-mpi=${mpi}"

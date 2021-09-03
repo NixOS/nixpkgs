@@ -7,13 +7,6 @@
 let
   py = python3.override {
     packageOverrides = self: super: {
-      rsa = super.rsa.overridePythonAttrs (oldAttrs: rec {
-        version = "3.4.2";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "25df4e10c263fb88b5ace923dd84bf9aa7f5019687b5e55382ffcdb8bede9db5";
-        };
-      });
       # TODO: https://github.com/aws/aws-cli/pull/5712
       colorama = super.colorama.overridePythonAttrs (oldAttrs: rec {
         version = "0.4.3";
@@ -28,11 +21,11 @@ let
 in
 with py.pkgs; buildPythonApplication rec {
   pname = "awscli";
-  version = "1.19.30"; # N.B: if you change this, change botocore and boto3 to a matching version too
+  version = "1.19.97"; # N.B: if you change this, change botocore and boto3 to a matching version too
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-XD0CwBTDUvCTSL7JrcQCAd8zq+Ve0zSDpfz0Vzi8oeM=";
+    sha256 = "sha256-kecuyQMk4GWH9G0/f4Gi/hWtW4Zme9Q4i7XclcZTlNc=";
   };
 
   # https://github.com/aws/aws-cli/issues/4837

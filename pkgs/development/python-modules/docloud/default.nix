@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , requests
+, six
 }:
 
 buildPythonPackage rec {
@@ -15,6 +16,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     requests
+    six
   ];
 
   # Pypi's tarball doesn't contain tests. Source not available.

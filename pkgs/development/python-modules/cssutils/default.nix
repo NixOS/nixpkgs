@@ -1,29 +1,53 @@
 { lib
 , buildPythonPackage
-, isPy27
+, pythonOlder
 , fetchPypi
+, setuptools-scm
+, toml
+, importlib-metadata
+, cssselect
+, lxml
 , mock
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "cssutils";
-  version = "2.0.0";
+  version = "2.3.0";
 
-  disabled = isPy27;
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "984b5dbe3a2a0483d7cb131609a17f4cbaa34dda306c419924858a88588fed7c";
+    sha256 = "sha256-stOxYEfKroLlxZADaTW6+htiHPRcLziIWvS+SDjw/QA=";
   };
 
+  nativeBuildInputs = [
+    setuptools-scm
+    toml
+  ];
+
+  propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
+    importlib-metadata
+  ];
+
   checkInputs = [
+    cssselect
+    lxml
     mock
     pytestCheckHook
   ];
 
   disabledTests = [
-    "test_parseUrl" # accesses network
+    # access network
+    "test_parseUrl"
+    "encutils"
+    "website.logging"
+  ] ++ lib.optionals (pythonOlder "3.9") [
+    # AttributeError: module 'importlib.resources' has no attribute 'files'
+    "test_parseFile"
+    "test_parseString"
+    "test_combine"
   ];
 
   pythonImportsCheck = [ "cssutils" ];

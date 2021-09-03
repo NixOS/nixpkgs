@@ -6,23 +6,62 @@ with lib;
 
 let
 
-  etc' = filter (f: f.enable) (attrValues config.environment.etc);
+  # if the source is a local file, it should be imported to the store
+  localToStore = mapAttrs (name: value: if name == "source" then "${value}" else value);
+  etc' = map localToStore (filter (f: f.enable) (attrValues config.environment.etc));
 
-  etc = pkgs.stdenvNoCC.mkDerivation {
-    name = "etc";
+  etc = pkgs.runCommandLocal "etc" {
+    # This is needed for the systemd module
+    passthru.targets = map (x: x.target) etc';
+  } /* sh */ ''
+    set -euo pipefail
 
-    builder = ./make-etc.sh;
+    makeEtcEntry() {
+      src="$1"
+      target="$2"
+      mode="$3"
+      user="$4"
+      group="$5"
 
-    preferLocalBuild = true;
-    allowSubstitutes = false;
+      if [[ "$src" = *'*'* ]]; then
+        # If the source name contains '*', perform globbing.
+        mkdir -p "$out/etc/$target"
+        for fn in $src; do
+            ln -s "$fn" "$out/etc/$target/"
+        done
+      else
 
-    /* !!! Use toXML. */
-    sources = map (x: x.source) etc';
-    targets = map (x: x.target) etc';
-    modes = map (x: x.mode) etc';
-    users  = map (x: x.user) etc';
-    groups  = map (x: x.group) etc';
-  };
+        mkdir -p "$out/etc/$(dirname "$target")"
+        if ! [ -e "$out/etc/$target" ]; then
+          ln -s "$src" "$out/etc/$target"
+        else
+          echo "duplicate entry $target -> $src"
+          if [ "$(readlink "$out/etc/$target")" != "$src" ]; then
+            echo "mismatched duplicate entry $(readlink "$out/etc/$target") <-> $src"
+            ret=1
+
+            continue
+          fi
+        fi
+
+        if [ "$mode" != symlink ]; then
+          echo "$mode" > "$out/etc/$target.mode"
+          echo "$user" > "$out/etc/$target.uid"
+          echo "$group" > "$out/etc/$target.gid"
+        fi
+      fi
+    }
+
+    mkdir -p "$out/etc"
+    ${concatMapStringsSep "\n" (etcEntry: escapeShellArgs [
+      "makeEtcEntry"
+      etcEntry.source
+      etcEntry.target
+      etcEntry.mode
+      etcEntry.user
+      etcEntry.group
+    ]) etc'}
+  '';
 
 in
 
@@ -154,7 +193,7 @@ in
       ''
         # Set up the statically computed bits of /etc.
         echo "setting up /etc..."
-        ${pkgs.perl}/bin/perl -I${pkgs.perlPackages.FileSlurp}/${pkgs.perl.libPrefix} ${./setup-etc.pl} ${etc}/etc
+        ${pkgs.perl.withPackages (p: [ p.FileSlurp ])}/bin/perl ${./setup-etc.pl} ${etc}/etc
       '';
 
   };

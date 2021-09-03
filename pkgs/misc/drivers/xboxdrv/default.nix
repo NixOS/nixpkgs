@@ -18,7 +18,7 @@ in stdenv.mkDerivation {
   dontUseSconsInstall = true;
 
   meta = with lib; {
-    homepage = "https://pingus.seul.org/~grumbel/xboxdrv/";
+    homepage = "https://xboxdrv.gitlab.io/";
     description = "Xbox/Xbox360 (and more) gamepad driver for Linux that works in userspace";
     license = licenses.gpl3Plus;
     maintainers = [ ];

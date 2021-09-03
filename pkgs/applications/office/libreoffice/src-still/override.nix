@@ -7,4 +7,5 @@ attrs:
   configureFlags = attrs.configureFlags ++ [
     (lib.enableFeature kdeIntegration "kf5")
   ];
+  patches = [ ../xdg-open-brief.patch ];
 }

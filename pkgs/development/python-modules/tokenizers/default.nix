@@ -49,19 +49,19 @@ let
   };
 in buildPythonPackage rec {
   pname = "tokenizers";
-  version = "0.10.1";
+  version = "unstable-2021-08-13";
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = pname;
-    rev = "python-v${version}";
-    hash = "sha256-N/dKjQwHKmJnB76q8ISQ3cjuW0Z4GqGavnFFx/w9JRQ=";
+    rev = "e7dd6436dd4a4ffd9e8a4f110ca68e6a38677cb6";
+    sha256 = "1p7w9a43a9h6ys5nsa4g89l65dj11037p7a1lqkj4x1yc9kv2y1r";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src sourceRoot;
     name = "${pname}-${version}";
-    hash = "sha256-3ICSjtiRfLOj+PXu6mcuDoAtod5uXAcabYWTLxEgI18=";
+    sha256 = "1yb4jsx6mp9jgd1g3mli6vr6mri2afnwqlmxq1rpvn34z6b3iw9q";
   };
 
   sourceRoot = "source/bindings/python";
@@ -76,14 +76,11 @@ in buildPythonPackage rec {
     numpy
   ];
 
-  installCheckInputs = [
+  checkInputs = [
     datasets
     pytestCheckHook
     requests
   ];
-
-  doCheck = false;
-  doInstallCheck = true;
 
   postUnpack = ''
     # Add data files for tests, otherwise tests attempt network access.
@@ -98,6 +95,10 @@ in buildPythonPackage rec {
       ln -s ${norvigBig} big.txt
       ln -s ${openaiVocab} openai-gpt-vocab.json
       ln -s ${openaiMerges} openai-gpt-merges.txt )
+  '';
+
+  postPatch = ''
+    echo 'import multiprocessing; multiprocessing.set_start_method("fork")' >> tests/__init__.py
   '';
 
   preCheck = ''

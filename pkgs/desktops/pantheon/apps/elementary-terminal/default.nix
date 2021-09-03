@@ -12,6 +12,7 @@
 , gtk3
 , libxml2
 , granite
+, libhandy
 , libnotify
 , vte
 , libgee
@@ -23,7 +24,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-terminal";
-  version = "5.5.2";
+  version = "6.0.0";
 
   repoName = "terminal";
 
@@ -31,7 +32,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "sha256-giVmL0zYEVYJ40ZBQ9dDb4hOx4HaYRt7tUTOu37lMYU=";
+    sha256 = "08akr4sv4jy9kd4s26kib6j7i8hc3vs0sp71fifv7ww4mi9cm6jc";
   };
 
   passthru = {
@@ -57,6 +58,7 @@ stdenv.mkDerivation rec {
     granite
     gtk3
     libgee
+    libhandy
     libnotify
     pcre2
     vte

@@ -4,8 +4,8 @@
 }:
 
 python3.pkgs.buildPythonApplication rec {
-  pname = "theHarvester";
-  version = "3.2.3";
+  pname = "theharvester";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "laramies";
@@ -16,15 +16,15 @@ python3.pkgs.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3.pkgs; [
     aiodns
+    aiofiles
     aiohttp
     aiomultiprocess
     aiosqlite
     beautifulsoup4
     censys
     certifi
-    dns
-    gevent
-    grequests
+    dnspython
+    fastapi
     lxml
     netaddr
     plotly
@@ -33,14 +33,23 @@ python3.pkgs.buildPythonApplication rec {
     requests
     retrying
     shodan
-    texttable
+    slowapi
+    starlette
+    uvicorn
     uvloop
   ];
 
-  checkInputs = [ python3.pkgs.pytest ];
+  checkInputs = with  python3.pkgs; [
+    pytest
+    pytest-asyncio
+  ];
 
-  checkPhase = "runHook preCheck ; pytest tests/test_myparser.py ; runHook postCheck";
   # We don't run other tests (discovery modules) because they require network access
+  checkPhase = ''
+    runHook preCheck
+    pytest tests/test_myparser.py
+    runHook postCheck
+  '';
 
   meta = with lib; {
     description = "Gather E-mails, subdomains and names from different public sources";

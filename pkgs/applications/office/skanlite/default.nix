@@ -24,7 +24,7 @@ mkDerivation rec {
     description = "KDE simple image scanning application";
     homepage    = "https://apps.kde.org/skanlite";
     license     = licenses.gpl2Plus;
-    maintainers = with maintainers; [ pshendry ];
+    maintainers = with maintainers; [ polendri ];
     platforms   = platforms.linux;
   };
 }

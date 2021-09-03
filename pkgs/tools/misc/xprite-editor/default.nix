@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = lib.optionals stdenv.isLinux [ pkg-config python3 ];
 
-  cargoSha256 = "1a0zy8gfc1gdk8nnv5qr4yspqy1jsip5nql3w74rl6h46cplpf5y";
+  cargoSha256 = "0z1ip667d1qwvm9md3zg8ib9jixpg7qj5ypwib7r2928h14yg7ck";
 
   cargoBuildFlags = [ "--bin" "xprite-native" ];
 

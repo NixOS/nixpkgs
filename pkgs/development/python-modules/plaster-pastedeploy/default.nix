@@ -1,6 +1,6 @@
 { buildPythonPackage, fetchPypi, fetchpatch
 , plaster, PasteDeploy
-, pytest, pytestcov
+, pytest, pytest-cov
 }:
 
 buildPythonPackage rec {
@@ -26,5 +26,5 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [ plaster PasteDeploy ];
-  checkInputs = [ pytest pytestcov ];
+  checkInputs = [ pytest pytest-cov ];
 }

@@ -7,12 +7,13 @@ let
 
   inherit (builtins) concatStringsSep;
 
-  config_file_content = lib.generators.toKeyValue {} cfg.configItems;
+  config_file_content = lib.generators.toKeyValue { } cfg.configItems;
   config_file = pkgs.writeText "rabbitmq.conf" config_file_content;
 
   advanced_config_file = pkgs.writeText "advanced.config" cfg.config;
 
-in {
+in
+{
   ###### interface
   options = {
     services.rabbitmq = {
@@ -57,7 +58,7 @@ in {
         description = ''
           Port on which RabbitMQ will listen for AMQP connections.
         '';
-        type = types.int;
+        type = types.port;
       };
 
       dataDir = mkOption {
@@ -79,7 +80,7 @@ in {
       };
 
       configItems = mkOption {
-        default = {};
+        default = { };
         type = types.attrsOf types.str;
         example = literalExample ''
           {
@@ -123,15 +124,37 @@ in {
       };
 
       plugins = mkOption {
-        default = [];
+        default = [ ];
         type = types.listOf types.str;
         description = "The names of plugins to enable";
       };
 
       pluginDirs = mkOption {
-        default = [];
+        default = [ ];
         type = types.listOf types.path;
         description = "The list of directories containing external plugins";
+      };
+
+      managementPlugin = mkOption {
+        description = "The options to run the management plugin";
+        type = types.submodule {
+          options = {
+            enable = mkOption {
+              default = false;
+              type = types.bool;
+              description = ''
+                Whether to enable the management plugin
+              '';
+            };
+            port = mkOption {
+              default = 15672;
+              type = types.port;
+              description = ''
+                On which port to run the management plugin
+              '';
+            };
+          };
+        };
       };
     };
   };
@@ -157,7 +180,12 @@ in {
 
     services.rabbitmq.configItems = {
       "listeners.tcp.1" = mkDefault "${cfg.listenAddress}:${toString cfg.port}";
+    } // optionalAttrs cfg.managementPlugin.enable {
+      "management.tcp.port" = toString cfg.managementPlugin.port;
+      "management.tcp.ip" = cfg.listenAddress;
     };
+
+    services.rabbitmq.plugins = optional cfg.managementPlugin.enable "rabbitmq_management";
 
     systemd.services.rabbitmq = {
       description = "RabbitMQ Server";
@@ -180,7 +208,7 @@ in {
         RABBITMQ_ENABLED_PLUGINS_FILE = pkgs.writeText "enabled_plugins" ''
           [ ${concatStringsSep "," cfg.plugins} ].
         '';
-      } //  optionalAttrs (cfg.config != "") { RABBITMQ_ADVANCED_CONFIG_FILE = advanced_config_file; };
+      } // optionalAttrs (cfg.config != "") { RABBITMQ_ADVANCED_CONFIG_FILE = advanced_config_file; };
 
       serviceConfig = {
         ExecStart = "${cfg.package}/sbin/rabbitmq-server";

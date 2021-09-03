@@ -1,20 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, zlib, rdkafka, yajl }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, zlib, rdkafka, yajl, avro-c, libserdes }:
 
 stdenv.mkDerivation rec {
   pname = "kafkacat";
 
-  version = "1.6.0";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "edenhill";
     repo = "kafkacat";
     rev = version;
-    sha256 = "0z3bw00s269myfd1xqksjyznmgp74xfs09xqlq347adsgby3cmfs";
+    sha256 = "sha256-koDhj/RQc9fhfqjrJylhURw6tppPELhLlBGbNVJsii8=";
   };
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ zlib rdkafka yajl ];
+  buildInputs = [ zlib rdkafka yajl avro-c libserdes ];
 
   preConfigure = ''
     patchShebangs ./configure

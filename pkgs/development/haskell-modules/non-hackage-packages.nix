@@ -11,6 +11,10 @@ self: super: {
 
   ldgallery-compiler = self.callPackage ../../tools/graphics/ldgallery/compiler { };
 
+  # Used by maintainers/scripts/regenerate-hackage-packages.sh, and generated
+  # from the latest master instead of the current version on Hackage.
+  cabal2nix-unstable = self.callPackage ./cabal2nix-unstable.nix { };
+
   # https://github.com/channable/vaultenv/issues/1
   vaultenv = self.callPackage ../tools/haskell/vaultenv { };
 
@@ -18,16 +22,19 @@ self: super: {
   # https://github.com/spacchetti/spago/issues/512
   spago = self.callPackage ../tools/purescript/spago/spago.nix { };
 
+  nix-linter = self.callPackage ../../development/tools/analysis/nix-linter { };
+
   nix-output-monitor = self.callPackage ../../tools/nix/nix-output-monitor { };
 
-  # cabal2nix --revision <rev> https://github.com/hasura/ci-info-hs.git
-  ci-info = self.callPackage ../misc/haskell/hasura/ci-info {};
-  # cabal2nix --revision <rev> https://github.com/hasura/pg-client-hs.git
-  pg-client = self.callPackage ../misc/haskell/hasura/pg-client {};
-  # cabal2nix --revision <rev> https://github.com/hasura/graphql-parser-hs.git
-  graphql-parser = self.callPackage ../misc/haskell/hasura/graphql-parser {};
-  # cabal2nix  --subpath server --maintainer offline --no-check --revision 1.2.1 https://github.com/hasura/graphql-engine.git
-  graphql-engine = self.callPackage ../misc/haskell/hasura/graphql-engine {};
+  # hasura graphql-engine is not released to hackage.
+  # https://github.com/hasura/graphql-engine/issues/7391
+  ci-info = self.callPackage ../misc/haskell/hasura/ci-info.nix {};
+  pg-client = self.callPackage ../misc/haskell/hasura/pg-client.nix {};
+  graphql-parser = self.callPackage ../misc/haskell/hasura/graphql-parser.nix {};
+  graphql-engine = self.callPackage ../misc/haskell/hasura/graphql-engine.nix {};
+  hasura-resource-pool = self.callPackage ../misc/haskell/hasura/pool.nix {};
+  hasura-ekg-core = self.callPackage ../misc/haskell/hasura/ekg-core.nix {};
+  hasura-ekg-json = self.callPackage ../misc/haskell/hasura/ekg-json.nix {};
 
   # Unofficial fork until PRs are merged https://github.com/pcapriotti/optparse-applicative/pulls/roberth
   # cabal2nix --maintainer roberth https://github.com/hercules-ci/optparse-applicative.git > pkgs/development/misc/haskell/hercules-ci-optparse-applicative.nix

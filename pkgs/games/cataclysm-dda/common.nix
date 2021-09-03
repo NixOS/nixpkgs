@@ -13,17 +13,15 @@ let
   tilesDeps = [ SDL2 SDL2_image SDL2_mixer SDL2_ttf freetype ]
     ++ optionals stdenv.isDarwin [ Cocoa ];
 
-  installXDGAppLauncher = ''
-    launcher="$out/share/applications/cataclysm-dda.desktop"
-    install -D -m 444 data/xdg/*cataclysm-dda.desktop -T "$launcher"
-    sed -i "$launcher" -e "s,\(Exec=\)\(cataclysm-tiles\),\1$out/bin/\2,"
-    install -D -m 444 data/xdg/cataclysm-dda.svg -t $out/share/icons/hicolor/scalable/apps
+  patchDesktopFile = ''
+    substituteInPlace $out/share/applications/org.cataclysmdda.CataclysmDDA.desktop \
+      --replace "Exec=cataclysm-tiles" "Exec=$out/bin/cataclysm-tiles"
   '';
 
   installMacOSAppLauncher = ''
     app=$out/Applications/Cataclysm.app
-    install -D -m 444 data/osx/Info.plist -t $app/Contents
-    install -D -m 444 data/osx/AppIcon.icns -t $app/Contents/Resources
+    install -D -m 444 build-data/osx/Info.plist -t $app/Contents
+    install -D -m 444 build-data/osx/AppIcon.icns -t $app/Contents/Resources
     mkdir $app/Contents/MacOS
     launcher=$app/Contents/MacOS/Cataclysm.sh
     cat << EOF > $launcher
@@ -58,21 +56,18 @@ stdenv.mkDerivation {
   ] ++ optionals tiles [
     "TILES=1" "SOUND=1"
   ] ++ optionals stdenv.isDarwin [
-    "NATIVE=osx" "CLANG=1"
+    "NATIVE=osx"
+    "CLANG=1"
+    "OSX_MIN=${stdenv.targetPlatform.darwinMinVersion}"
   ];
 
   postInstall = optionalString tiles
   ( if !stdenv.isDarwin
-    then installXDGAppLauncher
+    then patchDesktopFile
     else installMacOSAppLauncher
   );
 
   dontStrip = debug;
-
-  # https://hydra.nixos.org/build/65193254
-  # src/weather_data.cpp:203:1: fatal error: opening dependency file obj/tiles/weather_data.d: No such file or directory
-  # make: *** [Makefile:687: obj/tiles/weather_data.o] Error 1
-  enableParallelBuilding = false;
 
   passthru = {
     isTiles = tiles;
@@ -106,7 +101,7 @@ stdenv.mkDerivation {
     '';
     homepage = "https://cataclysmdda.org/";
     license = licenses.cc-by-sa-30;
-    maintainers = with maintainers; [ mnacamura ];
+    maintainers = with maintainers; [ mnacamura DeeUnderscore ];
     platforms = platforms.unix;
   };
 }

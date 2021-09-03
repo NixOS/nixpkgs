@@ -1,17 +1,32 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, zlib, c-ares, pkg-config, re2, openssl, protobuf
-, gflags, libnsl
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, buildPackages
+, cmake
+, zlib
+, c-ares
+, pkg-config
+, re2
+, openssl
+, protobuf
+, grpc
+, abseil-cpp
+, libnsl
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.36.1"; # N.B: if you change this, change pythonPackages.grpcio-tools to a matching version too
   pname = "grpc";
+  version = "1.39.1"; # N.B: if you change this, change pythonPackages.grpcio-tools to a matching version too
+
   src = fetchFromGitHub {
     owner = "grpc";
     repo = "grpc";
     rev = "v${version}";
-    sha256 = "0lb6pls9m05bvr6bvqzp6apdchhsazc5866yvmgkm979xcrzdy2z";
+    sha256 = "1yrr04g6faphh4hwzryqrwzgcr0hqqh05x9mc3vhpzmdkrrbz4zn";
     fetchSubmodules = true;
   };
+
   patches = [
     # Fix build on armv6l (https://github.com/grpc/grpc/pull/21341)
     (fetchpatch {
@@ -20,21 +35,25 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  propagatedBuildInputs = [ c-ares re2 zlib ];
-  buildInputs = [ c-ares.cmake-config openssl protobuf gflags ]
+  nativeBuildInputs = [ cmake pkg-config ]
+    ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) grpc;
+  propagatedBuildInputs = [ c-ares re2 zlib abseil-cpp ];
+  buildInputs = [ c-ares.cmake-config openssl protobuf ]
     ++ lib.optionals stdenv.isLinux [ libnsl ];
 
-  cmakeFlags =
-    [ "-DgRPC_ZLIB_PROVIDER=package"
-      "-DgRPC_CARES_PROVIDER=package"
-      "-DgRPC_RE2_PROVIDER=package"
-      "-DgRPC_SSL_PROVIDER=package"
-      "-DgRPC_PROTOBUF_PROVIDER=package"
-      "-DgRPC_GFLAGS_PROVIDER=package"
-      "-DBUILD_SHARED_LIBS=ON"
-      "-DCMAKE_SKIP_BUILD_RPATH=OFF"
-    ];
+  cmakeFlags = [
+    "-DgRPC_ZLIB_PROVIDER=package"
+    "-DgRPC_CARES_PROVIDER=package"
+    "-DgRPC_RE2_PROVIDER=package"
+    "-DgRPC_SSL_PROVIDER=package"
+    "-DgRPC_PROTOBUF_PROVIDER=package"
+    "-DgRPC_ABSL_PROVIDER=package"
+    "-DBUILD_SHARED_LIBS=ON"
+    "-DCMAKE_SKIP_BUILD_RPATH=OFF"
+    "-DCMAKE_CXX_STANDARD=17"
+  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "-D_gRPC_PROTOBUF_PROTOC_EXECUTABLE=${buildPackages.protobuf}/bin/protoc"
+  ];
 
   # CMake creates a build directory by default, this conflicts with the
   # basel BUILD file on case-insensitive filesystems.
@@ -53,7 +72,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "The C based gRPC (C++, Python, Ruby, Objective-C, PHP, C#)";
     license = licenses.asl20;
-    maintainers = [ maintainers.lnl7 maintainers.marsam ];
+    maintainers = with maintainers; [ lnl7 marsam ];
     homepage = "https://grpc.io/";
     platforms = platforms.all;
     changelog = "https://github.com/grpc/grpc/releases/tag/v${version}";

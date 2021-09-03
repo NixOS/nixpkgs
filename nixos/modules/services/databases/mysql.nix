@@ -34,7 +34,7 @@ in
 
       package = mkOption {
         type = types.package;
-        example = literalExample "pkgs.mysql";
+        example = literalExample "pkgs.mariadb";
         description = "
           Which MySQL derivation to use. MariaDB packages are supported too.
         ";
@@ -48,7 +48,7 @@ in
       };
 
       port = mkOption {
-        type = types.int;
+        type = types.port;
         default = 3306;
         description = "Port of MySQL.";
       };

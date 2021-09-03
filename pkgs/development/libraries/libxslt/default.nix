@@ -1,4 +1,6 @@
-{ lib, stdenv, fetchurl, fetchpatch, libxml2, findXMLCatalogs, gettext, python3, libgcrypt
+{ lib, stdenv, fetchurl
+, pkg-config
+, libxml2, findXMLCatalogs, gettext, python3, libgcrypt
 , cryptoSupport ? false
 , pythonSupport ? stdenv.buildPlatform == stdenv.hostPlatform
 }:
@@ -14,6 +16,10 @@ stdenv.mkDerivation rec {
 
   outputs = [ "bin" "dev" "out" "man" "doc" ] ++ lib.optional pythonSupport "py";
 
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
   buildInputs = [ libxml2.dev ]
     ++ lib.optional stdenv.isDarwin gettext
     ++ lib.optionals pythonSupport [ libxml2.py python3 ]
@@ -22,7 +28,6 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ findXMLCatalogs ];
 
   configureFlags = [
-    "--with-libxml-prefix=${libxml2.dev}"
     "--without-debug"
     "--without-mem-debug"
     "--without-debugger"

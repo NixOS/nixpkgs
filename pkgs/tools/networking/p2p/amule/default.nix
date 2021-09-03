@@ -2,53 +2,46 @@
 , enableDaemon ? false # build amule daemon
 , httpServer ? false # build web interface for the daemon
 , client ? false # build amule remote gui
-, fetchFromGitHub, stdenv, lib, zlib, wxGTK, perl, cryptopp, libupnp, gettext, libpng
-, autoreconfHook, pkg-config, makeWrapper, libX11 }:
+, fetchFromGitHub
+, stdenv
+, lib
+, cmake
+, zlib
+, wxGTK
+, perl
+, cryptopp
+, libupnp
+, gettext
+, libpng
+, autoreconfHook
+, pkg-config
+, makeWrapper
+, libX11
+}:
 
 stdenv.mkDerivation rec {
   pname = "amule";
-  version = "unstable-20201006";
+  version = "2.3.3";
 
   src = fetchFromGitHub {
     owner = "amule-project";
     repo = "amule";
-    rev = "6f8951527eda670c7266984ce476061bfe8867fc";
-    sha256 = "12b44b6hz3mb7nsn6xhzvm726xs06xcim013i1appif4dr8njbx1";
+    rev = version;
+    sha256 = "1nm4vxgmisn1b6l3drmz0q04x067j2i8lw5rnf0acaapwlp8qwvi";
   };
 
-  postPatch = ''
-    substituteInPlace src/libs/ec/file_generator.pl \
-      --replace /usr/bin/perl ${perl}/bin/perl
-
-    # autotools expects these to be in the root
-    cp docs/{AUTHORS,README} .
-    cp docs/Changelog ./ChangeLog
-    cp docs/Changelog ./NEWS
-  '';
-
-  preAutoreconf = ''
-    pushd src/pixmaps/flags_xpm >/dev/null
-    ./makeflags.sh
-    popd >/dev/null
-  '';
-
-  nativeBuildInputs = [ autoreconfHook gettext makeWrapper pkg-config ];
+  nativeBuildInputs = [ cmake gettext makeWrapper pkg-config ];
 
   buildInputs = [
-    zlib wxGTK perl cryptopp libupnp
+    zlib wxGTK perl cryptopp.dev libupnp
   ] ++ lib.optional httpServer libpng
     ++ lib.optional client libX11;
 
-  enableParallelBuilding = true;
-
-  configureFlags = [
-    "--with-crypto-prefix=${cryptopp}"
-    "--disable-debug"
-    "--enable-optimize"
-    (lib.enableFeature monolithic   "monolithic")
-    (lib.enableFeature enableDaemon "amule-daemon")
-    (lib.enableFeature client       "amule-gui")
-    (lib.enableFeature httpServer   "webserver")
+  cmakeFlags = [
+    "-DBUILD_MONOLITHIC=${if monolithic then "ON" else "OFF"}"
+    "-DBUILD_DAEMON=${if enableDaemon then "ON" else "OFF"}"
+    "-DBUILD_REMOTEGUI=${if client then "ON" else "OFF"}"
+    "-DBUILD_WEBSERVER=${if httpServer then "ON" else "OFF"}"
   ];
 
   # aMule will try to `dlopen' libupnp and libixml, so help it
@@ -75,7 +68,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ phreedom ];
     platforms = platforms.unix;
-    # Could not find crypto++ installation or sources.
-    broken = true;
+    # cmake fails: Cannot specify link libraries for target "wxWidgets::ADV" which is not built by this project.
+    broken = enableDaemon;
   };
 }

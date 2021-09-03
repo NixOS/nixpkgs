@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, pkg-config, libGLU, libGL, libX11, libXext, libXfixes
 , libXdamage, libXcomposite, libXi, libxcb, cogl, pango, atk, json-glib
-, gobject-introspection, gtk3, gnome3, libinput, libgudev, libxkbcommon
+, gobject-introspection, gtk3, gnome, libinput, libgudev, libxkbcommon
 }:
 
 let
@@ -29,8 +29,9 @@ stdenv.mkDerivation rec {
   #doCheck = true; # no tests possible without a display
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
     };
   };
 
@@ -55,7 +56,7 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl2Plus;
     homepage = "http://www.clutter-project.org/";
 
-    maintainers = with lib.maintainers; [ lethalman ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.mesaPlatforms;
   };
 }

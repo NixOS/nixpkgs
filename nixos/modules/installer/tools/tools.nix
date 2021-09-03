@@ -34,15 +34,15 @@ let
     name = "nixos-generate-config";
     src = ./nixos-generate-config.pl;
     path = lib.optionals (lib.elem "btrfs" config.boot.supportedFilesystems) [ pkgs.btrfs-progs ];
-    perl = "${pkgs.perl}/bin/perl -I${pkgs.perlPackages.FileSlurp}/${pkgs.perl.libPrefix}";
+    perl = "${pkgs.perl.withPackages (p: [ p.FileSlurp ])}/bin/perl";
     inherit (config.system.nixos-generate-config) configuration desktopConfiguration;
     xserverEnabled = config.services.xserver.enable;
   };
 
   nixos-option =
-    if lib.versionAtLeast (lib.getVersion pkgs.nix) "2.4pre"
+    if lib.versionAtLeast (lib.getVersion config.nix.package) "2.4pre"
     then null
-    else pkgs.callPackage ./nixos-option { };
+    else pkgs.nixos-option;
 
   nixos-version = makeProg {
     name = "nixos-version";
@@ -163,7 +163,8 @@ in
         # List packages installed in system profile. To search, run:
         # \$ nix search wget
         # environment.systemPackages = with pkgs; [
-        #   wget vim
+        #   vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
+        #   wget
         #   firefox
         # ];
 

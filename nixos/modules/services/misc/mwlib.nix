@@ -34,7 +34,7 @@ in
 
       port = mkOption {
         default = 8899;
-        type = types.int;
+        type = types.port;
         description = "Specify port to listen on.";
       }; # nserve.port
 
@@ -68,7 +68,7 @@ in
 
       port = mkOption {
         default = 14311;
-        type = types.int;
+        type = types.port;
         description = "Specify port to listen on.";
       }; # qserve.port
 
@@ -137,7 +137,7 @@ in
 
             port = mkOption {
               default = 8898;
-              type = types.int;
+              type = types.port;
               description = "Port to listen to when serving files from cache.";
             }; # nslave.http.port
 

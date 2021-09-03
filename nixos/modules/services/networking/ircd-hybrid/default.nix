@@ -10,7 +10,7 @@ let
     name = "ircd-hybrid-service";
     scripts = [ "=>/bin" ./control.in ];
     substFiles = [ "=>/conf" ./ircd.conf ];
-    inherit (pkgs) ircdHybrid coreutils su iproute gnugrep procps;
+    inherit (pkgs) ircdHybrid coreutils su iproute2 gnugrep procps;
 
     ipv6Enabled = boolToString config.networking.enableIPv6;
 

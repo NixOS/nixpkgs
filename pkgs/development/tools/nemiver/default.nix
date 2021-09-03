@@ -2,7 +2,7 @@
 , fetchurl
 , fetchpatch
 , pkg-config
-, gnome3
+, gnome
 , gtk3
 , libxml2
 , intltool
@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
   ];
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = "nemiver";
       versionPolicy = "none";
     };

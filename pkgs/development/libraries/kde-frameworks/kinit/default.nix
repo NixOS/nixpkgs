@@ -8,7 +8,6 @@ let inherit (lib) getLib; in
 
 mkDerivation {
   name = "kinit";
-  meta = { maintainers = [ lib.maintainers.ttuegel ]; };
   outputs = [ "out" "dev" ];
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [

@@ -2,14 +2,14 @@
 
  buildPythonPackage rec {
   pname = "pydsdl";
-  version = "1.9.4";
+  version = "1.12.1";
   disabled = pythonOlder "3.5"; # only python>=3.5 is supported
 
   src = fetchFromGitHub {
     owner = "UAVCAN";
     repo = pname;
     rev = version;
-    sha256 = "1hmmc4sg6dckbx2ghcjpi74yprapa6lkxxzy0h446mvyngp0kwfv";
+    sha256 = "sha256-5AwwqduIvLSZk6WcI59frwRKwjniQXfNWWVsy6V6I1E=";
   };
 
   # allow for writable directory for darwin

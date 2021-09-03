@@ -8,7 +8,7 @@
 , libarchive
 , libconfuse
 , libsodium
-, lzma
+, xz
 , zlib
 , coreutils
 , dosfstools
@@ -21,16 +21,14 @@
 
 stdenv.mkDerivation rec {
   pname = "fwup";
-  version = "1.8.3";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "fhunleth";
     repo = "fwup";
     rev = "v${version}";
-    sha256 = "sha256-ayfcnIZ7MuBsCy1giwmY2D2C6AukwS+fevmXqGa4c1w=";
+    sha256 = "sha256-ARwBm9p6o/iC09F6pc5c4qq3WClNTyAvLPsG58YQOAM=";
   };
-
-  patches = [ ./fix-testrunner-darwin.patch ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -42,10 +40,9 @@ stdenv.mkDerivation rec {
     libarchive
     libconfuse
     libsodium
-    lzma
+    xz
     zlib
-  ]
-    ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     DiskArbitration
   ];
 
@@ -62,7 +59,7 @@ stdenv.mkDerivation rec {
     xdelta
   ];
 
-  doCheck = true;
+  doCheck = !stdenv.isDarwin;
 
   meta = with lib; {
     description = "Configurable embedded Linux firmware update creator and runner";

@@ -1,4 +1,4 @@
-{ lib, stdenv, icu, expat, zlib, bzip2, python, fixDarwinDylibNames, libiconv
+{ lib, stdenv, icu, expat, zlib, bzip2, python ? null, fixDarwinDylibNames, libiconv
 , fetchpatch
 , which
 , buildPackages

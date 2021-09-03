@@ -4,7 +4,7 @@
 , mock
 , parameterized
 , pytestCheckHook
-, dateutil
+, python-dateutil
 , pytz
 , regex
 , tzlocal
@@ -39,7 +39,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     # install_requires
-    dateutil pytz regex tzlocal
+    python-dateutil pytz regex tzlocal
     # extra_requires
     convertdate umalqurra jdatetime ruamel_yaml
   ];

@@ -1,4 +1,5 @@
-{ cairo
+{ config
+, cairo
 , cmake
 , fetchFromGitHub
 , libXdmcp
@@ -7,6 +8,7 @@
 , pcre
 , pkg-config
 , python3
+, python3Packages # sphinx-build
 , lib
 , stdenv
 , xcbproto
@@ -18,101 +20,97 @@
 , xcbutilxrm
 , makeWrapper
 , removeReferencesTo
+, alsa-lib
+, curl
+, libmpdclient
+, libpulseaudio
+, wirelesstools
+, libnl
+, i3
+, i3-gaps
+, jsoncpp
 
-# optional packages-- override the variables ending in 'Support' to enable or
-# disable modules
-, alsaSupport   ? true,  alsaLib       ? null
-, githubSupport ? false, curl          ? null
-, mpdSupport    ? false, libmpdclient ? null
-, pulseSupport  ? false, libpulseaudio ? null
-, iwSupport     ? false, wirelesstools ? null
-, nlSupport     ? true,  libnl         ? null
-, i3Support ? false, i3GapsSupport ? false, i3 ? null, i3-gaps ? null, jsoncpp ? null
+  # override the variables ending in 'Support' to enable or disable modules
+, alsaSupport ? true
+, githubSupport ? false
+, mpdSupport ? false
+, pulseSupport ? config.pulseaudio or false
+, iwSupport ? false
+, nlSupport ? true
+, i3Support ? false
+, i3GapsSupport ? false
 }:
 
-assert alsaSupport   -> alsaLib       != null;
-assert githubSupport -> curl          != null;
-assert mpdSupport    -> libmpdclient != null;
-assert pulseSupport  -> libpulseaudio != null;
-
-assert iwSupport     -> ! nlSupport && wirelesstools != null;
-assert nlSupport     -> ! iwSupport && libnl         != null;
-
-assert i3Support     -> ! i3GapsSupport && jsoncpp != null && i3      != null;
-assert i3GapsSupport -> ! i3Support     && jsoncpp != null && i3-gaps != null;
-
 stdenv.mkDerivation rec {
-    pname = "polybar";
-    version = "3.5.2";
+  pname = "polybar";
+  version = "3.5.6";
 
-    src = fetchFromGitHub {
-      owner = pname;
-      repo = pname;
-      rev = version;
-      sha256 = "1ir8fdnzrba9fkkjfvax5szx5h49lavwgl9pabjzrpbvif328g3x";
-      fetchSubmodules = true;
-    };
+  src = fetchFromGitHub {
+    owner = pname;
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-Uvj9V2M/uQxyziTx1hecrcaQZECijlpVmWcUeT+PqrI=";
+    fetchSubmodules = true;
+  };
 
-    buildInputs = [
-      cairo
-      libXdmcp
-      libpthreadstubs
-      libxcb
-      pcre
-      python3
-      xcbproto
-      xcbutil
-      xcbutilcursor
-      xcbutilimage
-      xcbutilrenderutil
-      xcbutilwm
-      xcbutilxrm
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    python3Packages.sphinx
+    removeReferencesTo
+  ] ++ lib.optional (i3Support || i3GapsSupport) makeWrapper;
 
-      (if alsaSupport   then alsaLib       else null)
-      (if githubSupport then curl          else null)
-      (if mpdSupport    then libmpdclient  else null)
-      (if pulseSupport  then libpulseaudio else null)
+  buildInputs = [
+    cairo
+    libXdmcp
+    libpthreadstubs
+    libxcb
+    pcre
+    python3
+    xcbproto
+    xcbutil
+    xcbutilcursor
+    xcbutilimage
+    xcbutilrenderutil
+    xcbutilwm
+    xcbutilxrm
+  ] ++ lib.optional alsaSupport alsa-lib
+  ++ lib.optional githubSupport curl
+  ++ lib.optional mpdSupport libmpdclient
+  ++ lib.optional pulseSupport libpulseaudio
+  ++ lib.optional iwSupport wirelesstools
+  ++ lib.optional nlSupport libnl
+  ++ lib.optional (i3Support || i3GapsSupport) jsoncpp
+  ++ lib.optional i3Support i3
+  ++ lib.optional i3GapsSupport i3-gaps;
 
-      (if iwSupport     then wirelesstools else null)
-      (if nlSupport     then libnl         else null)
+  postInstall =
+    if i3Support then ''
+      wrapProgram $out/bin/polybar \
+        --prefix PATH : "${i3}/bin"
+    ''
+    else if i3GapsSupport
+    then ''
+      wrapProgram $out/bin/polybar \
+        --prefix PATH : "${i3-gaps}/bin"
+    ''
+    else "";
 
-      (if i3Support || i3GapsSupport then jsoncpp else null)
-      (if i3Support then i3 else null)
-      (if i3GapsSupport then i3-gaps else null)
+  postFixup = ''
+    remove-references-to -t ${stdenv.cc} $out/bin/polybar
+  '';
 
-      (if i3Support || i3GapsSupport then makeWrapper else null)
-    ];
-
-    postInstall = if i3Support
-                  then ''wrapProgram $out/bin/polybar \
-                           --prefix PATH : "${i3}/bin"
-                       ''
-                  else if i3GapsSupport
-                  then ''wrapProgram $out/bin/polybar \
-                           --prefix PATH : "${i3-gaps}/bin"
-                       ''
-                  else '''';
-
-    nativeBuildInputs = [
-      cmake
-      pkg-config
-      removeReferencesTo
-    ];
-
-    postFixup = ''
-        remove-references-to -t ${stdenv.cc} $out/bin/polybar
+  meta = with lib; {
+    homepage = "https://polybar.github.io/";
+    changelog = "https://github.com/polybar/polybar/releases/tag/${version}";
+    description = "A fast and easy-to-use tool for creating status bars";
+    longDescription = ''
+      Polybar aims to help users build beautiful and highly customizable
+      status bars for their desktop environment, without the need of
+      having a black belt in shell scripting.
     '';
-
-    meta = with lib; {
-      homepage = "https://polybar.github.io/";
-      description = "A fast and easy-to-use tool for creating status bars";
-      longDescription = ''
-        Polybar aims to help users build beautiful and highly customizable
-        status bars for their desktop environment, without the need of
-        having a black belt in shell scripting.
-      '';
-      license = licenses.mit;
-      maintainers = with maintainers; [ afldcr Br1ght0ne ];
-      platforms = platforms.linux;
-    };
+    license = licenses.mit;
+    maintainers = with maintainers; [ afldcr Br1ght0ne fortuneteller2k ];
+    platforms = platforms.linux;
+  };
 }

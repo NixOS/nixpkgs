@@ -11,11 +11,15 @@ toKodiAddon (stdenv.mkDerivation ({
   extraRuntimeDependencies = [ ];
 
   installPhase = ''
+    runHook preInstall
+
     cd $src/$sourceDir
     d=$out${addonDir}/${namespace}
     mkdir -p $d
     sauce="."
     [ -d ${namespace} ] && sauce=${namespace}
     cp -R "$sauce/"* $d
+
+    runHook postInstall
   '';
 } // attrs))

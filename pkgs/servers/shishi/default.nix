@@ -14,7 +14,7 @@ let
   mkWith = mkFlag "with-" "without-";
   mkOther = mkFlag "" "" true;
 
-  shouldUsePkg = pkg: if pkg != null && lib.any (lib.meta.platformMatch stdenv.hostPlatform) pkg.meta.platforms then pkg else null;
+  shouldUsePkg = pkg: if pkg != null && lib.meta.availableOn stdenv.hostPlatform pkg then pkg else null;
 
   optPam = shouldUsePkg pam;
   optLibidn = shouldUsePkg libidn;
@@ -22,10 +22,11 @@ let
 in
 with lib;
 stdenv.mkDerivation rec {
-  name = "shishi-1.0.2";
+  pname = "shishi";
+  version = "1.0.2";
 
   src = fetchurl {
-    url = "mirror://gnu/shishi/${name}.tar.gz";
+    url = "mirror://gnu/shishi/shishi-${version}.tar.gz";
     sha256 = "032qf72cpjdfffq1yq54gz3ahgqf2ijca4vl31sfabmjzq9q370d";
   };
 

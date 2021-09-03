@@ -2,6 +2,7 @@
 , python3Packages
 , fetchFromGitHub
 , wrapQtAppsHook
+, cups
 }:
 
 with python3Packages;
@@ -16,6 +17,11 @@ buildPythonApplication rec {
     rev = "v${version}";
     sha256 = "0px0xdv6kyzkkpmvryrdfavv1qy2xrqdxkpmhvx1gj649xcabv32";
   };
+
+  postPatch = ''
+    substituteInPlace inkcut/device/transports/printer/plugin.py \
+      --replace ", 'lpr', " ", '${cups}/bin/lpr', "
+  '';
 
   nativeBuildInputs = [ wrapQtAppsHook ];
 

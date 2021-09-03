@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, SDL2, SDL2_mixer, alsaLib, libpng
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, SDL2, SDL2_mixer, alsa-lib, libpng
 , pcre, makeDesktopItem }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config ];
 
-  buildInputs = [ SDL2 SDL2_mixer alsaLib libpng pcre ];
+  buildInputs = [ SDL2 SDL2_mixer alsa-lib libpng pcre ];
 
   hardeningDisable = ["all"];
 

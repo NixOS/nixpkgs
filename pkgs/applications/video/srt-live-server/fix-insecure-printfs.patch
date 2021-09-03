@@ -1,0 +1,61 @@
+diff --color -ur a/Makefile b/Makefile
+--- a/Makefile	2021-04-16 13:02:41.416453040 +0200
++++ b/Makefile	2021-04-16 13:21:23.020089623 +0200
+@@ -1,3 +1,4 @@
++PREFIX = /usr/local
+ SHELL = /bin/sh
+ MAIN_NAME=sls
+ CLIENT_NAME=slc
+@@ -64,3 +65,16 @@
+ 	rm -f $(OUTPUT_PATH)/*.o
+ 	rm -rf $(BIN_PATH)/*
+ 
++install: all
++	@echo installing executable files to ${DESTDIR}${PREFIX}/bin
++	@mkdir -p "${DESTDIR}${PREFIX}/bin"
++	@cp -f ${BIN_PATH}/${MAIN_NAME} "${DESTDIR}${PREFIX}/bin"
++	@chmod 755 "${DESTDIR}${PREFIX}/bin/${MAIN_NAME}"
++	@cp -f ${BIN_PATH}/${CLIENT_NAME} "${DESTDIR}${PREFIX}/bin"
++	@chmod 755 "${DESTDIR}${PREFIX}/bin/${CLIENT_NAME}"
++
++uninstall:
++	@echo removing executable files from ${DESTDIR}${PREFIX}/bin
++	@rm -f "${DESTDIR}${PREFIX}/bin/${MAIN_NAME}"
++	@rm -f "${DESTDIR}${PREFIX}/bin/${CLIENT_NAME}"
++
+diff --color -ur a/slscore/HttpClient.cpp b/slscore/HttpClient.cpp
+--- a/slscore/HttpClient.cpp	2021-04-16 13:02:41.416453040 +0200
++++ b/slscore/HttpClient.cpp	2021-04-16 13:11:40.343866698 +0200
+@@ -90,7 +90,7 @@
+ 		goto FUNC_END;
+ 	}
+ 	if (NULL != method && strlen(method) > 0) {
+-		sprintf(m_http_method, method);
++		strcpy(m_http_method, method);
+ 	}
+ 
+ 	m_interval = interval;
+diff --color -ur a/slscore/SLSLog.cpp b/slscore/SLSLog.cpp
+--- a/slscore/SLSLog.cpp	2021-04-16 13:02:41.416453040 +0200
++++ b/slscore/SLSLog.cpp	2021-04-16 13:08:16.836119519 +0200
+@@ -85,7 +85,7 @@
+     vsnprintf (buf , 4095 , fmt , vl);
+     //sprintf(buf_info, "%s %s: %s\n" , cur_time, LOG_LEVEL_NAME[level], buf);
+     sprintf(buf_info, "%s:%03d %s %s: %s\n" , cur_time, cur_time_msec, APP_NAME, LOG_LEVEL_NAME[level], buf);
+-    printf(buf_info);
++    puts(buf_info);
+ 
+     if (m_log_file) {
+         fwrite(buf_info, strlen(buf_info), 1, m_log_file);
+diff --color -ur a/slscore/SLSSrt.cpp b/slscore/SLSSrt.cpp
+--- a/slscore/SLSSrt.cpp	2021-04-16 13:02:41.417452995 +0200
++++ b/slscore/SLSSrt.cpp	2021-04-16 13:10:11.004957820 +0200
+@@ -124,7 +124,7 @@
+     std::map<int, std::string>::iterator it;
+     for(it=map_error.begin(); it!=map_error.end(); ++it) {
+         sprintf(szBuf, "%d: %s\n", it->first, it->second.c_str());
+-        printf(szBuf);
++        puts(szBuf);
+     }
+     printf("----------end------------\n");
+     map_error.clear();

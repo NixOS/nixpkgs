@@ -62,7 +62,7 @@ in
       '';
     };
 
-    enable = mkEnableOption "Whether to enable Kubernetes addon manager.";
+    enable = mkEnableOption "Kubernetes addon manager.";
   };
 
   ###### implementation
@@ -83,6 +83,9 @@ in
         Group = "kubernetes";
         Restart = "on-failure";
         RestartSec = 10;
+      };
+      unitConfig = {
+        StartLimitIntervalSec = 0;
       };
     };
 

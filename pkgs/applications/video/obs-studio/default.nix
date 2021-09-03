@@ -1,4 +1,6 @@
-{ config, lib, stdenv
+{ config
+, lib
+, stdenv
 , mkDerivation
 , fetchFromGitHub
 , addOpenGLRunpath
@@ -30,28 +32,45 @@
 , python3
 
 , alsaSupport ? stdenv.isLinux
-, alsaLib
+, alsa-lib
 , pulseaudioSupport ? config.pulseaudio or stdenv.isLinux
 , libpulseaudio
 , libcef
+, pipewireSupport ? stdenv.isLinux
+, pipewire
 }:
 
 let
   inherit (lib) optional optionals;
 
-in mkDerivation rec {
+in
+mkDerivation rec {
   pname = "obs-studio";
-  version = "26.1.2";
+  version = "27.0.0";
 
   src = fetchFromGitHub {
     owner = "obsproject";
     repo = "obs-studio";
     rev = version;
-    sha256 = "1plr5a7k5scxlibhbknhhk19ipk8las14dzs7v64zx7rhpj00009";
+    sha256 = "1n71705b9lbdff3svkmgwmbhlhhxvi8ajxqb74lm07v56a5bvi6p";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ addOpenGLRunpath cmake pkg-config ];
+  patches = [
+    # Lets obs-browser build against CEF 90.1.0+
+    ./Enable-file-access-and-universal-access-for-file-URL.patch
+
+    # Lets obs-browser build against CEF 91.1.0+
+    ./Change-product_version-to-user_agent_product.patch
+  ];
+
+  nativeBuildInputs = [
+    addOpenGLRunpath
+    cmake
+    pkg-config
+    makeWrapper
+  ]
+  ++ optional scriptingSupport swig;
 
   buildInputs = [
     curl
@@ -71,12 +90,12 @@ in mkDerivation rec {
     wayland
     x264
     libvlc
-    makeWrapper
     mbedtls
   ]
-  ++ optionals scriptingSupport [ luajit swig python3 ]
-  ++ optional alsaSupport alsaLib
-  ++ optional pulseaudioSupport libpulseaudio;
+  ++ optionals scriptingSupport [ luajit python3 ]
+  ++ optional alsaSupport alsa-lib
+  ++ optional pulseaudioSupport libpulseaudio
+  ++ optional pipewireSupport pipewire;
 
   # Copied from the obs-linuxbrowser
   postUnpack = ''
@@ -103,13 +122,13 @@ in mkDerivation rec {
   ];
 
   postInstall = ''
-      wrapProgram $out/bin/obs \
-        --prefix "LD_LIBRARY_PATH" : "${xorg.libX11.out}/lib:${libvlc}/lib"
+    wrapProgram $out/bin/obs \
+      --prefix "LD_LIBRARY_PATH" : "${xorg.libX11.out}/lib:${libvlc}/lib"
   '';
 
   postFixup = lib.optionalString stdenv.isLinux ''
-      addOpenGLRunpath $out/lib/lib*.so
-      addOpenGLRunpath $out/lib/obs-plugins/*.so
+    addOpenGLRunpath $out/lib/lib*.so
+    addOpenGLRunpath $out/lib/obs-plugins/*.so
   '';
 
   meta = with lib; {
@@ -120,8 +139,8 @@ in mkDerivation rec {
       video content, efficiently
     '';
     homepage = "https://obsproject.com";
-    maintainers = with maintainers; [ jb55 MP2E ];
-    license = licenses.gpl2;
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    maintainers = with maintainers; [ jb55 MP2E V ];
+    license = licenses.gpl2Plus;
+    platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
   };
 }

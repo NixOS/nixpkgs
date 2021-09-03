@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchPypi, pythonOlder, setuptools
-, twiggy, requests, offtrac, bugzilla, taskw, dateutil, pytz, keyring, six
+, twiggy, requests, offtrac, bugzilla, taskw, python-dateutil, pytz, keyring, six
 , jinja2, pycurl, dogpile_cache, lockfile, click, pyxdg, future, jira }:
 
 buildPythonPackage rec {
@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     setuptools
-    twiggy requests offtrac bugzilla taskw dateutil pytz keyring six
+    twiggy requests offtrac bugzilla taskw python-dateutil pytz keyring six
     jinja2 pycurl dogpile_cache lockfile click pyxdg future jira
   ];
 

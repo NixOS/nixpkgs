@@ -1,4 +1,4 @@
-{ fetchurl, fetchgit, linkFarm, runCommandNoCC, gnutar }: rec {
+{ fetchurl, fetchgit, linkFarm, runCommand, gnutar }: rec {
   offline_cache = linkFarm "offline" packages;
   packages = [
     {
@@ -666,11 +666,11 @@
       };
     }
     {
-      name = "_influxdata_flux_lsp_browser___flux_lsp_browser_0.5.23.tgz";
+      name = "_influxdata_flux_lsp_browser___flux_lsp_browser_0.5.41.tgz";
       path = fetchurl {
-        name = "_influxdata_flux_lsp_browser___flux_lsp_browser_0.5.23.tgz";
-        url  = "https://registry.yarnpkg.com/@influxdata/flux-lsp-browser/-/flux-lsp-browser-0.5.23.tgz";
-        sha1 = "b3d1579e26ff21a11771003cbcaebe5fef82d73c";
+        name = "_influxdata_flux_lsp_browser___flux_lsp_browser_0.5.41.tgz";
+        url  = "https://registry.yarnpkg.com/@influxdata/flux-lsp-browser/-/flux-lsp-browser-0.5.41.tgz";
+        sha1 = "abf6c5ad253317f34a9217ecfd250d78fe625a83";
       };
     }
     {

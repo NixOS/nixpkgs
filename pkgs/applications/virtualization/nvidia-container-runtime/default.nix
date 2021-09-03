@@ -35,7 +35,7 @@ buildGoPackage rec {
   };
 
   goPackagePath = "github.com/${pname}/src";
-  buildFlagsArray = [ "-ldflags=" "-s -w" ];
+  ldflags = [ "-s" "-w" ];
   nativeBuildInputs = [ makeWrapper ];
 
   postInstall = ''

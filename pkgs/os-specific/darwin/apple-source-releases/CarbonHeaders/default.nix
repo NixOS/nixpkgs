@@ -1,6 +1,6 @@
-{ lib, appleDerivation }:
+{ lib, appleDerivation', stdenvNoCC }:
 
-appleDerivation {
+appleDerivation' stdenvNoCC {
   dontBuild = true;
 
   installPhase = ''

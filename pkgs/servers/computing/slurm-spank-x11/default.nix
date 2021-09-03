@@ -1,10 +1,7 @@
 { lib, stdenv, fetchFromGitHub, slurm } :
-let
+stdenv.mkDerivation rec {
+  pname = "slurm-spank-x11";
   version = "0.2.5";
-in
-stdenv.mkDerivation {
-  name = "slurm-spank-x11-${version}";
-  version = version;
 
   src = fetchFromGitHub {
     owner = "hautreux";

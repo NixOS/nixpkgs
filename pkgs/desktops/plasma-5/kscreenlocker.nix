@@ -1,18 +1,18 @@
 {
   mkDerivation, lib,
   extra-cmake-modules, kdoctools,
-  kcmutils, kcrash, kdeclarative, kdelibs4support, kglobalaccel, kidletime,
+  kcmutils, kcrash, kdeclarative, kglobalaccel, kidletime,
   kwayland, libXcursor, pam, plasma-framework, qtbase, qtdeclarative, qtx11extras,
-  wayland,
+  wayland, layer-shell-qt,
 }:
 
 mkDerivation {
   name = "kscreenlocker";
-  meta.broken = lib.versionOlder qtbase.version "5.15.0";
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
-    kcmutils kcrash kdeclarative kdelibs4support kglobalaccel kidletime kwayland
+    kcmutils kcrash kdeclarative kglobalaccel kidletime kwayland
     libXcursor pam plasma-framework qtdeclarative qtx11extras wayland
+    layer-shell-qt
   ];
   outputs = [ "out" "dev" ];
 }

@@ -27,6 +27,5 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     license = licenses.bsd3;
     downloadPage = "https://sourceforge.net/projects/ipmiutil/files/ipmiutil/";
-    inherit version;
   };
 }

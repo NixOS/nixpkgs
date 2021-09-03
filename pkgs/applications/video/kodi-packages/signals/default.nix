@@ -9,13 +9,17 @@ buildKodiAddon rec {
     sha256 = "1qcjbakch8hvx02wc01zv014nmzgn6ahc4n2bj5mzr114ppd3hjs";
   };
 
-  passthru.updateScript = addonUpdateScript {
-    attrPath = "kodi.packages.signals";
+  passthru= {
+    pythonPath = "lib";
+    updateScript = addonUpdateScript {
+      attrPath = "kodi.packages.signals";
+    };
   };
 
   meta = with lib; {
     homepage = "https://github.com/ruuk/script.module.addon.signals";
     description = "Provides signal/slot mechanism for inter-addon communication";
     license = licenses.lgpl21Only;
+    maintainers = teams.kodi.members;
   };
 }

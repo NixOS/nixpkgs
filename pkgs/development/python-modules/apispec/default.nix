@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
 , pyyaml
 , prance
 , marshmallow
@@ -11,24 +12,30 @@
 
 buildPythonPackage rec {
   pname = "apispec";
-  version = "4.2.0";
+  version = "4.7.1";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fbbd069caa22c0270bc71a5330b46b5a4e1984d8345b9236ca02fbca23094647";
+    sha256 = "1yf71c9nq1rfb5pkgmfw486fvywi1bjnmgwxcly7y3basf3980kr";
   };
 
-  checkInputs = [
+  propagatedBuildInputs = [
     pyyaml
     prance
+  ];
+
+  checkInputs = [
     openapi-spec-validator
     marshmallow
     mock
     pytestCheckHook
   ];
 
+  pythonImportsCheck = [ "apispec" ];
+
   meta = with lib; {
-    description = "A pluggable API specification generator. Currently supports the OpenAPI Specification (f.k.a. the Swagger specification";
+    description = "A pluggable API specification generator with support for the OpenAPI Specification";
     homepage = "https://github.com/marshmallow-code/apispec";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];

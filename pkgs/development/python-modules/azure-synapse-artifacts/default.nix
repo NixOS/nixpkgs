@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "azure-synapse-artifacts";
-  version = "0.5.0";
+  version = "0.8.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "a13124dc9405277f697f6452728d7dcf4c50601ee76055fd42f12b51494d6579";
+    sha256 = "3d4fdfd0bd666984f7bdc7bc0c7a6018c35a5d46a81a32dd193b07c03b528b72";
   };
 
   propagatedBuildInputs = [
@@ -19,6 +19,9 @@ buildPythonPackage rec {
     azure-core
     msrest
   ];
+
+  # zero tests run
+  doCheck = false;
 
   pythonImportsCheck = [ "azure.synapse.artifacts" ];
 

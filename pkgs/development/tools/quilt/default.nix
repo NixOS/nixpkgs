@@ -2,10 +2,11 @@
 
 stdenv.mkDerivation rec {
 
-  name = "quilt-0.66";
+  pname = "quilt";
+  version = "0.66";
 
   src = fetchurl {
-    url = "mirror://savannah/quilt/${name}.tar.gz";
+    url = "mirror://savannah/${pname}/${pname}-${version}.tar.gz";
     sha256 = "01vfvk4pqigahx82fhaaffg921ivd3k7rylz1yfvy4zbdyd32jri";
   };
 

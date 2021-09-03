@@ -1,11 +1,12 @@
 { lib, stdenv, fetchurl, fetchpatch }:
 
 stdenv.mkDerivation rec {
-  name = "super-3.30.0";
+  pname = "super";
+  version = "3.30.0";
 
   src = fetchurl {
-    name = "${name}.tar.gz";
-    url = "https://www.ucolick.org/~will/RUE/super/${name}-tar.gz";
+    name = "super-${version}.tar.gz";
+    url = "https://www.ucolick.org/~will/RUE/super/super-${version}-tar.gz";
     sha256 = "0k476f83w7f45y9jpyxwr00ikv1vhjiq0c26fgjch9hnv18icvwy";
   };
 

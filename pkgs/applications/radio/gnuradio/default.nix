@@ -16,12 +16,13 @@
 , codec2
 , gsm
 , fftwFloat
-, alsaLib
+, alsa-lib
 , libjack2
 , CoreAudio
 , uhd
 , SDL
 , gsl
+, soapysdr
 , libsodium
 , libsndfile
 , libunwind
@@ -44,14 +45,14 @@
 , pname ? "gnuradio"
 , versionAttr ? {
   major = "3.9";
-  minor = "0";
+  minor = "2";
   patch = "0";
 }
 , fetchSubmodules ? false
 }:
 
 let
-  sourceSha256 =  "ZjQzioAuWrd8jsYOnLNH1mK4n9EbrjgvPX3mTzVFdLk=";
+  sourceSha256 = "01wyqazrpphmb0fl69j93k0w4vm4d1l4177m1fyg7qx8hzia0aaq";
   featuresInfo = {
     # Needed always
     basic = {
@@ -151,7 +152,7 @@ let
     };
     gr-audio = {
       runtime = []
-        ++ lib.optionals stdenv.isLinux [ alsaLib libjack2 ]
+        ++ lib.optionals stdenv.isLinux [ alsa-lib libjack2 ]
         ++ lib.optionals stdenv.isDarwin [ CoreAudio ]
       ;
       cmakeEnableFlag = "GR_AUDIO";
@@ -190,11 +191,10 @@ let
       runtime = [ SDL ];
       cmakeEnableFlag = "GR_VIDEO_SDL";
     };
-    # codec2 and gsm support is broken with gr3.9: https://github.com/gnuradio/gnuradio/issues/4278
-    # gr-vocoder = {
-      # runtime = [ codec2 gsm ];
-      # cmakeEnableFlag = "GR_VOCODER";
-    # };
+    gr-vocoder = {
+      runtime = [ codec2 gsm ];
+      cmakeEnableFlag = "GR_VOCODER";
+    };
     gr-wavelet = {
       cmakeEnableFlag = "GR_WAVELET";
       runtime = [ gsl libsodium ];
@@ -205,6 +205,12 @@ let
     };
     gr-network = {
       cmakeEnableFlag = "GR_NETWORK";
+    };
+    gr-soapy = {
+      cmakeEnableFlag = "GR_SOAPY";
+      runtime = [
+        soapysdr
+      ];
     };
   };
   shared = (import ./shared.nix {
@@ -253,9 +259,6 @@ stdenv.mkDerivation rec {
 
   postInstall = shared.postInstall
     # This is the only python reference worth removing, if needed.
-    # Even if python support is enabled, and we don't care about this
-    # reference, pybind's path is not properly set. See:
-    # https://github.com/gnuradio/gnuradio/issues/4380
     + lib.optionalString (!hasFeature "python-support" features) ''
       ${removeReferencesTo}/bin/remove-references-to -t ${python} $out/lib/cmake/gnuradio/GnuradioConfig.cmake
       ${removeReferencesTo}/bin/remove-references-to -t ${python} $(readlink -f $out/lib/libgnuradio-runtime.so)

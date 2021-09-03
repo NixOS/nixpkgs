@@ -3,7 +3,7 @@
 , zlib
 , xorg
 , freetype
-, alsaLib
+, alsa-lib
 , jdk11
 , curl
 , lttng-ust
@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation rec {
   pname = "codeql";
-  version = "2.4.5";
+  version = "2.5.9";
 
   dontConfigure = true;
   dontBuild = true;
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   src = fetchzip {
     url = "https://github.com/github/codeql-cli-binaries/releases/download/v${version}/codeql.zip";
-    sha256 = "sha256-FM7fcjbZilp1spy0HxDhEAzs7Qe2r/HObKB80o4mSiw=";
+    sha256 = "sha256-r3Jm+VYjn0Dz4BCSbADbgTWL1owbyIXlkoj6mOmZcZk=";
   };
 
   nativeBuildInputs = [
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     xorg.libXtst
     xorg.libXrender
     freetype
-    alsaLib
+    alsa-lib
     jdk11
     stdenv.cc.cc.lib
     curl

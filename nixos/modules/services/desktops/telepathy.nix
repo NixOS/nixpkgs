@@ -39,7 +39,7 @@ with lib;
     services.dbus.packages = [ pkgs.telepathy-mission-control ];
 
     # Enable runtime optional telepathy in gnome-shell
-    services.xserver.desktopManager.gnome3.sessionPath = with pkgs; [
+    services.xserver.desktopManager.gnome.sessionPath = with pkgs; [
       telepathy-glib
       telepathy-logger
     ];

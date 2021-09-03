@@ -3,23 +3,20 @@
 let
   common = { stname, target, postInstall ? "" }:
     buildGoModule rec {
-      version = "1.14.0";
-      name = "${stname}-${version}";
+      pname = stname;
+      version = "1.18.1";
 
       src = fetchFromGitHub {
         owner  = "syncthing";
         repo   = "syncthing";
         rev    = "v${version}";
-        sha256 = "1nkjbikin341v74fcwdaa2v5f3zhd8xr6pjhpka1fdw6vvnn4lnd";
+        sha256 = "1sm4d0pjgk0spz9pddqb3i8hli10pibd5xs18mhcwrhnxj2xky1y";
       };
 
-      vendorSha256 = "1kr6yyigi7bbi4xwpk009q801wvmf3aaw4m40ki0s6gjn0wjl4j3";
+      vendorSha256 = "1qqpxm4s1s2yp1zmi4m25y1a6r7kxc5rmvfsg50jmqsfnwligpz6";
 
       doCheck = false;
 
-      patches = [
-        ./add-stcli-target.patch
-      ];
       BUILD_USER="nix";
       BUILD_HOST="nix";
 
@@ -47,7 +44,7 @@ let
         description = "Open Source Continuous File Synchronization";
         changelog = "https://github.com/syncthing/syncthing/releases/tag/v${version}";
         license = licenses.mpl20;
-        maintainers = with maintainers; [ pshendry joko peterhoeg andrew-d ];
+        maintainers = with maintainers; [ joko peterhoeg andrew-d ];
         platforms = platforms.unix;
       };
     };
@@ -81,12 +78,6 @@ in {
                  $out/lib/systemd/user/syncthing.service \
                  --replace /usr/bin/syncthing $out/bin/syncthing
     '';
-  };
-
-  syncthing-cli = common {
-    stname = "syncthing-cli";
-
-    target = "stcli";
   };
 
   syncthing-discovery = common {

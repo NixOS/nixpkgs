@@ -41,6 +41,7 @@ stdenv.mkDerivation rec {
     homepage = "https://code-industry.net/free-pdf-editor/";
     license = licenses.unfreeRedistributable;
     platforms = with platforms; [ "x86_64-linux" ];
-    maintainers = with maintainers; [ cmcdragonkai flokli ];
+    broken = true;
+    maintainers = with maintainers; [ cmcdragonkai ];
   };
 }

@@ -29,6 +29,6 @@ in buildPythonPackage rec {
     homepage = "https://github.com/Vayn/python-fontconfig";
     description = "Python binding for Fontconfig";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ gnidorah ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

@@ -1,8 +1,8 @@
-{ callPackage
+{ python3
 , rustPlatform
 }:
 
-callPackage ./generic.nix {
+python3.pkgs.callPackage ./generic.nix {
   buildAndTestSubdir = "examples/word-count";
 
   nativeBuildInputs = with rustPlatform; [

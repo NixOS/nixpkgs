@@ -159,10 +159,9 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
-    systemd.services.logstash = with pkgs; {
+    systemd.services.logstash = {
       description = "Logstash Daemon";
       wantedBy = [ "multi-user.target" ];
-      environment = { JAVA_HOME = jre; };
       path = [ pkgs.bash ];
       serviceConfig = {
         ExecStartPre = ''${pkgs.coreutils}/bin/mkdir -p "${cfg.dataDir}" ; ${pkgs.coreutils}/bin/chmod 700 "${cfg.dataDir}"'';

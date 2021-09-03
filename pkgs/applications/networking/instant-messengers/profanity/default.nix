@@ -21,13 +21,13 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "profanity";
-  version = "0.10.0";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "profanity-im";
     repo = "profanity";
     rev = version;
-    sha256 = "0a9rzhnivxcr8v02xxzrbck7pvvv4c66ap2zy0gzxhri5p8ac03r";
+    sha256 = "0xmzsh0szm8x3hgw65j0cd2bp8cmrnq5pjz49lqajircyzflsngm";
   };
 
   patches = [
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
   # Enable feature flags, so that build fail if libs are missing
   configureFlags = [ "--enable-c-plugins" "--enable-otr" ]
     ++ optionals notifySupport       [ "--enable-notifications" ]
-    ++ optionals traySupport         [ "--enable-icons" ]
+    ++ optionals traySupport         [ "--enable-icons-and-clipboard" ]
     ++ optionals pgpSupport          [ "--enable-pgp" ]
     ++ optionals pythonPluginSupport [ "--enable-python-plugins" ]
     ++ optionals omemoSupport        [ "--enable-omemo" ];

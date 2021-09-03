@@ -1,7 +1,7 @@
-From 95e4533f1eeb6e0d509f9129d0133f0b849cc3c5 Mon Sep 17 00:00:00 2001
+From 8b7f881cf22e98e907506f4c403b9e304e332bf9 Mon Sep 17 00:00:00 2001
 From: Eelco Dolstra <eelco.dolstra@logicblox.com>
 Date: Fri, 19 Dec 2014 14:46:17 +0100
-Subject: [PATCH 05/18] Add some NixOS-specific unit directories
+Subject: [PATCH 05/19] Add some NixOS-specific unit directories
 
 Look in `/nix/var/nix/profiles/default/lib/systemd/{system,user}` for
 units provided by packages installed into the default profile via
@@ -92,7 +92,7 @@ index 96b82170d0..bf66bd6b77 100644
  
                  if (!add)
 diff --git a/src/core/systemd.pc.in b/src/core/systemd.pc.in
-index f2c045511d..d38a3a0302 100644
+index b5cc8f94a5..a701cd05f8 100644
 --- a/src/core/systemd.pc.in
 +++ b/src/core/systemd.pc.in
 @@ -38,10 +38,11 @@ systemdsystemconfdir=${systemd_system_conf_dir}
@@ -110,5 +110,5 @@ index f2c045511d..d38a3a0302 100644
  
  systemd_system_generator_dir=${root_prefix}/lib/systemd/system-generators
 -- 
-2.29.2
+2.30.1
 

@@ -77,5 +77,6 @@ stdenv.mkDerivation rec {
     description = "An implementation of the standard Unix documentation system accessed using the man command";
     license = licenses.gpl2;
     platforms = lib.platforms.unix;
+    mainProgram = "man";
   };
 }

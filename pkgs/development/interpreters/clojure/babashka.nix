@@ -2,17 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "babashka";
-  version = "0.2.10";
-
-  reflectionJson = fetchurl {
-    name = "reflection.json";
-    url = "https://github.com/borkdude/${pname}/releases/download/v${version}/${pname}-${version}-reflection.json";
-    sha256 = "1c7f0z1hi0vcfz532r3fhr4c64jjqppf94idpa1jziz1dljkwk85";
-  };
+  version = "0.6.0";
 
   src = fetchurl {
-    url = "https://github.com/borkdude/${pname}/releases/download/v${version}/${pname}-${version}-standalone.jar";
-    sha256 = "0j6k3vmdljf3bjmj5dywhxjmxcs1axscc8dlnw94g5rwf9bin0dn";
+    url = "https://github.com/babashka/${pname}/releases/download/v${version}/${pname}-${version}-standalone.jar";
+    sha256 = "sha256-W7zcTs0nTw1ed04ev7WKAMyBd/2n4Mezo5kh0sHFyyc=";
   };
 
   dontUnpack = true;
@@ -27,41 +21,18 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     runHook preBuild
 
-    # https://github.com/babashka/babashka/blob/77daea7362d8e2562c89c315b1fbcefde6fa56a5/script/compile
+    # https://github.com/babashka/babashka/blob/v0.6.0/script/compile#L41-L52
     args=("-jar" "$BABASHKA_JAR"
           "-H:Name=$BABASHKA_BINARY"
-          "${lib.optionalString stdenv.isDarwin ''-H:-CheckToolchain''}"
           "-H:+ReportExceptionStackTraces"
-          "-J-Dclojure.spec.skip-macros=true"
-          "-J-Dclojure.compiler.direct-linking=true"
-          "-H:IncludeResources=BABASHKA_VERSION"
-          "-H:IncludeResources=SCI_VERSION"
-          "-H:ReflectionConfigurationFiles=${reflectionJson}"
-          "--initialize-at-build-time"
           # "-H:+PrintAnalysisCallTree"
           # "-H:+DashboardAll"
           # "-H:DashboardDump=reports/dump"
           # "-H:+DashboardPretty"
           # "-H:+DashboardJson"
-          "-H:Log=registerResource:"
-          "-H:EnableURLProtocols=http,https,jar"
-          "--enable-all-security-services"
-          "-H:+JNI"
           "--verbose"
           "--no-fallback"
-          "--no-server"
-          "--report-unsupported-elements-at-runtime"
-          "--initialize-at-run-time=org.postgresql.sspi.SSPIClient"
           "--native-image-info"
-          "--verbose"
-          "-H:ServiceLoaderFeatureExcludeServices=javax.sound.sampled.spi.AudioFileReader"
-          "-H:ServiceLoaderFeatureExcludeServices=javax.sound.midi.spi.MidiFileReader"
-          "-H:ServiceLoaderFeatureExcludeServices=javax.sound.sampled.spi.MixerProvider"
-          "-H:ServiceLoaderFeatureExcludeServices=javax.sound.sampled.spi.FormatConversionProvider"
-          "-H:ServiceLoaderFeatureExcludeServices=javax.sound.sampled.spi.AudioFileWriter"
-          "-H:ServiceLoaderFeatureExcludeServices=javax.sound.midi.spi.MidiDeviceProvider"
-          "-H:ServiceLoaderFeatureExcludeServices=javax.sound.midi.spi.SoundbankReader"
-          "-H:ServiceLoaderFeatureExcludeServices=javax.sound.midi.spi.MidiFileWriter"
           "$BABASHKA_XMX")
 
      native-image ''${args[@]}
@@ -110,9 +81,16 @@ stdenv.mkDerivation rec {
     - Batteries included (tools.cli, cheshire, ...)
     - Library support via popular tools like the clojure CLI
     '';
-    homepage = "https://github.com/borkdude/babashka";
+    homepage = "https://github.com/babashka/babashka";
+    changelog = "https://github.com/babashka/babashka/blob/v${version}/CHANGELOG.md";
     license = licenses.epl10;
     platforms = graalvm11-ce.meta.platforms;
-    maintainers = with maintainers; [ bandresen bhougland DerGuteMoritz jlesquembre ];
+    maintainers = with maintainers; [
+      bandresen
+      bhougland
+      DerGuteMoritz
+      jlesquembre
+      thiagokokada
+    ];
   };
 }

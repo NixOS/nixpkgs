@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , ncurses5
 , python27
@@ -6,7 +7,8 @@
 
 stdenv.mkDerivation rec {
   pname = "gcc-arm-embedded";
-  version = "8-2019-q3-update";
+  version = "8.3.1";
+  release = "8-2019-q3-update";
   subdir = "8-2019q3/RC1.1";
 
   suffix = {
@@ -15,7 +17,7 @@ stdenv.mkDerivation rec {
   }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   src = fetchurl {
-    url = "https://developer.arm.com/-/media/Files/downloads/gnu-rm/${subdir}/gcc-arm-none-eabi-${version}-${suffix}.tar.bz2";
+    url = "https://developer.arm.com/-/media/Files/downloads/gnu-rm/${subdir}/gcc-arm-none-eabi-${release}-${suffix}.tar.bz2";
     sha256 = {
       x86_64-darwin = "fc235ce853bf3bceba46eff4b95764c5935ca07fc4998762ef5e5b7d05f37085";
       x86_64-linux  = "b50b02b0a16e5aad8620e9d7c31110ef285c1dde28980b1a9448b764d77d8f92";

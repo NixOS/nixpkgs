@@ -123,7 +123,7 @@ in stdenv.mkDerivation {
     description = "An office suite with a word processor, spreadsheet and presentation program";
     homepage = "https://www.softmaker.com/";
     license = licenses.unfree;
-    maintainers = with maintainers; [ danieldk ];
+    maintainers = with maintainers; [ ];
     platforms = [ "x86_64-linux" ];
   };
 }

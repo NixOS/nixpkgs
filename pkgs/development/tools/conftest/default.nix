@@ -2,21 +2,20 @@
 
 buildGoModule rec {
   pname = "conftest";
-  version = "0.23.0";
+  version = "0.27.0";
 
   src = fetchFromGitHub {
     owner = "open-policy-agent";
     repo = "conftest";
     rev = "v${version}";
-    sha256 = "sha256-mSiZjpsFZfkM522f1WcJgBexiBS0o3uf1g94pjhgGVU=";
+    sha256 = "sha256-Yc/aejGLMbAqpIRTVQQ3lv7/oyr7tVAy41Gx6198Eos=";
   };
 
-  vendorSha256 = "sha256-iCIuEvwkbfBZ858yZZyVf5om6YLsGKRvzFmYzJBrRf4=";
+  vendorSha256 = "sha256-jI5bX6S2C0ckiiieVlaRNEsLS/5gGkC3o/xauDtCOjA=";
 
   doCheck = false;
 
-  buildFlagsArray = [
-    "-ldflags="
+  ldflags = [
     "-s"
     "-w"
     "-X github.com/open-policy-agent/conftest/internal/commands.version=${version}"
@@ -36,6 +35,6 @@ buildGoModule rec {
     '';
     inherit (src.meta) homepage;
     license = licenses.asl20;
-    maintainers = with maintainers; [ yurrriq ];
+    maintainers = with maintainers; [ yurrriq jk ];
   };
 }

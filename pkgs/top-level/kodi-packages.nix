@@ -46,6 +46,8 @@ let self = rec {
 
   # addon packages
 
+  a4ksubtitles = callPackage ../applications/video/kodi-packages/a4ksubtitles { };
+
   controllers = {
     default = callPackage ../applications/video/kodi-packages/controllers { controller = "default"; };
 
@@ -66,6 +68,8 @@ let self = rec {
     snes = callPackage ../applications/video/kodi-packages/controllers { controller = "snes"; };
   };
 
+  jellyfin = callPackage ../applications/video/kodi-packages/jellyfin { };
+
   joystick = callPackage ../applications/video/kodi-packages/joystick { };
 
   netflix = callPackage ../applications/video/kodi-packages/netflix { };
@@ -75,6 +79,8 @@ let self = rec {
   steam-controller = callPackage ../applications/video/kodi-packages/steam-controller { };
 
   steam-launcher = callPackage ../applications/video/kodi-packages/steam-launcher { };
+
+  steam-library = callPackage ../applications/video/kodi-packages/steam-library { };
 
   pdfreader = callPackage ../applications/video/kodi-packages/pdfreader { };
 
@@ -90,24 +96,42 @@ let self = rec {
 
   vfs-libarchive = callPackage ../applications/video/kodi-packages/vfs-libarchive { };
 
+  youtube = callPackage ../applications/video/kodi-packages/youtube { };
+
   # addon packages (dependencies)
 
   certifi = callPackage ../applications/video/kodi-packages/certifi { };
 
   chardet = callPackage ../applications/video/kodi-packages/chardet { };
 
+  dateutil = callPackage ../applications/video/kodi-packages/dateutil { };
+
   idna = callPackage ../applications/video/kodi-packages/idna { };
 
   inputstream-adaptive = callPackage ../applications/video/kodi-packages/inputstream-adaptive { };
 
+  inputstream-ffmpegdirect = callPackage ../applications/video/kodi-packages/inputstream-ffmpegdirect { };
+
+  inputstream-rtmp = callPackage ../applications/video/kodi-packages/inputstream-rtmp { };
+
   inputstreamhelper = callPackage ../applications/video/kodi-packages/inputstreamhelper { };
+
+  kodi-six = callPackage ../applications/video/kodi-packages/kodi-six { };
 
   myconnpy = callPackage ../applications/video/kodi-packages/myconnpy { };
 
   requests = callPackage ../applications/video/kodi-packages/requests { };
 
+  requests-cache = callPackage ../applications/video/kodi-packages/requests-cache { };
+
+  routing = callPackage ../applications/video/kodi-packages/routing { };
+
   signals = callPackage ../applications/video/kodi-packages/signals { };
 
+  six = callPackage ../applications/video/kodi-packages/six { };
+
   urllib3 = callPackage ../applications/video/kodi-packages/urllib3 { };
+
+  websocket = callPackage ../applications/video/kodi-packages/websocket { };
 
 }; in self

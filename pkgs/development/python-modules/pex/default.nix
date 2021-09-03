@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "pex";
-  version = "2.1.30";
+  version = "2.1.47";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ac170d656d2083d02048850005415d03d1767087e4f5037bc86defb6b23e712d";
+    sha256 = "0928d0316caac840db528030fc741930e8be22a3fa6a8635308fb8443a0a0c6a";
   };
 
   nativeBuildInputs = [ setuptools ];

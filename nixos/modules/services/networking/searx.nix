@@ -4,23 +4,25 @@ with lib;
 
 let
   runDir = "/run/searx";
+
   cfg = config.services.searx;
+
+  settingsFile = pkgs.writeText "settings.yml"
+    (builtins.toJSON cfg.settings);
 
   generateConfig = ''
     cd ${runDir}
 
     # write NixOS settings as JSON
-    cat <<'EOF' > settings.yml
-      ${builtins.toJSON cfg.settings}
-    EOF
+    (
+      umask 077
+      cp --no-preserve=mode ${settingsFile} settings.yml
+    )
 
     # substitute environment variables
     env -0 | while IFS='=' read -r -d ''' n v; do
       sed "s#@$n@#$v#g" -i settings.yml
     done
-
-    # set strict permissions
-    chmod 400 settings.yml
   '';
 
   settingType = with types; (oneOf

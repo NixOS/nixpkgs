@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion --zsh $completions_dir/_page
   '';
 
-  cargoSha256 = "0s1iwli5h6qkibi24v80izr38z84zfx1dv71fv06lzq38b6s4nd5";
+  cargoSha256 = "19ff5h8z34z15wdnd3mj8bwlqcixwbimys77gfjmzb3w1g9ivlks";
 
   meta = with lib; {
     description = "Use neovim as pager";

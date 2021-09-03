@@ -5,7 +5,7 @@
 , dnspython
 , requests
 , pytest
-, pytestcov
+, pytest-cov
 , isPy3k
 }:
 
@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytest
-    pytestcov
+    pytest-cov
   ];
 
   meta = with lib; {

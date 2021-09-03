@@ -1,19 +1,19 @@
 { lib, stdenv, fetchFromGitHub
 , wrapGAppsHook, cmake, gettext
-, maxima, wxGTK, gnome3 }:
+, maxima, wxGTK, gnome }:
 
 stdenv.mkDerivation rec {
   pname = "wxmaxima";
-  version = "20.06.6";
+  version = "21.05.2";
 
   src = fetchFromGitHub {
     owner = "wxMaxima-developers";
     repo = "wxmaxima";
     rev = "Version-${version}";
-    sha256 = "054f7n5kx75ng5j20rd5q27n9xxk03mrd7sbxyym1lsswzimqh4w";
+    sha256 = "sha256-HPqdxGrPxe5FZNOimTpAP+c9VpDBkXu3Z1c1Aaf3+UA=";
   };
 
-  buildInputs = [ wxGTK maxima gnome3.adwaita-icon-theme ];
+  buildInputs = [ wxGTK maxima gnome.adwaita-icon-theme ];
 
   nativeBuildInputs = [ wrapGAppsHook cmake gettext ];
 

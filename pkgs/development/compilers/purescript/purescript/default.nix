@@ -18,19 +18,20 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "purescript";
-  version = "0.14.0";
+  version = "0.14.4";
 
+  # These hashes can be updated automatically by running the ./update.sh script.
   src =
     if stdenv.isDarwin
     then
     fetchurl {
       url = "https://github.com/${pname}/${pname}/releases/download/v${version}/macos.tar.gz";
-      sha256 = "0dfnn5ar7zgvgvxcvw5f6vwpkgkwa017y07s7mvdv44zf4hzsj3s";
+      sha256 = "0m6zwb5f890d025zpn006qr8cky6zhjycap5az9zh6h47jfbrcf9";
     }
     else
     fetchurl {
       url = "https://github.com/${pname}/${pname}/releases/download/v${version}/linux64.tar.gz";
-      sha256 = "1l3i7mxlzb2dkq6ff37rvnaarikxzxj0fg9i2kk26s8pz7vpqgjh";
+      sha256 = "0hgsh6l52z873b2zk3llvqik18ifika48lmr71qyhlqf250ng9m0";
     };
 
 
@@ -51,8 +52,11 @@ in stdenv.mkDerivation rec {
     $PURS --bash-completion-script $PURS > $out/share/bash-completion/completions/purs-completion.bash
   '';
 
-  passthru.tests = {
-    minimal-module = pkgs.callPackage ./test-minimal-module {};
+  passthru = {
+    updateScript = ./update.sh;
+    tests = {
+      minimal-module = pkgs.callPackage ./test-minimal-module {};
+    };
   };
 
   meta = with lib; {
@@ -61,5 +65,7 @@ in stdenv.mkDerivation rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ justinwoo mbbx6spp cdepillabout ];
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    mainProgram = "purs";
+    changelog = "https://github.com/purescript/purescript/releases/tag/v${version}";
   };
 }

@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , isPy27
-, setuptools_scm
+, setuptools-scm
 , cython
 , numpy
 , msgpack
@@ -13,16 +13,16 @@
 
 buildPythonPackage rec {
   pname = "numcodecs";
-  version = "0.7.3";
+  version = "0.9.0";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "022b12ad83eb623ec53f154859d49f6ec43b15c36052fa864eaf2d9ee786dd85";
+    sha256 = "3c23803671a3d920efa175af5828870bdff60ba2a3fcbf1d5b48bb81d68219c6";
   };
 
   nativeBuildInputs = [
-    setuptools_scm
+    setuptools-scm
     cython
     gcc8
   ];

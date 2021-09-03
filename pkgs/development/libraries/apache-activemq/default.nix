@@ -2,14 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "apache-activemq";
-  version = "5.16.0";
+  version = "5.16.2";
 
   src = fetchurl {
-    sha256 = "0x68l4n0v2jqmbawdgpghmhnchpg1jsvxzskj6s4hjll6hdgb6fk";
+    sha256 = "sha256-IS/soe5Lx1C+/UWnNcv+8AwMmu5FHvURbpkTMMGrEFs=";
     url = "mirror://apache/activemq/${version}/${pname}-${version}-bin.tar.gz";
   };
-
-  phases = [ "unpackPhase" "installPhase" ];
 
   installPhase = ''
     mkdir -p $out

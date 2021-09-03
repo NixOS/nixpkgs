@@ -1,7 +1,8 @@
 { lib, stdenv, fetchgit, libpulseaudio, pkg-config, gtk3, glibc, autoconf, automake, libnotify, libX11, xf86inputevdev }:
 
 stdenv.mkDerivation {
-  name = "pa-applet-2012-04-11";
+  pname = "pa-applet";
+  version = "unstable-2012-04-11";
 
   src = fetchgit {
     url = "git://github.com/fernandotcl/pa-applet.git";

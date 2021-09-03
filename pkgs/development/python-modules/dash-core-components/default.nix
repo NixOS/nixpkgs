@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "dash_core_components";
-  version = "1.15.0";
+  version = "1.17.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b61cb37322de91b4feb0d4d823694cbba8686f6459db774b53d553135350c71e";
+    sha256 = "sha256-flA/Xt22MDTdIMI9IYzA2KgeyI6aFbfLxg4maw4rYKk=";
   };
 
   # No tests in archive

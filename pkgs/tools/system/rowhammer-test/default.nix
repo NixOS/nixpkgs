@@ -1,7 +1,8 @@
 { lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation {
-  name = "rowhammer-test-20150811";
+  pname = "rowhammer-test";
+  version = "20150811";
 
   src = fetchFromGitHub {
     owner = "google";

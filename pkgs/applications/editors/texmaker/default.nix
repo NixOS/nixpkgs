@@ -1,15 +1,15 @@
-{ lib, mkDerivation, fetchurl, qtbase, qtscript, qmake, zlib, pkg-config, poppler }:
+{ lib, mkDerivation, fetchurl, qtbase, qtscript, qtwebengine, qmake, zlib, pkg-config, poppler }:
 
 mkDerivation rec {
   pname = "texmaker";
-  version = "5.0.4";
+  version = "5.1.1";
 
   src = fetchurl {
     url = "http://www.xm1math.net/texmaker/${pname}-${version}.tar.bz2";
-    sha256 = "1qnh5g8zkjpjmw2l8spcynpfgs3wpcfcla5ms2kkgvkbdlzspqqx";
+    sha256 = "sha256-gANJknSWIMN+B0uAOtPil8EbjyWt4E+xOxOseR87Dd4=";
   };
 
-  buildInputs = [ qtbase qtscript poppler zlib ];
+  buildInputs = [ qtbase qtscript poppler zlib qtwebengine ];
   nativeBuildInputs = [ pkg-config poppler qmake ];
   NIX_CFLAGS_COMPILE="-I${poppler.dev}/include/poppler";
 
@@ -18,8 +18,6 @@ mkDerivation rec {
     "ICONDIR=${placeholder "out"}/share/pixmaps"
     "METAINFODIR=${placeholder "out"}/share/metainfo"
   ];
-
-  enableParallelBuilding = true;
 
   meta = with lib; {
     description = "TeX and LaTeX editor";

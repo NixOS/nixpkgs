@@ -11,7 +11,28 @@ stdenv.mkDerivation rec {
     sha256 = "0dln1ar7bxwhpi36sccmpwapy7iz4j097rbf02mgn42lw5vrcg3s";
   };
 
-  nativeBuildInputs = [ autoconf automake pkg-config ];
+  nativeBuildInputs = [ autoconf automake libtool pkg-config ];
+
+  preConfigure = ''
+    # Tries to use glibtoolize on Darwin, but it shouldn't for Nix.
+    sed -i -e 's/glibtoolize/libtoolize/g' bootstrap
+    ./bootstrap
+  '';
+
+  configureFlags = [
+    "--disable-owtcl"
+    "--disable-owphp"
+    "--disable-owpython"
+    "--disable-zero"
+    "--disable-owshell"
+    "--disable-owhttpd"
+    "--disable-owftpd"
+    "--disable-owserver"
+    "--disable-owperl"
+    "--disable-owtap"
+    "--disable-owmon"
+    "--disable-owexternal"
+  ];
 
   meta = with lib; {
     description = "1-Wire File System full library";
@@ -20,24 +41,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ disserman ];
     platforms = platforms.unix;
   };
-
-  buildInputs = [ libtool ];
-
-  preConfigure = "./bootstrap";
-
-  configureFlags = [
-      "--disable-owtcl"
-      "--disable-owphp"
-      "--disable-owpython"
-      "--disable-zero"
-      "--disable-owshell"
-      "--disable-owhttpd"
-      "--disable-owftpd"
-      "--disable-owserver"
-      "--disable-owperl"
-      "--disable-owtcl"
-      "--disable-owtap"
-      "--disable-owmon"
-      "--disable-owexternal"
-    ];
 }

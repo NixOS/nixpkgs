@@ -18,7 +18,7 @@
 # Normal gem packages can be used outside of bundler; a binstub is created in
 # $out/bin.
 
-{ lib, fetchurl, fetchgit, makeWrapper, git, darwin
+{ lib, fetchurl, fetchgit, makeWrapper, gitMinimal, darwin
 , ruby, bundler
 } @ defs:
 
@@ -89,7 +89,7 @@ stdenv.mkDerivation ((builtins.removeAttrs attrs ["source"]) // {
 
   buildInputs = [
     ruby makeWrapper
-  ] ++ lib.optionals (type == "git") [ git ]
+  ] ++ lib.optionals (type == "git") [ gitMinimal ]
     ++ lib.optionals (type != "gem") [ bundler ]
     ++ lib.optional stdenv.isDarwin darwin.libobjc
     ++ buildInputs;
@@ -217,8 +217,8 @@ stdenv.mkDerivation ((builtins.removeAttrs attrs ["source"]) // {
 
     # looks like useless files which break build repeatability and consume space
     pushd $out/${ruby.gemPath}
-    rm -fv doc/*/*/created.rid || true
-    rm -fv {gems/*/ext/*,extensions/*/*/*}/{Makefile,mkmf.log,gem_make.out} || true
+    find doc/ -iname created.rid -delete -print
+    find gems/*/ext/ extensions/ \( -iname Makefile -o -iname mkmf.log -o -iname gem_make.out \) -delete -print
     ${if keepGemCache then "" else "rm -fvr cache"}
     popd
 
@@ -242,7 +242,10 @@ stdenv.mkDerivation ((builtins.removeAttrs attrs ["source"]) // {
   propagatedUserEnvPkgs = gemPath ++ propagatedUserEnvPkgs;
 
   passthru = passthru // { isRubyGem = true; };
-  inherit meta;
+  meta = {
+    # default to Ruby's platforms
+    platforms = ruby.meta.platforms;
+  } // meta;
 })
 
 )

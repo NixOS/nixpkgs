@@ -6,10 +6,12 @@ with lib; mkCoqDerivation rec {
   defaultVersion = switch coq.coq-version [
     { case = "8.6"; out = "8.8.1"; }
     { case = (versions.range "8.7" "8.12"); out = "8.12.0"; }
+    { case = (versions.range "8.13" "8.13"); out = "c366d3f01ec1812b145117a4da940518b092d3a6"; }
   ] null;
   release = {
     "8.8.1".sha256 = "0gh32j0f18vv5lmf6nb87nr5450w6ai06rhrnvlx2wwi79gv10wp";
     "8.12.0".sha256 = "0b92vhyzn1j6cs84z2182fn82hxxj0bqq7hk6cs4awwb3vc7dkhi";
+    "c366d3f01ec1812b145117a4da940518b092d3a6".sha256 = "1wzr7mdsnf1rq7q0dvmv55vxzysy85b00ahwbs868bl7m8fk8x5b";
   };
 
   preConfigure = "patchShebangs ./configure.sh";

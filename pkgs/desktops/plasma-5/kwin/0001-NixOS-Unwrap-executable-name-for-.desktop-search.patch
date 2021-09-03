@@ -1,0 +1,57 @@
+From 29ec6fada935ef966e5859082435ed57daa9522d Mon Sep 17 00:00:00 2001
+From: Samuel Dionne-Riel <samuel@dionne-riel.com>
+Date: Tue, 16 Mar 2021 15:03:59 -0400
+Subject: [PATCH] [NixOS] Unwrap executable name for .desktop search
+
+Why is this necessary even though -a "$0" is used in the wrapper?
+Because it's completely bypassing argv0! This looks at the executable
+file in-use according to the kernel!
+
+Wrappers cannot affect the `/proc/.../exe` symlink!
+---
+ src/service_utils.h | 28 +++++++++++++++++++++++++++-
+ 1 file changed, 27 insertions(+), 1 deletion(-)
+
+diff --git a/src/service_utils.h b/src/service_utils.h
+index 8a70c1fad..6674f553b 100644
+--- a/src/service_utils.h
++++ b/src/service_utils.h
+@@ -26,8 +26,34 @@ namespace KWin
+ const static QString s_waylandInterfaceName = QStringLiteral("X-KDE-Wayland-Interfaces");
+ const static QString s_dbusRestrictedInterfaceName = QStringLiteral("X-KDE-DBUS-Restricted-Interfaces");
+ 
+-static QStringList fetchProcessServiceField(const QString &executablePath, const QString &fieldName)
++static QStringList fetchProcessServiceField(const QString &in_executablePath, const QString &fieldName)
+ {
++    // !! Start NixOS fix
++    // NixOS fixes many packaging issues through "wrapper" scripts that manipulates the environment or does
++    // miscellaneous trickeries and mischievous things to make the programs work.
++    // In turn, programs often employs different mischievous schemes and trickeries to do *other things.
++    // It often happens that they conflict.
++    // Here, `kwin` tries to detect the .desktop file for a given process.
++    // `kwin` followed the process `/proc/.../exe` up to the actual binary running.
++    // It normally would be fine, e.g. /usr/bin/foobar is what's in the desktop file.
++    // But it's not the truth here! It's extremely likely the resolved path is /nix/store/.../bin/.foobar-wrapped
++    // rather than what the desktop file points to, something like /nix/store/.../bin/foobar !!
++    // Since the wrappers for Nixpkgs *always* prepend a dot and append -wrapped, we assume here that we can keep
++    // `/^(.*)\/\.([^/]*)-wrapped/` until the (equivalent) regex does not match.
++    // This should canonicalize the wrapper name to the expected name to look for in the desktop file.
++
++    // Use a copy of the const string
++    QString executablePath(in_executablePath);
++
++    // While the parts needed are present, "unwrap" one layer of wrapper names.
++    while (executablePath.endsWith("-wrapped") && executablePath[executablePath.lastIndexOf("/")+1] == QChar('.')) {
++        // Approximately equivalent to s/-wrapped$//
++        executablePath.remove(executablePath.length() - 8, 8);
++        // Approximately equivalent to s;/\.;/;
++        executablePath.remove(executablePath.lastIndexOf("/")+1, 1);
++    }
++    // !! End NixOS fix
++
+     // needed to be able to use the logging category in a header static function
+     static QLoggingCategory KWIN_UTILS ("KWIN_UTILS", QtWarningMsg);
+     const auto servicesFound = KApplicationTrader::query([&executablePath] (const KService::Ptr &service) {
+-- 
+2.28.0
+

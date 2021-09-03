@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, python }:
+{ lib, stdenv, fetchFromGitHub, cmake, python2 }:
 
 stdenv.mkDerivation rec {
   version = "0.6.3";
@@ -11,9 +11,11 @@ stdenv.mkDerivation rec {
     sha256 = "0cz3vv7g5snfbsqcf3q8bmd6kv5qp84gj3avwkn4vl00krw13bl7";
   };
 
-  nativeBuildInputs = [ cmake python ];
+  nativeBuildInputs = [ cmake python2 ];
 
   cmakeFlags = ["-DWITH_TESTS=ON"];
+
+  strictDeps = true;
 
   doCheck = true;
 

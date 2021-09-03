@@ -1,20 +1,20 @@
-{ stdenv, lib, fetchurl, alsaLib, bison, flex, libsndfile, which
+{ stdenv, lib, fetchurl, alsa-lib, bison, flex, libsndfile, which
 , AppKit, Carbon, CoreAudio, CoreMIDI, CoreServices, Kernel
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.4.0.1";
+  version = "1.4.1.0";
   pname = "chuck";
 
   src = fetchurl {
     url = "http://chuck.cs.princeton.edu/release/files/chuck-${version}.tgz";
-    sha256 = "1m0fhndbqaf0lii1asyc50c66bv55ib6mbnm8fzk5qc5ncs0r8hi";
+    sha256 = "sha256-dL+ZrVFeMRPFW4MxUpNvrQKjzwBqVBBf8Rd3xHMZSSg=";
   };
 
   nativeBuildInputs = [ flex bison which ];
 
   buildInputs = [ libsndfile ]
-    ++ lib.optional (!stdenv.isDarwin) alsaLib
+    ++ lib.optional (!stdenv.isDarwin) alsa-lib
     ++ lib.optional stdenv.isDarwin [ AppKit Carbon CoreAudio CoreMIDI CoreServices Kernel ];
 
   patches = [ ./darwin-limits.patch ];

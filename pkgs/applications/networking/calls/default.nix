@@ -17,10 +17,11 @@
 , desktop-file-utils
 , appstream-glib
 , libpeas
+, libgdata
 , dbus
 , vala
 , wrapGAppsHook
-, xvfb_run
+, xvfb-run
 , gtk-doc
 , docbook-xsl-nons
 , docbook_xml_dtd_43
@@ -65,11 +66,12 @@ stdenv.mkDerivation rec {
     callaudiod
     gtk3
     libpeas
+    libgdata # required by some dependency transitively
   ];
 
   checkInputs = [
     dbus
-    xvfb_run
+    xvfb-run
   ];
 
   NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
@@ -92,6 +94,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A phone dialer and call handler";
+    longDescription = "GNOME Calls is a phone dialer and call handler. Setting NixOS option `programs.calls.enable = true` is recommended.";
     homepage = "https://source.puri.sm/Librem5/calls";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ craigem lheckemann ];

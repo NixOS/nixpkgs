@@ -25,7 +25,6 @@ stdenv.mkDerivation {
   name = "tempora-lgc";
   inherit nativeBuildInputs;
   inherit srcs;
-  phases = "installPhase";
   installPhase = ''
     mkdir -p "$out/share/fonts/opentype/public"
     cp ${toString srcs} "$out/share/fonts/opentype/public"

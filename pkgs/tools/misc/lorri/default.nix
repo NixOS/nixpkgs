@@ -12,10 +12,10 @@
 
 let
   # Run `eval $(nix-build -A lorri.updater)` after updating the revision!
-  version = "1.3.1";
-  gitRev = "df83b9b175fecc8ec8b02096c5cfe2db3d00b92e";
-  sha256 = "1df6p0b482vhymw3z7gimc441jr7aix9lhdbcm5wjvw9f276016f";
-  cargoSha256 = "1f9b2h3zakw7qmlnc4rqhxnw80sl5h4mj8cghr82iacxwqz499ql";
+  version = "1.5.0";
+  gitRev = "f4b6a135e2efb18b3a679e3946d4d070a1c45a2c";
+  sha256 = "0irgzw7vwhvm97nmylj44x2dnd8pwf47gvlgw7fj58fj67a0l8fr";
+  cargoSha256 = "18l7yxciqcvagsg9lykilfhr104a4qqdydjkjysxgd197xalxgzr";
 
 in (rustPlatform.buildRustPackage rec {
   pname = "lorri";

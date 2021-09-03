@@ -217,8 +217,15 @@ def _get_latest_version_github(package, extension, current_version, target):
 
     release = next(filter(lambda x: strip_prefix(x['tag_name']) == version, releases))
     prefix = get_prefix(release['tag_name'])
-    sha256 = subprocess.check_output(["nix-prefetch-url", "--type", "sha256", "--unpack", f"{release['tarball_url']}"], stderr=subprocess.DEVNULL)\
-        .decode('utf-8').strip()
+    try:
+        sha256 = subprocess.check_output(["nix-prefetch-url", "--type", "sha256", "--unpack", f"{release['tarball_url']}"], stderr=subprocess.DEVNULL)\
+            .decode('utf-8').strip()
+    except:
+        # this may fail if they have both a branch and a tag of the same name, attempt tag name
+        tag_url = str(release['tarball_url']).replace("tarball","tarball/refs/tags")
+        sha256 = subprocess.check_output(["nix-prefetch-url", "--type", "sha256", "--unpack", tag_url], stderr=subprocess.DEVNULL)\
+            .decode('utf-8').strip()
+
 
     return version, sha256, prefix
 

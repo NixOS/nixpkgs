@@ -6,9 +6,8 @@ mkDerivation {
   version = "0.16.1.0";
   src = fetchgit {
     url = "https://github.com/hercules-ci/optparse-applicative.git";
-    sha256 = "0v0r11jaav95im82if976256kncp0ji7nfdrlpbgmwxnkj1hxl48";
-    rev = "f9d1242f9889d2e09ff852db9dc2d231d9a3e8d8";
-    fetchSubmodules = true;
+    sha256 = "05vchaw2rf46hh2128qjpky686iy5hff964mbdhcyiz612jjflyp";
+    rev = "9e2968c09a7c5b29d04578dc68d81ce5aec0591e";
   };
   libraryHaskellDepends = [
     ansi-wl-pprint base process transformers transformers-compat

@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "helmfile";
-  version = "0.138.7";
+  version = "0.140.0";
 
   src = fetchFromGitHub {
     owner = "roboll";
     repo = "helmfile";
     rev = "v${version}";
-    sha256 = "sha256-LFNsSd+S+mQiTk7bCnSD/Kp/D0Jefxo80eRsGkStBhs=";
+    sha256 = "sha256-D9CyJE6/latz4541NfOtvKy+kui3CVmD483SkdEJzyU=";
   };
 
-  vendorSha256 = "sha256-WlV6moJymQ7VyZXXuViCNN1WP4NzBUszavxpKjQR8to=";
+  vendorSha256 = "sha256-QYI5HxEUNrZKSjk0LlbhjvxXlWCbbLup51Ht3HJDNC8=";
 
   doCheck = false;
 
@@ -19,7 +19,7 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
-  buildFlagsArray = [ "-ldflags=-s -w -X github.com/roboll/helmfile/pkg/app/version.Version=${version}" ];
+  ldflags = [ "-s" "-w" "-X github.com/roboll/helmfile/pkg/app/version.Version=${version}" ];
 
   postInstall = ''
     wrapProgram $out/bin/helmfile \

@@ -7,8 +7,7 @@
 }:
 
 {
-name ? "${attrs.pname}-${attrs.version}"
-
+pname
 , version
 
 # by default prefix `name` e.g. "lua5.2-${name}"
@@ -60,7 +59,9 @@ name ? "${attrs.pname}-${attrs.version}"
 # The two above arguments have access to builder variables -- e.g. to $out
 
 # relative to srcRoot, path to the rockspec to use when using rocks
-, rockspecFilename ?  "../*.rockspec"
+, rockspecFilename ? null
+# relative to srcRoot, path to folder that contains the expected rockspec
+, rockspecDir ?  "."
 
 # must be set for packages that don't have a rock
 , knownRockspec ? null
@@ -71,6 +72,9 @@ name ? "${attrs.pname}-${attrs.version}"
 # Keep extra attributes from `attrs`, e.g., `patchPhase', etc.
 
 let
+  generatedRockspecFilename = "${rockspecDir}/${pname}-${version}.rockspec";
+
+
   # TODO fix warnings "Couldn't load rockspec for ..." during manifest
   # construction -- from initial investigation, appears it will require
   # upstream luarocks changes to fix cleanly (during manifest construction,
@@ -144,7 +148,7 @@ in
 toLuaModule ( lua.stdenv.mkDerivation (
 builtins.removeAttrs attrs ["disabled" "checkInputs" "externalDeps" "extraVariables"] // {
 
-  name = namePrefix + name;
+  name = namePrefix + pname + "-" + version;
 
   buildInputs = [ wrapLua lua.pkgs.luarocks ]
     ++ buildInputs
@@ -159,19 +163,7 @@ builtins.removeAttrs attrs ["disabled" "checkInputs" "externalDeps" "extraVariab
   # @-patterns do not capture formal argument default values, so we need to
   # explicitly inherit this for it to be available as a shell variable in the
   # builder
-  inherit rockspecFilename;
   inherit rocksSubdir;
-
-  # enabled only for src.rock
-  setSourceRoot= let
-    name_only= lib.getName name;
-  in
-    lib.optionalString (knownRockspec == null) ''
-    # format is rockspec_basename/source_basename
-    # rockspec can set it via spec.source.dir
-    folder=$(find . -mindepth 2 -maxdepth 2 -type d -path '*${name_only}*/*'|head -n1)
-    sourceRoot="$folder"
-  '';
 
   configurePhase = ''
     runHook preConfigure
@@ -180,6 +172,9 @@ builtins.removeAttrs attrs ["disabled" "checkInputs" "externalDeps" "extraVariab
     ${luarocks_content}
     EOF
     export LUAROCKS_CONFIG="$PWD/${luarocks_config}";
+  ''
+  + lib.optionalString (rockspecFilename == null) ''
+    rockspecFilename="${generatedRockspecFilename}"
   ''
   + lib.optionalString (knownRockspec != null) ''
 
@@ -192,6 +187,7 @@ builtins.removeAttrs attrs ["disabled" "checkInputs" "externalDeps" "extraVariab
     runHook postConfigure
   '';
 
+  # TODO could be moved to configurePhase
   buildPhase = ''
     runHook preBuild
 

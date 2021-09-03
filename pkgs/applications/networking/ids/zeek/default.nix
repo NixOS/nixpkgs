@@ -21,11 +21,11 @@
 
 stdenv.mkDerivation rec {
   pname = "zeek";
-  version = "4.0.0";
+  version = "4.1.0";
 
   src = fetchurl {
     url = "https://download.zeek.org/zeek-${version}.tar.gz";
-    sha256 = "0m7zy5k2595vf5xr2r4m75rfsdddigrv2hilm1c3zaif4srxmvpj";
+    sha256 = "165kva8dgf152ahizqdk0g2y466ij2gyxja5fjxlkxcxr5p357pj";
   };
 
   nativeBuildInputs = [ cmake flex bison file ];

@@ -1,12 +1,17 @@
 { fetchurl, lib, stdenv }:
 
 stdenv.mkDerivation rec {
-  name = "gsl-2.6";
+  pname = "gsl";
+  version = "2.7";
 
   src = fetchurl {
-    url = "mirror://gnu/gsl/${name}.tar.gz";
-    sha256 = "1a460zj9xmbgvcymkdhqh313c4l29mn9cffbi5vf33x3qygk70mp";
+    url = "mirror://gnu/gsl/${pname}-${version}.tar.gz";
+    sha256 = "sha256-77vzeF2g5TA4vnkHUAYotGYVLbw8FzqH3hteui4jYCs=";
   };
+
+  preConfigure = if (lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11" && stdenv.isDarwin) then ''
+    MACOSX_DEPLOYMENT_TARGET=10.16
+  '' else null;
 
   # do not let -march=skylake to enable FMA (https://lists.gnu.org/archive/html/bug-gsl/2011-11/msg00019.html)
   NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isx86_64 "-mno-fma";

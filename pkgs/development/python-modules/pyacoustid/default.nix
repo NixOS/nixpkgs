@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "pyacoustid";
-  version = "1.2.0";
+  version = "1.2.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0c3dsnfyldnsmyzczp5s5aqvbzcn360s0h4l3gm3k53lg57f762z";
+    sha256 = "e62b2929fbc5ead508758d2f700f5d355f7d83d14f5efe33c1d4fc59cbdeba84";
   };
 
   propagatedBuildInputs = [ requests audioread ];
@@ -23,10 +23,15 @@ buildPythonPackage rec {
         acoustid.py
   '';
 
+  # package has no tests
+  doCheck = false;
+
+  pythonImportsCheck = [ "acoustid" ];
+
   meta = with lib; {
     description = "Bindings for Chromaprint acoustic fingerprinting";
     homepage = "https://github.com/sampsyo/pyacoustid";
     license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
-
 }

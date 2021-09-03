@@ -511,7 +511,7 @@ let
             machine.sleep(10)
             residue = machine.succeed("ip tuntap list")
             assert (
-                residue is ""
+                residue == ""
             ), "Some virtual interface has not been properly cleaned:\n{}".format(residue)
       '';
     };
@@ -665,10 +665,10 @@ let
             ipv4Residue = machine.succeed("ip -4 route list dev eth0 | head -n-3").strip()
             ipv6Residue = machine.succeed("ip -6 route list dev eth0 | head -n-3").strip()
             assert (
-                ipv4Residue is ""
+                ipv4Residue == ""
             ), "The IPv4 routing table has not been properly cleaned:\n{}".format(ipv4Residue)
             assert (
-                ipv6Residue is ""
+                ipv6Residue == ""
             ), "The IPv6 routing table has not been properly cleaned:\n{}".format(ipv6Residue)
       '';
     };
@@ -719,6 +719,24 @@ let
         print(client.succeed("stat /etc/systemd/network/50-foo.link"))
         client.succeed("udevadm settle")
         assert "mtu 1442" in client.succeed("ip l show dummy0")
+      '';
+    };
+    wlanInterface = let
+      testMac = "06:00:00:00:02:00";
+    in {
+      name = "WlanInterface";
+      machine = { pkgs, ... }: {
+        boot.kernelModules = [ "mac80211_hwsim" ];
+        networking.wlanInterfaces = {
+          wlan0 = { device = "wlan0"; };
+          wap0 = { device = "wlan0"; mac = testMac; };
+        };
+      };
+      testScript = ''
+        machine.start()
+        machine.wait_for_unit("network.target")
+        machine.wait_until_succeeds("ip address show wap0 | grep -q ${testMac}")
+        machine.fail("ip address show wlan0 | grep -q ${testMac}")
       '';
     };
   };

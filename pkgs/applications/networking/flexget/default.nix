@@ -1,15 +1,22 @@
-{ lib, python3Packages }:
+{ lib, python3Packages, fetchFromGitHub }:
 
 python3Packages.buildPythonApplication rec {
-  pname = "FlexGet";
-  version = "3.1.106";
+  pname = "flexget";
+  version = "3.1.136";
 
-  src = python3Packages.fetchPypi {
-    inherit pname version;
-    sha256 = "f0ff300a1762d701b77eb16142dcc13d9d099bbed695f1e950392c1d1bb988eb";
+  # Fetch from GitHub in order to use `requirements.in`
+  src = fetchFromGitHub {
+    owner = "flexget";
+    repo = "flexget";
+    rev = "v${version}";
+    sha256 = "058sja2miwhr6lx5j8r9d97k4ywh6dsxd05nb5w19z6a0sq1vmyb";
   };
 
   postPatch = ''
+    # Symlink requirements.in because upstream uses `pip-compile` which yields
+    # python-version dependent requirements
+    ln -sf requirements.in requirements.txt
+
     # remove dependency constraints
     sed 's/==\([0-9]\.\?\)\+//' -i requirements.txt
 
@@ -35,6 +42,7 @@ python3Packages.buildPythonApplication rec {
     flask-restful
     flask-restx
     flask
+    greenlet
     guessit
     html5lib
     jinja2
@@ -45,7 +53,7 @@ python3Packages.buildPythonApplication rec {
     pynzb
     pyparsing
     PyRSS2Gen
-    dateutil
+    python-dateutil
     pyyaml
     rebulk
     requests
@@ -54,14 +62,15 @@ python3Packages.buildPythonApplication rec {
     sqlalchemy
     terminaltables
     zxcvbn
+    psutil
     # plugins
     transmission-rpc
   ];
 
   meta = with lib; {
-    homepage    = "https://flexget.com/";
+    homepage = "https://flexget.com/";
     description = "Multipurpose automation tool for all of your media";
-    license     = licenses.mit;
+    license = licenses.mit;
     maintainers = with maintainers; [ marsam ];
   };
 }

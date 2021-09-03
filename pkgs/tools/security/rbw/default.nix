@@ -5,6 +5,7 @@
 , openssl
 , pkg-config
 , makeWrapper
+, installShellFiles
 , Security
 , libiconv
 
@@ -20,21 +21,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rbw";
-  version = "1.1.2";
+  version = "1.3.0";
 
   src = fetchCrate {
     inherit version;
     crateName = pname;
-    sha256 = "1xihjx4f8kgyablxsy8vgn4w6i92p2xm5ncacdk39npa5g8wadlx";
+    sha256 = "17x4q29rsljbalc70r3ks4r6g5zc6jl4si75i33fcicxsvx6f39q";
   };
 
-  cargoSha256 = "0fvs06wd05a90dggi7n46d5gl9flnciqzg9j3ijmz3z5bb6aky1b";
-
-  cargoPatches = [ ./bump-security-framework-crate.patch ];
+  cargoSha256 = "14095ds8f5knrqcriphjlbvasc29n9rf8h5vlkmhpxyk7wh9azzc";
 
   nativeBuildInputs = [
     pkg-config
     makeWrapper
+    installShellFiles
   ];
 
   buildInputs = lib.optionals stdenv.isDarwin [ Security libiconv ];
@@ -60,7 +60,12 @@ rustPlatform.buildRustPackage rec {
     export OPENSSL_LIB_DIR="${openssl.out}/lib"
   '';
 
-  postInstall = lib.optionalString withFzf ''
+  postInstall = ''
+    for shell in bash zsh fish; do
+      $out/bin/rbw gen-completions $shell > rbw.$shell
+      installShellCompletion rbw.$shell
+    done
+  '' + lib.optionalString withFzf ''
     cp bin/rbw-fzf $out/bin
   '' + lib.optionalString withRofi ''
     cp bin/rbw-rofi $out/bin

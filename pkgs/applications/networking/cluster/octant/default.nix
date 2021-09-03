@@ -1,27 +1,29 @@
 { lib, stdenv, fetchzip }:
 
-let
-  inherit (stdenv.hostPlatform) system;
-  suffix = {
-    x86_64-linux = "Linux-64bit";
-    aarch64-linux = "Linux-arm64";
-    x86_64-darwin = "macOS-64bit";
-  }."${system}" or (throw "Unsupported system: ${system}");
-  baseurl = "https://github.com/vmware-tanzu/octant/releases/download";
-  fetchsrc = version: sha256: fetchzip {
-      url = "${baseurl}/v${version}/octant_${version}_${suffix}.tar.gz";
-      sha256 = sha256."${system}";
-    };
-in
 stdenv.mkDerivation rec {
   pname = "octant";
-  version = "0.17.0";
+  version = "0.23.0";
 
-  src = fetchsrc version {
-    x86_64-linux = "sha256-kYS8o97HBjNgwmrG4fjsqFWxZy6ATFOhxt6j3KMZbEc=";
-    aarch64-linux = "sha256-/Tpna2Y8+PQt+SeOJ9NDweRWGiQXU/sN+Wh/vLYQPwM=";
-    x86_64-darwin = "sha256-aOUmnD+l/Cc5qTiHxFLBjCatszmPdUc4YYZ6Oy5DT3U=";
-  };
+  src =
+    let
+      inherit (stdenv.hostPlatform) system;
+      suffix = {
+        x86_64-linux = "Linux-64bit";
+        aarch64-linux = "Linux-arm64";
+        x86_64-darwin = "macOS-64bit";
+        aarch64-darwin = "macOS-arm64";
+      }.${system} or (throw "Unsupported system: ${system}");
+      fetchsrc = version: sha256: fetchzip {
+        url = "https://github.com/vmware-tanzu/octant/releases/download/v${version}/octant_${version}_${suffix}.tar.gz";
+        sha256 = sha256.${system};
+      };
+    in
+    fetchsrc version {
+      x86_64-linux = "sha256-wnm4Zprlao+zbWVJNY4BsAT1fFMft7luyDaW2HfNotg=";
+      aarch64-linux = "sha256-eYvfLUelSrmdY9dbgAlPm7en88hsdCnejJGq2Gz4DN0=";
+      x86_64-darwin = "sha256-NXMQ4mbYfIK+arGWZVhQk5iAw6AZM9PAGJ9CEC/rmgA=";
+      aarch64-darwin = "sha256-WqlbiDV2CuBYr6IXQ8vaESxKNZGp9vBj683igazcmwM=";
+    };
 
   dontConfigure = true;
   dontBuild = true;
@@ -48,15 +50,17 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://octant.dev/";
     changelog = "https://github.com/vmware-tanzu/octant/blob/v${version}/CHANGELOG.md";
-    description = "Highly extensible platform for developers to better understand the complexity of Kubernetes clusters.";
+    description = "Highly extensible platform for developers to better understand the complexity of Kubernetes clusters";
     longDescription = ''
-      Octant is a tool for developers to understand how applications run on a Kubernetes cluster.
-      It aims to be part of the developer's toolkit for gaining insight and approaching complexity found in Kubernetes.
-      Octant offers a combination of introspective tooling, cluster navigation, and object management along with a
-      plugin system to further extend its capabilities.
+      Octant is a tool for developers to understand how applications run on a
+      Kubernetes cluster.
+      It aims to be part of the developer's toolkit for gaining insight and
+      approaching complexity found in Kubernetes. Octant offers a combination of
+      introspective tooling, cluster navigation, and object management along
+      with a plugin system to further extend its capabilities.
     '';
     license = licenses.asl20;
     maintainers = with maintainers; [ jk ];
-    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];
+    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
   };
 }

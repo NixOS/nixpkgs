@@ -1,11 +1,11 @@
 {lib, stdenv
 , coreutils, findutils, nix, xz, bzip2, gnused, gnugrep, openssl
-, lighttpd, iproute }:
+, lighttpd, iproute2 }:
 stdenv.mkDerivation rec {
   version = "2014-06-29-1";
   pname = "nix-binary-cache";
 
-  phases = ["installPhase"];
+  dontUnpack = true;
 
   installPhase = ''
     mkdir -p "$out/bin"
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
       --replace @gnugrep@ "${gnugrep}/bin" \
       --replace @openssl@ "${openssl.bin}/bin" \
       --replace @lighttpd@ "${lighttpd}/sbin" \
-      --replace @iproute@ "${iproute}/sbin" \
+      --replace @iproute@ "${iproute2}/sbin" \
       --replace "xXxXx" "xXxXx"
 
     chmod a+x "$out/bin/nix-binary-cache.cgi"
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
       --replace @gnugrep@ "${gnugrep}/bin" \
       --replace @openssl@ "${openssl.bin}/bin" \
       --replace @lighttpd@ "${lighttpd}/sbin" \
-      --replace @iproute@ "${iproute}/sbin" \
+      --replace @iproute@ "${iproute2}/sbin" \
       --replace "xXxXx" "xXxXx"
 
     chmod a+x "$out/bin/nix-binary-cache-start"
@@ -54,7 +54,6 @@ stdenv.mkDerivation rec {
     '';
     maintainers = [lib.maintainers.raskin];
     license = lib.licenses.gpl2Plus;
-    inherit version;
     platforms = lib.platforms.all;
     hydraPlatforms = [];
   };

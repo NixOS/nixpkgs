@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, meson, ninja, glib, json-glib, pkg-config, gobject-introspection, vala, gtk-doc, docbook_xsl, docbook_xml_dtd_43, gnome3 }:
+{ lib, stdenv, fetchurl, meson, ninja, glib, json-glib, pkg-config, gobject-introspection, vala, gtk-doc, docbook_xsl, docbook_xml_dtd_43, gnome }:
 stdenv.mkDerivation rec {
   pname = "jsonrpc-glib";
   version = "3.38.0";
@@ -22,8 +22,9 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
     };
   };
 

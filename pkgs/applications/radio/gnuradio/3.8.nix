@@ -1,6 +1,5 @@
 { lib, stdenv
 , fetchFromGitHub
-, fetchpatch
 , cmake
 # Remove gcc and python references
 , removeReferencesTo
@@ -17,7 +16,7 @@
 , codec2
 , gsm
 , fftwFloat
-, alsaLib
+, alsa-lib
 , libjack2
 , CoreAudio
 , uhd
@@ -42,15 +41,15 @@
 , pname ? "gnuradio"
 , versionAttr ? {
   major = "3.8";
-  minor = "2";
-  patch = "0";
+  minor = "3";
+  patch = "1";
 }
 # We use our build of volk and not the one bundled with the release
 , fetchSubmodules ? false
 }:
 
 let
-  sourceSha256 =  "SFDjtyQRp0fXijZukpLYtISpx8imxedlYN9mRibv1eA=";
+  sourceSha256 = "0vd39azp8n576dbqsanax7bgsnxwc80riaxid2ihxs4xzyjmbw9r";
   featuresInfo = {
     # Needed always
     basic = {
@@ -150,7 +149,7 @@ let
     };
     gr-audio = {
       runtime = []
-        ++ lib.optionals stdenv.isLinux [ alsaLib libjack2 ]
+        ++ lib.optionals stdenv.isLinux [ alsa-lib libjack2 ]
         ++ lib.optionals stdenv.isDarwin [ CoreAudio ]
       ;
       cmakeEnableFlag = "GR_AUDIO";
@@ -241,12 +240,18 @@ stdenv.mkDerivation rec {
   };
   cmakeFlags = shared.cmakeFlags
     # From some reason, if these are not set, libcodec2 and gsm are not
-    # detected properly. NOTE: qradiolink needs libcodec2 to be detected in
+    # detected properly. The issue is reported upstream:
+    # https://github.com/gnuradio/gnuradio/issues/4278
+    # The above issue was fixed for GR3.9 without a backporting patch.
+    #
+    # NOTE: qradiolink needs libcodec2 to be detected in
     # order to build, see https://github.com/qradiolink/qradiolink/issues/67
     ++ lib.optionals (hasFeature "gr-vocoder" features) [
+      "-DLIBCODEC2_FOUND=TRUE"
       "-DLIBCODEC2_LIBRARIES=${codec2}/lib/libcodec2.so"
       "-DLIBCODEC2_INCLUDE_DIRS=${codec2}/include"
       "-DLIBCODEC2_HAS_FREEDV_API=ON"
+      "-DLIBGSM_FOUND=TRUE"
       "-DLIBGSM_LIBRARIES=${gsm}/lib/libgsm.so"
       "-DLIBGSM_INCLUDE_DIRS=${gsm}/include/gsm"
     ]
@@ -262,23 +267,4 @@ stdenv.mkDerivation rec {
       ${removeReferencesTo}/bin/remove-references-to -t ${python} $out/lib/cmake/gnuradio/GnuradioConfig.cmake
     ''
   ;
-  patches = [
-    # Don't install python referencing files if python support is disabled.
-    # See: https://github.com/gnuradio/gnuradio/pull/3839
-    (fetchpatch {
-      url = "https://github.com/gnuradio/gnuradio/commit/4a4fd570b398b0b50fe875fcf0eb9c9db2ea5c6e.diff";
-      sha256 = "xz2E0ji6zfdOAhjfPecAcaVOIls1XP8JngLkBbBBW5Q=";
-    })
-    (fetchpatch {
-      url = "https://github.com/gnuradio/gnuradio/commit/dbc8ad7e7361fddc7b1dbc267c07a776a3f9664b.diff";
-      sha256 = "tQcCpcUbJv3yqAX8rSHN/pAuBq4ueEvoVo7sNzZGvf4=";
-    })
-    # Needed to use boost 1.7x, see:
-    # https://github.com/gnuradio/gnuradio/issues/3720
-    # https://github.com/gnuradio/gnuradio/pull/3967
-    (fetchpatch {
-      url = "https://github.com/gnuradio/gnuradio/commit/cbcb968358fad56f3646619b258f18b0e6693a07.diff";
-      sha256 = "1ajf4797f869lqv436xw61s29qdbn7f01i0970kfxv3yahd34p9v";
-    })
-  ];
 }

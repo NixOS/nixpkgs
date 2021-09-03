@@ -57,6 +57,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
             else:
                 if check_success():
                     return
+            import time
             time.sleep(retry_sleep)
 
         if not check_success():

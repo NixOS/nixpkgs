@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "clair";
-  version = "4.0.3";
+  version = "4.2.0";
 
   src = fetchFromGitHub {
     owner = "quay";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-ztp3t55EOUQqTAEUZtHvHK8nTTVOAmYR9vN2hXLhpVw=";
+    sha256 = "sha256-PVR7QMndjfCNVo9U3lnArpRBxLfmOH8iEdFub7hZyio=";
   };
 
-  vendorSha256 = "sha256-+0jp/TvUjpeJJxEs2drVkUb/ua9qqqxome4M9TkpfP4=";
+  vendorSha256 = "sha256-npskCUVxNTgI8egVU1id02xHFfTizOb7kBUNfOLdbOc=";
 
   doCheck = false;
 

@@ -1,33 +1,30 @@
-{ lib, stdenv, fetchPypi, python, buildPythonPackage, isPy3k, pycairo, backports_functools_lru_cache
-, which, cycler, dateutil, nose, numpy, pyparsing, sphinx, tornado, kiwisolver
-, freetype, libpng, pkg-config, mock, pytz, pygobject3, gobject-introspection
+{ lib, stdenv, fetchPypi, writeText, buildPythonPackage, isPy3k, pycairo
+, which, cycler, python-dateutil, numpy, pyparsing, sphinx, tornado, kiwisolver
+, freetype, qhull, libpng, pkg-config, mock, pytz, pygobject3, gobject-introspection
 , certifi, pillow
-, enableGhostscript ? true, ghostscript ? null, gtk3
+, enableGhostscript ? true, ghostscript, gtk3
 , enableGtk3 ? false, cairo
 # darwin has its own "MacOSX" backend
-, enableTk ? !stdenv.isDarwin, tcl ? null, tk ? null, tkinter ? null, libX11 ? null
-, enableQt ? false, pyqt5 ? null
+, enableTk ? !stdenv.isDarwin, tcl, tk, tkinter
+, enableQt ? false, pyqt5
+# required for headless detection
+, libX11, wayland
 , Cocoa
-, pythonOlder
 }:
 
-assert enableGhostscript -> ghostscript != null;
-assert enableTk -> (tcl != null)
-                && (tk != null)
-                && (tkinter != null)
-                && (libX11 != null)
-                ;
-assert enableQt -> pyqt5 != null;
+let
+  interactive = enableTk || enableGtk3 || enableQt;
+in
 
 buildPythonPackage rec {
-  version = "3.3.4";
+  version = "3.4.2";
   pname = "matplotlib";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3e477db76c22929e4c6876c44f88d790aacdf3c3f8f3a90cb1975c0bf37825b0";
+    sha256 = "d8d994cefdff9aaba45166eb3de4f5211adb4accac85cbf97137e98f26ea0219";
   };
 
   XDG_RUNTIME_DIR = "/tmp";
@@ -39,13 +36,23 @@ buildPythonPackage rec {
     ++ lib.optional stdenv.isDarwin [ Cocoa ];
 
   propagatedBuildInputs =
-    [ cycler dateutil numpy pyparsing tornado freetype kiwisolver
-      certifi libpng mock pytz pillow ]
+    [ cycler python-dateutil numpy pyparsing tornado freetype qhull
+      kiwisolver certifi libpng mock pytz pillow ]
     ++ lib.optionals enableGtk3 [ cairo pycairo gtk3 gobject-introspection pygobject3 ]
     ++ lib.optionals enableTk [ tcl tk tkinter libX11 ]
     ++ lib.optionals enableQt [ pyqt5 ];
 
-  setup_cfg = if stdenv.isDarwin then ./setup-darwin.cfg else ./setup.cfg;
+  passthru.config = {
+    directories = { basedirlist = "."; };
+    libs = {
+      system_freetype = true;
+      system_qhull = true;
+    } // lib.optionalAttrs stdenv.isDarwin {
+      # LTO not working in darwin stdenv, see #19312
+      enable_lto = false;
+    };
+  };
+  setup_cfg = writeText "setup.cfg" (lib.generators.toINI {} passthru.config);
   preBuild = ''
     cp "$setup_cfg" ./setup.cfg
   '';
@@ -60,8 +67,14 @@ buildPythonPackage rec {
     let
       tcl_tk_cache = ''"${tk}/lib", "${tcl}/lib", "${lib.strings.substring 0 3 tk.version}"'';
     in
-    lib.optionalString enableTk
-      "sed -i '/self.tcl_tk_cache = None/s|None|${tcl_tk_cache}|' setupext.py";
+    lib.optionalString enableTk ''
+      sed -i '/self.tcl_tk_cache = None/s|None|${tcl_tk_cache}|' setupext.py
+    '' + lib.optionalString (stdenv.isLinux && interactive) ''
+      # fix paths to libraries in dlopen calls (headless detection)
+      substituteInPlace src/_c_internal_utils.c \
+        --replace libX11.so.6 ${libX11}/lib/libX11.so.6 \
+        --replace libwayland-client.so.0 ${wayland}/lib/libwayland-client.so.0
+    '';
 
   # Matplotlib needs to be built against a specific version of freetype in
   # order for all of the tests to pass.
@@ -70,6 +83,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python plotting library, making publication quality plots";
     homepage    = "https://matplotlib.org/";
+    license     = with licenses; [ psfl bsd0 ];
     maintainers = with maintainers; [ lovek323 veprbl ];
   };
 

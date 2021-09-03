@@ -65,6 +65,6 @@ buildGoPackage rec {
     description = "A scalable, survivable, strongly-consistent SQL database";
     license     = licenses.bsl11;
     platforms   = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];
-    maintainers = with maintainers; [ rushmorem thoughtpolice rvolosatovs ];
+    maintainers = with maintainers; [ rushmorem thoughtpolice ];
   };
 }

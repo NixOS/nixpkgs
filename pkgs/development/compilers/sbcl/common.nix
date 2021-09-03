@@ -1,8 +1,8 @@
 { version, sha256 }:
 
-{ lib, stdenv, fetchurl, writeText, sbclBootstrap
+{ lib, stdenv, fetchurl, fetchpatch, writeText, sbclBootstrap
 , sbclBootstrapHost ? "${sbclBootstrap}/bin/sbcl --disable-debugger --no-userinit --no-sysinit"
-, threadSupport ? (stdenv.isi686 || stdenv.isx86_64 || "aarch64-linux" == stdenv.hostPlatform.system)
+, threadSupport ? (stdenv.isi686 || stdenv.isx86_64 || "aarch64-linux" == stdenv.hostPlatform.system || "aarch64-darwin" == stdenv.hostPlatform.system)
 , disableImmobileSpace ? false
   # Meant for sbcl used for creating binaries portable to non-NixOS via save-lisp-and-die.
   # Note that the created binaries still need `patchelf --set-interpreter ...`
@@ -21,6 +21,14 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [texinfo];
+
+  patches = lib.optional
+    (lib.versionAtLeast version "2.1.2" && lib.versionOlder version "2.1.8")
+    (fetchpatch {
+      # Fix segfault on ARM when reading large core files
+      url = "https://github.com/sbcl/sbcl/commit/8fa3f76fba2e8572e86ac6fc5754e6b2954fc774.patch";
+      sha256 = "1ic531pjnws1k3xd03a5ixbq8cn10dlh2nfln59k0vbm0253g3lv";
+    });
 
   postPatch = ''
     echo '"${version}.nixos"' > version.lisp-expr
@@ -79,7 +87,7 @@ stdenv.mkDerivation rec {
                   lib.concatStringsSep " "
                     (builtins.map (x: "--with-${x}") enableFeatures ++
                      builtins.map (x: "--without-${x}") disableFeatures)
-                }
+                } ${if stdenv.hostPlatform.system == "aarch64-darwin" then "--arch=arm64" else ""}
     (cd doc/manual ; make info)
 
     runHook postBuild
@@ -110,7 +118,6 @@ stdenv.mkDerivation rec {
   '');
 
   meta = sbclBootstrap.meta // {
-    inherit version;
     updateWalker = true;
   };
 }

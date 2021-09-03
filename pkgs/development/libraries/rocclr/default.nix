@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rocclr";
-  version = "4.0.0";
+  version = "4.1.0";
 
   src = fetchFromGitHub {
     owner = "ROCm-Developer-Tools";
     repo = "ROCclr";
     rev = "rocm-${version}";
-    hash = "sha256-B27ff1b9JRhxFUsBt7CGuYaR87hvKbVSCERWD45d8tM=";
+    hash = "sha256-2DI/PL29aiZcxOrGZBzXwAnNgZQpSDjyyGKgl+vDErk=";
   };
 
   nativeBuildInputs = [ cmake rocm-cmake ];
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     description = "Radeon Open Compute common language runtime";
     homepage = "https://github.com/ROCm-Developer-Tools/ROCclr";
     license = licenses.mit;
-    maintainers = with maintainers; [ danieldk ];
+    maintainers = with maintainers; [ ];
     # rocclr seems to have some AArch64 ifdefs, but does not seem
     # to be supported yet by the build infrastructure. Recheck in
     # the future.

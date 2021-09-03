@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, fetchpatch
 , meson
 , ninja
 , gettext
@@ -103,6 +104,15 @@ stdenv.mkDerivation rec {
   patches = [
     # Use pkgconfig to inject the includedirs
     ./fix_pkgconfig_includedir.patch
+  ] ++ lib.optionals stdenv.isDarwin [
+    # Fix “error: cannot initialize a parameter of type 'unsigned long *' with an rvalue of type 'typename std::remove_reference<decltype(*(&opencv_dilate_erode_type))>::type *' (aka 'volatile unsigned long *')” on Darwin.
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/gstreamer/gst-plugins-bad/commit/640a65bf966df065d41a511e2d76d1f26a2e770c.patch";
+      sha256 = "E5pig+qEfR58Jticr6ydFxZOhM3ZJ8zgrf5K4BdiB/Y=";
+      includes = [
+        "ext/opencv/gstcvdilateerode.cpp"
+      ];
+    })
   ];
 
   nativeBuildInputs = [
@@ -282,6 +292,8 @@ stdenv.mkDerivation rec {
     # `applemedia/videotexturecache.h` requires `gst/gl/gl.h`,
     # but its meson build system does not declare the dependency.
     "-Dapplemedia=disabled"
+  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    "-Dintrospection=disabled"
   ];
 
   # Argument list too long

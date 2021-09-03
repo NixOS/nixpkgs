@@ -3,13 +3,13 @@
 
 buildPythonPackage rec {
   pname = "keepkey";
-  version = "6.6.0";
+  version = "6.7.0";
 
   src = fetchFromGitHub {
     owner = "keepkey";
     repo = "python-keepkey";
     rev = "v${version}";
-    sha256 = "1v0ns26ykskn0dpbvz9g6lz4q740qmahvddj3pc3rfbjvg43p3vh";
+    sha256 = "0yi27wzb4q371y4bywi4hz37h4x63wjsyaa2mbx0rgc8xl2wm6yz";
   };
 
   propagatedBuildInputs = [ protobuf hidapi trezor ];

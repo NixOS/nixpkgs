@@ -37,9 +37,9 @@ in buildPythonPackage rec {
     pkg-config
   ];
   checkInputs = [
-    numpy ncurses
+    gdb numpy ncurses
   ];
-  buildInputs = [ glibcLocales gdb ];
+  buildInputs = [ glibcLocales ];
   LC_ALL = "en_US.UTF-8";
 
   patches = [

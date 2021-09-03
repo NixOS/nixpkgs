@@ -8,13 +8,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "git-cinnabar";
-  version = "0.5.6";
+  version = "0.5.7";
 
   src = fetchFromGitHub {
     owner = "glandium";
     repo = "git-cinnabar";
     rev = version;
-    sha256 = "1wbp4xqpkaqhhkjw8rbbsagwiciqffacqqbm4j49q41mlk371ai3";
+    sha256 = "04dsjlsw98avrckldx7rc70b2zsbajzkyqqph4c7d9xd5djh3yaj";
     fetchSubmodules = true;
   };
 

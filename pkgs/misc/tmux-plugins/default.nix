@@ -24,10 +24,11 @@ let
     preInstall ? "",
     postInstall ? "",
     path ? lib.getName pluginName,
-    dependencies ? [],
     ...
   }:
-    addRtp "${rtpPath}/${path}" rtpFilePath a (stdenv.mkDerivation (a // {
+    if lib.hasAttr "dependencies" a then
+      throw "dependencies attribute is obselete. see NixOS/nixpkgs#118034" # added 2021-04-01
+    else addRtp "${rtpPath}/${path}" rtpFilePath a (stdenv.mkDerivation (a // {
       pname = namePrefix + pluginName;
 
       inherit pluginName unpackPhase configurePhase buildPhase addonInfo preInstall postInstall;
@@ -44,11 +45,13 @@ let
 
         runHook postInstall
       '';
-
-      dependencies = [ pkgs.bash ] ++ dependencies;
     }));
 
 in rec {
+  inherit mkTmuxPlugin;
+
+  mkDerivation = throw "tmuxPlugins.mkDerivation is deprecated, use tmuxPlugins.mkTmuxPlugin instead"; # added 2021-03-14
+
   battery = mkTmuxPlugin {
     pluginName = "battery";
     version = "unstable-2019-07-04";
@@ -57,6 +60,33 @@ in rec {
       repo = "tmux-battery";
       rev = "f8b8e8451990365e0c98c38c184962e4f83b793b";
       sha256 = "1bhdzsx3kdjqjmm1q4j8937lrpkzf71irr3fqhdbddsghwrrmwim";
+    };
+  };
+
+  better-mouse-mode = mkTmuxPlugin {
+    pluginName = "better-mouse-mode";
+    version = "unstable-2021-08-02";
+    src = fetchFromGitHub {
+      owner = "NHDaly";
+      repo = "tmux-better-mouse-mode";
+      rev = "aa59077c635ab21b251bd8cb4dc24c415e64a58e";
+      sha256 = "06346ih3hzwszhkj25g4xv5av7292s6sdbrdpx39p0n3kgf5mwww";
+    };
+    rtpFilePath = "scroll_copy_mode.tmux";
+    meta = {
+      homepage = "https://github.com/NHDaly/tmux-better-mouse-mode";
+      description = "better mouse support for tmux";
+      longDescription =
+      ''
+        Features:
+
+          * Emulate mouse-support for full-screen programs like less that don't provide built in mouse support.
+          * Exit copy-mode and return to your prompt by scrolling back all the way down to the bottom.
+          * Adjust your scrolling speed.
+      '';
+      license = lib.licenses.mit;
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [ chrispickard ];
     };
   };
 
@@ -69,7 +99,6 @@ in rec {
       rev = "26eb5ffce0b559d682b9f98c8d4b6c370ecb639b";
       sha256 = "1glwa89bv2r92qz579a49prk3jf612cpd5hw46j4wfb35xhnj3ab";
     };
-    dependencies = [ resurrect ];
     meta = {
       homepage = "https://github.com/tmux-plugins/tmux-continuum";
       description = "continous saving of tmux environment";
@@ -125,12 +154,12 @@ in rec {
 
   dracula = mkTmuxPlugin rec {
     pluginName = "dracula";
-    version = "unstable-2021-02-18";
+    version = "2.0.0";
     src = fetchFromGitHub {
       owner = "dracula";
       repo = "tmux";
-      rev = "8d1a7fa41b773d4f7b53dfff2d9fc5166d34f104";
-      sha256 = "DG+oKbTkYO4hwoOlOqW5IuCLdVEttlvLM2en4DUHyMY=";
+      rev = "v${version}";
+      sha256 = "ILs+GMltb2AYNUecFMyQZ/AuETB0PCFF2InSnptVBos=";
     };
     meta = with lib; {
       homepage = "https://draculatheme.com/tmux";
@@ -138,6 +167,34 @@ in rec {
       license = licenses.mit;
       platforms = platforms.unix;
       maintainers = with maintainers; [ ethancedwards8 ];
+    };
+  };
+
+  extrakto = mkTmuxPlugin {
+    pluginName = "extrakto";
+    version = "unstable-2021-04-04";
+    src = fetchFromGitHub {
+      owner = "laktak";
+      repo = "extrakto";
+      rev = "de8ac3e8a9fa887382649784ed8cae81f5757f77";
+      sha256 = "0mkp9r6mipdm7408w7ls1vfn6i3hj19nmir2bvfcp12b69zlzc47";
+    };
+    nativeBuildInputs = [ pkgs.makeWrapper ];
+    postInstall = ''
+    for f in extrakto.sh open.sh tmux-extrakto.sh; do
+      wrapProgram $target/scripts/$f \
+        --prefix PATH : ${with pkgs; lib.makeBinPath (
+        [ pkgs.fzf pkgs.python3 pkgs.xclip ]
+        )}
+    done
+
+    '';
+    meta = {
+      homepage = "https://github.com/laktak/extrakto";
+      description = "Fuzzy find your text with fzf instead of selecting it by hand ";
+      license = lib.licenses.mit;
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [ kidd ];
     };
   };
 
@@ -152,7 +209,15 @@ in rec {
       sha256 = "0gp37m3d0irrsih96qv2yalvr1wmf1n64589d4qzyzq16lzyjcr0";
       fetchSubmodules = true;
     };
-    dependencies = [ pkgs.gawk ];
+    nativeBuildInputs = [ pkgs.makeWrapper ];
+    postInstall = ''
+      for f in config.sh tmux-fingers.sh setup-fingers-mode-bindings.sh; do
+      wrapProgram $target/scripts/$f \
+        --prefix PATH : ${with pkgs; lib.makeBinPath (
+          [ gawk ] ++ lib.optionals stdenv.isDarwin [ reattach-to-user-namespace ]
+        )}
+      done
+    '';
   };
 
   fpp = mkTmuxPlugin {
@@ -167,7 +232,6 @@ in rec {
     postInstall = ''
       sed -i -e 's|fpp |${pkgs.fpp}/bin/fpp |g' $target/fpp.tmux
     '';
-    dependencies = [ pkgs.fpp ];
   };
 
   fzf-tmux-url = mkTmuxPlugin {
@@ -207,8 +271,6 @@ in rec {
     postInstall = ''
       sed -i -e 's|ruby|${pkgs.ruby}/bin/ruby|g' $target/scripts/tmux-jump.sh
     '';
-    dependencies = [ pkgs.ruby ];
-
     meta = with lib; {
       homepage = "https://github.com/schasse/tmux-jump";
       description = "Vimium/Easymotion like navigation for tmux";
@@ -473,7 +535,7 @@ in rec {
       find $target -type f -print0 | xargs -0 sed -i -e 's|sed |${pkgs.gnused}/bin/sed |g'
       find $target -type f -print0 | xargs -0 sed -i -e 's|tput |${pkgs.ncurses}/bin/tput |g'
     '';
-     meta = {
+    meta = {
       homepage = "https://github.com/sainnhe/tmux-fzf";
       description = "Use fzf to manage your tmux work environment! ";
       longDescription =
@@ -506,7 +568,6 @@ in rec {
     postInstall = ''
       sed -i -e '14,20{s|urlview|${pkgs.urlview}/bin/urlview|g}' $target/urlview.tmux
     '';
-    dependencies = [ pkgs.urlview ];
   };
 
   vim-tmux-focus-events = mkTmuxPlugin {
@@ -542,12 +603,12 @@ in rec {
 
   yank = mkTmuxPlugin {
     pluginName = "yank";
-    version = "unstable-2019-12-02";
+    version = "unstable-2021-06-20";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "tmux-yank";
-      rev = "648005db64d9bf3c4650eff694ecb6cf3e42b0c8";
-      sha256 = "1zg9k8yk1iw01vl8m44w4sv20lln4l0lq9dafc09lxmgxm9dllj4";
+      rev = "1b1a436e19f095ae8f825243dbe29800a8acd25c";
+      sha256 = "hRvkBf+YrWycecnDixAsD4CAHg3KsioomfJ/nLl5Zgs=";
     };
   };
 }

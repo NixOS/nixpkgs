@@ -1,13 +1,15 @@
-{ lib, buildGoModule, fetchgit }:
+{ lib, buildGoModule, fetchFromGitea }:
 
 buildGoModule rec {
   pname = "tea";
-  version = "0.7.0";
+  version = "0.7.1";
 
-  src = fetchgit {
-    url = "https://gitea.com/gitea/tea";
+  src = fetchFromGitea {
+    domain = "gitea.com";
+    owner = "gitea";
+    repo = "tea";
     rev = "v${version}";
-    sha256 = "sha256-Kq+A6YELfBJ04t7pPnX8Ulh4NSMFn3AHggplLD9J8MY=";
+    sha256 = "sha256-Y/Znj8vVjVt+rs+n8JRQsptq5u17G2D7r98PDxPLyd4=";
   };
 
   vendorSha256 = null;

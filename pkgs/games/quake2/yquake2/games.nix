@@ -28,7 +28,7 @@ let
     inherit (data) id version description sha256;
     inherit title;
 
-    name = "yquake2-${title}-${version}";
+    pname = "yquake2-${title}";
 
     src = fetchFromGitHub {
       inherit sha256;

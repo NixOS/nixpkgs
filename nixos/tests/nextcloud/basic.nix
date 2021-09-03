@@ -37,6 +37,7 @@ in {
         config = {
           # Don't inherit adminuser since "root" is supposed to be the default
           inherit adminpass;
+          dbtableprefix = "nixos_";
         };
         autoUpdateApps = {
           enable = true;
@@ -51,7 +52,7 @@ in {
     nextcloudWithoutMagick = args@{ config, pkgs, lib, ... }:
       lib.mkMerge
       [ (nextcloud args)
-        { services.nextcloud.disableImagemagick = true; } ];
+        { services.nextcloud.enableImagemagick = false; } ];
   };
 
   testScript = { nodes, ... }: let

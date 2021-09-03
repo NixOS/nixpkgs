@@ -42,6 +42,5 @@ mkDerivation rec {
     license = licenses.gpl3;
     maintainers = with maintainers; [ peterhoeg ];
     inherit (qtbase.meta) platforms;
-    inherit version;
   };
 }

@@ -2,11 +2,12 @@
 
 assert stdenv.isLinux && stdenv ? glibc;
 
-stdenv.mkDerivation {
-  name = "checkinstall-1.6.2";
+stdenv.mkDerivation rec {
+  pname = "checkinstall";
+  version = "1.6.2";
 
   src = fetchurl {
-    url = "http://www.asic-linux.com.mx/~izto/checkinstall/files/source/checkinstall-1.6.2.tar.gz";
+    url = "https://www.asic-linux.com.mx/~izto/checkinstall/files/source/checkinstall-${version}.tar.gz";
     sha256 = "1x4kslyvfd6lm6zd1ylbq2pjxrafb77ydfjaqi16sa5qywn1jqfw";
   };
 

@@ -51,7 +51,7 @@ let
     src =
       if stdenv.hostPlatform.system == "x86_64-linux" then
         fetchurl {
-          url = args.url or "https://download.nvidia.com/XFree86/Linux-x86_64/${version}/NVIDIA-Linux-x86_64-${version}${pkgSuffix}.run";
+          url = args.url or "https://us.download.nvidia.com/XFree86/Linux-x86_64/${version}/NVIDIA-Linux-x86_64-${version}${pkgSuffix}.run";
           sha256 = sha256_64bit;
         }
       else if stdenv.hostPlatform.system == "i686-linux" then
@@ -74,6 +74,13 @@ let
 
     kernel = if libsOnly then null else kernel.dev;
     kernelVersion = if libsOnly then null else kernel.modDirVersion;
+
+    makeFlags = optionals (!libsOnly) (kernel.makeFlags ++ [
+      "IGNORE_PREEMPT_RT_PRESENCE=1"
+      "NV_BUILD_SUPPORTS_HMM=1"
+      "SYSSRC=${kernel.dev}/lib/modules/${kernel.modDirVersion}/source"
+      "SYSOUT=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+    ]);
 
     hardeningDisable = [ "pic" "format" ];
 

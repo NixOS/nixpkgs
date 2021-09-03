@@ -110,7 +110,6 @@ rec {
       description = "Provides fast jumps to text based on initial letter";
       license = licenses.mit;
       platforms = platforms.all;
-      maintainers = [ maintainers.rycee ];
     };
   };
 
@@ -133,7 +132,6 @@ rec {
       description = "Adds support for ANSI escape sequences in the Eclipse console";
       license = licenses.asl20;
       platforms = platforms.all;
-      maintainers = [ maintainers.rycee ];
     };
   };
 
@@ -156,7 +154,6 @@ rec {
       homepage = "https://www.antlr.org/";
       license = licenses.bsd3;
       platforms = platforms.all;
-      maintainers = [ maintainers.rycee ];
     };
   };
 
@@ -179,7 +176,6 @@ rec {
       homepage = "https://www.antlr.org/";
       license = licenses.bsd3;
       platforms = platforms.all;
-      maintainers = [ maintainers.rycee ];
     };
   };
 
@@ -202,7 +198,6 @@ rec {
       description = "Adds new tools to the context menu of text-based editors";
       license = licenses.epl10;
       platforms = platforms.all;
-      maintainers = [ maintainers.rycee ];
     };
   };
 
@@ -225,7 +220,6 @@ rec {
       description = "Show file encoding and line ending for the active editor in the eclipse status bar";
       license = licenses.epl10;
       platforms = platforms.all;
-      maintainers = [ maintainers.rycee ];
     };
   };
 
@@ -248,19 +242,18 @@ rec {
       description = "Shows disassembled bytecode of current java editor or class file";
       license = licenses.bsd2;
       platforms = platforms.all;
-      maintainers = [ maintainers.rycee ];
     };
   };
 
   cdt = buildEclipseUpdateSite rec {
     name = "cdt-${version}";
     # find current version at https://www.eclipse.org/cdt/downloads.php
-    version = "10.1.0";
+    version = "10.2.0";
 
     src = fetchzip {
       stripRoot = false;
-      url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/tools/cdt/releases/10.1/${name}/${name}.zip";
-      sha256 = "1hbswcar3a5cw20mwrj82w9pvpkvvj6jrvqqf1lincva0r5sl7h8";
+      url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/tools/cdt/releases/10.2/${name}/${name}.zip";
+      sha256 = "1r30cbpbzw3dfcsn54p6sqip86dqhydhsppjgaz60b6z138vzx49";
     };
 
     meta = with lib; {
@@ -287,7 +280,6 @@ rec {
       description = "Checkstyle integration into the Eclipse IDE";
       license = licenses.lgpl21;
       platforms = platforms.all;
-      maintainers = [ maintainers.rycee ];
     };
 
   };
@@ -311,7 +303,6 @@ rec {
       description = "Plugin to switch color themes conveniently and without side effects";
       license = licenses.epl10;
       platforms = platforms.all;
-      maintainers = [ maintainers.rycee ];
     };
   };
 
@@ -386,7 +377,6 @@ rec {
       description = "EclEmma is a free Java code coverage tool for Eclipse";
       license = licenses.epl10;
       platforms = platforms.all;
-      maintainers = [ maintainers.rycee ];
     };
   };
 
@@ -409,7 +399,6 @@ rec {
       description = "Plugin that uses static analysis to look for bugs in Java code";
       license = licenses.epl10;
       platforms = platforms.all;
-      maintainers = [ maintainers.rycee ];
     };
   };
 
@@ -482,26 +471,6 @@ rec {
       homepage = "https://github.com/boothen/Json-Eclipse-Plugin";
       license = licenses.epl10;
       platforms = platforms.all;
-      maintainers = [ maintainers.rycee ];
-    };
-  };
-
-  jdt = buildEclipseUpdateSite rec {
-    name = "jdt-${version}";
-    version = "4.18";
-
-    src = fetchzip {
-      stripRoot = false;
-      url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-${version}-202012021800/org.eclipse.jdt-${version}.zip";
-      sha256 = "q0O6OE2u0bdz1+nOkzXDrrOOzoEbVaXnejx4lX7uZgk=";
-    };
-
-    meta = with lib; {
-      homepage = "https://www.eclipse.org/jdt/";
-      description = "Eclipse Java development tools";
-      license = licenses.epl10;
-      platforms = platforms.all;
-      maintainers = [ maintainers.rycee ];
     };
   };
 
@@ -524,7 +493,6 @@ rec {
       description = "Provides JDT Java CodeMining";
       license = licenses.epl10;
       platforms = platforms.all;
-      maintainers = [ maintainers.rycee ];
     };
   };
 
@@ -567,7 +535,6 @@ rec {
       description = "The Scala IDE for Eclipse";
       license = licenses.bsd3;
       platforms = platforms.all;
-      maintainers = [ maintainers.rycee ];
     };
   };
 
@@ -586,7 +553,6 @@ rec {
       description = "Plugin that uses static analysis to look for bugs in Java code";
       license = licenses.lgpl21;
       platforms = platforms.all;
-      maintainers = [ maintainers.rycee ];
     };
   };
 
@@ -609,7 +575,6 @@ rec {
       description = "Eclipse plugin for the TestNG testing framework";
       license = licenses.asl20;
       platforms = platforms.all;
-      maintainers = [ maintainers.rycee ];
     };
   };
 
@@ -654,7 +619,6 @@ rec {
       description = "A YAML editor plugin for Eclipse";
       license = licenses.epl10;
       platforms = platforms.all;
-      maintainers = [ maintainers.rycee ];
     };
   };
 

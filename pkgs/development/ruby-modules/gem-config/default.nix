@@ -17,15 +17,16 @@
 # This seperates "what to build" (the exact gem versions) from "how to build"
 # (to make gems behave if necessary).
 
-{ lib, fetchurl, writeScript, ruby, kerberos, libxml2, libxslt, python, stdenv, which
-, libiconv, postgresql, v8, clang, sqlite, zlib, imagemagick
+{ lib, fetchurl, writeScript, ruby, libkrb5, libxml2, libxslt, python2, stdenv, which
+, libiconv, postgresql, v8, clang, sqlite, zlib, imagemagick, lasem
 , pkg-config , ncurses, xapian, gpgme, util-linux, tzdata, icu, libffi
-, cmake, libssh2, openssl, libmysqlclient, darwin, git, perl, pcre, gecode_3, curl
+, cmake, libssh2, openssl, libmysqlclient, git, perl, pcre, gecode_3, curl
 , msgpack, libsodium, snappy, libossp_uuid, lxc, libpcap, xorg, gtk2, buildRubyGem
 , cairo, re2, rake, gobject-introspection, gdk-pixbuf, zeromq, czmq, graphicsmagick, libcxx
 , file, libvirt, glib, vips, taglib, libopus, linux-pam, libidn, protobuf, fribidi, harfbuzz
 , bison, flex, pango, python3, patchelf, binutils, freetds, wrapGAppsHook, atk
-, bundler, libsass, libselinux ? null, libsepol ? null
+, bundler, libsass, libexif, libselinux, libsepol, shared-mime-info, libthai, libdatrie
+, CoreServices, DarwinTools, cctools
 }@args:
 
 let
@@ -41,7 +42,8 @@ in
 {
   atk = attrs: {
     dependencies = attrs.dependencies ++ [ "gobject-introspection" ];
-    nativeBuildInputs = [ rake bundler pkg-config ];
+    nativeBuildInputs = [ rake bundler pkg-config ]
+      ++ lib.optionals stdenv.isDarwin [ DarwinTools ];
     propagatedBuildInputs = [ gobject-introspection wrapGAppsHook atk ];
   };
 
@@ -61,12 +63,14 @@ in
     };
 
   cairo = attrs: {
-    nativeBuildInputs = [ pkg-config ];
+    nativeBuildInputs = [ pkg-config ]
+      ++ lib.optionals stdenv.isDarwin [ DarwinTools ];
     buildInputs = [ gtk2 pcre xorg.libpthreadstubs xorg.libXdmcp];
   };
 
   cairo-gobject = attrs: {
-    nativeBuildInputs = [ pkg-config ];
+    nativeBuildInputs = [ pkg-config ]
+      ++ lib.optionals stdenv.isDarwin [ DarwinTools ];
     buildInputs = [ cairo pcre xorg.libpthreadstubs xorg.libXdmcp ];
   };
 
@@ -164,6 +168,10 @@ in
     '';
   };
 
+  mimemagic = attrs: {
+    FREEDESKTOP_MIME_TYPES_PATH = "${shared-mime-info}/share/mime/packages/freedesktop.org.xml";
+  };
+
   mini_magick = attrs: {
     postInstall = ''
       installPath=$(cat $out/nix-support/gem-meta/install-path)
@@ -179,13 +187,19 @@ in
     buildInputs = [ openssl ];
   };
 
+  exif = attrs: {
+    buildFlags = [ "--with-exif-dir=${libexif}" ];
+    buildInputs = [ libexif ];
+  };
+
   ffi = attrs: {
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ libffi ];
   };
 
   gdk_pixbuf2 = attrs: {
-    nativeBuildInputs = [ pkg-config bundler rake ];
+    nativeBuildInputs = [ pkg-config bundler rake ]
+      ++ lib.optionals stdenv.isDarwin [ DarwinTools ];
     propagatedBuildInputs = [ gobject-introspection wrapGAppsHook gdk-pixbuf ];
   };
 
@@ -195,7 +209,8 @@ in
   };
 
   gio2 = attrs: {
-    nativeBuildInputs = [ pkg-config ];
+    nativeBuildInputs = [ pkg-config ]
+      ++ lib.optionals stdenv.isDarwin [ DarwinTools ];
     buildInputs = [ gtk2 pcre gobject-introspection ] ++ lib.optionals stdenv.isLinux [ util-linux libselinux libsepol ];
   };
 
@@ -211,7 +226,16 @@ in
     '';
   };
 
-  pg_query = attrs: lib.optionalAttrs (attrs.version == "1.3.0") {
+  pg_query = attrs: lib.optionalAttrs (attrs.version == "2.0.2") {
+    dontBuild = false;
+    postPatch = ''
+      sed -i "s;'https://codeload.github.com.*';'${fetchurl {
+        url = "https://codeload.github.com/lfittl/libpg_query/tar.gz/13-2.0.2";
+        sha256 = "0ms2s6hmy8qyzv4g1hj4i2p5fws1v8lrj73b2knwbp2ipd45yj7y";
+      }}';" ext/pg_query/extconf.rb
+    '';
+  } // lib.optionalAttrs (attrs.version == "1.3.0") {
+    # Needed for gitlab
     dontBuild = false;
     postPatch = ''
       sed -i "s;'https://codeload.github.com.*';'${fetchurl {
@@ -222,7 +246,8 @@ in
   };
 
   glib2 = attrs: {
-    nativeBuildInputs = [ pkg-config ];
+    nativeBuildInputs = [ pkg-config ]
+      ++ lib.optionals stdenv.isDarwin [ DarwinTools ];
     buildInputs = [ gtk2 pcre ];
   };
 
@@ -231,7 +256,7 @@ in
       binutils pkg-config
     ] ++ lib.optionals stdenv.isLinux [
       util-linux libselinux libsepol
-    ];
+    ] ++ lib.optionals stdenv.isDarwin [ DarwinTools ];
     propagatedBuildInputs = [
       atk
       gdk-pixbuf
@@ -239,16 +264,18 @@ in
       gobject-introspection
       gtk2
       harfbuzz
+      libdatrie
+      libthai
       pcre
       xorg.libpthreadstubs
       xorg.libXdmcp
     ];
-    # CFLAGS must be set for this gem to detect gdkkeysyms.h correctly
-    # CFLAGS = "-I${gtk2.dev}/include/gtk-2.0 -I/non-existent-path";
+    dontStrip = stdenv.isDarwin;
   };
 
   gobject-introspection = attrs: {
-    nativeBuildInputs = [ pkg-config pcre ];
+    nativeBuildInputs = [ pkg-config pcre ]
+      ++ lib.optionals stdenv.isDarwin [ DarwinTools ];
     propagatedBuildInputs = [ gobject-introspection wrapGAppsHook glib ];
   };
 
@@ -274,9 +301,7 @@ in
   };
 
   hitimes = attrs: {
-    buildInputs =
-      lib.optionals stdenv.isDarwin
-        [ darwin.apple_sdk.frameworks.CoreServices ];
+    buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
   };
 
   iconv = attrs: {
@@ -303,7 +328,7 @@ in
   # otherwise the gem will fail to link to the libv8 binary.
   # see: https://github.com/cowboyd/libv8/pull/161
   libv8 = attrs: {
-    buildInputs = [ which v8 python ];
+    buildInputs = [ which v8 python2 ];
     buildFlags = [ "--with-system-v8=true" ];
     dontBuild = false;
     postPatch = ''
@@ -332,6 +357,7 @@ in
       flex
       pkg-config
       python3
+      patchelf
     ];
 
     buildInputs = [
@@ -356,12 +382,13 @@ in
             $out/${ruby.gemPath}/extensions/*/*/mathematical-${attrs.version}/gem_make.out
     '';
 
-    # For some reason 'mathematical.so' is missing cairo and glib in its RPATH, add them explicitly here
+    # For some reason 'mathematical.so' is missing cairo, glib, and
+    # lasem in its RPATH, add them explicitly here
     postFixup = lib.optionalString stdenv.isLinux ''
       soPath="$out/${ruby.gemPath}/gems/mathematical-${attrs.version}/lib/mathematical/mathematical.so"
-      ${patchelf}/bin/patchelf \
-        --set-rpath "${lib.makeLibraryPath [ glib cairo ]}:$(${patchelf}/bin/patchelf --print-rpath "$soPath")" \
-        "$soPath"
+      rpath="$(patchelf --print-rpath "$soPath")"
+      patchelf --set-rpath "${lib.makeLibraryPath [ lasem glib cairo ]}:$rpath" "$soPath"
+      patchelf --replace-needed liblasem.so liblasem-0.4.so "$soPath"
     '';
   };
 
@@ -438,7 +465,9 @@ in
       pcre
       xorg.libpthreadstubs
       xorg.libXdmcp
-    ];
+    ] ++ lib.optionals stdenv.isDarwin [ DarwinTools ];
+    buildInputs = [ libdatrie libthai ]
+      ++ lib.optionals stdenv.isLinux [ libselinux libsepol util-linux ];
     propagatedBuildInputs = [ gobject-introspection wrapGAppsHook gtk2 ];
   };
 
@@ -504,6 +533,14 @@ in
       "--with-libvirt-include=${libvirt}/include"
       "--with-libvirt-lib=${libvirt}/lib"
     ];
+    dontBuild = false;
+    postPatch = ''
+      # https://gitlab.com/libvirt/libvirt-ruby/-/commit/43543991832c9623c00395092bcfb9e178243ba4
+      substituteInPlace ext/libvirt/common.c \
+        --replace 'st.h' 'ruby/st.h'
+      substituteInPlace ext/libvirt/domain.c \
+        --replace 'st.h' 'ruby/st.h'
+    '';
   };
 
   ruby-lxc = attrs: {
@@ -523,13 +560,9 @@ in
       cd "$(cat $out/nix-support/gem-meta/install-path)"
 
       substituteInPlace lib/vips.rb \
-        --replace "glib-2.0" "${glib.out}/lib/libglib-2.0${stdenv.hostPlatform.extensions.sharedLibrary}"
-
-      substituteInPlace lib/vips.rb \
-        --replace "gobject-2.0" "${glib.out}/lib/libgobject-2.0${stdenv.hostPlatform.extensions.sharedLibrary}"
-
-      substituteInPlace lib/vips.rb \
-        --replace "vips_libname = 'vips'" "vips_libname = '${lib.getLib vips}/lib/libvips${stdenv.hostPlatform.extensions.sharedLibrary}'"
+        --replace 'library_name("vips", 42)' '"${lib.getLib vips}/lib/libvips${stdenv.hostPlatform.extensions.sharedLibrary}"' \
+        --replace 'library_name("glib-2.0", 0)' '"${glib.out}/lib/libglib-2.0${stdenv.hostPlatform.extensions.sharedLibrary}"' \
+        --replace 'library_name("gobject-2.0", 0)' '"${glib.out}/lib/libgobject-2.0${stdenv.hostPlatform.extensions.sharedLibrary}"'
     '';
   };
 
@@ -598,7 +631,7 @@ in
   };
 
   timfel-krb5-auth = attrs: {
-    buildInputs = [ kerberos ];
+    buildInputs = [ libkrb5 ];
   };
 
   tiny_tds = attrs: {
@@ -646,7 +679,7 @@ in
   };
 
   zookeeper = attrs: {
-    buildInputs = lib.optionals stdenv.isDarwin [ darwin.cctools ];
+    buildInputs = lib.optionals stdenv.isDarwin [ cctools ];
     dontBuild = false;
     postPatch = ''
       sed -i ext/extconf.rb -e "4a \

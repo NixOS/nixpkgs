@@ -1,34 +1,25 @@
 diff --git a/internal/config/config.go b/internal/config/config.go
-index 79c2a36..12ba31e 100644
+index 36f8625..72ede08 100644
 --- a/internal/config/config.go
 +++ b/internal/config/config.go
-@@ -3,7 +3,6 @@ package config
- import (
- 	"io/ioutil"
- 	"net/url"
--	"os"
- 	"path"
- 	"path/filepath"
+@@ -12,7 +12,7 @@ import (
+ )
  
-@@ -59,16 +58,13 @@ func (c *Config) GetHttpClient() *client.HttpClient {
- }
+ const (
+-	configFile            = "config.yml"
++	configFile            = "shell-config.yml"
+ 	defaultSecretFileName = ".gitlab_shell_secret"
+ )
  
- func New() (*Config, error) {
--	dir, err := os.Getwd()
--	if err != nil {
--		return nil, err
--	}
-+	dir := "/run/gitlab"
- 
- 	return NewFromDir(dir)
- }
- 
- func NewFromDir(dir string) (*Config, error) {
--	return newFromFile(path.Join(dir, configFile))
-+	return newFromFile("/run/gitlab/shell-config.yml")
- }
- 
- func newFromFile(filename string) (*Config, error) {
+@@ -91,7 +91,7 @@ func (c *Config) GetHttpClient() *client.HttpClient {
+ // NewFromDirExternal returns a new config from a given root dir. It also applies defaults appropriate for
+ // gitlab-shell running in an external SSH server.
+ func NewFromDirExternal(dir string) (*Config, error) {
+-	cfg, err := newFromFile(filepath.Join(dir, configFile))
++	cfg, err := newFromFile(filepath.Join("/run/gitlab", configFile))
+ 	if err != nil {
+ 		return nil, err
+ 	}
 diff --git a/internal/keyline/key_line.go b/internal/keyline/key_line.go
 index c6f2422..fb0426b 100644
 --- a/internal/keyline/key_line.go
@@ -55,6 +46,3 @@ index 52ac5ee..d96baa3 100644
    end
  
    def auth_file
--- 
-2.28.0
-

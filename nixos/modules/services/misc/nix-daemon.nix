@@ -21,6 +21,7 @@ let
          calls in `libstore/build.cc', don't add any supplementary group
          here except "nixbld".  */
       uid = builtins.add config.ids.uids.nixbld nr;
+      isSystemUser = true;
       group = "nixbld";
       extraGroups = [ "nixbld" ];
     };
@@ -457,7 +458,7 @@ in
                 description = "The flake reference to which <option>from></option> is to be rewritten.";
               };
               flake = mkOption {
-                type = types.unspecified;
+                type = types.nullOr types.attrs;
                 default = null;
                 example = literalExample "nixpkgs";
                 description = ''

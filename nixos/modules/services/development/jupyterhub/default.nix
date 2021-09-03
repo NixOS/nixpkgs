@@ -117,7 +117,7 @@ in {
             env = (pkgs.python3.withPackages (pythonPackages: with pythonPackages; [
                     ipykernel
                     pandas
-                    scikitlearn
+                    scikit-learn
                   ]));
           in {
             displayName = "Python 3 for machine learning";

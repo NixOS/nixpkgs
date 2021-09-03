@@ -7,10 +7,11 @@
 with lib;
 
 stdenv.mkDerivation rec {
-  name = "optipng-0.7.7";
+  pname = "optipng";
+  version = "0.7.7";
 
   src = fetchurl {
-    url = "mirror://sourceforge/optipng/${name}.tar.gz";
+    url = "mirror://sourceforge/optipng/optipng-${version}.tar.gz";
     sha256 = "0lj4clb851fzpaq446wgj0sfy922zs5l5misbpwv6w7qrqrz4cjg";
   };
 

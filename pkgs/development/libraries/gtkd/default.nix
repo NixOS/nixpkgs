@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip, fetchpatch, atk, cairo, ldc, gdk-pixbuf, gnome3, gst_all_1, librsvg
+{ lib, stdenv, fetchzip, fetchpatch, atk, cairo, ldc, gdk-pixbuf, gnome, gst_all_1, librsvg
 , glib, gtk3, gtksourceview4, libgda, libpeas, pango, pkg-config, which, vte }:
 
 let

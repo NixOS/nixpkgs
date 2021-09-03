@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, python, pcsclite, pth }:
+{ lib, stdenv, fetchFromGitHub, pcsclite, pth, python2 }:
 
 stdenv.mkDerivation rec {
   pname = "hexio";
@@ -11,8 +11,9 @@ stdenv.mkDerivation rec {
     repo = "hexio";
   };
 
-  propagatedBuildInputs = [ python ];
-  buildInputs = [ pcsclite pth ];
+  strictDeps = true;
+
+  buildInputs = [ pcsclite pth python2 ];
 
   patchPhase = ''
     substituteInPlace Makefile \

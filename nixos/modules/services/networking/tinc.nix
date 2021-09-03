@@ -351,7 +351,7 @@ in
 
   config = mkIf (cfg.networks != { }) {
 
-    environment.etc = fold (a: b: a // b) { }
+    environment.etc = foldr (a: b: a // b) { }
       (flip mapAttrsToList cfg.networks (network: data:
         flip mapAttrs' data.hosts (host: text: nameValuePair
           ("tinc/${network}/hosts/${host}")
@@ -427,9 +427,12 @@ in
       nameValuePair ("tinc.${network}") ({
         description = "Tinc daemon user for ${network}";
         isSystemUser = true;
+        group = "tinc.${network}";
       })
     );
-
+    users.groups = flip mapAttrs' cfg.networks (network: _:
+      nameValuePair "tinc.${network}" {}
+    );
   };
 
   meta.maintainers = with maintainers; [ minijackson ];

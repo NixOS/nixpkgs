@@ -1,7 +1,7 @@
 { lib, fetchFromGitHub, buildLinux, linux_zen, ... } @ args:
 
 let
-  version = "5.11.1";
+  version = "5.13.9";
   suffix = "lqx1";
 in
 
@@ -14,13 +14,13 @@ buildLinux (args // {
     owner = "zen-kernel";
     repo = "zen-kernel";
     rev = "v${version}-${suffix}";
-    sha256 = "00cji0dkfsjz6agwvcqpy7771hqbzcxk8awpbhlhpwa5j161r7l4";
+    sha256 = "sha256-aAnwPw1qoGhUdWN/uaQa+5bi0DFZB/wDfNow7FgMMFE=";
   };
 
   extraMeta = {
-    branch = "5.10/master";
+    branch = "5.13/master";
     maintainers = with lib.maintainers; [ atemu ];
     description = linux_zen.meta.description + " (Same as linux_zen but less aggressive release schedule)";
   };
 
-} // (args.argsOverride or {}))
+} // (args.argsOverride or { }))

@@ -9,6 +9,7 @@
 , qtsvg
 , kwindowsystem
 , libqtxdg
+, perl
 , xorg
 , autoPatchelfHook
 , lxqtUpdateScript
@@ -16,18 +17,19 @@
 
 mkDerivation rec {
   pname = "screengrab";
-  version = "2.1.0";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "0jy2izgl3jg6mnykpw7ji1fjv7dsivdfi6k6i6glrpa0z1p51gic";
+    sha256 = "16dycq40lbvk6jvpj7zp85m23cgvh8nj38fz99gxjfzn2nz1gy4a";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
+    perl # needed by LXQtTranslateDesktop.cmake
     autoPatchelfHook # fix libuploader.so and libextedit.so not found
   ];
 

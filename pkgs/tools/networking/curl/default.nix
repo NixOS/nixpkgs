@@ -7,8 +7,15 @@
 , gnutlsSupport ? false, gnutls ? null
 , wolfsslSupport ? false, wolfssl ? null
 , scpSupport ? zlibSupport && !stdenv.isSunOS && !stdenv.isCygwin, libssh2 ? null
-, # a very sad story re static: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=439039
-  gssSupport ? with stdenv.hostPlatform; !isWindows && !isStatic, libkrb5 ? null
+, gssSupport ? with stdenv.hostPlatform; !(
+    !isWindows &&
+    # a very sad story re static: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=439039
+    !isStatic &&
+    # the "mig" tool does not configure its compiler correctly. This could be
+    # fixed in mig, but losing gss support on cross compilation to darwin is
+    # not worth the effort.
+    !(isDarwin && (stdenv.buildPlatform != stdenv.hostPlatform))
+  ), libkrb5 ? null
 , c-aresSupport ? false, c-ares ? null
 , brotliSupport ? false, brotli ? null
 }:
@@ -35,15 +42,21 @@ assert gssSupport -> libkrb5 != null;
 
 stdenv.mkDerivation rec {
   pname = "curl";
-  version = "7.74.0";
+  version = "7.76.1";
 
   src = fetchurl {
     urls = [
       "https://curl.haxx.se/download/${pname}-${version}.tar.bz2"
       "https://github.com/curl/curl/releases/download/${lib.replaceStrings ["."] ["_"] pname}-${version}/${pname}-${version}.tar.bz2"
     ];
-    sha256 = "19bp3d91xq9vqwlbzq261j23mk9lz4lyka4gr2fm6dhnd3k66k8g";
+    sha256 = "1scmfrp0c27pkd7yva9k50miprjpsyfbb33apx72qc9igm6ii3ks";
   };
+
+  patches = [
+    ./CVE-2021-22897.patch
+    ./CVE-2021-22898.patch
+    ./CVE-2021-22901.patch
+  ];
 
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
   separateDebugInfo = stdenv.isLinux;

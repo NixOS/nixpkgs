@@ -4,8 +4,8 @@ with skawarePackages;
 
 buildPackage {
   pname = "execline";
-  version = "2.8.0.0";
-  sha256 = "0vbn4pdazy6x6213vn42k0khcij5bvkbrcfg7nw6inhf8154nx77";
+  version = "2.8.0.1";
+  sha256 = "1v9swmhw2rcrr9fmkmd7qh8qq0kslhmvxwz2a3bhan9ksabz8wx3";
 
   description = "A small scripting language, to be used in place of a shell in non-interactive scripts";
 

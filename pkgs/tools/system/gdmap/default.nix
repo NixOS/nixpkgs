@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, gtk2, pkg-config, libxml2, intltool, gettext }:
 
 stdenv.mkDerivation rec {
-  name = "gdmap-0.8.1";
+  pname = "gdmap";
+  version = "0.8.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/gdmap/${name}.tar.gz";
+    url = "mirror://sourceforge/gdmap/gdmap-${version}.tar.gz";
     sha256 = "0nr8l88cg19zj585hczj8v73yh21k7j13xivhlzl8jdk0j0cj052";
   };
 

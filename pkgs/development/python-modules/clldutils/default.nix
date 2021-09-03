@@ -5,7 +5,7 @@
 , attrs
 , colorlog
 , csvw
-, dateutil
+, python-dateutil
 , tabulate
 , mock
 , postgresql
@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "clldutils";
-  version = "3.7.0";
+  version = "3.9.0";
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "clld";
     repo = pname;
     rev = "v${version}";
-    sha256 = "13shas7krf7j04gqxjn09ipy318hmrp1s3b5d576d5r1xfxakam4";
+    sha256 = "07ljq7v1zvaxyl6xn4a2p4097lgd5j9bz71lf05y5bz8k024mxbr";
   };
 
   patchPhase = ''
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
-    dateutil
+    python-dateutil
     tabulate
     colorlog
     attrs
@@ -48,6 +48,6 @@ buildPythonPackage rec {
     description = "CSV on the Web";
     homepage = "https://github.com/cldf/csvw";
     license = licenses.asl20;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [ ];
   };
 }

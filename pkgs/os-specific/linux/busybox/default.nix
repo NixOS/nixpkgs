@@ -32,7 +32,7 @@ let
     CONFIG_FEATURE_WTMP n
   '';
 
-  # The debian version lacks behind the upstream version and also contains
+  # The debian version lags behind the upstream version and also contains
   # a debian-specific suffix. We only fetch the debian repository to get the
   # default.script
   debianVersion = "1.30.1-6";
@@ -49,14 +49,14 @@ in
 
 stdenv.mkDerivation rec {
   pname = "busybox";
-  version = "1.32.1";
+  version = "1.33.1";
 
   # Note to whoever is updating busybox: please verify that:
   # nix-build pkgs/stdenv/linux/make-bootstrap-tools.nix -A test
   # still builds after the update.
   src = fetchurl {
     url = "https://busybox.net/downloads/${pname}-${version}.tar.bz2";
-    sha256 = "1vhd59qmrdyrr1q7rvxmyl96z192mxl089hi87yl0hcp6fyw8mwx";
+    sha256 = "0a0dcvsh7nxnhxc5y73fky0z30i9p7r30qfidm2akn0n5fywdkhj";
   };
 
   hardeningDisable = [ "format" "pie" ]
@@ -134,7 +134,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Tiny versions of common UNIX utilities in a single small executable";
     homepage = "https://busybox.net/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ TethysSvensson ];
     platforms = platforms.linux;
     priority = 10;

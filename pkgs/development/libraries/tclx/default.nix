@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchurl, tcl }:
+{ lib, fetchurl, tcl }:
 
-stdenv.mkDerivation rec {
+tcl.mkTclDerivation rec {
   name = "tclx-${version}.${patch}";
   version = "8.4";
   patch = "1";
@@ -10,13 +10,10 @@ stdenv.mkDerivation rec {
     sha256 = "1v2qwzzidz0is58fd1p7wfdbscxm3ip2wlbqkj5jdhf6drh1zd59";
   };
 
-  passthru = {
-    libPrefix = ""; # Using tclx${version} did not work
-  };
-
-  buildInputs = [ tcl ];
-
-  configureFlags = [ "--with-tcl=${tcl}/lib" "--exec-prefix=\${prefix}" ];
+  # required in order for tclx to properly detect tclx.tcl at runtime
+  postInstall = ''
+    ln -s $prefix/lib/tclx${version} $prefix/lib/tclx${version}/tclx${version}
+  '';
 
   meta = {
     homepage = "http://tclx.sourceforge.net/";

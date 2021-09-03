@@ -68,7 +68,10 @@ class GitLabRepo:
         version = self.rev2version(rev)
 
         passthru = {v: self.get_file(v, rev).strip() for v in ['GITALY_SERVER_VERSION', 'GITLAB_PAGES_VERSION',
-                                                               'GITLAB_SHELL_VERSION', 'GITLAB_WORKHORSE_VERSION']}
+                                                               'GITLAB_SHELL_VERSION']}
+
+        passthru["GITLAB_WORKHORSE_VERSION"] = version
+
         return dict(version=self.rev2version(rev),
                     repo_hash=self.get_git_hash(rev),
                     owner=self.owner,
@@ -128,9 +131,12 @@ def update_rubyenv():
     data = _get_data_json()
     rev = data['rev']
 
-    for fn in ['Gemfile.lock', 'Gemfile']:
-        with open(rubyenv_dir / fn, 'w') as f:
-            f.write(repo.get_file(fn, rev))
+    with open(rubyenv_dir / 'Gemfile.lock', 'w') as f:
+        f.write(repo.get_file('Gemfile.lock', rev))
+    with open(rubyenv_dir / 'Gemfile', 'w') as f:
+        original = repo.get_file('Gemfile', rev)
+        original += "\ngem 'sd_notify'\n"
+        f.write(re.sub(r".*mail-smtp_pool.*", "", original))
 
     subprocess.check_output(['bundle', 'lock'], cwd=rubyenv_dir)
     subprocess.check_output(['bundix'], cwd=rubyenv_dir)
@@ -181,9 +187,6 @@ def update_gitlab_shell():
     gitlab_shell_version = data['passthru']['GITLAB_SHELL_VERSION']
     _call_nix_update('gitlab-shell', gitlab_shell_version)
 
-    repo = GitLabRepo(repo='gitlab-shell')
-    gitlab_shell_dir = pathlib.Path(__file__).parent / 'gitlab-shell'
-
 
 @cli.command('update-gitlab-workhorse')
 def update_gitlab_workhorse():
@@ -192,8 +195,6 @@ def update_gitlab_workhorse():
     gitlab_workhorse_version = data['passthru']['GITLAB_WORKHORSE_VERSION']
     _call_nix_update('gitlab-workhorse', gitlab_workhorse_version)
 
-    repo = GitLabRepo('gitlab-org', 'gitlab-workhorse')
-    gitlab_workhorse_dir = pathlib.Path(__file__).parent / 'gitlab-workhorse'
 
 @cli.command('update-all')
 @click.option('--rev', default='latest', help='The rev to use (vX.Y.Z-ee), or \'latest\'')

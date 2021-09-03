@@ -6,7 +6,7 @@
 , qtquickcontrols
 , qtimageformats
 , qtxmlpatterns
-, ffmpeg_3
+, ffmpeg
 , guvcview
 , cmake
 , ninja
@@ -40,7 +40,6 @@ mkDerivation rec {
     v4l-utils
     libv4l
     pcre
-    ffmpeg_3
     guvcview
     qwt
   ];
@@ -63,6 +62,10 @@ mkDerivation rec {
                 "find_package(Qt5 REQUIRED COMPONENTS Core Widgets Xml Multimedia"
     grep -rl 'qwt' . | xargs sed -i 's@<qwt/qwt_slider.h>@<qwt_slider.h>@g'
   '';
+
+  qtWrapperArgs = [
+    "--prefix" "PATH" ":" (lib.makeBinPath [ ffmpeg ])
+  ];
 
   meta = with lib; {
     homepage = "http://www.qstopmotion.org";

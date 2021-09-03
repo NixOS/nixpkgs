@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPackages, autoreconfHook, fetchurl }:
+{ lib, stdenv, buildPackages, autoreconfHook, fetchurl, libedit }:
 
 stdenv.mkDerivation rec {
   pname = "dash";
@@ -11,7 +11,6 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  # Temporary fix until a proper one is accepted upstream
   patches = [
     (fetchurl {
       # Dash executes code when noexec ("-n") is specified
@@ -19,9 +18,18 @@ stdenv.mkDerivation rec {
       url = "https://git.kernel.org/pub/scm/utils/dash/dash.git/patch/?id=29d6f2148f10213de4e904d515e792d2cf8c968e";
       sha256 = "08q90bx36ixwlcj331dh7420qyj8i0qh1cc1gljrhd83fhl9w0y5";
     })
-  ] ++ lib.optional stdenv.isDarwin ./0001-fix-dirent64-et-al-on-darwin.patch;
+  ] ++ lib.optionals stdenv.isDarwin [
+      # Temporary fix until a proper one is accepted upstream
+    ./0001-fix-dirent64-et-al-on-darwin.patch
+  ];
+
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = lib.optional stdenv.isDarwin autoreconfHook;
+  buildInputs = [ libedit ];
+
+  configureFlags = [ "--with-libedit" ];
+
+  enableParallelBuilding = true;
 
   meta = with lib; {
     homepage = "http://gondor.apana.org.au/~herbert/dash/";

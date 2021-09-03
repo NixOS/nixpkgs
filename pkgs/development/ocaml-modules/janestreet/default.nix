@@ -1,10 +1,10 @@
-{ janePackage, ocamlbuild, angstrom, cryptokit, ctypes,
-  magic-mime, ocaml-migrate-parsetree, octavius, ounit, ppx_deriving, re,
-  num, openssl
-, ppxlib
+{ self
+, openssl
 }:
 
-rec {
+with self;
+
+{
 
   ocaml-compiler-libs = janePackage {
     pname = "ocaml-compiler-libs";

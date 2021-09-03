@@ -41,6 +41,19 @@ rec {
         else if final.isNetBSD              then "nblibc"
         # TODO(@Ericson2314) think more about other operating systems
         else                                     "native/impure";
+      # Choose what linker we wish to use by default. Someday we might also
+      # choose the C compiler, runtime library, C++ standard library, etc. in
+      # this way, nice and orthogonally, and deprecate `useLLVM`. But due to
+      # the monolithic GCC build we cannot actually make those choices
+      # independently, so we are just doing `linker` and keeping `useLLVM` for
+      # now.
+      linker =
+        /**/ if final.useLLVM or false      then "lld"
+        else if final.isDarwin              then "cctools"
+        # "bfd" and "gold" both come from GNU binutils. The existance of Gold
+        # is why we use the more obscure "bfd" and not "binutils" for this
+        # choice.
+        else                                     "bfd";
       extensions = {
         sharedLibrary =
           /**/ if final.isDarwin  then ".dylib"
@@ -111,6 +124,19 @@ rec {
         armv7a  = "armv7";
         aarch64 = "arm64";
       }.${final.parsed.cpu.name} or final.parsed.cpu.name;
+
+      darwinPlatform =
+        if final.isMacOS then "macos"
+        else if final.isiOS then "ios"
+        else null;
+      # The canonical name for this attribute is darwinSdkVersion, but some
+      # platforms define the old name "sdkVer".
+      darwinSdkVersion = final.sdkVer or (if final.isAarch64 then "11.0" else "10.12");
+      darwinMinVersion = final.darwinSdkVersion;
+      darwinMinVersionVariable =
+        if final.isMacOS then "MACOSX_DEPLOYMENT_TARGET"
+        else if final.isiOS then "IPHONEOS_DEPLOYMENT_TARGET"
+        else null;
 
       emulator = pkgs: let
         qemu-user = pkgs.qemu.override {

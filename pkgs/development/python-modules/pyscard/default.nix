@@ -6,12 +6,12 @@ let
 in
 
 buildPythonPackage rec {
-  version = "2.0.0";
+  version = "2.0.1";
   pname = "pyscard";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0yap0p8mp6dx58n3nina6ryhc2cysaj75sq98wf3qybf33cxjr5k";
+    sha256 = "2ba5ed0db0ed3c98e95f9e34016aa3a57de1bc42dd9030b77a546036ee7e46d8";
   };
 
   postPatch = if withApplePCSC then ''

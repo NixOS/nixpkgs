@@ -30,17 +30,18 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "obsidian";
-  version = "0.11.5";
+  version = "0.12.12";
 
   src = fetchurl {
-    url =
-      "https://github.com/obsidianmd/obsidian-releases/releases/download/v${version}/obsidian-${version}.tar.gz";
-    sha256 = "FxhvRRxV8oxRwvImftoSTqrus2x5p90NfuvddZjdBNU=";
+    url = "https://github.com/obsidianmd/obsidian-releases/releases/download/v${version}/obsidian-${version}.tar.gz";
+    sha256 = "sha256-zvWJvMmb0TlFYXrT2QUgMG6uleT42+y+F4bSZQ2ftnE=";
   };
 
   nativeBuildInputs = [ makeWrapper graphicsmagick ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
 
     makeWrapper ${electron}/bin/electron $out/bin/obsidian \
@@ -56,6 +57,8 @@ in stdenv.mkDerivation rec {
       mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps
       gm convert -resize "$size"x"$size" ${icon} $out/share/icons/hicolor/"$size"x"$size"/apps/obsidian.png
     done
+
+    runHook postInstall
   '';
 
   passthru.updateScript = updateScript;

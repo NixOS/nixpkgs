@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, boost, cmake, ilmbase, libjpeg, libpng, libtiff
-, opencolorio, openexr, unzip
+, opencolorio_1, openexr, unzip
 }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake unzip ];
   buildInputs = [
     boost ilmbase libjpeg libpng
-    libtiff opencolorio openexr
+    libtiff opencolorio_1 openexr
   ];
 
   cmakeFlags = [
@@ -31,6 +31,11 @@ stdenv.mkDerivation rec {
     "USE_PYTHON=0"
     "INSTALLDIR=${placeholder "out"}"
     "dist_dir="
+  ];
+
+  patches = [
+    # Backported from https://github.com/OpenImageIO/oiio/pull/2539 for 1.8.17
+    ./2539_backport.patch
   ];
 
   meta = with lib; {

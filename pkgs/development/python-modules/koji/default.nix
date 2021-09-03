@@ -1,4 +1,4 @@
-{ lib, fetchurl, buildPythonPackage, isPy3k, pycurl, six, rpm, dateutil }:
+{ lib, fetchurl, buildPythonPackage, isPy3k, pycurl, six, rpm, python-dateutil }:
 
 buildPythonPackage rec {
   pname = "koji";
@@ -10,7 +10,7 @@ buildPythonPackage rec {
     sha256 = "0a3kn3qvspvx15imgzzzjsbvw6bqmbk29apbliqwifa9cj7pvb40";
   };
 
-  propagatedBuildInputs = [ pycurl six rpm dateutil ];
+  propagatedBuildInputs = [ pycurl six rpm python-dateutil ];
 
   # Judging from SyntaxError
   disabled = isPy3k;

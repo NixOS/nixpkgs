@@ -8,7 +8,7 @@
 { fetchurl, stdenv, lua, unzip, pkg-config
 , pcre, oniguruma, gnulib, tre, glibc, sqlite, openssl, expat
 , autoreconfHook, gnum4
-, mysql, postgresql, cyrus_sasl
+, postgresql, cyrus_sasl
 , fetchFromGitHub, which, writeText
 , pkgs
 , lib
@@ -83,7 +83,7 @@ with self; {
   };
 
 
-  inherit toLuaModule lua-setup-hook;
+  inherit toLuaModule hasLuaModule lua-setup-hook;
   inherit buildLuarocksPackage buildLuaApplication;
   inherit requiredLuaModules luaOlder luaAtLeast
     isLua51 isLua52 isLua53 isLuaJIT lua callPackage;
@@ -99,8 +99,8 @@ with self; {
 
   luarocks-nix = callPackage ../development/tools/misc/luarocks/luarocks-nix.nix { };
 
-  luxio = buildLuaPackage rec {
-    name = "luxio-${version}";
+  luxio = buildLuaPackage {
+    pname = "luxio";
     version = "13";
 
     src = fetchurl {

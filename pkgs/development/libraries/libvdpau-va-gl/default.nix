@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, cmake, pkg-config, libX11, libpthreadstubs, libXau, libXdmcp
-, libXext, libvdpau, glib, libva, ffmpeg_3, libGLU }:
+, libXext, libvdpau, glib, libva, libGLU }:
 
 stdenv.mkDerivation rec {
   pname = "libvdpau-va-gl";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ libX11 libpthreadstubs libXau libXdmcp libXext libvdpau glib libva ffmpeg_3 libGLU ];
+  buildInputs = [ libX11 libpthreadstubs libXau libXdmcp libXext libvdpau glib libva libGLU ];
 
   doCheck = false; # fails. needs DRI access
 

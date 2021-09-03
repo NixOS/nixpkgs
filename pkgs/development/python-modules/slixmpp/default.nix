@@ -13,13 +13,13 @@
 
 buildPythonPackage rec {
   pname = "slixmpp";
-  version = "1.7.0";
+  version = "1.7.1";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-fy7sRKS7ih4JmjOW/noL8qJ1xWVpQLbBbObHnMwT3Bc=";
+    sha256 = "sha256-mvg23FdHJZeIZRcm8GLWmm9DDTBt29jmsUHB/smVSec=";
   };
 
   patches = [

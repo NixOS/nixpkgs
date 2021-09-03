@@ -4,7 +4,10 @@ with lib; mkCoqDerivation {
 
   namePrefix = [ "coq" "mathcomp" ];
   pname = "multinomials";
+  opam-name = "coq-mathcomp-multinomials";
+
   owner = "math-comp";
+
   inherit version;
   defaultVersion =  with versions; switch [ coq.version mathcomp.version ] [
       { cases = [ (range "8.10" "8.13") "1.12.0" ];             out = "1.5.4"; }

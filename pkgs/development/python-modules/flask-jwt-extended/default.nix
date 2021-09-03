@@ -1,15 +1,15 @@
-{ lib, buildPythonPackage, fetchPypi, dateutil, flask, pyjwt, werkzeug, pytest }:
+{ lib, buildPythonPackage, fetchPypi, python-dateutil, flask, pyjwt, werkzeug, pytest }:
 
 buildPythonPackage rec {
   pname = "Flask-JWT-Extended";
-  version = "3.25.1";
+  version = "4.2.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bbf4467f41c56cf1fd8a5870d2556f419c572aad2b4085757581c3f9b4d7767a";
+    sha256 = "22b8ffa7587d50aaf65f3009f1d55ef7287da8260eaf4655a5837e33479216c3";
   };
 
-  propagatedBuildInputs = [ dateutil flask pyjwt werkzeug ];
+  propagatedBuildInputs = [ python-dateutil flask pyjwt werkzeug ];
   checkInputs = [ pytest ];
 
   checkPhase = ''

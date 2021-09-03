@@ -3,8 +3,6 @@
 rec {
   cuda-samplesPackages = callPackage ./cuda-samples { };
   inherit (cuda-samplesPackages)
-    cuda-samples_cudatoolkit_9
-    cuda-samples_cudatoolkit_9_2
     cuda-samples_cudatoolkit_10
     cuda-samples_cudatoolkit_10_0
     cuda-samples_cudatoolkit_10_1

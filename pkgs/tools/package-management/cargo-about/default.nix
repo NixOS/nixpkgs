@@ -1,16 +1,18 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{ lib, rustPlatform, fetchFromGitHub, stdenv, libiconv }:
 rustPlatform.buildRustPackage rec {
   pname = "cargo-about";
-  version = "0.2.3";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "EmbarkStudios";
     repo = "cargo-about";
     rev = version;
-    sha256 = "1jdp5ksxm4rsqhirgl5zwpiahrz2lx046pkvf6xvr6ms70l2xiwj";
+    sha256 = "sha256-MsXNneKj2xCci1guj1TKcIrX7XByJ5/lWUmjxAsgzPY=";
   };
 
-  cargoSha256 = "07bjxsg5kgx8dg3wf6mvi5460db206l68irqc21hz10plz5llmnr";
+  cargoSha256 = "sha256-ssAmY+o+/2+C9sol+PeFlpNwVuN5JNoofgkr3cUW+S4=";
+
+  buildInputs = lib.optional stdenv.isDarwin libiconv;
 
   meta = with lib; {
     description = "Cargo plugin to generate list of all licenses for a crate";

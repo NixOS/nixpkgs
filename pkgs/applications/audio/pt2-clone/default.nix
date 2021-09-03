@@ -2,23 +2,23 @@
 , fetchFromGitHub
 , cmake
 , nixosTests
-, alsaLib
+, alsa-lib
 , SDL2
 }:
 
 stdenv.mkDerivation rec {
   pname = "pt2-clone";
-  version = "1.28";
+  version = "1.32";
 
   src = fetchFromGitHub {
     owner = "8bitbubsy";
     repo = "pt2-clone";
     rev = "v${version}";
-    sha256 = "1c2x43f46l7556kl9y9qign0g6ywdkh7ywkzv6c9y63n68ph20x2";
+    sha256 = "sha256-U1q4xCOzV7n31WgCTGlEXvZaUT/TP797cOAHkecQaLo=";
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ SDL2 ] ++ lib.optional stdenv.isLinux alsaLib;
+  buildInputs = [ SDL2 ] ++ lib.optional stdenv.isLinux alsa-lib;
 
   passthru.tests = {
     pt2-clone-opens = nixosTests.pt2-clone;

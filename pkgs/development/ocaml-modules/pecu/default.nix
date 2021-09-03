@@ -1,21 +1,21 @@
-{ lib, buildDunePackage, ocaml, fetchurl, fmt, alcotest }:
+{ lib, buildDunePackage, ocaml, fetchurl, fmt, alcotest, crowbar, astring }:
 
 buildDunePackage rec {
   pname = "pecu";
-  version = "0.5";
+  version = "0.6";
 
   useDune2 = true;
 
   minimumOCamlVersion = "4.03";
 
   src = fetchurl {
-    url = "https://github.com/mirage/pecu/releases/download/v0.5/pecu-v0.5.tbz";
-    sha256 = "713753cd6ba3f4609a26d94576484e83ffef7de5f2208a2993576a1b22f0e0e7";
+    url = "https://github.com/mirage/pecu/releases/download/v${version}/pecu-v${version}.tbz";
+    sha256 = "a9d2b7da444c83b20f879f6c3b7fc911d08ac1e6245ad7105437504f9394e5c7";
   };
 
-  # fmt availability
-  doCheck = lib.versionAtLeast ocaml.version "4.05";
-  checkInputs = [ fmt alcotest ];
+  # crowbar availability
+  doCheck = lib.versionAtLeast ocaml.version "4.08";
+  checkInputs = [ fmt alcotest crowbar astring ];
 
   meta = with lib; {
     description = "Encoder/Decoder of Quoted-Printable (RFC2045 & RFC2047)";

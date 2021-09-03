@@ -1,18 +1,33 @@
-{ stdenv, lib, fetchurl, makeWrapper, pkg-config, udev, dbus, pcsclite
-, wget, coreutils, perlPackages
+{ stdenv
+, lib
+, fetchurl
+, makeWrapper
+, pkg-config
+, systemd
+, dbus
+, pcsclite
+, wget
+, coreutils
+, perlPackages
 }:
 
-let deps = lib.makeBinPath [ wget coreutils ];
-
-in stdenv.mkDerivation rec {
-  name = "pcsc-tools-1.5.7";
+stdenv.mkDerivation rec {
+  pname = "pcsc-tools";
+  version = "1.5.7";
 
   src = fetchurl {
-    url = "http://ludovic.rousseau.free.fr/softwares/pcsc-tools/${name}.tar.bz2";
+    url = "http://ludovic.rousseau.free.fr/softwares/pcsc-tools/${pname}-${version}.tar.bz2";
     sha256 = "17b9jxvcxmn007lavan20l25v4jvm6dqc4x9dlqzbg6mjs28zsp0";
   };
 
-  buildInputs = [ udev dbus perlPackages.perl pcsclite ];
+  postPatch = ''
+    substituteInPlace ATR_analysis \
+      --replace /usr/local/pcsc /etc/pcsc \
+      --replace /usr/share/pcsc $out/share/pcsc
+  '';
+
+  buildInputs = [ dbus perlPackages.perl pcsclite ]
+    ++ lib.optional stdenv.isLinux systemd;
 
   nativeBuildInputs = [ makeWrapper pkg-config ];
 
@@ -24,14 +39,16 @@ in stdenv.mkDerivation rec {
     wrapProgram $out/bin/ATR_analysis \
       --set PERL5LIB "${with perlPackages; makePerlPath [ pcscperl ]}"
     wrapProgram $out/bin/pcsc_scan \
-      --set PATH "$out/bin:${deps}"
+      --prefix PATH : "$out/bin:${lib.makeBinPath [ coreutils wget ]}"
+
+    install -Dm444 -t $out/share/pcsc smartcard_list.txt
   '';
 
   meta = with lib; {
     description = "Tools used to test a PC/SC driver, card or reader";
     homepage = "http://ludovic.rousseau.free.fr/softwares/pcsc-tools/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.linux;
   };
 }

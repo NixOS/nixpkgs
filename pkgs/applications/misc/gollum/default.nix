@@ -1,5 +1,5 @@
 { lib, stdenv, bundlerEnv, ruby, makeWrapper, bundlerUpdateScript
-, git }:
+, git, docutils, perl }:
 
 stdenv.mkDerivation rec {
   pname = "gollum";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  phases = [ "installPhase" ];
+  dontUnpack = true;
 
   installPhase = let
     env = bundlerEnv {
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   in ''
     mkdir -p $out/bin
     makeWrapper ${env}/bin/gollum $out/bin/gollum \
-      --prefix PATH ":" ${lib.makeBinPath [ git ]}
+      --prefix PATH ":" ${lib.makeBinPath [ git docutils perl]}
     makeWrapper ${env}/bin/gollum-migrate-tags $out/bin/gollum-migrate-tags \
       --prefix PATH ":" ${lib.makeBinPath [ git ]}
   '';

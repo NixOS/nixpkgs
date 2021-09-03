@@ -12,11 +12,11 @@
 
 buildPythonPackage rec {
   pname = "yq";
-  version = "2.12.0";
+  version = "2.12.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-HSrUA1BNMGtSWLhsaY+YVtetWLe7F6K4dWkaanuMTCA=";
+    sha256 = "2f156d0724b61487ac8752ed4eaa702a5737b804d5afa46fa55866951cd106d2";
   };
 
   patches = [

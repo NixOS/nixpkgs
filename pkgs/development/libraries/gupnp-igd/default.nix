@@ -10,7 +10,7 @@
 , docbook_xml_dtd_412
 , glib
 , gupnp
-, gnome3
+, gnome
 }:
 
 stdenv.mkDerivation rec {
@@ -44,11 +44,14 @@ stdenv.mkDerivation rec {
     "-Dgtk_doc=true"
   ];
 
-  doCheck = true;
+  # Seems to get stuck sometimes.
+  # https://github.com/NixOS/nixpkgs/issues/119288
+  #doCheck = true;
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
     };
   };
 

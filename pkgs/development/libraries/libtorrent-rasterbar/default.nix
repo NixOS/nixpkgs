@@ -3,7 +3,7 @@
 }:
 
 let
-  version = "2.0.1";
+  version = "2.0.3";
 
   # Make sure we override python, so the correct version is chosen
   boostPython = boost.override { enablePython = true; inherit python; };
@@ -16,7 +16,7 @@ in stdenv.mkDerivation {
     owner = "arvidn";
     repo = "libtorrent";
     rev = "v${version}";
-    sha256 = "04ppw901babkfkis89pyb8kiyn39kb21k1s838xjq5ghbral1b1c";
+    sha256 = "0c5g2chylhkwwssfab9gw0b7bm3raj08yzgia7j4d044lp8gflnd";
     fetchSubmodules = true;
   };
 
@@ -41,7 +41,6 @@ in stdenv.mkDerivation {
     description = "A C++ BitTorrent implementation focusing on efficiency and scalability";
     license = licenses.bsd3;
     maintainers = [ maintainers.phreedom ];
-    broken = stdenv.isDarwin;
     platforms = platforms.unix;
   };
 }

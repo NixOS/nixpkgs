@@ -1,15 +1,15 @@
-{ lib, mkXfceDerivation, gobject-introspection, gtk2, gtk3, libICE, libSM
-, libstartup_notification, libxfce4util, xfconf }:
+{ lib, mkXfceDerivation, gobject-introspection, vala, gtk3, libICE, libSM
+, libstartup_notification, libgtop, epoxy, libxfce4util, xfconf }:
 
 mkXfceDerivation {
   category = "xfce";
   pname = "libxfce4ui";
-  version = "4.14.1";
+  version = "4.16.0";
 
-  sha256 = "0fnncf30s51qhgixn57z4d021pjjhzgsg2x69w4dy68vff2347qy";
+  sha256 = "sha256-YmawNgkCM2xwoMKZrY9SxRhm2t0tsmk2j2+grW9zPCk=";
 
-  nativeBuildInputs = [ gobject-introspection ];
-  buildInputs =  [ gtk2 gtk3 libstartup_notification xfconf ];
+  nativeBuildInputs = [ gobject-introspection vala ];
+  buildInputs =  [ gtk3 libstartup_notification libgtop epoxy xfconf ];
   propagatedBuildInputs = [ libxfce4util libICE libSM ];
 
   configureFlags = [
@@ -18,6 +18,6 @@ mkXfceDerivation {
 
   meta = with lib; {
     description = "Widgets library for Xfce";
-    license = licenses.lgpl2Plus;
+    license = with licenses; [ lgpl2Plus lgpl21Plus ];
   };
 }

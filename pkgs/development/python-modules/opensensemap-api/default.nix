@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "opensensemap-api";
-  version = "0.1.5";
+  version = "0.1.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1f3iqwl8ynvrkdd961v2hjsbldwbr217pv5pay2m5f0m974bhblx";
+    sha256 = "sha256-e60aVIoKFqo++WJHUYGutugkjB8YgyNQgJbILgAyOOY=";
   };
 
   propagatedBuildInputs = [

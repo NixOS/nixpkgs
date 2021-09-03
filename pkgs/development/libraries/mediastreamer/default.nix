@@ -1,14 +1,14 @@
-{ alsaLib
+{ alsa-lib
 , bctoolbox
 , bzrtp
 , cmake
 , doxygen
 , fetchFromGitLab
-, fetchpatch
-, ffmpeg_3
+, ffmpeg
 , glew
 , gsm
 , intltool
+, lib
 , libGL
 , libGLU
 , libX11
@@ -24,16 +24,16 @@
 , libvpx
 , ortp
 , pkg-config
-, python
+, python3
 , SDL
 , speex
 , srtp
-, lib, stdenv
+, stdenv
 }:
 
 stdenv.mkDerivation rec {
   pname = "mediastreamer2";
-  version = "4.4.32";
+  version = "4.5.15";
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     group = "BC";
     repo = pname;
     rev = version;
-    sha256 = "sha256-kaNQuhxsUx74hBhfpB76NuNTT+8h74nfiv1re43tHps=";
+    sha256 = "sha256-n/EuXEQ9nJKC32PMvWkfP1G+E6uQQuu1/A168n8/cIY=";
   };
 
   patches = [
@@ -58,14 +58,14 @@ stdenv.mkDerivation rec {
     doxygen
     intltool
     pkg-config
-    python
+    python3
   ];
 
   propagatedBuildInputs = [
-    alsaLib
+    alsa-lib
     bctoolbox
     bzrtp
-    ffmpeg_3
+    ffmpeg
     glew
     gsm
     libGL
@@ -87,6 +87,8 @@ stdenv.mkDerivation rec {
     srtp
   ];
 
+  strictDeps = true;
+
   # Do not build static libraries
   cmakeFlags = [ "-DENABLE_STATIC=NO" ];
 
@@ -102,7 +104,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A powerful and lightweight streaming engine specialized for voice/video telephony applications";
     homepage = "http://www.linphone.org/technical-corner/mediastreamer2";
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ jluttine ];
   };

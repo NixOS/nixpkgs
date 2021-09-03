@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "dicom2nifti";
-  version = "2.2.12";
+  version = "2.3.0";
   disabled = isPy27;
 
   # no tests in PyPI dist
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "icometrix";
     repo = pname;
     rev = version;
-    sha256 = "0ddzaw0yasyi2wsh7a6r73cdcmdfbb0nh0k0n4yxp9vnkw1ag5z4";
+    sha256 = "sha256-QSu9CGXFjDpI25Cy6QSbrwiQ2bwsVezCUxSovRLs6AI=";
   };
 
   propagatedBuildInputs = [ nibabel numpy pydicom scipy setuptools ];

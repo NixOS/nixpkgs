@@ -31,6 +31,5 @@ mkDerivation {
     homepage = "https://centrabit.com/";
     license = licenses.gpl3;
     platforms = qt5.qtbase.meta.platforms;
-    maintainers = [ maintainers.ehmry ];
   };
 }

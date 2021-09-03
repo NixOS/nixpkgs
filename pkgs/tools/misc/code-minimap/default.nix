@@ -1,20 +1,24 @@
 { lib
+, stdenv
 , rustPlatform
 , fetchFromGitHub
+, libiconv
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "code-minimap";
-  version = "0.5.0";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "wfxr";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-t+zHAneINLd8JHkhaR+aF55gAWJmphYEqbx74CqAmM8=";
+    sha256 = "sha256-eCHmMtndcQJqKmjxhkcLvjMUXApkSnH+7qyG7PDfcwo=";
   };
 
-  cargoSha256 = "sha256-eVh+6gTzKTelZ3MypkqYMXHr9QwaNG8H0xS82kilR/s=";
+  cargoSha256 = "sha256-wKCANWznOJMlQ8T2q39NNNRmgPYMpbkJhXpxojusNsE=";
+
+  buildInputs = lib.optional stdenv.isDarwin libiconv;
 
   meta = with lib; {
     description = "A high performance code minimap render";

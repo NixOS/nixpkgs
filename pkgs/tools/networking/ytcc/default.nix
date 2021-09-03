@@ -2,18 +2,25 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "ytcc";
-  version = "2.0.1";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "woefe";
     repo = "ytcc";
     rev = "v${version}";
-    sha256 = "11gwpqmq611j07pjscch28jsrfgyzy69ph2w1miz3arqmxz7dqjp";
+    sha256 = "1q0w3b7r93416s28qra608n0d7cjh95nwkzgg23z5hp5sq3w3izr";
   };
 
   nativeBuildInputs = [ gettext ];
 
-  propagatedBuildInputs = with python3Packages; [ click feedparser lxml sqlalchemy youtube-dl ];
+  propagatedBuildInputs = with python3Packages; [
+    click
+    feedparser
+    lxml
+    sqlalchemy
+    youtube-dl
+    wcwidth
+  ];
 
   checkInputs = with python3Packages; [ nose pytestCheckHook ];
 
@@ -24,6 +31,11 @@ python3Packages.buildPythonApplication rec {
     "download_videos"
     "update_all"
     "add_channel_duplicate"
+    "test_subscribe"
+    "test_import"
+    "test_import_duplicate"
+    "test_update"
+    "test_download"
   ];
 
   meta = {

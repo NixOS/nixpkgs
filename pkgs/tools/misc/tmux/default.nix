@@ -1,8 +1,8 @@
 { lib, stdenv
 , fetchFromGitHub
+, fetchpatch
 , autoreconfHook
 , pkg-config
-, makeWrapper
 , bison
 , ncurses
 , libevent
@@ -21,7 +21,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "tmux";
-  version = "3.1c";
+  version = "3.2a";
 
   outputs = [ "out" "man" ];
 
@@ -29,8 +29,16 @@ stdenv.mkDerivation rec {
     owner = "tmux";
     repo = "tmux";
     rev = version;
-    sha256 = "1fqgpzfas85dn0sxlvvg6rj488jwgnxs8d3gqcm8lgs211m9qhcf";
+    sha256 = "0143ylfk7zsl3xmiasb768238gr582cfhsgv3p0h0f13bp8d6q09";
   };
+
+  patches = [
+    # See https://github.com/tmux/tmux/pull/2755
+    (fetchpatch {
+      url = "https://github.com/tmux/tmux/commit/d0a2683120ec5a33163a14b0e1b39d208745968f.patch";
+      sha256 = "070knpncxfxi6k4q64jwi14ns5vm3606cf402h1c11cwnaa84n1g";
+    })
+  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -41,13 +49,14 @@ stdenv.mkDerivation rec {
   buildInputs = [
     ncurses
     libevent
-    makeWrapper
   ];
 
   configureFlags = [
     "--sysconfdir=/etc"
     "--localstatedir=/var"
   ];
+
+  enableParallelBuilding = true;
 
   postInstall = ''
     mkdir -p $out/share/bash-completion/completions
@@ -71,7 +80,7 @@ stdenv.mkDerivation rec {
           * Terminal locking, manually or after a timeout.
           * A clean, easily extended, BSD-licensed codebase, under active development.
       '';
-
+    changelog = "https://github.com/tmux/tmux/raw/${version}/CHANGES";
     license = lib.licenses.bsd3;
 
     platforms = lib.platforms.unix;

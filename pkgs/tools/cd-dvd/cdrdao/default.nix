@@ -1,10 +1,11 @@
 {lib, stdenv, fetchurl, libvorbis, libmad, pkg-config, libao}:
 
-stdenv.mkDerivation {
-  name = "cdrdao-1.2.3";
+stdenv.mkDerivation rec {
+  pname = "cdrdao";
+  version = "1.2.3";
 
   src = fetchurl {
-    url = "mirror://sourceforge/cdrdao/cdrdao-1.2.3.tar.bz2";
+    url = "mirror://sourceforge/cdrdao/cdrdao-${version}.tar.bz2";
     sha256 = "0pmpgx91j984snrsxbq1dgf3ximks2dfh1sqqmic72lrls7wp4w1";
   };
 

@@ -1,22 +1,25 @@
-{ cargo, fetchFromGitHub, makeWrapper, pkg-config, rustPlatform, lib, stdenv, gcc, Security, cmake }:
+{ cargo, fetchFromGitHub, makeWrapper, pkg-config, rustPlatform, lib, stdenv
+, gcc, cmake, libiconv, CoreServices, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "evcxr";
-  version = "0.8.1";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "evcxr";
     rev = "v${version}";
-    sha256 = "sha256-5YbvPDyGaoKPelLep2tVica08SI7Cyo9SLMnE6dmWe4=";
+    sha256 = "sha256-JziLEsY6kF5UeDt17q/HDrTlNtHj7DWy1tTq3s2eZHE=";
   };
 
-  cargoSha256 = "sha256-hqVmNBrvagqhGPWTaBXuY8lULolWIoR5ovEhH5k1tz4=";
+  cargoSha256 = "sha256-I164eXgc/yiKKskloh6FGYD3bLCLWXaM6uWa01PRDXs=";
 
   RUST_SRC_PATH = "${rustPlatform.rustLibSrc}";
 
   nativeBuildInputs = [ pkg-config makeWrapper cmake ];
-  buildInputs = lib.optional stdenv.isDarwin Security;
+  buildInputs = lib.optionals stdenv.isDarwin
+    [ libiconv CoreServices Security ];
+
   postInstall = let
     wrap = exe: ''
       wrapProgram $out/bin/${exe} \

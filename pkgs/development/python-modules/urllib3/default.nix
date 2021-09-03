@@ -1,12 +1,11 @@
 { lib
-, stdenv
 , brotli
 , buildPythonPackage
-, certifi
 , cryptography
-, dateutil
+, python-dateutil
 , fetchPypi
 , idna
+, isPy27
 , mock
 , pyopenssl
 , pysocks
@@ -20,25 +19,24 @@
 
 buildPythonPackage rec {
   pname = "urllib3";
-  version = "1.26.3";
-  disabled = pythonOlder "3.6";
+  version = "1.26.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "de3eedaad74a2683334e282005cd8d7f22f4d55fa690a2a1020a416cb0a47e73";
+    sha256 = "sha256-9XtMFsYvonYLfj2Xw1slVRL7a1miWXMPNroyzp+ONC8=";
   };
 
   propagatedBuildInputs = [
     brotli
-    certifi
+    pysocks
+  ] ++ lib.optionals isPy27 [
     cryptography
     idna
     pyopenssl
-    pysocks
   ];
 
   checkInputs = [
-    dateutil
+    python-dateutil
     mock
     pytest-freezegun
     pytest-timeout

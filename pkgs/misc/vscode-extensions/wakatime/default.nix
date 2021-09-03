@@ -13,8 +13,8 @@ in
     };
 
     postPatch = ''
-      mkdir -p wakatime-master
-      cp -rt wakatime-master --no-preserve=all ${wakatime}/lib/python*/site-packages/wakatime
+      mkdir wakatime-cli
+      ln -s ${wakatime}/bin/wakatime ./wakatime-cli/wakatime-cli
     '';
 
     meta = with lib; {

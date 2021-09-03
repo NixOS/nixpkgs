@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, ffmpeg_3, imagemagick, dzen2, xorg }:
+{ lib, stdenv, fetchFromGitHub, makeWrapper, ffmpeg, imagemagick, dzen2, xorg }:
 
 stdenv.mkDerivation {
   pname = "xscast-unstable";
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
     patchShebangs $out/bin
 
     wrapProgram "$out/bin/xscast" \
-      --prefix PATH : ${lib.makeBinPath [ ffmpeg_3 dzen2 xorg.xwininfo xorg.xinput xorg.xmodmap imagemagick ]}
+      --prefix PATH : ${lib.makeBinPath [ ffmpeg dzen2 xorg.xwininfo xorg.xinput xorg.xmodmap imagemagick ]}
 
     runHook postInstall
   '';
@@ -30,6 +30,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/KeyboardFire/xscast";
     license = licenses.mit;
     description = "Screencasts of windows with list of keystrokes overlayed";
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ ];
   };
 }

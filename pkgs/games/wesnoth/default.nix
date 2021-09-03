@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wesnoth";
-  version = "1.14.15";
+  version = "1.14.17";
 
   src = fetchFromGitHub {
     rev = version;
     owner = "wesnoth";
     repo = "wesnoth";
-    sha256 = "sha256-HbQy5yhNe6HFydipqh2wWcyLfIjbdRjcBQaqAOtBJsY=";
+    sha256 = "RZ38MbUaUjfajo9wXSfDt8NHBySC+ODlgZAPf2NPblc=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = "https://www.wesnoth.org/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ abbradar ];
     platforms = platforms.unix;
   };

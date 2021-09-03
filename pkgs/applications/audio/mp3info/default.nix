@@ -1,10 +1,11 @@
 { fetchurl, lib, stdenv, ncurses, pkg-config, gtk2 }:
 
 stdenv.mkDerivation rec {
-  name = "mp3info-0.8.5a";
+  pname = "mp3info";
+  version = "0.8.5a";
 
   src = fetchurl {
-    url = "ftp://ftp.ibiblio.org/pub/linux/apps/sound/mp3-utils/mp3info/${name}.tgz";
+    url = "ftp://ftp.ibiblio.org/pub/linux/apps/sound/mp3-utils/${pname}/${pname}-${version}.tgz";
     sha256 = "042f1czcs9n2sbqvg4rsvfwlqib2gk976mfa2kxlfjghx5laqf04";
   };
 

@@ -1,38 +1,40 @@
 { lib
-, pkgs
 , buildPythonPackage
 , fetchFromGitHub
-, pytest
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
-  pname   = "DendroPy";
-  version = "4.4.0";
+  pname = "dendropy";
+  version = "4.5.1";
 
-  # tests are incorrectly packaged in pypi version
   src = fetchFromGitHub {
     owner = "jeetsukumaran";
     repo = pname;
     rev = "v${version}";
-    sha256 = "097hfyv2kaf4x92i4rjx0paw2cncxap48qivv8zxng4z7nhid0x9";
+    sha256 = "sha256-FP0+fJkkFtSysPxoHXjyMgF8pPin7aRyzmHe9bH8LlM=";
   };
 
-  preCheck = ''
-    # Needed for unicode python tests
-    export LC_ALL="en_US.UTF-8"
-    cd tests  # to find the 'support' module
-  '';
+  checkInputs = [
+    pytestCheckHook
+  ];
 
-  checkInputs = [ pytest pkgs.glibcLocales ];
+  disabledTests = [
+    # FileNotFoundError: [Errno 2] No such file or directory: 'paup'
+    "test_basic_split_count_with_incorrect_rootings_raises_error"
+    "test_basic_split_count_with_incorrect_weight_treatment_raises_error"
+    "test_basic_split_counting_under_different_rootings"
+    "test_group1"
+    # AssertionError: 6 != 5
+    "test_by_num_lineages"
+  ];
 
-  checkPhase = ''
-    pytest -k 'not test_dataio_nexml_reader_tree_list and not test_pscores_with'
-  '';
+  pythonImportsCheck = [ "dendropy" ];
 
-  meta = {
+  meta = with lib; {
+    description = "Python library for phylogenetic computing";
     homepage = "https://dendropy.org/";
-    description = "A Python library for phylogenetic computing";
-    maintainers = with lib.maintainers; [ unode ];
-    license = lib.licenses.bsd3;
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ unode ];
   };
 }

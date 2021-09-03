@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, makeWrapper, pkg-config, cmake, fcitx, gtk3, isocodes, gnome3 }:
+{ lib, stdenv, fetchurl, makeWrapper, pkg-config, cmake, fcitx, gtk3, isocodes, gnome }:
 
 stdenv.mkDerivation rec {
   name = "fcitx-configtool-0.4.10";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake pkg-config makeWrapper ];
-  buildInputs = [ fcitx isocodes gtk3 gnome3.adwaita-icon-theme ];
+  buildInputs = [ fcitx isocodes gtk3 gnome.adwaita-icon-theme ];
 
   # Patch paths to `fcitx-remote`
   prePatch = ''

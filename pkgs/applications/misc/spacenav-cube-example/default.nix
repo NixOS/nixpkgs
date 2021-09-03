@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ libX11 mesa_glu libspnav ];
 
-  configureFlags = [ "--disable-debug" ];
+  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   installPhase = ''
     runHook preInstall

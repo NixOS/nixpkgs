@@ -5,8 +5,8 @@
 with lib;
 
 {
-  meta = {
-    maintainers = with maintainers; [ worldofpeace ];
+  meta = with lib; {
+    maintainers = with maintainers; [ ] ++ teams.pantheon.members;
   };
 
   ###### interface

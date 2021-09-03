@@ -1,7 +1,8 @@
 { lib, stdenv, fetchurl, SDL, SDL_image, SDL_ttf, SDL_mixer }:
 
 stdenv.mkDerivation {
-  name = "beret-1.2.0";
+  pname = "beret";
+  version = "1.2.0";
 
   buildInputs = [ SDL SDL_image SDL_ttf SDL_mixer ];
 

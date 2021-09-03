@@ -47,6 +47,7 @@ Options:
       --deepClone     Clone the entire repository.
       --no-deepClone  Make a shallow clone of just the required ref.
       --leave-dotGit  Keep the .git directories.
+      --fetch-lfs     Fetch git Large File Storage (LFS) files.
       --fetch-submodules Fetch submodules.
       --builder       Clone as fetchgit does, but url, rev, and out option are mandatory.
       --quiet         Only print the final json summary.
@@ -139,7 +140,7 @@ url_to_name(){
     fi
 }
 
-# Fetch everything and checkout the right sha1
+# Fetch and checkout the right sha1
 checkout_hash(){
     local hash="$1"
     local ref="$2"
@@ -148,6 +149,7 @@ checkout_hash(){
         hash=$(hash_from_ref "$ref")
     fi
 
+    clean_git fetch ${builder:+--progress} --depth=1 origin "$hash" || \
     clean_git fetch -t ${builder:+--progress} origin || return 1
 
     local object_type=$(git cat-file -t "$hash")
@@ -298,7 +300,9 @@ clone_user_rev() {
     local rev="${3:-HEAD}"
 
     if [ -n "$fetchLFS" ]; then
-        HOME=$TMPDIR
+        tmpHomePath="$(mktemp -d -p nix-prefetch-git-tmp-home-XXXXXXXXXX)"
+        exit_handlers+=(remove_tmpHomePath)
+        HOME="$tmpHomePath"
         git lfs install
     fi
 
@@ -394,6 +398,7 @@ print_results() {
   "date": "$(json_escape "$commitDateStrict8601")",
   "path": "$(json_escape "$finalPath")",
   "$(json_escape "$hashType")": "$(json_escape "$hash")",
+  "fetchLFS": $([[ -n "$fetchLFS" ]] && echo true || echo false),
   "fetchSubmodules": $([[ -n "$fetchSubmodules" ]] && echo true || echo false),
   "deepClone": $([[ -n "$deepClone" ]] && echo true || echo false),
   "leaveDotGit": $([[ -n "$leaveDotGit" ]] && echo true || echo false)
@@ -404,6 +409,10 @@ EOF
 
 remove_tmpPath() {
     rm -rf "$tmpPath"
+}
+
+remove_tmpHomePath() {
+    rm -rf "$tmpHomePath"
 }
 
 if test -n "$QUIET"; then

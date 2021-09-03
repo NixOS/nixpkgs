@@ -2,10 +2,11 @@
 , sqlite, libsoup, libnice, gnutls}:
 
 stdenv.mkDerivation rec {
-  name = "telepathy-gabble-0.18.4";
+  pname = "telepathy-gabble";
+  version = "0.18.4";
 
   src = fetchurl {
-    url = "https://telepathy.freedesktop.org/releases/telepathy-gabble/${name}.tar.gz";
+    url = "https://telepathy.freedesktop.org/releases/telepathy-gabble/telepathy-gabble-${version}.tar.gz";
     sha256 = "174nlkqm055vrhv11gy73m20jbsggcb0ddi51c7s9m3j5ibr2p0i";
   };
 

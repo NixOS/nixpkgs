@@ -38,11 +38,11 @@ in
       default = pkgs.linuxPackages;
       type = types.unspecified // { merge = mergeEqualOption; };
       apply = kernelPackages: kernelPackages.extend (self: super: {
-        kernel = super.kernel.override {
+        kernel = super.kernel.override (originalArgs: {
           inherit randstructSeed;
-          kernelPatches = super.kernel.kernelPatches ++ kernelPatches;
+          kernelPatches = (originalArgs.kernelPatches or []) ++ kernelPatches;
           features = lib.recursiveUpdate super.kernel.features features;
-        };
+        });
       });
       # We don't want to evaluate all of linuxPackages for the manual
       # - some of it might not even evaluate correctly.

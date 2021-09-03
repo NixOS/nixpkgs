@@ -1,31 +1,49 @@
 { lib, stdenv
 , fetchurl
 , pkg-config
+, meson
+, ninja
 , udev
 , glib
 , gobject-introspection
-, gnome3
+, gnome
+, vala
 }:
 
 stdenv.mkDerivation rec {
   pname = "libgudev";
-  version = "234";
+  version = "236";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0drf39qhsdz35kwb18hnfj2ig4yfxhfks66m783zlhnvy2narbhv";
+    sha256 = "094mgjmwgsgqrr1i0vd20ynvlkihvs3vgbmpbrhswjsrdp86j0z5";
   };
 
-  nativeBuildInputs = [ pkg-config gobject-introspection ];
-  buildInputs = [ udev glib ];
+  nativeBuildInputs = [
+    pkg-config
+    gobject-introspection
+    meson
+    ninja
+    vala
+  ];
 
-  # There's a dependency cycle with umockdev and the tests fail to LD_PRELOAD anyway.
-  configureFlags = [ "--disable-umockdev" ];
+  buildInputs = [
+    udev
+    glib
+  ];
+
+  mesonFlags = [
+    # There's a dependency cycle with umockdev and the tests fail to LD_PRELOAD anyway
+    "-Dtests=disabled"
+  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    "-Dintrospection=disabled"
+    "-Dvapi=disabled"
+  ];
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "none";
     };

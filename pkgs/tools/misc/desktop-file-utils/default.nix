@@ -14,6 +14,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ glib libintl ];
 
+  postPatch = ''
+    substituteInPlace src/install.c \
+      --replace \"update-desktop-database\" \"$out/bin/update-desktop-database\"
+  '';
+
   setupHook = ./setup-hook.sh;
 
   meta = {

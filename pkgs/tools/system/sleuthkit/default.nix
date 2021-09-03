@@ -1,14 +1,14 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, libewf, afflib, openssl, zlib }:
 
 stdenv.mkDerivation rec {
-  version = "4.10.1";
+  version = "4.11.0";
   pname = "sleuthkit";
 
   src = fetchFromGitHub {
     owner = "sleuthkit";
     repo = "sleuthkit";
     rev = "${pname}-${version}";
-    sha256 = "142kkpkpawpqyc88pr6xdvlagw6djaah1schyjxq9qdq9cnqx0dw";
+    sha256 = "sha256-cY55zK6N3tyCLBJtZn4LhK9kLkikJjg640Pm/NA0ALY=";
   };
 
   postPatch = ''
@@ -29,6 +29,5 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.linux;
     license = lib.licenses.ipl10;
-    inherit version;
   };
 }

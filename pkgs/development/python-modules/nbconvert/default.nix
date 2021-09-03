@@ -30,6 +30,16 @@ buildPythonPackage rec {
     sha256 = "cbbc13a86dfbd4d1b5dee106539de0795b4db156c894c2c5dc382062bbc29002";
   };
 
+  # Add $out/share/jupyter to the list of paths that are used to search for
+  # various exporter templates
+  patches = [
+    ./templates.patch
+  ];
+
+  postPatch = ''
+    substituteAllInPlace ./nbconvert/exporters/templateexporter.py
+  '';
+
   checkInputs = [ pytestCheckHook glibcLocales ];
 
   propagatedBuildInputs = [

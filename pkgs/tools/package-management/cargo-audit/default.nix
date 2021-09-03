@@ -1,19 +1,39 @@
-{ stdenv, lib, rustPlatform, fetchFromGitHub, openssl, pkg-config, Security, libiconv }:
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, openssl
+, pkg-config
+, Security
+, libiconv
+}:
+
 rustPlatform.buildRustPackage rec {
   pname = "cargo-audit";
-  version = "0.13.1";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "RustSec";
-    repo = "cargo-audit";
-    rev = "v${version}";
-    sha256 = "1q8i2c3f8ir1pxkvla4dshz7n0cl97mjydc64xis5pph39f69yc1";
+    repo = "rustsec";
+    rev = "cargo-audit%2Fv${version}";
+    sha256 = "0pvb1m9277ysjzydjvx7viybi6bd23ch7sbjyx1wnz45ahrmia1j";
   };
 
-  cargoSha256 = "1b62mcj4gjz2arjf3r30k9qcg81i5x0149a4bfj39xdrz55gg0wh";
+  cargoSha256 = "0cf8kg8vhfqbrkm227rzyl3394n7fsqhqgq13qks7374h5d04haw";
 
-  buildInputs = [ openssl libiconv ] ++ lib.optionals stdenv.isDarwin [ Security ];
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
+  buildInputs = [
+    openssl
+    libiconv
+  ] ++ lib.optionals stdenv.isDarwin [
+    Security
+  ];
+
+  # enables `cargo audit fix`
+  cargoBuildFlags = [ "--features fix" ];
 
   # The tests require network access which is not available in sandboxed Nix builds.
   doCheck = false;

@@ -1,29 +1,12 @@
-{ buildPecl, lib, pcre', fetchpatch }:
+{ buildPecl, lib, pcre2 }:
 
 buildPecl {
   pname = "protobuf";
 
-  version = "3.14.0";
-  sha256 = "1ldc4s28hq61cfg8l4c06pgicj0ng7k37f28a0dnnbs7xkr7cibd";
+  version = "3.17.3";
+  sha256 = "05nn6ps271vwrbr9w08lyyzsszabnqhz1x0vbblg0q8y2xrmb6dl";
 
-  buildInputs = [ pcre' ];
-
-  patches = [
-    # TODO: remove with next update
-    (fetchpatch {
-      url = "https://github.com/protocolbuffers/protobuf/commit/823f351448f7c432bed40b89ee3309e0a94c1855.patch";
-      sha256 = "sha256-ozHtO8s9zvmh/+wBEge3Yn3n0pbpR3dAojJcuAg/G3s=";
-      stripLen = 4;
-      includes = [
-        "array.c"
-        "def.c"
-        "map.c"
-        "message.c"
-        "protobuf.h"
-        "wkt.inc"
-      ];
-    })
-  ];
+  buildInputs = [ pcre2 ];
 
   meta = with lib; {
     description = ''

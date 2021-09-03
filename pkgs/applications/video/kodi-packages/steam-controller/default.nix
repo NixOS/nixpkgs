@@ -16,7 +16,6 @@ buildKodiBinaryAddon rec {
   meta = with lib; {
     description = "Binary addon for steam controller.";
     platforms = platforms.all;
-    maintainers = with maintainers; [ edwtjo ];
+    maintainers = teams.kodi.members;
   };
-
 }

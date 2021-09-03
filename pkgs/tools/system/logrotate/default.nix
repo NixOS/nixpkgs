@@ -1,16 +1,17 @@
 { lib, stdenv, fetchFromGitHub, gzip, popt, autoreconfHook
 , mailutils ? null
+, aclSupport ? true, acl
 }:
 
 stdenv.mkDerivation rec {
   pname = "logrotate";
-  version = "3.18.0";
+  version = "3.18.1";
 
   src = fetchFromGitHub {
     owner = "logrotate";
     repo = "logrotate";
     rev = version;
-    sha256 = "sha256-OFGXwaTabyuIgeC2ON68m83rzVxomk8QL6xwyrVV654=";
+    sha256 = "sha256-OJOV++rtN9ry+l0c0eanpu/Pwu8cOHfyEaDWp3FZjkw=";
   };
 
   # Logrotate wants to access the 'mail' program; to be done.
@@ -22,7 +23,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ popt ];
+  buildInputs = [ popt ] ++ lib.optionals aclSupport [ acl ];
 
   meta = with lib; {
     homepage = "https://fedorahosted.org/releases/l/o/logrotate/";

@@ -9,18 +9,19 @@
 
 buildPythonPackage rec {
   pname = "pytest-httpx";
-  version = "0.11.0";
+  version = "0.12.1";
 
   src = fetchFromGitHub {
     owner = "Colin-b";
     repo = "pytest_httpx";
     rev = "v${version}";
-    sha256 = "08idd3y6khxjqkn46diqvkjvsl4w4pxhl6z1hspbkrj0pqwf9isi";
+    sha256 = "sha256-eyR0h0fW5a+L6QslTnM0TPvQCto06aMcKCE+b8LqHcQ=";
   };
+
+  buildInputs = [ pytest ];
 
   propagatedBuildInputs = [
     httpx
-    pytest
   ];
 
   checkInputs = [

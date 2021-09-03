@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitLab, meson, ninja, cmake
 , wrapGAppsHook, pkg-config, desktop-file-utils
 , appstream-glib, pythonPackages, glib, gobject-introspection
-, gtk3, webkitgtk, glib-networking, gnome3, gspell, texlive
-, shared-mime-info, haskellPackages, libhandy
+, gtk3, webkitgtk, glib-networking, gnome, gspell, texlive
+, shared-mime-info, libhandy, fira
 }:
 
 let
@@ -13,35 +13,37 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "apostrophe";
-  version = "2.3";
+  version = "2.4";
 
   src = fetchFromGitLab {
     owner  = "somas";
     repo   = pname;
     domain = "gitlab.gnome.org";
     rev    = "v${version}";
-    sha256 = "1ggrbbnhbnf6p3hs72dww3c9m1rvr4znggmvwcpj6i8v1a3kycnb";
+    sha256 = "1qzy3zhi18wf42m034s8kcmx9gl05j620x3hf6rnycq2fvy7g4gz";
   };
 
   nativeBuildInputs = [ meson ninja cmake pkg-config desktop-file-utils
     appstream-glib wrapGAppsHook ];
 
   buildInputs = [ glib pythonEnv gobject-introspection gtk3
-    gnome3.adwaita-icon-theme webkitgtk gspell texlive
+    gnome.adwaita-icon-theme webkitgtk gspell texlive
     glib-networking libhandy ];
 
   postPatch = ''
-    patchShebangs --build build-aux/meson_post_install.py
+    substituteInPlace data/media/css/web/base.css                                        \
+      --replace 'url("/app/share/fonts/FiraSans-Regular.ttf") format("ttf")'             \
+                'url("${fira}/share/fonts/opentype/FiraSans-Regular.otf") format("otf")' \
+      --replace 'url("/app/share/fonts/FiraMono-Regular.ttf") format("ttf")'             \
+                'url("${fira}/share/fonts/opentype/FiraMono-Regular.otf") format("otf")'
 
-    # get rid of unused distributed dependencies
-    rm -r ${pname}/pylocales
+    patchShebangs --build build-aux/meson_post_install.py
   '';
 
   preFixup = ''
     gappsWrapperArgs+=(
       --prefix PYTHONPATH : "$out/lib/python${pythonEnv.pythonVersion}/site-packages/"
       --prefix PATH : "${texlive}/bin"
-      --prefix PATH : "${haskellPackages.pandoc-citeproc}/bin"
       --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
     )
   '';

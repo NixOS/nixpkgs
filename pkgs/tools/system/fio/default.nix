@@ -1,22 +1,24 @@
 { lib, stdenv, fetchFromGitHub, makeWrapper
-, libaio, python, zlib
+, libaio, python3, zlib
 , withGnuplot ? false, gnuplot ? null }:
 
 stdenv.mkDerivation rec {
   pname = "fio";
-  version = "3.26";
+  version = "3.27";
 
   src = fetchFromGitHub {
     owner  = "axboe";
     repo   = "fio";
     rev    = "fio-${version}";
-    sha256 = "sha256-/Si0McndJ6Xp3ifDr+BStv89LmZyAgof95QkHGT8MGQ=";
+    sha256 = "sha256-/VzqmDbCTOOwFBMDj9nYuAW7ZJNM8B2LQ3QxReWG+iw=";
   };
 
-  buildInputs = [ python zlib ]
+  buildInputs = [ python3 zlib ]
     ++ lib.optional (!stdenv.isDarwin) libaio;
 
   nativeBuildInputs = [ makeWrapper ];
+
+  strictDeps = true;
 
   enableParallelBuilding = true;
 

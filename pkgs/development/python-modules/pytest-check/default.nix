@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "1i01i5ab06ic11na13gcacrlcs2ab6rmaii0yz0x06z5ynnljn6s";
   };
 
-  propagatedBuildInputs = [ pytest ];
+  buildInputs = [ pytest ];
   checkInputs = [ pytestCheckHook ];
 
   meta = with lib; {

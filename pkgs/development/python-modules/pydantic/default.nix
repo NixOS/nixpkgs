@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "pydantic";
-  version = "1.8";
+  version = "1.8.2";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "samuelcolvin";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-+HfnM/IrFlUyQJdiOYyaJUNenh8dLtd8CUJWSbn6hwQ=";
+    sha256 = "06162dss6mvi7wiy2lzxwvzajwxgy8b2fyym7qipaj7zibcqalq2";
   };
 
   propagatedBuildInputs = [

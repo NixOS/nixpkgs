@@ -6,26 +6,28 @@
 }:
 
 let
-  inherit (python3.pkgs) buildPythonApplication fetchPypi;
+  inherit (python3.pkgs) buildPythonApplication fetchPypi setuptools-scm;
 in
 buildPythonApplication rec {
   pname = "todoman";
-  version = "3.9.0";
+  version = "4.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e7e5cab13ecce0562b1f13f46ab8cbc079caed4b462f2371929f8a4abff2bcbe";
+    sha256 = "4c4d0c6533da8d553f3dd170c9c4ff3752eb11fd7177ee391414a39adfef60ad";
   };
+
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     installShellFiles
+    setuptools-scm
   ];
   propagatedBuildInputs = with python3.pkgs; [
     atomicwrites
     click
     click-log
     click-repl
-    configobj
     humanize
     icalendar
     parsedatetime
@@ -41,8 +43,8 @@ buildPythonApplication rec {
     freezegun
     hypothesis
     pytest
-    pytestrunner
-    pytestcov
+    pytest-runner
+    pytest-cov
     glibcLocales
   ];
 

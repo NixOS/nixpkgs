@@ -191,7 +191,7 @@ in
           ExecStop = "${cfg.package}/bin/consul leave";
         });
 
-        path = with pkgs; [ iproute gnugrep gawk consul ];
+        path = with pkgs; [ iproute2 gnugrep gawk consul ];
         preStart = ''
           mkdir -m 0700 -p ${dataDir}
           chown -R consul ${dataDir}
