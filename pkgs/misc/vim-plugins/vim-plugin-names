@@ -690,7 +690,7 @@ tamago324/compe-zsh
 tamago324/lir.nvim
 tami5/compe-conjure
 tami5/lispdocs.nvim
-tami5/sql.nvim
+tami5/sqlite.lua
 tbastos/vim-lua
 tbodt/deoplete-tabnine
 ternjs/tern_for_vim

@@ -5161,16 +5161,16 @@ final: prev:
     meta.homepage = "https://github.com/AndrewRadev/splitjoin.vim/";
   };
 
-  sql-nvim = buildVimPluginFrom2Nix {
-    pname = "sql.nvim";
+  sqlite-lua = buildVimPluginFrom2Nix {
+    pname = "sqlite.lua";
     version = "2021-09-03";
     src = fetchFromGitHub {
       owner = "tami5";
-      repo = "sql.nvim";
+      repo = "sqlite.lua";
       rev = "f1051e5ee1dbc9a41007f94433ff882e4243fafa";
       sha256 = "0vyb48x65ywsc7hdcp1ggmlah97866dpx4wmidjck15mqzkiwldz";
     };
-    meta.homepage = "https://github.com/tami5/sql.nvim/";
+    meta.homepage = "https://github.com/tami5/sqlite.lua/";
   };
 
   srcery-vim = buildVimPluginFrom2Nix {
