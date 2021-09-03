@@ -108,6 +108,12 @@ in {
       source = "${cfg.package}/bin/smtpctl";
     };
 
+    security.wrappers.makemap = {
+      group = "smtpq";
+      setgid = true;
+      source = "${cfg.package}/bin/makemap";
+    };
+
     services.mail.sendmailSetuidWrapper = mkIf cfg.setSendmail security.wrappers.smtpctl;
 
     systemd.tmpfiles.rules = [

@@ -50,6 +50,10 @@ stdenv.mkDerivation rec {
     "localstatedir=\${TMPDIR}"
   ];
 
+  postInstall = ''
+    ln -s ./smtpctl $out/sbin/makemap
+  '';
+
   meta = with lib; {
     homepage = "https://www.opensmtpd.org/";
     description = ''
