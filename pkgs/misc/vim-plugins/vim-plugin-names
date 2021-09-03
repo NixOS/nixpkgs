@@ -605,6 +605,7 @@ rktjmp/fwatch.nvim@main
 rktjmp/lush.nvim@main
 rmagatti/auto-session@main
 rmagatti/goto-preview@main
+RobertAudi/securemodelines
 rodjek/vim-puppet
 romainl/vim-cool
 romainl/vim-qf

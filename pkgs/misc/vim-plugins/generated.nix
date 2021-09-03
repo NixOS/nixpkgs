@@ -4883,6 +4883,18 @@ final: prev:
     meta.homepage = "https://github.com/Xuyuanp/scrollbar.nvim/";
   };
 
+  securemodelines = buildVimPluginFrom2Nix {
+    pname = "securemodelines";
+    version = "2019-02-09";
+    src = fetchFromGitHub {
+      owner = "RobertAudi";
+      repo = "securemodelines";
+      rev = "657ebcb88be5e09b715cac903a874046bdd7fc4e";
+      sha256 = "0cqf2vakfhfb3wjmz5kz9kync252sffx3rvlnb8vbfs1p6l19vhs";
+    };
+    meta.homepage = "https://github.com/RobertAudi/securemodelines/";
+  };
+
   self = buildVimPluginFrom2Nix {
     pname = "self";
     version = "2014-05-28";
