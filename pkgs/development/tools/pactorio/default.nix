@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
   GEN_COMPLETIONS = "1";
 
   meta = with lib; {
-    description = "Mod package for factorio";
+    description = "Mod packager for factorio";
     homepage = "https://github.com/figsoda/pactorio";
     changelog = "https://github.com/figsoda/pactorio/blob/v${version}/CHANGELOG.md";
     license = licenses.mpl20;
