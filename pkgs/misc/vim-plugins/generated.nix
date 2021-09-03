@@ -3758,12 +3758,12 @@ final: prev:
     pname = "nvim-ale-diagnostic";
     version = "2021-03-03";
     src = fetchFromGitHub {
-      owner = "nathunsmitty";
+      owner = "nathanmsmith";
       repo = "nvim-ale-diagnostic";
       rev = "894a6790637fdda0df1a2ee1de3f58cd8c276e10";
       sha256 = "07jfmhac8s27awx9pknxlaqz9x3sbmjx7n90pr4np389b43zgrmp";
     };
-    meta.homepage = "https://github.com/nathunsmitty/nvim-ale-diagnostic/";
+    meta.homepage = "https://github.com/nathanmsmith/nvim-ale-diagnostic/";
   };
 
   nvim-autopairs = buildVimPluginFrom2Nix {
