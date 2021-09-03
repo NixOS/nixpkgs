@@ -311,20 +311,20 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "16qxl287kkf34h71djlf9x3wxmd5ylcm83y2zhnrv81gbrhn8k12";
+      sha256 = "1rsglf7ag17n465iff7vlw83pn2rpl4kv9sb1rpf17nx6xpi7yl5";
       type = "gem";
     };
-    version = "1.38.0";
+    version = "1.30.2";
   };
   grpc-tools = {
     groups = ["development" "test"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0sfbf5s19nfgznlb7m2sfw9l0ppvypj46ijjvq5p35fc6b8by5aq";
+      sha256 = "0k9zhsqhamp02ryzgfb4y2bbick151vlhrhj0kqbbz9lyhms0bd4";
       type = "gem";
     };
-    version = "1.38.0";
+    version = "1.30.2";
   };
   i18n = {
     dependencies = ["concurrent-ruby"];
