@@ -1,6 +1,15 @@
 diff --color -ur a/src/corelib/configure.json b/src/corelib/configure.json
 --- a/src/corelib/configure.json	2020-10-27 09:02:11.000000000 +0100
-+++ b/src/corelib/configure.json	2021-09-01 12:38:32.310356819 +0200
++++ b/src/corelib/configure.json	2021-09-03 20:03:11.321616009 +0200
+@@ -114,7 +114,7 @@
+                     "condition": "config.win32 && !features.shared"
+                 },
+                 { "libs": "-licuin -licuuc -licudt", "condition": "config.win32 && features.shared" },
+-                { "libs": "-licui18n -licuuc -licudata", "condition": "!config.win32" }
++                { "libs": "-licui18n -licuuc -licudata -lc++ -lc++abi", "condition": "!config.win32" }
+             ],
+             "use": [
+                 { "lib": "libdl", "condition": "features.dlopen" }
 @@ -155,7 +155,7 @@
              "headers": [ "atomic", "cstdint" ],
              "sources": [
@@ -12,7 +21,7 @@ diff --color -ur a/src/corelib/configure.json b/src/corelib/configure.json
          "librt": {
 diff --color -ur a/src/gui/configure.json b/src/gui/configure.json
 --- a/src/gui/configure.json	2020-10-27 09:02:11.000000000 +0100
-+++ b/src/gui/configure.json	2021-09-01 12:38:32.311356857 +0200
++++ b/src/gui/configure.json	2021-09-03 20:02:40.542485289 +0200
 @@ -303,7 +303,7 @@
              },
              "headers": "harfbuzz/hb.h",
@@ -44,7 +53,7 @@ diff --color -ur a/src/gui/configure.json b/src/gui/configure.json
          "xcb_icccm": {
 diff --color -ur a/src/plugins/sqldrivers/configure.json b/src/plugins/sqldrivers/configure.json
 --- a/src/plugins/sqldrivers/configure.json	2020-10-27 09:02:11.000000000 +0100
-+++ b/src/plugins/sqldrivers/configure.json	2021-09-01 13:50:06.943343623 +0200
++++ b/src/plugins/sqldrivers/configure.json	2021-09-03 20:02:40.543485293 +0200
 @@ -71,7 +71,7 @@
                  { "type": "mysqlConfig", "query": "--libs", "cleanlibs": true },
                  { "type": "mysqlConfig", "query": "--libs_r", "cleanlibs": false },
@@ -65,7 +74,7 @@ diff --color -ur a/src/plugins/sqldrivers/configure.json b/src/plugins/sqldriver
          "tds": {
 diff --color -ur a/src/printsupport/configure.json b/src/printsupport/configure.json
 --- a/src/printsupport/configure.json	2020-10-27 09:02:11.000000000 +0100
-+++ b/src/printsupport/configure.json	2021-09-01 12:38:32.313356933 +0200
++++ b/src/printsupport/configure.json	2021-09-03 20:02:40.544485297 +0200
 @@ -21,7 +21,7 @@
              },
              "headers": "cups/cups.h",

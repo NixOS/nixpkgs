@@ -416,7 +416,7 @@ stage1 = llvmPackages_10.stdenv.mkDerivation ({
 # for the static build and considering the build time
 # it's just easier to separate the build from the fixup
 # and do/tweak it in a second/final stage.
-in stdenv.mkDerivation {
+in if (!stdenv.hostPlatform.isStatic) then stage1 else (stdenv.mkDerivation {
   pname = "qtbase-final";
   inherit version;
 
@@ -458,5 +458,13 @@ in stdenv.mkDerivation {
     moveToOutput bin "$dev"
 
     chmod -R 0555 "$dev/bin"
+
+    runHook postInstall
   '';
-}
+
+  postInstall = ''
+    sed -i '/pritarget.path/a pritarget.path = \$\$NIX_OUTPUT_PLUGIN\/mkspecs\/modules' "$dev/mkspecs/features/qt_plugin.prf"
+    sed -i '/pritarget.path = \//d' "$dev/mkspecs/features/qt_plugin.prf"
+    sed -i "s!plug_path = /.*!plug_path = $bin/lib/qt-5.15.2/plugins!g" "$dev/mkspecs/features/qt.prf"
+  '';
+})
