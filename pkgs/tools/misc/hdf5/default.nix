@@ -34,10 +34,10 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ removeReferencesTo ];
+  nativeBuildInputs = [ removeReferencesTo ]
+    ++ optional (gfortran != null) gfortran;
 
   buildInputs = []
-    ++ optional (gfortran != null) gfortran
     ++ optional (szip != null) szip
     ++ optional javaSupport jdk;
 
