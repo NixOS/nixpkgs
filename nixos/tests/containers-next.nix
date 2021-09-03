@@ -173,6 +173,12 @@ in {
             ];
         };
         network.v6.addrPool = lib.mkForce [];
+        credentials = [
+          {
+            id = "snens";
+            path = "${pkgs.writeText "totallysecret" "abc"}";
+          }
+        ];
         config = { pkgs, ... }: {
           environment.systemPackages = [ pkgs.tcpdump pkgs.tmux pkgs.dnsutils ];
           networking.firewall.allowedTCPPorts = [ 80 ];
@@ -372,6 +378,11 @@ in {
 
         server.succeed(
             "systemd-run -M publicnet --pty --quiet -- /bin/sh --login -c 'ping fd23::1 -c3 >&2'"
+        )
+
+    with subtest("Credentials"):
+        server.succeed(
+            "systemd-run -M container0 --pty --quiet /bin/sh --login -c 'test -e /run/host/credentials/snens'"
         )
 
     server.succeed("machinectl poweroff container0")

@@ -6,7 +6,6 @@ with lib;
 
 let
   cfg = config.systemd.nspawn;
-
   checkExec = checkUnitConfig "Exec" [
     (assertOnlyFields [
       "Boot" "ProcessTwo" "Parameters" "Environment" "User" "WorkingDirectory"
@@ -156,14 +155,6 @@ in {
         })
         {
           systemd.targets.multi-user.wants = [ "machines.target" ];
-
-          # Workaround for https://github.com/NixOS/nixpkgs/pull/67232#issuecomment-531315437 and https://github.com/systemd/systemd/issues/13622
-          # Once systemd fixes this upstream, we can re-enable -U
-          systemd.services."systemd-nspawn@".serviceConfig.ExecStart = [
-            ""  # deliberately empty. signals systemd to override the ExecStart
-            # Only difference between upstream is that we do not pass the -U flag
-            "${config.systemd.package}/bin/systemd-nspawn --quiet --keep-unit --boot --network-veth --settings=override --machine=%i"
-          ];
         }
       ];
 }

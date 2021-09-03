@@ -304,6 +304,47 @@ in {
             '';
           };
 
+          credentials = mkOption {
+            type = types.listOf (types.submodule {
+              options = {
+                id = mkOption {
+                  type = types.str;
+                  description = ''
+                    ID of the credential under which the credential can be referenced by services
+                    inside the container.
+                  '';
+                };
+                path = mkOption {
+                  type = types.str;
+                  description = ''
+                    Path or ID of the credential passed to the container.
+                  '';
+                };
+              };
+            });
+            apply = concatMapStringsSep " " ({ id, path }: "--load-credential=${id}:${path}");
+            default = [];
+            description = ''
+              Credentials using the <literal>LoadCredential=</literal>-feature from
+              <citerefentry><refentrytitle>systemd.exec</refentrytitle><manvolnum>5</manvolnum>
+              </citerefentry>. These will be passed to the container's service-manager
+              and can be used in a service inside a container like
+
+              <programlisting>
+              {
+                <xref linkend="opt-systemd.services._name_.serviceConfig" />.LoadCredential = "foo:foo";
+              }
+              </programlisting>
+
+              where <literal>foo</literal> is the
+              <xref linkend="opt-nixos.containers.instances._name_.credentials._.id" /> of the
+              credential passed to the container.
+
+              See also <citerefentry><refentrytitle>systemd-nspawn</refentrytitle>
+              <manvolnum>1</manvolnum></citerefentry>.
+            '';
+          };
+
           activation = {
             strategy = mkOption {
               type = types.enum [ "none" "reload" "restart" "dynamic" ];
@@ -497,7 +538,7 @@ in {
       targets.machines.wants = map (x: "systemd-nspawn@${x}.service") (attrNames cfg);
       services = listToAttrs (flip map (attrNames cfg) (container:
         let
-          inherit (cfg.${container}) activation;
+          inherit (cfg.${container}) activation credentials;
         in nameValuePair "systemd-nspawn@${container}" {
           preStart = mkBefore ''
             mkdir -p /var/lib/machines/${container}/{etc,var,nix/var/nix}
@@ -531,6 +572,10 @@ in {
                 "block-device-mapper rw"
               ];
               X-ActivationStrategy = activation.strategy;
+              ExecStart = [
+                ""
+                "${config.systemd.package}/bin/systemd-nspawn ${credentials} --quiet --keep-unit --boot --network-veth --settings=override --machine=%i"
+              ];
             }
             (mkIf (elem activation.strategy [ "reload" "dynamic" ]) {
               ExecReload = if activation.reloadScript != null
