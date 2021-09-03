@@ -2566,6 +2566,18 @@ final: prev:
     meta.homepage = "https://github.com/vito-c/jq.vim/";
   };
 
+  jsonc-vim = buildVimPluginFrom2Nix {
+    pname = "jsonc.vim";
+    version = "2020-11-24";
+    src = fetchFromGitHub {
+      owner = "neoclide";
+      repo = "jsonc.vim";
+      rev = "63ffa5199a0e64d5ce0515256407f32dfbd67fc3";
+      sha256 = "047c2sc8q49axhi9416lzzpv5ykczc63dqd4xy56rfcfrvsi199j";
+    };
+    meta.homepage = "https://github.com/neoclide/jsonc.vim/";
+  };
+
   julia-vim = buildVimPluginFrom2Nix {
     pname = "julia-vim";
     version = "2021-08-04";

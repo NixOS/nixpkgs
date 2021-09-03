@@ -484,6 +484,7 @@ neoclide/coc-neco
 neoclide/coc.nvim@release
 neoclide/denite-extra
 neoclide/denite-git
+neoclide/jsonc.vim
 neoclide/vim-easygit
 neomake/neomake
 neovim/nvim-lspconfig
