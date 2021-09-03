@@ -221,9 +221,10 @@ in {
         default = config.networking.hostName;
         description = ''
           The domain name of the server, with optional explicit port.
-          This is used by remote servers to connect to this server,
-          e.g. matrix.org, localhost:8080, etc.
+          This is used by remote servers to look up the server address.
           This is also the last part of your UserID.
+
+          The server_name cannot be changed later so it is important to configure this correctly before you start Synapse.
         '';
       };
       public_baseurl = mkOption {
