@@ -1000,6 +1000,18 @@ final: prev:
     meta.homepage = "https://github.com/nixprime/cpsm/";
   };
 
+  crates-nvim = buildVimPluginFrom2Nix {
+    pname = "crates.nvim";
+    version = "2021-09-03";
+    src = fetchFromGitHub {
+      owner = "saecki";
+      repo = "crates.nvim";
+      rev = "ffec425ab2052850f93e9617f308b26d625e85fc";
+      sha256 = "06qjyqpbfv0dj7gpqdrx7dzm3j554n90ic6i7ljb4nh16v17k0dz";
+    };
+    meta.homepage = "https://github.com/saecki/crates.nvim/";
+  };
+
   csapprox = buildVimPluginFrom2Nix {
     pname = "csapprox";
     version = "2013-07-27";
