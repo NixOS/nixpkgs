@@ -1,4 +1,4 @@
-{ stdenv, lib, python3 }:
+{ stdenv, lib, python3, nixosTests }:
 
 stdenv.mkDerivation rec {
   name = "nixos-nspawn";
@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
   '';
 
   dontBuild = true;
+
+  passthru.tests = { inherit (nixosTests) containers-next-imperative; };
 
   doCheck = true;
   checkInputs = [ python3.pkgs.flake8 ];

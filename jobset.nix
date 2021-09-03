@@ -11,5 +11,6 @@ in
     general = release.tests.containers-next;
     migration = release.tests.container-migration;
     activation = release.tests.containers-config-activation;
+    imperative = release.tests.containers-next-imperative;
   };
 }

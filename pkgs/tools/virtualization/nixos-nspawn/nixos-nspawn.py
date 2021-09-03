@@ -146,10 +146,10 @@ class Container:
     def dump(self):
         return {
             'kind': self.type(),
-            'state': self.machinectl_property('State', 'powered off'),
+            'state': self.__machinectl_property('State', 'powered off'),
             'name': self.name,
             'file': self.path,
-            'os': self.version()
+            'os': self.version
         }
 
     def type(self):
@@ -218,6 +218,8 @@ class Container:
 
         with open(f"{path}/data") as f:
             data = loads(f.read())
+
+        makedirs("/etc/systemd/nspawn")
 
         zone = "" if data['zone'] is None else f"Zone={data['zone']}"
         ephemeral = "" if not data['ephemeral'] else "Ephemeral=true"
