@@ -41,6 +41,7 @@
 , zlib
 , xdg-utils
 , wrapGAppsHook
+, commandLineArgs ? ""
 }:
 
 let
@@ -154,6 +155,11 @@ stdenv.mkDerivation rec {
       ln -sf ${xdg-utils}/bin/xdg-mime $out/opt/brave.com/brave/xdg-mime
 
       runHook postInstall
+  '';
+
+  preFixup = ''
+    # Add command line args to wrapGApp.
+    gappsWrapperArgs+=(--add-flags ${lib.escapeShellArg commandLineArgs})
   '';
 
   installCheckPhase = ''
