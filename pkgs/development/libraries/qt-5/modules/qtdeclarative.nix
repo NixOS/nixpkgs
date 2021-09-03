@@ -7,6 +7,8 @@ qtModule {
   outputs = [ "out" "dev" "bin" ];
   preConfigure = ''
     NIX_CFLAGS_COMPILE+=" -DNIXPKGS_QML2_IMPORT_PREFIX=\"$qtQmlPrefix\""
+  '' + lib.optionalString stdenv.hostPlatform.isStatic + ''
+    NIX_LDFLAGS+=" -lc++ -lc++abi -lXdmcp -lXau -lexpat -lbz2"
   '';
   configureFlags = lib.optionals (lib.versionAtLeast qtbase.version "5.11.0") [ "-qml-debug" ];
   devTools = [
