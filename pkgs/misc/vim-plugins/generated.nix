@@ -6975,6 +6975,18 @@ final: prev:
     meta.homepage = "https://github.com/andys8/vim-elm-syntax/";
   };
 
+  vim-emoji = buildVimPluginFrom2Nix {
+    pname = "vim-emoji";
+    version = "2018-01-30";
+    src = fetchFromGitHub {
+      owner = "junegunn";
+      repo = "vim-emoji";
+      rev = "9ed6515401a6e20a9781ba508db7d67a5e4e231f";
+      sha256 = "0bvwmz570pfxicbask88p523vkggidq5fj2zm59s4c20a7d5s1yy";
+    };
+    meta.homepage = "https://github.com/junegunn/vim-emoji/";
+  };
+
   vim-endwise = buildVimPluginFrom2Nix {
     pname = "vim-endwise";
     version = "2021-03-06";
