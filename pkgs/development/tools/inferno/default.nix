@@ -2,15 +2,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "inferno";
-  version = "0.10.6";
+  version = "0.10.7";
 
   # github version doesn't have a Cargo.lock
   src = fetchCrate {
     inherit pname version;
-    sha256 = "1pn3ask36mv8byd62xhm8bjv59k12i1s533jgb5syml64w1cnn12";
+    sha256 = "0bzrwa87j56sv03frl0lp6izfxsldn0692g2vpwfndhrsm0gy8z9";
   };
 
-  cargoSha256 = "0w5w9pyv34x0iy9knr79491kb9bgbcagh6251pq72mv4pvx0axip";
+  cargoSha256 = "1dvk1y1afqlmmqqdm91lg2wvny5q47yfjvmjzaryk2ic1s6g17b1";
 
   # these tests depend on a patched version of flamegraph which is included in
   # the github repository as a submodule, but absent from the crates version
