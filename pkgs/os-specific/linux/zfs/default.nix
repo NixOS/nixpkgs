@@ -26,6 +26,14 @@ let
   buildKernel = any (n: n == configFile) [ "kernel" "all" ];
   buildUser = any (n: n == configFile) [ "user" "all" ];
 
+  # XXX: You always want to build kernel modules with the same stdenv as the
+  # kernel was built with. However, since zfs can also be built for userspace we
+  # need to correctly pick between the provided/default stdenv, and the one used
+  # by the kernel.
+  # If you don't do this your ZFS builds will fail on any non-standard (e.g.
+  # clang-built) kernels.
+  stdenv' = if kernel == null then stdenv else kernel.stdenv;
+
   common = { version
     , sha256
     , extraPatches ? []
@@ -34,7 +42,7 @@ let
     , latestCompatibleLinuxPackages
     , kernelCompatible ? null }:
 
-    stdenv.mkDerivation {
+    stdenv'.mkDerivation {
       name = "zfs-${configFile}-${version}${optionalString buildKernel "-${kernel.version}"}";
 
       src = fetchFromGitHub {
@@ -47,11 +55,6 @@ let
 
       postPatch = optionalString buildKernel ''
         patchShebangs scripts
-
-        # https://github.com/openzfs/zfs/issues/10107
-        substituteInPlace ./config/kernel.m4 \
-          --replace "make modules" "make CC=$CC modules"
-
         # The arrays must remain the same length, so we repeat a flag that is
         # already part of the command and therefore has no effect.
         substituteInPlace ./module/os/linux/zfs/zfs_ctldir.c \

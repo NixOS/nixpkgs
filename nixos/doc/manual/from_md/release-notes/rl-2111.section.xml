@@ -207,6 +207,13 @@
           <link linkend="opt-services.postfixadmin.enable">postfixadmin</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://sr.ht/~emersion/soju">soju</link>, a
+          user-friendly IRC bouncer. Available as
+          <link xlink:href="options.html#opt-services.soju.enable">services.soju</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-incompatibilities">
@@ -1086,6 +1093,15 @@ Superuser created successfully.
           <literal>lib.formats.yaml</literal>’s
           <literal>generate</literal> will not generate JSON anymore,
           but instead use more of the YAML-specific syntax.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          GNOME desktop environment now enables
+          <literal>QGnomePlatform</literal> as the Qt platform theme,
+          which should avoid crashes when opening file chooser dialogs
+          in Qt apps by using XDG desktop portal. Additionally, it will
+          make the apps fit better visually.
         </para>
       </listitem>
     </itemizedlist>
