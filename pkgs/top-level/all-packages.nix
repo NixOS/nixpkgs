@@ -7873,6 +7873,8 @@ with pkgs;
 
   os-prober = callPackage ../tools/misc/os-prober {};
 
+  oshka = callPackage ../development/tools/oshka {};
+
   osl = callPackage ../development/compilers/osl { };
 
   osqp = callPackage ../development/libraries/science/math/osqp { };
