@@ -313,27 +313,27 @@ rec {
    * as a easy way to build multiple derivations at once.
    */
   symlinkJoin =
-    args_@{ name
-         , paths
+    args_@{ paths
          , preferLocalBuild ? true
          , allowSubstitutes ? false
          , postBuild ? ""
          , ...
          }:
     let
-      args = removeAttrs args_ [ "name" "postBuild" ]
-        // {
-          inherit preferLocalBuild allowSubstitutes;
-          passAsFile = [ "paths" ];
-        }; # pass the defaults
-    in runCommand name args
-      ''
-        mkdir -p $out
-        for i in $(cat $pathsPath); do
-          ${lndir}/bin/lndir -silent $i $out
-        done
-        ${postBuild}
-      '';
+      defaultAttr = {
+        inherit preferLocalBuild allowSubstitutes;
+        dontUnpack = true;
+        passAsFile = [ "paths" ];
+        installPhase = ''
+          mkdir -p $out
+          for i in $(cat $pathsPath); do
+            ${lndir}/bin/lndir -silent $i $out
+          done
+          ${postBuild}
+        '';
+      }; # pass the defaults
+      args = (removeAttrs args_ [ "postBuild" ]) // defaultAttr;
+    in stdenvNoCC.mkDerivation args;
 
   /*
    * Quickly create a set of symlinks to derivations.
