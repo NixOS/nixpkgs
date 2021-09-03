@@ -76,7 +76,7 @@ in
 
       type = types.attrsOf scriptType;
 
-      apply = set: {
+      apply = set: set // {
         script =
           ''
             #! ${pkgs.runtimeShell}
@@ -139,7 +139,7 @@ in
 
       type = with types; attrsOf scriptType;
 
-      apply = set: {
+      apply = set: set // {
         script = ''
           unset PATH
           for i in ${toString path}; do
