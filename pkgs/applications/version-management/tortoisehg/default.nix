@@ -4,11 +4,11 @@
 
 python3Packages.buildPythonApplication rec {
     pname = "tortoisehg";
-    version = "5.8";
+    version = "5.9";
 
     src = fetchurl {
       url = "https://www.mercurial-scm.org/release/tortoisehg/targz/tortoisehg-${version}.tar.gz";
-      sha256 = "154q7kyrdk045wx7rsblzx41k3wbvp2f40kzkxmiiaa5n35srsm3";
+      sha256 = "1y8nb2b9j9qx11k1wrb9hydc94dgbsqx4yf2bv8y878hqmk1z57a";
     };
 
     # Extension point for when thg's mercurial is lagging behind mainline.
