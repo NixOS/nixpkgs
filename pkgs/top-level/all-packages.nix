@@ -5437,6 +5437,8 @@ with pkgs;
 
   gitea = callPackage ../applications/version-management/gitea { };
 
+  gokart = callPackage ../development/tools/gokart { };
+
   gl2ps = callPackage ../development/libraries/gl2ps { };
 
   glab = callPackage ../applications/version-management/git-and-tools/glab { };
