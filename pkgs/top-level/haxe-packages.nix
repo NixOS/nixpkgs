@@ -131,7 +131,7 @@ let
         rev = version;
         sha256 = "1bgx8pr062xsy81ygbakm3v033d68dqqx0dgfs0dczdqy8q0039k";
       };
-      nativeBuildInputs = [ haxe patchelfLatest ];
+      nativeBuildInputs = [ haxe ];
       buildInputs = [ libuv zlib libpng SDL2 libvorbis libjpeg libGL libGLU openal mbedtls mesa sqlite ];
 
       buildPhase = ''
