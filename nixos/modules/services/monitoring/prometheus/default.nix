@@ -52,7 +52,8 @@ let
     remote_write = filterValidPrometheus cfg.remoteWrite;
     remote_read = filterValidPrometheus cfg.remoteRead;
     alerting = {
-      inherit (cfg) alertmanagers;
+      alertmanagers = cfg.alertmanagers;
+      alert_relabel_configs = cfg.alertRelabelConfigs;
     };
   };
 
@@ -1701,6 +1702,22 @@ in
       description = ''
         A list of alertmanagers to send alerts to.
         See <link xlink:href="https://prometheus.io/docs/prometheus/latest/configuration/configuration/#alertmanager_config">the official documentation</link> for more information.
+      '';
+    };
+
+    alertRelabelConfigs = mkOption {
+      type = types.listOf promTypes.relabel_config;
+      example = literalExpression ''
+        [ {
+          source_labels = [ "dc" ];
+          regex = "(.+)\d+";
+          target_label = "dc";
+        } ]
+      '';
+      default = [ ];
+      description = ''
+        List of alert relabel configurations.
+        See <link xlink:href="https://prometheus.io/docs/prometheus/latest/configuration/configuration/#alert_relabel_configs">the official documentation</link> for more information.
       '';
     };
 
