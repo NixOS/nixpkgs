@@ -21,13 +21,12 @@ stdenv.mkDerivation rec {
     sha256 = "0jd28vy9ivl3rcpkxmhw73b6krzm0pd9jps8asw92wa00lm2z9mk";
   };
 
-  nativeBuildInputs = [ pkg-config bison makeWrapper ];
+  nativeBuildInputs = [ pkg-config bison makeWrapper gfortran ];
   propagatedBuildInputs = [ numactl rdma-core zlib opensm ];
   buildInputs = with lib; [
     numactl
     libxml2
     perl
-    gfortran
     openssh
     hwloc
   ] ++ optionals (network == "infiniband") [ rdma-core opensm ]
