@@ -1,6 +1,6 @@
 { qtModule, stdenv, lib, qtbase, qtdeclarative }:
 
-qtModule {
+qtModule ({
   pname = "qttools";
   qtInputs = [ qtbase qtdeclarative ];
   outputs = [ "out" "dev" "bin" ];
@@ -39,4 +39,8 @@ qtModule {
   NIX_CFLAGS_COMPILE = lib.optional stdenv.isDarwin ''-DNIXPKGS_QMLIMPORTSCANNER="${qtdeclarative.dev}/bin/qmlimportscanner"'';
 
   setupHook = ../hooks/qttools-setup-hook.sh;
-}
+} // lib.optionalAttrs stdenv.hostPlatform.isStatic {
+  preConfigure = ''
+    NIX_LDFLAGS+=" -lXdmcp -lXau -lexpat -lbz2"
+  '';
+})
