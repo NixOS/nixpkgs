@@ -8,8 +8,13 @@
 
 let
   withPlugins = plugins: buildPythonPackage {
-    name = "${package.name}-with-plugins";
+    pname = "${package.pname}-with-plugins";
+    inherit (package) version;
+
     dontUnpack = true;
+    dontBuild = true;
+    doCheck = false;
+
     nativeBuildInputs = [ makeWrapper ];
     propagatedBuildInputs = plugins ++ package.propagatedBuildInputs;
 

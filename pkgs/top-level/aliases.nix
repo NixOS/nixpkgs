@@ -387,6 +387,7 @@ mapAliases ({
   keepassx-community = keepassxc; # added 2017-11
   keepassx-reboot = keepassx-community; # added 2017-02-01
   keepassx2-http = keepassx-reboot; # added 2016-10-17
+  kexectools = kexec-tools; # added 2021-09-03
   keybase-go = keybase;  # added 2016-08-24
   kinetic-cpp-client = throw "kinetic-cpp-client has been removed from nixpkgs, as it's abandoned."; # 2020-04-28
   kicad-with-packages3d = kicad; # added 2019-11-25
