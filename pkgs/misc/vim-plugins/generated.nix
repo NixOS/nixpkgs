@@ -5630,6 +5630,18 @@ final: prev:
     meta.homepage = "https://github.com/wellle/tmux-complete.vim/";
   };
 
+  tmuxline-vim = buildVimPluginFrom2Nix {
+    pname = "tmuxline.vim";
+    version = "2021-07-20";
+    src = fetchFromGitHub {
+      owner = "edkolev";
+      repo = "tmuxline.vim";
+      rev = "4119c553923212cc67f4e135e6f946dc3ec0a4d6";
+      sha256 = "0gs2jghs1a9sp09mlphcpa1rzlmxmsvyaa7y20w6qsbczz989vm3";
+    };
+    meta.homepage = "https://github.com/edkolev/tmuxline.vim/";
+  };
+
   todo-comments-nvim = buildVimPluginFrom2Nix {
     pname = "todo-comments.nvim";
     version = "2021-08-05";
