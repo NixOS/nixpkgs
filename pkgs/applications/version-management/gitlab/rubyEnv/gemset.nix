@@ -195,15 +195,15 @@
     version = "0.3.0";
   };
   apollo_upload_server = {
-    dependencies = ["graphql" "rails"];
+    dependencies = ["actionpack" "graphql"];
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0xk54h9mmzhrbgbmk33v38pavb8w6421mx2yrgsdarkfl9fr90y3";
+      sha256 = "0klhppx4vjfdvgz12wb63bcxy5ymk0mp8wkh01fpgjn2l3fwkwz5";
       type = "gem";
     };
-    version = "2.0.2";
+    version = "2.1.0";
   };
   asana = {
     dependencies = ["faraday" "faraday_middleware" "faraday_middleware-multi_json" "oauth2"];
@@ -1987,10 +1987,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0dzdxrn2ra21nyfnabj44fbwbccjkp3i7cjpym99pzbsx8dkna8z";
+      sha256 = "09xci7jw5sckagnwfjlglz4cywylrf16r83f82asnnngvxadvvmq";
       type = "gem";
     };
-    version = "0.21.0";
+    version = "0.21.1";
   };
   gitlab-license = {
     groups = ["default"];
@@ -2278,10 +2278,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "16qxl287kkf34h71djlf9x3wxmd5ylcm83y2zhnrv81gbrhn8k12";
+      sha256 = "1rsglf7ag17n465iff7vlw83pn2rpl4kv9sb1rpf17nx6xpi7yl5";
       type = "gem";
     };
-    version = "1.38.0";
+    version = "1.30.2";
   };
   gssapi = {
     dependencies = ["ffi"];
