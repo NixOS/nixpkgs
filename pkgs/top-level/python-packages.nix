@@ -9036,6 +9036,8 @@ in {
 
   types-pytz = callPackage ../development/python-modules/types-pytz { };
 
+  types-pyyaml = callPackage ../development/python-modules/types-pyyaml { };
+
   types-requests = callPackage ../development/python-modules/types-requests { };
 
   typesentry = callPackage ../development/python-modules/typesentry { };
