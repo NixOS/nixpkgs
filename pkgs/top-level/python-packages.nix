@@ -1683,6 +1683,8 @@ in {
 
   coverage = callPackage ../development/python-modules/coverage { };
 
+  coverage-python-version = callPackage ../development/python-modules/coverage-python-version { };
+
   coveralls = callPackage ../development/python-modules/coveralls { };
 
   cozy = callPackage ../development/python-modules/cozy { };
