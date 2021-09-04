@@ -14,7 +14,7 @@
 , libgcrypt
 , libotr
 , html-tidy
-, libgpgerror
+, libgpg-error
 , libsignal-protocol-c
 , usrsctp
 
@@ -76,7 +76,7 @@ mkDerivation rec {
     libgcrypt
     libotr
     html-tidy
-    libgpgerror
+    libgpg-error
     libsignal-protocol-c
     usrsctp
   ] ++ lib.optionals voiceMessagesSupport [

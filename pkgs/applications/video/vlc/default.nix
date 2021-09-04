@@ -2,7 +2,7 @@
 , libarchive, perl, xorg, libdvdnav, libbluray
 , zlib, a52dec, libmad, faad2, ffmpeg, alsa-lib
 , pkg-config, dbus, fribidi, freefont_ttf, libebml, libmatroska
-, libvorbis, libtheora, speex, lua5, libgcrypt, libgpgerror, libupnp
+, libvorbis, libtheora, speex, lua5, libgcrypt, libgpg-error, libupnp
 , libcaca, libpulseaudio, flac, schroedinger, libxml2, librsvg
 , mpeg2dec, systemd, gnutls, avahi, libcddb, libjack2, SDL, SDL_image
 , libmtp, unzip, taglib, libkate, libtiger, libv4l, samba, libssh2, liboggz
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   # needing them
   buildInputs = [
     zlib a52dec libmad faad2 ffmpeg alsa-lib libdvdnav libdvdnav.libdvdread
-    libbluray dbus fribidi libvorbis libtheora speex lua5 libgcrypt libgpgerror
+    libbluray dbus fribidi libvorbis libtheora speex lua5 libgcrypt libgpg-error
     libupnp libcaca libpulseaudio flac schroedinger libxml2 librsvg mpeg2dec
     systemd gnutls avahi libcddb SDL SDL_image libmtp taglib libarchive
     libkate libtiger libv4l samba libssh2 liboggz libass libdvbpsi libva
