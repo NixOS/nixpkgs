@@ -6632,7 +6632,7 @@ with pkgs;
   };
 
   meilisearch = callPackage ../servers/search/meilisearch {
-    inherit (darwin.apple_sdk.frameworks) IOKit Security;
+    inherit (darwin.apple_sdk.frameworks) Security;
   };
 
   memtester = callPackage ../tools/system/memtester { };
@@ -19042,6 +19042,8 @@ with pkgs;
 
   tremor = callPackage ../development/libraries/tremor { };
 
+  triehash = callPackage ../tools/misc/triehash { };
+
   trillian = callPackage ../tools/misc/trillian {
     buildGoModule = buildGo115Module;
   };
@@ -31001,6 +31003,8 @@ with pkgs;
   dosbox = callPackage ../misc/emulators/dosbox { };
 
   emu2 = callPackage ../misc/emulators/emu2 { };
+
+  apt = callPackage ../tools/package-management/apt { };
 
   dpkg = callPackage ../tools/package-management/dpkg { };
 
