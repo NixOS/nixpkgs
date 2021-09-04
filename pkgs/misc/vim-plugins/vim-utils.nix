@@ -4,6 +4,7 @@
 , fetchFromGitHub, runtimeShell
 , hasLuaModule
 , python3
+, callPackage, makeSetupHook
 }:
 
 /*
@@ -485,7 +486,18 @@ rec {
     '';
   };
 
-  inherit (import ./build-vim-plugin.nix { inherit lib stdenv rtpPath vim; }) buildVimPlugin buildVimPluginFrom2Nix;
+  vimGenDocHook = callPackage ({ vim }:
+    makeSetupHook {
+      name = "vim-gen-doc-hook";
+      deps = [ vim ];
+      substitutions = {
+        vimBinary = "${vim}/bin/vim";
+        inherit rtpPath;
+      };
+    } ./vim-gen-doc-hook.sh) {};
+
+  inherit (import ./build-vim-plugin.nix { inherit lib stdenv rtpPath vim vimGenDocHook; })
+    buildVimPlugin buildVimPluginFrom2Nix;
 
   # used to figure out which python dependencies etc. neovim needs
   requiredPlugins = {

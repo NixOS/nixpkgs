@@ -2,11 +2,11 @@
 
 # build-tools
 , bootPkgs
-, autoconf, automake, coreutils, fetchpatch, fetchurl, perl, python3, m4, sphinx
-, xattr, autoSignDarwinBinariesHook
+, autoconf, automake, coreutils, fetchurl, perl, python3, m4, sphinx, xattr
 , bash
 
 , libiconv ? null, ncurses
+, glibcLocales ? null
 
 , # GHC can be built with system libffi or a bundled one.
   libffi ? null
@@ -43,7 +43,7 @@
   enableDocs ? (
     # Docs disabled for musl and cross because it's a large task to keep
     # all `sphinx` dependencies building in those environments.
-    # `sphinx` pulls in among others:
+    # `sphinx` pullls in among others:
     # Ruby, Python, Perl, Rust, OpenGL, Xorg, gtk, LLVM.
     (stdenv.targetPlatform == stdenv.hostPlatform)
     && !stdenv.hostPlatform.isMusl
@@ -123,8 +123,7 @@ let
   # Use gold either following the default, or to avoid the BFD linker due to some bugs / perf issues.
   # But we cannot avoid BFD when using musl libc due to https://sourceware.org/bugzilla/show_bug.cgi?id=23856
   # see #84670 and #49071 for more background.
-  useLdGold = targetPlatform.linker == "gold" ||
-    (targetPlatform.linker == "bfd" && (targetPackages.stdenv.cc.bintools.bintools.hasGold or false) && !targetPlatform.isMusl);
+  useLdGold = targetPlatform.linker == "gold" || (targetPlatform.linker == "bfd" && !targetPlatform.isMusl);
 
   runtimeDeps = [
     targetPackages.stdenv.cc.bintools
@@ -137,35 +136,22 @@ let
 
 in
 stdenv.mkDerivation (rec {
-  version = "8.10.6";
+  version = "9.2.0.20210821";
   name = "${targetPrefix}ghc-${version}";
 
   src = fetchurl {
-    url = "https://downloads.haskell.org/ghc/${version}/ghc-${version}-src.tar.xz";
-    sha256 = "43afba72a533408b42c1492bd047b5e37e5f7204e41a5cedd3182cc841610ce9";
+    url = "https://downloads.haskell.org/ghc/9.2.1-rc1/ghc-${version}-src.tar.xz";
+    sha256 = "1q2pppxv2avhykyxvyq72r5p97rkkiqp19b77yhp85ralbcp4ivw";
   };
 
   enableParallelBuilding = true;
 
   outputs = [ "out" "doc" ];
 
-  patches = [
-    # See upstream patch at
-    # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/4885. Since we build
-    # from source distributions, the auto-generated configure script needs to be
-    # patched as well, therefore we use an in-tree patch instead of pulling the
-    # upstream patch. Don't forget to check backport status of the upstream patch
-    # when adding new GHC releases in nixpkgs.
-    ./respect-ar-path.patch
-  ] ++ lib.optionals stdenv.isDarwin [
-    # Make Block.h compile with c++ compilers. Remove with the next release
-    (fetchpatch {
-      url = "https://gitlab.haskell.org/ghc/ghc/-/commit/97d0b0a367e4c6a52a17c3299439ac7de129da24.patch";
-      sha256 = "0r4zjj0bv1x1m2dgxp3adsf2xkr94fjnyj1igsivd9ilbs5ja0b5";
-    })
-  ];
-
   postPatch = "patchShebangs .";
+
+  # GHC needs the locale configured during the Haddock phase.
+  LANG = "en_US.UTF-8";
 
   # GHC is a bit confused on its cross terminology.
   preConfigure = ''
@@ -187,13 +173,12 @@ stdenv.mkDerivation (rec {
 
     echo -n "${buildMK}" > mk/build.mk
     sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure
+  '' + lib.optionalString (stdenv.isLinux && hostPlatform.libc == "glibc") ''
+    export LOCALE_ARCHIVE="${glibcLocales}/lib/locale/locale-archive"
   '' + lib.optionalString (!stdenv.isDarwin) ''
     export NIX_LDFLAGS+=" -rpath $out/lib/ghc-${version}"
   '' + lib.optionalString stdenv.isDarwin ''
     export NIX_LDFLAGS+=" -no_dtrace_dof"
-
-    # GHC tries the host xattr /usr/bin/xattr by default which fails since it expects python to be 2.7
-    export XATTR=${lib.getBin xattr}/bin/xattr
   '' + lib.optionalString targetPlatform.useAndroidPrebuilt ''
     sed -i -e '5i ,("armv7a-unknown-linux-androideabi", ("e-m:e-p:32:32-i64:64-v128:64:128-a:0:32-n32-S64", "cortex-a8", ""))' llvm-targets
   '' + lib.optionalString targetPlatform.isMusl ''
@@ -251,10 +236,12 @@ stdenv.mkDerivation (rec {
   nativeBuildInputs = [
     perl autoconf automake m4 python3
     ghc bootPkgs.alex bootPkgs.happy bootPkgs.hscolour
-  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
-    autoSignDarwinBinariesHook
   ] ++ lib.optionals enableDocs [
     sphinx
+  ] ++ lib.optionals stdenv.isDarwin [
+    # TODO(@sternenseemann): use XATTR env var after backport of
+    # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/6447
+    xattr
   ];
 
   # For building runtime libs
@@ -285,6 +272,10 @@ stdenv.mkDerivation (rec {
     # * https://gitlab.haskell.org/ghc/ghc/-/issues/19580
     ++ lib.optional stdenv.targetPlatform.isMusl "pie";
 
+  # big-parallel allows us to build with more than 2 cores on
+  # Hydra which already warrants a significant speedup
+  requiredSystemFeatures = [ "big-parallel" ];
+
   postInstall = ''
     # Install the bash completion file.
     install -D -m 444 utils/completion/ghc.bash $out/share/bash-completion/completions/${targetPrefix}ghc
@@ -310,13 +301,16 @@ stdenv.mkDerivation (rec {
   meta = {
     homepage = "http://haskell.org/ghc";
     description = "The Glasgow Haskell Compiler";
-    maintainers = with lib.maintainers; [ marcweber andres peti ];
+    maintainers = with lib.maintainers; [ marcweber andres peti guibou ];
     timeout = 24 * 3600;
     inherit (ghc.meta) license platforms;
 
     # integer-simple builds are broken when GHC links against musl.
     # See https://github.com/NixOS/nixpkgs/pull/129606#issuecomment-881323743.
-    broken = enableIntegerSimple && hostPlatform.isMusl;
+    # Linker failure on macOS:
+    # https://gitlab.haskell.org/ghc/ghc/-/issues/19950#note_373726
+    broken = (enableIntegerSimple && hostPlatform.isMusl)
+      || stdenv.hostPlatform.isDarwin;
   };
 
 } // lib.optionalAttrs targetPlatform.useAndroidPrebuilt {

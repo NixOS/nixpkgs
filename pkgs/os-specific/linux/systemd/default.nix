@@ -52,8 +52,8 @@
 , libselinux
 , withLibseccomp ? lib.meta.availableOn stdenv.hostPlatform libseccomp
 , libseccomp
-, withKexectools ? lib.meta.availableOn stdenv.hostPlatform kexectools
-, kexectools
+, withKexectools ? lib.meta.availableOn stdenv.hostPlatform kexec-tools
+, kexec-tools
 , bashInteractive
 , libmicrohttpd
 
@@ -302,7 +302,7 @@ stdenv.mkDerivation rec {
   ++ lib.optionals withCompression [ bzip2 lz4 xz ]
   ++ lib.optional withCryptsetup (lib.getDev cryptsetup.dev)
   ++ lib.optional withEfi gnu-efi
-  ++ lib.optional withKexectools kexectools
+  ++ lib.optional withKexectools kexec-tools
   ++ lib.optional withLibseccomp libseccomp
   ++ lib.optional withNetworkd iptables
   ++ lib.optional withPCRE2 pcre2

@@ -1,7 +1,7 @@
 { stdenv, lib, makeDesktopItem
 , unzip, libsecret, libXScrnSaver, libxshmfence, wrapGAppsHook
 , gtk2, atomEnv, at-spi2-atk, autoPatchelfHook
-, systemd, fontconfig, libdbusmenu, buildFHSUserEnvBubblewrap
+, systemd, fontconfig, libdbusmenu, glib, buildFHSUserEnvBubblewrap
 , writeShellScriptBin
 
 # Populate passthru.tests
@@ -99,6 +99,13 @@ let
       grep -q "VSCODE_PATH='$out/lib/vscode'" $out/bin/${executableName} # check if sed succeeded
     '') + ''
       runHook postInstall
+    '';
+
+    preFixup = ''
+      gappsWrapperArgs+=(
+        # Add gio to PATH so that moving files to the trash works when not using a desktop environment
+        --prefix PATH : ${glib.bin}/bin
+      )
     '';
 
     inherit meta;

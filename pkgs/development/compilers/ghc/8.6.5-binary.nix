@@ -192,5 +192,6 @@ stdenv.mkDerivation rec {
     hydraPlatforms = builtins.filter (p: p != "aarch64-linux") platforms;
     # build segfaults, use ghc8102Binary which has proper musl support instead
     broken = stdenv.hostPlatform.isMusl;
+    maintainers = with lib.maintainers; [ guibou ];
   };
 }
