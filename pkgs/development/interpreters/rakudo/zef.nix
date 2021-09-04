@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "zef";
-  version = "0.11.10";
+  version = "0.11.11";
 
   src = fetchFromGitHub {
     owner = "ugexe";
     repo = "zef";
     rev = "v${version}";
-    sha256 = "sha256-snnvREM2RLssmE55Ea0Imcw12pmyD6+/11ZXmmUY36U=";
+    sha256 = "0jx0jj9rb01x8nv38j4wvcn2d7an1q7iznnm40wdzyn7hffsiq10";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -30,6 +30,6 @@ stdenv.mkDerivation rec {
     homepage    = "https://github.com/ugexe/zef";
     license     = licenses.artistic2;
     platforms   = platforms.unix;
-    maintainers = with maintainers; [ sgo ];
+    maintainers = with maintainers; [ sgo spacekookie ];
   };
 }
