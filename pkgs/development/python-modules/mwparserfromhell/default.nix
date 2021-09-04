@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "mwparserfromhell";
-  version = "0.6.2";
+  version = "0.6.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d3f74c0101f81ff73c61985b67f2e7048a30dc5f6a578ea1544e69133988d874";
+    sha256 = "1ad779f1bc0808d280ec1026c9de74f424de535568e21debd12830b5b0fa097e";
   };
 
   checkInputs = [

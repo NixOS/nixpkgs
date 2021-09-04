@@ -4,20 +4,20 @@
 
 mixRelease rec {
   pname = "elixir-ls";
-  version = "0.8.0";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "elixir-lsp";
     repo = "elixir-ls";
     rev = "v${version}";
-    sha256 = "sha256-pUvONMTYH8atF/p2Ep/K3bwJUDxTzCsxLPbpjP0tQpM=";
+    sha256 = "sha256-KlZq12RCor9GrwA8QMP3R+jUQ/xFHRjkLwwkvthiMU0=";
     fetchSubmodules = true;
   };
 
   mixFodDeps = fetchMixDeps {
     pname = "mix-deps-${pname}";
     inherit src version;
-    sha256 = "sha256-YRzPASpg1K2kZUga5/aQf4Q33d8aHCwhw7KJxSY56k4=";
+    sha256 = "sha256-OzjToAg+q/ybCyqzNFk28OBsItjFTbdPi416EPh2qX0=";
   };
 
   # elixir_ls is an umbrella app
@@ -68,4 +68,5 @@ mixRelease rec {
     platforms = platforms.unix;
     maintainers = teams.beam.members;
   };
+  passthru.updateScript = ./update.sh;
 }

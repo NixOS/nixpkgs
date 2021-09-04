@@ -2,7 +2,7 @@
 
 ## Introduction {#javascript-introduction}
 
-This contains instructions on how to package javascript applications. For instructions on how to add a cli package from npm please consult the #node.js section
+This contains instructions on how to package javascript applications.
 
 The various tools available will be listed in the [tools-overview](#javascript-tools-overview). Some general principles for packaging will follow. Finally some tool specific instructions will be given.
 

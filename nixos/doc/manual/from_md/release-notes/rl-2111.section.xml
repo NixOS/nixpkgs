@@ -22,7 +22,7 @@
       </listitem>
       <listitem>
         <para>
-          kOps now defaults to 1.21.0, which uses containerd as the
+          kOps now defaults to 1.21.1, which uses containerd as the
           default runtime.
         </para>
       </listitem>
@@ -205,6 +205,20 @@
           a web based virtual user administration interface for Postfix
           mail servers. Available as
           <link linkend="opt-services.postfixadmin.enable">postfixadmin</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://sr.ht/~emersion/soju">soju</link>, a
+          user-friendly IRC bouncer. Available as
+          <link xlink:href="options.html#opt-services.soju.enable">services.soju</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://nats.io/">nats</link>, a high
+          performance cloud and edge messaging system. Available as
+          <link linkend="opt-services.nats.enable">services.nats</link>.
         </para>
       </listitem>
     </itemizedlist>
@@ -1086,6 +1100,15 @@ Superuser created successfully.
           <literal>lib.formats.yaml</literal>’s
           <literal>generate</literal> will not generate JSON anymore,
           but instead use more of the YAML-specific syntax.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          GNOME desktop environment now enables
+          <literal>QGnomePlatform</literal> as the Qt platform theme,
+          which should avoid crashes when opening file chooser dialogs
+          in Qt apps by using XDG desktop portal. Additionally, it will
+          make the apps fit better visually.
         </para>
       </listitem>
     </itemizedlist>

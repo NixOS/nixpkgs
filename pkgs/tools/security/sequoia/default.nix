@@ -102,7 +102,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "A cool new OpenPGP implementation";
     homepage = "https://sequoia-pgp.org/";
-    license = licenses.gpl3;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ minijackson doronbehar ];
   };
 }

@@ -545,8 +545,8 @@ with self;
 
   ppx_optcomp = janePackage {
     pname = "ppx_optcomp";
-    version = "0.14.1";
-    hash = "0j5smqa0hig1yn8wfrb4mv0y59kkwsalmqkm5asbd7kcc6589ap4";
+    version = "0.14.3";
+    hash = "1iflgfzs23asw3k6098v84al5zqx59rx2qjw0mhvk56avlx71pkw";
     minimumOCamlVersion = "4.04.2";
     meta.description = "Optional compilation for OCaml";
     propagatedBuildInputs = [ ppxlib ];

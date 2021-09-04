@@ -228,6 +228,8 @@ with pkgs;
 
   cen64 = callPackage ../misc/emulators/cen64 { };
 
+  uxn = callPackage ../misc/emulators/uxn { };
+
   cereal = callPackage ../development/libraries/cereal { };
 
   cewl = callPackage ../tools/security/cewl { };
@@ -865,6 +867,8 @@ with pkgs;
     inherit (plasma5Packages) kdialog;
   };
 
+  akku = callPackage ../tools/package-management/akku { };
+
   albert = libsForQt5.callPackage ../applications/misc/albert {};
 
   arch-install-scripts = callPackage ../tools/misc/arch-install-scripts {};
@@ -872,6 +876,8 @@ with pkgs;
   auditwheel = callPackage ../tools/package-management/auditwheel { };
 
   amidst = callPackage ../tools/games/minecraft/amidst { };
+
+  cope = callPackage ../tools/misc/cope { };
 
   gamemode = callPackage ../tools/games/gamemode {
     libgamemode32 = pkgsi686Linux.gamemode.lib;
@@ -1023,9 +1029,9 @@ with pkgs;
   };
   termite-unwrapped = callPackage ../applications/terminal-emulators/termite { };
 
-  termonad-with-packages = callPackage ../applications/terminal-emulators/termonad {
-    inherit (haskellPackages) ghcWithPackages;
-  };
+  termonad-with-packages = callPackage ../applications/terminal-emulators/termonad { };
+
+  termonad = termonad-with-packages;
 
   termsyn = callPackage ../data/fonts/termsyn { };
 
@@ -1450,7 +1456,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) PCSC;
   };
 
-  cozy = callPackage ../applications/audio/cozy-audiobooks { };
+  cozy = callPackage ../applications/audio/cozy { };
 
   cpuid = callPackage ../os-specific/linux/cpuid { };
 
@@ -2178,9 +2184,7 @@ with pkgs;
     '';
   });
 
-  caddy = callPackage ../servers/caddy {
-    buildGoModule = buildGo115Module;
-  };
+  caddy = callPackage ../servers/caddy { };
 
   traefik = callPackage ../servers/traefik { };
 
@@ -4128,6 +4132,8 @@ with pkgs;
 
   daemonize = callPackage ../tools/system/daemonize { };
 
+  danger-gitlab = callPackage ../applications/version-management/danger-gitlab { };
+
   daq = callPackage ../applications/networking/ids/daq { };
 
   dar = callPackage ../tools/backup/dar { };
@@ -4616,7 +4622,7 @@ with pkgs;
   # The latest version used by elasticsearch, logstash, kibana and the the beats from elastic.
   # When updating make sure to update all plugins or they will break!
   elk6Version = "6.8.3";
-  elk7Version = "7.5.1";
+  elk7Version = "7.10.2";
 
   elasticsearch6 = callPackage ../servers/search/elasticsearch/6.x.nix {
     util-linux = util-linuxMinimal;
@@ -4629,12 +4635,12 @@ with pkgs;
   };
   elasticsearch7 = callPackage ../servers/search/elasticsearch/7.x.nix {
     util-linux = util-linuxMinimal;
-    jre_headless = jre8_headless; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
+    jre_headless = jdk11_headless; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
   elasticsearch7-oss = callPackage ../servers/search/elasticsearch/7.x.nix {
     enableUnfree = false;
     util-linux = util-linuxMinimal;
-    jre_headless = jre8_headless; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
+    jre_headless = jdk11_headless; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
   elasticsearch = elasticsearch6;
   elasticsearch-oss = elasticsearch6-oss;
@@ -5253,7 +5259,9 @@ with pkgs;
 
   git-big-picture = callPackage ../applications/version-management/git-and-tools/git-big-picture { };
 
-  git-branchless = callPackage ../applications/version-management/git-and-tools/git-branchless { };
+  git-branchless = callPackage ../applications/version-management/git-and-tools/git-branchless {
+    inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
+  };
 
   inherit (haskellPackages) git-brunch;
 
@@ -5428,6 +5436,8 @@ with pkgs;
   git-latexdiff = callPackage ../tools/typesetting/git-latexdiff { };
 
   gitea = callPackage ../applications/version-management/gitea { };
+
+  gokart = callPackage ../development/tools/gokart { };
 
   gl2ps = callPackage ../development/libraries/gl2ps { };
 
@@ -6344,7 +6354,7 @@ with pkgs;
 
   keeperrl = callPackage ../games/keeperrl { };
 
-  kexectools = callPackage ../os-specific/linux/kexectools { };
+  kexec-tools = callPackage ../os-specific/linux/kexec-tools { };
 
   keepkey_agent = with python3Packages; toPythonApplication keepkey_agent;
 
@@ -6622,7 +6632,7 @@ with pkgs;
   };
 
   meilisearch = callPackage ../servers/search/meilisearch {
-    inherit (darwin.apple_sdk.frameworks) IOKit Security;
+    inherit (darwin.apple_sdk.frameworks) Security;
   };
 
   memtester = callPackage ../tools/system/memtester { };
@@ -7567,6 +7577,8 @@ with pkgs;
   nmap-graphical = nmap.override {
     graphicalSupport = true;
   };
+
+  nmap-formatter = callPackage ../tools/security/nmap-formatter { };
 
   nmapsi4 = libsForQt514.callPackage ../tools/security/nmap/qt.nix { };
 
@@ -10605,6 +10617,8 @@ with pkgs;
 
   nix-bash-completions = callPackage ../shells/bash/nix-bash-completions { };
 
+  yarn-bash-completion = callPackage ../shells/bash/yarn-completion { };
+
   undistract-me = callPackage ../shells/bash/undistract-me { };
 
   dash = callPackage ../shells/dash { };
@@ -10816,6 +10830,7 @@ with pkgs;
 
   bluespec = callPackage ../development/compilers/bluespec {
     gmp-static = gmp.override { withStatic = true; };
+    tex = texlive.combined.scheme-full;
   };
 
   cakelisp = callPackage ../development/compilers/cakelisp { };
@@ -11469,7 +11484,7 @@ with pkgs;
 
   # Please update doc/languages-frameworks/haskell.section.md, “Our
   # current default compiler is”, if you bump this:
-  haskellPackages = dontRecurseIntoAttrs haskell.packages.ghc8106;
+  haskellPackages = dontRecurseIntoAttrs haskell.packages.ghc8107;
 
   inherit (haskellPackages) ghc;
 
@@ -13229,6 +13244,8 @@ with pkgs;
 
   arpa2cm = callPackage ../development/tools/build-managers/arpa2cm { };
 
+  arpa2common = callPackage ../development/libraries/arpa2common { };
+
   asn2quickder = python2Packages.callPackage ../development/tools/asn2quickder {};
 
   astyle = callPackage ../development/tools/misc/astyle { };
@@ -13744,6 +13761,8 @@ with pkgs;
   drm_info = callPackage ../development/tools/drm_info { };
 
   drush = callPackage ../development/tools/misc/drush { };
+
+  dwz = callPackage ../development/tools/misc/dwz { };
 
   easypdkprog = callPackage ../development/embedded/easypdkprog { };
 
@@ -14352,6 +14371,8 @@ with pkgs;
     inherit (gnome2) vte;
     lua = lua5;
   } // (config.radare or {}));
+
+  ran = callPackage ../servers/http/ran { };
 
   retry = callPackage ../tools/system/retry { };
 
@@ -16310,6 +16331,8 @@ with pkgs;
   libb64 = callPackage ../development/libraries/libb64 { };
 
   judy = callPackage ../development/libraries/judy { };
+
+  kddockwidgets = libsForQt5.callPackage ../development/libraries/kddockwidgets { };
 
   keybinder = callPackage ../development/libraries/keybinder {
     automake = automake111x;
@@ -18499,7 +18522,7 @@ with pkgs;
 
   qrupdate = callPackage ../development/libraries/qrupdate { };
 
-  qgnomeplatform =  libsForQt514.callPackage ../development/libraries/qgnomeplatform { };
+  qgnomeplatform = libsForQt5.callPackage ../development/libraries/qgnomeplatform { };
 
   randomx = callPackage ../development/libraries/randomx { };
 
@@ -18533,6 +18556,8 @@ with pkgs;
   rttr = callPackage ../development/libraries/rttr { };
 
   rubberband = callPackage ../development/libraries/rubberband { };
+
+  rustc-demangle = callPackage ../development/libraries/rustc-demangle { };
 
   s2geometry = callPackage ../development/libraries/s2geometry { };
 
@@ -19006,6 +19031,8 @@ with pkgs;
   };
 
   tremor = callPackage ../development/libraries/tremor { };
+
+  triehash = callPackage ../tools/misc/triehash { };
 
   trillian = callPackage ../tools/misc/trillian {
     buildGoModule = buildGo115Module;
@@ -21261,6 +21288,13 @@ with pkgs;
     ];
   };
 
+  linux_5_14 = callPackage ../os-specific/linux/kernel/linux-5.14.nix {
+    kernelPatches = [
+      kernelPatches.bridge_stp_helper
+      kernelPatches.request_key_helper
+    ];
+  };
+
   linux-rt_5_10 = callPackage ../os-specific/linux/kernel/linux-rt-5.10.nix {
     kernelPatches = [
       kernelPatches.bridge_stp_helper
@@ -21339,9 +21373,7 @@ with pkgs;
 
     acpi_call = callPackage ../os-specific/linux/acpi-call {};
 
-    akvcam = callPackage ../os-specific/linux/akvcam {
-      inherit (qt5) qmake;
-    };
+    akvcam = callPackage ../os-specific/linux/akvcam { };
 
     amdgpu-pro = callPackage ../os-specific/linux/amdgpu-pro { };
 
@@ -21553,7 +21585,7 @@ with pkgs;
 
   # Update this when adding the newest kernel major version!
   # And update linux_latest_for_hardened below if the patches are already available
-  linuxPackages_latest = linuxPackages_5_13;
+  linuxPackages_latest = linuxPackages_5_14;
   linux_latest = linuxPackages_latest.kernel;
 
   # Realtime kernel packages.
@@ -21578,6 +21610,7 @@ with pkgs;
   linuxPackages_5_4 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_4);
   linuxPackages_5_10 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_10);
   linuxPackages_5_13 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_13);
+  linuxPackages_5_14 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_14);
 
   # When adding to the list above:
   # - Update linuxPackages_latest to the latest version
@@ -23713,6 +23746,8 @@ with pkgs;
     inherit (python3Packages) python wrapPython pygments markdown;
   };
 
+  chatty = callPackage ../applications/networking/instant-messengers/chatty { };
+
   chirp = callPackage ../applications/radio/chirp { };
 
   browsh = callPackage ../applications/networking/browsers/browsh { };
@@ -24343,6 +24378,8 @@ with pkgs;
 
   geany = callPackage ../applications/editors/geany { };
   geany-with-vte = callPackage ../applications/editors/geany/with-vte.nix { };
+
+  genact = callPackage ../applications/misc/genact { };
 
   genxword = callPackage ../applications/misc/genxword { };
 
@@ -29887,6 +29924,8 @@ with pkgs;
     inherit (gnome) zenity;
   };
 
+  protonup = with python3Packages; toPythonApplication protonup;
+
   sdlpop = callPackage ../games/sdlpop { };
 
   stepmania = callPackage ../games/stepmania {
@@ -31409,6 +31448,8 @@ with pkgs;
   dosbox = callPackage ../misc/emulators/dosbox { };
 
   emu2 = callPackage ../misc/emulators/emu2 { };
+
+  apt = callPackage ../tools/package-management/apt { };
 
   dpkg = callPackage ../tools/package-management/dpkg { };
 

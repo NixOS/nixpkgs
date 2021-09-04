@@ -6,7 +6,9 @@ with lib;
 
 let
 
-  etc' = filter (f: f.enable) (attrValues config.environment.etc);
+  # if the source is a local file, it should be imported to the store
+  localToStore = mapAttrs (name: value: if name == "source" then "${value}" else value);
+  etc' = map localToStore (filter (f: f.enable) (attrValues config.environment.etc));
 
   etc = pkgs.runCommandLocal "etc" {
     # This is needed for the systemd module

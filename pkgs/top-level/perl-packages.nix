@@ -10657,6 +10657,23 @@ let
     propagatedBuildInputs = [ pkgs.more FileWhich TermReadKey ]; # `more` used in tests
   };
 
+  IOPty = buildPerlModule {
+    pname = "IO-Pty";
+    version = "1.16";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/T/TO/TODDR/IO-Tty-1.16.tar.gz";
+      sha256 = "sha256-jxoJwHBzitxpXfkD8uf3QwjdjZkbkUwLw5Cg5gISlN0=";
+    };
+    buildPhase = "make";
+    checkPhase = "make test";
+    installPhase = "make install";
+    meta = {
+      homepage = "https://github.com/toddr/IO-Tty";
+      description = "Pseudo TTY object class";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   IOPrompt = buildPerlModule {
     pname = "IO-Prompt";
     version = "0.997004";
@@ -10746,6 +10763,23 @@ let
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CA/CAPOEIRAB/IO-Stringy-2.113.tar.gz";
       sha256 = "0kpycb56l6ilvmdx9swx9wpj1x3vfnqdflfjd6dn6spnz750y8ji";
+    };
+  };
+
+  IOStty = buildPerlModule {
+    pname = "IO-Stty";
+    version = "0.04";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/T/TO/TODDR/IO-Stty-0.04.tar.gz";
+      sha256 = "sha256-XJUJ8ahpPYKH+gE97wv4eqZM2ScThGHvjetVUDxmUcI=";
+    };
+    buildPhase = "make";
+    checkPhase = "make test";
+    installPhase = "make install";
+    meta = {
+      homepage = "http://wiki.github.com/toddr/IO-Stty";
+      description = "Change and print terminal line settings";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
@@ -19810,6 +19844,22 @@ let
       homepage = "https://github.com/frioux/Syntax-Keyword-Junction";
       description = "Perl6 style Junction operators in Perl5";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  SyntaxKeywordTry = buildPerlModule {
+    pname = "Syntax-Keyword-Try";
+    version = "0.25";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/Syntax-Keyword-Try-0.25.tar.gz";
+      sha256 = "0xd82gcpcrnmwxsbk7x0ainmyybdc087g6j69hrpy80j0asnq2f5";
+    };
+    propagatedBuildInputs = [ XSParseKeyword ];
+    perlPreHook = lib.optionalString stdenv.isDarwin "export LD=$CC";
+    meta = {
+      description = "A try/catch/finally syntax for perl";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.zakame ];
     };
   };
 

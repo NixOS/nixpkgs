@@ -26,6 +26,14 @@ let
   buildKernel = any (n: n == configFile) [ "kernel" "all" ];
   buildUser = any (n: n == configFile) [ "user" "all" ];
 
+  # XXX: You always want to build kernel modules with the same stdenv as the
+  # kernel was built with. However, since zfs can also be built for userspace we
+  # need to correctly pick between the provided/default stdenv, and the one used
+  # by the kernel.
+  # If you don't do this your ZFS builds will fail on any non-standard (e.g.
+  # clang-built) kernels.
+  stdenv' = if kernel == null then stdenv else kernel.stdenv;
+
   common = { version
     , sha256
     , extraPatches ? []
@@ -34,7 +42,7 @@ let
     , latestCompatibleLinuxPackages
     , kernelCompatible ? null }:
 
-    stdenv.mkDerivation {
+    stdenv'.mkDerivation {
       name = "zfs-${configFile}-${version}${optionalString buildKernel "-${kernel.version}"}";
 
       src = fetchFromGitHub {
@@ -210,13 +218,14 @@ in {
 
   zfsUnstable = common {
     # check the release notes for compatible kernels
-    kernelCompatible = kernel.kernelAtLeast "3.10" && kernel.kernelOlder "5.14";
+    kernelCompatible = kernel.kernelAtLeast "3.10" && kernel.kernelOlder "5.15";
     latestCompatibleLinuxPackages = linuxPackages_5_13;
 
     # this package should point to a version / git revision compatible with the latest kernel release
-    version = "2.1.0";
+    version = "unstable-2021-08-30";
+    rev = "3b89d9518df2c7fd747e349873a3d4d498beb20e";
 
-    sha256 = "sha256-YdY4SStXZGBBdAHdM3R/unco7ztxI3s0/buPSNSeh5o=";
+    sha256 = "sha256-wVbjpVrPQmhJmMqdGUf0IwlCIoOsT7Zfj5lxSKcOsgg=";
 
     isUnstable = true;
   };

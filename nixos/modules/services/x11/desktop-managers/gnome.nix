@@ -372,6 +372,13 @@ in
       xdg.portal.enable = true;
       xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
 
+      # Harmonize Qt5 application style and also make them use the portal for file chooser dialog.
+      qt5 = {
+        enable = mkDefault true;
+        platformTheme = mkDefault "gnome";
+        style = mkDefault "adwaita";
+      };
+
       networking.networkmanager.enable = mkDefault true;
 
       services.xserver.updateDbusEnvironment = true;

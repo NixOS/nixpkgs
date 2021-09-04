@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "lttng-modules-${kernel.version}";
-  version = "2.12.6";
+  version = "2.13.0";
 
   src = fetchurl {
     url = "https://lttng.org/files/lttng-modules/lttng-modules-${version}.tar.bz2";
-    sha256 = "sha256-lawqLPkthdI/+9rKah7A18FnIR0eD7hQq5AASj9HXqo=";
+    sha256 = "0mikc3fdjd0w6rrcyksjzmv0czvgba6yk8dfmz4a3cr8s4y2pgsy";
   };
 
   buildInputs = kernel.moduleBuildDependencies;

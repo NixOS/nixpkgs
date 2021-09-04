@@ -23,7 +23,7 @@ mkDerivation rec {
     owner = "openstreetmap";
     repo = "merkaartor";
     rev = version;
-    sha256 = "sha256-Gx+gnVbSY8JnG03kO5vVQNlSZRl/hrKTdDbh7lyIMbA=";
+    sha256 = "sha256-I3QNCXzwhEFa8aOdwl3UJV8MLZ9caN9wuaaVrGFRvbQ=";
   };
 
   nativeBuildInputs = [ qmake qttools ];

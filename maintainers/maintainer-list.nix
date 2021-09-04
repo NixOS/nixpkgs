@@ -80,6 +80,12 @@
     githubId = 791309;
     name = "Jan Hrnko";
   };
+  _1000teslas = {
+    name = "Kevin Tran";
+    email = "47207223+1000teslas@users.noreply.github.com";
+    github = "1000teslas";
+    githubId = 47207223;
+  };
   _3699n = {
     email = "nicholas@nvk.pm";
     github = "3699n";
@@ -3620,6 +3626,12 @@
       longkeyid = "rsa4096/0xECC755EE583C1672";
       fingerprint = "2F93 661D AC17 EA98 A104  F780 ECC7 55EE 583C 1672";
     }];
+  };
+  flexagoon = {
+    email = "flexagoon@pm.me";
+    github = "flexagoon";
+    githubId = 66178592;
+    name = "Pavel Zolotarevskiy";
   };
   flexw = {
     email = "felix.weilbach@t-online.de";
@@ -7444,6 +7456,16 @@
     githubId = 16665913;
     name = "Maxim Schuwalow";
     email = "maxim.schuwalow@gmail.com";
+  };
+  msfjarvis = {
+    github = "msfjarvis";
+    githubId = 3348378;
+    name = "Harsh Shandilya";
+    email = "nixos@msfjarvis.dev";
+    keys = [{
+      longkeyid = "rsa4096/0xB7843F823355E9B9";
+      fingerprint = "8F87 050B 0F9C B841 1515  7399 B784 3F82 3355 E9B9";
+    }];
   };
   msiedlarek = {
     email = "mikolaj@siedlarek.pl";

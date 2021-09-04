@@ -15,7 +15,7 @@
   # Utility functions, could just import but passing in for efficiency
   lib
 
-, # Use to reevaluate Nixpkgs; a dirty hack that should be removed
+, # Use to reevaluate Nixpkgs
   nixpkgsFun
 
   ## Other parameters
@@ -218,7 +218,7 @@ let
     appendOverlays = extraOverlays:
       if extraOverlays == []
       then self
-      else import ./stage.nix (args // { overlays = args.overlays ++ extraOverlays; });
+      else nixpkgsFun { overlays = args.overlays ++ extraOverlays; };
 
     # NOTE: each call to extend causes a full nixpkgs rebuild, adding ~130MB
     #       of allocations. DO NOT USE THIS IN NIXPKGS.

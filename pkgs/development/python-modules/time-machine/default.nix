@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "time-machine";
-  version = "2.3.1";
+  version = "2.4.0";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "adamchainz";
     repo = pname;
     rev = version;
-    sha256 = "1flim8xaa7qglh2b39cf57i8g0kg0707pw3mdkrgh0xjn27bv9bi";
+    sha256 = "sha256-1k8mGkgJw0MfydJ/Sm8qDvFNaIqoHR1fZkVrXxvc8Zk=";
   };
 
   propagatedBuildInputs = [

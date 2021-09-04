@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "caddy";
-  version = "2.4.3";
+  version = "2.4.4";
 
   subPackages = [ "cmd/caddy" ];
 
@@ -10,10 +10,10 @@ buildGoModule rec {
     owner = "caddyserver";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Z3BVx7gCkls5Hy+H6lA3DOBequRutwa2F34FDt9n+8I=";
+    sha256 = "sha256-POdDORICDE49BQ5LLTs4GTb1VoSXZD4K4MpRkVoj+AY=";
   };
 
-  vendorSha256 = "sha256-Zwpakw/vyDVngc1Bn+RdRPECNweruwGxsT4dfvMELkQ=";
+  vendorSha256 = "sha256-JAQaxEmdX0fpDahe55pEKnUW64k8JjrytkBrXpQJz3I=";
 
   passthru.tests = { inherit (nixosTests) caddy; };
 

@@ -23,6 +23,7 @@ let
   offloadCfg = pCfg.offload;
   primeEnabled = syncCfg.enable || offloadCfg.enable;
   nvidiaPersistencedEnabled =  cfg.nvidiaPersistenced;
+  nvidiaSettings = cfg.nvidiaSettings;
 in
 
 {
@@ -140,6 +141,15 @@ in
         If this is enabled, then the bus IDs of the NVIDIA and Intel GPUs have to be
         specified (<option>hardware.nvidia.prime.nvidiaBusId</option> and
         <option>hardware.nvidia.prime.intelBusId</option>).
+      '';
+    };
+
+    hardware.nvidia.nvidiaSettings = mkOption {
+      default = true;
+      type = types.bool;
+      description = ''
+        Whether to add nvidia-settings, NVIDIA's GUI configuration tool, to
+        systemPackages.
       '';
     };
 
@@ -279,7 +289,8 @@ in
     hardware.opengl.extraPackages = optional offloadCfg.enable nvidia_x11.out;
     hardware.opengl.extraPackages32 = optional offloadCfg.enable nvidia_x11.lib32;
 
-    environment.systemPackages = [ nvidia_x11.bin nvidia_x11.settings ]
+    environment.systemPackages = [ nvidia_x11.bin ]
+      ++ optionals nvidiaSettings [ nvidia_x11.settings ]
       ++ optionals nvidiaPersistencedEnabled [ nvidia_x11.persistenced ];
 
     systemd.packages = optional cfg.powerManagement.enable nvidia_x11.out;

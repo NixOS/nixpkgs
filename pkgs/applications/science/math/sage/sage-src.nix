@@ -13,19 +13,41 @@ let
   # Fetch a diff between `base` and `rev` on sage's git server.
   # Used to fetch trac tickets by setting the `base` to the last release and the
   # `rev` to the last commit of the ticket.
-  fetchSageDiff = { base, name, rev, sha256, ...}@args: (
+  fetchSageDiff = { base, name, rev, sha256, squashed ? false, ...}@args: (
     fetchpatch ({
       inherit name sha256;
 
-      # We used to use
-      # "https://git.sagemath.org/sage.git/patch?id2=${base}&id=${rev}"
-      # but the former way does not squash multiple patches together.
-      url = "https://github.com/sagemath/sage/compare/${base}...${rev}.diff";
+      # There are three places to get changes from:
+      #
+      # 1) From Sage's Trac. Contains all release tags (like "9.4") and all developer
+      # branches (wip patches from tickets), but exports each commit as a separate
+      # patch, so merge commits can lead to conflicts. Used if squashed == false.
+      #
+      # 2) From GitHub's sagemath/sage repo. This lets us use a GH feature that allows
+      # us to choose between a .patch file, with one patch per commit, or a .diff file,
+      # which squashes all commits into a single diff. This is used if squashed ==
+      # true. This repo has all release tags. However, it has no developer branches, so
+      # this option can't be used if a change wasn't yet shipped in a (possibly beta)
+      # release.
+      #
+      # 3) From GitHub's sagemath/sagetrac-mirror repo. Mirrors all developer branches,
+      # but has no release tags. The only use case not covered by 1 or 2 is when we need
+      # to apply a patch from an open ticket that contains merge commits.
+      #
+      # Item 3 could cover all use cases if the sagemath/sagetrack-mirror repo had
+      # release tags, but it requires a sha instead of a release number in "base", which
+      # is inconvenient.
+      urls = if squashed
+             then [
+               "https://github.com/sagemath/sage/compare/${base}...${rev}.diff"
+               "https://github.com/sagemath/sagetrac-mirror/compare/${base}...${rev}.diff"
+             ]
+             else [ "https://git.sagemath.org/sage.git/patch?id2=${base}&id=${rev}" ];
 
       # We don't care about sage's own build system (which builds all its dependencies).
       # Exclude build system changes to avoid conflicts.
       excludes = [ "build/*" ];
-    } // builtins.removeAttrs args [ "rev" "base" "sha256" ])
+    } // builtins.removeAttrs args [ "rev" "base" "sha256" "squashed" ])
   );
 in
 stdenv.mkDerivation rec {
@@ -80,6 +102,14 @@ stdenv.mkDerivation rec {
     # now set the cache dir to be within the .sage directory. This is not
     # strictly necessary, but keeps us from littering in the user's HOME.
     ./patches/sympow-cache.patch
+
+    # https://trac.sagemath.org/ticket/32305
+    (fetchSageDiff {
+      base = "9.4";
+      name = "networkx-2.6-upgrade.patch";
+      rev = "9808325853ba9eb035115e5b056305a1c9d362a0";
+      sha256 = "sha256-gJSqycCtbAVr5qnVEbHFUvIuTOvaxFIeffpzd6nH4DE=";
+    })
   ];
 
   patches = nixPatches ++ bugfixPatches ++ packageUpgradePatches;

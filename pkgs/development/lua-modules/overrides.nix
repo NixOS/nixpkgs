@@ -121,6 +121,11 @@ with super;
         sha256 = "0gfvvbri9kyzhvq3bvdbj2l6mwvlz040dk4mrd5m9gz79f7w109c";
       })
     ];
+
+    # there is only a rockspec.in in the repo, the actual rockspec must be generated
+    preConfigure = ''
+      make rock
+    '';
   });
 
   lrexlib-gnu = super.lrexlib-gnu.override({
@@ -139,10 +144,6 @@ with super;
     buildInputs = [
       pkgs.glibc.dev
     ];
-  });
-
-  ltermbox = super.ltermbox.override( {
-    disabled = !isLua51 || isLuaJIT;
   });
 
   lua-iconv = super.lua-iconv.override({
@@ -348,6 +349,19 @@ with super;
     '';
   });
 
+  std-_debug = super.std-_debug.overrideAttrs(oa: {
+    # run make to generate lib/std/_debug/version.lua
+    preConfigure = ''
+      make all
+    '';
+  });
+
+  std-normalize = super.std-normalize.overrideAttrs(oa: {
+    # run make to generate lib/std/_debug/version.lua
+    preConfigure = ''
+      make all
+    '';
+  });
 
   # aliases
   cjson = super.lua-cjson;

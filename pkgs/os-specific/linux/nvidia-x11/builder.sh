@@ -17,10 +17,8 @@ buildPhase() {
         # Create the module.
         echo "Building linux driver against kernel: $kernel";
         cd kernel
-        sysSrc=$(echo $kernel/lib/modules/$kernelVersion/source)
-        sysOut=$(echo $kernel/lib/modules/$kernelVersion/build)
         unset src # used by the nv makefile
-        make IGNORE_PREEMPT_RT_PRESENCE=1 NV_BUILD_SUPPORTS_HMM=1 SYSSRC=$sysSrc SYSOUT=$sysOut module -j$NIX_BUILD_CORES
+        make $makeFlags -j $NIX_BUILD_CORES module
 
         cd ..
     fi

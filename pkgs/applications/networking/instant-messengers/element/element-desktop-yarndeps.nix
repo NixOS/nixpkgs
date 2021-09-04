@@ -2002,11 +2002,11 @@
       };
     }
     {
-      name = "electron___electron_13.1.7.tgz";
+      name = "electron___electron_13.1.9.tgz";
       path = fetchurl {
-        name = "electron___electron_13.1.7.tgz";
-        url  = "https://registry.yarnpkg.com/electron/-/electron-13.1.7.tgz";
-        sha1 = "7e17f5c93a8d182a2a486884fed3dc34ab101be9";
+        name = "electron___electron_13.1.9.tgz";
+        url  = "https://registry.yarnpkg.com/electron/-/electron-13.1.9.tgz";
+        sha1 = "668e2632b81e9fa21edfd32876282d3e2ff7fd76";
       };
     }
     {

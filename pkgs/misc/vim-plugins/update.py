@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -p nix-prefetch-git -p python3 -p python3Packages.GitPython nix -i python3
+#!nix-shell update-shell.nix -i python3
+
 
 # format:
 # $ nix run nixpkgs.python3Packages.black -c black update.py
@@ -66,7 +67,7 @@ class VimEditor(pluginupdate.Editor):
                 f.write(textwrap.indent(textwrap.dedent(
                     f"""
   {plugin.normalized_name} = buildVimPluginFrom2Nix {{
-    pname = "{plugin.normalized_name}";
+    pname = "{plugin.name}";
     version = "{plugin.version}";
     src = fetchFromGitHub {{
       owner = "{owner}";

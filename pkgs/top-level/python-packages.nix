@@ -1373,6 +1373,8 @@ in {
 
   cert-chain-resolver = callPackage ../development/python-modules/cert-chain-resolver { };
 
+  certauth = callPackage ../development/python-modules/certauth { };
+
   certbot = callPackage ../development/python-modules/certbot { };
 
   certbot-dns-cloudflare = callPackage ../development/python-modules/certbot-dns-cloudflare { };
@@ -2564,7 +2566,9 @@ in {
 
   fints = callPackage ../development/python-modules/fints { };
 
-  fiona = callPackage ../development/python-modules/fiona { };
+  fiona = callPackage ../development/python-modules/fiona {
+    gdal = pkgs.gdal_2;
+  };
 
   fipy = callPackage ../development/python-modules/fipy { };
 
@@ -5695,6 +5699,8 @@ in {
   };
 
   protobuf3-to-dict = callPackage ../development/python-modules/protobuf3-to-dict { };
+
+  protonup = callPackage ../development/python-modules/protonup { };
 
   prov = callPackage ../development/python-modules/prov { };
 
@@ -9609,6 +9615,8 @@ in {
   };
 
   youtube-search = callPackage ../development/python-modules/youtube-search { };
+
+  youtube-search-python = callPackage ../development/python-modules/youtube-search-python { };
 
   youtube-transcript-api = callPackage ../development/python-modules/youtube-transcript-api { };
 
