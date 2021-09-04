@@ -2654,6 +2654,7 @@ with pkgs;
 
   element-desktop = callPackage ../applications/networking/instant-messengers/element/element-desktop.nix {
     inherit (darwin.apple_sdk.frameworks) Security AppKit CoreServices;
+    electron = electron_13;
   };
   element-desktop-wayland = element-desktop.override {
     useWayland = true;
@@ -13259,7 +13260,19 @@ with pkgs;
   aws-adfs = with python3Packages; toPythonApplication aws-adfs;
 
   inherit (callPackages ../development/tools/electron { })
-    electron electron_3 electron_4 electron_5 electron_6 electron_7 electron_8 electron_9 electron_10 electron_11 electron_12 electron_13;
+    electron
+    electron_3
+    electron_4
+    electron_5
+    electron_6
+    electron_7
+    electron_8
+    electron_9
+    electron_10
+    electron_11
+    electron_12
+    electron_13
+    electron_14;
 
   autobuild = callPackage ../development/tools/misc/autobuild { };
 
