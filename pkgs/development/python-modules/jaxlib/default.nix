@@ -2,10 +2,13 @@
 # backend will require some additional work. Those wheels are located here:
 # https://storage.googleapis.com/jax-releases/libtpu_releases.html.
 
-# For future reference, the easiest way to test that the gpu is being used is:
+# For future reference, the easiest way to test the GPU backend is to run
 #   NIX_PATH=.. nix-shell -p python3 python3Packages.jax "python3Packages.jaxlib.override { cudaSupport = true; }"
-#   python -c "from jax.lib import xla_bridge; print(xla_bridge.get_backend().platform)"
-# See https://github.com/google/jax/issues/971#issuecomment-508216439.
+#   python -c "from jax.lib import xla_bridge; assert xla_bridge.get_backend().platform == 'gpu'"
+#   python -c "from jax import random; random.PRNGKey(0)"
+# See https://github.com/google/jax/issues/971#issuecomment-508216439. There's
+# no convenient way to test the GPU backend in the derivation since the nix
+# build environment blocks access to the GPU.
 
 { addOpenGLRunpath, autoPatchelfHook, buildPythonPackage, config, fetchPypi
 , fetchurl, isPy39, lib, stdenv
@@ -66,8 +69,8 @@ buildPythonPackage rec {
     done
   '';
 
-  # pip dependencies
-  propagatedBuildInputs = [ absl-py flatbuffers scipy ];
+  # pip dependencies and optionally cudatoolkit.
+  propagatedBuildInputs = [ absl-py flatbuffers scipy ] ++ lib.optional cudaSupport cudatoolkit_11;
 
   pythonImportsCheck = [ "jaxlib" ];
 
