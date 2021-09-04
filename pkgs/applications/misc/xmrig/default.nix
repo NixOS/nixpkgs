@@ -1,7 +1,14 @@
 { stdenv, lib, fetchFromGitHub, cmake, libuv, libmicrohttpd, openssl, hwloc
+, writeText
+, configFile ? null
 , donateLevel ? 0
 }:
 
+let
+  configFileWriteCommand = if configFile != null then ''
+    echo "${configFile}" > $out/bin/config.json
+  '' else "";
+in
 stdenv.mkDerivation rec {
   pname = "xmrig";
   version = "6.14.0";
@@ -25,7 +32,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     install -vD xmrig $out/bin/xmrig
-  '';
+  '' + configFileWriteCommand;
 
   meta = with lib; {
     description = "Monero (XMR) CPU miner";
