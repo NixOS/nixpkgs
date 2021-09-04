@@ -338,6 +338,8 @@ with pkgs;
 
   creddump = callPackage ../tools/security/creddump {};
 
+  credential-detector = callPackage ../tools/security/credential-detector { };
+
   credslayer = callPackage ../tools/security/credslayer { };
 
   device-tree_rpi = callPackage ../os-specific/linux/device-tree/raspberrypi.nix {};
