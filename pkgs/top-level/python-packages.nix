@@ -9706,6 +9706,10 @@ in {
 
   zodbpickle = callPackage ../development/python-modules/zodbpickle { };
 
+  zope_bobo = callPackage ../development/python-modules/zope_bobo { };
+
+  zope_bobodoctestumentation = callPackage ../development/python-modules/zope_bobodoctestumentation { };
+
   zope_broken = callPackage ../development/python-modules/zope_broken { };
 
   zope_component = callPackage ../development/python-modules/zope_component { };
