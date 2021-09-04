@@ -154,9 +154,14 @@ in {
       };
 
       sidekiqPort = lib.mkOption {
-        description = "TCP port used by the mastodon-sidekiq service";
+        description = "TCP port used by the mastodon-sidekiq service.";
         type = lib.types.port;
         default = 55002;
+      };
+      sidekiqThreads = lib.mkOption {
+        description = "Worker threads used by the mastodon-sidekiq service.";
+        type = lib.types.int;
+        default = 25;
       };
 
       vapidPublicKeyFile = lib.mkOption {
@@ -524,9 +529,10 @@ in {
       wantedBy = [ "multi-user.target" ];
       environment = env // {
         PORT = toString(cfg.sidekiqPort);
+        DB_POOL = toString cfg.sidekiqThreads;
       };
       serviceConfig = {
-        ExecStart = "${cfg.package}/bin/sidekiq -c 25 -r ${cfg.package}";
+        ExecStart = "${cfg.package}/bin/sidekiq -c ${toString cfg.sidekiqThreads} -r ${cfg.package}";
         Restart = "always";
         RestartSec = 20;
         EnvironmentFile = "/var/lib/mastodon/.secrets_env";
