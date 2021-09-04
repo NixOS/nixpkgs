@@ -19032,6 +19032,8 @@ with pkgs;
 
   tremor = callPackage ../development/libraries/tremor { };
 
+  triehash = callPackage ../tools/misc/triehash { };
+
   trillian = callPackage ../tools/misc/trillian {
     buildGoModule = buildGo115Module;
   };
@@ -31446,6 +31448,8 @@ with pkgs;
   dosbox = callPackage ../misc/emulators/dosbox { };
 
   emu2 = callPackage ../misc/emulators/emu2 { };
+
+  apt = callPackage ../tools/package-management/apt { };
 
   dpkg = callPackage ../tools/package-management/dpkg { };
 
