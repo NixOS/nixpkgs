@@ -5437,6 +5437,8 @@ with pkgs;
 
   gitea = callPackage ../applications/version-management/gitea { };
 
+  gokart = callPackage ../development/tools/gokart { };
+
   gl2ps = callPackage ../development/libraries/gl2ps { };
 
   glab = callPackage ../applications/version-management/git-and-tools/glab { };
@@ -7575,6 +7577,8 @@ with pkgs;
   nmap-graphical = nmap.override {
     graphicalSupport = true;
   };
+
+  nmap-formatter = callPackage ../tools/security/nmap-formatter { };
 
   nmapsi4 = libsForQt514.callPackage ../tools/security/nmap/qt.nix { };
 

@@ -1371,6 +1371,8 @@ in {
 
   cert-chain-resolver = callPackage ../development/python-modules/cert-chain-resolver { };
 
+  certauth = callPackage ../development/python-modules/certauth { };
+
   certbot = callPackage ../development/python-modules/certbot { };
 
   certbot-dns-cloudflare = callPackage ../development/python-modules/certbot-dns-cloudflare { };
