@@ -1,6 +1,7 @@
 { lib, stdenv
-, rtpPath ? "share/vim-plugins"
+, rtpPath
 , vim
+, vimGenDocHook
 }:
 
 rec {
@@ -25,6 +26,7 @@ rec {
     addRtp "${rtpPath}/${path}" attrs (stdenv.mkDerivation (attrs // {
       name = namePrefix + name;
 
+      nativeBuildInputs = attrs.nativeBuildInputs or [] ++ [ vimGenDocHook ];
       inherit unpackPhase configurePhase buildPhase addonInfo preInstall postInstall;
 
       installPhase = ''
@@ -33,21 +35,6 @@ rec {
         target=$out/${rtpPath}/${path}
         mkdir -p $out/${rtpPath}
         cp -r . $target
-
-        # build help tags
-        if [ -d "$target/doc" ]; then
-          echo "Building help tags"
-          if ! ${vim}/bin/vim -N -u NONE -i NONE -n -E -s -V1 -c "helptags $target/doc" +quit!; then
-            echo "Failed to build help tags!"
-            exit 1
-          fi
-        else
-          echo "No docs available"
-        fi
-
-        if [ -n "$addonInfo" ]; then
-          echo "$addonInfo" > $target/addon-info.json
-        fi
 
         runHook postInstall
       '';

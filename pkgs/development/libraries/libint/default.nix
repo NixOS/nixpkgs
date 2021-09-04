@@ -1,6 +1,7 @@
 { lib, stdenv, fetchFromGitHub, autoconf, automake, libtool
 , python3, perl, gmpxx, mpfr, boost, eigen, gfortran, cmake
-, enableFMA ? false, enableFortran ? true
+, enableFMA ? stdenv.hostPlatform.fmaSupport
+, enableFortran ? true
 }:
 
 let

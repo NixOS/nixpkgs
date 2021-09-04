@@ -1373,6 +1373,8 @@ in {
 
   cert-chain-resolver = callPackage ../development/python-modules/cert-chain-resolver { };
 
+  certauth = callPackage ../development/python-modules/certauth { };
+
   certbot = callPackage ../development/python-modules/certbot { };
 
   certbot-dns-cloudflare = callPackage ../development/python-modules/certbot-dns-cloudflare { };
@@ -5697,6 +5699,8 @@ in {
   };
 
   protobuf3-to-dict = callPackage ../development/python-modules/protobuf3-to-dict { };
+
+  protonup = callPackage ../development/python-modules/protonup { };
 
   prov = callPackage ../development/python-modules/prov { };
 
