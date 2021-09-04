@@ -49,7 +49,7 @@ self: super: {
   });
 
   # cabal-install-parsers is written for Cabal 3.4
-  cabal-install-parsers = super.cabal-install-parsers.override { Cabal = super.Cabal_3_4_0_0; };
+  cabal-install-parsers = super.cabal-install-parsers.override { Cabal = super.Cabal_3_6_0_0; };
 
   # Jailbreak to fix the build.
   base-noprelude = doJailbreak super.base-noprelude;
