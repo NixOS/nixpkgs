@@ -203,7 +203,7 @@ self: super: {
 
   direnv-vim = super.direnv-vim.overrideAttrs (oa: {
     preFixup = oa.preFixup or "" + ''
-      substituteInPlace $out/share/vim-plugins/direnv-vim/autoload/direnv.vim \
+      substituteInPlace $out/share/vim-plugins/direnv.vim/autoload/direnv.vim \
         --replace "let s:direnv_cmd = get(g:, 'direnv_cmd', 'direnv')" \
           "let s:direnv_cmd = get(g:, 'direnv_cmd', '${lib.getBin direnv}/bin/direnv')"
     '';
