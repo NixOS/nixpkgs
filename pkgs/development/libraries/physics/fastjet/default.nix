@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, python2 }:
+{ lib
+, stdenv
+, fetchurl
+, python
+, withPython ? false
+}:
 
 stdenv.mkDerivation rec {
   pname = "fastjet";
@@ -9,12 +14,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-7gfIdHyOrYbYjeSp5OjR6efXYUlz9WMbqCl/egJHi5E=";
   };
 
-  buildInputs = [ python2 ];
+  buildInputs = lib.optional withPython python;
 
   configureFlags = [
     "--enable-allcxxplugins"
-    "--enable-pyext"
-    ];
+  ] ++ lib.optional withPython "--enable-pyext";
 
   enableParallelBuilding = true;
 

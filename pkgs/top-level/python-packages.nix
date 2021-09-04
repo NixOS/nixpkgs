@@ -2502,6 +2502,11 @@ in {
 
   fastimport = callPackage ../development/python-modules/fastimport { };
 
+  fastjet = toPythonModule (pkgs.fastjet.override {
+    withPython = true;
+    inherit python;
+  });
+
   fastjsonschema = callPackage ../development/python-modules/fastjsonschema { };
 
   fastnlo_toolkit = toPythonModule (pkgs.fastnlo_toolkit.override {
