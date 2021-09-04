@@ -30,9 +30,9 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake python3 ];
 
-  buildInputs = [ libxml2 libffi ];
+  buildInputs = [ libffi ];
 
-  propagatedBuildInputs = [ ncurses zlib ];
+  propagatedBuildInputs = [ ncurses zlib libxml2 ];
 
   cmakeFlags = with stdenv; [
     "-DCMAKE_BUILD_TYPE=${if debugVersion then "Debug" else "Release"}"
