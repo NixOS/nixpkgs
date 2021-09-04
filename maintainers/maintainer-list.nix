@@ -1324,6 +1324,12 @@
     githubId = 7346933;
     name = "betaboon";
   };
+  bew = {
+    email = "benoit.dechezelles@gmail.com";
+    github = "bew";
+    githubId = 9730330;
+    name = "Benoit de Chezelles";
+  };
   bfortz = {
     email = "bernard.fortz@gmail.com";
     github = "bfortz";
