@@ -4,11 +4,14 @@
 
 # For future reference, the easiest way to test the GPU backend is to run
 #   NIX_PATH=.. nix-shell -p python3 python3Packages.jax "python3Packages.jaxlib.override { cudaSupport = true; }"
+#   export XLA_FLAGS=--xla_gpu_force_compilation_parallelism=1
 #   python -c "from jax.lib import xla_bridge; assert xla_bridge.get_backend().platform == 'gpu'"
 #   python -c "from jax import random; random.PRNGKey(0)"
-# See https://github.com/google/jax/issues/971#issuecomment-508216439. There's
-# no convenient way to test the GPU backend in the derivation since the nix
-# build environment blocks access to the GPU.
+#   python -c "from jax import random; x = random.normal(random.PRNGKey(0), (100, 100)); x @ x"
+# There's no convenient way to test the GPU backend in the derivation since the
+# nix build environment blocks access to the GPU. See also:
+#   * https://github.com/google/jax/issues/971#issuecomment-508216439
+#   * https://github.com/google/jax/issues/5723#issuecomment-913038780
 
 { addOpenGLRunpath, autoPatchelfHook, buildPythonPackage, config, fetchPypi
 , fetchurl, isPy39, lib, stdenv
@@ -57,6 +60,7 @@ buildPythonPackage rec {
   # artifacts. autoPatchelfHook runs in postFixup and auto-stripping runs in the
   # patchPhase. Dependencies:
   #   * libcudart.so.11.0 -> cudatoolkit_11.lib
+  #   * libcublas.so.11   -> cudatoolkit_11
   #   * libcuda.so.1      -> opengl driver in /run/opengl-driver/lib
   preInstallCheck = lib.optional cudaSupport ''
     shopt -s globstar
@@ -65,7 +69,9 @@ buildPythonPackage rec {
 
     for file in $out/**/*.so; do
       rpath=$(patchelf --print-rpath $file)
-      patchelf --set-rpath "$rpath:${lib.makeLibraryPath [ cudatoolkit_11.lib ]}" $file
+      # For some reason `makeLibraryPath` on `cudatoolkit_11` maps to
+      # <cudatoolkit_11.lib>/lib which is different from <cudatoolkit_11>/lib.
+      patchelf --set-rpath "$rpath:${cudatoolkit_11}/lib:${lib.makeLibraryPath [ cudatoolkit_11.lib ]}" $file
     done
   '';
 
