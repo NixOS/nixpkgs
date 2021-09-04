@@ -27,8 +27,8 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "A modern replacement for ps written in Rust";
     homepage = "https://github.com/dalance/procs";
+    changelog = "https://github.com/dalance/procs/raw/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ dalance Br1ght0ne ];
-    platforms = with platforms; linux ++ darwin;
   };
 }
