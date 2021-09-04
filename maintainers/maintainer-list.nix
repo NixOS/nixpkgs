@@ -6706,6 +6706,12 @@
     githubId = 775189;
     name = "Jordi Masip";
   };
+  MaskedBelgian = {
+    email = "michael.colicchia@imio.be";
+    github = "MaskedBelgian";
+    githubId = 29855073;
+    name = "Michael Colicchia";
+  };
   matdsoupe = {
     github = "matdsoupe";
     githubId = 44469426;
