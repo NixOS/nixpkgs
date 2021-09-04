@@ -1668,6 +1668,8 @@ with pkgs;
 
   ili2c = callPackage ../tools/misc/ili2c { };
 
+  ilspy = callPackage ../development/tools/ilspy { };
+
   imagelol = callPackage ../tools/compression/imagelol { };
 
   imageworsener = callPackage ../tools/graphics/imageworsener { };
