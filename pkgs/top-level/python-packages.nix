@@ -9758,6 +9758,8 @@ in {
 
   zope_testrunner = callPackage ../development/python-modules/zope_testrunner { };
 
+  zope_zc_recipe_deployment = callPackage ../development/python-modules/zope_zc_recipe_deployment { };
+
   zopfli = callPackage ../development/python-modules/zopfli { };
 
   zstandard = callPackage ../development/python-modules/zstandard { };
