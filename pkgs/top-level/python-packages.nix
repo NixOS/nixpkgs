@@ -1427,6 +1427,8 @@ in {
 
   check-manifest = callPackage ../development/python-modules/check-manifest { };
 
+  check-python-versions = callPackage ../development/python-modules/check-python-versions { };
+
   cheetah3 = callPackage ../development/python-modules/cheetah3 { };
 
   cheroot = callPackage ../development/python-modules/cheroot { };
