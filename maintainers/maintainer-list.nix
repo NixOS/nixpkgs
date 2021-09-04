@@ -1324,6 +1324,12 @@
     githubId = 7346933;
     name = "betaboon";
   };
+  bew = {
+    email = "benoit.dechezelles@gmail.com";
+    github = "bew";
+    githubId = 9730330;
+    name = "Benoit de Chezelles";
+  };
   bfortz = {
     email = "bernard.fortz@gmail.com";
     github = "bfortz";
@@ -10277,6 +10283,12 @@
     github = "fkstef";
     githubId = 8668915;
     name = "Stephane Schitter";
+  };
+  staccato = {
+    name = "staccato";
+    email = "moveq@riseup.net";
+    github = "staccato";
+    githubId = 86573128;
   };
   steell = {
     email = "steve@steellworks.com";

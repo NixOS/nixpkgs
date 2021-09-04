@@ -7274,6 +7274,8 @@ with pkgs;
 
   mscgen = callPackage ../tools/graphics/mscgen { };
 
+  metabigor = callPackage ../tools/security/metabigor { };
+
   metasploit = callPackage ../tools/security/metasploit { };
 
   ms-sys = callPackage ../tools/misc/ms-sys { };
@@ -20120,7 +20122,7 @@ with pkgs;
     modules = [ nginxModules.dav nginxModules.moreheaders ];
   };
 
-  nginxModules = callPackage ../servers/http/nginx/modules.nix { };
+  nginxModules = recurseIntoAttrs (callPackage ../servers/http/nginx/modules.nix { });
 
   # We should move to dynmaic modules and create a nginxFull package with all modules
   nginxShibboleth = nginxStable.override {
@@ -31111,6 +31113,8 @@ with pkgs;
   };
 
   gobuster = callPackage ../tools/security/gobuster { };
+
+  gotestwaf = callPackage ../tools/security/gotestwaf { };
 
   guetzli = callPackage ../applications/graphics/guetzli { };
 
