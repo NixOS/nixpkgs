@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, ncurses, perl, help2man
+{ stdenv, lib, fetchurl, fetchpatch, ncurses, perl, help2man
 , apparmorRulesFromClosure
 }:
 
@@ -13,6 +13,12 @@ stdenv.mkDerivation rec {
   outputs = ["out" "apparmor"];
 
   patches = [
+    (fetchpatch {
+      name = "CVE-2021-40491.patch";
+      url = "https://git.savannah.gnu.org/cgit/inetutils.git/patch/?id=58cb043b190fd04effdaea7c9403416b436e50dd";
+      excludes = [ "NEWS" ];
+      sha256 = "0001ij7493x14f05zfjk11x1x0363sbbxh08nnfv226pmbaxzbkn";
+    })
     ./whois-Update-Canadian-TLD-server.patch
     ./service-name.patch
     # https://git.congatec.com/yocto/meta-openembedded/commit/3402bfac6b595c622e4590a8ff5eaaa854e2a2a3
