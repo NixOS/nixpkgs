@@ -9218,6 +9218,8 @@ in {
 
   versioneer = callPackage ../development/python-modules/versioneer { };
 
+  versiontag = callPackage ../development/python-modules/versiontag { };
+
   versiontools = callPackage ../development/python-modules/versiontools { };
 
   vertica-python = callPackage ../development/python-modules/vertica-python { };
