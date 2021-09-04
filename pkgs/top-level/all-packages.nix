@@ -14770,6 +14770,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  taoup = callPackage ../tools/misc/taoup { };
+
   tcptrack = callPackage ../development/tools/misc/tcptrack { };
 
   teensyduino = arduino-core.override { withGui = true; withTeensyduino = true; };
