@@ -17,9 +17,9 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     for shell in bash fish zsh; do
-      $out/bin/procs --completion $shell > procs.$shell
-      installShellCompletion procs.$shell
+      $out/bin/procs --completion $shell
     done
+    installShellCompletion procs.{bash,fish} --zsh _procs
   '';
 
   buildInputs = lib.optionals stdenv.isDarwin [ Security libiconv ];
