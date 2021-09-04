@@ -14178,7 +14178,7 @@ with pkgs;
 
   luaformatter = callPackage ../development/tools/luaformatter
     (lib.optionalAttrs stdenv.isDarwin {
-      stdenv = overrideCC stdenv llvmPackages_latest.clang;
+      stdenv = overrideCC stdenv llvmPackages_9.clang;
     });
 
   malt = callPackage ../development/tools/profiling/malt {};
