@@ -19969,6 +19969,8 @@ with pkgs;
 
   jetty = callPackage ../servers/http/jetty { };
 
+  jibri = callPackage ../servers/jibri { };
+
   jicofo = callPackage ../servers/jicofo { };
 
   jitsi-meet = callPackage ../servers/web-apps/jitsi-meet { };
@@ -21576,6 +21578,8 @@ with pkgs;
   perf-tools = callPackage ../os-specific/linux/perf-tools { };
 
   pipes = callPackage ../misc/screensavers/pipes { };
+
+  pipes-rs = callPackage ../misc/screensavers/pipes-rs { };
 
   pipework = callPackage ../os-specific/linux/pipework { };
 
