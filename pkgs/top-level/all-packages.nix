@@ -3598,7 +3598,7 @@ with pkgs;
 
   bud = callPackage ../tools/networking/bud { };
 
-  bump2version = python37Packages.callPackage ../applications/version-management/git-and-tools/bump2version { };
+  bump2version = python3Packages.callPackage ../applications/version-management/git-and-tools/bump2version { };
 
   bumpver = callPackage ../applications/version-management/bumpver { };
 
@@ -14739,9 +14739,7 @@ with pkgs;
 
   vultr-cli = callPackage ../development/tools/vultr-cli { };
 
-  vulnix = callPackage ../tools/security/vulnix {
-    python3Packages = python37Packages;
-  };
+  vulnix = callPackage ../tools/security/vulnix { };
 
   vtable-dumper = callPackage ../development/tools/misc/vtable-dumper { };
 
@@ -25272,11 +25270,7 @@ with pkgs;
 
   kubetail = callPackage ../applications/networking/cluster/kubetail { } ;
 
-  kupfer = callPackage ../applications/misc/kupfer {
-    # using python36 as there appears to be a waf issue with python37
-    # see https://github.com/NixOS/nixpkgs/issues/60498
-    python3Packages = python36Packages;
-  };
+  kupfer = callPackage ../applications/misc/kupfer { };
 
   kvirc = libsForQt514.callPackage ../applications/networking/irc/kvirc { };
 

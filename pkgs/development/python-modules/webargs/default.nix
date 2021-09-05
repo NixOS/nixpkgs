@@ -4,12 +4,12 @@
 
 buildPythonPackage rec {
   pname = "webargs";
-  version = "8.0.0";
+  version = "8.0.1";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0xy6na8axc5wnp2wg3kvqbpl2iv0hx0rsnlrmrgkgp88znx6cmjn";
+    sha256 = "bcce022250ee97cfbb0ad07b02388ac90a226ef4b479ec84317152345a565614";
   };
 
   pythonImportsCheck = [

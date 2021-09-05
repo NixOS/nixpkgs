@@ -45,14 +45,14 @@
 
 buildPythonPackage rec {
   pname = "mitmproxy";
-  version = "6.0.2";
+  version = "7.0.2";
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-FyIZKFQtf6qvwo4+NzPa/KOmBCcdGJ3jCqxz26+S2e4=";
+    sha256 = "0y5zsay9b6xgibs6m4gckw63jip35vsdfajsh1nw2zcb2xs1a7qs";
   };
 
   propagatedBuildInputs = [

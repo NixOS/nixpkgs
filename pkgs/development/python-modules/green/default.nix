@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "green";
-  version = "3.2.6";
+  version = "3.3.0";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e51d4ff6e6885942d944304fedc7440a8f87917aa09526beeecb31a0dae655b8";
+    sha256 = "a4d86f2dfa4ccbc86f24bcb9c9ab8bf34219c876c24e9f0603aab4dfe73bb575";
   };
 
   propagatedBuildInputs = [
