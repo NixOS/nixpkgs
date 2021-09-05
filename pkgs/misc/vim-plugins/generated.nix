@@ -5497,6 +5497,18 @@ final: prev:
     meta.homepage = "https://github.com/tomtom/tcomment_vim/";
   };
 
+  telescope-coc-nvim = buildVimPluginFrom2Nix {
+    pname = "telescope-coc.nvim";
+    version = "2021-08-26";
+    src = fetchFromGitHub {
+      owner = "fannheyward";
+      repo = "telescope-coc.nvim";
+      rev = "1037a9186b5889dc3145ce9494956006c8b20f17";
+      sha256 = "0i2g168q57pfbm63idl054sdbflkgd8a754pvk0q9w7w1mzpql2q";
+    };
+    meta.homepage = "https://github.com/fannheyward/telescope-coc.nvim/";
+  };
+
   telescope-dap-nvim = buildVimPluginFrom2Nix {
     pname = "telescope-dap.nvim";
     version = "2021-03-26";

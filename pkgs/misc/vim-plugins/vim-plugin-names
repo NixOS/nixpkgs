@@ -147,6 +147,7 @@ euclio/vim-markdown-composer
 f-person/git-blame.nvim
 famiu/bufdelete.nvim
 famiu/feline.nvim
+fannheyward/telescope-coc.nvim
 farmergreg/vim-lastplace
 fatih/vim-go
 fcpg/vim-osc52
