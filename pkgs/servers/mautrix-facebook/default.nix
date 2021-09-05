@@ -1,4 +1,5 @@
-{ fetchFromGitHub
+{ enableSystemd ? stdenv.isLinux
+, fetchFromGitHub
 , lib
 , python3
 , stdenv
@@ -29,7 +30,7 @@ python3.pkgs.buildPythonPackage rec {
     ruamel_yaml
     unpaddedbase64
     yarl
-  ];
+  ] ++ lib.optional enableSystemd systemd;
 
   doCheck = false;
 
