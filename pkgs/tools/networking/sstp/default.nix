@@ -22,13 +22,14 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ pkg-config ];
+
   buildInputs = [ libevent openssl ppp ];
 
-  meta = {
+  meta = with lib; {
     description = "SSTP client for Linux";
     homepage = "http://sstp-client.sourceforge.net/";
-    platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.ktosiek ];
-    license = lib.licenses.gpl2;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ ktosiek ];
+    license = licenses.gpl2Plus;
   };
 }
