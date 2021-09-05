@@ -1865,7 +1865,6 @@ dont-distribute-packages:
  - lambda-options
  - lambdaFeed
  - lambdaLit
- - lambdabot
  - lambdabot-xmpp
  - lambdabot-zulip
  - lambdacms-media

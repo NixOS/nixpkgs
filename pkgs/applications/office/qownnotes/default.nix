@@ -1,15 +1,17 @@
-{ mkDerivation, lib, stdenv, fetchurl, qmake, qttools, qtbase, qtsvg, qtdeclarative, qtxmlpatterns, qtwebsockets, qtx11extras
-, qtwayland }:
+{ mkDerivation, lib, stdenv, fetchurl
+, qmake, qttools, qtbase, qtsvg, qtdeclarative, qtxmlpatterns, qtwebsockets
+, qtx11extras, qtwayland
+}:
 
 mkDerivation rec {
   pname = "qownnotes";
-  version = "21.7.4";
+  version = "21.8.12";
 
   src = fetchurl {
     url = "https://download.tuxfamily.org/${pname}/src/${pname}-${version}.tar.xz";
     # Fetch the checksum of current version with curl:
     # curl https://download.tuxfamily.org/qownnotes/src/qownnotes-<version>.tar.xz.sha256
-    sha256 = "3957dc623b419582ef7ccc5cb04b8f97bed4e96e8ecc2e99bef9dca7ce255b8e";
+    sha256 = "85fbfb6288411ed585de85dd2cfcf3b3308eb4634824b96c5842d091da4cd476";
   };
 
   nativeBuildInputs = [ qmake qttools ];

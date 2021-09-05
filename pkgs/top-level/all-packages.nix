@@ -9483,8 +9483,6 @@ with pkgs;
 
   timetrap = callPackage ../applications/office/timetrap { };
 
-  timetable = callPackage ../applications/office/timetable { };
-
   timekeeper = callPackage ../applications/office/timekeeper { };
 
   timezonemap = callPackage ../development/libraries/timezonemap { };
@@ -12728,7 +12726,7 @@ with pkgs;
 
   ### LUA interpreters
   luaInterpreters = callPackage ./../development/interpreters/lua-5 {};
-  inherit (luaInterpreters) lua5_1 lua5_2 lua5_2_compat lua5_3 lua5_3_compat lua5_4 lua5_4_compat luajit_openresty luajit_2_1 luajit_2_0;
+  inherit (luaInterpreters) lua5_1 lua5_2 lua5_2_compat lua5_3 lua5_3_compat lua5_4 lua5_4_compat luajit_2_1 luajit_2_0;
 
   lua5 = lua5_2_compat;
   lua = lua5;
@@ -19959,6 +19957,8 @@ with pkgs;
 
   jetty = callPackage ../servers/http/jetty { };
 
+  jibri = callPackage ../servers/jibri { };
+
   jicofo = callPackage ../servers/jicofo { };
 
   jitsi-meet = callPackage ../servers/web-apps/jitsi-meet { };
@@ -22025,6 +22025,8 @@ with pkgs;
   perf-tools = callPackage ../os-specific/linux/perf-tools { };
 
   pipes = callPackage ../misc/screensavers/pipes { };
+
+  pipes-rs = callPackage ../misc/screensavers/pipes-rs { };
 
   pipework = callPackage ../os-specific/linux/pipework { };
 
@@ -28110,12 +28112,7 @@ with pkgs;
   wrapNeovimUnstable = callPackage ../applications/editors/neovim/wrapper.nix { };
   wrapNeovim = neovim-unwrapped: lib.makeOverridable (neovimUtils.legacyWrapper neovim-unwrapped);
   neovim-unwrapped = callPackage ../applications/editors/neovim {
-    # See:
-    #   - https://github.com/NixOS/nixpkgs/issues/129099
-    #   - https://github.com/NixOS/nixpkgs/issues/128959
-    lua =
-      if (stdenv.isDarwin && stdenv.isAarch64) then luajit_openresty else
-      luajit;
+    lua = luajit;
   };
 
   neovimUtils = callPackage ../applications/editors/neovim/utils.nix { };

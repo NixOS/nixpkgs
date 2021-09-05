@@ -2664,7 +2664,6 @@ broken-packages:
   - lagrangian
   - lambda2js
   - lambdaBase
-  - lambdabot-social-plugins
   - lambdabot-utils
   - lambda-bridge
   - lambda-canvas
