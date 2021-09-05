@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://rdfind.pauldreik.se/";
     description = "Removes or hardlinks duplicate files very swiftly";
-    license = lib.licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = [ maintainers.wmertens ];
     platforms = platforms.all;
   };
