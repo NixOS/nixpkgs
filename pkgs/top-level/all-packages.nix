@@ -25652,6 +25652,8 @@ with pkgs;
 
   dupd = callPackage ../tools/misc/dupd { };
 
+  jdownloader2 = callPackage ../applications/networking/jdownloader2 { };
+
   jdupes = callPackage ../tools/misc/jdupes { };
 
   jed = callPackage ../applications/editors/jed { };
