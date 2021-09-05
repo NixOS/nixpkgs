@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
       binary files.
     '';
     homepage = "https://wiki.gentoo.org/wiki/Hardened/PaX_Utilities";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.unix;
     maintainers = with maintainers; [ thoughtpolice joachifm ];
   };
