@@ -28,5 +28,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ nicknovitski ];
     platforms = platforms.unix;
+    changelog = "https://github.com/cantino/reckon/blob/v${version}/CHANGELOG.md";
   };
 }
