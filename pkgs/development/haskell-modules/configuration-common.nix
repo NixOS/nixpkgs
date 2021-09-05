@@ -1118,6 +1118,7 @@ self: super: {
   # The test suite depends on an impure cabal-install installation in
   # $HOME, which we don't have in our build sandbox.
   cabal-install-parsers = dontCheck super.cabal-install-parsers;
+  cabal-install-parsers_0_4_2 = dontCheck super.cabal-install-parsers_0_4_2;
 
   # 2021-08-18: Erroneously  claims that it needs a newer HStringTemplate (>= 0.8.8) than stackage.
   gitit = doJailbreak super.gitit;
@@ -1763,8 +1764,11 @@ self: super: {
 
   # 2021-05-09 haskell-ci pins ShellCheck 0.7.1
   # https://github.com/haskell-CI/haskell-ci/issues/507
+  # 2021-09-05 haskell-ci needs Cabal 3.4,
+  # cabal-install-parsers uses Cabal 3.6 since 0.4.3
   haskell-ci = super.haskell-ci.override {
     ShellCheck = self.ShellCheck_0_7_1;
+    cabal-install-parsers = self.cabal-install-parsers_0_4_2;
   };
 
   Frames-streamly = overrideCabal (super.Frames-streamly.override { relude = super.relude_1_0_0_1; }) (drv: {
