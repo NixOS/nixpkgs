@@ -89,7 +89,7 @@ stageFuns: let
   folder = nextStage: stageFun: prevStage: let
     args = stageFun prevStage;
     args' = args // {
-      stdenv = args.stdenv // {
+      stdenv = args.stdenv.override {
         # For debugging
         __bootPackages = prevStage;
         __hatPackages = nextStage;

@@ -52,6 +52,10 @@ let lib = import ../../../lib; in lib.makeOverridable (
 , # The implementation of `mkDerivation`, parameterized with the final stdenv so we can tie the knot.
   # This is convient to have as a parameter so the stdenv "adapters" work better
   mkDerivationFromStdenv ? import ./make-derivation.nix { inherit lib config; }
+
+  # previous / next stage for debugging, see stdenv/booter.nix
+, __bootPackages ? null
+, __hatPackages ? null
 }:
 
 let
@@ -166,6 +170,8 @@ let
       inherit overrides;
 
       inherit cc hasCC;
+
+      inherit __bootPackages __hatPackages;
     }
 
     # Propagate any extra attributes.  For instance, we use this to
