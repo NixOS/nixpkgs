@@ -1554,6 +1554,8 @@ with pkgs;
 
   flood = nodePackages.flood;
 
+  fntsample = callPackage ../tools/text/fntsample { };
+
   fxlinuxprintutil = callPackage ../tools/misc/fxlinuxprintutil { };
 
   genann = callPackage ../development/libraries/genann { };
