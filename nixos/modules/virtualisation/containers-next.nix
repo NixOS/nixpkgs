@@ -150,6 +150,10 @@ let
               useDHCP = false;
               useNetworkd = true;
             };
+            # We need a static libsudoers if we bind-mount into a user-namespaced
+            # container since the bind-mounts are owned by `nouser:nogroup` then (including
+            # `/nix/store`) and this doesn't like sudo.
+            security.sudo.package = mkDefault pkgs.sudo-nspawn;
             # FIXME get rid of this hack!
             # On a test-system I experienced that this service was hanging for no reason.
             # After a config-activation in ExecReload which affected larger parts of the OS in the

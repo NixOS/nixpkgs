@@ -385,6 +385,11 @@ in {
             "systemd-run -M container0 --pty --quiet /bin/sh --login -c 'test -e /run/host/credentials/snens'"
         )
 
+    with subtest("Proper sudo"):
+        server.succeed(
+            "systemd-run -M container0 --pty --quiet /bin/sh --login -c 'sudo -u root /run/current-system/sw/bin/ls'"
+        )
+
     server.succeed("machinectl poweroff container0")
     server.succeed("machinectl poweroff container1")
     server.succeed("machinectl poweroff publicnet")
