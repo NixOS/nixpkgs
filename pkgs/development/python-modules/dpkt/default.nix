@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "dpkt";
-  version = "1.9.7.1";
+  version = "1.9.7.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "74899d557ec4e337db29cecc80548b23a1205384d30ee407397cfb9ab178e3d4";
+    sha256 = "80f977667ebbad2b5c4f7b7f45ee8bea6622fb71723f68a9a8fe6274520c853b";
   };
 
   # Project has no tests
