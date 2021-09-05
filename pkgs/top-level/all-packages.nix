@@ -338,6 +338,8 @@ with pkgs;
 
   creddump = callPackage ../tools/security/creddump {};
 
+  credential-detector = callPackage ../tools/security/credential-detector { };
+
   credslayer = callPackage ../tools/security/credslayer { };
 
   device-tree_rpi = callPackage ../os-specific/linux/device-tree/raspberrypi.nix {};
@@ -29957,6 +29959,8 @@ with pkgs;
 
   conglomerate = callPackage ../applications/science/biology/conglomerate { };
 
+  dalfox = callPackage ../tools/security/dalfox { };
+
   dcm2niix = callPackage ../applications/science/biology/dcm2niix { };
 
   deepdiff = with python3Packages; toPythonApplication deepdiff;
@@ -31124,7 +31128,9 @@ with pkgs;
 
   hatari = callPackage ../misc/emulators/hatari { };
 
-  hck = callPackage ../tools/text/hck { };
+  hck = callPackage ../tools/text/hck {
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
+  };
 
   helm = callPackage ../applications/audio/helm { };
 
