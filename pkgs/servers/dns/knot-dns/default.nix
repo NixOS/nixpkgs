@@ -1,6 +1,7 @@
 { lib, stdenv, fetchurl, pkg-config, gnutls, liburcu, lmdb, libcap_ng, libidn2, libunistring
 , systemd, nettle, libedit, zlib, libiconv, libintl, libmaxminddb, libbpf, nghttp2, libmnl
 , autoreconfHook, nixosTests
+, fetchpatch
 }:
 
 stdenv.mkDerivation rec {
@@ -25,6 +26,11 @@ stdenv.mkDerivation rec {
     # They are later created from NixOS itself.
     ./dont-create-run-time-dirs.patch
     ./runtime-deps.patch
+    # rename task_t to worker_task_t to fix redefinition issues on (aach64-)darwin
+    (fetchpatch {
+      url = "https://gitlab.nic.cz/knot/knot-dns/-/commit/a70b718085f9b97e556970444313c37a702a60f7.diff";
+      sha256 = "0m776pb9iga0lj2gadk23shfrcfrsrzlyaj8800klw7xh6qq32bm";
+    })
   ];
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];
