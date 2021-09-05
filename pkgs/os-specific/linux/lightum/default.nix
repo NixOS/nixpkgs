@@ -1,7 +1,8 @@
 { lib, stdenv, fetchgit, libX11, libXScrnSaver, libXext, glib, dbus, pkg-config, systemd }:
 
 stdenv.mkDerivation {
-  name = "lightum-2014-06-07";
+  pname = "lightum";
+  version = "unstable-2014-06-07";
   src = fetchgit {
     url = "https://github.com/poliva/lightum";
     rev = "123e6babe0669b23d4c1dfa5511088608ff2baa8";

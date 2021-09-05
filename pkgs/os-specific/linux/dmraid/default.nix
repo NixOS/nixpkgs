@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, fetchpatch, lvm2 }:
 
 stdenv.mkDerivation rec {
-  name = "dmraid-1.0.0.rc16";
+  pname = "dmraid";
+  version = "1.0.0.rc16";
 
   src = fetchurl {
-    url = "https://people.redhat.com/~heinzm/sw/dmraid/src/old/${name}.tar.bz2";
+    url = "https://people.redhat.com/~heinzm/sw/dmraid/src/old/dmraid-${version}.tar.bz2";
     sha256 = "0m92971gyqp61darxbiri6a48jz3wq3gkp8r2k39320z0i6w8jgq";
   };
 

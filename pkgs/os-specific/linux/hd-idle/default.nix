@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "hd-idle-1.05";
+  pname = "hd-idle";
+  version = "1.05";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/hd-idle/${name}.tgz";
+    url = "mirror://sourceforge/project/hd-idle/hd-idle-${version}.tgz";
     sha256 = "031sm996s0rhy3z91b9xvyimsj2yd2fhsww2al2hxda5s5wzxzjf";
   };
 
