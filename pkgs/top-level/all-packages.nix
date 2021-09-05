@@ -903,6 +903,8 @@ with pkgs;
 
   sx-go = callPackage ../tools/security/sx-go { };
 
+  tauon = callPackage ../applications/audio/tauon { };
+
   tfk8s = callPackage ../tools/misc/tfk8s { };
 
   tnat64 = callPackage ../tools/networking/tnat64 { };
