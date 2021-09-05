@@ -7215,7 +7215,7 @@ with pkgs;
     pythonPackages = python3Packages;
   };
 
-  mirakurun = nodePackages.mirakurun;
+  mirakurun = callPackage ../applications/video/mirakurun { };
 
   miredo = callPackage ../tools/networking/miredo { };
 
