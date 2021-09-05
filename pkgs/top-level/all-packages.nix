@@ -5277,6 +5277,10 @@ with pkgs;
 
   git-cinnabar = callPackage ../applications/version-management/git-and-tools/git-cinnabar { };
 
+  git-cliff = callPackage ../applications/version-management/git-and-tools/git-cliff {
+    inherit (pkgs.darwin.apple_sdk.frameworks) Security;
+  };
+
   git-codeowners = callPackage ../applications/version-management/git-and-tools/git-codeowners { };
 
   git-codereview = callPackage ../applications/version-management/git-and-tools/git-codereview { };
