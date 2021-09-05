@@ -162,8 +162,6 @@ with self; with super; {
     pythonPackages = self;
   });
 
-  hg-git = callPackage ../development/python-modules/hg-git { };
-
   hgsvn = callPackage ../development/python-modules/hgsvn { };
 
   hsaudiotag = callPackage ../development/python-modules/hsaudiotag { };

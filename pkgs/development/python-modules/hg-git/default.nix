@@ -3,6 +3,7 @@
 , fetchPypi
 , dulwich
 , brotli
+, mercurial
 }:
 
 buildPythonPackage rec {
@@ -16,9 +17,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ dulwich brotli ];
 
-  # circular dependency, tests need mercurial to be installed, but hg-git is a
-  # dependency of nixpkgs' mercurial package.
-  doCheck = false;
+  checkInputs = [ mercurial ];
 
   meta = with lib; {
     description = "Push and pull from a Git server using Mercurial";
