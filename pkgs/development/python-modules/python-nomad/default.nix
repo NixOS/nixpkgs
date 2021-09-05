@@ -14,6 +14,8 @@ buildPythonPackage rec {
   # Tests require nomad agent
   doCheck = false;
 
+  pythonImportsCheck = [ "nomad" ];
+
   meta = with lib; {
     description = "Python client library for Hashicorp Nomad";
     homepage = "https://github.com/jrxFive/python-nomad";
