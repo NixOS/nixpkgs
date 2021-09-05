@@ -1112,28 +1112,6 @@ self: super: {
   # Therefore we jailbreak it.
   hakyll-contrib-hyphenation = doJailbreak super.hakyll-contrib-hyphenation;
 
-  # Jailbreak due to bounds on multiple dependencies,
-  # bound on pandoc needs to be patched since it is conditional
-  hakyll = doJailbreak (overrideCabal super.hakyll (drv: {
-    patches = [
-      # Remove when Hakyll > 4.14.0.0
-      (pkgs.fetchpatch {
-        url = "https://github.com/jaspervdj/hakyll/commit/0dc6127d81ff688e27c36ce469230320eee60246.patch";
-        sha256 = "sha256-YyRz3bAmIBODTEeS5kGl2J2x31SjiPoLzUZUlo3nHvQ=";
-      })
-      # Remove when Hakyll > 4.14.0.0
-      (pkgs.fetchpatch {
-        url = "https://github.com/jaspervdj/hakyll/commit/af9e29b5456c105dc948bc46c93e989a650b5ed1.patch";
-        sha256 = "sha256-ghc0V5L9OybNHWKmM0vhjRBN2rIvDlp+ClcK/aQst44=";
-      })
-      # Remove when Hakyll > 4.14.0.0
-      (pkgs.fetchpatch {
-        url = "https://github.com/jaspervdj/hakyll/commit/e0c63558a82ac4347181d5d77dce7f763a1db410.patch";
-        sha256 = "sha256-wYlxJmq56YQ29vpVsQhO+JdL0GBezCAfkdhIdFnLYsc=";
-      })
-    ];
-  }));
-
   # 2020-06-22: NOTE: > 0.4.0 => rm Jailbreak: https://github.com/serokell/nixfmt/issues/71
   nixfmt = doJailbreak super.nixfmt;
 
