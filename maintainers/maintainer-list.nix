@@ -276,6 +276,12 @@
     githubId = 315003;
     name = "Adam Saponara";
   };
+  aegyo = {
+    email = "jessica.scoltock@protonmail.com";
+    github = "aegyo";
+    githubId = 4183969;
+    name = "Jessica Chen";
+  };
   aerialx = {
     email = "aaron+nixos@aaronlindsay.com";
     github = "AerialX";
