@@ -16,12 +16,12 @@
 
 buildPythonPackage rec {
   pname = "fakeredis";
-  version = "1.5.2";
+  version = "1.6.0";
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "18fc1808d2ce72169d3f11acdb524a00ef96bd29970c6d34cfeb2edb3fc0c020";
+    sha256 = "sha256-Ecz8l2nXGNN+RbOC5kproCWGtiKvoDcaa9hXZtciVfM=";
   };
 
   propagatedBuildInputs = [
@@ -38,6 +38,11 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-mock
     pytestCheckHook
+  ];
+
+  disabledTestPaths = [
+    # Missing support for later pytest-asyncio, https://github.com/jamesls/fakeredis/issues/307
+    "test/test_aioredis1.py"
   ];
 
   pythonImportsCheck = [ "fakeredis" ];

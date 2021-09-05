@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "gitleaks";
-  version = "7.5.0";
+  version = "7.6.0";
 
   src = fetchFromGitHub {
     owner = "zricethezav";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-s7EOCoGciGT5+Fose9BffsHHE/SsSMmNoWGmeAv6Agk=";
+    sha256 = "sha256-XRpbbtQiF9EnGMICjyXXm2XjuR0jGC7UiY+UHIAMODM=";
   };
 
-  vendorSha256 = "sha256-Cc4DJPpOMHxDcH22S7znYo7QHNRXv8jOJhznu09kaE4=";
+  vendorSha256 = "sha256-86PspExE+T/IuCvpf6LAkWcCRlHPqP5VUbHAckEzALc=";
 
   ldflags = [
     "-s" "-w" "-X github.com/zricethezav/gitleaks/v${lib.versions.major version}/version.Version=${version}"

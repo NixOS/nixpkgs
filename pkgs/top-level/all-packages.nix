@@ -338,6 +338,8 @@ with pkgs;
 
   creddump = callPackage ../tools/security/creddump {};
 
+  credential-detector = callPackage ../tools/security/credential-detector { };
+
   credslayer = callPackage ../tools/security/credslayer { };
 
   device-tree_rpi = callPackage ../os-specific/linux/device-tree/raspberrypi.nix {};
@@ -2654,6 +2656,7 @@ with pkgs;
 
   element-desktop = callPackage ../applications/networking/instant-messengers/element/element-desktop.nix {
     inherit (darwin.apple_sdk.frameworks) Security AppKit CoreServices;
+    electron = electron_13;
   };
   element-desktop-wayland = element-desktop.override {
     useWayland = true;
@@ -6632,7 +6635,7 @@ with pkgs;
   };
 
   meilisearch = callPackage ../servers/search/meilisearch {
-    inherit (darwin.apple_sdk.frameworks) IOKit Security;
+    inherit (darwin.apple_sdk.frameworks) Security;
   };
 
   memtester = callPackage ../tools/system/memtester { };
@@ -7272,6 +7275,8 @@ with pkgs;
   mrtg = callPackage ../tools/misc/mrtg { };
 
   mscgen = callPackage ../tools/graphics/mscgen { };
+
+  metabigor = callPackage ../tools/security/metabigor { };
 
   metasploit = callPackage ../tools/security/metasploit { };
 
@@ -13259,7 +13264,19 @@ with pkgs;
   aws-adfs = with python3Packages; toPythonApplication aws-adfs;
 
   inherit (callPackages ../development/tools/electron { })
-    electron electron_3 electron_4 electron_5 electron_6 electron_7 electron_8 electron_9 electron_10 electron_11 electron_12 electron_13;
+    electron
+    electron_3
+    electron_4
+    electron_5
+    electron_6
+    electron_7
+    electron_8
+    electron_9
+    electron_10
+    electron_11
+    electron_12
+    electron_13
+    electron_14;
 
   autobuild = callPackage ../development/tools/misc/autobuild { };
 
@@ -19032,6 +19049,8 @@ with pkgs;
 
   tremor = callPackage ../development/libraries/tremor { };
 
+  triehash = callPackage ../tools/misc/triehash { };
+
   trillian = callPackage ../tools/misc/trillian {
     buildGoModule = buildGo115Module;
   };
@@ -20095,7 +20114,7 @@ with pkgs;
     modules = [ nginxModules.dav nginxModules.moreheaders ];
   };
 
-  nginxModules = callPackage ../servers/http/nginx/modules.nix { };
+  nginxModules = recurseIntoAttrs (callPackage ../servers/http/nginx/modules.nix { });
 
   # We should move to dynmaic modules and create a nginxFull package with all modules
   nginxShibboleth = nginxStable.override {
@@ -24022,6 +24041,8 @@ with pkgs;
   };
 
   docker-distribution = callPackage ../applications/virtualization/docker/distribution.nix { };
+
+  dockfmt = callPackage ../development/tools/dockfmt { };
 
   afterburn = callPackage ../tools/admin/afterburn {};
 
@@ -30383,6 +30404,8 @@ with pkgs;
 
   conglomerate = callPackage ../applications/science/biology/conglomerate { };
 
+  dalfox = callPackage ../tools/security/dalfox { };
+
   dcm2niix = callPackage ../applications/science/biology/dcm2niix { };
 
   deepdiff = with python3Packages; toPythonApplication deepdiff;
@@ -31447,6 +31470,8 @@ with pkgs;
 
   emu2 = callPackage ../misc/emulators/emu2 { };
 
+  apt = callPackage ../tools/package-management/apt { };
+
   dpkg = callPackage ../tools/package-management/dpkg { };
 
   dumb = callPackage ../misc/dumb { };
@@ -31538,6 +31563,8 @@ with pkgs;
 
   gobuster = callPackage ../tools/security/gobuster { };
 
+  gotestwaf = callPackage ../tools/security/gotestwaf { };
+
   guetzli = callPackage ../applications/graphics/guetzli { };
 
   gummi = callPackage ../applications/misc/gummi { };
@@ -31546,7 +31573,9 @@ with pkgs;
 
   hatari = callPackage ../misc/emulators/hatari { };
 
-  hck = callPackage ../tools/text/hck { };
+  hck = callPackage ../tools/text/hck {
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
+  };
 
   helm = callPackage ../applications/audio/helm { };
 
