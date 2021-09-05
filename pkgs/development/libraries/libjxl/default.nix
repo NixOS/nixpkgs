@@ -29,6 +29,13 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
+  # hydra's darwin machines run into https://github.com/libjxl/libjxl/issues/408
+  # unless we disable highway's tests
+  postPatch = lib.optional stdenv.isDarwin ''
+    substituteInPlace third_party/highway/CMakeLists.txt \
+      --replace 'if(BUILD_TESTING)' 'if(false)'
+  '';
+
   nativeBuildInputs = [
     asciidoc # for docs
     cmake
