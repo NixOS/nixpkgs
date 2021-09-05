@@ -36,11 +36,6 @@ addMakeFlags() {
   export MKUNPRIVED=yes
   export EXTERNAL_TOOLCHAIN=yes
 
-  export INSTALL_FILE="install -U -c"
-  export INSTALL_DIR="xinstall -U -d"
-  export INSTALL_LINK="install -U -l h"
-  export INSTALL_SYMLINK="install -U -l s"
-
   makeFlags="MACHINE=$MACHINE $makeFlags"
   makeFlags="MACHINE_ARCH=$MACHINE_ARCH $makeFlags"
   makeFlags="AR=$AR $makeFlags"
@@ -79,7 +74,7 @@ includesPhase() {
 
     local flagsArray=(
          $makeFlags ${makeFlagsArray+"${makeFlagsArray[@]}"}
-         DESTDIR=${!outputInclude} includes
+         includes
     )
 
     echoCmd 'includes flags' "${flagsArray[@]}"
