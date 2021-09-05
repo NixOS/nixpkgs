@@ -2269,6 +2269,12 @@
     githubId = 1382175;
     name = "Oliver Matthews";
   };
+  cyounkins = {
+    name = "Craig Younkins";
+    email = "cyounkins@gmail.com";
+    github = "cyounkins";
+    githubId = 346185;
+  };
   cypherpunk2140 = {
     email = "stefan.mihaila@pm.me";
     github = "stefan-mihaila";
