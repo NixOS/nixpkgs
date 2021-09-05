@@ -168,36 +168,6 @@ let
       meta.mainProgram = "markdownlint";
     };
 
-    mirakurun = super.mirakurun.override rec {
-      nativeBuildInputs = with pkgs; [ makeWrapper ];
-      postInstall = let
-        runtimeDeps = [ nodejs ] ++ (with pkgs; [ bash which v4l-utils ]);
-      in
-      ''
-        substituteInPlace $out/lib/node_modules/mirakurun/processes.json \
-          --replace "/usr/local" ""
-
-        # XXX: Files copied from the Nix store are non-writable, so they need
-        # to be given explicit write permissions
-        substituteInPlace $out/lib/node_modules/mirakurun/lib/Mirakurun/config.js \
-          --replace 'fs.copyFileSync("config/server.yml", path);' \
-                    'fs.copyFileSync("config/server.yml", path); fs.chmodSync(path, 0o644);' \
-          --replace 'fs.copyFileSync("config/tuners.yml", path);' \
-                    'fs.copyFileSync("config/tuners.yml", path); fs.chmodSync(path, 0o644);' \
-          --replace 'fs.copyFileSync("config/channels.yml", path);' \
-                    'fs.copyFileSync("config/channels.yml", path); fs.chmodSync(path, 0o644);'
-
-        # XXX: The original mirakurun command uses PM2 to manage the Mirakurun
-        # server.  However, we invoke the server directly and let systemd
-        # manage it to avoid complication. This is okay since no features
-        # unique to PM2 is currently being used.
-        makeWrapper ${nodejs}/bin/npm $out/bin/mirakurun \
-          --add-flags "start" \
-          --run "cd $out/lib/node_modules/mirakurun" \
-          --prefix PATH : ${pkgs.lib.makeBinPath runtimeDeps}
-      '';
-    };
-
     node-gyp = super.node-gyp.override {
       nativeBuildInputs = [ pkgs.makeWrapper ];
       # Teach node-gyp to use nodejs headers locally rather that download them form https://nodejs.org.
