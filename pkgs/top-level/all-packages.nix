@@ -8767,6 +8767,8 @@ with pkgs;
 
   sacad = callPackage ../tools/misc/sacad { };
 
+  sad = callPackage ../tools/text/sad { };
+
   safecopy = callPackage ../tools/system/safecopy { };
 
   sacd = callPackage ../tools/cd-dvd/sacd { };
