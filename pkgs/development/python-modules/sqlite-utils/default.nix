@@ -4,38 +4,36 @@
 , pythonOlder
 , click
 , click-default-group
-, dateutils
 , sqlite-fts4
 , tabulate
 , pytestCheckHook
+, pytest-runner
+, black
 , hypothesis
+, sqlite
 }:
 
 buildPythonPackage rec {
   pname = "sqlite-utils";
-  version = "3.17";
+  version = "3.9.1";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "77acd202aa568a1f6888c5d8879f306bb3f8acedc82df0df98eb615caa491abb";
+    sha256 = "a08ed62eb269e26ae9c35b9be9cd3d395b0522157e6543128a40cc5302d8aa81";
   };
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace '"pytest-runner"' ""
-  '';
 
   propagatedBuildInputs = [
     click
     click-default-group
-    dateutils
     sqlite-fts4
     tabulate
   ];
 
   checkInputs = [
     pytestCheckHook
+    pytest-runner
+    black
     hypothesis
   ];
 
@@ -45,4 +43,5 @@ buildPythonPackage rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ meatcar ];
   };
+
 }

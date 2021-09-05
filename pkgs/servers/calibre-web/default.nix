@@ -18,9 +18,9 @@ python3.pkgs.buildPythonApplication rec {
 
   prePatch = ''
     substituteInPlace setup.cfg \
-      --replace "requests>=2.11.1,<2.25.0" "requests" \
-      --replace "cps = calibreweb:main" "calibre-web = calibreweb:main" \
-      --replace "PyPDF3>=1.0.0,<1.0.4" "PyPDF3>=1.0.0"
+        --replace "requests>=2.11.1,<2.25.0" "requests>=2.11.1,<2.26.0" \
+        --replace "cps = calibreweb:main" "calibre-web = calibreweb:main" \
+        --replace "PyPDF3>=1.0.0,<1.0.4" "PyPDF3>=1.0.0"
   '';
 
   patches = [

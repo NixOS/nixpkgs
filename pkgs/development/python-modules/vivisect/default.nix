@@ -10,12 +10,12 @@
 }:
 buildPythonPackage rec {
   pname = "vivisect";
-  version = "1.0.4";
+  version = "0.2.1";
   disabled = isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bd47b2cf5874cd2f74e6c36b8a97bf301785bacf9ac0297bbe78ec1b8c86c755";
+    sha256 = "8fc4d2097a1d0d8d97aa8c540984cb52432df759f04f2281a21a4e1b7d1a95a7";
   };
 
   propagatedBuildInputs = [

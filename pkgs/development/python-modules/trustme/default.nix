@@ -13,11 +13,11 @@
 
 buildPythonPackage rec {
   pname = "trustme";
-  version = "0.9.0";
+  version = "0.8.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-XgeyPXDO7WTzuzauS5q8UjVMFsmNRasDe+4rX7/+WGw=";
+    sha256 = "3dcfbe186bf33d146347c6180b67564257f2708960027ab6d24fea2865daabca";
   };
 
   checkInputs = [
@@ -42,12 +42,10 @@ buildPythonPackage rec {
   # Some of the tests use localhost networking.
   __darwinAllowLocalNetworking = true;
 
-  pythonImportsCheck = [ "trustme" ];
-
-  meta = with lib; {
+  meta = {
     description = "High quality TLS certs while you wait, for the discerning tester";
     homepage = "https://github.com/python-trio/trustme";
-    license = with licenses; [ mit asl20 ];
-    maintainers = with maintainers; [ catern ];
+    license = with lib.licenses; [ mit asl20 ];
+    maintainers = with lib.maintainers; [ catern ];
   };
 }

@@ -12,7 +12,8 @@
 }:
 
 let
-  excludedTests = [ "reimport_from_subinterpreter" ]
+  excludedTests = []
+    ++ [ "reimport_from_subinterpreter" ]
     # cython's testsuite is not working very well with libc++
     # We are however optimistic about things outside of testsuite still working
     ++ lib.optionals (stdenv.cc.isClang or false) [ "cpdef_extern_func" "libcpp_algo" ]
@@ -25,21 +26,19 @@ let
 
 in buildPythonPackage rec {
   pname = "Cython";
-  version = "0.29.24";
+  version = "0.29.22";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-zfBNB8NgCGDowuuq1Oj1KsP+shJFPBdkpJrAjIJ+hEM=";
+    sha256 = "sha256-32uDx6bR2WfqiaKQPkqTE3djSil0WWUuRVFzTEgZVAY=";
   };
 
   nativeBuildInputs = [
     pkg-config
   ];
-
   checkInputs = [
     gdb numpy ncurses
   ];
-
   buildInputs = [ glibcLocales ];
   LC_ALL = "en_US.UTF-8";
 
@@ -72,7 +71,9 @@ in buildPythonPackage rec {
   # https://github.com/cython/cython/issues/2785
   # Temporary solution
   doCheck = false;
-  # doCheck = !stdenv.isDarwin;
+
+#   doCheck = !stdenv.isDarwin;
+
 
   meta = {
     description = "An optimising static compiler for both the Python programming language and the extended Cython programming language";

@@ -1,7 +1,7 @@
 set -eu
 set -o pipefail
 
-if [[ -n "${BASH_VERSINFO-}" && "${BASH_VERSINFO-}" -lt 4 ]]; then
+if [ -n "${BASH_VERSINFO-}" ] && [ "${BASH_VERSINFO-}" -lt 4 ]; then
     echo "Detected Bash version that isn't supported by Nixpkgs (${BASH_VERSION})"
     echo "Please install Bash 4 or greater to continue."
     exit 1
@@ -329,10 +329,6 @@ declare -a pkgTargetHookVars=(envTargetTargetHook)
 
 declare -a pkgHookVarVars=(pkgBuildHookVars pkgHostHookVars pkgTargetHookVars)
 
-# those variables are declared here, since where and if they are used varies
-# shellcheck disable=SC2034
-declare -a preFixupHooks fixupOutputHooks preConfigureHooks postFixupHooks postUnpackHooks unpackCmdHooks
-
 # Add env hooks for all sorts of deps with the specified host offset.
 addEnvHooks() {
     local depHostOffset="$1"
@@ -374,14 +370,14 @@ declare -a allPlatOffsets=(-1 0 1)
 # implements.
 findInputs() {
     local -r pkg="$1"
-    local -r hostOffset="$2"
-    local -r targetOffset="$3"
+    local -ri hostOffset="$2"
+    local -ri targetOffset="$3"
 
     # Sanity check
-    (( hostOffset <= targetOffset )) || exit -1
+    (( "$hostOffset" <= "$targetOffset" )) || exit -1
 
-    local varVar="${pkgAccumVarVars[hostOffset + 1]}"
-    local varRef="$varVar[$((targetOffset - hostOffset))]"
+    local varVar="${pkgAccumVarVars[$hostOffset + 1]}"
+    local varRef="$varVar[\$targetOffset - \$hostOffset]"
     local var="${!varRef}"
     unset -v varVar varRef
 
@@ -408,21 +404,21 @@ findInputs() {
     # offsets to current offset
     local -i mapOffsetResult
     function mapOffset() {
-        local -r inputOffset="$1"
-        if (( inputOffset <= 0 )); then
-            local -r outputOffset=$((inputOffset + hostOffset))
+        local -ri inputOffset="$1"
+        if (( "$inputOffset" <= 0 )); then
+            local -ri outputOffset="$inputOffset + $hostOffset"
         else
-            local -r outputOffset=$((inputOffset - 1 + targetOffset))
+            local -ri outputOffset="$inputOffset - 1 + $targetOffset"
         fi
         mapOffsetResult="$outputOffset"
     }
 
     # Host offset relative to that of the package whose immediate
     # dependencies we are currently exploring.
-    local relHostOffset
+    local -i relHostOffset
     for relHostOffset in "${allPlatOffsets[@]}"; do
         # `+ 1` so we start at 0 for valid index
-        local files="${propagatedDepFilesVars[relHostOffset + 1]}"
+        local files="${propagatedDepFilesVars[$relHostOffset + 1]}"
 
         # Host offset relative to the package currently being
         # built---as absolute an offset as will be used.
@@ -500,11 +496,11 @@ done
 # Add package to the future PATH and run setup hooks
 activatePackage() {
     local pkg="$1"
-    local -r hostOffset="$2"
-    local -r targetOffset="$3"
+    local -ri hostOffset="$2"
+    local -ri targetOffset="$3"
 
     # Sanity check
-    (( hostOffset <= targetOffset )) || exit -1
+    (( "$hostOffset" <= "$targetOffset" )) || exit -1
 
     if [ -f "$pkg" ]; then
         source "$pkg"
@@ -521,7 +517,7 @@ activatePackage() {
         addToSearchPath _PATH "$pkg/bin"
     fi
 
-    if (( hostOffset <= -1 )); then
+    if [[ "$hostOffset" -le -1 ]]; then
         addToSearchPath _XDG_DATA_DIRS "$pkg/share"
     fi
 
@@ -535,13 +531,13 @@ activatePackage() {
 }
 
 _activatePkgs() {
-    local hostOffset targetOffset
+    local -i hostOffset targetOffset
     local pkg
 
     for hostOffset in "${allPlatOffsets[@]}"; do
-        local pkgsVar="${pkgAccumVarVars[hostOffset + 1]}"
+        local pkgsVar="${pkgAccumVarVars[$hostOffset + 1]}"
         for targetOffset in "${allPlatOffsets[@]}"; do
-            (( hostOffset <= targetOffset )) || continue
+            (( "$hostOffset" <= "$targetOffset" )) || continue
             local pkgsRef="${pkgsVar}[$targetOffset - $hostOffset]"
             local pkgsSlice="${!pkgsRef}[@]"
             for pkg in ${!pkgsSlice+"${!pkgsSlice}"}; do
@@ -563,14 +559,14 @@ _activatePkgs
 # with this information to the relevant env hook array, but bash
 # doesn't have closures, so it's easier to just pass this in.
 _addToEnv() {
-    local depHostOffset depTargetOffset
+    local -i depHostOffset depTargetOffset
     local pkg
 
     for depHostOffset in "${allPlatOffsets[@]}"; do
-        local hookVar="${pkgHookVarVars[depHostOffset + 1]}"
-        local pkgsVar="${pkgAccumVarVars[depHostOffset + 1]}"
+        local hookVar="${pkgHookVarVars[$depHostOffset + 1]}"
+        local pkgsVar="${pkgAccumVarVars[$depHostOffset + 1]}"
         for depTargetOffset in "${allPlatOffsets[@]}"; do
-            (( depHostOffset <= depTargetOffset )) || continue
+            (( "$depHostOffset" <= "$depTargetOffset" )) || continue
             local hookRef="${hookVar}[$depTargetOffset - $depHostOffset]"
             if [[ -z "${strictDeps-}" ]]; then
 
@@ -582,12 +578,12 @@ _addToEnv() {
                 #
                 # TODO(@Ericson2314): Don't special-case native compilation
                 for pkg in \
-                    "${pkgsBuildBuild[@]}" \
-                    "${pkgsBuildHost[@]}" \
-                    "${pkgsBuildTarget[@]}" \
-                    "${pkgsHostHost[@]}" \
-                    "${pkgsHostTarget[@]}" \
-                    "${pkgsTargetTarget[@]}"
+                    ${pkgsBuildBuild+"${pkgsBuildBuild[@]}"} \
+                    ${pkgsBuildHost+"${pkgsBuildHost[@]}"} \
+                    ${pkgsBuildTarget+"${pkgsBuildTarget[@]}"} \
+                    ${pkgsHostHost+"${pkgsHostHost[@]}"} \
+                    ${pkgsHostTarget+"${pkgsHostTarget[@]}"} \
+                    ${pkgsTargetTarget+"${pkgsTargetTarget[@]}"}
                 do
                     if [[ "$visitedPkgs" = *"$pkg"* ]]; then
                         continue
@@ -662,7 +658,7 @@ export NIX_INDENT_MAKE=1
 
 if [ -z "${NIX_BUILD_CORES:-}" ]; then
   NIX_BUILD_CORES="1"
-elif (( NIX_BUILD_CORES <= 0 )); then
+elif [ "$NIX_BUILD_CORES" -le 0 ]; then
   NIX_BUILD_CORES=$(nproc 2>/dev/null || true)
   if expr >/dev/null 2>&1 "$NIX_BUILD_CORES" : "^[0-9][0-9]*$"; then
     :
@@ -675,11 +671,11 @@ export NIX_BUILD_CORES
 
 # Prevent SSL libraries from using certificates in /etc/ssl, unless set explicitly.
 # Leave it in impure shells for convenience.
-if [[ -z "${NIX_SSL_CERT_FILE:-}" && "${IN_NIX_SHELL:-}" != "impure" ]]; then
+if [ -z "${NIX_SSL_CERT_FILE:-}" ] && [ "${IN_NIX_SHELL:-}" != "impure" ]; then
   export NIX_SSL_CERT_FILE=/no-cert-file.crt
 fi
 # Another variant left for compatibility.
-if [[ -z "${SSL_CERT_FILE:-}" && "${IN_NIX_SHELL:-}" != "impure" ]]; then
+if [ -z "${SSL_CERT_FILE:-}" ] && [ "${IN_NIX_SHELL:-}" != "impure" ]; then
   export SSL_CERT_FILE=/no-cert-file.crt
 fi
 
@@ -1014,19 +1010,17 @@ configurePhase() {
         configureFlags="${prefixKey:---prefix=}$prefix $configureFlags"
     fi
 
-    if [[ -f "$configureScript" ]]; then
-        # Add --disable-dependency-tracking to speed up some builds.
-        if [ -z "${dontAddDisableDepTrack:-}" ]; then
-            if grep -q dependency-tracking "$configureScript"; then
-                configureFlags="--disable-dependency-tracking $configureFlags"
-            fi
+    # Add --disable-dependency-tracking to speed up some builds.
+    if [ -z "${dontAddDisableDepTrack:-}" ]; then
+        if [ -f "$configureScript" ] && grep -q dependency-tracking "$configureScript"; then
+            configureFlags="--disable-dependency-tracking $configureFlags"
         fi
+    fi
 
-        # By default, disable static builds.
-        if [ -z "${dontDisableStatic:-}" ]; then
-            if grep -q enable-static "$configureScript"; then
-                configureFlags="--disable-static $configureFlags"
-            fi
+    # By default, disable static builds.
+    if [ -z "${dontDisableStatic:-}" ]; then
+        if [ -f "$configureScript" ] && grep -q enable-static "$configureScript"; then
+            configureFlags="--disable-static $configureFlags"
         fi
     fi
 
@@ -1034,7 +1028,7 @@ configurePhase() {
         # Old bash empty array hack
         # shellcheck disable=SC2086
         local flagsArray=(
-            $configureFlags "${configureFlagsArray[@]}"
+            $configureFlags ${configureFlagsArray+"${configureFlagsArray[@]}"}
         )
         echoCmd 'configure flags' "${flagsArray[@]}"
         # shellcheck disable=SC2086
@@ -1064,8 +1058,8 @@ buildPhase() {
         local flagsArray=(
             ${enableParallelBuilding:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}}
             SHELL=$SHELL
-            $makeFlags "${makeFlagsArray[@]}"
-            $buildFlags "${buildFlagsArray[@]}"
+            $makeFlags ${makeFlagsArray+"${makeFlagsArray[@]}"}
+            $buildFlags ${buildFlagsArray+"${buildFlagsArray[@]}"}
         )
 
         echoCmd 'build flags' "${flagsArray[@]}"
@@ -1103,8 +1097,8 @@ checkPhase() {
         local flagsArray=(
             ${enableParallelChecking:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}}
             SHELL=$SHELL
-            $makeFlags "${makeFlagsArray[@]}"
-            ${checkFlags:-VERBOSE=y} "${checkFlagsArray[@]}"
+            $makeFlags ${makeFlagsArray+"${makeFlagsArray[@]}"}
+            ${checkFlags:-VERBOSE=y} ${checkFlagsArray+"${checkFlagsArray[@]}"}
             ${checkTarget}
         )
 
@@ -1129,8 +1123,8 @@ installPhase() {
     # shellcheck disable=SC2086
     local flagsArray=(
         SHELL=$SHELL
-        $makeFlags "${makeFlagsArray[@]}"
-        $installFlags "${installFlagsArray[@]}"
+        $makeFlags ${makeFlagsArray+"${makeFlagsArray[@]}"}
+        $installFlags ${installFlagsArray+"${installFlagsArray[@]}"}
         ${installTargets:-install}
     )
 
@@ -1237,8 +1231,8 @@ installCheckPhase() {
         local flagsArray=(
             ${enableParallelChecking:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}}
             SHELL=$SHELL
-            $makeFlags "${makeFlagsArray[@]}"
-            $installCheckFlags "${installCheckFlagsArray[@]}"
+            $makeFlags ${makeFlagsArray+"${makeFlagsArray[@]}"}
+            $installCheckFlags ${installCheckFlagsArray+"${installCheckFlagsArray[@]}"}
             ${installCheckTarget:-installcheck}
         )
 
@@ -1257,7 +1251,7 @@ distPhase() {
     # Old bash empty array hack
     # shellcheck disable=SC2086
     local flagsArray=(
-        $distFlags "${distFlagsArray[@]}" ${distTarget:-dist}
+        $distFlags ${distFlagsArray+"${distFlagsArray[@]}"} ${distTarget:-dist}
     )
 
     echo 'dist flags: %q' "${flagsArray[@]}"

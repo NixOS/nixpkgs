@@ -8,16 +8,15 @@
 , pytest-timeout
 , pytest-xprocess
 , pytestCheckHook
-}:
+ }:
 
 buildPythonPackage rec {
-  pname = "werkzeug";
+  pname = "Werkzeug";
   version = "2.0.1";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
-    pname = "Werkzeug";
-    inherit version;
+    inherit pname version;
     sha256 = "0hlwawnn8c41f254qify5jnjj8xb97n294h09bqimzqhs0qdpq8x";
   };
 

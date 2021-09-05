@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchPypi
-, setuptools-scm
+, setuptools-scm, toml
 , more-itertools, backports_functools_lru_cache }:
 
 buildPythonPackage rec {
@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "bfcf7da71e2a0e980189b0744b59dba6c1dcf66dcd7a30f8a4413e478046b314";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  nativeBuildInputs = [ setuptools-scm toml ];
 
   propagatedBuildInputs = [ more-itertools backports_functools_lru_cache ];
 

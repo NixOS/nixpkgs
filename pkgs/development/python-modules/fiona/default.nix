@@ -1,16 +1,16 @@
 { stdenv, lib, buildPythonPackage, fetchPypi, isPy3k, pythonOlder
 , attrs, click, cligj, click-plugins, six, munch, enum34
 , pytestCheckHook, boto3, mock, giflib, pytz
-, gdal, certifi
+, gdal
+, certifi
 }:
 
 buildPythonPackage rec {
-  pname = "fiona";
+  pname = "Fiona";
   version = "1.8.20";
 
   src = fetchPypi {
-    pname = "Fiona";
-    inherit version;
+    inherit pname version;
     sha256 = "a70502d2857b82f749c09cb0dea3726787747933a2a1599b5ab787d74e3c143b";
   };
 
@@ -42,15 +42,11 @@ buildPythonPackage rec {
 
   preCheck = ''
     rm -r fiona # prevent importing local fiona
-    # disable gdal deprecation warnings
-    export GDAL_ENABLE_DEPRECATED_DRIVER_GTM=YES
   '';
 
   disabledTests = [
     # Some tests access network, others test packaging
     "http" "https" "wheel"
-    # Assert not true
-    "test_no_append_driver_cannot_append"
   ];
 
   meta = with lib; {

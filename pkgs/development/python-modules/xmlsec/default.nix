@@ -9,6 +9,7 @@
 , xmlsec
 , pkgconfig
 , setuptools-scm
+, toml
 , lxml
 , hypothesis
 }:
@@ -27,7 +28,7 @@ buildPythonPackage rec {
     ./reset-lxml-in-tests.patch
   ];
 
-  nativeBuildInputs = [ pkg-config pkgconfig setuptools-scm ];
+  nativeBuildInputs = [ pkg-config pkgconfig setuptools-scm toml ];
 
   buildInputs = [ xmlsec libxslt libxml2 libtool ];
 

@@ -2,51 +2,44 @@
 , stdenv
 , bokeh
 , buildPythonPackage
-, cloudpickle
-, distributed
 , fetchFromGitHub
 , fsspec
-, jinja2
+, pytestCheckHook
+, pytest-rerunfailures
+, pythonOlder
+, cloudpickle
 , numpy
-, packaging
+, toolz
+, dill
 , pandas
 , partd
-, pytest-rerunfailures
 , pytest-xdist
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, toolz
 , withExtraComplete ? false
+, distributed
 }:
 
 buildPythonPackage rec {
   pname = "dask";
-  version = "2021.08.1";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "2021.06.2";
+  disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "dask";
     repo = pname;
     rev = version;
-    sha256 = "sha256-HnrHOp3Y/iLYaK3KVp6NJrK68BMqX8lTl/wLosiGc7k=";
+    sha256 = "sha256-qvfjdijzlqaJQrDztRAVr5PudTaVd3WOTBid2ElZQgg=";
   };
 
   propagatedBuildInputs = [
-    cloudpickle
-    fsspec
-    packaging
-    partd
-    pyyaml
-    toolz
-    pandas
-    jinja2
     bokeh
+    cloudpickle
+    dill
+    fsspec
     numpy
-  ] ++ lib.optionals (withExtraComplete) [
-    # infinite recursion between distributed and dask
+    pandas
+    partd
+    toolz
+  ] ++ lib.optionals withExtraComplete [
     distributed
   ];
 
@@ -70,11 +63,7 @@ buildPythonPackage rec {
   '';
 
   pytestFlagsArray = [
-    # parallelize
-    "--numprocesses auto"
-    # rerun failed tests up to three times
-    "--reruns 3"
-    # don't run tests that require network access
+    "-n $NIX_BUILD_CORES"
     "-m 'not network'"
   ];
 
@@ -92,16 +81,7 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  pythonImportsCheck = [
-    "dask"
-    "dask.array"
-    "dask.bag"
-    "dask.bytes"
-    "dask.dataframe"
-    "dask.dataframe.io"
-    "dask.dataframe.tseries"
-    "dask.diagnostics"
-  ];
+  pythonImportsCheck = [ "dask.dataframe" "dask" "dask.array" ];
 
   meta = with lib; {
     description = "Minimal task scheduling abstraction";

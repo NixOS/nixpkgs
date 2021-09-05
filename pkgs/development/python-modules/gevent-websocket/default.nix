@@ -17,16 +17,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ gevent gunicorn ];
 
-  # zero tests run
-  doCheck = false;
-
-  pythonImportsCheck = [ "geventwebsocket" ];
-
   meta = with lib; {
     homepage = "https://www.gitlab.com/noppo/gevent-websocket";
     description = "Websocket handler for the gevent pywsgi server, a Python network library";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
   };
 
 }

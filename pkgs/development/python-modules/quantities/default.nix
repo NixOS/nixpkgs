@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , numpy
-, pytestCheckHook
+, python
 }:
 
 buildPythonPackage rec {
@@ -14,27 +14,15 @@ buildPythonPackage rec {
     sha256 = "67546963cb2a519b1a4aa43d132ef754360268e5d551b43dd1716903d99812f0";
   };
 
-  propagatedBuildInputs = [
-    numpy
-  ];
+  propagatedBuildInputs = [ numpy ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkPhase = ''
+    ${python.interpreter} setup.py test -V 1
+  '';
 
-  disabledTests = [
-    # Tests don't work with current numpy
-    # https://github.com/python-quantities/python-quantities/pull/195
-    "test_arctan2"
-    "test_fix"
-  ];
-
-  pythonImportsCheck = [ "quantities" ];
-
-  meta = with lib; {
-    description = "Quantities is designed to handle arithmetic and conversions of physical quantities";
+  meta = {
+    description = "Quantities is designed to handle arithmetic and";
     homepage = "https://python-quantities.readthedocs.io/";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.bsd2;
   };
 }

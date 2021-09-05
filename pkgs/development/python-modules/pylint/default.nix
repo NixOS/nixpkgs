@@ -1,13 +1,12 @@
 { stdenv
 , lib
 , buildPythonPackage
-, fetchFromGitHub
+, fetchPypi
 , pythonOlder
 , installShellFiles
 , astroid
 , isort
 , mccabe
-, platformdirs
 , toml
 , pytest-benchmark
 , pytest-xdist
@@ -16,15 +15,13 @@
 
 buildPythonPackage rec {
   pname = "pylint";
-  version = "2.10.2";
+  version = "2.7.4";
 
   disabled = pythonOlder "3.6";
 
-  src = fetchFromGitHub {
-    owner = "PyCQA";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-hkrkgUdC5LO1oSPFL6gvIk0zFpMw45gCmnoRbdPZuRs=";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "bd38914c7731cdc518634a8d3c5585951302b6e2b6de60fbb3f7a0220e21eeee";
   };
 
   nativeBuildInputs = [
@@ -35,7 +32,6 @@ buildPythonPackage rec {
     astroid
     isort
     mccabe
-    platformdirs
     toml
   ];
 
@@ -60,12 +56,6 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [
     "-n auto"
-  ];
-
-  disabledTestPaths = [
-    # tests miss multiple input files
-    # FileNotFoundError: [Errno 2] No such file or directory
-    "tests/pyreverse/test_writer.py"
   ];
 
   disabledTests = lib.optionals stdenv.isDarwin [

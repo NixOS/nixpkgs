@@ -391,14 +391,13 @@ let
     , dontStrip ? true
     , unpackPhase ? "true"
     , buildPhase ? "true"
-    , meta ? {}
     , ... }@args:
 
     let
-      extraArgs = removeAttrs args [ "name" "dependencies" "buildInputs" "dontStrip" "dontNpmInstall" "preRebuild" "unpackPhase" "buildPhase" "meta" ];
+      extraArgs = removeAttrs args [ "name" "dependencies" "buildInputs" "dontStrip" "dontNpmInstall" "preRebuild" "unpackPhase" "buildPhase" ];
     in
     stdenv.mkDerivation ({
-      name = "${name}-${version}";
+      name = "node_${name}-${version}";
       buildInputs = [ tarWrapper python nodejs ]
         ++ lib.optional (stdenv.isLinux) utillinux
         ++ lib.optional (stdenv.isDarwin) libtool
@@ -447,11 +446,6 @@ let
         # Run post install hook, if provided
         runHook postInstall
       '';
-
-      meta = {
-        # default to Node.js' platforms
-        platforms = nodejs.meta.platforms;
-      } // meta;
     } // extraArgs);
 
   # Builds a node environment (a node_modules folder and a set of binaries)

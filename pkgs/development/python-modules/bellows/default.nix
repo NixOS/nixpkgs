@@ -46,9 +46,10 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # AssertionError: assert 65534 is None
-    # https://github.com/zigpy/bellows/issues/436
-    "test_startup_nwk_params"
+    # RuntimeError: coroutine 'test_remigrate_forcibly_downgraded_v4' was never awaited
+    #"test_remigrate_forcibly_downgraded_v4"
+    # RuntimeError: Event loop is closed
+    "test_thread_already_stopped"
   ];
 
   pythonImportsCheck = [

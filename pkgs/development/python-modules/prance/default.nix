@@ -1,43 +1,51 @@
 { lib
 , buildPythonPackage
-, fetchFromGitHub
+, fetchPypi
 , chardet
+, pyyaml
 , requests
-, ruamel_yaml
 , six
 , semver
 , pytestCheckHook
+, pytest-cov
+, pytest-runner
 , openapi-spec-validator
 }:
 
 buildPythonPackage rec {
   pname = "prance";
-  version = "0.21.8.0";
+  version = "0.21.2";
 
-  src = fetchFromGitHub {
-    owner = "RonnyPfannschmidt";
-    repo = pname;
-    rev = "v${version}";
-    fetchSubmodules = true;
-    sha256 = "sha256-kGANMHfWwhW3ZBw2ZVCJZR/bV2EPhcydMKhDeDTVwcQ=";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "43ebe3a5b38f0c65c428427004c4d8ce8d7155ddad50610276c89c192680f138";
   };
+
+  buildInputs = [
+    pytest-runner
+  ];
 
   propagatedBuildInputs = [
     chardet
+    pyyaml
     requests
-    ruamel_yaml
     six
     semver
   ];
 
   checkInputs = [
     pytestCheckHook
+    pytest-cov
     openapi-spec-validator
   ];
 
   postPatch = ''
+    substituteInPlace setup.py \
+      --replace "tests_require = dev_require," "tests_require = None," \
+      --replace "chardet~=4.0" "" \
+      --replace "semver~=2.13" ""
     substituteInPlace setup.cfg \
-      --replace "--cov=prance --cov-report=term-missing --cov-fail-under=90" ""
+      --replace "--cov-fail-under=90" ""
   '';
 
   # Disable tests that require network

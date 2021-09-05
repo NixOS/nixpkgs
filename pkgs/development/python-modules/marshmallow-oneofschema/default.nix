@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "marshmallow-oneofschema";
-  version = "3.0.1";
+  version = "2.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "62cd2099b29188c92493c2940ee79d1bf2f2619a71721664e5a98ec2faa58237";
+    sha256 = "0s0yr7nv06sfgxglghl2vq74g3m49j60k1hi2qzfsv4bj8hvs35k";
   };
 
   propagatedBuildInputs = [ marshmallow setuptools ];

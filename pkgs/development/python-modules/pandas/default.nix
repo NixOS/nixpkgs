@@ -33,11 +33,11 @@
 
 buildPythonPackage rec {
   pname = "pandas";
-  version = "1.3.2";
+  version = "1.2.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cbcb84d63867af3411fa063af3de64902665bb5b3d40b25b2059e40603594e87";
+    sha256 = "649ecab692fade3cbfcf967ff936496b0cfba0af00a55dfaacd82bdda5cb2279";
   };
 
   nativeBuildInputs = [ cython ];
@@ -105,8 +105,6 @@ buildPythonPackage rec {
     "test_missing_required_dependency"
     # AssertionError with 1.2.3
     "test_from_coo"
-    # AssertionError: No common DType exists for the given inputs
-    "test_comparison_invalid"
   ] ++ lib.optionals stdenv.isDarwin [
     "test_locale"
     "test_clipboard"

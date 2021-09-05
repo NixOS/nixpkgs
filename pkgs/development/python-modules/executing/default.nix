@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, setuptools-scm
 , asttokens
 }:
 
@@ -15,10 +14,6 @@ buildPythonPackage rec {
     rev = "v${version}";
     sha256 = "1hqx94h6l2wg9sljiaajfay2nr62sqa819w3bxrz8cdki1abdygv";
   };
-
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
 
   preBuild = ''
     export SETUPTOOLS_SCM_PRETEND_VERSION="${version}"

@@ -4,7 +4,6 @@
 , fetchFromGitHub
 , brotlicffi
 , certifi
-, charset-normalizer
 , h2
 , httpcore
 , rfc3986
@@ -19,20 +18,19 @@
 
 buildPythonPackage rec {
   pname = "httpx";
-  version = "0.19.0";
+  version = "0.18.2";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "encode";
     repo = pname;
     rev = version;
-    sha256 = "sha256-bUxxeUYqOHBmSL2gPQG5cIq6k5QY4Kyhj9ToA5yZXPA=";
+    sha256 = "0rr5b6z96yipvp4riqmmbkbcy0sdyzykcdwf5y9ryh27pxr8q8x4";
   };
 
   propagatedBuildInputs = [
     brotlicffi
     certifi
-    charset-normalizer
     h2
     httpcore
     rfc3986

@@ -5,13 +5,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "pyLODE";
-  version = "2.12.0";
+  version = "2.8.6";
 
   src = fetchFromGitHub {
     owner = "RDFLib";
     repo = pname;
     rev = version;
-    sha256 = "sha256-X/YiJduAJNiceIrlCFwD2PFiMn3HVlzr9NzyDvYcql8=";
+    sha256 = "0zbk5lj9vlg32rmvw1himlw63kxd7sim7nzglrjs5zm6vpi4x5ch";
   };
 
   propagatedBuildInputs = with python3Packages; [
@@ -22,6 +22,7 @@ python3Packages.buildPythonApplication rec {
     jinja2
     markdown
     rdflib
+    rdflib-jsonld
     requests
     six
     beautifulsoup4

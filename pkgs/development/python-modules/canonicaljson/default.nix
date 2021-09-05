@@ -1,11 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, frozendict
-, simplejson
-, six
-, isPy27
-, pytestCheckHook
+{ lib, buildPythonPackage, fetchPypi
+, frozendict, simplejson, six, isPy27
 }:
 
 buildPythonPackage rec {
@@ -19,15 +13,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    frozendict
-    simplejson
-    six
-  ];
-
-  checkInputs = [ pytestCheckHook ];
-
-  disabledTests = [
-    "test_frozen_dict"
+    frozendict simplejson six
   ];
 
   meta = with lib; {

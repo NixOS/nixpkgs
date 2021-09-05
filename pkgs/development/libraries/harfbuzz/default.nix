@@ -32,8 +32,7 @@ let
 in
 
 stdenv.mkDerivation {
-  pname = "harfbuzz${optionalString withIcu "-icu"}";
-  inherit version;
+  name = "harfbuzz${optionalString withIcu "-icu"}-${version}";
 
   src = fetchFromGitHub {
     owner = "harfbuzz";
@@ -43,7 +42,8 @@ stdenv.mkDerivation {
   };
 
   postPatch = ''
-    patchShebangs src/*.py test
+    patchShebangs src/*.py
+    patchShebangs test
   '' + lib.optionalString stdenv.isDarwin ''
     # ApplicationServices.framework headers have cast-align warnings.
     substituteInPlace src/hb.hh \

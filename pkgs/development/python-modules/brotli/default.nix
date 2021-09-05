@@ -1,7 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook }:
+{ lib, buildPythonPackage, fetchFromGitHub, pytest }:
 
 buildPythonPackage rec {
   pname = "brotli";
@@ -19,18 +16,15 @@ buildPythonPackage rec {
 
   dontConfigure = true;
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytest ];
 
-  pytestFlagsArray = [
-    "python/tests"
-  ];
+  checkPhase = ''
+    pytest python/tests
+  '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/google/brotli";
     description = "Generic-purpose lossless compression algorithm";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.mit;
   };
 }

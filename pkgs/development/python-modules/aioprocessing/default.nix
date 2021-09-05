@@ -7,7 +7,7 @@
 buildPythonPackage rec {
   pname = "aioprocessing";
   version = "2.0.0";
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.4";
 
   src = fetchPypi {
     inherit pname version;
