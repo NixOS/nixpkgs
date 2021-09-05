@@ -5,6 +5,8 @@ stdenv.mkDerivation rec {
   pname = "libopenmpt";
   version = "0.5.10";
 
+  outputs = [ "out" "lib" "dev" ];
+
   src = fetchurl {
     url = "https://lib.openmpt.org/files/libopenmpt/src/libopenmpt-${version}+release.autotools.tar.gz";
     sha256 = "sha256-Waj6KNi432nLf6WXK9+TEIHatOHhFWxpoaU7ZcK+n/o=";
