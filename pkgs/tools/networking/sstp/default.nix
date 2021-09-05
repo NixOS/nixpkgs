@@ -9,11 +9,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-hISqUfv75Big661YrSCo7hxG7XH4AL4YvNI7Qua6rWQ=";
   };
 
-  patchPhase =
-    ''
-      sed 's,/usr/sbin/pppd,${ppp}/sbin/pppd,' -i src/sstp-pppd.c
-      sed "s,sstp-pppd-plugin.so,$out/lib/pppd/sstp-pppd-plugin.so," -i src/sstp-pppd.c
-    '';
+  postPatch = ''
+    sed 's,/usr/sbin/pppd,${ppp}/sbin/pppd,' -i src/sstp-pppd.c
+    sed "s,sstp-pppd-plugin.so,$out/lib/pppd/sstp-pppd-plugin.so," -i src/sstp-pppd.c
+  '';
 
   configureFlags = [
     "--with-openssl=${openssl.dev}"
