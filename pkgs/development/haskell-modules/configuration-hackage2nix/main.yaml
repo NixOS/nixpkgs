@@ -240,6 +240,8 @@ package-maintainers:
     - streamly
     - taskwarrior
     - witch
+  ncfavier:
+    - lambdabot
   pacien:
     - ldgallery-compiler
   peti:
