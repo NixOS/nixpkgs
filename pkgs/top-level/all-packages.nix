@@ -9483,8 +9483,6 @@ with pkgs;
 
   timetrap = callPackage ../applications/office/timetrap { };
 
-  timetable = callPackage ../applications/office/timetable { };
-
   timekeeper = callPackage ../applications/office/timekeeper { };
 
   timezonemap = callPackage ../development/libraries/timezonemap { };
