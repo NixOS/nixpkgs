@@ -2,7 +2,7 @@
 , usePulseAudio ? config.pulseaudio or false, libpulseaudio }:
 
 stdenv.mkDerivation rec {
-  pname = "openmpt123";
+  pname = "libopenmpt";
   version = "0.5.10";
 
   src = fetchurl {
