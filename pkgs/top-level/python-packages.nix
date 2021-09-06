@@ -5100,6 +5100,7 @@ in {
   openstack-pbr = callPackage ../development/python-modules/openstack/pbr { };
     pbr = self.openstack-pbr; # Alias added 2021-09-05
   openstack-python-cinderclient = callPackage ../development/python-modules/openstack/python-cinderclient { };
+  openstack-python-client = callPackage ../development/python-modules/openstack/python-client { };
 
   opentimestamps = callPackage ../development/python-modules/opentimestamps { };
 
