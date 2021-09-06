@@ -5096,6 +5096,7 @@ in {
   openstack-oslo_serialization = callPackage ../development/python-modules/openstack/oslo_serialization { };
   openstack-oslo_utils = callPackage ../development/python-modules/openstack/oslo_utils { };
   openstack-oslotest = callPackage ../development/python-modules/openstack/oslotest { };
+  openstack-osprofiler = callPackage ../development/python-modules/openstack/osprofiler { };
   openstack-pbr = callPackage ../development/python-modules/openstack/pbr { };
     pbr = self.openstack-pbr; # Alias added 2021-09-05
 
