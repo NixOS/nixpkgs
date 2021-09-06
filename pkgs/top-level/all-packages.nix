@@ -15991,8 +15991,8 @@ with pkgs;
 
   cairo = callPackage ../development/libraries/cairo { };
 
-  cairomm = callPackage ../development/libraries/cairomm { };
-
+  cairomm = cairomm_1_0;
+  cairomm_1_0 = callPackage ../development/libraries/cairomm/1.0.nix { };
   cairomm_1_16 = callPackage ../development/libraries/cairomm/1.16.nix {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;
   };

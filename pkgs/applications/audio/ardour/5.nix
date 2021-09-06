@@ -3,7 +3,7 @@
 , alsa-lib
 , aubio
 , boost
-, cairomm
+, cairomm_1_0
 , curl
 , doxygen
 , fftwSinglePrec
@@ -77,7 +77,7 @@ in stdenv.mkDerivation rec {
     alsa-lib
     aubio
     boost
-    cairomm
+    cairomm_1_0
     curl
     dbus
     fftw

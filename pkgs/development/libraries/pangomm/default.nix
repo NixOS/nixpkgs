@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, meson, ninja, python3, pango, glibmm_2_4, cairomm, gnome
+{ lib, stdenv, fetchurl, pkg-config, meson, ninja, python3, pango, glibmm_2_4, cairomm_1_0, gnome
 , ApplicationServices }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config meson ninja python3 ] ++ lib.optional stdenv.isDarwin [
     ApplicationServices
   ];
-  propagatedBuildInputs = [ pango glibmm_2_4 cairomm ];
+  propagatedBuildInputs = [ pango glibmm_2_4 cairomm_1_0 ];
 
   doCheck = true;
 
