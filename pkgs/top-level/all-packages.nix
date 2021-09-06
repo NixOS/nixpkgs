@@ -5434,6 +5434,8 @@ with pkgs;
 
   gitstatus = callPackage ../applications/version-management/git-and-tools/gitstatus { };
 
+  gitty = callPackage ../applications/version-management/git-and-tools/gitty { };
+
   gitui = callPackage ../applications/version-management/git-and-tools/gitui {
     inherit (darwin.apple_sdk.frameworks) Security AppKit;
   };
