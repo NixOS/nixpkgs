@@ -12,23 +12,23 @@
 , gsettings-desktop-schemas
 , gtk3
 , libgee
+, libhandy
+, libsoup
 , json-glib
 , glib-networking
-, libsoup
-, libunity
 , desktop-file-utils
 , wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "fondo";
-  version = "1.5.2";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "calo001";
     repo = pname;
     rev = version;
-    sha256 = "sha256-EATZRmYSGUzWYaPqFT4mLTGGvwUp+Mn93yMF2JsPaYo=";
+    sha256 = "sha256-JiDbkVs+EZRWRohSiuh8xFFgEhbnMYZfnZtz5Z4Wdb0=";
   };
 
   nativeBuildInputs = [
@@ -48,8 +48,8 @@ stdenv.mkDerivation rec {
     gtk3
     json-glib
     libgee
+    libhandy
     libsoup
-    libunity
     pantheon.granite
   ];
 
