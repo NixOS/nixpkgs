@@ -31428,6 +31428,8 @@ with pkgs;
 
   cups-bjnp = callPackage ../misc/cups/drivers/cups-bjnp { };
 
+  cups-brother-dcp9020cdw = pkgsi686Linux.callPackage ../misc/cups/drivers/brother-dcp9020cdw { };
+
   cups-brother-hl1110 = pkgsi686Linux.callPackage ../misc/cups/drivers/hl1110 { };
 
   cups-brother-hl1210w = pkgsi686Linux.callPackage ../misc/cups/drivers/hl1210w { };
