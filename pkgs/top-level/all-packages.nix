@@ -5277,6 +5277,10 @@ with pkgs;
 
   git-cinnabar = callPackage ../applications/version-management/git-and-tools/git-cinnabar { };
 
+  git-cliff = callPackage ../applications/version-management/git-and-tools/git-cliff {
+    inherit (pkgs.darwin.apple_sdk.frameworks) Security;
+  };
+
   git-codeowners = callPackage ../applications/version-management/git-and-tools/git-codeowners { };
 
   git-codereview = callPackage ../applications/version-management/git-and-tools/git-codereview { };
@@ -8766,6 +8770,8 @@ with pkgs;
   s6-portable-utils = skawarePackages.s6-portable-utils;
 
   sacad = callPackage ../tools/misc/sacad { };
+
+  sad = callPackage ../tools/text/sad { };
 
   safecopy = callPackage ../tools/system/safecopy { };
 

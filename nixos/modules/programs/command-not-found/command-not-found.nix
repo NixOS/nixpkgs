@@ -49,10 +49,10 @@ in
       ''
         # This function is called whenever a command is not found.
         command_not_found_handle() {
-          local p=${commandNotFound}/bin/command-not-found
-          if [ -x $p -a -f ${cfg.dbPath} ]; then
+          local p='${commandNotFound}/bin/command-not-found'
+          if [ -x "$p" ] && [ -f '${cfg.dbPath}' ]; then
             # Run the helper program.
-            $p "$@"
+            "$p" "$@"
             # Retry the command if we just installed it.
             if [ $? = 126 ]; then
               "$@"
@@ -70,10 +70,10 @@ in
       ''
         # This function is called whenever a command is not found.
         command_not_found_handler() {
-          local p=${commandNotFound}/bin/command-not-found
-          if [ -x $p -a -f ${cfg.dbPath} ]; then
+          local p='${commandNotFound}/bin/command-not-found'
+          if [ -x "$p" ] && [ -f '${cfg.dbPath}' ]; then
             # Run the helper program.
-            $p "$@"
+            "$p" "$@"
 
             # Retry the command if we just installed it.
             if [ $? = 126 ]; then
