@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, pkg-config, libzip, glib, libusb1, libftdi1, check
-, libserialport, librevisa, doxygen, glibmm, python3
+, libserialport, librevisa, doxygen, glibmm_2_4, python3
 , version ? "0.5.1", sha256 ? "171b553dir5gn6w4f7n37waqk62nq2kf1jykx4ifjacdz5xdw3z4", doInstallCheck ? true
 }:
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ doxygen pkg-config python3 ];
-  buildInputs = [ libzip glib libusb1 libftdi1 check libserialport librevisa glibmm ];
+  buildInputs = [ libzip glib libusb1 libftdi1 check libserialport librevisa glibmm_2_4 ];
 
   strictDeps = true;
 

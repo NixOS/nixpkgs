@@ -15965,8 +15965,8 @@ with pkgs;
     dbus = dbus.override { systemd = null; };
   });
 
-  glibmm = callPackage ../development/libraries/glibmm { };
-
+  glibmm = glibmm_2_4;
+  glibmm_2_4 = callPackage ../development/libraries/glibmm/2.4.nix { };
   glibmm_2_68 = callPackage ../development/libraries/glibmm/2.68.nix {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
@@ -20281,9 +20281,7 @@ with pkgs;
 
   libpulseaudio = libpulseaudio-vanilla;
 
-  easyeffects = callPackage ../applications/audio/easyeffects {
-    glibmm = glibmm_2_68;
-  };
+  easyeffects = callPackage ../applications/audio/easyeffects { };
 
   pulseeffects-legacy = callPackage ../applications/audio/pulseeffects-legacy {
     boost = boost172;

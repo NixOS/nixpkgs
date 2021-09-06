@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, libxml2, glibmm, perl, gnome }:
+{ lib, stdenv, fetchurl, pkg-config, libxml2, glibmm_2_4, perl, gnome }:
 
 stdenv.mkDerivation rec {
   pname = "libxml++";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config perl ];
 
-  propagatedBuildInputs = [ libxml2 glibmm ];
+  propagatedBuildInputs = [ libxml2 glibmm_2_4 ];
 
   passthru = {
     updateScript = gnome.updateScript {

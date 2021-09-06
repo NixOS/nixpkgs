@@ -5,7 +5,7 @@
 , gettext
 , pkg-config
 , pulseaudioFull
-, glibmm
+, glibmm_2_4
 , gtkmm3
 , wrapGAppsHook
 }:
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     pulseaudioFull
-    glibmm
+    glibmm_2_4
     gtkmm3
   ];
 

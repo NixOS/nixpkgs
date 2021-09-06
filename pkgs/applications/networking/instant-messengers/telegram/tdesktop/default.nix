@@ -25,7 +25,7 @@
 , range-v3
 , tl-expected
 , hunspell
-, glibmm
+, glibmm_2_4
 , webkitgtk
 , jemalloc
 , rnnoise
@@ -114,7 +114,7 @@ mkDerivation rec {
     range-v3
     tl-expected
     hunspell
-    glibmm
+    glibmm_2_4
     webkitgtk
     jemalloc
     rnnoise

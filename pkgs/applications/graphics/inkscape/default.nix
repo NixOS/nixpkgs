@@ -9,7 +9,7 @@
 , ghostscript
 , glib
 , glib-networking
-, glibmm
+, glibmm_2_4
 , gsl
 , gspell
 , gtk-mac-integration
@@ -118,7 +118,7 @@ stdenv.mkDerivation rec {
     gettext
     glib
     glib-networking
-    glibmm
+    glibmm_2_4
     gsl
     gtkmm3
     imagemagick

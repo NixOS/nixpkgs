@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, file, glibmm, gst_all_1, gnome }:
+{ lib, stdenv, fetchurl, pkg-config, file, glibmm_2_4, gst_all_1, gnome }:
 stdenv.mkDerivation rec {
   pname = "gstreamermm";
   version = "1.10.0";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config file ];
 
-  propagatedBuildInputs = [ glibmm gst_all_1.gst-plugins-base ];
+  propagatedBuildInputs = [ glibmm_2_4 gst_all_1.gst-plugins-base ];
 
   enableParallelBuilding = true;
 

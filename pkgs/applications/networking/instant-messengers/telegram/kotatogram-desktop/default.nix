@@ -2,7 +2,7 @@
 , pkg-config, cmake, ninja, python3, wrapGAppsHook, wrapQtAppsHook
 , qtbase, qtimageformats, gtk3, libsForQt5, lz4, xxHash
 , ffmpeg, openalSoft, minizip, libopus, alsa-lib, libpulseaudio, range-v3
-, tl-expected, hunspell, glibmm, webkitgtk
+, tl-expected, hunspell, glibmm_2_4, webkitgtk
 # Transitive dependencies:
 , pcre, xorg, util-linux, libselinux, libsepol, epoxy
 , at-spi2-core, libXtst, libthai, libdatrie
@@ -38,7 +38,7 @@ in mkDerivation rec {
   buildInputs = [
     qtbase qtimageformats gtk3 libsForQt5.kwayland libsForQt5.libdbusmenu lz4 xxHash
     ffmpeg openalSoft minizip libopus alsa-lib libpulseaudio range-v3
-    tl-expected hunspell glibmm webkitgtk
+    tl-expected hunspell glibmm_2_4 webkitgtk
     tg_owt
     # Transitive dependencies:
     pcre xorg.libXdmcp util-linux libselinux libsepol epoxy

@@ -4,7 +4,7 @@
 , dbus_cplusplus
 , desktop-file-utils
 , fetchurl
-, glibmm
+, glibmm_2_4
 , kernel
 , libavc1394
 , libconfig
@@ -70,7 +70,7 @@ mkDerivation rec {
   buildInputs = [
     dbus
     dbus_cplusplus
-    glibmm
+    glibmm_2_4
     libavc1394
     libconfig
     libiec61883

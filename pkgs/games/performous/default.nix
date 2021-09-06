@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, cmake, pkg-config, gettext
-, glibmm, libxmlxx, pango, librsvg
+, glibmm_2_4, libxmlxx, pango, librsvg
 , SDL2, glew, boost, ffmpeg, portaudio, epoxy
 }:
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config gettext ];
 
   buildInputs = [
-    glibmm libxmlxx pango librsvg
+    glibmm_2_4 libxmlxx pango librsvg
     SDL2 glew boost ffmpeg portaudio epoxy
   ];
 }

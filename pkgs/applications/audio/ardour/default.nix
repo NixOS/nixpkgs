@@ -13,7 +13,7 @@
 , fftwSinglePrec
 , flac
 , glibc
-, glibmm
+, glibmm_2_4
 , graphviz
 , gtkmm2
 , harvid
@@ -93,7 +93,7 @@ stdenv.mkDerivation rec {
     fftw
     fftwSinglePrec
     flac
-    glibmm
+    glibmm_2_4
     gtkmm2
     itstool
     libarchive

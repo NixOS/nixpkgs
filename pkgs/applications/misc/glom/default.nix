@@ -19,7 +19,7 @@
 , libepc
 , python3
 , ncurses
-, glibmm
+, glibmm_2_4
 , gtk3
 , openssl
 , gtkmm3
@@ -76,7 +76,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [
     boost_python
-    glibmm
+    glibmm_2_4
     gtk3
     openssl
     libxmlxx3

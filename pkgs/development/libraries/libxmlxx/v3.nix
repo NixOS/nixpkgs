@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, libxml2, glibmm, perl }:
+{ lib, stdenv, fetchurl, pkg-config, libxml2, glibmm_2_4, perl }:
 
 stdenv.mkDerivation rec {
   pname = "libxml++";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config perl ];
 
-  buildInputs = [ glibmm ];
+  buildInputs = [ glibmm_2_4 ];
 
   propagatedBuildInputs = [ libxml2 ];
 

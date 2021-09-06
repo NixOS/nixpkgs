@@ -8,7 +8,7 @@
 , doxygen
 , fftwSinglePrec
 , flac
-, glibmm
+, glibmm_2_4
 , graphviz
 , gtkmm2
 , libjack2
@@ -83,7 +83,7 @@ in stdenv.mkDerivation rec {
     fftw
     fftwSinglePrec
     flac
-    glibmm
+    glibmm_2_4
     gtkmm2
     libjack2
     liblo

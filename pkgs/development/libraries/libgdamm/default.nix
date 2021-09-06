@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, glibmm, libgda, libxml2, gnome
+{ lib, stdenv, fetchurl, pkg-config, glibmm_2_4, libgda, libxml2, gnome
 , mysqlSupport ? false
 , postgresSupport ? false }:
 
@@ -18,7 +18,7 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ glibmm libxml2 ];
+  buildInputs = [ glibmm_2_4 libxml2 ];
   propagatedBuildInputs = [ gda ];
 
   enableParallelBuilding = true;

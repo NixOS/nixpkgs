@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, cmake, curl, zlib, ffmpeg, glew, pcre
 , rtmpdump, cairo, boost, SDL2, SDL2_mixer, libjpeg, pango, xz, nasm
-, llvm, glibmm
+, llvm, glibmm_2_4
 }:
 
 stdenv.mkDerivation rec {
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     curl zlib ffmpeg glew pcre rtmpdump cairo boost SDL2 SDL2_mixer libjpeg
-    pango xz nasm llvm glibmm
+    pango xz nasm llvm glibmm_2_4
   ];
 
   meta = with lib; {

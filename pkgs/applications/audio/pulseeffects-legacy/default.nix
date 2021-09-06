@@ -12,7 +12,7 @@
 , pulseaudio
 , gtk3
 , glib
-, glibmm
+, glibmm_2_4
 , gtkmm3
 , lilv
 , lv2
@@ -68,7 +68,7 @@ in stdenv.mkDerivation rec {
   buildInputs = [
     pulseaudio
     glib
-    glibmm
+    glibmm_2_4
     gtk3
     gtkmm3
     gst_all_1.gstreamer

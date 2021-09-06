@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchgit, boost, ganv, glibmm, gtkmm2, libjack2, lilv
+{ lib, stdenv, fetchgit, boost, ganv, glibmm_2_4, gtkmm2, libjack2, lilv
 , lv2, makeWrapper, pkg-config, python3, raul, serd, sord, sratom
 , wafHook
 , suil
@@ -18,7 +18,7 @@ stdenv.mkDerivation  rec {
 
   nativeBuildInputs = [ pkg-config wafHook python3 python3.pkgs.wrapPython ];
   buildInputs = [
-    boost ganv glibmm gtkmm2 libjack2 lilv lv2
+    boost ganv glibmm_2_4 gtkmm2 libjack2 lilv lv2
     python3 raul serd sord sratom suil
   ];
 

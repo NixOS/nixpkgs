@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl
 , pkg-config
-, gtk3, glib, glibmm, gtkmm3, gtkspell3
+, gtk3, glib, glibmm_2_4, gtkmm3, gtkspell3
 }:
 
 stdenv.mkDerivation rec {
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    gtk3 glib glibmm gtkmm3
+    gtk3 glib glibmm_2_4 gtkmm3
   ];
 
   meta = with lib; {

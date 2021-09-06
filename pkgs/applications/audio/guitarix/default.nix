@@ -10,7 +10,7 @@
 , gettext
 , glib
 , glib-networking
-, glibmm
+, glibmm_2_4
 , gnome
 , gsettings-desktop-schemas
 , gtk3
@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
     fftw
     glib
     glib-networking.out
-    glibmm
+    glibmm_2_4
     gnome.adwaita-icon-theme
     gsettings-desktop-schemas
     gtk3

@@ -5,7 +5,7 @@
 , calf
 , fftwFloat
 , glib
-, glibmm
+, glibmm_2_68
 , gtk4
 , gtkmm4
 , itstool
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     fftwFloat
     glib
-    glibmm
+    glibmm_2_68
     gtk4
     gtkmm4
     libbs2b

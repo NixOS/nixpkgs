@@ -6,7 +6,7 @@
 , bc
 , fluxbox
 , gettext
-, glibmm
+, glibmm_2_4
 , gtkmm2
 , libglademm
 , libsigcxx
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     bc
     fluxbox
-    glibmm
+    glibmm_2_4
     gtkmm2
     libglademm
     libsigcxx
