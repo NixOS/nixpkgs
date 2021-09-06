@@ -265,6 +265,8 @@ in {
 
   aioeafm = callPackage ../development/python-modules/aioeafm { };
 
+  aioeagle = callPackage ../development/python-modules/aioeagle { };
+
   aioemonitor = callPackage ../development/python-modules/aioemonitor { };
 
   aioesphomeapi = callPackage ../development/python-modules/aioesphomeapi { };
