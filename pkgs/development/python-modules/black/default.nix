@@ -2,7 +2,6 @@
 , buildPythonPackage, fetchPypi, pythonOlder, setuptools-scm, pytestCheckHook
 , aiohttp
 , aiohttp-cors
-, appdirs
 , attrs
 , click
 , colorama
@@ -60,7 +59,6 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     aiohttp
     aiohttp-cors
-    appdirs
     attrs
     click
     colorama
