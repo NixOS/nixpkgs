@@ -4357,6 +4357,8 @@ with pkgs;
 
   doom-bcc = callPackage ../games/zdoom/bcc-git.nix { };
 
+  dorkscout = callPackage ../tools/security/dorkscout { };
+
   sl1-to-photon = python3Packages.callPackage ../applications/misc/sl1-to-photon { };
 
   slade = callPackage ../applications/misc/slade {
