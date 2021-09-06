@@ -2366,6 +2366,8 @@ in {
 
   envoy-reader = callPackage ../development/python-modules/envoy-reader { };
 
+  envoy-utils = callPackage ../development/python-modules/envoy-utils { };
+
   enzyme = callPackage ../development/python-modules/enzyme { };
 
   epc = callPackage ../development/python-modules/epc { };
