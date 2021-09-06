@@ -1932,4 +1932,9 @@ EOT
   # 2021-08-18: streamly-posix was released with hspec 2.8.2, but it works with older versions too.
   streamly-posix = doJailbreak super.streamly-posix;
 
+  # 2021-09-06: hadolint depends on language-docker >= 10.1
+  hadolint = super.hadolint.override {
+    language-docker = self.language-docker_10_1_1;
+  };
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
