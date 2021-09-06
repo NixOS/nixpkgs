@@ -67,7 +67,7 @@ function fetchgit(fileName, url, rev, branch, builtinFetchGit) {
 
 function fetchLockedDep(builtinFetchGit) {
   return function (pkg) {
-    const { nameWithVersion, resolved } = pkg
+    let { nameWithVersion, resolved } = pkg
 
     if (!resolved) {
       console.error(
@@ -76,9 +76,14 @@ function fetchLockedDep(builtinFetchGit) {
       return ''
     }
 
-    const [url, sha1OrRev] = resolved.split('#')
+    const fileName = urlToName(resolved.split('#')[0])
 
-    const fileName = urlToName(url)
+    if (resolved.startsWith('https://codeload.github.com/')) {
+      let s = resolved.split('/')
+      resolved = `git+https://github.com/${s[3]}/${s[4]}.git#${s[6]}`
+    }
+
+    const [url, sha1OrRev] = resolved.split('#')
 
     if (url.startsWith('git+') || url.startsWith("git:")) {
       const rev = sha1OrRev
