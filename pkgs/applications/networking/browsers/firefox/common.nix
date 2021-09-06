@@ -5,12 +5,12 @@
 
 { lib, stdenv, pkg-config, pango, perl, python3, zip
 , libjpeg, zlib, dbus, dbus-glib, bzip2, xorg
-, freetype, fontconfig, file, nspr, nss, nss_3_53
+, freetype, fontconfig, file, nspr, nss
 , yasm, libGLU, libGL, sqlite, unzip, makeWrapper
 , hunspell, libevent, libstartup_notification
 , libvpx_1_8
 , icu69, libpng, jemalloc, glib, pciutils
-, autoconf213, which, gnused, rustPackages, rustPackages_1_45
+, autoconf213, which, gnused, rustPackages
 , rust-cbindgen, nodejs, nasm, fetchpatch
 , gnum4
 , gtk2, gtk3, wrapGAppsHook
@@ -90,20 +90,15 @@ let
             then "/Applications/${binaryNameCapitalized}.app/Contents/MacOS"
             else "/bin";
 
-  # 78 ESR won't build with rustc 1.47
-  inherit (if lib.versionAtLeast version "82" then rustPackages else rustPackages_1_45)
-    rustc cargo;
+  inherit (rustPackages) rustc cargo;
 
   # Darwin's stdenv provides the default llvmPackages version, match that since
   # clang LTO on Darwin is broken so the stdenv is not being changed.
   # Target the LLVM version that rustc -Vv reports it is built with for LTO.
-  # rustPackages_1_45 -> LLVM 10, rustPackages -> LLVM 11
   llvmPackages0 =
     /**/ if stdenv.isDarwin
       then buildPackages.llvmPackages
-    else if lib.versionAtLeast rustc.llvm.version "11"
-      then buildPackages.llvmPackages_11
-    else buildPackages.llvmPackages_10;
+    else buildPackages.llvmPackages_11;
   # Force the use of lld and other llvm tools for LTO
   llvmPackages = llvmPackages0.override {
     bootBintoolsNoLibc = null;
@@ -118,7 +113,7 @@ let
 
   # Disable p11-kit support in nss until our cacert packages has caught up exposing CKA_NSS_MOZILLA_CA_POLICY
   # https://github.com/NixOS/nixpkgs/issues/126065
-  nss_pkg = if lib.versionOlder version "83" then nss_3_53 else nss.override { useP11kit = false; };
+  nss_pkg = nss.override { useP11kit = false; };
 
   # --enable-release adds -ffunction-sections & LTO that require a big amount of
   # RAM and the 32-bit memory space cannot handle that linking
@@ -185,11 +180,10 @@ buildStdenv.mkDerivation ({
   ++ lib.optional  gssSupport libkrb5
   ++ lib.optionals waylandSupport [ libxkbcommon libdrm ]
   ++ lib.optional  pipewireSupport pipewire
-  ++ lib.optional  (lib.versionAtLeast version "82") gnum4
+  ++ [ gnum4 ]
   ++ lib.optionals buildStdenv.isDarwin [ CoreMedia ExceptionHandling Kerberos
                                           AVFoundation MediaToolbox CoreLocation
-                                          Foundation libobjc AddressBook cups ]
-  ++ lib.optional  (lib.versionOlder version "90") gtk2;
+                                          Foundation libobjc AddressBook cups ];
 
   NIX_LDFLAGS = lib.optionalString ltoSupport ''
     -rpath ${llvmPackages.libunwind.out}/lib
@@ -201,21 +195,6 @@ buildStdenv.mkDerivation ({
     rm -rf obj-x86_64-pc-linux-gnu
     substituteInPlace toolkit/xre/glxtest.cpp \
       --replace 'dlopen("libpci.so' 'dlopen("${pciutils}/lib/libpci.so'
-  '' + lib.optionalString (pipewireSupport && lib.versionOlder version "83") ''
-    # substitute the /usr/include/ lines for the libraries that pipewire provides.
-    # The patch we pick from fedora only contains the generated moz.build files
-    # which hardcode the dependency paths instead of running pkg_config.
-    substituteInPlace \
-      media/webrtc/trunk/webrtc/modules/desktop_capture/desktop_capture_generic_gn/moz.build \
-      --replace /usr/include ${pipewire.dev}/include
-  '' + lib.optionalString (lib.versionAtLeast version "80" && lib.versionOlder version "81") ''
-    substituteInPlace dom/system/IOUtils.h \
-      --replace '#include "nspr/prio.h"'          '#include "prio.h"'
-
-    substituteInPlace dom/system/IOUtils.cpp \
-      --replace '#include "nspr/prio.h"'          '#include "prio.h"' \
-      --replace '#include "nspr/private/pprio.h"' '#include "private/pprio.h"' \
-      --replace '#include "nspr/prtypes.h"'       '#include "prtypes.h"'
   '';
 
   nativeBuildInputs =
