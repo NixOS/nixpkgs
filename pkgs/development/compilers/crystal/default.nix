@@ -214,8 +214,7 @@ let
         license = licenses.asl20;
         maintainers = with maintainers; [ david50407 fabianhjr manveru peterhoeg ];
         platforms = builtins.attrNames archs;
-        # Error running at_exit handler: Nil assertion failed
-        broken = lib.versions.minor version == "32" && stdenv.isDarwin;
+        broken = lib.versionOlder version "0.36.1" && stdenv.isDarwin;
       };
     })
   );
@@ -264,10 +263,19 @@ rec {
     extraBuildInputs = [ git ];
   };
 
+  binaryCrystal_0_36 = genericBinary {
+    version = "0.36.1";
+    sha256s = {
+      x86_64-linux = "065vzq34g7hgzl2mrzy9gwwsfikc78nj7xxsbrk67r6rz0a7bk1q";
+      i686-linux = "18m4b1lnd682i5ygbg6cljqjny60nn2mlrzrk765h2ip6fljqbm1";
+      x86_64-darwin = "0xggayk92zh64pb5sz77n12hkcd1hg8kw90z7gb18594q551sf1v";
+    };
+  };
+
   crystal_0_36 = generic {
     version = "0.36.1";
     sha256 = "sha256-5rjrvwZKM4lHpmxLyUVbi0Zw98xT+iJKonxwfUwS/Wk=";
-    binary = crystal_0_35;
+    binary = binaryCrystal_0_36;
   };
 
   crystal_1_0 = generic {
