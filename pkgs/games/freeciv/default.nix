@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, lua5_3, pkg-config, python3
 , zlib, bzip2, curl, xz, gettext, libiconv
 , sdlClient ? true, SDL, SDL_mixer, SDL_image, SDL_ttf, SDL_gfx, freetype, fluidsynth
-, gtkClient ? false, gtk3
+, gtkClient ? false, gtk3, wrapGAppsHook
 , qtClient ? false, qt5
 , server ? true, readline
 , enableSqlite ? true, sqlite
@@ -26,7 +26,8 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ autoreconfHook pkg-config ]
-    ++ lib.optional qtClient [ qt5.wrapQtAppsHook ];
+    ++ lib.optional qtClient [ qt5.wrapQtAppsHook ]
+    ++ lib.optional gtkClient [ wrapGAppsHook ];
 
   buildInputs = [ lua5_3 zlib bzip2 curl xz gettext libiconv ]
     ++ lib.optionals sdlClient [ SDL SDL_mixer SDL_image SDL_ttf SDL_gfx freetype fluidsynth ]
@@ -36,6 +37,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional enableSqlite sqlite;
 
   dontWrapQtApps = true;
+  dontWrapGApps = true;
 
   configureFlags = [ "--enable-shared" ]
     ++ lib.optional sdlClient "--enable-client=sdl"
@@ -49,6 +51,8 @@ stdenv.mkDerivation rec {
 
   postFixup = lib.optionalString qtClient ''
     wrapQtApp $out/bin/freeciv-qt
+  '' + lib.optionalString gtkClient ''
+    wrapGApp $out/bin/freeciv-gtk3.22
   '';
 
   enableParallelBuilding = true;
