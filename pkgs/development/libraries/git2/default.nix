@@ -5,14 +5,14 @@
 
 stdenv.mkDerivation rec {
   pname = "libgit2";
-  version = "1.1.1";
+  version = "1.2.0";
   # keep the version in sync with python3.pkgs.pygit2 and libgit2-glib
 
   src = fetchFromGitHub {
     owner = "libgit2";
     repo = "libgit2";
     rev = "v${version}";
-    sha256 = "sha256-SxceIxT0aeiiiZCeSIe6EOa+MyVpQVaiv/ZZn6fkwIc=";
+    sha256 = "sha256-butGEyMWPROI2y5zLWx/13p+Dr5k/yYI0LJGejJbZQ4=";
   };
 
   cmakeFlags = [
