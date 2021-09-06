@@ -7,19 +7,19 @@
 let
   pypkgs = with python3Packages; [
     aiofiles filetype matrix-nio appdirs cairosvg
-    pymediainfo setuptools html-sanitizer mistune blist
-    pyotherside
+    pymediainfo setuptools html-sanitizer hsluv mistune blist
+    plyer pyotherside redbaron simpleaudio watchgod
   ];
 in
 mkDerivation rec {
   pname = "mirage";
-  version = "0.6.4";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "mirukana";
     repo = pname;
     rev = "v${version}";
-    sha256 = "15x0x2rf4fzsd0zr84fq3j3ddzkgc5il8s54jpxk8wl4ah03g4nv";
+    sha256 = "1mhmly68l4ij3vma3w736i6r1rppj8383ybf002da7670nabi53l";
     fetchSubmodules = true;
   };
 

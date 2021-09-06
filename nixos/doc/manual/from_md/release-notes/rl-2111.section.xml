@@ -1025,6 +1025,14 @@ Superuser created successfully.
           changelog</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <literal>mirage-im</literal> was upgraded from 0.6.x to 0.7.x.
+          The 0.7.x release has a different settings format. Mirage
+          notifies at startup when the old configuration file is
+          detected.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-notable-changes">
