@@ -29941,9 +29941,13 @@ with pkgs;
   steamcmd = steamPackages.steamcmd;
 
   protontricks = python3Packages.callPackage ../tools/package-management/protontricks {
-    inherit steam-run;
-    inherit winetricks;
-    inherit (gnome) zenity;
+    winetricks = winetricks.override {
+      # Remove default build of wine to reduce closure size.
+      # Falls back to wine in PATH.
+      wine = null;
+    };
+
+    inherit steam-run yad;
   };
 
   protonup = with python3Packages; toPythonApplication protonup;
