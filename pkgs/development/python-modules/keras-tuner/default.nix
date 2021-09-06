@@ -36,6 +36,7 @@ buildPythonPackage rec {
     tensorflow-tensorboard_2
   ];
   checkInputs = [
+    portpicker
     pytestCheckHook
   ];
   meta = with lib; {
