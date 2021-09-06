@@ -5085,6 +5085,7 @@ in {
   openstack-docstheme = callPackage ../development/python-modules/openstack/docstheme { };
   openstack-hacking = callPackage ../development/python-modules/openstack/hacking { };
   openstack-keystoneauth1 = callPackage ../development/python-modules/openstack/keystoneauth1 { };
+  openstack-os-client-config = callPackage ../development/python-modules/openstack/os-client-config { };
   openstack-pbr = callPackage ../development/python-modules/openstack/pbr { };
     pbr = self.openstack-pbr; # Alias added 2021-09-05
 
