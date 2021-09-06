@@ -286,6 +286,8 @@ with pkgs;
 
   evans = callPackage ../development/tools/evans { };
 
+  exo-procman = callPackage ../development/tools/exo { };
+
   frugal = callPackage ../development/tools/frugal { };
 
   glade = callPackage ../development/tools/glade { };
