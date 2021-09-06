@@ -4250,7 +4250,7 @@ in {
   };
 
   llvmlite = callPackage ../development/python-modules/llvmlite {
-    llvm = pkgs.llvm_9;
+    llvm = pkgs.llvm_11;
   }; # llvmlite always requires a specific version of llvm.
 
   lmdb = callPackage ../development/python-modules/lmdb {
