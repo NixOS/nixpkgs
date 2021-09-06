@@ -5082,6 +5082,7 @@ in {
   opensimplex = callPackage ../development/python-modules/opensimplex { };
 
   openstack-debtcollector = callPackage ../development/python-modules/openstack/debtcollector { };
+  openstack-docstheme = callPackage ../development/python-modules/openstack/docstheme { };
   openstack-pbr = callPackage ../development/python-modules/openstack/pbr { };
     pbr = self.openstack-pbr; # Alias added 2021-09-05
 
