@@ -56,6 +56,7 @@ let
       buildCommand = ''
         mkdir -p $out
         tar --strip-components=1 -C $out -xf ${src}
+        patchShebangs $out/bin/crystal
       '';
     };
 
@@ -93,6 +94,10 @@ let
       outputs = [ "out" "lib" "bin" ];
 
       postPatch = ''
+        export TMP=$(mktemp -d)
+        export HOME=$TMP
+        mkdir -p $HOME/test
+
         # Add dependency of crystal to docs to avoid issue on flag changes between releases
         # https://github.com/crystal-lang/crystal/pull/8792#issuecomment-614004782
         substituteInPlace Makefile \
@@ -103,39 +108,35 @@ let
 
         ln -sf spec/compiler spec/std
 
-        # Dirty fix for when no sandboxing is enabled
-        rm -rf /tmp/crystal
-        mkdir -p /tmp/crystal
+        mkdir -p $TMP/crystal
 
         substituteInPlace spec/std/file_spec.cr \
           --replace '/bin/ls' '${coreutils}/bin/ls' \
-          --replace '/usr/share' '/tmp/crystal' \
-          --replace '/usr' '/tmp'
+          --replace '/usr/share' "$TMP/crystal" \
+          --replace '/usr' "$TMP" \
+          --replace '/tmp' "$TMP"
 
         substituteInPlace spec/std/process_spec.cr \
           --replace '/bin/cat' '${coreutils}/bin/cat' \
           --replace '/bin/ls' '${coreutils}/bin/ls' \
           --replace '/usr/bin/env' '${coreutils}/bin/env' \
           --replace '"env"' '"${coreutils}/bin/env"' \
-          --replace '"/usr"' '"/tmp"'
-
-        substituteInPlace spec/std/socket/tcp_server_spec.cr \
-          --replace '{% if flag?(:gnu) %}"listen: "{% else %}"bind: "{% end %}' '"bind: "'
+          --replace '/usr' "$TMP" \
+          --replace '/tmp' "$TMP"
 
         substituteInPlace spec/std/system_spec.cr \
           --replace '`hostname`' '`${hostname}/bin/hostname`'
 
-        # See https://github.com/crystal-lang/crystal/pull/8640
-        substituteInPlace spec/std/http/cookie_spec.cr \
-          --replace '01 Jan 2020' '01 Jan #{Time.utc.year + 2}'
-
         # See https://github.com/crystal-lang/crystal/issues/8629
         substituteInPlace spec/std/socket/udp_socket_spec.cr \
           --replace 'it "joins and transmits to multicast groups"' 'pending "joins and transmits to multicast groups"'
+      '';
 
-        # See https://github.com/crystal-lang/crystal/pull/8699
-        substituteInPlace spec/std/xml/xml_spec.cr \
-          --replace 'it "handles errors"' 'pending "handles errors"'
+      # Defaults are 4
+      preBuild = ''
+        export CRYSTAL_WORKERS=$NIX_BUILD_CORES
+        export threads=$NIX_BUILD_CORES
+        export CRYSTAL_CACHE_DIR=$TMP
       '';
 
       buildInputs = commonBuildInputs extraBuildInputs;
@@ -197,9 +198,6 @@ let
       checkTarget = "compiler_spec";
 
       preCheck = ''
-        export HOME=/tmp
-        mkdir -p $HOME/test
-
         export LIBRARY_PATH=${lib.makeLibraryPath checkInputs}:$LIBRARY_PATH
         export PATH=${lib.makeBinPath checkInputs}:$PATH
       '';
