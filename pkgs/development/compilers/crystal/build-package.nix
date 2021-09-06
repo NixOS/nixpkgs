@@ -120,7 +120,7 @@ stdenv.mkDerivation (mkDerivationArgs // {
 
   installCheckPhase = args.installCheckPhase or ''
     for f in $out/bin/*; do
-      $f --help
+      $f --help > /dev/null
     done
   '';
 
