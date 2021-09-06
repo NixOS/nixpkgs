@@ -12943,6 +12943,8 @@ with pkgs;
     inherit pkgs lib;
   };
 
+  poetry2conda = python3Packages.callPackage ../development/python-modules/poetry2conda { };
+
   pipenv = callPackage ../development/tools/pipenv {};
 
   pipewire = callPackage ../development/libraries/pipewire {};
