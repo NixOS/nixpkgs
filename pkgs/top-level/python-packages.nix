@@ -5099,6 +5099,7 @@ in {
   openstack-osprofiler = callPackage ../development/python-modules/openstack/osprofiler { };
   openstack-pbr = callPackage ../development/python-modules/openstack/pbr { };
     pbr = self.openstack-pbr; # Alias added 2021-09-05
+  openstack-python-cinderclient = callPackage ../development/python-modules/openstack/python-cinderclient { };
 
   opentimestamps = callPackage ../development/python-modules/opentimestamps { };
 
