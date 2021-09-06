@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, lua5_3, pkg-config, python3
 , zlib, bzip2, curl, xz, gettext, libiconv
 , sdlClient ? true, SDL, SDL_mixer, SDL_image, SDL_ttf, SDL_gfx, freetype, fluidsynth
-, gtkClient ? stdenv.isLinux, gtk3
+, gtkClient ? false, gtk3
 , qtClient ? false, qt5
 , server ? true, readline
 , enableSqlite ? true, sqlite
@@ -46,6 +46,10 @@ stdenv.mkDerivation rec {
     ++ lib.optional enableSqlite "--enable-fcdb=sqlite3"
     ++ lib.optional (!gtkClient) "--enable-fcmp=cli"
     ++ lib.optional (!server)    "--disable-server";
+
+  postFixup = lib.optionalString qtClient ''
+    wrapQtApp $out/bin/freeciv-qt
+  '';
 
   enableParallelBuilding = true;
 
