@@ -570,6 +570,7 @@ mapAliases ({
   openisns = open-isns; # added 2020-01-28
   openjpeg_1 = throw "openjpeg_1 has been removed, use openjpeg_2 instead"; # added 2021-01-24
   openjpeg_2 = openjpeg; # added 2021-01-25
+  openmpt123 = libopenmpt; # added 2021-09-05
   opensans-ttf = open-sans; # added 2018-12-04
   openssh_with_kerberos = openssh; # added 2018-01-28
   orchis = orchis-theme; # added 2021-06-09
