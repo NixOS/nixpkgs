@@ -5090,6 +5090,7 @@ in {
   openstack-osc-lib = callPackage ../development/python-modules/openstack/osc-lib { };
   openstack-oslo_concurrency = callPackage ../development/python-modules/openstack/oslo_concurrency { };
   openstack-oslo_config = callPackage ../development/python-modules/openstack/oslo_config { };
+  openstack-oslo_context = callPackage ../development/python-modules/openstack/oslo_context { };
   openstack-oslo_i18n = callPackage ../development/python-modules/openstack/oslo_i18n { };
   openstack-pbr = callPackage ../development/python-modules/openstack/pbr { };
     pbr = self.openstack-pbr; # Alias added 2021-09-05
