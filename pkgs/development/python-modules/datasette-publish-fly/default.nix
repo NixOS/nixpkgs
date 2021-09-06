@@ -2,7 +2,6 @@
 , fetchFromGitHub
 , lib
 , datasette
-, flyctl
 , pytestCheckHook
 , pytest-asyncio
 , sqlite-utils
