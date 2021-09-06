@@ -17207,13 +17207,19 @@ let
     };
   };
 
-  PkgConfig = buildPerlPackage {
+  PkgConfig = buildPerlPackage rec {
     pname = "PkgConfig";
     version = "0.25026";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PL/PLICEASE/PkgConfig-0.25026.tar.gz";
       sha256 = "1862hzlkibqsgynrnwg43acycp4rlsv19gsybjwq39nnqb9mxfjd";
     };
+    # support cross-compilation by simplifying the way we get version during build
+    postPatch = ''
+      substituteInPlace Makefile.PL --replace \
+        'do { require "./lib/PkgConfig.pm"; $PkgConfig::VERSION; }' \
+        '"${version}"'
+    '';
     meta = {
       description = "Pure-Perl Core-Only replacement for pkg-config";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
