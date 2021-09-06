@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, gtk2, glibmm, cairomm, pangomm, atkmm }:
+{ lib, stdenv, fetchurl, pkg-config, gtk2, glibmm, cairomm, pangomm, atkmm_1_6 }:
 
 stdenv.mkDerivation rec {
   name = "gtkmm-${minVer}.5";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  propagatedBuildInputs = [ glibmm gtk2 atkmm cairomm pangomm ];
+  propagatedBuildInputs = [ glibmm gtk2 atkmm_1_6 cairomm pangomm ];
 
   doCheck = true;
 

@@ -5,7 +5,7 @@
 , pkg-config
 , libdrm
 , libGL
-, atkmm
+, atkmm_1_6
 , pcre
 , gtkmm3
 , boost
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ libdrm libGL atkmm pcre gtkmm3 boost libxmlxx3 mesa pciutils ];
+  buildInputs = [ libdrm libGL atkmm_1_6 pcre gtkmm3 boost libxmlxx3 mesa pciutils ];
 
   cmakeFlags = [ "-DENABLE_UNIT_TESTS=off" ];
 

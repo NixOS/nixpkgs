@@ -15983,8 +15983,8 @@ with pkgs;
 
   atk = callPackage ../development/libraries/atk { };
 
-  atkmm = callPackage ../development/libraries/atkmm { };
-
+  atkmm = atkmm_1_6;
+  atkmm_1_6 = callPackage ../development/libraries/atkmm/1.6.nix { };
   atkmm_2_36 = callPackage ../development/libraries/atkmm/2.36.nix { };
 
   pixman = callPackage ../development/libraries/pixman { };
