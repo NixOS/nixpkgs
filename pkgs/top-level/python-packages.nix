@@ -5102,6 +5102,7 @@ in {
   openstack-python-cinderclient = callPackage ../development/python-modules/openstack/python-cinderclient { };
   openstack-python-client = callPackage ../development/python-modules/openstack/python-client { };
   openstack-python-keystoneclient = callPackage ../development/python-modules/openstack/python-keystoneclient { };
+  openstack-python-manilaclient = callPackage ../development/python-modules/openstack/python-manilaclient { };
 
   opentimestamps = callPackage ../development/python-modules/opentimestamps { };
 
