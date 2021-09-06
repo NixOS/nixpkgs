@@ -17970,9 +17970,6 @@ with pkgs;
   nss = lowPrio (callPackage ../development/libraries/nss { });
   nssTools = nss.tools;
 
-  # required for stable thunderbird and firefox-esr-78
-  nss_3_53 = lowPrio (callPackage ../development/libraries/nss/3.53.nix { });
-
   nss_wrapper = callPackage ../development/libraries/nss_wrapper { };
 
   nsss = skawarePackages.nsss;
