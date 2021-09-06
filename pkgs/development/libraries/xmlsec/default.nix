@@ -1,7 +1,5 @@
 { stdenv, fetchurl, libxml2, gnutls, libxslt, pkg-config, libgcrypt, libtool
-# nss_3_53 is used instead of the latest due to a number of issues:
-# https://github.com/lsh123/xmlsec/issues?q=is%3Aissue+is%3Aopen+nss
-, openssl, nss_3_53, lib, runCommandCC, writeText }:
+, openssl, nss, lib, runCommandCC, writeText }:
 
 lib.fix (self:
 stdenv.mkDerivation rec {
@@ -24,11 +22,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ libxml2 gnutls libxslt libgcrypt libtool openssl nss_3_53 ];
+  buildInputs = [ libxml2 gnutls libxslt libgcrypt libtool openssl nss ];
 
   enableParallelBuilding = true;
   doCheck = true;
-  checkInputs = [ nss_3_53.tools ];
+  checkInputs = [ nss.tools ];
   preCheck = ''
   substituteInPlace tests/testrun.sh \
     --replace 'timestamp=`date +%Y%m%d_%H%M%S`' 'timestamp=19700101_000000' \
