@@ -5081,6 +5081,9 @@ in {
 
   opensimplex = callPackage ../development/python-modules/opensimplex { };
 
+  openstack-pbr = callPackage ../development/python-modules/openstack/pbr { };
+    pbr = self.openstack-pbr; # Alias added 2021-09-05
+
   opentimestamps = callPackage ../development/python-modules/opentimestamps { };
 
   opentracing = callPackage ../development/python-modules/opentracing { };
@@ -5259,8 +5262,6 @@ in {
   paypalrestsdk = callPackage ../development/python-modules/paypalrestsdk { };
 
   pbkdf2 = callPackage ../development/python-modules/pbkdf2 { };
-
-  pbr = callPackage ../development/python-modules/pbr { };
 
   pc-ble-driver-py = toPythonModule (callPackage ../development/python-modules/pc-ble-driver-py { });
 
