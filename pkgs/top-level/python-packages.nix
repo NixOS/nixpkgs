@@ -5092,6 +5092,7 @@ in {
   openstack-oslo_config = callPackage ../development/python-modules/openstack/oslo_config { };
   openstack-oslo_context = callPackage ../development/python-modules/openstack/oslo_context { };
   openstack-oslo_i18n = callPackage ../development/python-modules/openstack/oslo_i18n { };
+  openstack-oslo_log = callPackage ../development/python-modules/openstack/oslo_log { };
   openstack-pbr = callPackage ../development/python-modules/openstack/pbr { };
     pbr = self.openstack-pbr; # Alias added 2021-09-05
 
