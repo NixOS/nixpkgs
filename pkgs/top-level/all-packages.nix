@@ -4109,11 +4109,12 @@ with pkgs;
     ldapSupport = true;
   };
 
-  curl = curlMinimal.override {
+  curl = curlMinimal.override ({
     idnSupport = true;
+  } // lib.optionalAttrs (!stdenv.hostPlatform.isStatic) {
     gssSupport = true;
     brotliSupport = true;
-  };
+  });
 
   curlMinimal = callPackage ../tools/networking/curl { };
 
