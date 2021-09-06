@@ -9,6 +9,14 @@ in
 {
   options.services.snapper = {
 
+    snapshotRootOnBoot = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether to snapshot root on boot
+      '';
+    };
+
     snapshotInterval = mkOption {
       type = types.str;
       default = "hourly";
@@ -136,14 +144,9 @@ in
     systemd.services.snapper-timeline = {
       description = "Timeline of Snapper Snapshots";
       inherit documentation;
+      requires = [ "local-fs.target" ];
       serviceConfig.ExecStart = "${pkgs.snapper}/lib/snapper/systemd-helper --timeline";
-    };
-
-    systemd.timers.snapper-timeline = {
-      description = "Timeline of Snapper Snapshots";
-      inherit documentation;
-      wantedBy = [ "basic.target" ];
-      timerConfig.OnCalendar = cfg.snapshotInterval;
+      startAt = cfg.snapshotInterval;
     };
 
     systemd.services.snapper-cleanup = {
@@ -155,10 +158,21 @@ in
     systemd.timers.snapper-cleanup = {
       description = "Cleanup of Snapper Snapshots";
       inherit documentation;
-      wantedBy = [ "basic.target" ];
+      wantedBy = [ "timers.target" ];
+      requires = [ "local-fs.target" ];
       timerConfig.OnBootSec = "10m";
       timerConfig.OnUnitActiveSec = cfg.cleanupInterval;
     };
+
+    systemd.services.snapper-boot = lib.optionalAttrs cfg.snapshotRootOnBoot {
+      description = "Take snapper snapshot of root on boot";
+      inherit documentation;
+      serviceConfig.ExecStart = "${pkgs.snapper}/bin/snapper --config root create --cleanup-algorithm number --description boot";
+      serviceConfig.type = "oneshot";
+      requires = [ "local-fs.target" ];
+      wantedBy = [ "multi-user.target" ];
+      unitConfig.ConditionPathExists = "/etc/snapper/configs/root";
+    };
+
   });
 }
-
