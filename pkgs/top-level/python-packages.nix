@@ -5088,6 +5088,7 @@ in {
   openstack-os-client-config = callPackage ../development/python-modules/openstack/os-client-config { };
   openstack-os-service-types = callPackage ../development/python-modules/openstack/os-service-types { };
   openstack-osc-lib = callPackage ../development/python-modules/openstack/osc-lib { };
+  openstack-oslo_i18n = callPackage ../development/python-modules/openstack/oslo_i18n { };
   openstack-pbr = callPackage ../development/python-modules/openstack/pbr { };
     pbr = self.openstack-pbr; # Alias added 2021-09-05
 
