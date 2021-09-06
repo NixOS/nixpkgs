@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, cmake, pkg-config, zlib, libpng, cairo, freetype
-, json_c, fontconfig, gtkmm3, pangomm, glew, libGLU, xorg, pcre, wrapGAppsHook
+, json_c, fontconfig, gtkmm3, pangomm_1_4, glew, libGLU, xorg, pcre, wrapGAppsHook
 }:
 stdenv.mkDerivation rec {
   pname = "solvespace";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     zlib libpng cairo freetype
-    json_c fontconfig gtkmm3 pangomm glew libGLU
+    json_c fontconfig gtkmm3 pangomm_1_4 glew libGLU
     xorg.libpthreadstubs xorg.libXdmcp pcre
   ];
 

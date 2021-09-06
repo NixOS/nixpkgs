@@ -71,7 +71,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 } // lib.optionalAttrs (config.allowAliases or true) {
   inherit (pkgs)
     # GTK Libs
-    glib glibmm_2_4 atk atkmm_1_6 cairo pango pangomm gdk_pixbuf gtkmm2 libcanberra-gtk2
+    glib glibmm_2_4 atk atkmm_1_6 cairo pango pangomm_1_4 gdk_pixbuf gtkmm2 libcanberra-gtk2
 
     # Included for backwards compatibility
     libsoup libwnck2 gtk-doc gnome-doc-utils rarian

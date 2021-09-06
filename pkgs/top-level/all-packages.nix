@@ -16005,10 +16005,10 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
   };
 
-  pangomm = callPackage ../development/libraries/pangomm {
+  pangomm = pangomm_1_4;
+  pangomm_1_4 = callPackage ../development/libraries/pangomm/1.4.nix {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;
   };
-
   pangomm_2_48 = callPackage ../development/libraries/pangomm/2.48.nix {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;
   };

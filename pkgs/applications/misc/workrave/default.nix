@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, wrapGAppsHook
 , autoconf, autoconf-archive, automake, gettext, intltool, libtool, pkg-config
 , libICE, libSM, libXScrnSaver, libXtst, cheetah
-, gobject-introspection, glib, glibmm_2_4, gtkmm3, atk, pango, pangomm, cairo
+, gobject-introspection, glib, glibmm_2_4, gtkmm3, atk, pango, pangomm_1_4, cairo
 , cairomm_1_0 , dbus, dbus-glib, gdome2, gstreamer, gst-plugins-base
 , gst-plugins-good, libsigcxx }:
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     libICE libSM libXScrnSaver libXtst cheetah
-    gobject-introspection glib glibmm_2_4 gtkmm3 atk pango pangomm cairo cairomm_1_0
+    gobject-introspection glib glibmm_2_4 gtkmm3 atk pango pangomm_1_4 cairo cairomm_1_0
     dbus dbus-glib gdome2 gstreamer gst-plugins-base gst-plugins-good libsigcxx
   ];
 

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, meson, ninja, python3, gtk3, glibmm_2_4, cairomm_1_0, pangomm, atkmm_1_6, epoxy, gnome }:
+{ lib, stdenv, fetchurl, pkg-config, meson, ninja, python3, gtk3, glibmm_2_4, cairomm_1_0, pangomm_1_4, atkmm_1_6, epoxy, gnome }:
 
 stdenv.mkDerivation rec {
   pname = "gtkmm";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config meson ninja python3 ];
   buildInputs = [ epoxy ];
 
-  propagatedBuildInputs = [ glibmm_2_4 gtk3 atkmm_1_6 cairomm_1_0 pangomm ];
+  propagatedBuildInputs = [ glibmm_2_4 gtk3 atkmm_1_6 cairomm_1_0 pangomm_1_4 ];
 
   # https://bugzilla.gnome.org/show_bug.cgi?id=764521
   doCheck = false;
