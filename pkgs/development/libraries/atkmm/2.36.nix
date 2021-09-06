@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, atk, glibmm, pkg-config, gnome }:
+{ lib, stdenv, fetchurl, atk, glibmm_2_68, pkg-config, gnome, meson, ninja, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "atkmm";
@@ -11,9 +11,9 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  propagatedBuildInputs = [ atk glibmm ];
+  propagatedBuildInputs = [ atk glibmm_2_68 ];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config meson ninja python3 ];
 
   doCheck = true;
 
