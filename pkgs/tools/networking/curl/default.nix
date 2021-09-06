@@ -145,5 +145,7 @@ stdenv.mkDerivation rec {
     license = licenses.curl;
     maintainers = with maintainers; [ lovek323 ];
     platforms = platforms.all;
+    # Fails to link against static brotli or gss
+    broken = stdenv.hostPlatform.isStatic && (brotliSupport || gssSupport);
   };
 }
