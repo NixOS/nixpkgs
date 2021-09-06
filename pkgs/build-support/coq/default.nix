@@ -57,7 +57,8 @@ let
     ] "") + optionalString (v == null) "-broken";
   append-version = p: n: p + display-pkg n "" coqPackages.${n}.version + "-";
   prefix-name = foldl append-version "" namePrefix;
-  var-coqlib-install = (optionalString (versions.isGe "8.7" coq.coq-version) "COQMF_") + "COQLIB";
+  var-coqlib-install =
+    (optionalString (versions.isGe "8.7" coq.coq-version || coq.coq-version == "dev") "COQMF_") + "COQLIB";
   useDune2 = args.useDune2 or (useDune2ifVersion fetched.version);
 in
 
