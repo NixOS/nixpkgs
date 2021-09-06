@@ -5106,6 +5106,7 @@ in {
   openstack-python-novaclient = callPackage ../development/python-modules/openstack/python-novaclient { };
   openstack-python-swiftclient = callPackage ../development/python-modules/openstack/python-swiftclient { };
   openstack-sdk = callPackage ../development/python-modules/openstack/sdk { };
+  openstack-tempest = callPackage ../development/python-modules/openstack/tempest { };
 
   opentimestamps = callPackage ../development/python-modules/opentimestamps { };
 
