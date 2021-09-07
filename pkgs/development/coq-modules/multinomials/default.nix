@@ -4,7 +4,6 @@ with lib; mkCoqDerivation {
 
   namePrefix = [ "coq" "mathcomp" ];
   pname = "multinomials";
-  opam-name = "coq-mathcomp-multinomials";
 
   owner = "math-comp";
 
