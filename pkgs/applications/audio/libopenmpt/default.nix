@@ -2,8 +2,10 @@
 , usePulseAudio ? config.pulseaudio or false, libpulseaudio }:
 
 stdenv.mkDerivation rec {
-  pname = "openmpt123";
+  pname = "libopenmpt";
   version = "0.5.10";
+
+  outputs = [ "out" "lib" "dev" ];
 
   src = fetchurl {
     url = "https://lib.openmpt.org/files/libopenmpt/src/libopenmpt-${version}+release.autotools.tar.gz";
