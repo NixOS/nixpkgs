@@ -203,7 +203,7 @@ self: super: {
 
   direnv-vim = super.direnv-vim.overrideAttrs (oa: {
     preFixup = oa.preFixup or "" + ''
-      substituteInPlace $out/share/vim-plugins/direnv-vim/autoload/direnv.vim \
+      substituteInPlace $out/share/vim-plugins/direnv.vim/autoload/direnv.vim \
         --replace "let s:direnv_cmd = get(g:, 'direnv_cmd', 'direnv')" \
           "let s:direnv_cmd = get(g:, 'direnv_cmd', '${lib.getBin direnv}/bin/direnv')"
     '';
@@ -479,7 +479,7 @@ self: super: {
     dependencies = with self; [ skim ];
   });
 
-  sql-nvim = super.sql-nvim.overrideAttrs (old: {
+  sqlite-lua = super.sqlite-lua.overrideAttrs (old: {
     postPatch = ''
       substituteInPlace lua/sql/defs.lua \
         --replace "vim.g.sql_clib_path or" "vim.g.sql_clib_path or '${sqlite.out}/lib/libsqlite3.so' or"
@@ -516,7 +516,7 @@ self: super: {
     });
 
   telescope-frecency-nvim = super.telescope-frecency-nvim.overrideAttrs (old: {
-    dependencies = with self; [ sql-nvim telescope-nvim ];
+    dependencies = with self; [ sqlite-lua telescope-nvim ];
   });
 
   telescope-fzf-writer-nvim = super.telescope-fzf-writer-nvim.overrideAttrs (old: {

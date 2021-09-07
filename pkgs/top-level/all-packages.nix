@@ -338,6 +338,8 @@ with pkgs;
 
   creddump = callPackage ../tools/security/creddump {};
 
+  credential-detector = callPackage ../tools/security/credential-detector { };
+
   credslayer = callPackage ../tools/security/credslayer { };
 
   device-tree_rpi = callPackage ../os-specific/linux/device-tree/raspberrypi.nix {};
@@ -7274,6 +7276,8 @@ with pkgs;
 
   mscgen = callPackage ../tools/graphics/mscgen { };
 
+  metabigor = callPackage ../tools/security/metabigor { };
+
   metasploit = callPackage ../tools/security/metasploit { };
 
   ms-sys = callPackage ../tools/misc/ms-sys { };
@@ -9478,8 +9482,6 @@ with pkgs;
   timelapse-deflicker = callPackage ../applications/graphics/timelapse-deflicker { };
 
   timetrap = callPackage ../applications/office/timetrap { };
-
-  timetable = callPackage ../applications/office/timetable { };
 
   timekeeper = callPackage ../applications/office/timekeeper { };
 
@@ -19963,6 +19965,8 @@ with pkgs;
 
   jetty = callPackage ../servers/http/jetty { };
 
+  jibri = callPackage ../servers/jibri { };
+
   jicofo = callPackage ../servers/jicofo { };
 
   jitsi-meet = callPackage ../servers/web-apps/jitsi-meet { };
@@ -20118,7 +20122,7 @@ with pkgs;
     modules = [ nginxModules.dav nginxModules.moreheaders ];
   };
 
-  nginxModules = callPackage ../servers/http/nginx/modules.nix { };
+  nginxModules = recurseIntoAttrs (callPackage ../servers/http/nginx/modules.nix { });
 
   # We should move to dynmaic modules and create a nginxFull package with all modules
   nginxShibboleth = nginxStable.override {
@@ -21570,6 +21574,8 @@ with pkgs;
   perf-tools = callPackage ../os-specific/linux/perf-tools { };
 
   pipes = callPackage ../misc/screensavers/pipes { };
+
+  pipes-rs = callPackage ../misc/screensavers/pipes-rs { };
 
   pipework = callPackage ../os-specific/linux/pipework { };
 
@@ -29949,6 +29955,8 @@ with pkgs;
 
   conglomerate = callPackage ../applications/science/biology/conglomerate { };
 
+  dalfox = callPackage ../tools/security/dalfox { };
+
   dcm2niix = callPackage ../applications/science/biology/dcm2niix { };
 
   deepdiff = with python3Packages; toPythonApplication deepdiff;
@@ -31106,6 +31114,8 @@ with pkgs;
 
   gobuster = callPackage ../tools/security/gobuster { };
 
+  gotestwaf = callPackage ../tools/security/gotestwaf { };
+
   guetzli = callPackage ../applications/graphics/guetzli { };
 
   gummi = callPackage ../applications/misc/gummi { };
@@ -31114,7 +31124,9 @@ with pkgs;
 
   hatari = callPackage ../misc/emulators/hatari { };
 
-  hck = callPackage ../tools/text/hck { };
+  hck = callPackage ../tools/text/hck {
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
+  };
 
   helm = callPackage ../applications/audio/helm { };
 
