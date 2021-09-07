@@ -2192,9 +2192,9 @@ with pkgs;
 
   traefik-certs-dumper = callPackage ../tools/misc/traefik-certs-dumper { };
 
-  calamares = libsForQt514.callPackage ../tools/misc/calamares {
+  calamares = libsForQt515.callPackage ../tools/misc/calamares {
     python = python3;
-    boost = pkgs.boost.override { python = python3; };
+    boost = pkgs.boost.override { enablePython = true; python = python3; };
   };
 
   calendar-cli = callPackage ../tools/networking/calendar-cli { };
@@ -5433,6 +5433,8 @@ with pkgs;
   gitstats = callPackage ../applications/version-management/gitstats { };
 
   gitstatus = callPackage ../applications/version-management/git-and-tools/gitstatus { };
+
+  gitty = callPackage ../applications/version-management/git-and-tools/gitty { };
 
   gitui = callPackage ../applications/version-management/git-and-tools/gitui {
     inherit (darwin.apple_sdk.frameworks) Security AppKit;
@@ -12942,6 +12944,8 @@ with pkgs;
   poetry2nix = callPackage ../development/tools/poetry2nix/poetry2nix {
     inherit pkgs lib;
   };
+
+  poetry2conda = python3Packages.callPackage ../development/python-modules/poetry2conda { };
 
   pipenv = callPackage ../development/tools/pipenv {};
 
@@ -26740,7 +26744,7 @@ with pkgs;
 
   vivaldi-widevine = callPackage ../applications/networking/browsers/vivaldi/widevine.nix { };
 
-  openmpt123 = callPackage ../applications/audio/openmpt123 { };
+  libopenmpt = callPackage ../applications/audio/libopenmpt { };
 
   openrazer-daemon = with python3Packages; toPythonApplication openrazer-daemon;
 

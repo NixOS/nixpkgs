@@ -51,7 +51,7 @@
 , CoreFoundation
 , CoreServices
 
-# nvim-treesitter dependencies
+  # nvim-treesitter dependencies
 , tree-sitter
 
   # sved dependencies
@@ -66,7 +66,7 @@
 , openssl
 , pkg-config
 
-# vim-go dependencies
+  # vim-go dependencies
 , asmfmt
 , delve
 , errcheck
@@ -86,7 +86,7 @@
 , iferr
 , impl
 , reftools
-# must be lua51Packages
+  # must be lua51Packages
 , luaPackages
 }:
 
@@ -311,13 +311,9 @@ self: super: {
     pname = "himalaya-vim";
     inherit (himalaya) src version;
     dependencies = with self; [ himalaya ];
-    patchPhase = ''
-      rm -rf !"vim/"
-      cp -vaR vim/. .
-      rm -rf vim/
-    '';
-    preFixup = ''
-      substituteInPlace $out/share/vim-plugins/himalaya-vim/plugin/himalaya.vim \
+    configurePhase = ''
+      cd vim
+      substituteInPlace plugin/himalaya.vim \
         --replace 'if !executable("himalaya")' 'if v:false'
     '';
     postFixup = ''
@@ -391,9 +387,9 @@ self: super: {
 
   minimap-vim = super.minimap-vim.overrideAttrs (old: {
     preFixup = ''
-      substituteInPlace $out/share/vim-plugins/minimap-vim/plugin/minimap.vim \
+      substituteInPlace $out/share/vim-plugins/minimap.vim/plugin/minimap.vim \
         --replace "code-minimap" "${code-minimap}/bin/code-minimap"
-      substituteInPlace $out/share/vim-plugins/minimap-vim/bin/minimap_generator.sh \
+      substituteInPlace $out/share/vim-plugins/minimap.vim/bin/minimap_generator.sh \
         --replace "code-minimap" "${code-minimap}/bin/code-minimap"
     '';
   });
