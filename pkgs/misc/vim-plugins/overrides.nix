@@ -51,7 +51,7 @@
 , CoreFoundation
 , CoreServices
 
-# nvim-treesitter dependencies
+  # nvim-treesitter dependencies
 , tree-sitter
 
   # sved dependencies
@@ -66,7 +66,7 @@
 , openssl
 , pkg-config
 
-# vim-go dependencies
+  # vim-go dependencies
 , asmfmt
 , delve
 , errcheck
@@ -86,7 +86,7 @@
 , iferr
 , impl
 , reftools
-# must be lua51Packages
+  # must be lua51Packages
 , luaPackages
 }:
 
@@ -203,7 +203,7 @@ self: super: {
 
   direnv-vim = super.direnv-vim.overrideAttrs (oa: {
     preFixup = oa.preFixup or "" + ''
-      substituteInPlace $out/share/vim-plugins/direnv-vim/autoload/direnv.vim \
+      substituteInPlace $out/share/vim-plugins/direnv.vim/autoload/direnv.vim \
         --replace "let s:direnv_cmd = get(g:, 'direnv_cmd', 'direnv')" \
           "let s:direnv_cmd = get(g:, 'direnv_cmd', '${lib.getBin direnv}/bin/direnv')"
     '';
@@ -311,13 +311,9 @@ self: super: {
     pname = "himalaya-vim";
     inherit (himalaya) src version;
     dependencies = with self; [ himalaya ];
-    patchPhase = ''
-      rm -rf !"vim/"
-      cp -vaR vim/. .
-      rm -rf vim/
-    '';
-    preFixup = ''
-      substituteInPlace $out/share/vim-plugins/himalaya-vim/plugin/himalaya.vim \
+    configurePhase = ''
+      cd vim
+      substituteInPlace plugin/himalaya.vim \
         --replace 'if !executable("himalaya")' 'if v:false'
     '';
     postFixup = ''
@@ -391,9 +387,9 @@ self: super: {
 
   minimap-vim = super.minimap-vim.overrideAttrs (old: {
     preFixup = ''
-      substituteInPlace $out/share/vim-plugins/minimap-vim/plugin/minimap.vim \
+      substituteInPlace $out/share/vim-plugins/minimap.vim/plugin/minimap.vim \
         --replace "code-minimap" "${code-minimap}/bin/code-minimap"
-      substituteInPlace $out/share/vim-plugins/minimap-vim/bin/minimap_generator.sh \
+      substituteInPlace $out/share/vim-plugins/minimap.vim/bin/minimap_generator.sh \
         --replace "code-minimap" "${code-minimap}/bin/code-minimap"
     '';
   });
@@ -479,7 +475,7 @@ self: super: {
     dependencies = with self; [ skim ];
   });
 
-  sql-nvim = super.sql-nvim.overrideAttrs (old: {
+  sqlite-lua = super.sqlite-lua.overrideAttrs (old: {
     postPatch = ''
       substituteInPlace lua/sql/defs.lua \
         --replace "vim.g.sql_clib_path or" "vim.g.sql_clib_path or '${sqlite.out}/lib/libsqlite3.so' or"
@@ -516,7 +512,7 @@ self: super: {
     });
 
   telescope-frecency-nvim = super.telescope-frecency-nvim.overrideAttrs (old: {
-    dependencies = with self; [ sql-nvim telescope-nvim ];
+    dependencies = with self; [ sqlite-lua telescope-nvim ];
   });
 
   telescope-fzf-writer-nvim = super.telescope-fzf-writer-nvim.overrideAttrs (old: {

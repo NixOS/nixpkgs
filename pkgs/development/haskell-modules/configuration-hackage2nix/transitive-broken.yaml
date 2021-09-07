@@ -962,6 +962,7 @@ dont-distribute-packages:
  - distribution-plot
  - dixi
  - dl-fedora
+ - dl-fedora_0_9_1
  - dmenu-pkill
  - dmenu-pmount
  - dmenu-search
@@ -979,6 +980,7 @@ dont-distribute-packages:
  - dph-prim-interface
  - dph-prim-par
  - dph-prim-seq
+ - dprox
  - dropbox-sdk
  - dropsolve
  - dsh-sql
@@ -1232,6 +1234,7 @@ dont-distribute-packages:
  - gnss-converters
  - gnuidn
  - goal-geometry
+ - goal-graphical
  - goal-probability
  - goal-simulation
  - goat
@@ -1698,6 +1701,7 @@ dont-distribute-packages:
  - ideas-math
  - ideas-math-types
  - ideas-statistics
+ - if-instance
  - ige-mac-integration
  - ihaskell-inline-r
  - ihaskell-rlangqq
@@ -1865,8 +1869,6 @@ dont-distribute-packages:
  - lambda-options
  - lambdaFeed
  - lambdaLit
- - lambdabot
- - lambdabot-xmpp
  - lambdabot-zulip
  - lambdacms-media
  - lambdacube
@@ -2302,6 +2304,10 @@ dont-distribute-packages:
  - peyotls-codec
  - pgsql-simple
  - phonetic-languages-examples
+ - phonetic-languages-general
+ - phonetic-languages-simplified-examples-array
+ - phonetic-languages-simplified-examples-common
+ - phonetic-languages-simplified-generalized-examples-array
  - phonetic-languages-simplified-lists-examples
  - phooey
  - photoname

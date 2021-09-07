@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchurl, fetchFromGitHub, nixosTests }:
+{ lib, buildGoModule, fetchurl, fetchFromGitHub, nixosTests, tzdata }:
 
 buildGoModule rec {
   pname = "grafana";
@@ -47,6 +47,16 @@ buildGoModule rec {
     "-s" "-w" "-X main.version=${version}"
   ];
 
+  # Tests start http servers which need to bind to local addresses:
+  # panic: httptest: failed to listen on a port: listen tcp6 [::1]:0: bind: operation not permitted
+  __darwinAllowLocalNetworking = true;
+
+  # On Darwin, files under /usr/share/zoneinfo exist, but fail to open in sandbox:
+  # TestValueAsTimezone: date_formats_test.go:33: Invalid has err for input "Europe/Amsterdam": operation not permitted
+  preCheck = ''
+    export ZONEINFO=${tzdata}/share/zoneinfo
+  '';
+
   postInstall = ''
     tar -xvf $srcStatic
     mkdir -p $out/share/grafana
@@ -60,6 +70,7 @@ buildGoModule rec {
     license = licenses.agpl3;
     homepage = "https://grafana.com";
     maintainers = with maintainers; [ offline fpletz willibutz globin ma27 Frostman ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
+    mainProgram = "grafana-server";
   };
 }

@@ -1,17 +1,29 @@
-{ fetchFromGitHub, lib, rustPlatform }:
+{ cmake
+, fetchFromGitHub
+, lib
+, rustPlatform
+, stdenv
+, libiconv
+, CoreFoundation
+, Security
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "hck";
-  version = "0.5.4";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "sstadick";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1zdzi98qywlwk5bp47963vya2p2ahrbjkc9h63lmb05wlas9s78y";
+    sha256 = "1xjp56asfn37kr0fsrjkil20nf372q70cijqb5ll2sq2zwjnyyzn";
   };
 
-  cargoSha256 = "0lvd5xpgh2vq2lszzb0fs6ha2vb419a5w0hlkq3287vq3ya3p4qg";
+  cargoSha256 = "12n33gwxcym5z5n762wmzcck4zmmn42kh04nwpdb3az4apghdp3z";
+
+  nativeBuildInputs = [ cmake ];
+
+  buildInputs = lib.optionals stdenv.isDarwin [ libiconv CoreFoundation Security ];
 
   meta = with lib; {
     description = "A close to drop in replacement for cut that can use a regex delimiter instead of a fixed string";

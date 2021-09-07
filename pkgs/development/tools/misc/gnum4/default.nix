@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnum4";
-  version = "1.4.19";
+  version = "1.4.18";
 
   src = fetchurl {
     url = "mirror://gnu/m4/m4-${version}.tar.bz2";
-    sha256 = "sha256-swapHA/ZO8QoDPwumMt6s5gf91oYe+oyk4EfRSyJqMg=";
+    sha256 = "1xkwwq0sgv05cla0g0a01yzhk0wpsn9y40w9kh9miiiv0imxfh36";
   };
 
   doCheck = false;

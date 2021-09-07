@@ -950,4 +950,8 @@ self: super: builtins.intersectAttrs super {
       })
     )
   );
+
+  # Test suite is just the default example executable which doesn't work if not
+  # executed by Setup.hs, but works if started on a proper TTY
+  isocline = dontCheck super.isocline;
 }

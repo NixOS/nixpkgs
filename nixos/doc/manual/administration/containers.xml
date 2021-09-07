@@ -28,7 +28,7 @@
   contrast, in the imperative approach, containers are configured and updated
   independently from the host system.
  </para>
- <xi:include href="imperative-containers.xml" />
- <xi:include href="declarative-containers.xml" />
- <xi:include href="container-networking.xml" />
+ <xi:include href="../from_md/administration/imperative-containers.section.xml" />
+ <xi:include href="../from_md/administration/declarative-containers.section.xml" />
+ <xi:include href="../from_md/administration/container-networking.section.xml" />
 </chapter>
