@@ -16,13 +16,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "tts";
-  version = "0.2.1";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "coqui-ai";
     repo = "TTS";
     rev = "v${version}";
-    sha256 = "sha256-7YMNxZ15qQowEE0tE6x/LbtirNGp7h9OLyS1JSl9x2A=";
+    sha256 = "sha256-hhL6/hBs2umR8/VEumr2LzuCAOkroK8vBfDuNVY0ygw=";
   };
 
   postPatch = ''
@@ -55,6 +55,7 @@ python3.pkgs.buildPythonApplication rec {
     pypinyin
     pysbd
     pytorch
+    pyworld
     scipy
     soundfile
     tensorboardx

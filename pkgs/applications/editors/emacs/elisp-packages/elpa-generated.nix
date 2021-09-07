@@ -234,10 +234,10 @@
       elpaBuild {
         pname = "auctex";
         ename = "auctex";
-        version = "13.0.13";
+        version = "13.0.14";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/auctex-13.0.13.tar";
-          sha256 = "06cb9jphqd0nysc60b4x24zmdryljb168cw66adl7b2x7sdzpkmn";
+          url = "https://elpa.gnu.org/packages/auctex-13.0.14.tar";
+          sha256 = "1gmqdcg9s6xf8kvzh1j27nbimakd5cy8pwsn0il19l026kxjimr8";
         };
         packageRequires = [ emacs ];
         meta = {
@@ -707,6 +707,21 @@
           license = lib.licenses.free;
         };
       }) {};
+    crdt = callPackage ({ elpaBuild, fetchurl, lib }:
+      elpaBuild {
+        pname = "crdt";
+        ename = "crdt";
+        version = "0.1.4";
+        src = fetchurl {
+          url = "https://elpa.gnu.org/packages/crdt-0.1.4.tar";
+          sha256 = "1qqfjvkajwhdhz0jhqixdn68l1rl02pn2fmxizzsv0as20v0ay0r";
+        };
+        packageRequires = [];
+        meta = {
+          homepage = "https://elpa.gnu.org/packages/crdt.html";
+          license = lib.licenses.free;
+        };
+      }) {};
     crisp = callPackage ({ elpaBuild, fetchurl, lib }:
       elpaBuild {
         pname = "crisp";
@@ -726,10 +741,10 @@
       elpaBuild {
         pname = "csharp-mode";
         ename = "csharp-mode";
-        version = "1.0.0";
+        version = "1.0.2";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/csharp-mode-1.0.0.tar";
-          sha256 = "0vhm443fkcjsj95r4rs9r0mz9vzfk92883nxhyi35d3jaf112gm1";
+          url = "https://elpa.gnu.org/packages/csharp-mode-1.0.2.tar";
+          sha256 = "1xddnd6g6qz3xnzl6dmd38qvzvm32acdyhmm27hfdpqcbg6isfad";
         };
         packageRequires = [ emacs ];
         meta = {
@@ -786,10 +801,10 @@
       elpaBuild {
         pname = "dash";
         ename = "dash";
-        version = "2.19.0";
+        version = "2.19.1";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/dash-2.19.0.tar";
-          sha256 = "0qszjs60xxqjiqf5f2bgmnbx5jiqii4ghcydwg500za0n2j0f5sx";
+          url = "https://elpa.gnu.org/packages/dash-2.19.1.tar";
+          sha256 = "0c11lm7wpgmqk8zbdcpmyas12ylml5yhp99mj9h1wqqw0p33xaiw";
         };
         packageRequires = [ emacs ];
         meta = {
@@ -1026,10 +1041,10 @@
       elpaBuild {
         pname = "ebdb";
         ename = "ebdb";
-        version = "0.8.2";
+        version = "0.8.4";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/ebdb-0.8.2.tar";
-          sha256 = "1idwih5v287q9vdhsnr1bsibdv4h61vmy3b82svf2x9aik1a7vir";
+          url = "https://elpa.gnu.org/packages/ebdb-0.8.4.tar";
+          sha256 = "0n811af83fqpzq9513gf240gnz7qkwrjw07qs4sra4069q0pwnjr";
         };
         packageRequires = [ emacs seq ];
         meta = {
@@ -1217,6 +1232,21 @@
         packageRequires = [ cl-lib nadvice seq ];
         meta = {
           homepage = "https://elpa.gnu.org/packages/emms.html";
+          license = lib.licenses.free;
+        };
+      }) {};
+    engrave-faces = callPackage ({ elpaBuild, emacs, fetchurl, lib }:
+      elpaBuild {
+        pname = "engrave-faces";
+        ename = "engrave-faces";
+        version = "0.2.0";
+        src = fetchurl {
+          url = "https://elpa.gnu.org/packages/engrave-faces-0.2.0.tar";
+          sha256 = "1d0hsfg3wvwbs82gjyvfjvy1sszcm7qa50bch1b6jy05kbc543ip";
+        };
+        packageRequires = [ emacs ];
+        meta = {
+          homepage = "https://elpa.gnu.org/packages/engrave-faces.html";
           license = lib.licenses.free;
         };
       }) {};
@@ -3752,6 +3782,21 @@
           license = lib.licenses.free;
         };
       }) {};
+    taxy = callPackage ({ elpaBuild, emacs, fetchurl, lib }:
+      elpaBuild {
+        pname = "taxy";
+        ename = "taxy";
+        version = "0.4";
+        src = fetchurl {
+          url = "https://elpa.gnu.org/packages/taxy-0.4.tar";
+          sha256 = "1iy1761v2q0i020x8ch4z3vljx2v62pcy5bifxq8gw5qx0115576";
+        };
+        packageRequires = [ emacs ];
+        meta = {
+          homepage = "https://elpa.gnu.org/packages/taxy.html";
+          license = lib.licenses.free;
+        };
+      }) {};
     temp-buffer-browse = callPackage ({ elpaBuild, emacs, fetchurl, lib }:
       elpaBuild {
         pname = "temp-buffer-browse";
@@ -3820,10 +3865,10 @@
       elpaBuild {
         pname = "tramp";
         ename = "tramp";
-        version = "2.5.1.1";
+        version = "2.5.1.2";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/tramp-2.5.1.1.tar";
-          sha256 = "0v3rvvhjcnyvg6l4vyxz6513mxzvv9n0skkmr62ry8yi5x9wnqp1";
+          url = "https://elpa.gnu.org/packages/tramp-2.5.1.2.tar";
+          sha256 = "0p8m8prxrvrr455ahb626c1dry04m80y017h16ngr4i5ais0r85g";
         };
         packageRequires = [ emacs ];
         meta = {
@@ -3987,6 +4032,21 @@
         packageRequires = [ emacs ];
         meta = {
           homepage = "https://elpa.gnu.org/packages/valign.html";
+          license = lib.licenses.free;
+        };
+      }) {};
+    vc-backup = callPackage ({ elpaBuild, fetchurl, lib }:
+      elpaBuild {
+        pname = "vc-backup";
+        ename = "vc-backup";
+        version = "1.0.0";
+        src = fetchurl {
+          url = "https://elpa.gnu.org/packages/vc-backup-1.0.0.tar";
+          sha256 = "0vcrbb4s1rzar9q882kfcslycxvycp61923sg82i29b7yd0yrgdr";
+        };
+        packageRequires = [];
+        meta = {
+          homepage = "https://elpa.gnu.org/packages/vc-backup.html";
           license = lib.licenses.free;
         };
       }) {};
@@ -4379,10 +4439,10 @@
       elpaBuild {
         pname = "xref";
         ename = "xref";
-        version = "1.1.0";
+        version = "1.2.2";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/xref-1.1.0.tar";
-          sha256 = "1s7pwk09bry4nqr4bc78a3mbwyrxagai2gpsd49x47czy2x7m3ax";
+          url = "https://elpa.gnu.org/packages/xref-1.2.2.tar";
+          sha256 = "14kdy8blhs6lwg349l9lmv0bbpybgi9nsg2iic3v87j4jyi41ljm";
         };
         packageRequires = [ emacs ];
         meta = {

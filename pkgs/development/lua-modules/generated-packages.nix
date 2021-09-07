@@ -160,10 +160,10 @@ busted = buildLuarocksPackage {
 
 cassowary = buildLuarocksPackage {
   pname = "cassowary";
-  version = "2.3.1-1";
+  version = "2.3.1-2";
   knownRockspec = (fetchurl {
-    url    = "https://luarocks.org/cassowary-2.3.1-1.rockspec";
-    sha256 = "1rgs0rmlmhghml0gi4dn0rg2iq7rqnn8w8dcy9r3qsbkpyylbajc";
+    url    = "https://luarocks.org/cassowary-2.3.1-2.rockspec";
+    sha256 = "04y882f9ai1jhk0zwla2g0fvl56a75rwnxhsl9r3m0qa5i0ia1i5";
   }).outPath;
   src = fetchgit ( removeAttrs (builtins.fromJSON ''{
   "url": "https://github.com/sile-typesetter/cassowary.lua",
@@ -171,7 +171,7 @@ cassowary = buildLuarocksPackage {
   "date": "2021-07-19T14:37:34+03:00",
   "path": "/nix/store/rzsbr6gqg8vhchl24ma3p1h4slhk0xp7-cassowary.lua",
   "sha256": "1r668qcvd2a1rx17xp7ajp5wjhyvh2fwn0c60xmw0mnarjb5w1pq",
-  "fetchSubmodules": true,
+  "fetchSubmodules": false,
   "deepClone": false,
   "leaveDotGit": false
 }
@@ -179,6 +179,10 @@ cassowary = buildLuarocksPackage {
 
   disabled = (luaOlder "5.1");
   propagatedBuildInputs = [ lua penlight ];
+  checkInputs = [ busted ];
+  # Avoid circular dependency issue with busted / penlight, see:
+  # https://github.com/NixOS/nixpkgs/pull/136453/files#r700982255
+  doCheck = false;
 
   meta = {
     homepage = "https://github.com/sile-typesetter/cassowary.lua";
@@ -1953,15 +1957,18 @@ nvim-client = buildLuarocksPackage {
 
 penlight = buildLuarocksPackage {
   pname = "penlight";
-  version = "dev-1";
-
+  version = "1.11.0-1";
+  knownRockspec = (fetchurl {
+    url    = "https://luarocks.org/penlight-1.11.0-1.rockspec";
+    sha256 = "1sjhnywvamyi9fadhra5pw2an1rhy2hk2byfxmr3n5wi0xrqv004";
+  }).outPath;
   src = fetchgit ( removeAttrs (builtins.fromJSON ''{
   "url": "https://github.com/lunarmodules/penlight.git",
   "rev": "e3712f00fae09a166dd62540b677600165d5bcd7",
   "date": "2021-08-18T21:37:47+02:00",
   "path": "/nix/store/i70ndw8qhvcm828ifb3vyj08y22xp0ka-penlight",
   "sha256": "19n9xqkb4hlak0k7hamk4ixwjvyxslsnyh1zjazdzrl8n736xhkl",
-  "fetchSubmodules": true,
+  "fetchSubmodules": false,
   "deepClone": false,
   "leaveDotGit": false
 }
@@ -1969,12 +1976,13 @@ penlight = buildLuarocksPackage {
 
   disabled = (luaOlder "5.1");
   propagatedBuildInputs = [ lua luafilesystem ];
-  checkInputs = [ busted busted ];
+  checkInputs = [ busted ];
   doCheck = false;
 
   meta = {
     homepage = "https://lunarmodules.github.io/penlight";
     description = "Lua utility libraries loosely based on the Python standard libraries";
+    maintainers = with lib.maintainers; [ alerque ];
     license.fullName = "MIT/X11";
   };
 };
