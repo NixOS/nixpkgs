@@ -71,5 +71,6 @@ buildGoModule rec {
     homepage = "https://grafana.com";
     maintainers = with maintainers; [ offline fpletz willibutz globin ma27 Frostman ];
     platforms = platforms.linux ++ platforms.darwin;
+    mainProgram = "grafana-server";
   };
 }

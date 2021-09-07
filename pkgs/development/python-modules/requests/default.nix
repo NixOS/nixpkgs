@@ -36,7 +36,9 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
+    brotlicffi
     certifi
+    charset-normalizer
     chardet
     idna
     urllib3

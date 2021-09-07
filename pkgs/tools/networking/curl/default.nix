@@ -96,7 +96,7 @@ stdenv.mkDerivation rec {
       "--without-ca-bundle"
       "--without-ca-path"
       # The build fails when using wolfssl with --with-ca-fallback
-      (lib.withFeature wolfsslSupport "ca-fallback")
+      (lib.withFeature (!wolfsslSupport) "ca-fallback")
       "--disable-manual"
       (lib.withFeatureAs sslSupport "ssl" openssl.dev)
       (lib.withFeatureAs gnutlsSupport "gnutls" gnutls.dev)
@@ -145,5 +145,7 @@ stdenv.mkDerivation rec {
     license = licenses.curl;
     maintainers = with maintainers; [ lovek323 ];
     platforms = platforms.all;
+    # Fails to link against static brotli or gss
+    broken = stdenv.hostPlatform.isStatic && (brotliSupport || gssSupport);
   };
 }
