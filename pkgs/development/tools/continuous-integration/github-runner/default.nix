@@ -237,6 +237,10 @@ stdenv.mkDerivation rec {
   # Stripping breaks the binaries
   dontStrip = true;
 
+  preFixup = ''
+    patchelf --replace-needed liblttng-ust.so.0 liblttng-ust.so $out/lib/libcoreclrtraceptprovider.so
+  '';
+
   postFixup = ''
     fix_rpath() {
       patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $out/lib/$1
