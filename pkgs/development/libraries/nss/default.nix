@@ -187,6 +187,8 @@ stdenv.mkDerivation rec {
       runHook postInstall
     '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = with lib; {
     homepage = "https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS";
     description = "A set of libraries for development of security-enabled client and server applications";
