@@ -7565,6 +7565,8 @@ in {
 
   queuelib = callPackage ../development/python-modules/queuelib { };
 
+  qmk-dotty-dict = callPackage ../development/python-modules/qmk-dotty-dict {};
+
   r2pipe = callPackage ../development/python-modules/r2pipe { };
 
   rabbitpy = callPackage ../development/python-modules/rabbitpy { };
