@@ -4102,6 +4102,18 @@ final: prev:
     meta.homepage = "https://github.com/dstein64/nvim-scrollview/";
   };
 
+  nvim-solarized-lua = buildVimPluginFrom2Nix {
+    pname = "nvim-solarized-lua";
+    version = "2021-07-09";
+    src = fetchFromGitHub {
+      owner = "ishan9299";
+      repo = "nvim-solarized-lua";
+      rev = "fa437ae65a6c1239525e4ec7f4cbf4671eaa55ba";
+      sha256 = "032gs63g3x62mym6nhznvywsqk1cxsgwx0fv2vyh2c929fb27ji7";
+    };
+    meta.homepage = "https://github.com/ishan9299/nvim-solarized-lua/";
+  };
+
   nvim-terminal-lua = buildVimPluginFrom2Nix {
     pname = "nvim-terminal.lua";
     version = "2019-10-17";
