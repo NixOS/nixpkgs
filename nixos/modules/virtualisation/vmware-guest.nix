@@ -42,7 +42,7 @@ in
       {
         description = "VMware vmblock fuse mount";
         documentation = [ "https://github.com/vmware/open-vm-tools/blob/master/open-vm-tools/vmblock-fuse/design.txt" ];
-        before = [ "umounts.service" "vmware.service" ];
+        before = [ "vmware.service" ];
         wants = [ "vmware.service" ];
         what = "${open-vm-tools}/bin/vmware-vmblock-fuse";
         where = "/run/vmblock-fuse";
