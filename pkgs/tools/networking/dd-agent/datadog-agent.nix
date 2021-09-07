@@ -1,4 +1,4 @@
-{ lib, buildGoModule, makeWrapper, fetchgit, git, invoke, pyaml, pythonPackages, pkg-config, systemd, hostname, extraTags ? [] }:
+{ lib, buildGoModule, makeWrapper, fetchFromGitHub, pythonPackages, pkg-config, systemd, hostname, extraTags ? [] }:
 
 let
   # keep this in sync with github.com/DataDog/agent-payload dependency
@@ -12,11 +12,10 @@ in buildGoModule rec {
   pname = "datadog-agent";
   version = "7.30.2";
 
-  src = fetchgit {
-    url = "https://${goPackagePath}.git";
+  src = fetchFromGitHub {
+    inherit owner repo;
     rev = version;
-    leaveDotGit = true;
-    sha256 = "1cpybjwnby265w307p3hdg06448xrmapjbvd6zp46d7rsi4lj6vn";
+    sha256 = "17ahrxhb87sj7f04wg44xv4k9wrlvf04j92ac5936a6maygp01rd";
   };
 
   vendorSha256 = "06ryy501vibc6n14qwg94394c76l060525y6qg261qb748mbi8qi";
@@ -30,7 +29,7 @@ in buildGoModule rec {
   ];
 
 
-  nativeBuildInputs = [ git pyaml invoke pkg-config makeWrapper ];
+  nativeBuildInputs = [ pkg-config makeWrapper ];
   buildInputs = [ systemd ];
   PKG_CONFIG_PATH = "${python}/lib/pkgconfig";
 
@@ -44,7 +43,8 @@ in buildGoModule rec {
     ];
   in ''
     buildFlagsArray=( "-tags" "ec2 systemd cpython process log secrets ${lib.concatStringsSep " " extraTags}" "-ldflags" "${ldFlags}")
-    invoke generate --mod=vendor
+    # Keep directories to generate in sync with tasks/go.py
+    go generate ./pkg/status ./cmd/agent/gui
   '';
 
   # DataDog use paths relative to the agent binary, so fix these.
