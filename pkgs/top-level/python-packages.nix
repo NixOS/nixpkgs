@@ -5582,6 +5582,8 @@ in {
 
   pomegranate = callPackage ../development/python-modules/pomegranate { };
 
+  pontos = callPackage ../development/python-modules/pontos { };
+
   pony = callPackage ../development/python-modules/pony { };
 
   ponywhoosh = callPackage ../development/python-modules/ponywhoosh { };
