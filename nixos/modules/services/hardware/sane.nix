@@ -3,12 +3,6 @@
 with lib;
 
 let
-
-  pkg = pkgs.sane-backends.override {
-    scanSnapDriversUnfree = config.hardware.sane.drivers.scanSnap.enable;
-    scanSnapDriversPackage = config.hardware.sane.drivers.scanSnap.package;
-  };
-
   sanedConf = pkgs.writeTextFile {
     name = "saned.conf";
     destination = "/etc/sane.d/saned.conf";
@@ -27,18 +21,49 @@ let
     '';
   };
 
-  env = {
-    SANE_CONFIG_DIR = config.hardware.sane.configDir;
-    LD_LIBRARY_PATH = [ "${saneConfig}/lib/sane" ];
+  saneConfig = pkgs.mkSaneConfig {
+    paths = baseDerivs ++ (singleton overridenPkg);
+    inherit (config.hardware.sane) disabledDefaultBackends;
   };
 
-  backends = [ pkg netConf ] ++ optional config.services.saned.enable sanedConf ++ config.hardware.sane.extraBackends;
-  saneConfig = pkgs.mkSaneConfig { paths = backends; inherit (config.hardware.sane) disabledDefaultBackends; };
+  env = {
+    SANE_CONFIG_DIR = config.hardware.sane.configDir;
+    LD_LIBRARY_PATH = "${saneConfig}/lib/sane";
+  };
+
+  overridenPkg = pkgs.sane-backends.override {
+    scanSnapDriversUnfree = config.hardware.sane.drivers.scanSnap.enable;
+    scanSnapDriversPackage = config.hardware.sane.drivers.scanSnap.package;
+  };
+
+
+  wrappedPkg = pkgs.runCommand "sane-backends-wrapper"
+    {
+      buildInputs = with pkgs; [ makeWrapper coreutils ];
+    }
+    (
+      let op = overridenPkg;
+      in
+      ''
+        for bin in ${op}/bin/*; do
+            fn="$(basename "$bin")"
+            makeWrapper $bin $out/bin/"$fn" \
+            ${
+              concatStringsSep " \\\n "
+              (mapAttrsToList (name: value: ''--set ${name} "${value}"'') env)
+            }
+        done
+      ''
+    );
+
+  baseDerivs = [ netConf ]
+    ++ optional config.services.saned.enable sanedConf
+    ++ config.hardware.sane.extraBackends;
+  derivsToInstall = baseDerivs ++ (singleton wrappedPkg);
 
   enabled = config.hardware.sane.enable || config.services.saned.enable;
 
 in
-
 {
 
   ###### interface
@@ -147,16 +172,14 @@ in
 
   };
 
-
   ###### implementation
 
   config = mkMerge [
     (mkIf enabled {
       hardware.sane.configDir = mkDefault "${saneConfig}/etc/sane.d";
 
-      environment.systemPackages = backends;
-      environment.sessionVariables = env;
-      services.udev.packages = backends;
+      environment.systemPackages = derivsToInstall;
+      services.udev.packages = derivsToInstall;
 
       users.groups.scanner.gid = config.ids.gids.scanner;
     })
@@ -166,7 +189,7 @@ in
 
       systemd.services."saned@" = {
         description = "Scanner Service";
-        environment = mapAttrs (name: val: toString val) env;
+        environment = env;
         serviceConfig = {
           User = "scanner";
           Group = "scanner";
