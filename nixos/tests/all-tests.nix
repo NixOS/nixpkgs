@@ -173,6 +173,7 @@ in
   hedgedoc = handleTest ./hedgedoc.nix {};
   herbstluftwm = handleTest ./herbstluftwm.nix {};
   installed-tests = pkgs.recurseIntoAttrs (handleTest ./installed-tests {});
+  invidious = handleTest ./invidious.nix {};
   oci-containers = handleTestOn ["x86_64-linux"] ./oci-containers.nix {};
   # 9pnet_virtio used to mount /nix partition doesn't support
   # hibernation. This test happens to work on x86_64-linux but
