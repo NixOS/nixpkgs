@@ -3,22 +3,14 @@
 
 stdenv.mkDerivation rec {
   pname = "nlohmann_json";
-  version = "3.9.1";
+  version = "3.10.2";
 
   src = fetchFromGitHub {
     owner = "nlohmann";
     repo = "json";
     rev = "v${version}";
-    sha256 = "sha256-THordDPdH2qwk6lFTgeFmkl7iDuA/7YH71PTUe6vJCs=";
+    sha256 = "/OFNfukrIyfJmD0ko174aud9T6ZOesHANJjyfk4q/Vs=";
   };
-
-  patches = [
-    # https://github.com/nlohmann/json/pull/2690
-    (fetchpatch {
-      url = "https://github.com/nlohmann/json/commit/53a9850eebb88c6ff95f6042d08d5c0cc9d18097.patch";
-      sha256 = "k+Og00nXNg5IsFQY5fWD3xVQQXUFFTie44UXole0S1M=";
-    })
-  ];
 
   nativeBuildInputs = [ cmake ];
 
