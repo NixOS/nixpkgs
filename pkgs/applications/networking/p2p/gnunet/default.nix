@@ -3,7 +3,7 @@
 , makeWrapper, ncurses, pkg-config, libxml2, sqlite, zlib
 , libpulseaudio, libopus, libogg, jansson, libsodium
 
-, postgresqlSupport ? false, postgresql }:
+, postgresqlSupport ? true, postgresql }:
 
 stdenv.mkDerivation rec {
   pname = "gnunet";
