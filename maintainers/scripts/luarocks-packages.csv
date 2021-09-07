@@ -75,7 +75,7 @@ mediator_lua,,,,,,
 mpack,,,,,,
 moonscript,,,,,,arobyn
 nvim-client,https://github.com/neovim/lua-client.git,,,,,
-penlight,https://github.com/Tieske/Penlight.git,,,,,
+penlight,https://github.com/lunarmodules/Penlight.git,,,,,alerque
 plenary.nvim,https://github.com/nvim-lua/plenary.nvim.git,,,,lua5_1,
 rapidjson,https://github.com/xpol/lua-rapidjson.git,,,,,
 readline,,,,,,
