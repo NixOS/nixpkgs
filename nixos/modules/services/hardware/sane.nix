@@ -161,6 +161,12 @@ in
       '';
     };
 
+    services.saned.openFirewall = mkOption {
+      type = types.bool;
+      default = false;
+      description = "Configure the firewall to allow saned traffic to pass.";
+    };
+
     services.saned.extraConfig = mkOption {
       type = types.lines;
       default = "";
@@ -186,6 +192,7 @@ in
 
     (mkIf config.services.saned.enable {
       networking.firewall.connectionTrackingModules = [ "sane" ];
+      networking.firewall.allowedTCPPorts = mkIf config.services.saned.openFirewall [ 6566 ];
 
       systemd.services."saned@" = {
         description = "Scanner Service";
@@ -193,7 +200,7 @@ in
         serviceConfig = {
           User = "scanner";
           Group = "scanner";
-          ExecStart = "${pkg}/bin/saned";
+          ExecStart = "${wrappedPkg}/bin/saned";
         };
       };
 
