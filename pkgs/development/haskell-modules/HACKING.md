@@ -75,7 +75,7 @@ The short version is this:
 
 ---
 
-This is the follow-up to #TODO.
+This is the follow-up to #TODO. Come to [#haskell:nixos.org](https://matrix.to/#/#haskell:nixos.org) if you have any questions.
 ```
 
 Make sure to replace all TODO with the actual values.
