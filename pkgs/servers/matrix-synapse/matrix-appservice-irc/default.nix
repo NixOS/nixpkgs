@@ -1,16 +1,22 @@
-{ pkgs, nodePackages, makeWrapper, nixosTests, nodejs, stdenv, lib, ... }:
+{ pkgs, nodePackages, makeWrapper, nixosTests, nodejs, stdenv, lib, fetchFromGitHub }:
 
 let
-
-  packageName = with lib; concatStrings (map (entry: (concatStrings (mapAttrsToList (key: value: "${key}-${value}") entry))) (importJSON ./package.json));
-
   ourNodePackages = import ./node-composition.nix {
     inherit pkgs nodejs;
     inherit (stdenv.hostPlatform) system;
   };
+  version = builtins.replaceStrings [ "\n" ] [ "" ] (builtins.readFile ./REVISION);
 in
-ourNodePackages."${packageName}".override {
+ourNodePackages.package.override {
   pname = "matrix-appservice-irc";
+  inherit version;
+
+  src = fetchFromGitHub {
+    owner = "matrix-org";
+    repo = "matrix-appservice-irc";
+    rev = version;
+    sha256 = "sha256-EncodJKptrLC54B5XipkiHXFgJ5cD+crcT3SOPOc+7M=";
+  };
 
   nativeBuildInputs = [ makeWrapper nodePackages.node-gyp-build ];
 
