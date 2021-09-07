@@ -13,13 +13,16 @@
 , readline
 , systemd
 , udev
-}: let
+, enableExperimental ? false
+}:
+let
   pythonPath = with python3.pkgs; [
     dbus-python
     pygobject3
     recursivePthLoader
   ];
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "bluez";
   version = "5.61";
 
@@ -84,7 +87,14 @@ in stdenv.mkDerivation rec {
     # To provide ciptool, sdptool, and rfcomm (unmaintained)
     # superseded by new D-Bus APIs
     "--enable-deprecated"
-  ];
+  ]
+  # Enables build of experimental tools. Details:
+  # https://github.com/bluez/bluez/blob/8c0c82c9e966654002350ada8489ca577896566a/README#L229
+  # Do not confuse with -E/--experimental argument for bluetoothd used to enable
+  # experimental D-Bus Interfaces. For the latter you might want to consider
+  # flipping the swhitch here:
+  # https://github.com/bluez/bluez/blob/8c0c82c9e966654002350ada8489ca577896566a/src/main.conf#L99
+  ++ lib.optional enableExperimental "--enable-experimental";
 
   # Work around `make install' trying to create /var/lib/bluetooth.
   installFlags = [ "statedir=$(TMPDIR)/var/lib/bluetooth" ];
