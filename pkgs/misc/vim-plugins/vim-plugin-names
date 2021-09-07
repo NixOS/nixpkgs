@@ -56,7 +56,7 @@ camspiers/lens.vim
 camspiers/snap@main
 carlitux/deoplete-ternjs
 ccarpita/rtorrent-syntax-file
-cespare/vim-toml
+cespare/vim-toml@main
 chaoren/vim-wordmotion
 chikatoike/concealedyank.vim
 chikatoike/sourcemap.vim

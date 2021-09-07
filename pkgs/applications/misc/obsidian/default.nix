@@ -1,7 +1,8 @@
-{ stdenv, fetchurl, lib, makeWrapper, electron, makeDesktopItem, graphicsmagick
+{ stdenv, fetchurl, lib, makeWrapper, electron_13, makeDesktopItem, graphicsmagick
 , writeScript }:
 
 let
+  electron = electron_13;
   icon = fetchurl {
     url =
       "https://forum.obsidian.md/uploads/default/original/1X/bf119bd48f748f4fd2d65f2d1bb05d3c806883b5.png";
