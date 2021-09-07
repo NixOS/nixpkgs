@@ -43,6 +43,9 @@ self: super: {
   unix = null;
   xhtml = null;
 
+  # 0.12.0 introduces support for 9.2
+  base-compat = self.base-compat_0_12_0;
+
   # cabal-install needs more recent versions of Cabal and base16-bytestring.
   cabal-install = (doJailbreak super.cabal-install).overrideScope (self: super: {
     Cabal = null;
