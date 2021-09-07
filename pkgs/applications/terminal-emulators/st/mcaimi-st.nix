@@ -10,14 +10,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "xst";
-  version = "0.8.4.1";
+  pname = "mcaimi-st";
+  version = "0.0.0+unstable=2021-08-30";
 
   src = fetchFromGitHub {
-    owner = "gnotclub";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "nOJcOghtzFkl7B/4XeXptn2TdrGQ4QTKBo+t+9npxOA=";
+    owner = "mcaimi";
+    repo = "st";
+    rev = "1a8cad03692ee6d32c03a136cdc76bdb169e15d8";
+    hash = "sha256-xyVEvD8s1J9Wj9NB4Gg+0ldvde7M8IVpzCOTttC1IY0=";
   };
 
   nativeBuildInputs = [
@@ -41,9 +41,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/gnotclub/xst";
-    description = "Simple terminal fork that can load config from Xresources";
+    description = "Suckless Terminal fork";
     license = licenses.mit;
-    maintainers = [ maintainers.vyp ];
+    maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.linux;
   };
 }
