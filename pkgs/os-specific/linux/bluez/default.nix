@@ -13,13 +13,15 @@
 , readline
 , systemd
 , udev
-}: let
+}:
+let
   pythonPath = with python3.pkgs; [
     dbus-python
     pygobject3
     recursivePthLoader
   ];
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "bluez";
   version = "5.61";
 
