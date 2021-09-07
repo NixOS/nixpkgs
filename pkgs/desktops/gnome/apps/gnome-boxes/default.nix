@@ -50,7 +50,6 @@
 , vte
 , glib-networking
 , qemu-utils
-, qemu
 }:
 
 stdenv.mkDerivation rec {
@@ -122,7 +121,7 @@ stdenv.mkDerivation rec {
   ];
 
   preFixup = ''
-    gappsWrapperArgs+=(--prefix PATH : "${lib.makeBinPath [ mtools cdrkit libcdio qemu-utils qemu ]}")
+    gappsWrapperArgs+=(--prefix PATH : "${lib.makeBinPath [ mtools cdrkit libcdio qemu-utils ]}")
   '';
 
   postPatch = ''

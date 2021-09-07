@@ -1,48 +1,26 @@
-{ lib
-, stdenv
-, clang
-, fetchFromGitHub
-, installShellFiles
-, openssl
-, libpcap
+{ lib, stdenv, fetchurl, openssl, libpcap
 }:
+
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "cowpatty";
-  version = "4.8";
+  version = "4.6";
 
-  src = fetchFromGitHub {
-    owner = "joswr1ght";
-    repo = pname;
-    rev = version;
-    sha256 = "0fvwwghhd7wsx0lw2dj9rdsjnirawnq3c6silzvhi0yfnzn5fs0s";
+  buildInputs = [ openssl libpcap ];
+
+  src = fetchurl {
+    url = "http://www.willhackforsushi.com/code/cowpatty/${version}/${pname}-${version}.tgz";
+    sha256 = "1hivh3bq2maxvqzwfw06fr7h8bbpvxzah6mpibh3wb85wl9w2gyd";
   };
 
-  nativeBuildInputs = [
-    clang
-    installShellFiles
-  ];
+  installPhase = "make DESTDIR=$out BINDIR=/bin install";
 
-  buildInputs = [
-    openssl
-    libpcap
-  ];
-
-  makeFlags = [
-    "DESTDIR=$(out)"
-    "BINDIR=/bin"
-  ];
-
-  postInstall = ''
-    installManPage cowpatty.1
-    installManPage genpmk.1
-  '';
-
-  meta = with lib; {
+  meta = {
     description = "Offline dictionary attack against WPA/WPA2 networks";
-    homepage = "https://github.com/joswr1ght/cowpatty";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ nico202 fab ];
+    license = licenses.gpl2;
+    homepage = "https://www.willhackforsushi.com/?page_id=50";
+    maintainers = with maintainers; [ nico202 ];
     platforms = platforms.linux;
   };
 }

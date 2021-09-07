@@ -23,14 +23,14 @@
 
 stdenv.mkDerivation rec {
   pname = "bamf";
-  version = "0.5.5";
+  version = "0.5.4";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchgit {
     url = "https://git.launchpad.net/~unity-team/bamf";
-    rev = "${version}+21.10.20210710-0ubuntu1";
-    sha256 = "0iwz5z5cz9r56pmfjvjd2kcjlk416dw6g38svs33ynssjgsqbdm0";
+    rev = version;
+    sha256 = "1klvij1wyhdj5d8sr3b16pfixc1yk8ihglpjykg7zrr1f50jfgsz";
   };
 
   nativeBuildInputs = [
@@ -55,6 +55,11 @@ stdenv.mkDerivation rec {
     libgtop
     libstartup_notification
     libwnck
+  ];
+
+  patches = [
+    # Port tests and checks to python3 lxml.
+    ./gtester2xunit-python3.patch
   ];
 
   # Fix hard-coded path

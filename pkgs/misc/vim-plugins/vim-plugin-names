@@ -62,7 +62,6 @@ chikatoike/concealedyank.vim
 chikatoike/sourcemap.vim
 chkno/vim-haskell-module-name
 chr4/nginx.vim
-chr4/sslsecure.vim
 chrisbra/CheckAttach
 chrisbra/csv.vim
 chrisbra/NrrwRgn
@@ -123,7 +122,6 @@ easymotion/vim-easymotion
 eddiebergman/nvim-treesitter-pyfold
 eddyekofo94/gruvbox-flat.nvim
 editorconfig/editorconfig-vim
-edkolev/tmuxline.vim
 edluffy/hologram.nvim@main
 edluffy/specs.nvim@main
 edwinb/idris2-vim
@@ -301,7 +299,6 @@ junegunn/seoul256.vim
 junegunn/vader.vim
 junegunn/vim-after-object
 junegunn/vim-easy-align
-junegunn/vim-emoji
 junegunn/vim-github-dashboard
 junegunn/vim-peekaboo
 junegunn/vim-plug
@@ -459,7 +456,7 @@ nanotech/jellybeans.vim
 natebosch/vim-lsc
 nathanaelkane/vim-indent-guides
 nathangrigg/vim-beancount
-nathanmsmith/nvim-ale-diagnostic@main
+nathunsmitty/nvim-ale-diagnostic@main
 navicore/vissort.vim
 nbouscal/vim-stylish-haskell
 ncm2/float-preview.nvim
@@ -484,7 +481,6 @@ neoclide/coc-neco
 neoclide/coc.nvim@release
 neoclide/denite-extra
 neoclide/denite-git
-neoclide/jsonc.vim
 neoclide/vim-easygit
 neomake/neomake
 neovim/nvim-lspconfig
@@ -605,7 +601,6 @@ rktjmp/fwatch.nvim@main
 rktjmp/lush.nvim@main
 rmagatti/auto-session@main
 rmagatti/goto-preview@main
-RobertAudi/securemodelines
 rodjek/vim-puppet
 romainl/vim-cool
 romainl/vim-qf
@@ -627,7 +622,6 @@ rust-lang/rust.vim
 ryanoasis/vim-devicons
 ryvnf/readline.vim
 saadparwaiz1/cmp_luasnip
-saecki/crates.nvim
 sainnhe/edge
 sainnhe/gruvbox-material
 sainnhe/sonokai
@@ -696,7 +690,7 @@ tamago324/compe-zsh
 tamago324/lir.nvim
 tami5/compe-conjure
 tami5/lispdocs.nvim
-tami5/sqlite.lua
+tami5/sql.nvim
 tbastos/vim-lua
 tbodt/deoplete-tabnine
 ternjs/tern_for_vim
@@ -800,7 +794,6 @@ vim-erlang/vim-erlang-tags
 vim-pandoc/vim-pandoc
 vim-pandoc/vim-pandoc-after
 vim-pandoc/vim-pandoc-syntax
-vim-python/python-syntax
 vim-ruby/vim-ruby
 vim-scripts/a.vim
 vim-scripts/align
@@ -855,7 +848,6 @@ whonore/Coqtail
 will133/vim-dirdiff
 wincent/command-t
 wincent/ferret
-wincent/terminus
 windwp/nvim-autopairs
 winston0410/cmd-parser.nvim
 winston0410/range-highlight.nvim

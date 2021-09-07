@@ -18,21 +18,9 @@ stdenv.mkDerivation {
       ocaml findlib ocamlbuild ocamlmod ocamlify
     ];
 
-  configurePhase = ''
-    runHook preConfigure
-    ocaml setup.ml -configure --prefix $out
-    runHook postConfigure
-  '';
-  buildPhase = ''
-    runHook preBuild
-    ocaml setup.ml -build
-    runHook postBuild
-  '';
-  installPhase = ''
-    runHook preInstall
-    ocaml setup.ml -install
-    runHook postInstall
-  '';
+  configurePhase = "ocaml setup.ml -configure --prefix $out";
+  buildPhase     = "ocaml setup.ml -build";
+  installPhase   = "ocaml setup.ml -install";
 
   meta = with lib; {
     homepage = "http://oasis.forge.ocamlcore.org/";

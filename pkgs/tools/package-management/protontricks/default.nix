@@ -2,24 +2,23 @@
 , buildPythonApplication
 , fetchFromGitHub
 , setuptools-scm
-, setuptools
 , vdf
 , bash
 , steam-run
 , winetricks
-, yad
+, zenity
 , pytestCheckHook
 }:
 
 buildPythonApplication rec {
   pname = "protontricks";
-  version = "1.6.0";
+  version = "1.5.2";
 
   src = fetchFromGitHub {
     owner = "Matoking";
     repo = pname;
     rev = version;
-    hash = "sha256-sbYIqVsuDZ2Htb6SVIe/gBA1UIvUzu4fjTjWQ7k1WFs=";
+    hash = "sha256-Vmxb8SjPhcSqFzykHRPsLtAoSwomN+se+icwHkucbX8=";
   };
 
   patches = [
@@ -28,31 +27,23 @@ buildPythonApplication rec {
   ];
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   nativeBuildInputs = [ setuptools-scm ];
-
-  propagatedBuildInputs = [
-    setuptools # implicit dependency, used to find data/icon_placeholder.png
-    vdf
-  ];
+  propagatedBuildInputs = [ vdf ];
 
   makeWrapperArgs = [
     "--prefix PATH : ${lib.makeBinPath [
       bash
       steam-run
-      winetricks
-      yad
+      (winetricks.override {
+        # Remove default build of wine to reduce closure size.
+        # Falls back to wine in PATH when --no-runtime is passed.
+        wine = null;
+      })
+      zenity
     ]}"
   ];
 
   checkInputs = [ pytestCheckHook ];
-
-  # From 1.6.0 release notes (https://github.com/Matoking/protontricks/releases/tag/1.6.0):
-  # In most cases the script is unnecessary and should be removed as part of the packaging process.
-  postInstall = ''
-    rm "$out/bin/protontricks-desktop-install"
-  '';
-
   pythonImportsCheck = [ "protontricks" ];
 
   meta = with lib; {
@@ -60,6 +51,6 @@ buildPythonApplication rec {
     homepage = "https://github.com/Matoking/protontricks";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ kira-bruneau ];
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    platforms = platforms.linux;
   };
 }

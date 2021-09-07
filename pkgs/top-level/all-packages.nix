@@ -338,8 +338,6 @@ with pkgs;
 
   creddump = callPackage ../tools/security/creddump {};
 
-  credential-detector = callPackage ../tools/security/credential-detector { };
-
   credslayer = callPackage ../tools/security/credslayer { };
 
   device-tree_rpi = callPackage ../os-specific/linux/device-tree/raspberrypi.nix {};
@@ -1017,9 +1015,6 @@ with pkgs;
     extraLibs = config.st.extraLibs or [];
   };
   xst = callPackage ../applications/terminal-emulators/st/xst.nix { };
-  lukesmithxyz-st = callPackage ../applications/terminal-emulators/st/lukesmithxyz-st { };
-  mcaimi-st = callPackage ../applications/terminal-emulators/st/mcaimi-st.nix { };
-  siduck76-st = callPackage ../applications/terminal-emulators/st/siduck76-st.nix { };
 
   stupidterm = callPackage ../applications/terminal-emulators/stupidterm {
     gtk = gtk3;
@@ -2195,9 +2190,9 @@ with pkgs;
 
   traefik-certs-dumper = callPackage ../tools/misc/traefik-certs-dumper { };
 
-  calamares = libsForQt515.callPackage ../tools/misc/calamares {
+  calamares = libsForQt514.callPackage ../tools/misc/calamares {
     python = python3;
-    boost = pkgs.boost.override { enablePython = true; python = python3; };
+    boost = pkgs.boost.override { python = python3; };
   };
 
   calendar-cli = callPackage ../tools/networking/calendar-cli { };
@@ -4109,12 +4104,11 @@ with pkgs;
     ldapSupport = true;
   };
 
-  curl = curlMinimal.override ({
+  curl = curlMinimal.override {
     idnSupport = true;
-  } // lib.optionalAttrs (!stdenv.hostPlatform.isStatic) {
     gssSupport = true;
     brotliSupport = true;
-  });
+  };
 
   curlMinimal = callPackage ../tools/networking/curl { };
 
@@ -5281,10 +5275,6 @@ with pkgs;
 
   git-cinnabar = callPackage ../applications/version-management/git-and-tools/git-cinnabar { };
 
-  git-cliff = callPackage ../applications/version-management/git-and-tools/git-cliff {
-    inherit (pkgs.darwin.apple_sdk.frameworks) Security;
-  };
-
   git-codeowners = callPackage ../applications/version-management/git-and-tools/git-codeowners { };
 
   git-codereview = callPackage ../applications/version-management/git-and-tools/git-codereview { };
@@ -5437,8 +5427,6 @@ with pkgs;
   gitstats = callPackage ../applications/version-management/gitstats { };
 
   gitstatus = callPackage ../applications/version-management/git-and-tools/gitstatus { };
-
-  gitty = callPackage ../applications/version-management/git-and-tools/gitty { };
 
   gitui = callPackage ../applications/version-management/git-and-tools/gitui {
     inherit (darwin.apple_sdk.frameworks) Security AppKit;
@@ -7216,7 +7204,7 @@ with pkgs;
     pythonPackages = python3Packages;
   };
 
-  mirakurun = callPackage ../applications/video/mirakurun { };
+  mirakurun = nodePackages.mirakurun;
 
   miredo = callPackage ../tools/networking/miredo { };
 
@@ -7285,8 +7273,6 @@ with pkgs;
   mrtg = callPackage ../tools/misc/mrtg { };
 
   mscgen = callPackage ../tools/graphics/mscgen { };
-
-  metabigor = callPackage ../tools/security/metabigor { };
 
   metasploit = callPackage ../tools/security/metasploit { };
 
@@ -8777,8 +8763,6 @@ with pkgs;
 
   sacad = callPackage ../tools/misc/sacad { };
 
-  sad = callPackage ../tools/text/sad { };
-
   safecopy = callPackage ../tools/system/safecopy { };
 
   sacd = callPackage ../tools/cd-dvd/sacd { };
@@ -9494,6 +9478,8 @@ with pkgs;
   timelapse-deflicker = callPackage ../applications/graphics/timelapse-deflicker { };
 
   timetrap = callPackage ../applications/office/timetrap { };
+
+  timetable = callPackage ../applications/office/timetable { };
 
   timekeeper = callPackage ../applications/office/timekeeper { };
 
@@ -12738,7 +12724,7 @@ with pkgs;
 
   ### LUA interpreters
   luaInterpreters = callPackage ./../development/interpreters/lua-5 {};
-  inherit (luaInterpreters) lua5_1 lua5_2 lua5_2_compat lua5_3 lua5_3_compat lua5_4 lua5_4_compat luajit_2_1 luajit_2_0;
+  inherit (luaInterpreters) lua5_1 lua5_2 lua5_2_compat lua5_3 lua5_3_compat lua5_4 lua5_4_compat luajit_openresty luajit_2_1 luajit_2_0;
 
   lua5 = lua5_2_compat;
   lua = lua5;
@@ -12948,8 +12934,6 @@ with pkgs;
   poetry2nix = callPackage ../development/tools/poetry2nix/poetry2nix {
     inherit pkgs lib;
   };
-
-  poetry2conda = python3Packages.callPackage ../development/python-modules/poetry2conda { };
 
   pipenv = callPackage ../development/tools/pipenv {};
 
@@ -19979,8 +19963,6 @@ with pkgs;
 
   jetty = callPackage ../servers/http/jetty { };
 
-  jibri = callPackage ../servers/jibri { };
-
   jicofo = callPackage ../servers/jicofo { };
 
   jitsi-meet = callPackage ../servers/web-apps/jitsi-meet { };
@@ -20136,7 +20118,7 @@ with pkgs;
     modules = [ nginxModules.dav nginxModules.moreheaders ];
   };
 
-  nginxModules = recurseIntoAttrs (callPackage ../servers/http/nginx/modules.nix { });
+  nginxModules = callPackage ../servers/http/nginx/modules.nix { };
 
   # We should move to dynmaic modules and create a nginxFull package with all modules
   nginxShibboleth = nginxStable.override {
@@ -21588,8 +21570,6 @@ with pkgs;
   perf-tools = callPackage ../os-specific/linux/perf-tools { };
 
   pipes = callPackage ../misc/screensavers/pipes { };
-
-  pipes-rs = callPackage ../misc/screensavers/pipes-rs { };
 
   pipework = callPackage ../os-specific/linux/pipework { };
 
@@ -26297,7 +26277,7 @@ with pkgs;
 
   vivaldi-widevine = callPackage ../applications/networking/browsers/vivaldi/widevine.nix { };
 
-  libopenmpt = callPackage ../applications/audio/libopenmpt { };
+  openmpt123 = callPackage ../applications/audio/openmpt123 { };
 
   openrazer-daemon = with python3Packages; toPythonApplication openrazer-daemon;
 
@@ -27675,7 +27655,12 @@ with pkgs;
   wrapNeovimUnstable = callPackage ../applications/editors/neovim/wrapper.nix { };
   wrapNeovim = neovim-unwrapped: lib.makeOverridable (neovimUtils.legacyWrapper neovim-unwrapped);
   neovim-unwrapped = callPackage ../applications/editors/neovim {
-    lua = luajit;
+    # See:
+    #   - https://github.com/NixOS/nixpkgs/issues/129099
+    #   - https://github.com/NixOS/nixpkgs/issues/128959
+    lua =
+      if (stdenv.isDarwin && stdenv.isAarch64) then luajit_openresty else
+      luajit;
   };
 
   neovimUtils = callPackage ../applications/editors/neovim/utils.nix { };
@@ -29498,13 +29483,9 @@ with pkgs;
   steamcmd = steamPackages.steamcmd;
 
   protontricks = python3Packages.callPackage ../tools/package-management/protontricks {
-    winetricks = winetricks.override {
-      # Remove default build of wine to reduce closure size.
-      # Falls back to wine in PATH.
-      wine = null;
-    };
-
-    inherit steam-run yad;
+    inherit steam-run;
+    inherit winetricks;
+    inherit (gnome) zenity;
   };
 
   protonup = with python3Packages; toPythonApplication protonup;
@@ -29967,8 +29948,6 @@ with pkgs;
   clustal-omega = callPackage ../applications/science/biology/clustal-omega { };
 
   conglomerate = callPackage ../applications/science/biology/conglomerate { };
-
-  dalfox = callPackage ../tools/security/dalfox { };
 
   dcm2niix = callPackage ../applications/science/biology/dcm2niix { };
 
@@ -31127,8 +31106,6 @@ with pkgs;
 
   gobuster = callPackage ../tools/security/gobuster { };
 
-  gotestwaf = callPackage ../tools/security/gotestwaf { };
-
   guetzli = callPackage ../applications/graphics/guetzli { };
 
   gummi = callPackage ../applications/misc/gummi { };
@@ -31137,9 +31114,7 @@ with pkgs;
 
   hatari = callPackage ../misc/emulators/hatari { };
 
-  hck = callPackage ../tools/text/hck {
-    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
-  };
+  hck = callPackage ../tools/text/hck { };
 
   helm = callPackage ../applications/audio/helm { };
 

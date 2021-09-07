@@ -8,6 +8,12 @@
 , libfido2
 }:
 
+let
+  # pandoc is currently broken on aarch64-darwin
+  # because of missing ghc
+  brokenPandoc = stdenv.isDarwin && stdenv.isAarch64;
+in
+
 buildGoModule rec {
   pname = "gocryptfs";
   version = "2.1";
@@ -23,6 +29,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [
     pkg-config
+  ] ++ lib.optionals (!brokenPandoc) [
     pandoc
   ];
 
@@ -38,7 +45,7 @@ buildGoModule rec {
 
   subPackages = [ "." "gocryptfs-xray" "contrib/statfs" ];
 
-  postBuild = ''
+  postBuild = lib.optionalString (!brokenPandoc) ''
     pushd Documentation/
     mkdir -p $out/share/man/man1
     # taken from Documentation/MANPAGE-render.bash

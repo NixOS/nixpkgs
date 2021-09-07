@@ -2,6 +2,7 @@
 , buildPythonPackage, fetchPypi, pythonOlder, setuptools-scm, pytestCheckHook
 , aiohttp
 , aiohttp-cors
+, appdirs
 , attrs
 , click
 , colorama
@@ -9,7 +10,6 @@
 , mypy-extensions
 , pathspec
 , parameterized
-, platformdirs
 , regex
 , tomli
 , typed-ast
@@ -20,13 +20,13 @@
 
 buildPythonPackage rec {
   pname = "black";
-  version = "21.8b0";
+  version = "21.7b0";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-VwYI0oqjrxeSuYxKM326xjZ4d7R7EriKtCCVz8GmJ8I=";
+    sha256 = "06d27adq6v6p8wspi0wwqz2pnq34p5jhnqvijbin54yyj5j3qdy8";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
@@ -59,12 +59,12 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     aiohttp
     aiohttp-cors
+    appdirs
     attrs
     click
     colorama
     mypy-extensions
     pathspec
-    platformdirs
     regex
     tomli
     typed-ast # required for tests and python2 extra

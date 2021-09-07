@@ -8,13 +8,9 @@ let
   esConfig = ''
     network.host: ${cfg.listenAddress}
     cluster.name: ${cfg.cluster_name}
-    ${lib.optionalString cfg.single_node ''
-      discovery.type: single-node
-      gateway.auto_import_dangling_indices: true
-    ''}
 
     http.port: ${toString cfg.port}
-    transport.port: ${toString cfg.tcp_port}
+    transport.tcp.port: ${toString cfg.tcp_port}
 
     ${cfg.extraConf}
   '';
@@ -79,12 +75,6 @@ in
       description = "Elasticsearch name that identifies your cluster for auto-discovery.";
       default = "elasticsearch";
       type = types.str;
-    };
-
-    single_node = mkOption {
-      description = "Start a single-node cluster";
-      default = true;
-      type = types.bool;
     };
 
     extraConf = mkOption {

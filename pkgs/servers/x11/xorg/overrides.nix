@@ -200,11 +200,19 @@ self: super:
       ++ malloc0ReturnsNullCrossFlag;
 
     patches = [
-      # Adds color emoji rendering support.
+      # The following three patches add color emoji rendering support.
       # https://gitlab.freedesktop.org/xorg/lib/libxft/merge_requests/1
       (fetchpatch {
-        url = "https://gitlab.freedesktop.org/xorg/lib/libxft/commit/fe41537b5714a2301808eed2d76b2e7631176573.patch";
-        sha256 = "045lp1q50i2wlwvpsq6ycxdc6p3asm2r3bk2nbad1dwkqw2xf9jc";
+        url = "https://gitlab.freedesktop.org/xorg/lib/libxft/commit/723092ece088559f1af299236305911f4ee4d450.patch";
+        sha256 = "1y5s6x5b7n2rqxapdx65zlcz35s7i7075qxkfnj859hx7k5ybx53";
+      })
+      (fetchpatch {
+        url = "https://gitlab.freedesktop.org/xorg/lib/libxft/commit/e0fc4ce7e87ab9c4b47e5c8e693f070dfd0d2f7b.patch";
+        sha256 = "1x7cbhdrprrmngyy3l3b45bz6717dzp881687h5hxa4g2bg5c764";
+      })
+      (fetchpatch {
+        url = "https://gitlab.freedesktop.org/xorg/lib/libxft/commit/d385aa3e5320d18918413df0e8aef3a713a47e0b.patch";
+        sha256 = "1acnks2g88hari2708x93ywa9m2f4lm60yhn9va45151ma2qb5n0";
       })
     ];
 

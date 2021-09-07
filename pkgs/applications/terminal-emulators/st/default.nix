@@ -2,16 +2,18 @@
 , stdenv
 , fetchurl
 , pkg-config
+, writeText
+, libX11
+, ncurses
 , fontconfig
 , freetype
-, libX11
 , libXft
-, ncurses
-, writeText
 , conf ? null
 , patches ? [ ]
 , extraLibs ? [ ]
 }:
+
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "st";
@@ -19,16 +21,15 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://dl.suckless.org/st/${pname}-${version}.tar.gz";
-    hash = "sha256-1C087OtNamXjLpClM249RG22EsP72evBeAvGyaAzRqY=";
+    sha256 = "19j66fhckihbg30ypngvqc9bcva47mp379ch5vinasjdxgn3qbfl";
   };
 
   inherit patches;
 
-  configFile = lib.optionalString (conf != null)
-    (writeText "config.def.h" conf);
+  configFile = optionalString (conf != null) (writeText "config.def.h" conf);
 
-  postPatch = lib.optionalString (conf != null) "cp ${configFile} config.def.h"
-    + lib.optionalString stdenv.isDarwin ''
+  postPatch = optionalString (conf != null) "cp ${configFile} config.def.h"
+    + optionalString stdenv.isDarwin ''
     substituteInPlace config.mk --replace "-lrt" ""
   '';
 
@@ -51,13 +52,11 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     runHook preInstall
-
     TERMINFO=$out/share/terminfo make install PREFIX=$out
-
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://st.suckless.org/";
     description = "Simple Terminal for X from Suckless.org Community";
     license = licenses.mit;

@@ -2,14 +2,14 @@
 
 buildGoModule rec {
   pname = "tfk8s";
-  version = "0.1.7";
+  version = "0.1.6";
   tag = "v${version}";
 
   src = fetchFromGitHub {
     owner = "jrhouston";
     repo = "tfk8s";
     rev = tag;
-    sha256 = "0mkfggwjrsp0rzh7ll6nmp9kqcw4fl8q81vk67z5mbd276dkyxrb";
+    sha256 = "sha256-pjgacKyOAlaFqHCKcLmjTl/uWpjMzkHH0UcaIEb+IZI=";
   };
 
   vendorSha256 = "sha256-eLPmghs05pMMtys97Ja7YGdVMZmMmiaFeMwzaWNxW0I=";

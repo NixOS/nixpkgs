@@ -102,12 +102,7 @@ mkDerivation rec {
   dontWrapQtApps = true;
   preFixup = ''
     wrapQtApp "$out/bin/sonic-pi" \
-      --prefix PATH : ${lib.makeBinPath [ bash jack2 ruby supercollider ] } \
-      --set AUBIO_LIB "${aubio}/lib/libaubio.so"
-    makeWrapper \
-      $out/app/server/ruby/bin/sonic-pi-server.rb \
-      $out/bin/sonic-pi-server \
-      --prefix PATH : ${lib.makeBinPath [ bash jack2 ruby supercollider ] } \
+      --prefix PATH : ${ruby}/bin:${bash}/bin:${supercollider}/bin:${jack2}/bin \
       --set AUBIO_LIB "${aubio}/lib/libaubio.so"
   '';
 

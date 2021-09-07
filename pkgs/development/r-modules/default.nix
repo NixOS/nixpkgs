@@ -456,7 +456,6 @@ let
     mvtnorm = [ pkgs.libiconv ];
     statmod = [ pkgs.libiconv ];
     rsvg = [ pkgs.librsvg.dev ];
-    ssh = with pkgs; [ libssh ];
   };
 
   packagesRequireingX = [

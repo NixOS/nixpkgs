@@ -175,6 +175,7 @@
 , "mathjax"
 , "meat"
 , "@mermaid-js/mermaid-cli"
+, "mirakurun"
 , "mocha"
 , "multi-file-swagger"
 , "musescore-downloader"

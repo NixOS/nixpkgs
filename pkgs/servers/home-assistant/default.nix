@@ -724,7 +724,6 @@ in with py.pkgs; buildPythonApplication rec {
     "yandex_transport"
     "yandextts"
     "yeelight"
-    "youless"
     # disabled, because it tries to join a multicast group and fails to find a usable network interface
     # "zeroconf"
     "zerproc"

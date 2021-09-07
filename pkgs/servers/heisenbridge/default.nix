@@ -2,13 +2,13 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "heisenbridge";
-  version = "1.0.1";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "hifi";
     repo = "heisenbridge";
     rev = "v${version}";
-    sha256 = "sha256-PaLOFZTeX7HxBiOc94x5sHuJYKRF1fR9ShmQN7IPuuo=";
+    sha256 = "sha256-DmYGP50GsthxvhXUMkwV+mvcfCjCMu90VMe5woNvf1w=";
   };
 
   propagatedBuildInputs = with python3Packages; [

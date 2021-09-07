@@ -8,25 +8,22 @@
 
 stdenv.mkDerivation rec {
   pname = "sdlpop";
-  version = "1.22";
+  version = "1.21";
 
   src = fetchFromGitHub {
     owner = "NagyD";
     repo = "SDLPoP";
     rev = "v${version}";
-    sha256 = "1yy5r1r0hv0xggk8qd8bwk2zy7abpv89nikq4flqgi53fc5q9xl7";
+    sha256 = "1q4mnyg8v4420f1bp24v8lgi335vijdv61yi3fan14jgfzl38l7w";
   };
 
   nativeBuildInputs = [ pkg-config makeWrapper copyDesktopItems ];
-
   buildInputs = [ SDL2 SDL2_image ];
 
   makeFlags = [ "-C" "src" ];
 
   preBuild = ''
-    substituteInPlace src/Makefile \
-      --replace "CC = gcc" "CC = ${stdenv.cc.targetPrefix}cc" \
-      --replace "CFLAGS += -I/opt/local/include" "CFLAGS += -I${SDL2.dev}/include/SDL2 -I${SDL2_image}/include/SDL2"
+    substituteInPlace src/Makefile --replace "CC = gcc" "CC = ${stdenv.cc.targetPrefix}gcc"
   '';
 
   # The prince binary expects two things of the working directory it is called from:
@@ -66,5 +63,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ iblech ];
     platforms = platforms.unix;
+    broken = stdenv.isDarwin;
   };
 }

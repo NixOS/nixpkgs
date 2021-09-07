@@ -314,9 +314,7 @@ stdenv.mkDerivation (rec {
   meta = {
     homepage = "http://haskell.org/ghc";
     description = "The Glasgow Haskell Compiler";
-    maintainers = with lib.maintainers; [
-      guibou
-    ] ++ lib.teams.haskell.members;
+    maintainers = with lib.maintainers; [ marcweber andres peti guibou ];
     timeout = 24 * 3600;
     inherit (ghc.meta) license platforms;
 

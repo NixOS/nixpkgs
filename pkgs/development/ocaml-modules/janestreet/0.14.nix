@@ -351,8 +351,7 @@ with self;
 
   parsexp = janePackage {
     pname = "parsexp";
-    version = "0.14.1";
-    hash = "1nr0ncb8l2mkk8pqzknr7fsqw5kpz8y102kyv5bc0x7c36v0d4zy";
+    hash = "0rvbrf8ggh2imsbhqi15jzyyqbi3m5hzvy2iy2r4skx6m102mzpd";
     minimumOCamlVersion = "4.04.2";
     meta.description = "S-expression parsing library";
     propagatedBuildInputs = [ base sexplib0 ];

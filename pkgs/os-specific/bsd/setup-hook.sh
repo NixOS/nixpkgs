@@ -58,15 +58,9 @@ addMakeFlags() {
 }
 
 setBSDSourceDir() {
-  # merge together all extra paths
-  # there should be a better way to do this
   sourceRoot=$PWD/$sourceRoot
   export BSDSRCDIR=$sourceRoot
   export _SRC_TOP_=$BSDSRCDIR
-  chmod -R u+w $sourceRoot
-  for path in $extraPaths; do
-    rsync -Er --chmod u+w $path/ $sourceRoot/
-  done
 
   cd $sourceRoot
   if [ -d "$BSD_PATH" ]

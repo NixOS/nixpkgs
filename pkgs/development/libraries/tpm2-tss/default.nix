@@ -38,7 +38,9 @@ stdenv.mkDerivation rec {
     substituteInPlace src/tss2-tcti/tctildr-dl.c \
       --replace '@PREFIX@' $out/lib/
     substituteInPlace ./test/unit/tctildr-dl.c \
-      --replace '@PREFIX@' $out/lib
+      --replace ', "libtss2' ", \"$out/lib/libtss2" \
+      --replace ', "foo' ", \"$out/lib/foo" \
+      --replace ', TEST_TCTI_NAME' ", \"$out/lib/\"TEST_TCTI_NAME"
   '';
 
   configureFlags = [

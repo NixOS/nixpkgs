@@ -1586,7 +1586,6 @@ broken-packages:
   - getflag
   - GGg
   - ggtsTC
-  - ghc-bignum-orphans
   - ghc-clippy-plugin
   - ghc-core-smallstep
   - ghc-datasize
@@ -2537,6 +2536,7 @@ broken-packages:
   - IsNull
   - iso8601-duration
   - isobmff
+  - isocline
   - isotope
   - itcli
   - itemfield
@@ -2656,7 +2656,6 @@ broken-packages:
   - KSP
   - ktx
   - ktx-codec
-  - kubernetes-client
   - kuifje
   - kure
   - kure-your-boilerplate
@@ -2665,6 +2664,7 @@ broken-packages:
   - lagrangian
   - lambda2js
   - lambdaBase
+  - lambdabot-social-plugins
   - lambdabot-utils
   - lambda-bridge
   - lambda-canvas
@@ -2718,7 +2718,6 @@ broken-packages:
   - layers
   - layout
   - layout-bootstrap
-  - lazify
   - lazyarray
   - lazyboy
   - lazy-priority-queue
@@ -3111,7 +3110,6 @@ broken-packages:
   - monopati
   - months
   - monus
-  - monus-weighted-search
   - monzo
   - morfette
   - morfeusz
@@ -3198,7 +3196,6 @@ broken-packages:
   - nanomsg-haskell
   - nanoparsec
   - NanoProlog
-  - nanovg-simple
   - nanq
   - naperian
   - naqsha
@@ -3591,11 +3588,9 @@ broken-packages:
   - phoityne
   - phone-numbers
   - phone-push
-  - phonetic-languages-plus
   - phonetic-languages-properties
   - phonetic-languages-simplified-properties-lists
   - phonetic-languages-simplified-properties-lists-double
-  - phonetic-languages-ukrainian-array
   - phraskell
   - Phsu
   - phybin
@@ -3805,7 +3800,6 @@ broken-packages:
   - provenience
   - proxy-kindness
   - proxy-mapping
-  - prune-juice
   - pseudo-trie
   - PTQ
   - publicsuffixlistcreate
@@ -5218,7 +5212,6 @@ broken-packages:
   - weighted-regexp
   - welshy
   - werewolf
-  - wgpu-hs
   - Wheb
   - while-lang-parser
   - whim

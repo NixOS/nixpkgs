@@ -3323,8 +3323,6 @@ in {
 
   heudiconv = callPackage ../development/python-modules/heudiconv { };
 
-  hg-commitsigs = callPackage ../development/python-modules/hg-commitsigs { };
-
   hg-evolve = callPackage ../development/python-modules/hg-evolve { };
 
   hglib = callPackage ../development/python-modules/hglib { };
@@ -5571,10 +5569,6 @@ in {
 
   poetry-core = callPackage ../development/python-modules/poetry-core { };
 
-  poetry-semver = callPackage ../development/python-modules/poetry-semver { };
-
-  poetry2conda = callPackage ../development/python-modules/poetry2conda { };
-
   poezio = callPackage ../applications/networking/instant-messengers/poezio { };
 
   polib = callPackage ../development/python-modules/polib { };
@@ -5586,8 +5580,6 @@ in {
   polyline = callPackage ../development/python-modules/polyline { };
 
   pomegranate = callPackage ../development/python-modules/pomegranate { };
-
-  pontos = callPackage ../development/python-modules/pontos { };
 
   pony = callPackage ../development/python-modules/pony { };
 
@@ -7855,8 +7847,6 @@ in {
 
   rst2ansi = callPackage ../development/python-modules/rst2ansi { };
 
-  rstcheck = callPackage ../development/python-modules/rstcheck { };
-
   rtmidi-python = callPackage ../development/python-modules/rtmidi-python { };
 
   rtoml = callPackage ../development/python-modules/rtoml { };
@@ -9616,8 +9606,6 @@ in {
   yfinance = callPackage ../development/python-modules/yfinance { };
 
   yoda = toPythonModule (pkgs.yoda.override { inherit python; });
-
-  youless-api = callPackage ../development/python-modules/youless-api { };
 
   youtube-dl = callPackage ../tools/misc/youtube-dl { };
 

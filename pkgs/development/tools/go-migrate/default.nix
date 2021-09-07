@@ -20,6 +20,5 @@ buildGoModule rec {
     description = "Database migrations. CLI and Golang library";
     maintainers = with maintainers; [ offline ];
     license     = licenses.mit;
-    mainProgram = "migrate";
   };
 }

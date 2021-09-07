@@ -34,7 +34,7 @@ buildPythonPackage rec {
     pytest-regressions
     pytestCheckHook
   ];
-  pythonImportsCheck = [ "markdown_it" ];
+  pytestImportsCheck = [ "markdown_it" ];
 
   meta = with lib; {
     description = "Markdown parser done right";

@@ -1143,16 +1143,6 @@ Superuser created successfully.
           make the apps fit better visually.
         </para>
       </listitem>
-      <listitem>
-        <para>
-          <literal>rofi</literal> has been updated from
-          <quote>1.6.1</quote> to <quote>1.7.0</quote>, one important
-          thing is the removal of the old xresources based configuration
-          setup. Read more
-          <link xlink:href="https://github.com/davatorium/rofi/blob/cb12e6fc058f4a0f4f/Changelog#L1">in
-          rofi’s changelog</link>.
-        </para>
-      </listitem>
     </itemizedlist>
   </section>
 </section>
