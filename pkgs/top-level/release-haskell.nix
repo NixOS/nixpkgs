@@ -312,6 +312,7 @@ let
       language-nix = all;
       nix-paths = all;
       titlecase = all;
+      ghc-api-compat = all;
     })
     {
       mergeable = pkgs.releaseTools.aggregate {

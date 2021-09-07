@@ -1926,9 +1926,6 @@ EOT
     Cabal = self.Cabal_3_6_0_0;
   };
 
-  # ghc-api-compat needlessly requires 8.10.5 exactly, but we have 8.10.6
-  ghc-api-compat = doJailbreak super.ghc-api-compat;
-
   # 2021-08-18: streamly-posix was released with hspec 2.8.2, but it works with older versions too.
   streamly-posix = doJailbreak super.streamly-posix;
 

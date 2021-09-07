@@ -112,4 +112,7 @@ self: super: {
     };
     ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_0_0_4;
   });
+
+  # pick right version for compiler
+  ghc-api-compat = doDistribute super.ghc-api-compat_9_0_1;
 }
