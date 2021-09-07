@@ -13,6 +13,7 @@
 , readline
 , systemd
 , udev
+, enableExperimental ? false
 }:
 let
   pythonPath = with python3.pkgs; [
@@ -86,7 +87,7 @@ stdenv.mkDerivation rec {
     # To provide ciptool, sdptool, and rfcomm (unmaintained)
     # superseded by new D-Bus APIs
     "--enable-deprecated"
-  ];
+  ] ++ lib.optional enableExperimental "--enable-experimental";
 
   # Work around `make install' trying to create /var/lib/bluetooth.
   installFlags = [ "statedir=$(TMPDIR)/var/lib/bluetooth" ];
