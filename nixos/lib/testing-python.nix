@@ -257,105 +257,18 @@ rec {
         inherit test driver driverInteractive nodes;
       };
 
-  runInMachine =
-    { drv
-    , machine
-    , preBuild ? ""
-    , postBuild ? ""
-    , qemu_pkg ? pkgs.qemu_test
-    , ... # ???
-    }:
-    let
-      build-vms = import ./build-vms.nix {
-        inherit system pkgs minimal specialArgs extraConfigurations;
-      };
 
-      vm = build-vms.buildVM { }
-        [
-          machine
-          {
-            key = "run-in-machine";
-            networking.hostName = "client";
-            nix.readOnlyStore = false;
-            virtualisation.writableStore = false;
-          }
-        ];
+  abortForFunction = functionName: abort ''The ${functionName} function was
+    removed because it is not an essential part of the NixOS testing
+    infrastructure. It had no usage in NixOS or Nixpkgs and it had no designated
+    maintainer. You are free to reintroduce it by documenting it in the manual
+    and adding yourself as maintainer. It was removed in
+    https://github.com/NixOS/nixpkgs/pull/137013
+  '';
 
-      buildrunner = writeText "vm-build" ''
-        source $1
+  runInMachine = abortForFunction "runInMachine";
 
-        ${coreutils}/bin/mkdir -p $TMPDIR
-        cd $TMPDIR
-
-        exec $origBuilder $origArgs
-      '';
-
-      testScript = ''
-        start_all()
-        client.wait_for_unit("multi-user.target")
-        ${preBuild}
-        client.succeed("env -i ${bash}/bin/bash ${buildrunner} /tmp/xchg/saved-env >&2")
-        ${postBuild}
-        client.succeed("sync") # flush all data before pulling the plug
-      '';
-
-      testDriver = pythonTestDriver { inherit qemu_pkg; };
-
-      vmRunCommand = writeText "vm-run" ''
-        xchg=vm-state-client/xchg
-        ${coreutils}/bin/mkdir $out
-        ${coreutils}/bin/mkdir -p $xchg
-
-        for i in $passAsFile; do
-          i2=''${i}Path
-          _basename=$(${coreutils}/bin/basename ''${!i2})
-          ${coreutils}/bin/cp ''${!i2} $xchg/$_basename
-          eval $i2=/tmp/xchg/$_basename
-          ${coreutils}/bin/ls -la $xchg
-        done
-
-        unset i i2 _basename
-        export | ${gnugrep}/bin/grep -v '^xchg=' > $xchg/saved-env
-        unset xchg
-
-        export tests='${testScript}'
-        ${testDriver}/bin/nixos-test-driver --keep-vm-state ${vm.config.system.build.vm}/bin/run-*-vm
-      ''; # */
-
-    in
-    lib.overrideDerivation drv (attrs: {
-      requiredSystemFeatures = [ "kvm" ];
-      builder = "${bash}/bin/sh";
-      args = [ "-e" vmRunCommand ];
-      origArgs = attrs.args;
-      origBuilder = attrs.builder;
-    });
-
-
-  runInMachineWithX = { require ? [ ], ... } @ args:
-    let
-      client =
-        { ... }:
-        {
-          inherit require;
-          imports = [
-            ../tests/common/auto.nix
-          ];
-          virtualisation.memorySize = 1024;
-          services.xserver.enable = true;
-          test-support.displayManager.auto.enable = true;
-          services.xserver.displayManager.defaultSession = "none+icewm";
-          services.xserver.windowManager.icewm.enable = true;
-        };
-    in
-    runInMachine ({
-      machine = client;
-      preBuild =
-        ''
-          client.wait_for_x()
-        '';
-    } // args);
-
+  runInMachineWithX = abortForFunction "runInMachineWithX";
 
   simpleTest = as: (makeTest as).test;
 
