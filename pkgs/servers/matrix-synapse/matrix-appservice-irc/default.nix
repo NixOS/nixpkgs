@@ -1,11 +1,11 @@
-{ pkgs, nodePackages, makeWrapper, nixosTests, nodejs, stdenv, lib, fetchFromGitHub, ... }:
+{ pkgs, nodePackages, makeWrapper, nixosTests, nodejs, stdenv, lib, fetchFromGitHub }:
 
 let
   ourNodePackages = import ./node-composition.nix {
     inherit pkgs nodejs;
     inherit (stdenv.hostPlatform) system;
   };
-  version = builtins.readFile ./REVISION;
+  version = builtins.replaceStrings [ "\n" ] [ "" ] (builtins.readFile ./REVISION);
 in
 ourNodePackages.package.override {
 

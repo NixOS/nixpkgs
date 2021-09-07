@@ -131,6 +131,8 @@ import ./make-test-python.nix ({ pkgs, ... }:
     };
 
     testScript = ''
+      import pathlib
+
       start_all()
 
       ircd.wait_for_unit("ngircd.service")

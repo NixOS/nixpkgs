@@ -19,7 +19,7 @@ echo "matrix-appservice-irc: $CURRENT_VERSION -> $TARGET_VERSION"
 rm -f package.json package-lock.json
 wget https://github.com/matrix-org/matrix-appservice-irc/raw/$TARGET_VERSION/package.json
 wget -O package-lock-temp.json https://github.com/matrix-org/matrix-appservice-irc/raw/$TARGET_VERSION/package-lock.json
-echo -n "$TARGET_VERSION" > ./REVISION
+echo "$TARGET_VERSION" > ./REVISION
 
 ./generate-dependencies.sh
 
