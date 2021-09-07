@@ -77,8 +77,8 @@ vscode-utils.buildVscodeMarketplaceExtension rec {
     touch "./install.lock"
 
     # Mono runtimes from nix package (used by generated `OpenDebugAD7`).
-    mv ./debugAdapters/OpenDebugAD7 ./debugAdapters/OpenDebugAD7_orig
-    cp -p "${openDebugAD7Script}" "./debugAdapters/OpenDebugAD7"
+    mv ./debugAdapters/bin/OpenDebugAD7 ./debugAdapters/bin/OpenDebugAD7_orig
+    cp -p "${openDebugAD7Script}" "./debugAdapters/bin/OpenDebugAD7"
 
     # Clang-format from nix package.
     mv  ./LLVM/ ./LLVM_orig
