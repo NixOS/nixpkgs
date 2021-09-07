@@ -575,6 +575,7 @@ let
     "RandomFields"
     "rareNMtests"
     "rAverage"
+    "RclusTool"
     "Rcmdr"
     "RcmdrPlugin_coin"
     "RcmdrPlugin_depthTools"
