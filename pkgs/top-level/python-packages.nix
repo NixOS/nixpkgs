@@ -5587,6 +5587,8 @@ in {
 
   pomegranate = callPackage ../development/python-modules/pomegranate { };
 
+  pontos = callPackage ../development/python-modules/pontos { };
+
   pony = callPackage ../development/python-modules/pony { };
 
   ponywhoosh = callPackage ../development/python-modules/ponywhoosh { };
@@ -9614,6 +9616,8 @@ in {
   yfinance = callPackage ../development/python-modules/yfinance { };
 
   yoda = toPythonModule (pkgs.yoda.override { inherit python; });
+
+  youless-api = callPackage ../development/python-modules/youless-api { };
 
   youtube-dl = callPackage ../tools/misc/youtube-dl { };
 

@@ -1017,6 +1017,9 @@ with pkgs;
     extraLibs = config.st.extraLibs or [];
   };
   xst = callPackage ../applications/terminal-emulators/st/xst.nix { };
+  lukesmithxyz-st = callPackage ../applications/terminal-emulators/st/lukesmithxyz-st { };
+  mcaimi-st = callPackage ../applications/terminal-emulators/st/mcaimi-st.nix { };
+  siduck76-st = callPackage ../applications/terminal-emulators/st/siduck76-st.nix { };
 
   stupidterm = callPackage ../applications/terminal-emulators/stupidterm {
     gtk = gtk3;
@@ -7212,7 +7215,7 @@ with pkgs;
     pythonPackages = python3Packages;
   };
 
-  mirakurun = nodePackages.mirakurun;
+  mirakurun = callPackage ../applications/video/mirakurun { };
 
   miredo = callPackage ../tools/networking/miredo { };
 
@@ -29494,9 +29497,13 @@ with pkgs;
   steamcmd = steamPackages.steamcmd;
 
   protontricks = python3Packages.callPackage ../tools/package-management/protontricks {
-    inherit steam-run;
-    inherit winetricks;
-    inherit (gnome) zenity;
+    winetricks = winetricks.override {
+      # Remove default build of wine to reduce closure size.
+      # Falls back to wine in PATH.
+      wine = null;
+    };
+
+    inherit steam-run yad;
   };
 
   protonup = with python3Packages; toPythonApplication protonup;
