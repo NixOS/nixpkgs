@@ -36,6 +36,17 @@ let
     scanSnapDriversPackage = config.hardware.sane.drivers.scanSnap.package;
   };
 
+  # We no longer expose `env` in the system sessionVariables, so
+  # we'll need a way for users to run SANE-depending programs (xsane, etc)
+  # with the correct environment.
+  wrapHelper = pkgs.writeScriptBin "sane-wrap" ''
+    ${
+      concatStringsSep "\n"
+        (mapAttrsToList (name: value: ''export ${name}="${value}"'') env)
+    }
+
+    exec $@
+  '';
 
   wrappedPkg = pkgs.runCommand "sane-backends-wrapper"
     {
@@ -59,7 +70,7 @@ let
   baseDerivs = [ netConf ]
     ++ optional config.services.saned.enable sanedConf
     ++ config.hardware.sane.extraBackends;
-  derivsToInstall = baseDerivs ++ (singleton wrappedPkg);
+  derivsToInstall = baseDerivs ++ [ wrappedPkg wrapHelper ];
 
   enabled = config.hardware.sane.enable || config.services.saned.enable;
 
