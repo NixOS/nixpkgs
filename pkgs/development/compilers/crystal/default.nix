@@ -219,48 +219,6 @@ let
 
 in
 rec {
-  binaryCrystal_0_31 = genericBinary {
-    version = "0.31.1";
-    sha256s = {
-      x86_64-linux = "0r8salf572xrnr4m6ll9q5hz6jj8q7ff1rljlhmqb1r26a8mi2ih";
-      i686-linux = "0hridnis5vvrswflx0q67xfg5hryhz6ivlwrb9n4pryj5d1gwjrr";
-      x86_64-darwin = "1dgxgv0s3swkc5cwawzgpbc6bcd2nx4hjxc7iw2h907y1vgmbipz";
-    };
-  };
-
-  crystal_0_31 = generic {
-    version = "0.31.1";
-    sha256 = "1dswxa32w16gnc6yjym12xj7ibg0g6zk3ngvl76lwdjqb1h6lwz8";
-    doCheck = false; # 5 checks are failing now
-    binary = binaryCrystal_0_31;
-  };
-
-  crystal_0_32 = generic {
-    version = "0.32.1";
-    sha256 = "120ndi3nhh2r52hjvhwfb49cdggr1bzdq6b8xg7irzavhjinfza6";
-    binary = crystal_0_31;
-  };
-
-  crystal_0_33 = generic {
-    version = "0.33.0";
-    sha256 = "1zg0qixcws81s083wrh54hp83ng2pa8iyyafaha55mzrh8293jbi";
-    binary = crystal_0_32;
-  };
-
-  crystal_0_34 = generic {
-    version = "0.34.0";
-    sha256 = "110lfpxk9jnqyznbfnilys65ixj5sdmy8pvvnlhqhc3ccvrlnmq4";
-    binary = crystal_0_33;
-  };
-
-  crystal_0_35 = generic {
-    version = "0.35.1";
-    sha256 = "0p51bjl1nsvwsm64lqq421dcsxa201w7wwq8plw4r8wqarpq0g69";
-    binary = crystal_0_34;
-    # Needs git to build as per https://github.com/crystal-lang/crystal/issues/9789
-    extraBuildInputs = [ git ];
-  };
-
   binaryCrystal_0_36 = genericBinary {
     version = "0.36.1";
     sha256s = {
