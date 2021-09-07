@@ -1,4 +1,13 @@
-{ lib, fetchFromGitHub, stdenv, zlib, ninja, meson, pkg-config }:
+{ lib
+, fetchFromGitHub
+, stdenv
+, zlib
+, ninja
+, meson
+, pkg-config
+, cmake
+, libpng
+}:
 
 stdenv.mkDerivation rec {
   pname = "libspng";
@@ -11,13 +20,32 @@ stdenv.mkDerivation rec {
     sha256 = "0n91mr06sr34cqq91738251iaw21h5c4jgjpn0kqfx69ywxcl9fj";
   };
 
+  doCheck = true;
+
   mesonBuildType = "release";
 
-  outputs = [ "out" "dev" ];
-  outputBin = "dev";
+  mesonFlags = [
+    # this is required to enable testing
+    # https://github.com/randy408/libspng/blob/bc383951e9a6e04dbc0766f6737e873e0eedb40b/tests/README.md#testing
+    "-Ddev_build=true"
+  ];
 
-  buildInputs = [ pkg-config zlib ];
-  nativeBuildInputs = [ ninja meson ];
+  outputs = [ "out" "dev" ];
+
+  checkInputs = [
+    cmake
+    libpng
+  ];
+
+  buildInputs = [
+    pkg-config
+    zlib
+  ];
+
+  nativeBuildInputs = [
+    ninja
+    meson
+  ];
 
   meta = with lib; {
     description = "Simple, modern libpng alternative";
