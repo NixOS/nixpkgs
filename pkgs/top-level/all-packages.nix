@@ -5624,7 +5624,9 @@ with pkgs;
 
   govc = callPackage ../tools/virtualization/govc { };
 
-  goverlay = callPackage ../tools/graphics/goverlay { };
+  goverlay = callPackage ../tools/graphics/goverlay {
+    inherit (qt5) wrapQtAppsHook;
+  };
 
   gpart = callPackage ../tools/filesystems/gpart { };
 
