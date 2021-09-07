@@ -1,4 +1,4 @@
-<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="sec-writing-documentation">
+<chapter xmlns="http://docbook.org/ns/docbook"  xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude" xml:id="sec-writing-documentation">
   <title>Writing NixOS Documentation</title>
   <para>
     As NixOS grows, so too does the need for a catalogue and explanation
