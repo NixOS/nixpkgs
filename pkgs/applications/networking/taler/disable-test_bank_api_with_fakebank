@@ -1,0 +1,12 @@
+diff --git a/src/testing/Makefile.am b/src/testing/Makefile.am
+index 7fa7ef3..98869b7 100644
+--- a/src/testing/Makefile.am
++++ b/src/testing/Makefile.am
+@@ -130,7 +130,6 @@ AM_TESTS_ENVIRONMENT=export TALER_PREFIX=$${TALER_PREFIX:-@libdir@};export PATH=
+ check_PROGRAMS = \
+   test_auditor_api \
+   test_auditor_api_version \
+-  test_bank_api_with_fakebank \
+   test_bank_api_with_pybank \
+   test_bank_api_with_nexus \
+   test_exchange_api \

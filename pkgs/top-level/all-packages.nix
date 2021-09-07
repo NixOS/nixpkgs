@@ -10188,7 +10188,7 @@ with pkgs;
 
   tagtime = callPackage ../applications/misc/tagtime { };
 
-  inherit (callPackages ../applications/networking/taler { })
+  inherit (callPackages ../applications/networking/taler { jinja2 = python39Packages.jinja2;})
     taler-exchange taler-merchant;
 
   tangram = callPackage ../applications/networking/instant-messengers/tangram { };
