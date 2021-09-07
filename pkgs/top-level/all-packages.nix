@@ -21699,6 +21699,9 @@ with pkgs;
   linuxPackages_5_10_hardened = recurseIntoAttrs (hardenedLinuxPackagesFor pkgs.linux_5_10 { });
   linux_5_10_hardened = linuxPackages_5_10_hardened.kernel;
 
+  linuxPackages_5_13_hardened = recurseIntoAttrs (hardenedLinuxPackagesFor pkgs.linux_5_13 { });
+  linux_5_13_hardened = linuxPackages_5_13_hardened.kernel;
+
   # Hardkernel (Odroid) kernels.
   linuxPackages_hardkernel_4_14 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_hardkernel_4_14);
   linuxPackages_hardkernel_latest = linuxPackages_hardkernel_4_14;
