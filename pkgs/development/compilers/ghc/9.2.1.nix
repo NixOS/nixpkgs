@@ -313,6 +313,7 @@ stdenv.mkDerivation (rec {
     # https://gitlab.haskell.org/ghc/ghc/-/issues/19950#note_373726
     broken = (enableIntegerSimple && hostPlatform.isMusl)
       || stdenv.hostPlatform.isDarwin;
+    hydraPlatforms = lib.remove "x86_64-darwin" ghc.meta.platforms;
   };
 
 } // lib.optionalAttrs targetPlatform.useAndroidPrebuilt {
