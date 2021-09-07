@@ -18176,7 +18176,8 @@ with pkgs;
 
   inherit (callPackages ../development/libraries/openssl { })
     openssl_1_0_2
-    openssl_1_1;
+    openssl_1_1
+    openssl_3_0;
 
   openssl-chacha = callPackage ../development/libraries/openssl/chacha.nix { };
 
