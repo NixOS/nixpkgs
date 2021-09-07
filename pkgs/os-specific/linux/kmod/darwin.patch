@@ -69,14 +69,17 @@ diff --git a/shared/macro.h b/shared/macro.h
 index 4fc5405..b5a2702 100644
 --- a/shared/macro.h
 +++ b/shared/macro.h
-@@ -71,3 +71,7 @@
- #endif
- 
- #define UNIQ __COUNTER__
-+
-+ #if !defined(__linux__)
+@@ -53,6 +53,10 @@
+ #define CONCATENATE(x, y) XCONCATENATE(x, y)
+ #define UNIQ(x) CONCATENATE(x, __COUNTER__)
+
++#if !defined(__linux__)
 +#define program_invocation_short_name getprogname()
 +#endif
++
+ /* Temporaries for importing index handling */
+ #define NOFAIL(x) (x)
+ #define fatal(x...) do { } while (0)
 diff --git a/shared/missing.h b/shared/missing.h
 index 4c0d136..ad8ec0f 100644
 --- a/shared/missing.h
