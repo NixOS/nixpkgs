@@ -9610,6 +9610,8 @@ in {
 
   yoda = toPythonModule (pkgs.yoda.override { inherit python; });
 
+  youless-api = callPackage ../development/python-modules/youless-api { };
+
   youtube-dl = callPackage ../tools/misc/youtube-dl { };
 
   youtube-dl-light = callPackage ../tools/misc/youtube-dl {
