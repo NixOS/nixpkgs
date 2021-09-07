@@ -9,6 +9,11 @@
 # linted:
 # $ nix run nixpkgs.python3Packages.flake8 -c flake8 --ignore E501,E265,E402 update.py
 
+# If you see `HTTP Error 429: too many requests` errors while running this script,
+# refer to:
+#
+# https://github.com/NixOS/nixpkgs/blob/master/doc/languages-frameworks/vim.section.md#updating-plugins-in-nixpkgs-updating-plugins-in-nixpkgs
+
 import inspect
 import os
 import sys
