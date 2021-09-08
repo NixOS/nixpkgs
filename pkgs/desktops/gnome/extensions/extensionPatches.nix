@@ -11,4 +11,12 @@
 # the upstream repository's sources.
 super: super // {
 
+  "display-brightness-ddcutil@themightydeity.github.com" = super."display-brightness-ddcutil@themightydeity.github.com".overrideAttrs (old: {
+    # Has a hard-coded path to a run-time dependency
+    # https://github.com/NixOS/nixpkgs/issues/136111
+    postPatch = ''
+      substituteInPlace "extension.js" --replace "/usr/bin/ddcutil" "${ddcutil}/bin/ddcutil"
+    '';
+  });
+
 }
