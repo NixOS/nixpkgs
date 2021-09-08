@@ -78,12 +78,12 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://gnupg.org";
-    description = "Modern (2.1) release of the GNU Privacy Guard, a GPL OpenPGP implementation";
+    description = "Modern (2.2) release of the GNU Privacy Guard, a GPL OpenPGP implementation";
     license = licenses.gpl3Plus;
     longDescription = ''
       The GNU Privacy Guard is the GNU project's complete and free
       implementation of the OpenPGP standard as defined by RFC4880.  GnuPG
-      "modern" (2.1) is the latest development with a lot of new features.
+      "modern" (2.2) is the latest development with a lot of new features.
       GnuPG allows to encrypt and sign your data and communication, features a
       versatile key management system as well as access modules for all kind of
       public key directories.  GnuPG, also known as GPG, is a command line tool
