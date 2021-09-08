@@ -13,7 +13,7 @@
    effect after you run <command>nixos-rebuild</command>.
   </para>
  </partintro>
- <xi:include href="config-syntax.xml" />
+ <xi:include href="../from_md/configuration/config-syntax.chapter.xml" />
  <xi:include href="package-mgmt.xml" />
  <xi:include href="../from_md/configuration/user-mgmt.chapter.xml" />
  <xi:include href="file-systems.xml" />
