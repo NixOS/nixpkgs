@@ -16,7 +16,7 @@
  <xi:include href="../from_md/configuration/config-syntax.chapter.xml" />
  <xi:include href="../from_md/configuration/package-mgmt.chapter.xml" />
  <xi:include href="../from_md/configuration/user-mgmt.chapter.xml" />
- <xi:include href="file-systems.xml" />
+ <xi:include href="../from_md/configuration/file-systems.chapter.xml" />
  <xi:include href="../from_md/configuration/x-windows.chapter.xml" />
  <xi:include href="../from_md/configuration/wayland.chapter.xml" />
  <xi:include href="../from_md/configuration/gpu-accel.chapter.xml" />
