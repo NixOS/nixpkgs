@@ -379,6 +379,7 @@ in
   radicale = handleTest ./radicale.nix {};
   redis = handleTest ./redis.nix {};
   redmine = handleTest ./redmine.nix {};
+  restartByActivationScript = handleTest ./restart-by-activation-script.nix {};
   restic = handleTest ./restic.nix {};
   robustirc-bridge = handleTest ./robustirc-bridge.nix {};
   roundcube = handleTest ./roundcube.nix {};

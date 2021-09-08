@@ -2,6 +2,7 @@
 
 use strict;
 use warnings;
+use File::Path qw(make_path);
 use File::Basename;
 use File::Slurp;
 use Net::DBus;
@@ -14,9 +15,17 @@ my $out = "@out@";
 my $curSystemd = abs_path("/run/current-system/sw/bin");
 
 # To be robust against interruption, record what units need to be started etc.
-my $startListFile = "/run/systemd/start-list";
-my $restartListFile = "/run/systemd/restart-list";
-my $reloadListFile = "/run/systemd/reload-list";
+my $startListFile = "/run/nixos/start-list";
+my $restartListFile = "/run/nixos/restart-list";
+my $reloadListFile = "/run/nixos/reload-list";
+
+# Parse restart/reload requests by the activation script
+my $restartByActivationFile = "/run/nixos/activation-restart-list";
+my $reloadByActivationFile = "/run/nixos/activation-reload-list";
+my $dryRestartByActivationFile = "/run/nixos/dry-activation-restart-list";
+my $dryReloadByActivationFile = "/run/nixos/dry-activation-reload-list";
+
+make_path("/run/nixos", { mode => 0755 });
 
 my $action = shift @ARGV;
 
@@ -150,7 +159,7 @@ $unitsToRestart{$_} = 1 foreach
     split('\n', read_file($restartListFile, err_mode => 'quiet') // "");
 
 $unitsToReload{$_} = 1 foreach
-    split '\n', read_file($reloadListFile, err_mode => 'quiet') // "";
+    split('\n', read_file($reloadListFile, err_mode => 'quiet') // "");
 
 my $activePrev = getActiveUnits;
 while (my ($unit, $state) = each %{$activePrev}) {
@@ -366,6 +375,12 @@ if ($action eq "dry-activate") {
     print STDERR "would activate the configuration...\n";
     system("$out/dry-activate", "$out");
 
+    $unitsToRestart{$_} = 1 foreach
+        split('\n', read_file($dryRestartByActivationFile, err_mode => 'quiet') // "");
+
+    $unitsToReload{$_} = 1 foreach
+        split('\n', read_file($dryReloadByActivationFile, err_mode => 'quiet') // "");
+
     print STDERR "would restart systemd\n" if $restartSystemd;
     print STDERR "would restart the following units: ", join(", ", sort(keys %unitsToRestart)), "\n"
         if scalar(keys %unitsToRestart) > 0;
@@ -373,6 +388,8 @@ if ($action eq "dry-activate") {
         if scalar @unitsToStartFiltered;
     print STDERR "would reload the following units: ", join(", ", sort(keys %unitsToReload)), "\n"
         if scalar(keys %unitsToReload) > 0;
+    unlink($dryRestartByActivationFile);
+    unlink($dryReloadByActivationFile);
     exit 0;
 }
 
@@ -394,6 +411,15 @@ print STDERR "NOT restarting the following changed units: ", join(", ", sort(key
 my $res = 0;
 print STDERR "activating the configuration...\n";
 system("$out/activate", "$out") == 0 or $res = 2;
+
+# Handle the activation script requesting the restart or reload of a unit.
+# We can only restart and reload (not stop/start) because the units to be
+# stopped are already stopped before the activation script is run.
+$unitsToRestart{$_} = 1 foreach
+    split('\n', read_file($restartByActivationFile, err_mode => 'quiet') // "");
+
+$unitsToReload{$_} = 1 foreach
+    split('\n', read_file($reloadByActivationFile, err_mode => 'quiet') // "");
 
 # Restart systemd if necessary. Note that this is done using the
 # current version of systemd, just in case the new one has trouble
@@ -434,6 +460,7 @@ if (scalar(keys %unitsToReload) > 0) {
     print STDERR "reloading the following units: ", join(", ", sort(keys %unitsToReload)), "\n";
     system("@systemd@/bin/systemctl", "reload", "--", sort(keys %unitsToReload)) == 0 or $res = 4;
     unlink($reloadListFile);
+    unlink($reloadByActivationFile);
 }
 
 # Restart changed services (those that have to be restarted rather
@@ -442,6 +469,7 @@ if (scalar(keys %unitsToRestart) > 0) {
     print STDERR "restarting the following units: ", join(", ", sort(keys %unitsToRestart)), "\n";
     system("@systemd@/bin/systemctl", "restart", "--", sort(keys %unitsToRestart)) == 0 or $res = 4;
     unlink($restartListFile);
+    unlink($restartByActivationFile);
 }
 
 # Start all active targets, as well as changed units we stopped above.
