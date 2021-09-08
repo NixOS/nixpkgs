@@ -21,7 +21,7 @@
  <xi:include href="../from_md/configuration/wayland.chapter.xml" />
  <xi:include href="../from_md/configuration/gpu-accel.chapter.xml" />
  <xi:include href="../from_md/configuration/xfce.chapter.xml" />
- <xi:include href="networking.xml" />
+ <xi:include href="../from_md/configuration/networking.chapter.xml" />
  <xi:include href="../from_md/configuration/linux-kernel.chapter.xml" />
  <xi:include href="../from_md/configuration/subversion.chapter.xml" />
  <xi:include href="../generated/modules.xml" xpointer="xpointer(//section[@id='modules']/*)" />
