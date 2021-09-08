@@ -1,9 +1,14 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy27 }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   version = "2.3.1";
   pname = "elementpath";
-  disabled = isPy27; # uses incompatible class syntax
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "sissaschool";
