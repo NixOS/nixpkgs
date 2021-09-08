@@ -10,7 +10,7 @@
 
 let
   sha256 = {
-    "x86_64-linux" = "sha256-FRZTUOlOK1bIbrHdR9yQv45zMhby3tWbMPpaPPq3L9s=";
+    "x86_64-linux" = "sha256-Tasynkzyy8UIalQn6qhIuPWDflf4pL76D2czgEijrPw=";
     "i686-linux" = "0z6y45sz086njpywg7f0jn6n02qynb1qbi889g2kcgwbfjvmcpm1";
   }."${stdenv.system}";
 
@@ -25,7 +25,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "etcher";
-  version = "1.5.121";
+  version = "1.5.122";
 
   src = fetchurl {
     url = "https://github.com/balena-io/etcher/releases/download/v${version}/balena-etcher-electron_${version}_${arch}.deb";
