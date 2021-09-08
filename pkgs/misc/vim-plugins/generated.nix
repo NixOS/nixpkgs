@@ -3482,12 +3482,12 @@ final: prev:
     pname = "neorg";
     version = "2021-08-26";
     src = fetchFromGitHub {
-      owner = "vhyrro";
+      owner = "nvim-neorg";
       repo = "neorg";
       rev = "45ded3cbd52da312b71bffd8b8a6b9bed1367500";
       sha256 = "1792j7h2an4kfc9jp6p8fa7mwri7295rb30siar35c0diapzai32";
     };
-    meta.homepage = "https://github.com/vhyrro/neorg/";
+    meta.homepage = "https://github.com/nvim-neorg/neorg/";
   };
 
   neoscroll-nvim = buildVimPluginFrom2Nix {
