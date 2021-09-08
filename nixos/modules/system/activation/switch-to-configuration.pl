@@ -20,6 +20,10 @@ my $reloadListFile = "/run/systemd/reload-list";
 
 my $action = shift @ARGV;
 
+# Prepare the environment
+foreach (keys %ENV) {
+    delete $ENV{$_} unless $_ eq "NIXOS_NO_SYNC";
+}
 if ("@localeArchive@" ne "") {
     $ENV{LOCALE_ARCHIVE} = "@localeArchive@";
 }
