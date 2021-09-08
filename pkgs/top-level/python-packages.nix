@@ -2701,7 +2701,7 @@ in {
   flatbuffers_2 = callPackage ../development/python-modules/flatbuffers {
     inherit (pkgs) flatbuffers;
   };
-  flatbuffers = flatbuffers_2;
+  flatbuffers = self.flatbuffers_2;
 
   flexmock = callPackage ../development/python-modules/flexmock { };
 
