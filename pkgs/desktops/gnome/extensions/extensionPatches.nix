@@ -19,4 +19,14 @@ super: super // {
     '';
   });
 
+  "gnome-shell-screenshot@ttll.de" = super."gnome-shell-screenshot@ttll.de".overrideAttrs (old: {
+    # Requires gjs
+    # https://github.com/NixOS/nixpkgs/issues/136112
+    postPatch = ''
+      for file in *.js; do
+        substituteInPlace $file --replace "gjs" "${gjs}/bin/gjs"
+      done
+    '';
+  });
+
 }
