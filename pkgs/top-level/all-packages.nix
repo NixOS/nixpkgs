@@ -6212,6 +6212,8 @@ with pkgs;
 
   itm-tools = callPackage ../development/tools/misc/itm-tools { };
 
+  ite-backlight = callPackage ../misc/ite-backlight { };
+
   iwgtk = callPackage ../tools/networking/iwgtk { };
 
   ix = callPackage ../tools/misc/ix { };
