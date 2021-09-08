@@ -2695,9 +2695,13 @@ in {
 
   flask_wtf = callPackage ../development/python-modules/flask-wtf { };
 
-  flatbuffers = callPackage ../development/python-modules/flatbuffers {
+  flatbuffers_1_12 = callPackage ../development/python-modules/flatbuffers {
+    flatbuffers = pkgs.flatbuffers_1_12;
+  };
+  flatbuffers_2 = callPackage ../development/python-modules/flatbuffers {
     inherit (pkgs) flatbuffers;
   };
+  flatbuffers = flatbuffers_2;
 
   flexmock = callPackage ../development/python-modules/flexmock { };
 
@@ -8694,7 +8698,7 @@ in {
     nccl = pkgs.nccl_cudatoolkit_11;
     inherit (pkgs.darwin.apple_sdk.frameworks) Foundation Security;
     flatbuffers-core = pkgs.flatbuffers;
-    flatbuffers-python = self.flatbuffers;
+    flatbuffers-python = self.flatbuffers_1_12;
     lmdb-core = pkgs.lmdb;
   };
 

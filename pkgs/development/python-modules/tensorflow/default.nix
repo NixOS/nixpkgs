@@ -3,11 +3,27 @@
 # Python deps
 , buildPythonPackage, pythonOlder, pythonAtLeast, python
 # Python libraries
-, numpy, tensorflow-tensorboard_2, absl-py
-, future, setuptools, wheel, keras-preprocessing, google-pasta
-, opt-einsum, astunparse, h5py
-, termcolor, grpcio, six, wrapt, protobuf, tensorflow-estimator_2
-, dill, flatbuffers-python, tblib, typing-extensions
+, absl-py
+, astunparse
+, dill
+, flatbuffers-python
+, google-pasta
+, grpcio
+, h5py
+, Keras
+, keras-preprocessing
+, numpy
+, opt-einsum
+, protobuf
+, setuptools
+, six
+, tblib
+, tensorflow-estimator_2
+, tensorflow-tensorboard_2
+, termcolor
+, typing-extensions
+, wheel
+, wrapt
 # Common deps
 , git, pybind11, which, binutils, glibcLocales, cython, perl
 # Common libraries
@@ -72,7 +88,7 @@ let
 
   tfFeature = x: if x then "1" else "0";
 
-  version = "2.4.2";
+  version = "2.6.0";
   variant = if cudaSupport then "-gpu" else "";
   pname = "tensorflow${variant}";
 
@@ -110,21 +126,18 @@ let
       owner = "tensorflow";
       repo = "tensorflow";
       rev = "v${version}";
-      sha256 = "07a2y05hixch1bjag5pzw3p1m7bdj3bq4gdvmsfk2xraz49b1pi8";
+      sha256 = "sha256:0736mx2b9q8fzyl523h1qlqmjqbngx36c9fmddzavw09az49bhh7";
     };
 
-    patches = [
-      # included from 2.6.0 onwards
-      (fetchpatch {
-        name = "fix-numpy-1.20-notimplementederror.patch";
-        url = "https://github.com/tensorflow/tensorflow/commit/b258941525f496763d4277045b6513c815720e3a.patch";
-        sha256 = "19f9bzrcfsynk11s2hqvscin5c65zf7r6g3nb10jnimw79vafiry";
-      })
-      # Relax too strict Python packages versions dependencies.
-      ./relax-dependencies.patch
-      # Add missing `io_bazel_rules_docker` dependency.
-      ./workspace.patch
-    ];
+    # Relax too strict Python packages versions dependencies.
+    patchPhase = ''
+      sed -i 's/typing_extensions ~= 3.7.4/typing_extensions >= 3.7.4/' tensorflow/tools/pip_package/setup.py
+      sed -i 's/numpy ~= 1.19.2/numpy >= 1.19.2/' tensorflow/tools/pip_package/setup.py
+      sed -i 's/h5py ~= 3.1.0/h5py >= 3.1.0/' tensorflow/tools/pip_package/setup.py
+      sed -i 's/six ~= 1.15.0/six >= 1.15.0/' tensorflow/tools/pip_package/setup.py
+      sed -i 's/wheel ~= 0.35/wheel >= 0.35/' tensorflow/tools/pip_package/setup.py
+      sed -i 's/gast == 0.4.0/gast >= 0.4.0/' tensorflow/tools/pip_package/setup.py
+    '';
 
     # On update, it can be useful to steal the changes from gentoo
     # https://gitweb.gentoo.org/repo/gentoo.git/tree/sci-libs/tensorflow
@@ -206,7 +219,6 @@ let
       "opt_einsum_archive"
       "org_sqlite"
       "pasta"
-      "pcre"
       "png"
       "pybind11"
       "six_archive"
@@ -294,9 +306,9 @@ let
     fetchAttrs = {
       # cudaSupport causes fetch of ncclArchive, resulting in different hashes
       sha256 = if cudaSupport then
-        "10m6qj3kchgxfgb6qh59vc51knm9r9pkng8bf90h00dnggvv8234"
+        "sha256:18kid14smhf01ps9kydjrbjpcc82x3h0lxbhw6dlf7bb5qqq6yph"
       else
-        "04a98yrp09nd0p17k0jbzkgjppxs0yma7m5zkfrwgvr4g0w71v68";
+        "sha256:029pn5n1sp3swdxf8ag5lqw02hrjb24gj6w5m8cdpdp0czyv4nxs";
     };
 
     buildAttrs = {
@@ -373,10 +385,12 @@ in buildPythonPackage {
     google-pasta
     grpcio
     h5py
+    Keras
     keras-preprocessing
     numpy
     opt-einsum
     protobuf
+    python.pkgs.clang_5
     six
     tblib
     tensorflow-estimator_2
