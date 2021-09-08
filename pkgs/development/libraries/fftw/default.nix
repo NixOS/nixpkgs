@@ -9,6 +9,8 @@
 , enableAvx2 ? stdenv.hostPlatform.avx2Support
 , enableAvx512 ? stdenv.hostPlatform.avx512Support
 , enableFma ? stdenv.hostPlatform.fmaSupport
+, enableMpi ? false
+, mpi
 }:
 
 with lib;
@@ -38,10 +40,10 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ gfortran ];
 
-  buildInputs = lib.optionals stdenv.cc.isClang [
+  buildInputs = optionals stdenv.cc.isClang [
     # TODO: This may mismatch the LLVM version sin the stdenv, see #79818.
     llvmPackages.openmp
-  ];
+  ] ++ optional enableMpi mpi;
 
   configureFlags =
     [ "--enable-shared"
@@ -56,6 +58,7 @@ stdenv.mkDerivation {
     ++ optional enableAvx512 "--enable-avx512"
     ++ optional enableFma "--enable-fma"
     ++ [ "--enable-openmp" ]
+    ++ optional enableMpi "--enable-mpi"
     # doc generation causes Fortran wrapper generation which hard-codes gcc
     ++ optional (!withDoc) "--disable-doc";
 

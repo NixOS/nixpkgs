@@ -244,6 +244,7 @@ inkarkat/vim-ReplaceWithSameIndentRegister
 inkarkat/vim-SyntaxRange
 int3/vim-extradite
 Iron-E/nvim-highlite
+ishan9299/nvim-solarized-lua
 itchyny/calendar.vim
 itchyny/lightline.vim
 itchyny/thumbnail.vim
