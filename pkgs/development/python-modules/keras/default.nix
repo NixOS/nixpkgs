@@ -5,12 +5,13 @@
 }:
 
 buildPythonPackage rec {
-  pname = "Keras";
-  version = "2.4.3";
+  pname = "keras";
+  version = "2.6.0";
+  format = "wheel";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "fedd729b52572fb108a98e3d97e1bac10a81d3917d2103cc20ab2a5f03beb973";
+    inherit format pname version;
+    sha256 = "sha256:1rrpjhk191h9ksnxvkkaj24nx48nxy08b2p47j0gwacqd9jzajjh";
   };
 
   checkInputs = [
@@ -23,9 +24,6 @@ buildPythonPackage rec {
     six pyyaml numpy scipy h5py
     keras-applications keras-preprocessing
   ];
-
-  # Couldn't get tests working
-  doCheck = false;
 
   meta = with lib; {
     description = "Deep Learning library for Theano and TensorFlow";
