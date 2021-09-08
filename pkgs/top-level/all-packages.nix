@@ -5978,6 +5978,8 @@ with pkgs;
 
   html-proofer = callPackage ../tools/misc/html-proofer { };
 
+  htmlq = callPackage ../development/tools/htmlq { };
+
   htpdate = callPackage ../tools/networking/htpdate { };
 
   http-prompt = callPackage ../tools/networking/http-prompt { };
