@@ -14,7 +14,7 @@
   </para>
  </partintro>
  <xi:include href="../from_md/configuration/config-syntax.chapter.xml" />
- <xi:include href="package-mgmt.xml" />
+ <xi:include href="../from_md/configuration/package-mgmt.chapter.xml" />
  <xi:include href="../from_md/configuration/user-mgmt.chapter.xml" />
  <xi:include href="file-systems.xml" />
  <xi:include href="../from_md/configuration/x-windows.chapter.xml" />
