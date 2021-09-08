@@ -10828,6 +10828,8 @@ with pkgs;
 
   aspectj = callPackage ../development/compilers/aspectj { };
 
+  atasm = callPackage ../development/compilers/atasm { };
+
   ats = callPackage ../development/compilers/ats { };
   ats2 = callPackage ../development/compilers/ats2 { };
 
