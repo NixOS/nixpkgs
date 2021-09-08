@@ -21,7 +21,7 @@ buildGoModule rec {
   };
 
   meta = with lib; {
-    maintainers = with maintainers; [ bricewge ];
+    maintainers = with maintainers; [ ];
     license = licenses.asl20;
     description = "Command line client for the Drone continuous integration server";
   };
