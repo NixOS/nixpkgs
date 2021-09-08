@@ -3106,6 +3106,18 @@ final: prev:
     meta.homepage = "https://github.com/wfxr/minimap.vim/";
   };
 
+  minsnip-nvim = buildVimPluginFrom2Nix {
+    pname = "minsnip.nvim";
+    version = "2021-09-06";
+    src = fetchFromGitHub {
+      owner = "jose-elias-alvarez";
+      repo = "minsnip.nvim";
+      rev = "0bcc73cb716b07d4286ef714f5a07d94204d484c";
+      sha256 = "0k6dmqmw52scvwfr5w8dg7388cy95vdvgfw3f4prwyls60i9x55w";
+    };
+    meta.homepage = "https://github.com/jose-elias-alvarez/minsnip.nvim/";
+  };
+
   mkdx = buildVimPluginFrom2Nix {
     pname = "mkdx";
     version = "2021-07-05";
