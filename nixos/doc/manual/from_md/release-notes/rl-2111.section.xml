@@ -119,6 +119,14 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://github.com/cloudflare/cloudflared">cloudflared</link>,
+          a program which (among other things) can proxy and encrypt
+          traditional DNS requests using DNS-over-HTTPS. Available as
+          <link xlink:href="options.html#opt-services.cloudflared-dns">services.cloudflared-dns</link>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://github.com/maxmind/geoipupdate">geoipupdate</link>,
           a GeoIP database updater from MaxMind. Available as
           <link xlink:href="options.html#opt-services.geoipupdate.enable">services.geoipupdate</link>.
