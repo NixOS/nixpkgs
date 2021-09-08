@@ -1,0 +1,39 @@
+From ae37386278ed11724c1e56eeb53aa5d5885ced83 Mon Sep 17 00:00:00 2001
+From: Daniel Kahn Gillmor <dkg@fifthhorseman.net>
+Date: Tue, 7 Sep 2021 12:10:44 +0200
+Subject: [PATCH] dirmngr: Only use SKS pool CA for SKS pool
+
+* dirmngr/http.c (http_session_new): when checking whether the
+keyserver is the HKPS pool, check specifically against the pool name,
+as ./configure might have been used to select a different default
+keyserver.  It makes no sense to apply Kristian's certificate
+authority to anything other than the literal host
+hkps.pool.sks-keyservers.net.
+
+Modified to apply to GnuPG release 2.3.1.
+
+Signed-off-by: Daniel Kahn Gillmor <dkg@fifthhorseman.net>
+Co-authored-by: Leon Schuermann <leon@is.currently.online>
+GnuPG-Bug-Id: 4593
+---
+ dirmngr/http.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/dirmngr/http.c b/dirmngr/http.c
+index f7f65303b..4a29e9a8a 100644
+--- a/dirmngr/http.c
++++ b/dirmngr/http.c
+@@ -763,7 +763,7 @@ http_session_new (http_session_t *r_session,
+ 
+     is_hkps_pool = (intended_hostname
+                     && !ascii_strcasecmp (intended_hostname,
+-                                          get_default_keyserver (1)));
++                                          "hkps.pool.sks-keyservers.net"));
+ 
+     /* If we are looking for the hkps pool from sks-keyservers.net,
+      * then forcefully use its dedicated certificate authority.  */
+
+base-commit: cbbdb88627fe57ebf02b8b4bf9002d356e57e2e4
+-- 
+2.31.1
+
