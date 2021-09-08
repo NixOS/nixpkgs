@@ -17,7 +17,9 @@ stdenv.mkDerivation {
     inherit mpi;
   };
 
-  buildInputs = [ blas lapack gfortran ]
+  nativeBuildInputs = [ gfortran ];
+
+  buildInputs = [ blas lapack ]
     ++ lib.optionals useMpi [ mpi scalapack ];
 
   enableParallelBuilding = true;

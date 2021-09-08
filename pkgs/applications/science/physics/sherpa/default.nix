@@ -13,7 +13,10 @@ stdenv.mkDerivation rec {
     sed -ie '/sys\/sysctl.h/d' ATOOLS/Org/Run_Parameter.C
   '';
 
-  buildInputs = [ gfortran sqlite lhapdf rivet ];
+
+  nativeBuildInputs = [ gfortran ];
+
+  buildInputs = [ sqlite lhapdf rivet ];
 
   enableParallelBuilding = true;
 

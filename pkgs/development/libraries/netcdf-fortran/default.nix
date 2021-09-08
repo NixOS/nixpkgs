@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "00qwg4v250yg8kxp68srrnvfbfim241fnlm071p9ila2mihk8r01";
   };
 
-  buildInputs = [ netcdf hdf5 curl gfortran ];
+  nativeBuildInputs = [ gfortran ];
+  buildInputs = [ netcdf hdf5 curl ];
   doCheck = true;
 
   meta = with lib; {
