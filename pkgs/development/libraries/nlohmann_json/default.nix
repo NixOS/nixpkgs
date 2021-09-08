@@ -26,8 +26,9 @@ stdenv.mkDerivation rec {
   postInstall = "rm -rf $out/lib64";
 
   meta = with lib; {
-    description = "Header only C++ library for the JSON file format";
-    homepage = "https://github.com/nlohmann/json";
+    description = "JSON for Modern C++";
+    homepage = "https://json.nlohmann.me";
+    changelog = "https://github.com/nlohmann/json/blob/develop/ChangeLog.md";
     license = licenses.mit;
     platforms = platforms.all;
   };
