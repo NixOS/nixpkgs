@@ -9086,6 +9086,8 @@ with pkgs;
 
   spicy = callPackage ../development/tools/spicy { };
 
+  spoof-mac = python3Packages.callPackage ../tools/networking/spoof-mac { };
+
   ssh-askpass-fullscreen = callPackage ../tools/networking/ssh-askpass-fullscreen { };
 
   sshguard = callPackage ../tools/security/sshguard {};
@@ -12173,11 +12175,14 @@ with pkgs;
     inherit (llvmPackages_rocm) clang;
   };
 
+  hip = callPackage ../development/compilers/hip {
+    inherit (llvmPackages_rocm) clang clang-unwrapped compiler-rt lld llvm;
+  };
+
   rocm-cmake = callPackage ../development/tools/build-managers/rocm-cmake { };
 
   rocm-comgr = callPackage ../development/libraries/rocm-comgr {
     inherit (llvmPackages_rocm) clang lld llvm;
-    device-libs = rocm-device-libs;
   };
 
   rocm-device-libs = callPackage ../development/libraries/rocm-device-libs {
@@ -12194,10 +12199,11 @@ with pkgs;
     inherit (llvmPackages_rocm) clang-unwrapped llvm;
   };
 
-  # Python >= 3.8 still gives a bunch of warnings.
-  rocm-smi = python37.pkgs.callPackage ../tools/system/rocm-smi { };
+  rocm-smi = python3Packages.callPackage ../tools/system/rocm-smi { };
 
   rocm-thunk = callPackage ../development/libraries/rocm-thunk { };
+
+  rocminfo = callPackage ../development/tools/rocminfo { };
 
   rtags = callPackage ../development/tools/rtags {
     inherit (darwin) apple_sdk;

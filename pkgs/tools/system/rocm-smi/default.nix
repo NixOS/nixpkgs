@@ -1,17 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, cmake, python3 }:
+{ lib, stdenv, fetchFromGitHub, cmake, wrapPython }:
 
 stdenv.mkDerivation rec {
   pname = "rocm-smi";
-  version = "4.1.0";
+  version = "4.3.1";
 
   src = fetchFromGitHub {
     owner = "RadeonOpenCompute";
     repo = "rocm_smi_lib";
     rev = "rocm-${version}";
-    hash = "sha256-LEaC1XhmyoVWrpL05MhgN02LVT2rLKdnw9g2QdfM/uE=";
+    hash = "sha256-Ckno73Otkc9rHEUkSgNoOui+6ZHGUF+B9iAoe0NQH0c=";
   };
 
-  nativeBuildInputs = [ cmake python3.pkgs.wrapPython ];
+  nativeBuildInputs = [ cmake wrapPython ];
 
   postPatch = ''
     # Upstream ROCm is installed in an /opt directory. For this reason,
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     description = "System management interface for AMD GPUs supported by ROCm";
     homepage = "https://github.com/RadeonOpenCompute/ROC-smi";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ lovesegfault ];
     platforms = [ "x86_64-linux" ];
   };
 }
