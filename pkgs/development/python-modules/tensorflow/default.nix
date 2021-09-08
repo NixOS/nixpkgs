@@ -27,7 +27,7 @@
 # Common deps
 , git, pybind11, which, binutils, glibcLocales, cython, perl
 # Common libraries
-, jemalloc, mpi, gast, grpc, sqlite, boringssl, jsoncpp
+, jemalloc, mpi, gast_0_4, grpc, sqlite, boringssl, jsoncpp
 , curl, snappy, flatbuffers-core, lmdb-core, icu, double-conversion, libpng, libjpeg_turbo, giflib
 # Upsteam by default includes cuda support since tensorflow 1.15. We could do
 # that in nix as well. It would make some things easier and less confusing, but
@@ -99,7 +99,7 @@ let
       astunparse
       dill
       flatbuffers-python
-      gast
+      gast_0_4
       google-pasta
       grpcio
       h5py
@@ -136,7 +136,6 @@ let
       sed -i 's/h5py ~= 3.1.0/h5py >= 3.1.0/' tensorflow/tools/pip_package/setup.py
       sed -i 's/six ~= 1.15.0/six >= 1.15.0/' tensorflow/tools/pip_package/setup.py
       sed -i 's/wheel ~= 0.35/wheel >= 0.35/' tensorflow/tools/pip_package/setup.py
-      sed -i 's/gast == 0.4.0/gast >= 0.4.0/' tensorflow/tools/pip_package/setup.py
     '';
 
     # On update, it can be useful to steal the changes from gentoo
@@ -381,7 +380,7 @@ in buildPythonPackage {
     astunparse
     dill
     flatbuffers-python
-    gast
+    gast_0_4
     google-pasta
     grpcio
     h5py
