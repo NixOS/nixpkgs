@@ -24,11 +24,11 @@ let
 in
 with py.pkgs; buildPythonApplication rec {
   pname = "matrix-synapse";
-  version = "1.41.1";
+  version = "1.42.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1vaym6mxnwg2xdqjcigi2sb0kkdi0ly5d5ghakfsysxcfn08d1z8";
+    sha256 = "sha256-wJFjjm9apRqjk5eN/kIEgecHgm/XLbtwXHEpM2pmvO8=";
   };
 
   patches = [
