@@ -77,9 +77,6 @@ GEM
       aws-sdk-s3 (~> 1.0)
       aws-sdk-sqs (~> 1.0)
       fluentd (>= 0.14.22, < 2)
-    fluent-plugin-scribe (1.0.0)
-      fluentd
-      thrift (~> 0.8.0)
     fluent-plugin-webhdfs (1.2.4)
       fluentd (>= 0.14.22)
       webhdfs (>= 0.6.0)
@@ -110,7 +107,6 @@ GEM
       sigdump (~> 0.2.2)
     sigdump (0.2.4)
     strptime (0.2.3)
-    thrift (0.8.0)
     tzinfo (2.0.0)
       concurrent-ruby (~> 1.0)
     tzinfo-data (1.2019.2)
@@ -131,7 +127,6 @@ DEPENDENCIES
   fluent-plugin-record-reformer
   fluent-plugin-rewrite-tag-filter
   fluent-plugin-s3
-  fluent-plugin-scribe
   fluent-plugin-webhdfs
   fluentd
 
