@@ -26,6 +26,6 @@
    </listitem>
   </itemizedlist>
  </para>
- <xi:include href="declarative-packages.xml" />
+ <xi:include href="../from_md/configuration/declarative-packages.section.xml" />
  <xi:include href="../from_md/configuration/ad-hoc-packages.section.xml" />
 </chapter>
