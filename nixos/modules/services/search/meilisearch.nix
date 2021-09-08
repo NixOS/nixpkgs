@@ -5,7 +5,8 @@ with lib;
 let
   cfg = config.services.meilisearch;
 
-in {
+in
+{
 
   meta.maintainers = with maintainers; [ filalex77 ];
 
@@ -56,21 +57,23 @@ in {
   };
 
   ###### implementation
-  
+
   config = mkIf cfg.enable {
     systemd.services.meilisearch = {
       description = "MeiliSearch daemon";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
-      environment = let
-        masterKey = mkIf (cfg.masterKeyFile != null) (builtins.readFile cfg.masterKeyFile);
-      in {
-        MEILI_DB_PATH = "/var/lib/meilisearch";
-        MEILI_HTTP_ADDR = "${cfg.listenAddress}:${toString cfg.listenPort}";
-        MEILI_MASTER_KEY = masterKey;
-        MEILI_NO_ANALYTICS = toString cfg.noAnalytics;
-        MEILI_ENV = cfg.environment;
-      };
+      environment =
+        let
+          masterKey = mkIf (cfg.masterKeyFile != null) (builtins.readFile cfg.masterKeyFile);
+        in
+        {
+          MEILI_DB_PATH = "/var/lib/meilisearch";
+          MEILI_HTTP_ADDR = "${cfg.listenAddress}:${toString cfg.listenPort}";
+          MEILI_MASTER_KEY = masterKey;
+          MEILI_NO_ANALYTICS = toString cfg.noAnalytics;
+          MEILI_ENV = cfg.environment;
+        };
       serviceConfig = {
         ExecStart = "${pkgs.meilisearch}/bin/meilisearch";
         DynamicUser = true;
