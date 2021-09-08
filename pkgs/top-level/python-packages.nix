@@ -1467,6 +1467,11 @@ in {
 
   ckcc-protocol = callPackage ../development/python-modules/ckcc-protocol { };
 
+  inherit (import ../development/python-modules/clang self)
+    clang_5
+    clang_11
+    clang;
+
   class-registry = callPackage ../development/python-modules/class-registry { };
 
   claripy =  callPackage ../development/python-modules/claripy { };
