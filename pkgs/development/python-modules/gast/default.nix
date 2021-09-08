@@ -1,26 +1,12 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, astunparse
-}:
-
-buildPythonPackage rec {
-  pname = "gast";
-  version = "0.5.1";
-
-  src = fetchFromGitHub {
-    owner = "serge-sans-paille";
-    repo = "gast";
-    rev = version;
-    sha256 = "1gph45frnj47lfr6idiyxrb3gk7vzc9rni9cijmcyz10dyx5kgwa";
+self: rec {
+  # Used by tensorflow 2.6.0
+  gast_0_4 = self.callPackage ./common.nix {
+    version = "0.4.0";
+    sha256 = "sha256:0zhca08ij3rgrpcr3w385dfiwng129s44wsnmcxg7jhbqpyz2s5y";
   };
-
-  checkInputs = [ astunparse ];
-
-  meta = with lib; {
-    description = "GAST provides a compatibility layer between the AST of various Python versions, as produced by ast.parse from the standard ast module.";
-    homepage = "https://github.com/serge-sans-paille/gast/";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ jyp cpcloud ];
+  gast_0_5 = self.callPackage ./common.nix {
+    version = "0.5.2";
+    sha256 = "sha256:05vysdd9hlivq91xyspsjj560xfsjcsjp8491cl0j4p5b1lsmzxa";
   };
+  gast = gast_0_5;
 }

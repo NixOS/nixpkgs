@@ -2836,7 +2836,10 @@ in {
 
   garminconnect-ha = callPackage ../development/python-modules/garminconnect-ha { };
 
-  gast = callPackage ../development/python-modules/gast { };
+  inherit (import ../development/python-modules/gast self)
+    gast_0_4
+    gast_0_5
+    gast;
 
   garages-amsterdam = callPackage ../development/python-modules/garages-amsterdam { };
 
