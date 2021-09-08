@@ -13836,6 +13836,8 @@ with pkgs;
 
   ezquake = callPackage ../games/ezquake { };
 
+  faas-cli = callPackage ../development/tools/faas-cli { };
+
   findbugs = callPackage ../development/tools/analysis/findbugs { };
 
   findnewest = callPackage ../development/tools/misc/findnewest { };
