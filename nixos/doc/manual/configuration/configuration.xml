@@ -25,7 +25,7 @@
  <xi:include href="../from_md/configuration/linux-kernel.chapter.xml" />
  <xi:include href="../from_md/configuration/subversion.chapter.xml" />
  <xi:include href="../generated/modules.xml" xpointer="xpointer(//section[@id='modules']/*)" />
- <xi:include href="profiles.xml" />
+ <xi:include href="../from_md/configuration/profiles.chapter.xml" />
  <xi:include href="../from_md/configuration/kubernetes.chapter.xml" />
 <!-- Apache; libvirtd virtualisation -->
 </part>
