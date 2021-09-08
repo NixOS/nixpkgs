@@ -112,6 +112,19 @@ let
     (self: super: {
       home-assistant-frontend = self.callPackage ./frontend.nix { };
     })
+
+    # Pinned due to incompability with aioesphomeapi 8.0.0
+    (self: super: {
+      aioesphomeapi = super.aioesphomeapi.overrideAttrs (oldAttrs: rec {
+        version = "7.0.0";
+        src = fetchFromGitHub {
+          owner = "esphome";
+          repo = oldAttrs.pname;
+          rev = "v${version}";
+          hash = "sha256-ho/1fpq4yAgmYNERPqs51oqr08ncaN9+GRTUUuGU7ps=";
+        };
+      });
+    })
   ];
 
   mkOverride = attrname: version: sha256:
@@ -722,6 +735,7 @@ in with py.pkgs; buildPythonApplication rec {
     "yandex_transport"
     "yandextts"
     "yeelight"
+    "youless"
     # disabled, because it tries to join a multicast group and fails to find a usable network interface
     # "zeroconf"
     "zerproc"

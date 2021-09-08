@@ -93,6 +93,12 @@ in {
     gssSupport = false;
   };
 
+  liblinear = super.liblinear.override {
+    # Don’t use new stdenv zlib because
+    # it doesn’t like the --disable-shared flag
+    stdenv = super.stdenv;
+  };
+
   ocaml-ng = self.lib.mapAttrs (_: set:
     if set ? overrideScope' then set.overrideScope' ocamlStaticAdapter else set
   ) super.ocaml-ng;

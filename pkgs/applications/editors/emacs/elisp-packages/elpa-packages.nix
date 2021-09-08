@@ -6,7 +6,7 @@ To update the list of packages from MELPA,
 
 1. Run `./update-elpa`.
 2. Check for evaluation errors:
-     `nix-instantiate ../../../../../ -A emacs.pkgs.elpaPackages`.
+     env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate ../../../../../ -A emacs.pkgs.elpaPackages
 3. Run `git commit -m "elpa-packages $(date -Idate)" -- elpa-generated.nix`
 
 ## Update from overlay
