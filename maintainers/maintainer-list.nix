@@ -11321,10 +11321,14 @@
     name = "Jos van den Oever";
   };
   vanilla = {
-    email = "neko@hydev.org";
+    email = "osu_vanilla@126.com";
     github = "VergeDX";
     githubId = 25173827;
     name = "Vanilla";
+    keys = [{
+      longkeyid = "rsa4096/0x4DFA2BDD7305E739";
+      fingerprint = "5C16 5178 7DE2 EE5A AF98  3EA3 4DFA 2BDD 7305 E739";
+    }];
   };
   vanschelven = {
     email = "klaas@vanschelven.com";
