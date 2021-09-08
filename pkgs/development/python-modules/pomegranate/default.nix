@@ -31,7 +31,11 @@ buildPythonPackage rec {
       url = "https://github.com/jmschrei/pomegranate/commit/42d14bebc44ffd4a778b2a6430aa845591b7c3b7.patch";
       sha256 = "0f9cx0fj9xkr3hch7jyrn76zjypilh5bqw734caaw6g2m49lvbff";
     })
-  ];
+  ] ++ [
+    # Likely an upstream test bug and not a real problem:
+    #   https://github.com/jmschrei/pomegranate/issues/939
+    ./disable-failed-on-nextworkx-2.6.patch
+  ] ;
 
   propagatedBuildInputs = [ numpy scipy cython networkx joblib pyyaml ];
 
