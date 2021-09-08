@@ -7677,6 +7677,12 @@
     githubId = 2590830;
     name = "Sage Raflik";
   };
+  neosimsim = {
+    email = "me@abn.sh";
+    github = "neosimsim";
+    githubId = 1771772;
+    name = "Alexander Ben Nasrallah";
+  };
   nequissimus = {
     email = "tim@nequissimus.com";
     github = "nequissimus";
