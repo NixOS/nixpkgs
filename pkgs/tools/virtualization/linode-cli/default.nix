@@ -22,13 +22,13 @@ in
 
 buildPythonApplication rec {
   pname = "linode-cli";
-  version = "5.8.1";
+  version = "5.8.2";
 
   src = fetchFromGitHub {
     owner = "linode";
     repo = pname;
     rev = version;
-    sha256 = "19lfnwgm09gxk0mcikwl7v4hw2ai2k9lkdjlalz8fsswf81my7h6";
+    sha256 = "sha256-JlWbhElgRDeFMjtPPy7Sk69SMlpQYfnZ3AjAfl2SRyI=";
   };
 
   # remove need for git history
