@@ -1884,6 +1884,8 @@ with pkgs;
 
   aws = callPackage ../tools/virtualization/aws { };
 
+  aws-iot-securetunneling-localproxy = callPackage ../tools/virtualization/aws-iot-securetunneling-localproxy { };
+
   aws_mturk_clt = callPackage ../tools/misc/aws-mturk-clt { };
 
   awstats = callPackage ../tools/system/awstats { };

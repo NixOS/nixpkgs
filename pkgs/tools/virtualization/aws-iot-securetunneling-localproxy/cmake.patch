@@ -1,0 +1,52 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 007d79f..63389f9 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -27,7 +27,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+ 
+ # Configure Compiler flags
+ if (UNIX OR APPLE)
+-    set(CUSTOM_COMPILER_FLAGS "-O2 -D_FORTIFY_SOURCE=2 -fPIE -Wall -Werror")
++    set(CUSTOM_COMPILER_FLAGS "-O2 -D_FORTIFY_SOURCE=2 -fPIE -Wall -Werror -DBOOST_ALLOW_DEPRECATED_HEADERS -DBOOST_LOG_DYN_LINK")
+     set(TEST_COMPILER_FLAGS "${CUSTOM_COMPILER_FLAGS} -D_AWSIOT_TUNNELING_NO_SSL")
+ elseif (WIN32 OR MSVC)
+     set(CUSTOM_COMPILER_FLAGS "/W4 /DYNAMICBASE /NXCOMPAT /analyze")
+@@ -66,15 +66,8 @@ find_package(Catch2 REQUIRED)
+ #########################################
+ # Boost dependencies                    #
+ #########################################
+-set_property(GLOBAL PROPERTY Boost_USE_STATIC_LIBS ON)
+-set_property(GLOBAL PROPERTY Boost_USE_DEBUG_RUNTIME OFF)
+-#set_property(GLOBAL PROPERTY Boost_USE_MULTITHREADED ON)
+-find_package(Boost 1.68.0 REQUIRED COMPONENTS system log log_setup thread program_options date_time filesystem)
++find_package(Boost 1.69.0 REQUIRED COMPONENTS system log log_setup thread program_options date_time filesystem)
+ include_directories(${Boost_INCLUDE_DIRS})
+-foreach(BOOST_LIB ${Boost_LIBRARIES})
+-    string(REPLACE ${CMAKE_SHARED_LIBRARY_SUFFIX} ${CMAKE_STATIC_LIBRARY_SUFFIX} BOOST_STATIC_LIB ${BOOST_LIB})
+-    list(APPEND Boost_STATIC_LIBRARIES ${BOOST_STATIC_LIB})
+-endforeach()
+ 
+ #########################################
+ # Target : Build aws-tunnel-local-proxy #
+@@ -98,7 +91,7 @@ endif()
+ target_link_libraries(${AWS_TUNNEL_LOCAL_PROXY_TARGET_NAME} ${CMAKE_THREAD_LIBS_INIT})
+ target_link_libraries(${AWS_TUNNEL_LOCAL_PROXY_TARGET_NAME} OpenSSL::SSL)
+ target_link_libraries(${AWS_TUNNEL_LOCAL_PROXY_TARGET_NAME} OpenSSL::Crypto)
+-target_link_libraries(${AWS_TUNNEL_LOCAL_PROXY_TARGET_NAME} ${Boost_STATIC_LIBRARIES})
++target_link_libraries(${AWS_TUNNEL_LOCAL_PROXY_TARGET_NAME} ${Boost_LIBRARIES})
+ target_link_libraries(${AWS_TUNNEL_LOCAL_PROXY_TARGET_NAME} ${Protobuf_LITE_STATIC_LIBRARY})
+ 
+ 
+@@ -106,10 +99,11 @@ include_directories(${PROJECT_SOURCE_DIR}/src)
+ target_link_libraries(${AWS_TUNNEL_LOCAL_PROXY_TEST_NAME} ${CMAKE_THREAD_LIBS_INIT})
+ target_link_libraries(${AWS_TUNNEL_LOCAL_PROXY_TEST_NAME} OpenSSL::SSL)
+ target_link_libraries(${AWS_TUNNEL_LOCAL_PROXY_TEST_NAME} OpenSSL::Crypto)
+-target_link_libraries(${AWS_TUNNEL_LOCAL_PROXY_TEST_NAME} ${Boost_STATIC_LIBRARIES})
++target_link_libraries(${AWS_TUNNEL_LOCAL_PROXY_TEST_NAME} ${Boost_LIBRARIES})
+ target_link_libraries(${AWS_TUNNEL_LOCAL_PROXY_TEST_NAME} ${Protobuf_LITE_STATIC_LIBRARY})
+ 
+ 
+ set_property(TARGET ${AWS_TUNNEL_LOCAL_PROXY_TARGET_NAME} APPEND_STRING PROPERTY COMPILE_FLAGS ${CUSTOM_COMPILER_FLAGS})
+ set_property(TARGET ${AWS_TUNNEL_LOCAL_PROXY_TEST_NAME} APPEND_STRING PROPERTY COMPILE_FLAGS ${TEST_COMPILER_FLAGS})
+ 
++install(TARGETS ${AWS_TUNNEL_LOCAL_PROXY_TARGET_NAME})
