@@ -5979,6 +5979,10 @@ with pkgs;
 
   html-proofer = callPackage ../tools/misc/html-proofer { };
 
+  htmlq = callPackage ../development/tools/htmlq {
+    inherit (pkgs.darwin.apple_sdk.frameworks) Security;
+  };
+
   htpdate = callPackage ../tools/networking/htpdate { };
 
   http-prompt = callPackage ../tools/networking/http-prompt { };
@@ -14184,7 +14188,7 @@ with pkgs;
 
   luaformatter = callPackage ../development/tools/luaformatter
     (lib.optionalAttrs stdenv.isDarwin {
-      stdenv = overrideCC stdenv llvmPackages_latest.clang;
+      stdenv = overrideCC stdenv llvmPackages_9.clang;
     });
 
   malt = callPackage ../development/tools/profiling/malt {};
@@ -17432,6 +17436,8 @@ with pkgs;
   libspectrum = callPackage ../development/libraries/libspectrum { };
 
   libspiro = callPackage ../development/libraries/libspiro {};
+
+  libspng = callPackage ../development/libraries/libspng { };
 
   libssh = callPackage ../development/libraries/libssh { };
 
@@ -21283,6 +21289,9 @@ with pkgs;
   linux_5_4_hardened = linuxKernel.kernels.linux_5_4_hardened;
   linuxPackages_5_10_hardened = linuxKernel.packages.linux_5_10_hardened;
   linux_5_10_hardened = linuxKernel.kernels.linux_5_10_hardened;
+
+  linuxPackages_5_13_hardened = recurseIntoAttrs (hardenedLinuxPackagesFor pkgs.linux_5_13 { });
+  linux_5_13_hardened = linuxPackages_5_13_hardened.kernel;
 
   # Hardkernel (Odroid) kernels.
   linuxPackages_hardkernel_latest = linuxKernel.packageAliases.linux_hardkernel_latest;
