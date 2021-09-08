@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
   pname = "age";
@@ -13,8 +13,14 @@ buildGoModule rec {
   };
 
   ldflags = [
-    "-X main.Version=${version}"
+    "-s" "-w" "-X main.Version=${version}"
   ];
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  preInstall = ''
+    installManPage doc/*.1
+  '';
 
   doInstallCheck = true;
   installCheckPhase = ''
