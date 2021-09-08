@@ -17,5 +17,5 @@
  <xi:include href="../from_md/administration/logging.chapter.xml" />
  <xi:include href="../from_md/administration/cleaning-store.chapter.xml" />
  <xi:include href="../from_md/administration/containers.chapter.xml" />
- <xi:include href="troubleshooting.xml" />
+ <xi:include href="../from_md/administration/troubleshooting.chapter.xml" />
 </part>
