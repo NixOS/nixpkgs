@@ -21,8 +21,8 @@ buildPythonApplication rec {
   meta = with lib; {
     description = "Command-line program to download image-galleries and -collections from several image hosting sites";
     homepage = "https://github.com/mikf/gallery-dl";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ dawidsowa ];
-    platforms = platforms.unix;
+    changelog = "https://github.com/mikf/gallery-dl/raw/v${version}/CHANGELOG.md";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ dawidsowa marsam ];
   };
 }
