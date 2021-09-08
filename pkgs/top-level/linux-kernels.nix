@@ -202,6 +202,7 @@ let
     linux_4_19_hardened = hardenedKernelFor kernels.linux_4_19 { };
     linux_5_4_hardened = hardenedKernelFor kernels.linux_5_4 { };
     linux_5_10_hardened = hardenedKernelFor kernels.linux_5_10 { };
+    linux_5_13_hardened = hardenedKernelFor kernels.linux_5_13 { };
 
   });
   /*  Linux kernel modules are inherently tied to a specific kernel.  So
@@ -483,6 +484,7 @@ let
     linux_4_19_hardened = recurseIntoAttrs (hardenedPackagesFor kernels.linux_4_19 { });
     linux_5_4_hardened = recurseIntoAttrs (hardenedPackagesFor kernels.linux_5_4 { });
     linux_5_10_hardened = recurseIntoAttrs (hardenedPackagesFor kernels.linux_5_10 { });
+    linux_5_13_hardened = recurseIntoAttrs (hardenedPackagesFor kernels.linux_5_13 { });
 
     linux_zen = recurseIntoAttrs (packagesFor kernels.linux_zen);
     linux_lqx = recurseIntoAttrs (packagesFor kernels.linux_lqx);
