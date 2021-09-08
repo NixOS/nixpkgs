@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "pymazda";
-  version = "0.2.0";
+  version = "0.2.1";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-tEe70gvEglxqECiPjS3k29zZi70OSGMv6JxhrXqPhnY=";
+    sha256 = "sha256-Dg7oVNEjKZB6zksm1We2JGBW+cGkOOQOP3bS4CNL4q8=";
   };
 
   propagatedBuildInputs = [
