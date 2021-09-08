@@ -200,6 +200,11 @@ in stdenv.mkDerivation {
       done
     ''}
 
+    # https://github.com/NixOS/nixpkgs/issues/137104
+    ${optionalString (enableHardening || headless) ''
+      rm $libexec/components/VBoxREM.so
+    ''}
+
     cp -rv out/linux.*/${buildType}/bin/src "$modsrc"
   '';
 
