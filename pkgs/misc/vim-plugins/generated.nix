@@ -4126,6 +4126,18 @@ final: prev:
     meta.homepage = "https://github.com/ishan9299/nvim-solarized-lua/";
   };
 
+  nvim-spectre = buildVimPluginFrom2Nix {
+    pname = "nvim-spectre";
+    version = "2021-09-05";
+    src = fetchFromGitHub {
+      owner = "windwp";
+      repo = "nvim-spectre";
+      rev = "0f10e9fe2553cb8c0a1512924a2639035559e0bd";
+      sha256 = "15bahq0gspjl263bjlpd199brf3ns126j2mrlfxsqzlcnc53y7za";
+    };
+    meta.homepage = "https://github.com/windwp/nvim-spectre/";
+  };
+
   nvim-terminal-lua = buildVimPluginFrom2Nix {
     pname = "nvim-terminal.lua";
     version = "2019-10-17";

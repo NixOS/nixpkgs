@@ -859,6 +859,7 @@ wincent/command-t
 wincent/ferret
 wincent/terminus
 windwp/nvim-autopairs
+windwp/nvim-spectre
 winston0410/cmd-parser.nvim
 winston0410/range-highlight.nvim
 wlangstroth/vim-racket
