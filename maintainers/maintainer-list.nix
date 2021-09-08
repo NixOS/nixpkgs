@@ -1520,12 +1520,6 @@
     githubId = 355401;
     name = "Brian Hicks";
   };
-  bricewge = {
-    email = "bricewge@gmail.com";
-    github = "bricewge";
-    githubId = 5525646;
-    name = "Brice Waegeneire";
-  };
   Br1ght0ne = {
     email = "brightone@protonmail.com";
     github = "Br1ght0ne";
