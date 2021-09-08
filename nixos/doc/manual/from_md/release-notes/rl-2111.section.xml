@@ -909,6 +909,17 @@ Superuser created successfully.
           file</link> format.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          The <literal>datadog-agent</literal>,
+          <literal>datadog-integrations-core</literal> and
+          <literal>datadog-process-agent</literal> packages were
+          upgraded from 6.11.2 to 7.30.2, git-2018-09-18 to 7.30.1 and
+          6.11.1 to 7.30.2, respectively. For details, see the
+          <link xlink:href="https://github.com/DataDog/datadog-agent/blob/main/CHANGELOG.rst">upstream
+          changelog</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-notable-changes">
