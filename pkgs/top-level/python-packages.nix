@@ -7162,6 +7162,8 @@ in {
 
   python3-sipsimple = callPackage ../development/python-modules/python3-sipsimple { };
 
+  python3-xcaplib = callPackage ../development/python-modules/python3-xcaplib { };
+
   python3-openid = callPackage ../development/python-modules/python3-openid { };
 
   python-awair = callPackage ../development/python-modules/python-awair { };
