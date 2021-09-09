@@ -16,6 +16,7 @@ showSyntax() {
 
 # Parse the command line.
 origArgs=("$@")
+copyClosureFlags=()
 extraBuildFlags=()
 lockFlags=()
 flakeFlags=()
@@ -59,6 +60,9 @@ while [ "$#" -gt 0 ]; do
       --upgrade-all)
         upgrade=1
         upgrade_all=1
+        ;;
+      -s|--use-substitutes)
+        copyClosureFlags+=("$i")
         ;;
       --max-jobs|-j|--cores|-I|--builders)
         j="$1"; shift 1
@@ -157,11 +161,11 @@ targetHostCmd() {
 copyToTarget() {
     if ! [ "$targetHost" = "$buildHost" ]; then
         if [ -z "$targetHost" ]; then
-            NIX_SSHOPTS=$SSHOPTS nix-copy-closure --from "$buildHost" "$1"
+            NIX_SSHOPTS=$SSHOPTS nix-copy-closure "${copyClosureFlags[@]}" --from "$buildHost" "$1"
         elif [ -z "$buildHost" ]; then
-            NIX_SSHOPTS=$SSHOPTS nix-copy-closure --to "$targetHost" "$1"
+            NIX_SSHOPTS=$SSHOPTS nix-copy-closure "${copyClosureFlags[@]}" --to "$targetHost" "$1"
         else
-            buildHostCmd nix-copy-closure --to "$targetHost" "$1"
+            buildHostCmd nix-copy-closure "${copyClosureFlags[@]}" --to "$targetHost" "$1"
         fi
     fi
 }
@@ -425,7 +429,7 @@ if [[ -n $buildNix && -z $flake ]]; then
     if [ -a "$nixDrv" ]; then
         nix-store -r "$nixDrv"'!'"out" --add-root "$tmpDir/nix" --indirect >/dev/null
         if [ -n "$buildHost" ]; then
-            nix-copy-closure --to "$buildHost" "$nixDrv"
+            nix-copy-closure "${copyClosureFlags[@]}" --to "$buildHost" "$nixDrv"
             # The nix build produces multiple outputs, we add them all to the remote path
             for p in $(buildHostCmd nix-store -r "$(readlink "$nixDrv")" "${buildArgs[@]}"); do
                 remoteNix="$remoteNix${remoteNix:+:}$p/bin"
