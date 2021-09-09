@@ -120,7 +120,6 @@ let
 
   bazel-build = buildBazelPackage {
     name = "${pname}-${version}";
-    bazel = bazel_3;
 
     src = fetchFromGitHub {
       owner = "tensorflow";
