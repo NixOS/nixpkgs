@@ -38,6 +38,8 @@ stdenv.mkDerivation {
     single-host-smoke-test = nixosTests.jitsi-meet;
   };
 
+  passthru.updateScript = ./update.sh;
+
   meta = with lib; {
     description = "A WebRTC compatible video router";
     longDescription = ''
