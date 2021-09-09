@@ -6311,6 +6311,10 @@ with pkgs;
 
   jo = callPackage ../development/tools/jo { };
 
+  joshuto = callPackage ../applications/misc/joshuto {
+    inherit (darwin.apple_sdk.frameworks) SystemConfiguration;
+  };
+
   jrnl = python3Packages.callPackage ../applications/misc/jrnl { };
 
   jsawk = callPackage ../tools/text/jsawk { };
