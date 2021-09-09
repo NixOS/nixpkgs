@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "youless-api";
-  version = "0.12";
+  version = "0.13";
 
   disabled = pythonOlder "3.7";
 
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "jongsoftdev";
     repo = "youless-python-bridge";
     rev = version;
-    sha256 = "18hymahpblq87i7lv479sizj8mgxawjhj31g4j1lyna1mds3887k";
+    sha256 = "sha256-Vywzd8wZG4eI/U69fPYuLpF54zAeuCv3Q81z5UcMGjc=";
   };
 
   propagatedBuildInputs = [
