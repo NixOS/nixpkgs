@@ -431,6 +431,10 @@ self: super: {
     dependencies = with self; [ popfix ];
   });
 
+  nvim-spectre = super.nvim-spectre.overrideAttrs (old: {
+    dependencies = with self; [ plenary-nvim ];
+  });
+
   # Usage:
   # pkgs.vimPlugins.nvim-treesitter.withPlugins (p: [ p.tree-sitter-c p.tree-sitter-java ... ])
   # or for all grammars:
