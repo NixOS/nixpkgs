@@ -18973,7 +18973,7 @@ with pkgs;
 
   svxlink = libsForQt5.callPackage ../applications/radio/svxlink { };
 
-  swiftclient = python3.pkgs.callPackage ../tools/admin/swiftclient { };
+  swiftclient = with python3Packages; toPythonApplication python-swiftclient;
 
   sword = callPackage ../development/libraries/sword { };
 

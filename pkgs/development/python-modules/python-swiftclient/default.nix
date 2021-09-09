@@ -2,14 +2,16 @@
 
 buildPythonApplication rec {
   pname = "python-swiftclient";
-  version = "3.11.0";
+  version = "3.12.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3972f8b1986e60ea786ad01697e6882f331209ae947ef8b795531940f1e0732b";
+    sha256 = "sha256-MTtEShTQ+bYoy/PoxS8sQnFlj56KM9QiKFHC5PD3t6A=";
   };
 
-  propagatedBuildInputs = [ requests six pbr setuptools ];
+  nativeBuildInputs = [ pbr ];
+
+  propagatedBuildInputs = [ requests six setuptools ];
 
   # For the tests the following requirements are needed:
   # https://github.com/openstack/python-swiftclient/blob/master/test-requirements.txt
