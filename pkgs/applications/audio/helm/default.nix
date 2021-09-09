@@ -41,6 +41,7 @@
 
   prePatch = ''
     sed -i 's|usr/||g' Makefile
+    sed -i "s|/usr/share/|$out/share/|" src/common/load_save.cpp
   '';
 
   buildPhase = ''
