@@ -1,0 +1,31 @@
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, astor
+, pytestCheckHook
+}:
+buildPythonPackage rec {
+  pname = "flynt";
+  version = "0.66";
+
+  disabled = pythonOlder "3.6";
+
+  src = fetchFromGitHub {
+    owner = "ikamensh";
+    repo = "flynt";
+    rev = "v${version}";
+    hash = "sha256-DV433wqLjF5k4g8J7rj5gZfaw+Y4/TDOoFKo3eKDjZ4=";
+  };
+
+  propagatedBuildInputs = [ astor ];
+
+  checkInputs = [ pytestCheckHook ];
+
+  meta = with lib; {
+    description = "flynt is a command line tool to automatically convert a project's Python code from old \"%-formatted\" and .format(...) strings into Python 3.6+'s \"f-strings\".";
+    homepage = "https://github.com/ikamensh/flynt";
+    license = licenses.mit;
+    maintainers = with maintainers; [ cpcloud ];
+  };
+}
