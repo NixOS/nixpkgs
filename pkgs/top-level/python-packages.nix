@@ -7160,6 +7160,8 @@ in {
 
   python3-otr = callPackage ../development/python-modules/python3-otr { };
 
+  python3-sipsimple = callPackage ../development/python-modules/python3-sipsimple { };
+
   python3-openid = callPackage ../development/python-modules/python3-openid { };
 
   python-awair = callPackage ../development/python-modules/python-awair { };
