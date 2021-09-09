@@ -1,7 +1,7 @@
-{ stdenv, bazel_3, buildBazelPackage, isPy3k, lib, fetchFromGitHub, symlinkJoin
-, addOpenGLRunpath, fetchpatch, patchelf
+{ stdenv, buildBazelPackage, isPy3k, lib, fetchFromGitHub, symlinkJoin
+, addOpenGLRunpath, patchelf
 # Python deps
-, buildPythonPackage, pythonOlder, pythonAtLeast, python
+, buildPythonPackage, pythonOlder, python
 # Python libraries
 , absl-py
 , astunparse
