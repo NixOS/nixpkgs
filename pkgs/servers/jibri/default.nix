@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = with lib; {
     description = "JItsi BRoadcasting Infrastructure";
     longDescription = ''
