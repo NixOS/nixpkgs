@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "hck";
-  version = "0.6.2";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "sstadick";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1xjp56asfn37kr0fsrjkil20nf372q70cijqb5ll2sq2zwjnyyzn";
+    sha256 = "02yvpgvzdprysg0spa0abn7d3vjj5spzc3528rwbpl4cw2yx8j6w";
   };
 
-  cargoSha256 = "12n33gwxcym5z5n762wmzcck4zmmn42kh04nwpdb3az4apghdp3z";
+  cargoSha256 = "0n6wywb1xyaxkbr0fs39992dfv55wzvp05i1vk9mxgnsim9s7aw8";
 
   nativeBuildInputs = [ cmake ];
 

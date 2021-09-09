@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "python-nomad";
-  version = "1.3.0";
+  version = "1.4.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "67731d050472923581c43a39a8f01567468e8b3c8e83465b762c99eb0e5e23bc";
+    sha256 = "087a7d5d2af9fd8ce5da70d29e4b456c6b8b0ea3cd16613ed50f6eb8ad6cdba6";
   };
 
   propagatedBuildInputs = [ requests ];

@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchFromGitHub
 , addOpenGLRunpath
 , cmake
@@ -21,13 +22,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rocm-opencl-runtime";
-  version = "4.1.0";
+  version = "4.3.1";
 
   src = fetchFromGitHub {
     owner = "RadeonOpenCompute";
     repo = "ROCm-OpenCL-Runtime";
     rev = "rocm-${version}";
-    hash = "sha256-+6h1E5uWNKjjaeO5ZIi854CWYi0QGQ5mVUHdi9+4vX4=";
+    hash = "sha256-4+PNxRqvAvU0Nj2igYl3WiS5h5HGV63J+cHbIVW89LE=";
   };
 
   nativeBuildInputs = [ cmake rocm-cmake ];
@@ -77,7 +78,7 @@ stdenv.mkDerivation rec {
     description = "OpenCL runtime for AMD GPUs, part of the ROCm stack";
     homepage = "https://github.com/RadeonOpenCompute/ROCm-OpenCL-Runtime";
     license = with licenses; [ asl20 mit ];
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ acowley danieldk lovesegfault ];
     platforms = platforms.linux;
   };
 }

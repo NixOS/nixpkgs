@@ -56,9 +56,11 @@ let
       ''}
 
       echo "$activationScript" > $out/activate
+      echo "$dryActivationScript" > $out/dry-activate
       substituteInPlace $out/activate --subst-var out
-      chmod u+x $out/activate
-      unset activationScript
+      substituteInPlace $out/dry-activate --subst-var out
+      chmod u+x $out/activate $out/dry-activate
+      unset activationScript dryActivationScript
 
       cp ${config.system.build.bootStage2} $out/init
       substituteInPlace $out/init --subst-var-by systemConfig $out
@@ -108,6 +110,7 @@ let
       config.system.build.installBootLoader
       or "echo 'Warning: do not know how to make this configuration bootable; please enable a boot loader.' 1>&2; true";
     activationScript = config.system.activationScripts.script;
+    dryActivationScript = config.system.dryActivationScript;
     nixosLabel = config.system.nixos.label;
 
     configurationName = config.boot.loader.grub.configurationName;

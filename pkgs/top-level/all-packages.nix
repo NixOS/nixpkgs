@@ -5978,6 +5978,10 @@ with pkgs;
 
   html-proofer = callPackage ../tools/misc/html-proofer { };
 
+  htmlq = callPackage ../development/tools/htmlq {
+    inherit (pkgs.darwin.apple_sdk.frameworks) Security;
+  };
+
   htpdate = callPackage ../tools/networking/htpdate { };
 
   http-prompt = callPackage ../tools/networking/http-prompt { };
@@ -9081,6 +9085,8 @@ with pkgs;
 
   spicy = callPackage ../development/tools/spicy { };
 
+  spoof-mac = python3Packages.callPackage ../tools/networking/spoof-mac { };
+
   ssh-askpass-fullscreen = callPackage ../tools/networking/ssh-askpass-fullscreen { };
 
   sshguard = callPackage ../tools/security/sshguard {};
@@ -12168,11 +12174,14 @@ with pkgs;
     inherit (llvmPackages_rocm) clang;
   };
 
+  hip = callPackage ../development/compilers/hip {
+    inherit (llvmPackages_rocm) clang clang-unwrapped compiler-rt lld llvm;
+  };
+
   rocm-cmake = callPackage ../development/tools/build-managers/rocm-cmake { };
 
   rocm-comgr = callPackage ../development/libraries/rocm-comgr {
     inherit (llvmPackages_rocm) clang lld llvm;
-    device-libs = rocm-device-libs;
   };
 
   rocm-device-libs = callPackage ../development/libraries/rocm-device-libs {
@@ -12189,10 +12198,11 @@ with pkgs;
     inherit (llvmPackages_rocm) clang-unwrapped llvm;
   };
 
-  # Python >= 3.8 still gives a bunch of warnings.
-  rocm-smi = python37.pkgs.callPackage ../tools/system/rocm-smi { };
+  rocm-smi = python3Packages.callPackage ../tools/system/rocm-smi { };
 
   rocm-thunk = callPackage ../development/libraries/rocm-thunk { };
+
+  rocminfo = callPackage ../development/tools/rocminfo { };
 
   rtags = callPackage ../development/tools/rtags {
     inherit (darwin) apple_sdk;
@@ -14178,7 +14188,7 @@ with pkgs;
 
   luaformatter = callPackage ../development/tools/luaformatter
     (lib.optionalAttrs stdenv.isDarwin {
-      stdenv = overrideCC stdenv llvmPackages_latest.clang;
+      stdenv = overrideCC stdenv llvmPackages_9.clang;
     });
 
   malt = callPackage ../development/tools/profiling/malt {};
@@ -17423,6 +17433,8 @@ with pkgs;
   libspectrum = callPackage ../development/libraries/libspectrum { };
 
   libspiro = callPackage ../development/libraries/libspiro {};
+
+  libspng = callPackage ../development/libraries/libspng { };
 
   libssh = callPackage ../development/libraries/libssh { };
 
@@ -21701,6 +21713,9 @@ with pkgs;
   linuxPackages_5_10_hardened = recurseIntoAttrs (hardenedLinuxPackagesFor pkgs.linux_5_10 { });
   linux_5_10_hardened = linuxPackages_5_10_hardened.kernel;
 
+  linuxPackages_5_13_hardened = recurseIntoAttrs (hardenedLinuxPackagesFor pkgs.linux_5_13 { });
+  linux_5_13_hardened = linuxPackages_5_13_hardened.kernel;
+
   # Hardkernel (Odroid) kernels.
   linuxPackages_hardkernel_4_14 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_hardkernel_4_14);
   linuxPackages_hardkernel_latest = linuxPackages_hardkernel_4_14;
@@ -24258,6 +24273,8 @@ with pkgs;
   etherape = callPackage ../applications/networking/sniffers/etherape { };
 
   evilpixie = libsForQt5.callPackage ../applications/graphics/evilpixie { };
+
+  exaile = callPackage ../applications/audio/exaile { };
 
   exercism = callPackage ../applications/misc/exercism { };
 

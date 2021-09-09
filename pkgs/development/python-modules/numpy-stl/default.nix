@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "numpy-stl";
-  version = "2.16.2";
+  version = "2.16.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3e635b6fb6112a3c5e00e9e20eedab93b9b0c45ff1cc34eb7bdc0b3e922e2d77";
+    sha256 = "95890627001efb2cb8d17418730cdc1bdd64b8dbb9862b01a8e0359d79fe863e";
   };
 
   propagatedBuildInputs = [

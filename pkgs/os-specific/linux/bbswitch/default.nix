@@ -59,5 +59,6 @@ stdenv.mkDerivation {
     platforms = [ "x86_64-linux" "i686-linux" ];
     homepage = "https://github.com/Bumblebee-Project/bbswitch";
     maintainers = with maintainers; [ abbradar ];
+    license = licenses.gpl2Plus;
   };
 }

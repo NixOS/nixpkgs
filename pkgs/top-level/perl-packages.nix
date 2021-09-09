@@ -1221,6 +1221,26 @@ let
     };
   };
 
+  BarcodeZBar = buildPerlPackage {
+    pname = "Barcode-ZBar";
+    version = "0.04pre";
+    # The meta::cpan version of this module has been unmaintained from 2009
+    # This uses an updated version from the ZBar repo that works with the current ZBar library
+    src = "${pkgs.zbar.src}/perl";
+    postPatch = ''
+      substituteInPlace Makefile.PL --replace "-lzbar" "-L${pkgs.zbar.lib}/lib -lzbar"
+      rm t/Processor.t
+    '';
+    buildInputs =[ ExtUtilsMakeMaker ];
+    propagatedBuildInputs = [ pkgs.zbar PerlMagick ];
+    perlPreHook = lib.optionalString stdenv.isDarwin "export LD=$CC";
+    meta = {
+      homepage = "https://github.com/mchehab/zbar/tree/master/perl";
+      description = "Perl interface to the ZBar Barcode Reader";
+      license = with lib.licenses; [ gpl2Plus ];
+    };
+  };
+
   BC = buildPerlPackage {
     pname = "B-C";
     version = "1.57";
@@ -5007,6 +5027,21 @@ let
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
     buildInputs = [ TestFailWarnings ];
+  };
+
+  DataSectionSimple = buildPerlPackage {
+    pname = "Data-Section-Simple";
+    version = "0.07";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/Data-Section-Simple-0.07.tar.gz";
+      sha256 = "0b3035ffdb909aa1f7ded6b608fa9d894421c82c097d51e7171170d67579a9cb";
+    };
+    buildInputs = [ TestRequires ];
+    meta = {
+      homepage = "https://github.com/miyagawa/Data-Section-Simple";
+      description = "Read data from __DATA__";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
   };
 
   DataSerializer = buildPerlModule {
@@ -21739,6 +21774,21 @@ let
     meta = {
       description = "Basic utilities for writing tests";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  TestSnapshot = buildPerlPackage {
+    pname = "Test-Snapshot";
+    version = "0.06";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/E/ET/ETJ/Test-Snapshot-0.06.tar.gz";
+      sha256 = "f4dd7a9a55baa2247540ae34210cd05a04f9d1061befec97a1c90eda95bfae45";
+    };
+    buildInputs = [ CaptureTiny ];
+    propagatedBuildInputs = [ TextDiff ];
+    meta = {
+      description = "Test against data stored in automatically-named file";
+      license = lib.licenses.artistic2;
     };
   };
 

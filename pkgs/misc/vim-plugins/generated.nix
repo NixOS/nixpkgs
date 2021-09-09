@@ -3106,6 +3106,18 @@ final: prev:
     meta.homepage = "https://github.com/wfxr/minimap.vim/";
   };
 
+  minsnip-nvim = buildVimPluginFrom2Nix {
+    pname = "minsnip.nvim";
+    version = "2021-09-06";
+    src = fetchFromGitHub {
+      owner = "jose-elias-alvarez";
+      repo = "minsnip.nvim";
+      rev = "0bcc73cb716b07d4286ef714f5a07d94204d484c";
+      sha256 = "0k6dmqmw52scvwfr5w8dg7388cy95vdvgfw3f4prwyls60i9x55w";
+    };
+    meta.homepage = "https://github.com/jose-elias-alvarez/minsnip.nvim/";
+  };
+
   mkdx = buildVimPluginFrom2Nix {
     pname = "mkdx";
     version = "2021-07-05";
@@ -3482,12 +3494,12 @@ final: prev:
     pname = "neorg";
     version = "2021-09-05";
     src = fetchFromGitHub {
-      owner = "vhyrro";
+      owner = "nvim-neorg";
       repo = "neorg";
       rev = "47a0a3d91ddde94488ccd03d38b5beeb296d3148";
       sha256 = "0n8scyjy3wx2l3anl3dyipx7rlayrjb5dlri2r81dr1s77vkch83";
     };
-    meta.homepage = "https://github.com/vhyrro/neorg/";
+    meta.homepage = "https://github.com/nvim-neorg/neorg/";
   };
 
   neoscroll-nvim = buildVimPluginFrom2Nix {
@@ -4112,6 +4124,18 @@ final: prev:
       sha256 = "032gs63g3x62mym6nhznvywsqk1cxsgwx0fv2vyh2c929fb27ji7";
     };
     meta.homepage = "https://github.com/ishan9299/nvim-solarized-lua/";
+  };
+
+  nvim-spectre = buildVimPluginFrom2Nix {
+    pname = "nvim-spectre";
+    version = "2021-09-05";
+    src = fetchFromGitHub {
+      owner = "windwp";
+      repo = "nvim-spectre";
+      rev = "0f10e9fe2553cb8c0a1512924a2639035559e0bd";
+      sha256 = "15bahq0gspjl263bjlpd199brf3ns126j2mrlfxsqzlcnc53y7za";
+    };
+    meta.homepage = "https://github.com/windwp/nvim-spectre/";
   };
 
   nvim-terminal-lua = buildVimPluginFrom2Nix {
