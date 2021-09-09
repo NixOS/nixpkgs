@@ -9128,6 +9128,12 @@
     githubId = 801525;
     name = "rembo10";
   };
+  remgodow = {
+    email = "remgodow+github@protonmail.com";
+    github = "remgodow";
+    githubId = 10079854;
+    name = "remgodow";
+  };
   renatoGarcia = {
     email = "fgarcia.renato@gmail.com";
     github = "renatoGarcia";
