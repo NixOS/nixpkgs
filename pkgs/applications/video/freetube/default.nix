@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     description = "An Open Source YouTube app for privacy";
     homepage = "https://freetubeapp.io/";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ ryneeverett ];
+    maintainers = with maintainers; [ ryneeverett alyaeanyx ];
     platforms = [ "x86_64-linux" ];
   };
 }
