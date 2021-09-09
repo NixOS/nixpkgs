@@ -27805,6 +27805,8 @@ with pkgs;
 
   terminal-notifier = callPackage ../applications/misc/terminal-notifier {};
 
+  texture-synthesis = callPackage ../tools/graphics/texture-synthesis { };
+
   tty-solitaire = callPackage ../applications/misc/tty-solitaire { };
 
   termtosvg = callPackage ../tools/misc/termtosvg { };
