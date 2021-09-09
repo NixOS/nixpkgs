@@ -2442,6 +2442,8 @@ with pkgs;
 
   csv2odf = callPackage ../applications/office/csv2odf { };
 
+  csview = callPackage ../tools/text/csview { };
+
   csvkit = callPackage ../tools/text/csvkit { };
 
   csvtool = callPackage ../development/ocaml-modules/csv/csvtool.nix { };
