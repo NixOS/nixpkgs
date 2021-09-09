@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     description = "Kernel module driver for DDC/CI monitors";
     homepage = "https://gitlab.com/ddcci-driver-linux/ddcci-driver-linux";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ bricewge ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
     broken = kernel.kernelOlder "5.1";
   };
