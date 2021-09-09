@@ -399,14 +399,17 @@ in buildPythonPackage {
     tensorflow-tensorboard_2
   ];
 
+  # NOTE: Switch back to `addOpenGLRunpath "$lib"` and the built-in `patchelf`
+  # once https://github.com/NixOS/patchelf/pull/256 is merged and released as
+  # the default version in nixpkgs. By adding our own patchelf to
+  # nativeBuildInputs, we can use the fixed version.
+  nativeBuildInputs = [ patchelf ];
+
   postFixup = lib.optionalString cudaSupport ''
-    # NOTE: Switch back to `addOpenGLRunpath "$lib"` and the built-in `patchelf`
-    # once https://github.com/NixOS/patchelf/pull/256 is merged and released as
-    # the default version in nixpkgs.
-    patchelf=${patchelf}/bin/patchelf
+    patchelf --version
     find $out -type f \( -name '*.so' -or -name '*.so.*' \) | while read lib; do
-      $patchelf --set-rpath "/run/opengl-driver:$($patchelf --print-rpath "$lib")" "$lib"
-      $patchelf --set-rpath "${cudatoolkit}/lib:${cudatoolkit.lib}/lib:${cudnn}/lib:${nccl}/lib:$($patchelf --print-rpath "$lib")" "$lib"
+      patchelf --set-rpath "/run/opengl-driver:$(patchelf --print-rpath "$lib")" "$lib"
+      patchelf --set-rpath "${cudatoolkit}/lib:${cudatoolkit.lib}/lib:${cudnn}/lib:${nccl}/lib:$(patchelf --print-rpath "$lib")" "$lib"
     done
   '';
 
