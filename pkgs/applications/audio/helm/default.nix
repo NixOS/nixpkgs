@@ -26,11 +26,13 @@
   buildInputs = [
     xorg.libX11 xorg.libXcomposite xorg.libXcursor xorg.libXext
     xorg.libXinerama xorg.libXrender xorg.libXrandr
-    freetype alsa-lib curl libjack2 pkg-config libGLU libGL lv2
+    freetype alsa-lib curl libjack2 libGLU libGL lv2
   ];
+  nativeBuildInputs = [ pkg-config ];
 
   CXXFLAGS = "-DHAVE_LROUND";
   enableParallelBuilding = true;
+  makeFlags = [ "DESTDIR=$(out)" ];
 
   patches = [
     # gcc9 compatibility https://github.com/mtytel/helm/pull/233
@@ -43,10 +45,6 @@
   prePatch = ''
     sed -i 's|usr/||g' Makefile
     sed -i "s|/usr/share/|$out/share/|" src/common/load_save.cpp
-  '';
-
-  installPhase = ''
-   make DESTDIR="$out" install
   '';
 
   meta = with lib; {
@@ -69,7 +67,7 @@
         Simple arpeggiator
         Effects: Formant filter, stutter, delay
     '';
-    license = lib.licenses.gpl3;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ maintainers.magnetophon ];
     platforms = platforms.linux;
   };
