@@ -1,25 +1,22 @@
 diff --git a/setup.py b/setup.py
-index cfec60d..32ca206 100644
+index ee5bbba9..0b7b9b45 100644
 --- a/setup.py
 +++ b/setup.py
-@@ -24,7 +24,6 @@ elif "--abi" in sys.argv:
- from setuptools import setup  # noqa
+@@ -15,7 +15,6 @@ from distutils.command.build_py import build_py as _build_py
+ 
  
  sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 -import versioneer  # noqa
  
  del sys.path[0]
  
-@@ -86,7 +85,7 @@ if __name__ == "__main__":
-     if not os.getenv("SKIP_CYTHON_BUILD"):
-         cython_build()
+@@ -129,12 +128,12 @@ if __name__ == "__main__":
+     if platforms is not None:
+         extras["platforms"] = platforms
  
 -    cmds = versioneer.get_cmdclass()
 +    cmds = {}
-     cmds["bdist_wheel"] = bdist_wheel
- 
-     extras = {}
-@@ -96,7 +95,7 @@ if __name__ == "__main__":
+     cmds.update(build=build, build_py=build_py)
  
      setup(
          name="debugpy",
@@ -29,7 +26,7 @@ index cfec60d..32ca206 100644
          long_description=long_description,
          long_description_content_type="text/markdown",
 diff --git a/src/debugpy/__init__.py b/src/debugpy/__init__.py
-index baa5a7c..5355327 100644
+index baa5a7c5..53553272 100644
 --- a/src/debugpy/__init__.py
 +++ b/src/debugpy/__init__.py
 @@ -27,7 +27,6 @@ __all__ = [
