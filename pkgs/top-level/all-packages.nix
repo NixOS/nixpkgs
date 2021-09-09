@@ -20132,7 +20132,7 @@ with pkgs;
 
   leafnode = callPackage ../servers/news/leafnode { };
 
-  lemmy = callPackage ../servers/web-apps/lemmy {
+  lemmy-server = callPackage ../servers/web-apps/lemmy/server.nix {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
