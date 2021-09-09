@@ -20,6 +20,7 @@
 , rocm-runtime
 , rocm-thunk
 , rocminfo
+, writeScript
 , writeText
 }:
 
@@ -163,4 +164,19 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/hipcc --set HIP_PATH $out --set HSA_PATH ${rocm-runtime} --set HIP_CLANG_PATH ${clang}/bin --prefix PATH : ${lld}/bin --set NIX_CC_WRAPPER_TARGET_HOST_${stdenv.cc.suffixSalt} 1 --prefix NIX_LDFLAGS ' ' -L${compiler-rt}/lib --prefix NIX_LDFLAGS_FOR_TARGET ' ' -L${compiler-rt}/lib
     wrapProgram $out/bin/hipconfig --set HIP_PATH $out --set HSA_PATH ${rocm-runtime} --set HIP_CLANG_PATH ${clang}/bin
   '';
+
+  passthru.updateScript = writeScript "update.sh" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p curl jq common-updater-scripts
+    version="$(curl -sL "https://api.github.com/repos/ROCm-Developer-Tools/HIP/tags" | jq '.[].name | split("-") | .[1] | select( . != null )' --raw-output | sort -n | tail -1)"
+    update-source-version hip "$version"
+  '';
+
+  meta = with lib; {
+    description = "C++ Heterogeneous-Compute Interface for Portability";
+    homepage = "https://github.com/ROCm-Developer-Tools/HIP";
+    license = licenses.mit;
+    maintainers = with maintainers; [ lovesegfault ];
+    platforms = platforms.linux;
+  };
 }
