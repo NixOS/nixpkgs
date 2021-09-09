@@ -1382,6 +1382,12 @@
     githubId = 28444296;
     name = "Benjamin Hougland";
   };
+  billewanick = {
+    email = "bill@ewanick.com";
+    github = "billewanick";
+    githubId = 13324165;
+    name = "Bill Ewanick";
+  };
   binarin = {
     email = "binarin@binarin.ru";
     github = "binarin";
