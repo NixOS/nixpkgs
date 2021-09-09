@@ -44,11 +44,6 @@
     sed -i "s|/usr/share/|$out/share/|" src/common/load_save.cpp
   '';
 
-  buildPhase = ''
-    make lv2
-    make standalone
-  '';
-
   installPhase = ''
    make DESTDIR="$out" install
   '';
