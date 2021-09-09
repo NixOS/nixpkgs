@@ -321,17 +321,6 @@
     };
     version = "1.1.11";
   };
-  fluent-plugin-scribe = {
-    dependencies = ["fluentd" "thrift"];
-    groups = ["default"];
-    platforms = [];
-    source = {
-      remotes = ["https://rubygems.org"];
-      sha256 = "19m37d0saknifjg8kva96pgsc7zsmdlwvwiy9gvhi2d6c7bq3q30";
-      type = "gem";
-    };
-    version = "1.0.0";
-  };
   fluent-plugin-webhdfs = {
     dependencies = ["fluentd" "webhdfs"];
     groups = ["default"];
@@ -486,16 +475,6 @@
       type = "gem";
     };
     version = "0.2.3";
-  };
-  thrift = {
-    groups = ["default"];
-    platforms = [];
-    source = {
-      remotes = ["https://rubygems.org"];
-      sha256 = "0aj23ndh5n5yqcvp4c12y7vl5wvxpl66zncf6n6ax2zvb6ig44cv";
-      type = "gem";
-    };
-    version = "0.8.0";
   };
   tzinfo = {
     dependencies = ["concurrent-ruby"];
