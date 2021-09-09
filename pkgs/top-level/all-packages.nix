@@ -20017,6 +20017,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  lemmy-ui = callPackage ../servers/web-apps/lemmy/ui.nix { };
+
   lighttpd = callPackage ../servers/http/lighttpd { };
 
   livepeer = callPackage ../servers/livepeer { };
