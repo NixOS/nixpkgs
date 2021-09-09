@@ -125,7 +125,7 @@ let
       owner = "tensorflow";
       repo = "tensorflow";
       rev = "v${version}";
-      sha256 = "sha256:0736mx2b9q8fzyl523h1qlqmjqbngx36c9fmddzavw09az49bhh7";
+      sha256 = "0736mx2b9q8fzyl523h1qlqmjqbngx36c9fmddzavw09az49bhh7";
     };
 
     # Relax too strict Python packages versions dependencies.
@@ -304,9 +304,9 @@ let
     fetchAttrs = {
       # cudaSupport causes fetch of ncclArchive, resulting in different hashes
       sha256 = if cudaSupport then
-        "sha256:18kid14smhf01ps9kydjrbjpcc82x3h0lxbhw6dlf7bb5qqq6yph"
+        "18kid14smhf01ps9kydjrbjpcc82x3h0lxbhw6dlf7bb5qqq6yph"
       else
-        "sha256:029pn5n1sp3swdxf8ag5lqw02hrjb24gj6w5m8cdpdp0czyv4nxs";
+        "029pn5n1sp3swdxf8ag5lqw02hrjb24gj6w5m8cdpdp0czyv4nxs";
     };
 
     buildAttrs = {
