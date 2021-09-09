@@ -20,9 +20,7 @@ in {
         type = lib.types.package;
         default = pkgs.kratos;
         defaultText = "pkgs.kratos";
-        description = ''
-          The kratos package to use
-        '';
+        description = "The kratos package to use.";
       };
     };
   };
