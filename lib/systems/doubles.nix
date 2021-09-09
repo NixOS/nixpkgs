@@ -28,7 +28,7 @@ let
     "aarch64-linux" "armv5tel-linux" "armv6l-linux" "armv7a-linux"
     "armv7l-linux" "i686-linux" "m68k-linux" "mipsel-linux"
     "powerpc64-linux" "powerpc64le-linux" "riscv32-linux"
-    "riscv64-linux" "s390-linux" "x86_64-linux"
+    "riscv64-linux" "s390-linux" "s390x-linux" "x86_64-linux"
 
     # MMIXware
     "mmix-mmixware"
@@ -41,7 +41,8 @@ let
     # none
     "aarch64-none" "arm-none" "armv6l-none" "avr-none" "i686-none"
     "msp430-none" "or1k-none" "m68k-none" "powerpc-none"
-    "riscv32-none" "riscv64-none" "s390-none" "vc4-none" "x86_64-none"
+    "riscv32-none" "riscv64-none" "s390-none" "s390x-none" "vc4-none"
+    "x86_64-none"
 
     # OpenBSD
     "i686-openbsd" "x86_64-openbsd"
