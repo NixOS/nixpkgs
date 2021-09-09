@@ -7150,6 +7150,8 @@ in {
 
   pytest-xvfb = callPackage ../development/python-modules/pytest-xvfb { };
 
+  python3-application = callPackage ../development/python-modules/python3-application { };
+
   python3-openid = callPackage ../development/python-modules/python3-openid { };
 
   python-awair = callPackage ../development/python-modules/python-awair { };
