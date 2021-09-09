@@ -8722,6 +8722,16 @@ in {
 
   tensorflowWithCuda = self.tensorflow.override {
     cudaSupport = true;
+    # See https://github.com/NixOS/patchelf/pull/256#issuecomment-915617721.
+    # This can be removed once that PR is merged and released.
+    patchelf = pkgs.patchelfUnstable.overrideAttrs(old: {
+      src = pkgs.fetchFromGitHub {
+        owner = "andrewla";
+        repo = "patchelf";
+        rev = "c99745d4040e0b0a9596828e791dbdf1058cd07a";
+        sha256 = "sha256:0b7m7v89c570901pcgv8pdpy42320jndb7gdxsr0ghq810j2ykjn";
+      };
+    });
   };
 
   tensorflowWithoutCuda = self.tensorflow.override {
