@@ -130,11 +130,12 @@ let
 
     # Relax too strict Python packages versions dependencies.
     patchPhase = ''
-      sed -i 's/typing_extensions ~= 3.7.4/typing_extensions >= 3.7.4/' tensorflow/tools/pip_package/setup.py
-      sed -i 's/numpy ~= 1.19.2/numpy >= 1.19.2/' tensorflow/tools/pip_package/setup.py
-      sed -i 's/h5py ~= 3.1.0/h5py >= 3.1.0/' tensorflow/tools/pip_package/setup.py
-      sed -i 's/six ~= 1.15.0/six >= 1.15.0/' tensorflow/tools/pip_package/setup.py
-      sed -i 's/wheel ~= 0.35/wheel >= 0.35/' tensorflow/tools/pip_package/setup.py
+      substituteInPlace tensorflow/tools/pip_package/setup.py \
+        --replace "typing_extensions ~= 3.7.4" "typing_extensions >= 3.7.4" \
+        --replace "numpy ~= 1.19.2" "numpy >= 1.19.2" \
+        --replace "h5py ~= 3.1.0" "h5py >= 3.1.0" \
+        --replace "six ~= 1.15.0" "six >= 1.15.0" \
+        --replace "wheel ~= 0.35" "wheel >= 0.35"
     '';
 
     # On update, it can be useful to steal the changes from gentoo
