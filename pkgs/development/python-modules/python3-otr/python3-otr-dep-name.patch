@@ -1,0 +1,12 @@
+diff --git a/setup.py b/setup.py
+index 040c619..2f2f759 100755
+--- a/setup.py
++++ b/setup.py
+@@ -31,6 +31,6 @@ setup(
+ 
+     packages=['otr'],
+     provides=['otr'],
+-    install_requires=['gmpy2', 'zope.interface', 'application', 'cryptography']
++    install_requires=['gmpy2', 'zope.interface', 'python3-application', 'cryptography']
+ )
+ 
