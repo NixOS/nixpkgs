@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation rec {
   pname = "kea";
-  version = "1.9.10";
+  version = "1.9.11";
 
   src = fetchurl {
     url = "https://ftp.isc.org/isc/${pname}/${version}/${pname}-${version}.tar.gz";
-    sha256 = "08pr2qav87jmrf074v8zbqyjkl51wf6r9hhgbkzhdav9d4f9kny3";
+    sha256 = "sha256-fSyJYsAshtEviybA67UzGCWK2iHJYJy5tJIZxxzTfyU=";
   };
 
   patches = [ ./dont-create-var.patch ];
