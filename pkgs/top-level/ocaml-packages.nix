@@ -1252,7 +1252,6 @@ let
     tezos-crypto = callPackage ../development/ocaml-modules/tezos/crypto.nix { };
     tezos-error-monad = callPackage ../development/ocaml-modules/tezos/error-monad.nix { };
     tezos-event-logging = callPackage ../development/ocaml-modules/tezos/event-logging.nix { };
-    tezos-lmdb = callPackage ../development/ocaml-modules/tezos/lmdb.nix { };
     tezos-lwt-result-stdlib = callPackage ../development/ocaml-modules/tezos/lwt-result-stdlib.nix { };
     tezos-micheline = callPackage ../development/ocaml-modules/tezos/micheline.nix { };
     tezos-p2p-services = callPackage ../development/ocaml-modules/tezos/p2p-services.nix { };
