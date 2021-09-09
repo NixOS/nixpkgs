@@ -41,7 +41,7 @@ let
     validated =  pkgs.runCommand "nagios-checked.cfg" {preferLocalBuild=true;} ''
       cp ${file} nagios.cfg
       # nagios checks the existence of /var/lib/nagios, but
-      # it does not exists in the build sandbox, so we fake it
+      # it does not exist in the build sandbox, so we fake it
       mkdir lib
       lib=$(readlink -f lib)
       sed -i s@=${nagiosState}@=$lib@ nagios.cfg
