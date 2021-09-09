@@ -15,13 +15,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "nbxplorer";
-  version = "2.1.58";
+  version = "2.2.5";
 
   src = fetchFromGitHub {
     owner = "dgarage";
     repo = "NBXplorer";
     rev = "v${version}";
-    sha256 = "sha256-rhD0owLEx7WxZnGPNaq4QpZopMsFQDOTnA0fs539Wxg=";
+    sha256 = "sha256-EWT/1fQpqEyKBEDHvmguHV/8s30DxweYswy0QvMDzcQ=";
   };
 
   nativeBuildInputs = [ dotnetSdk dotnetPackages.Nuget makeWrapper ];
