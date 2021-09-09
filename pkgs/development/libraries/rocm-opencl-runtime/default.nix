@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, writeScript
 , addOpenGLRunpath
 , cmake
 , rocm-cmake
@@ -72,6 +73,13 @@ stdenv.mkDerivation rec {
     substituteInPlace khronos/icd/loader/linux/icd_linux.c \
       --replace 'ICD_VENDOR_PATH' '"${addOpenGLRunpath.driverLink}/etc/OpenCL/vendors/"'
     echo 'add_dependencies(amdocl64 OpenCL)' >> amdocl/CMakeLists.txt
+  '';
+
+  passthru.updateScript = writeScript "update.sh" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p curl jq common-updater-scripts
+    version="$(curl -sL "https://api.github.com/repos/RadeonOpenCompute/ROCm-OpenCL-Runtime/tags" | jq '.[].name | split("-") | .[1] | select( . != null )' --raw-output | sort -n | tail -1)"
+    update-source-version rocm-opencl-runtime "$version"
   '';
 
   meta = with lib; {
