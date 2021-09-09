@@ -2,14 +2,28 @@
 , nodejs ? pkgs.nodejs-14_x
 , jq, youtube-dl, nodePackages, yarn2nix-moretea }:
 
+/*
+updating:
+cd pkgs/servers/peertube
+git clone --depth 1 --branch v3.4.0 https://github.com/Chocobozzz/PeerTube.git /tmp/PeerTube
+(cd /tmp/PeerTube/ && yarn2nix > yarn.nix)
+(cd /tmp/PeerTube/client && yarn2nix > yarn.nix)
+cp /tmp/PeerTube/package.json .
+cp /tmp/PeerTube/yarn.lock .
+cp /tmp/PeerTube/yarn.nix .
+mkdir -p client
+cp /tmp/PeerTube/client/package.json client/
+cp /tmp/PeerTube/client/yarn.lock client/
+cp /tmp/PeerTube/client/yarn.nix client/
+*/
 let
-  version = "3.3.0";
+  version = "3.4.0";
 
   source = fetchFromGitHub {
     owner = "Chocobozzz";
     repo = "PeerTube";
     rev = "v${version}";
-    sha256 = "0b8i9cx53wlqw048wr62jjp5n90vawmd2sp3qzn4gb89ih5qiprv";
+    sha256 = "sha256-cYmdVBx3XBMAUWMJ7DqFtlSwLe5g6mPFPUN8GVGuHIc=";
   };
 
   patchedSource = stdenv.mkDerivation {

@@ -4,8 +4,9 @@ rec {
     inherit version;
     pname = "peertube-server-yarn-modules";
     name = "${pname}-${version}";
-    packageJSON = "${sources}/package.json";
-    yarnLock = "${sources}/yarn.lock";
+    packageJSON = ./package.json;
+    yarnLock = ./yarn.lock;
+    yarnNix = ./yarn.nix;
     pkgConfig = yarnModulesConfig;
   };
   dist = stdenv.mkDerivation {
