@@ -76,6 +76,7 @@ let
     network  = (ps: [ ps.psutil ]);
     nginx    = (ps: []);
     postgres = (ps: with ps; [ pg8000 psycopg2 ]);
+    process  = (ps: []);
   };
 
   # All integrations (default + extra):
