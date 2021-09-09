@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, cmake, rocm-runtime, python3, rocm-cmake, busybox, gnugrep
+{ stdenv, lib, fetchFromGitHub, writeScript, fetchpatch, cmake, rocm-runtime, python3, rocm-cmake, busybox, gnugrep
   # rocminfo requires that the calling user have a password and be in
   # the video group. If we let rocm_agent_enumerator rely upon
   # rocminfo's output, then it, too, has those requirements. Instead,
@@ -35,4 +35,19 @@ stdenv.mkDerivation rec {
   '' + lib.optionalString (defaultTargets != []) ''
     echo '${lib.concatStringsSep "\n" defaultTargets}' > $out/bin/target.lst
   '';
+
+  passthru.updateScript = writeScript "update.sh" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p curl jq common-updater-scripts
+    version="$(curl -sL "https://api.github.com/repos/RadeonOpenCompute/rocminfo/tags" | jq '.[].name | split("-") | .[1] | select( . != null )' --raw-output | sort -n | tail -1)"
+    update-source-version rocminfo "$version"
+  '';
+
+  meta = with lib; {
+    description = "ROCm Application for Reporting System Info";
+    homepage = "https://github.com/RadeonOpenCompute/rocminfo";
+    license = licenses.ncsa;
+    maintainers = with maintainers; [ lovesegfault ];
+    platforms = platforms.linux;
+  };
 }

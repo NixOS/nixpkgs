@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, clang, rocm-device-libs, lld, llvm }:
+{ lib, stdenv, fetchFromGitHub, writeScript, cmake, clang, rocm-device-libs, lld, llvm }:
 
 stdenv.mkDerivation rec {
   pname = "rocm-comgr";
@@ -34,6 +34,13 @@ stdenv.mkDerivation rec {
   patchPhase = ''
     sed -e '/^llvm_map_components_to_libnames/,/[[:space:]]*Symbolize)/d' \
         -i CMakeLists.txt
+  '';
+
+  passthru.updateScript = writeScript "update.sh" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p curl jq common-updater-scripts
+    version="$(curl -sL "https://api.github.com/repos/RadeonOpenCompute/ROCm-CompilerSupport/releases?per_page=1" | jq '.[0].tag_name | split("-") | .[1]' --raw-output)"
+    update-source-version rocm-comgr "$version"
   '';
 
   meta = with lib; {
