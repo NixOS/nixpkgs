@@ -1121,6 +1121,12 @@ Superuser created successfully.
           rofi’s changelog</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          Bare minimum module for <literal>kratos</literal> have been
+          defined
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
 </section>
