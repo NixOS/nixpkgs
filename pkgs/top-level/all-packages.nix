@@ -9057,6 +9057,8 @@ with pkgs;
 
   simplescreenrecorder = libsForQt5.callPackage ../applications/video/simplescreenrecorder { };
 
+  sipclients3 = callPackage ../tools/networking/sipclients3 { };
+
   sipsak = callPackage ../tools/networking/sipsak { };
 
   sipvicious = python3Packages.callPackage ../tools/security/sipvicious { };
