@@ -30,6 +30,7 @@
   ];
 
   CXXFLAGS = "-DHAVE_LROUND";
+  enableParallelBuilding = true;
 
   patches = [
     # gcc9 compatibility https://github.com/mtytel/helm/pull/233
