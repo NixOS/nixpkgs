@@ -65,12 +65,11 @@ set( CMAKE_CXX_STANDARD_REQUIRED ON )
 # consumers by loading the developer's config from a build
 # directory (which doesn't have the rest of the config
 # installed inside it).
-find_package(Calamares 3.2.40 REQUIRED NO_CMAKE_PACKAGE_REGISTRY)
+set( CALAMARES_VERSION_REQUIRED 3.2.43 )
+find_package(Calamares ${CALAMARES_VERSION_REQUIRED} NO_CMAKE_PACKAGE_REGISTRY)
 if (NOT TARGET Calamares::calamares OR NOT TARGET Calamares::calamaresui)
-    message(FATAL_ERROR "Calamares found with missing CMake targets")
+    find_package(Calamares ${CALAMARES_VERSION_REQUIRED} REQUIRED)
 endif()
-
-find_package(YAMLCPP REQUIRED)  # Needed to untangle some dependencies before Calamares 3.2.36
 
 ### CMAKE SETUP
 #
