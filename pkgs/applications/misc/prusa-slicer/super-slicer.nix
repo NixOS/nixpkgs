@@ -20,6 +20,8 @@ let
       fetchSubmodules = true;
     };
 
+    patches = null;
+
     # We don't need PS overrides anymore, and gcode-viewer is embedded in the binary.
     postInstall = null;
     separateDebugInfo = true;
