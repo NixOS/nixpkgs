@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
     owner = "prisma";
     repo = "prisma-engines";
     rev = version;
-    sha256 = "sha256-i4r+TRC8454awbqe35Kg3M9xN2NnP8Sbd/dITtm9MDg=";
+    sha256 = "sha256-39+pEjve7evxcjcBK1JLTRNNjfUMoCgSgtYcdJ3zIKE=";
   };
 
   cargoPatches = [
@@ -27,8 +27,6 @@ rustPlatform.buildRustPackage rec {
   OPENSSL_NO_VENDOR = 1;
 
   cargoSha256 = "sha256-BldEj8+tzY0dIA/fdrPLsFn3ZdfoGq6GsomCUhQBoLM=";
-
-  outputs = [ "out" "lib" "bin" ];
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl protobuf ];
@@ -45,7 +43,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   postInstall = ''
-    cp target/release/libquery_engine.so $out/lib/libquery_engine.so.node
+    cp target/x86_64-unknown-linux-gnu/release/libquery_engine.so $out/lib/libquery_engine.so.node
   '';
 
   # Tests are long to compile
