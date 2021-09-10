@@ -3949,6 +3949,11 @@ with pkgs;
 
   bluetooth_battery = python3Packages.callPackage ../applications/misc/bluetooth_battery { };
 
+  calyx-vpn = libsForQt5.callPackage ../tools/networking/bitmask-vpn {
+    provider = "calyx";
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
+  };
+
   code-browser-qt = libsForQt5.callPackage ../applications/editors/code-browser { withQt = true;
                                                                                 };
   code-browser-gtk = callPackage ../applications/editors/code-browser { withGtk = true;
@@ -8391,6 +8396,11 @@ with pkgs;
 
   rig = callPackage ../tools/misc/rig {
     stdenv = gccStdenv;
+  };
+
+  riseup-vpn = libsForQt5.callPackage ../tools/networking/bitmask-vpn {
+    provider = "riseup";
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
 
   rocket = libsForQt5.callPackage ../tools/graphics/rocket { };
