@@ -125,8 +125,6 @@
     };
   };
 
-  git-undo = callPackage ./git-undo { };
-
   haskell-unicode-input-method = let
     rev = "d8d168148c187ed19350bb7a1a190217c2915a63";
   in melpaBuild {
@@ -269,6 +267,8 @@
   ess-R-object-popup = callPackage ./ess-R-object-popup { };
 
   font-lock-plus = callPackage ./font-lock-plus { };
+
+  git-undo = callPackage ./git-undo { };
 
   helm-words = callPackage ./helm-words { };
 
