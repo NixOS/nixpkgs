@@ -2961,6 +2961,8 @@ in {
 
   glcontext = callPackage ../development/python-modules/glcontext { };
 
+  glfw = callPackage ../development/python-modules/glfw { };
+
   glob2 = callPackage ../development/python-modules/glob2 { };
 
   globre = callPackage ../development/python-modules/globre { };
