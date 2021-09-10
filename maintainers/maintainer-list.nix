@@ -9570,6 +9570,12 @@
     github = "s1341";
     githubId = 5682183;
   };
+  samalws = {
+    email = "sam@samalws.com";
+    name = "Sam Alws";
+    github = "samalws";
+    githubId = 20981725;
+  };
   samb96 = {
     email = "samb96@gmail.com";
     github = "samb96";
