@@ -169,7 +169,8 @@ rec {
       # converts { a.b.c = 5; } to { "a.b".c = 5; } for toINI
       gitFlattenAttrs = let
         recurse = path: value:
-          if isAttrs value then
+        assert lib.assertMsg (! lib.isDerivation value) "`${lib.getName value}` is a derivation. If you meant to pass its store path, convert it to a string.";
+        if isAttrs value then
             lib.mapAttrsToList (name: value: recurse ([ name ] ++ path) value) value
           else if length path > 1 then {
             ${concatStringsSep "." (lib.reverseList (tail path))}.${head path} = value;
