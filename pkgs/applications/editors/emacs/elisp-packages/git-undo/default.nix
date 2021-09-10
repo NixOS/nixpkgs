@@ -1,8 +1,12 @@
-{ stdenv, fetchFromGitHub, emacs, lib }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, emacs
+}:
 
 stdenv.mkDerivation {
   pname = "git-undo";
-  version = "2019-10-13";
+  version = "0.0.0+unstable=2019-12-21";
 
   src = fetchFromGitHub {
     owner = "jwiegley";
@@ -11,7 +15,9 @@ stdenv.mkDerivation {
     sha256 = "sha256-cVkK9EF6qQyVV3uVqnBEjF8e9nEx/8ixnM8PvxqCyYE=";
   };
 
-  buildInputs = [ emacs ];
+  buildInputs = [
+    emacs
+  ];
 
   buildPhase = ''
     runHook preBuild
@@ -26,11 +32,11 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
-    description = "Revert region to most recent Git-historical version";
+  meta = with lib; {
     homepage = "https://github.com/jwiegley/git-undo-el";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ leungbk ];
+    description = "Revert region to most recent Git-historical version";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ leungbk ];
     platforms = emacs.meta.platforms;
   };
 }
