@@ -179,7 +179,7 @@ with lib.maintainers; {
   };
 
   openstack = {
-    memebers = [
+    members = [
       angustrau
       superherointj
       supersandro2000
