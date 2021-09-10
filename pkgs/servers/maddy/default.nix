@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, coreutils, installShellFiles, scdoc }:
+{ lib, buildGoModule, fetchFromGitHub, coreutils, installShellFiles, scdoc, nixosTests }:
 
 buildGoModule rec {
   pname = "maddy";
@@ -36,6 +36,8 @@ buildGoModule rec {
       --replace "/usr/local/bin/maddy" "$out/bin/maddy" \
       --replace "/bin/kill" "${coreutils}/bin/kill"
   '';
+
+  passthru.tests.nixos = nixosTests.maddy;
 
   meta = with lib; {
     description = "Composable all-in-one mail server";
