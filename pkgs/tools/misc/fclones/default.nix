@@ -30,6 +30,6 @@ rustPlatform.buildRustPackage rec {
     description = "Efficient Duplicate File Finder and Remover";
     homepage = "https://github.com/pkolaczk/fclones";
     license = licenses.mit;
-    maintainers = with maintainers; [ cyounkins ];
+    maintainers = with maintainers; [ cyounkins msfjarvis ];
   };
 }
