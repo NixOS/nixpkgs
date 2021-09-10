@@ -19,9 +19,6 @@
 , zlib
 }:
 let
-  pname = "github-actions-runner";
-  version = "2.279.0";
-
   deps = (import ./deps.nix { inherit fetchurl; });
   nugetPackages = map
     (x: {
@@ -29,63 +26,20 @@ let
       path = "${x}";
     })
     deps;
-  nugetSource = linkFarm "${pname}-${version}-packages" nugetPackages;
+  nugetSource = linkFarm "nuget-packages" nugetPackages;
 
   dotnetSdk = dotnetCorePackages.sdk_3_1;
   runtimeId = "linux-x64";
-
-  disabledTest = [
-    # Self-updating is patched out, hence this test will fail
-    "FullyQualifiedName!=GitHub.Runner.Common.Tests.Listener.RunnerL0.TestRunOnceHandleUpdateMessage"
-  ] ++ map
-    # Online tests
-    (x: "FullyQualifiedName!=GitHub.Runner.Common.Tests.Worker.ActionManagerL0.PrepareActions_${x}")
-    [
-      "CompositeActionWithActionfile_CompositeContainerNested"
-      "CompositeActionWithActionfile_CompositePrestepNested"
-      "CompositeActionWithActionfile_MaxLimit"
-      "CompositeActionWithActionfile_Node"
-      "DownloadActionFromGraph"
-      "DownloadActionFromGraph_Legacy"
-      "NotPullOrBuildImagesMultipleTimes"
-      "NotPullOrBuildImagesMultipleTimes_Legacy"
-      "RepositoryActionWithActionYamlFile_DockerHubImage"
-      "RepositoryActionWithActionYamlFile_DockerHubImage_Legacy"
-      "RepositoryActionWithActionfileAndDockerfile"
-      "RepositoryActionWithActionfileAndDockerfile_Legacy"
-      "RepositoryActionWithActionfile_DockerHubImage"
-      "RepositoryActionWithActionfile_DockerHubImage_Legacy"
-      "RepositoryActionWithActionfile_Dockerfile"
-      "RepositoryActionWithActionfile_Dockerfile_Legacy"
-      "RepositoryActionWithActionfile_DockerfileRelativePath"
-      "RepositoryActionWithActionfile_DockerfileRelativePath_Legacy"
-      "RepositoryActionWithActionfile_Node"
-      "RepositoryActionWithActionfile_Node_Legacy"
-      "RepositoryActionWithDockerfile"
-      "RepositoryActionWithDockerfile_Legacy"
-      "RepositoryActionWithDockerfileInRelativePath"
-      "RepositoryActionWithDockerfileInRelativePath_Legacy"
-      "RepositoryActionWithDockerfilePrepareActions_Repository"
-      "RepositoryActionWithInvalidWrapperActionfile_Node"
-      "RepositoryActionWithInvalidWrapperActionfile_Node_Legacy"
-      "RepositoryActionWithWrapperActionfile_PreSteps"
-      "RepositoryActionWithWrapperActionfile_PreSteps_Legacy"
-    ] ++ map
-    (x: "FullyQualifiedName!=GitHub.Runner.Common.Tests.DotnetsdkDownloadScriptL0.${x}")
-    [
-      "EnsureDotnetsdkBashDownloadScriptUpToDate"
-      "EnsureDotnetsdkPowershellDownloadScriptUpToDate"
-    ];
-  testFilterXml = lib.concatStringsSep "&amp;" disabledTest;
 in
 stdenv.mkDerivation rec {
-  inherit pname version;
+  pname = "github-runner";
+  version = "2.281.1";
 
   src = fetchFromGitHub {
     owner = "actions";
     repo = "runner";
-    rev = "6b75179ec79e2041b3b5b4e9206b73db2d206aac"; # v${version}
-    sha256 = "sha256-d7LAHL8Ff7R++d1HuLxWjtiBZRogySe7xHY/xJAcFms=";
+    rev = "c8caf59bb7adaa87c4cf8f61372670d338a13f2d"; # v${version}
+    sha256 = "sha256-Nl1FSjwweVqdQEVhqt4PEcqZbF7htNT279yx1nGuAe0=";
   };
 
   nativeBuildInputs = [
@@ -125,7 +79,7 @@ stdenv.mkDerivation rec {
     # Disable specific tests
     substituteInPlace src/dir.proj \
       --replace 'dotnet test Test/Test.csproj' \
-                "dotnet test Test/Test.csproj --filter '${testFilterXml}'"
+                "dotnet test Test/Test.csproj --filter '${lib.concatStringsSep "&amp;" disabledTests}'"
 
     # We don't use a Git checkout
     substituteInPlace src/dir.proj \
@@ -179,6 +133,49 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = true;
+
+  disabledTests = [
+    # Self-updating is patched out, hence this test will fail
+    "FullyQualifiedName!=GitHub.Runner.Common.Tests.Listener.RunnerL0.TestRunOnceHandleUpdateMessage"
+  ] ++ map
+    # Online tests
+    (x: "FullyQualifiedName!=GitHub.Runner.Common.Tests.Worker.ActionManagerL0.PrepareActions_${x}")
+    [
+      "CompositeActionWithActionfile_CompositeContainerNested"
+      "CompositeActionWithActionfile_CompositePrestepNested"
+      "CompositeActionWithActionfile_MaxLimit"
+      "CompositeActionWithActionfile_Node"
+      "DownloadActionFromGraph"
+      "DownloadActionFromGraph_Legacy"
+      "NotPullOrBuildImagesMultipleTimes"
+      "NotPullOrBuildImagesMultipleTimes_Legacy"
+      "RepositoryActionWithActionYamlFile_DockerHubImage"
+      "RepositoryActionWithActionYamlFile_DockerHubImage_Legacy"
+      "RepositoryActionWithActionfileAndDockerfile"
+      "RepositoryActionWithActionfileAndDockerfile_Legacy"
+      "RepositoryActionWithActionfile_DockerHubImage"
+      "RepositoryActionWithActionfile_DockerHubImage_Legacy"
+      "RepositoryActionWithActionfile_Dockerfile"
+      "RepositoryActionWithActionfile_Dockerfile_Legacy"
+      "RepositoryActionWithActionfile_DockerfileRelativePath"
+      "RepositoryActionWithActionfile_DockerfileRelativePath_Legacy"
+      "RepositoryActionWithActionfile_Node"
+      "RepositoryActionWithActionfile_Node_Legacy"
+      "RepositoryActionWithDockerfile"
+      "RepositoryActionWithDockerfile_Legacy"
+      "RepositoryActionWithDockerfileInRelativePath"
+      "RepositoryActionWithDockerfileInRelativePath_Legacy"
+      "RepositoryActionWithDockerfilePrepareActions_Repository"
+      "RepositoryActionWithInvalidWrapperActionfile_Node"
+      "RepositoryActionWithInvalidWrapperActionfile_Node_Legacy"
+      "RepositoryActionWithWrapperActionfile_PreSteps"
+      "RepositoryActionWithWrapperActionfile_PreSteps_Legacy"
+    ] ++ map
+    (x: "FullyQualifiedName!=GitHub.Runner.Common.Tests.DotnetsdkDownloadScriptL0.${x}")
+    [
+      "EnsureDotnetsdkBashDownloadScriptUpToDate"
+      "EnsureDotnetsdkPowershellDownloadScriptUpToDate"
+    ];
 
   checkInputs = [ git ];
 
@@ -239,6 +236,10 @@ stdenv.mkDerivation rec {
 
   # Stripping breaks the binaries
   dontStrip = true;
+
+  preFixup = ''
+    patchelf --replace-needed liblttng-ust.so.0 liblttng-ust.so $out/lib/libcoreclrtraceptprovider.so
+  '';
 
   postFixup = ''
     fix_rpath() {

@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ google-auth google-crc32c requests ];
 
-  checkInputs = [ google-auth google-cloud-testutils mock pytestCheckHook pytest-asyncio ];
+  checkInputs = [ google-cloud-testutils mock pytestCheckHook pytest-asyncio ];
 
   preCheck = ''
     # prevent shadowing imports

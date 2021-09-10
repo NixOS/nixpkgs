@@ -2366,6 +2366,8 @@ in {
 
   envoy-reader = callPackage ../development/python-modules/envoy-reader { };
 
+  envoy-utils = callPackage ../development/python-modules/envoy-utils { };
+
   enzyme = callPackage ../development/python-modules/enzyme { };
 
   epc = callPackage ../development/python-modules/epc { };
@@ -3729,6 +3731,10 @@ in {
   javaobj-py3 = callPackage ../development/python-modules/javaobj-py3 { };
 
   javaproperties = callPackage ../development/python-modules/javaproperties { };
+
+  jax = callPackage ../development/python-modules/jax { };
+
+  jaxlib = callPackage ../development/python-modules/jaxlib { };
 
   JayDeBeApi = callPackage ../development/python-modules/JayDeBeApi { };
 
@@ -7562,6 +7568,8 @@ in {
   questionary = callPackage ../development/python-modules/questionary { };
 
   queuelib = callPackage ../development/python-modules/queuelib { };
+
+  qmk-dotty-dict = callPackage ../development/python-modules/qmk-dotty-dict {};
 
   r2pipe = callPackage ../development/python-modules/r2pipe { };
 

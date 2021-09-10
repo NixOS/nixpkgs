@@ -9,16 +9,21 @@
 , octavius
 , dune-build-info
 , uutf
+, re
 , pp
 , csexp
 , cmdliner
 }:
 
-buildDunePackage {
+buildDunePackage rec {
   pname = "lsp";
   inherit (jsonrpc) version src;
   useDune2 = true;
-  minimumOCamlVersion = "4.06";
+  minimumOCamlVersion =
+    if lib.versionAtLeast version "1.7.0" then
+      "4.12"
+    else
+      "4.06";
 
   # unvendor some (not all) dependencies.
   # They are vendored by upstream only because it is then easier to install
@@ -28,22 +33,24 @@ buildDunePackage {
     rm -r ocaml-lsp-server/vendor/{octavius,uutf,omd,cmdliner}
   '';
 
-  buildInputs = [
-    cppo
-    ppx_yojson_conv_lib
-    ocaml-syntax-shims
-    octavius
-    dune-build-info
-    omd
-    cmdliner
-  ] ++ lib.optional (lib.versionAtLeast jsonrpc.version "1.7.0") pp;
+  buildInputs =
+    if lib.versionAtLeast version "1.7.0" then
+      [ pp re ppx_yojson_conv_lib octavius dune-build-info omd cmdliner ]
+    else
+      [ cppo
+        ppx_yojson_conv_lib
+        ocaml-syntax-shims
+        octavius
+        dune-build-info
+        omd
+        cmdliner
+      ];
 
   propagatedBuildInputs = [
     csexp
     jsonrpc
-    stdlib-shims
     uutf
-  ];
+  ] ++ lib.optional (lib.versionOlder version "1.7.0") stdlib-shims;
 
   meta = jsonrpc.meta // {
     description = "LSP protocol implementation in OCaml";

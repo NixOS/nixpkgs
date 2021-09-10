@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchFromGitHub
+, writeScript
 , cmake
 , pkg-config
 , numactl
@@ -26,6 +27,13 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     cp -r $src/include $out
+  '';
+
+  passthru.updateScript = writeScript "update.sh" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p curl jq common-updater-scripts
+    version="$(curl -sL "https://api.github.com/repos/RadeonOpenCompute/ROCT-Thunk-Interface/tags" | jq '.[].name | split("-") | .[1] | select( . != null )' --raw-output | sort -n | tail -1)"
+    update-source-version rocm-thunk "$version"
   '';
 
   meta = with lib; {
