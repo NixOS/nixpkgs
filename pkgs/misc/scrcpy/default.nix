@@ -59,6 +59,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Genymobile/scrcpy";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ deltaevo lukeadams ];
+    maintainers = with maintainers; [ deltaevo lukeadams msfjarvis ];
   };
 }
