@@ -1303,6 +1303,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  checkip = callPackage ../tools/networking/checkip { };
+
   ec2_api_tools = callPackage ../tools/virtualization/ec2-api-tools { };
 
   ec2_ami_tools = callPackage ../tools/virtualization/ec2-ami-tools { };
@@ -4364,6 +4366,8 @@ with pkgs;
   doomseeker = qt5.callPackage ../applications/misc/doomseeker { };
 
   doom-bcc = callPackage ../games/zdoom/bcc-git.nix { };
+
+  dorkscout = callPackage ../tools/security/dorkscout { };
 
   sl1-to-photon = python3Packages.callPackage ../applications/misc/sl1-to-photon { };
 
@@ -7903,6 +7907,8 @@ with pkgs;
   };
 
   os-prober = callPackage ../tools/misc/os-prober {};
+
+  oshka = callPackage ../development/tools/oshka {};
 
   osl = callPackage ../development/compilers/osl { };
 
@@ -12408,6 +12414,7 @@ with pkgs;
   sbcl_2_0_9 = callPackage ../development/compilers/sbcl/2.0.9.nix {};
   sbcl_2_1_1 = callPackage ../development/compilers/sbcl/2.1.1.nix {};
   sbcl_2_1_2 = callPackage ../development/compilers/sbcl/2.1.2.nix {};
+  sbcl_2_1_8 = callPackage ../development/compilers/sbcl/2.1.8.nix {};
   sbcl = sbcl_2_1_2;
 
   roswell = callPackage ../development/tools/roswell/default.nix { };
@@ -14143,6 +14150,8 @@ with pkgs;
   kubeone = callPackage ../applications/networking/cluster/kubeone { };
 
   kubeprompt = callPackage ../development/tools/kubeprompt { };
+
+  kubescape = callPackage ../tools/security/kubescape { };
 
   kubesec = callPackage ../tools/security/kubesec { };
 
