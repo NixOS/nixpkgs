@@ -228,12 +228,14 @@ sub handleModifiedUnit {
                 # We write this to a file to ensure that the
                 # service gets restarted if we're interrupted.
                 if (!$socketActivated) {
-                    $unitsToStart->{$unit} = 1;
-                    recordUnit($startListFile, $unit);
+                    if (index($unit, "systemd-nspawn@") == -1) {
+                        $unitsToStart->{$unit} = 1;
+                        recordUnit($startListFile, $unit);
+                    }
                 }
 
                 if (index($unit, "systemd-nspawn@") == -1) {
-                    $unitsToStop{$unit} = 1;
+                    $unitsToStop->{$unit} = 1;
                 }
             }
         }
@@ -290,6 +292,15 @@ sub compareNspawnUnits {
     return (0, $contentsNew->{'X-ActivationStrategy'}[0] // "dynamic");
 }
 
+my $activeContainersOut = `machinectl list`;
+sub isContainerRunning {
+    my ($name) = @_;
+    if (index($activeContainersOut, $name) != -1) {
+        return 1;
+    }
+    return 0;
+}
+
 my @currentNspawnUnits = glob("/etc/systemd/nspawn/*.nspawn");
 my @upcomingNspawnUnits = glob("$out/etc/systemd/nspawn/*.nspawn");
 foreach (@upcomingNspawnUnits) {
@@ -303,7 +314,9 @@ foreach (@upcomingNspawnUnits) {
             my ($eq, $strategy) = compareNspawnUnits($orig, $_);
             if ($strategy ne "none") {
                 if ($strategy ne "restart" and ($eq == 0 or $strategy eq "reload")) {
-                    $unitsToReload{$unitName} = 1;
+                    if (isContainerRunning($unit) == 1) {
+                        $unitsToReload{$unitName} = 1;
+                    }
                 } elsif ($eq == 1) {
                     $unitsToRestart{$unitName} = 1;
                 }
@@ -567,8 +580,25 @@ system("@systemd@/bin/systemd-tmpfiles", "--create", "--remove", "--exclude-pref
 # Reload units that need it. This includes remounting changed mount
 # units.
 if (scalar(keys %unitsToReload) > 0) {
-    print STDERR "reloading the following units: ", join(", ", sort(keys %unitsToReload)), "\n";
-    system("@systemd@/bin/systemctl", "reload", "--", sort(keys %unitsToReload)) == 0 or $res = 4;
+    my @to_reload = sort(keys %unitsToReload);
+    my (@services, @containers);
+    print STDERR "reloading the following units: ", join(", ", @to_reload), "\n";
+    foreach my $s (@to_reload) {
+        if (index($s, "systemd-nspawn@") == 0) {
+            push @containers, $s;
+        } else {
+            push @services, $s;
+        }
+    }
+
+    # Reloading containers & dbus.service in the same transaction causes
+    # the system to stall for about 1 minute.
+    if (scalar(@services) > 0) {
+        system("@systemd@/bin/systemctl", "reload", "--", @services) == 0 or $res = 4;
+    }
+    if (scalar(@containers) > 0) {
+        system("@systemd@/bin/systemctl", "reload", "--", @containers) == 0 or $res = 4;
+    }
     unlink($reloadListFile);
     unlink($reloadByActivationFile);
 }

@@ -28,6 +28,12 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: let
     network.v4.static.hostAddresses = [ "10.231.140.1/24" ];
   };
 
+  instances.dynamic2 = {
+    activation.strategy = "dynamic";
+    network.v4.static.containerPool = [ "10.231.141.2/24" ];
+    network.v4.static.hostAddresses = [ "10.231.141.1/24" ];
+  };
+
   testvm = { ... }: {
     systemd.services.systemd-networkd.environment.SYSTEMD_LOG_LEVEL = "debug";
     networking = {
@@ -62,6 +68,11 @@ in {
               };
             };
             networking.firewall.allowedTCPPorts = [ 80 ];
+          };
+        }
+        {
+          dynamic2.config = {
+            services.nginx.enable = true;
           };
         }
       ];
@@ -99,7 +110,7 @@ in {
         for i in ['dynamic', 'teststop', 'restart', 'reload']:
             assert i in available, f"Expected machine {i} in `machinectl output!"
 
-        for i in range(136, 141):
+        for i in range(136, 142):
             base.wait_until_succeeds(f"ping -c3 10.231.{str(i)}.2 >&2")
 
         base.fail("curl 10.231.136.2 -sSf --connect-timeout 10")
@@ -110,6 +121,7 @@ in {
             )
 
     with subtest("Activate changes"):
+        base.succeed("machinectl stop dynamic2")
         act_output = base.succeed(
             "${change}/bin/switch-to-configuration test 2>&1 | tee /dev/stderr"
         ).split('\n')
@@ -127,6 +139,9 @@ in {
         print(units)
         assert "systemd-nspawn@reload.service" in units['reloading']
         assert "systemd-nspawn@reload.service" not in units['restarting']
+
+        assert "systemd-nspawn@dynamic2.service" not in units['reloading']
+        assert "systemd-nspawn@dynamic2.service" not in units['restarting']
 
         assert "systemd-nspawn@restart.service" in units['restarting']
         assert "systemd-nspawn@restart.service" not in units['reloading']
