@@ -10637,6 +10637,8 @@ with pkgs;
 
   oksh = callPackage ../shells/oksh { };
 
+  loksh = callPackage ../shells/loksh { };
+
   pash = callPackage ../shells/pash { };
 
   scponly = callPackage ../shells/scponly { };
