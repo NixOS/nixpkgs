@@ -1,5 +1,5 @@
 { python3Packages, fetchurl, lib,
-  yubikey-personalization, libu2f-host, libusb1 }:
+  yubikey-personalization, libu2f-host, libusb1, procps }:
 
 python3Packages.buildPythonPackage rec {
   pname = "yubikey-manager";
@@ -9,6 +9,11 @@ python3Packages.buildPythonPackage rec {
     url = "https://developers.yubico.com/${pname}/Releases/${pname}-${version}.tar.gz";
     hash = "sha256-OxbKo5vwOBabU6/2hO4RMWiifo4IVIxz+DlcwP9xO/E=";
   };
+
+  postPatch = ''
+    substituteInPlace "ykman/pcsc/__init__.py" \
+      --replace '/usr/bin/pkill' '${procps}/bin/pkill'
+  '';
 
   propagatedBuildInputs =
     with python3Packages; [
