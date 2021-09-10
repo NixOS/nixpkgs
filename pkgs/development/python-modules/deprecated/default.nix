@@ -1,12 +1,17 @@
-{ lib, fetchPypi, buildPythonPackage, wrapt, pytest }:
+{ lib
+, fetchPypi
+, buildPythonPackage
+, wrapt
+, pytest
+}:
 
 buildPythonPackage rec {
   pname = "Deprecated";
-  version = "1.2.12";
+  version = "1.2.13";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6d2de2de7931a968874481ef30208fd4e08da39177d61d3d4ebdf4366e7dbca1";
+    sha256 = "sha256-Q6xTNdqQwxwkugKK9TapHUHVP55pAd2wIbzFcs5E440=";
   };
 
   propagatedBuildInputs = [ wrapt ];
