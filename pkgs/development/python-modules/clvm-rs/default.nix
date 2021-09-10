@@ -9,20 +9,20 @@
 
 buildPythonPackage rec {
   pname = "clvm_rs";
-  version = "0.1.10";
+  version = "0.1.11";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Chia-Network";
     repo = "clvm_rs";
     rev = version;
-    sha256 = "sha256-ersQ5jz2dW9paWFqgkwmwLZkkqKxhT0lTRt78cRRoSc=";
+    sha256 = "sha256-PXx7PKkqTb5slP8Z3z6yuWYrSEJSeGe75LmEvTFLKbQ=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    sha256 = "sha256-tJWTHTSg9HLd/7m7P3ZJw+QRgkIvt/SvtjFI0oKctxU=";
+    sha256 = "sha256-sztmQeNECR8KSWd+CwkWOip7DAr/pnacjaIvuakymcs=";
   };
 
   format = "pyproject";
