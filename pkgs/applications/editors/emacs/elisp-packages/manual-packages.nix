@@ -260,6 +260,8 @@
 
   # Packages made the classical callPackage way
 
+  apheleia = callPackage ./apheleia { };
+
   ebuild-mode = callPackage ./ebuild-mode { };
 
   emacspeak = callPackage ./emacspeak { };
