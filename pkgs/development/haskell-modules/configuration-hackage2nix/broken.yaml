@@ -5044,7 +5044,6 @@ broken-packages:
   - urldecode
   - url-decoders
   - urldisp-happstack
-  - urlencoded
   - url-generic
   - urn
   - urn-random
