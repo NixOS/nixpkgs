@@ -21,6 +21,8 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "backports.entry_points_selectable" ];
 
+  pythonNamespaces = [ "backports" ];
+
   meta = with lib; {
     description = "Compatibility shim providing selectable entry points for older implementations";
     homepage = "https://github.com/jaraco/backports.entry_points_selectable";
