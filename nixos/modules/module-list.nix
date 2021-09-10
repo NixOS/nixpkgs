@@ -160,6 +160,7 @@
   ./programs/less.nix
   ./programs/liboping.nix
   ./programs/light.nix
+  ./programs/maven.nix
   ./programs/mosh.nix
   ./programs/mininet.nix
   ./programs/msmtp.nix
