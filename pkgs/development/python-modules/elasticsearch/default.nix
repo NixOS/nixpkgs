@@ -7,11 +7,16 @@
 
 buildPythonPackage (rec {
   pname = "elasticsearch";
-  version = "7.14.1";
+  # In 7.14.0, the package was intentionally made incompatible with
+  # the OSS version of elasticsearch - don't update past 7.13.x until
+  # there's a clear path forward. See
+  # https://github.com/elastic/elasticsearch-py/issues/1639 for more
+  # info.
+  version = "7.13.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f928898fe06869516f2603f9a96a6f166c06888233806b31ac6568bac0266501";
+    sha256 = "d6bcca0b2e5665d08e6fe6fadc2d4d321affd76ce483603078fc9d3ccd2bc0f9";
   };
 
   # Check is disabled because running them destroy the content of the local cluster!

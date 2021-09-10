@@ -12355,6 +12355,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
   cargo-readme = callPackage ../development/tools/rust/cargo-readme {};
+  cargo-sort = callPackage ../development/tools/rust/cargo-sort { };
   cargo-sweep = callPackage ../development/tools/rust/cargo-sweep { };
   cargo-sync-readme = callPackage ../development/tools/rust/cargo-sync-readme {};
   cargo-udeps = callPackage ../development/tools/rust/cargo-udeps {
@@ -31558,6 +31559,8 @@ with pkgs;
   norwester-font = callPackage ../data/fonts/norwester  {};
 
   nut = callPackage ../applications/misc/nut { };
+
+  nhentai = callPackage ../applications/misc/nhentai { };
 
   nvd = callPackage ../tools/package-management/nvd { };
 
