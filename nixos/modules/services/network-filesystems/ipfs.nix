@@ -12,6 +12,11 @@ let
     (optionalString (cfg.defaultMode == "norouting") "--routing=none")
   ] ++ cfg.extraFlags);
 
+  profile =
+    if cfg.localDiscovery
+    then "local-discovery"
+    else "server";
+
   splitMulitaddr = addrRaw: lib.tail (lib.splitString "/" addrRaw);
 
   multiaddrToListenStream = addrRaw:
@@ -236,14 +241,13 @@ in
       environment.IPFS_PATH = cfg.dataDir;
 
       preStart = ''
-        if [[ ! -f ${cfg.dataDir}/config ]]; then
-          ipfs init ${optionalString cfg.emptyRepo "-e"} \
-            ${optionalString (! cfg.localDiscovery) "--profile=server"}
+        if [[ ! -f "$IPFS_PATH/config" ]]; then
+          ipfs init ${optionalString cfg.emptyRepo "-e"} --profile=${profile}
         else
-          ${if cfg.localDiscovery
-            then "ipfs --offline config profile apply local-discovery"
-            else "ipfs --offline config profile apply server"
-          }
+          # After an unclean shutdown this file may exist which will cause the config command to attempt to talk to the daemon. This will hang forever if systemd is holding our sockets open.
+          rm -vf "$IPFS_PATH/api"
+
+          ipfs --offline config profile apply ${profile}
         fi
       '' + optionalString cfg.autoMount ''
         ipfs --offline config Mounts.FuseAllowOther --json true
