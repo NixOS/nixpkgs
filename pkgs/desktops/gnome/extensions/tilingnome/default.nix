@@ -1,7 +1,7 @@
 { stdenv, lib, fetchFromGitHub, glib, gnome }:
 
 stdenv.mkDerivation rec {
-  pname = "gnome-shell-extension-tilingnome-unstable";
+  pname = "gnome-shell-extension-tilingnome";
   version = "unstable-2019-09-19";
 
   src = fetchFromGitHub {
