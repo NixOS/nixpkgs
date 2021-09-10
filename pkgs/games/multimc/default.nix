@@ -1,4 +1,4 @@
-{ lib, mkDerivation, fetchFromGitHub, cmake, jdk8, jdk, zlib, file, makeWrapper, xorg, libpulseaudio, qtbase, libGL }:
+{ lib, mkDerivation, fetchFromGitHub, cmake, jdk8, jdk, zlib, file, makeWrapper, xorg, libpulseaudio, qtbase, libGL, msaClientID ? "" }:
 
 let
   libpath = with xorg; lib.makeLibraryPath [ libX11 libXext libXcursor libXrandr libXxf86vm libpulseaudio libGL ];
@@ -22,6 +22,10 @@ in mkDerivation rec {
     substituteInPlace launcher/java/JavaUtils.cpp \
       --replace 'scanJavaDir("/usr/lib/jvm")' 'javas.append("${jdk}/lib/openjdk/bin/java")' \
       --replace 'scanJavaDir("/usr/lib32/jvm")' 'javas.append("${jdk8}/lib/openjdk/bin/java")'
+
+    # add client ID
+    substituteInPlace notsecrets/Secrets.cpp \
+      --replace 'QString MSAClientID = "";' 'QString MSAClientID = "${msaClientID}";'
   '';
 
   cmakeFlags = [ "-DMultiMC_LAYOUT=lin-system" ];
