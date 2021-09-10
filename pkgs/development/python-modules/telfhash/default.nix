@@ -2,32 +2,33 @@
 , buildPythonPackage
 , fetchFromGitHub
 , capstone
+, packaging
 , pyelftools
 , tlsh
 , nose
 }:
 buildPythonPackage {
   pname = "telfhash";
-  version = "unstable-2021-01-29";
+  version = "0.9.8";
 
   src = fetchFromGitHub {
     owner = "trendmicro";
     repo = "telfhash";
-    rev = "b5e398e59dc25a56a28861751c1fccc74ef71617";
-    sha256 = "jNu6qm8Q/UyJVaCqwFOPX02xAR5DwvCK3PaH6Fvmakk=";
+    rev = "0aa7df079c00fe00e3a1147adb52f010cfa4431d";
+    sha256 = "124zajv43wx9l8rvdvmzcnbh0xpzmbn253pznpbjwvygfx16gq02";
   };
-
-  patches = [ ./telfhash-new-tlsh-hash.patch ];
 
   # The tlsh library's name is just "tlsh"
   postPatch = ''
     substituteInPlace requirements.txt --replace "python-tlsh" "tlsh"
+    substituteInPlace requirements.txt --replace "py-tlsh" "tlsh"
   '';
 
   propagatedBuildInputs = [
     capstone
     pyelftools
     tlsh
+    packaging
   ];
 
   checkInputs = [
