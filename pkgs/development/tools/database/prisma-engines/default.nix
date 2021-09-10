@@ -4,9 +4,12 @@
 , pkg-config
 , protobuf
 , rustPlatform
+, stdenv
 }:
 
-rustPlatform.buildRustPackage rec {
+let
+  node-api-lib = (if stdenv.isDarwin then "libquery_engine.dylib" else "libquery_engine.so");
+in rustPlatform.buildRustPackage rec {
   pname = "prisma-engines";
   version = "2.30.2";
 
@@ -43,7 +46,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   postInstall = ''
-    cp target/x86_64-unknown-linux-gnu/release/libquery_engine.so $out/lib/libquery_engine.so.node
+    mv $out/lib/${node-api-lib} $out/lib/libquery_engine.node
   '';
 
   # Tests are long to compile
