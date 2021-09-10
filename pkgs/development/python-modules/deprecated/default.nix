@@ -2,24 +2,32 @@
 , fetchPypi
 , buildPythonPackage
 , wrapt
-, pytest
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
-  pname = "Deprecated";
+  pname = "deprecated";
   version = "1.2.13";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "Deprecated";
+    inherit version;
     sha256 = "sha256-Q6xTNdqQwxwkugKK9TapHUHVP55pAd2wIbzFcs5E440=";
   };
 
-  propagatedBuildInputs = [ wrapt ];
-  checkInputs = [ pytest ];
+  propagatedBuildInputs = [
+    wrapt
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [ "deprecated" ];
+
   meta = with lib; {
     homepage = "https://github.com/tantale/deprecated";
     description = "Python @deprecated decorator to deprecate old python classes, functions or methods";
-    platforms = platforms.all;
     license = licenses.mit;
     maintainers = with maintainers; [ tilpner ];
   };
