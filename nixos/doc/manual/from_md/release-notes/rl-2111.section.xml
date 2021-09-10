@@ -1153,6 +1153,17 @@ Superuser created successfully.
           rofi’s changelog</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          ipfs now defaults to not listening on you local network. This
+          setting was change as server providers won’t accept port
+          scanning on their private network. If you have several ipfs
+          instances running on a network you own, feel free to change
+          the setting <literal>ipfs.localDiscovery = true;</literal>.
+          localDiscovery enables different instances to discover each
+          other and share data.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
 </section>
