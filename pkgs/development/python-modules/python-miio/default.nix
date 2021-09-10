@@ -24,13 +24,13 @@
 
 buildPythonPackage rec {
   pname = "python-miio";
-  version = "0.5.7";
+  version = "0.5.8";
   disabled = pythonOlder "3.6";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Dl/9aiCb8RYcSGEkO9X51Oaqg7FOv5mWYIDZs9fpOIg=";
+    sha256 = "sha256-16XEah5rgem/L8A/zo1zPrifrU15VMk652rFLZcvjig=";
   };
 
   postPatch = ''

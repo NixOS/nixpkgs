@@ -11080,6 +11080,12 @@
     githubId = 10110;
     name = "Travis B. Hartwell";
   };
+  travisdavis-ops = {
+    email = "travisdavismedia@gmail.com";
+    github = "travisdavis-ops";
+    githubId = 52011418;
+    name = "Travis Davis";
+  };
   TredwellGit = {
     email = "tredwell@tutanota.com";
     github = "TredwellGit";

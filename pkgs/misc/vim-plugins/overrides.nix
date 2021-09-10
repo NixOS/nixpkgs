@@ -481,8 +481,8 @@ self: super: {
 
   sqlite-lua = super.sqlite-lua.overrideAttrs (old: {
     postPatch = ''
-      substituteInPlace lua/sql/defs.lua \
-        --replace "vim.g.sql_clib_path or" "vim.g.sql_clib_path or '${sqlite.out}/lib/libsqlite3.so' or"
+      substituteInPlace lua/sqlite/defs.lua \
+        --replace "vim.g.sqlite_clib_path" "vim.g.sqlite_clib_path or '${sqlite.out}/lib/libsqlite3.so'"
     '';
   });
 
