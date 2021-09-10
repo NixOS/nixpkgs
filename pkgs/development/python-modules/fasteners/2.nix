@@ -32,6 +32,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A python package that provides useful locks";
+    longDescription = ''
+      Python standard library provides a lock for threads (both a reentrant one, and a non-reentrant one, see below). Fasteners extends this, and provides a lock for processes, as well as Reader Writer locks for both threads and processes.
+    '';
     homepage = "https://github.com/harlowja/fasteners";
     license = licenses.asl20;
   };
