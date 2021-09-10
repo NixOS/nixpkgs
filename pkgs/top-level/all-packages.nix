@@ -5785,6 +5785,8 @@ with pkgs;
 
   gupnp-tools = callPackage ../tools/networking/gupnp-tools {};
 
+  gvm-tools = with python3.pkgs; toPythonApplication gvm-tools;
+
   gvpe = callPackage ../tools/networking/gvpe {
     openssl = openssl_1_0_2;
   };

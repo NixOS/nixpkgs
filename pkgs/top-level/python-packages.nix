@@ -3241,6 +3241,8 @@ in {
 
   guzzle_sphinx_theme = callPackage ../development/python-modules/guzzle_sphinx_theme { };
 
+  gvm-tools = callPackage ../development/python-modules/gvm-tools {};
+
   gviz-api = callPackage ../development/python-modules/gviz-api {};
 
   gym = callPackage ../development/python-modules/gym { };
