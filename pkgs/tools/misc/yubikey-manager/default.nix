@@ -1,4 +1,4 @@
-{ python3Packages, fetchFromGitHub, lib, yubikey-personalization, libu2f-host, libusb1 }:
+{ python3Packages, fetchFromGitHub, lib, yubikey-personalization, libu2f-host, libusb1, procps }:
 
 python3Packages.buildPythonPackage rec {
   pname = "yubikey-manager";
@@ -10,6 +10,11 @@ python3Packages.buildPythonPackage rec {
     owner = "Yubico";
     sha256 = "sha256:0ycp7k6lkxzqwkc16fifhyqaqi7hl3351pwddsn18r5l83jnzdn2";
   };
+
+  postPatch = ''
+    substituteInPlace "ykman/pcsc/__init__.py" \
+      --replace '/usr/bin/pkill' '${procps}/bin/pkill'
+  '';
 
   format = "pyproject";
 
