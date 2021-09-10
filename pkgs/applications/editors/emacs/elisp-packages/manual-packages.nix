@@ -298,8 +298,6 @@
 
   youtube-dl = callPackage ./youtube-dl { };
 
-  zeitgeist = callPackage ./zeitgeist { };
-
   # From old emacsPackages (pre emacsPackagesNg)
   cedet = callPackage ./cedet { };
   cedille = callPackage ./cedille { cedille = pkgs.cedille; };
