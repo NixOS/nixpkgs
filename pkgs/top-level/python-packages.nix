@@ -5515,6 +5515,8 @@ in {
 
   python-songpal = callPackage ../development/python-modules/python-songpal { };
 
+  python-swiftclient = callPackage ../development/python-modules/python-swiftclient { };
+
   python-tado = callPackage ../development/python-modules/python-tado { };
 
   pyutil = callPackage ../development/python-modules/pyutil { };

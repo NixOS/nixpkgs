@@ -173,7 +173,7 @@ in
         description = ''Whether to enable local discovery for the ipfs daemon.
           This will allow ipfs to scan ports on your local network. Some hosting services will ban you if you do this.
         '';
-        default = true;
+        default = false;
       };
 
       serviceFdlimit = mkOption {
