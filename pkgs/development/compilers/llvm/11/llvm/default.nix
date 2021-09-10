@@ -65,6 +65,26 @@ in stdenv.mkDerivation (rec {
       sha256 = "sha256:12s8vr6ibri8b48h2z38f3afhwam10arfiqfy4yg37bmc054p5hi";
       stripLen = 1;
     })
+    # gcc-11 compat upstream patch
+    (fetchpatch {
+      url = "https://github.com/llvm/llvm-project/commit/b498303066a63a203d24f739b2d2e0e56dca70d1.patch";
+      sha256 = "sha256:0nh123kld0dgz2h941lng331dkj3wbm5lfxm375k1f569gv83hlk";
+      stripLen = 1;
+    })
+
+    # Fix invalid std::string(nullptr) for GCC 12
+    (fetchpatch {
+      name = "nvptx-gcc-12.patch";
+      url = "https://github.com/llvm/llvm-project/commit/99e64623ec9b31def9375753491cc6093c831809.patch";
+      sha256 = "0zjfjgavqzi2ypqwqnlvy6flyvdz8hi1anwv0ybwnm2zqixg7za3";
+      stripLen = 1;
+    })
+    (fetchpatch {
+      name = "dfaemitter-gcc-12.patch";
+      url = "https://github.com/llvm/llvm-project/commit/0841916e87a39e3c223c986e8da31e4a9a1432e3.patch";
+      sha256 = "1kckghvsngs51mqm82asy0s9vr19h8aqbw43a0w44mccqw6bzrwf";
+      stripLen = 1;
+    })
   ] ++ lib.optional enablePolly ./gnu-install-dirs-polly.patch;
 
   postPatch = optionalString stdenv.isDarwin ''

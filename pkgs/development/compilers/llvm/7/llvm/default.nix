@@ -68,6 +68,14 @@ in stdenv.mkDerivation ({
       sha256 = "0k6k1p5yisgwx417a67s7sr9930rqh1n0zv5jvply8vjjy4b3kf8";
     })
     ./gnu-install-dirs.patch
+
+    # Fix invalid std::string(nullptr) for GCC 12
+    (fetchpatch {
+      name = "nvptx-gcc-12.patch";
+      url = "https://github.com/llvm/llvm-project/commit/99e64623ec9b31def9375753491cc6093c831809.patch";
+      sha256 = "0zjfjgavqzi2ypqwqnlvy6flyvdz8hi1anwv0ybwnm2zqixg7za3";
+      stripLen = 1;
+    })
   ] ++ lib.optional enablePolly ./gnu-install-dirs-polly.patch;
 
   postPatch = optionalString stdenv.isDarwin ''
