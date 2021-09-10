@@ -34,6 +34,6 @@ stdenv.mkDerivation rec {
     description = "Open the GitHub page or website for a repository in your browser";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = [ maintainers.jlesquembre ];
+    maintainers = with maintainers; [ jlesquembre SuperSandro2000 ];
   };
 }
