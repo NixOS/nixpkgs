@@ -37,7 +37,14 @@ stdenv.mkDerivation rec {
   # TODO: Remove the musl patches when
   #         https://github.com/linux-audit/audit-userspace/pull/25
   #       is available with the next release.
-  patches = [ ./patches/weak-symbols.patch ]
+  patches = [
+    ./patches/weak-symbols.patch
+    (fetchpatch {
+      # upstream build fix against -fno-common compilers like >=gcc-10
+      url = "https://github.com/linux-audit/audit-userspace/commit/017e6c6ab95df55f34e339d2139def83e5dada1f.patch";
+      sha256 = "100xa1rzkv0mvhjbfgpfm72f7c4p68syflvgc3xm6pxgrqqmfq8h";
+    })
+  ]
   ++ lib.optional stdenv.hostPlatform.isMusl [
     (
       let patch = fetchpatch {
