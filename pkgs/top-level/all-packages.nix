@@ -7729,6 +7729,10 @@ with pkgs;
 
   ocserv = callPackage ../tools/networking/ocserv { };
 
+  oha = callPackage ../tools/networking/oha {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   opencorsairlink = callPackage ../tools/misc/opencorsairlink { };
 
   openfpgaloader = callPackage ../development/embedded/fpga/openfpgaloader { };
