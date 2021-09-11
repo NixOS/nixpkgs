@@ -5170,6 +5170,8 @@ in {
 
   oslo-utils = callPackage ../development/python-modules/oslo-utils { };
 
+  oslotest = callPackage ../development/python-modules/oslotest { };
+
   osqp = callPackage ../development/python-modules/osqp { };
 
   outcome = callPackage ../development/python-modules/outcome { };
