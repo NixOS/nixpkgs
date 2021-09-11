@@ -32593,6 +32593,8 @@ with pkgs;
 
   websocketd = callPackage ../applications/networking/websocketd { };
 
+  wike = callPackage ../applications/misc/wike { };
+
   wikicurses = callPackage ../applications/misc/wikicurses {
     pythonPackages = python3Packages;
   };
