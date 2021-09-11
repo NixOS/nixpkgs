@@ -23974,7 +23974,9 @@ with pkgs;
 
   foo-yc20 = callPackage ../applications/audio/foo-yc20 { };
 
-  fossil = callPackage ../applications/version-management/fossil { };
+  fossil = callPackage ../applications/version-management/fossil {
+    sqlite = sqlite.override { enableDeserialize = true; };
+  };
 
   freebayes = callPackage ../applications/science/biology/freebayes { };
 
@@ -30838,7 +30840,7 @@ with pkgs;
 
   root5 = lowPrio (callPackage ../applications/science/misc/root/5.nix {
     inherit (darwin.apple_sdk.frameworks) Cocoa OpenGL;
-    stdenv = if stdenv.cc.isClang then llvmPackages_5.stdenv else gcc8Stdenv;
+    stdenv = if stdenv.cc.isClang then llvmPackages_5.stdenv else stdenv;
   });
 
   rink = callPackage ../applications/science/misc/rink {
