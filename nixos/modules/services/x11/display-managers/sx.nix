@@ -34,4 +34,6 @@ in {
     };
     systemd.services.display-manager.enable = false;
   };
+
+  meta.maintainers = with maintainers; [ figsoda ];
 }
