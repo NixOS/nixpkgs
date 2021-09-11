@@ -905,6 +905,8 @@ with pkgs;
 
   sx-go = callPackage ../tools/security/sx-go { };
 
+  tauon = callPackage ../applications/audio/tauon { };
+
   tfk8s = callPackage ../tools/misc/tfk8s { };
 
   tnat64 = callPackage ../tools/networking/tnat64 { };
@@ -5795,6 +5797,8 @@ with pkgs;
 
   gupnp-tools = callPackage ../tools/networking/gupnp-tools {};
 
+  gvm-tools = with python3.pkgs; toPythonApplication gvm-tools;
+
   gvpe = callPackage ../tools/networking/gvpe {
     openssl = openssl_1_0_2;
   };
@@ -9874,6 +9878,8 @@ with pkgs;
 
   vend = callPackage ../development/tools/vend { };
 
+  verco = callPackage ../applications/version-management/verco { };
+
   verilator = callPackage ../applications/science/electronics/verilator {};
 
   verilog = callPackage ../applications/science/electronics/verilog {
@@ -12696,6 +12702,11 @@ with pkgs;
 
   beam = callPackage ./beam-packages.nix { };
   beam_nox = callPackage ./beam-packages.nix { beam = beam_nox; wxSupport = false; };
+  beam_minimal = callPackage ./beam-packages.nix {
+    beam = beam_minimal;
+    wxSupport = false;
+    systemdSupport = false;
+  };
 
   inherit (beam.interpreters)
     erlang erlangR24 erlangR23 erlangR22 erlangR21
@@ -25675,6 +25686,10 @@ with pkgs;
 
   menumaker = callPackage ../applications/misc/menumaker { };
 
+  menyoki = callPackage ../applications/graphics/menyoki {
+    inherit (xorg) libX11 libXrandr;
+  };
+
   mercurial_4 = callPackage ../applications/version-management/mercurial/4.9.nix {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;
   };
@@ -31068,6 +31083,10 @@ with pkgs;
   carps-cups = callPackage ../misc/cups/drivers/carps-cups { };
 
   cups-bjnp = callPackage ../misc/cups/drivers/cups-bjnp { };
+
+  dcp9020cdwlpr = (pkgsi686Linux.callPackage ../misc/cups/drivers/brother/dcp9020cdw { }).driver;
+
+  dcp9020cdw-cupswrapper = (callPackage ../misc/cups/drivers/brother/dcp9020cdw { }).cupswrapper;
 
   cups-brother-hl1110 = pkgsi686Linux.callPackage ../misc/cups/drivers/hl1110 { };
 
