@@ -135,25 +135,14 @@ in
         description = "The list of directories containing external plugins";
       };
 
-      managementPlugin = mkOption {
-        description = "The options to run the management plugin";
-        type = types.submodule {
-          options = {
-            enable = mkOption {
-              default = false;
-              type = types.bool;
-              description = ''
-                Whether to enable the management plugin
-              '';
-            };
-            port = mkOption {
-              default = 15672;
-              type = types.port;
-              description = ''
-                On which port to run the management plugin
-              '';
-            };
-          };
+      managementPlugin = {
+        enable = mkEnableOption "the management plugin";
+        port = mkOption {
+          default = 15672;
+          type = types.port;
+          description = ''
+            On which port to run the management plugin
+          '';
         };
       };
     };
