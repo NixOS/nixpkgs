@@ -26614,8 +26614,6 @@ with pkgs;
     mlt-qt5 = libsForQt514.mlt;
   };
 
-  typora = callPackage ../applications/editors/typora { };
-
   taxi = callPackage ../applications/networking/ftp/taxi { };
 
   librep = callPackage ../development/libraries/librep { };

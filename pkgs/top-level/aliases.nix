@@ -913,7 +913,8 @@ mapAliases ({
   truecrypt = veracrypt; # added 2018-10-24
   tshark = wireshark-cli; # added 2018-04-25
   tuijam = throw "tuijam has been removed because Google Play Music was discontinued"; # added 2021-03-07
-  turbo-geth = throw "turbo-geth has been renamed to erigon"; # added 20201-08-08
+  turbo-geth = throw "turbo-geth has been renamed to erigon"; # added 2021-08-08
+  typora = throw "typora has been removed as it cannot be updated because newer versions use an anti-user encryption and refuse to start"; # added 2021-09-11
   uberwriter = apostrophe; # added 2020-04-23
   ubootBeagleboneBlack = ubootAmx335xEVM; # added 2020-01-21
   ucsFonts = ucs-fonts; # added 2016-07-15
