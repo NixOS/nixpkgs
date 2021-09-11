@@ -21,7 +21,7 @@ buildPythonPackage rec {
   # The tlsh library's name is just "tlsh"
   postPatch = ''
     substituteInPlace requirements.txt \
-    	--replace "python-tlsh" "tlsh" \
+       --replace "python-tlsh" "tlsh" \
        --replace "py-tlsh" "tlsh"
   '';
 
