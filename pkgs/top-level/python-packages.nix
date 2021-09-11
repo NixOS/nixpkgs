@@ -8725,6 +8725,7 @@ in {
     # See https://github.com/NixOS/patchelf/pull/256#issuecomment-915617721.
     # This can be removed once that PR is merged and released.
     patchelf = pkgs.patchelfUnstable.overrideAttrs(old: {
+      version = "unstable+c99745d4";
       src = pkgs.fetchFromGitHub {
         owner = "andrewla";
         repo = "patchelf";
