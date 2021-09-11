@@ -1105,6 +1105,7 @@ broken-packages:
   - docvim
   - dominion
   - domplate
+  - dormouse-uri
   - do-spaces
   - dotfs
   - dot-linker
@@ -4200,6 +4201,7 @@ broken-packages:
   - servant-auth-hmac
   - servant-auth-token-api
   - servant-avro
+  - servant-benchmark
   - servant-client-js
   - servant-db
   - servant-dhall
@@ -5044,7 +5046,6 @@ broken-packages:
   - urldecode
   - url-decoders
   - urldisp-happstack
-  - urlencoded
   - url-generic
   - urn
   - urn-random
