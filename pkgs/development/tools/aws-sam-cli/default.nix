@@ -44,7 +44,7 @@ python3.pkgs.buildPythonApplication rec {
       --replace "Flask~=1.1.2" "Flask~=2.0" \
       --replace "dateparser~=0.7" "dateparser>=0.7" \
       --replace "docker~=4.2.0" "docker>=4.2.0" \
-      --replace "requests==" "requests~=" \
+      --replace "requests==" "requests #" \
       --replace "watchdog==" "watchdog #"
   '';
 
