@@ -7127,6 +7127,8 @@ in {
 
   python-box = callPackage ../development/python-modules/python-box { };
 
+  python-cinderclient = callPackage ../development/python-modules/python-cinderclient { };
+
   python-constraint = callPackage ../development/python-modules/python-constraint { };
 
   python-crontab = callPackage ../development/python-modules/python-crontab { };

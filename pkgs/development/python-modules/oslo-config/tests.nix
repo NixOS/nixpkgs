@@ -38,6 +38,5 @@ buildPythonPackage rec {
 
   checkPhase = ''
     stestr run
-
   '';
 }
