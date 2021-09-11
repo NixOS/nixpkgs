@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , substituteAll
 , binutils
+, coreutils
 , asciidoctor
 , cmake
 , perl
@@ -14,13 +15,13 @@
 
 let ccache = stdenv.mkDerivation rec {
   pname = "ccache";
-  version = "4.4";
+  version = "4.4.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-ZewR1srksfKCxehhAg3i8m+0OvmOSF+24njbtcc1GQY=";
+    hash = "sha256-zsJoaaxYVV78vsxq2nbOh9ZAU1giKp8Kh6qJFL120CQ=";
   };
 
   outputs = [ "out" "man" ];
@@ -35,6 +36,11 @@ let ccache = stdenv.mkDerivation rec {
       objdump = "${binutils.bintools}/bin/objdump";
     })
   ];
+
+  postPatch = ''
+    substituteInPlace test/suites/basedir.bash \
+       --replace "/bin/pwd" "${coreutils}/bin/pwd"
+  '';
 
   nativeBuildInputs = [ asciidoctor cmake perl ];
   buildInputs = [ zstd ];
