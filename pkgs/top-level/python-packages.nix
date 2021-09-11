@@ -5168,6 +5168,8 @@ in {
 
   oslo-serialization = callPackage ../development/python-modules/oslo-serialization { };
 
+  oslo-utils = callPackage ../development/python-modules/oslo-utils { };
+
   osqp = callPackage ../development/python-modules/osqp { };
 
   outcome = callPackage ../development/python-modules/outcome { };
