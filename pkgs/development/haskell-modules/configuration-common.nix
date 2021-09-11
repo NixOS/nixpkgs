@@ -1443,10 +1443,10 @@ self: super: {
   # compatible with Cabal 3. No upstream repository found so far
   readline =  appendPatch super.readline ./patches/readline-fix-for-cabal-3.patch;
 
-  # 2020-12-05: http-client is fixed on too old version
-  essence-of-live-coding-warp = doJailbreak (super.essence-of-live-coding-warp.override {
-    http-client = self.http-client_0_7_8;
-  });
+  # 2020-12-05: this package requires a newer version of http-client,
+  # but it still compiles with older version:
+  # https://github.com/turion/essence-of-live-coding/pull/86
+  essence-of-live-coding-warp = doJailbreak super.essence-of-live-coding-warp;
 
   # 2020-12-06: Restrictive upper bounds w.r.t. pandoc-types (https://github.com/owickstrom/pandoc-include-code/issues/27)
   pandoc-include-code = doJailbreak super.pandoc-include-code;
