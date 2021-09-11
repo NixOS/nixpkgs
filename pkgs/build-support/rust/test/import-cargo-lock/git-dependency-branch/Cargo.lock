@@ -20,7 +20,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "git-dependency"
+name = "git-dependency-branch"
 version = "0.1.0"
 dependencies = [
  "rand",
@@ -40,19 +40,18 @@ checksum = "ac74c624d6b2d21f425f752262f42188365d7b8ff1aff74c82e45136510a4857"
 
 [[package]]
 name = "rand"
-version = "0.8.3"
-source = "git+https://github.com/rust-random/rand.git#f0e01ee0a7257753cc51b291f62666f4765923ef"
+version = "0.8.4"
+source = "git+https://github.com/rust-random/rand.git?branch=master#fcc5baf31565a94f63dce41c2e739e6f182475f4"
 dependencies = [
  "libc",
  "rand_chacha",
  "rand_core",
- "rand_hc",
 ]
 
 [[package]]
 name = "rand_chacha"
-version = "0.3.0"
-source = "git+https://github.com/rust-random/rand.git#f0e01ee0a7257753cc51b291f62666f4765923ef"
+version = "0.3.1"
+source = "git+https://github.com/rust-random/rand.git?branch=master#fcc5baf31565a94f63dce41c2e739e6f182475f4"
 dependencies = [
  "ppv-lite86",
  "rand_core",
@@ -60,18 +59,10 @@ dependencies = [
 
 [[package]]
 name = "rand_core"
-version = "0.6.2"
-source = "git+https://github.com/rust-random/rand.git#f0e01ee0a7257753cc51b291f62666f4765923ef"
+version = "0.6.3"
+source = "git+https://github.com/rust-random/rand.git?branch=master#fcc5baf31565a94f63dce41c2e739e6f182475f4"
 dependencies = [
  "getrandom",
-]
-
-[[package]]
-name = "rand_hc"
-version = "0.3.0"
-source = "git+https://github.com/rust-random/rand.git#f0e01ee0a7257753cc51b291f62666f4765923ef"
-dependencies = [
- "rand_core",
 ]
 
 [[package]]
