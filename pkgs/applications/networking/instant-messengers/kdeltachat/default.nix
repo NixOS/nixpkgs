@@ -1,6 +1,5 @@
 { lib
 , mkDerivation
-, fetchFromGitHub
 , fetchFromSourcehut
 , cmake
 , extra-cmake-modules
@@ -15,13 +14,13 @@
 
 mkDerivation rec {
   pname = "kdeltachat";
-  version = "unstable-2021-08-28";
+  version = "unstable-2021-09-10";
 
   src = fetchFromSourcehut {
     owner = "~link2xt";
     repo = "kdeltachat";
-    rev = "4d051bc35611fa5b75865769df7a512d90a13c65";
-    sha256 = "1p8pb3pwgvxy5bvr6by54f1f62imdlddy2mk52qxcvrx8f833bml";
+    rev = "40092aa096bac7e279eb5a4cc97758bac484236c";
+    sha256 = "0vmsbxx4hxh35v1lbj82vq2w8z8inj83xpf24wzlbdr9inlbmym4";
   };
 
   nativeBuildInputs = [
