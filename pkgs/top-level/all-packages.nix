@@ -24067,6 +24067,8 @@ with pkgs;
 
   dfilemanager = libsForQt5.callPackage ../applications/misc/dfilemanager { };
 
+  dht = callPackage ../applications/networking/p2p/dht { };
+
   dia = callPackage ../applications/graphics/dia {
     inherit (gnome2) libart_lgpl libgnomeui;
   };
@@ -24778,6 +24780,8 @@ with pkgs;
   foxtrotgps = callPackage ../applications/misc/foxtrotgps { };
 
   fractal = callPackage ../applications/networking/instant-messengers/fractal { };
+
+  fragments = callPackage ../applications/networking/p2p/fragments { };
 
   freecad = libsForQt5.callPackage ../applications/graphics/freecad {
     inherit (python3Packages)
@@ -25904,6 +25908,8 @@ with pkgs;
   libreoffice-still-unwrapped = libreoffice-still.libreoffice;
 
   libvmi = callPackage ../development/libraries/libvmi { };
+
+  libutp = callPackage ../applications/networking/p2p/libutp { };
 
   lifelines = callPackage ../applications/misc/lifelines { };
 
