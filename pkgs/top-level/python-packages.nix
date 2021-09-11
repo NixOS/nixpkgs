@@ -265,6 +265,8 @@ in {
 
   aioeafm = callPackage ../development/python-modules/aioeafm { };
 
+  aioeagle = callPackage ../development/python-modules/aioeagle { };
+
   aioemonitor = callPackage ../development/python-modules/aioemonitor { };
 
   aioesphomeapi = callPackage ../development/python-modules/aioesphomeapi { };
@@ -9091,6 +9093,8 @@ in {
   ufonormalizer = callPackage ../development/python-modules/ufonormalizer { };
 
   ufoprocessor = callPackage ../development/python-modules/ufoprocessor { };
+
+  ueagle = callPackage ../development/python-modules/ueagle { };
 
   ujson = callPackage ../development/python-modules/ujson { };
 
