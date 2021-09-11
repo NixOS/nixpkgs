@@ -6,10 +6,11 @@
 , addOpenGLRunpath
 , autoreconfHook
 }:
-
-stdenv.mkDerivation rec {
-  pname = "ocl-icd";
+let
   version = "2.3.1";
+in stdenv.mkDerivation {
+  pname = "ocl-icd";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "OCL-dev";
@@ -25,14 +26,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ opencl-headers ];
 
-  postPatch = ''
-    sed -i 's,"/etc/OpenCL/vendors","${addOpenGLRunpath.driverLink}/etc/OpenCL/vendors",g' ocl_icd_loader.c
-  '';
-
   meta = with lib; {
     description = "OpenCL ICD Loader for ${opencl-headers.name}";
     homepage    = "https://github.com/OCL-dev/ocl-icd";
     license     = licenses.bsd2;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
