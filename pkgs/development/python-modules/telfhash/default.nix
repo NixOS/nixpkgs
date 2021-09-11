@@ -14,7 +14,7 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "trendmicro";
     repo = "telfhash";
-    rev = "0aa7df079c00fe00e3a1147adb52f010cfa4431d";
+    rev = version;
     sha256 = "124zajv43wx9l8rvdvmzcnbh0xpzmbn253pznpbjwvygfx16gq02";
   };
 
