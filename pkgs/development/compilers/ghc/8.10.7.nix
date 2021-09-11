@@ -106,6 +106,12 @@ let
     GhcRtsHcOpts += -fPIC
   '' + lib.optionalString targetPlatform.useAndroidPrebuilt ''
     EXTRA_CC_OPTS += -std=gnu99
+  ''
+  # While split sections are now enabled by default in ghc 8.8 for windows,
+  # they seem to lead to `too many sections` errors when building base for
+  # profiling.
+  + lib.optionalString targetPlatform.isWindows ''
+    SplitSections = NO
   '';
 
   # Splicer will pull out correct variations
@@ -157,6 +163,13 @@ stdenv.mkDerivation (rec {
     # upstream patch. Don't forget to check backport status of the upstream patch
     # when adding new GHC releases in nixpkgs.
     ./respect-ar-path.patch
+
+    # cabal passes incorrect --host= when cross-compiling
+    # https://github.com/haskell/cabal/issues/5887
+    (fetchpatch {
+            url = "https://raw.githubusercontent.com/input-output-hk/haskell.nix/122bd81150386867da07fdc9ad5096db6719545a/overlays/patches/ghc/cabal-host.patch";
+      sha256 = "sha256:0yd0sajgi24sc1w5m55lkg2lp6kfkgpp3lgija2c8y3cmkwfpdc1";
+    })
   ] ++ lib.optionals stdenv.isDarwin [
     # Make Block.h compile with c++ compilers. Remove with the next release
     (fetchpatch {

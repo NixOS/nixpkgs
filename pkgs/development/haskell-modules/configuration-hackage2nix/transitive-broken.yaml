@@ -962,15 +962,14 @@ dont-distribute-packages:
  - distribution-plot
  - dixi
  - dl-fedora
- - dl-fedora_0_9_1
  - dmenu-pkill
  - dmenu-pmount
  - dmenu-search
  - doc-review
- - doi
  - domain
  - domain-core
  - domain-optics
+ - dormouse-client
  - dow
  - download-media-content
  - dph-examples
@@ -1125,6 +1124,7 @@ dont-distribute-packages:
  - formlets-hsp
  - forth-hll
  - fortran-src-extras
+ - fortran-vars
  - foscam-directory
  - foscam-sort
  - fp-ieee
@@ -1907,6 +1907,7 @@ dont-distribute-packages:
  - layouting
  - lazy-hash
  - lazy-hash-cache
+ - ldap-scim-bridge
  - ldapply
  - leaky
  - lean
@@ -3196,7 +3197,6 @@ dont-distribute-packages:
  - wheb-strapped
  - whitespace
  - wikipedia4epub
- - windowslive
  - winio
  - wl-pprint-ansiterm
  - wl-pprint-terminfo
