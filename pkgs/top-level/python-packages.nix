@@ -5154,6 +5154,8 @@ in {
 
   osmpythontools = callPackage ../development/python-modules/osmpythontools { };
 
+  oslo-concurrency = callPackage ../development/python-modules/oslo-concurrency { };
+
   osqp = callPackage ../development/python-modules/osqp { };
 
   outcome = callPackage ../development/python-modules/outcome { };
