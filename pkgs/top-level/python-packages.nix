@@ -3702,6 +3702,8 @@ in {
 
   isort = callPackage ../development/python-modules/isort { };
 
+  isounidecode = callPackage ../development/python-modules/isounidecode { };
+
   isoweek = callPackage ../development/python-modules/isoweek { };
 
   itanium_demangler = callPackage ../development/python-modules/itanium_demangler { };
@@ -6324,6 +6326,8 @@ in {
   pylutron = callPackage ../development/python-modules/pylutron { };
 
   pylutron-caseta = callPackage ../development/python-modules/pylutron-caseta { };
+
+  pylyrics = callPackage ../development/python-modules/pylyrics { };
 
   pylxd = callPackage ../development/python-modules/pylxd { };
 
