@@ -44,8 +44,7 @@ self: super: {
 
   # cabal-install needs more recent versions of Cabal and base16-bytestring.
   cabal-install = super.cabal-install.overrideScope (self: super: {
-    Cabal = self.Cabal_3_4_0_0;
-    base16-bytestring = self.base16-bytestring_0_1_1_7;
+    Cabal = self.Cabal_3_6_1_0;
   });
 
   # cabal-install-parsers is written for Cabal 3.6
