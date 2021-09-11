@@ -9315,6 +9315,8 @@ with pkgs;
 
   stunnel = callPackage ../tools/networking/stunnel { };
 
+  stuntman = callPackage ../tools/networking/stuntman { };
+
   stutter = haskell.lib.justStaticExecutables haskellPackages.stutter;
 
   strongswan    = callPackage ../tools/networking/strongswan { };
