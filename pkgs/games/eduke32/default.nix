@@ -18,13 +18,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "eduke32";
-  version = "20210722";
-  rev = "9484";
-  revExtra = "f3fea8c15";
+  version = "20210910";
+  rev = "9603";
+  revExtra = "6c289cce4";
 
   src = fetchurl {
-    url = "http://dukeworld.duke4.net/eduke32/synthesis/${version}-${rev}-${revExtra}/eduke32_src_${version}-${rev}-${revExtra}.tar.xz";
-    sha256 = "0fdl2i465cl5x7129772ksx97lvim98m9009q5cfmf6scagj9pvz";
+    url = "https://dukeworld.com/eduke32/synthesis/${version}-${rev}-${revExtra}/eduke32_src_${version}-${rev}-${revExtra}.tar.xz";
+    sha256 = "sha256-/NQMsmT9z2N3KWBrP8hlGngQKJUgSP+vrNoFqJscRCk=";
   };
 
   buildInputs = [
