@@ -29203,6 +29203,8 @@ with pkgs;
 
   adom = callPackage ../games/adom { };
 
+  airshipper = callPackage ../games/airshipper { };
+
   airstrike = callPackage ../games/airstrike { };
 
   alephone = callPackage ../games/alephone { };
