@@ -1,7 +1,6 @@
 { lib
 , mkDerivation
 , fetchurl
-, fetchFromGitHub
 , poppler_utils
 , pkg-config
 , libpng
