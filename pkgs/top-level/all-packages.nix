@@ -23890,6 +23890,7 @@ with pkgs;
 
   cni = callPackage ../applications/networking/cluster/cni {};
   cni-plugins = callPackage ../applications/networking/cluster/cni/plugins.nix {};
+  cni-plugin-flannel = callPackage ../applications/networking/cluster/cni/plugin-flannel.nix {};
 
   dnsname-cni = callPackage ../applications/networking/cluster/dnsname-cni {};
 
