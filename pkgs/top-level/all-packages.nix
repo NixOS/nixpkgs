@@ -11606,6 +11606,13 @@ with pkgs;
     buildPackages = buildPackages // { stdenv = buildPackages.gcc8Stdenv; };
   });
 
+  go_1_17 = callPackage ../development/compilers/go/1.17.nix ({
+    inherit (darwin.apple_sdk.frameworks) Security Foundation;
+  } // lib.optionalAttrs (stdenv.cc.isGNU && stdenv.isAarch64) {
+    stdenv = gcc8Stdenv;
+    buildPackages = buildPackages // { stdenv = buildPackages.gcc8Stdenv; };
+  });
+
   go_2-dev = callPackage ../development/compilers/go/2-dev.nix ({
     inherit (darwin.apple_sdk.frameworks) Security Foundation;
   } // lib.optionalAttrs (stdenv.cc.isGNU && stdenv.isAarch64) {
@@ -19567,6 +19574,15 @@ with pkgs;
   buildGo116Package = callPackage ../development/go-packages/generic {
     go = buildPackages.go_1_16;
   };
+  # go_1_17 has go module changes which may not be portable
+  # across different go versions and/or platforms,
+  # it also requires >=10.13 stdenv on darwin which
+  # is not currently available for x86_64-darwin
+  #
+  # do not uncomment this without approval from the go CODEOWNERS
+  #buildGo117Package = callPackage ../development/go-packages/generic {
+  #  go = buildPackages.go_1_17;
+  #};
 
   buildGoPackage = buildGo116Package;
 
@@ -19576,6 +19592,15 @@ with pkgs;
   buildGo116Module = callPackage ../development/go-modules/generic {
     go = buildPackages.go_1_16;
   };
+  # go_1_17 has go module changes which may not be portable
+  # across different go versions and/or platforms,
+  # it also requires >=10.13 stdenv on darwin which
+  # is not currently available for x86_64-darwin
+  #
+  # do not uncomment this without approval from the go CODEOWNERS
+  #buildGo117Module = callPackage ../development/go-modules/generic {
+  #  go = buildPackages.go_1_17;
+  #};
 
   buildGoModule = buildGo116Module;
 
