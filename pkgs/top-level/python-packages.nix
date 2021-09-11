@@ -2961,6 +2961,8 @@ in {
 
   glcontext = callPackage ../development/python-modules/glcontext { };
 
+  glfw = callPackage ../development/python-modules/glfw { };
+
   glob2 = callPackage ../development/python-modules/glob2 { };
 
   globre = callPackage ../development/python-modules/globre { };
@@ -5509,6 +5511,8 @@ in {
   python-openzwave-mqtt = callPackage ../development/python-modules/python-openzwave-mqtt { };
 
   python-songpal = callPackage ../development/python-modules/python-songpal { };
+
+  python-swiftclient = callPackage ../development/python-modules/python-swiftclient { };
 
   python-tado = callPackage ../development/python-modules/python-tado { };
 

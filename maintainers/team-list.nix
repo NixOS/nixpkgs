@@ -178,6 +178,15 @@ with lib.maintainers; {
     scope = "Maintain the ecosystem around Matrix, a decentralized messenger.";
   };
 
+  openstack = {
+    members = [
+      angustrau
+      superherointj
+      supersandro2000
+    ];
+    scope = "Maintain the ecosystem around OpenStack";
+  };
+
   pantheon = {
     members = [
       davidak

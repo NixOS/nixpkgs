@@ -37,6 +37,17 @@
           PostgreSQL now defaults to major version 13.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          Activation scripts can now opt int to be run when running
+          <literal>nixos-rebuild dry-activate</literal> and detect the
+          dry activation by reading <literal>$NIXOS_ACTION</literal>.
+          This allows activation scripts to output what they would
+          change if the activation was really run. The users/modules
+          activation script supports this and outputs some of is
+          actions.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-new-services">
@@ -1119,6 +1130,17 @@ Superuser created successfully.
           setup. Read more
           <link xlink:href="https://github.com/davatorium/rofi/blob/cb12e6fc058f4a0f4f/Changelog#L1">in
           rofi’s changelog</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          ipfs now defaults to not listening on you local network. This
+          setting was change as server providers won’t accept port
+          scanning on their private network. If you have several ipfs
+          instances running on a network you own, feel free to change
+          the setting <literal>ipfs.localDiscovery = true;</literal>.
+          localDiscovery enables different instances to discover each
+          other and share data.
         </para>
       </listitem>
     </itemizedlist>

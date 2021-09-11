@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sunrise-commander";
-  version = "0.0.0-unstable=2021-04-23";
+  version = "0.0.0+unstable=2021-07-22";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "db880fbea03d2db00db1398c91918c3c6f0392e3";
-    hash = "sha256-IGHCKYQaGUapaA9vxq0xO58KCpBPOiQpHqrEaHK0usE=";
+    rev = "7662f635c372224e2356d745185db1e718fb7ee4";
+    hash = "sha256-NYUqJ2rDidVchX2B0+ApNbQeZFxxCnKRYXb6Ia+NzLI=";
   };
 
   buildInputs = [
