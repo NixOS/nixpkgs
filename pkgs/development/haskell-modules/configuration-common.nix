@@ -1923,7 +1923,7 @@ EOT
 
   # Needs Cabal >= 3.4
   chs-cabal = super.chs-cabal.override {
-    Cabal = self.Cabal_3_6_0_0;
+    Cabal = self.Cabal_3_6_1_0;
   };
 
   # 2021-08-18: streamly-posix was released with hspec 2.8.2, but it works with older versions too.
