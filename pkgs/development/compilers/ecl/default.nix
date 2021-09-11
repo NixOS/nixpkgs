@@ -16,7 +16,7 @@ let
     url="https://common-lisp.net/project/ecl/static/files/release/${name}.tgz";
     sha256="000906nnq25177bgsfndiw3iqqgrjc9spk10hzk653sbz3f7anmi";
   };
-  buildInputs = [
+  nativeBuildInputs = [
     libtool autoconf automake texinfo makeWrapper
   ];
   propagatedBuildInputs = [
@@ -29,7 +29,7 @@ let
 in
 stdenv.mkDerivation {
   inherit (s) name version;
-  inherit buildInputs propagatedBuildInputs;
+  inherit nativeBuildInputs propagatedBuildInputs;
 
   src = fetchurl {
     inherit (s) url sha256;
