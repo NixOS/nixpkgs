@@ -8806,6 +8806,12 @@
     githubId = 33375;
     name = "Peter Sanford";
   };
+  pshirshov = {
+    email = "pshirshov@eml.cc";
+    github = "pshirshov";
+    githubId = 295225;
+    name = "Pavel Shirshov";
+  };
   psibi = {
     email = "sibi@psibi.in";
     github = "psibi";
