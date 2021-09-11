@@ -2,7 +2,7 @@
 , lua
 , nixosTests
 , withLibevent ? true
-, withDBI ? true, luadbi ? null
+, withDBI ? true
 # use withExtraLibs to add additional dependencies of community modules
 , withExtraLibs ? [ ]
 , withOnlyInstalledCommunityModules ? [ ]
@@ -12,7 +12,7 @@ with lib;
 
 
 let
-  luaEnv = lua.withPackages(p: with p;[
+  luaEnv = lua.withPackages(p: with p; [
       luasocket luasec luaexpat luafilesystem luabitop luadbi-sqlite3
     ]
     ++ lib.optional withLibevent p.luaevent

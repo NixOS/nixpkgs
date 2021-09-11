@@ -107,7 +107,7 @@ in
     };
   };
 
-  vicious = toLuaModule( stdenv.mkDerivation rec {
+  vicious = luaLib.toLuaModule( stdenv.mkDerivation rec {
     pname = "vicious";
     version = "2.5.0";
 

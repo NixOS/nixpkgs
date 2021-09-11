@@ -12,7 +12,8 @@
 }:
 let
   luaPackages = callPackage ../../lua-modules {
-    lua=self; overrides=packageOverrides;
+    lua = self;
+    overrides = packageOverrides;
   };
 
 plat = if stdenv.isLinux then "linux"
