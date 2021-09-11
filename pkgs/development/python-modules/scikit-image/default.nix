@@ -14,10 +14,12 @@
 , cloudpickle
 , imageio
 , tifffile
-, pytest
+, pytestCheckHook
 }:
 
-buildPythonPackage rec {
+let
+  installedPackageRoot = "${builtins.placeholder "out"}/${python.sitePackages}";
+in buildPythonPackage rec {
   pname = "scikit-image";
   version = "0.18.3";
 
@@ -27,6 +29,8 @@ buildPythonPackage rec {
     rev = "v${version}";
     sha256 = "0a2h3bw5rkk23k4r04qc9maccg00nddssd7lfsps8nhp5agk1vyh";
   };
+
+  patches = [ ./add-testing-data.patch ];
 
   nativeBuildInputs = [ cython ];
 
@@ -44,34 +48,28 @@ buildPythonPackage rec {
     tifffile
   ];
 
-  checkInputs = [ pytest ];
+  checkInputs = [ pytestCheckHook ];
 
   # (1) The package has cythonized modules, whose .so libs will appear only in the wheel, i.e. in nix store;
   # (2) To stop Python from importing the wrong directory, i.e. the one in the build dir, not the one in nix store, `skimage` dir should be removed or renamed;
   # (3) Therefore, tests should be run on the installed package in nix store.
-  # (4) It requires setting a custom test root and form appropriate paths to ignored test modules, for which `pytestCheckHook` is insufficient.
-  # Because of that, a custom checkPhase is needed along with the patch to add all the data/image files for testing, not only the "legacy" set.
-  patches = [ ./add-testing-data.patch ];
 
-  checkPhase = ''
-    # Removing of `skimage` in the build dir is required to force Python to use the skimage in the `PYTHONPATH` instead of the build dir.
+  # See e.g. https://discourse.nixos.org/t/cant-import-cythonized-modules-at-checkphase/14207 on why the following is needed.
+  preCheck = ''
     rm -r skimage
-    # Site-packages path for the installed package
-    export INSTALL_PATH=$out/${python.sitePackages}
-
-    # `skimage/filters/rank/tests/test_rank.py`: requires network access (actually some data is loaded via `skimage._shared.testing.fetch` in the global scope, which calls `pytest.skip` when network is unaccessible, leading to a pytest collection error).
-    # `skimage/data/test_data.py::test_skin`: requires network access
-    # `skimage/data/tests/test_data.py::test_skin`: --"--
-    # `skimage/io/tests/test_io.py::test_imread_http_url`: --"--
-    # `skimage/restoration/tests/test_rolling_ball.py::test_ndim`: --"--
-    pytest $INSTALL_PATH \
-      --ignore=$INSTALL_PATH/skimage/filters/rank/tests/test_rank.py \
-      --deselect=skimage/data/test_data.py::test_skin \
-      --deselect=skimage/data/tests/test_data.py::test_skin \
-      --deselect=skimage/io/tests/test_io.py::test_imread_http_url \
-      --deselect=skimage/restoration/tests/test_rolling_ball.py::test_ndim \
-      --pyargs skimage
   '';
+
+  disabledTestPaths = [
+    # Requires network access (actually some data is loaded via `skimage._shared.testing.fetch` in the global scope, which calls `pytest.skip` when a network is unaccessible, leading to a pytest collection error).
+    "${installedPackageRoot}/skimage/filters/rank/tests/test_rank.py"
+  ];
+  pytestFlagsArray = [ "${installedPackageRoot}" "--pyargs" "skimage" ] ++ builtins.map (testid: "--deselect=" + testid) [
+    # These tests require network access
+    "skimage/data/test_data.py::test_skin"
+    "skimage/data/tests/test_data.py::test_skin"
+    "skimage/io/tests/test_io.py::test_imread_http_url"
+    "skimage/restoration/tests/test_rolling_ball.py::test_ndim"
+  ];
 
   # Check cythonized modules
   pythonImportsCheck = [
