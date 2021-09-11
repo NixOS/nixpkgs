@@ -5512,6 +5512,12 @@
     githubId = 66669;
     name = "Jeff Zellner";
   };
+  k4leg = {
+    name = "k4leg";
+    email = "python.bogdan@gmail.com";
+    github = "k4leg";
+    githubId = 39882583;
+  };
   kaction = {
     name = "Dmitry Bogatov";
     email = "KAction@disroot.org";
