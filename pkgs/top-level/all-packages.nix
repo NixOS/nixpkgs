@@ -16129,6 +16129,8 @@ with pkgs;
 
   gvfs = callPackage ../development/libraries/gvfs { };
 
+  gvm-libs = callPackage ../development/libraries/gvm-libs { };
+
   gwenhywfar = callPackage ../development/libraries/aqbanking/gwenhywfar.nix { };
 
   hamlib = hamlib_3;
