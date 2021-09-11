@@ -1693,6 +1693,12 @@
     githubId = 7435854;
     name = "Victor Calvert";
   };
+  cameronnemo = {
+    email = "cnemo@tutanota.com";
+    github = "cameronnemo";
+    githubId = 3212452;
+    name = "Cameron Nemo";
+  };
   campadrenalin = {
     email = "campadrenalin@gmail.com";
     github = "campadrenalin";
