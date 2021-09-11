@@ -101,6 +101,7 @@ mkDerivation rec {
       regex
       sip
       zeroconf
+      jeepney
       # the following are distributed with calibre, but we use upstream instead
       odfpy
     ] ++ lib.optional (unrarSupport) unrardll
