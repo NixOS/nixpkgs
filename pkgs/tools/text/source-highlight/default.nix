@@ -30,7 +30,12 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-boost=${boost.out}" ];
 
-  enableParallelBuilding = false;
+  doCheck = true;
+
+  enableParallelBuilding = true;
+  # Upstream uses the same intermediate files in multiple tests, running
+  # them in parallel by make will eventually break one or more tests.
+  enableParallelChecking = false;
 
   outputs = [ "out" "doc" "dev" ];
 
