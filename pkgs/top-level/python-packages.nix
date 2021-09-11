@@ -5160,6 +5160,8 @@ in {
 
   oslo-context = callPackage ../development/python-modules/oslo-context { };
 
+  oslo-db = callPackage ../development/python-modules/oslo-db { };
+
   osqp = callPackage ../development/python-modules/osqp { };
 
   outcome = callPackage ../development/python-modules/outcome { };
