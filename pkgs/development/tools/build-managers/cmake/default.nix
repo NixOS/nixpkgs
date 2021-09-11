@@ -36,7 +36,9 @@ stdenv.mkDerivation rec {
 
   ] ++ lib.optional stdenv.isCygwin ./3.2.2-cygwin.patch
   # Derived from https://github.com/curl/curl/commit/31f631a142d855f069242f3e0c643beec25d1b51
-  ++ lib.optional (stdenv.isDarwin && isBootstrap) ./remove-systemconfiguration-dep.patch;
+  ++ lib.optional (stdenv.isDarwin && isBootstrap) ./remove-systemconfiguration-dep.patch
+  # On Darwin, always set CMAKE_SHARED_LIBRARY_RUNTIME_C_FLAG.
+  ++ lib.optional stdenv.isDarwin ./darwin-always-set-runtime-c-flag.patch;
 
   outputs = [ "out" ]
     ++ lib.optionals buildDocs [ "man" "info" ];
