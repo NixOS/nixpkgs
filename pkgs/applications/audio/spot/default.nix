@@ -10,8 +10,9 @@
 , rustPlatform
 , pkg-config
 , glib
+, libadwaita
 , libhandy
-, gtk3
+, gtk4
 , openssl
 , alsa-lib
 , libpulseaudio
@@ -20,19 +21,19 @@
 
 stdenv.mkDerivation rec {
   pname = "spot";
-  version = "0.1.14";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "xou816";
     repo = "spot";
     rev = version;
-    sha256 = "eHhbm1amTx3ngqsP32uDEdrhrBeurMftg5SToTQGX9o=";
+    sha256 = "16pri0in514xzy21bsijyvyyjwa0f6lg4zyizmdcmcdw4glrs11m";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-jY7pWoY9IJi5hHVRS1gQKb+Vmfc+wxHvoAwupOtXXQs=";
+    sha256 = "1fvnidxh4rnkzqg3qjk3zlkp2d41qdamm0bfavk8jrazw8sgih84";
   };
 
   nativeBuildInputs = [
@@ -41,7 +42,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     python3 # for meson postinstall script
-    gtk3 # for gtk-update-icon-cache
+    gtk4 # for gtk-update-icon-cache
     glib # for glib-compile-schemas
     desktop-file-utils
     rustPlatform.rust.cargo
@@ -52,7 +53,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glib
-    gtk3
+    gtk4
+    libadwaita
     libhandy
     openssl
     alsa-lib
