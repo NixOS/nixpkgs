@@ -661,6 +661,8 @@ with pkgs;
 
   srcOnly = callPackage ../build-support/src-only { };
 
+  substitute = callPackage ../build-support/substitute/substitute.nix { };
+
   substituteAll = callPackage ../build-support/substitute/substitute-all.nix { };
 
   substituteAllFiles = callPackage ../build-support/substitute-files/substitute-all-files.nix { };
