@@ -181,8 +181,8 @@
   })
   (fetchNuGet {
     name = "NBitcoin.Altcoins";
-    version = "3.0.3";
-    sha256 = "0129mgnyyb55haz68d8z694g1q2rlc0qylx08d5qnfpq1r03cdqd";
+    version = "3.0.4";
+    sha256 = "03aia31sznw81jjr9k6dkwgvm9dc38fgp1z8y5i45vlkf5fp89pb";
   })
   (fetchNuGet {
     name = "NBitcoin.TestFramework";

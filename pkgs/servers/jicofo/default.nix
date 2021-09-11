@@ -32,6 +32,8 @@ stdenv.mkDerivation {
     single-node-smoke-test = nixosTests.jitsi-meet;
   };
 
+  passthru.updateScript = ./update.sh;
+
   meta = with lib; {
     description = "A server side focus component used in Jitsi Meet conferences";
     longDescription = ''

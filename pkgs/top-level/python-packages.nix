@@ -265,6 +265,8 @@ in {
 
   aioeafm = callPackage ../development/python-modules/aioeafm { };
 
+  aioeagle = callPackage ../development/python-modules/aioeagle { };
+
   aioemonitor = callPackage ../development/python-modules/aioemonitor { };
 
   aioesphomeapi = callPackage ../development/python-modules/aioesphomeapi { };
@@ -3251,6 +3253,8 @@ in {
 
   guzzle_sphinx_theme = callPackage ../development/python-modules/guzzle_sphinx_theme { };
 
+  gvm-tools = callPackage ../development/python-modules/gvm-tools {};
+
   gviz-api = callPackage ../development/python-modules/gviz-api {};
 
   gym = callPackage ../development/python-modules/gym { };
@@ -3701,6 +3705,8 @@ in {
   isodate = callPackage ../development/python-modules/isodate { };
 
   isort = callPackage ../development/python-modules/isort { };
+
+  isounidecode = callPackage ../development/python-modules/isounidecode { };
 
   isoweek = callPackage ../development/python-modules/isoweek { };
 
@@ -6326,6 +6332,8 @@ in {
 
   pylutron-caseta = callPackage ../development/python-modules/pylutron-caseta { };
 
+  pylyrics = callPackage ../development/python-modules/pylyrics { };
+
   pylxd = callPackage ../development/python-modules/pylxd { };
 
   pylzma = callPackage ../development/python-modules/pylzma { };
@@ -7154,6 +7162,8 @@ in {
   python-gitlab = callPackage ../development/python-modules/python-gitlab { };
 
   python-gnupg = callPackage ../development/python-modules/python-gnupg { };
+
+  python-gvm = callPackage ../development/python-modules/python-gvm { };
 
   python-hosts = callPackage ../development/python-modules/python-hosts { };
 
@@ -9102,6 +9112,8 @@ in {
 
   ufoprocessor = callPackage ../development/python-modules/ufoprocessor { };
 
+  ueagle = callPackage ../development/python-modules/ueagle { };
+
   ujson = callPackage ../development/python-modules/ujson { };
 
   ukpostcodeparser = callPackage ../development/python-modules/ukpostcodeparser { };
@@ -9357,6 +9369,8 @@ in {
   watchgod = callPackage ../development/python-modules/watchgod { };
 
   waterfurnace = callPackage ../development/python-modules/waterfurnace { };
+
+  wavedrom = callPackage ../development/python-modules/wavedrom { };
 
   WazeRouteCalculator = callPackage ../development/python-modules/WazeRouteCalculator { };
 
