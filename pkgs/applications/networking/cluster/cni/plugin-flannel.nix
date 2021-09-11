@@ -2,7 +2,7 @@
 
 buildGoModule {
   pname = "cni-plugin-flannel";
-  version = "20210910";
+  version = "unstable-2021-09-10";
 
   src = fetchFromGitHub {
     owner = "flannel-io";
