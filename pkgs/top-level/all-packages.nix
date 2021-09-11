@@ -10340,8 +10340,6 @@ with pkgs;
 
   chase = callPackage ../tools/system/chase { };
 
-  wicd = callPackage ../tools/networking/wicd { };
-
   wimlib = callPackage ../tools/archivers/wimlib { };
 
   wipe = callPackage ../tools/security/wipe { };
