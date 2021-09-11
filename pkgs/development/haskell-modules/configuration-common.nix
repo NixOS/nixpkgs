@@ -1931,7 +1931,7 @@ EOT
 
   # 2021-09-06: hadolint depends on language-docker >= 10.1
   hadolint = super.hadolint.override {
-    language-docker = self.language-docker_10_1_1;
+    language-docker = self.language-docker_10_1_2;
   };
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
