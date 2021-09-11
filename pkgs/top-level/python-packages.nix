@@ -8607,6 +8607,8 @@ in {
     inherit (pkgs) subunit cppunit check;
   };
 
+  subunit2sql = callPackage ../development/python-modules/subunit2sql { };
+
   suds-jurko = callPackage ../development/python-modules/suds-jurko { };
 
   sumo = callPackage ../development/python-modules/sumo { };
