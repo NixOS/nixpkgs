@@ -1,4 +1,7 @@
-{ beam, callPackage, wxGTK30, buildPackages, wxSupport ? true }:
+{ beam, callPackage, wxGTK30, buildPackages, stdenv
+, wxSupport ? true
+, systemdSupport ? stdenv.isLinux
+}:
 
 with beam; {
   lib = callPackage ../development/beam-modules/lib.nix { };
@@ -23,7 +26,7 @@ with beam; {
       # Can be enabled since the bug has been fixed in https://github.com/erlang/otp/pull/2508
       parallelBuild = true;
       autoconf = buildPackages.autoconf269;
-      inherit wxSupport;
+      inherit wxSupport systemdSupport;
     };
     erlangR24_odbc = erlangR24.override { odbcSupport = true; };
     erlangR24_javac = erlangR24.override { javacSupport = true; };
@@ -38,7 +41,7 @@ with beam; {
       # Can be enabled since the bug has been fixed in https://github.com/erlang/otp/pull/2508
       parallelBuild = true;
       autoconf = buildPackages.autoconf269;
-      inherit wxSupport;
+      inherit wxSupport systemdSupport;
     };
     erlangR23_odbc = erlangR23.override { odbcSupport = true; };
     erlangR23_javac = erlangR23.override { javacSupport = true; };
@@ -53,7 +56,7 @@ with beam; {
       # Can be enabled since the bug has been fixed in https://github.com/erlang/otp/pull/2508
       parallelBuild = true;
       autoconf = buildPackages.autoconf269;
-      inherit wxSupport;
+      inherit wxSupport systemdSupport;
     };
     erlangR22_odbc = erlangR22.override { odbcSupport = true; };
     erlangR22_javac = erlangR22.override { javacSupport = true; };
@@ -66,7 +69,7 @@ with beam; {
     erlangR21 = lib.callErlang ../development/interpreters/erlang/R21.nix {
       wxGTK = wxGTK30;
       autoconf = buildPackages.autoconf269;
-      inherit wxSupport;
+      inherit wxSupport systemdSupport;
     };
     erlangR21_odbc = erlangR21.override { odbcSupport = true; };
     erlangR21_javac = erlangR21.override { javacSupport = true; };
