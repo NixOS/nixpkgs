@@ -28187,9 +28187,7 @@ with pkgs;
 
   neovim-remote = callPackage ../applications/editors/neovim/neovim-remote.nix { };
 
-  vis = callPackage ../applications/editors/vis {
-    inherit (lua52Packages) lpeg;
-  };
+  vis = callPackage ../applications/editors/vis { };
 
   viw = callPackage ../applications/editors/viw { };
 
