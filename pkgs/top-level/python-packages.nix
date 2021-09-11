@@ -1886,6 +1886,8 @@ in {
 
   debian-inspector = callPackage ../development/python-modules/debian-inspector { };
 
+  debtcollector = callPackage ../development/python-modules/debtcollector { };
+
   debts = callPackage ../development/python-modules/debts { };
 
   debugpy = callPackage ../development/python-modules/debugpy { };
@@ -3279,6 +3281,8 @@ in {
 
   hachoir = callPackage ../development/python-modules/hachoir { };
 
+  hacking = callPackage ../development/python-modules/hacking { };
+
   hdate = callPackage ../development/python-modules/hdate { };
 
   ha-ffmpeg = callPackage ../development/python-modules/ha-ffmpeg { };
@@ -3971,6 +3975,8 @@ in {
   keyrings-alt = callPackage ../development/python-modules/keyrings-alt { };
 
   keystone-engine = callPackage ../development/python-modules/keystone-engine { };
+
+  keystoneauth1 = callPackage ../development/python-modules/keystoneauth1 { };
 
   keyutils = callPackage ../development/python-modules/keyutils {
     inherit (pkgs) keyutils;
@@ -5103,6 +5109,8 @@ in {
 
   opensimplex = callPackage ../development/python-modules/opensimplex { };
 
+  openstacksdk = callPackage ../development/python-modules/openstacksdk { };
+
   opentimestamps = callPackage ../development/python-modules/opentimestamps { };
 
   opentracing = callPackage ../development/python-modules/opentracing { };
@@ -5140,7 +5148,11 @@ in {
 
   orvibo = callPackage ../development/python-modules/orvibo { };
 
+  os-service-types = callPackage ../development/python-modules/os-service-types { };
+
   osc = callPackage ../development/python-modules/osc { };
+
+  osc-lib = callPackage ../development/python-modules/osc-lib { };
 
   oscrypto = callPackage ../development/python-modules/oscrypto { };
 
@@ -5149,6 +5161,24 @@ in {
   osmnx = callPackage ../development/python-modules/osmnx { };
 
   osmpythontools = callPackage ../development/python-modules/osmpythontools { };
+
+  oslo-concurrency = callPackage ../development/python-modules/oslo-concurrency { };
+
+  oslo-config = callPackage ../development/python-modules/oslo-config { };
+
+  oslo-context = callPackage ../development/python-modules/oslo-context { };
+
+  oslo-db = callPackage ../development/python-modules/oslo-db { };
+
+  oslo-i18n = callPackage ../development/python-modules/oslo-i18n { };
+
+  oslo-log = callPackage ../development/python-modules/oslo-log { };
+
+  oslo-serialization = callPackage ../development/python-modules/oslo-serialization { };
+
+  oslo-utils = callPackage ../development/python-modules/oslo-utils { };
+
+  oslotest = callPackage ../development/python-modules/oslotest { };
 
   osqp = callPackage ../development/python-modules/osqp { };
 
@@ -5511,6 +5541,8 @@ in {
   python-izone = callPackage ../development/python-modules/python-izone { };
 
   python-juicenet = callPackage ../development/python-modules/python-juicenet { };
+
+  python-keystoneclient = callPackage ../development/python-modules/python-keystoneclient { };
 
   python-lsp-black = callPackage ../development/python-modules/python-lsp-black { };
 
@@ -7105,6 +7137,8 @@ in {
 
   python-box = callPackage ../development/python-modules/python-box { };
 
+  python-cinderclient = callPackage ../development/python-modules/python-cinderclient { };
+
   python-constraint = callPackage ../development/python-modules/python-constraint { };
 
   python-crontab = callPackage ../development/python-modules/python-crontab { };
@@ -7244,6 +7278,8 @@ in {
 
   python-nomad = callPackage ../development/python-modules/python-nomad { };
 
+  python-novaclient = callPackage ../development/python-modules/python-novaclient { };
+
   python-oauth2 = callPackage ../development/python-modules/python-oauth2 { };
 
   pythonocc-core = toPythonModule (callPackage ../development/python-modules/pythonocc-core {
@@ -7254,6 +7290,8 @@ in {
   python-olm = callPackage ../development/python-modules/python-olm { };
 
   python-opendata-transport = callPackage ../development/python-modules/python-opendata-transport { };
+
+  python-openstackclient = callPackage ../development/python-modules/python-openstackclient { };
 
   python_openzwave = callPackage ../development/python-modules/python_openzwave { };
 
@@ -8527,6 +8565,8 @@ in {
 
   stem = callPackage ../development/python-modules/stem { };
 
+  stestr = callPackage ../development/python-modules/stestr { };
+
   stevedore = callPackage ../development/python-modules/stevedore { };
 
   stm32loader = callPackage ../development/python-modules/stm32loader { };
@@ -8578,6 +8618,8 @@ in {
   subunit = callPackage ../development/python-modules/subunit {
     inherit (pkgs) subunit cppunit check;
   };
+
+  subunit2sql = callPackage ../development/python-modules/subunit2sql { };
 
   suds-jurko = callPackage ../development/python-modules/suds-jurko { };
 
