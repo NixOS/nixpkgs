@@ -22,6 +22,7 @@
 , parallelBuild ? false
 , systemd
 , wxSupport ? true
+, systemdSupport ? stdenv.isLinux # systemd support in epmd
   # updateScript deps
 , writeScript
 , common-updater-scripts
@@ -42,7 +43,6 @@
 , javacPackages ? [ openjdk11 ]
 , odbcSupport ? false
 , odbcPackages ? [ unixODBC ]
-, withSystemd ? stdenv.isLinux # systemd support in epmd
 , opensslPackage ? openssl
 , wxPackages ? [ libGL libGLU wxGTK xorg.libX11 ]
 , preUnpack ? ""
@@ -96,7 +96,7 @@ stdenv.mkDerivation ({
     ++ optionals wxSupport wxPackages2
     ++ optionals odbcSupport odbcPackages
     ++ optionals javacSupport javacPackages
-    ++ optional withSystemd systemd
+    ++ optional systemdSupport systemd
     ++ optionals stdenv.isDarwin (with pkgs.darwin.apple_sdk.frameworks; [ AGL Carbon Cocoa WebKit ]);
 
   debugInfo = enableDebugInfo;
@@ -123,7 +123,7 @@ stdenv.mkDerivation ({
     ++ optional javacSupport "--with-javac"
     ++ optional odbcSupport "--with-odbc=${unixODBC}"
     ++ optional wxSupport "--enable-wx"
-    ++ optional withSystemd "--enable-systemd"
+    ++ optional systemdSupport "--enable-systemd"
     ++ optional stdenv.isDarwin "--enable-darwin-64bit"
     ++ configureFlags;
 
