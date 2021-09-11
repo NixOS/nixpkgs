@@ -7,7 +7,7 @@
 , tlsh
 , nose
 }:
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "telfhash";
   version = "0.9.8";
 
