@@ -1884,6 +1884,8 @@ in {
 
   debian-inspector = callPackage ../development/python-modules/debian-inspector { };
 
+  debtcollector = callPackage ../development/python-modules/debtcollector { };
+
   debts = callPackage ../development/python-modules/debts { };
 
   debugpy = callPackage ../development/python-modules/debugpy { };
