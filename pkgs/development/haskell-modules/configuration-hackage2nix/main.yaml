@@ -94,6 +94,8 @@ default-package-overrides:
   - dhall-nix < 1.1.22
   # reflex-dom-pandoc is only used by neuron which needs a version < 1.0.0.0
   - reflex-dom-pandoc < 1.0.0.0
+  # 2021-09-07: pin to our current GHC version
+  - ghc-api-compat == 8.10.7
 
 extra-packages:
   - base16-bytestring < 1               # required for cabal-install etc.
@@ -122,7 +124,7 @@ extra-packages:
   - crackNum < 3.0                      # 2021-05-21: 3.0 removed the lib which sbv 7.13 uses
   - ShellCheck == 0.7.1                 # 2021-05-09: haskell-ci 0.12.1 pins this version
   - cabal-install-parsers == 0.4.2      # 2021-09-04: needed haskell-ci by until it upgrades to Cabal >= 3.6
-  - ghc-api-compat < 8.10.5             # 2021-08-18: ghc-api-compat 8.10.5 is only compatible with ghc 8.10.5
+  - ghc-api-compat == 8.6               # 2021-09-07: preserve for GHC 8.8.4
 
 package-maintainers:
   abbradar:

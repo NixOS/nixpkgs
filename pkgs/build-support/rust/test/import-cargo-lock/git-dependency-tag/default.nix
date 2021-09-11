@@ -1,7 +1,7 @@
 { rustPlatform }:
 
 rustPlatform.buildRustPackage {
-  pname = "git-dependency-no-rev";
+  pname = "git-dependency-tag";
   version = "0.1.0";
 
   src = ./.;
@@ -9,13 +9,13 @@ rustPlatform.buildRustPackage {
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "rand-0.8.3" = "0ya2hia3cn31qa8894s3av2s8j5bjwb6yq92k0jsnlx7jid0jwqa";
+      "rand-0.8.3" = "0l3p174bpwia61vcvxz5mw65a13ri3wy94z04xrnyy5lzciykz4f";
     };
   };
 
   doInstallCheck = true;
 
   installCheckPhase = ''
-    $out/bin/git-dependency-no-rev
+    $out/bin/git-dependency-tag
   '';
 }

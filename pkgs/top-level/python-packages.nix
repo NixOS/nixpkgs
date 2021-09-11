@@ -2251,6 +2251,8 @@ in {
 
   dulwich = callPackage ../development/python-modules/dulwich { };
 
+  dungeon-eos = callPackage ../development/python-modules/dungeon-eos { };
+
   dwdwfsapi = callPackage ../development/python-modules/dwdwfsapi { };
 
   dyn = callPackage ../development/python-modules/dyn { };

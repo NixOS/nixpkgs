@@ -8,6 +8,9 @@
 , monotonic
 , six
 , nose
+, pyopenssl
+, iana-etc
+, libredirect
 }:
 
 buildPythonPackage rec {
@@ -22,22 +25,31 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ dnspython greenlet monotonic six ]
     ++ lib.optional (pythonOlder "3.4") enum34;
 
-  prePatch = ''
-    substituteInPlace setup.py \
-      --replace "dnspython >= 1.15.0, < 2.0.0" "dnspython"
+  checkInputs = [ nose pyopenssl ];
+
+  preCheck = ''
+    echo "nameserver 127.0.0.1" > resolv.conf
+    export NIX_REDIRECTS=/etc/protocols=${iana-etc}/etc/protocols:/etc/resolv.conf=$(realpath resolv.conf)
+    export LD_PRELOAD=${libredirect}/lib/libredirect.so
+
+    export EVENTLET_IMPORT_VERSION_ONLY=0
   '';
 
-  checkInputs = [ nose ];
+  checkPhase = ''
+    runHook preCheck
 
-  doCheck = false;  # too much transient errors to bother
+    nosetests --exclude test_getaddrinfo --exclude test_hosts_no_network
+
+    runHook postCheck
+  '';
 
   # unfortunately, it needs /etc/protocol to be present to not fail
-  #pythonImportsCheck = [ "eventlet" ];
+  # pythonImportsCheck = [ "eventlet" ];
 
   meta = with lib; {
     homepage = "https://pypi.python.org/pypi/eventlet/";
     description = "A concurrent networking library for Python";
+    maintainers = with maintainers; [ SuperSandro2000 ];
     license = licenses.mit;
   };
-
 }
