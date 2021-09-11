@@ -24713,6 +24713,8 @@ with pkgs;
 
   fbida = callPackage ../applications/graphics/fbida { };
 
+  fclones = callPackage ../tools/misc/fclones { };
+
   fcp = callPackage ../tools/misc/fcp { };
 
   fdupes = callPackage ../tools/misc/fdupes { };
