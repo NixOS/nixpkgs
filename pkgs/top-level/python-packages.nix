@@ -5164,6 +5164,8 @@ in {
 
   oslo-i18n = callPackage ../development/python-modules/oslo-i18n { };
 
+  oslo-log = callPackage ../development/python-modules/oslo-log { };
+
   osqp = callPackage ../development/python-modules/osqp { };
 
   outcome = callPackage ../development/python-modules/outcome { };
