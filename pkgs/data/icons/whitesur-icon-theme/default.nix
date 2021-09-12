@@ -1,30 +1,19 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, gtk3
-, gnome
-, gnome-icon-theme
-, hicolor-icon-theme
-}:
+{ lib, stdenvNoCC, fetchFromGitHub, gtk3, hicolor-icon-theme }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "Whitesur-icon-theme";
-  version = "2021-05-20";
+  version = "2021-08-26";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
-    sha256 = "KboUYozTleOBKNun66g2oj7u/36hyQsPtRSk/x/LAWo=";
+    sha256 = "O7nb6X20HvnzldijP/fXqAs/2qE5JUg3DEMb84ZMQp4=";
   };
 
   nativeBuildInputs = [ gtk3 ];
 
-  buildInputs = [
-    gnome-icon-theme
-    gnome.adwaita-icon-theme
-    hicolor-icon-theme
-  ];
+  buildInputs = [ hicolor-icon-theme ];
 
   dontDropIconThemeCache = true;
 
