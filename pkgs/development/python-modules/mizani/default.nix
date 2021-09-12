@@ -4,7 +4,6 @@
 , matplotlib
 , palettable
 , pandas
-, pytest-cov
 , pytestCheckHook
 }:
 
@@ -19,14 +18,19 @@ buildPythonPackage rec {
     sha256 = "04r53dp5jbklv8l9ncgc5wiq0gx25y73h65gmmbbfkxwgsl3w78l";
   };
 
+  # Patch out the pytest coverage checking.
+  patchPhase = ''
+    substituteInPlace pytest.ini --replace " --cov=mizani --cov-report=xml" ""
+  '';
+
   propagatedBuildInputs = [ matplotlib palettable pandas ];
 
-  checkInputs = [ pytest-cov pytestCheckHook ];
+  checkInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Scales for Python";
-    homepage    = "https://github.com/has2k1/mizani";
-    license     = licenses.bsd3;
+    homepage = "https://github.com/has2k1/mizani";
+    license = licenses.bsd3;
     maintainers = with maintainers; [ samuela ];
   };
 }
