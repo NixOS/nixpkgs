@@ -90,7 +90,8 @@ stdenv.mkDerivation rec {
     "--with-cups-datadir=$(out)/share/cups"
   ];
 
-  doCheck = true;
+  # make check does nothing useful
+  doCheck = false;
 
   # don't build/install statically linked bin/gs
   buildFlags = [ "so" ];
@@ -120,6 +121,19 @@ stdenv.mkDerivation rec {
     runHook preInstallCheck
 
     $out/bin/gs --version
+    pushd examples
+    for f in *.{ps,eps,pdf}; do
+      echo "Rendering $f"
+      $out/bin/gs \
+        -dNOPAUSE \
+        -dBATCH \
+        -sDEVICE=bitcmyk \
+        -sOutputFile=/dev/null \
+        -r600 \
+        -dBufferSpace=100000 \
+        $f
+    done
+    popd # examples
 
     runHook postInstallCheck
   '';
