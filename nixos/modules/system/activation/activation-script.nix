@@ -18,8 +18,17 @@ let
   });
 
   systemActivationScript = set: onlyDry: let
-    set' = filterAttrs (_: v: onlyDry -> v.supportsDryActivation) (mapAttrs (_: v: if isString v then (noDepEntry v) // { supportsDryActivation = false; } else v) set);
+    set' = mapAttrs (_: v: if isString v then (noDepEntry v) // { supportsDryActivation = false; } else v) set;
     withHeadlines = addAttributeName set';
+    # When building a dry activation script, this replaces all activation scripts
+    # that do not support dry mode with a comment that does nothing. Filtering these
+    # activation scripts out so they don't get generated into the dry activation script
+    # does not work because when an activation script that supports dry mode depends on
+    # an activation script that does not, the dependency cannot be resolved and the eval
+    # fails.
+    withDrySnippets = mapAttrs (a: v: if onlyDry && !v.supportsDryActivation then v // {
+      text = "#### Activation script snippet ${a} does not support dry activation.";
+    } else v) withHeadlines;
   in
     ''
       #!${pkgs.runtimeShell}
@@ -37,7 +46,7 @@ let
       # Ensure a consistent umask.
       umask 0022
 
-      ${textClosureMap id (withHeadlines) (attrNames withHeadlines)}
+      ${textClosureMap id (withDrySnippets) (attrNames withDrySnippets)}
 
     '' + optionalString (!onlyDry) ''
       # Make this configuration the current configuration.
