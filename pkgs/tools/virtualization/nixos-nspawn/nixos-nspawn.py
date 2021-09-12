@@ -3,9 +3,6 @@
 
 # TODO
 # * support for extra-options
-# * refactoring
-# * tests
-# * polkit
 # * activation
 
 from argparse import ArgumentParser
@@ -16,6 +13,7 @@ from os import chmod, getenv, makedirs, path, remove, sync
 from shutil import rmtree
 from subprocess import Popen, PIPE, STDOUT
 from sys import exc_info
+from traceback import print_tb
 
 import logging
 import re
@@ -174,9 +172,6 @@ class Container:
         ], log_raw=True)
 
     def remove(self):
-        if not self.is_imperative():
-            raise Exception(f"Cannot remove non-declarative container {self.name}!")
-
         logging.info(f"Removing {self.name}...")
         run(["machinectl", "poweroff", self.name], must_succeed=False)
 
@@ -191,7 +186,7 @@ class Container:
         logging.info(f"Removing state-directory in /var/lib/machines/{self.name}")
         rmtree(f"/var/lib/machines/{self.name}", ignore_errors=True)
 
-    def build_nixos_config(self, nix_expr, update=False):
+    def build_nixos_config(self, nix_expr, update=False, show_trace=False):
         if not update:
             try:
                 profile_dir = setup_nixprofile(self.name)
@@ -203,23 +198,27 @@ class Container:
             profile_dir = f"{PROFILE_BASE}/{self.name}"
 
         eval_code = getenv('NIXOS_NSPAWN_EVAL', '@eval@')
-        run([
+        trace_arg = None if not show_trace else "--show-trace"
+        args = [
             "nix-env", "-p", f"{profile_dir}/system", "--arg", "config", nix_expr,
             "-f", eval_code, "--set", "--arg", "nixpkgs", "<nixpkgs>"
-        ])
+        ]
+        if trace_arg is not None:
+            args.append(trace_arg)
+        run(args)
 
         return path.realpath(f"{profile_dir}/system")
 
-    def install_container(self, nix_expr, update=False):
+    def install_container(self, nix_expr, update=False, show_trace=False):
         if not self.pending and not update:
             raise Exception(f"Container {self.name} already exists!")
 
-        path = self.build_nixos_config(nix_expr, update)
+        path = self.build_nixos_config(nix_expr, update, show_trace)
 
         with open(f"{path}/data") as f:
             data = loads(f.read())
 
-        makedirs("/etc/systemd/nspawn")
+        makedirs("/etc/systemd/nspawn", exist_ok=True)
 
         zone = "" if data['zone'] is None else f"Zone={data['zone']}"
         ephemeral = "" if not data['ephemeral'] else "Ephemeral=true"
@@ -260,7 +259,8 @@ PrivateUsersChown=yes
 
         logging.info(f"Creating state-directory {self.name}")
         makedirs(f"/var/lib/machines/{self.name}/etc", exist_ok=True)
-        open(f"/var/lib/machines/{self.name}/etc/os-release", 'w').close()
+        if not update:
+            open(f"/var/lib/machines/{self.name}/etc/os-release", 'w').close()
 
         self.pending = False
         logging.info(f"Booting new container {self.name}")
@@ -298,9 +298,24 @@ PrivateUsersChown=yes
         self.network = extract('Network', parser)
 
 
+def create_container(name, expect_imperative=False, pending=False):
+    container = Container(
+        f"/etc/systemd/nspawn/{name}.nspawn",
+        pending=pending
+    )
+
+    if expect_imperative and not container.is_imperative():
+        raise Exception("Cannot use declarative containers for this operation!")
+
+    return container
+
+
 def op_create(args):
     new_name = args.name
-    Container(f"/etc/systemd/nspawn/{new_name}.nspawn", pending=True).install_container(args.config)
+    create_container(new_name, pending=True).install_container(
+        args.config,
+        show_trace=args.show_trace
+    )
 
 
 def op_list(args):
@@ -320,17 +335,16 @@ def op_list(args):
 def op_update(args):
     name = args.name
     cfg = args.config
-    container = Container(f"/etc/systemd/nspawn/{name}.nspawn")
 
-    if not container.is_imperative():
-        raise Exception("Cannot update declarative containers!")
-
-    container.install_container(cfg, update=True)
+    create_container(
+        name,
+        expect_imperative=True
+    ).install_container(cfg, update=True, show_trace=args.show_trace)
 
 
 def op_remove(args):
     try:
-        Container(f'/etc/systemd/nspawn/{args.name}.nspawn').remove()
+        create_container(args.name, expect_imperative=True).remove()
     except Exception as e:
         profile = f"{PROFILE_BASE}/{args.name}"
         if path.exists(profile):
@@ -341,23 +355,11 @@ def op_remove(args):
 
 
 def op_list_gens(args):
-    name = args.name
-    container = Container(f"/etc/systemd/nspawn/{name}.nspawn")
-
-    if not container.is_imperative():
-        raise Exception("Cannot update declarative containers!")
-
-    container.list_generations()
+    create_container(args.name, expect_imperative=True).list_generations()
 
 
 def op_rollback(args):
-    name = args.name
-    container = Container(f"/etc/systemd/nspawn/{name}.nspawn")
-
-    if not container.is_imperative():
-        raise Exception("Cannot update declarative containers!")
-
-    container.rollback()
+    create_container(args.name, expect_imperative=True).rollback()
 
 
 if __name__ == '__main__':
@@ -365,26 +367,49 @@ if __name__ == '__main__':
         level=logging.INFO,
         format='%(asctime)s %(levelname)-8s %(message)s'
     )
+
     parser = ArgumentParser()
+    parser.add_argument('--show-trace', action='store_true')
     cmd = parser.add_subparsers(dest='subcmd')
+
+    # Options to `create` a new imperative container. Apart from the name,
+    # a config-file is accepted that's mostly equivalent to how declarative
+    # containers are built.
     create = cmd.add_parser('create')
     create.add_argument('name', help='Name of the container')
     create.add_argument('config', help='Configuration file for the container')
+
+    # Options to `list` all containers (either pretty-printed or as json).
     list = cmd.add_parser('list')
     list.add_argument('--declarative', action='store_true')
     list.add_argument('--imperative', action='store_true')
     list.add_argument('--json', action='store_true')
+
+    # Options to `remove` a single, imperative container.
     rm = cmd.add_parser('remove')
     rm.add_argument('name', help='Name of the container')
+
+    # Options to `update` an imperative container by re-applying a Nix
+    # expression (as used by `create`) to it.
     update = cmd.add_parser('update')
     update.add_argument('name', help='Name of the container')
     update.add_argument('--config', help='Configuration file to use to update the container')
+
+    # Wrapper for `nix-env --list-generations` on an imperative container.
     list_gens = cmd.add_parser('list-generations')
     list_gens.add_argument('name', help='Name of the container')
+
+    # Wrapper for `nix-env --rollback` on an imperative container.
     rollback = cmd.add_parser('rollback')
     rollback.add_argument('name', help='Name of the container')
 
     args = parser.parse_args()
+    dst = args.subcmd
+    if not args.subcmd:
+        dst = "list"
+        args.imperative = True
+        args.declarative = True
+        args.json = False
 
     cmds = {
         'create': op_create,
@@ -396,9 +421,12 @@ if __name__ == '__main__':
     }
 
     try:
-        cmds[args.subcmd](args)
+        cmds[dst](args)
     except:
         info = exc_info()
         message = f"Unrecoverable error occurred: {info[0].__name__}({info[1]})"
         logging.error(message)
+        if args.show_trace:
+            print('Calltrace:')
+            print(print_tb(info[2]))
         exit(1)
