@@ -29494,7 +29494,9 @@ with pkgs;
 
   ecwolf = callPackage ../games/ecwolf { };
 
-  eduke32 = callPackage ../games/eduke32 { };
+  eduke32 = callPackage ../games/eduke32 {
+    inherit (darwin.apple_sdk.frameworks) AGL Cocoa GLUT OpenGL;
+  };
 
   egoboo = callPackage ../games/egoboo { };
 
