@@ -1,8 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, isPy27
-, backports-shutil-which
 , cffi
 , pytest-runner
 , six
@@ -27,8 +25,6 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     cffi
     six
-  ] ++ lib.optionals isPy27 [
-    backports-shutil-which
   ];
 
   pythonImportsCheck = [ "rchitect" ];
