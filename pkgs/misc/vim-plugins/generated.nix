@@ -627,6 +627,18 @@ final: prev:
     meta.homepage = "https://github.com/hrsh7th/cmp-path/";
   };
 
+  cmp-spell = buildVimPluginFrom2Nix {
+    pname = "cmp-spell";
+    version = "2021-08-28";
+    src = fetchFromGitHub {
+      owner = "f3fora";
+      repo = "cmp-spell";
+      rev = "7157c9fa1029269d97d9ed5632ec575bb71981b4";
+      sha256 = "1xrc3zs9jz7dvdfhfx9ikg7abxgvjns0iqr9yzn3jzqm4a37zc62";
+    };
+    meta.homepage = "https://github.com/f3fora/cmp-spell/";
+  };
+
   cmp-vsnip = buildVimPluginFrom2Nix {
     pname = "cmp-vsnip";
     version = "2021-08-25";
