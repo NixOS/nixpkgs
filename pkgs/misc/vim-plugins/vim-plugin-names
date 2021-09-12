@@ -346,6 +346,7 @@ kosayoda/nvim-lightbulb
 kristijanhusak/defx-git
 kristijanhusak/defx-icons
 kristijanhusak/deoplete-phpactor
+kristijanhusak/orgmode.nvim
 kristijanhusak/vim-carbon-now-sh
 kristijanhusak/vim-dadbod-completion
 kristijanhusak/vim-dadbod-ui

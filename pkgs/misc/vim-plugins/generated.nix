@@ -4438,6 +4438,18 @@ final: prev:
     meta.homepage = "https://github.com/tyru/open-browser.vim/";
   };
 
+  orgmode-nvim = buildVimPluginFrom2Nix {
+    pname = "orgmode.nvim";
+    version = "2021-09-10";
+    src = fetchFromGitHub {
+      owner = "kristijanhusak";
+      repo = "orgmode.nvim";
+      rev = "e7fff702db42ed1d90bc9fa46c3b3a102024041f";
+      sha256 = "0fxz0j7mjbs64x18kx3jsj3h8l124ndxf576k8vh9cwgz1g66bcj";
+    };
+    meta.homepage = "https://github.com/kristijanhusak/orgmode.nvim/";
+  };
+
   packer-nvim = buildVimPluginFrom2Nix {
     pname = "packer.nvim";
     version = "2021-09-10";
