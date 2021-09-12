@@ -99,10 +99,10 @@ self: super: {
     # The linked ruby code shows generates the required '.clang_complete' for cmake based projects
     # https://gist.github.com/Mic92/135e83803ed29162817fce4098dec144
     preFixup = ''
-      substituteInPlace "$out"/share/vim-plugins/clang_complete/plugin/clang_complete.vim \
+      substituteInPlace "$out"/plugin/clang_complete.vim \
         --replace "let g:clang_library_path = '' + "''" + ''" "let g:clang_library_path='${llvmPackages.libclang.lib}/lib/libclang.so'"
 
-      substituteInPlace "$out"/share/vim-plugins/clang_complete/plugin/libclang.py \
+      substituteInPlace "$out"/plugin/libclang.py \
         --replace "/usr/lib/clang" "${llvmPackages.clang.cc}/lib/clang"
     '';
   });
@@ -110,7 +110,7 @@ self: super: {
   clighter8 = super.clighter8.overrideAttrs (old: {
     preFixup = ''
       sed "/^let g:clighter8_libclang_path/s|')$|${llvmPackages.clang.cc.lib}/lib/libclang.so')|" \
-        -i "$out"/share/vim-plugins/clighter8/plugin/clighter8.vim
+        -i "$out"/plugin/clighter8.vim
     '';
   });
 
@@ -203,7 +203,7 @@ self: super: {
 
   direnv-vim = super.direnv-vim.overrideAttrs (oa: {
     preFixup = oa.preFixup or "" + ''
-      substituteInPlace $out/share/vim-plugins/direnv.vim/autoload/direnv.vim \
+      substituteInPlace $out/autoload/direnv.vim \
         --replace "let s:direnv_cmd = get(g:, 'direnv_cmd', 'direnv')" \
           "let s:direnv_cmd = get(g:, 'direnv_cmd', '${lib.getBin direnv}/bin/direnv')"
     '';
@@ -354,7 +354,7 @@ self: super: {
       propagatedBuildInputs = [ LanguageClient-neovim-bin ];
 
       preFixup = ''
-        substituteInPlace "$out"/share/vim-plugins/LanguageClient-neovim/autoload/LanguageClient.vim \
+        substituteInPlace "$out"/autoload/LanguageClient.vim \
           --replace "let l:path = s:root . '/bin/'" "let l:path = '${LanguageClient-neovim-bin}' . '/bin/'"
       '';
     };
@@ -387,9 +387,9 @@ self: super: {
 
   minimap-vim = super.minimap-vim.overrideAttrs (old: {
     preFixup = ''
-      substituteInPlace $out/share/vim-plugins/minimap.vim/plugin/minimap.vim \
+      substituteInPlace $out/plugin/minimap.vim \
         --replace "code-minimap" "${code-minimap}/bin/code-minimap"
-      substituteInPlace $out/share/vim-plugins/minimap.vim/bin/minimap_generator.sh \
+      substituteInPlace $out/bin/minimap_generator.sh \
         --replace "code-minimap" "${code-minimap}/bin/code-minimap"
     '';
   });
@@ -691,7 +691,7 @@ self: super: {
 
   vim-dasht = super.vim-dasht.overrideAttrs (old: {
     preFixup = ''
-      substituteInPlace $out/share/vim-plugins/vim-dasht/autoload/dasht.vim \
+      substituteInPlace $out/autoload/dasht.vim \
         --replace "['dasht']" "['${dasht}/bin/dasht']"
     '';
   });
@@ -795,7 +795,7 @@ self: super: {
     in
     super.vim-markdown-composer.overrideAttrs (oldAttrs: rec {
       preFixup = ''
-        substituteInPlace "$out"/share/vim-plugins/vim-markdown-composer/after/ftplugin/markdown/composer.vim \
+        substituteInPlace "$out"/after/ftplugin/markdown/composer.vim \
           --replace "let l:args = [s:plugin_root . '/target/release/markdown-composer']" \
           "let l:args = ['${vim-markdown-composer-bin}/bin/markdown-composer']"
       '';

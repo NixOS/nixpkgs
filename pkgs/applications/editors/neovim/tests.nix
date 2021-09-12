@@ -84,6 +84,13 @@ rec {
     viAlias = true;
   };
 
+  nvim_with_plug = neovim.override {
+    extraName = "-with-plug";
+    configure.plug.plugins = with pkgs.vimPlugins; [
+      vim-go
+    ];
+  };
+
   # nixpkgs should detect that no wrapping is necessary
   nvimShouldntWrap = wrapNeovim2 "-should-not-wrap" nvimAutoDisableWrap;
 
