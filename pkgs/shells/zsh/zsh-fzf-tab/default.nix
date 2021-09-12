@@ -15,6 +15,8 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses ];
 
+  patches = lib.optionals stdenv.isDarwin [ ./darwin.patch ];
+
   postConfigure = ''
     pushd modules
     ./configure --disable-gdbm --without-tcsetpgrp
@@ -40,6 +42,6 @@ in stdenv.mkDerivation rec {
     description = "Replace zsh's default completion selection menu with fzf!";
     license = licenses.mit;
     maintainers = with maintainers; [ vonfry ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

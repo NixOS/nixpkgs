@@ -899,6 +899,10 @@ with pkgs;
 
   gofu = callPackage ../applications/misc/gofu { };
 
+  linux-router = callPackage ../tools/networking/linux-router { };
+
+  linux-router-without-wifi = linux-router.override { useWifiDependencies = false; };
+
   metapixel = callPackage ../tools/graphics/metapixel { };
 
   pferd = callPackage ../tools/misc/pferd {};
@@ -1104,6 +1108,8 @@ with pkgs;
   amtterm = callPackage ../tools/system/amtterm {};
 
   analog = callPackage ../tools/admin/analog {};
+
+  android-backup-extractor = callPackage ../tools/backup/android-backup-extractor {};
 
   android-tools = lowPrio (callPackage ../tools/misc/android-tools {
     stdenv = if stdenv.targetPlatform.isAarch64 then gcc10Stdenv else stdenv;
@@ -4881,6 +4887,7 @@ with pkgs;
   fgallery = callPackage ../tools/graphics/fgallery { };
 
   flannel = callPackage ../tools/networking/flannel { };
+  cni-plugin-flannel = callPackage ../tools/networking/flannel/plugin.nix {};
 
   flare = callPackage ../games/flare {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
@@ -9319,6 +9326,8 @@ with pkgs;
 
   stunnel = callPackage ../tools/networking/stunnel { };
 
+  stuntman = callPackage ../tools/networking/stuntman { };
+
   stutter = haskell.lib.justStaticExecutables haskellPackages.stutter;
 
   strongswan    = callPackage ../tools/networking/strongswan { };
@@ -10356,8 +10365,6 @@ with pkgs;
 
   chase = callPackage ../tools/system/chase { };
 
-  wicd = callPackage ../tools/networking/wicd { };
-
   wimlib = callPackage ../tools/archivers/wimlib { };
 
   wipe = callPackage ../tools/security/wipe { };
@@ -10562,6 +10569,8 @@ with pkgs;
   zerotierone = callPackage ../tools/networking/zerotierone { };
 
   zerofree = callPackage ../tools/filesystems/zerofree { };
+
+  zfs-autobackup = callPackage ../tools/backup/zfs-autobackup { };
 
   zfsbackup = callPackage ../tools/backup/zfsbackup { };
 
@@ -16230,6 +16239,8 @@ with pkgs;
   htmlcxx = callPackage ../development/libraries/htmlcxx { };
 
   http-parser = callPackage ../development/libraries/http-parser { };
+
+  hubble = callPackage ../applications/networking/cluster/hubble { };
 
   hunspell = callPackage ../development/libraries/hunspell { };
 
@@ -23954,7 +23965,6 @@ with pkgs;
 
   cni = callPackage ../applications/networking/cluster/cni {};
   cni-plugins = callPackage ../applications/networking/cluster/cni/plugins.nix {};
-  cni-plugin-flannel = callPackage ../applications/networking/cluster/cni/plugin-flannel.nix {};
 
   dnsname-cni = callPackage ../applications/networking/cluster/dnsname-cni {};
 
@@ -29490,7 +29500,9 @@ with pkgs;
 
   ecwolf = callPackage ../games/ecwolf { };
 
-  eduke32 = callPackage ../games/eduke32 { };
+  eduke32 = callPackage ../games/eduke32 {
+    inherit (darwin.apple_sdk.frameworks) AGL Cocoa GLUT OpenGL;
+  };
 
   egoboo = callPackage ../games/egoboo { };
 
@@ -29915,7 +29927,9 @@ with pkgs;
 
   quake3hires = callPackage ../games/quake3/content/hires.nix { };
 
-  quakespasm = callPackage ../games/quakespasm { };
+  quakespasm = callPackage ../games/quakespasm {
+    inherit (darwin.apple_sdk.frameworks) Cocoa CoreAudio CoreFoundation IOKit OpenGL;
+  };
   vkquake = callPackage ../games/quakespasm/vulkan.nix { };
 
   ioquake3 = callPackage ../games/quake3/ioquake { };
@@ -31206,7 +31220,9 @@ with pkgs;
 
   ngspice = callPackage ../applications/science/electronics/ngspice { };
 
-  openems = callPackage ../applications/science/electronics/openems { };
+  openems = callPackage ../applications/science/electronics/openems {
+    qcsxcad = libsForQt5.qcsxcad;
+  };
 
   openroad = libsForQt5.callPackage ../applications/science/electronics/openroad { };
 

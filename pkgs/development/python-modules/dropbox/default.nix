@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "dropbox";
-  version = "11.18.0";
+  version = "11.19.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fa512c87521809e93502fc6a27b1d57ffbcef2281468c8f93575eab6a9ad5f05";
+    sha256 = "a56d200c47d7cd19f697e232a616342b224079f43abf4748bc55fb0c1de4346f";
   };
 
   postPatch = ''
