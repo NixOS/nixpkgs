@@ -4,9 +4,9 @@ runCommand "radian-wrapper" {
   preferLocalBuild = true;
   allowSubstitutes = false;
 
-  nativeBuildInputs = [makeWrapper];
+  nativeBuildInputs = [ makeWrapper ];
 
-  buildInputs = [R] ++ recommendedPackages ++ packages;
+  buildInputs = [ R ] ++ recommendedPackages ++ packages;
 }
 ''
 makeWrapper ${radian}/bin/radian $out/bin/radian \
