@@ -1,3 +1,8 @@
+# Update instructions:
+#
+# To update `thunderbird-bin`'s `release_sources.nix`, run from the nixpkgs root:
+#
+#     nix-shell maintainers/scripts/update.nix --argstr package pkgs.firefox-bin-unwrapped
 { stdenv, lib, fetchurl, config, makeWrapper
 , alsa-lib
 , at-spi2-atk

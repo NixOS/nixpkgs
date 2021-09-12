@@ -1,10 +1,10 @@
 { fetchurl, lib, stdenv, makeWrapper, which, perl, perlPackages }:
 
 stdenv.mkDerivation {
-  name = "taskopen-1.1.4";
+  name = "taskopen-1.1.5";
   src = fetchurl {
-    url = "https://github.com/ValiValpas/taskopen/archive/v1.1.4.tar.gz";
-    sha256 = "774dd89f5c92462098dd6227e181268e5ec9930bbc569f25784000df185c71ba";
+    url = "https://github.com/ValiValpas/taskopen/archive/v1.1.5.tar.gz";
+    sha256 = "sha256-7fncdt1wCJ4zNLrCf93yRFD8Q4XQ3DCJ1+zJg9Gcl3w=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
