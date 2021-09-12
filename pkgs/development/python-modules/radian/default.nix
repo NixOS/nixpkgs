@@ -31,6 +31,8 @@ buildPythonPackage rec {
     six
   ];
 
+  pythonImportsCheck = [ "radian" ];
+
   meta = with lib; {
     description = "A 21 century R console.";
     homepage = "https://github.com/randy3k/radian";
