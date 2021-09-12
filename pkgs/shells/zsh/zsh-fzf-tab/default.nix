@@ -42,6 +42,6 @@ in stdenv.mkDerivation rec {
     description = "Replace zsh's default completion selection menu with fzf!";
     license = licenses.mit;
     maintainers = with maintainers; [ vonfry ];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = platforms.unix;
   };
 }
