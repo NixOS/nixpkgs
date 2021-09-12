@@ -1,9 +1,14 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
+, coverage
 , lineedit
+, pexpect
+, ptyprocess
 , pygments
-, pytest-runner
+, pyte
+, pytestCheckHook
+, R
 , rchitect
 , six
 }:
@@ -12,16 +17,30 @@ buildPythonPackage rec {
   pname = "radian";
   version = "0.5.11";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "hM2IDcBjOFIRC3SdNO9PSM8TqI1ga1GvCFQkqf4Tyto=";
+  src = fetchFromGitHub {
+    owner = "randy3k";
+    repo = pname;
+    rev = "c1579e6b3fa1c302961d08debe17232127616b9b";
+    sha256 = "SAVZgdLv7DZNwfvbu98m3cSZuv/XrRRZXHTT+58z8Ao=";
   };
 
-  buildInputs = [
-    pytest-runner
+  postPatch = ''
+    substituteInPlace setup.py --replace '"pytest-runner"' ""
+  '';
+
+  checkInputs = [
+    pytestCheckHook
+    coverage
+    pyte
+    pexpect
+    ptyprocess
   ];
 
-  # Tests not included in PyPI release
+  nativeBuildInputs = [
+    R # needed at setup time to detect R_HOME
+  ];
+
+  # Tests fail in mysterious ways with empty exception values
   doCheck = false;
 
   propagatedBuildInputs = [

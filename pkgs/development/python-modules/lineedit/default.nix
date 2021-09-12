@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pygments
 , six
 , wcwidth
@@ -10,12 +10,16 @@ buildPythonPackage rec {
   pname = "lineedit";
   version = "0.1.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "9HlUeRVONQrZz26L5q06ePEPiSuZZ1ry+BQPLYR/bz8=";
+  src = fetchFromGitHub {
+    owner = "randy3k";
+    repo = pname;
+    rev = "4262e9852aa50b09ff3f0569e1840b003ed00584";
+    sha256 = "fq2NpjIQkIq1yzXEUxi6cz80kutVqcH6MqJXHtpTFsk=";
   };
 
-  # Tests not included in PyPI release
+  # Tests fail with "[Errno 1] Operation not permitted". This is
+  # preceded by "Warning: Input is not to a terminal (fd=0)", so
+  # probably related.
   doCheck = false;
 
   propagatedBuildInputs = [
