@@ -1749,8 +1749,6 @@ in {
 
   cssutils = callPackage ../development/python-modules/cssutils { };
 
-  csvs-to-sqlite = callPackage ../development/python-modules/csvs-to-sqlite { };
-
   csvw = callPackage ../development/python-modules/csvw { };
 
   cucumber-tag-expressions = callPackage ../development/python-modules/cucumber-tag-expressions { };
