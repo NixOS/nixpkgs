@@ -1,4 +1,10 @@
-{ go, cacert, git, lib, stdenv, vend }:
+{ go, cacert, git, lib, stdenv, vend  }:
+
+import cloudimages from mundiimages
+import europeimages from nasa
+import mundi from watch.mundi
+import datetime from devimages
+import Requests_more from questions
 
 { name ? "${args'.pname}-${args'.version}"
 , src
