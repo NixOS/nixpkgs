@@ -480,9 +480,11 @@ self: super: {
   });
 
   sqlite-lua = super.sqlite-lua.overrideAttrs (old: {
-    postPatch = ''
+    postPatch = let
+      libsqlite = "${sqlite.out}/lib/libsqlite3${stdenv.hostPlatform.extensions.sharedLibrary}";
+    in ''
       substituteInPlace lua/sqlite/defs.lua \
-        --replace "vim.g.sqlite_clib_path" "vim.g.sqlite_clib_path or '${sqlite.out}/lib/libsqlite3.so'"
+        --replace "path = vim.g.sqlite_clib_path" "path = vim.g.sqlite_clib_path or ${lib.escapeShellArg libsqlite}"
     '';
   });
 
