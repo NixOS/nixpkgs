@@ -591,6 +591,7 @@ raghur/vim-ghost
 Raimondi/delimitMate
 rakr/vim-one
 ray-x/aurora
+ray-x/cmp-treesitter
 ray-x/lsp_signature.nvim
 rbgrouleff/bclose.vim
 rbong/vim-flog

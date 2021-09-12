@@ -639,6 +639,18 @@ final: prev:
     meta.homepage = "https://github.com/f3fora/cmp-spell/";
   };
 
+  cmp-treesitter = buildVimPluginFrom2Nix {
+    pname = "cmp-treesitter";
+    version = "2021-09-11";
+    src = fetchFromGitHub {
+      owner = "ray-x";
+      repo = "cmp-treesitter";
+      rev = "cdc1c4c6170278e119759da0b3c28d73f531a231";
+      sha256 = "0h0hr086mdszqjk5417nk2fmnbdkyi29gmqirx15k323y53hnvd1";
+    };
+    meta.homepage = "https://github.com/ray-x/cmp-treesitter/";
+  };
+
   cmp-vsnip = buildVimPluginFrom2Nix {
     pname = "cmp-vsnip";
     version = "2021-08-25";
