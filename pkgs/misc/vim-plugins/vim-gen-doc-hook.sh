@@ -7,7 +7,6 @@ vimPluginGenTags() {
 
     target="$out/@rtpPath@/$pname"
     mkdir -p $out/@rtpPath@
-    cp -r . $target
 
     # build help tags
     if [ -d "$target/doc" ]; then
