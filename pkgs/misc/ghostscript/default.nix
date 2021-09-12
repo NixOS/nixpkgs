@@ -1,6 +1,6 @@
 { config, stdenv, lib, fetchurl, pkg-config, zlib, expat, openssl, autoconf
 , libjpeg, libpng, libtiff, freetype, fontconfig, libpaper, jbig2dec
-, libiconv, ijs, lcms2, fetchpatch
+, libiconv, ijs, lcms2, fetchpatch, callPackage
 , cupsSupport ? config.ghostscript.cups or (!stdenv.isDarwin), cups ? null
 , x11Support ? cupsSupport, xlibsWrapper ? null # with CUPS, X11 only adds very little
 }:
@@ -137,6 +137,8 @@ stdenv.mkDerivation rec {
 
     runHook postInstallCheck
   '';
+
+  passthru.tests.test-corpus-render = callPackage ./test-corpus-render.nix {};
 
   meta = {
     homepage = "https://www.ghostscript.com/";
