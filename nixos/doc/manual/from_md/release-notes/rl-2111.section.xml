@@ -1150,6 +1150,13 @@ Superuser created successfully.
           other and share data.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <literal>lua</literal> and <literal>luajit</literal>
+          interpreters have been patched to avoid looking into /usr/lib
+          directories, thus increasing the purity of the build.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
 </section>
