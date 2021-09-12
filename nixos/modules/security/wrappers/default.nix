@@ -230,10 +230,6 @@ in
     system.activationScripts.wrappers =
       lib.stringAfter [ "specialfs" "users" ]
         ''
-          # Look in the system path and in the default profile for
-          # programs to be wrapped.
-          WRAPPER_PATH=${config.system.path}/bin:${config.system.path}/sbin
-
           chmod 755 "${parentWrapperDir}"
 
           # We want to place the tmpdirs for the wrappers to the parent dir.
