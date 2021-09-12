@@ -17,6 +17,15 @@
 , dbus
 }:
 
+let
+  themes = fetchFromGitLab {
+    domain = "source.puri.sm";
+    owner = "Librem5";
+    repo = "feedbackd-device-themes";
+    rev = "v0.0.20210909";
+    sha256 = "1d041wnq39sa0sl08xya4yp3n7j6aw560i38chl10vgpmwk9mmhr";
+  };
+in
 stdenv.mkDerivation rec {
   pname = "feedbackd";
   # Not an actual upstream project release,
@@ -63,6 +72,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     mkdir -p $out/lib/udev/rules.d
     sed "s|/usr/libexec/|$out/libexec/|" < $src/debian/feedbackd.udev > $out/lib/udev/rules.d/90-feedbackd.rules
+    cp ${themes}/data/* $out/share/feedbackd/themes/
   '';
 
   meta = with lib; {
