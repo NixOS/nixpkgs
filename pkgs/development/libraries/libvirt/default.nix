@@ -91,7 +91,7 @@ stdenv.mkDerivation rec {
       fetchurl
         {
           url = "https://libvirt.org/sources/${pname}-${version}.tar.xz";
-          sha256 = "sha256-l1VjqpfxBigg06SiRE4ANZ4jLahE9mJC6SrTzZ8o5kY=";
+          sha256 = "1cjj48dn4ww13ayicd2g863a5kz0sc5jlbv2991bj54dq6cn0q8v";
         }
     else
       fetchFromGitLab {
