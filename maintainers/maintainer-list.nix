@@ -11838,6 +11838,12 @@
     githubId = 3992240;
     name = "Elijah Rum";
   };
+  x3ro = {
+    name = "^x3ro";
+    email = "nix@x3ro.dev";
+    github = "x3rAx";
+    githubId = 2268851;
+  };
   xaverdh = {
     email = "hoe.dom@gmx.de";
     github = "xaverdh";

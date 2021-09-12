@@ -899,6 +899,10 @@ with pkgs;
 
   gofu = callPackage ../applications/misc/gofu { };
 
+  linux-router = callPackage ../tools/networking/linux-router { };
+
+  linux-router-without-wifi = linux-router.override { useWifiDependencies = false; };
+
   metapixel = callPackage ../tools/graphics/metapixel { };
 
   pferd = callPackage ../tools/misc/pferd {};
