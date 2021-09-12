@@ -31,6 +31,8 @@ buildPythonPackage rec {
     backports-shutil-which
   ];
 
+  pythonImportsCheck = [ "rchitect" ];
+
   meta = with lib; {
     description = "Interoperate R with Python";
     homepage = "https://github.com/randy3k/rchitect";
