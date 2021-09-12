@@ -18,8 +18,10 @@ in {
 
   config = mkIf cfg.enable {
     security.wrappers.noisetorch = {
-      source = "${cfg.package}/bin/noisetorch";
+      owner = "root";
+      group = "root";
       capabilities = "cap_sys_resource=+ep";
+      source = "${cfg.package}/bin/noisetorch";
     };
   };
 }

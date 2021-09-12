@@ -142,6 +142,7 @@ in
         source = "${pkgs.fcron}/bin/fcronsighup";
         owner = "root";
         group = "fcron";
+        setuid = true;
       };
     };
     systemd.services.fcron = {

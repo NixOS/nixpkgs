@@ -33,12 +33,10 @@ let
       };
     options.owner = lib.mkOption
       { type = lib.types.str;
-        default = "root";
         description = "The owner of the wrapper program.";
       };
     options.group = lib.mkOption
       { type = lib.types.str;
-        default = "root";
         description = "The group of the wrapper program.";
       };
     options.permissions = lib.mkOption
@@ -74,7 +72,7 @@ let
       };
     options.setuid = lib.mkOption
       { type = lib.types.bool;
-        default = true;
+        default = false;
         description = "Whether to add the setuid bit the wrapper program.";
       };
     options.setgid = lib.mkOption
@@ -156,13 +154,30 @@ in
       default = {};
       example = lib.literalExample
         ''
-          { sendmail.source = "/nix/store/.../bin/sendmail";
-            ping = {
-              source  = "${pkgs.iputils.out}/bin/ping";
-              owner   = "nobody";
-              group   = "nogroup";
-              capabilities = "cap_net_raw+ep";
-            };
+          {
+            # a setuid root program
+            doas =
+              { setuid = true;
+                owner = "root";
+                group = "root";
+                source = "''${pkgs.doas}/bin/doas";
+              };
+
+            # a setgid program
+            locate =
+              { setgid = true;
+                owner = "root";
+                group = "mlocate";
+                source = "''${pkgs.locate}/bin/locate";
+              };
+
+            # a program with the CAP_NET_RAW capability
+            ping =
+              { owner = "root";
+                group = "root";
+                capabilities = "cap_net_raw+ep";
+                source = "''${pkgs.iputils.out}/bin/ping";
+              };
           }
         '';
       description = ''
@@ -198,13 +213,21 @@ in
         }
       ) wrappers;
 
-    security.wrappers = {
-      # These are mount related wrappers that require the +s permission.
-      fusermount.source = "${pkgs.fuse}/bin/fusermount";
-      fusermount3.source = "${pkgs.fuse3}/bin/fusermount3";
-      mount.source = "${lib.getBin pkgs.util-linux}/bin/mount";
-      umount.source = "${lib.getBin pkgs.util-linux}/bin/umount";
-    };
+    security.wrappers =
+      let
+        mkSetuidRoot = source:
+          { setuid = true;
+            owner = "root";
+            group = "root";
+            inherit source;
+          };
+      in
+      { # These are mount related wrappers that require the +s permission.
+        fusermount  = mkSetuidRoot "${pkgs.fuse}/bin/fusermount";
+        fusermount3 = mkSetuidRoot "${pkgs.fuse3}/bin/fusermount3";
+        mount  = mkSetuidRoot "${lib.getBin pkgs.util-linux}/bin/mount";
+        umount = mkSetuidRoot "${lib.getBin pkgs.util-linux}/bin/umount";
+      };
 
     boot.specialFileSystems.${parentWrapperDir} = {
       fsType = "tmpfs";

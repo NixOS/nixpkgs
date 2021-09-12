@@ -104,7 +104,12 @@ in
       gid = config.ids.gids.exim;
     };
 
-    security.wrappers.exim.source = "${cfg.package}/bin/exim";
+    security.wrappers.exim =
+      { setuid = true;
+        owner = "root";
+        group = "root";
+        source = "${cfg.package}/bin/exim";
+      };
 
     systemd.services.exim = {
       description = "Exim Mail Daemon";

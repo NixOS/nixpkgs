@@ -183,6 +183,9 @@ in {
     };
 
     security.wrappers.qemu-bridge-helper = {
+      setuid = true;
+      owner = "root";
+      group = "root";
       source = "/run/${dirName}/nix-helpers/qemu-bridge-helper";
     };
 

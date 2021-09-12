@@ -278,8 +278,18 @@ in
       }
     ];
     security.wrappers = {
-      fping.source = "${pkgs.fping}/bin/fping";
-      fping6.source = "${pkgs.fping}/bin/fping6";
+      fping =
+        { setuid = true;
+          owner = "root";
+          group = "root";
+          source = "${pkgs.fping}/bin/fping";
+        };
+      fping6 =
+        { setuid = true;
+          owner = "root";
+          group = "root";
+          source = "${pkgs.fping}/bin/fping6";
+        };
     };
     environment.systemPackages = [ pkgs.fping ];
     users.users.${cfg.user} = {
