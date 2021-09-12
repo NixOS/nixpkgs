@@ -169,7 +169,7 @@ rec {
       # converts { a.b.c = 5; } to { "a.b".c = 5; } for toINI
       gitFlattenAttrs = let
         recurse = path: value:
-          if isAttrs value then
+          if isAttrs value && !lib.isDerivation value then
             lib.mapAttrsToList (name: value: recurse ([ name ] ++ path) value) value
           else if length path > 1 then {
             ${concatStringsSep "." (lib.reverseList (tail path))}.${head path} = value;
