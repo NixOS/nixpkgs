@@ -66,6 +66,8 @@ mapAliases ({
   badtouch = authoscope; # Project was renamed, added 20210626
   bar-xft = lemonbar-xft;  # added 2015-01-16
   bashCompletion = bash-completion; # Added 2016-09-28
+  bash_5 = bash; # added 2021-08-20
+  bashInteractive_5 = bashInteractive; # added 2021-08-20
   batti = throw "batti has been removed from nixpkgs, as it was unmaintained"; # added 2019-12-10
   bazaar = throw "bazaar has been deprecated by breezy."; # added 2020-04-19
   bazaarTools = throw "bazaar has been deprecated by breezy."; # added 2020-04-19
