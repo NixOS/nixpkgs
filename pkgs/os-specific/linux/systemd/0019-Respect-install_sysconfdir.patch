@@ -1,0 +1,55 @@
+From 8f2a035947e7802061b10be0605544c3aaa4a34e Mon Sep 17 00:00:00 2001
+From: Kai Wohlfahrt <kai.wohlfahrt@gmail.com>
+Date: Tue, 14 Sep 2021 00:32:52 +0100
+Subject: [PATCH 19/19] Respect install_sysconfdir
+
+This was lost e11a25cadbe and c900d89faa0 while adding jinja2
+templating. Breaks builds on NixOS.
+---
+ src/core/meson.build  | 2 +-
+ src/login/meson.build | 7 ++++---
+ 2 files changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/src/core/meson.build b/src/core/meson.build
+index f0d2c6f642..c4f7d44c35 100644
+--- a/src/core/meson.build
++++ b/src/core/meson.build
+@@ -193,7 +193,7 @@ foreach item : in_files
+                 output: file,
+                 command : [meson_render_jinja2, config_h, '@INPUT@'],
+                 capture : true,
+-                install : dir != 'no',
++                install : (dir == pkgsysconfdir) ? install_sysconfdir_samples : (dir != 'no'),
+                 install_dir : dir)
+ endforeach
+ 
+diff --git a/src/login/meson.build b/src/login/meson.build
+index 8c20e6be65..64be87402f 100644
+--- a/src/login/meson.build
++++ b/src/login/meson.build
+@@ -71,18 +71,19 @@ in_files = [
+         ['70-uaccess.rules',   udevrulesdir,  enable_logind and conf.get('HAVE_ACL') == 1],
+         ['71-seat.rules',      udevrulesdir,  enable_logind],
+         ['73-seat-late.rules', udevrulesdir,  enable_logind],
+-        ['systemd-user',       pamconfdir,    enable_logind and pamconfdir != 'no']]
++        ['systemd-user',       pamconfdir,    enable_logind]]
+ 
+ foreach tuple : in_files
+         file = tuple[0]
++	dir = tuple[1]
+         custom_target(
+                 file,
+                 input : file + '.in',
+                 output: file,
+                 command : [meson_render_jinja2, config_h, '@INPUT@'],
+                 capture : true,
+-                install : tuple[2],
+-                install_dir : tuple[1])
++                install : tuple[2] and ((dir == pkgsysconfdir) ? install_sysconfdir_samples : (dir != 'no')),
++                install_dir : dir)
+ endforeach
+ 
+ if enable_logind
+-- 
+2.32.0
+

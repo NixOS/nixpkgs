@@ -5,6 +5,7 @@
 , fetchFromGitHub
 , fetchpatch
 , buildPackages
+, bash
 , ninja
 , meson
 , m4
@@ -17,7 +18,6 @@
 , glib
 , substituteAll
 , gettext
-, python3Packages
 
   # Mandatory dependencies
 , libcap
@@ -113,7 +113,8 @@ assert withCryptsetup ->
 let
   wantCurl = withRemote || withImportd;
 
-  version = "247.6";
+  python3 = buildPackages.python3Packages.python.withPackages (ps: with ps; [ lxml jinja2 ]);
+  version = "249.4";
 in
 stdenv.mkDerivation {
   inherit version pname;
@@ -124,7 +125,7 @@ stdenv.mkDerivation {
     owner = "systemd";
     repo = "systemd-stable";
     rev = "v${version}";
-    sha256 = "sha256-7XYEq3Qw25suwjbtPzx9lVPHUu9ZY/1bADXl2wQbkJc=";
+    sha256 = "0pqi9gbk9kgwvd0idf13ybxz7s4h5przn01bwj6fna44jr0wy41c";
   };
 
   # If these need to be regenerated, `git am path/to/00*.patch` them into a
@@ -137,33 +138,20 @@ stdenv.mkDerivation {
     ./0003-Fix-NixOS-containers.patch
     ./0004-Look-for-fsck-in-the-right-place.patch
     ./0005-Add-some-NixOS-specific-unit-directories.patch
-    ./0006-Get-rid-of-a-useless-message-in-user-sessions.patch
-    ./0007-hostnamed-localed-timedated-disable-methods-that-cha.patch
-    ./0008-Fix-hwdb-paths.patch
-    ./0009-Change-usr-share-zoneinfo-to-etc-zoneinfo.patch
-    ./0010-localectl-use-etc-X11-xkb-for-list-x11.patch
-    ./0011-build-don-t-create-statedir-and-don-t-touch-prefixdi.patch
-    ./0012-inherit-systemd-environment-when-calling-generators.patch
-    ./0013-add-rootprefix-to-lookup-dir-paths.patch
-    ./0014-systemd-shutdown-execute-scripts-in-etc-systemd-syst.patch
-    ./0015-systemd-sleep-execute-scripts-in-etc-systemd-system-.patch
-    ./0016-kmod-static-nodes.service-Update-ConditionFileNotEmp.patch
-    ./0017-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
-    ./0018-logind-seat-debus-show-CanMultiSession-again.patch
-    ./0019-pkg-config-derive-prefix-from-prefix.patch
-
-    # Fix -Werror=format.
-    (fetchpatch {
-      url = "https://github.com/systemd/systemd/commit/ab1aa6368a883bce88e3162fee2bea14aacedf23.patch";
-      sha256 = "1b280l5jrjsg8qhsang199mpqjhkpix4c8bm3blknjnq9iv43add";
-    })
-
-    # Fix CVE-2021-33910, disclosed 2021-07-20
-    (fetchpatch {
-      name = "CVE-2021-33910.patch";
-      url = "https://github.com/systemd/systemd/commit/441e0115646d54f080e5c3bb0ba477c892861ab9.patch";
-      sha256 = "1g1lk95igaadg67kah9bpi4zsc01rg398sd1247ghjsvl5hxn4v4";
-    })
+    ./0006-hostnamed-localed-timedated-disable-methods-that-cha.patch
+    ./0007-Fix-hwdb-paths.patch
+    ./0008-Change-usr-share-zoneinfo-to-etc-zoneinfo.patch
+    ./0009-localectl-use-etc-X11-xkb-for-list-x11.patch
+    ./0010-build-don-t-create-statedir-and-don-t-touch-prefixdi.patch
+    ./0011-inherit-systemd-environment-when-calling-generators.patch
+    ./0012-add-rootprefix-to-lookup-dir-paths.patch
+    ./0013-systemd-shutdown-execute-scripts-in-etc-systemd-syst.patch
+    ./0014-systemd-sleep-execute-scripts-in-etc-systemd-system-.patch
+    ./0015-kmod-static-nodes.service-Update-ConditionFileNotEmp.patch
+    ./0016-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
+    ./0017-logind-seat-debus-show-CanMultiSession-again.patch
+    ./0018-pkg-config-derive-prefix-from-prefix.patch
+    ./0019-Respect-install_sysconfdir.patch # FIXME: upstream this patch
   ];
 
   postPatch = ''
@@ -286,7 +274,7 @@ stdenv.mkDerivation {
       docbook_xsl
       docbook_xml_dtd_42
       docbook_xml_dtd_45
-      (buildPackages.python3Packages.python.withPackages (ps: with ps; [ python3Packages.lxml ]))
+      python3
     ];
 
   buildInputs =
@@ -447,7 +435,17 @@ stdenv.mkDerivation {
         --replace /bin/plymouth /run/current-system/sw/bin/plymouth # To avoid dependency
     done
 
-    for dir in tools src/resolve test src/test src/shared; do
+    for dir in \
+      tools \
+      src/resolve \
+      src/udev \
+      src/libsystemd/sd-journal \
+      src/test \
+      src/shared \
+      src/basic \
+      src/partition \
+      test; \
+    do
       patchShebangs $dir
     done
 
@@ -459,7 +457,7 @@ stdenv.mkDerivation {
         --replace '"tar"' '"${gnutar}/bin/tar"'
     done
 
-    substituteInPlace src/journal/catalog.c \
+    substituteInPlace src/libsystemd/sd-journal/catalog.c \
       --replace /usr/lib/systemd/catalog/ $out/lib/systemd/catalog/
   '';
 
@@ -469,7 +467,7 @@ stdenv.mkDerivation {
     substituteInPlace config.h \
       --replace "POLKIT_AGENT_BINARY_PATH" "_POLKIT_AGENT_BINARY_PATH" \
       --replace "SYSTEMD_BINARY_PATH" "_SYSTEMD_BINARY_PATH" \
-      --replace "SYSTEMD_CGROUP_AGENT_PATH" "_SYSTEMD_CGROUP_AGENT_PATH"
+      --replace "SYSTEMD_CGROUPS_AGENT_PATH" "_SYSTEMD_CGROUPS_AGENT_PATH"
   '';
 
   NIX_CFLAGS_COMPILE = toString [
@@ -481,8 +479,8 @@ stdenv.mkDerivation {
     # Set the release_agent on /sys/fs/cgroup/systemd to the
     # currently running systemd (/run/current-system/systemd) so
     # that we don't use an obsolete/garbage-collected release agent.
-    "-USYSTEMD_CGROUP_AGENT_PATH"
-    "-DSYSTEMD_CGROUP_AGENT_PATH=\"/run/current-system/systemd/lib/systemd/systemd-cgroups-agent\""
+    "-USYSTEMD_CGROUPS_AGENT_PATH"
+    "-DSYSTEMD_CGROUPS_AGENT_PATH=\"/run/current-system/systemd/lib/systemd/systemd-cgroups-agent\""
 
     "-USYSTEMD_BINARY_PATH"
     "-DSYSTEMD_BINARY_PATH=\"/run/current-system/systemd/lib/systemd/systemd\""
