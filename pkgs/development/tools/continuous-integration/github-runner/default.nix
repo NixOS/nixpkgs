@@ -30,6 +30,7 @@ let
 
   dotnetSdk = dotnetCorePackages.sdk_3_1;
   runtimeId = "linux-x64";
+  fakeSha1 = "0000000000000000000000000000000000000000";
 in
 stdenv.mkDerivation rec {
   pname = "github-runner";
@@ -38,7 +39,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "actions";
     repo = "runner";
-    rev = "c8caf59bb7adaa87c4cf8f61372670d338a13f2d"; # v${version}
+    rev = "v${version}";
     sha256 = "sha256-Nl1FSjwweVqdQEVhqt4PEcqZbF7htNT279yx1nGuAe0=";
   };
 
@@ -126,7 +127,7 @@ stdenv.mkDerivation rec {
       -p:PackageRuntime="${runtimeId}" \
       -p:BUILDCONFIG="Release" \
       -p:RunnerVersion="${version}" \
-      -p:GitInfoCommitHash="${src.rev}" \
+      -p:GitInfoCommitHash="${fakeSha1}" \
       src/dir.proj
 
     runHook postBuild
@@ -191,7 +192,7 @@ stdenv.mkDerivation rec {
       -p:PackageRuntime="${runtimeId}" \
       -p:BUILDCONFIG="Debug" \
       -p:RunnerVersion="${version}" \
-      -p:GitInfoCommitHash="${src.rev}" \
+      -p:GitInfoCommitHash="${fakeSha1}" \
       src/dir.proj
 
     runHook postCheck
