@@ -48,8 +48,7 @@ in
     (if withX then "--with-x" else "--without-x")
     (if withQt then "--with-qt=qt5" else "--without-qt")
     (if aquaterm then "--with-aquaterm" else "--without-aquaterm")
-  ]
-  ++ lib.optional withCaca "--with-caca";
+  ] ++ lib.optional withCaca "--with-caca";
 
   CXXFLAGS = lib.optionalString (stdenv.isDarwin && withQt) "-std=c++11";
 
