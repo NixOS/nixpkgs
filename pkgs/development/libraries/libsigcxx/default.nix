@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libsigc++";
-  version = "2.10.6";
+  version = "3.0.7";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-3aF23EaBvanVoqwbxVJzvdOBZit6bUnpGCZ9E+h3Ths=";
+    sha256 = "sha256-v76RwNCU6mu8bL05CbfZjGVh7qi22cDCWt2Qam6D1zM=";
   };
 
   nativeBuildInputs = [ pkg-config meson ninja ];
