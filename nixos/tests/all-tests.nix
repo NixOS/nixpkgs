@@ -98,6 +98,7 @@ in
   deluge = handleTest ./deluge.nix {};
   dendrite = handleTest ./dendrite.nix {};
   dhparams = handleTest ./dhparams.nix {};
+  disable-installer-tools = handleTest ./disable-installer-tools.nix {};
   discourse = handleTest ./discourse.nix {};
   dnscrypt-proxy2 = handleTestOn ["x86_64-linux"] ./dnscrypt-proxy2.nix {};
   dnscrypt-wrapper = handleTestOn ["x86_64-linux"] ./dnscrypt-wrapper {};
