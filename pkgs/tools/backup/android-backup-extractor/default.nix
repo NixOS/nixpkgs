@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   version = "20210909062443-4c55371";
 
   src = fetchurl {
-    url = "https://github.com/nelenkov/${pname}/releases/download/${version}/abe.jar";
+    url = "https://github.com/nelenkov/android-backup-extractor/releases/download/${version}/abe.jar";
     sha256 = "0ms241kb4h9y9apr637sb4kw5mml40c1ac0q4jcxhnwr3dr05w1q";
   };
 
