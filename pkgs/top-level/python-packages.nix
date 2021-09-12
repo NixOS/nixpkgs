@@ -4251,6 +4251,8 @@ in {
 
   linecache2 = callPackage ../development/python-modules/linecache2 { };
 
+  lineedit = callPackage ../development/python-modules/lineedit { };
+
   line_profiler = callPackage ../development/python-modules/line_profiler { };
 
   linkify-it-py = callPackage ../development/python-modules/linkify-it-py { };
@@ -7633,6 +7635,8 @@ in {
 
   rachiopy = callPackage ../development/python-modules/rachiopy { };
 
+  radian = callPackage ../development/python-modules/radian { };
+
   radicale_infcloud = callPackage ../development/python-modules/radicale_infcloud { };
 
   radio_beam = callPackage ../development/python-modules/radio_beam { };
@@ -7668,6 +7672,8 @@ in {
   rawkit = callPackage ../development/python-modules/rawkit { };
 
   rbtools = callPackage ../development/python-modules/rbtools { };
+
+  rchitect = callPackage ../development/python-modules/rchitect { };
 
   rcssmin = callPackage ../development/python-modules/rcssmin { };
 
