@@ -30,6 +30,6 @@ buildPythonPackage rec {
     description = "Morphological analyzer/inflection engine for Russian and Ukrainian";
     homepage = "https://github.com/kmike/pymorphy2";
     license = licenses.mit;
-    maintainers = with maintainers; [ danieldk ];
+    maintainers = with maintainers; [ ];
   };
 }

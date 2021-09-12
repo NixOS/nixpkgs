@@ -363,6 +363,12 @@ with super;
     '';
   });
 
+  # TODO just while testing, remove afterwards
+  # toVimPlugin should do it instead
+  gitsigns-nvim = super.gitsigns-nvim.overrideAttrs(oa: {
+    nativeBuildInputs = oa.nativeBuildInputs or [] ++ [ pkgs.vimUtils.vimGenDocHook ];
+  });
+
   # aliases
   cjson = super.lua-cjson;
 }

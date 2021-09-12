@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildCommand = ''
     mkdir -p "$out"/bin
-    cp "${vimPlugins.vimacs}"/share/vim-plugins/vimacs/bin/vim $out/bin/vimacs
+    cp "${vimPlugins.vimacs}"/bin/vim $out/bin/vimacs
     substituteInPlace "$out"/bin/vimacs \
       --replace '-vim}' '-@bin@/bin/vim}' \
       --replace '-gvim}' '-@bin@/bin/vim -g}' \

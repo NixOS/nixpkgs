@@ -2728,6 +2728,8 @@ in {
 
   flux-led = callPackage ../development/python-modules/flux-led { };
 
+  flynt = callPackage ../development/python-modules/flynt { };
+
   fn = callPackage ../development/python-modules/fn { };
 
   fnvhash = callPackage ../development/python-modules/fnvhash { };

@@ -7,13 +7,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "discordchatexporter-cli";
-  version = "2.30";
+  version = "2.30.1";
 
   src = fetchFromGitHub {
     owner = "tyrrrz";
     repo = "discordchatexporter";
     rev = version;
-    sha256 = "uTOeRsEab4vaAwtfysUTM3xFP5UMxpUQnuuU8hv3nk8=";
+    sha256 = "JSYIhd+DNVOKseHtWNNChECR5hKr+ntu1Yyqtnlg8rM=";
   };
 
   nativeBuildInputs = [ dotnet-sdk_5 dotnetPackages.Nuget cacert makeWrapper autoPatchelfHook ];
