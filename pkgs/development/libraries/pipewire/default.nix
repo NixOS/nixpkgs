@@ -7,6 +7,7 @@
 , ninja
 , systemd
 , pkg-config
+, docutils
 , doxygen
 , graphviz
 , valgrind
@@ -66,6 +67,7 @@ let
       "jack"
       "dev"
       "doc"
+      "man"
       "mediaSession"
       "installedTests"
     ];
@@ -94,6 +96,7 @@ let
     ];
 
     nativeBuildInputs = [
+      docutils
       doxygen
       graphviz
       meson
@@ -125,7 +128,6 @@ let
 
     mesonFlags = [
       "-Ddocs=enabled"
-      "-Dman=disabled" # we don't have xmltoman
       "-Dexamples=${mesonEnable withMediaSession}" # only needed for `pipewire-media-session`
       "-Dudevrulesdir=lib/udev/rules.d"
       "-Dinstalled_tests=enabled"
