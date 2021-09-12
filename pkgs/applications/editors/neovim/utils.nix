@@ -78,8 +78,7 @@ let
         ++ (extraPython3Packages ps)
         ++ (lib.concatMap (f: f ps) pluginPython3Packages));
 
-      lua = neovim-unwrapped.lua;
-      luaEnv = lua.withPackages(ps: extraLuaPackages ps);
+      luaEnv = neovim-unwrapped.lua.withPackages(extraLuaPackages);
 
       # Mapping a boolean argument to a key that tells us whether to add or not to
       # add to nvim's 'embedded rc' this:
@@ -115,8 +114,8 @@ let
         ] ++ lib.optionals (binPath != "") [
           "--suffix" "PATH" ":" binPath
         ] ++ lib.optionals (luaEnv != null) [
-          "--prefix" "LUA_PATH" ";" "${luaEnv}/share/lua/${lua.luaversion}/?.lua"
-          "--prefix" "LUA_CPATH" ";" "${luaEnv}/lib/lua/${lua.luaversion}/?.so"
+          "--prefix" "LUA_PATH" ";" (neovim-unwrapped.lua.pkgs.lib.genLuaPathAbsStr luaEnv)
+          "--prefix" "LUA_CPATH" ";" (neovim-unwrapped.lua.pkgs.lib.genLuaCPathAbsStr luaEnv)
         ];
 
 

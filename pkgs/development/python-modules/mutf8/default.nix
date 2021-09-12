@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "mutf8";
-  version = "1.0.4";
+  version = "1.0.5";
 
   disabled = pythonOlder "3.6";
 
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "TkTech";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-99NL4mCvzQmDvaOI2M9PA8UUwIrrEtVHRmJqkd6hNd0=";
+    sha256 = "0blp6gb7q3f7if326xard8zlfg2rcmb3a7mxvaxgkvxigipjb9af";
   };
 
   checkInputs = [

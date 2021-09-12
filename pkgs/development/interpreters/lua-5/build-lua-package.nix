@@ -238,7 +238,7 @@ builtins.removeAttrs attrs ["disabled" "checkInputs" "externalDeps" "extraVariab
     inherit externalDeps;
   } // passthru;
 
-  meta = with lib.maintainers; {
+  meta = {
     platforms = lua.meta.platforms;
     # add extra maintainer(s) to every package
     maintainers = (meta.maintainers or []) ++ [ ];

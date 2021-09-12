@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "unpackerr";
-  version = "0.9.7";
+  version = "0.9.8";
 
   src = fetchFromGitHub {
     owner = "davidnewhall";
     repo = "unpackerr";
     rev = "v${version}";
-    sha256 = "sha256-OJDFPSXbJffiKW1SmMptPxj69YU7cuOU1LgIiInurCM=";
+    sha256 = "08xcxs4qh25qsjaf6wivhpszl61zdp59hlkd57igf9fv4lywb41q";
   };
 
-  vendorSha256 = "sha256-n8gRefr+MyiSaATG1mZrS3lx4oDEfbQ1LQxQ6vp5l0Y=";
+  vendorSha256 = "0ilpg7xfll0c5lsv8zf4h3i72yabddkddih4d292hczyz9wi3j4z";
 
   buildInputs = lib.optionals stdenv.isDarwin [ Cocoa WebKit ];
 

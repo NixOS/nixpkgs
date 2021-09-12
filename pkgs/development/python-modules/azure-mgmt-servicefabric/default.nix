@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-servicefabric";
-  version = "1.0.0";
+  version = "2.0.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "de35e117912832c1a9e93109a8d24cab94f55703a9087b2eb1c5b0655b3b1913";
+    sha256 = "4c6f3de2526a27af78aecae248604f941c4d059fbcf2265912a380e3c788735d";
   };
 
   propagatedBuildInputs = [

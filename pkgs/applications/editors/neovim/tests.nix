@@ -84,6 +84,13 @@ rec {
     viAlias = true;
   };
 
+  nvim_with_plug = neovim.override {
+    extraName = "-with-plug";
+    configure.plug.plugins = with pkgs.vimPlugins; [
+      vim-go
+    ];
+  };
+
   # nixpkgs should detect that no wrapping is necessary
   nvimShouldntWrap = wrapNeovim2 "-should-not-wrap" nvimAutoDisableWrap;
 
@@ -133,7 +140,7 @@ rec {
     configure.pathogen.pluginNames = [ "vim-nix" ];
   };
 
-  nvimWithLuaPackages = wrapNeovim2 "with-lua-packages" (makeNeovimConfig {
+  nvimWithLuaPackages = wrapNeovim2 "-with-lua-packages" (makeNeovimConfig {
     extraLuaPackages = ps: [ps.mpack];
     customRC = ''
       lua require("mpack")
@@ -141,6 +148,7 @@ rec {
   });
 
   nvim_with_lua_packages = runTest nvimWithLuaPackages ''
+    export HOME=$TMPDIR
     ${nvimWithLuaPackages}/bin/nvim -i NONE --noplugin -es
   '';
 })

@@ -185,7 +185,7 @@ let
       else (lib.optional (x ? name) x.name)
             ++ (x.names or []);
 
-  rtpPath = "share/vim-plugins";
+  rtpPath = ".";
 
   nativeImpl = packages:
   (let
@@ -196,13 +196,14 @@ let
       ln -sf ${plugin}/${plugin.pname}-${plugin.version}-rocks/${plugin.pname}/${plugin.version}/* $out/pack/${packageName}/${dir}/${plugin.pname}/
     '';
 
-    linkVimlPlugin = pluginPath: packageName: dir:
-      "ln -sf ${pluginPath}/${rtpPath}/* $out/pack/${packageName}/${dir}";
+    linkVimlPlugin = plugin: packageName: dir: ''
+      mkdir -p $out/pack/${packageName}/${dir}/${plugin.pname}
+      ln -sf ${plugin}/${rtpPath}/* $out/pack/${packageName}/${dir}/${plugin.pname}
+    '';
 
-      # (builtins.trace pluginPath )
-      link = pluginPath: if hasLuaModule pluginPath
-        then linkLuaPlugin pluginPath
-        else linkVimlPlugin pluginPath;
+    link = pluginPath: if hasLuaModule pluginPath
+      then linkLuaPlugin pluginPath
+      else linkVimlPlugin pluginPath;
 
     packageLinks = (packageName: {start ? [], opt ? []}:
     let

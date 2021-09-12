@@ -19,7 +19,7 @@ rec {
     buildPhase ? "",
     preInstall ? "",
     postInstall ? "",
-    path ? lib.getName name,
+    path ? ".",
     addonInfo ? null,
     ...
   }:
