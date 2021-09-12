@@ -3,6 +3,7 @@
 , fetchPypi
 , jinja2
 , lxml
+, pygments
 }:
 
 buildPythonPackage rec {
@@ -17,6 +18,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     jinja2
     lxml
+    pygments
   ];
 
   # There are no unit tests in the pypi tarball. Most of the unit tests on the
@@ -35,5 +37,4 @@ buildPythonPackage rec {
     license = licenses.bsd0;
     homepage = "https://www.gcovr.com/";
   };
-
 }
