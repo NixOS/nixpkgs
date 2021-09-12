@@ -2,13 +2,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "quill";
-  version = "0.2.4";
+  version = "0.2.5";
 
   src = fetchFromGitHub {
     owner = "dfinity";
     repo = "quill";
     rev = "v${version}";
-    sha256 = "sha256-rR5VgdlJy6TQBmCHuKc7nPjznbeLjCmQdUJKjY0GsNI=";
+    sha256 = "sha256-lvINDtOG2mmz0ESxL11DQVZh3IcEiZYYMu5oN5Q9WKA=";
   };
 
   ic = fetchFromGitHub {
@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
     export OPENSSL_LIB_DIR=${openssl.out}/lib
   '';
 
-  cargoSha256 = "sha256-nLNuOqShOq01gVWoRCbsvfAd7B9VClUA8Hu8/UQNILg=";
+  cargoSha256 = "sha256-F2RMfHVFqCq9cb+9bjPWaRcQWKYIwwffWCssoQ6sSdU=";
 
   nativeBuildInputs = [ pkg-config protobuf ];
   buildInputs = [ openssl ]
