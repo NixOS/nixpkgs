@@ -327,6 +327,7 @@ karb94/neoscroll.nvim
 kassio/neoterm
 kbenzie/vim-spirv
 kchmck/vim-coffee-script
+kdheepak/cmp-latex-symbols@main
 kdheepak/lazygit.nvim
 KeitaNakamura/neodark.vim
 keith/investigate.vim

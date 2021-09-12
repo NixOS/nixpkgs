@@ -579,6 +579,18 @@ final: prev:
     meta.homepage = "https://github.com/hrsh7th/cmp-emoji/";
   };
 
+  cmp-latex-symbols = buildVimPluginFrom2Nix {
+    pname = "cmp-latex-symbols";
+    version = "2021-09-10";
+    src = fetchFromGitHub {
+      owner = "kdheepak";
+      repo = "cmp-latex-symbols";
+      rev = "29dc9e53d17cd1f26605888f85500c8ba79cebff";
+      sha256 = "17qjw0yp0cmgyjy593qq6rfh7fgfwgb7mxg7a0kg1drjpncwv8gl";
+    };
+    meta.homepage = "https://github.com/kdheepak/cmp-latex-symbols/";
+  };
+
   cmp-nvim-lsp = buildVimPluginFrom2Nix {
     pname = "cmp-nvim-lsp";
     version = "2021-09-03";
