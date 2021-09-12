@@ -1,4 +1,4 @@
-{ lib, pkgs, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule {
   pname = "cni-plugin-flannel";
