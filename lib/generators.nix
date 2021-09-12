@@ -35,6 +35,8 @@ rec {
           ("generators.mkValueStringDefault: " +
            "${t} not supported: ${toPretty {} v}");
     in   if isInt      v then toString v
+    # convert derivations to store paths
+    else if lib.isDerivation v then toString v
     # we default to not quoting strings
     else if isString   v then v
     # isString returns "1", which is not a good default
