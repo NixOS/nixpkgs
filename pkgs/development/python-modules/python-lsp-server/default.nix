@@ -35,14 +35,14 @@
 
 buildPythonPackage rec {
   pname = "python-lsp-server";
-  version = "1.2.1";
+  version = "1.2.2";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "python-lsp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-TyXKlXeXMyq+bQq9ngDm0SuW+rAhDlOVlC3mDI1THwk=";
+    sha256 = "sha256-RuZfCvYeO4mthZrg06UhwPp57qvuUI1yYyne5nzIHhE=";
   };
 
   propagatedBuildInputs = [

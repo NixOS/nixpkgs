@@ -265,6 +265,8 @@ in {
 
   aioeafm = callPackage ../development/python-modules/aioeafm { };
 
+  aioeagle = callPackage ../development/python-modules/aioeagle { };
+
   aioemonitor = callPackage ../development/python-modules/aioemonitor { };
 
   aioesphomeapi = callPackage ../development/python-modules/aioesphomeapi { };
@@ -1884,6 +1886,8 @@ in {
 
   debian-inspector = callPackage ../development/python-modules/debian-inspector { };
 
+  debtcollector = callPackage ../development/python-modules/debtcollector { };
+
   debts = callPackage ../development/python-modules/debts { };
 
   debugpy = callPackage ../development/python-modules/debugpy { };
@@ -2246,6 +2250,8 @@ in {
   dugong = callPackage ../development/python-modules/dugong { };
 
   dulwich = callPackage ../development/python-modules/dulwich { };
+
+  dungeon-eos = callPackage ../development/python-modules/dungeon-eos { };
 
   dwdwfsapi = callPackage ../development/python-modules/dwdwfsapi { };
 
@@ -3245,6 +3251,8 @@ in {
 
   guzzle_sphinx_theme = callPackage ../development/python-modules/guzzle_sphinx_theme { };
 
+  gvm-tools = callPackage ../development/python-modules/gvm-tools {};
+
   gviz-api = callPackage ../development/python-modules/gviz-api {};
 
   gym = callPackage ../development/python-modules/gym { };
@@ -3272,6 +3280,8 @@ in {
   habitipy = callPackage ../development/python-modules/habitipy { };
 
   hachoir = callPackage ../development/python-modules/hachoir { };
+
+  hacking = callPackage ../development/python-modules/hacking { };
 
   hdate = callPackage ../development/python-modules/hdate { };
 
@@ -3696,6 +3706,8 @@ in {
 
   isort = callPackage ../development/python-modules/isort { };
 
+  isounidecode = callPackage ../development/python-modules/isounidecode { };
+
   isoweek = callPackage ../development/python-modules/isoweek { };
 
   itanium_demangler = callPackage ../development/python-modules/itanium_demangler { };
@@ -3963,6 +3975,8 @@ in {
   keyrings-alt = callPackage ../development/python-modules/keyrings-alt { };
 
   keystone-engine = callPackage ../development/python-modules/keystone-engine { };
+
+  keystoneauth1 = callPackage ../development/python-modules/keystoneauth1 { };
 
   keyutils = callPackage ../development/python-modules/keyutils {
     inherit (pkgs) keyutils;
@@ -5095,6 +5109,8 @@ in {
 
   opensimplex = callPackage ../development/python-modules/opensimplex { };
 
+  openstacksdk = callPackage ../development/python-modules/openstacksdk { };
+
   opentimestamps = callPackage ../development/python-modules/opentimestamps { };
 
   opentracing = callPackage ../development/python-modules/opentracing { };
@@ -5132,7 +5148,11 @@ in {
 
   orvibo = callPackage ../development/python-modules/orvibo { };
 
+  os-service-types = callPackage ../development/python-modules/os-service-types { };
+
   osc = callPackage ../development/python-modules/osc { };
+
+  osc-lib = callPackage ../development/python-modules/osc-lib { };
 
   oscrypto = callPackage ../development/python-modules/oscrypto { };
 
@@ -5141,6 +5161,24 @@ in {
   osmnx = callPackage ../development/python-modules/osmnx { };
 
   osmpythontools = callPackage ../development/python-modules/osmpythontools { };
+
+  oslo-concurrency = callPackage ../development/python-modules/oslo-concurrency { };
+
+  oslo-config = callPackage ../development/python-modules/oslo-config { };
+
+  oslo-context = callPackage ../development/python-modules/oslo-context { };
+
+  oslo-db = callPackage ../development/python-modules/oslo-db { };
+
+  oslo-i18n = callPackage ../development/python-modules/oslo-i18n { };
+
+  oslo-log = callPackage ../development/python-modules/oslo-log { };
+
+  oslo-serialization = callPackage ../development/python-modules/oslo-serialization { };
+
+  oslo-utils = callPackage ../development/python-modules/oslo-utils { };
+
+  oslotest = callPackage ../development/python-modules/oslotest { };
 
   osqp = callPackage ../development/python-modules/osqp { };
 
@@ -5503,6 +5541,8 @@ in {
   python-izone = callPackage ../development/python-modules/python-izone { };
 
   python-juicenet = callPackage ../development/python-modules/python-juicenet { };
+
+  python-keystoneclient = callPackage ../development/python-modules/python-keystoneclient { };
 
   python-lsp-black = callPackage ../development/python-modules/python-lsp-black { };
 
@@ -6319,6 +6359,8 @@ in {
 
   pylutron-caseta = callPackage ../development/python-modules/pylutron-caseta { };
 
+  pylyrics = callPackage ../development/python-modules/pylyrics { };
+
   pylxd = callPackage ../development/python-modules/pylxd { };
 
   pylzma = callPackage ../development/python-modules/pylzma { };
@@ -7095,6 +7137,8 @@ in {
 
   python-box = callPackage ../development/python-modules/python-box { };
 
+  python-cinderclient = callPackage ../development/python-modules/python-cinderclient { };
+
   python-constraint = callPackage ../development/python-modules/python-constraint { };
 
   python-crontab = callPackage ../development/python-modules/python-crontab { };
@@ -7142,6 +7186,8 @@ in {
   python-gitlab = callPackage ../development/python-modules/python-gitlab { };
 
   python-gnupg = callPackage ../development/python-modules/python-gnupg { };
+
+  python-gvm = callPackage ../development/python-modules/python-gvm { };
 
   python-hosts = callPackage ../development/python-modules/python-hosts { };
 
@@ -7232,6 +7278,8 @@ in {
 
   python-nomad = callPackage ../development/python-modules/python-nomad { };
 
+  python-novaclient = callPackage ../development/python-modules/python-novaclient { };
+
   python-oauth2 = callPackage ../development/python-modules/python-oauth2 { };
 
   pythonocc-core = toPythonModule (callPackage ../development/python-modules/pythonocc-core {
@@ -7242,6 +7290,8 @@ in {
   python-olm = callPackage ../development/python-modules/python-olm { };
 
   python-opendata-transport = callPackage ../development/python-modules/python-opendata-transport { };
+
+  python-openstackclient = callPackage ../development/python-modules/python-openstackclient { };
 
   python_openzwave = callPackage ../development/python-modules/python_openzwave { };
 
@@ -8515,6 +8565,8 @@ in {
 
   stem = callPackage ../development/python-modules/stem { };
 
+  stestr = callPackage ../development/python-modules/stestr { };
+
   stevedore = callPackage ../development/python-modules/stevedore { };
 
   stm32loader = callPackage ../development/python-modules/stm32loader { };
@@ -8566,6 +8618,8 @@ in {
   subunit = callPackage ../development/python-modules/subunit {
     inherit (pkgs) subunit cppunit check;
   };
+
+  subunit2sql = callPackage ../development/python-modules/subunit2sql { };
 
   suds-jurko = callPackage ../development/python-modules/suds-jurko { };
 
@@ -9090,6 +9144,8 @@ in {
 
   ufoprocessor = callPackage ../development/python-modules/ufoprocessor { };
 
+  ueagle = callPackage ../development/python-modules/ueagle { };
+
   ujson = callPackage ../development/python-modules/ujson { };
 
   ukpostcodeparser = callPackage ../development/python-modules/ukpostcodeparser { };
@@ -9346,6 +9402,8 @@ in {
   watchgod = callPackage ../development/python-modules/watchgod { };
 
   waterfurnace = callPackage ../development/python-modules/waterfurnace { };
+
+  wavedrom = callPackage ../development/python-modules/wavedrom { };
 
   WazeRouteCalculator = callPackage ../development/python-modules/WazeRouteCalculator { };
 

@@ -12,6 +12,7 @@
 , qtbase
 , libusb1
 , libpcap
+, libtiff
 , libXt
 , libpng
 , Cocoa
@@ -33,19 +34,23 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config cmake wrapQtAppsHook ];
   buildInputs = [
-    qhull
-    flann
-    boost
     eigen
     libusb1
     libpcap
-    libpng
-    vtk
     qtbase
     libXt
   ]
   ++ lib.optionals stdenv.isDarwin [ Cocoa AGL ]
   ++ lib.optionals withCuda [ cudatoolkit ];
+
+  propagatedBuildInputs = [
+    boost
+    flann
+    libpng
+    libtiff
+    qhull
+    vtk
+  ];
 
   cmakeFlags = lib.optionals stdenv.isDarwin [
     "-DOPENGL_INCLUDE_DIR=${OpenGL}/Library/Frameworks"

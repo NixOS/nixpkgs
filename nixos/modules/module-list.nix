@@ -145,6 +145,7 @@
   ./programs/fuse.nix
   ./programs/gamemode.nix
   ./programs/geary.nix
+  ./programs/git.nix
   ./programs/gnome-disks.nix
   ./programs/gnome-documents.nix
   ./programs/gnome-terminal.nix

@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "frugal";
-  version = "3.14.7";
+  version = "3.14.8";
 
   src = fetchFromGitHub {
     owner = "Workiva";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-mCfM2G+FhKDwPg0NqLIAe8F5MRZVJ0tcIY9FBuLpRpE=";
+    sha256 = "sha256-oCqN9iG4+vBvIJoW1v4ww9SALlhcX5bEgqSjTArPQ2g=";
   };
 
   subPackages = [ "." ];

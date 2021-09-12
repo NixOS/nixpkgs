@@ -424,7 +424,7 @@ self: super: {
   });
 
   null-ls-nvim = super.null-ls-nvim.overrideAttrs (old: {
-    path = "null-ls.nvim";
+    dependencies = with self; [ plenary-nvim nvim-lspconfig ];
   });
 
   nvim-lsputils = super.nvim-lsputils.overrideAttrs (old: {
@@ -675,7 +675,7 @@ self: super: {
             libiconv
           ];
 
-          cargoSha256 = "16lcsi5mxmj79ky5lbpivravn8rjl4z3j3fsxrglb22ab4i7js3n";
+          cargoSha256 = "1hmbgqd22fy68n05vdb93wsdvws91m4i6nm1kq6bwwbhzhkvd7js";
         };
       in
       ''
