@@ -112,6 +112,9 @@ buildPythonPackage rec {
   disabledTests = [
     # Tests require a git repository
     "test_get_version"
+    # https://github.com/mitmproxy/mitmproxy/commit/36ebf11916704b3cdaf4be840eaafa66a115ac03
+    # Tests require terminal
+    "test_integration"
   ];
 
   pythonImportsCheck = [ "mitmproxy" ];
