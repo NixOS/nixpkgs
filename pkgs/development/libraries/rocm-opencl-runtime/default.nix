@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
     description = "OpenCL runtime for AMD GPUs, part of the ROCm stack";
     homepage = "https://github.com/RadeonOpenCompute/ROCm-OpenCL-Runtime";
     license = with licenses; [ asl20 mit ];
-    maintainers = with maintainers; [ acowley danieldk lovesegfault ];
+    maintainers = with maintainers; [ acowley lovesegfault ];
     platforms = platforms.linux;
   };
 }
