@@ -31177,7 +31177,9 @@ with pkgs;
 
   ngspice = callPackage ../applications/science/electronics/ngspice { };
 
-  openems = callPackage ../applications/science/electronics/openems { };
+  openems = callPackage ../applications/science/electronics/openems {
+    qcsxcad = libsForQt5.qcsxcad;
+  };
 
   openroad = libsForQt5.callPackage ../applications/science/electronics/openroad { };
 
