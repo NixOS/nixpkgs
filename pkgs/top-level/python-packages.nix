@@ -961,6 +961,8 @@ in {
 
   azure-synapse-artifacts = callPackage ../development/python-modules/azure-synapse-artifacts { };
 
+  azure-synapse-managedprivateendpoints = callPackage ../development/python-modules/azure-synapse-managedprivateendpoints { };
+
   azure-synapse-spark = callPackage ../development/python-modules/azure-synapse-spark { };
 
   b2sdk = callPackage ../development/python-modules/b2sdk { };
