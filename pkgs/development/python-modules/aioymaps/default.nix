@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "aioymaps";
-  version = "1.1.0";
+  version = "1.2.0";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1rvgf4flvnpjj0sm14xlnfmmnlmkz6xq5h5mfb14amkfy76za3jm";
+    sha256 = "6244a8c587ff4e2fe0735045498476e0fdcecc3ae670658a85c39cac6a644635";
   };
 
   propagatedBuildInputs = [
