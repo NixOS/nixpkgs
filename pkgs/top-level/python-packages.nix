@@ -209,6 +209,8 @@ in {
 
   adguardhome = callPackage ../development/python-modules/adguardhome { };
 
+  adjustText = callPackage ../development/python-modules/adjustText { };
+
   advantage-air = callPackage ../development/python-modules/advantage-air { };
 
   aemet-opendata = callPackage ../development/python-modules/aemet-opendata { };
