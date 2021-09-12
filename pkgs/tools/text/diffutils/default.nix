@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "diffutils";
-  version = "3.7";
+  version = "3.8";
 
   src = fetchurl {
     url = "mirror://gnu/diffutils/diffutils-${version}.tar.xz";
-    sha256 = "09isrg0isjinv8c535nxsi1s86wfdfzml80dbw41dj9x3hiad9xk";
+    sha256 = "sha256-pr3X0bMSZtEcT03mwbdI1GB6sCMa9RiPwlM9CuJDj+w=";
   };
 
   outputs = [ "out" "info" ];
