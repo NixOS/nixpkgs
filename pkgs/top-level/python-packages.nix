@@ -687,6 +687,8 @@ in {
 
   automat = callPackage ../development/python-modules/automat { };
 
+  autopage = callPackage ../development/python-modules/autopage { };
+
   autopep8 = callPackage ../development/python-modules/autopep8 { };
 
   avahi = toPythonModule (pkgs.avahi.override {
