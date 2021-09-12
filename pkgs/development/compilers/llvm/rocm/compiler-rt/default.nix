@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     description = "ROCm fork of the LLVM Compiler runtime libraries";
     homepage = "https://github.com/RadeonOpenCompute/llvm-project";
     license = licenses.ncsa;
-    maintainers = with maintainers; [ acowley danieldk lovesegfault ];
+    maintainers = with maintainers; [ acowley lovesegfault ];
     platforms = platforms.linux;
   };
 }

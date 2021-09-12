@@ -115,6 +115,6 @@ in buildPythonPackage rec {
     description = "Fast State-of-the-Art Tokenizers optimized for Research and Production";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ danieldk ];
+    maintainers = with maintainers; [ ];
   };
 }

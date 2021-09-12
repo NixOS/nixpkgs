@@ -9,7 +9,7 @@ in {
   name = "handbrake";
 
   meta = {
-    maintainers = with pkgs.lib.maintainers; [ danieldk ];
+    maintainers = with pkgs.lib.maintainers; [ ];
   };
 
   machine = { pkgs, ... }: {
