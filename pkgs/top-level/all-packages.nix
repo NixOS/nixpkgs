@@ -661,6 +661,8 @@ with pkgs;
 
   srcOnly = callPackage ../build-support/src-only { };
 
+  substitute = callPackage ../build-support/substitute/substitute.nix { };
+
   substituteAll = callPackage ../build-support/substitute/substitute-all.nix { };
 
   substituteAllFiles = callPackage ../build-support/substitute-files/substitute-all-files.nix { };
@@ -895,6 +897,8 @@ with pkgs;
 
   gobgp = callPackage ../tools/networking/gobgp { };
 
+  gofu = callPackage ../applications/misc/gofu { };
+
   metapixel = callPackage ../tools/graphics/metapixel { };
 
   pferd = callPackage ../tools/misc/pferd {};
@@ -912,6 +916,8 @@ with pkgs;
   tnat64 = callPackage ../tools/networking/tnat64 { };
 
   veikk-linux-driver-gui = libsForQt5.callPackage ../tools/misc/veikk-linux-driver-gui { };
+
+  ventoy-bin = callPackage ../tools/cd-dvd/ventoy-bin { };
 
   xcd = callPackage ../tools/misc/xcd { };
 
@@ -6321,6 +6327,10 @@ with pkgs;
 
   jo = callPackage ../development/tools/jo { };
 
+  joshuto = callPackage ../applications/misc/joshuto {
+    inherit (darwin.apple_sdk.frameworks) SystemConfiguration;
+  };
+
   jrnl = python3Packages.callPackage ../applications/misc/jrnl { };
 
   jsawk = callPackage ../tools/text/jsawk { };
@@ -7719,6 +7729,10 @@ with pkgs;
   ocproxy = callPackage ../tools/networking/ocproxy { };
 
   ocserv = callPackage ../tools/networking/ocserv { };
+
+  oha = callPackage ../tools/networking/oha {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   opencorsairlink = callPackage ../tools/misc/opencorsairlink { };
 
@@ -10702,6 +10716,8 @@ with pkgs;
   oil = callPackage ../shells/oil { };
 
   oksh = callPackage ../shells/oksh { };
+
+  loksh = callPackage ../shells/loksh { };
 
   pash = callPackage ../shells/pash { };
 
@@ -18231,6 +18247,8 @@ with pkgs;
 
   openslp = callPackage ../development/libraries/openslp {};
 
+  openstackclient = with python3Packages; toPythonApplication python-openstackclient;
+
   openvdb = callPackage ../development/libraries/openvdb {};
 
   inherit (callPackages ../development/libraries/libressl { })
@@ -23489,6 +23507,7 @@ with pkgs;
 
   cni = callPackage ../applications/networking/cluster/cni {};
   cni-plugins = callPackage ../applications/networking/cluster/cni/plugins.nix {};
+  cni-plugin-flannel = callPackage ../applications/networking/cluster/cni/plugin-flannel.nix {};
 
   dnsname-cni = callPackage ../applications/networking/cluster/dnsname-cni {};
 
@@ -24255,6 +24274,8 @@ with pkgs;
   termshark = callPackage ../tools/networking/termshark { };
 
   fbida = callPackage ../applications/graphics/fbida { };
+
+  fclones = callPackage ../tools/misc/fclones { };
 
   fcp = callPackage ../tools/misc/fcp { };
 
@@ -26165,8 +26186,6 @@ with pkgs;
     mlt-qt5 = libsForQt514.mlt;
   };
 
-  typora = callPackage ../applications/editors/typora { };
-
   taxi = callPackage ../applications/networking/ftp/taxi { };
 
   librep = callPackage ../development/libraries/librep { };
@@ -27448,9 +27467,15 @@ with pkgs;
 
   tendermint = callPackage ../tools/networking/tendermint { };
 
+  termdbms = callPackage ../development/tools/database/termdbms { };
+
   termdown = python3Packages.callPackage ../applications/misc/termdown { };
 
   terminal-notifier = callPackage ../applications/misc/terminal-notifier {};
+
+  textplots = callPackage ../tools/graphics/textplots { };
+
+  texture-synthesis = callPackage ../tools/graphics/texture-synthesis { };
 
   tty-solitaire = callPackage ../applications/misc/tty-solitaire { };
 
@@ -28809,6 +28834,8 @@ with pkgs;
   abuse = callPackage ../games/abuse { };
 
   adom = callPackage ../games/adom { };
+
+  airshipper = callPackage ../games/airshipper { };
 
   airstrike = callPackage ../games/airstrike { };
 
@@ -31872,7 +31899,7 @@ with pkgs;
 
   satysfi = callPackage ../tools/typesetting/satysfi { };
 
-  sc-controller = pythonPackages.callPackage ../misc/drivers/sc-controller {
+  sc-controller = python3Packages.callPackage ../misc/drivers/sc-controller {
     inherit libusb1; # Shadow python.pkgs.libusb1.
   };
 
@@ -32125,6 +32152,8 @@ with pkgs;
   webkit2-sharp = callPackage ../development/libraries/webkit2-sharp {  };
 
   websocketd = callPackage ../applications/networking/websocketd { };
+
+  wike = callPackage ../applications/misc/wike { };
 
   wikicurses = callPackage ../applications/misc/wikicurses {
     pythonPackages = python3Packages;

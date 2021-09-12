@@ -1,9 +1,9 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
 , dnspython
-, enum34
 , greenlet
 , monotonic
 , six
@@ -22,10 +22,12 @@ buildPythonPackage rec {
     sha256 = "2f0bb8ed0dc0ab21d683975d5d8ab3c054d588ce61def9faf7a465ee363e839b";
   };
 
-  propagatedBuildInputs = [ dnspython greenlet monotonic six ]
-    ++ lib.optional (pythonOlder "3.4") enum34;
+  propagatedBuildInputs = [ dnspython greenlet pyopenssl six ]
+    ++ lib.optional (pythonOlder "3.5") monotonic;
 
-  checkInputs = [ nose pyopenssl ];
+  checkInputs = [ nose ];
+
+  doCheck = !stdenv.isDarwin;
 
   preCheck = ''
     echo "nameserver 127.0.0.1" > resolv.conf
@@ -47,7 +49,7 @@ buildPythonPackage rec {
   # pythonImportsCheck = [ "eventlet" ];
 
   meta = with lib; {
-    homepage = "https://pypi.python.org/pypi/eventlet/";
+    homepage = "https://github.com/eventlet/eventlet/";
     description = "A concurrent networking library for Python";
     maintainers = with maintainers; [ SuperSandro2000 ];
     license = licenses.mit;

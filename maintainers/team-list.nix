@@ -182,7 +182,7 @@ with lib.maintainers; {
     members = [
       angustrau
       superherointj
-      supersandro2000
+      SuperSandro2000
     ];
     scope = "Maintain the ecosystem around OpenStack";
   };

@@ -232,6 +232,13 @@
           <link linkend="opt-services.nats.enable">services.nats</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://git-scm.com">git</link>, a
+          distributed version control system. Available as
+          <link xlink:href="options.html#opt-programs.git.enable">programs.git</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-incompatibilities">
