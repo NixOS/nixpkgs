@@ -16236,6 +16236,8 @@ with pkgs;
 
   http-parser = callPackage ../development/libraries/http-parser { };
 
+  hubble = callPackage ../applications/networking/cluster/hubble { };
+
   hunspell = callPackage ../development/libraries/hunspell { };
 
   hunspellDicts = recurseIntoAttrs (callPackages ../development/libraries/hunspell/dictionaries.nix {});
