@@ -17,6 +17,12 @@ in stdenv.mkDerivation {
       url = "https://git.savannah.gnu.org/cgit/cpio.git/patch/?id=dd96882877721703e19272fe25034560b794061b";
       sha256 = "0vmr0qjwj2ldnzsvccl105ckwgx3ssvn9mp3f27ss0kiyigrzz32";
     })
+    (fetchpatch {
+      # upstream build fix against -fno-common compilers like >=gcc-10
+      name = "fno-common-fix.patch";
+      url = "https://git.savannah.gnu.org/cgit/cpio.git/patch/?id=641d3f489cf6238bb916368d4ba0d9325a235afb";
+      sha256 = "1ffawzxjw72kzpdwffi2y7pvibrmwf4jzrxdq9f4a75q6crl66iq";
+    })
   ];
 
   preConfigure = if stdenv.isCygwin then ''
