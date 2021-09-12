@@ -1,8 +1,8 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , cffi
-, pytest-runner
+, pytestCheckHook
 , six
 }:
 
@@ -10,16 +10,23 @@ buildPythonPackage rec {
   pname = "rchitect";
   version = "0.3.32";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "ghA7Go1E3TcGqgvY6CVP5UKN1S1GLwy5hmxYPrcoasM=";
+  src = fetchFromGitHub {
+    owner = "randy3k";
+    repo = pname;
+    rev = "0f3d5a191cca895a1cb9c41f8391520a08e8b9fc";
+    sha256 = "B+laYoW1XEq+XOoD/gjDngy8o9OSFJPpqdXVpvDIjLA=";
   };
 
-  buildInputs = [
-    pytest-runner
+  postPatch = ''
+    substituteInPlace setup.py --replace '"pytest-runner"' ""
+  '';
+
+  checkInputs = [
+    pytestCheckHook
   ];
 
-  # Tests not included in PyPI release
+  # Problems importing rchitect._cffi, which is a module built with
+  # cffi
   doCheck = false;
 
   propagatedBuildInputs = [
