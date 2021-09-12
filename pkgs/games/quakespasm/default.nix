@@ -1,6 +1,6 @@
 { lib, stdenv, SDL, SDL2, fetchurl, gzip, libvorbis, libmad
 , Cocoa, CoreAudio, CoreFoundation, IOKit, OpenGL
-, copyDesktopItems, makeDesktopItem
+, copyDesktopItems, makeDesktopItem, imagemagick
 , useSDL2 ? stdenv.isDarwin # TODO: CoreAudio fails to initialize with SDL 1.x for some reason.
 }:
 
@@ -21,7 +21,10 @@ stdenv.mkDerivation rec {
     ./quakespasm-darwin-makefile-improvements.patch
   ];
 
-  nativeBuildInputs = [ copyDesktopItems ];
+  nativeBuildInputs = lib.optionals stdenv.isLinux [
+    copyDesktopItems
+    imagemagick
+  ];
   buildInputs = [
     gzip libvorbis libmad (if useSDL2 then SDL2 else SDL)
   ] ++ lib.optionals stdenv.isDarwin [
@@ -68,6 +71,12 @@ stdenv.mkDerivation rec {
       --replace '>''${EXECUTABLE_NAME}' '>quake'
     substituteInPlace $out/Applications/Quake.app/Contents/Info.plist \
       --replace '>''${PRODUCT_NAME}' '>QuakeSpasm'
+  '' + lib.optionalString stdenv.isLinux ''
+    for i in 16 24 32 48 64 128 256 512; do
+      sz="$i"x"$i"
+      convert -resize $sz ../Misc/QuakeSpasm_512.png \
+        $out/share/icons/hicolor/$sz/apps/quakespasm.png"
+    done
   '';
 
   enableParallelBuilding = true;
@@ -77,7 +86,11 @@ stdenv.mkDerivation rec {
       name = "quakespasm";
       exec = "quake";
       desktopName = "Quakespasm";
-      categories = "Game;";
+      categories = "Game;Shooter;";
+      comment = "Quake (quakespasm engine)";
+      terminal = false;
+      startupNotify = true;
+      icon = "quakespasm";
     })
   ];
 
