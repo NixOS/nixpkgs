@@ -5,6 +5,7 @@
   lcms2,
   installShellFiles,
   dbus,
+  darwin,
   Cocoa,
   CoreGraphics,
   Foundation,
@@ -45,6 +46,8 @@ buildPythonApplication rec {
     libpng
     python3
     zlib
+  ] ++ lib.optionals (stdenv.isDarwin && (builtins.hasAttr "UserNotifications" darwin.apple_sdk.frameworks)) [
+    darwin.apple_sdk.frameworks.UserNotifications
   ] ++ lib.optionals stdenv.isLinux [
     fontconfig libunistring libcanberra libX11
     libXrandr libXinerama libXcursor libxkbcommon libXi libXext
@@ -66,6 +69,8 @@ buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = lib.optional stdenv.isLinux libGL;
+
+  patches = lib.optionals stdenv.isDarwin [ ./apple-sdk-11.patch ];
 
   outputs = [ "out" "terminfo" ];
 
