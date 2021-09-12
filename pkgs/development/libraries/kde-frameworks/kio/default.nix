@@ -1,6 +1,6 @@
 {
   mkDerivation, fetchpatch,
-  extra-cmake-modules, kdoctools, qttools,
+  util-linux, extra-cmake-modules, kdoctools, qttools,
   karchive, kbookmarks, kcompletion, kconfig, kconfigwidgets, kcoreaddons,
   kdbusaddons, ki18n, kiconthemes, kitemviews, kjobwidgets, knotifications,
   kservice, ktextwidgets, kwallet, kwidgetsaddons, kwindowsystem, kxmlgui,
@@ -11,7 +11,7 @@ mkDerivation {
   name = "kio";
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
-    karchive kconfigwidgets kdbusaddons ki18n kiconthemes knotifications
+    util-linux karchive kconfigwidgets kdbusaddons ki18n kiconthemes knotifications
     ktextwidgets kwallet kwidgetsaddons kwindowsystem qtscript qtx11extras
     kcrash
   ];
