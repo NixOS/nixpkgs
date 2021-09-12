@@ -32,6 +32,7 @@ with pkgs; {
   linux_5_4 = makeKernelTest "5.4" linuxPackages_5_4;
   linux_5_10 = makeKernelTest "5.10" linuxPackages_5_10;
   linux_5_13 = makeKernelTest "5.13" linuxPackages_5_13;
+  linux_5_14 = makeKernelTest "5.14" linuxPackages_5_14;
 
   linux_testing = makeKernelTest "testing" linuxPackages_testing;
 }
