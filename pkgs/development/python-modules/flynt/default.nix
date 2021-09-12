@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ikamensh";
     repo = "flynt";
-    rev = "v${version}";
+    rev = version;
     hash = "sha256-DV433wqLjF5k4g8J7rj5gZfaw+Y4/TDOoFKo3eKDjZ4=";
   };
 
