@@ -1,4 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi, setuptools }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, callPackage
+}:
 
 buildPythonPackage rec {
   pname = "pbr";
@@ -11,13 +16,19 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ setuptools ];
 
-  # circular dependencies with fixtures
+  # check in passthru.tests.pytest to escape infinite recursion with fixtures
   doCheck = false;
+
+  passthru.tests = {
+    pytest = callPackage ./tests.nix { };
+  };
+
   pythonImportsCheck = [ "pbr" ];
 
   meta = with lib; {
-    homepage = "http://docs.openstack.org/developer/pbr/";
-    license = licenses.asl20;
     description = "Python Build Reasonableness";
+    homepage = "https://github.com/openstack/pbr";
+    license = licenses.asl20;
+    maintainers = teams.openstack.members;
   };
 }
