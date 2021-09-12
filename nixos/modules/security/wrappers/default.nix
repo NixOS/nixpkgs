@@ -96,20 +96,20 @@ let
     }:
     assert (lib.versionAtLeast (lib.getVersion config.boot.kernelPackages.kernel) "4.3");
     ''
-      cp ${securityWrapper}/bin/security-wrapper $wrapperDir/${program}
-      echo -n "${source}" > $wrapperDir/${program}.real
+      cp ${securityWrapper}/bin/security-wrapper "$wrapperDir/${program}"
+      echo -n "${source}" > "$wrapperDir/${program}.real"
 
       # Prevent races
-      chmod 0000 $wrapperDir/${program}
-      chown ${owner}.${group} $wrapperDir/${program}
+      chmod 0000 "$wrapperDir/${program}"
+      chown ${owner}.${group} "$wrapperDir/${program}"
 
       # Set desired capabilities on the file plus cap_setpcap so
       # the wrapper program can elevate the capabilities set on
       # its file into the Ambient set.
-      ${pkgs.libcap.out}/bin/setcap "cap_setpcap,${capabilities}" $wrapperDir/${program}
+      ${pkgs.libcap.out}/bin/setcap "cap_setpcap,${capabilities}" "$wrapperDir/${program}"
 
       # Set the executable bit
-      chmod ${permissions} $wrapperDir/${program}
+      chmod ${permissions} "$wrapperDir/${program}"
     '';
 
   ###### Activation script for the setuid wrappers
@@ -124,14 +124,14 @@ let
     , ...
     }:
     ''
-      cp ${securityWrapper}/bin/security-wrapper $wrapperDir/${program}
-      echo -n "${source}" > $wrapperDir/${program}.real
+      cp ${securityWrapper}/bin/security-wrapper "$wrapperDir/${program}"
+      echo -n "${source}" > "$wrapperDir/${program}.real"
 
       # Prevent races
-      chmod 0000 $wrapperDir/${program}
-      chown ${owner}.${group} $wrapperDir/${program}
+      chmod 0000 "$wrapperDir/${program}"
+      chown ${owner}.${group} "$wrapperDir/${program}"
 
-      chmod "u${if setuid then "+" else "-"}s,g${if setgid then "+" else "-"}s,${permissions}" $wrapperDir/${program}
+      chmod "u${if setuid then "+" else "-"}s,g${if setgid then "+" else "-"}s,${permissions}" "$wrapperDir/${program}"
     '';
 
   mkWrappedPrograms =
@@ -238,7 +238,7 @@ in
 
           # We want to place the tmpdirs for the wrappers to the parent dir.
           wrapperDir=$(mktemp --directory --tmpdir="${parentWrapperDir}" wrappers.XXXXXXXXXX)
-          chmod a+rx $wrapperDir
+          chmod a+rx "$wrapperDir"
 
           ${lib.concatStringsSep "\n" mkWrappedPrograms}
 
@@ -246,15 +246,15 @@ in
             # Atomically replace the symlink
             # See https://axialcorps.com/2013/07/03/atomically-replacing-files-and-directories/
             old=$(readlink -f ${wrapperDir})
-            if [ -e ${wrapperDir}-tmp ]; then
-              rm --force --recursive ${wrapperDir}-tmp
+            if [ -e "${wrapperDir}-tmp" ]; then
+              rm --force --recursive "${wrapperDir}-tmp"
             fi
-            ln --symbolic --force --no-dereference $wrapperDir ${wrapperDir}-tmp
-            mv --no-target-directory ${wrapperDir}-tmp ${wrapperDir}
-            rm --force --recursive $old
+            ln --symbolic --force --no-dereference "$wrapperDir" "${wrapperDir}-tmp"
+            mv --no-target-directory "${wrapperDir}-tmp" "${wrapperDir}"
+            rm --force --recursive "$old"
           else
             # For initial setup
-            ln --symbolic $wrapperDir ${wrapperDir}
+            ln --symbolic "$wrapperDir" "${wrapperDir}"
           fi
         '';
 
