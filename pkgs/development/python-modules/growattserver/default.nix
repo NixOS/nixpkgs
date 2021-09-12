@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "growattserver";
-  version = "1.0.2";
+  version = "1.1.0";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "indykoning";
     repo = "PyPi_GrowattServer";
     rev = version;
-    sha256 = "sha256-0i7pMJ4gAVOkvj2uYZJygr3rehgIAfyxq9cWbozwRIQ=";
+    sha256 = "sha256-Vooy+czqhrsWVw35zJb5paC5G0WwOlI5hF8PXxJG0cY=";
   };
 
   propagatedBuildInputs = [

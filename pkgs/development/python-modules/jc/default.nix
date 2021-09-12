@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "jc";
-  version = "1.16.1";
+  version = "1.16.2";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "kellyjonbrazil";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-R/RKMxSilv8JJW5om+l99vvrZYHjEEK1OCdsYWuxA74=";
+    sha256 = "sha256-QTisaO0LNjZ+dltHCqyWDQDNCGTqc8woMSwqsoyfhbk=";
   };
 
   propagatedBuildInputs = [ ruamel_yaml xmltodict pygments ];
