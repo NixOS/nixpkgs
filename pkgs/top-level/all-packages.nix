@@ -28454,9 +28454,7 @@ with pkgs;
     imlib2 = imlib2-nox;
   };
 
-  watson = callPackage ../applications/office/watson {
-    pythonPackages = python3Packages;
-  };
+  watson = callPackage ../applications/office/watson { };
 
   wapiti = callPackage ../tools/security/wapiti { };
 
