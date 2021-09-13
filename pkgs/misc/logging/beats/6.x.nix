@@ -23,6 +23,7 @@ let beat = package : extraArgs : buildGoPackage (rec {
       };
     } // extraArgs);
 in rec {
+  auditbeat6  = beat "auditbeat"  {meta.description = "Lightweight shipper for audit data";};
   filebeat6   = beat "filebeat"   {meta.description = "Lightweight shipper for logfiles";};
   heartbeat6  = beat "heartbeat"  {meta.description = "Lightweight shipper for uptime monitoring";};
   metricbeat6 = beat "metricbeat" {
