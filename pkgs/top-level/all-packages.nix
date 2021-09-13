@@ -22206,6 +22206,8 @@ with pkgs;
 
   riscv-pk = callPackage ../misc/riscv-pk { };
 
+  ristate = callPackage ../tools/misc/ristate { };
+
   roccat-tools = callPackage ../os-specific/linux/roccat-tools { };
 
   rtsp-simple-server = callPackage ../servers/rtsp-simple-server { };
