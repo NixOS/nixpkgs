@@ -35,13 +35,13 @@ let
   '';
 in stdenv.mkDerivation rec {
   pname = "goverlay";
-  version = "0.6.2";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "benjamimgois";
     repo = pname;
     rev = version;
-    hash = "sha256-nV8pcFBxrOlj4ebfLZF2gQwKt4bt+wtD72sXepu5kRI=";
+    hash = "sha256-ZksQse0xWAtH+U6EjcGWT2BOG5dfSnm6XvZLLE5ynHs=";
   };
 
   outputs = [ "out" "man" ];
