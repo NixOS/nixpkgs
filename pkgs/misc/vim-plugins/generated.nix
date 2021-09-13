@@ -449,12 +449,12 @@ final: prev:
 
   chadtree = buildVimPluginFrom2Nix {
     pname = "chadtree";
-    version = "2021-09-12";
+    version = "2021-09-13";
     src = fetchFromGitHub {
       owner = "ms-jpq";
       repo = "chadtree";
-      rev = "121139c3308df99a230da75c3c168947dfd94f60";
-      sha256 = "1w3fjz06cz43lyl52kcbyc9zsqzhs483jyc4av3fvycfqs9n2z6m";
+      rev = "356863bbe896fbea6450b652c60a27b0a1cb3dbd";
+      sha256 = "0s4vhw8qkg89a9afy9mqa42sl95dmapaqqhzz6gxvamqbk6kgj6y";
     };
     meta.homepage = "https://github.com/ms-jpq/chadtree/";
   };
@@ -2980,8 +2980,8 @@ final: prev:
     src = fetchFromGitHub {
       owner = "ray-x";
       repo = "lsp_signature.nvim";
-      rev = "76afb84baee7d843c3d5fb6491a01081ceb3c717";
-      sha256 = "0cy3z89sjy64ri6q015h7r20xqmdxszcrh80jf8v1nay71maxs8b";
+      rev = "5668ffc9b8cbe472cf0c85938e51c4a22a183da1";
+      sha256 = "1dqy6m4lwb77zizncr0kyyra3a2ylmgiwr2hrxl3s8f4asggiy6z";
     };
     meta.homepage = "https://github.com/ray-x/lsp_signature.nvim/";
   };
@@ -3108,12 +3108,12 @@ final: prev:
 
   mattn-calendar-vim = buildVimPluginFrom2Nix {
     pname = "mattn-calendar-vim";
-    version = "2021-09-06";
+    version = "2021-09-13";
     src = fetchFromGitHub {
       owner = "mattn";
       repo = "calendar-vim";
-      rev = "4cdf69c43d66500b1c1235f3c1c584f257115cb9";
-      sha256 = "06phscsjqb3wnwdmb5w8rirj02fcz9svp5wdnzv9jkvj822ni4pr";
+      rev = "6595a540a3fdf3d2a65ff18b3bf157540dc2602b";
+      sha256 = "1186fbfhpb9n8cp79xbgq7q6a5sgndaldadrhshlq0nm3ajwv6v9";
     };
     meta.homepage = "https://github.com/mattn/calendar-vim/";
   };
@@ -3456,12 +3456,12 @@ final: prev:
 
   neoformat = buildVimPluginFrom2Nix {
     pname = "neoformat";
-    version = "2021-08-30";
+    version = "2021-09-12";
     src = fetchFromGitHub {
       owner = "sbdchd";
       repo = "neoformat";
-      rev = "3924dade3a0b06d1457958ea7aa181787478b464";
-      sha256 = "1fr2lw5pfx9bs45c9knk9yz0p6pb5w51zlzqb5kr6c966hdq1msx";
+      rev = "88570b2f9c42fbf7ecbaeac3c52d941c461e65b0";
+      sha256 = "13blkgc1sfkpkrr15vgx8s2nz7np358qv9sr10znv8wjdn9wp2dd";
     };
     meta.homepage = "https://github.com/sbdchd/neoformat/";
   };
@@ -3744,12 +3744,12 @@ final: prev:
 
   nord-vim = buildVimPluginFrom2Nix {
     pname = "nord-vim";
-    version = "2021-07-10";
+    version = "2021-09-12";
     src = fetchFromGitHub {
       owner = "arcticicestudio";
       repo = "nord-vim";
-      rev = "7e8d8abec9226d3697a9725b24a7d840623c6b66";
-      sha256 = "0zi86iqc6hznf6vnmhyk7rlqwmkl0gxvjsc55ygxkypa1075lqg3";
+      rev = "c2aaac39e5cb6111dabd24be7098bf04947ca6ca";
+      sha256 = "11iwjaypjkjd3s45dx3f7blpj0lkjs4jmp41sj7hlg2r7m64ss1g";
     };
     meta.homepage = "https://github.com/arcticicestudio/nord-vim/";
   };
@@ -6846,12 +6846,12 @@ final: prev:
 
   vim-dadbod = buildVimPluginFrom2Nix {
     pname = "vim-dadbod";
-    version = "2021-08-23";
+    version = "2021-09-12";
     src = fetchFromGitHub {
       owner = "tpope";
       repo = "vim-dadbod";
-      rev = "6f8b99868fd5560d6eb47f82ca76ec62e3d5ae78";
-      sha256 = "0n1hvyv9555rgi3qajy3d59v1nqdwcrr0l4nqzc0pr0cg9q7d6g3";
+      rev = "3900e1003ba64bce7d8ed877d742bee386ad56dc";
+      sha256 = "1xbjadnp0mx4a6r5ghlqx7w9ngf930yg4qyhkvlji0scf20vvjis";
     };
     meta.homepage = "https://github.com/tpope/vim-dadbod/";
   };
@@ -10355,12 +10355,12 @@ final: prev:
 
   vimtex = buildVimPluginFrom2Nix {
     pname = "vimtex";
-    version = "2021-09-11";
+    version = "2021-09-12";
     src = fetchFromGitHub {
       owner = "lervag";
       repo = "vimtex";
-      rev = "c445c1684bd5cedc7adb2226f0e88292e1a988f0";
-      sha256 = "0h9ks1v3qli5k1a85s5wg4lvv6pml7xgxynnmh1s6cv42b1hn6dy";
+      rev = "4989653b88dd94cf23395894123f3d37138f9f52";
+      sha256 = "0abgkw1sgbnm12hlsg23i01laza3yamxgssxm5sb22gn1pmq0l51";
     };
     meta.homepage = "https://github.com/lervag/vimtex/";
   };
