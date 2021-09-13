@@ -1,14 +1,14 @@
 { callPackage, fetchurl, fetchFromGitHub, ... } @ args:
 
 callPackage ./generic.nix (args // {
-  version = "5.0.0";
-  srcHash = "sha256-w7QxPspZTCD3Yag2cZchqvB2AAGviWuuw6tkQg/5kQo=";
+  version = "4.0.1";
+  srcHash = "sha256-dcy/ona5JcaxyXipIP8vMMSw0/34tRd3kVtvaaIRiW4=";
 
   arrow-testing = fetchFromGitHub {
     owner = "apache";
     repo = "arrow-testing";
-    rev = "6d98243093c0b36442da94de7010f3eacc2a9909";
-    hash = "sha256-n57Fuz2k6sX1o3vYBmC41eRKGnyt9+YL5r3WTHHRRzw=";
+    rev = "d6c4deb22c4b4e9e3247a2f291046e3c671ad235";
+    hash = "sha256-MfiJYRYdoa1rqNGV0ab5/JhUPYooyQPuF8NUJSO2kDM=";
   };
 
   parquet-testing = fetchFromGitHub {
@@ -19,20 +19,14 @@ callPackage ./generic.nix (args // {
   };
 
   arrow-jemalloc = fetchurl {
-    # From
-    # ./cpp/cmake_modules/ThirdpartyToolchain.cmake
-    # ./cpp/thirdparty/versions.txt
     url =
       "https://github.com/jemalloc/jemalloc/releases/download/5.2.1/jemalloc-5.2.1.tar.bz2";
     hash = "sha256-NDMOXOJ2CZ4uiVDZM121qHVomkxqVnUe87HYxTf4h/Y=";
   };
 
   arrow-mimalloc = fetchurl {
-    # From
-    # ./cpp/cmake_modules/ThirdpartyToolchain.cmake
-    # ./cpp/thirdparty/versions.txt
     url =
-      "https://github.com/microsoft/mimalloc/archive/v1.7.2.tar.gz";
-    hash = "sha256-sZEuNUVlpLaYQQ91g8D4OTSm27Ot5Uq33csVaTIJNr0=";
+      "https://github.com/microsoft/mimalloc/archive/v1.6.4.tar.gz";
+    hash = "sha256-+mFrGudrVY7DjEEcWa+lK1lj1+escFUZVeBgchLYCq0=";
   };
 })

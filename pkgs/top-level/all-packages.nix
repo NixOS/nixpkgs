@@ -14992,10 +14992,15 @@ with pkgs;
 
   arrayfire = callPackage ../development/libraries/arrayfire {};
 
-  arrow-cpp = callPackage ../development/libraries/arrow-cpp ({
+  arrow-cpp_4 = callPackage ../development/libraries/arrow-cpp/4.nix ({
   } // lib.optionalAttrs (stdenv.hostPlatform.isi686 && stdenv.cc.isGNU) {
     stdenv = overrideCC stdenv buildPackages.gcc6; # hidden symbol `__divmoddi4'
   });
+  arrow-cpp_5 = callPackage ../development/libraries/arrow-cpp/default.nix ({
+  } // lib.optionalAttrs (stdenv.hostPlatform.isi686 && stdenv.cc.isGNU) {
+    stdenv = overrideCC stdenv buildPackages.gcc6; # hidden symbol `__divmoddi4'
+  });
+  arrow-cpp = arrow-cpp_5;
 
   assimp = callPackage ../development/libraries/assimp { };
 
