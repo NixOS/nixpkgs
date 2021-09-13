@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pymyq";
-  version = "3.1.3";
+  version = "3.1.4";
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "arraylabs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-V2u2wUSPwiF6o6OWhQVKiHtzhn0/rzyM6e2+a+D7UNA=";
+    sha256 = "1l029vmrsd1bbfd0v79dyn7pn3ph3n1vdybhb83vyhi7rp4agh07";
   };
 
   propagatedBuildInputs = [
