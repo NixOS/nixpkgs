@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   pname = "smemstat";
-  version = "0.02.08";
+  version = "0.02.10";
   src = fetchurl {
     url = "https://kernel.ubuntu.com/~cking/tarballs/smemstat/smemstat-${version}.tar.xz";
-    sha256 = "1agigvkv1868cskivzrwyiixl658x5bv7xpz4xjc8mlii4maivpp";
+    sha256 = "sha256-Vrs1jOg5yHdEffVo769aaxSawo4iZtGrFJ65Nu+RhcU=";
   };
   buildInputs = [ ncurses ];
   installFlags = [ "DESTDIR=$(out)" ];
