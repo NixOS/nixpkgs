@@ -7049,6 +7049,8 @@ with pkgs;
 
   ltris = callPackage ../games/ltris { };
 
+  lunatic = callPackage ../development/interpreters/lunatic { };
+
   lv = callPackage ../tools/text/lv { };
 
   lxc = callPackage ../os-specific/linux/lxc {
