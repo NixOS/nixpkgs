@@ -19,12 +19,13 @@
       "/run/current-system/sw/bin/true"
     ];
 
+    # Containers are supposed to use systemd-networkd to have a proper
+    # networking stack even during boot-up.
     networking = {
       useHostResolvConf = false;
       useDHCP = false;
       useNetworkd = true;
     };
-
     systemd.network.networks."20-host0" = {
       matchConfig = {
         Virtualization = "container";

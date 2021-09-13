@@ -12,22 +12,37 @@ let
   dummy = (import (nixpkgs + "/lib")).evalModules {
     modules = [
       (nixpkgs + "/nixos/modules/misc/assertions.nix")
-      { options = builtins.removeAttrs neededOptions [ "rendered" ]; }
+      { options = (builtins.removeAttrs neededOptions [ "rendered" ]); }
       {
         instances.imperative = lib.mkMerge [
           config
-          { nixpkgs = lib.mkDefault nixpkgs; }
+          {
+            nixpkgs = lib.mkDefault nixpkgs;
+            activation.strategy = lib.mkDefault "restart";
+          }
         ];
       }
-      {
+      ({ config, ... }: {
         instances.imperative.config.imports = [
-          (nixpkgs + "/nixos/modules/virtualisation/containers-next/container-profile.nix")
+          (import (nixpkgs + "/nixos/modules/virtualisation/containers-next/container-profile.nix"))
+          {
+            systemd.network = {
+              networks."20-host0".address =
+                (if config.instances.imperative.network != null
+                  then config.instances.imperative.network.v6.static.containerPool
+                    ++ config.instances.imperative.network.v4.static.containerPool
+                  else []);
+            };
+          }
         ];
-      }
+      })
       ({ config, ... }: {
         assertions = [
           { assertion = config.instances.imperative.sharedNix;
             message = "Experimental `sharedNix'-feature isn't supported for imperative containers!";
+          }
+          { assertion = config.instances.imperative.activation.strategy != "dynamic";
+            message = "`dynamic` is currently not supported!";
           }
         ];
       })

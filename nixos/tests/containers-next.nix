@@ -168,9 +168,9 @@ in {
       container0 = {
         network.v6.static = {
           containerPool = [ "fd24::2/64" ];
-            hostAddresses = [
-              "fd24::3/64"
-            ];
+          hostAddresses = [
+            "fd24::3/64"
+          ];
         };
         network.v6.addrPool = lib.mkForce [];
         credentials = [

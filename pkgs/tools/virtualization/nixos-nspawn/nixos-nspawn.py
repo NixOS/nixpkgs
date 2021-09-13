@@ -1,10 +1,6 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -p python3 -i python3 python3Packages.rich
 
-# TODO
-# * support for extra-options
-# * activation
-
 from argparse import ArgumentParser
 from configparser import ConfigParser, Interpolation
 from glob import glob
@@ -154,7 +150,7 @@ class Container:
         return 'imperative' if self.is_imperative() else 'declarative'
 
     def list_generations(self):
-        profile_dir = f"{PROFILE_BASE}/{self.name}"
+        profile_dir = self.__profile_dir()
         run([
             "nix-env",
             "-p",
@@ -162,14 +158,22 @@ class Container:
             "--list-generations"
         ], log_raw=True)
 
-    def rollback(self):
-        profile_dir = f"{PROFILE_BASE}/{self.name}"
+    def rollback(self, strategy=None):
+        data = self.__cfg_repr()
+
+        profile_dir = self.__profile_dir()
         run([
             "nix-env",
             "-p",
             f"{profile_dir}/system",
             "--rollback"
         ], log_raw=True)
+
+        self.__activate(
+            data=data,
+            path=self.__nix_path(),
+            strategy=strategy
+        )
 
     def remove(self):
         logging.info(f"Removing {self.name}...")
@@ -178,8 +182,9 @@ class Container:
         logging.info(f"Removing nspawn unit {self.path}")
         try:
             remove(self.path)
+            remove(f'/etc/systemd/network/20-ve-{self.name}.network')
         except FileNotFoundError:
-            logging.warn(f"{self.path} doesn't exist! Continuing with cleanup anyways")
+            logging.warn(f"{self.path} or network unit doesn't exist! Continuing with cleanup anyways")
 
         rmtree(f"{PROFILE_BASE}/{self.name}", ignore_errors=True)
 
@@ -195,7 +200,7 @@ class Container:
                     f"Profile for {self.name} already exists! Perhaps some dirty state? Try removing with `remove'."
                 )
         else:
-            profile_dir = f"{PROFILE_BASE}/{self.name}"
+            profile_dir = self.__profile_dir()
 
         eval_code = getenv('NIXOS_NSPAWN_EVAL', '@eval@')
         trace_arg = None if not show_trace else "--show-trace"
@@ -207,41 +212,66 @@ class Container:
             args.append(trace_arg)
         run(args)
 
-        return path.realpath(f"{profile_dir}/system")
+        return self.__nix_path()
 
-    def install_container(self, nix_expr, update=False, show_trace=False):
+    def install_container(self, nix_expr, update=False, show_trace=False, strategy=None):
         if not self.pending and not update:
             raise Exception(f"Container {self.name} already exists!")
 
-        path = self.build_nixos_config(nix_expr, update, show_trace)
-
-        with open(f"{path}/data") as f:
-            data = loads(f.read())
+        path_ = self.build_nixos_config(nix_expr, update, show_trace)
+        data = self.__cfg_repr()
 
         makedirs("/etc/systemd/nspawn", exist_ok=True)
+
+        if data['zone'] is not None and not path.exists(f"/sys/class/net/vz-{data['zone']}"):
+            raise Exception(f"Virtual zone {data['zone']} does not exist!")
 
         zone = "" if data['zone'] is None else f"Zone={data['zone']}"
         ephemeral = "" if not data['ephemeral'] else "Ephemeral=true"
         link_journal = "" if ephemeral != "" else "LinkJournal=guest"
+        private_network_text = "" if data['network'] is None else "Private=true\nVirtualEthernet=true"
         port_text = ""
         for p in data['forwardPorts']:
             port_text += f"Port={p}\n"
 
-        if data['network'] is not None:
-            network_file = f'/etc/systemd/network/20-ve-{self.name}'
+        if data['network'] is not None and data['zone'] is None:
+            network_file = f'/etc/systemd/network/20-ve-{self.name}.network'
+            nat_text = "IPMasquerade=yes" if data['network']['v4']['nat'] else ""
+            addr_text = ""
+            if data['network']['v6']['addrPool'] != []:
+                print('Warning: IPv6 SLAAC currently not supported for imperative containers!')
+
+            network_cfgs = [
+                data['network']['v4']['addrPool'],
+                data['network']['v6']['addrPool'],
+                data['network']['v4']['static']['hostAddresses'],
+                data['network']['v6']['static']['hostAddresses'],
+            ]
+            for ips in network_cfgs:
+                if ips != []:
+                    addr_text += "".join(f"Address={i}\n" for i in ips)
+
             with open(network_file, 'w+') as f:
                 f.write(f"""
 [Match]
 Driver=veth
 Name=ve-{self.name}
 [Network]
+{addr_text}
+DHCPServer=yes
+EmitLLDP=customer-bridge
+IPForward=yes
+{nat_text}
+LLDP=yes
 """)
+
+            run(["systemctl", "restart", "systemd-networkd"])
 
         with open(self.path, 'w+') as f:
             f.write(f"""
 [Exec]
 Boot=false
-Parameters={path}/init
+Parameters={path_}/init
 PrivateUsers=yes
 X-ActivationStrategy={data['activation']['strategy']}
 X-Imperative=1
@@ -255,6 +285,7 @@ PrivateUsersChown=yes
 [Network]
 {zone}
 {port_text}
+{private_network_text}
 """)
 
         logging.info(f"Creating state-directory {self.name}")
@@ -263,9 +294,40 @@ PrivateUsersChown=yes
             open(f"/var/lib/machines/{self.name}/etc/os-release", 'w').close()
 
         self.pending = False
-        logging.info(f"Booting new container {self.name}")
         sync()
-        run(["machinectl", "start", self.name])
+
+        if update:
+            self.__activate(data, path_, strategy)
+        else:
+            logging.info(f"Booting new container {self.name}")
+            run(["machinectl", "start", self.name])
+
+    def __activate(self, data, path, strategy):
+        if strategy is None:
+            strategy = data['activation']['strategy']
+        if strategy == 'restart':
+            logging.info(f"Rebooting container {self.name}")
+            run(["machinectl", "reboot", self.name])
+        else:
+            logging.info(f"Reloading container {self.name}")
+            pid, _ = run(
+                ['machinectl', 'show', self.name, '--property', 'Leader', '--value'],
+                return_stdout=True
+            )
+            run([
+                "nsenter",
+                "-t",
+                pid.strip(),
+                "-m",
+                "-u",
+                "-U",
+                "-i",
+                "-n",
+                "-p",
+                "--",
+                f"{path}/bin/switch-to-configuration",
+                "test"
+            ])
 
     def __machinectl_property(self, prop, default='<unknown>'):
         str_ret, exit = run(
@@ -296,6 +358,16 @@ PrivateUsersChown=yes
         self.exec = extract('Exec', parser)
         self.files = extract('Files', parser)
         self.network = extract('Network', parser)
+
+    def __profile_dir(self):
+        return f"{PROFILE_BASE}/{self.name}"
+
+    def __nix_path(self):
+        return path.realpath(f"{self.__profile_dir()}/system")
+
+    def __cfg_repr(self):
+        with open(f"{self.__nix_path()}/data") as f:
+            return loads(f.read())
 
 
 def create_container(name, expect_imperative=False, pending=False):
@@ -335,11 +407,12 @@ def op_list(args):
 def op_update(args):
     name = args.name
     cfg = args.config
+    strategy = 'reload' if args.reload else ('restart' if args.restart else None)
 
     create_container(
         name,
         expect_imperative=True
-    ).install_container(cfg, update=True, show_trace=args.show_trace)
+    ).install_container(cfg, update=True, show_trace=args.show_trace, strategy=strategy)
 
 
 def op_remove(args):
@@ -359,7 +432,8 @@ def op_list_gens(args):
 
 
 def op_rollback(args):
-    create_container(args.name, expect_imperative=True).rollback()
+    strategy = 'reload' if args.reload else ('restart' if args.restart else None)
+    create_container(args.name, expect_imperative=True).rollback(strategy=strategy)
 
 
 if __name__ == '__main__':
@@ -393,6 +467,8 @@ if __name__ == '__main__':
     # expression (as used by `create`) to it.
     update = cmd.add_parser('update')
     update.add_argument('name', help='Name of the container')
+    update.add_argument('--reload', help='Whether to reload the container', action='store_true')
+    update.add_argument('--restart', help='Whether to restart the container', action='store_true')
     update.add_argument('--config', help='Configuration file to use to update the container')
 
     # Wrapper for `nix-env --list-generations` on an imperative container.
@@ -402,6 +478,8 @@ if __name__ == '__main__':
     # Wrapper for `nix-env --rollback` on an imperative container.
     rollback = cmd.add_parser('rollback')
     rollback.add_argument('name', help='Name of the container')
+    rollback.add_argument('--reload', help='Whether to reload the container', action='store_true')
+    rollback.add_argument('--restart', help='Whether to restart the container', action='store_true')
 
     args = parser.parse_args()
     dst = args.subcmd
