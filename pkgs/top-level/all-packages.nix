@@ -17526,6 +17526,8 @@ with pkgs;
   libssh = callPackage ../development/libraries/libssh { };
 
   libssh2 = callPackage ../development/libraries/libssh2 { };
+  #FIXME: temporary attribute
+  libssh2_1_10 = callPackage ../development/libraries/libssh2/1_10.nix { };
 
   libstartup_notification = callPackage ../development/libraries/startup-notification { };
 
