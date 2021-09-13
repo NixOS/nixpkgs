@@ -19,12 +19,12 @@
 
 let
   executableName = "element-desktop";
-  version = "1.8.2";
+  version = "1.8.4";
   src = fetchFromGitHub {
     owner = "vector-im";
     repo = "element-desktop";
     rev = "v${version}";
-    sha256 = "sha256-6DPMfx3LF45YWn2do02zDMLYZGBgBrOMJx3XBAO0ZyM=";
+    sha256 = "sha256-MmrO9Ref/qpW7ssjw8IAb7dYZHMRBfdfH2whsZJq/14=";
   };
   electron_exec = if stdenv.isDarwin then "${electron}/Applications/Electron.app/Contents/MacOS/Electron" else "${electron}/bin/electron";
 in
