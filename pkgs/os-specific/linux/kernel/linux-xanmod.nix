@@ -1,7 +1,7 @@
 { lib, stdenv, buildLinux, fetchFromGitHub, ... } @ args:
 
 let
-  version = "5.13.13";
+  version = "5.14.3";
   release = "1";
   suffix = "xanmod${release}-cacule";
 in
@@ -13,7 +13,7 @@ buildLinux (args // rec {
     owner = "xanmod";
     repo = "linux";
     rev = modDirVersion;
-    sha256 = "sha256-qRJuTkTmsKbCCGrzq62o+1RrvTGM74p4mqy9AQ8hvD0=";
+    sha256 = "sha256-nl8DktW2TsV20ii/f41TsSotE/yBRBH3SYlWKLsfT50=";
   };
 
   structuredExtraConfig = with lib.kernel; {
@@ -53,7 +53,7 @@ buildLinux (args // rec {
   };
 
   extraMeta = {
-    branch = "5.13-cacule";
+    branch = "5.14-cacule";
     maintainers = with lib.maintainers; [ fortuneteller2k lovesegfault ];
     description = "Built with custom settings and new features built to provide a stable, responsive and smooth desktop experience";
     broken = stdenv.isAarch64;
