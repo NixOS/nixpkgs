@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchRepoProject
+, writeScript
 , cmake
 , ninja
 , patchelf
@@ -21,13 +22,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "amdvlk";
-  version = "2021.Q3.4";
+  version = "2021.Q3.6";
 
   src = fetchRepoProject {
     name = "${pname}-src";
     manifest = "https://github.com/GPUOpen-Drivers/AMDVLK.git";
     rev = "refs/tags/v-${version}";
-    sha256 = "Rmx5vicxKXstI8TdxeFVjEFe71XJOyzp5L6VyDNuXmM=";
+    sha256 = "l/4YBOA8O04eARjIp9KZjzzNaDPKnCwz3/SPKy20JdE=";
   };
 
   buildInputs = [
@@ -78,6 +79,22 @@ in stdenv.mkDerivation rec {
 
   # Keep the rpath, otherwise vulkaninfo and vkcube segfault
   dontPatchELF = true;
+
+  passthru.updateScript = writeScript "update.sh" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p coreutils curl gnused jq common-updater-scripts
+
+    function setHash() {
+      sed -i "pkgs/development/libraries/amdvlk/default.nix" -e 's,sha256 = "[^.'"'"']*",sha256 = "'"$1"'",'
+    }
+
+    version="$(curl -sL "https://api.github.com/repos/GPUOpen-Drivers/AMDVLK/releases?per_page=1" | jq '.[0].tag_name | split("-") | .[1]' --raw-output)"
+    sed -i "pkgs/development/libraries/amdvlk/default.nix" -e 's/version = "[^.'"'"']*"/version = "'"$version"'"/'
+
+    setHash "$(nix-instantiate --eval -A lib.fakeSha256 | xargs echo)"
+    hash="$(nix to-base64 $(nix-build -A amdvlk 2>&1 | tail -n3 | grep 'got:' | cut -d: -f2- | xargs echo || true))"
+    setHash "$hash"
+  '';
 
   meta = with lib; {
     description = "AMD Open Source Driver For Vulkan";
