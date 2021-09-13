@@ -11,15 +11,15 @@ diff --git a/src/kiod/kiod_main.cpp b/src/kiod/kiod_main.cpp
 index 1976ee1..eb402bf 100644
 --- a/src/kiod/kiod_main.cpp
 +++ b/src/kiod/kiod_main.cpp
-@@ -50,7 +50,7 @@ void KIOD::loadModule(const QString &name)
-         module = factory->create<KDEDModule>();
+@@ -49,7 +49,7 @@ void KIOD::loadModule(const QString &name)
+         module->setModuleName(name); // makes it register to DBus
+         m_modules.insert(name, module);
+     } else {
+-        qCWarning(KIOD_CATEGORY) << "Error loading plugin:" << result.errorText;
++        qCWarning(KIOD_CATEGORY) << "Error loading plugin:" << name << result.errorText;
      }
-     if (!module) {
--        qCWarning(KIOD_CATEGORY) << "Error loading plugin:" << loader.errorString();
-+        qCWarning(KIOD_CATEGORY) << "Error loading plugin" << name << loader.errorString();
-         return;
-     }
-     module->setModuleName(name); // makes it register to DBus
+ }
+ 
 -- 
 2.30.1
 
