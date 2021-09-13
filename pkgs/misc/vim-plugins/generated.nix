@@ -471,6 +471,18 @@ final: prev:
     meta.homepage = "https://github.com/vim-scripts/changeColorScheme.vim/";
   };
 
+  cheatsheet-nvim = buildVimPluginFrom2Nix {
+    pname = "cheatsheet.nvim";
+    version = "2021-08-20";
+    src = fetchFromGitHub {
+      owner = "sudormrfbin";
+      repo = "cheatsheet.nvim";
+      rev = "7d83f02176287436acc06428ded782fe4bc08b94";
+      sha256 = "1ajqmg4lls4nc9bpw233rd25z5qfbnkwbdi1jnrh79nlr9sxvcyp";
+    };
+    meta.homepage = "https://github.com/sudormrfbin/cheatsheet.nvim/";
+  };
+
   CheckAttach = buildVimPluginFrom2Nix {
     pname = "CheckAttach";
     version = "2019-05-08";
@@ -3900,12 +3912,12 @@ final: prev:
 
   nvim-cmp = buildVimPluginFrom2Nix {
     pname = "nvim-cmp";
-    version = "2021-09-12";
+    version = "2021-09-13";
     src = fetchFromGitHub {
       owner = "hrsh7th";
       repo = "nvim-cmp";
-      rev = "9c460395a04e2ea7a1f4f8b82572efc67faf18ff";
-      sha256 = "0rvk3y08fhwjy1k9s9jvgiak0f4h6pwl6gxa3ibm8wd6bah8ip9b";
+      rev = "e46ae3b62e11704ace7f1f14c1398bcfaf70b217";
+      sha256 = "1nb0insrhsa0d2mwhk42b07wkfb28j7ylscj0hqr6n69jg5jc0vz";
     };
     meta.homepage = "https://github.com/hrsh7th/nvim-cmp/";
   };
