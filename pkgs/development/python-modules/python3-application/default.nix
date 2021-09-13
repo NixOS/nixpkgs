@@ -4,6 +4,8 @@ buildPythonPackage rec {
   pname = "python3-application";
   version = "3.0.3";
 
+  disabled = !isPy3k;
+
   src = fetchFromGitHub {
     owner = "AGProjects";
     repo = "python3-application";
@@ -12,8 +14,6 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ zope_interface twisted ];
-
-  disabled = !isPy3k;
 
   pythonImportsCheck = [ "application" ];
 

@@ -5,6 +5,8 @@ buildPythonPackage rec {
   pname = "python3-xcaplib";
   version = "2.0.1";
 
+  disabled = !isPy3k;
+
   src = fetchFromGitHub {
     owner = "AGProjects";
     repo = "python3-xcaplib";
@@ -13,8 +15,6 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ lxml gevent python3-eventlib python3-application ];
-
-  disabled = !isPy3k;
 
   meta = with lib; {
     description = "Python XCAP client library";

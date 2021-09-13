@@ -20,6 +20,8 @@ in buildPythonPackage rec {
   pname = "python3-sipsimple";
   version = "5.2.6";
 
+  disabled = !isPy3k;
+
   src =
     fetchFromGitHub {
       name = pname;
@@ -99,8 +101,6 @@ in buildPythonPackage rec {
     x264
     libvpx
   ];
-
-  disabled = !isPy3k;
 
   # because a test refers to /etc/protocols
   preCheck = ''

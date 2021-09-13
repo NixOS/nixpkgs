@@ -5,14 +5,14 @@ buildPythonPackage rec {
   pname = "python3-msrplib";
   version = "0.21.1";
 
+  disabled = !isPy3k;
+
   src = fetchFromGitHub {
     owner = "AGProjects";
     repo = "python3-msrplib";
     rev = "5bd069620d436d5a65e1c369e43cc6b88857fb9e";
     sha256 = "sha256-z0gF/oQW/h3qiCL1cFWBPK7JYzLCNAD7/dg7HfY4rig=";
   };
-
-  disabled = !isPy3k;
 
   propagatedBuildInputs = [ python3-application python3-gnutls python3-eventlib twisted zope_interface ];
 

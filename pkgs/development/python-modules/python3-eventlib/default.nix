@@ -4,6 +4,8 @@ buildPythonPackage rec {
   pname = "python3-eventlib";
   version = "0.3.0";
 
+  disabled = !isPy3k;
+
   src = fetchFromGitHub {
     owner = "AGProjects";
     repo = "python3-eventlib";
@@ -12,8 +14,6 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ zope_interface twisted greenlet ];
-
-  disabled = !isPy3k;
 
   dontUseSetuptoolsCheck = true;
 

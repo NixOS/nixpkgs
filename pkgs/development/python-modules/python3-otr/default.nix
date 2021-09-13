@@ -5,14 +5,14 @@ buildPythonPackage rec {
   pname = "python3-otr";
   version = "2.0.1";
 
+  disabled = !isPy3k;
+
   src = fetchFromGitHub {
     owner = "AGProjects";
     repo = "python3-otr";
     rev = version;
     sha256 = "sha256-XsJQIRZj04TkoWIddOc0evXwNFP/IYF/z/nO7mC0aVY=";
   };
-
-  disabled = !isPy3k;
 
   propagatedBuildInputs = [ python3-application zope_interface cryptography gmpy2 ];
 
