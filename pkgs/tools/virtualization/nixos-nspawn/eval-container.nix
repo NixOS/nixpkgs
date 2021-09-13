@@ -2,7 +2,7 @@
 
 let
   lib = import (nixpkgs + "/lib");
-  module = import (nixpkgs + "/nixos/modules/virtualisation/containers-next.nix");
+  module = import (nixpkgs + "/nixos/modules/virtualisation/containers-next");
   neededOptions = (module {
     pkgs = null;
     config = null;
@@ -16,40 +16,12 @@ let
       {
         instances.imperative = lib.mkMerge [
           config
-          {
-            config.boot.isContainer = true;
-            nixpkgs = lib.mkDefault nixpkgs;
-            # FIXME get rid of this hack!
-            # On a test-system I experienced that this service was hanging for no reason.
-            # After a config-activation in ExecReload which affected larger parts of the OS in the
-            # container, `nixops` waited until the timeout was reached. However, the networkd
-            # was routable and the `host0` interface reached the state `configured`. Hence I'd guess
-            # that this is a networkd bug that requires investigation. Until then, I'll leave
-            # this as-is.
-            config.systemd.services.systemd-networkd-wait-online.serviceConfig.ExecStart = lib.mkForce [
-              ""
-              "/run/current-system/sw/bin/true"
-            ];
-            config.networking = {
-              useHostResolvConf = false;
-              useDHCP = false;
-              useNetworkd = true;
-            };
-            config.systemd.network.networks."20-host0" = {
-              matchConfig = {
-                Virtualization = "container";
-                Name = "host0";
-              };
-              linkConfig.RequiredForOnline = "no";
-              dhcpConfig.UseTimezone = "yes";
-              networkConfig = {
-                DHCP = "yes";
-                LLDP = "yes";
-                EmitLLDP = "customer-bridge";
-                LinkLocalAddressing = lib.mkDefault "ipv6";
-              };
-            };
-          }
+          { nixpkgs = lib.mkDefault nixpkgs; }
+        ];
+      }
+      {
+        instances.imperative.config.imports = [
+          (nixpkgs + "/nixos/modules/virtualisation/containers-next/container-profile.nix")
         ];
       }
       ({ config, ... }: {

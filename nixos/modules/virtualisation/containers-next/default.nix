@@ -142,42 +142,10 @@ let
     { container = import "${toString config.nixpkgs}/nixos/lib/eval-config.nix" {
         system = pkgs.system;
         modules = [
+          ./container-profile.nix
           ({ pkgs, ... }: {
-            boot.isContainer = true;
-            networking = {
-              hostName = name;
-              useHostResolvConf = false;
-              useDHCP = false;
-              useNetworkd = true;
-            };
-            # We need a static libsudoers if we bind-mount into a user-namespaced
-            # container since the bind-mounts are owned by `nouser:nogroup` then (including
-            # `/nix/store`) and this doesn't like sudo.
-            security.sudo.package = mkDefault pkgs.sudo-nspawn;
-            # FIXME get rid of this hack!
-            # On a test-system I experienced that this service was hanging for no reason.
-            # After a config-activation in ExecReload which affected larger parts of the OS in the
-            # container, `nixops` waited until the timeout was reached. However, the networkd
-            # was routable and the `host0` interface reached the state `configured`. Hence I'd guess
-            # that this is a networkd bug that requires investigation. Until then, I'll leave
-            # this as-is.
-            systemd.services.systemd-networkd-wait-online.serviceConfig.ExecStart = lib.mkForce [
-              ""
-              "/run/current-system/sw/bin/true"
-            ];
+            networking.hostName = name;
             systemd.network.networks."20-host0" = {
-              matchConfig = {
-                Virtualization = "container";
-                Name = "host0";
-              };
-              linkConfig.RequiredForOnline = "no";
-              dhcpConfig.UseTimezone = "yes";
-              networkConfig = {
-                DHCP = "yes";
-                LLDP = "yes";
-                EmitLLDP = "customer-bridge";
-                LinkLocalAddressing = mkDefault "ipv6";
-              };
               address = mkIf (cfg.${name}.network != null) (
                 cfg.${name}.network.v4.static.containerPool
                 ++ cfg.${name}.network.v6.static.containerPool
@@ -292,7 +260,7 @@ in {
           };
 
           nixpkgs = mkOption {
-            default = ../../..;
+            default = ../../../..;
             type = types.path;
             description = ''
               Path to the `nixpkgs`-checkout or channel to use for the container.

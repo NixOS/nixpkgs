@@ -26,7 +26,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
         in with pkgs; [
           stdenv stdenvNoCC emptyContainer.config.containers.foo.path
           libxslt desktop-file-utils texinfo docbook5 libxml2
-          docbook_xsl_ns xorg.lndir documentation-highlighter
+          docbook_xsl_ns xorg.lndir documentation-highlighter sudo-nspawn
         ];
       };
     in {
