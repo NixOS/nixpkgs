@@ -10,9 +10,16 @@ fi
 
 if [ "$#" != 1 ] && [ "$#" != 2 ]; then
 	cat <<-EOF
-	Usage: $0 [--print] commit-spec [commit-spec]
+	Usage: $0 [--print] from-commit-spec [to-commit-spec]
 	    You need to be in a git-controlled nixpkgs tree.
 	    The current state of the tree will be used if the second commit is missing.
+
+	    Examples:
+	      effect of latest commit:
+	          $ $0 HEAD^
+	          $ $0 --print HEAD^
+	      effect of the whole patch series for 'staging' branch:
+	          $ $0 origin/staging staging
 	EOF
 	exit 1
 fi
