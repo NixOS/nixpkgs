@@ -1,24 +1,11 @@
-{ lib, fetchFromGitHub, buildGoPackage  }:
-
-buildGoPackage rec {
+{ lib, datadog-agent }:
+datadog-agent.overrideAttrs (attrs: {
   pname = "datadog-process-agent";
-  version = "6.11.1";
-  owner   = "DataDog";
-  repo    = "datadog-process-agent";
-
-  src = fetchFromGitHub {
-    inherit owner repo;
-    rev    = version;
-    sha256 = "0fc2flm0pa44mjxvn4fan0mkvg9yyg27w68xdgrnpdifj99kxxjf";
-  };
-
-  goDeps = ./datadog-process-agent-deps.nix;
-  goPackagePath = "github.com/${owner}/${repo}";
-
-  meta = with lib; {
-    description = "Live process collector for the DataDog Agent v6";
-    homepage    = "https://www.datadoghq.com";
-    license     = licenses.bsd3;
-    maintainers = with maintainers; [ domenkozar rvl ];
-  };
-}
+  meta = with lib;
+    attrs.meta // {
+      description = "Live process collector for the DataDog Agent v7";
+      maintainers = with maintainers; [ domenkozar rvl ];
+    };
+  subPackages = [ "cmd/process-agent" ];
+  postInstall = null;
+})

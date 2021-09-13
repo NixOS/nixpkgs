@@ -35,6 +35,8 @@ rec {
           ("generators.mkValueStringDefault: " +
            "${t} not supported: ${toPretty {} v}");
     in   if isInt      v then toString v
+    # convert derivations to store paths
+    else if lib.isDerivation v then toString v
     # we default to not quoting strings
     else if isString   v then v
     # isString returns "1", which is not a good default
@@ -169,7 +171,7 @@ rec {
       # converts { a.b.c = 5; } to { "a.b".c = 5; } for toINI
       gitFlattenAttrs = let
         recurse = path: value:
-          if isAttrs value then
+          if isAttrs value && !lib.isDerivation value then
             lib.mapAttrsToList (name: value: recurse ([ name ] ++ path) value) value
           else if length path > 1 then {
             ${concatStringsSep "." (lib.reverseList (tail path))}.${head path} = value;

@@ -55,6 +55,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/huggingface/transformers/releases/tag/v${version}";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ danieldk pashashocky ];
+    maintainers = with maintainers; [ pashashocky ];
   };
 }

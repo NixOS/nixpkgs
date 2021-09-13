@@ -67,6 +67,6 @@ in buildPythonPackage {
     changelog = "https://github.com/pytorch/pytorch/releases/tag/v${version}";
     license = licenses.unfree; # Includes CUDA and Intel MKL.
     platforms = platforms.linux;
-    maintainers = with maintainers; [ danieldk ];
+    maintainers = with maintainers; [ ];
   };
 }

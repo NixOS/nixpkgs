@@ -2001,6 +2001,8 @@ with pkgs;
 
   blink = libsForQt5.callPackage ../applications/networking/instant-messengers/blink { };
 
+  blitz = callPackage ../development/libraries/blitz { };
+
   blockbook = callPackage ../servers/blockbook { };
 
   blockhash = callPackage ../tools/graphics/blockhash { };
@@ -19950,9 +19952,8 @@ with pkgs;
 
   prosody = callPackage ../servers/xmpp/prosody {
     # _compat can probably be removed on next minor version after 0.10.0
-    lua5 = lua5_2_compat;
-    withExtraLibs = [ luaPackages.luadbi-sqlite3 ];
-    inherit (lua52Packages) luasocket luasec luaexpat luafilesystem luabitop luaevent luadbi;
+    lua = lua5_2_compat;
+    withExtraLibs = [];
   };
 
   biboumi = callPackage ../servers/xmpp/biboumi { };
@@ -23988,7 +23989,9 @@ with pkgs;
     inherit (gnome2) libgnomeui GConf;
   };
 
-  corrscope = libsForQt5.callPackage ../applications/video/corrscope { };
+  corrscope = libsForQt5.callPackage ../applications/video/corrscope {
+    ffmpeg = ffmpeg-full;
+  };
 
   coreimage = libsForQt5.callPackage ../applications/graphics/coreimage { };
 
@@ -24088,7 +24091,7 @@ with pkgs;
   };
   datadog-process-agent = callPackage ../tools/networking/dd-agent/datadog-process-agent.nix { };
   datadog-integrations-core = extras: callPackage ../tools/networking/dd-agent/integrations-core.nix {
-    python = python27;
+    python = python3;
     extraIntegrations = extras;
   };
 
@@ -28277,9 +28280,7 @@ with pkgs;
 
   neovim-remote = callPackage ../applications/editors/neovim/neovim-remote.nix { };
 
-  vis = callPackage ../applications/editors/vis {
-    inherit (lua52Packages) lpeg;
-  };
+  vis = callPackage ../applications/editors/vis { };
 
   viw = callPackage ../applications/editors/viw { };
 
@@ -28453,9 +28454,7 @@ with pkgs;
     imlib2 = imlib2-nox;
   };
 
-  watson = callPackage ../applications/office/watson {
-    pythonPackages = python3Packages;
-  };
+  watson = callPackage ../applications/office/watson { };
 
   wapiti = callPackage ../tools/security/wapiti { };
 
@@ -29453,6 +29452,9 @@ with pkgs;
 
   crawl = callPackage ../games/crawl { };
 
+  inherit (import ../games/crossfire pkgs)
+    crossfire-server crossfire-arch crossfire-maps crossfire-client;
+
   crrcsim = callPackage ../games/crrcsim {};
 
   curseofwar = callPackage ../games/curseofwar { SDL = null; };
@@ -29461,6 +29463,9 @@ with pkgs;
   cutemaze = libsForQt5.callPackage ../games/cutemaze {};
 
   cuyo = callPackage ../games/cuyo { };
+
+  inherit (import ../games/deliantra pkgs)
+    deliantra-server deliantra-arch deliantra-maps deliantra-data;
 
   devilutionx = callPackage ../games/devilutionx {};
 
