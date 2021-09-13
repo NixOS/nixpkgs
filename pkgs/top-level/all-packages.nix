@@ -8331,6 +8331,8 @@ with pkgs;
 
   proxychains = callPackage ../tools/networking/proxychains { };
 
+  proxychains-ng = callPackage ../tools/networking/proxychains-ng { };
+
   proxify = callPackage ../tools/networking/proxify { };
 
   proxytunnel = callPackage ../tools/misc/proxytunnel {
