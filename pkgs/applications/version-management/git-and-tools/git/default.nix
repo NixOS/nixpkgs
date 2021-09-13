@@ -65,6 +65,9 @@ stdenv.mkDerivation {
     # Fix references to gettext introduced by ./git-sh-i18n.patch
     substituteInPlace git-sh-i18n.sh \
         --subst-var-by gettext ${gettext}
+
+    # ensure we are using the correct shell when executing the test scripts
+    patchShebangs t/*.sh
   '';
 
   nativeBuildInputs = [ gettext perlPackages.perl makeWrapper ]
