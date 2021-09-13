@@ -2,7 +2,6 @@
 , lib
 , buildPythonPackage
 , fetchPypi
-, fetchpatch
 , gfortran
 , glibcLocales
 , numpy
@@ -19,22 +18,13 @@
 
 buildPythonPackage rec {
   pname = "scikit-learn";
-  version = "0.24.1";
+  version = "0.24.2";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "oDNKGALmTWVgIsO/q1anP71r9LEpg0PzaIryFRgQu98=";
+    sha256 = "0UcBoSQXkwOSzTiY6WRs9WcMGQuTNiXr51EbH317hzY=";
   };
-
-  patches = [
-    # This patch fixes compatibility with numpy 1.20. It was merged before 0.24.1 was released,
-    # but for some reason was not included in the 0.24.1 release tarball.
-    (fetchpatch {
-      url = "https://github.com/scikit-learn/scikit-learn/commit/e7ef22c3ba2334cb3b476e95d7c083cf6b48ce56.patch";
-      sha256 = "174554k1pbf92bj7wgq0xjj16bkib32ailyhwavdxaknh4bd9nmv";
-    })
-  ];
 
   buildInputs = [
     pillow
