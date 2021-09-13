@@ -1,6 +1,6 @@
 { lib, fetchFromGitHub
 , makeWrapper, makeDesktopItem, mkYarnPackage
-, electron, element-web
+, electron, element-web, fetchpatch
 }:
 # Notes for maintainers:
 # * versions of `element-web` and `element-desktop` should be kept in sync.
@@ -18,6 +18,13 @@ let
 in mkYarnPackage rec {
   name = "element-desktop-${version}";
   inherit version src;
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/vector-im/element-desktop/commit/96e5389779f60c91b8fe80d7bd9af413d72ec61f.patch";
+      sha256 = "sha256-82I5BDNDWIfp+m2HpzTA5+39hMv2bTbmJlXfM4YUjDY=";
+    })
+  ];
 
   packageJSON = ./element-desktop-package.json;
   yarnNix = ./element-desktop-yarndeps.nix;
