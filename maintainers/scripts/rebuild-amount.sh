@@ -21,7 +21,7 @@ fi
 parallel="$(echo 'config.rebuild-amount.parallel or false' | nix-repl . 2>/dev/null \
 			| grep -v '^\(nix-repl.*\)\?$' | tail -n 1 || true)"
 
-echo "Estimating rebuild amount by counting changed Hydra jobs."
+echo "Estimating rebuild amount by counting changed Hydra jobs (parallel=$parallel)."
 
 toRemove=()
 
