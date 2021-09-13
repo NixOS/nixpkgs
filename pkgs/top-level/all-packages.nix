@@ -6676,6 +6676,7 @@ with pkgs;
 
   meilisearch = callPackage ../servers/search/meilisearch {
     inherit (darwin.apple_sdk.frameworks) Security;
+    inherit pkgs;
   };
 
   memtester = callPackage ../tools/system/memtester { };
