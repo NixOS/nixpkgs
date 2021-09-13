@@ -1,0 +1,12 @@
+Upstream patch with whitespace change:
+https://github.com/psf/black/commit/41e670064063e3e221b1c3c40db5aaae784b5231.patch
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -23,1 +23,1 @@ extend-exclude = '''
+-requires = ["setuptools>=41.0", "setuptools_scm~=6.0.1", "wheel"]
++requires = ["setuptools>=45.0", "setuptools_scm[toml]>=6.3.1", "wheel"]
+--- a/setup.cfg
++++ b/setup.cfg
+@@ -1,1 +1,1 @@
+-	setuptools_scm~=6.0.1
++	setuptools_scm[toml]>=6.3.1

@@ -29,6 +29,9 @@ buildPythonPackage rec {
     sha256 = "sha256-VwYI0oqjrxeSuYxKM326xjZ4d7R7EriKtCCVz8GmJ8I=";
   };
 
+  # upstream backport to allow setuptools_scm-6.3
+  patches = [ ./newer-setuptools_scm.patch ];
+
   nativeBuildInputs = [ setuptools-scm ];
 
   # Necessary for the tests to pass on Darwin with sandbox enabled.
