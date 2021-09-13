@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
 
   configurePhase = ''
     runHook preConfigure
-    for opt in $enabledOptions; do echo "#define $opt" >> src/config/general.h; done
+    for opt in ${lib.escapeShellArgs enabledOptions}; do echo "#define $opt" >> src/config/general.h; done
     sed -i '/cp \''${ISOLINUX_BIN}/s/$/ --no-preserve=mode/' src/util/geniso
     substituteInPlace src/Makefile.housekeeping --replace '/bin/echo' echo
     runHook postConfigure
