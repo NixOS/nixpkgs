@@ -35,6 +35,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   notes-up = pkgs.notes-up.override { withPantheon = true; };
 
+  touchegg = pkgs.touchegg.override { withPantheon = true; };
+
   #### APPS
 
   appcenter = callPackage ./apps/appcenter { };
