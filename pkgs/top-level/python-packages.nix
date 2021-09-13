@@ -7247,6 +7247,8 @@ in {
 
   python_magic = callPackage ../development/python-modules/python-magic { };
 
+  python-manilaclient = callPackage ../development/python-modules/python-manilaclient { };
+
   python-mapnik = let
     boost = pkgs.boost.override {
       enablePython = true;
