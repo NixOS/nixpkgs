@@ -239,6 +239,17 @@
           <link xlink:href="options.html#opt-programs.git.enable">programs.git</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://domainaware.github.io/parsedmarc/">parsedmarc</link>,
+          a service which parses incoming
+          <link xlink:href="https://dmarc.org/">DMARC</link> reports and
+          stores or sends them to a downstream service for further
+          analysis. Documented in
+          <link linkend="module-services-parsedmarc">its manual
+          entry</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-incompatibilities">

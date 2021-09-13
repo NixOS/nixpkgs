@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchPypi
 , python
-, isPy3k
 , msrest
 , msrestazure
 , azure-common
