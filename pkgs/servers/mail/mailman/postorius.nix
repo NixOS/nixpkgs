@@ -6,11 +6,11 @@ buildPythonPackage rec {
   pname = "postorius";
   # Note: Mailman core must be on the latest version before upgrading Postorious.
   # See: https://gitlab.com/mailman/postorius/-/issues/516#note_544571309
-  version = "1.3.4";
+  version = "1.3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-L2ApUGQNvR0UVvodVM+wMzjYLZkegI4fT4yUiU/cibU=";
+    sha256 = "0f23c6542bf0f6e6364d678c094ee5804acfe59ecbcc0e944bc4c13834e24e80";
   };
 
   propagatedBuildInputs = [ django-mailman3 readme_renderer ];
