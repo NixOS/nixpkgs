@@ -22,13 +22,13 @@
 
 buildPythonPackage rec {
   pname = "binwalk";
-  version = "2.3.2";
+  version = "27";
 
   src = fetchFromGitHub {
     owner = "ReFirmLabs";
     repo = "binwalk";
-    rev = "v${version}";
-    sha256 = "sha256-lfHXutAp06Xr/TSBpDwBUBC/mWI9XuyImoKwA3inqgU=";
+    rev = "python${version}";
+    sha256 = "03kqhs3j9czdc2pnr1v8iszwx254ljpvrmmj0j5ls0ssjrfxacyx";
   };
 
   propagatedBuildInputs = [ zlib xz ncompress gzip bzip2 gnutar p7zip cabextract squashfsTools xz pycrypto ]
