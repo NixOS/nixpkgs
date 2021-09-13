@@ -17,6 +17,13 @@ buildGoModule {
 
   vendorSha256 = "oSHBR1EvK/1+cXqGNCE9tWn6Kd/BwNY3m5XrKCAijhA=";
 
+  # install module configuration
+  postFixup = ''
+    mkdir -p $out/share/earlybird
+    cp -a config $out/share/earlybird
+    cp .ge_ignore $out/share/earlybird
+  '';
+
   meta = with lib; {
     description = "A sensitive data detection tool capable of scanning source code repositories for passwords, key files, and more";
     homepage = "https://github.com/americanexpress/earlybird";
