@@ -1,5 +1,5 @@
 { lib, fetchFromGitHub, buildPythonPackage, isPy3k, zope_interface
-, python3-application, cryptography,  gmpy2 }:
+, python3-application, cryptography, gmpy2 }:
 
 buildPythonPackage rec {
   pname = "python3-otr";

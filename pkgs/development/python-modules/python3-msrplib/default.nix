@@ -16,8 +16,6 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ python3-application python3-gnutls python3-eventlib twisted zope_interface ];
 
-  buildInputs = [ ];
-
   meta = with lib; {
     description = "Message Session Relay Protocol (MSRP)";
     homepage = "https://github.com/AGProjects/python3-msrplib";

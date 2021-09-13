@@ -16,8 +16,6 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ twisted pyopenssl service-identity ];
 
-  buildInputs = [ ];
-
   patches = [ ./libgnutls-path.patch ];
   postPatch = ''
     sed -i 's|@gnutlslib@|'"${lib.getLib gnutls}/lib"'|g' gnutls/library/__init__.py

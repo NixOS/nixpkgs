@@ -1,5 +1,5 @@
-{ lib, python3, libvncserver, xorg, makeDesktopItem, mkDerivationWith
-, fetchdarcs, callPackage }:
+{ lib, python3, libvncserver, xorg, makeDesktopItem, copyDesktopItems
+, mkDerivationWith, fetchdarcs, callPackage }:
 
 with python3.pkgs;
 mkDerivationWith buildPythonApplication rec {
@@ -23,6 +23,7 @@ mkDerivationWith buildPythonApplication rec {
 
   nativeBuildInputs = [
     cython
+    copyDesktopItems
   ];
 
   buildInputs = [
@@ -40,13 +41,11 @@ mkDerivationWith buildPythonApplication rec {
   '';
 
   postInstall = ''
-    ln -s "${desktopItem}/share/applications" "$out/share/applications"
-
     mkdir -p "$out/share/pixmaps"
     cp "$out"/share/blink/icons/blink.* "$out/share/pixmaps"
   '';
 
-  desktopItem = makeDesktopItem {
+  desktopItems = [ (makeDesktopItem {
     name = "Blink";
     desktopName = "Blink";
     genericName = "SIP client";
@@ -57,7 +56,7 @@ mkDerivationWith buildPythonApplication rec {
     startupNotify = false;
     terminal = false;
     categories = "Qt;Network;Telephony";
-  };
+  }) ];
 
   meta = with lib; {
     homepage = "https://icanblink.com/";
