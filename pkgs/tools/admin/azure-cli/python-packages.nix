@@ -87,7 +87,7 @@ let
         postPatch = ''
           substituteInPlace setup.py \
             --replace "azure-mgmt-core>=1.2.0,<1.3.0" "azure-mgmt-core~=1.2" \
-            --replace "requests~=2.25.1" "requests~=2.25" \
+            --replace "requests[socks]~=2.25.1" "requests[socks]~=2.25" \
             --replace "cryptography>=3.2,<3.4" "cryptography"
         '';
 
