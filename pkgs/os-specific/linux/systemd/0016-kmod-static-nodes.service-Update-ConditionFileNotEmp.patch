@@ -1,4 +1,4 @@
-From ba19f629c1806ca2d2ab58154e45bce4ae4a3f0c Mon Sep 17 00:00:00 2001
+From 330490aa8a44206bc03205654680913ab01408a1 Mon Sep 17 00:00:00 2001
 From: Florian Klink <flokli@flokli.de>
 Date: Sat, 7 Mar 2020 22:40:27 +0100
 Subject: [PATCH 16/19] kmod-static-nodes.service: Update ConditionFileNotEmpty
@@ -10,10 +10,10 @@ On NixOS, kernel modules of the currently booted systems are located at
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/units/kmod-static-nodes.service.in b/units/kmod-static-nodes.service.in
-index f4170d6a99..9a6a591bea 100644
+index 777e82d16b..b6abc2bba0 100644
 --- a/units/kmod-static-nodes.service.in
 +++ b/units/kmod-static-nodes.service.in
-@@ -12,7 +12,7 @@ Description=Create list of static device nodes for the current kernel
+@@ -12,7 +12,7 @@ Description=Create List of Static Device Nodes
  DefaultDependencies=no
  Before=sysinit.target systemd-tmpfiles-setup-dev.service
  ConditionCapability=CAP_SYS_MODULE
@@ -23,5 +23,5 @@ index f4170d6a99..9a6a591bea 100644
  [Service]
  Type=oneshot
 -- 
-2.30.1
+2.32.0
 
