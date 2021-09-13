@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "fclones";
-  version = "0.14.0";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "pkolaczk";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1ni5amy903cy822yhw070bcrrixrw2m1vr66q1h32bc98pyv4w05";
+    sha256 = "sha256-8NUneKJpnBjC4OcAABEpI9p+saBqAk+l43FS8/tIYjc=";
   };
 
-  cargoSha256 = "1gcb46k7bwdfsf6hyvmi6dna1nf6myzy63bhjfp0wy7c8g4m2mg8";
+  cargoSha256 = "sha256-5qX45FJFaiE1vTXjllM9U1w57MX18GgKEFOEBMc64Jk=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ udev ];
