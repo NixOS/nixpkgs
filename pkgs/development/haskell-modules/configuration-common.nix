@@ -1354,19 +1354,12 @@ self: super: {
   # 2021-06-20: Tests fail: https://github.com/haskell/haskell-language-server/issues/1949
   hls-refine-imports-plugin = dontCheck super.hls-refine-imports-plugin;
 
-  # 2021-03-09: Golden tests seem to be missing in hackage release:
-  # https://github.com/haskell/haskell-language-server/issues/1536
-  hls-tactics-plugin = dontCheck (super.hls-tactics-plugin.override { refinery = self.refinery_0_3_0_0; });
+  # 2021-09-14: Tests are broken because of undeterministic variable names
+  hls-tactics-plugin = dontCheck super.hls-tactics-plugin;
 
   # 2021-03-21 Test hangs
   # https://github.com/haskell/haskell-language-server/issues/1562
-  # Jailbreak because of: https://github.com/haskell/haskell-language-server/pull/1595
-  ghcide = doJailbreak (dontCheck super.ghcide);
-
-  # 2020-03-09: Tests broken in hackage release
-  # fixed on upstream, but not released in hiedb 0.3.0.1
-  # https://github.com/wz1000/HieDb/issues/30
-  hiedb = dontCheck super.hiedb;
+  ghcide = dontCheck super.ghcide;
 
   data-tree-print = doJailbreak super.data-tree-print;
 
@@ -1842,9 +1835,6 @@ EOT
     testFlags = [ "--pattern" "!/[NOCI]/" ];
   };
 
-  # Tests require to run a binary which isn't built
-  lsp-test = dontCheck super.lsp-test;
-
   # 2021-05-22: Tests fail sometimes (even consistently on hydra)
   # when running a fs-related test with >= 12 jobs. To work around
   # this, run tests with only a single job.
@@ -1933,5 +1923,14 @@ EOT
   hadolint = super.hadolint.override {
     language-docker = self.language-docker_10_1_2;
   };
+
+  # 2021-09-13: hls 1.3 needs a newer lsp than stackage-lts. (lsp >= 1.2.0.1)
+  # (hls is nearly the only consumer, but consists of 18 packages, so we bump lsp globally.)
+  lsp = doDistribute self.lsp_1_2_0_1;
+  lsp-types = doDistribute self.lsp-types_1_3_0_1;
+  # Not running the "example" test because it requires a binary from lsps test
+  # suite which is not part of the output of lsp.
+  lsp-test = doDistribute (overrideCabal self.lsp-test_0_14_0_1 (old: { testTarget = "tests func-test"; }));
+
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

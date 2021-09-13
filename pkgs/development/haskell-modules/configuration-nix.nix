@@ -842,6 +842,16 @@ self: super: builtins.intersectAttrs super {
       export HOME=$TMPDIR/home
     '';
   });
+  hiedb = overrideCabal super.hiedb (drv: {
+    preCheck = ''
+      export PATH=$PWD/dist/build/hiedb:$PATH
+    '';
+  });
+  hls-call-hierarchy-plugin = overrideCabal super.hls-call-hierarchy-plugin (drv: {
+    preCheck = ''
+      export HOME=$TMPDIR/home
+    '';
+  });
   # Tests have file permissions expections that don‘t work with the nix store.
   hls-stylish-haskell-plugin = dontCheck super.hls-stylish-haskell-plugin;
   hls-haddock-comments-plugin = overrideCabal super.hls-haddock-comments-plugin (drv: {
