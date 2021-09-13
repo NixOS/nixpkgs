@@ -201,6 +201,13 @@ in
 
         if [ "$(id -u)" = 0 ]; then chown -R elasticsearch:elasticsearch ${cfg.dataDir}; fi
       '';
+      postStart = ''
+        # Make sure elasticsearch is up and running before dependents
+        # are started
+        while ! ${pkgs.curl}/bin/curl -sS -f http://localhost:${toString cfg.port} 2>/dev/null; do
+          sleep 1
+        done
+      '';
     };
 
     environment.systemPackages = [ cfg.package ];

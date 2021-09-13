@@ -786,7 +786,9 @@ let
     });
 
     RMySQL = old.RMySQL.overrideDerivation (attrs: {
-      MYSQL_DIR="${pkgs.libmysqlclient}";
+      MYSQL_DIR = "${pkgs.libmysqlclient}";
+      PKGCONFIG_CFLAGS = "-I${pkgs.libmysqlclient.dev}/include/mysql";
+      NIX_CFLAGS_LINK = "-L${pkgs.libmysqlclient}/lib/mysql -lmysqlclient";
       preConfigure = ''
         patchShebangs configure
       '';
