@@ -7683,6 +7683,8 @@ with pkgs;
 
   nttcp = callPackage ../tools/networking/nttcp { };
 
+  ntttcp = callPackage ../tools/networking/ntttcp { };
+
   nuttcp = callPackage ../tools/networking/nuttcp { };
 
   nssmdns = callPackage ../tools/networking/nss-mdns { };
