@@ -6,7 +6,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "adjustText";
+  pname = "adjusttext";
   version = "0.7.3";
 
   src = fetchFromGitHub {
@@ -22,8 +22,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Iteratively adjust text position in matplotlib plots to minimize overlaps";
-    homepage    = "https://github.com/Phlya/adjustText";
-    license     = licenses.mit;
+    homepage = "https://github.com/Phlya/adjustText";
+    license = licenses.mit;
     maintainers = with maintainers; [ samuela ];
   };
 }

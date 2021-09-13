@@ -209,7 +209,7 @@ in {
 
   adguardhome = callPackage ../development/python-modules/adguardhome { };
 
-  adjustText = callPackage ../development/python-modules/adjustText { };
+  adjusttext = callPackage ../development/python-modules/adjusttext { };
 
   advantage-air = callPackage ../development/python-modules/advantage-air { };
 
