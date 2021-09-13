@@ -18,7 +18,11 @@ buildPythonPackage rec {
   '';
 
   # Disable darwin tests which require executables: `iconutil` and `screencapture`
-  disabledTests = lib.optionals stdenv.isDarwin [
+  disabledTests = [
+    # pyroma version in 21.05 complains about python 3.10 reference in
+    # classifier tags
+    "test_pyroma"
+  ] ++ lib.optionals stdenv.isDarwin [
     "test_grab"
     "test_grabclipboard"
     "test_save"
