@@ -145,6 +145,7 @@ esneider/YUNOcommit.vim
 euclidianAce/BetterLua.vim
 euclio/vim-markdown-composer
 f-person/git-blame.nvim
+f3fora/cmp-spell
 famiu/bufdelete.nvim
 famiu/feline.nvim
 farmergreg/vim-lastplace
@@ -327,6 +328,7 @@ karb94/neoscroll.nvim
 kassio/neoterm
 kbenzie/vim-spirv
 kchmck/vim-coffee-script
+kdheepak/cmp-latex-symbols@main
 kdheepak/lazygit.nvim
 KeitaNakamura/neodark.vim
 keith/investigate.vim
@@ -344,6 +346,7 @@ kosayoda/nvim-lightbulb
 kristijanhusak/defx-git
 kristijanhusak/defx-icons
 kristijanhusak/deoplete-phpactor
+kristijanhusak/orgmode.nvim
 kristijanhusak/vim-carbon-now-sh
 kristijanhusak/vim-dadbod-completion
 kristijanhusak/vim-dadbod-ui
@@ -589,6 +592,7 @@ raghur/vim-ghost
 Raimondi/delimitMate
 rakr/vim-one
 ray-x/aurora
+ray-x/cmp-treesitter
 ray-x/lsp_signature.nvim
 rbgrouleff/bclose.vim
 rbong/vim-flog

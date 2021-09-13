@@ -2,18 +2,18 @@
 
 stdenv.mkDerivation rec {
   pname = "clojure-lsp";
-  version = "2021.07.12-12.30.59";
+  version = "2021.09.04-17.11.44";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "0iky3yh548xn28285x8gnjzc00f3i2b415wb2dhd9p9y2bgzhkld";
+    sha256 = "1i12vxg3yb1051q7j6yqlsdy4lc4xl7n4lqssp8w634fpx1p0rgv";
   };
 
   jar = fetchurl {
     url = "https://github.com/clojure-lsp/clojure-lsp/releases/download/${version}/clojure-lsp.jar";
-    sha256 = "02k1k0slh1lm7k43d52jvgl0fdyp9gcr8csbr6yi71qbhy0axrmp";
+    sha256 = "0ahrlqzyz3mgfx8w9w49172pb3dipq0hwwzk2yasqzcp1fi6jm80";
   };
 
   GRAALVM_HOME = graalvm11-ce;
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
     export HOME="$(mktemp -d)"
     ./clojure-lsp --version | fgrep -q '${version}'
-    ${babashka}/bin/bb integration-test/run-all.clj ./clojure-lsp
+    ${babashka}/bin/bb integration-test ./clojure-lsp
 
     runHook postCheck
   '';

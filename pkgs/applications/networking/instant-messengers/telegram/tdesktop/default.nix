@@ -59,7 +59,7 @@ let
 in
 mkDerivation rec {
   pname = "telegram-desktop";
-  version = "2.9.3";
+  version = "3.0.1";
   # Note: Update via pkgs/applications/networking/instant-messengers/telegram/tdesktop/update.py
 
   # Telegram-Desktop with submodules
@@ -68,7 +68,7 @@ mkDerivation rec {
     repo = "tdesktop";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-ZmhgBL5nbgrNLRmCHocqVNC3KtaLm4LUY1f4Xl8CvB4=";
+    sha256 = "196w82a92jahz7caqv2cyhhq53xm3figa7kiq59kid5wbqg33c9x";
   };
 
   postPatch = ''
@@ -81,6 +81,8 @@ mkDerivation rec {
       --replace '"libasound.so.2"' '"${alsa-lib}/lib/libasound.so.2"'
     substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioPulse.cpp \
       --replace '"libpulse.so.0"' '"${libpulseaudio}/lib/libpulse.so.0"'
+    substituteInPlace Telegram/lib_webview/webview/platform/linux/webview_linux_webkit_gtk.cpp \
+      --replace '"libwebkit2gtk-4.0.so.37"' '"${webkitgtk}/lib/libwebkit2gtk-4.0.so.37"'
   '';
 
   # We want to run wrapProgram manually (with additional parameters)
