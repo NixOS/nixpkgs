@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
 
     # https://github.com/babashka/babashka/blob/v0.6.0/script/compile#L41-L52
     args=("-jar" "$BABASHKA_JAR"
+          # Required to build babashka on darwin. Do not remove.
+          "${lib.optionalString stdenv.isDarwin "-H:-CheckToolchain"}"
           "-H:Name=$BABASHKA_BINARY"
           "-H:+ReportExceptionStackTraces"
           # "-H:+PrintAnalysisCallTree"
