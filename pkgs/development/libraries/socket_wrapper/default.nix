@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, cmake, pkg-config }:
 
 stdenv.mkDerivation rec {
-  name = "socket_wrapper-1.3.3";
+  pname = "socket_wrapper";
+  version = "1.3.3";
 
   src = fetchurl {
-    url = "mirror://samba/cwrap/${name}.tar.gz";
+    url = "mirror://samba/cwrap/socket_wrapper-${version}.tar.gz";
     sha256 = "sha256-G42i+w7n3JkPvOc039I+frzDnq1GGGyQqUkMFdoebhM=";
   };
 
