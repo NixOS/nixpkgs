@@ -1,4 +1,5 @@
 { fetchurl
+, fetchpatch
 , substituteAll
 , runCommand
 , lib
@@ -62,6 +63,12 @@ let self = stdenv.mkDerivation rec {
     (substituteAll {
       src = ./fix-paths.patch;
       inherit zenity;
+    })
+
+    # https://salsa.debian.org/gnome-team/mutter/-/blob/ubuntu/master/debian/patches/x11-Add-support-for-fractional-scaling-using-Randr.patch
+    (fetchpatch {
+      url = "https://salsa.debian.org/gnome-team/mutter/-/raw/91d9bdafd5d624fe1f40f4be48663014830eee78/debian/patches/x11-Add-support-for-fractional-scaling-using-Randr.patch";
+      sha256 = "m6PKjVxhGVuzsMBVA82UyJ6Cb1s6SMI0eRooa+F2MY8=";
     })
   ];
 
@@ -137,7 +144,7 @@ let self = stdenv.mkDerivation rec {
     libdir = "${self}/lib/mutter-8";
 
     tests = {
-      libdirExists = runCommand "mutter-libdir-exists" {} ''
+      libdirExists = runCommand "mutter-libdir-exists" { } ''
         if [[ ! -d ${self.libdir} ]]; then
           echo "passthru.libdir should contain a directory, “${self.libdir}” is not one."
           exit 1
