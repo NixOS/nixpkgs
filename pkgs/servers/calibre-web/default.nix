@@ -20,7 +20,8 @@ python3.pkgs.buildPythonApplication rec {
     substituteInPlace setup.cfg \
       --replace "requests>=2.11.1,<2.25.0" "requests" \
       --replace "cps = calibreweb:main" "calibre-web = calibreweb:main" \
-      --replace "PyPDF3>=1.0.0,<1.0.4" "PyPDF3>=1.0.0"
+      --replace "PyPDF3>=1.0.0,<1.0.4" "PyPDF3>=1.0.0" \
+      --replace "unidecode>=0.04.19,<1.3.0" "unidecode>=0.04.19"
   '';
 
   patches = [
