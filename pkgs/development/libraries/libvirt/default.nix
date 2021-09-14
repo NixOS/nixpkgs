@@ -183,6 +183,10 @@ stdenv.mkDerivation rec {
       # do not use "''${qemu_kvm}/bin/qemu-kvm" to avoid bound VMs to particular qemu derivations
       substituteInPlace src/lxc/lxc_conf.c \
         --replace 'lxc_path,' '"/run/libvirt/nix-emulators/libvirt_lxc",'
+      substituteInPlace build-aux/meson.build \
+        --replace "gsed" "sed" \
+        --replace "gmake" "make" \
+        --replace "ggrep" "grep"
       patchShebangs .
     ''
     + (lib.concatStringsSep "\n" (lib.mapAttrsToList patchBuilder overrides));
