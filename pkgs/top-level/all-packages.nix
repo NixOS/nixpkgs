@@ -16326,7 +16326,9 @@ with pkgs;
 
   icu = icu69;
 
-  id3lib = callPackage ../development/libraries/id3lib { };
+  id3lib = callPackage ../development/libraries/id3lib {
+    inherit (darwin) libiconv;
+  };
 
   idasen = with python3Packages; toPythonApplication idasen;
 

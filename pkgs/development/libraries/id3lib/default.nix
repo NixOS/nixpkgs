@@ -1,4 +1,9 @@
-{lib, stdenv, fetchurl, zlib}:
+{ lib
+, stdenv
+, fetchurl
+, zlib
+, libiconv
+}:
 
 stdenv.mkDerivation rec {
   pname = "id3lib";
@@ -9,7 +14,7 @@ stdenv.mkDerivation rec {
     ./patch_id3lib_3.8.3_UTF16_writing_bug.diff
   ];
 
-  buildInputs = [ zlib ];
+  buildInputs = [ zlib ] ++ lib.optional stdenv.isDarwin libiconv;
 
   src = fetchurl {
     url = "mirror://sourceforge/id3lib/${pname}-${version}.tar.gz";
