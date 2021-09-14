@@ -5582,6 +5582,18 @@ final: prev:
     meta.homepage = "https://github.com/tomtom/tcomment_vim/";
   };
 
+  telescope-coc-nvim = buildVimPluginFrom2Nix {
+    pname = "telescope-coc.nvim";
+    version = "2021-08-26";
+    src = fetchFromGitHub {
+      owner = "fannheyward";
+      repo = "telescope-coc.nvim";
+      rev = "1037a9186b5889dc3145ce9494956006c8b20f17";
+      sha256 = "0i2g168q57pfbm63idl054sdbflkgd8a754pvk0q9w7w1mzpql2q";
+    };
+    meta.homepage = "https://github.com/fannheyward/telescope-coc.nvim/";
+  };
+
   telescope-dap-nvim = buildVimPluginFrom2Nix {
     pname = "telescope-dap.nvim";
     version = "2021-03-26";
@@ -6482,6 +6494,18 @@ final: prev:
       sha256 = "1kpq5bjp8wr8r1kfkq4dx3ypgv9jn3y91bfi2sszbn4i882j4ka7";
     };
     meta.homepage = "https://github.com/ntpeters/vim-better-whitespace/";
+  };
+
+  vim-bookmarks = buildVimPluginFrom2Nix {
+    pname = "vim-bookmarks";
+    version = "2021-08-22";
+    src = fetchFromGitHub {
+      owner = "MattesGroeger";
+      repo = "vim-bookmarks";
+      rev = "9cc5fa7ecc23b052bd524d07c85356c64b92aeef";
+      sha256 = "1w8g9jvyi765sp2icjb6c20yn0y6w69zfyh37a367aqk7r76nbk5";
+    };
+    meta.homepage = "https://github.com/MattesGroeger/vim-bookmarks/";
   };
 
   vim-bracketed-paste = buildVimPluginFrom2Nix {
