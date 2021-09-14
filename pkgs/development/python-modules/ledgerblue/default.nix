@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "ledgerblue";
-  version = "0.1.37";
+  version = "0.1.38";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f34945c9bd4b9846ed9e48ecc239d3e9aec64c3a45411092d133260246169854";
+    sha256 = "df1fffc4f586eaa95b8cf910176d28997e65a3ecd43d9c0af34e46078b6b6ee3";
   };
 
   propagatedBuildInputs = [
@@ -18,6 +18,8 @@ buildPythonPackage rec {
 
   # No tests
   doCheck = false;
+
+  pythonImportsCheck = [ "ledgerblue" ];
 
   meta = with lib; {
     description = "Python library to communicate with Ledger Blue/Nano S";

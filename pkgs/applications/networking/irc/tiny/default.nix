@@ -26,6 +26,8 @@ rustPlatform.buildRustPackage rec {
     ./fix-Cargo.lock.patch
   ];
 
+  cargoBuildFlags = lib.optionals stdenv.isLinux [ "--features=desktop-notifications" ];
+
   nativeBuildInputs = lib.optional stdenv.isLinux pkg-config;
   buildInputs = lib.optionals stdenv.isLinux [ dbus openssl ] ++ lib.optional stdenv.isDarwin Foundation;
 

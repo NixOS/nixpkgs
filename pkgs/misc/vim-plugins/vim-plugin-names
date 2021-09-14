@@ -148,6 +148,7 @@ f-person/git-blame.nvim
 f3fora/cmp-spell
 famiu/bufdelete.nvim
 famiu/feline.nvim
+fannheyward/telescope-coc.nvim
 farmergreg/vim-lastplace
 fatih/vim-go
 fcpg/vim-osc52
@@ -416,6 +417,7 @@ MarcWeber/vim-addon-toggle-buffer
 MarcWeber/vim-addon-xdebug
 markonm/traces.vim
 martinda/Jenkinsfile-vim-syntax
+MattesGroeger/vim-bookmarks
 mattn/calendar-vim as mattn-calendar-vim
 mattn/emmet-vim
 mattn/vim-gist
@@ -551,6 +553,7 @@ overcache/NeoSolarized
 p00f/nvim-ts-rainbow
 pangloss/vim-javascript
 parsonsmatt/intero-neovim
+PaterJason/cmp-conjure
 pearofducks/ansible-vim
 peitalin/vim-jsx-typescript
 peterbjorgensen/sved
@@ -693,6 +696,7 @@ stefandtw/quickfix-reflector.vim
 stephpy/vim-yaml
 stevearc/aerial.nvim
 stsewd/fzf-checkout.vim
+sudormrfbin/cheatsheet.nvim
 sunaku/vim-dasht
 sunjon/Shade.nvim
 svermeulen/vim-subversive
