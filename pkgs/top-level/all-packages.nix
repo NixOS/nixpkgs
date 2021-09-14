@@ -2470,7 +2470,7 @@ with pkgs;
 
   csv2latex = callPackage ../tools/misc/csv2latex { };
 
-  csvs-to-sqlite = python3Packages.callPackage ../tools/misc/csvs-to-sqlite { };
+  csvs-to-sqlite = callPackage ../tools/misc/csvs-to-sqlite { };
 
   cucumber = callPackage ../development/tools/cucumber {};
 
