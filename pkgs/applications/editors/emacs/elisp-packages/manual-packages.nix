@@ -284,6 +284,8 @@
 
   perl-completion = callPackage ./perl-completion { };
 
+  plz = callPackage ./plz { };
+
   pod-mode = callPackage ./pod-mode { };
 
   power-mode = callPackage ./power-mode { };
