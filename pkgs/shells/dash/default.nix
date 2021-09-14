@@ -25,7 +25,16 @@ stdenv.mkDerivation rec {
       url = "https://git.kernel.org/pub/scm/utils/dash/dash.git/patch/?id=29d6f2148f10213de4e904d515e792d2cf8c968e";
       sha256 = "0aadb7aaaan6jxmi6icv4p5gqx7k510yszaqsa29b5giyxz5l9i1";
     })
+
+    # aarch64-darwin fix from upstream; remove on next release
+    (fetchpatch {
+      url = "https://git.kernel.org/pub/scm/utils/dash/dash.git/patch/?id=6f6d1f2da03468c0e131fdcbdcfa9771ffca2614";
+      sha256 = "16iz2ylkyhpxqq411ns8pjk8rizh6afhavvsf052wvzsnmmlvfbw";
+    })
   ];
+
+  # configure.ac patched; remove on next release
+  nativeBuildInputs = [ autoreconfHook ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   buildInputs = [ libedit ];
