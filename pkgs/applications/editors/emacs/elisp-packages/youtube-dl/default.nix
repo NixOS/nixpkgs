@@ -1,8 +1,12 @@
-{ stdenv, fetchFromGitHub, emacs, lib }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, emacs
+}:
 
-stdenv.mkDerivation {
+trivialBuild {
   pname = "youtube-dl";
-  version = "2018-10-12";
+  version = "0.0.0+unstable=2018-10-12";
 
   src = fetchFromGitHub {
     owner = "skeeto";
@@ -13,24 +17,11 @@ stdenv.mkDerivation {
 
   buildInputs = [ emacs ];
 
-  buildPhase = ''
-    runHook preBuild
-    emacs -L . --batch -f batch-byte-compile *.el
-    runHook postBuild
-  '';
-
-  installPhase = ''
-    runHook preInstall
-    install -d $out/share/emacs/site-lisp
-    install *.el *.elc $out/share/emacs/site-lisp
-    runHook postInstall
-  '';
-
-  meta = {
-    description = "Emacs frontend to the youtube-dl utility";
+  meta = with lib; {
+    description = "Emacs youtube-dl download manager";
     homepage = "https://github.com/skeeto/youtube-dl-emacs";
-    license = lib.licenses.unlicense;
-    maintainers = with lib.maintainers; [ leungbk ];
-    platforms = emacs.meta.platforms;
+    license = licenses.unlicense;
+    maintainers = with maintainers; [ leungbk ];
+    inherit (emacs.meta) platforms;
   };
 }
