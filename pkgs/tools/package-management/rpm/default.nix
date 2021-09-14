@@ -36,13 +36,19 @@ stdenv.mkDerivation rec {
     "--sharedstatedir=/com"
   ];
 
-  # Small fixes for ndb on darwin
-  # https://github.com/rpm-software-management/rpm/pull/1465
   patches = [
+    # Small fixes for ndb on darwin
+    # https://github.com/rpm-software-management/rpm/pull/1465
     (fetchpatch {
       name = "darwin-support.patch";
       url = "https://github.com/rpm-software-management/rpm/commit/2d20e371d5e38f4171235e5c64068cad30bda557.patch";
       sha256 = "0p3j5q5a4hl357maf7018k3826jhcpqg6wfrnccrkv30g0ayk171";
+    })
+    # Fix build on aarch64-darwin
+    # https://github.com/rpm-software-management/rpm/pull/1775
+    (fetchpatch {
+      url = "https://github.com/emilazy/rpm/commit/45120e756930b4787ea2e06fb8a9e623ea13f2f3.patch";
+      sha256 = "0zzblwx9apxyjsri4cxd09y9b2hs57r2fck98939j1qgcwy732ar";
     })
   ];
 
