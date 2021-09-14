@@ -321,6 +321,7 @@ stdenv.mkDerivation {
 
     # Flaky tests:
     disable_test t5319-multi-pack-index
+    disable_test t6421-merge-partial-clone
 
     ${lib.optionalString (!perlSupport) ''
       # request-pull is a Bash script that invokes Perl, so it is not available
