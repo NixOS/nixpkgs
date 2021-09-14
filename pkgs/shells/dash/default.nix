@@ -1,4 +1,11 @@
-{ lib, stdenv, buildPackages, autoreconfHook, fetchurl, libedit }:
+{ lib
+, stdenv
+, buildPackages
+, autoreconfHook
+, fetchurl
+, fetchpatch
+, libedit
+}:
 
 stdenv.mkDerivation rec {
   pname = "dash";
@@ -12,11 +19,11 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   patches = [
-    (fetchurl {
+    (fetchpatch {
       # Dash executes code when noexec ("-n") is specified
       # https://www.openwall.com/lists/oss-security/2020/11/11/3
       url = "https://git.kernel.org/pub/scm/utils/dash/dash.git/patch/?id=29d6f2148f10213de4e904d515e792d2cf8c968e";
-      sha256 = "08q90bx36ixwlcj331dh7420qyj8i0qh1cc1gljrhd83fhl9w0y5";
+      sha256 = "0aadb7aaaan6jxmi6icv4p5gqx7k510yszaqsa29b5giyxz5l9i1";
     })
   ] ++ lib.optionals stdenv.isDarwin [
       # Temporary fix until a proper one is accepted upstream
