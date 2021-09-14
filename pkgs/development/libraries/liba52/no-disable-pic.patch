@@ -1,0 +1,27 @@
+From c04fb7d4a524e54d6e0cc7170ff1486a7c9af7d9 Mon Sep 17 00:00:00 2001
+From: Emily <vcs@emily.moe>
+Date: Tue, 14 Sep 2021 23:16:50 +0100
+Subject: [PATCH] configure.ac: don't disable PIC
+
+Based on https://github.com/videolan/vlc/blob/65dfe0cdc97bbb98ad34a690989636d40f326e32/contrib/src/a52/liba52-pic.patch.
+---
+ configure.ac | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/configure.ac b/configure.ac
+index 935ddec..c4ab49c 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -144,9 +144,6 @@ AC_CHECK_FUNCS([memalign gettimeofday ftime])
+ AC_SUBST([LIBA52_CFLAGS])
+ AC_SUBST([LIBA52_LIBS])
+ 
+-dnl avoid -fPIC when possible
+-AC_LIBTOOL_NON_PIC([LIBA52_CFLAGS="$LIBA52_CFLAGS -prefer-non-pic"])
+-
+ AC_ARG_ENABLE([fixed],
+     [  --enable-fixed          use fixed-point (integer-based) arithmetic])
+ AC_ARG_ENABLE([double],
+-- 
+2.32.0
+
