@@ -32569,6 +32569,8 @@ with pkgs;
 
   vice = callPackage ../misc/emulators/vice { };
 
+  viddy = callPackage ../tools/misc/viddy { };
+
   ViennaRNA = callPackage ../applications/science/molecular-dynamics/viennarna { };
 
   viewnior = callPackage ../applications/graphics/viewnior { };
