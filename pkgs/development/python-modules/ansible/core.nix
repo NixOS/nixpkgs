@@ -23,8 +23,8 @@
 
 let
   ansible-collections = callPackage ./collections.nix {
-    version = "4.4.0";
-    sha256 = "031n22j0lsmh69x6i6gkva81j68b4yzh1pbg3q2h4bknl85q46ag";
+    version = "4.5.0";
+    sha256 = "1c8dspqy4in7sgz10y1pggwnh1hv79wap7p7xhai0f0s6nr54lyc";
   };
 in
 buildPythonPackage rec {
