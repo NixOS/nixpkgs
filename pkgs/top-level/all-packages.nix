@@ -6630,6 +6630,8 @@ with pkgs;
 
   makebootfat = callPackage ../tools/misc/makebootfat { };
 
+  mapserver = callPackage ../servers/mapserver { };
+
   martin = callPackage ../servers/martin {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
