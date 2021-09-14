@@ -1932,5 +1932,7 @@ EOT
   # suite which is not part of the output of lsp.
   lsp-test = doDistribute (overrideCabal self.lsp-test_0_14_0_1 (old: { testTarget = "tests func-test"; }));
 
+  # 2021-09-14: Tests are flaky.
+  hls-splice-plugin = dontCheck super.hls-splice-plugin;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
