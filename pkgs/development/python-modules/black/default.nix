@@ -29,6 +29,10 @@ buildPythonPackage rec {
     sha256 = "sha256-VwYI0oqjrxeSuYxKM326xjZ4d7R7EriKtCCVz8GmJ8I=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.cfg --replace "setuptools_scm~=6.0.1" "setuptools_scm"
+  '';
+
   nativeBuildInputs = [ setuptools-scm ];
 
   # Necessary for the tests to pass on Darwin with sandbox enabled.
