@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     jmol
     cddlib
   ] ++ (with python3.pkgs; [
-    sage_docbuild
+    sage-docbuild
     psutil
     future
     sphinx

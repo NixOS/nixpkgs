@@ -57,14 +57,14 @@ let
   );
 in
 stdenv.mkDerivation rec {
-  version = "9.4";
+  version = "9.5";
   pname = "sage-src";
 
   src = fetchFromGitHub {
     owner = "sagemath";
     repo = "sage";
     rev = version;
-    sha256 = "sha256-jqkr4meG02KbTCMsGvyr1UbosS4ZuUJhPXU/InuS+9A=";
+    sha256 = "sha256-uOsLpsGpcIGs8Xr82X82MElnTB2E908gytyNJ8WVD5w=";
   };
 
   # Patches needed because of particularities of nix or the way this is packaged.
@@ -117,46 +117,6 @@ stdenv.mkDerivation rec {
     # Let's just assume warnings are expected until we update to 4.27.0.
     ./patches/fonttools-deprecation-warnings.patch
 
-    # https://trac.sagemath.org/ticket/32305
-    (fetchSageDiff {
-      base = "9.4";
-      name = "networkx-2.6-upgrade.patch";
-      rev = "9808325853ba9eb035115e5b056305a1c9d362a0";
-      sha256 = "sha256-gJSqycCtbAVr5qnVEbHFUvIuTOvaxFIeffpzd6nH4DE=";
-    })
-
-    # https://trac.sagemath.org/ticket/32420
-    (fetchSageDiff {
-      base = "9.5.beta2";
-      name = "sympy-1.9-update.patch";
-      rev = "beed4e16aff32e47d0c3b1c58cb1e2f4c38590f8";
-      sha256 = "sha256-3eJPfWfCrCAQ5filIn7FbzjRQeO9QyTIVl/HyRuqFtE=";
-    })
-
-    # https://trac.sagemath.org/ticket/32567
-    (fetchSageDiff {
-      base = "9.5.beta2";
-      name = "arb-2.21.0-update.patch";
-      rev = "eb3304dd521a3d5a9334e747a08e234bbf16b4eb";
-      sha256 = "sha256-XDkaY4VQGyESXI6zuD7nCNzyQOl/fmBFvAESH9+RRvk=";
-    })
-
-    # https://trac.sagemath.org/ticket/32797
-    (fetchSageDiff {
-      base = "9.5.beta7";
-      name = "pari-2.13.3-update.patch";
-      rev = "f5f7a86908daf60b25e66e6a189c51ada7e0a732";
-      sha256 = "sha256-H/caGx3q4KcdsyGe+ojV9bUTQ5y0siqM+QHgDbeEnbw=";
-    })
-
-    # https://trac.sagemath.org/ticket/32909
-    (fetchSageDiff {
-      base = "9.5.beta7";
-      name = "matplotlib-3.5-deprecation-warnings.patch";
-      rev = "a5127dc56fdf5c2e82f6bc781cfe78dbd04e97b7";
-      sha256 = "sha256-p23qUu9mgEUbdbX6cy7ArxZAtpcFjCKbgyxN4jWvj1o=";
-    })
-
     # https://trac.sagemath.org/ticket/32968
     (fetchSageDiff {
       base = "9.5.beta8";
@@ -164,6 +124,11 @@ stdenv.mkDerivation rec {
       rev = "fc84f82f52b6f05f512cb359ec7c100f93cf8841";
       sha256 = "sha256-bBbfdcnw/9LUOlY8rHJRbFJEdMXK4shosqTNaobTS1Q=";
     })
+
+    # Upstream has not upgraded to linbox 1.7 yet because it conflicts with
+    # pre-4.2.1p3 versions of Singular, but we don't have this problem.
+    # https://trac.sagemath.org/ticket/32959
+    ./patches/linbox-1.7-upgrade.patch
   ];
 
   patches = nixPatches ++ bugfixPatches ++ packageUpgradePatches;

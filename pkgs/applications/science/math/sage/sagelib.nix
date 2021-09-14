@@ -38,7 +38,7 @@
 , pkg-config
 , planarity
 , ppl
-, pynac
+, primecountpy
 , python
 , ratpoints
 , readline
@@ -50,6 +50,7 @@
 , singular
 , pip
 , jupyter_core
+, sage-setup
 , libhomfly
 , libbraiding
 , gmpy2
@@ -86,6 +87,7 @@ buildPythonPackage rec {
     perl
     jupyter_core
     pkg-config
+    sage-setup
     pip # needed to query installed packages
     lisp-compiler
     m4
@@ -130,7 +132,7 @@ buildPythonPackage rec {
     pari
     planarity
     ppl
-    pynac
+    primecountpy
     rankwidth
     ratpoints
     singular
@@ -181,6 +183,7 @@ buildPythonPackage rec {
     # build/pkgs, either directly or via sage-get-system-packages.
     sed -i 's/==2.1.0rc1/>=2.1.1/' ../gmpy2/install-requires.txt
     sed -i 's/, <3.4//' ../rpy2/install-requires.txt
+    sed -i 's/, <4.3//' ../sphinx/install-requires.txt
     sed -i '/sage_conf/d' src/setup.cfg.m4
     sed -i '/sage_conf/d' src/requirements.txt.m4
     for infile in src/*.m4; do

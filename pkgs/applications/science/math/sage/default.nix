@@ -14,13 +14,17 @@ let
       # `sagelib`, i.e. all of sage except some wrappers and runtime dependencies
       sagelib = self.callPackage ./sagelib.nix {
         inherit flint arb;
-        inherit sage-src env-locations pynac singular;
+        inherit sage-src env-locations singular;
         inherit (maxima) lisp-compiler;
         linbox = pkgs.linbox.override { withSage = true; };
         pkg-config = pkgs.pkg-config; # not to confuse with pythonPackages.pkg-config
       };
 
-      sage_docbuild = self.callPackage ./sage_docbuild.nix {
+      sage-docbuild = self.callPackage ./python-modules/sage-docbuild.nix {
+        inherit sage-src;
+      };
+
+      sage-setup = self.callPackage ./python-modules/sage-setup.nix {
         inherit sage-src;
       };
     };
@@ -58,9 +62,9 @@ let
   # the env-locations file.
   sage-env = callPackage ./sage-env.nix {
     sagelib = python3.pkgs.sagelib;
-    sage_docbuild = python3.pkgs.sage_docbuild;
+    sage-docbuild = python3.pkgs.sage-docbuild;
     inherit env-locations;
-    inherit python3 singular palp flint pynac pythonEnv maxima;
+    inherit python3 singular palp flint pythonEnv maxima;
     pkg-config = pkgs.pkg-config; # not to confuse with pythonPackages.pkg-config
   };
 
@@ -74,7 +78,7 @@ let
   sage-with-env = callPackage ./sage-with-env.nix {
     inherit python3 pythonEnv;
     inherit sage-env;
-    inherit pynac singular maxima;
+    inherit singular maxima;
     inherit three;
     pkg-config = pkgs.pkg-config; # not to confuse with pythonPackages.pkg-config
   };
@@ -91,7 +95,7 @@ let
 
   pythonRuntimeDeps = with python3.pkgs; [
     sagelib
-    sage_docbuild
+    sage-docbuild
     cvxopt
     networkx
     service-identity
@@ -131,9 +135,6 @@ let
       useBoehmgc = true;
     };
   };
-
-  # *not* to confuse with the python package "pynac"
-  pynac = pkgs.pynac.override { inherit singular flint; };
 
   # With openblas (64 bit), the tests fail the same way as when sage is build with
   # openblas instead of openblasCompat. Apparently other packages somehow use flints
