@@ -192,14 +192,16 @@ in {
   };
 
   openssl_1_1 = common {
-    version = "1.1.1k";
-    sha256 = "1rdfzcrxy9y38wqdw5942vmdax9hjhgrprzxm42csal7p5shhal9";
+    version = "1.1.1l";
+    sha256 = "sha256-C3o+XlnDSCf+DDp0t+yLrvMCuY+oAIjX+RU6oW+na9E=";
     patches = [
       ./1.1/nix-ssl-cert-file.patch
 
       (if stdenv.hostPlatform.isDarwin
        then ./1.1/use-etc-ssl-certs-darwin.patch
        else ./1.1/use-etc-ssl-certs.patch)
+    ] ++ lib.optionals (stdenv.isDarwin) [
+      ./1.1/macos-yosemite-compat.patch
     ];
     withDocs = true;
   };

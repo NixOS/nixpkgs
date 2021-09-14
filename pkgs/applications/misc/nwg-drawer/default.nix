@@ -10,13 +10,13 @@
 
 buildGoModule rec {
   pname = "nwg-drawer";
-  version = "0.1.7";
+  version = "0.1.8";
 
   src = fetchFromGitHub {
     owner = "nwg-piotr";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-WUYWS0pkYJwXadhlZDHIl9BuirLTu5TNITZ+cBMArVw=";
+    sha256 = "sha256-XEMD5Z0RejySamxmkGBDoAj0ARUyPm/31EPuf96Whlk=";
   };
 
   vendorSha256 = "sha256-HyrjquJ91ddkyS8JijHd9HjtfwSQykXCufa2wzl8RNk=";

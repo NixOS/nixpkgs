@@ -387,6 +387,7 @@ mapAliases ({
   keepassx-community = keepassxc; # added 2017-11
   keepassx-reboot = keepassx-community; # added 2017-02-01
   keepassx2-http = keepassx-reboot; # added 2016-10-17
+  kexectools = kexec-tools; # added 2021-09-03
   keybase-go = keybase;  # added 2016-08-24
   kinetic-cpp-client = throw "kinetic-cpp-client has been removed from nixpkgs, as it's abandoned."; # 2020-04-28
   kicad-with-packages3d = kicad; # added 2019-11-25
@@ -569,6 +570,7 @@ mapAliases ({
   openisns = open-isns; # added 2020-01-28
   openjpeg_1 = throw "openjpeg_1 has been removed, use openjpeg_2 instead"; # added 2021-01-24
   openjpeg_2 = openjpeg; # added 2021-01-25
+  openmpt123 = libopenmpt; # added 2021-09-05
   opensans-ttf = open-sans; # added 2018-12-04
   openssh_with_kerberos = openssh; # added 2018-01-28
   orchis = orchis-theme; # added 2021-06-09
@@ -702,6 +704,7 @@ mapAliases ({
   pybind11 = throw "pybind11 was removed because pythonPackages.pybind11 for the appropriate version of Python should be used"; # added 2021-05-14
   pynagsystemd = throw "pynagsystemd was removed as it was unmaintained and incompatible with recent systemd versions. Instead use its fork check_systemd."; # added 2020-10-24
   python2nix = throw "python2nix has been removed as it is outdated. Use e.g. nixpkgs-pytools instead."; # added 2021-03-08
+  python-swiftclient = swiftclient; # added 2021-09-09
   quagga = throw "quagga is no longer maintained upstream"; # added 2021-04-22
   qca-qt5 = libsForQt5.qca-qt5;  # added 2015-12-19
   qcsxcad = libsForQt5.qcsxcad;  # added 2020-11-05
@@ -892,6 +895,7 @@ mapAliases ({
   tex-gyre-termes-math = tex-gyre-math.termes; # added 2018-04-03
   tftp_hpa = tftp-hpa; # added 2015-04-03
   timescale-prometheus = promscale; # added 2020-09-29
+  timetable = throw "timetable has been removed, as the upstream project has been abandoned"; # added 2021-09-05
   tomcat7 = throw "tomcat7 has been removed from nixpkgs as it has reached end of life."; # added 2022-06-16
   tomcat8 = throw "tomcat8 has been removed from nixpkgs as it has reached end of life."; # added 2022-06-16
   tomcat85 = throw "tomcat85 has been removed from nixpkgs as it has reached end of life."; # added 2020-03-11
@@ -909,7 +913,8 @@ mapAliases ({
   truecrypt = veracrypt; # added 2018-10-24
   tshark = wireshark-cli; # added 2018-04-25
   tuijam = throw "tuijam has been removed because Google Play Music was discontinued"; # added 2021-03-07
-  turbo-geth = throw "turbo-geth has been renamed to erigon"; # added 20201-08-08
+  turbo-geth = throw "turbo-geth has been renamed to erigon"; # added 2021-08-08
+  typora = throw "Newer versions of typora use anti-user encryption and refuse to start. As such it has been removed."; # added 2021-09-11
   uberwriter = apostrophe; # added 2020-04-23
   ubootBeagleboneBlack = ubootAmx335xEVM; # added 2020-01-21
   ucsFonts = ucs-fonts; # added 2016-07-15
@@ -943,6 +948,7 @@ mapAliases ({
   webkitgtk24x-gtk3 = throw "webkitgtk24x-gtk3 has been removed because it's insecure. Please use webkitgtk."; # added 2019-12-05
   webkitgtk24x-gtk2 = throw "webkitgtk24x-gtk2 has been removed because it's insecure. Please use webkitgtk."; # added 2019-12-05
   weechat-matrix-bridge = weechatScripts.weechat-matrix-bridge; # added 2018-09-06
+  wicd = throw "wicd has been removed as it is abandoned."; # added 2021-09-11
   wineStaging = wine-staging; # added 2018-01-08
   winusb = woeusb; # added 2017-12-22
   winstone = throw "winstone is not supported anymore. Alternatives are Jetty or Tomcat."; # added 2019-05-14

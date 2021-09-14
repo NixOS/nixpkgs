@@ -22,7 +22,7 @@
       </listitem>
       <listitem>
         <para>
-          kOps now defaults to 1.21.0, which uses containerd as the
+          kOps now defaults to 1.21.1, which uses containerd as the
           default runtime.
         </para>
       </listitem>
@@ -35,6 +35,17 @@
       <listitem>
         <para>
           PostgreSQL now defaults to major version 13.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Activation scripts can now opt int to be run when running
+          <literal>nixos-rebuild dry-activate</literal> and detect the
+          dry activation by reading <literal>$NIXOS_ACTION</literal>.
+          This allows activation scripts to output what they would
+          change if the activation was really run. The users/modules
+          activation script supports this and outputs some of is
+          actions.
         </para>
       </listitem>
     </itemizedlist>
@@ -207,6 +218,38 @@
           <link linkend="opt-services.postfixadmin.enable">postfixadmin</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://sr.ht/~emersion/soju">soju</link>, a
+          user-friendly IRC bouncer. Available as
+          <link xlink:href="options.html#opt-services.soju.enable">services.soju</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://nats.io/">nats</link>, a high
+          performance cloud and edge messaging system. Available as
+          <link linkend="opt-services.nats.enable">services.nats</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://git-scm.com">git</link>, a
+          distributed version control system. Available as
+          <link xlink:href="options.html#opt-programs.git.enable">programs.git</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://domainaware.github.io/parsedmarc/">parsedmarc</link>,
+          a service which parses incoming
+          <link xlink:href="https://dmarc.org/">DMARC</link> reports and
+          stores or sends them to a downstream service for further
+          analysis. Documented in
+          <link linkend="module-services-parsedmarc">its manual
+          entry</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-incompatibilities">
@@ -323,6 +366,33 @@ Superuser created successfully.
           <link xlink:href="https://github.com/ledgerwatch/erigon/releases/tag/v2021.08.03">release
           notes</link>).
         </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="options.html#opt-users.users._name_.group">users.users.&lt;name&gt;.group</link>
+          no longer defaults to <literal>nogroup</literal>, which was
+          insecure. Out-of-tree modules are likely to require
+          adaptation: instead of
+        </para>
+        <programlisting language="bash">
+{
+  users.users.foo = {
+    isSystemUser = true;
+  };
+}
+</programlisting>
+        <para>
+          also create a group for your user:
+        </para>
+        <programlisting language="bash">
+{
+  users.users.foo = {
+    isSystemUser = true;
+    group = &quot;foo&quot;;
+  };
+  users.groups.foo = {};
+}
+</programlisting>
       </listitem>
       <listitem>
         <para>
@@ -895,6 +965,19 @@ Superuser created successfully.
           file</link> format.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          The <literal>datadog-agent</literal>,
+          <literal>datadog-integrations-core</literal> and
+          <literal>datadog-process-agent</literal> packages were
+          upgraded from 6.11.2 to 7.30.2, git-2018-09-18 to 7.30.1 and
+          6.11.1 to 7.30.2, respectively. As a result
+          <literal>services.datadog-agent</literal> has had breaking
+          changes to the configuration file. For details, see the
+          <link xlink:href="https://github.com/DataDog/datadog-agent/blob/main/CHANGELOG.rst">upstream
+          changelog</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-notable-changes">
@@ -1086,6 +1169,43 @@ Superuser created successfully.
           <literal>lib.formats.yaml</literal>’s
           <literal>generate</literal> will not generate JSON anymore,
           but instead use more of the YAML-specific syntax.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          GNOME desktop environment now enables
+          <literal>QGnomePlatform</literal> as the Qt platform theme,
+          which should avoid crashes when opening file chooser dialogs
+          in Qt apps by using XDG desktop portal. Additionally, it will
+          make the apps fit better visually.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>rofi</literal> has been updated from
+          <quote>1.6.1</quote> to <quote>1.7.0</quote>, one important
+          thing is the removal of the old xresources based configuration
+          setup. Read more
+          <link xlink:href="https://github.com/davatorium/rofi/blob/cb12e6fc058f4a0f4f/Changelog#L1">in
+          rofi’s changelog</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          ipfs now defaults to not listening on you local network. This
+          setting was change as server providers won’t accept port
+          scanning on their private network. If you have several ipfs
+          instances running on a network you own, feel free to change
+          the setting <literal>ipfs.localDiscovery = true;</literal>.
+          localDiscovery enables different instances to discover each
+          other and share data.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>lua</literal> and <literal>luajit</literal>
+          interpreters have been patched to avoid looking into /usr/lib
+          directories, thus increasing the purity of the build.
         </para>
       </listitem>
     </itemizedlist>

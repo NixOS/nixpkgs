@@ -6,7 +6,7 @@
 
 buildGoPackage rec {
   pname = "docker-slim";
-  version = "1.36.2";
+  version = "1.36.4";
 
   goPackagePath = "github.com/docker-slim/docker-slim";
 
@@ -14,7 +14,7 @@ buildGoPackage rec {
     owner = "docker-slim";
     repo = "docker-slim";
     rev = version;
-    sha256 = "sha256-Q8M8+krPC6WRDCxe88gzX5bDG8x6sJ8TduTKjA85WFA=";
+    sha256 = "0hgiigai5jpczjll4s4r4jzbq272s3p8f0r6mj4r3mjjs89hkqz1";
   };
 
   subPackages = [ "cmd/docker-slim" "cmd/docker-slim-sensor" ];
@@ -38,7 +38,7 @@ buildGoPackage rec {
   meta = with lib; {
     description = "Minify and secure Docker containers";
     homepage = "https://dockersl.im/";
-    changelog = "https://github.com/docker-slim/docker-slim/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/docker-slim/docker-slim/raw/${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ Br1ght0ne marsam mbrgm ];
   };

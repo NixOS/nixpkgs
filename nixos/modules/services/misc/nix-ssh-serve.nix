@@ -4,7 +4,7 @@ with lib;
 let cfg = config.nix.sshServe;
     command =
       if cfg.protocol == "ssh"
-        then "nix-store --serve"
+        then "nix-store --serve ${lib.optionalString cfg.write "--write"}"
       else "nix-daemon --stdio";
 in {
   options = {
@@ -15,6 +15,12 @@ in {
         type = types.bool;
         default = false;
         description = "Whether to enable serving the Nix store as a remote store via SSH.";
+      };
+
+      write = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Whether to enable writing to the Nix store as a remote store via SSH. Note: the sshServe user is named nix-ssh and is not a trusted-user. nix-ssh should be added to the nix.trustedUsers option in most use cases, such as allowing remote building of derivations.";
       };
 
       keys = mkOption {
@@ -38,9 +44,11 @@ in {
 
     users.users.nix-ssh = {
       description = "Nix SSH store user";
-      uid = config.ids.uids.nix-ssh;
+      isSystemUser = true;
+      group = "nix-ssh";
       useDefaultShell = true;
     };
+    users.groups.nix-ssh = {};
 
     services.openssh.enable = true;
 

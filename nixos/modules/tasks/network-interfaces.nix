@@ -1296,14 +1296,14 @@ in
             '';
 
             # Udev script to execute for a new WLAN interface. The script configures the new WLAN interface.
-            newInterfaceScript = device: new: pkgs.writeScript "udev-run-script-wlan-interfaces-${new._iName}.sh" ''
+            newInterfaceScript = new: pkgs.writeScript "udev-run-script-wlan-interfaces-${new._iName}.sh" ''
               #!${pkgs.runtimeShell}
               # Configure the new interface
               ${pkgs.iw}/bin/iw dev ${new._iName} set type ${new.type}
-              ${optionalString (new.type == "mesh" && new.meshID!=null) "${pkgs.iw}/bin/iw dev ${device} set meshid ${new.meshID}"}
-              ${optionalString (new.type == "monitor" && new.flags!=null) "${pkgs.iw}/bin/iw dev ${device} set monitor ${new.flags}"}
-              ${optionalString (new.type == "managed" && new.fourAddr!=null) "${pkgs.iw}/bin/iw dev ${device} set 4addr ${if new.fourAddr then "on" else "off"}"}
-              ${optionalString (new.mac != null) "${pkgs.iproute2}/bin/ip link set dev ${device} address ${new.mac}"}
+              ${optionalString (new.type == "mesh" && new.meshID!=null) "${pkgs.iw}/bin/iw dev ${new._iName} set meshid ${new.meshID}"}
+              ${optionalString (new.type == "monitor" && new.flags!=null) "${pkgs.iw}/bin/iw dev ${new._iName} set monitor ${new.flags}"}
+              ${optionalString (new.type == "managed" && new.fourAddr!=null) "${pkgs.iw}/bin/iw dev ${new._iName} set 4addr ${if new.fourAddr then "on" else "off"}"}
+              ${optionalString (new.mac != null) "${pkgs.iproute2}/bin/ip link set dev ${new._iName} address ${new.mac}"}
             '';
 
             # Udev attributes for systemd to name the device and to create a .device target.
@@ -1318,7 +1318,7 @@ in
             # It is important to have that rule first as overwriting the NAME attribute also prevents the
             # next rules from matching.
             ${flip (concatMapStringsSep "\n") (wlanListDeviceFirst device wlanDeviceInterfaces.${device}) (interface:
-            ''ACTION=="add", SUBSYSTEM=="net", ENV{DEVTYPE}=="wlan", ENV{INTERFACE}=="${interface._iName}", ${systemdAttrs interface._iName}, RUN+="${newInterfaceScript device interface}"'')}
+            ''ACTION=="add", SUBSYSTEM=="net", ENV{DEVTYPE}=="wlan", ENV{INTERFACE}=="${interface._iName}", ${systemdAttrs interface._iName}, RUN+="${newInterfaceScript interface}"'')}
 
             # Add the required, new WLAN interfaces to the default WLAN interface with the
             # persistent, default name as assigned by udev.

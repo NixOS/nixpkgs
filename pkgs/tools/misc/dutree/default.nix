@@ -8,7 +8,12 @@ rustPlatform.buildRustPackage rec {
     owner = "nachoparker";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1720295nxwr6r5yr6zhk2cw5y2l4w862f5wm9v7jjmf3a840yl8p";
+    sha256 = "17lm8jd07bi499mywg2iq669im34j4x4yhc8a3adxn12f8j0dfg7";
+    # test directory has files with unicode names which causes hash mismatches
+    # It is also not used by any tests or parts of build process
+    extraPostFetch = ''
+      rm -r $out/test
+    '';
   };
 
   cargoSha256 = "0gg1w0xx36aswfm0y53nqwwz7zds25ysmklbrc8v2r91j74bhkzw";

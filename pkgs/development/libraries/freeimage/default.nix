@@ -18,6 +18,14 @@ stdenv.mkDerivation {
   prePatch = "rm -rf Source/Lib* Source/OpenEXR Source/ZLib";
   patches = [ ./unbundle.diff ];
 
+  postPatch = ''
+    # To support cross compilation, use the correct `pkg-config`.
+    substituteInPlace Makefile.fip \
+      --replace "pkg-config" "$PKG_CONFIG"
+    substituteInPlace Makefile.gnu \
+      --replace "pkg-config" "$PKG_CONFIG"
+  '';
+
   nativeBuildInputs = [
     pkg-config
   ] ++ lib.optionals stdenv.isDarwin [

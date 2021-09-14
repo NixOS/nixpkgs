@@ -1,6 +1,5 @@
 { lib
 , mkDerivation
-, fetchFromGitHub
 , fetchFromSourcehut
 , cmake
 , extra-cmake-modules
@@ -11,34 +10,17 @@
 , qtimageformats
 , qtmultimedia
 , qtwebengine
-, rustPlatform
 }:
 
-let
-  libdeltachat' = libdeltachat.overrideAttrs (old: rec {
-    inherit (old) pname;
-    version = "1.58.0";
-    src = fetchFromGitHub {
-      owner = "deltachat";
-      repo = "deltachat-core-rust";
-      rev = version;
-      sha256 = "03xc0jlfmvmdcipmzavbzkq010qlxzf3mj1zi7wcix7kpl8gwmy7";
-    };
-    cargoDeps = rustPlatform.fetchCargoTarball {
-      inherit src;
-      name = "${pname}-${version}";
-      sha256 = "1zijxyc1xjlbyh1gh2lyw44xjcrhz1msykrlqgfkw5w1w0yh78hd";
-    };
-  });
-in mkDerivation rec {
+mkDerivation rec {
   pname = "kdeltachat";
-  version = "unstable-2021-08-02";
+  version = "unstable-2021-09-10";
 
   src = fetchFromSourcehut {
     owner = "~link2xt";
     repo = "kdeltachat";
-    rev = "950f4f22c01ab75f613479ef831bdf38f395d1dd";
-    sha256 = "007gazqkzcc0w0rq2i8ysa9f50ldj7n9f5gp1mh8bi86bdvdkzsy";
+    rev = "40092aa096bac7e279eb5a4cc97758bac484236c";
+    sha256 = "0vmsbxx4hxh35v1lbj82vq2w8z8inj83xpf24wzlbdr9inlbmym4";
   };
 
   nativeBuildInputs = [
@@ -49,7 +31,7 @@ in mkDerivation rec {
 
   buildInputs = [
     kirigami2
-    libdeltachat'
+    libdeltachat
     qtimageformats
     qtmultimedia
     qtwebengine

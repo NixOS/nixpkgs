@@ -140,9 +140,12 @@ in {
 
     environment.systemPackages = [ pkg ];
 
-    users.users.radicale.uid = config.ids.uids.radicale;
+    users.users.radicale = {
+      isSystemUser = true;
+      group = "radicale";
+    };
 
-    users.groups.radicale.gid = config.ids.gids.radicale;
+    users.groups.radicale = {};
 
     systemd.services.radicale = {
       description = "A Simple Calendar and Contact Server";

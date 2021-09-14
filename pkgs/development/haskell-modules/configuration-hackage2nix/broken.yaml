@@ -632,7 +632,6 @@ broken-packages:
   - cio
   - cipher-blowfish
   - circlehs
-  - circular
   - citeproc-hs
   - cjk
   - cj-token
@@ -1021,9 +1020,11 @@ broken-packages:
   - dgim
   - dgs
   - dhall-check
+  - dhall-csv
   - dhall-fly
   - dhall-text
   - dhall-to-cabal
+  - dhall-toml
   - dhcp-lease-parser
   - dhrun
   - dia-base
@@ -1104,6 +1105,7 @@ broken-packages:
   - docvim
   - dominion
   - domplate
+  - dormouse-uri
   - do-spaces
   - dotfs
   - dot-linker
@@ -1585,6 +1587,7 @@ broken-packages:
   - getflag
   - GGg
   - ggtsTC
+  - ghc-bignum-orphans
   - ghc-clippy-plugin
   - ghc-core-smallstep
   - ghc-datasize
@@ -2654,6 +2657,7 @@ broken-packages:
   - KSP
   - ktx
   - ktx-codec
+  - kubernetes-client
   - kuifje
   - kure
   - kure-your-boilerplate
@@ -2662,7 +2666,6 @@ broken-packages:
   - lagrangian
   - lambda2js
   - lambdaBase
-  - lambdabot-social-plugins
   - lambdabot-utils
   - lambda-bridge
   - lambda-canvas
@@ -2716,6 +2719,7 @@ broken-packages:
   - layers
   - layout
   - layout-bootstrap
+  - lazify
   - lazyarray
   - lazyboy
   - lazy-priority-queue
@@ -3108,6 +3112,7 @@ broken-packages:
   - monopati
   - months
   - monus
+  - monus-weighted-search
   - monzo
   - morfette
   - morfeusz
@@ -3194,7 +3199,7 @@ broken-packages:
   - nanomsg-haskell
   - nanoparsec
   - NanoProlog
-  - nanovg
+  - nanovg-simple
   - nanq
   - naperian
   - naqsha
@@ -3587,9 +3592,11 @@ broken-packages:
   - phoityne
   - phone-numbers
   - phone-push
+  - phonetic-languages-plus
   - phonetic-languages-properties
   - phonetic-languages-simplified-properties-lists
   - phonetic-languages-simplified-properties-lists-double
+  - phonetic-languages-ukrainian-array
   - phraskell
   - Phsu
   - phybin
@@ -3799,6 +3806,7 @@ broken-packages:
   - provenience
   - proxy-kindness
   - proxy-mapping
+  - prune-juice
   - pseudo-trie
   - PTQ
   - publicsuffixlistcreate
@@ -4193,6 +4201,7 @@ broken-packages:
   - servant-auth-hmac
   - servant-auth-token-api
   - servant-avro
+  - servant-benchmark
   - servant-client-js
   - servant-db
   - servant-dhall
@@ -4802,6 +4811,7 @@ broken-packages:
   - th-traced
   - thumbnail-plus
   - tianbar
+  - ticket-management
   - TicTacToe
   - tictactoe3d
   - tidal-midi
@@ -5036,7 +5046,6 @@ broken-packages:
   - urldecode
   - url-decoders
   - urldisp-happstack
-  - urlencoded
   - url-generic
   - urn
   - urn-random
@@ -5210,6 +5219,7 @@ broken-packages:
   - weighted-regexp
   - welshy
   - werewolf
+  - wgpu-hs
   - Wheb
   - while-lang-parser
   - whim
@@ -5329,6 +5339,7 @@ broken-packages:
   - yandex-translate
   - yaop
   - yap
+  - yapb
   - yarr
   - yaya-test
   - yaya-unsafe-test

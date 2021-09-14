@@ -145,6 +145,7 @@
   ./programs/fuse.nix
   ./programs/gamemode.nix
   ./programs/geary.nix
+  ./programs/git.nix
   ./programs/gnome-disks.nix
   ./programs/gnome-documents.nix
   ./programs/gnome-terminal.nix
@@ -374,6 +375,7 @@
   ./services/desktops/zeitgeist.nix
   ./services/development/bloop.nix
   ./services/development/blackfire.nix
+  ./services/development/distccd.nix
   ./services/development/hoogle.nix
   ./services/development/jupyter/default.nix
   ./services/development/jupyterhub/default.nix
@@ -381,6 +383,8 @@
   ./services/display-managers/greetd.nix
   ./services/editors/emacs.nix
   ./services/editors/infinoted.nix
+  ./services/games/crossfire-server.nix
+  ./services/games/deliantra-server.nix
   ./services/games/factorio.nix
   ./services/games/freeciv.nix
   ./services/games/minecraft-server.nix
@@ -617,6 +621,7 @@
   ./services/monitoring/munin.nix
   ./services/monitoring/nagios.nix
   ./services/monitoring/netdata.nix
+  ./services/monitoring/parsedmarc.nix
   ./services/monitoring/prometheus/default.nix
   ./services/monitoring/prometheus/alertmanager.nix
   ./services/monitoring/prometheus/exporters.nix
@@ -833,6 +838,7 @@
   ./services/networking/smokeping.nix
   ./services/networking/softether.nix
   ./services/networking/solanum.nix
+  ./services/networking/soju.nix
   ./services/networking/spacecookie.nix
   ./services/networking/spiped.nix
   ./services/networking/squid.nix
@@ -871,7 +877,6 @@
   ./services/networking/wasabibackend.nix
   ./services/networking/websockify.nix
   ./services/networking/wg-quick.nix
-  ./services/networking/wicd.nix
   ./services/networking/wireguard.nix
   ./services/networking/wpa_supplicant.nix
   ./services/networking/xandikos.nix

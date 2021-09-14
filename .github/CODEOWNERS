@@ -19,7 +19,7 @@
 
 # Libraries
 /lib                        @edolstra @nbp @infinisil
-/lib/systems                @nbp @ericson2314 @matthewbauer
+/lib/systems                @alyssais @nbp @ericson2314 @matthewbauer
 /lib/generators.nix         @edolstra @nbp @Profpatsch
 /lib/cli.nix                @edolstra @nbp @Profpatsch
 /lib/debug.nix              @edolstra @nbp @Profpatsch
@@ -41,6 +41,12 @@
 
 # Nixpkgs build-support
 /pkgs/build-support/writers @lassulus @Profpatsch
+
+# Nixpkgs documentation
+/maintainers/scripts/db-to-md.sh @jtojnar @ryantm
+/maintainers/scripts/doc @jtojnar @ryantm
+/doc/build-aux/pandoc-filters @jtojnar
+/doc/contributing/contributing-to-documentation.chapter.md @jtojnar
 
 # NixOS Internals
 /nixos/default.nix          @nbp @infinisil
@@ -104,7 +110,7 @@
 
 # Rust
 /pkgs/development/compilers/rust @Mic92 @LnL7 @zowoq
-/pkgs/build-support/rust @andir @danieldk @zowoq
+/pkgs/build-support/rust @andir @zowoq
 
 # Darwin-related
 /pkgs/stdenv/darwin         @NixOS/darwin-maintainers

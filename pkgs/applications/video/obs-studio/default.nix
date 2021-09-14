@@ -46,13 +46,13 @@ let
 in
 mkDerivation rec {
   pname = "obs-studio";
-  version = "27.0.0";
+  version = "27.0.1";
 
   src = fetchFromGitHub {
     owner = "obsproject";
     repo = "obs-studio";
     rev = version;
-    sha256 = "1n71705b9lbdff3svkmgwmbhlhhxvi8ajxqb74lm07v56a5bvi6p";
+    sha256 = "04fzsr9yizmxy0r7z2706crvnsnybpnv5kgfn77znknxxjacfhkn";
     fetchSubmodules = true;
   };
 

@@ -40,6 +40,7 @@ in {
       renamed="$TMPDIR/${tmpFilename}"
       mv "$downloadedFile" "$renamed"
       unpackFile "$renamed"
+      chmod -R +w "$unpackDir"
     ''
     + (if stripRoot then ''
       if [ $(ls "$unpackDir" | wc -l) != 1 ]; then

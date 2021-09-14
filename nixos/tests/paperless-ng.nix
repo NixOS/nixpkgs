@@ -25,12 +25,22 @@ import ./make-test-python.nix ({ lib, ... }: {
         # Wait until server accepts connections
         machine.wait_until_succeeds("curl -fs localhost:28981")
 
-    with subtest("Document is consumed"):
+    with subtest("Create web test doc"):
+        machine.succeed(
+            "convert -size 400x40 xc:white -font 'DejaVu-Sans' -pointsize 20 -fill black "
+            "-annotate +5+20 'hello web 16-10-2005' /tmp/webdoc.png"
+        )
+        machine.wait_until_succeeds("curl -u admin:admin -F document=@/tmp/webdoc.png -fs localhost:28981/api/documents/post_document/")
+
+    with subtest("Documents are consumed"):
         machine.wait_until_succeeds(
-            "(($(curl -u admin:admin -fs localhost:28981/api/documents/ | jq .count) == 1))"
+            "(($(curl -u admin:admin -fs localhost:28981/api/documents/ | jq .count) == 2))"
         )
         assert "2005-10-16" in machine.succeed(
             "curl -u admin:admin -fs localhost:28981/api/documents/ | jq '.results | .[0] | .created'"
+        )
+        assert "2005-10-16" in machine.succeed(
+            "curl -u admin:admin -fs localhost:28981/api/documents/ | jq '.results | .[1] | .created'"
         )
   '';
 })

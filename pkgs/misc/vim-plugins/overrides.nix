@@ -51,7 +51,7 @@
 , CoreFoundation
 , CoreServices
 
-# nvim-treesitter dependencies
+  # nvim-treesitter dependencies
 , tree-sitter
 
   # sved dependencies
@@ -66,7 +66,7 @@
 , openssl
 , pkg-config
 
-# vim-go dependencies
+  # vim-go dependencies
 , asmfmt
 , delve
 , errcheck
@@ -86,7 +86,7 @@
 , iferr
 , impl
 , reftools
-# must be lua51Packages
+  # must be lua51Packages
 , luaPackages
 }:
 
@@ -99,10 +99,10 @@ self: super: {
     # The linked ruby code shows generates the required '.clang_complete' for cmake based projects
     # https://gist.github.com/Mic92/135e83803ed29162817fce4098dec144
     preFixup = ''
-      substituteInPlace "$out"/share/vim-plugins/clang_complete/plugin/clang_complete.vim \
+      substituteInPlace "$out"/plugin/clang_complete.vim \
         --replace "let g:clang_library_path = '' + "''" + ''" "let g:clang_library_path='${llvmPackages.libclang.lib}/lib/libclang.so'"
 
-      substituteInPlace "$out"/share/vim-plugins/clang_complete/plugin/libclang.py \
+      substituteInPlace "$out"/plugin/libclang.py \
         --replace "/usr/lib/clang" "${llvmPackages.clang.cc}/lib/clang"
     '';
   });
@@ -110,7 +110,7 @@ self: super: {
   clighter8 = super.clighter8.overrideAttrs (old: {
     preFixup = ''
       sed "/^let g:clighter8_libclang_path/s|')$|${llvmPackages.clang.cc.lib}/lib/libclang.so')|" \
-        -i "$out"/share/vim-plugins/clighter8/plugin/clighter8.vim
+        -i "$out"/plugin/clighter8.vim
     '';
   });
 
@@ -203,7 +203,7 @@ self: super: {
 
   direnv-vim = super.direnv-vim.overrideAttrs (oa: {
     preFixup = oa.preFixup or "" + ''
-      substituteInPlace $out/share/vim-plugins/direnv-vim/autoload/direnv.vim \
+      substituteInPlace $out/autoload/direnv.vim \
         --replace "let s:direnv_cmd = get(g:, 'direnv_cmd', 'direnv')" \
           "let s:direnv_cmd = get(g:, 'direnv_cmd', '${lib.getBin direnv}/bin/direnv')"
     '';
@@ -311,13 +311,9 @@ self: super: {
     pname = "himalaya-vim";
     inherit (himalaya) src version;
     dependencies = with self; [ himalaya ];
-    patchPhase = ''
-      rm -rf !"vim/"
-      cp -vaR vim/. .
-      rm -rf vim/
-    '';
-    preFixup = ''
-      substituteInPlace $out/share/vim-plugins/himalaya-vim/plugin/himalaya.vim \
+    configurePhase = ''
+      cd vim
+      substituteInPlace plugin/himalaya.vim \
         --replace 'if !executable("himalaya")' 'if v:false'
     '';
     postFixup = ''
@@ -358,7 +354,7 @@ self: super: {
       propagatedBuildInputs = [ LanguageClient-neovim-bin ];
 
       preFixup = ''
-        substituteInPlace "$out"/share/vim-plugins/LanguageClient-neovim/autoload/LanguageClient.vim \
+        substituteInPlace "$out"/autoload/LanguageClient.vim \
           --replace "let l:path = s:root . '/bin/'" "let l:path = '${LanguageClient-neovim-bin}' . '/bin/'"
       '';
     };
@@ -391,9 +387,9 @@ self: super: {
 
   minimap-vim = super.minimap-vim.overrideAttrs (old: {
     preFixup = ''
-      substituteInPlace $out/share/vim-plugins/minimap-vim/plugin/minimap.vim \
+      substituteInPlace $out/plugin/minimap.vim \
         --replace "code-minimap" "${code-minimap}/bin/code-minimap"
-      substituteInPlace $out/share/vim-plugins/minimap-vim/bin/minimap_generator.sh \
+      substituteInPlace $out/bin/minimap_generator.sh \
         --replace "code-minimap" "${code-minimap}/bin/code-minimap"
     '';
   });
@@ -428,11 +424,15 @@ self: super: {
   });
 
   null-ls-nvim = super.null-ls-nvim.overrideAttrs (old: {
-    path = "null-ls.nvim";
+    dependencies = with self; [ plenary-nvim nvim-lspconfig ];
   });
 
   nvim-lsputils = super.nvim-lsputils.overrideAttrs (old: {
     dependencies = with self; [ popfix ];
+  });
+
+  nvim-spectre = super.nvim-spectre.overrideAttrs (old: {
+    dependencies = with self; [ plenary-nvim ];
   });
 
   # Usage:
@@ -479,10 +479,12 @@ self: super: {
     dependencies = with self; [ skim ];
   });
 
-  sql-nvim = super.sql-nvim.overrideAttrs (old: {
-    postPatch = ''
-      substituteInPlace lua/sql/defs.lua \
-        --replace "vim.g.sql_clib_path or" "vim.g.sql_clib_path or '${sqlite.out}/lib/libsqlite3.so' or"
+  sqlite-lua = super.sqlite-lua.overrideAttrs (old: {
+    postPatch = let
+      libsqlite = "${sqlite.out}/lib/libsqlite3${stdenv.hostPlatform.extensions.sharedLibrary}";
+    in ''
+      substituteInPlace lua/sqlite/defs.lua \
+        --replace "path = vim.g.sqlite_clib_path" "path = vim.g.sqlite_clib_path or ${lib.escapeShellArg libsqlite}"
     '';
   });
 
@@ -516,7 +518,7 @@ self: super: {
     });
 
   telescope-frecency-nvim = super.telescope-frecency-nvim.overrideAttrs (old: {
-    dependencies = with self; [ sql-nvim telescope-nvim ];
+    dependencies = with self; [ sqlite-lua telescope-nvim ];
   });
 
   telescope-fzf-writer-nvim = super.telescope-fzf-writer-nvim.overrideAttrs (old: {
@@ -675,7 +677,7 @@ self: super: {
             libiconv
           ];
 
-          cargoSha256 = "16lcsi5mxmj79ky5lbpivravn8rjl4z3j3fsxrglb22ab4i7js3n";
+          cargoSha256 = "1hmbgqd22fy68n05vdb93wsdvws91m4i6nm1kq6bwwbhzhkvd7js";
         };
       in
       ''
@@ -691,7 +693,7 @@ self: super: {
 
   vim-dasht = super.vim-dasht.overrideAttrs (old: {
     preFixup = ''
-      substituteInPlace $out/share/vim-plugins/vim-dasht/autoload/dasht.vim \
+      substituteInPlace $out/autoload/dasht.vim \
         --replace "['dasht']" "['${dasht}/bin/dasht']"
     '';
   });
@@ -795,7 +797,7 @@ self: super: {
     in
     super.vim-markdown-composer.overrideAttrs (oldAttrs: rec {
       preFixup = ''
-        substituteInPlace "$out"/share/vim-plugins/vim-markdown-composer/after/ftplugin/markdown/composer.vim \
+        substituteInPlace "$out"/after/ftplugin/markdown/composer.vim \
           --replace "let l:args = [s:plugin_root . '/target/release/markdown-composer']" \
           "let l:args = ['${vim-markdown-composer-bin}/bin/markdown-composer']"
       '';

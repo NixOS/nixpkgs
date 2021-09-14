@@ -54,6 +54,6 @@ in buildPythonPackage {
     changelog = "https://github.com/pytorch/vision/releases/tag/v${version}";
     license = licenses.bsd3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ danieldk junjihashimoto ];
+    maintainers = with maintainers; [ junjihashimoto ];
   };
 }

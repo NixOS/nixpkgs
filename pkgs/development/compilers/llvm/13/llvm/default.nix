@@ -59,13 +59,6 @@ in stdenv.mkDerivation (rec {
       sha256 = "18l6mrvm2vmwm77ckcnbjvh6ybvn72rhrb799d4qzwac4x2ifl7g";
       stripLen = 1;
     })
-
-    # Fix tests on non-x86 platforms: https://reviews.llvm.org/D107020
-    (fetchpatch {
-      url = "https://github.com/llvm/llvm-project/commit/5060224d9eed8b8359ed5090bb7c577b8575e9e7.patch";
-      sha256 = "1s2n3pqa11pmlifys1jkppmw858p5i64xszpc8ppc98middv19v1";
-      stripLen = 1;
-    })
   ] ++ lib.optional enablePolly ./gnu-install-dirs-polly.patch;
 
   postPatch = optionalString stdenv.isDarwin ''

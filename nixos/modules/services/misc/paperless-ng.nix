@@ -284,6 +284,9 @@ in
         PATH = mkForce cfg.package.path;
         PYTHONPATH = "${cfg.package.pythonPath}:${cfg.package}/lib/paperless-ng/src";
       };
+      # Allow the web interface to access the private /tmp directory of the server.
+      # This is required to support uploading files via the web interface.
+      unitConfig.JoinsNamespaceOf = "paperless-ng-server.service";
       # Bind to `paperless-ng-server` so that the web server never runs
       # during migrations
       bindsTo = [ "paperless-ng-server.service" ];

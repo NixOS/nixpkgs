@@ -199,10 +199,12 @@ in {
     environment.systemPackages = [ cfg.package ];
 
     users.users.kibana = {
-      uid = config.ids.uids.kibana;
+      isSystemUser = true;
       description = "Kibana service user";
       home = cfg.dataDir;
       createHome = true;
+      group = "kibana";
     };
+    users.groups.kibana = {};
   };
 }

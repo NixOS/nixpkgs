@@ -4,6 +4,7 @@
 , fetchFromGitHub, runtimeShell
 , hasLuaModule
 , python3
+, callPackage, makeSetupHook
 }:
 
 /*
@@ -184,7 +185,7 @@ let
       else (lib.optional (x ? name) x.name)
             ++ (x.names or []);
 
-  rtpPath = "share/vim-plugins";
+  rtpPath = ".";
 
   nativeImpl = packages:
   (let
@@ -195,13 +196,14 @@ let
       ln -sf ${plugin}/${plugin.pname}-${plugin.version}-rocks/${plugin.pname}/${plugin.version}/* $out/pack/${packageName}/${dir}/${plugin.pname}/
     '';
 
-    linkVimlPlugin = pluginPath: packageName: dir:
-      "ln -sf ${pluginPath}/${rtpPath}/* $out/pack/${packageName}/${dir}";
+    linkVimlPlugin = plugin: packageName: dir: ''
+      mkdir -p $out/pack/${packageName}/${dir}/${plugin.pname}
+      ln -sf ${plugin}/${rtpPath}/* $out/pack/${packageName}/${dir}/${plugin.pname}
+    '';
 
-      # (builtins.trace pluginPath )
-      link = pluginPath: if hasLuaModule pluginPath
-        then linkLuaPlugin pluginPath
-        else linkVimlPlugin pluginPath;
+    link = pluginPath: if hasLuaModule pluginPath
+      then linkLuaPlugin pluginPath
+      else linkVimlPlugin pluginPath;
 
     packageLinks = (packageName: {start ? [], opt ? []}:
     let
@@ -485,7 +487,18 @@ rec {
     '';
   };
 
-  inherit (import ./build-vim-plugin.nix { inherit lib stdenv rtpPath vim; }) buildVimPlugin buildVimPluginFrom2Nix;
+  vimGenDocHook = callPackage ({ vim }:
+    makeSetupHook {
+      name = "vim-gen-doc-hook";
+      deps = [ vim ];
+      substitutions = {
+        vimBinary = "${vim}/bin/vim";
+        inherit rtpPath;
+      };
+    } ./vim-gen-doc-hook.sh) {};
+
+  inherit (import ./build-vim-plugin.nix { inherit lib stdenv rtpPath vim vimGenDocHook; })
+    buildVimPlugin buildVimPluginFrom2Nix;
 
   # used to figure out which python dependencies etc. neovim needs
   requiredPlugins = {

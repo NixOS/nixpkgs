@@ -99,7 +99,7 @@ self: super: {
   darcs = dontDistribute super.darcs;
 
   # The package needs the latest Cabal version.
-  cabal-install-parsers = super.cabal-install-parsers.overrideScope (self: super: { Cabal = self.Cabal_3_2_1_0; });
+  cabal-install-parsers = super.cabal-install-parsers.overrideScope (self: super: { Cabal = self.Cabal_3_6_0_0; });
 
   # cabal-fmt requires Cabal3
   cabal-fmt = super.cabal-fmt.override { Cabal = self.Cabal_3_2_1_0; };
@@ -129,5 +129,5 @@ self: super: {
   # vector 0.12.2 indroduced doctest checks that don‘t work on older compilers
   vector = dontCheck super.vector;
 
-  ghc-api-compat = super.ghc-api-compat_8_6;
+  ghc-api-compat = doDistribute super.ghc-api-compat_8_6;
 }

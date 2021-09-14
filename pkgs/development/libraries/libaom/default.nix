@@ -35,6 +35,10 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
     # CPU detection isn't supported on Darwin and breaks the aarch64-darwin build:
     "-DCONFIG_RUNTIME_CPU_DETECT=0"
+  ] ++ lib.optionals stdenv.isAarch32 [
+    # armv7l-hf-multiplatform does not support NEON
+    # see lib/systems/platform.nix
+    "-DENABLE_NEON=0"
   ];
 
   postFixup = ''

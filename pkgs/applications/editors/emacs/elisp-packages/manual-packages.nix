@@ -78,6 +78,31 @@
     };
   };
 
+  # may be part of MELPA in the future, see
+  # https://github.com/mlochbaum/BQN/issues/10#issuecomment-912982874
+  bqn-mode = self.trivialBuild {
+    pname = "bqn-mode";
+    version = "unstable-2021-09-04";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "mlochbaum";
+      repo = "BQN";
+      rev = "e623a2fcafdf5fd6c8d31570175284805c4f34d9";
+      sha256 = "1a2lpxy3bak4724r0ns4la5d0j6484ngi73kcwp82vgbbpk7lcrp";
+    };
+
+    postUnpack = ''
+      sourceRoot="$sourceRoot/editors/emacs"
+    '';
+
+    meta = {
+      description = "Emacs mode for BQN";
+      license = lib.licenses.gpl3Only;
+      maintainers = [ lib.maintainers.sternenseemann ];
+      homepage = "https://mlochbaum.github.io/BQN/editors/index.html";
+    };
+  };
+
   ghc-mod = melpaBuild {
     pname = "ghc";
     version = pkgs.haskellPackages.ghc-mod.version;
@@ -99,8 +124,6 @@
       license = bsd3;
     };
   };
-
-  git-undo = callPackage ./git-undo { };
 
   haskell-unicode-input-method = let
     rev = "d8d168148c187ed19350bb7a1a190217c2915a63";
@@ -235,6 +258,8 @@
 
   # Packages made the classical callPackage way
 
+  apheleia = callPackage ./apheleia { };
+
   ebuild-mode = callPackage ./ebuild-mode { };
 
   emacspeak = callPackage ./emacspeak { };
@@ -243,7 +268,13 @@
 
   font-lock-plus = callPackage ./font-lock-plus { };
 
+  git-undo = callPackage ./git-undo { };
+
   helm-words = callPackage ./helm-words { };
+
+  isearch-plus = callPackage ./isearch-plus { };
+
+  isearch-prop = callPackage ./isearch-prop { };
 
   jam-mode = callPackage ./jam-mode { };
 

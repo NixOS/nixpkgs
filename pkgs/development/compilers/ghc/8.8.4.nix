@@ -2,7 +2,7 @@
 
 # build-tools
 , bootPkgs
-, autoconf, automake, coreutils, fetchurl, perl, python3, m4, sphinx
+, autoconf, automake, coreutils, fetchpatch, fetchurl, perl, python3, m4, sphinx
 , bash
 
 , libiconv ? null, ncurses
@@ -114,6 +114,12 @@ let
     GhcRtsHcOpts += -fPIC
   '' + lib.optionalString targetPlatform.useAndroidPrebuilt ''
     EXTRA_CC_OPTS += -std=gnu99
+  ''
+  # While split sections are now enabled by default in ghc 8.8 for windows,
+  # they seem to lead to `too many sections` errors when building base for
+  # profiling.
+  + lib.optionalString targetPlatform.isWindows ''
+    SplitSections = NO
   '';
 
   # Splicer will pull out correct variations
@@ -131,7 +137,7 @@ let
   # Use gold either following the default, or to avoid the BFD linker due to some bugs / perf issues.
   # But we cannot avoid BFD when using musl libc due to https://sourceware.org/bugzilla/show_bug.cgi?id=23856
   # see #84670 and #49071 for more background.
-  useLdGold = targetPlatform.linker == "gold" || (targetPlatform.linker == "bfd" && !targetPlatform.isMusl);
+  useLdGold = targetPlatform.linker == "gold" || (targetPlatform.linker == "bfd" && !targetPlatform.isMusl && !targetPlatform.isWindows);
 
   runtimeDeps = [
     targetPackages.stdenv.cc.bintools
@@ -167,6 +173,18 @@ stdenv.mkDerivation (rec {
     # Fix documentation configuration which causes a syntax error with sphinx 4.*
     # See also https://gitlab.haskell.org/ghc/ghc/-/issues/19962
     ./sphinx-4-configuration.patch
+    # cabal passes incorrect --host= when cross-compiling
+    # https://github.com/haskell/cabal/issues/5887
+    (fetchpatch {
+            url = "https://raw.githubusercontent.com/input-output-hk/haskell.nix/122bd81150386867da07fdc9ad5096db6719545a/overlays/patches/ghc/cabal-host.patch";
+      sha256 = "sha256:0yd0sajgi24sc1w5m55lkg2lp6kfkgpp3lgija2c8y3cmkwfpdc1";
+    })
+
+    # error: 'VirtualAllocExNuma' redeclared as different kind of symbol
+    # name conflict between rts/win32/OSMem.c and winbase.h from the mingw-w64 runtime package
+    # Renamed to match ghc8.8:
+    # https://gitlab.haskell.org/ghc/ghc/-/commit/4b431f334018eaef2cf36de3316025c68c922915#20d64c0bdc272817149d1d5cf20a73a8b5fd637f
+    ./rename-numa-api-call.patch
   ];
 
   postPatch = "patchShebangs .";
@@ -316,7 +334,9 @@ stdenv.mkDerivation (rec {
   meta = {
     homepage = "http://haskell.org/ghc";
     description = "The Glasgow Haskell Compiler";
-    maintainers = with lib.maintainers; [ marcweber andres peti ];
+    maintainers = with lib.maintainers; [
+      guibou
+    ] ++ lib.teams.haskell.members;
     timeout = 24 * 3600;
     inherit (ghc.meta) license platforms;
 

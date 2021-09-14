@@ -77,6 +77,9 @@ python3Packages.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace setup.py --subst-var out
+    patchShebangs bin/ulauncher-toggle
+    substituteInPlace bin/ulauncher-toggle \
+      --replace wmctrl ${wmctrl}/bin/wmctrl
   '';
 
   # https://github.com/Ulauncher/Ulauncher/issues/390
@@ -99,8 +102,10 @@ python3Packages.buildPythonApplication rec {
     runHook postCheck
   '';
 
+  # do not double wrap
+  dontWrapGApps = true;
   preFixup = ''
-    gappsWrapperArgs+=(--prefix PATH : "${lib.makeBinPath [ wmctrl ]}")
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}" --prefix PATH : "${lib.makeBinPath [ wmctrl ]}")
   '';
 
   passthru = {

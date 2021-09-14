@@ -268,6 +268,10 @@ stdenv.mkDerivation (rec {
     # * https://gitlab.haskell.org/ghc/ghc/-/issues/19580
     ++ lib.optional stdenv.targetPlatform.isMusl "pie";
 
+  # big-parallel allows us to build with more than 2 cores on
+  # Hydra which already warrants a significant speedup
+  requiredSystemFeatures = [ "big-parallel" ];
+
   postInstall = ''
     # Install the bash completion file.
     install -D -m 444 utils/completion/ghc.bash $out/share/bash-completion/completions/${targetPrefix}ghc
@@ -293,7 +297,9 @@ stdenv.mkDerivation (rec {
   meta = {
     homepage = "http://haskell.org/ghc";
     description = "The Glasgow Haskell Compiler";
-    maintainers = with lib.maintainers; [ marcweber andres peti ];
+    maintainers = with lib.maintainers; [
+      guibou
+    ] ++ lib.teams.haskell.members;
     timeout = 24 * 3600;
     inherit (ghc.meta) license platforms;
 

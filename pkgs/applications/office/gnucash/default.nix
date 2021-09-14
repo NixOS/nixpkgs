@@ -33,6 +33,15 @@ stdenv.mkDerivation rec {
     sha256 = "0csp8iddhc901vv09gl5lj970g6ili696vwj4vdpkiprp7gh26r5";
   };
 
+  patches = [
+    # Fixes a warning about an initialized variable that kills enableDebugging gnucash builds on nix.
+    # This will most likely be part of the 4.7 release, it will be safe to remove then.
+    (fetchpatch {
+      url = "https://github.com/Gnucash/gnucash/commit/b42052464ba9701a3d1834fc58fa0deb32ab9afe.patch";
+      sha256 = "092957c8jqj4v70fv0ia1wpgl6x34hbwjrichxfbk5ja8l6535gc";
+    })
+  ];
+
   nativeBuildInputs = [ pkg-config makeWrapper cmake gtest swig ];
 
   buildInputs = [

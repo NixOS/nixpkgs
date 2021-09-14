@@ -8,8 +8,6 @@
 , pytz
 , faker
 , six
-, enum34
-, isPy27
 , mock
 , blinker
 , pytest-flask
@@ -20,27 +18,34 @@
 
 buildPythonPackage rec {
   pname = "flask-restx";
-  version = "0.4.0";
+  version = "0.5.1";
 
   # Tests not included in PyPI tarball
   src = fetchFromGitHub {
     owner = "python-restx";
     repo = pname;
     rev = version;
-    sha256 = "sha256-jM0QJ/klbWh3qho6ZQOH2n1qaguK9C98QIuSfqpI8xA=";
+    sha256 = "18vrmknyxw6adn62pz3kr9kvazfgjgl4pgimdf8527fyyiwcqy15";
   };
 
-  postPatch = ''
-    # https://github.com/python-restx/flask-restx/pull/341
-    substituteInPlace requirements/install.pip \
-      --replace "Flask>=0.8, <2.0.0" "Flask>=0.8, !=2.0.0" \
-      --replace "werkzeug <2.0.0" "werkzeug !=2.0.0"
-  '';
+  propagatedBuildInputs = [
+    aniso8601
+    flask
+    jsonschema
+    pytz
+    six
+    werkzeug
+  ];
 
-  propagatedBuildInputs = [ aniso8601 jsonschema flask werkzeug pytz six ]
-    ++ lib.optionals isPy27 [ enum34 ];
-
-  checkInputs = [ pytestCheckHook faker mock pytest-flask pytest-mock pytest-benchmark blinker ];
+  checkInputs = [
+    blinker
+    faker
+    mock
+    pytest-benchmark
+    pytest-flask
+    pytest-mock
+    pytestCheckHook
+  ];
 
   pytestFlagsArray = [
     "--benchmark-disable"

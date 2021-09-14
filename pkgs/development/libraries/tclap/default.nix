@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "tclap";
-  version = "1.2.3";
+  version = "1.2.4";
 
   src = fetchurl {
     url = "mirror://sourceforge/tclap/${pname}-${version}.tar.gz";
-    sha256 = "sha256-GefbUoFUDxVDSHcLw6dIRXX09Umu+OAKq8yUs5X3c8k=";
+    sha256 = "sha256-Y0xbWduxzLydal9t5JSiV+KaP1nctvwwRF/zm0UYhXQ=";
   };
 
   meta = with lib; {

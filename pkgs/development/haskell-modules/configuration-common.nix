@@ -64,7 +64,7 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "0kcsb5kqyx256fp1bj3y0x6k3286j4cykrx0yr4k3vvb3maakf7k";
+      sha256 = "1022ff2x9jvi2a0820lbgmmh54cxh1vbn0qfdwr50w7ggvjp88i6";
       # delete android and Android directories which cause issues on
       # darwin (case insensitive directory). Since we don't need them
       # during the build process, we can delete it to prevent a hash
@@ -119,14 +119,6 @@ self: super: {
   # sse2 flag due to https://github.com/haskell/vector/issues/47.
   # Jailbreak is necessary for QuickCheck dependency.
   vector = doJailbreak (if pkgs.stdenv.isi686 then appendConfigureFlag super.vector "--ghc-options=-msse2" else super.vector);
-
-  # Test suite fails due golden tests checking text representation
-  # of normalized dhall expressions, and newer dhall versions format
-  # differently.
-  hpack-dhall =
-    if pkgs.lib.versionOlder "0.5.2" super.hpack-dhall.version
-    then throw "Drop dontCheck override for hpack-dhall > 0.5.2"
-    else dontCheck super.hpack-dhall;
 
   inline-c-cpp = overrideCabal super.inline-c-cpp (drv: {
     postPatch = (drv.postPatch or "") + ''
@@ -1120,34 +1112,13 @@ self: super: {
   # Therefore we jailbreak it.
   hakyll-contrib-hyphenation = doJailbreak super.hakyll-contrib-hyphenation;
 
-  # Jailbreak due to bounds on multiple dependencies,
-  # bound on pandoc needs to be patched since it is conditional
-  hakyll = doJailbreak (overrideCabal super.hakyll (drv: {
-    patches = [
-      # Remove when Hakyll > 4.14.0.0
-      (pkgs.fetchpatch {
-        url = "https://github.com/jaspervdj/hakyll/commit/0dc6127d81ff688e27c36ce469230320eee60246.patch";
-        sha256 = "sha256-YyRz3bAmIBODTEeS5kGl2J2x31SjiPoLzUZUlo3nHvQ=";
-      })
-      # Remove when Hakyll > 4.14.0.0
-      (pkgs.fetchpatch {
-        url = "https://github.com/jaspervdj/hakyll/commit/af9e29b5456c105dc948bc46c93e989a650b5ed1.patch";
-        sha256 = "sha256-ghc0V5L9OybNHWKmM0vhjRBN2rIvDlp+ClcK/aQst44=";
-      })
-      # Remove when Hakyll > 4.14.0.0
-      (pkgs.fetchpatch {
-        url = "https://github.com/jaspervdj/hakyll/commit/e0c63558a82ac4347181d5d77dce7f763a1db410.patch";
-        sha256 = "sha256-wYlxJmq56YQ29vpVsQhO+JdL0GBezCAfkdhIdFnLYsc=";
-      })
-    ];
-  }));
-
   # 2020-06-22: NOTE: > 0.4.0 => rm Jailbreak: https://github.com/serokell/nixfmt/issues/71
   nixfmt = doJailbreak super.nixfmt;
 
   # The test suite depends on an impure cabal-install installation in
   # $HOME, which we don't have in our build sandbox.
   cabal-install-parsers = dontCheck super.cabal-install-parsers;
+  cabal-install-parsers_0_4_2 = dontCheck super.cabal-install-parsers_0_4_2;
 
   # 2021-08-18: Erroneously  claims that it needs a newer HStringTemplate (>= 0.8.8) than stackage.
   gitit = doJailbreak super.gitit;
@@ -1793,8 +1764,11 @@ self: super: {
 
   # 2021-05-09 haskell-ci pins ShellCheck 0.7.1
   # https://github.com/haskell-CI/haskell-ci/issues/507
+  # 2021-09-05 haskell-ci needs Cabal 3.4,
+  # cabal-install-parsers uses Cabal 3.6 since 0.4.3
   haskell-ci = super.haskell-ci.override {
     ShellCheck = self.ShellCheck_0_7_1;
+    cabal-install-parsers = self.cabal-install-parsers_0_4_2;
   };
 
   Frames-streamly = overrideCabal (super.Frames-streamly.override { relude = super.relude_1_0_0_1; }) (drv: {
@@ -1952,10 +1926,12 @@ EOT
     Cabal = self.Cabal_3_6_0_0;
   };
 
-  # ghc-api-compat needlessly requires 8.10.5 exactly, but we have 8.10.6
-  ghc-api-compat = doJailbreak super.ghc-api-compat;
-
   # 2021-08-18: streamly-posix was released with hspec 2.8.2, but it works with older versions too.
   streamly-posix = doJailbreak super.streamly-posix;
+
+  # 2021-09-06: hadolint depends on language-docker >= 10.1
+  hadolint = super.hadolint.override {
+    language-docker = self.language-docker_10_1_1;
+  };
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

@@ -1400,6 +1400,19 @@ let
 
       vadimcn.vscode-lldb = callPackage ./vscode-lldb { };
 
+      viktorqvarfordt.vscode-pitch-black-theme = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-pitch-black-theme";
+          publisher = "ViktorQvarfordt";
+          version = "1.2.4";
+          sha256 = "sha256-HTXToZv0WWFjuQiofEJuaZNSDTmCUcZ0B3KOn+CVALw=";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
+
       vincaslt.highlight-matching-tag = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "highlight-matching-tag";

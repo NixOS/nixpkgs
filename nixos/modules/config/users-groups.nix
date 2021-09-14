@@ -123,7 +123,7 @@ let
       group = mkOption {
         type = types.str;
         apply = x: assert (builtins.stringLength x < 32 || abort "Group name '${x}' is longer than 31 characters which is not allowed!"); x;
-        default = "nogroup";
+        default = "";
         description = "The user's primary group.";
       };
 
@@ -561,14 +561,16 @@ in {
       shadow.gid = ids.gids.shadow;
     };
 
-    system.activationScripts.users = stringAfter [ "stdio" ]
-      ''
+    system.activationScripts.users = {
+      supportsDryActivation = true;
+      text = ''
         install -m 0700 -d /root
         install -m 0755 -d /home
 
         ${pkgs.perl.withPackages (p: [ p.FileSlurp p.JSON ])}/bin/perl \
         -w ${./update-users-groups.pl} ${spec}
       '';
+    };
 
     # for backwards compatibility
     system.activationScripts.groups = stringAfter [ "users" ] "";
@@ -636,6 +638,16 @@ in {
             in xor isEffectivelySystemUser user.isNormalUser;
             message = ''
               Exactly one of users.users.${user.name}.isSystemUser and users.users.${user.name}.isNormalUser must be set.
+            '';
+          }
+          {
+            assertion = user.group != "";
+            message = ''
+              users.users.${user.name}.group is unset. This used to default to
+              nogroup, but this is unsafe. For example you can create a group
+              for this user with:
+              users.users.${user.name}.group = "${user.name}";
+              users.groups.${user.name} = {};
             '';
           }
         ]

@@ -223,7 +223,11 @@ self: super: builtins.intersectAttrs super {
   wxcore = super.wxcore.override { wxGTK = pkgs.wxGTK30; };
 
   # Test suite wants to connect to $DISPLAY.
+  bindings-GLFW = dontCheck super.bindings-GLFW;
+  gi-gtk-declarative = dontCheck super.gi-gtk-declarative;
+  gi-gtk-declarative-app-simple = dontCheck super.gi-gtk-declarative-app-simple;
   hsqml = dontCheck (addExtraLibraries (super.hsqml.override { qt5 = pkgs.qt5Full; }) [pkgs.libGLU pkgs.libGL]);
+  monomer = dontCheck super.monomer;
 
   # Wants to check against a real DB, Needs freetds
   odbc = dontCheck (addExtraLibraries super.odbc [ pkgs.freetds ]);
@@ -351,13 +355,6 @@ self: super: builtins.intersectAttrs super {
 
   # Looks like Avahi provides the missing library
   dnssd = super.dnssd.override { dns_sd = pkgs.avahi.override { withLibdnssdCompat = true; }; };
-
-  # requires an X11 display
-  bindings-GLFW = dontCheck super.bindings-GLFW;
-
-  # requires an X11 display in test suite
-  gi-gtk-declarative = dontCheck super.gi-gtk-declarative;
-  gi-gtk-declarative-app-simple = dontCheck super.gi-gtk-declarative-app-simple;
 
   # tests depend on executable
   ghcide = overrideCabal super.ghcide (drv: {
@@ -953,4 +950,8 @@ self: super: builtins.intersectAttrs super {
       })
     )
   );
+
+  # Test suite is just the default example executable which doesn't work if not
+  # executed by Setup.hs, but works if started on a proper TTY
+  isocline = dontCheck super.isocline;
 }

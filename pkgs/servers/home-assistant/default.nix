@@ -65,11 +65,6 @@ let
       });
     })
 
-    # Pinned due to bug in ring-doorbell 0.7.0
-    # https://github.com/tchellomello/python-ring-doorbell/issues/240
-    (mkOverride "ring-doorbell" "0.6.2"
-      "fbd537722a27b3b854c26506d894b7399bb8dc57ff36083285971227a2d46560")
-
     # Pinned due to API changes in pylast 4.2.1
     (mkOverride "pylast" "4.2.0"
       "0zd0dn2l738ndz62vpa751z0ldnm91dcz9zzbvxv53r08l0s9yf3")
@@ -116,6 +111,19 @@ let
     # home-assistant-frontend does not exist in python3.pkgs
     (self: super: {
       home-assistant-frontend = self.callPackage ./frontend.nix { };
+    })
+
+    # Pinned due to incompability with aioesphomeapi 8.0.0
+    (self: super: {
+      aioesphomeapi = super.aioesphomeapi.overrideAttrs (oldAttrs: rec {
+        version = "7.0.0";
+        src = fetchFromGitHub {
+          owner = "esphome";
+          repo = oldAttrs.pname;
+          rev = "v${version}";
+          hash = "sha256-ho/1fpq4yAgmYNERPqs51oqr08ncaN9+GRTUUuGU7ps=";
+        };
+      });
     })
   ];
 
@@ -727,6 +735,7 @@ in with py.pkgs; buildPythonApplication rec {
     "yandex_transport"
     "yandextts"
     "yeelight"
+    "youless"
     # disabled, because it tries to join a multicast group and fails to find a usable network interface
     # "zeroconf"
     "zerproc"

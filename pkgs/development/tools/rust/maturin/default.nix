@@ -44,6 +44,6 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/PyO3/maturin";
     license = licenses.asl20;
-    maintainers = [ maintainers.danieldk ];
+    maintainers = [ ];
   };
 }

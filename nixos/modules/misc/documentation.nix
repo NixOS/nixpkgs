@@ -120,6 +120,24 @@ in
         '';
       };
 
+      man.manualPages = mkOption {
+        type = types.path;
+        default = pkgs.buildEnv {
+          name = "man-paths";
+          paths = config.environment.systemPackages;
+          pathsToLink = [ "/share/man" ];
+          extraOutputsToInstall = ["man"];
+          ignoreCollisions = true;
+        };
+        defaultText = "all man pages in config.environment.systemPackages";
+        description = ''
+          The manual pages to generate caches for if <option>generateCaches</option>
+          is enabled. Must be a path to a directory with man pages under
+          <literal>/share/man</literal>; see the source for an example.
+          Advanced users can make this a content-addressed derivation to save a few rebuilds.
+        '';
+      };
+
       info.enable = mkOption {
         type = types.bool;
         default = true;
@@ -207,16 +225,8 @@ in
       environment.extraOutputsToInstall = [ "man" ] ++ optional cfg.dev.enable "devman";
       environment.etc."man_db.conf".text =
         let
-          manualPages = pkgs.buildEnv {
-            name = "man-paths";
-            paths = config.environment.systemPackages;
-            pathsToLink = [ "/share/man" ];
-            extraOutputsToInstall = ["man"];
-            ignoreCollisions = true;
-          };
-          manualCache = pkgs.runCommandLocal "man-cache" { }
-          ''
-            echo "MANDB_MAP ${manualPages}/share/man $out" > man.conf
+          manualCache = pkgs.runCommandLocal "man-cache" { } ''
+            echo "MANDB_MAP ${cfg.man.manualPages}/share/man $out" > man.conf
             ${pkgs.man-db}/bin/mandb -C man.conf -psc >/dev/null 2>&1
           '';
         in

@@ -245,8 +245,10 @@ in
 
     users.users.ncdns = {
       isSystemUser = true;
+      group = "ncdns";
       description = "ncdns daemon user";
     };
+    users.groups.ncdns = {};
 
     systemd.services.ncdns = {
       description = "ncdns daemon";

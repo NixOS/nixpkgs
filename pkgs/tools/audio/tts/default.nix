@@ -16,20 +16,22 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "tts";
-  version = "0.2.0";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "coqui-ai";
     repo = "TTS";
     rev = "v${version}";
-    sha256 = "sha256-FlxR1bPkUZT3SPuWiK0oAuI9dKfurEZurB0NhyDgOyY=";
+    sha256 = "sha256-hhL6/hBs2umR8/VEumr2LzuCAOkroK8vBfDuNVY0ygw=";
   };
 
   postPatch = ''
-    sed -i -e 's!librosa==[^"]*!librosa!' requirements.txt
-    sed -i -e 's!numba==[^"]*!numba!' requirements.txt
-    sed -i -e 's!numpy==[^"]*!numpy!' requirements.txt
-    sed -i -e 's!umap-learn==[^"]*!umap-learn!' requirements.txt
+    sed -i requirements.txt \
+      -e 's!librosa==[^"]*!librosa!' \
+      -e 's!mecab-python3==[^"]*!mecab-python3!' \
+      -e 's!numba==[^"]*!numba!' \
+      -e 's!numpy==[^"]*!numpy!' \
+      -e 's!umap-learn==[^"]*!umap-learn!'
   '';
 
   nativeBuildInputs = with python3.pkgs; [
@@ -53,6 +55,7 @@ python3.pkgs.buildPythonApplication rec {
     pypinyin
     pysbd
     pytorch
+    pyworld
     scipy
     soundfile
     tensorboardx

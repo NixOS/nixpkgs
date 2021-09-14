@@ -17,13 +17,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "fstar";
-  version = "2021.07.31";
+  version = "2021.09.11";
 
   src = fetchFromGitHub {
     owner = "FStarLang";
     repo = "FStar";
     rev = "v${version}";
-    sha256 = "KZTmphpt8nYpOd8EReAZ6iIkS4uY3ZziKQ3A70BL/90=";
+    sha256 = "1aqk6fx77zcb7mcm78dk4l4zzd323qiv7yc7hvc38494yf6gk8a0";
   };
 
   nativeBuildInputs = [ makeWrapper installShellFiles ];
@@ -72,6 +72,7 @@ stdenv.mkDerivation rec {
     description = "ML-like functional programming language aimed at program verification";
     homepage = "https://www.fstar-lang.org";
     license = licenses.asl20;
+    changelog = "https://github.com/FStarLang/FStar/raw/v${version}/CHANGES.md";
     platforms = with platforms; darwin ++ linux;
     maintainers = with maintainers; [ gebner ];
   };

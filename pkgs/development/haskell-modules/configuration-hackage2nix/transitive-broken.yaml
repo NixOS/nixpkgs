@@ -391,7 +391,6 @@ dont-distribute-packages:
  - adict
  - adp-multi-monadiccp
  - aern2-real
- - aern2-real_0_2_8_0
  - aeson-native
  - afv
  - agda-server
@@ -712,14 +711,14 @@ dont-distribute-packages:
  - claferwiki
  - clash
  - clash-ghc
- - clash-ghc_1_4_3
  - clash-lib
- - clash-lib_1_4_3
  - clash-multisignal
  - clash-prelude-quickcheck
+ - clash-shake
  - clash-systemverilog
  - clash-verilog
  - clash-vhdl
+ - clashilator
  - classify-frog
  - classy-miso
  - clckwrks
@@ -967,10 +966,10 @@ dont-distribute-packages:
  - dmenu-pmount
  - dmenu-search
  - doc-review
- - doi
  - domain
  - domain-core
  - domain-optics
+ - dormouse-client
  - dow
  - download-media-content
  - dph-examples
@@ -980,6 +979,7 @@ dont-distribute-packages:
  - dph-prim-interface
  - dph-prim-par
  - dph-prim-seq
+ - dprox
  - dropbox-sdk
  - dropsolve
  - dsh-sql
@@ -1063,7 +1063,6 @@ dont-distribute-packages:
  - falling-turnip
  - fallingblocks
  - family-tree
- - fast-digits
  - fastirc
  - fault-tree
  - fbrnch
@@ -1125,12 +1124,14 @@ dont-distribute-packages:
  - formlets-hsp
  - forth-hll
  - fortran-src-extras
+ - fortran-vars
  - foscam-directory
  - foscam-sort
  - fp-ieee
  - fplll
  - fpnla-examples
  - frame-markdown
+ - freckle-app
  - free-theorems-counterexamples
  - free-theorems-seq
  - free-theorems-seq-webui
@@ -1233,6 +1234,7 @@ dont-distribute-packages:
  - gnss-converters
  - gnuidn
  - goal-geometry
+ - goal-graphical
  - goal-probability
  - goal-simulation
  - goat
@@ -1699,6 +1701,7 @@ dont-distribute-packages:
  - ideas-math
  - ideas-math-types
  - ideas-statistics
+ - if-instance
  - ige-mac-integration
  - ihaskell-inline-r
  - ihaskell-rlangqq
@@ -1855,7 +1858,6 @@ dont-distribute-packages:
  - knots
  - korfu
  - ks-test
- - kubernetes-client
  - kurita
  - laborantin-hs
  - labsat
@@ -1867,8 +1869,6 @@ dont-distribute-packages:
  - lambda-options
  - lambdaFeed
  - lambdaLit
- - lambdabot
- - lambdabot-xmpp
  - lambdabot-zulip
  - lambdacms-media
  - lambdacube
@@ -1895,7 +1895,6 @@ dont-distribute-packages:
  - lapack
  - lapack-carray
  - lapack-comfort-array
- - lapack-comfort-array_0_0_1
  - lapack-hmatrix
  - lapack_0_4
  - lat
@@ -1908,6 +1907,7 @@ dont-distribute-packages:
  - layouting
  - lazy-hash
  - lazy-hash-cache
+ - ldap-scim-bridge
  - ldapply
  - leaky
  - lean
@@ -2006,7 +2006,6 @@ dont-distribute-packages:
  - loup
  - ls-usb
  - lsystem
- - lti13
  - luachunk
  - lucid-colonnade
  - lucienne
@@ -2064,7 +2063,6 @@ dont-distribute-packages:
  - maxent
  - maxent-learner-hw-gui
  - maxsharing
- - mcmc
  - mcmc-samplers
  - mealy
  - mediabus-fdk-aac
@@ -2114,7 +2112,6 @@ dont-distribute-packages:
  - monetdb-mapi
  - mongrel2-handler
  - monky
- - monomer
  - monte-carlo
  - moo
  - moo-nad
@@ -2172,7 +2169,6 @@ dont-distribute-packages:
  - mywatch
  - n2o-web
  - nakadi-client
- - nanovg-simple
  - nats-queue
  - natural-number
  - nemesis-titan
@@ -2309,6 +2305,10 @@ dont-distribute-packages:
  - peyotls-codec
  - pgsql-simple
  - phonetic-languages-examples
+ - phonetic-languages-general
+ - phonetic-languages-simplified-examples-array
+ - phonetic-languages-simplified-examples-common
+ - phonetic-languages-simplified-generalized-examples-array
  - phonetic-languages-simplified-lists-examples
  - phooey
  - photoname
@@ -2591,6 +2591,8 @@ dont-distribute-packages:
  - restful-snap
  - restricted-workers
  - rethinkdb-model
+ - retroclash-lib
+ - retroclash-sim
  - rewrite
  - rewriting
  - rezoom
@@ -3195,7 +3197,6 @@ dont-distribute-packages:
  - wheb-strapped
  - whitespace
  - wikipedia4epub
- - windowslive
  - winio
  - wl-pprint-ansiterm
  - wl-pprint-terminfo
@@ -3270,7 +3271,6 @@ dont-distribute-packages:
  - yeshql
  - yesod-articles
  - yesod-auth-ldap
- - yesod-auth-lti13
  - yesod-colonnade
  - yesod-continuations
  - yesod-examples

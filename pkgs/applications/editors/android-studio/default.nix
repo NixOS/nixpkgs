@@ -9,16 +9,16 @@ let
     inherit buildFHSUserEnv;
   };
   stableVersion = {
-    version = "2020.3.1.23"; # "Android Studio Arctic Fox (2020.3.1)"
-    sha256Hash = "06xjdibb5lxiga3jg9akmvbazjwk11akyhy3g4pc562hcifsa5sk";
+    version = "2020.3.1.24"; # "Android Studio Arctic Fox (2020.3.1)"
+    sha256Hash = "0k8jcq8vpjayvwm9wqcrjhnp7dly0h4bb8nxspck5zmi8q2ar67l";
   };
   betaVersion = {
     version = "2020.3.1.21"; # "Android Studio Arctic Fox (2020.3.1) RC 1"
     sha256Hash = "04k7c328bl8ixi8bvp2mm33q2hmv40yc9p5dff5cghyycarwpd3f";
   };
   latestVersion = { # canary & dev
-    version = "2021.1.1.5"; # "Android Studio Bumblebee (2021.1.1) Canary 5"
-    sha256Hash = "0fx6nnazg4548rhb11wzaccm5c2si57mj8qwyl5j17x4k5r3m7nh";
+    version = "2021.1.1.11"; # "Android Studio Bumblebee (2021.1.1) Canary 11"
+    sha256Hash = "0npvb7kr259799bs2bs2drvimmmwb0rdzswbkz8zgi5c2fwjcvvl";
   };
 in {
   # Attributes are named by their corresponding release channels

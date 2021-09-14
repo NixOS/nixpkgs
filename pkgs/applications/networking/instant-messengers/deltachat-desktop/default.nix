@@ -8,6 +8,7 @@
 , makeWrapper
 , nodePackages
 , pkg-config
+, rustPlatform
 , stdenv
 , CoreServices
 }:
@@ -19,13 +20,13 @@ let
     "${electron}/bin/electron";
 in nodePackages.deltachat-desktop.override rec {
   pname = "deltachat-desktop";
-  version = "unstable-2021-08-04";
+  version = "1.21.0";
 
   src = fetchFromGitHub {
     owner = "deltachat";
     repo = "deltachat-desktop";
-    rev = "2c47d6b7e46f4f68c7eb45508ab9e145af489ea1";
-    sha256 = "03b6j3cj2yanvsargh6q57bf1llg17yrqgmd14lp0wkam767kkfa";
+    rev = "v${version}";
+    sha256 = "1fwnv77qa9p50js98byb26ms7mhv7rfwhfv21f282a74pbqsar45";
   };
 
   nativeBuildInputs = [
