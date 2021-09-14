@@ -308,7 +308,6 @@
   color-theme-solarized = callPackage ./color-theme-solarized { };
   session-management-for-emacs = callPackage ./session-management-for-emacs { };
   hsc3-mode = callPackage ./hsc3 { };
-  ido-ubiquitous = callPackage ./ido-ubiquitous { };
   prolog-mode = callPackage ./prolog { };
   rect-mark = callPackage ./rect-mark { };
   sunrise-commander = callPackage ./sunrise-commander { };
