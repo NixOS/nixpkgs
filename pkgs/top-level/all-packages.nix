@@ -20173,7 +20173,11 @@ with pkgs;
   mod_timestamp = pkgs.apacheHttpdPackages.mod_timestamp;
 
   inherit (callPackages ../servers/mpd {
-    stdenv = if stdenv.cc.isClang then llvmPackages_8.stdenv else stdenv;
+    # Requires C++17 and therefore LLVM >= 8, but we don't want to use an
+    # older LLVM if we already have a suitable one (e.g. aarch64-darwin).
+    stdenv = if stdenv.cc.isClang && lib.versionOlder stdenv.cc.version "8"
+      then llvmPackages_8.stdenv
+      else stdenv;
     inherit (darwin.apple_sdk.frameworks) AudioToolbox AudioUnit;
   }) mpd mpd-small mpdWithFeatures;
 
