@@ -579,6 +579,18 @@ final: prev:
     meta.homepage = "https://github.com/hrsh7th/cmp-calc/";
   };
 
+  cmp-conjure = buildVimPluginFrom2Nix {
+    pname = "cmp-conjure";
+    version = "2021-08-29";
+    src = fetchFromGitHub {
+      owner = "PaterJason";
+      repo = "cmp-conjure";
+      rev = "4c2a2233de7d2c8ccbf8652b4c741921498ceaec";
+      sha256 = "1ivrag7gch7mc72rim939z5gh7v532j29hgiy0pxgw3m6lvxdhwq";
+    };
+    meta.homepage = "https://github.com/PaterJason/cmp-conjure/";
+  };
+
   cmp-emoji = buildVimPluginFrom2Nix {
     pname = "cmp-emoji";
     version = "2021-08-25";

@@ -553,6 +553,7 @@ overcache/NeoSolarized
 p00f/nvim-ts-rainbow
 pangloss/vim-javascript
 parsonsmatt/intero-neovim
+PaterJason/cmp-conjure
 pearofducks/ansible-vim
 peitalin/vim-jsx-typescript
 peterbjorgensen/sved
