@@ -1,5 +1,5 @@
 { lib, stdenv
-, fetchFromGitHub, fetchpatch
+, fetchFromGitHub
 , cmake, pkg-config, unzip, zlib, pcre, hdf5
 , glog, boost, gflags, protobuf
 , config
@@ -39,20 +39,20 @@ assert blas.implementation == "openblas" && lapack.implementation == "openblas";
 assert enablePython -> pythonPackages != null;
 
 let
-  version = "3.4.8";
+  version = "3.4.15";
 
   src = fetchFromGitHub {
     owner  = "opencv";
     repo   = "opencv";
     rev    = version;
-    sha256 = "1dnz3gfj70lm1gbrk8pz28apinlqi2x6nvd6xcy5hs08505nqnjp";
+    hash   = "sha256-dLwQM2VhVlBV4xazS2rItTscKYeeNlNT0G8G1A1mOmc=";
   };
 
   contribSrc = fetchFromGitHub {
     owner  = "opencv";
     repo   = "opencv_contrib";
     rev    = version;
-    sha256 = "0psaa1yx36n34l09zd1y8jxgf8q4jzxd3vn06fqmzwzy85hcqn8i";
+    hash   = "sha256-FJDRMmSOT5jA+n2Ke0gEH7n5rgGvB1UzYpYZ1vmucjg=";
   };
 
   # Contrib must be built in order to enable Tesseract support:
@@ -150,6 +150,11 @@ stdenv.mkDerivation {
   postUnpack = lib.optionalString buildContrib ''
     cp --no-preserve=mode -r "${contribSrc}/modules" "$NIX_BUILD_TOP/opencv_contrib"
   '';
+
+  # Ensures that we use the system OpenEXR rather than the vendored copy of the source included with OpenCV.
+  patches = [
+    ./cmake-don-t-use-OpenCVFindOpenEXR.patch
+  ];
 
   # This prevents cmake from using libraries in impure paths (which
   # causes build failure on non NixOS)
