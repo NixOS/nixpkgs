@@ -4598,6 +4598,8 @@ in {
 
   mkl-service = callPackage ../development/python-modules/mkl-service { };
 
+  ml-collections = callPackage ../development/python-modules/ml-collections { };
+
   mlflow = callPackage ../development/python-modules/mlflow { };
 
   mlrose = callPackage ../development/python-modules/mlrose { };
