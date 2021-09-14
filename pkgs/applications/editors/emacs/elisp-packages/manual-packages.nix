@@ -282,8 +282,6 @@
 
   nano-theme = callPackage ./nano-theme { };
 
-  org-mac-link = callPackage ./org-mac-link { };
-
   perl-completion = callPackage ./perl-completion { };
 
   pod-mode = callPackage ./pod-mode { };
