@@ -401,9 +401,12 @@ in
   config = mkIf cfg.enable {
 
     users.users.sshd =
-      { isSystemUser = true;
+      {
+        isSystemUser = true;
+        group = "sshd";
         description = "SSH privilege separation user";
       };
+    users.groups.sshd = {};
 
     services.openssh.moduliFile = mkDefault "${cfgc.package}/etc/ssh/moduli";
     services.openssh.sftpServerExecutable = mkDefault "${cfgc.package}/libexec/sftp-server";

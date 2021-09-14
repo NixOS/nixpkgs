@@ -190,6 +190,7 @@ in
 
     users.users.${iodinedUser} = {
       uid = config.ids.uids.iodined;
+      group = "iodined";
       description = "Iodine daemon user";
     };
     users.groups.iodined.gid = config.ids.gids.iodined;

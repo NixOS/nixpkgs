@@ -165,10 +165,12 @@ in {
 
     users.users.airsonic = {
       description = "Airsonic service user";
+      group = "airsonic";
       name = cfg.user;
       home = cfg.home;
       createHome = true;
       isSystemUser = true;
     };
+    users.groups.airsonic = {};
   };
 }

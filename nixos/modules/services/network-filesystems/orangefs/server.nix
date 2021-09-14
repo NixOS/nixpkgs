@@ -193,7 +193,10 @@ in {
     environment.systemPackages = [ pkgs.orangefs ];
 
     # orangefs daemon will run as user
-    users.users.orangefs.isSystemUser = true;
+    users.users.orangefs = {
+      isSystemUser = true;
+      group = "orangfs";
+    };
     users.groups.orangefs = {};
 
     # To format the file system the config file is needed.

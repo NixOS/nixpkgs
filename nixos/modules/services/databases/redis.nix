@@ -246,6 +246,7 @@ in {
 
     users.users.redis = {
       description = "Redis database user";
+      group = "redis";
       isSystemUser = true;
     };
     users.groups.redis = {};
