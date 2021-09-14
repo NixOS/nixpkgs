@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "libreddit";
-  version = "0.14.14";
+  version = "0.15.1";
 
   src = fetchFromGitHub {
     owner = "spikecodes";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-duirX+X8moByV1urdgXjzTQ2zOfCfz7etzjDxkSKvhk=";
+    sha256 = "sha256-Df2WedLOz4wpot0Isy3JCF5p1sV9Hx3bkTNp1KkSfHQ=";
   };
 
-  cargoSha256 = "sha256-pFCERBnN386rW8ajpLWUHteCTWRmEiR19Sp5d8HXc5Y=";
+  cargoSha256 = "sha256-eR/0gpuEBQ7gHrSmJqGaM4vqKwg9WZdVVnBU4DgJcVQ=";
 
   buildInputs = lib.optional stdenv.isDarwin Security;
 
