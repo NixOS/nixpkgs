@@ -1,4 +1,4 @@
-{ lib, stdenv, graalvm11-ce, babashka, fetchurl, fetchFromGitHub, clojure }:
+{ lib, stdenv, graalvm11-ce, babashka, fetchurl, fetchFromGitHub, clojure, writeScript }:
 
 stdenv.mkDerivation rec {
   pname = "clojure-lsp";
@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
   };
 
   jar = fetchurl {
-    url = "https://github.com/clojure-lsp/clojure-lsp/releases/download/${version}/clojure-lsp.jar";
+    url =
+      "https://github.com/clojure-lsp/clojure-lsp/releases/download/${version}/clojure-lsp.jar";
     sha256 = "0ahrlqzyz3mgfx8w9w49172pb3dipq0hwwzk2yasqzcp1fi6jm80";
   };
 
@@ -47,6 +48,27 @@ stdenv.mkDerivation rec {
     ${babashka}/bin/bb integration-test ./clojure-lsp
 
     runHook postCheck
+  '';
+
+  passthru.updateScript = writeScript "update-clojure-lsp" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p curl common-updater-scripts
+
+    set -eu -o pipefail
+
+    latest_version=$(curl -s https://api.github.com/repos/clojure-lsp/clojure-lsp/releases/latest | jq --raw-output .tag_name)
+
+    old_jar_hash=$(nix-instantiate --eval --strict -A "clojure-lsp.jar.drvAttrs.outputHash" | tr -d '"' | sed -re 's|[+]|\\&|g')
+
+    curl -o clojure-lsp.jar -sL https://github.com/clojure-lsp/clojure-lsp/releases/download/$latest_version/clojure-lsp.jar
+    new_jar_hash=$(nix-hash --flat --type sha256 clojure-lsp.jar | sed -re 's|[+]|\\&|g')
+
+    rm -f clojure-lsp.jar
+
+    nixFile=$(nix-instantiate --eval --strict -A "clojure-lsp.meta.position" | sed -re 's/^"(.*):[0-9]+"$/\1/')
+
+    sed -i "$nixFile" -re "s|\"$old_jar_hash\"|\"$new_jar_hash\"|"
+    update-source-version clojure-lsp "$latest_version"
   '';
 
   meta = with lib; {
