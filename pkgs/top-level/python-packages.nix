@@ -281,6 +281,8 @@ in {
 
   aioguardian = callPackage ../development/python-modules/aioguardian { };
 
+  aiogithubapi = callPackage ../development/python-modules/aiogithubapi { };
+
   aioh2 = callPackage ../development/python-modules/aioh2 { };
 
   aioharmony = callPackage ../development/python-modules/aioharmony { };
@@ -686,6 +688,8 @@ in {
   autologging = callPackage ../development/python-modules/autologging { };
 
   automat = callPackage ../development/python-modules/automat { };
+
+  autopage = callPackage ../development/python-modules/autopage { };
 
   autopep8 = callPackage ../development/python-modules/autopep8 { };
 

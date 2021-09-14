@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "songrec";
-  version = "0.1.9";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "marin-m";
     repo = pname;
     rev = version;
-    sha256 = "sha256-2n6bj/JlbOTs3AyQKItacutUl1nmb6YsrXvRSp9C+BA=";
+    sha256 = "sha256-9fq2P+F7Olm9bUQ1HbH/Lzb5J2mJCma+x/vuH3wf+zY=";
   };
 
-  cargoSha256 = "sha256-3sr7Rtp34Y2oCI+/6mE6C7jRx0xloiljuP0nlYACfMY=";
+  cargoSha256 = "sha256-ATlwBMuT8AufkrZNe1+U74hYRN4V88ZDKYvCWV52iyI=";
 
   nativeBuildInputs = [ pkg-config ];
 

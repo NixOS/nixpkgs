@@ -21,16 +21,17 @@
 , anyio
 , websocket-client
 , requests
+, requests-unixsocket
 }:
 
 buildPythonPackage rec {
   pname = "jupyter_server";
-  version = "1.10.2";
+  version = "1.11.0";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d3a3b68ebc6d7bfee1097f1712cf7709ee39c92379da2cc08724515bb85e72bf";
+    sha256 = "sha256-irT0hKSiaY91fP8HadJ7XZkeAjKmZtVPTWraTmphMws=";
   };
 
   propagatedBuildInputs = [
@@ -49,6 +50,7 @@ buildPythonPackage rec {
     prometheus-client
     anyio
     websocket-client
+    requests-unixsocket
   ];
 
   checkInputs = [
@@ -59,9 +61,10 @@ buildPythonPackage rec {
 
   preCheck = ''
     export HOME=$(mktemp -d)
+    export PATH=$out/bin:$PATH
   '';
 
-  pytestFlagsArray = [ "jupyter_server/tests/" ];
+  pytestFlagsArray = [ "jupyter_server" ];
 
   # disabled failing tests
   disabledTests = [

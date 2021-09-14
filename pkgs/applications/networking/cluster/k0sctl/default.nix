@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "k0sctl";
-  version = "0.9.0";
+  version = "0.10.2";
 
   src = fetchFromGitHub {
     owner = "k0sproject";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-aW7x2XfeFU0z3lwPTsDHudHjdwTtfASgrbKGddVb6Rs=";
+    sha256 = "sha256-0vsOZbSQtoWvU81wnT7QWNhvIclwGAu441lTOuZnXho=";
   };
 
-  vendorSha256 = "sha256-bsXXWyeZXZLV6igEvyvPpS92FruGiLDx/5CCTKPe0EU=";
+  vendorSha256 = "sha256-3OTkigryWsyCytyNMyumJJtc/BwtdryvDQRan2dzqfg=";
 
   meta = with lib; {
     description = "A bootstrapping and management tool for k0s clusters.";
