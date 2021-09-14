@@ -6630,6 +6630,8 @@ with pkgs;
 
   makebootfat = callPackage ../tools/misc/makebootfat { };
 
+  mapcache = callPackage ../servers/mapcache { };
+
   mapserver = callPackage ../servers/mapserver { };
 
   martin = callPackage ../servers/martin {
