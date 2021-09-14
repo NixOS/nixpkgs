@@ -5550,6 +5550,8 @@ in {
 
   python-ipmi = callPackage ../development/python-modules/python-ipmi { };
 
+  python-ironicclient = callPackage ../development/python-modules/python-ironicclient { };
+
   python-izone = callPackage ../development/python-modules/python-izone { };
 
   python-juicenet = callPackage ../development/python-modules/python-juicenet { };
