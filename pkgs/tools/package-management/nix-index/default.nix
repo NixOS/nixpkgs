@@ -1,5 +1,5 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, pkg-config, makeWrapper, openssl, curl
-, nix, Security
+{ lib, stdenv, rustPlatform, fetchFromGitHub, pkg-config, openssl, curl
+, Security
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "161lz96a52s53rhhkxxhcg41bsmh8w6rv6nl8gwqmg3biszy7hah";
 
-  nativeBuildInputs = [ pkg-config makeWrapper ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl curl ]
     ++ lib.optional stdenv.isDarwin Security;
 
@@ -26,14 +26,12 @@ rustPlatform.buildRustPackage rec {
     cp ./command-not-found.sh $out/etc/profile.d/command-not-found.sh
     substituteInPlace $out/etc/profile.d/command-not-found.sh \
       --replace "@out@" "$out"
-    wrapProgram $out/bin/nix-index \
-      --prefix PATH : "${lib.makeBinPath [ nix ]}"
   '';
 
   meta = with lib; {
     description = "A files database for nixpkgs";
     homepage = "https://github.com/bennofs/nix-index";
     license = with licenses; [ bsd3 ];
-    maintainers = [ maintainers.bennofs ];
+    maintainers = with maintainers; [ bennofs ncfavier ];
   };
 }
