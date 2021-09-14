@@ -239,6 +239,17 @@
           <link xlink:href="options.html#opt-programs.git.enable">programs.git</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://domainaware.github.io/parsedmarc/">parsedmarc</link>,
+          a service which parses incoming
+          <link xlink:href="https://dmarc.org/">DMARC</link> reports and
+          stores or sends them to a downstream service for further
+          analysis. Documented in
+          <link linkend="module-services-parsedmarc">its manual
+          entry</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-incompatibilities">
@@ -355,6 +366,33 @@ Superuser created successfully.
           <link xlink:href="https://github.com/ledgerwatch/erigon/releases/tag/v2021.08.03">release
           notes</link>).
         </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="options.html#opt-users.users._name_.group">users.users.&lt;name&gt;.group</link>
+          no longer defaults to <literal>nogroup</literal>, which was
+          insecure. Out-of-tree modules are likely to require
+          adaptation: instead of
+        </para>
+        <programlisting language="bash">
+{
+  users.users.foo = {
+    isSystemUser = true;
+  };
+}
+</programlisting>
+        <para>
+          also create a group for your user:
+        </para>
+        <programlisting language="bash">
+{
+  users.users.foo = {
+    isSystemUser = true;
+    group = &quot;foo&quot;;
+  };
+  users.groups.foo = {};
+}
+</programlisting>
       </listitem>
       <listitem>
         <para>

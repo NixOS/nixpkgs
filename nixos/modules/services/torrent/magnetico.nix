@@ -172,8 +172,10 @@ in {
 
     users.users.magnetico = {
       description = "Magnetico daemons user";
+      group = "magnetico";
       isSystemUser = true;
     };
+    users.groups.magnetico = {};
 
     systemd.services.magneticod = {
       description = "Magnetico DHT crawler";
