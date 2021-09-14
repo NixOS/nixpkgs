@@ -237,7 +237,6 @@ let
     audio = [ pkgs.portaudio ];
     BayesSAE = [ pkgs.gsl_1 ];
     BayesVarSel = [ pkgs.gsl_1 ];
-    BayesXsrc = with pkgs; [ readline.dev ncurses ];
     bigGP = [ pkgs.mpi ];
     bio3d = [ pkgs.zlib ];
     BiocCheck = [ pkgs.which ];
@@ -267,6 +266,7 @@ let
     gert = [ pkgs.libgit2 ];
     haven = with pkgs; [ libiconv zlib.dev ];
     h5vc = [ pkgs.zlib.dev ];
+    httpuv = [ pkgs.zlib.dev ];
     HiCseg = [ pkgs.gsl_1 ];
     imager = [ pkgs.x11 ];
     iBMQ = [ pkgs.gsl_1 ];
@@ -341,6 +341,7 @@ let
     seqinr = [ pkgs.zlib.dev ];
     seqminer = with pkgs; [ zlib.dev bzip2 ];
     sf = with pkgs; [ gdal proj geos ];
+    s2 = [ pkgs.openssl.dev ];
     terra = with pkgs; [ gdal proj geos ];
     showtext = with pkgs; [ zlib libpng icu freetype.dev ];
     simplexreg = [ pkgs.gsl_1 ];
@@ -496,10 +497,7 @@ let
     "DeducerText"
     "Demerelate"
     "detrendeR"
-    "dpa"
-    "dynamicGraph"
     "dynBiplotGUI"
-    "EasyqpcR"
     "EcoVirtual"
     "exactLoglinTest"
     "fat2Lpoly"
@@ -551,7 +549,6 @@ let
     "mritc"
     "multgee"
     "multibiplotGUI"
-    "OligoSpecificitySystem"
     "onemap"
     "OpenRepGrid"
     "paleoMAS"
@@ -724,10 +721,6 @@ let
 
     rpf = old.rpf.overrideDerivation (attrs: {
       patchPhase = "patchShebangs configure";
-    });
-
-    BayesXsrc = old.BayesXsrc.overrideDerivation (attrs: {
-      patches = [ ./patches/BayesXsrc.patch ];
     });
 
     Rhdf5lib = old.Rhdf5lib.overrideDerivation (attrs: {
