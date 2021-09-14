@@ -5546,6 +5546,8 @@ in {
 
   python-glanceclient = callPackage ../development/python-modules/python-glanceclient { };
 
+  python-heatclient = callPackage ../development/python-modules/python-heatclient { };
+
   python-ipmi = callPackage ../development/python-modules/python-ipmi { };
 
   python-izone = callPackage ../development/python-modules/python-izone { };
