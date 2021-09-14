@@ -2,19 +2,18 @@
 
 stdenv.mkDerivation rec {
   pname = "clojure-lsp";
-  version = "2021.09.04-17.11.44";
+  version = "2021.09.13-22.25.35";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "1i12vxg3yb1051q7j6yqlsdy4lc4xl7n4lqssp8w634fpx1p0rgv";
+    sha256 = "0ypn0m81lbhx45y0ajpgk7id9g47l1gnihvqdjxw5m1j2hdwjdzr";
   };
 
   jar = fetchurl {
-    url =
-      "https://github.com/clojure-lsp/clojure-lsp/releases/download/${version}/clojure-lsp.jar";
-    sha256 = "0ahrlqzyz3mgfx8w9w49172pb3dipq0hwwzk2yasqzcp1fi6jm80";
+    url = "https://github.com/clojure-lsp/clojure-lsp/releases/download/${version}/clojure-lsp.jar";
+    sha256 = "e93e334a4ada04a28e0b148b8364b9433b8d83f6417249d7bded7cc86d1fe081";
   };
 
   GRAALVM_HOME = graalvm11-ce;
@@ -52,7 +51,7 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = writeScript "update-clojure-lsp" ''
     #!/usr/bin/env nix-shell
-    #!nix-shell -i bash -p curl common-updater-scripts
+    #!nix-shell -i bash -p curl common-updater-scripts gnused jq nix
 
     set -eu -o pipefail
 
