@@ -92,6 +92,17 @@ stdenv.mkDerivation rec {
       url = "https://gitlab.gnome.org/GNOME/gnome-control-center/commit/9acaa10567c94048657c69538e5d7813f82c4224.patch";
       sha256 = "59GeTPcG2UiVTL4VTS/TP0p0QkAQpm3VgvuAiw64wUU=";
     })
+
+    # https://salsa.debian.org/gnome-team/gnome-control-center/-/blob/ubuntu/master/debian/patches/ubuntu/display-Support-UI-scaled-logical-monitor-mode.patch
+    (fetchpatch {
+      url = "https://salsa.debian.org/gnome-team/gnome-control-center/-/raw/f185f33fb200cc963c062c7a82920a085f696978/debian/patches/ubuntu/display-Support-UI-scaled-logical-monitor-mode.patch";
+      sha256 = "XBMD0chaV6GGg3R9/rQnsBejXspomVZz/a4Bvv/AHCA=";
+    })
+    # https://salsa.debian.org/gnome-team/gnome-control-center/-/blob/ubuntu/master/debian/patches/ubuntu/display-Allow-fractional-scaling-to-be-enabled.patch
+    (fetchpatch {
+      url = "https://salsa.debian.org/gnome-team/gnome-control-center/-/raw/f185f33fb200cc963c062c7a82920a085f696978/debian/patches/ubuntu/display-Allow-fractional-scaling-to-be-enabled.patch";
+      sha256 = "Pm6PTmsL2bW9JAHD1u0oUEqD1PCIErOlcuqlwvP593I=";
+    })
   ];
 
   nativeBuildInputs = [
