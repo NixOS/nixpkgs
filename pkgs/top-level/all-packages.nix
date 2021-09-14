@@ -14919,7 +14919,7 @@ with pkgs;
 
   ### DEVELOPMENT / LIBRARIES
 
-  a52dec = callPackage ../development/libraries/a52dec { };
+  liba52 = callPackage ../development/libraries/liba52 { };
 
   aalib = callPackage ../development/libraries/aalib { };
 

@@ -1,11 +1,11 @@
 {lib, stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
-  pname = "a52dec";
+  pname = "liba52";
   version = "0.7.4";
 
   src = fetchurl {
-    url = "https://liba52.sourceforge.net/files/${pname}-${version}.tar.gz";
+    url = "https://${pname}.sourceforge.net/files/a52dec-${version}.tar.gz";
     sha256 = "oh1ySrOzkzMwGUNTaH34LEdbXfuZdRPu9MJd5shl7DM=";
   };
 

@@ -35,6 +35,7 @@ in
 mapAliases ({
   PPSSPP = ppsspp; # added 2017-10-01
   QmidiNet = qmidinet;  # added 2016-05-22
+  a52dec = liba52; # added 2021-09-14
   accounts-qt = libsForQt5.accounts-qt; # added 2015-12-19
   adobeReader = adobe-reader; # added 2013-11-04
   adobe_flex_sdk = apache-flex-sdk; # added 2018-06-01

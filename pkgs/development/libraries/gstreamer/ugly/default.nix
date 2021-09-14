@@ -7,7 +7,7 @@
 , gst-plugins-base
 , orc
 , gettext
-, a52dec
+, liba52
 , libcdio
 , libdvdread
 , libmad
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gst-plugins-base
     orc
-    a52dec
+    liba52
     libcdio
     libdvdread
     libmad
