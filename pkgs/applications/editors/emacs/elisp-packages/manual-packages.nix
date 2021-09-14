@@ -264,6 +264,8 @@
 
   emacspeak = callPackage ./emacspeak { };
 
+  ement = callPackage ./ement { };
+
   ess-R-object-popup = callPackage ./ess-R-object-popup { };
 
   font-lock-plus = callPackage ./font-lock-plus { };
