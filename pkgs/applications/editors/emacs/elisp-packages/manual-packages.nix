@@ -262,6 +262,8 @@
 
   ebuild-mode = callPackage ./ebuild-mode { };
 
+  evil-markdown = callPackage ./evil-markdown { };
+
   emacspeak = callPackage ./emacspeak { };
 
   ess-R-object-popup = callPackage ./ess-R-object-popup { };
