@@ -1060,6 +1060,7 @@ in
       uid = config.ids.uids.systemd-coredump;
       group = "systemd-coredump";
     };
+    users.groups.systemd-coredump = {};
     users.users.systemd-network = {
       uid = config.ids.uids.systemd-network;
       group = "systemd-network";
