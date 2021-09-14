@@ -86,7 +86,7 @@ in buildFHSUserEnv {
     xorg.xrandr perl which p7zip gnused gnugrep psmisc opencl-headers
 
     # ZDOOM
-    soundfont-fluid bzip2 game-music-emu
+    soundfont-fluid bzip2 libgme
   ] ++ qt5Deps pkgs
     ++ gnomeDeps pkgs
     ++ lib.optional steamSupport pkgs.steam

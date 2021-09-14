@@ -60,7 +60,7 @@
 , freetype ? null # Needed for drawtext filter
 , frei0r ? null # frei0r video filtering
 , fribidi ? null # Needed for drawtext filter
-, game-music-emu ? null # Game Music Emulator
+, libgme ? null # Game Music Emulator
 , gnutls ? null
 , gsm ? null # GSM de/encoder
 #, ilbc ? null # iLBC de/encoder
@@ -335,7 +335,7 @@ stdenv.mkDerivation rec {
     (enableFeature (freetype != null) "libfreetype")
     (enableFeature (frei0r != null && gplLicensing) "frei0r")
     (enableFeature (fribidi != null) "libfribidi")
-    (enableFeature (game-music-emu != null) "libgme")
+    (enableFeature (libgme != null) "libgme")
     (enableFeature (gnutls != null) "gnutls")
     (enableFeature (gsm != null) "libgsm")
     #(enableFeature (ilbc != null) "libilbc")
@@ -426,7 +426,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ addOpenGLRunpath perl pkg-config texinfo yasm ];
 
   buildInputs = [
-    bzip2 celt dav1d fontconfig freetype frei0r fribidi game-music-emu gnutls gsm
+    bzip2 celt dav1d fontconfig freetype frei0r fribidi libgme gnutls gsm
     libjack2 ladspaH lame libaom libass libbluray libbs2b libcaca libdc1394 libmodplug libmysofa
     libogg libopus librsvg libssh libtheora libvdpau libvorbis libvpx libwebp libX11
     libxcb libXv libXext xz openal openjpeg libpulseaudio rav1e svt-av1 rtmpdump opencore-amr

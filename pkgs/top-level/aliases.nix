@@ -269,6 +269,7 @@ mapAliases ({
   fusesmb = throw "fusesmb is abandoned by upstream"; # added 2019-10-15
   fwupdate = throw "fwupdate was merged into fwupd"; # added 2020-05-19
   g4py = python3Packages.geant4; # added 2020-06-06
+  game-music-emu = libgme; # added 2021-09-14
   gccApple = throw "gccApple is no longer supported"; # added 2018-04-25
   gdal_1_11 = throw "gdal_1_11 was removed. Use gdal instead."; # added 2021-04-03
   gdb-multitarget = gdb; # added 2017-11-13

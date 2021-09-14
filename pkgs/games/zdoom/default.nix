@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, p7zip, cmake
-, SDL2, openal, fluidsynth, soundfont-fluid, bzip2, zlib, libjpeg, game-music-emu
+, SDL2, openal, fluidsynth, soundfont-fluid, bzip2, zlib, libjpeg, libgme
 , libsndfile, mpg123 }:
 
 stdenv.mkDerivation rec {
@@ -14,13 +14,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ p7zip cmake ];
   buildInputs = [
-    SDL2 openal fluidsynth bzip2 zlib libjpeg game-music-emu libsndfile mpg123
+    SDL2 openal fluidsynth bzip2 zlib libjpeg libgme libsndfile mpg123
   ];
 
   cmakeFlags = [
     "-DFORCE_INTERNAL_GME=OFF"
-    "-DGME_INCLUDE_DIR=${game-music-emu}/include"
-    "-DGME_LIBRARIES=${game-music-emu}/lib/libgme.so"
+    "-DGME_INCLUDE_DIR=${libgme}/include"
+    "-DGME_LIBRARIES=${libgme}/lib/libgme.so"
   ];
 
   sourceRoot = ".";
