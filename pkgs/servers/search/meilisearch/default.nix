@@ -1,4 +1,5 @@
-{ lib
+{ pkgs
+, lib
 , stdenv
 , buildRustCrate
 , defaultCrateOverrides
@@ -27,7 +28,7 @@ let
     };
   };
   cargo_nix = import ./Cargo.nix {
-    nixpkgs = ../../../..;
+    inherit pkgs;
     buildRustCrateForPkgs = customBuildRustCrateForPkgs;
   };
   meilisearch-http = cargo_nix.workspaceMembers."meilisearch-http".build.override {
