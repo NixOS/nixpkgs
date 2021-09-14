@@ -1,4 +1,6 @@
-{ lib, stdenv, pixie, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub
+, pixie, rlwrap
+}:
 
 stdenv.mkDerivation rec {
   pname = "dust";
@@ -16,8 +18,9 @@ stdenv.mkDerivation rec {
   patches = [ ./make-paths-configurable.patch ];
 
   configurePhase = ''
-    pixiePath="${pixie}/bin/pixie-vm" \
+    pixiePath="${pixie}/bin/pixie" \
     basePath="$out/share/dust" \
+    rlwrapPath="${rlwrap}/bin/rlwrap" \
       substituteAll dust.in dust
     chmod +x dust
   '';
