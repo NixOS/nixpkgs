@@ -71,6 +71,10 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace modules/text_renderer/freetype/platform_fonts.h --replace \
       /usr/share/fonts/truetype/freefont ${freefont_ttf}/share/fonts/truetype
+
+    # Fix compilation with the unreleased liba52 in nixpkgs.
+    substituteInPlace modules/codec/a52.c \
+      --replace 'a52_init( 0 )' 'a52_init()'
   '';
 
   # - Touch plugins (plugins cache keyed off mtime and file size:
