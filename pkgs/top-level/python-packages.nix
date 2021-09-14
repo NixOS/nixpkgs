@@ -279,6 +279,8 @@ in {
 
   aioguardian = callPackage ../development/python-modules/aioguardian { };
 
+  aiogithubapi = callPackage ../development/python-modules/aiogithubapi { };
+
   aioh2 = callPackage ../development/python-modules/aioh2 { };
 
   aioharmony = callPackage ../development/python-modules/aioharmony { };
