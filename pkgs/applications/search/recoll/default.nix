@@ -35,11 +35,11 @@
 
 mkDerivation rec {
   pname = "recoll";
-  version = "1.28.6";
+  version = "1.31.0";
 
   src = fetchurl {
     url = "https://www.lesbonscomptes.com/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-fSblLddWTJKRzw4VAQp+p3xPe5grB2xITgN6vKr0xLc=";
+    sha256 = "sha256-TtkfohzeT0HO6ywCMNxrODW1DnJg5KMFkx9AbDfQt+c=";
   };
 
   configureFlags = [ "--enable-recollq" "--disable-webkit" ]
