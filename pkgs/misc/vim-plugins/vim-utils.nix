@@ -295,7 +295,7 @@ let
       plugImpl =
       (''
         source ${vimPlugins.vim-plug.rtp}/plug.vim
-        call plug#begin('/dev/null')
+        silent! call plug#begin('/dev/null')
 
         '' + (lib.concatMapStringsSep "\n" (pkg: "Plug '${pkg.rtp}'") plug.plugins) + ''
 

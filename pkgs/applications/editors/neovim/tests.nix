@@ -87,9 +87,18 @@ rec {
   nvim_with_plug = neovim.override {
     extraName = "-with-plug";
     configure.plug.plugins = with pkgs.vimPlugins; [
-      vim-go
+      base16-vim
     ];
+    configure.customRC = ''
+      color base16-tomorrow-night
+      set background=dark
+    '';
   };
+
+  run_nvim_with_plug = runTest nvim_with_plug ''
+    export HOME=$TMPDIR
+    ${nvim_with_plug}/bin/nvim -i NONE -c 'color base16-tomorrow-night'  +quit!
+  '';
 
   # nixpkgs should detect that no wrapping is necessary
   nvimShouldntWrap = wrapNeovim2 "-should-not-wrap" nvimAutoDisableWrap;
