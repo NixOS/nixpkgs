@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation rec {
   pname = "dash";
-  version = "0.5.11.2";
+  version = "0.5.11.4";
 
   src = fetchurl {
     url = "http://gondor.apana.org.au/~herbert/dash/files/${pname}-${version}.tar.gz";
-    sha256 = "0pvdpm1cgfbc25ramn4305a0158yq031q1ain4dc972rnxl7vyq0";
+    sha256 = "13g06zqfy4n7jkrbb5l1vw0xcnjvq76i16al8fjc5g33afxbf5af";
   };
 
   hardeningDisable = [ "format" ];
@@ -25,13 +25,9 @@ stdenv.mkDerivation rec {
       url = "https://git.kernel.org/pub/scm/utils/dash/dash.git/patch/?id=29d6f2148f10213de4e904d515e792d2cf8c968e";
       sha256 = "0aadb7aaaan6jxmi6icv4p5gqx7k510yszaqsa29b5giyxz5l9i1";
     })
-  ] ++ lib.optionals stdenv.isDarwin [
-      # Temporary fix until a proper one is accepted upstream
-    ./0001-fix-dirent64-et-al-on-darwin.patch
   ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = lib.optional stdenv.isDarwin autoreconfHook;
   buildInputs = [ libedit ];
 
   configureFlags = [ "--with-libedit" ];
