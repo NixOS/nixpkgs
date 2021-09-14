@@ -15,9 +15,8 @@ common =
   , autoreconfHook, autoconf-archive, bison, flex
   , jq, libarchive, libcpuid
   , lowdown, mdbook
-  # Used by tests
-  , gtest
-  , busybox-sandbox-shell
+  , gtest # used by tests
+  , nix-sandbox-shell
   , storeDir
   , stateDir
   , confDir
@@ -30,7 +29,6 @@ common =
   , patches ? [ ]
   }:
   let
-     sh = busybox-sandbox-shell;
      nix = stdenv.mkDerivation rec {
       inherit pname version src patches;
 
@@ -132,7 +130,7 @@ common =
           "--disable-init-state"
         ]
         ++ lib.optionals stdenv.isLinux [
-          "--with-sandbox-shell=${sh}/bin/busybox"
+          "--with-sandbox-shell=${nix-sandbox-shell}${nix-sandbox-shell.shellPath}"
         ]
         ++ lib.optional (
             stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform ? nix && stdenv.hostPlatform.nix ? system

@@ -10696,6 +10696,11 @@ with pkgs;
   undistract-me = callPackage ../shells/bash/undistract-me { };
 
   dash = callPackage ../shells/dash { };
+  nix-sandbox-shell =
+    # musl roadmap has RISC-V support projected for 1.1.20
+    if !stdenv.hostPlatform.isRiscV && stdenv.hostPlatform.libc != "bionic"
+      then pkgsStatic.dash.override { enableMinimal = true; }
+      else            dash.override { enableMinimal = true; };
 
   dasht = callPackage ../tools/misc/dasht { };
 
@@ -21022,12 +21027,6 @@ with pkgs;
   bridge-utils = callPackage ../os-specific/linux/bridge-utils { };
 
   busybox = callPackage ../os-specific/linux/busybox { };
-  busybox-sandbox-shell = callPackage ../os-specific/linux/busybox/sandbox-shell.nix {
-    # musl roadmap has RISC-V support projected for 1.1.20
-    busybox = if !stdenv.hostPlatform.isRiscV && stdenv.hostPlatform.libc != "bionic"
-              then pkgsStatic.busybox
-              else busybox;
-  };
 
   cachefilesd = callPackage ../os-specific/linux/cachefilesd { };
 
