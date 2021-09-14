@@ -20,12 +20,12 @@ for url_and_key in "${url_and_key_list[@]}"; do
   name=$(echo "$url_and_key" | cut -d' ' -f3)
 
   echo "prefetching ${url}..."
-  hash=$(nix-prefetch-url "$url" --name "$name")
+  hash=$(nix hash to-base64 --type sha256 `nix-prefetch-url "$url" --name "$name"`)
 
   echo "    $key = {" >> $hashfile
   echo "      name = \"$name\";" >> $hashfile
   echo "      url = \"$url\";" >> $hashfile
-  echo "      sha256 = \"$hash\";" >> $hashfile
+  echo "      hash = \"sha256-$hash\";" >> $hashfile
   echo "    };" >> $hashfile
 
   echo
