@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "argocd";
-  version = "2.1.1";
+  version = "2.1.2";
   commit = "57abbf95ed160c88b2634ec4d37df9555cc74fb3";
   tag = "v${version}";
 
@@ -10,10 +10,10 @@ buildGoModule rec {
     owner = "argoproj";
     repo = "argo-cd";
     rev = tag;
-    sha256 = "0jh7kh4751kb7439vbbh5f03kcy56phdcvzypjw8n0w239n5xmmc";
+    sha256 = "sha256-JhVWRcaWuq/+kGD6JqHAtT8PtvgfgEyp7f1siMNHJN8=";
   };
 
-  vendorSha256 = "sha256-KtLEN66Q5WpCi+COId+gPu2XHcs5/D04rYLHV6XohzQ=";
+  vendorSha256 = "sha256-N45yRlBGZ/c9ve2YPcWA26pylV8hzxjPh6evKtkgnoc=";
 
   nativeBuildInputs = [ packr makeWrapper installShellFiles ];
 
