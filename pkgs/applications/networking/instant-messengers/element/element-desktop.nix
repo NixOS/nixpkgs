@@ -1,6 +1,17 @@
-{ lib, fetchFromGitHub
-, makeWrapper, makeDesktopItem, mkYarnPackage
-, electron, element-web, fetchpatch
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, makeDesktopItem
+, mkYarnPackage
+, electron
+, element-web
+, callPackage
+, Security
+, AppKit
+, CoreServices
+
+, useWayland ? false
 }:
 # Notes for maintainers:
 # * versions of `element-web` and `element-desktop` should be kept in sync.
@@ -8,23 +19,16 @@
 
 let
   executableName = "element-desktop";
-  version = "1.8.4";
+  version = "1.8.5";
   src = fetchFromGitHub {
     owner = "vector-im";
     repo = "element-desktop";
     rev = "v${version}";
-    sha256 = "sha256-MmrO9Ref/qpW7ssjw8IAb7dYZHMRBfdfH2whsZJq/14=";
+    sha256 = "sha256-i9PWGEcf+EOn6j++GuYt6xmwYycmW5hE5xhpRMOFBGM=";
   };
 in mkYarnPackage rec {
   name = "element-desktop-${version}";
   inherit version src;
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/vector-im/element-desktop/commit/96e5389779f60c91b8fe80d7bd9af413d72ec61f.patch";
-      sha256 = "sha256-82I5BDNDWIfp+m2HpzTA5+39hMv2bTbmJlXfM4YUjDY=";
-    })
-  ];
 
   packageJSON = ./element-desktop-package.json;
   yarnNix = ./element-desktop-yarndeps.nix;
