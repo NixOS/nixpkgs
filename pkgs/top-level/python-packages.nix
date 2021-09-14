@@ -5544,6 +5544,8 @@ in {
 
   python-ecobee-api = callPackage ../development/python-modules/python-ecobee-api { };
 
+  python-glanceclient = callPackage ../development/python-modules/python-glanceclient { };
+
   python-ipmi = callPackage ../development/python-modules/python-ipmi { };
 
   python-izone = callPackage ../development/python-modules/python-izone { };
