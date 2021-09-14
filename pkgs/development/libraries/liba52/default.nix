@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./no-disable-pic.patch
+    ./no-always-inline.patch
   ];
 
   makeFlags = [

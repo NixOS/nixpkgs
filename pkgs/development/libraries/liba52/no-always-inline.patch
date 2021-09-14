@@ -1,0 +1,28 @@
+From 9ac22dc4ff363ddd556015624d258eeca1c1e24c Mon Sep 17 00:00:00 2001
+From: Emily <vcs@emily.moe>
+Date: Tue, 14 Sep 2021 23:25:35 +0100
+Subject: [PATCH] configure.ac: don't use AC_C_ALWAYS_INLINE
+
+This causes `inline` to be interpreted as `__attribute__
+((__always_inline__))`, which breaks macOS system headers.
+
+Based on https://github.com/videolan/vlc/blob/c61b24a704d7d63bd1576406e7289c200b0dfeda/contrib/src/a52/liba52-inline.patch.
+---
+ configure.ac | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/configure.ac b/configure.ac
+index c4ab49c..c9f8e3e 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -130,7 +130,6 @@ AC_CHECK_GENERATE_INTTYPES([include])
+ 
+ dnl Checks for typedefs, structures, and compiler characteristics.
+ AC_C_CONST
+-AC_C_ALWAYS_INLINE
+ AC_C_RESTRICT
+ AC_C_BUILTIN_EXPECT
+ AC_C_BIGENDIAN
+-- 
+2.32.0
+
