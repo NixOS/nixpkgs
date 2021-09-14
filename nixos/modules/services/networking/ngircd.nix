@@ -52,8 +52,11 @@ in {
     };
 
     users.users.ngircd = {
-      uid = config.ids.uids.ngircd;
+      isSystemUser = true;
+      group = "ngircd";
       description = "ngircd user.";
     };
+    users.groups.ngircd = {};
+
   };
 }

@@ -651,10 +651,12 @@ in {
       environment.systemPackages = [ cfg.package ];
 
       users.users.neo4j = {
-        uid = config.ids.uids.neo4j;
+        isSystemUser = true;
+        group = "neo4j";
         description = "Neo4j daemon user";
         home = cfg.directories.home;
       };
+      users.groups.neo4j = {};
     };
 
   meta = {
