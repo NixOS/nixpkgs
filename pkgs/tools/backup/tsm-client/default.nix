@@ -91,7 +91,7 @@ let
       zlib
     ];
     runtimeDependencies = [
-      lvm2
+      (lib.attrsets.getLib lvm2)
     ];
     sourceRoot = ".";
 
