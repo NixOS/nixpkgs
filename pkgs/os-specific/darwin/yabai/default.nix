@@ -1,17 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, Carbon, Cocoa, ScriptingBridge, xxd }:
+{ lib, stdenv, fetchFromGitHub, Carbon, Cocoa, ScriptingBridge, SkyLight, xxd }:
 
 stdenv.mkDerivation rec {
   pname = "yabai";
-  version = "3.3.4";
+  version = "3.3.10";
 
   src = fetchFromGitHub {
     owner = "koekeishiya";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1pvyjdxgy7yxxz4x87f8an0dlxvxbnmv5kya8hkzw2na453ihvab";
+    sha256 = "1gd88s3a05qvvyjhk5wpw1crb7p1gik1gdxn7pv2vq1x7zyvzvph";
   };
 
-  buildInputs = [ Carbon Cocoa ScriptingBridge xxd ];
+  buildInputs = [ Carbon Cocoa ScriptingBridge SkyLight xxd ];
 
   installPhase = ''
     mkdir -p $out/bin
