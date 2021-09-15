@@ -25,7 +25,7 @@ trivialBuild {
   };
 
   meta = {
-    description = "plz is an HTTP library for Emacs";
+    description = "Ement.el is a Matrix client for Emacs";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.all;
   };
