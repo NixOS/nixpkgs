@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "cloudflared";
-  version = "2021.8.7";
+  version = "2021.9.0";
 
   src = fetchFromGitHub {
     owner  = "cloudflare";
     repo   = "cloudflared";
     rev    = version;
-    sha256 = "sha256-Q8Xjo60lR1x7Y9/jcxXX32IxVVlHmkr4ekIwWTgdwps=";
+    sha256 = "sha256-djgMTCDIVcaPI6to/pPN2hPi1tsKPxRCT30EL0OOEQU=";
   };
 
   vendorSha256 = null;
