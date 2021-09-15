@@ -32,10 +32,8 @@ let
     then {
       inherit rev deepClone fetchSubmodules; url = "${baseUrl}.git";
     } // lib.optionalAttrs (leaveDotGit != null) { inherit leaveDotGit; }
-    else ({ url = "${baseUrl}/archive/${rev}.tar.gz"; } // privateAttrs)
-  ) // passthruAttrs // { inherit name; };
+    else { url = "${baseUrl}/archive/${rev}.tar.gz"; }
+  ) // privateAttrs // passthruAttrs // { inherit name; };
 in
-
-assert private -> !useFetchGit;
 
 fetcher fetcherArgs // { meta.homepage = baseUrl; inherit rev; }
