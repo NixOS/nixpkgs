@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
 , html5lib
@@ -21,8 +22,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     html5lib
-    lxml
     soupsieve
+    # lxml causes bs4 tests to fail on Darwin, see https://github.com/NixOS/nixpkgs/issues/137678#issuecomment-920370656
+  ] ++ lib.optional (!stdenv.isDarwin) [
+    lxml
   ];
 
   checkInputs = [
