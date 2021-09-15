@@ -1022,6 +1022,40 @@ Superuser created successfully.
       </listitem>
       <listitem>
         <para>
+          In NixOS virtual machines (QEMU), the
+          <literal>virtualisation</literal> module has been updated with
+          new options to configure:
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              IPv4 port forwarding
+              (<link xlink:href="options.html#opt-virtualisation.forwardPorts"><literal>virtualisation.forwardPorts</literal></link>),
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              shared host directories
+              (<link xlink:href="options.html#opt-virtualisation.sharedDirectories"><literal>virtualisation.sharedDirectories</literal></link>),
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              screen resolution
+              (<link xlink:href="options.html#opt-virtualisation.resolution"><literal>virtualisation.resolution</literal></link>).
+            </para>
+          </listitem>
+        </itemizedlist>
+        <para>
+          In addition, the default
+          <link xlink:href="options.html#opt-virtualisation.msize"><literal>msize</literal></link>
+          parameter in 9P filesystems (including /nix/store and all
+          shared directories) has been increased to 16K for improved
+          performance.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The setting
           <link xlink:href="options.html#opt-services.openssh.logLevel"><literal>services.openssh.logLevel</literal></link>
           <literal>&quot;VERBOSE&quot;</literal>
