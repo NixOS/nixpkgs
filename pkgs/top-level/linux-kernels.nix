@@ -229,9 +229,13 @@ in {
     linux_hardened = hardenedKernelFor packageAliases.linux_default.kernel { };
 
     linux_4_14_hardened = hardenedKernelFor kernels.linux_4_14 { };
+
     linux_4_19_hardened = hardenedKernelFor kernels.linux_4_19 { };
+
     linux_5_4_hardened = hardenedKernelFor kernels.linux_5_4 { };
+
     linux_5_10_hardened = hardenedKernelFor kernels.linux_5_10 { };
+
     linux_5_14_hardened = hardenedKernelFor kernels.linux_5_14 { };
 
   }));
@@ -492,7 +496,15 @@ in {
     linux_rpi4 = packagesFor kernels.linux_rpi4;
   };
 
-  packages = recurseIntoAttrs (vanillaPackages // rtPackages // rpiPackages // {
+  hardenedPackages = {
+    linux_4_14_hardened = recurseIntoAttrs (hardenedPackagesFor kernels.linux_4_14 { });
+    linux_4_19_hardened = recurseIntoAttrs (hardenedPackagesFor kernels.linux_4_19 { });
+    linux_5_4_hardened = recurseIntoAttrs (hardenedPackagesFor kernels.linux_5_4 { });
+    linux_5_10_hardened = recurseIntoAttrs (hardenedPackagesFor kernels.linux_5_10 { });
+    linux_5_14_hardened = recurseIntoAttrs (hardenedPackagesFor kernels.linux_5_14 { });
+  };
+
+  packages = recurseIntoAttrs (vanillaPackages // rtPackages // rpiPackages // hardenedPackages // {
     linux_mptcp_95 = packagesFor kernels.linux_mptcp_95;
 
     # Intentionally lacks recurseIntoAttrs, as -rc kernels will quite likely break out-of-tree modules and cause failed Hydra builds.
@@ -500,12 +512,6 @@ in {
     linux_testing_bcachefs = recurseIntoAttrs (packagesFor kernels.linux_testing_bcachefs);
 
     linux_hardened = recurseIntoAttrs (hardenedPackagesFor packageAliases.linux_default.kernel { });
-
-    linux_4_14_hardened = recurseIntoAttrs (hardenedPackagesFor kernels.linux_4_14 { });
-    linux_4_19_hardened = recurseIntoAttrs (hardenedPackagesFor kernels.linux_4_19 { });
-    linux_5_4_hardened = recurseIntoAttrs (hardenedPackagesFor kernels.linux_5_4 { });
-    linux_5_10_hardened = recurseIntoAttrs (hardenedPackagesFor kernels.linux_5_10 { });
-    linux_5_14_hardened = recurseIntoAttrs (hardenedPackagesFor kernels.linux_5_14 { });
 
     linux_zen = recurseIntoAttrs (packagesFor kernels.linux_zen);
     linux_lqx = recurseIntoAttrs (packagesFor kernels.linux_lqx);
