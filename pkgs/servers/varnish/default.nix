@@ -50,10 +50,6 @@ in
     version = "6.0.8";
     sha256 = "1zk83hfxgjq1d0n4zx86q3f05y9f2zc6a1miz1zcvfa052q4bljx";
   };
-  varnish65 = common {
-    version = "6.5.2";
-    sha256 = "041gc22h8cwsb8jw7zdv6yk5h8xg2q0g655m5zhi5jxq35f2sljx";
-  };
   varnish70 = common {
     version = "7.0.0";
     sha256 = "11z0pa618lh925ih67wmp1gqk7i46l486j4spjy71g1n3w5mqylc";
