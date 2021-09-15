@@ -150,18 +150,7 @@
 
   agda2-mode = callPackage ./agda2-mode { };
 
-  agda-input = self.trivialBuild {
-    pname = "agda-input";
-
-    inherit (pkgs.haskellPackages.Agda) src version;
-
-    postUnpack = "mv $sourceRoot/src/data/emacs-mode/agda-input.el $sourceRoot";
-
-    meta = {
-      description = "Standalone package providing the agda-input method without building Agda.";
-      inherit (pkgs.haskellPackages.Agda.meta) homepage license;
-    };
-  };
+  agda-input = callPackage ./agda-input{ };
 
   # may be part of MELPA in the future, see
   # https://github.com/mlochbaum/BQN/issues/10#issuecomment-912982874
