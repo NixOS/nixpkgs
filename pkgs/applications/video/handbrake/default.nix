@@ -15,6 +15,8 @@
   ffmpeg-full, nv-codec-headers, libogg, x264, x265, libvpx, libtheora, dav1d,
   # Codecs, audio
   libopus, lame, libvorbis, speex, libsamplerate,
+  # Graphics
+  libjpeg_turbo, zimg,
   # Text processing
   libiconv, fribidi, fontconfig, freetype, libass, jansson, libxml2, harfbuzz,
   # Optical media
@@ -46,26 +48,17 @@
 
 stdenv.mkDerivation rec {
   pname = "handbrake";
-  version = "1.3.3";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "HandBrake";
     repo = "HandBrake";
     rev = version;
-    sha256 = "0bsmk37543zv3p32a7wxnh2w483am23ha2amj339q3nnb4142krn";
+    sha256 = "015nbvww4sx043nzmdsj1j8z99ws1vzl87illyqj9bxqvvqvf401";
     extraPostFetch = ''
       echo "DATE=$(date +"%F %T %z" -r $out/NEWS.markdown)" > $out/version.txt
     '';
   };
-
-  # Remove with a release after 1.3.3
-  patches = [
-    (fetchpatch {
-      name = "audio-fix-ffmpeg-4_4";
-      url = "https://github.com/HandBrake/HandBrake/commit/f28289fb06ab461ea082b4be56d6d1504c0c31c2.patch";
-      sha256 = "sha256:1zcwa4h97d8wjspb8kbd8b1jg0a9vvmv9zaphzry4m9q0bj3h3kz";
-    })
-  ];
 
   # we put as little as possible in src.extraPostFetch as it's much easier to
   # add to it here without having to fiddle with src.sha256
@@ -108,6 +101,7 @@ _EOF
   buildInputs = [
     ffmpeg-full libogg libtheora x264 x265 libvpx dav1d
     libopus lame libvorbis speex libsamplerate
+    libjpeg_turbo zimg
     libiconv fribidi fontconfig freetype libass jansson libxml2 harfbuzz
     libdvdread libdvdnav libdvdcss libbluray xz
   ] ++ lib.optional (!stdenv.isDarwin) numactl
