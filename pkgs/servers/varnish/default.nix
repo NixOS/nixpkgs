@@ -47,8 +47,8 @@ let
 in
 {
   varnish60 = common {
-    version = "6.0.7";
-    sha256 = "0njs6xpc30nc4chjdm4d4g63bigbxhi4dc46f4az3qcz51r8zl2a";
+    version = "6.0.8";
+    sha256 = "1zk83hfxgjq1d0n4zx86q3f05y9f2zc6a1miz1zcvfa052q4bljx";
   };
   varnish65 = common {
     version = "6.5.2";
