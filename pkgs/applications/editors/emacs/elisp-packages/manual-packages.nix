@@ -264,6 +264,8 @@
 
   emacspeak = callPackage ./emacspeak { };
 
+  ement = callPackage ./ement { };
+
   ess-R-object-popup = callPackage ./ess-R-object-popup { };
 
   font-lock-plus = callPackage ./font-lock-plus { };
@@ -283,6 +285,8 @@
   org-mac-link = callPackage ./org-mac-link { };
 
   perl-completion = callPackage ./perl-completion { };
+
+  plz = callPackage ./plz { };
 
   pod-mode = callPackage ./pod-mode { };
 
