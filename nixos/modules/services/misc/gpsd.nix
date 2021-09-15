@@ -90,6 +90,7 @@ in
       { inherit uid;
         description = "gpsd daemon user";
         home = "/var/empty";
+        group = "gpsd";
       };
 
     users.groups.gpsd = { inherit gid; };
