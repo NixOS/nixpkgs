@@ -6,20 +6,21 @@
 , kconfig
 , kcoreaddons
 , ki18n
+, knotifications
 , qtbase
 , qtquickcontrols2
 }:
 
 mkDerivation rec {
   pname = "mauikit";
-  version = "1.2.2";
+  version = "2.0.1";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "maui";
     repo = "mauikit";
     rev = "v${version}";
-    sha256 = "1jz0a65bbznjg7aaq19rdyp956wn6xc1x4xigfkhj6mwsvnb49av";
+    sha256 = "sha256-qz/MePMvyGR8lzR2xB2f9QENx04UHu0Xef7v0xcKovo=";
   };
 
   nativeBuildInputs = [
@@ -31,6 +32,7 @@ mkDerivation rec {
     kconfig
     kcoreaddons
     ki18n
+    knotifications
     qtquickcontrols2
   ];
 
