@@ -529,7 +529,7 @@ in
       #ntp = 179; # unused
       zabbix = 180;
       #redis = 181; # unused, removed 2018-01-03
-      #unifi = 183; # unused
+      unifi = 183; # unused
       #uptimed = 184; # unused
       #zope2 = 185; # unused
       #ripple-data-api = 186; #unused

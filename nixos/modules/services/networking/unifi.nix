@@ -116,8 +116,12 @@ in
 
     users.users.unifi = {
       uid = config.ids.uids.unifi;
+      group = "unifi";
       description = "UniFi controller daemon user";
       home = "${stateDir}";
+    };
+    users.groups.unifi = {
+      gid = config.ids.gids.unifi;
     };
 
     networking.firewall = mkIf cfg.openPorts {
