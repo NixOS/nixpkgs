@@ -94,7 +94,7 @@ mkDerivation rec {
       please use the official build from shotcut.org instead.
     '';
     homepage = "https://shotcut.org";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ goibhniu woffs peti ];
     platforms = platforms.linux;
   };
