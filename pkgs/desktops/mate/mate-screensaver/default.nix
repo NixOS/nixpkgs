@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
     systemd
     mate.mate-desktop
     mate.mate-menus
+    mate.mate-panel
   ];
 
   configureFlags = [ "--without-console-kit" ];
