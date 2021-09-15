@@ -9710,6 +9710,10 @@ with pkgs;
 
   trebleshot = libsForQt5.callPackage ../applications/networking/trebleshot { };
 
+  trenchbroom = libsForQt5.callPackage ../applications/misc/trenchbroom {
+    inherit (xorg) libXxf86vm;
+  };
+
   trickle = callPackage ../tools/networking/trickle {};
 
   inherit (nodePackages) triton;
