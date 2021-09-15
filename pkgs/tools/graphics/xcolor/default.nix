@@ -3,16 +3,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "xcolor";
-  version = "0.5.0";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "Soft";
     repo = pname;
     rev = version;
-    sha256 = "0i04jwvjasrypnsfwdnvsvcygp8ckf1a5sxvjxaivy73cdvy34vk";
+    sha256 = "sha256-NfmoBZek4hsga6RflE5EKkWarhCFIcTwEXhg2fpkxNE=";
   };
 
-  cargoSha256 = "1r2s4iy5ls0svw5ww51m37jhrbvnj690ig6n9c60hzw1hl4krk30";
+  cargoSha256 = "sha256-Zh73+FJ63SkusSavCqSCLbHVnU++4ZFSMFUIM7TnOj0=";
 
   nativeBuildInputs = [ pkg-config python3 installShellFiles copyDesktopItems ];
 
