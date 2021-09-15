@@ -18437,7 +18437,7 @@ with pkgs;
     python = python37;
   };
 
-  protobuf = protobuf3_17;
+  protobuf = protobuf3_18;
 
   protobuf3_18 = callPackage ../development/libraries/protobuf/3.18.nix { };
   protobuf3_17 = callPackage ../development/libraries/protobuf/3.17.nix { };
