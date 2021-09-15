@@ -62,6 +62,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/lainsce/khronos";
     maintainers = with maintainers; [ xiorcale ] ++ pantheon.maintainers;
     platforms = platforms.linux;
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
   };
 }
