@@ -6,7 +6,11 @@ let
 
   cfg = config.documentation;
 
-  manualModules = baseModules ++ optionals cfg.nixos.includeAllModules (extraModules ++ modules);
+  manualModules =
+    baseModules
+    # Modules for which to show options even when not imported
+    ++ [ ../virtualisation/qemu-vm.nix ]
+    ++ optionals cfg.nixos.includeAllModules (extraModules ++ modules);
 
   /* For the purpose of generating docs, evaluate options with each derivation
     in `pkgs` (recursively) replaced by a fake with path "\${pkgs.attribute.path}".
