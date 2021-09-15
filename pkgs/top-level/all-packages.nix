@@ -7566,6 +7566,8 @@ with pkgs;
 
   nomad-driver-podman = callPackage ../applications/networking/cluster/nomad-driver-podman { };
 
+  nomino = callPackage ../tools/misc/nomino { };
+
   notable = callPackage ../applications/misc/notable { };
 
   ntlmrecon = callPackage ../tools/security/ntlmrecon { };
