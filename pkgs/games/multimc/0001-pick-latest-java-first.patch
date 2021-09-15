@@ -4,14 +4,14 @@ Date: Tue, 22 Jun 2021 21:50:11 +0300
 Subject: [PATCH] pick latest java first
 
 ---
- api/logic/java/JavaInstallList.cpp | 4 ++--
- api/logic/java/JavaUtils.cpp       | 2 +-
+ launcher/java/JavaInstallList.cpp | 4 ++--
+ launcher/java/JavaUtils.cpp       | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/api/logic/java/JavaInstallList.cpp b/api/logic/java/JavaInstallList.cpp
+diff --git a/launcher/java/JavaInstallList.cpp b/launcher/java/JavaInstallList.cpp
 index 0bded03c..40898e20 100644
---- a/api/logic/java/JavaInstallList.cpp
-+++ b/api/logic/java/JavaInstallList.cpp
+--- a/launcher/java/JavaInstallList.cpp
++++ b/launcher/java/JavaInstallList.cpp
 @@ -120,8 +120,8 @@ void JavaInstallList::updateListData(QList<BaseVersionPtr> versions)
  
  bool sortJavas(BaseVersionPtr left, BaseVersionPtr right)
@@ -23,10 +23,10 @@ index 0bded03c..40898e20 100644
      return (*rleft) > (*rright);
  }
  
-diff --git a/api/logic/java/JavaUtils.cpp b/api/logic/java/JavaUtils.cpp
+diff --git a/launcher/java/JavaUtils.cpp b/launcher/java/JavaUtils.cpp
 index 5f004a10..6d633631 100644
---- a/api/logic/java/JavaUtils.cpp
-+++ b/api/logic/java/JavaUtils.cpp
+--- a/launcher/java/JavaUtils.cpp
++++ b/launcher/java/JavaUtils.cpp
 @@ -350,7 +350,6 @@ QList<QString> JavaUtils::FindJavaPaths()
      qDebug() << "Linux Java detection incomplete - defaulting to \"java\"";
  
