@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "goreleaser";
-  version = "0.176.0";
+  version = "0.179.0";
 
   src = fetchFromGitHub {
     owner = "goreleaser";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-7xqzt/QJOkZLVY3MbBf7QYBrEgO500ft6ahvngaw9rs=";
+    sha256 = "sha256-E8a1S6CPPd8xsdt/tu1VmWxQCMUp8dEPB5H2IL4jj1k=";
   };
 
-  vendorSha256 = "sha256-xdK98JWfxvufewcXiMjo6hslFrCbmWrgTAwJM7f00n4=";
+  vendorSha256 = "sha256-qF7mULIQrFs/SAMm/dUcYPs1urLKKg6w7hgkuJ2AivQ=";
 
   ldflags = [
     "-s"

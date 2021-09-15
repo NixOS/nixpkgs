@@ -1,4 +1,5 @@
 { stdenv, fetchurl, lib, zlib, pcre
+, memorymappingHook, memstreamHook
 , tlsSupport ? true, gnutls ? null
 # ^ set { tlsSupport = false; } to reduce closure size by ~= 18.6 MB
 }:
@@ -15,7 +16,9 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = lib.optional tlsSupport gnutls.dev;
-  buildInputs = [ zlib pcre ] ++ lib.optional tlsSupport gnutls;
+  buildInputs = [ zlib pcre ]
+    ++ lib.optionals (stdenv.system == "x86_64-darwin") [ memorymappingHook memstreamHook ]
+    ++ lib.optional tlsSupport gnutls;
 
   preConfigure = ''
     cd src
