@@ -152,30 +152,8 @@
 
   agda-input = callPackage ./agda-input{ };
 
-  # may be part of MELPA in the future, see
-  # https://github.com/mlochbaum/BQN/issues/10#issuecomment-912982874
-  bqn-mode = self.trivialBuild {
-    pname = "bqn-mode";
-    version = "unstable-2021-09-04";
+  bqn-mode = callPackage ./bqn-mode { };
 
-    src = pkgs.fetchFromGitHub {
-      owner = "mlochbaum";
-      repo = "BQN";
-      rev = "e623a2fcafdf5fd6c8d31570175284805c4f34d9";
-      sha256 = "1a2lpxy3bak4724r0ns4la5d0j6484ngi73kcwp82vgbbpk7lcrp";
-    };
-
-    postUnpack = ''
-      sourceRoot="$sourceRoot/editors/emacs"
-    '';
-
-    meta = {
-      description = "Emacs mode for BQN";
-      license = lib.licenses.gpl3Only;
-      maintainers = [ lib.maintainers.sternenseemann ];
-      homepage = "https://mlochbaum.github.io/BQN/editors/index.html";
-    };
-  };
   llvm-mode = trivialBuild {
     pname = "llvm-mode";
     inherit (pkgs.llvmPackages.llvm) src version;
