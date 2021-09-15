@@ -161,6 +161,16 @@ rec {
         ) a (attrNames n)
     ) {} list_of_attrs;
 
+  /*  Apply the function to each element in the attribute set. Same as
+      `mapAttrs`, but arguments flipped.
+
+     Example:
+       forEachAttr { x = "foo"; y = "bar"; } (name: value:
+         name + "-" + value
+       )
+       => { x = "x-foo"; y = "y-bar"; }
+  */
+  forEachAttr = set: f: mapAttrs f set;
 
   /* Recursively collect sets that verify a given predicate named `pred'
      from the set `attrs'.  The recursion is stopped when the predicate is
