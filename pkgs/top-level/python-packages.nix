@@ -4524,6 +4524,8 @@ in {
 
   mido = callPackage ../development/python-modules/mido { };
 
+  migen = callPackage ../development/python-modules/migen { };
+
   milc = callPackage ../development/python-modules/milc { };
 
   milksnake = callPackage ../development/python-modules/milksnake { };
