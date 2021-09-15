@@ -3,7 +3,7 @@
   (fetchNuGet { name = "Gress"; version = "1.2.0"; sha256 = "0aidc9whi0718gh896j7xkyndki9x7rifd8n1n681afb2zbxw4bn"; })
   (fetchNuGet { name = "JsonExtensions"; version = "1.1.0"; sha256 = "1fqxb2jdbvjgg135wmy890qf63r056dq16jy7wgzkgp21m3j0lgy"; })
   (fetchNuGet { name = "Microsoft.AspNetCore.App.Ref"; version = "3.1.10"; sha256 = "0xn4zh7shvijqlr03fqsmps6gz856isd9bg9rk4z2c4599ggal77"; })
-  (fetchNuGet { name = "Microsoft.NETCore.App.Host.linux-x64"; version = "3.1.14"; sha256 = "11rqnascx9asfyxgxzwgxgr9gxxndm552k4dn4p1s57ciz7vkg9h"; })
+  (fetchNuGet { name = "Microsoft.NETCore.App.Host.linux-x64"; version = "3.1.19"; sha256 = "10fs93kg8vhhm1l05815m8yqz796i6gk824pk1bps239mshmkybr"; })
   (fetchNuGet { name = "Microsoft.NETCore.App.Ref"; version = "3.1.0"; sha256 = "08svsiilx9spvjamcnjswv0dlpdrgryhr3asdz7cvnl914gjzq4y"; })
   (fetchNuGet { name = "MiniRazor.CodeGen"; version = "2.1.4"; sha256 = "1856hfw2wl3ilxmpg4jmwpigmq0rm50i9pmy3sq8f1xc8j44kzl2"; })
   (fetchNuGet { name = "MiniRazor.Runtime"; version = "2.1.4"; sha256 = "1pc3kjbnz810a8bb94k6355rflmayigfmpfmc4jzzx6l6iavnnc4"; })
