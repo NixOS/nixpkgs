@@ -14,9 +14,7 @@ stdenv.mkDerivation rec {
 
   # On RISC-V platforms, LLVM's libunwind implementation is unsupported by strace.
   # The build will silently fall back and -k will not work on RISC-V.
-  buildInputs = [ perl.out libunwind ]; # support -k
-
-  postPatch = "patchShebangs --host strace-graph";
+  buildInputs = [ libunwind ]; # support -k
 
   configureFlags = [ "--enable-mpers=check" ];
 
