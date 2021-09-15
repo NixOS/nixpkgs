@@ -224,18 +224,7 @@
 
   };
 
-  ott-mode = self.trivialBuild {
-    pname = "ott-mod";
-
-    inherit (pkgs.ott) src version;
-
-    postUnpack = "mv $sourceRoot/emacs/ott-mode.el $sourceRoot";
-
-    meta = {
-      description = "Standalone package providing ott-mode without building ott and with compiled bytecode.";
-      inherit (pkgs.haskellPackages.Agda.meta) homepage license;
-    };
-  };
+  ott-mode = callPackage ./ott-mode { };
 
   urweb-mode = callPackage ./urweb-mode { };
 
