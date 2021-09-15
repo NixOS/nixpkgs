@@ -9,13 +9,13 @@
 , pillow
 , python
 , pytorch-bin
-, version ? "0.10.0"
 }:
 
 let
   pyVerNoDot = builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion;
   srcs = import ./binary-hashes.nix version;
   unsupported = throw "Unsupported system";
+  version = "0.10.0";
 in buildPythonPackage {
   inherit version;
 
