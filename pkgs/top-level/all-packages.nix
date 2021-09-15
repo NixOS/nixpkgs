@@ -4714,6 +4714,8 @@ with pkgs;
 
   endlessh = callPackage ../servers/endlessh { };
 
+  ericw-tools = callPackage ../applications/misc/ericw-tools { };
+
   cryfs = callPackage ../tools/filesystems/cryfs { };
 
   encfs = callPackage ../tools/filesystems/encfs {
