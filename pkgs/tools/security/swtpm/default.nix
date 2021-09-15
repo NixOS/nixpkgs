@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchFromGitHub, fetchpatch
+, fetchFromGitHub
 , autoreconfHook
 , pkg-config
 , libtasn1, openssl, fuse, glib, libseccomp, json-glib
@@ -8,6 +8,9 @@
 , unixtools, expect, socat
 , gnutls
 , perl
+
+# Tests
+, python3, which
 }:
 
 stdenv.mkDerivation rec {
@@ -21,17 +24,14 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-iy8xjKnPLq1ntZa9x+KtLDznzu6m+1db3NPeGQESUVo=";
   };
 
-  patches = [
-    (fetchpatch {
-      url = "https://patch-diff.githubusercontent.com/raw/stefanberger/swtpm/pull/527.patch";
-      sha256 = "sha256-cpKHP15a27ifmmswSgHoNzGPO6TY/ZuJIfM5xLOlqlU=";
-    })
-  ];
-
   nativeBuildInputs = [
     pkg-config unixtools.netstat expect socat
     perl # for pod2man
     autoreconfHook
+  ];
+
+  checkInputs = [
+    python3 which
   ];
 
   buildInputs = [
@@ -47,6 +47,8 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
+    patchShebangs tests/*
+
     # Makefile tries to create the directory /var/lib/swtpm-localca, which fails
     substituteInPlace samples/Makefile.am \
         --replace 'install-data-local:' 'do-not-execute:'
@@ -58,6 +60,7 @@ stdenv.mkDerivation rec {
         '# define CERTTOOL_NAME "${gnutls}/bin/certtool"'
   '';
 
+  doCheck = true;
   enableParallelBuilding = true;
 
   outputs = [ "out" "man" ];
