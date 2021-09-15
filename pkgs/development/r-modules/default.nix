@@ -43,21 +43,29 @@ let
   #
   deriveBioc = mkDerive {
     mkHomepage = {name, biocVersion, ...}: "https://bioconductor.org/packages/${biocVersion}/bioc/html/${name}.html";
-    mkUrls = {name, version, biocVersion}: [ "mirror://bioc/${biocVersion}/bioc/src/contrib/${name}_${version}.tar.gz"
-                                             "mirror://bioc/${biocVersion}/bioc/src/contrib/Archive/${name}/${name}_${version}.tar.gz"
-                                             "mirror://bioc/${biocVersion}/bioc/src/contrib/Archive/${name}_${version}.tar.gz" ];
+    mkUrls = {name, version, biocVersion}: [
+      "mirror://bioc/${biocVersion}/bioc/src/contrib/${name}_${version}.tar.gz"
+      "mirror://bioc/${biocVersion}/bioc/src/contrib/Archive/${name}/${name}_${version}.tar.gz"
+      "mirror://bioc/${biocVersion}/bioc/src/contrib/Archive/${name}_${version}.tar.gz"
+    ];
   };
   deriveBiocAnn = mkDerive {
     mkHomepage = {name, ...}: "http://www.bioconductor.org/packages/${name}.html";
-    mkUrls = {name, version, biocVersion}: [ "mirror://bioc/${biocVersion}/data/annotation/src/contrib/${name}_${version}.tar.gz" ];
+    mkUrls = {name, version, biocVersion}: [
+      "mirror://bioc/${biocVersion}/data/annotation/src/contrib/${name}_${version}.tar.gz"
+    ];
   };
   deriveBiocExp = mkDerive {
     mkHomepage = {name, ...}: "http://www.bioconductor.org/packages/${name}.html";
-    mkUrls = {name, version, biocVersion}: [ "mirror://bioc/${biocVersion}/data/experiment/src/contrib/${name}_${version}.tar.gz" ];
+    mkUrls = {name, version, biocVersion}: [
+      "mirror://bioc/${biocVersion}/data/experiment/src/contrib/${name}_${version}.tar.gz"
+    ];
   };
   deriveCran = mkDerive {
     mkHomepage = {name, snapshot, ...}: "http://mran.revolutionanalytics.com/snapshot/${snapshot}/web/packages/${name}/";
-    mkUrls = {name, version, snapshot}: [ "http://mran.revolutionanalytics.com/snapshot/${snapshot}/src/contrib/${name}_${version}.tar.gz" ];
+    mkUrls = {name, version, snapshot}: [
+      "http://mran.revolutionanalytics.com/snapshot/${snapshot}/src/contrib/${name}_${version}.tar.gz"
+    ];
   };
 
   # Overrides package definitions with nativeBuildInputs.
