@@ -14,7 +14,7 @@
   # Processing, video codecs, containers
   ffmpeg-full, nv-codec-headers, libogg, x264, x265, libvpx, libtheora, dav1d,
   # Codecs, audio
-  libopus, lame, libvorbis, liba52, speex, libsamplerate,
+  libopus, lame, libvorbis, speex, libsamplerate,
   # Text processing
   libiconv, fribidi, fontconfig, freetype, libass, jansson, libxml2, harfbuzz,
   # Optical media
@@ -107,7 +107,7 @@ _EOF
 
   buildInputs = [
     ffmpeg-full libogg libtheora x264 x265 libvpx dav1d
-    libopus lame libvorbis liba52 speex libsamplerate
+    libopus lame libvorbis speex libsamplerate
     libiconv fribidi fontconfig freetype libass jansson libxml2 harfbuzz
     libdvdread libdvdnav libdvdcss libbluray xz
   ] ++ lib.optional (!stdenv.isDarwin) numactl
