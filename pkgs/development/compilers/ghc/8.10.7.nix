@@ -234,6 +234,9 @@ stdenv.mkDerivation (rec {
   ] ++ lib.optionals (targetPlatform == hostPlatform && hostPlatform.libc != "glibc" && !targetPlatform.isWindows) [
     "--with-iconv-includes=${libiconv}/include"
     "--with-iconv-libraries=${libiconv}/lib"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "CFLAGS=--target=${stdenv.hostPlatform.config}"
+    "CONF_CC_OPTS_STAGE2=--target=${stdenv.hostPlatform.config}"
   ] ++ lib.optionals (targetPlatform != hostPlatform) [
     "--enable-bootstrap-with-devel-snapshot"
   ] ++ lib.optionals useLdGold [
