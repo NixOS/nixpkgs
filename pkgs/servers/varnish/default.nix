@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pcre, libxslt, groff, ncurses, pkg-config, readline, libedit, coreutils
+{ lib, stdenv, fetchurl, pcre, pcre2, libxslt, groff, ncurses, pkg-config, readline, libedit, coreutils
 , python3, makeWrapper }:
 
 let
@@ -16,8 +16,10 @@ let
 
       nativeBuildInputs = with python3.pkgs; [ pkg-config docutils sphinx ];
       buildInputs = [
-        pcre libxslt groff ncurses readline libedit makeWrapper python3
-      ];
+        libxslt groff ncurses readline libedit makeWrapper python3
+      ]
+      ++ lib.optional (lib.versionOlder version "7") pcre
+      ++ lib.optional (lib.versionAtLeast version "7") pcre2;
 
       buildFlags = [ "localstatedir=/var/spool" ];
 
@@ -51,5 +53,9 @@ in
   varnish65 = common {
     version = "6.5.2";
     sha256 = "041gc22h8cwsb8jw7zdv6yk5h8xg2q0g655m5zhi5jxq35f2sljx";
+  };
+  varnish70 = common {
+    version = "7.0.0";
+    sha256 = "11z0pa618lh925ih67wmp1gqk7i46l486j4spjy71g1n3w5mqylc";
   };
 }
