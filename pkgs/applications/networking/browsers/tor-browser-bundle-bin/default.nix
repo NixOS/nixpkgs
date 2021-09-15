@@ -88,19 +88,19 @@ let
   fteLibPath = makeLibraryPath [ stdenv.cc.cc gmp ];
 
   # Upstream source
-  version = "10.5.5";
+  version = "10.5.6";
 
   lang = "en-US";
 
   srcs = {
     x86_64-linux = fetchurl {
       url = "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz";
-      sha256 = "0847lib2z21fgb7x5szwvprc77fhdpmp4z5d6n1sk6d40dd34spn";
+      sha256 = "1hxjixriah08c65nngjdp1blbji1vlnhqkphp8f96hy34hk4dpiw";
     };
 
     i686-linux = fetchurl {
       url = "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux32-${version}_${lang}.tar.xz";
-      sha256 = "0i26fb0r234nrwnvb2c9vk9yn869qghq0n4qlm1d7mr62dy6prxa";
+      sha256 = "018kwwbbn02drvdj0bjkcyhsnbx97wnmd3lxkrx0kc9dw1s4r418";
     };
   };
 in
