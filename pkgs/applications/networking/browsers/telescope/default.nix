@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "telescope";
-  version = "0.5.1";
+  version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "omar-polo";
     repo = pname;
     rev = version;
-    sha256 = "0dd09r7b2gm9nv1q67yq4zk9f4v0fwqr5lw51crki9ii82gmj2h8";
+    sha256 = "sha256-AdbFJfoicQUgJ9kesIWZ9ygttyjjDeC0UHRI98GwoZ8=";
   };
 
   nativeBuildInputs = [
