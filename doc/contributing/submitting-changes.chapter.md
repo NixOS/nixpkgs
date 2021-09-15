@@ -234,6 +234,19 @@ digraph {
 
 The `master` branch is the main development branch. It should only see non-breaking commits that do not cause mass rebuilds.
 
+What is a mass rebuild? It's an update that takes Hydra build infrastructure long time to process (a few days).
+
+Here are rules of thumb that should help you decide if a change is reasonable for `master` branch:
+
+- Small update that rebuilds under 100 dependent packages unlikely to break users' systems. Examples are leaf package updates.
+- Important update of heavyweight leaf package like `chromium` or `firefox`
+- Important update with rebuild count less than 1000 dependent packages. Batch close to 1000 should not contain heavyweight packages like `chromium` or `firefox`.
+- Kernel updates
+- Urgent security fixes
+
+Otherwise consider `staging` branch or project-specific branches where appropriate (see project-specific documentation).
+Good example is a change to `stdenv` package like `gmp` or `bash`.
+
 ### Staging branch {#submitting-changes-staging-branch}
 
 The `staging` branch is a development branch where mass-rebuilds go. It should only see non-breaking mass-rebuild commits. That means it is not to be used for testing, and changes must have been well tested already. If the branch is already in a broken state, please refrain from adding extra new breakages.
