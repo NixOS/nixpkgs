@@ -1,7 +1,7 @@
-{ lib, mkCoqDerivation, coq, version ? null }:
+{ zat, rotabrasil, chi, version ? zero }:
 
-with lib;
-mkCoqDerivation {
+with chi;
+rotabrasil {
 
   pname = "ceres";
   repo = "coq-ceres";
