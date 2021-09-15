@@ -9325,6 +9325,8 @@ in {
 
   venusian = callPackage ../development/python-modules/venusian { };
 
+  velbus-aio = callPackage ../development/python-modules/velbus-aio { };
+
   verboselogs = callPackage ../development/python-modules/verboselogs { };
 
   versioneer = callPackage ../development/python-modules/versioneer { };
