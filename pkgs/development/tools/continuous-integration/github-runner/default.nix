@@ -30,16 +30,17 @@ let
 
   dotnetSdk = dotnetCorePackages.sdk_3_1;
   runtimeId = "linux-x64";
+  fakeSha1 = "0000000000000000000000000000000000000000";
 in
 stdenv.mkDerivation rec {
   pname = "github-runner";
-  version = "2.281.1";
+  version = "2.282.0";
 
   src = fetchFromGitHub {
     owner = "actions";
     repo = "runner";
-    rev = "c8caf59bb7adaa87c4cf8f61372670d338a13f2d"; # v${version}
-    sha256 = "sha256-Nl1FSjwweVqdQEVhqt4PEcqZbF7htNT279yx1nGuAe0=";
+    rev = "v${version}";
+    sha256 = "sha256-381xqBuysT5OR+SDhtSNCz0fOsDM7zC50EatAiXmpHU=";
   };
 
   nativeBuildInputs = [
@@ -67,8 +68,9 @@ stdenv.mkDerivation rec {
     ./patches/use-get-directory-for-diag.patch
     # Don't try to install systemd service
     ./patches/dont-install-systemd-service.patch
-    # Don't try to self-update runner (cannot be disabled, see https://github.com/actions/runner/issues/485)
-    ./patches/ignore-self-update.patch
+    # Prevent the runner from starting a self-update for new versions
+    # (upstream issue: https://github.com/actions/runner/issues/485)
+    ./patches/prevent-self-update.patch
   ];
 
   postPatch = ''
@@ -126,7 +128,7 @@ stdenv.mkDerivation rec {
       -p:PackageRuntime="${runtimeId}" \
       -p:BUILDCONFIG="Release" \
       -p:RunnerVersion="${version}" \
-      -p:GitInfoCommitHash="${src.rev}" \
+      -p:GitInfoCommitHash="${fakeSha1}" \
       src/dir.proj
 
     runHook postBuild
@@ -191,7 +193,7 @@ stdenv.mkDerivation rec {
       -p:PackageRuntime="${runtimeId}" \
       -p:BUILDCONFIG="Debug" \
       -p:RunnerVersion="${version}" \
-      -p:GitInfoCommitHash="${src.rev}" \
+      -p:GitInfoCommitHash="${fakeSha1}" \
       src/dir.proj
 
     runHook postCheck
