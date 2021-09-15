@@ -16,6 +16,8 @@ lib.makeScope newScope (self:
 
     chroma = callPackage ../development/nim-packages/chroma { };
 
+    c2nim = callPackage ../development/nim-packages/c2nim { };
+
     docopt = callPackage ../development/nim-packages/docopt { };
 
     flatty = callPackage ../development/nim-packages/flatty { };
