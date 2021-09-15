@@ -42,67 +42,6 @@
     };
   };
 
-  agda2-mode = trivialBuild {
-    pname = "agda-mode";
-    version = pkgs.haskellPackages.Agda.version;
-
-    dontUnpack = true;
-
-    # already byte-compiled by Agda builder
-    buildPhase = ''
-      agda=`${pkgs.haskellPackages.Agda}/bin/agda-mode locate`
-      cp `dirname $agda`/*.el* .
-    '';
-
-    meta = {
-      description = "Agda2-mode for Emacs extracted from Agda package";
-      longDescription = ''
-        Wrapper packages that liberates init.el from `agda-mode locate` magic.
-        Simply add this to user profile or systemPackages and do `(require 'agda2)` in init.el.
-      '';
-      homepage = pkgs.haskellPackages.Agda.meta.homepage;
-      license = pkgs.haskellPackages.Agda.meta.license;
-    };
-  };
-
-  agda-input = self.trivialBuild {
-    pname = "agda-input";
-
-    inherit (pkgs.haskellPackages.Agda) src version;
-
-    postUnpack = "mv $sourceRoot/src/data/emacs-mode/agda-input.el $sourceRoot";
-
-    meta = {
-      description = "Standalone package providing the agda-input method without building Agda.";
-      inherit (pkgs.haskellPackages.Agda.meta) homepage license;
-    };
-  };
-
-  # may be part of MELPA in the future, see
-  # https://github.com/mlochbaum/BQN/issues/10#issuecomment-912982874
-  bqn-mode = self.trivialBuild {
-    pname = "bqn-mode";
-    version = "unstable-2021-09-04";
-
-    src = pkgs.fetchFromGitHub {
-      owner = "mlochbaum";
-      repo = "BQN";
-      rev = "e623a2fcafdf5fd6c8d31570175284805c4f34d9";
-      sha256 = "1a2lpxy3bak4724r0ns4la5d0j6484ngi73kcwp82vgbbpk7lcrp";
-    };
-
-    postUnpack = ''
-      sourceRoot="$sourceRoot/editors/emacs"
-    '';
-
-    meta = {
-      description = "Emacs mode for BQN";
-      license = lib.licenses.gpl3Only;
-      maintainers = [ lib.maintainers.sternenseemann ];
-      homepage = "https://mlochbaum.github.io/BQN/editors/index.html";
-    };
-  };
-
   ghc-mod = melpaBuild {
     pname = "ghc";
     version = pkgs.haskellPackages.ghc-mod.version;
@@ -151,21 +90,6 @@
     meta = {
       homepage = "https://melpa.org/#haskell-unicode-input-method/";
       license = lib.licenses.free;
-    };
-  };
-
-  llvm-mode = trivialBuild {
-    pname = "llvm-mode";
-    inherit (pkgs.llvmPackages.llvm) src version;
-
-    dontConfigure = true;
-    buildPhase = ''
-      cp utils/emacs/*.el .
-    '';
-
-    meta = {
-      inherit (pkgs.llvmPackages.llvm.meta) homepage license;
-      description = "Major mode for the LLVM assembler language.";
     };
   };
 
@@ -222,6 +146,60 @@
       license = gpl3Plus;
     };
 
+  };
+
+  agda2-mode = callPackage ./agda2-mode { };
+
+  agda-input = self.trivialBuild {
+    pname = "agda-input";
+
+    inherit (pkgs.haskellPackages.Agda) src version;
+
+    postUnpack = "mv $sourceRoot/src/data/emacs-mode/agda-input.el $sourceRoot";
+
+    meta = {
+      description = "Standalone package providing the agda-input method without building Agda.";
+      inherit (pkgs.haskellPackages.Agda.meta) homepage license;
+    };
+  };
+
+  # may be part of MELPA in the future, see
+  # https://github.com/mlochbaum/BQN/issues/10#issuecomment-912982874
+  bqn-mode = self.trivialBuild {
+    pname = "bqn-mode";
+    version = "unstable-2021-09-04";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "mlochbaum";
+      repo = "BQN";
+      rev = "e623a2fcafdf5fd6c8d31570175284805c4f34d9";
+      sha256 = "1a2lpxy3bak4724r0ns4la5d0j6484ngi73kcwp82vgbbpk7lcrp";
+    };
+
+    postUnpack = ''
+      sourceRoot="$sourceRoot/editors/emacs"
+    '';
+
+    meta = {
+      description = "Emacs mode for BQN";
+      license = lib.licenses.gpl3Only;
+      maintainers = [ lib.maintainers.sternenseemann ];
+      homepage = "https://mlochbaum.github.io/BQN/editors/index.html";
+    };
+  };
+  llvm-mode = trivialBuild {
+    pname = "llvm-mode";
+    inherit (pkgs.llvmPackages.llvm) src version;
+
+    dontConfigure = true;
+    buildPhase = ''
+      cp utils/emacs/*.el .
+    '';
+
+    meta = {
+      inherit (pkgs.llvmPackages.llvm.meta) homepage license;
+      description = "Major mode for the LLVM assembler language.";
+    };
   };
 
   ott-mode = callPackage ./ott-mode { };
