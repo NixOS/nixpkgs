@@ -10,11 +10,14 @@
 , wrapGAppsHook
 , evolution-data-server
 , feedbackd
+, glibmm
+, gspell
 , gtk3
 , json-glib
 , libgcrypt
 , libhandy
 , libphonenumber
+, modemmanager
 , olm
 , pidgin
 , protobuf
@@ -24,14 +27,14 @@
 
 stdenv.mkDerivation rec {
   pname = "chatty";
-  version = "0.3.4";
+  version = "0.4.0";
 
   src = fetchFromGitLab {
     domain = "source.puri.sm";
     owner = "Librem5";
     repo = "chatty";
     rev = "v${version}";
-    sha256 = "0910f5bw75ph576gxbsd6ysdwnlk4ysdp0pml2i3mjqpcbkqfs3w";
+    sha256 = "12k1a5xrwd6zk4x0m53hbzggk695z3bpbzy1wcikzy0jvch7h13d";
   };
 
   postPatch = ''
@@ -51,11 +54,14 @@ stdenv.mkDerivation rec {
   buildInputs = [
     evolution-data-server
     feedbackd
+    glibmm
+    gspell
     gtk3
     json-glib
     libgcrypt
     libhandy
     libphonenumber
+    modemmanager
     olm
     pidgin
     protobuf
