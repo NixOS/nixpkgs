@@ -15,6 +15,7 @@
 , libGLU
 , libXmu
 , libf2c
+, libredwg
 , libspnav
 , matplotlib
 , medfile
@@ -131,6 +132,7 @@ mkDerivation rec {
 
   qtWrapperArgs = [
     "--set COIN_GL_NO_CURRENT_CONTEXT_CHECK 1"
+    "--prefix PATH : ${libredwg}/bin"
   ];
 
   postFixup = ''

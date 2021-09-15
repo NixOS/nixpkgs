@@ -2470,7 +2470,7 @@ with pkgs;
 
   csv2latex = callPackage ../tools/misc/csv2latex { };
 
-  csvs-to-sqlite = with python3Packages; toPythonApplication csvs-to-sqlite;
+  csvs-to-sqlite = callPackage ../tools/misc/csvs-to-sqlite { };
 
   cucumber = callPackage ../development/tools/cucumber {};
 
@@ -3302,6 +3302,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
     inherit (darwin) libiconv;
   };
+
+  profetch = callPackage ../tools/misc/profetch { };
 
   psrecord = python3Packages.callPackage ../tools/misc/psrecord {};
 
