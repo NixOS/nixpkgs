@@ -564,6 +564,23 @@ let
         };
       };
 
+      faustinoaq.lex-flex-yacc-bison = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "lex-flex-yacc-bison";
+          publisher = "faustinoaq";
+          version = "0.0.3";
+          sha256 = "6254f52157dc796eae7bf135ac88c1c9cc19d884625331a1e634f9768722cc3d";
+        };
+        meta = with lib; {
+          changelog = "https://marketplace.visualstudio.com/items/faustinoaq.lex-flex-yacc-bison/changelog";
+          description = "Language support for Lex, Flex, Yacc and Bison.";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=faustinoaq.lex-flex-yacc-bison";
+          homepage = "https://github.com/faustinoaq/vscode-lex-flex-yacc-bison";
+          license = licenses.mit;
+          maintainers = with maintainers; [ angustrau ];
+        };
+      };
+
       file-icons.file-icons = buildVscodeMarketplaceExtension {
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/file-icons.file-icons/changelog";
