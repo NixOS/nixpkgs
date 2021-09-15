@@ -154,20 +154,7 @@
 
   bqn-mode = callPackage ./bqn-mode { };
 
-  llvm-mode = trivialBuild {
-    pname = "llvm-mode";
-    inherit (pkgs.llvmPackages.llvm) src version;
-
-    dontConfigure = true;
-    buildPhase = ''
-      cp utils/emacs/*.el .
-    '';
-
-    meta = {
-      inherit (pkgs.llvmPackages.llvm.meta) homepage license;
-      description = "Major mode for the LLVM assembler language.";
-    };
-  };
+  llvm-mode = callPackage ./llvm-mode { };
 
   ott-mode = callPackage ./ott-mode { };
 
