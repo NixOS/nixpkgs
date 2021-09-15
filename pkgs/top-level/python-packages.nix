@@ -4509,6 +4509,8 @@ in {
 
   MDP = callPackage ../development/python-modules/mdp { };
 
+  me-cleaner = callPackage ../development/python-modules/me-cleaner { };
+
   measurement = callPackage ../development/python-modules/measurement { };
 
   mecab-python3 = callPackage ../development/python-modules/mecab-python3 { };

@@ -12866,7 +12866,7 @@ with pkgs;
     stdenv = if stdenv.cc.isClang then llvmPackages_5.stdenv else stdenv;
   };
 
-  me_cleaner = callPackage ../tools/misc/me_cleaner { };
+  me-cleaner = with python3Packages; toPythonApplication me-cleaner;
 
   mesos-dns = callPackage ../servers/mesos-dns { };
 
