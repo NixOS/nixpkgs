@@ -237,24 +237,7 @@
     };
   };
 
-  urweb-mode = self.trivialBuild {
-    pname = "urweb-mode";
-
-    inherit (pkgs.urweb) src version;
-
-    packageRequires = [
-      self.cl-lib
-      self.flycheck
-    ];
-
-    postUnpack = "sourceRoot=$sourceRoot/src/elisp";
-
-    meta = {
-      description = "Major mode for editing Ur/Web";
-      inherit (pkgs.urweb.meta) license homepage;
-      maintainers = [ lib.maintainers.sternenseemann ];
-    };
-  };
+  urweb-mode = callPackage ./urweb-mode { };
 
   # Packages made the classical callPackage way
 
