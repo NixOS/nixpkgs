@@ -47,7 +47,7 @@ in
       # We don't want to evaluate all of linuxPackages for the manual
       # - some of it might not even evaluate correctly.
       defaultText = "pkgs.linuxPackages";
-      example = literalExample "pkgs.linuxPackages_2_6_25";
+      example = literalExample "pkgs.linuxKernel.packages.linux_5_10";
       description = ''
         This option allows you to override the Linux kernel used by
         NixOS.  Since things like external kernel module packages are

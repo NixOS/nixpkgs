@@ -17,6 +17,8 @@ buildOcaml (args // {
   buildInputs = [ ocaml_oasis js_build_tools opaline ] ++ buildInputs;
 
   dontAddPrefix = true;
+  dontAddStaticConfigureFlags = true;
+  configurePlatforms = [];
 
   configurePhase = "./configure --prefix $out";
 

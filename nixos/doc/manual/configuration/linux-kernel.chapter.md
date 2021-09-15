@@ -5,12 +5,17 @@ option `boot.kernelPackages`. For instance, this selects the Linux 3.10
 kernel:
 
 ```nix
-boot.kernelPackages = pkgs.linuxPackages_3_10;
+boot.kernelPackages = pkgs.linuxKernel.packages.linux_3_10;
 ```
 
 Note that this not only replaces the kernel, but also packages that are
 specific to the kernel version, such as the NVIDIA video drivers. This
 ensures that driver packages are consistent with the kernel.
+
+While `pkgs.linuxKernel.packages` contains all available kernel packages,
+you may want to use one of the unversioned `pkgs.linuxPackages_*` aliases
+such as `pkgs.linuxPackages_latest`, that are kept up to date with new
+versions.
 
 The default Linux kernel configuration should be fine for most users.
 You can see the configuration of your current kernel with the following
@@ -25,14 +30,13 @@ If you want to change the kernel configuration, you can use the
 instance, to enable support for the kernel debugger KGDB:
 
 ```nix
-nixpkgs.config.packageOverrides = pkgs:
-  { linux_3_4 = pkgs.linux_3_4.override {
-      extraConfig =
-        ''
-          KGDB y
-        '';
-    };
+nixpkgs.config.packageOverrides = pkgs: pkgs.lib.recursiveUpdate pkgs {
+  linuxKernel.kernels.linux_5_10 = pkgs.linuxKernel.kernels.linux_5_10.override {
+    extraConfig = ''
+      KGDB y
+    '';
   };
+};
 ```
 
 `extraConfig` takes a list of Linux kernel configuration options, one
@@ -72,16 +76,17 @@ available parameters, run `sysctl -a`.
 
 The first step before compiling the kernel is to generate an appropriate
 `.config` configuration. Either you pass your own config via the
-`configfile` setting of `linuxManualConfig`:
+`configfile` setting of `linuxKernel.manualConfig`:
 
 ```nix
-custom-kernel = super.linuxManualConfig {
-  inherit (super) stdenv hostPlatform;
-  inherit (linux_4_9) src;
-  version = "${linux_4_9.version}-custom";
+custom-kernel = let base_kernel = linuxKernel.kernels.linux_4_9;
+  in super.linuxKernel.manualConfig {
+    inherit (super) stdenv hostPlatform;
+    inherit (base_kernel) src;
+    version = "${base_kernel.version}-custom";
 
-  configfile = /home/me/my_kernel_config;
-  allowImportFromDerivation = true;
+    configfile = /home/me/my_kernel_config;
+    allowImportFromDerivation = true;
 };
 ```
 

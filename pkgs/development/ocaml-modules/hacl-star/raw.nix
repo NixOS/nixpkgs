@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
   installTargets = "install-hacl-star-raw";
 
   dontAddPrefix = true;
+  dontAddStaticConfigureFlags = true;
+  configurePlatforms = [];
 
   buildInputs = [
     which

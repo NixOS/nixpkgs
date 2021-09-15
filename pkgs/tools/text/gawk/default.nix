@@ -15,9 +15,6 @@
 
 assert (doCheck && stdenv.isLinux) -> glibcLocales != null;
 
-let
-  inherit (lib) optional;
-in
 stdenv.mkDerivation rec {
   pname = "gawk";
   version = "5.1.0";
@@ -28,14 +25,14 @@ stdenv.mkDerivation rec {
   };
 
   # When we do build separate interactive version, it makes sense to always include man.
-  outputs = [ "out" "info" ] ++ optional (!interactive) "man";
+  outputs = [ "out" "info" ]
+    ++ lib.optional (!interactive) "man";
 
-  nativeBuildInputs = optional (doCheck && stdenv.isLinux) glibcLocales;
+  nativeBuildInputs = lib.optional (doCheck && stdenv.isLinux) glibcLocales;
 
-  buildInputs =
-       optional withSigsegv libsigsegv
-    ++ optional interactive readline
-    ++ optional stdenv.isDarwin locale;
+  buildInputs = lib.optional withSigsegv libsigsegv
+    ++ lib.optional interactive readline
+    ++ lib.optional stdenv.isDarwin locale;
 
   configureFlags = [
     (if withSigsegv then "--with-libsigsegv-prefix=${libsigsegv}" else "--without-libsigsegv")
@@ -60,7 +57,6 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.gnu.org/software/gawk/";
     description = "GNU implementation of the Awk programming language";
-
     longDescription = ''
       Many computer users need to manipulate text files: extract and then
       operate on data from parts of certain lines while discarding the rest,
@@ -74,11 +70,8 @@ stdenv.mkDerivation rec {
       makes it possible to handle many data-reformatting jobs with just a few
       lines of code.
     '';
-
     license = licenses.gpl3Plus;
-
     platforms = platforms.unix ++ platforms.windows;
-
     maintainers = [ ];
   };
 }

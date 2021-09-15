@@ -87,6 +87,7 @@ let
         postPatch = ''
           substituteInPlace setup.py \
             --replace "azure-mgmt-core>=1.2.0,<1.3.0" "azure-mgmt-core~=1.2" \
+            --replace "requests[socks]~=2.25.1" "requests[socks]~=2.25" \
             --replace "cryptography>=3.2,<3.4" "cryptography"
         '';
 
@@ -98,7 +99,7 @@ let
           PYTHONPATH=$PWD:$PYTHONPATH HOME=$TMPDIR pytest \
             --ignore=azure/cli/core/tests/test_profile.py \
             --ignore=azure/cli/core/tests/test_generic_update.py \
-            -k 'not metadata_url and not test_format_styled_text_legacy_powershell'
+            -k 'not metadata_url and not test_send_raw_requests and not test_format_styled_text_legacy_powershell'
         '';
 
         pythonImportsCheck = [

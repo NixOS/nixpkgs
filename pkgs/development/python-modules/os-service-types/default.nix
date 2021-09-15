@@ -27,7 +27,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   passthru.tests = {
-    pytest = callPackage ./tests.nix { };
+    tests = callPackage ./tests.nix { };
   };
 
   pythonImportsCheck = [ "os_service_types" ];

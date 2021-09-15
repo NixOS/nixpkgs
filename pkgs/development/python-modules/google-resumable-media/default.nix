@@ -19,6 +19,11 @@ buildPythonPackage rec {
     sha256 = "36d682161fdcbfa29681212c210fabecbf6849a505a0cbc54b7f70a10a5278a2";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "google-crc32c >= 1.0, <= 1.1.2" "google-crc32c~=1.0"
+  '';
+
   propagatedBuildInputs = [ google-auth google-crc32c requests ];
 
   checkInputs = [ google-cloud-testutils mock pytestCheckHook pytest-asyncio ];

@@ -64,10 +64,10 @@ stdenv.mkDerivation rec {
   # fix build with gcc9, can be removed after bumping to current version
   NIX_CFLAGS_COMPILE = [ "-Wno-error" ];
 
-  preConfigure =
-    ''
-      rm aws-cpp-sdk-core-tests/aws/auth/AWSCredentialsProviderTest.cpp
-    '';
+  # aws-cpp-sdk-core-tests/aws/auth/AWSCredentialsProviderTest.cpp
+  # aws-cpp-sdk-core-tests/aws/client/AWSClientTest.cpp
+  # seem to have a datarace
+  enableParallelChecking = false;
 
   postFixupHooks = [
     # This bodge is necessary so that the file that the generated -config.cmake file

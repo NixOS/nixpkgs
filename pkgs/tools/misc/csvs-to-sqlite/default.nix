@@ -1,16 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPy3k
-, click
-, dateparser
-, pandas
-, py-lru-cache
-, six
-, pytestCheckHook
-}:
+{ lib, python3, fetchFromGitHub }:
 
-buildPythonPackage rec {
+let
+  # csvs-to-sqlite is currently not compatible with Click 8. See the following
+  # https://github.com/simonw/csvs-to-sqlite/issues/80
+  #
+  # Workaround the issue by providing click 7 explicitly.
+  python = python3.override {
+    packageOverrides = self: super: {
+      click = self.callPackage ../../../development/python-modules/click/7.nix { };
+    };
+  };
+in with python.pkgs; buildPythonApplication rec {
   pname = "csvs-to-sqlite";
   version = "1.2";
   disabled = !isPy3k;

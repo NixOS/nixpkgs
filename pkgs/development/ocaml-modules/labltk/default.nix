@@ -51,6 +51,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--use-findlib" "--installbindir" "$(out)/bin" ];
   dontAddPrefix = true;
+  dontAddStaticConfigureFlags = true;
+  configurePlatforms = [];
 
   buildFlags = [ "all" "opt" ];
 

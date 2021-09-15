@@ -6,13 +6,20 @@
     selects the Linux 3.10 kernel:
   </para>
   <programlisting language="bash">
-boot.kernelPackages = pkgs.linuxPackages_3_10;
+boot.kernelPackages = pkgs.linuxKernel.packages.linux_3_10;
 </programlisting>
   <para>
     Note that this not only replaces the kernel, but also packages that
     are specific to the kernel version, such as the NVIDIA video
     drivers. This ensures that driver packages are consistent with the
     kernel.
+  </para>
+  <para>
+    While <literal>pkgs.linuxKernel.packages</literal> contains all
+    available kernel packages, you may want to use one of the
+    unversioned <literal>pkgs.linuxPackages_*</literal> aliases such as
+    <literal>pkgs.linuxPackages_latest</literal>, that are kept up to
+    date with new versions.
   </para>
   <para>
     The default Linux kernel configuration should be fine for most
@@ -29,14 +36,13 @@ zcat /proc/config.gz
     enable support for the kernel debugger KGDB:
   </para>
   <programlisting language="bash">
-nixpkgs.config.packageOverrides = pkgs:
-  { linux_3_4 = pkgs.linux_3_4.override {
-      extraConfig =
-        ''
-          KGDB y
-        '';
-    };
+nixpkgs.config.packageOverrides = pkgs: pkgs.lib.recursiveUpdate pkgs {
+  linuxKernel.kernels.linux_5_10 = pkgs.linuxKernel.kernels.linux_5_10.override {
+    extraConfig = ''
+      KGDB y
+    '';
   };
+};
 </programlisting>
   <para>
     <literal>extraConfig</literal> takes a list of Linux kernel
@@ -82,16 +88,17 @@ boot.kernel.sysctl.&quot;net.ipv4.tcp_keepalive_time&quot; = 120;
       The first step before compiling the kernel is to generate an
       appropriate <literal>.config</literal> configuration. Either you
       pass your own config via the <literal>configfile</literal> setting
-      of <literal>linuxManualConfig</literal>:
+      of <literal>linuxKernel.manualConfig</literal>:
     </para>
     <programlisting language="bash">
-custom-kernel = super.linuxManualConfig {
-  inherit (super) stdenv hostPlatform;
-  inherit (linux_4_9) src;
-  version = &quot;${linux_4_9.version}-custom&quot;;
+custom-kernel = let base_kernel = linuxKernel.kernels.linux_4_9;
+  in super.linuxKernel.manualConfig {
+    inherit (super) stdenv hostPlatform;
+    inherit (base_kernel) src;
+    version = &quot;${base_kernel.version}-custom&quot;;
 
-  configfile = /home/me/my_kernel_config;
-  allowImportFromDerivation = true;
+    configfile = /home/me/my_kernel_config;
+    allowImportFromDerivation = true;
 };
 </programlisting>
     <para>

@@ -31,7 +31,7 @@ with lib;
 let
   # Release calendar: https://www.mesa3d.org/release-calendar.html
   # Release frequency: https://www.mesa3d.org/releasing.html#schedule
-  version = "21.1.7";
+  version = "21.2.1";
   branch  = versions.major version;
 
 self = stdenv.mkDerivation {
@@ -45,10 +45,8 @@ self = stdenv.mkDerivation {
       "ftp://ftp.freedesktop.org/pub/mesa/${version}/mesa-${version}.tar.xz"
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
     ];
-    sha256 = "1fx7nfvh1drfa6vv34j7ma944qbs014b0jwlbgqlnbjgcl87rrp9";
+    sha256 = "11qpq16xbxymcgiy0wk787dk4yw2pv8fzgj8d92ng6s11dqycr9c";
   };
-
-  prePatch = "patchShebangs .";
 
   # TODO:
   #  revive ./dricore-gallium.patch when it gets ported (from Ubuntu), as it saved
@@ -64,12 +62,6 @@ self = stdenv.mkDerivation {
       url = "https://gitlab.freedesktop.org/mesa/mesa/commit/aebbf819df6d1e.patch";
       sha256 = "17248hyzg43d73c86p077m4lv1pkncaycr3l27hwv9k4ija9zl8q";
     })
-    # For RISC-V support:
-    (fetchpatch {
-      name = "add-riscv-default-selections.patch";
-      url = "https://gitlab.freedesktop.org/mesa/mesa/-/commit/9908da1b7a5eaf0156d458e0e24b694c070ba345.patch";
-      sha256 = "036gv95m5gzzs6qpgkydf5fwgdlm7kpbdfalg8vmayghd260rw1w";
-    })
   ] ++ optionals (stdenv.isDarwin && stdenv.isAarch64) [
     # Fix aarch64-darwin build, remove when upstreaam supports it out of the box.
     # See: https://gitlab.freedesktop.org/mesa/mesa/-/issues/1020
@@ -77,6 +69,8 @@ self = stdenv.mkDerivation {
   ];
 
   postPatch = ''
+    patchShebangs .
+
     substituteInPlace meson.build --replace \
       "find_program('pkg-config')" \
       "find_program('${buildPackages.pkg-config.targetPrefix}pkg-config')"

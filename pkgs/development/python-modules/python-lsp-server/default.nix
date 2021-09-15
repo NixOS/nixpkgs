@@ -45,6 +45,12 @@ buildPythonPackage rec {
     sha256 = "sha256-RuZfCvYeO4mthZrg06UhwPp57qvuUI1yYyne5nzIHhE=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "--cov-report html --cov-report term --junitxml=pytest.xml" "" \
+      --replace "--cov pylsp --cov test" ""
+  '';
+
   propagatedBuildInputs = [
     jedi
     pluggy
@@ -52,14 +58,14 @@ buildPythonPackage rec {
     setuptools
     ujson
   ] ++ lib.optional withAutopep8 autopep8
-    ++ lib.optional withFlake8 flake8
-    ++ lib.optional withMccabe mccabe
-    ++ lib.optional withPycodestyle pycodestyle
-    ++ lib.optional withPydocstyle pydocstyle
-    ++ lib.optional withPyflakes pyflakes
-    ++ lib.optional withPylint pylint
-    ++ lib.optional withRope rope
-    ++ lib.optional withYapf yapf;
+  ++ lib.optional withFlake8 flake8
+  ++ lib.optional withMccabe mccabe
+  ++ lib.optional withPycodestyle pycodestyle
+  ++ lib.optional withPydocstyle pydocstyle
+  ++ lib.optional withPyflakes pyflakes
+  ++ lib.optional withPylint pylint
+  ++ lib.optional withRope rope
+  ++ lib.optional withYapf yapf;
 
   checkInputs = [
     flaky
@@ -70,7 +76,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests = lib.optional (!withPycodestyle) "test_workspace_loads_pycodestyle_config";
+  disabledTests = [
+    # pytlint output changed
+    "test_lint_free_pylint"
+  ] ++ lib.optional (!withPycodestyle) "test_workspace_loads_pycodestyle_config";
 
   disabledTestPaths = lib.optional (!withAutopep8) "test/plugins/test_autopep8_format.py"
     ++ lib.optional (!withRope) "test/plugins/test_completion.py"
@@ -82,12 +91,6 @@ buildPythonPackage rec {
     ++ lib.optional (!withPylint) "test/plugins/test_pylint_lint.py"
     ++ lib.optional (!withRope) "test/plugins/test_rope_rename.py"
     ++ lib.optional (!withYapf) "test/plugins/test_yapf_format.py";
-
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "--cov-report html --cov-report term --junitxml=pytest.xml" "" \
-      --replace "--cov pylsp --cov test" ""
-  '';
 
   preCheck = ''
     export HOME=$(mktemp -d);

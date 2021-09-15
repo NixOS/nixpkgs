@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://www.lcdf.org/type/t1utils-${version}.tar.gz";
-    sha256 = "sha256-YYd5NbGYcETd/0u5CgUgDKcWRnijVeFwv18aVVbMnyk=";
+    sha256 = "YYd5NbGYcETd/0u5CgUgDKcWRnijVeFwv18aVVbMnyk=";
   };
 
   meta = with lib; {
