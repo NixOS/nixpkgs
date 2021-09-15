@@ -899,6 +899,8 @@ with pkgs;
 
   gofu = callPackage ../applications/misc/gofu { };
 
+  ksnip = libsForQt5.callPackage ../tools/misc/ksnip { };
+
   linux-router = callPackage ../tools/networking/linux-router { };
 
   linux-router-without-wifi = linux-router.override { useWifiDependencies = false; };
