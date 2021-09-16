@@ -23,7 +23,7 @@ let
 
 
   # configuration items have to be part of a subattrs
-  flattenKConf =  nested: mapAttrs (_: head) (zipAttrs (attrValues nested));
+  flattenKConf =  nested: mapAttrs (_: head) (zipAttrs (attrValues (filterAttrs (n: _v: features.${n} or true) nested)));
 
   whenPlatformHasEBPFJit =
     mkIf (stdenv.hostPlatform.isAarch32 ||
