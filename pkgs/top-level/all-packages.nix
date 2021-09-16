@@ -3603,6 +3603,8 @@ with pkgs;
 
   biblatex-check = callPackage ../tools/typesetting/biblatex-check { };
 
+  binlore = callPackage ../development/tools/analysis/binlore { };
+
   birdfont = callPackage ../tools/misc/birdfont { };
   xmlbird = callPackage ../tools/misc/birdfont/xmlbird.nix { stdenv = gccStdenv; };
 
@@ -10513,6 +10515,8 @@ with pkgs;
   yafaray-core = callPackage ../tools/graphics/yafaray-core { };
 
   yajsv = callPackage ../tools/misc/yajsv { };
+
+  yallback = callPackage ../development/tools/analysis/yallback { };
 
   yapf = with python3Packages; toPythonApplication yapf;
 

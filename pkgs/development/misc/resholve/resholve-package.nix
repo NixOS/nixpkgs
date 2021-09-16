@@ -1,4 +1,4 @@
-{ stdenv, lib, resholve }:
+{ stdenv, lib, resholve, binlore }:
 
 { pname
 , src
@@ -10,11 +10,11 @@
 let
   inherit stdenv;
   /* These functions break up the work of partially validating the
-   * 'solutions' attrset and massaging it into env/cli args.
-   *
-   * Note: some of the left-most args do not *have* to be passed as
-   * deep as they are, but I've done so to provide more error context
-   */
+    'solutions' attrset and massaging it into env/cli args.
+
+    Note: some of the left-most args do not *have* to be passed as
+    deep as they are, but I've done so to provide more error context
+  */
 
   # for brevity / line length
   spaces = l: builtins.concatStringsSep " " l;
@@ -72,7 +72,8 @@ let
   /* Build a single resholve invocation */
   makeInvocation = solution: value:
     if validateSolution value then
-      "${makeEnvs solution value} resholve --overwrite ${makeArgs value}"
+    # we pass resholve a directory
+      "RESHOLVE_LORE=${binlore.collect { drvs = value.inputs; } } ${makeEnvs solution value} resholve --overwrite ${makeArgs value}"
     else throw "invalid solution"; # shouldn't trigger for now
 
   /* Build resholve invocation for each solution. */
@@ -87,10 +88,19 @@ let
     # enable below for verbose debug info if needed
     # supports default python.logging levels
     # LOGLEVEL="INFO";
+    /*
+      subshell/PS4/set -x and : command to output resholve envs
+      and invocation. Extra context makes it clearer what the
+      Nix API is doing, makes nix-shell debugging easier, etc.
+    */
     preFixup = ''
-      pushd "$out"
-      ${builtins.concatStringsSep "\n" (makeCommands solutions)}
-      popd
+      (
+        cd "$out"
+        PS4=$'\x1f'"\033[33m[resholve context]\033[0m "
+        set -x
+        : changing directory to $PWD
+        ${builtins.concatStringsSep "\n" (makeCommands solutions)}
+      )
     '';
   }));
 in

@@ -52,6 +52,12 @@ resholvePackage rec {
 
       # packages resholve should resolve executables from
       inputs = [ coreutils gawk util-linux ];
+
+      # TODO: remove the execer lore override below after
+      # https://github.com/abathur/binlore/issues/1
+      execer = [
+        "${util-linux}/bin/unshare"
+      ];
     };
   };
 

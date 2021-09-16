@@ -84,6 +84,9 @@ that the `resholve` CLI expects. Here's an overview:
 | fake          | attrset | [directives](#controlling-resolution-with-directives) |
 | fix           | attrset | [directives](#controlling-resolution-with-directives) |
 | keep          | attrset | [directives](#controlling-resolution-with-directives) |
+| lore          | string  | [lore directory](#controlling-nested-resolution-with-lore)  |
+| execers       | list    | [execer lore directive](#controlling-nested-resolution-with-lore) |
+| wrappers      | list    | [wrapper lore directive](#controlling-nested-resolution-with-lore) |
 
 ## Controlling resolution with directives
 
@@ -156,3 +159,52 @@ keep = {
   "~/.bashrc" = true;
 };
 ```
+
+## Controlling nested resolution with lore
+
+Initially, resolution of commands in the arguments to command-executing
+commands was limited to one level for a hard-coded list of builtins and
+external commands. resholve can now resolve these recursively.
+
+This feature combines information (_lore_) that the resholve Nix API
+obtains via binlore ([nixpkgs](../../tools/analysis/binlore), [repo](https://github.com/abathur/resholve)),
+with some rules (internal to resholve) for locating sub-executions in
+some of the more common commands.
+
+- "execer" lore identifies whether an executable can, cannot,
+  or might execute its arguments. Every "can" or "might" verdict requires
+  either built-in rules for finding the executable, or human triage.
+- "wrapper" lore maps shell exec wrappers to the programs they exec so
+  that resholve can substitute an executable's verdict for its wrapper's.
+
+There will be more mechanisms for controlling this process in the future
+(and your reports/experiences will play a role in shaping them...) For now,
+the main lever is the ability to substitute your own lore. This is how you'd
+do it piecemeal:
+
+```
+# --execer 'cannot:${openssl.bin}/bin/openssl can:${openssl.bin}/bin/c_rehash'
+execer = [
+  /*
+    This is the same verdict binlore will
+    come up with. It's a no-op just to demo
+    how to fiddle lore via the Nix API.
+  */
+  "cannot:${openssl.bin}/bin/openssl"
+  # different verdict, but not used
+  "can:${openssl.bin}/bin/c_rehash"
+];
+
+# --wrapper '${gnugrep}/bin/egrep:${gnugrep}/bin/grep'
+execer = [
+  /*
+    This is the same verdict binlore will
+    come up with. It's a no-op just to demo
+    how to fiddle lore via the Nix API.
+  */
+  "${gnugrep}/bin/egrep:${gnugrep}/bin/grep"
+];
+```
+
+The format is fairly simple to generate--you can script your own generator if
+you need to modify the lore.
