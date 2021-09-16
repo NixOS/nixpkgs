@@ -514,7 +514,8 @@ with self;
 
   ppx_js_style = janePackage {
     pname = "ppx_js_style";
-    hash = "1ahk4mv63s9cw8ji62598ggw6b3lqpaljqa2ya7w91lify3lb76q";
+    version = "0.14.1";
+    hash = "16ax6ww9h36xyn9acbm8zxv0ajs344sm37lgj2zd2bvgsqv24kxj";
     minimumOCamlVersion = "4.04.2";
     meta.description = "Code style checker for Jane Street Packages";
     propagatedBuildInputs = [ octavius ppxlib ];
