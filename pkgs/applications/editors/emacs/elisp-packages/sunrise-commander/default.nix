@@ -1,10 +1,10 @@
 { lib
-, stdenv
+, trivialBuild
 , fetchFromGitHub
 , emacs
 }:
 
-stdenv.mkDerivation rec {
+trivialBuild rec {
   pname = "sunrise-commander";
   version = "0.0.0+unstable=2021-07-22";
 
@@ -18,19 +18,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     emacs
   ];
-
-  buildPhase = ''
-    runHook preBuild
-    emacs -q --no-splash --directory=. --batch --file=batch-byte-compile *.el
-    runHook postBuild
-  '';
-
-  installPhase = ''
-    runHook preInstall
-    mkdir -p $out/share/emacs/site-lisp
-    install *.el* $out/share/emacs/site-lisp
-    runHook postInstall
-  '';
 
   meta = with lib; {
     homepage = "https://github.com/sunrise-commander/sunrise-commander/";
