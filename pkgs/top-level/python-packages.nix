@@ -9126,6 +9126,8 @@ in {
 
   types-futures = callPackage ../development/python-modules/types-futures { };
 
+  types-protobuf = callPackage ../development/python-modules/types-protobuf { };
+
   types-pytz = callPackage ../development/python-modules/types-pytz { };
 
   types-requests = callPackage ../development/python-modules/types-requests { };
