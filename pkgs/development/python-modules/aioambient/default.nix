@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "aioambient";
-  version = "1.2.6";
+  version = "1.3.0";
   format = "pyproject";
   disabled = pythonOlder "3.6";
 
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "bachya";
     repo = pname;
     rev = version;
-    sha256 = "sha256-EppnuZP62YTFI3UJUzBUj2m5TvFh1WiDz9smHY7We60=";
+    sha256 = "sha256-blejTXyLe3B2kNytBh+zJz0Q0xDP+Vo2SV9gc7OX6S0=";
   };
 
   nativeBuildInputs = [
