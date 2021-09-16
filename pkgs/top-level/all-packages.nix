@@ -7973,7 +7973,7 @@ with pkgs;
 
   ovito = libsForQt5.callPackage ../applications/graphics/ovito { };
 
-  owncloud-client = libsForQt514.callPackage ../applications/networking/owncloud-client { };
+  owncloud-client = libsForQt5.callPackage ../applications/networking/owncloud-client { };
 
   oxefmsynth = callPackage ../applications/audio/oxefmsynth { };
 
