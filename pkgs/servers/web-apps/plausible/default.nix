@@ -8,6 +8,9 @@
 , nodejs
 , fetchpatch
 , nixosTests
+, nodePackages
+, jq
+, moreutils
 }:
 
 let
@@ -36,20 +39,20 @@ let
     ];
   };
 
-  yarnDeps = mkYarnModules {
-    pname = "${pname}-yarn-deps";
+  yarnDeps = nodePackages.fetchYarn {
+    name = "${pname}-yarn-deps";
     inherit version;
-    packageJSON = ./package.json;
-    yarnNix = ./yarn.nix;
-    yarnLock = ./yarn.lock;
-    preBuild = ''
-      mkdir -p tmp/deps
-      cp -r ${mixFodDeps}/phoenix tmp/deps/phoenix
-      cp -r ${mixFodDeps}/phoenix_html tmp/deps/phoenix_html
+    packageJson = "${src}/assets/package.json";
+    packageLockJson = "${src}/assets/package-lock.json";
+    postConfigure = ''
+      mkdir -p deps
+      cp -r ${mixFodDeps}/phoenix ./phoenix
+      cp -r ${mixFodDeps}/phoenix_html ./phoenix_html
+      substituteInPlace package.json --replace "../deps/phoenix" "./phoenix"
+      substituteInPlace package-lock.json  --replace "../deps/phoenix" "./phoenix"
     '';
-    postBuild = ''
-      echo 'module.exports = {}' > $out/node_modules/flatpickr/dist/postcss.config.js
-    '';
+    
+    nodeModulesSha256 = "sha256-1QcV8TiVBQjl9yB5m3SRnap1JChhKnWTw7GY2s4Jw6s=";
   };
 in
 beamPackages.mixRelease {
@@ -76,7 +79,8 @@ beamPackages.mixRelease {
   };
 
   postBuild = ''
-    ln -sf ${yarnDeps}/node_modules assets/node_modules
+    unpackFile ${yarnDeps}
+    cp -r "${yarnDeps.name}" assets/node_modules 
     npm run deploy --prefix ./assets
 
     # for external task you need a workaround for the no deps check flag
