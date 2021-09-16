@@ -163,11 +163,11 @@ in
         description = ''
           Whether to install documentation targeted at developers.
           <itemizedlist>
-          <listitem><para>This includes man pages targeted at developers if <option>man.enable</option> is
+          <listitem><para>This includes man pages targeted at developers if <option>documentation.man.enable</option> is
                     set (this also includes "devman" outputs).</para></listitem>
-          <listitem><para>This includes info pages targeted at developers if <option>info.enable</option>
+          <listitem><para>This includes info pages targeted at developers if <option>documentation.info.enable</option>
                     is set (this also includes "devinfo" outputs).</para></listitem>
-          <listitem><para>This includes other pages targeted at developers if <option>doc.enable</option>
+          <listitem><para>This includes other pages targeted at developers if <option>documentation.doc.enable</option>
                     is set (this also includes "devdoc" outputs).</para></listitem>
           </itemizedlist>
         '';
@@ -181,10 +181,10 @@ in
           <itemizedlist>
           <listitem><para>This includes man pages like
                     <citerefentry><refentrytitle>configuration.nix</refentrytitle>
-                    <manvolnum>5</manvolnum></citerefentry> if <option>man.enable</option> is
+                    <manvolnum>5</manvolnum></citerefentry> if <option>documentation.man.enable</option> is
                     set.</para></listitem>
           <listitem><para>This includes the HTML manual and the <command>nixos-help</command> command if
-                    <option>doc.enable</option> is set.</para></listitem>
+                    <option>documentation.doc.enable</option> is set.</para></listitem>
           </itemizedlist>
         '';
       };
