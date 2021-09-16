@@ -20,6 +20,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
+  ];
+
+  buildInputs = [
     qtbase
   ];
 

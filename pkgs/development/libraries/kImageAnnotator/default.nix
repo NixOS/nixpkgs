@@ -23,6 +23,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
+  ];
+
+  buildInputs = [
     kColorPicker
     qtbase
     qtsvg

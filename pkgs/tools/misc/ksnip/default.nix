@@ -26,13 +26,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     extra-cmake-modules
-    qttranslations
   ];
 
   buildInputs = [
     kColorPicker
     kImageAnnotator
     qtsvg
+    qttranslations
     qtx11extras
   ];
 
