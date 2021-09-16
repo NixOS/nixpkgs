@@ -1,10 +1,12 @@
 { stdenv
 , lib
-, autoPatchelfHook
-, wrapQtAppsHook
-, fetchurl
-, dpkg
-, qtbase
+, cmake
+, extra-cmake-modules
+, fetchFromGitHub
+, kColorPicker
+, kImageAnnotator
+, qtsvg
+, qttranslations
 , qtx11extras
 }:
 
@@ -12,33 +14,27 @@ stdenv.mkDerivation rec {
   pname = "ksnip";
   version = "1.9.1";
 
-  src = fetchurl {
-    url = "https://github.com/ksnip/ksnip/releases/download/v${version}/ksnip-${version}-continuous.deb";
-    sha256 = "0wabyhb6751jlbrr0872ks2klb6570yfjczn6fjb1albavsk8mml";
+  src = fetchFromGitHub {
+    owner = "ksnip";
+    repo = "ksnip";
+    rev = "v${version}";
+    sha256 = "1izsk586n9fbm0di0hj6pxs7r0a6w554gpad1ghf247icr0pfc1l";
   };
 
-  sourceRoot = ".";
-  unpackCmd = "dpkg-deb -x $src .";
-
-  dontConfigure = true;
-  dontBuild = true;
-
-  buildInputs = [
-    qtbase
-    qtx11extras
-  ];
+  dontWrapQtApps = true;
 
   nativeBuildInputs = [
-    autoPatchelfHook
-    wrapQtAppsHook
-    dpkg
+    cmake
+    extra-cmake-modules
+    qttranslations
   ];
 
-  installPhase = ''
-    mkdir -p $out/bin
-    mv usr $out/
-    ln -s $out/usr/bin/ksnip $out/bin/ksnip
-  '';
+  buildInputs = [
+    kColorPicker
+    kImageAnnotator
+    qtsvg
+    qtx11extras
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/ksnip/ksnip";

@@ -16466,6 +16466,10 @@ with pkgs;
 
   judy = callPackage ../development/libraries/judy { };
 
+  kColorPicker = libsForQt5.callPackage ../development/libraries/kColorPicker { };
+
+  kImageAnnotator = libsForQt5.callPackage ../development/libraries/kImageAnnotator { };
+
   kddockwidgets = libsForQt5.callPackage ../development/libraries/kddockwidgets { };
 
   keybinder = callPackage ../development/libraries/keybinder {
