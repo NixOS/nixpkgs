@@ -49,6 +49,7 @@ stdenv.mkDerivation rec {
       -not -name '*.so.*' \
       -not -name '*.so' \
       -not -name '*.jar' \
+      -not -name 'jspawnhelper' \
       -not -path '*/resources/*' | \
     while IFS= read -r f ; do
       patchelf --set-interpreter "${stdenv.cc.bintools.dynamicLinker}" $f
@@ -58,6 +59,10 @@ stdenv.mkDerivation rec {
         --suffix LD_LIBRARY_PATH : "${lib.strings.makeLibraryPath buildInputs}"
     done
 
+    find $out -type f -executable -name 'jspawnhelper' | \
+    while IFS= read -r f ; do
+      patchelf --set-interpreter "${stdenv.cc.bintools.dynamicLinker}" $f
+    done
   '';
 
   meta = with lib; {
