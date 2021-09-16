@@ -33,10 +33,12 @@ stdenv.mkDerivation rec {
     perl scripts/config.pl set MBEDTLS_THREADING_PTHREAD    # POSIX thread wrapper layer for the threading layer.
   '';
 
-  cmakeFlags = [ "-DUSE_SHARED_MBEDTLS_LIBRARY=on" ];
-  NIX_CFLAGS_COMPILE = lib.optionals stdenv.cc.isGNU [
-    "-Wno-error=format"
-    "-Wno-error=format-truncation"
+  cmakeFlags = [
+    "-DUSE_SHARED_MBEDTLS_LIBRARY=on"
+
+    # Blanket -Werror produces false positives on fresh
+    # toolchains and on non-default CFLAGS (like -Wformat).
+    "-DMBEDTLS_FATAL_WARNINGS=off"
   ];
 
   meta = with lib; {
