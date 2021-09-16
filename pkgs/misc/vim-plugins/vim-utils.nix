@@ -187,8 +187,9 @@ let
 
   rtpPath = ".";
 
-  nativeImpl = packages:
-  (let
+  # Generates a packpath folder as expected by vim
+  packDir = packages:
+  let
     # dir is "start" or "opt"
     linkLuaPlugin = plugin: packageName: dir: ''
       mkdir -p $out/pack/${packageName}/${dir}/${plugin.pname}/lua
@@ -205,7 +206,7 @@ let
       then linkLuaPlugin pluginPath
       else linkVimlPlugin pluginPath;
 
-    packageLinks = (packageName: {start ? [], opt ? []}:
+    packageLinks = packageName: {start ? [], opt ? []}:
     let
       # `nativeImpl` expects packages to be derivations, not strings (as
       # opposed to older implementations that have to maintain backwards
@@ -230,21 +231,20 @@ let
       ++ [
         "mkdir -p $out/pack/${packageName}/start/__python3_dependencies"
         "ln -s ${python3Env}/${python3Env.sitePackages} $out/pack/${packageName}/start/__python3_dependencies/python3"
-      ]
-    );
-    packDir = (packages:
+      ];
+  in
       stdenv.mkDerivation {
         name = "vim-pack-dir";
         src = ./.;
         installPhase = lib.concatStringsSep "\n" (lib.flatten (lib.mapAttrsToList packageLinks packages));
         preferLocalBuild = true;
-      }
-    );
-  in
+    };
+
+  nativeImpl = packages:
   ''
     set packpath^=${packDir packages}
     set runtimepath^=${packDir packages}
-  '');
+  '';
 
   /* Generates a vimrc string
 
