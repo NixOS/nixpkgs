@@ -21,20 +21,21 @@
 
 let
   defaultOverrides = [
-    # Override the version of some packages pinned in Home Assistant's setup.py and requirements_all.txt
-    (mkOverride "python-slugify" "4.0.1" "69a517766e00c1268e5bbfc0d010a0a8508de0b18d30ad5a1ff357f8ae724270")
-
+    # Pinned due to API changes in async-upnp-client>=0.20.0, remove after
     (self: super: {
       async-upnp-client = super.async-upnp-client.overridePythonAttrs (oldAttrs: rec {
-        version = "0.19.2";
+        version = "0.20.0";
         src = fetchFromGitHub {
           owner = "StevenLooman";
           repo = "async_upnp_client";
-          rev = version;
-          sha256 = "1v8d2lvxihqasn7866zssys16s0lgxkk6ri2dp4rr7wr8g9ixvdr";
+          rev = "v${version}";
+          sha256 = "sha256-jxYGOljV7tcsiAgpOhbXj7g7AwyP1kDDC83PiHG6ZFg=";
         };
       });
     })
+
+    # Override the version of some packages pinned in Home Assistant's setup.py and requirements_all.txt
+    (mkOverride "python-slugify" "4.0.1" "69a517766e00c1268e5bbfc0d010a0a8508de0b18d30ad5a1ff357f8ae724270")
 
     # Pinned due to API changes in iaqualink>=2.0, remove after
     # https://github.com/home-assistant/core/pull/48137 was merged
@@ -95,6 +96,9 @@ let
       });
     })
 
+    # Pinned due to API changes in 0.1.0
+    (mkOverride "poolsense" "0.0.8" "09y4fq0gdvgkfsykpxnvmfv92dpbknnq5v82spz43ak6hjnhgcyp")
+
     # Pinned due to changes in total-connect-client>0.58 which made the tests fails at the moment
     (self: super: {
       total-connect-client = super.total-connect-client.overridePythonAttrs (oldAttrs: rec {
@@ -111,19 +115,6 @@ let
     # home-assistant-frontend does not exist in python3.pkgs
     (self: super: {
       home-assistant-frontend = self.callPackage ./frontend.nix { };
-    })
-
-    # Pinned due to incompability with aioesphomeapi 8.0.0
-    (self: super: {
-      aioesphomeapi = super.aioesphomeapi.overrideAttrs (oldAttrs: rec {
-        version = "7.0.0";
-        src = fetchFromGitHub {
-          owner = "esphome";
-          repo = oldAttrs.pname;
-          rev = "v${version}";
-          hash = "sha256-ho/1fpq4yAgmYNERPqs51oqr08ncaN9+GRTUUuGU7ps=";
-        };
-      });
     })
   ];
 
@@ -154,7 +145,7 @@ let
   extraBuildInputs = extraPackages py.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2021.8.8";
+  hassVersion = "2021.9.6";
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "homeassistant";
@@ -171,7 +162,7 @@ in with py.pkgs; buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = version;
-    sha256 = "1fj16qva04d9qhpnfxxacsp82vqqfha5c2zg4f850kld4qhwrgky";
+    sha256 = "1ac56gdnhzkf19h29g0f54camw6v1cg5wx0crhm23r45qlfsjacs";
   };
 
   # leave this in, so users don't have to constantly update their downstream patch handling
@@ -181,7 +172,6 @@ in with py.pkgs; buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "attrs==21.2.0" "attrs" \
       --replace "awesomeversion==21.4.0" "awesomeversion" \
       --replace "bcrypt==3.1.7" "bcrypt" \
       --replace "cryptography==3.3.2" "cryptography" \
@@ -234,6 +224,7 @@ in with py.pkgs; buildPythonApplication rec {
     pytest-xdist
     pytestCheckHook
     requests-mock
+    stdlib-list
     jsonpickle
     respx
     # required by tests/auth/mfa_modules
@@ -796,6 +787,9 @@ in with py.pkgs; buildPythonApplication rec {
     "--deselect tests/components/local_ip/test_config_flow.py::test_config_flow"
     # netatmo/test_select.py: NoneType object has no attribute state
     "--deselect tests/components/netatmo/test_select.py::test_select_schedule_thermostats"
+    # wemo/test_sensor.py: KeyError for various power attributes
+    "--deselect tests/components/wemo/test_sensor.py::TestInsightTodayEnergy::test_state_unavailable"
+    "--deselect tests/components/wemo/test_sensor.py::TestInsightCurrentPower::test_state_unavailable"
     # helpers/test_system_info.py: AssertionError: assert 'Unknown' == 'Home Assistant Container'
     "--deselect tests/helpers/test_system_info.py::test_container_installationtype"
     # tests are located in tests/
