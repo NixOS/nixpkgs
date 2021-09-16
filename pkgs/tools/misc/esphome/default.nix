@@ -16,13 +16,13 @@ let
 in
 with python.pkgs; buildPythonApplication rec {
   pname = "esphome";
-  version = "2021.8.2";
+  version = "2021.9.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "sha256-R+5eefPUZc6y/B8cZbxsLVrVwvBbVISZQAb1KwiYdFg=";
+    sha256 = "sha256-QYtScfw+VFYc5rljDf1W+vI8Rx2UJuQ51yBTBVhO7Ns=";
   };
 
   patches = [
@@ -48,6 +48,7 @@ with python.pkgs; buildPythonApplication rec {
   # - validate_cryptography_installed
   # - validate_pillow_installed
   propagatedBuildInputs = [
+    aioesphomeapi
     click
     colorama
     cryptography
