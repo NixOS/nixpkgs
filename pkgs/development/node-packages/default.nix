@@ -8,6 +8,8 @@ let
     inherit (stdenv.hostPlatform) system;
   };
   self = super // {
+    fetchYarn = pkgs.callPackage ../../build-support/fetchyarn { };    
+
     "@angular/cli" = super."@angular/cli".override {
       prePatch = ''
         export NG_CLI_ANALYTICS=false
