@@ -114,6 +114,10 @@ let
       orga = "ram02z";
       repo = "tree-sitter-fish";
     };
+    "tree-sitter-dot" = {
+      orga = "rydesun";
+      repo = "tree-sitter-dot";
+    };
   };
 
   allGrammars =
