@@ -106,8 +106,8 @@ installPhase() {
             sed -E "s#(libEGL_nvidia)#$i/lib/\\1#" 10_nvidia.json > 10_nvidia.json.fixed
             sed -E "s#(libnvidia-egl-wayland)#$i/lib/\\1#" 10_nvidia_wayland.json > 10_nvidia_wayland.json.fixed
 
-            install -Dm644 10_nvidia.json.fixed $i/share/glvnd/egl_vendor.d/nvidia.json
-            install -Dm644 10_nvidia_wayland.json.fixed $i/share/glvnd/egl_vendor.d/nvidia_wayland.json
+            install -Dm644 10_nvidia.json.fixed $i/share/glvnd/egl_vendor.d/10_nvidia.json
+            install -Dm644 10_nvidia_wayland.json.fixed $i/share/egl/egl_external_platform.d/10_nvidia_wayland.json
         fi
 
     done
