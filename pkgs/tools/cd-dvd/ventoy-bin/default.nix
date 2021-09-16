@@ -11,7 +11,7 @@ let arch = {
 }.${stdenv.hostPlatform.system} or (throw "Unsupported platform ${stdenv.hostPlatform.system}");
 in stdenv.mkDerivation rec {
   pname = "ventoy-bin";
-  version = "1.0.51";
+  version = "1.0.52";
 
   nativeBuildInputs = [ autoPatchelfHook makeWrapper ];
   buildInputs = [ hexdump exfat dosfstools e2fsprogs xz util-linux bash parted ];
