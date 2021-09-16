@@ -2,11 +2,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "symfony-cli";
-  version = "4.26.0";
+  version = "4.26.3";
 
   src = fetchurl {
     url = "https://github.com/symfony/cli/releases/download/v${version}/symfony_linux_amd64.gz";
-    sha256 = "sha256-fQZKRDLc6T+YEX443k6DnarSNV3Rbc2Y34ingJik+sc=";
+    sha256 = "sha256-les12GheTKr4XvZpE4YIyNMaXWizeB0COhDiMcYYC7o=";
   };
 
   dontBuild = true;
