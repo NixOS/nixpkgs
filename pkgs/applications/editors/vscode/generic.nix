@@ -121,6 +121,9 @@ let
         --replace "/usr/bin/pkexec" "/run/wrappers/bin/pkexec" \
         --replace "/bin/bash" "${bash}/bin/bash"
       rm -rf "$packed"
+
+      # this fixes bundled ripgrep
+      chmod +x resources/app/node_modules/vscode-ripgrep/bin/rg
     '';
 
     inherit meta;
