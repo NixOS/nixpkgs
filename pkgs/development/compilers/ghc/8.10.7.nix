@@ -235,6 +235,8 @@ stdenv.mkDerivation (rec {
     "--with-iconv-includes=${libiconv}/include"
     "--with-iconv-libraries=${libiconv}/lib"
   ] ++ lib.optionals stdenv.isDarwin [
+    # N.B. GHC uses clang as its assembler on Darwin
+    "CLANG=${llvmPackages.clang}/bin/clang"
     "CFLAGS=--target=${stdenv.hostPlatform.config}"
     "CONF_CC_OPTS_STAGE2=--target=${stdenv.hostPlatform.config}"
   ] ++ lib.optionals (targetPlatform != hostPlatform) [
