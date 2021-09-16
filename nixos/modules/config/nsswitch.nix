@@ -14,14 +14,18 @@ with lib;
       internal = true;
       default = [];
       description = ''
-        Search path for NSS (Name Service Switch) modules.  This allows
-        several DNS resolution methods to be specified via
+        Path containing NSS (Name Service Switch) modules.
+        This allows several DNS resolution methods to be specified via
         <filename>/etc/nsswitch.conf</filename>.
       '';
       apply = list:
         {
           inherit list;
-          path = makeLibraryPath list;
+          path = pkgs.symlinkJoin
+            {
+              name = "nss-modules";
+              paths = list;
+            } + "/lib";
         };
     };
 
