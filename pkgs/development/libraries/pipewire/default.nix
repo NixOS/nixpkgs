@@ -58,7 +58,7 @@ let
 
   self = stdenv.mkDerivation rec {
     pname = "pipewire";
-    version = "0.3.35";
+    version = "0.3.36";
 
     outputs = [
       "out"
@@ -77,7 +77,7 @@ let
       owner = "pipewire";
       repo = "pipewire";
       rev = version;
-      sha256 = "sha256-cGH0Hd4c4KLyynMb3LIwElwHD99apNiI40SwZC3KG/s=";
+      sha256 = "sha256-kwoffB0Hi84T4Q0NaxLxsCyPV4R0LayX9kHmXU/vRPA=";
     };
 
     patches = [
