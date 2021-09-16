@@ -60,12 +60,18 @@ let ccache = stdenv.mkDerivation rec {
     bashInteractive
   ] ++ lib.optional stdenv.isDarwin xcodebuild;
 
-  checkPhase = ''
+  checkPhase = let
+    badTests = [
+      "test.trim_dir" # flaky on hydra (possibly filesystem-specific?)
+    ] ++ lib.optionals stdenv.isDarwin [
+      "test.basedir"
+      "test.multi_arch"
+      "test.nocpp2"
+    ];
+  in ''
     runHook preCheck
     export HOME=$(mktemp -d)
-    ctest --output-on-failure ${lib.optionalString stdenv.isDarwin ''
-      -E '^(test.nocpp2|test.basedir|test.multi_arch|test.trim_dir)$'
-    ''}
+    ctest --output-on-failure -E '^(${lib.concatStringsSep "|" badTests})$'
     runHook postCheck
   '';
 
