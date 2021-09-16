@@ -37,6 +37,9 @@
 , xkb-switch
 , ycmd
 
+# test dependencies
+, neovim-unwrapped
+
   # command-t dependencies
 , rake
 , ruby
@@ -392,6 +395,12 @@ self: super: {
       substituteInPlace $out/bin/minimap_generator.sh \
         --replace "code-minimap" "${code-minimap}/bin/code-minimap"
     '';
+
+    doCheck = true;
+    checkPhase = ''
+      ${neovim-unwrapped}/bin/nvim -n -u NONE -i NONE -V1 --cmd "set rtp+=$out" --cmd "runtime! plugin/*.vim" -c "MinimapToggle"  +quit!
+    '';
+
   });
 
   ncm2 = super.ncm2.overrideAttrs (old: {
