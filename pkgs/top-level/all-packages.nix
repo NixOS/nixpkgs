@@ -4714,6 +4714,8 @@ with pkgs;
 
   endlessh = callPackage ../servers/endlessh { };
 
+  ericw-tools = callPackage ../applications/misc/ericw-tools { };
+
   cryfs = callPackage ../tools/filesystems/cryfs { };
 
   encfs = callPackage ../tools/filesystems/encfs {
@@ -9711,6 +9713,10 @@ with pkgs;
   trash-cli = callPackage ../tools/misc/trash-cli { };
 
   trebleshot = libsForQt5.callPackage ../applications/networking/trebleshot { };
+
+  trenchbroom = libsForQt5.callPackage ../applications/misc/trenchbroom {
+    inherit (xorg) libXxf86vm;
+  };
 
   trickle = callPackage ../tools/networking/trickle {};
 
@@ -20132,9 +20138,11 @@ with pkgs;
 
   leafnode = callPackage ../servers/news/leafnode { };
 
-  lemmy = callPackage ../servers/web-apps/lemmy {
+  lemmy-server = callPackage ../servers/web-apps/lemmy/server.nix {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+
+  lemmy-ui = callPackage ../servers/web-apps/lemmy/ui.nix { };
 
   lighttpd = callPackage ../servers/http/lighttpd { };
 
@@ -24311,7 +24319,9 @@ with pkgs;
 
   fbida = callPackage ../applications/graphics/fbida { };
 
-  fclones = callPackage ../tools/misc/fclones { };
+  fclones = callPackage ../tools/misc/fclones {
+    inherit (darwin.apple_sdk.frameworks) AppKit;
+  };
 
   fcp = callPackage ../tools/misc/fcp { };
 
@@ -27009,7 +27019,7 @@ with pkgs;
 
   rsclock = callPackage ../applications/misc/rsclock { };
 
-  rstudio = libsForQt514.callPackage ../applications/editors/rstudio {
+  rstudio = libsForQt5.callPackage ../applications/editors/rstudio {
     boost = boost166;
     llvmPackages = llvmPackages_7;
     jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
