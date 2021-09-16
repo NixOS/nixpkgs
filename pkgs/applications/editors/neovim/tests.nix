@@ -100,6 +100,17 @@ rec {
     ${nvim_with_plug}/bin/nvim -i NONE -c 'color base16-tomorrow-night'  +quit!
   '';
 
+
+  # check that the vim-doc hook correctly generates the tag
+  # we know for a fact packer has a doc folder
+  checkForTags = vimPlugins.packer-nvim.overrideAttrs(oldAttrs: {
+    doInstallCheck = true;
+    installCheckPhase = ''
+      [ -f $out/doc/tags ]
+    '';
+  });
+
+
   # nixpkgs should detect that no wrapping is necessary
   nvimShouldntWrap = wrapNeovim2 "-should-not-wrap" nvimAutoDisableWrap;
 
