@@ -462,6 +462,12 @@
     githubId = 2335822;
     name = "Alexandre Esteves";
   };
+  alexnortung = {
+    name = "alexnortung";
+    email = "alex_nortung@live.dk";
+    github = "alexnortung";
+    githubId = 1552267;
+  };
   alexvorobiev = {
     email = "alexander.vorobiev@gmail.com";
     github = "alexvorobiev";

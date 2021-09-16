@@ -22748,6 +22748,8 @@ with pkgs;
 
   seshat = callPackage ../data/fonts/seshat { };
 
+  session-desktop-appimage = callPackage ../applications/networking/instant-messengers/session-desktop-appimage { };
+
   shaderc = callPackage ../development/compilers/shaderc { };
 
   shades-of-gray-theme = callPackage ../data/themes/shades-of-gray { };

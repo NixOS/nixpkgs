@@ -31,7 +31,6 @@ let
                        else stdenv.hostPlatform.extensions.sharedLibrary;
 
 
-  isILP64 = blasProvider.blas64 or false;
   blasImplementation = lib.getName blasProvider;
 
 in
