@@ -6,6 +6,7 @@
   tree-sitter-comment = (builtins.fromJSON (builtins.readFile ./tree-sitter-comment.json));
   tree-sitter-cpp = (builtins.fromJSON (builtins.readFile ./tree-sitter-cpp.json));
   tree-sitter-css = (builtins.fromJSON (builtins.readFile ./tree-sitter-css.json));
+  tree-sitter-dot = (builtins.fromJSON (builtins.readFile ./tree-sitter-dot.json));
   tree-sitter-embedded-template = (builtins.fromJSON (builtins.readFile ./tree-sitter-embedded-template.json));
   tree-sitter-fennel = (builtins.fromJSON (builtins.readFile ./tree-sitter-fennel.json));
   tree-sitter-fish = (builtins.fromJSON (builtins.readFile ./tree-sitter-fish.json));

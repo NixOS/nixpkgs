@@ -8592,6 +8592,8 @@ in {
 
   stdiomask = callPackage ../development/python-modules/stdiomask { };
 
+  stdlib-list = callPackage ../development/python-modules/stdlib-list { };
+
   stem = callPackage ../development/python-modules/stem { };
 
   stestr = callPackage ../development/python-modules/stestr { };

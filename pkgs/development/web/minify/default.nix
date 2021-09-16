@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "minify";
-  version = "2.9.21";
+  version = "2.9.22";
 
   src = fetchFromGitHub {
     owner = "tdewolff";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-cHoQtvxofMet7j/PDKlFoVB9Qo5EMWcXqAwhqR4vNko=";
+    sha256 = "sha256-ph5PrM917qGwp7SLg6Ujfk5YJWFSlUBdW/JJRiwq7fw=";
   };
 
-  vendorSha256 = "sha256-awlrjXXX9PWs4dt78yK4qNE1wCaA+tGL45tHQxxby8c=";
+  vendorSha256 = "sha256-0GKIGIVtMywpKxopsVrUZMgeXP/l76U2As8FiG2Niqw=";
 
   doCheck = false;
 

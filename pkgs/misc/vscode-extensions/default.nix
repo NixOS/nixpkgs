@@ -1362,6 +1362,18 @@ let
         };
       };
 
+      tobiasalthoff.atom-material-theme = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "atom-material-theme";
+          publisher = "tobiasalthoff";
+          version = "1.10.7";
+          sha256 = "sha256-t5CKrDEbDCuo28wN+hiWrvkt3C9vQAPfV/nd3QBGQ/s=";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
       tomoki1207.pdf = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "pdf";

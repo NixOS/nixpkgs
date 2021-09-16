@@ -310,11 +310,13 @@ in {
           "serial_pm"
           "sms"
           "upb"
+          "usb"
           "velbus"
           "w800rf32"
           "xbee"
           "zha"
           "zwave"
+          "zwave_js"
         ];
       in {
         ExecStart = "${package}/bin/hass --runner --config '${cfg.configDir}'";
