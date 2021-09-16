@@ -81,11 +81,11 @@ let
       getLib getDev getMan chooseDevOutputs zipWithNames zip
       recurseIntoAttrs dontRecurseIntoAttrs cartesianProductOfSets;
     inherit (self.lists) singleton forEach foldr fold foldl foldl' imap0 imap1
-      concatMap flatten remove findSingle findFirst any all count
+      ifilter0 concatMap flatten remove findSingle findFirst any all count
       optional optionals toList range partition zipListsWith zipLists
       reverseList listDfs toposort sort naturalSort compareLists take
-      drop sublist last init crossLists unique intersectLists
-      subtractLists mutuallyExclusive groupBy groupBy';
+      drop sublist last init crossLists uniq uniqBy unique fastUnique
+      intersectLists subtractLists mutuallyExclusive groupBy groupBy';
     inherit (self.strings) concatStrings concatMapStrings concatImapStrings
       intersperse concatStringsSep concatMapStringsSep
       concatImapStringsSep makeSearchPath makeSearchPathOutput

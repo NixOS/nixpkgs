@@ -33,7 +33,7 @@ let
       ++ lib.optional (lib.any pkgNeedsRuby splitBin.wrong) ruby;
   };
 
-  uniqueStrings = list: lib.sort (a: b: a < b) (lib.unique list);
+  uniqueStrings = list: lib.fastUnique (a: b: a < b) list;
 
   mkUniqueOutPaths = pkgs: uniqueStrings
     (map (p: p.outPath) (builtins.filter lib.isDerivation pkgs));
