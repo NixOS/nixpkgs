@@ -4714,6 +4714,8 @@ with pkgs;
 
   endlessh = callPackage ../servers/endlessh { };
 
+  ericw-tools = callPackage ../applications/misc/ericw-tools { };
+
   cryfs = callPackage ../tools/filesystems/cryfs { };
 
   encfs = callPackage ../tools/filesystems/encfs {
@@ -9711,6 +9713,10 @@ with pkgs;
   trash-cli = callPackage ../tools/misc/trash-cli { };
 
   trebleshot = libsForQt5.callPackage ../applications/networking/trebleshot { };
+
+  trenchbroom = libsForQt5.callPackage ../applications/misc/trenchbroom {
+    inherit (xorg) libXxf86vm;
+  };
 
   trickle = callPackage ../tools/networking/trickle {};
 
