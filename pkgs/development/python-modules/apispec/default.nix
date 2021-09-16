@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "apispec";
-  version = "4.7.1";
+  version = "5.1.0";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1yf71c9nq1rfb5pkgmfw486fvywi1bjnmgwxcly7y3basf3980kr";
+    sha256 = "9ac7a7a6000339a02d05404ef561e013375f170de01d8b238782f8fb83082b5b";
   };
 
   propagatedBuildInputs = [

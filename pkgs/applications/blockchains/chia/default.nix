@@ -26,6 +26,13 @@ let chia = python3Packages.buildPythonApplication rec {
     })
   ];
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "==" ">="
+
+    ln -sf ${cacert}/etc/ssl/certs/ca-bundle.crt mozilla-ca/cacert.pem
+  '';
+
   nativeBuildInputs = [
     python3Packages.setuptools-scm
   ];
@@ -74,17 +81,6 @@ let chia = python3Packages.buildPythonApplication rec {
     "test_default_cached_master_passphrase"
     "test_using_legacy_keyring"
   ];
-
-  postPatch = ''
-    # tweak version requirements to what's available in Nixpkgs
-    substituteInPlace setup.py \
-      --replace "aiohttp==3.7.4" "aiohttp>=3.7.4" \
-      --replace "sortedcontainers==2.3.0" "sortedcontainers>=2.3.0" \
-      --replace "click==7.1.2" "click>=7.1.2" \
-      --replace "clvm==0.9.7" "clvm>=0.9.7" \
-
-    ln -sf ${cacert}/etc/ssl/certs/ca-bundle.crt mozilla-ca/cacert.pem
-  '';
 
   preCheck = ''
     export HOME=`mktemp -d`

@@ -90,6 +90,38 @@ rec {
       });
     });
 
+  # Best effort static binaries. Will still be linked to libSystem,
+  # but more portable than Nix store binaries.
+  makeStaticDarwin = stdenv: stdenv.override (old: {
+    # extraBuildInputs are dropped in cross.nix, but darwin still needs them
+    extraBuildInputs = [ pkgs.buildPackages.darwin.CF ];
+    mkDerivationFromStdenv = extendMkDerivationArgs old (args: {
+      NIX_CFLAGS_LINK = toString (args.NIX_CFLAGS_LINK or "")
+        + lib.optionalString (stdenv.cc.isGNU or false) " -static-libgcc";
+      nativeBuildInputs = (args.nativeBuildInputs or []) ++ [
+        (pkgs.buildPackages.makeSetupHook {
+          substitutions = {
+            libsystem = "${stdenv.cc.libc}/lib/libSystem.B.dylib";
+          };
+        } ./darwin/portable-libsystem.sh)
+      ];
+    });
+  });
+
+  # Puts all the other ones together
+  makeStatic = stdenv: lib.foldl (lib.flip lib.id) stdenv (
+    lib.optional stdenv.hostPlatform.isDarwin makeStaticDarwin
+
+    ++ [ makeStaticLibraries propagateBuildInputs ]
+
+    # Apple does not provide a static version of libSystem or crt0.o
+    # So we can’t build static binaries without extensive hacks.
+    ++ lib.optional (!stdenv.hostPlatform.isDarwin) makeStaticBinaries
+
+    # Glibc doesn’t come with static runtimes by default.
+    # ++ lib.optional (stdenv.hostPlatform.libc == "glibc") ((lib.flip overrideInStdenv) [ self.stdenv.glibc.static ])
+  );
+
 
   /* Modify a stdenv so that all buildInputs are implicitly propagated to
      consuming derivations

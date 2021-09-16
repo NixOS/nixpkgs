@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation {
   pname = "opencl-info";
-  version = "2014-02-21";
+  version = "unstable-2014-02-21";
 
   src = fetchFromGitHub {
     owner = "marchv";

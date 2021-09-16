@@ -86,6 +86,8 @@ let
 
     configureScript = optionalString (!crossCompiling) "${stdenv.shell} ./Configure";
 
+    dontAddStaticConfigureFlags = true;
+
     dontAddPrefix = !crossCompiling;
 
     enableParallelBuilding = !crossCompiling;

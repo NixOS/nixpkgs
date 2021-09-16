@@ -11,7 +11,11 @@ buildDunePackage {
     sha256 = "0kzqkk451m69nqi5qiwak0rd0rp5vzi613gcngsiig7dyxwka61c";
   };
 
-  dontConfigure = true;
+  # dont do autotools configuration, but do trigger findlib's preConfigure hook
+  configurePhase = ''
+    runHook preConfigure
+    runHook postConfigure
+  '';
 
   buildInputs = [ dune-configurator ncurses ];
   propagatedBuildInputs = [ zarith zlib ];

@@ -2,6 +2,7 @@
 , python
 , buildPythonPackage
 , fetchFromGitHub
+, openmp
 , pytest-runner
 , ply
 , networkx
@@ -34,7 +35,7 @@ in buildPythonPackage rec {
     # Hardcode path to mp library
     (substituteAll {
       src = ./0001-hardcode-path-to-libgomp.patch;
-      gomp = "${stdenv.cc.cc.lib}/lib/libgomp${stdenv.hostPlatform.extensions.sharedLibrary}";
+      gomp = "${if stdenv.cc.isClang then openmp else stdenv.cc.cc.lib}/lib/libgomp${stdenv.hostPlatform.extensions.sharedLibrary}";
     })
   ];
 

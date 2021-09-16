@@ -1,30 +1,34 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, traitlets
+, entrypoints
 , jupyter_core
-, pyzmq
+, nest-asyncio
 , python-dateutil
+, pyzmq
+, tornado
+, traitlets
 , isPyPy
 , py
-, tornado
 }:
 
 buildPythonPackage rec {
   pname = "jupyter_client";
-  version = "6.1.12";
+  version = "7.0.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c4bca1d0846186ca8be97f4d2fa6d2bae889cce4892a167ffa1ba6bd1f73e782";
+    sha256 = "0c6cabd07e003a2e9692394bf1ae794188ad17d2e250ed747232d7a473aa772c";
   };
 
   propagatedBuildInputs = [
-    traitlets
+    entrypoints
     jupyter_core
-    pyzmq
+    nest-asyncio
     python-dateutil
+    pyzmq
     tornado
+    traitlets
   ] ++ lib.optional isPyPy py;
 
   # Circular dependency with ipykernel

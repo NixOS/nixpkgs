@@ -199,6 +199,29 @@ isELF() {
     if [ "$magic" = $'\177ELF' ]; then return 0; else return 1; fi
 }
 
+# Return success if the specified file is a Mach-O object.
+isMachO() {
+    local fn="$1"
+    local fd
+    local magic
+    exec {fd}< "$fn"
+    read -r -n 4 -u "$fd" magic
+    exec {fd}<&-
+    # https://opensource.apple.com/source/lldb/lldb-310.2.36/examples/python/mach_o.py.auto.html
+    if [[ "$magic" = $'\xfe\xed\xfa\xcf' || "$magic" = $'\xcf\xfa\xed\xfe' ]]; then
+        # MH_MAGIC_64 || MH_CIGAM_64
+        return 0;
+    elif [[ "$magic" = $'\xfe\xed\xfa\xce' || "$magic" = $'\xce\xfa\xed\xfe' ]]; then
+        # MH_MAGIC || MH_CIGAM
+        return 0;
+    elif [[ "$magic" = $'\xca\xfe\xba\xbe' || "$magic" = $'\xbe\xba\xfe\xca' ]]; then
+        # FAT_MAGIC || FAT_CIGAM
+        return 0;
+    else
+        return 1;
+    fi
+}
+
 # Return success if the specified file is a script (i.e. starts with
 # "#!").
 isScript() {

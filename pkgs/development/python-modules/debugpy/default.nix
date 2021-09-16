@@ -62,7 +62,7 @@ buildPythonPackage rec {
       "x86_64-darwin"  = "-std=c++11 -lc -D_REENTRANT -dynamiclib -arch x86_64 -o attach_x86_64.dylib";
       "i686-darwin"    = "-std=c++11 -lc -D_REENTRANT -dynamiclib -arch i386 -o attach_x86.dylib";
       "aarch64-darwin" = "-std=c++11 -lc -D_REENTRANT -dynamiclib -arch arm64 -o attach_arm64.dylib";
-    }.${stdenv.hostPlatform.system}}
+    }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}")}
   )'';
 
   checkInputs = [

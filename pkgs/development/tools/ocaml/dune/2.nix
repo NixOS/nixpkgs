@@ -13,11 +13,14 @@ stdenv.mkDerivation rec {
     sha256 = "09lzq04b642iy0ljp59p32lgk3q8iphjh8fkdp69q29l5frgwx5k";
   };
 
-  buildInputs = [ ocaml findlib ];
+  nativeBuildInputs = [ ocaml findlib ];
+  strictDeps = true;
 
   buildFlags = "release";
 
   dontAddPrefix = true;
+  dontAddStaticConfigureFlags = true;
+  configurePlatforms = [];
 
   installFlags = [ "PREFIX=${placeholder "out"}" "LIBDIR=$(OCAMLFIND_DESTDIR)" ];
 

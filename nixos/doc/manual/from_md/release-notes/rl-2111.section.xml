@@ -985,6 +985,20 @@ Superuser created successfully.
     <itemizedlist>
       <listitem>
         <para>
+          The linux kernel package infrastructure was moved out of
+          <literal>all-packages.nix</literal>, and restructured. Linux
+          related functions and attributes now live under the
+          <literal>pkgs.linuxKernel</literal> attribute set. In
+          particular the versioned <literal>linuxPackages_*</literal>
+          package sets (such as <literal>linuxPackages_5_4</literal>)
+          and kernels from <literal>pkgs</literal> were moved there and
+          now live under <literal>pkgs.linuxKernel.packages.*</literal>.
+          The unversioned ones (such as
+          <literal>linuxPackages_latest</literal>) remain untouched.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The setting
           <link xlink:href="options.html#opt-services.openssh.logLevel"><literal>services.openssh.logLevel</literal></link>
           <literal>&quot;VERBOSE&quot;</literal>
@@ -1169,6 +1183,24 @@ Superuser created successfully.
           <literal>lib.formats.yaml</literal>’s
           <literal>generate</literal> will not generate JSON anymore,
           but instead use more of the YAML-specific syntax.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          MariaDB was upgraded from 10.5.x to 10.6.x. Please read the
+          <link xlink:href="https://mariadb.com/kb/en/changes-improvements-in-mariadb-106/">upstream
+          release notes</link> for changes and upgrade instructions.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The MariaDB C client library, also known as libmysqlclient or
+          mariadb-connector-c, was upgraded from 3.1.x to 3.2.x. While
+          this should hopefully not have any impact, this upgrade comes
+          with some changes to default behavior, so you might want to
+          review the
+          <link xlink:href="https://mariadb.com/kb/en/changes-and-improvements-in-mariadb-connector-c-32/">upstream
+          release notes</link>.
         </para>
       </listitem>
       <listitem>

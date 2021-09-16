@@ -41,8 +41,8 @@ buildPythonPackage rec {
   ];
 
   disabledTestPaths = [
-    # Missing support for later pytest-asyncio, https://github.com/jamesls/fakeredis/issues/307
-    "test/test_aioredis1.py"
+    # AttributeError: 'AsyncGenerator' object has no attribute XXXX
+    "test/test_aioredis2.py"
   ];
 
   pythonImportsCheck = [ "fakeredis" ];

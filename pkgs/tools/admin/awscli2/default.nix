@@ -2,6 +2,14 @@
 let
   py = python3.override {
     packageOverrides = self: super: {
+      awscrt = super.awscrt.overridePythonAttrs (oldAttrs: rec {
+        version = "0.11.24";
+        src = self.fetchPypi {
+          inherit (oldAttrs) pname;
+          inherit version;
+          sha256 = "sha256-uKpovKQEvwCFvgVw7/W1QtAffo48D5sIWav+XgcBYv8=";
+        };
+      });
       botocore = super.botocore.overridePythonAttrs (oldAttrs: rec {
         version = "2.0.0dev138";
         src = fetchFromGitHub {
@@ -43,12 +51,12 @@ with py.pkgs; buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "awscrt==0.11.24" "awscrt" \
       --replace "colorama>=0.2.5,<0.4.4" "colorama" \
       --replace "cryptography>=3.3.2,<3.4.0" "cryptography" \
       --replace "docutils>=0.10,<0.16" "docutils" \
       --replace "ruamel.yaml>=0.15.0,<0.16.0" "ruamel.yaml" \
-      --replace "wcwidth<0.2.0" "wcwidth"
+      --replace "wcwidth<0.2.0" "wcwidth" \
+      --replace "distro>=1.5.0,<1.6.0" "distro"
   '';
 
   checkInputs = [ jsonschema mock nose ];
