@@ -86,7 +86,7 @@ in
 
       config = mkOption {
         default = {};
-        type = (types.either types.bool types.int);
+        type = types.attrsOf (types.either types.bool types.int);
         description = "Additional config";
         example = {
           auto-fan = true;
