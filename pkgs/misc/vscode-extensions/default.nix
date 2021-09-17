@@ -1390,6 +1390,18 @@ let
         };
       };
 
+      tabnine.tabnine-vscode = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "tabnine-vscode";
+          publisher = "tabnine";
+          version = "3.4.27";
+          sha256 = "sha256-Xg/N59a38OKEWb/4anysslensUoj9ENcuobkyByFDxE=";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
       tamasfe.even-better-toml = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "even-better-toml";
