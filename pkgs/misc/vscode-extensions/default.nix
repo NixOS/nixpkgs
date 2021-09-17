@@ -129,6 +129,23 @@ let
         };
       };
 
+      arcticicestudio.nord-visual-studio-code = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "nord-visual-studio-code";
+          publisher = "arcticicestudio";
+          version = "0.18.0";
+          sha256 = "sha256-Uo6peR+2ZNX6nwJ0Yar32Pe0rfBZ+f6ef1cYhUvVUbE=";
+        };
+        meta = with lib; {
+          description = "An arctic, north-bluish clean and elegant Visual Studio Code theme.";
+          downloadPage =
+            "https://marketplace.visualstudio.com/items?itemName=arcticicestudio.nord-visual-studio-code";
+          homepage = "https://github.com/arcticicestudio/nord-visual-studio-code";
+          license = licenses.mit;
+          maintainers = with maintainers; [ imgabe ];
+        };
+      };
+
       arrterian.nix-env-selector = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "nix-env-selector";
