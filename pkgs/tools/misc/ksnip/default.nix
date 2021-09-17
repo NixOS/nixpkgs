@@ -3,8 +3,8 @@
 , cmake
 , extra-cmake-modules
 , fetchFromGitHub
-, kColorPicker
-, kImageAnnotator
+, kcolorpicker
+, kimageannotator
 , qtsvg
 , qttranslations
 , qtx11extras
@@ -29,8 +29,8 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    kColorPicker
-    kImageAnnotator
+    kcolorpicker
+    kimageannotator
     qtsvg
     qttranslations
     qtx11extras
