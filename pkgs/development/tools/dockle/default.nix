@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "dockle";
-  version = "0.3.15";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "goodwithtech";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-jxFlbGJ95cSv08HcqrVufpTE5KkvAC9zOTQ2+JZWe5A=";
+    sha256 = "sha256-H+qJBwKh+jh5ECMPbPgGtXzF+mm73ut0+URqpNBc3SM=";
   };
 
-  vendorSha256 = "sha256-h+2AcppNUJ7zjHeBzDy1iWoR3i7a2v0Pc7vOfoUqPOw=";
+  vendorSha256 = "sha256-klTIGmMKA6gp1strgvKnVBtYGQu2407UwxZ8brdGEkQ=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ btrfs-progs lvm2 ];

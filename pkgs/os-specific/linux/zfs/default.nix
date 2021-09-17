@@ -16,7 +16,7 @@
 , enablePython ? true
 
 # for determining the latest compatible linuxPackages
-, linuxPackages_5_13 ? pkgs.linuxKernel.packages.linux_5_13
+, linuxPackages_5_14 ? pkgs.linuxKernel.packages.linux_5_14
 }:
 
 with lib;

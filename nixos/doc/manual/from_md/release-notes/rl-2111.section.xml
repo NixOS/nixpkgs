@@ -1066,8 +1066,8 @@ Superuser created successfully.
           The wordpress module provides a new interface which allows to
           use different webservers with the new option
           <link xlink:href="options.html#opt-services.wordpress.webserver"><literal>services.wordpress.webserver</literal></link>.
-          Currently <literal>httpd</literal> and
-          <literal>nginx</literal> are supported. The definitions of
+          Currently <literal>httpd</literal>, <literal>caddy</literal>
+          and <literal>nginx</literal> are supported. The definitions of
           wordpress sites should now be set in
           <link xlink:href="options.html#opt-services.wordpress.sites"><literal>services.wordpress.sites</literal></link>.
         </para>

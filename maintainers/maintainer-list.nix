@@ -1909,6 +1909,12 @@
     githubId = 3086255;
     name = "Barry Moore II";
   };
+  chisui = {
+    email = "chisui.pd@gmail.com";
+    github = "chisui";
+    githubId = 4526429;
+    name = "Philipp Dargel";
+  };
   chivay = {
     email = "hubert.jasudowicz@gmail.com";
     github = "chivay";
@@ -4811,6 +4817,12 @@
     githubId = 26877687;
     name = "Yurii Izorkin";
   };
+  j0xaf = {
+    email = "j0xaf@j0xaf.de";
+    name = "Jörn Gersdorf";
+    github = "j0xaf";
+    githubId = 932697;
+  };
   j0hax = {
     name = "Johannes Arnold";
     email = "johannes.arnold@stud.uni-hannover.de";
@@ -5471,6 +5483,12 @@
     github = "jumper149";
     githubId = 39434424;
     name = "Felix Springer";
+  };
+  junjihashimoto = {
+    email = "junji.hashimoto@gmail.com";
+    github = "junjihashimoto";
+    githubId = 2469618;
+    name = "Junji Hashimoto";
   };
   justinas = {
     email = "justinas@justinas.org";

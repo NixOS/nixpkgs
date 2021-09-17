@@ -138,6 +138,8 @@ All programs that are built with [MPI](https://en.wikipedia.org/wiki/Message_Pas
 
 -   [MPICH](https://www.mpich.org/), attribute name `mpich`
 
+-   [MVAPICH](https://mvapich.cse.ohio-state.edu/), attribute name `mvapich`
+
 To provide MPI enabled applications that use `MPICH`, instead of the default `Open MPI`, simply use the following overlay:
 
 ```nix

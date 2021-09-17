@@ -15,7 +15,7 @@ let
   pyVerNoDot = builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion;
   srcs = import ./binary-hashes.nix version;
   unsupported = throw "Unsupported system";
-  version = "0.9.1";
+  version = "0.10.0";
 in buildPythonPackage {
   inherit version;
 
@@ -54,6 +54,6 @@ in buildPythonPackage {
     changelog = "https://github.com/pytorch/vision/releases/tag/v${version}";
     license = licenses.bsd3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ junjihashimoto ];
   };
 }

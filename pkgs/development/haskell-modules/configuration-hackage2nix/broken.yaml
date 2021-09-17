@@ -843,7 +843,6 @@ broken-packages:
   - Craft3e
   - craftwerk
   - crawlchain
-  - crc
   - crc16
   - crdt-event-fold
   - creatur
