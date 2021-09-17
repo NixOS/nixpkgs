@@ -1936,4 +1936,7 @@ EOT
   # 2021-09-14: Tests are flaky.
   hls-splice-plugin = dontCheck super.hls-splice-plugin;
 
+  # 2021-09-18: https://github.com/haskell/haskell-language-server/issues/2205
+  hls-stylish-haskell-plugin = doJailbreak super.hls-stylish-haskell-plugin;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
