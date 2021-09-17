@@ -139,7 +139,7 @@ in
       #users = 100; # unused
       # cgminer = 101; #dynamically allocated as of 2021-09-17
       munin = 102;
-      logcheck = 103;
+      #logcheck = 103; #dynamically allocated as of 2021-09-17
       #nix-ssh = 104; #dynamically allocated as of 2021-09-03
       dictd = 105;
       couchdb = 106;
