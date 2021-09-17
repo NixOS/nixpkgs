@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub
-, meson, ninja, pkg-config, wayland, scdoc, makeWrapper
-, wlroots, wayland-protocols, pixman, libxkbcommon
+, meson, ninja, pkg-config, wayland-scanner, scdoc, makeWrapper
+, wlroots, wayland, wayland-protocols, pixman, libxkbcommon
 , systemd, libGL, libX11, mesa
 , xwayland ? null
 , nixosTests
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "0vm96gxinhy48m3x9p1sfldyd03w3gk6iflb7n9kn06j1vqyswr6";
   };
 
-  nativeBuildInputs = [ meson ninja pkg-config wayland scdoc makeWrapper ];
+  nativeBuildInputs = [ meson ninja pkg-config wayland-scanner scdoc makeWrapper ];
 
   buildInputs = [
     wlroots wayland wayland-protocols pixman libxkbcommon

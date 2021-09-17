@@ -16,8 +16,11 @@ buildKodiAddon rec {
     urllib3
   ];
 
-  passthru.updateScript = addonUpdateScript {
-    attrPath = "kodi.packages.requests";
+  passthru = {
+    pythonPath = "lib";
+    updateScript = addonUpdateScript {
+      attrPath = "kodi.packages.requests";
+    };
   };
 
   meta = with lib; {

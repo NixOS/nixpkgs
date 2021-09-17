@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "lima";
-  version = "0.5.0";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
-    owner = "AkihiroSuda";
+    owner = "lima-vm";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-1952xGSfVFI2Fs5HLJKCyB6ZxKFf5uPKXIlctM/T+8o=";
+    sha256 = "sha256-3Bc8F8L4ac0YoUp2zoQYPsj7hcXKf8SVkE7q6q0MNSs=";
   };
 
-  vendorSha256 = "sha256-rPL/jxMHMkKffoYLSI3FFtFRYGtARKmrODmL9w+rN0E=";
+  vendorSha256 = "sha256-vYeHv6sSiO6fY+oXR8bFFs/NAhivtnkc15pXEu+reZQ=";
 
   nativeBuildInputs = [ makeWrapper installShellFiles ];
 
@@ -44,7 +44,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    homepage = "https://github.com/AkihiroSuda/lima";
+    homepage = "https://github.com/lima-vm/lima";
     description = "Linux virtual machines (on macOS, in most cases)";
     license = licenses.asl20;
     maintainers = with maintainers; [ anhduy ];

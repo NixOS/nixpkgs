@@ -7,13 +7,18 @@
 
 buildPythonPackage rec {
   pname = "resolvelib";
-  version = "0.7.1";
+  # Currently this package is only used by Ansible and breaking changes
+  # are frequently introduced, so when upgrading ensure the new version
+  # is compatible with Ansible
+  # https://github.com/NixOS/nixpkgs/pull/128636
+  # https://github.com/ansible/ansible/blob/devel/requirements.txt
+  version = "0.5.5";
 
   src = fetchFromGitHub {
     owner = "sarugaku";
     repo = "resolvelib";
     rev = version;
-    sha256 = "1fqz75riagizihvf4j7wc3zjw6kmg1dd8sf49aszyml105kb33n8";
+    sha256 = "198vfv78hilpg0d0mjzchzp9zk6239wnra61vlsgwpcgz66d2bgv";
   };
 
   checkInputs = [

@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     at-spi2-atk
   ];
 
-  phases = "unpackPhase fixupPhase";
+  dontInstall = true;
 
   # change this to azuredatastudio-insiders for insiders releases
   edition = "azuredatastudio";

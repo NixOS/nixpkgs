@@ -2,7 +2,7 @@
 , coverage
 , mock
 , pytest
-, pytestcov
+, pytest-cov
 , setuptools
 }:
 
@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ setuptools ];
 
-  checkInputs = [ pytest mock pytestcov coverage ];
+  checkInputs = [ pytest mock pytest-cov coverage ];
 
   prePatch = ''
     substituteInPlace requirements_test.txt --replace "==" ">=" \

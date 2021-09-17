@@ -10,7 +10,7 @@
 , pytest-cov
 , pytest-mock
 , pytestCheckHook
-, pytestrunner
+, pytest-runner
 , requests
 , responses
 , six
@@ -45,7 +45,7 @@ buildPythonPackage rec {
     pytest-cov
     pytest-mock
     pytestCheckHook
-    pytestrunner
+    pytest-runner
     responses
   ];
 

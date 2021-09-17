@@ -9,8 +9,7 @@ let versions = builtins.fromJSON (builtins.readFile ./versions.json);
            else if stdenv.isAarch64 then "arm64"
            else throw "Unsupported architecture";
     os = if stdenv.isLinux then "linux"
-         else if (stdenv.isDarwin && stdenv.isx86_64) then "darwin"
-         else if stdenv.isDarwin then throw "Unsupported architecture"
+         else if stdenv.isDarwin then "darwin"
          else throw "Unsupported os";
     versionInfo = versions."${os}-${arch}";
     inherit (versionInfo) version sha256 url;

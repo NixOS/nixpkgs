@@ -15,7 +15,7 @@ buildGoModule rec {
   deleteVendor = true;
   vendorSha256 = "+Z8sENIMWXP29Piwb/W6i7UdNXVq6ZnO7AZbSaUYCME=";
 
-  buildFlagsArray = [ "-ldflags=-s -w -X main.version=v${version}" ];
+  ldflags = [ "-s" "-w" "-X main.version=v${version}" ];
 
   subPackages = [ "cmd/aws-iam-authenticator" ];
 

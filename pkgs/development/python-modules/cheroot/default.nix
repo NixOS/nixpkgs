@@ -9,7 +9,7 @@
 , portend
 , pyopenssl
 , pytestCheckHook
-, pytestcov
+, pytest-cov
 , pytest-mock
 , requests
 , requests-toolbelt
@@ -46,7 +46,7 @@ buildPythonPackage rec {
     portend
     pyopenssl
     pytestCheckHook
-    pytestcov
+    pytest-cov
     pytest-mock
     requests
     requests-toolbelt

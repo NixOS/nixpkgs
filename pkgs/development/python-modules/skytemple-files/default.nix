@@ -1,25 +1,18 @@
-{ lib, buildPythonPackage, fetchFromGitHub, appdirs, explorerscript, ndspy, pillow, setuptools, skytemple-rust, tilequant, armips, fetchpatch }:
+{ lib, buildPythonPackage, fetchFromGitHub, appdirs, dungeon-eos, explorerscript
+, ndspy, pillow, setuptools, skytemple-rust, tilequant, armips
+}:
 
 buildPythonPackage rec {
   pname = "skytemple-files";
-  version = "1.2.3";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "SkyTemple";
     repo = pname;
     rev = version;
-    sha256 = "sha256-/S0otBujwO/IMiLKgA2o8wlD6xk1/DpwOAfemojV9NU=";
+    sha256 = "1gpmgdas7x1zmszs9hlxjb6nk683901cy1kc0gyhz0rzdn5jg3lb";
     fetchSubmodules = true;
   };
-
-  patches = [
-    # fix patching https://github.com/SkyTemple/skytemple-files/pull/128
-    # merged, remove for next update
-    (fetchpatch {
-      url = "http://github.com/SkyTemple/skytemple-files/commit/71dd71e6abb7435405e30225e8a37592b990d692.patch";
-      sha256 = "sha256-CSBaT+LVP9J0C1FlUCduTJroq9z2EAJG6lruvlHlQLI=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace skytemple_files/patch/arm_patcher.py \
@@ -28,7 +21,7 @@ buildPythonPackage rec {
 
   buildInputs = [ armips ];
 
-  propagatedBuildInputs = [ appdirs explorerscript ndspy pillow setuptools skytemple-rust tilequant ];
+  propagatedBuildInputs = [ appdirs dungeon-eos explorerscript ndspy pillow setuptools skytemple-rust tilequant ];
 
   doCheck = false; # requires Pokémon Mystery Dungeon ROM
   pythonImportsCheck = [ "skytemple_files" ];

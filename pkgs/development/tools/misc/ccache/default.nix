@@ -4,7 +4,7 @@
 , fetchpatch
 , substituteAll
 , binutils
-, asciidoc
+, asciidoctor
 , cmake
 , perl
 , zstd
@@ -15,18 +15,25 @@
 
 let ccache = stdenv.mkDerivation rec {
   pname = "ccache";
-  version = "4.3";
+  version = "4.4.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-ZBxDTMUZiZJLIYbvACTFwvlss+IZiMjiL0khfM5hFCM=";
+    hash = "sha256-zsJoaaxYVV78vsxq2nbOh9ZAU1giKp8Kh6qJFL120CQ=";
   };
 
   outputs = [ "out" "man" ];
 
   patches = [
+    # Use the shell builtin pwd for the basedir test
+    # See https://github.com/ccache/ccache/pull/933
+    (fetchpatch {
+      url = "https://github.com/ccache/ccache/commit/58fd1fbe75a1b5dc3f9151947ace15164fdef91c.patch";
+      sha256 = "BoBn4YSDy8pQxJ+fQHSsrUZDBVeLFWXIQ6CunDwMO7o=";
+    })
+
     # When building for Darwin, test/run uses dwarfdump, whereas on
     # Linux it uses objdump. We don't have dwarfdump packaged for
     # Darwin, so this patch updates the test to also use objdump on
@@ -35,15 +42,16 @@ let ccache = stdenv.mkDerivation rec {
       src = ./force-objdump-on-darwin.patch;
       objdump = "${binutils.bintools}/bin/objdump";
     })
-    # Fix clang C++ modules test (remove in next release)
-    (fetchpatch {
-      url = "https://github.com/ccache/ccache/commit/8b0c783ffc77d29a3e3520345b776a5c496fd892.patch";
-      sha256 = "13qllx0qhfrdila6bdij9lk74fhkm3vdj01zgq1ri6ffrv9lqrla";
-    })
   ];
 
-  nativeBuildInputs = [ asciidoc cmake perl ];
+  nativeBuildInputs = [ asciidoctor cmake perl ];
   buildInputs = [ zstd ];
+
+  cmakeFlags = [
+    # Build system does not autodetect redis library presence.
+    # Requires explicit flag.
+    "-DREDIS_STORAGE_BACKEND=OFF"
+  ];
 
   doCheck = true;
   checkInputs = [
@@ -52,12 +60,18 @@ let ccache = stdenv.mkDerivation rec {
     bashInteractive
   ] ++ lib.optional stdenv.isDarwin xcodebuild;
 
-  checkPhase = ''
+  checkPhase = let
+    badTests = [
+      "test.trim_dir" # flaky on hydra (possibly filesystem-specific?)
+    ] ++ lib.optionals stdenv.isDarwin [
+      "test.basedir"
+      "test.multi_arch"
+      "test.nocpp2"
+    ];
+  in ''
     runHook preCheck
     export HOME=$(mktemp -d)
-    ctest --output-on-failure ${lib.optionalString stdenv.isDarwin ''
-      -E '^(test.nocpp2|test.basedir|test.multi_arch)$'
-    ''}
+    ctest --output-on-failure -E '^(${lib.concatStringsSep "|" badTests})$'
     runHook postCheck
   '';
 

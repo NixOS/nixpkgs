@@ -6,7 +6,7 @@
 , flask
 , pyquery
 , pytest
-, pytestrunner
+, pytest-runner
 , cairosvg
 , tinycss
 , cssselect
@@ -38,7 +38,7 @@ buildPythonPackage rec {
 
     # Should be a check input, but upstream lists it under "setup_requires".
     # https://github.com/Kozea/pygal/issues/430
-    pytestrunner
+    pytest-runner
   ];
 
   checkInputs = [

@@ -6,7 +6,7 @@
   </para>
   <programlisting>
 $ nix-build nixos/tests/login.nix -A driverInteractive
-$ ./result/bin/nixos-test-driver
+$ ./result/bin/nixos-test-driver --interactive
 starting VDE switch for network 1
 &gt;
 </programlisting>
@@ -26,22 +26,11 @@ starting VDE switch for network 1
     the test (e.g. to debug the test script).
   </para>
   <para>
-    To just start and experiment with the VMs, run:
-  </para>
-  <programlisting>
-$ nix-build nixos/tests/login.nix -A driverInteractive
-$ ./result/bin/nixos-run-vms
-</programlisting>
-  <para>
-    The script <literal>nixos-run-vms</literal> starts the virtual
-    machines defined by test.
-  </para>
-  <para>
     You can re-use the VM states coming from a previous run by setting
     the <literal>--keep-vm-state</literal> flag.
   </para>
   <programlisting>
-$ ./result/bin/nixos-run-vms --keep-vm-state
+$ ./result/bin/nixos-test-driver --interactive --keep-vm-state
 </programlisting>
   <para>
     The machine state is stored in the

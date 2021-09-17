@@ -11,11 +11,11 @@ assert usePcre -> pcre != null;
 
 stdenv.mkDerivation rec {
   pname = "haproxy";
-  version = "2.3.10";
+  version = "2.3.13";
 
   src = fetchurl {
     url = "https://www.haproxy.org/download/${lib.versions.majorMinor version}/src/${pname}-${version}.tar.gz";
-    sha256 = "sha256-mUbgz8g/KQcrNDHjckYiHPnUqdKKFYwHVxTTRSZvTzU=";
+    sha256 = "0mz2vga8wwhqa8n4psphbqfd5q33n4m8ar7ac9chhn0i397s8lf6";
   };
 
   buildInputs = [ openssl zlib ]

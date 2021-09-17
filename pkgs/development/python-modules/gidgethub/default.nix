@@ -3,7 +3,7 @@
 , fetchPypi
 , pythonOlder
 , setuptools
-, pytestrunner
+, pytest-runner
 , pytest
 , pytest-asyncio
 , twisted
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     sha256 = "3efbd6998600254ec7a2869318bd3ffde38edc3a0d37be0c14bc46b45947b682";
   };
 
-  nativeBuildInputs = [ setuptools pytestrunner ];
+  nativeBuildInputs = [ setuptools pytest-runner ];
   checkInputs = [ pytest pytest-asyncio twisted treq tornado aiohttp ];
   propagatedBuildInputs = [
     uritemplate

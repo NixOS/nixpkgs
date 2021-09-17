@@ -1,11 +1,9 @@
 { lib, stdenv, fetchurl, imake, bison, flex, gccmakedep
 , xorgproto, libXau, libXt, libXext, libXaw, libXpm, xorgcffiles }:
 
-let
+stdenv.mkDerivation rec {
   pname = "nas";
   version = "1.9.4";
-in stdenv.mkDerivation {
-  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${pname}-${version}.src.tar.gz";

@@ -7,6 +7,7 @@
 , pkg-config
 , gtk3
 , glib
+, glib-networking
 , wrapGAppsHook
 , itstool
 , gnupg
@@ -48,6 +49,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gtk3
     glib
+    glib-networking
     gcr
     gsettings-desktop-schemas
     gnupg

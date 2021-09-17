@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromSourcehut
-, meson, pkg-config, wayland, ninja
-, cairo, libinput, pango, wayland-protocols, libxkbcommon
+, meson, pkg-config, wayland-scanner, ninja
+, cairo, libinput, pango, wayland, wayland-protocols, libxkbcommon
 }:
 
 let
@@ -17,8 +17,8 @@ in stdenv.mkDerivation rec {
     sha256 = "10kafdja5cwbypspwhvaxjz3hvf51vqjzbgdasl977193cvxgmbs";
   };
 
-  nativeBuildInputs = [ meson pkg-config wayland ninja ];
-  buildInputs = [ cairo libinput pango wayland-protocols libxkbcommon ];
+  nativeBuildInputs = [ meson pkg-config wayland-scanner ninja ];
+  buildInputs = [ cairo libinput pango wayland wayland-protocols libxkbcommon ];
 
   meta = with lib; {
     description = "Displays keys being pressed on a Wayland session";

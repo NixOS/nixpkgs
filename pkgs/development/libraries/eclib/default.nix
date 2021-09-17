@@ -43,7 +43,6 @@ stdenv.mkDerivation rec {
   ];
   doCheck = true;
   meta = with lib; {
-    inherit version;
     description = "Elliptic curve tools";
     homepage = "https://github.com/JohnCremona/eclib";
     license = licenses.gpl2Plus;

@@ -2,9 +2,13 @@
 
 , coreutils
 , git
+, libiconv
 , ncurses
 , rustPlatform
 , sqlite
+, stdenv
+, Security
+, SystemConfiguration
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -33,6 +37,10 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     ncurses
     sqlite
+  ] ++ lib.optionals (stdenv.isDarwin) [
+    Security
+    SystemConfiguration
+    libiconv
   ];
 
   preCheck = ''
@@ -44,6 +52,6 @@ rustPlatform.buildRustPackage rec {
     description = "A suite of tools to help you visualize, navigate, manipulate, and repair your commit history";
     homepage = "https://github.com/arxanas/git-branchless";
     license = licenses.asl20;
-    maintainers = with maintainers; [ nh2 ];
+    maintainers = with maintainers; [ msfjarvis nh2 ];
   };
 }

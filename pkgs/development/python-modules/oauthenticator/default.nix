@@ -14,12 +14,12 @@
 
 buildPythonPackage rec {
   pname = "oauthenticator";
-  version = "14.0.0";
+  version = "14.2.0";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1zfcl3dq9ladqg7fnpx6kgxf1ckjzlc8v3j6wa8w6iwglm40ax4r";
+    sha256 = "4baa02ff2c159cbba06f8d07fe11a6e624285ca2f813b1258b4c68766c0ee46b";
   };
 
   propagatedBuildInputs = [
@@ -35,12 +35,6 @@ buildPythonPackage rec {
     pytestCheckHook
     requests-mock
   ];
-
-  postPatch = ''
-  # The constraint was removed. No longer needed for > 14.0.0
-  # https://github.com/jupyterhub/oauthenticator/pull/431
-    substituteInPlace test-requirements.txt --replace "pyjwt>=1.7,<2.0" "pyjwt"
-  '';
 
   disabledTests = [
     # Test are outdated, https://github.com/jupyterhub/oauthenticator/issues/432

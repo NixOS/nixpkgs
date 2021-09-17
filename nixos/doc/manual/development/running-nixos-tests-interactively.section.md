@@ -5,7 +5,7 @@ when developing or debugging a test:
 
 ```ShellSession
 $ nix-build nixos/tests/login.nix -A driverInteractive
-$ ./result/bin/nixos-test-driver
+$ ./result/bin/nixos-test-driver --interactive
 starting VDE switch for network 1
 >
 ```
@@ -24,20 +24,11 @@ back into the test driver command line upon its completion. This allows
 you to inspect the state of the VMs after the test (e.g. to debug the
 test script).
 
-To just start and experiment with the VMs, run:
-
-```ShellSession
-$ nix-build nixos/tests/login.nix -A driverInteractive
-$ ./result/bin/nixos-run-vms
-```
-
-The script `nixos-run-vms` starts the virtual machines defined by test.
-
 You can re-use the VM states coming from a previous run by setting the
 `--keep-vm-state` flag.
 
 ```ShellSession
-$ ./result/bin/nixos-run-vms --keep-vm-state
+$ ./result/bin/nixos-test-driver --interactive --keep-vm-state
 ```
 
 The machine state is stored in the `$TMPDIR/vm-state-machinename`

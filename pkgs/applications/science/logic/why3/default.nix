@@ -1,12 +1,12 @@
 { callPackage, fetchurl, fetchpatch, lib, stdenv
 , ocamlPackages, coqPackages, rubber, hevea, emacs }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "why3";
   version = "1.4.0";
 
   src = fetchurl {
-    url = "https://gforge.inria.fr/frs/download.php/file/38425/why3-1.4.0.tar.gz";
+    url = "https://gforge.inria.fr/frs/download.php/file/38425/why3-${version}.tar.gz";
     sha256 = "0lw0cpx347zz9vvwqibmbxgs80fsd16scgk3isscvwxnajpc3rv8";
   };
 

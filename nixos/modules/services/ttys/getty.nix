@@ -6,7 +6,7 @@ let
   cfg = config.services.getty;
 
   baseArgs = [
-    "--login-program" "${pkgs.shadow}/bin/login"
+    "--login-program" "${cfg.loginProgram}"
   ] ++ optionals (cfg.autologinUser != null) [
     "--autologin" cfg.autologinUser
   ] ++ optionals (cfg.loginOptions != null) [
@@ -36,6 +36,14 @@ in
         description = ''
           Username of the account that will be automatically logged in at the console.
           If unspecified, a login prompt is shown as usual.
+        '';
+      };
+
+      loginProgram = mkOption {
+        type = types.path;
+        default = "${pkgs.shadow}/bin/login";
+        description = ''
+          Path to the login binary executed by agetty.
         '';
       };
 

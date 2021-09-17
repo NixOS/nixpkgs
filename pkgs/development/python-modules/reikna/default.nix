@@ -2,7 +2,7 @@
 , fetchPypi
 , buildPythonPackage
 , sphinx
-, pytestcov
+, pytest-cov
 , pytest
 , Mako
 , numpy
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     sha256 = "d01f4264c8379ef2962a93aacb002d491b92ef9b5b22b45f77e7821dfa87bef7";
   };
 
-  checkInputs = [ sphinx pytestcov pytest ];
+  checkInputs = [ sphinx pytest-cov pytest ];
 
   propagatedBuildInputs = [ Mako numpy funcsigs ]
     ++ lib.optional withCuda pycuda

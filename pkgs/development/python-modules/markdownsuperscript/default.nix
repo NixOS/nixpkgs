@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchPypi, markdown,
-  pytest, pytestrunner, pytestcov, coverage }:
+  pytest, pytest-runner, pytest-cov, coverage }:
 
 buildPythonPackage rec {
   pname = "MarkdownSuperscript";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     sed 's/=.*//' -i requirements/*.txt
   '';
 
-  checkInputs = [ pytest pytestrunner pytestcov coverage ];
+  checkInputs = [ pytest pytest-runner pytest-cov coverage ];
 
   meta = with lib; {
     description = "An extension to the Python Markdown package enabling superscript text";

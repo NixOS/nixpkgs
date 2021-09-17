@@ -7,12 +7,9 @@
 # cgit) that are needed here should be included directly in Nixpkgs as
 # files.
 
-let
-  version = "1.2.1";
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "libmpc";
-  inherit version; # to avoid clash with the MPD client
+  version = "1.2.1"; # to avoid clash with the MPD client
 
   src = fetchurl {
     url = "mirror://gnu/mpc/mpc-${version}.tar.gz";

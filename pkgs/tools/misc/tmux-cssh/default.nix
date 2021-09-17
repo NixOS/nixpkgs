@@ -1,7 +1,8 @@
 { lib, stdenv, fetchFromGitHub, makeWrapper, tmux }:
 
 stdenv.mkDerivation {
-  name = "tmux-cssh-20151015";
+  pname = "tmux-cssh";
+  version = "unstable-2015-10-15";
 
   src = fetchFromGitHub {
     owner = "dennishafemann";

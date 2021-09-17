@@ -4,24 +4,38 @@
 , callPackage
 }:
 
-with python3.pkgs;
+let
+py = python3.override {
+  packageOverrides = self: super: {
+    frozendict = super.frozendict.overridePythonAttrs (oldAttrs: rec {
+      version = "1.2";
+      src = oldAttrs.src.override {
+        inherit version;
+        sha256 = "0ibf1wipidz57giy53dh7mh68f2hz38x8f4wdq88mvxj5pr7jhbp";
+      };
+      doCheck = false;
+    });
+  };
+};
+in
+
+with py.pkgs;
 
 let
-  plugins = python3.pkgs.callPackage ./plugins { };
+  plugins = py.pkgs.callPackage ./plugins { };
   tools = callPackage ./tools { };
 in
 buildPythonApplication rec {
   pname = "matrix-synapse";
-  version = "1.38.0";
+  version = "1.42.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-k9/enFktixO4zvgBW3zw0COBakDP1PHVWAlbMi+FiWQ=";
+    sha256 = "sha256-wJFjjm9apRqjk5eN/kIEgecHgm/XLbtwXHEpM2pmvO8=";
   };
 
   patches = [
-    # adds an entry point for the service
-    ./homeserver-script.patch
+    ./0001-setup-add-homeserver-as-console-script.patch
   ];
 
   buildInputs = [ openssl ];
@@ -41,7 +55,7 @@ buildPythonApplication rec {
     netaddr
     phonenumbers
     pillow
-    prometheus_client
+    prometheus-client
     psutil
     psycopg2
     pyasn1
@@ -67,13 +81,13 @@ buildPythonApplication rec {
   doCheck = !stdenv.isDarwin;
 
   checkPhase = ''
-    PYTHONPATH=".:$PYTHONPATH" ${python3.interpreter} -m twisted.trial tests
+    PYTHONPATH=".:$PYTHONPATH" ${py.interpreter} -m twisted.trial tests
   '';
 
   passthru.tests = { inherit (nixosTests) matrix-synapse; };
   passthru.plugins = plugins;
   passthru.tools = tools;
-  passthru.python = python3;
+  passthru.python = py;
 
   meta = with lib; {
     homepage = "https://matrix.org";

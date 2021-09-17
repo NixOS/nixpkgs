@@ -1,8 +1,12 @@
 { lib, stdenv, fetchFromGitHub, cmake, bash, gnugrep
 , fixDarwinDylibNames
 , file
+, fetchpatch
 , legacySupport ? false
 , static ? stdenv.hostPlatform.isStatic
+# these need to be ran on the host, thus disable when cross-compiling
+, buildContrib ? stdenv.hostPlatform == stdenv.buildPlatform
+, doCheck ? stdenv.hostPlatform == stdenv.buildPlatform
 }:
 
 stdenv.mkDerivation rec {
@@ -24,6 +28,12 @@ stdenv.mkDerivation rec {
     # This patches makes sure we do not attempt to use the MD5 implementation
     # of the host platform when running the tests
     ./playtests-darwin.patch
+
+    # Fixes linking for static builds
+    (fetchpatch {
+      url = "https://github.com/facebook/zstd/pull/2724/commits/e1f85dbca3a0ed5ef06c8396912a0914db8dea6a.patch";
+      sha256 = "sha256-PuYAqnJWAE+L9bsroOnnBGJhERW8LHrGSLtIEkKU9vg=";
+    })
   ];
 
   postPatch = lib.optionalString (!static) ''
@@ -40,6 +50,7 @@ stdenv.mkDerivation rec {
     (name: value: "-DZSTD_${name}:BOOL=${if value then "ON" else "OFF"}") {
       BUILD_SHARED = !static;
       BUILD_STATIC = static;
+      BUILD_CONTRIB = buildContrib;
       PROGRAMS_LINK_SHARED = !static;
       LEGACY_SUPPORT = legacySupport;
       BUILD_TESTS = doCheck;
@@ -52,7 +63,7 @@ stdenv.mkDerivation rec {
   '';
 
   checkInputs = [ file ];
-  doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
+  inherit doCheck;
   checkPhase = ''
     runHook preCheck
     # Patch shebangs for playTests
@@ -62,12 +73,17 @@ stdenv.mkDerivation rec {
   '';
 
   preInstall = ''
+    mkdir -p $bin/bin
     substituteInPlace ../programs/zstdgrep \
       --replace ":-grep" ":-${gnugrep}/bin/grep" \
       --replace ":-zstdcat" ":-$bin/bin/zstdcat"
 
     substituteInPlace ../programs/zstdless \
       --replace "zstdcat" "$bin/bin/zstdcat"
+  '' + lib.optionalString buildContrib ''
+    cp contrib/pzstd/pzstd $bin/bin/pzstd
+  '' + lib.optionalString stdenv.isDarwin ''
+    install_name_tool -change @rpath/libzstd.1.dylib $out/lib/libzstd.1.dylib $bin/bin/pzstd
   '';
 
   outputs = [ "bin" "dev" ]

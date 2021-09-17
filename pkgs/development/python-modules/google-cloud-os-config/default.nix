@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-os-config";
-  version = "1.2.0";
+  version = "1.5.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2b828513c1cea481d03d0218516e5c5d8b53756db3637f02cd69ae3c171832dc";
+    sha256 = "69764c406c8e1a95b66a84c042b7023c13eaef3bf79e493e60edd9ce62e8f2e4";
   };
 
   propagatedBuildInputs = [ google-api-core libcst proto-plus ];

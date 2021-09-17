@@ -1,7 +1,8 @@
 { stdenv, kubernetes, installShellFiles }:
 
 stdenv.mkDerivation {
-  name = "kubectl-${kubernetes.version}";
+  pname = "kubectl";
+  version = kubernetes.version;
 
   # kubectl is currently part of the main distribution but will eventially be
   # split out (see homepage)

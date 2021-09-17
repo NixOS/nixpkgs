@@ -1,7 +1,6 @@
 { lib
 , aiohttp
 , aioresponses
-, appdirs
 , attrs
 , buildPythonPackage
 , cached-property
@@ -12,6 +11,7 @@
 , isodate
 , lxml
 , mock
+, platformdirs
 , pretend
 , pytest-asyncio
 , pytest-httpx
@@ -19,7 +19,7 @@
 , pythonOlder
 , pytz
 , requests
-, requests_toolbelt
+, requests-toolbelt
 , requests-file
 , requests-mock
 , xmlsec
@@ -27,28 +27,28 @@
 
 buildPythonPackage rec {
   pname = "zeep";
-  version = "4.0.0";
+  version = "4.1.0";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "mvantellingen";
     repo = "python-zeep";
     rev = version;
-    sha256 = "1rwmwk47fxs8dxwv5dr6gbnbiyilznifb47fhbxgzj231w0y82cm";
+    sha256 = "sha256-fJLr2LJpbNQTl183R56G7sJILfm04R39qpJxLogQLoo=";
   };
 
   propagatedBuildInputs = [
-    appdirs
     attrs
     cached-property
     defusedxml
     httpx
     isodate
     lxml
+    platformdirs
     pytz
     requests
-    requests_toolbelt
     requests-file
+    requests-toolbelt
     xmlsec
   ];
 
@@ -62,7 +62,6 @@ buildPythonPackage rec {
     pytest-httpx
     pytestCheckHook
     requests-mock
-    xmlsec
   ];
 
   preCheck = ''

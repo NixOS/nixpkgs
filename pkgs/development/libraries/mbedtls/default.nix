@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  postConfigure = lib.optionals enableThreading ''
+  postConfigure = lib.optionalString enableThreading ''
     perl scripts/config.pl set MBEDTLS_THREADING_C    # Threading abstraction layer
     perl scripts/config.pl set MBEDTLS_THREADING_PTHREAD    # POSIX thread wrapper layer for the threading layer.
   '';

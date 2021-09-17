@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchPypi, watchdog, flake8
-, pytest, pytestrunner, coverage, sphinx, twine }:
+, pytest, pytest-runner, coverage, sphinx, twine }:
 
 buildPythonPackage rec {
   pname = "ndjson";
@@ -10,7 +10,7 @@ buildPythonPackage rec {
     sha256 = "v5dGy2uxy1PRcs2n8VTAfHhtZl/yg0Hk5om3lrIp5dY=";
   };
 
-  checkInputs = [ pytest pytestrunner flake8 twine sphinx coverage watchdog ];
+  checkInputs = [ pytest pytest-runner flake8 twine sphinx coverage watchdog ];
 
   meta = with lib; {
     homepage = "https://github.com/rhgrant10/ndjson";

@@ -1,17 +1,26 @@
-{ lib, python3, groff, less, fetchFromGitHub }:
+{ lib, python3, groff, less, fetchFromGitHub, fetchpatch }:
 let
   py = python3.override {
     packageOverrides = self: super: {
+      awscrt = super.awscrt.overridePythonAttrs (oldAttrs: rec {
+        version = "0.11.24";
+        src = self.fetchPypi {
+          inherit (oldAttrs) pname;
+          inherit version;
+          sha256 = "sha256-uKpovKQEvwCFvgVw7/W1QtAffo48D5sIWav+XgcBYv8=";
+        };
+      });
       botocore = super.botocore.overridePythonAttrs (oldAttrs: rec {
-        version = "2.0.0dev122";
+        version = "2.0.0dev138";
         src = fetchFromGitHub {
           owner = "boto";
           repo = "botocore";
-          rev = "8dd916418c8193f56226b7772f263b2435eae27a";
-          sha256 = "sha256-iAZmqnffqrmFuxlQyOpEQzSCcL/hRAjuXKulOXoy4hY=";
+          rev = "5f1971d2d9d2cf7090a8b71650ab40712319bca3";
+          sha256 = "sha256-onptN++MDJrit3sIEXCX9oRJ0qQ5xzmI6J2iABiK7RA";
         };
+        propagatedBuildInputs = super.botocore.propagatedBuildInputs ++ [py.pkgs.awscrt];
       });
-      prompt_toolkit = super.prompt_toolkit.overridePythonAttrs (oldAttrs: rec {
+      prompt-toolkit = super.prompt-toolkit.overridePythonAttrs (oldAttrs: rec {
         version = "2.0.10";
         src = oldAttrs.src.override {
           inherit version;
@@ -24,23 +33,30 @@ let
 in
 with py.pkgs; buildPythonApplication rec {
   pname = "awscli2";
-  version = "2.2.14"; # N.B: if you change this, change botocore to a matching version too
+  version = "2.2.30"; # N.B: if you change this, change botocore to a matching version too
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-cli";
     rev = version;
-    sha256 = "sha256-LU9Tqzdi8ULZ5y3FbfSXdrip4NcxFkXRCTpVGo05LcM=";
+    sha256 = "sha256-OPxo5RjdDCTPntiJInUtgcU43Nn5JEUbwRJXeBl/yYQ";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/mgorny/aws-cli/commit/85361123d2fa12eaedf912c046ffe39aebdd2bad.patch";
+      sha256 = "sha256-1Rb+/CY7ze1/DbJ6TfqHF01cfI2vixZ1dT91bmHTg/A=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "awscrt==0.11.13" "awscrt" \
       --replace "colorama>=0.2.5,<0.4.4" "colorama" \
       --replace "cryptography>=3.3.2,<3.4.0" "cryptography" \
       --replace "docutils>=0.10,<0.16" "docutils" \
       --replace "ruamel.yaml>=0.15.0,<0.16.0" "ruamel.yaml" \
-      --replace "wcwidth<0.2.0" "wcwidth"
+      --replace "wcwidth<0.2.0" "wcwidth" \
+      --replace "distro>=1.5.0,<1.6.0" "distro"
   '';
 
   checkInputs = [ jsonschema mock nose ];
@@ -55,7 +71,7 @@ with py.pkgs; buildPythonApplication rec {
     docutils
     groff
     less
-    prompt_toolkit
+    prompt-toolkit
     pyyaml
     rsa
     ruamel_yaml

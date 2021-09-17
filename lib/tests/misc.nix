@@ -132,6 +132,16 @@ runTests {
     expected = [ 1 1 0 ];
   };
 
+  testFunctionArgsFunctor = {
+    expr = functionArgs { __functor = self: { a, b }: null; };
+    expected = { a = false; b = false; };
+  };
+
+  testFunctionArgsSetFunctionArgs = {
+    expr = functionArgs (setFunctionArgs (args: args.x) { x = false; });
+    expected = { x = false; };
+  };
+
 # STRINGS
 
   testConcatMapStrings = {

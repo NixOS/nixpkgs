@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "cfssl";
-  version = "1.6.0";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "cloudflare";
     repo = "cfssl";
     rev = "v${version}";
-    sha256 = "sha256-29HEaW5LCoHcuJrfVUN2hnsRtaSTrvIBo8ok2UJbfuQ=";
+    sha256 = "sha256-QY04MecjQTmrkPkWcLkXJWErtaw7esb6GnPIKGTJL34=";
   };
 
   subPackages = [
@@ -34,11 +34,10 @@ buildGoModule rec {
     popd
   '';
 
-  buildFlagsArray = ''
-    -ldflags=
-      -s -w
-      -X github.com/cloudflare/cfssl/cli/version.version=v${version}
-  '';
+  ldflags = [
+    "-s" "-w"
+    "-X github.com/cloudflare/cfssl/cli/version.version=v${version}"
+  ];
 
   meta = with lib; {
     homepage = "https://cfssl.org/";

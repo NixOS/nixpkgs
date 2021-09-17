@@ -10,13 +10,13 @@
 , wafHook
 }:
 
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation rec {
   pname = "talloc";
-  version = "2.3.2";
+  version = "2.3.3";
 
   src = fetchurl {
     url = "mirror://samba/talloc/${pname}-${version}.tar.gz";
-    sha256 = "sha256-J6A++Z44TXeRJN91XesinNF2H5Reym0gDoz9m/Upe9c=";
+    sha256 = "sha256-a+lbI2i9CvHEzXqIFG62zuoY5Gw//JMwv2JitA0diqo=";
   };
 
   nativeBuildInputs = [
@@ -42,6 +42,11 @@ stdenv.mkDerivation (rec {
     "--builtin-libraries=replace"
   ];
 
+  # python-config from build Python gives incorrect values when cross-compiling.
+  # If python-config is not found, the build falls back to using the sysconfig
+  # module, which works correctly in all cases.
+  PYTHON_CONFIG = "/invalid";
+
   # this must not be exported before the ConfigurePhase otherwise waf whines
   preBuild = lib.optionalString stdenv.hostPlatform.isMusl ''
     export NIX_CFLAGS_LINK="-no-pie -shared";
@@ -57,9 +62,4 @@ stdenv.mkDerivation (rec {
     license = licenses.gpl3;
     platforms = platforms.all;
   };
-} // lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform) {
-  # python-config from build Python gives incorrect values when cross-compiling.
-  # If python-config is not found, the build falls back to using the sysconfig
-  # module, which works correctly when cross-compiling.
-  PYTHON_CONFIG = "/invalid";
-})
+}

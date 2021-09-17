@@ -13,7 +13,7 @@ perlPackages.buildPerlPackage rec {
 
   outputs = [ "out" ];
 
-  buildInputs = with perlPackages; [ DBI DBDPg TermReadKey JSON LWPUserAgent ];
+  buildInputs = with perlPackages; [ DBI DBDPg TermReadKey JSON LWP ];
 
   nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
   postInstall = lib.optionalString stdenv.isDarwin ''

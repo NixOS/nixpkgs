@@ -561,6 +561,7 @@ in {
      ) {
       users.users.graphite = {
         uid = config.ids.uids.graphite;
+        group = "graphite";
         description = "Graphite daemon user";
         home = dataDir;
       };

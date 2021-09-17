@@ -1,10 +1,11 @@
 {lib, stdenv, fetchurl, ncurses}:
 
-stdenv.mkDerivation {
-  name = "iptraf-3.0.1";
+stdenv.mkDerivation rec {
+  pname = "iptraf";
+  version = "3.0.1";
 
   src = fetchurl {
-    url = "ftp://iptraf.seul.org/pub/iptraf/iptraf-3.0.1.tar.gz";
+    url = "ftp://iptraf.seul.org/pub/iptraf/iptraf-${version}tar.gz";
     sha256 = "12n059j9iihhpf6spmlaspqzxz3wqan6kkpnhmlj08jdijpnk84m";
   };
 

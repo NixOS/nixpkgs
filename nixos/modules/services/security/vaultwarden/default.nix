@@ -26,12 +26,12 @@ let
         if value != null then [ (nameValuePair (nameToEnvVar name) (if isBool value then boolToString value else toString value)) ] else []
       ) cfg.config));
     in { DATA_FOLDER = "/var/lib/bitwarden_rs"; } // optionalAttrs (!(configEnv ? WEB_VAULT_ENABLED) || configEnv.WEB_VAULT_ENABLED == "true") {
-      WEB_VAULT_FOLDER = "${pkgs.vaultwarden-vault}/share/vaultwarden/vault";
+      WEB_VAULT_FOLDER = "${cfg.webVaultPackage}/share/vaultwarden/vault";
     } // configEnv;
 
   configFile = pkgs.writeText "vaultwarden.env" (concatStrings (mapAttrsToList (name: value: "${name}=${value}\n") configEnv));
 
-  vaultwarden = pkgs.vaultwarden.override { inherit (cfg) dbBackend; };
+  vaultwarden = cfg.package.override { inherit (cfg) dbBackend; };
 
 in {
   imports = [
@@ -101,6 +101,20 @@ in {
         Note that this file needs to be available on the host on which
         <literal>vaultwarden</literal> is running.
       '';
+    };
+
+    package = mkOption {
+      type = package;
+      default = pkgs.vaultwarden;
+      defaultText = "pkgs.vaultwarden";
+      description = "Vaultwarden package to use.";
+    };
+
+    webVaultPackage = mkOption {
+      type = package;
+      default = pkgs.vaultwarden-vault;
+      defaultText = "pkgs.vaultwarden-vault";
+      description = "Web vault package to use.";
     };
   };
 

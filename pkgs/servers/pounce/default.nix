@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "pounce";
-  version = "2.3";
+  version = "2.5";
 
   src = fetchzip {
     url = "https://git.causal.agency/pounce/snapshot/pounce-${version}.tar.gz";
-    sha256 = "0pk3kwr6k6dz2vdx1kyv7mhj756j4bwsmdlmjzhh8ghczjqp2s2x";
+    sha256 = "0swbncsm888r95dwk13v1vii5sr3gah817dfah5v7zs8lsv1kgv5";
   };
 
   buildInputs = [ libressl ];

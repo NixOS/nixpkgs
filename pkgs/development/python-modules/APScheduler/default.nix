@@ -6,7 +6,7 @@
 , pytestCheckHook
 , pytest-asyncio
 , pytest-tornado
-, pytestcov
+, pytest-cov
 , sqlalchemy
 , tornado
 , twisted
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-tornado
     pytestCheckHook
-    pytestcov
+    pytest-cov
     sqlalchemy
     tornado
     twisted

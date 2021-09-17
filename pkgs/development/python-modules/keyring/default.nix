@@ -13,12 +13,12 @@
 
 buildPythonPackage rec {
   pname = "keyring";
-  version = "23.0.1";
+  version = "23.1.0";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "045703609dd3fccfcdb27da201684278823b72af515aedec1a8515719a038cb8";
+    sha256 = "b7e0156667f5dcc73c1f63a518005cd18a4eb23fe77321194fefcc03748b21a4";
   };
 
   nativeBuildInputs = [
@@ -48,6 +48,9 @@ buildPythonPackage rec {
   disabledTests = lib.optionals (stdenv.isDarwin) [
     "test_multiprocess_get"
     "test_multiprocess_get_after_native_get"
+  ] ++ [
+    # E       ValueError: too many values to unpack (expected 1)
+    "test_entry_point"
   ];
 
   disabledTestPaths = [

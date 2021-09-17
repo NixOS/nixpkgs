@@ -11,23 +11,24 @@
 }:
 
 let
-  specVersion = "4.96.0"; # Version taken from: https://www.linode.com/docs/api/openapi.yaml at `info.version`.
+  # specVersion taken from: https://www.linode.com/docs/api/openapi.yaml at `info.version`.
+  specVersion = "4.104.0";
   spec = fetchurl {
     url = "https://raw.githubusercontent.com/linode/linode-api-docs/v${specVersion}/openapi.yaml";
-    sha256 = "sha256-4+j5BBTOFLLiA+n0YEUH/ICK4Iuxr6nNB7ZRrYACW2I=";
+    sha256 = "0lbky0djqsndp33067q6yir5525m3zcgkpvf1z16mkspkixzadqs";
   };
 
 in
 
 buildPythonApplication rec {
   pname = "linode-cli";
-  version = "5.4.3";
+  version = "5.9.0";
 
   src = fetchFromGitHub {
     owner = "linode";
     repo = pname;
     rev = version;
-    sha256 = "sha256-hljvcYtck89Lzje0XgnvYqh+jebOEOFnOkgEnGZJm0o=";
+    sha256 = "08j7j9fpxh08vkczjqahb8r55bwks8p3ykrv6a2kfi309629nm96";
   };
 
   # remove need for git history

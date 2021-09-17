@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, commentjson
 , cryptography
 , fetchFromGitHub
 , poetry-core
@@ -11,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "aiohomekit";
-  version = "0.3.0";
+  version = "0.6.2";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "Jc2k";
     repo = pname;
     rev = version;
-    sha256 = "sha256-chRUQyCDXW4of0XBdmKuQEzUE3Gt4A2uGlPNy+oEoco=";
+    sha256 = "16lfav83g12vzs3ssfva7chcqqb7xdx54djwfwyn9xcwfaa7cwhw";
   };
 
   nativeBuildInputs = [
@@ -26,6 +27,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    commentjson
     cryptography
     zeroconf
   ];

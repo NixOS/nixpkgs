@@ -66,21 +66,27 @@ let
 in stdenv.mkDerivation rec {
 
   pname = "omnisharp-roslyn";
-  version = "1.37.8";
+  version = "1.37.12";
 
   src = fetchFromGitHub {
     owner = "OmniSharp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1zi31m6ngk4rm7444n6q7mim096w5h4j2biwmvwmcf5yvig845za";
+    sha256 = "0gyy49v3pslr0l0q6h8hzah4s0iwkhkyckyrj3g2cg08w20b10gw";
   };
 
   nativeBuildInputs = [ makeWrapper msbuild ];
 
+  # NuGetPackageVersion is overridden to be to be compatible with msbuild 16.10,
+  # it needs to be kept in sync with ./create-deps.sh
   buildPhase = ''
     runHook preBuild
 
-    HOME=$(pwd)/fake-home msbuild -r -p:Configuration=Release -p:RestoreConfigFile=${nuget-config} src/OmniSharp.Stdio.Driver/OmniSharp.Stdio.Driver.csproj
+    HOME=$(pwd)/fake-home msbuild -r \
+      -p:Configuration=Release \
+      -p:RestoreConfigFile=${nuget-config} \
+      -p:NuGetPackageVersion=5.9.1-rc.8 \
+      src/OmniSharp.Stdio.Driver/OmniSharp.Stdio.Driver.csproj
 
     runHook postBuild
   '';
@@ -97,7 +103,7 @@ in stdenv.mkDerivation rec {
     ln -s ${msbuild}/lib/mono/msbuild/Current/bin $out/src/.msbuild/Current/Bin
 
     makeWrapper ${mono6}/bin/mono $out/bin/omnisharp \
-      --prefix PATH : ${dotnet-sdk}/bin \
+      --suffix PATH : ${dotnet-sdk}/bin \
       --add-flags "$out/src/OmniSharp.exe"
   '';
 

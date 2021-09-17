@@ -1,9 +1,11 @@
-{lib, stdenv, fetchurl, lzo}:
+{ lib, stdenv, fetchurl, lzo }:
 
 stdenv.mkDerivation rec {
-  name = "lzop-1.04";
+  pname = "lzop";
+  version = "1.04";
+
   src = fetchurl {
-    url = "https://www.lzop.org/download/${name}.tar.gz";
+    url = "https://www.lzop.org/download/lzop-${version}.tar.gz";
     sha256 = "0h9gb8q7y54m9mvy3jvsmxf21yx8fc3ylzh418hgbbv0i8mbcwky";
   };
 
@@ -12,6 +14,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://www.lzop.org";
     description = "Fast file compressor";
+    maintainers = with maintainers; [ ];
     license = licenses.gpl2;
     platforms = platforms.unix;
   };

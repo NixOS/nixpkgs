@@ -86,7 +86,6 @@ buildPythonApplication rec {
   '';
 
   meta = {
-    inherit version;
     description = "Interactive terminal multitool for tabular data";
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.raskin ];

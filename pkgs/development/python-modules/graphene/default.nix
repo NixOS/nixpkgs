@@ -50,7 +50,8 @@ buildPythonPackage rec {
   pytestFlagsArray = [ "--benchmark-disable" ];
 
   disabledTests = [
-    # TypeError: Failed: DID NOT RAISE <class...
+    # Expects different Exeception classes, but receives none of them
+    # https://github.com/graphql-python/graphene/issues/1346
     "test_unexpected_error"
   ];
 

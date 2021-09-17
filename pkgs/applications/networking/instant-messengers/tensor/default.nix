@@ -15,8 +15,6 @@ mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  enableParallelBuilding = true;
-
   buildInputs = [ qtbase qtquickcontrols ];
   nativeBuildInputs = [ qmake ];
 
@@ -60,6 +58,5 @@ mkDerivation rec {
     license = licenses.gpl3;
     maintainers = with maintainers; [ peterhoeg ];
     inherit (qtbase.meta) platforms;
-    inherit version;
   };
 }

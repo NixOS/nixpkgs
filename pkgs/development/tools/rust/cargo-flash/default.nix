@@ -7,6 +7,7 @@
 , pkg-config
 , rustfmt
 , Security
+, AppKit
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -23,7 +24,7 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "sha256-f5vUMdyz3vDh2yE0pMKZiknsqTAKkuvTCtlgb6/gaLc=";
 
   nativeBuildInputs = [ pkg-config rustfmt ];
-  buildInputs = [ libusb1 openssl ] ++ lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = [ libusb1 openssl ] ++ lib.optionals stdenv.isDarwin [ Security AppKit ];
 
   meta = with lib; {
     description = "A cargo extension for working with microcontrollers";

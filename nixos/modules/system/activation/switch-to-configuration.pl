@@ -36,6 +36,8 @@ EOF
     exit 1;
 }
 
+$ENV{NIXOS_ACTION} = $action;
+
 # This is a NixOS installation if it has /etc/NIXOS or a proper
 # /etc/os-release.
 die "This is not a NixOS installation!\n" unless
@@ -243,9 +245,13 @@ while (my ($unit, $state) = each %{$activePrev}) {
                             foreach my $socket (@sockets) {
                                 if (defined $activePrev->{$socket}) {
                                     $unitsToStop{$socket} = 1;
-                                    $unitsToStart{$socket} = 1;
-                                    recordUnit($startListFile, $socket);
-                                    $socketActivated = 1;
+                                    # Only restart sockets that actually
+                                    # exist in new configuration:
+                                    if (-e "$out/etc/systemd/system/$socket") {
+                                        $unitsToStart{$socket} = 1;
+                                        recordUnit($startListFile, $socket);
+                                        $socketActivated = 1;
+                                    }
                                 }
                             }
                         }
@@ -356,6 +362,10 @@ if ($action eq "dry-activate") {
         if scalar @unitsToStopFiltered > 0;
     print STDERR "would NOT stop the following changed units: ", join(", ", sort(keys %unitsToSkip)), "\n"
         if scalar(keys %unitsToSkip) > 0;
+
+    print STDERR "would activate the configuration...\n";
+    system("$out/dry-activate", "$out");
+
     print STDERR "would restart systemd\n" if $restartSystemd;
     print STDERR "would restart the following units: ", join(", ", sort(keys %unitsToRestart)), "\n"
         if scalar(keys %unitsToRestart) > 0;

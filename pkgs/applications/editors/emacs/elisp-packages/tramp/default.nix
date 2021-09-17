@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "tramp";
-  version = "2.5.0";
+  version = "2.5.1";
 
   src = fetchurl {
     url = "mirror://gnu/tramp/${pname}-${version}.tar.gz";
-    sha256 = "sha256-w+6HJA8kFb75Z+7vM1zDnzOnkSSIXKnLVyCcEh+nMGY=";
+    hash = "sha256-+jjWBcj2dP9Xyj4dzpAX86KnajVa9eFDcjD9xTw6vks=";
   };
 
   buildInputs = [
@@ -19,10 +19,11 @@ stdenv.mkDerivation rec {
     texinfo
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.gnu.org/software/tramp";
-    description = "Transparently access remote files from Emacs. Newer versions than built-in.";
-    license = lib.licenses.gpl3Plus;
+    description = "Transparently access remote files from Emacs (latest version)";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ AndersonTorres ];
     inherit (emacs.meta) platforms;
   };
 }

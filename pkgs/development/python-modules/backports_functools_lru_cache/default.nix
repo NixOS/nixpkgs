@@ -6,7 +6,7 @@
 , pytest
 , pytest-black
 , pytest-flake8
-, pytestcov
+, pytest-cov
 }:
 
 buildPythonPackage rec {
@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools-scm ];
 
-  checkInputs = [ pytest pytest-flake8 pytest-black pytestcov ];
+  checkInputs = [ pytest pytest-flake8 pytest-black pytest-cov ];
   # ironically, they fail a linting test, and pytest.ini forces that test suite
   checkPhase = ''
     rm backports/functools_lru_cache.py
@@ -29,6 +29,8 @@ buildPythonPackage rec {
 
   # Test fail on Python 2
   doCheck = isPy3k;
+
+  pythonNamespaces = [ "backports" ];
 
   meta = {
     description = "Backport of functools.lru_cache";

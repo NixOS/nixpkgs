@@ -51,10 +51,11 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : with lib; {
             host = "localhost";
             port = 143;
           };
-          pages = {
-            enabled = true;
-            host = "localhost";
-          };
+          # https://github.com/NixOS/nixpkgs/issues/132295
+          # pages = {
+          #   enabled = true;
+          #   host = "localhost";
+          # };
         };
         secrets = {
           secretFile = pkgs.writeText "secret" "Aig5zaic";
@@ -90,7 +91,8 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : with lib; {
       waitForServices = ''
         gitlab.wait_for_unit("gitaly.service")
         gitlab.wait_for_unit("gitlab-workhorse.service")
-        gitlab.wait_for_unit("gitlab-pages.service")
+        # https://github.com/NixOS/nixpkgs/issues/132295
+        # gitlab.wait_for_unit("gitlab-pages.service")
         gitlab.wait_for_unit("gitlab-mailroom.service")
         gitlab.wait_for_unit("gitlab.service")
         gitlab.wait_for_unit("gitlab-sidekiq.service")
@@ -143,7 +145,8 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : with lib; {
       )
       gitlab.succeed("systemd-tmpfiles --create")
       gitlab.succeed("rm -rf ${nodes.gitlab.config.services.postgresql.dataDir}")
-      gitlab.systemctl("start gitlab-config.service gitlab-postgresql.service")
+      gitlab.systemctl("start gitlab-config.service gitaly.service gitlab-postgresql.service")
+      gitlab.wait_for_file("${nodes.gitlab.config.services.gitlab.statePath}/tmp/sockets/gitaly.socket")
       gitlab.succeed(
           "sudo -u gitlab -H gitlab-rake gitlab:backup:restore RAILS_ENV=production BACKUP=dump force=yes"
       )

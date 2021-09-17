@@ -1,5 +1,5 @@
 { lib, stdenv, buildPythonPackage, isPy3k, fetchFromGitHub
-, asgiref, autobahn, twisted, pytestrunner
+, asgiref, autobahn, twisted, pytest-runner
 , hypothesis, pytest, pytest-asyncio, service-identity, pyopenssl
 }:
 buildPythonPackage rec {
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "sha256-KWkMV4L7bA2Eo/u4GGif6lmDNrZAzvYyDiyzyWt9LeI=";
   };
 
-  nativeBuildInputs = [ pytestrunner ];
+  nativeBuildInputs = [ pytest-runner ];
 
   propagatedBuildInputs = [ asgiref autobahn twisted service-identity pyopenssl ];
 

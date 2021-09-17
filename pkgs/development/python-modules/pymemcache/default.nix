@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "pymemcache";
-  version = "3.4.4";
+  version = "3.5.0";
 
   src = fetchFromGitHub {
     owner = "pinterest";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1ajlhirxhd4pbzgd84k44znjazjbnbdfm3sk64avs0vgcgclq2n7";
+    sha256 = "sha256-O2qmcLWCUSc1f32irelIZOOuOziOUQXFGcuQJBXPvvM=";
   };
 
   checkInputs = [

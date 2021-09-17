@@ -1,11 +1,12 @@
 {lib, stdenv, fetchFromGitHub, pkg-config, autoconf, automake, glib, libtool }:
 
-stdenv.mkDerivation {
-  name = "gnet-2.0.8";
+stdenv.mkDerivation rec {
+  pname = "gnet";
+  version = "2.0.8";
   src = fetchFromGitHub {
     owner = "GNOME";
     repo = "gnet";
-    rev = "GNET_2_0_8";
+    rev = "GNET_${lib.replaceStrings ["."] ["_"] version}";
     sha256 = "1cy78kglzi235md964ikvm0rg801bx0yk9ya8zavndjnaarzqq87";
   };
 

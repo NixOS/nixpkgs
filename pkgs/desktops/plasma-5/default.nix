@@ -123,12 +123,14 @@ let
       kscreen = callPackage ./kscreen.nix {};
       kscreenlocker = callPackage ./kscreenlocker.nix {};
       ksshaskpass = callPackage ./ksshaskpass.nix {};
-      ksysguard = callPackage ./ksysguard.nix {};
+      ksysguard = throw "ksysguard has been replaced with plasma-systemmonitor";
+      ksystemstats = callPackage ./ksystemstats.nix {};
       kwallet-pam = callPackage ./kwallet-pam.nix {};
       kwayland-integration = callPackage ./kwayland-integration.nix {};
       kwayland-server = callPackage ./kwayland-server {};
       kwin = callPackage ./kwin {};
       kwrited = callPackage ./kwrited.nix {};
+      layer-shell-qt = callPackage ./layer-shell-qt.nix {};
       libkscreen = callPackage ./libkscreen {};
       libksysguard = callPackage ./libksysguard {};
       milou = callPackage ./milou.nix {};
@@ -158,6 +160,7 @@ let
         kwin-dynamic-workspaces = callPackage ./3rdparty/kwin/scripts/dynamic-workspaces.nix { };
         kwin-tiling = callPackage ./3rdparty/kwin/scripts/tiling.nix { };
         krohnkite = callPackage ./3rdparty/kwin/scripts/krohnkite.nix { };
+        krunner-symbols = callPackage ./3rdparty/addons/krunner-symbols.nix { };
         parachute = callPackage ./3rdparty/kwin/scripts/parachute.nix { };
       };
 

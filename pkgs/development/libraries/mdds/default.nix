@@ -19,7 +19,6 @@ stdenv.mkDerivation rec {
   checkInputs = [ boost ];
 
   meta = with lib; {
-    inherit version;
     homepage = "https://gitlab.com/mdds/mdds";
     description = "A collection of multi-dimensional data structure and indexing algorithm";
     platforms = platforms.all;

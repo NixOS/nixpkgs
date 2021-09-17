@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, texinfo }:
 
 stdenv.mkDerivation rec {
-  name = "indent-2.2.12";
+  pname = "indent";
+  version = "2.2.12";
 
   src = fetchurl {
-    url = "mirror://gnu/indent/${name}.tar.gz";
+    url = "mirror://gnu/${pname}/${pname}-${version}.tar.gz";
     sha256 = "12xvcd16cwilzglv9h7sgh4h1qqjd1h8s48ji2dla58m4706hzg7";
   };
 

@@ -2,12 +2,9 @@
 , fetchurl, fetchpatch
 }:
 
-let
-  version = "1.7";
-
-in python2Packages.buildPythonApplication {
+python2Packages.buildPythonApplication rec {
   pname = "nixops";
-  inherit version;
+  version = "1.7";
 
   src = fetchurl {
     url = "https://nixos.org/releases/nixops/nixops-${version}/nixops-${version}.tar.bz2";

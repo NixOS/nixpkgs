@@ -214,11 +214,13 @@ stdenv.mkDerivation {
     cp --no-preserve=mode -r "${contribSrc}/modules" "$NIX_BUILD_TOP/source/opencv_contrib"
   '';
 
-  # This prevents cmake from using libraries in impure paths (which
-  # causes build failure on non NixOS)
+  # Ensures that we use the system OpenEXR rather than the vendored copy of the source included with OpenCV.
   patches = [
     ./cmake-don-t-use-OpenCVFindOpenEXR.patch
   ] ++ lib.optional enableCuda ./cuda_opt_flow.patch;
+
+  # This prevents cmake from using libraries in impure paths (which
+  # causes build failure on non NixOS)
   postPatch = ''
     sed -i '/Add these standard paths to the search paths for FIND_LIBRARY/,/^\s*$/{d}' CMakeLists.txt
   '';

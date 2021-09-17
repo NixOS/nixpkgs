@@ -45,8 +45,6 @@ mkDerivation rec {
 
   doCheck = true;
 
-  enableParallelBuilding = true;
-
   buildFlags = optional withDocumentation "docs";
 
   installFlags = [ "INSTALL_ROOT=$(out)" ] ++ optional withDocumentation "install_docs";
@@ -70,7 +68,7 @@ mkDerivation rec {
       --replace 'LLVM_CXXFLAGS ~= s,-gsplit-dwarf,' '${lib.concatStringsSep "\n" ["LLVM_CXXFLAGS ~= s,-gsplit-dwarf," "    LLVM_CXXFLAGS += -fno-rtti"]}'
   '';
 
-  preBuild = optional withDocumentation ''
+  preBuild = optionalString withDocumentation ''
     ln -s ${getLib qtbase}/$qtDocPrefix $NIX_QT5_TMP/share
   '';
 

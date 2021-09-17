@@ -30,7 +30,10 @@ stdenv.mkDerivation rec {
     hash = "sha256:1hfy8vaap3184cd7h3qhz0da7c992idkc6q2nz9frhma45c5vgmd";
   };
 
-  patches = [ ./monotone-1.1-Adapt-to-changes-in-pcre-8.42.patch ];
+  patches = [
+    ./monotone-1.1-Adapt-to-changes-in-pcre-8.42.patch
+    ./monotone-1.1-adapt-to-botan2.patch
+  ];
 
   postPatch = ''
     sed -e 's@/usr/bin/less@${less}/bin/less@' -i src/unix/terminal.cc

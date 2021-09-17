@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, six, pytestcov, pytest }:
+{ lib, buildPythonPackage, fetchPypi, six, pytest-cov, pytest }:
 
 buildPythonPackage rec {
   version = "1.2.0";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ six ];
 
-  checkInputs = [ pytestcov pytest ];
+  checkInputs = [ pytest-cov pytest ];
 
   meta = with lib; {
     description = "Python library for parsing Dockerfile files";

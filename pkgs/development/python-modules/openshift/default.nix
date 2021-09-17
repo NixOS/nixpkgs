@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "openshift";
-  version = "0.12.0";
+  version = "0.12.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-aggRnD4goiZJPp4cngp8AIrJC/V46378cwUSfq8Xml4=";
+    sha256 = "a38957684b17ad0e140a87226249bf26de7267db0c83a6d512b48be258052e1a";
   };
 
   propagatedBuildInputs = [

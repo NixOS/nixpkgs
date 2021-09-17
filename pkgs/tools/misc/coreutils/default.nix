@@ -112,7 +112,8 @@ stdenv.mkDerivation (rec {
   # and {Open,Free}BSD.
   # With non-standard storeDir: https://github.com/NixOS/nix/issues/512
   doCheck = stdenv.hostPlatform == stdenv.buildPlatform
-    && (stdenv.hostPlatform.libc == "glibc" || stdenv.hostPlatform.isMusl);
+    && (stdenv.hostPlatform.libc == "glibc" || stdenv.hostPlatform.isMusl)
+    && !stdenv.isAarch32;
 
   # Prevents attempts of running 'help2man' on cross-built binaries.
   PERL = if stdenv.hostPlatform == stdenv.buildPlatform then null else "missing";

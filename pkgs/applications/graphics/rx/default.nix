@@ -7,16 +7,16 @@ with lib;
 
 rustPlatform.buildRustPackage rec {
   pname = "rx";
-  version = "0.4.0";
+  version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "cloudhead";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1pln65pqy39ijrld11d06klwzfhhzmrgdaxijpx9q7w9z66zmqb8";
+    sha256 = "sha256-LTpaV/fgYUgA2M6Wz5qLHnTNywh13900g+umhgLvciM=";
   };
 
-  cargoSha256 = "1mb9wx5h729pc9y1b0d0yiapyk0mlbvdmvwq993fcpkziwjvnl44";
+  cargoSha256 = "sha256-4hi1U4jl6QA7H8AKHlU+Hqz5iKGYHRXHDsrcqY7imkU=";
 
   nativeBuildInputs = [ cmake pkg-config makeWrapper ];
 
@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage rec {
   # FIXME: GLFW (X11) requires DISPLAY env variable for all tests
   doCheck = false;
 
-  postInstall = optional stdenv.isLinux ''
+  postInstall = optionalString stdenv.isLinux ''
     mkdir -p $out/share/applications
     cp $src/rx.desktop $out/share/applications
     wrapProgram $out/bin/rx --prefix LD_LIBRARY_PATH : ${libGL}/lib

@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "liquidctl";
-  version = "1.7.0";
+  version = "1.7.1";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner  = pname;
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "sha256-tpk8wCKyrj3dOkBxj9UWcyrAb31uKtl2fRwwh7dAQGE=";
+    sha256 = "sha256-TNDQV1BOVVdvr0XAyWGcwgMbe4mV7J05hQeKVUqVT9s=";
   };
 
   nativeBuildInputs = [ installShellFiles ];

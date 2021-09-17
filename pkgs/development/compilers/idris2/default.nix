@@ -48,7 +48,8 @@ stdenv.mkDerivation rec {
   postInstall = let
     includedLibs = [ "base" "contrib" "network" "prelude" ];
     name = "${pname}-${version}";
-    packagePaths = builtins.map (l: "$out/${name}/" + l) includedLibs;
+    packagePaths =
+      builtins.map (l: "$out/${name}/${l}-${version}") includedLibs;
     additionalIdris2Paths = builtins.concatStringsSep ":" packagePaths;
   in ''
     # Remove existing idris2 wrapper that sets incorrect LD_LIBRARY_PATH

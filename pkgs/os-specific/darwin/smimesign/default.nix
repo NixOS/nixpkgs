@@ -13,7 +13,7 @@ buildGoModule rec {
 
   vendorSha256 = "1cldxykm9qj5rvyfafam45y5xj4f19700s2f9w7ndhxgfp9vahvz";
 
-  buildFlagsArray = "-ldflags=-X main.versionString=v${version}";
+  ldflags = [ "-X main.versionString=v${version}" ];
 
   meta = with lib; {
     description = "An S/MIME signing utility for macOS and Windows that is compatible with Git";

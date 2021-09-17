@@ -1,8 +1,8 @@
 diff --git a/Source/CMakeLists.txt b/Source/CMakeLists.txt
-index 1b6bb00d4c..487114daa8 100644
+index 9a18184fd3..278d146dd1 100644
 --- a/Source/CMakeLists.txt
 +++ b/Source/CMakeLists.txt
-@@ -893,7 +893,6 @@ endif()
+@@ -933,7 +933,6 @@ endif()
  # On Apple we need CoreFoundation and CoreServices
  if(APPLE)
    target_link_libraries(CMakeLib "-framework CoreFoundation")
@@ -11,27 +11,25 @@ index 1b6bb00d4c..487114daa8 100644
  
  if(WIN32 AND NOT UNIX)
 diff --git a/Source/cmGlobalXCodeGenerator.cxx b/Source/cmGlobalXCodeGenerator.cxx
-index a5ce5d18f4..3d6838ce82 100644
+index 77403b076a..d5aac95e1e 100644
 --- a/Source/cmGlobalXCodeGenerator.cxx
 +++ b/Source/cmGlobalXCodeGenerator.cxx
-@@ -43,11 +43,10 @@
- 
- struct cmLinkImplementation;
+@@ -49,10 +49,6 @@ struct cmLinkImplementation;
  
  #if !defined(CMAKE_BOOTSTRAP) && defined(__APPLE__)
--#  define HAVE_APPLICATION_SERVICES
--#  include <ApplicationServices/ApplicationServices.h>
-+#  include <CoreFoundation/CoreFoundation.h>
+ #  include <CoreFoundation/CoreFoundation.h>
+-#  if !TARGET_OS_IPHONE
+-#    define HAVE_APPLICATION_SERVICES
+-#    include <ApplicationServices/ApplicationServices.h>
+-#  endif
  #endif
-
- #if !defined(CMAKE_BOOTSTRAP)
- #  include "cmXMLParser.h"
  
+ #if !defined(CMAKE_BOOTSTRAP)
 diff --git a/Utilities/cmlibarchive/CMakeLists.txt b/Utilities/cmlibarchive/CMakeLists.txt
-index bfcaf30bb7..1da540aee5 100644
+index 79452ffff6..a848731b7e 100644
 --- a/Utilities/cmlibarchive/CMakeLists.txt
 +++ b/Utilities/cmlibarchive/CMakeLists.txt
-@@ -2007,11 +2007,6 @@ IF(ENABLE_TEST)
+@@ -2013,11 +2013,6 @@ IF(ENABLE_TEST)
  ENDIF(ENABLE_TEST)
  ENDIF()
  

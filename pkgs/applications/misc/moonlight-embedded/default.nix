@@ -1,34 +1,34 @@
 { lib, stdenv, fetchFromGitHub, cmake, perl
 , alsa-lib, libevdev, libopus, udev, SDL2
 , ffmpeg, pkg-config, xorg, libvdpau, libpulseaudio, libcec
-, curl, expat, avahi, enet, libuuid, libva
+, curl, expat, avahi, libuuid, libva
 }:
 
 stdenv.mkDerivation rec {
   pname = "moonlight-embedded";
-  version = "2.4.11";
+  version = "2.5.1";
 
   src = fetchFromGitHub {
-    owner = "irtimmer";
+    owner = "moonlight-stream";
     repo = "moonlight-embedded";
     rev = "v${version}";
-    sha256 = "19wm4gizj8q6j4jwqfcn3bkhms97d8afwxmqjmjnqqxzpd2gxc16";
+    sha256 = "0wn6yjpqyjv52278xsx1ivnqrwca4fnk09a01fwzk4adpry1q9ck";
     fetchSubmodules = true;
   };
 
   outputs = [ "out" "man" ];
 
-  nativeBuildInputs = [ cmake perl ];
+  nativeBuildInputs = [ cmake perl pkg-config ];
   buildInputs = [
     alsa-lib libevdev libopus udev SDL2
-    ffmpeg pkg-config xorg.libxcb libvdpau libpulseaudio libcec
-    xorg.libpthreadstubs curl expat avahi enet libuuid libva
+    ffmpeg xorg.libxcb libvdpau libpulseaudio libcec
+    xorg.libpthreadstubs curl expat avahi libuuid libva
   ];
 
   meta = with lib; {
     description = "Open source implementation of NVIDIA's GameStream";
-    homepage = "https://github.com/irtimmer/moonlight-embedded";
-    license = licenses.gpl3;
+    homepage = "https://github.com/moonlight-stream/moonlight-embedded";
+    license = licenses.gpl3Plus;
     maintainers = [ maintainers.globin ];
     platforms = platforms.linux;
   };

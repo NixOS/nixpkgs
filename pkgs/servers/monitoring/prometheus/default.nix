@@ -1,4 +1,10 @@
-{ stdenv, lib, go, buildGoModule, fetchFromGitHub, mkYarnPackage, nixosTests
+{ stdenv
+, lib
+, go
+, buildGoModule
+, fetchFromGitHub
+, mkYarnPackage
+, nixosTests
 , fetchpatch
 }:
 
@@ -27,7 +33,8 @@ let
     installPhase = "mv build $out";
     distPhase = "true";
   };
-in buildGoModule rec {
+in
+buildGoModule rec {
   pname = "prometheus";
   inherit src version;
 
@@ -40,20 +47,20 @@ in buildGoModule rec {
     ln -s ${webui} web/ui/static/react
   '';
 
-  buildFlags = "-tags=builtinassets";
-  buildFlagsArray = let
-    t = "${goPackagePath}/vendor/github.com/prometheus/common/version";
-  in [
-    ''
-      -ldflags=
-         -X ${t}.Version=${version}
-         -X ${t}.Revision=unknown
-         -X ${t}.Branch=unknown
-         -X ${t}.BuildUser=nix@nixpkgs
-         -X ${t}.BuildDate=unknown
-         -X ${t}.GoVersion=${lib.getVersion go}
-    ''
-  ];
+  tags = [ "builtinassets" ];
+
+  ldflags =
+    let
+      t = "${goPackagePath}/vendor/github.com/prometheus/common/version";
+    in
+    [
+      "-X ${t}.Version=${version}"
+      "-X ${t}.Revision=unknown"
+      "-X ${t}.Branch=unknown"
+      "-X ${t}.BuildUser=nix@nixpkgs"
+      "-X ${t}.BuildDate=unknown"
+      "-X ${t}.GoVersion=${lib.getVersion go}"
+    ];
 
   # only run this in the real build, not during the vendor build
   # this should probably be fixed in buildGoModule
@@ -67,7 +74,8 @@ in buildGoModule rec {
     cp -a $src/console_libraries $src/consoles $out/etc/prometheus
   '';
 
-  doCheck = !stdenv.isDarwin; # https://hydra.nixos.org/build/130673870/nixlog/1
+  # doCheck = !stdenv.isDarwin; # https://hydra.nixos.org/build/130673870/nixlog/1
+  doCheck = false;
 
   passthru.tests = { inherit (nixosTests) prometheus; };
 

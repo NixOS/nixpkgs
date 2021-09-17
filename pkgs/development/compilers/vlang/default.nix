@@ -1,6 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, glfw, freetype, openssl, upx ? null }:
-
-assert stdenv.hostPlatform.isUnix -> upx != null;
+{ lib, stdenv, fetchFromGitHub, glfw, freetype, openssl, makeWrapper, upx }:
 
 stdenv.mkDerivation rec {
   pname = "vlang";
@@ -25,16 +23,15 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ glfw freetype openssl ]
     ++ lib.optional stdenv.hostPlatform.isUnix upx;
 
-  buildPhase = ''
-    runHook preBuild
-    cc -std=gnu11 $CFLAGS -w -o v $vc/v.c -lm $LDFLAGS
-    # vlang seems to want to write to $HOME/.vmodules,
-    # so lets give it a writable HOME
-    HOME=$PWD ./v -prod self
-    # Exclude thirdparty/vschannel as it is windows-specific.
-    find thirdparty -path thirdparty/vschannel -prune -o -type f -name "*.c" -execdir cc -std=gnu11 $CFLAGS -w -c {} $LDFLAGS ';'
-    runHook postBuild
-  '';
+  nativeBuildInputs = [ makeWrapper ];
+
+  makeFlags = [
+    "local=1"
+    "VC=${vc}"
+    # vlang seems to want to write to $HOME/.vmodules , so lets give
+    # it a writable HOME
+    "HOME=$TMPDIR"
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -43,6 +40,7 @@ stdenv.mkDerivation rec {
     cp -r {cmd,vlib,thirdparty} $out/lib
     mv v $out/lib
     ln -s $out/lib/v $out/bin/v
+    wrapProgram $out/bin/v --prefix PATH : ${lib.makeBinPath [ stdenv.cc ]}
     runHook postInstall
   '';
 

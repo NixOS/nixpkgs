@@ -1,4 +1,4 @@
-{ runCommandNoCC, lib, makeWrapper, wayfirePlugins }:
+{ runCommand, lib, makeWrapper, wayfirePlugins }:
 
 let
   inherit (lib) escapeShellArg makeBinPath;
@@ -17,7 +17,7 @@ let
   plugins = choosePlugins wayfirePlugins;
 in
 
-runCommandNoCC "${application.name}-wrapped" {
+runCommand "${application.name}-wrapped" {
   nativeBuildInputs = [ makeWrapper ];
 
   passthru = application.passthru // {

@@ -217,6 +217,20 @@ in rec {
     }).config.system.build.amazonImage)
 
   );
+  amazonImageZfs = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system:
+
+    with import ./.. { inherit system; };
+
+    hydraJob ((import lib/eval-config.nix {
+      inherit system;
+      modules =
+        [ configuration
+          versionModule
+          ./maintainers/scripts/ec2/amazon-image-zfs.nix
+        ];
+    }).config.system.build.amazonImage)
+
+  );
 
 
   # Test job for https://github.com/NixOS/nixpkgs/issues/121354 to test

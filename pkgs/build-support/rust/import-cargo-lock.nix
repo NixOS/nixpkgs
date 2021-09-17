@@ -12,14 +12,15 @@ let
   # Parse a git source into different components.
   parseGit = src:
     let
-      parts = builtins.match ''git\+([^?]+)(\?rev=(.*))?#(.*)?'' src;
-      rev = builtins.elemAt parts 2;
+      parts = builtins.match ''git\+([^?]+)(\?(rev|tag|branch)=(.*))?#(.*)'' src;
+      type = builtins.elemAt parts 2; # rev, tag or branch
+      value = builtins.elemAt parts 3;
     in
       if parts == null then null
       else {
         url = builtins.elemAt parts 0;
-        sha = builtins.elemAt parts 3;
-      } // lib.optionalAttrs (rev != null) { inherit rev; };
+        sha = builtins.elemAt parts 4;
+      } // lib.optionalAttrs (type != null) { inherit type value; };
 
   packages = (builtins.fromTOML (builtins.readFile lockFile)).package;
 
@@ -63,11 +64,19 @@ let
 
   # We can't use the existing fetchCrate function, since it uses a
   # recursive hash of the unpacked crate.
-  fetchCrate = pkg: fetchurl {
-    name = "crate-${pkg.name}-${pkg.version}.tar.gz";
-    url = "https://crates.io/api/v1/crates/${pkg.name}/${pkg.version}/download";
-    sha256 = pkg.checksum;
-  };
+  fetchCrate = pkg:
+    assert lib.assertMsg (pkg ? checksum) ''
+      Package ${pkg.name} does not have a checksum.
+      Please note that the Cargo.lock format where checksums used to be listed
+      under [metadata] is not supported.
+      If that is the case, running `cargo update` with a recent toolchain will
+      automatically update the format along with the crate's depenendencies.
+    '';
+    fetchurl {
+      name = "crate-${pkg.name}-${pkg.version}.tar.gz";
+      url = "https://crates.io/api/v1/crates/${pkg.name}/${pkg.version}/download";
+      sha256 = pkg.checksum;
+    };
 
   # Fetch and unpack a crate.
   mkCrate = pkg:
@@ -129,7 +138,7 @@ let
         cat > $out/.cargo-config <<EOF
         [source."${gitParts.url}"]
         git = "${gitParts.url}"
-        ${lib.optionalString (gitParts ? rev) "rev = \"${gitParts.rev}\""}
+        ${lib.optionalString (gitParts ? type) "${gitParts.type} = \"${gitParts.value}\""}
         replace-with = "vendored-sources"
         EOF
       ''

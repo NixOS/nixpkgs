@@ -44,12 +44,12 @@ stdenv.mkDerivation rec {
     "--with-dbusconfdir=${placeholder "out"}/share"
     "--with-systemdunitdir=${placeholder "out"}/lib/systemd/system"
     "--enable-external-ell"
+    "--sysconfdir=/etc"
   ];
 
-  postInstall = ''
-    rm -r $out/etc/ofono
-    ln -s /etc/ofono $out/etc/ofono
-  '';
+  installFlags = [
+    "sysconfdir=${placeholder "out"}/etc"
+  ];
 
   enableParallelBuilding = true;
   enableParallelChecking = false;

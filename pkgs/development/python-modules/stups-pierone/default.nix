@@ -5,7 +5,7 @@
 , stups-cli-support
 , stups-zign
 , pytest
-, pytestcov
+, pytest-cov
 , hypothesis
 , isPy3k
 }:
@@ -34,7 +34,7 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytest
-    pytestcov
+    pytest-cov
     hypothesis
   ];
 

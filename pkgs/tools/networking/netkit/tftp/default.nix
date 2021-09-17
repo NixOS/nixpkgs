@@ -1,13 +1,14 @@
 {lib, stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
-  name = "netkit-tftp-0.17";
+  pname = "netkit-tftp";
+  version = "0.17";
 
   src = fetchurl {
     urls = [
-      "mirror://ubuntu/pool/universe/n/netkit-tftp/netkit-tftp_0.17.orig.tar.gz"
-      "ftp://ftp.uk.linux.org/pub/linux/Networking/netkit/${name}.tar.gz"
-      "https://ftp.cc.uoc.gr/mirrors/linux/ubuntu/packages/pool/universe/n/netkit-tftp/netkit-tftp_0.17.orig.tar.gz"
+      "mirror://ubuntu/pool/universe/n/netkit-tftp/netkit-tftp_${version}.orig.tar.gz"
+      "ftp://ftp.uk.linux.org/pub/linux/Networking/netkit/netkit-tftp-${version}.tar.gz"
+      "https://ftp.cc.uoc.gr/mirrors/linux/ubuntu/packages/pool/universe/n/netkit-tftp/netkit-tftp_${version}.orig.tar.gz"
     ];
     sha256 = "0kfibbjmy85r3k92cdchha78nzb6silkgn1zaq9g8qaf1l0w0hrs";
   };

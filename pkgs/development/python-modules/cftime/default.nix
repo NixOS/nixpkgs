@@ -2,7 +2,7 @@
 , fetchPypi
 , pytestCheckHook
 , coveralls
-, pytestcov
+, pytest-cov
 , cython
 , numpy
 , python
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   checkInputs = [
     pytestCheckHook
     coveralls
-    pytestcov
+    pytest-cov
   ];
 
   nativeBuildInputs = [

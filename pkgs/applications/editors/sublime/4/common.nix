@@ -100,7 +100,7 @@ in stdenv.mkDerivation (rec {
   inherit pname;
   version = buildVersion;
 
-  phases = [ "installPhase" ];
+  dontUnpack = true;
 
   ${primaryBinary} = binaryPackage;
 

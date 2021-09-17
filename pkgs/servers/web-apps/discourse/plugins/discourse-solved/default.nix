@@ -1,11 +1,17 @@
-{ mkDiscoursePlugin, fetchFromGitHub }:
+{ lib, mkDiscoursePlugin, fetchFromGitHub }:
 
 mkDiscoursePlugin {
   name = "discourse-solved";
   src = fetchFromGitHub {
     owner = "discourse";
     repo = "discourse-solved";
-    rev = "179611766d53974308e6f7def21836997c3c55fc";
-    sha256 = "sha256:1s77h42d3bv2lqw33akxh8ss482vxnz4d7qz6xicwqfwv34qjf03";
+    rev = "8bf54370200fe9d94541f69339430a7dc1019d62";
+    sha256 = "1sk91h4dilkxm1wpv8zw59wgw860ywwlcgiw2kd23ybdk9n7b3lh";
+  };
+  meta = with lib; {
+    homepage = "https://github.com/discourse/discourse-solved";
+    maintainers = with maintainers; [ talyz ];
+    license = licenses.mit;
+    description = "Allow accepted answers on topics";
   };
 }

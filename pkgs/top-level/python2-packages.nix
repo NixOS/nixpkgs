@@ -70,6 +70,8 @@ with self; with super; {
 
   construct = callPackage ../development/python-modules/construct/2.10.54.nix { };
 
+  contextlib2 = callPackage ../development/python-modules/contextlib2/0.nix { };
+
   convertdate = callPackage ../development/python-modules/convertdate/2.2.x.nix { };
 
   cryptography = callPackage ../development/python-modules/cryptography/3.3.nix { };
@@ -79,6 +81,8 @@ with self; with super; {
   darcsver = callPackage ../development/python-modules/darcsver { };
 
   dateparser = callPackage ../development/python-modules/dateparser/0.x.nix { };
+
+  decorator = callPackage ../development/python-modules/decorator/4.nix { };
 
   deskcon = callPackage ../development/python-modules/deskcon { };
 
@@ -281,6 +285,8 @@ with self; with super; {
 
   metaphone = callPackage ../development/python-modules/metaphone { };
 
+  mlt = disabled super.mlt;
+
   mock = callPackage ../development/python-modules/mock/2.nix { };
 
   # Needed here because moinmoin is loaded as a Python library.
@@ -391,6 +397,8 @@ with self; with super; {
 
   pip = callPackage ../development/python-modules/pip/20.nix { };
 
+  pluggy = callPackage ../development/python-modules/pluggy/0.nix { };
+
   postorius = disabled super.postorius;
 
   praw = callPackage ../development/python-modules/praw/6.3.nix { };
@@ -403,7 +411,7 @@ with self; with super; {
 
   progressbar231 = callPackage ../development/python-modules/progressbar231 { };
 
-  prompt_toolkit = callPackage ../development/python-modules/prompt_toolkit/1.nix { };
+  prompt-toolkit = callPackage ../development/python-modules/prompt-toolkit/1.nix { };
 
   pyamf = callPackage ../development/python-modules/pyamf { };
 
@@ -478,9 +486,8 @@ with self; with super; {
 
   pytest-mock = callPackage ../development/python-modules/pytest-mock/2.nix { };
 
-  pytestrunner = callPackage ../development/python-modules/pytestrunner/2.nix { };
+  pytest-runner = callPackage ../development/python-modules/pytest-runner/2.nix { };
 
-  pytest_xdist = self.pytest-xdist; # added 2021-01-04
   pytest-xdist = callPackage ../development/python-modules/pytest-xdist/1.nix { };
 
   python-otr = callPackage ../development/python-modules/python-otr { };

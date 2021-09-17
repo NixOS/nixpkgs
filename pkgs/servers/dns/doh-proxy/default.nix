@@ -10,7 +10,7 @@ buildPythonApplication rec {
     sha256 = "1fxzxipzdvk75yrcr78mpdz8lwpisba67lk4jcwxdnkv6997dwfp";
   };
 
-  nativeBuildInputs = [ pytestrunner flake8];
+  nativeBuildInputs = [ pytest-runner flake8];
 
   propagatedBuildInputs = [
     aioh2
@@ -22,7 +22,7 @@ buildPythonApplication rec {
     asynctest
     unittest-data-provider
     pytest
-    pytestcov
+    pytest-cov
     pytest-aiohttp
   ];
 

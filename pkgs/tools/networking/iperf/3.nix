@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "iperf";
-  version = "3.9";
+  version = "3.10.1";
 
   src = fetchurl {
     url = "https://downloads.es.net/pub/iperf/iperf-${version}.tar.gz";
-    sha256 = "0f601avdmzpwsa3lbi0ppjhkrdipm5wifhhxy5czf99370k3mdi4";
+    sha256 = "0nkisr2215w68ivadg3sx3q50iwamznwigs63lclb8jlrih9gg03";
   };
 
   buildInputs = [ openssl ];

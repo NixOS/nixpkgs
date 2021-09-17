@@ -78,6 +78,8 @@ let
 
     bitv = callPackage ../development/ocaml-modules/bitv { };
 
+    bls12-381 = callPackage ../development/ocaml-modules/bls12-381 { };
+
     bolt = callPackage ../development/ocaml-modules/bolt { };
 
     bos = callPackage ../development/ocaml-modules/bos { };
@@ -139,6 +141,8 @@ let
 
     cairo2 = callPackage ../development/ocaml-modules/cairo2 { };
 
+    callipyge = callPackage ../development/ocaml-modules/callipyge { };
+
     caqti = callPackage ../development/ocaml-modules/caqti { };
 
     caqti-async = callPackage ../development/ocaml-modules/caqti/async.nix { };
@@ -156,6 +160,8 @@ let
     caqti-type-calendar = callPackage ../development/ocaml-modules/caqti/type-calendar.nix { };
 
     cfstream = callPackage ../development/ocaml-modules/cfstream { };
+
+    chacha = callPackage ../development/ocaml-modules/chacha { };
 
     charInfo_width = callPackage ../development/ocaml-modules/charInfo_width { };
 
@@ -371,6 +377,8 @@ let
 
     fdkaac = callPackage ../development/ocaml-modules/fdkaac { };
 
+    ff = callPackage ../development/ocaml-modules/ff { };
+
     fiat-p256 = callPackage ../development/ocaml-modules/fiat-p256 { };
 
     fieldslib_p4 = callPackage ../development/ocaml-modules/fieldslib { };
@@ -411,7 +419,12 @@ let
 
     h2 = callPackage ../development/ocaml-modules/h2 { };
 
+    hack_parallel = callPackage ../development/ocaml-modules/hack_parallel { };
+
     hacl_x25519 = callPackage ../development/ocaml-modules/hacl_x25519 { };
+
+    hacl-star = callPackage ../development/ocaml-modules/hacl-star { };
+    hacl-star-raw = callPackage ../development/ocaml-modules/hacl-star/raw.nix { };
 
     herelib = callPackage ../development/ocaml-modules/herelib { };
 
@@ -601,7 +614,7 @@ let
     linenoise = callPackage ../development/ocaml-modules/linenoise { };
 
     llvm = callPackage ../development/ocaml-modules/llvm {
-      libllvm = pkgs.llvmPackages_8.libllvm;
+      libllvm = pkgs.llvmPackages_10.libllvm;
     };
 
     logs = callPackage ../development/ocaml-modules/logs { };
@@ -614,9 +627,7 @@ let
       inherit (pkgs) file;
     };
 
-    lwt = callPackage ../development/ocaml-modules/lwt {
-      ocaml-migrate-parsetree = ocaml-migrate-parsetree-2;
-    };
+    lwt = callPackage ../development/ocaml-modules/lwt { };
 
     lwt-canceler = callPackage ../development/ocaml-modules/lwt-canceler { };
 
@@ -625,6 +636,8 @@ let
     lwt_camlp4 = callPackage ../development/ocaml-modules/lwt/camlp4.nix { };
 
     lwt-dllist = callPackage ../development/ocaml-modules/lwt-dllist { };
+
+    lwt-watcher = callPackage ../development/ocaml-modules/lwt-watcher { };
 
     lwt_log = callPackage ../development/ocaml-modules/lwt_log { };
 
@@ -785,6 +798,8 @@ let
 
     mparser =  callPackage ../development/ocaml-modules/mparser { };
 
+    mparser-pcre =  callPackage ../development/ocaml-modules/mparser/pcre.nix { };
+
     mtime =  callPackage ../development/ocaml-modules/mtime { };
 
     mustache =  callPackage ../development/ocaml-modules/mustache { };
@@ -792,6 +807,8 @@ let
     netchannel = callPackage ../development/ocaml-modules/netchannel { };
 
     nocrypto =  callPackage ../development/ocaml-modules/nocrypto { };
+
+    noise = callPackage ../development/ocaml-modules/noise { };
 
     nonstd =  callPackage ../development/ocaml-modules/nonstd { };
 
@@ -839,8 +856,6 @@ let
     ocamlgraph = callPackage ../development/ocaml-modules/ocamlgraph { };
     ocamlgraph_gtk = callPackage ../development/ocaml-modules/ocamlgraph/gtk.nix { };
 
-    ocaml_http = callPackage ../development/ocaml-modules/http { };
-
     ocaml_libvirt = callPackage ../development/ocaml-modules/ocaml-libvirt { };
 
     ocamlify = callPackage ../development/tools/ocaml/ocamlify { };
@@ -857,9 +872,7 @@ let
 
     ocamlmod = callPackage ../development/tools/ocaml/ocamlmod { };
 
-    ocaml-monadic = callPackage ../development/ocaml-modules/ocaml-monadic {
-      ocaml-migrate-parsetree = ocaml-migrate-parsetree-2;
-    };
+    ocaml-monadic = callPackage ../development/ocaml-modules/ocaml-monadic { };
 
     ocaml_mysql = callPackage ../development/ocaml-modules/mysql { };
 
@@ -870,6 +883,8 @@ let
     ocaml_optcomp = callPackage ../development/ocaml-modules/optcomp { };
 
     ocaml_pcre = callPackage ../development/ocaml-modules/pcre {};
+
+    ocaml-print-intf = callPackage ../development/ocaml-modules/ocaml-print-intf { };
 
     pgocaml = callPackage ../development/ocaml-modules/pgocaml {};
 
@@ -927,6 +942,8 @@ let
 
     odoc = callPackage ../development/ocaml-modules/odoc { };
 
+    odoc-parser = callPackage ../development/ocaml-modules/odoc-parser { };
+
     omd = callPackage ../development/ocaml-modules/omd { };
 
     opam-core = callPackage ../development/ocaml-modules/opam-core {
@@ -956,6 +973,8 @@ let
     optint = callPackage ../development/ocaml-modules/optint { };
 
     otfm = callPackage ../development/ocaml-modules/otfm { };
+
+    otoml = callPackage ../development/ocaml-modules/otoml { };
 
     otr = callPackage ../development/ocaml-modules/otr { };
 
@@ -999,6 +1018,8 @@ let
       inherit (pkgs) postgresql;
     };
 
+    pp = callPackage ../development/ocaml-modules/pp { };
+
     ppx_bap = callPackage ../development/ocaml-modules/ppx_bap { };
 
     ppx_bitstring = callPackage ../development/ocaml-modules/bitstring/ppx.nix {
@@ -1024,6 +1045,8 @@ let
     secp256k1 = callPackage ../development/ocaml-modules/secp256k1 {
       inherit (pkgs) secp256k1;
     };
+
+    secp256k1-internal = callPackage ../development/ocaml-modules/secp256k1-internal { };
 
     seq = callPackage ../development/ocaml-modules/seq { };
 
@@ -1159,6 +1182,23 @@ let
 
     reason-native = lib.recurseIntoAttrs (callPackage ../development/ocaml-modules/reason-native { });
 
+    rfc7748 = callPackage ../development/ocaml-modules/rfc7748 { };
+
+    ezresto = callPackage ../development/ocaml-modules/resto/ezresto.nix { };
+    ezresto-directory = callPackage ../development/ocaml-modules/resto/ezresto-directory.nix { };
+
+    resto = callPackage ../development/ocaml-modules/resto { };
+    resto-acl = callPackage ../development/ocaml-modules/resto/acl.nix { };
+    resto-cohttp = callPackage ../development/ocaml-modules/resto/cohttp.nix { };
+    resto-cohttp-client = callPackage ../development/ocaml-modules/resto/cohttp-client.nix { };
+    resto-cohttp-self-serving-client = callPackage ../development/ocaml-modules/resto/cohttp-self-serving-client.nix { };
+    resto-cohttp-server = callPackage ../development/ocaml-modules/resto/cohttp-server.nix { };
+    resto-directory = callPackage ../development/ocaml-modules/resto/directory.nix { };
+    resto-json = callPackage ../development/ocaml-modules/resto/json.nix { };
+
+    ringo = callPackage ../development/ocaml-modules/ringo { };
+    ringo-lwt = callPackage ../development/ocaml-modules/ringo/lwt.nix { };
+
     rope = callPackage ../development/ocaml-modules/rope { };
 
     routes = callPackage ../development/ocaml-modules/routes { };
@@ -1207,6 +1247,34 @@ let
 
     terminal_size = callPackage ../development/ocaml-modules/terminal_size { };
 
+    tezos-base = callPackage ../development/ocaml-modules/tezos/base.nix { };
+    tezos-clic = callPackage ../development/ocaml-modules/tezos/clic.nix { };
+    tezos-crypto = callPackage ../development/ocaml-modules/tezos/crypto.nix { };
+    tezos-error-monad = callPackage ../development/ocaml-modules/tezos/error-monad.nix { };
+    tezos-event-logging = callPackage ../development/ocaml-modules/tezos/event-logging.nix { };
+    tezos-lmdb = callPackage ../development/ocaml-modules/tezos/lmdb.nix { };
+    tezos-lwt-result-stdlib = callPackage ../development/ocaml-modules/tezos/lwt-result-stdlib.nix { };
+    tezos-micheline = callPackage ../development/ocaml-modules/tezos/micheline.nix { };
+    tezos-p2p-services = callPackage ../development/ocaml-modules/tezos/p2p-services.nix { };
+    tezos-p2p = callPackage ../development/ocaml-modules/tezos/p2p.nix { };
+    tezos-protocol-008-PtEdo2Zk-parameters = callPackage ../development/ocaml-modules/tezos/protocol-008-PtEdo2Zk-parameters.nix { };
+    tezos-protocol-008-PtEdo2Zk = callPackage ../development/ocaml-modules/tezos/protocol-008-PtEdo2Zk.nix { };
+    tezos-protocol-compiler = callPackage ../development/ocaml-modules/tezos/protocol-compiler.nix { };
+    tezos-protocol-demo-noops = callPackage ../development/ocaml-modules/tezos/protocol-demo-noops.nix { };
+    tezos-protocol-environment-packer = callPackage ../development/ocaml-modules/tezos/protocol-environment-packer.nix { };
+    tezos-protocol-environment-sigs = callPackage ../development/ocaml-modules/tezos/protocol-environment-sigs.nix { };
+    tezos-protocol-environment-structs = callPackage ../development/ocaml-modules/tezos/protocol-environment-structs.nix { };
+    tezos-protocol-environment = callPackage ../development/ocaml-modules/tezos/protocol-environment.nix { };
+    tezos-requester = callPackage ../development/ocaml-modules/tezos/requester.nix { };
+    tezos-rpc = callPackage ../development/ocaml-modules/tezos/rpc.nix { };
+    tezos-sapling = callPackage ../development/ocaml-modules/tezos/sapling.nix { };
+    tezos-shell-services = callPackage ../development/ocaml-modules/tezos/shell-services.nix { };
+    tezos-stdlib-unix = callPackage ../development/ocaml-modules/tezos/stdlib-unix.nix { };
+    tezos-stdlib = callPackage ../development/ocaml-modules/tezos/stdlib.nix { };
+    tezos-test-services = callPackage ../development/ocaml-modules/tezos/test-services.nix { };
+    tezos-version = callPackage ../development/ocaml-modules/tezos/version.nix { };
+    tezos-workers = callPackage ../development/ocaml-modules/tezos/workers.nix { };
+
     toml = callPackage ../development/ocaml-modules/toml { };
 
     topkg = callPackage ../development/ocaml-modules/topkg { };
@@ -1247,6 +1315,8 @@ let
     vchan = callPackage ../development/ocaml-modules/vchan { };
 
     vg = callPackage ../development/ocaml-modules/vg { };
+
+    vlq = callPackage ../development/ocaml-modules/vlq { };
 
     visitors = callPackage ../development/ocaml-modules/visitors { };
 

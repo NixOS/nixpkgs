@@ -28,8 +28,7 @@ buildGoModule rec {
 
   vendorSha256 = null;
 
-  buildFlagsArray = [
-    "-ldflags="
+  ldflags = [
     "-s"
     "-w"
     "-X code.cloudfoundry.org/credhub-cli/version.Version=${version}"

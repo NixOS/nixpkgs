@@ -27,11 +27,13 @@ let
     "bird"
     "bitcoin"
     "blackbox"
+    "buildkite-agent"
     "collectd"
     "dnsmasq"
     "domain"
     "dovecot"
     "fritzbox"
+    "influxdb"
     "json"
     "jitsi"
     "kea"
@@ -180,7 +182,7 @@ let
         serviceConfig.PrivateTmp = mkDefault true;
         serviceConfig.WorkingDirectory = mkDefault /tmp;
         serviceConfig.DynamicUser = mkDefault enableDynamicUser;
-        serviceConfig.User = conf.user;
+        serviceConfig.User = mkDefault conf.user;
         serviceConfig.Group = conf.group;
       } serviceOpts ]);
   };

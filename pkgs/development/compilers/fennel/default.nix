@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fennel";
-  version = "0.9.2";
+  version = "0.10.0";
 
   src = fetchFromSourcehut {
     owner = "~technomancy";
     repo = pname;
     rev = version;
-    sha256 = "1kpm3lzxzwkhxm4ghpbx8iw0ni7gb73y68lsc3ll2rcx0fwv9303";
+    sha256 = "sha256-/xCnaDNZJTBGxIgjPUVeEyMVeRWg8RCNuo5nPpLrJXY=";
   };
 
   nativeBuildInputs = [ installShellFiles ];

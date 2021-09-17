@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
         sha256 = "06fj725xfhf3fwrf7dya7ijmxq3v76kfmd4lr2067a92zhlwr5pv";
       };
 
-  phases = [ "installPhase" ];
+  dontConfigure = true;
 
   installPhase = ''
     tar xf ${src}

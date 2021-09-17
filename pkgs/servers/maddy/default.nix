@@ -1,21 +1,33 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, coreutils }:
 
 buildGoModule rec {
   pname = "maddy";
-  version = "0.4.4";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "foxcpp";
     repo = "maddy";
     rev = "v${version}";
-    sha256 = "sha256-IhVEb6tjfbWqhQdw1UYxy4I8my2L+eSOCd/BEz0qis0=";
+    sha256 = "sha256-SxJfuNZBtwaILF4zD4hrTANc/GlOG53XVwg3NvKYAkg=";
   };
 
-  vendorSha256 = "sha256-FrKWlZ3pQB+oo+rfHA8AgGRAr7YRUcb064bZGTDSKkk=";
+  vendorSha256 = "sha256-bxKEQaOubjRfLX+dMxVDzLOUInHykUdy9X8wvFE6Va4=";
 
-  buildFlagsArray = [ "-ldflags=-s -w -X github.com/foxcpp/maddy.Version=${version}" ];
+  ldflags = [ "-s" "-w" "-X github.com/foxcpp/maddy.Version=${version}" ];
 
   subPackages = [ "cmd/maddy" "cmd/maddyctl" ];
+
+  postInstall = ''
+    mkdir -p $out/lib/systemd/system
+
+    substitute dist/systemd/maddy.service $out/lib/systemd/system/maddy.service \
+      --replace "/usr/bin/maddy" "$out/bin/maddy" \
+      --replace "/bin/kill" "${coreutils}/bin/kill"
+
+    substitute dist/systemd/maddy@.service $out/lib/systemd/system/maddy@.service \
+      --replace "/usr/bin/maddy" "$out/bin/maddy" \
+      --replace "/bin/kill" "${coreutils}/bin/kill"
+  '';
 
   meta = with lib; {
     description = "Composable all-in-one mail server";

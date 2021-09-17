@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, grpc_google_iam_v1
+, grpc-google-iam-v1
 , google-cloud-core
 , google-cloud-testutils
 , libcst
@@ -14,16 +14,16 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-spanner";
-  version = "3.5.0";
+  version = "3.9.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "19656140f180aef84e023c3a8fd534ac964247a52199317ea33abc701d5a8c5a";
+    sha256 = "53fe3d903363fb17db155fd05f5356d9b310a519fbebd53903aa426a31cad706";
   };
 
   propagatedBuildInputs = [
     google-cloud-core
-    grpc_google_iam_v1
+    grpc-google-iam-v1
     libcst
     proto-plus
     sqlparse
@@ -43,8 +43,13 @@ buildPythonPackage rec {
 
   disabledTestPaths = [
     # Requires credentials
-    "tests/system/test_system.py"
-    "tests/system/test_system_dbapi.py"
+    "tests/system/test_backup_api.py"
+    "tests/system/test_database_api.py"
+    "tests/system/test_dbapi.py"
+    "tests/system/test_instance_api.py"
+    "tests/system/test_session_api.py"
+    "tests/system/test_streaming_chunking.py"
+    "tests/system/test_table_api.py"
     "tests/unit/spanner_dbapi/test_connect.py"
     "tests/unit/spanner_dbapi/test_connection.py"
     "tests/unit/spanner_dbapi/test_cursor.py"

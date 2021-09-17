@@ -20,7 +20,7 @@
 }:
 
 let
-  version = "4.1.3";
+  version = "4.1.5";
 
   libsecp256k1_name =
     if stdenv.isLinux then "libsecp256k1.so.0"
@@ -36,13 +36,27 @@ let
     owner = "spesmilo";
     repo = "electrum";
     rev = version;
-    sha256 = "1nkcybalkfna9zn33dxm13ic3brj50cfzwspjl349rgyar07j781";
+    sha256 = "1ps8yaps5kfd7yv7bpdvssbwm6f5qivxcvhwn17cpddc2760a7nk";
 
     extraPostFetch = ''
       mv $out ./all
       mv ./all/electrum/tests $out
     '';
   };
+
+  py = python3.override {
+    packageOverrides = self: super: {
+
+      aiorpcx = super.aiorpcx.overridePythonAttrs (oldAttrs: rec {
+        version = "0.18.7";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "1rswrspv27x33xa5bnhrkjqzhv0sknv5kd7pl1vidw9d2z4rx2l0";
+        };
+      });
+    };
+  };
+
 in
 
 python3.pkgs.buildPythonApplication {
@@ -51,7 +65,7 @@ python3.pkgs.buildPythonApplication {
 
   src = fetchurl {
     url = "https://download.electrum.org/${version}/Electrum-${version}.tar.gz";
-    sha256 = "1mlwpmgfm3n45agx65jzsi4dr8nxf95x7nl01jnwa3qk5krrv4cf";
+    sha256 = "188r4zji985z8pm9b942xhmvv174yndk6jxagxl7ljk03wl2wiwi";
   };
 
   postUnpack = ''
@@ -66,7 +80,7 @@ python3.pkgs.buildPythonApplication {
 
   nativeBuildInputs = lib.optionals enableQt [ wrapQtAppsHook ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = with py.pkgs; [
     aiohttp
     aiohttp-socks
     aiorpcx
@@ -87,7 +101,10 @@ python3.pkgs.buildPythonApplication {
     ckcc-protocol
     keepkey
     trezor
-  ] ++ lib.optionals enableQt [ pyqt5 qdarkstyle ];
+  ] ++ lib.optionals enableQt [
+    pyqt5
+    qdarkstyle
+  ];
 
   preBuild = ''
     sed -i 's,usr_share = .*,usr_share = "'$out'/share",g' setup.py
@@ -154,6 +171,8 @@ python3.pkgs.buildPythonApplication {
       of the blockchain.
     '';
     homepage = "https://electrum.org/";
+    downloadPage = "https://electrum.org/#download";
+    changelog = "https://github.com/spesmilo/electrum/blob/master/RELEASE-NOTES";
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = with maintainers; [ joachifm np prusnak ];

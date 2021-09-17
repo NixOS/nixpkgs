@@ -844,10 +844,6 @@ self: super:
     postInstall = "mkdir $out/bin";
   });
 
-  xwd = super.xwd.overrideAttrs (attrs: {
-    buildInputs = with self; attrs.buildInputs ++ [libXt];
-  });
-
   xrdb = super.xrdb.overrideAttrs (attrs: {
     configureFlags = [ "--with-cpp=${mcpp}/bin/mcpp" ];
   });

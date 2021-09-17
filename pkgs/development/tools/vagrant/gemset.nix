@@ -64,10 +64,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "186sra2bww83wa245mhmm57ngdn4w2k2x39iqkmxasjhibg5jsbl";
+      sha256 = "1iykfw2j6dd26rhgid3a17zghrmbmi68ppf3a7cdkvii68p4f37a";
       type = "gem";
     };
-    version = "0.84.0";
+    version = "0.85.0";
   };
   ffi = {
     groups = ["default"];
@@ -138,10 +138,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0h2v34xhi30w0d9gfzds2w6v89grq2gkpgvmdj9m8x1ld1845xnj";
+      sha256 = "1dq7yd4s9accpjiq0f92sgikw3whc5wnjn065laggkpqcqgx75gh";
       type = "gem";
     };
-    version = "3.5.1";
+    version = "3.6.0";
   };
   little-plugger = {
     groups = ["default"];
@@ -310,15 +310,15 @@
     version = "2.3.2";
   };
   vagrant_cloud = {
-    dependencies = ["excon" "log4r"];
+    dependencies = ["excon" "log4r" "rexml"];
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1rwfw014fbvaxshf8abi87srfaiirb7cr93s61qm177jm8q86h57";
+      sha256 = "0np0d8rjca130si5iaxasbqmfbbx4l3kd9mxdsa3p5mqiia7za3b";
       type = "gem";
     };
-    version = "3.0.4";
+    version = "3.0.5";
   };
   wdm = {
     groups = ["default"];

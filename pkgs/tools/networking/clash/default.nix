@@ -15,8 +15,7 @@ buildGoModule rec {
 
   doCheck = false;
 
-  buildFlagsArray = [
-    "-ldflags="
+  ldflags = [
     "-X github.com/Dreamacro/clash/constant.Version=${version}"
   ];
 

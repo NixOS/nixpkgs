@@ -1,7 +1,6 @@
 { lib
-, python3Packages
-, fetchFromGitHub
 , python3
+, fetchFromGitHub
 , fetchpatch
 }:
 
@@ -11,38 +10,39 @@
 # $ tts-server --model_name tts_models/en/ljspeech/glow-tts --vocoder_name vocoder_models/universal/libri-tts/fullband-melgan
 #
 # If you upgrade from an old version you may have to delete old models from ~/.local/share/tts
-# Also note that your tts version might not support all available models so check:
-#   https://github.com/coqui-ai/TTS/releases/tag/v0.1.2
 #
 # For now, for deployment check the systemd unit in the pull request:
 #   https://github.com/NixOS/nixpkgs/pull/103851#issue-521121136
 
-python3Packages.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "tts";
-  version = "0.1.2";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "coqui-ai";
     repo = "TTS";
     rev = "v${version}";
-    sha256 = "1qgiaqn7iqxyf54qgnpmli69nw9s3gmi9qv874jsgycykc10hjg4";
+    sha256 = "sha256-LiH056h7eIaikBr6sm5A4T/lF7nVroxaZSYzrES7+zk=";
   };
 
   postPatch = ''
-    sed -i -e 's!librosa==[^"]*!librosa!' requirements.txt
-    sed -i -e 's!numba==[^"]*!numba!' requirements.txt
-    sed -i -e 's!numpy==[^"]*!numpy!' requirements.txt
-    sed -i -e 's!umap-learn==[^"]*!umap-learn!' requirements.txt
+    sed -i requirements.txt \
+      -e 's!librosa==[^"]*!librosa!' \
+      -e 's!mecab-python3==[^"]*!mecab-python3!' \
+      -e 's!numba==[^"]*!numba!' \
+      -e 's!numpy==[^"]*!numpy!' \
+      -e 's!umap-learn==[^"]*!umap-learn!'
   '';
 
-  nativeBuildInputs = with python3Packages; [
+  nativeBuildInputs = with python3.pkgs; [
     cython
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = with python3.pkgs; [
     anyascii
     coqpit
     flask
+    fsspec
     gruut
     gdown
     inflect
@@ -55,6 +55,7 @@ python3Packages.buildPythonApplication rec {
     pypinyin
     pysbd
     pytorch
+    pyworld
     scipy
     soundfile
     tensorboardx
@@ -68,12 +69,12 @@ python3Packages.buildPythonApplication rec {
     cp -r TTS/server/templates/ $out/${python3.sitePackages}/TTS/server
     # cython modules are not installed for some reasons
     (
-      cd TTS/tts/layers/glow_tts/monotonic_align
-      ${python3Packages.python.interpreter} setup.py install --prefix=$out
+      cd TTS/tts/utils/monotonic_align
+      ${python3.interpreter} setup.py install --prefix=$out
     )
   '';
 
-  checkInputs = with python3Packages; [
+  checkInputs = with python3.pkgs; [
     pytest-sugar
     pytestCheckHook
   ];
@@ -107,6 +108,7 @@ python3Packages.buildPythonApplication rec {
     "tests/vocoder_tests/test_vocoder_tf_melgan_generator.py"
     "tests/tts_tests/test_tacotron2_tf_model.py"
     # RuntimeError: fft: ATen not compiled with MKL support
+    "tests/tts_tests/test_vits_train.py"
     "tests/vocoder_tests/test_fullband_melgan_train.py"
     "tests/vocoder_tests/test_hifigan_train.py"
     "tests/vocoder_tests/test_melgan_train.py"

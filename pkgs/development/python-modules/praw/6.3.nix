@@ -4,7 +4,7 @@
 , betamax-matchers
 , mock
 , six
-, pytestrunner
+, pytest-runner
 , prawcore
 , pytest
 , requests-toolbelt
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    pytestrunner
+    pytest-runner
   ];
 
   propagatedBuildInputs = [

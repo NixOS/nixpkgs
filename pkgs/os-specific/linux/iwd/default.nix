@@ -12,12 +12,12 @@
 
 stdenv.mkDerivation rec {
   pname = "iwd";
-  version = "1.15";
+  version = "1.16";
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/network/wireless/iwd.git";
     rev = version;
-    sha256 = "sha256-qGQDIzJfeBT9VLwr9Ci9vXcM0ZvFvjL2E9PcKoZ8E94=";
+    sha256 = "sha256-Nu6vb5UOJ/KgmJZM4bMKwLpOoKMLcnZPYCqFBQjuCYY=";
   };
 
   outputs = [ "out" "man" ]
@@ -91,6 +91,6 @@ stdenv.mkDerivation rec {
     description = "Wireless daemon for Linux";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ dtzWill fpletz ];
+    maintainers = with maintainers; [ dtzWill fpletz maxeaubrey ];
   };
 }

@@ -1,10 +1,9 @@
 { lib, stdenv, fetchgit, cmake, libtiff, pkg-config, tesseract }:
 
-let rev = "a6abbd61127a6392d420bbbebdf7612608c943c2";
-    shortRev = builtins.substring 0 7 rev;
-in
-stdenv.mkDerivation {
-  name = "vobsub2srt-git-20140817-${shortRev}";
+stdenv.mkDerivation rec {
+  pname = "vobsub2srt-git";
+  version = "20140817-${builtins.substring 0 7 rev}";
+  rev = "a6abbd61127a6392d420bbbebdf7612608c943c2";
 
   src = fetchgit {
     inherit rev;

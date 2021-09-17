@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, pytest, pytestrunner, six, regex}:
+{ lib, buildPythonPackage, fetchPypi, pytest, pytest-runner, six, regex}:
 
 buildPythonPackage rec {
   pname = "rebulk";
@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   # Some kind of trickery with imports that doesn't work.
   doCheck = false;
-  buildInputs = [ pytest pytestrunner ];
+  buildInputs = [ pytest pytest-runner ];
   propagatedBuildInputs = [ six regex ];
 
   meta = with lib; {

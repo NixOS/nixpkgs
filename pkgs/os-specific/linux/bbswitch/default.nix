@@ -36,6 +36,8 @@ stdenv.mkDerivation {
       --replace "/lib/modules" "${kernel.dev}/lib/modules"
   '';
 
+  makeFlags = kernel.makeFlags;
+
   installPhase = ''
     mkdir -p $out/lib/modules/${kernel.modDirVersion}/misc
     cp bbswitch.ko $out/lib/modules/${kernel.modDirVersion}/misc
@@ -59,5 +61,6 @@ stdenv.mkDerivation {
     platforms = [ "x86_64-linux" "i686-linux" ];
     homepage = "https://github.com/Bumblebee-Project/bbswitch";
     maintainers = with maintainers; [ abbradar ];
+    license = licenses.gpl2Plus;
   };
 }

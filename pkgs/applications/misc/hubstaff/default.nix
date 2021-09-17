@@ -4,9 +4,9 @@
 , curl, writeShellScript, common-updater-scripts }:
 
 let
-  url = "https://hubstaff-production.s3.amazonaws.com/downloads/HubstaffClient/Builds/Release/1.5.19-9e79d1da/Hubstaff-1.5.19-9e79d1da.sh";
-  version = "1.5.19-9e79d1da";
-  sha256 = "1l4sq8cblpl1kclkx5pgy0ldfmqa3n8bvdl5qml0n78r0lpk382j";
+  url = "https://hubstaff-production.s3.amazonaws.com/downloads/HubstaffClient/Builds/Release/1.6.0-02e625d8/Hubstaff-1.6.0-02e625d8.sh";
+  version = "1.6.0-02e625d8";
+  sha256 = "1rd4icgy25j9l1xs6djmpv2nc2ilvjpblddv95xvvz39z82sfr29";
 
   rpath = lib.makeLibraryPath
     [ libX11 zlib libSM libICE libXext freetype libXrender fontconfig libXft

@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, fetchpatch, openssl, libpcap, python2, withPython ? false }:
 
 stdenv.mkDerivation rec {
-  name = "vde2-2.3.2";
+  pname = "vde2";
+  version = "2.3.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/vde/vde2/2.3.1/${name}.tar.gz";
+    url = "mirror://sourceforge/vde/vde2/${version}/vde2-${version}.tar.gz";
     sha256 = "14xga0ib6p1wrv3hkl4sa89yzjxv7f1vfqaxsch87j6scdm59pr2";
   };
 

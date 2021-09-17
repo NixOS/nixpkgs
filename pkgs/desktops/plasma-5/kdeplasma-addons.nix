@@ -2,7 +2,7 @@
   mkDerivation,
   extra-cmake-modules, kdoctools,
   kconfig, kconfigwidgets, kcoreaddons, kcmutils, kholidays,
-  kio, knewstuff, kpurpose, kross, krunner, kservice, ksysguard,
+  kio, knewstuff, kpurpose, kross, krunner, kservice,
   kunitconversion, ibus, plasma-framework, plasma-workspace, qtdeclarative,
   qtwebengine, qtx11extras
 }:
@@ -12,7 +12,7 @@ mkDerivation {
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
     kconfig kconfigwidgets kcoreaddons kcmutils kholidays kio
-    knewstuff kpurpose kross krunner kservice ksysguard kunitconversion ibus
+    knewstuff kpurpose kross krunner kservice kunitconversion ibus
     plasma-framework plasma-workspace qtdeclarative qtwebengine qtx11extras
   ];
 }

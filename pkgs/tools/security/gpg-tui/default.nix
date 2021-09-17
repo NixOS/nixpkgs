@@ -5,6 +5,7 @@
 , gpgme
 , libgpgerror
 , libxcb
+, libxkbcommon
 , python3
 , AppKit
 , Foundation
@@ -15,16 +16,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "gpg-tui";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "orhun";
     repo = "gpg-tui";
     rev = "v${version}";
-    sha256 = "sha256-WUD6KZdtMJ/nEbC5MStK8qWKK05lXuk8+VD741g448s=";
+    sha256 = "sha256-UUfZd6wTBoOyBdkidzxa3Fyc3GjeGdCT0n7jKmhdNa0=";
   };
 
-  cargoSha256 = "sha256-uF9mbJ7Nd+JaoZN886NX8iRv8/LZSqYntoosyFzzAIs=";
+  cargoSha256 = "sha256-yX/g/An06nx95IaxjfYVUofvDDS2ZjiNAZf3ivi6ZF0=";
 
   nativeBuildInputs = [
     gpgme # for gpgme-config
@@ -36,6 +37,7 @@ rustPlatform.buildRustPackage rec {
     gpgme
     libgpgerror
     libxcb
+    libxkbcommon
   ] ++ lib.optionals stdenv.isDarwin [
     AppKit
     Foundation

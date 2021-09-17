@@ -9,7 +9,7 @@
 # * Update `version`+`hash` and rebuild.
 
 mkYarnPackage rec {
-  name = "grafana-image-renderer";
+  pname = "grafana-image-renderer";
   version = "3.0.0";
 
   src = fetchFromGitHub {

@@ -22,11 +22,11 @@ let
 in
 buildPythonPackage rec {
   pname = "pycuda";
-  version = "2020.1";
+  version = "2021.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "effa3b99b55af67f3afba9b0d1b64b4a0add4dd6a33bdd6786df1aa4cc8761a5";
+    sha256 = "ab87312d0fc349d9c17294a087bb9615cffcf966ad7b115f5b051008a48dd6ed";
   };
 
   preConfigure = with lib.versions; ''

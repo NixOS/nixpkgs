@@ -5,10 +5,11 @@ stdenv.mkDerivation rec {
   # they fix more, because it even has at least one bugs less than 2.7.4.
   # 2.8.0 does not start properly on linux
   # They just starting making that 2.8.0 work on linux.
-  name = "egoboo-2.7.3";
+  pname = "egoboo";
+  version = "2.7.3";
 
   src = fetchurl {
-    url = "mirror://sourceforge/egoboo/${name}.tar.gz";
+    url = "mirror://sourceforge/egoboo/egoboo-${version}.tar.gz";
     sha256 = "18cjgp9kakrsa90jcb4cl8hhh9k57mi5d1sy5ijjpd3p7zl647hd";
   };
 
@@ -22,10 +23,10 @@ stdenv.mkDerivation rec {
   # The user will need to have all the files in '.' to run egoboo, with
   # writeable controls.txt and setup.txt
   installPhase = ''
-    mkdir -p $out/share/${name}
-    cp -v game/egoboo $out/share/${name}
+    mkdir -p $out/share/egoboo-${version}
+    cp -v game/egoboo $out/share/egoboo-${version}
     cd ..
-    cp -v -Rd controls.txt setup.txt players modules basicdat $out/share/${name}
+    cp -v -Rd controls.txt setup.txt players modules basicdat $out/share/egoboo-${version}
   '';
 
   buildInputs = [ libGLU libGL SDL SDL_mixer SDL_image SDL_ttf ];

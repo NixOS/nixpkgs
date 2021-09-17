@@ -167,6 +167,7 @@ self: super: builtins.intersectAttrs super {
   mongoDB = dontCheck super.mongoDB;
   network-transport-tcp = dontCheck super.network-transport-tcp;
   network-transport-zeromq = dontCheck super.network-transport-zeromq; # https://github.com/tweag/network-transport-zeromq/issues/30
+  oidc-client = dontCheck super.oidc-client;            # the spec runs openid against google.com
   pipes-mongodb = dontCheck super.pipes-mongodb;        # http://hydra.cryp.to/build/926195/log/raw
   pixiv = dontCheck super.pixiv;
   raven-haskell = dontCheck super.raven-haskell;        # http://hydra.cryp.to/build/502053/log/raw
@@ -222,7 +223,14 @@ self: super: builtins.intersectAttrs super {
   wxcore = super.wxcore.override { wxGTK = pkgs.wxGTK30; };
 
   # Test suite wants to connect to $DISPLAY.
+  bindings-GLFW = dontCheck super.bindings-GLFW;
+  gi-gtk-declarative = dontCheck super.gi-gtk-declarative;
+  gi-gtk-declarative-app-simple = dontCheck super.gi-gtk-declarative-app-simple;
   hsqml = dontCheck (addExtraLibraries (super.hsqml.override { qt5 = pkgs.qt5Full; }) [pkgs.libGLU pkgs.libGL]);
+  monomer = dontCheck super.monomer;
+
+  # Wants to check against a real DB, Needs freetds
+  odbc = dontCheck (addExtraLibraries super.odbc [ pkgs.freetds ]);
 
   # Tests attempt to use NPM to install from the network into
   # /homeless-shelter. Disabled.
@@ -347,13 +355,6 @@ self: super: builtins.intersectAttrs super {
 
   # Looks like Avahi provides the missing library
   dnssd = super.dnssd.override { dns_sd = pkgs.avahi.override { withLibdnssdCompat = true; }; };
-
-  # requires an X11 display
-  bindings-GLFW = dontCheck super.bindings-GLFW;
-
-  # requires an X11 display in test suite
-  gi-gtk-declarative = dontCheck super.gi-gtk-declarative;
-  gi-gtk-declarative-app-simple = dontCheck super.gi-gtk-declarative-app-simple;
 
   # tests depend on executable
   ghcide = overrideCabal super.ghcide (drv: {
@@ -788,6 +789,11 @@ self: super: builtins.intersectAttrs super {
     platforms = pkgs.lib.platforms.x86;
   };
 
+  # uses x86 intrinsics
+  geomancy = overrideCabal super.geomancy {
+    platforms = pkgs.lib.platforms.x86;
+  };
+
   hls-brittany-plugin = overrideCabal super.hls-brittany-plugin (drv: {
     testToolDepends = [ pkgs.git ];
     preCheck = ''
@@ -914,4 +920,38 @@ self: super: builtins.intersectAttrs super {
 
   cachix = generateOptparseApplicativeCompletion "cachix" super.cachix;
 
+  # Enable extra optimisations which increase build time, but also
+  # later compiler performance, so we should do this for user's benefit.
+  # Flag added in Agda 2.6.2
+  Agda = appendConfigureFlag super.Agda "-foptimise-heavily";
+
+  # ats-format uses cli-setup in Setup.hs which is quite happy to write
+  # to arbitrary files in $HOME. This doesn't either not achieve anything
+  # or even fail, so we prevent it and install everything necessary ourselves.
+  # See also: https://hackage.haskell.org/package/cli-setup-0.2.1.4/docs/src/Distribution.CommandLine.html#setManpathGeneric
+  ats-format = generateOptparseApplicativeCompletion "atsfmt" (
+    justStaticExecutables (
+      overrideCabal super.ats-format (drv: {
+        # use vanilla Setup.hs
+        preCompileBuildDriver = ''
+          cat > Setup.hs << EOF
+          module Main where
+          import Distribution.Simple
+          main = defaultMain
+          EOF
+        '' + (drv.preCompileBuildDriver or "");
+        # install man page
+        buildTools = [
+          pkgs.buildPackages.installShellFiles
+        ] ++ (drv.buildTools or []);
+        postInstall = ''
+          installManPage man/atsfmt.1
+        '' + (drv.postInstall or "");
+      })
+    )
+  );
+
+  # Test suite is just the default example executable which doesn't work if not
+  # executed by Setup.hs, but works if started on a proper TTY
+  isocline = dontCheck super.isocline;
 }

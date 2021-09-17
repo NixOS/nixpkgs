@@ -13,8 +13,6 @@ buildGoPackage rec {
 
   goPackagePath = "github.com/docker/libnetwork";
 
-  goDeps = null;
-
   installPhase = ''
     install -m755 -D ./go/bin/proxy $out/bin/docker-proxy
   '';

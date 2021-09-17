@@ -1,10 +1,11 @@
 { fetchurl, lib, stdenv, emacs, curl, check, bc }:
 
 stdenv.mkDerivation rec {
-  name = "recutils-1.8";
+  pname = "recutils";
+  version = "1.8";
 
   src = fetchurl {
-    url = "mirror://gnu/recutils/${name}.tar.gz";
+    url = "mirror://gnu/recutils/recutils-${version}.tar.gz";
     sha256 = "14xiln4immfsw8isnvwvq0h23f6z0wilpgsc4qzabnrzb5lsx3nz";
   };
 

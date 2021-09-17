@@ -19,7 +19,6 @@ let
   };
 
   # map: name -> fixed-output hash
-  # sha1 in base32 was chosen as a compromise between security and length
   fixedHashes = lib.optionalAttrs useFixedHashes (import ./fixedHashes.nix);
 
   # function for creating a working environment from a set of TL packages
@@ -109,10 +108,11 @@ let
       pkgs =
         # tarball of a collection/scheme itself only contains a tlobj file
         [( if (attrs.hasRunfiles or false) then mkPkgV "run"
-            # the fake derivations are used for filtering of hyphenation patterns
+            # the fake derivations are used for filtering of hyphenation patterns and formats
           else {
             inherit pname version;
             tlType = "run";
+            hasFormats = attrs.hasFormats or false;
             hasHyphens = attrs.hasHyphens or false;
           }
         )]
@@ -171,11 +171,12 @@ let
           # metadata for texlive.combine
           passthru = {
             inherit pname tlType version;
+            hasFormats = args.hasFormats or false;
             hasHyphens = args.hasHyphens or false;
           };
         } // lib.optionalAttrs (fixedHash != null) {
           outputHash = fixedHash;
-          outputHashAlgo = "sha1";
+          outputHashAlgo = "sha256";
           outputHashMode = "recursive";
         }
       )

@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "aiolip";
-  version = "1.1.4";
+  version = "1.1.6";
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = pname;
     rev = version;
-    sha256 = "1f8mlvbnfcn3sigsmjdpdpgxmnbvcjhfr7lzch61i8sy25dgakji";
+    sha256 = "1bgmcl8q1p6f2xm3w2qylvla6vf6bd1p2hfwj4l8w6w0w04vr02g";
   };
 
   checkInputs = [

@@ -5,7 +5,7 @@
 , jupyter_client
 , ipython
 , ipykernel
-, prompt_toolkit
+, prompt-toolkit
 , pygments
 , pythonOlder
 }:
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     jupyter_client
     ipython
     ipykernel
-    prompt_toolkit
+    prompt-toolkit
     pygments
   ];
   checkInputs = [ nose ];

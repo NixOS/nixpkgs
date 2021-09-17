@@ -1,13 +1,13 @@
 { lib, fetchzip }:
 
 let
-  version = "0.040";
+  version = "0.042";
 
 in
 fetchzip {
   name = "JuliaMono-ttf-${version}";
   url = "https://github.com/cormullion/juliamono/releases/download/v${version}/JuliaMono-ttf.tar.gz";
-  sha256 = "sha256-Rrsvs682aWXZqydnOifXTJMa4uPl/aCGbVNRPGxkZng=";
+  sha256 = "sha256-oXODkeLDT5GXO4+r1fGaRrRS/SSBhzro5XE0GOwl4mQ=";
 
   postFetch = ''
     mkdir -p $out/share/fonts/truetype
@@ -25,7 +25,7 @@ fetchzip {
     '';
     maintainers = with maintainers; [ suhr ];
     platforms = with platforms; all;
-    homepage = "https://cormullion.github.io/pages/2020-07-26-JuliaMono/";
+    homepage = "https://juliamono.netlify.app/";
     license = licenses.ofl;
   };
 }

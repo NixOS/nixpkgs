@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "rokuecp";
-  version = "0.8.1";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "ctalkington";
     repo = "python-rokuecp";
     rev = version;
-    sha256 = "02mbmwljcvqj3ksj2irdm8849lcxzwa6fycgjqb0i75cgidxpans";
+    sha256 = "sha256-2FAnshIxaA52EwwwABBQ0sedAsz561YYxXDQo2Vcp1c=";
   };
 
   propagatedBuildInputs = [

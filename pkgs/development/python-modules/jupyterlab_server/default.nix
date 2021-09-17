@@ -10,19 +10,18 @@
 , jupyter_server
 , openapi-core
 , pytest-tornasync
-, pytestcov
 , ruamel-yaml
 , strict-rfc3339
 }:
 
 buildPythonPackage rec {
   pname = "jupyterlab_server";
-  version = "2.6.0";
+  version = "2.7.2";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f300adf6bb0a952bebe9c807a3b2a345d62da39b476b4f69ea0dc6b5f3f6b97d";
+    sha256 = "c6c9ae5796ed60c65bccd84503cbd44b9e35b046b8265f24db3cc4d61631fc0d";
   };
 
   postPatch = ''

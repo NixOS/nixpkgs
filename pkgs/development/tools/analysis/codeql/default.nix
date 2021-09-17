@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation rec {
   pname = "codeql";
-  version = "2.5.7";
+  version = "2.5.9";
 
   dontConfigure = true;
   dontBuild = true;
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   src = fetchzip {
     url = "https://github.com/github/codeql-cli-binaries/releases/download/v${version}/codeql.zip";
-    sha256 = "sha256-dKJQv/omXT/L5dWYkveXodNNt5Q3i1WDIA9nwmo0Sfc=";
+    sha256 = "sha256-r3Jm+VYjn0Dz4BCSbADbgTWL1owbyIXlkoj6mOmZcZk=";
   };
 
   nativeBuildInputs = [

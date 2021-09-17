@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "acpi-call";
-  version = "1.2.1";
+  version = "1.2.2";
   name = "${pname}-${version}-${kernel.version}";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "acpi_call";
     rev = "v${version}";
-    sha256 = "0mr4rjbv6fj4phf038addrgv32940bphghw2v9n1z4awvw7wzkbg";
+    sha256 = "1s7h9y3adyfhw7cjldlfmid79lrwz3vqlvziw9nwd6x5qdj4w9vp";
   };
 
   hardeningDisable = [ "pic" ];

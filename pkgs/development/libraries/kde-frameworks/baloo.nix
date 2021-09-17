@@ -12,5 +12,6 @@ mkDerivation {
     kauth kconfig kcrash kdbusaddons ki18n kio kidletime lmdb qtdeclarative
     solid
   ];
+  outputs = [ "dev" "out" ];
   propagatedBuildInputs = [ kcoreaddons kfilemetadata qtbase ];
 }

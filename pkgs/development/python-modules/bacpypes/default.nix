@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchPypi, fetchFromGitHub
-, wheel, pytestCheckHook, pytestrunner, pythonAtLeast }:
+, wheel, pytestCheckHook, pytest-runner, pythonAtLeast }:
 
 buildPythonPackage rec {
   version = "0.18.4";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ wheel ];
 
   # Using pytes instead of setuptools check hook allows disabling specific tests
-  checkInputs = [ pytestCheckHook pytestrunner ];
+  checkInputs = [ pytestCheckHook pytest-runner ];
   dontUseSetuptoolsCheck = true;
   disabledTests = [
     # Test fails with a an error: AssertionError: assert 30 == 31

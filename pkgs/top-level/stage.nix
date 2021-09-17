@@ -15,7 +15,7 @@
   # Utility functions, could just import but passing in for efficiency
   lib
 
-, # Use to reevaluate Nixpkgs; a dirty hack that should be removed
+, # Use to reevaluate Nixpkgs
   nixpkgsFun
 
   ## Other parameters
@@ -65,7 +65,12 @@
 
 let
   stdenvAdapters = self: super:
-    let res = import ../stdenv/adapters.nix self; in res // {
+    let
+      res = import ../stdenv/adapters.nix {
+        inherit lib config;
+        pkgs = self;
+      };
+    in res // {
       stdenvAdapters = res;
     };
 
@@ -169,6 +174,7 @@ let
       # so we don't need to check hostPlatform != buildPlatform.
       crossSystem = stdenv.hostPlatform // {
         useLLVM = true;
+        linker = "lld";
       };
     };
 
@@ -212,7 +218,7 @@ let
     appendOverlays = extraOverlays:
       if extraOverlays == []
       then self
-      else import ./stage.nix (args // { overlays = args.overlays ++ extraOverlays; });
+      else nixpkgsFun { overlays = args.overlays ++ extraOverlays; };
 
     # NOTE: each call to extend causes a full nixpkgs rebuild, adding ~130MB
     #       of allocations. DO NOT USE THIS IN NIXPKGS.
@@ -229,7 +235,6 @@ let
       overlays = [ (self': super': {
         pkgsStatic = super';
       })] ++ overlays;
-      crossOverlays = [ (import ./static.nix) ];
     } // lib.optionalAttrs stdenv.hostPlatform.isLinux {
       crossSystem = {
         isStatic = true;
@@ -238,6 +243,8 @@ let
             gnu = lib.systems.parse.abis.musl;
             gnueabi = lib.systems.parse.abis.musleabi;
             gnueabihf = lib.systems.parse.abis.musleabihf;
+            musleabi = lib.systems.parse.abis.musleabi;
+            musleabihf = lib.systems.parse.abis.musleabihf;
           }.${stdenv.hostPlatform.parsed.abi.name}
             or lib.systems.parse.abis.musl;
         };

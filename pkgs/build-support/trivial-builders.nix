@@ -24,16 +24,13 @@ rec {
   * `allowSubstitutes = false;`
   * to a derivation’s attributes.
   */
-  runCommand = runCommandNoCC;
-  runCommandLocal = runCommandNoCCLocal;
-
-  runCommandNoCC = name: env: runCommandWith {
+  runCommand = name: env: runCommandWith {
     stdenv = stdenvNoCC;
     runLocal = false;
     inherit name;
     derivationArgs = env;
   };
-  runCommandNoCCLocal = name: env: runCommandWith {
+  runCommandLocal = name: env: runCommandWith {
     stdenv = stdenvNoCC;
     runLocal = true;
     inherit name;
@@ -616,7 +613,7 @@ rec {
       command ? "${package.meta.mainProgram or package.pname or package.name} --version",
       version ? package.version,
     }: runCommand "test-version" { nativeBuildInputs = [ package ]; meta.timeout = 60; } ''
-      ${command} | grep -Fw ${version}
+      ${command} |& grep -Fw ${version}
       touch $out
     '';
 }

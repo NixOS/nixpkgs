@@ -1,6 +1,6 @@
 { stdenv
 , lib
-, fetchgit
+, fetchFromGitea
 , pkg-config
 , meson
 , ninja
@@ -9,50 +9,75 @@
 , fcft
 , json_c
 , libmpdclient
-, libxcb
 , libyaml
 , pixman
 , tllist
 , udev
 , wayland
+, wayland-scanner
 , wayland-protocols
+, waylandSupport ? false
+# Xorg backend
+, libxcb
 , xcbutil
 , xcbutilcursor
 , xcbutilerrors
 , xcbutilwm
 }:
 
+let
+  # Courtesy of sternenseemann and FRidh, commit c9a7fdfcfb420be8e0179214d0d91a34f5974c54
+  mesonFeatureFlag = opt: b: "-D${opt}=${if b then "enabled" else "disabled"}";
+in
+
 stdenv.mkDerivation rec {
   pname = "yambar";
-  version = "1.6.1";
+  version = "1.7.0";
 
-  src = fetchgit {
-    url = "https://codeberg.org/dnkl/yambar.git";
+  src = fetchFromGitea {
+    domain = "codeberg.org";
+    owner = "dnkl";
+    repo = "yambar";
     rev = version;
-    sha256 = "p47tFsEWsYNe6IVV65xGG211u6Vm2biRf4pmUDylBOQ=";
+    sha256 = "sha256-NzJrlPOkzstMbw37yBTah/uFYezlPB/1hrxCiXduSmc=";
   };
 
-  nativeBuildInputs = [ pkg-config meson ninja scdoc ];
+  nativeBuildInputs = [
+    pkg-config
+    meson
+    ninja
+    scdoc
+    wayland-scanner
+  ];
+
   buildInputs = [
     alsa-lib
     fcft
     json_c
     libmpdclient
-    libxcb
     libyaml
     pixman
     tllist
     udev
     wayland
     wayland-protocols
+  ] ++ lib.optionals (!waylandSupport) [
     xcbutil
     xcbutilcursor
     xcbutilerrors
     xcbutilwm
   ];
 
+  mesonBuildType = "release";
+
+  mesonFlags = [
+    (mesonFeatureFlag "backend-x11" (!waylandSupport))
+    (mesonFeatureFlag "backend-wayland" waylandSupport)
+  ];
+
   meta = with lib; {
     homepage = "https://codeberg.org/dnkl/yambar";
+    changelog = "https://codeberg.org/dnkl/yambar/releases/tag/${version}";
     description = "Modular status panel for X11 and Wayland";
     longDescription = ''
       yambar is a lightweight and configurable status panel (bar, for short) for

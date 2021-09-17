@@ -17,14 +17,6 @@ let
      if [[ "test" == "test" ]]; then echo "success"; fi
     '';
 
-    c = writeCBin "test-writers-c" { libraries = [ ]; } ''
-      #include <stdio.h>
-      int main() {
-        printf("success\n");
-        return 0;
-      }
-    '';
-
     dash = writeDashBin "test-writers-dash-bin" ''
      test '~' = '~' && echo 'success'
     '';
@@ -86,24 +78,6 @@ let
   simple = {
     bash = writeBash "test-writers-bash" ''
      if [[ "test" == "test" ]]; then echo "success"; fi
-    '';
-
-    c = writeC "test-writers-c" { libraries = [ glib.dev ]; } ''
-      #include <gio/gio.h>
-      #include <stdio.h>
-      int main() {
-        GApplication *application = g_application_new ("hello.world", G_APPLICATION_FLAGS_NONE);
-        g_application_register (application, NULL, NULL);
-        GNotification *notification = g_notification_new ("Hello world!");
-        g_notification_set_body (notification, "This is an example notification.");
-        GIcon *icon = g_themed_icon_new ("dialog-information");
-        g_notification_set_icon (notification, icon);
-        g_object_unref (icon);
-        g_object_unref (notification);
-        g_object_unref (application);
-        printf("success\n");
-        return 0;
-      }
     '';
 
     dash = writeDash "test-writers-dash" ''
@@ -193,7 +167,7 @@ let
     '';
 
 in runCommand "test-writers" {
-  passthru = { inherit writeTest bin simple; };
+  passthru = { inherit writeTest bin simple path; };
   meta.platforms = lib.platforms.all;
 } ''
   ${lib.concatMapStringsSep "\n" (test: writeTest "success" test.name "${test}/bin/${test.name}") (lib.attrValues bin)}

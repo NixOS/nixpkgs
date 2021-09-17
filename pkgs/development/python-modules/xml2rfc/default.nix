@@ -1,15 +1,15 @@
 { lib, fetchPypi, buildPythonPackage, pythonAtLeast, intervaltree, pyflakes, requests, lxml, google-i18n-address
-, pycountry, html5lib, six, kitchen, pypdf2, dict2xml, weasyprint, pyyaml, jinja2, ConfigArgParse, appdirs
+, pycountry, html5lib, six, kitchen, pypdf2, dict2xml, weasyprint, pyyaml, jinja2, configargparse, appdirs
 }:
 
 buildPythonPackage rec {
   pname = "xml2rfc";
-  version = "3.8.0";
+  version = "3.9.1";
   disabled = pythonAtLeast "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8e25a9d73acf57ade798fc67841277dbbdb81ced390e6f84362370305b127426";
+    sha256 = "76cee167e81fc3cc0e0cc696fe58cadd039e19a774c8f4d2e5c0fea724c7aaca";
   };
 
   propagatedBuildInputs = [
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     pypdf2
     dict2xml
     weasyprint
-    ConfigArgParse
+    configargparse
     appdirs
   ];
 

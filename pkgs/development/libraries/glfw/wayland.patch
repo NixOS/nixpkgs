@@ -1,0 +1,25 @@
+From 46fb81c69e8acdb70907409f98dd01e387408414 Mon Sep 17 00:00:00 2001
+From: Stone Tickle <lattis@mochiro.moe>
+Date: Fri, 5 Jun 2020 12:51:25 +0900
+Subject: [PATCH] set O_NONBLOCK on repeat timerfd
+
+---
+ src/wl_init.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/wl_init.c b/src/wl_init.c
+index 49e7cc52..43569bef 100644
+--- a/src/wl_init.c
++++ b/src/wl_init.c
+@@ -1166,7 +1166,7 @@ int _glfwPlatformInit(void)
+ 
+     _glfw.wl.timerfd = -1;
+     if (_glfw.wl.seatVersion >= 4)
+-        _glfw.wl.timerfd = timerfd_create(CLOCK_MONOTONIC, TFD_CLOEXEC);
++        _glfw.wl.timerfd = timerfd_create(CLOCK_MONOTONIC, TFD_CLOEXEC | TFD_NONBLOCK);
+ 
+     if (_glfw.wl.pointer && _glfw.wl.shm)
+     {
+-- 
+2.31.1
+

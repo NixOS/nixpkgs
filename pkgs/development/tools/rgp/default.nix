@@ -12,22 +12,22 @@
 , libX11
 , libxcb
 , libXi
-, ncurses5
+, ncurses
 , qtbase
 , qtdeclarative
 , zlib
 }:
 
 let
-  buildNum = "2021-03-31-696";
+  buildNum = "2021-06-30-819";
 in
 stdenv.mkDerivation rec {
   pname = "rgp";
-  version = "1.10";
+  version = "1.11";
 
   src = fetchurl {
     url = "https://gpuopen.com/download/radeon-developer-tool-suite/RadeonDeveloperToolSuite-${buildNum}.tgz";
-    sha256 = "1GUV75KpYbeq7KkE86QqTfGnf/t3VEgviaAsbg/LWJI=";
+    sha256 = "ru+e/oY844x4nvSVRBrTGDdnzUOBhwkaIrnftBITyE8=";
   };
 
   nativeBuildInputs = [ makeWrapper autoPatchelfHook ];
@@ -42,15 +42,10 @@ stdenv.mkDerivation rec {
     libX11
     libxcb
     libXi
-    ncurses5
+    ncurses
     qtbase
     qtdeclarative
     zlib
-  ];
-
-  runtimeDependencies = [
-    "${placeholder "out"}/opt/rgp"
-    "${placeholder "out"}/opt/rgp/qt"
   ];
 
   dontWrapQtApps = true;

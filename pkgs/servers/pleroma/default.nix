@@ -7,14 +7,14 @@
 
 beamPackages.mixRelease rec {
   pname = "pleroma";
-  version = "2.3.50";
+  version = "2.4.0";
 
   src = fetchFromGitLab {
     domain = "git.pleroma.social";
     owner = "pleroma";
     repo = "pleroma";
-    rev = "94687e23938b808a3fff95c92956ec337160cd0b";
-    sha256 = "160ss6qhx3007lyb0f5cjzbm5dzxq9q8rfn83l8qfxgan8hliag6";
+    rev = "v${version}";
+    sha256 = "sha256-1zp/qVk2K3q8AtkfXab0MBAHaQnY5enVtfdu64FFPhg=";
   };
 
   mixNixDeps = import ./mix.nix {
@@ -35,18 +35,6 @@ beamPackages.mixRelease rec {
           sha256 = "1v0q4bi7sb253i8q016l7gwlv5562wk5zy3l2sa446csvsacnpjk";
         };
         beamDeps = with final; [ prometheus ];
-      };
-      eblurhash = beamPackages.buildRebar3 rec {
-        name = "eblurhash";
-        version = "0.0.0";
-
-        src = fetchFromGitHub {
-          owner = "zotonic";
-          repo = "eblurhash";
-          rev = "04a0b76eadf4de1be17726f39b6313b88708fd12";
-          sha256 = "1b9r41scg9rn3skx65ssv1q5lczmg0ky6h1y39qajsvdi5w3swyx";
-        };
-        beamDeps = with final; [ ];
       };
       captcha = beamPackages.buildMix rec {
         name = "captcha";

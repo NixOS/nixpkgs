@@ -17,15 +17,22 @@ static int nrRedirects = 0;
 static char * from[MAX_REDIRECTS];
 static char * to[MAX_REDIRECTS];
 
+static int isInitialized = 0;
+
 // FIXME: might run too late.
 static void init() __attribute__((constructor));
 
 static void init()
 {
+    if (isInitialized) return;
+
     char * spec = getenv("NIX_REDIRECTS");
     if (!spec) return;
 
-    unsetenv("NIX_REDIRECTS");
+    // Ensure we only run this code once.
+    // We do not do `unsetenv("NIX_REDIRECTS")` to ensure that redirects
+    // also get initialized for subprocesses.
+    isInitialized = 1;
 
     char * spec2 = malloc(strlen(spec) + 1);
     strcpy(spec2, spec);

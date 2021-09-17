@@ -1,7 +1,7 @@
 { lib, stdenv, buildPythonApplication, fetchFromGitHub, pythonOlder,
   attrs, aiohttp, appdirs, click, keyring, Logbook, peewee, janus,
-  prompt_toolkit, matrix-nio, dbus-python, pydbus, notify2, pygobject3,
-  setuptools, fetchpatch, installShellFiles,
+  prompt-toolkit, matrix-nio, dbus-python, pydbus, notify2, pygobject3,
+  setuptools, installShellFiles,
 
   pytest, faker, pytest-aiohttp, aioresponses,
 
@@ -10,7 +10,7 @@
 
 buildPythonApplication rec {
   pname = "pantalaimon";
-  version = "0.9.2";
+  version = "0.10.2";
 
   disabled = pythonOlder "3.6";
 
@@ -19,16 +19,8 @@ buildPythonApplication rec {
     owner = "matrix-org";
     repo = pname;
     rev = version;
-    sha256 = "11dfv5b2slqybisq6npmrqxrzslh4bjs4093vrc05s94046d9d9n";
+    sha256 = "sha256-sjaJomKMKSZqLlKWTG7Oa87dXa5SnGQlVnrdS707A1w=";
   };
-
-  patches = [
-    # accept newer matrix-nio versions
-    (fetchpatch {
-      url = "https://github.com/matrix-org/pantalaimon/commit/73f68c76fb05037bd7fe71688ce39eb1f526a385.patch";
-      sha256 = "0wvqcfan8yp67p6khsqkynbkifksp2422b9jy511mvhpy51sqykl";
-    })
-  ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -40,7 +32,7 @@ buildPythonApplication rec {
     Logbook
     matrix-nio
     peewee
-    prompt_toolkit
+    prompt-toolkit
     setuptools
   ] ++ lib.optional enableDbusUi [
       dbus-python

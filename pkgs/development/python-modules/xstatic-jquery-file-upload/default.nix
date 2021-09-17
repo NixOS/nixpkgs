@@ -19,7 +19,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ xstatic-jquery ];
 
   meta = with lib;{
-    homepage =  "http://plugins.jquery.com/project/jQuery-File-Upload";
+    homepage =  "https://plugins.jquery.com/project/jQuery-File-Upload";
     description = "jquery-file-upload packaged static files for python";
     license = licenses.mit;
     maintainers = with maintainers; [ makefu ];

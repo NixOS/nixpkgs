@@ -7,20 +7,23 @@
 
 buildPythonPackage rec {
   pname = "pymata-express";
-  version = "1.20";
+  version = "1.21";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "MrYsLab";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-spYmd+Cb7Ej5FmniuJYAVVmq0mhOz5fu4+2UUXctRWs=";
+    rev = version;
+    sha256 = "1mibyn84kjahrv3kn51yl5mhkyig4piv6wanggzjflh5nm96bhy8";
   };
 
-  propagatedBuildInputs = [ pyserial ];
+  propagatedBuildInputs = [
+    pyserial
+  ];
 
   # Project has no tests
   doCheck = false;
+
   pythonImportsCheck = [ "pymata_express" ];
 
   meta = with lib; {

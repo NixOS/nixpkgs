@@ -6,13 +6,13 @@
 }:
 
 buildPythonPackage rec {
-  version = "22.0.0";
+  version = "23.0.0";
   pname = "azure-mgmt-compute";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "7d582f3a4331f681f6bc358b796d9c33d7c0d55aa95c2874fc8dbe692e6bfa6d";
+    sha256 = "1eb26b965ba4049ddcf10d4f25818725fc03c491c3be76537d0d74ceb1146b04";
   };
 
   propagatedBuildInputs = [
@@ -24,6 +24,8 @@ buildPythonPackage rec {
 
   # has no tests
   doCheck = false;
+
+  pythonImportsCheck = [ "azure.mgmt.compute" ];
 
   meta = with lib; {
     description = "This is the Microsoft Azure Compute Management Client Library";

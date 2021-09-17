@@ -48,8 +48,13 @@ self: super: {
     base16-bytestring = self.base16-bytestring_0_1_1_7;
   });
 
-  # cabal-install-parsers is written for Cabal 3.4
-  cabal-install-parsers = super.cabal-install-parsers.override { Cabal = super.Cabal_3_4_0_0; };
+  # cabal-install-parsers is written for Cabal 3.6
+  cabal-install-parsers = super.cabal-install-parsers.override { Cabal = super.Cabal_3_6_0_0; };
+
+  # older version of cabal-install-parsers for reverse dependencies that use Cabal 3.4
+  cabal-install-parsers_0_4_2 = super.cabal-install-parsers_0_4_2.override {
+    Cabal = self.Cabal_3_4_0_0;
+  };
 
   # Jailbreak to fix the build.
   base-noprelude = doJailbreak super.base-noprelude;
@@ -83,9 +88,5 @@ self: super: {
       # executable is allowed for ghc >= 8.10 and needs repline
       executableHaskellDepends = drv.executableToolDepends or [] ++ [ self.repline ];
     }));
-
-  # hackage-db 2.1.1 is incompatible with Cabal < 3.4
-  # See https://github.com/NixOS/cabal2nix/issues/501
-  hackage-db = self.hackage-db_2_1_0;
 
 }

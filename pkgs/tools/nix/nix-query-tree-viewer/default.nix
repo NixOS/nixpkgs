@@ -2,13 +2,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "nix-query-tree-viewer";
-  version = "0.2.0";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "cdepillabout";
-    repo  = "nix-query-tree-viewer";
+    repo  = pname;
     rev = "v${version}";
-    sha256 = "0vjcllhgq64n7mwxvyhmbqd6fpa9lwrpsnggc1kdlgd14ggq6jj6";
+    sha256 = "sha256-Lc9hfjybnRrkd7PZMa2ojxOM04bP4GJyagkZUX2nVwY=";
   };
 
   nativeBuildInputs = [
@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
     gtk3
   ];
 
-  cargoSha256 = "1i9sjs77v1c3lch93pzjgr1zl0k1mlwkdpf3zfp13hyjn6zpldnj";
+  cargoSha256 = "sha256-NSLBIvgo5EdCvZq52d+UbAa7K4uOST++2zbhO9DW38E=";
 
   meta = with lib; {
     description = "GTK viewer for the output of `nix store --query --tree`";

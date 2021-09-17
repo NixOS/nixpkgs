@@ -8,7 +8,7 @@
 , pproxy
 , pytest-asyncio
 , pytestCheckHook
-, pytestcov
+, pytest-cov
 , sniffio
 , trio
 , trustme
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     pproxy
     pytest-asyncio
     pytestCheckHook
-    pytestcov
+    pytest-cov
     trio
     trustme
     uvicorn

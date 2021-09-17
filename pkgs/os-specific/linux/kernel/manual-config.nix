@@ -1,5 +1,5 @@
 { lib, buildPackages, runCommand, nettools, bc, bison, flex, perl, rsync, gmp, libmpc, mpfr, openssl
-, libelf, cpio, elfutils, zstd, gawk
+, libelf, cpio, elfutils, zstd, gawk, python3Minimal
 , writeTextFile
 }:
 
@@ -19,6 +19,8 @@ in {
   stdenv,
   # The kernel version
   version,
+  # Additional kernel make flags
+  extraMakeFlags ? [],
   # The version of the kernel module directory
   modDirVersion ? version,
   # The kernel source (tarball, git checkout, etc.)
@@ -121,7 +123,7 @@ let
         # See also https://kernelnewbies.org/BuildId
         sed -i Makefile -e 's|--build-id=[^ ]*|--build-id=none|'
 
-        patchShebangs scripts/ld-version.sh
+        patchShebangs scripts
       '';
 
       postPatch = ''
@@ -173,7 +175,9 @@ let
         "KBUILD_BUILD_VERSION=1-NixOS"
         kernelConf.target
         "vmlinux"  # for "perf" and things like that
-      ] ++ optional isModular "modules";
+      ]
+      ++ optional isModular "modules"
+      ++ extraMakeFlags;
 
       installFlags = [
         "INSTALLKERNEL=${installkernel}"
@@ -307,7 +311,7 @@ stdenv.mkDerivation ((drvAttrs config stdenv.hostPlatform.linux-kernel kernelPat
   enableParallelBuilding = true;
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ perl bc nettools openssl rsync gmp libmpc mpfr gawk zstd ]
+  nativeBuildInputs = [ perl bc nettools openssl rsync gmp libmpc mpfr gawk zstd python3Minimal ]
       ++ optional  (stdenv.hostPlatform.linux-kernel.target == "uImage") buildPackages.ubootTools
       ++ optional  (lib.versionAtLeast version "4.14" && lib.versionOlder version "5.8") libelf
       # Removed util-linuxMinimal since it should not be a dependency.
@@ -325,7 +329,7 @@ stdenv.mkDerivation ((drvAttrs config stdenv.hostPlatform.linux-kernel kernelPat
     "ARCH=${stdenv.hostPlatform.linuxArch}"
   ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) [
     "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
-  ];
+  ] ++ extraMakeFlags;
 
   karch = stdenv.hostPlatform.linuxArch;
 })

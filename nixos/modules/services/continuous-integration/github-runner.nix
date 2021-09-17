@@ -98,6 +98,14 @@ in
       '';
       default = [ ];
     };
+
+    package = mkOption {
+      type = types.package;
+      description = ''
+        Which github-runner derivation to use.
+      '';
+      default = pkgs.github-runner;
+    };
   };
 
   config = mkIf cfg.enable {
@@ -131,7 +139,7 @@ in
       ] ++ cfg.extraPackages;
 
       serviceConfig = rec {
-        ExecStart = "${pkgs.github-runner}/bin/runsvc.sh";
+        ExecStart = "${cfg.package}/bin/runsvc.sh";
 
         # Does the following, sequentially:
         # - Copy the current and the previous `tokenFile` to the $RUNTIME_DIRECTORY
@@ -208,7 +216,7 @@ in
               if [[ -z "$empty" ]]; then
                 echo "Configuring GitHub Actions Runner"
                 token=$(< "$RUNTIME_DIRECTORY"/${newConfigTokenFilename})
-                RUNNER_ROOT="$STATE_DIRECTORY" ${pkgs.github-runner}/bin/config.sh \
+                RUNNER_ROOT="$STATE_DIRECTORY" ${cfg.package}/bin/config.sh \
                   --unattended \
                   --work "$RUNTIME_DIRECTORY" \
                   --url ${escapeShellArg cfg.url} \

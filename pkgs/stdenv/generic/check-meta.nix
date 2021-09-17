@@ -231,6 +231,7 @@ let
     timeout = int;
 
     # Weirder stuff that doesn't appear in the documentation?
+    maxSilent = int;
     knownVulnerabilities = listOf str;
     name = str;
     version = str;

@@ -7,10 +7,15 @@ let
 
   # FIXME consider using LoadCredential as soon as it actually works.
   envSecrets = ''
-    export ADMIN_USER_PWD="$(<${cfg.adminUser.passwordFile})"
-    export SECRET_KEY_BASE="$(<${cfg.server.secretKeybaseFile})"
+    ADMIN_USER_PWD="$(<${cfg.adminUser.passwordFile})"
+    export ADMIN_USER_PWD # separate export to make `set -e` work
+
+    SECRET_KEY_BASE="$(<${cfg.server.secretKeybaseFile})"
+    export SECRET_KEY_BASE # separate export to make `set -e` work
+
     ${optionalString (cfg.mail.smtp.passwordFile != null) ''
-      export SMTP_USER_PWD="$(<${cfg.mail.smtp.passwordFile})"
+      SMTP_USER_PWD="$(<${cfg.mail.smtp.passwordFile})"
+      export SMTP_USER_PWD # separate export to make `set -e` work
     ''}
   '';
 in {
@@ -102,6 +107,11 @@ in {
         type = types.str;
         description = ''
           Public URL where plausible is available.
+
+          Note that <literal>/path</literal> components are currently ignored:
+          <link xlink:href="https://github.com/plausible/analytics/issues/1182">
+            https://github.com/plausible/analytics/issues/1182
+          </link>.
         '';
       };
     };
@@ -228,6 +238,7 @@ in {
             WorkingDirectory = "/var/lib/plausible";
             StateDirectory = "plausible";
             ExecStartPre = "@${pkgs.writeShellScript "plausible-setup" ''
+              set -eu -o pipefail
               ${envSecrets}
               ${pkgs.plausible}/createdb.sh
               ${pkgs.plausible}/migrate.sh
@@ -238,6 +249,7 @@ in {
               ''}
             ''} plausible-setup";
             ExecStart = "@${pkgs.writeShellScript "plausible" ''
+              set -eu -o pipefail
               ${envSecrets}
               plausible start
             ''} plausible";

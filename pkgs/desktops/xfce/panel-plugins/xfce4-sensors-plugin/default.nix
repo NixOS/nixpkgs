@@ -8,11 +8,11 @@ in
 
 stdenv.mkDerivation rec {
   pname  = "xfce4-sensors-plugin";
-  version = "1.3.95";
+  version = "1.4.1";
 
   src = fetchurl {
     url = "mirror://xfce/src/${category}/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-g8ZK5GGN1ZKXHPoLwoWptHr4AaPthWg1zbKkxTPHhGw=";
+    sha256 = "sha256-N9DcVp5zXkgqGFRcJOsc4CKdaRDjpNTB3uBoCZkjS+I=";
   };
 
   nativeBuildInputs = [

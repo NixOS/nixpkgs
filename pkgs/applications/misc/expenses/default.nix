@@ -23,8 +23,8 @@ buildGoModule rec {
 
   buildInputs = [ sqlite ];
 
-  buildFlagsArray = [
-    "-ldflags=-s -w -X github.com/manojkarthick/expenses/cmd.Version=${version}"
+  ldflags = [
+    "-s" "-w" "-X github.com/manojkarthick/expenses/cmd.Version=${version}"
   ];
 
   meta = with lib; {

@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, pkg-config
-, libjpeg, libtiff, libpng, freetype
+, libtiff
 , fltk, gtk
-, libX11, libXext, libICE
+, libICE, libSM
 , dbus
 , fetchpatch
 }:
@@ -24,8 +24,16 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  postPatch = ''
+    # Causes fatal ldconfig cache generation attempt on non-NixOS Linux
+    for mkfile in autoconf/Makefile.common.lib.in libAfter{Base,Image}/Makefile.in; do
+      substituteInPlace $mkfile \
+        --replace 'test -w /etc' 'false'
+    done
+  '';
+
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libjpeg libtiff libpng freetype fltk gtk libX11 libXext libICE dbus dbus ];
+  buildInputs = [ libtiff fltk gtk libICE libSM dbus ];
 
   # A strange type of bug: dbus is not immediately found by pkg-config
   preConfigure = ''

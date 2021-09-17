@@ -1,3 +1,8 @@
+# Update instructions:
+#
+# To update `thunderbird-bin`'s `release_sources.nix`, run from the nixpkgs root:
+#
+#     nix-shell maintainers/scripts/update.nix --argstr package pkgs.firefox-bin-unwrapped
 { stdenv, lib, fetchurl, config, makeWrapper
 , alsa-lib
 , at-spi2-atk
@@ -74,8 +79,6 @@ stdenv.mkDerivation {
     url = "https://download-installer.cdn.mozilla.net/pub/thunderbird/releases/${version}/${source.arch}/${source.locale}/thunderbird-${version}.tar.bz2";
     inherit (source) sha256;
   };
-
-  phases = "unpackPhase installPhase";
 
   libPath = lib.makeLibraryPath
     [ stdenv.cc.cc
@@ -171,7 +174,7 @@ stdenv.mkDerivation {
 
   passthru.updateScript = import ./../../browsers/firefox-bin/update.nix {
     inherit writeScript xidel coreutils gnused gnugrep curl gnupg runtimeShell;
-    name = "thunderbird-bin-${version}";
+    pname = "thunderbird-bin";
     baseName = "thunderbird";
     channel = "release";
     basePath = "pkgs/applications/networking/mailreaders/thunderbird-bin";

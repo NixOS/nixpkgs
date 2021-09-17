@@ -5,7 +5,10 @@ stdenv.mkDerivation rec {
   version = "2.3.9";
 
   src = fetchurl {
-    url = "ftp://ftp.unixodbc.org/pub/unixODBC/${pname}-${version}.tar.gz";
+    urls = [
+      "ftp://ftp.unixodbc.org/pub/unixODBC/${pname}-${version}.tar.gz"
+      "http://www.unixodbc.org/${pname}-${version}.tar.gz"
+    ];
     sha256 = "sha256-UoM+rD1oHIsMmlpl8uvXRbOpZPII/HSPl35EAVoxsgc=";
   };
 

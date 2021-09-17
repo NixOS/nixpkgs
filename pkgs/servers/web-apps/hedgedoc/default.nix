@@ -29,7 +29,7 @@ let
 in
 
 mkYarnPackage rec {
-  name = "hedgedoc";
+  pname = "hedgedoc";
   version = "1.8.2";
 
   src = fetchFromGitHub {

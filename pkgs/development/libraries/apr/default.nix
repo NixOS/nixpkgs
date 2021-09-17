@@ -1,14 +1,23 @@
-{ lib, stdenv, fetchurl, autoreconfHook }:
+{ lib, stdenv, fetchurl, fetchpatch, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "apr-1.7.0";
+  pname = "apr";
+  version = "1.7.0";
 
   src = fetchurl {
-    url = "mirror://apache/apr/${name}.tar.bz2";
+    url = "mirror://apache/apr/${pname}-${version}.tar.bz2";
     sha256 = "1spp6r2a3xcl5yajm9safhzyilsdzgagc2dadif8x6z9nbq4iqg2";
   };
 
-  patches = lib.optionals stdenv.isDarwin [ ./is-this-a-compiler-bug.patch ];
+  patches = [
+    (fetchpatch {
+      name = "CVE-2021-35940.patch";
+      url = "https://dist.apache.org/repos/dist/release/apr/patches/apr-1.7.0-CVE-2021-35940.patch";
+      sha256 = "1qd511dyqa1b7bj89iihrlbaavbzl6yyblqginghmcnhw8adymbs";
+      # convince fetchpatch to restore missing `a/`, `b/` to paths
+      extraPrefix = "";
+    })
+  ] ++ lib.optionals stdenv.isDarwin [ ./is-this-a-compiler-bug.patch ];
 
   # This test needs the net
   postPatch = ''

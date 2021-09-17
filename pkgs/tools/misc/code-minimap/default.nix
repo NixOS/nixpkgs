@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "code-minimap";
-  version = "0.6.0";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "wfxr";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-nWfvRrKkUrr2owv9sLgORVPYp68/Ibdu/P1VddMb61s=";
+    sha256 = "sha256-eCHmMtndcQJqKmjxhkcLvjMUXApkSnH+7qyG7PDfcwo=";
   };
 
-  cargoSha256 = "sha256-OmWn6Z/r/gXMD4gp/TDo0Hokliq8Qgb354q8ZFpVG2s=";
+  cargoSha256 = "sha256-wKCANWznOJMlQ8T2q39NNNRmgPYMpbkJhXpxojusNsE=";
 
   buildInputs = lib.optional stdenv.isDarwin libiconv;
 

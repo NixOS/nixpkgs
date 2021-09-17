@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   pname = "watson-ruby";
   version = (import ./gemset.nix).watson-ruby.version;
 
-  phases = [ "installPhase" ];
+  dontUnpack = true;
 
   installPhase = let
     env = bundlerEnv {

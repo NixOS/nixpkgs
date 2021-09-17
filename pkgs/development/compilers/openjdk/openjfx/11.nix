@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, writeText, gradleGen, pkg-config, perl, cmake
-, gperf, gtk2, gtk3, libXtst, libXxf86vm, glib, alsa-lib, ffmpeg, python, ruby
+, gperf, gtk2, gtk3, libXtst, libXxf86vm, glib, alsa-lib, ffmpeg, python2, ruby
 , openjdk11-bootstrap }:
 
 let
@@ -20,9 +20,14 @@ let
     };
 
     buildInputs = [ gtk2 gtk3 libXtst libXxf86vm glib alsa-lib ffmpeg ];
-    nativeBuildInputs = [ gradle_ perl pkg-config cmake gperf python ruby ];
+    nativeBuildInputs = [ gradle_ perl pkg-config cmake gperf python2 ruby ];
 
     dontUseCmakeConfigure = true;
+
+    postPatch = ''
+      substituteInPlace buildSrc/linux.gradle \
+        --replace ', "-Werror=implicit-function-declaration"' ""
+    '';
 
     config = writeText "gradle.properties" (''
       CONF = Release

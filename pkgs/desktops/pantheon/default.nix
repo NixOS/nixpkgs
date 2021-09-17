@@ -23,7 +23,7 @@ lib.makeScope pkgs.newScope (self: with self; {
     wingpanel-indicator-session wingpanel-indicator-sound
   ];
 
-  maintainers = with pkgs.lib.maintainers; [ ];
+  maintainers = lib.teams.pantheon.members;
 
   mutter = pkgs.gnome.mutter334;
 

@@ -2,14 +2,14 @@
 
 buildPythonPackage rec {
   pname = "CoAPthon3";
-  version = "1.0.1";
+  version = "1.0.2";
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "Tanganelli";
     repo = pname;
     rev = version;
-    sha256 = "1im35i5i72y1p9qj8ixkwq7q6ksbrmi42giqiyfgjp1ym38snl69";
+    sha256 = "sha256-9QApoPUu3XFZY/lgjAsf5r2StFiRtUd1UXWDrzYUh6w=";
   };
 
   propagatedBuildInputs = [ cachetools ];

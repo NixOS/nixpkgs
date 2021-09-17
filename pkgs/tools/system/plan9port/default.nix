@@ -90,7 +90,6 @@ stdenv.mkDerivation {
       kovirobi
     ];
     platforms = platforms.unix;
-    broken = stdenv.isDarwin;
   };
 }
 # TODO: investigate the mouse chording support patch

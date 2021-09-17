@@ -10,7 +10,7 @@ buildPythonPackage {
   pname = "notmuch2";
   inherit (notmuch) version src;
 
-  sourceRoot = "${notmuch.src.name}/bindings/python-cffi";
+  sourceRoot = "notmuch-${notmuch.version}/bindings/python-cffi";
 
   buildInputs = [ python notmuch cffi ];
 

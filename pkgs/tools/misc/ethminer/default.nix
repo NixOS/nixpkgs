@@ -64,6 +64,11 @@ stdenv.mkDerivation rec {
     cudatoolkit
   ];
 
+  patches = [
+    # global context library is separated from libethash
+    ./add-global-context.patch
+  ];
+
   preConfigure = ''
     sed -i 's/_lib_static//' libpoolprotocols/CMakeLists.txt
   '';

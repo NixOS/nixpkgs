@@ -273,6 +273,26 @@ let
       '';
     };
 
+    influxdb = {
+      exporterConfig = {
+        enable = true;
+        sampleExpiry = "3s";
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-influxdb-exporter.service")
+        succeed(
+          "curl -XPOST http://localhost:9122/write --data-binary 'influxdb_exporter,distro=nixos,added_in=21.09 value=1'"
+        )
+        succeed(
+          "curl -sSf http://localhost:9122/metrics | grep 'nixos'"
+        )
+        execute("sleep 5")
+        fail(
+          "curl -sSf http://localhost:9122/metrics | grep 'nixos'"
+        )
+      '';
+    };
+
     jitsi = {
       exporterConfig = {
         enable = true;
@@ -326,49 +346,35 @@ let
       '';
     };
 
-    kea = {
+    kea = let
+      controlSocketPath = "/run/kea/dhcp6.sock";
+    in
+    {
       exporterConfig = {
         enable = true;
         controlSocketPaths = [
-          "/run/kea/kea-dhcp6.sock"
+          controlSocketPath
         ];
       };
       metricProvider = {
-        users.users.kea = {
-          isSystemUser = true;
-        };
-        users.groups.kea = {};
+        systemd.services.prometheus-kea-exporter.after = [ "kea-dhcp6-server.service" ];
 
-        systemd.services.prometheus-kea-exporter.after = [ "kea-dhcp6.service" ];
-
-        systemd.services.kea-dhcp6 = let
-          configFile = pkgs.writeText "kea-dhcp6.conf" (builtins.toJSON {
-            Dhcp6 = {
-              "control-socket" = {
-                "socket-type" = "unix";
-                "socket-name" = "/run/kea/kea-dhcp6.sock";
+        services.kea = {
+          dhcp6 = {
+            enable = true;
+            settings = {
+              control-socket = {
+                socket-type = "unix";
+                socket-name = controlSocketPath;
               };
             };
-          });
-        in
-        {
-          after = [ "network.target" ];
-          wantedBy = [ "multi-user.target" ];
-
-          serviceConfig = {
-            DynamicUser = false;
-            User = "kea";
-            Group = "kea";
-            ExecStart = "${pkgs.kea}/bin/kea-dhcp6 -c ${configFile}";
-            StateDirectory = "kea";
-            RuntimeDirectory = "kea";
-            UMask = "0007";
           };
         };
       };
+
       exporterTest = ''
-        wait_for_unit("kea-dhcp6.service")
-        wait_for_file("/run/kea/kea-dhcp6.sock")
+        wait_for_unit("kea-dhcp6-server.service")
+        wait_for_file("${controlSocketPath}")
         wait_for_unit("prometheus-kea-exporter.service")
         wait_for_open_port(9547)
         succeed(

@@ -28,19 +28,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "vector";
-  version = "0.14.0";
+  version = "0.16.1";
 
   src = fetchFromGitHub {
     owner = "timberio";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-wtihrR19jMJ7Kgvy6XBzOUrC/WKNVl2MVx4lWgXYlvg=";
+    sha256 = "sha256-10e0cWt6XW8msNR/RXbaOpdwTAlRLm6jVvDed905rho=";
   };
 
-  cargoSha256 = "sha256-VYIzAqh5Xxmn1koxhh+UDb2G3WS2UVXffuBY7h5Kr7A=";
+  cargoSha256 = "sha256-ezQ/tX/uKzJprLQt2xIUZwGuUOmuRmTO+gPsf3MLEv8=";
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ oniguruma openssl protobuf rdkafka zstd ]
-    ++ lib.optional stdenv.isDarwin [ Security libiconv coreutils CoreServices ];
+    ++ lib.optionals stdenv.isDarwin [ Security libiconv coreutils CoreServices ];
 
   # needed for internal protobuf c wrapper library
   PROTOC = "${protobuf}/bin/protoc";
@@ -53,7 +53,16 @@ rustPlatform.buildRustPackage rec {
   # dev dependency includes httpmock which depends on iashc which depends on curl-sys with http2 feature enabled
   # compilation fails because of a missing http2 include
   doCheck = !stdenv.isDarwin;
-  checkPhase = "TZDIR=${tzdata}/share/zoneinfo cargo test --no-default-features --features ${lib.concatStringsSep "," features} -- --test-threads 1";
+  # healthcheck_grafana_cloud is trying to make a network access
+  # test_stream_errors is flaky on linux-aarch64
+  checkPhase = ''
+    TZDIR=${tzdata}/share/zoneinfo cargo test \
+      --no-default-features \
+      --features ${lib.concatStringsSep "," features} \
+      -- --test-threads 1 \
+      --skip=sinks::loki::tests::healthcheck_grafana_cloud \
+      --skip=kubernetes::api_watcher::tests::test_stream_errors
+  '';
 
   # recent overhauls of DNS support in 0.9 mean that we try to resolve
   # vector.dev during the checkPhase, which obviously isn't going to work.

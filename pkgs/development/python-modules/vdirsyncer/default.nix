@@ -6,7 +6,7 @@
 , click
 , click-log
 , click-threading
-, requests_toolbelt
+, requests-toolbelt
 , requests
 , requests_oauthlib # required for google oauth sync
 , atomicwrites
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     click-threading
     requests
     requests_oauthlib # required for google oauth sync
-    requests_toolbelt
+    requests-toolbelt
   ];
 
   nativeBuildInputs = [

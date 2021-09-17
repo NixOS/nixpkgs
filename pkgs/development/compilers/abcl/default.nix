@@ -29,7 +29,6 @@ stdenv.mkDerivation rec {
   '';
   buildInputs = [jre ant jdk jre];
   meta = {
-    inherit version;
     description = "A JVM-based Common Lisp implementation";
     license = lib.licenses.gpl3 ;
     maintainers = [lib.maintainers.raskin];

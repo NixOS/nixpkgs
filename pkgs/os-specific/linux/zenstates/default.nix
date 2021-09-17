@@ -35,8 +35,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ python3 ];
 
-  phases = [ "installPhase" ];
-
   installPhase = ''
     mkdir -p $out/bin
     cp $src/zenstates.py $out/bin/zenstates

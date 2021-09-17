@@ -23,6 +23,7 @@ let
   offloadCfg = pCfg.offload;
   primeEnabled = syncCfg.enable || offloadCfg.enable;
   nvidiaPersistencedEnabled =  cfg.nvidiaPersistenced;
+  nvidiaSettings = cfg.nvidiaSettings;
 in
 
 {
@@ -143,6 +144,15 @@ in
       '';
     };
 
+    hardware.nvidia.nvidiaSettings = mkOption {
+      default = true;
+      type = types.bool;
+      description = ''
+        Whether to add nvidia-settings, NVIDIA's GUI configuration tool, to
+        systemPackages.
+      '';
+    };
+
     hardware.nvidia.nvidiaPersistenced = mkOption {
       default = false;
       type = types.bool;
@@ -179,27 +189,40 @@ in
           You cannot configure both an Intel iGPU and an AMD APU. Pick the one corresponding to your processor.
         '';
       }
+
       {
         assertion = primeEnabled -> pCfg.nvidiaBusId != "" && (pCfg.intelBusId != "" || pCfg.amdgpuBusId != "");
         message = ''
           When NVIDIA PRIME is enabled, the GPU bus IDs must configured.
         '';
       }
+
       {
         assertion = offloadCfg.enable -> versionAtLeast nvidia_x11.version "435.21";
         message = "NVIDIA PRIME render offload is currently only supported on versions >= 435.21.";
       }
+
       {
         assertion = !(syncCfg.enable && offloadCfg.enable);
         message = "Only one NVIDIA PRIME solution may be used at a time.";
       }
+
       {
         assertion = !(syncCfg.enable && cfg.powerManagement.finegrained);
         message = "Sync precludes powering down the NVIDIA GPU.";
       }
+
       {
         assertion = cfg.powerManagement.enable -> offloadCfg.enable;
         message = "Fine-grained power management requires offload to be enabled.";
+      }
+
+      {
+        assertion = cfg.powerManagement.enable -> (
+          builtins.pathExists (cfg.package.out + "/bin/nvidia-sleep.sh") &&
+          builtins.pathExists (cfg.package.out + "/lib/systemd/system-sleep/nvidia")
+        );
+        message = "Required files for driver based power management don't exist.";
       }
     ];
 
@@ -266,7 +289,8 @@ in
     hardware.opengl.extraPackages = optional offloadCfg.enable nvidia_x11.out;
     hardware.opengl.extraPackages32 = optional offloadCfg.enable nvidia_x11.lib32;
 
-    environment.systemPackages = [ nvidia_x11.bin nvidia_x11.settings ]
+    environment.systemPackages = [ nvidia_x11.bin ]
+      ++ optionals nvidiaSettings [ nvidia_x11.settings ]
       ++ optionals nvidiaPersistencedEnabled [ nvidia_x11.persistenced ];
 
     systemd.packages = optional cfg.powerManagement.enable nvidia_x11.out;

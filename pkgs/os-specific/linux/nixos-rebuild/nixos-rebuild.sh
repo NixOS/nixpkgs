@@ -4,6 +4,7 @@ if [ -x "@runtimeShell@" ]; then export SHELL="@runtimeShell@"; fi;
 
 set -e
 set -o pipefail
+shopt -s inherit_errexit
 
 export PATH=@path@:$PATH
 
@@ -15,6 +16,7 @@ showSyntax() {
 
 # Parse the command line.
 origArgs=("$@")
+copyClosureFlags=()
 extraBuildFlags=()
 lockFlags=()
 flakeFlags=()
@@ -25,7 +27,7 @@ rollback=
 upgrade=
 upgrade_all=
 profile=/nix/var/nix/profiles/system
-buildHost=
+buildHost=localhost
 targetHost=
 maybeSudo=()
 
@@ -58,6 +60,9 @@ while [ "$#" -gt 0 ]; do
       --upgrade-all)
         upgrade=1
         upgrade_all=1
+        ;;
+      -s|--use-substitutes)
+        copyClosureFlags+=("$i")
         ;;
       --max-jobs|-j|--cores|-I|--builders)
         j="$1"; shift 1
@@ -156,11 +161,11 @@ targetHostCmd() {
 copyToTarget() {
     if ! [ "$targetHost" = "$buildHost" ]; then
         if [ -z "$targetHost" ]; then
-            NIX_SSHOPTS=$SSHOPTS nix-copy-closure --from "$buildHost" "$1"
+            NIX_SSHOPTS=$SSHOPTS nix-copy-closure "${copyClosureFlags[@]}" --from "$buildHost" "$1"
         elif [ -z "$buildHost" ]; then
-            NIX_SSHOPTS=$SSHOPTS nix-copy-closure --to "$targetHost" "$1"
+            NIX_SSHOPTS=$SSHOPTS nix-copy-closure "${copyClosureFlags[@]}" --to "$targetHost" "$1"
         else
-            buildHostCmd nix-copy-closure --to "$targetHost" "$1"
+            buildHostCmd nix-copy-closure "${copyClosureFlags[@]}" --to "$targetHost" "$1"
         fi
     fi
 }
@@ -424,7 +429,7 @@ if [[ -n $buildNix && -z $flake ]]; then
     if [ -a "$nixDrv" ]; then
         nix-store -r "$nixDrv"'!'"out" --add-root "$tmpDir/nix" --indirect >/dev/null
         if [ -n "$buildHost" ]; then
-            nix-copy-closure --to "$buildHost" "$nixDrv"
+            nix-copy-closure "${copyClosureFlags[@]}" --to "$buildHost" "$nixDrv"
             # The nix build produces multiple outputs, we add them all to the remote path
             for p in $(buildHostCmd nix-store -r "$(readlink "$nixDrv")" "${buildArgs[@]}"); do
                 remoteNix="$remoteNix${remoteNix:+:}$p/bin"
@@ -519,7 +524,7 @@ if [ "$action" = switch -o "$action" = boot -o "$action" = test -o "$action" = d
 fi
 
 
-if [ "$action" = build-vm ]; then
+if [ "$action" = build-vm -o "$action" = build-vm-with-bootloader ]; then
     cat >&2 <<EOF
 
 Done.  The virtual machine can be started by running $(echo $pathToConfig/bin/run-*-vm)

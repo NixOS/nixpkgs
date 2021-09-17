@@ -1,7 +1,7 @@
 { buildPythonPackage
 , isPy27
 , fetchPypi
-, pytestrunner
+, pytest-runner
 , setuptools-scm
 , singledispatch ? null
 , pytest
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    pytestrunner
+    pytest-runner
     setuptools-scm
   ];
 

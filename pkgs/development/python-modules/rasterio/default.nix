@@ -1,7 +1,7 @@
 { buildPythonPackage, lib, fetchFromGitHub, isPy3k
 , cython, setuptools
 , numpy, affine, attrs, cligj, click-plugins, snuggs, gdal
-, pytest, pytestcov, packaging, hypothesis, boto3, mock
+, pytest, pytest-cov, packaging, hypothesis, boto3, mock
 , certifi, shapely
 }:
 
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "sha256-rf2qdUhbS4Z2+mvlN1RzZvlgTgjqiBoQzry4z5QLSUc=";
   };
 
-  checkInputs = [ boto3 pytest pytestcov packaging hypothesis shapely ] ++ lib.optional (!isPy3k) mock;
+  checkInputs = [ boto3 pytest pytest-cov packaging hypothesis shapely ] ++ lib.optional (!isPy3k) mock;
   nativeBuildInputs = [ cython gdal ];
   propagatedBuildInputs = [ certifi gdal numpy attrs affine cligj click-plugins snuggs setuptools ];
 

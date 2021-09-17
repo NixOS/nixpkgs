@@ -12,18 +12,20 @@
 , ffmpeg
 , libGLU
 , alsa-lib
+, libX11
+, libXrandr
 , sndio
 }:
 
 mkDerivation rec {
   pname = "punes";
-  version = "unstable-2021-06-05";
+  version = "unstable-2021-09-11";
 
   src = fetchFromGitHub {
     owner = "punesemu";
     repo = "puNES";
-    rev = "07fd123f62b2d075894a0cc966124db7b427b791";
-    sha256 = "1wxff7b397ayd2s2v14w6a0zfgklc7y0kv3mkz1gg5x47mnll24l";
+    rev = "60ca36fcb066c41d0b3f2b550ca94dc7d12d84d6";
+    sha256 = "JOi6AE1bpAc/wj9fQqHrUNc6vceeUyP0phT2f9kcJTY=";
   };
 
   postPatch = ''
@@ -34,7 +36,7 @@ mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook cmake pkg-config qttools ];
 
   buildInputs = [ ffmpeg qtbase qtsvg libGLU ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib libX11 libXrandr ]
     ++ lib.optionals stdenv.hostPlatform.isBSD [ sndio ];
 
   dontUseCmakeConfigure = true;
@@ -52,7 +54,7 @@ mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "Qt-based Nintendo Entertaiment System emulator and NSF/NSFe Music Player";
+    description = "Qt-based Nintendo Entertainment System emulator and NSF/NSFe Music Player";
     homepage = "https://github.com/punesemu/puNES";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ OPNA2608 ];

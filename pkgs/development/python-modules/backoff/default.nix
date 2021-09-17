@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "backoff";
-  version = "1.10.0";
+  version = "1.11.1";
 
   src = fetchFromGitHub {
     owner = "litl";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1jj0l6pjx747d2yyvnzd3qbm4qr73sq6cc56dhvd8wqfbp5279x0";
+    sha256 = "sha256-87IMcLaoCn0Vns8Ub/AFmv0gXtS0aPZX0cSt7+lOPm4=";
   };
 
   format = "pyproject";

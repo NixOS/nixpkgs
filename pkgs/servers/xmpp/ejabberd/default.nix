@@ -52,8 +52,6 @@ in stdenv.mkDerivation rec {
 
     makeFlags = [ "deps" ];
 
-    phases = [ "unpackPhase" "configurePhase" "buildPhase" "installPhase" ];
-
     installPhase = ''
       for i in deps/*; do
         ( cd $i

@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "duckdb";
-  version = "0.2.7";
+  version = "0.2.9";
 
   src = fetchFromGitHub {
     owner = "cwida";
     repo = "duckdb";
     rev = "v${version}";
-    sha256 = "0cnqq2n1424fqg7gfyvrwkk6nvjal2fm5n08xc8q28ynyhq4sfmj";
+    sha256 = "sha256-ID65xpNSDyi19OcOs9Gdf5xpK++UVWclp8pVggIWQNU=";
   };
 
   nativeBuildInputs = [ cmake ];

@@ -1,4 +1,4 @@
-{ lib, mkYarnPackage, fetchFromGitHub, runCommand, makeWrapper, python, nodejs }:
+{ lib, mkYarnPackage, fetchFromGitHub, runCommand, makeWrapper, python3, nodejs }:
 
 assert lib.versionAtLeast nodejs.version "12.0.0";
 
@@ -26,7 +26,7 @@ in mkYarnPackage rec {
 
   pkgConfig = {
     better-sqlite3 = {
-      buildInputs = [ python ];
+      buildInputs = [ python3 ];
       postInstall = ''
         # build native sqlite bindings
         npm run build-release --offline --nodedir="${nodeSources}"

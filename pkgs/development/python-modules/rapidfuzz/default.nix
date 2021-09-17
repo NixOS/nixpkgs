@@ -5,11 +5,12 @@
 , pytestCheckHook
 , hypothesis
 , pandas
+, numpy
 }:
 
 buildPythonPackage rec {
   pname = "rapidfuzz";
-  version = "1.4.1";
+  version = "1.6.0";
 
   disabled = pythonOlder "3.5";
 
@@ -18,8 +19,12 @@ buildPythonPackage rec {
     repo = "RapidFuzz";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-uZdD25ATJgRrDAHYSQNp7NvEmW7p3LD9vNmxAbf5Mwk=";
+    sha256 = "sha256-dJz6OzzjqWZwzDVJzJVUshK0HDP/Bz5cML0TrwVVcvg=";
   };
+
+  propagatedBuildInputs = [
+    numpy
+  ];
 
   checkInputs = [
     pytestCheckHook

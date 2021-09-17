@@ -106,10 +106,13 @@ self: super: {
   retry = dontCheck super.retry;
 
   # hlint 3.3 needs a ghc-lib-parser newer than the one from stackage
-  hlint = super.hlint_3_3_0.overrideScope (self: super: {
+  hlint = super.hlint_3_3_4.overrideScope (self: super: {
     ghc-lib-parser = overrideCabal self.ghc-lib-parser_9_0_1_20210324 {
       doHaddock = false;
     };
     ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_0_0_4;
   });
+
+  # pick right version for compiler
+  ghc-api-compat = doDistribute super.ghc-api-compat_9_0_1;
 }

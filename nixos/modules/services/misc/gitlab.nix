@@ -117,6 +117,7 @@ let
       shared.path = "${cfg.statePath}/shared";
       gitaly.client_path = "${cfg.packages.gitaly}/bin";
       backup = {
+        gitaly_backup_path = "${cfg.packages.gitaly}/bin/gitaly-backup";
         path = cfg.backup.path;
         keep_time = cfg.backup.keepTime;
       } // (optionalAttrs (cfg.backup.uploadOptions != {}) {
@@ -820,6 +821,40 @@ in {
         '';
       };
 
+      logrotate = {
+        enable = mkOption {
+          type = types.bool;
+          default = true;
+          description = ''
+            Enable rotation of log files.
+          '';
+        };
+
+        frequency = mkOption {
+          type = types.str;
+          default = "daily";
+          description = "How often to rotate the logs.";
+        };
+
+        keep = mkOption {
+          type = types.int;
+          default = 30;
+          description = "How many rotations to keep.";
+        };
+
+        extraConfig = mkOption {
+          type = types.lines;
+          default = ''
+            copytruncate
+            compress
+          '';
+          description = ''
+            Extra logrotate config options for this path. Refer to
+            <link xlink:href="https://linux.die.net/man/8/logrotate"/> for details.
+          '';
+        };
+      };
+
       extraConfig = mkOption {
         type = types.attrs;
         default = {};
@@ -929,6 +964,21 @@ in {
     services.postgresql = optionalAttrs databaseActuallyCreateLocally {
       enable = true;
       ensureUsers = singleton { name = cfg.databaseUsername; };
+    };
+
+    # Enable rotation of log files
+    services.logrotate = {
+      enable = cfg.logrotate.enable;
+      paths = {
+        gitlab = {
+          path = "${cfg.statePath}/log/*.log";
+          user = cfg.user;
+          group = cfg.group;
+          frequency = cfg.logrotate.frequency;
+          keep = cfg.logrotate.keep;
+          extraConfig = cfg.logrotate.extraConfig;
+        };
+      };
     };
 
     # The postgresql module doesn't currently support concepts like
@@ -1299,7 +1349,7 @@ in {
         Restart = "on-failure";
         WorkingDirectory = gitlabEnv.HOME;
         ExecStart =
-          "${cfg.packages.gitlab-workhorse}/bin/gitlab-workhorse "
+          "${cfg.packages.gitlab-workhorse}/bin/workhorse "
           + "-listenUmask 0 "
           + "-listenNetwork unix "
           + "-listenAddr /run/gitlab/gitlab-workhorse.socket "
@@ -1352,9 +1402,8 @@ in {
         procps
         gnupg
       ];
-
       serviceConfig = {
-        Type = "simple";
+        Type = "notify";
         User = cfg.user;
         Group = cfg.group;
         TimeoutSec = "infinity";

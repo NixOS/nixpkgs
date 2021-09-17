@@ -5,4 +5,8 @@ patch: [
 (patch "002" "1gjx9zqcm407am3n2sh44b8dxm48kgm15rzfiijqxr01m0hn3shm")
 (patch "003" "1cdnpbfc64yhvkjj4d12s9ywp11g195vzfl1cab24sq55wkcrwi2")
 (patch "004" "11iwhy6v562bv0kk7lwj7f5jj65ma9bblivy0v02h3ggcibbdbls")
+(patch "005" "19bdyigdr81824nxvqr6a7k0cax60wq7376j6b91afbnwvlvbjyc")
+(patch "006" "051x8wlwrqk0yr0zg378vh824iklfl5g9pkmcdf62qp8gn9pvqbm")
+(patch "007" "0fir80pp1gmlpadmqcgkrv4y119pc7xllchjzg05fd7px73viz5c")
+(patch "008" "1lfjgshk8i9vch92p5wgc9r90j3phw79aa7gbai89w183b2z6b7j")
 ]

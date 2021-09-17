@@ -271,13 +271,14 @@ in
           kmenuedit
           kscreen
           kscreenlocker
-          ksysguard
+          ksystemstats
           kwayland
           kwin
           kwrited
           libkscreen
           libksysguard
           milou
+          plasma-systemmonitor
           plasma-browser-integration
           plasma-integration
           polkit-kde-agent

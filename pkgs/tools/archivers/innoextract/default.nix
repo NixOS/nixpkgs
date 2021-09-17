@@ -3,10 +3,11 @@
 , withGog ? false, unar ? null }:
 
 stdenv.mkDerivation rec {
-  name = "innoextract-1.9";
+  pname = "innoextract";
+  version = "1.9";
 
   src = fetchurl {
-    url = "https://constexpr.org/innoextract/files/${name}.tar.gz";
+    url = "https://constexpr.org/innoextract/files/innoextract-${version}.tar.gz";
     sha256 = "09l1z1nbl6ijqqwszdwch9mqr54qb7df0wp2sd77v17dq6gsci33";
   };
 

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "caja";
-  version = "1.24.1";
+  version = "1.26.0";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0ylgb4b31vwgqmmknrhm4m9gfa1rzb9azpdd9myi0hscrr3h22z5";
+    sha256 = "1m0ai2r8b2mvlr8bqj9n6vg1pwzlwa46fqpq206wgyx5sgxac052";
   };
 
   nativeBuildInputs = [
@@ -23,10 +23,6 @@ stdenv.mkDerivation rec {
     exempi
     mate.mate-desktop
     hicolor-icon-theme
-  ];
-
-  patches = [
-    ./caja-extension-dirs.patch
   ];
 
   configureFlags = [ "--disable-update-mimedb" ];

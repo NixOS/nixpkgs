@@ -7,13 +7,13 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.4.2";
+  version = "1.4.4";
   pname = "strictyaml";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-3bTk6AfdUQybx/xQ/I0Tae1pbtXMktSUtedSuoJ2paI=";
+    sha256 = "044ae3bec56f31e18dff8cfa62a2c9c028f4c7fe4c0f761e50761184d3b68eef";
   };
 
   postPatch = ''

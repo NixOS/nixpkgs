@@ -1,10 +1,11 @@
 { fetchurl, lib, stdenv, guile, which, ed, libtool }:
 
 stdenv.mkDerivation rec {
-  name = "mcron-1.0.6";
+  pname = "mcron";
+  version = "1.0.6";
 
   src = fetchurl {
-    url = "mirror://gnu/mcron/${name}.tar.gz";
+    url = "mirror://gnu/mcron/mcron-${version}.tar.gz";
     sha256 = "0yvrfzzdy2m7fbqkr61fw01wd9r2jpnbyabxhcsfivgxywknl0fy";
   };
 

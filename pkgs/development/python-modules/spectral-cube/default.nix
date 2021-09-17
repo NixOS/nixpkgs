@@ -6,6 +6,8 @@
 , joblib
 , astropy
 , radio_beam
+, six
+, dask
 , pytestCheckHook
 , pytest-astropy
 , astropy-helpers
@@ -31,7 +33,7 @@ buildPythonPackage rec {
   ];
 
   nativeBuildInputs = [ astropy-helpers ];
-  propagatedBuildInputs = [ astropy radio_beam joblib ];
+  propagatedBuildInputs = [ astropy radio_beam joblib six dask ];
   checkInputs = [ pytestCheckHook aplpy pytest-astropy ];
 
   meta = {

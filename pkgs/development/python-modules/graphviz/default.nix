@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, pythonOlder
 , fetchFromGitHub
 , substituteAll
 , graphviz
@@ -12,14 +13,16 @@
 
 buildPythonPackage rec {
   pname = "graphviz";
-  version = "0.16";
+  version = "0.17";
+
+  disabled = pythonOlder "3.6";
 
   # patch does not apply to PyPI tarball due to different line endings
   src = fetchFromGitHub {
     owner = "xflr6";
     repo = "graphviz";
     rev = version;
-    sha256 = "147vi60mi57z623lhllwwzczzicv2iwj1yrmllj5xx5788i73j6g";
+    sha256 = "sha256-K6z2C7hQH2A9bqgRR4MRqxVAH/k2NQBEelb2/6KDUr0=";
   };
 
   patches = [

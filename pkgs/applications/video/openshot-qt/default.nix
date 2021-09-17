@@ -5,13 +5,13 @@
 
 mkDerivationWith python3Packages.buildPythonApplication rec {
   pname = "openshot-qt";
-  version = "2.5.1";
+  version = "2.6.1";
 
   src = fetchFromGitHub {
     owner = "OpenShot";
     repo = "openshot-qt";
     rev = "v${version}";
-    sha256 = "0qc5i0ay6j2wab1whl41sjb71cj02pg6y79drf7asrprq8b2rmfq";
+    sha256 = "0pa8iwl217503bjlqg2zlrw5lxyq5hvxrf5apxrh3843hj1w1myv";
   };
 
   nativeBuildInputs = [ doxygen wrapGAppsHook ];

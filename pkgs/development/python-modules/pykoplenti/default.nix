@@ -3,7 +3,7 @@
 , buildPythonPackage
 , click
 , fetchFromGitHub
-, prompt_toolkit
+, prompt-toolkit
 , pycryptodome
 , pythonOlder
 }:
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     aiohttp
     click
-    prompt_toolkit
+    prompt-toolkit
     pycryptodome
   ];
 

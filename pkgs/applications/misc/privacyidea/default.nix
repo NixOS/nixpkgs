@@ -12,18 +12,27 @@ let
           sha256 = "ebbb777cbf9312359b897bf81ba00dae0f5cb69fba2a18265dcc18a6f5ef7519";
         };
       });
+      flask_migrate = super.flask_migrate.overridePythonAttrs (oldAttrs: rec {
+        version = "2.7.0";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "ae2f05671588762dd83a21d8b18c51fe355e86783e24594995ff8d7380dffe38";
+        };
+      });
+      werkzeug = self.callPackage ../../../development/python-modules/werkzeug/1.nix { };
+      flask = self.callPackage ../../../development/python-modules/flask/1.nix { };
     };
   };
 in
 python3'.pkgs.buildPythonPackage rec {
   pname = "privacyIDEA";
-  version = "3.6";
+  version = "3.6.2";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-yywkQ3TdBzRMbJGY0Seaprztgt0JrCAbgqosMQ5fcQM=";
+    sha256 = "sha256-kv6XqsbGkaGEhfNxSOjCe6JbFOJnuqwM8CR/J9lJjks=";
     fetchSubmodules = true;
   };
 

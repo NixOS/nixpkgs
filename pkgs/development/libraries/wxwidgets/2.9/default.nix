@@ -11,12 +11,9 @@ assert withMesa -> libGLU != null && libGL != null;
 
 with lib;
 
-let
-  version = "2.9.4";
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "wxwidgets";
-  inherit version;
+  version = "2.9.4";
 
   src = fetchurl {
     url = "mirror://sourceforge/wxwindows/wxWidgets-${version}.tar.bz2";

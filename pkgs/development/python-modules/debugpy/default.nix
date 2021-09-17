@@ -2,13 +2,12 @@
 , stdenv
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , substituteAll
 , gdb
 , flask
 , psutil
 , pytest-timeout
-, pytest_xdist
+, pytest-xdist
 , pytestCheckHook
 , requests
 , isPy27
@@ -18,13 +17,13 @@
 
 buildPythonPackage rec {
   pname = "debugpy";
-  version = "1.3.0";
+  version = "1.4.3";
 
   src = fetchFromGitHub {
     owner = "Microsoft";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-YGzc9mMIzPTmUgIXuZROLdYKjUm69x9SR+JtYRVpn24=";
+    hash = "sha256-ULxVoZuMNDL0Win/+55RnbkCPZ8OI8nhSKshvJOMFQ4=";
   };
 
   patches = [
@@ -49,12 +48,6 @@ buildPythonPackage rec {
     # To avoid this issue, debugpy should be installed using python.withPackages:
     # python.withPackages (ps: with ps; [ debugpy ])
     ./fix-test-pythonpath.patch
-
-    # Fix tests with flask>=2.0
-    (fetchpatch {
-      url = "https://github.com/microsoft/debugpy/commit/0a7f2cd67dda27ea4d38389b49a4e2a1899b834e.patch";
-      sha256 = "1g070fn07n7jj01jaf5s570zn70akf6klkamigs3ix11gh736rpn";
-    })
   ];
 
   # Remove pre-compiled "attach" libraries and recompile for host platform
@@ -64,18 +57,19 @@ buildPythonPackage rec {
     cd src/debugpy/_vendored/pydevd/pydevd_attach_to_process
     rm *.so *.dylib *.dll *.exe *.pdb
     ${stdenv.cc}/bin/c++ linux_and_mac/attach.cpp -Ilinux_and_mac -fPIC -nostartfiles ${{
-      "x86_64-linux"  = "-shared -m64 -o attach_linux_amd64.so";
-      "i686-linux"    = "-shared -m32 -o attach_linux_x86.so";
-      "x86_64-darwin" = "-std=c++11 -lc -D_REENTRANT -dynamiclib -arch x86_64 -o attach_x86_64.dylib";
-      "i686-darwin"   = "-std=c++11 -lc -D_REENTRANT -dynamiclib -arch i386 -o attach_x86.dylib";
-    }.${stdenv.hostPlatform.system}}
+      "x86_64-linux"   = "-shared -m64 -o attach_linux_amd64.so";
+      "i686-linux"     = "-shared -m32 -o attach_linux_x86.so";
+      "x86_64-darwin"  = "-std=c++11 -lc -D_REENTRANT -dynamiclib -arch x86_64 -o attach_x86_64.dylib";
+      "i686-darwin"    = "-std=c++11 -lc -D_REENTRANT -dynamiclib -arch i386 -o attach_x86.dylib";
+      "aarch64-darwin" = "-std=c++11 -lc -D_REENTRANT -dynamiclib -arch arm64 -o attach_arm64.dylib";
+    }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}")}
   )'';
 
   checkInputs = [
     flask
     psutil
     pytest-timeout
-    pytest_xdist
+    pytest-xdist
     pytestCheckHook
     requests
   ] ++ lib.optionals (!isPy27) [
@@ -102,6 +96,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/microsoft/debugpy";
     license = licenses.mit;
     maintainers = with maintainers; [ kira-bruneau ];
-    platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" "i686-darwin" ];
+    platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" "i686-darwin" "aarch64-darwin" ];
   };
 }

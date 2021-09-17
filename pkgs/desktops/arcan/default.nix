@@ -35,8 +35,8 @@ rec {
 
   # One Expression to SymlinkJoin Them All
 
-  everyone-wrapped = callPackage ./wrapper.nix {
-    name = "everyone-wrapped";
-    appls = [ durden pipeworld prio ];
+  all-wrapped = callPackage ./wrapper.nix {
+    name = "all-wrapped";
+    appls = [ durden pipeworld ];
   };
 }

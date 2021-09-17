@@ -4,7 +4,7 @@
 , asn1crypto
 , asysocks
 , minikerberos
-, prompt_toolkit
+, prompt-toolkit
 , tqdm
 , winacl
 , winsspi
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     asn1crypto
     asysocks
     minikerberos
-    prompt_toolkit
+    prompt-toolkit
     tqdm
     winacl
     winsspi

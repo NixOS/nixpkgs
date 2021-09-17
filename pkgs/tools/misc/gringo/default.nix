@@ -3,13 +3,9 @@
   libcxx
 }:
 
-let
-  version = "4.5.4";
-in
-
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "gringo";
-  inherit version;
+  version = "4.5.4";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/potassco/gringo/${version}/gringo-${version}-source.tar.gz";

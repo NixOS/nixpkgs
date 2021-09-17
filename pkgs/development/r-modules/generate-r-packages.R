@@ -1,9 +1,16 @@
 #!/usr/bin/env Rscript
 library(data.table)
 library(parallel)
+library(BiocManager)
 cl <- makeCluster(10)
 
-biocVersion <- 3.12
+biocVersion <- BiocManager:::.version_map()
+biocVersion <- biocVersion[biocVersion$R == getRversion()[, 1:2],c("Bioc", "BiocStatus")]
+if ("release" %in% biocVersion$BiocStatus) {
+  biocVersion <-  as.numeric(as.character(biocVersion[biocVersion$BiocStatus == "release", "Bioc"]))
+} else {
+  biocVersion <-  max(as.numeric(as.character(biocVersion$Bioc)))
+}
 snapshotDate <- Sys.Date()-1
 
 mirrorUrls <- list( bioc=paste0("http://bioconductor.statistik.tu-dortmund.de/packages/", biocVersion, "/bioc/src/contrib/")
@@ -48,8 +55,7 @@ escapeName <- function(name) {
 }
 
 formatPackage <- function(name, version, sha256, depends, imports, linkingTo) {
-    name <- escapeName(name)
-    attr <- gsub(".", "_", name, fixed=TRUE)
+    attr <- gsub(".", "_", escapeName(name), fixed=TRUE)
     options(warn=5)
     depends <- paste( if (is.na(depends)) "" else gsub("[ \t\n]+", "", depends)
                     , if (is.na(imports)) "" else gsub("[ \t\n]+", "", imports)

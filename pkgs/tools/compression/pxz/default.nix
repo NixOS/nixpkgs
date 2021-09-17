@@ -1,20 +1,17 @@
-{ lib, stdenv, fetchgit, xz }:
+{ lib, stdenv, fetchFromGitHub, xz }:
 
-let name = "pxz";
-    version = "4.999.9beta+git";
-in
-stdenv.mkDerivation {
-  name = name + "-" + version;
+stdenv.mkDerivation rec {
+  pname = "pxz";
+  version = "4.999.9beta+git";
 
-  src = fetchgit {
-    url = "https://github.com/jnovy/pxz.git";
-    rev = "ae808463c2950edfdedb8fb49f95006db0a18667";
-    sha256 = "0na2kw8cf0qd8l1aywlv9m3xrxnqlcwxfdwp3f7x9vxwqx3k32kc";
+  src = fetchFromGitHub {
+    owner = "jnovy";
+    repo = "pxz";
+    rev = "124382a6d0832b13b7c091f72264f8f3f463070a";
+    sha256 = "15mmv832iqsqwigidvwnf0nyivxf0y8m22j2szy4h0xr76x4z21m";
   };
 
   buildInputs = [ xz ];
-
-  patches = [ ./_SC_ARG_MAX.patch ];
 
   buildPhase = ''
     gcc -o pxz pxz.c -llzma \
@@ -30,15 +27,18 @@ stdenv.mkDerivation {
     cp pxz.1 $out/share/man/man1
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://jnovy.fedorapeople.org/pxz/";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [pashev];
-    description = ''Parallel XZ is a compression utility that takes advantage of
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ pashev ];
+    description = "compression utility that runs LZMA compression of different parts on multiple cores simultaneously";
+    longDescription = ''
+      Parallel XZ is a compression utility that takes advantage of
       running LZMA compression of different parts of an input file on multiple
       cores and processors simultaneously. Its primary goal is to utilize all
       resources to speed up compression time with minimal possible influence
-      on compression ratio'';
-    platforms = with lib.platforms; linux;
+      on compression ratio
+    '';
+    platforms = with platforms; linux;
   };
 }

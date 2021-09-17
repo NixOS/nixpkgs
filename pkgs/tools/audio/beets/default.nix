@@ -100,18 +100,13 @@ let
 
 in pythonPackages.buildPythonApplication rec {
   pname = "beets";
-  # While there is a stable version, 1.4.9, it is more than 1000 commits behind
-  # master and lacks many bug fixes and improvements[1]. Also important,
-  # unstable does not require bs1770gain[2].
-  # [1]: https://discourse.beets.io/t/forming-a-beets-core-team/639
-  # [2]: https://github.com/NixOS/nixpkgs/pull/90504
-  version = "unstable-2021-05-13";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "beetbox";
     repo = "beets";
-    rev = "1faa41f8c558d3f4415e5e48cf4513d50b466d34";
-    sha256 = "sha256-P0bV7WNqCYe9+3lqnFmAoRlb2asdsBUjzRMc24RngpU=";
+    rev = "v${version}";
+    sha256 = "sha256-yQMCJUwpjDDhPffBS6LUq6z4iT1VyFQE0R27XEbYXbY=";
   };
 
   propagatedBuildInputs = [
@@ -133,7 +128,7 @@ in pythonPackages.buildPythonApplication rec {
     ++ lib.optional enableAcoustid         pythonPackages.pyacoustid
     ++ lib.optional enableBeatport         pythonPackages.requests_oauthlib
     ++ lib.optional enableConvert          ffmpeg
-    ++ lib.optional enableDiscogs          pythonPackages.discogs_client
+    ++ lib.optional enableDiscogs          pythonPackages.discogs-client
     ++ lib.optional (enableFetchart
                   || enableDeezer
                   || enableEmbyupdate
@@ -175,7 +170,7 @@ in pythonPackages.buildPythonApplication rec {
     # https://github.com/beetbox/beets/blob/v1.4.9/setup.py
     pylast
     mpd2
-    discogs_client
+    discogs-client
     pyxdg
   ];
 
@@ -266,12 +261,11 @@ in pythonPackages.buildPythonApplication rec {
   passthru = {
     # FIXME: remove in favor of pkgs.beetsExternalPlugins
     externalPlugins = beetsExternalPlugins;
-    updateScript = unstableGitUpdater { url = "https://github.com/beetbox/beets"; };
   };
 
   meta = with lib; {
     description = "Music tagger and library organizer";
-    homepage = "http://beets.io";
+    homepage = "https://beets.io";
     license = licenses.mit;
     maintainers = with maintainers; [ aszlig doronbehar lovesegfault pjones ];
     platforms = platforms.linux;

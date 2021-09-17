@@ -161,11 +161,11 @@
     md5name = "e61677e8799ce6e55b25afc11aa5339113f6a49cff031f336e32fa58635b1a4a-libetonyek-0.1.9.tar.xz";
   }
   {
-    name = "expat-2.2.8.tar.bz2";
-    url = "https://dev-www.libreoffice.org/src/expat-2.2.8.tar.bz2";
-    sha256 = "9a130948b05a82da34e4171d5f5ae5d321d9630277af02c8fa51e431f6475102";
+    name = "expat-2.4.1.tar.bz2";
+    url = "https://dev-www.libreoffice.org/src/expat-2.4.1.tar.bz2";
+    sha256 = "2f9b6a580b94577b150a7d5617ad4643a4301a6616ff459307df3e225bcfbf40";
     md5 = "";
-    md5name = "9a130948b05a82da34e4171d5f5ae5d321d9630277af02c8fa51e431f6475102-expat-2.2.8.tar.bz2";
+    md5name = "2f9b6a580b94577b150a7d5617ad4643a4301a6616ff459307df3e225bcfbf40-expat-2.4.1.tar.bz2";
   }
   {
     name = "Firebird-3.0.0.32483-0.tar.bz2";
@@ -567,11 +567,11 @@
     md5name = "2d84360b03042178def1d9ff538acacaed2b3a27411db7b2874f1612ed71abc8-xmlsec1-1.2.30.tar.gz";
   }
   {
-    name = "libxml2-2.9.10.tar.gz";
-    url = "https://dev-www.libreoffice.org/src/libxml2-2.9.10.tar.gz";
-    sha256 = "aafee193ffb8fe0c82d4afef6ef91972cbaf5feea100edc2f262750611b4be1f";
+    name = "libxml2-2.9.12.tar.gz";
+    url = "https://dev-www.libreoffice.org/src/libxml2-2.9.12.tar.gz";
+    sha256 = "c8d6681e38c56f172892c85ddc0852e1fd4b53b4209e7f4ebf17f7e2eae71d92";
     md5 = "";
-    md5name = "aafee193ffb8fe0c82d4afef6ef91972cbaf5feea100edc2f262750611b4be1f-libxml2-2.9.10.tar.gz";
+    md5name = "c8d6681e38c56f172892c85ddc0852e1fd4b53b4209e7f4ebf17f7e2eae71d92-libxml2-2.9.12.tar.gz";
   }
   {
     name = "libxslt-1.1.34.tar.gz";

@@ -1,6 +1,6 @@
 { lib, buildPythonPackage, fetchPypi
 , pytest
-, pytest_xdist
+, pytest-xdist
 , six }:
 
 buildPythonPackage rec {
@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytest
-    pytest_xdist
+    pytest-xdist
   ];
 
   propagatedBuildInputs = [

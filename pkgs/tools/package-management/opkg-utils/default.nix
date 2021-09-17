@@ -1,7 +1,8 @@
 { lib, stdenv, fetchgit }:
 
 stdenv.mkDerivation {
-  name = "opkg-utils-20141030";
+  pname = "opkg-utils";
+  version = "unstable-2014-10-30";
 
   # No releases, only a git tree
   src = fetchgit {

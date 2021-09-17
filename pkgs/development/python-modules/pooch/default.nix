@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "pooch";
-  version = "1.4.0";
+  version = "1.5.1";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f827e79ab51b21a8964a4b1ea8972aa4a1079cb9c1ff8e9ec61893eb7dab50cb";
+    sha256 = "57ab0c43e9c5bd81227b08b9931435d71c118cd53339cc5925123a740f40b312";
   };
 
   nativeBuildInputs = [ setuptools-scm ];

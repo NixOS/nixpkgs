@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, varnish, libmhash, docutils }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, varnish, libmhash, docutils, coreutils, version, sha256 }:
 
 stdenv.mkDerivation rec {
-  version = "1.0.2";
-  name = "${varnish.name}-digest-${version}";
+  pname = "${varnish.name}-digest";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "varnish";
     repo = "libvmod-digest";
-    rev = "libvmod-digest-${version}";
-    sha256 = "0jwkqqalydn0pwfdhirl5zjhbc3hldvhh09hxrahibr72fgmgpbx";
+    rev = version;
+    inherit sha256;
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config docutils ];

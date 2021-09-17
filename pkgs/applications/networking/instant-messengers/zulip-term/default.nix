@@ -36,7 +36,7 @@ python3.pkgs.buildPythonApplication rec {
     glibcLocales
   ] ++ (with python3.pkgs; [
     pytestCheckHook
-    pytestcov
+    pytest-cov
     pytest-mock
   ]);
 

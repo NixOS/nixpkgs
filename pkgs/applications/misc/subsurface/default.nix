@@ -64,8 +64,6 @@ let
       mv lib $out/
     '';
 
-    enableParallelBuilding = true;
-
     meta = with lib; {
       inherit (src.meta) homepage;
       description = "QtLocation plugin for Google maps tile API";

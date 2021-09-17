@@ -56,9 +56,13 @@ let
       ''}
 
       echo "$activationScript" > $out/activate
+      echo "$dryActivationScript" > $out/dry-activate
       substituteInPlace $out/activate --subst-var out
-      chmod u+x $out/activate
-      unset activationScript
+      substituteInPlace $out/dry-activate --subst-var out
+      chmod u+x $out/activate $out/dry-activate
+      unset activationScript dryActivationScript
+      ${pkgs.stdenv.shell} -n $out/activate
+      ${pkgs.stdenv.shell} -n $out/dry-activate
 
       cp ${config.system.build.bootStage2} $out/init
       substituteInPlace $out/init --subst-var-by systemConfig $out
@@ -108,6 +112,7 @@ let
       config.system.build.installBootLoader
       or "echo 'Warning: do not know how to make this configuration bootable; please enable a boot loader.' 1>&2; true";
     activationScript = config.system.activationScripts.script;
+    dryActivationScript = config.system.dryActivationScript;
     nixosLabel = config.system.nixos.label;
 
     configurationName = config.boot.loader.grub.configurationName;
@@ -125,7 +130,7 @@ let
     else showWarnings config.warnings baseSystem;
 
   # Replace runtime dependencies
-  system = fold ({ oldDependency, newDependency }: drv:
+  system = foldr ({ oldDependency, newDependency }: drv:
       pkgs.replaceDependency { inherit oldDependency newDependency drv; }
     ) baseSystemAssertWarn config.system.replaceRuntimeDependencies;
 

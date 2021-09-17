@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "ring-doorbell";
-  version = "0.7.0";
+  version = "0.7.1";
   disabled = !isPy3k;
 
   src = fetchPypi {
     pname = "ring_doorbell";
     inherit version;
-    sha256 = "1qnx9q9rzxhh0pygl3f9bg21b5zv7csv9h1w4zngdvsphbs0yiwg";
+    sha256 = "sha256-xE3TqXdhiUf9Tzmzc48D65Y5t1ekauacsTwwSG1urz4=";
   };
 
   propagatedBuildInputs = [

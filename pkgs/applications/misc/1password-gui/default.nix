@@ -28,15 +28,16 @@
 , nss
 , pango
 , systemd
+, udev
 , xdg-utils
 }:
 stdenv.mkDerivation rec {
   pname = "1password";
-  version = "8.0.34";
+  version = "8.1.1";
 
   src = fetchurl {
     url = "https://downloads.1password.com/linux/tar/stable/x86_64/1password-${version}.x64.tar.gz";
-    sha256 = "0mp119v5vgsva7pnxpsbq4xhh4vbhwv7ga9b5b7f6slx3biy1wmh";
+    sha256 = "0y39sfhj9xrgprh01i9apzfkqzm6pdhjc8x59x5p5djjjvxbcwmy";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -95,8 +96,12 @@ stdenv.mkDerivation rec {
         patchelf --set-rpath ${rpath}:$out/share/1password $file
       done
 
+      # Electron is trying to open udev via dlopen()
+      # and for some reason that doesn't seem to be impacted from the rpath.
+      # Adding udev to LD_LIBRARY_PATH fixes that.
       makeWrapper $out/share/1password/1password $out/bin/1password \
-        --prefix PATH : ${xdg-utils}/bin
+        --prefix PATH : ${lib.makeBinPath [ xdg-utils ]} \
+        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ udev ]}
 
       runHook postInstall
     '';

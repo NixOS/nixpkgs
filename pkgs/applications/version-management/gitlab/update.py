@@ -135,6 +135,7 @@ def update_rubyenv():
         f.write(repo.get_file('Gemfile.lock', rev))
     with open(rubyenv_dir / 'Gemfile', 'w') as f:
         original = repo.get_file('Gemfile', rev)
+        original += "\ngem 'sd_notify'\n"
         f.write(re.sub(r".*mail-smtp_pool.*", "", original))
 
     subprocess.check_output(['bundle', 'lock'], cwd=rubyenv_dir)

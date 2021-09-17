@@ -18,6 +18,6 @@ buildPythonPackage rec {
     homepage = "https://pypi.org/project/fs-s3fs/";
     license = licenses.mit;
     description = "Amazon S3 filesystem for PyFilesystem2";
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ ];
   };
 }

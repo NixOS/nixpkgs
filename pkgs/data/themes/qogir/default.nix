@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "qogir-theme";
-  version = "2021-06-25";
+  version = "2021-08-02";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
-    sha256 = "178lk0zffm4nd8fc872rfpm2aii1nszq0k389gkiyxkqphmknn4n";
+    sha256 = "sha256-U048qNBfxjx/5iHIXcqAwXfIwmux+sw4hVQkN3TDLzk=";
   };
 
   buildInputs = [ gdk-pixbuf librsvg ];

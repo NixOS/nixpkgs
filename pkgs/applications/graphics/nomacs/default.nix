@@ -8,6 +8,7 @@
 , qtbase
 , qttools
 , qtsvg
+, qtimageformats
 
 , exiv2
 , opencv4
@@ -46,6 +47,7 @@ mkDerivation rec {
   buildInputs = [qtbase
                  qttools
                  qtsvg
+                 qtimageformats
                  exiv2
                  opencv4
                  libraw

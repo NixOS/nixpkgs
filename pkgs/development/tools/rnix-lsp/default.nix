@@ -1,4 +1,4 @@
-{ callPackage, lib, fetchFromGitHub, rustPlatform }:
+{ lib, fetchFromGitHub, rustPlatform }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rnix-lsp";
@@ -8,7 +8,6 @@ rustPlatform.buildRustPackage rec {
     owner = "nix-community";
     repo = "rnix-lsp";
     rev = "v${version}";
-
     sha256 = "0fy620c34kxl27sd62x9mj0555bcdmnmbsxavmyiwb497z1m9wnn";
   };
 

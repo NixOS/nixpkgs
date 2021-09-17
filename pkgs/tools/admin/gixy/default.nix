@@ -21,7 +21,7 @@ python3.pkgs.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3.pkgs; [
     cached-property
-    ConfigArgParse
+    configargparse
     pyparsing
     jinja2
     nose

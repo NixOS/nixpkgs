@@ -5,18 +5,19 @@
 , glib
 , hunspell
 , hspell
+, nuspell
 , unittest-cpp
 }:
 
 stdenv.mkDerivation rec {
   pname = "enchant";
-  version = "2.3.0";
+  version = "2.3.1";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://github.com/AbiWord/${pname}/releases/download/v${version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-32gGO2wTskX6ckaw4JigPnT3qRxtiUe8XE9CzlXi5B0=";
+    sha256 = "sha256-e0sa/PLNi/ppHe6mGIQE0zfyMXS7w5ucKt0r80Bzbpw=";
   };
 
   nativeBuildInputs = [
@@ -26,6 +27,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     glib
     hunspell
+    nuspell
   ];
 
   checkInputs = [

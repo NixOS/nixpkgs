@@ -19,7 +19,7 @@ let
       provider = providers.${stdenv.hostPlatform.parsed.kernel.name} or providers.linux;
       bin = "${getBin provider}/bin/${cmd}";
       manpage = "${getOutput "man" provider}/share/man/man1/${cmd}.1.gz";
-    in runCommand "${cmd}-${version}" {
+    in runCommand "${cmd}-${provider.name}" {
       meta = {
         priority = 10;
         platforms = lib.platforms.${stdenv.hostPlatform.parsed.kernel.name} or lib.platforms.all;
@@ -43,7 +43,7 @@ let
 
   # more is unavailable in darwin
   # so we just use less
-  more_compat = runCommand "more-${version}" {} ''
+  more_compat = runCommand "more-${pkgs.less.name}" {} ''
     mkdir -p $out/bin
     ln -s ${pkgs.less}/bin/less $out/bin/more
   '';

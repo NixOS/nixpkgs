@@ -1,10 +1,8 @@
 { lib, stdenv, fetchurl, pkg-config, glib, gtkmm2 }:
 
-let version = "1.6.1";
-in
 stdenv.mkDerivation rec {
   pname = "nitrogen";
-  inherit version;
+  version = "1.6.1";
 
   src = fetchurl {
     url = "http://projects.l3ib.org/nitrogen/files/${pname}-${version}.tar.gz";

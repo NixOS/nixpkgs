@@ -12,11 +12,11 @@
 
 buildPythonPackage rec {
   pname = "doc8";
-  version = "0.8.1";
+  version = "0.9.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4d1df12598807cf08ffa9a1d5ef42d229ee0de42519da01b768ff27211082c12";
+    sha256 = "380b660474be40ce88b5f04fa93470449124dbc850a0318f2ef186162bc1360b";
   };
 
   buildInputs = [ pbr ];

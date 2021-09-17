@@ -11,21 +11,24 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "miniserve";
-  version = "0.14.0";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "svenstaro";
     repo = "miniserve";
     rev = "v${version}";
-    sha256 = "sha256-Hv1aefuiu7pOlSMUjZLGY6bxVy+6myFH1afZZ5gtmi0=";
+    sha256 = "sha256-DqH/6Uu4L0fWbnGX8s3jCGwBgPE2PLIkS/dZIj+BA9Q=";
   };
 
-  cargoSha256 = "sha256-CgiHluc9+5+hKwsC7UZimy1586QBUsj+TVlb2lQRXs0=";
+  cargoSha256 = "sha256-LgdVO41e56DIRkky1aF0X80ixs7ZH93Qk9Yx67vkO9E=";
 
   nativeBuildInputs = [ installShellFiles pkg-config zlib ];
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security ];
 
-  checkFlags = [ "--skip=cant_navigate_up_the_root" ];
+  checkFlags = [
+    "--skip=bind_ipv4_ipv6::case_2"
+    "--skip=cant_navigate_up_the_root"
+  ];
 
   postInstall = ''
     installShellCompletion --cmd miniserve \

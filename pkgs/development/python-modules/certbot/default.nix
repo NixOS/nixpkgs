@@ -2,26 +2,26 @@
 , buildPythonPackage
 , python, runCommand
 , fetchFromGitHub
-, ConfigArgParse, acme, configobj, cryptography, distro, josepy, parsedatetime, pyRFC3339, pyopenssl, pytz, requests, six, zope_component, zope_interface
+, configargparse, acme, configobj, cryptography, distro, josepy, parsedatetime, pyRFC3339, pyopenssl, pytz, requests, six, zope_component, zope_interface
 , dialog, gnureadline
-, pytest_xdist, pytestCheckHook, python-dateutil
+, pytest-xdist, pytestCheckHook, python-dateutil
 }:
 
 buildPythonPackage rec {
   pname = "certbot";
-  version = "1.16.0";
+  version = "1.19.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "0jdq6pvq7af2x483857qyp1qvqs4yb4nqcv66qi70glmbanhlxd4";
+    sha256 = "sha256-tCszN+sy4Z6nOwULj9ra5/TtW4YYi32fkbMKub5i2Xk=";
   };
 
   sourceRoot = "source/${pname}";
 
   propagatedBuildInputs = [
-    ConfigArgParse
+    configargparse
     acme
     configobj
     cryptography
@@ -42,7 +42,7 @@ buildPythonPackage rec {
   checkInputs = [
     python-dateutil
     pytestCheckHook
-    pytest_xdist
+    pytest-xdist
   ];
 
   pytestFlagsArray = [

@@ -1,5 +1,5 @@
 { lib
-, fetchFromGitHub
+, fetchPypi
 , buildPythonPackage
 , pycrypto
 , paramiko
@@ -18,13 +18,11 @@
 
 buildPythonPackage rec {
   pname = "ansible";
-  version = "2.9.23";
+  version = "2.9.25";
 
-  src = fetchFromGitHub {
-    owner = "ansible";
-    repo = "ansible";
-    rev = "v${version}";
-    sha256 = "0mikykpzyqpmaiczz53f71mcyc4qvahi9ckn7wgfx7sw7s2z3skk";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "sha256-i88sL1xgnluREUyosOQibWA7h/K+cdyzOOi30626oo8=";
   };
 
   prePatch = ''
@@ -48,7 +46,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    homepage = "http://www.ansible.com";
+    homepage = "https://www.ansible.com";
     description = "Radically simple IT automation";
     license = [ licenses.gpl3 ] ;
     maintainers = with maintainers; [ joamaki costrouc hexa ];

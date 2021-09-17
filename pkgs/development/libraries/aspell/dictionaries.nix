@@ -153,7 +153,7 @@ let
         }
       '';
 
-      phases = [ "preBuild" "buildPhase" "installPhase" ];
+      dontUnpack = true;
     } // args);
 
 in rec {
@@ -905,7 +905,11 @@ in rec {
 
     langInputs = [ en ];
 
-    buildPhase = "cat $src | aspell-affix en-computers --dont-validate-words --lang=en";
+    buildPhase = ''
+      runHook preBuild
+      cat $src | aspell-affix en-computers --dont-validate-words --lang=en
+      runHook postBuild
+    '';
     installPhase = "aspell-install en-computers";
 
     meta = {
@@ -930,8 +934,10 @@ in rec {
     langInputs = [ en ];
 
     buildPhase = ''
+      runHook preBuild
       cat $src1 | aspell-plain en_US-science --dont-validate-words --lang=en
       cat $src2 | aspell-plain en_GB-science --dont-validate-words --lang=en
+      runHook postBuild
     '';
     installPhase = "aspell-install en_US-science en_GB-science";
 

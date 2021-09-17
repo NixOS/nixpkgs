@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchFromGitHub, pythonOlder
-, aria2, poetry, pytest, pytestcov, pytest_xdist, responses
+, aria2, poetry, pytest, pytest-cov, pytest-xdist, responses
 , asciimatics, loguru, requests, setuptools, websocket-client
 }:
 
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     export HOME=$TMPDIR
   '';
 
-  checkInputs = [ aria2 responses pytest pytestcov pytest_xdist ];
+  checkInputs = [ aria2 responses pytest pytest-cov pytest-xdist ];
 
   # Tests are not all stable/deterministic,
   # they rely on actually running an aria2c daemon and communicating with it,

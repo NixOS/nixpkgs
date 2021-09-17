@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "google-re2";
-  version = "0.1.20210601";
+  version = "0.2.20210901";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1f1ql95f97ss8i0rn1c37kgi0qrf1nq9b3q8xbq9x3gwg7xgzi71";
+    sha256 = "676fa9ee54e3fb70f290526fc0f4d78d1e5a4add701b5547494eaf7c68c72247";
   };
 
   propagatedBuildInputs = [

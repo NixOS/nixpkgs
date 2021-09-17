@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, gtk3, pkg-config, intltool, libxslt, makeWrapper,
-  coreutils, zip, unzip, p7zip, unrar, gnutar, bzip2, gzip, lhasa, wrapGAppsHook }:
+  coreutils, zip, unzip, p7zip, unar, gnutar, bzip2, gzip, lhasa, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   version = "0.5.4.17";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     wrapProgram $out/bin/xarchiver \
-    --prefix PATH : ${lib.makeBinPath [ zip unzip p7zip unrar gnutar bzip2 gzip lhasa coreutils ]}
+    --prefix PATH : ${lib.makeBinPath [ zip unzip p7zip unar gnutar bzip2 gzip lhasa coreutils ]}
   '';
 
   meta = {
