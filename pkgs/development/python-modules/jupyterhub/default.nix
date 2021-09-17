@@ -119,6 +119,7 @@ buildPythonPackage rec {
     entrypoints
     jinja2
     jupyter-telemetry
+    notebook  # needed for local run, see PR #58542
     oauthlib
     pamela
     prometheus-client
