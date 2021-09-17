@@ -252,7 +252,7 @@ upload_image() {
         write_state "$state_key" ami_id "$ami_id"
     fi
 
-    make_image_public "$region" "$ami_id"
+    [[ -v PRIVATE ]] || make_image_public "$region" "$ami_id"
 
     echo "$ami_id"
 }
@@ -280,7 +280,7 @@ copy_to_region() {
         write_state "$state_key" ami_id "$ami_id"
     fi
 
-    make_image_public "$region" "$ami_id"
+    [[ -v PRIVATE ]] || make_image_public "$region" "$ami_id"
 
     echo "$ami_id"
 }
