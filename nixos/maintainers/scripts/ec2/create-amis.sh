@@ -64,10 +64,16 @@ read_image_info() {
 
 # We handle a single image per invocation, store all attributes in
 # globals for convenience.
-image_label=$(read_image_info .label)
+zfs_disks=$(read_image_info .disks)
+image_label="$(read_image_info .label)${zfs_disks:+-ZFS}"
 image_system=$(read_image_info .system)
-image_file=$(read_image_info .file)
-image_logical_bytes=$(read_image_info .logical_bytes)
+image_files=( $(read_image_info "${zfs_disks:+.disks.root}.file") )
+
+image_logical_bytes=$(read_image_info "${zfs_disks:+.disks.root}.logical_bytes")
+
+if [[ -n "$zfs_disks" ]]; then
+  image_files+=( $(read_image_info .disks.boot.file) )
+fi
 
 # Derived attributes
 
@@ -183,41 +189,48 @@ make_image_public() {
 upload_image() {
     local region=$1
 
-    local aws_path=${image_file#/}
+    for image_file in "${image_files[@]}"; do
+        local aws_path=${image_file#/}
 
-    local state_key="$region.$image_label.$image_system"
-    local task_id
-    task_id=$(read_state "$state_key" task_id)
-    local snapshot_id
-    snapshot_id=$(read_state "$state_key" snapshot_id)
-    local ami_id
-    ami_id=$(read_state "$state_key" ami_id)
-
-    if [ -z "$task_id" ]; then
-        log "Checking for image on S3"
-        if ! aws s3 ls --region "$region" "s3://${bucket}/${aws_path}" >&2; then
-            log "Image missing from aws, uploading"
-            aws s3 cp --region "$region" "$image_file" "s3://${bucket}/${aws_path}" >&2
+        if [[ -n "$zfs_disks" ]]; then
+            local suffix=${image_file%.*}
+            suffix=${suffix##*.}
         fi
 
-        log "Importing image from S3 path s3://$bucket/$aws_path"
+        local state_key="$region.$image_label${suffix:+.${suffix}}.$image_system"
+        local task_id
+        task_id=$(read_state "$state_key" task_id)
+        local snapshot_id
+        snapshot_id=$(read_state "$state_key" snapshot_id)
+        local ami_id
+        ami_id=$(read_state "$state_key" ami_id)
 
-        task_id=$(aws ec2 import-snapshot --role-name "$service_role_name" --disk-container "{
-          \"Description\": \"nixos-image-${image_label}-${image_system}\",
-          \"Format\": \"vhd\",
-          \"UserBucket\": {
-              \"S3Bucket\": \"$bucket\",
-              \"S3Key\": \"$aws_path\"
-          }
-        }" --region "$region" | jq -r '.ImportTaskId')
+        if [ -z "$task_id" ]; then
+            log "Checking for image on S3"
+            if ! aws s3 ls --region "$region" "s3://${bucket}/${aws_path}" >&2; then
+                log "Image missing from aws, uploading"
+                aws s3 cp --region "$region" "$image_file" "s3://${bucket}/${aws_path}" >&2
+            fi
 
-        write_state "$state_key" task_id "$task_id"
-    fi
+            log "Importing image from S3 path s3://$bucket/$aws_path"
 
-    if [ -z "$snapshot_id" ]; then
-        snapshot_id=$(wait_for_import "$region" "$task_id")
-        write_state "$state_key" snapshot_id "$snapshot_id"
-    fi
+            task_id=$(aws ec2 import-snapshot --role-name "$service_role_name" --disk-container "{
+              \"Description\": \"nixos-image-${image_label}-${image_system}\",
+              \"Format\": \"vhd\",
+              \"UserBucket\": {
+                  \"S3Bucket\": \"$bucket\",
+                  \"S3Key\": \"$aws_path\"
+              }
+            }" --region "$region" | jq -r '.ImportTaskId')
+
+            write_state "$state_key" task_id "$task_id"
+        fi
+
+        if [ -z "$snapshot_id" ]; then
+            snapshot_id=$(wait_for_import "$region" "$task_id")
+            write_state "$state_key" snapshot_id "$snapshot_id"
+        fi
+    done
 
     if [ -z "$ami_id" ]; then
         log "Registering snapshot $snapshot_id as AMI"
@@ -225,6 +238,21 @@ upload_image() {
         local block_device_mappings=(
             "DeviceName=/dev/xvda,Ebs={SnapshotId=$snapshot_id,VolumeSize=$image_logical_gigabytes,DeleteOnTermination=true,VolumeType=gp3}"
         )
+
+        if [[ -n "$zfs_disks" ]]; then
+            local root_snapshot_id=$(read_state "$region.$image_label.root.$image_system" snapshot_id)
+
+            # currently there is a bug in the ZFS AMI derivation, mismatching logical_bytes
+            # root.logical_bytes should be boot.logical_bytes and vice versa
+            # work around until fixed
+            local root_image_logical_bytes=$(read_image_info ".disks.boot.logical_bytes")
+            local root_image_logical_gigabytes=$(((root_image_logical_bytes-1)/1024/1024/1024+1)) # Round to the next GB
+
+            block_device_mappings+=(
+                "DeviceName=/dev/xvdb,Ebs={SnapshotId=$root_snapshot_id,VolumeSize=$root_image_logical_gigabytes,DeleteOnTermination=true,VolumeType=gp3}"
+            )
+        fi
+
 
         local extra_flags=(
             --root-device-name /dev/xvda
