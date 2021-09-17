@@ -40,21 +40,24 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "materialize";
-  version = "0.8.3";
-  rev = "3e47d280945f0ddbdc263fc643f067649f66eda1";
+  version = "0.9.4";
+  rev = "29d003cae5e9d46f8b11b2102ff0b9abf6608c2f";
 
   src = fetchFromGitHub {
     owner = "MaterializeInc";
     repo = pname;
     rev = "v${version}";
-    sha256 = "15635hcw04nms133k9l5582xbk7frc86nka91yaafl63q6pwbdvg";
+    sha256 = "021n05csyvza9ifq09qaxypgmlbp3a7xn6r1m4jn8d4rnz38wag6";
   };
 
-  cargoSha256 = "1fxqjhjs4bqq6nzax7xrhwjpv57dk90iw9fl8ilp41wzg7yvyhcm";
+  cargoSha256 = "12fysxzmqnx7y7yg6fjcv1952s77d46pwi32vnsv62icgqfpw0j4";
 
   nativeBuildInputs = [ cmake perl pkg-config ]
     # Provides the mig command used by the krb5-src build script
     ++ lib.optional stdenv.isDarwin bootstrap_cmds;
+
+  # Needed to get openssl-sys to use pkg-config.
+  OPENSSL_NO_VENDOR = 1;
 
   buildInputs = [ openssl ]
     ++ lib.optionals stdenv.isDarwin [ libiconv DiskArbitration Foundation ];
