@@ -23512,6 +23512,8 @@ with pkgs;
 
   cipher = callPackage ../applications/misc/cipher { };
 
+  clapper = callPackage ../applications/video/clapper { };
+
   claws-mail-gtk2 = callPackage ../applications/networking/mailreaders/claws-mail {
     inherit (xorg) libSM;
     useGtk3 = false;
