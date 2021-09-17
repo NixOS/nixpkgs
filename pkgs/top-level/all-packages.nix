@@ -2771,6 +2771,8 @@ with pkgs;
 
   firestarter = callPackage ../applications/misc/firestarter { };
 
+  fits-cloudctl = callPackage ../tools/admin/fits-cloudctl { };
+
   frangipanni = callPackage ../tools/text/frangipanni { };
 
   fselect = callPackage ../tools/misc/fselect { };

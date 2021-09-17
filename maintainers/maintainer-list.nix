@@ -4811,6 +4811,12 @@
     githubId = 26877687;
     name = "Yurii Izorkin";
   };
+  j0xaf = {
+    email = "j0xaf@j0xaf.de";
+    name = "Jörn Gersdorf";
+    github = "j0xaf";
+    githubId = 932697;
+  };
   j0hax = {
     name = "Johannes Arnold";
     email = "johannes.arnold@stud.uni-hannover.de";
