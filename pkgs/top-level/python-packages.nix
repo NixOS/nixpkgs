@@ -2404,8 +2404,6 @@ in {
 
   etebase-server = callPackage ../servers/etebase { };
 
-  etesync = callPackage ../development/python-modules/etesync { };
-
   eth-hash = callPackage ../development/python-modules/eth-hash { };
 
   eth-typing = callPackage ../development/python-modules/eth-typing { };
