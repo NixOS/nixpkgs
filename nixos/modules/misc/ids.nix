@@ -212,7 +212,7 @@ in
       sddm = 175;
       tss = 176;
       #memcached = 177; removed 2018-01-03
-      ntp = 179;
+      #ntp = 179; # dynamically allocated as of 2021-09-17
       zabbix = 180;
       #redis = 181; removed 2018-01-03
       #unifi = 183; dynamically allocated as of 2021-09-17
