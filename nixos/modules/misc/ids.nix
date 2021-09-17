@@ -215,7 +215,7 @@ in
       ntp = 179;
       zabbix = 180;
       #redis = 181; removed 2018-01-03
-      unifi = 183;
+      #unifi = 183; dynamically allocated as of 2021-09-17
       uptimed = 184;
       zope2 = 185;
       ripple-data-api = 186;
