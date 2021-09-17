@@ -11,7 +11,6 @@
 buildPythonPackage rec {
   pname = "vivisect";
   version = "1.0.4";
-  disabled = isPy3k;
 
   src = fetchPypi {
     inherit pname version;
@@ -24,6 +23,10 @@ buildPythonPackage rec {
     cxxfilt
     msgpack
     pycparser
+  ];
+
+  patches = [
+    ./vivisect-cxxfilt-version.patch
   ];
 
   preBuild = ''
