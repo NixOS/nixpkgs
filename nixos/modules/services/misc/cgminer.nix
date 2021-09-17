@@ -110,9 +110,13 @@ in
 
     users.users = optionalAttrs (cfg.user == "cgminer") {
       cgminer = {
-        uid = config.ids.uids.cgminer;
+        isSystemUser = true;
+        group = "cgminer";
         description = "Cgminer user";
       };
+    };
+    users.groups = optionalAttrs (cfg.user == "cgminer") {
+      cgminer = {};
     };
 
     environment.systemPackages = [ cfg.package ];
