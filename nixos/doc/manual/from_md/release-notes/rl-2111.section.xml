@@ -39,6 +39,13 @@
       </listitem>
       <listitem>
         <para>
+          spark now defaults to spark 3, updated from 2. A
+          <link xlink:href="https://spark.apache.org/docs/latest/core-migration-guide.html#upgrading-from-core-24-to-30">migration
+          guide</link> is available.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           Activation scripts can now opt int to be run when running
           <literal>nixos-rebuild dry-activate</literal> and detect the
           dry activation by reading <literal>$NIXOS_ACTION</literal>.
@@ -248,6 +255,12 @@
           analysis. Documented in
           <link linkend="module-services-parsedmarc">its manual
           entry</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://spark.apache.org/">spark</link>, a
+          unified analytics engine for large-scale data processing.
         </para>
       </listitem>
     </itemizedlist>
