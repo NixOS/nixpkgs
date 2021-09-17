@@ -7,16 +7,15 @@ with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "mkdocs";
-  version = "1.2.1";
   disabled = pythonOlder "3.6";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "sha256-JF3Zz1ObxeKsIF0pa8duJxqjLgMvmWsWMApHT43Z+EY=";
+    sha256 = "09fh7byadm81vddw9k9b9gq8pz8f0c9jjs65jmnlysinsawaw4y1";
   };
-
   propagatedBuildInputs = [
     click
     jinja2
@@ -30,25 +29,10 @@ buildPythonApplication rec {
     packaging
   ];
 
-  checkInputs = [
-    Babel
-    mock
-    pytestCheckHook
-  ];
-
-  postPatch = ''
-    # Remove test due to missing requirement
-    rm mkdocs/tests/theme_tests.py
-  '';
-
-  pytestFlagsArray = [ "mkdocs/tests/*.py" ];
-
-  disabledTests = [
-    # Don't start a test server
-    "testing_server"
-  ];
-
   pythonImportsCheck = [ "mkdocs" ];
+
+  doCheck = false;
+  # tests mirgated to tox
 
   meta = with lib; {
     description = "Project documentation with Markdown / static website generator";

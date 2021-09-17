@@ -4614,6 +4614,10 @@ in {
 
   mkl-service = callPackage ../development/python-modules/mkl-service { };
 
+  mkdocs-material = callPackage ../development/python-modules/mkdocs-material { };
+
+  mkdocs-material-extensions = callPackage ../development/python-modules/mkdocs-material-extensions { };
+
   mlflow = callPackage ../development/python-modules/mlflow { };
 
   mlrose = callPackage ../development/python-modules/mlrose { };
@@ -5529,6 +5533,8 @@ in {
   pyisy = callPackage ../development/python-modules/pyisy { };
 
   pykrakenapi = callPackage ../development/python-modules/pykrakenapi { };
+
+  pymdown-extensions = callPackage ../development/python-modules/pymdown-extensions { };
 
   pynndescent = callPackage ../development/python-modules/pynndescent { };
 
