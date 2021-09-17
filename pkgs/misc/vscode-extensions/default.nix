@@ -117,15 +117,46 @@ let
         };
       };
 
-      antfu.icons-carbon = buildVscodeMarketplaceExtension {
+      antfu = {
+        icons-carbon = buildVscodeMarketplaceExtension {
+          mktplcRef = {
+            name = "icons-carbon";
+            publisher = "antfu";
+            version = "0.2.2";
+            sha256 = "0mfap16la09mn0jhvy8s3dainrmjz64vra7d0d4fbcpgg420kv3f";
+          };
+          meta = with lib; {
+            license = licenses.mit;
+          };
+        };
+
+        slidev = buildVscodeMarketplaceExtension {
+          mktplcRef = {
+            publisher = "antfu";
+            name = "slidev";
+            version = "0.3.2";
+            sha256 = "sha256-vzmByEiKZIkd707Bs4RGQrMII5sghYlkQI6aAJOHFcY=";
+          };
+          meta = with lib; {
+            license = licenses.mit;
+          };
+        };
+      };
+
+      arcticicestudio.nord-visual-studio-code = buildVscodeMarketplaceExtension {
         mktplcRef = {
-          name = "icons-carbon";
-          publisher = "antfu";
-          version = "0.2.2";
-          sha256 = "0mfap16la09mn0jhvy8s3dainrmjz64vra7d0d4fbcpgg420kv3f";
+          name = "nord-visual-studio-code";
+          publisher = "arcticicestudio";
+          version = "0.18.0";
+          sha256 = "sha256-Uo6peR+2ZNX6nwJ0Yar32Pe0rfBZ+f6ef1cYhUvVUbE=";
         };
         meta = with lib; {
+          description = "An arctic, north-bluish clean and elegant Visual Studio Code theme.";
+          downloadPage =
+            "https://marketplace.visualstudio.com/items?itemName=arcticicestudio.nord-visual-studio-code";
+          homepage = "https://github.com/arcticicestudio/nord-visual-studio-code";
           license = licenses.mit;
+          maintainers = with maintainers; [ imgabe ];
         };
       };
 

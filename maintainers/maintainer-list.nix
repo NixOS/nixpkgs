@@ -4679,6 +4679,12 @@
     githubId = 993484;
     name = "Greg Hale";
   };
+  imgabe = {
+    email = "gabrielpmonte@hotmail.com";
+    github = "imgabe";
+    githubId = 24387926;
+    name = "Gabriel Pereira";
+  };
   imlonghao = {
     email = "nixos@esd.cc";
     github = "imlonghao";
