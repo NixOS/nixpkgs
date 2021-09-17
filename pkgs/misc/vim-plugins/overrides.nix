@@ -139,7 +139,7 @@ self: super: {
     dependencies = with self; [ completion-nvim ];
     buildInputs = [ tabnine ];
     postFixup = ''
-      mkdir $target/binaries
+      mkdir -p $target/binaries
       ln -s ${tabnine}/bin/TabNine $target/binaries/TabNine_$(uname -s)
     '';
   });
