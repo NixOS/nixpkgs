@@ -312,7 +312,7 @@ in
       };
 
       submissionsOptions = mkOption {
-        type = with types; attrOf str;
+        type = with types; attrsOf str;
         default = {
           smtpd_sasl_auth_enable = "yes";
           smtpd_client_restrictions = "permit_sasl_authenticated,reject";
