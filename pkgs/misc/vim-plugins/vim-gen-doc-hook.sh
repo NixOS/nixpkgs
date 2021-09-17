@@ -5,7 +5,7 @@ echo "Sourcing vim-gen-doc-hook"
 vimPluginGenTags() {
     echo "Executing vimPluginGenTags"
 
-    target="$out/@rtpPath@/$pname"
+    target="$out/@rtpPath@"
     mkdir -p $out/@rtpPath@
 
     # build help tags
@@ -16,7 +16,7 @@ vimPluginGenTags() {
         exit 1
         fi
     else
-        echo "No docs available"
+        echo "No docs available for $target"
     fi
 
     if [ -n "$addonInfo" ]; then
