@@ -3591,6 +3591,8 @@ with pkgs;
 
   oneshot = callPackage ../tools/networking/oneshot { };
 
+  orjail = callPackage ../tools/security/orjail { };
+
   online-judge-tools = with python3.pkgs; toPythonApplication online-judge-tools;
 
   xkbd = callPackage ../applications/misc/xkbd { };
