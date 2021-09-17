@@ -19524,6 +19524,8 @@ with pkgs;
 
   yubikey-agent = callPackage ../tools/security/yubikey-agent { };
 
+  yubikey-touch-detector = callPackage ../tools/security/yubikey-touch-detector { };
+
   zchunk = callPackage ../development/libraries/zchunk { };
 
   zeitgeist = callPackage ../development/libraries/zeitgeist { };
