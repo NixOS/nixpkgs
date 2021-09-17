@@ -51,7 +51,7 @@ let
       substituteInPlace package.json --replace "../deps/phoenix" "./phoenix"
       substituteInPlace package-lock.json  --replace "../deps/phoenix" "./phoenix"
     '';
-    
+
     nodeModulesSha256 = "sha256-1QcV8TiVBQjl9yB5m3SRnap1JChhKnWTw7GY2s4Jw6s=";
   };
 in
@@ -80,7 +80,7 @@ beamPackages.mixRelease {
 
   postBuild = ''
     unpackFile ${yarnDeps}
-    cp -r "${yarnDeps.name}" assets/node_modules 
+    cp -r "${yarnDeps.name}" assets/node_modules
     npm run deploy --prefix ./assets
 
     # for external task you need a workaround for the no deps check flag
