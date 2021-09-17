@@ -137,7 +137,7 @@ in
       #mongodb = 98; #dynamically allocated as of 2021-09-03
       #openldap = 99; # dynamically allocated as of PR#94610
       #users = 100; # unused
-      cgminer = 101;
+      # cgminer = 101; #dynamically allocated as of 2021-09-17
       munin = 102;
       logcheck = 103;
       #nix-ssh = 104; #dynamically allocated as of 2021-09-03
