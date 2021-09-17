@@ -1,0 +1,44 @@
+From 0ab8f5a6ee305cf4edcebfdc7b9eb5f98302de75 Mon Sep 17 00:00:00 2001
+From: Leif Middelschulte <Leif.Middelschulte@klsmartin.com>
+Date: Fri, 17 Sep 2021 16:16:17 +0200
+Subject: [PATCH] pc.in: use _FULL_ variable variants
+
+Nix' cmake packaging handler replaces the CMAKE_INSTALL_INCLUDEDIR
+with the absolute path. Which break package
+portability (i.e. `prefix`-usage).
+---
+ src/md4c-html.pc.in | 6 ++----
+ src/md4c.pc.in      | 6 ++----
+ 2 files changed, 4 insertions(+), 8 deletions(-)
+
+diff --git a/src/md4c-html.pc.in b/src/md4c-html.pc.in
+index 504bb52..fec7df4 100644
+--- a/src/md4c-html.pc.in
++++ b/src/md4c-html.pc.in
+@@ -1,7 +1,5 @@
+-prefix=@CMAKE_INSTALL_PREFIX@
+-exec_prefix=@CMAKE_INSTALL_PREFIX@
+-libdir=${exec_prefix}/@CMAKE_INSTALL_LIBDIR@
+-includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@
++libdir=@CMAKE_INSTALL_FULL_LIBDIR@
++includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@
+ 
+ Name: @PROJECT_NAME@ HTML renderer
+ Description: Markdown to HTML converter library.
+diff --git a/src/md4c.pc.in b/src/md4c.pc.in
+index cd8842d..b5d81f8 100644
+--- a/src/md4c.pc.in
++++ b/src/md4c.pc.in
+@@ -1,7 +1,5 @@
+-prefix=@CMAKE_INSTALL_PREFIX@
+-exec_prefix=@CMAKE_INSTALL_PREFIX@
+-libdir=${exec_prefix}/@CMAKE_INSTALL_LIBDIR@
+-includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@
++libdir=@CMAKE_INSTALL_FULL_LIBDIR@
++includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@
+ 
+ Name: @PROJECT_NAME@
+ Description: Markdown parser library with a SAX-like callback-based interface.
+-- 
+2.31.0
+
