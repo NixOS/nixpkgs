@@ -1,10 +1,11 @@
 { lib
 , stdenv
+, trivialBuild
 , fetchFromGitHub
 , emacs
 }:
 
-stdenv.mkDerivation rec {
+trivialBuild rec {
   pname = "apheleia";
   version = "0.0.0+unstable=2021-08-08";
 
@@ -18,19 +19,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     emacs
   ];
-
-  buildPhase = ''
-    runHook preBuild
-    emacs -L . --batch -f batch-byte-compile *.el
-    runHook postBuild
-  '';
-
-  installPhase = ''
-    runHook preInstall
-    install -d $out/share/emacs/site-lisp
-    install *.el *.elc $out/share/emacs/site-lisp
-    runHook postInstall
-  '';
 
   meta = with lib; {
     homepage = "https://github.com/raxod502/apheleia";

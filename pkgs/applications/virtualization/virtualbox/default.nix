@@ -97,6 +97,8 @@ in stdenv.mkDerivation {
     # Temporary workaround for broken build
     # https://www.virtualbox.org/pipermail/vbox-dev/2021-July/015670.html
     ./fix-configure-pkgconfig-qt.patch
+    # https://github.com/NixOS/nixpkgs/issues/123851
+    ./fix-audio-driver-loading.patch
   ];
 
   postPatch = ''

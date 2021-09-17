@@ -1382,6 +1382,12 @@
     githubId = 28444296;
     name = "Benjamin Hougland";
   };
+  billewanick = {
+    email = "bill@ewanick.com";
+    github = "billewanick";
+    githubId = 13324165;
+    name = "Bill Ewanick";
+  };
   binarin = {
     email = "binarin@binarin.ru";
     github = "binarin";
@@ -4280,6 +4286,12 @@
     github = "havvy";
     githubId = 731722;
     name = "Ryan Scheel";
+  };
+  hawkw = {
+    email = "eliza@elizas.website";
+    github = "hawkw";
+    githubId = 2796466;
+    name = "Eliza Weisman";
   };
   hax404 = {
     email = "hax404foogit@hax404.de";

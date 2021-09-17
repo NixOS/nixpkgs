@@ -2,11 +2,11 @@
 
 let wrapper = stdenv.mkDerivation rec {
   pname = "wrapper";
-  version = "3.5.44";
+  version = "3.5.46";
 
   src = fetchurl {
     url = "https://wrapper.tanukisoftware.com/download/${version}/wrapper_${version}_src.tar.gz";
-    sha256 = "1iq4j7srzy5p8q3nci9316bnwx4g71jyvzd1i5hp3s8v1k61910g";
+    sha256 = "sha256-guHQyFSI0TidAuOr4zWaf3WRGeNW4+Or1sbWdhWuWtg=";
   };
 
   buildInputs = [ jdk ];
@@ -32,11 +32,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "i2p";
-  version = "0.9.48";
+  version = "1.5.0";
 
   src = fetchurl {
     url = "https://download.i2p2.de/releases/${version}/i2psource_${version}.tar.bz2";
-    sha256 = "0cnm4bwl1gqcx89i96j2qlq6adphy4l72h5whamqwv86n8bmpig8";
+    sha256 = "sha256-JuX02VsaB2aHD5ezDlfJqOmGkCecO/CRmOMO/6vsxFA=";
   };
 
   buildInputs = [ jdk ant gettext which ];

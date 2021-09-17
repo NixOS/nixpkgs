@@ -13,6 +13,10 @@ buildPythonPackage rec {
     sha256  = "0xbwkjxxysfpqz72qn6n4a0zr2h6sprbcal8j7kzymh7swjy117w";
   };
 
+  # Backport from the 2.0.0 alpha releases of PySCF.
+  # H5Py > 3.3 deprecates the file modes, that PySCF sets.
+  patches = [ ./h5py.patch ];
+
   buildInputs = [
     libcint
     libxc

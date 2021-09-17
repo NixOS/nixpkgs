@@ -2,6 +2,7 @@
 , buildPythonPackage
 , aiohttp
 , aresponses
+, backoff
 , fetchFromGitHub
 , poetry-core
 , pytest-aiohttp
@@ -12,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "pyiqvia";
-  version = "1.0.1";
+  version = "1.1.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -21,7 +22,7 @@ buildPythonPackage rec {
     owner = "bachya";
     repo = pname;
     rev = version;
-    sha256 = "18qzxxn9xw9rwv3qz8k3zxh9xxy8c7rs8xlsrdrcq9wb0dhd7p0r";
+    sha256 = "sha256-uDcBpPHh+wQHI2vGjnumwVGt5ZOreVq+L3kOam97uW4=";
   };
 
   nativeBuildInputs = [
@@ -30,6 +31,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiohttp
+    backoff
   ];
 
   checkInputs = [

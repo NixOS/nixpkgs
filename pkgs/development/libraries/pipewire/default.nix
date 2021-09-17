@@ -7,6 +7,7 @@
 , ninja
 , systemd
 , pkg-config
+, docutils
 , doxygen
 , graphviz
 , valgrind
@@ -57,7 +58,7 @@ let
 
   self = stdenv.mkDerivation rec {
     pname = "pipewire";
-    version = "0.3.34";
+    version = "0.3.36";
 
     outputs = [
       "out"
@@ -66,6 +67,7 @@ let
       "jack"
       "dev"
       "doc"
+      "man"
       "mediaSession"
       "installedTests"
     ];
@@ -75,7 +77,7 @@ let
       owner = "pipewire";
       repo = "pipewire";
       rev = version;
-      sha256 = "sha256-ZFARA7YuDnpObGLWbgy1Rk+wzmAxHEMuHQkb6tWD0s0=";
+      sha256 = "sha256-kwoffB0Hi84T4Q0NaxLxsCyPV4R0LayX9kHmXU/vRPA=";
     };
 
     patches = [
@@ -94,6 +96,7 @@ let
     ];
 
     nativeBuildInputs = [
+      docutils
       doxygen
       graphviz
       meson
@@ -125,7 +128,6 @@ let
 
     mesonFlags = [
       "-Ddocs=enabled"
-      "-Dman=disabled" # we don't have xmltoman
       "-Dexamples=${mesonEnable withMediaSession}" # only needed for `pipewire-media-session`
       "-Dudevrulesdir=lib/udev/rules.d"
       "-Dinstalled_tests=enabled"

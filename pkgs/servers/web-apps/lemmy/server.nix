@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "lemmy-server";
-  version = "0.11.3";
+  version = "0.12.2";
 
   src = fetchFromGitHub {
     owner = "LemmyNet";
     repo = "lemmy";
     rev = version;
-    sha256 = "sha256-AFVipxzKwNiillVmMA+Q7nMKajN9mzw37mBpqzf+XpM=";
+    sha256 = "sha256-jhUpQ2f+b0BEXVfQOIujxam2PQA44wluUraJVJxL6LU=";
   };
 
-  cargoSha256 = "sha256-nxuynzQRUqne1KZIvP152afWbG2Zb9zyCqy7Bx4PeJ8=";
+  cargoSha256 = "sha256-2i8zCwd33LtUKxOChx/SLP9sWMRmxGkKK8xzaJImMHM=";
 
   buildInputs = [ postgresql ]
     ++ lib.optionals stdenv.isDarwin [ libiconv Security ];

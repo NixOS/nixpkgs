@@ -1513,7 +1513,7 @@ If you need to change a package's attribute(s) from `configuration.nix` you coul
     python = super.python.override {
       packageOverrides = python-self: python-super: {
         twisted = python-super.twisted.overrideAttrs (oldAttrs: {
-          src = super.fetchPipy {
+          src = super.fetchPypi {
             pname = "twisted";
             version = "19.10.0";
             sha256 = "7394ba7f272ae722a74f3d969dcf599bc4ef093bc392038748a490f1724a515d";

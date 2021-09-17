@@ -42,67 +42,6 @@
     };
   };
 
-  agda2-mode = trivialBuild {
-    pname = "agda-mode";
-    version = pkgs.haskellPackages.Agda.version;
-
-    dontUnpack = true;
-
-    # already byte-compiled by Agda builder
-    buildPhase = ''
-      agda=`${pkgs.haskellPackages.Agda}/bin/agda-mode locate`
-      cp `dirname $agda`/*.el* .
-    '';
-
-    meta = {
-      description = "Agda2-mode for Emacs extracted from Agda package";
-      longDescription = ''
-        Wrapper packages that liberates init.el from `agda-mode locate` magic.
-        Simply add this to user profile or systemPackages and do `(require 'agda2)` in init.el.
-      '';
-      homepage = pkgs.haskellPackages.Agda.meta.homepage;
-      license = pkgs.haskellPackages.Agda.meta.license;
-    };
-  };
-
-  agda-input = self.trivialBuild {
-    pname = "agda-input";
-
-    inherit (pkgs.haskellPackages.Agda) src version;
-
-    postUnpack = "mv $sourceRoot/src/data/emacs-mode/agda-input.el $sourceRoot";
-
-    meta = {
-      description = "Standalone package providing the agda-input method without building Agda.";
-      inherit (pkgs.haskellPackages.Agda.meta) homepage license;
-    };
-  };
-
-  # may be part of MELPA in the future, see
-  # https://github.com/mlochbaum/BQN/issues/10#issuecomment-912982874
-  bqn-mode = self.trivialBuild {
-    pname = "bqn-mode";
-    version = "unstable-2021-09-04";
-
-    src = pkgs.fetchFromGitHub {
-      owner = "mlochbaum";
-      repo = "BQN";
-      rev = "e623a2fcafdf5fd6c8d31570175284805c4f34d9";
-      sha256 = "1a2lpxy3bak4724r0ns4la5d0j6484ngi73kcwp82vgbbpk7lcrp";
-    };
-
-    postUnpack = ''
-      sourceRoot="$sourceRoot/editors/emacs"
-    '';
-
-    meta = {
-      description = "Emacs mode for BQN";
-      license = lib.licenses.gpl3Only;
-      maintainers = [ lib.maintainers.sternenseemann ];
-      homepage = "https://mlochbaum.github.io/BQN/editors/index.html";
-    };
-  };
-
   ghc-mod = melpaBuild {
     pname = "ghc";
     version = pkgs.haskellPackages.ghc-mod.version;
@@ -151,21 +90,6 @@
     meta = {
       homepage = "https://melpa.org/#haskell-unicode-input-method/";
       license = lib.licenses.free;
-    };
-  };
-
-  llvm-mode = trivialBuild {
-    pname = "llvm-mode";
-    inherit (pkgs.llvmPackages.llvm) src version;
-
-    dontConfigure = true;
-    buildPhase = ''
-      cp utils/emacs/*.el .
-    '';
-
-    meta = {
-      inherit (pkgs.llvmPackages.llvm.meta) homepage license;
-      description = "Major mode for the LLVM assembler language.";
     };
   };
 
@@ -224,43 +148,25 @@
 
   };
 
-  ott-mode = self.trivialBuild {
-    pname = "ott-mod";
+  agda2-mode = callPackage ./agda2-mode { };
 
-    inherit (pkgs.ott) src version;
+  agda-input = callPackage ./agda-input{ };
 
-    postUnpack = "mv $sourceRoot/emacs/ott-mode.el $sourceRoot";
+  bqn-mode = callPackage ./bqn-mode { };
 
-    meta = {
-      description = "Standalone package providing ott-mode without building ott and with compiled bytecode.";
-      inherit (pkgs.haskellPackages.Agda.meta) homepage license;
-    };
-  };
+  llvm-mode = callPackage ./llvm-mode { };
 
-  urweb-mode = self.trivialBuild {
-    pname = "urweb-mode";
+  ott-mode = callPackage ./ott-mode { };
 
-    inherit (pkgs.urweb) src version;
-
-    packageRequires = [
-      self.cl-lib
-      self.flycheck
-    ];
-
-    postUnpack = "sourceRoot=$sourceRoot/src/elisp";
-
-    meta = {
-      description = "Major mode for editing Ur/Web";
-      inherit (pkgs.urweb.meta) license homepage;
-      maintainers = [ lib.maintainers.sternenseemann ];
-    };
-  };
+  urweb-mode = callPackage ./urweb-mode { };
 
   # Packages made the classical callPackage way
 
   apheleia = callPackage ./apheleia { };
 
   ebuild-mode = callPackage ./ebuild-mode { };
+
+  evil-markdown = callPackage ./evil-markdown { };
 
   emacspeak = callPackage ./emacspeak { };
 
@@ -282,8 +188,6 @@
 
   nano-theme = callPackage ./nano-theme { };
 
-  org-mac-link = callPackage ./org-mac-link { };
-
   perl-completion = callPackage ./perl-completion { };
 
   plz = callPackage ./plz { };
@@ -302,15 +206,12 @@
 
   youtube-dl = callPackage ./youtube-dl { };
 
-  zeitgeist = callPackage ./zeitgeist { };
-
   # From old emacsPackages (pre emacsPackagesNg)
   cedet = callPackage ./cedet { };
   cedille = callPackage ./cedille { cedille = pkgs.cedille; };
   color-theme-solarized = callPackage ./color-theme-solarized { };
   session-management-for-emacs = callPackage ./session-management-for-emacs { };
   hsc3-mode = callPackage ./hsc3 { };
-  ido-ubiquitous = callPackage ./ido-ubiquitous { };
   prolog-mode = callPackage ./prolog { };
   rect-mark = callPackage ./rect-mark { };
   sunrise-commander = callPackage ./sunrise-commander { };
