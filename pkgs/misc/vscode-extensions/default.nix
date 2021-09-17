@@ -1106,6 +1106,18 @@ let
         };
       };
 
+      mvllow.rose-pine = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "mvllow";
+          name = "rose-pine";
+          version = "1.3.6";
+          sha256 = "sha256-pKrwiA/ZArBfumT0VTauhINSDEbABWgBBzTZEE07wzk=";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
       naumovs.color-highlight = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "color-highlight";
