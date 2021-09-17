@@ -212,6 +212,7 @@ self: super: {
   command-qq = dontCheck super.command-qq;              # http://hydra.cryp.to/build/499042/log/raw
   conduit-connection = dontCheck super.conduit-connection;
   craftwerk = dontCheck super.craftwerk;
+  crc = dontCheck super.crc;                            # https://github.com/MichaelXavier/crc/issues/2
   css-text = dontCheck super.css-text;
   damnpacket = dontCheck super.damnpacket;              # http://hydra.cryp.to/build/496923/log
   data-hash = dontCheck super.data-hash;

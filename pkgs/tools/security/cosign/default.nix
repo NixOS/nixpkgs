@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "cosign";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "sigstore";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-FG6LAaz6n2l77Wr7SYmwzL10G5gyHPCPG05hQlsOQBI=";
+    sha256 = "sha256-KiXcAuww0dZ78ilRp7j0JX6VAbOvmfd9h+LrOjrKaJo=";
   };
 
   buildInputs =
@@ -17,9 +17,9 @@ buildGoModule rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  vendorSha256 = "sha256-OKQVgF/pg4cigMkckX/dclieHCoD39ltR+DegaUfSDk=";
+  vendorSha256 = "sha256-yrUfSRCwoxoH2sM5KuApaIj7YF7SPXx9vTlXS+pA5CY=";
 
-  excludedPackages = "\\(copasetic\\)";
+  excludedPackages = "\\(copasetic\\|sample\\|webhook\\)";
 
   tags = lib.optionals pivKeySupport [ "pivkey" ];
 

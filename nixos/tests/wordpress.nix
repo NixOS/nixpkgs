@@ -45,6 +45,21 @@ import ./make-test-python.nix ({ pkgs, ... }:
       networking.firewall.allowedTCPPorts = [ 80 ];
       networking.hosts."127.0.0.1" = [ "site1.local" "site2.local" ];
     };
+
+    wp_caddy = { ... }: {
+      services.wordpress.webserver = "caddy";
+      services.wordpress.sites = {
+        "site1.local" = {
+          database.tablePrefix = "site1_";
+        };
+        "site2.local" = {
+          database.tablePrefix = "site2_";
+        };
+      };
+
+      networking.firewall.allowedTCPPorts = [ 80 ];
+      networking.hosts."127.0.0.1" = [ "site1.local" "site2.local" ];
+    };
   };
 
   testScript = ''
@@ -54,10 +69,11 @@ import ./make-test-python.nix ({ pkgs, ... }:
 
     wp_httpd.wait_for_unit("httpd")
     wp_nginx.wait_for_unit("nginx")
+    wp_caddy.wait_for_unit("caddy")
 
     site_names = ["site1.local", "site2.local"]
 
-    for machine in (wp_httpd, wp_nginx):
+    for machine in (wp_httpd, wp_nginx, wp_caddy):
         for site_name in site_names:
             machine.wait_for_unit(f"phpfpm-wordpress-{site_name}")
 
