@@ -205,7 +205,7 @@ autoPatchelfFile() {
     local dep rpath="" toPatch="$1"
 
     local interpreter
-    interpreter="$(< "$NIX_CC/nix-support/dynamic-linker")"
+    interpreter="$(< "$NIX_BINTOOLS/nix-support/dynamic-linker")"
 
     local interpreterArch interpreterOsabi toPatchArch toPatchOsabi
     interpreterArch="$(getBinArch "$interpreter")"
@@ -235,7 +235,7 @@ autoPatchelfFile() {
     fi
 
     local libcLib
-    libcLib="$(< "$NIX_CC/nix-support/orig-libc")/lib"
+    libcLib="$(< "$NIX_BINTOOLS/nix-support/orig-libc")/lib"
 
     echo "searching for dependencies of $toPatch" >&2
 
