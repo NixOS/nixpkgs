@@ -1941,6 +1941,18 @@ final: prev:
     meta.homepage = "https://github.com/shumphrey/fugitive-gitlab.vim/";
   };
 
+  futhark-vim = buildVimPluginFrom2Nix {
+    pname = "futhark-vim";
+    version = "2021-08-24";
+    src = fetchFromGitHub {
+      owner = "BeneCollyridam";
+      repo = "futhark-vim";
+      rev = "fd7d053c74f150712eaa73999f44a3f95c8f08ff";
+      sha256 = "17iwpqxkvflcimc066n5ljjbx603hpaqzk271r37qxdvk58jpn0w";
+    };
+    meta.homepage = "https://github.com/BeneCollyridam/futhark-vim/";
+  };
+
   fwatch-nvim = buildVimPluginFrom2Nix {
     pname = "fwatch.nvim";
     version = "2021-07-25";
