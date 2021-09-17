@@ -1004,6 +1004,14 @@ Superuser created successfully.
       </listitem>
       <listitem>
         <para>
+          The
+          <link xlink:href="options.html#opt-services.xserver.extraLayouts"><literal>services.xserver.extraLayouts</literal></link>
+          no longer cause additional rebuilds when a layout is added or
+          modified.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           Sway: The terminal emulator <literal>rxvt-unicode</literal> is
           no longer installed by default via
           <literal>programs.sway.extraPackages</literal>. The current
