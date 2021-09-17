@@ -6,7 +6,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "libva-${lib.optionalString minimal "minimal-"}${version}";
+  pname = "libva" + lib.optionalString minimal "minimal";
   version = "2.12.0";
 
   src = fetchFromGitHub {
@@ -25,8 +25,8 @@ stdenv.mkDerivation rec {
   # TODO: share libs between minimal and !minimal - perhaps just symlink them
 
   mesonFlags = [
-    # Add FHS paths for non-NixOS applications:
-    "-Ddriverdir=${mesa.drivers.driverLink}/lib/dri:/usr/lib/dri:/usr/lib32/dri"
+    # Add FHS and Debian paths for non-NixOS applications
+    "-Ddriverdir=${mesa.drivers.driverLink}/lib/dri:/usr/lib/dri:/usr/lib32/dri:/usr/lib/x86_64-linux-gnu/dri:/usr/lib/i386-linux-gnu/dri"
   ];
 
   meta = with lib; {

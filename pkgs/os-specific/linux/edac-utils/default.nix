@@ -2,7 +2,8 @@
 , sysfsutils, dmidecode, kmod }:
 
 stdenv.mkDerivation {
-  name = "edac-utils-2015-01-07";
+  pname = "edac-utils";
+  version = "unstable-2015-01-07";
 
   src = fetchFromGitHub {
     owner = "grondo";

@@ -1,7 +1,8 @@
 { lib, stdenv, fetchgit, pkg-config, dbus, libnotify, udisks2, gdk-pixbuf }:
 
 stdenv.mkDerivation {
-  name = "usermount-0.1";
+  pname = "usermount";
+  version = "0.1";
 
   src = fetchgit {
     url = "https://github.com/tom5760/usermount.git";

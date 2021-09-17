@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, fetchpatch }:
 
 let
   version = "2.13";
@@ -10,6 +10,14 @@ in stdenv.mkDerivation {
     url = "mirror://gnu/cpio/${name}.tar.bz2";
     sha256 = "0vbgnhkawdllgnkdn6zn1f56fczwk0518krakz2qbwhxmv2vvdga";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2021-38185.patch";
+      url = "https://git.savannah.gnu.org/cgit/cpio.git/patch/?id=dd96882877721703e19272fe25034560b794061b";
+      sha256 = "0vmr0qjwj2ldnzsvccl105ckwgx3ssvn9mp3f27ss0kiyigrzz32";
+    })
+  ];
 
   preConfigure = if stdenv.isCygwin then ''
     sed -i gnu/fpending.h -e 's,include <stdio_ext.h>,,'

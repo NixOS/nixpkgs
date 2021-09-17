@@ -1,7 +1,8 @@
 { lib, stdenv, fetchFromGitHub, perl }:
 
 stdenv.mkDerivation {
-  name = "perf-tools-20171219";
+  pname = "perf-tools";
+  version = "unstable-2017-12-19";
 
   src = fetchFromGitHub {
     owner = "brendangregg";

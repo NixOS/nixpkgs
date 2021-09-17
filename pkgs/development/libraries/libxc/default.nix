@@ -11,8 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "07iljmv737kx24kd33x9ndf5l854mwslg9x2psqm12k07jmq9wjw";
   };
 
-  buildInputs = [ gfortran ];
-  nativeBuildInputs = [ perl cmake ];
+  nativeBuildInputs = [ perl cmake gfortran ];
 
   preConfigure = ''
     patchShebangs ./
