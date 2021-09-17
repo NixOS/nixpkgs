@@ -5,26 +5,16 @@ then throw "camlpdf is not available for OCaml ${ocaml.version}"
 else
 
 stdenv.mkDerivation rec {
-  version = "2.3.1";
+  version = "2.4";
   name = "ocaml${ocaml.version}-camlpdf-${version}";
   src = fetchFromGitHub {
     owner = "johnwhitington";
     repo = "camlpdf";
     rev = "v${version}";
-    sha256 = "1q69hhk63z836jbkv4wsng27w35w0qpz01c7ax0mqm8d8kmnr0v4";
+    sha256 = "09kzrgmlxb567315p3fy59ba0kv7xhp548n9i3l4wf9n06p0ww9m";
   };
 
   buildInputs = [ which ocaml findlib ];
-
-  # Version number in META file is wrong
-  patchPhase = ''
-    patch -p 0 META <<EOF
-    3c3
-    < version="1.7.1"
-    ---
-    > version="${version}"
-    EOF
-  '';
 
   preInstall = ''
     mkdir -p $out/lib/ocaml/${ocaml.version}/site-lib/stublibs

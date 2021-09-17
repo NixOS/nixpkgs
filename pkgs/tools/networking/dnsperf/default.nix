@@ -1,17 +1,17 @@
 { lib, stdenv, fetchurl, fetchFromGitHub, autoreconfHook, pkg-config
-, openssl, ldns
+, openssl, ldns, libck
 }:
 
 stdenv.mkDerivation rec {
   pname = "dnsperf";
-  version = "2.4.0";
+  version = "2.5.2";
 
   # The same as the initial commit of the new GitHub repo (only readme changed).
   src = fetchFromGitHub {
     owner = "DNS-OARC";
     repo = "dnsperf";
     rev = "v${version}";
-    sha256 = "0q7zmzhhx71v41wf6rhyvpil43ch4a9sx21x47wgcg362lca3cbz";
+    sha256 = "0dzi28z7hnyxbibwdsalvd93czf4d5pgmvrbn6hlh52znsn40gbb";
   };
 
   outputs = [ "out" "man" "doc" ];
@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     openssl
     ldns # optional for DDNS (but cheap anyway)
+    libck
   ];
 
   doCheck = true;

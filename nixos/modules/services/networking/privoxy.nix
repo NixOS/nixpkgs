@@ -205,9 +205,8 @@ in
 
     users.groups.privoxy = {};
 
-    systemd.tmpfiles.rules = with cfg.settings; [
-      "d ${certificate-directory} 0770 privoxy privoxy ${cfg.certsLifetime}"
-    ];
+    systemd.tmpfiles.rules = optional cfg.inspectHttps
+      "d ${cfg.settings.certificate-directory} 0770 privoxy privoxy ${cfg.certsLifetime}";
 
     systemd.services.privoxy = {
       description = "Filtering web proxy";
@@ -243,7 +242,7 @@ in
           "default.action"
         ] ++ optional cfg.inspectHttps (toString inspectAction);
     } // (optionalAttrs cfg.enableTor {
-      forward-socks5 = "127.0.0.1:9063 .";
+      forward-socks5 = "/ 127.0.0.1:9063 .";
       toggle = true;
       enable-remote-toggle = false;
       enable-edit-actions = false;

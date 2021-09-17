@@ -2,14 +2,14 @@
 
 buildGoPackage rec {
   pname = "mob";
-  version = "1.3.0";
+  version = "1.12.0";
   goPackagePath = "github.com/remotemobprogramming/mob";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "remotemobprogramming";
     repo = pname;
-    sha256 = "sha256-uzWr6wWO6niocJ8yLc1Uu9Wt/FXlCuQrC0RJkgVlphM=";
+    sha256 = "sha256-5hvuaKlaWrB8nEeHytnn4ywciLbOSoXdBdc3K/PqMG8=";
   };
 
   meta = with lib; {

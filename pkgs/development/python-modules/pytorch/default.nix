@@ -1,12 +1,12 @@
 { stdenv, lib, fetchFromGitHub, fetchpatch, buildPythonPackage, python,
-  cudaSupport ? false, cudatoolkit ? null, cudnn ? null, nccl ? null, magma ? null,
+  cudaSupport ? false, cudatoolkit, cudnn, nccl, magma,
   mklDnnSupport ? true, useSystemNccl ? true,
   MPISupport ? false, mpi,
   buildDocs ? false,
   cudaArchList ? null,
 
   # Native build inputs
-  cmake, util-linux, linkFarm, symlinkJoin, which,
+  cmake, util-linux, linkFarm, symlinkJoin, which, pybind11,
 
   # Build inputs
   numactl,
@@ -30,8 +30,6 @@
   isPy3k, pythonOlder }:
 
 # assert that everything needed for cuda is present and that the correct cuda versions are used
-assert !cudaSupport || cudatoolkit != null;
-assert cudnn == null || cudatoolkit != null;
 assert !cudaSupport || (let majorIs = lib.versions.major cudatoolkit.version;
                         in majorIs == "9" || majorIs == "10" || majorIs == "11");
 
@@ -40,6 +38,7 @@ assert !(MPISupport && cudaSupport) || mpi.cudatoolkit == cudatoolkit;
 assert !cudaSupport || magma.cudatoolkit == cudatoolkit;
 
 let
+  setBool = v: if v then "1" else "0";
   cudatoolkit_joined = symlinkJoin {
     name = "${cudatoolkit.name}-unsplit";
     # nccl is here purely for semantic grouping it could be moved to nativeBuildInputs
@@ -118,7 +117,7 @@ let
 in buildPythonPackage rec {
   pname = "pytorch";
   # Don't forget to update pytorch-bin to the same version.
-  version = "1.8.0";
+  version = "1.9.0";
 
   disabled = !isPy3k;
 
@@ -133,7 +132,7 @@ in buildPythonPackage rec {
     repo   = "pytorch";
     rev    = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-qdZUtlxHZjCYoGfTdp5Bq3MtfXolWZrvib0kuzF3uIc=";
+    sha256 = "sha256-gZmEhV1zzfr/5T2uNfS+8knzyJIxnv2COWVyiAzU9jM=";
   };
 
   patches = lib.optionals stdenv.isDarwin [
@@ -162,16 +161,17 @@ in buildPythonPackage rec {
   # Use pytorch's custom configurations
   dontUseCmakeConfigure = true;
 
-  BUILD_NAMEDTENSOR = true;
-  BUILD_DOCS = buildDocs;
+  BUILD_NAMEDTENSOR = setBool true;
+  BUILD_DOCS = setBool buildDocs;
 
-  USE_MKL = blas.implementation == "mkl";
+  # We only do an imports check, so do not build tests either.
+  BUILD_TEST = setBool false;
 
   # Unlike MKL, oneDNN (née MKLDNN) is FOSS, so we enable support for
   # it by default. PyTorch currently uses its own vendored version
   # of oneDNN through Intel iDeep.
-  USE_MKLDNN = mklDnnSupport;
-  USE_MKLDNN_CBLAS = mklDnnSupport;
+  USE_MKLDNN = setBool mklDnnSupport;
+  USE_MKLDNN_CBLAS = setBool mklDnnSupport;
 
   preBuild = ''
     export MAX_JOBS=$NIX_BUILD_CORES
@@ -200,7 +200,7 @@ in buildPythonPackage rec {
   PYTORCH_BUILD_VERSION = version;
   PYTORCH_BUILD_NUMBER = 0;
 
-  USE_SYSTEM_NCCL=useSystemNccl;                  # don't build pytorch's third_party NCCL
+  USE_SYSTEM_NCCL=setBool useSystemNccl;                  # don't build pytorch's third_party NCCL
 
   # Suppress a weird warning in mkl-dnn, part of ideep in pytorch
   # (upstream seems to have fixed this in the wrong place?)
@@ -216,6 +216,7 @@ in buildPythonPackage rec {
     util-linux
     which
     ninja
+    pybind11
   ] ++ lib.optionals cudaSupport [ cudatoolkit_joined ];
 
   buildInputs = [ blas blas.provider ]
@@ -297,12 +298,23 @@ in buildPythonPackage rec {
     install_name_tool -change @rpath/libc10.dylib $lib/lib/libc10.dylib $lib/lib/libshm.dylib
   '';
 
+  # Builds in 2+h with 2 cores, and ~15m with a big-parallel builder.
+  requiredSystemFeatures = [ "big-parallel" ];
 
-  meta = {
+  passthru = {
+    inherit cudaSupport;
+    cudaArchList = final_cudaArchList;
+    # At least for 1.9.0 `torch.fft` is unavailable unless BLAS provider is MKL. This attribute allows for easy detection of its availability.
+    blasProvider = blas.provider;
+  };
+
+  meta = with lib; {
     description = "Open source, prototype-to-production deep learning platform";
     homepage    = "https://pytorch.org/";
-    license     = lib.licenses.bsd3;
-    platforms   = with lib.platforms; linux ++ lib.optionals (!cudaSupport) darwin;
-    maintainers = with lib.maintainers; [ danieldk teh thoughtpolice tscholak ]; # tscholak esp. for darwin-related builds
+    license     = licenses.bsd3;
+    platforms   = with platforms; linux ++ lib.optionals (!cudaSupport) darwin;
+    maintainers = with maintainers; [ teh thoughtpolice tscholak ]; # tscholak esp. for darwin-related builds
+    # error: use of undeclared identifier 'noU'; did you mean 'no'?
+    broken = stdenv.isDarwin;
   };
 }

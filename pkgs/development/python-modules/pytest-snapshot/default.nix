@@ -2,16 +2,18 @@
 
 buildPythonPackage rec {
   pname = "pytest-snapshot";
-  version = "0.5.0";
+  version = "0.6.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "77d736073598a6224825eef8b8e0c760812a61410af2180cb070b27eb79f257d";
+    sha256 = "f99152df98587f883f37bb0315f082ab3e0c565f53413f1193bb0019b992c3ea";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
 
-  propagatedBuildInputs = [ packaging pytest ];
+  buildInputs = [ pytest ];
+
+  propagatedBuildInputs = [ packaging ];
 
   # pypi does not contain tests and GitHub archive is not supported because setuptools-scm can't detect the version
   doCheck = false;

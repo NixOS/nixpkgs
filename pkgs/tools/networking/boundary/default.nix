@@ -1,32 +1,36 @@
 { stdenv, lib, fetchzip }:
 
-let
-  inherit (stdenv.hostPlatform) system;
-  suffix = {
-    x86_64-linux = "linux_amd64";
-    aarch64-linux = "linux_arm64";
-    x86_64-darwin = "darwin_amd64";
-  }."${system}" or (throw "Unsupported system: ${system}");
-  fetchsrc = version: sha256: fetchzip {
-      url = "https://releases.hashicorp.com/boundary/${version}/boundary_${version}_${suffix}.zip";
-      sha256 = sha256."${system}";
-    };
-in
 stdenv.mkDerivation rec {
   pname = "boundary";
-  version = "0.1.7";
+  version = "0.6.0";
 
-  src = fetchsrc version {
-    x86_64-linux = "sha256-cSD9V/Hj/eEc6k+LMNRnSEA94fA6bQUfCgA+XdqAR4k=";
-    aarch64-linux = "sha256-MG97PhG/t1rdmTF3n2YHYsTo8VODCaY3cfnv8YHgAY8=";
-    x86_64-darwin = "sha256-p60UiIy9DGx7AaEvmyo4FLa0Z67MQRNJkw1nHaM6eww=";
-  };
+  src =
+    let
+      inherit (stdenv.hostPlatform) system;
+      selectSystem = attrs: attrs.${system} or (throw "Unsupported system: ${system}");
+      suffix = selectSystem {
+        x86_64-linux = "linux_amd64";
+        aarch64-linux = "linux_arm64";
+        x86_64-darwin = "darwin_amd64";
+      };
+      sha256 = selectSystem {
+        x86_64-linux = "sha256-9xgvSnfMh5kX/RtC/B+tkbSNcB82U6SYzCs5V04VzW0=";
+        aarch64-linux = "sha256-ARSZygm1OayiOxF7I+/5ebwtaO0z/lYztuwNSD4Zu+0=";
+        x86_64-darwin = "sha256-GFLLpOt3BEJI14xKjnjK6nd4h/0+/aSLOagZphOKErE=";
+      };
+    in
+    fetchzip {
+      url = "https://releases.hashicorp.com/boundary/${version}/boundary_${version}_${suffix}.zip";
+      inherit sha256;
+    };
 
   dontConfigure = true;
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
     install -D boundary $out/bin/boundary
+    runHook postInstall
   '';
 
   doInstallCheck = true;

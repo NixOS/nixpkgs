@@ -1,8 +1,10 @@
-{ stdenv, rustPlatform, fetchurl, fetchFromGitHub, lib, nasm, cargo-c }:
+{ stdenv, rustPlatform, rust, fetchurl, fetchFromGitHub, lib, nasm, cargo-c, libiconv }:
 
-rustPlatform.buildRustPackage rec {
+let
+  rustTargetPlatformSpec = rust.toRustTargetSpec stdenv.hostPlatform;
+in rustPlatform.buildRustPackage rec {
   pname = "rav1e";
-  version = "0.4.0";
+  version = "0.4.1";
 
   src = stdenv.mkDerivation rec {
     name = "${pname}-${version}-source";
@@ -11,12 +13,12 @@ rustPlatform.buildRustPackage rec {
       owner = "xiph";
       repo = "rav1e";
       rev = "v${version}";
-      sha256 = "09w4476x6bdmh9pv4lchrzvfvbjvxxraa9f4dlbwgli89lcg9fcf";
+      sha256 = "0jnq5a3fv6fzzbmprzfxidlcwwgblkwwm0135cfw741wjv7f7h6r";
     };
 
     cargoLock = fetchurl {
       url = "https://github.com/xiph/rav1e/releases/download/v${version}/Cargo.lock";
-      sha256 = "0rkyi010z6qmwdpvzlzyrrhs8na929g11lszhbqx5y0gh3y5nyik";
+      sha256 = "14fi9wam9rs5206rvcd2f3sjpzq41pnfml14w74wn2ws3gpi46zn";
     };
 
     installPhase = ''
@@ -26,15 +28,16 @@ rustPlatform.buildRustPackage rec {
     '';
   };
 
-  cargoSha256 = "1iza2cws28hd4a3q90mc90l8ql4bsgapdznfr6bl65cjam43i5sg";
+  cargoSha256 = "0miq6iiywwbxm6k0alnqg6bnd14pwc8vl9d8fgg6c0vjlfy5zhlb";
   nativeBuildInputs = [ nasm cargo-c ];
+  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
 
   postBuild = ''
-    cargo cbuild --release --frozen --prefix=${placeholder "out"}
+    cargo cbuild --release --frozen --prefix=${placeholder "out"} --target ${rustTargetPlatformSpec}
   '';
 
   postInstall = ''
-    cargo cinstall --release --frozen --prefix=${placeholder "out"}
+    cargo cinstall --release --frozen --prefix=${placeholder "out"} --target ${rustTargetPlatformSpec}
   '';
 
   meta = with lib; {
@@ -48,6 +51,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/xiph/rav1e";
     changelog = "https://github.com/xiph/rav1e/releases/tag/v${version}";
     license = licenses.bsd2;
-    maintainers = [ maintainers.primeos ];
+    maintainers = [ ];
   };
 }

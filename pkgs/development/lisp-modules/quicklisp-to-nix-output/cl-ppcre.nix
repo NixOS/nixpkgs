@@ -1,3 +1,4 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
   baseName = "cl-ppcre";

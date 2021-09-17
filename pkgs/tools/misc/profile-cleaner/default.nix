@@ -1,14 +1,14 @@
 { lib, stdenv, fetchFromGitHub, makeWrapper, parallel, sqlite, bc, file }:
 
 stdenv.mkDerivation rec {
-  version = "2.41";
+  version = "2.42";
   pname = "profile-cleaner";
 
   src = fetchFromGitHub {
     owner = "graysky2";
     repo = "profile-cleaner";
     rev = "v${version}";
-    sha256 = "11sjf4j9dr6ih9jkg6vqq6gkfg6wly4182bi1008bsm1zdmm5iz7";
+    sha256 = "1d94lp91i4y896vyc7fc3ysha700cwzsdjmmmwlm6h2zp652c73y";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/graysky2/profile-cleaner";
     license = lib.licenses.mit;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.devhell ];
   };
 }

@@ -3,7 +3,7 @@
 
 buildPythonPackage rec {
   pname = "tzlocal";
-  version = "2.1";
+  version = "2.1"; # version needs to be compatible with APScheduler
 
   propagatedBuildInputs = [ pytz ];
 
@@ -15,9 +15,12 @@ buildPythonPackage rec {
   # test fail (timezone test fail)
   doCheck = false;
 
+  pythonImportsCheck = [ "tzlocal" ];
+
   meta = with lib; {
     description = "Tzinfo object for the local timezone";
     homepage = "https://github.com/regebro/tzlocal";
     license = licenses.cddl;
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

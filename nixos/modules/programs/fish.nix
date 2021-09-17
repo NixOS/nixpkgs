@@ -8,6 +8,11 @@ let
 
   cfg = config.programs.fish;
 
+  fishAbbrs = concatStringsSep "\n" (
+    mapAttrsFlatten (k: v: "abbr -ag ${k} ${escapeShellArg v}")
+      cfg.shellAbbrs
+  );
+
   fishAliases = concatStringsSep "\n" (
     mapAttrsFlatten (k: v: "alias ${k} ${escapeShellArg v}")
       (filterAttrs (k: v: v != null) cfg.shellAliases)
@@ -81,6 +86,18 @@ in
         description = ''
           Whether fish should autoload fish functions provided by other packages.
         '';
+      };
+
+      shellAbbrs = mkOption {
+        default = {};
+        example = {
+          gco = "git checkout";
+          npu = "nix-prefetch-url";
+        };
+        description = ''
+          Set of fish abbreviations.
+        '';
+        type = with types; attrsOf str;
       };
 
       shellAliases = mkOption {
@@ -205,6 +222,7 @@ in
         # if we haven't sourced the interactive config, do it
         status --is-interactive; and not set -q __fish_nixos_interactive_config_sourced
         and begin
+          ${fishAbbrs}
           ${fishAliases}
 
           ${sourceEnv "interactiveShellInit"}

@@ -17,16 +17,15 @@ in
         services.redis.unixSocket = redisSocket;
 
         # Allow access to the unix socket for the "redis" group.
-        services.redis.settings.unixsocketperm = "770";
+        services.redis.unixSocketPerm = 770;
 
         users.users."member" = {
           createHome = false;
           description = "A member of the redis group";
+          isNormalUser = true;
           extraGroups = [
             "redis"
           ];
-          group = "users";
-          shell = "/bin/sh";
         };
       };
   };

@@ -1,6 +1,6 @@
 { lib, buildPythonPackage, fetchPypi, writeText, asttokens
-, pycryptodome, pytest_xdist, pytestcov, recommonmark, semantic-version, sphinx
-, sphinx_rtd_theme, pytestrunner }:
+, pycryptodome, pytest-xdist, pytest-cov, recommonmark, semantic-version, sphinx
+, sphinx_rtd_theme, pytest-runner }:
 
 let
   sample-contract = writeText "example.vy" ''
@@ -14,20 +14,21 @@ in
 
 buildPythonPackage rec {
   pname = "vyper";
-  version = "0.2.8";
+  version = "0.2.16";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0d9fv630ayd1989qnklldh08vksa2lf0r06lm914qy5r5cvbl1v2";
+    sha256 = "6cf347440716964012d46686faefc9c689f01872f19736287a63aa8652ac3ddd";
   };
 
-  nativeBuildInputs = [ pytestrunner ];
+  nativeBuildInputs = [ pytest-runner ];
 
+  # Replace the dynamic commit hash lookup with the hash from the tag
   postPatch = ''
     substituteInPlace setup.py \
       --replace 'asttokens==' 'asttokens>=' \
       --replace 'subprocess.check_output("git rev-parse HEAD".split())' "' '" \
-      --replace 'commithash.decode("utf-8").strip()' "'069936fa3fee8646ff362145593128d7ef07da38'"
+      --replace 'commithash.decode("utf-8").strip()' "'6e7dba7a8b5f29762d3470da4f44634b819c808d'"
   '';
 
   propagatedBuildInputs = [

@@ -2,9 +2,11 @@
 , buildPythonPackage
 , fetchFromGitHub
 , git
+, poetry-core
 , attrs
 , future
 , aiohttp
+, aiohttp-socks
 , aiofiles
 , h11
 , h2
@@ -16,27 +18,42 @@
 , peewee
 , cachetools
 , atomicwrites
+, pytestCheckHook
+, faker
+, aioresponses
+, hypothesis
+, pytest-aiohttp
+, pytest-benchmark
 }:
 
 buildPythonPackage rec {
   pname = "matrix-nio";
-  version = "0.15.2";
+  version = "0.18.3";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "poljar";
     repo = "matrix-nio";
     rev = version;
-    sha256 = "190xw3cvk4amr9pl8ip2i7k3xdjd0231kn2zl6chny5axx22p1dv";
+    sha256 = "1sjdqzlk8vgv0748ayhnadw1bip3i4bfga4knb94cfkd3s4rgb39";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'aiofiles = "^0.6.0"' 'aiofiles = "*"'
+  '';
 
   nativeBuildInputs = [
     git
+    poetry-core
+    pytestCheckHook
   ];
 
   propagatedBuildInputs = [
     attrs
     future
     aiohttp
+    aiohttp-socks
     aiofiles
     h11
     h2
@@ -50,7 +67,20 @@ buildPythonPackage rec {
     atomicwrites
   ];
 
-  doCheck = false;
+  checkInputs = [
+    faker
+    aioresponses
+    hypothesis
+    pytest-aiohttp
+    pytest-benchmark
+  ];
+
+  disabledTests = [
+    # touches network
+    "test_connect_wrapper"
+    # time dependent and flaky
+    "test_transfer_monitor_callbacks"
+  ];
 
   meta = with lib; {
     description = "A Python Matrix client library, designed according to sans I/O principles";

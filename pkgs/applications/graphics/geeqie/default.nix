@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "geeqie";
-  version = "1.5.1";
+  version = "1.6.0";
 
   src = fetchurl {
-    url = "http://geeqie.org/${pname}-${version}.tar.xz";
-    sha256 = "02m1vqaasin249xx792cdj11xyag8lnanwzxd108y7y34g9xam28";
+    url = "https://github.com/BestImageViewer/geeqie/archive/refs/tags/v1.6.tar.gz";
+    sha256 = "0ky248j6n8hszkwwi949i1ypm2l5444byaspaa6564d9rpij01aj";
   };
 
   patches = [
@@ -23,9 +23,10 @@ stdenv.mkDerivation rec {
 
   preConfigure = "./autogen.sh";
 
-  nativeBuildInputs = [ pkg-config autoconf automake gettext intltool
-    wrapGAppsHook
-  ];
+  nativeBuildInputs =
+    [ pkg-config autoconf automake gettext intltool
+      wrapGAppsHook
+    ];
 
   buildInputs = [
     gtk3 lcms2 exiv2 libchamplain clutter-gtk ffmpegthumbnailer fbida

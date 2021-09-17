@@ -7,7 +7,7 @@
 , attrs
 , espeak-ng
 , pytestCheckHook
-, pytestcov
+, pytest-cov
 }:
 
 buildPythonApplication rec {
@@ -45,7 +45,7 @@ buildPythonApplication rec {
 
   checkInputs = [
     pytestCheckHook
-    pytestcov
+    pytest-cov
   ];
 
   # We tried to package festvial, but were unable to get the backend running,
@@ -65,6 +65,6 @@ buildPythonApplication rec {
     homepage = "https://github.com/bootphon/phonemizer";
     description = "Simple text to phones converter for multiple languages";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -45,8 +45,8 @@ buildGoModule rec {
   # produce binaries which panic when executed and are not interesting at all
   subPackages = [ "." ];
 
-  buildFlagsArray = [
-    "-ldflags=-X main.Version=${version} -X main.Mode=prod"
+  ldflags = [
+    "-X main.Version=${version}" "-X main.Mode=prod"
   ];
 
   meta = with lib; {

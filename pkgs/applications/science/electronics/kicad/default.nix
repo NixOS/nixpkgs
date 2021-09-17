@@ -1,6 +1,7 @@
 { lib, stdenv
 , fetchFromGitLab
-, gnome3
+, gnome
+, dconf
 , wxGTK30
 , wxGTK31
 , makeWrapper
@@ -24,6 +25,8 @@
 , withScripting ? true
 , python3
 , debug ? false
+, sanitizeAddress ? false
+, sanitizeThreads ? false
 , with3d ? true
 , withI18n ? true
 , srcs ? { }
@@ -145,28 +148,28 @@ let
       };
 
   python = python3;
-  wxPython = python.pkgs.wxPython_4_0;
+  wxPython = if (stable)
+    then python.pkgs.wxPython_4_0
+    else python.pkgs.wxPython_4_1;
 
   inherit (lib) concatStringsSep flatten optionalString optionals;
 in
 stdenv.mkDerivation rec {
 
   # Common libraries, referenced during runtime, via the wrapper.
-  passthru.libraries = callPackages ./libraries.nix { inherit libSrc libVersion; };
-  passthru.i18n = callPackage ./i18n.nix {
-    src = i18nSrc;
-    version = i18nVersion;
-  };
+  passthru.libraries = callPackages ./libraries.nix { inherit libSrc; };
+  passthru.i18n = callPackage ./i18n.nix { src = i18nSrc; };
   base = callPackage ./base.nix {
     inherit stable baseName;
     inherit kicadSrc kicadVersion;
     inherit (passthru) i18n;
     inherit wxGTK python wxPython;
-    inherit debug withI18n withOCC withOCE withNgspice withScripting;
+    inherit withI18n withOCC withOCE withNgspice withScripting;
+    inherit debug sanitizeAddress sanitizeThreads;
   };
 
   inherit pname;
-  version = kicadVersion;
+  version = if (stable) then kicadVersion else builtins.substring 0 10 src.src.rev;
 
   src = base;
   dontUnpack = true;
@@ -186,20 +189,37 @@ stdenv.mkDerivation rec {
   makeWrapperArgs = with passthru.libraries; [
     "--prefix XDG_DATA_DIRS : ${base}/share"
     "--prefix XDG_DATA_DIRS : ${hicolor-icon-theme}/share"
-    "--prefix XDG_DATA_DIRS : ${gnome3.defaultIconTheme}/share"
+    "--prefix XDG_DATA_DIRS : ${gnome.adwaita-icon-theme}/share"
     "--prefix XDG_DATA_DIRS : ${wxGTK.gtk}/share/gsettings-schemas/${wxGTK.gtk.name}"
     "--prefix XDG_DATA_DIRS : ${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}"
     # wrapGAppsHook did these two as well, no idea if it matters...
     "--prefix XDG_DATA_DIRS : ${cups}/share"
-    "--prefix GIO_EXTRA_MODULES : ${gnome3.dconf}/lib/gio/modules"
-
+    "--prefix GIO_EXTRA_MODULES : ${dconf}/lib/gio/modules"
+    # required to open a bug report link in firefox-wayland
+    "--set-default MOZ_DBUS_REMOTE 1"
+  ]
+  ++ optionals (stable)
+  [
     "--set-default KISYSMOD ${footprints}/share/kicad/modules"
     "--set-default KICAD_SYMBOL_DIR ${symbols}/share/kicad/library"
     "--set-default KICAD_TEMPLATE_DIR ${templates}/share/kicad/template"
     "--prefix KICAD_TEMPLATE_DIR : ${symbols}/share/kicad/template"
     "--prefix KICAD_TEMPLATE_DIR : ${footprints}/share/kicad/template"
   ]
-  ++ optionals (with3d) [ "--set-default KISYS3DMOD ${packages3d}/share/kicad/modules/packages3d" ]
+  ++ optionals (stable && with3d) [ "--set-default KISYS3DMOD ${packages3d}/share/kicad/modules/packages3d" ]
+  ++ optionals (!stable)
+  [
+    "--set-default KICAD6_FOOTPRINT_DIR ${footprints}/share/kicad/modules"
+    "--set-default KICAD6_SYMBOL_DIR ${symbols}/share/kicad/library"
+    "--set-default KICAD6_TEMPLATE_DIR ${templates}/share/kicad/template"
+    "--prefix KICAD6_TEMPLATE_DIR : ${symbols}/share/kicad/template"
+    "--prefix KICAD6_TEMPLATE_DIR : ${footprints}/share/kicad/template"
+  ]
+  ++ optionals (!stable && with3d)
+  [
+    "--set-default KISYS3DMOD ${packages3d}/share/kicad/3dmodels"
+    "--set-default KICAD6_3DMODEL_DIR ${packages3d}/share/kicad/3dmodels"
+  ]
   ++ optionals (withNgspice) [ "--prefix LD_LIBRARY_PATH : ${libngspice}/lib" ]
 
   # infinisil's workaround for #39493
@@ -215,6 +235,8 @@ stdenv.mkDerivation rec {
     in
     (concatStringsSep "\n"
       (flatten [
+        "runHook preInstall"
+
         (optionalString (withScripting) "buildPythonPath \"${base} $pythonPath\" \n")
 
         # wrap each of the directly usable tools
@@ -226,9 +248,22 @@ stdenv.mkDerivation rec {
 
         # link in the CLI utils
         (map (util: "ln -s ${base}/bin/${util} $out/bin/${util}") utils)
+
+        "runHook postInstall"
       ])
     )
   ;
+
+  postInstall = ''
+    mkdir -p $out/share
+    ln -s ${base}/share/applications $out/share/applications
+    ln -s ${base}/share/icons $out/share/icons
+    ln -s ${base}/share/mime $out/share/mime
+  '' + optionalString (stable) ''
+    ln -s ${base}/share/appdata $out/share/appdata
+  '' + optionalString (!stable) ''
+    ln -s ${base}/share/metainfo $out/share/metainfo
+  '';
 
   # can't run this for each pname
   # stable and unstable are in the same versions.nix
@@ -247,9 +282,8 @@ stdenv.mkDerivation rec {
       KiCad is an open source software suite for Electronic Design Automation.
       The Programs handle Schematic Capture, and PCB Layout with Gerber output.
     '';
-    license = lib.licenses.agpl3;
-    # berce seems inactive...
-    maintainers = with lib.maintainers; [ evils kiwi berce ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ evils kiwi ];
     # kicad is cross platform
     platforms = lib.platforms.all;
     # despite that, nipkgs' wxGTK for darwin is "wxmac"

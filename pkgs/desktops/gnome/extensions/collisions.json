@@ -1,0 +1,75 @@
+{
+  "38": {
+    "applications-menu": [
+      "apps-menu@gnome-shell-extensions.gcampax.github.com",
+      "Applications_Menu@rmy.pobox.com"
+    ],
+    "workspace-indicator": [
+      "workspace-indicator@gnome-shell-extensions.gcampax.github.com",
+      "horizontal-workspace-indicator@tty2.io"
+    ],
+    "lock-keys": [
+      "lockkeys@vaina.lt",
+      "lockkeys@fawtytoo"
+    ],
+    "fuzzy-clock": [
+      "Fuzzy_Clock@dallagi",
+      "fuzzy-clock@keepawayfromfire.co.uk"
+    ],
+    "hide-activities-button": [
+      "Hide_Activities@shay.shayel.org",
+      "hide-activities-button@nmingori.gnome-shell-extensions.org"
+    ],
+    "shutdowntimer": [
+      "ShutdownTimer@neumann",
+      "ShutdownTimer@deminder"
+    ],
+    "noannoyance": [
+      "noannoyance@sindex.com",
+      "noannoyance@daase.net"
+    ],
+    "transparent-window": [
+      "transparent-window@pbxqdown.github.com",
+      "transparentwindows.mdirshad07"
+    ],
+    "floating-dock": [
+      "floatingDock@sun.wxg@gmail.com",
+      "floating-dock@nandoferreira_prof@hotmail.com"
+    ],
+    "gnome-trash": [
+      "gnome-trash@gnome-trash.b00f.gitlab.com",
+      "gnome-trash@b00f.github.io"
+    ]
+  },
+  "40": {
+    "applications-menu": [
+      "apps-menu@gnome-shell-extensions.gcampax.github.com",
+      "Applications_Menu@rmy.pobox.com"
+    ],
+    "workspace-indicator": [
+      "workspace-indicator@gnome-shell-extensions.gcampax.github.com",
+      "horizontal-workspace-indicator@tty2.io"
+    ],
+    "lock-keys": [
+      "lockkeys@vaina.lt",
+      "lockkeys@fawtytoo"
+    ],
+    "hide-activities-button": [
+      "Hide_Activities@shay.shayel.org",
+      "hide-activities-button@nmingori.gnome-shell-extensions.org"
+    ],
+    "shutdowntimer": [
+      "ShutdownTimer@neumann",
+      "shutdown-timer-gnome-shell-extension",
+      "ShutdownTimer@deminder"
+    ],
+    "noannoyance": [
+      "noannoyance@sindex.com",
+      "noannoyance@daase.net"
+    ],
+    "extension-list": [
+      "extension-list@tu.berry",
+      "screen-lock@garciabaameiro.com"
+    ]
+  }
+}

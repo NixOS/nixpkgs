@@ -1,4 +1,12 @@
-{ lib, isPy27, isPy38, fetchFromGitHub, buildPythonPackage, pythonOlder, fetchpatch, flake8, importlib-metadata, six }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonAtLeast
+, isPy27
+, flake8
+, six
+, python
+}:
 
 buildPythonPackage rec {
   pname = "flake8-future-import";
@@ -12,16 +20,22 @@ buildPythonPackage rec {
     sha256 = "00q8n15xdnvqj454arn7xxksyrzh0dw996kjyy7g9rdk0rf8x82z";
   };
 
-  propagatedBuildInputs = [ flake8 six ]
-    ++ lib.optionals (pythonOlder "3.8") [
-      importlib-metadata
-    ];
+  patches = lib.optionals (pythonAtLeast "3.8") [
+    ./fix-annotations-version.patch
+  ] ++ lib.optionals isPy27 [
+    # Upstream disables this test case naturally on python 3, but it also fails
+    # inside NixPkgs for python 2. Since it's going to be deleted, we just skip it
+    # on py2 as well.
+    ./skip-test.patch
+  ];
 
-  # Upstream disables this test case naturally on python 3, but it also fails
-  # inside NixPkgs for python 2. Since it's going to be deleted, we just skip it
-  # on py2 as well.
-  patches = lib.optionals isPy38 [ ./fix-annotations-version.patch ]
-    ++ lib.optionals isPy27 [ ./skip-test.patch ];
+  propagatedBuildInputs = [ flake8 ];
+
+  checkInputs = [ six ];
+
+  checkPhase = ''
+    ${python.interpreter} -m test_flake8_future_import
+  '';
 
   meta = with lib; {
     description = "A flake8 extension to check for the imported __future__ modules to make it easier to have a consistent code base";

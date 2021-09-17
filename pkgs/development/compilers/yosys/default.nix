@@ -1,4 +1,5 @@
-{ stdenv, lib
+{ stdenv
+, lib
 , abc-verifier
 , bash
 , bison
@@ -33,13 +34,13 @@
 
 stdenv.mkDerivation rec {
   pname   = "yosys";
-  version = "0.9+3962";
+  version = "0.9+4276";
 
   src = fetchFromGitHub {
     owner  = "YosysHQ";
     repo   = "yosys";
-    rev    = "5d0cc54f5c36dea1d989438426a321b4554257c8";
-    sha256 = "1c85kga95lin6rcpr7cf80wr9f1a6irdrld9g23zmqdrxhick8y7";
+    rev    = "75a4cdfc8afc10fed80e43fb1ba31c7edaf6e361";
+    sha256 = "13xb7ny6i0kr6z6xkj9wmmcj551si7w05r3cghq8h8wkikyh6c8p";
   };
 
   enableParallelBuilding = true;

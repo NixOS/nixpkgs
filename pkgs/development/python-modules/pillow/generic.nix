@@ -26,9 +26,13 @@ buildPythonPackage rec {
     # pillow-simd
     "test_roundtrip"
     "test_basic"
+  ] ++ lib.optionals (lib.versions.major version == "6") [
+    # RuntimeError: Error setting from dictionary
+    "test_custom_metadata"
   ];
 
-  propagatedBuildInputs = [ olefile ];
+  propagatedBuildInputs = [ olefile ]
+    ++ lib.optionals (lib.versionAtLeast version "8.2.0") [ defusedxml ];
 
   checkInputs = [ pytestCheckHook pyroma numpy ];
 

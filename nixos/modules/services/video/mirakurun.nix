@@ -8,6 +8,18 @@ let
   username = config.users.users.mirakurun.name;
   groupname = config.users.users.mirakurun.group;
   settingsFmt = pkgs.formats.yaml {};
+
+  polkitRule = pkgs.writeTextDir "share/polkit-1/rules.d/10-mirakurun.rules" ''
+    polkit.addRule(function (action, subject) {
+      if (
+        (action.id == "org.debian.pcsc-lite.access_pcsc" ||
+          action.id == "org.debian.pcsc-lite.access_card") &&
+        subject.user == "${username}"
+      ) {
+        return polkit.Result.YES;
+      }
+    });
+  '';
 in
   {
     options = {
@@ -45,6 +57,15 @@ in
           description = ''
             Path to unix socket to listen on. If <literal>null</literal>, it
             won't listen on any unix sockets.
+          '';
+        };
+
+        allowSmartCardAccess = mkOption {
+          type = types.bool;
+          default = true;
+          description = ''
+            Install polkit rules to allow Mirakurun to access smart card readers
+            which is commonly used along with tuner devices.
           '';
         };
 
@@ -110,7 +131,7 @@ in
     };
 
     config = mkIf cfg.enable {
-      environment.systemPackages = [ mirakurun ];
+      environment.systemPackages = [ mirakurun ] ++ optional cfg.allowSmartCardAccess polkitRule;
       environment.etc = {
         "mirakurun/server.yml".source = settingsFmt.generate "server.yml" cfg.serverSettings;
         "mirakurun/tuners.yml" = mkIf (cfg.tunerSettings != null) {
@@ -152,7 +173,7 @@ in
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];
         serviceConfig = {
-          ExecStart = "${mirakurun}/bin/mirakurun";
+          ExecStart = "${mirakurun}/bin/mirakurun-start";
           User = username;
           Group = groupname;
           RuntimeDirectory="mirakurun";

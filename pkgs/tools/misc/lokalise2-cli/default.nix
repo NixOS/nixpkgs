@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "lokalise2-cli";
-  version = "2.6.3";
+  version = "2.6.7";
 
   src = fetchFromGitHub {
     owner = "lokalise";
     repo = "lokalise-cli-2-go";
     rev = "v${version}";
-    sha256 = "sha256-3kDaaPDRbhJyp/CblTKhB0dUeOjroCs3WkjEXL87Od4=";
+    sha256 = "sha256-p3JvaDDebbIgOvTh0e7yYe3qOXvj1pLSG95hpK62M7s=";
   };
 
-  vendorSha256 = "sha256-iWYlbGeLp/SiF8/OyWGIHJQB1RJjma9/EDc3zOsjNG8=";
+  vendorSha256 = "sha256-KJ8haktP9qoG5QsKnTOkvE8L+SQ9Z6hrsjUeS0wrdLs=";
 
   doCheck = false;
 

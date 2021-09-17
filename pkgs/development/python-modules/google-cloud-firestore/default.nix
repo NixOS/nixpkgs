@@ -13,11 +13,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-firestore";
-  version = "2.0.2";
+  version = "2.3.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1q5s2gpkibnjxal9zrz02jfnazf7rxk0bi0ln5a3di6i47kjnga9";
+    sha256 = "6e2eb65ccd75c6579214fb2099cfb98c57b2b4907ccb38a2ed21f00f492b7a50";
   };
 
   propagatedBuildInputs = [
@@ -39,10 +39,12 @@ buildPythonPackage rec {
     rm -r google
   '';
 
-  pytestFlagsArray = [
-    # tests are broken
-    "--ignore=tests/system/test_system.py"
-    "--ignore=tests/system/test_system_async.py"
+  disabledTestPaths = [
+    # Tests are broken
+    "tests/system/test_system.py"
+    "tests/system/test_system_async.py"
+    # requires credentials
+    "tests/unit/v1/test_bulk_writer.py"
   ];
 
   disabledTests = [

@@ -12,8 +12,6 @@ stdenv.mkDerivation rec {
     sha256 = "04ylk0y5b3jml2awmyz7m1hnymni8y1n83m0k6ychdh0px8frhm5";
   };
 
-  phases = [ "unpackPhase" "postPatch" "installPhase" ];
-
   postPatch = ''
     substituteInPlace debian/anarchism.desktop \
       --replace "/usr/bin/xdg-open" "${xdg-utils}/bin/xdg-open"

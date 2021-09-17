@@ -1,20 +1,21 @@
-{ mkXfceDerivation, exo, glib, gtk3, gtksourceview3, xfconf }:
+{ mkXfceDerivation, gobject-introspection, gtk3, gtksourceview4, gspell }:
 
 mkXfceDerivation {
   category = "apps";
   pname = "mousepad";
-  version = "0.4.2";
+  version = "0.5.6";
   odd-unstable = false;
 
-  sha256 = "0a35vaq4l0d8vzw7hqpvbgkr3wj1sqr2zvj7bc5z4ikz2cppqj7p";
+  sha256 = "sha256-cdM2NHUnN2FITITb4077Je5Z8xwZAJfjmwXfV+WE6jk=";
 
-  nativeBuildInputs = [ exo ];
-  buildInputs = [ glib gtk3 gtksourceview3 xfconf ];
+  nativeBuildInputs = [ gobject-introspection ];
 
-  # See https://github.com/NixOS/nixpkgs/issues/36468
-  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
+  buildInputs = [ gtk3 gtksourceview4 gspell ];
+
+  # Use the GSettings keyfile backend rather than DConf
+  configureFlags = [ "--enable-keyfile-settings" ];
 
   meta = {
-    description = "A simple text editor for Xfce";
+    description = "Simple text editor for Xfce";
   };
 }

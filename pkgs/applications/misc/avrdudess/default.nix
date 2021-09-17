@@ -10,7 +10,8 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ unzip ];
 
-  phases = [ "buildPhase" ];
+  dontUnpack = true;
+  dontInstall = true;
 
   buildPhase = ''
     mkdir -p "$out/avrdudess"

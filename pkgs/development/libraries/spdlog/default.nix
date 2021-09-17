@@ -49,8 +49,8 @@ let
 in
 {
   spdlog_1 = generic {
-    version = "1.8.2";
-    sha256 = "sha256-vYled5Z9fmxuO9193lefpFzIHAiSgvYn2iOfneLidQ8=";
+    version = "1.8.5";
+    sha256 = "sha256-D29jvDZQhPscaOHlrzGN1s7/mXlcsovjbqYpXd7OM50=";
   };
 
   spdlog_0 = generic {

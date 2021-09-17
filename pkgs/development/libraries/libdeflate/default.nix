@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub }:
+{ stdenv, lib, fetchFromGitHub, fixDarwinDylibNames }:
 
 stdenv.mkDerivation rec {
   pname = "libdeflate";
@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace Makefile --replace /usr/local $out
   '';
+
+  nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
   configurePhase = ''
     make programs/config.h

@@ -1,30 +1,31 @@
-{ lib, stdenv, fetchurl, autoreconfHook, pkg-config, cmocka, acl, libuuid, lzo, zlib, zstd }:
+{ lib, stdenv, fetchgit, autoreconfHook, pkg-config, cmocka, acl, libuuid, lzo, zlib, zstd }:
 
 stdenv.mkDerivation rec {
   pname = "mtd-utils";
-  version = "2.1.1";
+  version = "2.1.3";
 
-  src = fetchurl {
-    url = "ftp://ftp.infradead.org/pub/${pname}/${pname}-${version}.tar.bz2";
-    sha256 = "1lijl89l7hljx8xx70vrz9srd3h41v5gh4b0lvqnlv831yvyh5cd";
+  src = fetchgit {
+    url = "git://git.infradead.org/mtd-utils.git";
+    rev = "v${version}";
+    sha256 = "sha256-w20Zp1G0WbNvEJwqpLw2f8VvmW8ZBEL0GSHze8qpPWg";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ] ++ lib.optional doCheck cmocka;
   buildInputs = [ acl libuuid lzo zlib zstd ];
 
-  configureFlags = [
-    (lib.enableFeature doCheck "unit-tests")
-    (lib.enableFeature doCheck "tests")
+  configureFlags = with lib; [
+    (enableFeature doCheck "unit-tests")
+    (enableFeature doCheck "tests")
   ];
-  enableParallelBuilding = true;
 
   doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
 
-  meta = {
+  meta = with lib; {
     description = "Tools for MTD filesystems";
-    license = lib.licenses.gpl2Plus;
+    downloadPage = "https://git.infradead.org/mtd-utils.git";
+    license = licenses.gpl2Plus;
     homepage = "http://www.linux-mtd.infradead.org/";
-    maintainers = with lib.maintainers; [ viric ];
-    platforms = with lib.platforms; linux;
+    maintainers = with maintainers; [ viric superherointj ];
+    platforms = with platforms; linux;
   };
 }

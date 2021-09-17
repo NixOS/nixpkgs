@@ -1,16 +1,18 @@
 { stdenv
 , lib
-, fetchgit
+, fetchFromSourcehut
 , meson
 , ninja
 , pkg-config
+, glib
 , wrapGAppsHook
-, gtk3
-, gnome3
+, epoxy
+, gtk4
+, zbar
 , tiffSupport ? true
 , libraw
 , jpgSupport ? true
-, imagemagick
+, graphicsmagick
 , exiftool
 }:
 
@@ -20,24 +22,37 @@ let
   inherit (lib) makeBinPath optional optionals optionalString;
   runtimePath = makeBinPath (
     optional tiffSupport libraw
-    ++ optionals jpgSupport [ imagemagick exiftool ]
+    ++ optionals jpgSupport [ graphicsmagick exiftool ]
   );
 in
 stdenv.mkDerivation rec {
   pname = "megapixels";
-  version = "0.14.0";
+  version = "1.3.0";
 
-  src = fetchgit {
-    url = "https://git.sr.ht/~martijnbraam/megapixels";
+  src = fetchFromSourcehut {
+    owner = "~martijnbraam";
+    repo = "megapixels";
     rev = version;
-    sha256 = "136rv9sx0kgfkpqn5s90j7j4qhb8h04p14g5qhqshb89kmmsmxiw";
+    sha256 = "0dagp1sh5whnnllrydk7ijjid0hmvcbdm8kkzq2g168khdfn80jm";
   };
 
-  nativeBuildInputs = [ meson ninja pkg-config wrapGAppsHook ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    glib
+    wrapGAppsHook
+  ];
 
-  buildInputs = [ gtk3 gnome3.adwaita-icon-theme ]
-  ++ optional tiffSupport libraw
-  ++ optional jpgSupport imagemagick;
+  buildInputs = [
+    epoxy
+    gtk4
+    zbar
+  ];
+
+  postInstall = ''
+    glib-compile-schemas $out/share/glib-2.0/schemas
+  '';
 
   preFixup = optionalString (tiffSupport || jpgSupport) ''
     gappsWrapperArgs+=(
@@ -46,10 +61,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "GTK3 camera application using raw v4l2 and media-requests";
+    description = "GTK4 camera application that knows how to deal with the media request api";
     homepage = "https://sr.ht/~martijnbraam/Megapixels";
+    changelog = "https://git.sr.ht/~martijnbraam/megapixels/refs/${version}";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ OPNA2608 ];
+    maintainers = with maintainers; [ OPNA2608 dotlambda ];
     platforms = platforms.linux;
   };
 }

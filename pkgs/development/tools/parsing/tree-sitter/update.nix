@@ -2,6 +2,9 @@
 , curl, jq, xe
 , src }:
 
+# Grammar list:
+# https://github.com/tree-sitter/tree-sitter/blob/master/docs/index.md
+
 let
   # Grammars we want to fetch from the tree-sitter github orga
   knownTreeSitterOrgGrammarRepos = [
@@ -11,7 +14,6 @@ let
     "tree-sitter-json"
     "tree-sitter-cpp"
     "tree-sitter-ruby"
-    "tree-sitter-razor"
     "tree-sitter-go"
     "tree-sitter-c-sharp"
     "tree-sitter-python"
@@ -33,6 +35,7 @@ let
     "tree-sitter-jsdoc"
     "tree-sitter-ql"
     "tree-sitter-embedded-template"
+    "tree-sitter-tsq"
   ];
   knownTreeSitterOrgGrammarReposJson = jsonFile "known-tree-sitter-org-grammar-repos" knownTreeSitterOrgGrammarRepos;
 
@@ -56,6 +59,10 @@ let
     "highlight-schema"
     # website
     "tree-sitter.github.io"
+    # not maintained
+    "tree-sitter-razor"
+    # rust library for constructing arbitrary graph structures from source code
+    "tree-sitter-graph"
   ];
   ignoredTreeSitterOrgReposJson = jsonFile "ignored-tree-sitter-org-repos" ignoredTreeSitterOrgRepos;
 
@@ -63,13 +70,53 @@ let
   # If you need a grammar that already exists in the official orga,
   # make sure to give it a different name.
   otherGrammars = {
+    "tree-sitter-comment" = {
+      orga = "stsewd";
+      repo = "tree-sitter-comment";
+    };
     "tree-sitter-nix" = {
       orga = "cstrahan";
       repo = "tree-sitter-nix";
     };
+    "tree-sitter-latex" = {
+      orga = "latex-lsp";
+      repo = "tree-sitter-latex";
+    };
     "tree-sitter-lua" = {
       orga = "nvim-treesitter";
       repo = "tree-sitter-lua";
+    };
+    "tree-sitter-fennel" = {
+      orga = "travonted";
+      repo = "tree-sitter-fennel";
+    };
+    "tree-sitter-markdown" = {
+      orga = "ikatyang";
+      repo = "tree-sitter-markdown";
+    };
+    "tree-sitter-svelte" = {
+      orga = "Himujjal";
+      repo = "tree-sitter-svelte";
+    };
+    "tree-sitter-yaml" = {
+      orga = "ikatyang";
+      repo = "tree-sitter-yaml";
+    };
+    "tree-sitter-toml" = {
+      orga = "ikatyang";
+      repo = "tree-sitter-toml";
+    };
+    "tree-sitter-zig" = {
+      orga = "GrayJack";
+      repo = "tree-sitter-zig";
+    };
+    "tree-sitter-fish" = {
+      orga = "ram02z";
+      repo = "tree-sitter-fish";
+    };
+    "tree-sitter-dot" = {
+      orga = "rydesun";
+      repo = "tree-sitter-dot";
     };
   };
 

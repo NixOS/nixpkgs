@@ -32,7 +32,7 @@ in with lib; {
     };
 
     port = mkOption {
-      type = types.int;
+      type = types.port;
       default = 43110;
       example = 43110;
       description = "Optional zeronet web UI port.";
@@ -41,7 +41,7 @@ in with lib; {
     fileserverPort = mkOption {
       # Not optional: when absent zeronet tries to write one to the
       # read-only config file and crashes
-      type = types.int;
+      type = types.port;
       default = 12261;
       example = 12261;
       description = "Zeronet fileserver port.";

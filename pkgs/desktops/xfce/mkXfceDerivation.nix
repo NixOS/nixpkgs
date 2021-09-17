@@ -47,8 +47,8 @@ let
     };
 
     meta = with lib; {
-      homepage = "https://gitlab.xfce.org/${category}/${pname}/about";
-      license = licenses.gpl2; # some libraries are under LGPLv2+
+      homepage = "https://gitlab.xfce.org/${category}/${pname}";
+      license = licenses.gpl2Plus; # some libraries are under LGPLv2+
       platforms = platforms.linux;
     };
   };
@@ -57,3 +57,4 @@ let
 in
 
 stdenv.mkDerivation (recursiveUpdate template publicArgs // concatAttrLists [ template args ])
+# TODO [ AndersonTorres ]: verify if it allows using hash attribute as an option to sha256

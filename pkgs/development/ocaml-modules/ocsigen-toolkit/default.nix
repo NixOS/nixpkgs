@@ -5,26 +5,26 @@
 stdenv.mkDerivation rec {
  pname = "ocsigen-toolkit";
  name = "ocaml${ocaml.version}-${pname}-${version}";
- version = "2.7.0";
+ version = "2.12.2";
 
  propagatedBuildInputs = [ calendar js_of_ocaml-ppx_deriving_json eliom ];
  buildInputs = [ ocaml findlib opaline ];
 
- installPhase =
-  ''
+ installPhase = ''
+    runHook preInstall
+    mkdir -p $OCAMLFIND_DESTDIR
     export OCAMLPATH=$out/lib/ocaml/${ocaml.version}/site-lib/:$OCAMLPATH
     make install
     opaline -prefix $out
+    runHook postInstall
   '';
 
   src = fetchFromGitHub {
     owner = "ocsigen";
     repo = pname;
     rev = version;
-    sha256 = "0jan5779nc0jf993hmvfii15ralcs20sm4mcnqwqrnhjbq6f6zpk";
+    sha256 = "1fqrh7wrzs76qj3nvmxqy76pzqvsja2dwzqxyl8rkh5jg676vmqy";
   };
-
-  createFindlibDestdir = true;
 
   meta = {
     homepage = "http://ocsigen.org/ocsigen-toolkit/";

@@ -8,27 +8,26 @@
 , fetchFromGitHub
 , flake8
 , flask-sockets
-, isPy3k
+, moto
+, pythonOlder
 , psutil
 , pytest-asyncio
-, pytest-cov
 , pytestCheckHook
-, pytestrunner
 , sqlalchemy
-, websocket_client
+, websocket-client
 , websockets
 }:
 
 buildPythonPackage rec {
   pname = "slack-sdk";
-  version = "3.4.0";
-  disabled = !isPy3k;
+  version = "3.11.0";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "slackapi";
     repo = "python-slack-sdk";
     rev = "v${version}";
-    sha256 = "sha256-WlHVorltN8Apq0MZUStPlJZKbBFSbnAoIBQUZYGdDiY=";
+    sha256 = "0zwz36mpc7syrkslf1rf7c6sxfanw87mbr2758j01sph50m43g6m";
   };
 
   propagatedBuildInputs = [
@@ -36,7 +35,7 @@ buildPythonPackage rec {
     aiohttp
     boto3
     sqlalchemy
-    websocket_client
+    websocket-client
     websockets
   ];
 
@@ -45,22 +44,26 @@ buildPythonPackage rec {
     databases
     flake8
     flask-sockets
+    moto
     psutil
     pytest-asyncio
-    pytest-cov
     pytestCheckHook
-    pytestrunner
   ];
 
   preCheck = ''
     export HOME=$(mktemp -d)
   '';
 
-  # Exclude tests that requires network features
-  pytestFlagsArray = [ "--ignore=integration_tests" ];
+  disabledTestPaths = [
+    # Exclude tests that requires network features
+    "integration_tests"
+  ];
+
   disabledTests = [
+    # Requires network features
     "test_start_raises_an_error_if_rtm_ws_url_is_not_returned"
     "test_org_installation"
+    "test_interactions"
   ];
 
   pythonImportsCheck = [ "slack_sdk" ];

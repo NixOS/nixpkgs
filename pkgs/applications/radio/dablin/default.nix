@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, cmake, pkg-config
-, mpg123, SDL2, gnome3, faad2, pcre
+, mpg123, SDL2, gtkmm3, faad2, pcre
 } :
 
 stdenv.mkDerivation rec {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config ];
 
-  buildInputs = [ faad2 mpg123 SDL2 gnome3.gtkmm pcre ];
+  buildInputs = [ faad2 mpg123 SDL2 gtkmm3 pcre ];
 
   meta = with lib; {
     description = "Play DAB/DAB+ from ETI-NI aligned stream";

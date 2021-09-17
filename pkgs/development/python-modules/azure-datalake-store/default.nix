@@ -4,18 +4,18 @@
 , requests
 , adal
 , azure-common
-, futures
+, futures ? null
 , pathlib2
 , isPy3k
 }:
 
 buildPythonPackage rec {
   pname = "azure-datalake-store";
-  version = "0.0.51";
+  version = "0.0.52";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b871ebb3bcfd292e8a062dbbaacbc132793d98f1b60f549a8c3b672619603fc1";
+    sha256 = "4198ddb32614d16d4502b43d5c9739f81432b7e0e4d75d30e05149fe6007fea2";
   };
 
   propagatedBuildInputs = [

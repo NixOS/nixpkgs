@@ -1,20 +1,20 @@
 { lib, buildPythonPackage, fetchPypi, python
 , fonttools, lxml, fs, unicodedata2
 , defcon, fontpens, fontmath, booleanoperations
-, pytest, setuptools_scm
+, pytest, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "fontParts";
-  version = "0.9.9";
+  version = "0.9.11";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1iz04kpxgc5fx2rl4585hr1vp4cdajqbddlskkhlmzkn9hvz528i";
+    sha256 = "558a5f681fcf7ca0bb5a1c68917b5d9b61c77d517833a01ea1667773d13f4012";
     extension = "zip";
   };
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     booleanoperations

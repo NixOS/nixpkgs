@@ -2,7 +2,7 @@
 
 let
   pname = "camlidl";
-  webpage = "http://caml.inria.fr/pub/old_caml_site/camlidl/";
+  webpage = "https://caml.inria.fr/pub/old_caml_site/camlidl/";
 in
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";

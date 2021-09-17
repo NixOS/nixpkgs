@@ -13,7 +13,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ libX11 ];
 
-  phases = [ "buildPhase" "installPhase" ];
+  dontUnpack = true;
 
   buildPhase = ''
     cc -O2 -o RunningX $(pkg-config --cflags --libs x11) $src

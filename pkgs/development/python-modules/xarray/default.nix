@@ -6,18 +6,20 @@
 , pandas
 , setuptools
 , isPy3k
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "xarray";
-  version = "0.16.2";
+  version = "0.19.0";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-OOhDnWyRvNW3wPyjSdr44GQ6xohQyYcmLVNSbp19AeQ=";
+    sha256 = "3a365ce09127fc841ba88baa63f37ca61376ffe389a6c5e66d52f2c88c23a62b";
   };
 
+  nativeBuildInputs = [ setuptools-scm ];
   propagatedBuildInputs = [ numpy pandas setuptools ];
   checkInputs = [ pytestCheckHook ];
 

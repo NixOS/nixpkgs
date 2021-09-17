@@ -1,14 +1,21 @@
-{ lib, stdenv, fetchFromGitHub, mpir, gmp, mpfr, flint }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, mpir
+, gmp
+, mpfr
+, flint
+}:
 
 stdenv.mkDerivation rec {
   pname = "arb";
-  version = "2.17.0";
+  version = "2.20.0";
 
   src = fetchFromGitHub {
     owner = "fredrik-johansson";
     repo = pname;
     rev = version;
-    sha256 = "05lpy3hkl5f8ik19aw40cqydrb932xaf2n8hbq9ib5dnk7f010p1";
+    sha256 = "sha256-HOIbdkVV7NKowIGhDdn/S8unIRV469OnRHiuiCGaWgk=";
   };
 
   buildInputs = [ mpir gmp mpfr flint ];

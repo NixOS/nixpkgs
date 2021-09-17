@@ -12,6 +12,11 @@ stdenv.mkDerivation {
     sha256 = "0m4spva3z6fgbwlg4zq53l5p227dic893q2qq65pvzxyf7k7nmil";
   };
 
+  postPatch = ''
+    substituteInPlace Makefile.in \
+      --replace "-linkpkg" "-thread -linkpkg"
+  '';
+
   nativeBuildInputs = [ autoreconfHook which ];
   buildInputs = [ ocaml bap findlib ctypes ];
 

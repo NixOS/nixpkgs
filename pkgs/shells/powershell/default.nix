@@ -1,11 +1,15 @@
 { stdenv, lib, autoPatchelfHook, fetchzip, libunwind, libuuid, icu, curl
 , darwin, makeWrapper, less, openssl_1_1, pam, lttng-ust }:
 
-let platformString = if stdenv.isDarwin then "osx"
+let archString = if stdenv.isAarch64 then "arm64"
+                 else if stdenv.isx86_64 then "x64"
+                 else throw "unsupported platform";
+    platformString = if stdenv.isDarwin then "osx"
                      else if stdenv.isLinux then "linux"
                      else throw "unsupported platform";
-    platformSha = if stdenv.isDarwin then "0zv02h3njphrs8kgmicy7w40mmhmigdfl38f2dpwrs6z67f8vrm2"
-                     else if stdenv.isLinux then "0dka2q8ijg3ryzwmxapf8aq55d0sgaj6jj0rzj2738in9g4w2hbh"
+    platformSha = if stdenv.isDarwin then "0w44ws8b6zfixf7xz93hmplqsx18279n9x8j77y4rbzs13fldvsn"
+                     else if (stdenv.isLinux && stdenv.isx86_64) then "sha256-SOZn7CGLu9x+xhQwjgm0SL7sKDODLwHRpzi7tMdRBAM="
+                     else if (stdenv.isLinux && stdenv.isAarch64) then "1axbi4kmb1ydys7c45jhp729w1srid3c8jgivb4bdmdp56rf6h32"
                      else throw "unsupported platform";
     platformLdLibraryPath = if stdenv.isDarwin then "DYLD_FALLBACK_LIBRARY_PATH"
                      else if stdenv.isLinux then "LD_LIBRARY_PATH"
@@ -15,10 +19,10 @@ let platformString = if stdenv.isDarwin then "osx"
 in
 stdenv.mkDerivation rec {
   pname = "powershell";
-  version = "7.1.0";
+  version = "7.1.4";
 
   src = fetchzip {
-    url = "https://github.com/PowerShell/PowerShell/releases/download/v${version}/powershell-${version}-${platformString}-x64.tar.gz";
+    url = "https://github.com/PowerShell/PowerShell/releases/download/v${version}/powershell-${version}-${platformString}-${archString}.tar.gz";
     sha256 = platformSha;
     stripRoot = false;
   };
@@ -38,8 +42,11 @@ stdenv.mkDerivation rec {
     rm -f $pslibs/libcrypto${ext}.1.0.0
     rm -f $pslibs/libssl${ext}.1.0.0
 
+    # At least the 7.1.4-osx package does not have the executable bit set.
+    chmod a+x $pslibs/pwsh
+
     ls $pslibs
-  '' + lib.optionalString (!stdenv.isDarwin) ''
+  '' + lib.optionalString (!stdenv.isDarwin && !stdenv.isAarch64) ''
     patchelf --replace-needed libcrypto${ext}.1.0.0 libcrypto${ext}.1.1 $pslibs/libmi.so
     patchelf --replace-needed libssl${ext}.1.0.0 libssl${ext}.1.1 $pslibs/libmi.so
   '' + ''
@@ -55,14 +62,15 @@ stdenv.mkDerivation rec {
 
   doInstallCheck = true;
   installCheckPhase = ''
-    $out/bin/pwsh --help > /dev/null
+    # May need a writable home, seen on Darwin.
+    HOME=$TMP $out/bin/pwsh --help > /dev/null
   '';
 
   meta = with lib; {
     description = "Powerful cross-platform (Windows, Linux, and macOS) shell and scripting language based on .NET";
     homepage = "https://github.com/PowerShell/PowerShell";
     maintainers = with maintainers; [ yrashk srgom ];
-    platforms = [ "x86_64-darwin" "x86_64-linux" ];
+    platforms = [ "x86_64-darwin" "x86_64-linux" "aarch64-linux"];
     license = with licenses; [ mit ];
   };
 

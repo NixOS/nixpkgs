@@ -1,6 +1,6 @@
 { lib, mkDerivation, fetchFromGitHub, fetchpatch, qmake
 , qtbase, qtscript, qtwebkit, qtserialport, qtsvg, qtdeclarative, qtquickcontrols2
-, alsaLib, libsndfile, flite, openssl, udev, SDL2
+, alsa-lib, libsndfile, flite, openssl, udev, SDL2
 }:
 
 mkDerivation rec {
@@ -15,7 +15,7 @@ mkDerivation rec {
   };
 
   buildInputs = [
-    alsaLib libsndfile flite openssl udev SDL2
+    alsa-lib libsndfile flite openssl udev SDL2
     qtbase qtscript qtwebkit qtserialport qtsvg qtdeclarative qtquickcontrols2
   ];
 
@@ -29,8 +29,6 @@ mkDerivation rec {
     substituteInPlace $out/share/applications/apmplanner2.desktop \
       --replace /usr $out
   '';
-
-  enableParallelBuilding = true;
 
   meta = {
     description = "Ground station software for autonomous vehicles";

@@ -27,6 +27,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.isc;
     maintainers = [ maintainers.matthiasbeyer ];
-    platforms = platforms.linux;
+    platforms = platforms.all;
   };
 }

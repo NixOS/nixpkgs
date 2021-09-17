@@ -5,7 +5,7 @@
 , python3
 , dropbox
 , gtk3
-, gnome3
+, gnome
 , gdk-pixbuf
 , gobject-introspection
 }:
@@ -49,7 +49,7 @@ stdenv.mkDerivation {
   buildInputs = [
     python3
     gtk3
-    gnome3.nautilus
+    gnome.nautilus
   ];
 
   configureFlags = [

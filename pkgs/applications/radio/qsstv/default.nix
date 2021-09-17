@@ -1,5 +1,5 @@
 { mkDerivation, lib, fetchurl, qtbase, qmake, openjpeg, pkg-config, fftw,
-  libpulseaudio, alsaLib, hamlib, libv4l, fftwFloat }:
+  libpulseaudio, alsa-lib, hamlib, libv4l, fftwFloat }:
 
 mkDerivation rec {
   version = "9.4.4";
@@ -10,14 +10,12 @@ mkDerivation rec {
     sha256 = "0f9hx6sy418cb23fadll298pqbc5l2lxsdivi4vgqbkvx7sw58zi";
   };
 
-  enableParallelBuilding = true;
-
   nativeBuildInputs = [
     qmake
     pkg-config
   ];
 
-  buildInputs = [ qtbase openjpeg fftw libpulseaudio alsaLib hamlib libv4l
+  buildInputs = [ qtbase openjpeg fftw libpulseaudio alsa-lib hamlib libv4l
                   fftwFloat ];
 
   postInstall = ''

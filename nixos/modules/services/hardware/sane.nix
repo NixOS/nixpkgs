@@ -4,9 +4,10 @@ with lib;
 
 let
 
-  pkg = if config.hardware.sane.snapshot
-    then pkgs.sane-backends-git
-    else pkgs.sane-backends;
+  pkg = pkgs.sane-backends.override {
+    scanSnapDriversUnfree = config.hardware.sane.drivers.scanSnap.enable;
+    scanSnapDriversPackage = config.hardware.sane.drivers.scanSnap.package;
+  };
 
   sanedConf = pkgs.writeTextFile {
     name = "saned.conf";
@@ -32,7 +33,7 @@ let
   };
 
   backends = [ pkg netConf ] ++ optional config.services.saned.enable sanedConf ++ config.hardware.sane.extraBackends;
-  saneConfig = pkgs.mkSaneConfig { paths = backends; };
+  saneConfig = pkgs.mkSaneConfig { paths = backends; inherit (config.hardware.sane) disabledDefaultBackends; };
 
   enabled = config.hardware.sane.enable || config.services.saned.enable;
 
@@ -75,6 +76,16 @@ in
       example = literalExample "[ pkgs.hplipWithPlugin ]";
     };
 
+    hardware.sane.disabledDefaultBackends = mkOption {
+      type = types.listOf types.str;
+      default = [];
+      example = [ "v4l" ];
+      description = ''
+        Names of backends which are enabled by default but should be disabled.
+        See <literal>$SANE_CONFIG_DIR/dll.conf</literal> for the list of possible names.
+      '';
+    };
+
     hardware.sane.configDir = mkOption {
       type = types.str;
       internal = true;
@@ -87,6 +98,28 @@ in
       example = "192.168.0.16";
       description = ''
         Network hosts that should be probed for remote scanners.
+      '';
+    };
+
+    hardware.sane.drivers.scanSnap.enable = mkOption {
+      type = types.bool;
+      default = false;
+      example = true;
+      description = ''
+        Whether to enable drivers for the Fujitsu ScanSnap scanners.
+
+        The driver files are unfree and extracted from the Windows driver image.
+      '';
+    };
+
+    hardware.sane.drivers.scanSnap.package = mkOption {
+      type = types.package;
+      default = pkgs.sane-drivers.epjitsu;
+      description = ''
+        Epjitsu driver package to use. Useful if you want to extract the driver files yourself.
+
+        The process is described in the <literal>/etc/sane.d/epjitsu.conf</literal> file in
+        the <literal>sane-backends</literal> package.
       '';
     };
 
@@ -155,6 +188,7 @@ in
       users.users.scanner = {
         uid = config.ids.uids.scanner;
         group = "scanner";
+        extraGroups = [ "lp" ] ++ optionals config.services.avahi.enable [ "avahi" ];
       };
     })
   ];

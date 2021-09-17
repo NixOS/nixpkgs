@@ -1,35 +1,39 @@
-{ lib, stdenv, fetchurl, pkg-config, gettext, itstool, gnome3, glib, gtk3, gtksourceview3, libwnck3, libgtop, libxml2, libnotify, polkit, upower, wirelesstools, mate, hicolor-icon-theme, wrapGAppsHook }:
+{ lib, stdenv, fetchurl, pkg-config, gettext, itstool, dbus-glib, glib, gtk3, gtksourceview3
+, gucharmap, libmateweather, libnl, libwnck, libgtop, libxml2, libnotify, mate-panel, polkit
+, upower, wirelesstools, mate, hicolor-icon-theme, wrapGAppsHook, mateUpdateScript }:
 
 stdenv.mkDerivation rec {
   pname = "mate-applets";
-  version = "1.24.1";
+  version = "1.26.0";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0h70i4x3bk017pgv4zn280682wm58vwdjm7kni91ni8rmblnnvyp";
+    sha256 = "0xy9dwiqvmimqshbfq80jxq65aznlgx491lqq8rl4x8c9sdl7q5p";
   };
 
   nativeBuildInputs = [
-    pkg-config
     gettext
     itstool
+    pkg-config
     wrapGAppsHook
   ];
 
   buildInputs = [
+    dbus-glib
     gtk3
     gtksourceview3
-    gnome3.gucharmap
-    libwnck3
+    gucharmap
+    hicolor-icon-theme
     libgtop
-    libxml2
+    libmateweather
+    libnl
     libnotify
+    libwnck
+    libxml2
+    mate-panel
     polkit
     upower
     wirelesstools
-    mate.libmateweather
-    mate.mate-panel
-    hicolor-icon-theme
   ];
 
   configureFlags = [ "--enable-suid=no" ];
@@ -37,6 +41,8 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
   enableParallelBuilding = true;
+
+  passthru.updateScript = mateUpdateScript { inherit pname version; };
 
   meta = with lib; {
     description = "Applets for use with the MATE panel";

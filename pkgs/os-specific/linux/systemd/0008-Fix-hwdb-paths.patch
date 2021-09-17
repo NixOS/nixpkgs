@@ -1,7 +1,7 @@
-From 27680c555713e36d16198fc5f60b0f85e0777d30 Mon Sep 17 00:00:00 2001
+From 874698425f6d68fc0d662cb17c7c29e0af3e8c25 Mon Sep 17 00:00:00 2001
 From: Nikolay Amiantov <ab@fmap.me>
 Date: Thu, 7 Jul 2016 02:47:13 +0300
-Subject: [PATCH 08/18] Fix hwdb paths
+Subject: [PATCH 08/19] Fix hwdb paths
 
 Patch by vcunat.
 ---
@@ -28,5 +28,5 @@ index cb3c77ce96..7b8c80071f 100644
  _public_ int sd_hwdb_new(sd_hwdb **ret) {
          _cleanup_(sd_hwdb_unrefp) sd_hwdb *hwdb = NULL;
 -- 
-2.29.2
+2.30.1
 

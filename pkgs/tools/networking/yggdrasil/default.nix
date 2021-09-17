@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "yggdrasil";
-  version = "0.3.15";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "yggdrasil-network";
     repo = "yggdrasil-go";
     rev = "v${version}";
-    sha256 = "1nf00ygp55l01c0gdkw15f08p3hmn6s2r99lgf2xpq8jn75qra4i";
+    sha256 = "sha256-sMcbOTLdmAXp3U2XeNM0hrwOTjzr+9B6IvAaVbjhuFY=";
   };
 
-  vendorSha256 = "1zk6h1isxyml9asyb7g4scbhnfwghqwnv40a5f5j7z0s0s4nybdp";
+  vendorSha256 = "sha256-QQN8ePOQ7DT9KeuY4ohFuPtocuinh3Y3us6QMnCQ4gc=";
 
   doCheck = false;
 
@@ -22,12 +22,11 @@ buildGoModule rec {
 
   subPackages = [ "cmd/yggdrasil" "cmd/yggdrasilctl" ];
 
-  buildFlagsArray = ''
-    -ldflags=
-      -X github.com/yggdrasil-network/yggdrasil-go/src/version.buildVersion=${version}
-      -X github.com/yggdrasil-network/yggdrasil-go/src/version.buildName=${pname}
-      -s -w
-  '';
+  ldflags = [
+    "-X github.com/yggdrasil-network/yggdrasil-go/src/version.buildVersion=${version}"
+    "-X github.com/yggdrasil-network/yggdrasil-go/src/version.buildName=${pname}"
+    "-s" "-w"
+  ];
 
   passthru.tests.basic = nixosTests.yggdrasil;
 

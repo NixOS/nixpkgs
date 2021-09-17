@@ -1,12 +1,12 @@
-{ lib, stdenv, libressl, fetchzip, fetchpatch, pkg-config }:
+{ lib, stdenv, libressl, fetchzip, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "pounce";
-  version = "2.1p1";
+  version = "2.5";
 
   src = fetchzip {
     url = "https://git.causal.agency/pounce/snapshot/pounce-${version}.tar.gz";
-    sha256 = "1gphia45swj4ws6nrklqg1hvjrc6yw921v0pf29cvjhwrfl6dl0h";
+    sha256 = "0swbncsm888r95dwk13v1vii5sr3gah817dfah5v7zs8lsv1kgv5";
   };
 
   buildInputs = [ libressl ];

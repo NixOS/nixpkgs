@@ -1,19 +1,19 @@
-{ lib, stdenv, fetchurl, makeWrapper, jre_headless, nixosTests }:
+{ lib, stdenv, fetchurl, makeWrapper, openjdk11_headless, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "graylog";
-  version = "3.3.9";
+  version = "3.3.14";
 
   src = fetchurl {
     url = "https://packages.graylog2.org/releases/graylog/graylog-${version}.tgz";
-    sha256 = "1wl9j2jgjg5gwcsh92qr5f68wx12nvwadc9xkaa9wwd7x3z825jq";
+    sha256 = "04dslbvgrraacsw7wydbiv8jc753as2g54wn9sgh3lsryvzrfqfa";
   };
 
   dontBuild = true;
   dontStrip = true;
 
   nativeBuildInputs = [ makeWrapper ];
-  makeWrapperArgs = [ "--prefix" "PATH" ":" "${jre_headless}/bin" ];
+  makeWrapperArgs = [ "--set-default" "JAVA_HOME" "${openjdk11_headless}" ];
 
   passthru.tests = { inherit (nixosTests) graylog; };
 

@@ -21,6 +21,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  postPatch = lib.optionalString stdenv.isDarwin ''
+    substituteInPlace Makefile.conf \
+      --subst-var-by PREFIX $out
+  '';
+
   nativeBuildInputs = [ perl ];
 
   buildInputs = [ zlib bzip2 ];
@@ -34,7 +39,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://www.routino.org/";
     description = "OpenStreetMap Routing Software";
-    license = licenses.agpl3;
+    license = licenses.agpl3Plus;
     maintainers = with maintainers; [ dotlambda ];
     platforms = with platforms; linux ++ darwin;
   };

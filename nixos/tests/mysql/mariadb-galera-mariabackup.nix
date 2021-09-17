@@ -2,7 +2,7 @@ import ./../make-test-python.nix ({ pkgs, ...} :
 
 let
   mysqlenv-common      = pkgs.buildEnv { name = "mysql-path-env-common";      pathsToLink = [ "/bin" ]; paths = with pkgs; [ bash gawk gnutar inetutils which ]; };
-  mysqlenv-mariabackup = pkgs.buildEnv { name = "mysql-path-env-mariabackup"; pathsToLink = [ "/bin" ]; paths = with pkgs; [ gzip iproute netcat procps pv socat ]; };
+  mysqlenv-mariabackup = pkgs.buildEnv { name = "mysql-path-env-mariabackup"; pathsToLink = [ "/bin" ]; paths = with pkgs; [ gzip iproute2 netcat procps pv socat ]; };
 
 in {
   name = "mariadb-galera-mariabackup";
@@ -31,7 +31,7 @@ in {
         firewall.allowedTCPPorts = [ 3306 4444 4567 4568 ];
         firewall.allowedUDPPorts = [ 4567 ];
       };
-      users.users.testuser = { };
+      users.users.testuser = { isSystemUser = true; };
       systemd.services.mysql = with pkgs; {
         path = [ mysqlenv-common mysqlenv-mariabackup ];
       };
@@ -89,7 +89,7 @@ in {
         firewall.allowedTCPPorts = [ 3306 4444 4567 4568 ];
         firewall.allowedUDPPorts = [ 4567 ];
       };
-      users.users.testuser = { };
+      users.users.testuser = { isSystemUser = true; };
       systemd.services.mysql = with pkgs; {
         path = [ mysqlenv-common mysqlenv-mariabackup ];
       };
@@ -136,7 +136,7 @@ in {
         firewall.allowedTCPPorts = [ 3306 4444 4567 4568 ];
         firewall.allowedUDPPorts = [ 4567 ];
       };
-      users.users.testuser = { };
+      users.users.testuser = { isSystemUser = true; };
       systemd.services.mysql = with pkgs; {
         path = [ mysqlenv-common mysqlenv-mariabackup ];
       };

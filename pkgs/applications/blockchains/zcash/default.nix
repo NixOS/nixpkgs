@@ -1,23 +1,26 @@
 { rust, rustPlatform, stdenv, lib, fetchFromGitHub, autoreconfHook, makeWrapper
-, cargo, pkg-config
-, bash, curl, coreutils, boost17x, db62, libsodium, libevent, utf8cpp, util-linux
+, cargo, pkg-config, curl, coreutils, boost174, db62, hexdump, libsodium
+, libevent, utf8cpp, util-linux, withDaemon ? true, withMining ? true
+, withUtils ? true, withWallet ? true, withZmq ? true, zeromq
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage.override { stdenv = stdenv; } rec {
   pname = "zcash";
-  version = "4.1.1";
+  version = "4.4.1";
 
   src = fetchFromGitHub {
     owner = "zcash";
     repo  = "zcash";
     rev = "v${version}";
-    sha256 = "185zrw276g545np0niw5hlhlppkjbf5a1r4rwhnbaimdjdii2dil";
+    sha256 = "0nhrjizx518khrl8aygag6a1ianzzqpchasggi963f807kv7ipb7";
   };
 
-  cargoSha256 = "0qxr6asf8zsya0f1ri39z2cnfpjk96hgwjchz2c7j87vibbvg6dc";
+  cargoSha256 = "101j8cn2lg3l1gn53yg3svzwx783z331g9kzn9ici4azindyx903";
 
-  nativeBuildInputs = [ autoreconfHook cargo makeWrapper pkg-config ];
-  buildInputs = [ bash boost17x db62 libevent libsodium utf8cpp ];
+  nativeBuildInputs = [ autoreconfHook cargo hexdump makeWrapper pkg-config ];
+  buildInputs = [ boost174 libevent libsodium utf8cpp ]
+    ++ lib.optional withWallet db62
+    ++ lib.optional withZmq zeromq;
 
   # Use the stdenv default phases (./configure; make) instead of the
   # ones from buildRustPackage.
@@ -34,10 +37,13 @@ rustPlatform.buildRustPackage rec {
 
   configureFlags = [
     "--disable-tests"
-    "--with-boost-libdir=${lib.getLib boost17x}/lib"
+    "--with-boost-libdir=${lib.getLib boost174}/lib"
     "CXXFLAGS=-I${lib.getDev utf8cpp}/include/utf8cpp"
     "RUST_TARGET=${rust.toRustTargetSpec stdenv.hostPlatform}"
-  ];
+  ] ++ lib.optional (!withWallet) "--disable-wallet"
+    ++ lib.optional (!withDaemon) "--without-daemon"
+    ++ lib.optional (!withUtils) "--without-utils"
+    ++ lib.optional (!withMining) "--disable-mining";
 
   enableParallelBuilding = true;
 

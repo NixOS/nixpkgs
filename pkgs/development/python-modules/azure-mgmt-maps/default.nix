@@ -6,24 +6,24 @@
 , msrest
 , msrestazure
 , azure-common
-, azure-mgmt-nspkg
+, azure-mgmt-core
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-maps";
-  version = "0.1.0";
+  version = "2.0.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "c120e210bb61768da29de24d28b82f8d42ae24e52396eb6569b499709e22f006";
+    sha256 = "384e17f76a68b700a4f988478945c3a9721711c0400725afdfcb63cf84e85f0e";
   };
 
   propagatedBuildInputs = [
     msrest
     msrestazure
     azure-common
-    azure-mgmt-nspkg
+    azure-mgmt-core
   ];
 
   pythonNamespaces = [ "azure.mgmt" ];

@@ -1,11 +1,11 @@
 { rustPlatform, stdenv, lib, fetchFromGitHub, fetchurl
-, pkg-config, openssl
+, pkg-config, curl, openssl
 , CoreFoundation, libiconv, Security
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-c";
-  version = "0.7.3";
+  version = "0.9.2";
 
   src = stdenv.mkDerivation rec {
     name = "${pname}-source-${version}";
@@ -14,11 +14,11 @@ rustPlatform.buildRustPackage rec {
       owner = "lu-zero";
       repo = pname;
       rev = "v${version}";
-      sha256 = "0df87kx8dfq2fvz00k6advwg2iw9djkflhrbsjw0xhac78623c56";
+      sha256 = "0hvlrhmbplx4cj4l5fynihgr9cdh0rkpwvipizk1gpp6p1ksr5hz";
     };
     cargoLock = fetchurl {
       url = "https://github.com/lu-zero/${pname}/releases/download/v${version}/Cargo.lock";
-      sha256 = "18l54jf9q5xb908bwyyil1sblxxa9mkrgr33gm0r6nxicw6kf8in";
+      sha256 = "0ckn31asz7013206j153ig96602dxvxm6skdz1plan0h05j5mgah";
     };
 
     installPhase = ''
@@ -28,11 +28,22 @@ rustPlatform.buildRustPackage rec {
     '';
   };
 
-  cargoSha256 = "0z7sjfnnmld5bijn14c7v7arh0vzqmbkjk7bf9ky67acq2r2cv2f";
+  cargoSha256 = "0c0vn2pcy5px02mc0l4a3w7z9n8hc6br5w3ww6nrav5w6911jp52";
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl ]
+
+  nativeBuildInputs = [ pkg-config (lib.getDev curl) ];
+  buildInputs = [ openssl curl ]
   ++ lib.optionals stdenv.isDarwin [ CoreFoundation libiconv Security ];
+
+  # Ensure that we are avoiding build of the curl vendored in curl-sys
+  doInstallCheck = stdenv.hostPlatform.libc == "glibc";
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    ldd "$out/bin/cargo-cbuild" | grep libcurl.so
+
+    runHook postInstallCheck
+  '';
 
   meta = with lib; {
     description = "A cargo subcommand to build and install C-ABI compatibile dynamic and static libraries";
@@ -45,6 +56,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/lu-zero/cargo-c/releases/tag/v${version}";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ primeos ];
+    maintainers = with maintainers; [ ];
   };
 }

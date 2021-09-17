@@ -5,7 +5,7 @@
 , perl
 , gettext
 , gobject-introspection
-, gnome3
+, gnome
 , gtk-doc
 }:
 
@@ -31,8 +31,9 @@ stdenv.mkDerivation rec {
   ];
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
     };
   };
 

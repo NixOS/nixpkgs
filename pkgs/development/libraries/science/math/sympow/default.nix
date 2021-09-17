@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
     sha256 = "132l0xv00ld1svvv9wh99wfra4zzjv2885h2sq0dsl98wiyvi5zl";
   };
 
+  patches = [ ./clean-extra-logfile-output-from-pari.patch ];
+
   postUnpack = ''
     patchShebangs .
   '';

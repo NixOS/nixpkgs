@@ -7,6 +7,7 @@
 , makeWrapper
 , rsync
 , installShellFiles
+, nixosTests
 
 , components ? [
     "cmd/kubelet"
@@ -20,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "kubernetes";
-  version = "1.20.4";
+  version = "1.22.1";
 
   src = fetchFromGitHub {
     owner = "kubernetes";
     repo = "kubernetes";
     rev = "v${version}";
-    sha256 = "0nni351ya688dphdkpyq94p3wjw2kigg85kmalwdpv5wpz1abl5g";
+    sha256 = "sha256-coiDKczX5kWw/5A9+p0atPbn2nR0wBBdfXKTw6FYywo=";
   };
 
   nativeBuildInputs = [ removeReferencesTo makeWrapper which go rsync installShellFiles ];
@@ -66,8 +67,8 @@ stdenv.mkDerivation rec {
     install -D build/pause/linux/pause -t $pause/bin
     installManPage docs/man/man1/*.[1-9]
 
-    # Unfortunately, kube-addons-main.sh only looks for the lib file in either the current working dir
-    # or in /opt. We have to patch this for now.
+    # Unfortunately, kube-addons-main.sh only looks for the lib file in either the
+    # current working dir or in /opt. We have to patch this for now.
     substitute cluster/addons/addon-manager/kube-addons-main.sh $out/bin/kube-addons \
       --subst-var out
 
@@ -95,4 +96,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ johanot offline saschagrunert ];
     platforms = platforms.unix;
   };
+
+  passthru.tests = nixosTests.kubernetes;
 }

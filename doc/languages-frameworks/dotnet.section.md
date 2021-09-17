@@ -1,31 +1,31 @@
-# Dotnet
+# Dotnet {#dotnet}
 
-## Local Development Workflow
+## Local Development Workflow {#local-development-workflow}
 
 For local development, it's recommended to use nix-shell to create a dotnet environment:
 
-```
+```nix
 # shell.nix
 with import <nixpkgs> {};
 
 mkShell {
   name = "dotnet-env";
-  buildInputs = [
+  packages = [
     dotnet-sdk_3
   ];
 }
 ```
 
-### Using many sdks in a workflow
+### Using many sdks in a workflow {#using-many-sdks-in-a-workflow}
 
 It's very likely that more than one sdk will be needed on a given project. Dotnet provides several different frameworks (E.g dotnetcore, aspnetcore, etc.) as well as many versions for a given framework. Normally, dotnet is able to fetch a framework and install it relative to the executable. However, this would mean writing to the nix store in nixpkgs, which is read-only. To support the many-sdk use case, one can compose an environment using `dotnetCorePackages.combinePackages`:
 
-```
+```nix
 with import <nixpkgs> {};
 
 mkShell {
   name = "dotnet-env";
-  buildInputs = [
+  packages = [
     (with dotnetCorePackages; combinePackages [
       sdk_3_1
       sdk_3_0
@@ -37,7 +37,7 @@ mkShell {
 
 This will produce a dotnet installation that has the dotnet 3.1, 3.0, and 2.1 sdk. The first sdk listed will have it's cli utility present in the resulting environment. Example info output:
 
-```
+```ShellSession
 $ dotnet --info
 .NET Core SDK (reflecting any global.json):
  Version:   3.1.101
@@ -60,15 +60,15 @@ $ dotnet --info
   Microsoft.NETCore.App 3.1.1 [/nix/store/iiv98i2jdi226dgh4jzkkj2ww7f8jgpd-dotnet-core-combined/shared/Microsoft.NETCore.App]
 ```
 
-## dotnet-sdk vs dotnetCorePackages.sdk
+## dotnet-sdk vs dotnetCorePackages.sdk {#dotnet-sdk-vs-dotnetcorepackages.sdk}
 
 The `dotnetCorePackages.sdk_X_Y` is preferred over the old dotnet-sdk as both major and minor version are very important for a dotnet environment. If a given minor version isn't present (or was changed), then this will likely break your ability to build a project.
 
-## dotnetCorePackages.sdk vs vs dotnetCorePackages.net vs dotnetCorePackages.netcore vs dotnetCorePackages.aspnetcore
+## dotnetCorePackages.sdk vs dotnetCorePackages.net vs dotnetCorePackages.netcore vs dotnetCorePackages.aspnetcore {#dotnetcorepackages.sdk-vs-dotnetcorepackages.net-vs-dotnetcorepackages.netcore-vs-dotnetcorepackages.aspnetcore}
 
 The `dotnetCorePackages.sdk` contains both a runtime and the full sdk of a given version. The `net`, `netcore` and `aspnetcore` packages are meant to serve as minimal runtimes to deploy alongside already built applications. For runtime versions >= .NET 5 `net` is used while `netcore` is used for older .NET Core runtime version.
 
-## Packaging a Dotnet Application
+## Packaging a Dotnet Application {#packaging-a-dotnet-application}
 
 Ideally, we would like to build against the sdk, then only have the dotnet runtime available in the runtime closure.
 

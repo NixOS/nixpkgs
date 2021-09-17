@@ -184,12 +184,14 @@ in {
       };
     };
 
-    environment.systemPackages = [ pkgs.etcdctl ];
+    environment.systemPackages = [ pkgs.etcd ];
 
     users.users.etcd = {
-      uid = config.ids.uids.etcd;
+      isSystemUser = true;
+      group = "etcd";
       description = "Etcd daemon user";
       home = cfg.dataDir;
     };
+    users.groups.etcd = {};
   };
 }

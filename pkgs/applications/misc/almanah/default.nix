@@ -8,7 +8,7 @@
 , gcr
 , gettext
 , glib
-, gnome3
+, gnome
 , gpgme
 , gtk3
 , gtksourceview3
@@ -25,11 +25,11 @@
 
 stdenv.mkDerivation rec {
   pname = "almanah";
-  version = "0.12.2";
+  version = "0.12.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "IWYOnOu0C9uQ9k1dgWkJ6Kv+o/jY+6Llfsi4PusHE24=";
+    sha256 = "lMpDQOxlGljP66APR49aPbTZnfrGakbQ2ZcFvmiPMFo=";
   };
 
   nativeBuildInputs = [
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
   ];
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "none"; # it is quite odd
     };

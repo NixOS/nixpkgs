@@ -37,7 +37,7 @@ This works just like `runCommand`. The only difference is that it also provides 
 
 Variant of `runCommand` that forces the derivation to be built locally, it is not substituted. This is intended for very cheap commands (<1s execution time). It saves on the network roundrip and can speed up a build.
 
-::: note
+::: {.note}
 This sets [`allowSubstitutes` to `false`](https://nixos.org/nix/manual/#adv-attr-allowSubstitutes), so only use `runCommandLocal` if you are certain the user will always have a builder for the `system` of the derivation. This should be true for most trivial use cases (e.g. just copying some files to a different location or adding symlinks), because there the `system` is usually the same as `builtins.currentSystem`.
 :::
 
@@ -50,3 +50,50 @@ Many more commands wrap `writeTextFile` including `writeText`, `writeTextDir`, `
 ## `symlinkJoin` {#trivial-builder-symlinkJoin}
 
 This can be used to put many derivations into the same directory structure. It works by creating a new derivation and adding symlinks to each of the paths listed. It expects two arguments, `name`, and `paths`. `name` is the name used in the Nix store path for the created derivation. `paths` is a list of paths that will be symlinked. These paths can be to Nix store derivations or any other subdirectory contained within.
+
+## `writeReferencesToFile` {#trivial-builder-writeReferencesToFile}
+
+Writes the closure of transitive dependencies to a file.
+
+This produces the equivalent of `nix-store -q --requisites`.
+
+For example,
+
+```nix
+writeReferencesToFile (writeScriptBin "hi" ''${hello}/bin/hello'')
+```
+
+produces an output path `/nix/store/<hash>-runtime-deps` containing
+
+```nix
+/nix/store/<hash>-hello-2.10
+/nix/store/<hash>-hi
+/nix/store/<hash>-libidn2-2.3.0
+/nix/store/<hash>-libunistring-0.9.10
+/nix/store/<hash>-glibc-2.32-40
+```
+
+You can see that this includes `hi`, the original input path,
+`hello`, which is a direct reference, but also
+the other paths that are indirectly required to run `hello`.
+
+## `writeDirectReferencesToFile` {#trivial-builder-writeDirectReferencesToFile}
+
+Writes the set of references to the output file, that is, their immediate dependencies.
+
+This produces the equivalent of `nix-store -q --references`.
+
+For example,
+
+```nix
+writeDirectReferencesToFile (writeScriptBin "hi" ''${hello}/bin/hello'')
+```
+
+produces an output path `/nix/store/<hash>-runtime-references` containing
+
+```nix
+/nix/store/<hash>-hello-2.10
+```
+
+but none of `hello`'s dependencies, because those are not referenced directly
+by `hi`'s output.

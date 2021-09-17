@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ddccontrol";
-  version = "0.5.1";
+  version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "ddccontrol";
     repo = "ddccontrol";
-    rev = "0.5.1";
-    sha256 = "sha256-e6Rzzz5S+Um2ZBuUkfAJQA4V+zqCqsUHB0f1t/dTU2w=";
+    rev = "0.5.2";
+    sha256 = "sha256-kul0sjbwbCwadvrccG3KwL/fKWACFUg74QGvgfWE4FQ=";
   };
 
   nativeBuildInputs = [
@@ -32,6 +32,10 @@ stdenv.mkDerivation rec {
     pciutils
     gtk2
     ddccontrol-db
+  ];
+
+  configureFlags = [
+    "--with-systemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
   ];
 
   prePatch = ''

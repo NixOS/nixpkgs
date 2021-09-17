@@ -1,4 +1,4 @@
-{ lib, fetchFromGitLab, python3Packages, ffmpeg_3, mplayer, vcdimager, cdrkit, dvdauthor
+{ lib, fetchFromGitLab, python3Packages, ffmpeg, mplayer, vcdimager, cdrkit, dvdauthor
 , gtk3, gettext, wrapGAppsHook, gdk-pixbuf, gobject-introspection }:
 
 let
@@ -30,11 +30,11 @@ in buildPythonApplication rec {
   ];
 
   buildInputs = [
-    ffmpeg_3
+    ffmpeg
   ];
 
   propagatedBuildInputs = [
-    gtk3 pygobject3 gdk-pixbuf dbus-python ffmpeg_3 mplayer dvdauthor vcdimager cdrkit urllib3 setuptools
+    gtk3 pygobject3 gdk-pixbuf dbus-python ffmpeg mplayer dvdauthor vcdimager cdrkit urllib3 setuptools
   ];
 
   postPatch = ''

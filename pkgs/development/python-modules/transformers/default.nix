@@ -8,6 +8,7 @@
 , regex
 , requests
 , numpy
+, packaging
 , protobuf
 , sacremoses
 , tokenizers
@@ -16,14 +17,16 @@
 
 buildPythonPackage rec {
   pname = "transformers";
-  version = "4.3.3";
+  version = "4.4.2";
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-KII7ZR+vnCxCxUcBOQo9y0KxZa+XuIIAkSJejk8HrlA=";
+    hash = "sha256-kl1Z2FBo+yqVXUqLaUtet6IycmdcAtfydNTI4MNNrkc=";
   };
+
+  nativeBuildInputs = [ packaging ];
 
   propagatedBuildInputs = [
     cookiecutter
@@ -52,6 +55,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/huggingface/transformers/releases/tag/v${version}";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ danieldk pashashocky ];
+    maintainers = with maintainers; [ pashashocky ];
   };
 }

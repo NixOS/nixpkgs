@@ -50,7 +50,7 @@ in
       repo = "ngx_brotli";
       rev = "25f86f0bac1101b6512135eac5f93c49c63609e3";
       sha256 = "02hfvfa6milj40qc2ikpb9f95sxqvxk4hly3x74kqhysbdi06hhv";
-    }; in pkgs.runCommandNoCC "ngx_brotli-src" {} ''
+    }; in pkgs.runCommand "ngx_brotli-src" {} ''
       cp -a ${gitsrc} $out
       substituteInPlace $out/filter/config \
         --replace '$ngx_addon_dir/deps/brotli/c' ${lib.getDev pkgs.brotli}
@@ -321,13 +321,13 @@ in
     };
   };
 
-  rtmp ={
+  rtmp = {
     src = fetchFromGitHub {
       name = "rtmp";
       owner = "arut";
       repo = "nginx-rtmp-module";
-      rev = "v1.2.1";
-      sha256 = "0na1aam176irz6w148hnvamqy1ilbn4abhdzkva0yrm35a3ksbzn";
+      rev = "v1.2.2";
+      sha256 = "0y45bswk213yhkc2v1xca2rnsxrhx8v6azxz9pvi71vvxcggqv6h";
     };
   };
 

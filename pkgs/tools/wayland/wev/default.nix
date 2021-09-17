@@ -1,8 +1,9 @@
 { lib
 , stdenv
-, fetchurl
+, fetchFromSourcehut
 , pkg-config
 , scdoc
+, wayland-scanner
 , wayland
 , wayland-protocols
 , libxkbcommon
@@ -12,13 +13,15 @@ stdenv.mkDerivation rec {
   pname = "wev";
   version = "1.0.0";
 
-  src = fetchurl {
-    url = "https://git.sr.ht/~sircmpwn/wev/archive/${version}.tar.gz";
-    sha256 = "0vlxdkb59v6nb10j28gh1a56sx8jk7ak7liwzv911kpmygnls03g";
+  src = fetchFromSourcehut {
+    owner = "~sircmpwn";
+    repo = pname;
+    rev = version;
+    sha256 = "0l71v3fzgiiv6xkk365q1l08qvaymxd4kpaya6r2g8yzkr7i2hms";
   };
 
-  nativeBuildInputs = [ pkg-config scdoc wayland ];
-  buildInputs = [ wayland-protocols libxkbcommon ];
+  nativeBuildInputs = [ pkg-config scdoc wayland-scanner ];
+  buildInputs = [ wayland wayland-protocols libxkbcommon ];
 
   installFlags = [ "PREFIX=$(out)" ];
 

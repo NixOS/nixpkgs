@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchurl, meson, ninja, pkg-config, exiv2, glib, gnome3, gobject-introspection, vala, gtk-doc, docbook_xsl, docbook_xml_dtd_43 }:
+{ lib, stdenv, fetchurl, meson, ninja, pkg-config, exiv2, glib, gnome, gobject-introspection, vala, gtk-doc, docbook_xsl, docbook_xml_dtd_43 }:
 
 stdenv.mkDerivation rec {
   pname = "gexiv2";
-  version = "0.12.2";
+  version = "0.12.3";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "IyK1UqyjMO73lySmmcUaMCNF1eB0c4V4s5i38v+XlEw=";
+    sha256 = "0jt5cqL8b4QBULrR7XnBy+xnKVHhgMHh7DPKbHMMWfM=";
   };
 
   nativeBuildInputs = [ meson ninja pkg-config gobject-introspection vala gtk-doc docbook_xsl docbook_xml_dtd_43 ];
@@ -22,8 +22,9 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
     };
   };
 

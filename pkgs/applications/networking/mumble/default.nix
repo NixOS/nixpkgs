@@ -1,12 +1,12 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, qt5
 , avahi, boost, libopus, libsndfile, protobuf, speex, libcap
-, alsaLib, python3
+, alsa-lib, python3
 , rnnoise
 , jackSupport ? false, libjack2
 , speechdSupport ? false, speechd
 , pulseSupport ? false, libpulseaudio
 , iceSupport ? false, zeroc-ice
-, grpcSupport ? false, grpc, c-ares, abseil-cpp, which
+, grpcSupport ? false, grpc, which
 , nixosTests
 }:
 
@@ -63,7 +63,7 @@ let
       description = "Low-latency, high quality voice chat software";
       homepage = "https://mumble.info";
       license = licenses.bsd3;
-      maintainers = with maintainers; [ petabyteboy infinisil ];
+      maintainers = with maintainers; [ petabyteboy infinisil felixsinger ];
       platforms = platforms.linux;
     };
   });
@@ -73,7 +73,7 @@ let
 
     nativeBuildInputs = [ qt5.qttools ];
     buildInputs = [ libopus libsndfile speex qt5.qtsvg rnnoise ]
-      ++ lib.optional stdenv.isLinux alsaLib
+      ++ lib.optional stdenv.isLinux alsa-lib
       ++ lib.optional jackSupport libjack2
       ++ lib.optional speechdSupport speechd
       ++ lib.optional pulseSupport libpulseaudio;
@@ -104,7 +104,7 @@ let
   server = source: generic {
     type = "murmur";
 
-    postPatch = lib.optional iceSupport ''
+    postPatch = lib.optionalString iceSupport ''
       grep -Rl '/usr/share/Ice' . | xargs sed -i 's,/usr/share/Ice/,${zeroc-ice.dev}/share/ice/,g'
     '';
 
@@ -115,7 +115,7 @@ let
 
     buildInputs = [ libcap ]
       ++ lib.optional iceSupport zeroc-ice
-      ++ lib.optionals grpcSupport [ grpc c-ares abseil-cpp which ];
+      ++ lib.optionals grpcSupport [ grpc which ];
 
     installPhase = ''
       # bin stuff

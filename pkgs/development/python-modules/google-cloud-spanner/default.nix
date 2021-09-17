@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, grpc_google_iam_v1
+, grpc-google-iam-v1
 , google-cloud-core
 , google-cloud-testutils
 , libcst
@@ -14,24 +14,46 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-spanner";
-  version = "3.0.0";
+  version = "3.9.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "060c53bc6f541660a2fe868fd83a695207d4e7b050e04fe103d1e77634b813c7";
+    sha256 = "53fe3d903363fb17db155fd05f5356d9b310a519fbebd53903aa426a31cad706";
   };
 
-  propagatedBuildInputs = [ google-cloud-core grpc_google_iam_v1 libcst proto-plus sqlparse ];
+  propagatedBuildInputs = [
+    google-cloud-core
+    grpc-google-iam-v1
+    libcst
+    proto-plus
+    sqlparse
+  ];
 
-  checkInputs = [ google-cloud-testutils mock pytestCheckHook pytest-asyncio ];
+  checkInputs = [
+    google-cloud-testutils
+    mock
+    pytestCheckHook
+    pytest-asyncio
+  ];
 
   preCheck = ''
     # prevent google directory from shadowing google imports
     rm -r google
-    # disable tests which require credentials
-    rm tests/system/test_{system,system_dbapi}.py
-    rm tests/unit/spanner_dbapi/test_{connect,connection,cursor}.py
   '';
+
+  disabledTestPaths = [
+    # Requires credentials
+    "tests/system/test_backup_api.py"
+    "tests/system/test_database_api.py"
+    "tests/system/test_dbapi.py"
+    "tests/system/test_instance_api.py"
+    "tests/system/test_session_api.py"
+    "tests/system/test_streaming_chunking.py"
+    "tests/system/test_table_api.py"
+    "tests/unit/spanner_dbapi/test_connect.py"
+    "tests/unit/spanner_dbapi/test_connection.py"
+    "tests/unit/spanner_dbapi/test_cursor.py"
+  ];
 
   pythonImportsCheck = [
     "google.cloud.spanner_admin_database_v1"

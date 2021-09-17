@@ -44,8 +44,8 @@ rec {
   };
 
   shards_0_14 = generic {
-    version = "0.14.0";
-    sha256 = "sha256-HEyGXoGkQvLrk672/ekmBxnR1eRM//GwRPd/19LM8Wo=";
+    version = "0.14.1";
+    sha256 = "sha256-/C6whh5RbTBkFWqpn0GqyVe0opbrklm8xPv5MIG99VU=";
     crystal = crystal_0_36;
   };
 

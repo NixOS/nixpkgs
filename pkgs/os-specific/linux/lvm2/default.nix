@@ -4,7 +4,7 @@
 , pkg-config
 , util-linux
 , libuuid
-, thin-provisioning-tools, libaio
+, libaio
 , enableCmdlib ? false
 , enableDmeventd ? false
 , udev ? null
@@ -16,15 +16,15 @@ assert enableDmeventd -> enableCmdlib;
 
 stdenv.mkDerivation rec {
   pname = "lvm2" + lib.optionalString enableDmeventd "with-dmeventd";
-  version = "2.03.11";
+  version = "2.03.12";
 
   src = fetchurl {
     url = "https://mirrors.kernel.org/sourceware/lvm2/LVM2.${version}.tgz";
-    sha256 = "1m4xpda8vbyd89ca0w8nacvnl4j34yzsa625gn990fb5sh84ab44";
+    sha256 = "1shczwfd0888dchjiaqzd48ampm6f8y0ngsqd99fy4nxlbr5q1vn";
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ udev libuuid thin-provisioning-tools libaio ];
+  buildInputs = [ udev libuuid libaio ];
 
   configureFlags = [
     "--disable-readline"
@@ -67,22 +67,13 @@ stdenv.mkDerivation rec {
     sed -i 's|^#define LVM_CONFIGURE_LINE.*$|#define LVM_CONFIGURE_LINE "<removed>"|g' ./include/configure.h
   '';
 
-
-  patches = lib.optionals stdenv.hostPlatform.isMusl [
-    (fetchpatch {
-      name = "fix-stdio-usage.patch";
-      url = "https://git.alpinelinux.org/aports/plain/main/lvm2/fix-stdio-usage.patch?h=3.7-stable&id=31bd4a8c2dc00ae79a821f6fe0ad2f23e1534f50";
-      sha256 = "0m6wr6qrvxqi2d2h054cnv974jq1v65lqxy05g1znz946ga73k3p";
-    })
+  patches = [
+    # Musl fixes from Alpine.
+    ./fix-stdio-usage.patch
     (fetchpatch {
       name = "mallinfo.patch";
       url = "https://git.alpinelinux.org/aports/plain/main/lvm2/mallinfo.patch?h=3.7-stable&id=31bd4a8c2dc00ae79a821f6fe0ad2f23e1534f50";
       sha256 = "0g6wlqi215i5s30bnbkn8w7axrs27y3bnygbpbnf64wwx7rxxlj0";
-    })
-    (fetchpatch {
-      name = "mlockall-default-config.patch";
-      url = "https://git.alpinelinux.org/aports/plain/main/lvm2/mlockall-default-config.patch?h=3.7-stable&id=31bd4a8c2dc00ae79a821f6fe0ad2f23e1534f50";
-      sha256 = "1ivbj3sphgf8n1ykfiv5rbw7s8dgnj5jcr9jl2v8cwf28lkacw5l";
     })
   ];
 

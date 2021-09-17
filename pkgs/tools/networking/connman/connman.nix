@@ -55,10 +55,10 @@ let inherit (lib) optionals; in
 
 stdenv.mkDerivation rec {
   pname = "connman";
-  version = "1.39";
+  version = "1.40";
   src = fetchurl {
     url = "mirror://kernel/linux/network/connman/${pname}-${version}.tar.xz";
-    sha256 = "sha256-n2KnFpt0kcZwof8uM1sNlmMI+y9i4oXHgRBeuQ8YGvM=";
+    sha256 = "sha256-GleufOI0qjoXRKrDvlwhIdmNzpmUQO+KucxO39XtyxI=";
   };
 
   buildInputs = [
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     libmnl
     gnutls
     readline
-  ];
+  ] ++ optionals (enableOpenconnect) [ openconnect ];
 
   nativeBuildInputs = [
     pkg-config
@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     # directories flags
-    "--sysconfdir=${placeholder "out"}/etc"
+    "--sysconfdir=/etc"
     "--localstatedir=/var"
     "--with-dbusconfdir=${placeholder "out"}/share"
     "--with-dbusdatadir=${placeholder "out"}/share"

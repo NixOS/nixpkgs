@@ -8,8 +8,8 @@
 { lib, stdenv, fetchzip, writeText, pkg-config, gnumake42
 , customOCamlPackages ? null
 , ocamlPackages_4_05, ocamlPackages_4_09, ocamlPackages_4_10, ncurses
-, buildIde ? !(stdenv.isDarwin && lib.versionAtLeast version "8.10")
-, glib, gnome3, wrapGAppsHook
+, buildIde ? true
+, glib, gnome, wrapGAppsHook
 , csdp ? null
 , version, coq-version ? null,
 }@args:
@@ -43,6 +43,7 @@ let
    "8.12.2".sha256     = "18gscfm039pqhq4msq01nraig5dm9ab98bjca94zldf8jvdv0x2n";
    "8.13.0".sha256     = "0sjbqmz6qcvnz0hv87xha80qbhvmmyd675wyc5z4rgr34j2l1ymd";
    "8.13.1".sha256     = "0xx2ns84mlip9bg2mkahy3pmc5zfcgrjxsviq9yijbzy1r95wf0n";
+   "8.13.2".sha256     = "1884vbmwmqwn9ngibax6dhnqh4cc02l0s2ajc6jb1xgr0i60whjk";
   };
   releaseRev = v: "V${v}";
   fetched = import ../../../../build-support/coq/meta-fetch/default.nix
@@ -127,15 +128,16 @@ self = stdenv.mkDerivation {
   buildInputs = [ ncurses ] ++ ocamlBuildInputs
     ++ optionals buildIde
       (if versionAtLeast "8.10"
-       then [ ocamlPackages.lablgtk3-sourceview3 glib gnome3.defaultIconTheme wrapGAppsHook ]
-       else [ ocamlPackages.lablgtk ]);
+       then [ ocamlPackages.lablgtk3-sourceview3 glib gnome.adwaita-icon-theme wrapGAppsHook ]
+       else [ ocamlPackages.lablgtk ])
+    ++ optional (versionAtLeast "8.14") ocamlPackages.dune_2
+  ;
 
   postPatch = ''
     UNAME=$(type -tp uname)
     RM=$(type -tp rm)
-    substituteInPlace configure --replace "/bin/uname" "$UNAME"
     substituteInPlace tools/beautify-archive --replace "/bin/rm" "$RM"
-    substituteInPlace configure.ml --replace '"md5 -q"' '"md5sum"'
+    ${if !versionAtLeast "8.7" then "substituteInPlace configure.ml --replace \"md5 -q\" \"md5sum\"" else ""}
     ${csdpPatch}
   '';
 
@@ -160,6 +162,7 @@ self = stdenv.mkDerivation {
   prefixKey = "-prefix ";
 
   buildFlags = [ "revision" "coq" "coqide" "bin/votour" ];
+  enableParallelBuilding = true;
 
   createFindlibDestdir = true;
 

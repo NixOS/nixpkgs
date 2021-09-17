@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-criterion";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "bheisler";
     repo = pname;
     rev = version;
-    sha256 = "0czagclrn4yhlvlh06wsyiybz69r7mmk3182fywzn9vd0xlclxpi";
+    sha256 = "sha256-RPix9DM6E32PhObvV3xPGrnXrrVHn3auxLUhysP8GM0=";
   };
 
-  cargoSha256 = "sha256-XZuZ81hB/GQDopJyfSkxQiehSwJz7VWoJR6/m3WLil8=";
+  cargoSha256 = "sha256-L/ILHKWlcYTkbEi2qDu7tf/3NHfTl6GhW0s+fUlsW08=";
 
   meta = with lib; {
     description = "Cargo extension for running Criterion.rs benchmarks";

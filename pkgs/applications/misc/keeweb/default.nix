@@ -1,26 +1,24 @@
-{ lib, stdenv, fetchurl, appimageTools, undmg, libsecret }:
+{ lib, stdenv, fetchurl, appimageTools, undmg, libsecret, libxshmfence }:
 let
-  inherit (stdenv.hostPlatform) system;
-  throwSystem = throw "Unsupported system: ${system}";
-
   pname = "keeweb";
-  version = "1.16.7";
+  version = "1.18.6";
   name = "${pname}-${version}";
 
-  suffix = {
-    x86_64-linux = "linux.AppImage";
-    x86_64-darwin = "mac.x64.dmg";
-    aarch64-darwin = "mac.arm64.dmg";
-  }.${system} or throwSystem;
-
-  src = fetchurl {
-    url = "https://github.com/keeweb/keeweb/releases/download/v${version}/KeeWeb-${version}.${suffix}";
-    sha256 = {
-      x86_64-linux = "0a4yh2jh9sph17mqqi62gm5jc4yffkysq6yiggyzz5f8xw4p315j";
-      x86_64-darwin = "0ix1apddqvz561pw5lx47x091wlfj27zh8k8v7kn5xvm09hswfkr";
-      aarch64-darwin = "0p0kql79kcb3w947g1ljhbj15b8aqrwcrbi0cknb12f6iq47lkz7";
-    }.${system} or throwSystem;
+  srcs = {
+    x86_64-linux = fetchurl {
+      url = "https://github.com/keeweb/keeweb/releases/download/v${version}/KeeWeb-${version}.linux.AppImage";
+      sha256 = "sha256-hxXs8Dfh5YQy1zaFb20KDWNl8eqFjuN5QY7tsO6+E/U=";
+    };
+    x86_64-darwin = fetchurl {
+      url = "https://github.com/keeweb/keeweb/releases/download/v${version}/KeeWeb-${version}.mac.x64.dmg";
+      sha256 = "sha256-8+7NzaHVcLinKb57SAcJmF2Foy9RfxFhcTxzvL0JSJQ=";
+    };
+    aarch64-darwin = fetchurl {
+      url = "https://github.com/keeweb/keeweb/releases/download/v${version}/KeeWeb-${version}.mac.arm64.dmg";
+      sha256 = "sha256-1BNY6kRS0F+AUI+80ZGFi/ek28NMP1uexo1UORz5D6g=";
+    };
   };
+  src = srcs.${stdenv.hostPlatform.system};
 
   appimageContents = appimageTools.extract {
     inherit name src;
@@ -29,15 +27,16 @@ let
   meta = with lib; {
     description = "Free cross-platform password manager compatible with KeePass";
     homepage = "https://keeweb.info/";
+    changelog = "https://github.com/keeweb/keeweb/blob/v${version}/release-notes.md";
     license = licenses.mit;
     maintainers = with maintainers; [ sikmir ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    platforms = builtins.attrNames srcs;
   };
 
   linux = appimageTools.wrapType2 rec {
     inherit name src meta;
 
-    extraPkgs = pkgs: with pkgs; [ libsecret ];
+    extraPkgs = pkgs: with pkgs; [ libsecret libxshmfence ];
 
     extraInstallCommands = ''
       mv $out/bin/{${name},${pname}}
@@ -54,11 +53,11 @@ let
 
     nativeBuildInputs = [ undmg ];
 
-    sourceRoot = "KeeWeb.app";
+    sourceRoot = ".";
 
     installPhase = ''
-      mkdir -p $out/Applications/KeeWeb.app
-      cp -R . $out/Applications/KeeWeb.app
+      mkdir -p $out/Applications
+      cp -r *.app $out/Applications
     '';
   };
 in

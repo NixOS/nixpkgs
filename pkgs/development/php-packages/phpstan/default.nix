@@ -1,17 +1,18 @@
 { mkDerivation, fetchurl, makeWrapper, lib, php }:
 let
   pname = "phpstan";
-  version = "0.12.79";
+  version = "0.12.90";
 in
 mkDerivation {
   inherit pname version;
 
   src = fetchurl {
     url = "https://github.com/phpstan/phpstan/releases/download/${version}/phpstan.phar";
-    sha256 = "sha256-H6JmjdJtcCrNvad0ZbJ73OdRXimeTIJMVPuk8K6X6v8=";
+    sha256 = "0f8858w9b421s3dfz8a56g0mik4zyi1lp88lijw4zs2d94dcdl9s";
   };
 
-  phases = [ "installPhase" ];
+  dontUnpack = true;
+
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''

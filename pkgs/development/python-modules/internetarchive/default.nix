@@ -19,11 +19,11 @@
 
 buildPythonPackage rec {
   pname = "internetarchive";
-  version = "1.9.9";
+  version = "2.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a1614cbf35499d833e07699ddfd344764f86959fd5535aa9ce1203f57a77f970";
+    sha256 = "72094f05df39bb1463f61f928f3a7fa0dd236cab185cb8b7e8eb6c85e09acdc4";
   };
 
   propagatedBuildInputs = [
@@ -52,7 +52,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A Python and Command-Line Interface to Archive.org";
     homepage = "https://github.com/jjjake/internetarchive";
-    license = licenses.agpl3;
+    changelog = "https://github.com/jjjake/internetarchive/raw/v${version}/HISTORY.rst";
+    license = licenses.agpl3Plus;
     maintainers = [ maintainers.marsam ];
   };
 }

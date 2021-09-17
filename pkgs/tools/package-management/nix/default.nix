@@ -10,52 +10,60 @@ let
 
 common =
   { lib, stdenv, perl, curl, bzip2, sqlite, openssl ? null, xz
-  , bash, coreutils, gzip, gnutar
-  , pkg-config, boehmgc, perlPackages, libsodium, brotli, boost, editline, nlohmann_json
+  , bash, coreutils, util-linuxMinimal, gzip, gnutar
+  , pkg-config, boehmgc, libsodium, brotli, boost, editline, nlohmann_json
   , autoreconfHook, autoconf-archive, bison, flex
-  , jq, libarchive
+  , jq, libarchive, libcpuid
   , lowdown, mdbook
   # Used by tests
-  , gmock
+  , gtest
   , busybox-sandbox-shell
   , storeDir
   , stateDir
   , confDir
-  , withLibseccomp ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) libseccomp.meta.platforms, libseccomp
+  , withLibseccomp ? lib.meta.availableOn stdenv.hostPlatform libseccomp, libseccomp
   , withAWS ? !enableStatic && (stdenv.isLinux || stdenv.isDarwin), aws-sdk-cpp
   , enableStatic ? stdenv.hostPlatform.isStatic
-  , name, suffix ? "", src
+  , enableDocumentation ? lib.versionOlder version "2.4pre" ||
+                          stdenv.hostPlatform == stdenv.buildPlatform
+  , pname, version, suffix ? "", src
   , patches ? [ ]
   }:
   let
      sh = busybox-sandbox-shell;
      nix = stdenv.mkDerivation rec {
-      inherit name src patches;
-      version = lib.getVersion name;
+      inherit pname version src patches;
 
       is24 = lib.versionAtLeast version "2.4pre";
 
       VERSION_SUFFIX = suffix;
 
-      outputs = [ "out" "dev" "man" "doc" ];
+      outputs =
+        [ "out" "dev" ]
+        ++ lib.optionals enableDocumentation [ "man" "doc" ];
+
+      hardeningEnable = [ "pie" ];
 
       nativeBuildInputs =
         [ pkg-config ]
+        ++ lib.optionals stdenv.isLinux [ util-linuxMinimal ]
+        ++ lib.optionals (is24 && enableDocumentation) [
+          (lib.getBin lowdown) mdbook
+        ]
         ++ lib.optionals is24
           [ autoreconfHook
             autoconf-archive
             bison flex
-            (lib.getBin lowdown) mdbook
             jq
            ];
 
       buildInputs =
-        [ curl openssl sqlite xz bzip2 nlohmann_json
+        [ curl libsodium openssl sqlite xz bzip2 nlohmann_json
           brotli boost editline
         ]
         ++ lib.optionals stdenv.isDarwin [ Security ]
-        ++ lib.optional (stdenv.isLinux || stdenv.isDarwin) libsodium
-        ++ lib.optionals is24 [ libarchive gmock lowdown ]
+        ++ lib.optionals is24 [ libarchive gtest lowdown ]
+        ++ lib.optional (is24 && stdenv.isx86_64) libcpuid
         ++ lib.optional withLibseccomp libseccomp
         ++ lib.optional withAWS
             ((aws-sdk-cpp.override {
@@ -93,14 +101,12 @@ common =
             patchelf --set-rpath $out/lib:${stdenv.cc.cc.lib}/lib $out/lib/libboost_thread.so.*
           ''}
         '' +
-        # On all versions before c9f51e87057652db0013289a95deffba495b35e7,
-        # released with 2.3.8, we need to patch around an issue where the Nix
-        # configure step pulls in the build system's bash and other utilities
-        # when cross-compiling.
+        # On all versions before c9f51e87057652db0013289a95deffba495b35e7, which
+        # removes config.nix entirely and is not present in 2.3.x, we need to
+        # patch around an issue where the Nix configure step pulls in the build
+        # system's bash and other utilities when cross-compiling.
         lib.optionalString (
-          stdenv.buildPlatform != stdenv.hostPlatform &&
-          (lib.versionOlder "2.3.8" version && !is24)
-          # The additional is24 condition is required as versionOlder doesn't understand nixUnstable version strings
+          stdenv.buildPlatform != stdenv.hostPlatform && !is24
         ) ''
           mkdir tmp/
           substitute corepkgs/config.nix.in tmp/config.nix.in \
@@ -118,8 +124,12 @@ common =
         [ "--with-store-dir=${storeDir}"
           "--localstatedir=${stateDir}"
           "--sysconfdir=${confDir}"
-          "--disable-init-state"
           "--enable-gc"
+        ]
+        ++ lib.optional (!enableDocumentation) "--disable-doc-gen"
+        ++ lib.optionals (!is24) [
+          # option was removed in 2.4
+          "--disable-init-state"
         ]
         ++ lib.optionals stdenv.isLinux [
           "--with-sandbox-shell=${sh}/bin/busybox"
@@ -138,7 +148,7 @@ common =
       doInstallCheck = true; # not cross
 
       # socket path becomes too long otherwise
-      preInstallCheck = lib.optional stdenv.isDarwin ''
+      preInstallCheck = lib.optionalString stdenv.isDarwin ''
         export TMPDIR=$NIX_BUILD_TOP
       '';
 
@@ -159,11 +169,11 @@ common =
         license = lib.licenses.lgpl2Plus;
         maintainers = [ lib.maintainers.eelco ];
         platforms = lib.platforms.unix;
-        outputsToInstall = [ "out" "man" ];
+        outputsToInstall = [ "out" ] ++ lib.optional enableDocumentation "man";
       };
 
       passthru = {
-        perl-bindings = stdenv.mkDerivation {
+        perl-bindings = perl.pkgs.toPerlModule (stdenv.mkDerivation {
           pname = "nix-perl";
           inherit version;
 
@@ -177,66 +187,66 @@ common =
             [ perl pkg-config curl nix libsodium boost autoreconfHook autoconf-archive nlohmann_json ];
 
           configureFlags =
-            [ "--with-dbi=${perlPackages.DBI}/${perl.libPrefix}"
-              "--with-dbd-sqlite=${perlPackages.DBDSQLite}/${perl.libPrefix}"
+            [ "--with-dbi=${perl.pkgs.DBI}/${perl.libPrefix}"
+              "--with-dbd-sqlite=${perl.pkgs.DBDSQLite}/${perl.libPrefix}"
             ];
 
           preConfigure = "export NIX_STATE_DIR=$TMPDIR";
 
           preBuild = "unset NIX_INDENT_MAKE";
-        };
+        });
+        inherit boehmgc;
       };
     };
   in nix;
+
+  boehmgc_nix = boehmgc.override {
+    enableLargeConfig = true;
+  };
+
+  boehmgc_nixUnstable = boehmgc_nix.overrideAttrs (drv: {
+    patches = (drv.patches or []) ++ [
+      # Part of the GC solution in https://github.com/NixOS/nix/pull/4944
+      (fetchpatch {
+        url = https://github.com/hercules-ci/nix/raw/5c58d84a76d96f269e3ff1e72c9c9ba5f68576af/boehmgc-coroutine-sp-fallback.diff;
+        sha256 = "sha256-JvnWVTlkltmQUs/0qApv/LPZ690UX1/2hEP+LYRwKbI=";
+      })
+    ];
+  });
 
 in rec {
 
   nix = nixStable;
 
   nixStable = callPackage common (rec {
-    name = "nix-2.3.10";
+    pname = "nix";
+    version = "2.3.15";
     src = fetchurl {
-      url = "https://nixos.org/releases/nix/${name}/${name}.tar.xz";
-      sha256 = "a8a85e55de43d017abbf13036edfb58674ca136691582f17080c1cd12787b7ab";
+      url = "https://nixos.org/releases/nix/${pname}-${version}/${pname}-${version}.tar.xz";
+      sha256 = "sha256-N+MxClX94eUOfUMh0puRgNHp16+cjSEdtqZn5u5OtBA=";
     };
 
-    patches = [(
-      fetchpatch {
-        url = "https://github.com/NixOS/nix/pull/4316.patch";
-        sha256 = "0bqlm4n9sac9prgr9xlfng92arisp1hiqvc9pfh4fibsppkgdfc5";
-      }
-    )];
+    boehmgc = boehmgc_nix;
 
-    inherit storeDir stateDir confDir boehmgc;
+    inherit storeDir stateDir confDir;
   });
 
   nixUnstable = lib.lowPrio (callPackage common rec {
-    name = "nix-2.4${suffix}";
-    suffix = "pre20201205_a5d85d0";
+    pname = "nix";
+    version = "2.4${suffix}";
+    suffix = "pre20210908_${lib.substring 0 7 src.rev}";
 
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "a5d85d07faa94cf3518e98273be4bee3d495f06a";
-      sha256 = "0g9jjhh0vs4hjrff5yx88x6sh7rk87ngvni3gnyxajqia957dipg";
+      rev = "3c56f62093601143838af923195f630d8ffae2d4";
+      sha256 = "sha256-pjdzLOEt8i1NQe4drLpp8+LrRd2MgsISSQEsMebz2kc=";
     };
 
-    patches = [
-      (fetchpatch { # Fix build on gcc10
-        url = "https://github.com/NixOS/nix/commit/d4870462f8f539adeaa6dca476aff6f1f31e1981.patch";
-        sha256 = "mTvLvuxb2QVybRDgntKMq+b6da/s3YgM/ll2rWBeY/Y=";
-      })
-      # Fix the ETag bug. PR merged. Remove when updating to >= 20210125
-      # https://github.com/NixOS/nixpkgs/pull/109309#issuecomment-768331750
-      (fetchpatch {
-        url = "https://github.com/NixOS/nix/commit/c5b42c5a42138329c6d02da0d8a53cb59c6077f4.patch";
-        sha256 = "sha256-d4RNOKMxa4NMbFgYcqWRv2ByHt8F/XUWV+6P9qHz7S4=";
-      })
-    ];
+    boehmgc = boehmgc_nixUnstable;
 
-    inherit storeDir stateDir confDir boehmgc;
+    inherit storeDir stateDir confDir;
+
   });
-
-  nixFlakes = nixUnstable;
 
 }

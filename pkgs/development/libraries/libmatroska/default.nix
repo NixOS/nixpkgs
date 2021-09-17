@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libmatroska";
-  version = "1.6.2";
+  version = "1.6.3";
 
   src = fetchFromGitHub {
     owner  = "Matroska-Org";
     repo   = "libmatroska";
     rev    = "release-${version}";
-    sha256 = "0yhr9hhgljva1fx3b0r4s3wkkypdfgsysbl35a4g3krkbhaa9rsd";
+    sha256 = "01dg12ndxfdqgjx5v2qy4mff6xjdxglywyg82sr3if5aw6rp3dji";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=YES"
+    "-DCMAKE_INSTALL_PREFIX="
   ];
 
   meta = with lib; {

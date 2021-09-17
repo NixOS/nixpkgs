@@ -41,7 +41,7 @@ in {
     };
 
     port = mkOption {
-      type = types.int;
+      type = types.port;
       default = 9000;
       description = "TCP port to listen on for http connections.";
     };

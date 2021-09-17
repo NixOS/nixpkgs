@@ -14,7 +14,7 @@
 , libgsf
 , gcab
 , bzip2
-, gnome3
+, gnome
 }:
 
 stdenv.mkDerivation rec {
@@ -59,14 +59,15 @@ stdenv.mkDerivation rec {
     bzip2
   ];
 
-  doCheck = true;
+  # WiX tests fail on darwin
+  doCheck = !stdenv.isDarwin;
 
   postPatch = ''
     patchShebangs subprojects/bats-core/{bin,libexec}
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "none";
     };

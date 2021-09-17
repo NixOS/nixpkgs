@@ -6,7 +6,7 @@
 , epoxy
 , fetchFromGitHub
 , glm
-, gnome3
+, gtkmm3
 , lib
 , libgit2
 , librsvg
@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "horizon-eda";
-  version = "1.4.0";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "horizon-eda";
     repo = "horizon";
     rev = "v${version}";
-    sha256 = "0mra6kf1c2qixfzqva6r01qms5kdabbhhblhk5is6h6nq78i8640";
+    sha256 = "sha256-3JNkwKkr/fdz/2UFAHwhn03PHqX9YFOMf3Q7kkbTZYk=";
   };
 
   buildInputs = [
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     curl
     epoxy
     glm
-    gnome3.gtkmm
+    gtkmm3
     libgit2
     librsvg
     libuuid

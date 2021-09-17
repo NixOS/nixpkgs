@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0yfzr80pw632lkayg4qfmwzrqk02y30yz8br7isyhmgkswyp5rnx";
   };
 
-  phases = "installPhase";
+  dontUnpack = true;
 
   installPhase = ''
     mkdir -p "$out"/{share/vue,bin}

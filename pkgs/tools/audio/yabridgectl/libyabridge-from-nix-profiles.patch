@@ -1,8 +1,8 @@
 diff --git a/tools/yabridgectl/src/config.rs b/tools/yabridgectl/src/config.rs
-index c1c89cf..d7bd822 100644
+index 6e05e34..656eef3 100644
 --- a/tools/yabridgectl/src/config.rs
 +++ b/tools/yabridgectl/src/config.rs
-@@ -23,6 +23,7 @@ use std::collections::{BTreeMap, BTreeSet};
+@@ -23,6 +23,7 @@ use std::collections::{BTreeMap, BTreeSet, HashSet};
  use std::env;
  use std::fmt::Display;
  use std::fs;
@@ -10,7 +10,7 @@ index c1c89cf..d7bd822 100644
  use std::path::{Path, PathBuf};
  use which::which;
  use xdg::BaseDirectories;
-@@ -216,34 +217,24 @@ impl Config {
+@@ -222,34 +223,24 @@ impl Config {
                  }
              }
              None => {
@@ -56,10 +56,10 @@ index c1c89cf..d7bd822 100644
                          ));
                      }
 diff --git a/tools/yabridgectl/src/main.rs b/tools/yabridgectl/src/main.rs
-index 0db1bd4..221cdd0 100644
+index ce701b8..b6b9633 100644
 --- a/tools/yabridgectl/src/main.rs
 +++ b/tools/yabridgectl/src/main.rs
-@@ -102,7 +102,7 @@ fn main() -> Result<()> {
+@@ -150,7 +150,7 @@ fn main() -> Result<()> {
                          .about("Path to the directory containing 'libyabridge-{vst2,vst3}.so'")
                          .long_about(
                              "Path to the directory containing 'libyabridge-{vst2,vst3}.so'. If this \

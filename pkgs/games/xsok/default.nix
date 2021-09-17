@@ -37,7 +37,6 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    inherit version;
     description = "A generic Sokoban game for X11";
     license = lib.licenses.gpl2Plus;
     maintainers = [lib.maintainers.raskin];

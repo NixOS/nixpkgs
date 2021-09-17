@@ -98,7 +98,7 @@ in
 
           See "Multiple-output packages" chapter in the nixpkgs manual for more info.
         '';
-        # which is at ../../../doc/multiple-output.xml
+        # which is at ../../../doc/multiple-output.chapter.md
       };
 
       man.enable = mkOption {
@@ -117,6 +117,24 @@ in
           Whether to generate the manual page index caches using
           <literal>mandb(8)</literal>. This allows searching for a page or
           keyword using utilities like <literal>apropos(1)</literal>.
+        '';
+      };
+
+      man.manualPages = mkOption {
+        type = types.path;
+        default = pkgs.buildEnv {
+          name = "man-paths";
+          paths = config.environment.systemPackages;
+          pathsToLink = [ "/share/man" ];
+          extraOutputsToInstall = ["man"];
+          ignoreCollisions = true;
+        };
+        defaultText = "all man pages in config.environment.systemPackages";
+        description = ''
+          The manual pages to generate caches for if <option>generateCaches</option>
+          is enabled. Must be a path to a directory with man pages under
+          <literal>/share/man</literal>; see the source for an example.
+          Advanced users can make this a content-addressed derivation to save a few rebuilds.
         '';
       };
 
@@ -145,11 +163,11 @@ in
         description = ''
           Whether to install documentation targeted at developers.
           <itemizedlist>
-          <listitem><para>This includes man pages targeted at developers if <option>man.enable</option> is
+          <listitem><para>This includes man pages targeted at developers if <option>documentation.man.enable</option> is
                     set (this also includes "devman" outputs).</para></listitem>
-          <listitem><para>This includes info pages targeted at developers if <option>info.enable</option>
+          <listitem><para>This includes info pages targeted at developers if <option>documentation.info.enable</option>
                     is set (this also includes "devinfo" outputs).</para></listitem>
-          <listitem><para>This includes other pages targeted at developers if <option>doc.enable</option>
+          <listitem><para>This includes other pages targeted at developers if <option>documentation.doc.enable</option>
                     is set (this also includes "devdoc" outputs).</para></listitem>
           </itemizedlist>
         '';
@@ -163,10 +181,10 @@ in
           <itemizedlist>
           <listitem><para>This includes man pages like
                     <citerefentry><refentrytitle>configuration.nix</refentrytitle>
-                    <manvolnum>5</manvolnum></citerefentry> if <option>man.enable</option> is
+                    <manvolnum>5</manvolnum></citerefentry> if <option>documentation.man.enable</option> is
                     set.</para></listitem>
           <listitem><para>This includes the HTML manual and the <command>nixos-help</command> command if
-                    <option>doc.enable</option> is set.</para></listitem>
+                    <option>documentation.doc.enable</option> is set.</para></listitem>
           </itemizedlist>
         '';
       };
@@ -207,16 +225,8 @@ in
       environment.extraOutputsToInstall = [ "man" ] ++ optional cfg.dev.enable "devman";
       environment.etc."man_db.conf".text =
         let
-          manualPages = pkgs.buildEnv {
-            name = "man-paths";
-            paths = config.environment.systemPackages;
-            pathsToLink = [ "/share/man" ];
-            extraOutputsToInstall = ["man"];
-            ignoreCollisions = true;
-          };
-          manualCache = pkgs.runCommandLocal "man-cache" { }
-          ''
-            echo "MANDB_MAP ${manualPages}/share/man $out" > man.conf
+          manualCache = pkgs.runCommandLocal "man-cache" { } ''
+            echo "MANDB_MAP ${cfg.man.manualPages}/share/man $out" > man.conf
             ${pkgs.man-db}/bin/mandb -C man.conf -psc >/dev/null 2>&1
           '';
         in
@@ -258,8 +268,7 @@ in
 
       environment.systemPackages = []
         ++ optional cfg.man.enable manual.manpages
-        ++ optionals cfg.doc.enable ([ manual.manualHTML nixos-help ]
-           ++ optionals config.services.xserver.enable [ pkgs.nixos-icons ]);
+        ++ optionals cfg.doc.enable [ manual.manualHTML nixos-help ];
 
       services.getty.helpLine = mkIf cfg.doc.enable (
           "\nRun 'nixos-help' for the NixOS manual."

@@ -67,6 +67,6 @@ stdenv.mkDerivation rec {
     homepage = "https://assault.cubers.net";
     maintainers = [ ];
     platforms = platforms.linux; # should work on darwin with a little effort.
-    license = lib.licenses.zlib;
+    license = lib.licenses.unfree;
   };
 }

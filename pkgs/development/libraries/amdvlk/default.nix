@@ -21,13 +21,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "amdvlk";
-  version = "2021.Q1.4";
+  version = "2021.Q3.4";
 
   src = fetchRepoProject {
     name = "${pname}-src";
     manifest = "https://github.com/GPUOpen-Drivers/AMDVLK.git";
     rev = "refs/tags/v-${version}";
-    sha256 = "mA7YalgcfjfYdmKPk8L4mfDJWn0rimPDoDB9/S3pyNM=";
+    sha256 = "Rmx5vicxKXstI8TdxeFVjEFe71XJOyzp5L6VyDNuXmM=";
   };
 
   buildInputs = [
@@ -70,12 +70,8 @@ in stdenv.mkDerivation rec {
 
   installPhase = ''
     install -Dm755 -t $out/lib icd/amdvlk${suffix}.so
-    install -Dm644 -t $out/share/vulkan/icd.d ../drivers/AMDVLK/json/Redhat/amd_icd${suffix}.json
-
-    substituteInPlace $out/share/vulkan/icd.d/amd_icd${suffix}.json --replace \
-      "/usr/lib64" "$out/lib"
-    substituteInPlace $out/share/vulkan/icd.d/amd_icd${suffix}.json --replace \
-      "/usr/lib" "$out/lib"
+    install -Dm644 -t $out/share/vulkan/icd.d icd/amd_icd${suffix}.json
+    install -Dm644 -t $out/share/vulkan/implicit_layer.d icd/amd_icd${suffix}.json
 
     patchelf --set-rpath "$rpath" $out/lib/amdvlk${suffix}.so
   '';
@@ -89,6 +85,6 @@ in stdenv.mkDerivation rec {
     changelog = "https://github.com/GPUOpen-Drivers/AMDVLK/releases/tag/v-${version}";
     license = licenses.mit;
     platforms = [ "x86_64-linux" "i686-linux" ];
-    maintainers = with maintainers; [ danieldk Flakebi ];
+    maintainers = with maintainers; [ Flakebi ];
   };
 }

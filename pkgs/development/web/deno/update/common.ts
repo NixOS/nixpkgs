@@ -3,12 +3,15 @@ interface GHRelease {
 }
 
 const decode = (buffer: Uint8Array) => new TextDecoder("utf-8").decode(buffer);
-const run = async (command: string, args: string[]) => {
-  const cmd = Deno.run(
-    { cmd: [command, ...args], stdout: "piped", stderr: "piped" },
-  );
+const decodeTrim = (b: Uint8Array) => decode(b).trimEnd();
+export const run = async (command: string, args: string[]) => {
+  const cmd = Deno.run({
+    cmd: [command, ...args],
+    stdout: "piped",
+    stderr: "piped",
+  });
   if (!(await cmd.status()).success) {
-    const error = await cmd.stderrOutput().then((b) => decode(b).trimEnd());
+    const error = await cmd.stderrOutput().then(decodeTrim);
     // Known error we can ignore
     if (error.includes("'allow-unsafe-native-code-during-evaluation'")) {
       // Extract the target sha256 out of the error
@@ -23,26 +26,16 @@ const run = async (command: string, args: string[]) => {
     }
     throw new Error(error);
   }
-  return cmd.output().then((b) => decode(b).trimEnd());
+  return cmd.output().then(decodeTrim);
 };
 
 // Exports
 export const versionRegExp = /\d+\.\d+\.\d+/;
-export const sha256RegExp = /[a-z0-9]{52}/;
-
-export async function commit(
-  name: string,
-  oldVer: string,
-  newVer: string,
-  files: string[],
-) {
-  await run("git", ["add", ...files]);
-  await run("git", ["commit", "-m", `${name}: ${oldVer} -> ${newVer}`]);
-}
+export const sha256RegExp = /[a-z0-9]{52}|sha256-.{44}/;
 
 export const getExistingVersion = async (filePath: string) =>
-  read(filePath).then((s) =>
-    s.match(genValueRegExp("version", versionRegExp))?.shift() || ""
+  read(filePath).then(
+    (s) => s.match(genValueRegExp("version", versionRegExp))?.shift() || "",
   );
 
 export const getLatestVersion = (owner: string, repo: string) =>
@@ -57,9 +50,6 @@ export const genValueRegExp = (key: string, regex: RegExp) =>
 
 export const logger = (name: string) =>
   (...a: any) => console.log(`[${name}]`, ...a);
-
-export const nixPrefetch = (args: string[]) => run("nix-prefetch", args);
-export const nixPrefetchURL = (args: string[]) => run("nix-prefetch-url", args);
 
 export const read = Deno.readTextFile;
 export const write = Deno.writeTextFile;

@@ -1,21 +1,21 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, libX11, libXrandr, libXinerama, libXext, libXcursor, freetype, alsaLib, libjack2 }:
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, libX11, libXrandr, libXinerama, libXext, libXcursor, freetype, alsa-lib, libjack2 }:
 
 stdenv.mkDerivation rec {
   pname = "stochas";
-  version = "1.3.4";
+  version = "1.3.5";
 
   src = fetchFromGitHub {
     owner = "surge-synthesizer";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0b26mbj727dnygavz4kihnhmnnvwsr9l145w6kydq7bd7nwiw7lq";
+    sha256 = "1z8q53qfigw6wwbvpca92b9pf9d0mv3nyb0fmszz5ikj3pcybi7m";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [
-    libX11 libXrandr libXinerama libXext libXcursor freetype alsaLib libjack2
+    libX11 libXrandr libXinerama libXext libXcursor freetype alsa-lib libjack2
   ];
 
   installPhase = ''

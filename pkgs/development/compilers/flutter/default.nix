@@ -4,7 +4,7 @@ let
   getPatches = dir:
     let files = builtins.attrNames (builtins.readDir dir);
     in map (f: dir + ("/" + f)) files;
-  version = "1.22.4";
+  version = "2.2.1";
   channel = "stable";
   filename = "flutter_linux_${version}-${channel}.tar.xz";
 in
@@ -15,7 +15,7 @@ in
     pname = "flutter";
     src = fetchurl {
       url = "https://storage.googleapis.com/flutter_infra/releases/${channel}/linux/${filename}";
-      sha256 = "0qalgav9drqddcj8lfvl9ddf3325n953pvkmgha47lslg9sa88zw";
+      sha256 = "009pwk2casz10gibgjpz08102wxmkq9iq3994b3c2q342g6526g0";
     };
     patches = getPatches ./patches;
   };

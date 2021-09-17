@@ -4,7 +4,7 @@
 , requests
 , mock
 , pytest
-, pytestcov
+, pytest-cov
 , isPy3k
 }:
 
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   checkInputs = [
     mock
     pytest
-    pytestcov
+    pytest-cov
   ];
 
   meta = with lib; {

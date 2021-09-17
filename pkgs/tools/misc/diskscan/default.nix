@@ -20,7 +20,6 @@ stdenv.mkDerivation rec {
     description = "Scan HDD/SSD for failed and near failed sectors";
     platforms = with platforms; linux;
     maintainers = with maintainers; [ peterhoeg ];
-    inherit version;
     license = licenses.gpl3;
   };
 }

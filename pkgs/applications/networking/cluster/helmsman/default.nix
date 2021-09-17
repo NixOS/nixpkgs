@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "helmsman";
-  version = "3.6.4";
+  version = "3.7.3";
 
   src = fetchFromGitHub {
     owner = "Praqma";
     repo = "helmsman";
     rev = "v${version}";
-    sha256 = "sha256-4oJ/undqDSNn+Xn8eFEgOx+7263tmdXTHxXBkyFLpsE=";
+    sha256 = "sha256-7WN4YjhPbsFZfoFuZzsN85a+kdEVlEzQ9CfWh4nxxTs=";
   };
 
-  vendorSha256 = "sha256-mktq5Dnk1mBO2yy5SeMDxa/akXdO5i2WafMTGtH53H8=";
+  vendorSha256 = "sha256-XHgdVFGIzbPPYgv/T4TtvDDbKAe3niev4S5tu/nwSqg=";
 
   doCheck = false;
 

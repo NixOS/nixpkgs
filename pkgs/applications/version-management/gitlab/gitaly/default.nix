@@ -4,18 +4,6 @@
 , libgit2, openssl, zlib, pcre, http-parser }:
 
 let
-  # libgit2 was updated to 1.1.0 in nixpkgs, but gitlab doesn't support that yet.
-  # See https://github.com/NixOS/nixpkgs/pull/106909
-  libgit = libgit2.overrideAttrs (attrs: rec {
-    version = "1.0.0";
-    src = fetchFromGitHub {
-      owner = "libgit2";
-      repo = "libgit2";
-      rev = "v${version}";
-      sha256 = "06cwrw93ycpfb5kisnsa5nsy95pm11dbh0vvdjg1jn25h9q5d3vc";
-    };
-  });
-
   rubyEnv = bundlerEnv rec {
     name = "gitaly-env";
     inherit ruby;
@@ -32,31 +20,38 @@ let
         };
       };
   };
-in buildGoModule rec {
-  version = "13.8.4";
+  version = "14.2.3";
+  gitaly_package = "gitlab.com/gitlab-org/gitaly/v${lib.versions.major version}";
+in
+
+buildGoModule {
   pname = "gitaly";
+  inherit version;
 
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitaly";
     rev = "v${version}";
-    sha256 = "sha256-y8uy70ccQPba+JJmWace4LgLJkJNzVdFhrvq0AB8G5w=";
+    sha256 = "sha256-TSA5CoNaLeMu7O02rsaR/rNciLwzxSIUUQsCo40Z15c=";
   };
 
-  vendorSha256 = "sha256-oVw6vXI3CyOn4l02PkYx3HVpZfzQPi3yBuf9tRvoWoM=";
+  vendorSha256 = "sha256-WhkNK+V7yXK+le1u8StAKajZIBzVKqV/WIau27oZBXE=";
 
   passthru = {
     inherit rubyEnv;
   };
 
-  buildFlags = [ "-tags=static,system_libgit2" ];
+  ldflags = "-X ${gitaly_package}/internal/version.version=${version} -X ${gitaly_package}/internal/version.moduleVersion=${version}";
+
+  tags = [ "static,system_libgit2" ];
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ rubyEnv.wrappedRuby libgit openssl zlib pcre http-parser ];
+  buildInputs = [ rubyEnv.wrappedRuby libgit2 openssl zlib pcre http-parser ];
   doCheck = false;
 
   postInstall = ''
     mkdir -p $ruby
     cp -rv $src/ruby/{bin,lib,proto,git-hooks} $ruby
+    mv $out/bin/gitaly-git2go $out/bin/gitaly-git2go-${version}
   '';
 
   outputs = [ "out" "ruby" ];

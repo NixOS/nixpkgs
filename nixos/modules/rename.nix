@@ -18,6 +18,7 @@ with lib;
 
     # Completely removed modules
     (mkRemovedOptionModule [ "fonts" "fontconfig" "penultimate" ] "The corresponding package has removed from nixpkgs.")
+    (mkRemovedOptionModule [ "services" "quagga" ] "the corresponding package has been removed from nixpkgs")
     (mkRemovedOptionModule [ "services" "chronos" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "deepin" ] "The corresponding packages were removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "firefox" "syncserver" "user" ] "")
@@ -26,6 +27,7 @@ with lib;
     (mkRemovedOptionModule [ "services" "mesos" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "winstone" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "networking" "vpnc" ] "Use environment.etc.\"vpnc/service.conf\" instead.")
+    (mkRemovedOptionModule [ "networking" "wicd" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "environment" "blcr" "enable" ] "The BLCR module has been removed")
     (mkRemovedOptionModule [ "services" "beegfsEnable" ] "The BeeGFS module has been removed")
     (mkRemovedOptionModule [ "services" "beegfs" ] "The BeeGFS module has been removed")

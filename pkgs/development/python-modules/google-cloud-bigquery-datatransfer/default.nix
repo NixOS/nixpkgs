@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-bigquery-datatransfer";
-  version = "3.0.0";
+  version = "3.3.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0hmsqvs2srmqcwmli48vd5vw829zax3pwj63fsxig6sdhjlf6j7j";
+    sha256 = "fcb71ebe5c5b232d24fe7d666b65709e4fc8db43263c8182e5ed8e5a52abefec";
   };
 
   propagatedBuildInputs = [ google-api-core libcst proto-plus ];

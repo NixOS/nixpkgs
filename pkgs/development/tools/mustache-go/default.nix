@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   pname = "mustache-go";
-  version = "1.2.0";
+  version = "1.2.2";
 
   goPackagePath = "github.com/cbroglie/mustache";
 
@@ -10,7 +10,7 @@ buildGoPackage rec {
     owner = "cbroglie";
     repo = "mustache";
     rev = "v${version}";
-    sha256 = "0mnh5zbpfwymddm1dppg9i9d1r8jqyg03z2gl6c5a8fgbrnxpjvc";
+    sha256 = "sha256-ziWfkRUHYYyo1FqVVXFFDlTsBbsn59Ur9YQi2ZnTSRg=";
   };
 
   meta = with lib; {

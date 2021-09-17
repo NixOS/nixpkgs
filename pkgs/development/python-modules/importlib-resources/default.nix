@@ -1,25 +1,25 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, setuptools_scm
-, toml
+, setuptools-scm
 , importlib-metadata
-, typing
-, singledispatch
+, typing ? null
+, singledispatch ? null
 , pythonOlder
 , python
 }:
 
 buildPythonPackage rec {
-  pname = "importlib_resources";
-  version = "3.3.1";
+  pname = "importlib-resources";
+  version = "5.2.2";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "0ed250dbd291947d1a298e89f39afcc477d5a6624770503034b72588601bcc05";
+    pname = "importlib_resources";
+    inherit version;
+    sha256 = "sha256-pliCpND+X79wInNFa6LOdP5EiSwl5C4FespSa3AqbUs=";
   };
 
-  nativeBuildInputs = [ setuptools_scm toml ];
+  nativeBuildInputs = [ setuptools-scm ];
   propagatedBuildInputs = [
     importlib-metadata
   ] ++ lib.optional (pythonOlder "3.4") singledispatch
@@ -34,5 +34,6 @@ buildPythonPackage rec {
     description = "Read resources from Python packages";
     homepage = "https://importlib-resources.readthedocs.io/";
     license = licenses.asl20;
+    maintainers = [ ];
   };
 }

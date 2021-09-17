@@ -1,19 +1,35 @@
-{ lib, fetchPypi, buildPythonPackage,
-  setuptools_scm, toml, six, astroid, pytest
+{ lib
+, fetchPypi
+, buildPythonPackage
+, setuptools-scm
+, six
+, astroid
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "asttokens";
-  version = "2.0.4";
+  version = "2.0.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0a2ixiz04aw4p0aivxh47k3fa9ql804l3y5iv5gcih9aizi5fbm4";
+    sha256 = "sha256-mlTBFPAsepSA1WVQkyVGo/H+cdigLxvHzNDuPuNc9NU=";
   };
 
-  propagatedBuildInputs = [ setuptools_scm toml six astroid ];
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
-  checkInputs = [ pytest ];
+  propagatedBuildInputs = [
+    six
+    astroid
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [ "asttokens" ];
 
   meta = with lib; {
     homepage = "https://github.com/gristlabs/asttokens";

@@ -32,6 +32,6 @@ stdenv.mkDerivation rec {
     description = "Theme for GTK 3, GTK 2, Gnome-Shell, and Cinnamon";
     license = licenses.gpl3;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ rycee romildo ];
+    maintainers = with maintainers; [ romildo ];
   };
 }

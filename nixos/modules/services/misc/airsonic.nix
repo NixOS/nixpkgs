@@ -82,6 +82,25 @@ in {
         '';
       };
 
+      jre = mkOption {
+        type = types.package;
+        default = pkgs.jre8;
+        defaultText = literalExample "pkgs.jre8";
+        description = ''
+          JRE package to use.
+
+          Airsonic only supports Java 8, airsonic-advanced requires at least
+          Java 11.
+        '';
+      };
+
+      war = mkOption {
+        type = types.path;
+        default = "${pkgs.airsonic}/webapps/airsonic.war";
+        defaultText = "\${pkgs.airsonic}/webapps/airsonic.war";
+        description = "Airsonic war file to use.";
+      };
+
       jvmOptions = mkOption {
         description = ''
           Extra command line options for the JVM running AirSonic.
@@ -118,7 +137,7 @@ in {
       '';
       serviceConfig = {
         ExecStart = ''
-          ${pkgs.jre}/bin/java -Xmx${toString cfg.maxMemory}m \
+          ${cfg.jre}/bin/java -Xmx${toString cfg.maxMemory}m \
           -Dairsonic.home=${cfg.home} \
           -Dserver.address=${cfg.listenAddress} \
           -Dserver.port=${toString cfg.port} \
@@ -128,7 +147,7 @@ in {
             "-Dserver.use-forward-headers=true"} \
           ${toString cfg.jvmOptions} \
           -verbose:gc \
-          -jar ${pkgs.airsonic}/webapps/airsonic.war
+          -jar ${cfg.war}
         '';
         Restart = "always";
         User = "airsonic";
@@ -146,10 +165,12 @@ in {
 
     users.users.airsonic = {
       description = "Airsonic service user";
+      group = "airsonic";
       name = cfg.user;
       home = cfg.home;
       createHome = true;
       isSystemUser = true;
     };
+    users.groups.airsonic = {};
   };
 }

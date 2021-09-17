@@ -1,6 +1,16 @@
 { lib, stdenv, fetchurl, pkg-config, libseccomp, util-linux, qemu }:
 
-let version = "0.6.8";
+let
+  version = "0.6.8";
+  # list of all theoretically available targets
+  targets = [
+    "genode"
+    "hvt"
+    "muen"
+    "spt"
+    "virtio"
+    "xen"
+  ];
 in stdenv.mkDerivation {
   pname = "solo5";
   inherit version;
@@ -29,21 +39,26 @@ in stdenv.mkDerivation {
     export DESTDIR=$out
     export PREFIX=$out
     make install-tools
-    ${lib.optionalString stdenv.hostPlatform.isLinux "make ${
-      (lib.concatMapStringsSep " " (x: "install-opam-${x}") [ "hvt" "spt" ])
-    }"}
+
+    # get CONFIG_* vars from Makeconf which also parse in sh
+    grep '^CONFIG_' Makeconf > nix_tmp_targetconf
+    source nix_tmp_targetconf
+    # install opam / pkg-config files for all enabled targets
+    ${lib.concatMapStrings (bind: ''
+      [ -n "$CONFIG_${lib.toUpper bind}" ] && make install-opam-${bind}
+    '') targets}
+
     runHook postInstall
   '';
 
-  doCheck = true;
+  doCheck = stdenv.hostPlatform.isLinux;
   checkInputs = [ util-linux qemu ];
-  checkPhase = if stdenv.hostPlatform.isLinux then
-    ''
+  checkPhase = ''
+    runHook preCheck
     patchShebangs tests
     ./tests/bats-core/bats ./tests/tests.bats
-    ''
-  else
-    null;
+    runHook postCheck
+  '';
 
   meta = with lib; {
     description = "Sandboxed execution environment";

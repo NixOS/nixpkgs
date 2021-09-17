@@ -18,7 +18,6 @@ let
 
   fontconfig = config.fonts.fontconfig;
   xresourcesXft = pkgs.writeText "Xresources-Xft" ''
-    ${optionalString (fontconfig.dpi != 0) ''Xft.dpi: ${toString fontconfig.dpi}''}
     Xft.antialias: ${if fontconfig.antialias then "1" else "0"}
     Xft.rgba: ${fontconfig.subpixel.rgba}
     Xft.lcdfilter: lcd${fontconfig.subpixel.lcdfilter}

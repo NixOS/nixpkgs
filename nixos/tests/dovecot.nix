@@ -8,6 +8,8 @@ import ./make-test-python.nix {
       enable = true;
       protocols = [ "imap" "pop3" ];
       modules = [ pkgs.dovecot_pigeonhole ];
+      mailUser = "vmail";
+      mailGroup = "vmail";
     };
     environment.systemPackages = let
       sendTestMail = pkgs.writeScriptBin "send-testmail" ''

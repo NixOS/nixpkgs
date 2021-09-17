@@ -28,5 +28,6 @@ stdenv.mkDerivation rec {
     homepage = "https://tibleiz.net/copper/";
     license = licenses.bsd2;
     platforms = platforms.x86_64;
+    broken = stdenv.isDarwin;
   };
 }

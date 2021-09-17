@@ -5,6 +5,7 @@
 , libinput
 , libxcb
 , libxkbcommon
+, pixman
 , wayland
 , wayland-protocols
 , wlroots
@@ -12,17 +13,22 @@
 , patches ? [ ]
 , conf ? null
 , writeText
+, fetchpatch
 }:
+
+let
+  totalPatches = patches ++ [ ];
+in
 
 stdenv.mkDerivation rec {
   pname = "dwl";
-  version = "0.2";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "djpohly";
     repo = pname;
     rev = "v${version}";
-    sha256 = "gUaFTkpIQDswEubllMgvxPfCaEYFO7mODzjPyW7XsGQ=";
+    sha256 = "sha256-lfUAymLA4+E9kULZIueA+9gyVZYgaVS0oTX0LJjsSEs=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -30,6 +36,7 @@ stdenv.mkDerivation rec {
     libinput
     libxcb
     libxkbcommon
+    pixman
     wayland
     wayland-protocols
     wlroots
@@ -39,7 +46,7 @@ stdenv.mkDerivation rec {
   ];
 
   # Allow users to set their own list of patches
-  inherit patches;
+  patches = totalPatches;
 
   # Last line of config.mk enables XWayland
   prePatch = lib.optionalString enable-xwayland ''

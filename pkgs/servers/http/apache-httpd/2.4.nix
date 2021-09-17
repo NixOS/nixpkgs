@@ -1,4 +1,5 @@
 { lib, stdenv, fetchurl, perl, zlib, apr, aprutil, pcre, libiconv, lynx
+, nixosTests
 , proxySupport ? true
 , sslSupport ? true, openssl
 , http2Support ? true, nghttp2
@@ -16,12 +17,12 @@ assert ldapSupport -> aprutil.ldapSupport && openldap != null;
 assert http2Support -> nghttp2 != null;
 
 stdenv.mkDerivation rec {
-  version = "2.4.46";
+  version = "2.4.49";
   pname = "apache-httpd";
 
   src = fetchurl {
     url = "mirror://apache/httpd/httpd-${version}.tar.bz2";
-    sha256 = "1sj1rwgbcjgkzac3ybjy7j68c9b3dv3ap71m48mrjhf6w7vds3kl";
+    sha256 = "0fqkfjcpdd40ji2279wfxh5hddb5jdxlnpjr0sbhva8fi7b6bfb5";
   };
 
   # FIXME: -dev depends on -doc
@@ -85,6 +86,9 @@ stdenv.mkDerivation rec {
 
   passthru = {
     inherit apr aprutil sslSupport proxySupport ldapSupport luaSupport lua5;
+    tests = {
+      acme-integration = nixosTests.acme;
+    };
   };
 
   meta = with lib; {

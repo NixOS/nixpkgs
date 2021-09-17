@@ -8,7 +8,7 @@
 , intltool
 , itstool
 , libxml2
-, gnome3
+, gnome
 , python3
 , gobject-introspection
 , wrapGAppsHook

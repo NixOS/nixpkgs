@@ -20,28 +20,51 @@ let src =
       "0.15.0" = "0190vz59n6ma9ca1m3syl3mc8i1smj1m3d8x1jp21f710y4llfr6";
       "0.15.1" = "1x6fha495sgk4z05g0p0q3zfqm5l6xzmf6vjm9g9g7c820ym2q9a";
       "0.16.0" = "1vwjvvwha0ljc014v8jp8snki5zsqxlwd7x0dl0rg2i9kcmwc4mr";
+      "0.17.0" = "0f1lxp697yq61z8gqxjjaqd2ns8fd1vjfggn55x0gh9dx098p138";
+      "0.18.0" = "0571kzmb1h03qj74090n3mg8wfbh29qqrkdjkai6rnl5chll86lq";
+      "0.19.0" = "0ihgwl7d489g938m1jvgx8azdgq9f5np5mzqwwya797hx2m4dz32";
     }."${version}";
-  }
-; in
-
-let ocamlPackages =
-  if lib.versionAtLeast version "0.14.3"
+  };
+  ocamlPackages =
+  if lib.versionAtLeast version "0.17.0"
   then ocaml-ng.ocamlPackages
+  else if lib.versionAtLeast version "0.14.3"
+  then ocaml-ng.ocamlPackages_4_10
   else ocaml-ng.ocamlPackages_4_07
 ; in
 
 with ocamlPackages;
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "ocamlformat";
   inherit src version;
 
-  minimumOCamlVersion = "4.06";
+  minimumOCamlVersion =
+    if lib.versionAtLeast version "0.17.0"
+    then "4.08"
+    else "4.06";
 
   useDune2 = true;
 
   buildInputs =
-    if lib.versionAtLeast version "0.15.1"
+    if lib.versionAtLeast version "0.19.0"
+    then [
+      base
+      cmdliner
+      fpath
+      re
+      stdio
+      uuseg
+      uutf
+      fix
+      menhir
+      menhirLib
+      menhirSdk
+      ocp-indent
+      dune-build-info
+      odoc-parser
+    ]
+    else if lib.versionAtLeast version "0.18.0"
     then [
       base
       cmdliner
@@ -53,6 +76,47 @@ buildDunePackage rec {
       uutf
       fix
       menhir
+      menhirLib
+      menhirSdk
+      dune-build-info
+      ocaml-version
+      # Changed since 0.16.0:
+      (ppxlib.override { version = "0.22.0"; })
+    ]
+    else if lib.versionAtLeast version "0.17.0"
+    then [
+      base
+      cmdliner
+      fpath
+      odoc
+      re
+      stdio
+      uuseg
+      uutf
+      fix
+      menhir
+      menhirLib
+      menhirSdk
+      dune-build-info
+      ocaml-version
+      # Changed since 0.16.0:
+      (ppxlib.override { version = "0.22.0"; })
+      ocaml-migrate-parsetree-2
+    ]
+    else if lib.versionAtLeast version "0.15.1"
+    then [
+      base
+      cmdliner
+      fpath
+      odoc
+      re
+      stdio
+      uuseg
+      uutf
+      fix
+      menhir
+      menhirLib
+      menhirSdk
       (ppxlib.override { version = "0.18.0"; })
       dune-build-info # lib.versionAtLeast version "0.16.0"
       ocaml-version # lib.versionAtLeast version "0.16.0"
@@ -70,6 +134,8 @@ buildDunePackage rec {
       uutf
       fix
       menhir
+      menhirLib
+      menhirSdk
     ] else [
       base
       cmdliner

@@ -7,6 +7,8 @@ stdenv.mkDerivation rec {
   # that as the version number, I guess.
   version = "2017";
 
+  libname = pname + stdenv.targetPlatform.extensions.sharedLibrary;
+
   src = fetchurl {
     url = "https://baldur.iti.kit.edu/sat-competition-2017/solvers/incremental/glucose-ipasir.zip";
     sha256 = "0xchgady9vwdh8frmc8swz6va53igp2wj1y9sshd0g7549n87wdj";
@@ -18,13 +20,16 @@ stdenv.mkDerivation rec {
   sourceRoot = "sat/glucose4";
   patches = [ ./0001-Support-shared-library-build.patch ];
 
+  makeFlags = [ "CXX=${stdenv.cc.targetPrefix}c++" ];
+
   postBuild = ''
-    g++ -shared -Wl,-soname,libipasirglucose4.so -o libipasirglucose4.so \
+    $CXX -shared -o ${libname} \
+        ${if stdenv.cc.isClang then "" else "-Wl,-soname,${libname}"} \
         ipasirglucoseglue.o libipasirglucose4.a
   '';
 
   installPhase = ''
-    install -D libipasirglucose4.so $out/lib/libipasirglucose4.so
+    install -D ${libname} $out/lib/${libname}
   '';
 
   meta = with lib; {

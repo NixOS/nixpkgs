@@ -15,7 +15,7 @@ buildGoPackage rec {
 
   subPackages = [ "src/cmd/linuxkit" ];
 
-  buildFlagsArray = [ "-ldflags=-s -w -X ${goPackagePath}/src/cmd/linuxkit/version.GitCommit=${src.rev} -X ${goPackagePath}/src/cmd/linuxkit/version.Version=${version}" ];
+  ldflags = [ "-s" "-w" "-X ${goPackagePath}/src/cmd/linuxkit/version.GitCommit=${src.rev}" "-X ${goPackagePath}/src/cmd/linuxkit/version.Version=${version}" ];
 
   meta = with lib; {
     description = "A toolkit for building secure, portable and lean operating systems for containers";

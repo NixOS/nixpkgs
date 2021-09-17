@@ -375,7 +375,7 @@ let
         }
         trap cleanup EXIT
 
-        tmp=$(mktemp -d initrd-secrets.XXXXXXXXXX)
+        tmp=$(mktemp -d ''${TMPDIR:-/tmp}/initrd-secrets.XXXXXXXXXX)
 
         ${lib.concatStringsSep "\n" (mapAttrsToList (dest: source:
             let source' = if source == null then dest else toString source; in
@@ -386,7 +386,7 @@ let
           ) config.boot.initrd.secrets)
          }
 
-        (cd "$tmp" && find . -print0 | sort -z | cpio -o -H newc -R +0:+0 --reproducible --null) | \
+        (cd "$tmp" && find . -print0 | sort -z | cpio --quiet -o -H newc -R +0:+0 --reproducible --null) | \
           ${compressorExe} ${lib.escapeShellArgs initialRamdisk.compressorArgs} >> "$1"
       '';
 

@@ -8,8 +8,8 @@ let
     "i686" = "386";
     "x86_64" = "amd64";
     "aarch64" = "arm64";
-    "armv6l" = "arm";
-    "armv7l" = "arm";
+    "armv6l" = "armv6l";
+    "armv7l" = "armv6l";
     "powerpc64le" = "ppc64le";
   }.${platform.parsed.cpu.name} or (throw "Unsupported CPU ${platform.parsed.cpu.name}");
 
@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
   dontStrip = stdenv.hostPlatform.isDarwin;
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/share/go $out/bin
     mv bin/* $out/bin
     cp -r . $out/share/go
@@ -37,5 +38,6 @@ stdenv.mkDerivation rec {
       --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
       $out/bin/go
     '')}
-  '' ;
+    runHook postInstall
+  '';
 }

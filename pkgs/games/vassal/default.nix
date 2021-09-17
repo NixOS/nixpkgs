@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "VASSAL";
-  version = "3.4.12";
+  version = "3.5.8";
 
   src = fetchzip {
     url = "https://github.com/vassalengine/vassal/releases/download/${version}/${pname}-${version}-linux.tar.bz2";
-    sha256 = "0xn403fxz6ay5lv8whyfdq611kvxj5q309bj317yw5cxbb08w1yb";
+    sha256 = "sha256-IJ3p7+0fs/2dCbE1BOb2580upR9W/1R2/e3xmkAsJ+M=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -31,6 +31,6 @@ stdenv.mkDerivation rec {
       homepage = "http://www.vassalengine.org/";
       license = licenses.lgpl21Only;
       maintainers = with maintainers; [ tvestelind ];
-      platforms = platforms.linux;
+      platforms = platforms.unix;
   };
 }

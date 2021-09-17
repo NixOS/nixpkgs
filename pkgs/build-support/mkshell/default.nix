@@ -3,18 +3,23 @@
 # A special kind of derivation that is only meant to be consumed by the
 # nix-shell.
 {
-  inputsFrom ? [], # a list of derivations whose inputs will be made available to the environment
-  buildInputs ? [],
-  nativeBuildInputs ? [],
-  propagatedBuildInputs ? [],
-  propagatedNativeBuildInputs ? [],
-  ...
+  # a list of packages to add to the shell environment
+  packages ? [ ]
+, # propagate all the inputs from the given derivations
+  inputsFrom ? [ ]
+, buildInputs ? [ ]
+, nativeBuildInputs ? [ ]
+, propagatedBuildInputs ? [ ]
+, propagatedNativeBuildInputs ? [ ]
+, ...
 }@attrs:
 let
-  mergeInputs = name: lib.concatLists (lib.catAttrs name
-    ([attrs] ++ inputsFrom));
+  mergeInputs = name:
+    (attrs.${name} or []) ++
+    (lib.subtractLists inputsFrom (lib.flatten (lib.catAttrs name inputsFrom)));
 
   rest = builtins.removeAttrs attrs [
+    "packages"
     "inputsFrom"
     "buildInputs"
     "nativeBuildInputs"
@@ -26,15 +31,15 @@ in
 
 stdenv.mkDerivation ({
   name = "nix-shell";
-  phases = ["nobuildPhase"];
+  phases = [ "nobuildPhase" ];
 
   buildInputs = mergeInputs "buildInputs";
-  nativeBuildInputs = mergeInputs "nativeBuildInputs";
+  nativeBuildInputs = packages ++ (mergeInputs "nativeBuildInputs");
   propagatedBuildInputs = mergeInputs "propagatedBuildInputs";
   propagatedNativeBuildInputs = mergeInputs "propagatedNativeBuildInputs";
 
   shellHook = lib.concatStringsSep "\n" (lib.catAttrs "shellHook"
-    (lib.reverseList inputsFrom ++ [attrs]));
+    (lib.reverseList inputsFrom ++ [ attrs ]));
 
   nobuildPhase = ''
     echo

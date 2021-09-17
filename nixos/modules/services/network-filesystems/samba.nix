@@ -156,7 +156,6 @@ in
       securityType = mkOption {
         type = types.str;
         default = "user";
-        example = "share";
         description = "Samba security type";
       };
 

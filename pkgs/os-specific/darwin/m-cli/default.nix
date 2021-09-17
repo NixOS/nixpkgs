@@ -40,6 +40,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
 
     platforms = platforms.darwin;
-    maintainers = with maintainers; [ yurrriq ];
+    maintainers = with maintainers; [];
   };
 }

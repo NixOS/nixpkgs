@@ -1,8 +1,8 @@
 { stdenv
 , lib
-, fetchzip
+, fetchFromGitea
 , fetchurl
-, runCommandNoCC
+, runCommand
 , fcft
 , freetype
 , pixman
@@ -15,25 +15,33 @@
 , scdoc
 , tllist
 , wayland-protocols
+, wayland-scanner
 , pkg-config
+, utf8proc
 , allowPgo ? true
 , python3  # for PGO
+# for clang stdenv check
+, foot
+, llvmPackages
+, llvmPackages_latest
 }:
 
 let
-  version = "1.6.4";
+  version = "1.9.0";
 
   # build stimuli file for PGO build and the script to generate it
   # independently of the foot's build, so we can cache the result
   # and avoid unnecessary rebuilds as it can take relatively long
   # to generate
+  #
+  # For every bump, make sure that the hash is still accurate.
   stimulusGenerator = stdenv.mkDerivation {
     pname = "foot-generate-alt-random-writes";
     inherit version;
 
     src = fetchurl {
       url = "https://codeberg.org/dnkl/foot/raw/tag/${version}/scripts/generate-alt-random-writes.py";
-      sha256 = "0pnc5nvqrbgx5618ylrkrs9fyxjh4jcsbryfk6vlnk8x4wyyaibz";
+      sha256 = "0w4d0rxi54p8lvbynypcywqqwbbzmyyzc0svjab27ngmdj1034ii";
     };
 
     dontUnpack = true;
@@ -45,7 +53,7 @@ let
     '';
   };
 
-  stimuliFile = runCommandNoCC "pgo-stimulus-file" { } ''
+  stimuliFile = runCommand "pgo-stimulus-file" { } ''
     ${stimulusGenerator} \
       --rows=67 --cols=135 \
       --scroll --scroll-region \
@@ -65,12 +73,12 @@ let
 
   # https://codeberg.org/dnkl/foot/src/branch/master/INSTALL.md#performance-optimized-pgo
   pgoCflags = {
-    "clang" = "-O3 -Wno-ignored-optimization-argument -Wno-profile-instr-out-of-date -Wno-profile-instr-unprofiled";
-    "gcc" = "-O3 -Wno-missing-profile";
+    "clang" = "-O3 -Wno-ignored-optimization-argument";
+    "gcc" = "-O3";
   }."${compilerName}";
 
   # ar with lto support
-  ar = {
+  ar = stdenv.cc.bintools.targetPrefix + {
     "clang" = "llvm-ar";
     "gcc" = "gcc-ar";
     "unknown" = "ar";
@@ -80,33 +88,46 @@ let
   # using a compiler which foot's PGO build supports (clang or gcc)
   doPgo = allowPgo && (stdenv.hostPlatform == stdenv.buildPlatform)
     && compilerName != "unknown";
+
+  terminfoDir = "${placeholder "terminfo"}/share/terminfo";
 in
 stdenv.mkDerivation rec {
   pname = "foot";
   inherit version;
 
-  src = fetchzip {
-    url = "https://codeberg.org/dnkl/${pname}/archive/${version}.tar.gz";
-    sha256 = "0awv53l3039s1rnkhdkzc0gwawlnd1m8cl4qhaijhxzzq68w0dfb";
+  src = fetchFromGitea {
+    domain = "codeberg.org";
+    owner = "dnkl";
+    repo = pname;
+    rev = version;
+    sha256 = "0mkzq5lbgl5qp5nj8sk5gyg9hrrklmbjdqzlcr2a6rlmilkxlhwm";
   };
 
+  depsBuildBuild = [
+    pkg-config
+  ];
+
   nativeBuildInputs = [
+    wayland-scanner
     meson
     ninja
     ncurses
     scdoc
-    tllist
-    wayland-protocols
     pkg-config
-  ] ++ lib.optional stdenv.cc.isClang stdenv.cc.cc.llvm;
+  ] ++ lib.optionals (compilerName == "clang") [
+    stdenv.cc.cc.libllvm.out
+  ];
 
   buildInputs = [
+    tllist
+    wayland-protocols
     fontconfig
     freetype
     pixman
     wayland
     libxkbcommon
     fcft
+    utf8proc
   ];
 
   # recommended build flags for performance optimized foot builds
@@ -121,18 +142,58 @@ stdenv.mkDerivation rec {
     export AR="${ar}"
   '';
 
-  mesonFlags = [ "--buildtype=release" "-Db_lto=true" ];
+  mesonBuildType = "release";
+
+  mesonFlags = [
+    "-Db_lto=true"
+    # Prevent foot from installing its terminfo file into a custom location,
+    # we need to do this manually in postInstall.
+    # See https://codeberg.org/dnkl/foot/pulls/673,
+    # https://codeberg.org/dnkl/foot/src/tag/1.9.0/INSTALL.md#options
+    "-Dterminfo=disabled"
+    # Ensure TERM=foot is used
+    "-Ddefault-terminfo=foot"
+    # Tell foot what to set TERMINFO to
+    "-Dcustom-terminfo-install-location=${terminfoDir}"
+  ];
 
   # build and run binary generating PGO profiles,
   # then reconfigure to build the normal foot binary utilizing PGO
   preBuild = lib.optionalString doPgo ''
     meson configure -Db_pgo=generate
     ninja
+    # make sure there is _some_ profiling data on all binaries
+    ./footclient --version
+    ./foot --version
+    # generate pgo data of wayland independent code
     ./pgo ${stimuliFile} ${stimuliFile} ${stimuliFile}
     meson configure -Db_pgo=use
-  '' + lib.optionalString (doPgo && stdenv.cc.cc.pname == "clang") ''
+  '' + lib.optionalString (doPgo && compilerName == "clang") ''
     llvm-profdata merge default_*profraw --output=default.profdata
   '';
+
+  outputs = [ "out" "terminfo" ];
+
+  postInstall = ''
+    # build and install foot's terminfo to the standard location
+    # instead of its custom location
+    mkdir -p "${terminfoDir}"
+    tic -o "${terminfoDir}" -x -e foot,foot-direct "$NIX_BUILD_TOP/$sourceRoot/foot.info"
+  '';
+
+  passthru.tests = {
+    clang-default-compilation = foot.override {
+      inherit (llvmPackages) stdenv;
+    };
+
+    clang-latest-compilation = foot.override {
+      inherit (llvmPackages_latest) stdenv;
+    };
+
+    noPgo = foot.override {
+      allowPgo = false;
+    };
+  };
 
   meta = with lib; {
     homepage = "https://codeberg.org/dnkl/foot/";
@@ -141,5 +202,18 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = [ maintainers.sternenseemann ];
     platforms = platforms.linux;
+    # From (presumably) ncurses version 6.3, it will ship a foot
+    # terminfo file. This however won't include some non-standard
+    # capabilities foot's bundled terminfo file contains. Unless we
+    # want to have some features in e. g. vim or tmux stop working,
+    # we need to make sure that the foot terminfo overwrites ncurses'
+    # one. Due to <nixpkgs/nixos/modules/config/system-path.nix>
+    # ncurses is always added to environment.systemPackages on
+    # NixOS with its priority increased by 3, so we need to go
+    # one bigger.
+    # This doesn't matter a lot for local use since foot sets
+    # TERMINFO to a store path, but allows installing foot.terminfo
+    # on remote systems for proper foot terminfo support.
+    priority = (ncurses.meta.priority or 5) + 3 + 1;
   };
 }

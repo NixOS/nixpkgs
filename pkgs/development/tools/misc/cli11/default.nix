@@ -3,7 +3,7 @@
   fetchFromGitHub,
   cmake,
   gtest,
-  python,
+  python3,
   boost
 }:
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  checkInputs = [ boost python ];
+  checkInputs = [ boost python3 ];
 
   doCheck = true;
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     description = "Command line parser for C++11";
     homepage = "https://github.com/CLIUtils/CLI11";
     platforms = platforms.unix;
-    maintainers = with maintainers; [ nand0p ];
+    maintainers = with maintainers; [ ];
     license = licenses.bsd3;
   };
 

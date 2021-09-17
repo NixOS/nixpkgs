@@ -2,7 +2,7 @@ version: 2.0
 shards:
   ameba:
     git: https://github.com/crystal-ameba/ameba.git
-    version: 0.13.3
+    version: 0.14.2
 
   future:
     git: https://github.com/crystal-community/future.cr.git

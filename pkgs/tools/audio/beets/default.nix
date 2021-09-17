@@ -21,6 +21,7 @@
 , enableKodiupdate       ? true
 , enableLastfm           ? true
 , enableLoadext          ? true
+, enableLyrics           ? true
 , enableMpd              ? true
 , enablePlaylist         ? true
 , enableReplaygain       ? true
@@ -59,6 +60,7 @@ let
     lastgenre = enableLastfm;
     lastimport = enableLastfm;
     loadext = enableLoadext;
+    lyrics = enableLyrics;
     mpdstats = enableMpd;
     mpdupdate = enableMpd;
     playlist = enablePlaylist;
@@ -71,9 +73,9 @@ let
   };
 
   pluginsWithoutDeps = [
-    "bench" "bpd" "bpm" "bucket" "cue" "duplicates" "edit" "embedart"
+    "bareasc" "bench" "bpd" "bpm" "bucket" "duplicates" "edit" "embedart"
     "export" "filefilter" "fish" "freedesktop" "fromfilename" "ftintitle" "fuzzy"
-    "hook" "ihate" "importadded" "importfeeds" "info" "inline" "ipfs" "lyrics"
+    "hook" "ihate" "importadded" "importfeeds" "info" "inline" "ipfs"
     "mbcollection" "mbsubmit" "mbsync" "metasync" "missing" "parentwork" "permissions" "play"
     "plexupdate" "random" "rewrite" "scrub" "smartplaylist" "spotify" "the"
     "types" "unimported" "zero"
@@ -98,18 +100,13 @@ let
 
 in pythonPackages.buildPythonApplication rec {
   pname = "beets";
-  # While there is a stable version, 1.4.9, it is more than 1000 commits behind
-  # master and lacks many bug fixes and improvements[1]. Also important,
-  # unstable does not require bs1770gain[2].
-  # [1]: https://discourse.beets.io/t/forming-a-beets-core-team/639
-  # [2]: https://github.com/NixOS/nixpkgs/pull/90504
-  version = "unstable-2021-03-08";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "beetbox";
     repo = "beets";
-    rev = "debd382837ef1d30574c2234710d536bb299f979";
-    sha256 = "sha256-I6ejW3f72fdzWoz7g4n8pDYz2NiHGrorLegUQhQOSiI=";
+    rev = "v${version}";
+    sha256 = "sha256-yQMCJUwpjDDhPffBS6LUq6z4iT1VyFQE0R27XEbYXbY=";
   };
 
   propagatedBuildInputs = [
@@ -130,6 +127,8 @@ in pythonPackages.buildPythonApplication rec {
   ] ++ lib.optional enableAbsubmit         essentia-extractor
     ++ lib.optional enableAcoustid         pythonPackages.pyacoustid
     ++ lib.optional enableBeatport         pythonPackages.requests_oauthlib
+    ++ lib.optional enableConvert          ffmpeg
+    ++ lib.optional enableDiscogs          pythonPackages.discogs-client
     ++ lib.optional (enableFetchart
                   || enableDeezer
                   || enableEmbyupdate
@@ -139,10 +138,9 @@ in pythonPackages.buildPythonApplication rec {
                   || enableSubsonicplaylist
                   || enableSubsonicupdate
                   || enableAcousticbrainz) pythonPackages.requests
-    ++ lib.optional enableConvert          ffmpeg
-    ++ lib.optional enableDiscogs          pythonPackages.discogs_client
     ++ lib.optional enableKeyfinder        keyfinder-cli
     ++ lib.optional enableLastfm           pythonPackages.pylast
+    ++ lib.optional enableLyrics           pythonPackages.beautifulsoup4
     ++ lib.optional enableMpd              pythonPackages.mpd2
     ++ lib.optional enableSonosUpdate      pythonPackages.soco
     ++ lib.optional enableThumbnails       pythonPackages.pyxdg
@@ -172,7 +170,7 @@ in pythonPackages.buildPythonApplication rec {
     # https://github.com/beetbox/beets/blob/v1.4.9/setup.py
     pylast
     mpd2
-    discogs_client
+    discogs-client
     pyxdg
   ];
 
@@ -263,12 +261,11 @@ in pythonPackages.buildPythonApplication rec {
   passthru = {
     # FIXME: remove in favor of pkgs.beetsExternalPlugins
     externalPlugins = beetsExternalPlugins;
-    updateScript = unstableGitUpdater { url = "https://github.com/beetbox/beets"; };
   };
 
   meta = with lib; {
     description = "Music tagger and library organizer";
-    homepage = "http://beets.io";
+    homepage = "https://beets.io";
     license = licenses.mit;
     maintainers = with maintainers; [ aszlig doronbehar lovesegfault pjones ];
     platforms = platforms.linux;

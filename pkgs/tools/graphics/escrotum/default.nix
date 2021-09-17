@@ -1,10 +1,9 @@
-{ lib, fetchFromGitHub, buildPythonApplication
-, pygtk
-, numpy ? null
+{ lib, python2Packages, fetchFromGitHub
 }:
 
-buildPythonApplication {
-  name = "escrotum-2019-06-10";
+with python2Packages; buildPythonApplication {
+  pname = "escrotum";
+  version = "unstable-2019-06-10";
 
   src = fetchFromGitHub {
     owner  = "Roger";

@@ -25,7 +25,6 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    inherit version;
     description = "Compute the perceptual hash of an image";
     license = licenses.gpl3;
     maintainers = [maintainers.imalsogreg];

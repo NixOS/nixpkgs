@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , glib
 , gtk3
@@ -22,14 +23,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.3.2";
+  version = "1.4.1";
   pname = "cawbird";
 
   src = fetchFromGitHub {
     owner = "IBBoard";
     repo = "cawbird";
     rev = "v${version}";
-    sha256 = "1baw3h5wq2ib4bnphazq7n9c9wc94g0n6v4y5kg71n1dir0c3jkh";
+    sha256 = "0lmrgcj1ky1vhzynl36k6ba3ws089x4qdrnkjk3lbr334kicx9na";
   };
 
   nativeBuildInputs = [
@@ -69,11 +70,18 @@ stdenv.mkDerivation rec {
     patchShebangs data/meson_post_install.py
   '';
 
+  # supply Twitter API keys
+  # use default keys supplied by upstream, see https://github.com/IBBoard/cawbird/blob/master/README.md#preparation
+  mesonFlags = [
+    "-Dconsumer_key_base64=VmY5dG9yRFcyWk93MzJEZmhVdEk5Y3NMOA=="
+    "-Dconsumer_secret_base64=MThCRXIxbWRESDQ2Y0podzVtVU13SGUyVGlCRXhPb3BFRHhGYlB6ZkpybG5GdXZaSjI="
+  ];
+
   meta = with lib; {
     description = "Native GTK Twitter client for the Linux desktop";
     longDescription = "Cawbird is a modern, easy and fun Twitter client. Fork of the discontinued Corebird.";
     homepage = "https://ibboard.co.uk/cawbird/";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with lib.maintainers; [ jonafato schmittlauch ];
   };

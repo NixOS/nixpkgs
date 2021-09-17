@@ -1,6 +1,6 @@
 { lib, stdenv
 , fetchgit
-, alsaLib
+, alsa-lib
 , aubio
 , boost
 , cairomm
@@ -8,7 +8,6 @@
 , doxygen
 , fftwSinglePrec
 , flac
-, glibc
 , glibmm
 , graphviz
 , gtkmm2
@@ -75,7 +74,7 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    alsaLib
+    alsa-lib
     aubio
     boost
     cairomm

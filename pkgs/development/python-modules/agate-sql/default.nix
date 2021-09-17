@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , isPy27
-, fetchFromGitHub
+, fetchPypi
 , agate
 , sqlalchemy
 , crate
@@ -11,18 +11,20 @@
 
 buildPythonPackage rec {
   pname = "agate-sql";
-  version = "0.5.6";
+  version = "0.5.7";
 
   disabled = isPy27;
 
-  src = fetchFromGitHub {
-    owner = "wireservice";
-    repo = "agate-sql";
-    rev = version;
-    sha256 = "16rijcnvxrvw9mmyk4228dalrr2qb74y649g1l6qifiabx5ij78s";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "7622c1f243b5a9a5efddfe28c36eeeb30081e43e3eb72e8f3da22c2edaecf4d8";
   };
 
   propagatedBuildInputs = [ agate sqlalchemy ];
+
+  # crate is broken in nixpkgs, with SQLAlchemy > 1.3
+  # Skip tests for now as they rely on it.
+  doCheck = false;
 
   checkInputs = [ crate nose geojson ];
 

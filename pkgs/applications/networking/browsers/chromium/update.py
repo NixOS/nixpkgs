@@ -3,6 +3,7 @@
 
 """This script automatically updates chromium, google-chrome, chromedriver, and ungoogled-chromium
 via upstream-info.json."""
+# Usage: ./update.py [--commit]
 
 import csv
 import json
@@ -22,6 +23,7 @@ DEB_URL = 'https://dl.google.com/linux/chrome/deb/pool/main/g'
 BUCKET_URL = 'https://commondatastorage.googleapis.com/chromium-browser-official'
 
 JSON_PATH = dirname(abspath(__file__)) + '/upstream-info.json'
+COMMIT_MESSAGE_SCRIPT = dirname(abspath(__file__)) + '/get-commit-message.py'
 
 
 def load_json(path):
@@ -117,6 +119,21 @@ def channel_name_to_attr_name(channel_name):
     sys.exit(1)
 
 
+def get_channel_key(item):
+    """Orders Chromium channels by their name."""
+    channel_name = item[0]
+    if channel_name == 'stable':
+        return 0
+    if channel_name == 'beta':
+        return 1
+    if channel_name == 'dev':
+        return 2
+    if channel_name == 'ungoogled-chromium':
+        return 3
+    print(f'Error: Unexpected channel: {channel_name}', file=sys.stderr)
+    sys.exit(1)
+
+
 def print_updates(channels_old, channels_new):
     """Print a summary of the updates."""
     print('Updates:')
@@ -192,21 +209,25 @@ with urlopen(HISTORY_URL) as resp:
         channels[channel_name] = channel
 
 
-with open(JSON_PATH, 'w') as out:
-    def get_channel_key(item):
-        """Orders Chromium channels by their name."""
-        channel_name = item[0]
-        if channel_name == 'stable':
-            return 0
-        if channel_name == 'beta':
-            return 1
-        if channel_name == 'dev':
-            return 2
-        if channel_name == 'ungoogled-chromium':
-            return 3
-        print(f'Error: Unexpected channel: {channel_name}', file=sys.stderr)
-        sys.exit(1)
-    sorted_channels = OrderedDict(sorted(channels.items(), key=get_channel_key))
-    json.dump(sorted_channels, out, indent=2)
-    out.write('\n')
+sorted_channels = OrderedDict(sorted(channels.items(), key=get_channel_key))
+if len(sys.argv) == 2 and sys.argv[1] == '--commit':
+    for channel_name in sorted_channels.keys():
+        version_old = last_channels[channel_name]['version']
+        version_new = sorted_channels[channel_name]['version']
+        if LooseVersion(version_old) < LooseVersion(version_new):
+            last_channels[channel_name] = sorted_channels[channel_name]
+            with open(JSON_PATH, 'w') as out:
+                json.dump(last_channels, out, indent=2)
+                out.write('\n')
+            attr_name = channel_name_to_attr_name(channel_name)
+            commit_message = f'{attr_name}: {version_old} -> {version_new}'
+            if channel_name == 'stable':
+                body = subprocess.check_output([COMMIT_MESSAGE_SCRIPT, version_new]).decode('utf-8')
+                commit_message += '\n\n' + body
+            subprocess.run(['git', 'add', JSON_PATH], check=True)
+            subprocess.run(['git', 'commit', '--file=-'], input=commit_message.encode(), check=True)
+else:
+    with open(JSON_PATH, 'w') as out:
+        json.dump(sorted_channels, out, indent=2)
+        out.write('\n')
     print_updates(last_channels, sorted_channels)

@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "uucp-1.07";
+  pname = "uucp";
+  version = "1.07";
 
   src = fetchurl {
-    url = "mirror://gnu/uucp/${name}.tar.gz";
+    url = "mirror://gnu/uucp/uucp-${version}.tar.gz";
     sha256 = "0b5nhl9vvif1w3wdipjsk8ckw49jj1w85xw1mmqi3zbcpazia306";
   };
 

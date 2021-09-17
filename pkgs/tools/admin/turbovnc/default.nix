@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, nixosTests
 
 # Dependencies
 , cmake
@@ -21,13 +22,13 @@
 
 stdenv.mkDerivation rec {
   pname = "turbovnc";
-  version = "2.2.5";
+  version = "2.2.6";
 
   src = fetchFromGitHub {
     owner = "TurboVNC";
     repo = "turbovnc";
     rev = version;
-    sha256 = "0r2lk5lza7a9h02g4z5j59d8qj0x1q1my665d1x1plny4g46vam0";
+    sha256 = "sha256-HSppHPBBkTf+88ZBaYG6JK4A/5lOBCxPFv6898TD7PE=";
   };
 
   # TODO:
@@ -94,12 +95,15 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/vncserver \
       --prefix PATH : ${lib.makeBinPath (with xorg; [ xauth ])}
 
-    # The viewer is in Java and requires `JAVA_HOME`.
+    # The viewer is in Java and requires `JAVA_HOME` (which is a single
+    # path, cannot be multiple separated paths).
     # For SSH support, `ssh` is required on `PATH`.
     wrapProgram $out/bin/vncviewer \
-      --prefix JAVA_HOME : "${lib.makeLibraryPath [ openjdk ]}/openjdk" \
+      --set JAVA_HOME "${lib.makeLibraryPath [ openjdk ]}/openjdk" \
       --prefix PATH : ${lib.makeBinPath [ openssh ]}
   '';
+
+  passthru.tests.turbovnc-headless-server = nixosTests.turbovnc-headless-server;
 
   meta = {
     homepage = "https://turbovnc.org/";

@@ -4,35 +4,34 @@
 , buildDunePackage
 , ocaml
 , gen
-, ppx_tools_versioned
-, ocaml-migrate-parsetree
+, ppxlib
 , uchar
 }:
 
-if lib.versionOlder ocaml.version "4.02.3"
+if lib.versionOlder ocaml.version "4.08"
 then throw "sedlex is not available for OCaml ${ocaml.version}"
 else
 
 let
-  unicodeVersion = "12.1.0";
+  unicodeVersion = "13.0.0";
   baseUrl = "https://www.unicode.org/Public/${unicodeVersion}";
 
   DerivedCoreProperties = fetchurl {
     url = "${baseUrl}/ucd/DerivedCoreProperties.txt";
-    sha256 = "0s6sn1yr9qmb2i6gf8dir2zpsbjv1frdfzy3i2yjylzvf637msx6";
+    sha256 = "0j12x112cd8fpgazkc8izxnhhpia44p1m36ff8yapslxndcmzm55";
   };
   DerivedGeneralCategory = fetchurl {
     url = "${baseUrl}/ucd/extracted/DerivedGeneralCategory.txt";
-    sha256 = "1rifzq9ba6c58dn0lrmcb5l5k4ksx3zsdkira3m5p6h4i2wriy3q";
+    sha256 = "0w6mkz4w79k23bnmwgfxc4yqc2ypv8ilrjn6nk25hrafksbg00j5";
   };
   PropList = fetchurl {
     url = "${baseUrl}/ucd/PropList.txt";
-    sha256 = "0gsb1jpj3mnqbjgbavi4l95gl6g4agq58j82km22fdfg63j3w3fk";
+    sha256 = "1ks0585wimygbk2wqi9hqg8gyl25iffvdad5vya1zgsxs8z5lns8";
   };
 in
 buildDunePackage rec {
   pname = "sedlex";
-  version = "2.2";
+  version = "2.4";
 
   useDune2 = true;
 
@@ -40,11 +39,11 @@ buildDunePackage rec {
     owner = "ocaml-community";
     repo = "sedlex";
     rev = "v${version}";
-    sha256 = "18dwl2is5j26z6b1c47b81wvcpxw44fasppdadsrs9vsw63rwcm3";
+    sha256 = "13g8az4zqg6hrnxmy3qrasslppzlag13dd1dsr8vlpg2vpfmfv6i";
   };
 
   propagatedBuildInputs = [
-    gen uchar ocaml-migrate-parsetree ppx_tools_versioned
+    gen uchar ppxlib
   ];
 
   preBuild = ''
@@ -60,6 +59,7 @@ buildDunePackage rec {
 
   meta = {
     homepage = "https://github.com/ocaml-community/sedlex";
+    changelog = "https://github.com/ocaml-community/sedlex/raw/v${version}/CHANGES";
     description = "An OCaml lexer generator for Unicode";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.marsam ];

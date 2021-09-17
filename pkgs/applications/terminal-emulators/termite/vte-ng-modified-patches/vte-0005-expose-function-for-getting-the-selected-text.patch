@@ -21,7 +21,7 @@
 +vte_terminal_get_selection(VteTerminal *terminal) noexcept
 +{
 +	g_return_val_if_fail(VTE_IS_TERMINAL(terminal), NULL);
-+	return g_strdup (IMPL(terminal)->m_selection[VTE_SELECTION_PRIMARY]->str);
++	return g_strdup (IMPL(terminal)->m_selection[vte::to_integral(vte::platform::ClipboardType::PRIMARY)]->str);
 +}
 +
  /**

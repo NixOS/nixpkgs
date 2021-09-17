@@ -1,38 +1,57 @@
-{ lib, stdenv, autoconf, automake, pkg-config, gettext, libtool, bison
-, flex, which, subversion, fetchurl, makeWrapper, libftdi1, libusb-compat-0_1, readline
-, python3
-, svfSupport ? true
+{ lib
+, stdenv
+, fetchurl
+, autoconf
+, automake
+, autoreconfHook
+, gettext
+, libftdi1
+, libtool
+, libusb-compat-0_1
+, makeWrapper
+, pkg-config
+, readline
+, which
 , bsdlSupport ? true
-, staplSupport ? true
 , jedecSupport ? true
+, staplSupport ? true
+, svfSupport ? true
 }:
 
 stdenv.mkDerivation rec {
-  version = "2019.12";
   pname = "urjtag";
+  version = "2021.03";
 
   src = fetchurl {
-    url = "https://downloads.sourceforge.net/project/urjtag/urjtag/${version}/urjtag-${version}.tar.xz";
-    sha256 = "1k2vmvvarik0q3llbfbk8ad35mcns7w1ln9gla1mn7z9c6x6x90r";
+    url = "mirror://sourceforge/project/${pname}/${pname}/${version}/${pname}-${version}.tar.xz";
+    hash = "sha256-sKLqokVROvCW3E13AQmDIzXGlMbBKqXpL++uhoVBbxw=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ gettext autoconf automake libtool bison flex which
-    subversion makeWrapper readline libftdi1 libusb-compat-0_1 python3 ];
-
-  configureFlags = [
-    (lib.enableFeature svfSupport   "svf")
-    (lib.enableFeature bsdlSupport  "bsdl")
-    (lib.enableFeature staplSupport "stapl")
-    (lib.enableFeature jedecSupport "jedec-exp")
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    which
+    gettext
+  ];
+  buildInputs = [
+    libftdi1
+    libtool
+    libusb-compat-0_1
+    readline
   ];
 
-  meta = {
-    description = "Enhanced, modern tool for communicating over JTAG with flash chips, CPUs,and many more";
+  configureFlags = [
+    (lib.enableFeature bsdlSupport  "bsdl")
+    (lib.enableFeature jedecSupport "jedec-exp")
+    (lib.enableFeature staplSupport "stapl")
+    (lib.enableFeature svfSupport   "svf")
+  ];
+
+  meta = with lib; {
     homepage = "http://urjtag.org/";
-    license = with lib.licenses; [ gpl2Plus lgpl21Plus ];
-    platforms = lib.platforms.gnu ++ lib.platforms.linux;  # arbitrary choice
-    maintainers = with lib.maintainers; [ lowfatcomputing ];
+    description = "Universal JTAG library, server and tools";
+    license = with licenses; [ gpl2Plus lgpl21Plus ];
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = platforms.linux;
   };
 }
-

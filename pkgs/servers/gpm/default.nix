@@ -5,10 +5,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "gpm-1.20.7";
+  pname = "gpm";
+  version = "1.20.7";
 
   src = fetchurl {
-    url = "https://www.nico.schottelius.org/software/gpm/archives/${name}.tar.bz2";
+    url = "https://www.nico.schottelius.org/software/gpm/archives/gpm-${version}.tar.bz2";
     sha256 = "13d426a8h403ckpc8zyf7s2p5rql0lqbg2bv0454x0pvgbfbf4gh";
   };
 

@@ -12,7 +12,6 @@
 , coreutils
 , gperf
 , getent
-, patchelf
 , glibcLocales
 , glib
 , substituteAll
@@ -51,10 +50,10 @@
 , iptables
 , withSelinux ? false
 , libselinux
-, withLibseccomp ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) libseccomp.meta.platforms
+, withLibseccomp ? lib.meta.availableOn stdenv.hostPlatform libseccomp
 , libseccomp
-, withKexectools ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) kexectools.meta.platforms
-, kexectools
+, withKexectools ? lib.meta.availableOn stdenv.hostPlatform kexec-tools
+, kexec-tools
 , bashInteractive
 , libmicrohttpd
 
@@ -90,7 +89,6 @@
   # name argument
 , pname ? "systemd"
 
-
 , libxslt
 , docbook_xsl
 , docbook_xml_dtd_42
@@ -113,10 +111,10 @@ assert withCryptsetup ->
 let
   wantCurl = withRemote || withImportd;
 
-  version = "247.3";
 in
-stdenv.mkDerivation {
-  inherit version pname;
+stdenv.mkDerivation rec {
+  inherit pname;
+  version = "247.6";
 
   # We use systemd/systemd-stable for src, and ship NixOS-specific patches inside nixpkgs directly
   # This has proven to be less error-prone than the previous systemd fork.
@@ -124,12 +122,12 @@ stdenv.mkDerivation {
     owner = "systemd";
     repo = "systemd-stable";
     rev = "v${version}";
-    sha256 = "0zn0b74iwz3vxabqsk4yydwpgky3c5z4dl83wxbs1qi5d2dnbqa7";
+    sha256 = "sha256-7XYEq3Qw25suwjbtPzx9lVPHUu9ZY/1bADXl2wQbkJc=";
   };
 
   # If these need to be regenerated, `git am path/to/00*.patch` them into a
   # systemd worktree, rebase to the more recent systemd version, and export the
-  # patches again via `git format-patch v${version}`.
+  # patches again via `git -c format.signoff=false format-patch v${version}`.
   # Use `find . -name "*.patch" | sort` to get an up-to-date listing of all patches
   patches = [
     ./0001-Start-device-units-for-uninitialised-encrypted-devic.patch
@@ -150,7 +148,20 @@ stdenv.mkDerivation {
     ./0016-kmod-static-nodes.service-Update-ConditionFileNotEmp.patch
     ./0017-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
     ./0018-logind-seat-debus-show-CanMultiSession-again.patch
-    ./0019-Revert-pkg-config-prefix-is-not-really-configurable-.patch
+    ./0019-pkg-config-derive-prefix-from-prefix.patch
+
+    # Fix -Werror=format.
+    (fetchpatch {
+      url = "https://github.com/systemd/systemd/commit/ab1aa6368a883bce88e3162fee2bea14aacedf23.patch";
+      sha256 = "1b280l5jrjsg8qhsang199mpqjhkpix4c8bm3blknjnq9iv43add";
+    })
+
+    # Fix CVE-2021-33910, disclosed 2021-07-20
+    (fetchpatch {
+      name = "CVE-2021-33910.patch";
+      url = "https://github.com/systemd/systemd/commit/441e0115646d54f080e5c3bb0ba477c892861ab9.patch";
+      sha256 = "1g1lk95igaadg67kah9bpi4zsc01rg398sd1247ghjsvl5hxn4v4";
+    })
   ];
 
   postPatch = ''
@@ -254,55 +265,51 @@ stdenv.mkDerivation {
 
   outputs = [ "out" "man" "dev" ];
 
-  nativeBuildInputs =
-    [
-      pkg-config
-      gperf
-      ninja
-      meson
-      coreutils # meson calls date, stat etc.
-      glibcLocales
-      patchelf
-      getent
-      m4
+  nativeBuildInputs = [
+    pkg-config
+    gperf
+    ninja
+    meson
+    glibcLocales
+    getent
+    m4
 
-      intltool
-      gettext
+    intltool
+    gettext
 
-      libxslt
-      docbook_xsl
-      docbook_xml_dtd_42
-      docbook_xml_dtd_45
-      (buildPackages.python3Packages.python.withPackages (ps: with ps; [ python3Packages.lxml ]))
-    ];
+    libxslt
+    docbook_xsl
+    docbook_xml_dtd_42
+    docbook_xml_dtd_45
+    (buildPackages.python3Packages.python.withPackages (ps: with ps; [ python3Packages.lxml ]))
+  ];
 
-  buildInputs =
-    [
-      acl
-      audit
-      glib
-      kmod
-      libcap
-      libgcrypt
-      libidn2
-      libuuid
-      linuxHeaders
-      pam
-    ]
+  buildInputs = [
+    acl
+    audit
+    glib
+    kmod
+    libcap
+    libgcrypt
+    libidn2
+    libuuid
+    linuxHeaders
+    pam
+  ]
 
-    ++ lib.optional withApparmor libapparmor
-    ++ lib.optional wantCurl (lib.getDev curl)
-    ++ lib.optionals withCompression [ bzip2 lz4 xz ]
-    ++ lib.optional withCryptsetup (lib.getDev cryptsetup.dev)
-    ++ lib.optional withEfi gnu-efi
-    ++ lib.optional withKexectools kexectools
-    ++ lib.optional withLibseccomp libseccomp
-    ++ lib.optional withNetworkd iptables
-    ++ lib.optional withPCRE2 pcre2
-    ++ lib.optional withResolved libgpgerror
-    ++ lib.optional withSelinux libselinux
-    ++ lib.optional withRemote libmicrohttpd
-    ++ lib.optionals withHomed [ p11-kit libfido2 ]
+  ++ lib.optional withApparmor libapparmor
+  ++ lib.optional wantCurl (lib.getDev curl)
+  ++ lib.optionals withCompression [ bzip2 lz4 xz ]
+  ++ lib.optional withCryptsetup (lib.getDev cryptsetup.dev)
+  ++ lib.optional withEfi gnu-efi
+  ++ lib.optional withKexectools kexec-tools
+  ++ lib.optional withLibseccomp libseccomp
+  ++ lib.optional withNetworkd iptables
+  ++ lib.optional withPCRE2 pcre2
+  ++ lib.optional withResolved libgpgerror
+  ++ lib.optional withSelinux libselinux
+  ++ lib.optional withRemote libmicrohttpd
+  ++ lib.optionals withHomed [ p11-kit libfido2 ]
   ;
 
   #dontAddPrefix = true;
@@ -355,14 +362,14 @@ stdenv.mkDerivation {
     "-Db_pie=true"
     "-Dinstall-sysconfdir=false"
     /*
-    As of now, systemd doesn't allow runtime configuration of these values. So
-    the settings in /etc/login.defs have no effect on it. Many people think this
-    should be supported however, see
-    - https://github.com/systemd/systemd/issues/3855
-    - https://github.com/systemd/systemd/issues/4850
-    - https://github.com/systemd/systemd/issues/9769
-    - https://github.com/systemd/systemd/issues/9843
-    - https://github.com/systemd/systemd/issues/10184
+      As of now, systemd doesn't allow runtime configuration of these values. So
+      the settings in /etc/login.defs have no effect on it. Many people think this
+      should be supported however, see
+      - https://github.com/systemd/systemd/issues/3855
+      - https://github.com/systemd/systemd/issues/4850
+      - https://github.com/systemd/systemd/issues/9769
+      - https://github.com/systemd/systemd/issues/9843
+      - https://github.com/systemd/systemd/issues/10184
     */
     "-Dsystem-uid-max=999"
     "-Dsystem-gid-max=999"
@@ -507,8 +514,6 @@ stdenv.mkDerivation {
   '' + lib.optionalString (!withDocumentation) ''
     rm -rf $out/share/doc
   '';
-
-  enableParallelBuilding = true;
 
   # The interface version prevents NixOS from switching to an
   # incompatible systemd at runtime.  (Switching across reboots is

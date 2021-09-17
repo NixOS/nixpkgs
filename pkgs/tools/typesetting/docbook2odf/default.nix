@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, perlPackages, makeWrapper, zip, libxslt }:
 
 stdenv.mkDerivation rec {
-  name = "docbook2odf-0.244";
+  pname = "docbook2odf";
+  version = "0.244";
 
   src = fetchurl {
-    url = "http://open.comsultia.com/docbook2odf/dwn/${name}.tar.gz";
+    url = "http://open.comsultia.com/docbook2odf/dwn/docbook2odf-${version}.tar.gz";
     sha256 = "10k44g0qqa37k30pfj8vz95j6zdzz0nmnqjq1lyahfs2h4glzgwb";
   };
 
@@ -28,7 +29,7 @@ stdenv.mkDerivation rec {
 
     wrapProgram "$out/bin/docbook2odf" \
       --prefix PATH : "${lib.makeBinPath [ zip libxslt ]}" \
-      --prefix PERL5PATH : "${perlPackages.makePerlPath [ perlPackages.PerlMagick ]}"
+      --prefix PERL5PATH : "${perlPackages.makePerlPath [ perlPackages.ImageMagick ]}"
   '';
 
   meta = with lib; {

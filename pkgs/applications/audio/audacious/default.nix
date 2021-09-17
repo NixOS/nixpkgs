@@ -2,11 +2,11 @@
   mkDerivation, lib, fetchurl, fetchpatch,
   gettext, pkg-config,
   qtbase,
-  alsaLib, curl, faad2, ffmpeg, flac, fluidsynth, gdk-pixbuf, lame, libbs2b,
+  alsa-lib, curl, faad2, ffmpeg, flac, fluidsynth, gdk-pixbuf, lame, libbs2b,
   libcddb, libcdio, libcdio-paranoia, libcue, libjack2, libmad, libmms, libmodplug,
   libmowgli, libnotify, libogg, libpulseaudio, libsamplerate, libsidplayfp,
   libsndfile, libvorbis, libxml2, lirc, mpg123, neon, qtmultimedia, soxr,
-  wavpack, openmpt123
+  wavpack, libopenmpt
 }:
 
 mkDerivation rec {
@@ -29,11 +29,11 @@ mkDerivation rec {
     qtbase
 
     # Plugin dependencies
-    alsaLib curl faad2 ffmpeg flac fluidsynth gdk-pixbuf lame libbs2b libcddb
+    alsa-lib curl faad2 ffmpeg flac fluidsynth gdk-pixbuf lame libbs2b libcddb
     libcdio libcdio-paranoia libcue libjack2 libmad libmms libmodplug libmowgli
     libnotify libogg libpulseaudio libsamplerate libsidplayfp libsndfile
     libvorbis libxml2 lirc mpg123 neon qtmultimedia soxr wavpack
-    openmpt123
+    libopenmpt
   ];
 
   # Here we build both audacious and audacious-plugins in one

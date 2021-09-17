@@ -1,25 +1,42 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{ lib, buildGoModule, fetchFromGitHub, fetchzip, installShellFiles }:
+
+let
+  version = "0.17.1";
+
+  manifests = fetchzip {
+    url = "https://github.com/fluxcd/flux2/releases/download/v${version}/manifests.tar.gz";
+    sha256 = "1v6md4xh4sq1vmb5a8qvb66l101fq75lmv2s4j2z3walssb5mmgj";
+    stripRoot = false;
+  };
+in
 
 buildGoModule rec {
+  inherit version;
+
   pname = "fluxcd";
-  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "fluxcd";
     repo = "flux2";
     rev = "v${version}";
-    sha256 = "1yrjgjagh7jfzgvnj9wr71mk34x7yf66fwyby73f1pfi2cg49nhp";
+    sha256 = "1jglv30q6vicdzb2f8amdw9s6wdx8y5jmyr8pzl1psqn8zh0dagb";
   };
 
-  vendorSha256 = "0acxbmc4j1fcdja0s9g04f0kd34x54yfqismibfi40m2gzbg6ljr";
+  vendorSha256 = "sha256-uyajP7nLrRXLJcI/sBUEf4PPqz55I/ikCxVe4eAYqGA=";
 
   nativeBuildInputs = [ installShellFiles ];
 
-  doCheck = false;
-
   subPackages = [ "cmd/flux" ];
 
-  buildFlagsArray = [ "-ldflags=-s -w -X main.VERSION=${version}" ];
+  ldflags = [ "-s" "-w" "-X main.VERSION=${version}" ];
+
+  postUnpack = ''
+    cp -r ${manifests} source/cmd/flux/manifests
+  '';
+
+  # Required to workaround test error:
+  #   panic: mkdir /homeless-shelter: permission denied
+  HOME="$TMPDIR";
 
   doInstallCheck = true;
   installCheckPhase = ''
@@ -42,7 +59,6 @@ buildGoModule rec {
     '';
     homepage = "https://fluxcd.io";
     license = licenses.asl20;
-    maintainers = with maintainers; [ jlesquembre ];
-    platforms = platforms.unix;
+    maintainers = with maintainers; [ jlesquembre superherointj ];
   };
 }

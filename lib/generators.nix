@@ -35,6 +35,8 @@ rec {
           ("generators.mkValueStringDefault: " +
            "${t} not supported: ${toPretty {} v}");
     in   if isInt      v then toString v
+    # convert derivations to store paths
+    else if lib.isDerivation v then toString v
     # we default to not quoting strings
     else if isString   v then v
     # isString returns "1", which is not a good default
@@ -169,7 +171,7 @@ rec {
       # converts { a.b.c = 5; } to { "a.b".c = 5; } for toINI
       gitFlattenAttrs = let
         recurse = path: value:
-          if isAttrs value then
+          if isAttrs value && !lib.isDerivation value then
             lib.mapAttrsToList (name: value: recurse ([ name ] ++ path) value) value
           else if length path > 1 then {
             ${concatStringsSep "." (lib.reverseList (tail path))}.${head path} = value;
@@ -248,7 +250,7 @@ rec {
          then v.__pretty v.val
       else if v == {} then "{ }"
       else if v ? type && v.type == "derivation" then
-        "<derivation ${v.drvPath}>"
+        "<derivation ${v.drvPath or "???"}>"
       else "{" + introSpace
           + libStr.concatStringsSep introSpace (libAttr.mapAttrsToList
               (name: value:
@@ -307,4 +309,28 @@ rec {
 ${expr "" v}
 </plist>'';
 
+  /* Translate a simple Nix expression to Dhall notation.
+   * Note that integers are translated to Integer and never
+   * the Natural type.
+  */
+  toDhall = { }@args: v:
+    with builtins;
+    let concatItems = lib.strings.concatStringsSep ", ";
+    in if isAttrs v then
+      "{ ${
+        concatItems (lib.attrsets.mapAttrsToList
+          (key: value: "${key} = ${toDhall args value}") v)
+      } }"
+    else if isList v then
+      "[ ${concatItems (map (toDhall args) v)} ]"
+    else if isInt v then
+      "${if v < 0 then "" else "+"}${toString v}"
+    else if isBool v then
+      (if v then "True" else "False")
+    else if isFunction v then
+      abort "generators.toDhall: cannot convert a function to Dhall"
+    else if isNull v then
+      abort "generators.toDhall: cannot convert a null to Dhall"
+    else
+      builtins.toJSON v;
 }

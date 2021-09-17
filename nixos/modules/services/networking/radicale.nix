@@ -3,56 +3,103 @@
 with lib;
 
 let
-
   cfg = config.services.radicale;
 
-  confFile = pkgs.writeText "radicale.conf" cfg.config;
-
-  defaultPackage = if versionAtLeast config.system.stateVersion "20.09" then {
-    pkg = pkgs.radicale3;
-    text = "pkgs.radicale3";
-  } else if versionAtLeast config.system.stateVersion "17.09" then {
-    pkg = pkgs.radicale2;
-    text = "pkgs.radicale2";
-  } else {
-    pkg = pkgs.radicale1;
-    text = "pkgs.radicale1";
+  format = pkgs.formats.ini {
+    listToValue = concatMapStringsSep ", " (generators.mkValueStringDefault { });
   };
-in
 
-{
+  pkg = if isNull cfg.package then
+    pkgs.radicale
+  else
+    cfg.package;
 
-  options = {
-    services.radicale.enable = mkOption {
-      type = types.bool;
-      default = false;
-      description = ''
-          Enable Radicale CalDAV and CardDAV server.
-      '';
+  confFile = if cfg.settings == { } then
+    pkgs.writeText "radicale.conf" cfg.config
+  else
+    format.generate "radicale.conf" cfg.settings;
+
+  rightsFile = format.generate "radicale.rights" cfg.rights;
+
+  bindLocalhost = cfg.settings != { } && !hasAttrByPath [ "server" "hosts" ] cfg.settings;
+
+in {
+  options.services.radicale = {
+    enable = mkEnableOption "Radicale CalDAV and CardDAV server";
+
+    package = mkOption {
+      description = "Radicale package to use.";
+      # Default cannot be pkgs.radicale because non-null values suppress
+      # warnings about incompatible configuration and storage formats.
+      type = with types; nullOr package // { inherit (package) description; };
+      default = null;
+      defaultText = "pkgs.radicale";
     };
 
-    services.radicale.package = mkOption {
-      type = types.package;
-      default = defaultPackage.pkg;
-      defaultText = defaultPackage.text;
-      description = ''
-        Radicale package to use. This defaults to version 1.x if
-        <literal>system.stateVersion &lt; 17.09</literal>, version 2.x if
-        <literal>17.09 ≤ system.stateVersion &lt; 20.09</literal>, and
-        version 3.x otherwise.
-      '';
-    };
-
-    services.radicale.config = mkOption {
+    config = mkOption {
       type = types.str;
       default = "";
       description = ''
         Radicale configuration, this will set the service
         configuration file.
+        This option is mutually exclusive with <option>settings</option>.
+        This option is deprecated.  Use <option>settings</option> instead.
       '';
     };
 
-    services.radicale.extraArgs = mkOption {
+    settings = mkOption {
+      type = format.type;
+      default = { };
+      description = ''
+        Configuration for Radicale. See
+        <link xlink:href="https://radicale.org/3.0.html#documentation/configuration" />.
+        This option is mutually exclusive with <option>config</option>.
+      '';
+      example = literalExample ''
+        server = {
+          hosts = [ "0.0.0.0:5232" "[::]:5232" ];
+        };
+        auth = {
+          type = "htpasswd";
+          htpasswd_filename = "/etc/radicale/users";
+          htpasswd_encryption = "bcrypt";
+        };
+        storage = {
+          filesystem_folder = "/var/lib/radicale/collections";
+        };
+      '';
+    };
+
+    rights = mkOption {
+      type = format.type;
+      description = ''
+        Configuration for Radicale's rights file. See
+        <link xlink:href="https://radicale.org/3.0.html#documentation/authentication-and-rights" />.
+        This option only works in conjunction with <option>settings</option>.
+        Setting this will also set <option>settings.rights.type</option> and
+        <option>settings.rights.file</option> to approriate values.
+      '';
+      default = { };
+      example = literalExample ''
+        root = {
+          user = ".+";
+          collection = "";
+          permissions = "R";
+        };
+        principal = {
+          user = ".+";
+          collection = "{user}";
+          permissions = "RW";
+        };
+        calendars = {
+          user = ".+";
+          collection = "{user}/[^/]+";
+          permissions = "rw";
+        };
+      '';
+    };
+
+    extraArgs = mkOption {
       type = types.listOf types.str;
       default = [];
       description = "Extra arguments passed to the Radicale daemon.";
@@ -60,33 +107,97 @@ in
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ cfg.package ];
+    assertions = [
+      {
+        assertion = cfg.settings == { } || cfg.config == "";
+        message = ''
+          The options services.radicale.config and services.radicale.settings
+          are mutually exclusive.
+        '';
+      }
+    ];
 
-    users.users.radicale =
-      { uid = config.ids.uids.radicale;
-        description = "radicale user";
-        home = "/var/lib/radicale";
-        createHome = true;
-      };
+    warnings = optional (isNull cfg.package && versionOlder config.system.stateVersion "17.09") ''
+      The configuration and storage formats of your existing Radicale
+      installation might be incompatible with the newest version.
+      For upgrade instructions see
+      https://radicale.org/2.1.html#documentation/migration-from-1xx-to-2xx.
+      Set services.radicale.package to suppress this warning.
+    '' ++ optional (isNull cfg.package && versionOlder config.system.stateVersion "20.09") ''
+      The configuration format of your existing Radicale installation might be
+      incompatible with the newest version.  For upgrade instructions see
+      https://github.com/Kozea/Radicale/blob/3.0.6/NEWS.md#upgrade-checklist.
+      Set services.radicale.package to suppress this warning.
+    '' ++ optional (cfg.config != "") ''
+      The option services.radicale.config is deprecated.
+      Use services.radicale.settings instead.
+    '';
 
-    users.groups.radicale =
-      { gid = config.ids.gids.radicale; };
+    services.radicale.settings.rights = mkIf (cfg.rights != { }) {
+      type = "from_file";
+      file = toString rightsFile;
+    };
+
+    environment.systemPackages = [ pkg ];
+
+    users.users.radicale = {
+      isSystemUser = true;
+      group = "radicale";
+    };
+
+    users.groups.radicale = {};
 
     systemd.services.radicale = {
       description = "A Simple Calendar and Contact Server";
       after = [ "network.target" ];
+      requires = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         ExecStart = concatStringsSep " " ([
-          "${cfg.package}/bin/radicale" "-C" confFile
+          "${pkg}/bin/radicale" "-C" confFile
         ] ++ (
           map escapeShellArg cfg.extraArgs
         ));
         User = "radicale";
         Group = "radicale";
+        StateDirectory = "radicale/collections";
+        StateDirectoryMode = "0750";
+        # Hardening
+        CapabilityBoundingSet = [ "" ];
+        DeviceAllow = [ "/dev/stdin" ];
+        DevicePolicy = "strict";
+        IPAddressAllow = mkIf bindLocalhost "localhost";
+        IPAddressDeny = mkIf bindLocalhost "any";
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        NoNewPrivileges = true;
+        PrivateDevices = true;
+        PrivateTmp = true;
+        PrivateUsers = true;
+        ProcSubset = "pid";
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectProc = "invisible";
+        ProtectSystem = "strict";
+        ReadWritePaths = lib.optional
+          (hasAttrByPath [ "storage" "filesystem_folder" ] cfg.settings)
+          cfg.settings.storage.filesystem_folder;
+        RemoveIPC = true;
+        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        SystemCallArchitectures = "native";
+        SystemCallFilter = [ "@system-service" "~@privileged" "~@resources" ];
+        UMask = "0027";
       };
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ aneeshusa infinisil ];
+  meta.maintainers = with lib.maintainers; [ aneeshusa infinisil dotlambda ];
 }

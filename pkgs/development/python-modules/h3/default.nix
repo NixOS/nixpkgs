@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "h3";
-  version = "3.7.1";
+  version = "3.7.3";
 
   # pypi version does not include tests
   src = fetchFromGitHub {
     owner = "uber";
     repo = "h3-py";
     rev = "v${version}";
-    sha256 = "sha256-MIVV3kZGsIsaJ/ccJOK3+j1VwkUsZGHS5d1sGOBa1Ec=";
+    sha256 = "0wc1fz8v59r97wlayr4lnsgwzd4fxm991xbs9690d4vwdkapafll";
   };
 
   dontConfigure = true;

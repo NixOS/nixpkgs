@@ -19,10 +19,15 @@
 , makeWrapper
 , pulseaudio-qt
 , qca-qt5
+, qqc2-desktop-style
 , qtgraphicaleffects
 , qtmultimedia
+, qtquickcontrols2
 , qtx11extras
+, breeze-icons
 , sshfs
+, wayland
+, wayland-scanner
 }:
 
 mkDerivation {
@@ -44,9 +49,15 @@ mkDerivation {
     libfakekey
     pulseaudio-qt
     qca-qt5
+    qqc2-desktop-style
     qtgraphicaleffects
     qtmultimedia
+    qtquickcontrols2
     qtx11extras
+    wayland
+    wayland-scanner
+    # otherwise buttons are blank on non-kde
+    breeze-icons
   ];
 
   nativeBuildInputs = [ extra-cmake-modules kdoctools makeWrapper ];

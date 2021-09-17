@@ -85,5 +85,6 @@ stdenv.mkDerivation rec {
     description = "A completely decentralised P2P filesharing client based on the Bittorrent protocol";
     license = licenses.lgpl21;
     platforms = platforms.linux;
+    broken = true; # 2021-03-17 see https://github.com/NixOS/nixpkgs/issues/93053
   };
 }

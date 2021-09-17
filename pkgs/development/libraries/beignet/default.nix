@@ -2,8 +2,8 @@
 , fetchFromGitHub
 , cmake
 , pkg-config
-, clang-unwrapped
-, llvm
+, libclang
+, libllvm
 , libdrm
 , libX11
 , libpthreadstubs
@@ -35,11 +35,11 @@ stdenv.mkDerivation rec {
     patchShebangs src/git_sha1.sh
   '';
 
-  cmakeFlags = [ "-DCLANG_LIBRARY_DIR=${clang-unwrapped}/lib" ];
+  cmakeFlags = [ "-DCLANG_LIBRARY_DIR=${libclang.lib}/lib" ];
 
   buildInputs = [
-    llvm
-    clang-unwrapped
+    libllvm
+    libclang
     libX11
     libXext
     libpthreadstubs

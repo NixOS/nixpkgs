@@ -38,16 +38,16 @@ in
       default = pkgs.linuxPackages;
       type = types.unspecified // { merge = mergeEqualOption; };
       apply = kernelPackages: kernelPackages.extend (self: super: {
-        kernel = super.kernel.override {
+        kernel = super.kernel.override (originalArgs: {
           inherit randstructSeed;
-          kernelPatches = super.kernel.kernelPatches ++ kernelPatches;
+          kernelPatches = (originalArgs.kernelPatches or []) ++ kernelPatches;
           features = lib.recursiveUpdate super.kernel.features features;
-        };
+        });
       });
       # We don't want to evaluate all of linuxPackages for the manual
       # - some of it might not even evaluate correctly.
       defaultText = "pkgs.linuxPackages";
-      example = literalExample "pkgs.linuxPackages_2_6_25";
+      example = literalExample "pkgs.linuxKernel.packages.linux_5_10";
       description = ''
         This option allows you to override the Linux kernel used by
         NixOS.  Since things like external kernel module packages are

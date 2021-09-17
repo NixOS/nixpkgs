@@ -5,20 +5,20 @@
 
 buildGoModule rec {
   pname = "gitleaks";
-  version = "7.2.2";
+  version = "7.6.1";
 
   src = fetchFromGitHub {
     owner = "zricethezav";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-G/7Ezyfp9vkG1QHTG9Xg6mZ3qhQpx952i7rsSr3fFwY=";
+    sha256 = "sha256-52Wi3bQvKdHoJ1nVb4OVJ9wd8hDVF+6zlVSpsEai0Jw=";
   };
 
-  vendorSha256 = "0kk8ci7vprqw4v7cigspshfd13k2wyy4pdkxf11pqc2fz8j07kh9";
+  vendorSha256 = "sha256-86PspExE+T/IuCvpf6LAkWcCRlHPqP5VUbHAckEzALc=";
 
-  preBuild = ''
-    buildFlagsArray+=("-ldflags" "-s -w -X github.com/zricethezav/gitleaks/v${lib.versions.major version}/version.Version=${version}")
-  '';
+  ldflags = [
+    "-s" "-w" "-X github.com/zricethezav/gitleaks/v${lib.versions.major version}/version.Version=${version}"
+  ];
 
   meta = with lib; {
     description = "Scan git repos (or files) for secrets";

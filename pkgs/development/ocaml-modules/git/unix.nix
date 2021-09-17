@@ -1,4 +1,4 @@
-{ buildDunePackage, fetchpatch, git
+{ buildDunePackage, git
 , mmap, rresult, result, bigstringaf
 , fmt, bos, fpath, uri, digestif, logs, lwt, git-cohttp-unix
 , mirage-clock, mirage-clock-unix, astring, awa, cmdliner
@@ -6,7 +6,8 @@
 , tcpip, awa-mirage, mirage-flow
 , alcotest, alcotest-lwt, base64, cstruct
 , ke, mirage-crypto-rng, ocurl, git-binary
-, ptime
+, ptime, mimic, ca-certs-nss, tls, tls-mirage
+, cacert
 }:
 
 buildDunePackage {
@@ -14,14 +15,6 @@ buildDunePackage {
   inherit (git) version src minimumOCamlVersion;
 
   useDune2 = true;
-
-  patches = [
-    # https://github.com/mirage/ocaml-git/pull/472
-    (fetchpatch {
-      url = "https://github.com/sternenseemann/ocaml-git/commit/54998331eb9d5c61afe8901fabe0c74c2877f096.patch";
-      sha256 = "12kd45mlfaj4hxh33k9920a22mq1q2sdrin2j41w1angvg00d3my";
-    })
-  ];
 
   buildInputs = [
     awa awa-mirage cmdliner git-cohttp-unix
@@ -32,10 +25,14 @@ buildDunePackage {
     fmt bos fpath uri digestif logs lwt
     astring cohttp-lwt-unix decompress
     domain-name ipaddr mtime mirage-flow
+    cstruct ptime mimic ca-certs-nss
+    tls tls-mirage
   ];
   checkInputs = [
-    alcotest alcotest-lwt base64 cstruct ke
-    mirage-crypto-rng ocurl git-binary ptime
+    alcotest alcotest-lwt base64 ke
+    mirage-crypto-rng git-binary
+    cohttp-lwt-unix
+    cacert # sets up NIX_SSL_CERT_FILE
   ];
   doCheck = true;
 

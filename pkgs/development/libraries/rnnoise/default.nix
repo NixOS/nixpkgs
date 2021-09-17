@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation (rec {
   pname = "rnnoise";
-  version = "2020-06-28";
+  version = "2021-01-22";
 
   src = fetchFromGitHub {
     owner = "xiph";
     repo = "rnnoise";
-    rev = "90ec41ef659fd82cfec2103e9bb7fc235e9ea66c";
-    sha256 = "02z6qzjajhlpsb80lwl7cqqga9hm638psnqnppjkw84w4lrp15ny";
+    rev = "1cbdbcf1283499bbb2230a6b0f126eb9b236defd";
+    sha256 = "1y0rzgmvy8bf9a431garpm2w177s6ajgf79y5ymw4yb0pik57rwb";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

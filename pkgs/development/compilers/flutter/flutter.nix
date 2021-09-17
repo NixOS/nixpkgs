@@ -14,7 +14,7 @@
 , stdenv
 , lib
 , fetchurl
-, alsaLib
+, alsa-lib
 , dbus
 , expat
 , libpulseaudio
@@ -41,11 +41,10 @@ let
 
     buildInputs = [ git ];
 
-    inherit src patches;
+    inherit src patches version;
 
     postPatch = ''
       patchShebangs --build ./bin/
-      find ./bin/ -executable -type f -exec patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) {} \;
     '';
 
     buildPhase = ''
@@ -108,7 +107,7 @@ let
         libGLU
 
         # for android emulator
-        alsaLib
+        alsa-lib
         dbus
         expat
         libpulseaudio

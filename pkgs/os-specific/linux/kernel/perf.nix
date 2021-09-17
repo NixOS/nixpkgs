@@ -1,12 +1,14 @@
 { lib, stdenv, kernel, elfutils, python2, python3, perl, newt, slang, asciidoc, xmlto, makeWrapper
 , docbook_xsl, docbook_xml_dtd_45, libxslt, flex, bison, pkg-config, libunwind, binutils
 , libiberty, audit, libbfd, libopcodes, openssl, systemtap, numactl
-, zlib, withGtk ? false, gtk2 ? null
+, zlib
+, withGtk ? false, gtk2
+, withZstd ? true, zstd
+, withLibcap ? true, libcap
 }:
 
 with lib;
 
-assert withGtk -> gtk2 != null;
 assert versionAtLeast kernel.version "3.12";
 
 stdenv.mkDerivation {
@@ -42,7 +44,9 @@ stdenv.mkDerivation {
     elfutils newt slang libunwind libbfd zlib openssl systemtap.stapBuild numactl
     libopcodes python3 perl
   ] ++ lib.optional withGtk gtk2
-    ++ (if (versionAtLeast kernel.version "4.19") then [ python3 ] else [ python2 ]);
+    ++ (if (versionAtLeast kernel.version "4.19") then [ python3 ] else [ python2 ])
+    ++ lib.optional withZstd zstd
+    ++ lib.optional withLibcap libcap;
 
   # Note: we don't add elfutils to buildInputs, since it provides a
   # bad `ld' and other stuff.
@@ -55,7 +59,7 @@ stdenv.mkDerivation {
   ];
 
   postPatch = ''
-    patchShebangs scripts/bpf_helpers_doc.py
+    patchShebangs scripts
   '';
 
   doCheck = false; # requires "sparse"
@@ -74,5 +78,6 @@ stdenv.mkDerivation {
     description = "Linux tools to profile with performance counters";
     maintainers = with lib.maintainers; [viric];
     platforms = with lib.platforms; linux;
+    broken = kernel.kernelOlder "5";
   };
 }

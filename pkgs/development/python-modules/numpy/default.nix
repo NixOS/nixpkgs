@@ -40,14 +40,14 @@ let
   };
 in buildPythonPackage rec {
   pname = "numpy";
-  version = "1.20.1";
+  version = "1.21.2";
   format = "pyproject.toml";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "02m6sms6wb4flfg8y4h0msan4y7w7qgfqxhdk21lcabhm2339iiv";
+    sha256 = "423216d8afc5923b15df86037c6053bf030d15cc9e3224206ef868c2d63dd6dc";
   };
 
   patches = lib.optionals python.hasDistutilsCxxPatch [
@@ -73,9 +73,11 @@ in buildPythonPackage rec {
     ln -s ${cfg} site.cfg
   '';
 
-  enableParallelBuilding = true;
+  # Workaround flakey compiler feature detection
+  # https://github.com/numpy/numpy/issues/19624
+  hardeningDisable = [ "strictoverflow" ];
 
-  doCheck = !isPyPy; # numpy 1.16+ hits a bug in pypy's ctypes, using either numpy or pypy HEAD fixes this (https://github.com/numpy/numpy/issues/13807)
+  enableParallelBuilding = true;
 
   checkInputs = [
     pytest

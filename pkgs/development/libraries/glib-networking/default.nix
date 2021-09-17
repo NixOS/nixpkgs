@@ -12,19 +12,19 @@
 , gnutls
 , p11-kit
 , libproxy
-, gnome3
+, gnome
 , gsettings-desktop-schemas
 }:
 
 stdenv.mkDerivation rec {
   pname = "glib-networking";
-  version = "2.66.0";
+  version = "2.68.2";
 
   outputs = [ "out" "installedTests" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "16807qwflbghp0c66jdx2gnaffvdp4bla35ppzp9dlgx6wjbxmy5";
+    sha256 = "U168BU72l9tWpP/+2RvA4RyO4cmstIqtKMjh1cPVmU8=";
   };
 
   patches = [
@@ -74,8 +74,9 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
     };
 
     tests = {

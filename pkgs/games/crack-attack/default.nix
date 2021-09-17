@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, pkg-config, gtk2, freeglut, SDL, SDL_mixer, libGLU, libGL, libXi, libXmu }:
 
-stdenv.mkDerivation {
-  name = "crack-attack-1.1.14";
+stdenv.mkDerivation rec {
+  pname = "crack-attack";
+  version = "1.1.14";
 
   src = fetchurl {
-    url = "mirror://savannah/crack-attack/crack-attack-1.1.14.tar.gz";
+    url = "mirror://savannah/crack-attack/crack-attack-${version}.tar.gz";
     sha256 = "1sakj9a2q05brpd7lkqxi8q30bccycdzd96ns00s6jbxrzjlijkm";
   };
 

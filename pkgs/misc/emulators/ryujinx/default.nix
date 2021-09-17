@@ -1,27 +1,31 @@
 { lib, stdenv, fetchFromGitHub, fetchurl, makeWrapper, makeDesktopItem, linkFarmFromDrvs
 , dotnet-sdk_5, dotnetPackages, dotnetCorePackages, cacert
-, SDL2, libX11, ffmpeg, openal, libsoundio
+, libX11, libgdiplus, ffmpeg
+, SDL2_mixer, openal, libsoundio, sndio, pulseaudio
 , gtk3, gobject-introspection, gdk-pixbuf, wrapGAppsHook
 }:
 
 let
   runtimeDeps = [
-    SDL2
     gtk3
     libX11
+    libgdiplus
     ffmpeg
+    SDL2_mixer
     openal
     libsoundio
+    sndio
+    pulseaudio
   ];
 in stdenv.mkDerivation rec {
   pname = "ryujinx";
-  version = "1.0.6574"; # Versioning is based off of the official appveyor builds: https://ci.appveyor.com/project/gdkchan/ryujinx
+  version = "1.0.6954"; # Versioning is based off of the official appveyor builds: https://ci.appveyor.com/project/gdkchan/ryujinx
 
   src = fetchFromGitHub {
     owner = "Ryujinx";
     repo = "Ryujinx";
-    rev = "80ed8596c165127fb52026c697a9b6b515dabbd4";
-    sha256 = "0jhrl8g9fbz3w2hzmy9jm22cvjfa0x5vh3912rz1rvnd41qb9vs8";
+    rev = "31cbd09a75a9d5f4814c3907a060e0961eb2bb15";
+    sha256 = "00qql0wmlzs722s0igip3v0yjlqhc31jcr7nghwibcqrmx031azk";
   };
 
   nativeBuildInputs = [ dotnet-sdk_5 dotnetPackages.Nuget cacert makeWrapper wrapGAppsHook gobject-introspection gdk-pixbuf ];
@@ -36,7 +40,6 @@ in stdenv.mkDerivation rec {
 
   patches = [
     ./log.patch # Without this, Ryujinx attempts to write logs to the nix store. This patch makes it write to "~/.config/Ryujinx/Logs" on Linux.
-    ./disable-updater.patch # This disables the auto-updater, which does not work as it attempts to modify the nix store.
   ];
 
   configurePhase = ''
@@ -77,9 +80,13 @@ in stdenv.mkDerivation rec {
       --output $out/lib/ryujinx
     shopt -s extglob
 
+    # TODO: fix this hack https://github.com/Ryujinx/Ryujinx/issues/2349
+    mkdir -p $out/lib/sndio-6
+    ln -s ${sndio}/lib/libsndio.so $out/lib/sndio-6/libsndio.so.6
+
     makeWrapper $out/lib/ryujinx/Ryujinx $out/bin/Ryujinx \
       --set DOTNET_ROOT "${dotnetCorePackages.net_5_0}" \
-      --suffix LD_LIBRARY_PATH : "${lib.makeLibraryPath runtimeDeps}" \
+      --suffix LD_LIBRARY_PATH : "${builtins.concatStringsSep ":" [ (lib.makeLibraryPath runtimeDeps) "$out/lib/sndio-6" ]}" \
       ''${gappsWrapperArgs[@]}
 
     for i in 16 32 48 64 96 128 256 512 1024; do
@@ -108,4 +115,5 @@ in stdenv.mkDerivation rec {
     maintainers = [ maintainers.ivar ];
     platforms = [ "x86_64-linux" ];
   };
+  passthru.updateScript = ./updater.sh;
 }

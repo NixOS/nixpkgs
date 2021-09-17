@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "alda";
-  version = "1.4.3";
+  version = "1.5.0";
 
   src = fetchurl {
     url = "https://github.com/alda-lang/alda/releases/download/${version}/alda";
-    sha256 = "1c9rbwb3ga8w7zi0ndqq02hjr4drdw8s509qxxd3fh5vfy6x3qi2";
+    sha256 = "sha256-OHbOsgYN87ThU7EgjCgxADnOv32qIi+7XwDwcW0dmV0=";
   };
 
   dontUnpack = true;

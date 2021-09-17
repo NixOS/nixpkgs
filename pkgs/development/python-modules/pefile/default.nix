@@ -1,24 +1,34 @@
-{ buildPythonPackage
+{ lib
+, buildPythonPackage
 , future
-, fetchPypi
-, lib
+, fetchFromGitHub
+, setuptools-scm
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pefile";
-  version = "2019.4.18";
+  version = "2021.9.2";
+  disabled = pythonOlder "3.6";
 
-  propagatedBuildInputs = [ future ];
-
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "a5d6e8305c6b210849b47a6174ddf9c452b2888340b8177874b862ba6c207645";
+  src = fetchFromGitHub {
+    owner = "erocarrera";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "1pgsw84i9r6ydkfzqifgl5lvcz3cf3xz5c2543kl3q8mgb21wxaz";
   };
 
-  # Test data encrypted.
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
+
+  propagatedBuildInputs = [
+    future
+  ];
+
+  # Test data encrypted
   doCheck = false;
 
-  # Verify import still works.
   pythonImportsCheck = [ "pefile" ];
 
   meta = with lib; {

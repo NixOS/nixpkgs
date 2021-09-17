@@ -1,48 +1,22 @@
-{ lib, stdenv, fetchzip, ocaml, findlib, dune_2, cppo, easy-format, biniou }:
-let
+{ lib, fetchurl, buildDunePackage, cppo, easy-format, biniou }:
+
+buildDunePackage rec {
   pname = "yojson";
-  param =
-  if lib.versionAtLeast ocaml.version "4.02" then rec {
-    version = "1.7.0";
+  version = "1.7.0";
+  useDune2 = true;
+
+  src = fetchurl {
     url = "https://github.com/ocaml-community/yojson/releases/download/${version}/yojson-${version}.tbz";
-    sha256 = "08llz96if8bcgnaishf18si76cv11zbkni0aldb54k3cn7ipiqvd";
-    nativeBuildInputs = [ dune_2 ];
-    extra = {
-      installPhase = ''
-        dune install --prefix $out --libdir $OCAMLFIND_DESTDIR ${pname}
-      '';
-    };
-  } else rec {
-    version = "1.2.3";
-    url = "https://github.com/ocaml-community/yojson/archive/v${version}.tar.gz";
-    sha256 = "10dvkndgwanvw4agbjln7kgb1n9s6lii7jw82kwxczl5rd1sgmvl";
-    extra = {
-      createFindlibDestdir = true;
-
-      makeFlags = [ "PREFIX=$(out)" ];
-
-      preBuild = "mkdir $out/bin";
-    };
-  };
-in
-stdenv.mkDerivation ({
-
-  name = "ocaml${ocaml.version}-${pname}-${param.version}";
-
-  src = fetchzip {
-    inherit (param) url sha256;
+    sha256 = "1iich6323npvvs8r50lkr4pxxqm9mf6w67cnid7jg1j1g5gwcvv5";
   };
 
-  nativeBuildInputs = [ ocaml findlib ] ++ (param.nativeBuildInputs or []);
-  propagatedNativeBuildInputs = [ cppo ];
+  nativeBuildInputs = [ cppo ];
   propagatedBuildInputs = [ easy-format biniou ];
-  configurePlatforms = [];
 
   meta = with lib; {
     description = "An optimized parsing and printing library for the JSON format";
     homepage = "https://github.com/ocaml-community/${pname}";
     license = licenses.bsd3;
     maintainers = [ maintainers.vbgl ];
-    platforms = ocaml.meta.platforms or [];
   };
-} // param.extra)
+}

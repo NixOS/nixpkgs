@@ -1,0 +1,11 @@
+{
+  "url": "https://github.com/rydesun/tree-sitter-dot",
+  "rev": "e6f55c43b87b81cc982e38d414f0147fefa2515c",
+  "date": "2021-09-01T14:36:57+08:00",
+  "path": "/nix/store/n5a6bzh8rf35865wvcr3cis9r0fn2047-tree-sitter-dot",
+  "sha256": "1s3fpd0lnbm3gk9nbskdkdjlmdm7kz0l0g2zipv1m7qkc05nnkfy",
+  "fetchLFS": false,
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "leaveDotGit": false
+}

@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   srcs = [
     (fetchurl {
-      url = " https://github.com/GothenburgBitFactory/taskwarrior/releases/download/v${version}/${sourceRoot}.tar.gz";
+      url = "https://github.com/GothenburgBitFactory/taskwarrior/releases/download/v${version}/${sourceRoot}.tar.gz";
       sha256 = "0fwnxshhlha21hlgg5z1ad01w13zm1hlmncs274y5n8i15gdfhvj";
     })
     (fetchurl {

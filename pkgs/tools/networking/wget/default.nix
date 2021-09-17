@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "wget";
-  version = "1.20.3";
+  version = "1.21.1";
 
   src = fetchurl {
     url = "mirror://gnu/wget/${pname}-${version}.tar.lz";
-    sha256 = "1frajd86ds8vz2hprq30wq8ya89z9dcxnwm8nwk12bbc47l7qq39";
+    sha256 = "sha256-25u+U0fm+qBvx4gF7rgIsmiXlFXq2QA6YIVpydT8kK0=";
   };
 
   patches = [
@@ -37,6 +37,9 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     (lib.withFeatureAs (openssl != null) "ssl" "openssl")
+  ] ++ lib.optionals stdenv.isDarwin [
+    # https://lists.gnu.org/archive/html/bug-wget/2021-01/msg00076.html
+    "--without-included-regex"
   ];
 
   doCheck = false;

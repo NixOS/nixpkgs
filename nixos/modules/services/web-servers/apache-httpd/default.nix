@@ -15,10 +15,8 @@ let
   apachectl = pkgs.runCommand "apachectl" { meta.priority = -1; } ''
     mkdir -p $out/bin
     cp ${pkg}/bin/apachectl $out/bin/apachectl
-    sed -i $out/bin/apachectl -e 's|$HTTPD -t|$HTTPD -t -f ${httpdConf}|'
+    sed -i $out/bin/apachectl -e 's|$HTTPD -t|$HTTPD -t -f /etc/httpd/httpd.conf|'
   '';
-
-  httpdConf = cfg.configFile;
 
   php = cfg.phpPackage.override { apacheHttpd = pkg; };
 
@@ -38,11 +36,12 @@ let
   dependentCertNames = unique (map (hostOpts: hostOpts.certName) acmeEnabledVhosts);
 
   mkListenInfo = hostOpts:
-    if hostOpts.listen != [] then hostOpts.listen
-    else (
-      optional (hostOpts.onlySSL || hostOpts.addSSL || hostOpts.forceSSL) { ip = "*"; port = 443; ssl = true; } ++
-      optional (!hostOpts.onlySSL) { ip = "*"; port = 80; ssl = false; }
-    );
+    if hostOpts.listen != [] then
+      hostOpts.listen
+    else
+      optionals (hostOpts.onlySSL || hostOpts.addSSL || hostOpts.forceSSL) (map (addr: { ip = addr; port = 443; ssl = true; }) hostOpts.listenAddresses) ++
+      optionals (!hostOpts.onlySSL) (map (addr: { ip = addr; port = 80; ssl = false; }) hostOpts.listenAddresses)
+    ;
 
   listenInfo = unique (concatMap mkListenInfo vhosts);
 
@@ -204,7 +203,7 @@ let
     let
       documentRoot = if hostOpts.documentRoot != null
         then hostOpts.documentRoot
-        else pkgs.runCommand "empty" { preferLocalBuild = true; } "mkdir -p $out"
+        else pkgs.emptyDirectory
       ;
 
       mkLocations = locations: concatStringsSep "\n" (map (config: ''
@@ -464,7 +463,7 @@ in
         default = "common";
         example = "combined";
         description = ''
-          Log format for log files. Possible values are: combined, common, referer, agent.
+          Log format for log files. Possible values are: combined, common, referer, agent, none.
           See <link xlink:href="https://httpd.apache.org/docs/2.4/logs.html"/> for more details.
         '';
       };
@@ -682,6 +681,8 @@ in
       }) (filter (hostOpts: hostOpts.useACMEHost == null) acmeEnabledVhosts);
     in listToAttrs acmePairs;
 
+    # httpd requires a stable path to the configuration file for reloads
+    environment.etc."httpd/httpd.conf".source = cfg.configFile;
     environment.systemPackages = [
       apachectl
       pkg
@@ -753,6 +754,7 @@ in
         wants = concatLists (map (certName: [ "acme-finished-${certName}.target" ]) dependentCertNames);
         after = [ "network.target" ] ++ map (certName: "acme-selfsigned-${certName}.service") dependentCertNames;
         before = map (certName: "acme-${certName}.service") dependentCertNames;
+        restartTriggers = [ cfg.configFile ];
 
         path = [ pkg pkgs.coreutils pkgs.gnugrep ];
 
@@ -771,9 +773,9 @@ in
           '';
 
         serviceConfig = {
-          ExecStart = "@${pkg}/bin/httpd httpd -f ${httpdConf}";
-          ExecStop = "${pkg}/bin/httpd -f ${httpdConf} -k graceful-stop";
-          ExecReload = "${pkg}/bin/httpd -f ${httpdConf} -k graceful";
+          ExecStart = "@${pkg}/bin/httpd httpd -f /etc/httpd/httpd.conf";
+          ExecStop = "${pkg}/bin/httpd -f /etc/httpd/httpd.conf -k graceful-stop";
+          ExecReload = "${pkg}/bin/httpd -f /etc/httpd/httpd.conf -k graceful";
           User = cfg.user;
           Group = cfg.group;
           Type = "forking";
@@ -800,6 +802,7 @@ in
       # certs are updated _after_ config has been reloaded.
       before = sslTargets;
       after = sslServices;
+      restartTriggers = [ cfg.configFile ];
       # Block reloading if not all certs exist yet.
       # Happens when config changes add new vhosts/certs.
       unitConfig.ConditionPathExists = map (certName: certs.${certName}.directory + "/fullchain.pem") dependentCertNames;
@@ -807,7 +810,7 @@ in
         Type = "oneshot";
         TimeoutSec = 60;
         ExecCondition = "/run/current-system/systemd/bin/systemctl -q is-active httpd.service";
-        ExecStartPre = "${pkg}/bin/httpd -f ${httpdConf} -t";
+        ExecStartPre = "${pkg}/bin/httpd -f /etc/httpd/httpd.conf -t";
         ExecStart = "/run/current-system/systemd/bin/systemctl reload httpd.service";
       };
     };

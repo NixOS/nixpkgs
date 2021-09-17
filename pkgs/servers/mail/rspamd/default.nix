@@ -11,14 +11,16 @@ assert withHyperscan -> stdenv.isx86_64;
 
 stdenv.mkDerivation rec {
   pname = "rspamd";
-  version = "2.6";
+  version = "3.0";
 
   src = fetchFromGitHub {
     owner = "rspamd";
     repo = "rspamd";
     rev = version;
-    sha256 = "0vwa7k2s2bkfb8w78z5izkd6ywjbzqysb0grls898y549hm8ii70";
+    sha256 = "sha256-MXnaQhTDV6ji5634TXA5vvXBlA/SilwM0YYL8DjQL9s=";
   };
+
+  hardeningEnable = [ "pie" ];
 
   nativeBuildInputs = [ cmake pkg-config perl ];
   buildInputs = [ glib openssl pcre sqlite ragel icu jemalloc libsodium ]

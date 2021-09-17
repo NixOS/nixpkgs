@@ -2,7 +2,7 @@
 , ps, dnsutils # dig is recommended for multiple categories
 , withRecommends ? false # Install (almost) all recommended tools (see --recommends)
 , withRecommendedSystemPrograms ? withRecommends, util-linuxMinimal, dmidecode
-, file, hddtemp, iproute, ipmitool, usbutils, kmod, lm_sensors, smartmontools
+, file, hddtemp, iproute2, ipmitool, usbutils, kmod, lm_sensors, smartmontools
 , binutils, tree, upower, pciutils
 , withRecommendedDisplayInformationPrograms ? withRecommends, glxinfo, xorg
 }:
@@ -11,7 +11,7 @@ let
   prefixPath = programs:
     "--prefix PATH ':' '${lib.makeBinPath programs}'";
   recommendedSystemPrograms = lib.optionals withRecommendedSystemPrograms [
-    util-linuxMinimal dmidecode file hddtemp iproute ipmitool usbutils kmod
+    util-linuxMinimal dmidecode file hddtemp iproute2 ipmitool usbutils kmod
     lm_sensors smartmontools binutils tree upower pciutils
   ];
   recommendedDisplayInformationPrograms = lib.optionals
@@ -22,13 +22,13 @@ let
     ++ recommendedDisplayInformationPrograms;
 in stdenv.mkDerivation rec {
   pname = "inxi";
-  version = "3.3.01-1";
+  version = "3.3.04-1";
 
   src = fetchFromGitHub {
     owner = "smxi";
     repo = "inxi";
     rev = version;
-    sha256 = "sha256-wY9wsxBByxqy9qk/7UoKiUSpFGS1rFpdyTs3ig6OJRs=";
+    sha256 = "sha256-/EutIHQGLiRcRD/r8LJYG7oJBb7EAhR5cn6QiC7zMOc=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -57,6 +57,6 @@ in stdenv.mkDerivation rec {
     changelog = "https://github.com/smxi/inxi/blob/${version}/inxi.changelog";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ primeos ];
+    maintainers = with maintainers; [ ];
   };
 }

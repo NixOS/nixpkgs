@@ -1,6 +1,7 @@
 { lib, stdenv
 , go
 , fetchurl
+, redo-apenwarr
 , curl
 , perl
 , genericUpdater
@@ -9,24 +10,33 @@
 
 stdenv.mkDerivation rec {
   pname = "nncp";
-  version = "5.3.3";
+  version = "7.7.0";
 
   src = fetchurl {
     url = "http://www.nncpgo.org/download/${pname}-${version}.tar.xz";
-    sha256 = "1l35ndzrvpfim29jn1p0bwmc8w892z44nsrdnay28k229r9dhz3h";
+    sha256 = "ppKi/JY8sKRb/Vt/SXom0L1zhjBPn6PNUm3Gn8o5Ke4=";
   };
 
-  nativeBuildInputs = [ go ];
+  nativeBuildInputs = [ go redo-apenwarr ];
 
-  preConfigure = ''
+  buildPhase = ''
+    runHook preBuild
     export GOCACHE=$PWD/.cache
+    export CFGPATH=/etc/nncp.hjson
+    export SENDMAIL=sendmail # default value for generated config file
+    redo ''${enableParallelBuilding:+-j''${NIX_BUILD_CORES}}
+    runHook postBuild
   '';
 
-  makeFlags = [
-    "PREFIX=${placeholder "out"}"
-    "CFGPATH=/etc/nncp.hjson"
-    "SENDMAIL=/run/wrappers/bin/sendmail"
-  ];
+  installPhase = ''
+    runHook preInstall
+    export PREFIX=$out
+    rm -f INSTALL # work around case insensitivity
+    redo install
+    runHook postInstall
+  '';
+
+  enableParallelBuilding = true;
 
   passthru.updateScript = genericUpdater {
     inherit pname version;
@@ -54,7 +64,7 @@ stdenv.mkDerivation rec {
       transmission exists.
     '';
     homepage = "http://www.nncpgo.org/";
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
     platforms = platforms.all;
     maintainers = [ maintainers.woffs ];
   };

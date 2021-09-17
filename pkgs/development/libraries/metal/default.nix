@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/brunocodutra/metal";
     license = licenses.mit;
     maintainers = with maintainers; [ pmiddend ];
-    platforms = platforms.linux;
+    platforms = platforms.all;
   };
 
 }

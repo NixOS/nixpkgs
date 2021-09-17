@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, cmake, nasm }:
+{ lib, stdenv, fetchFromGitLab, cmake, nasm }:
 
 stdenv.mkDerivation rec {
   pname = "svt-av1";
-  version = "0.8.6";
+  version = "0.8.7";
 
-  src = fetchFromGitHub {
+  src = fetchFromGitLab {
     owner = "AOMediaCodec";
     repo = "SVT-AV1";
     rev = "v${version}";
-    sha256 = "1wzamg89azi1f93wxvdy7silsgklckc754ca066k33drvyacicyw";
+    sha256 = "1xlxb6kn6hqz9dxz0nd905m4i2mwjwq1330rbabwzmg4b66cdslg";
   };
 
   nativeBuildInputs = [ cmake nasm ];
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
       activities.
     '';
     inherit (src.meta) homepage;
-    changelog = "https://github.com/AOMediaCodec/SVT-AV1/blob/v${version}/CHANGELOG.md";
+    changelog = "https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/v${version}/CHANGELOG.md";
     license = with licenses; [
       bsd2
       {

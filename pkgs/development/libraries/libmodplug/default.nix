@@ -1,10 +1,8 @@
 { lib, stdenv, fetchurl, file }:
 
-let
-  version = "0.8.9.0";
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "libmodplug";
-  inherit version;
+  version = "0.8.9.0";
 
   preConfigure = ''
      substituteInPlace configure \

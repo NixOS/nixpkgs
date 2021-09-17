@@ -2,14 +2,14 @@
 
 mkDerivation rec {
   pname = "nemo-qml-plugin-dbus";
-  version = "2.1.23";
+  version = "2.1.24";
 
   src = fetchFromGitLab {
     domain = "git.sailfishos.org";
     owner = "mer-core";
     repo = "nemo-qml-plugin-dbus";
     rev = version;
-    sha256 = "0ww478ds7a6h4naa7vslj6ckn9cpsgcml0q7qardkzmdmxsrv1ag";
+    sha256 = "1ilg929456d3k0xkvxa5r4k7i4kkw9i8kgah5xx1yq0d9wka0l77";
   };
 
   nativeBuildInputs = [ qmake ];

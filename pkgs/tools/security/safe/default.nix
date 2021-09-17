@@ -18,9 +18,9 @@ buildGoPackage rec {
 
   goPackagePath = "github.com/starkandwayne/safe";
 
-  preBuild = ''
-    buildFlagsArray+=("-ldflags" "-X main.Version=${version}")
-  '';
+  ldflags = [
+    "-X main.Version=${version}"
+  ];
 
   meta = with lib; {
     description = "A Vault CLI";

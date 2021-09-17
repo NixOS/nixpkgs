@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , mkDerivation
 , fetchurl
 , poppler_utils
@@ -22,15 +21,16 @@
 , libmtp
 , xdg-utils
 , removeReferencesTo
+, libstemmer
 }:
 
 mkDerivation rec {
   pname = "calibre";
-  version = "5.12.0";
+  version = "5.24.0";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-N3/y1kSWyM36LpwbimftJ67h4zfk2j9hcvUi/pQL3YU=";
+    hash = "sha256:18dr577nv7ijw3ar6mrk2xrc54mlrqkaj5jrc6s5sirl0710fdfg";
   };
 
   patches = [
@@ -41,19 +41,10 @@ mkDerivation rec {
   ]
   ++ lib.optional (!unrarSupport) ./dont_build_unrar_plugin.patch;
 
-  escaped_pyqt5_dir = builtins.replaceStrings ["/"] ["\\/"] (toString python3Packages.pyqt5);
-  platform_tag =
-    if stdenv.hostPlatform.isDarwin then
-      "WS_MACX"
-    else if stdenv.hostPlatform.isWindows then
-      "WS_WIN"
-    else
-      "WS_X11";
-
   prePatch = ''
-    sed -i "s/\[tool.sip.project\]/[tool.sip.project]\nsip-include-dirs = [\"${escaped_pyqt5_dir}\/share\/sip\/PyQt5\"]/g" \
+    sed -i "s@\[tool.sip.project\]@[tool.sip.project]\nsip-include-dirs = [\"${python3Packages.pyqt5}/${python3Packages.python.sitePackages}/PyQt5/bindings\"]@g" \
       setup/build.py
-    sed -i "s/\[tool.sip.bindings.pictureflow\]/[tool.sip.bindings.pictureflow]\ntags = [\"${platform_tag}\"]/g" \
+    sed -i "s/\[tool.sip.bindings.pictureflow\]/[tool.sip.bindings.pictureflow]\ntags = [\"${python3Packages.sip.platform_tag}\"]/g" \
       setup/build.py
 
     # Remove unneeded files and libs
@@ -61,8 +52,6 @@ mkDerivation rec {
   '';
 
   dontUseQmakeConfigure = true;
-
-  enableParallelBuilding = true;
 
   nativeBuildInputs = [ pkg-config qmake removeReferencesTo ];
 
@@ -76,6 +65,7 @@ mkDerivation rec {
     libjpeg
     libmtp
     libpng
+    libstemmer
     libusb1
     podofo
     poppler_utils
@@ -84,15 +74,19 @@ mkDerivation rec {
     xdg-utils
   ] ++ (
     with python3Packages; [
-      apsw
+      (apsw.overrideAttrs (oldAttrs: rec {
+        setupPyBuildFlags = [ "--enable=load_extension" ];
+      }))
       beautifulsoup4
+      cchardet
       css-parser
       cssselect
-      dateutil
+      python-dateutil
       dnspython
       feedparser
       html2text
       html5-parser
+      jeepney
       lxml
       markdown
       mechanize
@@ -104,8 +98,9 @@ mkDerivation rec {
       pyqtwebengine
       python
       regex
-      sip_5
+      sip
       zeroconf
+      jeepney
       # the following are distributed with calibre, but we use upstream instead
       odfpy
     ] ++ lib.optional (unrarSupport) unrardll
@@ -123,7 +118,6 @@ mkDerivation rec {
     export FC_LIB_DIR=${fontconfig.lib}/lib
     export PODOFO_INC_DIR=${podofo.dev}/include/podofo
     export PODOFO_LIB_DIR=${podofo.lib}/lib
-    export SIP_BIN=${python3Packages.sip}/bin/sip
     export XDG_DATA_HOME=$out/share
     export XDG_UTILS_INSTALL_MODE="user"
 

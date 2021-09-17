@@ -45,7 +45,7 @@ rec {
       targetPkgs = pkgs: [ appimage-exec ]
         ++ defaultFhsEnvArgs.targetPkgs pkgs ++ extraPkgs pkgs;
 
-      runScript = "appimage-exec.sh -w ${src}";
+      runScript = "appimage-exec.sh -w ${src} --";
     } // (removeAttrs args (builtins.attrNames (builtins.functionArgs wrapAppImage))));
 
   wrapType2 = args@{ name, src, extraPkgs ? pkgs: [ ], ... }: wrapAppImage
@@ -61,7 +61,7 @@ rec {
     targetPkgs = pkgs: with pkgs; [
       gtk3
       bashInteractive
-      gnome3.zenity
+      gnome.zenity
       python2
       xorg.xrandr
       which
@@ -171,7 +171,7 @@ rec {
       librsvg
       xorg.libXft
       libvdpau
-      alsaLib
+      alsa-lib
 
       harfbuzz
       e2fsprogs
@@ -184,6 +184,7 @@ rec {
       # libraries not on the upstream include list, but nevertheless expected
       # by at least one appimage
       libtool.lib # for Synfigstudio
+      xorg.libxshmfence # for apple-music-electron
       at-spi2-core
     ];
   };

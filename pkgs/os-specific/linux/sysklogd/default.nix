@@ -14,6 +14,17 @@ stdenv.mkDerivation {
 
   installFlags = [ "BINDIR=$(out)/sbin" "MANDIR=$(out)/share/man" "INSTALL=install" ];
 
+  makeFlags = [
+    "CC=${stdenv.cc.targetPrefix}cc"
+  ];
+
+  postPatch = ''
+    # Disable stripping during installation, stripping will be done anyway.
+    # Fixes cross-compilation.
+    substituteInPlace Makefile \
+      --replace "-m 500 -s" "-m 500"
+  '';
+
   preConfigure =
     ''
       sed -e 's@-o \''${MAN_USER} -g \''${MAN_GROUP} -m \''${MAN_PERMS} @@' -i Makefile

@@ -3,25 +3,24 @@
 , fetchFromGitHub
 , pythonOlder
 , python
-, alembic, click, desktop-notifier, dropbox, fasteners, keyring, keyrings-alt, packaging, pathspec, Pyro5, requests, setuptools, sdnotify, sqlalchemy, survey, watchdog
+, click, desktop-notifier, dropbox, fasteners, keyring, keyrings-alt, packaging, pathspec, Pyro5, requests, setuptools, sdnotify, survey, watchdog
 , importlib-metadata
-, importlib-resources
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "maestral";
-  version = "1.4.2";
+  version = "1.4.8";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "SamSchott";
     repo = "maestral";
     rev = "v${version}";
-    sha256 = "sha256-ibAYuaPSty275/aQ0DibyWe2LjPoEpdWgElTnR+MEs8=";
+    sha256 = "sha256-sxPogzQW+P8yrqaaJHrQu7e0ztgwWUI0kLikcmrhYoQ=";
   };
 
   propagatedBuildInputs = [
-    alembic
     click
     desktop-notifier
     dropbox
@@ -34,13 +33,10 @@ buildPythonPackage rec {
     requests
     setuptools
     sdnotify
-    sqlalchemy
     survey
     watchdog
   ] ++ lib.optionals (pythonOlder "3.8") [
     importlib-metadata
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    importlib-resources
   ];
 
   makeWrapperArgs = [
@@ -49,14 +45,30 @@ buildPythonPackage rec {
     "--prefix" "PYTHONPATH" ":" "$out/lib/${python.libPrefix}/site-packages"
   ];
 
-  # no tests
-  doCheck = false;
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # We don't want to benchmark
+    "test_performance"
+    # Requires systemd
+    "test_autostart"
+    # Requires network access
+    "test_check_for_updates"
+    # Tries to look at /usr
+    "test_filestatus"
+    "test_path_exists_case_insensitive"
+    "test_cased_path_candidates"
+  ];
+
+  pythonImportsCheck = [ "maestral" ];
 
   meta = with lib; {
     description = "Open-source Dropbox client for macOS and Linux";
     license = licenses.mit;
     maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.unix;
-    inherit (src.meta) homepage;
+    homepage = "https://maestral.app";
   };
 }

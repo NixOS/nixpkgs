@@ -21,18 +21,18 @@
 , requests
 , send2trash
 , pexpect
-, prometheus_client
+, prometheus-client
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "notebook";
-  version = "6.2.0";
+  version = "6.4.3";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0464b28e18e7a06cec37e6177546c2322739be07962dd13bf712bcb88361f013";
+    sha256 = "03awxl8hr7ibwr6n48gci8jx80f18zll439wyr8gj35h6vnxzdp6";
   };
 
   LC_ALL = "en_US.utf8";
@@ -43,7 +43,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     jinja2 tornado ipython_genutils traitlets jupyter_core send2trash
     jupyter_client nbformat nbconvert ipykernel terminado requests pexpect
-    prometheus_client argon2_cffi
+    prometheus-client argon2_cffi
   ];
 
   # disable warning_filters

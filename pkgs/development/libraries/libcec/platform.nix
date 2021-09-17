@@ -1,10 +1,8 @@
 { lib, stdenv, fetchurl, cmake }:
 
-let version = "2.1.0.1"; in
-
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "p8-platform";
-  inherit version;
+  version = "2.1.0.1";
 
   src = fetchurl {
     url = "https://github.com/Pulse-Eight/platform/archive/p8-platform-${version}.tar.gz";
@@ -18,7 +16,7 @@ stdenv.mkDerivation {
     homepage = "https://github.com/Pulse-Eight/platform";
     repositories.git = "https://github.com/Pulse-Eight/platform.git";
     license = lib.licenses.gpl2Plus;
-    platforms = platforms.linux;
+    platforms = platforms.all;
     maintainers = [ maintainers.titanous ];
   };
 }

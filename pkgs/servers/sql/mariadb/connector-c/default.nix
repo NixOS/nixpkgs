@@ -29,8 +29,8 @@ stdenv.mkDerivation {
 
   postPatch = ''
     substituteInPlace mariadb_config/mariadb_config.c.in \
-      --replace '@CMAKE_SYSROOT@@CMAKE_INSTALL_PREFIX@/@INSTALL_INCLUDEDIR@' "$dev/include" \
-      --replace '@CMAKE_SYSROOT@@CMAKE_INSTALL_PREFIX@/@INSTALL_LIBDIR@' "$out/lib/mariadb"
+      --replace '-I%s/@INSTALL_INCLUDEDIR@' "-I$dev/include" \
+      --replace '-L%s/@INSTALL_LIBDIR@' "-L$out/lib/mariadb"
   '';
 
   # The cmake setup-hook uses $out/lib by default, this is not the case here.
@@ -56,7 +56,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Client library that can be used to connect to MySQL or MariaDB";
-    license = licenses.lgpl21;
+    license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ globin ];
     platforms = platforms.all;
   };

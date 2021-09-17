@@ -1,12 +1,13 @@
 { lib, hwdata, pkg-config, lxc, buildGoPackage, fetchurl
-, makeWrapper, acl, rsync, gnutar, xz, btrfs-progs, gzip, dnsmasq
-, squashfsTools, iproute, iptables, ebtables, iptables-nftables-compat, libcap
-, libco-canonical, dqlite, raft-canonical, sqlite-replication, udev
+, makeWrapper, acl, rsync, gnutar, xz, btrfs-progs, gzip, dnsmasq, attr
+, squashfsTools, iproute2, iptables, ebtables, iptables-nftables-compat, libcap
+, dqlite, raft-canonical, sqlite-replication, udev
 , writeShellScriptBin, apparmor-profiles, apparmor-parser
 , criu
 , bash
 , installShellFiles
 , nftablesSupport ? false
+, nixosTests
 }:
 
 let
@@ -18,13 +19,13 @@ let
 in
 buildGoPackage rec {
   pname = "lxd";
-  version = "4.12";
+  version = "4.18";
 
   goPackagePath = "github.com/lxc/lxd";
 
   src = fetchurl {
-    url = "https://github.com/lxc/lxd/releases/download/${pname}-${version}/${pname}-${version}.tar.gz";
-    sha256 = "1qgi9ciljq8h3ja9kalfvnxnjymddd5j4agv984137z443mqfnrw";
+    url = "https://linuxcontainers.org/downloads/lxd/lxd-${version}.tar.gz";
+    sha256 = "19gkllahfd2fgz6vng5lrqx3bdrzaf9s874gzznvzvj9sgj0j3mn";
   };
 
   postPatch = ''
@@ -33,14 +34,11 @@ buildGoPackage rec {
   '';
 
   preBuild = ''
-    # unpack vendor
-    pushd go/src/github.com/lxc/lxd
-    rm _dist/src/github.com/lxc/lxd
-    cp -r _dist/src/* ../../..
-    popd
-  '';
+    # required for go-dqlite. See: https://github.com/lxc/lxd/pull/8939
+    export CGO_LDFLAGS_ALLOW="(-Wl,-wrap,pthread_create)|(-Wl,-z,now)"
 
-  buildFlags = [ "-tags libsqlite3" ];
+    makeFlagsArray+=("-tags libsqlite3")
+  '';
 
   postInstall = ''
     # test binaries, code generation
@@ -48,7 +46,7 @@ buildGoPackage rec {
 
     wrapProgram $out/bin/lxd --prefix PATH : ${lib.makeBinPath (
       networkPkgs
-      ++ [ acl rsync gnutar xz btrfs-progs gzip dnsmasq squashfsTools iproute bash criu ]
+      ++ [ acl rsync gnutar xz btrfs-progs gzip dnsmasq squashfsTools iproute2 bash criu attr ]
       ++ [ (writeShellScriptBin "apparmor_parser" ''
              exec '${apparmor-parser}/bin/apparmor_parser' -I '${apparmor-profiles}/etc/apparmor.d' "$@"
            '') ]
@@ -58,15 +56,17 @@ buildGoPackage rec {
     installShellCompletion --bash --name lxd go/src/github.com/lxc/lxd/scripts/bash/lxd-client
   '';
 
+  passthru.tests.lxd = nixosTests.lxd;
+
   nativeBuildInputs = [ installShellFiles pkg-config makeWrapper ];
-  buildInputs = [ lxc acl libcap libco-canonical.dev dqlite.dev
-                  raft-canonical.dev sqlite-replication udev.dev ];
+  buildInputs = [ lxc acl libcap dqlite.dev raft-canonical.dev
+                  sqlite-replication udev.dev ];
 
   meta = with lib; {
     description = "Daemon based on liblxc offering a REST API to manage containers";
     homepage = "https://linuxcontainers.org/lxd/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ fpletz wucke13 ];
+    maintainers = with maintainers; [ fpletz wucke13 marsam ];
     platforms = platforms.linux;
   };
 }

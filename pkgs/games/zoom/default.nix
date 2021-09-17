@@ -3,10 +3,11 @@
 # !!! assert freetype == xorg.freetype
 
 stdenv.mkDerivation rec {
-  name = "zoom-1.1.5";
+  pname = "zoom";
+  version = "1.1.5";
 
   src = fetchurl {
-    url = "https://www.logicalshift.co.uk/unix/zoom/${name}.tar.gz";
+    url = "https://www.logicalshift.co.uk/unix/zoom/zoom-${version}.tar.gz";
     sha256 = "1g6van7f7sg3zfcz80mncnnbccyg2hnm0hq4x558vpsm0lf7z5pj";
   };
 

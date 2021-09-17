@@ -5,20 +5,20 @@
 
 stdenv.mkDerivation rec {
   pname = "emacs";
-  version = "27.1";
+  version = "27.2";
 
   emacsName = "emacs-${version}";
-  macportVersion = "8.0";
+  macportVersion = "8.2";
   name = "emacs-mac-${version}-${macportVersion}";
 
   src = fetchurl {
     url = "mirror://gnu/emacs/${emacsName}.tar.xz";
-    sha256 = "0h9f2wpmp6rb5rfwvqwv1ia1nw86h74p7hnz3vb3gjazj67i4k2a";
+    sha256 = "1ff182gjw9wqsbx1kj5gl2r5pbqhp4ar54g04j33fgz6g17cr9xl";
   };
 
   macportSrc = fetchurl {
     url = "ftp://ftp.math.s.chiba-u.ac.jp/emacs/${emacsName}-mac-${macportVersion}.tar.gz";
-    sha256 = "0rjk82k9qp1g701pfd4f0q2myzvsnp9q8xzphlxwi5yzwbs91kjq";
+    sha256 = "1bgm2g3ky7rkj1l27wnmyzqsqxzjng7y9bf72ym37wiyhyi2a9za";
   };
 
   hiresSrc = fetchurl {

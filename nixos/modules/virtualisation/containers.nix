@@ -4,15 +4,7 @@ let
 
   inherit (lib) mkOption types;
 
-  # Once https://github.com/NixOS/nixpkgs/pull/75584 is merged we can use the TOML generator
-  toTOML = name: value: pkgs.runCommandNoCC name {
-    nativeBuildInputs = [ pkgs.remarshal ];
-    value = builtins.toJSON value;
-    passAsFile = [ "value" ];
-  } ''
-    json2toml "$valuePath" "$out"
-  '';
-
+  toml = pkgs.formats.toml { };
 in
 {
   meta = {
@@ -25,6 +17,11 @@ in
       lib.mkRemovedOptionModule
       [ "virtualisation" "containers" "users" ]
       "All users with `isNormalUser = true` set now get appropriate subuid/subgid mappings."
+    )
+    (
+      lib.mkRemovedOptionModule
+      [ "virtualisation" "containers" "containersConf" "extraConfig" ]
+      "Use virtualisation.containers.containersConf.settings instead."
     )
   ];
 
@@ -45,23 +42,39 @@ in
       description = "Enable the OCI seccomp BPF hook";
     };
 
-    containersConf = mkOption {
-      default = {};
+    containersConf.settings = mkOption {
+      type = toml.type;
+      default = { };
       description = "containers.conf configuration";
-      type = types.submodule {
-        options = {
+    };
 
-          extraConfig = mkOption {
-            type = types.lines;
-            default = "";
-            description = ''
-              Extra configuration that should be put in the containers.conf
-              configuration file
-            '';
+    containersConf.cniPlugins = mkOption {
+      type = types.listOf types.package;
+      defaultText = ''
+        [
+          pkgs.cni-plugins
+        ]
+      '';
+      example = lib.literalExample ''
+        [
+          pkgs.cniPlugins.dnsname
+        ]
+      '';
+      description = ''
+        CNI plugins to install on the system.
+      '';
+    };
 
-          };
+    storage.settings = mkOption {
+      type = toml.type;
+      default = {
+        storage = {
+          driver = "overlay";
+          graphroot = "/var/lib/containers/storage";
+          runroot = "/run/containers/storage";
         };
       };
+      description = "storage.conf configuration";
     };
 
     registries = {
@@ -114,19 +127,24 @@ in
 
   config = lib.mkIf cfg.enable {
 
-    environment.etc."containers/containers.conf".text = ''
-      [network]
-      cni_plugin_dirs = ["${pkgs.cni-plugins}/bin/"]
+    virtualisation.containers.containersConf.cniPlugins = [ pkgs.cni-plugins ];
 
-      ${lib.optionalString (cfg.ociSeccompBpfHook.enable == true) ''
-      [engine]
-      hooks_dir = [
-        "${config.boot.kernelPackages.oci-seccomp-bpf-hook}",
-      ]
-      ''}
-    '' + cfg.containersConf.extraConfig;
+    virtualisation.containers.containersConf.settings = {
+      network.cni_plugin_dirs = map (p: "${lib.getBin p}/bin") cfg.containersConf.cniPlugins;
+      engine = {
+        init_path = "${pkgs.catatonit}/bin/catatonit";
+      } // lib.optionalAttrs cfg.ociSeccompBpfHook.enable {
+        hooks_dir = [ config.boot.kernelPackages.oci-seccomp-bpf-hook ];
+      };
+    };
 
-    environment.etc."containers/registries.conf".source = toTOML "registries.conf" {
+    environment.etc."containers/containers.conf".source =
+      toml.generate "containers.conf" cfg.containersConf.settings;
+
+    environment.etc."containers/storage.conf".source =
+      toml.generate "storage.conf" cfg.storage.settings;
+
+    environment.etc."containers/registries.conf".source = toml.generate "registries.conf" {
       registries = lib.mapAttrs (n: v: { registries = v; }) cfg.registries;
     };
 

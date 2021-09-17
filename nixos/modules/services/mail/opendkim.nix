@@ -134,7 +134,7 @@ in {
         ReadWritePaths = [ cfg.keyPath ];
 
         AmbientCapabilities = [];
-        CapabilityBoundingSet = [];
+        CapabilityBoundingSet = "";
         DevicePolicy = "closed";
         LockPersonality = true;
         MemoryDenyWriteExecute = true;

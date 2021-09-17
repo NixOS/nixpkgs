@@ -6,13 +6,14 @@
   libxkbfile, xf86inputevdev, xf86inputsynaptics, xinput, xkeyboard_config,
   xorgserver, util-linux,
 
-  qtdeclarative, qtquickcontrols, qtquickcontrols2, qtsvg, qtx11extras,
+  accounts-qt, qtdeclarative, qtquickcontrols, qtquickcontrols2, qtsvg,
+  qtx11extras,
 
-  attica, baloo, kactivities, kactivities-stats, kauth, kcmutils, kdbusaddons,
-  kdeclarative, kded, kdelibs4support, kemoticons, kglobalaccel, ki18n,
-  kitemmodels, knewstuff, knotifications, knotifyconfig, kpeople, krunner,
-  kscreenlocker, ksysguard, kwallet, kwin, phonon, plasma-framework,
-  plasma-workspace, qqc2-desktop-style, xf86inputlibinput
+  attica, baloo, kaccounts-integration, kactivities, kactivities-stats, kauth,
+  kcmutils, kdbusaddons, kdeclarative, kded, kdelibs4support, kemoticons,
+  kglobalaccel, ki18n, kitemmodels, knewstuff, knotifications, knotifyconfig,
+  kpeople, krunner, kscreenlocker, kwallet, kwin, phonon,
+  plasma-framework, plasma-workspace, qqc2-desktop-style, xf86inputlibinput
 }:
 
 mkDerivation {
@@ -22,12 +23,13 @@ mkDerivation {
     boost fontconfig ibus libcanberra_kde libpulseaudio libXcursor libXft xorgserver
     libxkbfile phonon xf86inputevdev xf86inputsynaptics xinput xkeyboard_config
 
-    qtdeclarative qtquickcontrols qtquickcontrols2 qtsvg qtx11extras
+    accounts-qt qtdeclarative qtquickcontrols qtquickcontrols2 qtsvg qtx11extras
 
-    attica baloo kactivities kactivities-stats kauth kcmutils kdbusaddons
-    kdeclarative kded kdelibs4support kemoticons kglobalaccel ki18n kitemmodels
-    knewstuff knotifications knotifyconfig kpeople krunner kscreenlocker
-    ksysguard kwallet kwin plasma-framework plasma-workspace qqc2-desktop-style
+    attica baloo kaccounts-integration kactivities kactivities-stats kauth
+    kcmutils kdbusaddons kdeclarative kded kdelibs4support kemoticons
+    kglobalaccel ki18n kitemmodels knewstuff knotifications knotifyconfig
+    kpeople krunner kscreenlocker kwallet kwin plasma-framework
+    plasma-workspace qqc2-desktop-style
   ];
 
   patches = [
@@ -39,11 +41,11 @@ mkDerivation {
   '';
   CXXFLAGS = [
     "-I${lib.getDev xorgserver}/include/xorg"
+    "-I${lib.getDev xf86inputsynaptics}/include/xorg"
     ''-DNIXPKGS_HWCLOCK=\"${lib.getBin util-linux}/sbin/hwclock\"''
   ];
   cmakeFlags = [
     "-DEvdev_INCLUDE_DIRS=${lib.getDev xf86inputevdev}/include/xorg"
-    "-DSynaptics_INCLUDE_DIRS=${lib.getDev xf86inputsynaptics}/include/xorg"
     "-DXORGLIBINPUT_INCLUDE_DIRS=${lib.getDev xf86inputlibinput}/include/xorg"
   ];
   postInstall = ''

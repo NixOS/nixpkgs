@@ -1,23 +1,27 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "bazel-buildtools";
-  version = "3.5.0";
-
-  goPackagePath = "github.com/bazelbuild/buildtools";
+  version = "4.2.0";
 
   src = fetchFromGitHub {
     owner = "bazelbuild";
     repo = "buildtools";
     rev = version;
-    sha256 = "179k0kwh7i2azkhk8dw7ac50a05q7n3i29pqaf69yw7jrpbf8k85";
+    sha256 = "sha256-m6jTDFgjUpQrm77tCnpIRHUFJCFl7GKwu7NoHtoLNa4=";
   };
 
-  goDeps = ./deps.nix;
+  vendorSha256 = "sha256-buMkRxVLlS2LBJGaGWeR41BsmE/0vgDS8s1VcRYN0fA=";
+
+  preBuild = ''
+    rm -r warn/docs
+  '';
+
+  doCheck = false;
 
   excludedPackages = [ "generatetables" ];
 
-  buildFlagsArray = [ "-ldflags=-s -w -X main.buildVersion=${version} -X main.buildScmRevision=${src.rev}" ];
+  ldflags = [ "-s" "-w" "-X main.buildVersion=${version}" "-X main.buildScmRevision=${src.rev}" ];
 
   meta = with lib; {
     description = "Tools for working with Google's bazel buildtool. Includes buildifier, buildozer, and unused_deps";

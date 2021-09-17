@@ -2,6 +2,7 @@
 , buildGoModule
 , fetchFromGitHub
 , makeWrapper
+, installShellFiles
 , buildkit
 , cni-plugins
 , extraPackages ? [ ]
@@ -9,26 +10,21 @@
 
 buildGoModule rec {
   pname = "nerdctl";
-  version = "0.7.0";
+  version = "0.11.1";
 
   src = fetchFromGitHub {
-    owner = "AkihiroSuda";
+    owner = "containerd";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-z5Ekryaa5KMShrjdsmFk9bXahtuc+6tec7dxH5/w7+A=";
+    sha256 = "sha256-r9VJQUmwe4UGCLmzxG2t9XHQ7KUeJxmEuAwxssPArcM=";
   };
 
-  vendorSha256 = "sha256-ovmVNtzTQbg141IvbaF/+k5WHxX8wuK7z5gH9l2g5UE=";
+  vendorSha256 = "sha256-KnXxp/6L09a34cnv4h7vpPhNO6EGmeEC6c1ydyYXkxU=";
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper installShellFiles ];
 
-  preBuild =
-    let
-      t = "github.com/AkihiroSuda/nerdctl/pkg/version";
-    in
-    ''
-      buildFlagsArray+=("-ldflags" "-s -w -X ${t}.Version=v${version} -X ${t}.Revision=<unknown>")
-    '';
+  ldflags = let t = "github.com/containerd/nerdctl/pkg/version"; in
+    [ "-s" "-w" "-X ${t}.Version=v${version}" "-X ${t}.Revision=<unknown>" ];
 
   # Many checks require a containerd socket and running nerdctl after it's built
   doCheck = false;
@@ -37,23 +33,22 @@ buildGoModule rec {
     wrapProgram $out/bin/nerdctl \
       --prefix PATH : "${lib.makeBinPath ([ buildkit ] ++ extraPackages)}" \
       --prefix CNI_PATH : "${cni-plugins}/bin"
+
+    installShellCompletion --cmd nerdctl \
+      --bash <($out/bin/nerdctl completion bash)
   '';
 
   doInstallCheck = true;
   installCheckPhase = ''
     runHook preInstallCheck
-    # nerdctl expects XDG_RUNTIME_DIR to be set
-    export XDG_RUNTIME_DIR=$TMPDIR
-
     $out/bin/nerdctl --help
-    # --version will error without containerd.sock access
-    $out/bin/nerdctl --help | grep "${version}"
+    $out/bin/nerdctl --version | grep "nerdctl version ${version}"
     runHook postInstallCheck
   '';
 
   meta = with lib; {
-    homepage = "https://github.com/AkihiroSuda/nerdctl/";
-    changelog = "https://github.com/AkihiroSuda/nerdctl/releases/tag/v${version}";
+    homepage = "https://github.com/containerd/nerdctl/";
+    changelog = "https://github.com/containerd/nerdctl/releases/tag/v${version}";
     description = "A Docker-compatible CLI for containerd";
     license = licenses.asl20;
     maintainers = with maintainers; [ jk ];

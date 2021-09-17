@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "SPAdes";
-  version = "3.14.1";
+  version = "3.15.3";
 
   src = fetchurl {
     url = "http://cab.spbu.ru/files/release${version}/${pname}-${version}.tar.gz";
-    sha256 = "1ji3afn6yvx7ysg7p9j0d1g28zrnxg1b7x90mhs2bj3lgs7vfafn";
+    sha256 = "sha256-suWp/XplruWriGIi1q9Pe3vH91XaegOUFXH6vWueFJk=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -19,9 +19,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "St. Petersburg genome assembler: assembly toolkit containing various assembly pipelines";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     homepage = "http://cab.spbu.ru/software/spades/";
-    platforms = platforms.unix;
+    platforms = with platforms; [ "x86_64-linux" "x86_64-darwin"];
     maintainers = [ maintainers.bzizou ];
   };
 }

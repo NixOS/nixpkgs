@@ -1,10 +1,10 @@
 { lib, fetchurl, buildDunePackage
-, checkseum, bigarray-compat, optint
-, bigstringaf, alcotest, hxd, camlzip, base64
+, checkseum, bigarray-compat, optint, cmdliner
+, bigstringaf, alcotest, camlzip, base64, ctypes, fmt
 }:
 
 buildDunePackage rec {
-  version = "1.2.0";
+  version = "1.4.2";
   pname = "decompress";
 
   minimumOCamlVersion = "4.07";
@@ -13,11 +13,12 @@ buildDunePackage rec {
 
   src = fetchurl {
     url = "https://github.com/mirage/decompress/releases/download/v${version}/decompress-v${version}.tbz";
-    sha256 = "1c3sq9a6kpzl0pj3gmg7w18ssjjl70yv0r3l7qjprcncjx23v62i";
+    sha256 = "822f125b46c87f4a902c334db8c86d4d5f33ebe978e93c40351a4d3269b95225";
   };
 
+  buildInputs = [ cmdliner ];
   propagatedBuildInputs = [ optint bigarray-compat checkseum ];
-  checkInputs = [ alcotest bigstringaf hxd camlzip base64 ];
+  checkInputs = [ alcotest bigstringaf ctypes fmt camlzip base64 ];
   doCheck = true;
 
   meta = {

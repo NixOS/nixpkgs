@@ -5,8 +5,8 @@ self: super: {
     _: {
       src = pkgs.fetchgit {
         url = "https://github.com/NixOS/nixops.git";
-        rev = "1ed5a091bc52de6c91319f446f833018a1cb326e";
-        sha256 = "1fx17qv9cl7hz7322zh4xlg02xn7bwwjj82cdcvqpsjf83crz3xi";
+        rev = "35ac02085169bc2372834d6be6cf4c1bdf820d09";
+        sha256 = "1jh0jrxyywjqhac2dvpj7r7isjv68ynbg7g6f6rj55raxcqc7r3j";
       };
     }
   );
@@ -15,8 +15,8 @@ self: super: {
     _: {
       src = pkgs.fetchgit {
         url = "https://github.com/NixOS/nixops-aws.git";
-        rev = "dbbaa1b15b6cf7ca1ceeb0a6195f5ee27693c505";
-        sha256 = "13gw3h7g19a0s7dpayjfksrmw6g0364dcm5z2d6mlyzdkfgak4jn";
+        rev = "371aedeb7fd53b8978a60dd7c37d3a6c38101c48";
+        sha256 = "15jz9x3ra3hsh6xj4cbri1fvvjk2rplnnhnccz7qc6f176b5r01j";
       };
     }
   );
@@ -25,8 +25,8 @@ self: super: {
     _: {
       src = pkgs.fetchgit {
         url = "https://github.com/nix-community/nixops-encrypted-links.git";
-        rev = "0bb9aa50a7294ee9dca10a18ff7d9024234913e1";
-        sha256 = "00wj03wcry83acwljq5v80dyrqaxpqb4j3jsdkfy3d7n5g4aq19l";
+        rev = "e2f196fce15fcfb00d18c055e1ac53aec33b8fb1";
+        sha256 = "12ynqwd5ad6wfyv6sma55wnmrlr8i14kd5d42zqv4zl23h0xnd6m";
       };
     }
   );
@@ -35,8 +35,8 @@ self: super: {
     _: {
       src = pkgs.fetchgit {
         url = "https://github.com/nix-community/nixops-gce.git";
-        rev = "23596af53eabc4e3bcf72beaaed82b2c8d40e419";
-        sha256 = "10gfdhf4b3ldrpns8z66mqxwfcbgf9ccz8fx0rcp7gsgsffb0i3c";
+        rev = "712453027486e62e087b9c91e4a8a171eebb6ddd";
+        sha256 = "0siw2silxvbxdfgb2dcymn11nqdf8an7q43wcq1lyg1ac07w7dwh";
       };
     }
   );
@@ -45,8 +45,8 @@ self: super: {
     _: {
       src = pkgs.fetchgit {
         url = "https://github.com/nix-community/nixops-libvirtd.git";
-        rev = "af6cf5b2ced57b7b6d36b5df7dd27a14e0a5cfb6";
-        sha256 = "1j75yg8a44dlbig38mf7n7p71mdzff6ii1z1pdp32i4ivk3l0hy6";
+        rev = "1245280d97e0adc4643d02d1cf62ddd582c73e49";
+        sha256 = "1z3zsx54585rcyabj6hrbwbd1c783rrlfj53np1sa3i7m93vmxzc";
       };
     }
   );

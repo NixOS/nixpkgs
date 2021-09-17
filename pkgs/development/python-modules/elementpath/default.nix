@@ -1,15 +1,20 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy27 }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+}:
 
 buildPythonPackage rec {
-  version = "2.1.4";
+  version = "2.3.1";
   pname = "elementpath";
-  disabled = isPy27; # uses incompatible class syntax
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "sissaschool";
     repo = "elementpath";
     rev = "v${version}";
-    sha256 = "00v6npm7d4bk4cnpzacxybn165x6vjqrydssznn0bxzv8aynm1vb";
+    sha256 = "1imjilhmbw08469irlbr3am5zksbg327n7mznxfixrigq9d65qx6";
   };
 
   # avoid circular dependency with xmlschema which directly depends on this

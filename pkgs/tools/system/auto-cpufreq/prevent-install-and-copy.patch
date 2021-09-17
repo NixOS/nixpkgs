@@ -1,18 +1,9 @@
 diff --git a/auto_cpufreq/core.py b/auto_cpufreq/core.py
-index a685db8..1ca1ca1 100644
+index 83d0d64..04b5035 100644
 --- a/auto_cpufreq/core.py
 +++ b/auto_cpufreq/core.py
-@@ -72,7 +72,7 @@ def app_version():
-             print("Git commit:", check_output(["git", "describe", "--always"]).strip().decode())
-         else:
-             print(getoutput("pacman -Qi auto-cpufreq | grep Version"))
--    else:        
-+    else:
-         # source code (auto-cpufreq-installer)
-         try:
-             print("Git commit:", check_output(["git", "describe", "--always"]).strip().decode())
-@@ -179,31 +179,13 @@ def get_current_gov():
-     return print("Currently using:", getoutput("cpufreqctl.auto-cpufreq --governor").strip().split(" ")[0], "governor")
+@@ -204,35 +204,13 @@ def get_current_gov():
+ 
  
  def cpufreqctl():
 -    """
@@ -20,14 +11,18 @@ index a685db8..1ca1ca1 100644
 -    """
 -
 -    # detect if running on a SNAP
--    if os.getenv('PKG_MARKER') == "SNAP":
+-    if os.getenv("PKG_MARKER") == "SNAP":
 -        pass
 -    else:
 -        # deploy cpufreqctl.auto-cpufreq script
 -        if os.path.isfile("/usr/bin/cpufreqctl"):
--            shutil.copy(SCRIPTS_DIR / "cpufreqctl.sh", "/usr/bin/cpufreqctl.auto-cpufreq")
+-            shutil.copy(
+-                SCRIPTS_DIR / "cpufreqctl.sh", "/usr/bin/cpufreqctl.auto-cpufreq"
+-            )
 -        else:
--            shutil.copy(SCRIPTS_DIR / "cpufreqctl.sh", "/usr/bin/cpufreqctl.auto-cpufreq")
+-            shutil.copy(
+-                SCRIPTS_DIR / "cpufreqctl.sh", "/usr/bin/cpufreqctl.auto-cpufreq"
+-            )
 +    # scripts are already in the correct place
 +    pass
  
@@ -37,7 +32,7 @@ index a685db8..1ca1ca1 100644
 -    remove cpufreqctl.auto-cpufreq script
 -    """
 -    # detect if running on a SNAP
--    if os.getenv('PKG_MARKER') == "SNAP":
+-    if os.getenv("PKG_MARKER") == "SNAP":
 -        pass
 -    else:
 -        if os.path.isfile("/usr/bin/cpufreqctl.auto-cpufreq"):
@@ -45,10 +40,10 @@ index a685db8..1ca1ca1 100644
 +    # no need to restore
 +    pass
  
+ 
  def footer(l=79):
-     print("\n" + "-" * l + "\n")
-@@ -233,74 +215,12 @@ def remove_complete_msg():
-     footer()
+@@ -276,76 +254,13 @@ def remove_complete_msg():
+ 
  
  def deploy_daemon():
 -    print("\n" + "-" * 21 + " Deploying auto-cpufreq as a daemon " + "-" * 22 + "\n")
@@ -66,21 +61,23 @@ index a685db8..1ca1ca1 100644
 -            f.seek(0)
 -            f.truncate()
 -            f.write(content.replace(orig_set, change_set))
--    except:
--        print("\nERROR:\nWas unable to turn off bluetooth on boot")
+-    except Exception as e:
+-        print(f"\nERROR:\nWas unable to turn off bluetooth on boot\n{repr(e)}")
 -
 -    auto_cpufreq_stats_path.touch(exist_ok=True)
 -
 -    print("\n* Deploy auto-cpufreq install script")
--    shutil.copy(SCRIPTS_DIR / "auto-cpufreq-install.sh", "/usr/bin/auto-cpufreq-install")
+-    shutil.copy(
+-        SCRIPTS_DIR / "auto-cpufreq-install.sh", "/usr/bin/auto-cpufreq-install"
+-    )
 -
 -    print("\n* Deploy auto-cpufreq remove script")
 -    shutil.copy(SCRIPTS_DIR / "auto-cpufreq-remove.sh", "/usr/bin/auto-cpufreq-remove")
 -
 -    call("/usr/bin/auto-cpufreq-install", shell=True)
--
 +    # prevent needless copying and system changes
 +    pass
+ 
  
  # remove auto-cpufreq daemon
  def remove():
@@ -102,8 +99,8 @@ index a685db8..1ca1ca1 100644
 -            f.seek(0)
 -            f.truncate()
 -            f.write(content.replace(change_set, orig_set))
--    except:
--        print("\nERROR:\nWas unable to turn on bluetooth on boot")
+-    except Exception as e:
+-        print(f"\nERROR:\nWas unable to turn on bluetooth on boot\n{repr(e)}")
 -
 -    # run auto-cpufreq daemon install script
 -    call("/usr/bin/auto-cpufreq-remove", shell=True)
@@ -125,15 +122,6 @@ index a685db8..1ca1ca1 100644
  
  def gov_check():
      for gov in get_avail_gov():
-@@ -331,7 +251,7 @@ def countdown(s):
-     if auto_cpufreq_stats_file is not None:
-         auto_cpufreq_stats_file.seek(0)
-         auto_cpufreq_stats_file.truncate(0)
--                
-+
-         # execution timestamp
-         from datetime import datetime
-         now = datetime.now()
 diff --git a/scripts/cpufreqctl.sh b/scripts/cpufreqctl.sh
 index 63a2b5b..e157efe 100755
 --- a/scripts/cpufreqctl.sh

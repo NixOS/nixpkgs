@@ -19,7 +19,7 @@ in
       default = null;
       example = "ondemand";
       description = ''
-        Configure the governor used to regulate the frequence of the
+        Configure the governor used to regulate the frequency of the
         available CPUs. By default, the kernel configures the
         performance governor, although this may be overwritten in your
         hardware-configuration.nix file.

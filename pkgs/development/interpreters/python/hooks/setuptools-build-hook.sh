@@ -31,6 +31,13 @@ setuptoolsShellHook() {
         mkdir -p "$tmp_path/@pythonSitePackages@"
         eval "@pythonInterpreter@ -m pip install -e . --prefix $tmp_path \
           --no-build-isolation >&2"
+
+        # Process pth file installed in tmp path. This allows one to
+        # actually import the editable installation. Note site.addsitedir
+        # appends, not prepends, new paths. Hence, it is not possible to override
+        # an existing installation of the package.
+        # https://github.com/pypa/setuptools/issues/2612
+        export NIX_PYTHONPATH="$tmp_path/@pythonSitePackages@:${NIX_PYTHONPATH-}"
     fi
 
     runHook postShellHook

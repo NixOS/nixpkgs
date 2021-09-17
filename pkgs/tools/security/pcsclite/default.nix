@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchurl, pkg-config, udev, dbus, perl, python3
-, IOKit ? null }:
+{ stdenv
+, lib
+, fetchurl
+, autoreconfHook
+, pkg-config
+, perl
+, python3
+, dbus
+, polkit
+, systemd
+, IOKit
+}:
 
 stdenv.mkDerivation rec {
   pname = "pcsclite";
@@ -14,14 +24,23 @@ stdenv.mkDerivation rec {
 
   patches = [ ./no-dropdir-literals.patch ];
 
+  postPatch = ''
+    sed -i configure.ac \
+      -e "s@polkit_policy_dir=.*@polkit_policy_dir=$bin/share/polkit-1/actions@"
+  '';
+
   configureFlags = [
+    "--enable-confdir=/etc"
     # The OS should care on preparing the drivers into this location
     "--enable-usbdropdir=/var/lib/pcsc/drivers"
-    "--enable-confdir=/etc"
-  ] ++ lib.optional stdenv.isLinux
-         "--with-systemdsystemunitdir=\${out}/etc/systemd/system"
-    ++ lib.optional (!stdenv.isLinux)
-         "--disable-libsystemd";
+  ]
+  ++ (if stdenv.isLinux then [
+    "--enable-ipcdir=/run/pcscd"
+    "--enable-polkit"
+    "--with-systemdsystemunitdir=${placeholder "bin"}/lib/systemd/system"
+  ] else [
+    "--disable-libsystemd"
+  ]);
 
   postConfigure = ''
     sed -i -re '/^#define *PCSCLITE_HP_DROPDIR */ {
@@ -34,9 +53,13 @@ stdenv.mkDerivation rec {
     moveToOutput bin/pcsc-spy "$dev"
   '';
 
-  nativeBuildInputs = [ pkg-config perl ];
-  buildInputs = [ python3 ] ++ lib.optionals stdenv.isLinux [ udev dbus ]
-             ++ lib.optionals stdenv.isDarwin [ IOKit ];
+  enableParallelBuilding = true;
+
+  nativeBuildInputs = [ autoreconfHook pkg-config perl ];
+
+  buildInputs = [ python3 ]
+    ++ lib.optionals stdenv.isLinux [ dbus polkit systemd ]
+    ++ lib.optionals stdenv.isDarwin [ IOKit ];
 
   meta = with lib; {
     description = "Middleware to access a smart card using SCard API (PC/SC)";

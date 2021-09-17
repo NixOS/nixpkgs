@@ -1,13 +1,13 @@
-{ stdenv, fetchFromGitHub, lib
+{ stdenv, fetchpatch, fetchFromGitHub, lib
 , cmake, perl, uthash, pkg-config, gettext
-, python, freetype, zlib, glib, libungif, libpng, libjpeg, libtiff, libxml2, cairo, pango
+, python, freetype, zlib, glib, giflib, libpng, libjpeg, libtiff, libxml2, cairo, pango
 , readline, woff2, zeromq, libuninameslist
 , withSpiro ? false, libspiro
 , withGTK ? false, gtk3
 , withGUI ? withGTK
 , withPython ? true
 , withExtras ? true
-, Carbon ? null, Cocoa ? null
+, Carbon, Cocoa
 }:
 
 assert withGTK -> withGUI;
@@ -22,6 +22,21 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "sha256-Rl/5lbXaPgIndANaD0IakaDus6T53FjiBb45FIuGrvc=";
   };
+
+  patches = [
+    # Allow installing contrib files (e.g. extras and tools).
+    # Taken from https://salsa.debian.org/fonts-team/fontforge/-/blob/master/debian/patches/0001-add-extra-cmake-install-rules.patch
+    (fetchpatch {
+      url = "https://salsa.debian.org/fonts-team/fontforge/raw/76bffe6ccf8ab20a0c81476a80a87ad245e2fd1c/debian/patches/0001-add-extra-cmake-install-rules.patch";
+      sha256 = "u3D9od2xLECNEHhZ+8dkuv9818tPkdP6y/Tvd9CADJg=";
+    })
+    # Fix segmentation fault with some fonts.
+    # This is merged and should be present in the next release.
+    (fetchpatch {
+      url = "https://github.com/fontforge/fontforge/commit/69e263b2aff29ad22f97f13935cfa97a1eabf207.patch";
+      sha256 = "06yyf90605aq6ppfiz83mqkdmnaq5418axp9jgsjyjq78b00xb29";
+    })
+  ];
 
   # use $SOURCE_DATE_EPOCH instead of non-deterministic timestamps
   postPatch = ''
@@ -38,9 +53,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config cmake ];
   buildInputs = [
     readline uthash woff2 zeromq libuninameslist
-    python freetype zlib glib libungif libpng libjpeg libtiff libxml2
+    python freetype zlib glib giflib libpng libjpeg libtiff libxml2
   ]
-    ++ lib.optionals withSpiro [libspiro]
+    ++ lib.optionals withSpiro [ libspiro ]
     ++ lib.optionals withGUI [ gtk3 cairo pango ]
     ++ lib.optionals stdenv.isDarwin [ Carbon Cocoa ];
 
@@ -62,11 +77,11 @@ stdenv.mkDerivation rec {
       rm -r "$out/share/fontforge/python"
     '';
 
-  meta = {
+  meta = with lib; {
     description = "A font editor";
-    homepage = "http://fontforge.github.io";
-    platforms = lib.platforms.all;
-    license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.erictapen ];
+    homepage = "https://fontforge.github.io";
+    platforms = platforms.all;
+    license = licenses.bsd3;
+    maintainers = [ maintainers.erictapen ];
   };
 }

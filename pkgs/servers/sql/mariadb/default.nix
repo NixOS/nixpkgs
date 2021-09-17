@@ -4,7 +4,7 @@
 , bzip2, lz4, lzo, snappy, xz, zlib, zstd
 , fixDarwinDylibNames, cctools, CoreServices, less
 , numactl # NUMA Support
-, withStorageMroonga ? true, kytea, msgpack, zeromq
+, withStorageMroonga ? true, kytea, libsodium, msgpack, zeromq
 , withStorageRocks ? true
 }:
 
@@ -22,14 +22,14 @@ mariadb = server // {
 };
 
 common = rec { # attributes common to both builds
-  version = "10.5.8";
+  version = "10.6.3";
 
   src = fetchurl {
     urls = [
       "https://downloads.mariadb.org/f/mariadb-${version}/source/mariadb-${version}.tar.gz"
       "https://downloads.mariadb.com/MariaDB/mariadb-${version}/source/mariadb-${version}.tar.gz"
     ];
-    sha256 = "1s3vfm73911cddjhgpcbkya6nz7ag2zygg56qqzwscn5ybv28j7b";
+    sha256 = "1nqq1g6h2gvsraqziv2qq42v7y6fzbfw357mh3d1zv7md9h2bhav";
     name   = "mariadb-${version}.tar.gz";
   };
 
@@ -95,7 +95,7 @@ common = rec { # attributes common to both builds
     rm "$out"/bin/{mariadb_config,mysql_config}
     rm -r $out/include
     rm -r $out/lib/pkgconfig
-    rm -r $out/share/aclocal
+    rm -rf "$out"/share/aclocal
   '';
 
   passthru.mysqlVersion = "5.7";
@@ -135,7 +135,7 @@ client = stdenv.mkDerivation (common // {
   ];
 
   postInstall = common.postInstall + ''
-    rm -r "$out"/share/doc
+    rm -rf "$out"/share/doc
     rm "$out"/bin/{mysqltest,mytop}
     libmysqlclient_path=$(readlink -f $out/lib/libmysqlclient${libExt})
     rm "$out"/lib/{libmariadb${libExt},libmysqlclient${libExt},libmysqlclient_r${libExt}}
@@ -155,11 +155,16 @@ server = stdenv.mkDerivation (common // {
     bzip2 lz4 lzo snappy xz zstd
     libxml2 judy libevent cracklib
   ] ++ optional (stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAarch32) numactl
-    ++ optionals withStorageMroonga [ kytea msgpack zeromq ]
+    ++ optionals withStorageMroonga [ kytea libsodium msgpack zeromq ]
     ++ optional stdenv.hostPlatform.isLinux linux-pam
     ++ optional (!stdenv.hostPlatform.isDarwin) mytopEnv;
 
   patches = common.patches;
+
+  postPatch = ''
+    substituteInPlace scripts/galera_new_cluster.sh \
+      --replace ":-mariadb" ":-mysql"
+  '';
 
   cmakeFlags = common.cmakeFlags ++ [
     "-DMYSQL_DATADIR=/var/lib/mysql"
@@ -202,7 +207,6 @@ server = stdenv.mkDerivation (common // {
     mv "$out"/OFF/suite/plugins/pam/pam_mariadb_mtr.so "$out"/share/pam/lib/security
     mv "$out"/OFF/suite/plugins/pam/mariadb_mtr "$out"/share/pam/etc/security
     rm -r "$out"/OFF
-    sed -i 's/-mariadb/-mysql/' "$out"/bin/galera_new_cluster
   '';
 
   # perlPackages.DBDmysql is broken on darwin

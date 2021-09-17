@@ -24,7 +24,8 @@ stdenv.mkDerivation rec {
 
   patches = [
     (fetchpatch {
-      url = "https://roy.marples.name/cgit/dhcpcd.git/patch/?id=114870290a8d3d696bc4049c32eef3eed03d6070";
+      name = "?id=114870290a8d3d696bc4049c32eef3eed03d6070";
+      url = "https://roy.marples.name/git/dhcpcd/commitdiff_plain/114870290a8d3d696bc4049c32eef3eed03d6070";
       sha256 = "0kzpwjh2gzvl5lvlnw6lis610p67nassk3apns68ga2pyxlky8qb";
     })
   ];
@@ -43,7 +44,7 @@ stdenv.mkDerivation rec {
   installFlags = [ "DBDIR=$(TMPDIR)/db" "SYSCONFDIR=${placeholder "out"}/etc" ];
 
   # Check that the udev plugin got built.
-  postInstall = lib.optional (udev != null) "[ -e ${placeholder "out"}/lib/dhcpcd/dev/udev.so ]";
+  postInstall = lib.optionalString (udev != null) "[ -e ${placeholder "out"}/lib/dhcpcd/dev/udev.so ]";
 
   meta = with lib; {
     description = "A client for the Dynamic Host Configuration Protocol (DHCP)";

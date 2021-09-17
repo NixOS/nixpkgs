@@ -190,7 +190,7 @@ in
         protocols.source  = pkgs.iana-etc + "/etc/protocols";
 
         # /etc/hosts: Hostname-to-IP mappings.
-        hosts.source = pkgs.runCommandNoCC "hosts" {} ''
+        hosts.source = pkgs.runCommand "hosts" {} ''
           cat ${escapeShellArgs cfg.hostFiles} > $out
         '';
 

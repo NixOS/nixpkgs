@@ -15,10 +15,10 @@ in {
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ pkgs.gnome3.geary ];
+    environment.systemPackages = [ pkgs.gnome.geary ];
     programs.dconf.enable = true;
-    services.gnome3.gnome-keyring.enable = true;
-    services.gnome3.gnome-online-accounts.enable = true;
+    services.gnome.gnome-keyring.enable = true;
+    services.gnome.gnome-online-accounts.enable = true;
   };
 }
 

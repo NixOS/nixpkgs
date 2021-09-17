@@ -8,8 +8,8 @@
 , fixDarwinDylibNames
 
 , cudaSupport
-, cudatoolkit_10_2
-, cudnn_cudatoolkit_10_2
+, cudatoolkit_11_1
+, cudnn_cudatoolkit_11_1
 }:
 
 let
@@ -18,7 +18,7 @@ let
   # this derivation. However, we should ensure on version bumps
   # that the CUDA toolkit for `passthru.tests` is still
   # up-to-date.
-  version = "1.8.0";
+  version = "1.9.0";
   device = if cudaSupport then "cuda" else "cpu";
   srcs = import ./binary-hashes.nix version;
   unavailable = throw "libtorch is not available for this platform";
@@ -38,7 +38,7 @@ in stdenv.mkDerivation {
 
   installPhase = ''
     # Copy headers and CMake files.
-    install -Dm755 -t $dev/lib lib/*.a
+    mkdir -p $dev
     cp -r include $dev
     cp -r share $dev
 
@@ -109,15 +109,15 @@ in stdenv.mkDerivation {
 
   passthru.tests.cmake = callPackage ./test {
     inherit cudaSupport;
-    cudatoolkit = cudatoolkit_10_2;
-    cudnn = cudnn_cudatoolkit_10_2;
+    cudatoolkit = cudatoolkit_11_1;
+    cudnn = cudnn_cudatoolkit_11_1;
   };
 
   meta = with lib; {
     description = "C++ API of the PyTorch machine learning framework";
     homepage = "https://pytorch.org/";
     license = licenses.unfree; # Includes CUDA and Intel MKL.
-    maintainers = with maintainers; [ danieldk ];
+    maintainers = with maintainers; [ ];
     platforms = with platforms; linux ++ darwin;
   };
 }

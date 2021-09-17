@@ -25,16 +25,16 @@
 
 buildPythonApplication rec {
   pname = "devpi-client";
-  version = "5.2.1";
+  version = "5.2.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "74ff365efeaa7b78c9eb7f6d7bd349ccd6252a6cdf879bcb4137ee5ff0fb127a";
+    sha256 = "24ac6d94108996efad4ff5185dabb1e5120ae238134b8175d6de2ca9e766cd92";
   };
 
-  buildInputs = [ glibcLocales pkginfo check-manifest ];
+  buildInputs = [ glibcLocales ];
 
-  propagatedBuildInputs = [ py devpi-common pluggy setuptools ];
+  propagatedBuildInputs = [ py devpi-common pluggy setuptools check-manifest pkginfo ];
 
   checkInputs = [
     pytest pytest-flake8 webtest mock
@@ -48,6 +48,8 @@ buildPythonApplication rec {
   '';
 
   LC_ALL = "en_US.UTF-8";
+
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     homepage = "http://doc.devpi.net";

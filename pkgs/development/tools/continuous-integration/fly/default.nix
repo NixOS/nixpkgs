@@ -1,26 +1,25 @@
-{ buildGoModule, fetchFromGitHub, stdenv, lib, writeText }:
+{ buildGoModule, fetchFromGitHub, stdenv, lib }:
 
 buildGoModule rec {
   pname = "fly";
-  version = "7.0.0";
+  version = "7.4.0";
 
   src = fetchFromGitHub {
     owner = "concourse";
     repo = "concourse";
     rev = "v${version}";
-    sha256 = "sha256-WpwMx8mPedunBKlRUDdcVA1sLWkZvuoaw6DEtvGSyAg=";
+    sha256 = "sha256-UvEPTZtQWztl7ZC1XrBxE8+emlXQjMG4IJEti5vVxUM=";
   };
 
-  vendorSha256 = "sha256-OxU+Hb8bX71SFuyAw583Z7bEu+b/j2i/fOGE5S9C91M=";
+  vendorSha256 = "sha256-IY+HGgoKNS/j3FGCX3F3EK1GehBjs3Z1K8V3O7a3swk=";
 
   doCheck = false;
 
   subPackages = [ "fly" ];
 
-  buildFlagsArray = ''
-    -ldflags=
-      -X github.com/concourse/concourse.Version=${version}
-  '';
+  ldflags = [
+    "-X github.com/concourse/concourse.Version=${version}"
+  ];
 
   postInstall = lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
     mkdir -p $out/share/{bash-completion/completions,zsh/site-functions}

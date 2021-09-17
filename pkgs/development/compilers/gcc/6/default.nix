@@ -5,6 +5,7 @@
 , langObjCpp ? stdenv.targetPlatform.isDarwin
 , langJava ? false
 , langGo ? false
+, reproducibleBuild ? true
 , profiledCompiler ? false
 , langJit ? false
 , staticCompiler ? false
@@ -60,6 +61,10 @@ assert langAda -> gnatboot != null;
 
 # threadsCross is just for MinGW
 assert threadsCross != null -> stdenv.targetPlatform.isWindows;
+
+# profiledCompiler builds inject non-determinism in one of the compilation stages.
+# If turned on, we can't provide reproducible builds anymore
+assert reproducibleBuild -> profiledCompiler == false;
 
 with lib;
 with builtins;
@@ -149,7 +154,7 @@ stdenv.mkDerivation ({
 
   hardeningDisable = [ "format" "pie" ];
 
-  prePatch =
+  postPatch =
     # This should kill all the stdinc frameworks that gcc and friends like to
     # insert into default search paths.
     lib.optionalString hostPlatform.isDarwin ''
@@ -161,9 +166,8 @@ stdenv.mkDerivation ({
 
       substituteInPlace libgfortran/configure \
         --replace "-install_name \\\$rpath/\\\$soname" "-install_name ''${!outputLib}/lib/\\\$soname"
-    '';
-
-  postPatch =
+    ''
+  + (
     if targetPlatform != hostPlatform || stdenv.cc.libc != null then
       # On NixOS, use the right path to the dynamic linker instead of
       # `/lib/ld*.so'.
@@ -186,7 +190,7 @@ stdenv.mkDerivation ({
             sed -i gcc/config/linux.h -e '1i#undef LOCAL_INCLUDE_DIR'
         ''
         )
-    else null;
+    else "");
 
   inherit noSysDirs staticCompiler langJava crossStageStatic
     libcCross crossMingw;
@@ -195,7 +199,9 @@ stdenv.mkDerivation ({
   nativeBuildInputs = [ texinfo which gettext ]
     ++ (optional (perl != null) perl)
     ++ (optional javaAwtGtk pkg-config)
-    ++ (optional (with stdenv.targetPlatform; isVc4 || isRedox) flex);
+    ++ (optional (with stdenv.targetPlatform; isVc4 || isRedox) flex)
+    ++ (optional langAda gnatboot)
+    ;
 
   # For building runtime libs
   depsBuildTarget =
@@ -218,7 +224,6 @@ stdenv.mkDerivation ({
     # The builder relies on GNU sed (for instance, Darwin's `sed' fails with
     # "-i may not be used with stdin"), and `stdenvNative' doesn't provide it.
     ++ (optional hostPlatform.isDarwin gnused)
-    ++ (optional langAda gnatboot)
     ;
 
   depsTargetTarget = optional (!crossStageStatic && threadsCross != null) threadsCross;
@@ -227,13 +232,12 @@ stdenv.mkDerivation ({
 
   preConfigure = import ../common/pre-configure.nix {
     inherit lib;
-    inherit version hostPlatform gnatboot langJava langAda langGo;
+    inherit version targetPlatform hostPlatform gnatboot langJava langAda langGo;
   };
 
   dontDisableStatic = true;
 
-  # TODO(@Ericson2314): Always pass "--target" and always prefix.
-  configurePlatforms = [ "build" "host" ] ++ lib.optional (targetPlatform != hostPlatform) "target";
+  configurePlatforms = [ "build" "host" "target" ];
 
   configureFlags = import ../common/configure-flags.nix {
     inherit
@@ -340,11 +344,7 @@ stdenv.mkDerivation ({
 
     maintainers = with lib.maintainers; [ peti ];
 
-    platforms =
-      lib.platforms.linux ++
-      lib.platforms.freebsd ++
-      lib.platforms.illumos ++
-      lib.platforms.darwin;
+    platforms = lib.platforms.unix;
   };
 }
 

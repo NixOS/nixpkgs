@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoBuildFlags = ["--features" "bin"];
-  cargoSha256 = "0nxm2k8dx6nxyghvpw44wqfd1n65947v2wqxxvy641hin4d7xzma";
+  cargoSha256 = "08ip6x4kink244majlk595yh551c2ap3ry58wly994mh8wf6ifwb";
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [
@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage rec {
     description = "Play an image/video in your terminal";
     homepage = "https://jd91mzm2.github.io/termplay/";
     license = licenses.mit;
-    maintainers = with maintainers; [ jD91mZM2 ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
   };
 }

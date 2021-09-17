@@ -38,6 +38,6 @@ in buildPythonPackage rec {
     description = "A Python utility / library to sort Python imports";
     homepage = "https://github.com/timothycrosley/isort";
     license = licenses.mit;
-    maintainers = with maintainers; [ couchemar nand0p ];
+    maintainers = with maintainers; [ couchemar ];
   };
 }

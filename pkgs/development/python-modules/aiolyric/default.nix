@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "aiolyric";
-  version = "1.0.5";
+  version = "1.0.7";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "timmo001";
     repo = pname;
     rev = "v${version}";
-    sha256 = "00kq3dsjcfhjzn585phb3g168dbg53wrqq7g8a4gljs49c2mf5qx";
+    sha256 = "sha256-3UyWUsamluJclwrQD+MuUPLhNJoNU4/8w1m92OLWyrg=";
   };
 
   propagatedBuildInputs = [ aiohttp ];

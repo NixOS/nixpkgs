@@ -6,23 +6,25 @@
 , msrest
 , msrestazure
 , azure-common
+, azure-mgmt-core
 , azure-mgmt-nspkg
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-servicefabric";
-  version = "0.5.0";
+  version = "2.0.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "5771f24516c8d4a27f5569f23f3a606f6f106e4ad502eec7f38aedfcd3eadc74";
+    sha256 = "4c6f3de2526a27af78aecae248604f941c4d059fbcf2265912a380e3c788735d";
   };
 
   propagatedBuildInputs = [
     msrest
     msrestazure
     azure-common
+    azure-mgmt-core
     azure-mgmt-nspkg
   ];
 

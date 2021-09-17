@@ -1,17 +1,17 @@
 { lib, buildPythonPackage, fetchPypi, pythonOlder
 , fonttools, setuptools-scm
-, pytest, pytestrunner, lxml, fs, unicodedata2, fontpens
+, pytest, pytest-runner, lxml, fs, unicodedata2, fontpens
 }:
 
 buildPythonPackage rec {
   pname = "defcon";
-  version = "0.8.0";
+  version = "0.9.0";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "028j7i39m75fnbyc6jsvwwiz31vq4slxwf47y6yszy1qn61xkcna";
+    sha256 = "140f51da51e9630a9fa11dfd34376c4e29785fdb0bddc2e371df5b36bec17b76";
     extension = "zip";
   };
 
@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytest
-    pytestrunner
+    pytest-runner
     lxml
     fs
     unicodedata2

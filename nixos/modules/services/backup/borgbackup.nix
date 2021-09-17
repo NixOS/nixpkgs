@@ -102,7 +102,7 @@ let
   mkWrapperDrv = {
       original, name, set ? {}
     }:
-    pkgs.runCommandNoCC "${name}-wrapper" {
+    pkgs.runCommand "${name}-wrapper" {
       buildInputs = [ pkgs.makeWrapper ];
     } (with lib; ''
       makeWrapper "${original}" "$out/bin/${name}" \
@@ -169,6 +169,8 @@ let
         (map (mkAuthorizedKey cfg false) cfg.authorizedKeys
         ++ map (mkAuthorizedKey cfg true) cfg.authorizedKeysAppendOnly);
       useDefaultShell = true;
+      group = cfg.group;
+      isSystemUser = true;
     };
     groups.${cfg.group} = { };
   };

@@ -5,26 +5,26 @@
 , mock
 , pygments
 , pytest
-, pytestcov
+, pytest-cov
 , pytest-django
 , python-dateutil
 , shortuuid
 , six
 , tox
-, typing
+, typing ? null
 , vobject
 , werkzeug
 }:
 
 buildPythonPackage rec {
   pname = "django-extensions";
-  version = "3.1.0";
+  version = "3.1.3";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "hZ6GS2VkXH8KfKZuL1rR6JS/nDkx8SfKuUx5XrvTbec=";
+    sha256 = "03mhikhh49z8bxajbjf1j790b9c9vl4zf4f86iwz7g0zrd7jqlvm";
   };
 
   LC_ALL = "en_US.UTF-8";
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     mock
     pygments # not explicitly declared in setup.py, but some tests require it
     pytest
-    pytestcov
+    pytest-cov
     pytest-django
     python-dateutil
     shortuuid

@@ -2,7 +2,7 @@
 , zlib, gettext, libvdpau, libva, libXv, sqlite
 , yasm, freetype, fontconfig, fribidi
 , makeWrapper, libXext, libGLU, qttools, qtbase, wrapQtAppsHook
-, alsaLib
+, alsa-lib
 , withX265 ? true, x265
 , withX264 ? true, x264
 , withXvid ? true, xvidcore
@@ -25,11 +25,11 @@ assert !withQT -> default != "qt5";
 
 stdenv.mkDerivation rec {
   pname = "avidemux";
-  version = "2.7.6";
+  version = "2.7.8";
 
   src = fetchurl {
     url = "mirror://sourceforge/avidemux/avidemux/${version}/avidemux_${version}.tar.gz";
-    sha256 = "1kwkn976ppahrcr74bnv6sqx75pzl9y21m1mvr5ksi1m6lgp924s";
+    sha256 = "sha256-YopAT1If8oEnYHAK4+KqeOWBaw/z+2/QWsPnUkjZdAE=";
   };
 
   patches = [
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional withQT wrapQtAppsHook;
   buildInputs = [
     zlib gettext libvdpau libva libXv sqlite fribidi fontconfig
-    freetype alsaLib libXext libGLU makeWrapper
+    freetype alsa-lib libXext libGLU makeWrapper
   ] ++ lib.optional withX264 x264
     ++ lib.optional withX265 x265
     ++ lib.optional withXvid xvidcore
@@ -91,7 +91,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://fixounet.free.fr/avidemux/";
     description = "Free video editor designed for simple video editing tasks";
-    maintainers = with maintainers; [ abbradar ma27 ];
+    maintainers = with maintainers; [ abbradar ];
     # "CPU not supported" errors on AArch64
     platforms = [ "i686-linux" "x86_64-linux" ];
     license = licenses.gpl2;

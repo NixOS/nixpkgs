@@ -5,7 +5,7 @@
 , fftw
 , fftwFloat
 , enablePython ? false
-, pythonPackages
+, pythonPackages ? null
 , llvmPackages
 }:
 let
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     pythonPackages.pytest
   ];
 
-  checkInputs = lib.optional enablePython [ pythonPackages.scipy pythonPackages.pytestcov ];
+  checkInputs = lib.optional enablePython [ pythonPackages.scipy pythonPackages.pytest-cov ];
 
   preConfigure = ''
     mkdir -p build/external/src

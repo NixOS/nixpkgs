@@ -10,10 +10,10 @@
 }:
 
 let
-  version = "1.17";
+  version = "1.19";
   prebuilt_server = fetchurl {
     url = "https://github.com/Genymobile/scrcpy/releases/download/v${version}/scrcpy-server-v${version}";
-    sha256 = "sha256-EbWtLRvJuXMPtyVKeO/XGo/0axk4/0aOR6IbZTobZyU=";
+    sha256 = "sha256-h2+TIhguaqxqWNsTNPQiWFXvOhfq68gKq2YB2dHsuGc=";
   };
 in
 stdenv.mkDerivation rec {
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     owner = "Genymobile";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-xCzrbWhMve0bJerFNHiUdSzp5O1pSaKRkcJSs/0nHpk=";
+    sha256 = "sha256-IR4FTbVtHp9rRm0U4d1zkl0u+oR5FeElJ91NIspSKWg=";
   };
 
   # postPatch:
@@ -59,6 +59,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Genymobile/scrcpy";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ deltaevo lukeadams ];
+    maintainers = with maintainers; [ deltaevo lukeadams msfjarvis ];
   };
 }

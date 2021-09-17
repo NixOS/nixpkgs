@@ -1,30 +1,29 @@
-{ lib, buildDunePackage, fetchurl, fmt, uutf, jsonm, base64, either }:
+{ lib, buildDunePackage, fetchurl, base64, either, fmt, jsonm, uutf }:
 
 buildDunePackage rec {
   pname = "repr";
-  version = "0.2.1";
-
-  minimumOCamlVersion = "4.08";
+  version = "0.4.0";
 
   src = fetchurl {
     url = "https://github.com/mirage/${pname}/releases/download/${version}/${pname}-fuzz-${version}.tbz";
-    sha256 = "1cbzbawbn71mmpw8y84s1p2pbhc055w1znz64jvr00c7fdr9p8hc";
+    sha256 = "1kpwgncyxcrq90dn7ilja7c5i88whc3fz4fmq1lwr0ar95d7d48p";
   };
 
+  minimumOCamlVersion = "4.08";
   useDune2 = true;
 
   propagatedBuildInputs = [
-    fmt
-    uutf
-    jsonm
     base64
     either
+    fmt
+    jsonm
+    uutf
   ];
 
   meta = with lib; {
     description = "Dynamic type representations. Provides no stability guarantee";
     homepage = "https://github.com/mirage/repr";
     license = licenses.isc;
-    maintainers = [ maintainers.sternenseemann ];
+    maintainers = with maintainers; [ sternenseemann ];
   };
 }

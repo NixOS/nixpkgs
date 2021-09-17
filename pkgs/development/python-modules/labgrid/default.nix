@@ -22,16 +22,18 @@
 
 buildPythonPackage rec {
   pname = "labgrid";
-  version = "0.3.1";
+  version = "0.3.3";
 
   src = fetchFromGitHub {
     owner = "labgrid-project";
     repo = "labgrid";
     rev = "v${version}";
-    sha256 = "15298prs2f4wiyn8lf475qicp3y22lcjdcpwp2fmrya642vnr6w5";
+    sha256 = "03dg0c5vahrdj1153pmd4653hjisq3cc6niqnwayjx5pjb15ikxk";
   };
 
   patches = [
+    # Pyserial within Nixpkgs already includes the necessary fix, remove the
+    # pyserial version check from labgrid.
     ./0001-serialdriver-remove-pyserial-version-check.patch
   ];
 

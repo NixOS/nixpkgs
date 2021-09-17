@@ -11,10 +11,18 @@ in {
   options = {
     virtualbox = {
       baseImageSize = mkOption {
-        type = types.int;
-        default = 50 * 1024;
+        type = with types; either (enum [ "auto" ]) int;
+        default = "auto";
+        example = 50 * 1024;
         description = ''
           The size of the VirtualBox base image in MiB.
+        '';
+      };
+      baseImageFreeSpace = mkOption {
+        type = with types; int;
+        default = 30 * 1024;
+        description = ''
+          Free space in the VirtualBox base image in MiB.
         '';
       };
       memorySize = mkOption {
@@ -57,7 +65,19 @@ in {
 
           Run <literal>VBoxManage modifyvm --help</literal> to see more options.
         '';
-     };
+      };
+      exportParams = mkOption {
+        type = with types; listOf (oneOf [ str int bool (listOf str) ]);
+        example = [
+          "--vsys" "0" "--vendor" "ACME Inc."
+        ];
+        default = [];
+        description = ''
+          Parameters passed to the Virtualbox export command.
+
+          Run <literal>VBoxManage export --help</literal> to see more options.
+        '';
+      };
       extraDisk = mkOption {
         description = ''
           Optional extra disk/hdd configuration.
@@ -116,6 +136,7 @@ in {
       inherit pkgs lib config;
       partitionTableType = "legacy";
       diskSize = cfg.baseImageSize;
+      additionalSpace = "${toString cfg.baseImageFreeSpace}M";
 
       postVM =
         ''
@@ -157,7 +178,7 @@ in {
           echo "exporting VirtualBox VM..."
           mkdir -p $out
           fn="$out/${cfg.vmFileName}"
-          VBoxManage export "$vmName" --output "$fn" --options manifest
+          VBoxManage export "$vmName" --output "$fn" --options manifest ${escapeShellArgs cfg.exportParams}
 
           rm -v $diskImage
 

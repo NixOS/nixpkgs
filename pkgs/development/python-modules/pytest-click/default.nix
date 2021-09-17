@@ -19,8 +19,9 @@ buildPythonPackage rec {
     sha256 = "197nvlqlyfrqpy5lrkmfh1ywpr6j9zipxl9d7syg2a2n7jz3a8rj";
   };
 
+  buildInputs = [ pytest ];
+
   propagatedBuildInputs = [
-    pytest
     click
   ];
 

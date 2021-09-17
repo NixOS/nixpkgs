@@ -5,7 +5,7 @@
 , dpkg
 , wrapGAppsHook
 , wrapQtAppsHook
-, alsaLib
+, alsa-lib
 , atk
 , bzip2
 , cairo
@@ -23,7 +23,7 @@
 , libtool
 , libuuid
 , libxml2
-, lzma
+, xz
 , nspr
 , nss
 , openssl
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = with xorg; [
-    alsaLib
+    alsa-lib
     atk
     bzip2
     cairo
@@ -97,7 +97,7 @@ stdenv.mkDerivation rec {
     libuuid
     libxcb
     libxml2
-    lzma
+    xz
     nspr
     nss
     openssl

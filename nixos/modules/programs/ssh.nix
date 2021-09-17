@@ -14,7 +14,7 @@ let
     ''
       #! ${pkgs.runtimeShell} -e
       export DISPLAY="$(systemctl --user show-environment | ${pkgs.gnused}/bin/sed 's/^DISPLAY=\(.*\)/\1/; t; d')"
-      exec ${askPassword}
+      exec ${askPassword} "$@"
     '';
 
   knownHosts = map (h: getAttr h cfg.knownHosts) (attrNames cfg.knownHosts);

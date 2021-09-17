@@ -3,6 +3,7 @@
 , fetchPypi
 , msrestazure
 , azure-common
+, azure-mgmt-core
 , azure-mgmt-nspkg
 , python
 , isPy3k
@@ -10,17 +11,18 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-billing";
-  version = "1.0.0"; #pypi's 0.2.0 doesn't build ootb
+  version = "6.0.0"; #pypi's 0.2.0 doesn't build ootb
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8b55064546c8e94839d9f8c98e9ea4b021004b3804e192bf39fa65b603536ad0";
+    sha256 = "d4f5c5a4188a456fe1eb32b6c45f55ca2069c74be41eb76921840b39f2f5c07f";
     extension = "zip";
   };
 
   propagatedBuildInputs = [
     msrestazure
     azure-common
+    azure-mgmt-core
     azure-mgmt-nspkg
   ];
 

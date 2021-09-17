@@ -2,26 +2,30 @@
 , buildPythonPackage
 , fetchFromGitHub
 , poetry
-, prompt_toolkit
+, prompt-toolkit
 , pytest-cov
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "questionary";
-  version = "1.9.0";
+  version = "1.10.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "tmbo";
     repo = pname;
     rev = version;
-    sha256 = "1x748bz7l2r48031dj6vr6jvvac28pv6vx1bina4lz60h1qac1kf";
+    sha256 = "14k24fq2nmk90iv0k7pnmmdhmk8z261397wg52sfcsccyhpdw3i7";
   };
 
-  nativeBuildInputs = [ poetry ];
+  nativeBuildInputs = [
+    poetry
+  ];
 
-  propagatedBuildInputs = [ prompt_toolkit ];
+  propagatedBuildInputs = [
+    prompt-toolkit
+  ];
 
   checkInputs = [
     pytest-cov
@@ -32,7 +36,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python library to build command line user prompts";
-    homepage = "https://github.com/bachya/regenmaschine";
+    homepage = "https://github.com/tmbo/questionary";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

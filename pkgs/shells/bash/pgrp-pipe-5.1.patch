@@ -14,18 +14,3 @@ diff -u ./configure ../bash-5.0-fixed/configure
  netbsd*|openbsd*)	LOCAL_CFLAGS="-DDEV_FD_STAT_BROKEN" ;;
  *qnx[67]*)	LOCAL_LIBS="-lncurses" ;;
  *qnx*)		LOCAL_CFLAGS="-Dqnx -F -3s" LOCAL_LDFLAGS="-3s" LOCAL_LIBS="-lunix -lncurses" ;;
-diff -u ./configure.ac ../bash-5.0-fixed/configure.ac
---- ./configure.ac	2019-01-02 15:39:11.000000000 +0100
-+++ ../bash-5.0-fixed/configure.ac	2019-01-02 15:39:11.000000000 +0100
-@@ -1108,10 +1108,7 @@
- solaris2*)	LOCAL_CFLAGS=-DSOLARIS ;;
- lynxos*)	LOCAL_CFLAGS=-DRECYCLES_PIDS ;;
- linux*)		LOCAL_LDFLAGS=-rdynamic		 # allow dynamic loading
--		case "`uname -r`" in
--		1.*|2.[[0123]]*)	: ;;
--		*)	AC_DEFINE(PGRP_PIPE) ;;
--		esac ;;
-+		AC_DEFINE(PGRP_PIPE) ;;
- netbsd*|openbsd*)	LOCAL_CFLAGS="-DDEV_FD_STAT_BROKEN" ;;
- *qnx[[67]]*)	LOCAL_LIBS="-lncurses" ;;
- *qnx*)		LOCAL_CFLAGS="-Dqnx -F -3s" LOCAL_LDFLAGS="-3s" LOCAL_LIBS="-lunix -lncurses" ;;

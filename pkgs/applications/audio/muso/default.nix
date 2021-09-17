@@ -1,5 +1,5 @@
-{ lib, fetchFromGitHub, rustPlatform
-, pkg-config, wrapGAppsHook
+{ lib, stdenv, fetchFromGitHub, rustPlatform
+, pkg-config, wrapGAppsHook, CoreServices
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -14,6 +14,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   nativeBuildInputs = [ pkg-config wrapGAppsHook ];
+  buildInputs = lib.optional stdenv.isDarwin CoreServices;
 
   preConfigure = ''
     substituteInPlace lib/utils.rs \
@@ -25,7 +26,7 @@ rustPlatform.buildRustPackage rec {
     cp share/* $out/share/muso/
   '';
 
-  cargoSha256 = "06jgk54r3f8gq6iylv5rgsawss3hc5kmvk02y4gl8iwfnw4xrvmg";
+  cargoSha256 = "1hgdzyz005244f2mh97js9ga0a6s2hcd6iydz07f1hmhsh1j2bwy";
 
   meta = with lib; {
     description = "An automatic music sorter (based on ID3 tags)";

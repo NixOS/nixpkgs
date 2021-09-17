@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, pythonAtLeast
+{ lib, buildPythonPackage, fetchPypi, pythonOlder
 , docker
 , escapism
 , jinja2
@@ -12,13 +12,13 @@
 }:
 
 buildPythonPackage rec {
-  version = "2021.1.0";
+  version = "2021.8.0";
   pname = "jupyter-repo2docker";
-  disabled = !(pythonAtLeast "3.4");
+  disabled = pythonOlder "3.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3e3e671407ef2a7f7695338dc6ce2ca9cc75683ffc7a543829cf119564aca802";
+    sha256 = "9d1b3c3ec7944ea6b0a234d6fa77293a2d1ed1c080eba8466aba94f811b3465d";
   };
 
   propagatedBuildInputs = [

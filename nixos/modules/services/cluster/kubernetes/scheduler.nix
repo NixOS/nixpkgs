@@ -21,7 +21,7 @@ in
     extraOpts = mkOption {
       description = "Kubernetes scheduler extra command line options.";
       default = "";
-      type = str;
+      type = separatedString " ";
     };
 
     featureGates = mkOption {
@@ -78,6 +78,9 @@ in
         Group = "kubernetes";
         Restart = "on-failure";
         RestartSec = 5;
+      };
+      unitConfig = {
+        StartLimitIntervalSec = 0;
       };
     };
 

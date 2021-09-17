@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "flowlogs_reader";
-  version = "2.3.0";
+  version = "3.1.0";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "19118ff77925c66a6782152066d86bc8d5c6ed60189b642263fb0c6eb7cb22ef";
+    sha256 = "d99636423abc83bb4042d63edd56852ede9e2949cadcc3339eda8f3367826dd4";
   };
 
   propagatedBuildInputs = [ botocore boto3 docutils ];

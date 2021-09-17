@@ -1,7 +1,8 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchFromGitHub
 , cmake
-, python
+, python3
 , llvm
 , clang-tools-extra_src ? null
 , lld
@@ -15,7 +16,7 @@ stdenv.mkDerivation rec {
 
   pname = "clang";
 
-  nativeBuildInputs = [ cmake python ];
+  nativeBuildInputs = [ cmake python3 ];
 
   buildInputs = [ llvm ];
 
@@ -65,7 +66,7 @@ stdenv.mkDerivation rec {
     description = "ROCm fork of the clang C/C++/Objective-C/Objective-C++ LLVM compiler frontend";
     homepage = "https://llvm.org/";
     license = with licenses; [ ncsa ];
-    maintainers = with maintainers; [ danieldk ];
+    maintainers = with maintainers; [ acowley lovesegfault ];
     platforms = platforms.linux;
   };
 }

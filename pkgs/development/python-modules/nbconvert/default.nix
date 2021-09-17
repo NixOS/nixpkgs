@@ -23,12 +23,22 @@
 
 buildPythonPackage rec {
   pname = "nbconvert";
-  version = "6.0.7";
+  version = "6.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cbbc13a86dfbd4d1b5dee106539de0795b4db156c894c2c5dc382062bbc29002";
+    sha256 = "d22a8ff202644d31db254d24d52c3a96c82156623fcd7c7f987bba2612303ec9";
   };
+
+  # Add $out/share/jupyter to the list of paths that are used to search for
+  # various exporter templates
+  patches = [
+    ./templates.patch
+  ];
+
+  postPatch = ''
+    substituteAllInPlace ./nbconvert/exporters/templateexporter.py
+  '';
 
   checkInputs = [ pytestCheckHook glibcLocales ];
 

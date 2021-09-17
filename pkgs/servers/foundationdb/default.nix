@@ -2,7 +2,7 @@
 , lib, fetchurl, fetchpatch, fetchFromGitHub
 
 , cmake, ninja, which, findutils, m4, gawk
-, python, python3, openjdk, mono, libressl, boost
+, python2, python3, openjdk, mono, libressl, boost
 }@args:
 
 let

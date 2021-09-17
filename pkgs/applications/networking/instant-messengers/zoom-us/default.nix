@@ -2,8 +2,8 @@
 , lib
 , fetchurl
 , makeWrapper
-# Dynamic libraries
-, alsaLib
+  # Dynamic libraries
+, alsa-lib
 , atk
 , cairo
 , dbus
@@ -18,29 +18,27 @@
 , xorg
 , libxkbcommon
 , zlib
-# Runtime
+  # Runtime
 , coreutils
 , pciutils
 , procps
 , util-linux
-, qttools
-, pulseaudioSupport ? true, libpulseaudio ? null
+, pulseaudioSupport ? true
+, libpulseaudio
 }:
 
-assert pulseaudioSupport -> libpulseaudio != null;
-
 let
-  version = "5.5.7938.0228";
+  version = "5.7.31792.0820";
   srcs = {
     x86_64-linux = fetchurl {
       url = "https://zoom.us/client/${version}/zoom_x86_64.pkg.tar.xz";
-      sha256 = "KM8o2tgIn0lecOM4gKdTOdk/zsohlFqtNX+ca/S6FGY=";
+      sha256 = "16p8wn67hb6p9rn684bbpwz8w5knyqw9rv2nnw6cwg949qjv43lm";
     };
   };
 
   libs = lib.makeLibraryPath ([
     # $ LD_LIBRARY_PATH=$NIX_LD_LIBRARY_PATH:$PWD ldd zoom | grep 'not found'
-    alsaLib
+    alsa-lib
     atk
     cairo
     dbus
@@ -66,9 +64,11 @@ let
     xorg.libXtst
   ] ++ lib.optional (pulseaudioSupport) libpulseaudio);
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "zoom";
   inherit version;
+
   src = srcs.${stdenv.hostPlatform.system};
 
   dontUnpack = true;
@@ -80,7 +80,7 @@ in stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
     mkdir $out
-    tar -C $out -xf ${src}
+    tar -C $out -xf $src
     mv $out/usr/* $out/
     runHook postInstall
   '';
@@ -101,9 +101,14 @@ in stdenv.mkDerivation rec {
     rm $out/bin/zoom
     # Zoom expects "zopen" executable (needed for web login) to be present in CWD. Or does it expect
     # everybody runs Zoom only after cd to Zoom package directory? Anyway, :facepalm:
+    # Clear Qt paths to prevent tripping over "foreign" Qt resources.
+    # Clear Qt screen scaling settings to prevent over-scaling.
     makeWrapper $out/opt/zoom/ZoomLauncher $out/bin/zoom \
       --run "cd $out/opt/zoom" \
-      --prefix PATH : ${lib.makeBinPath [ coreutils glib.dev pciutils procps qttools.dev util-linux ]} \
+      --unset QML2_IMPORT_PATH \
+      --unset QT_PLUGIN_PATH \
+      --unset QT_SCREEN_SCALE_FACTORS \
+      --prefix PATH : ${lib.makeBinPath [ coreutils glib.dev pciutils procps util-linux ]} \
       --prefix LD_LIBRARY_PATH ":" ${libs}
 
     # Backwards compatiblity: we used to call it zoom-us
@@ -115,11 +120,11 @@ in stdenv.mkDerivation rec {
 
   passthru.updateScript = ./update.sh;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://zoom.us/";
     description = "zoom.us video conferencing application";
-    license = lib.licenses.unfree;
+    license = licenses.unfree;
     platforms = builtins.attrNames srcs;
-    maintainers = with lib.maintainers; [ danbst tadfisher doronbehar ];
+    maintainers = with maintainers; [ danbst tadfisher doronbehar ];
   };
 }

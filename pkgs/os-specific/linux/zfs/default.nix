@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub
+{ pkgs, lib, stdenv, fetchFromGitHub
 , autoreconfHook269, util-linux, nukeReferences, coreutils
 , perl, nixosTests
 , configFile ? "all"
@@ -6,7 +6,7 @@
 # Userspace dependencies
 , zlib, libuuid, python3, attr, openssl
 , libtirpc
-, nfs-utils
+, nfs-utils, samba
 , gawk, gnugrep, gnused, systemd
 , smartmontools, enableMail ? false
 , sysstat, pkg-config
@@ -14,6 +14,9 @@
 # Kernel dependencies
 , kernel ? null
 , enablePython ? true
+
+# for determining the latest compatible linuxPackages
+, linuxPackages_5_14 ? pkgs.linuxKernel.packages.linux_5_14
 }:
 
 with lib;
@@ -23,14 +26,23 @@ let
   buildKernel = any (n: n == configFile) [ "kernel" "all" ];
   buildUser = any (n: n == configFile) [ "user" "all" ];
 
+  # XXX: You always want to build kernel modules with the same stdenv as the
+  # kernel was built with. However, since zfs can also be built for userspace we
+  # need to correctly pick between the provided/default stdenv, and the one used
+  # by the kernel.
+  # If you don't do this your ZFS builds will fail on any non-standard (e.g.
+  # clang-built) kernels.
+  stdenv' = if kernel == null then stdenv else kernel.stdenv;
+
   common = { version
     , sha256
     , extraPatches ? []
     , rev ? "zfs-${version}"
     , isUnstable ? false
+    , latestCompatibleLinuxPackages
     , kernelCompatible ? null }:
 
-    stdenv.mkDerivation {
+    stdenv'.mkDerivation {
       name = "zfs-${configFile}-${version}${optionalString buildKernel "-${kernel.version}"}";
 
       src = fetchFromGitHub {
@@ -55,6 +67,7 @@ let
           # And if it's enabled by default, only change that if we explicitly disable python to remove python from the closure
           nfs-utils.override (old: { enablePython = old.enablePython or true && enablePython; })
         }/bin/exportfs"
+        substituteInPlace ./lib/libshare/smb.h        --replace "/usr/bin/net"            "${samba}/bin/net"
         substituteInPlace ./config/user-systemd.m4    --replace "/usr/lib/modules-load.d" "$out/etc/modules-load.d"
         substituteInPlace ./config/zfs-build.m4       --replace "\$sysconfdir/init.d"     "$out/etc/init.d" \
                                                       --replace "/etc/default"            "$out/etc/default"
@@ -157,10 +170,10 @@ let
         done
       '';
 
-      outputs = [ "out" ] ++ optionals buildUser [ "lib" "dev" ];
+      outputs = [ "out" ] ++ optionals buildUser [ "dev" ];
 
       passthru = {
-        inherit enableMail;
+        inherit enableMail latestCompatibleLinuxPackages;
 
         tests =
           if isUnstable then [
@@ -179,16 +192,13 @@ let
           snapshotting, cloning, block devices, deduplication, and more.
         '';
         homepage = "https://github.com/openzfs/zfs";
+        changelog = "https://github.com/openzfs/zfs/releases/tag/zfs-${version}";
         license = licenses.cddl;
         platforms = platforms.linux;
         maintainers = with maintainers; [ hmenke jcumming jonringer wizeman fpletz globin mic92 ];
-        broken = if
-          buildKernel && (kernelCompatible != null) && !kernelCompatible
-          then builtins.trace ''
-            Linux v${kernel.version} is not yet supported by zfsonlinux v${version}.
-            ${lib.optionalString (!isUnstable) "Try zfsUnstable or set the NixOS option boot.zfs.enableUnstable."}
-          '' true
-          else false;
+        # If your Linux kernel version is not yet supported by zfs, try zfsUnstable.
+        # On NixOS set the option boot.zfs.enableUnstable.
+        broken = buildKernel && (kernelCompatible != null) && !kernelCompatible;
       };
     };
 in {
@@ -197,22 +207,25 @@ in {
   # to be adapted
   zfsStable = common {
     # check the release notes for compatible kernels
-    kernelCompatible = kernel.kernelAtLeast "3.10" && kernel.kernelOlder "5.12";
+    kernelCompatible = kernel.kernelAtLeast "3.10" && kernel.kernelOlder "5.15";
+    latestCompatibleLinuxPackages = linuxPackages_5_14;
 
     # this package should point to the latest release.
-    version = "2.0.3";
+    version = "2.1.1";
 
-    sha256 = "sha256-bai7SwJNOsrACcrUxZ4339REhbBPOWyYikHzgHfbONs=";
+    sha256 = "sha256-UUuJa5w/GsEvsgH/BnXFsP/dsOt9wwmPqKzDxLPrhiY=";
   };
 
   zfsUnstable = common {
     # check the release notes for compatible kernels
-    kernelCompatible = kernel.kernelAtLeast "3.10" && kernel.kernelOlder "5.12";
+    kernelCompatible = kernel.kernelAtLeast "3.10" && kernel.kernelOlder "5.15";
+    latestCompatibleLinuxPackages = linuxPackages_5_14;
 
     # this package should point to a version / git revision compatible with the latest kernel release
-    version = "2.0.3";
+    version = "2.1.1";
+    # rev = "0000000000000000000000000000000000000000";
 
-    sha256 = "sha256-bai7SwJNOsrACcrUxZ4339REhbBPOWyYikHzgHfbONs=";
+    sha256 = "sha256-wVbjpVrPQmhJmMqdGUf0IwlCIoOsT7Zfj5lxSKcOsgg=";
 
     isUnstable = true;
   };

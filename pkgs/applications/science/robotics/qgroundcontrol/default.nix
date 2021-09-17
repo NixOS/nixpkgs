@@ -6,7 +6,7 @@
 
 mkDerivation rec {
   pname = "qgroundcontrol";
-  version = "4.1.1";
+  version = "4.1.4";
 
   qtInputs = [
     qtbase qtcharts qtlocation qtserialport qtsvg qtquickcontrols2
@@ -17,7 +17,6 @@ mkDerivation rec {
     gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad wayland
   ];
 
-  enableParallelBuilding = true;
   buildInputs = [ SDL2 ] ++ gstInputs ++ qtInputs;
   nativeBuildInputs = [ pkg-config qmake qttools ];
 
@@ -63,7 +62,7 @@ mkDerivation rec {
     owner = "mavlink";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1dji7jmwsrgcgzhra94wrgz67ydsdra7p10fw8gbw54gf6ncjfjm";
+    sha256 = "0lhc36jpy7a5bnysqi574nk5izglj557mf8n9lcsgvzwxlkb2rbf";
     fetchSubmodules = true;
   };
 

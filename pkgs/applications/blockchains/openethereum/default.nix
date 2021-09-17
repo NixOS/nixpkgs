@@ -12,24 +12,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "openethereum";
-  version = "3.1.1";
+  version = "3.2.6";
 
   src = fetchFromGitHub {
     owner = "openethereum";
     repo = "openethereum";
     rev = "v${version}";
-    sha256 = "sha256-RUrJuJF0R0mc7XdLyk915fRWtMfzjp5QE6oeWxHfyEQ=";
+    sha256 = "0lxps3cyg8dzb9qr1kg91s9jc3mnm6hxybwcbhva38pcq4yc40xc";
   };
 
-  cargoSha256 = "sha256-b+winsCzU0sXGDX6nUtWq4JrIyTcJ3uva7RlV5VsXfk=";
+  cargoSha256 = "08yrpls3szmw6vy2c4d6b1k907ga0809ylvyx0zb6f8mp8z7ahl2";
 
-  LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
-  nativeBuildInputs = [
-    cmake
-    llvmPackages.clang
-    llvmPackages.libclang
-    pkg-config
-  ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [ openssl ]
     ++ lib.optionals stdenv.isLinux [ systemd ]
@@ -50,7 +44,7 @@ rustPlatform.buildRustPackage rec {
     description = "Fast, light, robust Ethereum implementation";
     homepage = "http://parity.io/ethereum";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ akru xrelkd ];
+    maintainers = with maintainers; [ akru ];
     platforms = lib.platforms.unix;
   };
 }

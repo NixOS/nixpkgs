@@ -2,10 +2,10 @@
 
 let
   pname = "jicofo";
-  version = "1.0-690";
+  version = "1.0-798";
   src = fetchurl {
     url = "https://download.jitsi.org/stable/${pname}_${version}-1_all.deb";
-    sha256 = "1w5nz2p6scd7w0ac93vhxlk5i8in5160c0icwl27m4x4km9xf6al";
+    sha256 = "55JagMfiBbBw0nqRxcMmfiwGF7B/1LA+pb5n6ZOZvag=";
   };
 in
 stdenv.mkDerivation {
@@ -31,6 +31,8 @@ stdenv.mkDerivation {
   passthru.tests = {
     single-node-smoke-test = nixosTests.jitsi-meet;
   };
+
+  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     description = "A server side focus component used in Jitsi Meet conferences";

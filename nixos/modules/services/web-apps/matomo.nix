@@ -77,6 +77,16 @@ in {
         '';
       };
 
+      periodicArchiveProcessingUrl = mkOption {
+        type = types.str;
+        default = "${user}.${fqdn}";
+        example = "matomo.yourdomain.org";
+        description = ''
+          URL of the host, without https prefix. By default, this is ${user}.${fqdn}, but you may want to change it if you
+          run Matomo on a different URL than matomo.yourdomain.
+        '';
+      };
+
       nginx = mkOption {
         type = types.nullOr (types.submodule (
           recursiveUpdate
@@ -190,7 +200,7 @@ in {
         UMask = "0007";
         CPUSchedulingPolicy = "idle";
         IOSchedulingClass = "idle";
-        ExecStart = "${cfg.package}/bin/matomo-console core:archive --url=https://${user}.${fqdn}";
+        ExecStart = "${cfg.package}/bin/matomo-console core:archive --url=https://${cfg.periodicArchiveProcessingUrl}";
       };
     };
 

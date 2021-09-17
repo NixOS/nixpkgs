@@ -1,22 +1,25 @@
 { lib
 , aiohttp
 , buildPythonPackage
+, cryptography
 , fetchPypi
-, pycryptodome
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pymazda";
-  version = "0.0.9";
+  version = "0.2.1";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "15kygabjlxmy3g5kj48ixqdwaz8qrfzxj8ii27cidsp2fq8ph165";
+    sha256 = "sha256-Dg7oVNEjKZB6zksm1We2JGBW+cGkOOQOP3bS4CNL4q8=";
   };
 
-  propagatedBuildInputs = [ aiohttp pycryptodome ];
+  propagatedBuildInputs = [
+    aiohttp
+    cryptography
+  ];
 
   # Project has no tests
   doCheck = false;

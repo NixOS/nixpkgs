@@ -1,6 +1,6 @@
 { stdenv, lib, fetchFromGitHub, fetchpatch, fetchurl, cmake, ctags, swig
 # data, compression
-, bzip2, curl, hdf5, json_c, lzma, lzo, protobuf, snappy
+, bzip2, curl, hdf5, json_c, xz, lzo, protobuf, snappy
 # maths
 , blas, lapack, eigen, nlopt, lp_solve, colpack, glpk
 # libraries
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
   buildInputs = with lib; [
-      blas lapack bzip2 colpack curl ctags eigen hdf5 json_c lp_solve lzma lzo
+      blas lapack bzip2 colpack curl ctags eigen hdf5 json_c lp_solve xz lzo
       protobuf nlopt snappy swig (libarchive.dev) libxml2 lapack glpk
     ]
     ++ optionals (pythonSupport) (with pythonPackages; [ python ply numpy ])

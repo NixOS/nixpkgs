@@ -1,21 +1,21 @@
 { lib, buildPythonPackage, python, fetchFromGitHub
-, cmake, sip, protobuf, pythonOlder }:
+, cmake, sip_4, protobuf, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "libarcus";
-  version = "4.8.0";
+  version = "4.10.0";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "Ultimaker";
     repo = "libArcus";
     rev = version;
-    sha256 = "1dvz1rkvm4309yzvj7vy49v1vskr5yfq4nzqdiydp1jb7zpvhqqm";
+    sha256 = "1ahka8s8fjwymyr7pca7i7h51ikfr35zy4nkzfcjn946x7p0dprf";
   };
 
   disabled = pythonOlder "3.4.0";
 
-  propagatedBuildInputs = [ sip ];
+  propagatedBuildInputs = [ sip_4 ];
   nativeBuildInputs = [ cmake ];
   buildInputs = [ protobuf ];
 

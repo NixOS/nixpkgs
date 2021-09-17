@@ -1,0 +1,250 @@
+{
+  "bluez5.features.device": [
+    {
+      "name": "Air 1 Plus",
+      "no-features": [
+        "hw-volume-mic"
+      ]
+    },
+    {
+      "name": "AirPods",
+      "no-features": [
+        "msbc-alt1",
+        "msbc-alt1-rtl"
+      ]
+    },
+    {
+      "name": "AirPods Pro",
+      "no-features": [
+        "msbc-alt1",
+        "msbc-alt1-rtl"
+      ]
+    },
+    {
+      "name": "AXLOIE Goin",
+      "no-features": [
+        "msbc-alt1",
+        "msbc-alt1-rtl"
+      ]
+    },
+    {
+      "name": "BAA 100",
+      "no-features": [
+        "hw-volume"
+      ]
+    },
+    {
+      "name": "D50s",
+      "address": "~^00:13:ef:",
+      "no-features": [
+        "hw-volume"
+      ]
+    },
+    {
+      "name": "JBL Endurance RUN BT",
+      "no-features": [
+        "msbc-alt1",
+        "msbc-alt1-rtl",
+        "sbc-xq"
+      ]
+    },
+    {
+      "name": "JBL LIVE650BTNC"
+    },
+    {
+      "name": "Motorola DC800",
+      "no-features": [
+        "sbc-xq"
+      ]
+    },
+    {
+      "name": "Motorola S305",
+      "no-features": [
+        "sbc-xq"
+      ]
+    },
+    {
+      "name": "Soundcore Life P2-L",
+      "no-features": [
+        "msbc-alt1",
+        "msbc-alt1-rtl"
+      ]
+    },
+    {
+      "name": "Urbanista Stockholm Plus",
+      "no-features": [
+        "msbc-alt1",
+        "msbc-alt1-rtl"
+      ]
+    },
+    {
+      "address": "~^94:16:25:",
+      "no-features": [
+        "hw-volume"
+      ]
+    },
+    {
+      "address": "~^9c:64:8b:",
+      "no-features": [
+        "hw-volume"
+      ]
+    },
+    {
+      "address": "~^a0:e9:db:",
+      "no-features": [
+        "hw-volume"
+      ]
+    },
+    {
+      "address": "~^0c:a6:94:",
+      "no-features": [
+        "hw-volume"
+      ]
+    },
+    {
+      "address": "~^00:14:02:",
+      "no-features": [
+        "hw-volume"
+      ]
+    },
+    {
+      "address": "~^44:5e:f3:",
+      "no-features": [
+        "hw-volume"
+      ]
+    },
+    {
+      "address": "~^d4:9c:28:",
+      "no-features": [
+        "hw-volume"
+      ]
+    },
+    {
+      "address": "~^00:18:6b:",
+      "no-features": [
+        "hw-volume"
+      ]
+    },
+    {
+      "address": "~^b8:ad:3e:",
+      "no-features": [
+        "hw-volume"
+      ]
+    },
+    {
+      "address": "~^a0:e9:db:",
+      "no-features": [
+        "hw-volume"
+      ]
+    },
+    {
+      "address": "~^00:24:1c:",
+      "no-features": [
+        "hw-volume"
+      ]
+    },
+    {
+      "address": "~^00:11:b1:",
+      "no-features": [
+        "hw-volume"
+      ]
+    },
+    {
+      "address": "~^a4:15:66:",
+      "no-features": [
+        "hw-volume"
+      ]
+    },
+    {
+      "address": "~^00:14:f1:",
+      "no-features": [
+        "hw-volume"
+      ]
+    },
+    {
+      "address": "~^00:26:7e:",
+      "no-features": [
+        "hw-volume"
+      ]
+    },
+    {
+      "address": "~^90:03:b7:",
+      "no-features": [
+        "hw-volume"
+      ]
+    }
+  ],
+  "bluez5.features.adapter": [
+    {
+      "bus-type": "usb",
+      "vendor-id": "usb:0bda"
+    },
+    {
+      "bus-type": "usb",
+      "no-features": [
+        "msbc-alt1-rtl"
+      ]
+    },
+    {
+      "no-features": [
+        "msbc-alt1-rtl"
+      ]
+    }
+  ],
+  "bluez5.features.kernel": [
+    {
+      "sysname": "Linux",
+      "release": "~^[0-4]\\.",
+      "no-features": [
+        "msbc-alt1",
+        "msbc-alt1-rtl"
+      ]
+    },
+    {
+      "sysname": "Linux",
+      "release": "~^5\\.[1-7]\\.",
+      "no-features": [
+        "msbc-alt1",
+        "msbc-alt1-rtl"
+      ]
+    },
+    {
+      "sysname": "Linux",
+      "release": "~^5\\.(8|9)\\.",
+      "no-features": [
+        "msbc-alt1"
+      ]
+    },
+    {
+      "sysname": "Linux",
+      "release": "~^5\\.10\\.(1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|51|52|53|54|55|56|57|58|59|60|61)($|[^0-9])",
+      "no-features": [
+        "msbc-alt1"
+      ]
+    },
+    {
+      "sysname": "Linux",
+      "release": "~^5\\.12\\.(18|19)($|[^0-9])",
+      "no-features": [
+        "msbc-alt1"
+      ]
+    },
+    {
+      "sysname": "Linux",
+      "release": "~^5\\.13\\.(3|4|5|6|7|8|9|10|11|12|13)($|[^0-9])",
+      "no-features": [
+        "msbc-alt1"
+      ]
+    },
+    {
+      "sysname": "Linux",
+      "release": "~^5\\.14($|[^0-9])",
+      "no-features": [
+        "msbc-alt1"
+      ]
+    },
+    {
+      "no-features": []
+    }
+  ]
+}

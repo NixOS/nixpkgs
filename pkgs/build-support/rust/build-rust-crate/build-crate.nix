@@ -9,12 +9,13 @@
 
   let
     baseRustcOpts =
-      [(if release then "-C opt-level=3" else "-C debuginfo=2")]
-      ++ ["-C codegen-units=$NIX_BUILD_CORES"]
-      ++ ["--remap-path-prefix=$NIX_BUILD_TOP=/" ]
-      ++ [(mkRustcDepArgs dependencies crateRenames)]
-      ++ [(mkRustcFeatureArgs crateFeatures)]
-      ++ extraRustcOpts
+      [
+        (if release then "-C opt-level=3" else "-C debuginfo=2")
+        "-C codegen-units=$NIX_BUILD_CORES"
+        "--remap-path-prefix=$NIX_BUILD_TOP=/"
+        (mkRustcDepArgs dependencies crateRenames)
+        (mkRustcFeatureArgs crateFeatures)
+      ] ++ extraRustcOpts
       ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "--target ${rust.toRustTargetSpec stdenv.hostPlatform} -C linker=${stdenv.hostPlatform.config}-gcc"
       # since rustc 1.42 the "proc_macro" crate is part of the default crate prelude
       # https://github.com/rust-lang/cargo/commit/4d64eb99a4#diff-7f98585dbf9d30aa100c8318e2c77e79R1021-R1022

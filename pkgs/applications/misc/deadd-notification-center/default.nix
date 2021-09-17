@@ -7,19 +7,25 @@
 , gtk3
 , gobject-introspection
 , libxml2
+, fetchpatch
 }:
 stdenv.mkDerivation rec {
   pname = "deadd-notification-center";
-  version = "1.7.3";
+  version = "2021-03-10";
 
   src = fetchFromGitHub {
     owner = "phuhl";
     repo = "linux_notification_center";
-    rev = version;
-    sha256 = "QaOLrtlhQyhMOirk6JO1yMGRrgycHmF9FAdKNbN2TRk=";
+    rev = "640ce0f";
+    sha256 = "12ldr8vppylr90849g3mpjphmnr4lp0vsdkj01a5f4bv4ksx35fm";
   };
 
-  dontUnpack = true;
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/phuhl/linux_notification_center/commit/5244e1498574983322be97925e1ff7ebe456d974.patch";
+      sha256 = "sha256-hbqbgBmuewOhtx0na2tmFa5W128ZrBvDcyPme/mRzlI=";
+    })
+  ];
 
   nativeBuildInputs = [
     autoPatchelfHook
@@ -33,15 +39,18 @@ stdenv.mkDerivation rec {
     hicolor-icon-theme
   ];
 
-  installPhase = ''
-    mkdir -p $out/bin $out/share/dbus-1/services
+  buildFlags = [
+    # Exclude stack from `make all` to use the prebuilt binary from .out/
+    "service"
+  ];
 
-    cp $src/.out/${pname} $out/bin/
-    chmod +x $out/bin/${pname}
-
-    sed "s|##PREFIX##|$out|g" $src/${pname}.service.in > \
-      $out/share/dbus-1/services/com.ph-uhl.deadd.notification.service
-  '';
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+    "SERVICEDIR_SYSTEMD=${placeholder "out"}/etc/systemd/user"
+    "SERVICEDIR_DBUS=${placeholder "out"}/share/dbus-1/services"
+    # Override systemd auto-detection.
+    "SYSTEMD=1"
+  ];
 
   meta = with lib; {
     description = "A haskell-written notification center for users that like a desktop with style";

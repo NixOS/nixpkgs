@@ -1,19 +1,20 @@
-{ lib, fetchFromGitHub, rustPlatform, installShellFiles }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, installShellFiles, libiconv }:
 
 rustPlatform.buildRustPackage rec {
   pname = "fselect";
-  version = "0.7.3";
+  version = "0.7.6";
 
   src = fetchFromGitHub {
     owner = "jhspetersson";
     repo = "fselect";
     rev = version;
-    sha256 = "sha256-udHSyw7tf1toB+v67BvJ49INFJdNR2BjQuHEzQJyIoU=";
+    sha256 = "sha256-uIqkk0aQVPXUWjOWmMTdM28Ihi+mflPpxnXJLFIQYJw=";
   };
 
-  cargoSha256 = "sha256-vVIanMkc0sPzu0L48oOh8wEEUOckR/AYkz81u4OR+fE=";
+  cargoSha256 = "sha256-5LRCLJbLiocB/VDf9MMxyIsERmOvuSAQEe822Dcu2j8=";
 
   nativeBuildInputs = [ installShellFiles ];
+  buildInputs = lib.optional stdenv.isDarwin libiconv;
 
   postInstall = ''
     installManPage docs/fselect.1

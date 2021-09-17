@@ -27,7 +27,8 @@ let
     in mkDerivation {
       name = "${src.name}-patched";
       inherit src;
-      phases = [ "unpackPhase" "patchPhase" ];
+
+      dontInstall = true;
 
       patchPhase = with lib; ''
         # we don’t want prebuild binaries checked into version control!

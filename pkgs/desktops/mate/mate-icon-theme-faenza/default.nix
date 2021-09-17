@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, autoreconfHook, gtk3, mate, hicolor-icon-theme }:
+{ lib, stdenv, fetchurl, autoreconfHook, gtk3, mate, hicolor-icon-theme, mateUpdateScript }:
 
 stdenv.mkDerivation rec {
   pname = "mate-icon-theme-faenza";
@@ -23,11 +23,13 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = {
+  passthru.updateScript = mateUpdateScript { inherit pname version; };
+
+  meta = with lib; {
     description = "Faenza icon theme from MATE";
     homepage = "https://mate-desktop.org";
-    license = lib.licenses.gpl2;
-    platforms = lib.platforms.unix;
-    maintainers = [ lib.maintainers.romildo ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.romildo ];
   };
 }

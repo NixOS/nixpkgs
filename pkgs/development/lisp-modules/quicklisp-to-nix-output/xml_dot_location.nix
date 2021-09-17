@@ -1,3 +1,4 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
   baseName = "xml_dot_location";
@@ -5,8 +6,8 @@ rec {
 
   parasites = [ "xml.location/test" ];
 
-  description = ''This system provides a convenient interface for
- manipulating XML data. It is inspired by the xmltio library.'';
+  description = "This system provides a convenient interface for
+ manipulating XML data. It is inspired by the xmltio library.";
 
   deps = [ args."alexandria" args."anaphora" args."babel" args."cl-ppcre" args."closer-mop" args."closure-common" args."cxml" args."cxml-stp" args."iterate" args."let-plus" args."lift" args."more-conditions" args."parse-number" args."puri" args."split-sequence" args."trivial-features" args."trivial-gray-streams" args."xpath" args."yacc" ];
 

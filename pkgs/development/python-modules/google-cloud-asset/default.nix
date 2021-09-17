@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, grpc_google_iam_v1
+, grpc-google-iam-v1
 , google-api-core
 , google-cloud-access-context-manager
 , google-cloud-org-policy
@@ -9,7 +9,6 @@
 , google-cloud-testutils
 , libcst
 , proto-plus
-, pytest
 , pytest-asyncio
 , pytestCheckHook
 , mock
@@ -17,15 +16,15 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-asset";
-  version = "2.2.0";
+  version = "3.5.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "05q0yaw6b553qmzylr45zin17h8mvi8yyyxhbv3cxa7f0ahviw8w";
+    sha256 = "7d7218ffdd17d64184e1de69ef016f1f070bb0c888785510c4731948b078067d";
   };
 
   propagatedBuildInputs = [
-    grpc_google_iam_v1
+    grpc-google-iam-v1
     google-api-core
     google-cloud-access-context-manager
     google-cloud-org-policy

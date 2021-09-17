@@ -159,10 +159,12 @@ in
 
       users.users.consul = {
         description = "Consul agent daemon user";
-        uid = config.ids.uids.consul;
+        isSystemUser = true;
+        group = "consul";
         # The shell is needed for health checks
         shell = "/run/current-system/sw/bin/bash";
       };
+      users.groups.consul = {};
 
       environment = {
         etc."consul.json".text = builtins.toJSON configOptions;
@@ -191,7 +193,7 @@ in
           ExecStop = "${cfg.package}/bin/consul leave";
         });
 
-        path = with pkgs; [ iproute gnugrep gawk consul ];
+        path = with pkgs; [ iproute2 gnugrep gawk consul ];
         preStart = ''
           mkdir -m 0700 -p ${dataDir}
           chown -R consul ${dataDir}

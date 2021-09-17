@@ -1,5 +1,5 @@
 {
-  mkDerivation, lib,
+  mkDerivation,
   bison, extra-cmake-modules, flex,
   kconfig, kcoreaddons, kcrash, kdbusaddons, kdoctools, ki18n, kwindowsystem,
   qtbase, shared-mime-info,
@@ -7,7 +7,6 @@
 
 mkDerivation {
   name = "kservice";
-  meta = { maintainers = [ lib.maintainers.ttuegel ]; };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   propagatedNativeBuildInputs = [ bison flex ];
   buildInputs = [

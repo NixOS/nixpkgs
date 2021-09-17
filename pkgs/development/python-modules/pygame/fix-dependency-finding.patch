@@ -1,0 +1,64 @@
+diff --git a/buildconfig/config_darwin.py b/buildconfig/config_darwin.py
+index 8d84683f..70df8f9c 100644
+--- a/buildconfig/config_darwin.py
++++ b/buildconfig/config_darwin.py
+@@ -56,10 +56,10 @@ class Dependency:
+ class FrameworkDependency(Dependency):
+     def configure(self, incdirs, libdirs):
+         BASE_DIRS = '/', os.path.expanduser('~/'), '/System/'
+-        for n in BASE_DIRS:
++        for n in incdirs + libdirs:
+             n += 'Library/Frameworks/'
+             fmwk = n + self.libs + '.framework/Versions/Current/'
+-            if os.path.isfile(fmwk + self.libs):
++            if os.path.isfile(fmwk + self.libs + '.tbd'):
+                 print ('Framework ' + self.libs + ' found')
+                 self.found = 1
+                 self.inc_dir = fmwk + 'Headers'
+@@ -158,19 +158,8 @@ def main(sdl2=False):
+     ])
+ 
+     print ('Hunting dependencies...')
+-    incdirs = ['/usr/local/include']
+-    if sdl2:
+-        incdirs.append('/usr/local/include/SDL2')
+-    else:
+-        incdirs.append('/usr/local/include/SDL')
+-
+-    incdirs.extend([
+-       #'/usr/X11/include',
+-       '/opt/local/include',
+-       '/opt/local/include/freetype2/freetype']
+-    )
+-    #libdirs = ['/usr/local/lib', '/usr/X11/lib', '/opt/local/lib']
+-    libdirs = ['/usr/local/lib', '/opt/local/lib']
++    incdirs = @buildinputs_include@
++    libdirs = @buildinputs_lib@
+ 
+     for d in DEPS:
+         if isinstance(d, (list, tuple)):
+diff --git a/buildconfig/config_unix.py b/buildconfig/config_unix.py
+index f6a4ea4b..f7f5be76 100644
+--- a/buildconfig/config_unix.py
++++ b/buildconfig/config_unix.py
+@@ -224,18 +224,8 @@ def main(sdl2=False):
+     if not DEPS[0].found:
+         raise RuntimeError('Unable to run "sdl-config". Please make sure a development version of SDL is installed.')
+ 
+-    incdirs = []
+-    libdirs = []
+-    for extrabase in extrabases:
+-        incdirs += [extrabase + d for d in origincdirs]
+-        libdirs += [extrabase + d for d in origlibdirs]
+-    incdirs += ["/usr"+d for d in origincdirs]
+-    libdirs += ["/usr"+d for d in origlibdirs]
+-    incdirs += ["/usr/local"+d for d in origincdirs]
+-    libdirs += ["/usr/local"+d for d in origlibdirs]
+-    if localbase:
+-        incdirs = [localbase+d for d in origincdirs]
+-        libdirs = [localbase+d for d in origlibdirs]
++    incdirs = @buildinputs_include@
++    libdirs = @buildinputs_lib@
+ 
+     for arg in DEPS[0].cflags.split():
+         if arg[:2] == '-I':

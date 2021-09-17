@@ -2,13 +2,17 @@
 
 stdenv.mkDerivation rec {
   pname = "lean";
-  version = "3.27.0";
+  version = "3.32.1";
 
   src = fetchFromGitHub {
     owner  = "leanprover-community";
     repo   = "lean";
-    rev    = "v${version}";
-    sha256 = "sha256-DSIWuMlweu9dsah5EdVCNQ9ADjYoEZongfw/Yh7/N/A=";
+    # lean's version string contains the commit sha1 it was built
+    # from. this is then used to check whether an olean file should be
+    # rebuilt. don't use a tag as rev because this will get replaced into
+    # src/githash.h.in in preConfigure.
+    rev    = "35b3a9c4e2d35cccb5ed220ea2f2909a4ed2ca90";
+    sha256 = "0s69smknsvycvydbk2f3vcqj1z3jrbv3k048z2r46391dai5iwhf";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -19,6 +23,13 @@ stdenv.mkDerivation rec {
   # Running the tests is required to build the *.olean files for the core
   # library.
   doCheck = true;
+
+  preConfigure = assert builtins.stringLength src.rev == 40; ''
+     substituteInPlace src/githash.h.in \
+       --subst-var-by GIT_SHA1 "${src.rev}"
+     substituteInPlace library/init/version.lean.in \
+       --subst-var-by GIT_SHA1 "${src.rev}"
+  '';
 
   postPatch = "patchShebangs .";
 

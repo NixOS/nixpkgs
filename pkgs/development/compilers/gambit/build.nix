@@ -63,11 +63,11 @@ gccStdenv.mkDerivation rec {
     lib.optional (!gccStdenv.isDarwin) "--enable-poll";
 
   configurePhase = ''
-    export CC=${gccStdenv.cc.targetPrefix}gcc \
-           CXX=${gccStdenv.cc.targetPrefix}g++ \
-           CPP=${gccStdenv.cc.targetPrefix}cpp \
-           CXXCPP=${gccStdenv.cc.targetPrefix}cpp \
-           LD=${gccStdenv.cc.targetPrefix}ld \
+    export CC=${gccStdenv.cc}/bin/${gccStdenv.cc.targetPrefix}gcc \
+           CXX=${gccStdenv.cc}/bin/${gccStdenv.cc.targetPrefix}g++ \
+           CPP=${gccStdenv.cc}/bin/${gccStdenv.cc.targetPrefix}cpp \
+           CXXCPP=${gccStdenv.cc}/bin/${gccStdenv.cc.targetPrefix}cpp \
+           LD=${gccStdenv.cc}/bin/${gccStdenv.cc.targetPrefix}ld \
            XMKMF=${coreutils}/bin/false
     unset CFLAGS LDFLAGS LIBS CPPFLAGS CXXFLAGS
 

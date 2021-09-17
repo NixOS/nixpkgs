@@ -2,7 +2,7 @@
 , buildPythonPackage
 , pythonOlder
 , fetchPypi
-, dateutil
+, python-dateutil
 , pytestCheckHook
 }:
 
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "177f9dd59861d871e27a484c3332f35a6e3f5d14626f2bf91be37891f18927f3";
   };
 
-  propagatedBuildInputs = [ dateutil ];
+  propagatedBuildInputs = [ python-dateutil ];
   checkInputs = [ pytestCheckHook ];
 
   meta = with lib; {

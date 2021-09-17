@@ -5,6 +5,7 @@
 , zlib
 , dbus
 , networkmanager
+, enableJavaScript ? stdenv.isDarwin || lib.meta.availableOn stdenv.hostPlatform spidermonkey_68
 , spidermonkey_68
 , pcre
 , gsettings-desktop-schemas
@@ -16,7 +17,9 @@
 , JavaScriptCore
 }:
 
-stdenv.mkDerivation rec {
+let
+  jsRuntime = if stdenv.hostPlatform.isDarwin then JavaScriptCore else spidermonkey_68;
+in stdenv.mkDerivation rec {
   pname = "libproxy";
   version = "0.4.17";
 
@@ -39,22 +42,21 @@ stdenv.mkDerivation rec {
     pcre
     python3
     zlib
+  ] ++ lib.optionals enableJavaScript [
+    jsRuntime
   ] ++ (if stdenv.hostPlatform.isDarwin then [
     SystemConfiguration
     CoreFoundation
-    JavaScriptCore
   ] else [
     glib
-    spidermonkey_68
     dbus
     networkmanager
   ]);
 
   cmakeFlags = [
-    "-DWITH_MOZJS=ON"
     "-DWITH_PYTHON2=OFF"
     "-DPYTHON3_SITEPKG_DIR=${placeholder "py3"}/${python3.sitePackages}"
-  ];
+  ] ++ lib.optional (enableJavaScript && !stdenv.hostPlatform.isDarwin) "-DWITH_MOZJS=ON";
 
   postFixup = lib.optionalString stdenv.isLinux ''
     # config_gnome3 uses the helper to find GNOME proxy settings

@@ -1,14 +1,14 @@
 { lib, buildPythonPackage, fetchPypi
-, pytest, pyyaml
+, pytest, pyyaml, hypothesis
 }:
 
 buildPythonPackage rec {
   pname = "yamlloader";
-  version = "0.5.5";
+  version = "1.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3KtfFrObsD0Q3aTNTzDJQ2dexMd3GAf8Z+fxuzGb9Mg=";
+    sha256 = "8a297c7a197683ba02e5e2b882ffd6c6180d01bdefb534b69cd3962df020bfe6";
   };
 
   propagatedBuildInputs = [
@@ -16,6 +16,7 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
+    hypothesis
     pytest
   ];
 

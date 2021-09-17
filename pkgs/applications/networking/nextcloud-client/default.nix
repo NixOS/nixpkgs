@@ -16,17 +16,18 @@
 , qtquickcontrols2
 , qtgraphicaleffects
 , sqlite
+, inkscape
 }:
 
 mkDerivation rec {
   pname = "nextcloud-client";
-  version = "3.1.3";
+  version = "3.3.3";
 
   src = fetchFromGitHub {
     owner = "nextcloud";
     repo = "desktop";
     rev = "v${version}";
-    sha256 = "sha256-8Ql6tOvWOjAvMJA87WlT9TbpnbciBsjDxRuYlMVi/m8=";
+    sha256 = "sha256-QE6F+L1uy2Tmsf/DI8eUF5Ck+oE8CXDTpZS3xg2tiSs=";
   };
 
   patches = [
@@ -37,6 +38,7 @@ mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     cmake
+    inkscape
   ];
 
   buildInputs = [
@@ -55,6 +57,10 @@ mkDerivation rec {
     sqlite
   ];
 
+  qtWrapperArgs = [
+    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libsecret ]}"
+  ];
+
   cmakeFlags = [
     "-DCMAKE_INSTALL_LIBDIR=lib" # expected to be prefix-relative by build code setting RPATH
     "-DNO_SHIBBOLETH=1" # allows to compile without qtwebkit
@@ -64,7 +70,7 @@ mkDerivation rec {
     description = "Nextcloud themed desktop client";
     homepage = "https://nextcloud.com";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ caugner ];
+    maintainers = with maintainers; [ caugner kranzes ];
     platforms = platforms.linux;
   };
 }

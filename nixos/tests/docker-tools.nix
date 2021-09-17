@@ -3,7 +3,7 @@
 import ./make-test-python.nix ({ pkgs, ... }: {
   name = "docker-tools";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ lnl7 ];
+    maintainers = [ lnl7 roberth ];
   };
 
   nodes = {
@@ -19,6 +19,20 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     unix_time_second1 = "1970-01-01T00:00:01Z"
 
     docker.wait_for_unit("sockets.target")
+
+    with subtest("includeStorePath"):
+        with subtest("assumption"):
+            docker.succeed("${examples.helloOnRoot} | docker load")
+            docker.succeed("docker run --rm hello | grep -i hello")
+            docker.succeed("docker image rm hello:latest")
+        with subtest("includeStorePath = false; breaks example"):
+            docker.succeed("${examples.helloOnRootNoStore} | docker load")
+            docker.fail("docker run --rm hello | grep -i hello")
+            docker.succeed("docker image rm hello:latest")
+        with subtest("includeStorePath = false; works with mounted store"):
+            docker.succeed("${examples.helloOnRootNoStore} | docker load")
+            docker.succeed("docker run --rm --volume ${builtins.storeDir}:${builtins.storeDir}:ro hello | grep -i hello")
+            docker.succeed("docker image rm hello:latest")
 
     with subtest("Ensure Docker images use a stable date by default"):
         docker.succeed(
@@ -161,10 +175,16 @@ import ./make-test-python.nix ({ pkgs, ... }: {
             "docker run --rm ${examples.layered-image.imageName} cat extraCommands",
         )
 
-    with subtest("Ensure building an image on top of a layered Docker images work"):
+    with subtest("Ensure images built on top of layered Docker images work"):
         docker.succeed(
             "docker load --input='${examples.layered-on-top}'",
             "docker run --rm ${examples.layered-on-top.imageName}",
+        )
+
+    with subtest("Ensure layered images built on top of layered Docker images work"):
+        docker.succeed(
+            "docker load --input='${examples.layered-on-top-layered}'",
+            "docker run --rm ${examples.layered-on-top-layered.imageName}",
         )
 
 
@@ -205,6 +225,31 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         assert "FROM_CHILD=true" in env, "envvars from the child should be preserved"
         assert "LAST_LAYER=child" in env, "envvars from the child should take priority"
 
+    with subtest("Ensure environment variables of layered images are correctly inherited"):
+        docker.succeed(
+            "docker load --input='${examples.environmentVariablesLayered}'"
+        )
+        out = docker.succeed("docker run --rm ${examples.environmentVariablesLayered.imageName} env")
+        env = out.splitlines()
+        assert "FROM_PARENT=true" in env, "envvars from the parent should be preserved"
+        assert "FROM_CHILD=true" in env, "envvars from the child should be preserved"
+        assert "LAST_LAYER=child" in env, "envvars from the child should take priority"
+
+    with subtest(
+        "Ensure inherited environment variables of layered images are correctly resolved"
+    ):
+        # Read environment variables as stored in image config
+        config = docker.succeed(
+            "tar -xOf ${examples.environmentVariablesLayered} manifest.json | ${pkgs.jq}/bin/jq -r .[].Config"
+        ).strip()
+        out = docker.succeed(
+            f"tar -xOf ${examples.environmentVariablesLayered} {config} | ${pkgs.jq}/bin/jq -r '.config.Env | .[]'"
+        )
+        env = out.splitlines()
+        assert (
+            sum(entry.startswith("LAST_LAYER") for entry in env) == 1
+        ), "envvars overridden by child should be unique"
+
     with subtest("Ensure image with only 2 layers can be loaded"):
         docker.succeed(
             "docker load --input='${examples.two-layered-image}'"
@@ -218,6 +263,18 @@ import ./make-test-python.nix ({ pkgs, ... }: {
             # Ensure the two output paths (ls and hello) are in the layer
             "docker run bulk-layer ls /bin/hello",
         )
+
+    with subtest(
+        "Ensure the bulk layer with a base image respects the number of maxLayers"
+    ):
+        docker.succeed(
+            "docker load --input='${pkgs.dockerTools.examples.layered-bulk-layer}'",
+            # Ensure the image runs correctly
+            "docker run layered-bulk-layer ls /bin/hello",
+        )
+
+        # Ensure the image has the correct number of layers
+        assert len(set_of_layers("layered-bulk-layer")) == 4
 
     with subtest("Ensure correct behavior when no store is needed"):
         # This check tests that buildLayeredImage can build images that don't need a store.
@@ -253,6 +310,73 @@ import ./make-test-python.nix ({ pkgs, ... }: {
             "docker load --input='${examples.layeredStoreSymlink}'",
             "docker run --rm ${examples.layeredStoreSymlink.imageName} bash -c 'test -L ${examples.layeredStoreSymlink.passthru.symlink}'",
             "docker rmi ${examples.layeredStoreSymlink.imageName}",
+        )
+
+    with subtest("buildImage supports registry/ prefix in image name"):
+        docker.succeed(
+            "docker load --input='${examples.prefixedImage}'"
+        )
+        docker.succeed(
+            "docker images --format '{{.Repository}}' | grep -F '${examples.prefixedImage.imageName}'"
+        )
+
+    with subtest("buildLayeredImage supports registry/ prefix in image name"):
+        docker.succeed(
+            "docker load --input='${examples.prefixedLayeredImage}'"
+        )
+        docker.succeed(
+            "docker images --format '{{.Repository}}' | grep -F '${examples.prefixedLayeredImage.imageName}'"
+        )
+
+    with subtest("buildLayeredImage supports running chown with fakeRootCommands"):
+        docker.succeed(
+            "docker load --input='${examples.layeredImageWithFakeRootCommands}'"
+        )
+        docker.succeed(
+            "docker run --rm ${examples.layeredImageWithFakeRootCommands.imageName} sh -c 'stat -c '%u' /home/jane | grep -E ^1000$'"
+        )
+
+    with subtest("Ensure docker load on merged images loads all of the constituent images"):
+        docker.succeed(
+            "docker load --input='${examples.mergedBashAndRedis}'"
+        )
+        docker.succeed(
+            "docker images --format '{{.Repository}}-{{.Tag}}' | grep -F '${examples.bash.imageName}-${examples.bash.imageTag}'"
+        )
+        docker.succeed(
+            "docker images --format '{{.Repository}}-{{.Tag}}' | grep -F '${examples.redis.imageName}-${examples.redis.imageTag}'"
+        )
+        docker.succeed("docker run --rm ${examples.bash.imageName} bash --version")
+        docker.succeed("docker run --rm ${examples.redis.imageName} redis-cli --version")
+        docker.succeed("docker rmi ${examples.bash.imageName}")
+        docker.succeed("docker rmi ${examples.redis.imageName}")
+
+    with subtest(
+        "Ensure docker load on merged images loads all of the constituent images (missing tags)"
+    ):
+        docker.succeed(
+            "docker load --input='${examples.mergedBashNoTagAndRedis}'"
+        )
+        docker.succeed(
+            "docker images --format '{{.Repository}}-{{.Tag}}' | grep -F '${examples.bashNoTag.imageName}-${examples.bashNoTag.imageTag}'"
+        )
+        docker.succeed(
+            "docker images --format '{{.Repository}}-{{.Tag}}' | grep -F '${examples.redis.imageName}-${examples.redis.imageTag}'"
+        )
+        # we need to explicitly specify the generated tag here
+        docker.succeed(
+            "docker run --rm ${examples.bashNoTag.imageName}:${examples.bashNoTag.imageTag} bash --version"
+        )
+        docker.succeed("docker run --rm ${examples.redis.imageName} redis-cli --version")
+        docker.succeed("docker rmi ${examples.bashNoTag.imageName}:${examples.bashNoTag.imageTag}")
+        docker.succeed("docker rmi ${examples.redis.imageName}")
+
+    with subtest("mergeImages preserves owners of the original images"):
+        docker.succeed(
+            "docker load --input='${examples.mergedBashFakeRoot}'"
+        )
+        docker.succeed(
+            "docker run --rm ${examples.layeredImageWithFakeRootCommands.imageName} sh -c 'stat -c '%u' /home/jane | grep -E ^1000$'"
         )
   '';
 })

@@ -1,7 +1,10 @@
 { lib, fetchFromGitHub, buildDunePackage, ocaml
-, version ? if lib.versionAtLeast ocaml.version "4.07" then "0.15.0" else "0.13.0"
+, version ?
+  if lib.versionAtLeast ocaml.version "4.07"
+  then if lib.versionAtLeast ocaml.version "4.08"
+  then "0.22.2" else "0.15.0" else "0.13.0"
 , ocaml-compiler-libs, ocaml-migrate-parsetree, ppx_derivers, stdio
-, stdlib-shims, ocaml-migrate-parsetree-2-1
+, stdlib-shims, ocaml-migrate-parsetree-2
 }:
 
 let param = {
@@ -19,10 +22,20 @@ let param = {
   "0.15.0" = {
     sha256 = "1p037kqj5858xrhh0dps6vbf4fnijla6z9fjz5zigvnqp4i2xkrn";
     min_version = "4.07";
+    max_version = "4.12";
     useOMP2 = false;
   };
   "0.18.0" = {
     sha256 = "1ciy6va2gjrpjs02kha83pzh0x1gkmfsfsdgabbs1v14a8qgfibm";
+    min_version = "4.07";
+    max_version = "4.12";
+  };
+  "0.22.0" = {
+    sha256 = "0kf7lgcwygf6zlx7rwddqpqvasa6v7xiq0bqal8vxlib6lpg074q";
+    min_version = "4.07";
+  };
+  "0.22.2" = {
+    sha256 = "0fysjqcpv281n52wl3h0dy2lzf9d61wdzk90ldv3p63a4i3mr1j2";
     min_version = "4.07";
   };
 }."${version}"; in
@@ -48,7 +61,7 @@ buildDunePackage rec {
   propagatedBuildInputs = [
     ocaml-compiler-libs
     (if param.useOMP2 or true
-     then ocaml-migrate-parsetree-2-1
+     then ocaml-migrate-parsetree-2
      else ocaml-migrate-parsetree)
     ppx_derivers
     stdio

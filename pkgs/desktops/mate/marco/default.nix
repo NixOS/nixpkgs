@@ -1,12 +1,13 @@
-{ lib, stdenv, fetchurl, pkg-config, gettext, itstool, libxml2, libcanberra-gtk3, libgtop, libstartup_notification, gnome3, gtk3, mate-settings-daemon, wrapGAppsHook }:
+{ lib, stdenv, fetchurl, pkg-config, gettext, itstool, libxml2, libcanberra-gtk3, libgtop
+, libXdamage, libXpresent, libstartup_notification, gnome, glib, gtk3, mate-settings-daemon, wrapGAppsHook, mateUpdateScript }:
 
 stdenv.mkDerivation rec {
   pname = "marco";
-  version = "1.24.1";
+  version = "1.26.0";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "109b41pjrc1b4slw6sx1lakdhrc46x829vczzk4bz3j15kcszg54";
+    sha256 = "01avxrg2fc6grfrp6hl8b0im4scy9xf6011swfrhli87ig6hhg7n";
   };
 
   nativeBuildInputs = [
@@ -20,18 +21,24 @@ stdenv.mkDerivation rec {
     libxml2
     libcanberra-gtk3
     libgtop
+    libXdamage
+    libXpresent
     libstartup_notification
     gtk3
-    gnome3.zenity
+    gnome.zenity
     mate-settings-daemon
   ];
 
+  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
+
   enableParallelBuilding = true;
+
+  passthru.updateScript = mateUpdateScript { inherit pname version; };
 
   meta = with lib; {
     description = "MATE default window manager";
     homepage = "https://github.com/mate-desktop/marco";
-    license = [ licenses.gpl2 ];
+    license = [ licenses.gpl2Plus ];
     platforms = platforms.unix;
     maintainers = [ maintainers.romildo ];
   };

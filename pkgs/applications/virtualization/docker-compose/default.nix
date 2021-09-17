@@ -3,17 +3,17 @@
 , mock, pytest, nose
 , pyyaml, backports_ssl_match_hostname, colorama, docopt
 , dockerpty, docker, ipaddress, jsonschema, requests
-, six, texttable, websocket_client, cached-property
+, six, texttable, websocket-client, cached-property
 , enum34, functools32, paramiko, distro, python-dotenv
 }:
 
 buildPythonApplication rec {
-  version = "1.28.3";
+  version = "1.29.2";
   pname = "docker-compose";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "78a48ef8ff4fed092261ecb1a60d9b28b7776e72ed6df591a900008039308b0f";
+    sha256 = "sha256-TIzZ0h0jdBJ5PRi9MxEASe6a+Nqz/iwhO70HM5WbCbc=";
   };
 
   # lots of networking and other fails
@@ -21,12 +21,12 @@ buildPythonApplication rec {
   nativeBuildInputs = [ installShellFiles ];
   checkInputs = [ mock pytest nose ];
   propagatedBuildInputs = [
-    pyyaml backports_ssl_match_hostname colorama dockerpty docker
-    ipaddress jsonschema requests six texttable websocket_client
+    pyyaml colorama dockerpty docker
+    ipaddress jsonschema requests six texttable websocket-client
     docopt cached-property paramiko distro python-dotenv
-  ] ++
-    lib.optional (pythonOlder "3.4") enum34 ++
-    lib.optional (pythonOlder "3.2") functools32;
+  ] ++ lib.optional (pythonOlder "3.7") backports_ssl_match_hostname
+  ++ lib.optional (pythonOlder "3.4") enum34
+  ++ lib.optional (pythonOlder "3.2") functools32;
 
   postPatch = ''
     # Remove upper bound on requires, see also

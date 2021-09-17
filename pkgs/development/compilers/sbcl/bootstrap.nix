@@ -2,6 +2,11 @@
 
 let
   options = rec {
+    aarch64-darwin = {
+      version = "2.1.2";
+      system = "arm64-darwin";
+      sha256 = "sha256-H0ALigXcWIypdA+fTf7jERscwbb7QIAfcoxCtGDh0RU=";
+    };
     x86_64-darwin = {
       version = "1.2.11";
       system = "x86-64-darwin";

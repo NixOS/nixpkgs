@@ -13,6 +13,10 @@ stdenv.mkDerivation rec {
     sha256 = "1fq30imk8zd26x8066di3kpc5zyfc5z6frr3zll685zcx4dxxrlj";
   };
 
+  preConfigure = lib.optionalString (lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11") ''
+    MACOSX_DEPLOYMENT_TARGET=10.16
+  '';
+
   # libevent_openssl is moved into its own output, so that openssl isn't present
   # in the default closure.
   outputs = [ "out" "dev" ]

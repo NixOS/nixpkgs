@@ -29,7 +29,7 @@ in
   options.i18n = {
     inputMethod = {
       enabled = mkOption {
-        type    = types.nullOr (types.enum [ "ibus" "fcitx" "fcitx5" "nabi" "uim" "hime" ]);
+        type    = types.nullOr (types.enum [ "ibus" "fcitx" "fcitx5" "nabi" "uim" "hime" "kime" ]);
         default = null;
         example = "fcitx";
         description = ''
@@ -46,6 +46,7 @@ in
           <listitem><para>nabi: A Korean input method based on XIM. Nabi doesn't support Qt 5.</para></listitem>
           <listitem><para>uim: The universal input method, is a library with a XIM bridge. uim mainly support Chinese, Japanese and Korean.</para></listitem>
           <listitem><para>hime: An extremely easy-to-use input method framework.</para></listitem>
+          <listitem><para>kime: Koream IME.</para></listitem>
           </itemizedlist>
         '';
       };

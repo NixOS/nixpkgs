@@ -9,7 +9,7 @@
 , libnotify
 , libutempter
 , vte
-, libwnck3
+, libwnck
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -41,7 +41,7 @@ python3.pkgs.buildPythonApplication rec {
     gtk3
     keybinder3
     libnotify
-    libwnck3
+    libwnck
     python3
     vte
   ];

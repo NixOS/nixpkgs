@@ -18,11 +18,11 @@
 
 buildPythonPackage rec {
   pname = "scikit-image";
-  version = "0.17.2";
+  version = "0.18.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bd954c0588f0f7e81d9763dc95e06950e68247d540476e06cb77bcbcd8c2d8b3";
+    sha256 = "ecae99f93f4c5e9b1bf34959f4dc596c41f2f6b2fc407d9d9ddf85aebd3137ca";
   };
 
   nativeBuildInputs = [ cython ];

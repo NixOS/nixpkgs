@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchurl
-, meson, pkg-config, wayland, ninja
-, cairo, libinput, pango, wayland-protocols, libxkbcommon
+{ lib, stdenv, fetchFromSourcehut
+, meson, pkg-config, wayland-scanner, ninja
+, cairo, libinput, pango, wayland, wayland-protocols, libxkbcommon
 }:
 
 let
@@ -10,13 +10,15 @@ in stdenv.mkDerivation rec {
   pname = "wshowkeys-unstable";
   inherit version;
 
-  src = fetchurl {
-    url = "https://git.sr.ht/~sircmpwn/wshowkeys/archive/${commit}.tar.gz";
-    sha256 = "0iplmw13jmc8d3m307kc047zq8yqwm42kw9fpm270562i3p0qk4d";
+  src = fetchFromSourcehut {
+    owner = "~sircmpwn";
+    repo = "wshowkeys";
+    rev = commit;
+    sha256 = "10kafdja5cwbypspwhvaxjz3hvf51vqjzbgdasl977193cvxgmbs";
   };
 
-  nativeBuildInputs = [ meson pkg-config wayland ninja ];
-  buildInputs = [ cairo libinput pango wayland-protocols libxkbcommon ];
+  nativeBuildInputs = [ meson pkg-config wayland-scanner ninja ];
+  buildInputs = [ cairo libinput pango wayland wayland-protocols libxkbcommon ];
 
   meta = with lib; {
     description = "Displays keys being pressed on a Wayland session";
@@ -33,5 +35,7 @@ in stdenv.mkDerivation rec {
     # TODO: gpl3Only or gpl3Plus (ask upstream)?
     platforms = platforms.unix;
     maintainers = with maintainers; [ primeos berbiche ];
+    broken = true; # Unmaintained and fails to run (Wayland protocol error)
+    # TODO (@primeos): Remove this package after the NixOS 21.11 branch-off
   };
 }

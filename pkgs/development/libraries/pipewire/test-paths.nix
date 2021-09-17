@@ -1,4 +1,4 @@
-{ lib, runCommand, pipewire, paths-out, paths-lib }:
+{ lib, runCommand, pipewire, paths-out, paths-lib, paths-out-media-session }:
 
 let
   check-path = output: path: ''

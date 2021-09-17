@@ -55,7 +55,7 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
     psutil
     pyxdg
     arrow
-    dateutil
+    python-dateutil
     easygui
     colour
     pymediainfo
@@ -81,7 +81,7 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
   meta = with lib; {
     description = "Photo and video importer for cameras, phones, and memory cards";
     homepage = "https://www.damonlynch.net/rapid/";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ jfrankenau ];
   };

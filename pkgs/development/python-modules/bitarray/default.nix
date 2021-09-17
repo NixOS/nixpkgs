@@ -1,13 +1,22 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, python
+}:
 
 buildPythonPackage rec {
   pname = "bitarray";
-  version = "1.7.0";
+  version = "2.3.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e31b472ac92e04ea943723cf781ec168e15049d91a3052203defb81652d2b086";
+    sha256 = "f19c62425576d3d1821ed711b94d1a4e5ede8f05ca121e99b6d978ed49c7a765";
   };
+
+  checkPhase = ''
+    cd $out
+    ${python.interpreter} -c 'import bitarray; bitarray.test()'
+  '';
 
   pythonImportsCheck = [ "bitarray" ];
 

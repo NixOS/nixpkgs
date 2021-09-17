@@ -1,19 +1,25 @@
-{ lib, fetchFromGitHub, rustPlatform, coreutils, bash, installShellFiles }:
+{ lib, fetchFromGitHub, stdenv, rustPlatform, coreutils, bash, installShellFiles, libiconv }:
 
 rustPlatform.buildRustPackage rec {
   pname = "just";
-  version = "0.8.4";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "casey";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-K8jeX1/Wn6mbf48GIR2wRAwiwg1rxtbtCPjjH+4dPYw=";
+    rev = version;
+    sha256 = "sha256-KC/m+I4uOBS0bJb5yvxSkj+1Jlq+bekLTqHlz4vqv8I=";
   };
-
-  cargoSha256 = "sha256-a9SBeX3oesdoC5G+4dK2tbt+W7VA4jPqCM9tOAex4DI=";
+  cargoSha256 = "sha256-et7V7orw2msv30nJ9sntzEQoeN1YqhHMnHOUt4a6e2I=";
 
   nativeBuildInputs = [ installShellFiles ];
+  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
+
+  postPatch = ''
+    # this hard codes the compiler, which breaks the aarch64 in particular
+    # we rather want to set the compiler ourself
+    rm .cargo/config
+  '';
 
   postInstall = ''
     installManPage man/just.1
@@ -30,23 +36,33 @@ rustPlatform.buildRustPackage rec {
     # USER must not be empty
     export USER=just-user
     export USERNAME=just-user
+    export JUST_CHOOSER="${coreutils}/bin/cat"
+
+    # Prevent string.rs from being changed
+    cp tests/string.rs $TMPDIR/string.rs
 
     sed -i src/justfile.rs \
         -i tests/*.rs \
         -e "s@/bin/echo@${coreutils}/bin/echo@g" \
-        -e "s@#!/usr/bin/env sh@#!${bash}/bin/sh@g" \
-        -e "s@#!/usr/bin/env cat@#!${coreutils}/bin/cat@g" \
-        -e "s@#!/usr/bin/env bash@#!${bash}/bin/sh@g"
+        -e "s@/usr/bin/env@${coreutils}/bin/env@g"
+
+    # Return unchanged string.rs
+    cp $TMPDIR/string.rs tests/string.rs
   '';
 
-  # Skip "edit" when running "cargo test", since this test case needs "cat".
-  # Skip "choose" when running "cargo test", since this test case needs "fzf".
-  checkFlags = [ "--skip=choose" "--skip=edit" ];
+  checkFlags = [
+    "--skip=edit" # trying to run "vim" fails as there's no /usr/bin/env or which in the sandbox to find vim and the dependency is not easily patched
+    "--skip=run_shebang" # test case very rarely fails with "Text file busy"
+    "--skip=invoke_error_function" # wants JUST_CHOOSER to be fzf
+    "--skip=status_error" # "exit status" instead of "exit code"
+    "--skip=exit_status" # "exit status" instead of "exit code"
+  ];
 
   meta = with lib; {
-    description = "A handy way to save and run project-specific commands";
     homepage = "https://github.com/casey/just";
+    changelog = "https://github.com/casey/just/blob/${version}/CHANGELOG.md";
+    description = "A handy way to save and run project-specific commands";
     license = licenses.cc0;
-    maintainers = with maintainers; [ xrelkd ];
+    maintainers = with maintainers; [ xrelkd jk ];
   };
 }

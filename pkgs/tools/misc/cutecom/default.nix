@@ -11,13 +11,16 @@ mkDerivation rec {
     sha256 = "X8jeESt+x5PxK3rTNC1h1Tpvue2WH09QRnG2g1eMoEE=";
   };
 
-  preConfigure = ''
-    substituteInPlace CMakeLists.txt \
-      --replace "#find_package(Serialport REQUIRED)" "find_package(Qt5SerialPort REQUIRED)"
-  '';
-
   buildInputs = [ qtbase qtserialport ];
   nativeBuildInputs = [ cmake ];
+
+  postInstall = ''
+    cd ..
+    mkdir -p "$out"/share/{applications,icons/hicolor/scalable/apps,man/man1}
+    cp cutecom.desktop "$out/share/applications"
+    cp images/cutecom.svg "$out/share/icons/hicolor/scalable/apps"
+    cp cutecom.1 "$out/share/man/man1"
+  '';
 
   meta = with lib; {
     description = "A graphical serial terminal";

@@ -17,7 +17,6 @@
 with lib;
 
 stdenv.mkDerivation (recursiveUpdate packageAttrs rec {
-  name = "${pname}-${version}";
   pname = "openra";
   version = "${engine.name}-${engine.version}";
 

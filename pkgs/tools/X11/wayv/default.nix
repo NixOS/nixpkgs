@@ -22,7 +22,6 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    inherit version;
     description = "A gesture control for X11";
     license = lib.licenses.gpl2Plus ;
     maintainers = [lib.maintainers.raskin];

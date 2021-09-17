@@ -1,6 +1,7 @@
 { lib
 , mkDerivation
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , dxflib
 , eigen
@@ -18,7 +19,7 @@
 
 mkDerivation rec {
   pname = "cloudcompare";
-  version = "2.11.2";
+  version = "2.11.2"; # Remove below patch with the next version bump.
 
   src = fetchFromGitHub {
     owner = "CloudCompare";
@@ -32,6 +33,15 @@ mkDerivation rec {
     # * CCCoreLib
     fetchSubmodules = true;
   };
+
+  patches = [
+    # TODO: Remove with next CloudCompare release (see https://github.com/CloudCompare/CloudCompare/pull/1478)
+    (fetchpatch {
+      name = "CloudCompare-fix-for-PDAL-2.3.0.patch";
+      url = "https://github.com/CloudCompare/CloudCompare/commit/f3038dcdeb0491c4a653c2ee6fb017326eb676a3.patch";
+      sha256 = "0ca5ry987mcgsdawz5yd4xhbsdb5k44qws30srxymzx2djvamwli";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake

@@ -6,7 +6,6 @@
 , cudnn
 , eigen
 , fetchFromGitHub
-, fetchpatch
 , gperftools
 , lib
 , libzip
@@ -34,14 +33,14 @@ let
 
 in env.mkDerivation rec {
   pname = "katago";
-  version = "1.8.0";
-  githash = "8ffda1fe05c69c67342365013b11225d443445e8";
+  version = "1.9.1";
+  githash = "c3220a5a404af835792c476f3f24904e4b799444";
 
   src = fetchFromGitHub {
     owner = "lightvector";
     repo = "katago";
     rev = "v${version}";
-    sha256 = "18r75xjj6vv2gbl92k9aa5bd0cxf09zl1vxlji148y0xbvgv6p8c";
+    sha256 = "sha256-sAtPOqGe6fZ9mAtLdp80fTALXVkP9WdWQU2iTFGXe24=";
   };
 
   fakegit = writeShellScriptBin "git" "echo ${githash}";
@@ -96,10 +95,13 @@ in env.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin; cp katago $out/bin;
   '' + lib.optionalString enableCuda ''
     wrapProgram $out/bin/katago \
       --prefix LD_LIBRARY_PATH : "/run/opengl-driver/lib"
+  '' + ''
+    runHook postInstall
   '';
 
   meta = with lib; {

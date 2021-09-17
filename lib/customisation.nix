@@ -219,16 +219,17 @@ rec {
 
   /* Like the above, but aims to support cross compilation. It's still ugly, but
      hopefully it helps a little bit. */
-  makeScopeWithSplicing = splicePackages: newScope: otherSplices: keep: f:
+  makeScopeWithSplicing = splicePackages: newScope: otherSplices: keep: extra: f:
     let
-      spliced = splicePackages {
+      spliced0 = splicePackages {
         pkgsBuildBuild = otherSplices.selfBuildBuild;
         pkgsBuildHost = otherSplices.selfBuildHost;
         pkgsBuildTarget = otherSplices.selfBuildTarget;
         pkgsHostHost = otherSplices.selfHostHost;
         pkgsHostTarget = self; # Not `otherSplices.selfHostTarget`;
         pkgsTargetTarget = otherSplices.selfTargetTarget;
-      } // keep self;
+      };
+      spliced = extra spliced0 // spliced0 // keep self;
       self = f self // {
         newScope = scope: newScope (spliced // scope);
         callPackage = newScope spliced; # == self.newScope {};
@@ -239,6 +240,7 @@ rec {
           newScope
           otherSplices
           keep
+          extra
           (lib.fixedPoints.extends g f);
         packages = f;
       };

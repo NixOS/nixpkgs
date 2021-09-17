@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "gopls";
-  version = "0.6.2";
+  version = "0.7.1";
 
   src = fetchgit {
     rev = "gopls/v${version}";
     url = "https://go.googlesource.com/tools";
-    sha256 = "0hbfxdsbfz044vw8zp223ni6m7gcwqpff4xpjiqmihhgga5849lf";
+    sha256 = "0cq8mangcc1fz1ii7v4smxbpzynhwy6gvl80n5hvhjpgkp0k4fsm";
   };
 
   modRoot = "gopls";
-  vendorSha256 = "0r9bffgi9ainqrl4kraqy71rgwdfcbqmv3srs12h3xvj0w5ya5rz";
+  vendorSha256 = "1mzn1nn3l080lch0yhh4g2sq02g95v14nha8k3d373vwvwg45igs";
 
   doCheck = false;
 

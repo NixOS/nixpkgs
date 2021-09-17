@@ -1,7 +1,8 @@
-{ stdenv, fetchurl, lib, makeWrapper, electron, makeDesktopItem, graphicsmagick
+{ stdenv, fetchurl, lib, makeWrapper, electron_13, makeDesktopItem, graphicsmagick
 , writeScript }:
 
 let
+  electron = electron_13;
   icon = fetchurl {
     url =
       "https://forum.obsidian.md/uploads/default/original/1X/bf119bd48f748f4fd2d65f2d1bb05d3c806883b5.png";
@@ -30,17 +31,18 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "obsidian";
-  version = "0.11.0";
+  version = "0.12.15";
 
   src = fetchurl {
-    url =
-      "https://github.com/obsidianmd/obsidian-releases/releases/download/v${version}/obsidian-${version}.tar.gz";
-    sha256 = "1acy0dny04c8rdxqvsq70aa7vd8rgyjarcrf57mhh26ai5wiw81s";
+    url = "https://github.com/obsidianmd/obsidian-releases/releases/download/v${version}/obsidian-${version}.tar.gz";
+    sha256 = "sha256-0pAwTkx89B6S0GPes2XXSRNdByIc+DwiI5HXoUqs/QE=";
   };
 
   nativeBuildInputs = [ makeWrapper graphicsmagick ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
 
     makeWrapper ${electron}/bin/electron $out/bin/obsidian \
@@ -56,6 +58,8 @@ in stdenv.mkDerivation rec {
       mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps
       gm convert -resize "$size"x"$size" ${icon} $out/share/icons/hicolor/"$size"x"$size"/apps/obsidian.png
     done
+
+    runHook postInstall
   '';
 
   passthru.updateScript = updateScript;

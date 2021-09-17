@@ -9,6 +9,7 @@
 #include <limits.h>
 #include <string.h>
 #include <spawn.h>
+#include <dirent.h>
 
 #define MAX_REDIRECTS 128
 
@@ -16,15 +17,22 @@ static int nrRedirects = 0;
 static char * from[MAX_REDIRECTS];
 static char * to[MAX_REDIRECTS];
 
+static int isInitialized = 0;
+
 // FIXME: might run too late.
 static void init() __attribute__((constructor));
 
 static void init()
 {
+    if (isInitialized) return;
+
     char * spec = getenv("NIX_REDIRECTS");
     if (!spec) return;
 
-    unsetenv("NIX_REDIRECTS");
+    // Ensure we only run this code once.
+    // We do not do `unsetenv("NIX_REDIRECTS")` to ensure that redirects
+    // also get initialized for subprocesses.
+    isInitialized = 1;
 
     char * spec2 = malloc(strlen(spec) + 1);
     strcpy(spec2, spec);
@@ -189,9 +197,85 @@ int posix_spawnp(pid_t * pid, const char * file,
     return posix_spawnp_real(pid, rewrite(file, buf), file_actions, attrp, argv, envp);
 }
 
-int execv(const char *path, char *const argv[])
+int execv(const char * path, char * const argv[])
 {
-    int (*execv_real) (const char *path, char *const argv[]) = dlsym(RTLD_NEXT, "execv");
+    int (*execv_real) (const char * path, char * const argv[]) = dlsym(RTLD_NEXT, "execv");
     char buf[PATH_MAX];
     return execv_real(rewrite(path, buf), argv);
+}
+
+int execvp(const char * path, char * const argv[])
+{
+    int (*_execvp) (const char *, char * const argv[]) = dlsym(RTLD_NEXT, "execvp");
+    char buf[PATH_MAX];
+    return _execvp(rewrite(path, buf), argv);
+}
+
+int execve(const char * path, char * const argv[], char * const envp[])
+{
+    int (*_execve) (const char *, char * const argv[], char * const envp[]) = dlsym(RTLD_NEXT, "execve");
+    char buf[PATH_MAX];
+    return _execve(rewrite(path, buf), argv, envp);
+}
+
+DIR * opendir(const char * path)
+{
+    char buf[PATH_MAX];
+    DIR * (*_opendir) (const char*) = dlsym(RTLD_NEXT, "opendir");
+
+    return _opendir(rewrite(path, buf));
+}
+
+#define SYSTEM_CMD_MAX 512
+
+char *replace_substring(char * source, char * buf, char * replace_string, char * start_ptr, char * suffix_ptr) {
+    char head[SYSTEM_CMD_MAX] = {0};
+    strncpy(head, source, start_ptr - source);
+
+    char tail[SYSTEM_CMD_MAX] = {0};
+    if(suffix_ptr < source + strlen(source)) {
+       strcpy(tail, suffix_ptr);
+    }
+
+    sprintf(buf, "%s%s%s", head, replace_string, tail);
+    return buf;
+}
+
+char *replace_string(char * buf, char * from, char * to) {
+    int num_matches = 0;
+    char * matches[SYSTEM_CMD_MAX];
+    int from_len = strlen(from);
+    for(int i=0; i<strlen(buf); i++){
+       char *cmp_start = buf + i;
+       if(strncmp(from, cmp_start, from_len) == 0){
+          matches[num_matches] = cmp_start;
+          num_matches++;
+       }
+    }
+    int len_diff = strlen(to) - strlen(from);
+    for(int n = 0; n < num_matches; n++) {
+       char replaced[SYSTEM_CMD_MAX];
+       replace_substring(buf, replaced, to, matches[n], matches[n]+from_len);
+       strcpy(buf, replaced);
+       for(int nn = n+1; nn < num_matches; nn++) {
+          matches[nn] += len_diff;
+       }
+    }
+    return buf;
+}
+
+void rewriteSystemCall(const char * command, char * buf) {
+    strcpy(buf, command);
+    for (int n = 0; n < nrRedirects; ++n) {
+       replace_string(buf, from[n], to[n]);
+    }
+}
+
+int system(const char *command)
+{
+    int (*_system) (const char*) = dlsym(RTLD_NEXT, "system");
+
+    char newCommand[SYSTEM_CMD_MAX];
+    rewriteSystemCall(command, newCommand);
+    return _system(newCommand);
 }

@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     homepage = "http://vcg.isti.cnr.it/vcglib/install.html";
     description = "C++ library for manipulation, processing and displaying with OpenGL of triangle and tetrahedral meshes";
     license = licenses.gpl3;
-    platforms = platforms.linux;
+    platforms = platforms.all;
     maintainers = with maintainers; [ abbradar ];
   };
 }

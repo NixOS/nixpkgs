@@ -1,11 +1,11 @@
 { stdenv, nix, perlPackages, buildEnv
-, makeWrapper, autoconf, automake, libtool, unzip, pkg-config, sqlite, libpqxx
+, makeWrapper, autoconf, automake, libtool, unzip, pkg-config, sqlite, libpqxx_6
 , top-git, mercurial, darcs, subversion, breezy, openssl, bzip2, libxslt
 , perl, postgresql, nukeReferences, git, boehmgc, nlohmann_json
-, docbook_xsl, openssh, gnused, coreutils, findutils, gzip, lzma, gnutar
+, docbook_xsl, openssh, gnused, coreutils, findutils, gzip, xz, gnutar
 , rpm, dpkg, cdrkit, pixz, lib, boost, autoreconfHook, src ? null, version ? null
 , migration ? false, patches ? []
-, tests ? {}
+, tests ? {}, mdbook
 }:
 
 with stdenv;
@@ -26,6 +26,7 @@ let
         CatalystPluginAccessLog
         CatalystPluginAuthorizationRoles
         CatalystPluginCaptcha
+        CatalystPluginPrometheusTiny
         CatalystPluginSessionStateCookie
         CatalystPluginSessionStoreFastMmap
         CatalystPluginSmartURI
@@ -37,6 +38,8 @@ let
         CatalystViewTT
         CatalystXScriptServerStarman
         CatalystXRoleApplicator
+        CryptPassphrase
+        CryptPassphraseArgon2
         CryptRandPasswd
         DBDPg
         DBDSQLite
@@ -57,10 +60,12 @@ let
         NetPrometheus
         NetStatsd
         PadWalker
+        PrometheusTinyShared
         Readonly
         SQLSplitStatement
         SetScalar
         Starman
+        StringCompareConstantTime
         SysHostnameLong
         TermSizeAny
         TextDiff
@@ -79,7 +84,7 @@ in stdenv.mkDerivation rec {
   inherit stdenv src version patches;
 
   buildInputs =
-    [ makeWrapper autoconf automake libtool unzip nukeReferences sqlite libpqxx
+    [ makeWrapper autoconf automake libtool unzip nukeReferences sqlite libpqxx_6
       top-git mercurial /*darcs*/ subversion breezy openssl bzip2 libxslt
       perlDeps perl nix
       postgresql # for running the tests
@@ -89,10 +94,10 @@ in stdenv.mkDerivation rec {
 
   hydraPath = lib.makeBinPath (
     [ sqlite subversion openssh nix coreutils findutils pixz
-      gzip bzip2 lzma gnutar unzip git top-git mercurial /*darcs*/ gnused breezy
+      gzip bzip2 xz gnutar unzip git top-git mercurial /*darcs*/ gnused breezy
     ] ++ lib.optionals stdenv.isLinux [ rpm dpkg cdrkit ] );
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [ autoreconfHook pkg-config mdbook ];
 
   configureFlags = [ "--with-docbook-xsl=${docbook_xsl}/xml/xsl/docbook" ];
 

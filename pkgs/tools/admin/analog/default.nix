@@ -2,19 +2,20 @@
 
 stdenv.mkDerivation rec {
   pname = "analog";
-  version = "6.0.16";
+  version = "6.0.17";
 
   src = fetchFromGitHub {
     owner = "c-amie";
     repo = "analog-ce";
     rev = version;
-    sha256 = "15hi8kfknldwpvm885r9s7zd5h7cirs7x0zazx2nnz62xvz3iymk";
+    sha256 = "sha256-89nNkIUKzlcKKy0TfthA9T27A446Fqv9hYllGjYkDP4=";
   };
 
-  configurePhase = ''
+  postPatch = ''
     sed -i src/anlghead.h \
       -e "s|#define DEFAULTCONFIGFILE .*|#define DEFAULTCONFIGFILE \"$out/etc/analog.cfg\"|g" \
       -e "s|#define LANGDIR .*|#define LANGDIR \"$out/share/$pname}/lang/\"|g"
+    substituteInPlace src/Makefile --replace "gcc" "${stdenv.cc.targetPrefix}cc"
   '';
 
   installPhase = ''
@@ -32,7 +33,7 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2;
     description = "Powerful tool to generate web server statistics";
     maintainers = [ lib.maintainers.peti ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.all;
   };
 
 }

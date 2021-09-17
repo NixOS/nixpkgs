@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "cx_Freeze";
-  version = "6.4.2";
+  version = "6.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fe0af7c658442402bcd209f993219a6ab98a951459495b4a141eb03b552a1c68";
+    sha256 = "050f1dd133a04810bd7f38ac7ae3b290054acb2ff4f6e73f7a286266d153495d";
   };
 
   disabled = pythonOlder "3.5";

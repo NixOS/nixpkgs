@@ -1,15 +1,15 @@
-{ lib, stdenv, fetchurl, openssl, db, groff, libtool
+{ lib, stdenv, fetchurl, openssl, db, groff, libtool, libsodium
 , withCyrusSasl ? true
 , cyrus_sasl
 }:
 
 stdenv.mkDerivation rec {
   pname = "openldap";
-  version = "2.4.57";
+  version = "2.4.58";
 
   src = fetchurl {
     url = "https://www.openldap.org/software/download/OpenLDAP/openldap-release/${pname}-${version}.tgz";
-    sha256 = "sha256-x7pH4ebstbQ289Qygd9Xq+/6mSYhQa7IImKLwiD2tFo=";
+    sha256 = "sha256-V7WSVL4V0L9qmrPVFMHAV3ewISMpFTMTSofJRGj49Hs=";
   };
 
   # TODO: separate "out" and "bin"
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ groff ];
 
-  buildInputs = [ openssl cyrus_sasl db libtool ];
+  buildInputs = [ openssl cyrus_sasl db libsodium libtool ];
 
   # Disable install stripping as it breaks cross-compiling.
   # We strip binaries anyway in fixupPhase.
@@ -29,6 +29,10 @@ stdenv.mkDerivation rec {
     "moduledir=$(out)/lib/modules"
     "CC=${stdenv.cc.targetPrefix}cc"
   ];
+
+  preConfigure = lib.optionalString (lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11") ''
+    MACOSX_DEPLOYMENT_TARGET=10.16
+  '';
 
   configureFlags = [
     "--enable-overlays"
@@ -46,6 +50,7 @@ stdenv.mkDerivation rec {
   postBuild = ''
     make $makeFlags CC=$CC -C contrib/slapd-modules/passwd/sha2
     make $makeFlags CC=$CC -C contrib/slapd-modules/passwd/pbkdf2
+    make $makeFlags CC=$CC -C contrib/slapd-modules/passwd/argon2
   '';
 
   doCheck = false; # needs a running LDAP server
@@ -54,6 +59,9 @@ stdenv.mkDerivation rec {
     "sysconfdir=$(out)/etc"
     "localstatedir=$(out)/var"
     "moduledir=$(out)/lib/modules"
+    # The argon2 module hardcodes /usr/bin/install as the path for the
+    # `install` binary, which is overridden here.
+    "INSTALL=install"
   ];
 
   # 1. Libraries left in the build location confuse `patchelf --shrink-rpath`
@@ -76,6 +84,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     make $installFlags install -C contrib/slapd-modules/passwd/sha2
     make $installFlags install -C contrib/slapd-modules/passwd/pbkdf2
+    make $installFlags install-lib -C contrib/slapd-modules/passwd/argon2
     chmod +x "$out"/lib/*.{so,dylib}
   '';
 

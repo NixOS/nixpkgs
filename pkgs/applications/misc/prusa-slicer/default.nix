@@ -4,7 +4,7 @@
 }:
 stdenv.mkDerivation rec {
   pname = "prusa-slicer";
-  version = "2.3.0";
+  version = "2.3.3";
 
   nativeBuildInputs = [
     cmake
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "prusa3d";
     repo = "PrusaSlicer";
-    sha256 = "08zyvik8cyj1n9knbg8saan7j8s60nzkyj4a77818zbi9lpi65i5";
+    sha256 = "0w0synqi3iz9aigsgv6x1c6sg123fasbx19h4w3ic1l48r8qmpwm";
     rev = "version_${version}";
   };
 

@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ flex bison zlib proj gdal libtiff libpng fftw sqlite cairo proj
   readline ffmpeg_3 makeWrapper wxGTK30 netcdf geos postgresql libmysqlclient blas
   libLAS proj-datumgrid ]
-    ++ (with python2Packages; [ python dateutil wxPython30 numpy ]);
+    ++ (with python2Packages; [ python python-dateutil wxPython30 numpy ]);
 
   # On Darwin the installer tries to symlink the help files into a system
   # directory

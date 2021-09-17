@@ -5,20 +5,20 @@
 , ply
 , kiwisolver
 , qtpy
-, sip
+, sip_4
 , cppy
 , bytecode
 }:
 
 buildPythonPackage rec {
   pname = "enaml";
-  version = "0.11.2";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "nucleic";
     repo = pname;
     rev = version;
-    sha256 = "1in5qa5j96qs3gsv8yaxs1l6dbm69xhzvc0pbzg0dd9kpqxfdy1j";
+    sha256 = "sha256-8ZahvFDYW7xUTSTZP1UXnQBCg9RVUywoO7EbqtTQPJI=";
   };
 
   # qt bindings cannot be found during tests
@@ -44,7 +44,7 @@ buildPythonPackage rec {
     ply
     kiwisolver
     qtpy
-    sip
+    sip_4
     cppy
     bytecode
   ];
