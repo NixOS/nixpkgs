@@ -12033,7 +12033,7 @@ with pkgs;
 
   koka = haskell.lib.justStaticExecutables (haskellPackages.callPackage ../development/compilers/koka { });
 
-  kotlin = callPackage ../development/compilers/kotlin { };
+  inherit (callPackage ../development/compilers/kotlin { }) kotlin kotlin-native;
 
   lazarus = callPackage ../development/compilers/fpc/lazarus.nix {
     fpc = fpc;
