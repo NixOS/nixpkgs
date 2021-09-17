@@ -1,4 +1,5 @@
 { pkgs
+, linuxKernel
 , config
 , buildPackages
 , callPackage
@@ -16,14 +17,31 @@
   # - Update the rev in ../os-specific/linux/kernel/linux-libre.nix to the latest one.
   # - Update linux_latest_hardened when the patches become available
 
-let
-  kernelPatches = callPackage ../os-specific/linux/kernel/patches.nix { };
+with linuxKernel;
 
+let
   deblobKernel = kernel: callPackage ../os-specific/linux/kernel/linux-libre.nix {
     linux = kernel;
   };
 
-  kernels = lib.makeExtensible (self: with self;
+  # Hardened Linux
+  hardenedKernelFor = kernel': overrides:
+    let kernel = kernel'.override overrides;
+    in kernel.override {
+      structuredExtraConfig = import ../os-specific/linux/kernel/hardened/config.nix {
+        inherit lib;
+        inherit (kernel) version;
+      };
+      kernelPatches = kernel.kernelPatches ++ [
+        kernelPatches.hardened.${kernel.meta.branch}
+      ];
+      modDirVersionArg = kernel.modDirVersion + (kernelPatches.hardened.${kernel.meta.branch}).extra;
+      isHardened = true;
+  };
+in {
+  kernelPatches = callPackage ../os-specific/linux/kernel/patches.nix { };
+
+  kernels = recurseIntoAttrs (lib.makeExtensible (self: with self;
     let callPackage = newScope self; in {
 
     linux_mptcp_95 = callPackage ../os-specific/linux/kernel/linux-mptcp-95.nix {
@@ -204,7 +222,7 @@ let
     linux_5_10_hardened = hardenedKernelFor kernels.linux_5_10 { };
     linux_5_13_hardened = hardenedKernelFor kernels.linux_5_13 { };
 
-  });
+  }));
   /*  Linux kernel modules are inherently tied to a specific kernel.  So
     rather than provide specific instances of those packages for a
     specific kernel, we have a function that builds those packages
@@ -429,20 +447,6 @@ let
     ati_drivers_x11 = throw "ati drivers are no longer supported by any kernel >=4.1"; # added 2021-05-18;
   });
 
-  # Hardened Linux
-  hardenedKernelFor = kernel': overrides:
-    let kernel = kernel'.override overrides;
-    in kernel.override {
-      structuredExtraConfig = import ../os-specific/linux/kernel/hardened/config.nix {
-        inherit lib;
-        inherit (kernel) version;
-      };
-      kernelPatches = kernel.kernelPatches ++ [
-        kernelPatches.hardened.${kernel.meta.branch}
-      ];
-      modDirVersionArg = kernel.modDirVersion + (kernelPatches.hardened.${kernel.meta.branch}).extra;
-      isHardened = true;
-  };
   hardenedPackagesFor = kernel: overrides: packagesFor (hardenedKernelFor kernel overrides);
 
   vanillaPackages = {
@@ -471,7 +475,7 @@ let
     linux_rpi4 = packagesFor kernels.linux_rpi4;
   };
 
-  packages = vanillaPackages // rtPackages // rpiPackages // {
+  packages = recurseIntoAttrs (vanillaPackages // rtPackages // rpiPackages // {
     linux_mptcp_95 = packagesFor kernels.linux_mptcp_95;
 
     # Intentionally lacks recurseIntoAttrs, as -rc kernels will quite likely break out-of-tree modules and cause failed Hydra builds.
@@ -495,7 +499,7 @@ let
     linux_libre = recurseIntoAttrs (packagesFor kernels.linux_libre);
 
     linux_latest_libre = recurseIntoAttrs (packagesFor kernels.linux_latest_libre);
-  };
+  });
 
   packageAliases = {
     linux_default = packages.linux_5_10;
@@ -509,21 +513,10 @@ let
 
   manualConfig = makeOverridable (callPackage ../os-specific/linux/kernel/manual-config.nix {});
 
-in
-
-{
-  packages = recurseIntoAttrs packages;
-  kernels = recurseIntoAttrs kernels;
-  inherit packageAliases;
-  inherit vanillaPackages rtPackages rpiPackages;
-  inherit kernelPatches packagesFor hardenedPackagesFor;
-
   customPackage = { version, src, configfile, allowImportFromDerivation ? true }:
     recurseIntoAttrs (packagesFor (manualConfig {
       inherit version src configfile lib stdenv allowImportFromDerivation;
     }));
-
-  inherit manualConfig;
 
   # Derive one of the default .config files
   linuxConfig = {

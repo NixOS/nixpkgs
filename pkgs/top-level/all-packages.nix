@@ -2771,6 +2771,8 @@ with pkgs;
 
   firestarter = callPackage ../applications/misc/firestarter { };
 
+  fits-cloudctl = callPackage ../tools/admin/fits-cloudctl { };
+
   frangipanni = callPackage ../tools/text/frangipanni { };
 
   fselect = callPackage ../tools/misc/fselect { };
@@ -19522,6 +19524,8 @@ with pkgs;
 
   yubikey-agent = callPackage ../tools/security/yubikey-agent { };
 
+  yubikey-touch-detector = callPackage ../tools/security/yubikey-touch-detector { };
+
   zchunk = callPackage ../development/libraries/zchunk { };
 
   zeitgeist = callPackage ../development/libraries/zeitgeist { };
@@ -29680,6 +29684,8 @@ with pkgs;
   steam-tui = callPackage ../games/steam-tui { };
 
   steamcmd = steamPackages.steamcmd;
+
+  steam-acf = callPackage ../tools/games/steam-acf { };
 
   protontricks = python3Packages.callPackage ../tools/package-management/protontricks {
     winetricks = winetricks.override {

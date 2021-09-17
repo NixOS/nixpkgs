@@ -2,7 +2,6 @@
 , trivialBuild
 , fetchFromGitHub
 , emacs
-, emacsPackages
 }:
 
 trivialBuild rec {
@@ -20,7 +19,7 @@ trivialBuild rec {
     emacs
   ] ++ propagatedUserEnvPkgs;
 
-  propagatedUserEnvPkgs = with emacsPackages; [
+  propagatedUserEnvPkgs = with emacs.pkgs; [
     evil
     markdown-mode
   ];

@@ -1909,6 +1909,12 @@
     githubId = 3086255;
     name = "Barry Moore II";
   };
+  chisui = {
+    email = "chisui.pd@gmail.com";
+    github = "chisui";
+    githubId = 4526429;
+    name = "Philipp Dargel";
+  };
   chivay = {
     email = "hubert.jasudowicz@gmail.com";
     github = "chivay";
@@ -4810,6 +4816,12 @@
     github = "izorkin";
     githubId = 26877687;
     name = "Yurii Izorkin";
+  };
+  j0xaf = {
+    email = "j0xaf@j0xaf.de";
+    name = "Jörn Gersdorf";
+    github = "j0xaf";
+    githubId = 932697;
   };
   j0hax = {
     name = "Johannes Arnold";
