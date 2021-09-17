@@ -2,6 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , emacs
+, trivialBuild
 }:
 
 trivialBuild {

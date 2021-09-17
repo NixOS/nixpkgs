@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, trivialBuild
 , emacs
 }:
 

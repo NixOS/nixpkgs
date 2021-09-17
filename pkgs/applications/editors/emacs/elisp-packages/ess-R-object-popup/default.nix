@@ -1,6 +1,7 @@
 { lib
 , trivialBuild
 , fetchFromGitHub
+, emacs
 }:
 
 trivialBuild rec {
