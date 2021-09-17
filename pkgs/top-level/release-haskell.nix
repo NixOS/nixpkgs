@@ -306,9 +306,7 @@ let
       Cabal_3_6_1_0 = with compilerNames; [ ghc884 ghc8107 ghc901 ghc921 ];
       cabal2nix-unstable = all;
       funcmp = all;
-      # Doesn't currently work on ghc-9.0:
-      # https://github.com/haskell/haskell-language-server/issues/297
-      haskell-language-server = with compilerNames; [ ghc884 ghc8107 ];
+      haskell-language-server = all;
       hoogle = all;
       hsdns = all;
       jailbreak-cabal = all;
