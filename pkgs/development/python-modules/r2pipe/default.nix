@@ -38,7 +38,6 @@ buildPythonPackage rec {
     import r2pipe
     r2 = r2pipe.open('${coreutils}/bin/ls')
     r2.cmd('a')
-    r2.quit()
     EOF
   '';
 
