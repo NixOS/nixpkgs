@@ -55,13 +55,15 @@ rustPlatform.buildRustPackage rec {
   doCheck = !stdenv.isDarwin;
   # healthcheck_grafana_cloud is trying to make a network access
   # test_stream_errors is flaky on linux-aarch64
+  # tcp_with_tls_intermediate_ca is flaky on linux-x86_64
   checkPhase = ''
     TZDIR=${tzdata}/share/zoneinfo cargo test \
       --no-default-features \
       --features ${lib.concatStringsSep "," features} \
       -- --test-threads 1 \
       --skip=sinks::loki::tests::healthcheck_grafana_cloud \
-      --skip=kubernetes::api_watcher::tests::test_stream_errors
+      --skip=kubernetes::api_watcher::tests::test_stream_errors \
+      --skip=sources::socket::test::tcp_with_tls_intermediate_ca
   '';
 
   # recent overhauls of DNS support in 0.9 mean that we try to resolve
