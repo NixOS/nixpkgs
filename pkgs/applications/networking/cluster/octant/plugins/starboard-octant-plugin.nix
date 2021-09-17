@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "starboard-octant-plugin";
-  version = "0.11.0";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "aquasecurity";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-XHc/1rqTEVOjCm0kFniUmmjVeRsr9Npt0OpQ6Oy7Rxo=";
+    sha256 = "sha256-JTSZtIRVFdUjhQsp2EMukeoVIo6nNx4xofq+3iOZUIk=";
   };
 
-  vendorSha256 = "sha256-EM0lPwwWJuLD+aqZWshz1ILaeEtUU4wJ0Puwv1Ikgf4=";
+  vendorSha256 = "sha256-1zrB+CobUBgdpBHRJPpfDYCD6oVWY4j4Met9EqNQQbE=";
 
   ldflags = [
     "-s" "-w"
