@@ -262,7 +262,7 @@ in
       pdnsd = 229;
       octoprint = 230;
       avahi-autoipd = 231;
-      nntp-proxy = 232;
+      # nntp-proxy = 232; #dynamically allocated as of 2021-09-17
       mjpg-streamer = 233;
       #radicale = 234;# dynamically allocated as of 2021-09-03
       hydra-queue-runner = 235;
