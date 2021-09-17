@@ -3,7 +3,6 @@
 , python
 , pythonOlder
 , fetchFromGitLab
-, fetchpatch
 , substituteAll
 , bubblewrap
 , exiftool

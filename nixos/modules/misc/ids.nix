@@ -201,7 +201,7 @@ in
       peerflix = 163;
       #chronos = 164; # removed 2020-08-15
       gitlab = 165;
-      tox-bootstrapd = 166;
+      # tox-bootstrapd = 166; removed 2021-09-15
       cadvisor = 167;
       nylon = 168;
       #apache-kafka = 169;# dynamically allocated as of 2021-09-03

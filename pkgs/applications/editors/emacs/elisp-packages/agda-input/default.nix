@@ -1,6 +1,6 @@
 { trivialBuild
 , haskellPackages
-}
+}:
 
 trivialBuild {
   pname = "agda-input";

@@ -52,6 +52,18 @@
       "name": "JBL LIVE650BTNC"
     },
     {
+      "name": "Motorola DC800",
+      "no-features": [
+        "sbc-xq"
+      ]
+    },
+    {
+      "name": "Motorola S305",
+      "no-features": [
+        "sbc-xq"
+      ]
+    },
+    {
       "name": "Soundcore Life P2-L",
       "no-features": [
         "msbc-alt1",
