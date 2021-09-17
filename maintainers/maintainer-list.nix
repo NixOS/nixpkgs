@@ -1909,6 +1909,12 @@
     githubId = 3086255;
     name = "Barry Moore II";
   };
+  chisui = {
+    email = "chisui.pd@gmail.com";
+    github = "chisui";
+    githubId = 4526429;
+    name = "Philipp Dargel";
+  };
   chivay = {
     email = "hubert.jasudowicz@gmail.com";
     github = "chivay";
