@@ -252,6 +252,9 @@ let
         # remove integer-simple because it appears to be broken with
         # musl and non-static-linking.
         integer-simple = {};
+
+        ghcjs = {};
+        ghcjs810 = {};
       };
 
       # Get some cache going for MUSL-enabled GHC.
