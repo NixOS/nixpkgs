@@ -2,10 +2,8 @@
 , buildGoModule
 , fetchFromGitHub
 , lib
-
 , go
 , pkg-config
-
 , libX11
 , libXcursor
 , libXrandr
@@ -13,7 +11,8 @@
 , libXi
 , libXext
 , libXxf86vm
-, libGL }:
+, libGL
+}:
 
 stdenv.mkDerivation rec {
   pname = "darktile";
