@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "profetch";
-  version = "0.1.6";
+  version = "0.1.7";
 
   src = fetchFromGitHub {
     owner = "RustemB";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1clh3l50wz6mlrw9kx0wh2bbhnz6bsksyh4ngz7givv4y3g9m702";
+    sha256 = "sha256-JsjpPUXMN0jytRS4yzSjrseqHiEQ+YinklG+tIIy+Zo=";
   };
 
   nativeBuildInputs = [ gprolog ];

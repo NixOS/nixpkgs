@@ -7051,6 +7051,8 @@ with pkgs;
 
   ltris = callPackage ../games/ltris { };
 
+  lunatic = callPackage ../development/interpreters/lunatic { };
+
   lv = callPackage ../tools/text/lv { };
 
   lxc = callPackage ../os-specific/linux/lxc {
@@ -19578,6 +19580,10 @@ with pkgs;
     inherit (haskellPackages) Agda;
   };
   agda = agdaPackages.agda;
+
+  ### DEVELOPMENT / LIBRARIES / BASH
+
+  bash-preexec = callPackage ../development/libraries/bash/bash-preexec { };
 
   ### DEVELOPMENT / LIBRARIES / JAVA
 
