@@ -258,7 +258,7 @@ in
       rspamd = 225;
       # rmilter = 226; # unused, removed 2019-08-22
       cfdyndns = 227;
-      gammu-smsd = 228;
+      # gammu-smsd = 228; #dynamically allocated as of 2021-09-17
       pdnsd = 229;
       octoprint = 230;
       avahi-autoipd = 231;
