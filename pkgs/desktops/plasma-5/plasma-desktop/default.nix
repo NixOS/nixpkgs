@@ -42,9 +42,6 @@ mkDerivation {
       sha256 = "sha256-2jqqFjBljbhf7I+fTsIvuFs3Ic662KTKRnbcSm5Jing=";
     })
   ];
-  postPatch = ''
-    sed '1i#include <cmath>' -i kcms/touchpad/backends/x11/synapticstouchpad.cpp
-  '';
   CXXFLAGS = [
     ''-DNIXPKGS_HWCLOCK=\"${lib.getBin util-linux}/sbin/hwclock\"''
   ];
