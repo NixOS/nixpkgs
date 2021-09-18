@@ -3,6 +3,7 @@
 , autoPatchelfHook
 , buildEnv
 , fetchurl
+, gnugrep
 , makeWrapper
 , procps
 , zlib
@@ -158,7 +159,7 @@ buildEnv {
       target=$(readlink "$bin")
       rm "$bin"
       makeWrapper "$target" "$bin" \
-        --prefix PATH : "$out/dsm_dir:${lib.strings.makeBinPath [ procps acl jdk8 ]}" \
+        --prefix PATH : "$out/dsm_dir:${lib.makeBinPath [ procps gnugrep acl jdk8 ]}" \
         --set DSM_DIR $out/dsm_dir
     done
   '';
