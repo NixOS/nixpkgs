@@ -17,21 +17,10 @@ let
   # Contains the ruby version heuristics
   rubyVersion = import ./ruby-version.nix { inherit lib; };
 
-  # Needed during postInstall
-  buildRuby =
-    if stdenv.hostPlatform == stdenv.buildPlatform
-    then "$out/bin/ruby"
-    else "${buildPackages.ruby}/bin/ruby";
-
   generic = { version, sha256 }: let
     ver = version;
     tag = ver.gitTag;
     atLeast30 = lib.versionAtLeast ver.majMin "3.0";
-    baseruby = self.override {
-      useRailsExpress = false;
-      docSupport = false;
-      rubygemsSupport = false;
-    };
     self = lib.makeOverridable (
       { stdenv, buildPackages, lib
       , fetchurl, fetchpatch, fetchFromSavannah, fetchFromGitHub
@@ -59,6 +48,12 @@ let
       , buildEnv, bundler, bundix
       , libiconv, libobjc, libunwind, Foundation
       , makeWrapper, buildRubyGem, defaultGemConfig
+      , baseRuby ? buildPackages.ruby.override {
+          useRailsExpress = false;
+          docSupport = false;
+          rubygemsSupport = false;
+        }
+      , useBaseRuby ? stdenv.hostPlatform != stdenv.buildPlatform || useRailsExpress
       }:
       stdenv.mkDerivation rec {
         pname = "ruby";
@@ -81,7 +76,7 @@ let
 
         nativeBuildInputs = [ autoreconfHook bison ]
           ++ (op docSupport groff)
-          ++ op (stdenv.buildPlatform != stdenv.hostPlatform) buildPackages.ruby;
+          ++ op useBaseRuby baseRuby;
         buildInputs = [ autoconf ]
           ++ (op fiddleSupport libffi)
           ++ (ops cursesSupport [ ncurses readline ])
@@ -134,19 +129,17 @@ let
         '';
 
         configureFlags = ["--enable-shared" "--enable-pthread" "--with-soname=ruby-${version}"]
-          ++ op useRailsExpress "--with-baseruby=${baseruby}/bin/ruby"
+          ++ op useBaseRuby "--with-baseruby=${baseRuby}/bin/ruby"
           ++ op (!jitSupport) "--disable-jit-support"
           ++ op (!docSupport) "--disable-install-doc"
-          ++ op (jemallocSupport) "--with-jemalloc"
+          ++ op jemallocSupport "--with-jemalloc"
           ++ ops stdenv.isDarwin [
             # on darwin, we have /usr/include/tk.h -- so the configure script detects
             # that tk is installed
             "--with-out-ext=tk"
             # on yosemite, "generating encdb.h" will hang for a very long time without this flag
             "--with-setjmp-type=setjmp"
-          ]
-          ++ op (stdenv.hostPlatform != stdenv.buildPlatform)
-             "--with-baseruby=${buildRuby}";
+          ];
 
         preConfigure = opString docSupport ''
           configureFlagsArray+=("--with-ridir=$devdoc/share/ri")
@@ -208,13 +201,14 @@ let
           # Add rbconfig shim so ri can find docs
           mkdir -p $devdoc/lib/ruby/site_ruby
           cp ${./rbconfig.rb} $devdoc/lib/ruby/site_ruby/rbconfig.rb
-        '' + opString useRailsExpress ''
+          sed -i '/^  CONFIG\["\(BASERUBY\|SHELL\|GREP\|EGREP\|MKDIR_P\|MAKEDIRS\|INSTALL\)"\]/d' $rbConfig
+        '' + opString useBaseRuby ''
           # Prevent the baseruby from being included in the closure.
-          sed -i '/^  CONFIG\["BASERUBY"\]/d' $rbConfig
-          sed -i "s|'--with-baseruby=${baseruby}/bin/ruby'||" $rbConfig
+          sed -i "s|'--with-baseruby=${baseRuby}/bin/ruby'||" $rbConfig
         '';
 
-        disallowedRequisites = op (!jitSupport) stdenv.cc.cc;
+        disallowedRequisites = op (!jitSupport) stdenv.cc.cc
+          ++ op useBaseRuby baseRuby;
 
         meta = with lib; {
           description = "The Ruby language";
@@ -227,7 +221,6 @@ let
         passthru = rec {
           version = ver;
           rubyEngine = "ruby";
-          baseRuby = baseruby;
           libPath = "lib/${rubyEngine}/${ver.libDir}";
           gemPath = "lib/${rubyEngine}/gems/${ver.libDir}";
           devEnv = import ./dev.nix {
@@ -246,6 +239,8 @@ let
           minorVersion = ver.minor;
           teenyVersion = ver.tiny;
           patchLevel = ver.patchLevel;
+        } // lib.optionalAttrs useBaseRuby {
+          inherit baseRuby;
         };
       }
     ) args; in self;
