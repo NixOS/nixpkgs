@@ -496,7 +496,7 @@ rec {
   getDev = getOutput "dev";
   getMan = getOutput "man";
 
-  /* Get a package's main executable's path */
+  /* Get the path to a package's main executable */
   mainProgram = pkg:
     "${getBin pkg}/bin/${pkg.meta.mainProgram or (lib.getName pkg)}";
 
