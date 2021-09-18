@@ -11,15 +11,15 @@ let
 in
 buildGoModule rec {
   pname = "pomerium";
-  version = "0.14.7";
+  version = "0.15.7";
   src = fetchFromGitHub {
     owner = "pomerium";
     repo = "pomerium";
     rev = "v${version}";
-    hash = "sha256:1jb96jk5qmary4fi1z9zwmppdyskj0qb6qii8s8mwazjjxqj1z2s";
+    hash = "sha256:0adlk4ylny1z43x1dw3ny0s1932vhb61hpf5wdz4r65y8k9qyfgr";
   };
 
-  vendorSha256 = "sha256:1daabi9qc9nx8bafn26iw6rv4vx2xpd0nnk06265aqaksx26db0s";
+  vendorSha256 = "sha256:1fszfbra84pcs8v1h2kf7iy603vf9v2ysg6il76aqmqrxmb1p7nv";
   subPackages = [
     "cmd/pomerium"
     "cmd/pomerium-cli"
@@ -38,24 +38,25 @@ buildGoModule rec {
     "${varFlags}"
   ];
 
-  nativeBuildInputs = [
-    zip
-  ];
+  preBuild = ''
+    rm internal/envoy/files/files_{darwin,linux}*.go
+    cat <<EOF >internal/envoy/files/files_generic.go
+    package files
 
-  # Pomerium expects to have envoy append to it in a zip.
-  # We use a store-only (-0) zip, so that the Nix scanner can find any store references we had in the envoy binary.
-  postBuild = ''
-    # Append Envoy
-    pushd $NIX_BUILD_TOP
-    mkdir -p envoy
-    cd envoy
-    cp ${envoy}/bin/envoy envoy
-    zip -0 envoy.zip envoy
-    popd
+    import _ "embed" // embed
 
-    mv $GOPATH/bin/pomerium $GOPATH/bin/pomerium.old
-    cat $GOPATH/bin/pomerium.old $NIX_BUILD_TOP/envoy/envoy.zip >$GOPATH/bin/pomerium
-    zip --adjust-sfx $GOPATH/bin/pomerium
+    //go:embed envoy
+    var rawBinary []byte
+
+    //go:embed envoy.sha256
+    var rawChecksum string
+
+    //go:embed envoy.version
+    var rawVersion string
+    EOF
+    cp ${envoy}/bin/envoy internal/envoy/files/envoy
+    sha256sum ${envoy}/bin/envoy > internal/envoy/files/envoy.sha256
+    echo ${envoy.version} > internal/envoy/files/envoy.version
   '';
 
   # We also need to set dontStrip to avoid having the envoy ZIP stripped off the end.
