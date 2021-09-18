@@ -1780,7 +1780,7 @@ default-package-overrides:
 - aop-prelude == 0.4.0.0
 - aos-signature == 0.1.1
 - aosd == 0.2.2
-- ap-normalize == 0.1.0.0
+- ap-normalize == 0.1.0.1
 - ap-reflect == 0.3
 - apache-md5 == 0.6.1.4
 - apart == 0.1.3

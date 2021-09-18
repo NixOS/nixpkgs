@@ -37,13 +37,4 @@ self: super: {
   # cabal2nix --maintainer roberth https://github.com/hercules-ci/optparse-applicative.git > pkgs/development/misc/haskell/hercules-ci-optparse-applicative.nix
   hercules-ci-optparse-applicative = self.callPackage ../misc/haskell/hercules-ci-optparse-applicative.nix {};
 
-  #
-  # Backports
-  #
-
-  # This file overrides packages in `hackage-packages.nix`.
-
-  # cabal2nix cabal://ap-normalize-0.1.0.1
-  ap-normalize = self.callPackage ../misc/haskell/ap-normalize {};
-
 }
