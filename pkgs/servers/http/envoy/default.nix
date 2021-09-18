@@ -17,8 +17,8 @@ let
     # However, the version string is more useful for end-users.
     # These are contained in a attrset of their own to make it obvious that
     # people should update both.
-    version = "1.17.3";
-    commit = "46bf743b97d0d3f01ff437b2f10cc0bd9cdfe6e4";
+    version = "1.19.1";
+    commit = "a2a1e3eed4214a38608ec223859fcfa8fb679b14";
   };
 in
 buildBazelPackage rec {
@@ -28,7 +28,7 @@ buildBazelPackage rec {
     owner = "envoyproxy";
     repo = "envoy";
     rev = srcVer.commit;
-    hash = "sha256:09zzr4h3zjsb2rkxrvlazpx0jy33yn9j65ilxiqbvv0ckaralqfc";
+    hash = "sha256:1v1hv4blrppnhllsxd9d3k2wl6nhd59r4ydljy389na3bb41jwf9";
 
     extraPostFetch = ''
       chmod -R +w $out
@@ -58,7 +58,7 @@ buildBazelPackage rec {
   ];
 
   fetchAttrs = {
-    sha256 = "sha256:1cy2b73x8jzczq9z9c1kl7zrg5iasvsakb50zxn4mswpmajkbj5h";
+    sha256 = "sha256:0vnl0gq6nhvyzz39jg1bvvna0xyhxalg71bp1jbxib7ql026004r";
     dontUseCmakeConfigure = true;
     dontUseGnConfigure = true;
     preInstall = ''
@@ -74,12 +74,6 @@ buildBazelPackage rec {
         $bazelOut/external/com_github_luajit_luajit/build.py \
         $bazelOut/external/local_config_sh/BUILD
       rm -r $bazelOut/external/go_sdk
-
-      # Replace some wheels which are only used for tests with empty files;
-      # they're nondeterministically built and packed.
-      >$bazelOut/external/config_validation_pip3/PyYAML-5.3.1-cp38-cp38-linux_x86_64.whl
-      >$bazelOut/external/protodoc_pip3/PyYAML-5.3.1-cp38-cp38-linux_x86_64.whl
-      >$bazelOut/external/thrift_pip3/thrift-0.13.0-cp38-cp38-linux_x86_64.whl
 
       # Remove Unix timestamps from go cache.
       rm -rf $bazelOut/external/bazel_gazelle_go_repository_cache/{gocache,pkg/mod/cache,pkg/sumdb}
