@@ -55,6 +55,13 @@
           actions.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          Pantheon desktop has been updated to version 6. Due to changes
+          of screen locker, if locking doesn’t work for you, please try
+          <literal>gsettings set org.gnome.desktop.lockdown disable-lock-screen false</literal>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-new-services">
@@ -189,8 +196,6 @@
           <link linkend="opt-services.isso.enable">isso</link>
         </para>
       </listitem>
-    </itemizedlist>
-    <itemizedlist spacing="compact">
       <listitem>
         <para>
           <link xlink:href="https://www.navidrome.org/">navidrome</link>,
@@ -199,8 +204,6 @@
           <link linkend="opt-services.navidrome.enable">navidrome</link>.
         </para>
       </listitem>
-    </itemizedlist>
-    <itemizedlist>
       <listitem>
         <para>
           <link xlink:href="https://docs.fluidd.xyz/">fluidd</link>, a
@@ -261,6 +264,13 @@
         <para>
           <link xlink:href="https://spark.apache.org/">spark</link>, a
           unified analytics engine for large-scale data processing.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/JoseExposito/touchegg">touchegg</link>,
+          a multi-touch gesture recognizer. Available as
+          <link linkend="opt-services.touchegg.enable">services.touchegg</link>.
         </para>
       </listitem>
     </itemizedlist>

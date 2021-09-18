@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchFromGitHub
+, fetchpatch
 , nix-update-script
 , pantheon
 , meson
@@ -28,7 +29,6 @@
 , webkitgtk
 , libwebp
 , appstream
-, libunity
 , wrapGAppsHook
 , elementary-icon-theme
 }:
@@ -45,6 +45,15 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "1dql14k43rv3in451amiwv4z71hz3ailx67hd8gw1ka3yw12128p";
   };
+
+  patches = [
+    # Upstream code not respecting our localedir
+    # https://github.com/elementary/photos/pull/629
+    (fetchpatch {
+      url = "https://github.com/elementary/photos/commit/e5230a4305381734e93f1e3d1177da21a8a4121b.patch";
+      sha256 = "1igqq51sj1sx6rl8yrw037jsgnaxfwzfs0m6pqzb9q4jvfdimzfi";
+    })
+  ];
 
   passthru = {
     updateScript = nix-update-script {
@@ -84,7 +93,6 @@ stdenv.mkDerivation rec {
     libraw
     librest
     libsoup
-    libunity
     libwebp
     scour
     sqlite

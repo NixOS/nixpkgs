@@ -10,6 +10,7 @@
 , granite
 , gtk3
 , libgee
+, libhandy
 , meson
 , ninja
 , pantheon
@@ -22,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sideload";
-  version = "1.1.1";
+  version = "6.0.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-eI/j6+lok9axRHV5DCsFY1fDCV+X5zBR7X8rK6odjFY=";
+    sha256 = "0mwcaayzcm5pjcwdd61can93y66jiz4wyz9wr8j5fbns5hbk3z5m";
   };
 
   passthru = {
@@ -56,6 +57,7 @@ stdenv.mkDerivation rec {
     granite
     gtk3
     libgee
+    libhandy
     libxml2
   ];
 

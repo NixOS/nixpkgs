@@ -2,31 +2,39 @@
 , fetchFromGitHub
 , nix-update-script
 , pantheon
-, pkg-config
+, appstream
+, desktop-file-utils
 , meson
 , ninja
-, vala
+, pkg-config
 , python3
-, desktop-file-utils
-, gtk3
-, granite
-, libgee
-, libcanberra
-, elementary-icon-theme
+, vala
 , wrapGAppsHook
+, clutter-gtk
+, elementary-icon-theme
+, evolution-data-server
+, granite
+, geoclue2
+, geocode-glib
+, gtk3
+, libchamplain
+, libgdata
+, libgee
+, libhandy
+, libical
 }:
 
 stdenv.mkDerivation rec {
-  pname = "elementary-screenshot-tool"; # This will be renamed to "screenshot" soon. See -> https://github.com/elementary/screenshot/pull/93
-  version = "1.7.1";
+  pname = "elementary-tasks";
+  version = "6.0.3";
 
-  repoName = "screenshot";
+  repoName = "tasks";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "sha256-qo55fzp0ieYF5I5uxnCQY066mege06InHL3B3ahYMZ0=";
+    sha256 = "0a6zgf7di4jyl764pn78wbanm0i5vrkk5ks3cfsvi3baprf3j9d5";
   };
 
   passthru = {
@@ -36,6 +44,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
+    appstream
     desktop-file-utils
     meson
     ninja
@@ -46,11 +55,18 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    clutter-gtk
     elementary-icon-theme
+    evolution-data-server
     granite
+    geoclue2
+    geocode-glib
     gtk3
-    libcanberra
+    libchamplain
+    libgdata
     libgee
+    libhandy
+    libical
   ];
 
   postPatch = ''
@@ -59,9 +75,9 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Screenshot tool designed for elementary OS";
-    homepage = "https://github.com/elementary/screenshot";
-    license = licenses.lgpl3;
+    homepage = "https://github.com/elementary/tasks";
+    description = "Synced tasks and reminders on elementary OS";
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;
   };
