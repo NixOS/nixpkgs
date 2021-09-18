@@ -12540,4 +12540,11 @@
     github = "rski";
     githubId = 2960312;
   };
+  mbprtpmnr = {
+    name = "mbprtpmnr";
+    email = "mbprtpmnr@pm.me";
+    github = "mbprtpmnr";
+    githubId = 88109321;
+  };
+
 }
