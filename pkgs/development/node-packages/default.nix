@@ -1,4 +1,4 @@
-{ pkgs, nodejs, stdenv, applyPatches, fetchFromGitHub, fetchpatch, fetchurl }:
+{ lib, pkgs, nodejs, stdenv, applyPatches, fetchFromGitHub, fetchpatch, fetchurl }:
 
 let
   since = (version: pkgs.lib.versionAtLeast nodejs.version version);
@@ -33,7 +33,7 @@ let
       '';
       postInstall = ''
         wrapProgram $out/bin/aws-azure-login \
-            --set PUPPETEER_EXECUTABLE_PATH ${pkgs.chromium}/bin/chromium
+            --set PUPPETEER_EXECUTABLE_PATH ${lib.mainProgram pkgs.chromium}
       '';
     };
 
@@ -68,7 +68,7 @@ let
       '';
       postInstall = ''
         wrapProgram $out/bin/fast \
-          --set PUPPETEER_EXECUTABLE_PATH ${pkgs.chromium.outPath}/bin/chromium
+          --set PUPPETEER_EXECUTABLE_PATH ${lib.mainProgram pkgs.chromium}
       '';
     });
 
@@ -240,7 +240,7 @@ let
       '';
       postInstall = ''
         wrapProgram $out/bin/mmdc \
-        --set PUPPETEER_EXECUTABLE_PATH ${pkgs.chromium.outPath}/bin/chromium
+        --set PUPPETEER_EXECUTABLE_PATH ${lib.mainProgram pkgs.chromium}
       '';
     });
 
