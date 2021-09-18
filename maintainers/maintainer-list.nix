@@ -9182,6 +9182,12 @@
     githubId = 546296;
     name = "Eric Ren";
   };
+  renesat = {
+    name = "Ivan Smolyakov";
+    email = "smol.ivan97@gmail.com";
+    github = "renesat";
+    githubId = 11363539;
+  };
   renzo = {
     email = "renzocarbonara@gmail.com";
     github = "k0001";
