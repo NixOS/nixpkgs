@@ -646,39 +646,53 @@ let
         };
       };
 
-      formulahendry.auto-close-tag = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          name = "auto-close-tag";
-          publisher = "formulahendry";
-          version = "0.5.6";
-          sha256 = "058jgmllqb0j6gg5anghdp35nkykii28igfcwqgh4bp10pyvspg0";
+      formulahendry = {
+        auto-close-tag = buildVscodeMarketplaceExtension {
+          mktplcRef = {
+            name = "auto-close-tag";
+            publisher = "formulahendry";
+            version = "0.5.6";
+            sha256 = "058jgmllqb0j6gg5anghdp35nkykii28igfcwqgh4bp10pyvspg0";
+          };
+          meta = {
+            license = lib.licenses.mit;
+          };
         };
-        meta = {
-          license = lib.licenses.mit;
-        };
-      };
 
-      formulahendry.auto-rename-tag = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          name = "auto-rename-tag";
-          publisher = "formulahendry";
-          version = "0.1.6";
-          sha256 = "0cqg9mxkyf41brjq2c764w42lzyn6ffphw6ciw7xnqk1h1x8wwbs";
+        auto-rename-tag = buildVscodeMarketplaceExtension {
+          mktplcRef = {
+            name = "auto-rename-tag";
+            publisher = "formulahendry";
+            version = "0.1.6";
+            sha256 = "0cqg9mxkyf41brjq2c764w42lzyn6ffphw6ciw7xnqk1h1x8wwbs";
+          };
+          meta = {
+            license = lib.licenses.mit;
+          };
         };
-        meta = {
-          license = lib.licenses.mit;
-        };
-      };
 
-      formulahendry.code-runner = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          name = "code-runner";
-          publisher = "formulahendry";
-          version = "0.11.2";
-          sha256 = "0qwcxr6m1xwhqmdl4pccjgpikpq1hgi2hgrva5abn8ixa2510hcy";
+        code-runner = buildVscodeMarketplaceExtension {
+          mktplcRef = {
+            name = "code-runner";
+            publisher = "formulahendry";
+            version = "0.11.2";
+            sha256 = "0qwcxr6m1xwhqmdl4pccjgpikpq1hgi2hgrva5abn8ixa2510hcy";
+          };
+          meta = {
+            license = lib.licenses.mit;
+          };
         };
-        meta = {
-          license = lib.licenses.mit;
+
+        terminal = buildVscodeMarketplaceExtension {
+          mktplcRef = {
+            publisher = "formulahendry";
+            name = "terminal";
+            version = "0.0.10";
+            sha256 = "sha256-9hGkD/mWGhwH0ACA3nUD75/XCIi6A8DiDVagfHwPRz4=";
+          };
+          meta = {
+            license = lib.licenses.mit;
+          };
         };
       };
 
