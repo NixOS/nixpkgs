@@ -1461,6 +1461,8 @@ in {
 
   cirq = callPackage ../development/python-modules/cirq { };
 
+  cirq-aqt = callPackage ../development/python-modules/cirq-aqt { };
+
   cirq-core = callPackage ../development/python-modules/cirq-core { };
 
   cirq-ionq = callPackage ../development/python-modules/cirq-ionq { };
