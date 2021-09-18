@@ -20,6 +20,8 @@ mkDerivation {
   '';
   propagatedUserEnvPkgs = [ kipi-plugins libkipi ];
   meta = with lib; {
+    homepage = "https://apps.kde.org/spectacle/";
+    description = "Screenshot capture utility";
     maintainers = with maintainers; [ ttuegel ];
     broken = versionOlder qtbase.version "5.15";
   };

@@ -10,6 +10,8 @@
 mkDerivation {
   pname = "konsole";
   meta = {
+    homepage = "https://apps.kde.org/konsole/";
+    description = "KDE terminal emulator";
     license = with lib.licenses; [ gpl2 lgpl21 fdl12 ];
     maintainers = with lib.maintainers; [ ttuegel turion ];
   };

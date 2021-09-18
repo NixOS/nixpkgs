@@ -10,6 +10,8 @@
 mkDerivation {
   pname = "kaddressbook";
   meta = {
+    homepage = "https://apps.kde.org/kaddressbook/";
+    description = "KDE contact manager";
     license = with lib.licenses; [ gpl2 lgpl21 fdl12 ];
     maintainers = kdepimTeam;
   };
