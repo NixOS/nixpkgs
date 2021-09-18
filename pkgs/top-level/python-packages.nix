@@ -6655,6 +6655,8 @@ in {
 
   pyquery = callPackage ../development/python-modules/pyquery { };
 
+  pyquil = callPackage ../development/python-modules/pyquil { };
+
   pyrabbit2 = callPackage ../development/python-modules/pyrabbit2 { };
 
   pyrad = callPackage ../development/python-modules/pyrad { };
@@ -7833,6 +7835,8 @@ in {
   retrying = callPackage ../development/python-modules/retrying { };
 
   retworkx = callPackage ../development/python-modules/retworkx { };
+
+  rfc3339 = callPackage ../development/python-modules/rfc3339 { };
 
   rfc3339-validator = callPackage ../development/python-modules/rfc3339-validator { };
 
