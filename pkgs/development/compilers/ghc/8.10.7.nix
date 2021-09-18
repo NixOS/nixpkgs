@@ -117,7 +117,7 @@ let
   # Splicer will pull out correct variations
   libDeps = platform: lib.optional enableTerminfo ncurses
     ++ [libffi]
-    ++ lib.optional (!enableIntegerSimple) gmp
+    ++ [gmp] # this is used even with integer-simple, when using the boot compiler
     ++ lib.optional (platform.libc != "glibc" && !targetPlatform.isWindows) libiconv;
 
   toolsForTarget = [
@@ -332,10 +332,6 @@ stdenv.mkDerivation (rec {
     ] ++ lib.teams.haskell.members;
     timeout = 24 * 3600;
     inherit (ghc.meta) license platforms;
-
-    # integer-simple builds are broken when GHC links against musl.
-    # See https://github.com/NixOS/nixpkgs/pull/129606#issuecomment-881323743.
-    broken = enableIntegerSimple && hostPlatform.isMusl;
   };
 
 } // lib.optionalAttrs targetPlatform.useAndroidPrebuilt {
