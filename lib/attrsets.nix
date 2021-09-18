@@ -496,6 +496,9 @@ rec {
   getDev = getOutput "dev";
   getMan = getOutput "man";
 
+  /* Get a package's main executable's path */
+  mainProgram = pkg: "${getBin pkg}/bin/${pkg.meta.mainProgram}";
+
   /* Pick the outputs of packages to place in buildInputs */
   chooseDevOutputs = drvs: builtins.map getDev drvs;
 
