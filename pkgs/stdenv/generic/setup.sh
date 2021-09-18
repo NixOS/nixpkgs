@@ -197,6 +197,34 @@ isELF() {
     if [ "$magic" = $'\177ELF' ]; then return 0; else return 1; fi
 }
 
+# Return success if the specified file is a Mach-O object.
+isMachO() {
+    local fn="$1"
+    local fd
+    local magic
+    exec {fd}< "$fn"
+    read -r -n 4 -u "$fd" magic
+    exec {fd}<&-
+
+    # nix uses 'declare -F' in get-env.sh to retrieve the loaded functions.
+    # If we use the $'string' syntax instead of 'echo -ne' then 'declare' will print the raw characters and break nix.
+    # See https://github.com/NixOS/nixpkgs/pull/138334 and https://github.com/NixOS/nix/issues/5262.
+
+    # https://opensource.apple.com/source/lldb/lldb-310.2.36/examples/python/mach_o.py.auto.html
+    if [[ "$magic" = $(echo -ne "\xfe\xed\xfa\xcf") || "$magic" = $(echo -ne "\xcf\xfa\xed\xfe") ]]; then
+        # MH_MAGIC_64 || MH_CIGAM_64
+        return 0;
+    elif [[ "$magic" = $(echo -ne "\xfe\xed\xfa\xce") || "$magic" = $(echo -ne "\xce\xfa\xed\xfe") ]]; then
+        # MH_MAGIC || MH_CIGAM
+        return 0;
+    elif [[ "$magic" = $(echo -ne "\xca\xfe\xba\xbe") || "$magic" = $(echo -ne "\xbe\xba\xfe\xca") ]]; then
+        # FAT_MAGIC || FAT_CIGAM
+        return 0;
+    else
+        return 1;
+    fi
+}
+
 # Return success if the specified file is a script (i.e. starts with
 # "#!").
 isScript() {
