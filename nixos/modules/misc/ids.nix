@@ -153,7 +153,7 @@ in
       #btsync = 113; # unused
       #minecraft = 114; #dynamically allocated as of 2021-09-03
       vault = 115;
-      rippled = 116;
+      # rippled = 116; #dynamically allocated as of 2021-09-18
       murmur = 117;
       foundationdb = 118;
       newrelic = 119;
