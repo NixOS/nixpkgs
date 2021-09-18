@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake, pkg-config, unzip, zlib, pcre, hdf5
 , glog, boost, gflags, protobuf
 , config
@@ -154,6 +155,11 @@ stdenv.mkDerivation {
   # Ensures that we use the system OpenEXR rather than the vendored copy of the source included with OpenCV.
   patches = [
     ./cmake-don-t-use-OpenCVFindOpenEXR.patch
+    # Fix usage of deprecated version of protobuf' SetTotalBytesLimit. Remove with the next release.
+    (fetchpatch {
+      url = "https://github.com/opencv/opencv/commit/384875f4fcf1782b10699a379aa245a03cb27a04.patch";
+      sha256 = "1agwd0pm07m2dy8a62vmfl4n73dsmsdll2a73q6kara9wm3jlp41";
+    })
   ];
 
   # This prevents cmake from using libraries in impure paths (which
