@@ -21,7 +21,7 @@ buildPythonPackage rec {
   # relax version constraints: aiobotocore works with newer botocore versions
   # the pinning used to match some `extras_require` we're not using.
   postPatch = ''
-    substituteInPlace setup.py --replace 'botocore>=1.20.49,<1.20.50' 'botocore'
+    substituteInPlace setup.py --replace 'botocore>=1.20.106,<1.20.107' 'botocore'
   '';
 
   propagatedBuildInputs = [ wrapt aiohttp aioitertools botocore ];
