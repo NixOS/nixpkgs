@@ -16,12 +16,7 @@ in
 buildGoModule {
   inherit src version;
   pname = "pagessrht";
-  vendorSha256 = "sha256-xOd9i+PNlLxZrw/+z/C9V+AbOLEociW2YHY+x1K+mJI=";
-
-  patches = [
-    # Upstream after 0.4.8
-    ./pages-fix-syntax-error-in-schema.sql.patch
-  ];
+  vendorSha256 = "sha256-YFRBoflFy48ipTvXdZ4qPSEgTIYvm4752JRZSzRG++U=";
 
   postInstall = ''
     mkdir -p $out/share/sql/
