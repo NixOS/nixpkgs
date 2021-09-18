@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "hgsrht";
-  version = "0.27.4";
+  version = "0.27.6";
 
   src = fetchhg {
     url = "https://hg.sr.ht/~sircmpwn/hg.sr.ht";
     rev = version;
-    sha256 = "1c0qfi0gmbfngvds6917fy9ii2iglawn429757rh7b4bvzn7n6mr";
+    sha256 = "ibijvKjS4CiWTYrO6Qdh3RkD0EUE7BY8wjdPwrD6vkA=";
   };
 
   nativeBuildInputs = srht.nativeBuildInputs;
