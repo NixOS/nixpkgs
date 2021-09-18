@@ -1354,7 +1354,7 @@ self: super: {
   commonmark-extensions = dontCheck super.commonmark-extensions;
 
   # Testsuite trying to run `which haskeline-examples-Test`
-  haskeline_0_8_1_2 = dontCheck super.haskeline_0_8_1_2;
+  haskeline_0_8_2 = dontCheck super.haskeline_0_8_2;
 
   # Tests for list-t, superbuffer, and stm-containers
   # depend on HTF and it is broken, 2020-08-23
@@ -1489,7 +1489,7 @@ self: super: {
   });
 
   # 2021-03-09: Overrides because nightly is to old for hls 1.0.0
-  lsp-test = doDistribute (dontCheck self.lsp-test_0_14_0_0);
+  lsp-test = doDistribute (dontCheck self.lsp-test_0_14_0_1);
 
   # 2021-03-21 Test hangs
   # https://github.com/haskell/haskell-language-server/issues/1562
@@ -1547,7 +1547,7 @@ self: super: {
   # 2020-11-19: Jailbreaking until: https://github.com/snapframework/heist/pull/124
   heist = doJailbreak super.heist;
 
-  hinit = generateOptparseApplicativeCompletion "hi" (super.hinit.override { haskeline = self.haskeline_0_8_1_2; });
+  hinit = generateOptparseApplicativeCompletion "hi" (super.hinit.override { haskeline = self.haskeline_0_8_2; });
 
   # 2020-11-19: Jailbreaking until: https://github.com/snapframework/snap/pull/219
   snap = doJailbreak super.snap;
@@ -1593,7 +1593,7 @@ self: super: {
 
   # 2020-12-05: http-client is fixed on too old version
   essence-of-live-coding-warp = doJailbreak (super.essence-of-live-coding-warp.override {
-    http-client = self.http-client_0_7_8;
+    http-client = self.http-client_0_7_9;
   });
 
   # 2020-12-06: Restrictive upper bounds w.r.t. pandoc-types (https://github.com/owickstrom/pandoc-include-code/issues/27)
