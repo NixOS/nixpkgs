@@ -38,7 +38,7 @@ let
   filteredGemset = filterGemset { inherit ruby groups; } importedGemset;
 
   configuredGemset = lib.flip lib.mapAttrs filteredGemset (name: attrs:
-    applyGemConfigs (attrs // { inherit ruby; gemName = name; })
+    applyGemConfigs (attrs // { inherit ruby document; gemName = name; })
   );
 
   hasBundler = builtins.hasAttr "bundler" filteredGemset;
