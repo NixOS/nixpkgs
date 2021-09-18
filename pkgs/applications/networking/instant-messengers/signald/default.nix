@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchgit, fetchFromGitLab, jre_headless, coreutils, gradle_6, git, perl
+{ lib, stdenv, fetchurl, fetchFromGitLab, jre_headless, coreutils, gradle_6, git, perl
 , makeWrapper }:
 
 let
