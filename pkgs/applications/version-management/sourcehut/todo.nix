@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "todosrht";
-  version = "0.64.14";
+  version = "0.64.28";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "todo.sr.ht";
     rev = version;
-    sha256 = "sha256-huIAhn6h1F5w5ST4/yBwr82kAzyYwhLu+gpRuOQgnsE=";
+    sha256 = "sha256-uClWcR0saH4dUGRRTueLv7T4IBefMVSI5khCdeDBRv4=";
   };
 
   nativeBuildInputs = srht.nativeBuildInputs;
