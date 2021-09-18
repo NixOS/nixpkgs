@@ -26,11 +26,21 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook autoconf-archive pkg-config doxygen perl
   ];
-  buildInputs = [ openssl json_c curl libgcrypt ];
-  checkInputs = [
-    cmocka uthash ibm-sw-tpm2 iproute2 procps_pkg which
+
+  # cmocka is checked / used(?) in the configure script
+  # when unit and/or integration testing is enabled
+  buildInputs = [ openssl json_c curl libgcrypt uthash ]
+    # cmocka doesn't build with pkgsStatic, and we don't need it anyway
+    # when tests are not run
+    ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [
+    cmocka
   ];
 
+  checkInputs = [
+    cmocka which openssl procps_pkg iproute2 ibm-sw-tpm2
+  ];
+
+  strictDeps = true;
   preAutoreconf = "./bootstrap";
 
   enableParallelBuilding = true;
@@ -49,7 +59,7 @@ stdenv.mkDerivation rec {
       --replace '@PREFIX@' $out/lib
   '';
 
-  configureFlags = [
+  configureFlags = lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [
     "--enable-unit"
     "--enable-integration"
   ];
