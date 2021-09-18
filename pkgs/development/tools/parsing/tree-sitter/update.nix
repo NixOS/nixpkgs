@@ -114,6 +114,10 @@ let
       orga = "Himujjal";
       repo = "tree-sitter-svelte";
     };
+    "tree-sitter-vim" = {
+      orga = "vigoux";
+      repo = "tree-sitter-viml";
+    };
     "tree-sitter-yaml" = {
       orga = "ikatyang";
       repo = "tree-sitter-yaml";

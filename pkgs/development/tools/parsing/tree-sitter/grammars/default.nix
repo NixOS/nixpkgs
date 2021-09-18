@@ -41,6 +41,7 @@
   tree-sitter-tsq = (builtins.fromJSON (builtins.readFile ./tree-sitter-tsq.json));
   tree-sitter-typescript = (builtins.fromJSON (builtins.readFile ./tree-sitter-typescript.json));
   tree-sitter-verilog = (builtins.fromJSON (builtins.readFile ./tree-sitter-verilog.json));
+  tree-sitter-vim = (builtins.fromJSON (builtins.readFile ./tree-sitter-vim.json));
   tree-sitter-yaml = (builtins.fromJSON (builtins.readFile ./tree-sitter-yaml.json));
   tree-sitter-zig = (builtins.fromJSON (builtins.readFile ./tree-sitter-zig.json));
 }
