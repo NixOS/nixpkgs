@@ -40,7 +40,7 @@
 , # Whether to build terminfo.
   enableTerminfo ? !stdenv.targetPlatform.isWindows
 
-, version ? "9.3.20210806"
+, version ? "9.3.20210913"
 , # What flavour to build. An empty string indicates no
   # specific flavour and falls back to ghc default values.
   ghcFlavour ? lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform)
@@ -153,8 +153,8 @@ stdenv.mkDerivation (rec {
 
   src = fetchgit {
     url = "https://gitlab.haskell.org/ghc/ghc.git/";
-    rev = "5d651c78fed7e55b3b3cd21a04499d1a2f75204d";
-    sha256 = "1z9xg8jsqr9id985wxfhkjyb3kpyrmr7vjdqzfv42cpxynd483r8";
+    rev = "64923cf295ea914db458547432237a5ed1eff571";
+    sha256 = "1s9sm4gf4r71lk0s7h9v217rxfwjf435q1jji90hlxz23wvmhr6d";
   };
 
   enableParallelBuilding = true;
@@ -194,6 +194,9 @@ stdenv.mkDerivation (rec {
     export NIX_LDFLAGS+=" -rpath $out/lib/ghc-${version}"
   '' + lib.optionalString stdenv.isDarwin ''
     export NIX_LDFLAGS+=" -no_dtrace_dof"
+
+    # GHC tries the host xattr /usr/bin/xattr by default which fails since it expects python to be 2.7
+    export XATTR=${lib.getBin xattr}/bin/xattr
   '' + lib.optionalString targetPlatform.useAndroidPrebuilt ''
     sed -i -e '5i ,("armv7a-unknown-linux-androideabi", ("e-m:e-p:32:32-i64:64-v128:64:128-a:0:32-n32-S64", "cortex-a8", ""))' llvm-targets
   '' + lib.optionalString targetPlatform.isMusl ''
@@ -256,10 +259,6 @@ stdenv.mkDerivation (rec {
     ghc bootPkgs.alex bootPkgs.happy bootPkgs.hscolour
   ] ++ lib.optionals enableDocs [
     sphinx
-  ] ++ lib.optionals stdenv.isDarwin [
-    # TODO(@sternenseemann): use XATTR env var once we have
-    # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/6447
-    xattr
   ];
 
   # For building runtime libs

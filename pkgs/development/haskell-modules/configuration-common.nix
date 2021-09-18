@@ -212,6 +212,7 @@ self: super: {
   command-qq = dontCheck super.command-qq;              # http://hydra.cryp.to/build/499042/log/raw
   conduit-connection = dontCheck super.conduit-connection;
   craftwerk = dontCheck super.craftwerk;
+  crc = dontCheck super.crc;                            # https://github.com/MichaelXavier/crc/issues/2
   css-text = dontCheck super.css-text;
   damnpacket = dontCheck super.damnpacket;              # http://hydra.cryp.to/build/496923/log
   data-hash = dontCheck super.data-hash;
@@ -1354,19 +1355,12 @@ self: super: {
   # 2021-06-20: Tests fail: https://github.com/haskell/haskell-language-server/issues/1949
   hls-refine-imports-plugin = dontCheck super.hls-refine-imports-plugin;
 
-  # 2021-03-09: Golden tests seem to be missing in hackage release:
-  # https://github.com/haskell/haskell-language-server/issues/1536
-  hls-tactics-plugin = dontCheck (super.hls-tactics-plugin.override { refinery = self.refinery_0_3_0_0; });
+  # 2021-09-14: Tests are broken because of undeterministic variable names
+  hls-tactics-plugin = dontCheck super.hls-tactics-plugin;
 
   # 2021-03-21 Test hangs
   # https://github.com/haskell/haskell-language-server/issues/1562
-  # Jailbreak because of: https://github.com/haskell/haskell-language-server/pull/1595
-  ghcide = doJailbreak (dontCheck super.ghcide);
-
-  # 2020-03-09: Tests broken in hackage release
-  # fixed on upstream, but not released in hiedb 0.3.0.1
-  # https://github.com/wz1000/HieDb/issues/30
-  hiedb = dontCheck super.hiedb;
+  ghcide = dontCheck super.ghcide;
 
   data-tree-print = doJailbreak super.data-tree-print;
 
@@ -1443,10 +1437,10 @@ self: super: {
   # compatible with Cabal 3. No upstream repository found so far
   readline =  appendPatch super.readline ./patches/readline-fix-for-cabal-3.patch;
 
-  # 2020-12-05: http-client is fixed on too old version
-  essence-of-live-coding-warp = doJailbreak (super.essence-of-live-coding-warp.override {
-    http-client = self.http-client_0_7_8;
-  });
+  # 2020-12-05: this package requires a newer version of http-client,
+  # but it still compiles with older version:
+  # https://github.com/turion/essence-of-live-coding/pull/86
+  essence-of-live-coding-warp = doJailbreak super.essence-of-live-coding-warp;
 
   # 2020-12-06: Restrictive upper bounds w.r.t. pandoc-types (https://github.com/owickstrom/pandoc-include-code/issues/27)
   pandoc-include-code = doJailbreak super.pandoc-include-code;
@@ -1842,9 +1836,6 @@ EOT
     testFlags = [ "--pattern" "!/[NOCI]/" ];
   };
 
-  # Tests require to run a binary which isn't built
-  lsp-test = dontCheck super.lsp-test;
-
   # 2021-05-22: Tests fail sometimes (even consistently on hydra)
   # when running a fs-related test with >= 12 jobs. To work around
   # this, run tests with only a single job.
@@ -1923,7 +1914,7 @@ EOT
 
   # Needs Cabal >= 3.4
   chs-cabal = super.chs-cabal.override {
-    Cabal = self.Cabal_3_6_0_0;
+    Cabal = self.Cabal_3_6_1_0;
   };
 
   # 2021-08-18: streamly-posix was released with hspec 2.8.2, but it works with older versions too.
@@ -1931,7 +1922,18 @@ EOT
 
   # 2021-09-06: hadolint depends on language-docker >= 10.1
   hadolint = super.hadolint.override {
-    language-docker = self.language-docker_10_1_1;
+    language-docker = self.language-docker_10_1_2;
   };
+
+  # 2021-09-13: hls 1.3 needs a newer lsp than stackage-lts. (lsp >= 1.2.0.1)
+  # (hls is nearly the only consumer, but consists of 18 packages, so we bump lsp globally.)
+  lsp = doDistribute self.lsp_1_2_0_1;
+  lsp-types = doDistribute self.lsp-types_1_3_0_1;
+  # Not running the "example" test because it requires a binary from lsps test
+  # suite which is not part of the output of lsp.
+  lsp-test = doDistribute (overrideCabal self.lsp-test_0_14_0_1 (old: { testTarget = "tests func-test"; }));
+
+  # 2021-09-14: Tests are flaky.
+  hls-splice-plugin = dontCheck super.hls-splice-plugin;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

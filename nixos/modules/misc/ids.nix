@@ -137,9 +137,9 @@ in
       #mongodb = 98; #dynamically allocated as of 2021-09-03
       #openldap = 99; # dynamically allocated as of PR#94610
       #users = 100; # unused
-      cgminer = 101;
+      # cgminer = 101; #dynamically allocated as of 2021-09-17
       munin = 102;
-      logcheck = 103;
+      #logcheck = 103; #dynamically allocated as of 2021-09-17
       #nix-ssh = 104; #dynamically allocated as of 2021-09-03
       dictd = 105;
       couchdb = 106;
@@ -212,10 +212,10 @@ in
       sddm = 175;
       tss = 176;
       #memcached = 177; removed 2018-01-03
-      ntp = 179;
+      #ntp = 179; # dynamically allocated as of 2021-09-17
       zabbix = 180;
       #redis = 181; removed 2018-01-03
-      unifi = 183;
+      #unifi = 183; dynamically allocated as of 2021-09-17
       uptimed = 184;
       zope2 = 185;
       ripple-data-api = 186;
@@ -244,7 +244,7 @@ in
       #kibana = 211;# dynamically allocated as of 2021-09-03
       xtreemfs = 212;
       calibre-server = 213;
-      heapster = 214;
+      #heapster = 214; #dynamically allocated as of 2021-09-17
       bepasty = 215;
       # pumpio = 216; # unused, removed 2018-02-24
       nm-openvpn = 217;
@@ -258,11 +258,11 @@ in
       rspamd = 225;
       # rmilter = 226; # unused, removed 2019-08-22
       cfdyndns = 227;
-      gammu-smsd = 228;
+      # gammu-smsd = 228; #dynamically allocated as of 2021-09-17
       pdnsd = 229;
       octoprint = 230;
       avahi-autoipd = 231;
-      nntp-proxy = 232;
+      # nntp-proxy = 232; #dynamically allocated as of 2021-09-17
       mjpg-streamer = 233;
       #radicale = 234;# dynamically allocated as of 2021-09-03
       hydra-queue-runner = 235;

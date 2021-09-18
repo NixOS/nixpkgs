@@ -187,8 +187,9 @@ let
 
   rtpPath = ".";
 
-  nativeImpl = packages:
-  (let
+  # Generates a packpath folder as expected by vim
+  packDir = packages:
+  let
     # dir is "start" or "opt"
     linkLuaPlugin = plugin: packageName: dir: ''
       mkdir -p $out/pack/${packageName}/${dir}/${plugin.pname}/lua
@@ -197,15 +198,15 @@ let
     '';
 
     linkVimlPlugin = plugin: packageName: dir: ''
-      mkdir -p $out/pack/${packageName}/${dir}/${plugin.pname}
-      ln -sf ${plugin}/${rtpPath}/* $out/pack/${packageName}/${dir}/${plugin.pname}
+      mkdir -p $out/pack/${packageName}/${dir}/${lib.getName plugin}
+      ln -sf ${plugin}/${rtpPath}/* $out/pack/${packageName}/${dir}/${lib.getName plugin}
     '';
 
     link = pluginPath: if hasLuaModule pluginPath
       then linkLuaPlugin pluginPath
       else linkVimlPlugin pluginPath;
 
-    packageLinks = (packageName: {start ? [], opt ? []}:
+    packageLinks = packageName: {start ? [], opt ? []}:
     let
       # `nativeImpl` expects packages to be derivations, not strings (as
       # opposed to older implementations that have to maintain backwards
@@ -230,21 +231,20 @@ let
       ++ [
         "mkdir -p $out/pack/${packageName}/start/__python3_dependencies"
         "ln -s ${python3Env}/${python3Env.sitePackages} $out/pack/${packageName}/start/__python3_dependencies/python3"
-      ]
-    );
-    packDir = (packages:
+      ];
+  in
       stdenv.mkDerivation {
         name = "vim-pack-dir";
         src = ./.;
         installPhase = lib.concatStringsSep "\n" (lib.flatten (lib.mapAttrsToList packageLinks packages));
         preferLocalBuild = true;
-      }
-    );
-  in
+    };
+
+  nativeImpl = packages:
   ''
     set packpath^=${packDir packages}
     set runtimepath^=${packDir packages}
-  '');
+  '';
 
   /* Generates a vimrc string
 
@@ -292,12 +292,14 @@ let
 
       /* vim-plug is an extremely popular vim plugin manager.
       */
+      /* Remove repeated "/." suffixes from a path */
+      stripDots = path: lib.head (builtins.split "(/\\.)*$" path);
       plugImpl =
       (''
         source ${vimPlugins.vim-plug.rtp}/plug.vim
-        call plug#begin('/dev/null')
+        silent! call plug#begin('/dev/null')
 
-        '' + (lib.concatMapStringsSep "\n" (pkg: "Plug '${pkg.rtp}'") plug.plugins) + ''
+        '' + (lib.concatMapStringsSep "\n" (pkg: "Plug '${stripDots pkg.rtp}'") plug.plugins) + ''
 
         call plug#end()
       '');

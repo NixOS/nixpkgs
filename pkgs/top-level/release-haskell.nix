@@ -252,6 +252,9 @@ let
         # remove integer-simple because it appears to be broken with
         # musl and non-static-linking.
         integer-simple = {};
+
+        ghcjs = {};
+        ghcjs810 = {};
       };
 
       # Get some cache going for MUSL-enabled GHC.
@@ -300,7 +303,7 @@ let
       # package sets (like Cabal, jailbreak-cabal) are
       # working as expected.
       cabal-install = all;
-      Cabal_3_6_0_0 = with compilerNames; [ ghc884 ghc8107 ];
+      Cabal_3_6_1_0 = with compilerNames; [ ghc884 ghc8107 ghc901 ghc921 ];
       cabal2nix-unstable = all;
       funcmp = all;
       # Doesn't currently work on ghc-9.0:

@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   pname = "openlibm";
-  version = "0.7.5";
+  version = "0.8.0";
   src = fetchurl {
     url = "https://github.com/JuliaLang/openlibm/archive/v${version}.tar.gz";
-    sha256 = "sha256-vpg7nh5A5pbou7frj2N208oK5nWubYKTZUA4Ww7uwVs=";
+    sha256 = "sha256-A2IHaN9MpSamPdZ1xt6VpcnRZ/9ZVVzlemHGv0nkAO4=";
   };
 
   makeFlags = [ "prefix=$(out)" ];

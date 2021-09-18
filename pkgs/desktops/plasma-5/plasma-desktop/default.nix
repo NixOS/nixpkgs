@@ -1,5 +1,5 @@
 {
-  mkDerivation, lib,
+  mkDerivation, lib, fetchpatch,
   extra-cmake-modules, kdoctools,
 
   boost, fontconfig, ibus, libXcursor, libXft, libcanberra_kde, libpulseaudio,
@@ -21,7 +21,8 @@ mkDerivation {
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
     boost fontconfig ibus libcanberra_kde libpulseaudio libXcursor libXft xorgserver
-    libxkbfile phonon xf86inputevdev xf86inputsynaptics xinput xkeyboard_config
+    libxkbfile phonon xf86inputlibinput xf86inputevdev xf86inputsynaptics xinput
+    xkeyboard_config
 
     accounts-qt qtdeclarative qtquickcontrols qtquickcontrols2 qtsvg qtx11extras
 
@@ -35,18 +36,14 @@ mkDerivation {
   patches = [
     ./hwclock-path.patch
     ./tzdir.patch
+    # https://invent.kde.org/plasma/plasma-desktop/-/merge_requests/563
+    (fetchpatch {
+      url = "https://invent.kde.org/plasma/plasma-desktop/-/commit/8d9bf2032b8a2e5de75edf5713c42866f5b80649.patch";
+      sha256 = "sha256-2jqqFjBljbhf7I+fTsIvuFs3Ic662KTKRnbcSm5Jing=";
+    })
   ];
-  postPatch = ''
-    sed '1i#include <cmath>' -i kcms/touchpad/backends/x11/synapticstouchpad.cpp
-  '';
   CXXFLAGS = [
-    "-I${lib.getDev xorgserver}/include/xorg"
-    "-I${lib.getDev xf86inputsynaptics}/include/xorg"
     ''-DNIXPKGS_HWCLOCK=\"${lib.getBin util-linux}/sbin/hwclock\"''
-  ];
-  cmakeFlags = [
-    "-DEvdev_INCLUDE_DIRS=${lib.getDev xf86inputevdev}/include/xorg"
-    "-DXORGLIBINPUT_INCLUDE_DIRS=${lib.getDev xf86inputlibinput}/include/xorg"
   ];
   postInstall = ''
     # Display ~/Desktop contents on the desktop by default.

@@ -13,9 +13,9 @@
 , gtk3
 , glib
 , libgee
+, libhandy
 , granite
 , libnotify
-, libunity
 , pango
 , elementary-dock
 , bamf
@@ -27,11 +27,12 @@
 , libcloudproviders
 , libgit2-glib
 , wrapGAppsHook
+, systemd
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-files";
-  version = "4.5.0";
+  version = "6.0.2";
 
   repoName = "files";
 
@@ -41,7 +42,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "sha256-wtQW1poX791DAlSFdVV9psnCfBDeVXI2fDZ2GcvvNn8=";
+    sha256 = "1i514r3adypmcwinmv4c1kybims16xi4i3akx0yy04dib92hbk7c";
   };
 
   passthru = {
@@ -73,29 +74,30 @@ stdenv.mkDerivation rec {
     libdbusmenu-gtk3
     libgee
     libgit2-glib
+    libhandy
     libnotify
-    libunity
     pango
     sqlite
+    systemd
     zeitgeist
   ];
 
   patches = [
-    ./0001-filechooser-module-hardcode-gsettings-for-nixos.patch
+    ./filechooser-portal-hardcode-gsettings-for-nixos.patch
   ];
 
   postPatch = ''
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
 
-    substituteInPlace filechooser-module/FileChooserDialog.vala \
+    substituteInPlace filechooser-portal/LegacyFileChooserDialog.vala \
       --subst-var-by ELEMENTARY_FILES_GSETTINGS_PATH ${glib.makeSchemaPath "$out" "${pname}-${version}"}
   '';
 
   meta = with lib; {
     description = "File browser designed for elementary OS";
     homepage = "https://github.com/elementary/files";
-    license = licenses.lgpl3;
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;
   };

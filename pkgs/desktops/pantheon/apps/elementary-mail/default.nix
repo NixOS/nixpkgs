@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchFromGitHub
+, fetchpatch
 , nix-update-script
 , pantheon
 , pkg-config
@@ -25,7 +26,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-mail";
-  version = "6.0.0";
+  version = "6.1.1";
 
   repoName = "mail";
 
@@ -33,7 +34,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "07iiipl0nsp63g5bn1y2hg6bmgj6i9cxqcfpd7q3vmldnkijvaxs";
+    sha256 = "15ai0x9236pjx76m0756nyc1by78v0lg1dgdiifk868krdvipzzx";
   };
 
   passthru = {
@@ -41,6 +42,12 @@ stdenv.mkDerivation rec {
       attrPath = "pantheon.${pname}";
     };
   };
+
+  patches = [
+    # The app stuck when loading gravatar, temporarily reverts part
+    # of https://github.com/elementary/mail/pull/600 to fix this
+    ./revert-fix-warning.patch
+  ];
 
   nativeBuildInputs = [
     appstream
