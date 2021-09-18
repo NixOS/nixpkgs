@@ -215,8 +215,6 @@ in {
       networkmanager.dns = "unbound";
     };
 
-    environment.etc."unbound/unbound.conf".source = confFile;
-
     systemd.services.unbound = {
       description = "Unbound recursive Domain Name Server";
       after = [ "network.target" ];
@@ -234,12 +232,8 @@ in {
         ''}
       '';
 
-      restartTriggers = [
-        confFile
-      ];
-
       serviceConfig = {
-        ExecStart = "${cfg.package}/bin/unbound -p -d -c /etc/unbound/unbound.conf";
+        ExecStart = "${cfg.package}/bin/unbound -p -d -c ${confFile}";
         ExecReload = "+/run/current-system/sw/bin/kill -HUP $MAINPID";
 
         NotifyAccess = "main";
