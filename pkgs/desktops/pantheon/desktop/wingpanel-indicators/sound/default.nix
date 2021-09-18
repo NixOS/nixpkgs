@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchFromGitHub
+, fetchpatch
 , nix-update-script
 , pantheon
 , pkg-config
@@ -19,14 +20,23 @@
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-sound";
-  version = "2.1.6";
+  version = "6.0.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-WGkxLsbdJ7Z7kolymYpggsVy4cN4CicNKdfCbunklSI=";
+    sha256 = "0cv97c0qrhqisyghy9a9qr4ffcx3g4bkswxm6rn4r2wfg4gvljri";
   };
+
+  patches = [
+    # Upstream code not respecting our localedir
+    # https://github.com/elementary/wingpanel-indicator-sound/pull/216
+    (fetchpatch {
+      url = "https://github.com/elementary/wingpanel-indicator-sound/commit/df816104c15e4322c1077313b1f43114cdaf710e.patch";
+      sha256 = "029z7l467jz1ymxwrzrf874062r6xmskl7mldpq39jh110fijy5l";
+    })
+  ];
 
   passthru = {
     updateScript = nix-update-script {
@@ -61,7 +71,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Sound Indicator for Wingpanel";
     homepage = "https://github.com/elementary/wingpanel-indicator-sound";
-    license = licenses.gpl2Plus;
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;
   };

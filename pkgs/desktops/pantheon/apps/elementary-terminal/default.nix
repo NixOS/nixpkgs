@@ -35,6 +35,15 @@ stdenv.mkDerivation rec {
     sha256 = "08akr4sv4jy9kd4s26kib6j7i8hc3vs0sp71fifv7ww4mi9cm6jc";
   };
 
+  patches = [
+    # Upstream code not respecting our localedir
+    # https://github.com/elementary/terminal/pull/611
+    (fetchpatch {
+      url = "https://github.com/elementary/terminal/commit/4f6f2d9f58642ed904240c247cc0a0846baecb6b.patch";
+      sha256 = "04pbd72migxw8i949v3bmw8kfi5nr02rjcwfrx3b6xkiic9825sv";
+    })
+  ];
+
   passthru = {
     updateScript = nix-update-script {
       attrPath = "pantheon.${pname}";

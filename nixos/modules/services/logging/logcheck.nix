@@ -215,11 +215,15 @@ in
 
     users.users = optionalAttrs (cfg.user == "logcheck") {
       logcheck = {
-        uid = config.ids.uids.logcheck;
+        group = "logcheck";
+        isSystemUser = true;
         shell = "/bin/sh";
         description = "Logcheck user account";
         extraGroups = cfg.extraGroups;
       };
+    };
+    users.groups = optionalAttrs (cfg.user == "logcheck") {
+      logcheck = {};
     };
 
     system.activationScripts.logcheck = ''

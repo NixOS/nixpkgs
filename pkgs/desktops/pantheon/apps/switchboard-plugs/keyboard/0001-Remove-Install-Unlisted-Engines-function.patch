@@ -1,19 +1,21 @@
-From 4fd6da39ab33a6eef46ee2c64eb4f5595c7fe633 Mon Sep 17 00:00:00 2001
-Message-Id: <4fd6da39ab33a6eef46ee2c64eb4f5595c7fe633.1599180249.git-series.worldofpeace@protonmail.ch>
-From: worldofpeace <worldofpeace@protonmail.ch>
-Date: Thu,  3 Sep 2020 20:43:25 -0400
+From f23363ad2fa402d59b41ffe2c13a46462c6d2194 Mon Sep 17 00:00:00 2001
+From: Bobby Rong <rjl931189261@126.com>
+Date: Fri, 16 Jul 2021 23:28:56 +0800
 Subject: [PATCH] Remove Install Unlisted Engines function
 
 https://github.com/elementary/switchboard-plug-keyboard/issues/324
+
+Co-Authored-By: WORLDofPEACE <worldofpeace@protonmail.ch>
+
 ---
- src/Dialogs/InstallEngineDialog.vala           | 140 +------------------
- src/Dialogs/ProgressDialog.vala                |  82 +----------
- src/InputMethod/Installer/InstallList.vala     |  73 +---------
- src/InputMethod/Installer/UbuntuInstaller.vala | 142 +------------------
- src/InputMethod/Installer/aptd-client.vala     |  93 +------------
- src/Widgets/InputMethod/AddEnginesPopover.vala |  12 +--
- src/Widgets/InputMethod/LanguagesRow.vala      |  43 +-----
- src/meson.build                                |   6 +-
+ src/Dialogs/InstallEngineDialog.vala          | 140 -----------------
+ src/Dialogs/ProgressDialog.vala               |  82 ----------
+ src/InputMethod/Installer/InstallList.vala    |  73 ---------
+ .../Installer/UbuntuInstaller.vala            | 142 ------------------
+ src/InputMethod/Installer/aptd-client.vala    |  93 ------------
+ .../InputMethod/AddEnginesPopover.vala        |  12 --
+ src/Widgets/InputMethod/LanguagesRow.vala     |  43 ------
+ src/meson.build                               |   6 -
  8 files changed, 591 deletions(-)
  delete mode 100644 src/Dialogs/InstallEngineDialog.vala
  delete mode 100644 src/Dialogs/ProgressDialog.vala
@@ -170,7 +172,7 @@ index ffba3a8..0000000
 -}
 diff --git a/src/Dialogs/ProgressDialog.vala b/src/Dialogs/ProgressDialog.vala
 deleted file mode 100644
-index f110aca..0000000
+index 868f167..0000000
 --- a/src/Dialogs/ProgressDialog.vala
 +++ /dev/null
 @@ -1,82 +0,0 @@
@@ -191,7 +193,7 @@ index f110aca..0000000
 -* with this program. If not, see http://www.gnu.org/licenses/.
 -*/
 -
--public class Pantheon.Keyboard.InputMethodPage.ProgressDialog : Gtk.Dialog {
+-public class Pantheon.Keyboard.InputMethodPage.ProgressDialog : Granite.Dialog {
 -    public int progress {
 -        set {
 -            if (value >= 100) {
@@ -583,10 +585,10 @@ index ee5c3f5..0000000
 -    }
 -}
 diff --git a/src/Widgets/InputMethod/AddEnginesPopover.vala b/src/Widgets/InputMethod/AddEnginesPopover.vala
-index 46e005d..6b56c6b 100644
+index 110bc1d..8a03ca8 100644
 --- a/src/Widgets/InputMethod/AddEnginesPopover.vala
 +++ b/src/Widgets/InputMethod/AddEnginesPopover.vala
-@@ -49,8 +49,6 @@ public class Pantheon.Keyboard.InputMethodPage.AddEnginesPopover : Gtk.Popover {
+@@ -43,8 +43,6 @@ public class Pantheon.Keyboard.InputMethodPage.AddEnginesPopover : Gtk.Popover {
          };
          scrolled.add (listbox);
  
@@ -595,7 +597,7 @@ index 46e005d..6b56c6b 100644
          var cancel_button = new Gtk.Button.with_label (_("Cancel"));
  
          var add_button = new Gtk.Button.with_label (_("Add Engine"));
-@@ -61,10 +59,8 @@ public class Pantheon.Keyboard.InputMethodPage.AddEnginesPopover : Gtk.Popover {
+@@ -55,10 +53,8 @@ public class Pantheon.Keyboard.InputMethodPage.AddEnginesPopover : Gtk.Popover {
              margin = 12,
              spacing = 6
          };
@@ -606,7 +608,7 @@ index 46e005d..6b56c6b 100644
  
          var grid = new Gtk.Grid ();
          grid.attach (search_entry, 0, 0);
-@@ -92,14 +88,6 @@ public class Pantheon.Keyboard.InputMethodPage.AddEnginesPopover : Gtk.Popover {
+@@ -88,14 +84,6 @@ public class Pantheon.Keyboard.InputMethodPage.AddEnginesPopover : Gtk.Popover {
              listbox.invalidate_filter ();
          });
  
@@ -671,20 +673,20 @@ index dc064ae..0000000
 -    }
 -}
 diff --git a/src/meson.build b/src/meson.build
-index 28f07c1..a515419 100644
+index 77a51d0..26711c5 100644
 --- a/src/meson.build
 +++ b/src/meson.build
-@@ -16,7 +16,6 @@ plug_files = files(
-     'Widgets/Shortcuts/CustomTree.vala',
+@@ -17,7 +17,6 @@ plug_files = files(
      'Widgets/Layout/Display.vala',
-     'Widgets/Layout/AddLayoutPopover.vala',
+     'Widgets/Layout/AdvancedSettingsPanel.vala',
+     'Widgets/Layout/AdvancedSettingsGrid.vala',
 -    'Widgets/InputMethod/LanguagesRow.vala',
      'Widgets/InputMethod/EnginesRow.vala',
      'Widgets/InputMethod/AddEnginesPopover.vala',
      'Views/Shortcuts.vala',
-@@ -36,11 +35,6 @@ plug_files = files(
-     'Layout/AdvancedSettingsGrid.vala',
-     'InputMethod/Utils.vala',
+@@ -33,11 +32,6 @@ plug_files = files(
+     'InputSources/SourceSettings.vala',
+     'InputSources/InputSource.vala',
      'InputMethod/AddEnginesList.vala',
 -    'InputMethod/Installer/UbuntuInstaller.vala',
 -    'InputMethod/Installer/InstallList.vala',
@@ -692,9 +694,5 @@ index 28f07c1..a515419 100644
 -    'Dialogs/ProgressDialog.vala',
 -    'Dialogs/InstallEngineDialog.vala',
      'Dialogs/ConflictDialog.vala',
+     'Dialogs/AddLayoutDialog.vala'
  )
- 
-
-base-commit: 9d9eddeb7da8450a309496c25066f4f78a9d4070
--- 
-git-series 0.9.1

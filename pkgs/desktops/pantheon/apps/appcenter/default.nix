@@ -30,14 +30,20 @@
 
 stdenv.mkDerivation rec {
   pname = "appcenter";
-  version = "3.6.0";
+  version = "3.7.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "0kwqgilhyrj2nbvw5y34nzch5h9jnrg1a1n333qdsx4ax6yrxh4j";
+    sha256 = "1llkc0p47jcx992lkwics86vv622dmmvm5hxrdsq26j9crcd5dam";
   };
+
+  patches = [
+    # Try to remove other backends to make flatpak backend work.
+    # https://github.com/NixOS/nixpkgs/issues/70214
+    ./flatpak-only.patch
+  ];
 
   passthru = {
     updateScript = nix-update-script {
