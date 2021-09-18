@@ -287,6 +287,15 @@ in {
         '';
       };
 
+      overwriteWebroot = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          Serve Nextcloud at a subdir of the NGINX webroot.
+        '';
+        example = "/nextcloud";
+      };
+
       defaultPhoneRegion = mkOption {
         default = null;
         type = types.nullOr types.str;
@@ -469,6 +478,7 @@ in {
               'log_type' => 'syslog',
               'log_level' => '${builtins.toString cfg.logLevel}',
               ${optionalString (c.overwriteProtocol != null) "'overwriteprotocol' => '${c.overwriteProtocol}',"}
+              ${optionalString (c.overwriteWebroot != null) "'overwritewebroot' => '${c.overwriteWebroot}',"}
               ${optionalString (c.dbname != null) "'dbname' => '${c.dbname}',"}
               ${optionalString (c.dbhost != null) "'dbhost' => '${c.dbhost}',"}
               ${optionalString (c.dbport != null) "'dbport' => '${toString c.dbport}',"}
@@ -614,7 +624,20 @@ in {
 
       services.nginx.enable = mkDefault true;
 
-      services.nginx.virtualHosts."${cfg.hostName}" = {
+      services.nginx.virtualHosts."${cfg.hostName}" = let
+        webroot = if cfg.config.overwriteWebroot != null then cfg.config.overwriteWebroot else "";
+        root = pkgs.stdenv.mkDerivation {
+          name = "nextcloud-webroot";
+          dontUnpack = true;
+          dontBuild = true;
+          dontFixup = true;
+          installPhase = ''
+            export target=$out${webroot}
+            mkdir -p $(dirname $target)
+            ln -s ${cfg.package} $target
+          '';
+        };
+      in {
         locations = {
           "= /robots.txt".extraConfig = ''
             allow all;
@@ -623,24 +646,24 @@ in {
           '';
 
           "^~ /.well-known" = {
-            root = cfg.package;
+            inherit root;
             extraConfig = ''
-              location = /.well-known/carddav { return 301 /remote.php/dav/; }
-              location = /.well-known/caldav  { return 301 /remote.php/dav/; }
+              location = /.well-known/carddav { return 301 ${webroot}/remote.php/dav/; }
+              location = /.well-known/caldav  { return 301 ${webroot}/remote.php/dav/; }
 
               location /.well-known/acme-challenge { try_files $uri $uri/ =404; }
               location /.well-known/pki-validation { try_files $uri $uri/ =404; }
 
-              return 301 /index.php$request_uri;
+              return 301 ${webroot}/index.php$request_uri;
             '';
           };
 
-          "/store-apps" = {
-            root = "${cfg.home}";
+          "${webroot}/store-apps/" = {
+            alias = "${cfg.home}/store-apps/";
           };
 
-          "^~ /" = {
-            root = cfg.package;
+          "^~ ${if webroot != "" then webroot else "/"}" = {
+            inherit root;
             extraConfig = ''
               client_max_body_size ${cfg.maxUploadSize};
               fastcgi_buffers 64 4K;
@@ -662,18 +685,18 @@ in {
 
               fastcgi_hide_header X-Powered-By;
 
-              index index.php index.html /index.php$request_uri;
+              index index.php index.html ${webroot}/index.php$request_uri;
 
-              location = / {
+              location = ${if webroot != "" then webroot else "/"} {
                 if ( $http_user_agent ~ ^DavClnt ) {
-                  return 302 /remote.php/webdav/$is_args$args;
+                  return 302 ${webroot}/remote.php/webdav/$is_args$args;
                 }
               }
 
-              location ~ ^/(?:build|tests|config|lib|3rdparty|templates|data)(?:$|/)  { return 404; }
-              location ~ ^/(?:\\.(?!well-known)|autotest|occ|issue|indie|db_|console) { return 404; }
+              location ~ ^${webroot}/(?:build|tests|config|lib|3rdparty|templates|data)(?:$|/)  { return 404; }
+              location ~ ^${webroot}/(?:\\.(?!well-known)|autotest|occ|issue|indie|db_|console) { return 404; }
 
-              location ~ ^/(?:index|remote|public|cron|core/ajax/update|status|ocs/v[12]|updater/.+|oc[ms]-provider/.+|.+/richdocumentscode/proxy)\\.php(?:$|/) {
+              location ~ ^${webroot}/(?:index|remote|public|cron|core/ajax/update|status|ocs/v[12]|updater/.+|oc[ms]-provider/.+|.+/richdocumentscode/proxy)\\.php(?:$|/) {
                 fastcgi_split_path_info ^(.+?\\.php)(/.*)$;
                 set $path_info $fastcgi_path_info;
 
@@ -694,7 +717,7 @@ in {
               }
 
               location ~ \\.(?:css|js|woff2?|svg|gif|map)$ {
-                try_files $uri /index.php$request_uri;
+                try_files $uri ${webroot}/index.php$request_uri;
                 expires 6M;
                 access_log off;
               }
@@ -704,13 +727,13 @@ in {
                 access_log off;
               }
 
-              location ~ ^/(?:updater|ocs-provider|ocm-provider)(?:$|/) {
+              location ~ ^${webroot}/(?:updater|ocs-provider|ocm-provider)(?:$|/) {
                 try_files $uri/ =404;
                 index index.php;
               }
 
-              location / {
-                try_files $uri $uri/ /index.php$request_uri;
+              location ${if webroot != "" then webroot else "/"} {
+                try_files $uri $uri/ ${webroot}/index.php$request_uri;
               }
             '';
           };
@@ -718,8 +741,8 @@ in {
 
         extraConfig = ''
           ${optionalString cfg.webfinger ''
-            rewrite ^/.well-known/host-meta /public.php?service=host-meta last;
-            rewrite ^/.well-known/host-meta.json /public.php?service=host-meta-json last;
+            rewrite ^/.well-known/host-meta ${webroot}/public.php?service=host-meta last;
+            rewrite ^/.well-known/host-meta.json ${webroot}/public.php?service=host-meta-json last;
           ''}
         '';
       };
