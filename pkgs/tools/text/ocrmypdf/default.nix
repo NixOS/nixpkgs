@@ -30,13 +30,13 @@ let
 in
 buildPythonApplication rec {
   pname = "ocrmypdf";
-  version = "12.3.0";
+  version = "12.5.0";
 
   src = fetchFromGitHub {
     owner = "jbarlow83";
     repo = "OCRmyPDF";
     rev = "v${version}";
-    sha256 = "122yv3p0v4fbx30zgppcznwnm7svg97gv0sa103xb6zcld68ggn2";
+    sha256 = "sha256-g80WedX+TGHE9EJ/RSgOc53PM17V3WZslUNaHoqKTo0=";
   };
 
   nativeBuildInputs = with python3Packages; [
@@ -47,9 +47,9 @@ buildPythonApplication rec {
 
   propagatedBuildInputs = with python3Packages; [
     cffi
-    chardet
     coloredlogs
     img2pdf
+    importlib-resources
     pdfminer
     pluggy
     pikepdf
@@ -84,6 +84,6 @@ buildPythonApplication rec {
     license = with licenses; [ mpl20 mit ];
     platforms = platforms.linux;
     maintainers = [ maintainers.kiwi ];
-    changelog  = "https://github.com/jbarlow83/OCRmyPDF/blob/v${version}/docs/release_notes.rst";
+    changelog = "https://github.com/jbarlow83/OCRmyPDF/blob/v${version}/docs/release_notes.rst";
   };
 }
