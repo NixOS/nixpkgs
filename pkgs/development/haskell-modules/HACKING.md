@@ -20,6 +20,10 @@ The workflow generally proceeds in three main steps:
 
 Each of these steps is described in a separate section.
 
+There is a script that automates the workflow for merging the currently open
+`haskell-updates` PR into `master` and opening the next PR.  It is described
+at the end of this document.
+
 ## Initial `haskell-updates` PR
 
 In this section we create the PR for merging `haskell-updates` into `master`.
@@ -46,39 +50,8 @@ In this section we create the PR for merging `haskell-updates` into `master`.
 
 1.  Push these commits to the `haskell-updates` branch of the NixOS/nixpkgs repository.
 
-1.  Open a PR on Nixpkgs merging `haskell-updates` into `master`.
-
-
-
-Use the title `haskellPackages: update stackage and hackage` and the following message body:
-
-```markdown
-### This Merge
-
-This PR is the regular merge of the `haskell-updates` branch into `master`.
-
-This branch is being continually built and tested by hydra at https://hydra.nixos.org/jobset/nixpkgs/haskell-updates.
-
-I will aim to merge this PR **by 2021-TODO-TODO**. If I can merge it earlier, there might be successor PRs in that time window. As part of our rotation @TODO will continue these merges from 2021-TODO-TODO to 2021-TODO-TODO.
-
-### haskellPackages Workflow Summary
-
-Our workflow is currently described in
-[`pkgs/development/haskell-modules/HACKING.md`](https://github.com/NixOS/nixpkgs/blob/haskell-updates/pkgs/development/haskell-modules/HACKING.md).
-
-The short version is this:
-* We regularly update the Stackage and Hackage pins on `haskell-updates` (normally at the beginning of a merge window).
-* The community fixes builds of Haskell packages on that branch.
-* We aim at at least one merge of `haskell-updates` into `master` every two weeks.
-* We only do the merge if the [`mergeable`](https://hydra.nixos.org/job/nixpkgs/haskell-updates/mergeable) job is succeeding on hydra.
-* If a [`maintained`](https://hydra.nixos.org/job/nixpkgs/haskell-updates/maintained) package is still broken at the time of merge, we will only merge if the maintainer has been pinged 7 days in advance. (If you care about a Haskell package, become a maintainer!)
-
----
-
-This is the follow-up to #TODO. Come to [#haskell:nixos.org](https://matrix.to/#/#haskell:nixos.org) if you have any questions.
-```
-
-Make sure to replace all TODO with the actual values.
+1.  Open a PR on Nixpkgs for merging `haskell-updates` into `master`.  The recommended
+    PR title and body text are described in the `merge-and-open-pr.sh` section.
 
 ## Notify Maintainers and Fix Broken Packages
 
@@ -111,7 +84,7 @@ It may help contributors to try to keep the GitHub comment updated with the
 most recent build report.
 
 Maintainers should be given at least 7 days to fix up their packages when they
-break.  If maintainers don't fix up their packages with 7 days, then they
+break.  If maintainers don't fix up their packages within 7 days, then they
 may be marked broken before merging `haskell-updates` into `master`.
 
 ### Fix Broken Packages
@@ -180,24 +153,6 @@ following will happen:
 
 -   All updated files will be committed.
 
-### Merge `master` into `haskell-updates`
-
-You should occasionally merge the `master` branch into the `haskell-updates`
-branch.
-
-In an ideal world, when we merge `haskell-updates` into `master`, it would
-cause few Hydra rebuilds on `master`.  Ideally, the `nixos-unstable` channel
-would never be prevented from progressing because of needing to wait for
-rebuilding Haskell packages.
-
-In order to make sure that there are a minimal number of rebuilds after merging
-`haskell-updates` into `master`, `master` should occasionally be merged into
-the `haskell-updates` branch.
-
-This is especially important after `staging-next` is merged into `master`,
-since there is a high chance that this will cause all the Haskell packages to
-rebuild.
-
 ## Merge `haskell-updates` into `master`
 
 Now it is time to merge the `haskell-updates` PR you opened above.
@@ -241,12 +196,60 @@ When you've double-checked these points, go ahead and merge the `haskell-updates
 After merging, **make sure not to delete the `haskell-updates` branch**, since it
 causes all currently open Haskell-related pull-requests to be automatically closed on GitHub.
 
+## Script for Merging `haskell-updates` and Opening a New PR
+
+There is a script that automates merging the current `haskell-updates` PR and
+opening the next one.  When you want to merge the currently open
+`haskell-updates` PR, you can run the script with the following steps:
+
+1.  Make sure you have previously authenticated with the `gh` command.  The
+    script uses the `gh` command to merge the current PR and open a new one.
+    You should only need to do this once.
+
+    ```console
+    $ gh auth login
+    ```
+
+1.  Make sure you have correctly marked packages broken.  One of the previous
+    sections explains how to do this.
+
+1.  Merge `master` into `haskell-updates` and make sure to push to the
+    `haskell-updates` branch.  (This can be skipped if `master` has recently
+    been merged into `haskell-updates`.)
+
+1.  Go to https://hydra.nixos.org/jobset/nixpkgs/haskell-updates and force an
+    evaluation of the `haskell-updates` jobset.  See one of the following
+    sections for how to do this.  Make sure there are no evaluation errors.  If
+    there are remaining evaluation errors, fix them before continuing with this
+    merge.
+
+1.  Run the script to merge `haskell-updates`:
+
+    ```console
+    $ ./maintainers/scripts/haskell/merge-and-open-pr.sh PR_NUM_OF_CURRENT_HASKELL_UPDATES_PR
+    ```
+
+    This does the following things:
+
+    1.  Fetches `origin`, makes sure you currently have the `haskell-updates`
+        branch checked out, and makes sure your currently checked-out
+        `haskell-updates` branch is on the same commit as
+        `origin/haskell-updates`.
+
+    1.  Merges the currently open `haskell-updates` PR.
+
+    1.  Updates Stackage and Hackage snapshots.  Regenerates the Haskell package set.
+
+    1.  Pushes the commits updating Stackage and Hackage and opens a new
+        `haskell-updates` PR on Nixpkgs.  If you'd like to do this by hand,
+        look in the script for the recommended PR title and body text.
+
 ## Update Hackage Version Information
 
-After merging into `master` you can update what hackage displays as the current
-version in NixOS for every individual package.
-To do this you run `maintainers/scripts/haskell/upload-nixos-package-list-to-hackage.sh`.
-See the script for how to provide credentials. Once you have configured that
+After merging into `master` you can update what Hackage displays as the current
+version in NixOS for every individual package.  To do this you run
+`maintainers/scripts/haskell/upload-nixos-package-list-to-hackage.sh`.  See the
+script for how to provide credentials. Once you have configured credentials,
 running this takes only a few seconds.
 
 ## Additional Info
