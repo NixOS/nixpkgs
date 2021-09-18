@@ -6655,8 +6655,6 @@ in {
 
   pyquery = callPackage ../development/python-modules/pyquery { };
 
-  pyquil = callPackage ../development/python-modules/pyquil { };
-
   pyrabbit2 = callPackage ../development/python-modules/pyrabbit2 { };
 
   pyrad = callPackage ../development/python-modules/pyrad { };
@@ -7604,6 +7602,8 @@ in {
   qcelemental = callPackage ../development/python-modules/qcelemental { };
 
   qcengine = callPackage ../development/python-modules/qcengine { };
+
+  qcs-api-client = callPackage ../development/python-modules/qcs-api-client { };
 
   qdarkstyle = callPackage ../development/python-modules/qdarkstyle { };
 
