@@ -70,6 +70,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/elementary/capnet-assist";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
   };
 }

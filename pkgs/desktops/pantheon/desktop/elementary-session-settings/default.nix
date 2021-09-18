@@ -155,6 +155,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/elementary/session-settings";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
   };
 }
