@@ -1465,6 +1465,8 @@ in {
 
   cirq-google = callPackage ../development/python-modules/cirq-google { };
 
+  cirq-rigetti = callPackage ../development/python-modules/cirq-rigetti { };
+
   cirq-pasqal = callPackage ../development/python-modules/cirq-pasqal { };
 
   cirq-web = callPackage ../development/python-modules/cirq-web { };
