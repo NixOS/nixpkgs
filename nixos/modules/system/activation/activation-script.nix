@@ -263,6 +263,7 @@ in
         script = config.system.userActivationScripts.script;
         unitConfig.ConditionUser = "!@system";
         serviceConfig.Type = "oneshot";
+        wantedBy = [ "default.target" ];
       };
     };
   };
