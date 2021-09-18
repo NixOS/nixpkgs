@@ -280,6 +280,16 @@
     <itemizedlist>
       <listitem>
         <para>
+          The <literal>security.wrappers</literal> option now requires
+          to always specify an owner, group and whether the
+          setuid/setgid bit should be set. This is motivated by the fact
+          that before NixOS 21.11, specifying either setuid or setgid
+          but not owner/group resulted in wrappers owned by
+          nobody/nogroup, which is unsafe.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>paperless</literal> module and package have been
           removed. All users should migrate to the successor
           <literal>paperless-ng</literal> instead. The Paperless project

@@ -71,7 +71,12 @@ in
 
     environment.systemPackages = [ pkgs.incron ];
 
-    security.wrappers.incrontab.source = "${pkgs.incron}/bin/incrontab";
+    security.wrappers.incrontab =
+    { setuid = true;
+      owner = "root";
+      group = "root";
+      source = "${pkgs.incron}/bin/incrontab";
+    };
 
     # incron won't read symlinks
     environment.etc."incron.d/system" = {

@@ -43,6 +43,13 @@ let
 
     '';
 
+  mkSetuidRoot = source:
+    { setuid = true;
+      owner = "root";
+      group = "root";
+      inherit source;
+    };
+
 in
 
 {
@@ -109,14 +116,14 @@ in
       };
 
     security.wrappers = {
-      su.source        = "${pkgs.shadow.su}/bin/su";
-      sg.source        = "${pkgs.shadow.out}/bin/sg";
-      newgrp.source    = "${pkgs.shadow.out}/bin/newgrp";
-      newuidmap.source = "${pkgs.shadow.out}/bin/newuidmap";
-      newgidmap.source = "${pkgs.shadow.out}/bin/newgidmap";
+      su        = mkSetuidRoot "${pkgs.shadow.su}/bin/su";
+      sg        = mkSetuidRoot "${pkgs.shadow.out}/bin/sg";
+      newgrp    = mkSetuidRoot "${pkgs.shadow.out}/bin/newgrp";
+      newuidmap = mkSetuidRoot "${pkgs.shadow.out}/bin/newuidmap";
+      newgidmap = mkSetuidRoot "${pkgs.shadow.out}/bin/newgidmap";
     } // lib.optionalAttrs config.users.mutableUsers {
-      chsh.source      = "${pkgs.shadow.out}/bin/chsh";
-      passwd.source    = "${pkgs.shadow.out}/bin/passwd";
+      chsh   = mkSetuidRoot "${pkgs.shadow.out}/bin/chsh";
+      passwd = mkSetuidRoot "${pkgs.shadow.out}/bin/passwd";
     };
   };
 }

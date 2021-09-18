@@ -1133,11 +1133,16 @@ in
     # kernel because we need the ambient capability
     security.wrappers = if (versionAtLeast (getVersion config.boot.kernelPackages.kernel) "4.3") then {
       ping = {
-        source  = "${pkgs.iputils.out}/bin/ping";
+        owner = "root";
+        group = "root";
         capabilities = "cap_net_raw+p";
+        source = "${pkgs.iputils.out}/bin/ping";
       };
     } else {
-      ping.source = "${pkgs.iputils.out}/bin/ping";
+      setuid = true;
+      owner = "root";
+      group = "root";
+      source = "${pkgs.iputils.out}/bin/ping";
     };
     security.apparmor.policies."bin.ping".profile = lib.mkIf config.security.apparmor.policies."bin.ping".enable (lib.mkAfter ''
       /run/wrappers/bin/ping {
