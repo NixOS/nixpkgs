@@ -17,15 +17,18 @@
 , lib
 , ghcjsDepOverrides ? (_:_:{})
 , haskell
+, linkFarm
+, buildPackages
 }:
 
 let
   passthru = {
     configuredSrc = callPackage ./configured-ghcjs-src.nix {
       inherit ghcjsSrc;
-      inherit (bootPkgs) ghc alex happy;
+      inherit (bootPkgs) ghc alex;
+      inherit (bootGhcjs) version;
+      happy = bootPkgs.happy_1_19_12;
     };
-    genStage0 = callPackage ./mk-stage0.nix { inherit (passthru) configuredSrc; };
     bootPkgs = bootPkgs.extend (lib.foldr lib.composeExtensions (_:_:{}) [
       (self: _: import stage0 {
         inherit (passthru) configuredSrc;
@@ -41,26 +44,22 @@ let
     targetPrefix = "";
     inherit bootGhcjs;
     inherit (bootGhcjs) version;
-    ghcVersion = bootPkgs.ghc.version;
     isGhcjs = true;
 
     enableShared = true;
 
     socket-io = pkgsHostHost.nodePackages."socket.io";
 
-    # Relics of the old GHCJS build system
-    stage1Packages = [];
-    mkStage2 = { callPackage }: {
-      # https://github.com/ghcjs/ghcjs-base/issues/110
-      # https://github.com/ghcjs/ghcjs-base/pull/111
-      ghcjs-base = haskell.lib.dontCheck (haskell.lib.doJailbreak (callPackage ./ghcjs-base.nix {}));
-    };
-
     haskellCompilerName = "ghcjs-${bootGhcjs.version}";
   };
 
   bootGhcjs = haskellLib.justStaticExecutables passthru.bootPkgs.ghcjs;
-  libexec = "${bootGhcjs}/libexec/${builtins.replaceStrings ["darwin" "i686"] ["osx" "i386"] stdenv.buildPlatform.system}-${passthru.bootPkgs.ghc.name}/${bootGhcjs.name}";
+
+  # This provides the stuff we need from the emsdk
+  emsdk = linkFarm "emsdk" [
+    { name = "upstream/bin"; path = buildPackages.clang + "/bin";}
+    { name = "upstream/emscripten"; path = buildPackages.emscripten + "/bin"; }
+  ];
 
 in stdenv.mkDerivation {
     name = bootGhcjs.name;
@@ -87,23 +86,29 @@ in stdenv.mkDerivation {
 
       mkdir -p $out/bin
       mkdir -p $out/lib/${bootGhcjs.name}
-      lndir ${libexec} $out/bin
+      lndir ${bootGhcjs}/bin $out/bin
+      chmod -R +w $out/bin
+      rm $out/bin/ghcjs-boot
+      cp ${bootGhcjs}/bin/ghcjs-boot $out/bin
+      rm $out/bin/haddock
+      cp ${bootGhcjs}/bin/haddock $out/bin
+      cp ${bootGhcjs}/bin/private-ghcjs-hsc2hs $out/bin/ghcjs-hsc2hs
+
+      wrapProgram $out/bin/ghcjs-boot --set ghcjs_libexecdir $out/bin
 
       wrapProgram $out/bin/ghcjs --add-flags "-B$out/lib/${bootGhcjs.name}"
-      wrapProgram $out/bin/haddock-ghcjs --add-flags "-B$out/lib/${bootGhcjs.name}"
+      wrapProgram $out/bin/haddock --add-flags "-B$out/lib/${bootGhcjs.name}"
       wrapProgram $out/bin/ghcjs-pkg --add-flags "--global-package-db=$out/lib/${bootGhcjs.name}/package.conf.d"
+      wrapProgram $out/bin/ghcjs-hsc2hs --add-flags "-I$out/lib/${bootGhcjs.name}/include --template=$out/lib/${bootGhcjs.name}/include/template-hsc.h"
 
-      env PATH=$out/bin:$PATH $out/bin/ghcjs-boot -j1 --with-ghcjs-bin $out/bin
+      env PATH=$out/bin:$PATH $out/bin/ghcjs-boot --with-emsdk=${emsdk} --no-haddock
     '';
 
-    # We hard code -j1 as a temporary workaround for
-    # https://github.com/ghcjs/ghcjs/issues/654
-    # enableParallelBuilding = true;
+    enableParallelBuilding = true;
 
     inherit passthru;
 
-    meta.platforms = passthru.bootPkgs.ghc.meta.platforms;
-    meta.maintainers = [lib.maintainers.elvishjerricco];
-    meta.hydraPlatforms = [];
-    meta.broken = true;    # https://hydra.nixos.org/build/129701778
+    # The emscripten is broken on darwin
+    meta.platforms = lib.platforms.linux;
+    meta.maintainers = with lib.maintainers; [ obsidian-systems-maintenance ];
   }

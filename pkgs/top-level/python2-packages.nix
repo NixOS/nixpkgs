@@ -36,6 +36,10 @@ with self; with super; {
 
   box2d = callPackage ../development/python-modules/box2d { };
 
+  boto3 = callPackage ../development/python-modules/boto3/1_17.nix {};
+
+  botocore = callPackage ../development/python-modules/botocore/1_20.nix {};
+
   browsermob-proxy = callPackage ../development/python-modules/browsermob-proxy { };
 
   cairocffi = callPackage ../development/python-modules/cairocffi/0_9.nix { };
@@ -543,6 +547,8 @@ with self; with super; {
   rpy2 = callPackage ../development/python-modules/rpy2/2.nix { };
 
   rsa = callPackage ../development/python-modules/rsa/4_0.nix { };
+
+  s3transfer = callPackage ../development/python-modules/s3transfer/0_4.nix { };
 
   sandboxlib = callPackage ../development/python-modules/sandboxlib { };
 
