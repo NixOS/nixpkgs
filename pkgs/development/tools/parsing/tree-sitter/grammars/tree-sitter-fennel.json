@@ -1,9 +1,9 @@
 {
   "url": "https://github.com/travonted/tree-sitter-fennel",
-  "rev": "e10b04389094d9b96aa8489121c1f285562d701d",
-  "date": "2021-08-18T16:21:04-04:00",
-  "path": "/nix/store/rmlldcr0yq9c87lp96jrajbf5n4xin6r-tree-sitter-fennel",
-  "sha256": "1bavjjy8wbp1hkj1nps1lsqa9ihwhnj039hfi1fvgxv5j7il74ir",
+  "rev": "42823442a18dd2aa7b0b22dc719abb54abb3fe2e",
+  "date": "2021-09-08T19:22:08-04:00",
+  "path": "/nix/store/2v174r3fc3cqsy8yanq2kdcjqvzl1jx9-tree-sitter-fennel",
+  "sha256": "0a59hgx7mmdicw9fq2q8dcd2ffmcgjdkk3rpwj84ya1qiyvs5x5s",
   "fetchLFS": false,
   "fetchSubmodules": false,
   "deepClone": false,
