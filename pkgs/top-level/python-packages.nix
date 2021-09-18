@@ -2500,6 +2500,8 @@ in {
 
   fastapi = callPackage ../development/python-modules/fastapi { };
 
+  fastavro = callPackage ../development/python-modules/fastavro { };
+
   fastcache = callPackage ../development/python-modules/fastcache { };
 
   fastdiff = callPackage ../development/python-modules/fastdiff { };
