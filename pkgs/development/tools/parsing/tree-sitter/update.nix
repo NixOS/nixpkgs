@@ -106,6 +106,10 @@ let
       orga = "ikatyang";
       repo = "tree-sitter-markdown";
     };
+    "tree-sitter-rst" = {
+      orga = "stsewd";
+      repo = "tree-sitter-rst";
+    };
     "tree-sitter-svelte" = {
       orga = "Himujjal";
       repo = "tree-sitter-svelte";

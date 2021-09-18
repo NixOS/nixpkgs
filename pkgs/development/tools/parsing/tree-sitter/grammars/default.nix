@@ -31,6 +31,7 @@
   tree-sitter-python = (builtins.fromJSON (builtins.readFile ./tree-sitter-python.json));
   tree-sitter-ql = (builtins.fromJSON (builtins.readFile ./tree-sitter-ql.json));
   tree-sitter-regex = (builtins.fromJSON (builtins.readFile ./tree-sitter-regex.json));
+  tree-sitter-rst = (builtins.fromJSON (builtins.readFile ./tree-sitter-rst.json));
   tree-sitter-ruby = (builtins.fromJSON (builtins.readFile ./tree-sitter-ruby.json));
   tree-sitter-rust = (builtins.fromJSON (builtins.readFile ./tree-sitter-rust.json));
   tree-sitter-scala = (builtins.fromJSON (builtins.readFile ./tree-sitter-scala.json));
