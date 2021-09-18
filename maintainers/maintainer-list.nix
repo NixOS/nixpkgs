@@ -12512,6 +12512,16 @@
       fingerprint = "61AE D40F 368B 6F26 9DAE  3892 6861 6B2D 8AC4 DCC5";
     }];
   };
+  zenithal = {
+    name = "zenithal";
+    email = "i@zenithal.me";
+    github = "ZenithalHourlyRate";
+    githubId = 19512674;
+    keys = [{
+      longkeyid = "rsa4096/0x87E17EEF9B18B6C9";
+      fingerprint = "1127 F188 280A E312 3619  3329 87E1 7EEF 9B18 B6C9";
+    }];
+  };
   zeri = {
     name = "zeri";
     email = "68825133+zeri42@users.noreply.github.com";
