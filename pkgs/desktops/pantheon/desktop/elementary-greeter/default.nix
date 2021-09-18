@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchFromGitHub
+, fetchpatch
 , nix-update-script
 , linkFarm
 , substituteAll
@@ -13,11 +14,13 @@
 , gtk3
 , granite
 , libgee
-, elementary-settings-daemon
+, libhandy
+, gnome-settings-daemon
 , mutter
 , elementary-icon-theme
 , wingpanel-with-indicators
 , elementary-gtk-theme
+, elementary-settings-daemon
 , nixos-artwork
 , lightdm
 , gdk-pixbuf
@@ -29,7 +32,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-greeter";
-  version = "5.0.4";
+  version = "6.0.0";
 
   repoName = "greeter";
 
@@ -37,7 +40,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "sha256-Enn+ekALWbk7FVJJuea/rNiwEZDIyb3kyMcZNNraOv8=";
+    sha256 = "1ny1003bbpdscc4kr2d94zc5vxm30y64dpj3fpd5zz2p2g0cq2h9";
   };
 
   passthru = {
@@ -66,10 +69,12 @@ stdenv.mkDerivation rec {
     elementary-gtk-theme
     elementary-icon-theme
     elementary-settings-daemon
+    gnome-settings-daemon
     gdk-pixbuf
     granite
     gtk3
     libgee
+    libhandy
     lightdm
     mutter
     wingpanel-with-indicators
@@ -80,12 +85,16 @@ stdenv.mkDerivation rec {
     "--sbindir=${placeholder "out"}/bin"
     # baked into the program for discovery of the greeter configuration
     "--sysconfdir=/etc"
-    # We use the patched gnome-settings-daemon
-    "-Dubuntu-patched-gsd=true"
-    "-Dgsd-dir=${elementary-settings-daemon}/libexec/" # trailing slash is needed
+    "-Dgsd-dir=${gnome-settings-daemon}/libexec/" # trailing slash is needed
   ];
 
   patches = [
+    # Upstream code not respecting our localedir
+    # https://github.com/elementary/greeter/pull/545
+    (fetchpatch {
+      url = "https://github.com/elementary/greeter/commit/d1373a7db827bc753bfcd70d0c8f25460ea9f1de.patch";
+      sha256 = "0s8l7ycd2s307d3dh1p4vdk33dbzjzqwxs6msyb9w0ycfyxlwdvp";
+    })
     ./sysconfdir-install.patch
     # Needed until https://github.com/elementary/greeter/issues/360 is fixed
     (substituteAll {

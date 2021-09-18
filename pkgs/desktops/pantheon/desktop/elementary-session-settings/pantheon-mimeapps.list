@@ -163,6 +163,6 @@ x-content/video-svcd=io.elementary.videos.desktop
 x-content/video-vcd=io.elementary.videos.desktop
 x-scheme-handler/http=org.gnome.Epiphany.desktop
 x-scheme-handler/https=org.gnome.Epiphany.desktop
-x-scheme-handler/mailto=org.gnome.Evolution.desktop
+x-scheme-handler/mailto=io.elementary.mail.desktop
 x-scheme-handler/trash=io.elementary.files.desktop
 

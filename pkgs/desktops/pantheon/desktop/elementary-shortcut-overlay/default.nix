@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchFromGitHub
+, fetchpatch
 , nix-update-script
 , pantheon
 , pkg-config
@@ -12,13 +13,14 @@
 , glib
 , granite
 , libgee
+, libhandy
 , elementary-icon-theme
 , wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-shortcut-overlay";
-  version = "1.1.2";
+  version = "1.2.0";
 
   repoName = "shortcut-overlay";
 
@@ -26,8 +28,17 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "sha256-TFS29vwDkTtoFcIVAbKskyLemqW9fxE7fQkM61DpDm0=";
+    sha256 = "1zs2fpx4agr00rsfmpi00nhiw92mlypzm4p9x3g851p24m62fn79";
   };
+
+  patches = [
+    # Upstream code not respecting our localedir
+    # https://github.com/elementary/shortcut-overlay/pull/100
+    (fetchpatch {
+      url = "https://github.com/elementary/shortcut-overlay/commit/f26e3684568e30cb6e151438e2d86c4d392626bf.patch";
+      sha256 = "0zxyqpk9xbxdm8lmgdwbb4yzzwbjlhypsca3xs34a2pl0b9pcdwd";
+    })
+  ];
 
   passthru = {
     updateScript = nix-update-script {
@@ -51,6 +62,7 @@ stdenv.mkDerivation rec {
     granite
     gtk3
     libgee
+    libhandy
   ];
 
   meta = with lib; {

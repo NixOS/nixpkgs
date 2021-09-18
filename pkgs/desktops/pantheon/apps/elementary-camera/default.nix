@@ -13,6 +13,7 @@
 , gtk3
 , granite
 , libgee
+, libhandy
 , gst_all_1
 , libcanberra
 , clutter-gtk
@@ -24,7 +25,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-camera";
-  version = "1.0.6";
+  version = "6.0.0";
 
   repoName = "camera";
 
@@ -32,7 +33,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "sha256-asl5NdSuLItXebxvqGlSEjwWhdButmka12YQAYkQT44=";
+    sha256 = "1z5c6pkc7psglxwzby5idsdxvplpi28ckjxrwdngnr22knfdcgag";
   };
 
   passthru = {
@@ -61,11 +62,12 @@ stdenv.mkDerivation rec {
     granite
     gst_all_1.gst-plugins-bad
     gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
+    (gst_all_1.gst-plugins-good.override { gtkSupport = true; })
     gst_all_1.gstreamer
     gtk3
     libcanberra
     libgee
+    libhandy
   ];
 
   postPatch = ''
@@ -76,7 +78,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Camera app designed for elementary OS";
     homepage = "https://github.com/elementary/camera";
-    license = licenses.gpl2Plus;
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;
   };
