@@ -2795,7 +2795,7 @@ default-package-overrides:
 - cabal2doap == 0.2
 - cabal2ebuild == 0.0.15.9
 - cabal2ghci == 0.0.1.1
-- cabal2nix == 2.17.0
+- cabal2nix == 2.18.0
 - cabal2spec == 2.6.2
 - cabalQuery == 0.1.0.1
 - cabalg == 0.2.9

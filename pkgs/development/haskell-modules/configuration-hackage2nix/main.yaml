@@ -116,6 +116,7 @@ extra-packages:
   - gi-gdkx11 == 3.0.11                 # 2021-05-07: For haskell-gi 0.25 without gtk4
   - ShellCheck == 0.7.1                 # 2021-05-09: haskell-ci 0.12.1 pins this version
   - Cabal == 3.4.0.0
+  - distribution-nixpkgs == 1.6.0
 
 package-maintainers:
   abbradar:

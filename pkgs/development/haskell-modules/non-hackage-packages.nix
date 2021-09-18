@@ -49,11 +49,5 @@ self: super: {
   arion-compose = self.callPackage ../../applications/virtualization/arion/arion-compose.nix {};
   # cabal2nix cabal://ap-normalize-0.1.0.1
   ap-normalize = self.callPackage ../misc/haskell/ap-normalize {};
-  # cabal2nix cabal://distribution-nixpkgs
-  distribution-nixpkgs_1_6_0 = self.callPackage ../misc/haskell/distribution-nixpkgs.nix {};
-  # cabal2nix cabal://cabal2nix-2.18.0
-  cabal2nix = self.callPackage ../misc/haskell/cabal2nix.nix {
-    distribution-nixpkgs = self.distribution-nixpkgs_1_6_0;
-  };
 
 }

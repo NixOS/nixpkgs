@@ -969,7 +969,10 @@ self: super: {
   hgettext = doJailbreak super.hgettext;
 
   # Generate shell completion.
-  cabal2nix = generateOptparseApplicativeCompletion "cabal2nix" super.cabal2nix;
+  cabal2nix = generateOptparseApplicativeCompletion "cabal2nix" (super.cabal2nix.override {
+    distribution-nixpkgs = self.distribution-nixpkgs_1_6_0;
+  });
+
   niv = generateOptparseApplicativeCompletion "niv" (super.niv.overrideScope (self: super: {
    # Needs override because of: https://github.com/nmattia/niv/issues/312
    optparse-applicative = self.optparse-applicative_0_15_1_0;
