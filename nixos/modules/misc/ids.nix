@@ -220,7 +220,7 @@ in
       zope2 = 185;
       ripple-data-api = 186;
       mediatomb = 187;
-      rdnssd = 188;
+      #rdnssd = 188; #dynamically allocated as of 2021-09-18
       ihaskell = 189;
       i2p = 190;
       lambdabot = 191;
