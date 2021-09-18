@@ -222,10 +222,13 @@ in {
     latestCompatibleLinuxPackages = linuxPackages_5_14;
 
     # this package should point to a version / git revision compatible with the latest kernel release
+    # IMPORTANT: Always use a tagged release candidate or commits from the
+    # zfs-<version>-staging branch, because this is tested by the OpenZFS
+    # maintainers.
     version = "2.1.1";
     # rev = "0000000000000000000000000000000000000000";
 
-    sha256 = "sha256-wVbjpVrPQmhJmMqdGUf0IwlCIoOsT7Zfj5lxSKcOsgg=";
+    sha256 = "sha256-UUuJa5w/GsEvsgH/BnXFsP/dsOt9wwmPqKzDxLPrhiY=";
 
     isUnstable = true;
   };
