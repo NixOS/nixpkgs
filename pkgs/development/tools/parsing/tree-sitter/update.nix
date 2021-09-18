@@ -78,6 +78,10 @@ let
       orga = "stsewd";
       repo = "tree-sitter-comment";
     };
+    "tree-sitter-dart" = {
+      orga = "usernobody14";
+      repo = "tree-sitter-dart";
+    };
     "tree-sitter-nix" = {
       orga = "cstrahan";
       repo = "tree-sitter-nix";
