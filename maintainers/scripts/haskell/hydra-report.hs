@@ -43,7 +43,7 @@ import Data.List.NonEmpty (NonEmpty, nonEmpty)
 import qualified Data.List.NonEmpty as NonEmpty
 import Data.Map.Strict (Map)
 import qualified Data.Map.Strict as Map
-import Data.Maybe (fromMaybe, mapMaybe)
+import Data.Maybe (fromMaybe, mapMaybe, isNothing)
 import Data.Monoid (Sum (Sum, getSum))
 import Data.Sequence (Seq)
 import qualified Data.Sequence as Seq
@@ -405,7 +405,8 @@ printBuildSummary
    summary
    topBrokenRdeps =
       Text.unlines $
-         headline <> totals
+         headline <> [""] <> tldr <> (("  * "<>) <$> (errors <> warnings)) <> [""]
+            <> totals
             <> optionalList "#### Maintained packages with build failure" (maintainedList fails)
             <> optionalList "#### Maintained packages with failed dependency" (maintainedList failedDeps)
             <> optionalList "#### Maintained packages with unknown error" (maintainedList unknownErr)
@@ -421,7 +422,7 @@ printBuildSummary
          [ "#### Build summary"
          , ""
          ]
-            <> printTable "Platform" (\x -> makeSearchLink id (platform x <> " " <> platformIcon x) ("." <> platform x)) (\x -> showT x <> " " <> icon x) showT (statusToNumSummary summary)
+            <> printTable "Platform" (\x -> makeSearchLink id (platform x <> " " <> platformIcon x) ("." <> platform x)) (\x -> showT x <> " " <> icon x) showT numSummary
       headline =
          [ "### [haskell-updates build report from hydra](https://hydra.nixos.org/jobset/nixpkgs/haskell-updates)"
          , "*evaluation ["
@@ -437,7 +438,9 @@ printBuildSummary
             <> "*"
          ]
       brokenLine (name, rdeps) = "[" <> name <> "](https://search.nixos.org/packages?channel=unstable&show=haskellPackages." <> name <> "&query=haskellPackages." <> name <> ") :arrow_heading_up: " <> Text.pack (show rdeps)
-      jobsByState predicate = Map.filter (predicate . foldl' min Success . fmap state . summaryBuilds) summary
+      numSummary = statusToNumSummary summary
+      jobsByState predicate = Map.filter (predicate . worstState) summary
+      worstState = foldl' min Success . fmap state . summaryBuilds
       fails = jobsByState (== Failed)
       failedDeps = jobsByState (== DependencyFailed)
       unknownErr = jobsByState (\x -> x > DependencyFailed && x < TimedOut)
@@ -449,6 +452,24 @@ printBuildSummary
       unmaintainedList = showBuild <=< sortOn (\(snd -> x) -> (negate (summaryUnbrokenReverseDeps x), negate (summaryReverseDeps x))) . Map.toList . withoutMaintainer
       showBuild (name, entry) = printJob id name (summaryBuilds entry, Text.pack (if summaryReverseDeps entry > 0 then " :arrow_heading_up: " <> show (summaryUnbrokenReverseDeps entry) <>" | "<> show (summaryReverseDeps entry) else ""))
       showMaintainedBuild (name, (table, maintainers)) = printJob id name (table, Text.intercalate " " (fmap ("@" <>) (toList maintainers)))
+      tldr = case (errors, warnings) of
+               ([],[]) -> [":green_circle: **Ready to merge**"]
+               ([],_) -> [":yellow_circle: **Potential issues**"]
+               _ -> [":red_circle: **Branch not mergeable**"]
+      warnings =
+         if' (Unfinished > maybe Success worstState maintainedJob) "`maintained` jobset failed." <>
+         if' (Unfinished == maybe Success worstState mergeableJob) "`mergeable` jobset is not finished." <>
+         if' (Unfinished == maybe Success worstState maintainedJob) "`maintained` jobset is not finished."
+      errors =
+         if' (isNothing mergeableJob) "No `mergeable` job found." <>
+         if' (isNothing maintainedJob) "No `maintained` job found." <>
+         if' (Unfinished > maybe Success worstState mergeableJob) "`mergeable` jobset failed." <>
+         if' (outstandingJobs (Platform "x86_64-linux") > 100) "Too much outstanding jobs on x86_64-linux." <>
+         if' (outstandingJobs (Platform "aarch64-linux") > 100) "Too much outstanding jobs on aarch64-linux."
+      if' p e = if p then [e] else mempty
+      outstandingJobs platform | Table m <- numSummary = Map.findWithDefault 0 (platform, Unfinished) m
+      maintainedJob = Map.lookup "maintained" summary
+      mergeableJob = Map.lookup "mergeable" summary
 
 printMaintainerPing :: IO ()
 printMaintainerPing = do
