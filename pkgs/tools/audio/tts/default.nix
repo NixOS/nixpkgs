@@ -16,13 +16,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "tts";
-  version = "0.3.0";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "coqui-ai";
     repo = "TTS";
     rev = "v${version}";
-    sha256 = "sha256-LiH056h7eIaikBr6sm5A4T/lF7nVroxaZSYzrES7+zk=";
+    sha256 = "sha256-/CeetLm3jgS5Q69zTVkLm+Wh4nD7D4c6j9MTujMc3fU=";
   };
 
   postPatch = ''
