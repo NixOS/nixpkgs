@@ -1467,6 +1467,8 @@ in {
 
   cirq-pasqal = callPackage ../development/python-modules/cirq-pasqal { };
 
+  cirq-web = callPackage ../development/python-modules/cirq-web { };
+
   ciscomobilityexpress = callPackage ../development/python-modules/ciscomobilityexpress { };
 
   ciso8601 = callPackage ../development/python-modules/ciso8601 { };
