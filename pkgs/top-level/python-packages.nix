@@ -1463,6 +1463,8 @@ in {
 
   cirq-core = callPackage ../development/python-modules/cirq-core { };
 
+  cirq-ionq = callPackage ../development/python-modules/cirq-ionq { };
+
   cirq-google = callPackage ../development/python-modules/cirq-google { };
 
   cirq-rigetti = callPackage ../development/python-modules/cirq-rigetti { };
