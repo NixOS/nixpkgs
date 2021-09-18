@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "atftp";
-  version = "0.7.4";
+  version = "0.7.5";
 
   src = fetchurl {
     url = "mirror://sourceforge/atftp/${pname}-${version}.tar.gz";
-    sha256 = "sha256-08nNDZcd/Hhtel9AVcNdTmaq/IECrANHPvIlvfftsmo=";
+    sha256 = "12h3sgkd25j4nfagil2jqyj1n8yxvaawj0cf01742642n57pmj4k";
   };
 
   nativeBuildInputs = [ makeWrapper ];
