@@ -21,7 +21,7 @@
     "@grpc/grpc-js": "^1.0",
     "@grpc/proto-loader": "^0.5.4",
     "@hapi/boom": "^9.1.0",
-    "chokidar": "^3.5.1",
+    "chokidar": "^3.5.2",
     "eslint": "^7.13.0",
     "express": "^4.16.3",
     "express-prom-bundle": "^5.1.5",
@@ -29,8 +29,9 @@
     "lodash": "^4.17.21",
     "minimist": "^1.2.0",
     "morgan": "^1.9.0",
+    "on-finished": "^2.3.0",
     "prom-client": "^11.5.3",
-    "puppeteer": "^3.3.0",
+    "puppeteer": "^10.0.0",
     "puppeteer-cluster": "^0.22.0",
     "unique-filename": "^1.1.0",
     "winston": "^3.2.1"
@@ -41,9 +42,9 @@
     "husky": "^4.3.8",
     "lint-staged": "^9.5.0",
     "pkg": "^5.1.0",
-    "prettier": "^1.19.1",
+    "prettier": "2.2.1",
     "tsc-watch": "^4.2.3",
-    "typescript": "^3.8.3"
+    "typescript": "^4.3.2"
   },
   "husky": {
     "hooks": {
