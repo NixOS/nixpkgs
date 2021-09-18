@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "fetchmail";
-  version = "6.4.21";
+  version = "6.4.22";
 
   src = fetchurl {
     url = "mirror://sourceforge/fetchmail/fetchmail-${version}.tar.xz";
-    sha256 = "sha256-akWcHK/XodqlzRNxQNpgwYyEtWmc2OckmnnDM0LJnR0=";
+    sha256 = "111cc6zfmb53f2a844iiyp3j2symcg8xd4m2kwb04mj3b6yihs6c";
   };
 
   buildInputs = [ openssl ];
