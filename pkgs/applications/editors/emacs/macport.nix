@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchurl, ncurses, pkg-config, texinfo, libxml2, gnutls, gettext, autoconf, automake, jansson
-, AppKit, Carbon, Cocoa, IOKit, OSAKit, Quartz, QuartzCore, WebKit
+{ lib, stdenv, fetchurl, fetchpatch, ncurses, pkg-config, texinfo, libxml2, gnutls, gettext, autoconf, automake, jansson, sigtool
+, AppKit, Carbon, Cocoa, IOKit, OSAKit, Quartz, QuartzCore, UniformTypeIdentifiers, WebKit
 , ImageCaptureCore, GSS, ImageIO # These may be optional
 }:
 
@@ -27,13 +27,26 @@ stdenv.mkDerivation rec {
     sha256 = "0f2wzdw2a3ac581322b2y79rlj3c9f33ddrq9allj97r1si6v5xk";
   };
 
+  patches = [
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/railwaycat/homebrew-emacsmacport/7e793808ebbc11d519a0103fb9f8fe7efbec345d/patches/mac-arm-fix.diff";
+      sha256 = "sha256-RF9b5PojFUAjh2TDUW4+HaWveV30Spy1iAXhaWf1ZVg=";
+    })
+  ];
+
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ pkg-config autoconf automake ];
+  nativeBuildInputs = [
+    pkg-config autoconf automake
+  ] ++ lib.optionals stdenv.isAarch64 [
+    sigtool
+  ];
 
   buildInputs = [ ncurses libxml2 gnutls texinfo gettext jansson
     AppKit Carbon Cocoa IOKit OSAKit Quartz QuartzCore WebKit
     ImageCaptureCore GSS ImageIO   # may be optional
+  ] ++ lib.optionals stdenv.isAarch64 [
+    UniformTypeIdentifiers
   ];
 
   postUnpack = ''

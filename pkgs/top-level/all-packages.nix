@@ -25038,9 +25038,10 @@ with pkgs;
 
   emacsMacport = callPackage ../applications/editors/emacs/macport.nix {
     inherit (darwin.apple_sdk.frameworks)
-      AppKit Carbon Cocoa IOKit OSAKit Quartz QuartzCore WebKit
+      AppKit Carbon Cocoa IOKit OSAKit Quartz QuartzCore UniformTypeIdentifiers WebKit
       ImageCaptureCore GSS ImageIO;
-    stdenv = if stdenv.cc.isClang then llvmPackages_6.stdenv else stdenv;
+    inherit (darwin)
+      sigtool;
   };
 
   emacsPackagesFor = emacs: import ./emacs-packages.nix {
