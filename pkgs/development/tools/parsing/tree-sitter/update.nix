@@ -127,7 +127,7 @@ let
       repo = "tree-sitter-toml";
     };
     "tree-sitter-zig" = {
-      orga = "GrayJack";
+      orga = "maxxnino";
       repo = "tree-sitter-zig";
     };
     "tree-sitter-fish" = {
