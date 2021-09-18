@@ -276,7 +276,7 @@ in
       sniproxy = 244;
       nzbget = 245;
       mosquitto = 246;
-      toxvpn = 247;
+      #toxvpn = 247; # dynamically allocated as of 2021-09-18
       # squeezelite = 248; # DynamicUser = true
       turnserver = 249;
       #smokeping = 250;# dynamically allocated as of 2021-09-03
