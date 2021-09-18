@@ -29,7 +29,7 @@ let
     mkPlasma5 = import ../desktops/plasma-5;
     attrs = {
       inherit libsForQt5;
-      inherit (pkgs) lib fetchurl;
+      inherit (pkgs) config lib fetchurl;
       gconf = pkgs.gnome2.GConf;
       inherit (pkgs) gsettings-desktop-schemas;
     };
