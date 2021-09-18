@@ -17,8 +17,6 @@ in stdenv.mkDerivation rec {
 
   makeFlags = [ "crypttokenplugindir=$(out)/lib/gwenhywfar/plugins/ct" ];
 
-  configureFlags = [ "--with-gwen-dir=${gwenhywfar}" ];
-
   meta = with lib; {
     description = "Library for access to chipcards";
     homepage = "https://www.aquamaniac.de/rdm/projects/libchipcard";
