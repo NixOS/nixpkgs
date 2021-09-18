@@ -3,13 +3,13 @@
 , buildGoModule
 }:
 let
-  version = "0.4.8";
+  version = "0.4.10";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "pages.sr.ht";
     rev = version;
-    sha256 = "sha256-z9w8v5e6LY6VUEczltyD55KEUUH7Gw1vUO00KPmT+D8=";
+    sha256 = "sha256-Lq/xCCAywxxjX5nHbOvmCaQ4wtLgjcMo3Qc7xO1fdAs=";
   };
 
 in
