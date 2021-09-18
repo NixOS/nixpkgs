@@ -297,6 +297,7 @@
   ./services/cluster/kubernetes/pki.nix
   ./services/cluster/kubernetes/proxy.nix
   ./services/cluster/kubernetes/scheduler.nix
+  ./services/cluster/spark/default.nix
   ./services/computing/boinc/client.nix
   ./services/computing/foldingathome/client.nix
   ./services/computing/slurm/slurm.nix

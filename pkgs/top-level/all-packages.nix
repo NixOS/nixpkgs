@@ -13146,7 +13146,10 @@ with pkgs;
 
   self = pkgsi686Linux.callPackage ../development/interpreters/self { };
 
-  spark = callPackage ../applications/networking/cluster/spark { };
+  inherit (callPackages ../applications/networking/cluster/spark { hadoop = hadoop_3_1; })
+    spark3
+    spark2;
+  spark = spark3;
 
   sparkleshare = callPackage ../applications/version-management/sparkleshare { };
 
