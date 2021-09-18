@@ -27,12 +27,6 @@ buildPythonPackage rec {
     sha256 = "sha256-yn53zbBVuiaD31sIB6qxweEgy+AsjzXZ0yk9lNva6mM=";
   };
 
-  # build_lazy_extractors assumes this directory exists but it is not present in
-  # the PyPI package
-  postPatch = ''
-    mkdir -p ytdlp_plugins/extractor
-  '';
-
   propagatedBuildInputs = [ websockets mutagen ]
     ++ lib.optional hlsEncryptedSupport pycryptodome;
 
