@@ -212,6 +212,11 @@ in
 
         serviceConfig =
           { ExecStart = "${pkgs.hostapd}/bin/hostapd ${configFile}";
+            # ensure hostapd isn't marked started until wlan's operational state is "carrier" or higher
+            ExecStartPost = mkIf config.networking.useNetworkd [
+              "${pkgs.systemd}/lib/systemd/systemd-networkd-wait-online -i ${cfg.interface} -o carrier"
+              "networkctl reconfigure ${cfg.interface}" # bring up the bridge
+            ];
             Restart = "always";
           };
       };
