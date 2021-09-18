@@ -141,6 +141,8 @@ with pkgs;
     autoconf = autoconf269;
   };
 
+  autorestic = callPackage ../tools/backup/autorestic { };
+
   autoPatchelfHook = makeSetupHook { name = "auto-patchelf-hook"; }
     ../build-support/setup-hooks/auto-patchelf.sh;
 
