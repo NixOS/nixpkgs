@@ -231,7 +231,7 @@ in
       skydns = 197;
       # ripple-rest = 198; # unused, removed 2017-08-12
       # nix-serve = 199; # unused, removed 2020-12-12
-      tvheadend = 200;
+      #tvheadend = 200; # dynamically allocated as of 2021-09-18
       uwsgi = 201;
       gitit = 202;
       riemanntools = 203;
