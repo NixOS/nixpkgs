@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "scmsrht";
-  version = "0.22.9";
+  version = "0.22.13";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "scm.sr.ht";
     rev = version;
-    sha256 = "sha256-327G6C8FW+iZx+167D7TQsFtV6FGc8MpMVo9L/cUUqU=";
+    sha256 = "sha256-9iRmQBt4Cxr5itTk34b8iDRyXYDHTDfZjV0SIDT/kkM=";
   };
 
   nativeBuildInputs = srht.nativeBuildInputs;
