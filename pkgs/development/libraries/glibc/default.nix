@@ -62,6 +62,12 @@ callPackage ./common.nix { inherit stdenv; } {
         ])
       ]);
 
+    preHook =
+      ''
+        outName=$(basename $out)
+        NIX_CFLAGS_COMPILE+=" -DDEFAULT_NSS_PATH=\"${dirOf builtins.storeDir}/run/glibc-nss-path/''${outName:0:32}:${dirOf builtins.storeDir}/run/glibc-nss-path\"";
+      '';
+
     # When building glibc from bootstrap-tools, we need libgcc_s at RPATH for
     # any program we run, because the gcc will have been placed at a new
     # store path than that determined when built (as a source for the
