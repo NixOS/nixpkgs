@@ -9862,12 +9862,6 @@
     githubId = 11613056;
     name = "Scott Dier";
   };
-  sdll = {
-    email = "sasha.delly@gmail.com";
-    github = "sdll";
-    githubId = 17913919;
-    name = "Sasha Illarionov";
-  };
   SeanZicari = {
     email = "sean.zicari@gmail.com";
     github = "SeanZicari";
