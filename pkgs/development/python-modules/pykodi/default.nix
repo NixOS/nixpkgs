@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "pykodi";
-  version = "0.2.5";
+  version = "0.2.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1al2q4jiqxjnz0j2xvs2hqzrz6fm3hmda5zjnkp8gdvgchd1cmn7";
+    sha256 = "sha256-SDp2S9HeqejRM3cf4x+5RLUQMPhjieQaXoubwf9Q/d4=";
   };
 
   propagatedBuildInputs = [
