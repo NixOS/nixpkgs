@@ -17,7 +17,15 @@ in clangStdenv.mkDerivation rec {
     sha256 = "1dwf10f2fpxc55pymwkapql20nc462mq61hv21c527994c2qp1ll";
   };
 
-  cmakeFlags = [ "-DUSE_BOOST_WAVE=ON" "-DENABLERTTI=ON" ];
+  cmakeFlags = [
+    "-DUSE_BOOST_WAVE=ON"
+    "-DENABLERTTI=ON"
+
+    # Build system implies llvm-config and llvm-as are in the same directory.
+    # Override defaults.
+    "-DLLVM_DIRECTORY=${llvm}"
+    "-DLLVM_CONFIG=${llvm.dev}/bin/llvm-config"
+  ];
 
   preConfigure = "patchShebangs src/liboslexec/serialize-bc.bash ";
 
