@@ -273,6 +273,13 @@
           <link linkend="opt-services.touchegg.enable">services.touchegg</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/pantheon-tweaks/pantheon-tweaks">pantheon-tweaks</link>,
+          an unofficial system settings panel for Pantheon. Available as
+          <link linkend="opt-programs.pantheon-tweaks.enable">programs.pantheon-tweaks</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-incompatibilities">
