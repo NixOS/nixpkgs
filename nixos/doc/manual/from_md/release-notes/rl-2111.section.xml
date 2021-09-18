@@ -1240,6 +1240,19 @@ Superuser created successfully.
           directories, thus increasing the purity of the build.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          Three new options,
+          <link linkend="opt-xdg.mime.addedAssociations">xdg.mime.addedAssociations</link>,
+          <link linkend="opt-xdg.mime.defaultApplications">xdg.mime.defaultApplications</link>,
+          and
+          <link linkend="opt-xdg.mime.removedAssociations">xdg.mime.removedAssociations</link>
+          have been added to the
+          <link linkend="opt-xdg.mime.enable">xdg.mime</link> module to
+          allow the configuration of
+          <literal>/etc/xdg/mimeapps.list</literal>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
 </section>

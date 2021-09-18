@@ -9133,6 +9133,10 @@ in {
 
   types-decorator = callPackage ../development/python-modules/types-decorator { };
 
+  types-futures = callPackage ../development/python-modules/types-futures { };
+
+  types-protobuf = callPackage ../development/python-modules/types-protobuf { };
+
   types-pytz = callPackage ../development/python-modules/types-pytz { };
 
   types-requests = callPackage ../development/python-modules/types-requests { };
@@ -9320,6 +9324,8 @@ in {
   venstarcolortouch = callPackage ../development/python-modules/venstarcolortouch { };
 
   venusian = callPackage ../development/python-modules/venusian { };
+
+  velbus-aio = callPackage ../development/python-modules/velbus-aio { };
 
   verboselogs = callPackage ../development/python-modules/verboselogs { };
 
