@@ -237,7 +237,7 @@ in
       riemanntools = 203;
       subsonic = 204;
       riak = 205;
-      shout = 206;
+      #shout = 206; # dynamically allocated as of 2021-09-18
       gateone = 207;
       namecoin = 208;
       #lxd = 210; # unused
