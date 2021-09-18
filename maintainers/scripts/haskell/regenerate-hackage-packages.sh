@@ -15,6 +15,8 @@
 set -euo pipefail
 
 HACKAGE2NIX="${HACKAGE2NIX:-hackage2nix}"
+NEXT_NIXOS_RELEASE=21.11
+CURRENT_NIXOS_RELEASE="$(cat .version)"
 
 # To prevent hackage2nix fails because of encoding.
 # See: https://github.com/NixOS/nixpkgs/pull/122023
@@ -23,13 +25,21 @@ export LC_ALL=C.UTF-8
 unpacked_hackage="$(nix-build -A all-cabal-hashes.unpacked --no-out-link)"
 config_dir="pkgs/development/haskell-modules/configuration-hackage2nix"
 
+# We are on an unstable branch if .version points to the unreleased stable release
+if [[ "$CURRENT_NIXOS_RELEASE" == "$NEXT_NIXOS_RELEASE" ]]; then
+    constraint_config="$config_dir/stackage.yaml"
+else
+    constraint_config="$config_dir/frozen-packages.yaml"
+    echo "We are on a release branch, using $constraint_config"
+fi
+
 echo "Starting hackage2nix to regenerate pkgs/development/haskell-modules/hackage-packages.nix ..."
 "$HACKAGE2NIX" \
    --hackage "$unpacked_hackage" \
    --preferred-versions <(for n in "$unpacked_hackage"/*/preferred-versions; do cat "$n"; echo; done) \
    --nixpkgs "$PWD" \
    --config "$config_dir/main.yaml" \
-   --config "$config_dir/stackage.yaml" \
+   --config "$constraint_config" \
    --config "$config_dir/broken.yaml" \
    --config "$config_dir/transitive-broken.yaml"
 
