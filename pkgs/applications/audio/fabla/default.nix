@@ -21,24 +21,10 @@ stdenv.mkDerivation rec {
   version = "1.3.2";
 
   src = fetchTarball {
-#    owner = "openAVproductions";
-#    repo = "openAV-Luppp";
-#    rev = "release-${version}";
     url = "https://github.com/openAVproductions/openAV-Fabla/tarball/master";
     sha256 = "1f6sh7y855xvhcnc9r73pdxnldwcs6f9ssvbypkwi5alkfa9zf14";
   };
 
-#  configurePhase = ''
-#
-#   mkdir build
-#   cd build
-#   cmake ..
-#  '';
-# buildPhase = ''
-#   make -j4
-#   make install
-#   '';
-#
   nativeBuildInputs = [
     cmake
     gnumake
@@ -46,7 +32,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-#    openav_ctlra
     lv2
     jack2
     cairo
