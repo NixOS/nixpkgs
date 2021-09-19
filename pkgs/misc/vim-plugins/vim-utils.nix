@@ -198,8 +198,8 @@ let
     '';
 
     linkVimlPlugin = plugin: packageName: dir: ''
-      mkdir -p $out/pack/${packageName}/${dir}/${plugin.pname}
-      ln -sf ${plugin}/${rtpPath}/* $out/pack/${packageName}/${dir}/${plugin.pname}
+      mkdir -p $out/pack/${packageName}/${dir}/${lib.getName plugin}
+      ln -sf ${plugin}/${rtpPath}/* $out/pack/${packageName}/${dir}/${lib.getName plugin}
     '';
 
     link = pluginPath: if hasLuaModule pluginPath

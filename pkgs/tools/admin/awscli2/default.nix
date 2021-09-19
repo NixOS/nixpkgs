@@ -11,12 +11,12 @@ let
         };
       });
       botocore = super.botocore.overridePythonAttrs (oldAttrs: rec {
-        version = "2.0.0dev138";
+        version = "2.0.0dev147";
         src = fetchFromGitHub {
           owner = "boto";
           repo = "botocore";
-          rev = "5f1971d2d9d2cf7090a8b71650ab40712319bca3";
-          sha256 = "sha256-onptN++MDJrit3sIEXCX9oRJ0qQ5xzmI6J2iABiK7RA";
+          rev = "afa015418df6b3aeef0f5645e8704de64adea3d7";
+          sha256 = "sha256-ypqDhCQXPqG8JCsLWt1V/4s95Hm+lClz+eOA2GnIhYg=";
         };
         propagatedBuildInputs = super.botocore.propagatedBuildInputs ++ [py.pkgs.awscrt];
       });
@@ -33,13 +33,13 @@ let
 in
 with py.pkgs; buildPythonApplication rec {
   pname = "awscli2";
-  version = "2.2.30"; # N.B: if you change this, change botocore to a matching version too
+  version = "2.2.39"; # N.B: if you change this, change botocore to a matching version too
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-cli";
     rev = version;
-    sha256 = "sha256-OPxo5RjdDCTPntiJInUtgcU43Nn5JEUbwRJXeBl/yYQ";
+    sha256 = "sha256-3GYj6+08J05Lu17jjydmzlypI5TUuV+5HA398oExkiU=";
   };
 
   patches = [
@@ -55,6 +55,7 @@ with py.pkgs; buildPythonApplication rec {
       --replace "cryptography>=3.3.2,<3.4.0" "cryptography" \
       --replace "docutils>=0.10,<0.16" "docutils" \
       --replace "ruamel.yaml>=0.15.0,<0.16.0" "ruamel.yaml" \
+      --replace "s3transfer>=0.4.2,<0.5.0" "s3transfer" \
       --replace "wcwidth<0.2.0" "wcwidth" \
       --replace "distro>=1.5.0,<1.6.0" "distro"
   '';

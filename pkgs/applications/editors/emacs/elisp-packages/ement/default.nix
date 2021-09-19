@@ -9,7 +9,14 @@
 
 trivialBuild {
   pname = "ement";
-  version = "unstable-2021-09-08";
+  version = "unstable-2021-09-16";
+
+  src = fetchFromGitHub {
+    owner = "alphapapa";
+    repo = "ement.el";
+    rev = "c07e914f077199c95b0e7941a421675c95d4687e";
+    sha256 = "sha256-kYVb2NrHYC87mY/hFUMAjb4TLJ9A2L2RrHoiAXvRaGg=";
+  };
 
   packageRequires = [
     plz
@@ -17,12 +24,9 @@ trivialBuild {
     ts
   ];
 
-  src = fetchFromGitHub {
-    owner = "alphapapa";
-    repo = "ement.el";
-    rev = "468aa9b0526aaa054f059c63797aa3d9ea13611d";
-    sha256 = "sha256-0FCAu253iTSf9qcsmoJxKlzfd5eYc8eJXUxG6+0eg/I=";
-  };
+  patches = [
+    ./handle-nil-images.patch
+  ];
 
   meta = {
     description = "Ement.el is a Matrix client for Emacs";

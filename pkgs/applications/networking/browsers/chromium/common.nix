@@ -88,6 +88,8 @@ let
   gnSystemLibraries = lib.optionals (!chromiumVersionAtLeast "93") [
     "ffmpeg"
     "snappy"
+  ] ++ lib.optionals (!chromiumVersionAtLeast "95") [
+    "zlib"
   ] ++ [
     "flac"
     "libjpeg"
@@ -95,7 +97,6 @@ let
     "libwebp"
     "libxslt"
     "opus"
-    "zlib"
   ];
 
   opusWithCustomModes = libopus.override {

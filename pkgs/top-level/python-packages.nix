@@ -3648,6 +3648,8 @@ in {
 
   intelhex = callPackage ../development/python-modules/intelhex { };
 
+  intensity-normalization = callPackage ../development/python-modules/intensity-normalization { };
+
   internetarchive = callPackage ../development/python-modules/internetarchive { };
 
   interruptingcow = callPackage ../development/python-modules/interruptingcow { };
@@ -5161,6 +5163,8 @@ in {
   ordered-set = callPackage ../development/python-modules/ordered-set { };
 
   orderedset = callPackage ../development/python-modules/orderedset { };
+
+  orjson = callPackage ../development/python-modules/orjson { };
 
   orm = callPackage ../development/python-modules/orm { };
 
