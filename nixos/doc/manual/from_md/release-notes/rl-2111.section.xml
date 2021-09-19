@@ -287,6 +287,13 @@
           <link linkend="opt-programs.pantheon-tweaks.enable">programs.pantheon-tweaks</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/hannesm/jackline">jackline</link>,
+          a minimalistic secure XMPP client in OCaml. Available as
+          <link linkend="opt-services.jackline.enable">services.jackline</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-incompatibilities">

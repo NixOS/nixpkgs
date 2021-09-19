@@ -528,6 +528,7 @@
   ./services/misc/ihaskell.nix
   ./services/misc/irkerd.nix
   ./services/misc/jackett.nix
+  ./services/misc/jackline.nix
   ./services/misc/jellyfin.nix
   ./services/misc/klipper.nix
   ./services/misc/logkeys.nix
