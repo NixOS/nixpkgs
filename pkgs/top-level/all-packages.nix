@@ -3187,6 +3187,8 @@ with pkgs;
 
   n2n = callPackage ../tools/networking/n2n { };
 
+  nesthub = callPackage ../servers/misc/nesthub { };
+
   nextdns = callPackage ../applications/networking/nextdns { };
 
   ngadmin = callPackage ../applications/networking/ngadmin { };
