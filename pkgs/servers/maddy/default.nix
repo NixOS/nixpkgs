@@ -31,7 +31,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Composable all-in-one mail server";
-    homepage = "https://foxcpp.dev/maddy";
+    homepage = "https://maddy.email";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [];
   };
