@@ -1,12 +1,14 @@
-{ lib, stdenv, fetchurl, apacheHttpd, python, ncurses }:
+{ lib, stdenv, fetchFromGitHub, apacheHttpd, python, ncurses }:
 
 stdenv.mkDerivation rec {
   pname = "mod_wsgi";
   version = "4.9.0";
 
-  src = fetchurl {
-    url = "https://github.com/GrahamDumpleton/mod_wsgi/archive/${version}.tar.gz";
-    sha256 = "sha256-Cm84CvhUuFoxUeVKPDO1IMSm4hqZvK165d37/jGnS1A=";
+  src = fetchFromGitHub {
+    owner = "GrahamDumpleton";
+    repo = "mod_wsgi";
+    rev = version;
+    hash = "sha256-gaWA6m4ENYtm88hCaoqrcIooA0TBI7Kj6fU6pPShoo4=";
   };
 
   buildInputs = [ apacheHttpd python ncurses ];
