@@ -33,6 +33,6 @@ buildGoModule rec {
     description = "Composable all-in-one mail server";
     homepage = "https://foxcpp.dev/maddy";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ lxea ];
+    maintainers = with maintainers; [];
   };
 }
