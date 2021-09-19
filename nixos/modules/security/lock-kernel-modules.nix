@@ -35,10 +35,10 @@ with lib;
       wants = [ "systemd-udevd.service" ];
       wantedBy = [ config.systemd.defaultUnit ];
 
-      before = [ config.systemd.defaultUnit ];
       after =
         [ "firewall.service"
           "systemd-modules-load.service"
+           config.systemd.defaultUnit
         ];
 
       unitConfig.ConditionPathIsReadWrite = "/proc/sys/kernel";
