@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mandoc";
-  version = "1.14.5";
+  version = "1.14.6";
 
   src = fetchurl {
     url = "https://mandoc.bsd.lv/snapshots/mandoc-${version}.tar.gz";
-    sha256 = "1xyqllxpjj1kimlipx11pzyywf5c25i4wmv0lqm7ph3gnlnb86c2";
+    sha256 = "8bf0d570f01e70a6e124884088870cbed7537f36328d512909eb10cd53179d9c";
   };
 
   buildInputs = [ zlib ];
@@ -16,15 +16,9 @@ stdenv.mkDerivation rec {
     MANPATH_DEFAULT="/run/current-system/sw/share/man"
     OSNAME="NixOS"
     PREFIX="$out"
-    HAVE_MANPATH=1
     LD_OHASH="-lutil"
-    BUILD_DB=0
     CC=${stdenv.cc.targetPrefix}cc
   '';
-
-  patches = [
-    ./remove-broken-cc-check.patch
-  ];
 
   preConfigure = ''
     echo $configureLocal > configure.local
