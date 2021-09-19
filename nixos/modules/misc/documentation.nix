@@ -207,8 +207,19 @@ in
   };
 
   config = mkIf cfg.enable (mkMerge [
+    {
+      assertions = [
+        {
+          assertion = !(cfg.man.man-db.enable && cfg.man.mandoc.enable);
+          message = ''
+            man-db and mandoc can't be used as the default man page viewer at the same time!
+          '';
+        }
+      ];
+    }
 
-    # The actual implementation for this lives in man-db.nix
+    # The actual implementation for this lives in man-db.nix or mandoc.nix,
+    # depending on which backend is active.
     (mkIf cfg.man.enable {
       environment.pathsToLink = [ "/share/man" ];
       environment.extraOutputsToInstall = [ "man" ] ++ optional cfg.dev.enable "devman";
