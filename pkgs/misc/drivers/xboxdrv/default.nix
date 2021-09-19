@@ -1,15 +1,27 @@
-{ lib, stdenv, fetchurl, sconsPackages, libX11, pkg-config
-, libusb1, boost, glib, dbus-glib }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, sconsPackages
+, libX11
+, pkg-config
+, libusb1
+, boost
+, glib
+, dbus-glib
+}:
 
 let
   version = "0.8.8";
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "xboxdrv";
   inherit version;
 
-  src = fetchurl {
-    url = "https://github.com/xboxdrv/xboxdrv/archive/v${version}.tar.gz";
-    sha256 = "0jx2wqmc7602dxyj19n3h8x0cpy929h7c0h39vcc5rf0q74fh3id";
+  src = fetchFromGitHub {
+    owner = "xboxdrv";
+    repo = "xboxdrv";
+    rev = "v${version}";
+    hash = "sha256-R0Bt4xfzQA1EmZbf7lcWLwSSUayf5Y711QhlAVhiLrY=";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];
