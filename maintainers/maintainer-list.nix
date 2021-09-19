@@ -8700,6 +8700,12 @@
     githubId = 11365056;
     name = "Kevin Liu";
   };
+  pnmadelaine = {
+    name = "Paul-Nicolas Madelaine";
+    email = "pnm@pnm.tf";
+    github = "pnmadelaine";
+    githubId = 21977014;
+  };
   pnotequalnp = {
     email = "kevin@pnotequalnp.com";
     github = "pnotequalnp";
