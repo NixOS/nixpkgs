@@ -40,6 +40,7 @@ let
     # nixpkgs uses for the respective system.
     defaultLibc = {
       i686-linux = {
+        variantSuffix = "";
         src = {
           url = "${downloadsUrl}/${version}/ghc-${version}-i386-deb9-linux.tar.xz";
           sha256 = "0bvwisl4w0z5z8z0da10m9sv0mhm9na2qm43qxr8zl23mn32mblx";
@@ -54,6 +55,7 @@ let
         ];
       };
       x86_64-linux = {
+        variantSuffix = "";
         src = {
           url = "${downloadsUrl}/${version}/ghc-${version}-x86_64-deb10-linux.tar.xz";
           sha256 = "0chnzy9j23b2wa8clx5arwz8wnjfxyjmz9qkj548z14cqf13slcl";
@@ -65,6 +67,7 @@ let
         ];
       };
       armv7l-linux = {
+        variantSuffix = "";
         src = {
           url = "${downloadsUrl}/${version}/ghc-${version}-armv7-deb10-linux.tar.xz";
           sha256 = "1j41cq5d3rmlgz7hzw8f908fs79gc5mn3q5wz277lk8zdf19g75v";
@@ -76,6 +79,7 @@ let
         ];
       };
       aarch64-linux = {
+        variantSuffix = "";
         src = {
           url = "${downloadsUrl}/${version}/ghc-${version}-aarch64-deb10-linux.tar.xz";
           sha256 = "14smwl3741ixnbgi0l51a7kh7xjkiannfqx15b72svky0y4l3wjw";
@@ -88,6 +92,7 @@ let
         ];
       };
       x86_64-darwin = {
+        variantSuffix = "";
         src = {
           url = "${downloadsUrl}/${version}/ghc-${version}-x86_64-apple-darwin.tar.xz";
           sha256 = "1hngyq14l4f950hzhh2d204ca2gfc98pc9xdasxihzqd1jq75dzd";
@@ -103,6 +108,7 @@ let
     # Binary distributions for the musl libc for the respective system.
     musl = {
       x86_64-linux = {
+        variantSuffix = "-musl";
         src = {
           url = "${downloadsUrl}/${version}/ghc-${version}-x86_64-alpine3.10-linux-integer-simple.tar.xz";
           sha256 = "0xpcbyaxqyhbl6f0i3s4rp2jm67nqpkfh2qlbj3i2fiaix89ml0l";
@@ -139,7 +145,7 @@ in
 stdenv.mkDerivation rec {
   inherit version;
 
-  name = "ghc-${version}-binary";
+  name = "ghc-${version}-binary${binDistUsed.variantSuffix}";
 
   src = fetchurl binDistUsed.src;
 

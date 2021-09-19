@@ -145,11 +145,17 @@ let
     targetPackages.stdenv.cc.bintools.bintools
   ];
 
+  # Makes debugging easier to see which variant is at play in `nix-store -q --tree`.
+  variantSuffix = lib.concatStrings [
+    (lib.optionalString stdenv.hostPlatform.isMusl "-musl")
+    (lib.optionalString enableIntegerSimple "-integer-simple")
+  ];
+
 in
 stdenv.mkDerivation (rec {
   inherit version;
   inherit (src) rev;
-  name = "${targetPrefix}ghc-${version}";
+  name = "${targetPrefix}ghc-${version}${variantSuffix}";
 
   src = fetchgit {
     url = "https://gitlab.haskell.org/ghc/ghc.git/";
