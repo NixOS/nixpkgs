@@ -210,6 +210,10 @@ opening the next one.  When you want to merge the currently open
     $ gh auth login
     ```
 
+1.  Make sure you have setup your `~/.cabal/config` file for authentication
+    for uploading the NixOS package versions to Hackage.  See the following
+    section for details on how to do this.
+
 1.  Make sure you have correctly marked packages broken.  One of the previous
     sections explains how to do this.
 

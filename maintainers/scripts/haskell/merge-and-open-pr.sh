@@ -75,6 +75,9 @@ fi
 echo "Merging https://github.com/NixOS/nixpkgs/pull/${curr_haskell_updates_pr_num}..."
 gh pr merge --repo NixOS/nixpkgs --merge "$curr_haskell_updates_pr_num"
 
+# Update the list of Haskell package versions in NixOS on Hackage.
+./maintainers/scripts/haskell/upload-nixos-package-list-to-hackage.sh
+
 # Update stackage, Hackage hashes, and regenerate Haskell package set
 echo "Updating Stackage..."
 ./maintainers/scripts/haskell/update-stackage.sh --do-commit
