@@ -62,6 +62,6 @@ stdenv.mkDerivation rec {
     description = "Linux multi-touch gesture recognizer";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
   };
 }

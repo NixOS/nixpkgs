@@ -52,7 +52,12 @@ in
       wants = [ "network.target" ];
     };
 
-    security.wrappers.screen.source = "${pkgs.screen}/bin/screen";
+    security.wrappers.screen =
+      { setuid = true;
+        owner = "root";
+        group = "root";
+        source = "${pkgs.screen}/bin/screen";
+      };
   };
 
   meta.doc = ./weechat.xml;

@@ -2993,6 +2993,8 @@ with pkgs;
 
   inklecate = callPackage ../development/compilers/inklecate {};
 
+  intensity-normalization = with python3Packages; toPythonApplication intensity-normalization;
+
   interactsh = callPackage ../tools/misc/interactsh { };
 
   interlock = callPackage ../servers/interlock {};
@@ -8023,6 +8025,8 @@ with pkgs;
 
   pamtester = callPackage ../tools/security/pamtester { };
 
+  pantheon-tweaks = callPackage ../applications/system/pantheon-tweaks { };
+
   paperless-ng = callPackage ../applications/office/paperless-ng { };
 
   paperwork = callPackage ../applications/office/paperwork/paperwork-gtk.nix { };
@@ -12426,6 +12430,7 @@ with pkgs;
   };
   cargo-readme = callPackage ../development/tools/rust/cargo-readme {};
   cargo-sort = callPackage ../development/tools/rust/cargo-sort { };
+  cargo-spellcheck = callPackage ../development/tools/rust/cargo-spellcheck { };
   cargo-sweep = callPackage ../development/tools/rust/cargo-sweep { };
   cargo-sync-readme = callPackage ../development/tools/rust/cargo-sync-readme {};
   cargo-udeps = callPackage ../development/tools/rust/cargo-udeps {
@@ -13063,7 +13068,7 @@ with pkgs;
   pipewire = callPackage ../development/libraries/pipewire {};
   pipewire_0_2 = callPackage ../development/libraries/pipewire/0.2.nix {};
 
-  pyradio = callPackage ../applications/radio/pyradio {};
+  pyradio = callPackage ../applications/audio/pyradio {};
 
   pyrex = pyrex095;
 
@@ -19894,11 +19899,11 @@ with pkgs;
   cassandra = cassandra_3_11;
 
   apache-jena = callPackage ../servers/nosql/apache-jena/binary.nix {
-    java = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
+    java = jre;
   };
 
   apache-jena-fuseki = callPackage ../servers/nosql/apache-jena/fuseki-binary.nix {
-    java = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
+    java = jre;
   };
 
   apcupsd = callPackage ../servers/apcupsd { };
@@ -24584,7 +24589,7 @@ with pkgs;
   gitolite = callPackage ../applications/version-management/gitolite { };
 
   gitoxide = callPackage ../applications/version-management/gitoxide {
-    inherit (darwin.apple_sdk.frameworks) Security;
+    inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
 
   inherit (gnome) gitg;

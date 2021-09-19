@@ -140,6 +140,13 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://github.com/evilsocket/opensnitch">opensnitch</link>,
+          an application firewall. Available as
+          <link linkend="opt-services.opensnitch.enable">services.opensnitch</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://www.snapraid.it/">snapraid</link>, a
           backup program for disk arrays. Available as
           <link linkend="opt-snapraid.enable">snapraid</link>.
@@ -283,11 +290,28 @@
           <link linkend="opt-services.touchegg.enable">services.touchegg</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/pantheon-tweaks/pantheon-tweaks">pantheon-tweaks</link>,
+          an unofficial system settings panel for Pantheon. Available as
+          <link linkend="opt-programs.pantheon-tweaks.enable">programs.pantheon-tweaks</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-incompatibilities">
     <title>Backward Incompatibilities</title>
     <itemizedlist>
+      <listitem>
+        <para>
+          The <literal>security.wrappers</literal> option now requires
+          to always specify an owner, group and whether the
+          setuid/setgid bit should be set. This is motivated by the fact
+          that before NixOS 21.11, specifying either setuid or setgid
+          but not owner/group resulted in wrappers owned by
+          nobody/nogroup, which is unsafe.
+        </para>
+      </listitem>
       <listitem>
         <para>
           The <literal>paperless</literal> module and package have been
@@ -1051,6 +1075,14 @@ Superuser created successfully.
       </listitem>
       <listitem>
         <para>
+          The
+          <link xlink:href="options.html#opt-services.xserver.extraLayouts"><literal>services.xserver.extraLayouts</literal></link>
+          no longer cause additional rebuilds when a layout is added or
+          modified.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           Sway: The terminal emulator <literal>rxvt-unicode</literal> is
           no longer installed by default via
           <literal>programs.sway.extraPackages</literal>. The current
@@ -1093,6 +1125,22 @@ Superuser created successfully.
           and <literal>nginx</literal> are supported. The definitions of
           wordpress sites should now be set in
           <link xlink:href="options.html#opt-services.wordpress.sites"><literal>services.wordpress.sites</literal></link>.
+        </para>
+        <para>
+          Sites definitions that use the old interface are automatically
+          migrated in the new option. This backward compatibility will
+          be removed in 22.05.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The dokuwiki module provides a new interface which allows to
+          use different webservers with the new option
+          <link xlink:href="options.html#opt-services.dokuwiki.webserver"><literal>services.dokuwiki.webserver</literal></link>.
+          Currently <literal>caddy</literal> and
+          <literal>nginx</literal> are supported. The definitions of
+          dokuwiki sites should now be set in
+          <link xlink:href="options.html#opt-services.dokuwiki.sites"><literal>services.dokuwiki.sites</literal></link>.
         </para>
         <para>
           Sites definitions that use the old interface are automatically

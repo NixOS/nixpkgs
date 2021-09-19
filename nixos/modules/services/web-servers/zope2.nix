@@ -103,7 +103,11 @@ in
 
   config = mkIf (cfg.instances != {}) {
 
-    users.users.zope2.uid = config.ids.uids.zope2;
+    users.users.zope2 = {
+      isSystemUser = true;
+      group = "zope2";
+    };
+    users.groups.zope2 = {};
 
     systemd.services =
       let

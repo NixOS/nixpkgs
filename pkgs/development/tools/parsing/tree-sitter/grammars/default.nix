@@ -3,10 +3,13 @@
   tree-sitter-bash = (builtins.fromJSON (builtins.readFile ./tree-sitter-bash.json));
   tree-sitter-c = (builtins.fromJSON (builtins.readFile ./tree-sitter-c.json));
   tree-sitter-c-sharp = (builtins.fromJSON (builtins.readFile ./tree-sitter-c-sharp.json));
+  tree-sitter-clojure = (builtins.fromJSON (builtins.readFile ./tree-sitter-clojure.json));
   tree-sitter-comment = (builtins.fromJSON (builtins.readFile ./tree-sitter-comment.json));
   tree-sitter-cpp = (builtins.fromJSON (builtins.readFile ./tree-sitter-cpp.json));
   tree-sitter-css = (builtins.fromJSON (builtins.readFile ./tree-sitter-css.json));
+  tree-sitter-dart = (builtins.fromJSON (builtins.readFile ./tree-sitter-dart.json));
   tree-sitter-dot = (builtins.fromJSON (builtins.readFile ./tree-sitter-dot.json));
+  tree-sitter-elisp = (builtins.fromJSON (builtins.readFile ./tree-sitter-elisp.json));
   tree-sitter-embedded-template = (builtins.fromJSON (builtins.readFile ./tree-sitter-embedded-template.json));
   tree-sitter-fennel = (builtins.fromJSON (builtins.readFile ./tree-sitter-fennel.json));
   tree-sitter-fish = (builtins.fromJSON (builtins.readFile ./tree-sitter-fish.json));
@@ -28,6 +31,7 @@
   tree-sitter-python = (builtins.fromJSON (builtins.readFile ./tree-sitter-python.json));
   tree-sitter-ql = (builtins.fromJSON (builtins.readFile ./tree-sitter-ql.json));
   tree-sitter-regex = (builtins.fromJSON (builtins.readFile ./tree-sitter-regex.json));
+  tree-sitter-rst = (builtins.fromJSON (builtins.readFile ./tree-sitter-rst.json));
   tree-sitter-ruby = (builtins.fromJSON (builtins.readFile ./tree-sitter-ruby.json));
   tree-sitter-rust = (builtins.fromJSON (builtins.readFile ./tree-sitter-rust.json));
   tree-sitter-scala = (builtins.fromJSON (builtins.readFile ./tree-sitter-scala.json));
@@ -37,6 +41,7 @@
   tree-sitter-tsq = (builtins.fromJSON (builtins.readFile ./tree-sitter-tsq.json));
   tree-sitter-typescript = (builtins.fromJSON (builtins.readFile ./tree-sitter-typescript.json));
   tree-sitter-verilog = (builtins.fromJSON (builtins.readFile ./tree-sitter-verilog.json));
+  tree-sitter-vim = (builtins.fromJSON (builtins.readFile ./tree-sitter-vim.json));
   tree-sitter-yaml = (builtins.fromJSON (builtins.readFile ./tree-sitter-yaml.json));
   tree-sitter-zig = (builtins.fromJSON (builtins.readFile ./tree-sitter-zig.json));
 }

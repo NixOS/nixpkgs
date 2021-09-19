@@ -147,6 +147,25 @@ in {
     };
   };
 
+  ender3v2tempfix = buildPlugin rec {
+    pname = "OctoPrintPlugin-ender3v2tempfix";
+    version = "unstable-2021-04-27";
+
+    src = fetchFromGitHub {
+      owner = "SimplyPrint";
+      repo = "OctoPrint-Creality2xTemperatureReportingFix";
+      rev = "2c4183b6a0242a24ebf646d7ac717cd7a2db2bcf";
+      sha256 = "03bc2zbffw4ksk8if90kxhs3179nbhb4xikp4f0adm3lrnvxkd3s";
+    };
+
+    meta = with lib; {
+      description = "Fixes the double temperature reporting from the Creality Ender-3 v2 printer";
+      homepage = "https://github.com/SimplyPrint/OctoPrint-Creality2xTemperatureReportingFix";
+      license = licenses.mit;
+      maintainers = with maintainers; [ illustris ];
+    };
+  };
+
   gcodeeditor = buildPlugin rec {
     pname = "GcodeEditor";
     version = "0.2.12";
