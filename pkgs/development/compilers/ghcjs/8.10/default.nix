@@ -108,7 +108,15 @@ in stdenv.mkDerivation {
 
     inherit passthru;
 
-    # The emscripten is broken on darwin
-    meta.platforms = lib.platforms.linux;
-    meta.maintainers = with lib.maintainers; [ obsidian-systems-maintenance ];
+    meta = {
+      # The emscripten is broken on darwin
+      platforms = lib.platforms.linux;
+
+      # Hydra limits jobs to only outputting 1 gigabyte worth of files.
+      # GHCJS outputs over 3 gigabytes.
+      # https://github.com/NixOS/nixpkgs/pull/137066#issuecomment-922335563
+      hydraPlatforms = lib.platforms.none;
+
+      maintainers = with lib.maintainers; [ obsidian-systems-maintenance ];
+    };
   }
