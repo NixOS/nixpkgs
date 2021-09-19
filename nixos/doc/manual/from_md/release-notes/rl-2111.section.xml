@@ -130,6 +130,13 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://github.com/evilsocket/opensnitch">opensnitch</link>,
+          an application firewall. Available as
+          <link linkend="opt-services.opensnitch.enable">services.opensnitch</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://www.snapraid.it/">snapraid</link>, a
           backup program for disk arrays. Available as
           <link linkend="opt-snapraid.enable">snapraid</link>.
