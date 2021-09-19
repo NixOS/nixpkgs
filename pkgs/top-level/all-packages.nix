@@ -10399,6 +10399,11 @@ with pkgs;
   unbound-full = unbound.override {
     withSystemd = true;
     withDoH = true;
+    withECS = true;
+    withDNSCrypt = true;
+    withDNSTAP = true;
+    withTFO = true;
+    withCacheDB = true;
   };
 
   unicorn = callPackage ../development/libraries/unicorn { };
