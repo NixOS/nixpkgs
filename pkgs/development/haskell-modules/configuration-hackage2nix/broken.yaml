@@ -1057,7 +1057,6 @@ broken-packages:
   - digits
   - DimensionalHash
   - dimensional-tf
-  - diohsc
   - diophantine
   - direct-binary-files
   - directed-cubical
