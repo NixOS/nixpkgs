@@ -111,7 +111,7 @@ stdenv.mkDerivation rec {
   # Not generated when cross compiling.
   postInstall = lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
     # Merge gdkpixbuf and librsvg loaders
-    cat ${gdk-pixbuf.out}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache $GDK_PIXBUF/loaders.cache > $GDK_PIXBUF/loaders.cache.tmp
+    cat ${lib.getLib gdk-pixbuf}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache $GDK_PIXBUF/loaders.cache > $GDK_PIXBUF/loaders.cache.tmp
     mv $GDK_PIXBUF/loaders.cache.tmp $GDK_PIXBUF/loaders.cache
   '';
 
