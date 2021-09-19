@@ -10768,6 +10768,12 @@
     github = "staccato";
     githubId = 86573128;
   };
+  stackshadow = {
+    email = "stackshadow@evilbrain.de";
+    github = "stackshadow";
+    githubId = 7512804;
+    name = "Martin Langlotz";
+  };
   steell = {
     email = "steve@steellworks.com";
     github = "Steell";

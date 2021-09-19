@@ -135,5 +135,5 @@ in {
 
   };
 
-  meta.maintainers = with maintainers; [ ymarkus ];
+  meta.maintainers = with maintainers; [ stackshadow ];
 }
