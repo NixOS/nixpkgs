@@ -24657,6 +24657,8 @@ with pkgs;
 
   giada = callPackage ../applications/audio/giada {};
 
+  fabla = callPackage ../applications/audio/fabla {};
+
   giara = callPackage ../applications/networking/giara { };
 
   gitit = callPackage ../applications/misc/gitit {};
