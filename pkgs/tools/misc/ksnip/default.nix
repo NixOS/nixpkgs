@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
       - User-defined actions for taking screenshot and post-processing.
       - Many configuration options.
     '';
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ x3ro ];
     platforms = platforms.linux;
   };
