@@ -188,6 +188,8 @@ in lib.makeScopeWithSplicing
       bsdSetupHook netbsdSetupHook
       makeMinimal
       rsync
+    ] ++ lib.optionals stdenv.buildPlatform.isDarwin [
+      buildPackages.binutils
     ];
 
     buildInputs = with self; commonDeps;
