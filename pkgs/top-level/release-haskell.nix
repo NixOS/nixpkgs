@@ -249,10 +249,6 @@ let
         # TODO: remove ghc865Binary altogether and use ghc8102Binary
         ghc865Binary = {};
 
-        # remove integer-simple because it appears to be broken with
-        # musl and non-static-linking.
-        integer-simple = {};
-
         ghcjs = {};
         ghcjs810 = {};
       };
@@ -380,6 +376,7 @@ let
         };
         constituents = accumulateDerivations [
           jobs.pkgsMusl.haskell.compiler.ghc8102Binary
+          jobs.pkgsMusl.haskell.compiler.ghc8107Binary
           jobs.pkgsMusl.haskell.compiler.ghc884
           jobs.pkgsMusl.haskell.compiler.ghc8107
           jobs.pkgsMusl.haskell.compiler.ghc901
