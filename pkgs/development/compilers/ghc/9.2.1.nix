@@ -134,10 +134,16 @@ let
     targetPackages.stdenv.cc.bintools.bintools
   ];
 
+  # Makes debugging easier to see which variant is at play in `nix-store -q --tree`.
+  variantSuffix = lib.concatStrings [
+    (lib.optionalString stdenv.hostPlatform.isMusl "-musl")
+    (lib.optionalString enableIntegerSimple "-integer-simple")
+  ];
+
 in
 stdenv.mkDerivation (rec {
   version = "9.2.0.20210821";
-  pname = "${targetPrefix}ghc";
+  pname = "${targetPrefix}ghc${variantSuffix}";
 
   src = fetchurl {
     url = "https://downloads.haskell.org/ghc/9.2.1-rc1/ghc-${version}-src.tar.xz";
