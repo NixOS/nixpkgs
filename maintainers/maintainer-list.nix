@@ -7699,6 +7699,12 @@
     email = "natedevv@gmail.com";
     name = "Nathan Moore";
   };
+  nateinaction = {
+    email = "email@n8.gay";
+    github = "nateinaction";
+    githubId = 105005;
+    name = "Nate Gay";
+  };
   nathanruiz = {
     email = "nathanruiz@protonmail.com";
     github = "nathanruiz";
