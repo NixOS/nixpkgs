@@ -28,4 +28,6 @@
   buffer_autoset = callPackage ./buffer_autoset { };
 
   highmon = callPackage ./highmon { };
+
+  zncplayback = callPackage ./zncplayback { };
 }
