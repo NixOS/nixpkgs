@@ -71,6 +71,6 @@ stdenv.mkDerivation rec {
     description = "Flatpak installer, designed for elementary OS";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
   };
 }

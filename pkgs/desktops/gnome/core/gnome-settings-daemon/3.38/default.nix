@@ -129,7 +129,7 @@ stdenv.mkDerivation rec {
     description = "GNOME Settings Daemon";
     homepage = "https://gitlab.gnome.org/GNOME/gnome-settings-daemon/";
     license = licenses.gpl2Plus;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
     platforms = platforms.linux;
   };
 }
