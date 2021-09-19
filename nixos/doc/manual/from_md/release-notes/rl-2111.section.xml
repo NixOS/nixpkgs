@@ -287,6 +287,13 @@
           <link linkend="opt-programs.pantheon-tweaks.enable">programs.pantheon-tweaks</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/yangl1996/nesthub">nesthub</link>,
+          HomeKit bridge for Nest thermostats. Available as
+          <link xlink:href="options.html#opt-services.nesthub.enable">services.nesthub</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-incompatibilities">
