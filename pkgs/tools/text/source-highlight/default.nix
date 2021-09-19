@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-boost=${boost.out}" ];
 
-  doCheck = true;
+  doCheck = !stdenv.cc.isClang;
 
   enableParallelBuilding = true;
   # Upstream uses the same intermediate files in multiple tests, running
