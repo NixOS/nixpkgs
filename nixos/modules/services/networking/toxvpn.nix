@@ -59,10 +59,12 @@ with lib;
 
     users.users = {
       toxvpn = {
-        uid        = config.ids.uids.toxvpn;
+        isSystemUser = true;
+        group = "toxvpn";
         home       = "/var/lib/toxvpn";
         createHome = true;
       };
     };
+    users.groups.toxvpn = {};
   };
 }
