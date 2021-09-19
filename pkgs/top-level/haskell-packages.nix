@@ -77,7 +77,7 @@ in {
         # aarch64 ghc865Binary gets SEGVs due to haskell#15449 or similar
         # Musl bindists do not exist for ghc 8.6.5, so we use 8.10.* for them
         else if stdenv.isAarch64 || stdenv.targetPlatform.isMusl then
-          packages.ghc8102BinaryMinimal
+          packages.ghc8107BinaryMinimal
         else
           packages.ghc865Binary;
       inherit (buildPackages.python3Packages) sphinx;
@@ -91,7 +91,7 @@ in {
         # aarch64 ghc865Binary gets SEGVs due to haskell#15449 or similar
         # Musl bindists do not exist for ghc 8.6.5, so we use 8.10.* for them
         else if stdenv.isAarch64 || stdenv.isAarch32 || stdenv.targetPlatform.isMusl then
-          packages.ghc8102BinaryMinimal
+          packages.ghc8107BinaryMinimal
         else
           packages.ghc865Binary;
       inherit (buildPackages.python3Packages) sphinx;
@@ -108,9 +108,9 @@ in {
           packages.ghc8107BinaryMinimal
         # aarch64 ghc8102Binary exceeds max output size on hydra
         else if stdenv.isAarch64 || stdenv.isAarch32 then
-          packages.ghc8102BinaryMinimal
+          packages.ghc8107BinaryMinimal
         else
-          packages.ghc8102Binary;
+          packages.ghc8107Binary;
       inherit (buildPackages.python3Packages) sphinx;
       buildLlvmPackages = buildPackages.llvmPackages_10;
       llvmPackages = pkgs.llvmPackages_10;
@@ -118,9 +118,9 @@ in {
     ghc921 = callPackage ../development/compilers/ghc/9.2.1.nix {
       # aarch64 ghc8102Binary exceeds max output size on hydra
       bootPkgs = if stdenv.isAarch64 || stdenv.isAarch32 then
-          packages.ghc8102BinaryMinimal
+          packages.ghc8107BinaryMinimal
         else
-          packages.ghc8102Binary;
+          packages.ghc8107Binary;
       inherit (buildPackages.python3Packages) sphinx;
       # Need to use apple's patched xattr until
       # https://github.com/xattr/xattr/issues/44 and

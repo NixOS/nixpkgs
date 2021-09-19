@@ -313,12 +313,9 @@ stdenv.mkDerivation (rec {
     timeout = 24 * 3600;
     inherit (ghc.meta) license platforms;
 
-    # integer-simple builds are broken when GHC links against musl.
-    # See https://github.com/NixOS/nixpkgs/pull/129606#issuecomment-881323743.
     # Linker failure on macOS:
     # https://gitlab.haskell.org/ghc/ghc/-/issues/19950#note_373726
-    broken = (enableIntegerSimple && hostPlatform.isMusl)
-      || stdenv.hostPlatform.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     hydraPlatforms = lib.remove "x86_64-darwin" ghc.meta.platforms;
   };
 
