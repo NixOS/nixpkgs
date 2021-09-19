@@ -46,6 +46,7 @@ in {
         ReadWritePaths = "";
         BindReadOnlyPaths = [
           builtins.storeDir
+          "/etc"
         ] ++ lib.optional (cfg.settings ? MusicFolder) cfg.settings.MusicFolder;
         CapabilityBoundingSet = "";
         RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ];
