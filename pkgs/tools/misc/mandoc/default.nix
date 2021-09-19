@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, zlib }:
+{ lib, stdenv, fetchurl, zlib, perl }:
 
 stdenv.mkDerivation rec {
   pname = "mandoc";
@@ -23,6 +23,11 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     printf '%s' "$configureLocal" > configure.local
   '';
+
+  doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
+  checkTarget = "regress";
+  checkInputs = [ perl ];
+  preCheck = "patchShebangs --build regress/regress.pl";
 
   meta = with lib; {
     homepage = "https://mandoc.bsd.lv/";
