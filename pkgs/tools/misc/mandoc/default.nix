@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   '';
 
   preConfigure = ''
-    echo $configureLocal > configure.local
+    printf '%s' "$configureLocal" > configure.local
   '';
 
   meta = with lib; {
