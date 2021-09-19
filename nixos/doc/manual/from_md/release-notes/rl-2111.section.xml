@@ -381,6 +381,18 @@
           <link xlink:href="options.html#opt-services.seafile.enable">services.seafile</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/sigp/lighthouse">lighthouse</link>,
+          a Ethereum 2.0 client. Available as
+          <link xlink:href="options.html#opt-services.lighthouse">services.lighthouse</link>.
+          Can be used together with the
+          <link xlink:href="https://geth.ethereum.org/">geth</link>,
+          available as
+          <link xlink:href="options.html#opt-services.geth">services.geth</link>,
+          to run a node for staking ETH2.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-incompatibilities">
