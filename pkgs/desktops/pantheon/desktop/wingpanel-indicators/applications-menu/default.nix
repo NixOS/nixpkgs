@@ -1,6 +1,5 @@
 { lib, stdenv
 , fetchFromGitHub
-, fetchpatch
 , nix-update-script
 , pantheon
 , substituteAll
@@ -19,7 +18,6 @@
 , elementary-dock
 , bamf
 , switchboard-with-plugs
-, libunity
 , libsoup
 , wingpanel
 , zeitgeist
@@ -29,7 +27,7 @@
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-applications-menu";
-  version = "2.7.1";
+  version = "2.8.2";
 
   repoName = "applications-menu";
 
@@ -37,7 +35,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "sha256-NeazBzkbdQTC6OzPxxyED4OstMkNkUGtCIaZD67fTnM=";
+    sha256 = "1pm3dnq35vbvyxqapmfy4frfwhc1l2zh634annlmbjiyfp5mzk0q";
   };
 
   passthru = {
@@ -59,14 +57,12 @@ stdenv.mkDerivation rec {
   buildInputs = [
     bamf
     elementary-dock
-    gnome-menus
     granite
     gtk3
     json-glib
     libgee
     libhandy
     libsoup
-    libunity
     switchboard-with-plugs
     wingpanel
     zeitgeist
@@ -83,12 +79,6 @@ stdenv.mkDerivation rec {
   ];
 
   patches = [
-    # Port to Libhandy-1
-    (fetchpatch {
-      url = "https://github.com/elementary/applications-menu/commit/8eb2430e8513e9d37f875c5c9b8b15a968c27127.patch";
-      sha256 = "8Uw9mUw7U5nrAwUDGVpAwoRqb9ah503wQCr9kPbBJIo=";
-    })
-
     (substituteAll {
       src = ./fix-paths.patch;
       bc = "${bc}/bin/bc";

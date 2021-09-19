@@ -9182,6 +9182,12 @@
     githubId = 546296;
     name = "Eric Ren";
   };
+  renesat = {
+    name = "Ivan Smolyakov";
+    email = "smol.ivan97@gmail.com";
+    github = "renesat";
+    githubId = 11363539;
+  };
   renzo = {
     email = "renzocarbonara@gmail.com";
     github = "k0001";
@@ -12510,6 +12516,16 @@
     keys = [{
       longkeyid = "rsa4096/0x68616B2D8AC4DCC5";
       fingerprint = "61AE D40F 368B 6F26 9DAE  3892 6861 6B2D 8AC4 DCC5";
+    }];
+  };
+  zenithal = {
+    name = "zenithal";
+    email = "i@zenithal.me";
+    github = "ZenithalHourlyRate";
+    githubId = 19512674;
+    keys = [{
+      longkeyid = "rsa4096/0x87E17EEF9B18B6C9";
+      fingerprint = "1127 F188 280A E312 3619  3329 87E1 7EEF 9B18 B6C9";
     }];
   };
   zeri = {

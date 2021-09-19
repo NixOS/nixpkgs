@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wingpanel";
-  version = "2.3.2";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-mXi600gufUK81Uks9p4+al0tCI7H9KpizZGyoomp42s=";
+    sha256 = "0ycys24y1rrz0ydpvs4mc89p4k986q1ziwbvziinxr1wsli9v1dj";
   };
 
   passthru = {
@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
       including the applications menu.
     '';
     homepage = "https://github.com/elementary/wingpanel";
-    license = licenses.gpl2Plus;
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;
   };

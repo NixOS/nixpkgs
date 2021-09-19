@@ -81,7 +81,12 @@ in {
   };
 
   config = mkIf cfg.enable {
-    security.wrappers.firejail.source = "${lib.getBin pkgs.firejail}/bin/firejail";
+    security.wrappers.firejail =
+      { setuid = true;
+        owner = "root";
+        group = "root";
+        source = "${lib.getBin pkgs.firejail}/bin/firejail";
+      };
 
     environment.systemPackages = [ pkgs.firejail ] ++ [ wrappedBins ];
   };

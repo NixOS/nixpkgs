@@ -461,6 +461,7 @@ in
   unit-php = handleTest ./web-servers/unit-php.nix {};
   upnp = handleTest ./upnp.nix {};
   usbguard = handleTest ./usbguard.nix {};
+  user-activation-scripts = handleTest ./user-activation-scripts.nix {};
   uwsgi = handleTest ./uwsgi.nix {};
   v2ray = handleTest ./v2ray.nix {};
   vault = handleTest ./vault.nix {};

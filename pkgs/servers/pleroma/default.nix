@@ -7,14 +7,14 @@
 
 beamPackages.mixRelease rec {
   pname = "pleroma";
-  version = "2.4.0";
+  version = "2.4.1";
 
   src = fetchFromGitLab {
     domain = "git.pleroma.social";
     owner = "pleroma";
     repo = "pleroma";
     rev = "v${version}";
-    sha256 = "sha256-1zp/qVk2K3q8AtkfXab0MBAHaQnY5enVtfdu64FFPhg=";
+    sha256 = "sha256-XYZIf8/Vznl4FvVAOy5GVfTBTCwhfUol/3vWWIDwIxQ=";
   };
 
   mixNixDeps = import ./mix.nix {

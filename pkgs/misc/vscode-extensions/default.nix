@@ -393,6 +393,23 @@ let
         };
       };
 
+      denoland.vscode-deno = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-deno";
+          publisher = "denoland";
+          version = "3.9.1";
+          sha256 = "sha256-OuGTjmJQFAWrYp7YnFpyo0NnnCcXYF8itYjGKMa3FCs=";
+        };
+        meta = with lib; {
+          changelog = "https://marketplace.visualstudio.com/items/denoland.vscode-deno/changelog";
+          description = "A language server client for Deno";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=denoland.vscode-deno";
+          homepage = "https://github.com/denoland/vscode_deno";
+          license = licenses.mit;
+          maintainers = with maintainers; [ ratsclub ];
+        };
+      };
+
       dhall.dhall-lang = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "dhall-lang";
@@ -806,8 +823,8 @@ let
         mktplcRef = {
           name = "haskell";
           publisher = "haskell";
-          version = "1.1.0";
-          sha256 = "1wg06lyk0qn9jd6gi007sg7v0z9z8gwq7x2449d4ihs9n3w5l0gb";
+          version = "1.6.1";
+          sha256 = "1l6nrbqkq1p62dkmzs4sy0rxbid3qa1104s3fd9fzkmc1sldzgsn";
         };
         meta = with lib; {
           license = licenses.mit;
@@ -955,8 +972,8 @@ let
         mktplcRef = {
           name = "language-haskell";
           publisher = "justusadam";
-          version = "3.2.1";
-          sha256 = "0lxp8xz17ciy93nj4lzxqvz71vw1zdyamrnh2n792yair8890rr6";
+          version = "3.4.0";
+          sha256 = "0ab7m5jzxakjxaiwmg0jcck53vnn183589bbxh3iiylkpicrv67y";
         };
         meta = {
           license = lib.licenses.bsd3;

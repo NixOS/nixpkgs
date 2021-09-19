@@ -198,8 +198,8 @@ let
     '';
 
     linkVimlPlugin = plugin: packageName: dir: ''
-      mkdir -p $out/pack/${packageName}/${dir}/${plugin.pname}
-      ln -sf ${plugin}/${rtpPath}/* $out/pack/${packageName}/${dir}/${plugin.pname}
+      mkdir -p $out/pack/${packageName}/${dir}/${lib.getName plugin}
+      ln -sf ${plugin}/${rtpPath}/* $out/pack/${packageName}/${dir}/${lib.getName plugin}
     '';
 
     link = pluginPath: if hasLuaModule pluginPath
@@ -292,12 +292,14 @@ let
 
       /* vim-plug is an extremely popular vim plugin manager.
       */
+      /* Remove repeated "/." suffixes from a path */
+      stripDots = path: lib.head (builtins.split "(/\\.)*$" path);
       plugImpl =
       (''
         source ${vimPlugins.vim-plug.rtp}/plug.vim
         silent! call plug#begin('/dev/null')
 
-        '' + (lib.concatMapStringsSep "\n" (pkg: "Plug '${pkg.rtp}'") plug.plugins) + ''
+        '' + (lib.concatMapStringsSep "\n" (pkg: "Plug '${stripDots pkg.rtp}'") plug.plugins) + ''
 
         call plug#end()
       '');

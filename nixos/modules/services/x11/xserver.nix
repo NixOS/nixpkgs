@@ -738,6 +738,9 @@ in
       nativeBuildInputs = with pkgs.buildPackages; [ xkbvalidate ];
       preferLocalBuild = true;
     } ''
+      ${optionalString (config.environment.sessionVariables ? XKB_CONFIG_ROOT)
+        "export XKB_CONFIG_ROOT=${config.environment.sessionVariables.XKB_CONFIG_ROOT}"
+      }
       xkbvalidate "$xkbModel" "$layout" "$xkbVariant" "$xkbOptions"
       touch "$out"
     '');

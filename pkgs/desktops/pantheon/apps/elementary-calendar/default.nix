@@ -10,6 +10,7 @@
 , gtk3
 , granite
 , libgee
+, libhandy
 , geoclue2
 , libchamplain
 , clutter
@@ -27,7 +28,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-calendar";
-  version = "5.1.1";
+  version = "6.0.1";
 
   repoName = "calendar";
 
@@ -35,7 +36,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "18npf4zzf2dywr1zkr6fqzcbb70297yvdp5wxw7zyam1xwa86v07";
+    sha256 = "1caxc42jrys5s4x9qai5wdpcwpkmyvnqx9z75974g7swiz1lrzq6";
   };
 
   passthru = {
@@ -66,6 +67,7 @@ stdenv.mkDerivation rec {
     gtk3
     libchamplain
     libgee
+    libhandy
     libical
     libnotify
     libgdata # required by some dependency transitively

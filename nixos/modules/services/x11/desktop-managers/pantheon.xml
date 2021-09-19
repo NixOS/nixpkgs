@@ -22,7 +22,7 @@
 <programlisting>
 <xref linkend="opt-services.pantheon.apps.enable"/> = false;
 </programlisting>
-   You can also use <xref linkend="opt-environment.pantheon.excludePackages"/> to remove any other app (like <package>geary</package>).
+   You can also use <xref linkend="opt-environment.pantheon.excludePackages"/> to remove any other app (like <package>elementary-mail</package>).
   </para>
  </section>
  <section xml:id="sec-pantheon-wingpanel-switchboard">

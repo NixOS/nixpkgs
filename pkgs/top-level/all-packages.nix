@@ -141,6 +141,8 @@ with pkgs;
     autoconf = autoconf269;
   };
 
+  autorestic = callPackage ../tools/backup/autorestic { };
+
   autoPatchelfHook = makeSetupHook { name = "auto-patchelf-hook"; }
     ../build-support/setup-hooks/auto-patchelf.sh;
 
@@ -8357,6 +8359,8 @@ with pkgs;
 
   proxychains = callPackage ../tools/networking/proxychains { };
 
+  proxychains-ng = callPackage ../tools/networking/proxychains-ng { };
+
   proxify = callPackage ../tools/networking/proxify { };
 
   proxytunnel = callPackage ../tools/misc/proxytunnel {
@@ -13059,7 +13063,7 @@ with pkgs;
   pipewire = callPackage ../development/libraries/pipewire {};
   pipewire_0_2 = callPackage ../development/libraries/pipewire/0.2.nix {};
 
-  pyradio = callPackage ../applications/radio/pyradio {};
+  pyradio = callPackage ../applications/audio/pyradio {};
 
   pyrex = pyrex095;
 
@@ -13144,7 +13148,10 @@ with pkgs;
 
   self = pkgsi686Linux.callPackage ../development/interpreters/self { };
 
-  spark = callPackage ../applications/networking/cluster/spark { };
+  inherit (callPackages ../applications/networking/cluster/spark { hadoop = hadoop_3_1; })
+    spark3
+    spark2;
+  spark = spark3;
 
   sparkleshare = callPackage ../applications/version-management/sparkleshare { };
 
@@ -19888,11 +19895,11 @@ with pkgs;
   cassandra = cassandra_3_11;
 
   apache-jena = callPackage ../servers/nosql/apache-jena/binary.nix {
-    java = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
+    java = jre;
   };
 
   apache-jena-fuseki = callPackage ../servers/nosql/apache-jena/fuseki-binary.nix {
-    java = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
+    java = jre;
   };
 
   apcupsd = callPackage ../servers/apcupsd { };

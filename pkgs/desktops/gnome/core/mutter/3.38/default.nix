@@ -1,35 +1,35 @@
 { fetchurl
-, fetchpatch
 , substituteAll
-, lib, stdenv
+, runCommand
+, lib
+, stdenv
 , pkg-config
 , gnome
-, pantheon
 , gettext
 , gobject-introspection
-, upower
 , cairo
 , pango
-, cogl
 , json-glib
 , libstartup_notification
 , zenity
-, libcanberra-gtk3
+, libcanberra
 , ninja
 , xkeyboard_config
 , libxkbfile
+, libXdamage
 , libxkbcommon
 , libXtst
 , libinput
+, libdrm
 , gsettings-desktop-schemas
 , glib
 , gtk3
 , gnome-desktop
-, geocode-glib
-, pipewire_0_2
+, pipewire
 , libgudev
 , libwacom
 , xwayland
+, mesa
 , meson
 , gnome-settings-daemon
 , xorgserver
@@ -39,23 +39,47 @@
 , desktop-file-utils
 , libcap_ng
 , egl-wayland
+, graphene
+, wayland-protocols
+, pantheon
 }:
 
-stdenv.mkDerivation rec {
+let self = stdenv.mkDerivation rec {
   pname = "mutter";
-  version = "3.34.6";
+  version = "3.38.6";
 
   outputs = [ "out" "dev" "man" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/mutter/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-I73ofTO4mBNYgxzsiRW7X/Hq+cHedMkM0WYLG5WINSY=";
+    sha256 = "0mxln9azl4krmknq2vmhd15lgpa2q7gh7whiv14nsqbr9iaxmg2x";
   };
+
+  patches = [
+    # Drop inheritable cap_sys_nice, to prevent the ambient set from leaking
+    # from mutter/gnome-shell, see https://github.com/NixOS/nixpkgs/issues/71381
+    ./drop-inheritable.patch
+
+    # Fixes issues for users of mutter like in gala.
+    # https://github.com/elementary/gala/issues/605
+    # https://gitlab.gnome.org/GNOME/mutter/issues/536
+    ./fix-glitches-in-gala.patch
+
+    (substituteAll {
+      src = ./fix-paths.patch;
+      inherit zenity;
+    })
+  ];
 
   mesonFlags = [
     "-Degl_device=true"
     "-Dinstalled_tests=false" # TODO: enable these
     "-Dwayland_eglstream=true"
+    "-Dprofiler=true"
+    "-Dxwayland_path=${xwayland}/bin/Xwayland"
+    # This should be auto detected, but it looks like it manages a false
+    # positive.
+    "-Dxwayland_initfd=disabled"
   ];
 
   propagatedBuildInputs = [
@@ -63,11 +87,13 @@ stdenv.mkDerivation rec {
     json-glib
     libXtst
     libcap_ng
+    graphene
   ];
 
   nativeBuildInputs = [
     desktop-file-utils
     gettext
+    mesa # needed for gbm
     meson
     ninja
     pkg-config
@@ -78,42 +104,28 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     cairo
-    cogl
     egl-wayland
-    geocode-glib
     glib
     gnome-desktop
     gnome-settings-daemon
     gobject-introspection
     gsettings-desktop-schemas
     gtk3
-    libcanberra-gtk3
+    libcanberra
+    libdrm
     libgudev
     libinput
     libstartup_notification
     libwacom
     libxkbcommon
     libxkbfile
+    libXdamage
     pango
-    pipewire_0_2 # TODO: backport pipewire 0.3 support
+    pipewire
     sysprof
-    upower
     xkeyboard_config
     xwayland
-    zenity
-  ];
-
-  patches = [
-    ./0001-EGL-Include-EGL-eglmesaext.h.patch
-    ./0002-drop-inheritable.patch
-    ./0003-Fix-glitches-in-gala.patch
-    ./0004-profiler-track-changes-in-GLib-and-Sysprof.patch
-    ./0005-meta-Add-missing-display.h-to-meta-workspace-manager.h.patch
-    ./0006-build-bump-ABI-to-sysprof-capture-4.patch
-    (substituteAll {
-      src = ./0007-fix-paths.patch;
-      inherit zenity;
-    })
+    wayland-protocols
   ];
 
   postPatch = ''
@@ -124,11 +136,29 @@ stdenv.mkDerivation rec {
     ${glib.dev}/bin/glib-compile-schemas "$out/share/glib-2.0/schemas"
   '';
 
+  # Install udev files into our own tree.
+  PKG_CONFIG_UDEV_UDEVDIR = "${placeholder "out"}/lib/udev";
+
+  passthru = {
+    libdir = "${self}/lib/mutter-7";
+
+    tests = {
+      libdirExists = runCommand "mutter-libdir-exists" {} ''
+        if [[ ! -d ${self.libdir} ]]; then
+          echo "passthru.libdir should contain a directory, “${self.libdir}” is not one."
+          exit 1
+        fi
+        touch $out
+      '';
+    };
+  };
+
   meta = with lib; {
     description = "A window manager for GNOME";
     homepage = "https://gitlab.gnome.org/GNOME/mutter";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = pantheon.maintainers;
     platforms = platforms.linux;
   };
-}
+};
+in self

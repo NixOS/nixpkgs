@@ -39,6 +39,13 @@
       </listitem>
       <listitem>
         <para>
+          spark now defaults to spark 3, updated from 2. A
+          <link xlink:href="https://spark.apache.org/docs/latest/core-migration-guide.html#upgrading-from-core-24-to-30">migration
+          guide</link> is available.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           Activation scripts can now opt int to be run when running
           <literal>nixos-rebuild dry-activate</literal> and detect the
           dry activation by reading <literal>$NIXOS_ACTION</literal>.
@@ -46,6 +53,13 @@
           change if the activation was really run. The users/modules
           activation script supports this and outputs some of is
           actions.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Pantheon desktop has been updated to version 6. Due to changes
+          of screen locker, if locking doesn’t work for you, please try
+          <literal>gsettings set org.gnome.desktop.lockdown disable-lock-screen false</literal>.
         </para>
       </listitem>
     </itemizedlist>
@@ -182,8 +196,6 @@
           <link linkend="opt-services.isso.enable">isso</link>
         </para>
       </listitem>
-    </itemizedlist>
-    <itemizedlist spacing="compact">
       <listitem>
         <para>
           <link xlink:href="https://www.navidrome.org/">navidrome</link>,
@@ -192,8 +204,6 @@
           <link linkend="opt-services.navidrome.enable">navidrome</link>.
         </para>
       </listitem>
-    </itemizedlist>
-    <itemizedlist>
       <listitem>
         <para>
           <link xlink:href="https://docs.fluidd.xyz/">fluidd</link>, a
@@ -250,11 +260,34 @@
           entry</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://spark.apache.org/">spark</link>, a
+          unified analytics engine for large-scale data processing.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/JoseExposito/touchegg">touchegg</link>,
+          a multi-touch gesture recognizer. Available as
+          <link linkend="opt-services.touchegg.enable">services.touchegg</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-incompatibilities">
     <title>Backward Incompatibilities</title>
     <itemizedlist>
+      <listitem>
+        <para>
+          The <literal>security.wrappers</literal> option now requires
+          to always specify an owner, group and whether the
+          setuid/setgid bit should be set. This is motivated by the fact
+          that before NixOS 21.11, specifying either setuid or setgid
+          but not owner/group resulted in wrappers owned by
+          nobody/nogroup, which is unsafe.
+        </para>
+      </listitem>
       <listitem>
         <para>
           The <literal>paperless</literal> module and package have been
@@ -1018,6 +1051,14 @@ Superuser created successfully.
       </listitem>
       <listitem>
         <para>
+          The
+          <link xlink:href="options.html#opt-services.xserver.extraLayouts"><literal>services.xserver.extraLayouts</literal></link>
+          no longer cause additional rebuilds when a layout is added or
+          modified.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           Sway: The terminal emulator <literal>rxvt-unicode</literal> is
           no longer installed by default via
           <literal>programs.sway.extraPackages</literal>. The current
@@ -1060,6 +1101,22 @@ Superuser created successfully.
           and <literal>nginx</literal> are supported. The definitions of
           wordpress sites should now be set in
           <link xlink:href="options.html#opt-services.wordpress.sites"><literal>services.wordpress.sites</literal></link>.
+        </para>
+        <para>
+          Sites definitions that use the old interface are automatically
+          migrated in the new option. This backward compatibility will
+          be removed in 22.05.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The dokuwiki module provides a new interface which allows to
+          use different webservers with the new option
+          <link xlink:href="options.html#opt-services.dokuwiki.webserver"><literal>services.dokuwiki.webserver</literal></link>.
+          Currently <literal>caddy</literal> and
+          <literal>nginx</literal> are supported. The definitions of
+          dokuwiki sites should now be set in
+          <link xlink:href="options.html#opt-services.dokuwiki.sites"><literal>services.dokuwiki.sites</literal></link>.
         </para>
         <para>
           Sites definitions that use the old interface are automatically
