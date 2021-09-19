@@ -1,13 +1,14 @@
-{ lib, stdenv, fetchurl, python, wafHook }:
+{ lib, stdenv, fetchFromGitHub, python, wafHook }:
 
 stdenv.mkDerivation rec {
   pname = "pflask";
-  version = "git-2015-12-17";
-  rev = "599418bb6453eaa0ccab493f9411f13726c1a636";
+  version = "unstable-2015-12-17";
 
-  src = fetchurl {
-    url = "https://github.com/ghedo/pflask/archive/${rev}.tar.gz";
-    sha256 = "2545fca37f9da484b46b6fb5e3a9bbba6526a9725189fe4af5227ef6e6fca440";
+  src = fetchFromGitHub {
+    owner = "ghedo";
+    repo = "pflask";
+    rev = "599418bb6453eaa0ccab493f9411f13726c1a636";
+    hash = "sha256-0RjitZd2JUK7WUEJuw4qhUx3joY5OI0Hh74mTzp7GmY=";
   };
 
   nativeBuildInputs = [ wafHook ];
@@ -15,9 +16,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Lightweight process containers for Linux";
-    homepage    = "https://ghedo.github.io/pflask/";
-    license     = lib.licenses.bsd2;
-    platforms   = lib.platforms.linux;
+    homepage = "https://ghedo.github.io/pflask/";
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ ];
   };
 }
