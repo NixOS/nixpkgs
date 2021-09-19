@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "plexapi";
-  version = "4.7.0";
+  version = "4.7.1";
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "pkkid";
     repo = "python-plexapi";
     rev = version;
-    sha256 = "1gh36ln9ki69rs7ml9syqq956i996rdi145qffjwb3736zylrzkp";
+    sha256 = "sha256-kZREcjLBSWXGULEKfWiherRCl5UXLOw4f3JFaqs8dXw=";
   };
 
   propagatedBuildInputs = [
