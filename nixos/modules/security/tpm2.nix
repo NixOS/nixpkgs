@@ -146,6 +146,7 @@ in {
       # Create the tss user and group only if the default value is used
       users.users.${cfg.tssUser} = lib.mkIf (cfg.tssUser == "tss") {
         isSystemUser = true;
+        group = "tss";
       };
       users.groups.${cfg.tssGroup} = lib.mkIf (cfg.tssGroup == "tss") {};
 
@@ -172,7 +173,7 @@ in {
           BusName = "com.intel.tss2.Tabrmd";
           ExecStart = "${cfg.abrmd.package}/bin/tpm2-abrmd";
           User = "tss";
-          Group = "nogroup";
+          Group = "tss";
         };
       };
 
