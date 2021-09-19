@@ -12572,5 +12572,11 @@
     github = "mbprtpmnr";
     githubId = 88109321;
   };
+  horhik = {
+    name = "horhik";
+    email = "horhik@tuta.io";
+    github = "horhik";
+    githubId = 46262811;
+  };
 
 }
