@@ -1,6 +1,12 @@
 { lib, stdenv, fetchurl, zlib, perl }:
 
 let
+  # check if we can execute binaries for the host platform on the build platform
+  # even though the platforms aren't the same. mandoc can't be cross compiled
+  # (easily) because of its configurePhase, but we want to allow “native” cross
+  # such as pkgsLLVM and pkgsStatic.
+  executableCross = stdenv.hostPlatform.isCompatible stdenv.buildPlatform;
+
   # Name of an UTF-8 locale _always_ present at runtime, used for UTF-8 support
   # (locale set by the user may differ). This would usually be C.UTF-8, but
   # darwin has no such locale.
@@ -9,6 +15,9 @@ let
     then "en_US.UTF-8"
     else "C.UTF-8";
 in
+
+assert executableCross ||
+  throw "mandoc relies on executing compiled programs in configurePhase, can't cross compile";
 
 stdenv.mkDerivation rec {
   pname = "mandoc";
@@ -27,6 +36,7 @@ stdenv.mkDerivation rec {
     PREFIX="$out"
     LD_OHASH="-lutil"
     CC=${stdenv.cc.targetPrefix}cc
+    AR=${stdenv.cc.bintools.targetPrefix}ar
     # Bypass the locale(1)-based check for UTF-8 support since it causes trouble:
     # * We only have meaningful locale(1) implementations for glibc and macOS
     # * NetBSD's locale(1) (used for macOS) depends on mandoc
@@ -40,7 +50,7 @@ stdenv.mkDerivation rec {
     printf '%s' "$configureLocal" > configure.local
   '';
 
-  doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
+  doCheck = executableCross;
   checkTarget = "regress";
   checkInputs = [ perl ];
   preCheck = "patchShebangs --build regress/regress.pl";
