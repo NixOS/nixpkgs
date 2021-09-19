@@ -8897,6 +8897,8 @@ in {
 
   thrift = callPackage ../development/python-modules/thrift { };
 
+  thriftpy2 = callPackage ../development/python-modules/thriftpy2 { };
+
   thumborPexif = callPackage ../development/python-modules/thumborpexif { };
 
   tkinter = let
