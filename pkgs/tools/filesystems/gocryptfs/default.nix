@@ -2,6 +2,8 @@
 , stdenv
 , buildGoModule
 , fetchFromGitHub
+, fuse
+, makeWrapper
 , openssl
 , pandoc
 , pkg-config
@@ -22,6 +24,7 @@ buildGoModule rec {
   vendorSha256 = "sha256-Q/oBT5xdLpgQCIk7KES6c8+BaCQVUIwCwVufl4oTFRs=";
 
   nativeBuildInputs = [
+    makeWrapper
     pkg-config
     pandoc
   ];
@@ -46,6 +49,12 @@ buildGoModule rec {
     pandoc MANPAGE-XRAY.md -s -t man -o $out/share/man/man1/gocryptfs-xray.1
     pandoc MANPAGE-STATFS.md -s -t man -o $out/share/man/man1/statfs.1
     popd
+  '';
+
+  postInstall = ''
+    wrapProgram $out/bin/gocryptfs \
+      --prefix PATH : ${lib.makeBinPath [ fuse ]}
+    ln -s $out/bin/gocryptfs $out/bin/mount.fuse.gocryptfs
   '';
 
   meta = with lib; {
