@@ -46,6 +46,7 @@ let
         };
         exePathForLibraryCheck = "ghc/stage2/build/tmp/ghc-stage2";
         archSpecificLibraries = [
+          { nixPackage = gmp; fileToCheckFor = null; }
           # The i686-linux bindist provided by GHC HQ is currently built on Debian 9,
           # which link it against `libtinfo.so.5` (ncurses 5).
           # Other bindists are linked `libtinfo.so.6` (ncurses 6).
@@ -59,6 +60,7 @@ let
         };
         exePathForLibraryCheck = "ghc/stage2/build/tmp/ghc-stage2";
         archSpecificLibraries = [
+          { nixPackage = gmp; fileToCheckFor = null; }
           { nixPackage = ncurses6; fileToCheckFor = "libtinfo.so.6"; }
         ];
       };
@@ -69,6 +71,7 @@ let
         };
         exePathForLibraryCheck = "ghc/stage2/build/tmp/ghc-stage2";
         archSpecificLibraries = [
+          { nixPackage = gmp; fileToCheckFor = null; }
           { nixPackage = ncurses6; fileToCheckFor = "libtinfo.so.6"; }
         ];
       };
@@ -79,6 +82,7 @@ let
         };
         exePathForLibraryCheck = "ghc/stage2/build/tmp/ghc-stage2";
         archSpecificLibraries = [
+          { nixPackage = gmp; fileToCheckFor = null; }
           { nixPackage = ncurses6; fileToCheckFor = "libtinfo.so.6"; }
           { nixPackage = numactl; fileToCheckFor = null; }
         ];
@@ -90,6 +94,7 @@ let
         };
         exePathForLibraryCheck = null; # we don't have a library check for darwin yet
         archSpecificLibraries = [
+          { nixPackage = gmp; fileToCheckFor = null; }
           { nixPackage = ncurses6; fileToCheckFor = null; }
           { nixPackage = libiconv; fileToCheckFor = null; }
         ];
@@ -104,6 +109,7 @@ let
         };
         exePathForLibraryCheck = "bin/ghc";
         archSpecificLibraries = [
+          { nixPackage = gmp; fileToCheckFor = null; }
           # In contrast to glibc builds, the musl-bindist uses `libncursesw.so.*`
           # instead of `libtinfo.so.*.`
           { nixPackage = ncurses6; fileToCheckFor = "libncursesw.so.6"; }
@@ -121,11 +127,8 @@ let
 
   libPath =
     lib.makeLibraryPath (
-      [
-        gmp
-      ]
       # Add arch-specific libraries.
-      ++ map ({ nixPackage, ... }: nixPackage) binDistUsed.archSpecificLibraries
+      map ({ nixPackage, ... }: nixPackage) binDistUsed.archSpecificLibraries
     );
 
   libEnvVar = lib.optionalString stdenv.hostPlatform.isDarwin "DY"
@@ -140,6 +143,12 @@ stdenv.mkDerivation rec {
 
   src = fetchurl binDistUsed.src;
 
+  # Note that for GHC 8.10 versions <= 8.10.5, the GHC HQ musl bindist
+  # has a `gmp` dependency:
+  # https://gitlab.haskell.org/ghc/ghc/-/commit/8306501020cd66f683ad9c215fa8e16c2d62357d
+  # Related nixpkgs issues:
+  # * https://github.com/NixOS/nixpkgs/pull/130441#issuecomment-922452843
+
   nativeBuildInputs = [ perl ];
   propagatedBuildInputs =
     lib.optionals useLLVM [ llvmPackages.llvm ]
@@ -147,6 +156,9 @@ stdenv.mkDerivation rec {
     # libgmp is (see not [musl bindists have no .buildinfo]), we need
     # to propagate `gmp`, otherwise programs built by this ghc will
     # fail linking with `cannot find -lgmp` errors.
+    # Concrete cases are listed in:
+    #     https://github.com/NixOS/nixpkgs/pull/130441#issuecomment-922459988
+    #
     # Also, as of writing, the release pages of musl bindists claim
     # that they use `integer-simple` and do not require `gmp`; however
     # that is incorrect, so `gmp` is required until a release has been
@@ -154,6 +166,12 @@ stdenv.mkDerivation rec {
     # (Note that for packaging the `-binary` compiler, nixpkgs does not care
     # about whether or not `gmp` is used; this comment is just here to explain
     # why the `gmp` dependency exists despite what the release page says.)
+    #
+    # For GHC >= 8.10.6, `gmp` was switched out for `integer-simple`
+    # (https://gitlab.haskell.org/ghc/ghc/-/commit/8306501020cd66f683ad9c215fa8e16c2d62357d),
+    # fixing the above-mentioned release issue,
+    # and for GHC >= 9.* it is not clear as of writing whether that switch
+    # will be made there too.
     ++ lib.optionals stdenv.hostPlatform.isMusl [ gmp ]; # musl bindist needs this
 
   # Set LD_LIBRARY_PATH or equivalent so that the programs running as part
