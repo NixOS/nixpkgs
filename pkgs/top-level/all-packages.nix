@@ -2993,6 +2993,8 @@ with pkgs;
 
   inklecate = callPackage ../development/compilers/inklecate {};
 
+  intensity-normalization = with python3Packages; toPythonApplication intensity-normalization;
+
   interactsh = callPackage ../tools/misc/interactsh { };
 
   interlock = callPackage ../servers/interlock {};

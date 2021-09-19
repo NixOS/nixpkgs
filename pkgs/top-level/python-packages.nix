@@ -3648,6 +3648,8 @@ in {
 
   intelhex = callPackage ../development/python-modules/intelhex { };
 
+  intensity-normalization = callPackage ../development/python-modules/intensity-normalization { };
+
   internetarchive = callPackage ../development/python-modules/internetarchive { };
 
   interruptingcow = callPackage ../development/python-modules/interruptingcow { };
