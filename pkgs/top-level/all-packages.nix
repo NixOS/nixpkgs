@@ -4583,6 +4583,8 @@ with pkgs;
 
   driftnet = callPackage ../tools/networking/driftnet {};
 
+  driftctl = callPackage ../applications/networking/cluster/driftctl { };
+
   drill = callPackage ../tools/networking/drill {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
