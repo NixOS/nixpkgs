@@ -5265,6 +5265,8 @@ in {
 
   parfive = callPackage ../development/python-modules/parfive { };
 
+  parquet = callPackage ../development/python-modules/parquet { };
+
   parse = callPackage ../development/python-modules/parse { };
 
   parsedatetime = callPackage ../development/python-modules/parsedatetime { };
