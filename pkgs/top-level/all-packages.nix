@@ -8023,6 +8023,8 @@ with pkgs;
 
   pamtester = callPackage ../tools/security/pamtester { };
 
+  pantheon-tweaks = callPackage ../applications/system/pantheon-tweaks { };
+
   paperless-ng = callPackage ../applications/office/paperless-ng { };
 
   paperwork = callPackage ../applications/office/paperwork/paperwork-gtk.nix { };
