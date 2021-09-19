@@ -1,5 +1,15 @@
 { lib, stdenv, fetchurl, zlib, perl }:
 
+let
+  # Name of an UTF-8 locale _always_ present at runtime, used for UTF-8 support
+  # (locale set by the user may differ). This would usually be C.UTF-8, but
+  # darwin has no such locale.
+  utf8Locale =
+    if stdenv.hostPlatform.isDarwin
+    then "en_US.UTF-8"
+    else "C.UTF-8";
+in
+
 stdenv.mkDerivation rec {
   pname = "mandoc";
   version = "1.14.6";
@@ -12,12 +22,18 @@ stdenv.mkDerivation rec {
   buildInputs = [ zlib ];
 
   configureLocal = ''
-    HAVE_WCHAR=1
     MANPATH_DEFAULT="/run/current-system/sw/share/man"
     OSNAME="NixOS"
     PREFIX="$out"
     LD_OHASH="-lutil"
     CC=${stdenv.cc.targetPrefix}cc
+    # Bypass the locale(1)-based check for UTF-8 support since it causes trouble:
+    # * We only have meaningful locale(1) implementations for glibc and macOS
+    # * NetBSD's locale(1) (used for macOS) depends on mandoc
+    # * Sandbox and locales cause all kinds of trouble
+    # * build and host libc (and thus locale handling) may differ
+    HAVE_WCHAR=1
+    UTF8_LOCALE=${utf8Locale}
   '';
 
   preConfigure = ''
