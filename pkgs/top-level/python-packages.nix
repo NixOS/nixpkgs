@@ -3644,6 +3644,8 @@ in {
 
   intake = callPackage ../development/python-modules/intake { };
 
+  intake-parquet = callPackage ../development/python-modules/intake-parquet { };
+
   intbitset = callPackage ../development/python-modules/intbitset { };
 
   intelhex = callPackage ../development/python-modules/intelhex { };
