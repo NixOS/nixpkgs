@@ -2,6 +2,7 @@
 , rustPlatform
 , fetchFromGitHub
 , llvmPackages
+, rocksdb
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -20,6 +21,11 @@ rustPlatform.buildRustPackage rec {
   # needed for librocksdb-sys
   nativeBuildInputs = [ llvmPackages.clang ];
   LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
+
+  # link rocksdb dynamically
+  ROCKSDB_INCLUDE_DIR = "${rocksdb}/include";
+  ROCKSDB_LIB_DIR = "${rocksdb}/lib";
+  cargoBuildFlags = "--no-default-features";
 
   meta = with lib; {
     description = "An efficient re-implementation of Electrum Server in Rust";
