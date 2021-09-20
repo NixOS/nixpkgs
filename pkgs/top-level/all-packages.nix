@@ -12114,6 +12114,8 @@ with pkgs;
 
   vcstool = callPackage ../development/tools/vcstool { };
 
+  vdexExtractor = callPackage ../development/tools/vdexExtractor { };
+
   verco = callPackage ../applications/version-management/verco { };
 
   verible = callPackage ../development/tools/verible { };
