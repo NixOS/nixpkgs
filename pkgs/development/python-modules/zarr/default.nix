@@ -1,19 +1,20 @@
 { lib
 , buildPythonPackage
-, isPy27
-, fetchPypi
-, setuptools-scm
 , asciitree
-, numpy
 , fasteners
+, fetchPypi
 , numcodecs
-, pytest
+, numpy
+, pytestCheckHook
+, pythonOlder
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "zarr";
   version = "2.10.0";
-  disabled = isPy27;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -26,23 +27,21 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     asciitree
-    numpy
     fasteners
     numcodecs
+    numpy
   ];
 
   checkInputs = [
-    pytest
+    pytestCheckHook
   ];
 
-  checkPhase = ''
-    pytest
-  '';
+  pythonImportsCheck = [ "zarr" ];
 
   meta = with lib; {
     description = "An implementation of chunked, compressed, N-dimensional arrays for Python";
     homepage = "https://github.com/zarr-developers/zarr";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc ];
   };
 }
