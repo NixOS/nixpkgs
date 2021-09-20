@@ -1,4 +1,4 @@
-{ buildGoModule, fetchFromGitHub, lib }:
+{ buildGoModule, common-updater-scripts, fetchFromGitHub, genericUpdater, lib }:
 
 buildGoModule rec {
   pname = "go-swag";
@@ -14,6 +14,15 @@ buildGoModule rec {
   vendorSha256 = "0n6f4z2jvmpg7pr3pyq64a4rh150ixn8dwkzk17j0vcy4bh9fka3";
 
   subPackages = [ "cmd/swag" ];
+
+   passthru = {
+     updateScript = genericUpdater {
+       inherit pname version;
+       versionLister = "${common-updater-scripts}/bin/list-git-tags ${src.meta.homepage}";
+       rev-prefix = "v";
+       ignoredVersions = ".(rc|beta).*";
+     };
+   };
 
   meta = with lib; {
     description = "Automatically generate RESTful API documentation with Swagger 2.0 for Go";
