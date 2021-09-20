@@ -36,6 +36,8 @@ stdenv.mkDerivation rec {
     OSNAME="NixOS"
     PREFIX="$out"
     LD_OHASH="-lutil"
+    # Use symlinks instead of hardlinks (more commonly used in nixpkgs)
+    LN="ln -sf"
     CC=${stdenv.cc.targetPrefix}cc
     AR=${stdenv.cc.bintools.targetPrefix}ar
     # Bypass the locale(1)-based check for UTF-8 support since it causes trouble:
