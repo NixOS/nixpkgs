@@ -59,6 +59,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/kivy/plyer";
     license = licenses.mit;
     maintainers = with maintainers; [ rski ];
-    broken = stdenv.isDarwin;
   };
 }
