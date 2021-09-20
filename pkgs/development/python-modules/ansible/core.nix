@@ -15,6 +15,7 @@
 , pycrypto
 , pyyaml
 , requests
+, resolvelib
 , scp
 , windowsSupport ? false, pywinrm
 , xmltodict
@@ -22,17 +23,17 @@
 
 let
   ansible-collections = callPackage ./collections.nix {
-    version = "3.4.0"; # must be < 4.0
-    sha256 = "096rbgz730njk0pg8qnc27mmz110wqrw354ca9gasb7rqg0f4d6a";
+    version = "4.5.0";
+    sha256 = "1c8dspqy4in7sgz10y1pggwnh1hv79wap7p7xhai0f0s6nr54lyc";
   };
 in
 buildPythonPackage rec {
-  pname = "ansible-base";
-  version = "2.10.14";
+  pname = "ansible-core";
+  version = "2.11.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-gAxGRsWKWJf3HyIwFn21YmoZbeuiCPDvRWChg//Z39o=";
+    sha256 = "sha256-fTzkcBQSKQdFRwQ2NIXkhRP4rQ8AE4uIhw622IlT0SE=";
   };
 
   # ansible_connection is already wrapped, so don't pass it through
@@ -55,6 +56,7 @@ buildPythonPackage rec {
     jinja2
     packaging
     pyyaml
+    resolvelib
     # optional dependencies
     junit-xml
     lxml
