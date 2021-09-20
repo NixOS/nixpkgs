@@ -52,7 +52,7 @@ let
       substituteInPlace package-lock.json  --replace "../deps/phoenix" "./phoenix"
     '';
 
-    nodeModulesSha256 = "sha256-1QcV8TiVBQjl9yB5m3SRnap1JChhKnWTw7GY2s4Jw6s=";
+    nodeModulesSha256 = "sha256-QPnbucLqiL/N8ktudTb9ejX5he+ML4bACQoKoWi7T9A=";
   };
 in
 beamPackages.mixRelease {
