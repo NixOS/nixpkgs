@@ -5864,6 +5864,8 @@ in {
 
   py-dmidecode = callPackage ../development/python-modules/py-dmidecode { };
 
+  py-slvs = callPackage ../development/python-modules/py-slvs { };
+
   py-ubjson = callPackage ../development/python-modules/py-ubjson { };
 
   py17track = callPackage ../development/python-modules/py17track { };
