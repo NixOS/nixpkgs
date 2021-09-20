@@ -84,6 +84,8 @@ stdenv.mkDerivation {
 
   propagatedNativeBuildInputs = [ lndir ];
 
+  enableParallelBuilding = true;
+
   outputs = [ "bin" "dev" "out" ];
 
   inherit patches;
