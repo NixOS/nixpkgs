@@ -366,6 +366,8 @@ with pkgs;
 
   docker-compose = python3Packages.callPackage ../applications/virtualization/docker-compose {};
 
+  docker-compose-wait = callPackage ../tools/misc/docker-compose-wait {};
+
   docker-ls = callPackage ../tools/misc/docker-ls { };
 
   docker-slim = callPackage ../applications/virtualization/docker-slim { };

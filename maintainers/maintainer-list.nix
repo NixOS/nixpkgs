@@ -11004,6 +11004,11 @@
     githubId = 9870613;
     name = "Hubert Mühlhans";
   };
+  tristanpemble = {
+    email = "tpemble@gmail.com";
+    github = "tristanpemble"; 
+    name = "Tristan Pemble";
+  };
   troydm = {
     email = "d.geurkov@gmail.com";
     github = "troydm";
