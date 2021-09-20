@@ -1096,7 +1096,9 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  amber-secret = callPackage ../tools/security/amber { };
+  amber-secret = callPackage ../tools/security/amber {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   inherit (callPackages ../development/tools/ammonite {})
     ammonite_2_12
