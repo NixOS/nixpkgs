@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sjasmplus";
-  version = "1.18.2";
+  version = "1.18.3";
 
   src = fetchFromGitHub {
     owner = "z00m128";
     repo = "sjasmplus";
     rev = "v${version}";
-    sha256 = "04348zcmc0b3crzwhvj1shx6f1n3x05vs8d5qdm7qhgdfki8r74v";
+    sha256 = "sha256-+FvNYfJ5I91RfuJTiOPhj5KW8HoOq8OgnnpFEgefSGc=";
   };
 
   buildFlags = [
