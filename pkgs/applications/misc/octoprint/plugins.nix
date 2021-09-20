@@ -2,15 +2,17 @@
 
 with pkgs;
 
-self: super: let
+self: super:
+let
   buildPlugin = args: self.buildPythonPackage (args // {
     pname = "OctoPrintPlugin-${args.pname}";
     inherit (args) version;
-    propagatedBuildInputs = (args.propagatedBuildInputs or []) ++ [ super.octoprint ];
+    propagatedBuildInputs = (args.propagatedBuildInputs or [ ]) ++ [ super.octoprint ];
     # none of the following have tests
     doCheck = false;
   });
-in {
+in
+{
   inherit buildPlugin;
 
   m86motorsoff = buildPlugin rec {
@@ -84,7 +86,7 @@ in {
 
     meta = with lib; {
       description = "Plugin to display the estimated print cost for the loaded model.";
-      homepage = "https://github.com/malnvenshorn/OctoPrint-CostEstimation";
+      homepage = "https://github.com/OllisGit/OctoPrint-CostEstimation";
       license = licenses.agpl3Only;
       maintainers = with maintainers; [ stunkymonkey ];
     };
