@@ -6,7 +6,7 @@
 , nodeModulesSha256
 , name ? "node_modules"
 , version
-, yarnFlags ? [ "--frozen-lockfile" "--production=false" "--verbose" "--check-files" ]
+, yarnFlags ? [ "--frozen-lockfile" "--production=false" "--verbose" "--check-files" "--ignore-scripts"]
 , patches ? [ ]
 , ...
 } @ args:
