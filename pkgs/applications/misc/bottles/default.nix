@@ -8,13 +8,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "bottles";
-  version = "2021.7.14-treviso";
+  version = "2021.9.14-treviso";
 
   src = fetchFromGitHub {
     owner = "bottlesdevs";
     repo = pname;
     rev = version;
-    sha256 = "0xhfk1ll8vacgrr0kkhynq4bryjhfjs29j824bark5mj9b6lkbix";
+    hash = "sha256:0wdb6pc9gl6fnmd500smsq303snncaim284wgz7isjwhmwmfyw8m";
   };
 
   postPatch = ''
@@ -52,6 +52,7 @@ python3Packages.buildPythonApplication rec {
     dbus-python
     gst-python
     liblarch
+    patool
   ] ++ [ steam-run-native ];
 
   format = "other";
@@ -61,7 +62,7 @@ python3Packages.buildPythonApplication rec {
   preConfigure = ''
     substituteInPlace build-aux/meson/postinstall.py \
       --replace "'update-desktop-database'" "'${desktop-file-utils}/bin/update-desktop-database'"
-    substituteInPlace src/runner.py \
+    substituteInPlace src/backend/runner.py \
       --replace " {runner}" " ${steam-run-native}/bin/steam-run {runner}" \
       --replace " {dxvk_setup}" " ${steam-run-native}/bin/steam-run {dxvk_setup}"
   '';
