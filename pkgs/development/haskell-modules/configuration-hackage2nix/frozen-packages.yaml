@@ -5856,7 +5856,7 @@ default-package-overrides:
 - github-webhooks == 0.15.0
 - githud == 3.2.2
 - gitignore == 1.1
-- gitit == 0.13.0.0
+- gitit == 0.15.0.0
 - gitlab-api == 0.0.0.2
 - gitlab-haskell == 0.2.5
 - gitlib == 3.1.3

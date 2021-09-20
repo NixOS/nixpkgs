@@ -1183,18 +1183,7 @@ self: super: {
   # $HOME, which we don't have in our build sandbox.
   cabal-install-parsers = dontCheck super.cabal-install-parsers;
 
-  # Update to 0.15.0.0 which fixes a security vulnerability
-  # by removing a fundamentally insecure feature. Backporting
-  # a “breaking” release for this seems necessary.
-  # See https://nvd.nist.gov/vuln/detail/CVE-2021-38711
-  #     https://github.com/jgm/gitit/blob/0.15.0.0/CHANGES
-  gitit = overrideCabal super.gitit (old: {
-    jailbreak = true;
-    version = "0.15.0.0";
-    sha256 = "05kz7dxmiabp0gkivn5ngmn3xah3h7a14a421qw6nx2ld1cr9vgf";
-    revision = null;
-    editedCabalFile = null;
-  });
+  gitit = doJailbreak super.gitit;
 
   # Test suite requires database
   persistent-mysql = dontCheck super.persistent-mysql;
