@@ -10,16 +10,16 @@
 
 buildGoModule rec {
   pname = "nerdctl";
-  version = "0.11.1";
+  version = "0.11.2";
 
   src = fetchFromGitHub {
     owner = "containerd";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-r9VJQUmwe4UGCLmzxG2t9XHQ7KUeJxmEuAwxssPArcM=";
+    sha256 = "sha256-QkUE4oImP0eg5tofGEUonKzffICG4b3SuPJz9S2ZNfE=";
   };
 
-  vendorSha256 = "sha256-KnXxp/6L09a34cnv4h7vpPhNO6EGmeEC6c1ydyYXkxU=";
+  vendorSha256 = "sha256-mPOyF1S/g1FpUHHNc+cy0nxk6rK9txnZPYHOSvvfu70=";
 
   nativeBuildInputs = [ makeWrapper installShellFiles ];
 
