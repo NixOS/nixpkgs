@@ -14,21 +14,23 @@
 , xmltodict
 , withJunos ? false
 , withNetbox ? false
+
+, version
+, sha256
 }:
 
 buildPythonPackage rec {
   pname = "ansible";
-  version = "3.4.0";
+  inherit version;
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "096rbgz730njk0pg8qnc27mmz110wqrw354ca9gasb7rqg0f4d6a";
+    inherit pname version sha256;
   };
 
   postPatch = ''
     # make ansible-base depend on ansible-collection, not the other way around
-    sed -i '/ansible-base/d' setup.py
+    sed -Ei '/ansible-(base|core)/d' setup.py
   '';
 
   propagatedBuildInputs = lib.unique ([
@@ -70,7 +72,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Radically simple IT automation";
-    homepage = "http://www.ansible.com";
+    homepage = "https://www.ansible.com";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ hexa ];
   };

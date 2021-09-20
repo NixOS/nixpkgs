@@ -3,6 +3,8 @@
 rec {
   ansible = ansible_2_10;
 
+  ansible_2_11 = python3Packages.toPythonApplication python3Packages.ansible-core;
+
   ansible_2_10 = python3Packages.toPythonApplication python3Packages.ansible-base;
 
   # End of support 2021/10/02, End of life 2021/12/31
