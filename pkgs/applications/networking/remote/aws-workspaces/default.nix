@@ -45,6 +45,10 @@ stdenv.mkDerivation rec {
     ${dpkg}/bin/dpkg -x $src $out
   '';
 
+  preFixup = ''
+    patchelf --replace-needed liblttng-ust.so.0 liblttng-ust.so $out/bin/libcoreclrtraceptprovider.so
+  '';
+
   installPhase = ''
     mkdir -p $out/bin
     mv $out/opt/workspacesclient/* $out/bin
