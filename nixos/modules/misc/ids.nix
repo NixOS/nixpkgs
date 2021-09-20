@@ -210,7 +210,7 @@ in
       #fleet = 173; # unused
       #input = 174; # unused
       sddm = 175;
-      tss = 176;
+      #tss = 176; # dynamically allocated as of 2021-09-17
       #memcached = 177; removed 2018-01-03
       #ntp = 179; # dynamically allocated as of 2021-09-17
       zabbix = 180;
@@ -524,7 +524,7 @@ in
       #fleet = 173; # unused
       input = 174;
       sddm = 175;
-      tss = 176;
+      #tss = 176; #dynamically allocateda as of 2021-09-20
       #memcached = 177; # unused, removed 2018-01-03
       #ntp = 179; # unused
       zabbix = 180;

@@ -4,17 +4,17 @@ with rustPlatform;
 
 buildRustPackage rec {
   pname = "svd2rust";
-  version = "0.18.0";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "rust-embedded";
     repo = "svd2rust";
     rev = "v${version}";
-    sha256 = "1p0zq3q4g9lr0ghavp7v1dwsqq19lkljkm1i2hsb1sk3pxa1f69n";
+    sha256 = "04mm0l7cv2q5yjxrkpr7p0kxd4nmi0d7m4l436q8p492nvgb75zx";
   };
   cargoPatches = [ ./cargo-lock.patch ];
 
-  cargoSha256 = "0c0f86x17fzav5q76z3ha3g00rbgyz2lm5a5v28ggy0jmg9xgsv6";
+  cargoSha256 = "1v1qx0r3k86jipyaaggm25pinsqicmzvnzrxd0lr5xk77s1kvgid";
 
   buildInputs = lib.optional stdenv.isDarwin libiconv;
 

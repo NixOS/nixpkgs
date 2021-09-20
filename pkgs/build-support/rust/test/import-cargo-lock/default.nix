@@ -4,6 +4,7 @@
 # $ nix-build -A tests.importCargoLock
 {
   basic = callPackage ./basic { };
+  basicDynamic = callPackage ./basic-dynamic { };
   gitDependency = callPackage ./git-dependency { };
   gitDependencyRev = callPackage ./git-dependency-rev { };
   gitDependencyTag = callPackage ./git-dependency-tag { };
