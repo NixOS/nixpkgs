@@ -40,7 +40,6 @@ let
     pname = "${pname}-yarn-deps";
     inherit version;
     packageJSON = ./package.json;
-    yarnNix = ./yarn.nix;
     yarnLock = ./yarn.lock;
     preBuild = ''
       mkdir -p tmp/deps
