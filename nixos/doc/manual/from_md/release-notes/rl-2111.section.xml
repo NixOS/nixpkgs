@@ -849,6 +849,12 @@ Superuser created successfully.
       </listitem>
       <listitem>
         <para>
+          The <literal>cozy-drive</literal> package has been added.
+          v3.29.0.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           the <literal>mingw-64</literal> package has been upgraded from
           6.0.0 to 9.0.0
         </para>
