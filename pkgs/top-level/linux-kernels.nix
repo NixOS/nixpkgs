@@ -432,6 +432,8 @@ in {
       virtualbox = pkgs.virtualboxHardened;
     };
 
+    vm-tools = callPackage ../os-specific/linux/vm-tools { };
+
     wireguard = if lib.versionOlder kernel.version "5.6" then callPackage ../os-specific/linux/wireguard { } else null;
 
     x86_energy_perf_policy = callPackage ../os-specific/linux/x86_energy_perf_policy { };
