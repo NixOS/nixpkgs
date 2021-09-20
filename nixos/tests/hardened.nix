@@ -57,6 +57,7 @@ import ./make-test-python.nix ({ pkgs, latestKernel ? false, ... } : {
       # Test kernel module hardening
       with subtest("No more kernel modules can be loaded"):
           # note: this better a be module we normally wouldn't load ...
+          machine.wait_for_unit("disable-kernel-module-loading.service")
           machine.fail("modprobe dccp")
 
 
