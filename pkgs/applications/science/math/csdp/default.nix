@@ -8,9 +8,7 @@ stdenv.mkDerivation {
     sha256 = "1f9ql6cjy2gwiyc51ylfan24v1ca9sjajxkbhszlds1lqmma8n05";
   };
 
-  nativeBuildInputs = [ gfortran ];
-
-  buildInputs = [ blas lapack ];
+  buildInputs = [ blas gfortran.cc.lib lapack ];
 
   postPatch = ''
     substituteInPlace Makefile --replace /usr/local/bin $out/bin

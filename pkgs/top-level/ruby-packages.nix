@@ -130,6 +130,16 @@
     };
     version = "2.4.0";
   };
+  ansi = {
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "14ims9zfal4gs2wpx2m5rd8zsrl2k794d359shkrsgg3fhr2a22l";
+      type = "gem";
+    };
+    version = "1.5.0";
+  };
   ast = {
     groups = ["default"];
     platforms = [];

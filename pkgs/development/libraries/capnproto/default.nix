@@ -10,14 +10,14 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage    = "http://kentonv.github.io/capnproto";
+    homepage    = "https://capnproto.org/";
     description = "Cap'n Proto cerealization protocol";
     longDescription = ''
       Cap’n Proto is an insanely fast data interchange format and
       capability-based RPC system. Think JSON, except binary. Or think Protocol
       Buffers, except faster.
     '';
-    license     = licenses.bsd2;
+    license     = licenses.mit;
     platforms   = platforms.all;
     maintainers = with maintainers; [ cstrahan ];
   };
