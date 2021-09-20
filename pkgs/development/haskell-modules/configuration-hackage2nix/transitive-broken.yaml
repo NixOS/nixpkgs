@@ -602,9 +602,6 @@ dont-distribute-packages:
  - boots-web
  - borel
  - bowntz
- - box
- - box-csv
- - box-socket
  - breakout
  - bricks
  - bricks-internal-test
@@ -650,7 +647,6 @@ dont-distribute-packages:
  - call
  - camfort
  - campfire
- - candid
  - canteven-http
  - cao
  - cap
@@ -700,6 +696,7 @@ dont-distribute-packages:
  - chr-core
  - chr-lang
  - chromatin
+ - chronos_1_1_3
  - chu2
  - chunks
  - ciphersaber2
@@ -3181,7 +3178,6 @@ dont-distribute-packages:
  - wavy
  - web-mongrel2
  - web-page
- - web-rep
  - web-routes-regular
  - web-routing
  - web3

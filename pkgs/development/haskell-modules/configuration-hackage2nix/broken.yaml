@@ -288,6 +288,7 @@ broken-packages:
   - barrie
   - barrier
   - barrier-monad
+  - base62
   - base64-conduit
   - base-compat-migrate
   - base-encoding
@@ -556,6 +557,7 @@ broken-packages:
   - capri
   - caramia
   - carbonara
+  - cardano-coin-selection
   - carettah
   - CarneadesDSL
   - carte
@@ -1102,6 +1104,7 @@ broken-packages:
   - doctest-prop
   - docusign-example
   - docvim
+  - doi
   - dominion
   - domplate
   - dormouse-uri
@@ -5227,6 +5230,7 @@ broken-packages:
   - why3
   - WikimediaParser
   - windns
+  - windowslive
   - winerror
   - Wired
   - wires
