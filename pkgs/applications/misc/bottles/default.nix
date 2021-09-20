@@ -2,7 +2,7 @@
 , meson, ninja, pkg-config, wrapGAppsHook
 , desktop-file-utils, gsettings-desktop-schemas, libnotify, libhandy
 , python3Packages, gettext
-, appstream-glib, gdk-pixbuf, glib, gobject-introspection, gspell, gtk3
+, appstream-glib, gdk-pixbuf, glib, gobject-introspection, gspell, gtk3, pciutils, xdg-utils
 , steam-run-native
 }:
 
@@ -53,7 +53,11 @@ python3Packages.buildPythonApplication rec {
     gst-python
     liblarch
     patool
-  ] ++ [ steam-run-native ];
+  ] ++ [
+    steam-run-native
+    pciutils
+    xdg-utils
+  ];
 
   format = "other";
   strictDeps = false; # broken with gobject-introspection setup hook, see https://github.com/NixOS/nixpkgs/issues/56943
