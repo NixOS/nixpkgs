@@ -5404,7 +5404,7 @@ with pkgs;
 
   git-fame = callPackage ../applications/version-management/git-and-tools/git-fame {};
 
-  git-fast-export = callPackage ../applications/version-management/git-and-tools/fast-export { mercurial = mercurial_4; };
+  git-fast-export = callPackage ../applications/version-management/git-and-tools/fast-export { };
 
   git-filter-repo = callPackage ../applications/version-management/git-and-tools/git-filter-repo {
     pythonPackages = python3Packages;
