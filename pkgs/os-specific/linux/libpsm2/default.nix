@@ -13,6 +13,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ numactl pkg-config ];
 
+  makeFlags = [
+    # Disable blanket -Werror to avoid build failures
+    # on fresh toolchains like gcc-11.
+    "WERROR="
+  ];
+
   installFlags = [
     "DESTDIR=$(out)"
     "UDEVDIR=/etc/udev"
