@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
 , pytest
@@ -20,11 +21,12 @@ buildPythonPackage rec {
 
   checkInputs = [ pytestCheckHook pexpect pytest-cov ];
 
-  disabledTests = [
-    "test_suppresses_timeout_when_pdb_is_entered"
-    # Remove until https://github.com/pytest-dev/pytest/pull/7207 or similar
-    "test_suppresses_timeout_when_debugger_is_entered"
+  disabledTests = lib.optionals (stdenv.isDarwin) [
+    # Calls pytest and expects "Timeout" in stdout, but it's not in there
+    "test_cov"
+    "test_fix_setup"
   ];
+
   pytestFlagsArray = [
     "-ra"
   ];
