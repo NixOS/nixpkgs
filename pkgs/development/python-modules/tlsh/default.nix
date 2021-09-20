@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Trend Micro Locality Sensitive Hash";
-    homepage = "http://tlsh.org/";
+    homepage = "https://tlsh.org/";
     license = licenses.asl20;
     platforms = platforms.unix;
   };
