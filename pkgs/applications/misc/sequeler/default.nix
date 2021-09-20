@@ -45,7 +45,7 @@ in stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/Alecaddd/sequeler";
     license = licenses.gpl3;
-    maintainers = [ maintainers.etu ] ++ pantheon.maintainers;
+    maintainers = with maintainers; [ etu ] ++ teams.pantheon.members;
     platforms = platforms.linux;
   };
 }

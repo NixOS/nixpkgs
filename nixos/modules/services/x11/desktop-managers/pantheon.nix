@@ -18,7 +18,7 @@ in
 
   meta = {
     doc = ./pantheon.xml;
-    maintainers = pkgs.pantheon.maintainers;
+    maintainers = teams.pantheon.members;
   };
 
   options = {

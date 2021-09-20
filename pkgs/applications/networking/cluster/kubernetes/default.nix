@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "kubernetes";
-  version = "1.22.1";
+  version = "1.22.2";
 
   src = fetchFromGitHub {
     owner = "kubernetes";
     repo = "kubernetes";
     rev = "v${version}";
-    sha256 = "sha256-coiDKczX5kWw/5A9+p0atPbn2nR0wBBdfXKTw6FYywo=";
+    sha256 = "sha256-O+FY9wJ0fztO7i5qJfw+cfhfBgaMWKX7IBBXJV4uuCk=";
   };
 
   nativeBuildInputs = [ removeReferencesTo makeWrapper which go rsync installShellFiles ];
@@ -60,6 +60,7 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
     for p in $WHAT; do
       install -D _output/local/go/bin/''${p##*/} -t $out/bin
     done
@@ -83,6 +84,7 @@ stdenv.mkDerivation rec {
         --bash <($out/bin/$tool completion bash) \
         --zsh <($out/bin/$tool completion zsh)
     done
+    runHook postInstall
   '';
 
   preFixup = ''

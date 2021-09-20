@@ -4565,6 +4565,16 @@
     githubId = 2789926;
     name = "Imran Hossain";
   };
+  iagoq = {
+    email = "18238046+iagocq@users.noreply.github.com";
+    github = "iagocq";
+    githubId = 18238046;
+    name = "Iago Manoel Brito";
+    keys = [{
+      longkeyid = "rsa4096/0x35D39F9A9A1BC8DA";
+      fingerprint = "DF90 9D58 BEE4 E73A 1B8C  5AF3 35D3 9F9A 9A1B C8DA";
+    }];
+  };
   iammrinal0 = {
     email = "nixpkgs@mrinalpurohit.in";
     github = "iammrinal0";

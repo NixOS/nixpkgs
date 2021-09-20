@@ -1,23 +1,24 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, fetchzip, system ? stdenv.targetPlatform }:
 
 stdenv.mkDerivation rec {
   pname = "adguardhome";
   version = "0.106.3";
 
-  src = fetchurl {
-    url = "https://github.com/AdguardTeam/AdGuardHome/releases/download/v${version}/AdGuardHome_linux_amd64.tar.gz";
-    sha256 = "11p081dqilga61zfziw5w37k6v2r84qynhz2hr4gk8367jck54x8";
-  };
+  src = (import ./bins.nix { inherit fetchurl fetchzip; }).${system};
 
   installPhase = ''
     install -m755 -D ./AdGuardHome $out/bin/adguardhome
   '';
 
+  passthru = {
+    updateScript = ./update.sh;
+  };
+
   meta = with lib; {
     homepage = "https://github.com/AdguardTeam/AdGuardHome";
     description = "Network-wide ads & trackers blocking DNS server";
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ numkem ];
-    license = licenses.gpl3;
+    platforms = [ "x86_64-linux" "aarch64-linux" "i686-linux" "x86_64-darwin" ];
+    maintainers = with maintainers; [ numkem iagoq ];
+    license = licenses.gpl3Only;
   };
 }

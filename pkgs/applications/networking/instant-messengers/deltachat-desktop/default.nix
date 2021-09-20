@@ -20,13 +20,13 @@ let
     "${electron}/bin/electron";
 in nodePackages.deltachat-desktop.override rec {
   pname = "deltachat-desktop";
-  version = "1.21.0";
+  version = "1.21.1";
 
   src = fetchFromGitHub {
     owner = "deltachat";
     repo = "deltachat-desktop";
     rev = "v${version}";
-    sha256 = "1fwnv77qa9p50js98byb26ms7mhv7rfwhfv21f282a74pbqsar45";
+    sha256 = "0d59z0mvi70i26d79s4h0sssclwcakidhvhq56zi78bkfqlx7xf1";
   };
 
   nativeBuildInputs = [

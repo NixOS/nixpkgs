@@ -20,7 +20,7 @@ or use Mozilla's [Rust nightlies overlay](#using-the-rust-nightlies-overlay).
 Rust applications are packaged by using the `buildRustPackage` helper from `rustPlatform`:
 
 ```nix
-{ lib, rustPlatform }:
+{ lib, fetchFromGitHub, rustPlatform }:
 
 rustPlatform.buildRustPackage rec {
   pname = "ripgrep";

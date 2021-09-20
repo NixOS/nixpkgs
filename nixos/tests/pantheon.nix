@@ -3,8 +3,8 @@ import ./make-test-python.nix ({ pkgs, ...} :
 {
   name = "pantheon";
 
-  meta = with pkgs.lib.maintainers; {
-    maintainers = pkgs.pantheon.maintainers;
+  meta = with lib; {
+    maintainers = teams.pantheon.members;
   };
 
   machine = { ... }:

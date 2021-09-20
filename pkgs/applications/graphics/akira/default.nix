@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
     description = "Native Linux Design application built in Vala and GTK";
     homepage = "https://github.com/akiraux/Akira";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ Br1ght0ne neonfuz ] ++ pantheon.maintainers;
+    maintainers = with maintainers; [ Br1ght0ne neonfuz ] ++ teams.pantheon.members;
     platforms = platforms.linux;
   };
 }

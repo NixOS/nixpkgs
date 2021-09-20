@@ -153,7 +153,7 @@ in
       #btsync = 113; # unused
       #minecraft = 114; #dynamically allocated as of 2021-09-03
       vault = 115;
-      rippled = 116;
+      # rippled = 116; #dynamically allocated as of 2021-09-18
       murmur = 117;
       foundationdb = 118;
       newrelic = 119;
@@ -217,10 +217,10 @@ in
       #redis = 181; removed 2018-01-03
       #unifi = 183; dynamically allocated as of 2021-09-17
       uptimed = 184;
-      zope2 = 185;
-      ripple-data-api = 186;
+      #zope2 = 185; # dynamically allocated as of 2021-09-18
+      #ripple-data-api = 186; dynamically allocated as of 2021-09-17
       mediatomb = 187;
-      rdnssd = 188;
+      #rdnssd = 188; #dynamically allocated as of 2021-09-18
       ihaskell = 189;
       i2p = 190;
       lambdabot = 191;
@@ -231,13 +231,13 @@ in
       skydns = 197;
       # ripple-rest = 198; # unused, removed 2017-08-12
       # nix-serve = 199; # unused, removed 2020-12-12
-      tvheadend = 200;
+      #tvheadend = 200; # dynamically allocated as of 2021-09-18
       uwsgi = 201;
       gitit = 202;
       riemanntools = 203;
       subsonic = 204;
       riak = 205;
-      shout = 206;
+      #shout = 206; # dynamically allocated as of 2021-09-18
       gateone = 207;
       namecoin = 208;
       #lxd = 210; # unused
@@ -276,7 +276,7 @@ in
       sniproxy = 244;
       nzbget = 245;
       mosquitto = 246;
-      toxvpn = 247;
+      #toxvpn = 247; # dynamically allocated as of 2021-09-18
       # squeezelite = 248; # DynamicUser = true
       turnserver = 249;
       #smokeping = 250;# dynamically allocated as of 2021-09-03
