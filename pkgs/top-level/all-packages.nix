@@ -24882,6 +24882,8 @@ with pkgs;
     gtk = gtk3;
   };
 
+  hors = callPackage ../development/tools/hors { };
+
   hover = callPackage ../development/tools/hover { };
 
   hovercraft = python3Packages.callPackage ../applications/misc/hovercraft { };
