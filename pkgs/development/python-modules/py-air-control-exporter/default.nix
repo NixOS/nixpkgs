@@ -8,22 +8,17 @@
 , prometheus-client
 , py-air-control
 , pytestCheckHook
-, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "py-air-control-exporter";
-  version = "0.3.0";
+  version = "0.3.1";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ece2e446273542e5c0352c9d6e80d8279132c6ada3649c59e87a711448801a3b";
+    sha256 = "0cwhcyyjzc6wlj7jp5h7fcj1hl03wzrz1if3sg205kh2hfrzzlqq";
   };
-
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
 
   propagatedBuildInputs = [
     click
@@ -34,19 +29,6 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytestCheckHook
-  ];
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "pytest-runner" ""
-    substituteInPlace setup.cfg \
-      --replace "--cov=py_air_control_exporter" ""
-  '';
-
-  disabledTests = [
-    # Tests are outdated
-    "test_help"
-    "test_unknown_protocol"
   ];
 
   pythonImportsCheck = [ "py_air_control_exporter" ];
