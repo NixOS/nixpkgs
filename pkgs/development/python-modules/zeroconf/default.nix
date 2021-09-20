@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "zeroconf";
-  version = "0.36.2";
+  version = "0.36.4";
   format = "setuptools";
   disabled = pythonOlder "3.6";
 
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "jstasiak";
     repo = "python-zeroconf";
     rev = version;
-    sha256 = "sha256-3QRrGfyMXiSas70IL19/DQAPf7I6vdg/itiZlD4/pvg=";
+    sha256 = "sha256-HjS8KwbSir8L0irstoMeSRfeHaq8Kvcwib9wvGdyHEo=";
   };
 
   propagatedBuildInputs = [

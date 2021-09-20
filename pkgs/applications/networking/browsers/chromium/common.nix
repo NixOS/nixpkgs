@@ -85,12 +85,12 @@ let
     in attrs: concatStringsSep " " (attrValues (mapAttrs toFlag attrs));
 
   # https://source.chromium.org/chromium/chromium/src/+/master:build/linux/unbundle/replace_gn_files.py
-  gnSystemLibraries = lib.optionals (!chromiumVersionAtLeast "93") [
-    "ffmpeg"
-    "snappy"
-  ] ++ lib.optionals (!chromiumVersionAtLeast "95") [
+  gnSystemLibraries = lib.optionals (!chromiumVersionAtLeast "95") [
     "zlib"
   ] ++ [
+    # TODO:
+    # "ffmpeg"
+    # "snappy"
     "flac"
     "libjpeg"
     "libpng"
