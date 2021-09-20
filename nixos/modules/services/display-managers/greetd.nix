@@ -99,7 +99,12 @@ in
 
     systemd.defaultUnit = "graphical.target";
 
-    users.users.greeter.isSystemUser = true;
+    users.users.greeter = {
+      isSystemUser = true;
+      group = "greeter";
+    };
+
+    users.groups.greeter = {};
   };
 
   meta.maintainers = with maintainers; [ queezle ];

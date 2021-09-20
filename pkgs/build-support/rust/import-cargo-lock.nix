@@ -2,11 +2,16 @@
 
 {
   # Cargo lock file
-  lockFile
+  lockFile ? null
+
+  # Cargo lock file contents as string
+, lockFileContents ? null
 
   # Hashes for git dependencies.
 , outputHashes ? {}
-}:
+} @ args:
+
+assert (lockFile == null) != (lockFileContents == null);
 
 let
   # Parse a git source into different components.
@@ -22,7 +27,13 @@ let
         sha = builtins.elemAt parts 4;
       } // lib.optionalAttrs (type != null) { inherit type value; };
 
-  packages = (builtins.fromTOML (builtins.readFile lockFile)).package;
+  # shadows args.lockFileContents
+  lockFileContents =
+    if lockFile != null
+    then builtins.readFile lockFile
+    else args.lockFileContents;
+
+  packages = (builtins.fromTOML lockFileContents).package;
 
   # There is no source attribute for the source package itself. But
   # since we do not want to vendor the source package anyway, we can
@@ -144,10 +155,17 @@ let
       ''
       else throw "Cannot handle crate source: ${pkg.source}";
 
-  vendorDir = runCommand "cargo-vendor-dir" {} ''
+  vendorDir = runCommand "cargo-vendor-dir" (lib.optionalAttrs (lockFile == null) {
+    inherit lockFileContents;
+    passAsFile = [ "lockFileContents" ];
+  }) ''
     mkdir -p $out/.cargo
 
-    ln -s ${lockFile} $out/Cargo.lock
+    ${
+      if lockFile != null
+      then "ln -s ${lockFile} $out/Cargo.lock"
+      else "cp $lockFileContentsPath $out/Cargo.lock"
+    }
 
     cat > $out/.cargo/config <<EOF
     [source.crates-io]
