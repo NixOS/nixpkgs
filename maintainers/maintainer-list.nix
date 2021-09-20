@@ -12572,5 +12572,11 @@
     github = "mbprtpmnr";
     githubId = 88109321;
   };
+  simarra = {
+    name = "simarra";
+    email = "loic.martel@protonmail.com";
+    github = "simarra";
+    githubId = 14372987;
+  };
 
 }
