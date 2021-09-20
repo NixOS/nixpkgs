@@ -4,15 +4,15 @@
 , cmake
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "tlsh";
-  version = "4.5.0";
+  version = "4.9.3";
 
   src = fetchFromGitHub {
     owner = "trendmicro";
     repo = "tlsh";
-    rev = "f2bb7a97cfb0f9418a750ba92c182d1091e6c159";
-    sha256 = "1kxfhdwqjd4pjdlr1gjh2am8mxpaqmfq7rrxkjfi0mbisl1krkwb";
+    rev = version;
+    sha256 = "sha256-12bhxJTJJWzoiWt4YwhcdwHDvJNoBenWl3l26SFuIGU=";
   };
 
   nativeBuildInputs = [ cmake ];
