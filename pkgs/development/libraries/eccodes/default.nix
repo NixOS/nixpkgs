@@ -1,23 +1,23 @@
 { fetchurl, lib, stdenv
-, cmake, netcdf, openjpeg, libpng, gfortran
+, cmake, netcdf, openjpeg, libpng, gfortran, perl
 , enablePython ? false, pythonPackages
 , enablePosixThreads ? false
 , enableOpenMPThreads ? false}:
 with lib;
 stdenv.mkDerivation rec {
   pname = "eccodes";
-  version = "2.12.5";
+  version = "2.23.0";
 
   src = fetchurl {
     url = "https://confluence.ecmwf.int/download/attachments/45757960/eccodes-${version}-Source.tar.gz";
-    sha256 = "0576fccng4nvmq5gma1nb1v00if5cwl81w4nv5zkb80q5wicn50c";
+    sha256 = "sha256-y9yFMlN+loLxqT3bA0QEFrZpBqTMJd7Dy9c5QNGUvww=";
   };
 
   postPatch = ''
     substituteInPlace cmake/FindOpenJPEG.cmake --replace openjpeg-2.1 ${openjpeg.incDir}
   '';
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake perl ];
 
   buildInputs = [ netcdf
                   openjpeg
