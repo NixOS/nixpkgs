@@ -12,6 +12,7 @@
 , rtmpSupport ? true
 , phantomjsSupport ? false
 , hlsEncryptedSupport ? true
+, withAlias ? false # Provides bin/youtube-dl for backcompat
 }:
 
 buildPythonPackage rec {
@@ -49,6 +50,10 @@ buildPythonPackage rec {
 
   # Requires network
   doCheck = false;
+
+  postInstall = lib.optionalString withAlias ''
+      ln -s "$out/bin/yt-dlp" "$out/bin/youtube-dl"
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/yt-dlp/yt-dlp/";
