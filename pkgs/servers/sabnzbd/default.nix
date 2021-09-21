@@ -53,6 +53,6 @@ in stdenv.mkDerivation rec {
     homepage = "https://sabnzbd.org";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with lib.maintainers; [ fridh ];
+    maintainers = with lib.maintainers; [ fridh jojosch ];
   };
 }
