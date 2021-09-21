@@ -78,7 +78,7 @@ with py.pkgs; buildPythonApplication rec {
   doCheck = !stdenv.isDarwin;
 
   checkPhase = ''
-    PYTHONPATH=".:$PYTHONPATH" ${python3.interpreter} -m twisted.trial tests
+    PYTHONPATH=".:$PYTHONPATH" ${python3.interpreter} -m twisted.trial -j $NIX_BUILD_CORES tests
   '';
 
   passthru.tests = { inherit (nixosTests) matrix-synapse; };
