@@ -5479,6 +5479,12 @@
     githubId = 3948275;
     name = "Harikrishnan R";
   };
+  ilpianista = {
+    email = "andrea@scarpino.dev";
+    github = "ilpianista";
+    githubId = 529436;
+    name = "Andrea Scarpino";
+  };
   ilya-fedin = {
     email = "fedin-ilja2010@ya.ru";
     github = "ilya-fedin";
