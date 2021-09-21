@@ -4657,6 +4657,8 @@ in {
 
   mohawk = callPackage ../development/python-modules/mohawk { };
 
+  molecule = callPackage ../development/python-modules/molecule { };
+
   mongodict = callPackage ../development/python-modules/mongodict { };
 
   mongoengine = callPackage ../development/python-modules/mongoengine { };
