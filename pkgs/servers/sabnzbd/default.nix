@@ -6,6 +6,7 @@
 , unrar
 , p7zip
 , makeWrapper
+, nixosTests
 }:
 
 let
@@ -47,6 +48,10 @@ in stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru.tests = {
+    smoke-test = nixosTests.sabnzbd;
+  };
 
   meta = with lib; {
     description = "Usenet NZB downloader, par2 repairer and auto extracting server";
