@@ -1,6 +1,6 @@
-{ buildGoModule
+{ lib
+, buildGoModule
 , fetchFromGitHub
-, lib
 }:
 
 buildGoModule rec {
@@ -21,5 +21,6 @@ buildGoModule rec {
     homepage = "https://github.com/fi-ts/cloudctl";
     license = licenses.mit;
     maintainers = with maintainers; [ j0xaf ];
+    mainProgram = "cloudctl";
   };
 }
