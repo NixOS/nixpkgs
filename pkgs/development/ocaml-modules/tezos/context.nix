@@ -1,20 +1,29 @@
 { lib
 , buildDunePackage
 , tezos-stdlib
-, tezos-error-monad
-, resto
-, resto-directory
+, tezos-base
+, tezos-shell-services
+, irmin
+, irmin-pack
+, digestif
+, alcotest-lwt
 }:
 
 buildDunePackage {
-  pname = "tezos-rpc";
+  pname = "tezos-context";
   inherit (tezos-stdlib) version useDune2;
-  src = "${tezos-stdlib.base_src}/src/lib_rpc";
+  src = "${tezos-stdlib.base_src}/src/lib_context";
 
   propagatedBuildInputs = [
-    tezos-error-monad
-    resto
-    resto-directory
+    tezos-base
+    tezos-shell-services
+    irmin
+    irmin-pack
+    digestif
+  ];
+
+  checkInputs = [
+    alcotest-lwt
   ];
 
   doCheck = true;

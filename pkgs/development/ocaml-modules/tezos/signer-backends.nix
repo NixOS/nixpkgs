@@ -1,18 +1,20 @@
 { lib
 , buildDunePackage
 , tezos-stdlib
-, tezos-stdlib-unix
+, tezos-rpc-http-client-unix
+, tezos-signer-services
 , alcotest
 , alcotest-lwt
 }:
 
 buildDunePackage {
-  pname = "tezos-clic";
+  pname = "tezos-signer-backends";
   inherit (tezos-stdlib) version useDune2;
-  src = "${tezos-stdlib.base_src}/src/lib_clic";
+  src = "${tezos-stdlib.base_src}/src/lib_signer_backends";
 
   propagatedBuildInputs = [
-    tezos-stdlib-unix
+    tezos-rpc-http-client-unix
+    tezos-signer-services
   ];
 
   checkInputs = [
@@ -23,6 +25,6 @@ buildDunePackage {
   doCheck = true;
 
   meta = tezos-stdlib.meta // {
-    description = "Tezos: library of auto-documented command-line-parsing combinators";
+    description = "Tezos: remote-signature backends for `tezos-client`";
   };
 }
