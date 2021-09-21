@@ -7468,6 +7468,18 @@ final: prev:
     meta.homepage = "https://github.com/thinca/vim-ft-diff_fold/";
   };
 
+  vim-fubitive = buildVimPluginFrom2Nix {
+    pname = "vim-fubitive";
+    version = "2020-09-10";
+    src = fetchFromGitHub {
+      owner = "tommcdo";
+      repo = "vim-fubitive";
+      rev = "5717417ee75c39ea2f8f446a9491cdf99d5965e9";
+      sha256 = "0lkp5i8s1214b9b1q9mg3aq32cvqzfd8q0i90bx9nf6n42cg2kjn";
+    };
+    meta.homepage = "https://github.com/tommcdo/vim-fubitive/";
+  };
+
   vim-fugitive = buildVimPluginFrom2Nix {
     pname = "vim-fugitive";
     version = "2021-09-19";
