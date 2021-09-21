@@ -14742,6 +14742,8 @@ with pkgs;
 
   teensy-loader-cli = callPackage ../development/embedded/teensy-loader-cli { };
 
+  tytools = libsForQt5.callPackage ../development/embedded/tytools { };
+
   terracognita = callPackage ../development/tools/misc/terracognita { };
 
   terraform-lsp = callPackage ../development/tools/misc/terraform-lsp { };
