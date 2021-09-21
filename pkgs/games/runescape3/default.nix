@@ -1,4 +1,4 @@
-{ stdenv, buildFHSUserEnv, dpkg, glibc, gcc-unwrapped, autoPatchelfHook, fetchurl, wrapGAppsHook
+{ stdenv, lib, buildFHSUserEnv, dpkg, glibc, gcc-unwrapped, autoPatchelfHook, fetchurl, wrapGAppsHook
   , xlibs, gnome2, xorg
   , libSM, libXxf86vm, libX11, glib, pango, gdk_pixbuf, cairo, gtk2-x11, zlib, libcap_progs, openssl, openssl_1_0_2
   , libpulseaudio
@@ -14,7 +14,7 @@ let
 
   src = fetchurl {
     url = "https://content.runescape.com/downloads/ubuntu/pool/non-free/r/${pname}/${pname}_${version}_amd64.deb";
-    sha256 = "01v37mjpx55zcbm87v90k4vfc6vdgsr5jyj6xf6cpim4q47wy97c";
+    sha256 = "0r5v1pwh0aas31b1d3pkrc8lqmqz9b4fml2b4kxmg5xzp677h271";
   };
 
   runescape = stdenv.mkDerivation {
@@ -88,11 +88,11 @@ let
     '';
 
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Launcher for RuneScape 3, the current main RuneScape";
       homepage = "https://www.runescape.com/";
       license = licenses.unfree;
-      maintainers = with stdenv.lib.maintainers; [ grburst ];
+      maintainers = with lib.maintainers; [ grburst ];
       platforms = [ "x86_64-linux" ];
     };
   };
