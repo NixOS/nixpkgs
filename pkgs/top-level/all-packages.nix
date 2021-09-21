@@ -8081,6 +8081,8 @@ with pkgs;
 
   pick = callPackage ../tools/misc/pick { };
 
+  pipe-rename = callPackage ../tools/misc/pipe-rename { };
+
   pitivi = callPackage ../applications/video/pitivi { };
 
   prism = callPackage ../applications/video/prism { };
