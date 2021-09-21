@@ -4,6 +4,7 @@
 , ruby, replace, gzip, gnutar, git, cacert, util-linux, gawk
 , imagemagick, optipng, pngquant, libjpeg, jpegoptim, gifsicle, libpsl
 , redis, postgresql, which, brotli, procps, rsync, nodePackages, v8
+, ghostscript
 
 , plugins ? []
 }@args:
@@ -296,6 +297,9 @@ let
       ln -sf /run/discourse/public $out/share/discourse/public
       ln -sf ${assets} $out/share/discourse/public.dist/assets
       ${lib.concatMapStringsSep "\n" (p: "ln -sf ${p} $out/share/discourse/plugins/${p.pluginName or ""}") plugins}
+
+      substituteInPlace $out/share/discourse/lib/letter_avatar.rb --replace Helvetica \
+        ${ghostscript}/share/ghostscript/fonts/n019003l.pfb
 
       runHook postInstall
     '';
