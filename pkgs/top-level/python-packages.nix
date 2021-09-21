@@ -4659,6 +4659,8 @@ in {
 
   molecule = callPackage ../development/python-modules/molecule { };
 
+  molecule-docker = callPackage ../development/python-modules/molecule-docker { };
+
   mongodict = callPackage ../development/python-modules/mongodict { };
 
   mongoengine = callPackage ../development/python-modules/mongoengine { };
