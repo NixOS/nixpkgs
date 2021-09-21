@@ -594,7 +594,7 @@ in
       package =
         mkOption {
           type = types.package;
-          default = cfg.host.pkgs.qemu_kvm;
+          default = cfg.host.pkgs.pkgsBuildBuild.qemu_kvm;
           example = "pkgs.qemu_test";
           description = lib.mdDoc "QEMU package to use.";
         };
