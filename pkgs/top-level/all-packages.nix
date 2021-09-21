@@ -24087,6 +24087,8 @@ with pkgs;
 
   keepass-otpkeyprov = callPackage ../applications/misc/keepass-plugins/otpkeyprov { };
 
+  kerbrute = callPackage ../tools/security/kerbrute { };
+
   exrdisplay = callPackage ../applications/graphics/exrdisplay { };
 
   exrtools = callPackage ../applications/graphics/exrtools { };
