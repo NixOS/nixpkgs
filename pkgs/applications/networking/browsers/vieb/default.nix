@@ -1,4 +1,4 @@
-{ mkYarnPackage, fetchFromGitHub, electron, makeWrapper, makeDesktopItem, lib }:
+{ mkYarnPackage, fetchFromGitHub, electron, makeWrapper, makeDesktopItem, lib, p7zip }:
 
 mkYarnPackage rec {
   pname = "vieb";
@@ -34,6 +34,11 @@ mkYarnPackage rec {
   };
 
   postInstall = ''
+    unlink $out/libexec/vieb/deps/vieb/node_modules
+    ln -s $out/libexec/vieb/node_modules $out/libexec/vieb/deps/vieb/node_modules
+
+    find $out/libexec/vieb/node_modules/7zip-bin -name 7za -exec ln -s -f ${p7zip}/bin/7za {} ';'
+
     install -Dm0644 {${desktopItem},$out}/share/applications/vieb.desktop
 
     pushd $out/libexec/vieb/node_modules/vieb/app/img/icons

@@ -52,7 +52,12 @@ in
       }
     ];
 
-    security.wrappers.vmware-user-suid-wrapper.source = "${open-vm-tools}/bin/vmware-user-suid-wrapper";
+    security.wrappers.vmware-user-suid-wrapper =
+      { setuid = true;
+        owner = "root";
+        group = "root";
+        source = "${open-vm-tools}/bin/vmware-user-suid-wrapper";
+      };
 
     environment.etc.vmware-tools.source = "${open-vm-tools}/etc/vmware-tools/*";
 
