@@ -2759,6 +2759,8 @@ with pkgs;
 
   ydotool = callPackage ../tools/wayland/ydotool { };
 
+  cambalache = callPackage ../development/tools/cambalache { };
+
   clipster = callPackage ../tools/misc/clipster { };
 
   clockify = callPackage ../applications/office/clockify {
