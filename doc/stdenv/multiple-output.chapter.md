@@ -79,7 +79,7 @@ A commonly adopted convention in `nixpkgs` is that executables provided by the p
 
 The `glibc` package is a deliberate single exception to the “binaries first” convention. The `glibc` has `libs` as its first output allowing the libraries provided by `glibc` to be referenced directly (e.g. `${stdenv.glibc}/lib/ld-linux-x86-64.so.2`). The executables provided by `glibc` can be accessed via its `bin` attribute (e.g. `${stdenv.glibc.bin}/bin/ldd`).
 
-The reason for why `glibc` deviates from the convention is because referencing a library provided by `glibc` is a very common operation among Nix packages. For instance, third-party executables packaged by Nix are typically patched and relinked with the relevant version of `glibc` libraries from Nix packages (please see the documentation on [patchelf](https://github.com/NixOS/patchelf/blob/master/README) for more details).
+The reason for why `glibc` deviates from the convention is because referencing a library provided by `glibc` is a very common operation among Nix packages. For instance, third-party executables packaged by Nix are typically patched and relinked with the relevant version of `glibc` libraries from Nix packages (please see the documentation on [patchelf](https://github.com/NixOS/patchelf) for more details).
 
 ### File type groups {#multiple-output-file-type-groups}
 
