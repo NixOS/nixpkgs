@@ -5520,6 +5520,8 @@ with pkgs;
 
   glab = callPackage ../applications/version-management/git-and-tools/glab { };
 
+  glitter = callPackage ../applications/version-management/git-and-tools/glitter { };
+
   glusterfs = callPackage ../tools/filesystems/glusterfs { };
 
   glmark2 = callPackage ../tools/graphics/glmark2 { };
