@@ -5562,7 +5562,13 @@ in {
 
   python-ecobee-api = callPackage ../development/python-modules/python-ecobee-api { };
 
+  python-glanceclient = callPackage ../development/python-modules/python-glanceclient { };
+
+  python-heatclient = callPackage ../development/python-modules/python-heatclient { };
+
   python-ipmi = callPackage ../development/python-modules/python-ipmi { };
+
+  python-ironicclient = callPackage ../development/python-modules/python-ironicclient { };
 
   python-izone = callPackage ../development/python-modules/python-izone { };
 
@@ -7276,6 +7282,8 @@ in {
 
   python_magic = callPackage ../development/python-modules/python-magic { };
 
+  python-manilaclient = callPackage ../development/python-modules/python-manilaclient { };
+
   python-mapnik = let
     boost = pkgs.boost.override {
       enablePython = true;
@@ -8765,6 +8773,8 @@ in {
   teletype = callPackage ../development/python-modules/teletype { };
 
   telfhash = callPackage ../development/python-modules/telfhash { };
+
+  tempest = callPackage ../development/python-modules/tempest { };
 
   tempita = callPackage ../development/python-modules/tempita { };
 
