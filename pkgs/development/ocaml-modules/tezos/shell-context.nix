@@ -1,18 +1,21 @@
 { lib
 , buildDunePackage
 , tezos-stdlib
+, tezos-protocol-environment
 }:
 
 buildDunePackage {
-  pname = "tezos-protocol-environment-packer";
+  pname = "tezos-shell-context";
   inherit (tezos-stdlib) version useDune2;
   src = "${tezos-stdlib.base_src}/src/lib_protocol_environment";
 
-  minimalOCamlVersion = "4.03";
+  propagatedBuildInputs = [
+    tezos-protocol-environment
+  ];
 
   doCheck = true;
 
   meta = tezos-stdlib.meta // {
-    description = "Tezos: sigs/structs packer for economic protocol environment";
+    description = "Tezos: economic-protocols environment implementation for `tezos-node`";
   };
 }

@@ -1,28 +1,28 @@
 { lib
 , buildDunePackage
 , tezos-stdlib
-, tezos-stdlib-unix
+, tezos-shell-services
+, tezos-sapling
 , alcotest
-, alcotest-lwt
 }:
 
 buildDunePackage {
-  pname = "tezos-clic";
+  pname = "tezos-client-base";
   inherit (tezos-stdlib) version useDune2;
-  src = "${tezos-stdlib.base_src}/src/lib_clic";
+  src = "${tezos-stdlib.base_src}/src/lib_client_base";
 
   propagatedBuildInputs = [
-    tezos-stdlib-unix
+    tezos-shell-services
+    tezos-sapling
   ];
 
   checkInputs = [
     alcotest
-    alcotest-lwt
   ];
 
   doCheck = true;
 
   meta = tezos-stdlib.meta // {
-    description = "Tezos: library of auto-documented command-line-parsing combinators";
+    description = "Tezos: protocol registration for the mockup mode";
   };
 }
