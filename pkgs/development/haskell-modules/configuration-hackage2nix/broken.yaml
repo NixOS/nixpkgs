@@ -968,7 +968,6 @@ broken-packages:
   - dbmigrations-mysql
   - dbmigrations-postgresql
   - dbmigrations-sqlite
-  - d-bus
   - DBus
   - dbus-core
   - dbus-qq
