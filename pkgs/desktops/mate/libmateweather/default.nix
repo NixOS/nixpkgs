@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/mate-desktop/libmateweather";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = [ maintainers.romildo ];
+    maintainers = teams.mate.members;
   };
 }
