@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     description = "Collection of tools to manage Teensy boards";
     homepage = "https://koromix.dev/tytools";
     license = licenses.unlicense;
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ ahuzik ];
   };
 }
