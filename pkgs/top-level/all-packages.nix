@@ -6657,6 +6657,8 @@ with pkgs;
 
   ldc = callPackage ../development/compilers/ldc { };
 
+  ligo = callPackage ../development/compilers/ligo { };
+
   ldgallery = callPackage ../tools/graphics/ldgallery {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
