@@ -142,7 +142,7 @@ rustPlatform.buildRustPackage rec {
   version = "1.0.0";
 
   cargoLock = let
-    fixupLockFile = path: /* ... */;
+    fixupLockFile = path: f (builtins.readFile path);
   in {
     lockFileContents = fixupLockFile ./Cargo.lock;
   };
