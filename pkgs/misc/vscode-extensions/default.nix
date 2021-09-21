@@ -1501,11 +1501,16 @@ let
         mktplcRef = {
           name = "errorlens";
           publisher = "usernamehw";
-          version = "3.2.4";
-          sha256 = "0caxmf6v0s5kgp6cp3j1kk7slhspjv5kzhn4sq3miyl5jkrn95kx";
+          version = "3.4.0";
+          sha256 = "1x9rkyhbp15dwp6dikzpk9lzjnh9cnxac89gzx533681zld906m8";
         };
-        meta = {
-          license = lib.licenses.mit;
+        meta = with lib; {
+          changelog = "https://marketplace.visualstudio.com/items/usernamehw.errorlens/changelog";
+          description = "Improve highlighting of errors, warnings and other language diagnostics.";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=usernamehw.errorlens";
+          homepage = "https://github.com/usernamehw/vscode-error-lens";
+          license = licenses.mit;
+          maintainers = with maintainers; [ imgabe ];
         };
       };
 
