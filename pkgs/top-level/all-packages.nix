@@ -449,10 +449,12 @@ with pkgs;
 
   fetchfossil = callPackage ../build-support/fetchfossil { };
 
-  fetchgit = callPackage ../build-support/fetchgit {
+  fetchgit = (callPackage ../build-support/fetchgit {
     git = buildPackages.gitMinimal;
     cacert = buildPackages.cacert;
     git-lfs = buildPackages.git-lfs;
+  }) // { # fetchgit is a function, so we use // instead of passthru.
+    tests = callPackages ../build-support/fetchgit/tests.nix {};
   };
 
   fetchgitLocal = callPackage ../build-support/fetchgitlocal { };
@@ -601,6 +603,15 @@ with pkgs;
   };
 
   installShellFiles = callPackage ../build-support/install-shell-files {};
+
+  # See doc/builders/special/invalidateFetcherByDrvHash.section.md or
+  # https://nixos.org/manual/nixpkgs/unstable/#sec-pkgs-invalidateFetcherByDrvHash
+  invalidateFetcherByDrvHash = f: args:
+    let
+      drvPath = (f args).drvPath;
+      # It's safe to discard the context, because we don't access the path.
+      salt = builtins.unsafeDiscardStringContext (lib.substring 0 12 (baseNameOf drvPath));
+    in f (args // { name = "${args.name or "source"}-salted-${salt}"; });
 
   lazydocker = callPackage ../tools/misc/lazydocker { };
 
@@ -3985,6 +3996,11 @@ with pkgs;
   biosdevname = callPackage ../tools/networking/biosdevname { };
 
   bluetooth_battery = python3Packages.callPackage ../applications/misc/bluetooth_battery { };
+
+  calyx-vpn = libsForQt5.callPackage ../tools/networking/bitmask-vpn {
+    provider = "calyx";
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
+  };
 
   code-browser-qt = libsForQt5.callPackage ../applications/editors/code-browser { withQt = true;
                                                                                 };
@@ -8473,6 +8489,11 @@ with pkgs;
     stdenv = gccStdenv;
   };
 
+  riseup-vpn = libsForQt5.callPackage ../tools/networking/bitmask-vpn {
+    provider = "riseup";
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
+  };
+
   rocket = libsForQt5.callPackage ../tools/graphics/rocket { };
 
   rtaudio = callPackage ../development/libraries/audio/rtaudio {
@@ -12356,6 +12377,7 @@ with pkgs;
   defaultCrateOverrides = callPackage ../build-support/rust/default-crate-overrides.nix { };
 
   cargo-about = callPackage ../tools/package-management/cargo-about { };
+  cargo-all-features = callPackage ../development/tools/rust/cargo-all-features { };
   cargo-audit = callPackage ../tools/package-management/cargo-audit {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -24890,7 +24912,9 @@ with pkgs;
     gtk = gtk3;
   };
 
-  hors = callPackage ../development/tools/hors { };
+  hors = callPackage ../development/tools/hors {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   hover = callPackage ../development/tools/hover { };
 
@@ -32069,6 +32093,8 @@ with pkgs;
   sqsh = callPackage ../development/tools/sqsh { };
 
   sumneko-lua-language-server = callPackage ../development/tools/sumneko-lua-language-server { };
+
+  sysz = callPackage  ../tools/misc/sysz { };
 
   go-swag = callPackage ../development/tools/go-swag { };
 

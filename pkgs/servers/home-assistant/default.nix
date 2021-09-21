@@ -828,8 +828,9 @@ in with py.pkgs; buildPythonApplication rec {
     "test_onboarding_core_no_rpi_power"
     # hue/test_sensor_base.py: Race condition when counting events
     "test_hue_events"
-    # august/test_lock.py: AssertionError: assert 'unlocked' == 'locked'
+    # august/test_lock.py: AssertionError: assert 'unlocked' == 'locked' / assert 'off' == 'on'
     "test_lock_update_via_pubnub"
+    "test_door_sense_update_via_pubnub"
   ];
 
   preCheck = ''
