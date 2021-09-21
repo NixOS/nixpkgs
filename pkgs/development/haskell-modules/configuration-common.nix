@@ -1180,14 +1180,18 @@ self: super: {
   # $HOME, which we don't have in our build sandbox.
   cabal-install-parsers = dontCheck super.cabal-install-parsers;
 
-  # jailbreak and patch (for pandoc >= 2.12) ensure compilation with newer dependencies.
-  # can both be removed at the next release (current is 0.13.0.0)
-  gitit = doJailbreak (appendPatch super.gitit
-    (pkgs.fetchpatch {
-      url = "https://github.com/jgm/gitit/commit/e8c9d94be332e2f73de9b0eee222a2a09f191faf.patch";
-      sha256 = "1rl2c3sz8cd2c3qwv9b640853s4bblcknvfv29k472wqhs62mwz1";
-      includes = [ "src/**" ];
-    }));
+  # Update to 0.15.0.0 which fixes a security vulnerability
+  # by removing a fundamentally insecure feature. Backporting
+  # a “breaking” release for this seems necessary.
+  # See https://nvd.nist.gov/vuln/detail/CVE-2021-38711
+  #     https://github.com/jgm/gitit/blob/0.15.0.0/CHANGES
+  gitit = overrideCabal super.gitit (old: {
+    jailbreak = true;
+    version = "0.15.0.0";
+    sha256 = "05kz7dxmiabp0gkivn5ngmn3xah3h7a14a421qw6nx2ld1cr9vgf";
+    revision = null;
+    editedCabalFile = null;
+  });
 
   # Test suite requires database
   persistent-mysql = dontCheck super.persistent-mysql;
