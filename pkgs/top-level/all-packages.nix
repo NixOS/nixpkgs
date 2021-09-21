@@ -17061,7 +17061,7 @@ with pkgs;
 
   libf2c = callPackage ../development/libraries/libf2c {};
 
-  libfabric = callPackage ../os-specific/linux/libfabric {};
+  libfabric = callPackage ../development/libraries/libfabric {};
 
   libfive = libsForQt5.callPackage ../development/libraries/libfive { };
 
