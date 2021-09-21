@@ -172,6 +172,15 @@ in
       };
 
       admin = {
+        skipCreate = lib.mkOption {
+          type = lib.types.bool;
+          default = false;
+          description = ''
+            Do not create the admin account, instead rely on other
+            existing admin accounts.
+          '';
+        };
+
         email = lib.mkOption {
           type = lib.types.str;
           example = "admin@example.com";
@@ -721,6 +730,16 @@ in
             lib.optionalString (file != null) ''
               replace-secret '${file}' '${file}' /run/discourse/config/discourse.conf
             '';
+
+          mkAdmin = ''
+            export ADMIN_EMAIL="${cfg.admin.email}"
+            export ADMIN_NAME="${cfg.admin.fullName}"
+            export ADMIN_USERNAME="${cfg.admin.username}"
+            ADMIN_PASSWORD="$(<${cfg.admin.passwordFile})"
+            export ADMIN_PASSWORD
+            discourse-rake admin:create_noninteractively
+          '';
+
         in ''
           set -o errexit -o pipefail -o nounset -o errtrace
           shopt -s inherit_errexit
@@ -750,12 +769,7 @@ in
           discourse-rake db:migrate >>/var/log/discourse/db_migration.log
           chmod -R u+w /run/discourse/tmp/
 
-          export ADMIN_EMAIL="${cfg.admin.email}"
-          export ADMIN_NAME="${cfg.admin.fullName}"
-          export ADMIN_USERNAME="${cfg.admin.username}"
-          ADMIN_PASSWORD="$(<${cfg.admin.passwordFile})"
-          export ADMIN_PASSWORD
-          discourse-rake admin:create_noninteractively
+          ${lib.optionalString (!cfg.admin.skipCreate) mkAdmin}
 
           discourse-rake themes:update
           discourse-rake uploads:regenerate_missing_optimized
