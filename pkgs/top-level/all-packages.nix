@@ -24899,7 +24899,9 @@ with pkgs;
     gtk = gtk3;
   };
 
-  hors = callPackage ../development/tools/hors { };
+  hors = callPackage ../development/tools/hors {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   hover = callPackage ../development/tools/hover { };
 
