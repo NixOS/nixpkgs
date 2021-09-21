@@ -8081,6 +8081,8 @@ with pkgs;
 
   pick = callPackage ../tools/misc/pick { };
 
+  pipe-rename = callPackage ../tools/misc/pipe-rename { };
+
   pitivi = callPackage ../applications/video/pitivi { };
 
   prism = callPackage ../applications/video/prism { };
@@ -24888,6 +24890,8 @@ with pkgs;
     gtk = gtk3;
   };
 
+  hors = callPackage ../development/tools/hors { };
+
   hover = callPackage ../development/tools/hover { };
 
   hovercraft = python3Packages.callPackage ../applications/misc/hovercraft { };
@@ -27159,6 +27163,8 @@ with pkgs;
   shotgun = callPackage ../tools/graphics/shotgun {};
 
   shutter = callPackage ../applications/graphics/shutter { };
+
+  sic-image-cli = callPackage ../tools/graphics/sic-image-cli { };
 
   simple-scan = gnome.simple-scan;
 
