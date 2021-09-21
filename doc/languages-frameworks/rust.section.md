@@ -122,16 +122,38 @@ rustPlatform.buildRustPackage rec {
 
   cargoLock = {
     lockFile = ./Cargo.lock;
-  }
+  };
 
   # ...
 }
 ```
 
 This will retrieve the dependencies using fixed-output derivations from
-the specified lockfile. Note that setting `cargoLock.lockFile` doesn't
-add a `Cargo.lock` to your `src`, and a `Cargo.lock` is still required
-to build a rust package. A simple fix is to use:
+the specified lockfile.
+
+Alternatively, `cargoLock.lockFileContents` can be set to a string of
+the contents of a `Cargo.lock` file, for example if you need to
+preprocess or generate the file as part of your build:
+
+
+```nix
+rustPlatform.buildRustPackage rec {
+  pname = "myproject";
+  version = "1.0.0";
+
+  cargoLock = let
+    fixupLockFile = path: /* ... */;
+  in {
+    lockFileContents = fixupLockFile ./Cargo.lock;
+  };
+
+  # ...
+}
+```
+
+Note that setting `cargoLock.lockFile` or `cargoLock.lockFileContents`
+doesn't add a `Cargo.lock` to your `src`, and a `Cargo.lock` is still
+required to build a rust package. A simple fix is to use:
 
 ```nix
 postPatch = ''
