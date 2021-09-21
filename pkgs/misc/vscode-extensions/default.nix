@@ -104,8 +104,8 @@ let
         mktplcRef = {
           name = "ng-template";
           publisher = "Angular";
-          version = "12.1.2";
-          sha256 = "sha256-fIHh1eRmu4zSgrtZr0XwLB+1Ad6a/0ABC55akGr0DOA=";
+          version = "12.2.0";
+          sha256 = "sha256-CChkWKiLi/OcOm268d45pNwiyrKhztqYsQvJV/9z+Ag=";
         };
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/Angular.ng-template/changelog";
