@@ -46,17 +46,20 @@ stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
-    patchelf --replace-needed liblttng-ust.so.0 liblttng-ust.so $out/bin/libcoreclrtraceptprovider.so
+    patchelf --replace-needed liblttng-ust.so.0 liblttng-ust.so $out/lib/libcoreclrtraceptprovider.so
   '';
 
   installPhase = ''
-    mkdir -p $out/bin
-    mv $out/opt/workspacesclient/* $out/bin
+    mkdir -p $out/bin $out/lib
+    mv $out/opt/workspacesclient/* $out/lib
+    rm -rf $out/opt
 
-    wrapProgram $out/bin/workspacesclient \
+    wrapProgram $out/lib/workspacesclient \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath buildInputs}" \
       --set GDK_PIXBUF_MODULE_FILE "${librsvg.out}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache" \
       --set GIO_EXTRA_MODULES "${glib-networking.out}/lib/gio/modules"
+
+    mv $out/lib/workspacesclient $out/bin
   '';
 
   meta = with lib; {
