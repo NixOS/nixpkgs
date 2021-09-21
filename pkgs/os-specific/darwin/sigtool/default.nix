@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, cmake, makeWrapper, openssl }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, openssl }:
 
 stdenv.mkDerivation {
   name = "sigtool";
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
     sha256 = "sha256-iCsdklN3crFx6CKsMIUP/fA3twLh4ArQh7OsVug5UjE=";
   };
 
-  nativeBuildInputs = [ pkg-config makeWrapper ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ];
 
   installFlags = [ "PREFIX=$(out)" ];
