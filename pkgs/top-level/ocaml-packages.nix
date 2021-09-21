@@ -1074,6 +1074,10 @@ let
 
     spacetime_lib = callPackage ../development/ocaml-modules/spacetime_lib { };
 
+    tar-unix = callPackage ../development/ocaml-modules/tar/unix.nix { };
+
+    tar = callPackage ../development/ocaml-modules/tar { };
+
     tcpip = callPackage ../development/ocaml-modules/tcpip { };
 
     tsort = callPackage ../development/ocaml-modules/tsort { };
