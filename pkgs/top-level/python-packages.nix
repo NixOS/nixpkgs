@@ -3610,6 +3610,8 @@ in {
 
   imutils = callPackage ../development/python-modules/imutils { };
 
+  in-place = callPackage ../development/python-modules/in-place { };
+
   incomfort-client = callPackage ../development/python-modules/incomfort-client { };
 
   incremental = callPackage ../development/python-modules/incremental { };
