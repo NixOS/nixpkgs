@@ -46,8 +46,11 @@ in
     hostName = mkOption {
       type = str;
       example = "meet.example.org";
+      default = config.networking.fqdn;
       description = ''
         Hostname of the Jitsi Meet instance.
+        It defaults to the fully qualified domain name of the host (networking.fqdn)
+        and may cause issues if it is not equal to (or a subdomain of) the FQDN.
       '';
     };
 
