@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
     pysdl2
     requests
     send2trash
-  ] ++ lib.optional withDiscordRPC [ pypresence ];
+  ] ++ lib.optional withDiscordRPC pypresence;
 
   makeWrapperArgs = [
     "--prefix PATH : ${lib.makeBinPath [ffmpeg]}"
