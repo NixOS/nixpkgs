@@ -48,8 +48,6 @@ if stdenv.isLinux then buildFHSUserEnv (appimageTools.defaultFhsEnvArgs // {
   name = "anki";
 
   runScript = writeShellScript "anki-wrapper.sh" ''
-    # Wayland support is broken, disable via ENV variable
-    export QT_QPA_PLATFORM=xcb
     exec ${unpacked}/bin/anki
   '';
 
