@@ -5184,6 +5184,18 @@ final: prev:
     meta.homepage = "https://github.com/mopp/sky-color-clock.vim/";
   };
 
+  slimv = buildVimPluginFrom2Nix {
+    pname = "slimv";
+    version = "2021-08-24";
+    src = fetchFromGitHub {
+      owner = "kovisoft";
+      repo = "slimv";
+      rev = "1c1ef6dad577e8c5fb7d94ec3b6d698b68e7730d";
+      sha256 = "03wy3apmzbrjxypq2xv1z71xnx7bkvhyarw5w1y3l8gl430vjmgi";
+    };
+    meta.homepage = "https://github.com/kovisoft/slimv/";
+  };
+
   smartpairs-vim = buildVimPluginFrom2Nix {
     pname = "smartpairs.vim";
     version = "2018-01-01";

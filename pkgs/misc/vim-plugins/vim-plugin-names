@@ -345,6 +345,7 @@ konfekt/fastfold
 Konfekt/vim-alias
 konfekt/vim-DetectSpellLang
 kosayoda/nvim-lightbulb
+kovisoft/slimv
 kristijanhusak/defx-git
 kristijanhusak/defx-icons
 kristijanhusak/deoplete-phpactor
