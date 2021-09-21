@@ -12510,6 +12510,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  rhack = callPackage ../development/tools/rust/rhack { };
   inherit (rustPackages) rls;
   rustfmt = rustPackages.rustfmt;
   rustracer = callPackage ../development/tools/rust/racer {
