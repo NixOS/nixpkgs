@@ -154,6 +154,7 @@
   ./programs/gnupg.nix
   ./programs/gphoto2.nix
   ./programs/hamster.nix
+  ./programs/htop.nix
   ./programs/iftop.nix
   ./programs/iotop.nix
   ./programs/java.nix
