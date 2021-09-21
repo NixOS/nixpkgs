@@ -3,16 +3,16 @@
 let
   pname = "anki-bin";
   # Update hashes for both Linux and Darwin!
-  version = "2.1.47";
+  version = "2.1.48";
 
   sources = {
     linux = fetchurl {
       url = "https://github.com/ankitects/anki/releases/download/${version}/anki-${version}-linux.tar.bz2";
-      sha256 = "sha256-cObvjXeDUDslfAhMOrlqyjidri6N7xLR2+LRz3hTdfg=";
+      sha256 = "sha256-1ZvC8CPnYMzCxxrko1FfmTvKiJT+7BhOdk52zLTnLGE=";
     };
     darwin = fetchurl {
       url = "https://github.com/ankitects/anki/releases/download/${version}/anki-${version}-mac.dmg";
-      sha256 = "sha256-TwYrI9gSabJ5icOsygtEJRymkrSgCD8jDXMtpaJXgWg=";
+      sha256 = "sha256-HXYTpOxFxjQoqjs+04diy5d+GmS69dFNEfLI/E4NCXw=";
     };
   };
 
@@ -48,8 +48,6 @@ if stdenv.isLinux then buildFHSUserEnv (appimageTools.defaultFhsEnvArgs // {
   name = "anki";
 
   runScript = writeShellScript "anki-wrapper.sh" ''
-    # Wayland support is broken, disable via ENV variable
-    export QT_QPA_PLATFORM=xcb
     exec ${unpacked}/bin/anki
   '';
 
