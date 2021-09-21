@@ -3,28 +3,29 @@
   , libSM, libXxf86vm, libX11, glib, pango, gdk_pixbuf, cairo, gtk2-x11, zlib, libcap_progs, openssl, openssl_1_0_2
   , libpulseaudio
   , SDL2, xorg_sys_opengl, libGL
+  , xdg_utils
 }:
 let
 
   # Please keep the version x.y.0.z and do not update to x.y.76.z because the
   # source of the latter disappears much faster.
-  version = "2.2.7";
+  version = "2.2.9";
+  pname = "runescape-launcher";
 
   src = fetchurl {
-    url = "https://content.runescape.com/downloads/ubuntu/pool/non-free/r/runescape-launcher/runescape-launcher_2.2.7_amd64.deb";
-    sha256 = "0m5ydk7aynkdaxifh8pwn1ckanibnf50i4p3vv2159cqpzpf6wgc";
+    url = "https://content.runescape.com/downloads/ubuntu/pool/non-free/r/${pname}/${pname}_${version}_amd64.deb";
+    sha256 = "01v37mjpx55zcbm87v90k4vfc6vdgsr5jyj6xf6cpim4q47wy97c";
   };
 
   runescape = stdenv.mkDerivation {
-    # name = "runescape-launcher-${version}";
-    name = "runescape-launcher";
+    name = pname;
     system = "x86_64-linux";
 
     inherit src;
 
     # Required for compilation
     nativeBuildInputs = [
-      autoPatchelfHook # Automatically setup the loader, and do the magic
+      autoPatchelfHook # Automatically setup the loader, and do the magic (see at bottom)
       wrapGAppsHook
       dpkg
     ];
@@ -44,6 +45,7 @@ let
       zlib
       libcap_progs
       openssl
+      xdg_utils
     ];
 
     runtimeDependencies = [
@@ -100,6 +102,7 @@ in
   /*
   * We can patch the runescape launcher, but it downloads a client at runtime and checks it for changes.
   * For that we need use a buildFHSUserEnv.
+  * FHS simulates a classic linux shell
   */
   buildFHSUserEnv {
    name = "RuneScape";
@@ -115,7 +118,7 @@ in
    runScript = "runescape-launcher";
 }
 
-# rs2client
+# rs2client manual patching (what autoPatchelfHook gives you)
 
 # missing libs:
 # > ldd rs2client | grep 'not found' | cut -d '=' -f1
