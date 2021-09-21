@@ -32068,6 +32068,8 @@ with pkgs;
 
   sumneko-lua-language-server = callPackage ../development/tools/sumneko-lua-language-server { };
 
+  sysz = callPackage  ../tools/misc/sysz { };
+
   go-swag = callPackage ../development/tools/go-swag { };
 
   go-swagger = callPackage ../development/tools/go-swagger { };
