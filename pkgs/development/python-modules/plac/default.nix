@@ -13,14 +13,14 @@ buildPythonPackage rec {
   };
 
   checkPhase = ''
-      cd doc
-      ${python.interpreter} -m unittest discover -p "*test_plac*"
-    '';
+    cd doc
+    ${python.interpreter} -m unittest discover -p "*test_plac*"
+  '';
 
   meta = with lib; {
     description = "Parsing the Command Line the Easy Way";
     homepage = "https://github.com/micheles/plac";
     license = licenses.bsdOriginal;
-    maintainers = with maintainers; [ sdll ];
-    };
+    maintainers = with maintainers; [ ];
+  };
 }

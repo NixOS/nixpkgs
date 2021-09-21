@@ -1100,6 +1100,10 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  amber-secret = callPackage ../tools/security/amber {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   inherit (callPackages ../development/tools/ammonite {})
     ammonite_2_12
     ammonite_2_13;
@@ -8760,6 +8764,7 @@ with pkgs;
 
   rpm = callPackage ../tools/package-management/rpm {
     python = python3;
+    lua = lua5_4;
   };
 
   rpm-ostree = callPackage ../tools/misc/rpm-ostree {
@@ -8807,6 +8812,8 @@ with pkgs;
   ruplacer = callPackage ../tools/text/ruplacer {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+
+  rust-petname = callPackage ../tools/text/rust-petname { };
 
   rustscan = callPackage ../tools/security/rustscan {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -12358,6 +12365,9 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
   cargo-criterion = callPackage ../development/tools/rust/cargo-criterion { };
+  cargo-deadlinks = callPackage ../development/tools/rust/cargo-deadlinks {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
   cargo-deb = callPackage ../tools/package-management/cargo-deb {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -12395,6 +12405,9 @@ with pkgs;
   };
   cargo-cross = callPackage ../development/tools/rust/cargo-cross { };
   cargo-deny = callPackage ../development/tools/rust/cargo-deny {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+  cargo-dephell = callPackage ../development/tools/rust/cargo-dephell {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
   cargo-diet = callPackage ../development/tools/rust/cargo-diet { };
@@ -12435,6 +12448,9 @@ with pkgs;
   cargo-spellcheck = callPackage ../development/tools/rust/cargo-spellcheck { };
   cargo-sweep = callPackage ../development/tools/rust/cargo-sweep { };
   cargo-sync-readme = callPackage ../development/tools/rust/cargo-sync-readme {};
+  cargo-tally = callPackage ../development/tools/rust/cargo-tally {
+    inherit (darwin.apple_sdk.frameworks) DiskArbitration Foundation IOKit;
+  };
   cargo-udeps = callPackage ../development/tools/rust/cargo-udeps {
     inherit (darwin.apple_sdk.frameworks) CoreServices Security SystemConfiguration;
   };
@@ -13995,6 +14011,8 @@ with pkgs;
   fujprog = callPackage ../development/embedded/fpga/fujprog {
     inherit (darwin.apple_sdk.frameworks) IOKit;
   };
+
+  fundoc = callPackage ../development/tools/fundoc { };
 
   funnelweb = callPackage ../development/tools/literate-programming/funnelweb { };
 

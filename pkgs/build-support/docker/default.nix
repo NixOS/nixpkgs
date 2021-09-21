@@ -636,7 +636,7 @@ rec {
              <(sort -n layerFiles|uniq|grep -v ${layer}) -1 -3 > newFiles
         # Append the new files to the layer.
         tar -rpf temp/layer.tar --hard-dereference --sort=name --mtime="@$SOURCE_DATE_EPOCH" \
-          --owner=0 --group=0 --no-recursion --files-from newFiles
+          --owner=0 --group=0 --no-recursion --verbatim-files-from --files-from newFiles
 
         echo "Adding meta..."
 
