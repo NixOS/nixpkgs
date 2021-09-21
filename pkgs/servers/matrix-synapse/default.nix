@@ -81,7 +81,7 @@ buildPythonApplication rec {
   doCheck = !stdenv.isDarwin;
 
   checkPhase = ''
-    PYTHONPATH=".:$PYTHONPATH" ${py.interpreter} -m twisted.trial tests
+    PYTHONPATH=".:$PYTHONPATH" ${py.interpreter} -m twisted.trial -j $NIX_BUILD_CORES tests
   '';
 
   passthru.tests = { inherit (nixosTests) matrix-synapse; };
