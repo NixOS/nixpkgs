@@ -324,6 +324,7 @@ kana/vim-niceblock
 kana/vim-operator-replace
 kana/vim-operator-user
 kana/vim-tabpagecd
+kana/vim-textobj-entire
 kana/vim-textobj-function
 kana/vim-textobj-user
 karb94/neoscroll.nvim

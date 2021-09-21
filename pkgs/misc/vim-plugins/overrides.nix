@@ -836,6 +836,11 @@ self: super: {
     dependencies = with self; [ vim-repeat ];
   });
 
+  vim-textobj-entire = super.vim-textobj-entire.overrideAttrs (old: {
+    dependencies = with self; [ vim-textobj-user ];
+    meta.maintainers = with lib.maintainers; [ farlion ];
+  });
+
   vim-unimpaired = super.vim-unimpaired.overrideAttrs (old: {
     dependencies = with self; [ vim-repeat ];
   });
