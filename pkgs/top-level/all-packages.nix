@@ -27160,6 +27160,8 @@ with pkgs;
 
   shutter = callPackage ../applications/graphics/shutter { };
 
+  sic-image-cli = callPackage ../tools/graphics/sic-image-cli { };
+
   simple-scan = gnome.simple-scan;
 
   siproxd = callPackage ../applications/networking/siproxd { };
