@@ -2,7 +2,6 @@
 , nixosTests
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , makeWrapper
 , nodejs
 , pkgs
@@ -10,22 +9,14 @@
 
 stdenv.mkDerivation rec {
   pname = "mjolnir";
-  version = "0.1.18";
+  version = "1.1.20";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "mjolnir";
     rev = "v${version}";
-    sha256 = "BIZUfgetkHlnPg+SWyfQgljjxIeWhHpibPVoTfTpS2k=";
+    sha256 = "yfMBnNriSpwitR4u664iz+8uWp/3iSTymyFajMBP5xg=";
   };
-
-  patches = [
-    # catch errors and set non-zero exit code
-    (fetchpatch {
-      url = "https://github.com/matrix-org/mjolnir/pull/102/commits/662b06df8ef085fb78608ed19924383be62fa59f.patch";
-      sha256 = "sha256-VUKFBMM67E8dGWSViDjMJadMS+DgvHvQS0aOnd2Fz/4=";
-    })
-  ];
 
   nativeBuildInputs = [
     nodejs
