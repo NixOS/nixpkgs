@@ -1853,6 +1853,12 @@
     githubId = 1762540;
     name = "Changlin Li";
   };
+  chanley = {
+    email = "charlieshanley@gmail.com";
+    github = "charlieshanley";
+    githubId = 8228888;
+    name = "Charlie Hanley";
+  };
   CharlesHD = {
     email = "charleshdespointes@gmail.com";
     github = "CharlesHD";
@@ -9861,12 +9867,6 @@
     github = "sdier";
     githubId = 11613056;
     name = "Scott Dier";
-  };
-  sdll = {
-    email = "sasha.delly@gmail.com";
-    github = "sdll";
-    githubId = 17913919;
-    name = "Sasha Illarionov";
   };
   SeanZicari = {
     email = "sean.zicari@gmail.com";

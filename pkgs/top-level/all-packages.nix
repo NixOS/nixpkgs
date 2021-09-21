@@ -8764,6 +8764,7 @@ with pkgs;
 
   rpm = callPackage ../tools/package-management/rpm {
     python = python3;
+    lua = lua5_4;
   };
 
   rpm-ostree = callPackage ../tools/misc/rpm-ostree {
@@ -8811,6 +8812,8 @@ with pkgs;
   ruplacer = callPackage ../tools/text/ruplacer {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+
+  rust-petname = callPackage ../tools/text/rust-petname { };
 
   rustscan = callPackage ../tools/security/rustscan {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -14008,6 +14011,8 @@ with pkgs;
   fujprog = callPackage ../development/embedded/fpga/fujprog {
     inherit (darwin.apple_sdk.frameworks) IOKit;
   };
+
+  fundoc = callPackage ../development/tools/fundoc { };
 
   funnelweb = callPackage ../development/tools/literate-programming/funnelweb { };
 
