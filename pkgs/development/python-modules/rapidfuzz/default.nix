@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "rapidfuzz";
-  version = "1.6.0";
+  version = "1.6.2";
 
   disabled = pythonOlder "3.5";
 
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     repo = "RapidFuzz";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-dJz6OzzjqWZwzDVJzJVUshK0HDP/Bz5cML0TrwVVcvg=";
+    sha256 = "sha256-tzjtvM5b9RD+Uqg5wT+FtSgjbAc0IgoDAmUFNpXQ9KA=";
   };
 
   propagatedBuildInputs = [
