@@ -1324,6 +1324,12 @@ Superuser created successfully.
           <literal>/etc/xdg/mimeapps.list</literal>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link linkend="opt-networking.hostName">networking.hostName</link>
+          no longer allows underscores.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
 </section>

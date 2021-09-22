@@ -391,10 +391,9 @@ in
       default = "nixos";
       # Only allow hostnames without the domain name part (i.e. no FQDNs, see
       # e.g. "man 5 hostname") and require valid DNS labels (recommended
-      # syntax). Note: We also allow underscores for compatibility/legacy
-      # reasons (as undocumented feature):
+      # syntax).
       type = types.strMatching
-        "^$|^[[:alnum:]]([[:alnum:]_-]{0,61}[[:alnum:]])?$";
+        "^$|^[[:alnum:]]([[:alnum:]-]{0,61}[[:alnum:]])?$";
       description = ''
         The name of the machine. Leave it empty if you want to obtain it from a
         DHCP server (if using DHCP). The hostname must be a valid DNS label (see
