@@ -30489,6 +30489,8 @@ with pkgs;
 
   nota = haskellPackages.callPackage ../applications/science/math/nota { };
 
+  notus-scanner = with python3Packages; toPythonApplication notus-scanner;
+
   openblas = callPackage ../development/libraries/science/math/openblas { };
 
   # A version of OpenBLAS using 32-bit integers on all platforms for compatibility with
