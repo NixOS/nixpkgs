@@ -1,4 +1,19 @@
-{ lib, stdenv, fetchurl, makeWrapper, bash, perl, diffstat, diffutils, patch, findutils }:
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, bash
+, coreutils
+, diffstat
+, diffutils
+, findutils
+, gawk
+, gnugrep
+, gnused
+, patch
+, perl
+, unixtools
+}:
 
 stdenv.mkDerivation rec {
 
@@ -11,11 +26,24 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ perl bash diffutils patch findutils diffstat ];
+
+  buildInputs = [
+    bash
+    coreutils
+    diffstat
+    diffutils
+    findutils
+    gawk
+    gnugrep
+    gnused
+    patch
+    perl
+    unixtools.column
+    unixtools.getopt
+  ];
 
   postInstall = ''
-    wrapProgram $out/bin/quilt --prefix PATH : \
-      ${perl}/bin:${bash}/bin:${diffstat}/bin:${diffutils}/bin:${findutils}/bin:${patch}/bin
+    wrapProgram $out/bin/quilt --prefix PATH : ${lib.makeBinPath buildInputs}
   '';
 
   meta = {
