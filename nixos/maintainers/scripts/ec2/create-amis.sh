@@ -69,7 +69,7 @@ image_label="$(read_image_info .label)${zfs_disks:+-ZFS}"
 image_system=$(read_image_info .system)
 image_files=( $(read_image_info "${zfs_disks:+.disks.root}.file") )
 
-image_logical_bytes=$(read_image_info "${zfs_disks:+.disks.root}.logical_bytes")
+image_logical_bytes=$(read_image_info "${zfs_disks:+.disks.boot}.logical_bytes")
 
 if [[ -n "$zfs_disks" ]]; then
   image_files+=( $(read_image_info .disks.boot.file) )
@@ -242,10 +242,7 @@ upload_image() {
         if [[ -n "$zfs_disks" ]]; then
             local root_snapshot_id=$(read_state "$region.$image_label.root.$image_system" snapshot_id)
 
-            # currently there is a bug in the ZFS AMI derivation, mismatching logical_bytes
-            # root.logical_bytes should be boot.logical_bytes and vice versa
-            # work around until fixed
-            local root_image_logical_bytes=$(read_image_info ".disks.boot.logical_bytes")
+            local root_image_logical_bytes=$(read_image_info ".disks.root.logical_bytes")
             local root_image_logical_gigabytes=$(((root_image_logical_bytes-1)/1024/1024/1024+1)) # Round to the next GB
 
             block_device_mappings+=(
