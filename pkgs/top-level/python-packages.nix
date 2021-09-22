@@ -9579,6 +9579,8 @@ in {
 
   wsgi-intercept = callPackage ../development/python-modules/wsgi-intercept { };
 
+  wsgiprox = callPackage ../development/python-modules/wsgiprox { };
+
   wsgiproxy2 = callPackage ../development/python-modules/wsgiproxy2 { };
 
   wsgitools = callPackage ../development/python-modules/wsgitools { };
