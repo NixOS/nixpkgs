@@ -486,6 +486,7 @@ in with py.pkgs; buildPythonApplication rec {
     "mailbox"
     "manual"
     "manual_mqtt"
+    "maxcube"
     "mazda"
     "media_player"
     "media_source"
