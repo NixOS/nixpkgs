@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, latestKernel ? false, ... } : {
+import ./make-test-python.nix ({ pkgs, ... } : {
   name = "hardened";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ joachifm ];
@@ -10,8 +10,6 @@ import ./make-test-python.nix ({ pkgs, latestKernel ? false, ... } : {
     { users.users.alice = { isNormalUser = true; extraGroups = [ "proc" ]; };
       users.users.sybil = { isNormalUser = true; group = "wheel"; };
       imports = [ ../modules/profiles/hardened.nix ];
-      boot.kernelPackages =
-        lib.mkIf latestKernel pkgs.linuxPackages_latest_hardened;
       environment.memoryAllocator.provider = "graphene-hardened";
       nix.useSandbox = false;
       virtualisation.emptyDiskImages = [ 4096 ];
