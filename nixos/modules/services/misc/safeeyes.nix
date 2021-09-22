@@ -26,6 +26,8 @@ in
 
   config = mkIf cfg.enable {
 
+    environment.systemPackages = [ pkgs.safeeyes ];
+
     systemd.user.services.safeeyes = {
       description = "Safeeyes";
 
