@@ -2,12 +2,12 @@
 
 let
   pname = "ledger-live-desktop";
-  version = "2.32.2";
+  version = "2.33.1";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://github.com/LedgerHQ/${pname}/releases/download/v${version}/${pname}-${version}-linux-x86_64.AppImage";
-    sha256 = "14agkl6xf0f9s5qldla6p6kzl8zlx61q5m8qy63lq215hrzh9d50";
+    sha256 = "1k1h37fbpsib9h8867m2dsfacdjs78gdm61gvrin5gpw1zj10syz";
   };
 
   appimageContents = appimageTools.extractType2 {
