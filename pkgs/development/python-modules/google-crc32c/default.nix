@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "google-crc32c";
-  version = "1.1.3";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "python-crc32c";
     rev = "v${version}";
-    sha256 = "1m2hafyfagvyabizr4fhcp2s2s3x56k006fhvl1qzk994qjhyzqk";
+    sha256 = "0snpqmj2avgqvfd7w26g03w78s6phwd8h55bvpjwm4lwj8hm8id7";
   };
 
   buildInputs = [ crc32c ];
