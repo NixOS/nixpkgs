@@ -21337,6 +21337,10 @@ with pkgs;
     inherit (darwin) IOKit;
   };
 
+  btop = callPackage ../tools/system/btop {
+    stdenv = gcc11Stdenv;
+  };
+
   nmon = callPackage ../os-specific/linux/nmon { };
 
   hwdata = callPackage ../os-specific/linux/hwdata { };
