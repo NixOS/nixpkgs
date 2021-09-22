@@ -2,7 +2,7 @@
 
 # build-tools
 , bootPkgs
-, autoconf, automake, coreutils, fetchurl, perl, python3, m4, sphinx, xattr
+, autoconf, automake, coreutils, fetchurl, fetchpatch, perl, python3, m4, sphinx, xattr
 , bash
 
 , libiconv ? null, ncurses
@@ -143,6 +143,14 @@ stdenv.mkDerivation (rec {
     url = "https://downloads.haskell.org/ghc/9.2.1-rc1/ghc-${version}-src.tar.xz";
     sha256 = "1q2pppxv2avhykyxvyq72r5p97rkkiqp19b77yhp85ralbcp4ivw";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "fix-darwin-link-failure.patch";
+      url = "https://gitlab.haskell.org/ghc/ghc/-/commit/77456387025ca74299ecc70621cbdb62b1b6ffc9.patch";
+      sha256 = "1g8smrn7hj8cbp9fhrylvmrb15s0xd8lhdgxqnx0asnd4az82gj8";
+    })
+  ];
 
   enableParallelBuilding = true;
 
@@ -311,9 +319,7 @@ stdenv.mkDerivation (rec {
     # See https://github.com/NixOS/nixpkgs/pull/129606#issuecomment-881323743.
     # Linker failure on macOS:
     # https://gitlab.haskell.org/ghc/ghc/-/issues/19950#note_373726
-    broken = (enableIntegerSimple && hostPlatform.isMusl)
-      || stdenv.hostPlatform.isDarwin;
-    hydraPlatforms = lib.remove "x86_64-darwin" ghc.meta.platforms;
+    broken = enableIntegerSimple && hostPlatform.isMusl;
   };
 
 } // lib.optionalAttrs targetPlatform.useAndroidPrebuilt {
