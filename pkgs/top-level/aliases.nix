@@ -1166,7 +1166,7 @@ mapAliases ({
     kdenlive kdf kdialog kdiamond
     keditbookmarks
     kfind kfloppy
-    kget kgpg
+    kget kgoldrunner kgpg
     khelpcenter
     kig kigo killbots kitinerary
     kleopatra klettres klines
