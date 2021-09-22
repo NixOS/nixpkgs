@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "pyTelegramBotAPI";
-  version = "4.0.0";
+  version = "4.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6accc4af505ee5b312689eaee1a9bc93cb6ea31a2d905a877c6b47f0888c3dcc";
+    sha256 = "sha256-k5XxPLpCB0TFoxVjjjNIwF3b7suedh3tIGyJ7rim2wo=";
   };
 
   propagatedBuildInputs = [ requests ];
