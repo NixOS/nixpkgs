@@ -8232,6 +8232,8 @@ in {
 
   simplekml = callPackage ../development/python-modules/simplekml { };
 
+  simple-rest-client = callPackage ../development/python-modules/simple-rest-client { };
+
   simple-salesforce = callPackage ../development/python-modules/simple-salesforce { };
 
   simple-websocket-server = callPackage ../development/python-modules/simple-websocket-server { };
