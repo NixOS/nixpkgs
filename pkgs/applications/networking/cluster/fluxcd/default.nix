@@ -20,7 +20,7 @@ buildGoModule rec {
     owner = "fluxcd";
     repo = "flux2";
     rev = "v${version}";
-    sha256 = sha256;
+    inherit sha256;
   };
 
   vendorSha256 = "sha256-glifJ0V3RwS7E6EWZsCa88m0MK883RhPSXCsAmMggVs=";
