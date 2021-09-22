@@ -5208,6 +5208,8 @@ in {
 
   oslotest = callPackage ../development/python-modules/oslotest { };
 
+  ospd = callPackage ../development/python-modules/ospd { };
+
   osqp = callPackage ../development/python-modules/osqp { };
 
   outcome = callPackage ../development/python-modules/outcome { };
