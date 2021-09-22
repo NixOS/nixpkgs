@@ -1,6 +1,7 @@
 { lib, stdenv, fetchurl, lua, pkg-config, nixosTests
 , withSystemd ? stdenv.isLinux && !stdenv.hostPlatform.isMusl, systemd
-, tlsSupport ? true, openssl
+# dependency ordering is broken at the moment when building with openssl
+, tlsSupport ? !stdenv.hostPlatform.isStatic, openssl
 }:
 
 stdenv.mkDerivation rec {
