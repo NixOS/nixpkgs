@@ -1058,7 +1058,7 @@ Superuser created successfully.
       <listitem>
         <para>
           NSS modules are now globally provided (by a
-          <literal>/run/nss-modules</literal> symlink), similar to how
+          <literal>/nix/var/nix/profiles/system/sw/lib/</literal> symlink), similar to how
           we handle OpenGL drivers.
         </para>
         <para>

@@ -1,7 +1,7 @@
 From 65a211ee3604733dceba13062f956256a573f27c Mon Sep 17 00:00:00 2001
 From: Florian Klink <flokli@flokli.de>
 Date: Sun, 19 Sep 2021 13:26:33 +0200
-Subject: [PATCH] nss_module.c: try loading NSS modules from /run/nss-modules
+Subject: [PATCH] nss_module.c: try loading NSS modules from /nix/var/nix/profiles/system/sw/lib/
  as a fallback
 
 Previously, glibc only looked for NSS modules in ${glibc.out}/lib
@@ -32,7 +32,7 @@ index 6c5f341f..44cfc2a4 100644
 +       /run/nss-modules, to allow loading NixOS-provided NSS modules. */
 +    if(handle == NULL)
 +      {
-+        const char *nix_glibc_nss_path = "/run/nss-modules/lib/";
++        const char *nix_glibc_nss_path = "/nix/var/nix/profiles/system/sw/lib/";
 +        char shlib_path[1024];
 +        size_t shlib_pathlen = strlen(nix_glibc_nss_path) + strlen(shlib_name);
 +
