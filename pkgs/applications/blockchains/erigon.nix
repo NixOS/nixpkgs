@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "erigon";
-  version = "2021.09.02";
+  version = "2021.09.03";
 
   src = fetchFromGitHub {
     owner = "ledgerwatch";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-0rWyDlZjfsZMOqAXs+mgmgz0m4oIN6bZ6Z9U4jWgR0E=";
+    sha256 = "sha256-RT/6YxNyvCjVyGE7OVELEyHGSqven6ATG/BhmcDIkfA=";
   };
 
-  vendorSha256 = "sha256-ardr+6Tz9IzSJPo9/kk7XV+2pIu6ZK3YYlp1zC/7Bno=";
+  vendorSha256 = "sha256-xViYY3JImaNW0ab7c+xTXzv58tBMcBVILRn7t1WTAWA=";
   runVend = true;
 
   # Build errors in mdbx when format hardening is enabled:
