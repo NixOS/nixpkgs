@@ -8704,6 +8704,8 @@ in {
 
   synologydsm-api = callPackage ../development/python-modules/synologydsm-api { };
 
+  syslog-rfc5424-formatter = callPackage ../development/python-modules/syslog-rfc5424-formatter { };
+
   systembridge = callPackage ../development/python-modules/systembridge { };
 
   systemd = callPackage ../development/python-modules/systemd {
