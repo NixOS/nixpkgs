@@ -231,3 +231,8 @@
 
 # Cinnamon
 /pkgs/desktops/cinnamon @mkg20001
+
+#nim
+/pkgs/development/compilers/nim  @ehmry
+/pkgs/development/nim-packages  @ehmry
+/pkgs/top-level/nim-packages.nix  @ehmry
