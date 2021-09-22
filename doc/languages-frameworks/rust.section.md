@@ -116,22 +116,44 @@ is updated after every change to `Cargo.lock`. Therefore,
 a `Cargo.lock` file using the `cargoLock` argument. For example:
 
 ```nix
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "myproject";
   version = "1.0.0";
 
   cargoLock = {
     lockFile = ./Cargo.lock;
-  }
+  };
 
   # ...
 }
 ```
 
 This will retrieve the dependencies using fixed-output derivations from
-the specified lockfile. Note that setting `cargoLock.lockFile` doesn't
-add a `Cargo.lock` to your `src`, and a `Cargo.lock` is still required
-to build a rust package. A simple fix is to use:
+the specified lockfile.
+
+One caveat is that `Cargo.lock` cannot be patched in the `patchPhase`
+because it runs after the dependencies have already been fetched. If
+you need to patch or generate the lockfile you can alternatively set
+`cargoLock.lockFileContents` to a string of its contents:
+
+```nix
+rustPlatform.buildRustPackage {
+  pname = "myproject";
+  version = "1.0.0";
+
+  cargoLock = let
+    fixupLockFile = path: f (builtins.readFile path);
+  in {
+    lockFileContents = fixupLockFile ./Cargo.lock;
+  };
+
+  # ...
+}
+```
+
+Note that setting `cargoLock.lockFile` or `cargoLock.lockFileContents`
+doesn't add a `Cargo.lock` to your `src`, and a `Cargo.lock` is still
+required to build a rust package. A simple fix is to use:
 
 ```nix
 postPatch = ''

@@ -13,7 +13,7 @@ with import ../../../nixos/lib/qemu-flags.nix { inherit pkgs; };
 
 rec {
 
-  qemu = pkgs.qemu_kvm;
+  qemu = buildPackages.qemu_kvm;
 
   modulesClosure = makeModulesClosure {
     inherit kernel rootModules;
@@ -24,7 +24,7 @@ rec {
   hd = "vda"; # either "sda" or "vda"
 
   initrdUtils = runCommand "initrd-utils"
-    { buildInputs = [ nukeReferences ];
+    { nativeBuildInputs = [ buildPackages.nukeReferences ];
       allowedReferences = [ "out" modulesClosure ]; # prevent accidents like glibc being included in the initrd
     }
     ''
@@ -655,7 +655,10 @@ rec {
   rpmClosureGenerator =
     {name, packagesLists, urlPrefixes, packages, archs ? []}:
     assert (builtins.length packagesLists) == (builtins.length urlPrefixes);
-    runCommand "${name}.nix" {buildInputs = [perl perlPackages.XMLSimple]; inherit archs;} ''
+    runCommand "${name}.nix" {
+      nativeBuildInputs = [ buildPackages.perl buildPackages.perlPackages.XMLSimple ];
+      inherit archs;
+    } ''
       ${lib.concatImapStrings (i: pl: ''
         gunzip < ${pl} > ./packages_${toString i}.xml
       '') packagesLists}
@@ -694,7 +697,8 @@ rec {
   debClosureGenerator =
     {name, packagesLists, urlPrefix, packages}:
 
-    runCommand "${name}.nix" { buildInputs = [ perl dpkg ]; } ''
+    runCommand "${name}.nix"
+      { nativeBuildInputs = [ buildPackages.perl buildPackages.dpkg ]; } ''
       for i in ${toString packagesLists}; do
         echo "adding $i..."
         case $i in

@@ -105,14 +105,14 @@ rec {
     headers = "1zkdgpjrh1dc9j8qyrrrh49v24960yhvwi2c530qbpf2azgqj71b";
   };
 
-  electron_12 = mkElectron "12.1.1" {
-    x86_64-linux = "21bcd5d415c147307082890498240f9f096e60053ebd90e81765375ecc00add3";
-    x86_64-darwin = "1ff96e9770dec3b61b7fcf8b2d5a334ed317cf271d91233604549df1e42cdc9b";
-    i686-linux = "b1e64e953ec9168dfa6da65888637fa866a57c08e2c48f1f443474f7f96b2e2e";
-    armv7l-linux = "f6a9c539df8c3699c45faeb5ffc5145b095af93604943e1e4c939f38fa1d6672";
-    aarch64-linux = "35a51b39c53c4e79aa0af90401cbb94f0d9ea0e606d1f6226473015021c0ac48";
-    aarch64-darwin = "5001583bd17cb3acb00f30c2a6e98e5f0b755d744c922d7eed9f166ac67964e0";
-    headers = "1x7ilyiy3kk2b1crv0h8v6dcfv6yhf371pi14x7333bzhw558s2a";
+  electron_12 = mkElectron "12.1.2" {
+    x86_64-linux = "e0ed1e223e956213f4f835573dd9c84aac3588c1d12ca67f81399534611a873d";
+    x86_64-darwin = "6a0efef7cee47d5f7cff7edfe2f3eaa134368f9ac8741742dfcb49f59da51e59";
+    i686-linux = "90c60083261bf86410f30d2588204276943cc7cbfe7751192723fdde6a67da72";
+    armv7l-linux = "cdff93b3ee2ab175c45d1afa33c7dde38030abe54fe285804a0eb3f983f67bdd";
+    aarch64-linux = "fe1351253cc8e9f6828de90957b40fab1cad31d38e88ef085c98a1b72d9cd14b";
+    aarch64-darwin = "4b2a2b9986938f332894946b22fc6cac357f69aaa72afe61b6ca6084d48dce67";
+    headers = "019rf1r9mk0hzhbl5fq48zr0l4y943biv2xwnpdhr5bm1wqpvz6l";
   };
 
   electron_13 = mkElectron "13.4.0" {

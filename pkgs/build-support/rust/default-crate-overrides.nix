@@ -22,6 +22,7 @@
 , clang
 , llvmPackages
 , linux-pam
+, rdkafka
 , ...
 }:
 
@@ -133,6 +134,11 @@ in
   pq-sys = attr: {
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ postgresql ];
+  };
+
+  rdkafka-sys = attr: {
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ rdkafka ];
   };
 
   rink = attrs: {

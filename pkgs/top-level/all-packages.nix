@@ -906,11 +906,15 @@ with pkgs;
 
   weidu = callPackage ../tools/games/weidu { };
 
+  weylus = callPackage ../applications/graphics/weylus { };
+
   gfshare = callPackage ../tools/security/gfshare { };
 
   gobgp = callPackage ../tools/networking/gobgp { };
 
   gofu = callPackage ../applications/misc/gofu { };
+
+  ksnip = libsForQt5.callPackage ../tools/misc/ksnip { };
 
   linux-router = callPackage ../tools/networking/linux-router { };
 
@@ -3245,7 +3249,7 @@ with pkgs;
 
   oci-cli = callPackage ../tools/admin/oci-cli { };
 
-  ocrmypdf = callPackage ../tools/text/ocrmypdf { };
+  ocrmypdf = with python3.pkgs; toPythonApplication ocrmypdf;
 
   ocrfeeder = callPackage ../applications/graphics/ocrfeeder { };
 
@@ -4814,7 +4818,7 @@ with pkgs;
 
   expect = callPackage ../tools/misc/expect { };
 
-  expliot = python3Packages.callPackage ../tools/security/expliot { };
+  expliot = callPackage ../tools/security/expliot { };
 
   f2fs-tools = callPackage ../tools/filesystems/f2fs-tools { };
 
@@ -5517,6 +5521,8 @@ with pkgs;
   gl2ps = callPackage ../development/libraries/gl2ps { };
 
   glab = callPackage ../applications/version-management/git-and-tools/glab { };
+
+  glitter = callPackage ../applications/version-management/git-and-tools/glitter { };
 
   glusterfs = callPackage ../tools/filesystems/glusterfs { };
 
@@ -12472,6 +12478,9 @@ with pkgs;
   cargo-readme = callPackage ../development/tools/rust/cargo-readme {};
   cargo-sort = callPackage ../development/tools/rust/cargo-sort { };
   cargo-spellcheck = callPackage ../development/tools/rust/cargo-spellcheck { };
+  cargo-supply-chain = callPackage ../development/tools/rust/cargo-supply-chain {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
   cargo-sweep = callPackage ../development/tools/rust/cargo-sweep { };
   cargo-sync-readme = callPackage ../development/tools/rust/cargo-sync-readme {};
   cargo-tally = callPackage ../development/tools/rust/cargo-tally {
@@ -12503,7 +12512,11 @@ with pkgs;
   maturin = callPackage ../development/tools/rust/maturin {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+  panamax = callPackage ../development/tools/rust/panamax {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
+  rhack = callPackage ../development/tools/rust/rhack { };
   inherit (rustPackages) rls;
   rustfmt = rustPackages.rustfmt;
   rustracer = callPackage ../development/tools/rust/racer {
@@ -12520,6 +12533,7 @@ with pkgs;
   rust-cbindgen = callPackage ../development/tools/rust/cbindgen {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+  rust-script = callPackage ../development/tools/rust/rust-script { };
   rustup = callPackage ../development/tools/rust/rustup {
     inherit (darwin.apple_sdk.frameworks) CoreServices Security;
   };
@@ -14552,6 +14566,8 @@ with pkgs;
 
   pup = callPackage ../development/tools/pup { };
 
+  puppet-bolt = callPackage ../tools/admin/puppet/puppet-bolt { };
+
   puppet-lint = callPackage ../development/tools/puppet/puppet-lint { };
 
   puppeteer-cli = callPackage ../tools/graphics/puppeteer-cli {};
@@ -14813,6 +14829,8 @@ with pkgs;
   teensyduino = arduino-core.override { withGui = true; withTeensyduino = true; };
 
   teensy-loader-cli = callPackage ../development/embedded/teensy-loader-cli { };
+
+  tytools = libsForQt5.callPackage ../development/embedded/tytools { };
 
   terracognita = callPackage ../development/tools/misc/terracognita { };
 
@@ -17064,7 +17082,7 @@ with pkgs;
 
   libf2c = callPackage ../development/libraries/libf2c {};
 
-  libfabric = callPackage ../os-specific/linux/libfabric {};
+  libfabric = callPackage ../development/libraries/libfabric {};
 
   libfive = libsForQt5.callPackage ../development/libraries/libfive { };
 
@@ -24092,6 +24110,8 @@ with pkgs;
 
   keepass-otpkeyprov = callPackage ../applications/misc/keepass-plugins/otpkeyprov { };
 
+  kerbrute = callPackage ../tools/security/kerbrute { };
+
   exrdisplay = callPackage ../applications/graphics/exrdisplay { };
 
   exrtools = callPackage ../applications/graphics/exrtools { };
@@ -24656,6 +24676,8 @@ with pkgs;
   gnucash = callPackage ../applications/office/gnucash { };
 
   goffice = callPackage ../development/libraries/goffice { };
+
+  gtk-pipe-viewer = perlPackages.callPackage ../applications/video/pipe-viewer { withGtk3 = true; };
 
   hydrus = python3Packages.callPackage ../applications/graphics/hydrus {
     inherit miniupnpc_2 swftools;
@@ -26231,6 +26253,8 @@ with pkgs;
   ping = callPackage ../applications/networking/ping { };
 
   piper = callPackage ../os-specific/linux/piper { };
+
+  pipe-viewer = perlPackages.callPackage ../applications/video/pipe-viewer {};
 
   plank = callPackage ../applications/misc/plank { };
 

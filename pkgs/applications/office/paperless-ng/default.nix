@@ -5,7 +5,6 @@
 , ghostscript
 , imagemagick
 , jbig2enc
-, ocrmypdf
 , optipng
 , pngquant
 , qpdf
