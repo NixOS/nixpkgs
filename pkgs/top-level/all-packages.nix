@@ -8842,6 +8842,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  rust-code-analysis = callPackage ../development/tools/rust-code-analysis { };
+
   rust-petname = callPackage ../tools/text/rust-petname { };
 
   rustscan = callPackage ../tools/security/rustscan {
