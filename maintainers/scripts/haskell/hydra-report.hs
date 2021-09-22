@@ -437,7 +437,7 @@ printBuildSummary
             <> Text.pack (formatTime defaultTimeLocale "%Y-%m-%d %H:%M UTC" fetchTime)
             <> "*"
          ]
-      brokenLine (name, rdeps) = "[" <> name <> "](https://search.nixos.org/packages?channel=unstable&show=haskellPackages." <> name <> "&query=haskellPackages." <> name <> ") :arrow_heading_up: " <> Text.pack (show rdeps)
+      brokenLine (name, rdeps) = "[" <> name <> "](https://packdeps.haskellers.com/reverse/" <> name <> ") :arrow_heading_up: " <> Text.pack (show rdeps) <> "  "
       numSummary = statusToNumSummary summary
       jobsByState predicate = Map.filter (predicate . worstState) summary
       worstState = foldl' min Success . fmap state . summaryBuilds
