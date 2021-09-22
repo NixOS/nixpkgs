@@ -5061,6 +5061,8 @@ in {
 
   oci = callPackage ../development/python-modules/oci { };
 
+  ocrmypdf = callPackage ../development/python-modules/ocrmypdf { };
+
   od = callPackage ../development/python-modules/od { };
 
   odfpy = callPackage ../development/python-modules/odfpy { };
@@ -5562,7 +5564,13 @@ in {
 
   python-ecobee-api = callPackage ../development/python-modules/python-ecobee-api { };
 
+  python-glanceclient = callPackage ../development/python-modules/python-glanceclient { };
+
+  python-heatclient = callPackage ../development/python-modules/python-heatclient { };
+
   python-ipmi = callPackage ../development/python-modules/python-ipmi { };
+
+  python-ironicclient = callPackage ../development/python-modules/python-ironicclient { };
 
   python-izone = callPackage ../development/python-modules/python-izone { };
 
@@ -5623,6 +5631,8 @@ in {
   plumbum = callPackage ../development/python-modules/plumbum { };
 
   ply = callPackage ../development/python-modules/ply { };
+
+  plyer = callPackage ../development/python-modules/plyer { };
 
   plyfile = callPackage ../development/python-modules/plyfile { };
 
@@ -7154,6 +7164,8 @@ in {
 
   python3-eventlib = callPackage ../development/python-modules/python3-eventlib { };
 
+  python3-gnutls = callPackage ../development/python-modules/python3-gnutls { };
+
   python3-openid = callPackage ../development/python-modules/python3-openid { };
 
   python-awair = callPackage ../development/python-modules/python-awair { };
@@ -7273,6 +7285,8 @@ in {
   };
 
   python_magic = callPackage ../development/python-modules/python-magic { };
+
+  python-manilaclient = callPackage ../development/python-modules/python-manilaclient { };
 
   python-mapnik = let
     boost = pkgs.boost.override {
@@ -8763,6 +8777,8 @@ in {
   teletype = callPackage ../development/python-modules/teletype { };
 
   telfhash = callPackage ../development/python-modules/telfhash { };
+
+  tempest = callPackage ../development/python-modules/tempest { };
 
   tempita = callPackage ../development/python-modules/tempita { };
 

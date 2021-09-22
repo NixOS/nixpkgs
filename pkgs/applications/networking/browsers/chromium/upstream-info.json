@@ -1,26 +1,26 @@
 {
   "stable": {
-    "version": "93.0.4577.82",
-    "sha256": "0lr8zdq06smncdzd6knzww9hxl8ynvxadmrkyyl13fpwb1422rjx",
-    "sha256bin64": "0ydvcakpnl20gx7493hv6aqnyf8f28rkvzgwnm4gws92b92n9ify",
+    "version": "94.0.4606.54",
+    "sha256": "0p8kfnyhykbv1cylsx4hj2qdzqr2xdql9rhpva8bfla2w9hr8g83",
+    "sha256bin64": "0lq34l00zrr92g882xzqwq1lf2vf12x1mwidrr2qh6fz7v5418d3",
     "deps": {
       "gn": {
-        "version": "2021-07-08",
+        "version": "2021-08-11",
         "url": "https://gn.googlesource.com/gn",
-        "rev": "24e2f7df92641de0351a96096fb2c490b2436bb8",
-        "sha256": "1lwkyhfhw0zd7daqz466n7x5cddf0danr799h4jg3s0yvd4galjl"
+        "rev": "69ec4fca1fa69ddadae13f9e6b7507efa0675263",
+        "sha256": "031znmkbm504iim5jvg3gmazj4qnkfc7zg8aymjsij18fhf7piz0"
       }
     },
     "chromedriver": {
-      "version": "93.0.4577.63",
-      "sha256_linux": "0w2lyjj0y9g1wnvk1sg2wi9dvhbjhdz1jb20rlrp5ny2gak6a47b",
-      "sha256_darwin": "11420nflyfvf95hxj488336jq6xqjn4lcrwpr67rj2fx6ganji7z"
+      "version": "94.0.4606.41",
+      "sha256_linux": "06flgis4am4jmd9qz6yn1jfdr07w2n3mfrlicw6a9icg5ir64fdq",
+      "sha256_darwin": "1mc0hhksqm5ms4k4aji043xzxncbifjwz5fqzywy4ji64w5kqrca"
     }
   },
   "beta": {
-    "version": "94.0.4606.50",
-    "sha256": "1aqy9bvypx66bvn5p15g94p47yfbal8mixs1d0j82pznqnqgph1z",
-    "sha256bin64": "07hq4qnbgq6m43zhipgy84yhiiy1fs6ffjkgsi8ixhr9b5pipzpv",
+    "version": "94.0.4606.54",
+    "sha256": "0p8kfnyhykbv1cylsx4hj2qdzqr2xdql9rhpva8bfla2w9hr8g83",
+    "sha256bin64": "1c2i9830r0fldigv16ggmj6r74l6d85abbhka0a5wpbbn6ay08jx",
     "deps": {
       "gn": {
         "version": "2021-08-11",
@@ -31,9 +31,9 @@
     }
   },
   "dev": {
-    "version": "95.0.4638.10",
-    "sha256": "0pgd5k24yly9fqpzigc5qqx6lvn6m95fjp7294cgmk0132icx71j",
-    "sha256bin64": "1gfaal3yxmi1n2nvfp39xp82g8vykzm0fjbdk0c1wh4gvlq2xx85",
+    "version": "95.0.4638.17",
+    "sha256": "1v5r8m3wlwh6prcj7bd4zprsr4g43869lhxv43m207c5nlnqiriz",
+    "sha256bin64": "1azn9216jhcdg4yjr6frz8vp98qbcnnhifp9jn9bwvyg69lr0dwb",
     "deps": {
       "gn": {
         "version": "2021-08-11",

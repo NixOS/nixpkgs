@@ -4447,6 +4447,12 @@
       fingerprint = "D618 7A03 A40A 3D56 62F5  4B46 03EF BF83 9A5F DC15";
     }];
   };
+  hleboulanger = {
+    email = "hleboulanger@protonmail.com";
+    name = "Harold Leboulanger";
+    github = "thbkrhsw";
+    githubId = 33122;
+  };
   hlolli = {
     email = "hlolli@gmail.com";
     github = "hlolli";
