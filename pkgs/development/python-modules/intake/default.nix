@@ -5,12 +5,14 @@
 , dask
 , holoviews
 , hvplot
+, fsspec
 , jinja2
 , msgpack
 , msgpack-numpy
 , numpy
 , pandas
 , panel
+, intake-parquet
 , pyarrow
 , pytestCheckHook
 , pythonOlder
@@ -24,6 +26,7 @@
 buildPythonPackage rec {
   pname = "intake";
   version = "0.6.3";
+
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
@@ -49,7 +52,12 @@ buildPythonPackage rec {
     tornado
   ];
 
-  checkInputs = [ pyarrow pytestCheckHook ];
+  checkInputs = [
+    fsspec
+    intake-parquet
+    pyarrow
+    pytestCheckHook
+  ];
 
   postPatch = ''
     # Is in setup_requires but not used in setup.py...
@@ -64,14 +72,12 @@ buildPythonPackage rec {
   '';
 
   disabledTests = [
-    # disable tests which touch network
+    # disable tests which touch network and are broken
     "test_discover"
     "test_filtered_compressed_cache"
     "test_get_dir"
     "test_remote_cat"
     "http"
-
-    # broken test
     "test_read_pattern"
     "test_remote_arr"
   ];
@@ -80,6 +86,6 @@ buildPythonPackage rec {
     description = "Data load and catalog system";
     homepage = "https://github.com/ContinuumIO/intake";
     license = licenses.bsd2;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc ];
   };
 }
