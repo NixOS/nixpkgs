@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, libtool
 , bzip2, zlib, libX11, libXext, libXt, fontconfig, freetype, ghostscript, libjpeg, djvulibre
-, lcms2, openexr, libpng, liblqr1, librsvg, libtiff, libxml2, openjpeg, libwebp, libheif
+, lcms2, openexr, libjxl, libpng, liblqr1, librsvg, libtiff, libxml2, openjpeg, libwebp, libheif
 , ApplicationServices
 , Foundation
 , testVersion, imagemagick
@@ -37,6 +37,7 @@ stdenv.mkDerivation rec {
     ++ (if arch != null then [ "--with-gcc-arch=${arch}" ] else [ "--without-gcc-arch" ])
     ++ lib.optional (librsvg != null) "--with-rsvg"
     ++ lib.optional (liblqr1 != null) "--with-lqr"
+    ++ lib.optional (libjxl != null) "--with-jxl"
     ++ lib.optionals (ghostscript != null)
       [ "--with-gs-font-dir=${ghostscript}/share/ghostscript/fonts"
         "--with-gslib"
@@ -49,7 +50,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ zlib fontconfig freetype ghostscript
-      liblqr1 libpng libtiff libxml2 libheif djvulibre
+      libjxl liblqr1 libpng libtiff libxml2 libheif djvulibre
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isMinGW)
       [ openexr librsvg openjpeg ]
