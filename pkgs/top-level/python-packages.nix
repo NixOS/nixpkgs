@@ -4956,6 +4956,8 @@ in {
 
   nototools = callPackage ../data/fonts/noto-fonts/tools.nix { };
 
+  notus-scanner = callPackage ../development/python-modules/notus-scanner { };
+
   nplusone = callPackage ../development/python-modules/nplusone { };
 
   npyscreen = callPackage ../development/python-modules/npyscreen { };
