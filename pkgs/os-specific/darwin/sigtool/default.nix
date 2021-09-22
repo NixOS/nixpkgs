@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "thefloweringash";
     repo = "sigtool";
-    rev = "refs/tags/v${version}";
+    rev = "v${version}";
     sha256 = "sha256-GSVkF1BkZEkIF+q0SsoCuE0q48DRclE3E+qKc6JEc/0=";
   };
 
