@@ -32,6 +32,8 @@ in
       wantedBy = [ "graphical-session.target" ];
       partOf   = [ "graphical-session.target" ];
 
+      path = [ pkgs.alsa-utils ];
+
       startLimitIntervalSec = 350;
       startLimitBurst = 10;
       serviceConfig = {
