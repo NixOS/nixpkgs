@@ -1,4 +1,4 @@
-{ lib, fetchpatch, fetchurl }:
+{ lib, fetchpatch, fetchurl, runCommand, patchutils }:
 
 {
   ath_regd_optional = rec {
@@ -47,9 +47,20 @@
   cpu-cgroup-v2 = import ./cpu-cgroup-v2-patches;
 
   hardened = let
-    mkPatch = kernelVersion: src: {
+    fixupPatch = name: patch: runCommand "${name}-fixup.patch" {
+      src = patch;
+      nativeBuildInputs = [ patchutils ];
+    } ''
+      # Drop all context lines for the root Makefile.
+      # This allows e.g. EXTRAVERSION to match without forcing a specific kernel version.
+      filterdiff -p 1 -x 'Makefile' $src > patch-no-makefile.patch
+      filterdiff -p 1 -i 'Makefile' $src > patch-only-makefile.patch
+      interdiff -U 0 /dev/null patch-only-makefile.patch > patch-only-makefile-no-context.patch
+      combinediff patch-only-makefile-no-context.patch patch-no-makefile.patch > $out
+    '';
+    mkPatch = kernelVersion: src: rec {
       name = lib.removeSuffix ".patch" src.name;
-      patch = fetchurl (lib.filterAttrs (k: v: k != "extra") src);
+      patch = fixupPatch name (fetchurl (lib.filterAttrs (k: v: k != "extra") src));
       extra = src.extra;
     };
     patches = builtins.fromJSON (builtins.readFile ./hardened/patches.json);
