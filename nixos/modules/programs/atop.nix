@@ -141,8 +141,15 @@ in
             // mkService cfg.atopgpu.enable "atopgpu" [ atop ];
           timers = mkTimer cfg.atopRotateTimer.enable "atop-rotate" [ atop ];
         };
-      security.wrappers =
-        lib.mkIf cfg.setuidWrapper.enable { atop = { source = "${atop}/bin/atop"; }; };
+
+      security.wrappers = lib.mkIf cfg.setuidWrapper.enable {
+        atop =
+          { setuid = true;
+            owner = "root";
+            group = "root";
+            source = "${atop}/bin/atop";
+          };
+      };
     }
   );
 }
