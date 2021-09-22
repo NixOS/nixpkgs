@@ -8,7 +8,7 @@ let
 in
 {
 
-  meta.maintainers = with maintainers; [ filalex77 ];
+  meta.maintainers = with maintainers; [ Br1ght0ne ];
 
   ###### interface
 
