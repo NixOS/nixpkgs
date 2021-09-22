@@ -6551,6 +6551,10 @@ in {
 
   pyomo = callPackage ../development/python-modules/pyomo { };
 
+  pyp = callPackage ../development/python-modules/pyp {
+    inherit (pkgs) jq;
+  };
+
   phonemizer = callPackage ../development/python-modules/phonemizer { };
 
   pyopencl = callPackage ../development/python-modules/pyopencl {
