@@ -2379,6 +2379,8 @@ with pkgs;
 
   chntpw = callPackage ../tools/security/chntpw { };
 
+  cliphist = callPackage ../tools/wayland/cliphist { };
+
   clipman = callPackage ../tools/wayland/clipman { };
 
   kanshi = callPackage ../tools/wayland/kanshi { };
