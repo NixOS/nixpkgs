@@ -131,10 +131,10 @@ rustPlatform.buildRustPackage {
 This will retrieve the dependencies using fixed-output derivations from
 the specified lockfile.
 
-Alternatively, `cargoLock.lockFileContents` can be set to a string of
-the contents of a `Cargo.lock` file, for example if you need to
-preprocess or generate the file as part of your build:
-
+One caveat is that `Cargo.lock` cannot be patched in the `patchPhase`
+because it runs after the dependencies have already been fetched. If
+you need to patch or generate the lockfile you can alternatively set
+`cargoLock.lockFileContents` to a string of its contents:
 
 ```nix
 rustPlatform.buildRustPackage {
