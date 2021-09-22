@@ -2442,6 +2442,8 @@ with pkgs;
 
   coolreader = libsForQt5.callPackage ../applications/misc/coolreader {};
 
+  copr-cli = callPackage ../tools/package-management/copr-cli {};
+
   corsair = with python3Packages; toPythonApplication corsair-scan;
 
   cosign = callPackage ../tools/security/cosign {
@@ -2515,6 +2517,8 @@ with pkgs;
   dontgo403 = callPackage ../tools/security/dontgo403 { };
 
   dpt-rp1-py = callPackage ../tools/misc/dpt-rp1-py { };
+
+  dput = callPackage ../tools/package-management/dput {};
 
   dot-http = callPackage ../development/tools/dot-http {
     openssl = openssl_1_1;
