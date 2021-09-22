@@ -30,7 +30,7 @@ buildPythonApplication rec {
     owner = "linode";
     repo = pname;
     rev = version;
-    sha256 = sha256;
+    inherit sha256;
   };
 
   # remove need for git history
