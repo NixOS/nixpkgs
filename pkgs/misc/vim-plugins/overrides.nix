@@ -686,7 +686,7 @@ self: super: {
             libiconv
           ];
 
-          cargoSha256 = "083v2bnnjyf9j923p6bidgbvmwnh8sfv5ai70qfffzrysi5gvzdf";
+          cargoSha256 = "sha256-zg8PKuzC1srCOtn0ZcqI9cZxMwN9hsf+sNhYgDg93Gs=";
         };
       in
       ''
@@ -834,6 +834,11 @@ self: super: {
 
   vim-surround = super.vim-surround.overrideAttrs (old: {
     dependencies = with self; [ vim-repeat ];
+  });
+
+  vim-textobj-entire = super.vim-textobj-entire.overrideAttrs (old: {
+    dependencies = with self; [ vim-textobj-user ];
+    meta.maintainers = with lib.maintainers; [ farlion ];
   });
 
   vim-unimpaired = super.vim-unimpaired.overrideAttrs (old: {

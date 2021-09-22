@@ -3,6 +3,8 @@
 {
   colorize_nicks = callPackage ./colorize_nicks { };
 
+  edit = callPackage ./edit { };
+
   multiline = callPackage ./multiline {
     inherit (perlPackages) PodParser;
   };

@@ -29,6 +29,8 @@ buildPythonApplication rec {
     stestr run
   '';
 
+  pythonImportsCheck = [ "swiftclient" ];
+
   meta = with lib; {
     homepage = "https://github.com/openstack/python-swiftclient";
     description = "Python bindings to the OpenStack Object Storage API";

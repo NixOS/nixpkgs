@@ -2312,6 +2312,8 @@ in {
 
   eggdeps = callPackage ../development/python-modules/eggdeps { };
 
+  einops = callPackage ../development/python-modules/einops { };
+
   elgato = callPackage ../development/python-modules/elgato { };
 
   elasticsearch = callPackage ../development/python-modules/elasticsearch { };
@@ -3643,6 +3645,8 @@ in {
   inquirer = callPackage ../development/python-modules/inquirer { };
 
   intake = callPackage ../development/python-modules/intake { };
+
+  intake-parquet = callPackage ../development/python-modules/intake-parquet { };
 
   intbitset = callPackage ../development/python-modules/intbitset { };
 
@@ -5061,6 +5065,8 @@ in {
 
   oci = callPackage ../development/python-modules/oci { };
 
+  ocrmypdf = callPackage ../development/python-modules/ocrmypdf { };
+
   od = callPackage ../development/python-modules/od { };
 
   odfpy = callPackage ../development/python-modules/odfpy { };
@@ -5204,6 +5210,8 @@ in {
 
   oslotest = callPackage ../development/python-modules/oslotest { };
 
+  ospd = callPackage ../development/python-modules/ospd { };
+
   osqp = callPackage ../development/python-modules/osqp { };
 
   outcome = callPackage ../development/python-modules/outcome { };
@@ -5268,6 +5276,8 @@ in {
   paramz = callPackage ../development/python-modules/paramz { };
 
   parfive = callPackage ../development/python-modules/parfive { };
+
+  parquet = callPackage ../development/python-modules/parquet { };
 
   parse = callPackage ../development/python-modules/parse { };
 
@@ -5562,7 +5572,13 @@ in {
 
   python-ecobee-api = callPackage ../development/python-modules/python-ecobee-api { };
 
+  python-glanceclient = callPackage ../development/python-modules/python-glanceclient { };
+
+  python-heatclient = callPackage ../development/python-modules/python-heatclient { };
+
   python-ipmi = callPackage ../development/python-modules/python-ipmi { };
+
+  python-ironicclient = callPackage ../development/python-modules/python-ironicclient { };
 
   python-izone = callPackage ../development/python-modules/python-izone { };
 
@@ -5623,6 +5639,8 @@ in {
   plumbum = callPackage ../development/python-modules/plumbum { };
 
   ply = callPackage ../development/python-modules/ply { };
+
+  plyer = callPackage ../development/python-modules/plyer { };
 
   plyfile = callPackage ../development/python-modules/plyfile { };
 
@@ -7276,6 +7294,8 @@ in {
 
   python_magic = callPackage ../development/python-modules/python-magic { };
 
+  python-manilaclient = callPackage ../development/python-modules/python-manilaclient { };
+
   python-mapnik = let
     boost = pkgs.boost.override {
       enablePython = true;
@@ -8766,6 +8786,8 @@ in {
 
   telfhash = callPackage ../development/python-modules/telfhash { };
 
+  tempest = callPackage ../development/python-modules/tempest { };
+
   tempita = callPackage ../development/python-modules/tempita { };
 
   tempora = callPackage ../development/python-modules/tempora { };
@@ -8906,6 +8928,8 @@ in {
   three-merge = callPackage ../development/python-modules/three-merge { };
 
   thrift = callPackage ../development/python-modules/thrift { };
+
+  thriftpy2 = callPackage ../development/python-modules/thriftpy2 { };
 
   thumborPexif = callPackage ../development/python-modules/thumborpexif { };
 

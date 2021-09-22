@@ -30,9 +30,6 @@ jq '{ name, version: $version, dependencies: (.dependencies + .devDependencies) 
     "$src/package.json" \
     > build-deps/package.json
 
-# FIXME: vsce@1.93.0 breaks the build.
-sed 's/"vsce": ".*"/"vsce": "=1.88.0"/' --in-place build-deps/package.json
-
 # Regenerate nodePackages.
 cd "$nixpkgs/pkgs/development/node-packages"
 exec ./generate.sh

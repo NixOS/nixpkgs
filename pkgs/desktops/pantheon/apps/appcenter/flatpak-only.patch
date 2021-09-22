@@ -1,15 +1,14 @@
-From 63594caa1da772de504ab1d93b69aae148f29f64 Mon Sep 17 00:00:00 2001
+From 5d3f20b49a89b55e39339a0f90ae7f846356b0e1 Mon Sep 17 00:00:00 2001
 From: Bobby Rong <rjl931189261@126.com>
-Date: Wed, 1 Sep 2021 12:25:09 +0800
-Subject: [PATCH] Drop PackageKitBackend and UbuntuDriversBackend
+Date: Wed, 22 Sep 2021 11:54:24 +0800
+Subject: [PATCH 1/2] Drop PackageKitBackend and UbuntuDriversBackend
 
 ---
  src/Application.vala            | 14 ---------
  src/Core/BackendAggregator.vala |  2 --
  src/Core/UpdateManager.vala     | 56 ---------------------------------
  src/MainWindow.vala             | 17 ----------
- src/Views/Homepage.vala         | 15 ---------
- 5 files changed, 104 deletions(-)
+ 4 files changed, 89 deletions(-)
 
 diff --git a/src/Application.vala b/src/Application.vala
 index 65fae5aa..9d42b14f 100644
@@ -161,36 +160,3 @@ index a32ce47b..b9f8594a 100644
          return false;
      }
  
-diff --git a/src/Views/Homepage.vala b/src/Views/Homepage.vala
-index 67d1e208..48af8f61 100644
---- a/src/Views/Homepage.vala
-+++ b/src/Views/Homepage.vala
-@@ -212,7 +212,6 @@ public class AppCenter.Homepage : AbstractView {
-         recently_updated_revealer.reveal_child = recently_updated_carousel.get_children ().length () > 0;
- 
-         var houston = AppCenterCore.Houston.get_default ();
--        var pk_client = AppCenterCore.PackageKitBackend.get_default ();
-         var packages_for_banner = new Gee.LinkedList<AppCenterCore.Package> ();
- 
-         var newest_ids = yield houston.get_app_ids ("/newest/project");
-@@ -220,20 +219,6 @@ public class AppCenter.Homepage : AbstractView {
-         Utils.shuffle_array (trending_ids);
- 
-         var packages = new Gee.HashMap<string, AppCenterCore.Package> ();
--        packages.set_all (pk_client.get_packages_for_component_ids (newest_ids));
--        packages.set_all (pk_client.get_packages_for_component_ids (trending_ids));
--
--        if (!AppCenterCore.PackageKitBackend.supports_parallel_package_queries) {
--            foreach (var package in packages.values) {
--                package.update_state ();
--            }
--        } else {
--            try {
--                yield pk_client.update_multiple_package_state (packages.values);
--            } catch (Error e) {
--                warning ("Error while getting installed state of banner packages: %s", e.message);
--            }
--        }
- 
-         foreach (var package in newest_ids) {
-             if (packages_for_banner.size >= NUM_PACKAGES_IN_BANNER) {

@@ -324,6 +324,7 @@ kana/vim-niceblock
 kana/vim-operator-replace
 kana/vim-operator-user
 kana/vim-tabpagecd
+kana/vim-textobj-entire
 kana/vim-textobj-function
 kana/vim-textobj-user
 karb94/neoscroll.nvim
@@ -345,6 +346,7 @@ konfekt/fastfold
 Konfekt/vim-alias
 konfekt/vim-DetectSpellLang
 kosayoda/nvim-lightbulb
+kovisoft/slimv
 kristijanhusak/defx-git
 kristijanhusak/defx-icons
 kristijanhusak/deoplete-phpactor
@@ -690,6 +692,7 @@ smiteshp/nvim-gps
 sodapopcan/vim-twiggy
 solarnz/arcanist.vim
 sonph/onehalf
+sotte/presenting.vim
 srcery-colors/srcery-vim
 steelsojka/completion-buffers
 steelsojka/pears.nvim
@@ -743,6 +746,7 @@ tomasiser/vim-code-dark
 tomasr/molokai
 tomlion/vim-solidity
 tommcdo/vim-exchange
+tommcdo/vim-fubitive
 tommcdo/vim-lion
 tommcdo/vim-ninja-feet
 tomtom/tcomment_vim
@@ -801,6 +805,7 @@ urbit/hoon.vim
 Valloric/MatchTagAlways
 Valodim/deoplete-notmuch
 vhda/verilog_systemverilog.vim
+vifm/vifm.vim
 vigoux/LanguageTool.nvim
 vim-airline/vim-airline
 vim-airline/vim-airline-themes
