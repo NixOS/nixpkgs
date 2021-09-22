@@ -150,6 +150,21 @@ package-maintainers:
   domenkozar:
     - cachix
     - cachix-api
+  dschrempf:
+    - circular
+    - covariance
+    - dirichlet
+    - elynx
+    - elynx-markov
+    - elynx-nexus
+    - elynx-seq
+    - elynx-tools
+    - elynx-tree
+    - glasso
+    - mcmc
+    - pava
+    - slynx
+    - tlynx
   expipiplus1:
     - VulkanMemoryAllocator
     - autoapply
