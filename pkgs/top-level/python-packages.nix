@@ -2504,6 +2504,8 @@ in {
 
   falcon = callPackage ../development/python-modules/falcon { };
 
+  faraday-plugins = callPackage ../development/python-modules/faraday-plugins { };
+
   fastapi = callPackage ../development/python-modules/fastapi { };
 
   fastcache = callPackage ../development/python-modules/fastcache { };
