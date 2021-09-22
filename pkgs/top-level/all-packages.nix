@@ -4980,6 +4980,8 @@ with pkgs;
 
   fabric-installer = callPackage ../tools/games/minecraft/fabric-installer { };
 
+  faraday-cli = callPackage ../tools/security/faraday-cli { };
+
   fastlane = callPackage ../tools/admin/fastlane { };
 
   fatresize = callPackage ../tools/filesystems/fatresize {};
