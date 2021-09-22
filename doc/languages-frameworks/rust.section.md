@@ -116,7 +116,7 @@ is updated after every change to `Cargo.lock`. Therefore,
 a `Cargo.lock` file using the `cargoLock` argument. For example:
 
 ```nix
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "myproject";
   version = "1.0.0";
 
@@ -137,7 +137,7 @@ preprocess or generate the file as part of your build:
 
 
 ```nix
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "myproject";
   version = "1.0.0";
 
