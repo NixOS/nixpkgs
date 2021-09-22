@@ -34,13 +34,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "github-runner";
-  version = "2.282.1";
+  version = "2.283.1";
 
   src = fetchFromGitHub {
     owner = "actions";
     repo = "runner";
     rev = "v${version}";
-    sha256 = "sha256-aDt+8vYR8bnaCmWUo3dqzVIekIr460/JzJkrpiPdIRw=";
+    sha256 = "sha256-S4Mql8lyHxahhYGoo91mlN6DrwKhyj1em0dv561j2l8=";
   };
 
   nativeBuildInputs = [
