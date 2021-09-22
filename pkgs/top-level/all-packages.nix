@@ -3665,6 +3665,8 @@ with pkgs;
 
   coolreader = libsForQt5.callPackage ../applications/misc/coolreader { };
 
+  copr-cli = callPackage ../tools/package-management/copr-cli {};
+
   corsair = with python3Packages; toPythonApplication corsair-scan;
 
   cosign = callPackage ../tools/security/cosign {
@@ -3758,6 +3760,8 @@ with pkgs;
   dotter = callPackage ../tools/misc/dotter {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
+
+  dput = callPackage ../tools/package-management/dput {};
 
   droidcam = callPackage ../applications/video/droidcam { };
 
