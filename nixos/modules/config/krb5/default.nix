@@ -84,7 +84,7 @@ in {
         type = types.package;
         default = pkgs.krb5Full;
         defaultText = "pkgs.krb5Full";
-        example = literalExample "pkgs.heimdalFull";
+        example = literalExample "pkgs.heimdal";
         description = ''
           The Kerberos implementation that will be present in
           <literal>environment.systemPackages</literal> after enabling this
