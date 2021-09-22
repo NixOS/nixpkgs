@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-watch";
-  version = "8.0.0";
+  version = "8.1.0";
 
   src = fetchFromGitHub {
     owner = "passcod";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-3IgzMUCkcKUkhTb/ZNRONdvB6Ci0OBB1dcjtc65U8xE=";
+    sha256 = "sha256-Vvr/O0Xk9hmUVUFoOk/MzTlEvR0Spx5n/9lsE2HfkF8=";
   };
 
-  cargoSha256 = "sha256-Xp/pxPKs41TXO/EUY5x8Bha7NUioMabbb73///fFr6U=";
+  cargoSha256 = "sha256-kX9CE95Z2nLb6VM19bu+UkOZ/hsjHUo/JMu0Y0xont0=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ CoreServices Foundation libiconv ];
 

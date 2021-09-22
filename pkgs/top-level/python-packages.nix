@@ -4492,6 +4492,8 @@ in {
 
   mautrix-appservice = self.mautrix; # alias 2019-12-28
 
+  maxcube-api = callPackage ../development/python-modules/maxcube-api { };
+
   maxminddb = callPackage ../development/python-modules/maxminddb { };
 
   maya = callPackage ../development/python-modules/maya { };
@@ -5003,6 +5005,8 @@ in {
   };
 
   nototools = callPackage ../data/fonts/noto-fonts/tools.nix { };
+
+  notus-scanner = callPackage ../development/python-modules/notus-scanner { };
 
   nplusone = callPackage ../development/python-modules/nplusone { };
 
