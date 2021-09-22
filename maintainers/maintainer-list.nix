@@ -5189,6 +5189,12 @@
     githubId = 9866621;
     name = "Jack";
   };
+  jkarlson = {
+    email = "jekarlson@gmail.com";
+    github = "jkarlson";
+    githubId = 1204734;
+    name = "Emil Karlson";
+  };
   jlesquembre = {
     email = "jl@lafuente.me";
     github = "jlesquembre";
