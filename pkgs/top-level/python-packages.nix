@@ -2960,6 +2960,8 @@ in {
 
   gidgethub = callPackage ../development/python-modules/gidgethub { };
 
+  gigalixir = callPackage ../development/python-modules/gigalixir { };
+
   gin-config = callPackage ../development/python-modules/gin-config { };
 
   gios = callPackage ../development/python-modules/gios { };
