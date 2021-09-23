@@ -13,25 +13,29 @@
 , mock
 , murmurhash
 , numpy
-, pathlib
 , plac
 , preshed
 , pydantic
 , srsly
 , tqdm
+, typing-extensions
 , wasabi
 }:
 
 buildPythonPackage rec {
   pname = "thinc";
-  version = "8.0.3";
+  version = "8.0.10";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-w3CnpG0BtYjY1fmdjV42s8usRRJjg1b6Qw9/Urs6iJc=";
+    sha256 = "07q04k552f8zl989yl9409b2p6mpf93qa5sa3rgqmgp64j6xpr5m";
   };
 
-  buildInputs = [ cython ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+  buildInputs = [
+    cython
+  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
     Accelerate
     CoreFoundation
     CoreGraphics
@@ -50,8 +54,9 @@ buildPythonPackage rec {
     tqdm
     pydantic
     wasabi
-  ] ++ lib.optional (pythonOlder "3.4") pathlib;
-
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    typing-extensions
+  ];
 
   checkInputs = [
     hypothesis
@@ -65,7 +70,7 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace setup.cfg \
       --replace "blis>=0.4.0,<0.8.0" "blis>=0.4.0,<1.0" \
-      --replace "pydantic>=1.7.1,<1.8.0" "pydantic~=1.7"
+      --replace "pydantic>=1.7.4,!=1.8,!=1.8.1,<1.9.0" "pydantic<1.9.0"
   '';
 
   checkPhase = ''
