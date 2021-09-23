@@ -6448,6 +6448,18 @@ final: prev:
     meta.homepage = "https://github.com/ThePrimeagen/vim-apm/";
   };
 
+  vim-argwrap = buildVimPluginFrom2Nix {
+    pname = "vim-argwrap";
+    version = "2021-06-11";
+    src = fetchFromGitHub {
+      owner = "FooSoft";
+      repo = "vim-argwrap";
+      rev = "f1c1d2b0c763ed77f9b9f2515ffff99a72c6a757";
+      sha256 = "03mnvb9sb1angzyyhm7d708yzb26bnrqv1x7dy67r1b6rflvv4wz";
+    };
+    meta.homepage = "https://github.com/FooSoft/vim-argwrap/";
+  };
+
   vim-asterisk = buildVimPluginFrom2Nix {
     pname = "vim-asterisk";
     version = "2020-02-03";

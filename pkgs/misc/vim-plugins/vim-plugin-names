@@ -166,6 +166,7 @@ folke/tokyonight.nvim@main
 folke/trouble.nvim@main
 folke/twilight.nvim@main
 folke/which-key.nvim@main
+FooSoft/vim-argwrap
 freitass/todo.txt-vim
 frigoeu/psc-ide-vim
 fruit-in/brainfuck-vim
