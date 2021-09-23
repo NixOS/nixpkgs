@@ -6,7 +6,7 @@
   src = fetchurl {
     name = "${name}.AppImage";
     url = "https://flexbox.reconfigure.me/download/electron/linux/x64/FLEXOPTIX%20App.${version}.AppImage";
-    sha256 = "sha256:1hzdb2fbkwpsf0d3ws4z32blk6549jwhf1lrlqmcxhzqfvkr4gin";
+    sha256 = "1hzdb2fbkwpsf0d3ws4z32blk6549jwhf1lrlqmcxhzqfvkr4gin";
   };
 
   udevRules = fetchurl {

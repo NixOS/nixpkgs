@@ -28,7 +28,7 @@ buildBazelPackage rec {
     owner = "envoyproxy";
     repo = "envoy";
     rev = srcVer.commit;
-    hash = "sha256:09zzr4h3zjsb2rkxrvlazpx0jy33yn9j65ilxiqbvv0ckaralqfc";
+    sha256 = "09zzr4h3zjsb2rkxrvlazpx0jy33yn9j65ilxiqbvv0ckaralqfc";
 
     extraPostFetch = ''
       chmod -R +w $out
@@ -58,7 +58,7 @@ buildBazelPackage rec {
   ];
 
   fetchAttrs = {
-    sha256 = "sha256:1cy2b73x8jzczq9z9c1kl7zrg5iasvsakb50zxn4mswpmajkbj5h";
+    sha256 = "1cy2b73x8jzczq9z9c1kl7zrg5iasvsakb50zxn4mswpmajkbj5h";
     dontUseCmakeConfigure = true;
     dontUseGnConfigure = true;
     preInstall = ''

@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       name = "audio-fix-ffmpeg-4_4";
       url = "https://github.com/HandBrake/HandBrake/commit/f28289fb06ab461ea082b4be56d6d1504c0c31c2.patch";
-      sha256 = "sha256:1zcwa4h97d8wjspb8kbd8b1jg0a9vvmv9zaphzry4m9q0bj3h3kz";
+      sha256 = "1zcwa4h97d8wjspb8kbd8b1jg0a9vvmv9zaphzry4m9q0bj3h3kz";
     })
   ];
 

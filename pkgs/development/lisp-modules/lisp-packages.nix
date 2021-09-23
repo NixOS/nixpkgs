@@ -17,7 +17,7 @@ let lispPackages = rec {
     src = pkgs.fetchgit {
       url = "https://github.com/quicklisp/quicklisp-client/";
       rev = "refs/tags/version-${version}";
-      sha256 = "sha256:102f1chpx12h5dcf659a9kzifgfjc482ylf73fg1cs3w34zdawnl";
+      sha256 = "102f1chpx12h5dcf659a9kzifgfjc482ylf73fg1cs3w34zdawnl";
     };
     overrides = x: rec {
       inherit clwrapper;
@@ -25,7 +25,7 @@ let lispPackages = rec {
         # Will usually be replaced with a fresh version anyway, but needs to be
         # a valid distinfo.txt
         url = "https://beta.quicklisp.org/dist/quicklisp/2021-04-11/distinfo.txt";
-        sha256 = "sha256:1z7a7m9cm7iv4m9ajvyqphsw30s3qwb0l8g8ayfmkvmvhlj79g86";
+        sha256 = "1z7a7m9cm7iv4m9ajvyqphsw30s3qwb0l8g8ayfmkvmvhlj79g86";
       };
       buildPhase = "true; ";
       postInstall = ''

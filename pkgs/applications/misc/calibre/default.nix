@@ -30,7 +30,7 @@ mkDerivation rec {
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${version}/${pname}-${version}.tar.xz";
-    hash = "sha256:18dr577nv7ijw3ar6mrk2xrc54mlrqkaj5jrc6s5sirl0710fdfg";
+    sha256 = "18dr577nv7ijw3ar6mrk2xrc54mlrqkaj5jrc6s5sirl0710fdfg";
   };
 
   patches = [

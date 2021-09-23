@@ -10,7 +10,7 @@ buildPythonPackage rec {
     owner = "byllyfish";
     repo = "precis_i18n";
     rev = "v${version}";
-    hash = "sha256:1r9pah1kgik6valf15ac7ybw0szr92cq84kwjvm6mq3z46j1pmkr";
+    sha256 = "1r9pah1kgik6valf15ac7ybw0szr92cq84kwjvm6mq3z46j1pmkr";
   };
 
   meta = {

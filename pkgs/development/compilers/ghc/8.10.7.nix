@@ -168,7 +168,7 @@ stdenv.mkDerivation (rec {
     # https://github.com/haskell/cabal/issues/5887
     (fetchpatch {
             url = "https://raw.githubusercontent.com/input-output-hk/haskell.nix/122bd81150386867da07fdc9ad5096db6719545a/overlays/patches/ghc/cabal-host.patch";
-      sha256 = "sha256:0yd0sajgi24sc1w5m55lkg2lp6kfkgpp3lgija2c8y3cmkwfpdc1";
+      sha256 = "0yd0sajgi24sc1w5m55lkg2lp6kfkgpp3lgija2c8y3cmkwfpdc1";
     })
 
     # In order to build ghcjs packages, the Cabal of the ghc used for the ghcjs

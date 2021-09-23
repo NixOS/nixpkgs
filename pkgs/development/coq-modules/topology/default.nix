@@ -6,7 +6,7 @@ mkCoqDerivation rec {
 
   releaseRev = v: "v${v}";
 
-  release."9.0.0".sha256 = "sha256:03lgy53xg9pmrdd3d8qb4087k5qjnk260655svp6d79x4p2lxr8c";
+  release."9.0.0".sha256 = "03lgy53xg9pmrdd3d8qb4087k5qjnk260655svp6d79x4p2lxr8c";
   release."8.12.0".sha256 = "sha256-ypHmHwzwZ6MQPYwuS3QyZmVOEPUCSbO2lhVaA6TypgQ=";
   release."8.10.0".sha256 = "sha256-mCLF3JYIiO3AEW9yvlcLeF7zN4SjW3LG+Y5vYB0l55A=";
   release."8.9.0".sha256 = "sha256-ZJh1BM34iZOQ75zqLIA+KtBjO2y33y0UpAw/ydCWQYc=";

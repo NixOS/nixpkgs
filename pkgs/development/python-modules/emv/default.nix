@@ -12,7 +12,7 @@ buildPythonPackage rec {
     owner = "russss";
     repo = "python-emv";
     rev = "v${version}";
-    hash = "sha256:1715hcba3fdi0i5awnrjdjnk74p66sxm9349pd8bb717zrh4gpj7";
+    sha256 = "1715hcba3fdi0i5awnrjdjnk74p66sxm9349pd8bb717zrh4gpj7";
   };
 
   postPatch = ''

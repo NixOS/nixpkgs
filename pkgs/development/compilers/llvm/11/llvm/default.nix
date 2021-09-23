@@ -62,7 +62,7 @@ in stdenv.mkDerivation (rec {
     (fetchpatch {
       name = "uops-CMOV16rm-noreg.diff";
       url = "https://github.com/llvm/llvm-project/commit/9e9f991ac033.diff";
-      sha256 = "sha256:12s8vr6ibri8b48h2z38f3afhwam10arfiqfy4yg37bmc054p5hi";
+      sha256 = "12s8vr6ibri8b48h2z38f3afhwam10arfiqfy4yg37bmc054p5hi";
       stripLen = 1;
     })
   ] ++ lib.optional enablePolly ./gnu-install-dirs-polly.patch;

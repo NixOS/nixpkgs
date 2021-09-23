@@ -39,11 +39,11 @@ buildPythonPackage rec {
   src = {
     cpu = fetchurl {
       url = "https://storage.googleapis.com/jax-releases/nocuda/jaxlib-${version}-cp39-none-manylinux2010_x86_64.whl";
-      sha256 = "sha256:0rqhs6qabydizlv5d3rb20dbv6612rr7dqfniy9r6h4kazdinsn6";
+      sha256 = "0rqhs6qabydizlv5d3rb20dbv6612rr7dqfniy9r6h4kazdinsn6";
     };
     gpu = fetchurl {
       url = "https://storage.googleapis.com/jax-releases/cuda111/jaxlib-${version}+cuda111-cp39-none-manylinux2010_x86_64.whl";
-      sha256 = "sha256:065kyzjsk9m84d138p99iymdiiicm1qz8a3iwxz8rspl43rwrw89";
+      sha256 = "065kyzjsk9m84d138p99iymdiiicm1qz8a3iwxz8rspl43rwrw89";
     };
   }.${device};
 

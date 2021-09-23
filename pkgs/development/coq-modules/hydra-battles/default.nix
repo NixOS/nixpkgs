@@ -5,7 +5,7 @@ mkCoqDerivation {
   pname = "hydra-battles";
   owner = "coq-community";
 
-  release."0.4".sha256 = "sha256:1f7pc4w3kir4c9p0fjx5l77401bx12y72nmqxrqs3qqd3iynvqlp";
+  release."0.4".sha256 = "1f7pc4w3kir4c9p0fjx5l77401bx12y72nmqxrqs3qqd3iynvqlp";
   releaseRev = (v: "v${v}");
 
   inherit version;

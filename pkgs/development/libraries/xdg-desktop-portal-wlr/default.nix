@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner = "emersion";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256:13fbzh8bjnhk4xs8j9bpc01q3hy27zpbf0gkk1fnh3hm5pnyfyiv";
+    sha256 = "13fbzh8bjnhk4xs8j9bpc01q3hy27zpbf0gkk1fnh3hm5pnyfyiv";
   };
 
   nativeBuildInputs = [ meson ninja pkg-config wayland-protocols makeWrapper ];

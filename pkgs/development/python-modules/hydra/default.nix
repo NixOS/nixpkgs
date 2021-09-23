@@ -11,7 +11,7 @@ buildPythonPackage rec {
     owner = "facebookresearch";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256:1svzysrjg47gb6lxx66fzd8wbhpbbsppprpbqssf5aqvhxgay3qk";
+    sha256 = "1svzysrjg47gb6lxx66fzd8wbhpbbsppprpbqssf5aqvhxgay3qk";
   };
 
   nativeBuildInputs = [ jre_headless ];

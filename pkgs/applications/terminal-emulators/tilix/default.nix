@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     owner = "gnunn1";
     repo = "tilix";
     rev = "${version}";
-    sha256 = "sha256:020gr4q7kmqq8vnsh8rw97gf1p2n1yq4d7ncyjjh9l13zkaxqqv9";
+    sha256 = "020gr4q7kmqq8vnsh8rw97gf1p2n1yq4d7ncyjjh9l13zkaxqqv9";
   };
 
   # Default upstream else LDC fails to link

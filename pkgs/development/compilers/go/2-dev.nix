@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "https://go.googlesource.com/go";
     rev = "9cd52cf2a93a958e8e001aea36886e7846c91f2f";
-    sha256 = "sha256:0hybm93y4i4j7bs86y7h73nc1wqnspkq75if7n1032zf9bs8sm96";
+    sha256 = "0hybm93y4i4j7bs86y7h73nc1wqnspkq75if7n1032zf9bs8sm96";
   };
 
   # perl is used for testing go vet

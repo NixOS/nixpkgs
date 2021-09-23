@@ -39,7 +39,7 @@ in pythonPackages.buildPythonApplication rec {
   patches = [
     (fetchpatch {
       url = "https://github.com/coursera-dl/coursera-dl/pull/789.patch";
-      sha256 = "sha256:07ca6zdyw3ypv7yzfv2kzmjvv86h0rwzllcg0zky27qppqz917bv";
+      sha256 = "07ca6zdyw3ypv7yzfv2kzmjvv86h0rwzllcg0zky27qppqz917bv";
     })
   ];
 

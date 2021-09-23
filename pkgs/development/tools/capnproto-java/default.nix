@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "capnproto";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256:1512x70xa6mlg9dmr84r8xbf0jzysjal51ivhhh2ppl97yiqjgls";
+    sha256 = "1512x70xa6mlg9dmr84r8xbf0jzysjal51ivhhh2ppl97yiqjgls";
   };
 
   patches = [

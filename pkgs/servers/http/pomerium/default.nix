@@ -16,10 +16,10 @@ buildGoModule rec {
     owner = "pomerium";
     repo = "pomerium";
     rev = "v${version}";
-    hash = "sha256:1jb96jk5qmary4fi1z9zwmppdyskj0qb6qii8s8mwazjjxqj1z2s";
+    sha256 = "1jb96jk5qmary4fi1z9zwmppdyskj0qb6qii8s8mwazjjxqj1z2s";
   };
 
-  vendorSha256 = "sha256:1daabi9qc9nx8bafn26iw6rv4vx2xpd0nnk06265aqaksx26db0s";
+  vendorSha256 = "1daabi9qc9nx8bafn26iw6rv4vx2xpd0nnk06265aqaksx26db0s";
   subPackages = [
     "cmd/pomerium"
     "cmd/pomerium-cli"

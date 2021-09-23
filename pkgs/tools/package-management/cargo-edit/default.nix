@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
     owner = "killercup";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256:0fh1lq793k4ddpqsf2av447hcb74vcq53afkm3g4672k48mjjw1y";
+    sha256 = "0fh1lq793k4ddpqsf2av447hcb74vcq53afkm3g4672k48mjjw1y";
   };
 
   cargoSha256 = "0ah3zjx36ibax4gi66g13finh4m2k0aidxkg2nxx1c2aqj847mm1";

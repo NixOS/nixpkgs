@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner = "graphia-app";
     repo = "graphia";
     rev = version;
-    sha256 = "sha256:05givvvg743sawqy2vhljkfgn5v1s907sflsnsv11ddx6x51na1w";
+    sha256 = "05givvvg743sawqy2vhljkfgn5v1s907sflsnsv11ddx6x51na1w";
   };
 
   nativeBuildInputs = [

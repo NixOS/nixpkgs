@@ -3,8 +3,8 @@
 with lib; mkCoqDerivation {
   pname = "gaia";
 
-  release."1.11".sha256 = "sha256:0gwb0blf37sv9gb0qpn34dab71zdcx7jsnqm3j9p58qw65cgsqn5";
-  release."1.12".sha256 = "sha256:0c6cim4x6f9944g8v0cp0lxs244lrhb04ms4y2s6y1wh321zj5mi";
+  release."1.11".sha256 = "0gwb0blf37sv9gb0qpn34dab71zdcx7jsnqm3j9p58qw65cgsqn5";
+  release."1.12".sha256 = "0c6cim4x6f9944g8v0cp0lxs244lrhb04ms4y2s6y1wh321zj5mi";
   releaseRev = (v: "v${v}");
 
   inherit version;

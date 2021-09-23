@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     owner = "minfrin";
     repo = "retry";
     rev = "${pname}-${version}";
-    sha256 = "sha256:0jrx4yrwlf4fn3309kxraj7zgwk7gq6rz5ibswq3w3b3jfvxi8qb";
+    sha256 = "0jrx4yrwlf4fn3309kxraj7zgwk7gq6rz5ibswq3w3b3jfvxi8qb";
   };
 
   meta = with lib; {

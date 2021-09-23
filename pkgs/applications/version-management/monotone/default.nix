@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     owner = "7c6f434c";
     repo = "monotone-mirror";
     rev = "b30b0e1c16def043d2dad57d1467d5bfdecdb070";
-    hash = "sha256:1hfy8vaap3184cd7h3qhz0da7c992idkc6q2nz9frhma45c5vgmd";
+    sha256 = "1hfy8vaap3184cd7h3qhz0da7c992idkc6q2nz9frhma45c5vgmd";
   };
 
   patches = [

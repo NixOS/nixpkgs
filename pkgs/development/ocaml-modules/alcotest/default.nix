@@ -10,7 +10,7 @@ buildDunePackage rec {
 
   src = fetchurl {
     url = "https://github.com/mirage/alcotest/releases/download/${version}/alcotest-mirage-${version}.tbz";
-    sha256 = "sha256:1h9yp44snb6sgm5g1x3wg4gwjscic7i56jf0j8jr07355pxwrami";
+    sha256 = "1h9yp44snb6sgm5g1x3wg4gwjscic7i56jf0j8jr07355pxwrami";
   };
 
   propagatedBuildInputs = [ astring cmdliner fmt uuidm re stdlib-shims uutf ];

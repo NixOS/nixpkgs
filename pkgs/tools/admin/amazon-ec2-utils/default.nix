@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "aws";
     repo = "amazon-ec2-utils";
     rev = version;
-    hash = "sha256:04dpxaaca144a74r6d93q4lp0d5l32v07rldj7v2v1c6s9nsf4mv";
+    sha256 = "04dpxaaca144a74r6d93q4lp0d5l32v07rldj7v2v1c6s9nsf4mv";
   };
 
   buildInputs = [

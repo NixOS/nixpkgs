@@ -1,13 +1,12 @@
 { lib, stdenv, fetchurl, botan2, libobjc, Security }:
 
 stdenv.mkDerivation rec {
-
   pname = "softhsm";
   version = "2.6.1";
 
   src = fetchurl {
     url = "https://dist.opendnssec.org/source/${pname}-${version}.tar.gz";
-    hash = "sha256:1wkmyi6n3z2pak1cj5yk6v6bv9w0m24skycya48iikab0mrr8931";
+    sha256 = "1wkmyi6n3z2pak1cj5yk6v6bv9w0m24skycya48iikab0mrr8931";
   };
 
   configureFlags = [

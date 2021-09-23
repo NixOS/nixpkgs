@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     owner = "hensm";
     repo = "fx_cast";
     rev = "v${version}";
-    hash = "sha256:1prgk9669xgwkdl39clq0l75n0gnkkpn27gp9rbgl4bafrhvmg9a";
+    sha256 = "1prgk9669xgwkdl39clq0l75n0gnkkpn27gp9rbgl4bafrhvmg9a";
   };
 
   buildInputs = with pkgs; [
