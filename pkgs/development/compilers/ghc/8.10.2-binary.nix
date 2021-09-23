@@ -138,8 +138,7 @@ in
 
 stdenv.mkDerivation rec {
   inherit version;
-
-  name = "ghc-${version}-binary";
+  pname = "ghc-binary";
 
   src = fetchurl binDistUsed.src;
 

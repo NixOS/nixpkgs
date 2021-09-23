@@ -149,7 +149,7 @@ in
 stdenv.mkDerivation (rec {
   inherit version;
   inherit (src) rev;
-  name = "${targetPrefix}ghc-${version}";
+  pname = "${targetPrefix}ghc";
 
   src = fetchgit {
     url = "https://gitlab.haskell.org/ghc/ghc.git/";
