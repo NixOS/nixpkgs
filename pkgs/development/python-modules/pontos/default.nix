@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, poetry
+, poetry-core
 , pytestCheckHook
 , pythonOlder
 , colorful
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    poetry
+    poetry-core
   ];
 
   propagatedBuildInputs = [
