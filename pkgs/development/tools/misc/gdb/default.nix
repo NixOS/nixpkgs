@@ -92,6 +92,7 @@ stdenv.mkDerivation rec {
     "--disable-shared" "--enable-static"
     "--with-system-zlib"
     "--with-system-readline"
+    "--disable-sim"
 
     "--with-gmp=${gmp.dev}"
     "--with-mpfr=${mpfr.dev}"
