@@ -13,7 +13,6 @@
 , enableOpenMPThreads ? false
 }:
 
-with lib;
 stdenv.mkDerivation rec {
   pname = "eccodes";
   version = "2.23.0";
@@ -36,7 +35,7 @@ stdenv.mkDerivation rec {
     gfortran
   ];
 
-  propagatedBuildInputs = optionals enablePython [
+  propagatedBuildInputs = lib.optionals enablePython [
     pythonPackages.python
     pythonPackages.numpy
   ];
@@ -57,7 +56,7 @@ stdenv.mkDerivation rec {
     ctest -R "eccodes_t_(definitions|calendar|unit_tests|md5|uerra|grib_2nd_order_numValues|julian)" -VV
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://confluence.ecmwf.int/display/ECC/";
     license = licenses.asl20;
     maintainers = with maintainers; [ knedlsepp ];
