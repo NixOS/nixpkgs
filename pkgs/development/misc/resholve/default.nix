@@ -12,7 +12,10 @@ rec {
     inherit (source) version;
     inherit (deps.oil) oildev;
   };
-  resholvePackage = callPackage ./resholve-package.nix {
+  resholve-utils = callPackage ./resholve-utils.nix {
     inherit resholve;
+  };
+  resholvePackage = callPackage ./resholve-package.nix {
+    inherit resholve resholve-utils;
   };
 }
