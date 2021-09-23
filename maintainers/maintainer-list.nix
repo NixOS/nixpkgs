@@ -4623,6 +4623,12 @@
     githubId = 3661115;
     name = "Ingo Blechschmidt";
   };
+  iclanzan = {
+    name = "Sorin Iclanzan";
+    email = "sorin+nixos@iclanzan.com";
+    github = "iclanzan";
+    githubId = 1806943;
+  };
   icy-thought = {
     name = "Icy-Thought";
     email = "gilganyx@pm.me";
