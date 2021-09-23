@@ -6448,6 +6448,18 @@ final: prev:
     meta.homepage = "https://github.com/ThePrimeagen/vim-apm/";
   };
 
+  vim-argumentative = buildVimPluginFrom2Nix {
+    pname = "vim-argumentative";
+    version = "2014-11-24";
+    src = fetchFromGitHub {
+      owner = "PeterRincker";
+      repo = "vim-argumentative";
+      rev = "63a5f7deb675c38126de626f4c00e000902462fe";
+      sha256 = "06ggdw08gha51r8m35ncgbp6b52lcw52l297b8d9z1c4r6b0s1vj";
+    };
+    meta.homepage = "https://github.com/PeterRincker/vim-argumentative/";
+  };
+
   vim-argwrap = buildVimPluginFrom2Nix {
     pname = "vim-argwrap";
     version = "2021-06-11";
