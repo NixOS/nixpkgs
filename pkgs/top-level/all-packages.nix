@@ -27117,6 +27117,8 @@ with pkgs;
 
   rkdeveloptool = callPackage ../misc/rkdeveloptool { };
 
+  roc-toolkit = callPackage ../applications/audio/roc-toolkit { };
+
   rofi-unwrapped = callPackage ../applications/misc/rofi {
     autoreconfHook = buildPackages.autoreconfHook269;
   };
