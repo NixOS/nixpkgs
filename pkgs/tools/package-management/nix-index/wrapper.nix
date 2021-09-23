@@ -1,8 +1,7 @@
 { lib, symlinkJoin, nix-index-unwrapped, makeWrapper, nix }:
 
-if nix == null then nix-index-unwrapped else
 symlinkJoin {
-  inherit (nix-index-unwrapped) name;
+  inherit (nix-index-unwrapped) name meta;
 
   paths = [ nix-index-unwrapped ];
 
@@ -12,8 +11,4 @@ symlinkJoin {
     wrapProgram $out/bin/nix-index \
       --prefix PATH : ${lib.makeBinPath [ nix ]}
   '';
-
-  meta = nix-index-unwrapped.meta // {
-    hydraPlatforms = [];
-  };
 }
