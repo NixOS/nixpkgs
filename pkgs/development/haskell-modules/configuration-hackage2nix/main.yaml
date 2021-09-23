@@ -239,28 +239,35 @@ package-maintainers:
     - mattermost-api-qc
     - Unique
   maralorn:
-    - arbtt
     - cabal-fmt
     - generic-optics
     - ghcup
+    - ghcid
     - ghcide
     - haskell-language-server
     - hedgehog
     - hlint
     - hmatrix
+    - hspec-discover
     - iCalendar
     - matrix-client
     - neuron
     - optics
+    - paths
+    - postgresql-simple
     - reflex-dom
     - releaser
+    - replace-megaparsec
     - req
     - shake-bench
     - shh
+    - shh-extras
     - snap
     - stm-containers
     - streamly
     - taskwarrior
+    - tz
+    - weeder
     - witch
   ncfavier:
     - lambdabot
