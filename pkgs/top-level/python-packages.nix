@@ -517,6 +517,8 @@ in {
 
   apsw = callPackage ../development/python-modules/apsw { };
 
+  apycula = callPackage ../development/python-modules/apycula { };
+
   aqualogic = callPackage ../development/python-modules/aqualogic { };
 
   arabic-reshaper = callPackage ../development/python-modules/arabic-reshaper { };
