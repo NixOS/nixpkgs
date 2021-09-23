@@ -14,11 +14,11 @@
 
 mkDerivation rec {
   pname = "kstars";
-  version = "3.5.4";
+  version = "3.5.5";
 
   src = fetchurl {
     url = "mirror://kde/stable/kstars/kstars-${version}.tar.xz";
-    sha256 = "sha256-JCdSYcogvoUmu+vB/vye+6ZMIJqVoScAKreh89dxoDU=";
+    sha256 = "sha256-cD31YFBnKvEPyBQils6qJxNKagDoIi8/Znfxj/Gsa0M=";
   };
 
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
@@ -32,11 +32,6 @@ mkDerivation rec {
 
     cfitsio indi-full xplanet libnova libraw gsl wcslib stellarsolver
   ];
-
-  # See https://bugs.kde.org/show_bug.cgi?id=439541
-  preConfigure = ''
-    rm po/de/docs/kstars/index.docbook
-  '';
 
   cmakeFlags = [
     "-DINDI_PREFIX=${indi-full}"

@@ -2394,6 +2394,8 @@ with pkgs;
 
   chntpw = callPackage ../tools/security/chntpw { };
 
+  cliphist = callPackage ../tools/wayland/cliphist { };
+
   clipman = callPackage ../tools/wayland/clipman { };
 
   kanshi = callPackage ../tools/wayland/kanshi { };
@@ -5011,6 +5013,8 @@ with pkgs;
   };
 
   fabric-installer = callPackage ../tools/games/minecraft/fabric-installer { };
+
+  faraday-cli = callPackage ../tools/security/faraday-cli { };
 
   fastlane = callPackage ../tools/admin/fastlane { };
 
@@ -7672,6 +7676,8 @@ with pkgs;
 
   npapi_sdk = callPackage ../development/libraries/npapi-sdk {};
 
+  npiet = callPackage ../development/interpreters/npiet { };
+
   npth = callPackage ../development/libraries/npth {};
 
   nmap = callPackage ../tools/security/nmap { };
@@ -8841,6 +8847,8 @@ with pkgs;
   ruplacer = callPackage ../tools/text/ruplacer {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+
+  rust-code-analysis = callPackage ../development/tools/rust-code-analysis { };
 
   rust-petname = callPackage ../tools/text/rust-petname { };
 
@@ -12210,6 +12218,7 @@ with pkgs;
 
   inherit (callPackages ../development/compilers/nim { })
     nim-unwrapped nimble-unwrapped nim;
+  nimPackages = recurseIntoAttrs nim.pkgs;
 
   nrpl = callPackage ../development/tools/nrpl { };
 
@@ -21512,6 +21521,8 @@ with pkgs;
   linux_5_10_hardened = linuxKernel.kernels.linux_5_10_hardened;
   linuxPackages_5_13_hardened = linuxKernel.packages.linux_5_13_hardened;
   linux_5_13_hardened = linuxKernel.kernels.linux_5_13_hardened;
+  linuxPackages_5_14_hardened = linuxKernel.packages.linux_5_14_hardened;
+  linux_5_14_hardened = linuxKernel.kernels.linux_5_14_hardened;
 
   # Hardkernel (Odroid) kernels.
   linuxPackages_hardkernel_latest = linuxKernel.packageAliases.linux_hardkernel_latest;
@@ -25390,6 +25401,8 @@ with pkgs;
   kapitonov-plugins-pack = callPackage ../applications/audio/kapitonov-plugins-pack { };
 
   kapow = libsForQt5.callPackage ../applications/misc/kapow { };
+
+  kappanhang = callPackage ../applications/radio/kappanhang { };
 
   okteta = libsForQt5.callPackage ../applications/editors/okteta { };
 

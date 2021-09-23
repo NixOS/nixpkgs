@@ -2506,7 +2506,11 @@ in {
 
   falcon = callPackage ../development/python-modules/falcon { };
 
+  faraday-plugins = callPackage ../development/python-modules/faraday-plugins { };
+
   fastapi = callPackage ../development/python-modules/fastapi { };
+
+  fastavro = callPackage ../development/python-modules/fastavro { };
 
   fastcache = callPackage ../development/python-modules/fastcache { };
 
@@ -6551,6 +6555,10 @@ in {
 
   pyomo = callPackage ../development/python-modules/pyomo { };
 
+  pyp = callPackage ../development/python-modules/pyp {
+    inherit (pkgs) jq;
+  };
+
   phonemizer = callPackage ../development/python-modules/phonemizer { };
 
   pyopencl = callPackage ../development/python-modules/pyopencl {
@@ -7133,6 +7141,8 @@ in {
   pytest-snapshot = callPackage ../development/python-modules/pytest-snapshot { };
 
   pytest-shutil = callPackage ../development/python-modules/pytest-shutil { };
+
+  python-status = callPackage ../development/python-modules/python-status { };
 
   python-string-utils = callPackage ../development/python-modules/python-string-utils { };
 
@@ -8087,6 +8097,8 @@ in {
     inherit (pkgs) gfortran glibcLocales;
   };
 
+  scikit-learn-extra = callPackage ../development/python-modules/scikit-learn-extra { };
+
   scikit-optimize = callPackage ../development/python-modules/scikit-optimize { };
 
   scikits-odes = callPackage ../development/python-modules/scikits-odes { };
@@ -8261,6 +8273,8 @@ in {
   simplejson = callPackage ../development/python-modules/simplejson { };
 
   simplekml = callPackage ../development/python-modules/simplekml { };
+
+  simple-rest-client = callPackage ../development/python-modules/simple-rest-client { };
 
   simple-salesforce = callPackage ../development/python-modules/simple-salesforce { };
 
@@ -9578,6 +9592,8 @@ in {
   ws4py = callPackage ../development/python-modules/ws4py { };
 
   wsgi-intercept = callPackage ../development/python-modules/wsgi-intercept { };
+
+  wsgiprox = callPackage ../development/python-modules/wsgiprox { };
 
   wsgiproxy2 = callPackage ../development/python-modules/wsgiproxy2 { };
 
