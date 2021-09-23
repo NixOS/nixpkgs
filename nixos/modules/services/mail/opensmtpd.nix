@@ -111,7 +111,7 @@ in {
     };
 
     services.mail.sendmailSetuidWrapper = mkIf cfg.setSendmail
-      security.wrappers.smtpctl // { program = "sendmail"; };
+      (security.wrappers.smtpctl // { program = "sendmail"; });
 
     systemd.tmpfiles.rules = [
       "d /var/spool/smtpd 711 root - - -"

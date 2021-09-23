@@ -4,6 +4,7 @@
 , simpleeval
 , isPy27
 , coveralls
+, wcmatch
 }:
 
 buildPythonPackage rec {
@@ -21,6 +22,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     simpleeval
+    wcmatch
   ];
 
   checkInputs = [
@@ -31,10 +33,14 @@ buildPythonPackage rec {
     coverage run -m unittest discover -s tests -t tests
   '';
 
+  pythonImportsCheck = [
+    "casbin"
+  ];
+
   meta = with lib; {
     description = "An authorization library that supports access control models like ACL, RBAC, ABAC in Python";
     homepage = "https://github.com/casbin/pycasbin";
     license = licenses.asl20;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc ];
   };
 }
