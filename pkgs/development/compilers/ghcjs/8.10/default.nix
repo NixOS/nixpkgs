@@ -109,8 +109,7 @@ in stdenv.mkDerivation {
     inherit passthru;
 
     meta = {
-      # The emscripten is broken on darwin
-      platforms = lib.platforms.linux;
+      platforms = with lib.platforms; linux ++ darwin;
 
       # Hydra limits jobs to only outputting 1 gigabyte worth of files.
       # GHCJS outputs over 3 gigabytes.
