@@ -1,4 +1,4 @@
-{ lib, python3Packages, fetchFromGitHub }:
+{ lib, python3Packages, fetchFromGitHub, substituteAll }:
 
 python3Packages.buildPythonPackage rec {
   pname = "auto-cpufreq";
@@ -16,8 +16,16 @@ python3Packages.buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "auto_cpufreq" ];
 
-  # patch to prevent script copying and to disable install
-  patches = [ ./prevent-install-and-copy.patch ];
+  patches = [
+    # hardcodes version output
+    (substituteAll {
+      src = ./fix-version-output.patch;
+      inherit version;
+    })
+
+    # patch to prevent script copying and to disable install
+    ./prevent-install-and-copy.patch
+  ];
 
   postInstall = ''
     # copy script manually
