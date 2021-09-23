@@ -13796,6 +13796,8 @@ with pkgs;
 
   css-html-js-minify = with python3Packages; toPythonApplication css-html-js-minify;
 
+  cvehound = callPackage ../development/tools/analysis/cvehound { };
+
   cvise = python3Packages.callPackage ../development/tools/misc/cvise {
     inherit (llvmPackages_11) llvm libclang;
   };
