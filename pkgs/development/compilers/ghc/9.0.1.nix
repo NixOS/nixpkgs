@@ -138,7 +138,7 @@ let
 in
 stdenv.mkDerivation (rec {
   version = "9.0.1";
-  name = "${targetPrefix}ghc-${version}";
+  pname = "${targetPrefix}ghc";
 
   src = fetchurl {
     url = "https://downloads.haskell.org/ghc/${version}/ghc-${version}-src.tar.xz";

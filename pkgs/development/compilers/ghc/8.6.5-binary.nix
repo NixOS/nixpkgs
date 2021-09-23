@@ -34,8 +34,7 @@ in
 
 stdenv.mkDerivation rec {
   version = "8.6.5";
-
-  name = "ghc-${version}-binary";
+  pname = "ghc-binary";
 
   # https://downloads.haskell.org/~ghc/8.6.5/
   src = fetchurl ({
