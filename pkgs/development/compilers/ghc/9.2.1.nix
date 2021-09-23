@@ -145,6 +145,8 @@ stdenv.mkDerivation (rec {
   };
 
   patches = [
+    # picked from release branch, remove with the next release candidate,
+    # see https://gitlab.haskell.org/ghc/ghc/-/issues/19950#note_373726
     (fetchpatch {
       name = "fix-darwin-link-failure.patch";
       url = "https://gitlab.haskell.org/ghc/ghc/-/commit/77456387025ca74299ecc70621cbdb62b1b6ffc9.patch";
@@ -317,8 +319,6 @@ stdenv.mkDerivation (rec {
 
     # integer-simple builds are broken when GHC links against musl.
     # See https://github.com/NixOS/nixpkgs/pull/129606#issuecomment-881323743.
-    # Linker failure on macOS:
-    # https://gitlab.haskell.org/ghc/ghc/-/issues/19950#note_373726
     broken = enableIntegerSimple && hostPlatform.isMusl;
   };
 
