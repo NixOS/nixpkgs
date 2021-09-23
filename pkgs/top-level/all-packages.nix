@@ -6792,6 +6792,8 @@ with pkgs;
 
   lottieconverter = callPackage ../tools/misc/lottieconverter { };
 
+  lpcnetfreedv = callPackage ../development/libraries/lpcnetfreedv { };
+
   lsd = callPackage ../tools/misc/lsd { };
 
   lsdvd = callPackage ../tools/cd-dvd/lsdvd {};
