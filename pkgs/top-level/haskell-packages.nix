@@ -146,11 +146,11 @@ in {
       libffi = pkgs.libffi;
     };
     ghcjs = compiler.ghcjs86;
-    ghcjs86 = callPackage ../development/compilers/ghcjs-ng {
+    ghcjs86 = callPackage ../development/compilers/ghcjs/8.6 {
       bootPkgs = packages.ghc865;
-      ghcjsSrcJson = ../development/compilers/ghcjs-ng/8.6/git.json;
-      stage0 = ../development/compilers/ghcjs-ng/8.6/stage0.nix;
-      ghcjsDepOverrides = callPackage ../development/compilers/ghcjs-ng/8.6/dep-overrides.nix {};
+      ghcjsSrcJson = ../development/compilers/ghcjs/8.6/git.json;
+      stage0 = ../development/compilers/ghcjs/8.6/stage0.nix;
+      ghcjsDepOverrides = callPackage ../development/compilers/ghcjs/8.6/dep-overrides.nix {};
     };
 
     # The integer-simple attribute set contains all the GHC compilers
@@ -259,7 +259,7 @@ in {
       buildHaskellPackages = ghc.bootPkgs;
       ghc = bh.compiler.ghcjs86;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.6.x.nix { };
-      packageSetConfig = callPackage ../development/haskell-modules/configuration-ghcjs.nix { };
+      packageSetConfig = callPackage ../development/haskell-modules/configuration-ghcjs-8.6.nix { };
     };
 
     # The integer-simple attribute set contains package sets for all the GHC compilers
