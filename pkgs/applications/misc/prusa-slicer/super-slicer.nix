@@ -13,9 +13,9 @@ let
     inherit version pname;
 
     src = fetchFromGitHub {
-      inherit sha256;
       owner = "supermerill";
       repo = "SuperSlicer";
+      inherit sha256;
       rev = version;
       fetchSubmodules = true;
     };
