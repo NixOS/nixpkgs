@@ -727,6 +727,8 @@ in
 
           umask u=rwx,g=rx,o=
 
+          rm -rf /var/lib/discourse/tmp/*
+
           cp -r ${cfg.package}/share/discourse/config.dist/* /run/discourse/config/
           cp -r ${cfg.package}/share/discourse/public.dist/* /run/discourse/public/
           ln -sf /var/lib/discourse/uploads /run/discourse/public/uploads
@@ -748,7 +750,7 @@ in
           )
 
           discourse-rake db:migrate >>/var/log/discourse/db_migration.log
-          chmod -R u+w /run/discourse/tmp/
+          chmod -R u+w /var/lib/discourse/tmp/
 
           export ADMIN_EMAIL="${cfg.admin.email}"
           export ADMIN_NAME="${cfg.admin.fullName}"
@@ -768,7 +770,6 @@ in
         RuntimeDirectory = map (p: "discourse/" + p) [
           "config"
           "home"
-          "tmp"
           "assets/javascripts/plugins"
           "public"
           "sockets"
@@ -777,6 +778,7 @@ in
         StateDirectory = map (p: "discourse/" + p) [
           "uploads"
           "backups"
+          "tmp"
         ];
         StateDirectoryMode = 0750;
         LogsDirectory = "discourse";
