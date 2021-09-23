@@ -6459,7 +6459,7 @@ final: prev:
     };
     meta.homepage = "https://github.com/PeterRincker/vim-argumentative/";
   };
-  
+
   vim-argwrap = buildVimPluginFrom2Nix {
     pname = "vim-argwrap";
     version = "2021-06-11";
