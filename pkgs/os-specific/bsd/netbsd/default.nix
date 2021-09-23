@@ -188,8 +188,6 @@ in lib.makeScopeWithSplicing
       bsdSetupHook netbsdSetupHook
       makeMinimal
       rsync
-    ] ++ lib.optionals stdenv.buildPlatform.isDarwin [
-      buildPackages.binutils
     ];
 
     buildInputs = with self; commonDeps;
@@ -204,6 +202,8 @@ in lib.makeScopeWithSplicing
       "TSORT=cat"
       # Can't process man pages yet
       "MKSHARE=no"
+    ] ++ lib.optionals stdenv.buildPlatform.isDarwin [
+      "OBJCOPY=echo"
     ];
     RENAME = "-D";
 
