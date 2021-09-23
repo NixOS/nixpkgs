@@ -48,7 +48,6 @@ stdenv.mkDerivation rec {
 
   patches = lib.optionals withPantheon [
     # https://github.com/elementary/browser
-    # FIXME: Update the patches when https://github.com/elementary/browser/pull/41 merged
     ./dark-style.patch
     ./navigation-buttons.patch
   ];
