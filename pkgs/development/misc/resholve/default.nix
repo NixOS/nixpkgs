@@ -8,8 +8,7 @@ let
 in
 rec {
   resholve = callPackage ./resholve.nix {
-    inherit (source) rSrc;
-    inherit (source) version;
+    inherit (source) rSrc version;
     inherit (deps.oil) oildev;
   };
   resholve-utils = callPackage ./resholve-utils.nix {
