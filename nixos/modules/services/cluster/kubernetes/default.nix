@@ -253,7 +253,7 @@ in {
     (mkIf cfg.kubelet.enable {
       virtualisation.containerd = {
         enable = mkDefault true;
-        settings = mkDefault defaultContainerdSettings;
+        settings = mapAttrsRecursive (name: mkDefault) defaultContainerdSettings;
       };
     })
 
