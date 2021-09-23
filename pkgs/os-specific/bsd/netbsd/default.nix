@@ -188,8 +188,6 @@ in lib.makeScopeWithSplicing
       bsdSetupHook netbsdSetupHook
       makeMinimal
       rsync
-    ] ++ lib.optionals stdenv.buildPlatform.isDarwin [
-      buildPackages.binutils
     ];
 
     buildInputs = with self; commonDeps;
@@ -204,8 +202,14 @@ in lib.makeScopeWithSplicing
       "TSORT=cat"
       # Can't process man pages yet
       "MKSHARE=no"
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # GNU objcopy produces broken .a libs which won't link into dependers.
+      # Makefiles only invoke `$OBJCOPY -x/-X`, so cctools strip works here.
+      "OBJCOPY=${buildPackages.darwin.cctools}/bin/strip"
     ];
     RENAME = "-D";
+
+    passthru.tests = { netbsd-install = self.install; };
 
     patches = [
       ./compat-cxx-safe-header.patch
