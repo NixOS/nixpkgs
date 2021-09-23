@@ -685,6 +685,7 @@
   ./services/networking/3proxy.nix
   ./services/networking/adguardhome.nix
   ./services/networking/amuled.nix
+  ./services/networking/antennas.nix
   ./services/networking/aria2.nix
   ./services/networking/asterisk.nix
   ./services/networking/atftpd.nix
