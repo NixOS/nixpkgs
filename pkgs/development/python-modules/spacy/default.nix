@@ -1,37 +1,40 @@
 { lib
+, blis
 , buildPythonPackage
 , callPackage
-, fetchPypi
-, pythonOlder
-, pytest
-, blis
 , catalogue
 , cymem
+, fetchPypi
 , jinja2
 , jsonschema
 , murmurhash
 , numpy
-, pathlib
-, preshed
-, requests
-, setuptools
-, srsly
-, spacy-legacy
-, thinc
-, typer
-, wasabi
 , packaging
 , pathy
+, preshed
 , pydantic
+, pytest
+, pythonOlder
+, requests
+, setuptools
+, spacy-legacy
+, srsly
+, thinc
+, tqdm
+, typer
+, typing-extensions
+, wasabi
 }:
 
 buildPythonPackage rec {
   pname = "spacy";
-  version = "3.0.6";
+  version = "3.1.3";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ViirifH1aAmciAsSqcN/Ts4pq4kmBmDP33KMAnEYecU=";
+    sha256 = "18n200hjdz6jlixx214xwyxwaj611srsn64glhp1k5vrl9j4w22q";
   };
 
   propagatedBuildInputs = [
@@ -42,18 +45,21 @@ buildPythonPackage rec {
     jsonschema
     murmurhash
     numpy
-    preshed
-    requests
-    setuptools
-    srsly
-    spacy-legacy
-    thinc
-    wasabi
     packaging
     pathy
+    preshed
     pydantic
+    requests
+    setuptools
+    spacy-legacy
+    srsly
+    thinc
+    tqdm
     typer
-  ] ++ lib.optional (pythonOlder "3.4") pathlib;
+    wasabi
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    typing-extensions
+  ];
 
   checkInputs = [
     pytest
@@ -67,7 +73,7 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace setup.cfg \
       --replace "blis>=0.4.0,<0.8.0" "blis>=0.4.0,<1.0" \
-      --replace "pydantic>=1.7.1,<1.8.0" "pydantic>=1.7.1,<1.8.3"
+      --replace "pydantic>=1.7.4,!=1.8,!=1.8.1,<1.9.0" "pydantic<1.9.0"
   '';
 
   pythonImportsCheck = [ "spacy" ];
