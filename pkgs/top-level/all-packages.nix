@@ -2394,6 +2394,8 @@ with pkgs;
 
   chntpw = callPackage ../tools/security/chntpw { };
 
+  cliphist = callPackage ../tools/wayland/cliphist { };
+
   clipman = callPackage ../tools/wayland/clipman { };
 
   kanshi = callPackage ../tools/wayland/kanshi { };
@@ -4818,7 +4820,7 @@ with pkgs;
 
   expect = callPackage ../tools/misc/expect { };
 
-  expliot = python3Packages.callPackage ../tools/security/expliot { };
+  expliot = callPackage ../tools/security/expliot { };
 
   f2fs-tools = callPackage ../tools/filesystems/f2fs-tools { };
 
@@ -5011,6 +5013,8 @@ with pkgs;
   };
 
   fabric-installer = callPackage ../tools/games/minecraft/fabric-installer { };
+
+  faraday-cli = callPackage ../tools/security/faraday-cli { };
 
   fastlane = callPackage ../tools/admin/fastlane { };
 
@@ -7672,6 +7676,8 @@ with pkgs;
 
   npapi_sdk = callPackage ../development/libraries/npapi-sdk {};
 
+  npiet = callPackage ../development/interpreters/npiet { };
+
   npth = callPackage ../development/libraries/npth {};
 
   nmap = callPackage ../tools/security/nmap { };
@@ -8841,6 +8847,8 @@ with pkgs;
   ruplacer = callPackage ../tools/text/ruplacer {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+
+  rust-code-analysis = callPackage ../development/tools/rust-code-analysis { };
 
   rust-petname = callPackage ../tools/text/rust-petname { };
 
@@ -12210,6 +12218,7 @@ with pkgs;
 
   inherit (callPackages ../development/compilers/nim { })
     nim-unwrapped nimble-unwrapped nim;
+  nimPackages = recurseIntoAttrs nim.pkgs;
 
   nrpl = callPackage ../development/tools/nrpl { };
 
@@ -12476,7 +12485,9 @@ with pkgs;
   cargo-readme = callPackage ../development/tools/rust/cargo-readme {};
   cargo-sort = callPackage ../development/tools/rust/cargo-sort { };
   cargo-spellcheck = callPackage ../development/tools/rust/cargo-spellcheck { };
-  cargo-supply-chain = callPackage ../development/tools/rust/cargo-supply-chain { };
+  cargo-supply-chain = callPackage ../development/tools/rust/cargo-supply-chain {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
   cargo-sweep = callPackage ../development/tools/rust/cargo-sweep { };
   cargo-sync-readme = callPackage ../development/tools/rust/cargo-sync-readme {};
   cargo-tally = callPackage ../development/tools/rust/cargo-tally {
@@ -14825,6 +14836,8 @@ with pkgs;
   teensyduino = arduino-core.override { withGui = true; withTeensyduino = true; };
 
   teensy-loader-cli = callPackage ../development/embedded/teensy-loader-cli { };
+
+  tytools = libsForQt5.callPackage ../development/embedded/tytools { };
 
   terracognita = callPackage ../development/tools/misc/terracognita { };
 
@@ -21509,6 +21522,8 @@ with pkgs;
   linux_5_10_hardened = linuxKernel.kernels.linux_5_10_hardened;
   linuxPackages_5_13_hardened = linuxKernel.packages.linux_5_13_hardened;
   linux_5_13_hardened = linuxKernel.kernels.linux_5_13_hardened;
+  linuxPackages_5_14_hardened = linuxKernel.packages.linux_5_14_hardened;
+  linux_5_14_hardened = linuxKernel.kernels.linux_5_14_hardened;
 
   # Hardkernel (Odroid) kernels.
   linuxPackages_hardkernel_latest = linuxKernel.packageAliases.linux_hardkernel_latest;
@@ -25384,6 +25399,8 @@ with pkgs;
   kapitonov-plugins-pack = callPackage ../applications/audio/kapitonov-plugins-pack { };
 
   kapow = libsForQt5.callPackage ../applications/misc/kapow { };
+
+  kappanhang = callPackage ../applications/radio/kappanhang { };
 
   okteta = libsForQt5.callPackage ../applications/editors/okteta { };
 
@@ -30484,6 +30501,8 @@ with pkgs;
   nasc = callPackage ../applications/science/math/nasc { };
 
   nota = haskellPackages.callPackage ../applications/science/math/nota { };
+
+  notus-scanner = with python3Packages; toPythonApplication notus-scanner;
 
   openblas = callPackage ../development/libraries/science/math/openblas { };
 

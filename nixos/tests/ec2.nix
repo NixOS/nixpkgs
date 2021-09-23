@@ -24,6 +24,11 @@ let
           ln -s vda1 /dev/xvda1
         '';
 
+        # In a NixOS test the serial console is occupied by the "backdoor"
+        # (see testing/test-instrumentation.nix) and is incompatible with
+        # the configuration in virtualisation/amazon-image.nix.
+        systemd.services."serial-getty@ttyS0".enable = mkForce false;
+
         # Needed by nixos-rebuild due to the lack of network
         # access. Determined by trial and error.
         system.extraDependencies = with pkgs; ( [

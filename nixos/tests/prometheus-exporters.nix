@@ -554,7 +554,11 @@ let
             WorkingDirectory = "/var/spool/mail";
           };
         };
-        users.users.mailexporter.isSystemUser = true;
+        users.users.mailexporter = {
+          isSystemUser = true;
+          group = "mailexporter";
+        };
+        users.groups.mailexporter = {};
       };
       exporterTest = ''
         wait_for_unit("postfix.service")

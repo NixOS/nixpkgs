@@ -14,7 +14,7 @@ in
     {
       environment.systemPackages = [
         pkgs.curl
-        (pkgs.mpv-with-scripts.override {
+        (pkgs.wrapMpv pkgs.mpv-unwrapped {
           scripts = [ pkgs.mpvScripts.simple-mpv-webui ];
         })
       ];

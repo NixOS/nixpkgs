@@ -2312,6 +2312,8 @@ in {
 
   eggdeps = callPackage ../development/python-modules/eggdeps { };
 
+  einops = callPackage ../development/python-modules/einops { };
+
   elgato = callPackage ../development/python-modules/elgato { };
 
   elasticsearch = callPackage ../development/python-modules/elasticsearch { };
@@ -2504,7 +2506,11 @@ in {
 
   falcon = callPackage ../development/python-modules/falcon { };
 
+  faraday-plugins = callPackage ../development/python-modules/faraday-plugins { };
+
   fastapi = callPackage ../development/python-modules/fastapi { };
+
+  fastavro = callPackage ../development/python-modules/fastavro { };
 
   fastcache = callPackage ../development/python-modules/fastcache { };
 
@@ -3644,6 +3650,8 @@ in {
 
   intake = callPackage ../development/python-modules/intake { };
 
+  intake-parquet = callPackage ../development/python-modules/intake-parquet { };
+
   intbitset = callPackage ../development/python-modules/intbitset { };
 
   intelhex = callPackage ../development/python-modules/intelhex { };
@@ -4488,6 +4496,8 @@ in {
 
   mautrix-appservice = self.mautrix; # alias 2019-12-28
 
+  maxcube-api = callPackage ../development/python-modules/maxcube-api { };
+
   maxminddb = callPackage ../development/python-modules/maxminddb { };
 
   maya = callPackage ../development/python-modules/maya { };
@@ -5000,6 +5010,8 @@ in {
 
   nototools = callPackage ../data/fonts/noto-fonts/tools.nix { };
 
+  notus-scanner = callPackage ../development/python-modules/notus-scanner { };
+
   nplusone = callPackage ../development/python-modules/nplusone { };
 
   npyscreen = callPackage ../development/python-modules/npyscreen { };
@@ -5206,6 +5218,8 @@ in {
 
   oslotest = callPackage ../development/python-modules/oslotest { };
 
+  ospd = callPackage ../development/python-modules/ospd { };
+
   osqp = callPackage ../development/python-modules/osqp { };
 
   outcome = callPackage ../development/python-modules/outcome { };
@@ -5270,6 +5284,8 @@ in {
   paramz = callPackage ../development/python-modules/paramz { };
 
   parfive = callPackage ../development/python-modules/parfive { };
+
+  parquet = callPackage ../development/python-modules/parquet { };
 
   parse = callPackage ../development/python-modules/parse { };
 
@@ -6539,6 +6555,10 @@ in {
 
   pyomo = callPackage ../development/python-modules/pyomo { };
 
+  pyp = callPackage ../development/python-modules/pyp {
+    inherit (pkgs) jq;
+  };
+
   phonemizer = callPackage ../development/python-modules/phonemizer { };
 
   pyopencl = callPackage ../development/python-modules/pyopencl {
@@ -7121,6 +7141,8 @@ in {
   pytest-snapshot = callPackage ../development/python-modules/pytest-snapshot { };
 
   pytest-shutil = callPackage ../development/python-modules/pytest-shutil { };
+
+  python-status = callPackage ../development/python-modules/python-status { };
 
   python-string-utils = callPackage ../development/python-modules/python-string-utils { };
 
@@ -8075,6 +8097,8 @@ in {
     inherit (pkgs) gfortran glibcLocales;
   };
 
+  scikit-learn-extra = callPackage ../development/python-modules/scikit-learn-extra { };
+
   scikit-optimize = callPackage ../development/python-modules/scikit-optimize { };
 
   scikits-odes = callPackage ../development/python-modules/scikits-odes { };
@@ -8249,6 +8273,8 @@ in {
   simplejson = callPackage ../development/python-modules/simplejson { };
 
   simplekml = callPackage ../development/python-modules/simplekml { };
+
+  simple-rest-client = callPackage ../development/python-modules/simple-rest-client { };
 
   simple-salesforce = callPackage ../development/python-modules/simple-salesforce { };
 
@@ -8921,6 +8947,8 @@ in {
 
   thrift = callPackage ../development/python-modules/thrift { };
 
+  thriftpy2 = callPackage ../development/python-modules/thriftpy2 { };
+
   thumborPexif = callPackage ../development/python-modules/thumborpexif { };
 
   tkinter = let
@@ -9564,6 +9592,8 @@ in {
   ws4py = callPackage ../development/python-modules/ws4py { };
 
   wsgi-intercept = callPackage ../development/python-modules/wsgi-intercept { };
+
+  wsgiprox = callPackage ../development/python-modules/wsgiprox { };
 
   wsgiproxy2 = callPackage ../development/python-modules/wsgiproxy2 { };
 

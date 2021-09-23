@@ -4,16 +4,14 @@
 
 stdenv.mkDerivation rec {
   pname = "argyllcms";
-  version = "2.2.0";
+  version = "2.2.1";
 
   src = fetchzip {
     # Kind of flacky URL, it was reaturning 406 and inconsistent binaries for a
     # while on me. It might be good to find a mirror
     url = "https://www.argyllcms.com/Argyll_V${version}_src.zip";
-    sha256 = "sha256-EcVwYJfJbWWXl58O3ulsrWgUYTgR4uWdMgb0Z140Pu4=";
+    sha256 = "sha256-umY3wQfG26Okqnw+MCUnlwWTAyJ6MR/FHe5oe61KBh0=";
   };
-
-  patches = [ ./gcc5.patch ];
 
   # The contents of this file comes from the Jamtop file from the
   # root of the ArgyllCMS distribution, rewritten to pick up Nixpkgs
@@ -21,7 +19,7 @@ stdenv.mkDerivation rec {
   # in that file is reflected here.
   jamTop = writeText "argyllcms_jamtop" ''
     DESTDIR = "/" ;
-    REFSUBDIR = "ref" ;
+    REFSUBDIR = "share/argyllcms" ;
 
     # Keep this DESTDIR anchored to Jamtop. PREFIX is used literally
     ANCHORED_PATH_VARS = DESTDIR ;
@@ -41,11 +39,21 @@ stdenv.mkDerivation rec {
     # enable dummy Demo Instrument (only if code is available)
     USE_DEMOINST = true ;
 
+    # enable Video Test Patch Generator and 3DLUT device support
+    # (V2.0.0 and above)
+    USE_VTPGLUT = false ;
+
+    # enable Printer device support
+    USE_PRINTER = false ;
+
+    # enable CMF Measurement device and accessory support (if present)
+    USE_CMFM = false ;
+
     # Use ArgyllCMS version of libusb (deprecated - don't use)
     USE_LIBUSB = false ;
 
-    # For testing CCast
-    DEFINES += CCTEST_PATTERN ;
+    # Compile in graph plotting code (Not fully implemented)
+    USE_PLOT = true ;		# [true]
 
     JPEGLIB = ;
     JPEGINC = ;
@@ -97,16 +105,11 @@ stdenv.mkDerivation rec {
 
   # Install udev rules, but remove lines that set up the udev-acl
   # stuff, since that is handled by udev's own rules (70-udev-acl.rules)
-  #
-  # Move ref to a better place (there must be a way to make the install target
-  # do that for us)
   postInstall = ''
     rm -v $out/bin/License.txt
     mkdir -p $out/etc/udev/rules.d
     sed -i '/udev-acl/d' usb/55-Argyll.rules
     cp -v usb/55-Argyll.rules $out/etc/udev/rules.d/
-    mkdir -p $out/share/
-    mv $out/ref $out/share/argyllcms
   '';
 
   meta = with lib; {

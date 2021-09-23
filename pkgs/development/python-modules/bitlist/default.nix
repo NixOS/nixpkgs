@@ -24,6 +24,11 @@ buildPythonPackage rec {
     nose
   ];
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "parts~=1.0.3" "parts>=1.0.3"
+  '';
+
   pythonImportsCheck = [ "bitlist" ];
 
   meta = with lib; {

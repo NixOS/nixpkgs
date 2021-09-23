@@ -30,19 +30,22 @@
 
 stdenv.mkDerivation rec {
   pname = "appcenter";
-  version = "3.7.1";
+  version = "3.8.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "1llkc0p47jcx992lkwics86vv622dmmvm5hxrdsq26j9crcd5dam";
+    sha256 = "07lkdpnjj9pxbq8h794qjiidvnysvzx0132w98r1wg9k7ca170bj";
   };
 
   patches = [
     # Try to remove other backends to make flatpak backend work.
     # https://github.com/NixOS/nixpkgs/issues/70214
     ./flatpak-only.patch
+    # The homepage banner does not show up on first run,
+    # has issues with app icon and mouse scrolling.
+    ./drop-homepage-banner.patch
   ];
 
   passthru = {
@@ -82,7 +85,6 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dhomepage=false"
     "-Dpayments=false"
     "-Dcurated=false"
   ];

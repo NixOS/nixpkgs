@@ -7,13 +7,13 @@
 }:
 
 buildPythonPackage rec {
-  version = "2.0.3";
+  version = "2.1.0";
   pname = "maxminddb";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "47e86a084dd814fac88c99ea34ba3278a74bc9de5a25f4b815b608798747c7dc";
+    sha256 = "c47b8acba98d03b8c762684d899623c257976f3eb0c9d557ff865d20cddc9d6b";
   };
 
   buildInputs = [ libmaxminddb ];

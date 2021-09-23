@@ -2743,6 +2743,12 @@
     githubId = 40633781;
     name = "Sergei S.";
   };
+  dit7ya = {
+    email = "7rat13@gmail.com";
+    github = "dit7ya";
+    githubId = 14034137;
+    name = "Mostly Void";
+  };
   dizfer = {
     email = "david@izquierdofernandez.com";
     github = "dizfer";
@@ -5188,6 +5194,12 @@
     github = "06kellyjac";
     githubId = 9866621;
     name = "Jack";
+  };
+  jkarlson = {
+    email = "jekarlson@gmail.com";
+    github = "jkarlson";
+    githubId = 1204734;
+    name = "Emil Karlson";
   };
   jlesquembre = {
     email = "jl@lafuente.me";
@@ -7666,6 +7678,12 @@
     github = "mvnetbiz";
     githubId = 6455574;
     name = "Matt Votava";
+  };
+  mvs = {
+    email = "mvs@nya.yt";
+    github = "illdefined";
+    githubId = 772914;
+    name = "Mikael Voss";
   };
   maxwilson = {
     email = "nixpkgs@maxwilson.dev";

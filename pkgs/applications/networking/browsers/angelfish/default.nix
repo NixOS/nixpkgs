@@ -20,17 +20,17 @@
 
 mkDerivation rec {
   pname = "angelfish";
-  version = "21.06";
+  version = "21.08";
 
   src = fetchurl {
     url = "mirror://kde/stable/plasma-mobile/${version}/angelfish-${version}.tar.xz";
-    sha256 = "sha256-iHgmG/DeaUPnRXlVIU8P/oUcYINienYmR2zI9Q4Yd3s=";
+    sha256 = "1gzvlha159bw767mj8lisn89592j4j4dazzfws3v4anddjh60xnh";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    sha256 = "0zh0kli7kav18v9znq2f5jklhf3m1kyb41jzmivjx70g9xyfzlwk";
+    sha256 = "1pbvw9hdzn3i97mahdy9y6jnjsmwmjs3lxfz7q6r9r10i8swbkak";
   };
 
   nativeBuildInputs = [
@@ -63,7 +63,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Web browser for Plasma Mobile";
-    homepage = "https://apps.kde.org/en/mobile.angelfish";
+    homepage = "https://invent.kde.org/plasma-mobile/angelfish";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dotlambda ];
   };
