@@ -27,7 +27,14 @@ stdenv.mkDerivation rec {
   };
 
   # FreeImage needs this patch
-  patches = [ ./headers.patch ];
+  patches = [
+    ./headers.patch
+    ./rename-version.patch
+  ];
+
+  postPatch = ''
+    mv VERSION VERSION.txt
+  '';
 
   outputs = [ "bin" "dev" "dev_private" "out" "man" "doc" ];
 
