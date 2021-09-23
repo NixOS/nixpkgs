@@ -9151,6 +9151,18 @@ final: prev:
     meta.homepage = "https://github.com/romainl/vim-qf/";
   };
 
+  vim-qlist = buildVimPluginFrom2Nix {
+    pname = "vim-qlist";
+    version = "2019-07-18";
+    src = fetchFromGitHub {
+      owner = "romainl";
+      repo = "vim-qlist";
+      rev = "be8fba124bf13314435b1faab8f628436d4cffb1";
+      sha256 = "0ska2mzx3hqqkq3fd09r0hlk2j8xc8mbbwfky31x3cmzsb9dksqw";
+    };
+    meta.homepage = "https://github.com/romainl/vim-qlist/";
+  };
+
   vim-qml = buildVimPluginFrom2Nix {
     pname = "vim-qml";
     version = "2020-11-03";
