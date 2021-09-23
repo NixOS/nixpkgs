@@ -1,9 +1,8 @@
 { stdenv, lib, buildFHSUserEnv, dpkg, glibc, gcc-unwrapped, autoPatchelfHook, fetchurl, wrapGAppsHook
-  , xlibs, gnome2, xorg
-  , libSM, libXxf86vm, libX11, glib, pango, gdk_pixbuf, cairo, gtk2-x11, zlib, libcap_progs, openssl, openssl_1_0_2
+  , gnome2, xorg
+  , libSM, libXxf86vm, libX11, glib, pango, cairo, gtk2-x11, zlib, openssl
   , libpulseaudio
   , SDL2, xorg_sys_opengl, libGL
-  , xdg_utils
 }:
 let
 
@@ -35,13 +34,10 @@ let
       libX11
       glib
       pango
-      gdk_pixbuf
       cairo
       gtk2-x11
       zlib
-      libcap_progs
       openssl
-      xdg_utils
     ];
 
     runtimeDependencies = [
@@ -103,7 +99,7 @@ in
    targetPkgs = pkgs: [
      runescape
      dpkg glibc gcc-unwrapped
-     libSM libXxf86vm libX11 glib pango gdk_pixbuf cairo gtk2-x11 zlib libcap_progs openssl openssl_1_0_2
+     libSM libXxf86vm libX11 glib pango cairo gtk2-x11 zlib openssl
      libpulseaudio
      xorg.libX11
      SDL2 xorg_sys_opengl libGL
