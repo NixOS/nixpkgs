@@ -14831,6 +14831,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  taoup = callPackage ../tools/misc/taoup { };
+
   tcptrack = callPackage ../development/tools/misc/tcptrack { };
 
   teensyduino = arduino-core.override { withGui = true; withTeensyduino = true; };
@@ -27373,6 +27375,8 @@ with pkgs;
 
   super-slicer = callPackage ../applications/misc/prusa-slicer/super-slicer.nix { };
 
+  super-slicer-staging = (callPackage ../applications/misc/prusa-slicer/super-slicer.nix { }).staging;
+
   robustirc-bridge = callPackage ../servers/irc/robustirc-bridge { };
 
   skrooge = libsForQt5.callPackage ../applications/office/skrooge {};
@@ -29257,6 +29261,11 @@ with pkgs;
   fheroes2 = callPackage ../games/fheroes2 {};
 
   fish-fillets-ng = callPackage ../games/fish-fillets-ng {};
+
+  fishfight = callPackage ../games/fishfight {
+    inherit (xorg) libX11 libXi;
+    inherit (darwin.apple_sdk.frameworks) AudioToolbox Cocoa CoreAudio CoreFoundation IOKit OpenGL;
+  };
 
   flightgear = libsForQt5.callPackage ../games/flightgear { };
 

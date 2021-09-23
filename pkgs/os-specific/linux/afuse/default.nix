@@ -1,11 +1,14 @@
-{ lib, stdenv, fetchurl, pkg-config, autoreconfHook, fuse }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, autoreconfHook, fuse }:
 
-stdenv.mkDerivation {
-  name = "afuse-0.4.1";
+stdenv.mkDerivation rec {
+  pname = "afuse-0.4.1";
+  version = "0.4.1";
 
-  src = fetchurl {
-    url = "https://github.com/pcarrier/afuse/archive/v0.4.1.tar.gz";
-    sha256 = "1sfhicmxppkvdd4z9klfn63snb71gr9hff6xij1gzk94xg6m0ycc";
+  src = fetchFromGitHub {
+    owner = "pcarrier";
+    repo = "afuse";
+    rev = "v${version}";
+    hash = "sha256-JivJ/xRxUiR0Mnm41T0514kF+T7ePeGpk4IHhWApKBo=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
