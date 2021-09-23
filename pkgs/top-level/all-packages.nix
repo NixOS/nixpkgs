@@ -408,6 +408,7 @@ with pkgs;
   dotnet-sdk_2 = dotnetCorePackages.sdk_2_1;
   dotnet-sdk_3 = dotnetCorePackages.sdk_3_1;
   dotnet-sdk_5 = dotnetCorePackages.sdk_5_0;
+  dotnet-sdk_6 = dotnetCorePackages.sdk_6_0;
 
   dotnet-sdk = dotnetCorePackages.sdk_5_0;
   dotnet-runtime = dotnetCorePackages.runtime_5_0;
