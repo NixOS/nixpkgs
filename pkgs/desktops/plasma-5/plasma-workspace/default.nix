@@ -59,6 +59,14 @@ mkDerivation {
       --replace 'query_qmake(QtBinariesDir QT_INSTALL_BINS)' 'set(QtBinariesDir "${lib.getBin qttools}/bin")'
   '';
 
+  # Otherwise app_id is plasmashell-wrapped instead of plasmashell
+  # See https://github.com/NixOS/nixpkgs/issues/118650
+  postFixup = ''
+    mv $out/bin/.plasmashell-wrapped $out/bin/.plasmashell.wrapped
+    substituteInPlace $out/bin/plasmashell \
+      --replace .plasmashell-wrapped"" ".plasmashell.wrapped"
+  '';
+
   NIX_CFLAGS_COMPILE = [
     ''-DNIXPKGS_XMESSAGE="${getBin xmessage}/bin/xmessage"''
     ''-DNIXPKGS_XRDB="${getBin xrdb}/bin/xrdb"''
