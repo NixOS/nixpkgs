@@ -8,6 +8,7 @@
 , libappindicator-gtk3
 , gst_all_1
 , pcre
+, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
@@ -24,6 +25,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
+    wrapGAppsHook
   ];
 
   buildInputs = [
