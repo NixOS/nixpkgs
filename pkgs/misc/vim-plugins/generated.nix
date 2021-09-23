@@ -6459,6 +6459,18 @@ final: prev:
     };
     meta.homepage = "https://github.com/PeterRincker/vim-argumentative/";
   };
+  
+  vim-argwrap = buildVimPluginFrom2Nix {
+    pname = "vim-argwrap";
+    version = "2021-06-11";
+    src = fetchFromGitHub {
+      owner = "FooSoft";
+      repo = "vim-argwrap";
+      rev = "f1c1d2b0c763ed77f9b9f2515ffff99a72c6a757";
+      sha256 = "03mnvb9sb1angzyyhm7d708yzb26bnrqv1x7dy67r1b6rflvv4wz";
+    };
+    meta.homepage = "https://github.com/FooSoft/vim-argwrap/";
+  };
 
   vim-asterisk = buildVimPluginFrom2Nix {
     pname = "vim-asterisk";
@@ -9149,6 +9161,18 @@ final: prev:
       sha256 = "0pylxkmhcanks59imah3q2xyn8lp5735xm17p13yx9vx90779nwp";
     };
     meta.homepage = "https://github.com/romainl/vim-qf/";
+  };
+
+  vim-qlist = buildVimPluginFrom2Nix {
+    pname = "vim-qlist";
+    version = "2019-07-18";
+    src = fetchFromGitHub {
+      owner = "romainl";
+      repo = "vim-qlist";
+      rev = "be8fba124bf13314435b1faab8f628436d4cffb1";
+      sha256 = "0ska2mzx3hqqkq3fd09r0hlk2j8xc8mbbwfky31x3cmzsb9dksqw";
+    };
+    meta.homepage = "https://github.com/romainl/vim-qlist/";
   };
 
   vim-qml = buildVimPluginFrom2Nix {
