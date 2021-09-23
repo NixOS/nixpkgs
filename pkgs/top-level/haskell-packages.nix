@@ -88,10 +88,10 @@ in {
         # aarch64 ghc865Binary gets SEGVs due to haskell#15449 or similar
         # the oldest ghc with aarch64-darwin support is 8.10.5
         # Musl bindists do not exist for ghc 8.6.5, so we use 8.10.* for them
-        if stdenv.isAarch64 || stdenv.isAarch32 || stdenv.targetPlatform.isMusl then
+        if stdenv.isAarch64 || stdenv.isAarch32 then
           packages.ghc8107BinaryMinimal
         else
-          packages.ghc865Binary;
+          packages.ghc8107Binary;
       inherit (buildPackages.python3Packages) sphinx;
       # Need to use apple's patched xattr until
       # https://github.com/xattr/xattr/issues/44 and
