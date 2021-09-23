@@ -27,6 +27,7 @@
 , "browserify"
 , "btc-rpc-explorer"
 , "castnow"
+, "carbon-now-cli"
 , "cdk8s-cli"
 , "cdktf-cli"
 , "clean-css-cli"
