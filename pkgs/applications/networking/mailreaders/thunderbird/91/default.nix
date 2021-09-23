@@ -2,21 +2,14 @@
 
 callPackage (import ../../../browsers/firefox/common.nix rec {
   pname = "thunderbird";
-  ffversion = "91.1.0";
+  ffversion = "91.1.1";
   application = "comm/mail";
   binaryName = pname;
   src = fetchurl {
     url = "mirror://mozilla/thunderbird/releases/${ffversion}/source/thunderbird-${ffversion}.source.tar.xz";
-    sha512 = "3zl164k4lp7m33s0097cbf8kbb4v1rs1q2qr58bsrdpc65fh20k88s1yd9h5phvydml14y6b1p2fhx723dcrcfkagdjhp3wsqjzyrf4";
+    sha512 = "2da102f9ec42489fc785ccdabcc7fdbc826f2df5e8e76c65866a44a221e762f59647ea265fe4907c18f0d3f1e04199e809235b4587ea17bdc1155e829f57ff2f";
   };
   patches = [
-    ./no-buildconfig-90.patch
-
-    # There is a bug in Thunderbird 91 where add-ons are required
-    # to be signed when the build is run with default settings.
-    # https://bugzilla.mozilla.org/show_bug.cgi?id=1727113
-    # https://phabricator.services.mozilla.com/D124361
-    ./D124361.diff
   ];
 
   meta = with lib; {
