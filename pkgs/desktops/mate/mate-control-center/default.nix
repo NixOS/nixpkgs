@@ -57,6 +57,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/mate-desktop/mate-control-center";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = [ maintainers.romildo ];
+    maintainers = teams.mate.members;
   };
 }

@@ -72,6 +72,15 @@
           <literal>gsettings set org.gnome.desktop.lockdown disable-lock-screen false</literal>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <literal>kubernetes-helm</literal> now defaults to 3.7.0,
+          which introduced some breaking changes to the experimental OCI
+          manifest format. See
+          <link xlink:href="https://github.com/helm/community/blob/main/hips/hip-0006.md">HIP
+          6</link> for more details.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-new-services">

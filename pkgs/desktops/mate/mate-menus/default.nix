@@ -27,6 +27,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/mate-desktop/mate-menus";
     license = with licenses; [ gpl2Plus lgpl2Plus ];
     platforms = platforms.unix;
-    maintainers = [ maintainers.romildo ];
+    maintainers = teams.mate.members;
   };
 }

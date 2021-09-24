@@ -166,6 +166,7 @@ folke/tokyonight.nvim@main
 folke/trouble.nvim@main
 folke/twilight.nvim@main
 folke/which-key.nvim@main
+FooSoft/vim-argwrap
 freitass/todo.txt-vim
 frigoeu/psc-ide-vim
 fruit-in/brainfuck-vim
@@ -561,6 +562,7 @@ pearofducks/ansible-vim
 peitalin/vim-jsx-typescript
 peterbjorgensen/sved
 peterhoeg/vim-qml
+PeterRincker/vim-argumentative
 petRUShka/vim-opencl
 phaazon/hop.nvim
 phanviet/vim-monokai-pro
@@ -623,6 +625,7 @@ RobertAudi/securemodelines
 rodjek/vim-puppet
 romainl/vim-cool
 romainl/vim-qf
+romainl/vim-qlist
 roman/golden-ratio
 romgrk/barbar.nvim
 romgrk/nvim-treesitter-context

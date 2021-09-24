@@ -46,6 +46,17 @@ let
       '';
     };
 
+    carbon-now-cli = super.carbon-now-cli.override ({
+      nativeBuildInputs = [ pkgs.makeWrapper ];
+      prePatch = ''
+        export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1
+      '';
+      postInstall = ''
+        wrapProgram $out/bin/carbon-now \
+          --set PUPPETEER_EXECUTABLE_PATH ${pkgs.chromium.outPath}/bin/chromium
+      '';
+    });
+
     deltachat-desktop = super."deltachat-desktop-../../applications/networking/instant-messengers/deltachat-desktop".override {
       meta.broken = true; # use the top-level package instead
     };

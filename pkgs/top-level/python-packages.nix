@@ -517,6 +517,8 @@ in {
 
   apsw = callPackage ../development/python-modules/apsw { };
 
+  apycula = callPackage ../development/python-modules/apycula { };
+
   aqualogic = callPackage ../development/python-modules/aqualogic { };
 
   arabic-reshaper = callPackage ../development/python-modules/arabic-reshaper { };
@@ -3616,6 +3618,8 @@ in {
 
   imutils = callPackage ../development/python-modules/imutils { };
 
+  in-place = callPackage ../development/python-modules/in-place { };
+
   incomfort-client = callPackage ../development/python-modules/incomfort-client { };
 
   incremental = callPackage ../development/python-modules/incremental { };
@@ -4146,7 +4150,6 @@ in {
   libgpuarray = callPackage ../development/python-modules/libgpuarray {
     clblas = pkgs.clblas.override { boost = self.boost; };
     cudaSupport = pkgs.config.cudaSupport or false;
-    inherit (pkgs.linuxPackages) nvidia_x11;
   };
 
   libiio = (toPythonModule (pkgs.libiio.override { inherit python; })).python;
@@ -8922,7 +8925,6 @@ in {
   Theano = callPackage ../development/python-modules/Theano rec {
     cudaSupport = pkgs.config.cudaSupport or false;
     cudnnSupport = cudaSupport;
-    inherit (pkgs.linuxPackages) nvidia_x11;
   };
 
   TheanoWithCuda = self.Theano.override {
