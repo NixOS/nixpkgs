@@ -385,6 +385,8 @@ in {
 
   aiounittest = callPackage ../development/python-modules/aiounittest { };
 
+  aiowatttime = callPackage ../development/python-modules/aiowatttime { };
+
   aiowinreg = callPackage ../development/python-modules/aiowinreg { };
 
   aioymaps = callPackage ../development/python-modules/aioymaps { };
