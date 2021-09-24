@@ -55,7 +55,11 @@ let
 
     recording = {
       recordings-directory = "/tmp/recordings";
+<<<<<<< HEAD
       finalize-script = "${cfg.finalizeScript}";
+=======
+      finalize-script = "/path/to/finalize"; # TODO(puck): replace with actual noop default
+>>>>>>> a1dc2ddd630 (nixos/jibri: init at 8.0-93-g51fe7a2)
     };
 
     streaming.rtmp-allow-list = [ ".*" ];
@@ -116,6 +120,8 @@ in
       '';
     };
 
+=======
+>>>>>>> a1dc2ddd630 (nixos/jibri: init at 8.0-93-g51fe7a2)
     xmppEnvironments = mkOption {
       description = ''
         XMPP servers to connect to.
@@ -242,6 +248,7 @@ in
 
   config = mkIf cfg.enable {
     users.groups.jibri = { };
+    users.groups.plugdev = { };
     users.users.jibri = {
       isSystemUser = true;
       group = "jibri";
@@ -305,7 +312,7 @@ in
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
 
-      path = [ pkgs.chromedriver pkgs.chromium pkgs.ffmpeg-full ];
+      path = with pkgs; [ chromedriver chromium ffmpeg-full ];
 
       script = (concatStrings (mapAttrsToList
         (name: env: ''
@@ -314,7 +321,11 @@ in
         '')
         cfg.xmppEnvironments))
       + ''
+<<<<<<< HEAD
         ${pkgs.jre8_headless}/bin/java -Djava.util.logging.config.file=${./logging.properties-journal} -Dconfig.file=${configFile} -jar ${pkgs.jibri}/opt/jitsi/jibri/jibri.jar --config /var/lib/jibri/jibri.json
+=======
+        ${pkgs.jre_headless}/bin/java -Djava.util.logging.config.file=${./logging.properties-journal} -Dconfig.file=${configFile} -jar ${pkgs.jibri}/opt/jitsi/jibri/jibri.jar --config /var/lib/jibri/jibri.json
+>>>>>>> a1dc2ddd630 (nixos/jibri: init at 8.0-93-g51fe7a2)
       '';
 
       environment.HOME = "/var/lib/jibri";
@@ -331,15 +342,15 @@ in
       };
     };
 
-    systemd.tmpfiles.rules =
-      [
-        "d /var/log/jitsi/jibri 755 jibri"
-      ];
+    systemd.tmpfiles.rules = [
+      "d /var/log/jitsi/jibri 755 jibri jibri"
+    ];
 
 
 
     # Configure Chromium to not show the "Chrome is being controlled by automatic test software" message.
     environment.etc."chromium/policies/managed/managed_policies.json".text = builtins.toJSON { CommandLineFlagSecurityWarningsEnabled = false; };
+    warnings = [ "All security warnings for Chromium have been disabled. This is necessary for Jibri, but it also impacts all other uses of Chromium on this system." ];
 
     boot = {
       extraModprobeConfig = ''
@@ -349,5 +360,5 @@ in
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ ];
+  meta.maintainers = lib.teams.jitsi.members;
 }
