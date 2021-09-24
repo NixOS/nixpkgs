@@ -9080,6 +9080,8 @@ in {
 
   tappy = callPackage ../development/python-modules/tappy { };
 
+  taskcat = callPackage ../development/python-modules/taskcat { };
+
   tasklib = callPackage ../development/python-modules/tasklib { };
 
   taskw = callPackage ../development/python-modules/taskw { };
