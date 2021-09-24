@@ -290,7 +290,7 @@ let
       cp -r . $out/share/discourse
       rm -r $out/share/discourse/log
       ln -sf /var/log/discourse $out/share/discourse/log
-      ln -sf /run/discourse/tmp $out/share/discourse/tmp
+      ln -sf /var/lib/discourse/tmp $out/share/discourse/tmp
       ln -sf /run/discourse/config $out/share/discourse/config
       ln -sf /run/discourse/assets/javascripts/plugins $out/share/discourse/app/assets/javascripts/plugins
       ln -sf /run/discourse/public $out/share/discourse/public
