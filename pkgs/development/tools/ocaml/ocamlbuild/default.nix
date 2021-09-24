@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   strictDeps = true;
 
   # x86_64-unknown-linux-musl-ld: -r and -pie may not be used together
-  hardeningDisable = lib.optional stdenv.hostPlatform.isStatic "pie";
+  hardeningDisable = lib.optional stdenv.hostPlatform.isMusl "pie";
 
   configurePhase = ''
   runHook preConfigure
