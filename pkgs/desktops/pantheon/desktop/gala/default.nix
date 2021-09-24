@@ -1,7 +1,6 @@
 { lib, stdenv
 , fetchFromGitHub
 , nix-update-script
-, fetchpatch
 , pantheon
 , pkg-config
 , meson
@@ -30,13 +29,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gala";
-  version = "6.0.1";
+  version = "6.2.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "0xp9vviamzdwlcnx4836sxaz2pyfkxswgvjm73ppn7fkdm0zjpzx";
+    sha256 = "1yxsfshahaxiqs5waj4v96rhjhdgyd1za4pwlg3vqq51p75k2b1g";
   };
 
   passthru = {
@@ -75,12 +74,6 @@ stdenv.mkDerivation rec {
   ];
 
   patches = [
-    # Upstream code not respecting our localedir
-    # https://github.com/elementary/gala/pull/1205
-    (fetchpatch {
-      url = "https://github.com/elementary/gala/commit/605aa10ea2a78650e001b2a247c5f7afce478b05.patch";
-      sha256 = "0bg67wzrnmx8nlw93i35vhyfx8al0bj0lacgci98vwlp2m1jgbd2";
-    })
     ./plugins-dir.patch
   ];
 
