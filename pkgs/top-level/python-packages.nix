@@ -4950,6 +4950,8 @@ in {
 
   mypy-protobuf = callPackage ../development/python-modules/mypy-protobuf { };
 
+  mypy-zope = callPackage ../development/python-modules/mypy-zope { };
+
   mysqlclient = callPackage ../development/python-modules/mysqlclient { };
 
   mysql-connector = callPackage ../development/python-modules/mysql-connector { };
