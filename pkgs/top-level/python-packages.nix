@@ -393,6 +393,8 @@ in {
 
   airly = callPackage ../development/python-modules/airly { };
 
+  airthings = callPackage ../development/python-modules/airthings { };
+
   ajpy = callPackage ../development/python-modules/ajpy { };
 
   ajsonrpc = callPackage ../development/python-modules/ajsonrpc { };
