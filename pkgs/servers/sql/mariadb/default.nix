@@ -92,7 +92,7 @@ common = rec { # attributes common to both builds
     # Remove Development components. Need to use libmysqlclient.
     rm "$out"/lib/mysql/plugin/daemon_example.ini
     rm "$out"/lib/{libmariadbclient.a,libmysqlclient.a,libmysqlclient_r.a,libmysqlservices.a}
-    rm "$out"/bin/{mariadb_config,mysql_config}
+    rm "$out"/bin/{mariadb-config,mariadb_config,mysql_config}
     rm -r $out/include
     rm -r $out/lib/pkgconfig
     rm -rf "$out"/share/aclocal
