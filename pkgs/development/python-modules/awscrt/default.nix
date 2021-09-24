@@ -2,7 +2,7 @@
 
 buildPythonPackage rec {
   pname = "awscrt";
-  version = "0.12.2";
+  version = "0.12.3";
 
   buildInputs = lib.optionals stdenv.isDarwin
     (with darwin.apple_sdk.frameworks; [ CoreFoundation Security ]);
@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c3a5aabac3d5dd5560f147fc8758034fa17bbd2d06793f6e6a30d99eeab2cbda";
+    sha256 = "441262c36b450286132fde7f110823f7ae7ae909c0f6483a0a2d56150b62f2b5";
   };
 
   meta = with lib; {
