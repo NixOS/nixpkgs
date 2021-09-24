@@ -473,6 +473,7 @@ in
   wiki-js = handleTest ./wiki-js.nix {};
   wireguard = handleTest ./wireguard {};
   wmderland = handleTest ./wmderland.nix {};
+  wpa_supplicant = handleTest ./wpa_supplicant.nix {};
   wordpress = handleTest ./wordpress.nix {};
   xandikos = handleTest ./xandikos.nix {};
   xautolock = handleTest ./xautolock.nix {};
