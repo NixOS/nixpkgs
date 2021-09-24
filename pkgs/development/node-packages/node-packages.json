@@ -25,6 +25,7 @@
 , "bower"
 , "bower2nix"
 , "browserify"
+, "browser-sync"
 , "btc-rpc-explorer"
 , "castnow"
 , "carbon-now-cli"
