@@ -9,15 +9,15 @@
 , ncurses
 }:
 
-resholvePackage {
+resholvePackage rec {
   pname = "shunit2";
-  version = "2019-08-10";
+  version = "2.1.8";
 
   src = fetchFromGitHub {
     owner = "kward";
-    repo = "shunit2";
-    rev = "ba130d69bbff304c0c6a9c5e8ab549ae140d6225";
-    sha256 = "1bsn8dhxbjfmh01lq80yhnld3w3fw1flh7nwx12csrp58zsvlmgk";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-IZHkgkVqzeh+eEKCDJ87sqNhSA+DU6kBCNDdQaUEeiM=";
   };
 
   installPhase = ''
@@ -82,8 +82,8 @@ resholvePackage {
 
   meta = with lib; {
     homepage = "https://github.com/kward/shunit2";
-    description = "A xUnit based unit test framework for Bourne based shell scripts";
-    maintainers = with maintainers; [ cdepillabout utdemir ];
+    description = "An xUnit based unit test framework for Bourne based shell scripts";
+    maintainers = with maintainers; [ abathur utdemir ];
     license = licenses.asl20;
     platforms = platforms.unix;
   };
