@@ -38,7 +38,6 @@ buildPythonPackage rec {
 
   buildInputs = [
     pillow
-    gfortran
     glibcLocales
   ] ++ lib.optionals stdenv.cc.isClang [
     llvmPackages.openmp
@@ -46,6 +45,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     cython
+    gfortran
   ];
 
   propagatedBuildInputs = [

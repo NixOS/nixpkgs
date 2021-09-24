@@ -57,6 +57,16 @@
       </listitem>
       <listitem>
         <para>
+          bash now defaults to major version 5.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Systemd was updated to version 249 (from 247).
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           Pantheon desktop has been updated to version 6. Due to changes
           of screen locker, if locking doesn’t work for you, please try
           <literal>gsettings set org.gnome.desktop.lockdown disable-lock-screen false</literal>.

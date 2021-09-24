@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "frnmst";
     repo = pname;
     rev = version;
-    sha256 = "sha256-VYknHuBoU7XWkm6mt8ckBzFLMcYTPW5CXMGdOn3perY=";
+    sha256 = "1dksx5ykm7f1bi16wg8kqqqlnc874k3vg9kfjbbbalv8w0g2g2am";
   };
 
   propagatedBuildInputs = [

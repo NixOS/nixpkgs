@@ -41,6 +41,8 @@ tcl.mkTclDerivation {
 
   propagatedBuildInputs = [ libXft ];
 
+  enableParallelBuilding = true;
+
   doCheck = false; # fails. can't find itself
 
   inherit tcl;

@@ -65,6 +65,9 @@ stdenv.mkDerivation {
     # Fix references to gettext introduced by ./git-sh-i18n.patch
     substituteInPlace git-sh-i18n.sh \
         --subst-var-by gettext ${gettext}
+
+    # ensure we are using the correct shell when executing the test scripts
+    patchShebangs t/*.sh
   '';
 
   nativeBuildInputs = [ gettext perlPackages.perl makeWrapper ]
@@ -318,6 +321,7 @@ stdenv.mkDerivation {
 
     # Flaky tests:
     disable_test t5319-multi-pack-index
+    disable_test t6421-merge-partial-clone
 
     ${lib.optionalString (!perlSupport) ''
       # request-pull is a Bash script that invokes Perl, so it is not available

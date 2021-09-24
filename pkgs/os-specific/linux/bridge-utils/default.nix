@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "bridge-utils-1.5";
+  pname = "bridge-utils";
+  version = "1.5";
 
   src = fetchurl {
-    url = "mirror://sourceforge/bridge/${name}.tar.gz";
+    url = "mirror://sourceforge/bridge/bridge-utils-${version}.tar.gz";
     sha256 = "42f9e5fb8f6c52e63a98a43b81bd281c227c529f194913e1c51ec48a393b6688";
   };
 

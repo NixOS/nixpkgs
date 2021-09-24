@@ -416,6 +416,11 @@ in with passthru; stdenv.mkDerivation {
     # This allows build Python to import host Python's sysconfigdata
     mkdir -p "$out/${sitePackages}"
     ln -s "$out/lib/${libPrefix}/"_sysconfigdata*.py "$out/${sitePackages}/"
+
+    # debug info can't be separated from a static library and would otherwise be
+    # left in place by a separateDebugInfo build. force its removal here to save
+    # space in output.
+    $STRIP -S $out/lib/${libPrefix}/config-*/libpython*.a || true
     '' + optionalString stripConfig ''
     rm -R $out/bin/python*-config $out/lib/python*/config-*
     '' + optionalString stripIdlelib ''
@@ -445,6 +450,13 @@ in with passthru; stdenv.mkDerivation {
     find $out -name "*.py" | ${pythonForBuildInterpreter} -m compileall -q -f -x "lib2to3" -i -
     find $out -name "*.py" | ${pythonForBuildInterpreter} -O  -m compileall -q -f -x "lib2to3" -i -
     find $out -name "*.py" | ${pythonForBuildInterpreter} -OO -m compileall -q -f -x "lib2to3" -i -
+    '' + ''
+    # *strip* shebang from libpython gdb script - it should be dual-syntax and
+    # interpretable by whatever python the gdb in question is using, which may
+    # not even match the major version of this python. doing this after the
+    # bytecode compilations for the same reason - we don't want bytecode generated.
+    mkdir -p $out/share/gdb
+    sed '/^#!/d' Tools/gdb/libpython.py > $out/share/gdb/libpython.py
   '';
 
   preFixup = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
@@ -469,6 +481,8 @@ in with passthru; stdenv.mkDerivation {
     # These typically end up in shebangs.
     pythonForBuild buildPackages.bash
   ];
+
+  separateDebugInfo = true;
 
   inherit passthru;
 

@@ -280,6 +280,7 @@ let
       };
       exporterTest = ''
         wait_for_unit("prometheus-influxdb-exporter.service")
+        wait_for_open_port(9122)
         succeed(
           "curl -XPOST http://localhost:9122/write --data-binary 'influxdb_exporter,distro=nixos,added_in=21.09 value=1'"
         )
