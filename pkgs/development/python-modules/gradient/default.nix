@@ -67,5 +67,8 @@ buildPythonPackage rec {
     license = licenses.isc;
     platforms = platforms.unix;
     maintainers = with maintainers; [ thoughtpolice ];
+    # There is no support for click > 8
+    # https://github.com/Paperspace/gradient-cli/issues/368
+    broken = true;
   };
 }

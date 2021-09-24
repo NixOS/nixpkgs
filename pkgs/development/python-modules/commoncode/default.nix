@@ -14,11 +14,11 @@
 }:
 buildPythonPackage rec {
   pname = "commoncode";
-  version = "21.8.27";
+  version = "21.8.31";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "789ee1798cd74ab4516d2e547473d69717d3b2ed7ee180ab2746e0bdfd0d88a4";
+    sha256 = "0e74c61226834393801e921ab125eae3b52361340278fb9a468c5c691d286c32";
   };
 
   dontConfigure = true;

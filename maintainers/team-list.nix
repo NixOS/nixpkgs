@@ -164,6 +164,14 @@ with lib.maintainers; {
     scope = "Maintain Kodi and related packages.";
   };
 
+  mate = {
+    members = [
+      j03
+      romildo
+    ];
+    scope = "Maintain Mate desktop environment and related packages.";
+  };
+
   matrix = {
     members = [
       ma27
