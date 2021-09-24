@@ -8074,6 +8074,8 @@ in {
 
   repoze_who = callPackage ../development/python-modules/repoze_who { };
 
+  reprint = callPackage ../development/python-modules/reprint { };
+
   reproject = callPackage ../development/python-modules/reproject { };
 
   requests-aws4auth = callPackage ../development/python-modules/requests-aws4auth { };
