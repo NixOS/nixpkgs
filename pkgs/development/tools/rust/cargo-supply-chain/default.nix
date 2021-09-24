@@ -1,17 +1,15 @@
-{ lib, rustPlatform, fetchFromGitHub, stdenv, Security }:
+{ lib, rustPlatform, fetchCrate, stdenv, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-supply-chain";
-  version = "0.0.2";
+  version = "0.2.0";
 
-  src = fetchFromGitHub {
-    owner = "rust-secure-code";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "0kpm842p7l0vwbfa99zq3w3nsasy5sp1b99si7brjjvq99bad9gr";
+  src = fetchCrate {
+    inherit pname version;
+    sha256 = "sha256-zjDZJOUjnEQ03rmo5CdSY1emE6YohOPlf7SKuvNLuV0=";
   };
 
-  cargoSha256 = "sha256-Mn5s6pfTHoFXtHqn6ii8PtAIBz/RJaR0zO5U5jS3UDU=";
+  cargoSha256 = "sha256-xSJ5rx8k+my0NeGYHZyvDzbM7uMdbViT7Ou9a9JACfs=";
 
   buildInputs = lib.optional stdenv.isDarwin Security;
 
