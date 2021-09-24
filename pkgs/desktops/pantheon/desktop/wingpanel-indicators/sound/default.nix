@@ -7,7 +7,7 @@
 , meson
 , python3
 , ninja
-, vala
+, vala_0_52
 , gtk3
 , granite
 , wingpanel
@@ -50,7 +50,9 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     python3
-    vala
+    # Does not build with vala 0.54
+    # https://github.com/elementary/wingpanel-indicator-sound/issues/219
+    vala_0_52
   ];
 
   buildInputs = [
