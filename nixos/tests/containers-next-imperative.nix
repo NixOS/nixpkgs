@@ -236,6 +236,12 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
         only_imperative.wait_until_succeeds("ping >&2 -c4 10.42.42.2")
         only_imperative.succeed("machinectl status foonet2 | grep 10.42.42.2")
 
+    with subtest("Reboot via machinectl(1)"):
+        only_imperative.succeed("machinectl poweroff foonet2")
+        only_imperative.wait_until_fails("ping >&2 -c4 10.42.42.2")
+        only_imperative.succeed("machinectl start foonet2")
+        only_imperative.wait_until_succeeds("ping >&2 -c4 10.42.42.2")
+
     only_imperative.shutdown()
     imperative_and_declarative.shutdown()
   '';
