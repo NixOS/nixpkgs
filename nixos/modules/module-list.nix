@@ -108,6 +108,8 @@
   ./misc/lib.nix
   ./misc/label.nix
   ./misc/locate.nix
+  ./misc/man-db.nix
+  ./misc/mandoc.nix
   ./misc/meta.nix
   ./misc/nixpkgs.nix
   ./misc/passthru.nix

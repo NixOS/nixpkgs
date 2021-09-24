@@ -74,10 +74,6 @@ let
       ];
     };
 
-  # list of man outputs currently active intended for use as default values
-  # for man-related options, thus "man" is included unconditionally.
-  activeManOutputs = [ "man" ] ++ lib.optionals cfg.dev.enable [ "devman" ];
-
 in
 
 {
@@ -107,8 +103,8 @@ in
         type = types.bool;
         default = true;
         description = ''
-          Whether to install manual pages and the <command>man</command> command.
-          This also includes "man" outputs.
+          Whether to install manual pages.
+          This also includes <literal>man</literal> outputs.
         '';
       };
 
@@ -116,27 +112,9 @@ in
         type = types.bool;
         default = false;
         description = ''
-          Whether to generate the manual page index caches using
-          <literal>mandb(8)</literal>. This allows searching for a page or
+          Whether to generate the manual page index caches.
+          This allows searching for a page or
           keyword using utilities like <literal>apropos(1)</literal>.
-        '';
-      };
-
-      man.manualPages = mkOption {
-        type = types.path;
-        default = pkgs.buildEnv {
-          name = "man-paths";
-          paths = config.environment.systemPackages;
-          pathsToLink = [ "/share/man" ];
-          extraOutputsToInstall = activeManOutputs;
-          ignoreCollisions = true;
-        };
-        defaultText = literalDocBook "all man pages in <option>config.environment.systemPackages</option>";
-        description = ''
-          The manual pages to generate caches for if <option>generateCaches</option>
-          is enabled. Must be a path to a directory with man pages under
-          <literal>/share/man</literal>; see the source for an example.
-          Advanced users can make this a content-addressed derivation to save a few rebuilds.
         '';
       };
 
@@ -221,29 +199,10 @@ in
 
   config = mkIf cfg.enable (mkMerge [
 
+    # The actual implementation for this lives in man-db.nix
     (mkIf cfg.man.enable {
-      environment.systemPackages = [ pkgs.man-db ];
       environment.pathsToLink = [ "/share/man" ];
-      environment.extraOutputsToInstall = activeManOutputs;
-      environment.etc."man_db.conf".text =
-        let
-          manualCache = pkgs.runCommandLocal "man-cache" { } ''
-            echo "MANDB_MAP ${cfg.man.manualPages}/share/man $out" > man.conf
-            ${pkgs.man-db}/bin/mandb -C man.conf -psc >/dev/null 2>&1
-          '';
-        in
-        ''
-          # Manual pages paths for NixOS
-          MANPATH_MAP /run/current-system/sw/bin /run/current-system/sw/share/man
-          MANPATH_MAP /run/wrappers/bin          /run/current-system/sw/share/man
-
-          ${optionalString cfg.man.generateCaches ''
-          # Generated manual pages cache for NixOS (immutable)
-          MANDB_MAP /run/current-system/sw/share/man ${manualCache}
-          ''}
-          # Manual pages caches for NixOS
-          MANDB_MAP /run/current-system/sw/share/man /var/cache/man/nixos
-        '';
+      environment.extraOutputsToInstall = [ "man" ] ++ optional cfg.dev.enable "devman";
     })
 
     (mkIf cfg.info.enable {
