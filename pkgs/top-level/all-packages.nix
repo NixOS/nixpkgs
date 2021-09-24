@@ -21896,6 +21896,8 @@ with pkgs;
 
   firmwareLinuxNonfree = callPackage ../os-specific/linux/firmware/firmware-linux-nonfree { };
 
+  qmk-udev-rules = callPackage ../os-specific/linux/qmk-udev-rules { };
+
   radeontools = callPackage ../os-specific/linux/radeontools { };
 
   radeontop = callPackage ../os-specific/linux/radeontop { };
