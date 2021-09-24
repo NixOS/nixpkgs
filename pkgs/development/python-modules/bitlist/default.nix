@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "bitlist";
-  version = "0.4.0";
+  version = "0.5.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-IL1tpP/F6O3BvJab6aC6r6PhRgKFpLp9aXmOK1rQXaU=";
+    sha256 = "sha256-bX/Z5FBm21gX4ax/HfqD2bNotZyNFX7dHCEN5uZzQJQ=";
   };
 
   propagatedBuildInputs = [
