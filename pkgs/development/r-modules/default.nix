@@ -465,6 +465,7 @@ let
     statmod = [ pkgs.libiconv ];
     rsvg = [ pkgs.librsvg.dev ];
     ssh = with pkgs; [ libssh ];
+    s2 = [ pkgs.openssl.dev ];
   };
 
   packagesRequireingX = [
