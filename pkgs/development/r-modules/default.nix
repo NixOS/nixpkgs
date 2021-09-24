@@ -466,6 +466,7 @@ let
     rsvg = [ pkgs.librsvg.dev ];
     ssh = with pkgs; [ libssh ];
     s2 = [ pkgs.openssl.dev ];
+    ArrayExpressHTS = with pkgs; [ zlib.dev curl.dev which ];
   };
 
   packagesRequireingX = [
