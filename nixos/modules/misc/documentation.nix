@@ -114,7 +114,16 @@ in
         description = ''
           Whether to generate the manual page index caches.
           This allows searching for a page or
-          keyword using utilities like <literal>apropos(1)</literal>.
+          keyword using utilities like
+          <citerefentry>
+            <refentrytitle>apropos</refentrytitle>
+            <manvolnum>1</manvolnum>
+          </citerefentry>
+          and the <literal>-k</literal> option of
+          <citerefentry>
+            <refentrytitle>man</refentrytitle>
+            <manvolnum>1</manvolnum>
+          </citerefentry>.
         '';
       };
 
