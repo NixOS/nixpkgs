@@ -40,6 +40,6 @@ rustPlatform.buildRustPackage rec {
     description = "A simple, fast and easy to use app to remove unnecessary files from your computer";
     homepage = "https://github.com/qarmin/czkawka";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ yanganto ];
+    maintainers = with maintainers; [ yanganto _0x4A6F ];
   };
 }
