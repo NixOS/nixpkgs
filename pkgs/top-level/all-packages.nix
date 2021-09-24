@@ -167,6 +167,8 @@ with pkgs;
 
   alda = callPackage ../development/interpreters/alda { };
 
+  align = callPackage ../tools/text/align { };
+
   althttpd = callPackage ../servers/althttpd { };
 
   among-sus = callPackage ../games/among-sus { };
