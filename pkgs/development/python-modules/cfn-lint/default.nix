@@ -93,5 +93,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/aws-cloudformation/cfn-python-lint";
     changelog = "https://github.com/aws-cloudformation/cfn-python-lint/blob/master/CHANGELOG.md";
     license = licenses.mit;
+    maintainers = with maintainers; [ glittershark ];
   };
 }
