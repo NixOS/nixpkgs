@@ -525,6 +525,8 @@ in {
 
   apispec = callPackage ../development/python-modules/apispec { };
 
+  apispec-webframeworks = callPackage ../development/python-modules/apispec-webframeworks { };
+
   aplpy = callPackage ../development/python-modules/aplpy { };
 
   appdirs = callPackage ../development/python-modules/appdirs { };
