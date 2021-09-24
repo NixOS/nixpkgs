@@ -18,6 +18,9 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ matplotlib numpy ];
 
+  # Project has no tests
+  doCheck = false;
+
   pythonImportsCheck = [ "adjustText" ];
 
   meta = with lib; {
