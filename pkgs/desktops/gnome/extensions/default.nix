@@ -62,7 +62,7 @@ in rec {
 
   gnomeExtensions = lib.trivial.pipe gnome40Extensions [
     # Apply some custom patches for automatically packaged extensions
-    (callPackage ./extensionPatches.nix {})
+    (callPackage ./extensionOverrides.nix {})
     # Add all manually packaged extensions
     (extensions: extensions // (callPackages ./manuallyPackaged.nix {}))
     # Map the extension UUIDs to readable names
