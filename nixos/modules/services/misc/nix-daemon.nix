@@ -181,6 +181,16 @@ in
         description = ''
           Nix daemon process priority. This priority propagates to build processes.
           0 is the default Unix process priority, 19 is the lowest.
+
+          Please note that if used on a recent Linux kernel with group scheduling,
+          setting the nice level will only have an effect relative to other threads
+          in the same task group. Therefore this option is only useful if
+          autogrouping has been disabled (see the kernel.sched_autogroup_enabled
+          sysctl) and no systemd unit uses any of the per-service CPU accounting
+          features of systemd. Otherwise the Nix daemon process may be placed in a
+          separate task group and the nice level setting will have no effect.
+          Refer to the man pages sched(7) and systemd.resource-control(5) for
+          details.
         '';
       };
 
