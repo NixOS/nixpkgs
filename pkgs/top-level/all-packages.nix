@@ -246,6 +246,8 @@ with pkgs;
 
   clj-kondo = callPackage ../development/tools/clj-kondo { };
 
+  cloak = callPackage ../applications/misc/cloak { };
+
   cmark = callPackage ../development/libraries/cmark { };
 
   cmark-gfm = callPackage ../development/libraries/cmark-gfm { };
