@@ -30,6 +30,7 @@ in with python.pkgs; buildPythonApplication rec {
   postInstall = ''
     installShellCompletion --bash --name watson watson.completion
     installShellCompletion --zsh --name _watson watson.zsh-completion
+    installShellCompletion --fish watson.fish
   '';
 
   checkInputs = [ pytestCheckHook pytest-mock mock pytest-datafiles ];
