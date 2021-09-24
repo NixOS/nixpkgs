@@ -44,25 +44,41 @@ in
         default = "calibre-server";
       };
 
+      userdb = mkOption {
+        description = ''
+          The path to the user database.
+                      If null, run without authentification.
+                      Database must be created by hand using calibre-server --userdb PATH --manage-users.'';
+        type = types.path;
+        default = null;
+      };
+
     };
   };
-
 
   ###### implementation
 
   config = mkIf cfg.enable {
 
     systemd.services.calibre-server = {
-        description = "Calibre Server";
-        after = [ "network.target" ];
-        wantedBy = [ "multi-user.target" ];
-        serviceConfig = {
-          User = cfg.user;
-          Restart = "always";
-          ExecStart = "${pkgs.calibre}/bin/calibre-server ${lib.concatStringsSep " " cfg.libraries}";
-        };
-
+      description = "Calibre Server";
+      after = [ "network.target" ];
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig = {
+        User = cfg.user;
+        Restart = "always";
+        ExecStart = ''
+          ${pkgs.calibre}/bin/calibre-server
+                  ${
+                    if cfg.userdb == null then
+                      ""
+                    else
+                      "--enable-auth --userdb " + cfg.userdb
+                  }
+          ${lib.concatStringsSep " " cfg.libraries} '';
       };
+
+    };
 
     environment.systemPackages = [ pkgs.calibre ];
 
