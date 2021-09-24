@@ -210,6 +210,12 @@ in {
           systemd.network.networks."20-host0".networkConfig.DNS = "fd24::1";
         };
       };
+      container2 = {
+        zone = "foo";
+        network.v6.addrPool = lib.mkForce [];
+        network.v4.addrPool = lib.mkForce [];
+        network.v4.static.containerPool = [ "10.100.200.11/24" ];
+      };
       publicnet = {};
 
       ephemeral = {
@@ -217,6 +223,8 @@ in {
         network = {};
       };
     };
+
+    systemd.nspawn.container2.execConfig.ResolvConf = "bind-host";
 
     systemd.nspawn.publicnet.networkConfig.VirtualEthernet = "no";
 
@@ -255,12 +263,7 @@ in {
     # proxies NDP traffic of container IPs.
     services.ndppd = {
       enable = true;
-      #proxies.ve-container0.rules."fd24::1/64" = {};
-      #proxies.ve-container0.rules."fd24::2/64" = {};
-      #proxies.ve-container0.rules."fd24::3/64" = {};
-      #proxies.eth1.rules."fd24::1/64" = {};
       proxies.eth1.rules."fd24::2/64" = {};
-      #proxies.eth1.rules."fd24::3/64" = {};
     };
 
     programs.mtr.enable = true;
@@ -311,7 +314,7 @@ in {
             "cat ${snakeOilPrivateKey} > privkey.snakeoil"
         )
         client.succeed("chmod 600 privkey.snakeoil")
-        client.succeed(
+        client.wait_until_succeeds(
             "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil root@fd24::2 true"
         )
 
@@ -337,6 +340,10 @@ in {
         server.succeed("ping -c3 client.lan >&2")
         server.succeed(
             "systemd-run -M container1 --pty --quiet -- /bin/sh --login -c 'resolvectl query client.lan | grep fd23::1' >&2"
+        )
+
+        server.succeed(
+            "systemd-run -M container2 --pty --quiet /bin/sh --login -c 'resolvectl query container2 | grep 127.0.0.2' >&2"
         )
 
     with subtest("MACVLANs"):
