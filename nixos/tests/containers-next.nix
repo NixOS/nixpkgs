@@ -300,6 +300,10 @@ in {
             "curl -sSf 'http://[fd24::2]' | grep -q 'Welcome to nginx'"
         )
 
+        server.succeed(
+            "systemd-run -M container0 --pty --quiet -- /bin/sh --login -c 'test -w /var/empty'"
+        )
+
         client.wait_until_succeeds("ping fd24::2 -c3 >&2")
         client.succeed("curl -sSf 'http://[fd24::2]' | grep -q 'Welcome to nginx'")
 

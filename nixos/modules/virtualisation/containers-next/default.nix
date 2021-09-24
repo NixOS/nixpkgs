@@ -513,8 +513,10 @@ in {
           inherit (cfg.${container}) activation credentials;
         in nameValuePair "systemd-nspawn@${container}" {
           preStart = mkBefore ''
-            mkdir -p /var/lib/machines/${container}/{etc,var,nix/var/nix}
-            touch /var/lib/machines/${container}/etc/{os-release,machine-id} || true
+            if [ ! -d /var/lib/machines/${container} ]; then
+              mkdir -p /var/lib/machines/${container}/{etc,var,nix/var/nix}
+              touch /var/lib/machines/${container}/etc/{os-release,machine-id} || true
+            fi
           '';
 
           partOf = [ "machines.target" ];
