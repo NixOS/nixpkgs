@@ -167,6 +167,8 @@ with pkgs;
 
   alda = callPackage ../development/interpreters/alda { };
 
+  align = callPackage ../tools/text/align { };
+
   althttpd = callPackage ../servers/althttpd { };
 
   among-sus = callPackage ../games/among-sus { };
@@ -243,6 +245,8 @@ with pkgs;
   clifm = callPackage ../applications/misc/clifm { };
 
   clj-kondo = callPackage ../development/tools/clj-kondo { };
+
+  cloak = callPackage ../applications/misc/cloak { };
 
   cmark = callPackage ../development/libraries/cmark { };
 
@@ -9208,6 +9212,8 @@ with pkgs;
   sshping = callPackage ../tools/networking/sshping {};
 
   ssh-chat = callPackage ../applications/networking/instant-messengers/ssh-chat { };
+
+  ssh-to-age = callPackage ../tools/security/ssh-to-age { };
 
   ssh-to-pgp = callPackage ../tools/security/ssh-to-pgp { };
 
@@ -26307,6 +26313,8 @@ with pkgs;
   prevo = callPackage ../applications/misc/prevo { };
   prevo-data = callPackage ../applications/misc/prevo/data.nix { };
   prevo-tools = callPackage ../applications/misc/prevo/tools.nix { };
+
+  psi-notify = callPackage ../applications/misc/psi-notify { };
 
   ptex = callPackage ../development/libraries/ptex {};
 
