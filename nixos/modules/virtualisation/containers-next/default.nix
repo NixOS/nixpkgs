@@ -450,6 +450,9 @@ in {
           Cannot start containers inside a container!
         '';
       }
+      { assertion = config.networking.useNetworkd;
+        description = "Only networkd is supported!";
+      }
     ] ++ (flip concatMap (attrNames config.nixos.containers.instances) (n: let inst = cfg.${n}; in [
       { assertion = inst.zone != null -> (config.nixos.containers.zones != null && config.nixos.containers.zones ? ${inst.zone});
         message = ''
