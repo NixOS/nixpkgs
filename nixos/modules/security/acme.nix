@@ -192,6 +192,14 @@ let
       ++ data.extraLegoRenewFlags
     );
 
+    # We need to collect all the ACME webroots to grant them write
+    # access in the systemd service.
+    webroots =
+      lib.remove null
+        (lib.unique
+            (builtins.map
+            (certAttrs: certAttrs.webroot)
+            (lib.attrValues config.security.acme.certs)));
   in {
     inherit accountHash cert selfsignedDeps;
 
@@ -287,6 +295,8 @@ let
           "acme/.lego/${cert}/${certDir}"
           "acme/.lego/accounts/${accountHash}"
         ];
+
+        ReadWritePaths = commonServiceConfig.ReadWritePaths ++ webroots;
 
         # Needs to be space separated, but can't use a multiline string because that'll include newlines
         BindPaths = [
