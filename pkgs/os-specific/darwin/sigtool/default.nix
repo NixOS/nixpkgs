@@ -14,5 +14,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ];
 
+  # Sigtool needs filesystem support.
+  # We need to be able to build sigtool on x86 so we can build the cross bootstrap tools.
+  NIX_LDFLAGS = lib.optionals (stdenv.cc.isClang && lib.versionOlder stdenv.cc.version "9") [
+    "-lc++fs"
+  ];
+
   installFlags = [ "PREFIX=$(out)" ];
 }
