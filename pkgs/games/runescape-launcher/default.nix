@@ -1,24 +1,19 @@
 { stdenv, lib, buildFHSUserEnv, dpkg, glibc, gcc-unwrapped, autoPatchelfHook, fetchurl, wrapGAppsHook
-  , gnome2, xorg
-  , libSM, libXxf86vm, libX11, glib, pango, cairo, gtk2-x11, zlib, openssl
-  , libpulseaudio
-  , SDL2, xorg_sys_opengl, libGL
+, gnome2, xorg
+, libSM, libXxf86vm, libX11, glib, pango, cairo, gtk2-x11, zlib, openssl
+, libpulseaudio
+, SDL2, xorg_sys_opengl, libGL
 }:
 let
 
-  version = "2.2.9";
-  pname = "runescape-launcher";
+  runescape = stdenv.mkDerivation rec {
+    version = "2.2.9";
+    pname = "runescape-launcher";
 
-  src = fetchurl {
-    url = "https://content.runescape.com/downloads/ubuntu/pool/non-free/r/${pname}/${pname}_${version}_amd64.deb";
-    sha256 = "0r5v1pwh0aas31b1d3pkrc8lqmqz9b4fml2b4kxmg5xzp677h271";
-  };
-
-  runescape = stdenv.mkDerivation {
-    name = pname;
-    system = "x86_64-linux";
-
-    inherit src;
+    src = fetchurl {
+      url = "https://content.runescape.com/downloads/ubuntu/pool/non-free/r/${pname}/${pname}_${version}_amd64.deb";
+      sha256 = "0r5v1pwh0aas31b1d3pkrc8lqmqz9b4fml2b4kxmg5xzp677h271";
+    };
 
     nativeBuildInputs = [
       autoPatchelfHook
@@ -41,18 +36,17 @@ let
     ];
 
     runtimeDependencies = [
-      libpulseaudio.out
-
-      libGL.out
-      SDL2.out
-      xorg_sys_opengl.out
-      openssl.out
-      zlib.out
+      libpulseaudio
+      libGL
+      SDL2
+      xorg_sys_opengl
+      openssl
+      zlib
     ];
 
-    unpackPhase = "true";
+    dontUnpack = true;
 
-    preBuildPhase = ''
+    preBuild = ''
       export DH_VERBOSE=1
     '';
 
@@ -66,15 +60,15 @@ let
       mkdir -p $out/bin $out/share
       dpkg -x $src $out
 
+      patchShebangs $out/usr/bin/runescape-launcher
       substituteInPlace $out/usr/bin/runescape-launcher \
-        --replace "/bin/sh" "/usr/bin/env sh" \
         --replace "unset XMODIFIERS" "$envVarsWithXmodifiers" \
         --replace "/usr/share/games/runescape-launcher/runescape" "$out/share/games/runescape-launcher/runescape"
 
       cp -r $out/usr/bin $out/
       cp -r $out/usr/share $out/
 
-      rm -rf $out/usr
+      rm -r $out/usr
     '';
 
 
