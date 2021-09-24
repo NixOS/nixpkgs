@@ -20,13 +20,13 @@
 
 buildPythonPackage rec {
   pname = "black";
-  version = "21.8b0";
+  version = "21.9b0";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-VwYI0oqjrxeSuYxKM326xjZ4d7R7EriKtCCVz8GmJ8I=";
+    sha256 = "sha256-feTPx+trcQ3jJXEtQBJWiRAdIdJSg+7X6ZmHIs8Q65E=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];

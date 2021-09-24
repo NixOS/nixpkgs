@@ -31,7 +31,7 @@ with lib;
 let
   # Release calendar: https://www.mesa3d.org/release-calendar.html
   # Release frequency: https://www.mesa3d.org/releasing.html#schedule
-  version = "21.2.1";
+  version = "21.2.2";
   branch  = versions.major version;
 
 self = stdenv.mkDerivation {
@@ -45,7 +45,7 @@ self = stdenv.mkDerivation {
       "ftp://ftp.freedesktop.org/pub/mesa/${version}/mesa-${version}.tar.xz"
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
     ];
-    sha256 = "11qpq16xbxymcgiy0wk787dk4yw2pv8fzgj8d92ng6s11dqycr9c";
+    sha256 = "1i75k6gh76f49vy6kksbsikf593jmgk6slqwbs1fs5s2jyzz3an4";
   };
 
   # TODO:

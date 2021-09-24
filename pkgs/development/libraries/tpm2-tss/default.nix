@@ -3,6 +3,14 @@
 , openssl, json_c, curl, libgcrypt
 , cmocka, uthash, ibm-sw-tpm2, iproute2, procps, which
 }:
+let
+  # Avoid a circular dependency on Linux systems (systemd depends on tpm2-tss,
+  # tpm2-tss tests depend on procps, procps depends on systemd by default). This
+  # needs to be conditional based on isLinux because procps for other systems
+  # might not support the withSystemd option.
+  procpsWithoutSystemd = procps.override { withSystemd = false; };
+  procps_pkg = if stdenv.isLinux then procpsWithoutSystemd else procps;
+in
 
 stdenv.mkDerivation rec {
   pname = "tpm2-tss";
@@ -20,7 +28,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [ openssl json_c curl libgcrypt ];
   checkInputs = [
-    cmocka uthash ibm-sw-tpm2 iproute2 procps which
+    cmocka uthash ibm-sw-tpm2 iproute2 procps_pkg which
   ];
 
   preAutoreconf = "./bootstrap";

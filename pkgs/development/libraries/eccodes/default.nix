@@ -26,13 +26,12 @@ stdenv.mkDerivation rec {
     substituteInPlace cmake/FindOpenJPEG.cmake --replace openjpeg-2.1 ${openjpeg.incDir}
   '';
 
-  nativeBuildInputs = [ cmake perl ];
+  nativeBuildInputs = [ cmake gfortran perl ];
 
   buildInputs = [
     netcdf
     openjpeg
     libpng
-    gfortran
   ];
 
   propagatedBuildInputs = lib.optionals enablePython [

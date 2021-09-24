@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tv";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "uzimaru0000";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-4PcD0keG3OVZPv6MA+rNSL9lysrseJUA6C5cd2f6LRY=";
+    sha256 = "sha256-qODv45smZ6jHCJBaa6EEvFLG+7g+FWrRf6BiHRFLzqM=";
   };
 
-  cargoSha256 = "sha256-E4qMxCqgJYIA8E6A0d8iUYTbKif5T51zcFdc+Ptq7qc=";
+  cargoSha256 = "sha256-nI4n4KMPLaIF978b5VvW3mb02vKW+r39nllrhukJilI=";
 
   meta = with lib; {
     description = "Format json into table view";

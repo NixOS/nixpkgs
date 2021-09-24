@@ -3,7 +3,8 @@
 assert lib.versionAtLeast kernel.version "4.4";
 
 stdenv.mkDerivation {
-  name = "sch_cake-2017-07-16";
+  pname = "sch_cake";
+  version = "unstable-2017-07-16";
 
   src = fetchFromGitHub {
     owner = "dtaht";
