@@ -1912,6 +1912,8 @@ in {
 
   dataclasses-json = callPackage ../development/python-modules/dataclasses-json { };
 
+  dataclasses-jsonschema = callPackage ../development/python-modules/dataclasses-jsonschema { };
+
   datadiff = callPackage ../development/python-modules/datadiff { };
 
   datadog = callPackage ../development/python-modules/datadog { };
