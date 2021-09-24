@@ -77,6 +77,14 @@ in {
         interfaces.eth0.useDHCP = true;
       };
 
+      # Also check if old containers can co-exist
+      containers.test3 = {
+        privateNetwork = true;
+        hostAddress = "10.232.13.1";
+        localAddress = "10.232.13.2";
+        config = {};
+      };
+
       systemd.nspawn.test1.networkConfig.MACVLAN = "eth1";
 
       systemd.network.networks."40-eth0".linkConfig.RequiredForOnline = "no";
@@ -216,6 +224,10 @@ in {
         legacy.succeed(
             "systemd-run -M test2 --pty --quiet -- /bin/sh --login -c 'cat /root/tmpfile | grep foobar'"
         )
+
+        legacy.succeed("nixos-container start test3")
+        legacy.succeed("ping 10.232.13.1 -c3 >&2")
+        legacy.succeed("ping 10.232.13.2 -c3 >&2")
 
     legacy.succeed("machinectl poweroff test1")
     legacy.succeed("machinectl poweroff test2")
