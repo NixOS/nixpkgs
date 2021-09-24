@@ -7369,6 +7369,8 @@ in {
 
   python_openzwave = callPackage ../development/python-modules/python_openzwave { };
 
+  python-osc = callPackage ../development/python-modules/python-osc { };
+
   python-packer = callPackage ../development/python-modules/python-packer { };
 
   python-pam = callPackage ../development/python-modules/python-pam {
