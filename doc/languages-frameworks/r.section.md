@@ -113,11 +113,3 @@ mv bioc-experiment-packages.nix.new bioc-experiment-packages.nix
 ```
 
 `generate-r-packages.R <repo>` reads  `<repo>-packages.nix`, therefor the renaming.
-
-## Testing if the Nix-expression could be evaluated {#testing-if-the-nix-expression-could-be-evaluated}
-
-```bash
-nix-build test-evaluation.nix --dry-run
-```
-
-If this exits fine, the expression is ok. If not, you have to edit `default.nix`
