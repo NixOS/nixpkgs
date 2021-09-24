@@ -41,6 +41,6 @@ stdenv.mkDerivation rec {
     homepage = "https://mate-desktop.org";
     license = with licenses; [ gpl2Plus fdl11Plus ];
     platforms = platforms.unix;
-    maintainers = with maintainers; [ romildo chpatrick ];
+    maintainers = teams.mate.members ++ (with maintainers; [ chpatrick ]);
   };
 }

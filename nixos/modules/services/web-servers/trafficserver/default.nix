@@ -8,20 +8,8 @@ let
   group = config.users.groups.trafficserver.name;
 
   getManualUrl = name: "https://docs.trafficserver.apache.org/en/latest/admin-guide/files/${name}.en.html";
-  getConfPath = name: "${pkgs.trafficserver}/etc/trafficserver/${name}";
 
   yaml = pkgs.formats.yaml { };
-
-  fromYAML = f:
-    let
-      jsonFile = pkgs.runCommand "in.json"
-        {
-          nativeBuildInputs = [ pkgs.remarshal ];
-        } ''
-        yaml2json < "${f}" > "$out"
-      '';
-    in
-    builtins.fromJSON (builtins.readFile jsonFile);
 
   mkYamlConf = name: cfg:
     if cfg != null then {
@@ -73,7 +61,7 @@ in
 
     ipAllow = mkOption {
       type = types.nullOr yaml.type;
-      default = fromYAML (getConfPath "ip_allow.yaml");
+      default = builtins.fromJSON (builtins.readFile ./ip_allow.json);
       defaultText = "upstream defaults";
       example = literalExample {
         ip_allow = [{
@@ -94,7 +82,7 @@ in
 
     logging = mkOption {
       type = types.nullOr yaml.type;
-      default = fromYAML (getConfPath "logging.yaml");
+      default = builtins.fromJSON (builtins.readFile ./logging.json);
       defaultText = "upstream defaults";
       example = literalExample { };
       description = ''

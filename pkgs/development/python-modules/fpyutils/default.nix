@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "fpyutils";
-  version = "2.0.0";
+  version = "2.0.1";
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "frnmst";
     repo = pname;
     rev = version;
-    sha256 = "1n15fvd6191ixxsza49fdd8j43hs0agagg8k9v6rc7by1ffqnl2b";
+    sha256 = "sha256-VYknHuBoU7XWkm6mt8ckBzFLMcYTPW5CXMGdOn3perY=";
   };
 
   propagatedBuildInputs = [

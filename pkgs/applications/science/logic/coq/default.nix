@@ -9,7 +9,7 @@
 , customOCamlPackages ? null
 , ocamlPackages_4_05, ocamlPackages_4_09, ocamlPackages_4_10, ncurses
 , buildIde ? true
-, glib, gnome, wrapGAppsHook
+, glib, gnome, wrapGAppsHook, makeDesktopItem, copyDesktopItems
 , csdp ? null
 , version, coq-version ? null,
 }@args:
@@ -124,7 +124,9 @@ self = stdenv.mkDerivation {
     '';
   };
 
-  nativeBuildInputs = [ pkg-config ] ++ optional (!versionAtLeast "8.6") gnumake42;
+  nativeBuildInputs = [ pkg-config ]
+    ++ optional buildIde copyDesktopItems
+    ++ optional (!versionAtLeast "8.6") gnumake42;
   buildInputs = [ ncurses ] ++ ocamlBuildInputs
     ++ optionals buildIde
       (if versionAtLeast "8.10"
@@ -166,12 +168,24 @@ self = stdenv.mkDerivation {
 
   createFindlibDestdir = true;
 
+  desktopItems = optional buildIde (makeDesktopItem {
+    name = "coqide";
+    exec = "coqide";
+    icon = "coq";
+    desktopName = "CoqIDE";
+    comment = "Graphical interface for the Coq proof assistant";
+    categories = "Development;Science;Math;IDE;GTK";
+  });
+
   postInstall = ''
     cp bin/votour $out/bin/
     ln -s $out/lib/coq $OCAMLFIND_DESTDIR/coq
+  '' + optionalString buildIde ''
+    mkdir -p "$out/share/pixmaps"
+    ln -s "$out/share/coq/coq.png" "$out/share/pixmaps/"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Coq proof assistant";
     longDescription = ''
       Coq is a formal proof management system.  It provides a formal language
