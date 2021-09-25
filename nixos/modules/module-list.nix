@@ -560,6 +560,7 @@
   ./services/misc/octoprint.nix
   ./services/misc/ombi.nix
   ./services/misc/osrm.nix
+  ./services/misc/owncast.nix
   ./services/misc/packagekit.nix
   ./services/misc/paperless-ng.nix
   ./services/misc/parsoid.nix
