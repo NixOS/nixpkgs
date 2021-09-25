@@ -57,6 +57,6 @@ in rustPlatform.buildRustPackage rec {
     homepage = "https://www.prisma.io/";
     license = licenses.asl20;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ pamplemousse ];
+    maintainers = with maintainers; [ pamplemousse pimeys ];
   };
 }
