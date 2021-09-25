@@ -736,6 +736,12 @@
     githubId = 1771266;
     name = "Vo Anh Duy";
   };
+  anirrudh = {
+    email = "anik597@gmail.com";
+    github = "anirrudh";
+    githubId = 6091755;
+    name = "Anirrudh Krishnan";
+  };
   ankhers = {
     email = "me@ankhers.dev";
     github = "ankhers";
