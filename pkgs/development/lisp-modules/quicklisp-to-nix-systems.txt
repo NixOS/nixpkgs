@@ -208,6 +208,7 @@ salza2
 serapeum
 simple-date
 simple-date-time
+slynk
 smart-buffer
 smug
 spinneret

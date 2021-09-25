@@ -2338,6 +2338,14 @@ let quicklisp-to-nix-packages = rec {
        }));
 
 
+  "slynk" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."slynk" or (x: {}))
+       (import ./quicklisp-to-nix-output/slynk.nix {
+         inherit fetchurl;
+       }));
+
+
   "simple-date-time" = buildLispPackage
     ((f: x: (x // (f x)))
        (qlOverrides."simple-date-time" or (x: {}))
