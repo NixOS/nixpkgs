@@ -11,10 +11,10 @@
 , stdenv
 }:
 let
-  mkCombyPackage = { pname, extraBuildInputs ? [ ], extraNativeInputs ? [ ] }:
+  mkCombyPackage = { pname, extraBuildInputs ? [ ], extraNativeInputs ? [ ], preBuild ? "" }:
     ocamlPackages.buildDunePackage rec {
-      inherit pname;
-      version = "1.5.1";
+      inherit pname preBuild;
+      version = "1.7.0";
       useDune2 = true;
       minimumOcamlVersion = "4.08.1";
       doCheck = true;
@@ -23,7 +23,7 @@ let
         owner = "comby-tools";
         repo = "comby";
         rev = version;
-        sha256 = "1ipfrr6n1jyyryhm9zpn8wwgzfac1zgbjdjzrm00qcwc17r8x2hf";
+        sha256 = "sha256-Y2RcYvJOSqppmxxG8IZ5GlFkXCOIQU+1jJZ6j+PBHC4";
       };
 
       nativeBuildInputs = [
@@ -51,9 +51,20 @@ let
     };
 
   combyKernel = mkCombyPackage { pname = "comby-kernel"; };
+  combySemantic = mkCombyPackage { pname = "comby-semantic"; extraBuildInputs = [ ocamlPackages.cohttp-lwt-unix ]; };
 in
 mkCombyPackage {
   pname = "comby";
+
+  # tests have to be removed before building otherwise installPhase will fail
+  # cli tests expect a path to the built binary
+  preBuild = ''
+    substituteInPlace test/common/dune \
+      --replace "test_cli_list" "" \
+      --replace "test_cli_helper" "" \
+      --replace "test_cli" ""
+    rm test/common/{test_cli_list,test_cli_helper,test_cli}.ml
+  '';
 
   extraBuildInputs = [
     zlib
@@ -86,4 +97,5 @@ mkCombyPackage {
     ocamlPackages.ppx_expect
     ocamlPackages.dune-configurator
   ];
+
 }
