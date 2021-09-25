@@ -858,6 +858,73 @@
       <listitem>
         <para>
           The
+          <link xlink:href="options.html#opt-networking.wireless.enable">networking.wireless</link>
+          module (based on wpa_supplicant) has been heavily reworked,
+          solving a number of issues and adding useful features:
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              The automatic discovery of wireless interfaces at boot has
+              been made reliable again (issues
+              <link xlink:href="https://github.com/NixOS/nixpkgs/issues/101963">#101963</link>,
+              <link xlink:href="https://github.com/NixOS/nixpkgs/issues/23196">#23196</link>).
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              WPA3 and Fast BSS Transition (802.11r) are now enabled by
+              default for all networks.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Secrets like pre-shared keys and passwords can now be
+              handled safely, meaning without including them in a
+              world-readable file
+              (<literal>wpa_supplicant.conf</literal> under /nix/store).
+              This is achieved by storing the secrets in a secured
+              <link xlink:href="options.html#opt-networking.wireless.environmentFile">environmentFile</link>
+              and referring to them though environment variables that
+              are expanded inside the configuration.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              With multiple interfaces declared, independent
+              wpa_supplicant daemons are started, one for each interface
+              (the services are named
+              <literal>wpa_supplicant-wlan0</literal>,
+              <literal>wpa_supplicant-wlan1</literal>, etc.).
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              The generated <literal>wpa_supplicant.conf</literal> file
+              is now formatted for easier reading.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              A new
+              <link xlink:href="options.html#opt-networking.wireless.scanOnLowSignal">scanOnLowSignal</link>
+              option has been added to facilitate fast roaming between
+              access points (enabled by default).
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              A new
+              <link xlink:href="options.html#opt-networking.wireless.networks._name_.authProtocols">networks.&lt;name&gt;.authProtocols</link>
+              option has been added to change the authentication
+              protocols used when connecting to a network.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+      <listitem>
+        <para>
+          The
           <link xlink:href="options.html#opt-networking.wireless.iwd.enable">networking.wireless.iwd</link>
           module has a new
           <link xlink:href="options.html#opt-networking.wireless.iwd.settings">networking.wireless.iwd.settings</link>
