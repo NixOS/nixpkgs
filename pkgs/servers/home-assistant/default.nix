@@ -430,6 +430,7 @@ in with py.pkgs; buildPythonApplication rec {
     "hue"
     "huisbaasje"
     "humidifier"
+    "hunterdouglas_powerview"
     "hvv_departures"
     "hyperion"
     "ialarm"

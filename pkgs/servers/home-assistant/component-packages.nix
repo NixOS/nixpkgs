@@ -380,7 +380,7 @@
     "hue" = ps: with ps; [ aiohue ];
     "huisbaasje" = ps: with ps; [ huisbaasje-client ];
     "humidifier" = ps: with ps; [ ];
-    "hunterdouglas_powerview" = ps: with ps; [ ]; # missing inputs: aiopvapi
+    "hunterdouglas_powerview" = ps: with ps; [ aiopvapi ];
     "hvv_departures" = ps: with ps; [ pygti ];
     "hydrawise" = ps: with ps; [ hydrawiser ];
     "hyperion" = ps: with ps; [ hyperion-py ];
