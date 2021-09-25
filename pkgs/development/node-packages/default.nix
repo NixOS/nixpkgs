@@ -1,4 +1,4 @@
-{ pkgs, nodejs, stdenv, applyPatches, fetchFromGitHub, fetchpatch }:
+{ pkgs, nodejs, stdenv, applyPatches, fetchFromGitHub, fetchpatch, fetchurl }:
 
 let
   since = (version: pkgs.lib.versionAtLeast nodejs.version version);
@@ -280,6 +280,22 @@ let
 
     prisma = super.prisma.override {
       nativeBuildInputs = [ pkgs.makeWrapper ];
+      version = "3.1.1";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/prisma/-/prisma-3.1.1.tgz";
+        sha512 = "sha512-+eZtWIL6hnOKUOvqq9WLBzSw2d/EbTmOx1Td1LI8/0XE40ctXMLG2N1p6NK5/+yivGaoNJ9PDpPsPL9lO4nJrQ==";
+      };
+      dependencies = [
+        {
+          name = "_at_prisma_slash_engines";
+          packageName = "@prisma/engines";
+          version = "3.1.0-24.c22652b7e418506fab23052d569b85d3aec4883f";
+          src = fetchurl {
+            url = "https://registry.npmjs.org/@prisma/engines/-/engines-3.1.0-24.c22652b7e418506fab23052d569b85d3aec4883f.tgz";
+            sha512 = "sha512-6NEp0VlLho3hVtIvj2P4h0e19AYqQSXtFGts8gSIXDnV+l5pRFZaDMfGo2RiLMR0Kfrs8c3ZYxYX0sWmVL0tWw==";
+          };
+        }
+      ];
       postInstall = with pkgs; ''
         wrapProgram "$out/bin/prisma" \
           --set PRISMA_MIGRATION_ENGINE_BINARY ${prisma-engines}/bin/migration-engine \

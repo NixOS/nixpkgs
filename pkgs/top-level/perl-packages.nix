@@ -3709,10 +3709,10 @@ let
 
   ConvertASN1 = buildPerlPackage {
     pname = "Convert-ASN1";
-    version = "0.27";
+    version = "0.33";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/G/GB/GBARR/Convert-ASN1-0.27.tar.gz";
-      sha256 = "12nmsca6hzgxq57sx7dp8yq6zxqhl41z5a6018877sf5w25ag93l";
+      url = "mirror://cpan/authors/id/T/TI/TIMLEGGE/Convert-ASN1-0.33.tar.gz";
+      sha256 = "0xk0s2rnwjb7ydhwfinpjcbw25im54b8cs7r9hj3m7n7412h1pqz";
     };
   };
 
