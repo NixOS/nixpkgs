@@ -2729,6 +2729,8 @@ in {
 
   flickrapi = callPackage ../development/python-modules/flickrapi { };
 
+  flipr-api = callPackage ../development/python-modules/flipr-api { };
+
   flit = callPackage ../development/python-modules/flit { };
 
   flit-core = callPackage ../development/python-modules/flit-core { };
