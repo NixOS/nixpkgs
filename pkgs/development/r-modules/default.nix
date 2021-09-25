@@ -468,6 +468,7 @@ let
     s2 = [ pkgs.openssl.dev ];
     ArrayExpressHTS = with pkgs; [ zlib.dev curl.dev which ];
     bbl = with pkgs; [ gsl ];
+    writexl = with pkgs; [ zlib.dev ];
   };
 
   packagesRequireingX = [
