@@ -1,13 +1,38 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, fetchurl, cmake, ctags, swig
-# data, compression
-, bzip2, curl, hdf5, json_c, xz, lzo, protobuf, snappy
-# maths
-, blas, lapack, eigen, nlopt, lp_solve, colpack, glpk
-# libraries
-, libarchive, libxml2
-# extra support
-, pythonSupport ? true, pythonPackages ? null
-, opencvSupport ? false, opencv ? null
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, fetchurl
+  # build
+, cmake
+, ctags
+, swig
+  # math
+, eigen
+, blas
+, lapack
+, glpk
+  # data
+, protobuf
+, json_c
+, libxml2
+, hdf5
+, curl
+  # compression
+, libarchive
+, bzip2
+, xz
+, snappy
+, lzo
+  # more math
+, nlopt
+, lp_solve
+, colpack
+  # extra support
+, pythonSupport ? true
+, pythonPackages ? null
+, opencvSupport ? false
+, opencv ? null
 , withSvmLight ? false
 }:
 
@@ -19,8 +44,10 @@ assert (!blas.isILP64) && (!lapack.isILP64);
 let
   pname = "shogun";
   version = "6.1.4";
+
   rxcppVersion = "4.0.0";
   gtestVersion = "1.8.0";
+
   srcs = {
     toolbox = fetchFromGitHub {
       owner = pname + "-toolbox";
@@ -42,19 +69,9 @@ let
 in
 
 stdenv.mkDerivation rec {
-
   inherit pname version;
 
   src = srcs.toolbox;
-
-  postUnpack = ''
-    mkdir -p $sourceRoot/third_party/{rxcpp,gtest}
-    ln -s ${srcs.rxcpp} $sourceRoot/third_party/rxcpp/v${rxcppVersion}.tar.gz
-    ln -s ${srcs.gtest} $sourceRoot/third_party/gtest/release-${gtestVersion}.tar.gz
-  '';
-
-  # broken
-  doCheck = false;
 
   patches = [
     (fetchpatch {
@@ -63,32 +80,55 @@ stdenv.mkDerivation rec {
     })
   ] ++ lib.optional (!withSvmLight) ./svmlight-scrubber.patch;
 
+  nativeBuildInputs = [ cmake ];
+
+  buildInputs = [
+    eigen
+    blas
+    lapack
+    glpk
+    protobuf
+    json_c
+    libxml2
+    hdf5
+    curl
+    libarchive
+    bzip2
+    xz
+    snappy
+    lzo
+    nlopt
+    lp_solve
+    colpack
+    ctags
+    swig
+  ] ++ lib.optionals pythonSupport (with pythonPackages; [ python ply numpy ])
+    ++ lib.optional opencvSupport opencv;
+
+  cmakeFlags = let
+    enableIf = cond: if cond then "ON" else "OFF";
+  in [
+    "-DBUILD_META_EXAMPLES=${enableIf doCheck}"
+    "-DCMAKE_VERBOSE_MAKEFILE=${enableIf doCheck}"
+    "-DENABLE_TESTING=${enableIf doCheck}"
+    "-DPythonModular=${enableIf pythonSupport}"
+    "-DOpenCV=${enableIf opencvSupport}"
+    "-DUSE_SVMLIGHT=${enableIf withSvmLight}"
+  ];
+
   CCACHE_DISABLE="1";
   CCACHE_DIR=".ccache";
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = with lib; [
-      blas lapack bzip2 colpack curl ctags eigen hdf5 json_c lp_solve xz lzo
-      protobuf nlopt snappy swig (libarchive.dev) libxml2 lapack glpk
-    ]
-    ++ optionals (pythonSupport) (with pythonPackages; [ python ply numpy ])
-    ++ optional  (opencvSupport) opencv;
-
   NIX_CFLAGS_COMPILE="-faligned-new";
 
-  cmakeFlags =
-  let
-      onOff = b: if b then "ON" else "OFF";
-      flag = n: b: "-D"+n+"="+onOff b;
-  in
-  with lib; [
-    (flag "ENABLE_TESTING" doCheck)
-    (flag "BUILD_META_EXAMPLES" doCheck)
-    (flag "CMAKE_VERBOSE_MAKEFILE:BOOL" doCheck)
-    (flag "PythonModular" pythonSupport)
-    (flag "OpenCV" opencvSupport)
-    (flag "USE_SVMLIGHT" withSvmLight)
-  ];
+  # broken
+  doCheck = false;
+
+  postUnpack = ''
+    mkdir -p $sourceRoot/third_party/{rxcpp,gtest}
+    ln -s ${srcs.rxcpp} $sourceRoot/third_party/rxcpp/v${rxcppVersion}.tar.gz
+    ln -s ${srcs.gtest} $sourceRoot/third_party/gtest/release-${gtestVersion}.tar.gz
+  '';
 
   postPatch = ''
     # Fix preprocessing SVMlight code
