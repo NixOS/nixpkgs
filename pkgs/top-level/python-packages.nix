@@ -2615,6 +2615,8 @@ in {
 
   fixtures = callPackage ../development/python-modules/fixtures { };
 
+  fjaraskupan = callPackage ../development/python-modules/fjaraskupan { };
+
   flake8-blind-except = callPackage ../development/python-modules/flake8-blind-except { };
 
   flake8 = callPackage ../development/python-modules/flake8 { };
