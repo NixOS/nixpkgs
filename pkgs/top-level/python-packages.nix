@@ -4472,6 +4472,8 @@ in {
 
   marshmallow = callPackage ../development/python-modules/marshmallow { };
 
+  marshmallow-dataclass = callPackage ../development/python-modules/marshmallow-dataclass { };
+
   marshmallow-enum = callPackage ../development/python-modules/marshmallow-enum { };
 
   marshmallow-oneofschema = callPackage ../development/python-modules/marshmallow-oneofschema { };
@@ -7808,6 +7810,8 @@ in {
   relatorio = callPackage ../development/python-modules/relatorio { };
 
   remarshal = callPackage ../development/python-modules/remarshal { };
+
+  renault-api = callPackage ../development/python-modules/renault-api { };
 
   rencode = callPackage ../development/python-modules/rencode { };
 

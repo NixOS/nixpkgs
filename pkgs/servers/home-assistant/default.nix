@@ -576,6 +576,7 @@ in with py.pkgs; buildPythonApplication rec {
     "recorder"
     "reddit"
     "remote"
+    "renault"
     "rest"
     "rest_command"
     "rflink"
