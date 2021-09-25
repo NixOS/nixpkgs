@@ -467,6 +467,7 @@ let
     ssh = with pkgs; [ libssh ];
     s2 = [ pkgs.openssl.dev ];
     ArrayExpressHTS = with pkgs; [ zlib.dev curl.dev which ];
+    bbl = with pkgs; [ gsl ];
   };
 
   packagesRequireingX = [
