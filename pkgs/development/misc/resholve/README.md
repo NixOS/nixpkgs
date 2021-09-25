@@ -105,7 +105,7 @@ that the `resholve` CLI expects. Here's an overview:
 | inputs        | list    | packages to resolve executables from                  |
 | interpreter   | string  | 'none' or abspath for shebang                         |
 | prologue      | file    | text to insert before the first code-line             |
-| epilogue      | file    | text to isnert after the last code-line               |
+| epilogue      | file    | text to insert after the last code-line               |
 | flags         | list    | strings to pass as flags                              |
 | fake          | attrset | [directives](#controlling-resolution-with-directives) |
 | fix           | attrset | [directives](#controlling-resolution-with-directives) |
@@ -161,25 +161,24 @@ from the manpage, and the Nix equivalents:
 ```nix
 # --fake 'f:setUp;tearDown builtin:setopt source:/etc/bashrc'
 fake = {
-  # fake accepts the initial of valid identifier types as a CLI convienience.
+  # fake accepts the initial of valid identifier types as a CLI convenience.
   # Use full names in the Nix API.
   function = [ "setUp" "tearDown" ];
   builtin = [ "setopt" ];
   source = [ "/etc/bashrc" ];
 };
 
-# --fix 'aliases xargs:ls $GIT:gix'
+# --fix 'aliases $GIT:gix /bin/bash'
 fix = {
   # all single-word directives use `true` as value
   aliases = true;
-  xargs = [ "ls" ];
   "$GIT" = [ "gix" ];
+  "/bin/bash";
 };
 
-# --keep 'which:git;ls .:$HOME $LS:exa /etc/bashrc ~/.bashrc'
+# --keep 'source:$HOME /etc/bashrc ~/.bashrc'
 keep = {
-  which = [ "git" "ls" ];
-  "." = [ "$HOME" ];
+  source = [ "$HOME" ];
   "$LS" = [ "exa" ];
   "/etc/bashrc" = true;
   "~/.bashrc" = true;
