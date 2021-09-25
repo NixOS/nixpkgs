@@ -703,7 +703,7 @@
     "remember_the_milk" = ps: with ps; [ httplib2 ]; # missing inputs: RtmAPI
     "remote" = ps: with ps; [ ];
     "remote_rpi_gpio" = ps: with ps; [ ]; # missing inputs: gpiozero
-    "renault" = ps: with ps; [ ]; # missing inputs: renault-api
+    "renault" = ps: with ps; [ renault-api ];
     "repetier" = ps: with ps; [ ]; # missing inputs: pyrepetier
     "rest" = ps: with ps; [ jsonpath xmltodict ];
     "rest_command" = ps: with ps; [ ];
