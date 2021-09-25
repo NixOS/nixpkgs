@@ -1250,6 +1250,12 @@ self: super: {
   gi-cairo-render = doJailbreak super.gi-cairo-render;
   gi-cairo-connector = doJailbreak super.gi-cairo-connector;
 
+  # Remove when https://github.com/gtk2hs/svgcairo/pull/10 gets merged.
+  svgcairo = appendPatch super.svgcairo (pkgs.fetchpatch {
+    url = "https://github.com/gtk2hs/svgcairo/commit/df6c6172b52ecbd32007529d86ba9913ba001306.patch";
+    sha256 = "128qrns56y139vfzg1rbyqfi2xn8gxsmpnxv3zqf4v5spsnprxwh";
+  });
+
   # Missing -Iinclude parameter to doc-tests (pull has been accepted, so should be resolved when 0.5.3 released)
   # https://github.com/lehins/massiv/pull/104
   massiv = dontCheck super.massiv;
