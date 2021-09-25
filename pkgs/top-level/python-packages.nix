@@ -3680,6 +3680,8 @@ in {
 
   iocapture = callPackage ../development/python-modules/iocapture { };
 
+  iotawattpy = callPackage ../development/python-modules/iotawattpy { };
+
   iowait = callPackage ../development/python-modules/iowait { };
 
   ipaddress = callPackage ../development/python-modules/ipaddress { };
