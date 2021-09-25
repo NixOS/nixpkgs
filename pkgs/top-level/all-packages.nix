@@ -15322,6 +15322,8 @@ with pkgs;
 
   aws-c-common = callPackage ../development/libraries/aws-c-common { };
 
+  aws-c-compression = callPackage ../development/libraries/aws-c-compression { };
+
   aws-c-event-stream = callPackage ../development/libraries/aws-c-event-stream { };
 
   aws-c-io = callPackage ../development/libraries/aws-c-io {
