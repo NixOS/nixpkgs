@@ -384,6 +384,7 @@ let
           "AllMulticast"
           "Unmanaged"
           "RequiredForOnline"
+          "ActivationPolicy"
         ])
         (assertMacAddress "MACAddress")
         (assertByteFormat "MTUBytes")
@@ -401,6 +402,14 @@ let
           "degraded"
           "enslaved"
           "routable"
+        ]))
+        (assertValueOneOf "ActivationPolicy" ([
+          "up"
+          "always-up"
+          "manual"
+          "always-down"
+          "down"
+          "bound"
         ]))
       ];
 
