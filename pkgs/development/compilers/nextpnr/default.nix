@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, cmake
-, boost, python3, eigen
+, boost, python3, eigen, python3Packages
 , icestorm, trellis
 , llvmPackages
 
@@ -39,17 +39,18 @@ stdenv.mkDerivation rec {
      = [ cmake ]
     ++ (lib.optional enableGui wrapQtAppsHook);
   buildInputs
-     = [ boostPython python3 eigen ]
+     = [ boostPython python3 eigen python3Packages.apycula ]
     ++ (lib.optional enableGui qtbase)
     ++ (lib.optional stdenv.cc.isClang llvmPackages.openmp);
 
   cmakeFlags =
     [ "-DCURRENT_GIT_VERSION=${lib.substring 0 7 (lib.elemAt srcs 0).rev}"
-      "-DARCH=generic;ice40;ecp5"
+      "-DARCH=generic;ice40;ecp5;gowin"
       "-DBUILD_TESTS=ON"
       "-DICESTORM_INSTALL_PREFIX=${icestorm}"
       "-DTRELLIS_INSTALL_PREFIX=${trellis}"
       "-DTRELLIS_LIBDIR=${trellis}/lib/trellis"
+      "-DGOWIN_BBA_EXECUTABLE=${python3Packages.apycula}/bin/gowin_bba"
       "-DUSE_OPENMP=ON"
       # warning: high RAM usage
       "-DSERIALIZE_CHIPDBS=OFF"
@@ -74,6 +75,7 @@ stdenv.mkDerivation rec {
     wrapQtApp $out/bin/nextpnr-generic
     wrapQtApp $out/bin/nextpnr-ice40
     wrapQtApp $out/bin/nextpnr-ecp5
+    wrapQtApp $out/bin/nextpnr-gowin
   '';
 
   meta = with lib; {
