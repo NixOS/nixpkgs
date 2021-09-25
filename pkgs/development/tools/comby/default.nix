@@ -1,5 +1,15 @@
-{ ocamlPackages, fetchFromGitHub, lib, zlib, pkg-config, cacert, gmp, libev
-, autoconf, sqlite, stdenv }:
+{ ocamlPackages
+, fetchFromGitHub
+, lib
+, zlib
+, pkg-config
+, cacert
+, gmp
+, libev
+, autoconf
+, sqlite
+, stdenv
+}:
 let
   mkCombyPackage = { pname, extraBuildInputs ? [ ], extraNativeInputs ? [ ] }:
     ocamlPackages.buildDunePackage rec {
@@ -41,7 +51,8 @@ let
     };
 
   combyKernel = mkCombyPackage { pname = "comby-kernel"; };
-in mkCombyPackage {
+in
+mkCombyPackage {
   pname = "comby";
 
   extraBuildInputs = [
@@ -62,6 +73,7 @@ in mkCombyPackage {
     ocamlPackages.lwt_react
     ocamlPackages.tls
     combyKernel
+    combySemantic
   ] ++ (if !stdenv.isAarch32 && !stdenv.isAarch64 then
     [ ocamlPackages.hack_parallel ]
   else
