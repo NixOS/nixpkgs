@@ -58,7 +58,7 @@ let
 
   self = stdenv.mkDerivation rec {
     pname = "pipewire";
-    version = "0.3.36";
+    version = "0.3.37";
 
     outputs = [
       "out"
@@ -77,7 +77,7 @@ let
       owner = "pipewire";
       repo = "pipewire";
       rev = version;
-      sha256 = "sha256-kwoffB0Hi84T4Q0NaxLxsCyPV4R0LayX9kHmXU/vRPA=";
+      sha256 = "sha256-bN73G2XYEWJF60D55WCpsbMW54wce7rCgEUo/DUmm20=";
     };
 
     patches = [
@@ -93,6 +93,8 @@ let
       ./0080-pipewire-config-dir.patch
       # Remove output paths from the comments in the config templates to break dependency cycles
       ./0090-pipewire-config-template-paths.patch
+      # Place SPA data files in lib output to avoid dependency cycles
+      ./0095-spa-data-dir.patch
     ];
 
     nativeBuildInputs = [
