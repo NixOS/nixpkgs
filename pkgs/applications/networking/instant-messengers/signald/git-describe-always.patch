@@ -1,9 +1,0 @@
-diff --git a/version.sh b/version.sh
-index 7aeeb3c..060cba3 100755
---- a/version.sh
-+++ b/version.sh
-@@ -1,3 +1,3 @@
- #!/bin/sh
--VERSION=$(git describe --exact-match 2> /dev/null) || VERSION=$(git describe --abbrev=0)+git$(date +%Y-%m-%d)r$(git rev-parse --short=8 HEAD).$(git rev-list $(git describe --abbrev=0)..HEAD --count)
-+VERSION=$(git describe --exact-match 2> /dev/null) || VERSION=$(git describe --always --abbrev=0)+git$(date +%Y-%m-%d)r$(git rev-parse --short=8 HEAD).$(git rev-list $(git describe --always --abbrev=0)..HEAD --count)
- echo $VERSION
