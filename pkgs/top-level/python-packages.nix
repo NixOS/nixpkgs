@@ -4512,6 +4512,8 @@ in {
     inherit (self) pyface pygments numpy vtk traitsui envisage apptools pyqt5;
   };
 
+  mbddns = callPackage ../development/python-modules/mbddns { };
+
   mccabe = callPackage ../development/python-modules/mccabe { };
 
   mcstatus = callPackage ../development/python-modules/mcstatus { };
