@@ -48,7 +48,12 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "INSTALL_DIR=\${out}/bin" ];
 
-  makeFlags = [ "XZ_SUPPORT=1" ]
+  makeFlags = [
+    "XZ_SUPPORT=1"
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "CXX=${stdenv.cc.targetPrefix}c++"
+    "AR=${stdenv.cc.targetPrefix}ar"
+  ]
     ++ lib.optional lz4Support "LZ4_SUPPORT=1";
 
   meta = with lib; {

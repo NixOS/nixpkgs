@@ -1,22 +1,23 @@
-{ lib, stdenv, fetchgit }:
+{ lib
+, trivialBuild
+, fetchFromGitHub
+, emacs
+}:
 
-stdenv.mkDerivation {
-  name = "ess-R-object-popup-20130302";
+trivialBuild rec {
+  pname = "ess-R-object-popup";
+  version = "1.0";
 
-  src = fetchgit {
-    url = "https://github.com/myuhe/ess-R-object-popup.el.git";
-    rev = "7e1f601bfba72de0fda44d9c82f96028ecbb9948";
-    sha256 = "0q8pbaa6wahli6fh0kng5zmnypsxi1fr2bzs2mfk3h8vf4nikpv0";
+  src = fetchFromGitHub {
+    owner = "myuhe";
+    repo = "ess-R-object-popup.el";
+    rev = "v${version}";
+    hash = "sha256-YN8ZLXEbwTFdFfovkV2IXV9v6y/PTgCdiRQqbpRaF2E=";
   };
 
-  installPhase = ''
-    mkdir -p $out/share/emacs/site-lisp
-    cp *.el *.elc $out/share/emacs/site-lisp/
-  '';
-
   meta = {
-    description = "Popup descriptions of R objects";
     homepage = "https://github.com/myuhe/ess-R-object-popup.el";
-    platforms = lib.platforms.all;
+    description = "Popup descriptions of R objects";
+    inherit (emacs.meta) platforms;
   };
 }

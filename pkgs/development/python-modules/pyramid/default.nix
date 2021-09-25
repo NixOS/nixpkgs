@@ -18,11 +18,11 @@
 
 buildPythonPackage rec {
   pname = "pyramid";
-  version = "1.10.8";
+  version = "2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b7cd66595bef92f81764b976ddde2b2fa8e4f5f325e02f65f6ec7f3708b29cf6";
+    sha256 = "45431b387587ed0fac6213b54d6e9f0936f0cc85238a8f5af7852fc9484c5c77";
   };
 
   checkInputs = [ webtest zope_component ];

@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication rec {
     cli-helpers
     click
     configobj
-    prompt_toolkit
+    prompt-toolkit
     pygments
     sqlparse
   ];

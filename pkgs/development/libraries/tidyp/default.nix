@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "tidyp";
   version = "1.04";
 
-  src = fetchFromGitHub {
-    owner = "petdance";
-    repo = "tidyp";
-    rev = version;
-    sha256 = "0jslskziwzk4hb6i640fvpnbv2zxrvim6pdx2gwx5wyc64aviskc";
+  src = fetchurl {
+    # downloads from a legacy GitHub download page from ~11 years ago
+    # project does not work with autoconf anymore and the configure script cannot be generated from the source download
+    url = "https://github.com/downloads/petdance/tidyp/${pname}-${version}.tar.gz";
+    sha256 = "0f5ky0ih4vap9c6j312jn73vn8m2bj69pl2yd3a5nmv35k9zmc10";
   };
 
   hardeningDisable = [ "format" ];

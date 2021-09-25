@@ -17,8 +17,8 @@ buildGoModule rec {
 
   subPackages = [ "cmd/lego" ];
 
-  buildFlagsArray = [
-    "-ldflags=-X main.version=${version}"
+  ldflags = [
+    "-X main.version=${version}"
   ];
 
   meta = with lib; {

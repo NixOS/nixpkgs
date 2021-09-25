@@ -337,10 +337,13 @@ in
           '';
           WorkingDirectory = top.dataDir;
         };
+        unitConfig = {
+          StartLimitIntervalSec = 0;
+        };
       };
 
       # Allways include cni plugins
-      services.kubernetes.kubelet.cni.packages = [pkgs.cni-plugins];
+      services.kubernetes.kubelet.cni.packages = [pkgs.cni-plugins pkgs.cni-plugin-flannel];
 
       boot.kernelModules = ["br_netfilter" "overlay"];
 

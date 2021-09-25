@@ -1,6 +1,6 @@
 { lib, buildPythonPackage, fetchPypi
 , django_environ, mock, django
-, pytest, pytestrunner, pytest-django
+, pytest, pytest-runner, pytest-django
 }:
 buildPythonPackage rec {
   pname = "django-guardian";
@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "c58a68ae76922d33e6bdc0e69af1892097838de56e93e78a8361090bcd9f89a0";
   };
 
-  checkInputs = [ pytest pytestrunner pytest-django django_environ mock ];
+  checkInputs = [ pytest pytest-runner pytest-django django_environ mock ];
   propagatedBuildInputs = [ django ];
 
   meta = with lib; {

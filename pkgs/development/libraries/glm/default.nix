@@ -1,37 +1,53 @@
-{ lib, stdenv, fetchurl, fetchzip, cmake }:
+{ lib, stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
-  version = "0.9.8.5";
+  version = "0.9.9.8";
   pname = "glm";
 
-  src = fetchzip {
-    url = "https://github.com/g-truc/glm/releases/download/${version}/${pname}-${version}.zip";
-    sha256 = "0dkfj4hin3am9fxgcvwr5gj0h9y52x7wa03lfwb3q0bvaj1rsly2";
+  src = fetchFromGitHub {
+    owner = "g-truc";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-F//+3L5Ozrw6s7t4LrcUmO7sN30ZSESdrPAYX57zgr8=";
   };
-
-  nativeBuildInputs = [ cmake ];
 
   outputs = [ "out" "doc" ];
 
-  cmakeConfigureFlags = [ "-DGLM_INSTALL_ENABLE=off" ];
+  nativeBuildInputs = [ cmake ];
 
-  # fetch newer version of platform.h which correctly supports gcc 7.3
-  gcc7PlatformPatch = fetchurl {
-    url = "https://raw.githubusercontent.com/g-truc/glm/384dab02e45a8ad3c1a3fa0906e0d5682c5b27b9/glm/simd/platform.h";
-    sha256 = "0ym0sgwznxhfyi014xs55x3ql7r65fjs34sqb5jiaffkdhkqgzia";
-  };
+  cmakeFlags = [
+    "-DBUILD_SHARED_LIBS=OFF"
+    "-DBUILD_STATIC_LIBS=OFF"
+    "-DGLM_TEST_ENABLE=${if doCheck then "ON" else "OFF"}"
+  ];
 
-  postPatch = ''
-    substituteInPlace CMakeLists.txt \
-      --replace '"''${CMAKE_CURRENT_BINARY_DIR}/''${GLM_INSTALL_CONFIGDIR}' '"''${GLM_INSTALL_CONFIGDIR}'
-    cp ${gcc7PlatformPatch} glm/simd/platform.h
-  '';
+  doCheck = true;
 
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-DGLM_COMPILER=0";
+  installPhase = ''
+    runHook preInstall
 
-  postInstall = ''
+    # Install header-only library
+    mkdir -p $out/include
+    cp -rv ../glm $out/include
+    rm $out/include/glm/CMakeLists.txt
+    rm $out/include/glm/detail/*.cpp
+
+    # Install CMake files
+    mkdir -p $out/lib
+    cp -rv ../cmake $out/lib
+    substituteInPlace $out/lib/cmake/glm/glmConfig.cmake \
+        --replace 'GLM_INCLUDE_DIRS ''${_IMPORT_PREFIX}' "GLM_INCLUDE_DIRS $out/include"
+
+    # Install pkg-config file
+    mkdir -p $out/lib/pkgconfig
+    substituteAll ${./glm.pc.in} $out/lib/pkgconfig/glm.pc
+
+    # Install docs
     mkdir -p $doc/share/doc/glm
-    cp -rv $NIX_BUILD_TOP/$sourceRoot/doc/* $doc/share/doc/glm
+    cp -rv ../doc/api $doc/share/doc/glm/html
+    cp -v ../doc/manual.pdf $doc/share/doc/glm
+
+    runHook postInstall
   '';
 
   meta = with lib; {
@@ -41,10 +57,10 @@ stdenv.mkDerivation rec {
       graphics software based on the OpenGL Shading Language (GLSL)
       specification and released under the MIT license.
     '';
-    homepage = "http://glm.g-truc.net/";
+    homepage = "https://github.com/g-truc/glm";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with maintainers; [ smancill ];
   };
 }
 

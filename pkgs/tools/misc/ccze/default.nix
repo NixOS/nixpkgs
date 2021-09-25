@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, autoconf, ncurses, pcre }:
 
 stdenv.mkDerivation rec {
-  name = "ccze-0.2.1-2";
+  pname = "ccze";
+  version = "0.2.1-2";
 
   src = fetchurl {
-    url = "https://github.com/madhouse/ccze/archive/${name}.tar.gz";
+    url = "https://github.com/madhouse/ccze/archive/ccze-${version}.tar.gz";
     sha256 = "1amavfvyls4v0gnikk43n2rpciaspxifgrmvi99qj6imv3mfg66n";
   };
 

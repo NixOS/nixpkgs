@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "widevine";
+  pname = "widevine";
   version = "4.10.1582.1";
 
   src = fetchurl {

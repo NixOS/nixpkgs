@@ -5,7 +5,7 @@
 , meson
 , ninja
 , pkg-config
-, vala
+, vala_0_52
 , desktop-file-utils
 , gtk3
 , libaccounts-glib
@@ -28,14 +28,13 @@
 , webkitgtk
 , libwebp
 , appstream
-, libunity
 , wrapGAppsHook
 , elementary-icon-theme
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-photos";
-  version = "2.7.1";
+  version = "2.7.2";
 
   repoName = "photos";
 
@@ -43,7 +42,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "1dql14k43rv3in451amiwv4z71hz3ailx67hd8gw1ka3yw12128p";
+    sha256 = "1zq9zfsc987vvrzadw9xqi3rlbi4jv2s82axkgy7ijm3ibi58ddc";
   };
 
   passthru = {
@@ -59,7 +58,9 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     python3
-    vala
+    # Does not build with vala 0.54
+    # https://github.com/elementary/photos/issues/638
+    vala_0_52
     wrapGAppsHook
   ];
 
@@ -84,7 +85,6 @@ stdenv.mkDerivation rec {
     libraw
     librest
     libsoup
-    libunity
     libwebp
     scour
     sqlite
@@ -105,6 +105,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/elementary/photos";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
   };
 }

@@ -62,6 +62,7 @@ let
       # Fonts
       "fonts"
       # ALSA
+      "alsa"
       "asound.conf"
       # SSL
       "ssl/certs"

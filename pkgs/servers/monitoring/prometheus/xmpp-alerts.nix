@@ -20,7 +20,7 @@ python3Packages.buildPythonApplication rec {
   ] ++ (with python3Packages; [
     aiohttp
     slixmpp
-    prometheus_client
+    prometheus-client
     pyyaml
   ]);
 

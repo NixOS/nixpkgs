@@ -13,8 +13,6 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ rpmextract ];
 
-  phases = [ "unpackPhase" "installPhase"];
-
   sourceRoot = ".";
 
   unpackPhase = ''

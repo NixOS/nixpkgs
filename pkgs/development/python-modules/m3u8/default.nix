@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, python, fetchFromGitHub, requests, iso8601, bottle, pytest, pytestcov }:
+{ lib, buildPythonPackage, python, fetchFromGitHub, requests, iso8601, bottle, pytest, pytest-cov }:
 
 buildPythonPackage rec {
   pname = "m3u8";
@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "0cmg993icpsa1b19kljxvjwhs167bsqrs0ad4wnwsi8qq6na5d4p";
   };
 
-  checkInputs = [ bottle pytest pytestcov ];
+  checkInputs = [ bottle pytest pytest-cov ];
 
   checkPhase = ''
     pytest tests/test_{parser,model,variant_m3u8}.py

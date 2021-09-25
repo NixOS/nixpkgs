@@ -1,18 +1,12 @@
 {
-  thor = {
-    version = "0.19.1";
-    source = {
-      type = "gem";
-      remotes = ["https://rubygems.org"];
-      sha256 = "08p5gx18yrbnwc6xc0mxvsfaxzgy2y9i78xq7ds0qmdm67q39y4z";
-    };
-  };
   foreman = {
-    version = "0.78.0";
+    groups = ["default"];
+    platforms = [];
     source = {
-      type = "gem";
       remotes = ["https://rubygems.org"];
-      sha256 = "1caz8mi7gq1hs4l1flcyyw1iw1bdvdbhppsvy12akr01k3s17xaq";
+      sha256 = "0szgxvnzwkzrfbq5dkwa98mig78aqglfy6irdsvq1gq045pbq9r7";
+      type = "gem";
     };
+    version = "0.87.2";
   };
 }

@@ -9,6 +9,13 @@ let
     RAILS_ENV = "production";
     NODE_ENV = "production";
 
+    # mastodon-web concurrency.
+    WEB_CONCURRENCY = toString cfg.webProcesses;
+    MAX_THREADS = toString cfg.webThreads;
+
+    # mastodon-streaming concurrency.
+    STREAMING_CLUSTER_NUM = toString cfg.streamingProcesses;
+
     DB_USER = cfg.database.user;
 
     REDIS_HOST = cfg.redis.host;
@@ -146,17 +153,40 @@ in {
         type = lib.types.port;
         default = 55000;
       };
+      streamingProcesses = lib.mkOption {
+        description = ''
+          Processes used by the mastodon-streaming service.
+          Defaults to the number of CPU cores minus one.
+        '';
+        type = lib.types.nullOr lib.types.int;
+        default = null;
+      };
 
       webPort = lib.mkOption {
         description = "TCP port used by the mastodon-web service.";
         type = lib.types.port;
         default = 55001;
       };
+      webProcesses = lib.mkOption {
+        description = "Processes used by the mastodon-web service.";
+        type = lib.types.int;
+        default = 2;
+      };
+      webThreads = lib.mkOption {
+        description = "Threads per process used by the mastodon-web service.";
+        type = lib.types.int;
+        default = 5;
+      };
 
       sidekiqPort = lib.mkOption {
-        description = "TCP port used by the mastodon-sidekiq service";
+        description = "TCP port used by the mastodon-sidekiq service.";
         type = lib.types.port;
         default = 55002;
+      };
+      sidekiqThreads = lib.mkOption {
+        description = "Worker threads used by the mastodon-sidekiq service.";
+        type = lib.types.int;
+        default = 25;
       };
 
       vapidPublicKeyFile = lib.mkOption {
@@ -524,9 +554,10 @@ in {
       wantedBy = [ "multi-user.target" ];
       environment = env // {
         PORT = toString(cfg.sidekiqPort);
+        DB_POOL = toString cfg.sidekiqThreads;
       };
       serviceConfig = {
-        ExecStart = "${cfg.package}/bin/sidekiq -c 25 -r ${cfg.package}";
+        ExecStart = "${cfg.package}/bin/sidekiq -c ${toString cfg.sidekiqThreads} -r ${cfg.package}";
         Restart = "always";
         RestartSec = 20;
         EnvironmentFile = "/var/lib/mastodon/.secrets_env";

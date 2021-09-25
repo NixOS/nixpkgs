@@ -28,6 +28,19 @@
       ]
     },
     {
+      "name": "BAA 100",
+      "no-features": [
+        "hw-volume"
+      ]
+    },
+    {
+      "name": "D50s",
+      "address": "~^00:13:ef:",
+      "no-features": [
+        "hw-volume"
+      ]
+    },
+    {
       "name": "JBL Endurance RUN BT",
       "no-features": [
         "msbc-alt1",
@@ -37,6 +50,18 @@
     },
     {
       "name": "JBL LIVE650BTNC"
+    },
+    {
+      "name": "Motorola DC800",
+      "no-features": [
+        "sbc-xq"
+      ]
+    },
+    {
+      "name": "Motorola S305",
+      "no-features": [
+        "sbc-xq"
+      ]
     },
     {
       "name": "Soundcore Life P2-L",
@@ -185,7 +210,35 @@
     },
     {
       "sysname": "Linux",
-      "release": "~^5\\.(8|9|10)\\.",
+      "release": "~^5\\.(8|9)\\.",
+      "no-features": [
+        "msbc-alt1"
+      ]
+    },
+    {
+      "sysname": "Linux",
+      "release": "~^5\\.10\\.(1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|51|52|53|54|55|56|57|58|59|60|61)($|[^0-9])",
+      "no-features": [
+        "msbc-alt1"
+      ]
+    },
+    {
+      "sysname": "Linux",
+      "release": "~^5\\.12\\.(18|19)($|[^0-9])",
+      "no-features": [
+        "msbc-alt1"
+      ]
+    },
+    {
+      "sysname": "Linux",
+      "release": "~^5\\.13\\.(3|4|5|6|7|8|9|10|11|12|13)($|[^0-9])",
+      "no-features": [
+        "msbc-alt1"
+      ]
+    },
+    {
+      "sysname": "Linux",
+      "release": "~^5\\.14($|[^0-9])",
       "no-features": [
         "msbc-alt1"
       ]

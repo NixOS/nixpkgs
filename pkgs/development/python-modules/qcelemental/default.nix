@@ -1,17 +1,17 @@
 { buildPythonPackage, lib, fetchPypi, numpy
-, pydantic, pint,  networkx, pytestrunner, pytestcov, pytest
+, pydantic, pint,  networkx, pytest-runner, pytest-cov, pytest
 } :
 
 buildPythonPackage rec {
   pname = "qcelemental";
-  version = "0.21.0";
+  version = "0.22.0";
 
-  checkInputs = [ pytestrunner pytestcov pytest ];
+  checkInputs = [ pytest-runner pytest-cov pytest ];
   propagatedBuildInputs = [ numpy pydantic pint networkx ];
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1b3c78fxbpnddrm1fnbvv4x2840jcfjg2l5cb5w4p38vzksiv238";
+    sha256 = "1d7fc613fbe30189cfa970a863a5955865b1116ff651d20325c721b6f0ef1f52";
   };
 
   doCheck = true;

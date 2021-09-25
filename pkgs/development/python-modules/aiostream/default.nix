@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , pythonOlder
 , pytestCheckHook
-, pytestcov
+, pytest-cov
 , pytest-asyncio
 }:
 
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     sha256 = "1r3x9qwl08yscmzvhafc6gsmq84lr17s6p7a1qxr49cmdvjzsc13";
   };
 
-  checkInputs = [ pytestCheckHook pytestcov pytest-asyncio ];
+  checkInputs = [ pytestCheckHook pytest-cov pytest-asyncio ];
 
   meta = with lib; {
     description = "Generator-based operators for asynchronous iteration";

@@ -9,12 +9,48 @@
   useEncumberedCode ? true
 }:
 
-let
-  inherit (lib) optional optionalString;
 
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "freetype";
-  version = "2.10.4";
+  version = "2.11.0";
+
+  src = fetchurl {
+    url = "mirror://savannah/${pname}/${pname}-${version}.tar.xz";
+    sha256 = "sha256-i+45vTloxIBLcGFKCjrVlyma0OgkvIqtXOiq9IBnvec=";
+  };
+
+  propagatedBuildInputs = [ zlib bzip2 libpng ]; # needed when linking against freetype
+
+  # dependence on harfbuzz is looser than the reverse dependence
+  nativeBuildInputs = [ pkg-config which makeWrapper ]
+    # FreeType requires GNU Make, which is not part of stdenv on FreeBSD.
+    ++ lib.optional (!stdenv.isLinux) gnumake;
+
+  patches = [
+    ./enable-table-validation.patch
+  ] ++ lib.optional useEncumberedCode ./enable-subpixel-rendering.patch;
+
+  outputs = [ "out" "dev" ];
+
+  configureFlags = [ "--bindir=$(dev)/bin" "--enable-freetype-config" ];
+
+  # native compiler to generate building tool
+  CC_BUILD = "${buildPackages.stdenv.cc}/bin/cc";
+
+  # The asm for armel is written with the 'asm' keyword.
+  CFLAGS = lib.optionalString stdenv.isAarch32 "-std=gnu99";
+
+  enableParallelBuilding = true;
+
+  doCheck = true;
+
+  postInstall = glib.flattenInclude + ''
+    substituteInPlace $dev/bin/freetype-config \
+      --replace ${buildPackages.pkg-config} ${pkgsHostHost.pkg-config}
+
+    wrapProgram "$dev/bin/freetype-config" \
+      --set PKG_CONFIG_PATH "$PKG_CONFIG_PATH:$dev/lib/pkgconfig"
+  '';
 
   meta = with lib; {
     description = "A font rendering engine";
@@ -30,44 +66,4 @@ in stdenv.mkDerivation rec {
     platforms = platforms.all;
     maintainers = with maintainers; [ ttuegel ];
   };
-
-  src = fetchurl {
-    url = "mirror://savannah/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "112pyy215chg7f7fmp2l9374chhhpihbh8wgpj5nj6avj3c59a46";
-  };
-
-  propagatedBuildInputs = [ zlib bzip2 libpng ]; # needed when linking against freetype
-
-  # dependence on harfbuzz is looser than the reverse dependence
-  nativeBuildInputs = [ pkg-config which makeWrapper ]
-    # FreeType requires GNU Make, which is not part of stdenv on FreeBSD.
-    ++ optional (!stdenv.isLinux) gnumake;
-
-  patches =
-    [ ./enable-table-validation.patch
-    ] ++
-    optional useEncumberedCode ./enable-subpixel-rendering.patch;
-
-  outputs = [ "out" "dev" ];
-
-  configureFlags = [ "--bindir=$(dev)/bin" "--enable-freetype-config" ];
-
-  # native compiler to generate building tool
-  CC_BUILD = "${buildPackages.stdenv.cc}/bin/cc";
-
-  # The asm for armel is written with the 'asm' keyword.
-  CFLAGS = optionalString stdenv.isAarch32 "-std=gnu99";
-
-  enableParallelBuilding = true;
-
-  doCheck = true;
-
-  postInstall = glib.flattenInclude + ''
-    substituteInPlace $dev/bin/freetype-config \
-      --replace ${buildPackages.pkg-config} ${pkgsHostHost.pkg-config}
-
-    wrapProgram "$dev/bin/freetype-config" \
-      --set PKG_CONFIG_PATH "$PKG_CONFIG_PATH:$dev/lib/pkgconfig"
-  '';
-
 }

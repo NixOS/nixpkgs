@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "itk";
-  version = "5.2.0";
+  version = "5.2.1";
 
   src = fetchFromGitHub {
     owner = "InsightSoftwareConsortium";
     repo = "ITK";
     rev = "v${version}";
-    sha256 = "19f65fc9spwvmywg43lkw9p2inrrzr1qrfzcbing3cjk0x2yrsnl";
+    sha256 = "sha256-KaVe9FMGm4ZVMpwAT12fA67T0qZS3ZueiI8z85+xSwE=";
   };
 
   postPatch = ''

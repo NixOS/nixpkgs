@@ -1,5 +1,5 @@
 { lib, hwdata, pkg-config, lxc, buildGoPackage, fetchurl
-, makeWrapper, acl, rsync, gnutar, xz, btrfs-progs, gzip, dnsmasq
+, makeWrapper, acl, rsync, gnutar, xz, btrfs-progs, gzip, dnsmasq, attr
 , squashfsTools, iproute2, iptables, ebtables, iptables-nftables-compat, libcap
 , dqlite, raft-canonical, sqlite-replication, udev
 , writeShellScriptBin, apparmor-profiles, apparmor-parser
@@ -19,13 +19,13 @@ let
 in
 buildGoPackage rec {
   pname = "lxd";
-  version = "4.16";
+  version = "4.18";
 
   goPackagePath = "github.com/lxc/lxd";
 
   src = fetchurl {
     url = "https://linuxcontainers.org/downloads/lxd/lxd-${version}.tar.gz";
-    sha256 = "1da9avmxs8sy92d9nrdgry2x685ral58zgf89yr88qxc0llbzq7r";
+    sha256 = "19gkllahfd2fgz6vng5lrqx3bdrzaf9s874gzznvzvj9sgj0j3mn";
   };
 
   postPatch = ''
@@ -34,12 +34,6 @@ buildGoPackage rec {
   '';
 
   preBuild = ''
-    # unpack vendor
-    pushd go/src/github.com/lxc/lxd
-    rm _dist/src/github.com/lxc/lxd
-    cp -r _dist/src/* ../../..
-    popd
-
     # required for go-dqlite. See: https://github.com/lxc/lxd/pull/8939
     export CGO_LDFLAGS_ALLOW="(-Wl,-wrap,pthread_create)|(-Wl,-z,now)"
 
@@ -52,7 +46,7 @@ buildGoPackage rec {
 
     wrapProgram $out/bin/lxd --prefix PATH : ${lib.makeBinPath (
       networkPkgs
-      ++ [ acl rsync gnutar xz btrfs-progs gzip dnsmasq squashfsTools iproute2 bash criu ]
+      ++ [ acl rsync gnutar xz btrfs-progs gzip dnsmasq squashfsTools iproute2 bash criu attr ]
       ++ [ (writeShellScriptBin "apparmor_parser" ''
              exec '${apparmor-parser}/bin/apparmor_parser' -I '${apparmor-profiles}/etc/apparmor.d' "$@"
            '') ]
@@ -72,7 +66,7 @@ buildGoPackage rec {
     description = "Daemon based on liblxc offering a REST API to manage containers";
     homepage = "https://linuxcontainers.org/lxd/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ fpletz wucke13 ];
+    maintainers = with maintainers; [ fpletz wucke13 marsam ];
     platforms = platforms.linux;
   };
 }

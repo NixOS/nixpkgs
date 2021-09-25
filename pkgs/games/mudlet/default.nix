@@ -2,7 +2,9 @@
 , boost, libGLU, lua, cmake,  which, pkg-config, }:
 
 let
-  luaEnv = lua.withPackages(ps: with ps; [ luazip luafilesystem lrexlib-pcre luasql-sqlite3 lua-yajl luautf8 ]);
+  luaEnv = lua.withPackages(ps: with ps; [
+    luazip luafilesystem lrexlib-pcre luasql-sqlite3 lua-yajl luautf8
+  ]);
 in
 stdenv.mkDerivation rec {
   pname = "mudlet";
@@ -39,8 +41,6 @@ stdenv.mkDerivation rec {
     cp -r ../mudlet.png $out/share/pixmaps/
 
     makeQtWrapper $out/mudlet $out/bin/mudlet \
-      --set LUA_CPATH "${luaEnv}/lib/lua/${lua.luaversion}/?.so" \
-      --prefix LUA_PATH : "$NIX_LUA_PATH" \
       --prefix LD_LIBRARY_PATH : "${libsForQt5.qtkeychain}/lib/" \
       --run "cd $out";
   '';

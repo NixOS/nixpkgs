@@ -13,8 +13,6 @@ stdenv.mkDerivation {
 
   buildInputs = [ b43FirmwareCutter ];
 
-  phases = [ "unpackPhase" "installPhase" ];
-
   installPhase = ''
     mkdir -p $out/lib/firmware
     b43-fwcutter -w $out/lib/firmware linux/wl_apsta.o
@@ -22,7 +20,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Firmware for cards supported by the b43 kernel module";
-    homepage = "http://wireless.kernel.org/en/users/Drivers/b43";
+    homepage = "https://wireless.wiki.kernel.org/en/users/drivers/b43";
     license = lib.licenses.unfree;
   };
 }

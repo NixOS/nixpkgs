@@ -20,13 +20,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "ulauncher";
-  version = "5.9.0";
+  version = "5.12.1";
 
   disabled = python3Packages.isPy27;
 
   src = fetchurl {
     url = "https://github.com/Ulauncher/Ulauncher/releases/download/${version}/ulauncher_${version}.tar.gz";
-    sha256 = "sha256-jRCrkJcjUHDd3wF+Hkxg0QaW7YgIh7zM/KZ4TAH84/U=";
+    sha256 = "sha256-Fd3IOCEeXGV8zGd/8SzrWRsSsZRVePnsDaX8WrBrCOQ=";
   };
 
   nativeBuildInputs = with python3Packages; [
@@ -77,6 +77,9 @@ python3Packages.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace setup.py --subst-var out
+    patchShebangs bin/ulauncher-toggle
+    substituteInPlace bin/ulauncher-toggle \
+      --replace wmctrl ${wmctrl}/bin/wmctrl
   '';
 
   # https://github.com/Ulauncher/Ulauncher/issues/390
@@ -99,8 +102,10 @@ python3Packages.buildPythonApplication rec {
     runHook postCheck
   '';
 
+  # do not double wrap
+  dontWrapGApps = true;
   preFixup = ''
-    gappsWrapperArgs+=(--prefix PATH : "${lib.makeBinPath [ wmctrl ]}")
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}" --prefix PATH : "${lib.makeBinPath [ wmctrl ]}")
   '';
 
   passthru = {

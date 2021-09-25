@@ -262,7 +262,12 @@ in
     };
 
     security.wrappers = {
-      fping.source = "${pkgs.fping}/bin/fping";
+      fping =
+        { setuid = true;
+          owner = "root";
+          group = "root";
+          source = "${pkgs.fping}/bin/fping";
+        };
     };
 
     systemd.services.zabbix-proxy = {

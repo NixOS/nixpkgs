@@ -686,7 +686,7 @@ in
             fsType = "tmpfs";
             neededForBoot = true;
             # Sync with systemd's tmp.mount;
-            options = [ "mode=1777" "strictatime" "nosuid" "nodev" ];
+            options = [ "mode=1777" "strictatime" "nosuid" "nodev" "size=${toString config.boot.tmpOnTmpfsSize}" ];
           };
         "/tmp/xchg" =
           { device = "xchg";

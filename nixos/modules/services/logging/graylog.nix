@@ -128,10 +128,12 @@ in
 
     users.users = mkIf (cfg.user == "graylog") {
       graylog = {
-        uid = config.ids.uids.graylog;
+        isSystemUser = true;
+        group = "graylog";
         description = "Graylog server daemon user";
       };
     };
+    users.groups = mkIf (cfg.user == "graylog") {};
 
     systemd.tmpfiles.rules = [
       "d '${cfg.messageJournalDir}' - ${cfg.user} - - -"

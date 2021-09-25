@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
       library, you register, configure, enable and disable user-space helpers. This library
       is used by conntrack-tools.
     '';
-    homepage = "http://www.netfilter.org/projects/libnetfilter_cthelper/";
+    homepage = "https://www.netfilter.org/projects/libnetfilter_cthelper/";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
   };

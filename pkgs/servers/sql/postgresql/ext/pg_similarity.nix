@@ -2,7 +2,8 @@
 
 stdenv.mkDerivation {
 
-  name = "pg_similarity-1.0";
+  pname = "pg_similarity";
+  version = "1.0";
   src = fetchFromGitHub {
     owner = "eulerto";
     repo = "pg_similarity";

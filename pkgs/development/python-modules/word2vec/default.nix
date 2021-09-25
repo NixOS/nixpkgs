@@ -9,7 +9,7 @@
 , setuptools-scm
 , gcc
 , pytest
-, pytestcov
+, pytest-cov
 , isPy27
 }:
 let
@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ cython numpy scikit-learn six ];
 
-  checkInputs = [ pytest pytestcov ];
+  checkInputs = [ pytest pytest-cov ];
 
   # Checks require test data downloaded separately
   # See project source Makefile:test-data rule for reference

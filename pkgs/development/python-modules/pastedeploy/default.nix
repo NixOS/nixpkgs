@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, pytestrunner
+, pytest-runner
 , pytest
 }:
 
@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "6dead6ab9823a85d585ef27f878bc647f787edb9ca8da0716aa9f1261b464817";
   };
 
-  buildInputs = [ pytestrunner ];
+  buildInputs = [ pytest-runner ];
 
   checkInputs = [ pytest ];
 

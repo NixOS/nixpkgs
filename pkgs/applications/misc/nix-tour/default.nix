@@ -12,8 +12,6 @@ stdenv.mkDerivation rec {
     sha256 = "09b1vxli4zv1nhqnj6c0vrrl51gaira94i8l7ww96fixqxjgdwvb";
   };
 
-  phases = [ "unpackPhase" "installPhase" ];
-
   installPhase = ''
     mkdir -p $out/bin
     mkdir -p $out/share

@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , pytest
-, pytestcov
+, pytest-cov
 , pytest-doctestplus
 , pytestCheckHook
 , setuptools-scm
@@ -25,7 +25,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     pytest-doctestplus
-    pytestcov
+    pytest-cov
+  ];
+
+  checkInputs = [
     pytestCheckHook
   ];
 

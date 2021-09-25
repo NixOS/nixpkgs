@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, cmake, pkg-config, wrapQtAppsHook, boost, libGL
-, qtbase, python }:
+, qtbase, python3 }:
 
 stdenv.mkDerivation rec {
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = let
     options = {
-      PYTHON_EXECUTABLE = "${python}/bin/python";
+      PYTHON_EXECUTABLE = "${python3.interpreter}";
       NANO_SHARED_BOOST = "ON";
       BOOST_ROOT = boost;
       RAIBLOCKS_GUI = "ON";
@@ -31,6 +31,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];
   buildInputs = [ boost libGL qtbase ];
+
+  strictDeps = true;
 
   buildPhase = ''
     runHook preBuild

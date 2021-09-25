@@ -33,44 +33,79 @@ let
 in {
   name = "dokuwiki";
   meta = with pkgs.lib; {
-    maintainers = with maintainers; [ _1000101 ];
+    maintainers = with maintainers; [
+      _1000101
+      onny
+    ];
   };
-  machine = { ... }: {
-    services.dokuwiki."site1.local" = {
-      aclUse = false;
-      superUser = "admin";
+
+  nodes = {
+    dokuwiki_nginx = {...}: {
+      services.dokuwiki = {
+        sites = {
+          "site1.local" = {
+            aclUse = false;
+            superUser = "admin";
+          };
+          "site2.local" = {
+            usersFile = "/var/lib/dokuwiki/site2.local/users.auth.php";
+            superUser = "admin";
+            templates = [ template-bootstrap3 ];
+            plugins = [ plugin-icalevents ];
+          };
+        };
+      };
+
+      networking.firewall.allowedTCPPorts = [ 80 ];
+      networking.hosts."127.0.0.1" = [ "site1.local" "site2.local" ];
     };
-    services.dokuwiki."site2.local" = {
-      usersFile = "/var/lib/dokuwiki/site2.local/users.auth.php";
-      superUser = "admin";
-      templates = [ template-bootstrap3 ];
-      plugins = [ plugin-icalevents ];
+
+    dokuwiki_caddy = {...}: {
+      services.dokuwiki = {
+        webserver = "caddy";
+        sites = {
+          "site1.local" = {
+            aclUse = false;
+            superUser = "admin";
+          };
+          "site2.local" = {
+            usersFile = "/var/lib/dokuwiki/site2.local/users.auth.php";
+            superUser = "admin";
+            templates = [ template-bootstrap3 ];
+            plugins = [ plugin-icalevents ];
+          };
+        };
+      };
+
+      networking.firewall.allowedTCPPorts = [ 80 ];
+      networking.hosts."127.0.0.1" = [ "site1.local" "site2.local" ];
     };
-    networking.hosts."127.0.0.1" = [ "site1.local" "site2.local" ];
+
   };
 
   testScript = ''
-    site_names = ["site1.local", "site2.local"]
 
     start_all()
 
-    machine.wait_for_unit("phpfpm-dokuwiki-site1.local.service")
-    machine.wait_for_unit("phpfpm-dokuwiki-site2.local.service")
+    dokuwiki_nginx.wait_for_unit("nginx")
+    dokuwiki_caddy.wait_for_unit("caddy")
 
-    machine.wait_for_unit("nginx.service")
+    site_names = ["site1.local", "site2.local"]
 
-    machine.wait_for_open_port(80)
+    for machine in (dokuwiki_nginx, dokuwiki_caddy):
+      for site_name in site_names:
+        machine.wait_for_unit(f"phpfpm-dokuwiki-{site_name}")
 
-    machine.succeed("curl -sSfL http://site1.local/ | grep 'DokuWiki'")
-    machine.fail("curl -sSfL 'http://site1.local/doku.php?do=login' | grep 'Login'")
+        machine.succeed("curl -sSfL http://site1.local/ | grep 'DokuWiki'")
+        machine.fail("curl -sSfL 'http://site1.local/doku.php?do=login' | grep 'Login'")
 
-    machine.succeed("curl -sSfL http://site2.local/ | grep 'DokuWiki'")
-    machine.succeed("curl -sSfL 'http://site2.local/doku.php?do=login' | grep 'Login'")
+        machine.succeed("curl -sSfL http://site2.local/ | grep 'DokuWiki'")
+        machine.succeed("curl -sSfL 'http://site2.local/doku.php?do=login' | grep 'Login'")
 
-    machine.succeed(
-        "echo 'admin:$2y$10$ijdBQMzSVV20SrKtCna8gue36vnsbVm2wItAXvdm876sshI4uwy6S:Admin:admin@example.test:user' >> /var/lib/dokuwiki/site2.local/users.auth.php",
-        "curl -sSfL -d 'u=admin&p=password' --cookie-jar cjar 'http://site2.local/doku.php?do=login'",
-        "curl -sSfL --cookie cjar --cookie-jar cjar 'http://site2.local/doku.php?do=login' | grep 'Logged in as: <bdi>Admin</bdi>'",
-    )
+        machine.succeed(
+            "echo 'admin:$2y$10$ijdBQMzSVV20SrKtCna8gue36vnsbVm2wItAXvdm876sshI4uwy6S:Admin:admin@example.test:user' >> /var/lib/dokuwiki/site2.local/users.auth.php",
+            "curl -sSfL -d 'u=admin&p=password' --cookie-jar cjar 'http://site2.local/doku.php?do=login'",
+            "curl -sSfL --cookie cjar --cookie-jar cjar 'http://site2.local/doku.php?do=login' | grep 'Logged in as: <bdi>Admin</bdi>'",
+        )
   '';
 })

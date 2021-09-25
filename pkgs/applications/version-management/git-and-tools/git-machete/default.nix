@@ -1,33 +1,54 @@
-{ lib, buildPythonApplication, fetchPypi
-, installShellFiles, pbr
-, flake8, mock, pycodestyle, pylint, tox }:
+{ lib
+, buildPythonApplication
+, fetchFromGitHub
+, installShellFiles
+, git
+, stestr
+, nix-update-script
+, testVersion
+, git-machete
+}:
 
 buildPythonApplication rec {
   pname = "git-machete";
-  version = "3.2.1";
+  version = "3.3.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1sw6b1jaddacfm4kvvhgxn743khmsi1c4b4f5mgvm3rabv0h473h";
+  src = fetchFromGitHub {
+    owner = "virtuslab";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "0sx45y1d1v6y66msjc1lw9jhjppgbxqj145kivmd7lr6ccw68kav";
   };
 
-  nativeBuildInputs = [ installShellFiles pbr ];
+  nativeBuildInputs = [ installShellFiles ];
 
-  # TODO: Add missing check inputs (2019-11-22):
-  # - stestr
-  doCheck = false;
-  checkInputs = [ flake8 mock pycodestyle pylint tox ];
+  checkInputs = [ git stestr ];
+
+  postCheck = ''
+    stestr run
+  '';
 
   postInstall = ''
-      installShellCompletion --bash --name git-machete completion/git-machete.completion.bash
-      installShellCompletion --zsh --name _git-machete completion/git-machete.completion.zsh
+    installShellCompletion --bash --name git-machete completion/git-machete.completion.bash
+    installShellCompletion --zsh --name _git-machete completion/git-machete.completion.zsh
   '';
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = pname;
+    };
+
+    tests = {
+      version = testVersion {
+        package = git-machete;
+      };
+    };
+  };
 
   meta = with lib; {
     homepage = "https://github.com/VirtusLab/git-machete";
     description = "Git repository organizer and rebase/merge workflow automation tool";
     license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = [ maintainers.blitz ];
+    maintainers = with maintainers; [ blitz ];
   };
 }

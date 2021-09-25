@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, fetchpatch, fuse }:
 
 stdenv.mkDerivation rec {
-  name = "aefs-0.4pre259-8843b7c";
+  pname = "aefs";
+  version = "0.4pre259-8843b7c";
 
   src = fetchurl {
-    url = "http://tarballs.nixos.org/${name}.tar.bz2";
+    url = "http://tarballs.nixos.org/aefs-${version}.tar.bz2";
     sha256 = "167hp58hmgdavg2mqn5dx1xgq24v08n8d6psf33jhbdabzx6a6zq";
   };
 

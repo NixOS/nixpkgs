@@ -30,8 +30,6 @@ stdenv.mkDerivation {
 
   installFlags = [ "INSTALL_ROOT=$(out)" ];
 
-  enableParallelBuilding = true;
-
   dontWrapQtApps = true;
 
   meta = {

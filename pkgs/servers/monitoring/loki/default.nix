@@ -8,14 +8,14 @@
 }:
 
 buildGoModule rec {
-  version = "2.2.1";
+  version = "2.3.0";
   pname = "grafana-loki";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "grafana";
     repo = "loki";
-    sha256 = "sha256-ujZD5GIgMewvEQW3Wnt0eHdMIFs77PkkEecgCDw9290=";
+    sha256 = "sha256-Cxg3VRF4p/Kb6LyreGV0g+zPr15wplritSZgkbTiDI0=";
   };
 
   vendorSha256 = null;
@@ -24,7 +24,7 @@ buildGoModule rec {
     # TODO split every executable into its own package
     "cmd/loki"
     "cmd/loki-canary"
-    "cmd/promtail"
+    "clients/cmd/promtail"
     "cmd/logcli"
   ];
 
@@ -38,16 +38,21 @@ buildGoModule rec {
 
   passthru.tests = { inherit (nixosTests) loki; };
 
-  buildFlagsArray = let t = "github.com/grafana/loki/pkg/build"; in
-    ''
-      -ldflags=-s -w -X ${t}.Version=${version} -X ${t}.BuildUser=nix@nixpkgs -X ${t}.BuildDate=unknown -X ${t}.Branch=unknown -X ${t}.Revision=unknown
-    '';
+  ldflags = let t = "github.com/grafana/loki/pkg/util/build"; in [
+    "-s"
+    "-w"
+    "-X ${t}.Version=${version}"
+    "-X ${t}.BuildUser=nix@nixpkgs"
+    "-X ${t}.BuildDate=unknown"
+    "-X ${t}.Branch=unknown"
+    "-X ${t}.Revision=unknown"
+  ];
 
   doCheck = true;
 
   meta = with lib; {
     description = "Like Prometheus, but for logs";
-    license = licenses.asl20;
+    license = with licenses; [ agpl3Only asl20 ];
     homepage = "https://grafana.com/oss/loki/";
     maintainers = with maintainers; [ willibutz globin mmahut ];
     platforms = platforms.unix;

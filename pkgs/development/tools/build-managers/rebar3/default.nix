@@ -1,11 +1,11 @@
-{ lib, stdenv, fetchFromGitHub,
+{ lib, stdenv, fetchFromGitHub, fetchgit,
   fetchHex, erlang, makeWrapper,
   writeScript, common-updater-scripts, coreutils, git, gnused, nix, rebar3-nix }:
 
 let
-  version = "3.16.1";
+  version = "3.17.0";
   owner = "erlang";
-  deps = import ./rebar-deps.nix { inherit fetchFromGitHub fetchHex; };
+  deps = import ./rebar-deps.nix { inherit fetchFromGitHub fetchgit fetchHex; };
   rebar3 = stdenv.mkDerivation rec {
     pname = "rebar3";
     inherit version erlang;
@@ -16,7 +16,7 @@ let
       inherit owner;
       repo = pname;
       rev = version;
-      sha256 = "0dhwlx7zykf9y3znk2k8fxrq5j43jy3c3gd76k74q34p1xbajgzr";
+      sha256 = "02sk3whrbprzlih4pgcsd6ngmassfjfmkz21gwvb7mq64pib40k6";
     };
 
     buildInputs = [ erlang ];
@@ -38,14 +38,6 @@ let
     buildPhase = ''
       HOME=. escript bootstrap
     '';
-
-
-    patches = []
-      # Skips test that can write outside the designated tmp directory, potentially resulting in build failures
-      # due to file ownership issues if ran without sandbox (eg. Mac M1 default). This patch can be Removed when
-      # rebar3 releases with the following commit:
-      # https://github.com/erlang/rebar3/commit/11055384dbd5bf7d181bca83a33b0e100275ff21
-      ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [ ./tmp-tests-skip.patch ];
 
     checkPhase = ''
       HOME=. escript ./rebar3 ct
@@ -96,7 +88,7 @@ let
         update-source-version rebar3 "$latest" --version-key=version --print-changes --file="$nix_path/default.nix"
         tmpdir=$(mktemp -d)
         cp -R $(nix-build $nixpkgs --no-out-link -A rebar3.src)/* "$tmpdir"
-        (cd "$tmpdir" && rebar3 nix lock -o "$nix_path/rebar-deps.nix")
+        (cd "$tmpdir" && rebar3 as test nix lock -o "$nix_path/rebar-deps.nix")
       else
         echo "rebar3 is already up-to-date"
       fi

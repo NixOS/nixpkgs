@@ -12,16 +12,21 @@ stdenv.mkDerivation rec {
     sha256 = "0cdvbancr7y4nrj8257y5n45hmhizr8isynagy4fpsnpammv8pi6";
   };
 
-  patchPhase = ''
+  postPatch = ''
     sed -i -e s,/usr/bin/install,install, -e s,-I/usr/include/slang,, Makefile.in po/Makefile
 
     substituteInPlace configure \
       --replace "/usr/include/python" "${pythonIncludePath}"
     substituteInPlace configure.ac \
       --replace "/usr/include/python" "${pythonIncludePath}"
+
+    substituteInPlace Makefile.in \
+      --replace "ar rv" "${stdenv.cc.targetPrefix}ar rv"
   '';
 
-  buildInputs = [ slang popt python ];
+  strictDeps = true;
+  nativeBuildInputs = [ python ];
+  buildInputs = [ slang popt ];
 
   NIX_LDFLAGS = "-lncurses";
 

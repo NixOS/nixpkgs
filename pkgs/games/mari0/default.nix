@@ -28,8 +28,6 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ lua love_11 zip ];
 
-  phases = [ "unpackPhase" "installPhase" ];
-
   installPhase =
   ''
     mkdir -p $out/bin $out/share/games/lovegames $out/share/applications

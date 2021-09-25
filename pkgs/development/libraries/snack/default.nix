@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "The Snack Sound Toolkit (Tcl)";
-    homepage = "http://www.speech.kth.se/snack/";
+    homepage = "https://www.speech.kth.se/snack/";
     license = lib.licenses.gpl2;
     broken = true;
   };

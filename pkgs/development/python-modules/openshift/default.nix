@@ -1,22 +1,32 @@
-{
-  lib
-  , buildPythonPackage
-  , fetchPypi
-  , jinja2
-  , kubernetes
-  , ruamel-yaml
-  , six
-  , python-string-utils
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, jinja2
+, kubernetes
+, ruamel-yaml
+, six
+, python-string-utils
+, pytest-bdd
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "openshift";
-  version = "0.12.0";
+  version = "0.12.1";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-aggRnD4goiZJPp4cngp8AIrJC/V46378cwUSfq8Xml4=";
+  src = fetchFromGitHub {
+    owner = "openshift";
+    repo = "openshift-restclient-python";
+    rev = "v${version}";
+    sha256 = "1di55xg3nl4dwrrfw314p4mfm6593kdi7ia517v1sm6x5p4hjl78";
   };
+
+  postPatch = ''
+    substituteInPlace requirements.txt \
+      --replace "kubernetes ~= 12.0" "kubernetes"
+
+    sed -i '/--cov/d' setup.cfg
+  '';
 
   propagatedBuildInputs = [
     jinja2
@@ -26,9 +36,17 @@ buildPythonPackage rec {
     six
   ];
 
-  # tries to connect to the network
-  doCheck = false;
   pythonImportsCheck = ["openshift"];
+
+  checkInputs = [
+    pytest-bdd
+    pytestCheckHook
+  ];
+
+  disabledTestPaths = [
+    # requires docker
+    "test/functional"
+  ];
 
   meta = with lib; {
     description = "Python client for the OpenShift API";

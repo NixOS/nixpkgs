@@ -100,6 +100,11 @@ in buildFHSUserEnv rec {
     libva
     pipewire.lib
 
+    # steamwebhelper
+    harfbuzz
+    libthai
+    pango
+
     # Not formally in runtime but needed by some games
     at-spi2-atk
     at-spi2-core   # CrossCode
@@ -114,7 +119,7 @@ in buildFHSUserEnv rec {
     xorg.libpciaccess
     udev # shadow of the tomb raider
 
-    ## screeps dependencies
+    # screeps dependencies
     gtk3
     dbus
     zlib
@@ -123,7 +128,6 @@ in buildFHSUserEnv rec {
     cairo
     freetype
     gdk-pixbuf
-    pango
     fontconfig
 
     # friends options won't display "Launch Game" without it
@@ -188,7 +192,6 @@ in buildFHSUserEnv rec {
     nss
     fontconfig
     cairo
-    pango
     expat
     dbus
     cups

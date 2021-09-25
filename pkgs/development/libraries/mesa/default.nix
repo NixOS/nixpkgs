@@ -31,7 +31,7 @@ with lib;
 let
   # Release calendar: https://www.mesa3d.org/release-calendar.html
   # Release frequency: https://www.mesa3d.org/releasing.html#schedule
-  version = "21.1.5";
+  version = "21.2.2";
   branch  = versions.major version;
 
 self = stdenv.mkDerivation {
@@ -45,10 +45,8 @@ self = stdenv.mkDerivation {
       "ftp://ftp.freedesktop.org/pub/mesa/${version}/mesa-${version}.tar.xz"
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
     ];
-    sha256 = "0vbn40azh7izrxvb15c51z3lfcb9zas2v1wc4z9cxvja0y9p4b02";
+    sha256 = "1i75k6gh76f49vy6kksbsikf593jmgk6slqwbs1fs5s2jyzz3an4";
   };
-
-  prePatch = "patchShebangs .";
 
   # TODO:
   #  revive ./dricore-gallium.patch when it gets ported (from Ubuntu), as it saved
@@ -64,12 +62,6 @@ self = stdenv.mkDerivation {
       url = "https://gitlab.freedesktop.org/mesa/mesa/commit/aebbf819df6d1e.patch";
       sha256 = "17248hyzg43d73c86p077m4lv1pkncaycr3l27hwv9k4ija9zl8q";
     })
-    # For RISC-V support:
-    (fetchpatch {
-      name = "add-riscv-default-selections.patch";
-      url = "https://gitlab.freedesktop.org/mesa/mesa/-/commit/9908da1b7a5eaf0156d458e0e24b694c070ba345.patch";
-      sha256 = "036gv95m5gzzs6qpgkydf5fwgdlm7kpbdfalg8vmayghd260rw1w";
-    })
   ] ++ optionals (stdenv.isDarwin && stdenv.isAarch64) [
     # Fix aarch64-darwin build, remove when upstreaam supports it out of the box.
     # See: https://gitlab.freedesktop.org/mesa/mesa/-/issues/1020
@@ -77,15 +69,17 @@ self = stdenv.mkDerivation {
   ];
 
   postPatch = ''
+    patchShebangs .
+
     substituteInPlace meson.build --replace \
       "find_program('pkg-config')" \
       "find_program('${buildPackages.pkg-config.targetPrefix}pkg-config')"
 
     # The drirc.d directory cannot be installed to $drivers as that would cause a cyclic dependency:
     substituteInPlace src/util/xmlconfig.c --replace \
-      'DATADIR "/drirc.d"' '"${placeholder "out"}/drirc.d"'
+      'DATADIR "/drirc.d"' '"${placeholder "out"}/share/drirc.d"'
     substituteInPlace src/util/meson.build --replace \
-      "get_option('datadir')" "'${placeholder "out"}'"
+      "get_option('datadir')" "'${placeholder "out"}/share'"
   '' + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
     substituteInPlace meson.build --replace \
       "find_program('nm')" \

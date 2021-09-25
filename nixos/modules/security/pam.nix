@@ -406,7 +406,7 @@ let
           ${let oath = config.security.pam.oath; in optionalString cfg.oathAuth
               "auth requisite ${pkgs.oathToolkit}/lib/security/pam_oath.so window=${toString oath.window} usersfile=${toString oath.usersFile} digits=${toString oath.digits}"}
           ${let yubi = config.security.pam.yubico; in optionalString cfg.yubicoAuth
-              "auth ${yubi.control} ${pkgs.yubico-pam}/lib/security/pam_yubico.so mode=${toString yubi.mode} ${optionalString (yubi.mode == "client") "id=${toString yubi.id}"} ${optionalString yubi.debug "debug"}"}
+              "auth ${yubi.control} ${pkgs.yubico-pam}/lib/security/pam_yubico.so mode=${toString yubi.mode} ${optionalString (yubi.challengeResponsePath != null) "chalresp_path=${yubi.challengeResponsePath}"} ${optionalString (yubi.mode == "client") "id=${toString yubi.id}"} ${optionalString yubi.debug "debug"}"}
           ${optionalString cfg.fprintAuth
               "auth sufficient ${pkgs.fprintd}/lib/security/pam_fprintd.so"}
         '' +
@@ -475,7 +475,7 @@ let
 
           # Session management.
           ${optionalString cfg.setEnvironment ''
-            session required pam_env.so conffile=${config.system.build.pamEnvironment} readenv=0
+            session required pam_env.so conffile=/etc/pam/environment readenv=0
           ''}
           session required pam_unix.so
           ${optionalString cfg.setLoginUid
@@ -826,6 +826,16 @@ in
           xlink:href="https://developers.yubico.com/yubico-pam/Authentication_Using_Challenge-Response.html">here</link>.
         '';
       };
+      challengeResponsePath = mkOption {
+        default = null;
+        type = types.nullOr types.path;
+        description = ''
+          If not null, set the path used by yubico pam module where the challenge expected response is stored.
+
+          More information can be found <link
+          xlink:href="https://developers.yubico.com/yubico-pam/Authentication_Using_Challenge-Response.html">here</link>.
+        '';
+      };
     };
 
     security.pam.enableEcryptfs = mkEnableOption "eCryptfs PAM module (mounting ecryptfs home directory on login)";
@@ -859,9 +869,10 @@ in
 
     security.wrappers = {
       unix_chkpwd = {
-        source = "${pkgs.pam}/sbin/unix_chkpwd.orig";
-        owner = "root";
         setuid = true;
+        owner = "root";
+        group = "root";
+        source = "${pkgs.pam}/sbin/unix_chkpwd.orig";
       };
     };
 

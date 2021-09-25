@@ -1,67 +1,48 @@
 { lib
 , stdenv
-, fetchFromGitHub
+, fetchFromGitHub, fetchpatch
 , autoreconfHook
 , pkg-config
-, libtasn1, openssl, fuse, glib, libseccomp
+, libtasn1, openssl, fuse, glib, libseccomp, json-glib
 , libtpms
 , unixtools, expect, socat
 , gnutls
 , perl
-, python3, python3Packages
 }:
 
 stdenv.mkDerivation rec {
   pname = "swtpm";
-  version = "0.5.2";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "stefanberger";
     repo = "swtpm";
     rev = "v${version}";
-    sha256 = "sha256-KY5V4z/8I15ePjorgZueNahlD/xvFa3tDarA0tuRxFk=";
+    sha256 = "sha256-7YzdwGAGECj7PhaCOf/dLSILPXqtbylCkN79vuFBw5Y=";
   };
 
-  pythonPath = with python3Packages; requiredPythonModules [
-    setuptools
-    cryptography
-  ];
-
   patches = [
-    # upstream looks for /usr directory in $prefix to check
-    # whether or not to proceed with installation of python
-    # tools (swtpm_setup utility).
-    ./python-installation.patch
+    (fetchpatch {
+      url = "https://patch-diff.githubusercontent.com/raw/stefanberger/swtpm/pull/527.patch";
+      sha256 = "sha256-cpKHP15a27ifmmswSgHoNzGPO6TY/ZuJIfM5xLOlqlU=";
+    })
   ];
-
-  prePatch = ''
-    patchShebangs src/swtpm_setup/setup.py
-    patchShebangs samples/setup.py
-  '';
 
   nativeBuildInputs = [
     pkg-config unixtools.netstat expect socat
     perl # for pod2man
     autoreconfHook
-    python3
   ];
   buildInputs = [
     libtpms
     openssl libtasn1 libseccomp
-    fuse glib
+    fuse glib json-glib
     gnutls
-    python3.pkgs.wrapPython
   ];
-  propagatedBuildInputs = pythonPath;
 
   configureFlags = [
     "--with-cuse"
   ];
-
-  postInstall = ''
-    wrapPythonProgramsIn $out/bin "$out $pythonPath"
-    wrapPythonProgramsIn $out/share/swtpm "$out $pythonPath"
-  '';
 
   enableParallelBuilding = true;
 

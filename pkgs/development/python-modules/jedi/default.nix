@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchFromGitHub, fetchPypi, pytest, glibcLocales, tox, pytestcov, parso }:
+{ lib, buildPythonPackage, fetchFromGitHub, fetchPypi, pytest, glibcLocales, tox, pytest-cov, parso }:
 
 buildPythonPackage rec {
   pname = "jedi";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
     fetchSubmodules = true;
   };
 
-  checkInputs = [ pytest glibcLocales tox pytestcov ];
+  checkInputs = [ pytest glibcLocales tox pytest-cov ];
 
   propagatedBuildInputs = [ parso ];
 

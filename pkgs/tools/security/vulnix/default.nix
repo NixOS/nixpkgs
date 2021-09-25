@@ -19,7 +19,7 @@ python3Packages.buildPythonApplication rec {
   checkInputs = with python3Packages; [
     freezegun
     pytest
-    pytestcov
+    pytest-cov
     pytest-flake8
   ];
 

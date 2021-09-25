@@ -20,7 +20,6 @@ mkDerivation rec {
   buildInputs = [ boost ];
 
   qmakeFlags = [ "VERSION=${version}" ];
-  enableParallelBuilding = true;
 
   postInstall = lib.optionalString stdenv.isDarwin ''
     mkdir -p $out/Applications

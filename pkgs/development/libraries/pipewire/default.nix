@@ -7,6 +7,7 @@
 , ninja
 , systemd
 , pkg-config
+, docutils
 , doxygen
 , graphviz
 , valgrind
@@ -27,20 +28,29 @@
 , callPackage
 , nixosTests
 , withMediaSession ? true
-, gstreamerSupport ? true, gst_all_1 ? null
-, ffmpegSupport ? true, ffmpeg ? null
-, bluezSupport ? true, bluez ? null, sbc ? null, libopenaptx ? null, ldacbt ? null, fdk_aac ? null
+, gstreamerSupport ? true
+, gst_all_1 ? null
+, ffmpegSupport ? true
+, ffmpeg ? null
+, bluezSupport ? true
+, bluez ? null
+, sbc ? null
+, libfreeaptx ? null
+, ldacbt ? null
+, fdk_aac ? null
 , nativeHspSupport ? true
 , nativeHfpSupport ? true
 , ofonoSupport ? true
 , hsphfpdSupport ? true
-, pulseTunnelSupport ? true, libpulseaudio ? null
-, zeroconfSupport ? true, avahi ? null
+, pulseTunnelSupport ? true
+, libpulseaudio ? null
+, zeroconfSupport ? true
+, avahi ? null
 }:
 
 let
   fontsConf = makeFontsConf {
-    fontDirectories = [];
+    fontDirectories = [ ];
   };
 
   mesonEnable = b: if b then "enabled" else "disabled";
@@ -48,7 +58,7 @@ let
 
   self = stdenv.mkDerivation rec {
     pname = "pipewire";
-    version = "0.3.31";
+    version = "0.3.36";
 
     outputs = [
       "out"
@@ -57,6 +67,7 @@ let
       "jack"
       "dev"
       "doc"
+      "man"
       "mediaSession"
       "installedTests"
     ];
@@ -66,7 +77,7 @@ let
       owner = "pipewire";
       repo = "pipewire";
       rev = version;
-      sha256 = "1dirz69ami7bcgy6hhh0ffi9gzwcy9idg94nvknwvwkjw4zm8m79";
+      sha256 = "sha256-kwoffB0Hi84T4Q0NaxLxsCyPV4R0LayX9kHmXU/vRPA=";
     };
 
     patches = [
@@ -85,6 +96,7 @@ let
     ];
 
     nativeBuildInputs = [
+      docutils
       doxygen
       graphviz
       meson
@@ -110,13 +122,12 @@ let
       systemd
     ] ++ lib.optionals gstreamerSupport [ gst_all_1.gst-plugins-base gst_all_1.gstreamer ]
     ++ lib.optional ffmpegSupport ffmpeg
-    ++ lib.optionals bluezSupport [ bluez libopenaptx ldacbt sbc fdk_aac ]
+    ++ lib.optionals bluezSupport [ bluez libfreeaptx ldacbt sbc fdk_aac ]
     ++ lib.optional pulseTunnelSupport libpulseaudio
     ++ lib.optional zeroconfSupport avahi;
 
     mesonFlags = [
       "-Ddocs=enabled"
-      "-Dman=disabled" # we don't have xmltoman
       "-Dexamples=${mesonEnable withMediaSession}" # only needed for `pipewire-media-session`
       "-Dudevrulesdir=lib/udev/rules.d"
       "-Dinstalled_tests=enabled"
@@ -209,8 +220,9 @@ let
       homepage = "https://pipewire.org/";
       license = licenses.mit;
       platforms = platforms.linux;
-      maintainers = with maintainers; [ jtojnar ];
+      maintainers = with maintainers; [ jtojnar kranzes ];
     };
   };
 
-in self
+in
+self

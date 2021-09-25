@@ -2,7 +2,13 @@
 with lib;
 let
   cfg = config.services.klipper;
-  format = pkgs.formats.ini { mkKeyValue = generators.mkKeyValueDefault {} ":"; };
+  format = pkgs.formats.ini {
+    # https://github.com/NixOS/nixpkgs/pull/121613#issuecomment-885241996
+    listToValue = l:
+      if builtins.length l == 1 then generators.mkValueStringDefault {} (head l)
+      else lib.concatMapStrings (s: "\n  ${generators.mkValueStringDefault {} s}") l;
+    mkKeyValue = generators.mkKeyValueDefault {} ":";
+  };
 in
 {
   ##### interface
@@ -24,8 +30,7 @@ in
 
       apiSocket = mkOption {
         type = types.nullOr types.path;
-        default = null;
-        example = "/run/klipper/api";
+        default = "/run/klipper/api";
         description = "Path of the API socket to create.";
       };
 

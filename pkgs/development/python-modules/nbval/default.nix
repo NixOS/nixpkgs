@@ -11,7 +11,7 @@
 , glibcLocales
 , matplotlib
 , sympy
-, pytestcov
+, pytest-cov
 }:
 
 buildPythonPackage rec {
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     pytestCheckHook
     matplotlib
     sympy
-    pytestcov
+    pytest-cov
   ];
 
   buildInputs = [ glibcLocales ];

@@ -407,12 +407,14 @@ in
 
   config = mkIf cfg.enable {
 
-    users.users.rippled =
-      { description = "Ripple server user";
-        uid = config.ids.uids.rippled;
+    users.users.rippled = {
+        description = "Ripple server user";
+        isSystemUser = true;
+        group = "rippled";
         home = cfg.databasePath;
         createHome = true;
       };
+    users.groups.rippled = {};
 
     systemd.services.rippled = {
       after = [ "network.target" ];

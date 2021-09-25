@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, glib, python3, libsigrok, check }:
+{ lib, stdenv, fetchurl, pkg-config, glib, python3, check }:
 
 stdenv.mkDerivation rec {
   pname = "libsigrokdecode";
@@ -10,7 +10,9 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ glib python3 libsigrok check ];
+  buildInputs = [ glib python3 ];
+  checkInputs = [ check ];
+  doCheck = true;
 
   meta = with lib; {
     description = "Protocol decoding library for the sigrok signal analysis software suite";

@@ -25,10 +25,11 @@ stdenv.mkDerivation rec {
     patchShebangs data/set-mime-type-entry.py
   '';
 
-  postFixup = ''
+  preFixup = ''
     # Workaround because of https://gitlab.gnome.org/GNOME/file-roller/issues/40
-    wrapProgram "$out/bin/file-roller" \
+    gappsWrapperArgs+=(
       --prefix PATH : ${lib.makeBinPath [ unzip ]}
+    )
   '';
 
   passthru = {

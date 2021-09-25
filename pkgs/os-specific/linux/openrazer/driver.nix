@@ -30,11 +30,13 @@ stdenv.mkDerivation (common // {
     install -m 644 -v -D install_files/udev/99-razer.rules $RAZER_RULES_OUT
     install -m 755 -v -D install_files/udev/razer_mount $RAZER_MOUNT_OUT
     substituteInPlace $RAZER_RULES_OUT \
-      --replace razer_mount $RAZER_MOUNT_OUT
+      --replace razer_mount $RAZER_MOUNT_OUT \
+      --replace plugdev openrazer
     substituteInPlace $RAZER_MOUNT_OUT \
       --replace /usr/bin/logger ${util-linux}/bin/logger \
       --replace chgrp ${coreutils}/bin/chgrp \
-      --replace "PATH='/sbin:/bin:/usr/sbin:/usr/bin'" ""
+      --replace "PATH='/sbin:/bin:/usr/sbin:/usr/bin'" "" \
+      --replace plugdev openrazer
 
     runHook postInstall
   '';

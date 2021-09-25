@@ -10,8 +10,6 @@ mkDerivation rec {
     sha256 = "0f9hx6sy418cb23fadll298pqbc5l2lxsdivi4vgqbkvx7sw58zi";
   };
 
-  enableParallelBuilding = true;
-
   nativeBuildInputs = [
     qmake
     pkg-config

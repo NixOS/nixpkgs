@@ -223,11 +223,11 @@ stdenv.mkDerivation rec {
       fi
     '';
 
-  meta = {
+  meta = with lib; {
     description = "A movie player that supports many video formats";
     homepage = "http://mplayerhq.hu";
-    license = "GPL";
-    maintainers = [ lib.maintainers.eelco ];
-    platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ eelco ];
+    platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
   };
 }

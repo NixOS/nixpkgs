@@ -278,7 +278,7 @@ in
         };
 
         options.webserver = mkOption {
-          type = types.enum [ "httpd" "nginx" ];
+          type = types.enum [ "httpd" "nginx" "caddy" ];
           default = "httpd";
           description = ''
             Whether to use apache2 or nginx for virtual host management.
@@ -457,6 +457,33 @@ in
       }) eachSite;
     };
   })
+
+  (mkIf (cfg.webserver == "caddy") {
+    services.caddy = {
+      enable = true;
+      virtualHosts = mapAttrs' (hostName: cfg: (
+        nameValuePair "http://${hostName}" {
+          extraConfig = ''
+            root    * /${pkg hostName cfg}/share/wordpress
+            file_server
+
+            php_fastcgi unix/${config.services.phpfpm.pools."wordpress-${hostName}".socket}
+
+            @uploads {
+              path_regexp path /uploads\/(.*)\.php
+            }
+            rewrite @uploads /
+
+            @wp-admin {
+              path  not ^\/wp-admin/*
+            }
+            rewrite @wp-admin {path}/index.php?{query}
+          '';
+        }
+      )) eachSite;
+    };
+  })
+
 
   ]);
 }

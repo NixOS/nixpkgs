@@ -7,7 +7,7 @@
 , attrs
 , espeak-ng
 , pytestCheckHook
-, pytestcov
+, pytest-cov
 }:
 
 buildPythonApplication rec {
@@ -45,7 +45,7 @@ buildPythonApplication rec {
 
   checkInputs = [
     pytestCheckHook
-    pytestcov
+    pytest-cov
   ];
 
   # We tried to package festvial, but were unable to get the backend running,

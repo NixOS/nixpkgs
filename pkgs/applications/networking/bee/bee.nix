@@ -44,8 +44,8 @@ buildGoModule {
   subPackages = [ "cmd/bee" ];
 
   # no symbol table, no debug info, and pass the commit for the version string
-  buildFlags = lib.optionalString ( lib.hasAttr "goVersionString" versionSpec)
-    "-ldflags -s -ldflags -w -ldflags -X=github.com/ethersphere/bee.commit=${versionSpec.goVersionString}";
+  ldflags = lib.optionals ( lib.hasAttr "goVersionString" versionSpec)
+    [ "-s" "-w" "-X=github.com/ethersphere/bee.commit=${versionSpec.goVersionString}" ];
 
   # Mimic the bee Makefile: without disabling CGO, two (transitive and
   # unused) dependencies would fail to compile.

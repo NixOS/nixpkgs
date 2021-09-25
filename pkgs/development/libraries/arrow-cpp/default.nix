@@ -9,25 +9,25 @@ let
   arrow-testing = fetchFromGitHub {
     owner = "apache";
     repo = "arrow-testing";
-    rev = "d6c4deb22c4b4e9e3247a2f291046e3c671ad235";
-    sha256 = "0cwhnqijam632zp07j98i8ym967wz6kd35fim1msv88x2rhqky1i";
+    rev = "6d98243093c0b36442da94de7010f3eacc2a9909";
+    hash = "sha256-n57Fuz2k6sX1o3vYBmC41eRKGnyt9+YL5r3WTHHRRzw=";
   };
 
   parquet-testing = fetchFromGitHub {
     owner = "apache";
     repo = "parquet-testing";
     rev = "ddd898958803cb89b7156c6350584d1cda0fe8de";
-    sha256 = "0n16xqlpxn2ryp43w8pppxrbwmllx6sk4hv3ycgikfj57nd3ibc0";
+    hash = "sha256-gK04mj1Fuhkf82NDMrXplFa+cr/3Ij7I9VnYfinuJlg=";
   };
 
 in stdenv.mkDerivation rec {
   pname = "arrow-cpp";
-  version = "4.0.1";
+  version = "5.0.0";
 
   src = fetchurl {
     url =
       "mirror://apache/arrow/arrow-${version}/apache-arrow-${version}.tar.gz";
-    sha256 = "0vl926i6jvsvj5vigdgqzp9v1i1h5zzj1abqr6qwc9drfsibzk3m";
+    hash = "sha256-w7QxPspZTCD3Yag2cZchqvB2AAGviWuuw6tkQg/5kQo=";
   };
   sourceRoot = "apache-arrow-${version}/cpp";
 
@@ -37,7 +37,7 @@ in stdenv.mkDerivation rec {
     # ./cpp/thirdparty/versions.txt
     url =
       "https://github.com/jemalloc/jemalloc/releases/download/5.2.1/jemalloc-5.2.1.tar.bz2";
-    sha256 = "1xl7z0vwbn5iycg7amka9jd6hxd8nmfk7nahi4p9w2bnw9f0wcrl";
+    hash = "sha256-NDMOXOJ2CZ4uiVDZM121qHVomkxqVnUe87HYxTf4h/Y=";
   };
 
   ARROW_MIMALLOC_URL = fetchurl {
@@ -45,8 +45,8 @@ in stdenv.mkDerivation rec {
     # ./cpp/cmake_modules/ThirdpartyToolchain.cmake
     # ./cpp/thirdparty/versions.txt
     url =
-      "https://github.com/microsoft/mimalloc/archive/v1.6.4.tar.gz";
-    sha256 = "1b8av0974q70alcmaw5cwzbn6n9blnpmj721ik1qwmbbwwd6nqgs";
+      "https://github.com/microsoft/mimalloc/archive/v1.7.2.tar.gz";
+    hash = "sha256-sZEuNUVlpLaYQQ91g8D4OTSm27Ot5Uq33csVaTIJNr0=";
   };
 
   patches = [

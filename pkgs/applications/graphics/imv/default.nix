@@ -56,13 +56,13 @@ assert builtins.all
 
 stdenv.mkDerivation rec {
   pname = "imv";
-  version = "4.2.0";
+  version = "4.3.0";
 
   src = fetchFromGitHub {
     owner = "eXeC64";
     repo = "imv";
     rev = "v${version}";
-    sha256 = "07pcpppmfvvj0czfvp1cyq03ha0jdj4whl13lzvw37q3vpxs5qqh";
+    sha256 = "sha256-HP9W9US9e3YAXwCqiHV8NVqrO20SfQKcW3a6+r1XrIs=";
   };
 
   mesonFlags = [

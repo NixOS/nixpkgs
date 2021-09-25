@@ -9,16 +9,15 @@
 , mock
 , pysqlite ? null
 , pytestCheckHook
-, pytest_xdist
 }:
 
 buildPythonPackage rec {
   pname = "SQLAlchemy";
-  version = "1.4.20";
+  version = "1.4.23";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1l5miq1nzvg51yqw3pnaq17dgibhgx2m0il2ha79gwpyd8k3mviq";
+    sha256 = "sha256-dv8kaIH1KAib8ZOFExuWYZe7SUZTmQOW0s4TjipEdYM=";
   };
 
   propagatedBuildInputs = [

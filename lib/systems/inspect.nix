@@ -26,6 +26,8 @@ rec {
     isAvr          = { cpu = { family = "avr"; }; };
     isAlpha        = { cpu = { family = "alpha"; }; };
     isOr1k         = { cpu = { family = "or1k"; }; };
+    isM68k         = { cpu = { family = "m68k"; }; };
+    isS390         = { cpu = { family = "s390"; }; };
     isJavaScript   = { cpu = cpuTypes.js; };
 
     is32bit        = { cpu = { bits = 32; }; };
@@ -54,6 +56,7 @@ rec {
     isNone         = { kernel = kernels.none; };
 
     isAndroid      = [ { abi = abis.android; } { abi = abis.androideabi; } ];
+    isGnu          = with abis; map (a: { abi = a; }) [ gnuabi64 gnu gnueabi gnueabihf ];
     isMusl         = with abis; map (a: { abi = a; }) [ musl musleabi musleabihf ];
     isUClibc       = with abis; map (a: { abi = a; }) [ uclibc uclibceabi uclibceabihf ];
 

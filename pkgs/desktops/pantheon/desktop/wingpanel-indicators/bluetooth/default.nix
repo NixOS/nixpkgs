@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-bluetooth";
-  version = "unstable-2020-10-01";
+  version = "2.1.8";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
-    rev = "2b59d646ea0d66ae45dafc851374f24dcd98c064";
-    sha256 = "sha256-selp70P+7RhbdHF6iiNmcNbMf/c+B9zZ6nlxwRSZGn4=";
+    rev = version;
+    sha256 = "12rasf8wy3cqnfjlm9s2qnx4drzx0w0yviagkng3kspdzm3vzsqy";
   };
 
   passthru = {
@@ -62,6 +62,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/elementary/wingpanel-indicator-bluetooth";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
   };
 }

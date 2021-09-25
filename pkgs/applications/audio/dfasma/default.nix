@@ -47,8 +47,6 @@ in mkDerivation rec {
     substituteInPlace dfasma.pro --replace "CONFIG += file_sdif" "";
   '';
 
-  enableParallelBuilding = true;
-
   meta = with lib; {
     description = "Analyse and compare audio files in time and frequency";
     longDescription = ''

@@ -1,0 +1,50 @@
+diff --git a/lib/bls-signatures/python-bindings/CMakeLists.txt b/lib/bls-signatures/python-bindings/CMakeLists.txt
+index 255e3bb..5f99c3a 100644
+--- a/lib/bls-signatures/python-bindings/CMakeLists.txt
++++ b/lib/bls-signatures/python-bindings/CMakeLists.txt
+@@ -6,8 +6,7 @@ include(FetchContent)
+ 
+ FetchContent_Declare(
+   pybind11
+-  GIT_REPOSITORY https://github.com/pybind/pybind11.git
+-  GIT_TAG        v2.6.2
++  SOURCE_DIR @pybind11_src@
+ )
+ FetchContent_MakeAvailable(pybind11 relic)
+ 
+diff --git a/lib/bls-signatures/src/CMakeLists.txt b/lib/bls-signatures/src/CMakeLists.txt
+index b762b5d..e06073b 100644
+--- a/lib/bls-signatures/src/CMakeLists.txt
++++ b/lib/bls-signatures/src/CMakeLists.txt
+@@ -4,18 +4,11 @@ set (CMAKE_CXX_STANDARD 17)
+ # CMake 3.14+
+ include(FetchContent)
+ 
+-if (DEFINED ENV{RELIC_MAIN})
+-  set(RELIC_GIT_TAG "origin/main")
+-else ()
+-  set(RELIC_GIT_TAG "1885ae3b681c423c72b65ce1fe70910142cf941c")
+-endif ()
+-
+ message(STATUS "Relic will be built from: ${RELIC_GIT_TAG}")
+ 
+ FetchContent_Declare(
+   relic
+-  GIT_REPOSITORY https://github.com/relic-toolkit/relic.git
+-  GIT_TAG        ${RELIC_GIT_TAG}
++  SOURCE_DIR @relic_src@
+ )
+ FetchContent_MakeAvailable(relic)
+ 
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 970ec74..948441a 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -38,6 +38,7 @@ include_directories(
+ 	${BLAKE3_PATH}
+ 	${CMAKE_BINARY_DIR}/_deps/relic-src/include
+ 	${CMAKE_BINARY_DIR}/_deps/relic-build/include
++     @relic_src@/include
+ )
+ 
+ IF (WIN32)

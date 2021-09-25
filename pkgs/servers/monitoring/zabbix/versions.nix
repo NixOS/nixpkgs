@@ -1,11 +1,11 @@
 generic: {
   v50 = generic {
-    version = "5.0.12";
-    sha256 = "1gxlsmvz3m3dm4qqgx5qg5zjs680salah17mdzm3m27w8srg13i5";
+    version = "5.0.15";
+    sha256 = "1q9xwixzdj3w9qmarpp8xbkjphsz4m185br8g6i9f96676hrw5ww";
   };
 
   v40 = generic {
-    version = "4.0.31";
-    sha256 = "1jfawwwqzd9bsywsn4qc7d1j2a4i8d92xg16k0f3y34pbmfm4603";
+    version = "4.0.33";
+    sha256 = "05pdqiql6xv1l7cn2piydsfjiaw6np0rbl1n5wg7bc7r4ikiyp4v";
   };
 }

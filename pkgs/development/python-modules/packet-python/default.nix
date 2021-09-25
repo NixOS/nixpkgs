@@ -6,7 +6,7 @@
 
 # For tests/setup.py
 , pytest
-, pytestrunner
+, pytest-runner
 , requests-mock
 }:
 
@@ -17,11 +17,11 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "4af12f2fbcc9713878ab4ed571e9fda028bc68add34cde0e7226af4d833a4d38";
   };
-  nativeBuildInputs = [ pytestrunner ];
+  nativeBuildInputs = [ pytest-runner ];
   propagatedBuildInputs = [ requests ];
   checkInputs = [
     pytest
-    pytestrunner
+    pytest-runner
     requests-mock
   ];
 

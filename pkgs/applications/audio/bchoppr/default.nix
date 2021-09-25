@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "bchoppr";
-  version = "1.10.8";
+  version = "1.10.10";
 
   src = fetchFromGitHub {
     owner = "sjaehn";
     repo = pname;
     rev = version;
-    sha256 = "sha256-F2J9TBONluhBuoEnpff3tLZEHFDbmllILqbZvu+PGGI=";
+    sha256 = "sha256-LNPG/ETRmgPv8LsYVHol4p5oRCvg+dSYVEe61i8Dvz8=";
   };
 
   nativeBuildInputs = [ pkg-config ];

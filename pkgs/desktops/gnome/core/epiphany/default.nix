@@ -9,6 +9,7 @@
 , icu
 , wrapGAppsHook
 , gnome
+, pantheon
 , libportal
 , libxml2
 , libxslt
@@ -33,16 +34,23 @@
 , libdazzle
 , libhandy
 , buildPackages
+, withPantheon ? false
 }:
 
 stdenv.mkDerivation rec {
   pname = "epiphany";
-  version = "40.2";
+  version = "40.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "dRGeIgZWV89w7ytgPU9zg1VzvQNPHmGMD2YkeP1saDU=";
+    sha256 = "2tE4ufLVXeJxEo/KOLYfU/2YDFh9KeG6a1CP/zsZ9WQ=";
   };
+
+  patches = lib.optionals withPantheon [
+    # https://github.com/elementary/browser
+    ./dark-style.patch
+    ./navigation-buttons.patch
+  ];
 
   nativeBuildInputs = [
     desktop-file-utils
@@ -87,7 +95,7 @@ stdenv.mkDerivation rec {
     p11-kit
     sqlite
     webkitgtk
-  ];
+  ] ++ lib.optional withPantheon pantheon.granite;
 
   # Tests need an X display
   mesonFlags = [
@@ -108,7 +116,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Epiphany";
     description = "WebKit based web browser for GNOME";
-    maintainers = teams.gnome.members;
+    maintainers = teams.gnome.members ++ teams.pantheon.members;
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };

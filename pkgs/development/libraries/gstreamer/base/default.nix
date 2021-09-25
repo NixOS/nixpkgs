@@ -107,6 +107,7 @@ stdenv.mkDerivation rec {
     "-Dgl_winsys=${lib.concatStringsSep "," (lib.optional enableX11 "x11" ++ lib.optional enableWayland "wayland" ++ lib.optional enableCocoa "cocoa")}"
   ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     "-Dintrospection=disabled"
+    "-Dtests=disabled"
   ]
   ++ lib.optional (!enableX11) "-Dx11=disabled"
   # TODO How to disable Wayland?

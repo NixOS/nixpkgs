@@ -259,7 +259,7 @@ in
       user = mkOption {
         type = types.str;
         default = "smokeping";
-        description = "User that runs smokeping and (optionally) thttpd";
+        description = "User that runs smokeping and (optionally) thttpd. A group of the same name will be created as well.";
       };
       webService = mkOption {
         type = types.bool;
@@ -278,18 +278,23 @@ in
       }
     ];
     security.wrappers = {
-      fping.source = "${pkgs.fping}/bin/fping";
-      fping6.source = "${pkgs.fping}/bin/fping6";
+      fping =
+        { setuid = true;
+          owner = "root";
+          group = "root";
+          source = "${pkgs.fping}/bin/fping";
+        };
     };
     environment.systemPackages = [ pkgs.fping ];
     users.users.${cfg.user} = {
       isNormalUser = false;
       isSystemUser = true;
-      uid = config.ids.uids.smokeping;
+      group = cfg.user;
       description = "smokeping daemon user";
       home = smokepingHome;
       createHome = true;
     };
+    users.groups.${cfg.user} = {};
     systemd.services.smokeping = {
       wantedBy = [ "multi-user.target"];
       serviceConfig = {

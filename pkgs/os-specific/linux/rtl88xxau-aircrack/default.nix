@@ -40,6 +40,8 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
   '';
 
+  enableParallelBuilding = true;
+
   meta = with lib; {
     description = "Aircrack-ng kernel module for Realtek 88XXau network cards\n(8811au, 8812au, 8814au and 8821au chipsets) with monitor mode and injection support.";
     homepage = "https://github.com/aircrack-ng/rtl8812au";

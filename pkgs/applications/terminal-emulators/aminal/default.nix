@@ -33,9 +33,9 @@ buildGoPackage rec {
     sha256 = "0syv9md7blnl6i19zf8s1xjx5vfz6s755fxyg2ply0qc1pwhsj8n";
   };
 
-  preBuild = ''
-    buildFlagsArray=("-ldflags=-X ${goPackagePath}/version.Version=${version}")
-  '';
+  ldflags = [
+    "-X ${goPackagePath}/version.Version=${version}"
+  ];
 
   meta = with lib; {
     description = "Golang terminal emulator from scratch";

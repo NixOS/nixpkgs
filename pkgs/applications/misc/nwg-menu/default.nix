@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "nwg-menu";
-  version = "unstable-2021-06-12";
+  version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "nwg-piotr";
     repo = "nwg-menu";
-    rev = "b0746e26514a047ed9c6b975a71b7263aa39bd56";
-    hash = "sha256-rxyf3CfpfWnRAlIR/pl+s7LGAZbZjdtNWPPK7BecdhQ=";
+    rev = "v${version}";
+    sha256 = "sha256-M948RGU9/PwUtFRmf1Po7KlrGxqRPiOZKfS1Vv3vqW8=";
   };
 
-  vendorSha256 = "sha256-nN5iBleK12SKY9PBiDA+tM4B8FiVGZLXbtJM2+YrEfA=";
+  vendorSha256 = "sha256-AnYtqSe8mq10FQ071GEVh65MaWek5gYlR+9d8yL0RAc=";
 
   runVend = true;
 

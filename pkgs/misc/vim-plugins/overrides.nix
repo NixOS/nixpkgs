@@ -37,6 +37,9 @@
 , xkb-switch
 , ycmd
 
+# test dependencies
+, neovim-unwrapped
+
   # command-t dependencies
 , rake
 , ruby
@@ -51,7 +54,7 @@
 , CoreFoundation
 , CoreServices
 
-# nvim-treesitter dependencies
+  # nvim-treesitter dependencies
 , tree-sitter
 
   # sved dependencies
@@ -66,7 +69,7 @@
 , openssl
 , pkg-config
 
-# vim-go dependencies
+  # vim-go dependencies
 , asmfmt
 , delve
 , errcheck
@@ -86,6 +89,8 @@
 , iferr
 , impl
 , reftools
+  # must be lua51Packages
+, luaPackages
 }:
 
 self: super: {
@@ -97,10 +102,10 @@ self: super: {
     # The linked ruby code shows generates the required '.clang_complete' for cmake based projects
     # https://gist.github.com/Mic92/135e83803ed29162817fce4098dec144
     preFixup = ''
-      substituteInPlace "$out"/share/vim-plugins/clang_complete/plugin/clang_complete.vim \
+      substituteInPlace "$out"/plugin/clang_complete.vim \
         --replace "let g:clang_library_path = '' + "''" + ''" "let g:clang_library_path='${llvmPackages.libclang.lib}/lib/libclang.so'"
 
-      substituteInPlace "$out"/share/vim-plugins/clang_complete/plugin/libclang.py \
+      substituteInPlace "$out"/plugin/libclang.py \
         --replace "/usr/lib/clang" "${llvmPackages.clang.cc}/lib/clang"
     '';
   });
@@ -108,7 +113,7 @@ self: super: {
   clighter8 = super.clighter8.overrideAttrs (old: {
     preFixup = ''
       sed "/^let g:clighter8_libclang_path/s|')$|${llvmPackages.clang.cc.lib}/lib/libclang.so')|" \
-        -i "$out"/share/vim-plugins/clighter8/plugin/clighter8.vim
+        -i "$out"/plugin/clighter8.vim
     '';
   });
 
@@ -124,8 +129,8 @@ self: super: {
     buildInputs = [ tabnine ];
 
     postFixup = ''
-      mkdir $target/binaries
-      ln -s ${tabnine}/bin/TabNine $target/binaries/TabNine_$(uname -s)
+      mkdir -p $target/binaries/${tabnine.version}
+      ln -s ${tabnine}/bin/ $target/binaries/${tabnine.version}/${tabnine.passthru.platform}
     '';
   });
 
@@ -137,7 +142,7 @@ self: super: {
     dependencies = with self; [ completion-nvim ];
     buildInputs = [ tabnine ];
     postFixup = ''
-      mkdir $target/binaries
+      mkdir -p $target/binaries
       ln -s ${tabnine}/bin/TabNine $target/binaries/TabNine_$(uname -s)
     '';
   });
@@ -201,7 +206,7 @@ self: super: {
 
   direnv-vim = super.direnv-vim.overrideAttrs (oa: {
     preFixup = oa.preFixup or "" + ''
-      substituteInPlace $out/share/vim-plugins/direnv-vim/autoload/direnv.vim \
+      substituteInPlace $out/autoload/direnv.vim \
         --replace "let s:direnv_cmd = get(g:, 'direnv_cmd', 'direnv')" \
           "let s:direnv_cmd = get(g:, 'direnv_cmd', '${lib.getBin direnv}/bin/direnv')"
     '';
@@ -210,6 +215,14 @@ self: super: {
   ensime-vim = super.ensime-vim.overrideAttrs (old: {
     passthru.python3Dependencies = ps: with ps; [ sexpdata websocket-client ];
     dependencies = with self; [ vimproc-vim vimshell-vim self.self forms ];
+  });
+
+  fcitx-vim = super.fcitx-vim.overrideAttrs (old: {
+    passthru.python3Dependencies = ps: with ps; [ dbus-python ];
+    meta = {
+      description = "Keep and restore fcitx state when leaving/re-entering insert mode or search mode";
+      license = lib.licenses.mit;
+    };
   });
 
   forms = super.forms.overrideAttrs (old: {
@@ -251,6 +264,14 @@ self: super: {
       '';
     });
 
+  fzf-checkout-vim = super.fzf-checkout-vim.overrideAttrs (old: {
+    # The plugin has a makefile which tries to run tests in a docker container.
+    # This prevents it.
+    prePatch = ''
+      rm Makefile
+    '';
+  });
+
   fzf-vim = super.fzf-vim.overrideAttrs (old: {
     dependencies = with self; [ fzfWrapper ];
   });
@@ -274,6 +295,8 @@ self: super: {
     dependencies = with self; [ plenary-nvim ];
   });
 
+  # plenary-nvim = super.toVimPlugin(luaPackages.plenary-nvim);
+
   gruvbox-nvim = super.gruvbox-nvim.overrideAttrs (old: {
     dependencies = with self; [ lush-nvim ];
   });
@@ -290,10 +313,10 @@ self: super: {
   himalaya-vim = buildVimPluginFrom2Nix {
     pname = "himalaya-vim";
     inherit (himalaya) src version;
-    configurePhase = "cd vim/";
     dependencies = with self; [ himalaya ];
-    preFixup = ''
-      substituteInPlace $out/share/vim-plugins/himalaya-vim/plugin/himalaya.vim \
+    configurePhase = ''
+      cd vim
+      substituteInPlace plugin/himalaya.vim \
         --replace 'if !executable("himalaya")' 'if v:false'
     '';
     postFixup = ''
@@ -334,7 +357,7 @@ self: super: {
       propagatedBuildInputs = [ LanguageClient-neovim-bin ];
 
       preFixup = ''
-        substituteInPlace "$out"/share/vim-plugins/LanguageClient-neovim/autoload/LanguageClient.vim \
+        substituteInPlace "$out"/autoload/LanguageClient.vim \
           --replace "let l:path = s:root . '/bin/'" "let l:path = '${LanguageClient-neovim-bin}' . '/bin/'"
       '';
     };
@@ -355,6 +378,10 @@ self: super: {
     dependencies = with self; [ vim-floaterm ];
   });
 
+  lir-nvim = super.lir-nvim.overrideAttrs (old: {
+    dependencies = with self; [ plenary-nvim ];
+  });
+
   meson = buildVimPluginFrom2Nix {
     inherit (meson) pname version src;
     preInstall = "cd data/syntax-highlighting/vim";
@@ -363,11 +390,17 @@ self: super: {
 
   minimap-vim = super.minimap-vim.overrideAttrs (old: {
     preFixup = ''
-      substituteInPlace $out/share/vim-plugins/minimap-vim/plugin/minimap.vim \
+      substituteInPlace $out/plugin/minimap.vim \
         --replace "code-minimap" "${code-minimap}/bin/code-minimap"
-      substituteInPlace $out/share/vim-plugins/minimap-vim/bin/minimap_generator.sh \
+      substituteInPlace $out/bin/minimap_generator.sh \
         --replace "code-minimap" "${code-minimap}/bin/code-minimap"
     '';
+
+    doCheck = true;
+    checkPhase = ''
+      ${neovim-unwrapped}/bin/nvim -n -u NONE -i NONE -V1 --cmd "set rtp+=$out" --cmd "runtime! plugin/*.vim" -c "MinimapToggle"  +quit!
+    '';
+
   });
 
   ncm2 = super.ncm2.overrideAttrs (old: {
@@ -400,11 +433,15 @@ self: super: {
   });
 
   null-ls-nvim = super.null-ls-nvim.overrideAttrs (old: {
-    path = "null-ls.nvim";
+    dependencies = with self; [ plenary-nvim nvim-lspconfig ];
   });
 
   nvim-lsputils = super.nvim-lsputils.overrideAttrs (old: {
     dependencies = with self; [ popfix ];
+  });
+
+  nvim-spectre = super.nvim-spectre.overrideAttrs (old: {
+    dependencies = with self; [ plenary-nvim ];
   });
 
   # Usage:
@@ -425,8 +462,20 @@ self: super: {
       });
   });
 
+  onedark-nvim = super.onedark-nvim.overrideAttrs (old: {
+    dependencies = with self; [ lush-nvim ];
+  });
+
   onehalf = super.onehalf.overrideAttrs (old: {
     configurePhase = "cd vim";
+  });
+
+  range-highlight-nvim = super.range-highlight-nvim.overrideAttrs (old: {
+    dependencies = with self; [ cmd-parser-nvim ];
+  });
+
+  refactoring-nvim = super.refactoring-nvim.overrideAttrs (old: {
+    dependencies = with self; [ nvim-treesitter plenary-nvim ];
   });
 
   skim = buildVimPluginFrom2Nix {
@@ -439,10 +488,12 @@ self: super: {
     dependencies = with self; [ skim ];
   });
 
-  sql-nvim = super.sql-nvim.overrideAttrs (old: {
-    postPatch = ''
-      substituteInPlace lua/sql/defs.lua \
-        --replace "vim.g.sql_clib_path or" "vim.g.sql_clib_path or '${sqlite.out}/lib/libsqlite3.so' or"
+  sqlite-lua = super.sqlite-lua.overrideAttrs (old: {
+    postPatch = let
+      libsqlite = "${sqlite.out}/lib/libsqlite3${stdenv.hostPlatform.extensions.sharedLibrary}";
+    in ''
+      substituteInPlace lua/sqlite/defs.lua \
+        --replace "path = vim.g.sqlite_clib_path" "path = vim.g.sqlite_clib_path or ${lib.escapeShellArg libsqlite}"
     '';
   });
 
@@ -476,7 +527,7 @@ self: super: {
     });
 
   telescope-frecency-nvim = super.telescope-frecency-nvim.overrideAttrs (old: {
-    dependencies = with self; [ sql-nvim telescope-nvim ];
+    dependencies = with self; [ sqlite-lua telescope-nvim ];
   });
 
   telescope-fzf-writer-nvim = super.telescope-fzf-writer-nvim.overrideAttrs (old: {
@@ -635,7 +686,7 @@ self: super: {
             libiconv
           ];
 
-          cargoSha256 = "sha256-D54R7LK4CH5S7x0g+3K1EJ4b10P7wRAIkHYwCOFJtfg=";
+          cargoSha256 = "sha256-zg8PKuzC1srCOtn0ZcqI9cZxMwN9hsf+sNhYgDg93Gs=";
         };
       in
       ''
@@ -651,7 +702,7 @@ self: super: {
 
   vim-dasht = super.vim-dasht.overrideAttrs (old: {
     preFixup = ''
-      substituteInPlace $out/share/vim-plugins/vim-dasht/autoload/dasht.vim \
+      substituteInPlace $out/autoload/dasht.vim \
         --replace "['dasht']" "['${dasht}/bin/dasht']"
     '';
   });
@@ -755,7 +806,7 @@ self: super: {
     in
     super.vim-markdown-composer.overrideAttrs (oldAttrs: rec {
       preFixup = ''
-        substituteInPlace "$out"/share/vim-plugins/vim-markdown-composer/after/ftplugin/markdown/composer.vim \
+        substituteInPlace "$out"/after/ftplugin/markdown/composer.vim \
           --replace "let l:args = [s:plugin_root . '/target/release/markdown-composer']" \
           "let l:args = ['${vim-markdown-composer-bin}/bin/markdown-composer']"
       '';
@@ -785,6 +836,11 @@ self: super: {
     dependencies = with self; [ vim-repeat ];
   });
 
+  vim-textobj-entire = super.vim-textobj-entire.overrideAttrs (old: {
+    dependencies = with self; [ vim-textobj-user ];
+    meta.maintainers = with lib.maintainers; [ farlion ];
+  });
+
   vim-unimpaired = super.vim-unimpaired.overrideAttrs (old: {
     dependencies = with self; [ vim-repeat ];
   });
@@ -794,7 +850,7 @@ self: super: {
   });
 
   vim-xdebug = super.vim-xdebug.overrideAttrs (old: {
-    postInstall = false;
+    postInstall = null;
   });
 
   vim-xkbswitch = super.vim-xkbswitch.overrideAttrs (old: {

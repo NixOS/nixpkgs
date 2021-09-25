@@ -15,6 +15,8 @@
   # TODO(Profpatsch): automatically infer most of these
   # : list string
 , configureFlags
+  # : string
+, postConfigure ? null
   # mostly for moving and deleting files from the build directory
   # : lines
 , postInstall
@@ -78,6 +80,8 @@ in stdenv.mkDerivation {
     # http://www.skarnet.org/cgi-bin/archive.cgi?1:mss:623:heiodchokfjdkonfhdph
     ++ (lib.optional stdenv.isDarwin
          "--build=${stdenv.hostPlatform.system}");
+
+  inherit postConfigure;
 
   # TODO(Profpatsch): ensure that there is always a $doc output!
   postInstall = ''

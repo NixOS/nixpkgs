@@ -2,21 +2,20 @@
 
 buildGoPackage rec {
   pname = "openldap_exporter";
-  version = "2.1";
+  version = "2.1.4";
 
   src = fetchFromGitHub {
     owner = "tomcz";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Di1GiyVp/hGCFhqxhlqJSucGZK7f/FDDUFtJRaiAZu4=";
+    sha256 = "sha256-G4bTYFm1Zh+7gfSIZnfrPyQ15967ebEzl33pgZu23D4=";
   };
 
-  buildFlagsArray = ''
-    -ldflags=
-      -s -w
-      -X github.com/tomcz/openldap_exporter.tag=v${version}
-      -X github.com/tomcz/openldap_exporter.commit=unknown
-  '';
+  ldflags = [
+    "-s" "-w"
+    "-X github.com/tomcz/openldap_exporter.tag=v${version}"
+    "-X github.com/tomcz/openldap_exporter.commit=unknown"
+  ];
 
   goPackagePath = "github.com/tomcz/openldap_exporter";
 

@@ -15,11 +15,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "grip-4.2.1";
+  name = "grip-4.2.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/grip/${name}.tar.gz";
-    sha256 = "sha256-3bFJURPbq9rzLsJCppRjSARhcOJxC4eSfw5VxvZgQ3Q=";
+    sha256 = "sha256-nXtGgJeNYM8lyllNi9UdmsnVcHOCXfryWmKGZ9QFTHE=";
   };
 
   nativeBuildInputs = [ pkg-config libtool ];

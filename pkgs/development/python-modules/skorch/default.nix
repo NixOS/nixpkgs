@@ -3,7 +3,7 @@
 , fetchPypi
 , pytestCheckHook
 , pytest
-, pytestcov
+, pytest-cov
 , flaky
 , numpy
 , pandas
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ numpy pytorch scikit-learn scipy tabulate tqdm ];
-  checkInputs = [ pytest pytestcov flaky pandas pytestCheckHook ];
+  checkInputs = [ pytest pytest-cov flaky pandas pytestCheckHook ];
 
   disabledTests = [
     # on CPU, these expect artifacts from previous GPU run

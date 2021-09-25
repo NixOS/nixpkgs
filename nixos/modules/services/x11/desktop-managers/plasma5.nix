@@ -197,12 +197,24 @@ in
       };
 
       security.wrappers = {
-        kcheckpass.source = "${lib.getBin libsForQt5.kscreenlocker}/libexec/kcheckpass";
-        start_kdeinit.source = "${lib.getBin libsForQt5.kinit}/libexec/kf5/start_kdeinit";
-        kwin_wayland = {
-          source = "${lib.getBin plasma5.kwin}/bin/kwin_wayland";
-          capabilities = "cap_sys_nice+ep";
-        };
+        kcheckpass =
+          { setuid = true;
+            owner = "root";
+            group = "root";
+            source = "${lib.getBin libsForQt5.kscreenlocker}/libexec/kcheckpass";
+          };
+        start_kdeinit =
+          { setuid = true;
+            owner = "root";
+            group = "root";
+            source = "${lib.getBin libsForQt5.kinit}/libexec/kf5/start_kdeinit";
+          };
+        kwin_wayland =
+          { owner = "root";
+            group = "root";
+            capabilities = "cap_sys_nice+ep";
+            source = "${lib.getBin plasma5.kwin}/bin/kwin_wayland";
+          };
       };
 
       # DDC support
@@ -271,13 +283,14 @@ in
           kmenuedit
           kscreen
           kscreenlocker
-          ksysguard
+          ksystemstats
           kwayland
           kwin
           kwrited
           libkscreen
           libksysguard
           milou
+          plasma-systemmonitor
           plasma-browser-integration
           plasma-integration
           polkit-kde-agent

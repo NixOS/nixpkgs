@@ -3,9 +3,8 @@
 , fetchurl
 , makeWrapper
 , pkg-config
-, autoconf
-, automake
 , poppler_utils
+, gitMinimal
 , harfbuzz
 , icu
 , fontconfig
@@ -39,11 +38,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "sile";
-  version = "0.10.15";
+  version = "0.12.0";
 
   src = fetchurl {
     url = "https://github.com/sile-typesetter/sile/releases/download/v${version}/${pname}-${version}.tar.xz";
-    sha256 = "0p1w3s6j34qi93aycqmqggfm277n90z90nlmm1j3qizxxwq5gda9";
+    sha256 = "1rkdzf4khyvsn5qg455mdhnlacxlqgi9vchy369a66qp5nrs50y9";
   };
 
   configureFlags = [
@@ -52,8 +51,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    autoconf
-    automake
+    gitMinimal
     pkg-config
     makeWrapper
   ];
@@ -70,7 +68,9 @@ stdenv.mkDerivation rec {
     poppler_utils
   ];
 
-  preConfigure = lib.optionalString stdenv.isDarwin ''
+  preConfigure = ''
+    patchShebangs build-aux/*.sh
+  '' + lib.optionalString stdenv.isDarwin ''
     sed -i -e 's|@import AppKit;|#import <AppKit/AppKit.h>|' src/macfonts.m
   '';
 
@@ -108,7 +108,8 @@ stdenv.mkDerivation rec {
       technologies and borrowing some ideas from graphical systems
       such as InDesign.
     '';
-    homepage = "https://sile-typesetter.org/";
+    homepage = "https://sile-typesetter.org";
+    changelog = "https://github.com/sile-typesetter/sile/raw/v${version}/CHANGELOG.md";
     platforms = platforms.unix;
     broken = stdenv.isDarwin;   # https://github.com/NixOS/nixpkgs/issues/23018
     maintainers = with maintainers; [ doronbehar alerque ];

@@ -1,7 +1,7 @@
-{ lib, runCommandNoCC, fetchurl, file, texlive, writeShellScript }:
+{ lib, runCommand, fetchurl, file, texlive, writeShellScript }:
 
 {
-  chktex = runCommandNoCC "texlive-test-chktex" {
+  chktex = runCommand "texlive-test-chktex" {
     nativeBuildInputs = [
       (with texlive; combine { inherit scheme-infraonly chktex; })
     ];
@@ -18,7 +18,7 @@
 
   dvipng = lib.recurseIntoAttrs {
     # https://github.com/NixOS/nixpkgs/issues/75605
-    basic = runCommandNoCC "texlive-test-dvipng-basic" {
+    basic = runCommand "texlive-test-dvipng-basic" {
       nativeBuildInputs = [ file texlive.combined.scheme-medium ];
       input = fetchurl {
         name = "test_dvipng.tex";
@@ -40,7 +40,7 @@
     '';
 
     # test dvipng's limited capability to render postscript specials via GS
-    ghostscript = runCommandNoCC "texlive-test-ghostscript" {
+    ghostscript = runCommand "texlive-test-ghostscript" {
       nativeBuildInputs = [ file (with texlive; combine { inherit scheme-small dvipng; }) ];
       input = builtins.toFile "postscript-sample.tex" ''
         \documentclass{minimal}
@@ -81,7 +81,7 @@
   };
 
   # https://github.com/NixOS/nixpkgs/issues/75070
-  dvisvgm = runCommandNoCC "texlive-test-dvisvgm" {
+  dvisvgm = runCommand "texlive-test-dvisvgm" {
     nativeBuildInputs = [ file texlive.combined.scheme-medium ];
     input = builtins.toFile "dvisvgm-sample.tex" ''
       \documentclass{article}
@@ -106,7 +106,7 @@
     mv document*.svg "$out"/
   '';
 
-  texdoc = runCommandNoCC "texlive-test-texdoc" {
+  texdoc = runCommand "texlive-test-texdoc" {
     nativeBuildInputs = [
       (with texlive; combine {
         inherit scheme-infraonly luatex texdoc;
@@ -121,7 +121,7 @@
   '';
 
   # test that language files are generated as expected
-  hyphen-base = runCommandNoCC "texlive-test-hyphen-base" {
+  hyphen-base = runCommand "texlive-test-hyphen-base" {
     hyphenBase = lib.head texlive.hyphen-base.pkgs;
     schemeFull = texlive.combined.scheme-full;
     schemeInfraOnly = texlive.combined.scheme-infraonly;
@@ -154,7 +154,7 @@
   '';
 
   # test that fmtutil.cnf is fully regenerated on scheme-full
-  fmtutilCnf = runCommandNoCC "texlive-test-fmtutil.cnf" {
+  fmtutilCnf = runCommand "texlive-test-fmtutil.cnf" {
     kpathsea = lib.head texlive.kpathsea.pkgs;
     schemeFull = texlive.combined.scheme-full;
   } ''

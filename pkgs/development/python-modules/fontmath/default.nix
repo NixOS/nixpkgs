@@ -1,6 +1,6 @@
 { lib, buildPythonPackage, fetchPypi, isPy27
 , fonttools, setuptools-scm
-, pytest, pytestrunner
+, pytest, pytest-runner
 }:
 
 buildPythonPackage rec {
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [ fonttools ];
-  checkInputs = [ pytest pytestrunner ];
+  checkInputs = [ pytest pytest-runner ];
 
   meta = with lib; {
     description = "A collection of objects that implement fast font, glyph, etc. math";

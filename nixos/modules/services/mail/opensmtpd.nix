@@ -103,12 +103,15 @@ in {
     };
 
     security.wrappers.smtpctl = {
+      owner = "nobody";
       group = "smtpq";
+      setuid = false;
       setgid = true;
       source = "${cfg.package}/bin/smtpctl";
     };
 
-    services.mail.sendmailSetuidWrapper = mkIf cfg.setSendmail security.wrappers.smtpctl;
+    services.mail.sendmailSetuidWrapper = mkIf cfg.setSendmail
+      (security.wrappers.smtpctl // { program = "sendmail"; });
 
     systemd.tmpfiles.rules = [
       "d /var/spool/smtpd 711 root - - -"

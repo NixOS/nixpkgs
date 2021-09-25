@@ -159,10 +159,12 @@ in
 
       users.users.consul = {
         description = "Consul agent daemon user";
-        uid = config.ids.uids.consul;
+        isSystemUser = true;
+        group = "consul";
         # The shell is needed for health checks
         shell = "/run/current-system/sw/bin/bash";
       };
+      users.groups.consul = {};
 
       environment = {
         etc."consul.json".text = builtins.toJSON configOptions;

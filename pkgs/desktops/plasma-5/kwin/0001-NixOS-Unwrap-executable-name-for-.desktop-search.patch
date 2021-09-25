@@ -9,13 +9,13 @@ file in-use according to the kernel!
 
 Wrappers cannot affect the `/proc/.../exe` symlink!
 ---
- service_utils.h | 28 +++++++++++++++++++++++++++-
+ src/service_utils.h | 28 +++++++++++++++++++++++++++-
  1 file changed, 27 insertions(+), 1 deletion(-)
 
-diff --git a/service_utils.h b/service_utils.h
+diff --git a/src/service_utils.h b/src/service_utils.h
 index 8a70c1fad..6674f553b 100644
---- a/service_utils.h
-+++ b/service_utils.h
+--- a/src/service_utils.h
++++ b/src/service_utils.h
 @@ -26,8 +26,34 @@ namespace KWin
  const static QString s_waylandInterfaceName = QStringLiteral("X-KDE-Wayland-Interfaces");
  const static QString s_dbusRestrictedInterfaceName = QStringLiteral("X-KDE-DBUS-Restricted-Interfaces");

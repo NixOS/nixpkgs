@@ -12,8 +12,8 @@
 let params =
   if lib.versionAtLeast ocaml.version "4.12"
   then {
-    version = "1.5.0";
-    sha256 = "0g82m3jrp4s0m3fn9xmm8khrb3acccq8ns9p62bqa09pjd4vgdk2";
+    version = "1.7.0";
+    sha256 = "1va2zj41znsr94bdw485vak96zrcvqwcrqf1sy8zipb6hdhbchya";
   } else {
     version = "1.4.1";
     sha256 = "1ssyazc0yrdng98cypwa9m3nzfisdzpp7hqnx684rqj8f0g3gs6f";
@@ -31,9 +31,17 @@ buildDunePackage rec {
   useDune2 = true;
   minimumOCamlVersion = "4.06";
 
-  buildInputs = [ yojson stdlib-shims ocaml-syntax-shims ];
+  buildInputs =
+    if lib.versionAtLeast version "1.7.0" then
+      [ ]
+    else
+      [ yojson stdlib-shims ocaml-syntax-shims ];
 
-  propagatedBuildInputs = [ ppx_yojson_conv_lib result ];
+  propagatedBuildInputs =
+    if lib.versionAtLeast version "1.7.0" then
+      [ ]
+    else
+      [ ppx_yojson_conv_lib result ];
 
   meta = with lib; {
     description = "Jsonrpc protocol implementation in OCaml";

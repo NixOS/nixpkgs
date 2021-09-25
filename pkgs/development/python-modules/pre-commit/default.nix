@@ -17,13 +17,13 @@
 
 buildPythonPackage rec {
   pname = "pre-commit";
-  version = "2.13.0";
+  version = "2.15.0";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit version;
     pname = "pre_commit";
-    sha256 = "sha256-dklyxgaT3GaLqOhuspZU7DFEUBMQ9xmHQqdnvsOFo3g=";
+    sha256 = "sha256-PCWt1429+2ooplF4DVwxGsQN0X8WDrOVSgxZ2kClBac=";
   };
 
   patches = [

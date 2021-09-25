@@ -12,7 +12,9 @@ stdenv.mkDerivation {
     sha256 = "14b8vg914nb0yp1hgxzm29bg692m0gqncjj43b599s98s1cwl92h";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild qtest ounit ];
+  nativeBuildInputs = [ ocaml findlib ocamlbuild ];
+  buildInputs = [ qtest ounit ];
+  strictDeps = true;
 
   configureFlags = [
     "--enable-tests"

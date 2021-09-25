@@ -1,4 +1,4 @@
-{ lib, fetchurl, python27Packages, python36Packages, wmctrl,
+{ lib, fetchurl, python27Packages, python3Packages, wmctrl,
   qtbase, mkDerivationWith }:
 
 {
@@ -24,9 +24,9 @@
     ];
   };
 
-  dev = with python36Packages; mkDerivationWith buildPythonPackage rec {
+  dev = with python3Packages; mkDerivationWith buildPythonPackage rec {
     pname = "plover";
-    version = "4.0.0.dev8";
+    version = "4.0.0.dev10";
 
     meta = with lib; {
       description = "OpenSteno Plover stenography software";
@@ -36,7 +36,7 @@
 
     src = fetchurl {
       url    = "https://github.com/openstenoproject/plover/archive/v${version}.tar.gz";
-      sha256 = "1wxkmik1zyw5gqig5r0cas5v6f5408fbnximzw610rdisqy09rxp";
+      sha256 = "sha256-Eun+ZgmOIjYw6FS/2OGoBvYh52U/Ue0+NtIqrvV2Tqc=";
     };
 
     # I'm not sure why we don't find PyQt5 here but there's a similar

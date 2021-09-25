@@ -12,11 +12,11 @@
 
 buildPythonPackage rec {
   pname = "pathy";
-  version = "0.5.2";
+  version = "0.6.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-nb8my/5rkc7thuHnXZHe1Hg8j+sLBlYyJcLHWrrKZ5M=";
+    sha256 = "f83f1eddf77dd86e824143eef8d9adbe0785c3cdd5ec0ed6c0edea3227385048";
   };
 
   propagatedBuildInputs = [ smart-open typer google-cloud-storage ];

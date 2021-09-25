@@ -1,7 +1,8 @@
 { lib, stdenv, fetchurl, readline
 , compat ? false
 , callPackage
-, packageOverrides ? (self: super: {})
+, makeWrapper
+, packageOverrides ? (final: prev: {})
 , sourceVersion
 , hash
 , patches ? []
@@ -10,7 +11,10 @@
 , staticOnly ? stdenv.hostPlatform.isStatic
 }:
 let
-luaPackages = callPackage ../../lua-modules {lua=self; overrides=packageOverrides;};
+  luaPackages = callPackage ../../lua-modules {
+    lua = self;
+    overrides = packageOverrides;
+  };
 
 plat = if stdenv.isLinux then "linux"
        else if stdenv.isDarwin then "macosx"
@@ -31,21 +35,32 @@ self = stdenv.mkDerivation rec {
     sha256 = hash;
   };
 
-  LuaPathSearchPaths    = luaPackages.getLuaPathList luaversion;
-  LuaCPathSearchPaths   = luaPackages.getLuaCPathList luaversion;
+  LuaPathSearchPaths    = luaPackages.lib.luaPathList;
+  LuaCPathSearchPaths   = luaPackages.lib.luaCPathList;
   setupHook = luaPackages.lua-setup-hook LuaPathSearchPaths LuaCPathSearchPaths;
 
+  nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ readline ];
 
   inherit patches;
 
-  postPatch = lib.optionalString (!stdenv.isDarwin && !staticOnly) ''
+  # we can't pass flags to the lua makefile because for portability, everything is hardcoded
+  postPatch = ''
+    {
+      echo -e '
+        #undef  LUA_PATH_DEFAULT
+        #define LUA_PATH_DEFAULT "./share/lua/${luaversion}/?.lua;./?.lua;./?/init.lua"
+        #undef  LUA_CPATH_DEFAULT
+        #define LUA_CPATH_DEFAULT "./lib/lua/${luaversion}/?.so;./?.so;./lib/lua/${luaversion}/loadall.so"
+      '
+    } >> src/luaconf.h
+  '' + lib.optionalString (!stdenv.isDarwin && !staticOnly) ''
     # Add a target for a shared library to the Makefile.
     sed -e '1s/^/LUA_SO = liblua.so/' \
         -e 's/ALL_T *= */&$(LUA_SO) /' \
         -i src/Makefile
     cat ${./lua-dso.make} >> src/Makefile
-  '';
+  '' ;
 
   # see configurePhase for additional flags (with space)
   makeFlags = [

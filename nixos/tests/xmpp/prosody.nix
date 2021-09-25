@@ -1,6 +1,6 @@
 let
-  cert = pkgs: pkgs.runCommandNoCC "selfSignedCerts" { buildInputs = [ pkgs.openssl ]; } ''
-    openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -nodes -subj '/CN=example.com/CN=uploads.example.com/CN=conference.example.com'
+  cert = pkgs: pkgs.runCommand "selfSignedCerts" { buildInputs = [ pkgs.openssl ]; } ''
+    openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -nodes -subj '/CN=example.com/CN=uploads.example.com/CN=conference.example.com' -days 36500
     mkdir -p $out
     cp key.pem cert.pem $out
   '';

@@ -1,7 +1,7 @@
 { stdenv, lib, python3, fetchFromGitHub, installShellFiles }:
 
 let
-  version = "2.26.1";
+  version = "2.28.0";
   srcName = "azure-cli-${version}-src";
 
   src = fetchFromGitHub {
@@ -9,7 +9,7 @@ let
     owner = "Azure";
     repo = "azure-cli";
     rev = "azure-cli-${version}";
-    sha256 = "sha256-AwchP0o3I2T37dLPNw51wldwYUmcRuWptyzrhOocEaQ=";
+    sha256 = "sha256-fTt6tIcc96f8t3NUaR0RG0JQ+LPgqSHuJSmVx4a6X7M=";
   };
 
   # put packages that needs to be overriden in the py package scope
@@ -28,6 +28,7 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
     substituteInPlace setup.py \
       --replace "javaproperties==0.5.1" "javaproperties" \
       --replace "pytz==2019.1" "pytz" \
+      --replace "scp~=0.13.2" "scp" \
       --replace "jsondiff==1.2.0" "jsondiff~=1.2" \
       --replace "antlr4-python3-runtime~=4.7.2" "antlr4-python3-runtime~=4.7" \
       --replace "mock~=4.0" "mock"
@@ -125,9 +126,11 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
     azure-storage-blob
     azure-synapse-accesscontrol
     azure-synapse-artifacts
+    azure-synapse-managedprivateendpoints
     azure-synapse-spark
     colorama
     cryptography
+    distro
     Fabric
     jsmin
     knack

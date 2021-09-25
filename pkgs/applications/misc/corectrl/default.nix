@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation rec{
   pname = "corectrl";
-  version = "1.1.3";
+  version = "1.1.4";
 
   src = fetchFromGitLab {
     owner = "corectrl";
     repo = "corectrl";
     rev = "v${version}";
-    sha256 = "sha256-xRyc7FYzG8MnhQ8DjIUHYLeUZCZQdi4j1v1fG7F0+G8=";
+    sha256 = "sha256-o8u9WnkK/6VZ+wlJ9I5Ti6ADjV9VXraRGpSWkDQv5JQ=";
   };
 
   nativeBuildInputs = [

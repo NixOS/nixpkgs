@@ -32,7 +32,7 @@ let
   edf = flag: feature: [("-D" + feature + (if flag then "=ON" else "=OFF"))];
 
 in (if !buildClient then stdenv.mkDerivation else mkDerivation) rec {
-  name = "quassel${tag}-${version}";
+  pname = "quassel${tag}";
   version = "0.13.1";
 
   src = fetchFromGitHub {

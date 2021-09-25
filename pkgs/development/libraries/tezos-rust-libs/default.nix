@@ -19,10 +19,11 @@ rustPlatform.buildRustPackage rec {
   '';
 
   postInstall = ''
-    mkdir $out/lib/tezos-rust-libs
     cp -r rustc-bls12-381/include $out/include
-    cp $out/lib/librustc_bls12_381.a $out/lib/tezos-rust-libs
-    cp $out/lib/librustzcash.a $out/lib/tezos-rust-libs
+    cp -r librustzcash/include $out
+    cp -r $out/lib $out/tmp
+    mkdir $out/lib/tezos-rust-libs
+    mv $out/tmp/ $out/lib/tezos-rust-libs/
   '';
 
   doCheck = true;

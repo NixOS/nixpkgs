@@ -229,9 +229,11 @@ in
 
     users.users.${bindUser} =
       {
-        uid = config.ids.uids.bind;
+        group = bindUser;
         description = "BIND daemon user";
+        isSystemUser = true;
       };
+    users.groups.${bindUser} = {};
 
     systemd.services.bind = {
       description = "BIND Domain Name Server";

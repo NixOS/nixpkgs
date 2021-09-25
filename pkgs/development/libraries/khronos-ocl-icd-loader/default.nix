@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0v2yi6d3g5qshzy6pjic09c5irwgds106yvr93q62f32psfblnmy";
   };
 
-  patches = lib.lists.optional withTracing ./tracing.patch;
+  patches = lib.optional withTracing ./tracing.patch;
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ opencl-headers ];

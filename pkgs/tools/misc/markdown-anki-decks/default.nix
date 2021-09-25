@@ -29,7 +29,10 @@ python3.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     # No API changes.
-    substituteInPlace pyproject.toml --replace 'python-frontmatter = "^0.5.0"' 'python-frontmatter = "^1.0.0"'
+    substituteInPlace pyproject.toml \
+      --replace 'python-frontmatter = "^0.5.0"' 'python-frontmatter = "^1.0.0"' \
+      --replace 'genanki = "^0.10.1"' 'genanki = "^0.11.0"' \
+      --replace 'typer = "^0.3.2"' 'typer = "^0.4.0"'
   '';
 
   # No tests available on Pypi and there is only a failing version assertion test in the repo.

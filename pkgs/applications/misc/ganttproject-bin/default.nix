@@ -15,8 +15,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ jre ];
 
-  phases = [ "unpackPhase" "installPhase" "fixupPhase" ];
-
   installPhase = let
 
     desktopItem = makeDesktopItem {

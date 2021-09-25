@@ -300,7 +300,9 @@ clone_user_rev() {
     local rev="${3:-HEAD}"
 
     if [ -n "$fetchLFS" ]; then
-        HOME=$TMPDIR
+        tmpHomePath="$(mktemp -d -p nix-prefetch-git-tmp-home-XXXXXXXXXX)"
+        exit_handlers+=(remove_tmpHomePath)
+        HOME="$tmpHomePath"
         git lfs install
     fi
 
@@ -396,6 +398,7 @@ print_results() {
   "date": "$(json_escape "$commitDateStrict8601")",
   "path": "$(json_escape "$finalPath")",
   "$(json_escape "$hashType")": "$(json_escape "$hash")",
+  "fetchLFS": $([[ -n "$fetchLFS" ]] && echo true || echo false),
   "fetchSubmodules": $([[ -n "$fetchSubmodules" ]] && echo true || echo false),
   "deepClone": $([[ -n "$deepClone" ]] && echo true || echo false),
   "leaveDotGit": $([[ -n "$leaveDotGit" ]] && echo true || echo false)
@@ -406,6 +409,10 @@ EOF
 
 remove_tmpPath() {
     rm -rf "$tmpPath"
+}
+
+remove_tmpHomePath() {
+    rm -rf "$tmpHomePath"
 }
 
 if test -n "$QUIET"; then

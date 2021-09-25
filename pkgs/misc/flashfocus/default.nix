@@ -10,7 +10,7 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   nativeBuildInputs = with python3.pkgs; [
-    pytestrunner
+    pytest-runner
   ];
 
   propagatedBuildInputs = with python3.pkgs; [

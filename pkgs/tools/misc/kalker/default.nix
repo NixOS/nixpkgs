@@ -1,6 +1,7 @@
 { lib
 , fetchFromGitHub
-, m4
+, gcc
+, gmp, mpfr, libmpc
 , rustPlatform
 }:
 rustPlatform.buildRustPackage rec {
@@ -16,13 +17,17 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-fBWnMlOLgwrOBPS2GIfOUDHQHcMMaU5r9JZVMbA+W58=";
 
-  nativeBuildInputs = [ m4 ];
+  # https://gitlab.com/tspiteri/gmp-mpfr-sys/-/issues/20
+  nativeBuildInputs = [ gcc ];
+  buildInputs = [ gmp mpfr libmpc ];
 
   outputs = [ "out" "lib" ];
 
   postInstall = ''
     moveToOutput "lib" "$lib"
   '';
+
+  CARGO_FEATURE_USE_SYSTEM_LIBS = "1";
 
   meta = with lib; {
     homepage = "https://kalker.strct.net";

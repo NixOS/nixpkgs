@@ -29,6 +29,7 @@ isExecutable() {
     isExeResult="$(LANG=C $READELF -h -l "$1" 2> /dev/null \
         | grep '^ *Type: *EXEC\>\|^ *INTERP\>')"
     # not using grep -q, because it can cause Broken pipe
+    # https://unix.stackexchange.com/questions/305547/broken-pipe-when-grepping-output-but-only-with-i-flag
     [ -n "$isExeResult" ]
 }
 
@@ -36,7 +37,6 @@ isExecutable() {
 # every consecutive call to findDependency.
 declare -Ag autoPatchelfCachedDepsAssoc
 declare -ag autoPatchelfCachedDeps
-
 
 addToDepCache() {
     if [[ ${autoPatchelfCachedDepsAssoc[$1]+f} ]]; then return; fi
@@ -53,25 +53,70 @@ declare -gi depCacheInitialised=0
 declare -gi doneRecursiveSearch=0
 declare -g foundDependency
 
-getDepsFromSo() {
-    ldd "$1" 2> /dev/null | sed -n -e 's/[^=]*=> *\(.\+\) \+([^)]*)$/\1/p'
+getDepsFromElfBinary() {
+    # NOTE: This does not use runPatchelf because it may encounter non-ELF
+    # files. Caller is expected to check the return code if needed.
+    patchelf --print-needed "$1" 2> /dev/null
+}
+
+getRpathFromElfBinary() {
+    # NOTE: This does not use runPatchelf because it may encounter non-ELF
+    # files. Caller is expected to check the return code if needed.
+    local rpath
+    rpath="$(patchelf --print-rpath "$1" 2> /dev/null)" || return $?
+
+    local IFS=':'
+    printf "%s\n" $rpath
+}
+
+populateCacheForDep() {
+    local so="$1"
+    local rpath found
+    rpath="$(getRpathFromElfBinary "$so")" || return 1
+
+    for found in $(getDepsFromElfBinary "$so"); do
+        local rpathElem
+        for rpathElem in $rpath; do
+            # Ignore empty element or $ORIGIN magic variable which should be
+            # deterministically resolved by adding this package's library
+            # files early anyway.
+            #
+            # shellcheck disable=SC2016
+            # (Expressions don't expand in single quotes, use double quotes for
+            # that.)
+            if [[ -z "$rpathElem" || "$rpathElem" == *'$ORIGIN'* ]]; then
+                continue
+            fi
+
+            local soname="${found%.so*}"
+            local foundso=
+            for foundso in "$rpathElem/$soname".so*; do
+                addToDepCache "$foundso"
+            done
+
+            # Found in this element of the rpath, no need to check others.
+            if [ -n "$foundso" ]; then
+                break
+            fi
+        done
+    done
+
+    # Not found in any rpath element.
+    return 1
 }
 
 populateCacheWithRecursiveDeps() {
-    local so found foundso
-    for so in "${autoPatchelfCachedDeps[@]}"; do
-        for found in $(getDepsFromSo "$so"); do
-            local base="${found##*/}"
-            local soname="${base%.so*}"
-            for foundso in "${found%/*}/$soname".so*; do
-                addToDepCache "$foundso"
-            done
-        done
+    # Dependencies may add more to the end of this array, so we use a counter
+    # with while instead of a regular for loop here.
+    local -i i=0
+    while [ $i -lt ${#autoPatchelfCachedDeps[@]} ]; do
+        populateCacheForDep "${autoPatchelfCachedDeps[$i]}"
+        i=$i+1
     done
 }
 
 getSoArch() {
-    objdump -f "$1" | sed -ne 's/^architecture: *\([^,]\+\).*/\1/p'
+    $OBJDUMP -f "$1" | sed -ne 's/^architecture: *\([^,]\+\).*/\1/p'
 }
 
 # NOTE: If you want to use this function outside of the autoPatchelf function,
@@ -129,25 +174,25 @@ autoPatchelfFile() {
         fi
     fi
 
+    local libcLib
+    libcLib="$(< "$NIX_CC/nix-support/orig-libc")/lib"
+
     echo "searching for dependencies of $toPatch" >&2
 
-    # We're going to find all dependencies based on ldd output, so we need to
-    # clear the RPATH first.
-    runPatchelf --remove-rpath "$toPatch"
-
-    # If the file is not a dynamic executable, ldd/sed will fail,
-    # in which case we return, since there is nothing left to do.
     local missing
-    missing="$(
-        ldd "$toPatch" 2> /dev/null | \
-            sed -n -e 's/^[\t ]*\([^ ]\+\) => not found.*/\1/p'
-    )" || return 0
+    missing="$(getDepsFromElfBinary "$toPatch")" || return 0
 
     # This ensures that we get the output of all missing dependencies instead
     # of failing at the first one, because it's more useful when working on a
     # new package where you don't yet know its dependencies.
 
     for dep in $missing; do
+        # Check whether this library exists in libc. If so, we don't need to do
+        # any futher searching -- it will be resolved correctly by the linker.
+        if [ -f "$libcLib/$dep" ]; then
+            continue
+        fi
+
         echo -n "  $dep -> " >&2
         if findDependency "$dep" "$(getSoArch "$toPatch")"; then
             rpath="$rpath${rpath:+:}${foundDependency%/*}"
@@ -184,7 +229,7 @@ addAutoPatchelfSearchPath() {
     done
 
     while IFS= read -r -d '' file; do
-    addToDepCache "$file"
+        addToDepCache "$file"
     done <  <(find "$@" "${findOpts[@]}" \! -type d \
             \( -name '*.so' -o -name '*.so.*' \) -print0)
 }
@@ -220,10 +265,10 @@ autoPatchelf() {
       segmentHeaders="$(LANG=C $READELF -l "$file")"
       # Skip if the ELF file doesn't have segment headers (eg. object files).
       # not using grep -q, because it can cause Broken pipe
-      [ -n "$(echo "$segmentHeaders" | grep '^Program Headers:')" ] || continue
+      grep -q '^Program Headers:' <<<"$segmentHeaders" || continue
       if isExecutable "$file"; then
           # Skip if the executable is statically linked.
-          [ -n "$(echo "$segmentHeaders" | grep "^ *INTERP\\>")" ] || continue
+          grep -q "^ *INTERP\\>" <<<"$segmentHeaders" || continue
       fi
       # Jump file if patchelf is unable to parse it
       # Some programs contain binary blobs for testing,
@@ -255,6 +300,9 @@ autoPatchelf() {
 # So what we do here is basically run in postFixup and emulate the same
 # behaviour as fixupOutputHooks because the setup hook for patchelf is run in
 # fixupOutput and the postFixup hook runs later.
+#
+# shellcheck disable=SC2016
+# (Expressions don't expand in single quotes, use double quotes for that.)
 postFixupHooks+=('
     if [ -z "${dontAutoPatchelf-}" ]; then
         autoPatchelf -- $(for output in $outputs; do

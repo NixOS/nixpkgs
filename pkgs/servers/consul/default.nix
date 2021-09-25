@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "consul";
-  version = "1.10.1";
+  version = "1.10.2";
   rev = "v${version}";
 
   # Note: Currently only release tags are supported, because they have the Consul UI
@@ -17,7 +17,7 @@ buildGoModule rec {
     owner = "hashicorp";
     repo = pname;
     inherit rev;
-    sha256 = "sha256-oap0pXqtIbT9wMfD/RuJ2tTRynSvfzsgL8TyY4nj3sM=";
+    sha256 = "sha256-mA/s3J0ylE3C3IGaYfadeZV6PQ5Ooth6iQ4JEgPl44Q=";
   };
 
   passthru.tests.consul = nixosTests.consul;
@@ -26,18 +26,17 @@ buildGoModule rec {
   # has a split module structure in one repo
   subPackages = ["." "connect/certgen"];
 
-  vendorSha256 = "sha256-DloQGxeooVhYWA5/ICkL2UEQvNPilb2F5pst78UzWPI=";
+  vendorSha256 = "sha256-MWQ1m2nvKdP8ZCDs0sjZCiW4DSGe3NnVl4sQ448cu5M=";
 
   doCheck = false;
 
   deleteVendor = true;
 
-  preBuild = ''
-    buildFlagsArray+=("-ldflags"
-                      "-X github.com/hashicorp/consul/version.GitDescribe=v${version}
-                       -X github.com/hashicorp/consul/version.Version=${version}
-                       -X github.com/hashicorp/consul/version.VersionPrerelease=")
-  '';
+  ldflags = [
+    "-X github.com/hashicorp/consul/version.GitDescribe=v${version}"
+    "-X github.com/hashicorp/consul/version.Version=${version}"
+    "-X github.com/hashicorp/consul/version.VersionPrerelease="
+  ];
 
   meta = with lib; {
     description = "Tool for service discovery, monitoring and configuration";

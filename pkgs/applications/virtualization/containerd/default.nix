@@ -10,7 +10,7 @@
 
 buildGoModule rec {
   pname = "containerd";
-  version = "1.5.4";
+  version = "1.5.5";
 
   outputs = [ "out" "man" ];
 
@@ -18,7 +18,7 @@ buildGoModule rec {
     owner = "containerd";
     repo = "containerd";
     rev = "v${version}";
-    sha256 = "sha256-VV1cxA8tDRiPDxKV8OGu3T7sgutmyL+VPNqTeFcVjJA=";
+    sha256 = "sha256-6mDTTXHpXBcKOcT+VrGgt6HJzvTeKgJ0ItJ+IjCTJxk=";
   };
 
   vendorSha256 = null;
@@ -27,20 +27,22 @@ buildGoModule rec {
 
   buildInputs = [ btrfs-progs ];
 
-  buildFlags = [ "VERSION=v${version}" "REVISION=${src.rev}" ];
-
   BUILDTAGS = lib.optionals (btrfs-progs == null) [ "no_btrfs" ];
 
   buildPhase = ''
+    runHook preBuild
     patchShebangs .
-    make binaries man $buildFlags
+    make binaries man "VERSION=v${version}" "REVISION=${src.rev}"
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
     install -Dm555 bin/* -t $out/bin
     installManPage man/*.[1-9]
     installShellCompletion --bash contrib/autocomplete/ctr
     installShellCompletion --zsh --name _ctr contrib/autocomplete/zsh_autocomplete
+    runHook postInstall
   '';
 
   passthru.tests = { inherit (nixosTests) docker; };

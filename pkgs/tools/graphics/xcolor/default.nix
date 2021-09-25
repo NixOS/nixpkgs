@@ -1,29 +1,42 @@
-{ lib, rustPlatform, fetchFromGitHub, fetchpatch, pkg-config, libX11, libXcursor, libxcb, python3 }:
+{ lib, rustPlatform, fetchFromGitHub, pkg-config, libX11, libXcursor
+, libxcb, python3, installShellFiles, makeDesktopItem, copyDesktopItems }:
 
 rustPlatform.buildRustPackage rec {
   pname = "xcolor";
-  version = "unstable-2021-02-02";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "Soft";
     repo = pname;
-    rev = "0e99e67cd37000bf563aa1e89faae796ec25f163";
-    sha256 = "sha256-rHqK05dN5lrvDNbRCWGghI7KJwWzNCuRDEThEeMzmio=";
+    rev = version;
+    sha256 = "sha256-NfmoBZek4hsga6RflE5EKkWarhCFIcTwEXhg2fpkxNE=";
   };
 
-  cargoPatches = [
-    # Update Cargo.lock, lexical_core doesn't build on Rust 1.52.1
-    (fetchpatch {
-      url = "https://github.com/Soft/xcolor/commit/324d80a18a39a11f2f7141b226f492e2a862d2ce.patch";
-      sha256 = "sha256-5VzXitpl/gMef40UQBh1EoHezXPyB08aflqp0mSMAVI=";
+  cargoSha256 = "sha256-Zh73+FJ63SkusSavCqSCLbHVnU++4ZFSMFUIM7TnOj0=";
+
+  nativeBuildInputs = [ pkg-config python3 installShellFiles copyDesktopItems ];
+
+  buildInputs = [ libX11 libXcursor libxcb ];
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "XColor";
+      exec = "xcolor -s";
+      desktopName = "XColor";
+      comment = "Select colors visible anywhere on the screen to get their RGB representation";
+      icon = "xcolor";
+      categories = "Graphics;";
     })
   ];
 
-  cargoSha256 = "sha256-yD4pX+dCJvbDecsdB8tNt1VsEcyAJxNrB5WsZUhPGII=";
+  postInstall = ''
+    mkdir -p $out/share/applications
 
-  nativeBuildInputs = [ pkg-config python3 ];
-
-  buildInputs = [ libX11 libXcursor libxcb ];
+    installManPage man/xcolor.1
+    for x in 16 24 32 48 256 512; do
+        install -D -m644 extra/icons/xcolor-''${x}.png $out/share/icons/hicolor/''${x}x''${x}/apps/xcolor.png
+    done
+  '';
 
   meta = with lib; {
     description = "Lightweight color picker for X11";

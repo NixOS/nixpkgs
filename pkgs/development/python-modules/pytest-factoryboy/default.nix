@@ -7,7 +7,7 @@
 , pytest
 , pytestcache
 , pytestCheckHook
-, pytestcov
+, pytest-cov
 }:
 
 buildPythonPackage rec {
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     mock
     pytestCheckHook
     pytestcache
-    pytestcov
+    pytest-cov
   ];
 
   pytestFlagsArray = [ "--ignore=docs" ];

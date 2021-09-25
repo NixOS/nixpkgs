@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "fcp";
-  version = "0.2.0";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "svetlitski";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0ahd79dh48hsi4bhs4zs0a7hr55jzsjix9c61lc42ipdbqgifg2d";
+    sha256 = "0f242n8w88rikg1srimdifadhggrb2r1z0g65id60ahb4bjm8a0x";
   };
 
-  cargoSha256 = "1arrw4fz3f3wfjy9nb8vm707vhh4x0vv9wv8z2s07b4qcwwih8k4";
+  cargoSha256 = "0gw7gjfwc4r03rg6z65ml0y37sh4yf716isqs0mb4jqkp7rwfbc9";
 
   nativeBuildInputs = [ expect ];
 

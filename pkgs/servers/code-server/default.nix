@@ -46,7 +46,6 @@ in stdenv.mkDerivation rec {
   yarnCache = stdenv.mkDerivation {
     name = "${pname}-${version}-${system}-yarn-cache";
     inherit src;
-    phases = ["unpackPhase" "buildPhase"];
     nativeBuildInputs = [ yarn' git ];
     buildPhase = ''
       export HOME=$PWD

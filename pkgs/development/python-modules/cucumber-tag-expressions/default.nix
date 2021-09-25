@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "cucumber-tag-expressions";
-  version = "3.0.1";
+  version = "4.0.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "71823468f567726332b87f40530b27fc83b35daea6514f5cbb03f0533d96e5be";
+    sha256 = "4ef4e0513d4c26d42299ffed010ed5e24125b87fc64de2e74b979d4a84c8f522";
   };
 
   checkInputs = [ pytest pytest-html ];

@@ -1,6 +1,6 @@
 { version, sha256 }:
 
-{ lib, stdenv, fetchurl, writeText, sbclBootstrap
+{ lib, stdenv, fetchurl, fetchpatch, writeText, sbclBootstrap
 , sbclBootstrapHost ? "${sbclBootstrap}/bin/sbcl --disable-debugger --no-userinit --no-sysinit"
 , threadSupport ? (stdenv.isi686 || stdenv.isx86_64 || "aarch64-linux" == stdenv.hostPlatform.system || "aarch64-darwin" == stdenv.hostPlatform.system)
 , disableImmobileSpace ? false
@@ -21,6 +21,14 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [texinfo];
+
+  patches = lib.optional
+    (lib.versionAtLeast version "2.1.2" && lib.versionOlder version "2.1.8")
+    (fetchpatch {
+      # Fix segfault on ARM when reading large core files
+      url = "https://github.com/sbcl/sbcl/commit/8fa3f76fba2e8572e86ac6fc5754e6b2954fc774.patch";
+      sha256 = "1ic531pjnws1k3xd03a5ixbq8cn10dlh2nfln59k0vbm0253g3lv";
+    });
 
   postPatch = ''
     echo '"${version}.nixos"' > version.lisp-expr

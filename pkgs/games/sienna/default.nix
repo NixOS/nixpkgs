@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ lua love ];
 
-  phases = "installPhase";
+  dontUnpack = true;
 
   installPhase =
   ''

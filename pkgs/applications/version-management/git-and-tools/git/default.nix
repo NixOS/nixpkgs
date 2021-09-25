@@ -25,7 +25,7 @@ assert sendEmailSupport -> perlSupport;
 assert svnSupport -> perlSupport;
 
 let
-  version = "2.32.0";
+  version = "2.33.0";
   svn = subversionClient.override { perlBindings = perlSupport; };
 
   gitwebPerlLibs = with perlPackages; [ CGI HTMLParser CGIFast FCGI FCGIProcManager HTMLTagCloud ];
@@ -37,7 +37,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-    sha256 = "08rnm3ipjqdd2n31dw7mxl3iv9g4nxgc409krmz892a37kd43a38";
+    sha256 = "0kqcs8nj5h7rh3q86pw5777awq7gn77lgxk88ynjl1rfz2snlg5z";
   };
 
   outputs = [ "out" ] ++ lib.optional withManual "doc";
@@ -65,6 +65,9 @@ stdenv.mkDerivation {
     # Fix references to gettext introduced by ./git-sh-i18n.patch
     substituteInPlace git-sh-i18n.sh \
         --subst-var-by gettext ${gettext}
+
+    # ensure we are using the correct shell when executing the test scripts
+    patchShebangs t/*.sh
   '';
 
   nativeBuildInputs = [ gettext perlPackages.perl makeWrapper ]
@@ -297,6 +300,8 @@ stdenv.mkDerivation {
     disable_test t0001-init 'shared overrides system'
     disable_test t0001-init 'init honors global core.sharedRepository'
     disable_test t1301-shared-repo
+    # git-completion.bash: line 405: compgen: command not found:
+    disable_test t9902-completion 'option aliases are shown with GIT_COMPLETION_SHOW_ALL'
 
     # Our patched gettext never fallbacks
     disable_test t0201-gettext-fallbacks
@@ -316,6 +321,7 @@ stdenv.mkDerivation {
 
     # Flaky tests:
     disable_test t5319-multi-pack-index
+    disable_test t6421-merge-partial-clone
 
     ${lib.optionalString (!perlSupport) ''
       # request-pull is a Bash script that invokes Perl, so it is not available

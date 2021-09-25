@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation {
   pname = "raspberrypi-wireless-firmware";
-  version = "2021-01-28";
+  version = "2021-06-28";
 
   srcs = [
     (fetchFromGitHub {
@@ -16,8 +16,8 @@ stdenv.mkDerivation {
       name = "firmware-nonfree";
       owner = "RPi-Distro";
       repo = "firmware-nonfree";
-      rev = "83938f78ca2d5a0ffe0c223bb96d72ccc7b71ca5";
-      sha256 = "1l4zz86y2hjyvdwjy75abyjwh3wqknd71y3vh1iw5nd0hws8ranp";
+      rev = "00de3194a96397c913786945ac0af1fd6fbec45b";
+      sha256 = "1xnr364dkiq6gmr21lcrj23hwc0g9y5qad8dm2maij647bgzp07r";
     })
   ];
 
@@ -28,6 +28,7 @@ stdenv.mkDerivation {
   dontFixup = true;
 
   installPhase = ''
+    runHook preInstall
     mkdir -p "$out/lib/firmware/brcm"
 
     # Wifi firmware
@@ -37,6 +38,7 @@ stdenv.mkDerivation {
 
     # Bluetooth firmware
     cp bluez-firmware/broadcom/*.hcd "$out/lib/firmware/brcm"
+    runHook postInstall
   '';
 
   outputHashMode = "recursive";

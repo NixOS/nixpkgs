@@ -2,7 +2,7 @@
 
 # build-tools
 , bootPkgs
-, autoconf, autoreconfHook, automake, coreutils, fetchgit, perl, python3, m4, sphinx
+, autoconf, autoreconfHook, automake, coreutils, fetchgit, perl, python3, m4, sphinx, xattr
 , bash
 
 , libiconv ? null, ncurses
@@ -40,7 +40,7 @@
 , # Whether to build terminfo.
   enableTerminfo ? !stdenv.targetPlatform.isWindows
 
-, version ? "9.3.20210504"
+, version ? "9.3.20210913"
 , # What flavour to build. An empty string indicates no
   # specific flavour and falls back to ghc default values.
   ghcFlavour ? lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform)
@@ -133,7 +133,8 @@ let
   # Use gold either following the default, or to avoid the BFD linker due to some bugs / perf issues.
   # But we cannot avoid BFD when using musl libc due to https://sourceware.org/bugzilla/show_bug.cgi?id=23856
   # see #84670 and #49071 for more background.
-  useLdGold = targetPlatform.linker == "gold" || (targetPlatform.linker == "bfd" && !targetPlatform.isMusl);
+  useLdGold = targetPlatform.linker == "gold" ||
+    (targetPlatform.linker == "bfd" && (targetPackages.stdenv.cc.bintools.bintools.hasGold or false) && !targetPlatform.isMusl);
 
   runtimeDeps = [
     targetPackages.stdenv.cc.bintools
@@ -152,8 +153,8 @@ stdenv.mkDerivation (rec {
 
   src = fetchgit {
     url = "https://gitlab.haskell.org/ghc/ghc.git/";
-    rev = "049c3a83fbce67e58e70c727d89e8331608a4e04";
-    sha256 = "0dk7c9ywam9fj33lqzpwxhiwz017m58j6ixvc8b07kzp7kskaxq7";
+    rev = "64923cf295ea914db458547432237a5ed1eff571";
+    sha256 = "1s9sm4gf4r71lk0s7h9v217rxfwjf435q1jji90hlxz23wvmhr6d";
   };
 
   enableParallelBuilding = true;
@@ -193,6 +194,9 @@ stdenv.mkDerivation (rec {
     export NIX_LDFLAGS+=" -rpath $out/lib/ghc-${version}"
   '' + lib.optionalString stdenv.isDarwin ''
     export NIX_LDFLAGS+=" -no_dtrace_dof"
+
+    # GHC tries the host xattr /usr/bin/xattr by default which fails since it expects python to be 2.7
+    export XATTR=${lib.getBin xattr}/bin/xattr
   '' + lib.optionalString targetPlatform.useAndroidPrebuilt ''
     sed -i -e '5i ,("armv7a-unknown-linux-androideabi", ("e-m:e-p:32:32-i64:64-v128:64:128-a:0:32-n32-S64", "cortex-a8", ""))' llvm-targets
   '' + lib.optionalString targetPlatform.isMusl ''
@@ -285,6 +289,10 @@ stdenv.mkDerivation (rec {
     # * https://gitlab.haskell.org/ghc/ghc/-/issues/19580
     ++ lib.optional stdenv.targetPlatform.isMusl "pie";
 
+  # big-parallel allows us to build with more than 2 cores on
+  # Hydra which already warrants a significant speedup
+  requiredSystemFeatures = [ "big-parallel" ];
+
   postInstall = ''
     # Install the bash completion file.
     install -D -m 444 utils/completion/ghc.bash $out/share/bash-completion/completions/${targetPrefix}ghc
@@ -310,7 +318,10 @@ stdenv.mkDerivation (rec {
   meta = {
     homepage = "http://haskell.org/ghc";
     description = "The Glasgow Haskell Compiler";
-    maintainers = with lib.maintainers; [ marcweber andres peti ];
+    maintainers = with lib.maintainers; [
+      guibou
+    ] ++ lib.teams.haskell.members;
+    timeout = 24 * 3600;
     inherit (ghc.meta) license platforms;
     # ghcHEAD times out on aarch64-linux on Hydra.
     hydraPlatforms = builtins.filter (p: p != "aarch64-linux") ghc.meta.platforms;

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, meson, ninja, pkg-config, gettext, gobject-introspection
+{ lib, stdenv, fetchurl, substituteAll, meson, ninja, pkg-config, gettext, gobject-introspection
 , gtk-doc, docbook_xsl, docbook_xml_dtd_412, docbook_xml_dtd_44, python3
 , glib, systemd, libusb1, vala, hwdata
 }:
@@ -10,14 +10,21 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "gusb";
-  version = "0.3.5";
+  version = "0.3.7";
 
   outputs = [ "bin" "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "https://people.freedesktop.org/~hughsient/releases/libgusb-${version}.tar.xz";
-    sha256 = "1pv5ivbwxb9anq2j34i68r8fgs8nwsi4hmss7h9v1i3wk7300ajv";
+    sha256 = "sha256-2l8l1oc2ImibM1FIbL4CjvwlRAP2Rt2BIl3+hULYxn0=";
   };
+
+  patches = [
+    (substituteAll {
+      src = ./fix-python-path.patch;
+      python = "${pythonEnv}/bin/python3";
+    })
+  ];
 
   nativeBuildInputs = [
     meson ninja pkg-config gettext pythonEnv
