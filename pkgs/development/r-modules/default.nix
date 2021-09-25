@@ -470,6 +470,7 @@ let
     bbl = with pkgs; [ gsl ];
     writexl = with pkgs; [ zlib.dev ];
     qpdf = with pkgs; [ libjpeg.dev zlib.dev ];
+    vcfR = with pkgs; [ zlib.dev ];
   };
 
   packagesRequireingX = [
