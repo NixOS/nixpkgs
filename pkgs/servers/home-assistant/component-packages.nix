@@ -564,7 +564,7 @@
     "netatmo" = ps: with ps; [ pyturbojpeg aiohttp-cors hass-nabucasa pyatmo ];
     "netdata" = ps: with ps; [ netdata ];
     "netgear" = ps: with ps; [ ]; # missing inputs: pynetgear
-    "netgear_lte" = ps: with ps; [ ]; # missing inputs: eternalegypt
+    "netgear_lte" = ps: with ps; [ eternalegypt ];
     "netio" = ps: with ps; [ aiohttp-cors ]; # missing inputs: pynetio
     "network" = ps: with ps; [ aiohttp-cors ifaddr ];
     "neurio_energy" = ps: with ps; [ ]; # missing inputs: neurio
