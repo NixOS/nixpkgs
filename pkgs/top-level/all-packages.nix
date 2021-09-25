@@ -9782,8 +9782,6 @@ with pkgs;
 
   trash-cli = callPackage ../tools/misc/trash-cli { };
 
-  trebleshot = libsForQt5.callPackage ../applications/networking/trebleshot { };
-
   trenchbroom = libsForQt5.callPackage ../applications/misc/trenchbroom {
     inherit (xorg) libXxf86vm;
   };
