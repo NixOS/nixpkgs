@@ -15400,6 +15400,8 @@ with pkgs;
 
   aws-c-event-stream = callPackage ../development/libraries/aws-c-event-stream { };
 
+  aws-c-http = callPackage ../development/libraries/aws-c-http { };
+
   aws-c-io = callPackage ../development/libraries/aws-c-io {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
