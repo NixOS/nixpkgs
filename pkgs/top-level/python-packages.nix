@@ -5243,6 +5243,8 @@ in {
 
   oyaml = callPackage ../development/python-modules/oyaml { };
 
+  p1monitor = callPackage ../development/python-modules/p1monitor { };
+
   packageurl-python = callPackage ../development/python-modules/packageurl-python { };
 
   packaging = callPackage ../development/python-modules/packaging { };

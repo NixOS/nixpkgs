@@ -545,6 +545,7 @@ in with py.pkgs; buildPythonApplication rec {
     "ovo_energy"
     "owntracks"
     "ozw"
+    "p1_monitor"
     "panel_custom"
     "panel_iframe"
     "persistent_notification"
