@@ -4923,6 +4923,8 @@ in {
 
   nilearn = callPackage ../development/python-modules/nilearn { };
 
+  niluclient = callPackage ../development/python-modules/niluclient { };
+
   nimfa = callPackage ../development/python-modules/nimfa { };
 
   nine = callPackage ../development/python-modules/nine { };
