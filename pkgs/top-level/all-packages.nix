@@ -15414,6 +15414,8 @@ with pkgs;
 
   aws-checksums = callPackage ../development/libraries/aws-checksums { };
 
+  aws-crt-cpp = callPackage ../development/libraries/aws-crt-cpp { };
+
   aws-sdk-cpp = callPackage ../development/libraries/aws-sdk-cpp {
     inherit (darwin.apple_sdk.frameworks) CoreAudio AudioToolbox;
   };
