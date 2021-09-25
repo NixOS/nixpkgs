@@ -128,6 +128,7 @@ gettext
 http-body
 hu.dwim.asdf
 hu.dwim.defclass-star
+hunchensocket
 hunchentoot
 idna
 ieee-floats
