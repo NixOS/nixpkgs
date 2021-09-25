@@ -186,6 +186,8 @@ keep = {
 };
 ```
 
+> **Note:** For now, at least, you'll need to reference the manpage to completely understand these examples.
+
 ## Controlling nested resolution with lore
 
 Initially, resolution of commands in the arguments to command-executing
