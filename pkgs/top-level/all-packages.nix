@@ -15408,6 +15408,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  aws-c-s3 = callPackage ../development/libraries/aws-c-s3 { };
+
   aws-checksums = callPackage ../development/libraries/aws-checksums { };
 
   aws-sdk-cpp = callPackage ../development/libraries/aws-sdk-cpp {
