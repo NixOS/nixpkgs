@@ -2,7 +2,6 @@
 , fetchFromGitHub
 , nix-update-script
 , pantheon
-, fetchpatch
 , substituteAll
 , meson
 , ninja

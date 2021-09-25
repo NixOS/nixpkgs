@@ -26,10 +26,18 @@ let
       # https://github.com/Koed00/django-q/issues/526
       django-q = super.django-q.overridePythonAttrs (oldAttrs: rec {
         version = "1.3.4";
-        src = super.fetchPypi {
-          inherit (oldAttrs) pname;
+        src = oldAttrs.src.override {
           inherit version;
           sha256 = "Uj1U3PG2YVLBtlj5FPAO07UYo0MqnezUiYc4yo274Q8=";
+        };
+      });
+
+      # Incompatible with aioredis 2
+      aioredis = super.aioredis.overridePythonAttrs (oldAttrs: rec {
+        version = "1.3.1";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "0fi7jd5hlx8cnv1m97kv9hc4ih4l8v15wzkqwsp73is4n0qazy0m";
         };
       });
     };
