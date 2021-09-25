@@ -30,7 +30,6 @@
 , systemd
 , udev
 , xdg-utils
-, udev
 , xorg
 }:
 stdenv.mkDerivation rec {
