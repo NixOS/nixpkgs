@@ -1,12 +1,18 @@
-{ lib, stdenv, fetchurl, jre, runtimeShell }:
+{ lib
+, stdenv
+, fetchurl
+, jre
+, runtimeShell
+, nix-update-script
+}:
 
 stdenv.mkDerivation rec {
   pname = "polylith";
-  version = "0.1.0-alpha9";
+  version = "0.2.12-alpha";
 
   src = fetchurl {
     url = "https://github.com/polyfy/polylith/releases/download/v${version}/poly-${version}.jar";
-    sha256 = "0mjn0fibj7z8wihk5frhyd5ai2bmzm909701sphjs7j9lgg0gc4k";
+    sha256 = "1zsasyrrssj7kmvgfr63fa5hslw9gnlbp9bh05g72bfgzi99n8kg";
   };
 
   dontUnpack = true;
@@ -38,6 +44,10 @@ stdenv.mkDerivation rec {
 
     runHook postInstallCheck
   '';
+
+  passthru.updateScript = nix-update-script {
+    attrPath = pname;
+  };
 
   meta = with lib; {
     description = "A tool used to develop Polylith based architectures in Clojure";
