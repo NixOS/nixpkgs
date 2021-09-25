@@ -6893,6 +6893,8 @@ in {
 
   pysparse = callPackage ../development/python-modules/pysparse { };
 
+  pyspcwebgw = callPackage ../development/python-modules/pyspcwebgw { };
+
   pyspf = callPackage ../development/python-modules/pyspf { };
 
   pyspice = callPackage ../development/python-modules/pyspice { };
