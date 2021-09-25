@@ -824,7 +824,7 @@
     "stiebel_eltron" = ps: with ps; [ pymodbus ]; # missing inputs: pystiebeleltron
     "stookalert" = ps: with ps; [ ]; # missing inputs: stookalert
     "stream" = ps: with ps; [ aiohttp-cors av ];
-    "streamlabswater" = ps: with ps; [ ]; # missing inputs: streamlabswater
+    "streamlabswater" = ps: with ps; [ streamlabswater ];
     "stt" = ps: with ps; [ aiohttp-cors ];
     "subaru" = ps: with ps; [ subarulink ];
     "suez_water" = ps: with ps; [ ]; # missing inputs: pysuez
