@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sigtool";
-  version = "0.1.0";
+  version = "0.1.2";
 
   src = fetchFromGitHub {
     owner = "thefloweringash";
     repo = "sigtool";
     rev = "v${version}";
-    sha256 = "sha256-GSVkF1BkZEkIF+q0SsoCuE0q48DRclE3E+qKc6JEc/0=";
+    sha256 = "sha256-v4udqW37vwcqBdqfvfwHnoyXpuLFt188ekVCPCPsTPM";
   };
 
   nativeBuildInputs = [ pkg-config ];

@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "vouch-proxy";
-  version = "0.34.0";
+  version = "0.34.1";
 
   src = fetchFromGitHub {
     owner = "vouch";
     repo = "vouch-proxy";
     rev = "v${version}";
-    sha256 = "sha256-xkCnBRGSryFf90dOeoZKQhugX66zkF/gYF1v6N9yjTQ=";
+    sha256 = "sha256-UUqETnvkdLBoxUHUpcfE3bxE7fZJEToDxz2Q6kN1/n4=";
   };
 
   vendorSha256 = "sha256-ifH+420FIrib+zQtzzHtMMYd84BED+vgnRw4xToYIl4=";
