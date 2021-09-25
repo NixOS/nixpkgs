@@ -3,20 +3,22 @@
 , fetchPypi
 , jinja2
 , lxml
+, pygments
 }:
 
 buildPythonPackage rec {
   pname = "gcovr";
-  version = "4.2";
+  version = "5.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0gyady7x3v3l9fm1zan0idaggqqcm31y7g5vxk7h05p5h7f39bjs";
+    sha256 = "1d80264cbaadff356b3dda71b8c62b3aa803e5b3eb6d526a24932cd6660a2576";
   };
 
   propagatedBuildInputs = [
     jinja2
     lxml
+    pygments
   ];
 
   # There are no unit tests in the pypi tarball. Most of the unit tests on the
@@ -35,5 +37,4 @@ buildPythonPackage rec {
     license = licenses.bsd0;
     homepage = "https://www.gcovr.com/";
   };
-
 }

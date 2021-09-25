@@ -21,9 +21,13 @@ stdenv.mkDerivation rec {
     "acpihelp"
     "acpisrc"
     "acpixtract"
+    "iasl"
   ];
 
   nativeBuildInputs = [ bison flex ];
+
+  # We can handle stripping ourselves.
+  INSTALLFLAGS = "-m 555";
 
   installFlags = [ "PREFIX=${placeholder "out"}" ];
 

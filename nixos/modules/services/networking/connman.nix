@@ -150,6 +150,7 @@ in {
       useDHCP = false;
       wireless = {
         enable = mkIf (!enableIwd) true;
+        dbusControlled = true;
         iwd = mkIf enableIwd {
           enable = true;
         };

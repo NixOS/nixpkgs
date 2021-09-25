@@ -87,6 +87,10 @@ let unwrapped = stdenv.mkDerivation rec {
     done
   '';
 
+  passthru = {
+    makePluginPath = lib.makeSearchPathOutput "lib" "lib/purple-${majorVersion}";
+  };
+
   meta = with lib; {
     description = "Multi-protocol instant messaging client";
     homepage = "http://pidgin.im";

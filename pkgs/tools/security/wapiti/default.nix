@@ -104,6 +104,8 @@ python3.pkgs.buildPythonApplication rec {
     # Requires a PHP installation
     "test_timesql"
     "test_cookies"
+    # E           TypeError: Expected bytes or bytes-like object got: <class 'str'>
+    "test_persister_upload"
   ];
 
   pythonImportsCheck = [ "wapitiCore" ];

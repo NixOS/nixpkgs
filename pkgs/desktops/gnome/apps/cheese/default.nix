@@ -30,6 +30,7 @@
 , ninja
 , dbus
 , python3
+, pipewire
 }:
 
 stdenv.mkDerivation rec {
@@ -85,6 +86,7 @@ stdenv.mkDerivation rec {
     gtk3
     libcanberra-gtk3
     librsvg
+    pipewire # PipeWire provides a gstreamer plugin for using PipeWire for video
   ];
 
   postPatch = ''

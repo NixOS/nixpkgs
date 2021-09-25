@@ -19,7 +19,13 @@ in
     listenAddress = mkOption {
       default = ":9000";
       type = types.str;
-      description = "Listen on a specific IP address and port.";
+      description = "IP address and port of the server.";
+    };
+
+    consoleAddress = mkOption {
+      default = ":9001";
+      type = types.str;
+      description = "IP address and port of the web UI (console).";
     };
 
     dataDir = mkOption {
@@ -99,7 +105,7 @@ in
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
-        ExecStart = "${cfg.package}/bin/minio server --json --address ${cfg.listenAddress} --config-dir=${cfg.configDir} ${toString cfg.dataDir}";
+        ExecStart = "${cfg.package}/bin/minio server --json --address ${cfg.listenAddress} --console-address ${cfg.consoleAddress} --config-dir=${cfg.configDir} ${toString cfg.dataDir}";
         Type = "simple";
         User = "minio";
         Group = "minio";

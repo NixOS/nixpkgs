@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "libsodium";
@@ -10,6 +10,11 @@ stdenv.mkDerivation rec {
   };
 
   outputs = [ "out" "dev" ];
+
+  patches = lib.optional stdenv.targetPlatform.isMinGW ./mingw-no-fortify.patch;
+
+  nativeBuildInputs = lib.optional stdenv.targetPlatform.isMinGW autoreconfHook;
+
   separateDebugInfo = stdenv.isLinux && stdenv.hostPlatform.libc != "musl";
 
   enableParallelBuilding = true;

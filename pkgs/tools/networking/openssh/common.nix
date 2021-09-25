@@ -123,5 +123,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd2;
     platforms = platforms.unix ++ platforms.windows;
     maintainers = with maintainers; [ eelco aneeshusa ];
+    mainProgram = "ssh";
   } // extraMeta;
 }

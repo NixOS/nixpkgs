@@ -79,6 +79,10 @@ let
     };
   };
 
+  xkb_patched = pkgs.xorg.xkeyboardconfig_custom {
+    layouts = config.services.xserver.extraLayouts;
+  };
+
 in
 
 {
@@ -114,59 +118,16 @@ in
 
   config = mkIf (layouts != { }) {
 
-    # We don't override xkeyboard_config directly to
-    # reduce the amount of packages to be recompiled.
-    # Only the following packages are necessary to set
-    # a custom layout anyway:
-    nixpkgs.overlays = lib.singleton (self: super: {
-
-      xkb_patched = self.xorg.xkeyboardconfig_custom {
-        layouts = config.services.xserver.extraLayouts;
-      };
-
-      xorg = super.xorg // {
-        xorgserver = super.xorg.xorgserver.overrideAttrs (old: {
-          configureFlags = old.configureFlags ++ [
-            "--with-xkb-bin-directory=${self.xorg.xkbcomp}/bin"
-            "--with-xkb-path=${self.xkb_patched}/share/X11/xkb"
-          ];
-        });
-
-        setxkbmap = super.xorg.setxkbmap.overrideAttrs (old: {
-          postInstall =
-            ''
-              mkdir -p $out/share
-              ln -sfn ${self.xkb_patched}/etc/X11 $out/share/X11
-            '';
-        });
-
-        xkbcomp = super.xorg.xkbcomp.overrideAttrs (old: {
-          configureFlags = [ "--with-xkb-config-root=${self.xkb_patched}/share/X11/xkb" ];
-        });
-
-      };
-
-      ckbcomp = super.ckbcomp.override {
-        xkeyboard_config = self.xkb_patched;
-      };
-
-      xkbvalidate = super.xkbvalidate.override {
-        libxkbcommon = self.libxkbcommon.override {
-          xkeyboard_config = self.xkb_patched;
-        };
-      };
-
-    });
-
     environment.sessionVariables = {
       # runtime override supported by multiple libraries e. g. libxkbcommon
       # https://xkbcommon.org/doc/current/group__include-path.html
-      XKB_CONFIG_ROOT = "${pkgs.xkb_patched}/etc/X11/xkb";
+      XKB_CONFIG_ROOT = "${xkb_patched}/etc/X11/xkb";
     };
 
     services.xserver = {
-      xkbDir = "${pkgs.xkb_patched}/etc/X11/xkb";
-      exportConfiguration = config.services.xserver.displayManager.startx.enable;
+      xkbDir = "${xkb_patched}/etc/X11/xkb";
+      exportConfiguration = config.services.xserver.displayManager.startx.enable
+        || config.services.xserver.displayManager.sx.enable;
     };
 
   };

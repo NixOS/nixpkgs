@@ -73,6 +73,7 @@ in
     services.automysqlbackup.config = mapAttrs (name: mkDefault) {
       mysql_dump_username = user;
       mysql_dump_host = "localhost";
+      mysql_dump_socket = "/run/mysqld/mysqld.sock";
       backup_dir = "/var/backup/mysql";
       db_exclude = [ "information_schema" "performance_schema" ];
       mailcontent = "stdout";

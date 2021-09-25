@@ -11,7 +11,11 @@ stdenv.mkDerivation {
 
   createFindlibDestdir = true;
 
-  configurePhase = "ocaml setup.ml -configure --prefix $out";
+  configurePhase = ''
+    runHook preConfigure
+    ocaml setup.ml -configure --prefix $out
+    runHook postConfigure
+  '';
 
   meta = {
     description = "Extensible Markdown library and tool in OCaml";

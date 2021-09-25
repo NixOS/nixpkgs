@@ -2,14 +2,14 @@
 
 buildPythonPackage rec {
   pname = "markdown2";
-  version = "2.4.0";
+  version = "2.4.1";
 
   # PyPI does not contain tests, so using GitHub instead.
   src = fetchFromGitHub {
     owner = "trentm";
     repo = "python-markdown2";
     rev = version;
-    sha256 = "sha256:03qmf087phpj0h9hx111k4r5pkm48dhb61mqhp1v75gd09k0z79z";
+    sha256 = "0y7kh9jj8ys00qkfmmyqj63y21g7wn7yr715kj0j1nabs6xbp0y7";
   };
 
   checkInputs = [ pygments ];

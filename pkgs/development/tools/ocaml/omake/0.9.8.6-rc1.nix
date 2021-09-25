@@ -23,7 +23,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ ocaml ncurses ];
 
-  phases = "unpackPhase patchPhase buildPhase";
+  dontInstall = true;
   buildPhase = ''
     make bootstrap
     make PREFIX=$out all

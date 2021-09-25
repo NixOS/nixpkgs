@@ -56,7 +56,7 @@ let
   mysqlLocal = cfg.database.createLocally && cfg.database.type == "mysql";
   pgsqlLocal = cfg.database.createLocally && cfg.database.type == "pgsql";
 
-  phpExt = pkgs.php.withExtensions
+  phpExt = pkgs.php74.withExtensions
         ({ enabled, all }: with all; [ iconv mbstring curl openssl tokenizer xmlrpc soap ctype zip gd simplexml dom  intl json sqlite3 pgsql pdo_sqlite pdo_pgsql pdo_odbc pdo_mysql pdo mysqli session zlib xmlreader fileinfo filter ]);
 in
 {

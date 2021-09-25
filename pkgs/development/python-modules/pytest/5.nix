@@ -30,6 +30,11 @@ buildPythonPackage rec {
     sha256 = "1n67lk8iwlsmfdm8663k8l7isllg1xd3n9p1yla7885szhdk6ybr";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "pluggy>=0.12,<1.0" "pluggy>=0.12,<2.0"
+  '';
+
   checkInputs = [ hypothesis pygments ];
   nativeBuildInputs = [ setuptools-scm ];
   propagatedBuildInputs = [

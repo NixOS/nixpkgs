@@ -13,7 +13,7 @@
 
 let
     gtk = if withGtk3 then gtk3 else gtk2;
-    inherit (lib) optional;
+    inherit (lib) optional optionalString;
 in
 stdenv.mkDerivation rec {
   pname = if extraOnly
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   installFlags = [ "sysconfdir=${placeholder "out"}/etc" ];
 
   # libfm-extra is pulled in by menu-cache and thus leads to a collision for libfm
-  postInstall = optional (!extraOnly) ''
+  postInstall = optionalString (!extraOnly) ''
      rm $out/lib/libfm-extra.so $out/lib/libfm-extra.so.* $out/lib/libfm-extra.la $out/lib/pkgconfig/libfm-extra.pc
   '';
 

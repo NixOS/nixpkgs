@@ -11,12 +11,11 @@ buildGoModule rec {
     sha256 = "sha256-ws5JC2/WkgwxKwYtP9xtFELRhztzL6tNSvopyeC6H0Q=";
   };
 
-  buildFlagsArray = ''
-    -ldflags=
-      -s -w
-      -X github.com/derailed/k9s/cmd.version=${version}
-      -X github.com/derailed/k9s/cmd.commit=${src.rev}
-  '';
+  ldflags = [
+    "-s" "-w"
+    "-X github.com/derailed/k9s/cmd.version=${version}"
+    "-X github.com/derailed/k9s/cmd.commit=${src.rev}"
+  ];
 
   vendorSha256 = "sha256-T9khJeg5XPhVyUiu4gEEHZR6RgJF4P8LYFycqJglms8=";
 

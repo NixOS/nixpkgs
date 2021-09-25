@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "jenkins";
-  version = "2.289.3";
+  version = "2.303.1";
 
   src = fetchurl {
     url = "http://mirrors.jenkins.io/war-stable/${version}/jenkins.war";
-    sha256 = "11wb4kqy1hja2fgnqsr6p0khdyvinclprxz9z5m58czrsllzsvcr";
+    sha256 = "0rf06axz1hxssg942w2g66avak30jy6rfdwxynhriqv3vrf17bja";
   };
 
   nativeBuildInputs = [ makeWrapper ];

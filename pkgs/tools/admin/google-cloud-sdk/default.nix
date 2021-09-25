@@ -125,5 +125,6 @@ in stdenv.mkDerivation rec {
     homepage = "https://cloud.google.com/sdk/";
     maintainers = with maintainers; [ iammrinal0 pradyuman stephenmw zimbatm ];
     platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" ];
+    mainProgram = "gcloud";
   };
 }

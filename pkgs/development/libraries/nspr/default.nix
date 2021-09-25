@@ -1,6 +1,9 @@
-{ lib, stdenv, fetchurl
-, CoreServices ? null
-, buildPackages }:
+{ lib
+, stdenv
+, fetchurl
+, CoreServices
+, buildPackages
+}:
 
 stdenv.mkDerivation rec {
   pname = "nspr";
@@ -37,13 +40,14 @@ stdenv.mkDerivation rec {
     moveToOutput share "$dev" # just aclocal
   '';
 
-  buildInputs = [] ++ lib.optionals stdenv.isDarwin [ CoreServices ];
+  buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
 
   enableParallelBuilding = true;
 
   meta = with lib; {
-    homepage = "http://www.mozilla.org/projects/nspr/";
+    homepage = "https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/Reference/NSPR_functions";
     description = "Netscape Portable Runtime, a platform-neutral API for system-level and libc-like functions";
+    maintainers = with maintainers; [ ];
     platforms = platforms.all;
     license = licenses.mpl20;
   };

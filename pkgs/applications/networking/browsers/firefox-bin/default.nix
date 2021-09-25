@@ -28,7 +28,7 @@
 , libXt
 , libcanberra
 , libnotify
-, gnome
+, adwaita-icon-theme
 , libGLU, libGL
 , nspr
 , nss
@@ -72,9 +72,9 @@ let
 
   policies = {
     DisableAppUpdate = true;
-  };
+  } // config.firefox.policies or {};
 
-  policiesJson = writeText "no-update-firefox-policy.json" (builtins.toJSON { inherit policies; });
+  policiesJson = writeText "firefox-policies.json" (builtins.toJSON { inherit policies; });
 
   defaultSource = lib.findFirst (sourceMatches "en-US") {} sources;
 
@@ -137,7 +137,7 @@ stdenv.mkDerivation {
 
   inherit gtk3;
 
-  buildInputs = [ wrapGAppsHook gtk3 gnome.adwaita-icon-theme ];
+  buildInputs = [ wrapGAppsHook gtk3 adwaita-icon-theme ];
 
   # "strip" after "patchelf" may break binaries.
   # See: https://github.com/NixOS/patchelf/issues/10
@@ -187,7 +187,7 @@ stdenv.mkDerivation {
   # update with:
   # $ nix-shell maintainers/scripts/update.nix --argstr package firefox-bin-unwrapped
   passthru.updateScript = import ./update.nix {
-    inherit pname version channel writeScript xidel coreutils gnused gnugrep gnupg curl runtimeShell;
+    inherit pname channel writeScript xidel coreutils gnused gnugrep gnupg curl runtimeShell;
     baseUrl =
       if channel == "devedition"
         then "http://archive.mozilla.org/pub/devedition/releases/"

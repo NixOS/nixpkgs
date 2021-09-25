@@ -20,7 +20,7 @@ in buildGoModule {
       sha256 = sha256;
     };
 
-    buildFlagsArray = "-ldflags=-X main.version=${humioCtlVersion}";
+    ldflags = [ "-X main.version=${humioCtlVersion}" ];
 
     nativeBuildInputs = [ installShellFiles ];
 

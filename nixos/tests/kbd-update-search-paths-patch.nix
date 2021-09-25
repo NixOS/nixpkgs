@@ -10,6 +10,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
   testScript = ''
     command = "${pkgs.kbd}/bin/setfont ter-112n 2>&1"
     (status, out) = machine.execute(command)
+    import re
     pattern = re.compile(r".*Unable to find file:.*")
     match = pattern.match(out)
     if match:

@@ -141,6 +141,8 @@ let
 
     cairo2 = callPackage ../development/ocaml-modules/cairo2 { };
 
+    callipyge = callPackage ../development/ocaml-modules/callipyge { };
+
     caqti = callPackage ../development/ocaml-modules/caqti { };
 
     caqti-async = callPackage ../development/ocaml-modules/caqti/async.nix { };
@@ -158,6 +160,8 @@ let
     caqti-type-calendar = callPackage ../development/ocaml-modules/caqti/type-calendar.nix { };
 
     cfstream = callPackage ../development/ocaml-modules/cfstream { };
+
+    chacha = callPackage ../development/ocaml-modules/chacha { };
 
     charInfo_width = callPackage ../development/ocaml-modules/charInfo_width { };
 
@@ -804,6 +808,8 @@ let
 
     nocrypto =  callPackage ../development/ocaml-modules/nocrypto { };
 
+    noise = callPackage ../development/ocaml-modules/noise { };
+
     nonstd =  callPackage ../development/ocaml-modules/nonstd { };
 
     notty = callPackage ../development/ocaml-modules/notty { };
@@ -877,6 +883,8 @@ let
     ocaml_optcomp = callPackage ../development/ocaml-modules/optcomp { };
 
     ocaml_pcre = callPackage ../development/ocaml-modules/pcre {};
+
+    ocaml-print-intf = callPackage ../development/ocaml-modules/ocaml-print-intf { };
 
     pgocaml = callPackage ../development/ocaml-modules/pgocaml {};
 
@@ -1009,6 +1017,8 @@ let
     postgresql = callPackage ../development/ocaml-modules/postgresql {
       inherit (pkgs) postgresql;
     };
+
+    pp = callPackage ../development/ocaml-modules/pp { };
 
     ppx_bap = callPackage ../development/ocaml-modules/ppx_bap { };
 
@@ -1172,6 +1182,8 @@ let
 
     reason-native = lib.recurseIntoAttrs (callPackage ../development/ocaml-modules/reason-native { });
 
+    rfc7748 = callPackage ../development/ocaml-modules/rfc7748 { };
+
     ezresto = callPackage ../development/ocaml-modules/resto/ezresto.nix { };
     ezresto-directory = callPackage ../development/ocaml-modules/resto/ezresto-directory.nix { };
 
@@ -1303,6 +1315,8 @@ let
     vchan = callPackage ../development/ocaml-modules/vchan { };
 
     vg = callPackage ../development/ocaml-modules/vg { };
+
+    vlq = callPackage ../development/ocaml-modules/vlq { };
 
     visitors = callPackage ../development/ocaml-modules/visitors { };
 

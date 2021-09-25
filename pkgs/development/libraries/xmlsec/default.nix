@@ -6,11 +6,11 @@
 lib.fix (self:
 stdenv.mkDerivation rec {
   pname = "xmlsec";
-  version = "1.2.31";
+  version = "1.2.32";
 
   src = fetchurl {
     url = "https://www.aleksey.com/xmlsec/download/xmlsec1-${version}.tar.gz";
-    sha256 = "mxC8Uswx5PdhYuOXXlDbJrcatJxXHYELMRymJr5aCyY=";
+    sha256 = "sha256-44NwKFMjYATlsI5CS4r+m1P+nzGqp6U4LznZUz63wEM=";
   };
 
   patches = [

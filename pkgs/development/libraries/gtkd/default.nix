@@ -27,6 +27,11 @@ in stdenv.mkDerivation rec {
       url = "https://github.com/gtkd-developers/GtkD/commit/a9db09117ab27127ca4c3b8d2f308fae483a9199.patch";
       sha256 = "0ngyqifw1kandc1vk01kms3z65pcisfd75q7z09rml96glhfzjd6";
     })
+    # Fix breakage with dmd ldc 1.26 and newer
+    (fetchpatch {
+      url = "https://github.com/gtkd-developers/GtkD/commit/323ff96c648882eaca2faee170bd9e90c6e1e9c3.patch";
+      sha256 = "1rhyi0isl6fl5i6fgsinvgq6v72xq7c6sajrxcsnmrzpvw91il3d";
+    })
   ];
 
   prePatch = ''

@@ -26,11 +26,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "blender";
-  version = "2.93.1";
+  version = "2.93.2";
 
   src = fetchurl {
     url = "https://download.blender.org/source/${pname}-${version}.tar.xz";
-    sha256 = "sha256-IdriOBw/DlpH6B0GKqC1nKnhTZwrIL8U9hkMS20BHNg=";
+    sha256 = "sha256-nG1Kk6UtiCwsQBDz7VELcMRVEovS49QiO3haIpvSfu4=";
   };
 
   patches = lib.optional stdenv.isDarwin ./darwin.patch;
@@ -143,6 +143,10 @@ stdenv.mkDerivation rec {
       --prefix PATH : $program_PATH \
       --prefix PYTHONPATH : "$program_PYTHONPATH" \
       --add-flags '--python-use-system-env'
+  '' + lib.optionalString stdenv.isDarwin ''
+    mkdir -p $out/Applications/Blender.app
+    ln -s $out/Blender.app $out/Applications/Blender.app
+    ln -s $out/Blender.app/Contents/MacOS $out/bin
   '';
 
   # Set RUNPATH so that libcuda and libnvrtc in /run/opengl-driver(-32)/lib can be

@@ -1,5 +1,5 @@
 { lib, stdenv
-, runCommandNoCC
+, runCommand
 , fetchurl
 , fetchpatch
 , perl
@@ -36,7 +36,7 @@
 , libidn
 , libedit
 , readline
-, sdk
+, apple_sdk
 , libGL
 , libGLU
 , mesa
@@ -63,7 +63,7 @@ assert enableGeoLocation -> geoclue2 != null;
 
 stdenv.mkDerivation rec {
   pname = "webkitgtk";
-  version = "2.32.3";
+  version = "2.32.4";
 
   outputs = [ "out" "dev" ];
 
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://webkitgtk.org/releases/${pname}-${version}.tar.xz";
-    sha256 = "sha256-wfSW9axlTv5M72L71PL77u8mWgfF50GeXSkAv+6lLLw=";
+    sha256 = "1zfkfyhm4i7901pp32wcwcfxax69qgq5k44x0glwaywdg4zjvkh0";
   };
 
   patches = lib.optionals stdenv.isLinux [
@@ -167,13 +167,15 @@ stdenv.mkDerivation rec {
   ]) ++ lib.optionals stdenv.isDarwin [
     libedit
     readline
+  ] ++ lib.optional (stdenv.isDarwin && !stdenv.isAarch64) (
     # Pull a header that contains a definition of proc_pid_rusage().
     # (We pick just that one because using the other headers from `sdk` is not
-    # compatible with our C++ standard library)
-    (runCommandNoCC "${pname}_headers" {} ''
-      install -Dm444 "${lib.getDev sdk}"/include/libproc.h "$out"/include/libproc.h
-    '')
-  ] ++ lib.optionals stdenv.isLinux [
+    # compatible with our C++ standard library. This header is already in
+    # the standard library on aarch64)
+    runCommand "${pname}_headers" {} ''
+      install -Dm444 "${lib.getDev apple_sdk.sdk}"/include/libproc.h "$out"/include/libproc.h
+    ''
+  ) ++ lib.optionals stdenv.isLinux [
     bubblewrap
     libseccomp
     systemd

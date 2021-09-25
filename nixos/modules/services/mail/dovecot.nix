@@ -429,6 +429,7 @@ in
 
       startLimitIntervalSec = 60;  # 1 min
       serviceConfig = {
+        Type = "notify";
         ExecStart = "${dovecotPkg}/sbin/dovecot -F";
         ExecReload = "${dovecotPkg}/sbin/doveadm reload";
         Restart = "on-failure";
@@ -467,10 +468,6 @@ in
     ];
 
     assertions = [
-      {
-        assertion = intersectLists cfg.protocols [ "pop3" "imap" ] != [];
-        message = "dovecot needs at least one of the IMAP or POP3 listeners enabled";
-      }
       {
         assertion = (cfg.sslServerCert == null) == (cfg.sslServerKey == null)
         && (cfg.sslCACert != null -> !(cfg.sslServerCert == null || cfg.sslServerKey == null));

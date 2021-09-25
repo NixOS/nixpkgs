@@ -1,38 +1,43 @@
 { lib, buildGoModule, fetchFromGitHub, fetchzip, installShellFiles }:
 
 let
-  version = "0.16.2";
+  version = "0.17.2";
+  sha256 = "0kcdx4ldnshk4pqq37a7p08xr5cpsjrbrifk9fc3jbiw39m09mhf";
+  manifestsSha256 = "1v6md4xh4sq1vmb5a8qvb66l101fq75lmv2s4j2z3walssb5mmgj";
 
   manifests = fetchzip {
     url = "https://github.com/fluxcd/flux2/releases/download/v${version}/manifests.tar.gz";
-    sha256 = "sha256-/uD0hxtTJSr+2tZcwzOIQcEbikHOshWukEBSaK3FiP4=";
+    sha256 = manifestsSha256;
     stripRoot = false;
   };
 in
 
 buildGoModule rec {
-  inherit version;
-
   pname = "fluxcd";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "fluxcd";
     repo = "flux2";
     rev = "v${version}";
-    sha256 = "sha256-hP2HQI9Oc7IlzVS5r7yqGAgSgqECOSZVe2B3vO2sgKA=";
+    inherit sha256;
   };
 
-  vendorSha256 = "sha256-6ABnX0GV3HmhpUpPWS0bigubRqpXGoikEeQ/LqO6Ybs=";
+  vendorSha256 = "sha256-glifJ0V3RwS7E6EWZsCa88m0MK883RhPSXCsAmMggVs=";
 
   nativeBuildInputs = [ installShellFiles ];
 
   subPackages = [ "cmd/flux" ];
 
-  buildFlagsArray = [ "-ldflags=-s -w -X main.VERSION=${version}" ];
+  ldflags = [ "-s" "-w" "-X main.VERSION=${version}" ];
 
   postUnpack = ''
     cp -r ${manifests} source/cmd/flux/manifests
   '';
+
+  # Required to workaround test error:
+  #   panic: mkdir /homeless-shelter: permission denied
+  HOME="$TMPDIR";
 
   doInstallCheck = true;
   installCheckPhase = ''
@@ -46,6 +51,8 @@ buildGoModule rec {
     done
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = with lib; {
     description = "Open and extensible continuous delivery solution for Kubernetes";
     longDescription = ''
@@ -55,7 +62,6 @@ buildGoModule rec {
     '';
     homepage = "https://fluxcd.io";
     license = licenses.asl20;
-    maintainers = with maintainers; [ jlesquembre ];
-    platforms = platforms.unix;
+    maintainers = with maintainers; [ jlesquembre superherointj ];
   };
 }

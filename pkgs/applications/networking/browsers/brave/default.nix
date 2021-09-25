@@ -36,6 +36,7 @@
 , nspr
 , nss
 , pango
+, pipewire
 , udev
 , xorg
 , zlib
@@ -80,6 +81,7 @@ rpath = lib.makeLibraryPath [
   nspr
   nss
   pango
+  pipewire
   udev
   xdg-utils
   xorg.libxcb
@@ -90,11 +92,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "brave";
-  version = "1.27.111";
+  version = "1.29.77";
 
   src = fetchurl {
     url = "https://github.com/brave/brave-browser/releases/download/v${version}/brave-browser_${version}_amd64.deb";
-    sha256 = "nQkna1r8wSjTPEWp9RxOz45FVmz97NHzTlb4Hh5lXcs=";
+    sha256 = "LJykdig44ACpvlaGogbwrbY9hCJT3CB4ZKDZ/IzaBOU=";
   };
 
   dontConfigure = true;

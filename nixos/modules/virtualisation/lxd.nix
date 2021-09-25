@@ -158,7 +158,7 @@ in {
       };
     };
 
-    users.groups.lxd.gid = config.ids.gids.lxd;
+    users.groups.lxd = {};
 
     users.users.root = {
       subUidRanges = [ { startUid = 1000000; count = 65536; } ];

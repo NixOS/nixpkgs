@@ -1,15 +1,51 @@
-{ mkDerivation, lib, fetchFromGitHub, callPackage
-, pkg-config, cmake, ninja, python3, wrapGAppsHook, wrapQtAppsHook
+{ mkDerivation
+, lib
+, fetchFromGitHub
+, callPackage
+, pkg-config
+, cmake
+, ninja
+, python3
+, wrapGAppsHook
+, wrapQtAppsHook
 , extra-cmake-modules
-, qtbase, qtimageformats, gtk3, kwayland, libdbusmenu, lz4, xxHash
-, ffmpeg, openalSoft, minizip, libopus, alsa-lib, libpulseaudio, range-v3
-, tl-expected, hunspell, glibmm, webkitgtk, jemalloc
+, qtbase
+, qtimageformats
+, gtk3
+, kwayland
+, libdbusmenu
+, lz4
+, xxHash
+, ffmpeg
+, openalSoft
+, minizip
+, libopus
+, alsa-lib
+, libpulseaudio
+, range-v3
+, tl-expected
+, hunspell
+, glibmm
+, webkitgtk
+, jemalloc
 , rnnoise
-# Transitive dependencies:
+  # Transitive dependencies:
 , util-linuxMinimal
-, pcre, libpthreadstubs, libXdmcp, libselinux, libsepol, epoxy
-, at-spi2-core, libXtst, libthai, libdatrie
-, xdg-utils, libsysprof-capture, libpsl, brotli
+, pcre
+, libpthreadstubs
+, libXdmcp
+, libselinux
+, libsepol
+, epoxy
+, at-spi2-core
+, libXtst
+, libthai
+, libdatrie
+, xdg-utils
+, libsysprof-capture
+, libpsl
+, brotli
+, microsoft_gsl
 }:
 
 # Main reference:
@@ -20,10 +56,11 @@
 # - https://github.com/void-linux/void-packages/blob/master/srcpkgs/telegram-desktop/template
 
 let
-  tg_owt = callPackage ./tg_owt.nix {};
-in mkDerivation rec {
+  tg_owt = callPackage ./tg_owt.nix { };
+in
+mkDerivation rec {
   pname = "telegram-desktop";
-  version = "2.9.0";
+  version = "3.1.0";
   # Note: Update via pkgs/applications/networking/instant-messengers/telegram/tdesktop/update.py
 
   # Telegram-Desktop with submodules
@@ -32,7 +69,7 @@ in mkDerivation rec {
     repo = "tdesktop";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "0964as7rkjq1px6z15z6kmkiz4zw69wmm3namwn940bsja123qls";
+    sha256 = "0507qdkz8gn0gyyhxsy4mc4rs2r94s1ipqfxrc6ghgj43jkrklx3";
   };
 
   postPatch = ''
@@ -45,6 +82,8 @@ in mkDerivation rec {
       --replace '"libasound.so.2"' '"${alsa-lib}/lib/libasound.so.2"'
     substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioPulse.cpp \
       --replace '"libpulse.so.0"' '"${libpulseaudio}/lib/libpulse.so.0"'
+    substituteInPlace Telegram/lib_webview/webview/platform/linux/webview_linux_webkit_gtk.cpp \
+      --replace '"libwebkit2gtk-4.0.so.37"' '"${webkitgtk}/lib/libwebkit2gtk-4.0.so.37"'
   '';
 
   # We want to run wrapProgram manually (with additional parameters)
@@ -52,20 +91,53 @@ in mkDerivation rec {
   dontWrapQtApps = true;
 
   nativeBuildInputs = [
-    pkg-config cmake ninja python3 wrapGAppsHook wrapQtAppsHook
+    pkg-config
+    cmake
+    ninja
+    python3
+    wrapGAppsHook
+    wrapQtAppsHook
     extra-cmake-modules
   ];
 
   buildInputs = [
-    qtbase qtimageformats gtk3 kwayland libdbusmenu lz4 xxHash
-    ffmpeg openalSoft minizip libopus alsa-lib libpulseaudio range-v3
-    tl-expected hunspell glibmm webkitgtk jemalloc
+    qtbase
+    qtimageformats
+    gtk3
+    kwayland
+    libdbusmenu
+    lz4
+    xxHash
+    ffmpeg
+    openalSoft
+    minizip
+    libopus
+    alsa-lib
+    libpulseaudio
+    range-v3
+    tl-expected
+    hunspell
+    glibmm
+    webkitgtk
+    jemalloc
     rnnoise
     tg_owt
     # Transitive dependencies:
     util-linuxMinimal # Required for libmount thus not nativeBuildInputs.
-    pcre libpthreadstubs libXdmcp libselinux libsepol epoxy
-    at-spi2-core libXtst libthai libdatrie libsysprof-capture libpsl brotli
+    pcre
+    libpthreadstubs
+    libXdmcp
+    libselinux
+    libsepol
+    epoxy
+    at-spi2-core
+    libXtst
+    libthai
+    libdatrie
+    libsysprof-capture
+    libpsl
+    brotli
+    microsoft_gsl
   ];
 
   cmakeFlags = [
@@ -104,6 +176,6 @@ in mkDerivation rec {
     platforms = platforms.linux;
     homepage = "https://desktop.telegram.org/";
     changelog = "https://github.com/telegramdesktop/tdesktop/releases/tag/v${version}";
-    maintainers = with maintainers; [ oxalica primeos ];
+    maintainers = with maintainers; [ oxalica primeos vanilla ];
   };
 }

@@ -233,7 +233,7 @@ rec {
     };
   };
 
-  scaleway-c1 = lib.recursiveUpdate armv7l-hf-multiplatform {
+  scaleway-c1 = armv7l-hf-multiplatform // {
     gcc = {
       cpu = "cortex-a9";
       fpu = "vfpv3";

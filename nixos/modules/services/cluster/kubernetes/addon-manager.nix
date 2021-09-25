@@ -84,6 +84,9 @@ in
         Restart = "on-failure";
         RestartSec = 10;
       };
+      unitConfig = {
+        StartLimitIntervalSec = 0;
+      };
     };
 
     services.kubernetes.addonManager.bootstrapAddons = mkIf isRBACEnabled

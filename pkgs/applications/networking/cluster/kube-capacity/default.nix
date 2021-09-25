@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "kube-capacity";
-  version = "0.6.0";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "robscott";
     repo = pname;
-    sha256 = "sha256-IwlcxlzNNYWNANszTM+s6/SA1C2LXrydSTtAvniNKXE=";
+    sha256 = "sha256-4UdNmuxJsPekA0y4mP302AYIFkG3ee3n99Redb/rPHw=";
   };
 
-  vendorSha256 = "sha256-EgLWZs282IV1euCUCc5ucf267E2Z7GF9SgoImiGvuVM=";
+  vendorSha256 = "sha256-PQlOuBqn+b7fO9eHgtTAKxo3YdWmgbxx2JomklttCrM=";
 
   meta = with lib; {
     description =

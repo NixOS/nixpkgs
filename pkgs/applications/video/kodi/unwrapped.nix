@@ -79,21 +79,21 @@ let
   libdvdcss = fetchFromGitHub {
     owner = "xbmc";
     repo = "libdvdcss";
-    rev = "1.4.2-${rel}-Beta-5";
+    rev = "1.4.2-Leia-Beta-5";
     sha256 = "0j41ydzx0imaix069s3z07xqw9q95k7llh06fc27dcn6f7b8ydyl";
   };
 
   libdvdnav = fetchFromGitHub {
     owner = "xbmc";
     repo = "libdvdnav";
-    rev = "6.0.0-${rel}-Alpha-3";
+    rev = "6.0.0-Leia-Alpha-3";
     sha256 = "0qwlf4lgahxqxk1r2pzl866mi03pbp7l1fc0rk522sc0ak2s9jhb";
   };
 
   libdvdread = fetchFromGitHub {
     owner = "xbmc";
     repo = "libdvdread";
-    rev = "6.0.0-${rel}-Alpha-3";
+    rev = "6.0.0-Leia-Alpha-3";
     sha256 = "1xxn01mhkdnp10cqdr357wx77vyzfb5glqpqyg8m0skyi75aii59";
   };
 

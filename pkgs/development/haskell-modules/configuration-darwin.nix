@@ -8,7 +8,7 @@ in
 
 with haskellLib;
 
-self: super: {
+self: super: ({
 
   # the tests for shell-conduit on Darwin illegitimatey assume non-GNU echo
   # see: https://github.com/psibi/shell-conduit/issues/12
@@ -194,6 +194,9 @@ self: super: {
   hls-module-name-plugin = dontCheck super.hls-module-name-plugin;
   hls-splice-plugin = dontCheck super.hls-splice-plugin;
   hls-ormolu-plugin = dontCheck super.hls-ormolu-plugin;
+  hls-pragmas-plugin = dontCheck super.hls-pragmas-plugin;
+  hls-haddock-comments-plugin = dontCheck super.hls-haddock-comments-plugin;
+  hls-floskell-plugin = dontCheck super.hls-floskell-plugin;
 
   # We are lacking pure pgrep at the moment for tests to work
   tmp-postgres = dontCheck super.tmp-postgres;
@@ -250,4 +253,11 @@ self: super: {
   # Otherwise impure gcc is used, which is Apple's weird wrapper
   c2hsc = addTestToolDepends super.c2hsc [ pkgs.gcc ];
 
-}
+} // lib.optionalAttrs pkgs.stdenv.isAarch64 {  # aarch64-darwin
+
+  # https://github.com/fpco/unliftio/issues/87
+  unliftio = dontCheck super.unliftio;
+
+  # https://github.com/fpco/inline-c/issues/127
+  inline-c-cpp = dontCheck super.inline-c-cpp;
+})

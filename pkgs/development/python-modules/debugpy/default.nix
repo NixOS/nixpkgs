@@ -17,13 +17,13 @@
 
 buildPythonPackage rec {
   pname = "debugpy";
-  version = "1.4.1";
+  version = "1.4.3";
 
   src = fetchFromGitHub {
     owner = "Microsoft";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-W51Y9tZB1Uyp175+hWCpXChwL+MBpDWjudF87F1MRso=";
+    hash = "sha256-ULxVoZuMNDL0Win/+55RnbkCPZ8OI8nhSKshvJOMFQ4=";
   };
 
   patches = [
@@ -57,11 +57,12 @@ buildPythonPackage rec {
     cd src/debugpy/_vendored/pydevd/pydevd_attach_to_process
     rm *.so *.dylib *.dll *.exe *.pdb
     ${stdenv.cc}/bin/c++ linux_and_mac/attach.cpp -Ilinux_and_mac -fPIC -nostartfiles ${{
-      "x86_64-linux"  = "-shared -m64 -o attach_linux_amd64.so";
-      "i686-linux"    = "-shared -m32 -o attach_linux_x86.so";
-      "x86_64-darwin" = "-std=c++11 -lc -D_REENTRANT -dynamiclib -arch x86_64 -o attach_x86_64.dylib";
-      "i686-darwin"   = "-std=c++11 -lc -D_REENTRANT -dynamiclib -arch i386 -o attach_x86.dylib";
-    }.${stdenv.hostPlatform.system}}
+      "x86_64-linux"   = "-shared -m64 -o attach_linux_amd64.so";
+      "i686-linux"     = "-shared -m32 -o attach_linux_x86.so";
+      "x86_64-darwin"  = "-std=c++11 -lc -D_REENTRANT -dynamiclib -arch x86_64 -o attach_x86_64.dylib";
+      "i686-darwin"    = "-std=c++11 -lc -D_REENTRANT -dynamiclib -arch i386 -o attach_x86.dylib";
+      "aarch64-darwin" = "-std=c++11 -lc -D_REENTRANT -dynamiclib -arch arm64 -o attach_arm64.dylib";
+    }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}")}
   )'';
 
   checkInputs = [
@@ -95,6 +96,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/microsoft/debugpy";
     license = licenses.mit;
     maintainers = with maintainers; [ kira-bruneau ];
-    platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" "i686-darwin" ];
+    platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" "i686-darwin" "aarch64-darwin" ];
   };
 }

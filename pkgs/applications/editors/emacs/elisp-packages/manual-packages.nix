@@ -42,42 +42,6 @@
     };
   };
 
-  agda2-mode = trivialBuild {
-    pname = "agda-mode";
-    version = pkgs.haskellPackages.Agda.version;
-
-    phases = [ "buildPhase" "installPhase" ];
-
-    # already byte-compiled by Agda builder
-    buildPhase = ''
-      agda=`${pkgs.haskellPackages.Agda}/bin/agda-mode locate`
-      cp `dirname $agda`/*.el* .
-    '';
-
-    meta = {
-      description = "Agda2-mode for Emacs extracted from Agda package";
-      longDescription = ''
-        Wrapper packages that liberates init.el from `agda-mode locate` magic.
-        Simply add this to user profile or systemPackages and do `(require 'agda2)` in init.el.
-      '';
-      homepage = pkgs.haskellPackages.Agda.meta.homepage;
-      license = pkgs.haskellPackages.Agda.meta.license;
-    };
-  };
-
-  agda-input = self.trivialBuild {
-    pname = "agda-input";
-
-    inherit (pkgs.haskellPackages.Agda) src version;
-
-    postUnpack = "mv $sourceRoot/src/data/emacs-mode/agda-input.el $sourceRoot";
-
-    meta = {
-      description = "Standalone package providing the agda-input method without building Agda.";
-      inherit (pkgs.haskellPackages.Agda.meta) homepage license;
-    };
-  };
-
   ghc-mod = melpaBuild {
     pname = "ghc";
     version = pkgs.haskellPackages.ghc-mod.version;
@@ -99,8 +63,6 @@
       license = bsd3;
     };
   };
-
-  git-undo = callPackage ./git-undo { };
 
   haskell-unicode-input-method = let
     rev = "d8d168148c187ed19350bb7a1a190217c2915a63";
@@ -128,21 +90,6 @@
     meta = {
       homepage = "https://melpa.org/#haskell-unicode-input-method/";
       license = lib.licenses.free;
-    };
-  };
-
-  llvm-mode = trivialBuild {
-    pname = "llvm-mode";
-    inherit (pkgs.llvmPackages.llvm) src version;
-
-    dontConfigure = true;
-    buildPhase = ''
-      cp utils/emacs/*.el .
-    '';
-
-    meta = {
-      inherit (pkgs.llvmPackages.llvm.meta) homepage license;
-      description = "Major mode for the LLVM assembler language.";
     };
   };
 
@@ -201,38 +148,49 @@
 
   };
 
-  ott-mode = self.trivialBuild {
-    pname = "ott-mod";
+  agda2-mode = callPackage ./agda2-mode { };
 
-    inherit (pkgs.ott) src version;
+  agda-input = callPackage ./agda-input{ };
 
-    postUnpack = "mv $sourceRoot/emacs/ott-mode.el $sourceRoot";
+  bqn-mode = callPackage ./bqn-mode { };
 
-    meta = {
-      description = "Standalone package providing ott-mode without building ott and with compiled bytecode.";
-      inherit (pkgs.haskellPackages.Agda.meta) homepage license;
-    };
-  };
+  llvm-mode = callPackage ./llvm-mode { };
+
+  ott-mode = callPackage ./ott-mode { };
+
+  urweb-mode = callPackage ./urweb-mode { };
 
   # Packages made the classical callPackage way
 
+  apheleia = callPackage ./apheleia { };
+
   ebuild-mode = callPackage ./ebuild-mode { };
 
+  evil-markdown = callPackage ./evil-markdown { };
+
   emacspeak = callPackage ./emacspeak { };
+
+  ement = callPackage ./ement { };
 
   ess-R-object-popup = callPackage ./ess-R-object-popup { };
 
   font-lock-plus = callPackage ./font-lock-plus { };
 
+  git-undo = callPackage ./git-undo { };
+
   helm-words = callPackage ./helm-words { };
+
+  isearch-plus = callPackage ./isearch-plus { };
+
+  isearch-prop = callPackage ./isearch-prop { };
 
   jam-mode = callPackage ./jam-mode { };
 
   nano-theme = callPackage ./nano-theme { };
 
-  org-mac-link = callPackage ./org-mac-link { };
-
   perl-completion = callPackage ./perl-completion { };
+
+  plz = callPackage ./plz { };
 
   pod-mode = callPackage ./pod-mode { };
 
@@ -248,15 +206,12 @@
 
   youtube-dl = callPackage ./youtube-dl { };
 
-  zeitgeist = callPackage ./zeitgeist { };
-
   # From old emacsPackages (pre emacsPackagesNg)
   cedet = callPackage ./cedet { };
   cedille = callPackage ./cedille { cedille = pkgs.cedille; };
   color-theme-solarized = callPackage ./color-theme-solarized { };
   session-management-for-emacs = callPackage ./session-management-for-emacs { };
   hsc3-mode = callPackage ./hsc3 { };
-  ido-ubiquitous = callPackage ./ido-ubiquitous { };
   prolog-mode = callPackage ./prolog { };
   rect-mark = callPackage ./rect-mark { };
   sunrise-commander = callPackage ./sunrise-commander { };

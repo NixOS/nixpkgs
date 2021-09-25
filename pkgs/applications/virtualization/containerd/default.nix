@@ -27,14 +27,12 @@ buildGoModule rec {
 
   buildInputs = [ btrfs-progs ];
 
-  buildFlags = [ "VERSION=v${version}" "REVISION=${src.rev}" ];
-
   BUILDTAGS = lib.optionals (btrfs-progs == null) [ "no_btrfs" ];
 
   buildPhase = ''
     runHook preBuild
     patchShebangs .
-    make binaries man $buildFlags
+    make binaries man "VERSION=v${version}" "REVISION=${src.rev}"
     runHook postBuild
   '';
 

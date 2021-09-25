@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, perl }:
 
-stdenv.mkDerivation {
-  name = "psutils-17";
+stdenv.mkDerivation rec {
+  pname = "psutils";
+  version = "17";
 
   src = fetchurl {
-    url = "ftp://ftp.knackered.org/pub/psutils/psutils-p17.tar.gz";
+    url = "ftp://ftp.knackered.org/pub/psutils/psutils-p${version}.tar.gz";
     sha256 = "1r4ab1fvgganm02kmm70b2r1azwzbav2am41gbigpa2bb1wynlrq";
   };
 

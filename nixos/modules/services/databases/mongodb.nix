@@ -123,9 +123,11 @@ in
 
     users.users.mongodb = mkIf (cfg.user == "mongodb")
       { name = "mongodb";
-        uid = config.ids.uids.mongodb;
+        isSystemUser = true;
+        group = "mongodb";
         description = "MongoDB server user";
       };
+    users.groups.mongodb = mkIf (cfg.user == "mongodb") {};
 
     environment.systemPackages = [ mongodb ];
 

@@ -7,8 +7,9 @@
 , gnutlsSupport ? false, gnutls ? null
 , wolfsslSupport ? false, wolfssl ? null
 , scpSupport ? zlibSupport && !stdenv.isSunOS && !stdenv.isCygwin, libssh2 ? null
-, gssSupport ? with stdenv.hostPlatform; !(
+, gssSupport ? with stdenv.hostPlatform; (
     !isWindows &&
+    # disable gss becuase of: undefined reference to `k5_bcmp'
     # a very sad story re static: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=439039
     !isStatic &&
     # the "mig" tool does not configure its compiler correctly. This could be
@@ -63,6 +64,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  strictDeps = true;
+
   nativeBuildInputs = [ pkg-config perl ];
 
   # Zlib and OpenSSL must be propagated because `libcurl.la' contains
@@ -93,15 +96,15 @@ stdenv.mkDerivation rec {
       "--without-ca-bundle"
       "--without-ca-path"
       # The build fails when using wolfssl with --with-ca-fallback
-      ( if wolfsslSupport then "--without-ca-fallback" else "--with-ca-fallback")
+      (lib.withFeature (!wolfsslSupport) "ca-fallback")
       "--disable-manual"
-      ( if sslSupport then "--with-ssl=${openssl.dev}" else "--without-ssl" )
-      ( if gnutlsSupport then "--with-gnutls=${gnutls.dev}" else "--without-gnutls" )
-      ( if scpSupport then "--with-libssh2=${libssh2.dev}" else "--without-libssh2" )
-      ( if ldapSupport then "--enable-ldap" else "--disable-ldap" )
-      ( if ldapSupport then "--enable-ldaps" else "--disable-ldaps" )
-      ( if idnSupport then "--with-libidn=${libidn.dev}" else "--without-libidn" )
-      ( if brotliSupport then "--with-brotli" else "--without-brotli" )
+      (lib.withFeatureAs sslSupport "ssl" openssl.dev)
+      (lib.withFeatureAs gnutlsSupport "gnutls" gnutls.dev)
+      (lib.withFeatureAs scpSupport "libssh2" libssh2.dev)
+      (lib.enableFeature ldapSupport "ldap")
+      (lib.enableFeature ldapSupport "ldaps")
+      (lib.withFeatureAs idnSupport "libidn" libidn.dev)
+      (lib.withFeature brotliSupport "brotli")
     ]
     ++ lib.optional wolfsslSupport "--with-wolfssl=${wolfssl.dev}"
     ++ lib.optional c-aresSupport "--enable-ares=${c-ares}"
@@ -142,5 +145,7 @@ stdenv.mkDerivation rec {
     license = licenses.curl;
     maintainers = with maintainers; [ lovek323 ];
     platforms = platforms.all;
+    # Fails to link against static brotli or gss
+    broken = stdenv.hostPlatform.isStatic && (brotliSupport || gssSupport);
   };
 }

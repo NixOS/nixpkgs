@@ -137,10 +137,10 @@
   }
   {
     name = "microsoft.netcore.app.host.linux-x64";
-    version = "3.1.14";
+    version = "3.1.19";
     src = fetchurl {
-      url = "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/microsoft.netcore.app.host.linux-x64/3.1.14/microsoft.netcore.app.host.linux-x64.3.1.14.nupkg";
-      sha256 = "11rqnascx9asfyxgxzwgxgr9gxxndm552k4dn4p1s57ciz7vkg9h";
+      url = "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/microsoft.netcore.app.host.linux-x64/3.1.19/microsoft.netcore.app.host.linux-x64.3.1.19.nupkg";
+      sha256 = "10fs93kg8vhhm1l05815m8yqz796i6gk824pk1bps239mshmkybr";
     };
   }
   {

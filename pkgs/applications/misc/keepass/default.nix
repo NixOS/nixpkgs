@@ -84,7 +84,7 @@ with builtins; buildDotnetPackage rec {
   # after loading. It is brought into plugins bin/ directory using
   # buildEnv in the plugin derivation. Wrapper below makes sure it
   # is found and does not pollute output path.
-  binPaths = lib.concatStrings (lib.intersperse ":" (map (x: x + "/bin") plugins));
+  binPaths = lib.concatStringsSep ":" (map (x: x + "/bin") plugins);
 
   dynlibPath = lib.makeLibraryPath [ gtk2 ];
 

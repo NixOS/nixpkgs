@@ -721,6 +721,24 @@ let
         assert "mtu 1442" in client.succeed("ip l show dummy0")
       '';
     };
+    wlanInterface = let
+      testMac = "06:00:00:00:02:00";
+    in {
+      name = "WlanInterface";
+      machine = { pkgs, ... }: {
+        boot.kernelModules = [ "mac80211_hwsim" ];
+        networking.wlanInterfaces = {
+          wlan0 = { device = "wlan0"; };
+          wap0 = { device = "wlan0"; mac = testMac; };
+        };
+      };
+      testScript = ''
+        machine.start()
+        machine.wait_for_unit("network.target")
+        machine.wait_until_succeeds("ip address show wap0 | grep -q ${testMac}")
+        machine.fail("ip address show wlan0 | grep -q ${testMac}")
+      '';
+    };
   };
 
 in mapAttrs (const (attrs: makeTest (attrs // {

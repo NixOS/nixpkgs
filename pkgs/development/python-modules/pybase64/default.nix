@@ -1,27 +1,29 @@
-{ buildPythonPackage, isPy3k, lib, fetchPypi, six, pytest }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pytestCheckHook
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "pybase64";
-  version = "1.1.4";
+  version = "1.2.0";
 
-  disabled = !isPy3k;
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f0e0db1dee2a2cbf35e6710ea138594ecc1e0f491ff9103f136de83d8f159315";
+    sha256 = "9e310fcf5cfa2cbf7d1d7eb503b6066bec785216bcd1d8c0a736f59d5ec21b0b";
   };
 
-  propagatedBuildInputs = [ six ];
-  checkInputs = [ pytest ];
+  checkInputs = [ pytestCheckHook ];
 
-  checkPhase = ''
-    py.test
-  '';
+  pythonImportsCheck = [ "pybase64" ];
 
   meta = with lib; {
-    homepage = "https://pypi.python.org/pypi/pybase64";
     description = "Fast Base64 encoding/decoding";
+    homepage = "https://github.com/mayeut/pybase64";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ ];
   };
 }

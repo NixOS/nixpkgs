@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "sozu";
-  version = "0.11.56";
+  version = "0.13.6";
 
   src = fetchFromGitHub {
     owner = "sozu-proxy";
     repo = pname;
     rev = version;
-    sha256 = "sha256-/XyBzhZCsX9sGk+iTFlDnblWfDCZdI4b9yfo4Z+Wp1U=";
+    sha256 = "sha256-C2wIkneOh6t8gjoHRYMRorAKEVvM3R+NRZbG9hhCE5A=";
   };
 
-  cargoSha256 = "sha256-xnps3/i6BpzdwUAQmb8aoOPc39L2P52y/ZDAeLoEIU8=";
+  cargoSha256 = "sha256-Ej2/X1aQ8uRdZKpVRT4+AzhDWMv/sT8GrCitUmkrHmI=";
 
   buildInputs =
     lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;

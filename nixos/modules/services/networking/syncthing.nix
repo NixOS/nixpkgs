@@ -9,7 +9,7 @@ let
 
   devices = mapAttrsToList (name: device: {
     deviceID = device.id;
-    inherit (device) name addresses introducer;
+    inherit (device) name addresses introducer autoAcceptFolders;
   }) cfg.devices;
 
   folders = mapAttrsToList ( _: folder: {
@@ -37,7 +37,7 @@ let
     do sleep 1; done
 
     curl() {
-        ${pkgs.curl}/bin/curl -sS -H "X-API-Key: $api_key" \
+        ${pkgs.curl}/bin/curl -sSLk -H "X-API-Key: $api_key" \
             --retry 1000 --retry-delay 1 --retry-all-errors \
             "$@"
     }
@@ -46,7 +46,7 @@ let
     old_cfg=$(curl ${cfg.guiAddress}/rest/config)
 
     # generate the new config by merging with the NixOS config options
-    new_cfg=$(echo "$old_cfg" | ${pkgs.jq}/bin/jq -c '. * {
+    new_cfg=$(printf '%s\n' "$old_cfg" | ${pkgs.jq}/bin/jq -c '. * {
         "devices": (${builtins.toJSON devices}${optionalString (! cfg.overrideDevices) " + .devices"}),
         "folders": (${builtins.toJSON folders}${optionalString (! cfg.overrideFolders) " + .folders"})
     } * ${builtins.toJSON cfg.extraOptions}')
@@ -146,6 +146,15 @@ in {
                 Whether the device should act as an introducer and be allowed
                 to add folders on this computer.
                 See <link xlink:href="https://docs.syncthing.net/users/introducer.html"/>.
+              '';
+            };
+
+            autoAcceptFolders = mkOption {
+              type = types.bool;
+              default = false;
+              description = ''
+                Automatically create or share folders that this device advertises at the default path.
+                See <link xlink:href="https://docs.syncthing.net/users/config.html?highlight=autoaccept#config-file-format"/>.
               '';
             };
 
@@ -425,6 +434,15 @@ in {
         defaultText = literalExample "dataDir${optionalString cond " + \"/.config/syncthing\""}";
       };
 
+      extraFlags = mkOption {
+        type = types.listOf types.str;
+        default = [];
+        example = [ "--reset-deltas" ];
+        description = ''
+          Extra flags passed to the syncthing command in the service definition.
+        '';
+      };
+
       openDefaultPorts = mkOption {
         type = types.bool;
         default = false;
@@ -517,7 +535,7 @@ in {
             ${cfg.package}/bin/syncthing \
               -no-browser \
               -gui-address=${cfg.guiAddress} \
-              -home=${cfg.configDir}
+              -home=${cfg.configDir} ${escapeShellArgs cfg.extraFlags}
           '';
           MemoryDenyWriteExecute = true;
           NoNewPrivileges = true;

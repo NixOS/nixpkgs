@@ -148,9 +148,11 @@ in {
     };
 
     users.users.zookeeper = {
-      uid = config.ids.uids.zookeeper;
+      isSystemUser = true;
+      group = "zookeeper";
       description = "Zookeeper daemon user";
       home = cfg.dataDir;
     };
+    users.groups.zookeeper = {};
   };
 }

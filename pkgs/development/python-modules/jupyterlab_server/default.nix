@@ -16,12 +16,12 @@
 
 buildPythonPackage rec {
   pname = "jupyterlab_server";
-  version = "2.6.0";
+  version = "2.8.1";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f300adf6bb0a952bebe9c807a3b2a345d62da39b476b4f69ea0dc6b5f3f6b97d";
+    sha256 = "39fd519e9b3275873bd15de891363c28f2649814f7bbc11c57469c60e8408e97";
   };
 
   postPatch = ''

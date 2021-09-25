@@ -463,6 +463,9 @@ stdenv.mkDerivation {
     + optionalString (targetPlatform ? gcc.mode) ''
       echo "-mmode=${targetPlatform.gcc.mode}" >> $out/nix-support/cc-cflags-before
     ''
+    + optionalString (targetPlatform ? gcc.thumb) ''
+      echo "-m${if targetPlatform.gcc.thumb then "thumb" else "arm"}" >> $out/nix-support/cc-cflags-before
+    ''
     + optionalString (targetPlatform ? gcc.tune &&
                       isGccArchSupported targetPlatform.gcc.tune) ''
       echo "-mtune=${targetPlatform.gcc.tune}" >> $out/nix-support/cc-cflags-before
@@ -472,7 +475,7 @@ stdenv.mkDerivation {
     + optionalString hostPlatform.isCygwin ''
       hardening_unsupported_flags+=" pic"
     '' + optionalString targetPlatform.isMinGW ''
-      hardening_unsupported_flags+=" stackprotector"
+      hardening_unsupported_flags+=" stackprotector fortify"
     '' + optionalString targetPlatform.isAvr ''
       hardening_unsupported_flags+=" stackprotector pic"
     '' + optionalString (targetPlatform.libc == "newlib") ''

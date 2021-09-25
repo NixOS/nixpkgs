@@ -21,5 +21,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://taplo.tamasfe.dev";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "taplo";
   };
 }

@@ -8,22 +8,24 @@
 , libappindicator-gtk3
 , gst_all_1
 , pcre
+, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "whatsapp-for-linux";
-  version = "1.1.5";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "eneshecan";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1gzahls4givd2kbjdwx6yb3jv7a3r1krw40qihiz7hkamkrpaiaz";
+    sha256 = "sha256-dEJRufOqlY+DnJdUaG5WP9hR1qO7KxR6MjKWq1SJB8A=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
+    wrapGAppsHook
   ];
 
   buildInputs = [

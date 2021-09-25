@@ -300,10 +300,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1aava1b75n056s24gn7ajrkmm6s3xa3swl62dl5q9apw4marghji";
+      sha256 = "1949w1lcd3iyiy4n6zgnrhdp78k9khbh2pbkrpkv263bbpmw8llg";
       type = "gem";
     };
-    version = "1.0.5";
+    version = "1.1.0";
   };
   grpc = {
     dependencies = ["google-protobuf" "googleapis-common-protos-types"];
@@ -672,10 +672,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1gh7sc3xd4rgl9z90181cq580r1xqn063mmv51wdrhhsrkkw2bi9";
+      sha256 = "19h5g3g7k7wggy9amfx8b3m09ss7wrakbrva2xnda9sw4chagx6y";
       type = "gem";
     };
-    version = "6.2.0";
+    version = "6.3.2";
   };
   redis = {
     groups = ["default"];

@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   version = "5.4";
 
   src = fetchgit {
-    url = "git://anongit.freedesktop.org/git/libxklavier";
+    url = "https://gitlab.freedesktop.org/archived-projects/libxklavier.git";
     rev = "${pname}-${version}";
     sha256 = "1w1x5mrgly2ldiw3q2r6y620zgd89gk7n90ja46775lhaswxzv7a";
   };

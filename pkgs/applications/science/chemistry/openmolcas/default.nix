@@ -27,9 +27,15 @@ in stdenv.mkDerivation {
     ./openblasPath.patch
   ];
 
-  nativeBuildInputs = [ perl cmake texlive.combined.scheme-minimal makeWrapper ];
-  buildInputs = [
+  nativeBuildInputs = [
+    perl
     gfortran
+    cmake
+    texlive.combined.scheme-minimal
+    makeWrapper
+  ];
+
+  buildInputs = [
     openblas
     hdf5-cpp
     python

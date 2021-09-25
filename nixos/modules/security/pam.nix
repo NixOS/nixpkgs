@@ -475,7 +475,7 @@ let
 
           # Session management.
           ${optionalString cfg.setEnvironment ''
-            session required pam_env.so conffile=${config.system.build.pamEnvironment} readenv=0
+            session required pam_env.so conffile=/etc/pam/environment readenv=0
           ''}
           session required pam_unix.so
           ${optionalString cfg.setLoginUid
@@ -828,7 +828,7 @@ in
       };
       challengeResponsePath = mkOption {
         default = null;
-        type = types.path;
+        type = types.nullOr types.path;
         description = ''
           If not null, set the path used by yubico pam module where the challenge expected response is stored.
 
@@ -869,9 +869,10 @@ in
 
     security.wrappers = {
       unix_chkpwd = {
-        source = "${pkgs.pam}/sbin/unix_chkpwd.orig";
-        owner = "root";
         setuid = true;
+        owner = "root";
+        group = "root";
+        source = "${pkgs.pam}/sbin/unix_chkpwd.orig";
       };
     };
 

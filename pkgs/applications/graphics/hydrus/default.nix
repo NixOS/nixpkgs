@@ -10,14 +10,14 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "hydrus";
-  version = "448";
+  version = "454";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "hydrusnetwork";
     repo = "hydrus";
     rev = "v${version}";
-    sha256 = "sha256-h7FQRgxqXDEXDFRQEPeJUIbJYf9fs68oUQv5rCUS0zw=";
+    sha256 = "sha256-AX72fOiwp/CLaaGxBBKlcRskwayHCeUC2/FGUoXp3lU=";
   };
 
   nativeBuildInputs = [

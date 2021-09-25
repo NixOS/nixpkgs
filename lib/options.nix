@@ -11,6 +11,7 @@ let
     filter
     foldl'
     head
+    tail
     isAttrs
     isBool
     isDerivation
@@ -144,7 +145,7 @@ rec {
       if def.value != first.value then
         throw "The option `${showOption loc}' has conflicting definition values:${showDefs [ first def ]}"
       else
-        first) (head defs) defs).value;
+        first) (head defs) (tail defs)).value;
 
   /* Extracts values of all "value" keys of the given list.
 

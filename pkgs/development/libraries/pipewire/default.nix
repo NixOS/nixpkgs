@@ -7,6 +7,7 @@
 , ninja
 , systemd
 , pkg-config
+, docutils
 , doxygen
 , graphviz
 , valgrind
@@ -27,20 +28,29 @@
 , callPackage
 , nixosTests
 , withMediaSession ? true
-, gstreamerSupport ? true, gst_all_1 ? null
-, ffmpegSupport ? true, ffmpeg ? null
-, bluezSupport ? true, bluez ? null, sbc ? null, libfreeaptx ? null, ldacbt ? null, fdk_aac ? null
+, gstreamerSupport ? true
+, gst_all_1 ? null
+, ffmpegSupport ? true
+, ffmpeg ? null
+, bluezSupport ? true
+, bluez ? null
+, sbc ? null
+, libfreeaptx ? null
+, ldacbt ? null
+, fdk_aac ? null
 , nativeHspSupport ? true
 , nativeHfpSupport ? true
 , ofonoSupport ? true
 , hsphfpdSupport ? true
-, pulseTunnelSupport ? true, libpulseaudio ? null
-, zeroconfSupport ? true, avahi ? null
+, pulseTunnelSupport ? true
+, libpulseaudio ? null
+, zeroconfSupport ? true
+, avahi ? null
 }:
 
 let
   fontsConf = makeFontsConf {
-    fontDirectories = [];
+    fontDirectories = [ ];
   };
 
   mesonEnable = b: if b then "enabled" else "disabled";
@@ -48,7 +58,7 @@ let
 
   self = stdenv.mkDerivation rec {
     pname = "pipewire";
-    version = "0.3.33";
+    version = "0.3.36";
 
     outputs = [
       "out"
@@ -57,6 +67,7 @@ let
       "jack"
       "dev"
       "doc"
+      "man"
       "mediaSession"
       "installedTests"
     ];
@@ -66,7 +77,7 @@ let
       owner = "pipewire";
       repo = "pipewire";
       rev = version;
-      sha256 = "sha256-HP2HcGjrLw0+8pO1upvJQk32v+bifYpi5Rtod0TbBis=";
+      sha256 = "sha256-kwoffB0Hi84T4Q0NaxLxsCyPV4R0LayX9kHmXU/vRPA=";
     };
 
     patches = [
@@ -85,6 +96,7 @@ let
     ];
 
     nativeBuildInputs = [
+      docutils
       doxygen
       graphviz
       meson
@@ -116,7 +128,6 @@ let
 
     mesonFlags = [
       "-Ddocs=enabled"
-      "-Dman=disabled" # we don't have xmltoman
       "-Dexamples=${mesonEnable withMediaSession}" # only needed for `pipewire-media-session`
       "-Dudevrulesdir=lib/udev/rules.d"
       "-Dinstalled_tests=enabled"
@@ -213,4 +224,5 @@ let
     };
   };
 
-in self
+in
+self

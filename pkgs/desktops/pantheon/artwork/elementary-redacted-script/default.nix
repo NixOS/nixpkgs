@@ -25,7 +25,7 @@ stdenv.mkDerivation {
     description = "Font for concealing text";
     homepage = "https://github.com/png2378/redacted-elementary";
     license = licenses.ofl;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
     platforms = platforms.linux;
   };
 }

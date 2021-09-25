@@ -80,10 +80,10 @@
     "owner": "hashicorp",
     "provider-source-address": "registry.terraform.io/hashicorp/aws",
     "repo": "terraform-provider-aws",
-    "rev": "v3.43.0",
-    "sha256": "05rv93y9hf0l869q6i581748rw4bahvsgggj0h7cwjnf7xap0sxj",
-    "vendorSha256": "1m6pkrpknslqnv60cz5739gp5nxc7xhga402wkl37gdagmadkmrk",
-    "version": "3.43.0"
+    "rev": "v3.56.0",
+    "sha256": "0fa61i172maanxmxz28mj7mkgrs9a5bs61mlvb0d5y97lv6pm2xg",
+    "vendorSha256": "1s22k4b2zq5n0pz6iqbqsf6f7chsbvkpdn432rvyshcryxlklfvl",
+    "version": "3.56.0"
   },
   "azuread": {
     "owner": "hashicorp",
@@ -332,11 +332,13 @@
     "version": "2.1.0"
   },
   "fastly": {
-    "owner": "terraform-providers",
+    "owner": "fastly",
+    "provider-source-address": "registry.terraform.io/fastly/fastly",
     "repo": "terraform-provider-fastly",
-    "rev": "v0.16.1",
-    "sha256": "1pjrcw03a86xgkzcx778f7kk79svv8csy05b7qi0m5x77zy4pws7",
-    "version": "0.16.1"
+    "rev": "v0.34.0",
+    "sha256": "1za00gzmyxr6wfzzq92m3spi9563pbpjwj24sm95kj34l6mfwpyx",
+    "vendorSha256": null,
+    "version": "0.34.0"
   },
   "flexibleengine": {
     "owner": "terraform-providers",

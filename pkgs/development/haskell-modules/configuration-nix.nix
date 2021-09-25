@@ -167,6 +167,7 @@ self: super: builtins.intersectAttrs super {
   mongoDB = dontCheck super.mongoDB;
   network-transport-tcp = dontCheck super.network-transport-tcp;
   network-transport-zeromq = dontCheck super.network-transport-zeromq; # https://github.com/tweag/network-transport-zeromq/issues/30
+  oidc-client = dontCheck super.oidc-client;            # the spec runs openid against google.com
   pipes-mongodb = dontCheck super.pipes-mongodb;        # http://hydra.cryp.to/build/926195/log/raw
   pixiv = dontCheck super.pixiv;
   raven-haskell = dontCheck super.raven-haskell;        # http://hydra.cryp.to/build/502053/log/raw
@@ -222,7 +223,14 @@ self: super: builtins.intersectAttrs super {
   wxcore = super.wxcore.override { wxGTK = pkgs.wxGTK30; };
 
   # Test suite wants to connect to $DISPLAY.
+  bindings-GLFW = dontCheck super.bindings-GLFW;
+  gi-gtk-declarative = dontCheck super.gi-gtk-declarative;
+  gi-gtk-declarative-app-simple = dontCheck super.gi-gtk-declarative-app-simple;
   hsqml = dontCheck (addExtraLibraries (super.hsqml.override { qt5 = pkgs.qt5Full; }) [pkgs.libGLU pkgs.libGL]);
+  monomer = dontCheck super.monomer;
+
+  # Wants to check against a real DB, Needs freetds
+  odbc = dontCheck (addExtraLibraries super.odbc [ pkgs.freetds ]);
 
   # Tests attempt to use NPM to install from the network into
   # /homeless-shelter. Disabled.
@@ -347,13 +355,6 @@ self: super: builtins.intersectAttrs super {
 
   # Looks like Avahi provides the missing library
   dnssd = super.dnssd.override { dns_sd = pkgs.avahi.override { withLibdnssdCompat = true; }; };
-
-  # requires an X11 display
-  bindings-GLFW = dontCheck super.bindings-GLFW;
-
-  # requires an X11 display in test suite
-  gi-gtk-declarative = dontCheck super.gi-gtk-declarative;
-  gi-gtk-declarative-app-simple = dontCheck super.gi-gtk-declarative-app-simple;
 
   # tests depend on executable
   ghcide = overrideCabal super.ghcide (drv: {
@@ -698,7 +699,7 @@ self: super: builtins.intersectAttrs super {
     testTarget = "unit-tests";
   };
 
-  haskell-language-server = enableCabalFlag (enableCabalFlag (overrideCabal super.haskell-language-server (drv: {
+  haskell-language-server = overrideCabal super.haskell-language-server (drv: {
     postInstall = let
       inherit (pkgs.lib) concatStringsSep take splitString;
       ghc_version = self.ghc.version;
@@ -713,7 +714,7 @@ self: super: builtins.intersectAttrs super {
       export PATH=$PATH:$PWD/dist/build/haskell-language-server:$PWD/dist/build/haskell-language-server-wrapper
       export HOME=$TMPDIR
     '';
-  })) "all-plugins") "all-formatters";
+  });
 
   # tests depend on a specific version of solc
   hevm = dontCheck (doJailbreak super.hevm);
@@ -841,6 +842,16 @@ self: super: builtins.intersectAttrs super {
       export HOME=$TMPDIR/home
     '';
   });
+  hiedb = overrideCabal super.hiedb (drv: {
+    preCheck = ''
+      export PATH=$PWD/dist/build/hiedb:$PATH
+    '';
+  });
+  hls-call-hierarchy-plugin = overrideCabal super.hls-call-hierarchy-plugin (drv: {
+    preCheck = ''
+      export HOME=$TMPDIR/home
+    '';
+  });
   # Tests have file permissions expections that don‘t work with the nix store.
   hls-stylish-haskell-plugin = dontCheck super.hls-stylish-haskell-plugin;
   hls-haddock-comments-plugin = overrideCabal super.hls-haddock-comments-plugin (drv: {
@@ -949,4 +960,8 @@ self: super: builtins.intersectAttrs super {
       })
     )
   );
+
+  # Test suite is just the default example executable which doesn't work if not
+  # executed by Setup.hs, but works if started on a proper TTY
+  isocline = dontCheck super.isocline;
 }

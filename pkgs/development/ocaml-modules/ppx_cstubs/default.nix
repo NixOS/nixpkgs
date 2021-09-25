@@ -13,7 +13,7 @@
 
 buildDunePackage rec {
   pname = "ppx_cstubs";
-  version = "0.6.1.1";
+  version = "0.6.1.2";
 
   useDune2 = true;
 
@@ -21,7 +21,7 @@ buildDunePackage rec {
     owner = "fdopen";
     repo = "ppx_cstubs";
     rev = version;
-    sha256 = "0rgg78435ypi6ryhcq5ljkch4qjvra2jqjd47c2hhhcbwvi2ssxh";
+    sha256 = "15cjb9ygnvp2kv85rrb7ncz7yalifyl7wd2hp2cl8r1qrpgi1d0w";
   };
 
   buildInputs = [
@@ -37,8 +37,9 @@ buildDunePackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/fdopen/ppx_cstubs";
+    changelog = "https://github.com/fdopen/ppx_cstubs/raw/${version}/CHANGES.md";
     description = "Preprocessor for easier stub generation with ocaml-ctypes";
-    license = licenses.mit;
+    license = licenses.lgpl21Plus;
     maintainers = [ maintainers.osener ];
   };
 }

@@ -50,6 +50,8 @@ in
 
     dontFixCmake = true;
 
+    inherit lua;
+
     buildInputs = [
       gperf
       libtermkey

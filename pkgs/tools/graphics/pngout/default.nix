@@ -5,11 +5,12 @@ let
   else if stdenv.hostPlatform.system == "x86_64-linux" then "x86_64"
   else throw "Unsupported system: ${stdenv.hostPlatform.system}";
 in
-stdenv.mkDerivation {
-  name = "pngout-20150319";
+stdenv.mkDerivation rec {
+  pname = "pngout";
+  version = "20150319";
 
   src = fetchurl {
-    url = "http://static.jonof.id.au/dl/kenutils/pngout-20150319-linux.tar.gz";
+    url = "http://static.jonof.id.au/dl/kenutils/pngout-${version}-linux.tar.gz";
     sha256 = "0iwv941hgs2g7ljpx48fxs24a70m2whrwarkrb77jkfcd309x2h7";
   };
 

@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-wallpapers";
-  version = "5.5.0";
+  version = "6.0.0";
 
   repoName = "wallpapers";
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "sha256-Q5sYDXqFhiTu8nABmyND3L8bIXd1BJ3GZQ9TL3SzwzA=";
+    sha256 = "1qpf8w7x9sp3sd4zpsrlj5ywpwqkq4ywbagm4sf25cwwn82dl59b";
   };
 
   nativeBuildInputs = [
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/elementary/wallpapers";
     license = licenses.publicDomain;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
   };
 }
 

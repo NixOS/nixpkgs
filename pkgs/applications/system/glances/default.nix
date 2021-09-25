@@ -9,14 +9,14 @@
 
 buildPythonApplication rec {
   pname = "glances";
-  version = "3.2.2";
+  version = "3.2.3.1";
   disabled = isPyPy;
 
   src = fetchFromGitHub {
     owner = "nicolargo";
     repo = "glances";
     rev = "v${version}";
-    sha256 = "13w7bxfizsfi3xyhharnindyn3dv3p9p54a4xwyhnnhczs8kqa8s";
+    sha256 = "0h7y36z4rizl1lyxacq32vpmvbwn9w2nrvrxn791060cksfw4xwd";
   };
 
   # Some tests fail in the sandbox (they e.g. require access to /sys/class/power_supply):
@@ -31,7 +31,7 @@ buildPythonApplication rec {
   ];
 
   doCheck = true;
-  preCheck = lib.optional stdenv.isDarwin ''
+  preCheck = lib.optionalString stdenv.isDarwin ''
     export DYLD_FRAMEWORK_PATH=/System/Library/Frameworks
   '';
 

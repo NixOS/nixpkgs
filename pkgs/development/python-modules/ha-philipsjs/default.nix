@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "ha-philipsjs";
-  version = "2.7.4";
+  version = "2.7.5";
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "danielperna84";
     repo = pname;
     rev = version;
-    sha256 = "08fjdb1q02dwxq8s15ddd00gps64xplblkn8dx5yivldskiy8i1n";
+    sha256 = "sha256-CAYyVNVq1rZZ/AYOAE8bfd7f94+PlAsnFRdguparNtY=";
   };
 
   propagatedBuildInputs = [

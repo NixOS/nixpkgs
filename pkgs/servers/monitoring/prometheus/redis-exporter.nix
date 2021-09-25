@@ -13,12 +13,11 @@ buildGoModule rec {
 
   vendorSha256 = "11237959ikd7l5glkhfz0g55mbld2hq985b5crwb9bnimaly5lga";
 
-  buildFlagsArray = ''
-    -ldflags=
-       -X main.BuildVersion=${version}
-       -X main.BuildCommitSha=unknown
-       -X main.BuildDate=unknown
-  '';
+  ldflags = [
+    "-X main.BuildVersion=${version}"
+    "-X main.BuildCommitSha=unknown"
+    "-X main.BuildDate=unknown"
+  ];
 
   # needs a redis server
   doCheck = false;

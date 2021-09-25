@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "tempora";
-  version = "4.0.2";
+  version = "4.1.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "10fdc29bf85fa0df39a230a225bb6d093982fc0825b648a414bbc06bddd79909";
+    sha256 = "c54da0f05405f04eb67abbb1dff4448fd91428b58cb00f0f645ea36f6a927950";
   };
 
   disabled = pythonOlder "3.2";

@@ -5,7 +5,7 @@
 , mock
 , numpy
 , poetry-core
-, prometheus_client
+, prometheus-client
 , pytestCheckHook
 , requests
 }:
@@ -26,14 +26,15 @@ buildPythonPackage rec {
     substituteInPlace pyproject.toml \
       --replace 'numpy = "1.18.5"' 'numpy = "^1.18.5"' \
       --replace 'hyperopt = "0.1.2"' 'hyperopt = ">=0.1.2"' \
-      --replace 'wheel = "^0.35.1"' 'wheel = "*"'
+      --replace 'wheel = "^0.35.1"' 'wheel = "*"' \
+      --replace 'prometheus-client = ">=0.8,<0.10"' 'prometheus-client = "*"'
   '';
 
   nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     hyperopt
-    prometheus_client
+    prometheus-client
     numpy
   ];
 

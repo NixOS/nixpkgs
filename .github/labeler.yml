@@ -72,6 +72,12 @@
   - nixos/**/*
   - pkgs/os-specific/linux/nixos-rebuild/**/*
 
+"6.topic: nim":
+  - doc/languages-frameworks/nim.section.md
+  - pkgs/development/compilers/nim/*
+  - pkgs/development/nim-packages/**/*
+  - pkgs/top-level/nim-packages.nix
+
 "6.topic: ocaml":
   - doc/languages-frameworks/ocaml.section.md
   - pkgs/development/compilers/ocaml/**/*

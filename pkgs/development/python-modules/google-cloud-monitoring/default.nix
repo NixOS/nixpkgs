@@ -13,11 +13,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-monitoring";
-  version = "2.3.0";
+  version = "2.5.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fcbf644622709277d47b0dd8884efd1d62703bffda3c1030e06404709690c06c";
+    sha256 = "d3d436fab7f50f69bdd47655871ac923e4dcbaf8538808bbe31cf0a3cbdf3514";
   };
 
   propagatedBuildInputs = [ libcst google-api-core proto-plus ];

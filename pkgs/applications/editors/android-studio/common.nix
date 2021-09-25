@@ -1,4 +1,4 @@
-{ channel, pname, version, build ? null, sha256Hash }:
+{ channel, pname, version, sha256Hash }:
 
 { alsa-lib
 , bash
@@ -55,7 +55,7 @@
 
 let
   drvName = "android-studio-${channel}-${version}";
-  filename = "android-studio-" + (if (build != null) then "ide-${build}" else version) + "-linux.tar.gz";
+  filename = "android-studio-${version}-linux.tar.gz";
 
   androidStudio = stdenv.mkDerivation {
     name = "${drvName}-unwrapped";

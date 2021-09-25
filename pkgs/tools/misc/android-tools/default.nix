@@ -1,7 +1,11 @@
 { lib, stdenv, fetchurl, fetchpatch
-, cmake, perl, go
+, cmake, perl, go, python3
 , protobuf, zlib, gtest, brotli, lz4, zstd, libusb1, pcre2, fmt_7
 }:
+
+let
+  pythonEnv = python3.withPackages(ps: [ ps.protobuf ]);
+in
 
 stdenv.mkDerivation rec {
   pname = "android-tools";
@@ -23,14 +27,25 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  postPatch = ''
+    sed -i -E "0,/import api_pb2/ s//from google.protobuf import api_pb2/" vendor/avb/aftltool.py
+  '';
+
   nativeBuildInputs = [ cmake perl go ];
   buildInputs = [ protobuf zlib gtest brotli lz4 zstd libusb1 pcre2 fmt_7 ];
+  propagatedBuildInputs = [ pythonEnv ];
 
   # Don't try to fetch any Go modules via the network:
   GOFLAGS = [ "-mod=vendor" ];
 
   preConfigure = ''
     export GOCACHE=$TMPDIR/go-cache
+  '';
+
+  postInstall = ''
+    install -Dm755 ../vendor/avb/aftltool.py -t $out/bin
+    install -Dm755 ../vendor/avb/avbtool.py -t $out/bin
+    install -Dm755 ../vendor/mkbootimg/mkbootimg.py $out/bin/mkbootimg
   '';
 
   meta = with lib; {

@@ -51,7 +51,7 @@ in {
   options.services.datadog-agent = {
     enable = mkOption {
       description = ''
-        Whether to enable the datadog-agent v6 monitoring service
+        Whether to enable the datadog-agent v7 monitoring service
       '';
       default = false;
       type = types.bool;
@@ -61,7 +61,7 @@ in {
       default = pkgs.datadog-agent;
       defaultText = "pkgs.datadog-agent";
       description = ''
-        Which DataDog v6 agent package to use. Note that the provided
+        Which DataDog v7 agent package to use. Note that the provided
         package is expected to have an overridable `pythonPackages`-attribute
         which configures the Python environment with the Datadog
         checks.
@@ -274,7 +274,7 @@ in {
         path = [ ];
         script = ''
           export DD_API_KEY=$(head -n 1 ${cfg.apiKeyFile})
-          ${pkgs.datadog-process-agent}/bin/agent --config /etc/datadog-agent/datadog.yaml
+          ${pkgs.datadog-process-agent}/bin/process-agent --config /etc/datadog-agent/datadog.yaml
         '';
       });
 

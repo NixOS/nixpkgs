@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p curl jq nix-prefetch
+#!nix-shell -i bash -p curl jq nix-prefetch libarchive
 set -euo pipefail
 cd "$(dirname "$0")"
 owner=rust-analyzer
@@ -46,16 +46,29 @@ sed "s#cargoSha256 = \".*\"#cargoSha256 = \"$cargo_sha256\"#" \
 
 # Update vscode extension
 
+extension_ver=$(curl "https://github.com/rust-analyzer/rust-analyzer/releases/download/$ver/rust-analyzer.vsix" -L |
+    bsdtar -xf - --to-stdout extension/package.json | # Use bsdtar to extract vsix(zip).
+    jq --raw-output '.version')
+echo "Extension version: $extension_ver"
+
 build_deps="../../../../misc/vscode-extensions/rust-analyzer/build-deps"
 # We need devDependencies to build vsix.
-jq '{ name, version, dependencies: (.dependencies + .devDependencies) }' "$node_src/package.json" \
+# `esbuild` is a binary package an is already in nixpkgs so we omit it here.
+jq '{ name, version: $ver, dependencies: (.dependencies + .devDependencies | del(.esbuild)) }' "$node_src/package.json" \
+    --arg ver "$extension_ver" \
     >"$build_deps/package.json.new"
 
-if cmp --quiet "$build_deps"/package.json{.new,}; then
-    echo "package.json not changed, skip updating nodePackages"
-    rm "$build_deps"/package.json.new
+old_deps="$(jq '.dependencies' "$build_deps"/package.json)"
+new_deps="$(jq '.dependencies' "$build_deps"/package.json.new)"
+if [[ "$old_deps" == "$new_deps" ]]; then
+    echo "package.json dependencies not changed, do simple version change"
+
+    sed -E '/^  "rust-analyzer-build-deps/,+3 s/version = ".*"/version = "'"$extension_ver"'"/' \
+        --in-place ../../../node-packages/node-packages.nix
+    mv "$build_deps"/package.json{.new,}
+
 else
-    echo "package.json changed, updating nodePackages"
+    echo "package.json dependencies changed, updating nodePackages"
     mv "$build_deps"/package.json{.new,}
 
     pushd "../../../node-packages"

@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "auth0-python";
-  version = "3.16.2";
+  version = "3.18.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Slpwml1GDdxAZ4P6Vn2brrupRofiOHvmQF26l0gtTJM=";
+    sha256 = "sha256-jitJF+puXaLv3qyJOjLFetzxRpnlbi4BKS0TzDmCRe8=";
   };
 
   propagatedBuildInputs = [
@@ -30,6 +30,8 @@ buildPythonPackage rec {
   disabledTests = [
     # tries to ping websites (e.g. google.com)
     "can_timeout"
+    "test_options_are_created_by_default"
+    "test_options_are_used_and_override"
   ];
 
   pythonImportsCheck = [ "auth0" ];

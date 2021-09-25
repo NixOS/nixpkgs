@@ -2,7 +2,8 @@
 , autoconf, automake, libtool, jdk, perl }:
 
 stdenv.mkDerivation {
-  name = "aldor-1.2.0";
+  pname = "aldor";
+  version = "1.2.0";
 
   src = fetchgit {
     url = "https://github.com/pippijn/aldor";

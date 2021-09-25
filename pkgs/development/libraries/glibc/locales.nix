@@ -34,9 +34,9 @@ callPackage ./common.nix { inherit stdenv; } {
       + lib.optionalString (!allLocales) ''
       # Check that all locales to be built are supported
       echo -n '${lib.concatMapStrings (s: s + " \\\n") locales}' \
-        | sort > locales-to-build.txt
+        | sort -u > locales-to-build.txt
       cat ../glibc-2*/localedata/SUPPORTED | grep ' \\' \
-        | sort > locales-supported.txt
+        | sort -u > locales-supported.txt
       comm -13 locales-supported.txt locales-to-build.txt \
         > locales-unsupported.txt
       if [[ $(wc -c locales-unsupported.txt) != "0 locales-unsupported.txt" ]]; then

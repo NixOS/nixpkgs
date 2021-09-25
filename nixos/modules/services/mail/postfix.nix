@@ -673,6 +673,7 @@ in
       services.mail.sendmailSetuidWrapper = mkIf config.services.postfix.setSendmail {
         program = "sendmail";
         source = "${pkgs.postfix}/bin/sendmail";
+        owner = "nobody";
         group = setgidGroup;
         setuid = false;
         setgid = true;
@@ -681,6 +682,7 @@ in
       security.wrappers.mailq = {
         program = "mailq";
         source = "${pkgs.postfix}/bin/mailq";
+        owner = "nobody";
         group = setgidGroup;
         setuid = false;
         setgid = true;
@@ -689,6 +691,7 @@ in
       security.wrappers.postqueue = {
         program = "postqueue";
         source = "${pkgs.postfix}/bin/postqueue";
+        owner = "nobody";
         group = setgidGroup;
         setuid = false;
         setgid = true;
@@ -697,6 +700,7 @@ in
       security.wrappers.postdrop = {
         program = "postdrop";
         source = "${pkgs.postfix}/bin/postdrop";
+        owner = "nobody";
         group = setgidGroup;
         setuid = false;
         setgid = true;

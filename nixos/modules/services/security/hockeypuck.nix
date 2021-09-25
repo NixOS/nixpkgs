@@ -82,8 +82,10 @@ in {
 
     users.users.hockeypuck = {
       isSystemUser = true;
+      group = "hockeypuck";
       description = "Hockeypuck user";
     };
+    users.groups.hockeypuck = {};
 
     systemd.services.hockeypuck = {
       description = "Hockeypuck OpenPGP Key Server";

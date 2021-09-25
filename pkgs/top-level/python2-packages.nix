@@ -36,6 +36,10 @@ with self; with super; {
 
   box2d = callPackage ../development/python-modules/box2d { };
 
+  boto3 = callPackage ../development/python-modules/boto3/1_17.nix {};
+
+  botocore = callPackage ../development/python-modules/botocore/1_20.nix {};
+
   browsermob-proxy = callPackage ../development/python-modules/browsermob-proxy { };
 
   cairocffi = callPackage ../development/python-modules/cairocffi/0_9.nix { };
@@ -70,6 +74,8 @@ with self; with super; {
 
   construct = callPackage ../development/python-modules/construct/2.10.54.nix { };
 
+  contextlib2 = callPackage ../development/python-modules/contextlib2/0.nix { };
+
   convertdate = callPackage ../development/python-modules/convertdate/2.2.x.nix { };
 
   cryptography = callPackage ../development/python-modules/cryptography/3.3.nix { };
@@ -79,6 +85,8 @@ with self; with super; {
   darcsver = callPackage ../development/python-modules/darcsver { };
 
   dateparser = callPackage ../development/python-modules/dateparser/0.x.nix { };
+
+  decorator = callPackage ../development/python-modules/decorator/4.nix { };
 
   deskcon = callPackage ../development/python-modules/deskcon { };
 
@@ -393,6 +401,8 @@ with self; with super; {
 
   pip = callPackage ../development/python-modules/pip/20.nix { };
 
+  pluggy = callPackage ../development/python-modules/pluggy/0.nix { };
+
   postorius = disabled super.postorius;
 
   praw = callPackage ../development/python-modules/praw/6.3.nix { };
@@ -537,6 +547,8 @@ with self; with super; {
   rpy2 = callPackage ../development/python-modules/rpy2/2.nix { };
 
   rsa = callPackage ../development/python-modules/rsa/4_0.nix { };
+
+  s3transfer = callPackage ../development/python-modules/s3transfer/0_4.nix { };
 
   sandboxlib = callPackage ../development/python-modules/sandboxlib { };
 

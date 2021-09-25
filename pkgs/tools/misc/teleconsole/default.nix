@@ -25,7 +25,6 @@ buildGoPackage rec {
   '';
 
   CGO_ENABLED = 1;
-  buildFlags = [ "-ldflags" ];
 
   meta = with lib; {
     homepage = "https://www.teleconsole.com/";

@@ -45,11 +45,11 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "samba";
-  version = "4.14.4";
+  version = "4.15.0";
 
   src = fetchurl {
     url = "mirror://samba/pub/samba/stable/${pname}-${version}.tar.gz";
-    sha256 = "1fc9ix91hb1f35j69sk7rsi9pky2p0vsmw47s973bx801cm0kbw9";
+    sha256 = "0h26s9lfdl8mccs9rfv1gr5f8snd95gjkrik6wl5ccb27044gwxi";
   };
 
   outputs = [ "out" "dev" "man" ];
@@ -139,6 +139,9 @@ stdenv.mkDerivation rec {
     ++ optional (!enablePam) "--without-pam"
     ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "--bundled-libraries=!asn1_compile,!compile_et"
+  ] ++ optional stdenv.isAarch32 [
+    # https://bugs.gentoo.org/683148
+    "--jobs 1"
   ];
 
   # python-config from build Python gives incorrect values when cross-compiling.

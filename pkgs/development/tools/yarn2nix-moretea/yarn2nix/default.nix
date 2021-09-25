@@ -4,7 +4,7 @@
 }:
 
 let
-  inherit (pkgs) stdenv lib fetchurl linkFarm callPackage git rsync makeWrapper;
+  inherit (pkgs) stdenv lib fetchurl linkFarm callPackage git rsync makeWrapper runCommandLocal;
 
   compose = f: g: x: f (g x);
   id = x: x;
@@ -105,7 +105,8 @@ in rec {
 
     in stdenv.mkDerivation {
       inherit preBuild postBuild name;
-      phases = ["configurePhase" "buildPhase"];
+      dontUnpack = true;
+      dontInstall = true;
       buildInputs = [ yarn nodejs git ] ++ extraBuildInputs;
 
       configurePhase = ''
@@ -413,21 +414,16 @@ in rec {
     '';
   };
 
-  fixup_yarn_lock = stdenv.mkDerivation {
-    name = "fixup_yarn_lock";
+  fixup_yarn_lock = runCommandLocal "fixup_yarn_lock"
+    {
+      buildInputs = [ nodejs ];
+    } ''
+    mkdir -p $out/lib
+    mkdir -p $out/bin
 
-    buildInputs = [ nodejs ];
+    cp ${./lib/urlToName.js} $out/lib/urlToName.js
+    cp ${./internal/fixup_yarn_lock.js} $out/bin/fixup_yarn_lock
 
-    phases = [ "installPhase" ];
-
-    installPhase = ''
-      mkdir -p $out/lib
-      mkdir -p $out/bin
-
-      cp ${./lib/urlToName.js} $out/lib/urlToName.js
-      cp ${./internal/fixup_yarn_lock.js} $out/bin/fixup_yarn_lock
-
-      patchShebangs $out
-    '';
-  };
+    patchShebangs $out
+  '';
 }

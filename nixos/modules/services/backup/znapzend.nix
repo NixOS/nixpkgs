@@ -324,7 +324,7 @@ in
       autoCreation = mkOption {
         type = bool;
         default = false;
-        description = "Automatically create the destination dataset if it does not exists.";
+        description = "Automatically create the destination dataset if it does not exist.";
       };
 
       zetup = mkOption {

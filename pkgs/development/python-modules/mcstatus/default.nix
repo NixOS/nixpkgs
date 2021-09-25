@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "mcstatus";
-  version = "6.4.0";
+  version = "6.5.0";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "Dinnerbone";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-pJ5TY9tbdhVW+kou+n5fMgCdHVBK6brBrlGIuO+VIK0=";
+    sha256 = "00xi3452lap4zx38msx89vvhrzkzb2dvwis1fcmx24qngj9g3yfr";
   };
 
   propagatedBuildInputs = [

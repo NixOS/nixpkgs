@@ -8,8 +8,6 @@ stdenv.mkDerivation {
     sha256 = "15qlvdfwbiclljj7075ycm78yzqahzrgl4ky8pymix5179acm05h";
   };
 
-  phases = [ "unpackPhase" "installPhase" ];
-
   unpackPhase = ''
     tar -zxf $src
     '';

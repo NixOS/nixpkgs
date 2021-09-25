@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , google-api-core
-, grpc_google_iam_v1
+, grpc-google-iam-v1
 , libcst
 , mock
 , proto-plus
@@ -12,16 +12,16 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-secret-manager";
-  version = "2.5.0";
+  version = "2.7.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e99eb9f77373b97bfc1becb7d23fae5574a33fd9e44b44a3e700abcbfbc9f94d";
+    sha256 = "84ae86a2320425df2e78d981d4ab26bff591ade1b978c18c929188b741a7b37d";
   };
 
   propagatedBuildInputs = [
     google-api-core
-    grpc_google_iam_v1
+    grpc-google-iam-v1
     libcst
     proto-plus
   ];

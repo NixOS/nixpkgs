@@ -374,6 +374,8 @@ stdenv.mkDerivation rec {
     # `pkgsMusl`.
     platforms = builtins.attrNames ghcBinDists.${distSetName};
     hydraPlatforms = builtins.filter (p: minimal || p != "aarch64-linux") platforms;
-    maintainers = with lib.maintainers; [ lostnet ];
+    maintainers = with lib.maintainers; [
+      guibou
+    ] ++ lib.teams.haskell.members;
   };
 }

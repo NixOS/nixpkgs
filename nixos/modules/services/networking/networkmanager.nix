@@ -464,6 +464,7 @@ in {
     users.users = {
       nm-openvpn = {
         uid = config.ids.uids.nm-openvpn;
+        group = "nm-openvpn";
         extraGroups = [ "networkmanager" ];
       };
       nm-iodine = {

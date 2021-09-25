@@ -11,12 +11,11 @@ buildGoPackage rec {
     sha256 = "sha256-G4bTYFm1Zh+7gfSIZnfrPyQ15967ebEzl33pgZu23D4=";
   };
 
-  buildFlagsArray = ''
-    -ldflags=
-      -s -w
-      -X github.com/tomcz/openldap_exporter.tag=v${version}
-      -X github.com/tomcz/openldap_exporter.commit=unknown
-  '';
+  ldflags = [
+    "-s" "-w"
+    "-X github.com/tomcz/openldap_exporter.tag=v${version}"
+    "-X github.com/tomcz/openldap_exporter.commit=unknown"
+  ];
 
   goPackagePath = "github.com/tomcz/openldap_exporter";
 

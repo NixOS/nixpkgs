@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "telethon";
-  version = "1.21.1";
+  version = "1.23.0";
 
   src = fetchPypi {
     inherit version;
     pname = "Telethon";
-    sha256 = "sha256-mTyDfvdFrd+XKifXv7oM5Riihj0aUOBzclW3ZNI+DvI=";
+    sha256 = "sha256-unVRzkR+lUqtZ/PuukurdXTMoHosb0HlvmmQTm4OwxM=";
   };
 
   patchPhase = ''

@@ -13,12 +13,12 @@
 
 buildPythonPackage rec {
   pname = "blspy";
-  version = "1.0.5";
+  version = "1.0.6";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-uDXzAdGzfyRbsMVllLNd3DK8F/GfovdX293z5Mel6eg=";
+    hash = "sha256-sULXnecEs8VI687pR9EK9jjYWlrB4tV4dt7Kzekaxb4=";
   };
 
   patches = [
@@ -31,6 +31,13 @@ buildPythonPackage rec {
         repo = "relic";
         rev = "1885ae3b681c423c72b65ce1fe70910142cf941c"; # pinned by blspy
         hash = "sha256-tsSZTcssl8t7Nqdex4BesgQ+ACPgTdtHnJFvS9josN0=";
+      };
+      sodium_src = fetchFromGitHub {
+        owner = "AmineKhaldi";
+        repo = "libsodium-cmake";
+        rev = "f73a3fe1afdc4e37ac5fe0ddd401bf521f6bba65"; # pinned by blspy
+        sha256 = "sha256-lGz7o6DQVAuEc7yTp8bYS2kwjzHwGaNjugDi1ruRJOA=";
+        fetchSubmodules = true;
       };
     })
   ];

@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation rec {
   pname = "talloc";
-  version = "2.3.2";
+  version = "2.3.3";
 
   src = fetchurl {
     url = "mirror://samba/talloc/${pname}-${version}.tar.gz";
-    sha256 = "sha256-J6A++Z44TXeRJN91XesinNF2H5Reym0gDoz9m/Upe9c=";
+    sha256 = "sha256-a+lbI2i9CvHEzXqIFG62zuoY5Gw//JMwv2JitA0diqo=";
   };
 
   nativeBuildInputs = [

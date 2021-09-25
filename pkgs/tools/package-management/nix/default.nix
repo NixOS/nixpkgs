@@ -234,13 +234,13 @@ in rec {
   nixUnstable = lib.lowPrio (callPackage common rec {
     pname = "nix";
     version = "2.4${suffix}";
-    suffix = "pre20210707_02dd6bb";
+    suffix = "pre20210908_${lib.substring 0 7 src.rev}";
 
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "02dd6bb610e55a009cd7a4c83639698d3a7acaa2";
-      sha256 = "sha256-ARRiLrDOK+JQtvVXsYegspENYimQzilvdTfO7eiBuaA=";
+      rev = "3c56f62093601143838af923195f630d8ffae2d4";
+      sha256 = "sha256-pjdzLOEt8i1NQe4drLpp8+LrRd2MgsISSQEsMebz2kc=";
     };
 
     boehmgc = boehmgc_nixUnstable;

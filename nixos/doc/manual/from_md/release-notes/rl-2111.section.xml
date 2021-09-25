@@ -22,7 +22,7 @@
       </listitem>
       <listitem>
         <para>
-          kOps now defaults to 1.21.0, which uses containerd as the
+          kOps now defaults to 1.21.1, which uses containerd as the
           default runtime.
         </para>
       </listitem>
@@ -35,6 +35,50 @@
       <listitem>
         <para>
           PostgreSQL now defaults to major version 13.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          spark now defaults to spark 3, updated from 2. A
+          <link xlink:href="https://spark.apache.org/docs/latest/core-migration-guide.html#upgrading-from-core-24-to-30">migration
+          guide</link> is available.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Activation scripts can now opt int to be run when running
+          <literal>nixos-rebuild dry-activate</literal> and detect the
+          dry activation by reading <literal>$NIXOS_ACTION</literal>.
+          This allows activation scripts to output what they would
+          change if the activation was really run. The users/modules
+          activation script supports this and outputs some of is
+          actions.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          bash now defaults to major version 5.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Systemd was updated to version 249 (from 247).
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Pantheon desktop has been updated to version 6. Due to changes
+          of screen locker, if locking doesn’t work for you, please try
+          <literal>gsettings set org.gnome.desktop.lockdown disable-lock-screen false</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>kubernetes-helm</literal> now defaults to 3.7.0,
+          which introduced some breaking changes to the experimental OCI
+          manifest format. See
+          <link xlink:href="https://github.com/helm/community/blob/main/hips/hip-0006.md">HIP
+          6</link> for more details.
         </para>
       </listitem>
     </itemizedlist>
@@ -105,6 +149,13 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://github.com/evilsocket/opensnitch">opensnitch</link>,
+          an application firewall. Available as
+          <link linkend="opt-services.opensnitch.enable">services.opensnitch</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://www.snapraid.it/">snapraid</link>, a
           backup program for disk arrays. Available as
           <link linkend="opt-snapraid.enable">snapraid</link>.
@@ -156,6 +207,105 @@
           <link linkend="opt-services.moonraker.enable">moonraker</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/influxdata/influxdb">influxdb2</link>,
+          a Scalable datastore for metrics, events, and real-time
+          analytics. Available as
+          <link linkend="opt-services.influxdb2.enable">services.influxdb2</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://posativ.org/isso/">isso</link>, a
+          commenting server similar to Disqus. Available as
+          <link linkend="opt-services.isso.enable">isso</link>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://www.navidrome.org/">navidrome</link>,
+          a personal music streaming server with subsonic-compatible
+          api. Available as
+          <link linkend="opt-services.navidrome.enable">navidrome</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://docs.fluidd.xyz/">fluidd</link>, a
+          Klipper web interface for managing 3d printers using
+          moonraker. Available as
+          <link linkend="opt-services.fluidd.enable">fluidd</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/earnestly/sx">sx</link>,
+          a simple alternative to both xinit and startx for starting a
+          Xorg server. Available as
+          <link linkend="opt-services.xserver.displayManager.sx.enable">services.xserver.displayManager.sx</link>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://postfixadmin.sourceforge.io/">postfixadmin</link>,
+          a web based virtual user administration interface for Postfix
+          mail servers. Available as
+          <link linkend="opt-services.postfixadmin.enable">postfixadmin</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://sr.ht/~emersion/soju">soju</link>, a
+          user-friendly IRC bouncer. Available as
+          <link xlink:href="options.html#opt-services.soju.enable">services.soju</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://nats.io/">nats</link>, a high
+          performance cloud and edge messaging system. Available as
+          <link linkend="opt-services.nats.enable">services.nats</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://git-scm.com">git</link>, a
+          distributed version control system. Available as
+          <link xlink:href="options.html#opt-programs.git.enable">programs.git</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://domainaware.github.io/parsedmarc/">parsedmarc</link>,
+          a service which parses incoming
+          <link xlink:href="https://dmarc.org/">DMARC</link> reports and
+          stores or sends them to a downstream service for further
+          analysis. Documented in
+          <link linkend="module-services-parsedmarc">its manual
+          entry</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://spark.apache.org/">spark</link>, a
+          unified analytics engine for large-scale data processing.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/JoseExposito/touchegg">touchegg</link>,
+          a multi-touch gesture recognizer. Available as
+          <link linkend="opt-services.touchegg.enable">services.touchegg</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/pantheon-tweaks/pantheon-tweaks">pantheon-tweaks</link>,
+          an unofficial system settings panel for Pantheon. Available as
+          <link linkend="opt-programs.pantheon-tweaks.enable">programs.pantheon-tweaks</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-incompatibilities">
@@ -163,9 +313,152 @@
     <itemizedlist>
       <listitem>
         <para>
-          The <literal>staticjinja</literal> package has been upgraded
-          from 1.0.4 to 3.0.1
+          The <literal>security.wrappers</literal> option now requires
+          to always specify an owner, group and whether the
+          setuid/setgid bit should be set. This is motivated by the fact
+          that before NixOS 21.11, specifying either setuid or setgid
+          but not owner/group resulted in wrappers owned by
+          nobody/nogroup, which is unsafe.
         </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>paperless</literal> module and package have been
+          removed. All users should migrate to the successor
+          <literal>paperless-ng</literal> instead. The Paperless project
+          <link xlink:href="https://github.com/the-paperless-project/paperless/commit/9b0063c9731f7c5f65b1852cb8caff97f5e40ba4">has
+          been archived</link> and advises all users to use
+          <literal>paperless-ng</literal> instead.
+        </para>
+        <para>
+          Users can use the <literal>services.paperless-ng</literal>
+          module as a replacement while noting the following
+          incompatibilities:
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              <literal>services.paperless.ocrLanguages</literal> has no
+              replacement. Users should migrate to
+              <link xlink:href="options.html#opt-services.paperless-ng.extraConfig"><literal>services.paperless-ng.extraConfig</literal></link>
+              instead:
+            </para>
+          </listitem>
+        </itemizedlist>
+        <programlisting language="bash">
+{
+  services.paperless-ng.extraConfig = {
+    # Provide languages as ISO 639-2 codes
+    # separated by a plus (+) sign.
+    # https://en.wikipedia.org/wiki/List_of_ISO_639-2_codes
+    PAPERLESS_OCR_LANGUAGE = &quot;deu+eng+jpn&quot;; # German &amp; English &amp; Japanse
+  };
+}
+</programlisting>
+        <itemizedlist>
+          <listitem>
+            <para>
+              If you previously specified
+              <literal>PAPERLESS_CONSUME_MAIL_*</literal> settings in
+              <literal>services.paperless.extraConfig</literal> you
+              should remove those options now. You now
+              <emphasis>must</emphasis> define those settings in the
+              admin interface of paperless-ng.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Option <literal>services.paperless.manage</literal> no
+              longer exists. Use the script at
+              <literal>${services.paperless-ng.dataDir}/paperless-ng-manage</literal>
+              instead. Note that this script only exists after the
+              <literal>paperless-ng</literal> service has been started
+              at least once.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              After switching to the new system configuration you should
+              run the Django management command to reindex your
+              documents and optionally create a user, if you don’t have
+              one already.
+            </para>
+            <para>
+              To do so, enter the data directory (the value of
+              <literal>services.paperless-ng.dataDir</literal>,
+              <literal>/var/lib/paperless</literal> by default), switch
+              to the paperless user and execute the management command
+              like below:
+            </para>
+            <programlisting>
+$ cd /var/lib/paperless
+$ su paperless -s /bin/sh
+$ ./paperless-ng-manage document_index reindex
+# if not already done create a user account, paperless-ng requires a login
+$ ./paperless-ng-manage createsuperuser
+Username (leave blank to use 'paperless'): my-user-name
+Email address: me@example.com
+Password: **********
+Password (again): **********
+Superuser created successfully.
+</programlisting>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>staticjinja</literal> package has been upgraded
+          from 1.0.4 to 4.1.0
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Firefox v91 does not support addons with invalid signature
+          anymore. Firefox ESR needs to be used for nix addon support.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>erigon</literal> ethereum node has moved to a new
+          database format in <literal>2021-05-04</literal>, and requires
+          a full resync
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>erigon</literal> ethereum node has moved it’s
+          database location in <literal>2021-08-03</literal>, users
+          upgrading must manually move their chaindata (see
+          <link xlink:href="https://github.com/ledgerwatch/erigon/releases/tag/v2021.08.03">release
+          notes</link>).
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="options.html#opt-users.users._name_.group">users.users.&lt;name&gt;.group</link>
+          no longer defaults to <literal>nogroup</literal>, which was
+          insecure. Out-of-tree modules are likely to require
+          adaptation: instead of
+        </para>
+        <programlisting language="bash">
+{
+  users.users.foo = {
+    isSystemUser = true;
+  };
+}
+</programlisting>
+        <para>
+          also create a group for your user:
+        </para>
+        <programlisting language="bash">
+{
+  users.users.foo = {
+    isSystemUser = true;
+    group = &quot;foo&quot;;
+  };
+  users.groups.foo = {};
+}
+</programlisting>
       </listitem>
       <listitem>
         <para>
@@ -665,6 +958,16 @@
       </listitem>
       <listitem>
         <para>
+          The fontconfig service’s dpi option has been removed.
+          Fontconfig should use Xft settings by default so there’s no
+          need to override one value in multiple places. The user can
+          set DPI via ~/.Xresources properly, or at the system level per
+          monitor, or as a last resort at the system level with
+          <literal>services.xserver.dpi</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>yambar</literal> package has been split into
           <literal>yambar</literal> and
           <literal>yambar-wayland</literal>, corresponding to the xorg
@@ -672,11 +975,94 @@
           <literal>yambar-wayland</literal> if you are on wayland.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          The <literal>services.minio</literal> module gained an
+          additional option <literal>consoleAddress</literal>, that
+          configures the address and port the web UI is listening, it
+          defaults to <literal>:9001</literal>. To be able to access the
+          web UI this port needs to be opened in the firewall.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>varnish</literal> package was upgraded from 6.3.x
+          to 6.5.x. <literal>varnish60</literal> for the last LTS
+          release is also still available.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>kubernetes</literal> package was upgraded to
+          1.22. The <literal>kubernetes.apiserver.kubeletHttps</literal>
+          option was removed and HTTPS is always used.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The attribute <literal>linuxPackages_latest_hardened</literal>
+          was dropped because the hardened patches lag behind the
+          upstream kernel which made version bumps harder. If you want
+          to use a hardened kernel, please pin it explicitly with a
+          versioned attribute such as
+          <literal>linuxPackages_5_10_hardened</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>nomad</literal> package now defaults to a 1.1.x
+          release instead of 1.0.x
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          If <literal>exfat</literal> is included in
+          <literal>boot.supportedFilesystems</literal> and when using
+          kernel 5.7 or later, the <literal>exfatprogs</literal>
+          user-space utilities are used instead of
+          <literal>exfat</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>todoman</literal> package was upgraded from 3.9.0
+          to 4.0.0. This introduces breaking changes in the
+          <link xlink:href="https://todoman.readthedocs.io/en/stable/configure.html#configuration-file">configuration
+          file</link> format.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>datadog-agent</literal>,
+          <literal>datadog-integrations-core</literal> and
+          <literal>datadog-process-agent</literal> packages were
+          upgraded from 6.11.2 to 7.30.2, git-2018-09-18 to 7.30.1 and
+          6.11.1 to 7.30.2, respectively. As a result
+          <literal>services.datadog-agent</literal> has had breaking
+          changes to the configuration file. For details, see the
+          <link xlink:href="https://github.com/DataDog/datadog-agent/blob/main/CHANGELOG.rst">upstream
+          changelog</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-notable-changes">
     <title>Other Notable Changes</title>
     <itemizedlist>
+      <listitem>
+        <para>
+          The linux kernel package infrastructure was moved out of
+          <literal>all-packages.nix</literal>, and restructured. Linux
+          related functions and attributes now live under the
+          <literal>pkgs.linuxKernel</literal> attribute set. In
+          particular the versioned <literal>linuxPackages_*</literal>
+          package sets (such as <literal>linuxPackages_5_4</literal>)
+          and kernels from <literal>pkgs</literal> were moved there and
+          now live under <literal>pkgs.linuxKernel.packages.*</literal>.
+          The unversioned ones (such as
+          <literal>linuxPackages_latest</literal>) remain untouched.
+        </para>
+      </listitem>
       <listitem>
         <para>
           The setting
@@ -694,6 +1080,14 @@
           <literal>&quot;VERBOSE&quot;</literal>, so that
           <literal>fail2ban</literal> can observe the failed login
           attempts from the SSH logs.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The
+          <link xlink:href="options.html#opt-services.xserver.extraLayouts"><literal>services.xserver.extraLayouts</literal></link>
+          no longer cause additional rebuilds when a layout is added or
+          modified.
         </para>
       </listitem>
       <listitem>
@@ -717,6 +1111,14 @@
       </listitem>
       <listitem>
         <para>
+          <literal>qtile</literal> hase been updated from
+          <quote>0.16.0</quote> to <quote>0.18.0</quote>, please check
+          <link xlink:href="https://github.com/qtile/qtile/blob/master/CHANGELOG">qtile
+          changelog</link> for changes.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>claws-mail</literal> package now references the
           new GTK+ 3 release branch, major version 4. To use the GTK+ 2
           releases, one can install the
@@ -728,10 +1130,26 @@
           The wordpress module provides a new interface which allows to
           use different webservers with the new option
           <link xlink:href="options.html#opt-services.wordpress.webserver"><literal>services.wordpress.webserver</literal></link>.
-          Currently <literal>httpd</literal> and
-          <literal>nginx</literal> are supported. The definitions of
+          Currently <literal>httpd</literal>, <literal>caddy</literal>
+          and <literal>nginx</literal> are supported. The definitions of
           wordpress sites should now be set in
           <link xlink:href="options.html#opt-services.wordpress.sites"><literal>services.wordpress.sites</literal></link>.
+        </para>
+        <para>
+          Sites definitions that use the old interface are automatically
+          migrated in the new option. This backward compatibility will
+          be removed in 22.05.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The dokuwiki module provides a new interface which allows to
+          use different webservers with the new option
+          <link xlink:href="options.html#opt-services.dokuwiki.webserver"><literal>services.dokuwiki.webserver</literal></link>.
+          Currently <literal>caddy</literal> and
+          <literal>nginx</literal> are supported. The definitions of
+          dokuwiki sites should now be set in
+          <link xlink:href="options.html#opt-services.dokuwiki.sites"><literal>services.dokuwiki.sites</literal></link>.
         </para>
         <para>
           Sites definitions that use the old interface are automatically
@@ -839,6 +1257,90 @@
           <literal>boot.kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;</literal>
           to always track the latest compatible kernel with a given
           version of zfs.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Nginx will use the value of
+          <literal>sslTrustedCertificate</literal> if provided for a
+          virtual host, even if <literal>enableACME</literal> is set.
+          This is useful for providers not using the same certificate to
+          sign OCSP responses and server certificates.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>lib.formats.yaml</literal>’s
+          <literal>generate</literal> will not generate JSON anymore,
+          but instead use more of the YAML-specific syntax.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          MariaDB was upgraded from 10.5.x to 10.6.x. Please read the
+          <link xlink:href="https://mariadb.com/kb/en/changes-improvements-in-mariadb-106/">upstream
+          release notes</link> for changes and upgrade instructions.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The MariaDB C client library, also known as libmysqlclient or
+          mariadb-connector-c, was upgraded from 3.1.x to 3.2.x. While
+          this should hopefully not have any impact, this upgrade comes
+          with some changes to default behavior, so you might want to
+          review the
+          <link xlink:href="https://mariadb.com/kb/en/changes-and-improvements-in-mariadb-connector-c-32/">upstream
+          release notes</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          GNOME desktop environment now enables
+          <literal>QGnomePlatform</literal> as the Qt platform theme,
+          which should avoid crashes when opening file chooser dialogs
+          in Qt apps by using XDG desktop portal. Additionally, it will
+          make the apps fit better visually.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>rofi</literal> has been updated from
+          <quote>1.6.1</quote> to <quote>1.7.0</quote>, one important
+          thing is the removal of the old xresources based configuration
+          setup. Read more
+          <link xlink:href="https://github.com/davatorium/rofi/blob/cb12e6fc058f4a0f4f/Changelog#L1">in
+          rofi’s changelog</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          ipfs now defaults to not listening on you local network. This
+          setting was change as server providers won’t accept port
+          scanning on their private network. If you have several ipfs
+          instances running on a network you own, feel free to change
+          the setting <literal>ipfs.localDiscovery = true;</literal>.
+          localDiscovery enables different instances to discover each
+          other and share data.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>lua</literal> and <literal>luajit</literal>
+          interpreters have been patched to avoid looking into /usr/lib
+          directories, thus increasing the purity of the build.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Three new options,
+          <link linkend="opt-xdg.mime.addedAssociations">xdg.mime.addedAssociations</link>,
+          <link linkend="opt-xdg.mime.defaultApplications">xdg.mime.defaultApplications</link>,
+          and
+          <link linkend="opt-xdg.mime.removedAssociations">xdg.mime.removedAssociations</link>
+          have been added to the
+          <link linkend="opt-xdg.mime.enable">xdg.mime</link> module to
+          allow the configuration of
+          <literal>/etc/xdg/mimeapps.list</literal>.
         </para>
       </listitem>
     </itemizedlist>

@@ -50,12 +50,12 @@ stdenv.mkDerivation rec {
     sha256 = "1f9hz8rf12jm8baa7kda34yl4hyl0xh0c4ap03krfjx23i3img47";
   };
 
-  nativeBuildInputs = [ python python.pkgs.sphinx pkg-config flex bison meson ninja ]
+  nativeBuildInputs = [ makeWrapper python python.pkgs.sphinx pkg-config flex bison meson ninja ]
     ++ lib.optionals gtkSupport [ wrapGAppsHook ]
     ++ lib.optionals stdenv.isLinux [ autoPatchelfHook ];
 
   buildInputs = [ zlib glib perl pixman
-    vde2 texinfo makeWrapper lzo snappy
+    vde2 texinfo lzo snappy
     gnutls nettle curl
   ]
     ++ lib.optionals ncursesSupport [ ncurses ]

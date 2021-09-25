@@ -115,10 +115,12 @@ in
   config = mkIf cfg.enable {
 
     users.users.unifi = {
-      uid = config.ids.uids.unifi;
+      isSystemUser = true;
+      group = "unifi";
       description = "UniFi controller daemon user";
       home = "${stateDir}";
     };
+    users.groups.unifi = {};
 
     networking.firewall = mkIf cfg.openPorts {
       # https://help.ubnt.com/hc/en-us/articles/218506997

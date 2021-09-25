@@ -1,0 +1,18 @@
+--- old/private/http.scm
++++ new/private/http.scm
+@@ -101,14 +101,7 @@
+                  ;; shouldn't, but it's an old issue.
+                  (log/error "Could not load libcurl. Please install the curl development(!) package.")
+                  (exit 1)))
+-          (case (os-name)
+-            ((darwin) (set! libcurl (open-shared-object "libcurl.dylib")))
+-            ((msys) (set! libcurl (open-shared-object "msys-curl-4")))
+-            (else
+-             (guard (exn
+-                     (else
+-                      (set! libcurl (open-shared-object "libcurl.so.3"))))
+-               (set! libcurl (open-shared-object "libcurl.so.4"))))))
++          (set! libcurl (open-shared-object "@libcurl@")))
+         (letrec ()
+           (define %curl_global_init (foreign-procedure libcurl int curl_global_init (long)))
+           (call %curl_global_init #b11)))

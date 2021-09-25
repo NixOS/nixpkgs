@@ -714,6 +714,8 @@ to `~/.gdbinit`. GDB will then be able to find debug information installed via `
 
 The installCheck phase checks whether the package was installed correctly by running its test suite against the installed directories. The default `installCheck` calls `make installcheck`.
 
+It is often better to add tests that are not part of the source distribution to `passthru.tests` (see <xref linkend="var-meta-tests"/>). This avoids adding overhead to every build and enables us to run them independently.
+
 #### Variables controlling the installCheck phase {#variables-controlling-the-installcheck-phase}
 
 ##### `doInstallCheck` {#var-stdenv-doInstallCheck}

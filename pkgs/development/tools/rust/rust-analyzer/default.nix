@@ -1,25 +1,34 @@
 { lib, stdenv, fetchFromGitHub, rustPlatform, CoreServices, cmake
 , libiconv
 , useMimalloc ? false
-# FIXME: Test doesn't pass under rustc 1.52.1 due to different escaping of `'` in string.
-, doCheck ? false
+, doCheck ? true
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rust-analyzer-unwrapped";
-  version = "2021-08-02";
-  cargoSha256 = "10mdkqf6fqbzx49gwc283ms56yvrcdlvyk4y98jf33b8g5jmr8j5";
+  version = "2021-09-20";
+  cargoSha256 = "sha256-OPolZ0oXGRcKvWxXkRMjyEXzvf1p41hGfHBpbDbLJck=";
 
   src = fetchFromGitHub {
     owner = "rust-analyzer";
     repo = "rust-analyzer";
     rev = version;
-    sha256 = "1nh1naaqc6f40raz31a0vwypaxm5drzdl2bwjfqx2gydy6051gcl";
+    sha256 = "sha256-k2UGz+h9++8wtV+XdGZbWysjkIDe+UNudKL46eisZzw=";
   };
+
+  patches = [
+    # Code format and git history check require more dependencies but don't really matter for packaging.
+    # So just ignore them.
+    ./ignore-git-and-rustfmt-tests.patch
+
+    # Patch for our rust 1.54.0 in nixpkgs. Remove it when we have rust >= 1.55.0
+    ./no-1-55-control-flow.patch
+  ];
 
   buildAndTestSubdir = "crates/rust-analyzer";
 
   cargoBuildFlags = lib.optional useMimalloc "--features=mimalloc";
+  cargoTestFlags = lib.optional useMimalloc "--features=mimalloc";
 
   nativeBuildInputs = lib.optional useMimalloc cmake;
 

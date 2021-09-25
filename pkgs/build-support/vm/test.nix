@@ -1,4 +1,4 @@
-with import ../../.. {};
+with import ../../.. { };
 with vmTools;
 
 {
@@ -30,7 +30,7 @@ with vmTools;
     src = patchelf.src;
     diskImage = diskImages.ubuntu1204i386;
     memSize = 512;
-    phases = "sysInfoPhase unpackPhase patchPhase configurePhase buildPhase checkPhase installPhase fixupPhase distPhase";
+    prePhases = [ sysInfoPhase ];
     sysInfoPhase = ''
       dpkg-query --list
     '';

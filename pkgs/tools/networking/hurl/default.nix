@@ -8,13 +8,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "hurl";
-  version = "1.2.0";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "Orange-OpenSource";
     repo = pname;
     rev = version;
-    sha256 = "0hbyqj794pvvfrg6jgz63mih73bnmnvgmwbv705c2238w7wsgk9w";
+    sha256 = "sha256-BmBqFJ64Nolq+eGZ5D3LQU3Ek2Gs+HpH/bptCQScbIg=";
   };
 
   nativeBuildInputs = [
@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage rec {
   # Tests require network access to a test server
   doCheck = false;
 
-  cargoSha256 = "09ndgm6kmqwdz7yn2rqxk5xr1qkai87zm1k138cng4wq135c3w6g";
+  cargoSha256 = "sha256-tAg3xwmh7SjJsm9r5TnhXHIDLpUQpz3YDS6gWxFgps4=";
 
   meta = with lib; {
     description = "Command line tool that performs HTTP requests defined in a simple plain text format.";

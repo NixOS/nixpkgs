@@ -31,8 +31,10 @@ in {
     environment.systemPackages = with pkgs; [ cfg.package ];
 
     security.wrappers.mtr-packet = {
-      source = "${cfg.package}/bin/mtr-packet";
+      owner = "root";
+      group = "root";
       capabilities = "cap_net_raw+p";
+      source = "${cfg.package}/bin/mtr-packet";
     };
   };
 }

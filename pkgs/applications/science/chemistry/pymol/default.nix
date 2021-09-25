@@ -1,8 +1,18 @@
-{ lib, fetchurl, fetchFromGitHub, makeDesktopItem
-, python3, python3Packages
-, glew, glm, freeglut, libpng, libxml2, tk, freetype, msgpack }:
-
-
+{ lib
+, fetchFromGitHub
+, makeDesktopItem
+, python3
+, python3Packages
+, netcdf
+, glew
+, glm
+, freeglut
+, libpng
+, libxml2
+, tk
+, freetype
+, msgpack
+}:
 let
   pname = "pymol";
   description = "A Python-enhanced molecular graphics tool";
@@ -20,15 +30,15 @@ let
 in
 python3Packages.buildPythonApplication rec {
   inherit pname;
-  version = "2.3.0";
+  version = "2.5.0";
   src = fetchFromGitHub {
     owner = "schrodinger";
     repo = "pymol-open-source";
     rev = "v${version}";
-    sha256 = "175cqi6gfmvv49i3ws19254m7ljs53fy6y82fm1ywshq2h2c93jh";
+    sha256 = "sha256-JdsgcVF1w1xFPZxVcyS+GcWg4a1Bd4SvxFOuSdlz9SM=";
   };
 
-  buildInputs = [ python3Packages.numpy glew glm freeglut libpng libxml2 tk freetype msgpack ];
+  buildInputs = [ python3Packages.numpy glew glm freeglut libpng libxml2 tk freetype msgpack netcdf ];
   NIX_CFLAGS_COMPILE = "-I ${libxml2.dev}/include/libxml2";
   hardeningDisable = [ "format" ];
 
@@ -49,7 +59,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    description = description;
+    inherit description;
     homepage = "https://www.pymol.org/";
     license = licenses.mit;
     maintainers = with maintainers; [ samlich ];

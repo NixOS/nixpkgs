@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-recoveryservicesbackup";
-  version = "1.0.0";
+  version = "2.0.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "fd915aa6a76ef9e0e963615d4c909400c8d5646e26273ae25fa1418ce61e28d2";
+    sha256 = "d3e60daefbc20a7fa381c7ad1498f4bf4bb5a1414c1c64188cc9d5c98c4e12ac";
   };
 
   propagatedBuildInputs = [
@@ -28,6 +28,8 @@ buildPythonPackage rec {
 
   # has no tests
   doCheck = false;
+
+  pythonImportsCheck = [ "azure.mgmt.recoveryservicesbackup" ];
 
   meta = with lib; {
     description = "This is the Microsoft Azure Recovery Services Backup Management Client Library";

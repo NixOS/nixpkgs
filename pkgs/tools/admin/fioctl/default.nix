@@ -2,22 +2,22 @@
 
 buildGoModule rec {
   pname = "fioctl";
-  version = "0.18";
+  version = "0.20";
 
   src = fetchFromGitHub {
     owner = "foundriesio";
     repo = "fioctl";
     rev = "v${version}";
-    sha256 = "sha256-uqJ08ftaU39gmhDtl+noVtGscu6utcl42rXz4XaGtWc=";
+    sha256 = "sha256-vc+V69cyJZSJa6GXUUNYeXdKvmUrVIQhsBykptcl85s=";
   };
 
-  vendorSha256 = "sha256-6a+JMj3hh6GPuqnLknv7/uR8vsUsOgsS+pdxHoMqH5w=";
+  vendorSha256 = "sha256-SuUY4xwinky5QO+GxyotrFiYX1LnWQNjwWXIUpfVHUE=";
 
   runVend = true;
 
-  buildFlagsArray = ''
-    -ldflags=-s -w -X github.com/foundriesio/fioctl/subcommands/version.Commit=${src.rev}
-  '';
+  ldflags = [
+    "-s" "-w" "-X github.com/foundriesio/fioctl/subcommands/version.Commit=${src.rev}"
+  ];
 
   meta = with lib; {
     description = "A simple CLI to manage your Foundries Factory ";

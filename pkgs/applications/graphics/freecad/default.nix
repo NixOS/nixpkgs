@@ -15,6 +15,7 @@
 , libGLU
 , libXmu
 , libf2c
+, libredwg
 , libspnav
 , matplotlib
 , medfile
@@ -61,6 +62,7 @@ mkDerivation rec {
     ninja
     pkg-config
     pyside2-tools
+    gfortran
     wrapQtAppsHook
   ];
 
@@ -69,7 +71,6 @@ mkDerivation rec {
     boost
     coin3d
     eigen
-    gfortran
     gts
     hdf5
     libGLU
@@ -131,6 +132,7 @@ mkDerivation rec {
 
   qtWrapperArgs = [
     "--set COIN_GL_NO_CURRENT_CONTEXT_CHECK 1"
+    "--prefix PATH : ${libredwg}/bin"
   ];
 
   postFixup = ''

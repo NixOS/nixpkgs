@@ -40,5 +40,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/dbrgn/tealdeer";
     maintainers = with maintainers; [ davidak ];
     license = with licenses; [ asl20 mit ];
+    mainProgram = "tldr";
   };
 }

@@ -4,11 +4,11 @@
 
 mkDerivation rec {
   pname = "bibletime";
-  version = "3.0.1";
+  version = "3.0.2";
 
   src = fetchurl {
     url = "https://github.com/bibletime/bibletime/releases/download/v${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-ay4o8mfgj/m3BBoBMXVgw0NTlaFgJQvLlNYvEZRXSiA=";
+    sha256 = "sha256-/JNjnU/DGD4YRtrKzX7t6MgNCZYihdgTJc+Jbr9IYJ4=";
   };
 
   nativeBuildInputs = [ cmake pkg-config docbook_xml_dtd_45 ];

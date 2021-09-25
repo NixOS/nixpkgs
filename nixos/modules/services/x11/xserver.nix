@@ -297,7 +297,11 @@ in
       dpi = mkOption {
         type = types.nullOr types.int;
         default = null;
-        description = "DPI resolution to use for X server.";
+        description = ''
+          Force global DPI resolution to use for X server. It's recommended to
+          use this only when DPI is detected incorrectly; also consider using
+          <literal>Monitor</literal> section in configuration file instead.
+        '';
       };
 
       updateDbusEnvironment = mkOption {
@@ -681,7 +685,7 @@ in
     systemd.services.display-manager =
       { description = "X11 Server";
 
-        after = [ "acpid.service" "systemd-logind.service" ];
+        after = [ "acpid.service" "systemd-logind.service" "systemd-user-sessions.service" ];
 
         restartIfChanged = false;
 
@@ -734,6 +738,9 @@ in
       nativeBuildInputs = with pkgs.buildPackages; [ xkbvalidate ];
       preferLocalBuild = true;
     } ''
+      ${optionalString (config.environment.sessionVariables ? XKB_CONFIG_ROOT)
+        "export XKB_CONFIG_ROOT=${config.environment.sessionVariables.XKB_CONFIG_ROOT}"
+      }
       xkbvalidate "$xkbModel" "$layout" "$xkbVariant" "$xkbOptions"
       touch "$out"
     '');

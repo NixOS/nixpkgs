@@ -79,6 +79,33 @@ in
       '';
     };
 
+    localSourceAllow = mkOption {
+      type = types.listOf types.str;
+      # Permissions snapshot and destroy are in case --no-sync-snap is not used
+      default = [ "bookmark" "hold" "send" "snapshot" "destroy" ];
+      description = ''
+        Permissions granted for the <option>services.syncoid.user</option> user
+        for local source datasets. See
+        <link xlink:href="https://openzfs.github.io/openzfs-docs/man/8/zfs-allow.8.html"/>
+        for available permissions.
+      '';
+    };
+
+    localTargetAllow = mkOption {
+      type = types.listOf types.str;
+      default = [ "change-key" "compression" "create" "mount" "mountpoint" "receive" "rollback" ];
+      example = [ "create" "mount" "receive" "rollback" ];
+      description = ''
+        Permissions granted for the <option>services.syncoid.user</option> user
+        for local target datasets. See
+        <link xlink:href="https://openzfs.github.io/openzfs-docs/man/8/zfs-allow.8.html"/>
+        for available permissions.
+        Make sure to include the <literal>change-key</literal> permission if you send raw encrypted datasets,
+        the <literal>compression</literal> permission if you send raw compressed datasets, and so on.
+        For remote target datasets you'll have to set your remote user permissions by yourself.
+      '';
+    };
+
     commonArgs = mkOption {
       type = types.listOf types.str;
       default = [ ];
@@ -133,6 +160,30 @@ in
             '';
           };
 
+          localSourceAllow = mkOption {
+            type = types.listOf types.str;
+            description = ''
+              Permissions granted for the <option>services.syncoid.user</option> user
+              for local source datasets. See
+              <link xlink:href="https://openzfs.github.io/openzfs-docs/man/8/zfs-allow.8.html"/>
+              for available permissions.
+              Defaults to <option>services.syncoid.localSourceAllow</option> option.
+            '';
+          };
+
+          localTargetAllow = mkOption {
+            type = types.listOf types.str;
+            description = ''
+              Permissions granted for the <option>services.syncoid.user</option> user
+              for local target datasets. See
+              <link xlink:href="https://openzfs.github.io/openzfs-docs/man/8/zfs-allow.8.html"/>
+              for available permissions.
+              Make sure to include the <literal>change-key</literal> permission if you send raw encrypted datasets,
+              the <literal>compression</literal> permission if you send raw compressed datasets, and so on.
+              For remote target datasets you'll have to set your remote user permissions by yourself.
+            '';
+          };
+
           sendOptions = mkOption {
             type = types.separatedString " ";
             default = "";
@@ -179,6 +230,8 @@ in
         config = {
           source = mkDefault name;
           sshKey = mkDefault cfg.sshKey;
+          localSourceAllow = mkDefault cfg.localSourceAllow;
+          localTargetAllow = mkDefault cfg.localTargetAllow;
         };
       }));
       default = { };
@@ -221,13 +274,11 @@ in
             path = [ "/run/booted-system/sw/bin/" ];
             serviceConfig = {
               ExecStartPre =
-                # Permissions snapshot and destroy are in case --no-sync-snap is not used
-                (map (buildAllowCommand "allow" [ "bookmark" "hold" "send" "snapshot" "destroy" ]) (localDatasetName c.source)) ++
-                (map (buildAllowCommand "allow" [ "create" "mount" "receive" "rollback" ]) (localDatasetName c.target));
+                (map (buildAllowCommand "allow" c.localSourceAllow) (localDatasetName c.source)) ++
+                (map (buildAllowCommand "allow" c.localTargetAllow) (localDatasetName c.target));
               ExecStopPost =
-                # Permissions snapshot and destroy are in case --no-sync-snap is not used
-                (map (buildAllowCommand "unallow" [ "bookmark" "hold" "send" "snapshot" "destroy" ]) (localDatasetName c.source)) ++
-                (map (buildAllowCommand "unallow" [ "create" "mount" "receive" "rollback" ]) (localDatasetName c.target));
+                (map (buildAllowCommand "unallow" c.localSourceAllow) (localDatasetName c.source)) ++
+                (map (buildAllowCommand "unallow" c.localTargetAllow) (localDatasetName c.target));
               ExecStart = lib.escapeShellArgs ([ "${pkgs.sanoid}/bin/syncoid" ]
                 ++ optionals c.useCommonArgs cfg.commonArgs
                 ++ optional c.recursive "-r"

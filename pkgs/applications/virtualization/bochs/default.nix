@@ -100,6 +100,7 @@ stdenv.mkDerivation rec {
     "--enable-sb16"
     "--enable-show-ips"
     "--enable-smp"
+    "--enable-vmx=2"
     "--enable-svm"
     "--enable-trace-linking"
     "--enable-usb"

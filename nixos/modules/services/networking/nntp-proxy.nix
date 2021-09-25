@@ -6,8 +6,6 @@ let
 
   inherit (pkgs) nntp-proxy;
 
-  proxyUser = "nntp-proxy";
-
   cfg = config.services.nntp-proxy;
 
   configBool = b: if b then "TRUE" else "FALSE";
@@ -210,16 +208,18 @@ in
 
   config = mkIf cfg.enable {
 
-    users.users.${proxyUser} =
-      { uid = config.ids.uids.nntp-proxy;
-        description = "NNTP-Proxy daemon user";
-      };
+    users.users.nntp-proxy = {
+      isSystemUser = true;
+      group = "nntp-proxy";
+      description = "NNTP-Proxy daemon user";
+    };
+    users.groups.nntp-proxy = {};
 
     systemd.services.nntp-proxy = {
       description = "NNTP proxy";
       after = [ "network.target" "nss-lookup.target" ];
       wantedBy = [ "multi-user.target" ];
-      serviceConfig = { User="${proxyUser}"; };
+      serviceConfig = { User="nntp-proxy"; };
       serviceConfig.ExecStart = "${nntp-proxy}/bin/nntp-proxy ${confFile}";
       preStart = ''
         if [ ! \( -f ${cfg.sslCert} -a -f ${cfg.sslKey} \) ]; then
