@@ -188,7 +188,7 @@
     "dlna_dmr" = ps: with ps; [ aiohttp-cors async-upnp-client ifaddr ];
     "dnsip" = ps: with ps; [ aiodns ];
     "dominos" = ps: with ps; [ aiohttp-cors ]; # missing inputs: pizzapi
-    "doods" = ps: with ps; [ pillow ]; # missing inputs: pydoods
+    "doods" = ps: with ps; [ pillow pydoods ];
     "doorbird" = ps: with ps; [ aiohttp-cors doorbirdpy ];
     "dovado" = ps: with ps; [ ]; # missing inputs: dovado
     "downloader" = ps: with ps; [ ];
