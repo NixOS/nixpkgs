@@ -15390,6 +15390,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) AudioUnit CoreServices;
   };
 
+  aws-c-auth = callPackage ../development/libraries/aws-c-auth { };
+
   aws-c-cal = callPackage ../development/libraries/aws-c-cal {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
