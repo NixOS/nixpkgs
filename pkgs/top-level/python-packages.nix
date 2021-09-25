@@ -8665,6 +8665,8 @@ in {
 
   streaming-form-data = callPackage ../development/python-modules/streaming-form-data { };
 
+  streamlabswater = callPackage ../development/python-modules/streamlabswater { };
+
   streamz = callPackage ../development/python-modules/streamz { };
 
   strict-rfc3339 = callPackage ../development/python-modules/strict-rfc3339 { };
