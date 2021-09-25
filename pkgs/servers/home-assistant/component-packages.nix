@@ -411,7 +411,7 @@
     "intesishome" = ps: with ps; [ pyintesishome ];
     "ios" = ps: with ps; [ aiohttp-cors ifaddr zeroconf ];
     "iota" = ps: with ps; [ ]; # missing inputs: pyota
-    "iotawatt" = ps: with ps; [ ]; # missing inputs: iotawattpy
+    "iotawatt" = ps: with ps; [ iotawattpy ];
     "iperf3" = ps: with ps; [ ]; # missing inputs: iperf3
     "ipma" = ps: with ps; [ pyipma ];
     "ipp" = ps: with ps; [ pyipp ];
