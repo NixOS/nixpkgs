@@ -1,13 +1,11 @@
 { lib, stdenv, fetchurl, fetchpatch }:
 
-let
+stdenv.mkDerivation rec {
+  pname = "cpio";
   version = "2.13";
-  name = "cpio-${version}";
-in stdenv.mkDerivation {
-  inherit name;
 
   src = fetchurl {
-    url = "mirror://gnu/cpio/${name}.tar.bz2";
+    url = "mirror://gnu/cpio/cpio-${version}.tar.bz2";
     sha256 = "0vbgnhkawdllgnkdn6zn1f56fczwk0518krakz2qbwhxmv2vvdga";
   };
 
@@ -26,9 +24,9 @@ in stdenv.mkDerivation {
         "0pidkbxalpj5yz4fr95x8h0rizgjij0xgvjgirfkjk460giawwg6")
   ];
 
-  preConfigure = if stdenv.isCygwin then ''
+  preConfigure = lib.optionalString stdenv.isCygwin ''
     sed -i gnu/fpending.h -e 's,include <stdio_ext.h>,,'
-  '' else null;
+  '';
 
   enableParallelBuilding = true;
 
