@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/quilt --prefix PATH : ${lib.makeBinPath buildInputs}
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://savannah.nongnu.org/projects/quilt";
     description = "Easily manage large numbers of patches";
 
@@ -57,8 +57,9 @@ stdenv.mkDerivation rec {
       and more.
     '';
 
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.all;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ smancill ];
+    platforms = platforms.all;
   };
 
 }
