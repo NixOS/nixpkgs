@@ -24,9 +24,7 @@ let
     }
   '';
 
-  lessKey = pkgs.runCommand "lesskey"
-            { src = pkgs.writeText "lessconfig" configText; preferLocalBuild = true; }
-            "${pkgs.less}/bin/lesskey -o $out $src";
+  lessKey = pkgs.writeText "lessconfig" configText;
 
 in
 
@@ -114,7 +112,7 @@ in
     environment.systemPackages = [ pkgs.less ];
 
     environment.variables = {
-      LESSKEY_SYSTEM = toString lessKey;
+      LESSKEYIN_SYSTEM = toString lessKey;
     } // optionalAttrs (cfg.lessopen != null) {
       LESSOPEN = cfg.lessopen;
     } // optionalAttrs (cfg.lessclose != null) {
