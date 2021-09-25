@@ -28,7 +28,7 @@
 , libXt
 , libcanberra
 , libnotify
-, gnome
+, adwaita-icon-theme
 , libGLU, libGL
 , nspr
 , nss
@@ -137,7 +137,7 @@ stdenv.mkDerivation {
 
   inherit gtk3;
 
-  buildInputs = [ wrapGAppsHook gtk3 gnome.adwaita-icon-theme ];
+  buildInputs = [ wrapGAppsHook gtk3 adwaita-icon-theme ];
 
   # "strip" after "patchelf" may break binaries.
   # See: https://github.com/NixOS/patchelf/issues/10

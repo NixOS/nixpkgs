@@ -6,7 +6,7 @@
 , alsa-lib, libXdamage, libXtst, libXrandr, libxshmfence, expat, cups
 , dbus, gtk3, gdk-pixbuf, gcc-unwrapped, at-spi2-atk, at-spi2-core
 , libkrb5, libdrm, mesa
-, libxkbcommon, wayland # ozone/wayland
+, libxkbcommon, pipewire, wayland # ozone/wayland
 
 # Command line programs
 , coreutils
@@ -67,7 +67,7 @@ let
     flac harfbuzz icu libpng opusWithCustomModes snappy speechd
     bzip2 libcap at-spi2-atk at-spi2-core
     libkrb5 libdrm mesa coreutils
-    libxkbcommon wayland
+    libxkbcommon pipewire wayland
   ] ++ optional pulseSupport libpulseaudio
     ++ optional libvaSupport libva
     ++ optional vulkanSupport vulkan-loader

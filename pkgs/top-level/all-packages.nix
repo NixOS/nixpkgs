@@ -13395,6 +13395,8 @@ with pkgs;
 
   abi-dumper = callPackage ../development/tools/misc/abi-dumper { };
 
+  abuild = callPackage ../development/tools/abuild { };
+
   adtool = callPackage ../tools/admin/adtool { };
 
   inherit (callPackage ../development/tools/alloy {
@@ -24491,6 +24493,7 @@ with pkgs;
   firefox-esr-wayland = wrapFirefox firefox-esr-91-unwrapped { forceWayland = true; };
 
   firefox-bin-unwrapped = callPackage ../applications/networking/browsers/firefox-bin {
+    inherit (gnome) adwaita-icon-theme;
     channel = "release";
     generated = import ../applications/networking/browsers/firefox-bin/release_sources.nix;
   };
@@ -24502,6 +24505,7 @@ with pkgs;
   };
 
   firefox-beta-bin-unwrapped = firefox-bin-unwrapped.override {
+    inherit (gnome) adwaita-icon-theme;
     channel = "beta";
     generated = import ../applications/networking/browsers/firefox-bin/beta_sources.nix;
   };
@@ -24513,6 +24517,7 @@ with pkgs;
   };
 
   firefox-devedition-bin-unwrapped = callPackage ../applications/networking/browsers/firefox-bin {
+    inherit (gnome) adwaita-icon-theme;
     channel = "devedition";
     generated = import ../applications/networking/browsers/firefox-bin/devedition_sources.nix;
   };
