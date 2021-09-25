@@ -28,6 +28,9 @@
 , callPackage
 , nixosTests
 , withMediaSession ? true
+, libcameraSupport ? true
+, libcamera
+, libdrm
 , gstreamerSupport ? true
 , gst_all_1 ? null
 , ffmpegSupport ? true
@@ -123,6 +126,7 @@ let
       SDL2
       systemd
     ] ++ lib.optionals gstreamerSupport [ gst_all_1.gst-plugins-base gst_all_1.gstreamer ]
+    ++ lib.optionals libcameraSupport [ libcamera libdrm ]
     ++ lib.optional ffmpegSupport ffmpeg
     ++ lib.optionals bluezSupport [ bluez libfreeaptx ldacbt sbc fdk_aac ]
     ++ lib.optional pulseTunnelSupport libpulseaudio
@@ -137,7 +141,7 @@ let
       "-Dpipewire_pulse_prefix=${placeholder "pulse"}"
       "-Dmedia-session-prefix=${placeholder "mediaSession"}"
       "-Dlibjack-path=${placeholder "jack"}/lib"
-      "-Dlibcamera=disabled"
+      "-Dlibcamera=${mesonEnable libcameraSupport}"
       "-Droc=disabled"
       "-Dlibpulse=${mesonEnable pulseTunnelSupport}"
       "-Davahi=${mesonEnable zeroconfSupport}"
