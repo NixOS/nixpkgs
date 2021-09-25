@@ -2414,6 +2414,8 @@ in {
 
   etebase-server = callPackage ../servers/etebase { };
 
+  eternalegypt = callPackage ../development/python-modules/eternalegypt { };
+
   etesync = callPackage ../development/python-modules/etesync { };
 
   eth-hash = callPackage ../development/python-modules/eth-hash { };
