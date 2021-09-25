@@ -469,6 +469,7 @@ let
     ArrayExpressHTS = with pkgs; [ zlib.dev curl.dev which ];
     bbl = with pkgs; [ gsl ];
     writexl = with pkgs; [ zlib.dev ];
+    qpdf = with pkgs; [ libjpeg.dev zlib.dev ];
   };
 
   packagesRequireingX = [
