@@ -1,4 +1,6 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib
+, buildPythonPackage
+, fetchPypi
 }:
 
 buildPythonPackage rec {
@@ -9,11 +11,6 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "09d762b9d83c65a83617ee57a3532eb10663f394c1caf81390516c5b1cc0fc6b";
   };
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace '"argparse"' ""
-  '';
 
   # test data not included on pypi
   doCheck = false;
