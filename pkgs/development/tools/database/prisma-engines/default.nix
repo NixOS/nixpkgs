@@ -4,9 +4,12 @@
 , pkg-config
 , protobuf
 , rustPlatform
+, stdenv
 }:
 
-rustPlatform.buildRustPackage rec {
+let
+  node-api-lib = (if stdenv.isDarwin then "libquery_engine.dylib" else "libquery_engine.so");
+in rustPlatform.buildRustPackage rec {
   pname = "prisma-engines";
   version = "2.30.2";
 
@@ -14,7 +17,7 @@ rustPlatform.buildRustPackage rec {
     owner = "prisma";
     repo = "prisma-engines";
     rev = version;
-    sha256 = "sha256-i4r+TRC8454awbqe35Kg3M9xN2NnP8Sbd/dITtm9MDg=";
+    sha256 = "sha256-39+pEjve7evxcjcBK1JLTRNNjfUMoCgSgtYcdJ3zIKE=";
   };
 
   cargoPatches = [
@@ -27,8 +30,6 @@ rustPlatform.buildRustPackage rec {
   OPENSSL_NO_VENDOR = 1;
 
   cargoSha256 = "sha256-BldEj8+tzY0dIA/fdrPLsFn3ZdfoGq6GsomCUhQBoLM=";
-
-  outputs = [ "out" "lib" "bin" ];
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl protobuf ];
@@ -45,7 +46,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   postInstall = ''
-    cp target/release/libquery_engine.so $out/lib/libquery_engine.so.node
+    mv $out/lib/${node-api-lib} $out/lib/libquery_engine.node
   '';
 
   # Tests are long to compile
@@ -56,6 +57,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://www.prisma.io/";
     license = licenses.asl20;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ pamplemousse ];
+    maintainers = with maintainers; [ pamplemousse pimeys ];
   };
 }

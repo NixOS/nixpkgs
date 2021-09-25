@@ -282,11 +282,11 @@ let
       nativeBuildInputs = [ pkgs.makeWrapper ];
       postInstall = with pkgs; ''
         wrapProgram "$out/bin/prisma" \
-          --prefix PRISMA_MIGRATION_ENGINE_BINARY : "${prisma-engines}/bin/migration-engine" \
-          --prefix PRISMA_QUERY_ENGINE_BINARY : "${prisma-engines}/bin/query-engine" \
-          --prefix PRISMA_QUERY_ENGINE_LIBRARY : "${lib.getLib prisma-engines}/libquery_engine.so.node"
-          --prefix PRISMA_INTROSPECTION_ENGINE_BINARY : "${prisma-engines}/bin/introspection-engine" \
-          --prefix PRISMA_FMT_BINARY : "${prisma-engines}/bin/prisma-fmt"
+          --set PRISMA_MIGRATION_ENGINE_BINARY ${prisma-engines}/bin/migration-engine \
+          --set PRISMA_QUERY_ENGINE_BINARY ${prisma-engines}/bin/query-engine \
+          --set PRISMA_QUERY_ENGINE_LIBRARY ${lib.getLib prisma-engines}/lib/libquery_engine.node \
+          --set PRISMA_INTROSPECTION_ENGINE_BINARY ${prisma-engines}/bin/introspection-engine \
+          --set PRISMA_FMT_BINARY ${prisma-engines}/bin/prisma-fmt
       '';
     };
 

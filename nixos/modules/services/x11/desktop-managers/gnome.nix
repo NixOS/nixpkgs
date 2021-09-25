@@ -476,6 +476,8 @@ in
     (mkIf serviceCfg.experimental-features.realtime-scheduling {
       security.wrappers.".gnome-shell-wrapped" = {
         source = "${pkgs.gnome.gnome-shell}/bin/.gnome-shell-wrapped";
+        owner = "root";
+        group = "root";
         capabilities = "cap_sys_nice=ep";
       };
 
