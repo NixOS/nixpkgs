@@ -243,15 +243,20 @@ let
       elmPackages.elm = pkgsPlatforms.elmPackages.elm;
 
       # GHCs linked to musl.
-      pkgsMusl.haskell.compiler = packagePlatforms pkgs.pkgsMusl.haskell.compiler // {
-        # remove musl ghc865Binary since it is known to be broken and
-        # causes an evaluation error on darwin.
-        # TODO: remove ghc865Binary altogether and use ghc8102Binary
-        ghc865Binary = {};
+      pkgsMusl.haskell.compiler = lib.recursiveUpdate
+        (packagePlatforms pkgs.pkgsMusl.haskell.compiler)
+        {
+          # remove musl ghc865Binary since it is known to be broken and
+          # causes an evaluation error on darwin.
+          # TODO: remove ghc865Binary altogether and use ghc8102Binary
+          ghc865Binary = {};
 
-        ghcjs = {};
-        ghcjs810 = {};
-      };
+          ghcjs = {};
+          ghcjs810 = {};
+
+          # Can't be built with musl, see meta.broken comment in the drv
+          integer-simple.ghc884 = {};
+        };
 
       # Get some cache going for MUSL-enabled GHC.
       pkgsMusl.haskellPackages =
