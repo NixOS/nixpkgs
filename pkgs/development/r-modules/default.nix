@@ -990,6 +990,12 @@ let
       buildInputs = [ libsodium.dev ] ++ attrs.buildInputs;
     });
 
+    Rhtslib = old.Rhtslib.overrideDerivation (attrs: {
+      preConfigure = ''
+        substituteInPlace R/zzz.R --replace "-lcurl" "-L${pkgs.curl.out}/lib -lcurl"
+      '';
+    });
+
   };
 in
   self
