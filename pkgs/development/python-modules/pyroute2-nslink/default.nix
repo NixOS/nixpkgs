@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "pyroute2-nslink";
-  version = "0.6.4";
+  version = "0.6.5";
 
   src = fetchPypi {
     pname = "pyroute2.nslink";
     inherit version;
-    sha256 = "0iz4vrv05x678ihhl2wdppxda82fxrq3d3sh7mka0pyb66a8mrik";
+    sha256 = "sha256-KS5sKDKnNUTBxtW6cn9xF6qEflX4jXjpS31GB7KZmZ4=";
   };
 
   propagatedBuildInputs = [
