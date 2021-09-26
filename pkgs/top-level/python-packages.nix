@@ -619,6 +619,8 @@ in {
 
   async-lru = callPackage ../development/python-modules/async-lru { };
 
+  asynccmd = callPackage ../development/python-modules/asynccmd { };
+
   asyncio-dgram = callPackage ../development/python-modules/asyncio-dgram { };
 
   asyncio-mqtt = callPackage ../development/python-modules/asyncio_mqtt { };
@@ -2736,6 +2738,8 @@ in {
   flexmock = callPackage ../development/python-modules/flexmock { };
 
   flickrapi = callPackage ../development/python-modules/flickrapi { };
+
+  flipr-api = callPackage ../development/python-modules/flipr-api { };
 
   flit = callPackage ../development/python-modules/flit { };
 
@@ -6905,6 +6909,8 @@ in {
 
   pysparse = callPackage ../development/python-modules/pysparse { };
 
+  pyspcwebgw = callPackage ../development/python-modules/pyspcwebgw { };
+
   pyspf = callPackage ../development/python-modules/pyspf { };
 
   pyspice = callPackage ../development/python-modules/pyspice { };
@@ -8682,6 +8688,8 @@ in {
   stravalib = callPackage ../development/python-modules/stravalib { };
 
   streaming-form-data = callPackage ../development/python-modules/streaming-form-data { };
+
+  streamlabswater = callPackage ../development/python-modules/streamlabswater { };
 
   streamz = callPackage ../development/python-modules/streamz { };
 
