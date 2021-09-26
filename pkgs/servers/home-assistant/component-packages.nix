@@ -272,7 +272,7 @@
     "flexit" = ps: with ps; [ pymodbus ];
     "flic" = ps: with ps; [ pyflic ];
     "flick_electric" = ps: with ps; [ pyflick ];
-    "flipr" = ps: with ps; [ ]; # missing inputs: flipr-api
+    "flipr" = ps: with ps; [ flipr-api ];
     "flo" = ps: with ps; [ aioflo ];
     "flock" = ps: with ps; [ ];
     "flume" = ps: with ps; [ pyflume ];
@@ -380,7 +380,7 @@
     "hue" = ps: with ps; [ aiohue ];
     "huisbaasje" = ps: with ps; [ huisbaasje-client ];
     "humidifier" = ps: with ps; [ ];
-    "hunterdouglas_powerview" = ps: with ps; [ ]; # missing inputs: aiopvapi
+    "hunterdouglas_powerview" = ps: with ps; [ aiopvapi ];
     "hvv_departures" = ps: with ps; [ pygti ];
     "hydrawise" = ps: with ps; [ hydrawiser ];
     "hyperion" = ps: with ps; [ hyperion-py ];
@@ -411,7 +411,7 @@
     "intesishome" = ps: with ps; [ pyintesishome ];
     "ios" = ps: with ps; [ aiohttp-cors ifaddr zeroconf ];
     "iota" = ps: with ps; [ ]; # missing inputs: pyota
-    "iotawatt" = ps: with ps; [ ]; # missing inputs: iotawattpy
+    "iotawatt" = ps: with ps; [ iotawattpy ];
     "iperf3" = ps: with ps; [ ]; # missing inputs: iperf3
     "ipma" = ps: with ps; [ pyipma ];
     "ipp" = ps: with ps; [ pyipp ];
@@ -564,7 +564,7 @@
     "netatmo" = ps: with ps; [ pyturbojpeg aiohttp-cors hass-nabucasa pyatmo ];
     "netdata" = ps: with ps; [ netdata ];
     "netgear" = ps: with ps; [ ]; # missing inputs: pynetgear
-    "netgear_lte" = ps: with ps; [ ]; # missing inputs: eternalegypt
+    "netgear_lte" = ps: with ps; [ eternalegypt ];
     "netio" = ps: with ps; [ aiohttp-cors ]; # missing inputs: pynetio
     "network" = ps: with ps; [ aiohttp-cors ifaddr ];
     "neurio_energy" = ps: with ps; [ ]; # missing inputs: neurio
@@ -574,7 +574,7 @@
     "nfandroidtv" = ps: with ps; [ ]; # missing inputs: notifications-android-tv
     "nightscout" = ps: with ps; [ ]; # missing inputs: py-nightscout
     "niko_home_control" = ps: with ps; [ ]; # missing inputs: niko-home-control
-    "nilu" = ps: with ps; [ ]; # missing inputs: niluclient
+    "nilu" = ps: with ps; [ niluclient ];
     "nissan_leaf" = ps: with ps; [ ]; # missing inputs: pycarwings2
     "nmap_tracker" = ps: with ps; [ aiohttp-cors getmac ifaddr netmap ]; # missing inputs: mac-vendor-lookup
     "nmbs" = ps: with ps; [ ]; # missing inputs: pyrail
@@ -630,7 +630,7 @@
     "ovo_energy" = ps: with ps; [ ovoenergy ];
     "owntracks" = ps: with ps; [ pynacl pyturbojpeg aiohttp-cors hass-nabucasa paho-mqtt ];
     "ozw" = ps: with ps; [ aiohttp-cors paho-mqtt python-openzwave-mqtt ];
-    "p1_monitor" = ps: with ps; [ ]; # missing inputs: p1monitor
+    "p1_monitor" = ps: with ps; [ p1monitor ];
     "panasonic_bluray" = ps: with ps; [ ]; # missing inputs: panacotta
     "panasonic_viera" = ps: with ps; [ ]; # missing inputs: panasonic_viera
     "pandora" = ps: with ps; [ pexpect ];
@@ -703,7 +703,7 @@
     "remember_the_milk" = ps: with ps; [ httplib2 ]; # missing inputs: RtmAPI
     "remote" = ps: with ps; [ ];
     "remote_rpi_gpio" = ps: with ps; [ ]; # missing inputs: gpiozero
-    "renault" = ps: with ps; [ ]; # missing inputs: renault-api
+    "renault" = ps: with ps; [ renault-api ];
     "repetier" = ps: with ps; [ ]; # missing inputs: pyrepetier
     "rest" = ps: with ps; [ jsonpath xmltodict ];
     "rest_command" = ps: with ps; [ ];
@@ -803,10 +803,10 @@
     "sonarr" = ps: with ps; [ sonarr ];
     "songpal" = ps: with ps; [ python-songpal ];
     "sonos" = ps: with ps; [ aiohttp-cors async-upnp-client defusedxml ifaddr plexapi plexauth plexwebsocket soco zeroconf ];
-    "sony_projector" = ps: with ps; [ ]; # missing inputs: pysdcp
+    "sony_projector" = ps: with ps; [ pysdcp ];
     "soundtouch" = ps: with ps; [ aiohttp-cors ifaddr libsoundtouch zeroconf ];
     "spaceapi" = ps: with ps; [ aiohttp-cors ];
-    "spc" = ps: with ps; [ ]; # missing inputs: pyspcwebgw
+    "spc" = ps: with ps; [ pyspcwebgw ];
     "speedtestdotnet" = ps: with ps; [ speedtest-cli ];
     "spider" = ps: with ps; [ spiderpy ];
     "splunk" = ps: with ps; [ ]; # missing inputs: hass_splunk
@@ -824,7 +824,7 @@
     "stiebel_eltron" = ps: with ps; [ pymodbus ]; # missing inputs: pystiebeleltron
     "stookalert" = ps: with ps; [ ]; # missing inputs: stookalert
     "stream" = ps: with ps; [ aiohttp-cors av ];
-    "streamlabswater" = ps: with ps; [ ]; # missing inputs: streamlabswater
+    "streamlabswater" = ps: with ps; [ streamlabswater ];
     "stt" = ps: with ps; [ aiohttp-cors ];
     "subaru" = ps: with ps; [ subarulink ];
     "suez_water" = ps: with ps; [ ]; # missing inputs: pysuez

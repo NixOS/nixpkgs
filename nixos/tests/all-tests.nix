@@ -327,6 +327,7 @@ in
   openstack-image-metadata = (handleTestOn ["x86_64-linux"] ./openstack-image.nix {}).metadata or {};
   openstack-image-userdata = (handleTestOn ["x86_64-linux"] ./openstack-image.nix {}).userdata or {};
   opentabletdriver = handleTest ./opentabletdriver.nix {};
+  owncast = handleTest ./owncast.nix {};
   image-contents = handleTest ./image-contents.nix {};
   orangefs = handleTest ./orangefs.nix {};
   os-prober = handleTestOn ["x86_64-linux"] ./os-prober.nix {};

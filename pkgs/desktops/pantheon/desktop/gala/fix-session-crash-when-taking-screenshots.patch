@@ -1,0 +1,50 @@
+From fa3c39331d4ef56a13019f45d811bde1fc755c21 Mon Sep 17 00:00:00 2001
+From: Bobby Rong <rjl931189261@126.com>
+Date: Sat, 25 Sep 2021 23:21:01 +0800
+Subject: [PATCH] Fix session crash when taking screenshots with mutter 3.38
+
+---
+ src/ScreenshotManager.vala | 5 ++---
+ vapi/mutter-clutter.vapi   | 2 +-
+ 2 files changed, 3 insertions(+), 4 deletions(-)
+
+diff --git a/src/ScreenshotManager.vala b/src/ScreenshotManager.vala
+index 3ffb0123..388fee1a 100644
+--- a/src/ScreenshotManager.vala
++++ b/src/ScreenshotManager.vala
+@@ -354,12 +354,11 @@ namespace Gala {
+                 paint_flags |= Clutter.PaintFlag.FORCE_CURSORS;
+             }
+ 
+-            unowned var data = image.get_data ();
+             if (GLib.ByteOrder.HOST == GLib.ByteOrder.LITTLE_ENDIAN) {
+                 wm.stage.paint_to_buffer (
+                     {x, y, width, height},
+                     scale,
+-                    ref data,
++                    image.get_data (),
+                     image.get_stride (),
+                     Cogl.PixelFormat.BGRA_8888_PRE,
+                     paint_flags
+@@ -368,7 +367,7 @@ namespace Gala {
+                 wm.stage.paint_to_buffer (
+                     {x, y, width, height},
+                     scale,
+-                    ref data,
++                    image.get_data (),
+                     image.get_stride (),
+                     Cogl.PixelFormat.ARGB_8888_PRE,
+                     paint_flags
+diff --git a/vapi/mutter-clutter.vapi b/vapi/mutter-clutter.vapi
+index 5b778cb2..95de24be 100644
+--- a/vapi/mutter-clutter.vapi
++++ b/vapi/mutter-clutter.vapi
+@@ -7336,7 +7336,7 @@ namespace Clutter {
+ 		[Version (since = "1.2")]
+ 		public bool get_use_alpha ();
+ #if HAS_MUTTER338
+-		public bool paint_to_buffer (Cairo.RectangleInt rect, float scale, [CCode (array_length = false)] ref unowned uint8[] data, int stride, Cogl.PixelFormat format, Clutter.PaintFlag paint_flags) throws GLib.Error;
++		public bool paint_to_buffer (Cairo.RectangleInt rect, float scale, [CCode (array_length = false, type = "uint8_t*")] uint8[] data, int stride, Cogl.PixelFormat format, Clutter.PaintFlag paint_flags) throws GLib.Error;
+ 		public void paint_to_framebuffer (Cogl.Framebuffer framebuffer, Cairo.RectangleInt rect, float scale, Clutter.PaintFlag paint_flags);
+ #else
+ 		[Version (since = "0.4")]
