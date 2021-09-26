@@ -1167,6 +1167,15 @@ self: super: {
     sha256 = "097wqn8hxsr50b9mhndg5pjim5jma2ym4ylpibakmmb5m98n17zp";
   });
 
+  # Pick patch from 1.6.0 which allows compilation with doctest 0.18
+  polysemy = appendPatches super.polysemy [
+    (pkgs.fetchpatch {
+      name = "allow-doctest-0.18.patch";
+      url = "https://github.com/polysemy-research/polysemy/commit/dbcf851eb69395ce3143ecf2dd616dcad953a339.patch";
+      sha256 = "1qf5pghc8p1glwaadkr95x12d74vhb98mg8dqwilyxbc6gq763w2";
+    })
+  ];
+
   # polysemy-plugin 0.2.5.0 has constraint ghc-tcplugins-extra (==0.3.*)
   # This upstream issue is relevant:
   # https://github.com/polysemy-research/polysemy/issues/322

@@ -3677,7 +3677,6 @@ broken-packages:
   - poly-control
   - polydata-core
   - polynomial
-  - polysemy
   - polysemy-zoo
   - polytypeable
   - pomaps
