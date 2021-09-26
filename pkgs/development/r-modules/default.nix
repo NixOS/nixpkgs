@@ -476,6 +476,7 @@ let
     spp = with pkgs; [ zlib.dev ];
     Rbowtie = with pkgs; [ zlib.dev ];
     gaston = with pkgs; [ zlib.dev ];
+    csaw = with pkgs; [ zlib.dev curl ];
   };
 
   packagesRequireingX = [
