@@ -26807,9 +26807,7 @@ with pkgs;
 
   owamp = callPackage ../applications/networking/owamp { };
 
-  vieb = callPackage ../applications/networking/browsers/vieb {
-    electron = electron_13;
-  };
+  vieb = callPackage ../applications/networking/browsers/vieb { };
 
   vivaldi = callPackage ../applications/networking/browsers/vivaldi {};
 
