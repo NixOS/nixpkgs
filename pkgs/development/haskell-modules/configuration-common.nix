@@ -796,7 +796,13 @@ self: super: {
 
   # https://github.com/haskell-hvr/cryptohash-sha256/issues/11
   # Jailbreak is necessary to break out of tasty < 1.x dependency.
-  cryptohash-sha256 = markUnbroken (doJailbreak super.cryptohash-sha256);
+  # hackage2nix generates this as a broken package due to the (fake) dependency
+  # missing from hackage, so we need to fix the meta attribute set.
+  cryptohash-sha256 = overrideCabal super.cryptohash-sha256 (drv: {
+    jailbreak = true;
+    broken = false;
+    hydraPlatforms = pkgs.lib.platforms.all;
+  });
 
   # The test suite has all kinds of out-dated dependencies, so it feels easier
   # to just disable it.
