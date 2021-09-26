@@ -1,7 +1,10 @@
 {
   services.xserver.desktopManager.session =
     [ { name = "none";
-        start = "";
+        supportExternalWM = true;
+        genStart = wm: ''
+          ${wm}
+        '';
       }
     ];
 }

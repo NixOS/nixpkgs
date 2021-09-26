@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
 
 with lib;
 
@@ -44,7 +44,7 @@ in
     ./xmonad.nix
     ./yeahwm.nix
     ./qtile.nix
-    ./none.nix ];
+  ];
 
   options = {
 
@@ -62,9 +62,10 @@ in
           scripts before forwarding the value to the
           <varname>displayManager</varname>.
         '';
-        apply = map (d: d // {
-          manage = "window";
-        });
+        apply = map (w:
+          w // {
+            bin = pkgs.writeShellScript "run-${w.name}" w.start;
+          });
       };
 
       default = mkOption {
@@ -83,6 +84,6 @@ in
   };
 
   config = {
-    services.xserver.displayManager.session = cfg.session;
+    services.xserver.displayManager.wmSessions = cfg.session;
   };
 }
