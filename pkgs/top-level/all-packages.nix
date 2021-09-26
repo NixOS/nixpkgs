@@ -12864,6 +12864,9 @@ with pkgs;
 
   clooj = callPackage ../development/interpreters/clojure/clooj.nix { };
 
+  dbqn = callPackage ../development/interpreters/bqn/dbqn { };
+  dbqn-native = lowPrio (dbqn.override { useNativeImage = true; });
+
   dhall = haskell.lib.justStaticExecutables haskellPackages.dhall;
 
   dhall-bash = haskell.lib.justStaticExecutables haskellPackages.dhall-bash;
