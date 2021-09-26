@@ -619,6 +619,8 @@ in {
 
   async-lru = callPackage ../development/python-modules/async-lru { };
 
+  asynccmd = callPackage ../development/python-modules/asynccmd { };
+
   asyncio-dgram = callPackage ../development/python-modules/asyncio-dgram { };
 
   asyncio-mqtt = callPackage ../development/python-modules/asyncio_mqtt { };
@@ -6906,6 +6908,8 @@ in {
   pyspark = callPackage ../development/python-modules/pyspark { };
 
   pysparse = callPackage ../development/python-modules/pysparse { };
+
+  pyspcwebgw = callPackage ../development/python-modules/pyspcwebgw { };
 
   pyspf = callPackage ../development/python-modules/pyspf { };
 

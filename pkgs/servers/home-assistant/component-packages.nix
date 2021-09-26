@@ -806,7 +806,7 @@
     "sony_projector" = ps: with ps; [ ]; # missing inputs: pysdcp
     "soundtouch" = ps: with ps; [ aiohttp-cors ifaddr libsoundtouch zeroconf ];
     "spaceapi" = ps: with ps; [ aiohttp-cors ];
-    "spc" = ps: with ps; [ ]; # missing inputs: pyspcwebgw
+    "spc" = ps: with ps; [ pyspcwebgw ];
     "speedtestdotnet" = ps: with ps; [ speedtest-cli ];
     "spider" = ps: with ps; [ spiderpy ];
     "splunk" = ps: with ps; [ ]; # missing inputs: hass_splunk
