@@ -474,6 +474,7 @@ let
     bio3d = with pkgs; [ zlib.dev ];
     arrangements = with pkgs; [ gmp.dev ];
     spp = with pkgs; [ zlib.dev ];
+    Rbowtie = with pkgs; [ zlib.dev ];
   };
 
   packagesRequireingX = [
