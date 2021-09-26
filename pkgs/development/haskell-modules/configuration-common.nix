@@ -1291,7 +1291,7 @@ self: super: {
   })) (drv: {
     patches = [ ./patches/graphql-engine-mapkeys.patch ];
     doHaddock = false;
-    version = "2.0.7";
+    version = "2.0.9";
   });
   hasura-ekg-core = super.hasura-ekg-core.overrideScope (self: super: {
     hspec = dontCheck self.hspec_2_8_3;
