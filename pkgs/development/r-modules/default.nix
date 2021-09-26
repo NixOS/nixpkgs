@@ -554,6 +554,7 @@ let
     "KappaGUI"
     "likeLTD"
     "logmult"
+    "loon"
     "LS2Wstat"
     "MareyMap"
     "memgene"
