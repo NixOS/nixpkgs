@@ -803,7 +803,7 @@
     "sonarr" = ps: with ps; [ sonarr ];
     "songpal" = ps: with ps; [ python-songpal ];
     "sonos" = ps: with ps; [ aiohttp-cors async-upnp-client defusedxml ifaddr plexapi plexauth plexwebsocket soco zeroconf ];
-    "sony_projector" = ps: with ps; [ ]; # missing inputs: pysdcp
+    "sony_projector" = ps: with ps; [ pysdcp ];
     "soundtouch" = ps: with ps; [ aiohttp-cors ifaddr libsoundtouch zeroconf ];
     "spaceapi" = ps: with ps; [ aiohttp-cors ];
     "spc" = ps: with ps; [ pyspcwebgw ];

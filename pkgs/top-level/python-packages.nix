@@ -6825,6 +6825,8 @@ in {
 
   pyscss = callPackage ../development/python-modules/pyscss { };
 
+  pysdcp = callPackage ../development/python-modules/pysdcp { };
+
   pysdl2 = callPackage ../development/python-modules/pysdl2 { };
 
   pysendfile = callPackage ../development/python-modules/pysendfile { };
