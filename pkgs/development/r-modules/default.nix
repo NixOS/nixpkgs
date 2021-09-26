@@ -475,6 +475,7 @@ let
     arrangements = with pkgs; [ gmp.dev ];
     spp = with pkgs; [ zlib.dev ];
     Rbowtie = with pkgs; [ zlib.dev ];
+    gaston = with pkgs; [ zlib.dev ];
   };
 
   packagesRequireingX = [
