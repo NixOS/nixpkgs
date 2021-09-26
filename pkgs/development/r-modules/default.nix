@@ -977,6 +977,14 @@ let
       '';
     });
 
+    sodium = old.sodium.overrideDerivation (attrs: with pkgs; {
+      preConfigure = ''
+        patchShebangs configure
+      '';
+      nativeBuildInputs = [ pkg-config ] ++ attrs.nativeBuildInputs;
+      buildInputs = [ libsodium.dev ] ++ attrs.buildInputs;
+    });
+
   };
 in
   self
