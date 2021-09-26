@@ -385,6 +385,12 @@ let
           jobs.pkgsMusl.haskell.compiler.ghc884
           jobs.pkgsMusl.haskell.compiler.ghc8107
           jobs.pkgsMusl.haskell.compiler.ghc901
+          jobs.pkgsMusl.haskell.compiler.ghc921
+          jobs.pkgsMusl.haskell.compiler.ghcHEAD
+          jobs.pkgsMusl.haskell.compiler.integer-simple.ghc8107
+          jobs.pkgsMusl.haskell.compiler.integer-simple.ghc901
+          jobs.pkgsMusl.haskell.compiler.integer-simple.ghc921
+          jobs.pkgsMusl.haskell.compiler.native-bignum.ghcHEAD
         ];
       };
 
