@@ -150,6 +150,6 @@ stdenv.mkDerivation rec {
     description = "A toolbox which offers a wide range of efficient and unified machine learning methods";
     homepage = "http://shogun-toolbox.org/";
     license = if withSvmLight then licenses.unfree else licenses.gpl3Plus;
-    maintainers = with maintainers; [ edwtjo ];
+    maintainers = with maintainers; [ edwtjo smancill ];
   };
 }
