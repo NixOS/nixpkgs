@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pytibber";
-  version = "0.19.1";
+  version = "0.20.0";
 
   disabled = pythonOlder "3.7";
 
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "Danielhiversen";
     repo = "pyTibber";
     rev = version;
-    sha256 = "sha256-+CI2TIGUZTztwx/9JqleKfVksybwGUGiHktu2xcNyUg=";
+    sha256 = "sha256-q7DNRCJrt4B/u7QV4MocxmlfEdLmJMP7umv3+PJjIoE=";
   };
 
   propagatedBuildInputs = [
