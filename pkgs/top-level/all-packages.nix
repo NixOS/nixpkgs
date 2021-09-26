@@ -5972,23 +5972,22 @@ with pkgs;
   hdf4 = callPackage ../tools/misc/hdf4 { };
 
   hdf5 = callPackage ../tools/misc/hdf5 {
-    gfortran = null;
-    szip = null;
+    fortranSupport = false;
+    fortran = gfortran;
   };
 
   hdf5_1_10 = callPackage ../tools/misc/hdf5/1.10.nix { };
 
   hdf5-mpi = appendToName "mpi" (hdf5.override {
-    szip = null;
     mpiSupport = true;
   });
 
   hdf5-cpp = appendToName "cpp" (hdf5.override {
-    cpp = true;
+    cppSupport = true;
   });
 
   hdf5-fortran = appendToName "fortran" (hdf5.override {
-    inherit gfortran;
+    fortranSupport = true;
   });
 
   hdf5-threadsafe = appendToName "threadsafe" (hdf5.overrideAttrs (oldAttrs: {
