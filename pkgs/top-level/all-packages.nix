@@ -14878,6 +14878,7 @@ with pkgs;
   texinfo5 = callPackage ../development/tools/misc/texinfo/5.2.nix { };
   texinfo6_5 = callPackage ../development/tools/misc/texinfo/6.5.nix { }; # needed for allegro
   texinfo6 = callPackage ../development/tools/misc/texinfo/6.7.nix { };
+  texinfo6_8 = callPackage ../development/tools/misc/texinfo/6.8.nix { };
   texinfo = texinfo6;
   texinfoInteractive = appendToName "interactive" (
     texinfo.override { interactive = true; }
