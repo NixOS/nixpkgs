@@ -471,6 +471,7 @@ let
     writexl = with pkgs; [ zlib.dev ];
     qpdf = with pkgs; [ libjpeg.dev zlib.dev ];
     vcfR = with pkgs; [ zlib.dev ];
+    bio3d = with pkgs; [ zlib.dev ];
   };
 
   packagesRequireingX = [
