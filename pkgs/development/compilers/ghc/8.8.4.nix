@@ -346,6 +346,11 @@ stdenv.mkDerivation (rec {
     ] ++ lib.teams.haskell.members;
     timeout = 24 * 3600;
     inherit (ghc.meta) license platforms;
+    # integer-simple builds are broken with musl when bootstrapping using
+    # GHC 8.10.2 and below, however it is not possible to reverse bootstrap
+    # GHC 8.8.4 with GHC 8.10.7.
+    # See https://github.com/NixOS/nixpkgs/pull/138523#issuecomment-927339953
+    broken = hostPlatform.isMusl && enableIntegerSimple;
   };
 
   dontStrip = (targetPlatform.useAndroidPrebuilt || targetPlatform.isWasm);
