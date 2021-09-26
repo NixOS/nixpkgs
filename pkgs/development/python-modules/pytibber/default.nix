@@ -43,7 +43,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "tibber" ];
 
   meta = with lib; {
-    description = "A python3 library to communicate with Tibber";
+    description = "Python library to communicate with Tibber";
     homepage = "https://github.com/Danielhiversen/pyTibber";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
