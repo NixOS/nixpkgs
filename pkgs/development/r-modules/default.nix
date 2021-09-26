@@ -472,6 +472,7 @@ let
     qpdf = with pkgs; [ libjpeg.dev zlib.dev ];
     vcfR = with pkgs; [ zlib.dev ];
     bio3d = with pkgs; [ zlib.dev ];
+    arrangements = with pkgs; [ gmp.dev ];
   };
 
   packagesRequireingX = [
