@@ -272,7 +272,7 @@
     "flexit" = ps: with ps; [ pymodbus ];
     "flic" = ps: with ps; [ pyflic ];
     "flick_electric" = ps: with ps; [ pyflick ];
-    "flipr" = ps: with ps; [ ]; # missing inputs: flipr-api
+    "flipr" = ps: with ps; [ flipr-api ];
     "flo" = ps: with ps; [ aioflo ];
     "flock" = ps: with ps; [ ];
     "flume" = ps: with ps; [ pyflume ];

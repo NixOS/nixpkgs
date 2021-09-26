@@ -362,6 +362,7 @@ in with py.pkgs; buildPythonApplication rec {
     "fireservicerota"
     "firmata"
     "flick_electric"
+    "flipr"
     "flo"
     "flume"
     "flunearyou"
