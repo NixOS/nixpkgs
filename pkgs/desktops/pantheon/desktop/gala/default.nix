@@ -75,6 +75,11 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./plugins-dir.patch
+    # https://github.com/elementary/gala/pull/1259
+    # https://github.com/NixOS/nixpkgs/issues/139404
+    # Remove this patch when it is included in a new release
+    # of gala OR when we no longer use mutter 3.38 for pantheon
+    ./fix-session-crash-when-taking-screenshots.patch
   ];
 
   postPatch = ''
