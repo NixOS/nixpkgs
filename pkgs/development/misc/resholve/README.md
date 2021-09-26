@@ -179,7 +179,6 @@ fix = {
 # --keep 'source:$HOME /etc/bashrc ~/.bashrc'
 keep = {
   source = [ "$HOME" ];
-  "$LS" = [ "exa" ];
   "/etc/bashrc" = true;
   "~/.bashrc" = true;
 };
