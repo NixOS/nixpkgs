@@ -49,6 +49,8 @@ let
     "CHANGELOG"
     "README"
     "README.*"
+    "DCO"
+    "CONTRIBUTING"
   ];
 
 in stdenv.mkDerivation {
