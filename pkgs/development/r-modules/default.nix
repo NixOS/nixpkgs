@@ -473,6 +473,7 @@ let
     vcfR = with pkgs; [ zlib.dev ];
     bio3d = with pkgs; [ zlib.dev ];
     arrangements = with pkgs; [ gmp.dev ];
+    spp = with pkgs; [ zlib.dev ];
   };
 
   packagesRequireingX = [
