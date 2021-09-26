@@ -143,7 +143,8 @@ with pkgs;
 
   autorestic = callPackage ../tools/backup/autorestic { };
 
-  autoPatchelfHook = makeSetupHook { name = "auto-patchelf-hook"; }
+  autoPatchelfHook = makeSetupHook
+    { name = "auto-patchelf-hook"; deps = [ bintools ]; }
     ../build-support/setup-hooks/auto-patchelf.sh;
 
   appimageTools = callPackage ../build-support/appimage {
@@ -5197,7 +5198,9 @@ with pkgs;
 
   fverb = callPackage ../applications/audio/fverb { };
 
-  fwknop = callPackage ../tools/security/fwknop { };
+  fwknop = callPackage ../tools/security/fwknop {
+    texinfo = texinfo6_7; # Uses @setcontentsaftertitlepage, removed in 6.8.
+  };
 
   exfat = callPackage ../tools/filesystems/exfat { };
 
@@ -14877,8 +14880,8 @@ with pkgs;
   texinfo4 = texinfo413;
   texinfo5 = callPackage ../development/tools/misc/texinfo/5.2.nix { };
   texinfo6_5 = callPackage ../development/tools/misc/texinfo/6.5.nix { }; # needed for allegro
-  texinfo6 = callPackage ../development/tools/misc/texinfo/6.7.nix { };
-  texinfo6_8 = callPackage ../development/tools/misc/texinfo/6.8.nix { };
+  texinfo6_7 = callPackage ../development/tools/misc/texinfo/6.7.nix { }; # needed for gpm, iksemel and fwknop
+  texinfo6 = callPackage ../development/tools/misc/texinfo/6.8.nix { };
   texinfo = texinfo6;
   texinfoInteractive = appendToName "interactive" (
     texinfo.override { interactive = true; }
@@ -21336,6 +21339,10 @@ with pkgs;
 
   gpm = callPackage ../servers/gpm {
     ncurses = null;  # Keep curses disabled for lack of value
+
+    # latest 6.8 mysteriously fails to parse '@headings single':
+    #   https://lists.gnu.org/archive/html/bug-texinfo/2021-09/msg00011.html
+    texinfo = texinfo6_7;
   };
 
   gpm-ncurses = gpm.override { inherit ncurses; };
@@ -25224,7 +25231,9 @@ with pkgs;
     inherit (perlPackages.override { pkgs = pkgs // { imagemagick = imagemagickBig;}; }) ImageMagick;
   };
 
-  iksemel = callPackage ../development/libraries/iksemel { };
+  iksemel = callPackage ../development/libraries/iksemel {
+    texinfo = texinfo6_7; # Uses @setcontentsaftertitlepage, removed in 6.8.
+  };
 
   imag = callPackage ../applications/misc/imag {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -25276,6 +25285,7 @@ with pkgs;
     djvulibre = null;
     lcms2 = null;
     openexr = null;
+    libjxl = null;
     libpng = null;
     liblqr1 = null;
     librsvg = null;
