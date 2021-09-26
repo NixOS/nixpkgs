@@ -1,5 +1,6 @@
 set -eu
 set -o pipefail
+shopt -s inherit_errexit
 
 if [[ -n "${BASH_VERSINFO-}" && "${BASH_VERSINFO-}" -lt 4 ]]; then
     echo "Detected Bash version that isn't supported by Nixpkgs (${BASH_VERSION})"
