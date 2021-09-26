@@ -118,6 +118,13 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://owncast.online/">owncast</link>,
+          self-hosted video live streaming solution. Available at
+          <link xlink:href="options.html#opt-services.owncast">services.owncast</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://sr.ht">sourcehut</link>, a
           collection of tools useful for software development. Available
           as
