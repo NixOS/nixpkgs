@@ -405,17 +405,13 @@ with pkgs;
 
   dotnetCorePackages = recurseIntoAttrs (callPackage ../development/compilers/dotnet {});
 
-  dotnet-sdk = dotnetCorePackages.sdk_2_1;
-
   dotnet-sdk_2 = dotnetCorePackages.sdk_2_1;
-
   dotnet-sdk_3 = dotnetCorePackages.sdk_3_1;
-
   dotnet-sdk_5 = dotnetCorePackages.sdk_5_0;
 
-  dotnet-netcore = dotnetCorePackages.netcore_2_1;
-
-  dotnet-aspnetcore = dotnetCorePackages.aspnetcore_2_1;
+  dotnet-sdk = dotnetCorePackages.sdk_5_0;
+  dotnet-runtime = dotnetCorePackages.runtime_5_0;
+  dotnet-aspnetcore = dotnetCorePackages.aspnetcore_5_0;
 
   dumb-init = callPackage ../applications/virtualization/dumb-init {};
 
@@ -12389,7 +12385,7 @@ with pkgs;
 
   roslyn = callPackage ../development/compilers/roslyn { };
 
-  msbuild = callPackage ../development/tools/build-managers/msbuild { dotnet-sdk = dotnet-sdk_5; };
+  msbuild = callPackage ../development/tools/build-managers/msbuild { };
 
   mosml = callPackage ../development/compilers/mosml { };
 
@@ -26890,10 +26886,7 @@ with pkgs;
     libtiff = callPackage ../applications/graphics/opentoonz/libtiff.nix { };
   })).callPackage ../applications/graphics/opentoonz { };
 
-  opentabletdriver = callPackage ../tools/X11/opentabletdriver {
-    dotnet-sdk = dotnetCorePackages.sdk_5_0;
-    dotnet-netcore = dotnetCorePackages.net_5_0;
-  };
+  opentabletdriver = callPackage ../tools/X11/opentabletdriver { };
 
   opentx = libsForQt5.callPackage ../applications/misc/opentx { };
 
@@ -33161,7 +33154,7 @@ with pkgs;
     stdenv = crossLibcStdenv;
   };
 
-  omnisharp-roslyn = callPackage ../development/tools/omnisharp-roslyn { dotnet-sdk = dotnet-sdk_5; };
+  omnisharp-roslyn = callPackage ../development/tools/omnisharp-roslyn { };
 
   wasmtime = callPackage ../development/interpreters/wasmtime {};
 
