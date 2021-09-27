@@ -2328,6 +2328,8 @@ in {
 
   elgato = callPackage ../development/python-modules/elgato { };
 
+  elkm1-lib = callPackage ../development/python-modules/elkm1-lib { };
+
   elasticsearch = callPackage ../development/python-modules/elasticsearch { };
 
   elasticsearch-dsl = callPackage ../development/python-modules/elasticsearch-dsl { };
