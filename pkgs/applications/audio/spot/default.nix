@@ -59,6 +59,9 @@ stdenv.mkDerivation rec {
     libpulseaudio
   ];
 
+  # https://github.com/xou816/spot/issues/313
+  mesonBuildType = "release";
+
   postPatch = ''
     chmod +x build-aux/cargo.sh
     patchShebangs build-aux/cargo.sh build-aux/meson/postinstall.py
