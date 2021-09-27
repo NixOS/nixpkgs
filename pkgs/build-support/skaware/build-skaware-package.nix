@@ -22,7 +22,8 @@
 , postInstall
   # : list Maintainer
 , maintainers ? []
-
+  # : passtrhu arguments (e.g. tests)
+, passthru ? {}
 
 }:
 
@@ -107,5 +108,7 @@ in stdenv.mkDerivation {
     maintainers = with lib.maintainers;
       [ pmahoney Profpatsch qyliss ] ++ maintainers;
   };
+
+  inherit passthru;
 
 }
