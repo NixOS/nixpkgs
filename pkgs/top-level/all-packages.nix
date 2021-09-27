@@ -14245,6 +14245,8 @@ with pkgs;
     inherit (llvmPackages_9) stdenv clang llvm;
   };
 
+  img = callPackage ../development/tools/img { };
+
   include-what-you-use = callPackage ../development/tools/analysis/include-what-you-use {
     llvmPackages = llvmPackages_12;
   };
