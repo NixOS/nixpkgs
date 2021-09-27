@@ -6,10 +6,9 @@
 buildDunePackage {
   pname = "containers-data";
 
-  inherit (containers) src version useDune2;
+  inherit (containers) src version doCheck useDune2;
 
   buildInputs = [ dune-configurator ];
-  doCheck = true;
   checkInputs = [ gen iter qcheck ];
 
   propagatedBuildInputs = [ containers ];
