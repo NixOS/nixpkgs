@@ -1051,6 +1051,16 @@ Superuser created successfully.
           changelog</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <literal>opencv2</literal> no longer includes the non-free
+          libraries by default, and consequently
+          <literal>pfstools</literal> no longer includes OpenCV support
+          by default. Both packages now support an
+          <literal>enableUnfree</literal> option to re-enable this
+          functionality.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-notable-changes">
