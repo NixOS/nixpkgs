@@ -478,7 +478,7 @@
     "lovelace" = ps: with ps; [ ];
     "luci" = ps: with ps; [ openwrt-luci-rpc ];
     "luftdaten" = ps: with ps; [ luftdaten ];
-    "lupusec" = ps: with ps; [ ]; # missing inputs: lupupy
+    "lupusec" = ps: with ps; [ lupupy ];
     "lutron" = ps: with ps; [ pylutron ];
     "lutron_caseta" = ps: with ps; [ aiolip pylutron-caseta ];
     "lw12wifi" = ps: with ps; [ ]; # missing inputs: lw12
