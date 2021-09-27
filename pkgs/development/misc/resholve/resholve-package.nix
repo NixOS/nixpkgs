@@ -13,7 +13,7 @@ let
   self = (stdenv.mkDerivation ((removeAttrs attrs [ "solutions" ])
     // {
     inherit pname version src;
-    buildInputs = [ resholve ];
+    buildInputs = (lib.optionals (builtins.hasAttr "buildInputs" attrs) attrs.buildInputs) ++ [ resholve ];
 
     # enable below for verbose debug info if needed
     # supports default python.logging levels
