@@ -2,7 +2,8 @@
 
 resholve converts bare executable references in shell scripts to absolute
 paths. This will hopefully make its way into the Nixpkgs manual soon, but
-until then I'll outline how to use the `resholvePackage` function.
+until then I'll outline how to use the `resholvePackage`, `resholveScript`,
+and `resholveScriptBin` functions.
 
 > Fair warning: resholve does *not* aspire to resolving all valid Shell
 > scripts. It depends on the OSH/Oil parser, which aims to support most (but
@@ -21,7 +22,10 @@ Each "solution" (k=v pair) in this attrset describes one resholve invocation.
 > - Packages with scripts that require conflicting directives can use multiple
 >   solutions to resolve the scripts separately, but produce a single package.
 
-## Basic Example
+The `resholveScript` and `resholveScriptBin` functions support a _single_
+`solution` attrset. This is basically the same as any single solution in `resholvePackage`, except that it doesn't need a `scripts` attr (it is automatically added).
+
+## Basic `resholvePackage` Example
 
 Here's a simple example from one of my own projects, with annotations:
 <!--
@@ -68,6 +72,28 @@ resholvePackage rec {
 }
 ```
 
+## Basic `resholveScript` and `resholveScriptBin` examples
+
+Both of these functions have the same basic API. This example is a little
+trivial for now. If you have a real usage that you find helpful, please PR it.
+
+```nix
+resholvedScript = resholveScript "name" {
+    inputs = [ file ];
+    interpreter = "${bash}/bin/bash";
+  } ''
+    echo "Hello"
+    file .
+  '';
+resholvedScriptBin = resholveScriptBin "name" {
+    inputs = [ file ];
+    interpreter = "${bash}/bin/bash";
+  } ''
+    echo "Hello"
+    file .
+  '';
+```
+
 ## Options
 
 `resholvePackage` maps Nix types/idioms into the flags and environment variables
@@ -79,7 +105,7 @@ that the `resholve` CLI expects. Here's an overview:
 | inputs        | list    | packages to resolve executables from                  |
 | interpreter   | string  | 'none' or abspath for shebang                         |
 | prologue      | file    | text to insert before the first code-line             |
-| epilogue      | file    | text to isnert after the last code-line               |
+| epilogue      | file    | text to insert after the last code-line               |
 | flags         | list    | strings to pass as flags                              |
 | fake          | attrset | [directives](#controlling-resolution-with-directives) |
 | fix           | attrset | [directives](#controlling-resolution-with-directives) |
@@ -135,30 +161,30 @@ from the manpage, and the Nix equivalents:
 ```nix
 # --fake 'f:setUp;tearDown builtin:setopt source:/etc/bashrc'
 fake = {
-  # fake accepts the initial of valid identifier types as a CLI convienience.
+  # fake accepts the initial of valid identifier types as a CLI convenience.
   # Use full names in the Nix API.
   function = [ "setUp" "tearDown" ];
   builtin = [ "setopt" ];
   source = [ "/etc/bashrc" ];
 };
 
-# --fix 'aliases xargs:ls $GIT:gix'
+# --fix 'aliases $GIT:gix /bin/bash'
 fix = {
   # all single-word directives use `true` as value
   aliases = true;
-  xargs = [ "ls" ];
   "$GIT" = [ "gix" ];
+  "/bin/bash";
 };
 
-# --keep 'which:git;ls .:$HOME $LS:exa /etc/bashrc ~/.bashrc'
+# --keep 'source:$HOME /etc/bashrc ~/.bashrc'
 keep = {
-  which = [ "git" "ls" ];
-  "." = [ "$HOME" ];
-  "$LS" = [ "exa" ];
+  source = [ "$HOME" ];
   "/etc/bashrc" = true;
   "~/.bashrc" = true;
 };
 ```
+
+> **Note:** For now, at least, you'll need to reference the manpage to completely understand these examples.
 
 ## Controlling nested resolution with lore
 
@@ -176,6 +202,11 @@ some of the more common commands.
   either built-in rules for finding the executable, or human triage.
 - "wrapper" lore maps shell exec wrappers to the programs they exec so
   that resholve can substitute an executable's verdict for its wrapper's.
+
+> **Caution:** At least when it comes to common utilities, it's best to treat
+> overrides as a stopgap until they can be properly handled in resholve and/or
+> binlore. Please report things you have to override and, if possible, help
+> get them sorted.
 
 There will be more mechanisms for controlling this process in the future
 (and your reports/experiences will play a role in shaping them...) For now,

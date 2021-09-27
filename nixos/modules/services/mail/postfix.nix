@@ -544,7 +544,7 @@ in
         type = types.lines;
         default = "";
         description = "
-          Entries for the virtual alias map, cf. man-page virtual(8).
+          Entries for the virtual alias map, cf. man-page virtual(5).
         ";
       };
 
