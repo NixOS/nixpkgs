@@ -6168,7 +6168,7 @@
         repo = fetchgit {
           url = "https://github.com/hedgedoc/js-sequence-diagrams.git";
           rev = "bda0e49b6c2754f3c7158b1dfb9ccf26efc24b39";
-          sha256 = "0rl29jmhv7vhadzb6d08hi9g64227r9j10fh3d0lbgxinrib5gma";
+          sha256 = "0d2zf62fmad760rg9hrkyhp03k5apms3fm0mf64yy8q6p3iw7jvw";
         };
       in
         runCommand "js-sequence-diagrams.git" { buildInputs = [gnutar]; } ''

@@ -272,7 +272,7 @@
     "flexit" = ps: with ps; [ pymodbus ];
     "flic" = ps: with ps; [ pyflic ];
     "flick_electric" = ps: with ps; [ pyflick ];
-    "flipr" = ps: with ps; [ ]; # missing inputs: flipr-api
+    "flipr" = ps: with ps; [ flipr-api ];
     "flo" = ps: with ps; [ aioflo ];
     "flock" = ps: with ps; [ ];
     "flume" = ps: with ps; [ pyflume ];
@@ -574,7 +574,7 @@
     "nfandroidtv" = ps: with ps; [ ]; # missing inputs: notifications-android-tv
     "nightscout" = ps: with ps; [ ]; # missing inputs: py-nightscout
     "niko_home_control" = ps: with ps; [ ]; # missing inputs: niko-home-control
-    "nilu" = ps: with ps; [ ]; # missing inputs: niluclient
+    "nilu" = ps: with ps; [ niluclient ];
     "nissan_leaf" = ps: with ps; [ ]; # missing inputs: pycarwings2
     "nmap_tracker" = ps: with ps; [ aiohttp-cors getmac ifaddr netmap ]; # missing inputs: mac-vendor-lookup
     "nmbs" = ps: with ps; [ ]; # missing inputs: pyrail
@@ -803,10 +803,10 @@
     "sonarr" = ps: with ps; [ sonarr ];
     "songpal" = ps: with ps; [ python-songpal ];
     "sonos" = ps: with ps; [ aiohttp-cors async-upnp-client defusedxml ifaddr plexapi plexauth plexwebsocket soco zeroconf ];
-    "sony_projector" = ps: with ps; [ ]; # missing inputs: pysdcp
+    "sony_projector" = ps: with ps; [ pysdcp ];
     "soundtouch" = ps: with ps; [ aiohttp-cors ifaddr libsoundtouch zeroconf ];
     "spaceapi" = ps: with ps; [ aiohttp-cors ];
-    "spc" = ps: with ps; [ ]; # missing inputs: pyspcwebgw
+    "spc" = ps: with ps; [ pyspcwebgw ];
     "speedtestdotnet" = ps: with ps; [ speedtest-cli ];
     "spider" = ps: with ps; [ spiderpy ];
     "splunk" = ps: with ps; [ ]; # missing inputs: hass_splunk
