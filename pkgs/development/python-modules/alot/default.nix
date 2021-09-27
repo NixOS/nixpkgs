@@ -1,11 +1,11 @@
 { lib, buildPythonPackage, python, fetchFromGitHub, isPy3k
-, notmuch, urwid, urwidtrees, twisted, python_magic, configobj, mock, file, gpgme
+, notmuch2, urwid, urwidtrees, twisted, python_magic, configobj, mock, file, gpgme
 , service-identity, gnupg, sphinx, gawk, procps, future , withManpage ? false
 }:
 
 buildPythonPackage rec {
   pname = "alot";
-  version = "0.9.1";
+  version = "0.10";
   outputs = [ "out" ] ++ lib.optional withManpage "man";
 
   disabled = !isPy3k;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
     owner = "pazz";
     repo = "alot";
     rev = version;
-    sha256 = "0s94m17yph1gq9f2svipb3bbwbw1s4j3zf2xkg5h91006v8286r6";
+    sha256 = "sha256-1reAq8X9VwaaZDY5UfvcFzHDKd71J88CqJgH3+ANjis=";
   };
 
   postPatch = ''
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   nativeBuildInputs = lib.optional withManpage sphinx;
 
   propagatedBuildInputs = [
-    notmuch
+    notmuch2
     urwid
     urwidtrees
     twisted
@@ -36,7 +36,7 @@ buildPythonPackage rec {
   ];
 
   # some twisted tests need the network (test_env_set... )
-  doCheck = false;
+  doCheck = true;
   postBuild = lib.optionalString withManpage "make -C docs man";
 
   checkInputs =  [ gawk future mock gnupg procps ];
@@ -61,7 +61,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/pazz/alot";
     description = "Terminal MUA using notmuch mail";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ edibopp ];
   };
