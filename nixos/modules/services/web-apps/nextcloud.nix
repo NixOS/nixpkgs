@@ -312,6 +312,124 @@ in {
           phone-numbers.
         '';
       };
+
+      objectstore = let
+        s3Arguments = {
+          bucket = mkOption {
+            type = types.str;
+            example = "nextcloud";
+            description = ''
+              The name of the S3 bucket.
+            '';
+          };
+          autocreate = mkOption {
+            type = types.bool;
+            description = ''
+              Create the objectstore if it does not exist.
+            '';
+          };
+          key = mkOption {
+            type = types.str;
+            example = "EJ39ITYZEUH5BGWDRUFY";
+            description = ''
+              The access key for the S3 bucket.
+            '';
+          };
+          secret = mkOption {
+            type = types.nullOr types.str;
+            default = null;
+            example = "M5MrXTRjkyMaxXPe2FRXMTfTfbKEnZCu+7uRTVSj";
+            description = ''
+              The access secret for the S3 bucket. Use
+              <literal>secretFile</literal> to avoid this being world-readable
+              in the <literal>/nix/store</literal>
+            '';
+          };
+          secretFile = mkOption {
+            type = types.nullOr types.str;
+            default = null;
+            example = "/var/nextcloud-objectstore-s3-secret";
+            description = ''
+              The full path to a file that contains the access secret. Must be
+              readable by user <literal>nextcloud</literal>.
+            '';
+          };
+          hostname = mkOption {
+            type = types.nullOr types.str;
+            default = null;
+            example = "example.com";
+            description = ''
+              Required for some non-Amazon implementations.
+            '';
+          };
+          port = mkOption {
+            type = types.nullOr types.port;
+            default = null;
+            description = ''
+              Required for some non-Amazon implementations.
+            '';
+          };
+          useSsl = mkOption {
+            type = types.nullOr types.bool;
+            default = null;
+            description = ''
+              Use SSL for objectstore access.
+            '';
+          };
+          region = mkOption {
+            type = types.nullOr types.str;
+            default = null;
+            example = "REGION";
+            description = ''
+              Required for some non-Amazon implementations.
+            '';
+          };
+          usePathStyle = mkOption {
+            type = types.bool;
+            default = false;
+            description = ''
+              Required for some non-Amazon S3 implementations.
+
+              Ordinarily, requests will be made with
+              http://bucket.hostname.domain/, but with path style
+              enabled requests are made with
+              http://hostname.domain/bucket instead.
+            '';
+          };
+        };
+      in mkOption {
+        type = types.nullOr (types.submodule {
+          options = {
+            s3 = mkOption {
+              type = types.submodule {
+                options = {
+                  enable = mkEnableOption "S3 object storage as primary storage.";
+                  arguments = mkOption {
+                    type = types.submodule {
+                      options = s3Arguments;
+                    };
+                    description = ''
+                      Configuration arguments for the object storage.
+                    '';
+                  };
+                };
+              };
+              description = ''
+                Mounts a bucket on an Amazon S3 object storage or compatible
+                implementation into the virtual filesystem.
+              '';
+            };
+          };
+        });
+        default = null;
+        description = ''
+          Options for configuring object storage as nextcloud's primary storage.
+
+          See nextcloud's documentation on "Object Storage as Primary Storage"
+          for details on how to select the right class and argument set for
+          your needs.
+        '';
+      };
     };
 
     enableImagemagick = mkEnableOption ''
@@ -389,6 +507,14 @@ in {
         }
         { assertion = versionOlder cfg.package.version "21" -> cfg.config.defaultPhoneRegion == null;
           message = "The `defaultPhoneRegion'-setting is only supported for Nextcloud >=21!";
+        }
+        { assertion = acfg.objectstore == null
+            || (lists.count (v: v.enable) (attrsets.attrValues acfg.objectstore)) == 1;
+          message = "If using objectstore class as primary storage exactly one class can be enabled.";
+        }
+        { assertion = let s3 = acfg.objectstore.s3; in acfg.objectstore == null
+            || (!s3.enable || ((s3.arguments.secret != null) != (s3.arguments.secretFile != null)));
+          message = "S3 storage requires specifying exactly one of secret or secretFile";
         }
       ];
 
@@ -479,11 +605,34 @@ in {
         nextcloud-setup = let
           c = cfg.config;
           writePhpArrary = a: "[${concatMapStringsSep "," (val: ''"${toString val}"'') a}]";
+          requiresReadSecretFunction = c.dbpassFile != null
+            || (c.objectstore != null && (c.objectstore.s3.enable && c.objectstore.s3.arguments.secretFile != null));
+          objectstoreConfig = let
+            class = if c.objectstore.s3.enable then "S3" else "";
+            args = if c.objectstore.s3.enable then c.objectstore.s3.arguments else {};
+            classLine = '''class' => '\\OC\\Files\\ObjectStore\\${class}','';
+            argumentLines = optionalString c.objectstore.s3.enable ''
+              'bucket' => '${args.bucket}',
+              'autocreate' => ${toString args.autocreate},
+              'key' => '${args.key}',
+              ${optionalString (args.secret != null) "'secret' => '${args.secret}',"}
+              ${optionalString (args.secretFile != null) "'secret' => nix_read_secret('${args.secretFile}'),"}
+              ${optionalString (args.hostname != null) "'hostname' => '${args.hostname}',"}
+              ${optionalString (args.port != null) "'port' => ${toString args.port},"}
+              ${optionalString (args.useSsl != null) "'use_ssl' => ${if args.useSsl then "true" else "false"},"}
+              ${optionalString (args.region != null) "'region' => '${args.region}',"}
+              'use_path_style' => ${if args.usePathStyle then "true" else "false"},
+            '';
+          in optionalString (c.objectstore != null) '''objectstore' => [
+            ${classLine}
+            'arguments' => [
+              ${argumentLines}
+            ],
+          ]'';
           overrideConfig = pkgs.writeText "nextcloud-config.php" ''
             <?php
-            ${optionalString (c.dbpassFile != null) ''
-              function nix_read_pwd() {
-                $file = "${c.dbpassFile}";
+            ${optionalString requiresReadSecretFunction ''
+              function nix_read_secret($file) {
                 if (!file_exists($file)) {
                   throw new \RuntimeException(sprintf(
                     "Cannot start Nextcloud, dbpass file %s set by NixOS doesn't seem to "
@@ -513,11 +662,12 @@ in {
               ${optionalString (c.dbuser != null) "'dbuser' => '${c.dbuser}',"}
               ${optionalString (c.dbtableprefix != null) "'dbtableprefix' => '${toString c.dbtableprefix}',"}
               ${optionalString (c.dbpass != null) "'dbpassword' => '${c.dbpass}',"}
-              ${optionalString (c.dbpassFile != null) "'dbpassword' => nix_read_pwd(),"}
+              ${optionalString (c.dbpassFile != null) "'dbpassword' => nix_read_secret('${c.dbpassFile}'),"}
               'dbtype' => '${c.dbtype}',
               'trusted_domains' => ${writePhpArrary ([ cfg.hostName ] ++ c.extraTrustedDomains)},
               'trusted_proxies' => ${writePhpArrary (c.trustedProxies)},
               ${optionalString (c.defaultPhoneRegion != null) "'default_phone_region' => '${c.defaultPhoneRegion}',"}
+              ${objectstoreConfig}
             ];
           '';
           occInstallCmd = let
