@@ -19,6 +19,8 @@ let
 
       makeFlags = [ "PREFIX=$(out)" "INSTALLPREFIX=$(out)" ];
 
+      postInstall = ''chmod +x "$out"/lib/libminiupnpc.so'';
+
       meta = with lib; {
         homepage = "http://miniupnp.free.fr/";
         description = "A client that implements the UPnP Internet Gateway Device (IGD) specification";
