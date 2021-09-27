@@ -26954,7 +26954,14 @@ with pkgs;
 
   qimgv = libsForQt5.callPackage ../applications/graphics/qimgv { };
 
-  qlandkartegt = libsForQt514.callPackage ../applications/misc/qlandkartegt {};
+  qlandkartegt = libsForQt514.callPackage ../applications/misc/qlandkartegt {
+    gdal = gdal.override {
+      libgeotiff = libgeotiff.override { proj = proj_7; };
+      libspatialite = libspatialite.override { proj = proj_7; };
+      proj = proj_7;
+    };
+    proj = proj_7;
+  };
 
   garmindev = callPackage ../applications/misc/qlandkartegt/garmindev.nix {};
 
