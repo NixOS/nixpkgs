@@ -8,6 +8,7 @@
 , jdk
 , llvmPackages_8
 , nixpkgs-fmt
+, protobuf
 , jq
 , shellcheck
 , moreutils
@@ -1675,6 +1676,23 @@ let
           version = "0.0.8";
           sha256 = "1ln9gly5bb7nvbziilnay4q448h9npdh7sd9xy277122h0qawkci";
         };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
+      zxh404.vscode-proto3 = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-proto3";
+          publisher = "zxh404";
+          version = "0.5.4";
+          sha256 = "08dfl5h1k6s542qw5qx2czm1wb37ck9w2vpjz44kp2az352nmksb";
+        };
+        nativeBuildInputs = [ jq moreutils ];
+        postInstall = ''
+          cd "$out/$installPrefix"
+          jq '.contributes.configuration.properties.protoc.properties.path.default = "${protobuf}/bin/protoc"' package.json | sponge package.json
+        '';
         meta = {
           license = lib.licenses.mit;
         };

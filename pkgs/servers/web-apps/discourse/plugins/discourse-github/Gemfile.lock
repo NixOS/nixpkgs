@@ -3,7 +3,7 @@ GEM
   specs:
     addressable (2.8.0)
       public_suffix (>= 2.0.2, < 5.0)
-    faraday (1.7.0)
+    faraday (1.8.0)
       faraday-em_http (~> 1.0)
       faraday-em_synchrony (~> 1.0)
       faraday-excon (~> 1.1)
@@ -40,4 +40,4 @@ DEPENDENCIES
   sawyer (= 0.8.2)
 
 BUNDLED WITH
-   2.2.20
+   2.2.24

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, capnproto, cmake }:
 
 stdenv.mkDerivation rec {
   pname = "capnproto";
@@ -8,6 +8,11 @@ stdenv.mkDerivation rec {
     url = "https://capnproto.org/capnproto-c++-${version}.tar.gz";
     sha256 = "sha256-soBUp6K/6kK/w5LI0AljDZTXLozoaiOtbxi15yV0Bk8=";
   };
+
+  nativeBuildInputs = [ cmake ]
+    ++ lib.optional (!(stdenv.hostPlatform.isCompatible stdenv.buildPlatform)) capnproto;
+
+  cmakeFlags = lib.optional (!(stdenv.hostPlatform.isCompatible stdenv.buildPlatform)) "-DEXTERNAL_CAPNP";
 
   meta = with lib; {
     homepage    = "https://capnproto.org/";
