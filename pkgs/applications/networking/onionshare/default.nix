@@ -12,6 +12,7 @@
   psutil,
   pyqt5,
   pycrypto,
+  pynacl,
   pyside2,
   pytestCheckHook,
   qrcode,
@@ -23,12 +24,12 @@
 }:
 
 let
-  version = "2.3.3";
+  version = "2.4";
   src = fetchFromGitHub {
-    owner = "micahflee";
+    owner = "onionshare";
     repo = "onionshare";
     rev = "v${version}";
-    sha256 = "sha256-wU2020RNXlwJ2y9uzcLxIX4EECev1Z9YvNyiBalLj/Y=";
+    sha256 = "sha256-Lclm7mIkaAkQpWcNILTRJtLA43dpiyHtWAeHS2r3+ZQ=";
   };
   meta = with lib; {
     description = "Securely and anonymously send and receive files";
@@ -77,6 +78,7 @@ in rec {
       stem
       psutil
       pycrypto
+      pynacl
       requests
       unidecode
     ];
@@ -98,6 +100,7 @@ in rec {
     disabledTests = [
       "test_firefox_like_behavior"
       "test_if_unmodified_since"
+      "test_get_tor_paths_linux"  # expects /usr instead of /nix/store
     ];
   };
 
