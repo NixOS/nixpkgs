@@ -196,11 +196,9 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "Mozilla Firefox, free web browser (binary package)";
     homepage = "http://www.mozilla.org/firefox/";
-    license = {
-      free = false;
-      url = "http://www.mozilla.org/en-US/foundation/trademarks/policy/";
-    };
+    license = licenses.mpl20;
     platforms = builtins.attrNames mozillaPlatforms;
+    hydraPlatforms = [];
     maintainers = with maintainers; [ taku0 lovesegfault ];
   };
 }
