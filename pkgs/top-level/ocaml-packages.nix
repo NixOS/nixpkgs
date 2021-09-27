@@ -627,6 +627,10 @@ let
 
     lua-ml = callPackage ../development/ocaml-modules/lua-ml { };
 
+    lustre-v6 = callPackage ../development/ocaml-modules/lustre-v6 { };
+
+    lutils = callPackage ../development/ocaml-modules/lutils { };
+
     luv = callPackage ../development/ocaml-modules/luv {
       inherit (pkgs) file;
     };
@@ -1181,6 +1185,8 @@ let
     qtest = callPackage ../development/ocaml-modules/qtest { };
 
     randomconv = callPackage ../development/ocaml-modules/randomconv { };
+
+    rdbg = callPackage ../development/ocaml-modules/rdbg { };
 
     re = callPackage ../development/ocaml-modules/re { };
 
