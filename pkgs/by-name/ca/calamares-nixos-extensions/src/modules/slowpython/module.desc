@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: no
+# SPDX-License-Identifier: CC0-1.0
+#
 # The slowpython module is .. just slow. It can be used
 # in testing to allow the slideshow time to run.
 ---
