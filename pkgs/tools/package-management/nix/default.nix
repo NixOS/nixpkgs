@@ -14,7 +14,7 @@ common =
   , pkg-config, boehmgc, libsodium, brotli, boost, editline, nlohmann_json
   , autoreconfHook, autoconf-archive, bison, flex
   , jq, libarchive, libcpuid
-  , lowdown, mdbook
+  , lowdown-0-9, mdbook
   # Used by tests
   , gtest
   , busybox-sandbox-shell
@@ -45,7 +45,7 @@ common =
           [ autoreconfHook
             autoconf-archive
             bison flex
-            (lib.getBin lowdown) mdbook
+            (lib.getBin lowdown-0-9) mdbook
             jq
            ];
 
@@ -55,7 +55,7 @@ common =
         ]
         ++ lib.optionals stdenv.isDarwin [ Security ]
         ++ lib.optional (stdenv.isLinux || stdenv.isDarwin) libsodium
-        ++ lib.optionals is24 [ libarchive gtest lowdown ]
+        ++ lib.optionals is24 [ libarchive gtest lowdown-0-9 ]
         ++ lib.optional (is24 && stdenv.isx86_64) libcpuid
         ++ lib.optional withLibseccomp libseccomp
         ++ lib.optional withAWS
@@ -228,13 +228,13 @@ in rec {
   nixUnstable = lib.lowPrio (callPackage common rec {
     pname = "nix";
     version = "2.4${suffix}";
-    suffix = "pre20210922_${lib.substring 0 7 src.rev}";
+    suffix = "pre20211001_${lib.substring 0 7 src.rev}";
 
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "bcd73ebf60bb9ba6cb09f8df4366d5474c16e4a4";
-      sha256 = "sha256-wRbz8c22tlRn2/va/yOoLJijdJn+JJqLRDPRlifaEEA=";
+      rev = "4f496150eb4e0012914c11f0a3ff4df2412b1d09";
+      sha256 = "00hxxk66f068588ymv60ygib6vgk7c97s9yia3qd561679rq3nsj";
     };
 
     boehmgc = boehmgc_nixUnstable;
