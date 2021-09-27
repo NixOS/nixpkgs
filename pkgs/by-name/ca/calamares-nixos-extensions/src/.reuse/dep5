@@ -1,0 +1,23 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: Calamares-Extensions
+Source: https://github.com/calamares/calamares-extensions.git
+
+### BUILD ARTIFACTS / NOT SOURCE
+#
+# QRC Files are basically build artifacts
+#
+FILES: src/modules/*/*.qrc
+License: CC0-1.0
+Copyright: no
+
+# GitHub issue templates are not part of the source
+#
+Files: .github/ISSUE_TEMPLATE/*
+License: CC0-1.0
+Copyright: no
+
+# GitHub actions are not part of the source
+Files: .github/workflows/*.yml
+License: CC0-1.0
+Copyright: no
+
