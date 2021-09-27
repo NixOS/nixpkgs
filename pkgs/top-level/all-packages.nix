@@ -18951,6 +18951,7 @@ with pkgs;
   skaffold = callPackage ../development/tools/skaffold { };
 
   skalibs = skawarePackages.skalibs;
+  skalibs_2_10 = skawarePackages.skalibs_2_10;
 
   skawarePackages = recurseIntoAttrs rec {
     cleanPackaging = callPackage ../build-support/skaware/clean-packaging.nix { };
@@ -18960,6 +18961,7 @@ with pkgs;
     buildManPages = callPackage ../build-support/skaware/build-skaware-man-pages.nix { };
 
     skalibs = callPackage ../development/libraries/skalibs { };
+    skalibs_2_10 = callPackage ../development/libraries/skalibs/2_10.nix { };
     execline = callPackage ../tools/misc/execline { };
 
     execline-man-pages = callPackage ../data/documentation/execline-man-pages {
@@ -20736,6 +20738,7 @@ with pkgs;
   prometheus-dnsmasq-exporter = callPackage ../servers/monitoring/prometheus/dnsmasq-exporter.nix { };
   prometheus-dovecot-exporter = callPackage ../servers/monitoring/prometheus/dovecot-exporter.nix { };
   prometheus-domain-exporter = callPackage ../servers/monitoring/prometheus/domain-exporter.nix { };
+  prometheus-fastly-exporter = callPackage ../servers/monitoring/prometheus/fastly-exporter.nix { };
   prometheus-flow-exporter = callPackage ../servers/monitoring/prometheus/flow-exporter.nix { };
   prometheus-fritzbox-exporter = callPackage ../servers/monitoring/prometheus/fritzbox-exporter.nix { };
   prometheus-gitlab-ci-pipelines-exporter = callPackage ../servers/monitoring/prometheus/gitlab-ci-pipelines-exporter.nix { };
@@ -26547,6 +26550,8 @@ with pkgs;
   obsidian = callPackage ../applications/misc/obsidian { };
 
   octoprint = callPackage ../applications/misc/octoprint { };
+
+  ocr-a = callPackage ../data/fonts/ocr-a {};
 
   ocrad = callPackage ../applications/graphics/ocrad { };
 

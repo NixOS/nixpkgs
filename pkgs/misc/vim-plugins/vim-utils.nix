@@ -399,6 +399,7 @@ in
 rec {
   inherit vimrcFile;
   inherit vimrcContent;
+  inherit packDir;
 
   # shell script with custom name passing [-u vimrc] [-U gvimrc] to vim
   vimWithRC = {
