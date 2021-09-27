@@ -75,6 +75,7 @@ chriskempson/base16-vim
 ChristianChiarulli/nvcode-color-schemes.vim
 christoomey/vim-sort-motion
 christoomey/vim-tmux-navigator
+ciaranm/inkpot
 ckarnell/antonys-macro-repeater
 clojure-vim/vim-jack-in
 cloudhead/neovim-fuzzy

@@ -2517,6 +2517,18 @@ final: prev:
     meta.homepage = "https://github.com/Yggdroot/indentLine/";
   };
 
+  inkpot = buildVimPluginFrom2Nix {
+    pname = "inkpot";
+    version = "2013-02-10";
+    src = fetchFromGitHub {
+      owner = "ciaranm";
+      repo = "inkpot";
+      rev = "b86ad4dc977d3e92ca713c83bc225526a7d77070";
+      sha256 = "1s9hizzjfd6szj5961hmmi767b3mk92q7jq94dff8c6zlza829gy";
+    };
+    meta.homepage = "https://github.com/ciaranm/inkpot/";
+  };
+
   intero-neovim = buildVimPluginFrom2Nix {
     pname = "intero-neovim";
     version = "2019-11-15";
