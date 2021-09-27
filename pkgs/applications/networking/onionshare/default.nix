@@ -55,6 +55,16 @@ let
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ lourkeur ];
   };
+  stem' = stem.overrideAttrs (_: rec {
+    version = "1.8.1";
+
+    src = fetchFromGitHub {
+      owner = "onionshare";
+      repo = "stem";
+      rev = version;
+      sha256 = "Dzpvx7CgAr5OtGmfubWAYDLqq5LkGqcwjr3bxpfL/3A=";
+    };
+  });
 
 in rec {
   onionshare = buildPythonApplication {
@@ -75,7 +85,7 @@ in rec {
       flask
       flask-httpauth
       flask-socketio
-      stem
+      stem'
       psutil
       pycrypto
       pynacl
