@@ -11120,9 +11120,6 @@ with pkgs;
   inherit (callPackages ../development/compilers/crystal {
     llvmPackages = llvmPackages_10;
   })
-    crystal_0_33
-    crystal_0_34
-    crystal_0_35
     crystal_0_36
     crystal_1_0
     crystal;
@@ -14723,8 +14720,7 @@ with pkgs;
   shallot = callPackage ../tools/misc/shallot { };
 
   inherit (callPackage ../development/tools/build-managers/shards { })
-    shards_0_11
-    shards_0_14
+    shards_0_15
     shards;
 
   shellcheck = callPackage ../development/tools/shellcheck {};
