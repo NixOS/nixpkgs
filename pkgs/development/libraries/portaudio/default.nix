@@ -3,6 +3,7 @@
 , fetchurl
 , alsa-lib
 , pkg-config
+, binutils
 , AudioUnit
 , AudioToolbox
 , CoreAudio
@@ -18,6 +19,8 @@ stdenv.mkDerivation rec {
     sha256 = "1vrdrd42jsnffh6rq8ap2c6fr4g9fcld89z649fs06bwqx1bzvs7";
   };
 
+  strictDeps = true;
+  depsBuildBuild = [ binutils ];
   nativeBuildInputs = [ pkg-config ];
   buildInputs = lib.optional (!stdenv.isDarwin) alsa-lib;
 
