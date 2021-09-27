@@ -4370,6 +4370,8 @@ in {
 
   lupa = callPackage ../development/python-modules/lupa { };
 
+  lupupy = callPackage ../development/python-modules/lupupy { };
+
   lxml = callPackage ../development/python-modules/lxml {
     inherit (pkgs) libxml2 libxslt zlib;
   };
