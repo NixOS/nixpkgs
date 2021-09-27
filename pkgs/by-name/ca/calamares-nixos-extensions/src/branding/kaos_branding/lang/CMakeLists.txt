@@ -1,3 +1,6 @@
+#   SPDX-FileCopyrightText: no
+#   SPDX-License-Identifier: CC0-1.0
+#
 foreach( lang ast ca cs de en es es_AR fr hu id_ID nl_NL pl pt_BR pt_PT ro_RO ru sr_RS tr_TR zh_CN )
    list( APPEND TS_FILES "${CMAKE_CURRENT_SOURCE_DIR}/calamares-${COMPONENT_NAME}_${lang}.ts" )
 endforeach()

@@ -1,3 +1,6 @@
+#   SPDX-FileCopyrightText: no
+#   SPDX-License-Identifier: CC0-1.0
+#
 if( NOT Calamares_WITH_QML )
     calamares_skip_module( "freebsddisk (QML is not supported in this build)" )
     return()

@@ -6,7 +6,7 @@ Source: https://github.com/calamares/calamares-extensions.git
 #
 # QRC Files are basically build artifacts
 #
-FILES: src/modules/*/*.qrc
+FILES: modules/*/*.qrc
 License: CC0-1.0
 Copyright: no
 

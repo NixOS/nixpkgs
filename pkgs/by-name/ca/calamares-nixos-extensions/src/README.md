@@ -1,3 +1,7 @@
+<!-- SPDX-FileCopyrightText: no
+     SPDX-License-Identifier: CC0-1.0
+-->
+
 # Calamares Branding and Module Examples
 
 > A *branding component* in Calamares is a description of the
