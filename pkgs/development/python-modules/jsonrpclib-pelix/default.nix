@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "jsonrpclib-pelix";
-  version = "0.4.2";
+  version = "0.4.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "340915c17ebef7451948341542bf4789fc8d8c9fe604e86f00b722b6074a89f0";
+    sha256 = "768e0a48249fbc6387564bb18ef347fd5db5b6ac74b86d5b1c009855850b14b3";
   };
 
   doCheck = false; # test_suite="tests" in setup.py but no tests in pypi.
