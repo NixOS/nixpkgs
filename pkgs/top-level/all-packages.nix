@@ -6903,6 +6903,10 @@ with pkgs;
 
   leatherman = callPackage ../development/libraries/leatherman { };
 
+  ledit = callPackage ../tools/misc/ledit {
+    inherit (ocamlPackages) camlp5;
+  };
+
   ledmon = callPackage ../tools/system/ledmon { };
 
   leela = callPackage ../tools/graphics/leela { };
