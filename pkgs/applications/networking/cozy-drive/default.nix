@@ -5,12 +5,12 @@
 
 let
   pname = "cozydrive";
-  version = "3.29.0";
+  version = "3.30.0";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://github.com/cozy-labs/cozy-desktop/releases/download/v${version}/Cozy-Drive-${version}-x86_64.AppImage";
-    sha256 = "12vjk1rxljjg14hm66iyqda3a5rgs5s7vsss0s6kf8v0yr7czc84";
+    sha256 = "1slgsjm616063kaz47437s2zaq9zl08239nwmrlgxf6873x1y33d";
   };
   appimageContents = appimageTools.extract { inherit name src; };
 
