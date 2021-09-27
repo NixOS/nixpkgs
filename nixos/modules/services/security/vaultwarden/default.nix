@@ -25,7 +25,7 @@ let
       configEnv = listToAttrs (concatLists (mapAttrsToList (name: value:
         if value != null then [ (nameValuePair (nameToEnvVar name) (if isBool value then boolToString value else toString value)) ] else []
       ) cfg.config));
-    in { DATA_FOLDER = "/var/lib/bitwarden_rs"; } // optionalAttrs (!(configEnv ? WEB_VAULT_ENABLED) || configEnv.WEB_VAULT_ENABLED == "true") {
+    in { DATA_FOLDER = cfg.stateDir; } // optionalAttrs (!(configEnv ? WEB_VAULT_ENABLED) || configEnv.WEB_VAULT_ENABLED == "true") {
       WEB_VAULT_FOLDER = "${cfg.webVaultPackage}/share/vaultwarden/vault";
     } // configEnv;
 
@@ -54,6 +54,14 @@ in {
       default = null;
       description = ''
         The directory under which vaultwarden will backup its persistent data.
+      '';
+    };
+
+    stateDir = mkOption {
+      type = str;
+      default = "/var/lib/bitwarden_rs";
+      description = ''
+        The directury in which vaultwarden will keep its state.
       '';
     };
 
@@ -145,7 +153,8 @@ in {
         ProtectHome = "true";
         ProtectSystem = "strict";
         AmbientCapabilities = "CAP_NET_BIND_SERVICE";
-        StateDirectory = "bitwarden_rs";
+        # required in case stateDir is outside /var/lib
+        ReadWritePaths = [ cfg.stateDir ];
       };
       wantedBy = [ "multi-user.target" ];
     };
@@ -154,7 +163,7 @@ in {
       aliases = [ "backup-bitwarden_rs" ];
       description = "Backup vaultwarden";
       environment = {
-        DATA_FOLDER = "/var/lib/bitwarden_rs";
+        DATA_FOLDER = cfg.stateDir;
         BACKUP_FOLDER = cfg.backupDir;
       };
       path = with pkgs; [ sqlite ];
