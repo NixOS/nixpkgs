@@ -15,32 +15,15 @@
 , zlib
 }:
 
-# NOTE: as of late 2020, yosys has switched to an automation robot that
-# automatically tags their repository Makefile with a new build number every
-# day when changes are committed. please MAKE SURE that the version number in
-# the 'version' field exactly matches the YOSYS_VER field in the Yosys
-# makefile!
-#
-# if a change in yosys isn't yet available under a build number like this (i.e.
-# it was very recently merged, within an hour), wait a few hours for the
-# automation robot to tag the new version, like so:
-#
-#     https://github.com/YosysHQ/yosys/commit/71ca9a825309635511b64b3ec40e5e5e9b6ad49b
-#
-# note that while most nix packages for "unstable versions" use a date-based
-# version scheme, synchronizing the nix package version here with the unstable
-# yosys version number helps users report better bugs upstream, and is
-# ultimately less confusing than using dates.
-
 stdenv.mkDerivation rec {
   pname   = "yosys";
-  version = "0.9+4276";
+  version = "0.10";
 
   src = fetchFromGitHub {
     owner  = "YosysHQ";
     repo   = "yosys";
-    rev    = "75a4cdfc8afc10fed80e43fb1ba31c7edaf6e361";
-    sha256 = "13xb7ny6i0kr6z6xkj9wmmcj551si7w05r3cghq8h8wkikyh6c8p";
+    rev    = "yosys-${version}";
+    sha256 = "1x51avmi516id1hv37my3pvzpcligrp9hjcw2f48fgffag4lqgwb";
   };
 
   enableParallelBuilding = true;
