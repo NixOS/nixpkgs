@@ -24671,6 +24671,8 @@ with pkgs;
 
   flex-ncat = callPackage ../applications/radio/flex-ncat { };
 
+  flex-ndax = callPackage ../applications/radio/flex-ndax { };
+
   fluxbox = callPackage ../applications/window-managers/fluxbox { };
 
   fme = callPackage ../applications/misc/fme {
