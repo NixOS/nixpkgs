@@ -1,18 +1,20 @@
-{ lib, fetchurl, buildDunePackage
+{ lib, fetchFromGitHub, buildDunePackage
 , ppx_sexp_conv, ounit
 }:
 
 buildDunePackage rec {
   pname = "macaddr";
-  version = "5.1.0";
+  version = "5.2.0";
 
   useDune2 = true;
 
   minimumOCamlVersion = "4.04";
 
-  src = fetchurl {
-    url = "https://github.com/mirage/ocaml-ipaddr/releases/download/v${version}/ipaddr-v${version}.tbz";
-    sha256 = "7e9328222c1a5f39b0751baecd7e27a842bdb0082fd48126eacbbad8816fbf5a";
+  src = fetchFromGitHub {
+    owner = "mirage";
+    repo = "ocaml-ipaddr";
+    rev = "v${version}";
+    sha256 = "QE2OxeFS7Vo4fmosFjKJG/nqEvVxb80y86c+Dg4Kpa8=";
   };
 
   checkInputs = [ ppx_sexp_conv ounit ];
