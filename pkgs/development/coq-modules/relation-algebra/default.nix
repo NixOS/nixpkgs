@@ -15,11 +15,11 @@ mkCoqDerivation {
 
   inherit version;
   defaultVersion = with versions; switch coq.coq-version [
-    { case = isGe "8.13"; out = "1.7.5"; }
-    { case = isGe "8.12"; out = "1.7.4"; }
-    { case = isGe "8.11"; out = "1.7.3"; }
-    { case = isGe "8.10"; out = "1.7.2"; }
-    { case = isGe "8.9"; out = "1.7.1"; }
+    { case = isEq "8.13"; out = "1.7.5"; }
+    { case = isEq "8.12"; out = "1.7.4"; }
+    { case = isEq "8.11"; out = "1.7.3"; }
+    { case = isEq "8.10"; out = "1.7.2"; }
+    { case = isEq "8.9";  out = "1.7.1"; }
   ] null;
 
   mlPlugin = true;

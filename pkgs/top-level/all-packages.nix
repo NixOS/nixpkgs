@@ -31068,6 +31068,7 @@ with pkgs;
     coqPackages_8_11 coq_8_11
     coqPackages_8_12 coq_8_12
     coqPackages_8_13 coq_8_13
+    coqPackages_8_14 coq_8_14
     coqPackages      coq
   ;
 
