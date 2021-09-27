@@ -1,20 +1,15 @@
 # === This file is part of Calamares - <https://github.com/calamares> ===
 #
-#   Calamares is free software: you can redistribute it and/or modify
-#   it under the terms of the GNU General Public License as published by
-#   the Free Software Foundation, either version 3 of the License, or
-#   (at your option) any later version.
+#   SPDX-FileCopyrightText: 2019 Adriaan de Groot <groot@kde.org>
+#   SPDX-License-Identifier: GPL-3.0-or-later
 #
-#   Calamares is distributed in the hope that it will be useful,
-#   but WITHOUT ANY WARRANTY; without even the implied warranty of
-#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-#   GNU General Public License for more details.
+###
 #
-#   You should have received a copy of the GNU General Public License
-#   along with Calamares. If not, see <http://www.gnu.org/licenses/>.
+#   Calamares-Examples is Free Software: see the License-Identifier above.
 #
-#   SPDX-License-Identifier: GPL-3.0+
-#   License-Filename: LICENSE
+#   Individual files may have different licenses (like the CMake
+#   infrastructure, which is BSD-2-Clause licensed). Check the SPDX
+#   identifiers in each file.
 #
 ###
 #
