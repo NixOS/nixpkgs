@@ -1621,6 +1621,8 @@ with pkgs;
 
   flood = nodePackages.flood;
 
+  font-config-info = callPackage ../tools/misc/font-config-info { };
+
   fxlinuxprintutil = callPackage ../tools/misc/fxlinuxprintutil { };
 
   genann = callPackage ../development/libraries/genann { };
