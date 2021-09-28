@@ -5561,6 +5561,8 @@ in {
 
   pyfireservicerota = callPackage ../development/python-modules/pyfireservicerota { };
 
+  pyflexit = callPackage ../development/python-modules/pyflexit { };
+
   pyflick = callPackage ../development/python-modules/pyflick { };
 
   pyfreedompro = callPackage ../development/python-modules/pyfreedompro { };
