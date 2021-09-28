@@ -677,6 +677,7 @@ in with py.pkgs; buildPythonApplication rec {
     "trace"
     "tradfri"
     "transmission"
+    "transport_nsw"
     "trend"
     "tts"
     "tuya"
