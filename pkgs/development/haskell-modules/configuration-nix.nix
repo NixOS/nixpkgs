@@ -142,7 +142,6 @@ self: super: builtins.intersectAttrs super {
 
   # Need WebkitGTK, not just webkit.
   webkit = super.webkit.override { webkit = pkgs.webkitgtk24x-gtk2; };
-  websnap = super.websnap.override { webkit = pkgs.webkitgtk24x-gtk3; };
 
   hs-mesos = overrideCabal super.hs-mesos (drv: {
     # Pass _only_ mesos; the correct protobuf is propagated.
