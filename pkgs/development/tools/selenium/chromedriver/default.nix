@@ -47,7 +47,7 @@ in stdenv.mkDerivation rec {
     install -m755 -D chromedriver $out/bin/chromedriver
   '' + lib.optionalString (!stdenv.isDarwin) ''
     patchelf --set-interpreter ${glibc.out}/lib/ld-linux-x86-64.so.2 $out/bin/chromedriver
-    wrapProgram "$out/bin/chromedriver" --prefix LD_LIBRARY_PATH : "${libs}:\$LD_LIBRARY_PATH"
+    wrapProgram "$out/bin/chromedriver" --prefix LD_LIBRARY_PATH : "${libs}"
   '';
 
   meta = with lib; {
