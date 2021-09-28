@@ -70,6 +70,6 @@ stdenv.mkDerivation rec {
     homepage = "https://roonlabs.com";
     license = licenses.unfree;
     maintainers = with maintainers; [ lovesegfault ];
-    platforms = platforms.linux;
+    platforms = [ "aarch64-linux" "x86_64-linux" ];
   };
 }
