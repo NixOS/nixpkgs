@@ -22160,6 +22160,8 @@ with pkgs;
 
   ugtrain = callPackage ../tools/misc/ugtrain { };
 
+  ulogd = callPackage ../os-specific/linux/ulogd { };
+
   untie = callPackage ../os-specific/linux/untie { };
 
   upower = callPackage ../os-specific/linux/upower { };
