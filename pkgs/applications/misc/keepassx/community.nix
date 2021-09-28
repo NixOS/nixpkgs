@@ -115,11 +115,6 @@ stdenv.mkDerivation rec {
   ++ optional (stdenv.isDarwin && withKeePassTouchID)
     darwin.apple_sdk.frameworks.LocalAuthentication;
 
-  preFixup = optionalString stdenv.isDarwin ''
-    # Make it work without Qt in PATH.
-    wrapQtApp $out/Applications/KeePassXC.app/Contents/MacOS/KeePassXC
-  '';
-
   passthru.tests = nixosTests.keepassxc;
 
   meta = {
