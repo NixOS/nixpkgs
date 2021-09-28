@@ -201,6 +201,7 @@ def update_plugins():
 
     """
     plugins = [
+        {'name': 'discourse-assign'},
         {'name': 'discourse-calendar'},
         {'name': 'discourse-canned-replies'},
         {'name': 'discourse-checklist'},
