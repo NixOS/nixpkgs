@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, unzip, makeWrapper
 , cairo, fontconfig, freetype, gdk-pixbuf, glib
 , glibc, gtk2, libX11, nspr, nss, pango, gconf
-, libxcb, libXi, libXrender, libXext
+, libxcb, libXi, libXrender, libXext, dbus
 }:
 
 let
@@ -27,6 +27,7 @@ let
     gdk-pixbuf glib gtk2 gconf
     libX11 nspr nss pango libXrender
     gconf libxcb libXext libXi
+    dbus
   ];
 
 in stdenv.mkDerivation rec {
