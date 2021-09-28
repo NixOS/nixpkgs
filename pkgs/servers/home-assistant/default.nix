@@ -338,6 +338,7 @@ in with py.pkgs; buildPythonApplication rec {
     "ee_brightbox"
     "efergy"
     "elgato"
+    "elkm1"
     "emonitor"
     "emulated_hue"
     "emulated_kasa"
