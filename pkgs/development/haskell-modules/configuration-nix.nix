@@ -140,9 +140,6 @@ self: super: builtins.intersectAttrs super {
   # Add necessary reference to gtk3 package
   gi-dbusmenugtk3 = addPkgconfigDepend super.gi-dbusmenugtk3 pkgs.gtk3;
 
-  # Need WebkitGTK, not just webkit.
-  webkit = super.webkit.override { webkit = pkgs.webkitgtk24x-gtk2; };
-
   hs-mesos = overrideCabal super.hs-mesos (drv: {
     # Pass _only_ mesos; the correct protobuf is propagated.
     extraLibraries = [ pkgs.mesos ];
