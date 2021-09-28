@@ -204,6 +204,7 @@ def update_plugins():
         {'name': 'discourse-assign'},
         {'name': 'discourse-calendar'},
         {'name': 'discourse-canned-replies'},
+        {'name': 'discourse-chat-integration'},
         {'name': 'discourse-checklist'},
         {'name': 'discourse-data-explorer'},
         {'name': 'discourse-github'},
