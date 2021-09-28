@@ -868,6 +868,7 @@ w0ng/vim-hybrid
 wakatime/vim-wakatime
 wannesm/wmgraphviz.vim
 wbthomason/packer.nvim
+weilbith/nvim-code-action-menu@main
 wellle/targets.vim
 wellle/tmux-complete.vim
 wfxr/minimap.vim

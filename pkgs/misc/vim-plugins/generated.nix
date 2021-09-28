@@ -3946,6 +3946,18 @@ final: prev:
     meta.homepage = "https://github.com/hrsh7th/nvim-cmp/";
   };
 
+  nvim-code-action-menu = buildVimPluginFrom2Nix {
+    pname = "nvim-code-action-menu";
+    version = "2021-09-28";
+    src = fetchFromGitHub {
+      owner = "weilbith";
+      repo = "nvim-code-action-menu";
+      rev = "0fea23ef716546ed1491d9d27d1c58ba658c2e01";
+      sha256 = "0s7ijj8323baxfamxk8zncdyf2zpl5c6pgfzy9kssv0z1ayl4463";
+    };
+    meta.homepage = "https://github.com/weilbith/nvim-code-action-menu/";
+  };
+
   nvim-colorizer-lua = buildVimPluginFrom2Nix {
     pname = "nvim-colorizer.lua";
     version = "2020-06-11";
