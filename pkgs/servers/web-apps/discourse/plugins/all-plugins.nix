@@ -15,6 +15,7 @@ in
   discourse-math = callPackage ./discourse-math {};
   discourse-migratepassword = callPackage ./discourse-migratepassword {};
   discourse-openid-connect = callPackage ./discourse-openid-connect {};
+  discourse-prometheus = callPackage ./discourse-prometheus {};
   discourse-solved = callPackage ./discourse-solved {};
   discourse-spoiler-alert = callPackage ./discourse-spoiler-alert {};
   discourse-yearly-review = callPackage ./discourse-yearly-review {};
