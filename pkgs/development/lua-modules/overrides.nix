@@ -300,7 +300,7 @@ with super;
         preBuild = self.luv.preBuild + ''
           sed -i 's,\(option(BUILD_MODULE.*\)ON,\1OFF,' CMakeLists.txt
           sed -i 's,\(option(BUILD_SHARED_LIBS.*\)OFF,\1ON,' CMakeLists.txt
-          sed -i 's,${"\${INSTALL_INC_DIR}"},${placeholder "out"}/include/luv,' CMakeLists.txt
+          sed -i 's,${"\${.*INSTALL_INC_DIR}"},${placeholder "out"}/include/luv,' CMakeLists.txt
         '';
 
         nativeBuildInputs = [ pkgs.fixDarwinDylibNames ];
