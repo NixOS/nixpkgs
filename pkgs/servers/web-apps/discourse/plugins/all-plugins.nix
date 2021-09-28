@@ -19,5 +19,6 @@ in
   discourse-saved-searches = callPackage ./discourse-saved-searches {};
   discourse-solved = callPackage ./discourse-solved {};
   discourse-spoiler-alert = callPackage ./discourse-spoiler-alert {};
+  discourse-voting = callPackage ./discourse-voting {};
   discourse-yearly-review = callPackage ./discourse-yearly-review {};
 }

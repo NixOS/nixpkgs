@@ -218,6 +218,7 @@ def update_plugins():
         {'name': 'discourse-saved-searches'},
         {'name': 'discourse-solved'},
         {'name': 'discourse-spoiler-alert'},
+        {'name': 'discourse-voting'},
         {'name': 'discourse-yearly-review'},
     ]
 
