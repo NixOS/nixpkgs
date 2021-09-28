@@ -9,20 +9,21 @@
 , dash-renderer
 , dash-html-components
 , dash-table
-, pytest
+, setuptools
 , pytest-mock
+, pytestCheckHook
 , mock
 }:
 
 buildPythonPackage rec {
   pname = "dash";
-  version = "1.21.0";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "plotly";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-X2yRlW6aXgRgKgRxLNBUHjkjMaw7K4iydzpWLBNt+Y8=";
+    sha256 = "1f5r2cqwa659rc61qa7zl1nqn7i1pr2ychydrfr92h1hm7kc06yi";
   };
 
   propagatedBuildInputs = [
@@ -34,22 +35,21 @@ buildPythonPackage rec {
     dash-renderer
     dash-html-components
     dash-table
+    setuptools
   ];
 
   checkInputs = [
-    pytest
-    pytest-mock
+    pytestCheckHook
     mock
+    pytest-mock
   ];
 
-  checkPhase = ''
-    pytest tests/unit/test_{configs,fingerprint,resources}.py \
-      tests/unit/dash/
-  '';
-
-  pythonImportsCheck = [
-    "dash"
+  pytestFlagsArray = [
+    "tests/unit/test_{configs,fingerprint,resources}.py"
+    "tests/unit/dash"
   ];
+
+  pythonImportsCheck = ["dash"];
 
   meta = with lib; {
     description = "Python framework for building analytical web applications";
