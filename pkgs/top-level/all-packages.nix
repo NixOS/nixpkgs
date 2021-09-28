@@ -27748,6 +27748,8 @@ with pkgs;
     fftw = fftwSinglePrec;
   };
 
+  timeshift  = callPackage ../tools/backup/timeshift { };
+
   timewarrior = callPackage ../applications/misc/timewarrior { };
 
   timew-sync-server = callPackage ../applications/misc/timew-sync-server { };
