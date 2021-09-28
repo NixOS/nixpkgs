@@ -13,12 +13,12 @@ let
     let
       defaultScope = mkScope self;
       callPackage = drv: args: callPackageWithScope defaultScope drv args;
-    in
-    rec {
+    in rec {
       inherit callPackage erlang;
       beamPackages = self;
 
-      inherit (callPackage ../tools/build-managers/rebar3 { }) rebar3 rebar3WithPlugins;
+      inherit (callPackage ../tools/build-managers/rebar3 { })
+        rebar3 rebar3WithPlugins;
       rebar = callPackage ../tools/build-managers/rebar { };
 
       # rebar3 port compiler plugin is required by buildRebar3
@@ -40,7 +40,12 @@ let
       erlang-ls = callPackage ./erlang-ls { };
 
       # BEAM-based languages.
-      elixir = elixir_1_11;
+      elixir = elixir_1_12;
+
+      elixir_1_12 = lib'.callElixir ../interpreters/elixir/1.12.nix {
+        inherit erlang;
+        debugInfo = true;
+      };
 
       elixir_1_11 = lib'.callElixir ../interpreters/elixir/1.11.nix {
         inherit erlang;
@@ -67,14 +72,19 @@ let
         debugInfo = true;
       };
 
-      elixir_ls = callPackage ./elixir_ls.nix { inherit elixir fetchMixDeps mixRelease; };
+      elixir_ls =
+        callPackage ./elixir_ls.nix { inherit elixir fetchMixDeps mixRelease; };
 
       # Remove old versions of elixir, when the supports fades out:
       # https://hexdocs.pm/elixir/compatibility-and-deprecations.html
 
       lfe = lfe_1_3;
-      lfe_1_2 = lib'.callLFE ../interpreters/lfe/1.2.nix { inherit erlang buildRebar3 buildHex; };
-      lfe_1_3 = lib'.callLFE ../interpreters/lfe/1.3.nix { inherit erlang buildRebar3 buildHex; };
+      lfe_1_2 = lib'.callLFE ../interpreters/lfe/1.2.nix {
+        inherit erlang buildRebar3 buildHex;
+      };
+      lfe_1_3 = lib'.callLFE ../interpreters/lfe/1.3.nix {
+        inherit erlang buildRebar3 buildHex;
+      };
 
       # Non hex packages. Examples how to build Rebar/Mix packages with and
       # without helper functions buildRebar3 and buildMix.
@@ -85,5 +95,4 @@ let
       # An example of Erlang/C++ package.
       cuter = callPackage ../tools/erlang/cuter { };
     };
-in
-makeExtensible packages
+in makeExtensible packages
