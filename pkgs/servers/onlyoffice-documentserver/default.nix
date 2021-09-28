@@ -9,10 +9,10 @@
 
 stdenv.mkDerivation rec {
   pname = "onlyoffice-documentserver";
-  version = "6.4.0";
+  version = "6.4.1";
   src = fetchurl {
     url = "https://github.com/ONLYOFFICE/DocumentServer/releases/download/v${version}/onlyoffice-documentserver_amd64.deb";
-    sha256 = "0yq7z73wvlfw01pxk637nxq73j145q00mxs6niddr4jv0hr24sad";
+    sha256 = "0q9ara3l7l0k4hx0kk36kkvzka5kw7fqk3r45zdfsx6ac8gnvm70";
   };
 
   nativeBuildInputs = [
