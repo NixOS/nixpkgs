@@ -2,6 +2,7 @@
 , cairo, fontconfig, freetype, gdk-pixbuf, glib
 , glibc, gtk2, libX11, nspr, nss, pango, gconf
 , libxcb, libXi, libXrender, libXext, dbus
+, testVersion, chromedriver
 }:
 
 let
@@ -49,6 +50,9 @@ in stdenv.mkDerivation rec {
     patchelf --set-interpreter ${glibc.out}/lib/ld-linux-x86-64.so.2 $out/bin/chromedriver
     wrapProgram "$out/bin/chromedriver" --prefix LD_LIBRARY_PATH : "${libs}"
   '';
+
+  passthru.tests.version =
+    testVersion { package = chromedriver; };
 
   meta = with lib; {
     homepage = "https://chromedriver.chromium.org/";
