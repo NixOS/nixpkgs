@@ -97,6 +97,7 @@ in
   cryptpad = handleTest ./cryptpad.nix {};
   deluge = handleTest ./deluge.nix {};
   dendrite = handleTest ./dendrite.nix {};
+  dex-oidc = handleTest ./dex-oidc.nix {};
   dhparams = handleTest ./dhparams.nix {};
   disable-installer-tools = handleTest ./disable-installer-tools.nix {};
   discourse = handleTest ./discourse.nix {};
