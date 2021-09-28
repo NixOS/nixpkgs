@@ -3259,6 +3259,8 @@ in {
     gst-plugins-base = pkgs.gst_all_1.gst-plugins-base;
   };
 
+  gtfs-realtime-bindings = callPackage ../development/python-modules/gtfs-realtime-bindings { };
+
   gtimelog = callPackage ../development/python-modules/gtimelog { };
 
   gtts = callPackage ../development/python-modules/gtts { };
