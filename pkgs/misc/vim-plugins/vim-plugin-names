@@ -644,7 +644,7 @@ rust-lang/rust.vim
 ryanoasis/vim-devicons
 ryvnf/readline.vim
 saadparwaiz1/cmp_luasnip
-saecki/crates.nvim
+saecki/crates.nvim@main
 sainnhe/edge
 sainnhe/gruvbox-material
 sainnhe/sonokai
@@ -868,6 +868,7 @@ w0ng/vim-hybrid
 wakatime/vim-wakatime
 wannesm/wmgraphviz.vim
 wbthomason/packer.nvim
+weilbith/nvim-code-action-menu@main
 wellle/targets.vim
 wellle/tmux-complete.vim
 wfxr/minimap.vim
