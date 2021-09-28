@@ -9,6 +9,7 @@ in
   discourse-chat-integration = callPackage ./discourse-chat-integration {};
   discourse-checklist = callPackage ./discourse-checklist {};
   discourse-data-explorer = callPackage ./discourse-data-explorer {};
+  discourse-docs = callPackage ./discourse-docs {};
   discourse-github = callPackage ./discourse-github {};
   discourse-ldap-auth = callPackage ./discourse-ldap-auth {};
   discourse-math = callPackage ./discourse-math {};
