@@ -5,7 +5,6 @@
 , click
 , dateparser
 , fetchFromGitHub
-, fetchpatch
 , marshmallow-dataclass
 , poetry-core
 , pyjwt
@@ -17,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "renault-api";
-  version = "0.1.4";
+  version = "0.1.5";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -26,7 +25,7 @@ buildPythonPackage rec {
     owner = "hacf-fr";
     repo = pname;
     rev = "v${version}";
-    sha256 = "049kh63yk0r0falqbl5akcwgzqjrkqqhf9y537rrlzc85ihf28b8";
+    sha256 = "sha256-b3oHpERUqeIw0yOxZytQuRE4jVUcahWlMQ+7ZBX0KL8=";
   };
 
   nativeBuildInputs = [
@@ -46,15 +45,6 @@ buildPythonPackage rec {
     aioresponses
     pytest-asyncio
     pytestCheckHook
-  ];
-
-  patches = [
-    # Switch to poetry-core, https://github.com/hacf-fr/renault-api/pull/371
-    (fetchpatch {
-      name = "switch-to-poetry-core.patch";
-      url = "https://github.com/hacf-fr/renault-api/commit/5457a612b9ff9f323e8449cbe9dbce465bd65a79.patch";
-      sha256 = "0ds9m4j2qpv0nyg9p8dk9klnarl8wckwclddgnii6h47qci362yy";
-    })
   ];
 
   pythonImportsCheck = [ "renault_api" ];
