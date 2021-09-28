@@ -2328,6 +2328,8 @@ in {
 
   elgato = callPackage ../development/python-modules/elgato { };
 
+  elkm1-lib = callPackage ../development/python-modules/elkm1-lib { };
+
   elasticsearch = callPackage ../development/python-modules/elasticsearch { };
 
   elasticsearch-dsl = callPackage ../development/python-modules/elasticsearch-dsl { };
@@ -6138,6 +6140,8 @@ in {
 
   pydocumentdb = callPackage ../development/python-modules/pydocumentdb { };
 
+  pydoods = callPackage ../development/python-modules/pydoods { };
+
   pydot = callPackage ../development/python-modules/pydot {
     inherit (pkgs) graphviz;
   };
@@ -6550,6 +6554,8 @@ in {
     inherit (pkgs) coreutils which;
   };
 
+  pynello = callPackage ../development/python-modules/pynello { };
+
   pynest2d = callPackage ../development/python-modules/pynest2d { };
 
   pynetbox = callPackage ../development/python-modules/pynetbox { };
@@ -6579,6 +6585,8 @@ in {
   pyodbc = callPackage ../development/python-modules/pyodbc { };
 
   pyogg = callPackage ../development/python-modules/pyogg { };
+
+  pyombi = callPackage ../development/python-modules/pyombi { };
 
   pyomo = callPackage ../development/python-modules/pyomo { };
 
