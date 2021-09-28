@@ -4204,6 +4204,8 @@ with pkgs;
 
   cwebbin = callPackage ../development/tools/misc/cwebbin { };
 
+  cve-bin-tool = python3Packages.callPackage ../tools/security/cve-bin-tool { };
+
   cvs-fast-export = callPackage ../applications/version-management/cvs-fast-export { };
 
   dadadodo = callPackage ../tools/text/dadadodo { };
