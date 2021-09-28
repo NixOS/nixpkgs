@@ -21364,6 +21364,8 @@ with pkgs;
     stdenv = gcc11Stdenv;
   };
 
+  nfacct = callPackage ../os-specific/linux/nfacct {  };
+
   nmon = callPackage ../os-specific/linux/nmon { };
 
   hwdata = callPackage ../os-specific/linux/hwdata { };
