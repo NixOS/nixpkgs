@@ -335,19 +335,8 @@ in {
               The access key for the S3 bucket.
             '';
           };
-          secret = mkOption {
-            type = types.nullOr types.str;
-            default = null;
-            example = "M5MrXTRjkyMaxXPe2FRXMTfTfbKEnZCu+7uRTVSj";
-            description = ''
-              The access secret for the S3 bucket. Use
-              <literal>secretFile</literal> to avoid this being world-readable
-              in the <literal>/nix/store</literal>
-            '';
-          };
           secretFile = mkOption {
-            type = types.nullOr types.str;
-            default = null;
+            type = types.str;
             example = "/var/nextcloud-objectstore-s3-secret";
             description = ''
               The full path to a file that contains the access secret. Must be
@@ -512,10 +501,6 @@ in {
             || (lists.count (v: v.enable) (attrsets.attrValues acfg.objectstore)) == 1;
           message = "If using objectstore class as primary storage exactly one class can be enabled.";
         }
-        { assertion = let s3 = acfg.objectstore.s3; in acfg.objectstore == null
-            || (!s3.enable || ((s3.arguments.secret != null) != (s3.arguments.secretFile != null)));
-          message = "S3 storage requires specifying exactly one of secret or secretFile";
-        }
       ];
 
       warnings = let
@@ -606,7 +591,7 @@ in {
           c = cfg.config;
           writePhpArrary = a: "[${concatMapStringsSep "," (val: ''"${toString val}"'') a}]";
           requiresReadSecretFunction = c.dbpassFile != null
-            || (c.objectstore != null && (c.objectstore.s3.enable && c.objectstore.s3.arguments.secretFile != null));
+            || (c.objectstore != null && c.objectstore.s3.enable);
           objectstoreConfig = let
             class = if c.objectstore.s3.enable then "S3" else "";
             args = if c.objectstore.s3.enable then c.objectstore.s3.arguments else {};
@@ -615,8 +600,7 @@ in {
               'bucket' => '${args.bucket}',
               'autocreate' => ${toString args.autocreate},
               'key' => '${args.key}',
-              ${optionalString (args.secret != null) "'secret' => '${args.secret}',"}
-              ${optionalString (args.secretFile != null) "'secret' => nix_read_secret('${args.secretFile}'),"}
+              'secret' => nix_read_secret('${args.secretFile}'),
               ${optionalString (args.hostname != null) "'hostname' => '${args.hostname}',"}
               ${optionalString (args.port != null) "'port' => ${toString args.port},"}
               ${optionalString (args.useSsl != null) "'use_ssl' => ${if args.useSsl then "true" else "false"},"}
