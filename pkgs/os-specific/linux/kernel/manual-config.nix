@@ -318,9 +318,8 @@ stdenv.mkDerivation ((drvAttrs config stdenv.hostPlatform.linux-kernel kernelPat
       ++ optionals (lib.versionAtLeast version "4.16") [ bison flex ]
       ++ optionals (lib.versionAtLeast version "5.2")  [ cpio pahole ]
       ++ optional  (lib.versionAtLeast version "5.8")  elfutils
+      ++ optional (lib.versionAtLeast version "5.2") zlib
       ;
-
-  buildInputs = optional (lib.versionAtLeast version "5.2") zlib;
 
   hardeningDisable = [ "bindnow" "format" "fortify" "stackprotector" "pic" "pie" ];
 
