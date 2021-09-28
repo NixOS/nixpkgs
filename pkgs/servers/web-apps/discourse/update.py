@@ -215,6 +215,7 @@ def update_plugins():
         # We can't update this automatically at the moment because the plugin.rb
         # tries to load a version number which breaks bundler called by this script.
         # {'name': 'discourse-prometheus'},
+        {'name': 'discourse-saved-searches'},
         {'name': 'discourse-solved'},
         {'name': 'discourse-spoiler-alert'},
         {'name': 'discourse-yearly-review'},
