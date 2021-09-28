@@ -59,5 +59,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ mjlbach ];
     platforms = platforms.linux;
+    mainProgram = "lua-language-server";
   };
 }

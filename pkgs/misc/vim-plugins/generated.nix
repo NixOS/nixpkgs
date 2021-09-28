@@ -1289,18 +1289,6 @@ final: prev:
     meta.homepage = "https://github.com/deoplete-plugins/deoplete-dictionary/";
   };
 
-  deoplete-emoji = buildVimPluginFrom2Nix {
-    pname = "deoplete-emoji";
-    version = "2019-01-20";
-    src = fetchFromGitHub {
-      owner = "fszymanski";
-      repo = "deoplete-emoji";
-      rev = "1dfa2da6ae3ee146ddfbfdba48cf45f0c1d57d7d";
-      sha256 = "0drqbdmy8igq6rv7s2qlxsp391pydcynlr9gkaadzrg7pk4nlgsb";
-    };
-    meta.homepage = "https://github.com/fszymanski/deoplete-emoji/";
-  };
-
   deoplete-fish = buildVimPluginFrom2Nix {
     pname = "deoplete-fish";
     version = "2020-04-04";

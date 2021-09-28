@@ -1,4 +1,6 @@
-{ stdenv, lib, fetchurl, ocaml, findlib, ocamlbuild, qtest, num }:
+{ stdenv, lib, fetchurl, ocaml, findlib, ocamlbuild, qtest, num
+, doCheck ? lib.versionAtLeast ocaml.version "4.08" && !stdenv.isAarch64
+}:
 
 let version = "3.3.0"; in
 
@@ -14,7 +16,7 @@ stdenv.mkDerivation {
   checkInputs = [ qtest ];
   propagatedBuildInputs = [ num ];
 
-  doCheck = lib.versionAtLeast ocaml.version "4.04" && !stdenv.isAarch64;
+  inherit doCheck;
   checkTarget = "test";
 
   createFindlibDestdir = true;
