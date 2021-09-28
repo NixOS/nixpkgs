@@ -899,7 +899,7 @@
     "trafikverket_train" = ps: with ps; [ pytrafikverket ];
     "trafikverket_weatherstation" = ps: with ps; [ pytrafikverket ];
     "transmission" = ps: with ps; [ transmissionrpc ];
-    "transport_nsw" = ps: with ps; [ ]; # missing inputs: PyTransportNSW
+    "transport_nsw" = ps: with ps; [ pytransportnsw ];
     "travisci" = ps: with ps; [ ]; # missing inputs: TravisPy
     "trend" = ps: with ps; [ numpy ];
     "tts" = ps: with ps; [ aiohttp-cors mutagen ];
