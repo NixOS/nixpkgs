@@ -7527,6 +7527,8 @@ in {
 
   pytrafikverket = callPackage ../development/python-modules/pytrafikverket { };
 
+  pytransportnsw = callPackage ../development/python-modules/pytransportnsw { };
+
   pytrends = callPackage ../development/python-modules/pytrends { };
 
   pytricia = callPackage ../development/python-modules/pytricia { };
