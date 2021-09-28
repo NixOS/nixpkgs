@@ -1,10 +1,10 @@
 { lib
 , fetchFromGitHub
-, crystal_0_33
+, crystal_1_0
 }:
 
 let
-  crystal = crystal_0_33;
+  crystal = crystal_1_0;
 
 in crystal.buildCrystalPackage rec {
   pname = "thicket";
