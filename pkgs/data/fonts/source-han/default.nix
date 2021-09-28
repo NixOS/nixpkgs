@@ -19,8 +19,7 @@ let
     version = lib.removeSuffix "R" rev;
 
     buildCommand = ''
-      mkdir -p $out/share/fonts/opentype/source-han-${family}
-      ln -s ${ttc} $out/share/fonts/opentype/source-han-${family}/SourceHan${Family}.ttc
+      install -m444 -Dt $out/share/fonts/opentype/source-han-${family} ${ttc}
     '';
 
     meta = {
