@@ -197,7 +197,7 @@ rec {
 
   withRecursion =
     args@{
-      /* If this option is not null, `toPretty` will stop evaluating at a certain depth */
+      /* If this option is not null, the given value will stop evaluating at a certain depth */
       depthLimit
       /* If this option is true, an error will be thrown, if a certain given depth is exceeded */
     , throwOnDepthLimit ? true
@@ -207,7 +207,7 @@ rec {
         transform = depth:
           if depthLimit != null && depth > depthLimit then
             if throwOnDepthLimit
-              then throw "Exceeded maximum eval-depth limit of ${toString depthLimit} while trying to pretty-print with `generators.withRecursion'!"
+              then throw "Exceeded maximum eval-depth limit of ${toString depthLimit} while trying to evaluate with `generators.withRecursion'!"
               else const "<unevaluated>"
           else id;
         mapAny = with builtins; depth: v:
