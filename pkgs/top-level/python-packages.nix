@@ -5587,6 +5587,8 @@ in {
 
   pypoint = callPackage ../development/python-modules/pypoint { };
 
+  pypoolstation = callPackage ../development/python-modules/pypoolstation { };
+
   pyrfxtrx = callPackage ../development/python-modules/pyrfxtrx { };
 
   pyrogram = callPackage ../development/python-modules/pyrogram { };
