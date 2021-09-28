@@ -36,7 +36,7 @@ buildPythonPackage rec {
     owner = "sphinx-doc";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1bl0k326h32dag41axbsjq1d9w59rm11naj6bfirg116nqw56mk6";
+    sha256 = "129x3kljxq7sbg5cc12z3cmjsili6l3qrsxllkx97id1a85f7zmj";
     extraPostFetch = ''
       cd $out
       mv tests/roots/test-images/testimäge.png \
