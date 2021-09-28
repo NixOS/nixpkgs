@@ -6582,6 +6582,8 @@ in {
 
   pyogg = callPackage ../development/python-modules/pyogg { };
 
+  pyombi = callPackage ../development/python-modules/pyombi { };
+
   pyomo = callPackage ../development/python-modules/pyomo { };
 
   pyp = callPackage ../development/python-modules/pyp {

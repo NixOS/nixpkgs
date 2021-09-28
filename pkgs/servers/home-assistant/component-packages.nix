@@ -599,7 +599,7 @@
     "octoprint" = ps: with ps; [ aiohttp-cors ifaddr netdisco zeroconf ];
     "oem" = ps: with ps; [ ]; # missing inputs: oemthermostat
     "ohmconnect" = ps: with ps; [ defusedxml ];
-    "ombi" = ps: with ps; [ ]; # missing inputs: pyombi
+    "ombi" = ps: with ps; [ pyombi ];
     "omnilogic" = ps: with ps; [ omnilogic ];
     "onboarding" = ps: with ps; [ aiohttp-cors home-assistant-frontend pillow sqlalchemy ];
     "ondilo_ico" = ps: with ps; [ aiohttp-cors ondilo ];
