@@ -40,11 +40,25 @@ stdenv.mkDerivation rec {
     ++ optional withPython "--enable-python"
     ++ optional withXtables "--with-xtables";
 
+  doInstallCheck = true;
+
+  installCheckPhase = ''
+    $out/bin/${meta.mainProgram} --help > /dev/null
+  '';
+
   meta = {
     description = "The project that aims to replace the existing {ip,ip6,arp,eb}tables framework";
     homepage = "https://netfilter.org/projects/nftables/";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ izorkin ];
+    mainProgram = "nft";
+    longDescription = ''
+      nftables replaces the popular {ip,ip6,arp,eb}tables.
+      This software provides a new in-kernel packet classification framework that is based
+      on a network-specific Virtual Machine (VM) and a new nft userspace command line tool.
+      nftables reuses the existing Netfilter subsystems such as the existing hook infrastructure,
+      the connection tracking system, NAT, userspace queueing and logging subsystem.
+    '';
   };
 }
