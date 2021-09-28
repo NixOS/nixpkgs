@@ -50,12 +50,13 @@
 , ffmpeg
 , runtimeShell
 , mesa # firefox wants gbm for drm+dmabuf
-, systemLocale ? config.i18n.defaultLocale or "en-US"
+, systemLocale ? config.i18n.defaultLocale or "en_US"
 }:
 
 let
 
   inherit (generated) version sources;
+  mozLocale = (import ./locales.nix { lib = lib; }).mozLocale;
 
   mozillaPlatforms = {
     i686-linux = "linux-i686";
@@ -78,7 +79,7 @@ let
 
   defaultSource = lib.findFirst (sourceMatches "en-US") {} sources;
 
-  source = lib.findFirst (sourceMatches systemLocale) defaultSource sources;
+  source = lib.findFirst (sourceMatches (mozLocale systemLocale)) defaultSource sources;
 
   pname = "firefox-${channel}-bin-unwrapped";
 
