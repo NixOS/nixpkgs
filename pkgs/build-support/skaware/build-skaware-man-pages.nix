@@ -7,8 +7,6 @@
 , version
   # : string
 , sha256
-  # : list (int | string)
-, sections
   # : string
 , description
   # : list Maintainer
@@ -38,10 +36,6 @@ stdenv.mkDerivation {
   ];
 
   dontBuild = true;
-
-  preInstall = lib.concatMapStringsSep "\n"
-    (section: "mkdir -p \"${manDir}/man${builtins.toString section}\"")
-    sections;
 
   meta = with lib; {
     inherit description license maintainers;
