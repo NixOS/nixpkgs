@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, python, fetchFromGitHub, isPy3k
+{ lib, buildPythonPackage, python, fetchFromGitHub, isPy3k, pytestCheckHook
 , notmuch2, urwid, urwidtrees, twisted, python_magic, configobj, mock, file, gpgme
 , service-identity, gnupg, sphinx, gawk, procps, future , withManpage ? false
 }:
@@ -35,11 +35,14 @@ buildPythonPackage rec {
     gpgme
   ];
 
-  # some twisted tests need the network (test_env_set... )
-  doCheck = true;
   postBuild = lib.optionalString withManpage "make -C docs man";
 
-  checkInputs =  [ gawk future mock gnupg procps ];
+  checkInputs = [ gawk future mock gnupg procps pytestCheckHook ];
+  # some twisted tests need internet access
+  disabledTests = [
+    "test_env_set"
+    "test_no_spawn_no_stdin_attached"
+  ];
 
   postInstall = let
     completionPython = python.withPackages (ps: [ ps.configobj ]);
