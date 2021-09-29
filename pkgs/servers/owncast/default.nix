@@ -1,7 +1,6 @@
 { lib, buildGoModule, fetchFromGitHub, nixosTests, bash, which, ffmpeg, makeWrapper, coreutils, ... }:
 
 buildGoModule rec {
-
   pname = "owncast";
   version = "0.0.9";
 
