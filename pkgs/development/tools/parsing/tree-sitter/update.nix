@@ -138,6 +138,10 @@ let
       orga = "rydesun";
       repo = "tree-sitter-dot";
     };
+    "tree-sitter-norg" = {
+      orga = "nvim-neorg";
+      repo = "tree-sitter-norg";
+    };
   };
 
   allGrammars =
