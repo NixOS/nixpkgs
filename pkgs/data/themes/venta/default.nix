@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "venta";
-  version = "0.6";
+  version = "0.7";
 
   src = fetchFromGitHub {
     owner = "darkomarko42";
     repo = pname;
     rev = version;
-    sha256 = "1fhiq1kji5qmwsh8335rzilvhs30g5jp126czf2rf532iba0ivd7";
+    sha256 = "0vgm65mb8qd6nbkkinmqb1hldksfgd6281l58y28jc5q4244l9wp";
   };
 
   buildInputs = [
