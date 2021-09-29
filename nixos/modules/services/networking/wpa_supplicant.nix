@@ -20,10 +20,16 @@ let
     ++ optional cfg.scanOnLowSignal ''bgscan="simple:30:-70:3600"''
     ++ optional (cfg.extraConfig != "") cfg.extraConfig);
 
+  configIsGenerated = with cfg;
+    networks != {} || extraConfig != "" || userControlled.enable;
+
+  # the original configuration file
   configFile =
-    if cfg.networks != {} || cfg.extraConfig != "" || cfg.userControlled.enable
+    if configIsGenerated
       then pkgs.writeText "wpa_supplicant.conf" generatedConfig
       else "/etc/wpa_supplicant.conf";
+  # the config file with environment variables replaced
+  finalConfig = ''"$RUNTIME_DIRECTORY"/wpa_supplicant.conf'';
 
   # Creates a network block for wpa_supplicant.conf
   mkNetwork = ssid: opts:
@@ -56,8 +62,8 @@ let
     let
       deviceUnit = optional (iface != null) "sys-subsystem-net-devices-${utils.escapeSystemdPath iface}.device";
       configStr = if cfg.allowAuxiliaryImperativeNetworks
-        then "-c /etc/wpa_supplicant.conf -I ${configFile}"
-        else "-c ${configFile}";
+        then "-c /etc/wpa_supplicant.conf -I ${finalConfig}"
+        else "-c ${finalConfig}";
     in {
       description = "WPA Supplicant instance" + optionalString (iface != null) " for interface ${iface}";
 
@@ -69,12 +75,25 @@ let
       stopIfChanged = false;
 
       path = [ package ];
+      serviceConfig.RuntimeDirectory = "wpa_supplicant";
+      serviceConfig.RuntimeDirectoryMode = "700";
+      serviceConfig.EnvironmentFile = mkIf (cfg.environmentFile != null)
+        (builtins.toString cfg.environmentFile);
 
       script =
       ''
-        if [ -f /etc/wpa_supplicant.conf -a "/etc/wpa_supplicant.conf" != "${configFile}" ]; then
-          echo >&2 "<3>/etc/wpa_supplicant.conf present but ignored. Generated ${configFile} is used instead."
-        fi
+        ${optionalString configIsGenerated ''
+          if [ -f /etc/wpa_supplicant.conf ]; then
+            echo >&2 "<3>/etc/wpa_supplicant.conf present but ignored. Generated ${configFile} is used instead."
+          fi
+        ''}
+
+        # substitute environment variables
+        ${pkgs.gawk}/bin/awk '{
+          for(varname in ENVIRON)
+            gsub("@"varname"@", ENVIRON[varname])
+          print
+        }' "${configFile}" > "${finalConfig}"
 
         iface_args="-s ${optionalString cfg.dbusControlled "-u"} -D${cfg.driver} ${configStr}"
 
@@ -155,6 +174,44 @@ in {
         '';
       };
 
+      environmentFile = mkOption {
+        type = types.nullOr types.path;
+        default = null;
+        example = "/run/secrets/wireless.env";
+        description = ''
+          File consisting of lines of the form <literal>varname=value</literal>
+          to define variables for the wireless configuration.
+
+          See section "EnvironmentFile=" in <citerefentry>
+          <refentrytitle>systemd.exec</refentrytitle><manvolnum>5</manvolnum>
+          </citerefentry> for a syntax reference.
+
+          Secrets (PSKs, passwords, etc.) can be provided without adding them to
+          the world-readable Nix store by defining them in the environment file and
+          referring to them in option <option>networking.wireless.networks</option>
+          with the syntax <literal>@varname@</literal>. Example:
+
+          <programlisting>
+          # content of /run/secrets/wireless.env
+          PSK_HOME=mypassword
+          PASS_WORK=myworkpassword
+          </programlisting>
+
+          <programlisting>
+          # wireless-related configuration
+          networking.wireless.environmentFile = "/run/secrets/wireless.env";
+          networking.wireless.networks = {
+            home.psk = "@PSK_HOME@";
+            work.auth = '''
+              eap=PEAP
+              identity="my-user@example.com"
+              password="@PASS_WORK@"
+            ''';
+          };
+          </programlisting>
+        '';
+      };
+
       networks = mkOption {
         type = types.attrsOf (types.submodule {
           options = {
@@ -165,10 +222,14 @@ in {
                 The network's pre-shared key in plaintext defaulting
                 to being a network without any authentication.
 
-                Be aware that these will be written to the nix store
-                in plaintext!
+                <warning><para>
+                  Be aware that this will be written to the nix store
+                  in plaintext! Use an environment variable instead.
+                </para></warning>
 
-                Mutually exclusive with <varname>pskRaw</varname>.
+                <note><para>
+                  Mutually exclusive with <varname>pskRaw</varname>.
+                </para></note>
               '';
             };
 
@@ -179,7 +240,14 @@ in {
                 The network's pre-shared key in hex defaulting
                 to being a network without any authentication.
 
-                Mutually exclusive with <varname>psk</varname>.
+                <warning><para>
+                  Be aware that this will be written to the nix store
+                  in plaintext! Use an environment variable instead.
+                </para></warning>
+
+                <note><para>
+                  Mutually exclusive with <varname>psk</varname>.
+                </para></note>
               '';
             };
 
@@ -231,7 +299,7 @@ in {
               example = ''
                 eap=PEAP
                 identity="user@example.com"
-                password="secret"
+                password="@EXAMPLE_PASSWORD@"
               '';
               description = ''
                 Use this option to configure advanced authentication methods like EAP.
@@ -242,7 +310,15 @@ in {
                 </citerefentry>
                 for example configurations.
 
-                Mutually exclusive with <varname>psk</varname> and <varname>pskRaw</varname>.
+                <warning><para>
+                  Be aware that this will be written to the nix store
+                  in plaintext! Use an environment variable for secrets.
+                </para></warning>
+
+                <note><para>
+                  Mutually exclusive with <varname>psk</varname> and
+                  <varname>pskRaw</varname>.
+                </para></note>
               '';
             };
 
@@ -303,11 +379,17 @@ in {
         default = {};
         example = literalExample ''
           { echelon = {                   # SSID with no spaces or special characters
-              psk = "abcdefgh";
+              psk = "abcdefgh";           # (password will be written to /nix/store!)
             };
+
+            echelon = {                   # safe version of the above: read PSK from the
+              psk = "@PSK_ECHELON@";      # variable PSK_ECHELON, defined in environmentFile,
+            };                            # this won't leak into /nix/store
+
             "echelon's AP" = {            # SSID with spaces and/or special characters
-               psk = "ijklmnop";
+               psk = "ijklmnop";          # (password will be written to /nix/store!)
             };
+
             "free.wifi" = {};             # Public wireless network
           }
         '';

@@ -4,15 +4,14 @@
 , # Ignored
   config ? null
 , # Nixpkgs, for qemu, lib and more
-  pkgs
+  pkgs, lib
 , # !!! See comment about args in lib/modules.nix
   specialArgs ? {}
 , # NixOS configuration to add to the VMs
   extraConfigurations ? []
 }:
 
-with pkgs.lib;
-with import ../lib/qemu-flags.nix { inherit pkgs; };
+with lib;
 
 rec {
 
@@ -93,8 +92,9 @@ rec {
                          "${config.networking.hostName}\n"));
 
                   virtualisation.qemu.options =
-                    forEach interfacesNumbered
-                      ({ fst, snd }: qemuNICFlags snd fst m.snd);
+                    let qemu-common = import ../lib/qemu-common.nix { inherit lib pkgs; };
+                    in flip concatMap interfacesNumbered
+                      ({ fst, snd }: qemu-common.qemuNICFlags snd fst m.snd);
                 };
             }
           )

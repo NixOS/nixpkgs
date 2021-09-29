@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-onlineaccounts";
-  version = "6.2.0";
+  version = "6.2.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "1lp3i31jzp21n43d1mh4d4i8zgim3q3j4inw4hmyimyql2s83cc3";
+    sha256 = "1q3f7zr04p2100mb255zy38il2i47l6vqdc9a9acjbk3n7q5sf92";
   };
 
   passthru = {

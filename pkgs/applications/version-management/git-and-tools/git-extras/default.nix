@@ -11,15 +11,21 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-ACuTb1DGft2/32Ezg23jhpl9yua5kUTZ2kKL8KHU+BU=";
   };
 
-  nativeBuildInputs = [ unixtools.column which ];
+  postPatch = ''
+    patchShebangs check_dependencies.sh
+  '';
+
+  nativeBuildInputs = [
+    unixtools.column
+    which
+  ];
 
   dontBuild = true;
 
-  preInstall = ''
-    patchShebangs .
-  '';
-
-  installFlags = [ "PREFIX=${placeholder "out"}" ];
+  installFlags = [
+    "PREFIX=${placeholder "out"}"
+    "SYSCONFDIR=${placeholder "out"}/share"
+  ];
 
   postInstall = ''
     # bash completion is already handled by make install

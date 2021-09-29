@@ -1,5 +1,7 @@
 { lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild
-, topkg, result, lwt, cmdliner, fmt }:
+, topkg, result, lwt, cmdliner, fmt
+, js_of_ocaml
+}:
 let
   pname = "logs";
   webpage = "https://erratique.ch/software/${pname}";
@@ -19,10 +21,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ ocaml findlib ocamlbuild ];
-  buildInputs = [ findlib topkg fmt cmdliner lwt ];
+  buildInputs = [ findlib topkg fmt cmdliner js_of_ocaml lwt ];
   propagatedBuildInputs = [ result ];
 
-  buildPhase = "${topkg.run} build --with-js_of_ocaml false";
+  buildPhase = "${topkg.run} build --with-js_of_ocaml true";
 
   inherit (topkg) installPhase;
 

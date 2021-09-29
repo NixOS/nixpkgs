@@ -92,11 +92,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "brave";
-  version = "1.29.77";
+  version = "1.30.86";
 
   src = fetchurl {
     url = "https://github.com/brave/brave-browser/releases/download/v${version}/brave-browser_${version}_amd64.deb";
-    sha256 = "LJykdig44ACpvlaGogbwrbY9hCJT3CB4ZKDZ/IzaBOU=";
+    sha256 = "0pg29i01dm5gqfd3aagsc83dbx0n3051wfxi0r1c9l93dwm5bmq9";
   };
 
   dontConfigure = true;
@@ -126,7 +126,7 @@ stdenv.mkDerivation rec {
 
       ln -sf $BINARYWRAPPER $out/bin/brave
 
-      for exe in $out/opt/brave.com/brave/{brave,crashpad_handler}; do
+      for exe in $out/opt/brave.com/brave/{brave,chrome_crashpad_handler}; do
       patchelf \
           --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
           --set-rpath "${rpath}" $exe
