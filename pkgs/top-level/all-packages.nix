@@ -5677,6 +5677,8 @@ with pkgs;
 
   google-cloud-cpp = callPackage ../development/libraries/google-cloud-cpp { };
 
+  google-java-format = callPackage ../development/tools/google-java-format { };
+
   gdown = with python3Packages; toPythonApplication gdown;
 
   gopro = callPackage ../tools/video/gopro { };
