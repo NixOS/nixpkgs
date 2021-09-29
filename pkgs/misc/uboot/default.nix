@@ -109,6 +109,15 @@ let
     } // extraMeta;
   } // removeAttrs args [ "extraMeta" ]);
 
+  # Make U-Boot forward some important settings from the firmware-provided FDT. Fixes booting on BCM2711C0 boards.
+  # See also: https://github.com/NixOS/nixpkgs/issues/135828
+  # Source: https://patchwork.ozlabs.org/project/uboot/patch/20210822143656.289891-1-sjoerd@collabora.com/
+  pi4ExtraPatches = [
+    (fetchpatch {
+      url = "https://patchwork.ozlabs.org/series/259129/mbox/";
+      sha256 = "04x55a62a5p4mv0ddpx7dnsh5pnx46vibnq8cry7hgwf4krl64gl";
+    })
+  ];
 in {
   inherit buildUBoot;
 
@@ -355,12 +364,14 @@ in {
   ubootRaspberryPi4_32bit = buildUBoot {
     defconfig = "rpi_4_32b_defconfig";
     extraMeta.platforms = ["armv7l-linux"];
+    extraPatches = pi4ExtraPatches;
     filesToInstall = ["u-boot.bin"];
   };
 
   ubootRaspberryPi4_64bit = buildUBoot {
     defconfig = "rpi_4_defconfig";
     extraMeta.platforms = ["aarch64-linux"];
+    extraPatches = pi4ExtraPatches;
     filesToInstall = ["u-boot.bin"];
   };
 
