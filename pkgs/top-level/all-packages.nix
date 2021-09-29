@@ -31483,6 +31483,8 @@ with pkgs;
     binutils-arm-embedded = pkgsCross.arm-embedded.buildPackages.binutils;
   };
 
+  go365 = callPackage ../tools/security/go365 { };
+
   gobuster = callPackage ../tools/security/gobuster { };
 
   gotestwaf = callPackage ../tools/security/gotestwaf { };
