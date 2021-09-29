@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, gnugrep, ncurses, pkg-config, readline, postgresql }:
+{ lib, stdenv, fetchFromGitHub, gnugrep, ncurses, pkg-config, installShellFiles, readline, postgresql }:
 
 stdenv.mkDerivation rec {
   pname = "pspg";
@@ -11,10 +11,14 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-xJ7kgEvIsTufAZa5x3YpElTc74nEs9C+baVjbheHySM=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config installShellFiles ];
   buildInputs = [ gnugrep ncurses readline postgresql ];
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
+
+  postInstall = ''
+    installShellCompletion --bash --name pspg.bash bash-completion.sh
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/okbob/pspg";
