@@ -12,7 +12,6 @@
 , libgee
 , gettext
 , gtk3
-, appstream
 , gnome-menus
 , json-glib
 , elementary-dock
@@ -27,7 +26,7 @@
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-applications-menu";
-  version = "2.8.2";
+  version = "2.9.0";
 
   repoName = "applications-menu";
 
@@ -35,7 +34,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "1pm3dnq35vbvyxqapmfy4frfwhc1l2zh634annlmbjiyfp5mzk0q";
+    sha256 = "0mwjw2ghbdj336ax5srxbqnjprdhj1if7sm9k9idqkmifpzccs7i";
   };
 
   passthru = {
@@ -45,7 +44,6 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    appstream
     gettext
     meson
     ninja
