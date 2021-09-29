@@ -832,6 +832,12 @@ self: super: builtins.intersectAttrs super {
       export HOME=$TMPDIR/home
     '';
   });
+  hls-rename-plugin = overrideCabal super.hls-rename-plugin (drv: {
+    testToolDepends = [ pkgs.git ];
+    preCheck = ''
+      export HOME=$TMPDIR/home
+    '' + (drv.preCheck or "");
+  });
   hls-splice-plugin = overrideCabal super.hls-splice-plugin (drv: {
     testToolDepends = [ pkgs.git ];
     preCheck = ''
