@@ -9,7 +9,7 @@
 , ...
 } @ args:
 
-kernel.override ( args // {
+(kernel.override ( args // {
 
   argsOverride = {
     version = "${kernel.version}-bcachefs-unstable-${date}";
@@ -30,4 +30,4 @@ kernel.override ( args // {
       extraConfig = "BCACHEFS_FS m";
     } ] ++ kernelPatches;
 
-})
+})).overrideAttrs ({ meta ? {}, ... }: { meta = meta // { broken = true; }; })
