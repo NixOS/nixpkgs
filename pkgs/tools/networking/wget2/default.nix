@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitLab
-, fetchpatch
   # build support
 , autoreconfHook
 , flex
@@ -28,27 +27,14 @@
 
 stdenv.mkDerivation rec {
   pname = "wget2";
-  version = "1.99.2";
+  version = "2.0.0";
 
   src = fetchFromGitLab {
     owner = "gnuwget";
     repo = pname;
-    rev = version;
-    sha256 = "1gws8y3z8xzi46c48n7jb162mr3ar4c34s7yy8kjcs14yzq951qz";
+    rev = "v${version}";
+    sha256 = "07zs2x2k62836l0arzc333j96yjpwal1v4mr8j99x6qxgmmssrbj";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "fix-autotools-2.70.patch";
-      url = "https://gitlab.com/gnuwget/wget2/-/commit/580af869093cfda6bc8a9d5901850354a16b3666.patch";
-      sha256 = "1x6wq4wxvvy6174d52qrhxkcgmv366f8smxyki49zb6rs4gqhskd";
-    })
-    (fetchpatch {
-      name = "update-potfiles-for-gnulib-2020-11-28.patch";
-      url = "https://gitlab.com/gnuwget/wget2/-/commit/368deb9fcca0c281f9c76333607cc878c3945ad0.patch";
-      sha256 = "1qsz8hbzbgg14wikxsbjjlq0cp3jw4pajbaz9wdn6ny617hdvi8y";
-    })
-  ];
 
   # wget2_noinstall contains forbidden reference to /build/
   postPatch = ''
@@ -68,9 +54,6 @@ stdenv.mkDerivation rec {
     rmdir gnulib
     cp -r ${gnulib} gnulib
     chmod -R u+w gnulib/{build-aux,lib}
-
-    # fix bashisms can be removed when https://gitlab.com/gnuwget/wget2/-/commit/c9499dcf2f58983d03e659e2a1a7f21225141edf is in the release
-    sed 's|==|=|g' -i configure.ac
 
     ./bootstrap --no-git --gnulib-srcdir=gnulib --skip-po
   '';
