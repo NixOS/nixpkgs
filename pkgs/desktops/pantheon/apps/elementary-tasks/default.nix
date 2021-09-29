@@ -26,7 +26,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-tasks";
-  version = "6.0.3";
+  version = "6.0.4";
 
   repoName = "tasks";
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "0a6zgf7di4jyl764pn78wbanm0i5vrkk5ks3cfsvi3baprf3j9d5";
+    sha256 = "1gb51gm8qgd8yzhqb7v69p2f1fgm3qf534if4lc85jrjsb8hgmhl";
   };
 
   passthru = {
