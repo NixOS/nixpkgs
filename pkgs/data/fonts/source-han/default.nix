@@ -31,11 +31,29 @@ let
   };
 in
 {
-  sans = makePackage {
+  sans = let
+    rev = "2.004R";
     family = "sans";
-    description = "sans-serif";
-    rev = "2.001R";
-    sha256 = "101p8q0sagf1sd1yzwdrmmxvkqq7j0b8hi0ywsfck9w56r4zx54y";
+    Family = "Sans";
+    zip = fetchzip {
+      url = "https://github.com/adobe-fonts/source-han-${family}/releases/download/${rev}/SourceHan${Family}.ttc.zip";
+      stripRoot = false;
+      sha256 = "0z852kzb84vqk57icfaxbfxhf43awcn8w39byfypxaxigzhy78l7";
+    };
+  in stdenvNoCC.mkDerivation {
+    pname = "source-han-sans";
+    version = lib.removeSuffix "R" rev;
+
+    buildCommand = ''
+      install -m444 -Dt $out/share/fonts/opentype/source-han-sans ${zip}/SourceHanSans.ttc
+    '';
+
+    meta = {
+      description = "An open source Pan-CJK sans-serif typeface";
+      homepage = "https://github.com/adobe-fonts/source-han-${family}";
+      license = lib.licenses.ofl;
+      maintainers = with lib.maintainers; [ taku0 emily ];
+    };
   };
 
   serif = makePackage {
