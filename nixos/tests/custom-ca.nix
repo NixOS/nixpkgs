@@ -82,7 +82,7 @@ in
       # chromium-based browsers refuse to run as root
       test-support.displayManager.auto.user = "alice";
       # browsers may hang with the default memory
-      virtualisation.memorySize = "500";
+      virtualisation.memorySize = 500;
 
       networking.hosts."127.0.0.1" = [ "good.example.com" "bad.example.com" ];
       security.pki.certificateFiles = [ "${example-good-cert}/ca.crt" ];
