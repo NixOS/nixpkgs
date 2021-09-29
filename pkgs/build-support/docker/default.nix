@@ -287,6 +287,12 @@ rec {
         echo "Packing raw image..."
         tar -C mnt --hard-dereference --sort=name --mtime="@$SOURCE_DATE_EPOCH" -cf $out/layer.tar .
       '';
+
+      postUmount = ''
+        mv $out/layer.tar .
+        rm -rf $out
+        mv layer.tar $out
+      '';
     };
 
   # Create an executable shell script which has the coreutils in its
