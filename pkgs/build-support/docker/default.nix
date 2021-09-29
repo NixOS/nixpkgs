@@ -191,13 +191,13 @@ rec {
     , postMount ? ""
     , postUmount ? ""
     }:
-    let
-      result = vmTools.runInLinuxVM (
+      vmTools.runInLinuxVM (
         runCommand name
           {
             preVM = vmTools.createEmptyImage {
               size = diskSize;
               fullName = "docker-run-disk";
+              destination = "./image";
             };
             inherit fromImage fromImageName fromImageTag;
 
@@ -278,12 +278,6 @@ rec {
 
           ${postUmount}
         '');
-    in
-    runCommand name { } ''
-      mkdir -p $out
-      cd ${result}
-      cp layer.tar json VERSION $out
-    '';
 
   exportImage = { name ? fromImage.name, fromImage, fromImageName ? null, fromImageTag ? null, diskSize ? 1024 }:
     runWithOverlay {
@@ -291,7 +285,13 @@ rec {
 
       postMount = ''
         echo "Packing raw image..."
-        tar -C mnt --hard-dereference --sort=name --mtime="@$SOURCE_DATE_EPOCH" -cf $out .
+        tar -C mnt --hard-dereference --sort=name --mtime="@$SOURCE_DATE_EPOCH" -cf $out/layer.tar .
+      '';
+
+      postUmount = ''
+        mv $out/layer.tar .
+        rm -rf $out
+        mv layer.tar $out
       '';
     };
 
