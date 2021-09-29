@@ -14660,6 +14660,9 @@ with pkgs;
 
   redo-sh = callPackage ../development/tools/build-managers/redo-sh { };
 
+  regclient = callPackage ../development/tools/regclient { };
+  inherit (regclient) regbot regctl regsync;
+
   reno = callPackage ../development/tools/reno { };
 
   re2c = callPackage ../development/tools/parsing/re2c { };
