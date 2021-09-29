@@ -9072,6 +9072,8 @@ with pkgs;
 
   schema2ldif = callPackage ../tools/text/schema2ldif { };
 
+  sharedown = callPackage ../tools/misc/sharedown { };
+
   shen-sbcl = callPackage ../development/interpreters/shen-sbcl { };
 
   shen-sources = callPackage ../development/interpreters/shen-sources { };
