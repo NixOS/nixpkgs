@@ -847,6 +847,8 @@ let
 
     frontc = callPackage ../development/ocaml-modules/frontc { };
 
+    ocamlformat-rpc-lib = callPackage ../development/ocaml-modules/ocamlformat-rpc-lib { };
+
     ocamlfuse = callPackage ../development/ocaml-modules/ocamlfuse { };
 
     ocaml-freestanding = callPackage ../development/ocaml-modules/ocaml-freestanding { };
