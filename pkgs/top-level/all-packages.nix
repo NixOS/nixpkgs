@@ -11753,6 +11753,8 @@ with pkgs;
 
   go-junit-report = callPackage ../development/tools/go-junit-report { };
 
+  gobang = callPackage ../development/tools/database/gobang { };
+
   gogetdoc = callPackage ../development/tools/gogetdoc { };
 
   gox = callPackage ../development/tools/gox { };
