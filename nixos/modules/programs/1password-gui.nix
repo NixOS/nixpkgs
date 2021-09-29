@@ -16,11 +16,18 @@ in
           Whether to install 1password-gui with systme-authentication.
         '';
       };
+
+      package = mkOption {
+        type = types.package;
+        default = pkgs._1password-gui;
+        defaultText = literalExample "pkgs._1password-gui";
+        description = "Package providing <command>1password</command>.";
+      };
     };
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ pkgs._1password-gui ];
+    environment.systemPackages = [ cfg.package ];
 
     security = {
       pam.services.polkit-1.fprintAuth = true;
@@ -28,7 +35,7 @@ in
 
       wrappers = {
         _1password-keyring-helper = {
-          source = "${pkgs._1password-gui.out}/share/1password/1Password-KeyringHelper-Real";
+          source = "${cfg.package.out}/share/1password/1Password-KeyringHelper-Real";
           owner = "root";
           group = "onepassword";
           setuid = true;
