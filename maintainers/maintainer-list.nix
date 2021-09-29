@@ -4677,6 +4677,12 @@
     githubId = 36193715;
     name = "Lassi Haasio";
   };
+  ilkecan = {
+    email = "ilkecan@protonmail.com";
+    github = "ilkecan";
+    githubId = 40234257;
+    name = "ilkecan bozdogan";
+  };
   illegalprime = {
     email = "themichaeleden@gmail.com";
     github = "illegalprime";
