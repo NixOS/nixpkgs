@@ -1325,6 +1325,8 @@ with pkgs;
 
   bitwise = callPackage ../tools/misc/bitwise { };
 
+  blanket = callPackage ../applications/audio/blanket { };
+
   brakeman = callPackage ../development/tools/analysis/brakeman { };
 
   brewtarget = libsForQt514.callPackage ../applications/misc/brewtarget { } ;
