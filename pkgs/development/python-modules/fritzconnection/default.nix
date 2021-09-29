@@ -1,18 +1,23 @@
-{ lib, buildPythonPackage, pythonOlder, fetchFromGitHub, pytestCheckHook, requests }:
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, pytestCheckHook
+, requests
+}:
 
 buildPythonPackage rec {
   pname = "fritzconnection";
-  version = "1.6.0";
+  version = "1.7.0";
 
-  # no tests on PyPI
+  disabled = pythonOlder "3.6";
+
   src = fetchFromGitHub {
     owner = "kbr";
     repo = pname;
     rev = version;
-    sha256 = "16sbv6ql6jd13lim88z8vl5205xppza10340bmq5m5f3lvzb7mpc";
+    sha256 = "sha256-1HzeNtSqzqr9zyxF1PVWi6QfRupw8huMYmdFI6rzIdY=";
   };
-
-  disabled = pythonOlder "3.6";
 
   propagatedBuildInputs = [ requests ];
 
@@ -21,7 +26,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "fritzconnection" ];
 
   meta = with lib; {
-    description = "Python-Tool to communicate with the AVM Fritz!Box";
+    description = "Python module to communicate with the AVM Fritz!Box";
     homepage = "https://github.com/kbr/fritzconnection";
     changelog = "https://fritzconnection.readthedocs.io/en/${version}/sources/changes.html";
     license = licenses.mit;
