@@ -49,6 +49,10 @@ stdenv.mkDerivation rec {
   '' + lib.optionalString (!stdenv.isDarwin && !stdenv.isAarch64) ''
     patchelf --replace-needed libcrypto${ext}.1.0.0 libcrypto${ext}.1.1 $pslibs/libmi.so
     patchelf --replace-needed libssl${ext}.1.0.0 libssl${ext}.1.1 $pslibs/libmi.so
+  '' + lib.optionalString (!stdenv.isDarwin) ''
+    # Remove liblttng-ust from dependencies once
+    # https://github.com/PowerShell/PowerShell/pull/14688 is in a release
+    patchelf --replace-needed liblttng-ust${ext}.0 liblttng-ust${ext}.1 $pslibs/libcoreclrtraceptprovider.so
   '' + ''
 
     mkdir -p $out/bin
@@ -69,7 +73,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Powerful cross-platform (Windows, Linux, and macOS) shell and scripting language based on .NET";
     homepage = "https://github.com/PowerShell/PowerShell";
-    maintainers = with maintainers; [ yrashk srgom ];
+    maintainers = with maintainers; [ yrashk srgom p3psi ];
     platforms = [ "x86_64-darwin" "x86_64-linux" "aarch64-linux"];
     license = with licenses; [ mit ];
   };
