@@ -68,6 +68,7 @@ self: super: {
   resolv = doJailbreak super.resolv;
   singleton-bool = doJailbreak super.singleton-bool;
   split = doJailbreak super.split;
+  splitmix = doJailbreak super.splitmix;
   tar = doJailbreak super.tar;
   time-compat = doJailbreak super.time-compat;
   vector = doJailbreak (dontCheck super.vector);
