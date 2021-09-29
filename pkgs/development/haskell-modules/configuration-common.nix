@@ -605,6 +605,25 @@ self: super: {
     '';
   });
 
+  d-bus = let
+    # The latest release on hackage is missing necessary patches for recent compilers
+    # https://github.com/Philonous/d-bus/issues/24
+    newer = overrideSrc super.d-bus {
+      version = "unstable-2021-01-08";
+      src = pkgs.fetchFromGitHub {
+        owner = "Philonous";
+        repo = "d-bus";
+        rev = "fb8a948a3b9d51db618454328dbe18fb1f313c70";
+        hash = "sha256-R7/+okb6t9DAkPVUV70QdYJW8vRcvBdz4zKJT13jb3A=";
+      };
+    };
+  # Add now required extension on recent compilers.
+  # https://github.com/Philonous/d-bus/pull/23
+  in appendPatch newer (pkgs.fetchpatch {
+    url = "https://github.com/Philonous/d-bus/commit/e5f37900a3a301c41d98bdaa134754894c705681.patch";
+    sha256 = "6rQ7H9t483sJe1x95yLPAZ0BKTaRjgqQvvrQv7HkJRE=";
+  });
+
   # * The standard libraries are compiled separately.
   # * We need multiple patches from master to fix compilation with
   #   updated dependencies (haskeline and megaparsec) which can be
@@ -777,7 +796,13 @@ self: super: {
 
   # https://github.com/haskell-hvr/cryptohash-sha256/issues/11
   # Jailbreak is necessary to break out of tasty < 1.x dependency.
-  cryptohash-sha256 = markUnbroken (doJailbreak super.cryptohash-sha256);
+  # hackage2nix generates this as a broken package due to the (fake) dependency
+  # missing from hackage, so we need to fix the meta attribute set.
+  cryptohash-sha256 = overrideCabal super.cryptohash-sha256 (drv: {
+    jailbreak = true;
+    broken = false;
+    hydraPlatforms = pkgs.lib.platforms.all;
+  });
 
   # The test suite has all kinds of out-dated dependencies, so it feels easier
   # to just disable it.
@@ -1148,6 +1173,15 @@ self: super: {
     sha256 = "097wqn8hxsr50b9mhndg5pjim5jma2ym4ylpibakmmb5m98n17zp";
   });
 
+  # Pick patch from 1.6.0 which allows compilation with doctest 0.18
+  polysemy = appendPatches super.polysemy [
+    (pkgs.fetchpatch {
+      name = "allow-doctest-0.18.patch";
+      url = "https://github.com/polysemy-research/polysemy/commit/dbcf851eb69395ce3143ecf2dd616dcad953a339.patch";
+      sha256 = "1qf5pghc8p1glwaadkr95x12d74vhb98mg8dqwilyxbc6gq763w2";
+    })
+  ];
+
   # polysemy-plugin 0.2.5.0 has constraint ghc-tcplugins-extra (==0.3.*)
   # This upstream issue is relevant:
   # https://github.com/polysemy-research/polysemy/issues/322
@@ -1231,6 +1265,12 @@ self: super: {
   gi-cairo-render = doJailbreak super.gi-cairo-render;
   gi-cairo-connector = doJailbreak super.gi-cairo-connector;
 
+  # Remove when https://github.com/gtk2hs/svgcairo/pull/10 gets merged.
+  svgcairo = appendPatch super.svgcairo (pkgs.fetchpatch {
+    url = "https://github.com/gtk2hs/svgcairo/commit/df6c6172b52ecbd32007529d86ba9913ba001306.patch";
+    sha256 = "128qrns56y139vfzg1rbyqfi2xn8gxsmpnxv3zqf4v5spsnprxwh";
+  });
+
   # Missing -Iinclude parameter to doc-tests (pull has been accepted, so should be resolved when 0.5.3 released)
   # https://github.com/lehins/massiv/pull/104
   massiv = dontCheck super.massiv;
@@ -1272,7 +1312,7 @@ self: super: {
   })) (drv: {
     patches = [ ./patches/graphql-engine-mapkeys.patch ];
     doHaddock = false;
-    version = "2.0.7";
+    version = "2.0.9";
   });
   hasura-ekg-core = super.hasura-ekg-core.overrideScope (self: super: {
     hspec = dontCheck self.hspec_2_8_3;
@@ -1938,5 +1978,13 @@ EOT
 
   # 2021-09-18: https://github.com/haskell/haskell-language-server/issues/2205
   hls-stylish-haskell-plugin = doJailbreak super.hls-stylish-haskell-plugin;
+
+  # 2021-09-29: unnecessary lower bound on generic-lens
+  hw-ip = assert pkgs.lib.versionOlder self.generic-lens.version "2.2.0.0";
+    doJailbreak super.hw-ip;
+  hw-eliasfano = assert pkgs.lib.versionOlder self.generic-lens.version "2.2.0.0";
+    doJailbreak super.hw-eliasfano;
+  hw-xml = assert pkgs.lib.versionOlder self.generic-lens.version "2.2.0.0";
+    doJailbreak super.hw-xml;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
