@@ -85,7 +85,7 @@ wrapQtAppsHook() {
 
         find "$targetDir" ! -type d -executable -print0 | while IFS= read -r -d '' file
         do
-            ifELF "$file" || isMachO "$file" || continue
+            isELF "$file" || isMachO "$file" || continue
 
             if [ -f "$file" ]
             then
