@@ -191,13 +191,13 @@ rec {
     , postMount ? ""
     , postUmount ? ""
     }:
-    let
-      result = vmTools.runInLinuxVM (
+      vmTools.runInLinuxVM (
         runCommand name
           {
             preVM = vmTools.createEmptyImage {
               size = diskSize;
               fullName = "docker-run-disk";
+              destination = "./image";
             };
             inherit fromImage fromImageName fromImageTag;
 
@@ -278,16 +278,6 @@ rec {
 
           ${postUmount}
         '');
-    in
-    runCommand name { } ''
-      cd ${result}
-      if [ -e json ] && [ -e VERSION ] ; then
-        mkdir -p $out
-        cp layer.tar json VERSION $out
-      else
-        cp layer.tar $out
-      fi
-    '';
 
   exportImage = { name ? fromImage.name, fromImage, fromImageName ? null, fromImageTag ? null, diskSize ? 1024 }:
     runWithOverlay {
