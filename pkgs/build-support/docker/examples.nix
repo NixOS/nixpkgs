@@ -541,4 +541,7 @@ rec {
     config.Cmd = [ "hello" ];
     includeStorePaths = false;
   };
+
+  # Example export of the bash image
+  exportBash = pkgs.dockerTools.exportImage { fromImage = bash; };
 }

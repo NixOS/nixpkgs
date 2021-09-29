@@ -257,14 +257,23 @@ rec {
     eval "$postVM"
   '';
 
-
-  createEmptyImage = {size, fullName}: ''
-    mkdir $out
-    diskImage=$out/disk-image.qcow2
+  /*
+    A bash script fragment that produces a disk image at `destination`.
+   */
+  createEmptyImage = {
+    # Disk image size in MiB
+    size,
+    # Name that will be written to ${destination}/nix-support/full-name
+    fullName,
+    # Where to write the image files, defaulting to $out
+    destination ? "$out"
+  }: ''
+    mkdir -p ${destination}
+    diskImage=${destination}/disk-image.qcow2
     ${qemu}/bin/qemu-img create -f qcow2 $diskImage "${toString size}M"
 
-    mkdir $out/nix-support
-    echo "${fullName}" > $out/nix-support/full-name
+    mkdir ${destination}/nix-support
+    echo "${fullName}" > ${destination}/nix-support/full-name
   '';
 
 
