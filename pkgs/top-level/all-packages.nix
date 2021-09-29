@@ -20448,6 +20448,11 @@ with pkgs;
 
   petidomo = callPackage ../servers/mail/petidomo { };
 
+  pict-rs = callPackage ../servers/web-apps/pict-rs {
+    inherit (darwin.apple_sdk.frameworks) Security;
+    ffmpeg = ffmpeg_4;
+  };
+
   popa3d = callPackage ../servers/mail/popa3d { };
 
   postfix = callPackage ../servers/mail/postfix { };
