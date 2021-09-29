@@ -5561,6 +5561,8 @@ in {
 
   pyfireservicerota = callPackage ../development/python-modules/pyfireservicerota { };
 
+  pyflexit = callPackage ../development/python-modules/pyflexit { };
+
   pyflick = callPackage ../development/python-modules/pyflick { };
 
   pyfreedompro = callPackage ../development/python-modules/pyfreedompro { };
@@ -5586,6 +5588,8 @@ in {
   pynx584 = callPackage ../development/python-modules/pynx584 { };
 
   pypoint = callPackage ../development/python-modules/pypoint { };
+
+  pypoolstation = callPackage ../development/python-modules/pypoolstation { };
 
   pyrfxtrx = callPackage ../development/python-modules/pyrfxtrx { };
 
@@ -5626,6 +5630,8 @@ in {
   python-openems = callPackage ../development/python-modules/python-openems { };
 
   python-openzwave-mqtt = callPackage ../development/python-modules/python-openzwave-mqtt { };
+
+  python-owasp-zap-v2-4 = callPackage ../development/python-modules/python-owasp-zap-v2-4 { };
 
   python-songpal = callPackage ../development/python-modules/python-songpal { };
 
