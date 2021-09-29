@@ -8869,6 +8869,10 @@ with pkgs;
 
   rust-petname = callPackage ../tools/text/rust-petname { };
 
+  rustcat = callPackage ../tools/networking/rustcat {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   rustscan = callPackage ../tools/security/rustscan {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
