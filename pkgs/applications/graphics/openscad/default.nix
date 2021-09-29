@@ -65,8 +65,6 @@ mkDerivation rec {
     mv $out/bin/*.app $out/Applications
     rmdir $out/bin || true
 
-    wrapQtApp "$out"/Applications/OpenSCAD.app/Contents/MacOS/OpenSCAD
-
     mv --target-directory=$out/Applications/OpenSCAD.app/Contents/Resources \
       $out/share/openscad/{examples,color-schemes,locale,libraries,fonts,templates}
 

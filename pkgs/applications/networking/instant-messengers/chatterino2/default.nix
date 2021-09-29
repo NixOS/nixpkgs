@@ -16,9 +16,6 @@ mkDerivation rec {
     mkdir -p "$out/Applications"
     mv bin/chatterino.app "$out/Applications/"
   '';
-  postFixup = lib.optionalString stdenv.isDarwin ''
-    wrapQtApp "$out/Applications/chatterino.app/Contents/MacOS/chatterino"
-  '';
   meta = with lib; {
     description = "A chat client for Twitch chat";
     longDescription = ''
