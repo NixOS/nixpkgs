@@ -9477,6 +9477,8 @@ in {
 
   vsure = callPackage ../development/python-modules/vsure { };
 
+  vt-py = callPackage ../development/python-modules/vt-py { };
+
   vtk = toPythonModule (pkgs.vtk.override {
     pythonInterpreter = python;
     enablePython = true;
