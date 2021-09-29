@@ -1139,10 +1139,12 @@ in
         source = "${pkgs.iputils.out}/bin/ping";
       };
     } else {
-      setuid = true;
-      owner = "root";
-      group = "root";
-      source = "${pkgs.iputils.out}/bin/ping";
+      ping = {
+        setuid = true;
+        owner = "root";
+        group = "root";
+        source = "${pkgs.iputils.out}/bin/ping";
+      };
     };
     security.apparmor.policies."bin.ping".profile = lib.mkIf config.security.apparmor.policies."bin.ping".enable (lib.mkAfter ''
       /run/wrappers/bin/ping {
