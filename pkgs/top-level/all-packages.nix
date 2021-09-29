@@ -27473,9 +27473,7 @@ with pkgs;
   rsclock = callPackage ../applications/misc/rsclock { };
 
   rstudio = libsForQt5.callPackage ../applications/editors/rstudio {
-    boost = boost166;
-    llvmPackages = llvmPackages_7;
-    jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
+    jdk = jdk8;
   };
 
   rsync = callPackage ../applications/networking/sync/rsync (config.rsync or {});
