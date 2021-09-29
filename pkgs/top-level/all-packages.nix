@@ -5431,6 +5431,10 @@ with pkgs;
 
   git-open = callPackage ../applications/version-management/git-and-tools/git-open { };
 
+  git-quickfix = callPackage ../applications/version-management/git-and-tools/git-quickfix {
+    inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
+  };
+
   git-radar = callPackage ../applications/version-management/git-and-tools/git-radar { };
 
   git-recent = callPackage ../applications/version-management/git-and-tools/git-recent {
