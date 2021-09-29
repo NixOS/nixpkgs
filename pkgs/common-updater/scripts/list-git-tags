@@ -1,4 +1,4 @@
-#! /bin/sh -x
+#! /bin/sh
 
 # lists all available tags from a git repository
 
