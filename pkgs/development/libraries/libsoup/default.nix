@@ -24,16 +24,23 @@ stdenv.mkDerivation rec {
   pname = "libsoup";
   version = "2.74.0";
 
+  outputs = [ "out" "dev" ];
+
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "sha256-M7HU4NY5RWxnXCJ4d+lKgHjXMSM+LVdonBGrzvfTxI4=";
   };
 
-  postPatch = ''
-    patchShebangs libsoup/
-  '';
-
-  outputs = [ "out" "dev" ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    glib
+  ] ++ lib.optionals withIntrospection [
+    gobject-introspection
+  ] ++ lib.optionals withVala [
+    vala
+  ];
 
   buildInputs = [
     python3
@@ -44,12 +51,11 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.isLinux [
     libsysprof-capture
   ];
-  nativeBuildInputs = [ meson ninja pkg-config glib ]
-    ++ lib.optional withIntrospection gobject-introspection
-    ++ lib.optional withVala vala;
-  propagatedBuildInputs = [ glib libxml2 ];
 
-  NIX_CFLAGS_COMPILE = [ "-lpthread" ];
+  propagatedBuildInputs = [
+    glib
+    libxml2
+  ];
 
   mesonFlags = [
     "-Dtls_check=false" # glib-networking is a runtime dependency, not a compile-time dependency
