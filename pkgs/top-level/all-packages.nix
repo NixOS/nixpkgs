@@ -6234,6 +6234,8 @@ with pkgs;
 
   iodine = callPackage ../tools/networking/iodine { };
 
+  ioccheck = callPackage ../tools/security/ioccheck { };
+
   ioping = callPackage ../tools/system/ioping { };
 
   iops = callPackage ../tools/system/iops { };
