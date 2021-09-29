@@ -1,17 +1,27 @@
-{ mkDerivation, stdenv, lib, fetchFromGitHub, cmake
-, qtbase, qtquickcontrols, qtquickcontrols2, qtkeychain, qtmultimedia, qttools
-, libquotient, libsecret
+{ mkDerivation
+, stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, qtbase
+, qtquickcontrols
+, qtquickcontrols2
+, qtkeychain
+, qtmultimedia
+, qttools
+, libquotient
+, libsecret
 }:
 
 mkDerivation rec {
   pname = "quaternion";
-  version = "0.0.9.5-beta2";
+  version = "0.0.95";
 
   src = fetchFromGitHub {
     owner = "QMatrixClient";
     repo = "Quaternion";
     rev = version;
-    sha256 = "sha256-K4SMB5kL0YO2OIeNUu4hWqU4E4n4vZDRRsJVYmCZqvM=";
+    sha256 = "sha256-WqhHqo4ySxufulC+TxS2ko2R5hUiORgdNAkp5Awdcw8=";
   };
 
   buildInputs = [
@@ -26,14 +36,15 @@ mkDerivation rec {
 
   nativeBuildInputs = [ cmake qttools ];
 
-  postInstall = if stdenv.isDarwin then ''
-    mkdir -p $out/Applications
-    mv $out/bin/quaternion.app $out/Applications
-    rmdir $out/bin || :
-  '' else ''
-    substituteInPlace $out/share/applications/com.github.quaternion.desktop \
-      --replace 'Exec=quaternion' "Exec=$out/bin/quaternion"
-  '';
+  postInstall =
+    if stdenv.isDarwin then ''
+      mkdir -p $out/Applications
+      mv $out/bin/quaternion.app $out/Applications
+      rmdir $out/bin || :
+    '' else ''
+      substituteInPlace $out/share/applications/com.github.quaternion.desktop \
+        --replace 'Exec=quaternion' "Exec=$out/bin/quaternion"
+    '';
 
   meta = with lib; {
     description =

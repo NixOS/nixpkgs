@@ -23,7 +23,6 @@
 , cudaSupport ? false
 , cudatoolkit ? null
 , cudnn ? null
-, nvidia_x11 ? null
 , zlib
 , python
 , symlinkJoin
@@ -41,8 +40,7 @@
 # - the source build is currently brittle and not easy to maintain
 
 assert cudaSupport -> cudatoolkit != null
-                   && cudnn != null
-                   && nvidia_x11 != null;
+                   && cudnn != null;
 
 # unsupported combination
 assert ! (stdenv.isDarwin && cudaSupport);
@@ -126,7 +124,6 @@ in buildPythonPackage {
         cudatoolkit.out
         cudatoolkit.lib
         cudnn
-        nvidia_x11
       ];
 
       libpaths = [

@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, bash
 , bison
 , flex
 , which
@@ -24,7 +25,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ bison flex which ];
-  buildInputs = [ perl ]
+  # bash is required for correctly replacing the shebangs in all tools for cross-compilation.
+  buildInputs = [ bash perl ]
     ++ lib.optional sensord rrdtool;
 
   makeFlags = [

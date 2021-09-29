@@ -50,10 +50,12 @@ mapAliases ({
   alsaTools = alsa-tools; # added 2021-06-10
   alsaUtils = alsa-utils; # added 2021-06-10
   amazon-glacier-cmd-interface = throw "amazon-glacier-cmd-interface has been removed due to it being unmaintained."; # added 2020-10-30
+  aminal = throw "aminal was renamed to darktile."; # added 2021-09-28
   ammonite-repl = ammonite; # added 2017-05-02
   amsn = throw "amsn has been removed due to being unmaintained."; # added 2020-12-09
   antimicro = throw "antimicro has been removed as it was broken, see antimicroX instead."; # added 2020-08-06
   arduino_core = arduino-core;  # added 2015-02-04
+  ardour_5 = throw "ardour_5 has been removed. see https://github.com/NixOS/nixpkgs/issues/139549"; # added 2021-09-28
   arora = throw "arora has been removed."; # added 2020-09-09
   asciidocFull = asciidoc-full;  # added 2014-06-22
   asterisk_15 = throw "asterisk_15: Asterisk 15 is end of life and has been removed."; # added 2020-10-07

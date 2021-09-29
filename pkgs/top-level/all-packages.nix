@@ -970,10 +970,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) AppKit CoreGraphics CoreServices CoreText Foundation OpenGL;
   };
 
-  aminal = callPackage ../applications/terminal-emulators/aminal {
-    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa Kernel;
-  };
-
   archi = callPackage ../tools/misc/archi { };
 
   contour = libsForQt5.callPackage ../applications/terminal-emulators/contour { };
@@ -2061,7 +2057,6 @@ with pkgs;
 
   libtensorflow-bin = callPackage ../development/libraries/science/math/tensorflow/bin.nix {
     cudaSupport = config.cudaSupport or false;
-    inherit (linuxPackages) nvidia_x11;
     cudatoolkit = cudatoolkit_10_0;
     cudnn = cudnn_cudatoolkit_10_0;
   };
@@ -4204,6 +4199,8 @@ with pkgs;
   tcp-cutter = callPackage ../tools/networking/tcp-cutter { };
 
   cwebbin = callPackage ../development/tools/misc/cwebbin { };
+
+  cve-bin-tool = python3Packages.callPackage ../tools/security/cve-bin-tool { };
 
   cvs-fast-export = callPackage ../applications/version-management/cvs-fast-export { };
 
@@ -23297,8 +23294,6 @@ with pkgs;
 
   ardour = callPackage ../applications/audio/ardour { };
 
-  ardour_5 = lowPrio (callPackage ../applications/audio/ardour/5.nix { });
-
   arelle = with python3Packages; toPythonApplication arelle;
 
   argo = callPackage ../applications/networking/cluster/argo { };
@@ -32328,6 +32323,8 @@ with pkgs;
   vgmstream = callPackage ../applications/audio/vgmstream { };
 
   vice = callPackage ../misc/emulators/vice { };
+
+  viddy = callPackage ../tools/misc/viddy { };
 
   ViennaRNA = callPackage ../applications/science/molecular-dynamics/viennarna { };
 

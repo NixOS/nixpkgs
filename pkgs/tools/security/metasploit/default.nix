@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, ruby, bundlerEnv }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, ruby
+, bundlerEnv
+}:
 
 let
   env = bundlerEnv {
@@ -8,13 +14,13 @@ let
   };
 in stdenv.mkDerivation rec {
   pname = "metasploit-framework";
-  version = "6.0.56";
+  version = "6.1.7";
 
   src = fetchFromGitHub {
     owner = "rapid7";
     repo = "metasploit-framework";
     rev = version;
-    sha256 = "sha256-FQxxQ4Lsoktl/Ld+nvBNHCTsZ3PFDQ4GEMrh/CMZrZ0=";
+    sha256 = "sha256-UzWNQnDo/o296GGd+C1ImHccOMAXfE55dJDB9hw9B8s=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

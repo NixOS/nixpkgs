@@ -1782,8 +1782,6 @@ in {
 
   curve25519-donna = callPackage ../development/python-modules/curve25519-donna { };
 
-  cve-bin-tool = callPackage ../development/python-modules/cve-bin-tool { };
-
   cvxopt = callPackage ../development/python-modules/cvxopt { };
 
   cvxpy = callPackage ../development/python-modules/cvxpy { };
@@ -2327,6 +2325,8 @@ in {
   einops = callPackage ../development/python-modules/einops { };
 
   elgato = callPackage ../development/python-modules/elgato { };
+
+  elkm1-lib = callPackage ../development/python-modules/elkm1-lib { };
 
   elasticsearch = callPackage ../development/python-modules/elasticsearch { };
 
@@ -5561,6 +5561,8 @@ in {
 
   pyfireservicerota = callPackage ../development/python-modules/pyfireservicerota { };
 
+  pyflexit = callPackage ../development/python-modules/pyflexit { };
+
   pyflick = callPackage ../development/python-modules/pyflick { };
 
   pyfreedompro = callPackage ../development/python-modules/pyfreedompro { };
@@ -5586,6 +5588,8 @@ in {
   pynx584 = callPackage ../development/python-modules/pynx584 { };
 
   pypoint = callPackage ../development/python-modules/pypoint { };
+
+  pypoolstation = callPackage ../development/python-modules/pypoolstation { };
 
   pyrfxtrx = callPackage ../development/python-modules/pyrfxtrx { };
 
@@ -5626,6 +5630,8 @@ in {
   python-openems = callPackage ../development/python-modules/python-openems { };
 
   python-openzwave-mqtt = callPackage ../development/python-modules/python-openzwave-mqtt { };
+
+  python-owasp-zap-v2-4 = callPackage ../development/python-modules/python-owasp-zap-v2-4 { };
 
   python-songpal = callPackage ../development/python-modules/python-songpal { };
 
@@ -6138,6 +6144,8 @@ in {
 
   pydocumentdb = callPackage ../development/python-modules/pydocumentdb { };
 
+  pydoods = callPackage ../development/python-modules/pydoods { };
+
   pydot = callPackage ../development/python-modules/pydot {
     inherit (pkgs) graphviz;
   };
@@ -6550,6 +6558,8 @@ in {
     inherit (pkgs) coreutils which;
   };
 
+  pynello = callPackage ../development/python-modules/pynello { };
+
   pynest2d = callPackage ../development/python-modules/pynest2d { };
 
   pynetbox = callPackage ../development/python-modules/pynetbox { };
@@ -6579,6 +6589,8 @@ in {
   pyodbc = callPackage ../development/python-modules/pyodbc { };
 
   pyogg = callPackage ../development/python-modules/pyogg { };
+
+  pyombi = callPackage ../development/python-modules/pyombi { };
 
   pyomo = callPackage ../development/python-modules/pyomo { };
 
@@ -8859,7 +8871,6 @@ in {
 
   tensorflow-bin_2 = callPackage ../development/python-modules/tensorflow/bin.nix {
     cudaSupport = pkgs.config.cudaSupport or false;
-    inherit (pkgs.linuxPackages) nvidia_x11;
     cudatoolkit = pkgs.cudatoolkit_11_0;
     cudnn = pkgs.cudnn_cudatoolkit_11_0;
   };

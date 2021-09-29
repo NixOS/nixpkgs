@@ -465,6 +465,18 @@ let
     statmod = [ pkgs.libiconv ];
     rsvg = [ pkgs.librsvg.dev ];
     ssh = with pkgs; [ libssh ];
+    s2 = [ pkgs.openssl.dev ];
+    ArrayExpressHTS = with pkgs; [ zlib.dev curl.dev which ];
+    bbl = with pkgs; [ gsl ];
+    writexl = with pkgs; [ zlib.dev ];
+    qpdf = with pkgs; [ libjpeg.dev zlib.dev ];
+    vcfR = with pkgs; [ zlib.dev ];
+    bio3d = with pkgs; [ zlib.dev ];
+    arrangements = with pkgs; [ gmp.dev ];
+    spp = with pkgs; [ zlib.dev ];
+    Rbowtie = with pkgs; [ zlib.dev ];
+    gaston = with pkgs; [ zlib.dev ];
+    csaw = with pkgs; [ zlib.dev curl ];
   };
 
   packagesRequireingX = [
@@ -546,6 +558,7 @@ let
     "KappaGUI"
     "likeLTD"
     "logmult"
+    "loon"
     "LS2Wstat"
     "MareyMap"
     "memgene"
@@ -706,15 +719,6 @@ let
 
     RcppParallel = old.RcppParallel.overrideDerivation (attrs: {
       preConfigure = "patchShebangs configure";
-    });
-
-    ggbio = old.ggbio.overrideDerivation (attrs: {
-      patches = [
-        (pkgs.fetchpatch {
-          url = "https://github.com/tengfei/ggbio/commit/b04a9840cf5c0bd0514db2536f2e610bbd364727.patch";
-          sha256 = "blwtObyIYo1UBWz4nlmcJ8Nyw/n0qwmJrtwFWuoUyMg=";
-        })
-      ];
     });
 
     RcppArmadillo = old.RcppArmadillo.overrideDerivation (attrs: {
@@ -976,6 +980,20 @@ let
     lpsymphony = old.lpsymphony.overrideDerivation (attrs: {
       preConfigure = ''
         patchShebangs configure
+      '';
+    });
+
+    sodium = old.sodium.overrideDerivation (attrs: with pkgs; {
+      preConfigure = ''
+        patchShebangs configure
+      '';
+      nativeBuildInputs = [ pkg-config ] ++ attrs.nativeBuildInputs;
+      buildInputs = [ libsodium.dev ] ++ attrs.buildInputs;
+    });
+
+    Rhtslib = old.Rhtslib.overrideDerivation (attrs: {
+      preConfigure = ''
+        substituteInPlace R/zzz.R --replace "-lcurl" "-L${pkgs.curl.out}/lib -lcurl"
       '';
     });
 
