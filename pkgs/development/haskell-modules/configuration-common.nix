@@ -1979,4 +1979,12 @@ EOT
   # 2021-09-18: https://github.com/haskell/haskell-language-server/issues/2205
   hls-stylish-haskell-plugin = doJailbreak super.hls-stylish-haskell-plugin;
 
+  # 2021-09-29: unnecessary lower bound on generic-lens
+  hw-ip = assert pkgs.lib.versionOlder self.generic-lens.version "2.2.0.0";
+    doJailbreak super.hw-ip;
+  hw-eliasfano = assert pkgs.lib.versionOlder self.generic-lens.version "2.2.0.0";
+    doJailbreak super.hw-eliasfano;
+  hw-xml = assert pkgs.lib.versionOlder self.generic-lens.version "2.2.0.0";
+    doJailbreak super.hw-xml;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
