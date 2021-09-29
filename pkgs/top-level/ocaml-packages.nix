@@ -611,6 +611,10 @@ let
 
     letsencrypt = callPackage ../development/ocaml-modules/letsencrypt { };
 
+    letsencrypt-app = callPackage ../development/ocaml-modules/letsencrypt/app.nix { };
+
+    letsencrypt-dns = callPackage ../development/ocaml-modules/letsencrypt/dns.nix { };
+
     linenoise = callPackage ../development/ocaml-modules/linenoise { };
 
     llvm = callPackage ../development/ocaml-modules/llvm {
@@ -989,6 +993,10 @@ let
     ounit2 = callPackage ../development/ocaml-modules/ounit2 { };
 
     paf = callPackage ../development/ocaml-modules/paf { };
+
+    paf-cohttp = callPackage ../development/ocaml-modules/paf/cohttp.nix { };
+
+    paf-le = callPackage ../development/ocaml-modules/paf/le.nix { };
 
     parse-argv = callPackage ../development/ocaml-modules/parse-argv { };
 

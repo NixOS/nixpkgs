@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
     install -D psi-notify $out/bin/psi-notify
     substituteInPlace psi-notify.service --replace psi-notify $out/bin/psi-notify
-    install -D psi-notify.service $out/share/systemd/user/psi-notify.service
+    install -D psi-notify.service $out/lib/systemd/user/psi-notify.service
 
     runHook postInstall
   '';

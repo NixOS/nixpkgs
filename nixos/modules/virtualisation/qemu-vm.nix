@@ -108,15 +108,17 @@ let
     ''
       #! ${pkgs.runtimeShell}
 
+      set -e
+
       NIX_DISK_IMAGE=$(readlink -f "''${NIX_DISK_IMAGE:-${config.virtualisation.diskImage}}")
 
       if ! test -e "$NIX_DISK_IMAGE"; then
           ${qemu}/bin/qemu-img create -f qcow2 "$NIX_DISK_IMAGE" \
-            ${toString config.virtualisation.diskSize}M || exit 1
+            ${toString config.virtualisation.diskSize}M
       fi
 
       # Create a directory for storing temporary data of the running VM.
-      if [ -z "$TMPDIR" -o -z "$USE_TMPDIR" ]; then
+      if [ -z "$TMPDIR" ] || [ -z "$USE_TMPDIR" ]; then
           TMPDIR=$(mktemp -d nix-vm.XXXXXXXXXX --tmpdir)
       fi
 
@@ -127,7 +129,7 @@ let
       ''
         # Create a writable copy/snapshot of the boot disk.
         # A writable boot disk can be booted from automatically.
-        ${qemu}/bin/qemu-img create -f qcow2 -F qcow2 -b ${bootDisk}/disk.img "$TMPDIR/disk.img" || exit 1
+        ${qemu}/bin/qemu-img create -f qcow2 -F qcow2 -b ${bootDisk}/disk.img "$TMPDIR/disk.img"
 
         NIX_EFI_VARS=$(readlink -f "''${NIX_EFI_VARS:-${cfg.efiVars}}")
 
@@ -135,13 +137,13 @@ let
         ''
           # VM needs writable EFI vars
           if ! test -e "$NIX_EFI_VARS"; then
-            cp ${bootDisk}/efi-vars.fd "$NIX_EFI_VARS" || exit 1
-            chmod 0644 "$NIX_EFI_VARS" || exit 1
+            cp ${bootDisk}/efi-vars.fd "$NIX_EFI_VARS"
+            chmod 0644 "$NIX_EFI_VARS"
           fi
         ''}
       ''}
 
-      cd "$TMPDIR" || exit 1
+      cd "$TMPDIR"
 
       ${lib.optionalString (cfg.emptyDiskImages != []) "idx=0"}
       ${flip concatMapStrings cfg.emptyDiskImages (size: ''
