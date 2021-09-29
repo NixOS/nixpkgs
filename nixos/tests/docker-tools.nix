@@ -381,7 +381,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
 
     with subtest("exportImage produces a valid tarball"):
         docker.succeed(
-            "tar -tf ${examples.exportBash} > /dev/null"
+            "tar -tf ${examples.exportBash} | grep '\./bin/bash' > /dev/null"
         )
   '';
 })
