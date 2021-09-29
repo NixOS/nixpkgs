@@ -618,7 +618,15 @@ with pkgs;
       drvPath = (f args).drvPath;
       # It's safe to discard the context, because we don't access the path.
       salt = builtins.unsafeDiscardStringContext (lib.substring 0 12 (baseNameOf drvPath));
-    in f (args // { name = "${args.name or "source"}-salted-${salt}"; });
+      # New derivation incorporating the original drv hash in the name
+      salted = f (args // { name = "${args.name or "source"}-salted-${salt}"; });
+      # Make sure we did change the derivation. If the fetcher ignores `name`,
+      # `invalidateFetcherByDrvHash` doesn't work.
+      checked =
+        if salted.drvPath == drvPath
+        then throw "invalidateFetcherByDrvHash: Adding the derivation hash to the fixed-output derivation name had no effect. Make sure the fetcher's name argument ends up in the derivation name. Otherwise, the fetcher will not be re-run when its implementation changes. This is important for testing."
+        else salted;
+    in checked;
 
   lazydocker = callPackage ../tools/misc/lazydocker { };
 
@@ -6232,6 +6240,8 @@ with pkgs;
   inxi = callPackage ../tools/system/inxi { };
 
   iodine = callPackage ../tools/networking/iodine { };
+
+  ioccheck = callPackage ../tools/security/ioccheck { };
 
   ioping = callPackage ../tools/system/ioping { };
 
@@ -12544,6 +12554,7 @@ with pkgs;
 
   rhack = callPackage ../development/tools/rust/rhack { };
   inherit (rustPackages) rls;
+  roogle = callPackage ../development/tools/rust/roogle { };
   rustfmt = rustPackages.rustfmt;
   rustracer = callPackage ../development/tools/rust/racer {
     inherit (darwin.apple_sdk.frameworks) Security;
