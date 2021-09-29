@@ -310,7 +310,7 @@ in
         # the service - therefore we sleep in a loop until we can ping the
         # endpoint.
         preStart = ''
-          while ! ping -q -c 1 v1-0-0-server.tarsnap.com &> /dev/null; do sleep 3; done
+          while ! ping -4 -q -c 1 v1-0-0-server.tarsnap.com &> /dev/null; do sleep 3; done
         '';
 
         script = let
