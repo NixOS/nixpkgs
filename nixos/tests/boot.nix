@@ -4,10 +4,10 @@
 }:
 
 with import ../lib/testing-python.nix { inherit system pkgs; };
-with import ../lib/qemu-flags.nix { inherit pkgs; };
 with pkgs.lib;
 
 let
+  qemu-common = import ../lib/qemu-common.nix { inherit (pkgs) lib pkgs; };
 
   iso =
     (import ../lib/eval-config.nix {
@@ -23,7 +23,7 @@ let
   makeBootTest = name: extraConfig:
     let
       machineConfig = pythonDict ({
-        qemuBinary = qemuBinary pkgs.qemu_test;
+        qemuBinary = qemu-common.qemuBinary pkgs.qemu_test;
         qemuFlags = "-m 768";
       } // extraConfig);
     in
@@ -65,7 +65,7 @@ let
         ];
       };
       machineConfig = pythonDict ({
-        qemuBinary = qemuBinary pkgs.qemu_test;
+        qemuBinary = qemu-common.qemuBinary pkgs.qemu_test;
         qemuFlags = "-boot order=n -m 2000";
         netBackendArgs = "tftp=${ipxeBootDir},bootfile=netboot.ipxe";
       } // extraConfig);
