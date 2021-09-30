@@ -140,10 +140,6 @@ self: super: builtins.intersectAttrs super {
   # Add necessary reference to gtk3 package
   gi-dbusmenugtk3 = addPkgconfigDepend super.gi-dbusmenugtk3 pkgs.gtk3;
 
-  # Need WebkitGTK, not just webkit.
-  webkit = super.webkit.override { webkit = pkgs.webkitgtk24x-gtk2; };
-  websnap = super.websnap.override { webkit = pkgs.webkitgtk24x-gtk3; };
-
   hs-mesos = overrideCabal super.hs-mesos (drv: {
     # Pass _only_ mesos; the correct protobuf is propagated.
     extraLibraries = [ pkgs.mesos ];
@@ -212,7 +208,19 @@ self: super: builtins.intersectAttrs super {
   mime-mail = appendConfigureFlag super.mime-mail "--ghc-option=-DMIME_MAIL_SENDMAIL_PATH=\"sendmail\"";
 
   # Help the test suite find system timezone data.
-  tz = overrideCabal super.tz (drv: { preConfigure = "export TZDIR=${pkgs.tzdata}/share/zoneinfo"; });
+  tz = overrideCabal super.tz (drv: {
+    preConfigure = "export TZDIR=${pkgs.tzdata}/share/zoneinfo";
+    patches = [
+      # Fix tests failing with libSystem, musl etc. due to a lack of
+      # support for glibc's non-POSIX TZDIR environment variable.
+      # https://github.com/nilcons/haskell-tz/pull/29
+      (pkgs.fetchpatch {
+        name = "support-non-glibc-tzset.patch";
+        url = "https://github.com/sternenseemann/haskell-tz/commit/64928f1a50a1a276a718491ae3eeef63abcdb393.patch";
+        sha256 = "1f53w8k1vpy39hzalyykpvm946ykkarj2714w988jdp4c2c4l4cf";
+      })
+    ] ++ (drv.patches or []);
+  });
 
   # Nix-specific workaround
   xmonad = appendPatch (dontCheck super.xmonad) ./patches/xmonad-nix.patch;
@@ -823,6 +831,12 @@ self: super: builtins.intersectAttrs super {
     preCheck = ''
       export HOME=$TMPDIR/home
     '';
+  });
+  hls-rename-plugin = overrideCabal super.hls-rename-plugin (drv: {
+    testToolDepends = [ pkgs.git ];
+    preCheck = ''
+      export HOME=$TMPDIR/home
+    '' + (drv.preCheck or "");
   });
   hls-splice-plugin = overrideCabal super.hls-splice-plugin (drv: {
     testToolDepends = [ pkgs.git ];

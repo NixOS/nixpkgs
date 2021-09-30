@@ -75,6 +75,10 @@ fi
 echo "Merging https://github.com/NixOS/nixpkgs/pull/${curr_haskell_updates_pr_num}..."
 gh pr merge --repo NixOS/nixpkgs --merge "$curr_haskell_updates_pr_num"
 
+# Update the list of Haskell package versions in NixOS on Hackage.
+echo "Updating list of Haskell package versions in NixOS on Hackage..."
+./maintainers/scripts/haskell/upload-nixos-package-list-to-hackage.sh
+
 # Update stackage, Hackage hashes, and regenerate Haskell package set
 echo "Updating Stackage..."
 ./maintainers/scripts/haskell/update-stackage.sh --do-commit
@@ -84,7 +88,7 @@ echo "Regenerating Hackage packages..."
 ./maintainers/scripts/haskell/regenerate-hackage-packages.sh --do-commit
 
 # Push these new commits to the haskell-updates branch
-echo "Pushing commits just created to the haskell-updates branch"
+echo "Pushing commits just created to the remote haskell-updates branch..."
 git push
 
 # Open new PR
@@ -93,7 +97,7 @@ new_pr_body=$(cat <<EOF
 
 This PR is the regular merge of the \`haskell-updates\` branch into \`master\`.
 
-This branch is being continually built and tested by hydra at https://hydra.nixos.org/jobset/nixpkgs/haskell-updates.
+This branch is being continually built and tested by hydra at https://hydra.nixos.org/jobset/nixpkgs/haskell-updates. You may be able to find an up-to-date Hydra build report at [cdepillabout/nix-haskell-updates-status](https://github.com/cdepillabout/nix-haskell-updates-status).
 
 We roughly aim to merge these \`haskell-updates\` PRs at least once every two weeks. See the @NixOS/haskell [team calendar](https://cloud.maralorn.de/apps/calendar/p/Mw5WLnzsP7fC4Zky) for who is currently in charge of this branch.
 
@@ -114,5 +118,5 @@ This is the follow-up to #${curr_haskell_updates_pr_num}. Come to [#haskell:nixo
 EOF
 )
 
-echo "Opening a PR for the next haskell-updates merge cycle"
+echo "Opening a PR for the next haskell-updates merge cycle..."
 gh pr create --repo NixOS/nixpkgs --base master --head haskell-updates --title "haskellPackages: update stackage and hackage" --body "$new_pr_body"
