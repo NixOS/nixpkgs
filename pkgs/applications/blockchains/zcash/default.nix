@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage.override { stdenv = stdenv; } rec {
   pname = "zcash";
-  version = "4.5.0";
+  version = "4.5.1";
 
   src = fetchFromGitHub {
     owner = "zcash";
     repo  = "zcash";
     rev = "v${version}";
-    sha256 = "0zn6ms2c4mh64cckjg88v0byy2ck116z5g4y82hh34mz3r11d9mn";
+    sha256 = "0kyk3hv1y13b3vwg9kjcrpvz9v3l8lp0ikj977nykd5ms8b1rifa";
   };
 
-  cargoSha256 = "16il7napj7ryxsap6icvdpvagm9mvgz2mpshny9wn56y60qaymd0";
+  cargoSha256 = "1mwprsg74xv6qlxf00w7xapnkisb1aid9hkyr8r90zcwdcy8783r";
 
   nativeBuildInputs = [ autoreconfHook cargo hexdump makeWrapper pkg-config ];
   buildInputs = [ boost175 libevent libsodium utf8cpp ]
