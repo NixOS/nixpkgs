@@ -32626,7 +32626,6 @@ with pkgs;
   };
 
   higan = callPackage ../misc/emulators/higan {
-    inherit (gnome2) gtksourceview;
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa OpenGL OpenAL;
   };
 
