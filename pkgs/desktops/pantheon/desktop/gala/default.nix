@@ -29,13 +29,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gala";
-  version = "6.2.0";
+  version = "6.2.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "1yxsfshahaxiqs5waj4v96rhjhdgyd1za4pwlg3vqq51p75k2b1g";
+    sha256 = "1phnhj731kvk8ykmm33ypcxk8fkfny9k6kdapl582qh4d47wcy6f";
   };
 
   passthru = {
@@ -75,11 +75,6 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./plugins-dir.patch
-    # https://github.com/elementary/gala/pull/1259
-    # https://github.com/NixOS/nixpkgs/issues/139404
-    # Remove this patch when it is included in a new release
-    # of gala OR when we no longer use mutter 3.38 for pantheon
-    ./fix-session-crash-when-taking-screenshots.patch
   ];
 
   postPatch = ''
