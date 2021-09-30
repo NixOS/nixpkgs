@@ -135,6 +135,7 @@
   ./programs/droidcam.nix
   ./programs/environment.nix
   ./programs/evince.nix
+  ./programs/extra-container.nix
   ./programs/feedbackd.nix
   ./programs/file-roller.nix
   ./programs/firejail.nix
