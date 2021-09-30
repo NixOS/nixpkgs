@@ -8765,6 +8765,8 @@ in {
 
   sunpy = callPackage ../development/python-modules/sunpy { };
 
+  sunwatcher = callPackage ../development/python-modules/sunwatcher { };
+
   supervise_api = callPackage ../development/python-modules/supervise_api { };
 
   supervisor = callPackage ../development/python-modules/supervisor { };
