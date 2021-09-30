@@ -24776,6 +24776,8 @@ with pkgs;
     withPortAudio = stdenv.isDarwin;
   };
 
+  limesctl = callPackage ../applications/misc/limesctl { };
+
   linssid = libsForQt5.callPackage ../applications/networking/linssid { };
 
   deadd-notification-center = callPackage ../applications/misc/deadd-notification-center/default.nix { };
