@@ -21,19 +21,6 @@
 
 let
   defaultOverrides = [
-    # Pinned due to API changes in async-upnp-client>=0.20.0, remove after
-    (self: super: {
-      async-upnp-client = super.async-upnp-client.overridePythonAttrs (oldAttrs: rec {
-        version = "0.20.0";
-        src = fetchFromGitHub {
-          owner = "StevenLooman";
-          repo = "async_upnp_client";
-          rev = "v${version}";
-          sha256 = "sha256-jxYGOljV7tcsiAgpOhbXj7g7AwyP1kDDC83PiHG6ZFg=";
-        };
-      });
-    })
-
     # Override the version of some packages pinned in Home Assistant's setup.py and requirements_all.txt
     (mkOverride "python-slugify" "4.0.1" "69a517766e00c1268e5bbfc0d010a0a8508de0b18d30ad5a1ff357f8ae724270")
 
