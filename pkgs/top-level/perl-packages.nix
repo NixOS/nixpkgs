@@ -9262,10 +9262,10 @@ let
 
   GraphicsTIFF = buildPerlPackage {
     pname = "Graphics-TIFF";
-    version = "9";
+    version = "16";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RA/RATCLIFFE/Graphics-TIFF-9.tar.gz";
-      sha256 = "1n1r9r7f6hp2s6l361pyvb1i1pm9xqy0w9n3z5ygm7j64160kz9a";
+      sha256 = "Kv0JTCBGnvp8+cMmDjzuqd4Qw9r+BjOo0eJC405OOdg=";
     };
     buildInputs = [ pkgs.libtiff ExtUtilsDepends ExtUtilsPkgConfig ];
     propagatedBuildInputs = [ Readonly ];
