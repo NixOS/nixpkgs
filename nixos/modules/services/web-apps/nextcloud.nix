@@ -757,7 +757,7 @@ in {
 
             ${optionalString (cfg.extraAppsEnable && cfg.extraApps != { }) ''
                 # Try to enable apps (don't fail when one of them cannot be enabled , eg. due to incompatible version)
-                ${occ}/bin/nextcloud-occ app:enable ${builtins.concatStringsSep " " ( lib.mapAttrsToList (name: target: "${name}") cfg.extraApps)} || true
+                ${occ}/bin/nextcloud-occ app:enable ${builtins.concatStringsSep " " ( lib.mapAttrsToList (name: target: "${name}") cfg.extraApps)}
             ''}
 
             ${occSetTrustedDomainsCmd}
