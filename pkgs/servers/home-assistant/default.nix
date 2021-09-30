@@ -518,6 +518,7 @@ in with py.pkgs; buildPythonApplication rec {
     "my"
     "myq"
     "mysensors"
+    "mythicbeastsdns"
     "nam"
     "namecheapdns"
     "neato"
