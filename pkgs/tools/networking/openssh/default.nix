@@ -1,4 +1,4 @@
-{ callPackage, fetchurl, fetchpatch, fetchFromGitHub, autoreconfHook }:
+{ callPackage, lib, fetchurl, fetchpatch, fetchFromGitHub, autoreconfHook }:
 let
   common = opts: callPackage (import ./common.nix opts) { };
 in
@@ -14,6 +14,7 @@ in
     };
 
     extraPatches = [ ./ssh-keysign-8.5.patch ];
+    extraMeta.maintainers = with lib.maintainers; [ das_j ];
   };
 
   openssh_hpn = common rec {
