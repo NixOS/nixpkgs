@@ -38,6 +38,27 @@ mkDerivation rec {
     ln -s /var/log/teamviewer $out/share/teamviewer/logfiles
     ln -s ${xdg-utils}/bin $out/share/teamviewer/tv_bin/xdg-utils
 
+    declare in_script_dir="./opt/teamviewer/tv_bin/script"
+
+    install -d "$out/share/dbus-1/services"
+    install -m 644 "$in_script_dir/com.teamviewer.TeamViewer.service" "$out/share/dbus-1/services"
+    substituteInPlace "$out/share/dbus-1/services/com.teamviewer.TeamViewer.service" \
+      --replace '/opt/teamviewer/tv_bin/TeamViewer' \
+        "$out/share/teamviewer/tv_bin/TeamViewer"
+    install -m 644 "$in_script_dir/com.teamviewer.TeamViewer.Desktop.service" "$out/share/dbus-1/services"
+    substituteInPlace "$out/share/dbus-1/services/com.teamviewer.TeamViewer.Desktop.service" \
+      --replace '/opt/teamviewer/tv_bin/TeamViewer_Desktop' \
+        "$out/share/teamviewer/tv_bin/TeamViewer_Desktop"
+
+    install -d "$out/share/dbus-1/system.d"
+    install -m 644 "$in_script_dir/com.teamviewer.TeamViewer.Daemon.conf" "$out/share/dbus-1/system.d"
+
+    install -d "$out/share/polkit-1/actions"
+    install -m 644 "$in_script_dir/com.teamviewer.TeamViewer.policy" "$out/share/polkit-1/actions"
+    substituteInPlace "$out/share/polkit-1/actions/com.teamviewer.TeamViewer.policy" \
+      --replace '/opt/teamviewer/tv_bin/script/execscript' \
+        "$out/share/teamviewer/tv_bin/script/execscript"
+
     for i in 16 20 24 32 48 256; do
       size=$i"x"$i
 
@@ -52,16 +73,17 @@ mkDerivation rec {
     substituteInPlace $out/share/teamviewer/tv_bin/script/tvw_config \
       --replace '/var/run/' '/run/'
 
-    wrapProgram $out/share/teamviewer/tv_bin/script/teamviewer --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libXrandr libX11 ]}"
-    wrapProgram $out/share/teamviewer/tv_bin/teamviewerd --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libXrandr libX11 ]}"
-    wrapProgram $out/share/teamviewer/tv_bin/TeamViewer --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libXrandr libX11 ]}"
-    wrapProgram $out/share/teamviewer/tv_bin/TeamViewer_Desktop --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [libXrandr libX11 libXext libXdamage libXtst libSM libXfixes ]}"
+    wrapProgram $out/share/teamviewer/tv_bin/script/teamviewer --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libXrandr libX11 dbus ]}"
+    wrapProgram $out/share/teamviewer/tv_bin/teamviewerd --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libXrandr libX11 dbus ]}"
+    wrapProgram $out/share/teamviewer/tv_bin/TeamViewer --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libXrandr libX11 dbus ]}"
+    wrapProgram $out/share/teamviewer/tv_bin/TeamViewer_Desktop --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [libXrandr libX11 libXext libXdamage libXtst libSM libXfixes dbus ]}"
 
     wrapQtApp $out/share/teamviewer/tv_bin/script/teamviewer
     wrapQtApp $out/bin/teamviewer
   '';
 
   dontStrip = true;
+  dontWrapQtApps = true;
   preferLocalBuild = true;
 
   meta = with lib; {
@@ -69,6 +91,6 @@ mkDerivation rec {
     license = licenses.unfree;
     description = "Desktop sharing application, providing remote support and online meetings";
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ jagajaga dasuxullebt ];
+    maintainers = with maintainers; [ jagajaga dasuxullebt jraygauthier ];
   };
 }
