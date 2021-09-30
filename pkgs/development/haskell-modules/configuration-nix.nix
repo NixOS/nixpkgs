@@ -932,6 +932,8 @@ self: super: builtins.intersectAttrs super {
   # Runtime dependencies and CLI completion
   nvfetcher = generateOptparseApplicativeCompletion "nvfetcher" (overrideCabal
     super.nvfetcher (drv: {
+      # test needs network
+      doCheck = false;
       buildTools = drv.buildTools or [ ] ++ [ pkgs.buildPackages.makeWrapper ];
       postInstall = drv.postInstall or "" + ''
         wrapProgram "$out/bin/nvfetcher" --prefix 'PATH' ':' "${
