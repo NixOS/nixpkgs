@@ -24,11 +24,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "nss-cacert";
-  version = "3.66";
+  version = "3.71";
 
   src = fetchurl {
     url = "mirror://mozilla/security/nss/releases/NSS_${lib.replaceStrings ["."] ["_"] version}_RTM/src/nss-${version}.tar.gz";
-    sha256 = "1jfdnh5l4k57r2vb07s06hqi7m2qzk0d9x25lsdsrw3cflx9x9w9";
+    sha256 = "0ly2l3dv6z5hlxs72h5x6796ni3x1bq60saavaf42ddgv4ax7b4r";
   };
 
   outputs = [ "out" "unbundled" ];
