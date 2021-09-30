@@ -1,7 +1,6 @@
 { buildPythonPackage
 , fetchPypi
 , lib
-, nose
 , sha256
 , version
 }:
@@ -14,12 +13,13 @@ buildPythonPackage rec {
     inherit pname sha256 version;
   };
 
-  checkInputs = [ nose ];
+  # The pypi distribution does not have any tests.
+  doCheck = false;
 
   meta = with lib; {
     description = "Libclang Python bindings";
-    homepage    = "https://clang.llvm.org/";
-    license     = licenses.ncsa;
+    homepage = "https://clang.llvm.org/";
+    license = licenses.ncsa;
     maintainers = with maintainers; [ samuela ];
   };
 }
