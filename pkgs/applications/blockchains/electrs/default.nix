@@ -27,7 +27,6 @@ rustPlatform.buildRustPackage rec {
   # link rocksdb dynamically
   ROCKSDB_INCLUDE_DIR = "${rocksdb}/include";
   ROCKSDB_LIB_DIR = "${rocksdb}/lib";
-  cargoBuildFlags = "--no-default-features";
 
   buildInputs = lib.optionals stdenv.isDarwin [ Security ];
 
