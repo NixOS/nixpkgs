@@ -707,7 +707,8 @@ with pkgs;
     inherit (darwin) signingUtils;
   };
 
-  vmTools = callPackage ../build-support/vm { };
+  # No callPackage.  In particular, we don't want `img` *package* in parameters.
+  vmTools = makeOverridable (import ../build-support/vm) { inherit pkgs lib; };
 
   releaseTools = callPackage ../build-support/release { };
 
