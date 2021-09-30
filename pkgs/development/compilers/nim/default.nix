@@ -114,7 +114,7 @@ in {
 
       ./nixbuild.patch
       # Load libraries at runtime by absolute path
-    ];
+    ] ++ lib.optional (!stdenv.hostPlatform.isWindows) ./toLocation.patch;
 
     configurePhase = ''
       runHook preConfigure
