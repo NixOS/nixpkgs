@@ -4,13 +4,13 @@ let
   py = python3Packages;
 in py.buildPythonApplication rec {
   pname = "friture";
-  version = "0.47";
+  version = "0.48";
 
   src = fetchFromGitHub {
     owner = "tlecomte";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1qcsvmgdz9hhv5gaa918147wvng6manc4iq8ci6yr761ljqrgwjx";
+    sha256 = "sha256-oOH58jD49xAeSuP+l6tYUpwkYsnfeSGTt8x4DFzTY6g=";
   };
 
   nativeBuildInputs = (with py; [ numpy cython scipy ]) ++
