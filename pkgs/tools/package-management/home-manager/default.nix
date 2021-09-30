@@ -4,7 +4,6 @@
 { bash, coreutils, findutils, gnused, less, lib, stdenv, makeWrapper, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-
   pname = "home-manager";
   version = "2021-09-13";
 
