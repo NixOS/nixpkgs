@@ -2976,6 +2976,8 @@ in {
 
   gidgethub = callPackage ../development/python-modules/gidgethub { };
 
+  gigalixir = callPackage ../development/python-modules/gigalixir { };
+
   gin-config = callPackage ../development/python-modules/gin-config { };
 
   gios = callPackage ../development/python-modules/gios { };
@@ -7988,6 +7990,8 @@ in {
   roku = callPackage ../development/python-modules/roku { };
 
   rokuecp = callPackage ../development/python-modules/rokuecp { };
+
+  rollbar = callPackage ../development/python-modules/rollbar { };
 
   roman = callPackage ../development/python-modules/roman { };
 
