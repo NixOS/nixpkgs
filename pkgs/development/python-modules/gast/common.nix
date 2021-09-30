@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , lib
+, pytestCheckHook
 , sha256
 , version
 }:
@@ -17,7 +18,7 @@ buildPythonPackage rec {
     rev = version;
   };
 
-  checkInputs = [ astunparse ];
+  checkInputs = [ astunparse pytestCheckHook ];
 
   meta = with lib; {
     description = "GAST provides a compatibility layer between the AST of various Python versions, as produced by ast.parse from the standard ast module";
