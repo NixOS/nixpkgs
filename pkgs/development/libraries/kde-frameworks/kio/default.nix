@@ -1,7 +1,7 @@
 {
   stdenv, lib, mkDerivation, fetchpatch,
   extra-cmake-modules, kdoctools, qttools,
-  acl, attr, libkrb5, util-linux ? null,
+  acl, attr, libkrb5, util-linux,
   karchive, kbookmarks, kcompletion, kconfig, kconfigwidgets, kcoreaddons,
   kdbusaddons, ki18n, kiconthemes, kitemviews, kjobwidgets, knotifications,
   kservice, ktextwidgets, kwallet, kwidgetsaddons, kwindowsystem, kxmlgui,
