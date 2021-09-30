@@ -17831,7 +17831,7 @@ with pkgs;
 
   libsoup = callPackage ../development/libraries/libsoup { };
 
-  libsoup3 = callPackage ../development/libraries/libsoup/3.x.nix { };
+  libsoup_3 = callPackage ../development/libraries/libsoup/3.x.nix { };
 
   libspectrum = callPackage ../development/libraries/libspectrum { };
 
@@ -19669,6 +19669,10 @@ with pkgs;
     harfbuzz = harfbuzzFull;
     inherit (gst_all_1) gst-plugins-base gst-plugins-bad;
     inherit (darwin) apple_sdk;
+  };
+
+  webkitgtk_4_1 = webkitgtk.override {
+    libsoup = libsoup_3;
   };
 
   websocketpp = callPackage ../development/libraries/websocket++ { };
