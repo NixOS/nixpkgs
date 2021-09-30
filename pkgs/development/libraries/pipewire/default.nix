@@ -24,6 +24,7 @@
 , vulkan-loader
 , webrtc-audio-processing
 , ncurses
+, readline81 # meson can't find <7 as those versions don't have a .pc file
 , makeFontsConf
 , callPackage
 , nixosTests
@@ -58,7 +59,7 @@ let
 
   self = stdenv.mkDerivation rec {
     pname = "pipewire";
-    version = "0.3.37";
+    version = "0.3.38";
 
     outputs = [
       "out"
@@ -77,7 +78,7 @@ let
       owner = "pipewire";
       repo = "pipewire";
       rev = version;
-      sha256 = "sha256-bN73G2XYEWJF60D55WCpsbMW54wce7rCgEUo/DUmm20=";
+      sha256 = "sha256-QENz4MVyKuPJynA+NBdmKa6g1GrcRg9vzXLJ1/i3VJU=";
     };
 
     patches = [
@@ -115,6 +116,7 @@ let
       libusb1
       libsndfile
       ncurses
+      readline81
       udev
       vulkan-headers
       vulkan-loader
@@ -130,7 +132,6 @@ let
 
     mesonFlags = [
       "-Ddocs=enabled"
-      "-Dexamples=${mesonEnable withMediaSession}" # only needed for `pipewire-media-session`
       "-Dudevrulesdir=lib/udev/rules.d"
       "-Dinstalled_tests=enabled"
       "-Dinstalled_test_prefix=${placeholder "installedTests"}"
