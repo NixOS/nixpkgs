@@ -24,6 +24,8 @@ in
 
     environment.systemPackages = [ pkgs.teamviewer ];
 
+    services.dbus.packages = [ pkgs.teamviewer ];
+
     systemd.services.teamviewerd = {
       description = "TeamViewer remote control daemon";
 
