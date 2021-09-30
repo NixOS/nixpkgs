@@ -4532,6 +4532,8 @@ in {
     inherit (self) pyface pygments numpy vtk traitsui envisage apptools pyqt5;
   };
 
+  mbddns = callPackage ../development/python-modules/mbddns { };
+
   mccabe = callPackage ../development/python-modules/mccabe { };
 
   mcstatus = callPackage ../development/python-modules/mcstatus { };
@@ -9546,7 +9548,7 @@ in {
 
   wavedrom = callPackage ../development/python-modules/wavedrom { };
 
-  WazeRouteCalculator = callPackage ../development/python-modules/WazeRouteCalculator { };
+  wazeroutecalculator = callPackage ../development/python-modules/wazeroutecalculator { };
 
   wcmatch = callPackage ../development/python-modules/wcmatch { };
 

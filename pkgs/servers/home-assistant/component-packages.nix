@@ -551,7 +551,7 @@
     "myq" = ps: with ps; [ pymyq ];
     "mysensors" = ps: with ps; [ aiohttp-cors paho-mqtt pymysensors ];
     "mystrom" = ps: with ps; [ aiohttp-cors python-mystrom ];
-    "mythicbeastsdns" = ps: with ps; [ ]; # missing inputs: mbddns
+    "mythicbeastsdns" = ps: with ps; [ mbddns ];
     "nad" = ps: with ps; [ nad-receiver ];
     "nam" = ps: with ps; [ nettigo-air-monitor ];
     "namecheapdns" = ps: with ps; [ defusedxml ];
@@ -961,7 +961,7 @@
     "waterfurnace" = ps: with ps; [ waterfurnace ];
     "watson_iot" = ps: with ps; [ ]; # missing inputs: ibmiotf
     "watson_tts" = ps: with ps; [ ibm-watson ];
-    "waze_travel_time" = ps: with ps; [ WazeRouteCalculator ];
+    "waze_travel_time" = ps: with ps; [ wazeroutecalculator ];
     "weather" = ps: with ps; [ ];
     "webhook" = ps: with ps; [ aiohttp-cors ];
     "webostv" = ps: with ps; [ aiopylgtv ];

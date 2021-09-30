@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "ephem";
-  version = "4.0.0.2";
+  version = "4.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-0D3nPr9qkWgdWX61tdQ7z28MZ+KSu6L5qXRzS08VdX4=";
+    sha256 = "c076794a511a34b5b91871c1cf6374dbc323ec69fca3f50eb718f20b171259d6";
   };
 
   checkInputs = [

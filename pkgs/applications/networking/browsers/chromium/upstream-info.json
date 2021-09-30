@@ -18,9 +18,9 @@
     }
   },
   "beta": {
-    "version": "95.0.4638.17",
-    "sha256": "1v5r8m3wlwh6prcj7bd4zprsr4g43869lhxv43m207c5nlnqiriz",
-    "sha256bin64": "0h88gd8y4i2jmvhiwadbq6hzqygddym8jy1fhzp8qnwfhc30qm4m",
+    "version": "95.0.4638.32",
+    "sha256": "1w904axixagn6gqcb90849q3qy0k3c6lgl0c97cb6m78l9xrrnbr",
+    "sha256bin64": "1z7xx608sh8agdl98r7xk7s43d3qnfpd1jvgbl7l8fqd85ns11i0",
     "deps": {
       "gn": {
         "version": "2021-08-11",
@@ -31,15 +31,15 @@
     }
   },
   "dev": {
-    "version": "96.0.4651.0",
-    "sha256": "0da1mhz3cy0k2igdh208i28k8fxca0yjfypvmj7624p7igrp4an6",
-    "sha256bin64": "1gslpdnpjp7w40lsl748rmbkbs31v22f2x45gahrijkvfrkgdqp9",
+    "version": "96.0.4655.0",
+    "sha256": "00gax7xqi1n4jiqwpff43c43mpqb5jakckwdfbgwhrp6h35xxdv1",
+    "sha256bin64": "1xyyz6p4qllzyd6wbdbhs6kp062dz40i03wrlsggb919bgp7ivnw",
     "deps": {
       "gn": {
-        "version": "2021-08-11",
+        "version": "2021-09-13",
         "url": "https://gn.googlesource.com/gn",
-        "rev": "69ec4fca1fa69ddadae13f9e6b7507efa0675263",
-        "sha256": "031znmkbm504iim5jvg3gmazj4qnkfc7zg8aymjsij18fhf7piz0"
+        "rev": "de86ec4176235871a7cb335756987e41246dae4a",
+        "sha256": "0mlnsqcj06azz5cpwlafi5gg6pvf2s6x9qq02zl1sm2h288y152g"
       }
     }
   },

@@ -11780,6 +11780,8 @@ with pkgs;
 
   go-junit-report = callPackage ../development/tools/go-junit-report { };
 
+  gobang = callPackage ../development/tools/database/gobang { };
+
   gogetdoc = callPackage ../development/tools/gogetdoc { };
 
   gox = callPackage ../development/tools/gox { };
@@ -24781,6 +24783,8 @@ with pkgs;
     withPortAudio = stdenv.isDarwin;
   };
 
+  limesctl = callPackage ../applications/misc/limesctl { };
+
   linssid = libsForQt5.callPackage ../applications/networking/linssid { };
 
   deadd-notification-center = callPackage ../applications/misc/deadd-notification-center/default.nix { };
@@ -32773,6 +32777,8 @@ with pkgs;
   duti = callPackage ../os-specific/darwin/duti {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;
   };
+
+  dnstake = callPackage ../tools/networking/dnstake {};
 
   dnstracer = callPackage ../tools/networking/dnstracer {
     inherit (darwin) libresolv;
