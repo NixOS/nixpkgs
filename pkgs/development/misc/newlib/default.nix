@@ -1,4 +1,9 @@
-{ stdenv, fetchurl, buildPackages }:
+{ stdenv, fetchurl, buildPackages
+, # "newlib-nano" is what the official ARM embedded toolchain calls this build
+  # configuration that prioritizes low space usage. We include it as a preset
+  # for embedded projects striving for a similar configuration.
+  nanoizeNewlib ? false
+}:
 
 stdenv.mkDerivation rec {
   pname = "newlib";
@@ -22,10 +27,21 @@ stdenv.mkDerivation rec {
 
     "--disable-newlib-supplied-syscalls"
     "--disable-nls"
+    "--enable-newlib-retargetable-locking"
+  ] ++ (if !nanoizeNewlib then [
     "--enable-newlib-io-long-long"
     "--enable-newlib-register-fini"
-    "--enable-newlib-retargetable-locking"
-  ];
+  ] else [
+    "--enable-newlib-reent-small"
+    "--disable-newlib-fvwrite-in-streamio"
+    "--disable-newlib-fseek-optimization"
+    "--disable-newlib-wide-orient"
+    "--enable-newlib-nano-malloc"
+    "--disable-newlib-unbuf-stream-opt"
+    "--enable-lite-exit"
+    "--enable-newlib-global-atexit"
+    "--enable-newlib-nano-formatted-io"
+  ]);
 
   dontDisableStatic = true;
 
