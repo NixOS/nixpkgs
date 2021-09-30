@@ -1,16 +1,16 @@
 { mkDerivation, lib, fetchurl, autoPatchelfHook, makeWrapper, xdg-utils, dbus
-, qtbase, qtwebkit, qtx11extras, qtquickcontrols, glibc
+, qtbase, qtwebkit, qtwebengine, qtx11extras, qtquickcontrols, getconf, glibc
 , libXrandr, libX11, libXext, libXdamage, libXtst, libSM, libXfixes
 , wrapQtAppsHook
 }:
 
 mkDerivation rec {
   pname = "teamviewer";
-  version = "15.15.5";
+  version = "15.18.5";
 
   src = fetchurl {
     url = "https://dl.tvcdn.de/download/linux/version_15x/teamviewer_${version}_amd64.deb";
-    sha256 = "sha256-H/CSc2RcjI+Fm8awYcXm3ioAJpbSNEMwGVrTozMux3A=";
+    sha256 = "03m8k6qr3mgylik1gqi8qlm0dngb3vf4p6gdwd5hyvz7gh5mdm2r";
   };
 
   unpackPhase = ''
@@ -19,7 +19,7 @@ mkDerivation rec {
   '';
 
   nativeBuildInputs = [ autoPatchelfHook makeWrapper wrapQtAppsHook ];
-  buildInputs = [ dbus qtbase qtwebkit qtx11extras libX11 ];
+  buildInputs = [ dbus getconf qtbase qtwebkit qtwebengine qtx11extras libX11 ];
   propagatedBuildInputs = [ qtquickcontrols ];
 
   installPhase = ''
@@ -73,10 +73,15 @@ mkDerivation rec {
     substituteInPlace $out/share/teamviewer/tv_bin/script/tvw_config \
       --replace '/var/run/' '/run/'
 
-    wrapProgram $out/share/teamviewer/tv_bin/script/teamviewer --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libXrandr libX11 dbus ]}"
-    wrapProgram $out/share/teamviewer/tv_bin/teamviewerd --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libXrandr libX11 dbus ]}"
-    wrapProgram $out/share/teamviewer/tv_bin/TeamViewer --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libXrandr libX11 dbus ]}"
-    wrapProgram $out/share/teamviewer/tv_bin/TeamViewer_Desktop --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [libXrandr libX11 libXext libXdamage libXtst libSM libXfixes dbus ]}"
+    wrapProgram $out/share/teamviewer/tv_bin/script/teamviewer \
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libXrandr libX11 dbus ]}"
+    wrapProgram $out/share/teamviewer/tv_bin/teamviewerd \
+      --prefix PATH : "${lib.makeBinPath [ getconf ]}" \
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libXrandr libX11 dbus ]}"
+    wrapProgram $out/share/teamviewer/tv_bin/TeamViewer \
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libXrandr libX11 dbus ]}"
+    wrapProgram $out/share/teamviewer/tv_bin/TeamViewer_Desktop \
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [libXrandr libX11 libXext libXdamage libXtst libSM libXfixes dbus ]}"
 
     wrapQtApp $out/share/teamviewer/tv_bin/script/teamviewer
     wrapQtApp $out/bin/teamviewer
