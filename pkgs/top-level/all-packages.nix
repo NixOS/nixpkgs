@@ -32267,6 +32267,8 @@ with pkgs;
 
   thinkfan = callPackage ../tools/system/thinkfan { };
 
+  tp-auto-kbbl = callPackage ../tools/system/tp-auto-kbbl { };
+
   tup = callPackage ../development/tools/build-managers/tup { };
 
   tusk = callPackage ../applications/office/tusk { };
