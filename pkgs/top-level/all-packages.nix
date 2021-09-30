@@ -8767,7 +8767,7 @@ with pkgs;
   rescuetime = libsForQt5.callPackage ../applications/misc/rescuetime { };
 
   inherit (callPackage ../development/misc/resholve { })
-    resholve resholvePackage;
+    resholve resholvePackage resholveScript resholveScriptBin;
 
   restool = callPackage ../os-specific/linux/restool {};
 
