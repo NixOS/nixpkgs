@@ -20457,13 +20457,6 @@ in
     ];
   };
 
-  linux_5_13 = callPackage ../os-specific/linux/kernel/linux-5.13.nix {
-    kernelPatches = [
-      kernelPatches.bridge_stp_helper
-      kernelPatches.request_key_helper
-    ];
-  };
-
   linux_5_14 = callPackage ../os-specific/linux/kernel/linux-5.14.nix {
     kernelPatches = [
       kernelPatches.bridge_stp_helper
@@ -20777,7 +20770,6 @@ in
   linuxPackages_4_19 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_19);
   linuxPackages_5_4 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_4);
   linuxPackages_5_10 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_10);
-  linuxPackages_5_13 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_13);
   linuxPackages_5_14 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_14);
 
   # When adding to the list above:
