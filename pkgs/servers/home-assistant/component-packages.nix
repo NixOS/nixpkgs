@@ -267,7 +267,7 @@
     "firmata" = ps: with ps; [ pymata-express ];
     "fitbit" = ps: with ps; [ aiohttp-cors fitbit ];
     "fixer" = ps: with ps; [ fixerio ];
-    "fjaraskupan" = ps: with ps; [ ]; # missing inputs: fjaraskupan
+    "fjaraskupan" = ps: with ps; [ fjaraskupan ];
     "fleetgo" = ps: with ps; [ ]; # missing inputs: ritassist
     "flexit" = ps: with ps; [ pymodbus ];
     "flic" = ps: with ps; [ pyflic ];
