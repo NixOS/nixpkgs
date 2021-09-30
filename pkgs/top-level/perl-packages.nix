@@ -10454,10 +10454,10 @@ let
 
   ImagePNGLibpng = buildPerlPackage {
     pname = "Image-PNG-Libpng";
-    version = "0.56";
+    version = "0.57";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BK/BKB/Image-PNG-Libpng-0.56.tar.gz";
-      sha256 = "1nf7qcql7b2w98i859f76q1vb4b2zd0k0ypjbsw7ngs2zzmvzyzs";
+      sha256 = "+vu/6/9CP3u4XvJ6MEH7YpG1AzbHpYIiSlysQzHDx9k=";
     };
     buildInputs = [ pkgs.libpng ];
     meta = {
