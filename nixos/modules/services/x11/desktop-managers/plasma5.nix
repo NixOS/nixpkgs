@@ -264,6 +264,7 @@ in
           kwallet-pam
           kwalletmanager
           kwayland
+          kwayland-integration
           kwidgetsaddons
           kxmlgui
           kxmlrpcclient

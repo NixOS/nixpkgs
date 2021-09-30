@@ -86,5 +86,9 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     # sse3 is not supported on aarch64
     badPlatforms = [ "aarch64-linux" ];
+    # added 2021-09-30
+    # upstream seems pretty dead
+    #/build/source/src/operations/denoise.cc:30:10: fatal error: vips/cimg_funcs.h: No such file or directory
+    broken = true;
   };
 }
