@@ -211,7 +211,7 @@ mirror://xorg/individual/lib/libXxf86misc-1.0.4.tar.bz2
 mirror://xorg/individual/lib/libXxf86vm-1.1.4.tar.bz2
 mirror://xorg/individual/lib/xtrans-1.4.0.tar.bz2
 mirror://xorg/individual/proto/xcb-proto-1.14.1.tar.xz
-mirror://xorg/individual/proto/xorgproto-2021.4.tar.bz2
+mirror://xorg/individual/proto/xorgproto-2021.5.tar.bz2
 mirror://xorg/individual/util/gccmakedep-1.0.3.tar.bz2
 mirror://xorg/individual/util/imake-1.0.8.tar.bz2
 mirror://xorg/individual/util/lndir-1.0.3.tar.bz2
