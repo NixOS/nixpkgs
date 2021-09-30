@@ -218,7 +218,7 @@ def main() -> None:
         sdboot_status = subprocess.check_output(["@systemd@/bin/bootctl", "--path=@efiSysMountPoint@", "status"], universal_newlines=True)
 
         # See status_binaries() in systemd bootctl.c for code which generates this
-        m = re.search("^\W+File:.*/EFI/(BOOT|systemd)/.*\.efi \(systemd-boot (\d+)\)$",
+        m = re.search("^\W+File:.*/EFI/(BOOT|systemd)/.*\.efi \(systemd-boot ([\d.]+)[^)]*\)$",
                       sdboot_status, re.IGNORECASE | re.MULTILINE)
         if m is None:
             print("could not find any previously installed systemd-boot")
