@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, makeWrapper, iptables, iproute2, procps }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub, makeWrapper, iptables, iproute2, procps }:
 
 buildGoModule rec {
   pname = "tailscale";
@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-66akb1ru2JJe23Cr8q9mkMmmgqtezqh+Mc8aA+Rovb8=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = lib.optionals stdenv.isLinux [ makeWrapper ];
 
   CGO_ENABLED = 0;
 
@@ -25,7 +25,7 @@ buildGoModule rec {
 
   ldflags = [ "-X tailscale.com/version.Long=${version}" "-X tailscale.com/version.Short=${version}" ];
 
-  postInstall = ''
+  postInstall = lib.optionalString stdenv.isLinux ''
     wrapProgram $out/bin/tailscaled --prefix PATH : ${lib.makeBinPath [ iproute2 iptables ]}
     wrapProgram $out/bin/tailscale --suffix PATH : ${lib.makeBinPath [ procps ]}
 
@@ -36,7 +36,6 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://tailscale.com";
     description = "The node agent for Tailscale, a mesh VPN built on WireGuard";
-    platforms = platforms.linux;
     license = licenses.bsd3;
     maintainers = with maintainers; [ danderson mbaillie ];
   };
