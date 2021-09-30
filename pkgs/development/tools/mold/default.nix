@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     owner = "rui314";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256:0mj258fy8l4i23jd6ail0xrrq3das7lmrf1brrr1591ahx4vjj14";
+    sha256 = "0mj258fy8l4i23jd6ail0xrrq3das7lmrf1brrr1591ahx4vjj14";
   };
 
   buildInputs = [ zlib openssl ];
