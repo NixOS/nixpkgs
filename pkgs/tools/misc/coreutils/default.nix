@@ -155,7 +155,7 @@ stdenv.mkDerivation (rec {
     license = licenses.gpl3Plus;
     platforms = platforms.unix ++ platforms.windows;
     priority = 10;
-    maintainers = [ maintainers.eelco ];
+    maintainers = [ maintainers.eelco maintainers.das_j ];
   };
 } // optionalAttrs stdenv.hostPlatform.isMusl {
   # Work around a bogus warning in conjunction with musl.
