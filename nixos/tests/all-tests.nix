@@ -200,6 +200,7 @@ in
   installer = handleTest ./installer.nix {};
   iodine = handleTest ./iodine.nix {};
   ipfs = handleTest ./ipfs.nix {};
+  iptables = handleTest ./iptables.nix {};
   ipv6 = handleTest ./ipv6.nix {};
   iscsi-root = handleTest ./iscsi-root.nix {};
   jackett = handleTest ./jackett.nix {};
