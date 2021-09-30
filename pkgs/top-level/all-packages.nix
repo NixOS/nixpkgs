@@ -23585,6 +23585,8 @@ with pkgs;
 
   berry = callPackage ../applications/window-managers/berry { };
 
+  bespokesynth = callPackage ../applications/audio/bespokesynth { };
+
   bevelbar = callPackage ../applications/window-managers/bevelbar { };
 
   bibletime = libsForQt5.callPackage ../applications/misc/bibletime { };
