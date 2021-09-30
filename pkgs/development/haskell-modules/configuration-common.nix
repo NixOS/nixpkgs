@@ -856,6 +856,11 @@ self: super: {
       stripLen = 1;
     });
 
+  # hledger-lib 1.23 depends on doctest >= 0.18
+  hledger-lib_1_23 = super.hledger-lib_1_23.override {
+    doctest = self.doctest_0_18_1;
+  };
+
   # Copy hledger man pages from data directory into the proper place. This code
   # should be moved into the cabal2nix generator.
   hledger = overrideCabal super.hledger (drv: {
