@@ -17,7 +17,7 @@ buildPythonPackage rec {
   checkInputs = [ nose ];
 
   meta = with lib; {
-    description = "libclang python bindings";
+    description = "Libclang Python bindings";
     homepage    = "https://clang.llvm.org/";
     license     = licenses.ncsa;
     maintainers = with maintainers; [ samuela ];
