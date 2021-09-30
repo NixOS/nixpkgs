@@ -53,6 +53,6 @@ in py.buildPythonApplication rec {
     homepage = "https://friture.org/";
     license = licenses.gpl3;
     platforms = platforms.linux; # fails on Darwin
-    maintainers = [ maintainers.laikq ];
+    maintainers = with maintainers; [ laikq alyaeanyx ];
   };
 }
