@@ -551,7 +551,7 @@
     "myq" = ps: with ps; [ pymyq ];
     "mysensors" = ps: with ps; [ aiohttp-cors paho-mqtt pymysensors ];
     "mystrom" = ps: with ps; [ aiohttp-cors python-mystrom ];
-    "mythicbeastsdns" = ps: with ps; [ ]; # missing inputs: mbddns
+    "mythicbeastsdns" = ps: with ps; [ mbddns ];
     "nad" = ps: with ps; [ nad-receiver ];
     "nam" = ps: with ps; [ nettigo-air-monitor ];
     "namecheapdns" = ps: with ps; [ defusedxml ];
