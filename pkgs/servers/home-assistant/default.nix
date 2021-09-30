@@ -39,20 +39,6 @@ let
       });
     })
 
-    # Pinned due to API changes in pyjwt>=2.0
-    (self: super: {
-      pyjwt = super.pyjwt.overridePythonAttrs (oldAttrs: rec {
-        version = "1.7.1";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "15hflax5qkw1v6nssk1r0wkj83jgghskcmn875m3wgvpzdvajncd";
-        };
-        disabledTests = [
-          "test_ec_verify_should_return_false_if_signature_invalid"
-        ];
-      });
-    })
-
     # Pinned due to API changes in pyruckus>0.12
     (self: super: {
       pyruckus = super.pyruckus.overridePythonAttrs (oldAttrs: rec {
