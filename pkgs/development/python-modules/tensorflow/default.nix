@@ -5,6 +5,7 @@
 # Python libraries
 , absl-py
 , astunparse
+, clang_5
 , dill
 , flatbuffers-python
 , google-pasta
@@ -389,7 +390,7 @@ in buildPythonPackage {
     numpy
     opt-einsum
     protobuf
-    python.pkgs.clang_5
+    clang_5
     six
     tblib
     tensorflow-estimator_2
