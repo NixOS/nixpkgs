@@ -24145,6 +24145,8 @@ with pkgs;
 
   fnott = callPackage ../applications/misc/fnott { };
 
+  gigalixir = with python3Packages; toPythonApplication gigalixir;
+
   go-libp2p-daemon = callPackage ../servers/go-libp2p-daemon { };
 
   go-motion = callPackage ../development/tools/go-motion { };
