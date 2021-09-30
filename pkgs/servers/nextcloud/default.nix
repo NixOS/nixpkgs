@@ -55,14 +55,15 @@ in {
   };
 
   nextcloud20 = generic {
-    version = "20.0.7";
-    sha256 = "sha256-jO2Ct3K/CvZ9W+EyPkD5d0KbwKK8yGQJXvx4dnUAtys=";
+    version = "20.0.13";
+    sha256 = "15mi51aayi3m8brxc0w51mbxp4h3hjv14gr5mm7ch2930x655gg9";
   };
 
   nextcloud21 = generic {
-    version = "21.0.2";
-    sha256 = "5e5b38109a3485db5fd2d248f24478eabe6c0790ec10b030acbbee207d5511fe";
+    version = "21.0.5";
+    sha256 = "1q46h480kn97k7h3xm7r5gsa8l3f0kfiicapi46sh0p39pbjbyhv";
   };
+
   # tip: get she sha with:
   # curl 'https://download.nextcloud.com/server/releases/nextcloud-${version}.tar.bz2.sha256'
 }
