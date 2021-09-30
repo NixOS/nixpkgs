@@ -58,7 +58,6 @@ self: super: {
   dec = doJailbreak super.dec;
   ed25519 = doJailbreak super.ed25519;
   hackage-security = doJailbreak super.hackage-security;
-  hashable = overrideCabal (doJailbreak (dontCheck super.hashable)) (drv: { postPatch = "sed -i -e 's,integer-gmp .*<1.1,integer-gmp < 2,' hashable.cabal"; });
   hashable-time = doJailbreak super.hashable-time;
   HTTP = overrideCabal (doJailbreak super.HTTP) (drv: { postPatch = "sed -i -e 's,! Socket,!Socket,' Network/TCP.hs"; });
   integer-logarithms = overrideCabal (doJailbreak super.integer-logarithms) (drv: { postPatch = "sed -i -e 's,integer-gmp <1.1,integer-gmp < 2,' integer-logarithms.cabal"; });
@@ -69,6 +68,7 @@ self: super: {
   resolv = doJailbreak super.resolv;
   singleton-bool = doJailbreak super.singleton-bool;
   split = doJailbreak super.split;
+  splitmix = doJailbreak super.splitmix;
   tar = doJailbreak super.tar;
   time-compat = doJailbreak super.time-compat;
   vector = doJailbreak (dontCheck super.vector);
@@ -87,7 +87,11 @@ self: super: {
     sha256 = "0rgzrq0513nlc1vw7nw4km4bcwn4ivxcgi33jly4a7n3c1r32v1f";
   });
 
-  # The test suite depends on ChasingBottoms, which is broken with ghc-9.0.x.
+  # 1.3.0 (on stackage) defines instances for the Option-type, which has been removed from base in GHC 9.2.x
+  # Tests fail because random hasn't been updated for GHC 9.2.x
+  hashable = dontCheck super.hashable_1_3_3_0;
+
+  # Tests fail because random hasn't been updated for GHC 9.2.x
   unordered-containers = dontCheck super.unordered-containers;
 
   # The test suite seems pretty broken.
