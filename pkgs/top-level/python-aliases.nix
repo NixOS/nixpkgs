@@ -79,6 +79,7 @@ mapAliases ({
   sphinxcontrib_plantuml = sphinxcontrib-plantuml;
   topydo = throw "python3Packages.topydo was moved to topydo"; # 2017-09-22
   tvnamer = throw "python3Packages.tvnamer was moved to tvnamer"; # 2021-07-05
+  WazeRouteCalculator = wazeroutecalculator; # 2021-09-29
   websocket_client = websocket-client;
   zc_buildout221 = zc_buildout; # added 2021-07-21
 })
