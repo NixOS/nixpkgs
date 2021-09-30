@@ -1,14 +1,14 @@
 {
-  mkDerivation, extra-cmake-modules, qtbase
-, qtdeclarative, kconfig, kcoreaddons, ki18n, kio, kirigami2
-, fetchpatch
+  mkDerivation, extra-cmake-modules, intltool, qtbase
+, accounts-qt, qtdeclarative, kaccounts-integration, kconfig, kcoreaddons, ki18n, kio, kirigami2
+, fetchpatch, signond
 }:
 
 mkDerivation {
   name = "purpose";
-  nativeBuildInputs = [ extra-cmake-modules ];
+  nativeBuildInputs = [ extra-cmake-modules intltool ];
   buildInputs = [
-    qtbase qtdeclarative kconfig kcoreaddons
-    ki18n kio kirigami2
+    qtbase accounts-qt qtdeclarative kaccounts-integration kconfig kcoreaddons
+    ki18n kio kirigami2 signond
   ];
 }
