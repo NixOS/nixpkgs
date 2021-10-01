@@ -45,9 +45,16 @@ stdenv.mkDerivation rec {
   installFlags = [ "PREFIX=$(out)" ];
 
   dontWrapQtApps = true;
+  preFixup = ''
+    buildPythonPath "$out $pythonPath"
+    makeWrapperArgs+=(
+      "''${qtWrapperArgs[@]}"
+      --prefix PATH : "$program_PATH:${which}/bin"
+      --set PYTHONPATH "$program_PYTHONPATH"
+    )
+  '';
   postFixup = ''
     # Also sets program_PYTHONPATH and program_PATH variables
-    wrapPythonPrograms
     wrapPythonProgramsIn "$out/share/carla/resources" "$out $pythonPath"
 
     find "$out/share/carla" -maxdepth 1 -type f -not -name "*.py" -print0 | while read -d "" f; do
@@ -57,14 +64,14 @@ stdenv.mkDerivation rec {
     patchPythonScript "$out/share/carla/carla_database.py"
 
     for program in $out/bin/*; do
-      wrapQtApp "$program" \
-        --prefix PATH : "$program_PATH:${which}/bin" \
+      wrapProgram "$program" \
+        "''${makeWrapperArgs[@]}" \
         --set PYTHONNOUSERSITE true
     done
 
     find "$out/share/carla/resources" -maxdepth 1 -type f -not -name "*.py" -print0 | while read -d "" f; do
-      wrapQtApp "$f" \
-        --prefix PATH : "$program_PATH:${which}/bin" \
+      wrapProgram "$f" \
+        "''${makeWrapperArgs[@]}" \
         --set PYTHONNOUSERSITE true
     done
   '';
