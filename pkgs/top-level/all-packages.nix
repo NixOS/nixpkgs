@@ -17453,7 +17453,7 @@ with pkgs;
 
   libkate = callPackage ../development/libraries/libkate { };
 
-  libkeyfinder = callPackage ../development/libraries/libkeyfinder { };
+  libkeyfinder = callPackage ../development/libraries/audio/libkeyfinder { };
 
   libkml = callPackage ../development/libraries/libkml { };
 
