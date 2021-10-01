@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-websecurityscanner";
-  version = "1.4.2";
+  version = "1.4.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "593e73edb31ecb8e079c83c65dca29a593208f81a7506e6ef20aeecf611f2a9d";
+    sha256 = "3ec1a646b5caa54735c23117810ca1f796471e84cff16c42eecc3553cf4ed2b4";
   };
 
   propagatedBuildInputs = [ google-api-core libcst proto-plus ];
