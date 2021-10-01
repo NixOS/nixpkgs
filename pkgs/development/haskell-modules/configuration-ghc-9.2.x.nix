@@ -63,6 +63,7 @@ self: super: {
   HTTP = overrideCabal (doJailbreak super.HTTP) (drv: { postPatch = "sed -i -e 's,! Socket,!Socket,' Network/TCP.hs"; });
   integer-logarithms = overrideCabal (doJailbreak super.integer-logarithms) (drv: { postPatch = "sed -i -e 's,integer-gmp <1.1,integer-gmp < 2,' integer-logarithms.cabal"; });
   lukko = doJailbreak super.lukko;
+  network = super.network_3_1_2_2;
   parallel = doJailbreak super.parallel;
   primitive = doJailbreak super.primitive;
   regex-posix = doJailbreak super.regex-posix;
