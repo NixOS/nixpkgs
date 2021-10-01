@@ -707,7 +707,8 @@ with pkgs;
     inherit (darwin) signingUtils;
   };
 
-  vmTools = callPackage ../build-support/vm { };
+  # No callPackage.  In particular, we don't want `img` *package* in parameters.
+  vmTools = makeOverridable (import ../build-support/vm) { inherit pkgs lib; };
 
   releaseTools = callPackage ../build-support/release { };
 
@@ -6918,6 +6919,10 @@ with pkgs;
 
   leatherman = callPackage ../development/libraries/leatherman { };
 
+  ledit = callPackage ../tools/misc/ledit {
+    inherit (ocamlPackages) camlp5;
+  };
+
   ledmon = callPackage ../tools/system/ledmon { };
 
   leela = callPackage ../tools/graphics/leela { };
@@ -11702,6 +11707,8 @@ with pkgs;
 
   pscid = nodePackages.pscid;
 
+  coreboot-toolchain = callPackage ../development/tools/misc/coreboot-toolchain { };
+
   remarkable-toolchain = callPackage ../development/tools/misc/remarkable/remarkable-toolchain { };
 
   remarkable2-toolchain = callPackage ../development/tools/misc/remarkable/remarkable2-toolchain { };
@@ -11776,6 +11783,8 @@ with pkgs;
   go-repo-root = callPackage ../development/tools/go-repo-root { };
 
   go-junit-report = callPackage ../development/tools/go-junit-report { };
+
+  gobang = callPackage ../development/tools/database/gobang { };
 
   gogetdoc = callPackage ../development/tools/gogetdoc { };
 
@@ -23463,6 +23472,8 @@ with pkgs;
 
   berry = callPackage ../applications/window-managers/berry { };
 
+  bespokesynth = callPackage ../applications/audio/bespokesynth { };
+
   bevelbar = callPackage ../applications/window-managers/bevelbar { };
 
   bibletime = libsForQt5.callPackage ../applications/misc/bibletime { };
@@ -24138,6 +24149,8 @@ with pkgs;
 
   fnott = callPackage ../applications/misc/fnott { };
 
+  gigalixir = with python3Packages; toPythonApplication gigalixir;
+
   go-libp2p-daemon = callPackage ../servers/go-libp2p-daemon { };
 
   go-motion = callPackage ../development/tools/go-motion { };
@@ -24771,6 +24784,8 @@ with pkgs;
     withPulseAudio = config.pulseaudio or stdenv.isLinux;
     withPortAudio = stdenv.isDarwin;
   };
+
+  limesctl = callPackage ../applications/misc/limesctl { };
 
   linssid = libsForQt5.callPackage ../applications/networking/linssid { };
 
@@ -26086,7 +26101,8 @@ with pkgs;
     mopidy-spotify-tunigo
     mopidy-subidy
     mopidy-tunein
-    mopidy-youtube;
+    mopidy-youtube
+    mopidy-ytmusic;
 
   motif = callPackage ../development/libraries/motif { };
 
@@ -28947,7 +28963,9 @@ with pkgs;
 
   eclair = callPackage ../applications/blockchains/eclair { };
 
-  electrs = callPackage ../applications/blockchains/electrs { };
+  electrs = callPackage ../applications/blockchains/electrs {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   elements  = libsForQt5.callPackage ../applications/blockchains/elements {
     miniupnpc = miniupnpc_2;
@@ -32614,7 +32632,6 @@ with pkgs;
   };
 
   higan = callPackage ../misc/emulators/higan {
-    inherit (gnome2) gtksourceview;
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa OpenGL OpenAL;
   };
 
@@ -32762,6 +32779,8 @@ with pkgs;
   duti = callPackage ../os-specific/darwin/duti {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;
   };
+
+  dnstake = callPackage ../tools/networking/dnstake {};
 
   dnstracer = callPackage ../tools/networking/dnstracer {
     inherit (darwin) libresolv;

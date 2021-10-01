@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "clj-kondo";
-  version = "2021.03.31";
+  version = "2021.09.25";
 
   reflectionJson = fetchurl {
     name = "reflection.json";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/clj-kondo/${pname}/releases/download/v${version}/${pname}-${version}-standalone.jar";
-    sha256 = "sha256-XSs0u758wEuaqZvFIevBrL61YNPUJ9Sc1DS+O9agj94=";
+    sha256 = "sha256-kS6bwsYH/cbjJlIeiDAy6QsAw+D1uHp26d4NBLfStjg=";
   };
 
   dontUnpack = true;

@@ -33,7 +33,7 @@
     "ambiclimate" = ps: with ps; [ aiohttp-cors ambiclimate ];
     "ambient_station" = ps: with ps; [ aioambient ];
     "amcrest" = ps: with ps; [ amcrest ha-ffmpeg ];
-    "ampio" = ps: with ps; [ ]; # missing inputs: asmog
+    "ampio" = ps: with ps; [ asmog ];
     "analytics" = ps: with ps; [ aiohttp-cors sqlalchemy ];
     "android_ip_webcam" = ps: with ps; [ pydroid-ipcam ];
     "androidtv" = ps: with ps; [ adb-shell androidtv pure-python-adb ];
@@ -267,7 +267,7 @@
     "firmata" = ps: with ps; [ pymata-express ];
     "fitbit" = ps: with ps; [ aiohttp-cors fitbit ];
     "fixer" = ps: with ps; [ fixerio ];
-    "fjaraskupan" = ps: with ps; [ ]; # missing inputs: fjaraskupan
+    "fjaraskupan" = ps: with ps; [ fjaraskupan ];
     "fleetgo" = ps: with ps; [ ]; # missing inputs: ritassist
     "flexit" = ps: with ps; [ pymodbus ];
     "flic" = ps: with ps; [ pyflic ];
@@ -551,7 +551,7 @@
     "myq" = ps: with ps; [ pymyq ];
     "mysensors" = ps: with ps; [ aiohttp-cors paho-mqtt pymysensors ];
     "mystrom" = ps: with ps; [ aiohttp-cors python-mystrom ];
-    "mythicbeastsdns" = ps: with ps; [ ]; # missing inputs: mbddns
+    "mythicbeastsdns" = ps: with ps; [ mbddns ];
     "nad" = ps: with ps; [ nad-receiver ];
     "nam" = ps: with ps; [ nettigo-air-monitor ];
     "namecheapdns" = ps: with ps; [ defusedxml ];
@@ -795,7 +795,7 @@
     "sochain" = ps: with ps; [ ]; # missing inputs: python-sochain-api
     "solaredge" = ps: with ps; [ solaredge stringcase ];
     "solaredge_local" = ps: with ps; [ ]; # missing inputs: solaredge-local
-    "solarlog" = ps: with ps; [ ]; # missing inputs: sunwatcher
+    "solarlog" = ps: with ps; [ sunwatcher ];
     "solax" = ps: with ps; [ solax ];
     "soma" = ps: with ps; [ pysoma ];
     "somfy" = ps: with ps; [ aiohttp-cors pymfy ];
@@ -961,7 +961,7 @@
     "waterfurnace" = ps: with ps; [ waterfurnace ];
     "watson_iot" = ps: with ps; [ ]; # missing inputs: ibmiotf
     "watson_tts" = ps: with ps; [ ibm-watson ];
-    "waze_travel_time" = ps: with ps; [ WazeRouteCalculator ];
+    "waze_travel_time" = ps: with ps; [ wazeroutecalculator ];
     "weather" = ps: with ps; [ ];
     "webhook" = ps: with ps; [ aiohttp-cors ];
     "webostv" = ps: with ps; [ aiopylgtv ];

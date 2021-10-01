@@ -1,10 +1,19 @@
-{ lib, fetchurl, appimageTools, gtk3 }:
+{ lib, fetchurl, makeDesktopItem, appimageTools, gtk3 }:
 let
   name = "saleae-logic-2";
   version = "2.3.37";
   src = fetchurl {
     url = "https://downloads.saleae.com/logic2/Logic-${version}-master.AppImage";
     sha256 = "0jclzd4s1r6h2p1r0vhmzz3jnwpp7d41g70lcamrsxidxrmm8d45";
+  };
+  desktopItem = makeDesktopItem {
+    inherit name;
+    exec = name;
+    icon = "Logic";
+    comment = "Software for Saleae logic analyzers";
+    desktopName = "Saleae Logic";
+    genericName = "Logic analyzer";
+    categories = "Development";
   };
 in
 appimageTools.wrapType2 {
@@ -17,6 +26,9 @@ appimageTools.wrapType2 {
       ''
         mkdir -p $out/etc/udev/rules.d
         cp ${appimageContents}/resources/linux/99-SaleaeLogic.rules $out/etc/udev/rules.d/
+        mkdir -p $out/share/pixmaps
+        ln -s ${desktopItem}/share/applications $out/share/
+        cp ${appimageContents}/usr/share/icons/hicolor/256x256/apps/Logic.png $out/share/pixmaps/Logic.png
       '';
 
   profile = ''
