@@ -17071,6 +17071,8 @@ with pkgs;
 
   libgig = callPackage ../development/libraries/libgig { };
 
+  libglibutil = callPackage ../development/libraries/libglibutil { };
+
   libgnome-keyring = callPackage ../development/libraries/libgnome-keyring { };
   libgnome-keyring3 = gnome.libgnome-keyring;
 
