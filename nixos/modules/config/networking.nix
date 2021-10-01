@@ -32,6 +32,22 @@ in
       '';
     };
 
+    networking.addFQDNAndHostnameEntries = lib.mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Whether to add the FQDN and hostname entries to /etc/hosts,
+        mapping FQDN and hostname to 127.0.0.2 and optionally ::1 if
+        IPv6 is enabled.
+
+        Setting this to false prevents DNS entries from being
+        overridden (when FQDN should resolve to the public IP address
+        instead of 127.0.0.1)
+
+        Useful for e.g. `services.zookeeper`.
+      '';
+    };
+
     networking.hostFiles = lib.mkOption {
       type = types.listOf types.path;
       defaultText = lib.literalExample "Hosts from `networking.hosts` and `networking.extraHosts`";
@@ -159,11 +175,11 @@ in
       hostnames = # Note: The FQDN (canonical hostname) has to come first:
         optional (cfg.hostName != "" && cfg.domain != null) "${cfg.hostName}.${cfg.domain}"
         ++ optional (cfg.hostName != "") cfg.hostName; # Then the hostname (without the domain)
-    in {
+    in optionalAttrs cfg.addFQDNAndHostnameEntries ({
       "127.0.0.2" = hostnames;
     } // optionalAttrs cfg.enableIPv6 {
       "::1" = hostnames;
-    };
+    });
 
     networking.hostFiles = let
       # Note: localhostHosts has to appear first in /etc/hosts so that 127.0.0.1
