@@ -399,13 +399,39 @@ in {
             The package can be upgraded by explicitly declaring the service-option
             `services.nextcloud.package`.
           '';
+
+        # FIXME(@Ma27) remove as soon as nextcloud properly supports
+        # mariadb >=10.6.
+        isUnsupportedMariadb =
+          # All currently supported Nextcloud versions are affected.
+          (versionOlder cfg.package.version "23")
+          # This module uses mysql
+          && (cfg.config.dbtype == "mysql")
+          # MySQL is managed via NixOS
+          && config.services.mysql.enable
+          # We're using MariaDB
+          && (getName config.services.mysql.package) == "mariadb-server"
+          # MariaDB is at least 10.6 and thus not supported
+          && (versionAtLeast (getVersion config.services.mysql.package) "10.6");
+
       in (optional (cfg.poolConfig != null) ''
           Using config.services.nextcloud.poolConfig is deprecated and will become unsupported in a future release.
           Please migrate your configuration to config.services.nextcloud.poolSettings.
         '')
         ++ (optional (versionOlder cfg.package.version "20") (upgradeWarning 19 "21.05"))
         ++ (optional (versionOlder cfg.package.version "21") (upgradeWarning 20 "21.05"))
-        ++ (optional (versionOlder cfg.package.version "22") (upgradeWarning 21 "21.11"));
+        ++ (optional (versionOlder cfg.package.version "22") (upgradeWarning 21 "21.11"))
+        ++ (optional isUnsupportedMariadb ''
+            You seem to be using MariaDB at an unsupported version (i.e. at least 10.6)!
+            Please note that this isn't supported officially by Nextcloud. You can either
+
+            * Switch to `pkgs.mysql`
+            * Downgrade MariaDB to at least 10.5
+            * Work around Nextcloud's problems by specifying `innodb_read_only_compressed=0`
+
+            For further context, please read
+            https://help.nextcloud.com/t/update-to-next-cloud-21-0-2-has-get-an-error/117028/15
+          '');
 
       services.nextcloud.package = with pkgs;
         mkDefault (
