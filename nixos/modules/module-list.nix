@@ -593,6 +593,7 @@
   ./services/misc/sysprof.nix
   ./services/misc/taskserver
   ./services/misc/tiddlywiki.nix
+  ./services/misc/tp-auto-kbbl.nix
   ./services/misc/tzupdate.nix
   ./services/misc/uhub.nix
   ./services/misc/weechat.nix
