@@ -53,6 +53,7 @@ self: super: {
 
   # Jailbreaks & Version Updates
   async = doJailbreak super.async;
+  base64-bytestring = doJailbreak super.base64-bytestring;
   ChasingBottoms = doJailbreak super.ChasingBottoms;
   data-fix = doJailbreak super.data-fix;
   dec = doJailbreak super.dec;
@@ -63,7 +64,7 @@ self: super: {
   integer-logarithms = overrideCabal (doJailbreak super.integer-logarithms) (drv: { postPatch = "sed -i -e 's,integer-gmp <1.1,integer-gmp < 2,' integer-logarithms.cabal"; });
   lukko = doJailbreak super.lukko;
   parallel = doJailbreak super.parallel;
-  primitive = doJailbreak (dontCheck super.primitive);
+  primitive = doJailbreak super.primitive;
   regex-posix = doJailbreak super.regex-posix;
   resolv = doJailbreak super.resolv;
   singleton-bool = doJailbreak super.singleton-bool;
@@ -88,14 +89,7 @@ self: super: {
   });
 
   # 1.3.0 (on stackage) defines instances for the Option-type, which has been removed from base in GHC 9.2.x
-  # Tests fail because random hasn't been updated for GHC 9.2.x
-  hashable = dontCheck super.hashable_1_3_3_0;
-
-  # Tests fail because random hasn't been updated for GHC 9.2.x
-  unordered-containers = dontCheck super.unordered-containers;
-
-  # The test suite seems pretty broken.
-  base64-bytestring = dontCheck super.base64-bytestring;
+  hashable = super.hashable_1_3_3_0;
 
   # 1.2.1 introduced support for GHC 9.2.1, stackage has 1.2.0
   # The test suite indirectly depends on random, which leads to infinite recursion
