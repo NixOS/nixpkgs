@@ -16,6 +16,12 @@ buildGoModule rec {
 
   vendorSha256 = "0zx3ii9crick647kslzwg4d39li6jds938f9j9dp287rhrlzjfbm";
 
+  ldflags = [
+    "-w"
+    "-s"
+    "-X main.version=${version}"
+  ];
+
   # tests require network access
   doCheck = false;
 
