@@ -621,6 +621,8 @@ in {
 
   async-lru = callPackage ../development/python-modules/async-lru { };
 
+  asyncclick = callPackage ../development/python-modules/asyncclick { };
+
   asynccmd = callPackage ../development/python-modules/asynccmd { };
 
   asyncio-dgram = callPackage ../development/python-modules/asyncio-dgram { };
