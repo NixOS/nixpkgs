@@ -55,7 +55,7 @@ in
           description = "Root path for log files.";
         };
         level = mkOption {
-          default = "Trace";
+          default = "Info";
           type = types.enum [ "Trace" "Debug" "Info" "Warn" "Error" "Critical" ];
           description = "General log level.";
         };
