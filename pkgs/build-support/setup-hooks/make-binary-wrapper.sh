@@ -30,6 +30,23 @@ makeBinaryWrapper() {
     makeDocumentedCWrapper "$1" "${@:3}" | gcc -Os -x c -o "$2" -
 }
 
+# Syntax: wrapProgramBinary <PROGRAM> <MAKE-WRAPPER FLAGS...>
+wrapProgramBinary() {
+    local prog="$1"
+    local hidden
+
+    assertExecutable "$prog"
+
+    hidden="$(dirname "$prog")/.$(basename "$prog")"-wrapped
+    while [ -e "$hidden" ]; do
+      hidden="${hidden}_"
+    done
+    mv "$prog" "$hidden"
+    # Silence warning about unexpanded $0:
+    # shellcheck disable=SC2016
+    makeBinaryWrapper "$hidden" "$prog" --argv0 '$0' "${@:2}"
+}
+
 # Generate source code for the wrapper in such a way that the wrapper source code
 # will still be readable even after compilation
 # makeDocumentedCWrapper EXECUTABLE ARGS
