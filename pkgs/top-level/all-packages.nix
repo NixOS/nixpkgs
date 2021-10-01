@@ -181,6 +181,9 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
 
+  arptables = arptables-legacy;
+  arptables-legacy = callPackage ../os-specific/linux/arptables { };
+
   fiche = callPackage ../servers/fiche { };
 
   fishnet = callPackage ../servers/fishnet { };
