@@ -53,7 +53,7 @@ self: super: {
 
   # Jailbreaks & Version Updates
   async = doJailbreak super.async;
-  ChasingBottoms = markBrokenVersion "1.3.1.9" super.ChasingBottoms;
+  ChasingBottoms = doJailbreak super.ChasingBottoms;
   data-fix = doJailbreak super.data-fix;
   dec = doJailbreak super.dec;
   ed25519 = doJailbreak super.ed25519;
