@@ -37,7 +37,7 @@ in
       default = true;
       description = ''
         Whether to add the FQDN and hostname entries to /etc/hosts,
-        mapping FQDN and hostname to 127.0.0.2 and optionally ::1 if
+        mapping them to 127.0.0.2 and optionally ::1 if
         IPv6 is enabled.
 
         Setting this to false prevents DNS entries from being
