@@ -2882,6 +2882,8 @@ in {
 
   garages-amsterdam = callPackage ../development/python-modules/garages-amsterdam { };
 
+  gbinder-python = callPackage ../development/python-modules/gbinder-python { };
+
   gcovr = callPackage ../development/python-modules/gcovr { };
 
   gcsfs = callPackage ../development/python-modules/gcsfs { };
