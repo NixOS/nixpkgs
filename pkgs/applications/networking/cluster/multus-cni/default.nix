@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "multus-cni";
-  version = "3.7.2";
+  version = "3.8";
 
   src = fetchFromGitHub {
     owner = "k8snetworkplumbingwg";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-eVYRbMijOEa+DNCm4w/+WVrTI9607NF9/l5YKkXJuFs=";
+    sha256 = "sha256-wG6SRts3+bmeMkfScyNorsBvRl/hxe+CUnL0rwfknpc=";
   };
 
   ldflags = let

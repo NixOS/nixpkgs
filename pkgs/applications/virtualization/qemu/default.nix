@@ -103,6 +103,17 @@ stdenv.mkDerivation rec {
       url = "https://raw.githubusercontent.com/alpinelinux/aports/2bb133986e8fa90e2e76d53369f03861a87a74ef/main/qemu/fix-sigevent-and-sigval_t.patch";
       sha256 = "0wk0rrcqywhrw9hygy6ap0lfg314m9z1wr2hn8338r5gfcw75mav";
     })
+  ] ++ lib.optionals stdenv.isDarwin [
+    # The Hypervisor.framework support patch converted something that can be applied:
+    # * https://patchwork.kernel.org/project/qemu-devel/list/?series=548227
+    # The base revision is whatever commit there is before the series starts:
+    # * https://github.com/patchew-project/qemu/commits/patchew/20210916155404.86958-1-agraf%40csgraf.de
+    # The target revision is what patchew has as the series tag from patchwork:
+    # * https://github.com/patchew-project/qemu/releases/tag/patchew%2F20210916155404.86958-1-agraf%40csgraf.de
+    (fetchpatch {
+      url = "https://github.com/patchew-project/qemu/compare/7adb961995a3744f51396502b33ad04a56a317c3..d2603c06d9c4a28e714b9b70fe5a9d0c7b0f934d.diff";
+      sha256 = "sha256-nSi5pFf9+EefUmyJzSEKeuxOt39ztgkXQyUB8fTHlcY=";
+    })
   ];
 
   postPatch = ''
@@ -166,6 +177,12 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # tries to access /dev
   dontWrapGApps = true;
+
+  # QEMU attaches entitlements with codesign and strip removes those,
+  # voiding the entitlements and making it non-operational.
+  # The alternative is to re-sign with entitlements after stripping:
+  # * https://github.com/qemu/qemu/blob/v6.1.0/scripts/entitlement.sh#L25
+  dontStrip = stdenv.isDarwin;
 
   postFixup = ''
     # the .desktop is both invalid and pointless
