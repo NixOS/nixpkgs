@@ -13457,6 +13457,8 @@ with pkgs;
 
   abuild = callPackage ../development/tools/abuild { };
 
+  actionlint = callPackage ../development/tools/analysis/actionlint { };
+
   adtool = callPackage ../tools/admin/adtool { };
 
   inherit (callPackage ../development/tools/alloy {
