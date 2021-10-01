@@ -175,7 +175,7 @@ in
       hostnames = # Note: The FQDN (canonical hostname) has to come first:
         optional (cfg.hostName != "" && cfg.domain != null) "${cfg.hostName}.${cfg.domain}"
         ++ optional (cfg.hostName != "") cfg.hostName; # Then the hostname (without the domain)
-    in optionalAttrs cfg.addFQDNAndHostnameEntries ({
+    in optionalAttrs cfg.includeFQDNAndHostnameEntries ({
       "127.0.0.2" = hostnames;
     } // optionalAttrs cfg.enableIPv6 {
       "::1" = hostnames;
