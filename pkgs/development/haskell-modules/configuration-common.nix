@@ -1992,8 +1992,14 @@ EOT
   hw-xml = assert pkgs.lib.versionOlder self.generic-lens.version "2.2.0.0";
     doJailbreak super.hw-xml;
 
-  # doctests fail due to deprecation warnings
+  # doctests fail due to deprecation warnings in 0.2
   candid = assert pkgs.lib.versionOlder super.candid.version "0.3";
-    appendConfigureFlags super.candid [ "--ghc-option=-Wno-deprecations" ];
+    overrideCabal super.candid (drv: {
+      version = "0.3";
+      sha256 = "0zq29zddkkwvlyz9qmxl942ml53m6jawl4m5rkb2510glbkcvr5x";
+      libraryHaskellDepends = drv.libraryHaskellDepends ++ [
+        self.file-embed
+      ];
+    });
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
