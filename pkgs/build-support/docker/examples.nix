@@ -562,6 +562,19 @@ rec {
   # Example export of the bash image
   exportBash = pkgs.dockerTools.exportImage { fromImage = bash; };
 
+  imageViaFakeChroot = pkgs.dockerTools.streamLayeredImage {
+    name = "image-via-fake-chroot";
+    tag = "latest";
+    config.Cmd = [ "hello" ];
+    # Crucially, instead of a relative path, this creates /bin, which is
+    # intercepted by fakechroot.
+    # This functionality is not available on darwin as of 2021.
+    fakeRootCommands = ''
+      mkdir /bin
+      ln -s ${pkgs.hello}/bin/hello /bin/hello
+    '';
+  };
+
   build-image-with-path = buildImage {
     name = "build-image-with-path";
     tag = "latest";

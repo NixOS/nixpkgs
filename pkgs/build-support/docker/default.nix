@@ -5,6 +5,7 @@
 , closureInfo
 , coreutils
 , e2fsprogs
+, fakechroot
 , fakeroot
 , findutils
 , go
@@ -34,6 +35,10 @@
 }:
 
 let
+  inherit (lib)
+    optionals
+    optionalString
+    ;
 
   inherit (lib)
     escapeShellArgs
@@ -811,6 +816,9 @@ rec {
     , # Optional bash script to run inside fakeroot environment.
       # Could be used for changing ownership of files in customisation layer.
       fakeRootCommands ? ""
+    , # Whether to run fakeRootCommands in fakechroot as well, so that they
+      # appear to run inside the image, but have access to the normal Nix store.
+      enableFakechroot ? pkgs.stdenv.buildPlatform.isLinux
     , # We pick 100 to ensure there is plenty of room for extension. I
       # believe the actual maximum is 128.
       maxLayers ? 100
@@ -842,16 +850,26 @@ rec {
           name = "${baseName}-customisation-layer";
           paths = contentsList;
           inherit extraCommands fakeRootCommands;
-          nativeBuildInputs = [ fakeroot ];
+          nativeBuildInputs = [
+            fakeroot
+          ] ++ optionals enableFakechroot [
+            fakechroot
+            # for chroot
+            coreutils
+            # fakechroot needs getopt, which is provided by util-linux
+            util-linux
+          ];
           postBuild = ''
             mv $out old_out
             (cd old_out; eval "$extraCommands" )
 
             mkdir $out
-
-            fakeroot bash -c '
+            ${optionalString enableFakechroot ''
+              export FAKECHROOT_EXCLUDE_PATH=/dev:/proc:/sys:${builtins.storeDir}:$out/layer.tar
+            ''}
+            ${optionalString enableFakechroot ''fakechroot chroot $PWD/old_out ''}fakeroot bash -c '
               source $stdenv/setup
-              cd old_out
+              ${optionalString (!enableFakechroot) ''cd old_out''}
               eval "$fakeRootCommands"
               tar \
                 --sort name \
