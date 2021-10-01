@@ -73,6 +73,6 @@ stdenv.mkDerivation rec {
       publicDomain # tzdata
     ];
     platforms = platforms.all;
-    maintainers = with maintainers; [ fpletz ];
+    maintainers = with maintainers; [ ajs124 fpletz ];
   };
 }
