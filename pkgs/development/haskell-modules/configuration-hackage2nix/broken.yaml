@@ -4269,6 +4269,7 @@ broken-packages:
   - semialign-extras
   - semibounded-lattices
   - Semigroup
+  - semigroupoids-do
   - semigroupoids-syntax
   - semigroups-actions
   - sendgrid-haskell
@@ -4662,6 +4663,7 @@ broken-packages:
   - streaming-utils
   - streaming-with
   - streamly-examples
+  - streamly-lz4
   - streamly-process
   - stream-monad
   - streamproc
@@ -4949,6 +4951,7 @@ broken-packages:
   - Titim
   - tkhs
   - tkyprof
+  - tmp-proc-example
   - todo
   - tofromxml
   - to-haskell
@@ -5405,6 +5408,7 @@ broken-packages:
   - xml-prettify
   - xml-query
   - xml-tydom-core
+  - xml-verify
   - XMMS
   - xmonad-bluetilebranch
   - xmonad-contrib-gpl

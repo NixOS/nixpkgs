@@ -175,6 +175,7 @@ let
         hinit
         hedgewars
         hledger
+        hledger-check-fancyassertions
         hledger-iadd
         hledger-interest
         hledger-ui
