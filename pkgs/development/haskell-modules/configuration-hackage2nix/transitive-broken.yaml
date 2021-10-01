@@ -489,7 +489,6 @@ dont-distribute-packages:
  - atuin
  - audiovisual
  - aura
- - aura_3_2_6
  - authoring
  - autonix-deps-kf5
  - avers
