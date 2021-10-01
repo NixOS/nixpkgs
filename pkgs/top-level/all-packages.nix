@@ -1040,6 +1040,8 @@ with pkgs;
 
   mrxvt = callPackage ../applications/terminal-emulators/mrxvt { };
 
+  natls = callPackage ../tools/misc/natls { };
+
   nimmm = callPackage ../applications/terminal-emulators/nimmm { };
 
   pikchr = callPackage ../tools/graphics/pikchr { };
@@ -31940,6 +31942,8 @@ with pkgs;
   nixos-generators = callPackage ../tools/nix/nixos-generators { };
 
   nixos-rebuild = callPackage ../os-specific/linux/nixos-rebuild { };
+
+  extra-container = callPackage ../tools/virtualization/extra-container { };
 
   norwester-font = callPackage ../data/fonts/norwester  {};
 
