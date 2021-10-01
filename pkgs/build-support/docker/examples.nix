@@ -350,6 +350,9 @@ rec {
       # This removes sharing of busybox and is not recommended. We do this
       # to make the example suitable as a test case with working binaries.
       cp -r ${pkgs.pkgsStatic.busybox}/* .
+
+      # This is a "build" dependency that will not appear in the image
+      ${pkgs.hello}/bin/hello
     '';
   };
 
@@ -504,6 +507,7 @@ rec {
     fakeRootCommands = ''
       mkdir -p ./home/jane
       chown 1000 ./home/jane
+      ln -s ${pkgs.pkgsStatic.hello} ./hello
     '';
   };
 
