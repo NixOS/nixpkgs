@@ -84,7 +84,7 @@ in
       )
 
       output = machine.succeed("/run/current-system/bin/switch-to-configuration boot")
-      assert "updating systemd-boot from 000.0 to " in output
+      assert "updated systemd-boot to " in output
     '';
   };
 }

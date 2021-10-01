@@ -214,19 +214,13 @@ def main() -> None:
             subprocess.check_call(["@systemd@/bin/bootctl", "--path=@efiSysMountPoint@", "--no-variables", "install"])
     else:
         # Update bootloader to latest if needed
-        systemd_version = subprocess.check_output(["@systemd@/bin/bootctl", "--version"], universal_newlines=True).split()[1]
-        sdboot_status = subprocess.check_output(["@systemd@/bin/bootctl", "--path=@efiSysMountPoint@", "status"], universal_newlines=True)
-
-        # See status_binaries() in systemd bootctl.c for code which generates this
-        m = re.search("^\W+File:.*/EFI/(BOOT|systemd)/.*\.efi \(systemd-boot ([\d.]+)[^)]*\)$",
-                      sdboot_status, re.IGNORECASE | re.MULTILINE)
-        if m is None:
-            print("could not find any previously installed systemd-boot")
-        else:
-            sdboot_version = m.group(2)
-            if systemd_version > sdboot_version:
-                print("updating systemd-boot from %s to %s" % (sdboot_version, systemd_version))
-                subprocess.check_call(["@systemd@/bin/bootctl", "--path=@efiSysMountPoint@", "update"])
+        update_output = subprocess.run(["@systemd@/bin/bootctl", "--path=@efiSysMountPoint@", "update", "--graceful"],
+                universal_newlines=True, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE).stderr
+        updated = re.search("^Copied \"/nix/store/.*-systemd-(.*)/lib/systemd/boot/efi/.*\.efi\" to \"/boot/EFI/.*\.efi\"\.$",
+                update_output, re.MULTILINE)
+        if updated:
+            systemd_version = updated.group(1)
+            print(f"updated systemd-boot to {systemd_version}")
 
     mkdir_p("@efiSysMountPoint@/efi/nixos")
     mkdir_p("@efiSysMountPoint@/loader/entries")
