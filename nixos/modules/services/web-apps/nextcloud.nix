@@ -6,7 +6,7 @@ let
   cfg = config.services.nextcloud;
   fpm = config.services.phpfpm.pools.nextcloud;
 
-  phpPackage = pkgs.php74.buildEnv {
+  phpPackage = cfg.phpPackage.buildEnv {
     extensions = { enabled, all }:
       (with all;
         enabled
@@ -93,6 +93,14 @@ in {
       type = types.package;
       description = "Which package to use for the Nextcloud instance.";
       relatedPackages = [ "nextcloud19" "nextcloud20" "nextcloud21" "nextcloud22" ];
+    };
+    phpPackage = mkOption {
+      type = types.package;
+      relatedPackages = [ "php74" "php80" ];
+      defaultText = "pkgs.php";
+      description = ''
+        PHP package to use for Nextcloud.
+      '';
     };
 
     maxUploadSize = mkOption {
@@ -450,6 +458,10 @@ in {
           else if versionOlder stateVersion "21.03" then nextcloud19
           else nextcloud21
         );
+
+      services.nextcloud.phpPackage =
+        if versionOlder cfg.package.version "21" then pkgs.php74
+        else pkgs.php80;
     }
 
     { systemd.timers.nextcloud-cron = {
