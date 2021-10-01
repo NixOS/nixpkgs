@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, callPackage, ncurses, gettext, pkg-config
+{ lib, stdenv, fetchurl, fetchpatch, callPackage, ncurses, gettext, pkg-config
 # default vimrc
 , vimrc ? fetchurl {
     name = "default-vimrc";
@@ -20,6 +20,24 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ gettext pkg-config ];
   buildInputs = [ ncurses ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ Carbon Cocoa ];
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/vim/vim/commit/b7081e135a16091c93f6f5f7525a5c58fb7ca9f9.patch";
+      name = "CVE-2021-3770.patch";
+      sha256 = "0xk5q1lsq99hinrwnfdi01i0zzr9s9f0bfq8244bb0nvwadlq302";
+    })
+    (fetchpatch {
+      url = "https://github.com/vim/vim/commit/65b605665997fad54ef39a93199e305af2fe4d7f.patch";
+      name = "CVE-2021-3778.patch";
+      sha256 = "1s4nbaz2nfl96zdnh8xwf6vsrby7xf6pjbfkc4c5y3h0mf2llb2h";
+    })
+    (fetchpatch {
+      url = "https://github.com/vim/vim/commit/35a9a00afcb20897d462a766793ff45534810dc3.patch";
+      name = "CVE-2021-3796.patch";
+      sha256 = "0d538dkgkdfp3z501bifgm4c8amlqdp3mjqjmhdd9cadza4amix9";
+    })
+  ];
 
   configureFlags = [
     "--enable-multibyte"
