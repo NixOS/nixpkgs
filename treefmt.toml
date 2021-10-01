@@ -1,0 +1,6 @@
+[formatter.nix]
+command = "nixpkgs-fmt"
+includes = ["*.nix"]
+excludes = [
+  "pkgs/development/r-modules/*.nix"
+]
