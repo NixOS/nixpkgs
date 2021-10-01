@@ -36,26 +36,30 @@ makeDocumentedCWrapper() {
 # makeCWrapper EXECUTABLE ARGS
 # ARGS: same as makeBinaryWrapper
 makeCWrapper() {
-    local argv0 n params cmd main flagsBefore flags executable params
+    local argv0 n params cmd main flagsBefore flags executable params length
     executable=$(escapeStringLiteral "$1")
     params=("$@")
-    for ((n = 1; n < ${#params[*]}; n += 1)); do
+    length=${#params[*]}
+    for ((n = 1; n < length; n += 1)); do
         p="${params[n]}"
         case $p in
             --set)
                 cmd=$(setEnv "${params[n + 1]}" "${params[n + 2]}")
                 main="$main    $cmd"$'\n'
                 n=$((n + 2))
+                [ $n -ge "$length" ] && printf '%s\n' "    #error makeBinaryWrapper: $p takes 2 arguments"
             ;;
             --set-default)
                 cmd=$(setDefaultEnv "${params[n + 1]}" "${params[n + 2]}")
                 main="$main    $cmd"$'\n'
                 n=$((n + 2))
+                [ $n -ge "$length" ] && printf '%s\n' "    #error makeBinaryWrapper:  $p takes 2 arguments"
             ;;
             --unset)
                 cmd=$(unsetEnv "${params[n + 1]}")
                 main="$main    $cmd"$'\n'
                 n=$((n + 1))
+                [ $n -ge "$length" ] && printf '%s\n' "    #error makeBinaryWrapper:  $p takes 1 argument"
             ;;
             --prefix)
                 cmd=$(setEnvPrefix "${params[n + 1]}" "${params[n + 2]}" "${params[n + 3]}")
@@ -63,6 +67,7 @@ makeCWrapper() {
                 uses_prefix=1
                 uses_concat3=1
                 n=$((n + 3))
+                [ $n -ge "$length" ] && printf '%s\n' "    #error makeBinaryWrapper:  $p takes 3 arguments"
             ;;
             --suffix)
                 cmd=$(setEnvSuffix "${params[n + 1]}" "${params[n + 2]}" "${params[n + 3]}")
@@ -70,15 +75,18 @@ makeCWrapper() {
                 uses_suffix=1
                 uses_concat3=1
                 n=$((n + 3))
+                [ $n -ge "$length" ] && printf '%s\n' "    #error makeBinaryWrapper:  $p takes 3 arguments"
             ;;
             --add-flags)
                 flags="${params[n + 1]}"
                 flagsBefore="$flagsBefore $flags"
                 n=$((n + 1))
+                [ $n -ge "$length" ] && printf '%s\n' "    #error makeBinaryWrapper:  $p takes 1 argument"
             ;;
             --argv0)
                 argv0=$(escapeStringLiteral "${params[n + 1]}")
                 n=$((n + 1))
+                [ $n -ge "$length" ] && printf '%s\n' "    #error makeBinaryWrapper:  $p takes 1 argument"
             ;;
             *) # Using an error macro, we will make sure the compiler gives an understandable error message
                 printf '%s\n' "    #error makeCWrapper did not understand argument ${p}"
