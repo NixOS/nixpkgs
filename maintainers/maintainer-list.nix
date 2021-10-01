@@ -2599,6 +2599,10 @@
     githubId = 202798;
     name = "Pierre Bourdon";
   };
+  delta = {
+    email = "d4delta@outlook.fr";
+    name = "Delta";
+  };
   deltaevo = {
     email = "deltaduartedavid@gmail.com";
     github = "DeltaEvo";
