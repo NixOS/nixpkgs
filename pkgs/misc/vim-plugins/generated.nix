@@ -5968,6 +5968,18 @@ final: prev:
     meta.homepage = "https://github.com/folke/trouble.nvim/";
   };
 
+  TrueZen-nvim = buildVimPluginFrom2Nix {
+    pname = "TrueZen.nvim";
+    version = "2021-09-11";
+    src = fetchFromGitHub {
+      owner = "Pocco81";
+      repo = "TrueZen.nvim";
+      rev = "5dfd2c23ce269a7b70708d84f3ce44bfc10d7830";
+      sha256 = "100gncjw94di6j9f9wl266s5cp2lywp18gzwzq4mzvp9y4kk7baf";
+    };
+    meta.homepage = "https://github.com/Pocco81/TrueZen.nvim/";
+  };
+
   tslime-vim = buildVimPluginFrom2Nix {
     pname = "tslime.vim";
     version = "2020-09-09";
