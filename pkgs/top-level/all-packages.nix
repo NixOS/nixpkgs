@@ -1041,6 +1041,8 @@ with pkgs;
 
   mrxvt = callPackage ../applications/terminal-emulators/mrxvt { };
 
+  natls = callPackage ../tools/misc/natls { };
+
   nimmm = callPackage ../applications/terminal-emulators/nimmm { };
 
   pikchr = callPackage ../tools/graphics/pikchr { };
@@ -31950,6 +31952,8 @@ with pkgs;
 
   nixos-rebuild = callPackage ../os-specific/linux/nixos-rebuild { };
 
+  extra-container = callPackage ../tools/virtualization/extra-container { };
+
   norwester-font = callPackage ../data/fonts/norwester  {};
 
   nut = callPackage ../applications/misc/nut { };
@@ -32342,6 +32346,8 @@ with pkgs;
   throttled = callPackage ../tools/system/throttled { };
 
   thinkfan = callPackage ../tools/system/thinkfan { };
+
+  tp-auto-kbbl = callPackage ../tools/system/tp-auto-kbbl { };
 
   tup = callPackage ../development/tools/build-managers/tup { };
 
