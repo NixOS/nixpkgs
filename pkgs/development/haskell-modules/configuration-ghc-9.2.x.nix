@@ -97,6 +97,10 @@ self: super: {
   # The test suite seems pretty broken.
   base64-bytestring = dontCheck super.base64-bytestring;
 
+  # 1.2.1 introduced support for GHC 9.2.1, stackage has 1.2.0
+  # The test suite indirectly depends on random, which leads to infinite recursion
+  random = dontCheck super.random_1_2_1;
+
   # 5 introduced support for GHC 9.0.x, but hasn't landed in stackage yet
   lens = super.lens_5_0_1;
 
