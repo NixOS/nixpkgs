@@ -22,7 +22,7 @@ let
         doCheck ? true,
         requireX ? false,
         broken ? false,
-        hydraPlatforms ? R.meta.hydraPlatforms
+        hydraPlatforms ? R.meta.platforms
       }: buildRPackage {
     name = "${name}-${version}";
     src = fetchurl {
