@@ -606,7 +606,9 @@ in
   makeWrapper = makeSetupHook { deps = [ dieHook ]; substitutions = { shell = targetPackages.runtimeShell; }; }
                               ../build-support/setup-hooks/make-wrapper.sh;
 
-  makeBinaryWrapper = makeSetupHook { } ../build-support/setup-hooks/make-binary-wrapper.sh;
+  makeBinaryWrapper = makeSetupHook {
+    deps = [ dieHook ];
+  } ../build-support/setup-hooks/make-binary-wrapper.sh;
 
   makeModulesClosure = { kernel, firmware, rootModules, allowMissing ? false }:
     callPackage ../build-support/kernel/modules-closure.nix {
