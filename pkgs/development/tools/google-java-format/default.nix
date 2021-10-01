@@ -17,11 +17,17 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/{bin,share/google-java-format}
-    install -D ${src} $out/share/google-java-format/google-java-format.jar
+    mkdir -p $out/{bin,share/${pname}}
+    install -D ${src} $out/share/${pname}/google-java-format-${version}-all-deps.jar
 
-    makeWrapper ${jre}/bin/java $out/bin/google-java-format \
-      --add-flags "-jar $out/share/google-java-format/google-java-format.jar"
+    makeWrapper ${jre}/bin/java $out/bin/${pname} \
+      --argv0 ${pname} \
+      --add-flags "--add-exports jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED" \
+      --add-flags "--add-exports jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED" \
+      --add-flags "--add-exports jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED" \
+      --add-flags "--add-exports jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED" \
+      --add-flags "--add-exports jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED" \
+      --add-flags "-jar $out/share/${pname}/google-java-format-${version}-all-deps.jar"
 
     runHook postInstall
   '';
