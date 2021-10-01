@@ -1,25 +1,16 @@
 { lib, stdenv, fetchurl, curl, gnunet, jansson, libgcrypt, libmicrohttpd
-, qrencode, libsodium, libtool, pkg-config, postgresql, sqlite, autoreconfHook, jinja2, recutils, wget, jq}:
+, qrencode, libsodium, libtool, pkg-config, postgresql, sqlite, autoreconfHook, jinja2, recutils, wget, jq, gettext, texinfo}:
 
 let
   gnunet' = gnunet.override { postgresqlSupport = true; };
 in rec {
   taler-exchange = stdenv.mkDerivation rec {
     pname = "taler-exchange";
-    # version = "0.8.4"; # needs gnunet 0.15.3 and conflicts with back dependency anastasis
-    version = "0.8.3";
+    version = "0.8.5";
     src = fetchurl {
       url = "http://ftp.gnu.org/gnu/taler/${pname}-${version}.tar.gz";
-      sha256 = "sha256-z411rAf2Kr0cNYivLjeKwNuty9tcNz9OudpMcz+cwpA=";
+      sha256 = "sha256-jehQKkDYdDkEXen/LSn0gZi4tYpykYM92W35ZbSLNj4=";
     };
-    patches = [
-      ./fix-some-test-paths
-      # Disable two tests
-      # This one was throwing an error
-      ./disable-test_taler_exchange_httpd_restart.sh
-      # This one was failing
-      ./disable-test_bank_api_with_fakebank
-    ];
     postPatch = ''
         find . -name '*.sh' -exec sed -i 's%#!/bin/bash%#!${stdenv.shell}%g' {} \;
       '';
@@ -36,12 +27,12 @@ in rec {
       curl
       jinja2
       recutils
+      gettext
+      texinfo # Fix 'makeinfo' is missing on your system.
     ];
     propagatedBuildInputs = [ gnunet' ];
-    configureFlags = [ "--with-gnunet=${gnunet'}/bin" ]; # GNUNETPFX
+    configureFlags = [ "--with-gnunet=${gnunet'}" ];
     checkInputs = [ wget curl ];
-    # NB: with version 0.8.4, at least one test is expecting a postgres DB during checkphase
-    doCheck = true;
     meta = with lib; {
       description = ''
         Taler is an electronic payment system providing the ability to pay
@@ -57,35 +48,46 @@ in rec {
       license = licenses.agpl3Plus;
       platforms = platforms.gnu ++ platforms.linux;
     };
+    # FIXME: at least one test wants to access a postgres db:
+    # `ERROR Database connection to 'postgres:///talercheck' failed: could not connect to server: No such file or directory`
+    doInstallCheck = false;
+    installCheck = ''
+      make check
+      '';
   };
 
   taler-merchant = stdenv.mkDerivation rec {
     pname = "taler-merchant";
-    version = "0.8.2";
-    # version = "0.8.3"; needs gnunet 0.15.3
+    version = "0.8.3";
     src = fetchurl {
       url = "http://ftp.gnu.org/gnu/taler/${pname}-${version}.tar.gz";
-      sha256 = "sha256-t841AQZS1H4joIuryxcEZkdSl/+Fd8dnvzGgEkvxiXs=";
+      sha256 = "sha256-n7YjJfY8HZevk9o4XbXs6isGFHLmusjCfEb+9maAK0U=";
     };
     postPatch = ''
         find . -name '*.sh' -exec sed -i 's%#!/bin/bash%#!${stdenv.shell}%g' {} \;
       '';
-    nativeBuildInputs = [ pkg-config ];
-    buildInputs = taler-exchange.buildInputs ++ [ qrencode taler-exchange
+    nativeBuildInputs = [ pkg-config autoreconfHook ];
+    buildInputs = taler-exchange.buildInputs ++ [
+      qrencode
+      taler-exchange
       # for ltdl.h
       libtool
     ];
     propagatedBuildInputs = [ gnunet' ];
     configureFlags = [
-      "--with-gnunet=${gnunet'}/bin" # GNUNETPFX
-      "--with-exchange=${taler-exchange}/bin" # EXCHANGEPFX
+      "--with-gnunet=${gnunet'}"
+      "--with-exchange=${taler-exchange}"
   ];
     preCheck = ''
         find . -name '*.sh' -exec sed -i 's%#!/bin/bash%#!${stdenv.shell}%g' {} \;
         find . -name '*.sh' -exec sed -i 's%#!/usr/bin/env bash%#!${stdenv.shell}%g' {} \;
       '';
-    doCheck = true;
+    doCheck = false; # `make check` is meant to be run after installation
     checkInputs = [ jq ];
+    doInstallCheck = true;
+    installCheck = ''
+      make check
+      '';
     meta = with lib; {
       description = ''
         This is the GNU Taler merchant backend. It provides the logic that should run
