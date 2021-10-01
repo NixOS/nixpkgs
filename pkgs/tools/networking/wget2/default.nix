@@ -6,9 +6,7 @@
 , autoreconfHook
 , flex
 , gnulib
-, lzip
 , pkg-config
-, python3
 , texinfo
   # libraries
 , brotli
@@ -17,49 +15,71 @@
 , libhsts
 , libidn2
 , libpsl
-, xz
+, lzip
 , nghttp2
-, sslSupport ? true
 , openssl
 , pcre2
+, sslSupport ? true
+, xz
 , zlib
 , zstd
 }:
 
 stdenv.mkDerivation rec {
   pname = "wget2";
-  version = "1.99.2";
+  version = "2.0.0";
+
+  outputs = [ "out" "lib" "dev" ];
 
   src = fetchFromGitLab {
     owner = "gnuwget";
     repo = pname;
-    rev = version;
-    sha256 = "1gws8y3z8xzi46c48n7jb162mr3ar4c34s7yy8kjcs14yzq951qz";
+    rev = "v${version}";
+    sha256 = "07zs2x2k62836l0arzc333j96yjpwal1v4mr8j99x6qxgmmssrbj";
   };
 
   patches = [
     (fetchpatch {
-      name = "fix-autotools-2.70.patch";
-      url = "https://gitlab.com/gnuwget/wget2/-/commit/580af869093cfda6bc8a9d5901850354a16b3666.patch";
-      sha256 = "1x6wq4wxvvy6174d52qrhxkcgmv366f8smxyki49zb6rs4gqhskd";
+      name = "fix-bashism-in-configure-ac.patch";
+      url = "https://gitlab.com/gnuwget/wget2/-/commit/da9788f5d62b89ba796393d9bc496b1d8d7a7b30.patch";
+      sha256 = "0bn3vkgyknks7jzs5722s2c4qlx7k5lwfiyz204bi42v1m28s1a5";
     })
     (fetchpatch {
-      name = "update-potfiles-for-gnulib-2020-11-28.patch";
-      url = "https://gitlab.com/gnuwget/wget2/-/commit/368deb9fcca0c281f9c76333607cc878c3945ad0.patch";
-      sha256 = "1qsz8hbzbgg14wikxsbjjlq0cp3jw4pajbaz9wdn6ny617hdvi8y";
+      name = "fix-double-quotes-in-configure-ac.patch";
+      url = "https://gitlab.com/gnuwget/wget2/-/commit/574c8ae08dfd8949da039879d85899123d31ab1d.patch";
+      sha256 = "14rfmij5w3bvj0fnkkkrxg0lfw3vgwiyvbkal3nqhgb0mlhlmd47";
     })
   ];
 
   # wget2_noinstall contains forbidden reference to /build/
   postPatch = ''
     substituteInPlace src/Makefile.am \
-      --replace 'bin_PROGRAMS = wget2 wget2_noinstall' 'bin_PROGRAMS = wget2'
+      --replace "bin_PROGRAMS = wget2 wget2_noinstall" "bin_PROGRAMS = wget2"
   '';
 
-  nativeBuildInputs = [ autoreconfHook flex lzip pkg-config python3 texinfo ];
+  strictDeps = true;
 
-  buildInputs = [ brotli bzip2 gpgme libhsts libidn2 libpsl xz nghttp2 pcre2 zlib zstd ]
-    ++ lib.optional sslSupport openssl;
+  nativeBuildInputs = [
+    autoreconfHook
+    flex
+    lzip
+    pkg-config
+    texinfo
+  ];
+
+  buildInputs = [
+    brotli
+    bzip2
+    gpgme
+    libhsts
+    libidn2
+    libpsl
+    nghttp2
+    pcre2
+    xz
+    zlib
+    zstd
+  ] ++ lib.optional sslSupport openssl;
 
   # TODO: include translation files
   autoreconfPhase = ''
@@ -69,19 +89,14 @@ stdenv.mkDerivation rec {
     cp -r ${gnulib} gnulib
     chmod -R u+w gnulib/{build-aux,lib}
 
-    # fix bashisms can be removed when https://gitlab.com/gnuwget/wget2/-/commit/c9499dcf2f58983d03e659e2a1a7f21225141edf is in the release
-    sed 's|==|=|g' -i configure.ac
-
     ./bootstrap --no-git --gnulib-srcdir=gnulib --skip-po
   '';
 
   configureFlags = [
-    "--disable-static"
+    (lib.enableFeature false "shared")
     # TODO: https://gitlab.com/gnuwget/wget2/-/issues/537
     (lib.withFeatureAs sslSupport "ssl" "openssl")
   ];
-
-  outputs = [ "out" "lib" "dev" ];
 
   meta = with lib; {
     description = "successor of GNU Wget, a file and recursive website downloader.";
