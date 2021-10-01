@@ -18591,9 +18591,7 @@ with pkgs;
     buildPythonApplication click future six;
   };
 
-  prospector = callPackage ../development/tools/prospector {
-    python = python37;
-  };
+  prospector = callPackage ../development/tools/prospector { };
 
   protobuf = protobuf3_18;
 
