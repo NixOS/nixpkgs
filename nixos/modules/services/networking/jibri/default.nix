@@ -55,11 +55,7 @@ let
 
     recording = {
       recordings-directory = "/tmp/recordings";
-<<<<<<< HEAD
       finalize-script = "${cfg.finalizeScript}";
-=======
-      finalize-script = "/path/to/finalize"; # TODO(puck): replace with actual noop default
->>>>>>> a1dc2ddd630 (nixos/jibri: init at 8.0-93-g51fe7a2)
     };
 
     streaming.rtmp-allow-list = [ ".*" ];
@@ -115,13 +111,33 @@ in
 
         exit 0
       '';
+      defaultText = literalExpression ''
+        pkgs.writeScript "finalize_recording.sh" ''''''
+        #!/bin/sh
+
+        RECORDINGS_DIR=$1
+
+        echo "This is a dummy finalize script" > /tmp/finalize.out
+        echo "The script was invoked with recordings directory $RECORDINGS_DIR." >> /tmp/finalize.out
+        echo "You should put any finalize logic (renaming, uploading to a service" >> /tmp/finalize.out
+        echo "or storage provider, etc.) in this script" >> /tmp/finalize.out
+
+        exit 0
+        '''''';
+      '';
+      example = literalExpression ''
+        pkgs.writeScript "finalize_recording.sh" ''''''
+        #!/bin/sh
+        RECORDINGS_DIR=$1
+        ${pkgs.rclone}/bin/rclone copy $RECORDINGS_DIR RCLONE_REMOTE:jibri-recordings/ -v --log-file=/var/log/jitsi/jibri/recording-upload.txt
+        exit 0
+        '''''';
+      '';
       description = ''
         This script runs when jibri finishes recording a video of a conference.
       '';
     };
 
-=======
->>>>>>> a1dc2ddd630 (nixos/jibri: init at 8.0-93-g51fe7a2)
     xmppEnvironments = mkOption {
       description = ''
         XMPP servers to connect to.
@@ -321,11 +337,7 @@ in
         '')
         cfg.xmppEnvironments))
       + ''
-<<<<<<< HEAD
         ${pkgs.jre8_headless}/bin/java -Djava.util.logging.config.file=${./logging.properties-journal} -Dconfig.file=${configFile} -jar ${pkgs.jibri}/opt/jitsi/jibri/jibri.jar --config /var/lib/jibri/jibri.json
-=======
-        ${pkgs.jre_headless}/bin/java -Djava.util.logging.config.file=${./logging.properties-journal} -Dconfig.file=${configFile} -jar ${pkgs.jibri}/opt/jitsi/jibri/jibri.jar --config /var/lib/jibri/jibri.json
->>>>>>> a1dc2ddd630 (nixos/jibri: init at 8.0-93-g51fe7a2)
       '';
 
       environment.HOME = "/var/lib/jibri";
