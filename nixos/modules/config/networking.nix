@@ -32,7 +32,7 @@ in
       '';
     };
 
-    networking.addFQDNAndHostnameEntries = lib.mkOption {
+    networking.includeFQDNAndHostnameEntries = lib.mkOption {
       type = types.bool;
       default = true;
       description = ''
