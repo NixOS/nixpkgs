@@ -1,0 +1,15 @@
+diff --git a/makefile b/makefile
+index a5f3d75..f617e25 100644
+--- a/makefile
++++ b/makefile
+@@ -109,9 +109,7 @@ ${bd}/%.o: src/builtins/%.c
+ 
+ 
+ src/gen/customRuntime:
+-	@echo "Copying precompiled bytecode from the bytecode branch"
+-	git checkout remotes/origin/bytecode src/gen/{compiler,formatter,runtime0,runtime1,src}
+-	git reset src/gen/{compiler,formatter,runtime0,runtime1,src}
++	@echo "Generated files handled by Nix"
+ ${bd}/load.o: src/gen/customRuntime
+ 
+ -include $(bd)/*.d
