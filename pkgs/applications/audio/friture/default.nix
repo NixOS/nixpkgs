@@ -28,9 +28,10 @@ in py.buildPythonApplication rec {
     rtmixer
   ];
 
-  patches = [
-    ./unlock_constraints.patch
-  ];
+  postPatch = ''
+    # Remove version constraints from Python dependencies in setup.py
+    sed -i -E "s/\"([A-Za-z0-9]+)(=|>|<)=[0-9\.]+\"/\"\1\"/g" setup.py
+  '';
 
   preFixup = ''
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
