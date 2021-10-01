@@ -43,8 +43,6 @@ in
         Setting this to false prevents DNS entries from being
         overridden (when FQDN should resolve to the public IP address
         instead of 127.0.0.1)
-
-        Useful for e.g. `services.zookeeper`.
       '';
     };
 
