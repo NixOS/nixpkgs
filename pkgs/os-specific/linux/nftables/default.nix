@@ -1,7 +1,8 @@
-{ lib, stdenv, fetchurl, pkg-config, bison, file, flex
+{ lib, stdenv, pkg-config, bison, file, flex
 , asciidoc, libxslt, findXMLCatalogs, docbook_xml_dtd_45, docbook_xsl
 , libmnl, libnftnl, libpcap
 , gmp, jansson, readline
+, fetchzip, nixosTests
 , withDebugSymbols ? false
 , withPython ? false , python3
 , withXtables ? false , iptables
@@ -13,9 +14,9 @@ stdenv.mkDerivation rec {
   version = "1.0.0";
   pname = "nftables";
 
-  src = fetchurl {
+  src = fetchzip {
     url = "https://netfilter.org/projects/nftables/files/${pname}-${version}.tar.bz2";
-    sha256 = "1x25zs2czmn14mmq1nqi4zibsvh04vqjbx5lxj42nylnmxym9gsq";
+    sha256 = "0h696szcgwzxlvwim5m5wi32jxi8fs20636yz01pmi175mpf6vsq";
   };
 
   nativeBuildInputs = [
@@ -40,11 +41,7 @@ stdenv.mkDerivation rec {
     ++ optional withPython "--enable-python"
     ++ optional withXtables "--with-xtables";
 
-  doInstallCheck = true;
-
-  installCheckPhase = ''
-    $out/bin/${meta.mainProgram} --help > /dev/null
-  '';
+  passthru.tests = nixosTests.nftables;
 
   meta = {
     description = "The project that aims to replace the existing {ip,ip6,arp,eb}tables framework";
