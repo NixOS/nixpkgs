@@ -567,6 +567,7 @@ petRUShka/vim-opencl
 phaazon/hop.nvim
 phanviet/vim-monokai-pro
 plasticboy/vim-markdown
+Pocco81/TrueZen.nvim@main
 ponko2/deoplete-fish
 posva/vim-vue
 powerman/vim-plugin-AnsiEsc
@@ -889,6 +890,7 @@ xolox/vim-misc
 xuhdev/vim-latex-live-preview
 Xuyuanp/nerdtree-git-plugin
 Xuyuanp/scrollbar.nvim
+yamatsum/nvim-cursorline@main
 yamatsum/nvim-nonicons@main
 ycm-core/YouCompleteMe
 Yggdroot/hiPairs
