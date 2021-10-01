@@ -12847,6 +12847,16 @@ with pkgs;
     bqn-path = "${cbqn-phase1}/bin/bqn";
   };
 
+  dbqn = callPackage ../development/interpreters/bqn/dzaima-bqn {
+    buildNativeImage = false;
+    stdenv = stdenvNoCC;
+    jdk = jre;
+  };
+  dbqn-native = callPackage ../development/interpreters/bqn/dzaima-bqn {
+    buildNativeImage = true;
+    jdk = graalvm11-ce;
+  };
+
   chibi = callPackage ../development/interpreters/chibi { };
 
   ceptre = callPackage ../development/interpreters/ceptre { };
