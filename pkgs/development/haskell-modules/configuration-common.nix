@@ -1992,4 +1992,8 @@ EOT
   hw-xml = assert pkgs.lib.versionOlder self.generic-lens.version "2.2.0.0";
     doJailbreak super.hw-xml;
 
+  # doctests fail due to deprecation warnings
+  candid = assert pkgs.lib.versionOlder super.candid.version "0.3";
+    appendConfigureFlags super.candid [ "--ghc-option=-Wno-deprecations" ];
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
