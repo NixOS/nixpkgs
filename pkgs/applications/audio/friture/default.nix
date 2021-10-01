@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, python3Packages, wrapQtAppsHook }:
+{ lib, fetchFromGitHub, fetchpatch, python3Packages, wrapQtAppsHook }:
 
 let
   py = python3Packages;
@@ -26,6 +26,15 @@ in py.buildPythonApplication rec {
     appdirs
     pyrr
     rtmixer
+  ];
+
+  patches = [
+    # Backported fix that resolves an issue with setuptools packaging
+    (fetchpatch {
+      name = "fix-setuptools-packaging.patch";
+      url = "https://github.com/tlecomte/friture/commit/ea7210dae883edf17de8fec82f9428b18ee138b6.diff";
+      sha256 = "sha256-Kv/vmC8kcqfOgfIPQyZN46sbV6bezhq6pyj8bvke6s8=";
+    })
   ];
 
   postPatch = ''
