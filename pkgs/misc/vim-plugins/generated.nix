@@ -663,6 +663,18 @@ final: prev:
     meta.homepage = "https://github.com/f3fora/cmp-spell/";
   };
 
+  cmp-tabnine = buildVimPluginFrom2Nix {
+    pname = "cmp-tabnine";
+    version = "2021-09-30";
+    src = fetchFromGitHub {
+      owner = "tzachar";
+      repo = "cmp-tabnine";
+      rev = "71fd46be319f96dc35ecda2fb2641a643c1ca3ba";
+      sha256 = "08kqzhzx90r06hjbbr5y79bh4xgg4nj73lsam0wcvq6xyjh7qbnn";
+    };
+    meta.homepage = "https://github.com/tzachar/cmp-tabnine/";
+  };
+
   cmp-treesitter = buildVimPluginFrom2Nix {
     pname = "cmp-treesitter";
     version = "2021-09-11";
