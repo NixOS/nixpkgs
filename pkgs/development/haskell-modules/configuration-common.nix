@@ -2002,4 +2002,9 @@ EOT
       ];
     });
 
+  # Needs network >= 3.1.2
+  quic = super.quic.overrideScope (self: super: {
+    network = self.network_3_1_2_2;
+  });
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
