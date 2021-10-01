@@ -1040,6 +1040,8 @@ with pkgs;
 
   mrxvt = callPackage ../applications/terminal-emulators/mrxvt { };
 
+  natls = callPackage ../tools/misc/natls { };
+
   nimmm = callPackage ../applications/terminal-emulators/nimmm { };
 
   pikchr = callPackage ../tools/graphics/pikchr { };
