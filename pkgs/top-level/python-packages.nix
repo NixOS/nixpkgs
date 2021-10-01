@@ -367,6 +367,8 @@ in {
 
   aiorun = callPackage ../development/python-modules/aiorun { };
 
+  aioserial = callPackage ../development/python-modules/aioserial { };
+
   aioshelly = callPackage ../development/python-modules/aioshelly { };
 
   aiosignal = callPackage ../development/python-modules/aiosignal { };
