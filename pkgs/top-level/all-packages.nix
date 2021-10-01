@@ -8767,7 +8767,7 @@ with pkgs;
   rescuetime = libsForQt5.callPackage ../applications/misc/rescuetime { };
 
   inherit (callPackage ../development/misc/resholve { })
-    resholve resholvePackage;
+    resholve resholvePackage resholveScript resholveScriptBin;
 
   restool = callPackage ../os-specific/linux/restool {};
 
@@ -12824,6 +12824,19 @@ with pkgs;
   angelscript_2_22 = callPackage ../development/interpreters/angelscript/2.22.nix {};
 
   babashka = callPackage ../development/interpreters/clojure/babashka.nix { };
+
+  # BQN interpreters and compilers
+  cbqn = cbqn-phase2;
+  # And the classic bootstrapping process
+  cbqn-phase0 = callPackage ../development/interpreters/bqn/cbqn {
+    bqn-path = null;
+  };
+  cbqn-phase1 = callPackage ../development/interpreters/bqn/cbqn {
+    bqn-path = "${cbqn-phase0}/bin/bqn";
+  };
+  cbqn-phase2 = callPackage ../development/interpreters/bqn/cbqn {
+    bqn-path = "${cbqn-phase1}/bin/bqn";
+  };
 
   chibi = callPackage ../development/interpreters/chibi { };
 
