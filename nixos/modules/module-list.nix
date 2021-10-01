@@ -135,6 +135,7 @@
   ./programs/droidcam.nix
   ./programs/environment.nix
   ./programs/evince.nix
+  ./programs/extra-container.nix
   ./programs/feedbackd.nix
   ./programs/file-roller.nix
   ./programs/firejail.nix
@@ -592,6 +593,7 @@
   ./services/misc/sysprof.nix
   ./services/misc/taskserver
   ./services/misc/tiddlywiki.nix
+  ./services/misc/tp-auto-kbbl.nix
   ./services/misc/tzupdate.nix
   ./services/misc/uhub.nix
   ./services/misc/weechat.nix

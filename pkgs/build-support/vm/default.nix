@@ -8,14 +8,17 @@
       ++ pkgs.lib.optional (pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64) "rtc_cmos"
 }:
 
-with pkgs;
-
+let
+  inherit (pkgs) bash bashInteractive busybox cpio coreutils e2fsprogs fetchurl kmod rpm
+    stdenv util-linux
+    buildPackages writeScript writeText runCommand;
+in
 rec {
   qemu-common = import ../../../nixos/lib/qemu-common.nix { inherit lib pkgs; };
 
   qemu = buildPackages.qemu_kvm;
 
-  modulesClosure = makeModulesClosure {
+  modulesClosure = pkgs.makeModulesClosure {
     inherit kernel rootModules;
     firmware = kernel;
   };
@@ -137,7 +140,7 @@ rec {
   '';
 
 
-  initrd = makeInitrd {
+  initrd = pkgs.makeInitrd {
     contents = [
       { object = stage1Init;
         symlink = "/init";
@@ -152,7 +155,7 @@ rec {
 
     # Set the system time from the hardware clock.  Works around an
     # apparent KVM > 1.5.2 bug.
-    ${pkgs.util-linux}/bin/hwclock -s
+    ${util-linux}/bin/hwclock -s
 
     export NIX_STORE=${storeDir}
     export NIX_BUILD_TOP=/tmp
@@ -324,7 +327,7 @@ rec {
 
 
   extractFs = {file, fs ? null} :
-    with pkgs; runInLinuxVM (
+    runInLinuxVM (
     stdenv.mkDerivation {
       name = "extract-file";
       buildInputs = [ util-linux ];
@@ -349,10 +352,10 @@ rec {
 
 
   extractMTDfs = {file, fs ? null} :
-    with pkgs; runInLinuxVM (
+    runInLinuxVM (
     stdenv.mkDerivation {
       name = "extract-file-mtd";
-      buildInputs = [ util-linux mtdutils ];
+      buildInputs = [ pkgs.util-linux pkgs.mtdutils ];
       buildCommand = ''
         ln -s ${kernel}/lib /lib
         ${kmod}/bin/modprobe mtd
@@ -503,7 +506,7 @@ rec {
      tarball must contain an RPM specfile. */
 
   buildRPM = attrs: runInLinuxImage (stdenv.mkDerivation ({
-    prePhases = [ prepareImagePhase sysInfoPhase ];
+    prePhases = [ pkgs.prepareImagePhase pkgs.sysInfoPhase ];
     dontUnpack = true;
     dontConfigure = true;
 
@@ -584,7 +587,7 @@ rec {
       buildCommand = ''
         ${createRootFS}
 
-        PATH=$PATH:${lib.makeBinPath [ dpkg dpkg glibc xz ]}
+        PATH=$PATH:${lib.makeBinPath [ pkgs.dpkg pkgs.glibc pkgs.xz ]}
 
         # Unpack the .debs.  We do this to prevent pre-install scripts
         # (which have lots of circular dependencies) from barfing.
