@@ -174,6 +174,8 @@ let
         ${copyClibrariesToLib}
       '';
       "11-darwin-amd64" = ''
+        # create empty $lib/lib to avoid breaking builds
+        mkdir -p $lib/lib
         ${nativePRNGWorkaround "$out/conf/security/java.security"}
       '';
     }.${javaVersionPlatform} + ''
