@@ -7,7 +7,7 @@ in
 
 python3Packages.buildPythonApplication rec {
   pname = "rpl";
-  version = builtins.substring 0 7 rev;
+  version = "1.10";
 
   # Tests not included in pip package.
   doCheck = false;
