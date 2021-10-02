@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config cmake makeWrapper ];
   buildInputs = [ openssh openssl curl zlib libiconv rustPlatform.rust.rustc.llvm ]
-    ++ (lib.optionals stdenv.isDarwin [ CoreFoundation Security SystemConfiguration ]);
+    ++ lib.optionals stdenv.isDarwin [ CoreFoundation Security SystemConfiguration ];
 
   doCheck = true;
 
