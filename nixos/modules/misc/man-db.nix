@@ -31,6 +31,16 @@ in
           Advanced users can make this a content-addressed derivation to save a few rebuilds.
         '';
       };
+
+      package = lib.mkOption {
+        type = lib.types.package;
+        default = pkgs.man-db;
+        defaultText = lib.literalExpression "pkgs.man-db";
+        description = ''
+          The <literal>man-db</literal> derivation to use. Useful to override
+          configuration options used for the package.
+        '';
+      };
     };
   };
 
@@ -39,12 +49,12 @@ in
   ];
 
   config = lib.mkIf cfg.enable {
-    environment.systemPackages = [ pkgs.man-db ];
+    environment.systemPackages = [ cfg.package ];
     environment.etc."man_db.conf".text =
       let
         manualCache = pkgs.runCommandLocal "man-cache" { } ''
           echo "MANDB_MAP ${cfg.manualPages}/share/man $out" > man.conf
-          ${pkgs.man-db}/bin/mandb -C man.conf -psc >/dev/null 2>&1
+          ${cfg.package}/bin/mandb -C man.conf -psc >/dev/null 2>&1
         '';
       in
       ''
