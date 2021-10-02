@@ -53,7 +53,6 @@ stdenv.mkDerivation {
 
   makeFlags = [
     "CC=${stdenv.cc.targetPrefix}cc"
-    "single-o3"
   ];
 
   installPhase = ''
