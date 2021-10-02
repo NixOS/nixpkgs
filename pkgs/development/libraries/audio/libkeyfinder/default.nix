@@ -26,6 +26,6 @@ stdenv.mkDerivation rec {
     description = "Musical key detection for digital audio (C++ library)";
     homepage = "https://mixxxdj.github.io/libkeyfinder/";
     license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
