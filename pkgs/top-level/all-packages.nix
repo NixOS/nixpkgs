@@ -14050,6 +14050,8 @@ with pkgs;
 
   drush = callPackage ../development/tools/misc/drush { };
 
+  dwfv = callPackage ../applications/science/electronics/dwfv { };
+
   dwz = callPackage ../development/tools/misc/dwz { };
 
   easypdkprog = callPackage ../development/embedded/easypdkprog { };
