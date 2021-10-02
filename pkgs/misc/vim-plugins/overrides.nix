@@ -117,6 +117,15 @@ self: super: {
     '';
   });
 
+  cmp-tabnine = super.cmp-tabnine.overrideAttrs (old: {
+    buildInputs = [ tabnine ];
+
+    postFixup = ''
+      mkdir -p $target/binaries/${tabnine.version}
+      ln -s ${tabnine}/bin/ $target/binaries/${tabnine.version}/${tabnine.passthru.platform}
+    '';
+  });
+
   command-t = super.command-t.overrideAttrs (old: {
     buildInputs = [ ruby rake ];
     buildPhase = ''

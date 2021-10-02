@@ -856,6 +856,11 @@ self: super: {
       stripLen = 1;
     });
 
+  # hledger-lib 1.23 depends on doctest >= 0.18
+  hledger-lib_1_23 = super.hledger-lib_1_23.override {
+    doctest = self.doctest_0_18_1;
+  };
+
   # Copy hledger man pages from data directory into the proper place. This code
   # should be moved into the cabal2nix generator.
   hledger = overrideCabal super.hledger (drv: {
@@ -1986,5 +1991,20 @@ EOT
     doJailbreak super.hw-eliasfano;
   hw-xml = assert pkgs.lib.versionOlder self.generic-lens.version "2.2.0.0";
     doJailbreak super.hw-xml;
+
+  # doctests fail due to deprecation warnings in 0.2
+  candid = assert pkgs.lib.versionOlder super.candid.version "0.3";
+    overrideCabal super.candid (drv: {
+      version = "0.3";
+      sha256 = "0zq29zddkkwvlyz9qmxl942ml53m6jawl4m5rkb2510glbkcvr5x";
+      libraryHaskellDepends = drv.libraryHaskellDepends ++ [
+        self.file-embed
+      ];
+    });
+
+  # Needs network >= 3.1.2
+  quic = super.quic.overrideScope (self: super: {
+    network = self.network_3_1_2_2;
+  });
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "pg_bigm";
-  version = "1.2";
+  version = "1.2-20200228";
 
   src = fetchurl {
-    url = "mirror://osdn/pgbigm/66565/${pname}-${version}-20161011.tar.gz";
-    sha256 = "1jp30za4bhwlas0yrhyjs9m03b1sj63km61xnvcbnh0sizyvhwis";
+    url = "mirror://osdn/pgbigm/72448/${pname}-${version}.tar.gz";
+    sha256 = "1hxn90prldwriqmqlf33ypgbxw5v54gkzx1305yzghryzfg7rhbl";
   };
 
   buildInputs = [ postgresql ];

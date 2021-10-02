@@ -1,4 +1,6 @@
-import ../make-test-python.nix ({ pkgs, ...}: let
+args@{ pkgs, nextcloudVersion ? 22, ... }:
+
+(import ../make-test-python.nix ({ pkgs, ...}: let
   adminpass = "hunter2";
   adminuser = "root";
 in {
@@ -18,6 +20,7 @@ in {
         enable = true;
         hostName = "nextcloud";
         https = true;
+        package = pkgs.${"nextcloud" + (toString nextcloudVersion)};
         caching = {
           apcu = true;
           redis = false;
@@ -103,4 +106,4 @@ in {
         "${withRcloneEnv} ${diffSharedFile}"
     )
   '';
-})
+})) args
