@@ -2,16 +2,20 @@
 
 let
   version = "6.0.2";
-  # TODO: add support for macOS
-  srcUrl =
-    if stdenv.isi686 then {
+  srcUrl = {
+    i686-linux = {
       url = "https://www.rarlab.com/rar/rarlinux-${version}.tar.gz";
-      sha256 = "sha256-5iqK7eOo+hgLtGSCqUoB+wOFZHUqZ0M/8Jf7bxdf9qA=";
-    } else if stdenv.isx86_64 then {
+      sha256 = "sha256-5iqk7eoo+hgltgscquob+wofzhuqz0m/8jf7bxdf9qa=";
+    };
+    x86_64-linux = {
       url = "https://www.rarlab.com/rar/rarlinux-x64-${version}.tar.gz";
       sha256 = "sha256-WAvrUGCgfwI51Mo/RYSSF0OLPPrTegUCuDEsnBeR9uQ=";
-    }
-    else throw "Unknown architecture";
+    };
+    x86_64-darwin = {
+      url = "https://www.rarlab.com/rar/rarosx-${version}.tar.gz";
+      sha256 = "sha256-baZ71vYXIGs25f7PJ0ujoGUrsWZRmFLhvDI0KoVktsg=";
+    };
+  }.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
   manSrc = fetchurl {
     url = "https://aur.archlinux.org/cgit/aur.git/plain/rar.1?h=rar&id=8e39a12e88d8a3b168c496c44c18d443c876dd10";
     name = "rar.1";
@@ -50,6 +54,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.rarlab.com/";
     license = licenses.unfree;
     maintainers = with maintainers; [ thiagokokada ];
-    platforms = platforms.linux;
+    platforms = with platforms; linux ++ darwin;
   };
 }
