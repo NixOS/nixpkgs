@@ -1,20 +1,30 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, boost, libpulseaudio }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, boost, libpulseaudio, installShellFiles }:
 
 stdenv.mkDerivation rec {
   pname = "pamixer";
-  version = "1.4";
+  version = "unstable-2021-03-29";
 
   src = fetchFromGitHub {
     owner = "cdemoulins";
     repo = "pamixer";
-    rev = version;
-    sha256 = "1i14550n8paijwwnhksv5izgfqm3s5q2773bdfp6vyqybkll55f7";
+    rev = "4ea2594cb8c605dccd00a381ba19680eba368e94";
+    sha256 = "sha256-kV4wIxm1WZvqqyfmgQ2cSbRJwJR154OW0MMDg2ntf6g=";
   };
 
   buildInputs = [ boost libpulseaudio ];
 
+  nativeBuildInputs = [ installShellFiles ];
+
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 pamixer -t $out/bin
+
+    runHook postInstall
+  '';
+
+  postInstall = ''
+    installManPage pamixer.1
   '';
 
   meta = with lib; {
@@ -29,7 +39,9 @@ stdenv.mkDerivation rec {
         - Mute or unmute a device
     '';
     homepage = "https://github.com/cdemoulins/pamixer";
+    maintainers = with maintainers; [ thiagokokada ];
     license = licenses.gpl3;
     platforms = platforms.linux;
+    mainProgram = "pamixer";
   };
 }

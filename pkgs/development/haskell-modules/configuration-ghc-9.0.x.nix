@@ -155,7 +155,7 @@ self: super: {
   # 2021-09-18: Need path >= 0.9.0 for ghc 9 compat
   path = self.path_0_9_0;
   # 2021-09-18: Need ormolu >= 0.3.0.0 for ghc 9 compat
-  ormolu = self.ormolu_0_3_0_0;
+  ormolu = doDistribute self.ormolu_0_3_0_1;
   # 2021-09-18: https://github.com/haskell/haskell-language-server/issues/2206
   # Restrictive upper bound on ormolu
   hls-ormolu-plugin = doJailbreak super.hls-ormolu-plugin;

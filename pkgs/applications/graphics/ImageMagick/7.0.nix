@@ -37,7 +37,9 @@ stdenv.mkDerivation rec {
     ++ (if arch != null then [ "--with-gcc-arch=${arch}" ] else [ "--without-gcc-arch" ])
     ++ lib.optional (librsvg != null) "--with-rsvg"
     ++ lib.optional (liblqr1 != null) "--with-lqr"
-    ++ lib.optional (libjxl != null) "--with-jxl"
+    # libjxl is broken on aarch64 (see meta.broken in libjxl) for now,
+    # let's disable it for now to unbreak the imagemagick build.
+    ++ lib.optional (libjxl != null && !stdenv.isAarch64) "--with-jxl"
     ++ lib.optionals (ghostscript != null)
       [ "--with-gs-font-dir=${ghostscript}/share/ghostscript/fonts"
         "--with-gslib"
@@ -50,8 +52,12 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ zlib fontconfig freetype ghostscript
-      libjxl liblqr1 libpng libtiff libxml2 libheif djvulibre
+      liblqr1 libpng libtiff libxml2 libheif djvulibre
     ]
+    # libjxl is broken on aarch64 (see meta.broken in libjxl) for now,
+    # let's disable it for now to unbreak the imagemagick build.
+    ++ lib.optionals (!stdenv.isAarch64)
+      [ libjxl ]
     ++ lib.optionals (!stdenv.hostPlatform.isMinGW)
       [ openexr librsvg openjpeg ]
     ++ lib.optionals stdenv.isDarwin [
