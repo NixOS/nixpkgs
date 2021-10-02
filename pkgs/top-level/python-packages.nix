@@ -427,6 +427,8 @@ in {
 
   ambee = callPackage ../development/python-modules/ambee { };
 
+  amberelectric = callPackage ../development/python-modules/amberelectric { };
+
   ambiclimate = callPackage ../development/python-modules/ambiclimate { };
 
   amcrest = callPackage ../development/python-modules/amcrest { };
