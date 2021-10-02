@@ -3039,6 +3039,16 @@
     githubId = 36110478;
     name = "Erik Arvstedt";
   };
+  ebbertd = {
+    email = "daniel@ebbert.nrw";
+    github = "ebbertd";
+    githubId = 20522234;
+    name = "Daniel Ebbert";
+    keys = [{
+      longkeyid = "rsa2048/0x47BC155927CBB9C7";
+      fingerprint = "E765 FCA3 D9BF 7FDB 856E  AD73 47BC 1559 27CB B9C7";
+    }];
+  };
   ebzzry = {
     email = "ebzzry@ebzzry.io";
     github = "ebzzry";
