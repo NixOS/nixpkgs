@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub
-, python37Packages
+, python3Packages
 , fehSupport ? false, feh
 , imagemagickSupport ? true, imagemagick
 , intltool
@@ -13,7 +13,7 @@
 , makeWrapper
 }:
 
-with python37Packages;
+with python3Packages;
 
 buildPythonApplication rec {
   pname = "variety";
@@ -26,9 +26,9 @@ buildPythonApplication rec {
     sha256 = "sha256-6dLz4KXavXwnk5GizBH46d2EHMHPjRo0WnnUuVMtI1M=";
   };
 
-  nativeBuildInputs = [ intltool wrapGAppsHook ];
+  nativeBuildInputs = [ makeWrapper intltool wrapGAppsHook ];
 
-  buildInputs = [ makeWrapper distutils_extra ];
+  buildInputs = [ distutils_extra ];
 
   doCheck = false;
 

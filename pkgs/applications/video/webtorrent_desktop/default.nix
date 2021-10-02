@@ -63,7 +63,6 @@
       url = "https://raw.githubusercontent.com/webtorrent/webtorrent-desktop/v${version}/static/linux/share/icons/hicolor/48x48/apps/webtorrent-desktop.png";
       sha256 = "00y96w9shbbrdbf6xcjlahqd08154kkrxmqraik7qshiwcqpw7p4";
     };
-    phases = [ "unpackPhase" "installPhase" ];
     nativeBuildInputs = [ dpkg ];
     installPhase = ''
       mkdir -p $out/share/{applications,icons/hicolor/{48x48,256x256}/apps}

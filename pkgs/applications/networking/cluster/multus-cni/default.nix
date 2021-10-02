@@ -2,20 +2,20 @@
 
 buildGoModule rec {
   pname = "multus-cni";
-  version = "3.7.1";
+  version = "3.8";
 
   src = fetchFromGitHub {
     owner = "k8snetworkplumbingwg";
     repo = pname;
     rev = "v${version}";
-    sha256 = "04rn7ypd0cw2c33wqb9wqy1dp6ajvcp7rcv7zybffb1d40mdlds1";
+    sha256 = "sha256-wG6SRts3+bmeMkfScyNorsBvRl/hxe+CUnL0rwfknpc=";
   };
 
-  buildFlagsArray = let
+  ldflags = let
     multus = "gopkg.in/intel/multus-cni.v3/pkg/multus";
     commit = "f6298a3a294a79f9fbda0b8f175e521799d5f8d7";
   in [
-    "-ldflags=-s -w -X '${multus}.version=v${version}' -X '${multus}.commit=${commit}'"
+    "-s" "-w" "-X ${multus}.version=v${version}" "-X ${multus}.commit=${commit}"
   ];
 
   preInstall = ''

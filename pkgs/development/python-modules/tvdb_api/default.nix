@@ -26,6 +26,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/dbr/tvdb_api";
     license = licenses.unlicense;
     maintainers = with maintainers; [ peterhoeg ];
+    # https://github.com/dbr/tvdb_api/issues/94
+    broken = true;
   };
-
 }

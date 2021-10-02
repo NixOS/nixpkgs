@@ -3,15 +3,12 @@
 , docbook_xsl_ns }:
 
 mkDerivation rec {
-
-  version = "3.0";
-
   pname = "bibletime";
+  version = "3.0.2";
 
   src = fetchurl {
-    url =
-      "https://github.com/bibletime/bibletime/releases/download/v${version}/${pname}-${version}.tar.xz";
-    sha256 = "08i6nb9a7z0jpsq76q0kr62hw6ph9chqjpjcvkimbcj4mmifzgnn";
+    url = "https://github.com/bibletime/bibletime/releases/download/v${version}/${pname}-${version}.tar.xz";
+    sha256 = "sha256-/JNjnU/DGD4YRtrKzX7t6MgNCZYihdgTJc+Jbr9IYJ4=";
   };
 
   nativeBuildInputs = [ cmake pkg-config docbook_xml_dtd_45 ];
@@ -37,11 +34,11 @@ mkDerivation rec {
     "-DBT_DOCBOOK_XSL_PDF_DOCBOOK_XSL=${docbook_xsl_ns}/share/xml/docbook-xsl-ns/html/chunk.xsl"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "A Qt4 Bible study tool";
     homepage = "http://www.bibletime.info/";
-    platforms = lib.platforms.linux;
-    license = lib.licenses.gpl2Plus;
-    maintainers = [ lib.maintainers.piotr ];
+    platforms = platforms.linux;
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.piotr ];
   };
 }

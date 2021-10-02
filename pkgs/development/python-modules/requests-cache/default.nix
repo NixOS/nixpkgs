@@ -1,52 +1,62 @@
 { lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
+, appdirs
 , attrs
+, buildPythonPackage
+, bson
+, cattrs
+, fetchFromGitHub
 , itsdangerous
-, requests
-, url-normalize
+, poetry-core
 , pytestCheckHook
+, pythonOlder
+, pyyaml
+, requests
 , requests-mock
+, rich
 , timeout-decorator
+, ujson
+, url-normalize
 }:
 
 buildPythonPackage rec {
   pname = "requests-cache";
-  version = "0.6.4";
-
-  disabled = pythonOlder "3.6";
-
+  version = "0.8.1";
   format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "reclosedev";
     repo = "requests-cache";
     rev = "v${version}";
-    sha256 = "10rvs611j16kakqx38kpqpc1v0dfb9rmbz2whpskswb1lsksv3j9";
+    sha256 = "sha256-HzOcPWmvUhqPtb/7Mnw6wWY7a4CwGRwPgq+7QoHJAc8=";
   };
 
+  nativeBuildInputs = [
+    poetry-core
+  ];
+
   propagatedBuildInputs = [
+    appdirs
     attrs
+    bson
+    cattrs
     itsdangerous
+    pyyaml
     requests
+    ujson
     url-normalize
   ];
 
   checkInputs = [
     pytestCheckHook
     requests-mock
+    rich
     timeout-decorator
   ];
 
-  disabledTestPaths = [
-    # connect to database on localhost
-    "tests/integration/test_cache.py"
-    "tests/integration/test_dynamodb.py"
-    "tests/integration/test_gridfs.py"
-    "tests/integration/test_mongodb.py"
-    "tests/integration/test_redis.py"
-  ];
+  # Integration tests require local DBs
+  pytestFlagsArray = [ "tests/unit" ];
 
   pythonImportsCheck = [ "requests_cache" ];
 
@@ -54,5 +64,6 @@ buildPythonPackage rec {
     description = "Persistent cache for requests library";
     homepage = "https://github.com/reclosedev/requests-cache";
     license = licenses.bsd3;
+    maintainers = with maintainers; [ fab ];
   };
 }

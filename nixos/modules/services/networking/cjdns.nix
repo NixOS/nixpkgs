@@ -39,7 +39,7 @@ let
   };
 
   # Additional /etc/hosts entries for peers with an associated hostname
-  cjdnsExtraHosts = pkgs.runCommandNoCC "cjdns-hosts" {} ''
+  cjdnsExtraHosts = pkgs.runCommand "cjdns-hosts" {} ''
     exec >$out
     ${concatStringsSep "\n" (mapAttrsToList (k: v:
         optionalString (v.hostname != "")

@@ -2,16 +2,16 @@
 
 stdenv.mkDerivation rec {
   pname = "workcraft";
-  version = "3.3.2";
+  version = "3.3.5";
 
   src = fetchurl {
     url = "https://github.com/workcraft/workcraft/releases/download/v${version}/workcraft-v${version}-linux.tar.gz";
-    sha256 = "0v71x3fph2j3xrnysvkm7zsgnbxisfbdfgxzvzxxfdg59a6l3xid";
+    sha256 = "sha256-KErKYK3mmjp5uNdGQnjzUUIEwXT5fqbAPUunH72Mtig=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
 
-  phases = [ "unpackPhase" "installPhase" "fixupPhase" ];
+  dontConfigure = true;
 
   installPhase = ''
   mkdir -p $out/share
@@ -28,6 +28,5 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ timor ];
-    inherit version;
   };
 }

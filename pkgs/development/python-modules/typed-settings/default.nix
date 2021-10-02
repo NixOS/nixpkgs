@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "typed-settings";
-  version = "0.9.2";
+  version = "0.10.0";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "203c1c6ec73dd1eb0fecd4981b31f8e05042f0dda16443190ac9ade1113ff53d";
+    sha256 = "1fr6qkq3ldlp5i5l4b891w9ail9lfhaxlar3yij912slq5w0s8aw";
   };
 
   nativeBuildInputs = [

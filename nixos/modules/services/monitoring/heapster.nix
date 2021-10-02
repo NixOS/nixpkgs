@@ -50,8 +50,10 @@ in {
     };
 
     users.users.heapster = {
-      uid = config.ids.uids.heapster;
+      isSystemUser = true;
+      group = "heapster";
       description = "Heapster user";
     };
+    users.groups.heapster = {};
   };
 }

@@ -91,7 +91,7 @@ let
 
   self = stdenv.mkDerivation rec {
     pname = "fwupd";
-    version = "1.5.7";
+    version = "1.5.12";
 
     # libfwupd goes to lib
     # daemon, plug-ins and libfwupdplugin go to out
@@ -100,7 +100,7 @@ let
 
     src = fetchurl {
       url = "https://people.freedesktop.org/~hughsient/releases/fwupd-${version}.tar.xz";
-      sha256 = "16isrrv6zhdgccbfnz7km5g1cnvfnip7aiidkfhf5dlnrnyb2sxh";
+      sha256 = "sha256-BluwLlm6s/2H/USARQpAvDR0+X8WP/q0h8VvxA6Qftc=";
     };
 
     patches = [
@@ -296,7 +296,6 @@ let
         "fwupd/thunderbolt.conf"
         "fwupd/upower.conf"
         "fwupd/uefi_capsule.conf"
-        "pki/fwupd/GPG-KEY-Hughski-Limited"
         "pki/fwupd/GPG-KEY-Linux-Foundation-Firmware"
         "pki/fwupd/GPG-KEY-Linux-Vendor-Firmware-Service"
         "pki/fwupd/LVFS-CA.pem"

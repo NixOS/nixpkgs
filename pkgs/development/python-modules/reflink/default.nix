@@ -3,7 +3,7 @@
 , fetchPypi
 , lib
 , pytestCheckHook
-, pytestrunner
+, pytest-runner
 }:
 
 buildPythonPackage rec {
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "sha256-ySU1gtskQTv9cDq/wbKkneePMbSQcjnyhumhkpoebjo=";
   };
 
-  propagatedBuildInputs = [ cffi pytestrunner ];
+  propagatedBuildInputs = [ cffi pytest-runner ];
 
   checkInputs = [ pytestCheckHook ];
 

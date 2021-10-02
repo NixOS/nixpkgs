@@ -39,8 +39,6 @@ mkDerivation rec {
     install -Dm755 -t $out/share/man/man1 doc/*.1.gz
   '';
 
-  dontGzipMan = true;
-
   meta = with lib; {
     description = "A mind-mapping software";
     longDescription = ''

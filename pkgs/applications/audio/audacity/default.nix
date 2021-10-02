@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     (fetchpatch {
-      url = "https://github.com/audacity/audacity/pull/831/commits/007852e51fcbb5f1f359d112f28b8984a604dac6.patch";
+      url = "https://github.com/audacity/audacity/commit/7f8135e112a0e1e8e906abab9339680d1e491441.patch";
       sha256 = "0zp2iydd46analda9cfnbmzdkjphz5m7dynrdj5qdnmq6j3px9fw";
       name = "audacity_xdg_paths.patch";
     })

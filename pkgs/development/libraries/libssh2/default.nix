@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libssh2";
-  version = "1.9.0";
+  version = "1.10.0";
 
   src = fetchurl {
-    url = "${meta.homepage}/download/${pname}-${version}.tar.gz";
-    sha256 = "1zfsz9nldakfz61d2j70pk29zlmj7w2vv46s9l3x2prhcgaqpyym";
+    url = "https://www.libssh2.org/download/libssh2-${version}.tar.gz";
+    sha256 = "sha256-LWTpDz3tOUuR06LndMogOkF59prr7gMAPlpvpiHkHVE=";
   };
 
   outputs = [ "out" "dev" "devdoc" ];
@@ -14,16 +14,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ openssl zlib ]
     ++ lib.optional stdenv.hostPlatform.isMinGW windows.mingw_w64;
 
-  patches = [
-    # Not able to use fetchpatch here: infinite recursion
-    ./CVE-2019-17498.patch
-  ];
-
   meta = with lib; {
     description = "A client-side C library implementing the SSH2 protocol";
     homepage = "https://www.libssh2.org";
     platforms = platforms.all;
     license = licenses.bsd3;
-    maintainers = [ ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

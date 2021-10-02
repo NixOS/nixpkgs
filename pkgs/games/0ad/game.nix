@@ -26,11 +26,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "0ad";
-  version = "0.0.24b";
+  version = "0.0.25b";
 
   src = fetchurl {
     url = "http://releases.wildfiregames.com/0ad-${version}-alpha-unix-build.tar.xz";
-    sha256 = "1a1py45hkh2cswi09vbf9chikgxdv9xplsmg6sv6xhdznv4j6p1j";
+    sha256 = "1p9fa8f7sjb9c5wl3mawzyfqvgr614kdkhrj2k4db9vkyisws3fp";
   };
 
   nativeBuildInputs = [ python2 perl pkg-config ];

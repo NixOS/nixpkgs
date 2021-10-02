@@ -2,20 +2,20 @@
 
 buildGoModule rec {
   pname = "shfmt";
-  version = "3.3.0";
+  version = "3.4.0";
 
   src = fetchFromGitHub {
     owner = "mvdan";
     repo = "sh";
     rev = "v${version}";
-    sha256 = "sha256-pD1nkbBw5NBCyuhn2DYop2AR+1T8p6/zTa6FeWiya7Q=";
+    sha256 = "sha256-Bxb4BlvAmJQhog3bZEGHJlrpXNqXpokkipBszPzRHSk=";
   };
 
-  vendorSha256 = "sha256-euJYStN21xFYosouWYXpHN3MWCKR4NT8z6OSonM0HW8=";
+  vendorSha256 = "sha256-ZYsQ+wE+G7xNrBN29npSxxPCz9+Wb/RsBzM5uwJkhO8=";
 
   subPackages = [ "cmd/shfmt" ];
 
-  buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version}" ];
+  ldflags = [ "-s" "-w" "-X main.version=${version}" ];
 
   nativeBuildInputs = [ installShellFiles scdoc ];
 

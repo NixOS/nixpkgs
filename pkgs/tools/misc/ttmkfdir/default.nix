@@ -1,7 +1,8 @@
 { lib, stdenv, fetchurl, freetype, fontconfig, libunwind, libtool, flex, bison }:
 
 stdenv.mkDerivation {
-  name = "ttf-mkfontdir-3.0.9-6";
+  pname = "ttf-mkfontdir";
+  version = "3.0.9-6";
 
   src = fetchurl {
     url = "http://mirror.fsf.org/trisquel/pool/main/t/ttmkfdir/ttmkfdir_3.0.9.orig.tar.gz";

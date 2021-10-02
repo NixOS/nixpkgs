@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pcre, libxslt, groff, ncurses, pkg-config, readline, libedit
+{ lib, stdenv, fetchurl, pcre, libxslt, groff, ncurses, pkg-config, readline, libedit, coreutils
 , python3, makeWrapper }:
 
 let
@@ -20,6 +20,10 @@ let
       ];
 
       buildFlags = [ "localstatedir=/var/spool" ];
+
+      postPatch = ''
+        substituteInPlace bin/varnishtest/vtc_main.c --replace /bin/rm "${coreutils}/bin/rm"
+      '';
 
       postInstall = ''
         wrapProgram "$out/sbin/varnishd" --prefix PATH : "${lib.makeBinPath [ stdenv.cc ]}"
@@ -44,12 +48,8 @@ in
     version = "6.0.7";
     sha256 = "0njs6xpc30nc4chjdm4d4g63bigbxhi4dc46f4az3qcz51r8zl2a";
   };
-  varnish62 = common {
-    version = "6.2.3";
-    sha256 = "02b6pqh5j1d4n362n42q42bfjzjrngd6x49b13q7wzsy6igd1jsy";
-  };
-  varnish63 = common {
-    version = "6.3.2";
-    sha256 = "1f5ahzdh3am6fij5jhiybv3knwl11rhc5r3ig1ybzw55ai7788q8";
+  varnish65 = common {
+    version = "6.5.2";
+    sha256 = "041gc22h8cwsb8jw7zdv6yk5h8xg2q0g655m5zhi5jxq35f2sljx";
   };
 }

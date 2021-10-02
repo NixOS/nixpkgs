@@ -5,7 +5,7 @@
 , mock
 , pygments
 , pytest
-, pytestcov
+, pytest-cov
 , pytest-django
 , python-dateutil
 , shortuuid
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     mock
     pygments # not explicitly declared in setup.py, but some tests require it
     pytest
-    pytestcov
+    pytest-cov
     pytest-django
     python-dateutil
     shortuuid

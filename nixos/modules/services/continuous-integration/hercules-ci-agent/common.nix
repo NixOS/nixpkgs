@@ -105,7 +105,7 @@ let
       pkgs.stdenv.mkDerivation {
         name = "hercules-ci-check-system-nix-src";
         inherit (config.nix.package) src patches;
-        configurePhase = ":";
+        dontConfigure = true;
         buildPhase = ''
           echo "Checking in-memory pathInfoCache expiry"
           if ! grep 'PathInfoCacheValue' src/libstore/store-api.hh >/dev/null; then

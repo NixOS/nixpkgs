@@ -1,16 +1,24 @@
-{ lib, stdenv, fetchurl
+{ lib, stdenv, fetchurl, fetchpatch
 , buildPackages, bison, flex, pkg-config
 , db, iptables, libelf, libmnl
 }:
 
 stdenv.mkDerivation rec {
   pname = "iproute2";
-  version = "5.12.0";
+  version = "5.14.0";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/net/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-nSaNuYo27ioOP/O5Ky7/9m/BE4pR5Am972qzz+FfMm8=";
+    sha256 = "1m4ifnxq7lxnm95l5354z8dk3xj6w9isxmbz53266drgln2sf3r1";
   };
+
+  patches = [
+    # To avoid ./configure failing due to invalid arguments:
+    (fetchpatch { # configure: restore backward compatibility
+      url = "https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/patch/?id=a3272b93725a406bc98b67373da67a4bdf6fcdb0";
+      sha256 = "0hyagh2lf6rrfss4z7ca8q3ydya6gg7vfhh25slhpgcn6lnk0xbv";
+    })
+  ];
 
   preConfigure = ''
     # Don't try to create /var/lib/arpd:

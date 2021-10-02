@@ -2,10 +2,11 @@
   alsa-lib, xlibsWrapper, libxslt, systemd, libusb-compat-0_1, libftdi1 }:
 
 stdenv.mkDerivation rec {
-  name = "lirc-0.10.1";
+  pname = "lirc";
+  version = "0.10.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/lirc/${name}.tar.bz2";
+    url = "mirror://sourceforge/lirc/${pname}-${version}.tar.bz2";
     sha256 = "1whlyifvvc7w04ahq07nnk1h18wc8j7c6wnvlb6mszravxh3qxcb";
   };
 
@@ -41,6 +42,7 @@ stdenv.mkDerivation rec {
     "--with-systemdsystemunitdir=$(out)/lib/systemd/system"
     "--enable-uinput" # explicit activation because build env has no uinput
     "--enable-devinput" # explicit activation because build env has no /dev/input
+    "--with-lockdir=/run/lirc/lock" # /run/lock is not writable for 'lirc' user
   ];
 
   installFlags = [

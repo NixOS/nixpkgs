@@ -1,11 +1,23 @@
-{ lib, buildPythonPackage, fetchPypi, latexcodec, pyyaml }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, latexcodec
+, pyyaml
+, setuptools
+}:
 
 buildPythonPackage rec {
   version = "0.24.0";
   pname = "pybtex";
 
   doCheck = false;
-  propagatedBuildInputs = [ latexcodec pyyaml ];
+  pythonImportsCheck = [ "pybtex" ];
+
+  propagatedBuildInputs = [
+    latexcodec
+    pyyaml
+    setuptools
+  ];
 
   src = fetchPypi {
     inherit version pname;

@@ -39,12 +39,30 @@
   ghcFlavour ? lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform)
     (if useLLVM then "perf-cross" else "perf-cross-ncg")
 
+, #  Whether to build sphinx documentation.
+  enableDocs ? (
+    # Docs disabled for musl and cross because it's a large task to keep
+    # all `sphinx` dependencies building in those environments.
+    # `sphinx` pullls in among others:
+    # Ruby, Python, Perl, Rust, OpenGL, Xorg, gtk, LLVM.
+    (stdenv.targetPlatform == stdenv.hostPlatform)
+    && !stdenv.hostPlatform.isMusl
+  )
+
+, enableHaddockProgram ?
+    # Disabled for cross; see note [HADDOCK_DOCS].
+    (stdenv.targetPlatform == stdenv.hostPlatform)
+
 , # Whether to disable the large address space allocator
   # necessary fix for iOS: https://www.reddit.com/r/haskell/comments/4ttdz1/building_an_osxi386_to_iosarm64_cross_compiler/d5qvd67/
   disableLargeAddressSpace ? stdenv.targetPlatform.isDarwin && stdenv.targetPlatform.isAarch64
 }:
 
 assert !enableIntegerSimple -> gmp != null;
+
+# Cross cannot currently build the `haddock` program for silly reasons,
+# see note [HADDOCK_DOCS].
+assert (stdenv.targetPlatform != stdenv.hostPlatform) -> !enableHaddockProgram;
 
 let
   inherit (stdenv) buildPlatform hostPlatform targetPlatform;
@@ -61,14 +79,26 @@ let
     ifneq \"\$(BuildFlavour)\" \"\"
     include mk/flavours/\$(BuildFlavour).mk
     endif
+    BUILD_SPHINX_HTML = ${if enableDocs then "YES" else "NO"}
+    BUILD_SPHINX_PDF = NO
+  '' +
+  # Note [HADDOCK_DOCS]:
+  # Unfortunately currently `HADDOCK_DOCS` controls both whether the `haddock`
+  # program is built (which we generally always want to have a complete GHC install)
+  # and whether it is run on the GHC sources to generate hyperlinked source code
+  # (which is impossible for cross-compilation); see:
+  # https://gitlab.haskell.org/ghc/ghc/-/issues/20077
+  # This implies that currently a cross-compiled GHC will never have a `haddock`
+  # program, so it can never generate haddocks for any packages.
+  # If this is solved in the future, we'd like to unconditionally
+  # build the haddock program (removing the `enableHaddockProgram` option).
+  ''
+    HADDOCK_DOCS = ${if enableHaddockProgram then "YES" else "NO"}
     DYNAMIC_GHC_PROGRAMS = ${if enableShared then "YES" else "NO"}
     INTEGER_LIBRARY = ${if enableIntegerSimple then "integer-simple" else "integer-gmp"}
   '' + lib.optionalString (targetPlatform != hostPlatform) ''
     Stage1Only = ${if targetPlatform.system == hostPlatform.system then "NO" else "YES"}
     CrossCompilePrefix = ${targetPrefix}
-    HADDOCK_DOCS = NO
-    BUILD_SPHINX_HTML = NO
-    BUILD_SPHINX_PDF = NO
   '' + lib.optionalString (!enableProfiledLibs) ''
     GhcLibWays = "v dyn"
   '' + lib.optionalString enableRelocatedStaticLibs ''
@@ -93,7 +123,8 @@ let
   # Use gold either following the default, or to avoid the BFD linker due to some bugs / perf issues.
   # But we cannot avoid BFD when using musl libc due to https://sourceware.org/bugzilla/show_bug.cgi?id=23856
   # see #84670 and #49071 for more background.
-  useLdGold = targetPlatform.linker == "gold" || (targetPlatform.linker == "bfd" && !targetPlatform.isMusl);
+  useLdGold = targetPlatform.linker == "gold" ||
+    (targetPlatform.linker == "bfd" && (targetPackages.stdenv.cc.bintools.bintools.hasGold or false) && !targetPlatform.isMusl);
 
   runtimeDeps = [
     targetPackages.stdenv.cc.bintools
@@ -104,10 +135,16 @@ let
     targetPackages.stdenv.cc.bintools.bintools
   ];
 
+  # Makes debugging easier to see which variant is at play in `nix-store -q --tree`.
+  variantSuffix = lib.concatStrings [
+    (lib.optionalString stdenv.hostPlatform.isMusl "-musl")
+    (lib.optionalString enableIntegerSimple "-integer-simple")
+  ];
+
 in
 stdenv.mkDerivation (rec {
   version = "9.0.1";
-  name = "${targetPrefix}ghc-${version}";
+  pname = "${targetPrefix}ghc${variantSuffix}";
 
   src = fetchurl {
     url = "https://downloads.haskell.org/ghc/${version}/ghc-${version}-src.tar.xz";
@@ -143,7 +180,7 @@ stdenv.mkDerivation (rec {
 
     echo -n "${buildMK}" > mk/build.mk
     sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure
-  '' + lib.optionalString (stdenv.isLinux) ''
+  '' + lib.optionalString (stdenv.isLinux && hostPlatform.libc == "glibc") ''
     export LOCALE_ARCHIVE="${glibcLocales}/lib/locale/locale-archive"
   '' + lib.optionalString (!stdenv.isDarwin) ''
     export NIX_LDFLAGS+=" -rpath $out/lib/ghc-${version}"
@@ -204,8 +241,10 @@ stdenv.mkDerivation (rec {
   dontAddExtraLibs = true;
 
   nativeBuildInputs = [
-    perl autoconf automake m4 python3 sphinx
+    perl autoconf automake m4 python3
     ghc bootPkgs.alex bootPkgs.happy bootPkgs.hscolour
+  ] ++ lib.optionals enableDocs [
+    sphinx
   ];
 
   # For building runtime libs
@@ -225,7 +264,20 @@ stdenv.mkDerivation (rec {
 
   checkTarget = "test";
 
-  hardeningDisable = [ "format" ] ++ lib.optional stdenv.targetPlatform.isMusl "pie";
+  hardeningDisable =
+    [ "format" ]
+    # In nixpkgs, musl based builds currently enable `pie` hardening by default
+    # (see `defaultHardeningFlags` in `make-derivation.nix`).
+    # But GHC cannot currently produce outputs that are ready for `-pie` linking.
+    # Thus, disable `pie` hardening, otherwise `recompile with -fPIE` errors appear.
+    # See:
+    # * https://github.com/NixOS/nixpkgs/issues/129247
+    # * https://gitlab.haskell.org/ghc/ghc/-/issues/19580
+    ++ lib.optional stdenv.targetPlatform.isMusl "pie";
+
+  # big-parallel allows us to build with more than 2 cores on
+  # Hydra which already warrants a significant speedup
+  requiredSystemFeatures = [ "big-parallel" ];
 
   postInstall = ''
     # Install the bash completion file.
@@ -252,7 +304,9 @@ stdenv.mkDerivation (rec {
   meta = {
     homepage = "http://haskell.org/ghc";
     description = "The Glasgow Haskell Compiler";
-    maintainers = with lib.maintainers; [ marcweber andres peti ];
+    maintainers = with lib.maintainers; [
+      guibou
+    ] ++ lib.teams.haskell.members;
     timeout = 24 * 3600;
     inherit (ghc.meta) license platforms;
   };

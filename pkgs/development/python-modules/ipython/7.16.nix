@@ -13,7 +13,7 @@
 , decorator
 , pickleshare
 , traitlets
-, prompt_toolkit
+, prompt-toolkit
 , pexpect
 , appnope
 , backcall
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     decorator
     pickleshare
     traitlets
-    prompt_toolkit
+    prompt-toolkit
     pygments
     pexpect
     backcall

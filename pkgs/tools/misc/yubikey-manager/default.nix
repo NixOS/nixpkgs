@@ -1,14 +1,24 @@
-{ python3Packages, fetchurl, lib,
-  yubikey-personalization, libu2f-host, libusb1 }:
+{ python3Packages, fetchFromGitHub, lib, yubikey-personalization, libu2f-host, libusb1, procps }:
 
 python3Packages.buildPythonPackage rec {
   pname = "yubikey-manager";
-  version = "4.0.3";
+  version = "4.0.5";
 
-  srcs = fetchurl {
-    url = "https://developers.yubico.com/${pname}/Releases/${pname}-${version}.tar.gz";
-    hash = "sha256-p7tv/bj6PMCnCU5j8Vhi60LxLiPmR1Cuf8xVdDVtZvQ=";
+  src = fetchFromGitHub {
+    repo = "yubikey-manager";
+    rev = version;
+    owner = "Yubico";
+    sha256 = "sha256:0ycp7k6lkxzqwkc16fifhyqaqi7hl3351pwddsn18r5l83jnzdn2";
   };
+
+  postPatch = ''
+    substituteInPlace "ykman/pcsc/__init__.py" \
+      --replace '/usr/bin/pkill' '${procps}/bin/pkill'
+  '';
+
+  format = "pyproject";
+
+  nativeBuildInputs = with python3Packages; [ poetry-core ];
 
   propagatedBuildInputs =
     with python3Packages; [

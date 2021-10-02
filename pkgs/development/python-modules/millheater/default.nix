@@ -1,3 +1,4 @@
+
 { lib
 , aiohttp
 , async-timeout
@@ -9,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "millheater";
-  version = "0.5.0";
+  version = "0.6.0";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "Danielhiversen";
     repo = "pymill";
     rev = version;
-    sha256 = "sha256-uMvCpXz+amb5mR9ebkAit21UFYpsTkjkZRXtmcvWt8k=";
+    sha256 = "sha256-goKJLI1iUHR6CrciwzsOHyN7EjdLHJufDVuA9Qa9Ftk=";
   };
 
   propagatedBuildInputs = [

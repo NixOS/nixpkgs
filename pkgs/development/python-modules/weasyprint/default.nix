@@ -13,10 +13,10 @@
   fontconfig,
   lib, stdenv,
   pytest,
-  pytestrunner,
+  pytest-runner,
   pytest-isort,
   pytest-flake8,
-  pytestcov,
+  pytest-cov,
   isPy3k,
   substituteAll
 }:
@@ -39,7 +39,7 @@ buildPythonPackage rec {
         --replace '[tool:pytest]' '[tool:pytest]\nflake8-ignore = E501'
   '';
 
-  checkInputs = [ pytest pytestrunner pytest-isort pytest-flake8 pytestcov ];
+  checkInputs = [ pytest pytest-runner pytest-isort pytest-flake8 pytest-cov ];
 
   FONTCONFIG_FILE = "${fontconfig.out}/etc/fonts/fonts.conf";
 

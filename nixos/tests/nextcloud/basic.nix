@@ -1,4 +1,6 @@
-import ../make-test-python.nix ({ pkgs, ...}: let
+args@{ pkgs, nextcloudVersion ? 22, ... }:
+
+(import ../make-test-python.nix ({ pkgs, ...}: let
   adminpass = "notproduction";
   adminuser = "root";
 in {
@@ -37,7 +39,9 @@ in {
         config = {
           # Don't inherit adminuser since "root" is supposed to be the default
           inherit adminpass;
+          dbtableprefix = "nixos_";
         };
+        package = pkgs.${"nextcloud" + (toString nextcloudVersion)};
         autoUpdateApps = {
           enable = true;
           startAt = "20:00";
@@ -99,4 +103,4 @@ in {
     )
     assert "hi" in client.succeed("cat /mnt/dav/test-shared-file")
   '';
-})
+})) args

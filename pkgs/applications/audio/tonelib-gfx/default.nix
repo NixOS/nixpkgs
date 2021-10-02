@@ -12,6 +12,7 @@
 , fribidi
 , pango
 , freetype
+, curl
 }:
 
 stdenv.mkDerivation rec {
@@ -49,6 +50,10 @@ stdenv.mkDerivation rec {
     cp -R $TMP/usr/* $out/
     mv $out/bin/ToneLib-GFX $out/bin/tonelib-gfx
   '';
+
+  runtimeDependencies = [
+    (lib.getLib curl)
+  ];
 
   meta = with lib; {
     description = "Tonelib GFX is an amp and effects modeling software for electric guitar and bass.";

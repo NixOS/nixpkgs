@@ -11,6 +11,7 @@ let
     filter
     foldl'
     head
+    tail
     isAttrs
     isBool
     isDerivation
@@ -144,7 +145,7 @@ rec {
       if def.value != first.value then
         throw "The option `${showOption loc}' has conflicting definition values:${showDefs [ first def ]}"
       else
-        first) (head defs) defs).value;
+        first) (head defs) (tail defs)).value;
 
   /* Extracts values of all "value" keys of the given list.
 
@@ -246,7 +247,9 @@ rec {
   showDefs = defs: concatMapStrings (def:
     let
       # Pretty print the value for display, if successful
-      prettyEval = builtins.tryEval (lib.generators.toPretty {} def.value);
+      prettyEval = builtins.tryEval
+        (lib.generators.toPretty { }
+          (lib.generators.withRecursion { depthLimit = 10; throwOnDepthLimit = false; } def.value));
       # Split it into its lines
       lines = filter (v: ! isList v) (builtins.split "\n" prettyEval.value);
       # Only display the first 5 lines, and indent them for better visibility

@@ -16,7 +16,8 @@ let
   });
 in
 stdenv.mkDerivation {
-  name = "skia-aseprite-m71";
+  pname = "skia";
+  version = "aseprite-m71";
 
   src = fetchFromGitHub {
     owner = "aseprite";
@@ -73,4 +74,12 @@ stdenv.mkDerivation {
       third_party/externals/angle2/include \
       third_party/skcms/**/*.h
   '';
+
+  meta = with lib; {
+    description = "Skia is a complete 2D graphic library for drawing Text, Geometries, and Images";
+    homepage = "https://skia.org/";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ ];
+    platforms = platforms.all;
+  };
 }

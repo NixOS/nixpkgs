@@ -163,6 +163,15 @@ let cfg = config.services.xserver.libinput;
           '';
       };
 
+      transformationMatrix = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          A  string  of  9 space-separated floating point numbers.  Sets the transformation matrix to
+          the 3x3 matrix where the first row is (abc), the second row is (def) and the third row is (ghi).
+        '';
+      };
+
       disableWhileTyping = mkOption {
         type = types.bool;
         default = false;
@@ -196,6 +205,7 @@ let cfg = config.services.xserver.libinput;
       ${optionalString (cfg.${deviceType}.accelSpeed != null) ''Option "AccelSpeed" "${cfg.${deviceType}.accelSpeed}"''}
       ${optionalString (cfg.${deviceType}.buttonMapping != null) ''Option "ButtonMapping" "${cfg.${deviceType}.buttonMapping}"''}
       ${optionalString (cfg.${deviceType}.calibrationMatrix != null) ''Option "CalibrationMatrix" "${cfg.${deviceType}.calibrationMatrix}"''}
+      ${optionalString (cfg.${deviceType}.transformationMatrix != null) ''Option "TransformationMatrix" "${cfg.${deviceType}.transformationMatrix}"''}
       ${optionalString (cfg.${deviceType}.clickMethod != null) ''Option "ClickMethod" "${cfg.${deviceType}.clickMethod}"''}
       Option "LeftHanded" "${xorgBool cfg.${deviceType}.leftHanded}"
       Option "MiddleEmulation" "${xorgBool cfg.${deviceType}.middleEmulation}"
@@ -227,6 +237,7 @@ in {
       "sendEventsMode"
       "tapping"
       "tappingDragLock"
+      "transformationMatrix"
       "disableWhileTyping"
       "additionalOptions"
     ]);

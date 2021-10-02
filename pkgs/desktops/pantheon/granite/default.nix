@@ -18,7 +18,7 @@
 
 stdenv.mkDerivation rec {
   pname = "granite";
-  version = "6.0.0";
+  version = "6.1.1";
 
   outputs = [ "out" "dev" ];
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-RGukXeFmtnyCfK8pKdvTHL0t8yhEYwAiiPelTy1Xcf0=";
+    sha256 = "13c6xk014psvmll9qybdqviskllw4g150m2k4ikjbv59g0rfp7xq";
   };
 
   passthru = {
@@ -46,14 +46,11 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
   ];
 
-  buildInputs = [
+  propagatedBuildInputs = [
     glib
+    gsettings-desktop-schemas # is_clock_format_12h uses "org.gnome.desktop.interface clock-format"
     gtk3
     libgee
-  ];
-
-  propagatedBuildInputs = [
-    gsettings-desktop-schemas # is_clock_format_12h uses "org.gnome.desktop.interface clock-format"
   ];
 
   postPatch = ''
@@ -70,6 +67,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/elementary/granite";
     license = licenses.lgpl3Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
   };
 }

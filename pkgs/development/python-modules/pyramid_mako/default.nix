@@ -23,5 +23,8 @@ buildPythonPackage rec {
     description = "Mako template bindings for the Pyramid web framework";
     license = licenses.bsd0;
     maintainers = with maintainers; [];
+    # broken on pyramid>=2.0
+    # https://github.com/Pylons/pyramid_mako/issues/53
+    broken = true;
   };
 }

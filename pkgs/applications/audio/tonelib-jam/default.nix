@@ -12,6 +12,7 @@
 , fribidi
 , pango
 , freetype
+, curl
 }:
 
 stdenv.mkDerivation rec {
@@ -49,6 +50,10 @@ stdenv.mkDerivation rec {
     cp -R $TMP/usr/* $out/
     mv $out/bin/ToneLib-Jam $out/bin/tonelib-jam
   '';
+
+  runtimeDependencies = [
+    (lib.getLib curl)
+  ];
 
   meta = with lib; {
     description = "ToneLib Jam – the learning and practice software for guitar players";

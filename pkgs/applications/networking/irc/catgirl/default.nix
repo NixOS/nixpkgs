@@ -1,16 +1,16 @@
-{ ctags, fetchurl, lib, libressl, man, ncurses, pkg-config, stdenv }:
+{ ctags, fetchurl, lib, libressl, ncurses, pkg-config, stdenv }:
 
 stdenv.mkDerivation rec {
   pname = "catgirl";
-  version = "1.8";
+  version = "1.9a";
 
   src = fetchurl {
     url = "https://git.causal.agency/catgirl/snapshot/${pname}-${version}.tar.gz";
-    sha256 = "0svpd2nqsr55ac98vczyhihs6pvgw7chspf6bdlwl98gch39dxif";
+    sha256 = "sha256-MEm5mrrWfNp+mBHFjGSOGvvfvBJ+Ho/K+mPUxzJDkV0=";
   };
 
   nativeBuildInputs = [ ctags pkg-config ];
-  buildInputs = [ libressl man ncurses ];
+  buildInputs = [ libressl ncurses ];
   strictDeps = true;
 
   meta = with lib; {

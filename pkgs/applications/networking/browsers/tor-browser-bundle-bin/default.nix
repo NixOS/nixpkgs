@@ -88,19 +88,25 @@ let
   fteLibPath = makeLibraryPath [ stdenv.cc.cc gmp ];
 
   # Upstream source
-  version = "10.0.18";
+  version = "10.5.6";
 
   lang = "en-US";
 
   srcs = {
     x86_64-linux = fetchurl {
-      url = "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz";
-      sha256 = "15ni33mkg3awfmk3ynr0vi4max1h2k0s10xw3dpmdx6chzv4ll14";
+      urls = [
+        "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz"
+        "https://tor.eff.org/dist/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz"
+      ];
+      sha256 = "1hxjixriah08c65nngjdp1blbji1vlnhqkphp8f96hy34hk4dpiw";
     };
 
     i686-linux = fetchurl {
-      url = "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux32-${version}_${lang}.tar.xz";
-      sha256 = "16lx8wkxli1fzq5f6gcw3im4p8k3xdmnmf6w0p7n8hd8681b1w5s";
+      urls = [
+        "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux32-${version}_${lang}.tar.xz"
+        "https://tor.eff.org/dist/torbrowser/${version}/tor-browser-linux32-${version}_${lang}.tar.xz"
+      ];
+      sha256 = "018kwwbbn02drvdj0bjkcyhsnbx97wnmd3lxkrx0kc9dw1s4r418";
     };
   };
 in
@@ -310,6 +316,13 @@ stdenv.mkDerivation rec {
     # Font cache files capture store paths; clear them out on the off
     # chance that TBB would continue using old font files.
     rm -rf "\$HOME/.cache/fontconfig"
+
+    # Manually specify data paths (by default TB attempts to create these in the store)
+    {
+      echo "user_pref(\"extensions.torlauncher.toronionauthdir_path\", \"\$HOME/TorBrowser/Data/Tor/onion-auth\");"
+      echo "user_pref(\"extensions.torlauncher.torrc_path\", \"\$HOME/TorBrowser/Data/Tor/torrc\");"
+      echo "user_pref(\"extensions.torlauncher.tordatadir_path\", \"\$HOME/TorBrowser/Data/Tor\");"
+    } >> "\$HOME/TorBrowser/Data/Browser/profile.default/prefs.js"
 
     # Lift-off
     #

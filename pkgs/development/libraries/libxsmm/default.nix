@@ -4,17 +4,15 @@
 , enableStatic ? stdenv.hostPlatform.isStatic
 }:
 
-let
-  version = "1.16.1";
-in stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "libxsmm";
-  inherit version;
+  version = "1.16.2";
 
   src = fetchFromGitHub {
     owner = "hfp";
     repo = "libxsmm";
     rev = version;
-    sha256 = "1c1qj6hcdfx11bvilnly92vgk1niisd2bjw1s8vfyi2f7ws1wnp0";
+    sha256 = "sha256-gmv5XHBRztcF7+ZKskQMloytJ53k0eJg0HJmUhndq70=";
   };
 
   nativeBuildInputs = [

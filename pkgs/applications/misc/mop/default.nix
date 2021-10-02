@@ -9,7 +9,7 @@ buildGoPackage rec {
   goDeps = ./deps.nix;
 
   preConfigure = ''
-    for i in $(find . -type f);do
+    for i in *.go **/*.go; do
         substituteInPlace $i --replace michaeldv/termbox-go nsf/termbox-go
     done
     substituteInPlace Makefile --replace mop/cmd mop/mop

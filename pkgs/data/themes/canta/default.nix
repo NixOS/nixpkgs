@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , gdk-pixbuf
 , librsvg
@@ -12,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "canta-theme";
-  version = "2021-07-06";
+  version = "2021-09-08";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
-    sha256 = "sha256-dz78h9Qq25+/i6fmw/zGlPq3DVQB3ADYwehgaWReMQ8=";
+    sha256 = "05h42nrggb6znzjcbh4lqqfcm41h4r85n3vwimp3l4lq5p90igr2";
   };
 
   nativeBuildInputs = [
@@ -57,7 +58,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Flat Design theme for GTK based desktop environments";
     homepage = "https://github.com/vinceliuice/Canta-theme";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.linux; # numix-icon-theme-circle unavailable in darwin
     maintainers = [ maintainers.romildo ];
   };

@@ -31,14 +31,14 @@
 
 buildPythonPackage rec {
   pname = "datasette";
-  version = "0.57.1";
+  version = "0.58.1";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "simonw";
     repo = pname;
     rev = version;
-    sha256 = "sha256-BHsf3GOganPhsDiZlRxvAsRZH/Sq+Jr+CZcc2ubce+8=";
+    sha256 = "sha256-dtKqp7LV1fRjwOMAlmmAnC19j8hLA1oixGextATW6z0=";
   };
 
   nativeBuildInputs = [ pytest-runner ];

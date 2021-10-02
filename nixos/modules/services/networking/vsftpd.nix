@@ -282,7 +282,8 @@ in
 
     users.users = {
       "vsftpd" = {
-        uid = config.ids.uids.vsftpd;
+        group = "vsftpd";
+        isSystemUser = true;
         description = "VSFTPD user";
         home = if cfg.localRoot != null
                then cfg.localRoot # <= Necessary for virtual users.
@@ -297,6 +298,7 @@ in
         };
     };
 
+    users.groups.vsftpd = {};
     users.groups.ftp.gid = config.ids.gids.ftp;
 
     # If you really have to access root via FTP use mkOverride or userlistDeny

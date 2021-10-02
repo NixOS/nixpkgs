@@ -70,9 +70,29 @@ let
   # If you need a grammar that already exists in the official orga,
   # make sure to give it a different name.
   otherGrammars = {
+    "tree-sitter-clojure" = {
+      orga = "sogaiu";
+      repo = "tree-sitter-clojure";
+    };
+    "tree-sitter-comment" = {
+      orga = "stsewd";
+      repo = "tree-sitter-comment";
+    };
+    "tree-sitter-dart" = {
+      orga = "usernobody14";
+      repo = "tree-sitter-dart";
+    };
+    "tree-sitter-elisp" = {
+      orga = "wilfred";
+      repo = "tree-sitter-elisp";
+    };
     "tree-sitter-nix" = {
       orga = "cstrahan";
       repo = "tree-sitter-nix";
+    };
+    "tree-sitter-latex" = {
+      orga = "latex-lsp";
+      repo = "tree-sitter-latex";
     };
     "tree-sitter-lua" = {
       orga = "nvim-treesitter";
@@ -86,9 +106,17 @@ let
       orga = "ikatyang";
       repo = "tree-sitter-markdown";
     };
+    "tree-sitter-rst" = {
+      orga = "stsewd";
+      repo = "tree-sitter-rst";
+    };
     "tree-sitter-svelte" = {
       orga = "Himujjal";
       repo = "tree-sitter-svelte";
+    };
+    "tree-sitter-vim" = {
+      orga = "vigoux";
+      repo = "tree-sitter-viml";
     };
     "tree-sitter-yaml" = {
       orga = "ikatyang";
@@ -99,8 +127,20 @@ let
       repo = "tree-sitter-toml";
     };
     "tree-sitter-zig" = {
-      orga = "GrayJack";
+      orga = "maxxnino";
       repo = "tree-sitter-zig";
+    };
+    "tree-sitter-fish" = {
+      orga = "ram02z";
+      repo = "tree-sitter-fish";
+    };
+    "tree-sitter-dot" = {
+      orga = "rydesun";
+      repo = "tree-sitter-dot";
+    };
+    "tree-sitter-norg" = {
+      orga = "nvim-neorg";
+      repo = "tree-sitter-norg";
     };
   };
 

@@ -1,25 +1,33 @@
 { lib, pkgs }: self: with self; with lib.licenses; {
 
-  elisp-ffi = melpaBuild rec {
+  elisp-ffi = let
+    rev = "da37c516a0e59bdce63fb2dc006a231dee62a1d9";
+  in melpaBuild {
     pname = "elisp-ffi";
-    version = "1.0.0";
+    version = "20170518.0";
+
+    commit = rev;
 
     src = pkgs.fetchFromGitHub {
       owner = "skeeto";
       repo = "elisp-ffi";
-      rev = version;
-      sha256 = "0z2n3h5l5fj8wl8i1ilfzv11l3zba14sgph6gz7dx7q12cnp9j22";
+      inherit rev;
+      sha256 = "sha256-StOezQEnNTjRmjY02ub5FRh59aL6gWfw+qgboz0wF94=";
     };
+
+    nativeBuildInputs = [ pkgs.pkg-config ];
 
     buildInputs = [ pkgs.libffi ];
 
-    preBuild = "make";
+    preBuild = ''
+      mv ffi.el elisp-ffi.el
+      make
+    '';
 
     recipe = pkgs.writeText "recipe" ''
       (elisp-ffi
       :repo "skeeto/elisp-ffi"
-      :fetcher github
-      :files ("ffi-glue" "ffi.el"))
+      :fetcher github)
     '';
 
     meta = {
@@ -31,42 +39,6 @@
         values on to Emacs.
       '';
       license = publicDomain;
-    };
-  };
-
-  agda2-mode = trivialBuild {
-    pname = "agda-mode";
-    version = pkgs.haskellPackages.Agda.version;
-
-    phases = [ "buildPhase" "installPhase" ];
-
-    # already byte-compiled by Agda builder
-    buildPhase = ''
-      agda=`${pkgs.haskellPackages.Agda}/bin/agda-mode locate`
-      cp `dirname $agda`/*.el* .
-    '';
-
-    meta = {
-      description = "Agda2-mode for Emacs extracted from Agda package";
-      longDescription = ''
-        Wrapper packages that liberates init.el from `agda-mode locate` magic.
-        Simply add this to user profile or systemPackages and do `(require 'agda2)` in init.el.
-      '';
-      homepage = pkgs.haskellPackages.Agda.meta.homepage;
-      license = pkgs.haskellPackages.Agda.meta.license;
-    };
-  };
-
-  agda-input = self.trivialBuild {
-    pname = "agda-input";
-
-    inherit (pkgs.haskellPackages.Agda) src version;
-
-    postUnpack = "mv $sourceRoot/src/data/emacs-mode/agda-input.el $sourceRoot";
-
-    meta = {
-      description = "Standalone package providing the agda-input method without building Agda.";
-      inherit (pkgs.haskellPackages.Agda.meta) homepage license;
     };
   };
 
@@ -92,21 +64,23 @@
     };
   };
 
-  git-undo = callPackage ./git-undo { };
-
-  haskell-unicode-input-method = melpaBuild {
-    pname = "emacs-haskell-unicode-input-method";
+  haskell-unicode-input-method = let
+    rev = "d8d168148c187ed19350bb7a1a190217c2915a63";
+  in melpaBuild {
+    pname = "haskell-unicode-input-method";
     version = "20110905.2307";
+
+    commit = rev;
 
     src = pkgs.fetchFromGitHub {
       owner = "roelvandijk";
       repo = "emacs-haskell-unicode-input-method";
-      rev = "d8d168148c187ed19350bb7a1a190217c2915a63";
+      inherit rev;
       sha256 = "09b7bg2s9aa4s8f2kdqs4xps3jxkq5wsvbi87ih8b6id38blhf78";
     };
 
     recipe = pkgs.writeText "recipe" ''
-      (emacs-haskell-unicode-input-method
+      (haskell-unicode-input-method
        :repo "roelvandijk/emacs-haskell-unicode-input-method"
        :fetcher github)
     '';
@@ -119,29 +93,19 @@
     };
   };
 
-  llvm-mode = trivialBuild {
-    pname = "llvm-mode";
-    inherit (pkgs.llvmPackages.llvm) src version;
-
-    dontConfigure = true;
-    buildPhase = ''
-      cp utils/emacs/*.el .
-    '';
-
-    meta = {
-      inherit (pkgs.llvmPackages.llvm.meta) homepage license;
-      description = "Major mode for the LLVM assembler language.";
-    };
-  };
-
-  matrix-client = melpaBuild {
+  matrix-client = let
+    rev = "d2ac55293c96d4c95971ed8e2a3f6f354565c5ed";
+  in melpaBuild
+  {
     pname = "matrix-client";
     version = "0.3.0";
+
+    commit = rev;
 
     src = pkgs.fetchFromGitHub {
       owner = "alphapapa";
       repo = "matrix-client.el";
-      rev = "d2ac55293c96d4c95971ed8e2a3f6f354565c5ed";
+      inherit rev;
       sha256 = "1scfv1502yg7x4bsl253cpr6plml1j4d437vci2ggs764sh3rcqq";
     };
 
@@ -184,38 +148,49 @@
 
   };
 
-  ott-mode = self.trivialBuild {
-    pname = "ott-mod";
+  agda2-mode = callPackage ./agda2-mode { };
 
-    inherit (pkgs.ott) src version;
+  agda-input = callPackage ./agda-input{ };
 
-    postUnpack = "mv $sourceRoot/emacs/ott-mode.el $sourceRoot";
+  bqn-mode = callPackage ./bqn-mode { };
 
-    meta = {
-      description = "Standalone package providing ott-mode without building ott and with compiled bytecode.";
-      inherit (pkgs.haskellPackages.Agda.meta) homepage license;
-    };
-  };
+  llvm-mode = callPackage ./llvm-mode { };
+
+  ott-mode = callPackage ./ott-mode { };
+
+  urweb-mode = callPackage ./urweb-mode { };
 
   # Packages made the classical callPackage way
 
+  apheleia = callPackage ./apheleia { };
+
   ebuild-mode = callPackage ./ebuild-mode { };
 
+  evil-markdown = callPackage ./evil-markdown { };
+
   emacspeak = callPackage ./emacspeak { };
+
+  ement = callPackage ./ement { };
 
   ess-R-object-popup = callPackage ./ess-R-object-popup { };
 
   font-lock-plus = callPackage ./font-lock-plus { };
 
+  git-undo = callPackage ./git-undo { };
+
   helm-words = callPackage ./helm-words { };
+
+  isearch-plus = callPackage ./isearch-plus { };
+
+  isearch-prop = callPackage ./isearch-prop { };
 
   jam-mode = callPackage ./jam-mode { };
 
   nano-theme = callPackage ./nano-theme { };
 
-  org-mac-link = callPackage ./org-mac-link { };
-
   perl-completion = callPackage ./perl-completion { };
+
+  plz = callPackage ./plz { };
 
   pod-mode = callPackage ./pod-mode { };
 
@@ -231,15 +206,12 @@
 
   youtube-dl = callPackage ./youtube-dl { };
 
-  zeitgeist = callPackage ./zeitgeist { };
-
   # From old emacsPackages (pre emacsPackagesNg)
   cedet = callPackage ./cedet { };
   cedille = callPackage ./cedille { cedille = pkgs.cedille; };
   color-theme-solarized = callPackage ./color-theme-solarized { };
   session-management-for-emacs = callPackage ./session-management-for-emacs { };
   hsc3-mode = callPackage ./hsc3 { };
-  ido-ubiquitous = callPackage ./ido-ubiquitous { };
   prolog-mode = callPackage ./prolog { };
   rect-mark = callPackage ./rect-mark { };
   sunrise-commander = callPackage ./sunrise-commander { };
@@ -250,38 +222,4 @@
   rectMark = rect-mark;
   sunriseCommander = sunrise-commander;
 
-  # Legacy aliases, these try to mostly map to melpa stable because it's
-  # closer to the old outdated package infra.
-  #
-  # Ideally this should be dropped some time during/after 20.03
-
-  autoComplete = self.melpaStablePackages.auto-complete;
-  bbdb3 = self.melpaStablePackages.bbdb;
-  colorTheme = self.color-theme;
-  cryptol = self.melpaStablePackages.cryptol-mode;
-  d = self.melpaStablePackages.d-mode;
-  emacsw3m = self.w3m;
-  erlangMode = self.melpaStablePackages.erlang;
-  flymakeCursor = self.melpaStablePackages.flymake-cursor;
-  graphvizDot = self.melpaStablePackages.graphviz-dot-mode;
-  haskellMode = self.melpaStablePackages.haskell-mode;
-  hsc3Mode = self.hsc3-mode;
-  idris = self.melpaStablePackages.idris-mode;
-  jade = self.jade-mode;
-  js2 = self.melpaStablePackages.js2-mode;
-  loremIpsum = self.lorem-ipsum;
-  markdownMode = self.melpaStablePackages.markdown-mode;
-  maudeMode = self.maude-mode;
-  phpMode = self.melpaStablePackages.php-mode;
-  prologMode = self.prolog-mode;
-  proofgeneral = self.melpaStablePackages.proof-general;
-  proofgeneral_HEAD = self.proof-general;
-  rainbowDelimiters = self.melpaStablePackages.rainbow-delimiters;
-  sbtMode = self.melpaStablePackages.sbt-mode;
-  scalaMode1 = self.melpaStablePackages.scala-mode;
-  # scalaMode2 = null;  # No clear mapping as of now
-  structuredHaskellMode = self.melpaStablePackages.shm;
-  tuaregMode = self.melpaStablePackages.tuareg;
-  writeGood = self.melpaStablePackages.writegood-mode;
-  xmlRpc = self.melpaStablePackages.xml-rpc;
 }

@@ -1,7 +1,7 @@
 { buildGoModule, hasura-graphql-engine }:
 
 buildGoModule rec {
-  name = "hasura-${version}";
+  pname = "hasura";
   version = hasura-graphql-engine.version;
 
   src = hasura-graphql-engine.src;
@@ -9,15 +9,15 @@ buildGoModule rec {
 
   subPackages = [ "cmd/hasura" ];
 
-  vendorSha256 = "sha256-Fp6o3xZ/964q8yzJJFrqWZtQ5zYNy6Wreh42YxWjNbU=";
+  vendorSha256 = "0c0zn3a3bq3g13zj1b7hz1gfd9mcc5wlch80vjgp31vgm23vvd8d";
 
   doCheck = false;
 
-  buildFlagsArray = [''-ldflags=
-    -X github.com/hasura/graphql-engine/cli/version.BuildVersion=${version}
-    -s
-    -w
-  ''];
+  ldflags = [
+    "-X github.com/hasura/graphql-engine/cli/version.BuildVersion=${version}"
+    "-s"
+    "-w"
+  ];
 
   postInstall = ''
     mkdir -p $out/share/{bash-completion/completions,zsh/site-functions}

@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "julia-bin";
-  version = "1.6.1";
+  version = "1.6.3";
 
   src = {
     x86_64-linux = fetchurl {
       url = "https://julialang-s3.julialang.org/bin/linux/x64/${lib.versions.majorMinor version}/julia-${version}-linux-x86_64.tar.gz";
-      sha256 = "01i5sm4vqb0y5qznql571zap19b42775drrcxnzsyhpaqgg8m23w";
+      sha256 = "0jrijj9snfx70692z2301rjassvwjcsjbxdsjyif9hyp9hrrqif7";
     };
   }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
@@ -20,7 +20,6 @@ stdenv.mkDerivation rec {
   patches = [
     # Source release Nix patch(es) relevant for binary releases as well.
     ./patches/1.6-bin/0002-nix-Skip-tempname-test-broken-in-sandbox.patch
-    ./patches/1.6-bin/0003-nix-Skip-chown-tests-broken-in-sandbox.patch
     ./patches/1.6-bin/0005-nix-Enable-parallel-unit-tests-for-sandbox.patch
   ];
   postPatch = ''

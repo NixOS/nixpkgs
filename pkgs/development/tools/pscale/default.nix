@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "pscale";
-  version = "0.51.0";
+  version = "0.76.0";
 
   src = fetchFromGitHub {
     owner = "planetscale";
     repo = "cli";
     rev = "v${version}";
-    sha256 = "sha256-ykHwDVwL30uXeCEP4EcM8TPYqZmCDDAUUpfinpYipHE=";
+    sha256 = "sha256-yfTfWMyRo1QP0QCbJOxNC1eAYmJQ/yKvWjThXd7r7Bc=";
   };
 
-  vendorSha256 = "sha256-3VP2fluQLZs4nWT3O6NmCFxrqKw0/j3ASNxtbXHlZEA=";
+  vendorSha256 = "sha256-dD+8ZraY0RvoGxJZSWG31Iif+R5CDNtQ9H7J8Ty0x7U=";
 
   meta = with lib; {
     homepage = "https://www.planetscale.com/";

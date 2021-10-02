@@ -6,7 +6,7 @@ let
   cfg = config.services.nextcloud;
   fpm = config.services.phpfpm.pools.nextcloud;
 
-  phpPackage = pkgs.php74.buildEnv {
+  phpPackage = cfg.phpPackage.buildEnv {
     extensions = { enabled, all }:
       (with all;
         enabled
@@ -92,7 +92,15 @@ in {
     package = mkOption {
       type = types.package;
       description = "Which package to use for the Nextcloud instance.";
-      relatedPackages = [ "nextcloud19" "nextcloud20" "nextcloud21" ];
+      relatedPackages = [ "nextcloud20" "nextcloud21" "nextcloud22" ];
+    };
+    phpPackage = mkOption {
+      type = types.package;
+      relatedPackages = [ "php74" "php80" ];
+      defaultText = "pkgs.php";
+      description = ''
+        PHP package to use for Nextcloud.
+      '';
     };
 
     maxUploadSize = mkOption {
@@ -385,7 +393,7 @@ in {
       ];
 
       warnings = let
-        latest = 21;
+        latest = 22;
         upgradeWarning = major: nixos:
           ''
             A legacy Nextcloud install (from before NixOS ${nixos}) may be installed.
@@ -399,13 +407,39 @@ in {
             The package can be upgraded by explicitly declaring the service-option
             `services.nextcloud.package`.
           '';
+
+        # FIXME(@Ma27) remove as soon as nextcloud properly supports
+        # mariadb >=10.6.
+        isUnsupportedMariadb =
+          # All currently supported Nextcloud versions are affected.
+          (versionOlder cfg.package.version "23")
+          # This module uses mysql
+          && (cfg.config.dbtype == "mysql")
+          # MySQL is managed via NixOS
+          && config.services.mysql.enable
+          # We're using MariaDB
+          && (getName config.services.mysql.package) == "mariadb-server"
+          # MariaDB is at least 10.6 and thus not supported
+          && (versionAtLeast (getVersion config.services.mysql.package) "10.6");
+
       in (optional (cfg.poolConfig != null) ''
           Using config.services.nextcloud.poolConfig is deprecated and will become unsupported in a future release.
           Please migrate your configuration to config.services.nextcloud.poolSettings.
         '')
-        ++ (optional (versionOlder cfg.package.version "19") (upgradeWarning 18 "20.09"))
         ++ (optional (versionOlder cfg.package.version "20") (upgradeWarning 19 "21.05"))
-        ++ (optional (versionOlder cfg.package.version "21") (upgradeWarning 20 "21.05"));
+        ++ (optional (versionOlder cfg.package.version "21") (upgradeWarning 20 "21.05"))
+        ++ (optional (versionOlder cfg.package.version "22") (upgradeWarning 21 "21.11"))
+        ++ (optional isUnsupportedMariadb ''
+            You seem to be using MariaDB at an unsupported version (i.e. at least 10.6)!
+            Please note that this isn't supported officially by Nextcloud. You can either
+
+            * Switch to `pkgs.mysql`
+            * Downgrade MariaDB to at least 10.5
+            * Work around Nextcloud's problems by specifying `innodb_read_only_compressed=0`
+
+            For further context, please read
+            https://help.nextcloud.com/t/update-to-next-cloud-21-0-2-has-get-an-error/117028/15
+          '');
 
       services.nextcloud.package = with pkgs;
         mkDefault (
@@ -415,14 +449,18 @@ in {
               nextcloud defined in an overlay, please set `services.nextcloud.package` to
               `pkgs.nextcloud`.
             ''
-          else if versionOlder stateVersion "20.09" then nextcloud18
           # 21.03 will not be an official release - it was instead 21.05.
           # This versionOlder statement remains set to 21.03 for backwards compatibility.
           # See https://github.com/NixOS/nixpkgs/pull/108899 and
           # https://github.com/NixOS/rfcs/blob/master/rfcs/0080-nixos-release-schedule.md.
           else if versionOlder stateVersion "21.03" then nextcloud19
-          else nextcloud21
+          else if versionOlder stateVersion "21.11" then nextcloud21
+          else nextcloud22
         );
+
+      services.nextcloud.phpPackage =
+        if versionOlder cfg.package.version "21" then pkgs.php74
+        else pkgs.php80;
     }
 
     { systemd.timers.nextcloud-cron = {
@@ -502,8 +540,6 @@ in {
               ${if c.dbport != null then "--database-port" else null} = ''"${toString c.dbport}"'';
               ${if c.dbuser != null then "--database-user" else null} = ''"${c.dbuser}"'';
               "--database-pass" = dbpass;
-              ${if c.dbtableprefix != null
-                then "--database-table-prefix" else null} = ''"${toString c.dbtableprefix}"'';
               "--admin-user" = ''"${c.adminuser}"'';
               "--admin-pass" = adminpass;
               "--data-dir" = ''"${cfg.home}/data"'';
@@ -616,9 +652,7 @@ in {
 
       services.nginx.enable = mkDefault true;
 
-      services.nginx.virtualHosts.${cfg.hostName} = let
-        major = toInt (versions.major cfg.package.version);
-      in {
+      services.nginx.virtualHosts.${cfg.hostName} = {
         root = cfg.package;
         locations = {
           "= /robots.txt" = {
@@ -701,7 +735,6 @@ in {
         };
         extraConfig = ''
           index index.php index.html /index.php$request_uri;
-          expires 1m;
           add_header X-Content-Type-Options nosniff;
           add_header X-XSS-Protection "1; mode=block";
           add_header X-Robots-Tag none;

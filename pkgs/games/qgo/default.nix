@@ -43,6 +43,4 @@ mkDerivation {
   '';
   nativeBuildInputs = [ qmake ];
   buildInputs = [ qtbase qtmultimedia qttranslations ];
-  enableParallelBuilding = true;
-
 }

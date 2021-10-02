@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , google-api-core
-, grpc_google_iam_v1
+, grpc-google-iam-v1
 , mock
 , proto-plus
 , pytest-asyncio
@@ -12,16 +12,16 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-bigquery-logging";
-  version = "0.1.0";
+  version = "0.2.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0s8vlw157z10yzzkrfyzfl31iad96wfl3ywk9g3gmmh0jfgy0gfj";
+    sha256 = "2dc15be4fdcd574c23124bfc0a678c864581038c96b86275c7b41d9fced06534";
   };
 
   propagatedBuildInputs = [
     google-api-core
-    grpc_google_iam_v1
+    grpc-google-iam-v1
     proto-plus
   ];
 

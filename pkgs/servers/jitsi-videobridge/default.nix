@@ -2,10 +2,10 @@
 
 let
   pname = "jitsi-videobridge2";
-  version = "2.1-508-gb24f756c";
+  version = "2.1-551-g2ad6eb0b";
   src = fetchurl {
     url = "https://download.jitsi.org/stable/${pname}_${version}-1_all.deb";
-    sha256 = "0kjsm3k7chgrfvvqxkp8xdw6wfrs122j4h8gcvyvpf9lg51p199g";
+    sha256 = "XwVcjvBtJkZP46kGMnE4R1ax7Re725GMoV+pCnCNpak=";
   };
 in
 stdenv.mkDerivation {
@@ -37,6 +37,8 @@ stdenv.mkDerivation {
   passthru.tests = {
     single-host-smoke-test = nixosTests.jitsi-meet;
   };
+
+  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     description = "A WebRTC compatible video router";

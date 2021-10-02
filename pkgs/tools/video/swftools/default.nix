@@ -19,7 +19,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     maintainers = [ maintainers.koral ];
     platforms = lib.platforms.unix;
-    broken = true;
     knownVulnerabilities = [
       "CVE-2017-10976"
       "CVE-2017-11096"

@@ -27,8 +27,6 @@ let
 
     outputs = [ "bin" "man" "doc" "out" ];
 
-    phases = [ "unpackPhase" "buildPhase" "installPhase" "fixupPhase" ];
-
     buildPhase = ''
       pandoc -s -f markdown-smart -t man shellcheck.1.md -o shellcheck.1
     '';

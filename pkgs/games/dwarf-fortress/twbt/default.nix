@@ -50,6 +50,12 @@ let
       sha256 = "092dgp8fh1j4nqr9wbzn89ib1nhscclr8m91lfxsvg0mgn7j8xlv";
       prerelease = true;
     };
+    "0.47.05" = {
+      twbtRelease = "6.xx";
+      dfhackRelease = "0.47.05-r1";
+      sha256 = "1nqhaf7271bm9rq9dmilhhk9q7v3841d0rv4y3fid40vfi4gpi3p";
+      prerelease = true;
+    };
   };
 
   release =

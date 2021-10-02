@@ -8,7 +8,7 @@ with import ../lib/testing-python.nix { inherit system pkgs; };
 with pkgs.lib;
 
 let
-  qemu-flags = import ../lib/qemu-flags.nix { inherit pkgs; };
+  qemu-common = import ../lib/qemu-common.nix { inherit (pkgs) lib pkgs; };
 
   router = { config, pkgs, lib, ... }:
     with pkgs.lib;
@@ -42,7 +42,7 @@ let
         machines = flip map vlanIfs (vlan:
           {
             hostName = "client${toString vlan}";
-            ethernetAddress = qemu-flags.qemuNicMac vlan 1;
+            ethernetAddress = qemu-common.qemuNicMac vlan 1;
             ipAddress = "192.168.${toString vlan}.2";
           }
         );
@@ -719,6 +719,24 @@ let
         print(client.succeed("stat /etc/systemd/network/50-foo.link"))
         client.succeed("udevadm settle")
         assert "mtu 1442" in client.succeed("ip l show dummy0")
+      '';
+    };
+    wlanInterface = let
+      testMac = "06:00:00:00:02:00";
+    in {
+      name = "WlanInterface";
+      machine = { pkgs, ... }: {
+        boot.kernelModules = [ "mac80211_hwsim" ];
+        networking.wlanInterfaces = {
+          wlan0 = { device = "wlan0"; };
+          wap0 = { device = "wlan0"; mac = testMac; };
+        };
+      };
+      testScript = ''
+        machine.start()
+        machine.wait_for_unit("network.target")
+        machine.wait_until_succeeds("ip address show wap0 | grep -q ${testMac}")
+        machine.fail("ip address show wlan0 | grep -q ${testMac}")
       '';
     };
   };

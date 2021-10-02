@@ -46,6 +46,6 @@ rustPlatform.buildRustPackage rec {
     description = "Utility for training word and subword embeddings";
     homepage = "https://github.com/finalfusion/finalfrontier/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ danieldk ];
+    maintainers = with maintainers; [ ];
   };
 }

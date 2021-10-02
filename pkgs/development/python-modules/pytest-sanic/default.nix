@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "pytest-sanic";
-  version = "1.7.1";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "yunstanford";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-OtyulpSHUWERtcIRT5j3YtHciIxFiIFYKqtlEd1NSFw=";
+    sha256 = "128qxpqilqjhpjzjzzfzsgi4bc0vxwmz0k3xwry6fwhyzcf2bzl5";
   };
 
   buildInputs = [

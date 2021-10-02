@@ -10,8 +10,6 @@ stdenv.mkDerivation rec {
     sha256 = "1gg4jcwvk4za6j4260dx1vz2dprrnqv8paqf6z86s7ka3y1nx1aj";
   };
 
-  phases = [ "unpackPhase" "buildPhase" "installPhase" "fixupPhase" ];
-
   buildPhase = ''
     mv apache-tomcat/conf/server.xml apache-tomcat/conf/server.xml.dist
     ln -s /run/atlassian-crowd/server.xml apache-tomcat/conf/server.xml

@@ -19,7 +19,7 @@ in stdenv.mkDerivation rec {
   yarnCache = stdenv.mkDerivation {
     name = "${pname}-${version}-${system}-yarn-cache";
     inherit src;
-    phases = [ "unpackPhase" "buildPhase" ];
+    dontInstall = true;
     nativeBuildInputs = [ yarn ];
     buildPhase = ''
       export HOME=$NIX_BUILD_ROOT

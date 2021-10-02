@@ -1,14 +1,18 @@
-{ lib, stdenv, fetchurl, pkg-config, glib }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, glib, Carbon }:
 
 stdenv.mkDerivation rec {
-  name = "liblqr-1-0.4.2";
+  pname = "liblqr-1";
+  version = "0.4.2";
 
-  src = fetchurl {
-    url = "${meta.homepage}/local--files/en:download-page/${name}.tar.bz2";
-    sha256 = "0dzikxzjz5zmy3vnydh90aqk23q0qm8ykx6plz6p4z90zlp84fhp";
+  src = fetchFromGitHub {
+    owner = "carlobaldassi";
+    repo = "liblqr";
+    rev = "v${version}";
+    sha256 = "10mrl5k3l2hxjhz4w93n50xwywp6y890rw2vsjcgai8627x5f1df";
   };
 
   nativeBuildInputs = [ pkg-config ];
+  buildInputs = lib.optionals stdenv.isDarwin [ Carbon ];
   propagatedBuildInputs = [ glib ];
 
   meta = with lib; {

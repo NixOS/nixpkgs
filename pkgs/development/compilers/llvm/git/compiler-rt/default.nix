@@ -1,4 +1,4 @@
-{ lib, stdenv, llvm_meta, version, src, cmake, python3, llvm, libcxxabi }:
+{ lib, stdenv, llvm_meta, version, src, cmake, python3, libllvm, libcxxabi }:
 
 let
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   inherit src;
   sourceRoot = "source/compiler-rt";
 
-  nativeBuildInputs = [ cmake python3 llvm.dev ];
+  nativeBuildInputs = [ cmake python3 libllvm.dev ];
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin libcxxabi;
 
   NIX_CFLAGS_COMPILE = [
@@ -56,11 +56,12 @@ stdenv.mkDerivation {
   patches = [
     ./codesign.patch # Revert compiler-rt commit that makes codesign mandatory
     ./X86-support-extension.patch # Add support for i486 i586 i686 by reusing i386 config
-    ./gnu-install-dirs.patch
     # ld-wrapper dislikes `-rpath-link //nix/store`, so we normalize away the
     # extra `/`.
     ./normalize-var.patch
   ]# ++ lib.optional stdenv.hostPlatform.isMusl ./sanitizers-nongnu.patch
+    # Prevent a compilation error on darwin
+    ++ lib.optional stdenv.hostPlatform.isDarwin ./darwin-targetconditionals.patch
     ++ lib.optional stdenv.hostPlatform.isAarch32 ./armv7l.patch;
 
   # TSAN requires XPC on Darwin, which we have no public/free source files for. We can depend on the Apple frameworks

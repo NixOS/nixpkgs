@@ -11,8 +11,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  phases = [ "unpackPhase" "installPhase" ];
-
   installPhase = ''
     substituteInPlace bin/riemann --replace '$top/lib/riemann.jar' "$out/share/java/riemann.jar"
 

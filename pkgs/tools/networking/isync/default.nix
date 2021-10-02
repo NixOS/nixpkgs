@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "isync";
-  version = "1.4.2";
+  version = "1.4.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/isync/${pname}-${version}.tar.gz";
-    sha256 = "0hskfpj4r4q3959k3npyqli353daj3r5d9mfia9bbmig87nyfd8r";
+    sha256 = "024p3glj4p7fhrssw5sr55arls9zna1igxxrspxlfd6sbds21ixl";
   };
 
   nativeBuildInputs = [ pkg-config perl ];

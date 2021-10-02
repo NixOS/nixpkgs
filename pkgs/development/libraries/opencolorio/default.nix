@@ -1,5 +1,5 @@
 {
-  stdenv, lib, fetchFromGitHub, symlinkJoin,
+  stdenv, lib, fetchFromGitHub,
   cmake, expat, libyamlcpp, ilmbase, pystring, # Base dependencies
 
   glew, freeglut, # Only required on Linux
@@ -16,17 +16,17 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "opencolorio";
-  version = "2.0.1";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "AcademySoftwareFoundation";
     repo = "OpenColorIO";
     rev = "v${version}";
-    sha256 = "194j9jp5c8ws0fryiz936wyinphnpzwpqnzvw9ryx6rbiwrba487";
+    sha256 = "sha256-Yr7yypXxf3ZvQVsDxVuKTN/DGPaLkIWli26RRoEDMdA=";
   };
 
-  nativeBuildInputs = [ cmake (symlinkJoin { name = "expat"; paths = [ expat.out expat.dev ]; }) ];
-  buildInputs = [ expat.out libyamlcpp ilmbase pystring ]
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ expat libyamlcpp ilmbase pystring ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ glew freeglut ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ Carbon GLUT Cocoa ]
     ++ lib.optionals pythonBindings [ python3Packages.python python3Packages.pybind11 ]

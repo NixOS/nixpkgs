@@ -11,7 +11,8 @@ mkDerivation {
     sha256 = "0d8gxkpm4rc00a8br5wzjpglkwx95kr15s4z3cvxyf6iik1j5r47";
   };
 
-  phases = [ "installPhase" ];
+  dontUnpack = true;
+
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''

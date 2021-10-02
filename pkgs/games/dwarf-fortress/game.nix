@@ -52,7 +52,8 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "dwarf-fortress-${dfVersion}";
+  pname = "dwarf-fortress";
+  version = dfVersion;
 
   src = fetchurl {
     url = "${homepage}df_${baseVersion}_${patchVersion}_${dfPlatform}.tar.bz2";

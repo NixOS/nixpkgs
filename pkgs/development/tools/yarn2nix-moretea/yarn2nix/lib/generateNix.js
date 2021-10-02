@@ -33,7 +33,7 @@ const { execFileSync } = require('child_process')
 
 function prefetchgit(url, rev) {
   return JSON.parse(
-    execFileSync("nix-prefetch-git", ["--rev", rev, url], {
+    execFileSync("nix-prefetch-git", ["--rev", rev, url, "--fetch-submodules"], {
       stdio: [ "ignore", "pipe", "ignore" ],
       timeout: 60000,
     })
@@ -57,7 +57,7 @@ function fetchgit(fileName, url, rev, branch, builtinFetchGit) {
           sha256 = "${prefetchgit(url, rev)}";
         };
       `}in
-        runCommandNoCC "${fileName}" { buildInputs = [gnutar]; } ''
+        runCommand "${fileName}" { buildInputs = [gnutar]; } ''
           # Set u+w because tar-fs can't unpack archives with read-only dirs
           # https://github.com/mafintosh/tar-fs/issues/79
           tar cf $out --mode u+w -C \${repo} .
@@ -104,7 +104,7 @@ function fetchLockedDep(builtinFetchGit) {
 }
 
 const HEAD = `
-{ fetchurl, fetchgit, linkFarm, runCommandNoCC, gnutar }: rec {
+{ fetchurl, fetchgit, linkFarm, runCommand, gnutar }: rec {
   offline_cache = linkFarm "offline" packages;
   packages = [
 `.trim()

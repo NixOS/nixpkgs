@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, elk6Version, buildGoPackage, libpcap, nixosTests, systemd }:
+{ lib, fetchFromGitHub, fetchpatch, elk6Version, buildGoPackage, libpcap, nixosTests, systemd }:
 
 let beat = package : extraArgs : buildGoPackage (rec {
       name = "${package}-${version}";
@@ -14,6 +14,14 @@ let beat = package : extraArgs : buildGoPackage (rec {
       goPackagePath = "github.com/elastic/beats";
 
       subPackages = [ package ];
+
+      patches = [
+        (fetchpatch {
+          # Build fix for aarch64, possibly other systems, merged in beats 7.x https://github.com/elastic/beats/pull/9493
+          url = "https://github.com/elastic/beats/commit/5d796571de1aa2a299393d2045dacc2efac41a04.diff";
+          sha256 = "sha256:0b79fljbi5xd3h8iiv1m38ad0zhmj09f187asc0m9rxlqrz2l9r2";
+        })
+      ];
 
       meta = with lib; {
         homepage = "https://www.elastic.co/products/beats";

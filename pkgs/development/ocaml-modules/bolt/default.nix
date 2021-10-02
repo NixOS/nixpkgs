@@ -42,6 +42,8 @@ EOF
   # The custom `configure` script does not expect the --prefix
   # option. Installation is handled by ocamlfind.
   dontAddPrefix = true;
+  dontAddStaticConfigureFlags = true;
+  configurePlatforms = [];
 
   createFindlibDestdir = true;
 

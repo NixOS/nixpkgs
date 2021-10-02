@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchzip, bison, flex, which, perl
-, sensord ? false, rrdtool ? null
+{ lib
+, stdenv
+, fetchFromGitHub
+, bash
+, bison
+, flex
+, which
+, perl
+, sensord ? false
+, rrdtool ? null
 }:
 
 assert sensord -> rrdtool != null;
@@ -7,16 +15,19 @@ assert sensord -> rrdtool != null;
 stdenv.mkDerivation rec {
   pname = "lm-sensors";
   version = "3.6.0";
-  dashedVersion = lib.replaceStrings ["."] ["-"] version;
+  dashedVersion = lib.replaceStrings [ "." ] [ "-" ] version;
 
-  src = fetchzip {
-    url = "https://github.com/lm-sensors/lm-sensors/archive/V${dashedVersion}.tar.gz";
-    sha256 = "1ipf6wjx037sqyhy0r5jh4983h216anq9l68ckn2x5c3qc4wfmzn";
+  src = fetchFromGitHub {
+    owner = "lm-sensors";
+    repo = "lm-sensors";
+    rev = "V${dashedVersion}";
+    hash = "sha256-9lfHCcODlS7sZMjQhK0yQcCBEoGyZOChx/oM0CU37sY=";
   };
 
   nativeBuildInputs = [ bison flex which ];
-  buildInputs = [ perl ]
-   ++ lib.optional sensord rrdtool;
+  # bash is required for correctly replacing the shebangs in all tools for cross-compilation.
+  buildInputs = [ bash perl ]
+    ++ lib.optional sensord rrdtool;
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"

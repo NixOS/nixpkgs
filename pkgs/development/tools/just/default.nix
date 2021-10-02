@@ -2,19 +2,24 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "just";
-  version = "0.9.8";
+  version = "0.10.2";
 
   src = fetchFromGitHub {
     owner = "casey";
     repo = pname;
     rev = version;
-    sha256 = "sha256-WT3r6qw/lCZy6hdfAJmoAgUqjSLPVT8fKX4DnqDnhOs=";
+    sha256 = "sha256-AR1bNsyex+kfXdiSF3QgeqK8qwIssLfaaY0qNhnp7ak=";
   };
-
-  cargoSha256 = "sha256-0R/9VndP/Oh5/yP7NsBC25jiCSRVNEXhbVksElLXeEc=";
+  cargoSha256 = "sha256-Ukhp8mPXD/dDolfSugOCVwRMgkjmDRCoNzthgqrN6p0=";
 
   nativeBuildInputs = [ installShellFiles ];
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
+
+  postPatch = ''
+    # this hard codes the compiler, which breaks the aarch64 in particular
+    # we rather want to set the compiler ourself
+    rm .cargo/config
+  '';
 
   postInstall = ''
     installManPage man/just.1
@@ -48,6 +53,9 @@ rustPlatform.buildRustPackage rec {
   checkFlags = [
     "--skip=edit" # trying to run "vim" fails as there's no /usr/bin/env or which in the sandbox to find vim and the dependency is not easily patched
     "--skip=run_shebang" # test case very rarely fails with "Text file busy"
+    "--skip=invoke_error_function" # wants JUST_CHOOSER to be fzf
+    "--skip=status_error" # "exit status" instead of "exit code"
+    "--skip=exit_status" # "exit status" instead of "exit code"
   ];
 
   meta = with lib; {

@@ -5,11 +5,11 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "aws-sam-cli";
-  version = "1.23.0";
+  version = "1.29.0";
 
   src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "0j0q6p08c3l9z0yc2cggw797k47cjh6ljpchiqgg0fh6mk32215f";
+    sha256 = "sha256-JXphjERqY5Vj8j2F4Z7FrFJJEpBgK/5236pYfQRVdco=";
   };
 
   # Tests are not included in the PyPI package
@@ -40,10 +40,12 @@ python3.pkgs.buildPythonApplication rec {
   # fix over-restrictive version bounds
   postPatch = ''
     substituteInPlace requirements/base.txt \
+      --replace "click~=7.1" "click~=8.0" \
+      --replace "Flask~=1.1.2" "Flask~=2.0" \
       --replace "dateparser~=0.7" "dateparser>=0.7" \
       --replace "docker~=4.2.0" "docker>=4.2.0" \
-      --replace "requests==2.23.0" "requests~=2.24" \
-      --replace "watchdog==0.10.3" "watchdog"
+      --replace "requests==" "requests #" \
+      --replace "watchdog==" "watchdog #"
   '';
 
   meta = with lib; {

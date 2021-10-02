@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "obs-multi-rtmp";
-  version = "0.2.6";
+  version = "0.2.7.1";
 
   src = fetchFromGitHub {
     owner = "sorayuki";
     repo = "obs-multi-rtmp";
     rev = version;
-    sha256 = "sha256-SMcVL54HwFIc7/wejEol2XiZhlZCMVCwHHtIKJ/CoYY=";
+    sha256 = "sha256-pnSIbAWGufcWIARXpX/zwA/Ff35lrinFaMIdFY00c4Y=";
   };
 
   nativeBuildInputs = [ cmake ];

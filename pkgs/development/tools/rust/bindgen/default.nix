@@ -1,11 +1,11 @@
-{ lib, fetchFromGitHub, rustPlatform, clang, llvmPackages_latest, rustfmt, writeScriptBin
+{ lib, fetchFromGitHub, rustPlatform, clang, llvmPackages_latest, rustfmt, writeTextFile
 , runtimeShell
 , bash
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rust-bindgen";
-  version = "0.57.0";
+  version = "0.59.1";
 
   RUSTFLAGS = "--cap-lints warn"; # probably OK to remove after update
 
@@ -13,10 +13,10 @@ rustPlatform.buildRustPackage rec {
     owner = "rust-lang";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-0d8+Rkb4h1DoFUQ7u2/kPR/fUUz0YvI+hNT4iXL3mxY=";
+    sha256 = "sha256-nCww9sr6kF7nCQeIGtOXddxD3dR/SJ0rqAc+RlZnUkQ=";
   };
 
-  cargoSha256 = "0r60smhlx1992a1s1k5sxjpdqllb2xsqcimgx3ldp5fdkfphk3cw";
+  cargoSha256 = "sha256-3EXYC/mwzVxo/ginvF1WFtS7ABE/ybyuKb58uMqfTDs=";
 
   #for substituteAll
   libclang = llvmPackages_latest.libclang.lib;
@@ -38,12 +38,17 @@ rustPlatform.buildRustPackage rec {
 
   doCheck = true;
   checkInputs =
-    let fakeRustup = writeScriptBin "rustup" ''
-      #!${runtimeShell}
-      shift
-      shift
-      exec "$@"
-    '';
+    let fakeRustup = writeTextFile {
+      name = "fake-rustup";
+      executable = true;
+      destination = "/bin/rustup";
+      text = ''
+        #!${runtimeShell}
+        shift
+        shift
+        exec "$@"
+      '';
+    };
   in [
     rustfmt
     fakeRustup # the test suite insists in calling `rustup run nightly rustfmt`

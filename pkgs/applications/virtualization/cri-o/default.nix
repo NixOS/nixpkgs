@@ -15,13 +15,13 @@
 
 buildGoModule rec {
   pname = "cri-o";
-  version = "1.21.1";
+  version = "1.22.0";
 
   src = fetchFromGitHub {
     owner = "cri-o";
     repo = "cri-o";
     rev = "v${version}";
-    sha256 = "sha256-WoQeZkHuCQGv//UKTpvucJXq7xI9Fkil8V1B1qTM75k=";
+    sha256 = "sha256-lY/kHvJBN7idFn3YUEHMR4w+M3F89RKMsvvyHmH/EPc=";
   };
   vendorSha256 = null;
 

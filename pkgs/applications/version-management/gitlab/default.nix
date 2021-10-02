@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, fetchpatch, fetchFromGitLab, bundlerEnv
 , ruby, tzdata, git, nettools, nixosTests, nodejs, openssl
 , gitlabEnterprise ? false, callPackage, yarn
-, fixup_yarn_lock, replace, file
+, fixup_yarn_lock, replace, file, cacert
 }:
 
 let
@@ -51,7 +51,7 @@ let
     pname = "gitlab-assets";
     inherit version src;
 
-    nativeBuildInputs = [ rubyEnv.wrappedRuby rubyEnv.bundler nodejs yarn git ];
+    nativeBuildInputs = [ rubyEnv.wrappedRuby rubyEnv.bundler nodejs yarn git cacert ];
 
     # Since version 12.6.0, the rake tasks need the location of git,
     # so we have to apply the location patches here too.

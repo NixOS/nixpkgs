@@ -12,4 +12,4 @@ dont-distribute-packages:
 EOF
 
 echo "Regenerating list of transitive broken packages ..."
-echo -e $(nix-instantiate --eval --strict maintainers/scripts/haskell/transitive-broken-packages.nix) | sed 's/\"//' | sort -i >> $config_file
+echo -e $(nix-instantiate --eval --strict maintainers/scripts/haskell/transitive-broken-packages.nix) | sed 's/\"//' | LC_ALL=C.UTF-8 sort -i >> $config_file

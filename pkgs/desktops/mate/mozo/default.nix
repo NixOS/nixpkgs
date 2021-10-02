@@ -2,14 +2,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "mozo";
-  version = "1.24.1";
+  version = "1.26.0";
 
   format = "other";
   doCheck = false;
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "14ps43gdh1sfvq49yhl58gxq3rc0d25i2d7r4ghlzf07ssxl53b0";
+    sha256 = "1hnxqdk69g7j809k6picgq8y626hnyznlzxd0pi743gshpwwnhj6";
   };
 
   nativeBuildInputs = [ pkg-config gettext gobject-introspection wrapGAppsHook ];
@@ -27,6 +27,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/mate-desktop/mozo";
     license = with licenses; [ lgpl2Plus ];
     platforms = platforms.unix;
-    maintainers = [ maintainers.romildo ];
+    maintainers = teams.mate.members;
   };
 }

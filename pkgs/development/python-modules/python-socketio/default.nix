@@ -3,19 +3,20 @@
 , buildPythonPackage
 , fetchFromGitHub
 , mock
+, msgpack
 , pytestCheckHook
 , python-engineio
 }:
 
 buildPythonPackage rec {
   pname = "python-socketio";
-  version = "5.0.4";
+  version = "5.4.0";
 
   src = fetchFromGitHub {
     owner = "miguelgrinberg";
     repo = "python-socketio";
     rev = "v${version}";
-    sha256 = "0mpqr53mrdzk9ki24y1inpsfvjlvm7pvxf8q4d52m80i5pcd5v5q";
+    sha256 = "sha256-0Q1R8XPciU5AEkj7Exlc906eyA5juYKzzA/Ygnzx7XU=";
   };
 
   propagatedBuildInputs = [
@@ -25,6 +26,7 @@ buildPythonPackage rec {
 
   checkInputs = [
     mock
+    msgpack
     pytestCheckHook
   ];
 

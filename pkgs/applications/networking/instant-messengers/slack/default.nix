@@ -44,14 +44,18 @@ let
 
   pname = "slack";
 
-  x86_64-darwin-version = "4.17.0";
-  x86_64-darwin-sha256 = "0r5cafxw73qnn14ljprn7w8bfn67zbkcniq60k9pf2zbqgb4cyj9";
+  x86_64-darwin-version = "4.19.0";
+  x86_64-darwin-sha256 = "0dj51lhxiba69as6x76ni8h20d36bcpf2xz3rxr1s8881mprpfsg";
 
-  x86_64-linux-version = "4.17.0";
-  x86_64-linux-sha256 = "07ccms58pq27ilkyhcf6cgwb7qrddwil5kgy8yv95ljikqzi5rxi";
+  x86_64-linux-version = "4.19.2";
+  x86_64-linux-sha256 = "02npmprwl1h7c2y03khvx8ifhk1gj1axbvlwigp2hkkjdw7y4b5a";
+
+  aarch64-darwin-version = "4.19.0";
+  aarch64-darwin-sha256 = "1mvs1bdyyyrpqmrbqg4sxpy6ylgchwz39nr232s441iqdz45p87v";
 
   version = {
     x86_64-darwin = x86_64-darwin-version;
+    aarch64-darwin = aarch64-darwin-version;
     x86_64-linux = x86_64-linux-version;
   }.${system} or throwSystem;
 
@@ -64,6 +68,10 @@ let
           url = "${base}/releases/macos/${version}/prod/x64/Slack-${version}-macOS.dmg";
           sha256 = x86_64-darwin-sha256;
         };
+        aarch64-darwin = fetchurl {
+          url = "${base}/releases/macos/${version}/prod/arm64/Slack-${version}-macOS.dmg";
+          sha256 = aarch64-darwin-sha256;
+        };
         x86_64-linux = fetchurl {
           url = "${base}/linux_releases/slack-desktop-${version}-amd64.deb";
           sha256 = x86_64-linux-sha256;
@@ -75,7 +83,7 @@ let
     homepage = "https://slack.com";
     license = licenses.unfree;
     maintainers = with maintainers; [ mmahut ];
-    platforms = [ "x86_64-darwin" "x86_64-linux" ];
+    platforms = [ "x86_64-darwin" "x86_64-linux" "aarch64-darwin"];
   };
 
   linux = stdenv.mkDerivation rec {
@@ -139,6 +147,8 @@ let
     dontPatchELF = true;
 
     installPhase = ''
+      runHook preInstall
+
       # The deb file contains a setuid binary, so 'dpkg -x' doesn't work here
       dpkg --fsys-tarfile $src | tar --extract
       rm -rf usr/share/lintian
@@ -164,6 +174,8 @@ let
       substituteInPlace $out/share/applications/slack.desktop \
         --replace /usr/bin/ $out/bin/ \
         --replace /usr/share/ $out/share/
+
+      runHook postInstall
     '';
   };
 
@@ -177,9 +189,11 @@ let
     sourceRoot = "Slack.app";
 
     installPhase = ''
+      runHook preInstall
       mkdir -p $out/Applications/Slack.app
       cp -R . $out/Applications/Slack.app
       /usr/bin/defaults write com.tinyspeck.slackmacgap SlackNoAutoUpdates -bool YES
+      runHook postInstall
     '';
   };
 in

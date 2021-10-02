@@ -7,6 +7,7 @@
   #       https://github.com/NixOS/nixpkgs/pull/119942
   nixos-install-tools,
   runCommand,
+  nixosTests,
 }:
 let
   inherit (nixos {}) config;
@@ -40,6 +41,7 @@ in
   };
 
   passthru.tests = {
+    nixos-tests = lib.recurseIntoAttrs nixosTests.installer;
     nixos-install-help = runCommand "test-nixos-install-help" {
       nativeBuildInputs = [
         man

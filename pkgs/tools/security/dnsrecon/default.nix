@@ -1,8 +1,11 @@
-{ lib, fetchFromGitHub, python3 }:
+{ lib
+, fetchFromGitHub
+, python3
+}:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "dnsrecon";
-  version = "0.9.1";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "darkoperator";
@@ -14,13 +17,12 @@ python3.pkgs.buildPythonApplication rec {
   format = "other";
 
   pythonPath = with python3.pkgs; [
-    dns netaddr lxml
+    dnspython netaddr lxml
   ];
 
   postPatch = ''
     substituteInPlace dnsrecon.py \
-      --replace "namelist.txt" "../share/namelist.txt" \
-      --replace "0.9.0" "${version}"
+      --replace "namelist.txt" "../share/namelist.txt"
   '';
 
   installPhase = ''
@@ -37,8 +39,8 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "DNS Enumeration Script";
     homepage = "https://github.com/darkoperator/dnsrecon";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.all;
-    maintainers = with maintainers; [ c0bw3b ];
+    maintainers = with maintainers; [ c0bw3b fab ];
   };
 }

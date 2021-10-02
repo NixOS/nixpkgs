@@ -1,15 +1,16 @@
 { lib, stdenv, fetchurl, lua, pkg-config, nixosTests
 , withSystemd ? stdenv.isLinux && !stdenv.hostPlatform.isMusl, systemd
-, tlsSupport ? true, openssl
+# dependency ordering is broken at the moment when building with openssl
+, tlsSupport ? !stdenv.hostPlatform.isStatic, openssl
 }:
 
 stdenv.mkDerivation rec {
   pname = "redis";
-  version = "6.2.4";
+  version = "6.2.5";
 
   src = fetchurl {
     url = "https://download.redis.io/releases/${pname}-${version}.tar.gz";
-    sha256 = "0vp1d9mlfsppry3nsj9f7bmh9wjgsy3jggp24sac1hhgl43c8cms";
+    sha256 = "1bjismh8lrvsjkm1wf5ak0igak5rr9cc39i0brwb6x0vk9q7b6jb";
   };
 
   # Cross-compiling fixes

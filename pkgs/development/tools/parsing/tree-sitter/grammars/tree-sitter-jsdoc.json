@@ -4,6 +4,7 @@
   "date": "2021-03-04T14:39:14-08:00",
   "path": "/nix/store/dpm11vziss6jbgp3dxvmgkb0dgg1ygc8-tree-sitter-jsdoc",
   "sha256": "0qpsy234p30j6955wpjlaqwbr21bi56p0ln5vhrd84s99ac7s6b6",
+  "fetchLFS": false,
   "fetchSubmodules": false,
   "deepClone": false,
   "leaveDotGit": false

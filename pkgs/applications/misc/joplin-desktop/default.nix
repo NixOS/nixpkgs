@@ -2,7 +2,7 @@
 
 let
   pname = "joplin-desktop";
-  version = "1.8.5";
+  version = "2.4.6";
   name = "${pname}-${version}";
 
   inherit (stdenv.hostPlatform) system;
@@ -16,8 +16,8 @@ let
   src = fetchurl {
     url = "https://github.com/laurent22/joplin/releases/download/v${version}/Joplin-${version}.${suffix}";
     sha256 = {
-      x86_64-linux = "11csbr72i5kac2bk7wpa877lay2z1n58s0yildkfnjy552ihdxny";
-      x86_64-darwin = "1n0ni3ixml99ag83bcn5wg6f0kldjhwkkddd9km37ykr8vxxl952";
+      x86_64-linux = "sha256-BMpRWtfx5fXEJy3hp/+q86sd+Yd/QPJbSqi2nWE2dcQ=";
+      x86_64-darwin = "sha256-4UNKdoGtQSN5/m+xQZrY77ZE5A7jvpDOUCRvwrS5e6g=";
     }.${system} or throwSystem;
   };
 
@@ -55,7 +55,8 @@ let
       install -Dm444 ${appimageContents}/@joplinapp-desktop.desktop -t $out/share/applications
       install -Dm444 ${appimageContents}/@joplinapp-desktop.png -t $out/share/pixmaps
       substituteInPlace $out/share/applications/@joplinapp-desktop.desktop \
-        --replace 'Exec=AppRun' 'Exec=${pname}'
+        --replace 'Exec=AppRun' 'Exec=${pname}' \
+        --replace 'Icon=joplin' "Icon=$out/share/pixmaps/@joplinapp-desktop.png"
     '';
   };
 

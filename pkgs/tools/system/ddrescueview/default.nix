@@ -6,7 +6,6 @@ let
 in stdenv.mkDerivation rec {
   pname = "ddrescueview";
   version = "${versionBase}${versionSuffix}";
-  name = "ddrescueview-0.4alpha4";
 
   src = fetchurl {
     name = "ddrescueview-${versionBase}${versionSuffix}.tar.xz";

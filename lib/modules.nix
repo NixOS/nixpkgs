@@ -162,13 +162,24 @@ rec {
             baseMsg = "The option `${showOption (prefix ++ firstDef.prefix)}' does not exist. Definition values:${showDefs [ firstDef ]}";
           in
             if attrNames options == [ "_module" ]
-              then throw ''
-                ${baseMsg}
+              then
+                let
+                  optionName = showOption prefix;
+                in
+                  if optionName == ""
+                    then throw ''
+                      ${baseMsg}
 
-                However there are no options defined in `${showOption prefix}'. Are you sure you've
-                declared your options properly? This can happen if you e.g. declared your options in `types.submodule'
-                under `config' rather than `options'.
-              ''
+                      It seems as if you're trying to declare an option by placing it into `config' rather than `options'!
+                    ''
+                  else
+                    throw ''
+                      ${baseMsg}
+
+                      However there are no options defined in `${showOption prefix}'. Are you sure you've
+                      declared your options properly? This can happen if you e.g. declared your options in `types.submodule'
+                      under `config' rather than `options'.
+                    ''
             else throw baseMsg
         else null;
 
@@ -710,8 +721,11 @@ rec {
 
   mkOptionDefault = mkOverride 1500; # priority of option defaults
   mkDefault = mkOverride 1000; # used in config sections of non-user modules to set a default
+  mkImageMediaOverride = mkOverride 60; # image media profiles can be derived by inclusion into host config, hence needing to override host config, but do allow user to mkForce
   mkForce = mkOverride 50;
   mkVMOverride = mkOverride 10; # used by ‘nixos-rebuild build-vm’
+
+  mkFixStrictness = lib.warn "lib.mkFixStrictness has no effect and will be removed. It returns its argument unmodified, so you can just remove any calls." id;
 
   mkOrder = priority: content:
     { _type = "order";

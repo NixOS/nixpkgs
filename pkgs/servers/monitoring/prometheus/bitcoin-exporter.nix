@@ -22,7 +22,7 @@ python3Packages.buildPythonApplication rec {
     })
   ];
 
-  propagatedBuildInputs = with python3Packages; [ prometheus_client bitcoinlib riprova ];
+  propagatedBuildInputs = with python3Packages; [ prometheus-client bitcoinlib riprova ];
 
   installPhase = ''
     mkdir -p $out/bin

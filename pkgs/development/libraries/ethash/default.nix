@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "ethash";
-  version = "0.6.0";
+  version = "0.7.1";
 
   src =
     fetchFromGitHub {
       owner = "chfast";
       repo = "ethash";
       rev = "v${version}";
-      sha256 = "sha256-N30v9OZwTmDbltPPmeSa0uOGJhos1VzyS5zY9vVCWfA=";
+      sha256 = "sha256-ba8SBtJd0ERunO9KpJZkutkO6ZnZOEGzWn2IjO1Uu28=";
     };
 
   nativeBuildInputs = [

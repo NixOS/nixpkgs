@@ -4,6 +4,7 @@
   "date": "2021-05-04T14:05:05-07:00",
   "path": "/nix/store/bzljwaraqj6zqpq85cz9xb0vwh7c10yj-tree-sitter-java",
   "sha256": "09v3xg1356ghc2n0yi8iqkp80lbkav0jpfgz8iz2j1sl7ihbvkyw",
+  "fetchLFS": false,
   "fetchSubmodules": false,
   "deepClone": false,
   "leaveDotGit": false

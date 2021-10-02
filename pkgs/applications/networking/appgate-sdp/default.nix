@@ -32,8 +32,7 @@
 , openssl
 , pango
 , procps
-, python37
-, python37Packages
+, python3
 , stdenv
 , systemd
 , xdg-utils
@@ -101,8 +100,8 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   buildInputs = [
-    python37
-    python37Packages.dbus-python
+    python3
+    python3.pkgs.dbus-python
   ];
 
   nativeBuildInputs = [

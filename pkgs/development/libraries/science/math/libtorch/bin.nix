@@ -117,7 +117,7 @@ in stdenv.mkDerivation {
     description = "C++ API of the PyTorch machine learning framework";
     homepage = "https://pytorch.org/";
     license = licenses.unfree; # Includes CUDA and Intel MKL.
-    maintainers = with maintainers; [ danieldk ];
+    maintainers = with maintainers; [ ];
     platforms = with platforms; linux ++ darwin;
   };
 }

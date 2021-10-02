@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "rclone";
-  version = "1.55.1";
+  version = "1.56.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "1fyi12qz2igcf9rqsp9gmcgfnmgy4g04s2b03b95ml6klbf73cns";
+    sha256 = "sha256-2UIIJMa5Wlr4rvBRXvE9kwh798x8jVa63hVLZ51Ltp0=";
   };
 
-  vendorSha256 = "199z3j62xw9h8yviyv4jfls29y2ri9511hcyp5ix8ahgk6ypz8vw";
+  vendorSha256 = "sha256-sTZZZ0P8F1bsFZO3/vbj9itNN7PCBJ0Q0tq4YayOPr8=";
 
   subPackages = [ "." ];
 
@@ -23,8 +23,9 @@ buildGoModule rec {
   buildInputs = lib.optional enableCmount (if stdenv.isDarwin then macfuse-stubs else fuse);
   nativeBuildInputs = [ installShellFiles makeWrapper ];
 
-  buildFlagsArray = lib.optionals enableCmount [ "-tags=cmount" ]
-    ++ [ "-ldflags=-s -w -X github.com/rclone/rclone/fs.Version=${version}" ];
+  tags = lib.optionals enableCmount [ "cmount" ];
+
+  ldflags = [ "-s" "-w" "-X github.com/rclone/rclone/fs.Version=${version}" ];
 
   postInstall =
     let

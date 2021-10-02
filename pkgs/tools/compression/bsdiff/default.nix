@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "4.3";
 
   src = fetchurl {
-    url    = "https://www.daemonology.net/bsdiff/${pname}-${version}.tar.gz";
+    url = "https://www.daemonology.net/bsdiff/${pname}-${version}.tar.gz";
     sha256 = "0j2zm3z271x5aw63mwhr3vymzn45p2vvrlrpm9cz2nywna41b0hq";
   };
 
@@ -27,11 +27,11 @@ stdenv.mkDerivation rec {
     cp bspatch.1 $out/share/man/man1
   '';
 
-  meta = {
+  meta = with lib; {
     description = "An efficient binary diff/patch tool";
-    homepage    = "http://www.daemonology.net/bsdiff";
-    license     = lib.licenses.bsd2;
-    platforms   = lib.platforms.unix;
-    maintainers = [ lib.maintainers.thoughtpolice ];
+    homepage = "https://www.daemonology.net/bsdiff/";
+    license = licenses.bsd2;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.thoughtpolice ];
   };
 }

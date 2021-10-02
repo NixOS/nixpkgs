@@ -76,6 +76,8 @@ buildPythonApplication rec {
     "TestConsumeUserDataHttp"
     # Chef Omnibus
     "TestInstallChefOmnibus"
+    # https://github.com/canonical/cloud-init/pull/893
+    "TestGetPackageMirrorInfo"
   ];
 
   disabledTestPaths = [
@@ -102,6 +104,7 @@ buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://cloudinit.readthedocs.org";
     description = "Provides configuration and customization of cloud instance";
+    license = with licenses; [ asl20 gpl3Plus ];
     maintainers = with maintainers; [ madjar phile314 ];
     platforms = platforms.all;
   };

@@ -3,6 +3,7 @@
 , autoPatchelfHook
 , fetchurl
 , flac
+, gcc11
 , lib
 , libmicrohttpd
 , llvmPackages_10
@@ -17,13 +18,11 @@
 
 mkDerivation rec {
   pname = "hqplayer-desktop";
-  version = "4.12.1-35";
+  version = "4.13.1-38";
 
   src = fetchurl {
-    # FIXME: use the fc34 sources when we get glibc 2.33 in nixpkgs
-    # c.f. https://github.com/NixOS/nixpkgs/pull/111616
-    url = "https://www.signalyst.eu/bins/hqplayer/fc33/hqplayer4desktop-${version}.fc33.x86_64.rpm";
-    sha256 = "sha256-DLnZNX+uAan9dhPLMvINeXsIn3Yv2CgsvyTcX0hbEK8=";
+    url = "https://www.signalyst.eu/bins/hqplayer/fc34/hqplayer4desktop-${version}.fc34.x86_64.rpm";
+    sha256 = "sha256-DEZWEGk5SfhcNQddehCBVbfeTH8KfVCdaxQ+F3MrRe8=";
   };
 
   unpackPhase = ''
@@ -35,11 +34,12 @@ mkDerivation rec {
   buildInputs = [
     alsa-lib
     flac
+    gcc11.cc.lib
     libmicrohttpd
     llvmPackages_10.openmp
-    qtquickcontrols2
     qtcharts
     qtdeclarative
+    qtquickcontrols2
     qtwebengine
     qtwebview
     wavpack

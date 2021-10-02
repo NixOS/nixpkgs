@@ -120,10 +120,12 @@ in {
     environment.systemPackages = [cfg.package];
 
     users.users.apache-kafka = {
-      uid = config.ids.uids.apache-kafka;
+      isSystemUser = true;
+      group = "apache-kafka";
       description = "Apache Kafka daemon user";
       home = head cfg.logDirs;
     };
+    users.groups.apache-kafka = {};
 
     systemd.tmpfiles.rules = map (logDir: "d '${logDir}' 0700 apache-kafka - - -") cfg.logDirs;
 

@@ -1,21 +1,22 @@
-{ stdenv, makeWrapper, runCommandNoCC, lib, nixosTests, writeShellScript
+{ stdenv, pkgs, makeWrapper, runCommand, lib, writeShellScript
 , fetchFromGitHub, bundlerEnv, callPackage
 
 , ruby, replace, gzip, gnutar, git, cacert, util-linux, gawk
-, imagemagick, optipng, pngquant, libjpeg, jpegoptim, gifsicle, libpsl
-, redis, postgresql, which, brotli, procps, rsync, nodePackages, v8
+, imagemagick, optipng, pngquant, libjpeg, jpegoptim, gifsicle, jhead
+, libpsl, redis, postgresql, which, brotli, procps, rsync
+, nodePackages, v8
 
 , plugins ? []
-}:
+}@args:
 
 let
-  version = "2.7.4";
+  version = "2.7.8";
 
   src = fetchFromGitHub {
     owner = "discourse";
     repo = "discourse";
     rev = "v${version}";
-    sha256 = "sha256-3cvrdWBXRM5F8qFEqbe8ru1U0wBqCkRxK7GAV0beJNk=";
+    sha256 = "sha256-p4eViEvzIU6W89FZRtMBXsT7bvf2H12bTPZ/h3iD8rA=";
   };
 
   runtimeDeps = [
@@ -41,6 +42,7 @@ let
     jpegoptim
     gifsicle
     nodePackages.svgo
+    jhead
   ];
 
   runtimeEnv = {
@@ -55,6 +57,7 @@ let
     , version ? null
     , meta ? null
     , bundlerEnvArgs ? {}
+    , preserveGemsDir ? false
     , src
     , ...
     }@args:
@@ -64,21 +67,30 @@ let
       });
     in
       stdenv.mkDerivation (builtins.removeAttrs args [ "bundlerEnvArgs" ] // {
-        inherit name pname version src meta;
         pluginName = if name != null then name else "${pname}-${version}";
-        phases = [ "unpackPhase" "installPhase" ];
+        dontConfigure = true;
+        dontBuild = true;
         installPhase = ''
           runHook preInstall
           mkdir -p $out
           cp -r * $out/
-        '' + lib.optionalString (bundlerEnvArgs != {}) ''
-          ln -sf ${rubyEnv}/lib/ruby/gems $out/gems
-        '' + ''
+        '' + lib.optionalString (bundlerEnvArgs != {}) (
+          if preserveGemsDir then ''
+            cp -r ${rubyEnv}/lib/ruby/gems/* $out/gems/
+          ''
+          else ''
+            if [[ -e $out/gems ]]; then
+              echo "Warning: The repo contains a 'gems' directory which will be removed!"
+              echo "         If you need to preserve it, set 'preserveGemsDir = true'."
+              rm -r $out/gems
+            fi
+            ln -sf ${rubyEnv}/lib/ruby/gems $out/gems
+          '' + ''
           runHook postInstall
-        '';
+        '');
       });
 
-  rake = runCommandNoCC "discourse-rake" {
+  rake = runCommand "discourse-rake" {
     nativeBuildInputs = [ makeWrapper ];
   } ''
     mkdir -p $out/bin
@@ -151,12 +163,18 @@ let
       brotli
       procps
       nodePackages.uglify-js
+      nodePackages.terser
     ];
 
     patches = [
       # Use the Ruby API version in the plugin gem path, to match the
       # one constructed by bundlerEnv
       ./plugin_gem_api_version.patch
+
+      # Change the path to the auto generated plugin assets, which
+      # defaults to the plugin's directory and isn't writable at the
+      # time of asset generation
+      ./auto_generated_path.patch
     ];
 
     # We have to set up an environment that is close enough to
@@ -226,9 +244,6 @@ let
       # Add a noninteractive admin creation task
       ./admin_create.patch
 
-      # Disable jhead, which is currently marked as vulnerable
-      ./disable_jhead.patch
-
       # Add the path to the CA cert bundle to make TLS work
       ./action_mailer_ca_cert.patch
 
@@ -243,6 +258,11 @@ let
       # Use mv instead of rename, since rename doesn't work across
       # device boundaries
       ./use_mv_instead_of_rename.patch
+
+      # Change the path to the auto generated plugin assets, which
+      # defaults to the plugin's directory and isn't writable at the
+      # time of asset generation
+      ./auto_generated_path.patch
     ];
 
     postPatch = ''
@@ -269,11 +289,10 @@ let
       cp -r . $out/share/discourse
       rm -r $out/share/discourse/log
       ln -sf /var/log/discourse $out/share/discourse/log
-      ln -sf /run/discourse/tmp $out/share/discourse/tmp
+      ln -sf /var/lib/discourse/tmp $out/share/discourse/tmp
       ln -sf /run/discourse/config $out/share/discourse/config
       ln -sf /run/discourse/assets/javascripts/plugins $out/share/discourse/app/assets/javascripts/plugins
       ln -sf /run/discourse/public $out/share/discourse/public
-      ln -sf /run/discourse/plugins $out/share/discourse/plugins
       ln -sf ${assets} $out/share/discourse/public.dist/assets
       ${lib.concatMapStringsSep "\n" (p: "ln -sf ${p} $out/share/discourse/plugins/${p.pluginName or ""}") plugins}
 
@@ -293,7 +312,7 @@ let
       enabledPlugins = plugins;
       plugins = callPackage ./plugins/all-plugins.nix { inherit mkDiscoursePlugin; };
       ruby = rubyEnv.wrappedRuby;
-      tests = nixosTests.discourse;
+      tests = import ../../../../nixos/tests/discourse.nix { package = pkgs.discourse.override args; };
     };
   };
 in discourse

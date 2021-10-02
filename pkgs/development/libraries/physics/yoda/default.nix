@@ -25,6 +25,13 @@ stdenv.mkDerivation rec {
       sha256 = "sha256-MZTOIt468bdPCS7UVfr5hQZUsVy3TpY/TjRrNySIL70=";
       excludes = [ "ChangeLog" ];
     })
+    # fix a minor bug
+    # https://gitlab.com/hepcedar/yoda/-/merge_requests/45
+    (fetchpatch {
+      name = "yoda-fix-yodascale-for-gz.patch";
+      url = "https://gitlab.com/hepcedar/yoda/-/commit/b03162aeaa2c99e38512ba6e4818d2e0a825b757.diff";
+      sha256 = "sha256-IMuPalQ/GKcdJOKAlwE/IRWtxDdu0inoj+A9nbRl6Gs=";
+    })
   ];
 
   nativeBuildInputs = with python.pkgs; [ cython makeWrapper ];

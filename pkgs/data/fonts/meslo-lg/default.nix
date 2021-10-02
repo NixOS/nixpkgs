@@ -21,7 +21,6 @@ stdenv.mkDerivation rec {
 
   sourceRoot = ".";
 
-  phases = [ "unpackPhase" "installPhase" ];
   unpackPhase = ''
     unzip -j ${meslo-lg}
     unzip -j ${meslo-lg-dz}

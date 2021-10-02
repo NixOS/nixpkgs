@@ -1,21 +1,21 @@
-{ buildPythonPackage
+{ lib
+, buildPythonPackage
 , fetchFromGitHub
-, isPy27
-, lib
+, pythonOlder
 , pytestCheckHook
 , tokenize-rt
 }:
 
 buildPythonPackage rec {
   pname = "pyupgrade";
-  version = "2.19.1";
-  disabled = isPy27;
+  version = "2.29.0";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "asottile";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-zDT8VskHEX4uldMvxnb9A+FKMuvZbtEcmdVl5mghTs4=";
+    sha256 = "sha256-Hq58DJe8ZLZSJdhqSxfTaZPnWae2aQFCe7lH+6Y6ABg=";
   };
 
   checkInputs = [ pytestCheckHook ];

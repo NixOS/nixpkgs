@@ -9,12 +9,14 @@
 , slang
 , autoreconfHook
 }:
-stdenv.mkDerivation {
-  name = "partimage-0.6.9";
+stdenv.mkDerivation rec {
+  pname = "partimage";
+  version = "0.6.9";
+
   enableParallelBuilding = true;
 
   src = fetchurl {
-    url = "mirror://sourceforge/partimage/partimage-0.6.9.tar.bz2";
+    url = "mirror://sourceforge/partimage/partimage-${version}.tar.bz2";
     sha256 = "0db6xiphk6xnlpbxraiy31c5xzj0ql6k4rfkmqzh665yyj0nqfkm";
   };
 

@@ -14,15 +14,14 @@ buildGoPackage rec {
     sha256 = "0zrzyaqs73pz4rmj4xaj15x4n1542m0nb7jqm2j77k07j75r5w41";
   };
 
-  buildFlagsArray = let t = "${goPackagePath}/vendor/github.com/prometheus/common/version"; in ''
-    -ldflags=
-       -X ${t}.Version=${version}
-       -X ${t}.Revision=${src.rev}
-       -X ${t}.Branch=unknown
-       -X ${t}.BuildUser=nix@nixpkgs
-       -X ${t}.BuildDate=unknown
-       -X ${t}.GoVersion=${lib.getVersion go}
-  '';
+  ldflags = let t = "${goPackagePath}/vendor/github.com/prometheus/common/version"; in [
+    "-X ${t}.Version=${version}"
+    "-X ${t}.Revision=${src.rev}"
+    "-X ${t}.Branch=unknown"
+    "-X ${t}.BuildUser=nix@nixpkgs"
+    "-X ${t}.BuildDate=unknown"
+    "-X ${t}.GoVersion=${lib.getVersion go}"
+  ];
 
   nativeBuildInputs = [ installShellFiles ];
 

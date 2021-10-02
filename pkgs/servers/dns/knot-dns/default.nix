@@ -1,17 +1,15 @@
 { lib, stdenv, fetchurl, pkg-config, gnutls, liburcu, lmdb, libcap_ng, libidn2, libunistring
-, systemd, nettle, libedit, zlib, libiconv, libintl, libmaxminddb, libbpf, nghttp2
+, systemd, nettle, libedit, zlib, libiconv, libintl, libmaxminddb, libbpf, nghttp2, libmnl
 , autoreconfHook, nixosTests
 }:
 
-let inherit (lib) optional optionals; in
-
 stdenv.mkDerivation rec {
   pname = "knot-dns";
-  version = "3.0.7";
+  version = "3.1.2";
 
   src = fetchurl {
     url = "https://secure.nic.cz/files/knot-dns/knot-${version}.tar.xz";
-    sha256 = "2bad8be0be95c8f54a26d1e16299e65f31ae1b34bd6ad3819aa50e7b40521484";
+    sha256 = "580087695df350898b2da8a5c2bdf1dc5eb262ed5ff2cb1538cee480a50fa094";
   };
 
   outputs = [ "bin" "out" "dev" ];
@@ -38,12 +36,10 @@ stdenv.mkDerivation rec {
     libmaxminddb # optional for geoip module (it's tiny)
     # without sphinx &al. for developer documentation
     # TODO: add dnstap support?
-  ]
-    ++ optionals stdenv.isLinux [
-      libcap_ng systemd
-      libbpf # XDP support
-    ]
-    ++ optional stdenv.isDarwin zlib; # perhaps due to gnutls
+  ] ++ lib.optionals stdenv.isLinux [
+    libcap_ng systemd
+    libbpf libmnl # XDP support (it's Linux kernel API)
+  ] ++ lib.optional stdenv.isDarwin zlib; # perhaps due to gnutls
 
   enableParallelBuilding = true;
 

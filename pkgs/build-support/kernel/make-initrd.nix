@@ -78,7 +78,7 @@ let
 in stdenvNoCC.mkDerivation rec {
   inherit name makeUInitrd extension uInitrdArch prepend;
 
-  ${if makeUInitrd then "uinitrdCompression" else null} = uInitrdCompression;
+  ${if makeUInitrd then "uInitrdCompression" else null} = uInitrdCompression;
 
   builder = ./make-initrd.sh;
 

@@ -273,6 +273,27 @@ let
       '';
     };
 
+    influxdb = {
+      exporterConfig = {
+        enable = true;
+        sampleExpiry = "3s";
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-influxdb-exporter.service")
+        wait_for_open_port(9122)
+        succeed(
+          "curl -XPOST http://localhost:9122/write --data-binary 'influxdb_exporter,distro=nixos,added_in=21.09 value=1'"
+        )
+        succeed(
+          "curl -sSf http://localhost:9122/metrics | grep 'nixos'"
+        )
+        execute("sleep 5")
+        fail(
+          "curl -sSf http://localhost:9122/metrics | grep 'nixos'"
+        )
+      '';
+    };
+
     jitsi = {
       exporterConfig = {
         enable = true;
@@ -326,49 +347,35 @@ let
       '';
     };
 
-    kea = {
+    kea = let
+      controlSocketPath = "/run/kea/dhcp6.sock";
+    in
+    {
       exporterConfig = {
         enable = true;
         controlSocketPaths = [
-          "/run/kea/kea-dhcp6.sock"
+          controlSocketPath
         ];
       };
       metricProvider = {
-        users.users.kea = {
-          isSystemUser = true;
-        };
-        users.groups.kea = {};
+        systemd.services.prometheus-kea-exporter.after = [ "kea-dhcp6-server.service" ];
 
-        systemd.services.prometheus-kea-exporter.after = [ "kea-dhcp6.service" ];
-
-        systemd.services.kea-dhcp6 = let
-          configFile = pkgs.writeText "kea-dhcp6.conf" (builtins.toJSON {
-            Dhcp6 = {
-              "control-socket" = {
-                "socket-type" = "unix";
-                "socket-name" = "/run/kea/kea-dhcp6.sock";
+        services.kea = {
+          dhcp6 = {
+            enable = true;
+            settings = {
+              control-socket = {
+                socket-type = "unix";
+                socket-name = controlSocketPath;
               };
             };
-          });
-        in
-        {
-          after = [ "network.target" ];
-          wantedBy = [ "multi-user.target" ];
-
-          serviceConfig = {
-            DynamicUser = false;
-            User = "kea";
-            Group = "kea";
-            ExecStart = "${pkgs.kea}/bin/kea-dhcp6 -c ${configFile}";
-            StateDirectory = "kea";
-            RuntimeDirectory = "kea";
-            UMask = "0007";
           };
         };
       };
+
       exporterTest = ''
-        wait_for_unit("kea-dhcp6.service")
-        wait_for_file("/run/kea/kea-dhcp6.sock")
+        wait_for_unit("kea-dhcp6-server.service")
+        wait_for_file("${controlSocketPath}")
         wait_for_unit("prometheus-kea-exporter.service")
         wait_for_open_port(9547)
         succeed(
@@ -454,15 +461,21 @@ let
         enable = true;
         lndTlsPath = "/var/lib/lnd/tls.cert";
         lndMacaroonDir = "/var/lib/lnd";
+        extraFlags = [ "--lnd.network=regtest" ];
       };
       metricProvider = {
-        systemd.services.prometheus-lnd-exporter.serviceConfig.DynamicUser = false;
-        services.bitcoind.main.enable = true;
-        services.bitcoind.main.extraConfig = ''
-          rpcauth=bitcoinrpc:e8fe33f797e698ac258c16c8d7aadfbe$872bdb8f4d787367c26bcfd75e6c23c4f19d44a69f5d1ad329e5adf3f82710f7
-          bitcoind.zmqpubrawblock=tcp://127.0.0.1:28332
-          bitcoind.zmqpubrawtx=tcp://127.0.0.1:28333
-        '';
+        virtualisation.memorySize = 1024;
+        systemd.services.prometheus-lnd-exporter.serviceConfig.RestartSec = 15;
+        systemd.services.prometheus-lnd-exporter.after = [ "lnd.service" ];
+        services.bitcoind.regtest = {
+          enable = true;
+          extraConfig = ''
+            rpcauth=bitcoinrpc:e8fe33f797e698ac258c16c8d7aadfbe$872bdb8f4d787367c26bcfd75e6c23c4f19d44a69f5d1ad329e5adf3f82710f7
+            zmqpubrawblock=tcp://127.0.0.1:28332
+            zmqpubrawtx=tcp://127.0.0.1:28333
+          '';
+          extraCmdlineOptions = [ "-regtest" ];
+        };
         systemd.services.lnd = {
           serviceConfig.ExecStart = ''
             ${pkgs.lnd}/bin/lnd \
@@ -471,7 +484,7 @@ let
               --tlskeypath=/var/lib/lnd/tls.key \
               --logdir=/var/log/lnd \
               --bitcoin.active \
-              --bitcoin.mainnet \
+              --bitcoin.regtest \
               --bitcoin.node=bitcoind \
               --bitcoind.rpcuser=bitcoinrpc \
               --bitcoind.rpcpass=hunter2 \
@@ -483,13 +496,31 @@ let
           wantedBy = [ "multi-user.target" ];
           after = [ "network.target" ];
         };
+        # initialize wallet, creates macaroon needed by exporter
+        systemd.services.lnd.postStart = ''
+          ${pkgs.curl}/bin/curl \
+            --retry 20 \
+            --retry-delay 1 \
+            --retry-connrefused \
+            --cacert /var/lib/lnd/tls.cert \
+            -X GET \
+            https://localhost:8080/v1/genseed | ${pkgs.jq}/bin/jq -c '.cipher_seed_mnemonic' > /tmp/seed
+          ${pkgs.curl}/bin/curl \
+            --retry 20 \
+            --retry-delay 1 \
+            --retry-connrefused \
+            --cacert /var/lib/lnd/tls.cert \
+            -X POST \
+            -d "{\"wallet_password\": \"asdfasdfasdf\", \"cipher_seed_mnemonic\": $(cat /tmp/seed | tr -d '\n')}" \
+            https://localhost:8080/v1/initwallet
+        '';
       };
       exporterTest = ''
         wait_for_unit("lnd.service")
         wait_for_open_port(10009)
         wait_for_unit("prometheus-lnd-exporter.service")
         wait_for_open_port(9092)
-        succeed("curl -sSf localhost:9092/metrics | grep '^promhttp_metric_handler'")
+        succeed("curl -sSf localhost:9092/metrics | grep '^lnd_peer_count'")
       '';
     };
 
@@ -524,7 +555,11 @@ let
             WorkingDirectory = "/var/spool/mail";
           };
         };
-        users.users.mailexporter.isSystemUser = true;
+        users.users.mailexporter = {
+          isSystemUser = true;
+          group = "mailexporter";
+        };
+        users.groups.mailexporter = {};
       };
       exporterTest = ''
         wait_for_unit("postfix.service")

@@ -20,7 +20,7 @@
 }:
 
 let
-  apparmor-version = "3.0.1";
+  apparmor-version = "3.0.3";
 
   apparmor-meta = component: with lib; {
     homepage = "https://apparmor.net/";
@@ -32,7 +32,7 @@ let
 
   apparmor-sources = fetchurl {
     url = "https://launchpad.net/apparmor/${lib.versions.majorMinor apparmor-version}/${apparmor-version}/+download/apparmor-${apparmor-version}.tar.gz";
-    sha256 = "096zbg3v7b51x7f1ly61mzd3iy9alad6sd4lam98j2d6v5ragbcg";
+    sha256 = "0nasq8pdmzkrf856yg1v8z5hcs0nn6gw2qr60ab0a7j9ixfv0g8m";
   };
 
   aa-teardown = writeShellScript "aa-teardown" ''
@@ -56,7 +56,7 @@ let
       name = "0003-Added-missing-typedef-definitions-on-parser.patch";
       sha256 = "0yyaqz8jlmn1bm37arggprqz0njb4lhjni2d9c8qfqj0kll0bam0";
     })
-    ];
+  ];
 
   # Set to `true` after the next FIXME gets fixed or this gets some
   # common derivation infra. Too much copy-paste to fix one by one.
@@ -256,7 +256,7 @@ let
     name = "apparmor-kernel-patches-${apparmor-version}";
     src = apparmor-sources;
 
-    phases = "unpackPhase installPhase";
+    dontBuild = true;
 
     installPhase = ''
       mkdir "$out"

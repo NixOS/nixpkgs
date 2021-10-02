@@ -2,11 +2,11 @@
 
 buildPythonApplication rec {
   pname = "gallery_dl";
-  version = "1.18.0";
+  version = "1.19.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a0658cd2b629ec5b24b9a893056ce7224088ee5eb760f30642131a8df0279131";
+    sha256 = "ceffaa5022d76132165ca9004c1e57d7400b56c9ab3866e3bd139e2ffe38cb72";
   };
 
   propagatedBuildInputs = [ requests ];
@@ -21,8 +21,8 @@ buildPythonApplication rec {
   meta = with lib; {
     description = "Command-line program to download image-galleries and -collections from several image hosting sites";
     homepage = "https://github.com/mikf/gallery-dl";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ dawidsowa ];
-    platforms = platforms.unix;
+    changelog = "https://github.com/mikf/gallery-dl/raw/v${version}/CHANGELOG.md";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ dawidsowa marsam ];
   };
 }

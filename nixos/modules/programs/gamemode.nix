@@ -56,6 +56,8 @@ in
       polkit.enable = true;
       wrappers = mkIf cfg.enableRenice {
         gamemoded = {
+          owner = "root";
+          group = "root";
           source = "${pkgs.gamemode}/bin/gamemoded";
           capabilities = "cap_sys_nice+ep";
         };

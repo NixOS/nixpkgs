@@ -20,7 +20,9 @@ stdenv.mkDerivation {
 
   src = script;
 
-  phases = [ "buildPhase" ];
+  dontUnpack = true;
+  dontInstall = true;
+
   buildPhase = ''
     mkdir -p $out/bin
     < $src sed "s#{{MYPATH}}#$out/bin/sendmail#" > $out/bin/sendmail

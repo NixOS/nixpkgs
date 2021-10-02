@@ -1,5 +1,5 @@
 { mkDerivation, lib, fetchurl, fetchgit, fetchpatch
-, qtbase, qtquickcontrols, qtscript, qtdeclarative, qmake, llvmPackages_8
+, qtbase, qtquickcontrols, qtscript, qtdeclarative, qmake, llvmPackages_8, elfutils, perf
 , withDocumentation ? false, withClangPlugins ? true
 }:
 
@@ -28,7 +28,7 @@ mkDerivation rec {
     sha256 = "07i045mzwbfhwj2jlijhz9xs6ay03qs5dgcw2kzlcr79a69i0h6j";
   };
 
-  buildInputs = [ qtbase qtscript qtquickcontrols qtdeclarative ] ++
+  buildInputs = [ qtbase qtscript qtquickcontrols qtdeclarative elfutils.dev ] ++
     optionals withClangPlugins [ llvmPackages_8.libclang
                                  clang_qt_vendor
                                  llvmPackages_8.llvm ];
@@ -45,11 +45,11 @@ mkDerivation rec {
 
   doCheck = true;
 
-  enableParallelBuilding = true;
-
   buildFlags = optional withDocumentation "docs";
 
   installFlags = [ "INSTALL_ROOT=$(out)" ] ++ optional withDocumentation "install_docs";
+
+  qtWrapperArgs = [ "--set-default PERFPROFILER_PARSER_FILEPATH ${lib.getBin perf}/bin" ];
 
   preConfigure = ''
     substituteInPlace src/plugins/plugins.pro \
@@ -70,7 +70,7 @@ mkDerivation rec {
       --replace 'LLVM_CXXFLAGS ~= s,-gsplit-dwarf,' '${lib.concatStringsSep "\n" ["LLVM_CXXFLAGS ~= s,-gsplit-dwarf," "    LLVM_CXXFLAGS += -fno-rtti"]}'
   '';
 
-  preBuild = optional withDocumentation ''
+  preBuild = optionalString withDocumentation ''
     ln -s ${getLib qtbase}/$qtDocPrefix $NIX_QT5_TMP/share
   '';
 

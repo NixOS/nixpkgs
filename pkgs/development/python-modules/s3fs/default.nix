@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "s3fs";
-  version = "2021.6.0";
+  version = "2021.8.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "53790061e220713918602c1f110e6a84d6e3e22aaba27b8e134cc56a3ab6284c";
+    sha256 = "0zwy2fr95s5wzrr2iwbayjh9xh421p6wf0m75szl7rw930v1kb2y";
   };
 
   buildInputs = [
@@ -32,8 +32,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "s3fs" ];
 
   meta = with lib; {
-    description = "S3FS builds on boto3 to provide a convenient Python filesystem interface for S3";
     homepage = "https://github.com/dask/s3fs/";
+    description = "A Pythonic file interface for S3";
     license = licenses.bsd3;
     maintainers = with maintainers; [ teh ];
   };

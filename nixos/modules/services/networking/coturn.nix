@@ -311,6 +311,7 @@ in {
     {
       users.users.turnserver =
         { uid = config.ids.uids.turnserver;
+          group = "turnserver";
           description = "coturn TURN server user";
         };
       users.groups.turnserver =

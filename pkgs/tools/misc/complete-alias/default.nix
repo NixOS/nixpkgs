@@ -5,13 +5,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "complete-alias";
-  version = "1.10.0";
+  version = "1.18.0";
 
   src = fetchFromGitHub {
     owner = "cykerway";
     repo = pname;
     rev = version;
-    sha256 = "1s0prdnmb2qnzc8d7ddldzqa53yc10qq0lbgx2l9dzmz8pdwylyc";
+    sha256 = "18lmdb3inphxyjv08ing5wckqnjq0m5zfl0f15mqzlvf2ypar63x";
   };
 
   buildPhase = ''

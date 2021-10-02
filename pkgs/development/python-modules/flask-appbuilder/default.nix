@@ -5,7 +5,6 @@
 , colorama
 , click
 , email_validator
-, fetchpatch
 , flask
 , flask-babel
 , flask_login
@@ -26,23 +25,18 @@
 
 buildPythonPackage rec {
   pname = "flask-appbuilder";
-  version = "3.3.0";
+  version = "3.3.3";
 
   src = fetchPypi {
     pname = "Flask-AppBuilder";
     inherit version;
-    sha256 = "00dsfv1apl6483wy20aj91f9h5ak2casbx5vcajv2nd3i7c7v8gx";
+    sha256 = "sha256-yjb4dpcQt2se5GT+wodh4UC9LAF4JmYrdX89VIdkk0U=";
   };
 
-  patches = [
-    # https://github.com/dpgaspar/Flask-AppBuilder/pull/1610
-    (fetchpatch {
-      name = "flask_jwt_extended-and-pyjwt-patch";
-      url = "https://github.com/dpgaspar/Flask-AppBuilder/commit/7097a7b133f27c78d2b54d2a46e4a4c24478a066.patch";
-      sha256 = "sha256-ZpY8+2Hoz3z01GVtw2OIbQcsmAwa7iwilFWzgcGhY1w=";
-      includes = [ "flask_appbuilder/security/manager.py" "setup.py" ];
-    })
-  ];
+  # See here: https://github.com/dpgaspar/Flask-AppBuilder/commit/7097a7b133f27c78d2b54d2a46e4a4c24478a066.patch
+  #           https://github.com/dpgaspar/Flask-AppBuilder/pull/1610
+  # The patch from the PR doesn't apply cleanly so I edited it manually.
+  patches = [ ./upgrade-to-flask_jwt_extended-4.patch ];
 
   propagatedBuildInputs = [
     apispec
@@ -69,10 +63,16 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "apispec[yaml]>=3.3, <4" "apispec[yaml] >=3.3, <5" \
+      --replace "apispec[yaml]>=3.3, <4" "apispec[yaml] >=3.3" \
+      --replace "Flask>=0.12, <2" "Flask" \
       --replace "Flask-Login>=0.3, <0.5" "Flask-Login >=0.3, <0.6" \
       --replace "Flask-Babel>=1, <2" "Flask-Babel >=1, <3" \
-      --replace "marshmallow-sqlalchemy>=0.22.0, <0.24.0" "marshmallow-sqlalchemy >=0.22.0, <0.25.0"
+      --replace "Flask-WTF>=0.14.2, <0.15.0" "Flask-WTF" \
+      --replace "marshmallow-sqlalchemy>=0.22.0, <0.24.0" "marshmallow-sqlalchemy" \
+      --replace "Flask-JWT-Extended>=3.18, <4" "Flask-JWT-Extended>=4.1.0" \
+      --replace "PyJWT>=1.7.1, <2.0.0" "PyJWT>=2.0.1" \
+      --replace "prison>=0.2.1, <1.0.0" "prison" \
+      --replace "SQLAlchemy<1.4.0" "SQLAlchemy"
   '';
 
   # Majority of tests require network access or mongo

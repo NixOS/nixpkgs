@@ -1,21 +1,21 @@
 { lib, fetchzip }:
 
 let
-  version = "2013.06.07"; # date of most recent file in distribution
+  version = "2014.08.16"; # date of most recent file in distribution
 in fetchzip {
   name = "helvetica-neue-lt-std-${version}";
 
-  url = "http://www.ephifonts.com/downloads/helvetica-neue-lt-std.zip";
+  url = "https://web.archive.org/web/20190823153624/http://ephifonts.com/downloads/helvetica-neue-lt-std.zip";
 
   postFetch = ''
     mkdir -p $out/share/fonts
-    unzip -j $downloadedFile Helvetica\ Neue\ LT\ Std/\*.otf -d $out/share/fonts/opentype
+    unzip -j $downloadedFile "Helvetica Neue LT Std/*.otf" -d $out/share/fonts/opentype
   '';
 
   sha256 = "0ampp9vf9xw0sdppl4lb9i9h75ywljhdcqmzh45mx2x9m7h6xgg9";
 
-  meta = {
-    homepage = "http://www.ephifonts.com/free-helvetica-font-helvetica-neue-lt-std.html";
+  meta = with lib; {
+    homepage = "https://web.archive.org/web/20190926040940/http://www.ephifonts.com/free-helvetica-font-helvetica-neue-lt-std.html";
     description = "Helvetica Neue LT Std font";
     longDescription = ''
       Helvetica Neue Lt Std is one of the most highly rated and complete
@@ -28,8 +28,8 @@ in fetchzip {
       font. The numbers are well spaced and defined with high accuracy. The
       punctuation marks are heavily detailed as well.
     '';
-    license = lib.licenses.unfree;
-    maintainers = [ lib.maintainers.romildo ];
-    platforms = lib.platforms.all;
+    license = licenses.unfree;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ romildo ];
   };
 }

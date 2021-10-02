@@ -15,6 +15,7 @@
 , enableSpelling ? true, gspell
 , enableUPnP ? true, gupnp-igd
 , enableOmemoPluginDependencies ? true
+, enableAppIndicator ? true, libappindicator-gtk3
 , extraPythonPackages ? ps: []
 }:
 
@@ -33,7 +34,8 @@ python3.pkgs.buildPythonApplication rec {
   ] ++ lib.optionals enableJingle [ farstream gstreamer gst-plugins-base gst-libav gst-plugins-good libnice ]
     ++ lib.optional enableSecrets libsecret
     ++ lib.optional enableSpelling gspell
-    ++ lib.optional enableUPnP gupnp-igd;
+    ++ lib.optional enableUPnP gupnp-igd
+    ++ lib.optional enableAppIndicator libappindicator-gtk3;
 
   nativeBuildInputs = [
     gettext wrapGAppsHook

@@ -13,10 +13,9 @@ buildGoPackage rec {
     sha256 = "18518wp3dcjhf3mdkg5iwxqr3326n6jwcnqhyibphnb2a58ap7ny";
   };
 
-  buildFlagsArray = ''
-    -ldflags=
-      -X main.BuildVersion=${version}
-  '';
+  ldflags = [
+    "-X main.BuildVersion=${version}"
+  ];
 
   meta = with lib; {
     description = "A simple tool for generating self signed certificates";

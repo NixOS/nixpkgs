@@ -77,7 +77,9 @@ in
         createHome = true;
         home = "/var/lib/morty";
         isSystemUser = true;
+        group = "morty";
       };
+    users.groups.morty = {};
 
     systemd.services.morty =
       {

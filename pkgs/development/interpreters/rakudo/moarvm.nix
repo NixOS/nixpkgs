@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "moarvm";
-  version = "2021.06";
+  version = "2021.07";
 
   src = fetchurl {
     url = "https://moarvm.org/releases/MoarVM-${version}.tar.gz";
-    sha256 = "19vjcyb9fg9msjw1ih00c2qby480gl4highw24zx7j84slhsj013";
+    sha256 = "1zk3dpvgrgg4kam3hx9pq1a2l2kgw822dci8hg7x0cn1lppwwdw4";
    };
 
   buildInputs = [ perl ] ++ lib.optionals stdenv.isDarwin [ CoreServices ApplicationServices ];

@@ -3,7 +3,7 @@
 , libXxf86dga, libXxf86misc
 , libXxf86vm, openal, libGLU, libGL, libjpeg, flac
 , libXi, libXfixes, freetype, libopus, libtheora
-, physfs, enet, pkg-config, gtk2, pcre, libpulseaudio, libpthreadstubs
+, physfs, enet, pkg-config, gtk3, pcre, libpulseaudio, libpthreadstubs
 , libXdmcp
 }:
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     libXxf86vm openal libGLU libGL
     libjpeg flac
     libXi libXfixes
-    enet libtheora freetype physfs libopus pkg-config gtk2 pcre libXdmcp
+    enet libtheora freetype physfs libopus pkg-config gtk3 pcre libXdmcp
     libpulseaudio libpthreadstubs
   ];
 

@@ -1,35 +1,45 @@
-{ lib, fetchPypi, fetchpatch, buildPythonPackage,
-  setuptools-scm, toml, six, astroid, pytest
+{ lib
+, fetchPypi
+, buildPythonPackage
+, setuptools-scm
+, six
+, astroid
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "asttokens";
-  version = "2.0.4";
+  version = "2.0.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0a2ixiz04aw4p0aivxh47k3fa9ql804l3y5iv5gcih9aizi5fbm4";
+    sha256 = "sha256-mlTBFPAsepSA1WVQkyVGo/H+cdigLxvHzNDuPuNc9NU=";
   };
 
-  patches = [
-    # Fixes compatibility with python 3.9, will be included in the next release
-    # after 2.0.4
-    (fetchpatch {
-      url = "https://github.com/gristlabs/asttokens/commit/d8ff80ee7d2e64c5e1daf50cc38eb99663f1b1ac.patch";
-      sha256 = "19y8n8vpzr2ijldbq5rh19sf0vz5azqqpkb9bx0ljjg98h6k7kjj";
-      excludes = [ "setup.cfg" ];
-    })
+  nativeBuildInputs = [
+    setuptools-scm
   ];
 
-  propagatedBuildInputs = [ setuptools-scm toml six astroid ];
+  propagatedBuildInputs = [
+    six
+    astroid
+  ];
 
-  checkInputs = [ pytest ];
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # Test is currently failing on Hydra, works locally
+    "test_slices"
+  ];
+
+  pythonImportsCheck = [ "asttokens" ];
 
   meta = with lib; {
     homepage = "https://github.com/gristlabs/asttokens";
     description = "Annotate Python AST trees with source text and token information";
     license = licenses.asl20;
-    platforms = platforms.all;
     maintainers = with maintainers; [ leenaars ];
   };
 }

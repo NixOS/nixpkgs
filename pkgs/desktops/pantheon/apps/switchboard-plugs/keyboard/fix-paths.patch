@@ -1,0 +1,13 @@
+diff --git a/src/Views/InputMethod.vala b/src/Views/InputMethod.vala
+index 6d79fdc..de4276e 100644
+--- a/src/Views/InputMethod.vala
++++ b/src/Views/InputMethod.vala
+@@ -325,7 +325,7 @@ public class Pantheon.Keyboard.InputMethodPage.Page : Gtk.Grid {
+     private void spawn_ibus_daemon () {
+         bool is_spawn_succeeded = false;
+         try {
+-            is_spawn_succeeded = Process.spawn_sync ("/", { "ibus-daemon", "-drx" }, Environ.get (), SpawnFlags.SEARCH_PATH, null);
++            is_spawn_succeeded = Process.spawn_sync ("/", { "@ibus@/bin/ibus-daemon", "-drx" }, Environ.get (), SpawnFlags.SEARCH_PATH, null);
+         } catch (GLib.SpawnError e) {
+             warning (e.message);
+             set_visible_view (e.message);

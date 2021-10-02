@@ -1,13 +1,14 @@
 { lib
 , attrs
-, bson
 , buildPythonPackage
 , fetchFromGitHub
 , hypothesis
 , immutables
+, motor
 , msgpack
 , poetry-core
 , pytestCheckHook
+, pythonOlder
 , pyyaml
 , tomlkit
 , ujson
@@ -15,14 +16,18 @@
 
 buildPythonPackage rec {
   pname = "cattrs";
-  version = "1.7.0";
+  version = "1.8.0";
   format = "pyproject";
+
+  # https://cattrs.readthedocs.io/en/latest/history.html#id33:
+  # "Python 2, 3.5 and 3.6 support removal. If you need it, use a version below 1.1.0."
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Tinche";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-7F4S4IeApbULXhkEZ0oab3Y7sk20Ag2fCYxsyi4WbWw=";
+    sha256 = "sha256-CKAsvRKS8kmLcyPA753mh6d3S04ObzO7xLPpmlmxrxI=";
   };
 
   nativeBuildInputs = [
@@ -34,9 +39,9 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    bson
     hypothesis
     immutables
+    motor
     msgpack
     pytestCheckHook
     pyyaml
@@ -52,6 +57,10 @@ buildPythonPackage rec {
     substituteInPlace tests/test_preconf.py \
       --replace "from orjson import dumps as orjson_dumps" "" \
       --replace "from orjson import loads as orjson_loads" ""
+  '';
+
+  preCheck = ''
+    export HOME=$(mktemp -d);
   '';
 
   disabledTestPaths = [

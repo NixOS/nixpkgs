@@ -89,7 +89,7 @@ rec {
         => "usr/local/bin"
   */
   concatStringsSep = builtins.concatStringsSep or (separator: list:
-    concatStrings (intersperse separator list));
+    lib.foldl' (x: y: x + y) "" (intersperse separator list));
 
   /* Maps a function over a list of strings and then concatenates the
      result with the specified separator interspersed between

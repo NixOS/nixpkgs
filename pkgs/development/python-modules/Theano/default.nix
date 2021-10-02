@@ -8,18 +8,14 @@
 , nose
 , numpy
 , scipy
+, setuptools
 , six
 , libgpuarray
 , cudaSupport ? false, cudatoolkit
 , cudnnSupport ? false, cudnn
-, nvidia_x11
 }:
 
 assert cudnnSupport -> cudaSupport;
-
-assert cudaSupport -> nvidia_x11 != null
-                   && cudatoolkit != null
-                   && cudnn != null;
 
 let
   wrapped = command: buildTop: buildInputs:
@@ -81,7 +77,15 @@ in buildPythonPackage rec {
 
   # keep Nose around since running the tests by hand is possible from Python or bash
   checkInputs = [ nose ];
-  propagatedBuildInputs = [ numpy numpy.blas scipy six libgpuarray_ ];
+  # setuptools needed for cuda support
+  propagatedBuildInputs = [
+    libgpuarray_
+    numpy
+    numpy.blas
+    scipy
+    setuptools
+    six
+  ];
 
   pythonImportsCheck = [ "theano" ];
 

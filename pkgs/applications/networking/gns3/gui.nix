@@ -10,8 +10,8 @@ let
     packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) defaultOverrides;
   };
 in python.pkgs.buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "gns3-gui";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "GNS3";

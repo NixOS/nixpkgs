@@ -2,26 +2,38 @@
 
 {
   # Cargo lock file
-  lockFile
+  lockFile ? null
+
+  # Cargo lock file contents as string
+, lockFileContents ? null
 
   # Hashes for git dependencies.
 , outputHashes ? {}
-}:
+} @ args:
+
+assert (lockFile == null) != (lockFileContents == null);
 
 let
   # Parse a git source into different components.
   parseGit = src:
     let
-      parts = builtins.match ''git\+([^?]+)(\?rev=(.*))?#(.*)?'' src;
-      rev = builtins.elemAt parts 2;
+      parts = builtins.match ''git\+([^?]+)(\?(rev|tag|branch)=(.*))?#(.*)'' src;
+      type = builtins.elemAt parts 2; # rev, tag or branch
+      value = builtins.elemAt parts 3;
     in
       if parts == null then null
       else {
         url = builtins.elemAt parts 0;
-        sha = builtins.elemAt parts 3;
-      } // lib.optionalAttrs (rev != null) { inherit rev; };
+        sha = builtins.elemAt parts 4;
+      } // lib.optionalAttrs (type != null) { inherit type value; };
 
-  packages = (builtins.fromTOML (builtins.readFile lockFile)).package;
+  # shadows args.lockFileContents
+  lockFileContents =
+    if lockFile != null
+    then builtins.readFile lockFile
+    else args.lockFileContents;
+
+  packages = (builtins.fromTOML lockFileContents).package;
 
   # There is no source attribute for the source package itself. But
   # since we do not want to vendor the source package anyway, we can
@@ -63,11 +75,19 @@ let
 
   # We can't use the existing fetchCrate function, since it uses a
   # recursive hash of the unpacked crate.
-  fetchCrate = pkg: fetchurl {
-    name = "crate-${pkg.name}-${pkg.version}.tar.gz";
-    url = "https://crates.io/api/v1/crates/${pkg.name}/${pkg.version}/download";
-    sha256 = pkg.checksum;
-  };
+  fetchCrate = pkg:
+    assert lib.assertMsg (pkg ? checksum) ''
+      Package ${pkg.name} does not have a checksum.
+      Please note that the Cargo.lock format where checksums used to be listed
+      under [metadata] is not supported.
+      If that is the case, running `cargo update` with a recent toolchain will
+      automatically update the format along with the crate's depenendencies.
+    '';
+    fetchurl {
+      name = "crate-${pkg.name}-${pkg.version}.tar.gz";
+      url = "https://crates.io/api/v1/crates/${pkg.name}/${pkg.version}/download";
+      sha256 = pkg.checksum;
+    };
 
   # Fetch and unpack a crate.
   mkCrate = pkg:
@@ -129,16 +149,23 @@ let
         cat > $out/.cargo-config <<EOF
         [source."${gitParts.url}"]
         git = "${gitParts.url}"
-        ${lib.optionalString (gitParts ? rev) "rev = \"${gitParts.rev}\""}
+        ${lib.optionalString (gitParts ? type) "${gitParts.type} = \"${gitParts.value}\""}
         replace-with = "vendored-sources"
         EOF
       ''
       else throw "Cannot handle crate source: ${pkg.source}";
 
-  vendorDir = runCommand "cargo-vendor-dir" {} ''
+  vendorDir = runCommand "cargo-vendor-dir" (lib.optionalAttrs (lockFile == null) {
+    inherit lockFileContents;
+    passAsFile = [ "lockFileContents" ];
+  }) ''
     mkdir -p $out/.cargo
 
-    ln -s ${lockFile} $out/Cargo.lock
+    ${
+      if lockFile != null
+      then "ln -s ${lockFile} $out/Cargo.lock"
+      else "cp $lockFileContentsPath $out/Cargo.lock"
+    }
 
     cat > $out/.cargo/config <<EOF
     [source.crates-io]

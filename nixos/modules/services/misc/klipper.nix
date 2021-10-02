@@ -2,8 +2,13 @@
 with lib;
 let
   cfg = config.services.klipper;
-  package = pkgs.klipper;
-  format = pkgs.formats.ini { mkKeyValue = generators.mkKeyValueDefault {} ":"; };
+  format = pkgs.formats.ini {
+    # https://github.com/NixOS/nixpkgs/pull/121613#issuecomment-885241996
+    listToValue = l:
+      if builtins.length l == 1 then generators.mkValueStringDefault {} (head l)
+      else lib.concatMapStrings (s: "\n  ${generators.mkValueStringDefault {} s}") l;
+    mkKeyValue = generators.mkKeyValueDefault {} ":";
+  };
 in
 {
   ##### interface
@@ -11,10 +16,48 @@ in
     services.klipper = {
       enable = mkEnableOption "Klipper, the 3D printer firmware";
 
+      package = mkOption {
+        type = types.package;
+        default = pkgs.klipper;
+        description = "The Klipper package.";
+      };
+
+      inputTTY = mkOption {
+        type = types.path;
+        default = "/run/klipper/tty";
+        description = "Path of the virtual printer symlink to create.";
+      };
+
+      apiSocket = mkOption {
+        type = types.nullOr types.path;
+        default = "/run/klipper/api";
+        description = "Path of the API socket to create.";
+      };
+
       octoprintIntegration = mkOption {
         type = types.bool;
         default = false;
         description = "Allows Octoprint to control Klipper.";
+      };
+
+      user = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          User account under which Klipper runs.
+
+          If null is specified (default), a temporary user will be created by systemd.
+        '';
+      };
+
+      group = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          Group account under which Klipper runs.
+
+          If null is specified (default), a temporary user will be created by systemd.
+        '';
       };
 
       settings = mkOption {
@@ -30,26 +73,40 @@ in
 
   ##### implementation
   config = mkIf cfg.enable {
-    assertions = [{
-      assertion = cfg.octoprintIntegration -> config.services.octoprint.enable;
-      message = "Option klipper.octoprintIntegration requires Octoprint to be enabled on this system. Please enable services.octoprint to use it.";
-    }];
+    assertions = [
+      {
+        assertion = cfg.octoprintIntegration -> config.services.octoprint.enable;
+        message = "Option klipper.octoprintIntegration requires Octoprint to be enabled on this system. Please enable services.octoprint to use it.";
+      }
+      {
+        assertion = cfg.user != null -> cfg.group != null;
+        message = "Option klipper.group is not set when a user is specified.";
+      }
+    ];
 
     environment.etc."klipper.cfg".source = format.generate "klipper.cfg" cfg.settings;
 
-    systemd.services.klipper = {
+    services.klipper = mkIf cfg.octoprintIntegration {
+      user = config.services.octoprint.user;
+      group = config.services.octoprint.group;
+    };
+
+    systemd.services.klipper = let
+      klippyArgs = "--input-tty=${cfg.inputTTY}"
+        + optionalString (cfg.apiSocket != null) " --api-server=${cfg.apiSocket}";
+    in {
       description = "Klipper 3D Printer Firmware";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
 
       serviceConfig = {
-        ExecStart = "${package}/lib/klipper/klippy.py --input-tty=/run/klipper/tty /etc/klipper.cfg";
+        ExecStart = "${cfg.package}/lib/klipper/klippy.py ${klippyArgs} /etc/klipper.cfg";
         RuntimeDirectory = "klipper";
         SupplementaryGroups = [ "dialout" ];
-        WorkingDirectory = "${package}/lib";
-      } // (if cfg.octoprintIntegration then {
-        Group = config.services.octoprint.group;
-        User = config.services.octoprint.user;
+        WorkingDirectory = "${cfg.package}/lib";
+      } // (if cfg.user != null then {
+        Group = cfg.group;
+        User = cfg.user;
       } else {
         DynamicUser = true;
         User = "klipper";

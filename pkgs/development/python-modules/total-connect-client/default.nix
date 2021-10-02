@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "total-connect-client";
-  version = "0.58";
+  version = "2021.8.3";
 
   src = fetchFromGitHub {
     owner = "craigjmidwinter";
     repo = "total-connect-client";
     rev = version;
-    sha256 = "1dqmgvgvwjh235wghygan2jnfvmn9vz789in2as3asig9cifix9z";
+    sha256 = "sha256-2iTH/Him4iMZadkmBR8Rwlt3RCqDXzR6ZqNHciNiHIk=";
   };
 
   propagatedBuildInputs = [
@@ -27,6 +27,11 @@ buildPythonPackage rec {
   preCheck = ''
     export PYTHONPATH="total_connect_client:$PYTHONPATH"
   '';
+
+  disabledTests = [
+    # Tests require network access
+    "tests_request"
+  ];
 
   pythonImportsCheck = [ "total_connect_client" ];
 

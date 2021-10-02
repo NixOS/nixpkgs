@@ -28,6 +28,11 @@ in
 
   config = mkIf cfg.enable {
     environment.systemPackages = [ sandbox ];
-    security.wrappers.${sandbox.passthru.sandboxExecutableName}.source = "${sandbox}/bin/${sandbox.passthru.sandboxExecutableName}";
+    security.wrappers.${sandbox.passthru.sandboxExecutableName} =
+      { setuid = true;
+        owner = "root";
+        group = "root";
+        source = "${sandbox}/bin/${sandbox.passthru.sandboxExecutableName}";
+      };
   };
 }

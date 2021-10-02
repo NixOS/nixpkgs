@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "PuLP";
-  version = "2.4";
+  version = "2.5.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b2aff10989b3692e3a59301a0cb0acddeb25dcea378f8804c86007075eae55b5";
+    sha256 = "27c2a87a98ea0e9a08c7c46e6df47d6d4e753ad9991fea2901892425d89c99a6";
   };
 
   propagatedBuildInputs = [ pyparsing amply ];

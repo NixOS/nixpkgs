@@ -1,30 +1,26 @@
 { lib
 , buildPythonPackage
-, fetchFromGitHub
+, fetchPypi
 , isPy3k
 , setuptools
-, pytestcov
+, pytest-cov
 , pytest
 }:
 
 buildPythonPackage rec {
   pname = "pglast";
-  version = "3.0";
+  version = "3.5";
 
-  # PyPI tarball does not include all the required files
-  src = fetchFromGitHub {
-    owner = "lelit";
-    repo = pname;
-    rev = "v${version}";
-    fetchSubmodules = true;
-    sha256 = "0yi24wj19rzw5dvppm8g3hnfskyzbrqw14q8x9f2q5zi8g6xnnrd";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "3bb74df084b149e8bf969380d88b1980fbd1aeda7f7057f4dee6751d854d6ae6";
   };
 
   disabled = !isPy3k;
 
   propagatedBuildInputs = [ setuptools ];
 
-  checkInputs = [ pytest pytestcov ];
+  checkInputs = [ pytest pytest-cov ];
 
   pythonImportsCheck = [ "pglast" ];
 

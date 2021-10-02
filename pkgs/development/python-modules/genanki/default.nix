@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchPypi, isPy3k
-, cached-property, frozendict, pystache, pyyaml, pytest, pytestrunner
+, cached-property, frozendict, pystache, pyyaml, pytest, pytest-runner
 }:
 
 buildPythonPackage rec {
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    pytestrunner
+    pytest-runner
     cached-property
     frozendict
     pystache

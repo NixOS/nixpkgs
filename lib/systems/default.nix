@@ -107,6 +107,7 @@ rec {
         else if final.isMips then "mips"
         else if final.isPower then "powerpc"
         else if final.isRiscV then "riscv"
+        else if final.isS390 then "s390"
         else final.parsed.cpu.name;
 
       qemuArch =

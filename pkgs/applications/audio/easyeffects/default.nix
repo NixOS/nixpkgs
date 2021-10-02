@@ -1,6 +1,8 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , desktop-file-utils
 , fetchFromGitHub
+, calf
 , fftwFloat
 , glib
 , glibmm
@@ -12,6 +14,7 @@
 , libsamplerate
 , libsndfile
 , lilv
+, lsp-plugins
 , lv2
 , meson
 , ninja
@@ -23,18 +26,19 @@
 , rubberband
 , speexdsp
 , wrapGAppsHook
+, zam-plugins
 , zita-convolver
 }:
 
 stdenv.mkDerivation rec {
   pname = "easyeffects";
-  version = "6.0.0";
+  version = "6.0.3";
 
   src = fetchFromGitHub {
     owner = "wwmm";
     repo = "easyeffects";
     rev = "v${version}";
-    hash = "sha256:1m3jamnhgpx3z51nfc8xg7adhf5x7dirvw0wf129hzxx4fjl7rch";
+    sha256 = "sha256-GzqPC/m/HMthLMamhJ4EXX6fxZYscdX1QmXgqHOPEcg=";
   };
 
   nativeBuildInputs = [
@@ -71,6 +75,24 @@ stdenv.mkDerivation rec {
     chmod +x meson_post_install.py
     patchShebangs meson_post_install.py
   '';
+
+  preFixup =
+    let
+      lv2Plugins = [
+        calf # limiter, compressor exciter, bass enhancer and others
+        lsp-plugins # delay
+      ];
+      ladspaPlugins = [
+        rubberband # pitch shifting
+        zam-plugins # maximizer
+      ];
+    in
+    ''
+      gappsWrapperArgs+=(
+        --set LV2_PATH "${lib.makeSearchPath "lib/lv2" lv2Plugins}"
+        --set LADSPA_PATH "${lib.makeSearchPath "lib/ladspa" ladspaPlugins}"
+      )
+    '';
 
   separateDebugInfo = true;
 

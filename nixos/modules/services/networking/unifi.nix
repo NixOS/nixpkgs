@@ -115,10 +115,12 @@ in
   config = mkIf cfg.enable {
 
     users.users.unifi = {
-      uid = config.ids.uids.unifi;
+      isSystemUser = true;
+      group = "unifi";
       description = "UniFi controller daemon user";
       home = "${stateDir}";
     };
+    users.groups.unifi = {};
 
     networking.firewall = mkIf cfg.openPorts {
       # https://help.ubnt.com/hc/en-us/articles/218506997
@@ -173,6 +175,41 @@ in
         User = "unifi";
         UMask = "0077";
         WorkingDirectory = "${stateDir}";
+
+        # Hardening
+        AmbientCapabilities = "";
+        CapabilityBoundingSet = "";
+        # ProtectClock= adds DeviceAllow=char-rtc r
+        DeviceAllow = "";
+        DevicePolicy = "closed";
+        LockPersonality = true;
+        NoNewPrivileges = true;
+        PrivateDevices = true;
+        PrivateMounts = true;
+        PrivateTmp = true;
+        PrivateUsers = true;
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectSystem = "strict";
+        RemoveIPC = true;
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        SystemCallErrorNumber = "EPERM";
+        SystemCallFilter = [ "@system-service" ];
+
+        # Required for ProtectSystem=strict
+        BindPaths = [ stateDir ];
+
+        # Needs network access
+        PrivateNetwork = false;
+        # Cannot be true due to OpenJDK
+        MemoryDenyWriteExecute = false;
       };
     };
 

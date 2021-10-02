@@ -27,8 +27,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper unzip ];
   buildInputs = [ lua love ];
 
-  phases = [ "unpackPhase" "installPhase" ];
-
   unpackPhase = ''
     unzip -j $src
   '';

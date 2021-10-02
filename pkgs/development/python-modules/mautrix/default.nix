@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "mautrix";
-  version = "0.9.6";
+  version = "0.10.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1810deb7f780700e7e0734e1844c1b4b2525ee990b8665f7b98e3f335a31bbcf";
+    sha256 = "sha256-25zLhlGMwDja5wGmkqYuYtSUqOdD/gzUKGi79f1Tsjs=";
   };
 
   propagatedBuildInputs = [
@@ -32,6 +32,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/tulir/mautrix-python";
     description = "A Python 3 asyncio Matrix framework.";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ nyanloutre ma27 ];
+    maintainers = with maintainers; [ nyanloutre ma27 sumnerevans ];
   };
 }

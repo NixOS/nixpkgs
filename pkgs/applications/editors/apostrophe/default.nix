@@ -1,8 +1,8 @@
-{ lib, stdenv, fetchFromGitLab, meson, ninja, cmake
+{ lib, stdenv, fetchFromGitLab, meson, ninja
 , wrapGAppsHook, pkg-config, desktop-file-utils
 , appstream-glib, pythonPackages, glib, gobject-introspection
 , gtk3, webkitgtk, glib-networking, gnome, gspell, texlive
-, shared-mime-info, libhandy
+, shared-mime-info, libhandy, fira, sassc
 }:
 
 let
@@ -13,24 +13,30 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "apostrophe";
-  version = "2.4";
+  version = "2.5";
 
   src = fetchFromGitLab {
-    owner  = "somas";
+    owner  = "World";
     repo   = pname;
     domain = "gitlab.gnome.org";
     rev    = "v${version}";
-    sha256 = "1qzy3zhi18wf42m034s8kcmx9gl05j620x3hf6rnycq2fvy7g4gz";
+    sha256 = "06yfiflmj3ip7ppcz41nb3xpgb5ggw5h74w0v87yaqqkq7qh31lp";
   };
 
-  nativeBuildInputs = [ meson ninja cmake pkg-config desktop-file-utils
-    appstream-glib wrapGAppsHook ];
+  nativeBuildInputs = [ meson ninja pkg-config desktop-file-utils
+    appstream-glib wrapGAppsHook sassc ];
 
   buildInputs = [ glib pythonEnv gobject-introspection gtk3
     gnome.adwaita-icon-theme webkitgtk gspell texlive
     glib-networking libhandy ];
 
   postPatch = ''
+    substituteInPlace data/media/css/web/base.css                                        \
+      --replace 'url("/app/share/fonts/FiraSans-Regular.ttf") format("ttf")'             \
+                'url("${fira}/share/fonts/opentype/FiraSans-Regular.otf") format("otf")' \
+      --replace 'url("/app/share/fonts/FiraMono-Regular.ttf") format("ttf")'             \
+                'url("${fira}/share/fonts/opentype/FiraMono-Regular.otf") format("otf")'
+
     patchShebangs --build build-aux/meson_post_install.py
   '';
 
@@ -43,7 +49,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "https://gitlab.gnome.org/somas/apostrophe";
+    homepage = "https://gitlab.gnome.org/World/apostrophe";
     description = "A distraction free Markdown editor for GNU/Linux";
     license = licenses.gpl3;
     platforms = platforms.linux;

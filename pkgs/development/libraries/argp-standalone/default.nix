@@ -19,11 +19,12 @@ let
     sha256 = "1xx2zdc187a1m2x6c1qs62vcrycbycw7n0q3ks2zkxpaqzx2dgkw";
   };
 in
-stdenv.mkDerivation {
-  name = "argp-standalone-1.3";
+stdenv.mkDerivation rec {
+  pname = "argp-standalone";
+  version = "1.3";
 
   src = fetchurl {
-    url = "https://www.lysator.liu.se/~nisse/misc/argp-standalone-1.3.tar.gz";
+    url = "https://www.lysator.liu.se/~nisse/misc/argp-standalone-${version}.tar.gz";
     sha256 = "dec79694da1319acd2238ce95df57f3680fea2482096e483323fddf3d818d8be";
   };
 
@@ -33,7 +34,11 @@ stdenv.mkDerivation {
 
   patchFlags = lib.optional stdenv.hostPlatform.isDarwin "-p0";
 
-  preConfigure = lib.optionalString stdenv.hostPlatform.isLinux "export CFLAGS='-fgnu89-inline'";
+  # For currently unknown reason, `-fPIC` has to be passed explicitly, otherwise
+  # downstream software like `elfutils` will get `recompile errors like:
+  #     libargp.a(argp-help.o): relocation R_X86_64_PC32 against symbol `program_invocation_short_name' can not be used when making a shared object; recompile with -fPIC
+  # It seems that nixpkgs's on-by-default `-fPIC` is not in effect here.
+  preConfigure = lib.optionalString stdenv.hostPlatform.isLinux "export CFLAGS='-fgnu89-inline -fPIC'";
 
   postInstall = ''
     mkdir -p $out/lib $out/include

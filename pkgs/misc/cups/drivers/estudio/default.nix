@@ -11,10 +11,6 @@ stdenv.mkDerivation {
 
   buildInputs = [ perl ];
 
-  phases = [ "unpackPhase"
-             "patchPhase"
-             "installPhase" ];
-
   patchPhase = ''
     patchShebangs lib/
     gunzip                share/cups/model/Toshiba/TOSHIBA_ColorMFP_CUPS.gz

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config
+{ lib, stdenv, fetchurl, pkg-config, fetchFromGitLab
 , python3
 , perl
 , perlPackages
@@ -6,6 +6,9 @@
 , intltool
 , libpeas
 , libsoup
+, libsecret
+, libnotify
+, libdmapsharing
 , gnome
 , totem-pl-parser
 , tdb
@@ -16,13 +19,31 @@
 , gst_plugins ? with gst_all_1; [ gst-plugins-good gst-plugins-ugly ]
 }:
 let
+
+  # The API version of libdmapsharing required by rhythmbox 3.4.4 is 3.0.
+
+  # This PR would solve the issue:
+  # https://gitlab.gnome.org/GNOME/rhythmbox/-/merge_requests/12
+  # Unfortunately applying this patch produces a rhythmbox which
+  # cannot fetch data from DAAP shares.
+
+  libdmapsharing_3 = libdmapsharing.overrideAttrs (old: rec {
+    version = "2.9.41";
+    src = fetchFromGitLab {
+      domain = "gitlab.gnome.org";
+      owner = "GNOME";
+      repo = old.pname;
+      rev = "${lib.toUpper old.pname}_${lib.replaceStrings ["."] ["_"] version}";
+      sha256 = "05kvrzf0cp3mskdy6iv7zqq24qdczl800q2dn1h4bk3d9wchgm4p";
+    };
+  });
+
+in stdenv.mkDerivation rec {
   pname = "rhythmbox";
   version = "3.4.4";
-in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "142xcvw4l19jyr5i72nbnrihs953pvrrzcbijjn9dxmxszbv03pf";
   };
 
@@ -46,7 +67,21 @@ in stdenv.mkDerivation rec {
 
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+    gst_all_1.gst-plugins-bad
+    gst_all_1.gst-plugins-ugly
+    gst_all_1.gst-libav
+
+    libdmapsharing_3 # necessary for daap support
+    libsecret
+    libnotify
   ] ++ gst_plugins;
+
+  configureFlags = [
+    "--enable-daap"
+    "--enable-libnotify"
+    "--with-libsecret"
+  ];
 
   enableParallelBuilding = true;
 
@@ -60,7 +95,7 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Rhythmbox";
     description = "A music playing application for GNOME";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.rasendubi ];
   };

@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, cchardet
 , chardet
 , cleo
 , clikit
@@ -12,17 +13,18 @@
 
 buildPythonPackage rec {
   pname = "clevercsv";
-  version = "0.6.8";
+  version = "0.7.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "alan-turing-institute";
     repo = "CleverCSV";
     rev = "v${version}";
-    sha256 = "0jpgyh65zqr76sz2s63zsjyb49dpg2xdmf72jvpicw923bdzhqvp";
+    sha256 = "sha256-ynS3G2ZcEqVlC2d6n5ZQ1Em5lh/dWESj9jEO8C4WzZQ=";
   };
 
   propagatedBuildInputs = [
+    cchardet
     chardet
     cleo
     clikit

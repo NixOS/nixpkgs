@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname   = "hashcat";
-  version = "6.2.2";
+  version = "6.2.4";
 
   src = fetchurl {
     url = "https://hashcat.net/files/hashcat-${version}.tar.gz";
-    sha256 = "0xbs3i5g2w8h5031jwgm13algs3f721k12fghnwfzi05fmzw8d0f";
+    sha256 = "sha256-kCA5b/kzaT4xC0ebZB6G8Xg9mBnWDR2Qd1KtjSSmDDE=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

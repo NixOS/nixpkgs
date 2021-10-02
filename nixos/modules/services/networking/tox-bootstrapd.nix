@@ -3,15 +3,15 @@
 with lib;
 
 let
-  home = "/var/lib/tox-bootstrapd";
-  PIDFile = "${home}/pid";
+  WorkingDirectory = "/var/lib/tox-bootstrapd";
+  PIDFile = "${WorkingDirectory}/pid";
 
   pkg = pkgs.libtoxcore;
   cfg = config.services.toxBootstrapd;
   cfgFile = builtins.toFile "tox-bootstrapd.conf"
     ''
       port = ${toString cfg.port}
-      keys_file_path = "${home}/keys"
+      keys_file_path = "${WorkingDirectory}/keys"
       pid_file_path = "${PIDFile}"
       ${cfg.extraConfig}
     '';
@@ -36,7 +36,7 @@ in
 
           keysFile = mkOption {
             type = types.str;
-            default = "${home}/keys";
+            default = "${WorkingDirectory}/keys";
             description = "Node key file.";
           };
 
@@ -56,13 +56,6 @@ in
 
   config = mkIf config.services.toxBootstrapd.enable {
 
-    users.users.tox-bootstrapd =
-      { uid = config.ids.uids.tox-bootstrapd;
-        description = "Tox bootstrap daemon user";
-        inherit home;
-        createHome = true;
-      };
-
     systemd.services.tox-bootstrapd = {
       description = "Tox DHT bootstrap daemon";
       after = [ "network.target" ];
@@ -70,8 +63,10 @@ in
       serviceConfig =
         { ExecStart = "${pkg}/bin/tox-bootstrapd --config=${cfgFile}";
           Type = "forking";
-          inherit PIDFile;
-          User = "tox-bootstrapd";
+          inherit PIDFile WorkingDirectory;
+          AmbientCapabilities = ["CAP_NET_BIND_SERVICE"];
+          DynamicUser = true;
+          StateDirectory = "tox-bootstrapd";
         };
     };
 

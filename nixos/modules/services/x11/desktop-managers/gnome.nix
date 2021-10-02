@@ -372,6 +372,13 @@ in
       xdg.portal.enable = true;
       xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
 
+      # Harmonize Qt5 application style and also make them use the portal for file chooser dialog.
+      qt5 = {
+        enable = mkDefault true;
+        platformTheme = mkDefault "gnome";
+        style = mkDefault "adwaita";
+      };
+
       networking.networkmanager.enable = mkDefault true;
 
       services.xserver.updateDbusEnvironment = true;
@@ -469,6 +476,8 @@ in
     (mkIf serviceCfg.experimental-features.realtime-scheduling {
       security.wrappers.".gnome-shell-wrapped" = {
         source = "${pkgs.gnome.gnome-shell}/bin/.gnome-shell-wrapped";
+        owner = "root";
+        group = "root";
         capabilities = "cap_sys_nice=ep";
       };
 

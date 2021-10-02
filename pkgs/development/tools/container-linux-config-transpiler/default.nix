@@ -15,9 +15,9 @@ buildGoPackage rec {
     sha256="1w6nvgrl5qp3ci9igflk9dlk3020psv5m4f3p57f3qcx9vrcl4lw";
   };
 
-  buildFlagsArray = ''
-    -ldflags=-X ${goPackagePath}/internal/version.Raw=v${version}
-  '';
+  ldflags = [
+    "-X ${goPackagePath}/internal/version.Raw=v${version}"
+  ];
 
   postInstall = ''
     mv $out/bin/{internal,ct}
@@ -32,4 +32,3 @@ buildGoPackage rec {
     platforms = with platforms; unix;
   };
 }
-

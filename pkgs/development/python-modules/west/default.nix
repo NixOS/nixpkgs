@@ -3,14 +3,14 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.11.0";
+  version = "0.11.1";
   pname = "west";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "67fdc85f44be308383b331940dced0756c8c81a85f753c6b97eb0d65d973f31a";
+    sha256 = "30771f3ec2a4281cd05c277a90f7dc94ded97d6dc1e1decdf4fe452dbbacc283";
   };
 
   propagatedBuildInputs = [

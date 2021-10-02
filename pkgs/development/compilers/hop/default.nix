@@ -7,10 +7,11 @@ let bigloo-release =
 ; in
 
 stdenv.mkDerivation rec {
-  name = "hop-3.3.0";
+  pname = "hop";
+  version = "3.4.4";
   src = fetchurl {
-    url = "ftp://ftp-sop.inria.fr/indes/fp/Hop/${name}.tar.gz";
-    sha256 = "14gf9ihmw95zdnxsqhn5jymfivpfq5cg9v0y7yjd5i7c787dncp5";
+    url = "ftp://ftp-sop.inria.fr/indes/fp/Hop/hop-${version}.tar.gz";
+    sha256 = "sha256-GzXh4HC+SFFoUi7SMqu36iYRPAJ6tMnOHd+he6n9k1I=";
   };
 
   postPatch = ''

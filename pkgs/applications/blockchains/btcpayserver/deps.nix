@@ -21,58 +21,53 @@
   })
   (fetchNuGet {
     name = "BIP78.Sender";
-    version = "0.2.0";
-    sha256 = "0gyynn15rc1x9p2703ffi4jnbpbd0k3wvg839xrk2skmaw8nxamf";
+    version = "0.2.2";
+    sha256 = "12pm2s35c0qzc06099q2z1pxwq94rq85n74yz8fs8gwvm2ksgp4p";
   })
   (fetchNuGet {
     name = "BTCPayServer.Hwi";
-    version = "1.1.3";
-    sha256 = "1c8hfnrjh2ad8qh75d63gsl170q8czf3j1hk8sv8fnbgnxdnkm7a";
+    version = "2.0.2";
+    sha256 = "0lh3n1qncqs4kbrmx65xs271f0d9c7irrs9qnsa9q51cbbqbljh9";
   })
   (fetchNuGet {
     name = "BTCPayServer.Lightning.All";
-    version = "1.2.7";
-    sha256 = "0jzmzvlpf6iba2fsc6cyi69vlaim9slqm2sapknmd7drl3gcn2zj";
+    version = "1.2.12";
+    sha256 = "0sciwh9m7h6ns59bsrzpd6zyxxdkiy33bdsq0phd3r2yxakvw68n";
   })
   (fetchNuGet {
     name = "BTCPayServer.Lightning.Charge";
-    version = "1.2.3";
-    sha256 = "1rdrwmijx0v4z0xsq4acyvdcj7hv6arfh3hwjy89rqnkkznrzgwv";
+    version = "1.2.7";
+    sha256 = "02x3p0am5zqp8f4fycdlrp26alicxc5vrlvgxg6d8wsa35q473xc";
   })
   (fetchNuGet {
     name = "BTCPayServer.Lightning.CLightning";
-    version = "1.2.3";
-    sha256 = "02197rh03q8d0mv40zf67wp1rd2gbxi5l8krd2rzj84n267bcfvc";
+    version = "1.2.8";
+    sha256 = "06c6dnp72iwvnjm3pil24fnk4vp2v1f9gg84a381yn1xah9jghky";
   })
   (fetchNuGet {
     name = "BTCPayServer.Lightning.Common";
-    version = "1.2.0";
-    sha256 = "17di8ndkw8z0ci0zk15mcrqpmganwkz9ys2snr2rqpw5mrlhpwa0";
-  })
-  (fetchNuGet {
-    name = "BTCPayServer.Lightning.Common";
-    version = "1.2.2";
-    sha256 = "07xb7fsqvfjmcawxylriw60i73h0cvfb765aznhp9ffyrmjaql7z";
+    version = "1.2.6";
+    sha256 = "09p2ks1qgy6jnpcfwgdnxvldyyadwnh3mwmq9z89vvzmmgs19xkk";
   })
   (fetchNuGet {
     name = "BTCPayServer.Lightning.Eclair";
-    version = "1.2.2";
-    sha256 = "03dymhwxb5s28kb187g5h4aysnz2xzml89p47nmwz9lkg2h4s73h";
+    version = "1.2.6";
+    sha256 = "0lf55w8v997kqh808545ry5mlwxpzxzlkbz38fl4nfm85yydw0fc";
   })
   (fetchNuGet {
     name = "BTCPayServer.Lightning.LND";
-    version = "1.2.4";
-    sha256 = "0qnj5rsp6hnybsr58zny9dfbsxksg1674q0z9944jwkzm7pcqyg4";
+    version = "1.2.8";
+    sha256 = "1g1siy3xwf3rmyl4qrcg42wpww4b2qmfs88x0rxccwxjy5inzkz6";
   })
   (fetchNuGet {
     name = "BTCPayServer.Lightning.Ptarmigan";
-    version = "1.2.2";
-    sha256 = "17yl85vqfp7l12bv3f3w1b861hm41i7cfhs78gaq04s4drvcnj6k";
+    version = "1.2.6";
+    sha256 = "10g785jh92z5x7aqh41ma3d1nw0718bk7ibb58ychhdk1v2wwmh4";
   })
   (fetchNuGet {
     name = "BuildBundlerMinifier";
-    version = "3.2.435";
-    sha256 = "0y1p226dbvs7q2ngm9w4mpkhfrhw2y122plv1yff7lx5m84ia02l";
+    version = "3.2.449";
+    sha256 = "1dcjlfl5w2vfppx2hq3jj6xy24id2x3hcajwylhphlz9jw2bnhsv";
   })
   (fetchNuGet {
     name = "BundlerMinifier.Core";
@@ -83,6 +78,11 @@
     name = "BundlerMinifier.TagHelpers";
     version = "3.2.435";
     sha256 = "0ksmby0lzgsxkv0xfzr840262kcqra9vds91mcx0rf20blksfvsk";
+  })
+  (fetchNuGet {
+    name = "Common.Logging.Core";
+    version = "3.4.1";
+    sha256 = "06h80c7l12nh6gnkzskcs4w8741xhprv72vf88f33ilzfy37h5jy";
   })
   (fetchNuGet {
     name = "CsvHelper";
@@ -756,13 +756,13 @@
   })
   (fetchNuGet {
     name = "NBitcoin.Altcoins";
-    version = "2.0.31";
-    sha256 = "13gcfsxpfq8slmsvgzf6iv581x7n535zq0p9c88bqs5p88r6lygm";
+    version = "3.0.4";
+    sha256 = "03aia31sznw81jjr9k6dkwgvm9dc38fgp1z8y5i45vlkf5fp89pb";
   })
   (fetchNuGet {
     name = "NBitcoin";
-    version = "5.0.4";
-    sha256 = "04iafda61izzxb691brk72qs01m5dadqb4970nw5ayck6275s71i";
+    version = "5.0.33";
+    sha256 = "030q609b9lhapq4wfl1w3impjw5m40kz2rg1s9jn3bn8yjfmsi4a";
   })
   (fetchNuGet {
     name = "NBitcoin";
@@ -771,18 +771,13 @@
   })
   (fetchNuGet {
     name = "NBitcoin";
-    version = "5.0.67";
-    sha256 = "049marx1jwr7srlpqspimrqqgahh53gi2iyp7bpzn5npsbzh9v3h";
+    version = "6.0.3";
+    sha256 = "1kfq1q86844ssp8myy5vmvg33h3x0p9gqrlc99fl9gm1vzjc723f";
   })
   (fetchNuGet {
     name = "NBitcoin";
-    version = "5.0.73";
-    sha256 = "0vqgcb0ws5fnkrdzqfkyh78041c6q4l22b93rr0006dd4bmqrmg1";
-  })
-  (fetchNuGet {
-    name = "NBitcoin";
-    version = "5.0.77";
-    sha256 = "0ykz4ii6lh6gdlz6z264wnib5pfnmq9q617qqbg0f04mq654jygb";
+    version = "6.0.8";
+    sha256 = "1f90zyrd35fzx0vgvd83jhd6hczd4037h2k198xiyxj04l4m3wm5";
   })
   (fetchNuGet {
     name = "NBitpayClient";
@@ -791,8 +786,88 @@
   })
   (fetchNuGet {
     name = "NBXplorer.Client";
-    version = "3.0.21";
-    sha256 = "1asri2wsjq3ljf2p4r4x52ba9cirh8ccc5ysxpnv4cvladkdazbi";
+    version = "4.1.0";
+    sha256 = "1al9j14k51ql7m6yd2w89xlnklj64jqjikq8wpl2vwi1zy2gxqrl";
+  })
+  (fetchNuGet {
+    name = "Nethereum.ABI";
+    version = "3.8.0";
+    sha256 = "10saq2qsqqgsf9d5cjji4lay74ydwkvkqgnns6gxikqicci8yx5c";
+  })
+  (fetchNuGet {
+    name = "Nethereum.Accounts";
+    version = "3.8.0";
+    sha256 = "03dq4l1gsd6r2hah5flas8d8pfys7hh5srd279kiidaaxrp8fv2m";
+  })
+  (fetchNuGet {
+    name = "Nethereum.BlockchainProcessing";
+    version = "3.8.0";
+    sha256 = "0sz6710a3rvzbj1ghx8dx9adfpsaydw8129c5nj2bqvvh6shi4ax";
+  })
+  (fetchNuGet {
+    name = "Nethereum.Contracts";
+    version = "3.8.0";
+    sha256 = "0989as81dqz4j0h8b5a9f5hnd4lrjdj851cfc4j5h6hd633a13f8";
+  })
+  (fetchNuGet {
+    name = "Nethereum.HdWallet";
+    version = "3.8.0";
+    sha256 = "0dy1bcm0gsp137286q3bx5q9gyd8lymrdmnh1ip3sszs5j31l9k2";
+  })
+  (fetchNuGet {
+    name = "Nethereum.Hex";
+    version = "3.8.0";
+    sha256 = "0sbi982jnfs39sp7w85wf8lb51mijpwr9mpsmws08zrm90n93kb6";
+  })
+  (fetchNuGet {
+    name = "Nethereum.JsonRpc.Client";
+    version = "3.8.0";
+    sha256 = "0gmdvsxhs398cj14f16r3dl8yv52iaxr9c9214k2ra28r14gfd1l";
+  })
+  (fetchNuGet {
+    name = "Nethereum.JsonRpc.RpcClient";
+    version = "3.8.0";
+    sha256 = "05k5f0dfcx4afbkc1w7cfnz514i7840j2haxyzsxkp8818yvfg0a";
+  })
+  (fetchNuGet {
+    name = "Nethereum.KeyStore";
+    version = "3.8.0";
+    sha256 = "05pj95vcfznlk4saq9dw19377gd1sqgmjcg5h92b5rzpgm9v811s";
+  })
+  (fetchNuGet {
+    name = "Nethereum.Model";
+    version = "3.8.0";
+    sha256 = "1qfhzqirj9bi49zb6rdcy7w5bm9jyv3a79q7crmgpq3qx4lmz5yh";
+  })
+  (fetchNuGet {
+    name = "Nethereum.RLP";
+    version = "3.8.0";
+    sha256 = "16142ag09h95394ip0ffkci09hchxh2i5xaw2rq46qcr8xd3kiym";
+  })
+  (fetchNuGet {
+    name = "Nethereum.RPC";
+    version = "3.8.0";
+    sha256 = "1m2p10dds1k0r3gci25lh6cxl9z7ciw18g6wwa4yqi1hsw7n59vb";
+  })
+  (fetchNuGet {
+    name = "Nethereum.Signer";
+    version = "3.8.0";
+    sha256 = "175acfqjqacc5zwh2kmrfnwd15jm3fjpv0xlgpyqry52mqxd9khf";
+  })
+  (fetchNuGet {
+    name = "Nethereum.StandardTokenEIP20";
+    version = "3.8.0";
+    sha256 = "0xqb32x5b9y9r380frhj52i1lxsfs92nfgcpmys3shjxz6fnwf6g";
+  })
+  (fetchNuGet {
+    name = "Nethereum.Util";
+    version = "3.8.0";
+    sha256 = "1ig1zkzpglq2q465n4c0ckv8w9gca9cfxz1qnrdhap0f1z90jyg8";
+  })
+  (fetchNuGet {
+    name = "Nethereum.Web3";
+    version = "3.8.0";
+    sha256 = "0n18chc9h1cxqp01kncik9lqfgiqrzl2zr8jgzbb05drlf6k0f3i";
   })
   (fetchNuGet {
     name = "NETStandard.Library";
@@ -915,6 +990,11 @@
     sha256 = "1w6s9wjbsyvq8cnqknkdzm9chnv0g5gcsrq5i94zp6br9vg7c627";
   })
   (fetchNuGet {
+    name = "Portable.BouncyCastle";
+    version = "1.8.2";
+    sha256 = "0xqc8q40lr4r7ahsmzpa1q0jagp12abb6rsj80p37q34hsv5284q";
+  })
+  (fetchNuGet {
     name = "QRCoder";
     version = "1.4.1";
     sha256 = "1xgwhpqrm4ycnj8nk4ibxfwkmkiwc5i15l1za3ci5alghlpcb6ch";
@@ -1021,8 +1101,8 @@
   })
   (fetchNuGet {
     name = "Selenium.WebDriver.ChromeDriver";
-    version = "88.0.4324.9600";
-    sha256 = "0jm8dpfp329xsrg69lzq2m6x9yin1m43qgrhs15cz2qx9f02pdx9";
+    version = "90.0.4430.2400";
+    sha256 = "18gjm92nzzvxf0hk7c0nnabs0vmh6yyzq3m4si7p21m6xa3bqiga";
   })
   (fetchNuGet {
     name = "Selenium.WebDriver";

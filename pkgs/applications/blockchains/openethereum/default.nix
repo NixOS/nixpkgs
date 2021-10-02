@@ -44,7 +44,7 @@ rustPlatform.buildRustPackage rec {
     description = "Fast, light, robust Ethereum implementation";
     homepage = "http://parity.io/ethereum";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ akru xrelkd ];
+    maintainers = with maintainers; [ akru ];
     platforms = lib.platforms.unix;
   };
 }

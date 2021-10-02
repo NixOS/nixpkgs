@@ -370,9 +370,11 @@ in rec {
                 ./009_remove_signedness_verifier.patch ./010_mx_substratevm.py
               ];
 
+    nativeBuildInputs = [ gfortran ];
+
     buildInputs = [ mx zlib.dev mercurial jvmci8 git llvm clang
                     python27withPackages icu ruby bzip2 which
-                    readline bzip2 xz pcre curl ed gfortran
+                    readline bzip2 xz pcre curl ed
                   ]  ++ lib.optional stdenv.isDarwin [
                     CoreFoundation gcc.cc.lib libiconv perl openssl
                   ];

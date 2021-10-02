@@ -31,12 +31,12 @@ in
 
 stdenv.mkDerivation rec {
   pname = "frama-c";
-  version = "23.0-rc1";
+  version = "23.1";
   slang   = "Vanadium";
 
   src = fetchurl {
-    url    = "http://frama-c.com/download/frama-c-${version}-${slang}.tar.gz";
-    sha256 = "1z9f9a217bav3vfc99kq57d5rza6j7hr91ndviwkgcaib6wc5hcv";
+    url    = "https://frama-c.com/download/frama-c-${version}-${slang}.tar.gz";
+    sha256 = "1rgkq9sg436smw005ag0j6y3xryhjn18a07m5wjfrfp0s1438nnj";
   };
 
   preConfigure = lib.optionalString stdenv.cc.isClang "configureFlagsArray=(\"--with-cpp=clang -E -C\")";

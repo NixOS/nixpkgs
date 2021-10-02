@@ -10,7 +10,7 @@
 
 let
   sha256 = {
-    "x86_64-linux" = "sha256-nGIUOS4LzfeXamcT0uigbQsVkULH2R3bli0DDEpg3ns=";
+    "x86_64-linux" = "sha256-Tasynkzyy8UIalQn6qhIuPWDflf4pL76D2czgEijrPw=";
     "i686-linux" = "0z6y45sz086njpywg7f0jn6n02qynb1qbi889g2kcgwbfjvmcpm1";
   }."${stdenv.system}";
 
@@ -25,7 +25,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "etcher";
-  version = "1.5.120";
+  version = "1.5.122";
 
   src = fetchurl {
     url = "https://github.com/balena-io/etcher/releases/download/v${version}/balena-etcher-electron_${version}_${arch}.deb";
@@ -58,6 +58,9 @@ stdenv.mkDerivation rec {
 
     cp -a usr/share/* $out/share
     cp -a opt/balenaEtcher/{locales,resources} $out/share/${pname}
+
+    substituteInPlace $out/share/applications/balena-etcher-electron.desktop \
+      --replace /opt/balenaEtcher/balena-etcher-electron ${pname}
 
     runHook postInstall
   '';

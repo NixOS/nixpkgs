@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
     sha256 = "1c10d18gj3kvpmyv5q246x35hjxaqn4ygy1cygaydhyxnm4klzdj";
   };
 
-  nativeBuildInputs = [ cmake openssh ];
-  buildInputs = [ mpi gfortran blas lapack ];
+  nativeBuildInputs = [ cmake openssh gfortran ];
+  buildInputs = [ mpi blas lapack ];
 
   doCheck = true;
 

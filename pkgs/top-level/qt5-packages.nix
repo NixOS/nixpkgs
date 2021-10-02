@@ -80,11 +80,15 @@ in (kdeFrameworks // plasma5 // plasma5.thirdParty // kdeGear // qt5 // {
 
   kde2-decoration = callPackage ../data/themes/kde2 { };
 
+  kcolorpicker = callPackage ../development/libraries/kcolorpicker { };
+
   kdiagram = callPackage ../development/libraries/kdiagram { };
 
   kdsoap = callPackage ../development/libraries/kdsoap { };
 
   kf5gpgmepp = callPackage ../development/libraries/kf5gpgmepp { };
+
+  kimageannotator = callPackage ../development/libraries/kimageannotator { };
 
   kproperty = callPackage ../development/libraries/kproperty { };
 
@@ -179,7 +183,7 @@ in (kdeFrameworks // plasma5 // plasma5.thirdParty // kdeGear // qt5 // {
   qtinstaller = callPackage ../development/libraries/qtinstaller { };
 
   qtkeychain = callPackage ../development/libraries/qtkeychain {
-    withQt5 = true;
+    inherit (pkgs.darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
 
   qtpbfimageplugin = callPackage ../development/libraries/qtpbfimageplugin { };

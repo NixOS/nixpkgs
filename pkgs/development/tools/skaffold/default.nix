@@ -2,26 +2,25 @@
 
 buildGoModule rec {
   pname = "skaffold";
-  version = "1.20.0";
+  version = "1.32.0";
 
   src = fetchFromGitHub {
     owner = "GoogleContainerTools";
     repo = "skaffold";
     rev = "v${version}";
-    sha256 = "080zhksznwsyi0w1ban90vgh8y1q2703h3h4fvkwg695prd9ij66";
+    sha256 = "sha256-LvTAM3uYzSEhX7zz7Z+VcMYV5p80EnyaEIu0CmAUaSg=";
   };
 
-  vendorSha256 = "1jvrk5jhjzg0dq0zg7p4hvjwda2289cmwh0ldz3269y8g3l113x8";
+  vendorSha256 = "sha256-TUpHg4yvZ0WKcUFXjWh4Q4/gRtJ93xNa/gLkj5PYo/w=";
 
   subPackages = ["cmd/skaffold"];
 
-  buildFlagsArray = let t = "github.com/GoogleContainerTools/skaffold/pkg/skaffold"; in  ''
-    -ldflags=
-      -s -w
-      -X ${t}/version.version=v${version}
-      -X ${t}/version.gitCommit=${src.rev}
-      -X ${t}/version.buildDate=unknown
-  '';
+  ldflags = let t = "github.com/GoogleContainerTools/skaffold/pkg/skaffold"; in [
+    "-s" "-w"
+    "-X ${t}/version.version=v${version}"
+    "-X ${t}/version.gitCommit=${src.rev}"
+    "-X ${t}/version.buildDate=unknown"
+  ];
 
   nativeBuildInputs = [ installShellFiles ];
 

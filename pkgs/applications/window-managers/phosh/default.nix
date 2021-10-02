@@ -8,6 +8,8 @@
 , wrapGAppsHook
 , libhandy
 , libxkbcommon
+, libgudev
+, callaudiod
 , pulseaudio
 , glib
 , gtk3
@@ -24,27 +26,20 @@
 , networkmanager
 , polkit
 , libsecret
-, writeText
 }:
 
-let
-  gvc = fetchFromGitLab {
-    domain = "gitlab.gnome.org";
-    owner = "GNOME";
-    repo = "libgnome-volume-control";
-    rev = "ae1a34aafce7026b8c0f65a43c9192d756fe1057";
-    sha256 = "0a4qh5pgyjki904qf7qmvqz2ksxb0p8xhgl2aixfbhixn0pw6saw";
-  };
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "phosh";
-  version = "0.11.0";
+  version = "0.13.1";
 
   src = fetchFromGitLab {
-    domain = "source.puri.sm";
-    owner = "Librem5";
+    domain = "gitlab.gnome.org";
+    group = "World";
+    owner = "Phosh";
     repo = pname;
     rev = "v${version}";
-    sha256 = "104qib4blh32s7bg6j3xza3s9syrxrvyh2wpyh5yx7v5wqarr20x";
+    fetchSubmodules = true; # including gvc and libcall-ui which are designated as subprojects
+    sha256 = "sha256-dKQK4mGe/dvNlca/XMDeq1Q4dH/WBF/rtiUh8RssF5c=";
   };
 
   nativeBuildInputs = [
@@ -60,6 +55,8 @@ in stdenv.mkDerivation rec {
     libhandy
     libsecret
     libxkbcommon
+    libgudev
+    callaudiod
     pulseaudio
     glib
     gcr
@@ -85,11 +82,6 @@ in stdenv.mkDerivation rec {
   doCheck = false;
 
   mesonFlags = [ "-Dsystemd=true" "-Dcompositor=${phoc}/bin/phoc" ];
-
-  postUnpack = ''
-    rmdir $sourceRoot/subprojects/gvc
-    ln -s ${gvc} $sourceRoot/subprojects/gvc
-  '';
 
   postPatch = ''
     chmod +x build-aux/post_install.py
@@ -128,9 +120,9 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A pure Wayland shell prototype for GNOME on mobile devices";
-    homepage = "https://source.puri.sm/Librem5/phosh";
+    homepage = "https://gitlab.gnome.org/World/Phosh/phosh";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ archseer jtojnar masipcat zhaofengli ];
+    maintainers = with maintainers; [ jtojnar masipcat zhaofengli ];
     platforms = platforms.linux;
   };
 }

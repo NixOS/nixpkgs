@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
       + lib.optionalString withPantheon " - built with Contractor support";
     homepage = "https://github.com/Philip-Scott/Notes-up";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ davidak ];
+    maintainers = with maintainers; [ ] ++ teams.pantheon.members;
     platforms = platforms.linux;
   };
 }

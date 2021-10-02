@@ -13,7 +13,27 @@
   "lockkeys@vaina.lt" = "lock-keys";
   "lockkeys@fawtytoo" = "lock-keys-2";
 
+  "system-monitor@paradoxxx.zero.gmail.com" = "system-monitor"; # manually packaged
+  "System_Monitor@bghome.gmail.com" = "system-monitor-2";
 
+  "Hide_Activities@shay.shayel.org" = "hide-activities-button";
+  "hide-activities-button@nmingori.gnome-shell-extensions.org" = "hide-activities-button-2";
+
+  # At the moment, ShutdownTimer@deminder is a fork of ShutdownTimer@neumann which adds new features
+  # there seem to be upstream plans, so this should be checked periodically:
+  # https://github.com/Deminder/ShutdownTimer https://github.com/neumann-d/ShutdownTimer/pull/46
+  "ShutdownTimer@neumann" = null;
+  "shutdown-timer-gnome-shell-extension" = "shutdowntimer-2";
+  "ShutdownTimer@deminder" = "shutdowntimer";
+
+  "noannoyance@sindex.com" = "noannoyance";
+  "noannoyance@daase.net" = "noannoyance-2";
+
+  "extension-list@tu.berry" = "extension-list";
+  "screen-lock@garciabaameiro.com" = "screen-lock"; # Don't know why they got 'extension-list' as slug
+
+
+  # ############################################################################
   # These are conflicts for 3.38 extensions. They will very probably come back
   # once more of them support 40.
 
@@ -26,4 +46,23 @@
 
   # That extension is broken because of https://github.com/NixOS/nixpkgs/issues/118612
   #"flypie@schneegans.github.com" = null;
+
+
+  # ############################################################################
+  # Overrides for extensions that were manually packaged in the past but are gradually
+  # being replaced by automatic packaging where possible.
+  #
+  # The manually packaged ones:
+  "EasyScreenCast@iacopodeenosee.gmail.com" = "easyScreenCast"; # extensionPortalSlug is "easyscreencast"
+  "gnome-fuzzy-app-search@gnome-shell-extensions.Czarlie.gitlab.com" = "fuzzy-app-search"; # extensionPortalSlug is "gnome-fuzzy-app-search"
+  "TopIcons@phocean.net" = "topicons-plus"; # extensionPortalSlug is "topicons"
+  "paperwm@hedning:matrix.org" = "paperwm"; # is not on extensions.gnome.org
+  "no-title-bar@jonaspoehler.de" = "no-title-bar"; # extensionPortalSlug is "no-title-bar-forked"
+  # These extensions are automatically packaged at the moment. We preserve the old attribute name
+  # for backwards compatibility.
+  "appindicatorsupport@rgcjonas.gmail.com" = "appindicator"; # extensionPortalSlug is "appindicator-support"
+  "unredirect@vaina.lt" = "disable-unredirect"; # extensionPortalSlug is "disable-unredirect-fullscreen-windows"
+  "drawOnYourScreen@abakkk.framagit.org" = "draw-on-your-screen"; # extensionPortalSlug is "draw-on-you-screen"
+  "timepp@zagortenay333" = "timepp"; # extensionPortalSlug is "time"
+  "windowIsReady_Remover@nunofarruca@gmail.com" = "window-is-ready-remover"; # extensionPortalSlug is "window-is-ready-notification-remover"
 }

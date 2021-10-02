@@ -17,6 +17,11 @@ in {
   };
 
   config = mkIf cfg.enable {
-    security.wrappers.wshowkeys.source = "${pkgs.wshowkeys}/bin/wshowkeys";
+    security.wrappers.wshowkeys =
+      { setuid = true;
+        owner = "root";
+        group = "root";
+        source = "${pkgs.wshowkeys}/bin/wshowkeys";
+      };
   };
 }

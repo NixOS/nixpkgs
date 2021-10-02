@@ -1,24 +1,22 @@
-{ lib, stdenv, fetchurl, guileSupport ? false, pkg-config ? null , guile ? null }:
+{ lib, stdenv, fetchurl, guileSupport ? false, pkg-config, guile }:
 
-assert guileSupport -> ( pkg-config != null && guile != null );
-
-let
-  version = "4.3";
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "gnumake";
-  inherit version;
+  version = "4.3";
 
   src = fetchurl {
     url = "mirror://gnu/make/make-${version}.tar.gz";
     sha256 = "06cfqzpqsvdnsxbysl5p2fgdgxgl9y4p7scpnrfa8z2zgkjdspz0";
   };
 
+  # to update apply these patches with `git am *.patch` to https://git.savannah.gnu.org/git/make.git
   patches = [
+    # Replaces /bin/sh with sh, see patch file for reasoning
+    ./0001-No-impure-bin-sh.patch
     # Purity: don't look for library dependencies (of the form `-lfoo') in /lib
     # and /usr/lib. It's a stupid feature anyway. Likewise, when searching for
     # included Makefiles, don't look in /usr/include and friends.
-    ./impure-dirs.patch
+    ./0002-remove-impure-dirs.patch
   ];
 
   nativeBuildInputs = lib.optionals guileSupport [ pkg-config ];
