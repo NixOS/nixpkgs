@@ -12830,15 +12830,25 @@ with pkgs;
   cbqn = cbqnBootstrap.phase2;
 
   cbqnBootstrap = lib.dontRecurseIntoAttrs {
+    # use clang since it produces less speculative warnings when compiling,
+    # but avoid bootstrapping a clang stdenv just for CBQN in the cross case
+    stdenv =
+      if stdenv.hostPlatform == stdenv.buildPlatform
+      then llvmPackages_latest.stdenv
+      else stdenv;
+
     phase0 = callPackage ../development/interpreters/bqn/cbqn {
+      inherit (cbqnBootstrap) stdenv;
       bqn-path = null;
     };
 
     phase1 = callPackage ../development/interpreters/bqn/cbqn {
+      inherit (cbqnBootstrap) stdenv;
       bqn-path = "${buildPackages.cbqnBootstrap.phase0}/bin/bqn";
     };
 
     phase2 = callPackage ../development/interpreters/bqn/cbqn {
+      inherit (cbqnBootstrap) stdenv;
       bqn-path = "${buildPackages.cbqnBootstrap.phase1}/bin/bqn";
     };
   };
