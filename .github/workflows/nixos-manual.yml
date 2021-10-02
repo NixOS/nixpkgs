@@ -15,11 +15,11 @@ jobs:
     runs-on: ubuntu-latest
     if: github.repository_owner == 'NixOS'
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f # pin@v2
       with:
         # pull_request_target checks out the base branch by default
         ref: refs/pull/${{ github.event.pull_request.number }}/merge
-    - uses: cachix/install-nix-action@v14
+    - uses: cachix/install-nix-action@11e5400eccd6f89582f7da71e36b86e2b0924252 # pin@v14
     - name: Check DocBook files generated from Markdown are consistent
       run: |
         nixos/doc/manual/md-to-db.sh

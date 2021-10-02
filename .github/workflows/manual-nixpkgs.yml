@@ -14,15 +14,15 @@ jobs:
     runs-on: ubuntu-latest
     if: github.repository_owner == 'NixOS'
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f # pin@v2
         with:
           # pull_request_target checks out the base branch by default
           ref: refs/pull/${{ github.event.pull_request.number }}/merge
-      - uses: cachix/install-nix-action@v14
+      - uses: cachix/install-nix-action@11e5400eccd6f89582f7da71e36b86e2b0924252 # pin@v14
         with:
           # explicitly enable sandbox
           extra_nix_config: sandbox = true
-      - uses: cachix/cachix-action@v10
+      - uses: cachix/cachix-action@73e75d1a0cd4330597a571e8f9dedb41faa2fc4e # pin@v10
         with:
           # This cache is for the nixos/nixpkgs manual builds and should not be trusted or used elsewhere.
           name: nixpkgs-ci

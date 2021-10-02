@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.repository_owner == 'NixOS'
     steps:
-    - uses: actions/labeler@v3
+    - uses: actions/labeler@e54d1c08bb51b1826c8da4b05eb3fbfbc5cc4943 # pin@v3
       with:
         repo-token: ${{ secrets.GITHUB_TOKEN }}
         sync-labels: true
