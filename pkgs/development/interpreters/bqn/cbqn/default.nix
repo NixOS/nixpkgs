@@ -21,7 +21,7 @@ let
 in
 
 stdenv.mkDerivation {
-  pname = "cbqn";
+  pname = "cbqn" + lib.optionalString (bqn-path == null) "-bytecode";
   version = "0.0.0+unstable=2021-09-29";
 
   src = fetchFromGitHub {
