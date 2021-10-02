@@ -6180,6 +6180,8 @@ in {
 
   pyee = callPackage ../development/python-modules/pyee { };
 
+  pyefergy = callPackage ../development/python-modules/pyefergy { };
+
   pyeight = callPackage ../development/python-modules/pyeight { };
 
   pyelftools = callPackage ../development/python-modules/pyelftools { };
