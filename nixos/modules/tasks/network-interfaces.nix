@@ -284,6 +284,13 @@ let
         '';
       };
 
+      wakeOnLan = {
+        enable = mkOption {
+          type = types.bool;
+          default = false;
+          description = "Wether to enable wol on this interface.";
+        };
+      };
     };
 
     config = {
