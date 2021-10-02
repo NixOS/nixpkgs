@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
 
     # https://github.com/babashka/babashka/blob/v0.6.1/script/compile#L41-L52
     args=("-jar" "$BABASHKA_JAR"
+          "-H:CLibraryPath=${graalvm11-ce.lib}/lib"
           # Required to build babashka on darwin. Do not remove.
           "${lib.optionalString stdenv.isDarwin "-H:-CheckToolchain"}"
           "-H:Name=$BABASHKA_BINARY"
