@@ -980,4 +980,11 @@ self: super: builtins.intersectAttrs super {
   # Test suite is just the default example executable which doesn't work if not
   # executed by Setup.hs, but works if started on a proper TTY
   isocline = dontCheck super.isocline;
+
+  # Some hash implementations are x86 only, but part of the test suite.
+  # So executing and building it on non-x86 platforms will always fail.
+  hashes = overrideCabal super.hashes {
+    doCheck = with pkgs.stdenv; hostPlatform == buildPlatform
+      && buildPlatform.isx86;
+  };
 }
