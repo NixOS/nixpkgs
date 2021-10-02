@@ -28,8 +28,6 @@ stdenv.mkDerivation rec {
     # https://github.com/clojure-lsp/clojure-lsp/blob/2021.09.30-15.28.01/graalvm/native-unix-compile.sh#L19-L24
     args=("-jar" "$CLOJURE_LSP_JAR"
           "-H:CLibraryPath=${graalvm11-ce.lib}/lib"
-          # Required to build babashka on darwin. Do not remove.
-          "${lib.optionalString stdenv.isDarwin "-H:-CheckToolchain"}"
           "-H:+ReportExceptionStackTraces"
           "--verbose"
           "--no-fallback"
