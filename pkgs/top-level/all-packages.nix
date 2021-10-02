@@ -5853,6 +5853,8 @@ with pkgs;
 
   gbenchmark = callPackage ../development/libraries/gbenchmark {};
 
+  gkraken = callPackage ../tools/system/gkraken { };
+
   gtkdatabox = callPackage ../development/libraries/gtkdatabox {};
 
   gtklick = callPackage ../applications/audio/gtklick {};
