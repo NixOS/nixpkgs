@@ -162,7 +162,7 @@ in
     in {
       "127.0.0.2" = hostnames;
     } // optionalAttrs cfg.enableIPv6 {
-      "::1" = hostnames;
+      "::1" = hostnames ++ [ "localhost" ];
     };
 
     networking.hostFiles = let
@@ -172,7 +172,6 @@ in
       # FQDN so that e.g. "hostname -f" works correctly.
       localhostHosts = pkgs.writeText "localhost-hosts" ''
         127.0.0.1 localhost
-        ${optionalString cfg.enableIPv6 "::1 localhost"}
       '';
       stringHosts =
         let
