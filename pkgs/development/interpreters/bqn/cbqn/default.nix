@@ -66,6 +66,13 @@ stdenv.mkDerivation rec {
      runHook postInstall
   '';
 
+  doInstallCheck = with stdenv; hostPlatform.isCompatible buildPlatform;
+  installCheckPhase = ''
+    runHook preInstallCheck
+    "$out/bin/bqn" "${mlochbaum-bqn}/test/this.bqn" | grep "All passed"
+    runHook postInstallCheck
+  '';
+
   meta = with lib; {
     homepage = "https://github.com/dzaima/CBQN/";
     description = "BQN implementation in C";
@@ -75,4 +82,3 @@ stdenv.mkDerivation rec {
   };
 }
 # TODO: factor BQN
-# TODO: test suite (dependent on BQN from mlochbaum)
