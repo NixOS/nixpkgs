@@ -1002,8 +1002,8 @@ Superuser created successfully.
       <listitem>
         <para>
           The <literal>varnish</literal> package was upgraded from 6.3.x
-          to 6.5.x. <literal>varnish60</literal> for the last LTS
-          release is also still available.
+          to 7.x. <literal>varnish60</literal> for the last LTS release
+          is also still available.
         </para>
       </listitem>
       <listitem>
