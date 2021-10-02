@@ -944,6 +944,18 @@ let
         };
       };
 
+      influxdata.flux = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "influxdata";
+          name = "flux";
+          version = "0.6.5";
+          sha256 = "sha256-rKkZ7Sg8buryFtbIuKsrf3V3Rf7PP8hnbEIRFf4FvSM=";
+        };
+        meta = with lib; {
+          license = licenses.mit;
+        };
+      };
+
       james-yu.latex-workshop = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "latex-workshop";
