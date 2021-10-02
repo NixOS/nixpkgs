@@ -31090,9 +31090,9 @@ with pkgs;
   } // (config.caffe or {}));
 
   caffe2 = callPackage ../development/libraries/science/math/caffe2 (rec {
-    inherit (python36Packages) python future six numpy pydot;
+    inherit (python3Packages) python future six numpy pydot;
     protobuf = protobuf3_1;
-    python-protobuf = python36Packages.protobuf.override { inherit protobuf; };
+    python-protobuf = python3Packages.protobuf.override { inherit protobuf; };
     opencv3 = opencv3WithoutCuda; # Used only for image loading.
   });
 
