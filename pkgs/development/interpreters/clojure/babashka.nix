@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, graalvm11-ce, glibcLocales }:
+{ lib, stdenv, fetchurl, graalvm11-ce, glibc, glibcLocales }:
 
 stdenv.mkDerivation rec {
   pname = "babashka";
@@ -23,6 +23,9 @@ stdenv.mkDerivation rec {
 
     # https://github.com/babashka/babashka/blob/v0.6.1/script/compile#L41-L52
     args=("-jar" "$BABASHKA_JAR"
+          # Reduce closure size by linking using glibc directly
+          # instead of using GraalVM copies
+          "-H:CLibraryPath=${glibc}/lib"
           # Required to build babashka on darwin. Do not remove.
           "${lib.optionalString stdenv.isDarwin "-H:-CheckToolchain"}"
           "-H:Name=$BABASHKA_BINARY"
