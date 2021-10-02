@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
 let
-  makewhatis = "${lib.getBin pkgs.mandoc}/bin/makewhatis";
+  makewhatis = "${lib.getBin cfg.package}/bin/makewhatis";
 
   cfg = config.documentation.man.mandoc;
 
@@ -26,12 +26,22 @@ in {
           The first value given takes priority.
         '';
       };
+
+      package = lib.mkOption {
+        type = lib.types.package;
+        default = pkgs.mandoc;
+        defaultText = lib.literalExpression "pkgs.mandoc";
+        description = ''
+          The <literal>mandoc</literal> derivation to use. Useful to override
+          configuration options used for the package.
+        '';
+      };
     };
   };
 
   config = lib.mkIf cfg.enable {
     environment = {
-      systemPackages = [ pkgs.mandoc ];
+      systemPackages = [ cfg.package ];
 
       # tell mandoc about man pages
       etc."man.conf".text = lib.concatMapStrings (path: ''
