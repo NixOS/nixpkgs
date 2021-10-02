@@ -7695,6 +7695,8 @@ with pkgs;
 
   pwsafe = callPackage ../applications/misc/pwsafe { };
 
+  neil = callPackage ../development/tools/neil { };
+
   niff = callPackage ../tools/package-management/niff { };
 
   nifskope = libsForQt5.callPackage ../tools/graphics/nifskope { };
