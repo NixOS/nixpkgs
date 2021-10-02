@@ -87,7 +87,7 @@ in stdenv.mkDerivation {
       include <abstractions/nameservice>
       include <abstractions/ssl_certs>
       include "${apparmorRulesFromClosure { name = "transmission-daemon"; } ([
-        curl libevent openssl pcre zlib libnatpmp miniupnpc
+        curl libevent openssl pcre zlib
       ] ++ lib.optionals enableSystemd [ systemd ]
         ++ lib.optionals stdenv.isLinux [ inotify-tools ]
       )}"
