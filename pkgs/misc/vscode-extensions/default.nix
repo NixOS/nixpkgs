@@ -414,9 +414,8 @@ let
           sha256 = "sha256-AYINgq1BMfh7p4xhwSC2Www6dQvyQAGTA45HJsmMGDg=";
         };
         meta = with lib; {
-          description = "LanguageTool integration for VS Code.";
-          downloadPage =
-            "https://marketplace.visualstudio.com/items?itemName=davidlday.languagetool-linter";
+          description = "LanguageTool integration for VS Code";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=davidlday.languagetool-linter";
           homepage = "https://github.com/davidlday/vscode-languagetool-linter";
           license = licenses.asl20;
           maintainers = with maintainers; [ ebbertd ];
