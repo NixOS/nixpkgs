@@ -2,16 +2,16 @@
 
 stdenv.mkDerivation rec {
   pname = "tzdata";
-  version = "2021b";
+  version = "2021c";
 
   srcs =
     [ (fetchurl {
         url = "https://data.iana.org/time-zones/releases/tzdata${version}.tar.gz";
-        sha256 = "1dyyqcxwhk7bx9lzlxg10rn3i0c12i0d2ngzgcmzxpsrvgdydnak";
+        sha256 = "0himprzx3ahxkmg4rvp8n5lqry76qzc65j6sfq151hqirg4d3wdl";
       })
       (fetchurl {
         url = "https://data.iana.org/time-zones/releases/tzcode${version}.tar.gz";
-        sha256 = "0qdkr02dkyhiqflwgq7dvv87c2qi5dm5yny2kwaxva59h7iczblr";
+        sha256 = "01fsa661vzdij46z286pa8q07cppqz29sr2pf0qqldqpldbb6km3";
       })
     ];
 
@@ -73,6 +73,6 @@ stdenv.mkDerivation rec {
       publicDomain # tzdata
     ];
     platforms = platforms.all;
-    maintainers = with maintainers; [ fpletz ];
+    maintainers = with maintainers; [ ajs124 fpletz ];
   };
 }
