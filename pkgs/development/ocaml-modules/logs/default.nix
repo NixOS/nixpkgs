@@ -1,6 +1,7 @@
 { lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild
 , topkg, result, lwt, cmdliner, fmt
 , js_of_ocaml
+, jsooSupport ? true
 }:
 let
   pname = "logs";
@@ -21,10 +22,11 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ ocaml findlib ocamlbuild ];
-  buildInputs = [ findlib topkg fmt cmdliner js_of_ocaml lwt ];
+  buildInputs = [ findlib topkg fmt cmdliner lwt ]
+    ++ lib.optional jsooSupport js_of_ocaml;
   propagatedBuildInputs = [ result ];
 
-  buildPhase = "${topkg.run} build --with-js_of_ocaml true";
+  buildPhase = "${topkg.run} build --with-js_of_ocaml ${lib.boolToString jsooSupport}";
 
   inherit (topkg) installPhase;
 
