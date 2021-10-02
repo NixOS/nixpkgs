@@ -97,7 +97,7 @@ rec {
 
   run_nvim_with_plug = runTest nvim_with_plug ''
     export HOME=$TMPDIR
-    ${nvim_with_plug}/bin/nvim -i NONE -c 'color base16-tomorrow-night'  +quit!
+    ${nvim_with_plug}/bin/nvim -i NONE -c 'color base16-tomorrow-night'  +quit! -e
   '';
 
 
