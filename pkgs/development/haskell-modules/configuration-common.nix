@@ -1913,9 +1913,34 @@ EOT
   # https://github.com/Porges/email-validate-hs/issues/58
   email-validate = doJailbreak super.email-validate;
 
-  # 2021-06-20: Outdated upper bounds
-  # https://github.com/Porges/email-validate-hs/issues/58
-  ghcup = doJailbreak super.ghcup;
+  # 2021-10-02: Make optics 0.4 packages work together
+  optics-th_0_4 = super.optics-th_0_4.override {
+    optics-core = self.optics-core_0_4;
+  };
+  optics-extra_0_4 = super.optics-extra_0_4.override {
+    optics-core = self.optics-core_0_4;
+  };
+  optics_0_4 = super.optics_0_4.override {
+    optics-core = self.optics-core_0_4;
+    optics-extra = self.optics-extra_0_4;
+    optics-th = self.optics-th_0_4;
+  };
+
+  # https://github.com/plow-technologies/hspec-golden-aeson/issues/17
+  hspec-golden-aeson_0_9_0_0 = dontCheck super.hspec-golden-aeson_0_9_0_0;
+
+  # 2021-10-02: Doesn't compile with optics < 0.4
+  ghcup = overrideCabal (super.ghcup.override {
+    hspec-golden-aeson = self.hspec-golden-aeson_0_9_0_0;
+    optics = self.optics_0_4;
+  }) (drv: {
+    # golden files are not shipped with the hackage tarball and hspec-golden-aeson
+    # needs some encouraging to create the missing files after version 0.8.0.0.
+    # See: https://gitlab.haskell.org/haskell/ghcup-hs/-/issues/255
+    preCheck = ''
+      export CREATE_MISSING_GOLDEN=yes
+    '' + (drv.preCheck or "");
+  });
 
   # Break out of "Cabal < 3.2" constraint.
   stylish-haskell = doJailbreak super.stylish-haskell;
