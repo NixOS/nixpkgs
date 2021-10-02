@@ -1164,6 +1164,12 @@
     email = "sivaraman.balaji@gmail.com";
     name = "Balaji Sivaraman";
   };
+  balodja = {
+    email = "balodja@gmail.com";
+    github = "balodja";
+    githubId = 294444;
+    name = "Vladimir Korolev";
+  };
   baloo = {
     email = "nixpkgs@superbaloo.net";
     github = "baloo";
