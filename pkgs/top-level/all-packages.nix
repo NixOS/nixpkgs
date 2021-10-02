@@ -16965,6 +16965,8 @@ with pkgs;
     libGL = null;
   };
 
+  libdecor = callPackage ../development/libraries/libdecor { };
+
   libdigidoc = callPackage ../development/libraries/libdigidoc {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
