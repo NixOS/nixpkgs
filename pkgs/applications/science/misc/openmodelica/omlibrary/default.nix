@@ -31,7 +31,7 @@ mkOpenModelicaDerivation {
 including Modelica Standard Library";
     homepage = "https://openmodelica.org";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ smironov ];
+    maintainers = with maintainers; [ balodja smironov ];
     platforms = platforms.linux;
   };
 }
