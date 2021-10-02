@@ -44,7 +44,6 @@ CNIPLUGINS_VERSION=$(grep VERSION_CNIPLUGINS= $FILE_SCRIPTS_VERSION \
 CNIPLUGINS_SHA256=$(nix-prefetch-url --quiet --unpack \
     "https://github.com/rancher/plugins/archive/refs/tags/v${CNIPLUGINS_VERSION}.tar.gz")
 
-
 setKV () {
     sed -i "s|$1 = \".*\"|$1 = \"$2\"|" ./default.nix
 }
