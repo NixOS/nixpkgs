@@ -13,11 +13,11 @@
 
 buildPythonPackage rec {
   pname = "watchdog";
-  version = "2.1.5";
+  version = "2.1.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5563b005907613430ef3d4aaac9c78600dd5704e84764cb6deda4b3d72807f09";
+    sha256 = "sha256-o25132x2fL9G9hqRxws7pxgR36CspKMk2UB6Bqi3ouc=";
   };
 
   buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
