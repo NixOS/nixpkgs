@@ -1,6 +1,18 @@
-{ callPackage, fetchgit, lib, stdenvNoCC
-, bison, curl, git, perl
-, flex, gnat11, zlib
+{ bison
+, callPackage
+, curl
+, fetchgit
+, flex
+, git
+, gnat11
+, lib
+, ncurses
+, perl
+, pkg-config
+, python3Minimal
+, stdenvNoCC
+, zlib
+, installExtraPackages ? true
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -13,8 +25,14 @@ stdenvNoCC.mkDerivation rec {
     sha256 = "00xr74yc0kj9rrqa1a8b7bih865qlp9i4zs67ysavkfrjrwwssxm";
   };
 
-  nativeBuildInputs = [ bison curl git perl ];
+  nativeBuildInputs = [ bison curl perl ];
   buildInputs = [ flex gnat11 zlib ];
+  propagatedBuildInputs = lib.optionals installExtraPackages [
+    git
+    ncurses
+    pkg-config
+    python3Minimal
+  ];
 
   enableParallelBuilding = true;
   dontConfigure = true;
