@@ -71,5 +71,8 @@ in {
   libressl_3_2 = generic {
     version = "3.2.5";
     sha256 = "1zkwrs3b19s1ybz4q9hrb7pqsbsi8vxcs44qanfy11fkc7ynb2kr";
+    patches = [
+      ./CVE-2021-41581.patch
+    ];
   };
 }
