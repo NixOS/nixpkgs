@@ -313,8 +313,17 @@ in {
         '';
       };
 
-      objectstore = let
-        s3Arguments = {
+      objectstore = {
+        s3 = {
+          enable = mkEnableOption ''
+            S3 object storage as primary storage.
+
+            This mounts a bucket on an Amazon S3 object storage or compatible
+            implementation into the virtual filesystem.
+
+            See nextcloud's documentation on "Object Storage as Primary
+            Storage" for more details.
+          '';
           bucket = mkOption {
             type = types.str;
             example = "nextcloud";
@@ -386,38 +395,6 @@ in {
             '';
           };
         };
-      in mkOption {
-        type = types.nullOr (types.submodule {
-          options = {
-            s3 = mkOption {
-              type = types.submodule {
-                options = {
-                  enable = mkEnableOption "S3 object storage as primary storage.";
-                  arguments = mkOption {
-                    type = types.submodule {
-                      options = s3Arguments;
-                    };
-                    description = ''
-                      Configuration arguments for the object storage.
-                    '';
-                  };
-                };
-              };
-              description = ''
-                Mounts a bucket on an Amazon S3 object storage or compatible
-                implementation into the virtual filesystem.
-              '';
-            };
-          };
-        });
-        default = null;
-        description = ''
-          Options for configuring object storage as nextcloud's primary storage.
-
-          See nextcloud's documentation on "Object Storage as Primary Storage"
-          for details on how to select the right class and argument set for
-          your needs.
-        '';
       };
     };
 
@@ -496,10 +473,6 @@ in {
         }
         { assertion = versionOlder cfg.package.version "21" -> cfg.config.defaultPhoneRegion == null;
           message = "The `defaultPhoneRegion'-setting is only supported for Nextcloud >=21!";
-        }
-        { assertion = acfg.objectstore == null
-            || (lists.count (v: v.enable) (attrsets.attrValues acfg.objectstore)) == 1;
-          message = "If using objectstore class as primary storage exactly one class can be enabled.";
         }
       ];
 
@@ -590,29 +563,22 @@ in {
         nextcloud-setup = let
           c = cfg.config;
           writePhpArrary = a: "[${concatMapStringsSep "," (val: ''"${toString val}"'') a}]";
-          requiresReadSecretFunction = c.dbpassFile != null
-            || (c.objectstore != null && c.objectstore.s3.enable);
-          objectstoreConfig = let
-            class = if c.objectstore.s3.enable then "S3" else "";
-            args = if c.objectstore.s3.enable then c.objectstore.s3.arguments else {};
-            classLine = '''class' => '\\OC\\Files\\ObjectStore\\${class}','';
-            argumentLines = optionalString c.objectstore.s3.enable ''
-              'bucket' => '${args.bucket}',
-              'autocreate' => ${toString args.autocreate},
-              'key' => '${args.key}',
-              'secret' => nix_read_secret('${args.secretFile}'),
-              ${optionalString (args.hostname != null) "'hostname' => '${args.hostname}',"}
-              ${optionalString (args.port != null) "'port' => ${toString args.port},"}
-              ${optionalString (args.useSsl != null) "'use_ssl' => ${if args.useSsl then "true" else "false"},"}
-              ${optionalString (args.region != null) "'region' => '${args.region}',"}
-              'use_path_style' => ${if args.usePathStyle then "true" else "false"},
-            '';
-          in optionalString (c.objectstore != null) '''objectstore' => [
-            ${classLine}
+          requiresReadSecretFunction = c.dbpassFile != null || c.objectstore.s3.enable;
+          objectstoreConfig = let s3 = c.objectstore.s3; in optionalString s3.enable '''objectstore' => [
+            'class' => '\\OC\\Files\\ObjectStore\\S3',
             'arguments' => [
-              ${argumentLines}
+              'bucket' => '${s3.bucket}',
+              'autocreate' => ${boolToString s3.autocreate},
+              'key' => '${s3.key}',
+              'secret' => nix_read_secret('${s3.secretFile}'),
+              ${optionalString (s3.hostname != null) "'hostname' => '${s3.hostname}',"}
+              ${optionalString (s3.port != null) "'port' => ${toString s3.port},"}
+              ${optionalString (s3.useSsl != null) "'use_ssl' => ${boolToString s3.useSsl},"}
+              ${optionalString (s3.region != null) "'region' => '${s3.region}',"}
+              'use_path_style' => ${boolToString s3.usePathStyle},
             ],
           ]'';
+
           overrideConfig = pkgs.writeText "nextcloud-config.php" ''
             <?php
             ${optionalString requiresReadSecretFunction ''
