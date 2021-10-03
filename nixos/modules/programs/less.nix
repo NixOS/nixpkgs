@@ -33,8 +33,9 @@ in
 
     programs.less = {
 
-      # since environment.nix sets PAGER=less, enable the less module by default
-      enable = mkEnableOption "less" // { default = true; };
+      # note that environment.nix sets PAGER=less, and
+      # therefore also enables this module
+      enable = mkEnableOption "less";
 
       configFile = mkOption {
         type = types.nullOr types.path;

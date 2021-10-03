@@ -25,6 +25,9 @@ in
         XDG_CONFIG_DIRS = [ "/etc/xdg" ]; # needs to be before profile-relative paths to allow changes through environment.etc
       };
 
+    # since we set PAGER to this above, make sure it's installed
+    programs.less.enable = true;
+
     environment.profiles = mkAfter
       [ "/nix/var/nix/profiles/default"
         "/run/current-system/sw"
