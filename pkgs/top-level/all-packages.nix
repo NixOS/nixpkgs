@@ -4058,6 +4058,8 @@ with pkgs;
 
   checkbashisms = callPackage ../development/tools/misc/checkbashisms { };
 
+  checkmate = callPackage ../development/tools/checkmate { };
+
   civetweb = callPackage ../development/libraries/civetweb { };
 
   ckb-next = libsForQt5.callPackage ../tools/misc/ckb-next { };
@@ -6710,6 +6712,10 @@ with pkgs;
   mailcatcher = callPackage ../development/web/mailcatcher { };
 
   makebootfat = callPackage ../tools/misc/makebootfat { };
+
+  mapcache = callPackage ../servers/mapcache { };
+
+  mapserver = callPackage ../servers/mapserver { };
 
   martin = callPackage ../servers/martin {
     inherit (darwin.apple_sdk.frameworks) Security;

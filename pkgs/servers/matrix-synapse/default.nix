@@ -1,6 +1,6 @@
 { lib, stdenv, python3, openssl
 , enableSystemd ? stdenv.isLinux, nixosTests
-, enableRedis ? false
+, enableRedis ? true
 , callPackage
 }:
 

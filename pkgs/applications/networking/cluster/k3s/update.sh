@@ -45,7 +45,7 @@ CNIPLUGINS_SHA256=$(nix-prefetch-url --quiet --unpack \
     "https://github.com/rancher/plugins/archive/refs/tags/v${CNIPLUGINS_VERSION}.tar.gz")
 
 setKV () {
-  sed -i "s/$1 = \".*\"/$1 = \"$2\"/" ./default.nix
+    sed -i "s|$1 = \".*\"|$1 = \"$2\"|" ./default.nix
 }
 
 setKV k3sVersion ${K3S_VERSION}
