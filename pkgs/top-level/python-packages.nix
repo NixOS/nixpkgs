@@ -1613,6 +1613,8 @@ in {
 
   colander = callPackage ../development/python-modules/colander { };
 
+  collections-extended = callPackage ../development/python-modules/collections-extended { };
+
   colorama = callPackage ../development/python-modules/colorama { };
 
   colorcet = callPackage ../development/python-modules/colorcet { };

@@ -37,6 +37,8 @@ buildPythonPackage rec {
     sha256 = "sha256-g80WedX+TGHE9EJ/RSgOc53PM17V3WZslUNaHoqKTo0=";
   };
 
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
   patches = [
     (substituteAll {
       src = ./paths.patch;
@@ -71,6 +73,10 @@ buildPythonPackage rec {
   checkInputs = [
     pytest-xdist
     pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "ocrmypdf"
   ];
 
   meta = with lib; {
