@@ -128,6 +128,14 @@ in
         '';
       };
 
+      plugins = lib.mkOption {
+        type = lib.types.listOf lib.types.path;
+        default = [];
+        description = ''
+          Keycloak plugin jar, ear files or derivations with them
+        '';
+      };
+
       database = {
         type = mkOption {
           type = enum [ "mysql" "postgresql" ];
@@ -785,6 +793,14 @@ in
 
               umask u=rwx,g=,o=
 
+              install_plugin() {
+                if [ -d "$1" ]; then
+                  find "$1" -type f \( -iname \*.ear -o -iname \*.jar \) -exec install -m 0500 -o keycloak -g keycloak "{}" "/run/keycloak/deployments/" \;
+                else
+                  install -m 0500 -o keycloak -g keycloak "$1" "/run/keycloak/deployments/"
+                fi
+              }
+
               install -m 0600 ${cfg.package}/standalone/configuration/*.properties /run/keycloak/configuration
               install -T -m 0600 ${keycloakConfig} /run/keycloak/configuration/standalone.xml
 
@@ -792,7 +808,9 @@ in
 
               export JAVA_OPTS=-Djboss.server.config.user.dir=/run/keycloak/configuration
               add-user-keycloak.sh -u admin -p '${cfg.initialAdminPassword}'
-            '' + optionalString (cfg.sslCertificate != null && cfg.sslCertificateKey != null) ''
+            ''
+            + lib.optionalString (cfg.plugins != []) (lib.concatStringsSep "\n" (map (pl: "install_plugin ${lib.escapeShellArg pl}") cfg.plugins))
+            + optionalString (cfg.sslCertificate != null && cfg.sslCertificateKey != null) ''
               pushd /run/keycloak/ssl/
               cat "$CREDENTIALS_DIRECTORY/ssl_cert" <(echo) \
                   "$CREDENTIALS_DIRECTORY/ssl_key" <(echo) \
