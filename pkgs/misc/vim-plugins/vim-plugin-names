@@ -124,6 +124,7 @@ eagletmt/neco-ghc
 easymotion/vim-easymotion
 eddiebergman/nvim-treesitter-pyfold
 eddyekofo94/gruvbox-flat.nvim
+EdenEast/nightfox.nvim@main
 editorconfig/editorconfig-vim
 edkolev/tmuxline.vim
 edluffy/hologram.nvim@main
