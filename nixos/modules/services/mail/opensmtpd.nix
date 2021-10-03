@@ -103,7 +103,7 @@ in {
     };
 
     security.wrappers.smtpctl = {
-      owner = "nobody";
+      owner = "root";
       group = "smtpq";
       setuid = false;
       setgid = true;
