@@ -11360,7 +11360,8 @@ let
     };
     outputs = [ "out" "tex" ];
     propagatedBuildInputs = [ ArchiveZip DBFile FileWhich IOString ImageMagick ImageSize JSONXS LWP ParseRecDescent PodParser TextUnidecode XMLLibXSLT ];
-    preCheck = /* epub test fails: File::Temp considers /build insecure */ ''
+    # https://github.com/brucemiller/LaTeXML/issues/1669
+    preCheck = ''
       rm t/931_epub.t
     '';
     nativeBuildInputs = [ pkgs.makeWrapper ] ++ lib.optional stdenv.isDarwin shortenPerlShebang;
