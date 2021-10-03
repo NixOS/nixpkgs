@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "awslambdaric";
-  version = "1.2.2";
+  version = "2.0.0";
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-lambda-python-runtime-interface-client";
     rev = version;
-    sha256 = "1r4b4w5xhf6p4vs7yx89kighlqim9f96v2ryknmrnmblgr4kg0h1";
+    sha256 = "1amlaq119mk8fa3fxi3d6vgp83vcd81mbk53jzbixacklmcsp50k";
   };
 
   patches = [
