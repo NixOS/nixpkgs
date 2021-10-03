@@ -9,8 +9,10 @@ let
   openjfx11 = callPackage ../development/compilers/openjdk/openjfx/11.nix { };
   openjfx15 = callPackage ../development/compilers/openjdk/openjfx/15.nix { };
 
+  mavenfod = callPackage ../development/java-modules/maven-fod.nix { };
+
 in {
-  inherit mavenbuild fetchMaven openjfx11 openjfx15;
+  inherit mavenbuild mavenfod fetchMaven openjfx11 openjfx15;
 
   compiler = let
 
