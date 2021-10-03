@@ -1,7 +1,6 @@
-{ stdenv, lib, pkgs, autoPatchelfHook, buildKodiAddon, ... }:
+{ stdenv, lib, autoPatchelfHook, buildKodiAddon, addonDir, kodi, fetchurl, unzip }:
 let
-  addonDir = "/share/kodi/addons";
-  python = pkgs.kodi.pythonPackages.python.withPackages (p: with p; [ flake8 ]);
+  python = kodi.pythonPackages.python.withPackages (p: with p; [ flake8 ]);
   os = "${stdenv.hostPlatform.system}";
   osname = {
     x86_64-linux = "linux_x64";
@@ -24,7 +23,7 @@ buildKodiAddon rec {
   namespace = "plugin.video.elementum";
   version = "0.1.83";
 
-  src = pkgs.fetchurl {
+  src = fetchurl {
     url = "https://github.com/elgatito/plugin.video.elementum/releases/download/v${version}/plugin.video.elementum-${version}.${osname}.zip";
     sha256 = hash;
   };
@@ -32,30 +31,23 @@ buildKodiAddon rec {
   nativeBuildInputs = [
     autoPatchelfHook
     python
-    pkgs.unzip
+    unzip
   ];
-  buildInputs = with pkgs; [
+  buildInputs = [
     stdenv.cc.cc.lib
   ];
 
-  patchPhase = ''
-    rm Makefile
-  '';
-
-  buildPHase = ":";
+  dontBuild = true;
 
   installPhase = ''
     mkdir -p $out${addonDir}/${namespace}/
     cp -r ./ $out${addonDir}/${namespace}/
   '';
 
-  propagatedBuildInputs = [
-  ];
-
   meta = with lib; {
     homepage = "https://elementumorg.github.io/";
     description = "Elementum addon is an addon for Kodi, that manages your virtual library, syncs with your Trakt account .";
     license = licenses.gpl2;
-    maintainers = teams.kodi.members;
+    maintainers = almostnobody;
   };
 }
