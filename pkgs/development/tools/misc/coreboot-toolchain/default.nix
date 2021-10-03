@@ -56,15 +56,15 @@ let
     sha256 = "1l1gxs5ncdbgz91lsl4y7w5aapask3w02q9inayb2m5bwlwq6jrw";
   };
 
-  tar_coreboot_name = "coreboot-${version_coreboot}.tar.xz";
-  tar_coreboot = fetchurl {
-    url = "https://coreboot.org/releases/${tar_coreboot_name}";
-    sha256 = "0viw2x4ckjwiylb92w85k06b0g9pmamjy2yqs7fxfqbmfadkf1yr";
+  coreboot = fetchgit {
+    url = "https://review.coreboot.org/coreboot";
+    rev = "${version_coreboot}";
+    sha256 = "00xr74yc0kj9rrqa1a8b7bih865qlp9i4zs67ysavkfrjrwwssxm";
   };
 in stdenvNoCC.mkDerivation rec {
   pname = "coreboot-toolchain";
   version = version_coreboot;
-  src = tar_coreboot;
+  src = coreboot;
 
   nativeBuildInputs = [ perl curl gnumake git bison ];
 
