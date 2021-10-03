@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     substituteInPlace build/gen_version --replace 'git describe' 'echo ${version}'
 
     # drop blanket -Werror
-    substituteInPlace make_in/Makefile.in --replace '-Werror' ' '
+    substituteInPlace make_in/Makefile.in --replace '-Werror' ''
   '';
 
   installPhase = ''
