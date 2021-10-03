@@ -585,7 +585,7 @@ in {
               function nix_read_secret($file) {
                 if (!file_exists($file)) {
                   throw new \RuntimeException(sprintf(
-                    "Cannot start Nextcloud, dbpass file %s set by NixOS doesn't seem to "
+                    "Cannot start Nextcloud, secret file %s set by NixOS doesn't seem to "
                     . "exist! Please make sure that the file exists and has appropriate "
                     . "permissions for user & group 'nextcloud'!",
                     $file
