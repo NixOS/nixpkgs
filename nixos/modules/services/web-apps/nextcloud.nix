@@ -368,8 +368,8 @@ in {
             '';
           };
           useSsl = mkOption {
-            type = types.nullOr types.bool;
-            default = null;
+            type = types.bool;
+            default = true;
             description = ''
               Use SSL for objectstore access.
             '';
@@ -573,7 +573,7 @@ in {
               'secret' => nix_read_secret('${s3.secretFile}'),
               ${optionalString (s3.hostname != null) "'hostname' => '${s3.hostname}',"}
               ${optionalString (s3.port != null) "'port' => ${toString s3.port},"}
-              ${optionalString (s3.useSsl != null) "'use_ssl' => ${boolToString s3.useSsl},"}
+              'use_ssl' => ${boolToString s3.useSsl},
               ${optionalString (s3.region != null) "'region' => '${s3.region}',"}
               'use_path_style' => ${boolToString s3.usePathStyle},
             ],
