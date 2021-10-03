@@ -216,6 +216,14 @@ in
       '';
     };
 
+    plugins = lib.mkOption {
+      type = lib.types.listOf lib.types.path;
+      default = [];
+      description = ''
+        Keycloak plugin jar, ear files or derivations with them
+      '';
+    };
+
     initialAdminPassword = lib.mkOption {
       type = lib.types.str;
       default = "changeme";
@@ -675,8 +683,18 @@ in
 
                   umask u=rwx,g=,o=
 
+                  install_plugin() {
+                    if [ -d "$1" ]; then
+                      find "$1" -type f \( -iname \*.ear -o -iname \*.jar \) -exec install -m 0500 -o keycloak -g keycloak "{}" "/run/keycloak/deployments/" \;
+                    else
+                      install -m 0500 -o keycloak -g keycloak "$1" "/run/keycloak/deployments/"
+                    fi
+                  }
+
                   install -T -m 0400 -o keycloak -g keycloak '${cfg.database.passwordFile}' /run/keycloak/secrets/db_password
-                '' + lib.optionalString (cfg.sslCertificate != null && cfg.sslCertificateKey != null) ''
+                '' + lib.optionalString (cfg.plugins != []) (lib.concatStringsSep "\n" (map (pl: "install_plugin ${lib.escapeShellArg pl}") cfg.plugins))
+                + lib.optionalString (cfg.sslCertificate != null && cfg.sslCertificateKey != null) ''
+
                   install -T -m 0400 -o keycloak -g keycloak '${cfg.sslCertificate}' /run/keycloak/secrets/ssl_cert
                   install -T -m 0400 -o keycloak -g keycloak '${cfg.sslCertificateKey}' /run/keycloak/secrets/ssl_key
                 '';
