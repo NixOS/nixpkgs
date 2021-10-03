@@ -12835,16 +12835,37 @@ with pkgs;
 
   mbqn = callPackage ../development/interpreters/bqn/mlochbaum-bqn { };
 
-  cbqn = cbqn-phase2;
-  # And the classic bootstrapping process
-  cbqn-phase0 = callPackage ../development/interpreters/bqn/cbqn {
-    bqn-path = null;
-  };
-  cbqn-phase1 = callPackage ../development/interpreters/bqn/cbqn {
-    bqn-path = "${cbqn-phase0}/bin/bqn";
-  };
-  cbqn-phase2 = callPackage ../development/interpreters/bqn/cbqn {
-    bqn-path = "${cbqn-phase1}/bin/bqn";
+  cbqn = cbqn-bootstrap.phase2;
+  cbqn-standalone = cbqn-bootstrap.phase0;
+
+  # Below, the classic self-bootstrapping process
+  cbqn-bootstrap = lib.dontRecurseIntoAttrs {
+    # use clang here since it emits less speculative warnings;
+    # however, avoid its building in cross compilations
+    stdenv =
+      if stdenv.hostPlatform == stdenv.buildPlatform
+      then clangStdenv
+      else stdenv;
+    mbqn-source = buildPackages.mbqn.src;
+
+    phase0 = callPackage ../development/interpreters/bqn/cbqn {
+      inherit (cbqn-bootstrap) stdenv;
+      genBytecode = false;
+      bqn-path = null;
+      mbqn-source = null;
+    };
+
+    phase1 = callPackage ../development/interpreters/bqn/cbqn {
+      inherit (cbqn-bootstrap) stdenv mbqn-source;
+      genBytecode = true;
+      bqn-path = "${buildPackages.cbqn-bootstrap.phase0}/bin/cbqn";
+    };
+
+    phase2 = callPackage ../development/interpreters/bqn/cbqn {
+      inherit (cbqn-bootstrap) stdenv mbqn-source;
+      genBytecode = true;
+      bqn-path = "${buildPackages.cbqn-bootstrap.phase1}/bin/cbqn";
+    };
   };
 
   dbqn = callPackage ../development/interpreters/bqn/dzaima-bqn {
