@@ -3,6 +3,7 @@
 , lib
 , cmake
 , cacert
+, fetchpatch
 , buildShared ? !stdenv.hostPlatform.isStatic
 }:
 
@@ -82,9 +83,15 @@ in {
   libressl_3_2 = generic {
     version = "3.2.5";
     sha256 = "1zkwrs3b19s1ybz4q9hrb7pqsbsi8vxcs44qanfy11fkc7ynb2kr";
+    patches = [
+      ./CVE-2021-41581.patch
+    ];
   };
   libressl_3_4 = generic {
     version = "3.4.0";
     sha256 = "1lhn76nd59p1dfd27b4636zj6wh3f5xsi8b3sxqnl820imsswbp5";
+    patches = [
+      ./CVE-2021-41581.patch
+    ];
   };
 }
