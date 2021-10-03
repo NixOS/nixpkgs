@@ -4,10 +4,10 @@ GEM
     foreman (0.87.2)
 
 PLATFORMS
-  x86_64-linux
+  ruby
 
 DEPENDENCIES
   foreman
 
 BUNDLED WITH
-   2.2.20
+   2.1.4
