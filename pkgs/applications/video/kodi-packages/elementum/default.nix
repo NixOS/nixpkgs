@@ -48,6 +48,6 @@ buildKodiAddon rec {
     homepage = "https://elementumorg.github.io/";
     description = "Elementum addon is an addon for Kodi, that manages your virtual library, syncs with your Trakt account .";
     license = licenses.gpl2;
-    maintainers = almostnobody;
+    maintainers = with maintainers; [ almostnobody ];
   };
 }
