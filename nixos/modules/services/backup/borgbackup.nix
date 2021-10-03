@@ -339,7 +339,11 @@ in {
             description = ''
               Backups are delayed by a uniformly random amount of time up to
               the value. Useful to stagger remote backups on a weak network
-              connection.
+              connection. Must be in the format described in
+              <citerefentry><refentrytitle>systemd.time</refentrytitle>
+              <manvolnum>7</manvolnum></citerefentry>. Either a unit-less value
+              (in seconds) or a time span value, e.g.,
+              <literal>"5min 20s"</literal>.
             '';
             example = "5 min";
           };
@@ -350,11 +354,12 @@ in {
             description = ''
               Whether and how soon a failed backup should be restarted.
               Must be in the format described in
-              <citerefentry><refentrytitle>systemd.service</refentrytitle>
-              <manvolnum>7</manvolnum></citerefentry>.
-              If you do not want a failed backup to restart
-              automatically, use <literal>null</literal>.
-            '';
+              <citerefentry><refentrytitle>systemd.time</refentrytitle>
+              <manvolnum>7</manvolnum></citerefentry>. Either a unit-less value
+              (in seconds) or a time span value, e.g.,
+              <literal>"5min 20s"</literal>.
+              If you do not want a failed backup to restart automatically, use
+              <literal>null</literal>.  '';
             example = "10 min";
           };
 
