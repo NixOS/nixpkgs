@@ -3518,6 +3518,8 @@ with pkgs;
 
   mslink = callPackage ../tools/misc/mslink { };
 
+  mceinject = callPackage ../os-specific/linux/mceinject { };
+
   mcelog = callPackage ../os-specific/linux/mcelog {
     util-linux = util-linuxMinimal;
   };
