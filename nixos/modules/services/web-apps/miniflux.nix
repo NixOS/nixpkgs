@@ -35,7 +35,7 @@ in
 
       config = mkOption {
         type = types.attrsOf types.str;
-        example = literalExample ''
+        example = literalExpression ''
           {
             CLEANUP_FREQUENCY = "48";
             LISTEN_ADDR = "localhost:8080";

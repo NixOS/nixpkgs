@@ -411,7 +411,7 @@ in
     boot.initrd.enable = mkOption {
       type = types.bool;
       default = !config.boot.isContainer;
-      defaultText = "!config.boot.isContainer";
+      defaultText = literalExpression "!config.boot.isContainer";
       description = ''
         Whether to enable the NixOS initial RAM disk (initrd). This may be
         needed to perform some initialisation tasks (like mounting
@@ -527,7 +527,7 @@ in
         then "zstd"
         else "gzip"
       );
-      defaultText = "zstd if the kernel supports it (5.9+), gzip if not.";
+      defaultText = literalDocBook "<literal>zstd</literal> if the kernel supports it (5.9+), <literal>gzip</literal> if not";
       type = types.unspecified; # We don't have a function type...
       description = ''
         The compressor to use on the initrd image. May be any of:
@@ -559,7 +559,7 @@ in
             is the path it should be copied from (or null for the same
             path inside and out).
           '';
-        example = literalExample
+        example = literalExpression
           ''
             { "/etc/dropbear/dropbear_rsa_host_key" =
                 ./secret-dropbear-key;

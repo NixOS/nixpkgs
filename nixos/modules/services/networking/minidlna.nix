@@ -39,7 +39,7 @@ in
     services.minidlna.friendlyName = mkOption {
       type = types.str;
       default = "${config.networking.hostName} MiniDLNA";
-      defaultText = "$HOSTNAME MiniDLNA";
+      defaultText = literalExpression ''"''${config.networking.hostName} MiniDLNA"'';
       example = "rpi3";
       description =
         ''

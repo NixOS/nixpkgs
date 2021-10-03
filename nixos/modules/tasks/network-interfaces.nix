@@ -146,7 +146,7 @@ let
       tempAddress = mkOption {
         type = types.enum (lib.attrNames tempaddrValues);
         default = cfg.tempAddresses;
-        defaultText = literalExample ''config.networking.tempAddresses'';
+        defaultText = literalExpression ''config.networking.tempAddresses'';
         description = ''
           When IPv6 is enabled with SLAAC, this option controls the use of
           temporary address (aka privacy extensions) on this
@@ -257,7 +257,7 @@ let
 
       virtualType = mkOption {
         default = if hasPrefix "tun" name then "tun" else "tap";
-        defaultText = literalExample ''if hasPrefix "tun" name then "tun" else "tap"'';
+        defaultText = literalExpression ''if hasPrefix "tun" name then "tun" else "tap"'';
         type = with types; enum [ "tun" "tap" ];
         description = ''
           The type of interface to create.
@@ -420,7 +420,7 @@ in
           The FQDN is required but cannot be determined. Please make sure that
           both networking.hostName and networking.domain are set properly.
         '';
-      defaultText = literalExample ''''${networking.hostName}.''${networking.domain}'';
+      defaultText = literalExpression ''"''${networking.hostName}.''${networking.domain}"'';
       description = ''
         The fully qualified domain name (FQDN) of this host. It is the result
         of combining networking.hostName and networking.domain. Using this
@@ -578,7 +578,6 @@ in
         options = {
 
           interfaces = mkOption {
-            example = [ "eth0" "eth1" ];
             description = "The physical network interfaces connected by the vSwitch.";
             type = with types; attrsOf (submodule vswitchInterfaceOpts);
           };
@@ -691,7 +690,7 @@ in
         '';
       in mkOption {
         default = { };
-        example = literalExample ''
+        example = literalExpression ''
           {
             bond0 = {
               interfaces = [ "eth0" "wlan0" ];
@@ -720,7 +719,7 @@ in
             driverOptions = mkOption {
               type = types.attrsOf types.str;
               default = {};
-              example = literalExample driverOptionsExample;
+              example = literalExpression driverOptionsExample;
               description = ''
                 Options for the bonding driver.
                 Documentation can be found in
@@ -784,7 +783,7 @@ in
 
     networking.macvlans = mkOption {
       default = { };
-      example = literalExample ''
+      example = literalExpression ''
         {
           wan = {
             interface = "enp2s0";
@@ -819,7 +818,7 @@ in
 
     networking.sits = mkOption {
       default = { };
-      example = literalExample ''
+      example = literalExpression ''
         {
           hurricane = {
             remote = "10.0.0.1";
@@ -883,7 +882,7 @@ in
 
     networking.vlans = mkOption {
       default = { };
-      example = literalExample ''
+      example = literalExpression ''
         {
           vlan0 = {
             id = 3;
@@ -927,7 +926,7 @@ in
 
     networking.wlanInterfaces = mkOption {
       default = { };
-      example = literalExample ''
+      example = literalExpression ''
         {
           wlan-station0 = {
               device = "wlp6s0";

@@ -2,7 +2,7 @@
 
 let
 
-  inherit (lib.options) literalExample mkEnableOption mkOption;
+  inherit (lib.options) literalExpression mkEnableOption mkOption;
   inherit (lib.types) bool enum ints lines attrsOf nullOr path str submodule;
   inherit (lib.modules) mkDefault mkIf mkMerge;
 
@@ -197,7 +197,7 @@ in
 
     sendmailPath = mkOption {
       type = path;
-      example = literalExample "''${pkgs.postfix}/bin/sendmail";
+      example = literalExpression ''"''${pkgs.postfix}/bin/sendmail"'';
       # '' ;  # fix vim
       description = ''
         Path to <filename>sendmail</filename> program.
@@ -344,7 +344,7 @@ in
     faxqclean.doneqMinutes = mkOption {
       type = ints.positive;
       default = 15;
-      example = literalExample "24*60";
+      example = literalExpression "24*60";
       description = ''
         Set the job
         age threshold (in minutes) that controls how long
@@ -354,7 +354,7 @@ in
     faxqclean.docqMinutes = mkOption {
       type = ints.positive;
       default = 60;
-      example = literalExample "24*60";
+      example = literalExpression "24*60";
       description = ''
         Set the document
         age threshold (in minutes) that controls how long

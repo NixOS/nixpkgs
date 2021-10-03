@@ -24,7 +24,8 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.sickbeard;
-        example = literalExample "pkgs.sickrage";
+        defaultText = literalExpression "pkgs.sickbeard";
+        example = literalExpression "pkgs.sickrage";
         description =''
           Enable <literal>pkgs.sickrage</literal> or <literal>pkgs.sickgear</literal>
           as an alternative to SickBeard

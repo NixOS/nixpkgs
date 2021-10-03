@@ -74,7 +74,7 @@ in {
       jsonJobs = mkOption {
         default = [ ];
         type = types.listOf types.str;
-        example = literalExample ''
+        example = literalExpression ''
           [
             '''
               [ { "job":
@@ -94,7 +94,7 @@ in {
       nixJobs = mkOption {
         default = [ ];
         type = types.listOf types.attrs;
-        example = literalExample ''
+        example = literalExpression ''
           [ { job =
               { name = "jenkins-job-test-3";
                 builders = [

@@ -24,7 +24,7 @@ in
       plugins = mkOption {
         type = types.listOf types.package;
         default = [];
-        example = literalExample "[ pkgs.modem-manager-gui ]";
+        example = literalExpression "[ pkgs.modem-manager-gui ]";
         description = ''
           The list of plugins to install.
         '';

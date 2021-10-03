@@ -125,7 +125,7 @@ in {
       package = mkOption {
         type = types.package;
         default = pkgs.matrix-synapse;
-        defaultText = "pkgs.matrix-synapse";
+        defaultText = literalExpression "pkgs.matrix-synapse";
         description = ''
           Overridable attribute of the matrix synapse server package to use.
         '';
@@ -133,7 +133,7 @@ in {
       plugins = mkOption {
         type = types.listOf types.package;
         default = [ ];
-        example = literalExample ''
+        example = literalExpression ''
           with config.services.matrix-synapse.package.plugins; [
             matrix-synapse-ldap3
             matrix-synapse-pam

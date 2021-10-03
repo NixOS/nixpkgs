@@ -33,7 +33,7 @@ in
           for additional details.
         '';
         default = [];
-        example = literalExample ''
+        example = literalExpression ''
           [
             "chlffgpmiacpedhhbkiomidkjlcfhogd" # pushbullet
             "mbniclmhobmnbdlbpiphghaielnnpgdp" # lightshot
@@ -75,7 +75,7 @@ in
           Make sure the selected policy is supported on Linux and your browser version.
         '';
         default = {};
-        example = literalExample ''
+        example = literalExpression ''
           {
             "BrowserSignin" = 0;
             "SyncDisabled" = true;
