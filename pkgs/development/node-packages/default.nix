@@ -387,18 +387,19 @@ let
     };
 
     vega-lite = super.vega-lite.override {
-        # npx tries to install vega from scratch at vegalite runtime if it
-        # can't find it. We thus replace it with a direct call to the nix
-        # derivation. This might not be necessary anymore in future vl
-        # versions: https://github.com/vega/vega-lite/issues/6863.
         postInstall = ''
-          substituteInPlace $out/lib/node_modules/vega-lite/bin/vl2pdf \
-            --replace "npx -p vega vg2pdf"  "${self.vega-cli}/bin/vg2pdf"
-          substituteInPlace $out/lib/node_modules/vega-lite/bin/vl2svg \
-            --replace "npx -p vega vg2svg"  "${self.vega-cli}/bin/vg2svg"
-          substituteInPlace $out/lib/node_modules/vega-lite/bin/vl2png \
-            --replace "npx -p vega vg2png"  "${self.vega-cli}/bin/vg2png"
+          cd node_modules
+          for dep in ${self.vega-cli}/lib/node_modules/vega-cli/node_modules/*; do
+            if [[ ! -d $dep ]]; then
+              ln -s "${self.vega-cli}/lib/node_modules/vega-cli/node_modules/$dep"
+            fi
+          done
         '';
+        passthru.tests = {
+          simple-execution = pkgs.callPackage ./package-tests/vega-lite.nix {
+            inherit (self) vega-lite;
+          };
+        };
     };
 
     webtorrent-cli = super.webtorrent-cli.override {

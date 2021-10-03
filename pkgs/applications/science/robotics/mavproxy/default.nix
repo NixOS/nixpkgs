@@ -3,11 +3,11 @@
 
 buildPythonApplication rec {
   pname = "MAVProxy";
-  version = "1.8.42";
+  version = "1.8.43";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "787f29f10d2cb7572206f874a255949d0da9a4e2ffd2bc28b94b78bb73cf05d8";
+    sha256 = "685e595dc8ccf354a62b354b5ef4b1f9558c4b76b1216a093dd1cc1fae37dd27";
   };
 
   postPatch = ''
