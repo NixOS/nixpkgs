@@ -8869,6 +8869,8 @@ with pkgs;
 
   rsibreak = libsForQt5.callPackage ../applications/misc/rsibreak { };
 
+  rslint = callPackage ../development/tools/rslint { };
+
   rss-bridge-cli = callPackage ../applications/misc/rss-bridge-cli { };
 
   rss2email = callPackage ../applications/networking/feedreaders/rss2email {
