@@ -246,6 +246,11 @@ runTests {
     };
   };
 
+  testEscapeXML = {
+    expr = escapeXML ''"test" 'test' < & >'';
+    expected = "&quot;test&quot; &apos;test&apos; &lt; &amp; &gt;";
+  };
+
 # LISTS
 
   testFilter = {
