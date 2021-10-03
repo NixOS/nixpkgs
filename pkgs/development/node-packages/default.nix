@@ -389,8 +389,7 @@ let
     vega-lite = super.vega-lite.override {
         postInstall = ''
           cd node_modules
-          vega_dependencies=$(ls ${self.vega-cli}/lib/node_modules/vega-cli/node_modules)
-          for dep in $vega_dependencies; do
+          for dep in ${self.vega-cli}/lib/node_modules/vega-cli/node_modules/*; do
             if [[ ! -d $dep ]]; then
               ln -s "${self.vega-cli}/lib/node_modules/vega-cli/node_modules/$dep"
             fi
