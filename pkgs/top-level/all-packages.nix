@@ -10481,6 +10481,8 @@ with pkgs;
     });
   };
 
+  wgpu = callPackage ../tools/graphics/wgpu { };
+
   wg-bond = callPackage ../applications/networking/wg-bond { };
 
   which = callPackage ../tools/system/which { };
