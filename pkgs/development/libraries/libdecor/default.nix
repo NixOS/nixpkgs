@@ -6,6 +6,7 @@
 , ninja
 , wayland
 , wayland-protocols
+, wayland-scanner
 , cairo
 , dbus
 , pango
@@ -21,10 +22,18 @@ stdenv.mkDerivation rec {
     owner = "jadahl";
     repo = "libdecor";
     rev = "${version}";
-    hash = "sha256:0qdg3r7k086wzszr969s0ljlqdvfqm31zpl8p5h397bw076zr6p2";
+    sha256 = "0qdg3r7k086wzszr969s0ljlqdvfqm31zpl8p5h397bw076zr6p2";
   };
 
-  nativeBuildInputs = [ meson ninja pkg-config ];
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    wayland-scanner
+  ];
+
   buildInputs = [
     wayland
     wayland-protocols

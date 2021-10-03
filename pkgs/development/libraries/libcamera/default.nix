@@ -19,12 +19,12 @@
 
 stdenv.mkDerivation {
   pname = "libcamera";
-  version = "unstable-2021-06-02";
+  version = "unstable-2021-09-24";
 
   src = fetchgit {
-    url = "git://linuxtv.org/libcamera.git";
-    rev = "143b252462b9b795a1286a30349348642fcb87f5";
-    sha256 = "0mlwgd3rxagzhmc94lnn6snriyqvfdpz8r8f58blcf16859galyl";
+    url = "https://git.libcamera.org/libcamera/libcamera.git";
+    rev = "40f5fddca7f774944a53f58eeaebc4db79c373d8";
+    sha256 = "0jklgdv5ma4nszxibms5lkf5d2ips7ncynwa1flglrhl5bl4wkzz";
   };
 
   postPatch = ''
