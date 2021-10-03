@@ -10019,6 +10019,8 @@ with pkgs;
 
   volatility = callPackage ../tools/security/volatility { };
 
+  volatility3 = callPackage ../tools/security/volatility3 { };
+
   vbetool = callPackage ../tools/system/vbetool { };
 
   vcsi = callPackage ../tools/video/vcsi { };
