@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
     owner = "bottlesdevs";
     repo = pname;
     rev = version;
-    hash = "sha256:0wdb6pc9gl6fnmd500smsq303snncaim284wgz7isjwhmwmfyw8m";
+    sha256 = "0wdb6pc9gl6fnmd500smsq303snncaim284wgz7isjwhmwmfyw8m";
   };
 
   postPatch = ''
