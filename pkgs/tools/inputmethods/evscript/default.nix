@@ -2,7 +2,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "evscript";
-  version = "git-2021-06-16";
+  version = "unstable-2021-06-16";
 
   src = fetchFromGitHub {
     owner = "myfreeweb";
