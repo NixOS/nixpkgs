@@ -145,7 +145,7 @@ let
   extraBuildInputs = extraPackages py.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2021.9.6";
+  hassVersion = "2021.9.7";
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "homeassistant";
@@ -162,7 +162,7 @@ in with py.pkgs; buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = version;
-    sha256 = "1ac56gdnhzkf19h29g0f54camw6v1cg5wx0crhm23r45qlfsjacs";
+    sha256 = "1vcdnxh671iqhlbf6811j537by2i03fhryp9r9x77477y2y0xd6k";
   };
 
   # leave this in, so users don't have to constantly update their downstream patch handling
@@ -175,10 +175,10 @@ in with py.pkgs; buildPythonApplication rec {
       --replace "awesomeversion==21.4.0" "awesomeversion" \
       --replace "bcrypt==3.1.7" "bcrypt" \
       --replace "cryptography==3.3.2" "cryptography" \
-      --replace "httpx==0.18.2" "httpx>=0.18.2" \
       --replace "pip>=8.0.3,<20.3" "pip" \
       --replace "requests==2.25.1" "requests>=2.25.1" \
-      --replace "ruamel.yaml==0.15.100" "ruamel.yaml"
+      --replace "ruamel.yaml==0.15.100" "ruamel.yaml" \
+      --replace "voluptuous==0.12.1" "voluptuous==0.12.2"
     substituteInPlace tests/test_config.py --replace '"/usr"' '"/build/media"'
   '';
 
@@ -339,6 +339,7 @@ in with py.pkgs; buildPythonApplication rec {
     "ee_brightbox"
     "efergy"
     "elgato"
+    "elkm1"
     "emonitor"
     "emulated_hue"
     "emulated_kasa"
@@ -362,7 +363,9 @@ in with py.pkgs; buildPythonApplication rec {
     "filter"
     "fireservicerota"
     "firmata"
+    "fjaraskupan"
     "flick_electric"
+    "flipr"
     "flo"
     "flume"
     "flunearyou"
@@ -431,6 +434,7 @@ in with py.pkgs; buildPythonApplication rec {
     "hue"
     "huisbaasje"
     "humidifier"
+    "hunterdouglas_powerview"
     "hvv_departures"
     "hyperion"
     "ialarm"
@@ -487,6 +491,7 @@ in with py.pkgs; buildPythonApplication rec {
     "mailbox"
     "manual"
     "manual_mqtt"
+    "maxcube"
     "mazda"
     "media_player"
     "media_source"
@@ -518,6 +523,7 @@ in with py.pkgs; buildPythonApplication rec {
     "my"
     "myq"
     "mysensors"
+    "mythicbeastsdns"
     "nam"
     "namecheapdns"
     "neato"
@@ -545,6 +551,7 @@ in with py.pkgs; buildPythonApplication rec {
     "ovo_energy"
     "owntracks"
     "ozw"
+    "p1_monitor"
     "panel_custom"
     "panel_iframe"
     "persistent_notification"
@@ -575,6 +582,7 @@ in with py.pkgs; buildPythonApplication rec {
     "recorder"
     "reddit"
     "remote"
+    "renault"
     "rest"
     "rest_command"
     "rflink"
@@ -628,6 +636,7 @@ in with py.pkgs; buildPythonApplication rec {
     # "sonos"
     "soundtouch"
     "spaceapi"
+    "spc"
     "speedtestdotnet"
     "spider"
     "spotify"
@@ -790,6 +799,8 @@ in with py.pkgs; buildPythonApplication rec {
     # wemo/test_sensor.py: KeyError for various power attributes
     "--deselect tests/components/wemo/test_sensor.py::TestInsightTodayEnergy::test_state_unavailable"
     "--deselect tests/components/wemo/test_sensor.py::TestInsightCurrentPower::test_state_unavailable"
+    # tado/test_climate.py: Tries to connect to my.tado.com
+    "--deselect tests/components/tado/test_climate.py::test_air_con["
     # helpers/test_system_info.py: AssertionError: assert 'Unknown' == 'Home Assistant Container'
     "--deselect tests/helpers/test_system_info.py::test_container_installationtype"
     # tests are located in tests/
@@ -827,8 +838,9 @@ in with py.pkgs; buildPythonApplication rec {
     "test_onboarding_core_no_rpi_power"
     # hue/test_sensor_base.py: Race condition when counting events
     "test_hue_events"
-    # august/test_lock.py: AssertionError: assert 'unlocked' == 'locked'
+    # august/test_lock.py: AssertionError: assert 'unlocked' == 'locked' / assert 'off' == 'on'
     "test_lock_update_via_pubnub"
+    "test_door_sense_update_via_pubnub"
   ];
 
   preCheck = ''

@@ -45,10 +45,16 @@ with lib;
 let
   k3sVersion = "1.21.4+k3s1";     # k3s git tag
   k3sCommit = "3e250fdbab72d88f7e6aae57446023a0567ffc97"; # k3s git commit at the above version
+  k3sRepoSha256 = "1w7drvk0bmlmqrxh1y6dxjy7dk6bdrl72pkd25lc1ir6wbzb05h9";
 
   traefikChartVersion = "9.18.2"; # taken from ./scripts/download at TRAEFIK_VERSION
+  traefikChartSha256 = "sha256-9d7p0ngyMN27u4OPgz7yI14Zj9y36t9o/HMX5wyDpUI=";
+
   k3sRootVersion = "0.9.1";       # taken from ./scripts/download at ROOT_VERSION
+  k3sRootSha256 = "sha256-qI84KYJKY/T6pqWZW9lOTq5NzZiu//v1zrMzUCiRTGQ=";
+
   k3sCNIVersion = "0.8.6-k3s1";   # taken from ./scripts/version.sh at VERSION_CNIPLUGINS
+  k3sCNISha256 = "sha256-uAy17eRRAXPCcnh481KxFMvFQecnnBs24jn5YnVNfY4=";
 
   baseMeta = {
     description = "A lightweight Kubernetes distribution";
@@ -61,7 +67,7 @@ let
   # bundled into the k3s binary
   traefikChart = fetchurl {
     url = "https://helm.traefik.io/traefik/traefik-${traefikChartVersion}.tgz";
-    sha256 = "sha256-9d7p0ngyMN27u4OPgz7yI14Zj9y36t9o/HMX5wyDpUI=";
+    sha256 = traefikChartSha256;
   };
   # so, k3s is a complicated thing to package
   # This derivation attempts to avoid including any random binaries from the
@@ -75,7 +81,7 @@ let
   k3sRoot = fetchzip {
     # Note: marked as apache 2.0 license
     url = "https://github.com/k3s-io/k3s-root/releases/download/v${k3sRootVersion}/k3s-root-amd64.tar";
-    sha256 = "sha256-qI84KYJKY/T6pqWZW9lOTq5NzZiu//v1zrMzUCiRTGQ=";
+    sha256 = k3sRootSha256;
     stripRoot = false;
   };
   k3sPlugins = buildGoPackage rec {
@@ -89,7 +95,7 @@ let
       owner = "rancher";
       repo = "plugins";
       rev = "v${version}";
-      sha256 = "sha256-uAy17eRRAXPCcnh481KxFMvFQecnnBs24jn5YnVNfY4=";
+      sha256 = k3sCNISha256;
     };
 
     meta = baseMeta // {
@@ -101,7 +107,7 @@ let
   k3sRepo = fetchgit {
     url = "https://github.com/k3s-io/k3s";
     rev = "v${k3sVersion}";
-    sha256 = "1w7drvk0bmlmqrxh1y6dxjy7dk6bdrl72pkd25lc1ir6wbzb05h9";
+    sha256 = k3sRepoSha256;
   };
   # Stage 1 of the k3s build:
   # Let's talk about how k3s is structured.
@@ -279,6 +285,8 @@ stdenv.mkDerivation rec {
   installCheckPhase = ''
     $out/bin/k3s --version | grep v${k3sVersion} > /dev/null
   '';
+
+  passthru.updateScript = ./update.sh;
 
   meta = baseMeta;
 }

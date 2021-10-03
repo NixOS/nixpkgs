@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, fetchpatch, python, zlib, pkg-config, glib
 , perl, pixman, vde2, alsa-lib, texinfo, flex
-, bison, lzo, snappy, libaio, gnutls, nettle, curl, ninja, meson
+, bison, lzo, snappy, libaio, libtasn1, gnutls, nettle, curl, ninja, meson, sigtool
 , makeWrapper, autoPatchelfHook
 , attr, libcap, libcap_ng
 , CoreServices, Cocoa, Hypervisor, rez, setfile
@@ -43,19 +43,20 @@ stdenv.mkDerivation rec {
     + lib.optionalString xenSupport "-xen"
     + lib.optionalString hostCpuOnly "-host-cpu-only"
     + lib.optionalString nixosTestRunner "-for-vm-tests";
-  version = "6.0.0";
+  version = "6.1.0";
 
   src = fetchurl {
     url= "https://download.qemu.org/qemu-${version}.tar.xz";
-    sha256 = "1f9hz8rf12jm8baa7kda34yl4hyl0xh0c4ap03krfjx23i3img47";
+    sha256 = "15iw7982g6vc4jy1l9kk1z9sl5bm1bdbwr74y7nvwjs1nffhig7f";
   };
 
-  nativeBuildInputs = [ makeWrapper python python.pkgs.sphinx pkg-config flex bison meson ninja ]
+  nativeBuildInputs = [ makeWrapper python python.pkgs.sphinx python.pkgs.sphinx_rtd_theme pkg-config flex bison meson ninja ]
     ++ lib.optionals gtkSupport [ wrapGAppsHook ]
-    ++ lib.optionals stdenv.isLinux [ autoPatchelfHook ];
+    ++ lib.optionals stdenv.isLinux [ autoPatchelfHook ]
+    ++ lib.optionals stdenv.isDarwin [ sigtool ];
 
   buildInputs = [ zlib glib perl pixman
-    vde2 texinfo lzo snappy
+    vde2 texinfo lzo snappy libtasn1
     gnutls nettle curl
   ]
     ++ lib.optionals ncursesSupport [ ncurses ]
@@ -85,22 +86,14 @@ stdenv.mkDerivation rec {
   patches = [
     ./fix-qemu-ga.patch
     ./9p-ignore-noatime.patch
+    # Cocoa clipboard support only works on macOS 10.14+
     (fetchpatch {
-      name = "CVE-2021-3545.patch";
-      url = "https://gitlab.com/qemu-project/qemu/-/commit/121841b25d72d13f8cad554363138c360f1250ea.patch";
-      sha256 = "13dgfd8dmxcalh2nvb68iv0kyv4xxrvpdqdxf1h3bjr4451glag1";
-    })
-    (fetchpatch {
-      name = "CVE-2021-3546.patch";
-      url = "https://gitlab.com/qemu-project/qemu/-/commit/9f22893adcb02580aee5968f32baa2cd109b3ec2.patch";
-      sha256 = "1vkhm9vl671y4cra60b6704339qk1h5dyyb3dfvmvpsvfyh2pm7n";
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/7e3e20d89129614f4a7b2451fe321cc6ccca3b76.diff";
+      sha256 = "09xz06g57wxbacic617pq9c0qb7nly42gif0raplldn5lw964xl2";
+      revert = true;
     })
   ] ++ lib.optional nixosTestRunner ./force-uid0-on-9p.patch
     ++ lib.optionals stdenv.hostPlatform.isMusl [
-    (fetchpatch {
-      url = "https://raw.githubusercontent.com/alpinelinux/aports/2bb133986e8fa90e2e76d53369f03861a87a74ef/main/qemu/xattr_size_max.patch";
-      sha256 = "1xfdjs1jlvs99hpf670yianb8c3qz2ars8syzyz8f2c2cp5y4bxb";
-    })
     (fetchpatch {
       url = "https://raw.githubusercontent.com/alpinelinux/aports/2bb133986e8fa90e2e76d53369f03861a87a74ef/main/qemu/musl-F_SHLCK-and-F_EXLCK.patch";
       sha256 = "1gm67v41gw6apzgz7jr3zv9z80wvkv0jaxd2w4d16hmipa8bhs0k";
@@ -110,19 +103,23 @@ stdenv.mkDerivation rec {
       url = "https://raw.githubusercontent.com/alpinelinux/aports/2bb133986e8fa90e2e76d53369f03861a87a74ef/main/qemu/fix-sigevent-and-sigval_t.patch";
       sha256 = "0wk0rrcqywhrw9hygy6ap0lfg314m9z1wr2hn8338r5gfcw75mav";
     })
+  ] ++ lib.optionals stdenv.isDarwin [
+    # The Hypervisor.framework support patch converted something that can be applied:
+    # * https://patchwork.kernel.org/project/qemu-devel/list/?series=548227
+    # The base revision is whatever commit there is before the series starts:
+    # * https://github.com/patchew-project/qemu/commits/patchew/20210916155404.86958-1-agraf%40csgraf.de
+    # The target revision is what patchew has as the series tag from patchwork:
+    # * https://github.com/patchew-project/qemu/releases/tag/patchew%2F20210916155404.86958-1-agraf%40csgraf.de
+    (fetchpatch {
+      url = "https://github.com/patchew-project/qemu/compare/7adb961995a3744f51396502b33ad04a56a317c3..d2603c06d9c4a28e714b9b70fe5a9d0c7b0f934d.diff";
+      sha256 = "sha256-nSi5pFf9+EefUmyJzSEKeuxOt39ztgkXQyUB8fTHlcY=";
+    })
   ];
 
   postPatch = ''
     # Otherwise tries to ensure /var/run exists.
     sed -i "/install_subdir('run', install_dir: get_option('localstatedir'))/d" \
         qga/meson.build
-
-    # TODO: On aarch64-darwin, we automatically codesign everything, but qemu
-    # needs specific entitlements and does its own signing. This codesign
-    # command fails, but we have no fix at the moment, so this disables it.
-    # This means `-accel hvf` is broken for now, on aarch64-darwin only.
-    substituteInPlace meson.build \
-      --replace 'if exe_sign' 'if false'
 
     # glibc 2.33 compat fix: if `has_statx = true` is set, `tools/virtiofsd/passthrough_ll.c` will
     # rely on `stx_mnt_id`[1] which is not part of glibc's `statx`-struct definition.
@@ -180,6 +177,12 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # tries to access /dev
   dontWrapGApps = true;
+
+  # QEMU attaches entitlements with codesign and strip removes those,
+  # voiding the entitlements and making it non-operational.
+  # The alternative is to re-sign with entitlements after stripping:
+  # * https://github.com/qemu/qemu/blob/v6.1.0/scripts/entitlement.sh#L25
+  dontStrip = stdenv.isDarwin;
 
   postFixup = ''
     # the .desktop is both invalid and pointless

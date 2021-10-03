@@ -1657,4 +1657,4 @@ DEPENDENCIES
   yajl-ruby (~> 1.4.1)
 
 BUNDLED WITH
-   2.2.20
+   2.2.24

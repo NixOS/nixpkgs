@@ -1,6 +1,5 @@
 { lib, stdenv
 , fetchFromGitHub
-, fetchpatch
 , nix-update-script
 , linkFarm
 , substituteAll
@@ -32,7 +31,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-greeter";
-  version = "6.0.0";
+  version = "6.0.1";
 
   repoName = "greeter";
 
@@ -40,7 +39,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "1ny1003bbpdscc4kr2d94zc5vxm30y64dpj3fpd5zz2p2g0cq2h9";
+    sha256 = "1f606ds56sp1c58q8dblfpaq9pwwkqw9i4gkwksw45m2xkwlbflq";
   };
 
   passthru = {
@@ -89,12 +88,6 @@ stdenv.mkDerivation rec {
   ];
 
   patches = [
-    # Upstream code not respecting our localedir
-    # https://github.com/elementary/greeter/pull/545
-    (fetchpatch {
-      url = "https://github.com/elementary/greeter/commit/d1373a7db827bc753bfcd70d0c8f25460ea9f1de.patch";
-      sha256 = "0s8l7ycd2s307d3dh1p4vdk33dbzjzqwxs6msyb9w0ycfyxlwdvp";
-    })
     ./sysconfdir-install.patch
     # Needed until https://github.com/elementary/greeter/issues/360 is fixed
     (substituteAll {

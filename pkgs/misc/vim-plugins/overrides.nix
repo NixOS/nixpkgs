@@ -36,6 +36,7 @@
 , which
 , xkb-switch
 , ycmd
+, nodejs
 
 # test dependencies
 , neovim-unwrapped
@@ -114,6 +115,15 @@ self: super: {
     preFixup = ''
       sed "/^let g:clighter8_libclang_path/s|')$|${llvmPackages.clang.cc.lib}/lib/libclang.so')|" \
         -i "$out"/plugin/clighter8.vim
+    '';
+  });
+
+  cmp-tabnine = super.cmp-tabnine.overrideAttrs (old: {
+    buildInputs = [ tabnine ];
+
+    postFixup = ''
+      mkdir -p $target/binaries/${tabnine.version}
+      ln -s ${tabnine}/bin/ $target/binaries/${tabnine.version}/${tabnine.passthru.platform}
     '';
   });
 
@@ -380,6 +390,30 @@ self: super: {
 
   lir-nvim = super.lir-nvim.overrideAttrs (old: {
     dependencies = with self; [ plenary-nvim ];
+  });
+
+  markdown-preview-nvim = super.markdown-preview-nvim.overrideAttrs (old: let
+    # We only need its dependencies `node-modules`.
+    nodeDep = nodePackages."markdown-preview-nvim-../../misc/vim-plugins/markdown-preview-nvim".overrideAttrs (old: {
+      dontNpmInstall = true;
+    });
+  in {
+    patches = [
+      (substituteAll {
+        src = ./markdown-preview-nvim/fix-node-paths.patch;
+        node = "${nodejs}/bin/node";
+      })
+    ];
+    postInstall = ''
+      # The node package name is `*-vim` not `*-nvim`.
+      ln -s ${nodeDep}/lib/node_modules/markdown-preview-vim/node_modules $out/app
+    '';
+
+    nativeBuildInputs = [ nodejs ];
+    doInstallCheck = true;
+    installCheckPhase = ''
+      node $out/app/index.js --version
+    '';
   });
 
   meson = buildVimPluginFrom2Nix {
@@ -686,7 +720,7 @@ self: super: {
             libiconv
           ];
 
-          cargoSha256 = "083v2bnnjyf9j923p6bidgbvmwnh8sfv5ai70qfffzrysi5gvzdf";
+          cargoSha256 = "sha256-zg8PKuzC1srCOtn0ZcqI9cZxMwN9hsf+sNhYgDg93Gs=";
         };
       in
       ''
@@ -834,6 +868,11 @@ self: super: {
 
   vim-surround = super.vim-surround.overrideAttrs (old: {
     dependencies = with self; [ vim-repeat ];
+  });
+
+  vim-textobj-entire = super.vim-textobj-entire.overrideAttrs (old: {
+    dependencies = with self; [ vim-textobj-user ];
+    meta.maintainers = with lib.maintainers; [ farlion ];
   });
 
   vim-unimpaired = super.vim-unimpaired.overrideAttrs (old: {

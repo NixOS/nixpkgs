@@ -14,7 +14,7 @@
 { stdenv, lib
 , buildPackages
 , newScope, callPackage
-, CoreFoundation, Security
+, CoreFoundation, Security, SystemConfiguration
 , pkgsBuildTarget, pkgsBuildBuild
 , makeRustPlatform
 }: rec {
@@ -104,7 +104,7 @@
         inherit CoreFoundation Security;
       };
       clippy = self.callPackage ./clippy.nix { inherit Security; };
-      rls = self.callPackage ./rls { inherit CoreFoundation Security; };
+      rls = self.callPackage ./rls { inherit CoreFoundation Security SystemConfiguration; };
     });
   };
 }

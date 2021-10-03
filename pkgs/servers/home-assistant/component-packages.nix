@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2021.9.6";
+  version = "2021.9.7";
   components = {
     "abode" = ps: with ps; [ abodepy ];
     "accuweather" = ps: with ps; [ accuweather ];
@@ -33,7 +33,7 @@
     "ambiclimate" = ps: with ps; [ aiohttp-cors ambiclimate ];
     "ambient_station" = ps: with ps; [ aioambient ];
     "amcrest" = ps: with ps; [ amcrest ha-ffmpeg ];
-    "ampio" = ps: with ps; [ ]; # missing inputs: asmog
+    "ampio" = ps: with ps; [ asmog ];
     "analytics" = ps: with ps; [ aiohttp-cors sqlalchemy ];
     "android_ip_webcam" = ps: with ps; [ pydroid-ipcam ];
     "androidtv" = ps: with ps; [ adb-shell androidtv pure-python-adb ];
@@ -188,7 +188,7 @@
     "dlna_dmr" = ps: with ps; [ aiohttp-cors async-upnp-client ifaddr ];
     "dnsip" = ps: with ps; [ aiodns ];
     "dominos" = ps: with ps; [ aiohttp-cors ]; # missing inputs: pizzapi
-    "doods" = ps: with ps; [ pillow ]; # missing inputs: pydoods
+    "doods" = ps: with ps; [ pillow pydoods ];
     "doorbird" = ps: with ps; [ aiohttp-cors doorbirdpy ];
     "dovado" = ps: with ps; [ ]; # missing inputs: dovado
     "downloader" = ps: with ps; [ ];
@@ -218,7 +218,7 @@
     "eight_sleep" = ps: with ps; [ pyeight ];
     "elgato" = ps: with ps; [ elgato ];
     "eliqonline" = ps: with ps; [ ]; # missing inputs: eliqonline
-    "elkm1" = ps: with ps; [ ]; # missing inputs: elkm1-lib
+    "elkm1" = ps: with ps; [ elkm1-lib ];
     "elv" = ps: with ps; [ pypca ];
     "emby" = ps: with ps; [ pyemby ];
     "emoncms" = ps: with ps; [ ];
@@ -267,12 +267,12 @@
     "firmata" = ps: with ps; [ pymata-express ];
     "fitbit" = ps: with ps; [ aiohttp-cors fitbit ];
     "fixer" = ps: with ps; [ fixerio ];
-    "fjaraskupan" = ps: with ps; [ ]; # missing inputs: fjaraskupan
+    "fjaraskupan" = ps: with ps; [ fjaraskupan ];
     "fleetgo" = ps: with ps; [ ]; # missing inputs: ritassist
     "flexit" = ps: with ps; [ pymodbus ];
     "flic" = ps: with ps; [ pyflic ];
     "flick_electric" = ps: with ps; [ pyflick ];
-    "flipr" = ps: with ps; [ ]; # missing inputs: flipr-api
+    "flipr" = ps: with ps; [ flipr-api ];
     "flo" = ps: with ps; [ aioflo ];
     "flock" = ps: with ps; [ ];
     "flume" = ps: with ps; [ pyflume ];
@@ -380,7 +380,7 @@
     "hue" = ps: with ps; [ aiohue ];
     "huisbaasje" = ps: with ps; [ huisbaasje-client ];
     "humidifier" = ps: with ps; [ ];
-    "hunterdouglas_powerview" = ps: with ps; [ ]; # missing inputs: aiopvapi
+    "hunterdouglas_powerview" = ps: with ps; [ aiopvapi ];
     "hvv_departures" = ps: with ps; [ pygti ];
     "hydrawise" = ps: with ps; [ hydrawiser ];
     "hyperion" = ps: with ps; [ hyperion-py ];
@@ -411,7 +411,7 @@
     "intesishome" = ps: with ps; [ pyintesishome ];
     "ios" = ps: with ps; [ aiohttp-cors ifaddr zeroconf ];
     "iota" = ps: with ps; [ ]; # missing inputs: pyota
-    "iotawatt" = ps: with ps; [ ]; # missing inputs: iotawattpy
+    "iotawatt" = ps: with ps; [ iotawattpy ];
     "iperf3" = ps: with ps; [ ]; # missing inputs: iperf3
     "ipma" = ps: with ps; [ pyipma ];
     "ipp" = ps: with ps; [ pyipp ];
@@ -478,7 +478,7 @@
     "lovelace" = ps: with ps; [ ];
     "luci" = ps: with ps; [ openwrt-luci-rpc ];
     "luftdaten" = ps: with ps; [ luftdaten ];
-    "lupusec" = ps: with ps; [ ]; # missing inputs: lupupy
+    "lupusec" = ps: with ps; [ lupupy ];
     "lutron" = ps: with ps; [ pylutron ];
     "lutron_caseta" = ps: with ps; [ aiolip pylutron-caseta ];
     "lw12wifi" = ps: with ps; [ ]; # missing inputs: lw12
@@ -493,7 +493,7 @@
     "marytts" = ps: with ps; [ ]; # missing inputs: speak2mary
     "mastodon" = ps: with ps; [ mastodon-py ];
     "matrix" = ps: with ps; [ matrix-client ];
-    "maxcube" = ps: with ps; [ ]; # missing inputs: maxcube-api
+    "maxcube" = ps: with ps; [ maxcube-api ];
     "mazda" = ps: with ps; [ pymazda ];
     "mcp23017" = ps: with ps; [ ]; # missing inputs: RPi.GPIO adafruit-circuitpython-mcp230xx
     "media_extractor" = ps: with ps; [ aiohttp-cors youtube-dl-light ];
@@ -551,20 +551,20 @@
     "myq" = ps: with ps; [ pymyq ];
     "mysensors" = ps: with ps; [ aiohttp-cors paho-mqtt pymysensors ];
     "mystrom" = ps: with ps; [ aiohttp-cors python-mystrom ];
-    "mythicbeastsdns" = ps: with ps; [ ]; # missing inputs: mbddns
+    "mythicbeastsdns" = ps: with ps; [ mbddns ];
     "nad" = ps: with ps; [ nad-receiver ];
     "nam" = ps: with ps; [ nettigo-air-monitor ];
     "namecheapdns" = ps: with ps; [ defusedxml ];
     "nanoleaf" = ps: with ps; [ pynanoleaf ];
     "neato" = ps: with ps; [ aiohttp-cors pybotvac ];
     "nederlandse_spoorwegen" = ps: with ps; [ nsapi ];
-    "nello" = ps: with ps; [ ]; # missing inputs: pynello
+    "nello" = ps: with ps; [ pynello ];
     "ness_alarm" = ps: with ps; [ ]; # missing inputs: nessclient
     "nest" = ps: with ps; [ aiohttp-cors ha-ffmpeg python-nest ]; # missing inputs: google-nest-sdm
     "netatmo" = ps: with ps; [ pyturbojpeg aiohttp-cors hass-nabucasa pyatmo ];
     "netdata" = ps: with ps; [ netdata ];
     "netgear" = ps: with ps; [ ]; # missing inputs: pynetgear
-    "netgear_lte" = ps: with ps; [ ]; # missing inputs: eternalegypt
+    "netgear_lte" = ps: with ps; [ eternalegypt ];
     "netio" = ps: with ps; [ aiohttp-cors ]; # missing inputs: pynetio
     "network" = ps: with ps; [ aiohttp-cors ifaddr ];
     "neurio_energy" = ps: with ps; [ ]; # missing inputs: neurio
@@ -574,7 +574,7 @@
     "nfandroidtv" = ps: with ps; [ ]; # missing inputs: notifications-android-tv
     "nightscout" = ps: with ps; [ ]; # missing inputs: py-nightscout
     "niko_home_control" = ps: with ps; [ ]; # missing inputs: niko-home-control
-    "nilu" = ps: with ps; [ ]; # missing inputs: niluclient
+    "nilu" = ps: with ps; [ niluclient ];
     "nissan_leaf" = ps: with ps; [ ]; # missing inputs: pycarwings2
     "nmap_tracker" = ps: with ps; [ aiohttp-cors getmac ifaddr netmap ]; # missing inputs: mac-vendor-lookup
     "nmbs" = ps: with ps; [ ]; # missing inputs: pyrail
@@ -599,7 +599,7 @@
     "octoprint" = ps: with ps; [ aiohttp-cors ifaddr netdisco zeroconf ];
     "oem" = ps: with ps; [ ]; # missing inputs: oemthermostat
     "ohmconnect" = ps: with ps; [ defusedxml ];
-    "ombi" = ps: with ps; [ ]; # missing inputs: pyombi
+    "ombi" = ps: with ps; [ pyombi ];
     "omnilogic" = ps: with ps; [ omnilogic ];
     "onboarding" = ps: with ps; [ aiohttp-cors home-assistant-frontend pillow sqlalchemy ];
     "ondilo_ico" = ps: with ps; [ aiohttp-cors ondilo ];
@@ -630,7 +630,7 @@
     "ovo_energy" = ps: with ps; [ ovoenergy ];
     "owntracks" = ps: with ps; [ pynacl pyturbojpeg aiohttp-cors hass-nabucasa paho-mqtt ];
     "ozw" = ps: with ps; [ aiohttp-cors paho-mqtt python-openzwave-mqtt ];
-    "p1_monitor" = ps: with ps; [ ]; # missing inputs: p1monitor
+    "p1_monitor" = ps: with ps; [ p1monitor ];
     "panasonic_bluray" = ps: with ps; [ ]; # missing inputs: panacotta
     "panasonic_viera" = ps: with ps; [ ]; # missing inputs: panasonic_viera
     "pandora" = ps: with ps; [ pexpect ];
@@ -703,7 +703,7 @@
     "remember_the_milk" = ps: with ps; [ httplib2 ]; # missing inputs: RtmAPI
     "remote" = ps: with ps; [ ];
     "remote_rpi_gpio" = ps: with ps; [ ]; # missing inputs: gpiozero
-    "renault" = ps: with ps; [ ]; # missing inputs: renault-api
+    "renault" = ps: with ps; [ renault-api ];
     "repetier" = ps: with ps; [ ]; # missing inputs: pyrepetier
     "rest" = ps: with ps; [ jsonpath xmltodict ];
     "rest_command" = ps: with ps; [ ];
@@ -795,7 +795,7 @@
     "sochain" = ps: with ps; [ ]; # missing inputs: python-sochain-api
     "solaredge" = ps: with ps; [ solaredge stringcase ];
     "solaredge_local" = ps: with ps; [ ]; # missing inputs: solaredge-local
-    "solarlog" = ps: with ps; [ ]; # missing inputs: sunwatcher
+    "solarlog" = ps: with ps; [ sunwatcher ];
     "solax" = ps: with ps; [ solax ];
     "soma" = ps: with ps; [ pysoma ];
     "somfy" = ps: with ps; [ aiohttp-cors pymfy ];
@@ -803,10 +803,10 @@
     "sonarr" = ps: with ps; [ sonarr ];
     "songpal" = ps: with ps; [ python-songpal ];
     "sonos" = ps: with ps; [ aiohttp-cors async-upnp-client defusedxml ifaddr plexapi plexauth plexwebsocket soco zeroconf ];
-    "sony_projector" = ps: with ps; [ ]; # missing inputs: pysdcp
+    "sony_projector" = ps: with ps; [ pysdcp ];
     "soundtouch" = ps: with ps; [ aiohttp-cors ifaddr libsoundtouch zeroconf ];
     "spaceapi" = ps: with ps; [ aiohttp-cors ];
-    "spc" = ps: with ps; [ ]; # missing inputs: pyspcwebgw
+    "spc" = ps: with ps; [ pyspcwebgw ];
     "speedtestdotnet" = ps: with ps; [ speedtest-cli ];
     "spider" = ps: with ps; [ spiderpy ];
     "splunk" = ps: with ps; [ ]; # missing inputs: hass_splunk
@@ -824,7 +824,7 @@
     "stiebel_eltron" = ps: with ps; [ pymodbus ]; # missing inputs: pystiebeleltron
     "stookalert" = ps: with ps; [ ]; # missing inputs: stookalert
     "stream" = ps: with ps; [ aiohttp-cors av ];
-    "streamlabswater" = ps: with ps; [ ]; # missing inputs: streamlabswater
+    "streamlabswater" = ps: with ps; [ streamlabswater ];
     "stt" = ps: with ps; [ aiohttp-cors ];
     "subaru" = ps: with ps; [ subarulink ];
     "suez_water" = ps: with ps; [ ]; # missing inputs: pysuez
@@ -961,7 +961,7 @@
     "waterfurnace" = ps: with ps; [ waterfurnace ];
     "watson_iot" = ps: with ps; [ ]; # missing inputs: ibmiotf
     "watson_tts" = ps: with ps; [ ibm-watson ];
-    "waze_travel_time" = ps: with ps; [ WazeRouteCalculator ];
+    "waze_travel_time" = ps: with ps; [ wazeroutecalculator ];
     "weather" = ps: with ps; [ ];
     "webhook" = ps: with ps; [ aiohttp-cors ];
     "webostv" = ps: with ps; [ aiopylgtv ];

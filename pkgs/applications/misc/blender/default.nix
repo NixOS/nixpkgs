@@ -136,8 +136,11 @@ stdenv.mkDerivation rec {
   NIX_LDFLAGS = optionalString cudaSupport "-rpath ${stdenv.cc.cc.lib}/lib";
 
   blenderExecutable =
-    placeholder "out" + (if stdenv.isDarwin then "/Blender.app/Contents/MacOS/Blender" else "/bin/blender");
-  postInstall = ''
+    placeholder "out" + (if stdenv.isDarwin then "/Applications/Blender.app/Contents/MacOS/Blender" else "/bin/blender");
+  postInstall = lib.optionalString stdenv.isDarwin ''
+    mkdir $out/Applications
+    mv $out/Blender.app $out/Applications
+  '' + ''
     buildPythonPath "$pythonPath"
     wrapProgram $blenderExecutable \
       --prefix PATH : $program_PATH \

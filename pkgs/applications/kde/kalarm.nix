@@ -19,6 +19,8 @@
 mkDerivation {
   pname = "kalarm";
   meta = {
+    homepage = "https://apps.kde.org/kalarm/";
+    description = "Personal alarm scheduler";
     license = with lib.licenses; [ gpl2 ];
     maintainers = [ lib.maintainers.rittelle ];
   };

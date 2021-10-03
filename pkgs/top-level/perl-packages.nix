@@ -3709,10 +3709,10 @@ let
 
   ConvertASN1 = buildPerlPackage {
     pname = "Convert-ASN1";
-    version = "0.27";
+    version = "0.33";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/G/GB/GBARR/Convert-ASN1-0.27.tar.gz";
-      sha256 = "12nmsca6hzgxq57sx7dp8yq6zxqhl41z5a6018877sf5w25ag93l";
+      url = "mirror://cpan/authors/id/T/TI/TIMLEGGE/Convert-ASN1-0.33.tar.gz";
+      sha256 = "0xk0s2rnwjb7ydhwfinpjcbw25im54b8cs7r9hj3m7n7412h1pqz";
     };
   };
 
@@ -8148,7 +8148,7 @@ let
     };
     propagatedBuildInputs = [ TextGlob ];
     meta = {
-      license = lib.licenses.free; # Same as Perl
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
@@ -8162,7 +8162,7 @@ let
     meta = {
       maintainers = teams.deshaw.members;
       description = "simple filename and pathname matching";
-      license = lib.licenses.free; # Same as Perl
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
@@ -8378,7 +8378,7 @@ let
     })];
     propagatedBuildInputs = [ ClassAccessor ];
     meta = {
-      license = lib.licenses.free; # Same as Perl
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
       description = "Pid File Manipulation";
       maintainers = teams.deshaw.members;
     };
@@ -12388,6 +12388,20 @@ let
        description = "Legacy HTTP/1.0 support for LWP";
        license = with lib.licenses; [ artistic1 gpl1Plus ];
      };
+  };
+
+  LWPUserAgentCached = buildPerlPackage {
+    pname = "LWP-UserAgent-Cached";
+    version = "0.08";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/O/OL/OLEG/LWP-UserAgent-Cached-0.08.tar.gz";
+      hash = "sha256-Pc5atMeAQWVs54Vk92Az5b0ew4b1TS57MHQK5I7nh8M=";
+    };
+    propagatedBuildInputs = [ LWP ];
+    meta = {
+      description = "LWP::UserAgent with simple caching mechanism";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
   };
 
   LWPUserAgentDNSHosts = buildPerlModule {
@@ -22535,6 +22549,19 @@ let
       homepage = "https://github.com/dagolden/Test-Number-Delta";
       description = "Compare the difference between numbers against a given tolerance";
       license = "apache";
+    };
+  };
+
+  TextParsewords = buildPerlPackage {
+    pname = "Text-Parsewords";
+    version = "3.30";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/C/CH/CHORNY/Text-ParseWords-3.30.tar.gz";
+      hash = "sha256-heAjgXndQ5l+WMZr1RYRGCvH1TNQUCmi2w0yMu2v9eg=";
+    };
+    meta = {
+      description = "Parse text into an array of tokens or array of arrays";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 

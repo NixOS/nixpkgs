@@ -240,6 +240,11 @@ in mkLicense lset) ({
     fullName = "CeCILL Free Software License Agreement v2.0";
   };
 
+  cecill21 = {
+    spdxId = "CECILL-2.1";
+    fullName = "CeCILL Free Software License Agreement v2.1";
+  };
+
   cecill-b = {
     spdxId = "CECILL-B";
     fullName  = "CeCILL-B Free Software License Agreement";

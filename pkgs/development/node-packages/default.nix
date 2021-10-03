@@ -1,4 +1,4 @@
-{ pkgs, nodejs, stdenv, applyPatches, fetchFromGitHub, fetchpatch }:
+{ pkgs, nodejs, stdenv, applyPatches, fetchFromGitHub, fetchpatch, fetchurl }:
 
 let
   since = (version: pkgs.lib.versionAtLeast nodejs.version version);
@@ -45,6 +45,17 @@ let
         done
       '';
     };
+
+    carbon-now-cli = super.carbon-now-cli.override ({
+      nativeBuildInputs = [ pkgs.makeWrapper ];
+      prePatch = ''
+        export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1
+      '';
+      postInstall = ''
+        wrapProgram $out/bin/carbon-now \
+          --set PUPPETEER_EXECUTABLE_PATH ${pkgs.chromium.outPath}/bin/chromium
+      '';
+    });
 
     deltachat-desktop = super."deltachat-desktop-../../applications/networking/instant-messengers/deltachat-desktop".override {
       meta.broken = true; # use the top-level package instead
@@ -269,13 +280,29 @@ let
 
     prisma = super.prisma.override {
       nativeBuildInputs = [ pkgs.makeWrapper ];
+      version = "3.1.1";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/prisma/-/prisma-3.1.1.tgz";
+        sha512 = "sha512-+eZtWIL6hnOKUOvqq9WLBzSw2d/EbTmOx1Td1LI8/0XE40ctXMLG2N1p6NK5/+yivGaoNJ9PDpPsPL9lO4nJrQ==";
+      };
+      dependencies = [
+        {
+          name = "_at_prisma_slash_engines";
+          packageName = "@prisma/engines";
+          version = "3.1.0-24.c22652b7e418506fab23052d569b85d3aec4883f";
+          src = fetchurl {
+            url = "https://registry.npmjs.org/@prisma/engines/-/engines-3.1.0-24.c22652b7e418506fab23052d569b85d3aec4883f.tgz";
+            sha512 = "sha512-6NEp0VlLho3hVtIvj2P4h0e19AYqQSXtFGts8gSIXDnV+l5pRFZaDMfGo2RiLMR0Kfrs8c3ZYxYX0sWmVL0tWw==";
+          };
+        }
+      ];
       postInstall = with pkgs; ''
         wrapProgram "$out/bin/prisma" \
-          --prefix PRISMA_MIGRATION_ENGINE_BINARY : "${prisma-engines}/bin/migration-engine" \
-          --prefix PRISMA_QUERY_ENGINE_BINARY : "${prisma-engines}/bin/query-engine" \
-          --prefix PRISMA_QUERY_ENGINE_LIBRARY : "${lib.getLib prisma-engines}/libquery_engine.so.node"
-          --prefix PRISMA_INTROSPECTION_ENGINE_BINARY : "${prisma-engines}/bin/introspection-engine" \
-          --prefix PRISMA_FMT_BINARY : "${prisma-engines}/bin/prisma-fmt"
+          --set PRISMA_MIGRATION_ENGINE_BINARY ${prisma-engines}/bin/migration-engine \
+          --set PRISMA_QUERY_ENGINE_BINARY ${prisma-engines}/bin/query-engine \
+          --set PRISMA_QUERY_ENGINE_LIBRARY ${lib.getLib prisma-engines}/lib/libquery_engine.node \
+          --set PRISMA_INTROSPECTION_ENGINE_BINARY ${prisma-engines}/bin/introspection-engine \
+          --set PRISMA_FMT_BINARY ${prisma-engines}/bin/prisma-fmt
       '';
     };
 

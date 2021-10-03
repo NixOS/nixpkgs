@@ -4,8 +4,8 @@ with skawarePackages;
 
 buildPackage {
   pname = "s6-rc";
-  version = "0.5.2.2";
-  sha256 = "12bzc483jpd16xmhfsfrib84daj1k3kwy5s5nc18ap60apa1r39a";
+  version = "0.5.2.3";
+  sha256 = "1f92dxw1n8r8avamixi9k0gqbnkpm0r3fmwzz7jd82g6bb2vsg5z";
 
   description = "A service manager for s6-based systems";
   platforms = lib.platforms.unix;

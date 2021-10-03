@@ -8,12 +8,10 @@
 { bash
 , buildFHSUserEnv
 , cacert
-, coreutils
 , git
 , runCommand
 , stdenv
 , lib
-, fetchurl
 , alsa-lib
 , dbus
 , expat
@@ -33,6 +31,7 @@
 , nspr
 , nss
 , systemd
+, which
 }:
 let
   drvName = "flutter-${version}";
@@ -74,10 +73,27 @@ let
     '';
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out
       cp -r . $out
       mkdir -p $out/bin/cache/
       ln -sf ${dart} $out/bin/cache/dart-sdk
+
+      runHook postInstall
+    '';
+
+    doInstallCheck = true;
+    installCheckInputs = [ which ];
+    installCheckPhase = ''
+      runHook preInstallCheck
+
+      export HOME="$(mktemp -d)"
+      $out/bin/flutter config --android-studio-dir $HOME
+      $out/bin/flutter config --android-sdk $HOME
+      $out/bin/flutter --version | fgrep -q '${version}'
+
+      runHook postInstallCheck
     '';
   };
 

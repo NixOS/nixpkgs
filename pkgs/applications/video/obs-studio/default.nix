@@ -121,10 +121,9 @@ mkDerivation rec {
     "-DCEF_ROOT_DIR=../../cef"
   ];
 
-  postInstall = ''
-    wrapProgram $out/bin/obs \
-      --prefix "LD_LIBRARY_PATH" : "${xorg.libX11.out}/lib:${libvlc}/lib"
-  '';
+  qtWrapperArgs = [
+    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ xorg.libX11 libvlc ]}"
+  ];
 
   postFixup = lib.optionalString stdenv.isLinux ''
     addOpenGLRunpath $out/lib/lib*.so

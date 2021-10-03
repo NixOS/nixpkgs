@@ -1,7 +1,7 @@
-{ cmake
-, fetchFromGitHub
-, lib
+{ lib
 , rustPlatform
+, fetchFromGitHub
+, cmake
 , stdenv
 , libiconv
 , CoreFoundation
@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "hck";
-  version = "0.6.3";
+  version = "0.6.6";
 
   src = fetchFromGitHub {
     owner = "sstadick";
     repo = pname;
     rev = "v${version}";
-    sha256 = "02yvpgvzdprysg0spa0abn7d3vjj5spzc3528rwbpl4cw2yx8j6w";
+    sha256 = "sha256-DUFJZEtJM5Sv41zJvSZ8KsNWFzlictM2T1wS7VxPL04=";
   };
 
-  cargoSha256 = "0n6wywb1xyaxkbr0fs39992dfv55wzvp05i1vk9mxgnsim9s7aw8";
+  cargoSha256 = "sha256-kubQL+p7J2koPDOje5wMxKDeCY4yi0kupfHsJCKYf44=";
 
   nativeBuildInputs = [ cmake ];
 

@@ -50,10 +50,12 @@ mapAliases ({
   alsaTools = alsa-tools; # added 2021-06-10
   alsaUtils = alsa-utils; # added 2021-06-10
   amazon-glacier-cmd-interface = throw "amazon-glacier-cmd-interface has been removed due to it being unmaintained."; # added 2020-10-30
+  aminal = throw "aminal was renamed to darktile."; # added 2021-09-28
   ammonite-repl = ammonite; # added 2017-05-02
   amsn = throw "amsn has been removed due to being unmaintained."; # added 2020-12-09
   antimicro = throw "antimicro has been removed as it was broken, see antimicroX instead."; # added 2020-08-06
   arduino_core = arduino-core;  # added 2015-02-04
+  ardour_5 = throw "ardour_5 has been removed. see https://github.com/NixOS/nixpkgs/issues/139549"; # added 2021-09-28
   arora = throw "arora has been removed."; # added 2020-09-09
   asciidocFull = asciidoc-full;  # added 2014-06-22
   asterisk_15 = throw "asterisk_15: Asterisk 15 is end of life and has been removed."; # added 2020-10-07
@@ -66,6 +68,8 @@ mapAliases ({
   badtouch = authoscope; # Project was renamed, added 20210626
   bar-xft = lemonbar-xft;  # added 2015-01-16
   bashCompletion = bash-completion; # Added 2016-09-28
+  bash_5 = bash; # added 2021-08-20
+  bashInteractive_5 = bashInteractive; # added 2021-08-20
   batti = throw "batti has been removed from nixpkgs, as it was unmaintained"; # added 2019-12-10
   bazaar = throw "bazaar has been deprecated by breezy."; # added 2020-04-19
   bazaarTools = throw "bazaar has been deprecated by breezy."; # added 2020-04-19
@@ -462,7 +466,6 @@ mapAliases ({
   linuxPackages_4_19 = linuxKernel.packages.linux_4_19;
   linuxPackages_5_4 = linuxKernel.packages.linux_5_4;
   linuxPackages_5_10 = linuxKernel.packages.linux_5_10;
-  linuxPackages_5_13 = linuxKernel.packages.linux_5_13;
   linuxPackages_5_14 = linuxKernel.packages.linux_5_14;
 
   linux_mptcp_95 = linuxKernel.kernels.linux_mptcp_95;
@@ -479,7 +482,6 @@ mapAliases ({
   linux_5_10 = linuxKernel.kernels.linux_5_10;
   linux-rt_5_10 = linuxKernel.kernels.linux_rt_5_10;
   linux-rt_5_11 = linuxKernel.kernels.linux_rt_5_11;
-  linux_5_13 = linuxKernel.kernels.linux_5_13;
   linux_5_14 = linuxKernel.kernels.linux_5_14;
 
   # added 2020-04-04
@@ -942,6 +944,7 @@ mapAliases ({
   transmission_remote_gtk = transmission-remote-gtk; # added 2018-01-06
   transmission-remote-cli = "transmission-remote-cli has been removed, as the upstream project has been abandoned. Please use tremc instead"; # added 2020-10-14
   transporter = throw "transporter has been removed. It was archived upstream, so it's considered abandoned.";
+  trebleshot = throw "trebleshot has been removed. It was archived upstream, so it's considered abandoned.";
   trilium = throw "trilium has been removed. Please use trilium-desktop instead."; # added 2020-04-29
   truecrypt = veracrypt; # added 2018-10-24
   tshark = wireshark-cli; # added 2018-04-25
@@ -966,6 +969,7 @@ mapAliases ({
   vamp = { vampSDK = vamp-plugin-sdk; }; # added 2020-03-26
   varnish62 = throw "varnish62 was removed from nixpkgs, because it is unmaintained upstream. Please switch to a different release."; # 2021-07-26
   varnish63 = throw "varnish63 was removed from nixpkgs, because it is unmaintained upstream. Please switch to a different release."; # 2021-07-26
+  varnish65 = throw "varnish65 was removed from nixpkgs, because it is unmaintained upstream. Please switch to a different release."; # 2021-09-15
   venus = throw "venus has been removed from nixpkgs, as it's unmaintained"; # added 2021-02-05
   vdirsyncerStable  = vdirsyncer; # added 2020-11-08, see https://github.com/NixOS/nixpkgs/issues/103026#issuecomment-723428168
   vimbWrapper = vimb; # added 2015-01

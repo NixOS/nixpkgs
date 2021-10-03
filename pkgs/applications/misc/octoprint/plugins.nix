@@ -2,15 +2,17 @@
 
 with pkgs;
 
-self: super: let
+self: super:
+let
   buildPlugin = args: self.buildPythonPackage (args // {
     pname = "OctoPrintPlugin-${args.pname}";
     inherit (args) version;
-    propagatedBuildInputs = (args.propagatedBuildInputs or []) ++ [ super.octoprint ];
+    propagatedBuildInputs = (args.propagatedBuildInputs or [ ]) ++ [ super.octoprint ];
     # none of the following have tests
     doCheck = false;
   });
-in {
+in
+{
   inherit buildPlugin;
 
   m86motorsoff = buildPlugin rec {
@@ -84,7 +86,7 @@ in {
 
     meta = with lib; {
       description = "Plugin to display the estimated print cost for the loaded model.";
-      homepage = "https://github.com/malnvenshorn/OctoPrint-CostEstimation";
+      homepage = "https://github.com/OllisGit/OctoPrint-CostEstimation";
       license = licenses.agpl3Only;
       maintainers = with maintainers; [ stunkymonkey ];
     };
@@ -144,6 +146,25 @@ in {
       homepage = "https://github.com/OllisGit/OctoPrint-DisplayLayerProgress";
       license = licenses.agpl3;
       maintainers = with maintainers; [ j0hax ];
+    };
+  };
+
+  ender3v2tempfix = buildPlugin rec {
+    pname = "OctoPrintPlugin-ender3v2tempfix";
+    version = "unstable-2021-04-27";
+
+    src = fetchFromGitHub {
+      owner = "SimplyPrint";
+      repo = "OctoPrint-Creality2xTemperatureReportingFix";
+      rev = "2c4183b6a0242a24ebf646d7ac717cd7a2db2bcf";
+      sha256 = "03bc2zbffw4ksk8if90kxhs3179nbhb4xikp4f0adm3lrnvxkd3s";
+    };
+
+    meta = with lib; {
+      description = "Fixes the double temperature reporting from the Creality Ender-3 v2 printer";
+      homepage = "https://github.com/SimplyPrint/OctoPrint-Creality2xTemperatureReportingFix";
+      license = licenses.mit;
+      maintainers = with maintainers; [ illustris ];
     };
   };
 

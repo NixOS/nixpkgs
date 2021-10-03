@@ -611,6 +611,10 @@ let
 
     letsencrypt = callPackage ../development/ocaml-modules/letsencrypt { };
 
+    letsencrypt-app = callPackage ../development/ocaml-modules/letsencrypt/app.nix { };
+
+    letsencrypt-dns = callPackage ../development/ocaml-modules/letsencrypt/dns.nix { };
+
     linenoise = callPackage ../development/ocaml-modules/linenoise { };
 
     llvm = callPackage ../development/ocaml-modules/llvm {
@@ -622,6 +626,10 @@ let
     lru = callPackage ../development/ocaml-modules/lru { };
 
     lua-ml = callPackage ../development/ocaml-modules/lua-ml { };
+
+    lustre-v6 = callPackage ../development/ocaml-modules/lustre-v6 { };
+
+    lutils = callPackage ../development/ocaml-modules/lutils { };
 
     luv = callPackage ../development/ocaml-modules/luv {
       inherit (pkgs) file;
@@ -843,6 +851,8 @@ let
 
     frontc = callPackage ../development/ocaml-modules/frontc { };
 
+    ocamlformat-rpc-lib = callPackage ../development/ocaml-modules/ocamlformat-rpc-lib { };
+
     ocamlfuse = callPackage ../development/ocaml-modules/ocamlfuse { };
 
     ocaml-freestanding = callPackage ../development/ocaml-modules/ocaml-freestanding { };
@@ -989,6 +999,10 @@ let
     ounit2 = callPackage ../development/ocaml-modules/ounit2 { };
 
     paf = callPackage ../development/ocaml-modules/paf { };
+
+    paf-cohttp = callPackage ../development/ocaml-modules/paf/cohttp.nix { };
+
+    paf-le = callPackage ../development/ocaml-modules/paf/le.nix { };
 
     parse-argv = callPackage ../development/ocaml-modules/parse-argv { };
 
@@ -1171,6 +1185,8 @@ let
     qtest = callPackage ../development/ocaml-modules/qtest { };
 
     randomconv = callPackage ../development/ocaml-modules/randomconv { };
+
+    rdbg = callPackage ../development/ocaml-modules/rdbg { };
 
     re = callPackage ../development/ocaml-modules/re { };
 
@@ -1601,7 +1617,7 @@ in let inherit (pkgs) callPackage; in rec
 
   ocamlPackages_4_13 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.13.nix { });
 
-  ocamlPackages_latest = ocamlPackages_4_12;
+  ocamlPackages_latest = ocamlPackages_4_13;
 
   ocamlPackages = ocamlPackages_4_12;
 }

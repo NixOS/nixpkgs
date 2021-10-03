@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, ruby, bundlerEnv }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, ruby
+, bundlerEnv
+}:
 
 let
   env = bundlerEnv {
@@ -8,13 +14,13 @@ let
   };
 in stdenv.mkDerivation rec {
   pname = "metasploit-framework";
-  version = "6.0.56";
+  version = "6.1.7";
 
   src = fetchFromGitHub {
     owner = "rapid7";
     repo = "metasploit-framework";
     rev = version;
-    sha256 = "sha256-FQxxQ4Lsoktl/Ld+nvBNHCTsZ3PFDQ4GEMrh/CMZrZ0=";
+    sha256 = "sha256-UzWNQnDo/o296GGd+C1ImHccOMAXfE55dJDB9hw9B8s=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -34,6 +40,11 @@ in stdenv.mkDerivation rec {
       done
     )
 
+    makeWrapper ${env}/bin/bundle $out/bin/msf-pattern_create \
+      --add-flags "exec ${ruby}/bin/ruby $out/share/msf/tools/exploit/pattern_create.rb"
+
+    makeWrapper ${env}/bin/bundle $out/bin/msf-pattern_offset \
+      --add-flags "exec ${ruby}/bin/ruby $out/share/msf/tools/exploit/pattern_offset.rb"
   '';
 
   # run with: nix-shell maintainers/scripts/update.nix --argstr path metasploit

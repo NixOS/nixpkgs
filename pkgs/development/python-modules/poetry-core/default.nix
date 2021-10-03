@@ -53,6 +53,9 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "poetry.core" ];
 
+  # allow for package to use pep420's native namespaces
+  pythonNamespaces = [ "poetry" ];
+
   meta = with lib; {
     description = "Core utilities for Poetry";
     homepage = "https://github.com/python-poetry/poetry-core/";

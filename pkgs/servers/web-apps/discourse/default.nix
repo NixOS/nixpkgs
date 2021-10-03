@@ -2,20 +2,21 @@
 , fetchFromGitHub, bundlerEnv, callPackage
 
 , ruby, replace, gzip, gnutar, git, cacert, util-linux, gawk
-, imagemagick, optipng, pngquant, libjpeg, jpegoptim, gifsicle, libpsl
-, redis, postgresql, which, brotli, procps, rsync, nodePackages, v8
+, imagemagick, optipng, pngquant, libjpeg, jpegoptim, gifsicle, jhead
+, libpsl, redis, postgresql, which, brotli, procps, rsync
+, nodePackages, v8
 
 , plugins ? []
 }@args:
 
 let
-  version = "2.7.7";
+  version = "2.7.8";
 
   src = fetchFromGitHub {
     owner = "discourse";
     repo = "discourse";
     rev = "v${version}";
-    sha256 = "sha256-rhcTQyirgPX0ITjgotJAYLLSU957GanxAYYhy9j123U=";
+    sha256 = "sha256-p4eViEvzIU6W89FZRtMBXsT7bvf2H12bTPZ/h3iD8rA=";
   };
 
   runtimeDeps = [
@@ -41,6 +42,7 @@ let
     jpegoptim
     gifsicle
     nodePackages.svgo
+    jhead
   ];
 
   runtimeEnv = {
@@ -242,9 +244,6 @@ let
       # Add a noninteractive admin creation task
       ./admin_create.patch
 
-      # Disable jhead, which is currently marked as vulnerable
-      ./disable_jhead.patch
-
       # Add the path to the CA cert bundle to make TLS work
       ./action_mailer_ca_cert.patch
 
@@ -290,7 +289,7 @@ let
       cp -r . $out/share/discourse
       rm -r $out/share/discourse/log
       ln -sf /var/log/discourse $out/share/discourse/log
-      ln -sf /run/discourse/tmp $out/share/discourse/tmp
+      ln -sf /var/lib/discourse/tmp $out/share/discourse/tmp
       ln -sf /run/discourse/config $out/share/discourse/config
       ln -sf /run/discourse/assets/javascripts/plugins $out/share/discourse/app/assets/javascripts/plugins
       ln -sf /run/discourse/public $out/share/discourse/public

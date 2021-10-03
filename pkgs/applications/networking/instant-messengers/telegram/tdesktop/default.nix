@@ -45,6 +45,7 @@
 , libsysprof-capture
 , libpsl
 , brotli
+, microsoft_gsl
 }:
 
 # Main reference:
@@ -59,7 +60,7 @@ let
 in
 mkDerivation rec {
   pname = "telegram-desktop";
-  version = "3.0.1";
+  version = "3.1.1";
   # Note: Update via pkgs/applications/networking/instant-messengers/telegram/tdesktop/update.py
 
   # Telegram-Desktop with submodules
@@ -68,7 +69,7 @@ mkDerivation rec {
     repo = "tdesktop";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "196w82a92jahz7caqv2cyhhq53xm3figa7kiq59kid5wbqg33c9x";
+    sha256 = "0h4g8lw9hf9pwmdljavflyn9g9jvjvany7y4vji0qcc1kd99vsnp";
   };
 
   postPatch = ''
@@ -136,6 +137,7 @@ mkDerivation rec {
     libsysprof-capture
     libpsl
     brotli
+    microsoft_gsl
   ];
 
   cmakeFlags = [
@@ -174,6 +176,6 @@ mkDerivation rec {
     platforms = platforms.linux;
     homepage = "https://desktop.telegram.org/";
     changelog = "https://github.com/telegramdesktop/tdesktop/releases/tag/v${version}";
-    maintainers = with maintainers; [ oxalica primeos ];
+    maintainers = with maintainers; [ oxalica primeos vanilla ];
   };
 }

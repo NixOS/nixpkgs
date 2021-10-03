@@ -6,6 +6,7 @@
 mkDerivation {
   pname = "picmi";
   meta = with lib; {
+    homepage = "https://apps.kde.org/picmi/";
     description = "Nonogram game";
     longDescription = ''The goal is to reveal the hidden pattern in the board by coloring or
       leaving blank the cells in a grid according to numbers given at the side of the grid.

@@ -53,22 +53,24 @@ self: super: {
 
   # Jailbreaks & Version Updates
   async = doJailbreak super.async;
-  ChasingBottoms = markBrokenVersion "1.3.1.9" super.ChasingBottoms;
+  base64-bytestring = doJailbreak super.base64-bytestring;
+  ChasingBottoms = doJailbreak super.ChasingBottoms;
   data-fix = doJailbreak super.data-fix;
   dec = doJailbreak super.dec;
   ed25519 = doJailbreak super.ed25519;
   hackage-security = doJailbreak super.hackage-security;
-  hashable = overrideCabal (doJailbreak (dontCheck super.hashable)) (drv: { postPatch = "sed -i -e 's,integer-gmp .*<1.1,integer-gmp < 2,' hashable.cabal"; });
   hashable-time = doJailbreak super.hashable-time;
   HTTP = overrideCabal (doJailbreak super.HTTP) (drv: { postPatch = "sed -i -e 's,! Socket,!Socket,' Network/TCP.hs"; });
   integer-logarithms = overrideCabal (doJailbreak super.integer-logarithms) (drv: { postPatch = "sed -i -e 's,integer-gmp <1.1,integer-gmp < 2,' integer-logarithms.cabal"; });
   lukko = doJailbreak super.lukko;
+  network = super.network_3_1_2_2;
   parallel = doJailbreak super.parallel;
-  primitive = doJailbreak (dontCheck super.primitive);
+  primitive = doJailbreak super.primitive;
   regex-posix = doJailbreak super.regex-posix;
   resolv = doJailbreak super.resolv;
   singleton-bool = doJailbreak super.singleton-bool;
   split = doJailbreak super.split;
+  splitmix = doJailbreak super.splitmix;
   tar = doJailbreak super.tar;
   time-compat = doJailbreak super.time-compat;
   vector = doJailbreak (dontCheck super.vector);
@@ -87,11 +89,12 @@ self: super: {
     sha256 = "0rgzrq0513nlc1vw7nw4km4bcwn4ivxcgi33jly4a7n3c1r32v1f";
   });
 
-  # The test suite depends on ChasingBottoms, which is broken with ghc-9.0.x.
-  unordered-containers = dontCheck super.unordered-containers;
+  # 1.3.0 (on stackage) defines instances for the Option-type, which has been removed from base in GHC 9.2.x
+  hashable = super.hashable_1_3_3_0;
 
-  # The test suite seems pretty broken.
-  base64-bytestring = dontCheck super.base64-bytestring;
+  # 1.2.1 introduced support for GHC 9.2.1, stackage has 1.2.0
+  # The test suite indirectly depends on random, which leads to infinite recursion
+  random = dontCheck super.random_1_2_1;
 
   # 5 introduced support for GHC 9.0.x, but hasn't landed in stackage yet
   lens = super.lens_5_0_1;

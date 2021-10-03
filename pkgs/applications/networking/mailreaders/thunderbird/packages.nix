@@ -10,21 +10,14 @@ in
 rec {
   thunderbird = common rec {
     pname = "thunderbird";
-    version = "91.1.0";
+    version = "91.1.2";
     application = "comm/mail";
     binaryName = pname;
     src = fetchurl {
       url = "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
-      sha512 = "c465ff25d67c5c28db53d3b1ccda10a743276e58c693406bf31bde0253f34123348180ae18765bd60b958c050e3a874dd69ac82d7612007a8c7a2e25939840ff";
+      sha512 = "f211ce2469f60862b1d641b5e165292d98db53695ab715090034c1ee2be7b04931f8e5e856b08b0c8c789e4d98df291d59283c257a38b556c0b4b0b63baa539f";
     };
     patches = [
-      ./no-buildconfig-90.patch
-
-      # There is a bug in Thunderbird 91 where add-ons are required
-      # to be signed when the build is run with default settings.
-      # https://bugzilla.mozilla.org/show_bug.cgi?id=1727113
-      # https://phabricator.services.mozilla.com/D124361
-      ./D124361.diff
     ];
 
     meta = with lib; {

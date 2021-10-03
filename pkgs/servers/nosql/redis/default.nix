@@ -1,6 +1,7 @@
 { lib, stdenv, fetchurl, lua, pkg-config, nixosTests
 , withSystemd ? stdenv.isLinux && !stdenv.hostPlatform.isMusl, systemd
-, tlsSupport ? true, openssl
+# dependency ordering is broken at the moment when building with openssl
+, tlsSupport ? !stdenv.hostPlatform.isStatic, openssl
 }:
 
 stdenv.mkDerivation rec {
@@ -54,5 +55,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     changelog = "https://github.com/redis/redis/raw/${version}/00-RELEASENOTES";
     maintainers = with maintainers; [ berdario globin marsam ];
+    mainProgram = "redis-cli";
   };
 }

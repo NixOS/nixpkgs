@@ -106,7 +106,7 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
 
   postInstall = let
     links = prefix: pkg: "ln -s ${pkg} $out/${prefix}/${pkg.name}";
-  in ''
+  in lib.optionalString supportFlags.embedInstallers ''
     mkdir -p $out/share/wine/gecko $out/share/wine/mono/
     ${lib.strings.concatStringsSep "\n"
           ((map (links "share/wine/gecko") geckos)

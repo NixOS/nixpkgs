@@ -16,16 +16,67 @@ let
     lib.concatMapStrings (s: if lib.isList s then "-" else s)
       (builtins.split "[^a-zA-Z0-9_.\\-]+" name);
 
-  # Function to build "zfs allow" and "zfs unallow" commands for the
-  # filesystems we've delegated permissions to.
-  buildAllowCommand = zfsAction: permissions: dataset: lib.escapeShellArgs [
-    # Here we explicitly use the booted system to guarantee the stable API needed by ZFS
-    "-+/run/booted-system/sw/bin/zfs"
-    zfsAction
-    cfg.user
-    (concatStringsSep "," permissions)
-    dataset
-  ];
+  # Function to build "zfs allow" commands for the filesystems we've
+  # delegated permissions to. It also checks if the target dataset
+  # exists before delegating permissions, if it doesn't exist we
+  # delegate it to the parent dataset. This should solve the case of
+  # provisoning new datasets.
+  buildAllowCommand = permissions: dataset: (
+    "-+${pkgs.writeShellScript "zfs-allow-${dataset}" ''
+      # Here we explicitly use the booted system to guarantee the stable API needed by ZFS
+
+      # Run a ZFS list on the dataset to check if it exists
+      if ${lib.escapeShellArgs [
+        "/run/booted-system/sw/bin/zfs"
+        "list"
+        dataset
+      ]} 2> /dev/null; then
+        ${lib.escapeShellArgs [
+          "/run/booted-system/sw/bin/zfs"
+          "allow"
+          cfg.user
+          (concatStringsSep "," permissions)
+          dataset
+        ]}
+      else
+        ${lib.escapeShellArgs [
+          "/run/booted-system/sw/bin/zfs"
+          "allow"
+          cfg.user
+          (concatStringsSep "," permissions)
+          # Remove the last part of the path
+          (builtins.dirOf dataset)
+        ]}
+      fi
+    ''}"
+  );
+
+  # Function to build "zfs unallow" commands for the filesystems we've
+  # delegated permissions to. Here we unallow both the target but also
+  # on the parent dataset because at this stage we have no way of
+  # knowing if the allow command did execute on the parent dataset or
+  # not in the pre-hook. We can't run the same if in the post hook
+  # since the dataset should have been created at this point.
+  buildUnallowCommand = permissions: dataset: (
+    "-+${pkgs.writeShellScript "zfs-unallow-${dataset}" ''
+      # Here we explicitly use the booted system to guarantee the stable API needed by ZFS
+      ${lib.escapeShellArgs [
+        "/run/booted-system/sw/bin/zfs"
+        "unallow"
+        cfg.user
+        (concatStringsSep "," permissions)
+        dataset
+      ]}
+      ${lib.escapeShellArgs [
+        "/run/booted-system/sw/bin/zfs"
+        "unallow"
+        cfg.user
+        (concatStringsSep "," permissions)
+        # Remove the last part of the path
+        (builtins.dirOf dataset)
+      ]}
+    ''}"
+  );
 in
 {
 
@@ -274,11 +325,11 @@ in
             path = [ "/run/booted-system/sw/bin/" ];
             serviceConfig = {
               ExecStartPre =
-                (map (buildAllowCommand "allow" c.localSourceAllow) (localDatasetName c.source)) ++
-                (map (buildAllowCommand "allow" c.localTargetAllow) (localDatasetName c.target));
+                (map (buildAllowCommand c.localSourceAllow) (localDatasetName c.source)) ++
+                (map (buildAllowCommand c.localTargetAllow) (localDatasetName c.target));
               ExecStopPost =
-                (map (buildAllowCommand "unallow" c.localSourceAllow) (localDatasetName c.source)) ++
-                (map (buildAllowCommand "unallow" c.localTargetAllow) (localDatasetName c.target));
+                (map (buildUnallowCommand c.localSourceAllow) (localDatasetName c.source)) ++
+                (map (buildUnallowCommand c.localTargetAllow) (localDatasetName c.target));
               ExecStart = lib.escapeShellArgs ([ "${pkgs.sanoid}/bin/syncoid" ]
                 ++ optionals c.useCommonArgs cfg.commonArgs
                 ++ optional c.recursive "-r"

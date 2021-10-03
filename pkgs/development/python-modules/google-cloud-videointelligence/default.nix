@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-videointelligence";
-  version = "2.3.2";
+  version = "2.3.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-+2HwsRZM/h2eVmX6uVEb1s9etDggoGuQg3qj7hXj/AQ=";
+    sha256 = "bb3a98b5b8044be80c5fdbd76e7acd9b9bdd6026729a53eae9692a9a6c6683ef";
   };
 
   propagatedBuildInputs = [ google-api-core proto-plus ];

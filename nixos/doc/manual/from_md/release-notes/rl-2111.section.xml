@@ -57,9 +57,28 @@
       </listitem>
       <listitem>
         <para>
+          bash now defaults to major version 5.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Systemd was updated to version 249 (from 247).
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           Pantheon desktop has been updated to version 6. Due to changes
           of screen locker, if locking doesn’t work for you, please try
           <literal>gsettings set org.gnome.desktop.lockdown disable-lock-screen false</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>kubernetes-helm</literal> now defaults to 3.7.0,
+          which introduced some breaking changes to the experimental OCI
+          manifest format. See
+          <link xlink:href="https://github.com/helm/community/blob/main/hips/hip-0006.md">HIP
+          6</link> for more details.
         </para>
       </listitem>
     </itemizedlist>
@@ -80,7 +99,15 @@
         <para>
           <link xlink:href="https://github.com/xrelkd/clipcat/">clipcat</link>,
           an X11 clipboard manager written in Rust. Available at
-          [services.clipcat](options.html#o pt-services.clipcat.enable).
+          <link xlink:href="options.html#opt-services.clipcat.enable">services.clipcat</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/dexidp/dex">dex</link>,
+          an OpenID Connect (OIDC) identity and OAuth 2.0 provider.
+          Available at
+          <link xlink:href="options.html#opt-services.dex.enable">services.dex</link>.
         </para>
       </listitem>
       <listitem>
@@ -95,6 +122,13 @@
           <link xlink:href="https://www.isc.org/kea/">Kea</link>, ISCs
           2nd generation DHCP and DDNS server suite. Available at
           <link xlink:href="options.html#opt-services.kea">services.kea</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://owncast.online/">owncast</link>,
+          self-hosted video live streaming solution. Available at
+          <link xlink:href="options.html#opt-services.owncast">services.owncast</link>.
         </para>
       </listitem>
       <listitem>
@@ -126,6 +160,13 @@
           <link xlink:href="https://vikunja.io">vikunja</link>, a to-do
           list app. Available as
           <link linkend="opt-services.vikunja.enable">services.vikunja</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/evilsocket/opensnitch">opensnitch</link>,
+          an application firewall. Available as
+          <link linkend="opt-services.opensnitch.enable">services.opensnitch</link>.
         </para>
       </listitem>
       <listitem>
@@ -961,8 +1002,8 @@ Superuser created successfully.
       <listitem>
         <para>
           The <literal>varnish</literal> package was upgraded from 6.3.x
-          to 6.5.x. <literal>varnish60</literal> for the last LTS
-          release is also still available.
+          to 7.x. <literal>varnish60</literal> for the last LTS release
+          is also still available.
         </para>
       </listitem>
       <listitem>
@@ -1018,6 +1059,16 @@ Superuser created successfully.
           changelog</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <literal>opencv2</literal> no longer includes the non-free
+          libraries by default, and consequently
+          <literal>pfstools</literal> no longer includes OpenCV support
+          by default. Both packages now support an
+          <literal>enableUnfree</literal> option to re-enable this
+          functionality.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-notable-changes">
@@ -1035,6 +1086,40 @@ Superuser created successfully.
           now live under <literal>pkgs.linuxKernel.packages.*</literal>.
           The unversioned ones (such as
           <literal>linuxPackages_latest</literal>) remain untouched.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          In NixOS virtual machines (QEMU), the
+          <literal>virtualisation</literal> module has been updated with
+          new options to configure:
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              IPv4 port forwarding
+              (<link xlink:href="options.html#opt-virtualisation.forwardPorts"><literal>virtualisation.forwardPorts</literal></link>),
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              shared host directories
+              (<link xlink:href="options.html#opt-virtualisation.sharedDirectories"><literal>virtualisation.sharedDirectories</literal></link>),
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              screen resolution
+              (<link xlink:href="options.html#opt-virtualisation.resolution"><literal>virtualisation.resolution</literal></link>).
+            </para>
+          </listitem>
+        </itemizedlist>
+        <para>
+          In addition, the default
+          <link xlink:href="options.html#opt-virtualisation.msize"><literal>msize</literal></link>
+          parameter in 9P filesystems (including /nix/store and all
+          shared directories) has been increased to 16K for improved
+          performance.
         </para>
       </listitem>
       <listitem>
@@ -1198,6 +1283,73 @@ Superuser created successfully.
             <para>
               NSS modules which should come after <literal>dns</literal>
               should use mkAfter.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+      <listitem>
+        <para>
+          The
+          <link xlink:href="options.html#opt-networking.wireless.enable">networking.wireless</link>
+          module (based on wpa_supplicant) has been heavily reworked,
+          solving a number of issues and adding useful features:
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              The automatic discovery of wireless interfaces at boot has
+              been made reliable again (issues
+              <link xlink:href="https://github.com/NixOS/nixpkgs/issues/101963">#101963</link>,
+              <link xlink:href="https://github.com/NixOS/nixpkgs/issues/23196">#23196</link>).
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              WPA3 and Fast BSS Transition (802.11r) are now enabled by
+              default for all networks.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Secrets like pre-shared keys and passwords can now be
+              handled safely, meaning without including them in a
+              world-readable file
+              (<literal>wpa_supplicant.conf</literal> under /nix/store).
+              This is achieved by storing the secrets in a secured
+              <link xlink:href="options.html#opt-networking.wireless.environmentFile">environmentFile</link>
+              and referring to them though environment variables that
+              are expanded inside the configuration.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              With multiple interfaces declared, independent
+              wpa_supplicant daemons are started, one for each interface
+              (the services are named
+              <literal>wpa_supplicant-wlan0</literal>,
+              <literal>wpa_supplicant-wlan1</literal>, etc.).
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              The generated <literal>wpa_supplicant.conf</literal> file
+              is now formatted for easier reading.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              A new
+              <link xlink:href="options.html#opt-networking.wireless.scanOnLowSignal">scanOnLowSignal</link>
+              option has been added to facilitate fast roaming between
+              access points (enabled by default).
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              A new
+              <link xlink:href="options.html#opt-networking.wireless.networks._name_.authProtocols">networks.&lt;name&gt;.authProtocols</link>
+              option has been added to change the authentication
+              protocols used when connecting to a network.
             </para>
           </listitem>
         </itemizedlist>

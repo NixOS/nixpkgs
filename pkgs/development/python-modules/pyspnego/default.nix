@@ -2,6 +2,9 @@
 , buildPythonPackage
 , cryptography
 , fetchFromGitHub
+, gssapi
+, krb5
+, ruamel-yaml
 , pytest-mock
 , pytestCheckHook
 , pythonOlder
@@ -10,24 +13,33 @@
 
 buildPythonPackage rec {
   pname = "pyspnego";
-  version = "0.1.6";
-  disabled = pythonOlder "3.6";
+  version = "0.2.0";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "jborean93";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0pfh2x0539f0k2qi2pbjm64b2fqp64c63xxpinvg1yfaw915kgpb";
+    sha256 = "sha256-puv9aq53NbjSuN561XFou404N9pIxvvMjZMgnNx3SjM=";
   };
 
   propagatedBuildInputs = [
     cryptography
+    gssapi
+    krb5
+    ruamel-yaml
   ];
 
   checkInputs = [
     glibcLocales
     pytest-mock
     pytestCheckHook
+  ];
+
+  disabledTests = [
+    # struct.error: unpack requires a buffer of 1 bytes
+    "test_credssp_invalid_client_authentication"
   ];
 
   LC_ALL = "en_US.UTF-8";

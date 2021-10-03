@@ -1,11 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, cmake, perl, stdenv, gcc10, darwin }:
+{ lib, buildPythonPackage, fetchPypi, cmake, perl, stdenv, gcc10, CoreFoundation, Security }:
 
 buildPythonPackage rec {
   pname = "awscrt";
-  version = "0.12.0";
+  version = "0.12.4";
 
-  buildInputs = lib.optionals stdenv.isDarwin
-    (with darwin.apple_sdk.frameworks; [ CoreFoundation Security ]);
+  buildInputs = lib.optionals stdenv.isDarwin [ CoreFoundation Security ];
 
   # Required to suppress -Werror
   # https://github.com/NixOS/nixpkgs/issues/39687
@@ -23,7 +22,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "65fa09ce78902319392bbb62991ddd3b33cebc0e3bbc81ad2c176072ab40de52";
+    sha256 = "6ad69336bc5277f501bd7e33f82e11db2665370c7d279496ee39fe2f369baeb2";
   };
 
   meta = with lib; {

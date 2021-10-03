@@ -8,6 +8,7 @@
 , jdk
 , llvmPackages_8
 , nixpkgs-fmt
+, protobuf
 , jq
 , shellcheck
 , moreutils
@@ -104,8 +105,8 @@ let
         mktplcRef = {
           name = "ng-template";
           publisher = "Angular";
-          version = "12.1.2";
-          sha256 = "sha256-fIHh1eRmu4zSgrtZr0XwLB+1Ad6a/0ABC55akGr0DOA=";
+          version = "12.2.0";
+          sha256 = "sha256-CChkWKiLi/OcOm268d45pNwiyrKhztqYsQvJV/9z+Ag=";
         };
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/Angular.ng-template/changelog";
@@ -191,6 +192,18 @@ let
 
         meta = with lib; {
           license = licenses.mit;
+        };
+      };
+
+      asvetliakov.vscode-neovim = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-neovim";
+          publisher = "asvetliakov";
+          version = "0.0.82";
+          sha256 = "17f0jzg9vdbqdjnnc5i1q28ij2kckvvxi7fw9szmyy754f074jb1";
+        };
+        meta = {
+          license = lib.licenses.mit;
         };
       };
 
@@ -390,6 +403,22 @@ let
         };
         meta = with lib; {
           license = licenses.mit;
+        };
+      };
+
+      davidlday.languagetool-linter = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "languagetool-linter";
+          publisher = "davidlday";
+          version = "0.18.0";
+          sha256 = "sha256-AYINgq1BMfh7p4xhwSC2Www6dQvyQAGTA45HJsmMGDg=";
+        };
+        meta = with lib; {
+          description = "LanguageTool integration for VS Code";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=davidlday.languagetool-linter";
+          homepage = "https://github.com/davidlday/vscode-languagetool-linter";
+          license = licenses.asl20;
+          maintainers = with maintainers; [ ebbertd ];
         };
       };
 
@@ -744,6 +773,18 @@ let
         };
       };
 
+      kamikillerto.vscode-colorize = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+            name = "vscode-colorize";
+            publisher = "kamikillerto";
+            version = "0.11.1";
+            sha256 = "1h82b1jz86k2qznprng5066afinkrd7j3738a56idqr3vvvqnbsm";
+        };
+        meta = {
+          license = lib.licenses.asl20;
+        };
+      };
+
       github = {
         copilot = buildVscodeMarketplaceExtension {
           mktplcRef = {
@@ -897,6 +938,18 @@ let
           publisher = "JakeBecker";
           version = "0.8.0";
           sha256 = "sha256-VD1g4DJfA0vDJ0cyHFDEtCEqQo0nXfPC5vknEU91cPk=";
+        };
+        meta = with lib; {
+          license = licenses.mit;
+        };
+      };
+
+      influxdata.flux = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "influxdata";
+          name = "flux";
+          version = "0.6.5";
+          sha256 = "sha256-rKkZ7Sg8buryFtbIuKsrf3V3Rf7PP8hnbEIRFf4FvSM=";
         };
         meta = with lib; {
           license = licenses.mit;
@@ -1501,11 +1554,16 @@ let
         mktplcRef = {
           name = "errorlens";
           publisher = "usernamehw";
-          version = "3.2.4";
-          sha256 = "0caxmf6v0s5kgp6cp3j1kk7slhspjv5kzhn4sq3miyl5jkrn95kx";
+          version = "3.4.0";
+          sha256 = "1x9rkyhbp15dwp6dikzpk9lzjnh9cnxac89gzx533681zld906m8";
         };
-        meta = {
-          license = lib.licenses.mit;
+        meta = with lib; {
+          changelog = "https://marketplace.visualstudio.com/items/usernamehw.errorlens/changelog";
+          description = "Improve highlighting of errors, warnings and other language diagnostics.";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=usernamehw.errorlens";
+          homepage = "https://github.com/usernamehw/vscode-error-lens";
+          license = licenses.mit;
+          maintainers = with maintainers; [ imgabe ];
         };
       };
 
@@ -1646,6 +1704,23 @@ let
           version = "0.0.8";
           sha256 = "1ln9gly5bb7nvbziilnay4q448h9npdh7sd9xy277122h0qawkci";
         };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
+      zxh404.vscode-proto3 = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-proto3";
+          publisher = "zxh404";
+          version = "0.5.4";
+          sha256 = "08dfl5h1k6s542qw5qx2czm1wb37ck9w2vpjz44kp2az352nmksb";
+        };
+        nativeBuildInputs = [ jq moreutils ];
+        postInstall = ''
+          cd "$out/$installPrefix"
+          jq '.contributes.configuration.properties.protoc.properties.path.default = "${protobuf}/bin/protoc"' package.json | sponge package.json
+        '';
         meta = {
           license = lib.licenses.mit;
         };

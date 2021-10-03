@@ -6,6 +6,8 @@ let
 
   cfg = config.services.xserver.displayManager;
   gdm = pkgs.gnome.gdm;
+  settingsFormat = pkgs.formats.ini { };
+  configFile = settingsFormat.generate "custom.conf" cfg.gdm.settings;
 
   xSessionWrapper = if (cfg.setupCommands == "") then null else
     pkgs.writeScript "gdm-x-session-wrapper" ''
@@ -103,6 +105,18 @@ in
           (Does not affect automatic suspend while logged in, or at lock screen.)
         '';
         type = types.bool;
+      };
+
+      settings = mkOption {
+        type = settingsFormat.type;
+        default = { };
+        example = {
+          debug.enable = true;
+        };
+        description = ''
+          Options passed to the gdm daemon.
+          See <link xlink:href="https://help.gnome.org/admin/gdm/stable/configuration.html.en#daemonconfig">here</link> for supported options.
+        '';
       };
 
     };
@@ -270,31 +284,26 @@ in
     # Use AutomaticLogin if delay is zero, because it's immediate.
     # Otherwise with TimedLogin with zero seconds the prompt is still
     # presented and there's a little delay.
-    environment.etc."gdm/custom.conf".text = ''
-      [daemon]
-      WaylandEnable=${boolToString cfg.gdm.wayland}
-      ${optionalString cfg.autoLogin.enable (
-        if cfg.gdm.autoLogin.delay > 0 then ''
-          TimedLoginEnable=true
-          TimedLogin=${cfg.autoLogin.user}
-          TimedLoginDelay=${toString cfg.gdm.autoLogin.delay}
-        '' else ''
-          AutomaticLoginEnable=true
-          AutomaticLogin=${cfg.autoLogin.user}
-        '')
-      }
+    services.xserver.displayManager.gdm.settings = {
+      daemon = mkMerge [
+        { WaylandEnable = cfg.gdm.wayland; }
+        # nested if else didn't work
+        (mkIf (cfg.autoLogin.enable && cfg.gdm.autoLogin.delay != 0 ) {
+          TimedLoginEnable = true;
+          TimedLogin = cfg.autoLogin.user;
+          TimedLoginDelay = cfg.gdm.autoLogin.delay;
+        })
+        (mkIf (cfg.autoLogin.enable && cfg.gdm.autoLogin.delay == 0 ) {
+          AutomaticLoginEnable = true;
+          AutomaticLogin = cfg.autoLogin.user;
+        })
+      ];
+      debug = mkIf cfg.gdm.debug {
+        Enable = true;
+      };
+    };
 
-      [security]
-
-      [xdmcp]
-
-      [greeter]
-
-      [chooser]
-
-      [debug]
-      ${optionalString cfg.gdm.debug "Enable=true"}
-    '';
+    environment.etc."gdm/custom.conf".source = configFile;
 
     environment.etc."gdm/Xsession".source = config.services.xserver.displayManager.sessionData.wrapper;
 

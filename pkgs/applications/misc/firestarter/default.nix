@@ -2,6 +2,7 @@
 , lib
 , fetchFromGitHub
 , fetchzip
+, addOpenGLRunpath
 , cmake
 , glibc_multi
 , glibc
@@ -9,7 +10,6 @@
 , pkg-config
 , cudatoolkit
 , withCuda ? false
-, linuxPackages
 }:
 
 let
@@ -60,12 +60,22 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake git pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    git
+    pkg-config
+  ] ++ lib.optionals withCuda [
+    addOpenGLRunpath
+  ];
 
   buildInputs = [ hwloc ] ++ (if withCuda then
-    [ glibc_multi cudatoolkit linuxPackages.nvidia_x11 ]
+    [ glibc_multi cudatoolkit ]
   else
     [ glibc.static ]);
+
+  NIX_LDFLAGS = lib.optionals withCuda [
+    "-L${cudatoolkit}/lib/stubs"
+  ];
 
   cmakeFlags = [
     "-DFIRESTARTER_BUILD_HWLOC=OFF"
@@ -76,8 +86,14 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin
     cp src/FIRESTARTER${lib.optionalString withCuda "_CUDA"} $out/bin/
+    runHook postInstall
+  '';
+
+  postFixup = lib.optionalString withCuda ''
+    addOpenGLRunpath $out/bin/FIRESTARTER_CUDA
   '';
 
   meta = with lib; {

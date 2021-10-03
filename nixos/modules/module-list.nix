@@ -135,6 +135,7 @@
   ./programs/droidcam.nix
   ./programs/environment.nix
   ./programs/evince.nix
+  ./programs/extra-container.nix
   ./programs/feedbackd.nix
   ./programs/file-roller.nix
   ./programs/firejail.nix
@@ -202,6 +203,7 @@
   ./programs/vim.nix
   ./programs/wavemon.nix
   ./programs/waybar.nix
+  ./programs/weylus.nix
   ./programs/wireshark.nix
   ./programs/wshowkeys.nix
   ./programs/xfs_quota.nix
@@ -343,6 +345,7 @@
   ./services/desktops/accountsservice.nix
   ./services/desktops/bamf.nix
   ./services/desktops/blueman.nix
+  ./services/desktops/cpupower-gui.nix
   ./services/desktops/dleyna-renderer.nix
   ./services/desktops/dleyna-server.nix
   ./services/desktops/pantheon/files.nix
@@ -558,6 +561,7 @@
   ./services/misc/octoprint.nix
   ./services/misc/ombi.nix
   ./services/misc/osrm.nix
+  ./services/misc/owncast.nix
   ./services/misc/packagekit.nix
   ./services/misc/paperless-ng.nix
   ./services/misc/parsoid.nix
@@ -589,6 +593,7 @@
   ./services/misc/sysprof.nix
   ./services/misc/taskserver
   ./services/misc/tiddlywiki.nix
+  ./services/misc/tp-auto-kbbl.nix
   ./services/misc/tzupdate.nix
   ./services/misc/uhub.nix
   ./services/misc/weechat.nix
@@ -899,6 +904,7 @@
   ./services/search/elasticsearch-curator.nix
   ./services/search/hound.nix
   ./services/search/kibana.nix
+  ./services/search/meilisearch.nix
   ./services/search/solr.nix
   ./services/security/certmgr.nix
   ./services/security/cfssl.nix
@@ -915,6 +921,7 @@
   ./services/security/nginx-sso.nix
   ./services/security/oauth2_proxy.nix
   ./services/security/oauth2_proxy_nginx.nix
+  ./services/security/opensnitch.nix
   ./services/security/privacyidea.nix
   ./services/security/physlock.nix
   ./services/security/shibboleth-sp.nix
@@ -958,6 +965,7 @@
   ./services/web-apps/calibre-web.nix
   ./services/web-apps/convos.nix
   ./services/web-apps/cryptpad.nix
+  ./services/web-apps/dex.nix
   ./services/web-apps/discourse.nix
   ./services/web-apps/documize.nix
   ./services/web-apps/dokuwiki.nix
@@ -985,6 +993,7 @@
   ./services/web-apps/nextcloud.nix
   ./services/web-apps/nexus.nix
   ./services/web-apps/node-red.nix
+  ./services/web-apps/pict-rs.nix
   ./services/web-apps/plantuml-server.nix
   ./services/web-apps/plausible.nix
   ./services/web-apps/pgpkeyserver-lite.nix
@@ -1027,7 +1036,7 @@
   ./services/web-servers/shellinabox.nix
   ./services/web-servers/tomcat.nix
   ./services/web-servers/traefik.nix
-  ./services/web-servers/trafficserver.nix
+  ./services/web-servers/trafficserver/default.nix
   ./services/web-servers/ttyd.nix
   ./services/web-servers/uwsgi.nix
   ./services/web-servers/varnish/default.nix

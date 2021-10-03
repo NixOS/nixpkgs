@@ -1,5 +1,6 @@
 source 'https://rubygems.org' do
   gem 'addressable'
+  gem 'ansi'
   gem 'atk'
   gem 'awesome_print'
   gem 'bacon'

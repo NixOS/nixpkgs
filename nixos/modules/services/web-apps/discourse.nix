@@ -172,6 +172,15 @@ in
       };
 
       admin = {
+        skipCreate = lib.mkOption {
+          type = lib.types.bool;
+          default = false;
+          description = ''
+            Do not create the admin account, instead rely on other
+            existing admin accounts.
+          '';
+        };
+
         email = lib.mkOption {
           type = lib.types.str;
           example = "admin@example.com";
@@ -721,11 +730,23 @@ in
             lib.optionalString (file != null) ''
               replace-secret '${file}' '${file}' /run/discourse/config/discourse.conf
             '';
+
+          mkAdmin = ''
+            export ADMIN_EMAIL="${cfg.admin.email}"
+            export ADMIN_NAME="${cfg.admin.fullName}"
+            export ADMIN_USERNAME="${cfg.admin.username}"
+            ADMIN_PASSWORD="$(<${cfg.admin.passwordFile})"
+            export ADMIN_PASSWORD
+            discourse-rake admin:create_noninteractively
+          '';
+
         in ''
           set -o errexit -o pipefail -o nounset -o errtrace
           shopt -s inherit_errexit
 
           umask u=rwx,g=rx,o=
+
+          rm -rf /var/lib/discourse/tmp/*
 
           cp -r ${cfg.package}/share/discourse/config.dist/* /run/discourse/config/
           cp -r ${cfg.package}/share/discourse/public.dist/* /run/discourse/public/
@@ -748,14 +769,9 @@ in
           )
 
           discourse-rake db:migrate >>/var/log/discourse/db_migration.log
-          chmod -R u+w /run/discourse/tmp/
+          chmod -R u+w /var/lib/discourse/tmp/
 
-          export ADMIN_EMAIL="${cfg.admin.email}"
-          export ADMIN_NAME="${cfg.admin.fullName}"
-          export ADMIN_USERNAME="${cfg.admin.username}"
-          ADMIN_PASSWORD="$(<${cfg.admin.passwordFile})"
-          export ADMIN_PASSWORD
-          discourse-rake admin:create_noninteractively
+          ${lib.optionalString (!cfg.admin.skipCreate) mkAdmin}
 
           discourse-rake themes:update
           discourse-rake uploads:regenerate_missing_optimized
@@ -768,7 +784,6 @@ in
         RuntimeDirectory = map (p: "discourse/" + p) [
           "config"
           "home"
-          "tmp"
           "assets/javascripts/plugins"
           "public"
           "sockets"
@@ -777,6 +792,7 @@ in
         StateDirectory = map (p: "discourse/" + p) [
           "uploads"
           "backups"
+          "tmp"
         ];
         StateDirectoryMode = 0750;
         LogsDirectory = "discourse";

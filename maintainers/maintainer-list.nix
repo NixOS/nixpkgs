@@ -578,6 +578,16 @@
     githubId = 2626481;
     name = "Ambroz Bizjak";
   };
+  ametrine = {
+    name = "Matilde Ametrine";
+    email = "matilde@diffyq.xyz";
+    github = "matilde-ametrine";
+    githubId = 90799677;
+    keys = [{
+      longkeyid = "rsa3072/0x07EE1FFCA58A11C5";
+      fingerprint = "7931 EB4E 4712 D7BE 04F8  6D34 07EE 1FFC A58A 11C5";
+    }];
+  };
   amiddelk = {
     email = "amiddelk@gmail.com";
     github = "amiddelk";
@@ -735,6 +745,12 @@
     github = "voanhduy1512";
     githubId = 1771266;
     name = "Vo Anh Duy";
+  };
+  anirrudh = {
+    email = "anik597@gmail.com";
+    github = "anirrudh";
+    githubId = 6091755;
+    name = "Anirrudh Krishnan";
   };
   ankhers = {
     email = "me@ankhers.dev";
@@ -1853,6 +1869,12 @@
     githubId = 1762540;
     name = "Changlin Li";
   };
+  chanley = {
+    email = "charlieshanley@gmail.com";
+    github = "charlieshanley";
+    githubId = 8228888;
+    name = "Charlie Hanley";
+  };
   CharlesHD = {
     email = "charleshdespointes@gmail.com";
     github = "CharlesHD";
@@ -2587,6 +2609,10 @@
     githubId = 202798;
     name = "Pierre Bourdon";
   };
+  delta = {
+    email = "d4delta@outlook.fr";
+    name = "Delta";
+  };
   deltaevo = {
     email = "deltaduartedavid@gmail.com";
     github = "DeltaEvo";
@@ -2736,6 +2762,12 @@
     github = "divi255";
     githubId = 40633781;
     name = "Sergei S.";
+  };
+  dit7ya = {
+    email = "7rat13@gmail.com";
+    github = "dit7ya";
+    githubId = 14034137;
+    name = "Mostly Void";
   };
   dizfer = {
     email = "david@izquierdofernandez.com";
@@ -3017,6 +3049,16 @@
     githubId = 36110478;
     name = "Erik Arvstedt";
   };
+  ebbertd = {
+    email = "daniel@ebbert.nrw";
+    github = "ebbertd";
+    githubId = 20522234;
+    name = "Daniel Ebbert";
+    keys = [{
+      longkeyid = "rsa2048/0x47BC155927CBB9C7";
+      fingerprint = "E765 FCA3 D9BF 7FDB 856E  AD73 47BC 1559 27CB B9C7";
+    }];
+  };
   ebzzry = {
     email = "ebzzry@ebzzry.io";
     github = "ebzzry";
@@ -3232,6 +3274,12 @@
     github = "emmanuelrosa";
     githubId = 13485450;
     name = "Emmanuel Rosa";
+  };
+  emptyflask = {
+    email = "jon@emptyflask.dev";
+    github = "emptyflask";
+    githubId = 28287;
+    name = "Jon Roberts";
   };
   endgame = {
     email = "jack@jackkelly.name";
@@ -4441,6 +4489,12 @@
       fingerprint = "D618 7A03 A40A 3D56 62F5  4B46 03EF BF83 9A5F DC15";
     }];
   };
+  hleboulanger = {
+    email = "hleboulanger@protonmail.com";
+    name = "Harold Leboulanger";
+    github = "thbkrhsw";
+    githubId = 33122;
+  };
   hlolli = {
     email = "hlolli@gmail.com";
     github = "hlolli";
@@ -4646,6 +4700,12 @@
     github = "ilikeavocadoes";
     githubId = 36193715;
     name = "Lassi Haasio";
+  };
+  ilkecan = {
+    email = "ilkecan@protonmail.com";
+    github = "ilkecan";
+    githubId = 40234257;
+    name = "ilkecan bozdogan";
   };
   illegalprime = {
     email = "themichaeleden@gmail.com";
@@ -5176,6 +5236,12 @@
     github = "06kellyjac";
     githubId = 9866621;
     name = "Jack";
+  };
+  jkarlson = {
+    email = "jekarlson@gmail.com";
+    github = "jkarlson";
+    githubId = 1204734;
+    name = "Emil Karlson";
   };
   jlesquembre = {
     email = "jl@lafuente.me";
@@ -7655,6 +7721,12 @@
     githubId = 6455574;
     name = "Matt Votava";
   };
+  mvs = {
+    email = "mvs@nya.yt";
+    github = "illdefined";
+    githubId = 772914;
+    name = "Mikael Voss";
+  };
   maxwilson = {
     email = "nixpkgs@maxwilson.dev";
     github = "mwilsoncoding";
@@ -9862,12 +9934,6 @@
     githubId = 11613056;
     name = "Scott Dier";
   };
-  sdll = {
-    email = "sasha.delly@gmail.com";
-    github = "sdll";
-    githubId = 17913919;
-    name = "Sasha Illarionov";
-  };
   SeanZicari = {
     email = "sean.zicari@gmail.com";
     github = "SeanZicari";
@@ -11442,8 +11508,8 @@
     githubId = 25173827;
     name = "Vanilla";
     keys = [{
-      longkeyid = "rsa4096/0x4DFA2BDD7305E739";
-      fingerprint = "5C16 5178 7DE2 EE5A AF98  3EA3 4DFA 2BDD 7305 E739";
+      longkeyid = "rsa4096/0x3750028ED04FA42E";
+      fingerprint = "2649 340C C909 F821 D251  6714 3750 028E D04F A42E";
     }];
   };
   vanschelven = {

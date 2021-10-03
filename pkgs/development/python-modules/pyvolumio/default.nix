@@ -7,20 +7,22 @@
 
 buildPythonPackage rec {
   pname = "pyvolumio";
-  version = "0.1.3";
+  version = "0.1.4";
+
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "OnFreund";
     repo = "PyVolumio";
     rev = "v${version}";
-    sha256 = "0x2dzmd9lwnak2iy6v54y24qjq37y3nlfhsvx7hddgv8jj1klvap";
+    sha256 = "0c6kcz9x0n9w67h2gncyhq0dw3q17nmzipcgx59pwqnn33jan5nf";
   };
 
   propagatedBuildInputs = [ aiohttp ];
 
   # Project has no tests
   doCheck = false;
+
   pythonImportsCheck = [ "pyvolumio" ];
 
   meta = with lib; {

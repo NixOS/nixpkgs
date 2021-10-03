@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, poetry
+, poetry-core
 , pytestCheckHook
 , pythonOlder
 , colorful
@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pontos";
-  version = "21.7.4";
+  version = "21.9.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -21,11 +21,11 @@ buildPythonPackage rec {
     owner = "greenbone";
     repo = pname;
     rev = "v${version}";
-    sha256 = "12z74fp21kv6jf4cwc4hd5xvl5lilhmpprcqimdg85pcddc4zwc2";
+    sha256 = "1pgvpg5sjmd9p1i9lm39k4r5qsz158wfgwfa56rx0p8xqf00h1xp";
   };
 
   nativeBuildInputs = [
-    poetry
+    poetry-core
   ];
 
   propagatedBuildInputs = [
