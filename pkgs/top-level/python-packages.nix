@@ -369,6 +369,8 @@ in {
 
   aiorun = callPackage ../development/python-modules/aiorun { };
 
+  aioserial = callPackage ../development/python-modules/aioserial { };
+
   aioshelly = callPackage ../development/python-modules/aioshelly { };
 
   aiosignal = callPackage ../development/python-modules/aiosignal { };
@@ -5490,6 +5492,8 @@ in {
   phe = callPackage ../development/python-modules/phe { };
 
   phik = callPackage ../development/python-modules/phik { };
+
+  phone-modem = callPackage ../development/python-modules/phone-modem { };
 
   phonenumbers = callPackage ../development/python-modules/phonenumbers { };
 
