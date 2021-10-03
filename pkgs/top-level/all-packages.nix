@@ -12832,6 +12832,9 @@ with pkgs;
   babashka = callPackage ../development/interpreters/clojure/babashka.nix { };
 
   # BQN interpreters and compilers
+
+  mbqn = callPackage ../development/interpreters/bqn/mlochbaum-bqn { };
+
   cbqn = cbqn-phase2;
   # And the classic bootstrapping process
   cbqn-phase0 = callPackage ../development/interpreters/bqn/cbqn {
