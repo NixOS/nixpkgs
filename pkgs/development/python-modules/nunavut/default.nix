@@ -3,12 +3,14 @@
 , pythonOlder
 , fetchPypi
 , pydsdl
+, pyyaml
 }:
 
  buildPythonPackage rec {
   pname = "nunavut";
   version = "1.4.2";
-  disabled = pythonOlder "3.5"; # only python>=3.5 is supported
+
+  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
@@ -17,6 +19,7 @@
 
   propagatedBuildInputs = [
     pydsdl
+    pyyaml
   ];
 
   # allow for writable directory for darwin
