@@ -29,6 +29,12 @@
   "noannoyance@sindex.com" = "noannoyance";
   "noannoyance@daase.net" = "noannoyance-2";
 
+  "panel-date-format@keiii.github.com" = "panel-date-format";
+  "panel-date-format@atareao.es" = "panel-date-format-2";
+
+  "wireguard-indicator@gregos.me" = "wireguard-indicator-2";
+  "wireguard-indicator@atareao.es" = "wireguard-indicator";
+
   "extension-list@tu.berry" = "extension-list";
   "screen-lock@garciabaameiro.com" = "screen-lock"; # Don't know why they got 'extension-list' as slug
 
