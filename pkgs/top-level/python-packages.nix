@@ -623,6 +623,8 @@ in {
 
   async-lru = callPackage ../development/python-modules/async-lru { };
 
+  asyncclick = callPackage ../development/python-modules/asyncclick { };
+
   asynccmd = callPackage ../development/python-modules/asynccmd { };
 
   asyncio-dgram = callPackage ../development/python-modules/asyncio-dgram { };
@@ -5642,6 +5644,8 @@ in {
   python-izone = callPackage ../development/python-modules/python-izone { };
 
   python-juicenet = callPackage ../development/python-modules/python-juicenet { };
+
+  python-kasa = callPackage ../development/python-modules/python-kasa { };
 
   python-keystoneclient = callPackage ../development/python-modules/python-keystoneclient { };
 
