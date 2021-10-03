@@ -575,7 +575,7 @@
     "nightscout" = ps: with ps; [ ]; # missing inputs: py-nightscout
     "niko_home_control" = ps: with ps; [ ]; # missing inputs: niko-home-control
     "nilu" = ps: with ps; [ niluclient ];
-    "nissan_leaf" = ps: with ps; [ ]; # missing inputs: pycarwings2
+    "nissan_leaf" = ps: with ps; [ pycarwings2 ];
     "nmap_tracker" = ps: with ps; [ aiohttp-cors getmac ifaddr netmap ]; # missing inputs: mac-vendor-lookup
     "nmbs" = ps: with ps; [ ]; # missing inputs: pyrail
     "no_ip" = ps: with ps; [ ];
