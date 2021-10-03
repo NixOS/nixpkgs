@@ -2823,6 +2823,8 @@ in {
 
   freezegun = callPackage ../development/python-modules/freezegun { };
 
+  frigidaire = callPackage ../development/python-modules/frigidaire { };
+
   frilouz = callPackage ../development/python-modules/frilouz { };
 
   fritzconnection = callPackage ../development/python-modules/fritzconnection { };
