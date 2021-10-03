@@ -11508,8 +11508,8 @@
     githubId = 25173827;
     name = "Vanilla";
     keys = [{
-      longkeyid = "rsa4096/0x4DFA2BDD7305E739";
-      fingerprint = "5C16 5178 7DE2 EE5A AF98  3EA3 4DFA 2BDD 7305 E739";
+      longkeyid = "rsa4096/0x3750028ED04FA42E";
+      fingerprint = "2649 340C C909 F821 D251  6714 3750 028E D04F A42E";
     }];
   };
   vanschelven = {
