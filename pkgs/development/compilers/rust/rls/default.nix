@@ -1,6 +1,6 @@
 { lib, stdenv, makeWrapper, fetchFromGitHub, rustPlatform
 , openssh, openssl, pkg-config, cmake, zlib, curl, libiconv
-, CoreFoundation, Security }:
+, CoreFoundation, Security, SystemConfiguration }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rls";
@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config cmake makeWrapper ];
   buildInputs = [ openssh openssl curl zlib libiconv rustPlatform.rust.rustc.llvm ]
-    ++ (lib.optionals stdenv.isDarwin [ CoreFoundation Security ]);
+    ++ lib.optionals stdenv.isDarwin [ CoreFoundation Security SystemConfiguration ];
 
   doCheck = true;
 
