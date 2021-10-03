@@ -9182,6 +9182,8 @@ in {
 
   tumpa = callPackage ../development/python-modules/tumpa { };
 
+  tuya-iot-py-sdk = callPackage ../development/python-modules/tuya-iot-py-sdk { };
+
   tuyaha = callPackage ../development/python-modules/tuyaha { };
 
   tvdb_api = callPackage ../development/python-modules/tvdb_api { };
