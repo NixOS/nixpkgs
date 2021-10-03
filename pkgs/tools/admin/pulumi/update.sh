@@ -1,36 +1,52 @@
 #!/usr/bin/env bash
 # Bash 3 compatible for Darwin
 
+# For getting the latest version of plugins automatically
+API_URL="https://api.github.com/repos/pulumi"
+
 # Version of Pulumi from
 # https://www.pulumi.com/docs/get-started/install/versions/
-VERSION="3.12.0"
+VERSION="3.13.2"
 
-# Grab latest release ${VERSION} from
-# https://github.com/pulumi/pulumi-${NAME}/releases
-plugins=(
-    "auth0=2.2.0"
-    "aws=4.19.0"
-    "cloudflare=3.5.0"
-    "consul=3.3.0"
-    "datadog=4.1.0"
-    "digitalocean=4.6.1"
-    "docker=3.1.0"
-    "equinix-metal=2.0.0"
-    "gcp=5.18.0"
-    "github=4.3.0"
-    "gitlab=4.2.0"
-    "hcloud=1.4.0"
-    "kubernetes=3.7.0"
-    "linode=3.3.2"
-    "mailgun=3.1.0"
-    "mysql=3.0.0"
-    "openstack=3.3.0"
-    "packet=3.2.2"
-    "postgresql=3.2.0"
-    "random=4.2.0"
-    "vault=4.4.0"
-    "vsphere=4.0.1"
+# A hashmap containing a plugin's name and it's respective repository inside
+# Pulumi's Github organization
+
+declare -A pulumi_repos
+pulumi_repos=(
+    ["auth0"]="pulumi-auth0"
+    ["aws"]="pulumi-aws"
+    ["cloudflare"]="pulumi-cloudflare"
+    ["consul"]="pulumi-consul"
+    ["datadog"]="pulumi-datadog"
+    ["digitalocean"]="pulumi-digitalocean"
+    ["docker"]="pulumi-docker"
+    ["equinix-metal"]="pulumi-equinix-metal"
+    ["gcp"]="pulumi-gcp"
+    ["github"]="pulumi-github"
+    ["gitlab"]="pulumi-gitlab"
+    ["hcloud"]="pulumi-hcloud"
+    ["kubernetes"]="pulumi-kubernetes"
+    ["linode"]="pulumi-linode"
+    ["mailgun"]="pulumi-mailgun"
+    ["mysql"]="pulumi-mysql"
+    ["openstack"]="pulumi-openstack"
+    ["packet"]="pulumi-packet"
+    ["postgresql"]="pulumi-postgresql"
+    ["random"]="pulumi-random"
+    ["vault"]="pulumi-vault"
+    ["vsphere"]="pulumi-vsphere"
 )
+
+# Contains latest release ${VERSION} from
+# https://github.com/pulumi/pulumi-${NAME}/releases
+
+# Dynamically builds the plugin array, using the hashmap's key/values and the
+# API for getting the latest version.
+plugins=()
+for key in "${!pulumi_repos[@]}"; do
+    plugins+=("${key}=$(curl -s ${API_URL}/${pulumi_repos[${key}]}/releases/latest | jq -M -r .tag_name | sed 's/v//g')")
+    sleep 1
+done
 
 function genMainSrc() {
     local url="https://get.pulumi.com/releases/sdk/pulumi-v${VERSION}-${1}-${2}.tar.gz"
