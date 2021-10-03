@@ -9709,6 +9709,8 @@ with pkgs;
 
   tinyproxy = callPackage ../tools/networking/tinyproxy { };
 
+  time-decode = callPackage ../tools/misc/time-decode { };
+
   tio = callPackage ../tools/misc/tio { };
 
   tiv = callPackage ../applications/misc/tiv { };
