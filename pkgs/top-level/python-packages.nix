@@ -341,6 +341,8 @@ in {
 
   aiomysql = callPackage ../development/python-modules/aiomysql { };
 
+  aionanoleaf = callPackage ../development/python-modules/aionanoleaf { };
+
   aionotify = callPackage ../development/python-modules/aionotify { };
 
   aionotion = callPackage ../development/python-modules/aionotion { };
