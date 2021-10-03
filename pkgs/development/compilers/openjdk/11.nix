@@ -40,6 +40,7 @@ let
       ./currency-date-range-jdk10.patch
       ./increase-javadoc-heap.patch
       ./fix-library-path-jdk11.patch
+      ./fix-glibc-2.34.patch
     ] ++ lib.optionals (!headless && enableGnome2) [
       ./swing-use-gtk-jdk10.patch
     ];
