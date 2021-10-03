@@ -16,8 +16,7 @@ let
       };
 
       nodes = {
-        keycloak = { ... }: {
-
+        keycloak = { config, ... }: {
           security.pki.certificateFiles = [
             certs.ca.cert
           ];
@@ -36,6 +35,9 @@ let
               username = "bogus";
               passwordFile = pkgs.writeText "dbPassword" "wzf6vOCbPp6cqTH";
             };
+            plugins = with config.services.keycloak.package.plugins; [
+              keycloak-discord
+            ];
           };
 
           environment.systemPackages = with pkgs; [
