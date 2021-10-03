@@ -36,10 +36,7 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
-    brotlicffi
     certifi
-    charset-normalizer
-    chardet
     idna
     urllib3
   ] ++ lib.optionals (isPy3k) [
@@ -47,6 +44,7 @@ buildPythonPackage rec {
     charset-normalizer
   ] ++ lib.optionals (isPy27) [
     brotli
+    chardet
   ];
 
   checkInputs = [
