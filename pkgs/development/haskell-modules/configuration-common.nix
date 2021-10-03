@@ -1937,7 +1937,7 @@ EOT
     # golden files are not shipped with the hackage tarball and hspec-golden-aeson
     # needs some encouraging to create the missing files after version 0.8.0.0.
     # See: https://gitlab.haskell.org/haskell/ghcup-hs/-/issues/255
-    preCheck = ''
+    preCheck = assert drv.version == "0.1.17.2"; ''
       export CREATE_MISSING_GOLDEN=yes
     '' + (drv.preCheck or "");
   });
