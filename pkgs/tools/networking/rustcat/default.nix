@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rustcat";
-  version = "1.3.0";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "robiot";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0f4g0fk3i9p403r21w1cdz4r9778pkz58y8h7w2fmj27bamsyfhb";
+    sha256 = "sha256-aoeinz1XVJ+MNt8ndV/HnKLdwa7rXwxIZucCkZCnNaM=";
   };
 
-  cargoSha256 = "0zlgnnlnglix0qrjc5v0g91v083lm20iw1fhvjpvjlfq7shdkhyd";
+  cargoSha256 = "sha256-cQxBM8m0sy9WKvKqyY/sNE3p4l2v9zdx80mReQEAoc8=";
 
   buildInputs = lib.optional stdenv.isDarwin Security;
 
