@@ -5,8 +5,11 @@ with pkgs;
 let
   mavenbuild = callPackage ../development/java-modules/build-maven-package.nix { };
   fetchMaven = callPackage ../development/java-modules/m2install.nix { };
+
+  mavenfod = callPackage ../development/java-modules/maven-fod.nix { };
+
 in {
-  inherit mavenbuild fetchMaven;
+  inherit mavenbuild mavenfod fetchMaven;
 
   mavenPlugins = recurseIntoAttrs (callPackage ../development/java-modules/mavenPlugins.nix { });
 
