@@ -3754,6 +3754,18 @@ final: prev:
     meta.homepage = "https://github.com/chr4/nginx.vim/";
   };
 
+  nightfox-nvim = buildVimPluginFrom2Nix {
+    pname = "nightfox.nvim";
+    version = "2021-10-01";
+    src = fetchFromGitHub {
+      owner = "EdenEast";
+      repo = "nightfox.nvim";
+      rev = "84c1d22f2108034f3597045155ac8fac230c90db";
+      sha256 = "0bz6h1c6hfw80nw1y1b89gnlbdnb2zjn4inn6fkhdvyg04yi8sn5";
+    };
+    meta.homepage = "https://github.com/EdenEast/nightfox.nvim/";
+  };
+
   nim-vim = buildVimPluginFrom2Nix {
     pname = "nim.vim";
     version = "2020-10-16";
