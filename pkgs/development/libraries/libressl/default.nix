@@ -7,6 +7,9 @@
 }:
 
 let
+  ldLibPathEnvName = if stdenv.isDarwin
+    then "DYLD_LIBRARY_PATH"
+    else "LD_LIBRARY_PATH";
 
   generic = { version, sha256, patches ? [] }: stdenv.mkDerivation rec {
     pname = "libressl";
@@ -44,6 +47,15 @@ let
     # DEFAULT_CA_FILE anymore, instead we have to patch the default value.
     postPatch = lib.optionalString (lib.versionAtLeast version "2.9.2") ''
       substituteInPlace ./tls/tls_config.c --replace '"/etc/ssl/cert.pem"' '"${cacert}/etc/ssl/certs/ca-bundle.crt"'
+    '';
+
+    doCheck = true;
+    preCheck = ''
+      export PREVIOUS_${ldLibPathEnvName}=$${ldLibPathEnvName}
+      export ${ldLibPathEnvName}="$${ldLibPathEnvName}:$(realpath tls/):$(realpath ssl/):$(realpath crypto/)"
+    '';
+    postCheck = ''
+      export ${ldLibPathEnvName}=$PREVIOUS_${ldLibPathEnvName}
     '';
 
     outputs = [ "bin" "dev" "out" "man" "nc" ];
