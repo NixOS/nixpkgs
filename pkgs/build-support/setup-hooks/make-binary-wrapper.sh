@@ -37,6 +37,7 @@ makeDocumentedCWrapper() {
 # ARGS: same as makeBinaryWrapper
 makeCWrapper() {
     local argv0 n params cmd main flagsBefore flags executable params length
+    local uses_prefix uses_suffix uses_concat3
     executable=$(escapeStringLiteral "$1")
     params=("$@")
     length=${#params[*]}
@@ -47,19 +48,19 @@ makeCWrapper() {
                 cmd=$(setEnv "${params[n + 1]}" "${params[n + 2]}")
                 main="$main    $cmd"$'\n'
                 n=$((n + 2))
-                [ $n -ge "$length" ] && printf '%s\n' "    #error makeCWrapper: $p takes 2 arguments"
+                [ $n -ge "$length" ] && main="$main    #error makeCWrapper: $p takes 2 arguments"$'\n'
             ;;
             --set-default)
                 cmd=$(setDefaultEnv "${params[n + 1]}" "${params[n + 2]}")
                 main="$main    $cmd"$'\n'
                 n=$((n + 2))
-                [ $n -ge "$length" ] && printf '%s\n' "    #error makeCWrapper: $p takes 2 arguments"
+                [ $n -ge "$length" ] && main="$main    #error makeCWrapper: $p takes 2 arguments"$'\n'
             ;;
             --unset)
                 cmd=$(unsetEnv "${params[n + 1]}")
                 main="$main    $cmd"$'\n'
                 n=$((n + 1))
-                [ $n -ge "$length" ] && printf '%s\n' "    #error makeCWrapper: $p takes 1 argument"
+                [ $n -ge "$length" ] && main="$main    #error makeCWrapper: $p takes 1 argument"$'\n'
             ;;
             --prefix)
                 cmd=$(setEnvPrefix "${params[n + 1]}" "${params[n + 2]}" "${params[n + 3]}")
@@ -67,7 +68,7 @@ makeCWrapper() {
                 uses_prefix=1
                 uses_concat3=1
                 n=$((n + 3))
-                [ $n -ge "$length" ] && printf '%s\n' "    #error makeCWrapper: $p takes 3 arguments"
+                [ $n -ge "$length" ] && main="$main    #error makeCWrapper: $p takes 3 arguments"$'\n'
             ;;
             --suffix)
                 cmd=$(setEnvSuffix "${params[n + 1]}" "${params[n + 2]}" "${params[n + 3]}")
@@ -75,21 +76,21 @@ makeCWrapper() {
                 uses_suffix=1
                 uses_concat3=1
                 n=$((n + 3))
-                [ $n -ge "$length" ] && printf '%s\n' "    #error makeCWrapper: $p takes 3 arguments"
+                [ $n -ge "$length" ] && main="$main    #error makeCWrapper: $p takes 3 arguments"$'\n'
             ;;
             --add-flags)
                 flags="${params[n + 1]}"
                 flagsBefore="$flagsBefore $flags"
                 n=$((n + 1))
-                [ $n -ge "$length" ] && printf '%s\n' "    #error makeCWrapper: $p takes 1 argument"
+                [ $n -ge "$length" ] && main="$main    #error makeCWrapper: $p takes 1 argument"$'\n'
             ;;
             --argv0)
                 argv0=$(escapeStringLiteral "${params[n + 1]}")
                 n=$((n + 1))
-                [ $n -ge "$length" ] && printf '%s\n' "    #error makeCWrapper: $p takes 1 argument"
+                [ $n -ge "$length" ] && main="$main    #error makeCWrapper: $p takes 1 argument"$'\n'
             ;;
             *) # Using an error macro, we will make sure the compiler gives an understandable error message
-                printf '%s\n' "    #error makeCWrapper: Unknown argument '$p'"
+                main="$main    #error makeCWrapper: Uknown argument ${p}"$'\n'
             ;;
         esac
     done
