@@ -341,6 +341,8 @@ in {
 
   aiomysql = callPackage ../development/python-modules/aiomysql { };
 
+  aionanoleaf = callPackage ../development/python-modules/aionanoleaf { };
+
   aionotify = callPackage ../development/python-modules/aionotify { };
 
   aionotion = callPackage ../development/python-modules/aionotion { };
@@ -366,6 +368,8 @@ in {
   aiorpcx = callPackage ../development/python-modules/aiorpcx { };
 
   aiorun = callPackage ../development/python-modules/aiorun { };
+
+  aioserial = callPackage ../development/python-modules/aioserial { };
 
   aioshelly = callPackage ../development/python-modules/aioshelly { };
 
@@ -2891,6 +2895,8 @@ in {
   gast = callPackage ../development/python-modules/gast { };
 
   garages-amsterdam = callPackage ../development/python-modules/garages-amsterdam { };
+
+  gbinder-python = callPackage ../development/python-modules/gbinder-python { };
 
   gcovr = callPackage ../development/python-modules/gcovr { };
 
@@ -5487,6 +5493,8 @@ in {
 
   phik = callPackage ../development/python-modules/phik { };
 
+  phone-modem = callPackage ../development/python-modules/phone-modem { };
+
   phonenumbers = callPackage ../development/python-modules/phonenumbers { };
 
   micloud = callPackage ../development/python-modules/micloud { };
@@ -6054,6 +6062,8 @@ in {
   pycaption = callPackage ../development/python-modules/pycaption { };
 
   pycares = callPackage ../development/python-modules/pycares { };
+
+  pycarwings2 = callPackage ../development/python-modules/pycarwings2 { };
 
   pycategories = callPackage ../development/python-modules/pycategories { };
 

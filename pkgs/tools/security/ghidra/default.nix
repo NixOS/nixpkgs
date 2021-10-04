@@ -62,7 +62,9 @@ in stdenv.mkDerivation rec {
 
   postFixup = ''
     mkdir -p "$out/bin"
-    makeWrapper "${pkg_path}/ghidraRun" "$out/bin/ghidra" \
+    ln -s "${pkg_path}/ghidraRun" "$out/bin/ghidra"
+
+    wrapProgram "${pkg_path}/support/launch.sh" \
       --prefix PATH : ${lib.makeBinPath [ openjdk11 ]}
   '';
 
