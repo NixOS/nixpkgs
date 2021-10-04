@@ -32116,6 +32116,8 @@ with pkgs;
 
   rargs = callPackage ../tools/misc/rargs { };
 
+  rancher = callPackage ../applications/networking/cluster/rancher { };
+
   rauc = callPackage ../tools/misc/rauc { };
 
   redprl = callPackage ../applications/science/logic/redprl { };
