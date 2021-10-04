@@ -54,6 +54,10 @@
       "lockkeys@vaina.lt",
       "lockkeys@fawtytoo"
     ],
+    "system-monitor": [
+      "system-monitor@paradoxxx.zero.gmail.com",
+      "System_Monitor@bghome.gmail.com"
+    ],
     "hide-activities-button": [
       "Hide_Activities@shay.shayel.org",
       "hide-activities-button@nmingori.gnome-shell-extensions.org"
@@ -67,9 +71,21 @@
       "noannoyance@sindex.com",
       "noannoyance@daase.net"
     ],
+    "panel-date-format": [
+      "panel-date-format@keiii.github.com",
+      "panel-date-format@atareao.es"
+    ],
+    "disable-unredirect-fullscreen-windows": [
+      "unredirect@vaina.lt",
+      "unredirect@aunetx"
+    ],
     "extension-list": [
       "extension-list@tu.berry",
       "screen-lock@garciabaameiro.com"
+    ],
+    "wireguard-indicator": [
+      "wireguard-indicator@gregos.me",
+      "wireguard-indicator@atareao.es"
     ]
   }
 }

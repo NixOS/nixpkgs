@@ -1,10 +1,5 @@
 { lib, fetchFromGitHub, python3Packages }:
 
-let
-  rev = "4467bd46a7a798f738247a7f090c1505176bd597";
-  sha256 = "0yf3pc3fws4nnh4nd8d3jpglmsyi69d17qqgpcnkpqca5l4cd25w";
-in
-
 python3Packages.buildPythonApplication rec {
   pname = "rpl";
   version = "1.10";
@@ -14,9 +9,10 @@ python3Packages.buildPythonApplication rec {
 
 
   src = fetchFromGitHub {
-    owner  = "rrthomas";
-    repo   = "rpl";
-    inherit rev sha256;
+    owner = "rrthomas";
+    repo = "rpl";
+    rev = "4467bd46a7a798f738247a7f090c1505176bd597";
+    sha256 = "0yf3pc3fws4nnh4nd8d3jpglmsyi69d17qqgpcnkpqca5l4cd25w";
   };
 
   patches = [

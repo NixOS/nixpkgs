@@ -12,7 +12,7 @@
 { stdenv, lib
 , buildPackages
 , newScope, callPackage
-, CoreFoundation, Security
+, CoreFoundation, Security, SystemConfiguration
 , pkgsBuildTarget, pkgsBuildBuild, pkgsBuildHost
 , makeRustPlatform
 , llvmPackages_11

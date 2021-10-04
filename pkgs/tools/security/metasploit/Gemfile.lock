@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/rapid7/metasploit-framework
-  revision: 6dddd6d372c75acadc183f6a4efdd44e453559b4
-  ref: refs/tags/6.1.7
+  revision: d50b53eafca062b7270a91894e4e9de7a526aa10
+  ref: refs/tags/6.1.8
   specs:
-    metasploit-framework (6.1.7)
+    metasploit-framework (6.1.8)
       actionpack (~> 6.0)
       activerecord (~> 6.0)
       activesupport (~> 6.0)
@@ -31,9 +31,9 @@ GIT
       metasploit-concern
       metasploit-credential
       metasploit-model
-      metasploit-payloads (= 2.0.54)
+      metasploit-payloads (= 2.0.58)
       metasploit_data_models
-      metasploit_payloads-mettle (= 1.0.10)
+      metasploit_payloads-mettle (= 1.0.13)
       mqtt
       msgpack
       nessus_rest
@@ -127,7 +127,7 @@ GEM
     arel-helpers (2.12.1)
       activerecord (>= 3.1.0, < 7)
     aws-eventstream (1.2.0)
-    aws-partitions (1.506.0)
+    aws-partitions (1.510.0)
     aws-sdk-core (3.121.1)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.239.0)
@@ -232,7 +232,7 @@ GEM
       activemodel (~> 6.0)
       activesupport (~> 6.0)
       railties (~> 6.0)
-    metasploit-credential (5.0.4)
+    metasploit-credential (5.0.5)
       metasploit-concern
       metasploit-model
       metasploit_data_models (>= 5.0.0)
@@ -246,7 +246,7 @@ GEM
       activemodel (~> 6.0)
       activesupport (~> 6.0)
       railties (~> 6.0)
-    metasploit-payloads (2.0.54)
+    metasploit-payloads (2.0.58)
     metasploit_data_models (5.0.4)
       activerecord (~> 6.0)
       activesupport (~> 6.0)
@@ -257,7 +257,7 @@ GEM
       railties (~> 6.0)
       recog (~> 2.0)
       webrick
-    metasploit_payloads-mettle (1.0.10)
+    metasploit_payloads-mettle (1.0.13)
     method_source (1.0.0)
     mini_portile2 (2.6.1)
     minitest (5.14.4)
@@ -273,7 +273,7 @@ GEM
     network_interface (0.0.2)
     nexpose (7.3.0)
     nio4r (2.5.8)
-    nokogiri (1.12.4)
+    nokogiri (1.12.5)
       mini_portile2 (~> 2.6.1)
       racc (~> 1.4)
     nori (2.6.0)
@@ -329,7 +329,7 @@ GEM
       rex-core
       rex-struct2
       rex-text
-    rex-core (0.1.17)
+    rex-core (0.1.18)
     rex-encoder (0.1.6)
       metasm
       rex-arch

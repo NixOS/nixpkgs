@@ -1,4 +1,11 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, stdenv
+, CoreFoundation
+, Security
+, SystemConfiguration
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "gobang";
@@ -12,6 +19,12 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "sha256-Tiefet5gLpiuYY6Scg5fjnaPiZfVl5Gy2oZFdhgNRxY=";
+
+  buildInputs = lib.optionals stdenv.isDarwin [
+    CoreFoundation
+    Security
+    SystemConfiguration
+  ];
 
   meta = with lib; {
     description = "A cross-platform TUI database management tool written in Rust";

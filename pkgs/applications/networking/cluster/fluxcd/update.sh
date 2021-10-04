@@ -14,7 +14,7 @@ SHA256=$(nix-prefetch-url --quiet --unpack https://github.com/fluxcd/flux2/archi
 SPEC_SHA256=$(nix-prefetch-url --quiet --unpack https://github.com/fluxcd/flux2/releases/download/${TAG}/manifests.tar.gz)
 
 setKV () {
-  sed -i "s/$1 = \".*\"/$1 = \"$2\"/" ./default.nix
+    sed -i "s|$1 = \".*\"|$1 = \"$2\"|" ./default.nix
 }
 
 setKV version ${VERSION}

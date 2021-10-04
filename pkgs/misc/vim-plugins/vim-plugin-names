@@ -124,6 +124,7 @@ eagletmt/neco-ghc
 easymotion/vim-easymotion
 eddiebergman/nvim-treesitter-pyfold
 eddyekofo94/gruvbox-flat.nvim
+EdenEast/nightfox.nvim@main
 editorconfig/editorconfig-vim
 edkolev/tmuxline.vim
 edluffy/hologram.nvim@main
@@ -537,6 +538,7 @@ nvim-treesitter/nvim-treesitter-refactor
 nvim-treesitter/nvim-treesitter-textobjects@0.5-compat
 nvim-treesitter/nvim-treesitter@0.5-compat
 nvim-treesitter/playground
+oberblastmeister/neuron.nvim
 oberblastmeister/termwrapper.nvim
 ocaml/vim-ocaml
 octol/vim-cpp-enhanced-highlight
