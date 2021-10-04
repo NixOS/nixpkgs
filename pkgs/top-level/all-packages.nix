@@ -9255,6 +9255,8 @@ with pkgs;
 
   snort = callPackage ../applications/networking/ids/snort { };
 
+  snowflake = callPackage ../tools/networking/snowflake { };
+
   so = callPackage ../development/tools/so {
     inherit (darwin.apple_sdk.frameworks) Security;
   };

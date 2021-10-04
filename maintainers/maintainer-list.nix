@@ -11996,6 +11996,16 @@
     githubId = 42300264;
     name = "wishfort36";
   };
+  witchof0x20 = {
+   name = "Jade";
+   email = "jade@witchof.space";
+   github = "witchof0x20";
+   githubId = 36118348;
+   keys = [{
+     longkeyid = "rsa4096/0x80A1F76FC9F954AE";
+     fingerprint = "69C9 876B 5797 1B2E 11C5  7C39 80A1 F76F C9F9 54AE";
+   }];
+  };
   wizeman = {
     email = "rcorreia@wizy.org";
     github = "wizeman";
