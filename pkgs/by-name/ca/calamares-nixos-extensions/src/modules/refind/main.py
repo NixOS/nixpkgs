@@ -27,27 +27,16 @@ def pretty_name():
     return _("Install rEFInd.")
 
 def get_uuid():
-    """
-    Checks and passes 'uuid' to other routine.
-
-    :return:
-    """
-    root_mount_point = libcalamares.globalstorage.value("rootMountPoint")
     partitions = libcalamares.globalstorage.value("partitions")
     for partition in partitions:
         if partition["mountPoint"] == "/":
             libcalamares.utils.debug(partition["uuid"])
             return partition["uuid"]
-    return ""
+    return None
 
 def update_conf(uuid, conf_path):
     """
     Updates the created rEFInd configuration file based on given parameters.
-
-    :param install_path:
-    :param efi_dir:
-    :param uuid:
-    :param kernel_type:
     """
     partitions = libcalamares.globalstorage.value("partitions")
 
@@ -100,7 +89,7 @@ def update_conf(uuid, conf_path):
     refind_file.close()
 
 
-def install_refind(boot_loader):
+def install_refind():
     install_path = libcalamares.globalstorage.value("rootMountPoint")
     uuid = get_uuid()
     conf_path = os.path.join(install_path, "boot/refind_linux.conf")
@@ -131,7 +120,6 @@ def install_refind(boot_loader):
     update_conf(uuid, conf_path)
 
 def run():
-    boot_loader = libcalamares.globalstorage.value("bootLoader")
     """
     Optional entry for when providing bootloader choices.
     Values taken from a packagechooser instance.
@@ -139,8 +127,8 @@ def run():
     """
     bootchoice = libcalamares.globalstorage.value("packagechooser_bootchoice")
 
-    if bootchoice != 'refind':
+    if bootchoice != "refind":
         return None
 
-    install_refind(boot_loader)
+    install_refind()
     return None
