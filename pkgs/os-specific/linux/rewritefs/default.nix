@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation {
   pname = "rewritefs";
-  version = "2021-10-03";
+  version = "unstable-2021-10-03";
 
   src = fetchFromGitHub {
     owner  = "sloonz";
