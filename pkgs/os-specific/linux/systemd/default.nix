@@ -155,7 +155,6 @@ stdenv.mkDerivation {
     ./0015-systemd-sleep-execute-scripts-in-etc-systemd-system-.patch
     ./0016-kmod-static-nodes.service-Update-ConditionFileNotEmp.patch
     ./0017-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
-    ./0018-logind-seat-debus-show-CanMultiSession-again.patch
     ./0019-pkg-config-derive-prefix-from-prefix.patch
 
     # In v249 a bunch of meson files had been touched as part of the migration to
