@@ -8,9 +8,9 @@ buildGoModule rec {
 
 
   src = fetchFromGitHub {
-    rev = "v${version}";
     owner = "vmware-tanzu";
     repo = "velero";
+    rev = "v${version}";
     sha256 = "sha256-n5Rk+Fyb6yAI5sRZi+WE1KyQZyGryZSP4yd/gmmsQxw=";
   };
 
