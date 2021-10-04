@@ -2,6 +2,8 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
+, pytestCheckHook
+, yasm
 }:
 
 buildPythonPackage rec {
@@ -17,8 +19,17 @@ buildPythonPackage rec {
     sha256 = "012bh1l2w7i9q8rcnznj3x0lra09d5yxd3r42cbrqdwl1mmg26qn";
   };
 
-  # no tests included
-  doCheck = false;
+  checkInputs = [
+    pytestCheckHook
+    yasm
+  ];
+
+  disabledTests = [
+    # TypeError: __init__() missing 3 required positional...
+    "test_dummy"
+  ];
+
+  pythonImportsCheck = [ "distorm3" ];
 
   meta = with lib; {
     description = "Disassembler library for x86/AMD64";
