@@ -1,12 +1,12 @@
 { appimageTools, lib, fetchurl }:
 let
   pname = "mathpix-snipping-tool";
-  version = "03.00.0050";
+  version = "03.00.0072";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://download.mathpix.com/linux/Mathpix_Snipping_Tool-x86_64.v${version}.AppImage";
-    sha256 = "0bf4x6jffiqdss8vwy1qypv75zxi1bfc8rywsgp5qlsjq792plpb";
+    sha256 = "1igg8wnshmg9f23qqw1gqb85h1aa3461c1n7dmgw6sn4lrrrh5ms";
   };
 
   appimageContents = appimageTools.extract { inherit name src; };
