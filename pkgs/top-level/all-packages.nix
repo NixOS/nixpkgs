@@ -32069,6 +32069,8 @@ with pkgs;
 
   shc = callPackage ../tools/security/shc { };
 
+  shellz = callPackage ../tools/security/shellz { };
+
   canon-cups-ufr2 = callPackage ../misc/cups/drivers/canon { };
 
   hll2390dw-cups = callPackage ../misc/cups/drivers/hll2390dw-cups { };
