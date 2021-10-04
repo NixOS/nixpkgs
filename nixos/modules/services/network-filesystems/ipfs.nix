@@ -57,7 +57,7 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.ipfs;
-        defaultText = "pkgs.ipfs";
+        defaultText = literalExpression "pkgs.ipfs";
         description = "Which IPFS package to use.";
       };
 

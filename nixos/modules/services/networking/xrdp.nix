@@ -47,7 +47,7 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.xrdp;
-        defaultText = "pkgs.xrdp";
+        defaultText = literalExpression "pkgs.xrdp";
         description = ''
           The package to use for the xrdp daemon's binary.
         '';

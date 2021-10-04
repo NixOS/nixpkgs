@@ -164,7 +164,7 @@ in
       settings = mkOption {
         type = configType;
         default = { };
-        example = literalExample ''
+        example = literalExpression ''
           { # enable webserver
             ncdns.httplistenaddr = ":8202";
 

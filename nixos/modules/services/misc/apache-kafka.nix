@@ -102,14 +102,14 @@ in {
     package = mkOption {
       description = "The kafka package to use";
       default = pkgs.apacheKafka;
-      defaultText = "pkgs.apacheKafka";
+      defaultText = literalExpression "pkgs.apacheKafka";
       type = types.package;
     };
 
     jre = mkOption {
       description = "The JRE with which to run Kafka";
       default = cfg.package.passthru.jre;
-      defaultText = "pkgs.apacheKafka.passthru.jre";
+      defaultText = literalExpression "pkgs.apacheKafka.passthru.jre";
       type = types.package;
     };
 

@@ -2,7 +2,7 @@
 
 let
   inherit (lib) mkDefault mkEnableOption mkForce mkIf mkMerge mkOption types maintainers recursiveUpdate;
-  inherit (lib) any attrValues concatMapStrings concatMapStringsSep flatten literalExample;
+  inherit (lib) any attrValues concatMapStrings concatMapStringsSep flatten literalExpression;
   inherit (lib) filterAttrs mapAttrs mapAttrs' mapAttrsToList nameValuePair optional optionalAttrs optionalString;
 
   cfg = migrateOldAttrs config.services.dokuwiki;
@@ -69,6 +69,7 @@ let
         package = mkOption {
           type = types.package;
           default = pkgs.dokuwiki;
+          defaultText = literalExpression "pkgs.dokuwiki";
           description = "Which DokuWiki package to use.";
         };
 
@@ -167,24 +168,24 @@ let
                 List of path(s) to respective plugin(s) which are copied from the 'plugin' directory.
                 <note><para>These plugins need to be packaged before use, see example.</para></note>
           '';
-          example = ''
-                # Let's package the icalevents plugin
-                plugin-icalevents = pkgs.stdenv.mkDerivation {
-                  name = "icalevents";
-                  # Download the plugin from the dokuwiki site
-                  src = pkgs.fetchurl {
-                    url = "https://github.com/real-or-random/dokuwiki-plugin-icalevents/releases/download/2017-06-16/dokuwiki-plugin-icalevents-2017-06-16.zip";
-                    sha256 = "e40ed7dd6bbe7fe3363bbbecb4de481d5e42385b5a0f62f6a6ce6bf3a1f9dfa8";
+          example = literalExpression ''
+                let
+                  # Let's package the icalevents plugin
+                  plugin-icalevents = pkgs.stdenv.mkDerivation {
+                    name = "icalevents";
+                    # Download the plugin from the dokuwiki site
+                    src = pkgs.fetchurl {
+                      url = "https://github.com/real-or-random/dokuwiki-plugin-icalevents/releases/download/2017-06-16/dokuwiki-plugin-icalevents-2017-06-16.zip";
+                      sha256 = "e40ed7dd6bbe7fe3363bbbecb4de481d5e42385b5a0f62f6a6ce6bf3a1f9dfa8";
+                    };
+                    sourceRoot = ".";
+                    # We need unzip to build this package
+                    buildInputs = [ pkgs.unzip ];
+                    # Installing simply means copying all files to the output directory
+                    installPhase = "mkdir -p $out; cp -R * $out/";
                   };
-                  sourceRoot = ".";
-                  # We need unzip to build this package
-                  buildInputs = [ pkgs.unzip ];
-                  # Installing simply means copying all files to the output directory
-                  installPhase = "mkdir -p $out; cp -R * $out/";
-                };
-
                 # And then pass this theme to the plugin list like this:
-                plugins = [ plugin-icalevents ];
+                in [ plugin-icalevents ]
           '';
         };
 
@@ -195,23 +196,23 @@ let
                 List of path(s) to respective template(s) which are copied from the 'tpl' directory.
                 <note><para>These templates need to be packaged before use, see example.</para></note>
           '';
-          example = ''
-                # Let's package the bootstrap3 theme
-                template-bootstrap3 = pkgs.stdenv.mkDerivation {
-                  name = "bootstrap3";
-                  # Download the theme from the dokuwiki site
-                  src = pkgs.fetchurl {
-                    url = "https://github.com/giterlizzi/dokuwiki-template-bootstrap3/archive/v2019-05-22.zip";
-                    sha256 = "4de5ff31d54dd61bbccaf092c9e74c1af3a4c53e07aa59f60457a8f00cfb23a6";
+          example = literalExpression ''
+                let
+                  # Let's package the bootstrap3 theme
+                  template-bootstrap3 = pkgs.stdenv.mkDerivation {
+                    name = "bootstrap3";
+                    # Download the theme from the dokuwiki site
+                    src = pkgs.fetchurl {
+                      url = "https://github.com/giterlizzi/dokuwiki-template-bootstrap3/archive/v2019-05-22.zip";
+                      sha256 = "4de5ff31d54dd61bbccaf092c9e74c1af3a4c53e07aa59f60457a8f00cfb23a6";
+                    };
+                    # We need unzip to build this package
+                    buildInputs = [ pkgs.unzip ];
+                    # Installing simply means copying all files to the output directory
+                    installPhase = "mkdir -p $out; cp -R * $out/";
                   };
-                  # We need unzip to build this package
-                  buildInputs = [ pkgs.unzip ];
-                  # Installing simply means copying all files to the output directory
-                  installPhase = "mkdir -p $out; cp -R * $out/";
-                };
-
                 # And then pass this theme to the template list like this:
-                templates = [ template-bootstrap3 ];
+                in [ template-bootstrap3 ]
           '';
         };
 

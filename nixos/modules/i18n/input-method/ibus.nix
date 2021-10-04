@@ -36,7 +36,7 @@ in
       engines = mkOption {
         type    = with types; listOf ibusEngine;
         default = [];
-        example = literalExample "with pkgs.ibus-engines; [ mozc hangul ]";
+        example = literalExpression "with pkgs.ibus-engines; [ mozc hangul ]";
         description =
           let
             enginesDrv = filterAttrs (const isDerivation) pkgs.ibus-engines;
@@ -48,7 +48,7 @@ in
       panel = mkOption {
         type = with types; nullOr path;
         default = null;
-        example = literalExample "''${pkgs.plasma5Packages.plasma-desktop}/lib/libexec/kimpanel-ibus-panel";
+        example = literalExpression ''"''${pkgs.plasma5Packages.plasma-desktop}/lib/libexec/kimpanel-ibus-panel"'';
         description = "Replace the IBus panel with another panel.";
       };
     };

@@ -23,7 +23,7 @@ in
       type = package;
       description = "openiscsi package to use";
       default = pkgs.openiscsi;
-      defaultText = "pkgs.openiscsi";
+      defaultText = literalExpression "pkgs.openiscsi";
     };
 
     extraConfig = mkOption {

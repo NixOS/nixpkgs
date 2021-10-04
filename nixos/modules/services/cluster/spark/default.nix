@@ -70,7 +70,7 @@ with lib;
         type = types.path;
         description = "Spark configuration directory. Spark will use the configuration files (spark-defaults.conf, spark-env.sh, log4j.properties, etc) from this directory.";
         default = "${cfg.package}/lib/${cfg.package.untarDir}/conf";
-        defaultText = literalExample "\${cfg.package}/lib/\${cfg.package.untarDir}/conf";
+        defaultText = literalExpression ''"''${package}/lib/''${package.untarDir}/conf"'';
       };
       logDir = mkOption {
         type = types.path;
@@ -81,8 +81,8 @@ with lib;
         type = types.package;
         description = "Spark package.";
         default = pkgs.spark;
-        defaultText = "pkgs.spark";
-        example = literalExample ''pkgs.spark.overrideAttrs (super: rec {
+        defaultText = literalExpression "pkgs.spark";
+        example = literalExpression ''pkgs.spark.overrideAttrs (super: rec {
           pname = "spark";
           version = "2.4.4";
 

@@ -44,7 +44,7 @@ in
     services.unifi.jrePackage = mkOption {
       type = types.package;
       default = pkgs.jre8;
-      defaultText = "pkgs.jre8";
+      defaultText = literalExpression "pkgs.jre8";
       description = ''
         The JRE package to use. Check the release notes to ensure it is supported.
       '';
@@ -53,7 +53,7 @@ in
     services.unifi.unifiPackage = mkOption {
       type = types.package;
       default = pkgs.unifiLTS;
-      defaultText = "pkgs.unifiLTS";
+      defaultText = literalExpression "pkgs.unifiLTS";
       description = ''
         The unifi package to use.
       '';
@@ -62,7 +62,7 @@ in
     services.unifi.mongodbPackage = mkOption {
       type = types.package;
       default = pkgs.mongodb;
-      defaultText = "pkgs.mongodb";
+      defaultText = literalExpression "pkgs.mongodb";
       description = ''
         The mongodb package to use.
       '';

@@ -50,7 +50,7 @@ in {
                 options = {
                   plugin = mkOption {
                     type = path;
-                    example = literalExample
+                    example = literalExpression
                       "$${pkgs.uhub}/plugins/mod_auth_sqlite.so";
                     description = "Path to plugin file.";
                   };

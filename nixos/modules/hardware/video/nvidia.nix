@@ -165,11 +165,11 @@ in
     hardware.nvidia.package = lib.mkOption {
       type = lib.types.package;
       default = config.boot.kernelPackages.nvidiaPackages.stable;
-      defaultText = "config.boot.kernelPackages.nvidiaPackages.stable";
+      defaultText = literalExpression "config.boot.kernelPackages.nvidiaPackages.stable";
       description = ''
         The NVIDIA X11 derivation to use.
       '';
-      example = "config.boot.kernelPackages.nvidiaPackages.legacy_340";
+      example = literalExpression "config.boot.kernelPackages.nvidiaPackages.legacy_340";
     };
   };
 

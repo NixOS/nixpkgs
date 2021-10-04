@@ -14,7 +14,7 @@ in {
       default = with pkgs.xorg; [
         xclock bitmap xlsfonts xfd xrefresh xload xwininfo xdpyinfo xwd xwud
       ];
-      example = literalExample ''
+      defaultText = literalExpression ''
         with pkgs.xorg; [
           xclock bitmap xlsfonts xfd xrefresh xload xwininfo xdpyinfo xwd xwud
         ]

@@ -486,7 +486,7 @@ let
       extraDomainNames = mkOption {
         type = types.listOf types.str;
         default = [];
-        example = literalExample ''
+        example = literalExpression ''
           [
             "example.org"
             "mydomain.org"
@@ -656,7 +656,7 @@ in {
           to those units if they rely on the certificates being present,
           or trigger restarts of the service if certificates get renewed.
         '';
-        example = literalExample ''
+        example = literalExpression ''
           {
             "example.com" = {
               webroot = "/var/lib/acme/acme-challenge/";
