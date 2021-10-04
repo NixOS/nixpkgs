@@ -664,11 +664,13 @@
     "version": "1.2.0"
   },
   "netlify": {
-    "owner": "terraform-providers",
+    "owner": "AegirHealth",
+    "provider-source-address": "registry.terraform.io/AegirHealth/netlify",
     "repo": "terraform-provider-netlify",
-    "rev": "v0.4.0",
-    "sha256": "07xds84k2vgpvn2cy3id7hmzg57sz2603zs4msn3ysxmi28lmqyg",
-    "version": "0.4.0"
+    "rev": "v0.6.12",
+    "sha256": "0h3ff1ligjvvlmhghx9g92an79b26nyyq5sq4cdsf6psvwfa2kzd",
+    "vendorSha256": null,
+    "version": "0.6.12"
   },
   "newrelic": {
     "owner": "terraform-providers",

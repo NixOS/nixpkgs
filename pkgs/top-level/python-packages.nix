@@ -9642,9 +9642,13 @@ in {
 
   whichcraft = callPackage ../development/python-modules/whichcraft { };
 
+  whirlpool-sixth-sense = callPackage ../development/python-modules/whirlpool-sixth-sense { };
+
   whisper = callPackage ../development/python-modules/whisper { };
 
   whitenoise = callPackage ../development/python-modules/whitenoise { };
+
+  whodap = callPackage ../development/python-modules/whodap { };
 
   whois = callPackage ../development/python-modules/whois { };
 
