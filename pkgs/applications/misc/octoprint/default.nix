@@ -35,7 +35,6 @@ let
         (mkOverride "markupsafe" "1.1.1" "29872e92839765e546828bb7754a68c418d927cd064fd4708fab9fe9c8bb116b")
         (mkOverride "sarge" "0.1.5.post0" "1c1ll7pys9vra5cfi8jxlgrgaql6c27l6inpy15aprgqhc4ck36s")
         (mkOverride "tornado" "5.1.1" "4e5158d97583502a7e2739951553cbd88a72076f152b4b11b64b9a10c4c49409")
-        (mkOverride "unidecode" "0.04.21" "280a6ab88e1f2eb5af79edff450021a0d3f0448952847cd79677e55e58bad051")
 
         # Requires flask<2, cannot mkOverride because tests need to be disabled
         (
@@ -65,7 +64,20 @@ let
           }
         )
 
-
+        # Requires unidecode>=0.04.14,<0.05. Upstream changed the source naming between releases
+        (
+          self: super: {
+            unidecode = super.unidecode.overridePythonAttrs (oldAttrs: rec {
+              version = "0.04.21";
+              src = fetchFromGitHub {
+                owner = "avian2";
+                repo = "unidecode";
+                rev = "release-${version}";
+                sha256 = "0p5bkibv0xm1265dlfrz3zq3k9bbx07gl8zyq8mvvb8hi7p5lifg";
+              };
+            });
+          }
+        )
 
         # Requires websocket-client <1.0, >=0.57. Cannot do mkOverride b/c differing underscore/hyphen in pypi source name
         (

@@ -6519,7 +6519,9 @@ with pkgs;
 
   keyfuzz = callPackage ../tools/inputmethods/keyfuzz { };
 
-  keystore-explorer = callPackage ../applications/misc/keystore-explorer { };
+  keystore-explorer = callPackage ../applications/misc/keystore-explorer {
+    jdk = jdk11;
+  };
 
   kfctl = callPackage ../applications/networking/cluster/kfctl { };
 
@@ -7431,6 +7433,8 @@ with pkgs;
   metabigor = callPackage ../tools/security/metabigor { };
 
   metasploit = callPackage ../tools/security/metasploit { };
+
+  mhost = callPackage ../applications/networking/mhost { };
 
   ms-sys = callPackage ../tools/misc/ms-sys { };
 
@@ -9925,6 +9929,8 @@ with pkgs;
 
   tydra = callPackage ../tools/misc/tydra { };
 
+  typos = callPackage ../development/tools/typos { };
+
   tz = callPackage ../tools/misc/tz { };
 
   u9fs = callPackage ../servers/u9fs { };
@@ -10668,6 +10674,8 @@ with pkgs;
     mkYarnPackage
     mkYarnModules
     fixup_yarn_lock;
+
+  yascreen = callPackage ../development/libraries/yascreen { };
 
   yasr = callPackage ../applications/audio/yasr { };
 
@@ -16081,6 +16089,7 @@ with pkgs;
     else if name == "newlib" && stdenv.targetPlatform.isVc4 then targetPackages.vc4-newlib or vc4-newlib
     else if name == "newlib" && stdenv.targetPlatform.isOr1k then targetPackages.or1k-newlib or or1k-newlib
     else if name == "newlib" then targetPackages.newlibCross or newlibCross
+    else if name == "newlib-nano" then targetPackages.newlib-nanoCross or newlib-nanoCross
     else if name == "musl" then targetPackages.muslCross or muslCross
     else if name == "msvcrt" then targetPackages.windows.mingw_w64 or windows.mingw_w64
     else if name == "libSystem" then
@@ -24093,6 +24102,8 @@ with pkgs;
   dvdstyler = callPackage ../applications/video/dvdstyler {
     inherit (gnome2) libgnomeui;
   };
+
+  dyff = callPackage ../development/tools/dyff {};
 
   dwl = callPackage ../applications/window-managers/dwl { };
 
@@ -32974,7 +32985,15 @@ with pkgs;
   newlib = callPackage ../development/misc/newlib { };
   newlibCross = callPackage ../development/misc/newlib {
     stdenv = crossLibcStdenv;
-    };
+  };
+
+  newlib-nano = callPackage ../development/misc/newlib {
+    nanoizeNewlib = true;
+  };
+  newlib-nanoCross = callPackage ../development/misc/newlib {
+    nanoizeNewlib = true;
+    stdenv = crossLibcStdenv;
+  };
 
   omnisharp-roslyn = callPackage ../development/tools/omnisharp-roslyn { dotnet-sdk = dotnet-sdk_5; };
 
