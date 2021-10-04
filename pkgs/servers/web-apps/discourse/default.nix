@@ -263,6 +263,9 @@ let
       # defaults to the plugin's directory and isn't writable at the
       # time of asset generation
       ./auto_generated_path.patch
+
+      # Make sure the notification email setting applies
+      ./notification_email.patch
     ];
 
     postPatch = ''
