@@ -17,7 +17,7 @@ let
   assets = {
     # MIT licensed
     "geoip.dat" = let
-      geoipRev = "202109300030";
+      geoipRev = "202110040733";
       geoipSha256 = "1d2z3ljs0v9rd10cfj8cpiijz3ikkplsymr44f7y90g4dmniwqh0";
     in fetchurl {
       url = "https://github.com/v2fly/geoip/releases/download/${geoipRev}/geoip.dat";
@@ -26,8 +26,8 @@ let
 
     # MIT licensed
     "geosite.dat" = let
-      geositeRev = "20211001023210";
-      geositeSha256 = "02d55i1pdndwvmi4v42hnncjng517s0k06gr3yn5krnj2qfjli2w";
+      geositeRev = "20211004124604";
+      geositeSha256 = "09q87ynvz8fcv24dngylrnj407zc8jn2kbs78ihnkw252r6jl18d";
     in fetchurl {
       url = "https://github.com/v2fly/domain-list-community/releases/download/${geositeRev}/dlc.dat";
       sha256 = geositeSha256;
