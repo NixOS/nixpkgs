@@ -9648,6 +9648,8 @@ in {
 
   whitenoise = callPackage ../development/python-modules/whitenoise { };
 
+  whodap = callPackage ../development/python-modules/whodap { };
+
   whois = callPackage ../development/python-modules/whois { };
 
   whoosh = callPackage ../development/python-modules/whoosh { };
