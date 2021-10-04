@@ -56,11 +56,12 @@ let
   builtGrammars =
     let
       change = name: grammar:
+        let src = fetchGrammar grammar; in
         callPackage ./grammar.nix { } {
           language = name;
           inherit version;
-          source = fetchGrammar grammar;
-          location = if grammar ? location then grammar.location else null;
+          src = "${src}/${grammar.location or "."}";
+          queriesSrc = "${src}/queries";
         };
       grammars' = (import ./grammars);
       grammars = grammars' //

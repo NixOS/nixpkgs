@@ -8,6 +8,7 @@
 , fetchpatch
 , fetchurl
 , substituteAll
+, linkFarm
 
   # Language dependencies
 , python
@@ -483,16 +484,31 @@ self: super: {
   # or for all grammars:
   # pkgs.vimPlugins.nvim-treesitter.withPlugins (_: tree-sitter.allGrammars)
   nvim-treesitter = super.nvim-treesitter.overrideAttrs (old: {
-    passthru.withPlugins =
-      grammarFn: self.nvim-treesitter.overrideAttrs (_: {
-        postPatch =
-          let
-            grammars = tree-sitter.withPlugins grammarFn;
-          in
-          ''
-            rm -r parser
-            ln -s ${grammars} parser
-          '';
+    passthru.withPlugins = grammarFn:
+      self.nvim-treesitter.overrideAttrs (_: {
+        grammars = grammarFn tree-sitter.builtGrammars;
+
+        # FIXME: tree-sitter-dart's queries are older than nvim-treesitter's builtin queries.
+        usePluginBuiltinQueries = [ "dart" ];
+
+        postInstall = old.postInstall or "" + ''
+          for grammar in $grammars; do
+            if [[ ! "$(basename "$grammar")" =~ tree-sitter-(.*)-grammar ]]; then
+              echo "Invalid grammar name: $grammar"
+              exit 1
+            fi
+            grammarName="''${BASH_REMATCH[1]}"
+            grammarName="''${grammarName//-/_}"
+
+            ln -s "$grammar/parser" "$out/parser/$grammarName${stdenv.hostPlatform.extensions.sharedLibrary}"
+
+            # Prefer parser's own up-to-date queries specification. Fallback to
+            # nvim-treesitter's builtin queries if the plugin does not provide one.
+            if [[ -d "$grammar/queries" && " $usePluginBuiltinQueries " != *" $grammarName "* ]]; then
+              cp -rfT "$grammar/queries" "$out/queries/$grammarName"
+            fi
+          done
+        '';
       });
   });
 

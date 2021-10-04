@@ -12,22 +12,15 @@
   # version of tree-sitter
 , version
   # source for the language grammar
-, source
-, location ? null
+, src
+  # queries directory of the language if exists
+, queriesSrc
 }:
 
 stdenv.mkDerivation {
 
   pname = "${language}-grammar";
-  inherit version;
-
-  src =
-    if location == null
-    then
-      source
-    else
-      "${source}/${location}"
-  ;
+  inherit version src queriesSrc;
 
   NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-I${lib.getDev libcxx}/include/c++/v1";
   buildInputs = [ tree-sitter ];
@@ -52,6 +45,9 @@ stdenv.mkDerivation {
     runHook preInstall
     mkdir $out
     mv parser $out/
+    if [[ -d "$queriesSrc" ]]; then
+      cp -r "$queriesSrc" $out/queries
+    fi
     runHook postInstall
   '';
 }
