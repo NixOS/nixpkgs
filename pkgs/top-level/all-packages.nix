@@ -24812,6 +24812,8 @@ with pkgs;
 
   goffice = callPackage ../development/libraries/goffice { };
 
+  got = callPackage ../applications/version-management/got { };
+
   gtk-pipe-viewer = perlPackages.callPackage ../applications/video/pipe-viewer { withGtk3 = true; };
 
   hydrus = python3Packages.callPackage ../applications/graphics/hydrus {
