@@ -9917,6 +9917,8 @@ with pkgs;
 
   tydra = callPackage ../tools/misc/tydra { };
 
+  typos = callPackage ../development/tools/typos { };
+
   tz = callPackage ../tools/misc/tz { };
 
   u9fs = callPackage ../servers/u9fs { };
