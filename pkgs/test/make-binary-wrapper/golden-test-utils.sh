@@ -12,23 +12,23 @@
 # Count the number of lines before the output text starts
 # commandLineCount FILE
 commandLineCount() {
-	local n state
-	n=0
-	state="init"
-	while IFS="" read -r p || [ -n "$p" ]; do
-		case $state in
-			init)
-				if [[ $p =~ ^//.*\\$ ]]; then state="comment"
-				elif [[ $p =~ ^//.* ]]; then state="padding"
-				else break
-				fi
-			;;
-			comment) [[ ! $p =~ ^.*\\$ ]] && state="padding";;
-			padding) [ -n "${p// }" ] && break;;
-		esac
-		n=$((n+1))
-	done < "$1"
-	printf '%s' "$n"
+    local n state
+    n=0
+    state="init"
+    while IFS="" read -r p || [ -n "$p" ]; do
+        case $state in
+            init)
+                if [[ $p =~ ^//.*\\$ ]]; then state="comment"
+                elif [[ $p =~ ^//.* ]]; then state="padding"
+                else break
+                fi
+            ;;
+            comment) [[ ! $p =~ ^.*\\$ ]] && state="padding";;
+            padding) [ -n "${p// }" ] && break;;
+        esac
+        n=$((n+1))
+    done < "$1"
+    printf '%s' "$n"
 }
 
 # getInputCommand FILE
