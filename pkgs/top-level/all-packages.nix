@@ -10666,6 +10666,8 @@ with pkgs;
     mkYarnModules
     fixup_yarn_lock;
 
+  yascreen = callPackage ../development/libraries/yascreen { };
+
   yasr = callPackage ../applications/audio/yasr { };
 
   yank = callPackage ../tools/misc/yank { };
