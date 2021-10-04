@@ -13,9 +13,11 @@ let
     chardet
     cheetah3
     cherrypy
-    cryptography
     configobj
+    cryptography
     feedparser
+    guessit
+    puremagic
     sabyenc3
   ]);
   path = lib.makeBinPath [ par2cmdline unrar unzip p7zip ];
