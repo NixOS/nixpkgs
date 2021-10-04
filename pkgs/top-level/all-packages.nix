@@ -7429,6 +7429,8 @@ with pkgs;
 
   metasploit = callPackage ../tools/security/metasploit { };
 
+  mhost = callPackage ../applications/networking/mhost { };
+
   ms-sys = callPackage ../tools/misc/ms-sys { };
 
   mtdutils = callPackage ../tools/filesystems/mtdutils { };
