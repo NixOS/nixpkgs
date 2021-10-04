@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, boost, libpulseaudio, installShellFiles }:
+{ lib, stdenv, fetchFromGitHub, boost, libpulseaudio }:
 
 stdenv.mkDerivation rec {
   pname = "pamixer";
@@ -13,19 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ boost libpulseaudio ];
 
-  nativeBuildInputs = [ installShellFiles ];
-
-  installPhase = ''
-    runHook preInstall
-
-    install -Dm755 pamixer -t $out/bin
-
-    runHook postInstall
-  '';
-
-  postInstall = ''
-    installManPage pamixer.1
-  '';
+  makeFlags = [ "PREFIX=$(out)" ];
 
   meta = with lib; {
     description = "Pulseaudio command line mixer";
