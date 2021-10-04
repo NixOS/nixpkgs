@@ -13,7 +13,11 @@ buildGoModule rec {
 
   vendorSha256 = "12mirnw229x5jkzda0c45vnjnv7fjvzf0rm3fcy5f3wza6hkx6q7";
 
-  subPackages = [ "cmd/dyff" "pkg/dyff" "internal/cmd" ];
+  subPackages = [
+    "cmd/dyff"
+    "pkg/dyff"
+    "internal/cmd"
+  ];
 
   meta = with lib; {
     description = "A diff tool for YAML files, and sometimes JSON";
