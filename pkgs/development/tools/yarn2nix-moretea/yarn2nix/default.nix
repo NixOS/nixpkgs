@@ -48,9 +48,9 @@ in rec {
 
   # Loads the generated offline cache. This will be used by yarn as
   # the package source.
-  importOfflineCache = yarnNix:
+  importOfflineCache = yarnNix: overrides:
     let
-      pkg = callPackage yarnNix { };
+      pkg = callPackage yarnNix overrides;
     in
       pkg.offline_cache;
 
@@ -68,6 +68,7 @@ in rec {
     packageJSON,
     yarnLock,
     yarnNix ? mkYarnNix { inherit yarnLock; },
+    yarnNixOverrides ? {},
     yarnFlags ? defaultYarnFlags,
     pkgConfig ? {},
     preBuild ? "",
@@ -75,7 +76,7 @@ in rec {
     workspaceDependencies ? [], # List of yarn packages
   }:
     let
-      offlineCache = importOfflineCache yarnNix;
+      offlineCache = importOfflineCache yarnNix yarnNixOverrides;
 
       extraBuildInputs = (lib.flatten (builtins.map (key:
         pkgConfig.${key}.buildInputs or []
@@ -158,6 +159,7 @@ in rec {
     src,
     packageJSON ? src + "/package.json",
     yarnLock ? src + "/yarn.lock",
+    yarnNixOverrides ? {},
     packageOverrides ? {},
     ...
   }@attrs:
@@ -213,7 +215,7 @@ in rec {
         inherit name;
         value = mkYarnPackage (
           builtins.removeAttrs attrs ["packageOverrides"]
-          // { inherit src packageJSON yarnLock workspaceDependencies; }
+          // { inherit src packageJSON yarnLock yarnNixOverrides workspaceDependencies; }
           // lib.attrByPath [name] {} packageOverrides
         );
       })
@@ -227,6 +229,7 @@ in rec {
     packageJSON ? src + "/package.json",
     yarnLock ? src + "/yarn.lock",
     yarnNix ? mkYarnNix { inherit yarnLock; },
+    yarnNixOverrides ? {},
     yarnFlags ? defaultYarnFlags,
     yarnPreBuild ? "",
     yarnPostBuild ? "",
@@ -253,7 +256,7 @@ in rec {
         preBuild = yarnPreBuild;
         postBuild = yarnPostBuild;
         workspaceDependencies = workspaceDependenciesTransitive;
-        inherit packageJSON pname version yarnLock yarnNix yarnFlags pkgConfig;
+        inherit packageJSON pname version yarnLock yarnNix yarnFlags pkgConfig yarnNixOverrides;
       };
 
       publishBinsFor_ = unlessNull publishBinsFor [pname];
