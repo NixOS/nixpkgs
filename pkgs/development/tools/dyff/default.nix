@@ -1,9 +1,9 @@
 { lib, buildGoModule, fetchFromGitHub}:
 
 buildGoModule rec {
-
   pname = "dyff";
   version = "1.4.3";
+
   src = fetchFromGitHub {
     owner = "homeport";
     repo = "dyff";
