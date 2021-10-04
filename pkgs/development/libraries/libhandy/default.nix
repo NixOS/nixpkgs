@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
   outputs = [
     "out"
     "dev"
+  ] ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [
     "devdoc"
   ] ++ lib.optionals enableGlade [
     "glade"
@@ -69,8 +70,9 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dgtk_doc=true"
+    "-Dgtk_doc=${lib.boolToString (stdenv.buildPlatform == stdenv.hostPlatform)}"
     "-Dglade_catalog=${if enableGlade then "enabled" else "disabled"}"
+    "-Dintrospection=${if (stdenv.buildPlatform == stdenv.hostPlatform) then "enabled" else "disabled"}"
   ];
 
   # Uses define_variable in pkg-config, but we still need it to use the glade output
