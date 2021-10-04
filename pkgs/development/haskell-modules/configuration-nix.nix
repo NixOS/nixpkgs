@@ -708,14 +708,7 @@ self: super: builtins.intersectAttrs super {
   };
 
   haskell-language-server = overrideCabal super.haskell-language-server (drv: {
-    postInstall = let
-      inherit (pkgs.lib) concatStringsSep take splitString;
-      ghc_version = self.ghc.version;
-      ghc_major_version = concatStringsSep "." (take 2 (splitString "." ghc_version));
-    in ''
-        ln -s $out/bin/haskell-language-server $out/bin/haskell-language-server-${ghc_version}
-        ln -s $out/bin/haskell-language-server $out/bin/haskell-language-server-${ghc_major_version}
-       '';
+    postInstall = "ln -s $out/bin/haskell-language-server $out/bin/haskell-language-server-${self.ghc.version}";
     testToolDepends = [ self.cabal-install pkgs.git ];
     testTarget = "func-test"; # wrapper test accesses internet
     preCheck = ''
