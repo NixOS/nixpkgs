@@ -25655,6 +25655,8 @@ with pkgs;
 
   kpt = callPackage ../applications/networking/cluster/kpt { };
 
+  krane = callPackage ../applications/networking/cluster/krane { };
+
   krita = libsForQt5.callPackage ../applications/graphics/krita { };
 
   krusader = libsForQt5.callPackage ../applications/misc/krusader { };
