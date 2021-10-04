@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pamixer";
-  version = "unstable-2021-03-29";
+  version = "1.5";
 
   src = fetchFromGitHub {
     owner = "cdemoulins";
     repo = "pamixer";
-    rev = "4ea2594cb8c605dccd00a381ba19680eba368e94";
-    sha256 = "sha256-kV4wIxm1WZvqqyfmgQ2cSbRJwJR154OW0MMDg2ntf6g=";
+    rev = version;
+    sha256 = "sha256-7VNhHAQ1CecQPlqb8SMKK0U1SsFZxDuS+QkPqJfMqrQ=";
   };
 
   buildInputs = [ boost libpulseaudio ];
