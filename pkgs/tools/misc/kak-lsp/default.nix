@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "0sv1a2k5rcf4hl1w50mh041r3w3nir6avyl6xa3rlcc7cy19q21y";
 
-  buildInputs = lib.optional stdenv.isDarwin [ Security ];
+  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
 
   meta = with lib; {
     description = "Kakoune Language Server Protocol Client";

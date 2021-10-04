@@ -46,8 +46,8 @@ in
   # helper functions for dealing with LUA_PATH and LUA_CPATH
   lib = luaLib;
 
-  getLuaPath = drv: getPath drv (luaLib.luaPathList lua.luaversion) ;
-  getLuaCPath = drv: getPath drv (luaLib.luaCPathList lua.luaversion) ;
+  getLuaPath = drv: getPath drv luaLib.luaPathList;
+  getLuaCPath = drv: getPath drv luaLib.luaCPathList;
 
   inherit (callPackage ../development/interpreters/lua-5/hooks { inherit (args) lib;})
     lua-setup-hook;
