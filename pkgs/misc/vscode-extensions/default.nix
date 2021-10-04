@@ -1472,6 +1472,18 @@ let
         };
       };
 
+      takayama.vscode-qq = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "takayama";
+          name = "vscode-qq";
+          version = "1.4.0";
+          sha256 = "sha256-DYjNWSKOrDYvdiV7G24uKz6w4ggeYUMkQIiOGZAbMSI=";
+        };
+        meta = {
+          license = lib.licenses.mpl20;
+        };
+      };
+
       tamasfe.even-better-toml = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "even-better-toml";
