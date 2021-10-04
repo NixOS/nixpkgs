@@ -1286,6 +1286,8 @@ with pkgs;
 
   autospotting = callPackage ../applications/misc/autospotting { };
 
+  autosuspend = callPackage ../os-specific/linux/autosuspend { };
+
   avfs = callPackage ../tools/filesystems/avfs { };
 
   aws-iam-authenticator = callPackage ../tools/security/aws-iam-authenticator {};
