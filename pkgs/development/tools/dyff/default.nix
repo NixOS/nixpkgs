@@ -32,6 +32,5 @@ buildGoModule rec {
     homepage = "https://github.com/homeport/dyff";
     license = licenses.mit;
     maintainers = with maintainers; [ edlimerkaj ];
-
   };
 }
