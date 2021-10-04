@@ -236,6 +236,8 @@ with pkgs;
 
   cereal = callPackage ../development/libraries/cereal { };
 
+  certgraph = callPackage ../tools/security/certgraph { };
+
   cewl = callPackage ../tools/security/cewl { };
 
   checkov = callPackage ../development/tools/analysis/checkov {};
