@@ -2,8 +2,10 @@
 , mkDerivation
 , fetchFromGitHub
 , fetchurl
+, povray
 , qmake
 , qttools
+, substituteAll
 , zlib
 }:
 
@@ -33,6 +35,15 @@ mkDerivation rec {
   nativeBuildInputs = [ qmake qttools ];
 
   buildInputs = [ zlib ];
+
+  propagatedBuildInputs = [ povray ];
+
+  patches = [
+    (substituteAll {
+      src = ./povray.patch;
+      inherit povray;
+    })
+  ];
 
   qmakeFlags = [
     "INSTALL_PREFIX=${placeholder "out"}"
