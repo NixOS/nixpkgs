@@ -6,7 +6,6 @@
 buildGoModule rec {
   pname = "pprof-unstable";
   version = "2021-09-30";
-  rev = "7fe48b4c820be13151ae35ce5a5e3f54f1b53eef";
 
   src = fetchFromGitHub {
     owner = "google";
