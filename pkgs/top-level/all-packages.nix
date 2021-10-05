@@ -23420,6 +23420,8 @@ with pkgs;
 
   animbar = callPackage ../applications/graphics/animbar { };
 
+  annotator = callPackage ../applications/graphics/annotator { };
+
   antfs-cli = callPackage ../applications/misc/antfs-cli {};
 
   antimony = libsForQt514.callPackage ../applications/graphics/antimony {};
