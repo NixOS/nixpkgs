@@ -6,11 +6,9 @@
 , addOpenGLRunpath
 , autoreconfHook
 }:
-let
-  version = "2.3.1";
-in stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "ocl-icd";
-  inherit version;
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "OCL-dev";
