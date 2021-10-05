@@ -9022,7 +9022,9 @@ in {
 
   thespian = callPackage ../development/python-modules/thespian { };
 
-  thinc = callPackage ../development/python-modules/thinc { };
+  thinc = callPackage ../development/python-modules/thinc {
+    inherit (pkgs.darwin.apple_sdk.frameworks) Accelerate CoreFoundation CoreGraphics CoreVideo;
+  };
 
   threadpool = callPackage ../development/python-modules/threadpool { };
 
