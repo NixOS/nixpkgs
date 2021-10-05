@@ -38,9 +38,19 @@ The function `mkOption` accepts the following arguments.
     of the module will have to define the value of the option, otherwise
     an error will be thrown.
 
+`defaultText`
+
+:   A textual representation of the default value to be rendered verbatim in
+    the manual. Useful if the default value is a complex expression or depends
+    on other values or packages.
+    Use `lib.literalExpression` for a Nix expression, `lib.literalDocBook` for
+    a plain English description in DocBook format.
+
 `example`
 
 :   An example value that will be shown in the NixOS manual.
+    You can use `lib.literalExpression` and `lib.literalDocBook` in the same way
+    as in `defaultText`.
 
 `description`
 

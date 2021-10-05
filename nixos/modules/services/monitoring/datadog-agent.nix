@@ -59,7 +59,7 @@ in {
 
     package = mkOption {
       default = pkgs.datadog-agent;
-      defaultText = "pkgs.datadog-agent";
+      defaultText = literalExpression "pkgs.datadog-agent";
       description = ''
         Which DataDog v7 agent package to use. Note that the provided
         package is expected to have an overridable `pythonPackages`-attribute
@@ -135,9 +135,11 @@ in {
         package set must be provided.
       '';
 
-      example = {
-        ntp = (pythonPackages: [ pythonPackages.ntplib ]);
-      };
+      example = literalExpression ''
+        {
+          ntp = pythonPackages: [ pythonPackages.ntplib ];
+        }
+      '';
     };
 
     extraConfig = mkOption {

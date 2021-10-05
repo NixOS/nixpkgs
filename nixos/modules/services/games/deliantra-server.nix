@@ -18,7 +18,7 @@ in {
     package = mkOption {
       type = types.package;
       default = pkgs.deliantra-server;
-      defaultText = "pkgs.deliantra-server";
+      defaultText = literalExpression "pkgs.deliantra-server";
       description = ''
         The package to use for the Deliantra server (and map/arch data, if you
         don't change dataDir).
@@ -28,7 +28,7 @@ in {
     dataDir = mkOption {
       type = types.str;
       default = "${pkgs.deliantra-data}";
-      defaultText = "\${pkgs.deliantra-data}";
+      defaultText = literalExpression ''"''${pkgs.deliantra-data}"'';
       description = ''
         Where to store readonly data (maps, archetypes, sprites, etc).
         Note that if you plan to use the live map editor (rather than editing
@@ -69,22 +69,24 @@ in {
         The example here is not comprehensive. See the files in
         /etc/deliantra-server after enabling this module for full documentation.
       '';
-      example = literalExample ''
-        dm_file = '''
-          admin:secret_password:localhost
-          jane:xyzzy:*
-        ''';
-        motd = "Welcome to Deliantra!";
-        settings = '''
-          # Settings for game mechanics.
-          stat_loss_on_death true
-          armor_max_enchant 7
-        ''';
-        config = '''
-          # Settings for the server daemon.
-          hiscore_url https://deliantra.example.net/scores/
-          max_map_reset 86400
-        ''';
+      example = literalExpression ''
+        {
+          dm_file = '''
+            admin:secret_password:localhost
+            jane:xyzzy:*
+          ''';
+          motd = "Welcome to Deliantra!";
+          settings = '''
+            # Settings for game mechanics.
+            stat_loss_on_death true
+            armor_max_enchant 7
+          ''';
+          config = '''
+            # Settings for the server daemon.
+            hiscore_url https://deliantra.example.net/scores/
+            max_map_reset 86400
+          ''';
+        }
       '';
       default = {
         motd = "";

@@ -27,7 +27,7 @@ in {
       package = mkOption {
         type = types.path;
         default = pkgs.fluentd;
-        defaultText = "pkgs.fluentd";
+        defaultText = literalExpression "pkgs.fluentd";
         description = "The fluentd package to use.";
       };
 

@@ -150,7 +150,7 @@ in
         connectTo = mkOption {
           type = types.attrsOf ( types.submodule ( connectToSubmodule ) );
           default = { };
-          example = literalExample ''
+          example = literalExpression ''
             {
               "192.168.1.1:27313" = {
                 hostname = "homer.hype";
@@ -197,7 +197,7 @@ in
         connectTo = mkOption {
           type = types.attrsOf ( types.submodule ( connectToSubmodule ) );
           default = { };
-          example = literalExample ''
+          example = literalExpression ''
             {
               "01:02:03:04:05:06" = {
                 hostname = "homer.hype";

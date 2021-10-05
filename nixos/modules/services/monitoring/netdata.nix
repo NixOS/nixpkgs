@@ -45,7 +45,7 @@ in {
       package = mkOption {
         type = types.package;
         default = pkgs.netdata;
-        defaultText = "pkgs.netdata";
+        defaultText = literalExpression "pkgs.netdata";
         description = "Netdata package to use.";
       };
 
@@ -84,8 +84,8 @@ in {
         extraPackages = mkOption {
           type = types.functionTo (types.listOf types.package);
           default = ps: [];
-          defaultText = "ps: []";
-          example = literalExample ''
+          defaultText = literalExpression "ps: []";
+          example = literalExpression ''
             ps: [
               ps.psycopg2
               ps.docker
@@ -102,7 +102,7 @@ in {
       extraPluginPaths = mkOption {
         type = types.listOf types.path;
         default = [ ];
-        example = literalExample ''
+        example = literalExpression ''
           [ "/path/to/plugins.d" ]
         '';
         description = ''
@@ -121,7 +121,7 @@ in {
         type = types.attrsOf types.attrs;
         default = {};
         description = "netdata.conf configuration as nix attributes. cannot be combined with configText.";
-        example = literalExample ''
+        example = literalExpression ''
           global = {
             "debug log" = "syslog";
             "access log" = "syslog";

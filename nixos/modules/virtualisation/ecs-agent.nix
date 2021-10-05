@@ -12,7 +12,7 @@ in {
       type = types.path;
       description = "The ECS agent package to use";
       default = pkgs.ecs-agent;
-      defaultText = "pkgs.ecs-agent";
+      defaultText = literalExpression "pkgs.ecs-agent";
     };
 
     extra-environment = mkOption {

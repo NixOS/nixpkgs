@@ -232,8 +232,7 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.tor;
-        defaultText = "pkgs.tor";
-        example = literalExample "pkgs.tor";
+        defaultText = literalExpression "pkgs.tor";
         description = "Tor package to use.";
       };
 

@@ -85,7 +85,7 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.nix;
-        defaultText = "pkgs.nix";
+        defaultText = literalExpression "pkgs.nix";
         description = ''
           This option specifies the Nix package instance to use throughout the system.
         '';
@@ -460,7 +460,7 @@ in
               flake = mkOption {
                 type = types.nullOr types.attrs;
                 default = null;
-                example = literalExample "nixpkgs";
+                example = literalExpression "nixpkgs";
                 description = ''
                   The flake input to which <option>from></option> is to be rewritten.
                 '';

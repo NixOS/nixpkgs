@@ -45,7 +45,7 @@ in {
 
     package = mkOption {
       default = pkgs.collectd;
-      defaultText = "pkgs.collectd";
+      defaultText = literalExpression "pkgs.collectd";
       description = ''
         Which collectd package to use.
       '';

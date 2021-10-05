@@ -100,7 +100,7 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.hydra-unstable;
-        defaultText = "pkgs.hydra-unstable";
+        defaultText = literalExpression "pkgs.hydra-unstable";
         description = "The Hydra package.";
       };
 
@@ -155,7 +155,7 @@ in
       smtpHost = mkOption {
         type = types.nullOr types.str;
         default = null;
-        example = ["localhost"];
+        example = "localhost";
         description = ''
           Hostname of the SMTP server to use to send email.
         '';

@@ -40,7 +40,7 @@ in
       configFile = mkOption {
         type = types.nullOr types.path;
         default = null;
-        example = literalExample "\${pkgs.my-configs}/lesskey";
+        example = literalExpression ''"''${pkgs.my-configs}/lesskey"'';
         description = ''
           Path to lesskey configuration file.
 
@@ -91,6 +91,7 @@ in
       lessopen = mkOption {
         type = types.nullOr types.str;
         default = "|${pkgs.lesspipe}/bin/lesspipe.sh %s";
+        defaultText = literalExpression ''"|''${pkgs.lesspipe}/bin/lesspipe.sh %s"'';
         description = ''
           Before less opens a file, it first gives your input preprocessor a chance to modify the way the contents of the file are displayed.
         '';

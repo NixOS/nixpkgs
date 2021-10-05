@@ -1,17 +1,17 @@
 { lib, rustPlatform, fetchFromGitHub, pkg-config, makeWrapper, vulkan-loader }:
 
 rustPlatform.buildRustPackage rec {
-  pname = "wgpu";
+  pname = "wgpu-utils";
   version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "gfx-rs";
-    repo = pname;
-    rev = "9da5c1d3a026c275feb57606b8c8d61f82b43386";
-    sha256 = "sha256-DcIMP06tlMxI16jqpKqei32FY8h7z41Nvygap2MQC8A=";
+    repo = "wgpu";
+    rev = "utils-${version}";
+    sha256 = "sha256-bOUcLtT5iPZuUgor2d/pJQ4Y+I1LMzREgj1cwLAvd+s=";
   };
 
-  cargoSha256 = "sha256-3gtIx337IP5t4nYGysOaU7SZRJrvVjYXN7mAqGbVlo8=";
+  cargoSha256 = "sha256-SSEG8JApQrgP7RWlXqb+xuy482oQZ5frE2IaVMruuG0=";
 
   nativeBuildInputs = [
     pkg-config
