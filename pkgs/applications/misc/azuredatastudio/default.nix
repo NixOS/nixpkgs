@@ -4,6 +4,7 @@
 , makeWrapper
 , libuuid
 , libunwind
+, libxkbcommon
 , icu
 , openssl
 , zlib
@@ -13,6 +14,9 @@
 , gnutar
 , atomEnv
 , libkrb5
+, libdrm
+, mesa
+, xorg
 }:
 
 # from justinwoo/azuredatastudio-nix
@@ -21,11 +25,12 @@
 stdenv.mkDerivation rec {
 
   pname = "azuredatastudio";
-  version = "1.17.1";
+  version = "1.33.0";
 
   src = fetchurl {
-    url = "https://azuredatastudiobuilds.blob.core.windows.net/releases/${version}/azuredatastudio-linux-${version}.tar.gz";
-    sha256 = "0px9n9vyjvyddca4x7d0zindd0dim7350vkjg5dd0506fm8dc38k";
+    name = "${pname}-${version}.tar.gz";
+    url = "https://azuredatastudio-update.azurewebsites.net/${version}/linux-x64/stable";
+    sha256 = "0593xs44ryfyxy0hc31hdbj706q16h58jb0qyfyncn7ngybm3423";
   };
 
   nativeBuildInputs = [
@@ -60,7 +65,7 @@ stdenv.mkDerivation rec {
   ];
 
   # this will most likely need to be updated when azuredatastudio's version changes
-  sqltoolsservicePath = "${targetPath}/resources/app/extensions/mssql/sqltoolsservice/Linux/2.0.0-release.56";
+  sqltoolsservicePath = "${targetPath}/resources/app/extensions/mssql/sqltoolsservice/Linux/3.0.0-release.139";
 
   rpath = lib.concatStringsSep ":" [
     atomEnv.libPath
@@ -71,6 +76,10 @@ stdenv.mkDerivation rec {
         at-spi2-atk
         stdenv.cc.cc.lib
         libkrb5
+        libdrm
+        libxkbcommon
+        mesa
+        xorg.libxshmfence
       ]
     )
     targetPath
@@ -111,5 +120,6 @@ stdenv.mkDerivation rec {
     description = "A data management tool that enables working with SQL Server, Azure SQL DB and SQL DW";
     homepage = "https://docs.microsoft.com/en-us/sql/azure-data-studio/download-azure-data-studio";
     license = lib.licenses.unfreeRedistributable;
+    platforms = [ "x86_64-linux" ];
   };
 }
