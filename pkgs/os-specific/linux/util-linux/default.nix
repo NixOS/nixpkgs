@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
   # somewhat risky because we have to consider that mount can setuid
   # root...
   configureFlags = [
+    "--localstatedir=/var"
     "--enable-write"
     "--enable-last"
     "--enable-mesg"
