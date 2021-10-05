@@ -62,7 +62,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ AndersonTorres sternenseemann ];
     inherit (jdk.meta) platforms;
-    priority = if buildNativeImage then 10 else 0;
   };
 }
 # TODO: Processing app
