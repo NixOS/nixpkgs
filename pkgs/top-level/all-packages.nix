@@ -1170,6 +1170,8 @@ with pkgs;
 
   apkid = callPackage ../development/tools/apkid { };
 
+  apkleaks = callPackage ../tools/security/apkleaks { };
+
   apksigcopier = callPackage ../development/tools/apksigcopier { };
 
   apksigner = callPackage ../development/tools/apksigner {
