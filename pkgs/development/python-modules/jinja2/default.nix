@@ -31,6 +31,13 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  pytestFlagsArray = [
+    # Avoid failure due to deprecation warning
+    # Fixed in https://github.com/python/cpython/pull/28153
+    # Remove after cpython 3.9.8
+    "-p no:warnings"
+  ];
+
   meta = with lib; {
     homepage = "http://jinja.pocoo.org/";
     description = "Stand-alone template engine";

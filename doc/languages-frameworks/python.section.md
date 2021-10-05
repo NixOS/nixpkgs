@@ -765,7 +765,7 @@ and in this case the `python38` interpreter is automatically used.
 ### Interpreters {#interpreters}
 
 Versions 2.7, 3.6, 3.7, 3.8 and 3.9 of the CPython interpreter are available as
-respectively `python27`, `python36`, `python37`, `python38` and `python39`. The
+respectively `python27`, `python37`, `python38` and `python39`. The
 aliases `python2` and `python3` correspond to respectively `python27` and
 `python39`. The attribute `python` maps to `python2`. The PyPy interpreters
 compatible with Python 2.7 and 3 are available as `pypy27` and `pypy3`, with
@@ -830,10 +830,10 @@ attribute set is created for each available Python interpreter. The available
 sets are
 
 * `pkgs.python27Packages`
-* `pkgs.python36Packages`
 * `pkgs.python37Packages`
 * `pkgs.python38Packages`
 * `pkgs.python39Packages`
+* `pkgs.python310Packages`
 * `pkgs.pypyPackages`
 
 and the aliases
