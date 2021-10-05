@@ -225,7 +225,7 @@ while (my ($unit, $state) = each %{$activePrev}) {
                 # Reload the changed mount unit to force a remount.
                 $unitsToReload{$unit} = 1;
                 recordUnit($reloadListFile, $unit);
-            } elsif ($unit =~ /\.socket$/ || $unit =~ /\.path$/ || $unit =~ /\.slice$/) {
+            } elsif ($unit =~ /\.path$/ || $unit =~ /\.slice$/) {
                 # FIXME: do something?
             } else {
                 my $unitInfo = parseUnit($newUnitFile);
@@ -236,45 +236,88 @@ while (my ($unit, $state) = each %{$activePrev}) {
                 elsif (!boolIsTrue($unitInfo->{'X-RestartIfChanged'} // "yes") || boolIsTrue($unitInfo->{'RefuseManualStop'} // "no") || boolIsTrue($unitInfo->{'X-OnlyManualStart'} // "no")) {
                     $unitsToSkip{$unit} = 1;
                 } else {
-                    if (!boolIsTrue($unitInfo->{'X-StopIfChanged'} // "yes")) {
-                        # This unit should be restarted instead of
-                        # stopped and started.
-                        $unitsToRestart{$unit} = 1;
-                        recordUnit($restartListFile, $unit);
-                    } else {
-                        # If this unit is socket-activated, then stop the
-                        # socket unit(s) as well, and restart the
-                        # socket(s) instead of the service.
-                        my $socketActivated = 0;
-                        if ($unit =~ /\.service$/) {
-                            my @sockets = split / /, ($unitInfo->{Sockets} // "");
-                            if (scalar @sockets == 0) {
-                                @sockets = ("$baseName.socket");
-                            }
-                            foreach my $socket (@sockets) {
-                                if (defined $activePrev->{$socket}) {
-                                    $unitsToStop{$socket} = 1;
-                                    # Only restart sockets that actually
-                                    # exist in new configuration:
-                                    if (-e "$out/etc/systemd/system/$socket") {
-                                        $unitsToStart{$socket} = 1;
-                                        recordUnit($startListFile, $socket);
-                                        $socketActivated = 1;
-                                    }
+                    # If this unit is socket-activated, then stop the
+                    # socket unit(s), and restart the socket(s) instead
+                    # of the service. We don't restart the socket but rather
+                    # do the whole stop-start thing because the socket may activate
+                    # the service when the service is stopped but systemd is not
+                    # reloaded yet.
+                    my $socketActivated = 0;
+                    if ($unit =~ /\.service$/) {
+                        my @sockets = split / /, ($unitInfo->{Sockets} // "");
+                        if (scalar @sockets == 0) {
+                            @sockets = ("$baseName.socket");
+                        }
+                        foreach my $socket (@sockets) {
+                            if (defined $activePrev->{$socket}) {
+                                # Briefly stop the socket before restarting it
+                                # a bit later. This is not really required technically
+                                # but prevents races from the service being activated while
+                                # we are switching the system.
+                                $unitsToStop{$socket} = 1;
+                                # Only restart sockets that actually
+                                # exist in new configuration
+                                if (-e "$out/etc/systemd/system/$socket") {
+                                    $unitsToRestart{$socket} = 1;
+                                    recordUnit($restartListFile, $socket);
+                                    $socketActivated = 1;
                                 }
                             }
                         }
-
-                        # If the unit is not socket-activated, record
-                        # that this unit needs to be started below.
-                        # We write this to a file to ensure that the
-                        # service gets restarted if we're interrupted.
-                        if (!$socketActivated) {
-                            $unitsToStart{$unit} = 1;
-                            recordUnit($startListFile, $unit);
+                        # Always stop the service and only restart the socket for
+                        # socket-activated units.
+                        if ($socketActivated && defined($activePrev->{$unit})) {
+                            $unitsToStop{$unit} = 1;
                         }
+                    }
+                    # Don't do the rest of this for socket-activated units
+                    # because we handled these above where we stop the unit
+                    # and restart the socket in its place. Since only services
+                    # can be socket-activated, the following condition always
+                    # evaluates to `true` for non-service units
+                    if (!$socketActivated) {
+                        # If we are restarting a socket, also stop the corresponding
+                        # service. This is required because restarting a socket
+                        # when the service is already activated fails.
+                        if ($unit =~ /\.socket$/) {
+                            my $service = $unitInfo->{Service} // "";
+                            if ($service eq "") {
+                                $service = "$baseName.service";
+                            }
+                            if (defined $activePrev->{$service}) {
+                                $unitsToStop{$service} = 1;
+                            }
+                            # Restart the socket. We stop it because it would otherwise
+                            # be able to re-activate the unit while other units are stopping
+                            # but then restart it instead of starting it because that allows
+                            # us to start the socket a little bit earlier. It also works well
+                            # together with the logic above so when both the service and the
+                            # socket that activates it change, the socket only gets restarted
+                            # once.
+                            if (defined $activePrev->{$unit}) {
+                                $unitsToStop{$unit} = 1;
+                            }
+                            $unitsToRestart{$unit} = 1;
+                            recordUnit($restartListFile, $unit);
+                        } else {
+                            if (!boolIsTrue($unitInfo->{'X-StopIfChanged'} // "yes")) {
+                                # This unit should be restarted instead of
+                                # stopped and started.
+                                $unitsToRestart{$unit} = 1;
+                                recordUnit($restartListFile, $unit);
+                            } else {
 
-                        $unitsToStop{$unit} = 1;
+                                # If the unit is not socket-activated, record
+                                # that this unit needs to be started below.
+                                # We write this to a file to ensure that the
+                                # service gets restarted if we're interrupted.
+                                if (!$socketActivated) {
+                                    $unitsToStart{$unit} = 1;
+                                    recordUnit($startListFile, $unit);
+                                    $unitsToStop{$unit} = 1;
+                                }
+                            }
+                        }
                     }
                 }
             }
