@@ -16,8 +16,7 @@ stdenv.mkDerivation rec {
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.ApplicationServices
     libunistring
-  ]
-  ;
+  ];
 
   propagatedBuildInputs = [ gmp ];
 
