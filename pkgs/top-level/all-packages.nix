@@ -1171,6 +1171,8 @@ with pkgs;
 
   apkid = callPackage ../development/tools/apkid { };
 
+  apkleaks = callPackage ../tools/security/apkleaks { };
+
   apksigcopier = callPackage ../development/tools/apksigcopier { };
 
   apksigner = callPackage ../development/tools/apksigner {
@@ -5312,6 +5314,8 @@ with pkgs;
   gh = callPackage ../applications/version-management/git-and-tools/gh { };
 
   ghorg = callPackage ../applications/version-management/git-and-tools/ghorg { };
+
+  ghost = callPackage ../tools/security/ghost { };
 
   ghostunnel = callPackage ../tools/networking/ghostunnel { };
 
@@ -21270,6 +21274,7 @@ with pkgs;
     buildArmTrustedFirmware
     armTrustedFirmwareTools
     armTrustedFirmwareAllwinner
+    armTrustedFirmwareAllwinnerH616
     armTrustedFirmwareQemu
     armTrustedFirmwareRK3328
     armTrustedFirmwareRK3399
@@ -22261,6 +22266,7 @@ with pkgs;
     ubootOrangePiPc
     ubootOrangePiZeroPlus2H5
     ubootOrangePiZero
+    ubootOrangePiZero2
     ubootPcduino3Nano
     ubootPine64
     ubootPine64LTS
