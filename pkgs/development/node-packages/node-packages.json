@@ -9,6 +9,7 @@
 , "@nerdwallet/shepherd"
 , "@nestjs/cli"
 , "@squoosh/cli"
+, "@tailwindcss/language-server"
 , "@vue/cli"
 , "@webassemblyjs/cli"
 , "@webassemblyjs/repl"
