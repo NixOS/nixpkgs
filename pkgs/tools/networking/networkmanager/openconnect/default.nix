@@ -71,6 +71,7 @@ in stdenv.mkDerivation {
       attrPath = "networkmanager-openconnect";
       versionPolicy = "odd-unstable";
     };
+    networkManagerPlugin = "VPN/nm-openconnect-service.name";
   };
 
   meta = with lib; {

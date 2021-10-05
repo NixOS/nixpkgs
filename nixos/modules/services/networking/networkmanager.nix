@@ -5,18 +5,6 @@ with lib;
 let
   cfg = config.networking.networkmanager;
 
-  basePackages = with pkgs; [
-    modemmanager
-    networkmanager
-    networkmanager-fortisslvpn
-    networkmanager-iodine
-    networkmanager-l2tp
-    networkmanager-openconnect
-    networkmanager-openvpn
-    networkmanager-vpnc
-    networkmanager-sstp
-   ] ++ optional (!delegateWireless && !enableIwd) wpa_supplicant;
-
   delegateWireless = config.networking.wireless.enable == true && cfg.unmanaged != [];
 
   enableIwd = cfg.wifi.backend == "iwd";
@@ -227,13 +215,30 @@ in {
         '';
       };
 
-      packages = mkOption {
+      basePackages = mkOption {
+        type = types.listOf types.package;
+        default = with pkgs; [
+          modemmanager
+          networkmanager
+          networkmanager-fortisslvpn
+          networkmanager-iodine
+          networkmanager-l2tp
+          networkmanager-openconnect
+          networkmanager-openvpn
+          networkmanager-vpnc
+          networkmanager-sstp
+        ];
+        description = ''
+          Basic packages of networkmanager, can be set to have a more minimal networkmanager.
+        '';
+      };
+
+     extraPackages = mkOption {
         type = types.listOf types.package;
         default = [ ];
         description = ''
           Extra packages that provide NetworkManager plugins.
         '';
-        apply = list: basePackages ++ list;
       };
 
       dhcp = mkOption {
@@ -380,7 +385,7 @@ in {
           </para><para>
           If you enable this option the
           <literal>networkmanager_strongswan</literal> plugin will be added to
-          the <option>networking.networkmanager.packages</option> option
+          the <option>networking.networkmanager.extraPackages</option> option
           so you don't need to to that yourself.
         '';
       };
@@ -388,6 +393,9 @@ in {
   };
 
   imports = [
+    (mkRenamedOptionModule
+      [ "networking" "networkmanager" "packages" ]
+      [ "networking" "networkmanager" "extraPackages" ])
     (mkRenamedOptionModule [ "networking" "networkmanager" "useDnsmasq" ] [ "networking" "networkmanager" "dns" ])
     (mkRemovedOptionModule ["networking" "networkmanager" "dynamicHosts"] ''
       This option was removed because allowing (multiple) regular users to
@@ -416,37 +424,14 @@ in {
     hardware.wirelessRegulatoryDatabase = true;
 
     environment.etc = with pkgs; {
-      "NetworkManager/NetworkManager.conf".source = configFile;
-
-      "NetworkManager/VPN/nm-openvpn-service.name".source =
-        "${networkmanager-openvpn}/lib/NetworkManager/VPN/nm-openvpn-service.name";
-
-      "NetworkManager/VPN/nm-vpnc-service.name".source =
-        "${networkmanager-vpnc}/lib/NetworkManager/VPN/nm-vpnc-service.name";
-
-      "NetworkManager/VPN/nm-openconnect-service.name".source =
-        "${networkmanager-openconnect}/lib/NetworkManager/VPN/nm-openconnect-service.name";
-
-      "NetworkManager/VPN/nm-fortisslvpn-service.name".source =
-        "${networkmanager-fortisslvpn}/lib/NetworkManager/VPN/nm-fortisslvpn-service.name";
-
-      "NetworkManager/VPN/nm-l2tp-service.name".source =
-        "${networkmanager-l2tp}/lib/NetworkManager/VPN/nm-l2tp-service.name";
-
-      "NetworkManager/VPN/nm-iodine-service.name".source =
-        "${networkmanager-iodine}/lib/NetworkManager/VPN/nm-iodine-service.name";
-
-      "NetworkManager/VPN/nm-sstp-service.name".source =
-        "${networkmanager-sstp}/lib/NetworkManager/VPN/nm-sstp-service.name";
+        "NetworkManager/NetworkManager.conf".source = configFile;
       }
+      // builtins.listToAttrs (map (pkg: nameValuePair "NetworkManager/${pkg.passthru.networkManagerPlugin}" {
+        source = "${pkg}/lib/NetworkManager/${pkg.passthru.networkManagerPlugin}";
+      }) (builtins.filter (pkg: builtins.hasAttr "networkManagerPlugin" pkg.passthru) (cfg.basePackages ++ cfg.extraPackages)))
       // optionalAttrs (cfg.appendNameservers != [] || cfg.insertNameservers != [])
          {
            "NetworkManager/dispatcher.d/02overridedns".source = overrideNameserversScript;
-         }
-      // optionalAttrs cfg.enableStrongSwan
-         {
-           "NetworkManager/VPN/nm-strongswan-service.name".source =
-             "${pkgs.networkmanager_strongswan}/lib/NetworkManager/VPN/nm-strongswan-service.name";
          }
       // listToAttrs (lib.imap1 (i: s:
          {
@@ -454,7 +439,7 @@ in {
             value = { mode = "0544"; inherit (s) source; };
          }) cfg.dispatcherScripts);
 
-    environment.systemPackages = cfg.packages;
+    environment.systemPackages = cfg.basePackages ++ cfg.extraPackages;
 
     users.groups = {
       networkmanager.gid = config.ids.gids.networkmanager;
@@ -473,7 +458,7 @@ in {
       };
     };
 
-    systemd.packages = cfg.packages;
+    systemd.packages = cfg.basePackages ++ cfg.extraPackages;
 
     systemd.tmpfiles.rules = [
       "d /etc/NetworkManager/system-connections 0700 root root -"
@@ -525,7 +510,11 @@ in {
       })
 
       (mkIf cfg.enableStrongSwan {
-        networkmanager.packages = [ pkgs.networkmanager_strongswan ];
+        networkmanager.extraPackages = [ pkgs.networkmanager_strongswan ];
+      })
+
+      (mkIf (!delegateWireless && !enableIwd) {
+        networkmanager.extraPackages = [ pkgs.wpa_supplicant ];
       })
 
       (mkIf enableIwd {
@@ -549,10 +538,10 @@ in {
 
     security.polkit.extraConfig = polkitConf;
 
-    services.dbus.packages = cfg.packages
+    services.dbus.packages = cfg.basePackages ++ cfg.extraPackages
       ++ optional cfg.enableStrongSwan pkgs.strongswanNM
       ++ optional (cfg.dns == "dnsmasq") pkgs.dnsmasq;
 
-    services.udev.packages = cfg.packages;
+    services.udev.packages = cfg.basePackages ++ cfg.extraPackages;
   };
 }
