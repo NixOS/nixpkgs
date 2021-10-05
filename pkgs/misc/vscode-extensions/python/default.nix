@@ -75,6 +75,20 @@ in vscode-utils.buildVscodeMarketplaceExtension rec {
     # Patch `packages.json` so that nix's *ctags* is used as default value for `python.workspaceSymbols.ctagsPath`.
     substituteInPlace "./package.json" \
       --replace "\"default\": \"ctags\"" "\"default\": \"${ctagsDefaultsTo}\""
+
+
+    # Similar cleanup to what's done in the `debugpy` python package.
+    # This prevent our autopatchelf logic to bark on unsupported binaries (`attach_x86.so`
+    # was problematic) but also should make our derivation less heavy.
+    (
+      cd pythonFiles/lib/python/debugpy/_vendored/pydevd/pydevd_attach_to_process
+      declare kept_aside="${{
+        "x86_64-linux" = "attach_linux_amd64.so";
+      }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}")}"
+      mv "$kept_aside" "$kept_aside.hidden"
+      rm *.so *.dylib *.dll *.exe *.pdb
+      mv "$kept_aside.hidden" "$kept_aside"
+    )
   '';
 
   postInstall = ''
