@@ -18954,6 +18954,8 @@ with pkgs;
 
   resolv_wrapper = callPackage ../development/libraries/resolv_wrapper { };
 
+  restinio = callPackage ../development/libraries/restinio {};
+
   rhino = callPackage ../development/libraries/java/rhino {
     javac = jdk8;
     jvm = jre8;
