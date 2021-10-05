@@ -13,7 +13,7 @@ in {
         description = "FLEXOPTIX app package to use";
         type = types.package;
         default = pkgs.flexoptix-app;
-        defaultText = "\${pkgs.flexoptix-app}";
+        defaultText = literalExpression "pkgs.flexoptix-app";
       };
     };
   };

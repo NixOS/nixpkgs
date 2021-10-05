@@ -20,7 +20,7 @@ in {
       description = "Package to use for flannel";
       type = types.package;
       default = pkgs.flannel;
-      defaultText = "pkgs.flannel";
+      defaultText = literalExpression "pkgs.flannel";
     };
 
     publicIp = mkOption {

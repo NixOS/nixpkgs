@@ -44,7 +44,7 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.usbguard;
-        defaultText = "pkgs.usbguard";
+        defaultText = literalExpression "pkgs.usbguard";
         description = ''
           The usbguard package to use. If you do not need the Qt GUI, use
           <literal>pkgs.usbguard-nox</literal> to save disk space.

@@ -217,7 +217,7 @@ in
 
       session = mkOption {
         default = [];
-        example = literalExample
+        example = literalExpression
           ''
             [ { manage = "desktop";
                 name = "xterm";
@@ -305,9 +305,7 @@ in
 
         execCmd = mkOption {
           type = types.str;
-          example = literalExample ''
-            "''${pkgs.lightdm}/bin/lightdm"
-          '';
+          example = literalExpression ''"''${pkgs.lightdm}/bin/lightdm"'';
           description = "Command to start the display manager.";
         };
 

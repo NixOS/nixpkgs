@@ -27,7 +27,8 @@ in
 
         locker = mkOption {
           default = "${pkgs.xlockmore}/bin/xlock"; # default according to `man xautolock`
-          example = "${pkgs.i3lock}/bin/i3lock -i /path/to/img";
+          defaultText = literalExpression ''"''${pkgs.xlockmore}/bin/xlock"'';
+          example = literalExpression ''"''${pkgs.i3lock}/bin/i3lock -i /path/to/img"'';
           type = types.str;
 
           description = ''
@@ -37,7 +38,7 @@ in
 
         nowlocker = mkOption {
           default = null;
-          example = "${pkgs.i3lock}/bin/i3lock -i /path/to/img";
+          example = literalExpression ''"''${pkgs.i3lock}/bin/i3lock -i /path/to/img"'';
           type = types.nullOr types.str;
 
           description = ''
@@ -56,7 +57,7 @@ in
 
         notifier = mkOption {
           default = null;
-          example = "${pkgs.libnotify}/bin/notify-send \"Locking in 10 seconds\"";
+          example = literalExpression ''"''${pkgs.libnotify}/bin/notify-send 'Locking in 10 seconds'"'';
           type = types.nullOr types.str;
 
           description = ''

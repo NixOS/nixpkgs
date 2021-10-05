@@ -11,23 +11,23 @@
   },
   "ATFlatControls": {
     "owner": "Alexey-T",
-    "rev": "2021.08.28",
-    "sha256": "sha256-nFRlSeU2ScPQrLXcd4dt8l9Ct7ceJyKMi97gtxz+S8I="
+    "rev": "2021.09.14",
+    "sha256": "sha256-j69UkRNdVdzMITBHMT1QwAsYX9S0fts5/0PCroCGtL8="
   },
   "ATSynEdit": {
     "owner": "Alexey-T",
-    "rev": "2021.09.03",
-    "sha256": "sha256-2y1E+52MPkimmozo1Qwpg7Qyhjct3cs76nHlOf/Cs0M="
+    "rev": "2021.10.03",
+    "sha256": "sha256-JGw/GbQNLAgHhDm/EgCGvzPpd8rqQo2FhmAL51XIekw="
   },
   "ATSynEdit_Cmp": {
     "owner": "Alexey-T",
-    "rev": "2021.09.03",
-    "sha256": "sha256-pZo+wKnqN2HfDjPeC/WqaE5sdNnpjRN2VKSP8p4Q6Ek="
+    "rev": "2021.09.14",
+    "sha256": "sha256-6eC75zAtWbM1XEI9OM3iqy/a8Vj1l5WU7HGJBpmoQsA="
   },
   "EControl": {
     "owner": "Alexey-T",
-    "rev": "2021.09.02",
-    "sha256": "sha256-i8laXF9IIhVkGZ2rzv7RlZeMxUza5LAXlTOxDj9CzJo="
+    "rev": "2021.10.03",
+    "sha256": "sha256-Kbjzn4Rp+/oTNgFMlzlkQEeob0Z4VidqJ/+wuNHS580="
   },
   "ATSynEdit_Ex": {
     "owner": "Alexey-T",

@@ -134,14 +134,14 @@ in {
     phpExtraExtensions = mkOption {
       type = with types; functionTo (listOf package);
       default = all: [];
-      defaultText = "all: []";
+      defaultText = literalExpression "all: []";
       description = ''
         Additional PHP extensions to use for nextcloud.
         By default, only extensions necessary for a vanilla nextcloud installation are enabled,
         but you may choose from the list of available extensions and add further ones.
         This is sometimes necessary to be able to install a certain nextcloud app that has additional requirements.
       '';
-      example = literalExample ''
+      example = literalExpression ''
         all: [ all.pdlib all.bz2 ]
       '';
     };

@@ -205,7 +205,7 @@ in {
               };
             });
             default = [ ];
-            example = literalExample ''
+            example = literalExpression ''
               [
                 {
                   rule = "allow";
@@ -244,7 +244,7 @@ in {
         };
       });
       default = [ ];
-      example = literalExample ''
+      example = literalExpression ''
         [
           {
             type = "proxy";
@@ -290,17 +290,6 @@ in {
         "::1"
         "fc00::/7"
       ];
-      example = [
-        "0.0.0.0/8"
-        "127.0.0.0/8"
-        "10.0.0.0/8"
-        "100.64.0.0/10"
-        "172.16.0.0/12"
-        "192.168.0.0/16"
-        "::"
-        "::1"
-        "fc00::/7"
-      ];
       description = ''
         What IP ranges to deny access when denyPrivate is set tu true.
       '';
@@ -322,19 +311,17 @@ in {
           nscache = mkOption {
             type = types.int;
             default = 65535;
-            example = 65535;
             description = "Set name cache size for IPv4.";
           };
           nscache6 = mkOption {
             type = types.int;
             default = 65535;
-            example = 65535;
             description = "Set name cache size for IPv6.";
           };
           nsrecord = mkOption {
             type = types.attrsOf types.str;
             default = { };
-            example = literalExample ''
+            example = literalExpression ''
               {
                 "files.local" = "192.168.1.12";
                 "site.local" = "192.168.1.43";

@@ -33,7 +33,7 @@ in
 
       packages = mkOption {
         type = types.listOf types.path;
-        example = literalExample "[ pkgs.tiscamera ]";
+        example = literalExpression "[ pkgs.tiscamera ]";
         description = ''
           List of packages containing <command>uvcvideo</command> dynamic controls
           rules. All files found in

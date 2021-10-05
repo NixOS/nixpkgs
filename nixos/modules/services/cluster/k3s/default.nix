@@ -12,8 +12,7 @@ in
     package = mkOption {
       type = types.package;
       default = pkgs.k3s;
-      defaultText = "pkgs.k3s";
-      example = literalExample "pkgs.k3s";
+      defaultText = literalExpression "pkgs.k3s";
       description = "Package that should be used for k3s";
     };
 

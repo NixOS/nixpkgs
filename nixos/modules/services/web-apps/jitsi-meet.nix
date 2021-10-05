@@ -54,7 +54,7 @@ in
     config = mkOption {
       type = attrs;
       default = { };
-      example = literalExample ''
+      example = literalExpression ''
         {
           enableWelcomePage = false;
           defaultLang = "fi";
@@ -81,7 +81,7 @@ in
     interfaceConfig = mkOption {
       type = attrs;
       default = { };
-      example = literalExample ''
+      example = literalExpression ''
         {
           SHOW_JITSI_WATERMARK = false;
           SHOW_WATERMARK_FOR_GUESTS = false;

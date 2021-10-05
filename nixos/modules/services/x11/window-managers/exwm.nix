@@ -22,7 +22,7 @@ in
       loadScript = mkOption {
         default = "(require 'exwm)";
         type = types.lines;
-        example = literalExample ''
+        example = ''
           (require 'exwm)
           (exwm-enable)
         '';
@@ -39,8 +39,9 @@ in
       };
       extraPackages = mkOption {
         type = types.functionTo (types.listOf types.package);
-        default = self: [];
-        example = literalExample ''
+        default = epkgs: [];
+        defaultText = literalExpression "epkgs: []";
+        example = literalExpression ''
           epkgs: [
             epkgs.emms
             epkgs.magit

@@ -75,7 +75,7 @@ in
     services.zope2.instances = mkOption {
       default = {};
       type = with types; attrsOf (submodule zope2Opts);
-      example = literalExample ''
+      example = literalExpression ''
         {
           plone01 = {
             http_address = "127.0.0.1:8080";

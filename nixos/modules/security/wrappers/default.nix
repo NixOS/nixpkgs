@@ -152,7 +152,7 @@ in
     security.wrappers = lib.mkOption {
       type = lib.types.attrsOf wrapperType;
       default = {};
-      example = lib.literalExample
+      example = lib.literalExpression
         ''
           {
             # a setuid root program
