@@ -122,6 +122,12 @@ let
           TMPDIR=$(mktemp -d nix-vm.XXXXXXXXXX --tmpdir)
       fi
 
+      ${lib.optionalString cfg.useNixStoreImage
+      ''
+        # Create a writable copy/snapshot of the store image.
+        ${qemu}/bin/qemu-img create -f qcow2 -F qcow2 -b ${storeImage}/nixos.qcow2 "$TMPDIR"/store.img
+      ''}
+
       # Create a directory for exchanging data with the VM.
       mkdir -p "$TMPDIR/xchg"
 
@@ -262,6 +268,18 @@ let
           umount /boot
         '' # */
     );
+
+  storeImage = import ../../lib/make-disk-image.nix {
+    inherit pkgs config lib;
+    additionalPaths = [ regInfo ];
+    format = "qcow2";
+    onlyNixStore = true;
+    partitionTableType = "none";
+    installBootLoader = false;
+    diskSize = "auto";
+    additionalSpace = "0M";
+    copyChannel = false;
+  };
 
 in
 
@@ -608,6 +626,20 @@ in
         };
     };
 
+    virtualisation.useNixStoreImage =
+      mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Build and use a disk image for the Nix store, instead of
+          accessing the host's one through 9p.
+
+          For applications which do a lot of reads from the store,
+          this can drastically improve performance, but at the cost of
+          disk space and image build time.
+        '';
+      };
+
     virtualisation.useBootLoader =
       mkOption {
         type = types.bool;
@@ -762,9 +794,18 @@ in
     virtualisation.pathsInNixDB = [ config.system.build.toplevel ];
 
     virtualisation.sharedDirectories = {
-      nix-store = { source = "/nix/store"; target = "/nix/store"; };
-      xchg      = { source = ''"$TMPDIR"/xchg''; target = "/tmp/xchg"; };
-      shared    = { source = ''"''${SHARED_DIR:-$TMPDIR/xchg}"''; target = "/tmp/shared"; };
+      nix-store = mkIf (!cfg.useNixStoreImage) {
+        source = builtins.storeDir;
+        target = "/nix/store";
+      };
+      xchg = {
+        source = ''"$TMPDIR"/xchg'';
+        target = "/tmp/xchg";
+      };
+      shared = {
+        source = ''"''${SHARED_DIR:-$TMPDIR/xchg}"'';
+        target = "/tmp/shared";
+      };
     };
 
     virtualisation.qemu.networkingOptions =
@@ -815,6 +856,11 @@ in
         driveExtraOpts.cache = "writeback";
         driveExtraOpts.werror = "report";
       }]
+      (mkIf cfg.useNixStoreImage [{
+        name = "nix-store";
+        file = ''"$TMPDIR"/store.img'';
+        deviceExtraOpts.bootindex = if cfg.useBootLoader then "3" else "2";
+      }])
       (mkIf cfg.useBootLoader [
         # The order of this list determines the device names, see
         # note [Disk layout with `useBootLoader`].
@@ -864,6 +910,13 @@ in
             # Sync with systemd's tmp.mount;
             options = [ "mode=1777" "strictatime" "nosuid" "nodev" "size=${toString config.boot.tmpOnTmpfsSize}" ];
           };
+
+        "/nix/${if cfg.writableStore then ".ro-store" else "store"}" =
+          mkIf cfg.useNixStoreImage
+            { device = "${lookupDriveDeviceName "nix-store" cfg.qemu.drives}";
+              neededForBoot = true;
+              options = [ "ro" ];
+            };
 
         "/nix/.rw-store" = mkIf (cfg.writableStore && cfg.writableStoreUseTmpfs)
           { fsType = "tmpfs";
