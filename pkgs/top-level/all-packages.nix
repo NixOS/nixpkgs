@@ -31247,6 +31247,8 @@ with pkgs;
 
   spyder = with python3.pkgs; toPythonApplication spyder;
 
+  spyre = callPackage ../tools/security/spyre { };
+
   openspace = callPackage ../applications/science/astronomy/openspace { };
 
   stellarium = libsForQt5.callPackage ../applications/science/astronomy/stellarium { };
