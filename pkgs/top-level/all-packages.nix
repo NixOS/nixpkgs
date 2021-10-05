@@ -13894,6 +13894,8 @@ with pkgs;
     jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
 
+  antlr4_9 = callPackage ../development/tools/parsing/antlr/4.9.nix { };
+
   antlr4 = antlr4_8;
 
   antlr = antlr4;
