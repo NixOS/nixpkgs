@@ -4,13 +4,13 @@
 }:
 
 buildGoModule rec {
-  pname = "pprof-unstable";
+  pname = "pprof";
   version = "unstable-2021-09-30";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "pprof";
-    inherit rev;
+    rev = "7fe48b4c820be13151ae35ce5a5e3f54f1b53eef";
     sha256 = "05nr3igdigs1586qplwfm17hfw0v81jy745g6vayq7cbplljfjb1";
   };
 
