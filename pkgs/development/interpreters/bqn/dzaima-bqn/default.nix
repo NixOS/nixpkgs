@@ -32,6 +32,7 @@ stdenv.mkDerivation rec {
     ./build8
   '' + lib.optionalString buildNativeImage ''
     native-image --report-unsupported-elements-at-runtime \
+      -H:CLibraryPath=${lib.getLib jdk}/lib \
       -J-Dfile.encoding=UTF-8 -jar BQN.jar dbqn
   '' + ''
     runHook postBuild
