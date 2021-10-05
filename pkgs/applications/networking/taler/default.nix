@@ -12,8 +12,8 @@ in rec {
       sha256 = "sha256-jehQKkDYdDkEXen/LSn0gZi4tYpykYM92W35ZbSLNj4=";
     };
     postPatch = ''
-        find . -name '*.sh' -exec sed -i 's%#!/bin/bash%#!${stdenv.shell}%g' {} \;
-      '';
+      find . -name '*.sh' -exec sed -i 's%#!/bin/bash%#!${stdenv.shell}%g' {} \;
+    '';
     enableParallelBuilding = true;
     nativeBuildInputs = [
       autoreconfHook
