@@ -338,7 +338,14 @@ let
         { object = pkgs.kmod-debian-aliases;
           symlink = "/etc/modprobe.d/debian.conf";
         }
-      ];
+      ] ++ (lib.mapAttrsToList
+        (symlink: options:
+          {
+            inherit symlink;
+            object = options.source;
+          }
+        )
+        config.boot.initrd.extraFiles);
   };
 
   # Script to add secret files to the initrd at bootloader update time
@@ -416,6 +423,22 @@ in
         Whether to enable the NixOS initial RAM disk (initrd). This may be
         needed to perform some initialisation tasks (like mounting
         network/encrypted file systems) before continuing the boot process.
+      '';
+    };
+
+    boot.initrd.extraFiles = mkOption {
+      default = { };
+      type = types.attrsOf
+        (types.submodule {
+          options = {
+            source = mkOption {
+              type = types.package;
+              description = "The object to make available inside the initrd.";
+            };
+          };
+        });
+      description = ''
+        Extra files to link and copy in to the initrd.
       '';
     };
 
