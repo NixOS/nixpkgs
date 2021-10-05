@@ -1,15 +1,21 @@
-{ lib, fetchzip }:
+{ lib, fetchzip, stdenvNoCC, writeText }:
 
 let
   version = "20210225";
-in fetchzip {
+in stdenvNoCC.mkDerivation {
   name = "iana-etc-${version}";
-  url = "https://github.com/Mic92/iana-etc/releases/download/${version}/iana-etc-${version}.tar.gz";
-  sha256 = "sha256-NVvZG3EJEYOXFDTBXD5m9sg/8msyMiBMkiZr+ZxWZ/g=";
+  src = fetchzip {
+    url = "https://github.com/Mic92/iana-etc/releases/download/${version}/iana-etc-${version}.tar.gz";
+    sha256 = "sha256:1bbbnj2ya0apyyhnw37521yl1hrz3zy3l8dw6sacmir0y6pmx9gi";
+  };
 
-  postFetch = ''
-    tar -xzvf $downloadedFile --strip-components=1
+  installPhase = ''
     install -D -m0644 -t $out/etc services protocols
+  '';
+
+  setupHook = writeText "setup-hook" ''
+    export NIX_ETC_PROTOCOLS=@out@/etc/protocols
+    export NIX_ETC_SERVICES=@out@/etc/services
   '';
 
   meta = with lib; {
