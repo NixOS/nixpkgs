@@ -1144,9 +1144,6 @@ self: super: {
   hakyll-contrib-hyphenation = doJailbreak super.hakyll-contrib-hyphenation;
   # 2021-10-04: too strict upper bound on Hakyll
   hakyll-filestore = doJailbreak super.hakyll-filestore;
-  # https://github.com/LaurentRDC/hakyll-images/issues/10, fixed in 1.1.1
-  hakyll-images = assert super.hakyll-images.version == "1.1.0";
-    dontCheck super.hakyll-images;
 
   # 2020-06-22: NOTE: > 0.4.0 => rm Jailbreak: https://github.com/serokell/nixfmt/issues/71
   nixfmt = doJailbreak super.nixfmt;
