@@ -79,9 +79,8 @@ in rec {
       "--with-exchange=${taler-exchange}"
   ];
     preCheck = ''
-        find . -name '*.sh' -exec sed -i 's%#!/bin/bash%#!${stdenv.shell}%g' {} \;
-        find . -name '*.sh' -exec sed -i 's%#!/usr/bin/env bash%#!${stdenv.shell}%g' {} \;
-      '';
+      find . -name '*.sh' -exec sed -i -e 's%#!/bin/bash%#!${stdenv.shell}%g' -e 's%#!/usr/bin/env bash%#!${stdenv.shell}%g'{} \;
+    '';
     doCheck = false; # `make check` is meant to be run after installation
     checkInputs = [ jq ];
     doInstallCheck = true;
