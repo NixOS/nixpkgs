@@ -1,7 +1,6 @@
 { lib, stdenv, fetchurl, pkg-config, zlib, shadow, libcap_ng
 , ncurses ? null, pam, systemd ? null
-, minimal ? false
-, nlsSupport ? !minimal
+, nlsSupport ? true
 }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +16,7 @@ stdenv.mkDerivation rec {
     ./rtcwake-search-PATH-for-shutdown.patch
   ];
 
-  outputs = [ "bin" "dev" "out" "man" ];
+  outputs = [ "bin" "dev" "out" "lib" "man" ];
 
   postPatch = ''
     patchShebangs tests/run.sh
@@ -46,12 +45,14 @@ stdenv.mkDerivation rec {
     (lib.withFeature (systemd != null) "systemd")
     (lib.withFeatureAs (systemd != null)
        "systemdsystemunitdir" "${placeholder "bin"}/lib/systemd/system/")
+    "SYSCONFSTATICDIR=${placeholder "lib"}/lib"
   ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
        "scanf_cv_type_modifier=ms"
   ;
 
   makeFlags = [
     "usrbin_execdir=${placeholder "bin"}/bin"
+    "usrlib_execdir=${placeholder "lib"}/lib"
     "usrsbin_execdir=${placeholder "bin"}/sbin"
   ];
 
@@ -61,10 +62,6 @@ stdenv.mkDerivation rec {
     ++ lib.filter (p: p != null) [ ncurses systemd ];
 
   doCheck = false; # "For development purpose only. Don't execute on production system!"
-
-  postInstall = lib.optionalString minimal ''
-    rm -rf $out/share/{doc,bash-completion}
-  '';
 
   enableParallelBuilding = true;
 
