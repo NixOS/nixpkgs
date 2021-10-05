@@ -56,7 +56,7 @@ in
     corsOrigins = mkOption {
       type = types.listOf types.str;
       description = "List of URLs that can access the API for Cross-Origin Resource Sharing (CORS)";
-      example = [ "http://localhost" "http://localhost:5000" ];
+      default = [ "http://localhost" "http://localhost:5000" ];
     };
 
     authenticationRequired = mkOption {
