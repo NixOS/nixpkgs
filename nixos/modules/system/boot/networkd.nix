@@ -668,6 +668,9 @@ let
           "SendOption"
           "UserClass"
           "VendorClass"
+          "DUIDType"
+          "DUIDRawData"
+          "IAID"
         ])
         (assertValueOneOf "UseAddress" boolValues)
         (assertValueOneOf "UseDNS" boolValues)
@@ -677,6 +680,7 @@ let
         (assertValueOneOf "ForceDHCPv6PDOtherInformation" boolValues)
         (assertValueOneOf "WithoutRA" ["solicit" "information-request"])
         (assertRange "SendOption" 1 65536)
+        (assertInt "IAID")
       ];
 
       sectionDHCPv6PrefixDelegation = checkUnitConfig "DHCPv6PrefixDelegation" [
