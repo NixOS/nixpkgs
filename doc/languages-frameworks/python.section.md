@@ -833,6 +833,7 @@ sets are
 * `pkgs.python37Packages`
 * `pkgs.python38Packages`
 * `pkgs.python39Packages`
+* `pkgs.python310Packages`
 * `pkgs.pypyPackages`
 
 and the aliases

@@ -37,7 +37,7 @@ with pkgs;
           keep = self: {
             # TODO maybe only define these here so nothing is needed to be kept in sync.
             inherit (self)
-              isPy27 isPy35 isPy36 isPy37 isPy38 isPy39 isPy3k isPyPy pythonAtLeast pythonOlder
+              isPy27 isPy35 isPy36 isPy37 isPy38 isPy39 isPy310 isPy3k isPyPy pythonAtLeast pythonOlder
               python bootstrapped-pip buildPythonPackage buildPythonApplication
               fetchPypi
               hasPythonModule requiredPythonModules makePythonPath disabledIf
@@ -185,9 +185,9 @@ in {
       major = "3";
       minor = "10";
       patch = "0";
-      suffix = "rc2";
+      suffix = "";
     };
-    sha256 = "091g5f0gqajhi21bwpvbrc44hpiilbsycw953ynvkds8hl45cnz7";
+    sha256 = "00mhn6kj4qkvkkv6hh2klnnjr0yk0c9hspp7njc7n6m1lvkzi6as";
     inherit (darwin) configd;
     inherit passthruFun;
   };
