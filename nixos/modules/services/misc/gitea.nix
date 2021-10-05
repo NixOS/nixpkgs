@@ -349,7 +349,7 @@ in
       server = mkMerge [
         {
           DOMAIN = cfg.domain;
-          STATIC_ROOT_PATH = cfg.staticRootPath;
+          STATIC_ROOT_PATH = toString cfg.staticRootPath;
           LFS_JWT_SECRET = "#lfsjwtsecret#";
           ROOT_URL = cfg.rootUrl;
         }
