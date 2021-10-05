@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     ++ optional systemdSupport systemd
   ;
 
-  configureFlags = [ "--enable-unicode" ]
+  configureFlags = [ "--enable-unicode" "--sysconfdir=/etc" ]
     ++ optional sensorsSupport "--with-sensors"
   ;
 
