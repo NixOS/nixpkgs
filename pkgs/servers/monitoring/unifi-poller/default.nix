@@ -26,6 +26,5 @@ buildGoModule rec {
     homepage = "https://github.com/unifi-poller/unifi-poller";
     license = licenses.mit;
     maintainers = with maintainers; [ elseym ];
-    platforms = platforms.unix;
   };
 }

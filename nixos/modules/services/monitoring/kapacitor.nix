@@ -61,7 +61,7 @@ in
 
     dataDir = mkOption {
       type = types.path;
-      example = "/var/lib/kapacitor";
+      default = "/var/lib/kapacitor";
       description = "Location where Kapacitor stores its state";
     };
 

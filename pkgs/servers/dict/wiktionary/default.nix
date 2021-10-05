@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "dict-db-wiktionary";
-  version = "20210901";
+  version = "20210920";
 
   src = fetchurl {
     url = "https://dumps.wikimedia.org/enwiktionary/${version}/enwiktionary-${version}-pages-articles.xml.bz2";
-    sha256 = "S87E0aAFITOTugvsXOmbq8+P/LS2J+GmFvJYeYj79PM=";
+    sha256 = "UeufbpSpRL+JrU3SkhxzWJncEsrM1es88grRmFwGABk=";
   };
 
   # script in nixpkgs does not support python2

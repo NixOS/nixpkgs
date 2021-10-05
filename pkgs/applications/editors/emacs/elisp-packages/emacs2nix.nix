@@ -4,8 +4,8 @@ let
   src = pkgs.fetchgit {
     url = "https://github.com/nix-community/emacs2nix.git";
     fetchSubmodules = true;
-    rev = "703b144eeb490e87133c777f82e198b4e515c312";
-    sha256 = "sha256-YBbRh/Cb8u9+Pn6/Bc0atI6knKVjr8jiTGgFkD2FNGI=";
+    rev = "8612e136199b29201703e3e28eba26ddc53f297e";
+    sha256 = "sha256-p15KuXS18j8nqy69LPnHcj6ciHLxa/nibshts0HMZ0A=";
   };
 in
 pkgs.mkShell {

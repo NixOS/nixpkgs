@@ -1289,6 +1289,8 @@ with pkgs;
 
   autospotting = callPackage ../applications/misc/autospotting { };
 
+  autosuspend = callPackage ../os-specific/linux/autosuspend { };
+
   avfs = callPackage ../tools/filesystems/avfs { };
 
   aws-iam-authenticator = callPackage ../tools/security/aws-iam-authenticator {};
@@ -6117,7 +6119,9 @@ with pkgs;
 
   httping = callPackage ../tools/networking/httping {};
 
-  httplz = callPackage ../tools/networking/httplz { };
+  httplz = callPackage ../tools/networking/httplz {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   httpfs2 = callPackage ../tools/filesystems/httpfs { };
 
@@ -7418,6 +7422,8 @@ with pkgs;
   moreutils = callPackage ../tools/misc/moreutils {
     docbook-xsl = docbook_xsl;
   };
+
+  mole = callPackage ../tools/networking/mole { };
 
   mosh = callPackage ../tools/networking/mosh { };
 
