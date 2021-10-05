@@ -19498,6 +19498,8 @@ with pkgs;
 
   usbredir = callPackage ../development/libraries/usbredir { };
 
+  usbrip = callPackage ../tools/security/usbrip { };
+
   uthash = callPackage ../development/libraries/uthash { };
 
   uthenticode = callPackage ../development/libraries/uthenticode { };
