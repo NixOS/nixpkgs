@@ -29,23 +29,18 @@ stdenv.mkDerivation rec {
 
   dontConfigure = true;
 
-  patches = [
-    # self-explaining
-    ./001-remove-vendoring.diff
-  ];
-
   postPatch = ''
     sed -i '/SHELL =.*/ d' makefile
   '';
 
-  preBuild =
-    if genBytecode
-    then ''
-      ${bqn-path} genRuntime ${mbqn-source}
-    ''
-    else ''
-      cp ${cbqn-bytecode-files}/src/gen/{compiler,formatter,runtime0,runtime1,src} src/gen/
-    '';
+  preBuild = ''
+    # inform make we are providing the runtime ourselves
+    touch src/gen/customRuntime
+  '' + (if genBytecode then ''
+    ${bqn-path} genRuntime ${mbqn-source}
+  '' else ''
+    cp ${cbqn-bytecode-files}/src/gen/{compiler,formatter,runtime0,runtime1,src} src/gen/
+  '');
 
   makeFlags = [
     "CC=${stdenv.cc.targetPrefix}cc"
