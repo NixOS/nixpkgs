@@ -22180,7 +22180,6 @@ with pkgs;
   util-linuxMinimal = if stdenv.isLinux then appendToName "minimal" (util-linux.override {
     minimal = true;
     ncurses = null;
-    perl = null;
     systemd = null;
   }) else util-linux;
 
