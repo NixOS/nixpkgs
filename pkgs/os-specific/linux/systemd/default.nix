@@ -184,9 +184,6 @@ stdenv.mkDerivation {
     substituteInPlace src/basic/path-util.h --replace "@defaultPathNormal@" "${placeholder "out"}/bin/"
     substituteInPlace src/boot/efi/meson.build \
       --replace \
-      "find_program('ld'" \
-      "find_program('${stdenv.cc.bintools.targetPrefix}ld'" \
-      --replace \
       "find_program('objcopy'" \
       "find_program('${stdenv.cc.bintools.targetPrefix}objcopy'"
   '' + (
@@ -408,6 +405,7 @@ stdenv.mkDerivation {
     "-Dsmack=true"
     "-Db_pie=true"
     "-Dinstall-sysconfdir=false"
+    "-Defi-ld=${stdenv.cc.bintools.targetPrefix}ld"
     /*
       As of now, systemd doesn't allow runtime configuration of these values. So
       the settings in /etc/login.defs have no effect on it. Many people think this

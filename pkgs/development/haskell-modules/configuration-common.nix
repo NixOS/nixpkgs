@@ -1477,7 +1477,11 @@ self: super: {
 
   hercules-ci-cli = generateOptparseApplicativeCompletion "hci" (
     # See hercules-ci-optparse-applicative in non-hackage-packages.nix.
-    addBuildDepend (unmarkBroken super.hercules-ci-cli) super.hercules-ci-optparse-applicative
+    addBuildDepend
+      (overrideCabal
+        (unmarkBroken super.hercules-ci-cli)
+        (drv: { hydraPlatforms = [ super.hercules-ci-cli.meta.platforms ]; }))
+      super.hercules-ci-optparse-applicative
   );
 
   # Readline uses Distribution.Simple from Cabal 2, in a way that is not

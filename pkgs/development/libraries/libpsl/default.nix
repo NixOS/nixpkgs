@@ -15,7 +15,10 @@
 }:
 
 let
-  enableValgrindTests = !stdenv.isDarwin && lib.meta.availableOn stdenv.hostPlatform valgrind;
+  enableValgrindTests = !stdenv.isDarwin && lib.meta.availableOn stdenv.hostPlatform valgrind
+    # Apparently valgrind doesn't support some new ARM features on (some) Hydra machines:
+    #  VEX: Mismatch detected between RDMA and atomics features.
+    && !stdenv.isAarch64;
 in stdenv.mkDerivation rec {
   pname = "libpsl";
   version = "0.21.0";

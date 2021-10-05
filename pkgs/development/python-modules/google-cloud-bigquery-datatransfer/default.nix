@@ -6,6 +6,7 @@
 , proto-plus
 , pytestCheckHook
 , pytest-asyncio
+, pytz
 , mock
 }:
 
@@ -18,7 +19,7 @@ buildPythonPackage rec {
     sha256 = "fcb71ebe5c5b232d24fe7d666b65709e4fc8db43263c8182e5ed8e5a52abefec";
   };
 
-  propagatedBuildInputs = [ google-api-core libcst proto-plus ];
+  propagatedBuildInputs = [ google-api-core libcst proto-plus pytz ];
   checkInputs = [ mock pytestCheckHook pytest-asyncio ];
 
   pythonImportsCheck = [

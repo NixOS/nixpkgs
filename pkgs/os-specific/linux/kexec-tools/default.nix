@@ -29,6 +29,13 @@ stdenv.mkDerivation rec {
       url = "https://src.fedoraproject.org/rpms/kexec-tools/raw/cb1e5463b5298b064e9b6c86ad6fe3505fec9298/f/kexec-tools-2.0.20-fix-broken-multiboot2-buliding-for-i386.patch";
       sha256 = "1kzmcsbhwfdgxlc5s88ir0n494phww1j16yk0z42x09qlkxxkg0l";
     })
+
+    (fetchpatch {
+      # upstream build fix against -fno-common compilers like >=gcc-10
+      name = "fno-common.patch";
+      url = "https://git.kernel.org/pub/scm/utils/kernel/kexec/kexec-tools.git/patch/?id=cc087b11462af9f971a2c090d07e8d780a867b50";
+      sha256 = "043hcsy6m14h64p6b9w25c7a3y0f487322dj81l6mbm6sws6s9lv";
+    })
   ];
 
   meta = with lib; {
