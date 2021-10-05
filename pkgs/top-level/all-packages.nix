@@ -13522,6 +13522,8 @@ with pkgs;
 
   actionlint = callPackage ../development/tools/analysis/actionlint { };
 
+  allure = callPackage ../development/tools/allure { };
+
   adtool = callPackage ../tools/admin/adtool { };
 
   inherit (callPackage ../development/tools/alloy {
