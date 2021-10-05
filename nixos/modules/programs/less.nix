@@ -24,9 +24,7 @@ let
     }
   '';
 
-  lessKey = pkgs.runCommand "lesskey"
-            { src = pkgs.writeText "lessconfig" configText; preferLocalBuild = true; }
-            "${pkgs.less}/bin/lesskey -o $out $src";
+  lessKey = pkgs.writeText "lessconfig" configText;
 
 in
 
@@ -35,6 +33,8 @@ in
 
     programs.less = {
 
+      # note that environment.nix sets PAGER=less, and
+      # therefore also enables this module
       enable = mkEnableOption "less";
 
       configFile = mkOption {
@@ -81,7 +81,9 @@ in
 
       envVariables = mkOption {
         type = types.attrsOf types.str;
-        default = {};
+        default = {
+          LESS = "-R";
+        };
         example = {
           LESS = "--quit-if-one-screen";
         };
@@ -112,7 +114,7 @@ in
     environment.systemPackages = [ pkgs.less ];
 
     environment.variables = {
-      LESSKEY_SYSTEM = toString lessKey;
+      LESSKEYIN_SYSTEM = toString lessKey;
     } // optionalAttrs (cfg.lessopen != null) {
       LESSOPEN = cfg.lessopen;
     } // optionalAttrs (cfg.lessclose != null) {
