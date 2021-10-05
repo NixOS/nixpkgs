@@ -4,8 +4,8 @@
 
 let
   sshuttle-telepresence = lib.overrideDerivation sshuttle (p: {
-        postInstall = "mv $out/bin/sshuttle $out/bin/sshuttle-telepresence";
-      });
+    postInstall = "mv $out/bin/sshuttle $out/bin/sshuttle-telepresence";
+  });
 in pythonPackages.buildPythonPackage rec {
   pname = "telepresence";
   version = "0.109";
