@@ -14,9 +14,7 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "03qca6avn7bwxcavif7q2nqfzivzp0py7qw3i4hsb28gjrq9nz36";
   };
 
-  # Disable coverage reports (can't send the data)
-
-  preInstall = ''
+  postPatch = ''
     substituteInPlace setup.cfg \
       --replace '--cov-config=setup.cfg' ""
   '';
