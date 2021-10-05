@@ -39,6 +39,7 @@ buildPythonPackage rec {
     # E     return Headers(result)
     # E ResourceWarning: unclosed file <_io.FileIO name=11 mode='rb+' closefd=True>
     "TestMultiPart"
+    "TestHTTPUtility"
   ] ++ lib.optionals stdenv.isDarwin [
     "test_get_machine_id"
   ];
