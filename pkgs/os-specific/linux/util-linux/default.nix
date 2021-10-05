@@ -1,5 +1,8 @@
 { lib, stdenv, fetchurl, pkg-config, zlib, shadow, libcap_ng
-, ncurses ? null, pam, systemd ? null, minimal ? false }:
+, ncurses ? null, pam, systemd ? null
+, minimal ? false
+, nlsSupport ? !minimal
+}:
 
 stdenv.mkDerivation rec {
   pname = "util-linux";
@@ -38,6 +41,7 @@ stdenv.mkDerivation rec {
     "--enable-fs-paths-default=/run/wrappers/bin:/run/current-system/sw/bin:/sbin"
     "--disable-makeinstall-setuid" "--disable-makeinstall-chown"
     "--disable-su" # provided by shadow
+    (lib.enableFeature nlsSupport "nls")
     (lib.withFeature (ncurses != null) "ncursesw")
     (lib.withFeature (systemd != null) "systemd")
     (lib.withFeatureAs (systemd != null)
@@ -59,7 +63,7 @@ stdenv.mkDerivation rec {
   doCheck = false; # "For development purpose only. Don't execute on production system!"
 
   postInstall = lib.optionalString minimal ''
-    rm -rf $out/share/{locale,doc,bash-completion}
+    rm -rf $out/share/{doc,bash-completion}
   '';
 
   enableParallelBuilding = true;
