@@ -7710,12 +7710,12 @@ final: prev:
 
   vim-go = buildVimPluginFrom2Nix {
     pname = "vim-go";
-    version = "2021-10-04";
+    version = "2021-10-05";
     src = fetchFromGitHub {
       owner = "fatih";
       repo = "vim-go";
-      rev = "c505edaddeabf00ee5de2ed78a196d7f49273866";
-      sha256 = "11dpmlhbfc61s3qx855w4h1cyqqlb2yc6qpp0733v4dz8qvriyzf";
+      rev = "81f8cd0ca270a7f6e3773644e163ac7de263e24c";
+      sha256 = "08y3maidpya4qb5n7rrywnzk551m2dky428aw69r44597a2ivnqr";
     };
     meta.homepage = "https://github.com/fatih/vim-go/";
   };
@@ -8741,6 +8741,18 @@ final: prev:
       sha256 = "08n9cgphv2m96kk5w996lwlqak011x5xm410hajmc91vy5fws361";
     };
     meta.homepage = "https://github.com/LnL7/vim-nix/";
+  };
+
+  vim-noctu = buildVimPluginFrom2Nix {
+    pname = "vim-noctu";
+    version = "2015-06-27";
+    src = fetchFromGitHub {
+      owner = "noahfrederick";
+      repo = "vim-noctu";
+      rev = "de2ff9855bccd72cd9ff3082bc89e4a4f36ea4fe";
+      sha256 = "14z1mwmvq0crvljsk6x29bxxhbavbjsggjr68f6aiz3635yih8vy";
+    };
+    meta.homepage = "https://github.com/noahfrederick/vim-noctu/";
   };
 
   vim-nong-theme = buildVimPluginFrom2Nix {
