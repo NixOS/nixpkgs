@@ -53,7 +53,7 @@ in rec {
     doInstallCheck = false;
     installCheck = ''
       make check
-      '';
+    '';
   };
 
   taler-merchant = stdenv.mkDerivation rec {
@@ -64,8 +64,8 @@ in rec {
       sha256 = "sha256-n7YjJfY8HZevk9o4XbXs6isGFHLmusjCfEb+9maAK0U=";
     };
     postPatch = ''
-        find . -name '*.sh' -exec sed -i 's%#!/bin/bash%#!${stdenv.shell}%g' {} \;
-      '';
+      find . -name '*.sh' -exec sed -i 's%#!/bin/bash%#!${stdenv.shell}%g' {} \;
+    '';
     nativeBuildInputs = [ pkg-config autoreconfHook ];
     buildInputs = taler-exchange.buildInputs ++ [
       qrencode
@@ -87,7 +87,7 @@ in rec {
     doInstallCheck = true;
     installCheck = ''
       make check
-      '';
+    '';
     meta = with lib; {
       description = ''
         This is the GNU Taler merchant backend. It provides the logic that should run
