@@ -1142,6 +1142,11 @@ self: super: {
   # https://bitbucket.org/rvlm/hakyll-contrib-hyphenation/src/master/
   # Therefore we jailbreak it.
   hakyll-contrib-hyphenation = doJailbreak super.hakyll-contrib-hyphenation;
+  # 2021-10-04: too strict upper bound on Hakyll
+  hakyll-filestore = doJailbreak super.hakyll-filestore;
+  # https://github.com/LaurentRDC/hakyll-images/issues/10, fixed in 1.1.1
+  hakyll-images = assert super.hakyll-images.version == "1.1.0";
+    dontCheck super.hakyll-images;
 
   # 2020-06-22: NOTE: > 0.4.0 => rm Jailbreak: https://github.com/serokell/nixfmt/issues/71
   nixfmt = doJailbreak super.nixfmt;
@@ -1913,9 +1918,34 @@ EOT
   # https://github.com/Porges/email-validate-hs/issues/58
   email-validate = doJailbreak super.email-validate;
 
-  # 2021-06-20: Outdated upper bounds
-  # https://github.com/Porges/email-validate-hs/issues/58
-  ghcup = doJailbreak super.ghcup;
+  # 2021-10-02: Make optics 0.4 packages work together
+  optics-th_0_4 = super.optics-th_0_4.override {
+    optics-core = self.optics-core_0_4;
+  };
+  optics-extra_0_4 = super.optics-extra_0_4.override {
+    optics-core = self.optics-core_0_4;
+  };
+  optics_0_4 = super.optics_0_4.override {
+    optics-core = self.optics-core_0_4;
+    optics-extra = self.optics-extra_0_4;
+    optics-th = self.optics-th_0_4;
+  };
+
+  # https://github.com/plow-technologies/hspec-golden-aeson/issues/17
+  hspec-golden-aeson_0_9_0_0 = dontCheck super.hspec-golden-aeson_0_9_0_0;
+
+  # 2021-10-02: Doesn't compile with optics < 0.4
+  ghcup = overrideCabal (super.ghcup.override {
+    hspec-golden-aeson = self.hspec-golden-aeson_0_9_0_0;
+    optics = self.optics_0_4;
+  }) (drv: {
+    # golden files are not shipped with the hackage tarball and hspec-golden-aeson
+    # needs some encouraging to create the missing files after version 0.8.0.0.
+    # See: https://gitlab.haskell.org/haskell/ghcup-hs/-/issues/255
+    preCheck = assert drv.version == "0.1.17.2"; ''
+      export CREATE_MISSING_GOLDEN=yes
+    '' + (drv.preCheck or "");
+  });
 
   # Break out of "Cabal < 3.2" constraint.
   stylish-haskell = doJailbreak super.stylish-haskell;
@@ -1992,18 +2022,12 @@ EOT
   hw-xml = assert pkgs.lib.versionOlder self.generic-lens.version "2.2.0.0";
     doJailbreak super.hw-xml;
 
-  # doctests fail due to deprecation warnings in 0.2
-  candid = assert pkgs.lib.versionOlder super.candid.version "0.3";
-    overrideCabal super.candid (drv: {
-      version = "0.3";
-      sha256 = "0zq29zddkkwvlyz9qmxl942ml53m6jawl4m5rkb2510glbkcvr5x";
-      libraryHaskellDepends = drv.libraryHaskellDepends ++ [
-        self.file-embed
-      ];
-    });
-
   # Needs network >= 3.1.2
   quic = super.quic.overrideScope (self: super: {
+    network = self.network_3_1_2_2;
+  });
+
+  http3 = super.http3.overrideScope (self: super: {
     network = self.network_3_1_2_2;
   });
 

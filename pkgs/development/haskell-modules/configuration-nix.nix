@@ -708,14 +708,7 @@ self: super: builtins.intersectAttrs super {
   };
 
   haskell-language-server = overrideCabal super.haskell-language-server (drv: {
-    postInstall = let
-      inherit (pkgs.lib) concatStringsSep take splitString;
-      ghc_version = self.ghc.version;
-      ghc_major_version = concatStringsSep "." (take 2 (splitString "." ghc_version));
-    in ''
-        ln -s $out/bin/haskell-language-server $out/bin/haskell-language-server-${ghc_version}
-        ln -s $out/bin/haskell-language-server $out/bin/haskell-language-server-${ghc_major_version}
-       '';
+    postInstall = "ln -s $out/bin/haskell-language-server $out/bin/haskell-language-server-${self.ghc.version}";
     testToolDepends = [ self.cabal-install pkgs.git ];
     testTarget = "func-test"; # wrapper test accesses internet
     preCheck = ''
@@ -980,4 +973,11 @@ self: super: builtins.intersectAttrs super {
   # Test suite is just the default example executable which doesn't work if not
   # executed by Setup.hs, but works if started on a proper TTY
   isocline = dontCheck super.isocline;
+
+  # Some hash implementations are x86 only, but part of the test suite.
+  # So executing and building it on non-x86 platforms will always fail.
+  hashes = overrideCabal super.hashes {
+    doCheck = with pkgs.stdenv; hostPlatform == buildPlatform
+      && buildPlatform.isx86;
+  };
 }
