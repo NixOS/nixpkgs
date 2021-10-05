@@ -6,6 +6,9 @@
 , cmake
 , antlr4_9
 , pytestCheckHook
+# Enables some expensive tests, useful for verifying an update
+, runAllTests ? false
+, afdko
 }:
 
 buildPythonPackage rec {
@@ -68,7 +71,7 @@ buildPythonPackage rec {
     #   https://github.com/adobe-type-tools/afdko/issues/1418
     find tests -name layerinfo.plist -delete
   '';
-  disabledTests = [
+  disabledTests = lib.optionals (!runAllTests) [
     # Disable slow tests, reduces test time ~25 %
     "test_report"
     "test_post_overflow"
@@ -78,6 +81,10 @@ buildPythonPackage rec {
     "test_overwrite"
     "test_options"
   ];
+
+  passthru.tests = {
+    fullTestsuite = afdko.override { runAllTests = true; };
+  };
 
   meta = with lib; {
     description = "Adobe Font Development Kit for OpenType";
