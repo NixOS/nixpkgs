@@ -11,7 +11,7 @@ in {
 
       package = mkOption {
         default = pkgs.whitebophir;
-        defaultText = "pkgs.whitebophir";
+        defaultText = literalExpression "pkgs.whitebophir";
         type = types.package;
         description = "Whitebophir package to use.";
       };

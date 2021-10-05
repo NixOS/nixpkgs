@@ -50,7 +50,7 @@ in
     package = mkOption {
       type = types.package;
       default = pkgs.undervolt;
-      defaultText = "pkgs.undervolt";
+      defaultText = literalExpression "pkgs.undervolt";
       description = ''
         undervolt derivation to use.
       '';

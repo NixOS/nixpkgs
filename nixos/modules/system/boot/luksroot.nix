@@ -663,13 +663,11 @@ in
                 };
 
                 encryptedPass = mkOption {
-                  default = "";
                   type = types.path;
                   description = "Path to the GPG encrypted passphrase.";
                 };
 
                 publicKey = mkOption {
-                  default = "";
                   type = types.path;
                   description = "Path to the Public Key.";
                 };

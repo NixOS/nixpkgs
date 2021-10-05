@@ -87,7 +87,7 @@ in {
       pass = mkOption {
         type = types.path;
         default = pkgs.writeText "unifi-poller-influxdb-default.password" "unifipoller";
-        defaultText = "unifi-poller-influxdb-default.password";
+        defaultText = literalExpression "unifi-poller-influxdb-default.password";
         description = ''
           Path of a file containing the password for influxdb.
           This file needs to be readable by the unifi-poller user.
@@ -130,7 +130,7 @@ in {
         pass = mkOption {
           type = types.path;
           default = pkgs.writeText "unifi-poller-unifi-default.password" "unifi";
-          defaultText = "unifi-poller-unifi-default.password";
+          defaultText = literalExpression "unifi-poller-unifi-default.password";
           description = ''
             Path of a file containing the password for the unifi service user.
             This file needs to be readable by the unifi-poller user.

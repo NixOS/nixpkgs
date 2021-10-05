@@ -169,7 +169,6 @@ in
 
         configFile = mkOption {
           type = types.path;
-          default = "";
           description = ''
             Path to PrivacyIDEA LDAP Proxy configuration (proxy.ini).
           '';

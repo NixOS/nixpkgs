@@ -33,7 +33,7 @@ in
             booting from the GRUB boot menu.
           '';
         default = { };
-        example = literalExample ''
+        example = literalExpression ''
           { demo = '''
               #!ipxe
               dhcp

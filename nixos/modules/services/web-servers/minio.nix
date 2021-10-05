@@ -87,7 +87,7 @@ in
 
     package = mkOption {
       default = pkgs.minio;
-      defaultText = "pkgs.minio";
+      defaultText = literalExpression "pkgs.minio";
       type = types.package;
       description = "Minio package to use.";
     };

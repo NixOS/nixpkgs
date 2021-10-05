@@ -10503,7 +10503,7 @@ with pkgs;
     });
   };
 
-  wgpu = callPackage ../tools/graphics/wgpu { };
+  wgpu-utils = callPackage ../tools/graphics/wgpu-utils { };
 
   wg-bond = callPackage ../applications/networking/wg-bond { };
 

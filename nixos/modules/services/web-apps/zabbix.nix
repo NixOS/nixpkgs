@@ -3,7 +3,7 @@
 let
 
   inherit (lib) mkDefault mkEnableOption mkForce mkIf mkMerge mkOption types;
-  inherit (lib) literalExample mapAttrs optionalString versionAtLeast;
+  inherit (lib) literalExpression mapAttrs optionalString versionAtLeast;
 
   cfg = config.services.zabbixWeb;
   fpm = config.services.phpfpm.pools.zabbix;
@@ -43,7 +43,7 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.zabbix.web;
-        defaultText = "zabbix.web";
+        defaultText = literalExpression "zabbix.web";
         description = "Which Zabbix package to use.";
       };
 
@@ -116,7 +116,7 @@ in
 
       virtualHost = mkOption {
         type = types.submodule (import ../web-servers/apache-httpd/vhost-options.nix);
-        example = literalExample ''
+        example = literalExpression ''
           {
             hostName = "zabbix.example.org";
             adminAddr = "webmaster@example.org";

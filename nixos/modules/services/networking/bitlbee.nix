@@ -109,7 +109,7 @@ in
       plugins = mkOption {
         type = types.listOf types.package;
         default = [];
-        example = literalExample "[ pkgs.bitlbee-facebook ]";
+        example = literalExpression "[ pkgs.bitlbee-facebook ]";
         description = ''
           The list of bitlbee plugins to install.
         '';
@@ -118,7 +118,7 @@ in
       libpurple_plugins = mkOption {
         type = types.listOf types.package;
         default = [];
-        example = literalExample "[ pkgs.purple-matrix ]";
+        example = literalExpression "[ pkgs.purple-matrix ]";
         description = ''
           The list of libpurple plugins to install.
         '';

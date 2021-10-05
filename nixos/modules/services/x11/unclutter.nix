@@ -16,7 +16,7 @@ in {
     package = mkOption {
       type = types.package;
       default = pkgs.unclutter;
-      defaultText = "pkgs.unclutter";
+      defaultText = literalExpression "pkgs.unclutter";
       description = "unclutter derivation to use.";
     };
 

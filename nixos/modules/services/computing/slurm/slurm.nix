@@ -132,8 +132,8 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.slurm.override { enableX11 = ! cfg.enableSrunX11; };
-        defaultText = "pkgs.slurm";
-        example = literalExample "pkgs.slurm-full";
+        defaultText = literalExpression "pkgs.slurm";
+        example = literalExpression "pkgs.slurm-full";
         description = ''
           The package to use for slurm binaries.
         '';
@@ -172,7 +172,7 @@ in
       nodeName = mkOption {
         type = types.listOf types.str;
         default = [];
-        example = literalExample ''[ "linux[1-32] CPUs=1 State=UNKNOWN" ];'';
+        example = literalExpression ''[ "linux[1-32] CPUs=1 State=UNKNOWN" ];'';
         description = ''
           Name that SLURM uses to refer to a node (or base partition for BlueGene
           systems). Typically this would be the string that "/bin/hostname -s"
@@ -183,7 +183,7 @@ in
       partitionName = mkOption {
         type = types.listOf types.str;
         default = [];
-        example = literalExample ''[ "debug Nodes=linux[1-32] Default=YES MaxTime=INFINITE State=UP" ];'';
+        example = literalExpression ''[ "debug Nodes=linux[1-32] Default=YES MaxTime=INFINITE State=UP" ];'';
         description = ''
           Name by which the partition may be referenced. Note that now you have
           to write the partition's parameters after the name.

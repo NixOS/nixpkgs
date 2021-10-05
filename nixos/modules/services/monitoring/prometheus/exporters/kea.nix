@@ -13,7 +13,7 @@ in {
   extraOpts = {
     controlSocketPaths = mkOption {
       type = types.listOf types.str;
-      example = literalExample ''
+      example = literalExpression ''
         [
           "/run/kea/kea-dhcp4.socket"
           "/run/kea/kea-dhcp6.socket"

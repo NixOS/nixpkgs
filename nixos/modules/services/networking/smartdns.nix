@@ -32,7 +32,7 @@ in {
       type =
       let atom = oneOf [ str int bool ];
       in attrsOf (coercedTo atom toList (listOf atom));
-      example = literalExample ''
+      example = literalExpression ''
         {
           bind = ":5353 -no-rule -group example";
           cache-size = 4096;

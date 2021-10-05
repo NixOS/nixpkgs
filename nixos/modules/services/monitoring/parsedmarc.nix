@@ -39,7 +39,7 @@ in
         hostname = lib.mkOption {
           type = lib.types.str;
           default = config.networking.fqdn;
-          defaultText = "config.networking.fqdn";
+          defaultText = lib.literalExpression "config.networking.fqdn";
           example = "monitoring.example.com";
           description = ''
             The hostname to use when configuring Postfix.

@@ -83,21 +83,24 @@ in {
           reload
           loadbalance
         }'';
-      defaultText = ''
-        .:${toString ports.dns} {
-          errors
-          health :${toString ports.health}
-          kubernetes ''${config.services.kubernetes.addons.dns.clusterDomain} in-addr.arpa ip6.arpa {
-            pods insecure
-            fallthrough in-addr.arpa ip6.arpa
+      defaultText = literalExpression ''
+        '''
+          .:${toString ports.dns} {
+            errors
+            health :${toString ports.health}
+            kubernetes ''${config.services.kubernetes.addons.dns.clusterDomain} in-addr.arpa ip6.arpa {
+              pods insecure
+              fallthrough in-addr.arpa ip6.arpa
+            }
+            prometheus :${toString ports.metrics}
+            forward . /etc/resolv.conf
+            cache 30
+            loop
+            reload
+            loadbalance
           }
-          prometheus :${toString ports.metrics}
-          forward . /etc/resolv.conf
-          cache 30
-          loop
-          reload
-          loadbalance
-        }'';
+        '''
+      '';
     };
   };
 

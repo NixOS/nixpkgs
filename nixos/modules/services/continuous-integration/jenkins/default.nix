@@ -81,14 +81,14 @@ in {
 
       package = mkOption {
         default = pkgs.jenkins;
-        defaultText = "pkgs.jenkins";
+        defaultText = literalExpression "pkgs.jenkins";
         type = types.package;
         description = "Jenkins package to use.";
       };
 
       packages = mkOption {
         default = [ pkgs.stdenv pkgs.git pkgs.jdk11 config.programs.ssh.package pkgs.nix ];
-        defaultText = "[ pkgs.stdenv pkgs.git pkgs.jdk11 config.programs.ssh.package pkgs.nix ]";
+        defaultText = literalExpression "[ pkgs.stdenv pkgs.git pkgs.jdk11 config.programs.ssh.package pkgs.nix ]";
         type = types.listOf types.package;
         description = ''
           Packages to add to PATH for the jenkins process.
@@ -120,7 +120,7 @@ in {
           <literal>null</literal>. You can generate this set with a
           tool such as <literal>jenkinsPlugins2nix</literal>.
         '';
-        example = literalExample ''
+        example = literalExpression ''
           import path/to/jenkinsPlugins2nix-generated-plugins.nix { inherit (pkgs) fetchurl stdenv; }
         '';
       };

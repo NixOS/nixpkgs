@@ -14,8 +14,8 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.git;
-        defaultText = "pkgs.git";
-        example = literalExample "pkgs.gitFull";
+        defaultText = literalExpression "pkgs.git";
+        example = literalExpression "pkgs.gitFull";
         description = "The git package to use";
       };
 

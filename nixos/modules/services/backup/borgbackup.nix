@@ -203,7 +203,7 @@ in {
       See also the chapter about BorgBackup in the NixOS manual.
     '';
     default = { };
-    example = literalExample ''
+    example = literalExpression ''
       { # for a local backup
         rootBackup = {
           paths = "/";
@@ -260,7 +260,7 @@ in {
           archiveBaseName = mkOption {
             type = types.strMatching "[^/{}]+";
             default = "${globalConfig.networking.hostName}-${name}";
-            defaultText = "\${config.networking.hostName}-<name>";
+            defaultText = literalExpression ''"''${config.networking.hostName}-<name>"'';
             description = ''
               How to name the created archives. A timestamp, whose format is
               determined by <option>dateFormat</option>, will be appended. The full
@@ -326,10 +326,7 @@ in {
               you to specify a <option>passCommand</option>
               or a <option>passphrase</option>.
             '';
-            example = ''
-              encryption.mode = "repokey-blake2" ;
-              encryption.passphrase = "mySecretPassphrase" ;
-            '';
+            example = "repokey-blake2";
           };
 
           encryption.passCommand = mkOption {
@@ -437,7 +434,7 @@ in {
               for the available options.
             '';
             default = { };
-            example = literalExample ''
+            example = literalExpression ''
               {
                 within = "1d"; # Keep all archives from the last day
                 daily = 7;
@@ -455,7 +452,7 @@ in {
               Use <literal>""</literal> to consider all archives.
             '';
             default = config.archiveBaseName;
-            defaultText = "\${archiveBaseName}";
+            defaultText = literalExpression "archiveBaseName";
           };
 
           environment = mkOption {
