@@ -17,11 +17,10 @@ stdenv.mkDerivation rec {
     sha256 = "1nzqgwpjawcky85mfrz5izs9lfb3aqlm96dc8syrxhgg20xrziwx";
   };
 
-  buildInputs = lib.optional (!buildNativeImage) jdk;
-
   nativeBuildInputs = [
     makeWrapper
-  ] ++ lib.optional buildNativeImage jdk;
+    jdk
+  ];
 
   dontConfigure = true;
 
