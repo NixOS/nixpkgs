@@ -1,5 +1,6 @@
 { lib, stdenv, fetchurl, curl, gnunet, jansson, libgcrypt, libmicrohttpd
-, qrencode, libsodium, libtool, pkg-config, postgresql, sqlite, autoreconfHook, jinja2, recutils, wget, jq, gettext, texinfo}:
+, qrencode, libsodium, libtool, pkg-config, postgresql, sqlite, autoreconfHook, jinja2, recutils, wget, jq, gettext, texinfo
+}:
 
 let
   gnunet' = gnunet.override { postgresqlSupport = true; };
