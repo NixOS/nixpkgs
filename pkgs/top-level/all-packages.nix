@@ -5310,6 +5310,8 @@ with pkgs;
 
   ghorg = callPackage ../applications/version-management/git-and-tools/ghorg { };
 
+  ghost = callPackage ../tools/security/ghost { };
+
   ghostunnel = callPackage ../tools/networking/ghostunnel { };
 
   ghq = callPackage ../applications/version-management/git-and-tools/ghq { };
