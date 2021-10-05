@@ -564,20 +564,22 @@ in {
           c = cfg.config;
           writePhpArrary = a: "[${concatMapStringsSep "," (val: ''"${toString val}"'') a}]";
           requiresReadSecretFunction = c.dbpassFile != null || c.objectstore.s3.enable;
-          objectstoreConfig = let s3 = c.objectstore.s3; in optionalString s3.enable '''objectstore' => [
-            'class' => '\\OC\\Files\\ObjectStore\\S3',
-            'arguments' => [
-              'bucket' => '${s3.bucket}',
-              'autocreate' => ${boolToString s3.autocreate},
-              'key' => '${s3.key}',
-              'secret' => nix_read_secret('${s3.secretFile}'),
-              ${optionalString (s3.hostname != null) "'hostname' => '${s3.hostname}',"}
-              ${optionalString (s3.port != null) "'port' => ${toString s3.port},"}
-              'use_ssl' => ${boolToString s3.useSsl},
-              ${optionalString (s3.region != null) "'region' => '${s3.region}',"}
-              'use_path_style' => ${boolToString s3.usePathStyle},
-            ],
-          ]'';
+          objectstoreConfig = let s3 = c.objectstore.s3; in optionalString s3.enable ''
+            'objectstore' => [
+              'class' => '\\OC\\Files\\ObjectStore\\S3',
+              'arguments' => [
+                'bucket' => '${s3.bucket}',
+                'autocreate' => ${boolToString s3.autocreate},
+                'key' => '${s3.key}',
+                'secret' => nix_read_secret('${s3.secretFile}'),
+                ${optionalString (s3.hostname != null) "'hostname' => '${s3.hostname}',"}
+                ${optionalString (s3.port != null) "'port' => ${toString s3.port},"}
+                'use_ssl' => ${boolToString s3.useSsl},
+                ${optionalString (s3.region != null) "'region' => '${s3.region}',"}
+                'use_path_style' => ${boolToString s3.usePathStyle},
+              ],
+            ]
+          '';
 
           overrideConfig = pkgs.writeText "nextcloud-config.php" ''
             <?php
