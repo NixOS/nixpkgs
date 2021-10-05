@@ -48,7 +48,7 @@ assert raspiCameraSupport -> (stdenv.isLinux && stdenv.isAarch64);
 
 stdenv.mkDerivation rec {
   pname = "gst-plugins-good";
-  version = "1.18.4";
+  version = "1.18.5";
 
   outputs = [ "out" "dev" ];
 
