@@ -1,7 +1,14 @@
-{ lib, stdenv, fetchFromGitHub
-, cmake, pkg-config
-, libva, libpciaccess, intel-gmmlib
-, enableX11 ? stdenv.isLinux, libX11
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, pkg-config
+, libva
+, libpciaccess
+, intel-gmmlib
+, enableX11 ? stdenv.isLinux
+, libX11
 }:
 
 stdenv.mkDerivation rec {
@@ -11,11 +18,19 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   src = fetchFromGitHub {
-    owner  = "intel";
-    repo   = "media-driver";
-    rev    = "intel-media-${version}";
+    owner = "intel";
+    repo = "media-driver";
+    rev = "intel-media-${version}";
     sha256 = "1ch1bvqg6p0i7ahblhy0h9c43y2mfhqb25v1s344iqsrywwcpzzr";
   };
+
+  patches = [
+    # fix platform detection
+    (fetchpatch {
+      url = "https://salsa.debian.org/multimedia-team/intel-media-driver-non-free/-/raw/master/debian/patches/0002-Remove-settings-based-on-ARCH.patch";
+      sha256 = "sha256-f4M0CPtAVf5l2ZwfgTaoPw7sPuAP/Uxhm5JSHEGhKT0=";
+    })
+  ];
 
   cmakeFlags = [
     "-DINSTALL_DRIVER_SYSCONF=OFF"
@@ -23,6 +38,8 @@ stdenv.mkDerivation rec {
     # Works only on hosts with suitable CPUs.
     "-DMEDIA_RUN_TEST_SUITE=OFF"
   ];
+
+  NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.hostPlatform.system == "i686-linux") "-D_FILE_OFFSET_BITS=64";
 
   nativeBuildInputs = [ cmake pkg-config ];
 
@@ -45,6 +62,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/intel/media-driver/releases/tag/intel-media-${version}";
     license = with licenses; [ bsd3 mit ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ primeos jfrankenau ];
+    maintainers = with maintainers; [ primeos jfrankenau SuperSandro2000 ];
   };
 }

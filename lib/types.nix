@@ -192,6 +192,12 @@ rec {
               else (listOf anything).merge;
             # This is the type of packages, only accept a single definition
             stringCoercibleSet = mergeOneOption;
+            lambda = loc: defs: arg: anything.merge
+              (loc ++ [ "<function body>" ])
+              (map (def: {
+                file = def.file;
+                value = def.value arg;
+              }) defs);
             # Otherwise fall back to only allowing all equal definitions
           }.${commonType} or mergeEqualOption;
         in mergeFunction loc defs;
