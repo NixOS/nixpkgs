@@ -23925,6 +23925,8 @@ with pkgs;
     buildGoPackage = buildGo115Package;
   };
 
+  cozy-drive = callPackage ../applications/networking/cozy-drive {};
+
   cq-editor = libsForQt5.callPackage ../applications/graphics/cq-editor {
     python3Packages = python37Packages;
   };
