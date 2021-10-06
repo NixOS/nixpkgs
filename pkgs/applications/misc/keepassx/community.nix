@@ -93,6 +93,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ asciidoctor cmake wrapGAppsHook wrapQtAppsHook qttools pkg-config ];
 
+  dontWrapGApps = true;
+
   buildInputs = [
     curl
     glibcLocales
@@ -116,7 +118,9 @@ stdenv.mkDerivation rec {
   ++ optional (stdenv.isDarwin && withKeePassTouchID)
     darwin.apple_sdk.frameworks.LocalAuthentication;
 
-  preFixup = optionalString stdenv.isDarwin ''
+  preFixup = ''
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '' + optionalString stdenv.isDarwin ''
     # Make it work without Qt in PATH.
     wrapQtApp $out/Applications/KeePassXC.app/Contents/MacOS/KeePassXC
   '';
