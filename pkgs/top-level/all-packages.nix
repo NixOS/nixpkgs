@@ -1623,6 +1623,8 @@ with pkgs;
 
   font-config-info = callPackage ../tools/misc/font-config-info { };
 
+  foxdot = with python3Packages; toPythonApplication foxdot;
+
   fxlinuxprintutil = callPackage ../tools/misc/fxlinuxprintutil { };
 
   genann = callPackage ../development/libraries/genann { };

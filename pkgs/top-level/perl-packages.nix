@@ -9262,10 +9262,10 @@ let
 
   GraphicsTIFF = buildPerlPackage {
     pname = "Graphics-TIFF";
-    version = "9";
+    version = "16";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RA/RATCLIFFE/Graphics-TIFF-9.tar.gz";
-      sha256 = "1n1r9r7f6hp2s6l361pyvb1i1pm9xqy0w9n3z5ygm7j64160kz9a";
+      sha256 = "Kv0JTCBGnvp8+cMmDjzuqd4Qw9r+BjOo0eJC405OOdg=";
     };
     buildInputs = [ pkgs.libtiff ExtUtilsDepends ExtUtilsPkgConfig ];
     propagatedBuildInputs = [ Readonly ];
@@ -10454,10 +10454,10 @@ let
 
   ImagePNGLibpng = buildPerlPackage {
     pname = "Image-PNG-Libpng";
-    version = "0.56";
+    version = "0.57";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BK/BKB/Image-PNG-Libpng-0.56.tar.gz";
-      sha256 = "1nf7qcql7b2w98i859f76q1vb4b2zd0k0ypjbsw7ngs2zzmvzyzs";
+      sha256 = "+vu/6/9CP3u4XvJ6MEH7YpG1AzbHpYIiSlysQzHDx9k=";
     };
     buildInputs = [ pkgs.libpng ];
     meta = {
@@ -17031,10 +17031,10 @@ let
 
   PDFAPI2 = buildPerlPackage {
     pname = "PDF-API2";
-    version = "2.038";
+    version = "2.042";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SS/SSIMMS/PDF-API2-2.038.tar.gz";
-      sha256 = "7447c4749b02a784f525d3c7ece99d34b0a10475db65096f6316748dd2f9bd09";
+      sha256 = "dEfEdJsCp4T1JdPH7OmdNLChBHXbZQlvYxZ0jdL5vQk=";
     };
     buildInputs = [ TestException TestMemoryCycle ];
     propagatedBuildInputs = [ FontTTF ];
@@ -17046,10 +17046,10 @@ let
 
   PDFBuilder = buildPerlPackage {
     pname = "PDF-Builder";
-    version = "3.022";
+    version = "3.023";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PM/PMPERRY/PDF-Builder-3.022.tar.gz";
-      sha256 = "0cfafyci5xar567z82w0vcjrwa6inf1a9ydszgkz51bi1ilj8as8";
+      sha256 = "SCskaQxxhfLn+7r5pIKz0SieJduAC/SPKVn1Epl3yjE=";
     };
     checkInputs = [ TestException TestMemoryCycle ];
     propagatedBuildInputs = [ FontTTF ];

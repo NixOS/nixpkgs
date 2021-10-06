@@ -16,6 +16,7 @@ rec {
   ];
 
   tier3 = [
+    "aarch64-darwin"
     "armv6l-linux"
     "armv7l-linux"
     "i686-linux"
