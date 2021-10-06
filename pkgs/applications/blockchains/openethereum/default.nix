@@ -52,5 +52,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.gpl3;
     maintainers = with maintainers; [ akru xrelkd ];
     platforms = lib.platforms.unix;
+    broken = true;
   };
 }
