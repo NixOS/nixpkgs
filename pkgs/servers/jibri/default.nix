@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, dpkg, jre_headless, makeWrapper, writeText, xorg }:
+{ lib, stdenv, fetchurl, dpkg, jre8_headless, makeWrapper, writeText, xorg }:
 
 let
   xorgModulePaths = writeText "module-paths" ''
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
     cat '${xorgModulePaths}' >> $out/etc/jitsi/jibri/xorg-video-dummy.conf
 
-    makeWrapper ${jre_headless}/bin/java $out/bin/jibri --add-flags "-jar $out/opt/jitsi/jibri/jibri.jar"
+    makeWrapper ${jre8_headless}/bin/java $out/bin/jibri --add-flags "-jar $out/opt/jitsi/jibri/jibri.jar"
 
     runHook postInstall
   '';
