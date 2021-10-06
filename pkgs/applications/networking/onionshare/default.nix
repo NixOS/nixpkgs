@@ -54,7 +54,7 @@ let
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ lourkeur ];
   };
-  stem' = stem.overrideAttrs (_: rec {
+  stem' = stem.overridePythonAttrs (_: rec {
     version = "1.8.1";
 
     src = fetchFromGitHub {
