@@ -10,7 +10,9 @@ stdenv.mkDerivation rec {
     # postFetch is necessary because the downloaded file does not match the
     # filename in the URL since it is a redirect. fetchzip attempts to wrongly use
     # this name.
-    postFetch = ''unzip $downloadedFile -d $out '';
+    postFetch = ''
+      unzip $downloadedFile -d $out
+    '';
   };
 
   dontBuild = true;
@@ -21,7 +23,7 @@ stdenv.mkDerivation rec {
     cp -ra crater $out
 
     # symlink mutable data into the nix store due to crater path requirements
-    rm -R $out/storage $out/.env
+    rm -r $out/storage $out/.env
     ln -s ${dataDir}/.env $out/.env
     ln -s ${dataDir}/storage $out/storage
     ln -s ${dataDir}/public/storage $out/public/storage
