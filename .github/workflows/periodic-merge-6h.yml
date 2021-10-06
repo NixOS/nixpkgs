@@ -30,10 +30,6 @@ jobs:
             into: staging-next
           - from: staging-next
             into: staging
-          - from: release-21.05
-            into: staging-next-21.05
-          - from: staging-next-21.05
-            into: staging-21.05
     name: ${{ matrix.pairs.from }} → ${{ matrix.pairs.into }}
     steps:
       - uses: actions/checkout@v2
