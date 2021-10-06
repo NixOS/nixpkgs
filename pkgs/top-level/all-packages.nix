@@ -1621,6 +1621,8 @@ with pkgs;
 
   flood = nodePackages.flood;
 
+  font-config-info = callPackage ../tools/misc/font-config-info { };
+
   fxlinuxprintutil = callPackage ../tools/misc/fxlinuxprintutil { };
 
   genann = callPackage ../development/libraries/genann { };
@@ -2885,6 +2887,7 @@ with pkgs;
   go-chromecast = callPackage ../applications/video/go-chromecast { };
 
   go-containerregistry = callPackage ../development/tools/go-containerregistry { };
+  inherit (go-containerregistry) crane gcrane;
 
   go-rice = callPackage ../tools/misc/go.rice {};
 
@@ -9332,6 +9335,10 @@ with pkgs;
 
   sqls = callPackage ../applications/misc/sqls { };
 
+  starsector = callPackage ../games/starsector {
+    openjdk = openjdk8;
+  };
+
   stdman = callPackage ../data/documentation/stdman { };
 
   steck = callPackage ../servers/pinnwand/steck.nix { };
@@ -14783,6 +14790,9 @@ with pkgs;
 
   redo-sh = callPackage ../development/tools/build-managers/redo-sh { };
 
+  regclient = callPackage ../development/tools/regclient { };
+  inherit (regclient) regbot regctl regsync;
+
   reno = callPackage ../development/tools/reno { };
 
   re2c = callPackage ../development/tools/parsing/re2c { };
@@ -18950,6 +18960,8 @@ with pkgs;
 
   resolv_wrapper = callPackage ../development/libraries/resolv_wrapper { };
 
+  restinio = callPackage ../development/libraries/restinio {};
+
   rhino = callPackage ../development/libraries/java/rhino {
     javac = jdk8;
     jvm = jre8;
@@ -19485,6 +19497,8 @@ with pkgs;
   usrsctp = callPackage ../development/libraries/usrsctp { };
 
   usbredir = callPackage ../development/libraries/usbredir { };
+
+  usbrip = callPackage ../tools/security/usbrip { };
 
   uthash = callPackage ../development/libraries/uthash { };
 
@@ -21332,6 +21346,8 @@ with pkgs;
 
   bolt = callPackage ../os-specific/linux/bolt { };
 
+  bpfmon = callPackage ../os-specific/linux/bpfmon { };
+
   bridge-utils = callPackage ../os-specific/linux/bridge-utils { };
 
   busybox = callPackage ../os-specific/linux/busybox { };
@@ -22278,6 +22294,7 @@ with pkgs;
     ubootPinebookPro
     ubootQemuAarch64
     ubootQemuArm
+    ubootQemuRiscv64Smode
     ubootRaspberryPi
     ubootRaspberryPi2
     ubootRaspberryPi3_32bit
@@ -23918,6 +23935,8 @@ with pkgs;
   coyim = callPackage ../applications/networking/instant-messengers/coyim {
     buildGoPackage = buildGo115Package;
   };
+
+  cozy-drive = callPackage ../applications/networking/cozy-drive {};
 
   cq-editor = libsForQt5.callPackage ../applications/graphics/cq-editor {
     python3Packages = python37Packages;
@@ -31347,6 +31366,8 @@ with pkgs;
   sumo = callPackage ../applications/science/networking/sumo { };
 
   spyder = with python3.pkgs; toPythonApplication spyder;
+
+  spyre = callPackage ../tools/security/spyre { };
 
   openspace = callPackage ../applications/science/astronomy/openspace { };
 

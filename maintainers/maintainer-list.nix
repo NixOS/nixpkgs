@@ -10300,6 +10300,12 @@
       fingerprint = "ADF4 C13D 0E36 1240 BD01  9B51 D1DE 6D7F 6936 63A5";
     }];
   };
+  simarra = {
+    name = "simarra";
+    email = "loic.martel@protonmail.com";
+    github = "simarra";
+    githubId = 14372987;
+  };
   simonchatts = {
     email = "code@chatts.net";
     github = "simonchatts";
