@@ -7,14 +7,14 @@ let
   };
 
   pkg = self: stdenv.mkDerivation {
-    name = "webdriver";
-    version = "0.0.0+build.18.7ceaf1f";
+    pname = "webdriver";
+    version = "0.pre+unstable=2015-02-08";
 
     src = fetchFromGitHub {
-        owner = "Quviq";
-        repo = "webdrv";
-        rev = "7ceaf1f67d834e841ca0133b4bf899a9fa2db6bb";
-        sha256 = "1pq6pmlr6xb4hv2fvmlrvzd8c70kdcidlgjv4p8n9pwvkif0cb87";
+      owner = "Quviq";
+      repo = "webdrv";
+      rev = "7ceaf1f67d834e841ca0133b4bf899a9fa2db6bb";
+      sha256 = "1pq6pmlr6xb4hv2fvmlrvzd8c70kdcidlgjv4p8n9pwvkif0cb87";
     };
 
     setupHook = writeText "setupHook.sh" ''
@@ -36,5 +36,5 @@ let
       env = shell self;
     };
 
-};
+  };
 in lib.fix pkg
