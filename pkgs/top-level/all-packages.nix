@@ -18115,6 +18115,8 @@ with pkgs;
 
   lightstep-tracer-cpp = callPackage ../development/libraries/lightstep-tracer-cpp { };
 
+  ligolo-ng = callPackage ../tools/networking/ligolo-ng { };
+
   linenoise = callPackage ../development/libraries/linenoise { };
 
   linenoise-ng = callPackage ../development/libraries/linenoise-ng { };
