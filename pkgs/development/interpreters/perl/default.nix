@@ -1,4 +1,4 @@
-{ config, lib, stdenv, fetchurl, fetchFromGitHub, pkgs, buildPackages
+{ config, lib, stdenv, fetchurl, fetchpatch, fetchFromGitHub, pkgs, buildPackages
 , callPackage
 , enableThreading ? true, coreutils, makeWrapper
 }:
@@ -41,7 +41,14 @@ let
       ]
       ++ optional stdenv.isSunOS ./ld-shared.patch
       ++ optionals stdenv.isDarwin [ ./cpp-precomp.patch ./sw_vers.patch ]
-      ++ optional crossCompiling ./MakeMaker-cross.patch;
+      ++ optionals crossCompiling [
+        ./MakeMaker-cross.patch
+        # https://github.com/arsv/perl-cross/pull/120
+        (fetchpatch {
+          url = "https://github.com/arsv/perl-cross/commit/3c318ae6572f8b36cb077c8b49c851e2f5fe181e.patch";
+          sha256 = "0cmcy8bams3c68f6xadl52z2w378wcpdjzi3qi4pcyvcfs011l6g";
+        })
+      ];
 
     # This is not done for native builds because pwd may need to come from
     # bootstrap tools when building bootstrap perl.
@@ -59,7 +66,7 @@ let
       unset src
     '';
 
-    # Build a thread-safe Perl with a dynamic libperls.o.  We need the
+    # Build a thread-safe Perl with a dynamic libperl.so.  We need the
     # "installstyle" option to ensure that modules are put under
     # $out/lib/perl5 - this is the general default, but because $out
     # contains the string "perl", Configure would select $out/lib.
@@ -71,13 +78,14 @@ let
       ++ [
         "-Uinstallusrbinperl"
         "-Dinstallstyle=lib/perl5"
-        "-Duseshrplib"
+      ] ++ lib.optional (!crossCompiling) "-Duseshrplib" ++ [
         "-Dlocincpth=${libcInc}/include"
         "-Dloclibpth=${libcLib}/lib"
       ]
       ++ optionals ((builtins.match ''5\.[0-9]*[13579]\..+'' version) != null) [ "-Dusedevel" "-Uversiononly" ]
       ++ optional stdenv.isSunOS "-Dcc=gcc"
       ++ optional enableThreading "-Dusethreads"
+      ++ optional stdenv.hostPlatform.isStatic "--all-static"
       ++ optionals (!crossCompiling) [
         "-Dprefix=${placeholder "out"}"
         "-Dman1dir=${placeholder "out"}/share/man/man1"
