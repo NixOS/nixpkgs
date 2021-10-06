@@ -34,7 +34,13 @@ buildPythonPackage rec {
     owner = "jbarlow83";
     repo = "OCRmyPDF";
     rev = "v${version}";
-    sha256 = "sha256-gFlQztrRN69HtR6sTJl8tryuTibxQrz97QcS5UkFOVs=";
+    # The content of .git_archival.txt is substituted upon tarball creation,
+    # which creates indeterminism if master no longer points to the tag.
+    # See https://github.com/jbarlow83/OCRmyPDF/issues/841
+    extraPostFetch = ''
+      rm "$out/.git_archival.txt"
+    '';
+    sha256 = "0zw7c6l9fkf128gxsbd7v4abazlxiygqys6627jpsjbmxg5jgp5w";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
