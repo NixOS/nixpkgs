@@ -321,8 +321,8 @@ in {
             This mounts a bucket on an Amazon S3 object storage or compatible
             implementation into the virtual filesystem.
 
-            See nextcloud's documentation on "Object Storage as Primary
-            Storage" for more details.
+            Further details about this feature can be found in the
+            <link xlink:href="https://docs.nextcloud.com/server/22/admin_manual/configuration_files/primary_storage.html">upstream documentation</link>.
           '';
           bucket = mkOption {
             type = types.str;
@@ -389,9 +389,9 @@ in {
               Required for some non-Amazon S3 implementations.
 
               Ordinarily, requests will be made with
-              http://bucket.hostname.domain/, but with path style
+              <literal>http://bucket.hostname.domain/</literal>, but with path style
               enabled requests are made with
-              http://hostname.domain/bucket instead.
+              <literal>http://hostname.domain/bucket</literal> instead.
             '';
           };
         };
@@ -399,7 +399,7 @@ in {
     };
 
     enableImagemagick = mkEnableOption ''
-        Whether to load the ImageMagick module into PHP.
+        the ImageMagick module for PHP.
         This is used by the theming app and for generating previews of certain images (e.g. SVG and HEIF).
         You may want to disable it for increased security. In that case, previews will still be available
         for some images (e.g. JPEG and PNG).
