@@ -349,6 +349,8 @@ let
 
     dune-site = callPackage ../development/ocaml-modules/dune-site { };
 
+    duppy = callPackage ../development/ocaml-modules/duppy { };
+
     duration =  callPackage ../development/ocaml-modules/duration { };
 
     dyn =  callPackage ../development/ocaml-modules/dyn { };
