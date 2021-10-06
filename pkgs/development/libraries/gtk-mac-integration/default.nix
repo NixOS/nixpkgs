@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "0sc0m3p8r5xfh5i4d7dg72kfixx9yi4f800y43bszyr88y52jkga";
   };
 
+  patches = [ ./disable-carbon-components.patch ];
+
   nativeBuildInputs = [ autoreconfHook pkg-config gtk-doc gobject-introspection ];
   buildInputs = [ glib ];
   propagatedBuildInputs = [ gtk ];
