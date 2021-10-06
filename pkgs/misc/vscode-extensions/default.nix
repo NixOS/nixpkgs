@@ -1045,6 +1045,18 @@ let
         };
       };
 
+      llvm-vs-code-extensions.vscode-clangd = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-clangd";
+          publisher = "llvm-vs-code-extensions";
+          version = "0.1.13";
+          sha256 = "/MpwbM+obcD3uqk8hnDrnbEK9Jot4fMe4sNzLt6mVGI=";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
       lokalise.i18n-ally = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "i18n-ally";
