@@ -522,14 +522,21 @@ in {
             ];
           '';
           occInstallCmd = let
-            dbpass = if c.dbpassFile != null
-              then ''"$(<"${toString c.dbpassFile}")"''
-              else if c.dbpass != null
-              then ''"${toString c.dbpass}"''
-              else ''""'';
-            adminpass = if c.adminpassFile != null
-              then ''"$(<"${toString c.adminpassFile}")"''
-              else ''"${toString c.adminpass}"'';
+            mkExport = { arg, value }: "export ${arg}=${value}";
+            dbpass = {
+              arg = "DBPASS";
+              value = if c.dbpassFile != null
+                then ''"$(<"${toString c.dbpassFile}")"''
+                else if c.dbpass != null
+                then ''"${toString c.dbpass}"''
+                else ''""'';
+            };
+            adminpass = {
+              arg = "ADMINPASS";
+              value = if c.adminpassFile != null
+                then ''"$(<"${toString c.adminpassFile}")"''
+                else ''"${toString c.adminpass}"'';
+            };
             installFlags = concatStringsSep " \\\n    "
               (mapAttrsToList (k: v: "${k} ${toString v}") {
               "--database" = ''"${c.dbtype}"'';
@@ -540,12 +547,14 @@ in {
               ${if c.dbhost != null then "--database-host" else null} = ''"${c.dbhost}"'';
               ${if c.dbport != null then "--database-port" else null} = ''"${toString c.dbport}"'';
               ${if c.dbuser != null then "--database-user" else null} = ''"${c.dbuser}"'';
-              "--database-pass" = dbpass;
+              "--database-pass" = "\$${dbpass.arg}";
               "--admin-user" = ''"${c.adminuser}"'';
-              "--admin-pass" = adminpass;
+              "--admin-pass" = "\$${adminpass.arg}";
               "--data-dir" = ''"${cfg.home}/data"'';
             });
           in ''
+            ${mkExport dbpass}
+            ${mkExport adminpass}
             ${occ}/bin/nextcloud-occ maintenance:install \
                 ${installFlags}
           '';
