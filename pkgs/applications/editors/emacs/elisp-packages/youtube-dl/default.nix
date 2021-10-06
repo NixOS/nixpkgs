@@ -7,7 +7,7 @@
 
 trivialBuild {
   pname = "youtube-dl";
-  version = "0.0.0+unstable=2018-10-12";
+  version = "0.pre+unstable=2018-10-12";
 
   src = fetchFromGitHub {
     owner = "skeeto";

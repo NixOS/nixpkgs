@@ -7,7 +7,7 @@
 
 trivialBuild rec {
   pname = "apheleia";
-  version = "0.0.0+unstable=2021-08-08";
+  version = "0.pre+unstable=2021-08-08";
 
   src = fetchFromGitHub {
     owner = "raxod502";
