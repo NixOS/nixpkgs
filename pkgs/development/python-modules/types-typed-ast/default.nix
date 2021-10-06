@@ -21,6 +21,6 @@ buildPythonPackage rec {
     description = "Typing stubs for typed-ast";
     homepage = "https://github.com/python/typeshed";
     license = licenses.asl20;
-    maintainers = with maintainers; [ superherointj veehaitch ];
+    maintainers = with maintainers; [ nicoo superherointj veehaitch ];
   };
 }

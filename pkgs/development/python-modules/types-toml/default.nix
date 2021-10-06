@@ -18,6 +18,6 @@ buildPythonPackage rec {
     description = "Typing stubs for toml";
     homepage = "https://github.com/python/typeshed/tree/master/stubs/toml";
     license = licenses.asl20;
-    maintainers = with maintainers; [ superherointj veehaitch ];
+    maintainers = with maintainers; [ nicoo superherointj veehaitch ];
   };
 }
