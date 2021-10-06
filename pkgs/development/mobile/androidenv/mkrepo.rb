@@ -170,6 +170,46 @@ def get_licenses doc
   licenses
 end
 
+def generate_pack_xml doc, package
+  pack = Nokogiri::XML::Document::new
+
+  localPackage = package.dup
+  localPackage.name =  'localPackage';
+  localPackage.children.each do |a|
+    case a.name
+    when 'revision', 'display-name', 'type-details', 'uses-license', 'dependencies'
+    else
+      a.unlink
+    end
+  end
+  repo = Nokogiri::XML::Node::new('repository', pack);
+  doc.root.namespace_definitions.each { |ns|
+    case ns.prefix
+    when "generic", "sys-img", "sdk"
+    else
+      repo.add_namespace_definition(ns.prefix, ns.href)
+    end
+  }
+
+  repo.add_namespace_definition('ns2', "http://schemas.android.com/repository/android/common/02")
+  repo.add_namespace_definition('generic', 'http://schemas.android.com/repository/android/generic/02')
+  repo.add_namespace_definition('sys-img', 'http://schemas.android.com/sdk/android/repo/sys-img2/02')
+  repo.add_namespace_definition('sdk', 'http://schemas.android.com/sdk/android/repo/repository2/02')
+
+  repo.namespace = repo.namespace_definitions.find{ |ns| ns.prefix=="ns2" }
+
+  license= Nokogiri::XML::Node::new('license', pack)
+  license.content="license";
+  license['type'] = 'text';
+  license['id'] =package.at_css('> uses-license')['ref']
+
+  repo.add_child license
+  repo.add_child localPackage
+  pack.add_child repo
+  pack.to_s
+end
+
+
 def parse_package_xml doc
   licenses = get_licenses doc
   packages = {}
@@ -196,6 +236,7 @@ def parse_package_xml doc
     target['displayName'] ||= display_name
     target['license'] ||= uses_license if uses_license
     target['archives'] ||= {}
+    target['packageXml'] ||= generate_pack_xml(doc, package)
     merge target['archives'], archives
   end
 
@@ -227,6 +268,7 @@ def parse_image_xml doc
     target['displayName'] ||= display_name
     target['license'] ||= uses_license if uses_license
     target['archives'] ||= {}
+    target['packageXml'] ||= generate_pack_xml(doc, package)
     merge target['archives'], archives
   end
 
@@ -275,6 +317,7 @@ def parse_addon_xml doc
     target['displayName'] ||= display_name
     target['license'] ||= uses_license if uses_license
     target['archives'] ||= {}
+    target['packageXml'] ||= generate_pack_xml(doc, package)
     merge target['archives'], archives
   end
 

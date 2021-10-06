@@ -1,4 +1,4 @@
-{stdenv, unzip}:
+{stdenv, writeText, unzip}:
 {package, os ? null, buildInputs ? [], patchInstructions ? "", meta ? {}, ...}@args:
 
 let
@@ -30,6 +30,9 @@ stdenv.mkDerivation ({
     mkdir -p $packageBaseDir
     cd $packageBaseDir
     cp -a $sourceRoot/* .
+    ${(if package ? packageXml then ''
+      ln -sfv ${writeText "package.xml" package.packageXml} package.xml
+    '' else "")}
     ${patchInstructions}
   '';
 
