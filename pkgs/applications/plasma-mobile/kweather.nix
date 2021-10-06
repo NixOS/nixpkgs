@@ -11,6 +11,7 @@
 , kquickcharts
 , kweathercore
 , plasma-framework
+, qtcharts
 , qtquickcontrols2
 }:
 
@@ -30,6 +31,7 @@ mkDerivation rec {
     kquickcharts
     kweathercore
     plasma-framework
+    qtcharts
     qtquickcontrols2
   ];
 
