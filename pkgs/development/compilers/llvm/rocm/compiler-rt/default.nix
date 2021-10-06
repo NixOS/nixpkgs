@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     ./compiler-rt-codesign.patch # Revert compiler-rt commit that makes codesign mandatory
     (fetchpatch {
       name = "libsanitizer-no-cyclades-rocm.patch";
-      url = "https://reviews.llvm.org/file/data/nrhbpc5axblqwx2xyyzv/PHID-FILE-wwcpjvquusomoddmqcwo/file";
+      url = "https://gist.github.com/lovesegfault/b255dcf2fa4e202411a6a04b61e6cc04/raw";
       sha256 = "sha256-PMMSLr2zHuNDn1OWqumqHwB74ktJSHxhJWkqEKB7Z64=";
       stripLen = 1;
      })

@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation rec {
   pname = "mcaimi-st";
-  version = "0.0.0+unstable=2021-08-30";
+  version = "0.pre+unstable=2021-08-30";
 
   src = fetchFromGitHub {
     owner = "mcaimi";
