@@ -16,7 +16,6 @@ let
     ''
     [settings]
     RunMode = Daemon
-    User = bitlbee
     ConfigDir = ${cfg.configDir}
     DaemonInterface = ${cfg.interface}
     DaemonPort = ${toString cfg.portNumber}
@@ -166,24 +165,17 @@ in
 
   config =  mkMerge [
     (mkIf config.services.bitlbee.enable {
-      users.users.bitlbee = {
-        uid = bitlbeeUid;
-        description = "BitlBee user";
-        home = "/var/lib/bitlbee";
-        createHome = true;
-      };
-
-      users.groups.bitlbee = {
-        gid = config.ids.gids.bitlbee;
-      };
-
       systemd.services.bitlbee = {
         environment.PURPLE_PLUGIN_PATH = purple_plugin_path;
         description = "BitlBee IRC to other chat networks gateway";
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
-        serviceConfig.User = "bitlbee";
-        serviceConfig.ExecStart = "${bitlbeePkg}/sbin/bitlbee -F -n -c ${bitlbeeConfig}";
+
+        serviceConfig = {
+          DynamicUser = true;
+          StateDirectory = "bitlbee";
+          ExecStart = "${bitlbeePkg}/sbin/bitlbee -F -n -c ${bitlbeeConfig}";
+        };
       };
 
       environment.systemPackages = [ bitlbeePkg ];

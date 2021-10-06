@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation rec {
   pname = "wio";
-  version = "0.0.0+unstable=2021-06-27";
+  version = "0.pre+unstable=2021-06-27";
 
   src = fetchFromBitbucket {
     owner = "anderson_torres";

@@ -57,7 +57,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "cardboard";
-  version = "0.0.0+unstable=2021-05-10";
+  version = "0.pre+unstable=2021-05-10";
 
   src = fetchFromGitLab {
     owner = "cardboardwm";

@@ -1480,7 +1480,7 @@ self: super: {
     addBuildDepend
       (overrideCabal
         (unmarkBroken super.hercules-ci-cli)
-        (drv: { hydraPlatforms = [ super.hercules-ci-cli.meta.platforms ]; }))
+        (drv: { hydraPlatforms = super.hercules-ci-cli.meta.platforms; }))
       super.hercules-ci-optparse-applicative
   );
 
