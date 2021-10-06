@@ -9,7 +9,7 @@ in rec {
     pname = "taler-exchange";
     version = "0.8.5";
     src = fetchurl {
-      url = "http://ftp.gnu.org/gnu/taler/${pname}-${version}.tar.gz";
+      url = "mirror://gnu/taler/${pname}-${version}.tar.gz";
       sha256 = "sha256-jehQKkDYdDkEXen/LSn0gZi4tYpykYM92W35ZbSLNj4=";
     };
     postPatch = ''
@@ -61,7 +61,7 @@ in rec {
     pname = "taler-merchant";
     version = "0.8.3";
     src = fetchurl {
-      url = "http://ftp.gnu.org/gnu/taler/${pname}-${version}.tar.gz";
+      url = "mirror://gnu/gnu/taler/${pname}-${version}.tar.gz";
       sha256 = "sha256-n7YjJfY8HZevk9o4XbXs6isGFHLmusjCfEb+9maAK0U=";
     };
     postPatch = ''
