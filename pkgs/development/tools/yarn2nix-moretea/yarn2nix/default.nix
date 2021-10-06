@@ -68,6 +68,7 @@ in rec {
     packageJSON,
     yarnLock,
     yarnNix ? mkYarnNix { inherit yarnLock; },
+    offlineCache ? importOfflineCache yarnNix,
     yarnFlags ? defaultYarnFlags,
     pkgConfig ? {},
     preBuild ? "",
@@ -75,8 +76,6 @@ in rec {
     workspaceDependencies ? [], # List of yarn packages
   }:
     let
-      offlineCache = importOfflineCache yarnNix;
-
       extraBuildInputs = (lib.flatten (builtins.map (key:
         pkgConfig.${key}.buildInputs or []
       ) (builtins.attrNames pkgConfig)));
@@ -227,6 +226,7 @@ in rec {
     packageJSON ? src + "/package.json",
     yarnLock ? src + "/yarn.lock",
     yarnNix ? mkYarnNix { inherit yarnLock; },
+    offlineCache ? importOfflineCache yarnNix,
     yarnFlags ? defaultYarnFlags,
     yarnPreBuild ? "",
     yarnPostBuild ? "",
@@ -253,7 +253,7 @@ in rec {
         preBuild = yarnPreBuild;
         postBuild = yarnPostBuild;
         workspaceDependencies = workspaceDependenciesTransitive;
-        inherit packageJSON pname version yarnLock yarnNix yarnFlags pkgConfig;
+        inherit packageJSON pname version yarnLock offlineCache yarnFlags pkgConfig;
       };
 
       publishBinsFor_ = unlessNull publishBinsFor [pname];
