@@ -270,6 +270,24 @@ reference = "master"
 resolved_reference = "712453027486e62e087b9c91e4a8a171eebb6ddd"
 
 [[package]]
+name = "nixops-hercules-ci"
+version = "0.1.0"
+description = ""
+category = "main"
+optional = false
+python-versions = "^3.8"
+develop = false
+
+[package.dependencies]
+nixops = {git = "https://github.com/NixOS/nixops.git", branch = "master"}
+
+[package.source]
+type = "git"
+url = "https://github.com/hercules-ci/nixops-hercules-ci.git"
+reference = "master"
+resolved_reference = "e601d5baffd003fd5f22deeaea0cb96444b054dc"
+
+[[package]]
 name = "nixops-virtd"
 version = "1.0"
 description = "NixOps plugin for virtd"
@@ -583,7 +601,7 @@ socks = ["PySocks (>=1.5.6,!=1.5.7,<2.0)"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "bd064837654a0d4a4691b3df01338b92c95a449ff400a9cd49fee843ab13ee92"
+content-hash = "8a294b2745b271983bac54258b4f3a2ab3b2e5b218440329fa7eea482c63774f"
 
 [metadata.files]
 alabaster = [
@@ -756,6 +774,7 @@ nixops = []
 nixops-aws = []
 nixops-encrypted-links = []
 nixops-gcp = []
+nixops-hercules-ci = []
 nixops-virtd = []
 nixopsvbox = []
 nixos-modules-contrib = []
