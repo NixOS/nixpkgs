@@ -887,6 +887,8 @@ let
 
     mlgmpidl =  callPackage ../development/ocaml-modules/mlgmpidl { };
 
+    mm = callPackage ../development/ocaml-modules/mm { };
+
     mmap =  callPackage ../development/ocaml-modules/mmap { };
 
     mparser =  callPackage ../development/ocaml-modules/mparser { };
