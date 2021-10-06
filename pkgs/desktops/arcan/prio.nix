@@ -5,7 +5,7 @@
 
 stdenv.mkDerivation rec {
   pname = "prio";
-  version = "0.0.0+unstable=2018-09-13";
+  version = "0.pre+unstable=2018-09-13";
 
   src = fetchFromGitHub {
     owner = "letoram";

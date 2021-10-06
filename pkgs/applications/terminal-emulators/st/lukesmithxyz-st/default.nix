@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation rec {
   pname = "lukesmithxyz-st";
-  version = "0.0.0+unstable=2021-08-10";
+  version = "0.pre+unstable=2021-08-10";
 
   src = fetchFromGitHub {
     owner = "LukeSmithxyz";
