@@ -36,8 +36,7 @@ let
   #
   # For every bump, make sure that the hash is still accurate.
   stimulusGenerator = stdenv.mkDerivation {
-    pname = "foot-generate-alt-random-writes";
-    inherit version;
+    name = "foot-generate-alt-random-writes";
 
     src = fetchurl {
       url = "https://codeberg.org/dnkl/foot/raw/tag/${version}/scripts/generate-alt-random-writes.py";
@@ -185,6 +184,13 @@ stdenv.mkDerivation rec {
     noPgo = foot.override {
       allowPgo = false;
     };
+
+    # By changing name, this will get rebuilt everytime we change version,
+    # even if the hash stays the same. Consequently it'll fail if we introduce
+    # a hash mismatch when updating.
+    stimulus-script-is-current = stimulusGenerator.src.overrideAttrs (_: {
+      name = "generate-alt-random-writes-${version}.py";
+    });
   };
 
   meta = with lib; {
