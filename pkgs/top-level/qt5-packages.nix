@@ -108,6 +108,8 @@ in (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGea
 
   kquickimageedit = callPackage ../development/libraries/kquickimageedit { };
 
+  kweathercore = libsForQt5.callPackage ../development/libraries/kweathercore { };
+
   ldutils = callPackage ../development/libraries/ldutils { };
 
   libcommuni = callPackage ../development/libraries/libcommuni { };
