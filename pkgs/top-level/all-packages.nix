@@ -472,6 +472,10 @@ with pkgs;
 
   fetchMavenArtifact = callPackage ../build-support/fetchmavenartifact { };
 
+  inherit (callPackage ../build-support/node/fetch-yarn-deps { })
+    prefetch-yarn-deps
+    fetchYarnDeps;
+
   find-cursor = callPackage ../tools/X11/find-cursor { };
 
   flare-floss = callPackage ../tools/security/flare-floss { };
