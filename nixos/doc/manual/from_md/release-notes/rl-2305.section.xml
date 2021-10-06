@@ -77,6 +77,14 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://craterapp.com">Crater</link>, a
+          self-hosted web application for managing invoices, clients and
+          payments. Available as
+          <link linkend="opt-services.crater.enable">services.crater</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://github.com/hzeller/gmrender-resurrect">gmediarender</link>,
           a simple, headless UPnP/DLNA renderer. Available as
           <link xlink:href="options.html#opt-services.gmediarender.enable">services.gmediarender</link>.
