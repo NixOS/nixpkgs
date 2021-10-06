@@ -177,7 +177,7 @@ let
     '';
 
 
-  regInfo = pkgs.closureInfo { rootPaths = config.virtualisation.pathsInNixDB; };
+  regInfo = pkgs.closureInfo { rootPaths = config.virtualisation.additionalPaths; };
 
 
   # Generate a hard disk image containing a /boot partition and GRUB
@@ -286,6 +286,7 @@ in
 {
   imports = [
     ../profiles/qemu-guest.nix
+    (mkRenamedOptionModule [ "virtualisation" "pathsInNixDB" ] [ "virtualisation" "additionalPaths" ])
   ];
 
   options = {
@@ -417,17 +418,23 @@ in
           '';
       };
 
-    virtualisation.pathsInNixDB =
+    virtualisation.additionalPaths =
       mkOption {
         type = types.listOf types.path;
         default = [];
         description =
           ''
-            The list of paths whose closure is registered in the Nix
-            database in the VM.  All other paths in the host Nix store
+            A list of paths whose closure should be made available to
+            the VM.
+
+            When 9p is used, the closure is registered in the Nix
+            database in the VM. All other paths in the host Nix store
             appear in the guest Nix store as well, but are considered
             garbage (because they are not registered in the Nix
-            database in the guest).
+            database of the guest).
+
+            When <option>virtualisation.useNixStoreImage</option> is
+            set, the closure is copied to the Nix store image.
           '';
       };
 
@@ -772,7 +779,7 @@ in
       '';
 
     # After booting, register the closure of the paths in
-    # `virtualisation.pathsInNixDB' in the Nix database in the VM.  This
+    # `virtualisation.additionalPaths' in the Nix database in the VM.  This
     # allows Nix operations to work in the VM.  The path to the
     # registration file is passed through the kernel command line to
     # allow `system.build.toplevel' to be included.  (If we had a direct
@@ -791,7 +798,7 @@ in
 
     virtualisation.bootDevice = mkDefault (driveDeviceName 1);
 
-    virtualisation.pathsInNixDB = [ config.system.build.toplevel ];
+    virtualisation.additionalPaths = [ config.system.build.toplevel ];
 
     virtualisation.sharedDirectories = {
       nix-store = mkIf (!cfg.useNixStoreImage) {
