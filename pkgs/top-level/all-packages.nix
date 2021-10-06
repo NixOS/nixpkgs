@@ -18111,6 +18111,8 @@ with pkgs;
 
   lightstep-tracer-cpp = callPackage ../development/libraries/lightstep-tracer-cpp { };
 
+  ligolo-ng = callPackage ../tools/networking/ligolo-ng { };
+
   linenoise = callPackage ../development/libraries/linenoise { };
 
   linenoise-ng = callPackage ../development/libraries/linenoise-ng { };
@@ -26800,9 +26802,7 @@ with pkgs;
 
   owamp = callPackage ../applications/networking/owamp { };
 
-  vieb = callPackage ../applications/networking/browsers/vieb {
-    electron = electron_13;
-  };
+  vieb = callPackage ../applications/networking/browsers/vieb { };
 
   vivaldi = callPackage ../applications/networking/browsers/vivaldi {};
 

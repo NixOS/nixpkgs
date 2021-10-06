@@ -28,7 +28,7 @@ in {
 
       # "nix-ccache --show-stats" and "nix-ccache --clear"
       security.wrappers.nix-ccache = {
-        owner = "nobody";
+        owner = "root";
         group = "nixbld";
         setuid = false;
         setgid = true;
