@@ -5,7 +5,7 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.8.0";
+  version = "0.8.1";
   pname = "javaproperties";
   format = "pyproject";
 
@@ -13,7 +13,7 @@ buildPythonPackage rec {
     owner = "jwodder";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0n6dz6rnpq8wdwqyxqwv0q7vrl26vfmvvysdjvy557fck1q2l0kf";
+    sha256 = "16rcdw5gd4a21v2xb1j166lc9z2dqcv68gqvk5mvpnm0x6nwadgp";
   };
 
   propagatedBuildInputs = [ six ];

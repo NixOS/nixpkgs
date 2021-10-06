@@ -50,7 +50,7 @@ in {
     security.wrappers = {
       dtmail = {
         setgid = true;
-        owner = "nobody";
+        owner = "root";
         group = "mail";
         source = "${pkgs.cdesktopenv}/bin/dtmail";
       };
