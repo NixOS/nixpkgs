@@ -8920,6 +8920,12 @@
     githubId = 11365056;
     name = "Kevin Liu";
   };
+  pnmadelaine = {
+    name = "Paul-Nicolas Madelaine";
+    email = "pnm@pnm.tf";
+    github = "pnmadelaine";
+    githubId = 21977014;
+  };
   pnotequalnp = {
     email = "kevin@pnotequalnp.com";
     github = "pnotequalnp";
@@ -10293,6 +10299,12 @@
       longkeyid = "rsa2048/0xD1DE6D7F693663A5";
       fingerprint = "ADF4 C13D 0E36 1240 BD01  9B51 D1DE 6D7F 6936 63A5";
     }];
+  };
+  simarra = {
+    name = "simarra";
+    email = "loic.martel@protonmail.com";
+    github = "simarra";
+    githubId = 14372987;
   };
   simonchatts = {
     email = "code@chatts.net";

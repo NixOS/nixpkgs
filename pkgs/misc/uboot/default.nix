@@ -19,10 +19,10 @@
 }:
 
 let
-  defaultVersion = "2021.04";
+  defaultVersion = "2021.10";
   defaultSrc = fetchurl {
     url = "ftp://ftp.denx.de/pub/u-boot/u-boot-${defaultVersion}.tar.bz2";
-    sha256 = "06p1vymf0dl6jc2xy5w7p42mpgppa46lmpm2ishmgsycnldqnhqd";
+    sha256 = "1m0bvwv8r62s4wk4w3cmvs888dhv9gnfa98dczr4drk2jbhj7ryd";
   };
   buildUBoot = {
     version ? null
@@ -43,6 +43,11 @@ let
 
     patches = [
       ./0001-configs-rpi-allow-for-bigger-kernels.patch
+
+      # Make U-Boot forward some important settings from the firmware-provided FDT. Fixes booting on BCM2711C0 boards.
+      # See also: https://github.com/NixOS/nixpkgs/issues/135828
+      # Source: https://patchwork.ozlabs.org/project/uboot/patch/20210822143656.289891-1-sjoerd@collabora.com/
+      ./0001-rpi-Copy-properties-from-firmware-dtb-to-the-loaded-.patch
     ] ++ extraPatches;
 
     postPatch = ''
@@ -109,7 +114,6 @@ let
       maintainers = with maintainers; [ dezgeg samueldr lopsided98 ];
     } // extraMeta;
   } // removeAttrs args [ "extraMeta" ]);
-
 in {
   inherit buildUBoot;
 
@@ -333,6 +337,12 @@ in {
   ubootQemuArm = buildUBoot {
     defconfig = "qemu_arm_defconfig";
     extraMeta.platforms = ["armv7l-linux"];
+    filesToInstall = ["u-boot.bin"];
+  };
+
+  ubootQemuRiscv64Smode = buildUBoot {
+    defconfig = "qemu-riscv64_smode_defconfig";
+    extraMeta.platforms = ["riscv64-linux"];
     filesToInstall = ["u-boot.bin"];
   };
 

@@ -17,11 +17,11 @@
 
 stdenv.mkDerivation rec {
   pname = "azure-functions-core-tools";
-  version = "3.0.3568";
+  version = "3.0.3734";
 
   src = fetchurl {
     url = "https://github.com/Azure/${pname}/releases/download/${version}/Azure.Functions.Cli.linux-x64.${version}.zip";
-    sha256 = "0yxdqc5d1xsixjj2dlvs32d6fz4vh58ih2l00lc456fg15mfw3lg";
+    sha256 = "sha256-27kUnXSnDKZ/m8d1KAZG5DrFzB5uqlCLgtN7lXJ+eTY=";
   };
 
   buildInputs = [
