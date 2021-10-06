@@ -24193,6 +24193,8 @@ with pkgs;
 
   dcnnt = python3Packages.callPackage ../servers/dcnnt { };
 
+  crater = callPackage ../servers/web-apps/crater { };
+
   dendrite = callPackage ../servers/dendrite { };
 
   dex-oidc = callPackage ../servers/dex { };
