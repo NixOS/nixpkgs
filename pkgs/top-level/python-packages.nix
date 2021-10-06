@@ -3753,6 +3753,8 @@ in {
 
   iso-639 = callPackage ../development/python-modules/iso-639 { };
 
+  iso4217 = callPackage ../development/python-modules/iso4217 { };
+
   iso8601 = callPackage ../development/python-modules/iso8601 { };
 
   isodate = callPackage ../development/python-modules/isodate { };
