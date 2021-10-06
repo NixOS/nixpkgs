@@ -11023,6 +11023,8 @@ with pkgs;
 
   avra = callPackage ../development/compilers/avra { };
 
+  beekeeper-studio = callPackage ../development/tools/database/beekeeper-studio { };
+
   bigloo = callPackage ../development/compilers/bigloo { };
 
   binaryen = callPackage ../development/compilers/binaryen { };
