@@ -1,0 +1,17 @@
+diff --git a/app/Models/Company.php b/app/Models/Company.php
+index c02706d..0b2325c 100644
+--- a/app/Models/Company.php
++++ b/app/Models/Company.php
+@@ -24,11 +24,7 @@ class Company extends Model implements HasMedia
+         $isSystem = FileDisk::whereSetAsDefault(true)->first()->isSystem();
+ 
+         if ($logo) {
+-            if ($isSystem) {
+-                return $logo->getPath();
+-            } else {
+-                return $logo->getFullUrl();
+-            }
++            return $logo->getFullUrl();
+         }
+ 
+         return null;

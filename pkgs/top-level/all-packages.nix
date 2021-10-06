@@ -20342,6 +20342,8 @@ with pkgs;
 
   couchpotato = callPackage ../servers/couchpotato {};
 
+  crater = callPackage ../servers/web-apps/crater { };
+
   dendrite = callPackage ../servers/dendrite { };
 
   dex-oidc = callPackage ../servers/dex { };
