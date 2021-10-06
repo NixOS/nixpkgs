@@ -314,6 +314,9 @@ let
           if [ -e renewed ]; then
             rm renewed
             ${data.postRun}
+            ${optionalString (data.reloadServices != [])
+                "systemctl --no-block try-reload-or-restart ${escapeShellArgs data.reloadServices}"
+            }
           fi
         '');
       };
@@ -472,6 +475,15 @@ let
         type = types.str;
         default = "acme";
         description = "Group running the ACME client.";
+      };
+
+      reloadServices = mkOption {
+        type = types.listOf types.str;
+        default = [];
+        description = ''
+          The list of systemd services to call <code>systemctl try-reload-or-restart</code>
+          on.
+        '';
       };
 
       postRun = mkOption {
