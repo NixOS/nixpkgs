@@ -18771,6 +18771,8 @@ with pkgs;
 
   qtscriptgenerator = callPackage ../development/libraries/qtscriptgenerator { };
 
+  quark-engine = callPackage ../tools/security/quark-engine { };
+
   quesoglc = callPackage ../development/libraries/quesoglc { };
 
   quickder = callPackage ../development/libraries/quickder {};
