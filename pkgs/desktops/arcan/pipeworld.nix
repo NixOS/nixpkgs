@@ -5,7 +5,7 @@
 
 stdenv.mkDerivation rec {
   pname = "pipeworld";
-  version = "0.0.0+unstable=2021-08-01";
+  version = "0.pre+unstable=2021-08-01";
 
   src = fetchFromGitHub {
     owner = "letoram";
