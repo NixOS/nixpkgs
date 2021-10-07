@@ -114,7 +114,7 @@ let
   extraBuildInputs = extraPackages py.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2021.9.7";
+  hassVersion = "2021.10.0";
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "homeassistant";
@@ -131,7 +131,7 @@ in with py.pkgs; buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = version;
-    sha256 = "1vcdnxh671iqhlbf6811j537by2i03fhryp9r9x77477y2y0xd6k";
+    sha256 = "0m54ynx0i4a6wljg6d9i6xa79c15cqah5cgaswgrbaxhjw5q78iv";
   };
 
   # leave this in, so users don't have to constantly update their downstream patch handling
@@ -306,7 +306,6 @@ in with py.pkgs; buildPythonApplication rec {
     "ecobee"
     "econet"
     "ee_brightbox"
-    "efergy"
     "elgato"
     "elkm1"
     "emonitor"
@@ -769,7 +768,7 @@ in with py.pkgs; buildPythonApplication rec {
     "--deselect tests/components/wemo/test_sensor.py::TestInsightTodayEnergy::test_state_unavailable"
     "--deselect tests/components/wemo/test_sensor.py::TestInsightCurrentPower::test_state_unavailable"
     # tado/test_climate.py: Tries to connect to my.tado.com
-    "--deselect tests/components/tado/test_climate.py::test_air_con["
+    "--deselect tests/components/tado/test_climate.py::test_air_con"
     # helpers/test_system_info.py: AssertionError: assert 'Unknown' == 'Home Assistant Container'
     "--deselect tests/helpers/test_system_info.py::test_container_installationtype"
     # tests are located in tests/
@@ -782,6 +781,9 @@ in with py.pkgs; buildPythonApplication rec {
     "tests/components"
     # pyotp since v2.4.0 complains about the short mock keys, hass pins v2.3.0
     "tests/auth/mfa_modules/test_notify.py"
+    # emulated_hue/test_upnp.py: Tries to establish the public ipv4 address
+    "tests/components/emulated_hue/test_upnp.py"
+
   ];
 
   disabledTests = [
