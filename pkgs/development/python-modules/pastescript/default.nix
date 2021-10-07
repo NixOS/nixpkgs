@@ -4,7 +4,7 @@
 , nose
 , six
 , paste
-, PasteDeploy
+, pastedeploy
 , cheetah
 }:
 
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ nose ];
-  propagatedBuildInputs = [ six paste PasteDeploy cheetah ];
+  propagatedBuildInputs = [ six paste pastedeploy cheetah ];
 
   doCheck = false;
 

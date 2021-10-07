@@ -3,7 +3,7 @@
 , fetchPypi
 , pytest
 , FormEncode
-, PasteDeploy
+, pastedeploy
 , paste
 , pydispatcher
 }:
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytest ];
-  propagatedBuildInputs = [ FormEncode PasteDeploy paste pydispatcher ];
+  propagatedBuildInputs = [ FormEncode pastedeploy paste pydispatcher ];
 
   meta = with lib; {
     description = "Object Relational Manager for providing an object interface to your database";
