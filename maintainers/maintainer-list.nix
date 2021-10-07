@@ -12245,6 +12245,12 @@
     githubId = 4113027;
     name = "Jesper Geertsen Jonsson";
   };
+  yinfeng = {
+    email = "lin.yinfeng@outlook.com";
+    github = "linyinfeng";
+    githubId = 11229748;
+    name = "Lin Yinfeng";
+  };
   ylwghst = {
     email = "ylwghst@onionmail.info";
     github = "ylwghst";

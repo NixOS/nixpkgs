@@ -27,7 +27,7 @@
 }:
 
 let
-  version = "1.9.0";
+  version = "1.9.2";
 
   # build stimuli file for PGO build and the script to generate it
   # independently of the foot's build, so we can cache the result
@@ -36,8 +36,7 @@ let
   #
   # For every bump, make sure that the hash is still accurate.
   stimulusGenerator = stdenv.mkDerivation {
-    pname = "foot-generate-alt-random-writes";
-    inherit version;
+    name = "foot-generate-alt-random-writes";
 
     src = fetchurl {
       url = "https://codeberg.org/dnkl/foot/raw/tag/${version}/scripts/generate-alt-random-writes.py";
@@ -100,7 +99,7 @@ stdenv.mkDerivation rec {
     owner = "dnkl";
     repo = pname;
     rev = version;
-    sha256 = "0mkzq5lbgl5qp5nj8sk5gyg9hrrklmbjdqzlcr2a6rlmilkxlhwm";
+    sha256 = "15h01ijx87i60bdgjjap1ymwlxggsxc6iziykh3bahj8432s1836";
   };
 
   depsBuildBuild = [
@@ -144,16 +143,15 @@ stdenv.mkDerivation rec {
 
   mesonBuildType = "release";
 
+  # See https://codeberg.org/dnkl/foot/src/tag/1.9.2/INSTALL.md#options
   mesonFlags = [
+    # Use lto
     "-Db_lto=true"
-    # Prevent foot from installing its terminfo file into a custom location,
-    # we need to do this manually in postInstall.
-    # See https://codeberg.org/dnkl/foot/pulls/673,
-    # https://codeberg.org/dnkl/foot/src/tag/1.9.0/INSTALL.md#options
-    "-Dterminfo=disabled"
+    # “Build” and install terminfo db
+    "-Dterminfo=enabled"
     # Ensure TERM=foot is used
     "-Ddefault-terminfo=foot"
-    # Tell foot what to set TERMINFO to
+    # Tell foot to set TERMINFO and where to install the terminfo files
     "-Dcustom-terminfo-install-location=${terminfoDir}"
   ];
 
@@ -174,13 +172,6 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "terminfo" ];
 
-  postInstall = ''
-    # build and install foot's terminfo to the standard location
-    # instead of its custom location
-    mkdir -p "${terminfoDir}"
-    tic -o "${terminfoDir}" -x -e foot,foot-direct "$NIX_BUILD_TOP/$sourceRoot/foot.info"
-  '';
-
   passthru.tests = {
     clang-default-compilation = foot.override {
       inherit (llvmPackages) stdenv;
@@ -193,6 +184,13 @@ stdenv.mkDerivation rec {
     noPgo = foot.override {
       allowPgo = false;
     };
+
+    # By changing name, this will get rebuilt everytime we change version,
+    # even if the hash stays the same. Consequently it'll fail if we introduce
+    # a hash mismatch when updating.
+    stimulus-script-is-current = stimulusGenerator.src.overrideAttrs (_: {
+      name = "generate-alt-random-writes-${version}.py";
+    });
   };
 
   meta = with lib; {

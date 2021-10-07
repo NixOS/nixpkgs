@@ -52,7 +52,7 @@ in rustPlatform.buildRustPackage rec {
     description = "A collection of engines that power the core stack for Prisma";
     homepage = "https://www.prisma.io/";
     license = licenses.asl20;
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
     maintainers = with maintainers; [ pamplemousse pimeys ];
   };
 }
