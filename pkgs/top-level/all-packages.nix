@@ -10665,7 +10665,10 @@ with pkgs;
     inherit (chickenPackages_4) eggDerivation fetchegg;
   };
 
-  unar = callPackage ../tools/archivers/unar { stdenv = clangStdenv; };
+  unar = callPackage ../tools/archivers/unar {
+    inherit (darwin.apple_sdk.frameworks) Foundation AppKit;
+    stdenv = clangStdenv;
+  };
 
   unp = callPackage ../tools/archivers/unp { };
 
