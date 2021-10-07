@@ -9925,6 +9925,8 @@ with pkgs;
 
   turses = callPackage ../applications/networking/instant-messengers/turses { };
 
+  tutanota-desktop = callPackage ../applications/networking/mailreaders/tutanota-desktop { };
+
   tv = callPackage ../tools/text/tv { };
 
   tvm = callPackage ../development/compilers/tvm { };
