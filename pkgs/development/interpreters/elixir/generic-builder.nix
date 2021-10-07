@@ -12,6 +12,7 @@
 
 { baseName ? "elixir"
 , version
+, erlangPackage ? erlang
 , minimumOTPVersion
 , sha256 ? null
 , rev ? "v${version}"
@@ -22,7 +23,7 @@ let
   inherit (lib) getVersion versionAtLeast optional;
 
 in
-assert versionAtLeast (getVersion erlang) minimumOTPVersion;
+assert versionAtLeast (getVersion erlangPackage) minimumOTPVersion;
 
 stdenv.mkDerivation ({
   name = "${baseName}-${version}";
@@ -30,7 +31,7 @@ stdenv.mkDerivation ({
   inherit src version debugInfo;
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ erlang ];
+  buildInputs = [ erlangPackage ];
 
   LANG = "C.UTF-8";
   LC_TYPE = "C.UTF-8";
