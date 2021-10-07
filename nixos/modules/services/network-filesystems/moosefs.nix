@@ -8,7 +8,6 @@ let
   mfsUser = if cfg.runAsUser then "moosefs" else "root";
 
   settingsFormat = let
-
     listSep = " ";
     allowedTypes = with types; [ bool int float str ];
     valueToString = val:
@@ -99,7 +98,6 @@ in {
           '';
           default = false;
         };
-
 
         exports = mkOption {
           type = with types; listOf str;
@@ -249,4 +247,3 @@ in {
       ( systemdService "chunkserver" { Restart = "on-abnormal"; } chunkserverCfg );
     };
 }
-
