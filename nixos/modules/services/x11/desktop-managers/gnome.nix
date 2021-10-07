@@ -374,7 +374,10 @@ in
       xdg.portal.enable = true;
       xdg.portal.extraPortals = [
         pkgs.xdg-desktop-portal-gnome
-        pkgs.xdg-desktop-portal-gtk
+        (pkgs.xdg-desktop-portal-gtk.override {
+          # Do not build portals that we already have.
+          buildPortalsInGnome = false;
+        })
       ];
 
       # Harmonize Qt5 application style and also make them use the portal for file chooser dialog.
