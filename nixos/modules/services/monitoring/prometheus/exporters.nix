@@ -185,6 +185,28 @@ let
         serviceConfig.DynamicUser = mkDefault enableDynamicUser;
         serviceConfig.User = mkDefault conf.user;
         serviceConfig.Group = conf.group;
+        # Hardening
+        serviceConfig.CapabilityBoundingSet = mkDefault [ "" ];
+        serviceConfig.DeviceAllow = [ "" ];
+        serviceConfig.LockPersonality = true;
+        serviceConfig.MemoryDenyWriteExecute = true;
+        serviceConfig.NoNewPrivileges = true;
+        serviceConfig.PrivateDevices = true;
+        serviceConfig.ProtectClock = true;
+        serviceConfig.ProtectControlGroups = true;
+        serviceConfig.ProtectHome = true;
+        serviceConfig.ProtectHostname = true;
+        serviceConfig.ProtectKernelLogs = true;
+        serviceConfig.ProtectKernelModules = true;
+        serviceConfig.ProtectKernelTunables = true;
+        serviceConfig.ProtectSystem = mkDefault "strict";
+        serviceConfig.RemoveIPC = true;
+        serviceConfig.RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+        serviceConfig.RestrictNamespaces = true;
+        serviceConfig.RestrictRealtime = true;
+        serviceConfig.RestrictSUIDSGID = true;
+        serviceConfig.SystemCallArchitectures = "native";
+        serviceConfig.UMask = "0077";
       } serviceOpts ]);
   };
 in

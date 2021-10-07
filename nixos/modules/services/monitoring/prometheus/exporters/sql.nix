@@ -99,6 +99,10 @@ in
           -config.file ${configFile} \
           ${concatStringsSep " \\\n  " cfg.extraFlags}
       '';
+      RestrictAddressFamilies = [
+        # Need AF_UNIX to collect data
+        "AF_UNIX"
+      ];
     };
   };
 }
