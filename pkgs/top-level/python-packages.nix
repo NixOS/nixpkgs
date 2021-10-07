@@ -5405,6 +5405,8 @@ in {
 
   patsy = callPackage ../development/python-modules/patsy { };
 
+  patrowl4py = callPackage ../development/python-modules/patrowl4py { };
+
   paver = callPackage ../development/python-modules/paver { };
 
   paypalrestsdk = callPackage ../development/python-modules/paypalrestsdk { };
