@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "ligolo-ng";
-  version = "0.1";
+  version = "0.2";
 
   src = fetchFromGitHub {
     owner = "tnpitsecurity";
     repo = "ligolo-ng";
     rev = "v${version}";
-    sha256 = "sha256-Ipfp+Ke4iSJmvUtfNUt/XSPTSDSdeMs+Ss8acZHUYrE=";
+    sha256 = "sha256-VzK6WykC3UDlhhyu8LMRHgOMkdEssJuh1Aqp0rGx7F4=";
   };
 
   postConfigure = ''
@@ -17,7 +17,7 @@ buildGoModule rec {
 
   ldflags = [ "-s" "-w" "-extldflags '-static'" ];
 
-  vendorSha256 = "sha256-axRCThmFavR+GTRWSgdAr2mbrp07hsFea0rKLQNIhgU=";
+  vendorSha256 = "sha256-ZRUy6gsl4Q2Sdm8Bfo4ANPdwcNQi5LNV6SbynpwfnOc=";
 
   doCheck = false; # tests require network access
 
