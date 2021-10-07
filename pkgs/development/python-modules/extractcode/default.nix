@@ -45,6 +45,7 @@ buildPythonPackage rec {
   # test_uncompress_* wants to use a binary to extract instead of the provided library
   disabledTests = [
     "test_uncompress_lz4_basic"
+    "test_extract_rar_with_trailing_data"
     "test_extract_tarlz4_basic"
     "test_extract_rar_with_trailing_data"
     # tries to parse /boot/vmlinuz-*, which is not available in the nix sandbox
