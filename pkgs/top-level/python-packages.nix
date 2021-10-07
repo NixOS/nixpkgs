@@ -5377,7 +5377,7 @@ in {
 
   paste = callPackage ../development/python-modules/paste { };
 
-  PasteDeploy = callPackage ../development/python-modules/pastedeploy { };
+  pastedeploy = callPackage ../development/python-modules/pastedeploy { };
 
   pastel = callPackage ../development/python-modules/pastel { };
 
@@ -6201,6 +6201,8 @@ in {
   pydy = callPackage ../development/python-modules/pydy { };
 
   pyechonest = callPackage ../development/python-modules/pyechonest { };
+
+  pyeclib = callPackage ../development/python-modules/pyeclib { };
 
   pyeconet = callPackage ../development/python-modules/pyeconet { };
 
@@ -8832,6 +8834,8 @@ in {
   swagger-spec-validator = callPackage ../development/python-modules/swagger-spec-validator { };
 
   swagger-ui-bundle = callPackage ../development/python-modules/swagger-ui-bundle { };
+
+  swift = callPackage ../development/python-modules/swift { };
 
   swisshydrodata = callPackage ../development/python-modules/swisshydrodata { };
 

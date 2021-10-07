@@ -1,5 +1,5 @@
 { buildPythonPackage, fetchPypi, fetchpatch
-, plaster, PasteDeploy
+, plaster, pastedeploy
 , pytest, pytest-cov
 }:
 
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   };
 
   patches = [
-    # Fix tests compatibility with PasteDeploy 2+
+    # Fix tests compatibility with pastedeploy 2+
     # https://github.com/Pylons/plaster_pastedeploy/pull/17
     (fetchpatch {
       url = "https://github.com/Pylons/plaster_pastedeploy/commit/d77d81a57e917c67a20332beca8f418651172905.patch";
@@ -25,6 +25,6 @@ buildPythonPackage rec {
     py.test
   '';
 
-  propagatedBuildInputs = [ plaster PasteDeploy ];
+  propagatedBuildInputs = [ plaster pastedeploy ];
   checkInputs = [ pytest pytest-cov ];
 }

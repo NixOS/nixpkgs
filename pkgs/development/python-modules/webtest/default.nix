@@ -10,7 +10,7 @@
 , mock
 , pyquery
 , wsgiproxy2
-, PasteDeploy
+, pastedeploy
 }:
 
 buildPythonPackage rec {
@@ -38,7 +38,7 @@ buildPythonPackage rec {
   checkInputs = [
     nose
     mock
-    PasteDeploy
+    pastedeploy
     wsgiproxy2
     pyquery
   ];

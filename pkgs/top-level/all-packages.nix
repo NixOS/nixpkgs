@@ -15741,6 +15741,8 @@ with pkgs;
 
   libesmtp = callPackage ../development/libraries/libesmtp { };
 
+  liberasurecode = callPackage ../applications/misc/liberasurecode { };
+
   exiv2 = callPackage ../development/libraries/exiv2 { };
 
   expat = callPackage ../development/libraries/expat { };
