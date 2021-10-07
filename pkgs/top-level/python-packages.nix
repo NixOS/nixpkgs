@@ -6194,6 +6194,8 @@ in {
 
   pyechonest = callPackage ../development/python-modules/pyechonest { };
 
+  pyeclib = callPackage ../development/python-modules/pyeclib { };
+
   pyeconet = callPackage ../development/python-modules/pyeconet { };
 
   pyedimax = callPackage ../development/python-modules/pyedimax { };
