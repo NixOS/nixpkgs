@@ -3,6 +3,7 @@
 , lib
 , fetchurl
 , postgresql
+, nixosTests
 , ...
 }@args:
 
@@ -41,6 +42,10 @@ callPackage ../nginx/generic.nix args rec {
     ln -s $out/nginx/conf $out/conf
     ln -s $out/nginx/html $out/html
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) openresty-lua;
+  };
 
   meta = {
     description = "A fast web application server built on Nginx";

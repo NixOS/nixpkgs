@@ -21,6 +21,7 @@
 , preConfigure ? ""
 , postInstall ? null
 , meta ? null
+, passthru ? { tests = {}; }
 }:
 
 with lib;
@@ -146,7 +147,7 @@ stdenv.mkDerivation {
       inherit (nixosTests) nginx nginx-auth nginx-etag nginx-pubhtml nginx-sandbox nginx-sso;
       variants = lib.recurseIntoAttrs nixosTests.nginx-variants;
       acme-integration = nixosTests.acme;
-    };
+    } // passthru.tests;
   };
 
   meta = if meta != null then meta else {
