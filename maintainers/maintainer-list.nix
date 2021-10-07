@@ -7377,6 +7377,12 @@
     githubId = 7610974;
     name = "Jason Miller";
   };
+  milogert = {
+    email = "milo@milogert.com";
+    github = "milogert";
+    githubId = 5378535;
+    name = "Milo Gertjejansen";
+  };
   miltador = {
     email = "miltador@yandex.ua";
     name = "Vasiliy Solovey";
