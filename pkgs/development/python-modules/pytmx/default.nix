@@ -1,19 +1,25 @@
-{ lib, fetchFromGitHub
-, python, buildPythonPackage, isPy27
-, pygame, pyglet, pysdl2, six
+{ lib
+, fetchFromGitHub
+, python
+, buildPythonPackage
+, pythonOlder
+, pygame
+, pyglet
+, pysdl2
+, six
 }:
 
 buildPythonPackage rec {
   pname = "pytmx";
-  version = "3.25";
+  version = "3.26";
 
-  disabled = isPy27;
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "bitcraft";
     repo = "PyTMX";
     rev = version;
-    sha256 = "0v07zhvzvl2qcqhjzgfzm8hgayq38gaqcxxkyhlq9n0hlk93nm97";
+    sha256 = "sha256-mBJ8DuwFppiyKhQNT8keFIcC4pjJgK1qPMeZlRvRtxU=";
   };
 
   propagatedBuildInputs = [ pygame pyglet pysdl2 six ];
