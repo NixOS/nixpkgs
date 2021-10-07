@@ -1,7 +1,5 @@
 { lib, stdenv, fetchurl, gettext, libgpgerror, libgcrypt, libksba, zlib }:
 
-with lib;
-
 stdenv.mkDerivation rec {
   pname = "ntbtls";
   version = "0.2.0";
@@ -20,7 +18,7 @@ stdenv.mkDerivation rec {
     moveToOutput "bin/ntbtls-config" $dev
   '';
 
-  meta = {
+  meta = with lib; {
     description = "A tiny TLS 1.2 only implementation";
     homepage = "https://www.gnupg.org/software/ntbtls/";
     license = licenses.gpl3Plus;
