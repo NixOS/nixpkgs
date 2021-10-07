@@ -1102,6 +1102,8 @@ let
 
     result = callPackage ../development/ocaml-modules/ocaml-result { };
 
+    samplerate = callPackage ../development/ocaml-modules/samplerate { };
+
     secp256k1 = callPackage ../development/ocaml-modules/secp256k1 {
       inherit (pkgs) secp256k1;
     };
