@@ -1,8 +1,6 @@
 { lib
-, stdenv
+, gcc9Stdenv
 , fetchurl
-, meson
-, ninja
 , pkg-config
 , libftdi1
 , libusb1
@@ -10,7 +8,7 @@
 , installShellFiles
 }:
 
-stdenv.mkDerivation rec {
+gcc9Stdenv.mkDerivation rec {
   pname = "flashrom";
   version = "1.2";
 
@@ -24,17 +22,15 @@ stdenv.mkDerivation rec {
       --replace "plugdev" "flashrom"
   '';
 
-  # Meson build doesn't build and install manpage. Only Makefile can.
-  # Build manpage from source directory. Here we're inside the ./build subdirectory
+  makeFlags = [ "PREFIX=$(out)" "libinstall" ];
+
   postInstall = ''
-    make flashrom.8 -C ..
-    installManPage ../flashrom.8
-    install -Dm644 ../util/z60_flashrom.rules $out/etc/udev/rules.d/flashrom.rules
+    install -Dm644 util/z60_flashrom.rules $out/lib/udev/rules.d/flashrom.rules
   '';
 
-  mesonFlags = lib.optionals stdenv.isAarch64 [ "-Dpciutils=false" ];
-  nativeBuildInputs = [ meson pkg-config ninja installShellFiles ];
-  buildInputs = [ libftdi1 libusb1 pciutils ];
+  nativeBuildInputs = [ pkg-config installShellFiles ];
+  buildInputs = [ libftdi1 libusb1 ]
+                ++ lib.optional (!gcc9Stdenv.isAarch64) pciutils;
 
   meta = with lib; {
     homepage = "http://www.flashrom.org";
@@ -42,6 +38,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = with maintainers; [ funfunctor fpletz felixsinger ];
     platforms = platforms.all;
-    broken = stdenv.isDarwin; # requires DirectHW
+    broken = gcc9Stdenv.isDarwin; # requires DirectHW
   };
 }
