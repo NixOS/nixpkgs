@@ -68,7 +68,12 @@ stdenv.mkDerivation rec {
     rm -vf BUILD
   '';
 
-  preBuild = ''
+  # When natively compiling, grpc_cpp_plugin is executed from the build directory,
+  # needing to load dynamic libraries from the build directory, so we set
+  # LD_LIBRARY_PATH to enable this. When cross compiling we need to avoid this,
+  # since it can cause the grpc_cpp_plugin executable from buildPackages to
+  # crash if build and host architecture are compatible (e. g. pkgsLLVM).
+  preBuild = lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
     export LD_LIBRARY_PATH=$(pwd)''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH
   '';
 
