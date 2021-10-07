@@ -32,7 +32,7 @@
 , acl
 , lz4
 , libgcrypt
-, libgpgerror
+, libgpg-error
 , libidn2
 , curl
 , gnutar
@@ -105,7 +105,7 @@
 , docbook_xml_dtd_45
 }:
 
-assert withResolved -> (libgcrypt != null && libgpgerror != null);
+assert withResolved -> (libgcrypt != null && libgpg-error != null);
 assert withImportd ->
 (curl.dev != null && zlib != null && xz != null && libgcrypt != null
   && gnutar != null && gnupg != null && withCompression);
@@ -347,7 +347,7 @@ stdenv.mkDerivation {
     ++ lib.optional withLibseccomp libseccomp
     ++ lib.optional withNetworkd iptables
     ++ lib.optional withPCRE2 pcre2
-    ++ lib.optional withResolved libgpgerror
+    ++ lib.optional withResolved libgpg-error
     ++ lib.optional withSelinux libselinux
     ++ lib.optional withRemote libmicrohttpd
     ++ lib.optionals withHomed [ p11-kit ]

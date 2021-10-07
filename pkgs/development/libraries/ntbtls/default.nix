@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, gettext, libgpgerror, libgcrypt, libksba, zlib }:
+{ lib, stdenv, fetchurl, gettext, libgpg-error, libgcrypt, libksba, zlib }:
 
 with lib;
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "dev" "out" ];
 
-  buildInputs = [ libgcrypt libgpgerror libksba zlib ]
+  buildInputs = [ libgcrypt libgpg-error libksba zlib ]
     ++ lib.optional stdenv.isDarwin gettext;
 
   postInstall = ''
