@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation rec {
   pname = "dbqn" + lib.optionalString buildNativeImage "-native";
-  version = "0.0.0+unstable=2021-10-05";
+  version = "0.pre+unstable=2021-10-05";
 
   src = fetchFromGitHub {
     owner = "dzaima";

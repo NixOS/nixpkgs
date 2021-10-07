@@ -2,26 +2,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ouch";
-  version = "0.1.5";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
-    owner = "vrmiguel";
+    owner = "ouch-org";
     repo = pname;
     rev = version;
-    sha256 = "00ah8hgrppa61jhwb74zl5b509q0yp2pp27w9frm814iqx70qn38";
+    sha256 = "sha256-OhEr/HvwgDkB8h3cpayOlnrs6OXiwAsQUH9XGqi5rpc=";
   };
 
-  cargoPatches = [
-    # a patch file to add Cargo.lock in the source code
-    # https://github.com/vrmiguel/ouch/pull/46
-    ./add-Cargo.lock.patch
-  ];
-
-  cargoSha256 = "181aq8r78g4bl1ndlwl54ws5ccrwph0mmk9506djxvfdy3hndxkg";
+  cargoSha256 = "sha256-lKsB75Lb9IYS80qu4jaIpnbEOr4Ow9M5S45Kk03An2o=";
 
   meta = with lib; {
-    description = "Taking the pain away from file (de)compression";
-    homepage = "https://github.com/vrmiguel/ouch";
+    description = "A command-line utility for easily compressing and decompressing files and directories";
+    homepage = "https://github.com/ouch-org/ouch";
     license = licenses.mit;
     maintainers = [ maintainers.psibi ];
   };

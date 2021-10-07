@@ -12896,29 +12896,22 @@ with pkgs;
 
   # Below, the classic self-bootstrapping process
   cbqn-bootstrap = lib.dontRecurseIntoAttrs {
-    # use clang here since it emits less speculative warnings;
-    # however, avoid its building in cross compilations
-    stdenv =
-      if stdenv.hostPlatform == stdenv.buildPlatform
-      then clangStdenv
-      else stdenv;
     mbqn-source = buildPackages.mbqn.src;
 
     phase0 = callPackage ../development/interpreters/bqn/cbqn {
-      inherit (cbqn-bootstrap) stdenv;
       genBytecode = false;
       bqn-path = null;
       mbqn-source = null;
     };
 
     phase1 = callPackage ../development/interpreters/bqn/cbqn {
-      inherit (cbqn-bootstrap) stdenv mbqn-source;
+      inherit (cbqn-bootstrap) mbqn-source;
       genBytecode = true;
       bqn-path = "${buildPackages.cbqn-bootstrap.phase0}/bin/cbqn";
     };
 
     phase2 = callPackage ../development/interpreters/bqn/cbqn {
-      inherit (cbqn-bootstrap) stdenv mbqn-source;
+      inherit (cbqn-bootstrap) mbqn-source;
       genBytecode = true;
       bqn-path = "${buildPackages.cbqn-bootstrap.phase1}/bin/cbqn";
     };
@@ -13630,7 +13623,8 @@ with pkgs;
     electron_11
     electron_12
     electron_13
-    electron_14;
+    electron_14
+    electron_15;
 
   autobuild = callPackage ../development/tools/misc/autobuild { };
 
@@ -32624,9 +32618,11 @@ with pkgs;
   });
 
   winePackages = recurseIntoAttrs (winePackagesFor (config.wine.build or "wine32"));
+  wine64Packages = recurseIntoAttrs (winePackagesFor "wine64");
   wineWowPackages = recurseIntoAttrs (winePackagesFor "wineWow");
 
   wine = winePackages.full;
+  wine64 = wine64Packages.full;
 
   wine-staging = lowPrio (winePackages.full.override {
     wineRelease = "staging";
