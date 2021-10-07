@@ -56,7 +56,6 @@ let
   # Dependencies that are required to build kernel modules
   moduleBuildDependencies = optional (lib.versionAtLeast version "4.14") libelf;
 
-  buildDTBs = stdenv.platform.kernelDTB or false;
 
   installkernel = writeTextFile { name = "installkernel"; executable=true; text = ''
     #!${stdenv.shell} -e
@@ -89,6 +88,11 @@ let
       } // config_;
 
       isModular = config.isYes "MODULES";
+
+      # If the kernel config option for building DTBs is set, that
+      # takes priority. Otherwise, check if DTBs are usually enabled
+      # on the platform we're building for.
+      buildDTBs = if config.isSet "DTB" then config.isYes "DTB" else stdenv.hostPlatform.linux-kernel.DTB or false;
 
       installsFirmware = (config.isEnabled "FW_LOADER") &&
         (isModular || (config.isDisabled "FIRMWARE_IN_KERNEL")) &&
