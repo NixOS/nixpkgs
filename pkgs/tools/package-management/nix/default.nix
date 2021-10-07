@@ -231,6 +231,22 @@ in rec {
     inherit storeDir stateDir confDir;
   });
 
+  nix_2_4 = callPackage common (rec {
+    pname = "nix";
+    version = "2.4pre-rc1";
+
+    src = fetchFromGitHub {
+      owner = "NixOS";
+      repo = "nix";
+      rev = version;
+      sha256 = "sha256-KOb8etMm5LksvT2l+CkvqzMO1bgmo9tJmyaNh0LvaR8=";
+    };
+
+    boehmgc = boehmgc_nixUnstable;
+
+    inherit storeDir stateDir confDir;
+  });
+
   nixUnstable = lib.lowPrio (callPackage common rec {
     pname = "nix";
     version = "2.5${suffix}";
