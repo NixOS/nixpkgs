@@ -29477,6 +29477,10 @@ with pkgs;
 
   eureka-editor = callPackage ../applications/misc/eureka-editor { };
 
+  eureka-ideas = callPackage ../applications/misc/eureka-ideas {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   extremetuxracer = callPackage ../games/extremetuxracer {
     libpng = libpng12;
   };
