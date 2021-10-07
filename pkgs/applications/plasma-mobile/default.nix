@@ -62,6 +62,7 @@ let
       };
     in {
       alligator = callPackage ./alligator.nix {};
+      angelfish = callPackage ./angelfish.nix { inherit srcs; };
       audiotube = callPackage ./audiotube.nix {};
       calindori = callPackage ./calindori.nix {};
       kalk = callPackage ./kalk.nix {};

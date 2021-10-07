@@ -53,6 +53,7 @@ mapAliases ({
   aminal = throw "aminal was renamed to darktile."; # added 2021-09-28
   ammonite-repl = ammonite; # added 2017-05-02
   amsn = throw "amsn has been removed due to being unmaintained."; # added 2020-12-09
+  angelfish = libsForQt5.plasmaMobileGear.angelfish; # added 2021-10-06
   antimicro = throw "antimicro has been removed as it was broken, see antimicroX instead."; # added 2020-08-06
   arduino_core = arduino-core;  # added 2015-02-04
   ardour_5 = throw "ardour_5 has been removed. see https://github.com/NixOS/nixpkgs/issues/139549"; # added 2021-09-28
