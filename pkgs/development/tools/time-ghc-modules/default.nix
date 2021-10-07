@@ -21,9 +21,11 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  buildInputs = [makeWrapper];
+  nativeBuildInputs = [makeWrapper];
 
   buildPhase = ''
+    runHook preBuild
+
     mkdir -p $out/bin
     cp ./time-ghc-modules $out/bin/time-ghc-modules
     wrapProgram $out/bin/time-ghc-modules --prefix PATH : ${lib.makeBinPath [ sqlite python3 coreutils findutils gnused ]}
@@ -33,6 +35,8 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out/bin/dist
     cp ./dist/index.html $out/bin/dist/index.html
+
+    runHook postBuild
   '';
 
   dontInstall = true;
