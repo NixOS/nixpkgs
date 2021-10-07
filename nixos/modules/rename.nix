@@ -80,6 +80,8 @@ with lib;
         is broken when using cgroups-v2.
     '')
 
+    (mkRemovedOptionModule [ "services" "kippo" ] "The corresponding package was removed from nixpkgs.")
+
     # Do NOT add any option renames here, see top of the file
   ];
 }
