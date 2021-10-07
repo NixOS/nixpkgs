@@ -8112,6 +8112,8 @@ in {
 
   rxv = callPackage ../development/python-modules/rxv { };
 
+  rzpipe = callPackage ../development/python-modules/rzpipe { };
+
   s2clientprotocol = callPackage ../development/python-modules/s2clientprotocol { };
 
   s3fs = callPackage ../development/python-modules/s3fs { };
