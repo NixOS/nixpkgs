@@ -1,10 +1,14 @@
-{ buildPythonPackage, fetchPypi, fetchpatch
-, plaster, pastedeploy
-, pytest, pytest-cov
+{ lib
+, buildPythonPackage
+, fetchPypi
+, fetchpatch
+, plaster
+, pastedeploy
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
-  pname = "plaster_pastedeploy";
+  pname = "plaster-pastedeploy";
   version = "0.6";
 
   src = fetchPypi {
@@ -21,10 +25,14 @@ buildPythonPackage rec {
     })
   ];
 
-  checkPhase = ''
-    py.test
-  '';
-
   propagatedBuildInputs = [ plaster pastedeploy ];
-  checkInputs = [ pytest pytest-cov ];
+
+  checkInputs = [ pytestCheckHook ];
+
+  meta = with lib; {
+    description = "PasteDeploy binding to the plaster configuration loader";
+    homepage = "https://github.com/Pylons/plaster_pastedeploy";
+    license = licenses.mit;
+    maintainers = with maintainers; [ ];
+  };
 }
