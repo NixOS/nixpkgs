@@ -1,6 +1,7 @@
 { lib, buildPackages, fetchFromGitHub, fetchpatch, perl, buildLinux, ... } @ args:
 
 buildLinux (args // {
+  # NOTE: bcachefs-tools should be updated simultaneously to preserve compatibility
   version = "5.13.0-2021.10.01";
   modDirVersion = "5.13.0";
 

@@ -47,7 +47,7 @@ let
   k3sCommit = "3e250fdbab72d88f7e6aae57446023a0567ffc97"; # k3s git commit at the above version
   k3sRepoSha256 = "1w7drvk0bmlmqrxh1y6dxjy7dk6bdrl72pkd25lc1ir6wbzb05h9";
 
-  traefikChartVersion = "9.18.2"; # taken from ./scripts/download at TRAEFIK_VERSION
+  traefikChartVersion = "9.18.2"; # taken from ./manifests/traefik.yaml at spec.version
   traefikChartSha256 = "sha256-9d7p0ngyMN27u4OPgz7yI14Zj9y36t9o/HMX5wyDpUI=";
 
   k3sRootVersion = "0.9.1";       # taken from ./scripts/download at ROOT_VERSION
