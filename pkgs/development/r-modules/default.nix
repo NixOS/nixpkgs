@@ -714,6 +714,7 @@ let
 
   # Packages which cannot be installed due to lack of dependencies or other reasons.
   brokenPackages = [
+    "rgl"
   ];
 
   otherOverrides = old: new: {
