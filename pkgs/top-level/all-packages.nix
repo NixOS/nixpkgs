@@ -933,6 +933,8 @@ with pkgs;
 
   gofu = callPackage ../applications/misc/gofu { };
 
+  godns = callPackage ../tools/networking/godns { };
+
   ksnip = libsForQt5.callPackage ../tools/misc/ksnip { };
 
   linux-router = callPackage ../tools/networking/linux-router { };
