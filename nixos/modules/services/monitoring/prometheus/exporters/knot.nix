@@ -45,6 +45,10 @@ in {
           ${concatStringsSep " \\\n  " cfg.extraFlags}
       '';
       SupplementaryGroups = [ "knot" ];
+      RestrictAddressFamilies = [
+        # Need AF_UNIX to collect data
+        "AF_UNIX"
+      ];
     };
   };
 }

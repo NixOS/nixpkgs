@@ -403,6 +403,8 @@ in {
 
   airly = callPackage ../development/python-modules/airly { };
 
+  airthings = callPackage ../development/python-modules/airthings { };
+
   ajpy = callPackage ../development/python-modules/ajpy { };
 
   ajsonrpc = callPackage ../development/python-modules/ajsonrpc { };
@@ -1956,6 +1958,8 @@ in {
 
   demjson = callPackage ../development/python-modules/demjson { };
 
+  demjson3 = callPackage ../development/python-modules/demjson3 { };
+
   dendropy = callPackage ../development/python-modules/dendropy { };
 
   denonavr = callPackage ../development/python-modules/denonavr { };
@@ -3280,6 +3284,8 @@ in {
     inherit (pkgs) meson;
     gst-plugins-base = pkgs.gst_all_1.gst-plugins-base;
   };
+
+  gtfs-realtime-bindings = callPackage ../development/python-modules/gtfs-realtime-bindings { };
 
   gtimelog = callPackage ../development/python-modules/gtimelog { };
 
@@ -7574,6 +7580,10 @@ in {
   pytradfri = callPackage ../development/python-modules/pytradfri { };
 
   pytrafikverket = callPackage ../development/python-modules/pytrafikverket { };
+
+  pytransportnsw = callPackage ../development/python-modules/pytransportnsw { };
+
+  pytransportnswv2 = callPackage ../development/python-modules/pytransportnswv2 { };
 
   pytrends = callPackage ../development/python-modules/pytrends { };
 

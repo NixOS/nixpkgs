@@ -412,6 +412,7 @@
   ./services/hardware/illum.nix
   ./services/hardware/interception-tools.nix
   ./services/hardware/irqbalance.nix
+  ./services/hardware/joycond.nix
   ./services/hardware/lcd.nix
   ./services/hardware/lirc.nix
   ./services/hardware/nvidia-optimus.nix
@@ -543,6 +544,7 @@
   ./services/misc/matrix-appservice-discord.nix
   ./services/misc/matrix-appservice-irc.nix
   ./services/misc/matrix-synapse.nix
+  ./services/misc/mautrix-facebook.nix
   ./services/misc/mautrix-telegram.nix
   ./services/misc/mbpfan.nix
   ./services/misc/mediatomb.nix

@@ -34,6 +34,10 @@ in {
           ${concatStringsSep " \\n" cfg.controlSocketPaths}
       '';
       SupplementaryGroups = [ "kea" ];
+      RestrictAddressFamilies = [
+        # Need AF_UNIX to collect data
+        "AF_UNIX"
+      ];
     };
   };
 }

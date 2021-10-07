@@ -780,7 +780,7 @@ in
       in
       [
         "-net nic,netdev=user.0,model=virtio"
-        "-netdev user,id=user.0,${forwardingOptions}\${QEMU_NET_OPTS:+,$QEMU_NET_OPTS}"
+        "-netdev user,id=user.0,${forwardingOptions}\"$QEMU_NET_OPTS\""
       ];
 
     # FIXME: Consolidate this one day.
