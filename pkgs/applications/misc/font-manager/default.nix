@@ -26,33 +26,21 @@
 
 stdenv.mkDerivation rec {
   pname = "font-manager";
-  version = "0.8.6";
+  version = "0.8.7";
 
   src = fetchFromGitHub {
     owner = "FontManager";
     repo = "master";
     rev = version;
-    sha256 = "0a18rbdy9d0fj0vnsc2rm7xlh17vjqn4kdyrq0ldzlzkb6zbdk2k";
+    sha256 = "lqXjGSsiWaMJGyr1c2Wt/bs4F8q51mQ1+f6vbZRQzVs=";
   };
 
   patches = [
-    # Fix some Desktop Settings with GNOME 40.
-    # https://github.com/FontManager/font-manager/issues/215
+    # Fix compilation with latest Vala.
+    # https://github.com/FontManager/font-manager/issues/240
     (fetchpatch {
-      url = "https://github.com/FontManager/font-manager/commit/b28f325d7951a66ebf1a2a432ee09fd22048a033.patch";
-      sha256 = "dKbrXGb9a4JuG/4x9vprMlh5J17HKJFifRWq9BWp1ow=";
-    })
-    (fetchpatch {
-      url = "https://github.com/FontManager/font-manager/commit/2147204d4c4c6b58161230500186c3a5d4eeb1c1.patch";
-      sha256 = "2/PFLwf7h76fIIN4+lyjg/L0KVU1hhRQCfwCAGDpb00=";
-    })
-    (fetchpatch {
-      url = "https://github.com/FontManager/font-manager/commit/3abc541ef8606727c72af7631c021809600336ac.patch";
-      sha256 = "rJPnW+7uuFLxTf5tk+Rzo+xkw2+uzU6BkzPXLeR/RGc=";
-    })
-    (fetchpatch {
-      url = "https://github.com/FontManager/font-manager/commit/03a822f0d7b72442cd2ffcc8668da265d3535e0d.patch";
-      sha256 = "3Z2UqK5VV2bIwpGd1tA7fivd7ooIuV6CxTJhzgOAkIM=";
+      url = "https://github.com/FontManager/font-manager/commit/f9c4621389dae5999ca9d2f3c8402c2512a9ea60.patch";
+      sha256 = "ZEJZSUYFLKmiHpVusO3ZUXMLUzJbbbCSqMjCtwlzPRY=";
     })
   ];
 
