@@ -6368,6 +6368,8 @@ with pkgs;
 
   jd = callPackage ../development/tools/jd { };
 
+  jd-diff-patch = callPackage ../development/tools/jd-diff-patch { };
+
   jd-gui = callPackage ../tools/security/jd-gui { };
 
   jdiskreport = callPackage ../tools/misc/jdiskreport { };
