@@ -1,11 +1,13 @@
-{ lib
+{ fetchurl
 , gcc9Stdenv
-, fetchurl
-, pkg-config
+, installShellFiles
+, lib
 , libftdi1
+, libjaylink
 , libusb1
 , pciutils
-, installShellFiles
+, pkg-config
+, jlinkSupport ? false
 }:
 
 gcc9Stdenv.mkDerivation rec {
@@ -17,23 +19,26 @@ gcc9Stdenv.mkDerivation rec {
     sha256 = "0ax4kqnh7kd3z120ypgp73qy1knz47l6qxsqzrfkd97mh5cdky71";
   };
 
+  nativeBuildInputs = [ pkg-config installShellFiles ];
+  buildInputs = [ libftdi1 libusb1 ]
+    # https://github.com/flashrom/flashrom/issues/125
+    ++ lib.optional (!gcc9Stdenv.isAarch64) pciutils
+    ++ lib.optional jlinkSupport libjaylink;
+
   postPatch = ''
     substituteInPlace util/z60_flashrom.rules \
       --replace "plugdev" "flashrom"
   '';
 
-  makeFlags = [ "PREFIX=$(out)" "libinstall" ];
+  makeFlags = [ "PREFIX=$(out)" "libinstall" ]
+    ++ lib.optional jlinkSupport "CONFIG_JLINK_SPI=yes";
 
   postInstall = ''
     install -Dm644 util/z60_flashrom.rules $out/lib/udev/rules.d/flashrom.rules
   '';
 
-  nativeBuildInputs = [ pkg-config installShellFiles ];
-  buildInputs = [ libftdi1 libusb1 ]
-                ++ lib.optional (!gcc9Stdenv.isAarch64) pciutils;
-
   meta = with lib; {
-    homepage = "http://www.flashrom.org";
+    homepage = "https://www.flashrom.org";
     description = "Utility for reading, writing, erasing and verifying flash ROM chips";
     license = licenses.gpl2;
     maintainers = with maintainers; [ funfunctor fpletz felixsinger ];
