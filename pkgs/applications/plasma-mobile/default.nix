@@ -62,6 +62,7 @@ let
       };
     in {
       alligator = callPackage ./alligator.nix {};
+      audiotube = callPackage ./audiotube.nix {};
       calindori = callPackage ./calindori.nix {};
       kalk = callPackage ./kalk.nix {};
       kasts = callPackage ./kasts.nix {};
