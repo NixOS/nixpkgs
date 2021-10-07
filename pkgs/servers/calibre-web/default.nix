@@ -7,13 +7,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "calibre-web";
-  version = "0.6.12";
+  version = "0.6.13";
 
   src = fetchFromGitHub {
     owner = "janeczku";
     repo = "calibre-web";
     rev = version;
-    sha256 = "sha256-IgS281qDxG302UznC63nZH8/ty4fgFtn+lLYdakGA4w=";
+    sha256 = "sha256-zU7ujvFPi4UaaEglIK3YX3TJxBME35NEKKblnJRt0tM=";
   };
 
   prePatch = ''
@@ -53,6 +53,7 @@ python3.pkgs.buildPythonApplication rec {
     flask_login
     flask_principal
     iso-639
+    lxml
     pypdf3
     requests
     sqlalchemy

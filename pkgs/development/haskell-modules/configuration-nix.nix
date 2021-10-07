@@ -94,8 +94,6 @@ self: super: builtins.intersectAttrs super {
   # Won't find it's header files without help.
   sfml-audio = appendConfigureFlag super.sfml-audio "--extra-include-dirs=${pkgs.openal}/include/AL";
 
-  hercules-ci-agent = disableLibraryProfiling super.hercules-ci-agent;
-
   # avoid compiling twice by providing executable as a separate output (with small closure size)
   niv = enableSeparateBinOutput super.niv;
   ormolu = enableSeparateBinOutput super.ormolu;
