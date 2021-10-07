@@ -933,6 +933,8 @@ with pkgs;
 
   gofu = callPackage ../applications/misc/gofu { };
 
+  godns = callPackage ../tools/networking/godns { };
+
   ksnip = libsForQt5.callPackage ../tools/misc/ksnip { };
 
   linux-router = callPackage ../tools/networking/linux-router { };
@@ -16952,6 +16954,8 @@ with pkgs;
 
   libcerf = callPackage ../development/libraries/libcerf {};
 
+  libcdada = callPackage ../development/libraries/libcdada { };
+
   libcdaudio = callPackage ../development/libraries/libcdaudio { };
 
   libcddb = callPackage ../development/libraries/libcddb { };
@@ -29476,6 +29480,10 @@ with pkgs;
   eternity = callPackage ../games/eternity-engine { };
 
   eureka-editor = callPackage ../applications/misc/eureka-editor { };
+
+  eureka-ideas = callPackage ../applications/misc/eureka-ideas {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   extremetuxracer = callPackage ../games/extremetuxracer {
     libpng = libpng12;
