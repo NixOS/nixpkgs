@@ -17693,6 +17693,8 @@ with pkgs;
 
   libopenaptx = callPackage ../development/libraries/libopenaptx { };
 
+  libopenglrecorder = callPackage ../development/libraries/libopenglrecorder { };
+
   libopus = callPackage ../development/libraries/libopus { };
 
   libopusenc = callPackage ../development/libraries/libopusenc { };
