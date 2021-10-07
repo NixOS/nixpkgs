@@ -12,19 +12,20 @@ let
     owner = "dzaima";
     repo = "CBQN";
     rev = "4d23479cdbd5ac6eb512c376ade58077b814b2b7";
-    sha256 = "1il6pxbllf4rs0wf2s6q6h72m3p1d6ymgsllpkmadnw1agif0fri";
+    hash = "sha256-MTvg4lOB26bqvJTqV71p4Y4qDjTYaOE40Jk4Sle/hsY=";
   };
 in
 assert genBytecode -> ((bqn-path != null) && (mbqn-source != null));
+
 stdenv.mkDerivation rec {
   pname = "cbqn" + lib.optionalString (!genBytecode) "-standalone";
-  version = "0.0.0+unstable=2021-10-05";
+  version = "0.pre+unstable=2021-10-05";
 
   src = fetchFromGitHub {
     owner = "dzaima";
     repo = "CBQN";
     rev = "e23dab20daff9c0dacc2561c616174af72029a3e";
-    sha256 = "17h8fb9a0hjindbxgkljajl1hjr8rdqrb85s5lz903v17wl4lrba";
+    hash = "sha256-amVKKD9hD5A+LbqglXHLKEsYqFSSztdXs1FCoNJyCJ4=";
   };
 
   dontConfigure = true;
@@ -62,8 +63,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ AndersonTorres sternenseemann synthetica ];
     platforms = platforms.all;
-    priority = if genBytecode then 0 else 10;
   };
 }
-# TODO: factor and version cbqn-bytecode-files
+# TODO: version cbqn-bytecode-files
 # TODO: test suite

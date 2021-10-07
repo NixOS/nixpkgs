@@ -7,13 +7,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "bqn";
-  version = "0.0.0+unstable=2021-10-01";
+  version = "0.pre+unstable=2021-10-06";
 
   src = fetchFromGitHub {
     owner = "mlochbaum";
     repo = "BQN";
-    rev = "b3d68f730d48ccb5e3b3255f9010c95bf9f86e22";
-    hash = "sha256-Tkgwz7+d25svmjRsXFUQq0S/73QJU+BKSNeGqpUcBTQ=";
+    rev = "2ce2dc40702431ef3d3ffece9e2f6f8b883ac6c5";
+    hash = "sha256-bvXKOaBlddG6O0GbmtqU9prklqmOOvlbXuCUaFO+j0M=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -21,7 +21,7 @@ stdenvNoCC.mkDerivation rec {
   buildInputs = [ nodejs ];
 
   patches = [
-    # Creates a @libbqn@ substitution variable
+    # Creates a @libbqn@ substitution variable, to be filled in the fixupPhase
     ./001-libbqn-path.patch
   ];
 
