@@ -29,10 +29,6 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ hupper pastedeploy plaster plaster-pastedeploy repoze_lru translationstring venusian webob zope_deprecation zope_interface ];
 
-  # Failing tests
-  # https://github.com/Pylons/pyramid/issues/1899
-  doCheck = !isPy35;
-
   pythonImportsCheck = [ "pyramid" ];
 
   meta = with lib; {

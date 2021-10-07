@@ -24,7 +24,7 @@ buildPythonPackage rec {
     sha256 = "sha256-qsFotbK08gCvTjWGfPMWcSIQ49XbgcHL3/OHImR7sIc=";
   };
 
-  preConfigure = ''
+  postPatch = ''
     substituteInPlace setup.py --replace "nose<1.3.0" "nose"
   '';
 
