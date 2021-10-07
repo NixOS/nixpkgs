@@ -36,6 +36,8 @@ let
 
     ansiterminal = callPackage ../development/ocaml-modules/ansiterminal { };
 
+    ao = callPackage ../development/ocaml-modules/ao { };
+
     apron = callPackage ../development/ocaml-modules/apron { };
 
     arp = callPackage ../development/ocaml-modules/arp { };
