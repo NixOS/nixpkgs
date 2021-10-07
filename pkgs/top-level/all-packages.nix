@@ -20536,6 +20536,8 @@ with pkgs;
 
   networkaudiod = callPackage ../servers/networkaudiod { };
 
+  unifiedpush-common-proxies = callPackage ../servers/unifiedpush-common-proxies { };
+
   unit = callPackage ../servers/http/unit { };
 
   ncdns = callPackage ../servers/dns/ncdns { };
