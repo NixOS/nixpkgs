@@ -1,82 +1,104 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, nettools, gettext, flex
-, readline ? null, openssl ? null, python2 ? null, ncurses ? null, rocksdb
-, sqlite ? null, postgresql ? null, libmysqlclient ? null, zlib ? null, lzo ? null
-, jansson ? null, acl ? null, glusterfs ? null, libceph ? null, libcap ? null
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, rpcsvc-proto
+, libtirpc
+, gtest
+, linux-pam
+, readline
+, openssl
+, python3
+, ncurses
+, postgresql
+, lzo
+, systemd
+, zlib
+, jansson
+, acl
+, glusterfs
+, libceph
+, libcap
+, libxml2
+, json_c
 }:
-
-assert sqlite != null || postgresql != null || libmysqlclient != null;
 
 with lib;
 let
-  withGlusterfs = "\${with_glusterfs_directory}";
+  pythonMajMin = lib.versions.majorMinor (lib.getVersion python3);
 in
 stdenv.mkDerivation rec {
   pname = "bareos";
-  version = "17.2.7";
+  version = "20.0.3";
+
+  outputs = [ "out" "dev" ];
 
   src = fetchFromGitHub {
     owner = "bareos";
     repo = "bareos";
     rev = "Release/${version}";
     name = "${pname}-${version}-src";
-    sha256 = "1awf5i4mw2nfd7z0dmqnywapnx9nz6xwqv8rxp0y2mnrhzdpbrbz";
+    sha256 = "sha256-fqSrLDcm8Yb53Jt+K5xywOc0UAurzVChmi4eDOW2NVQ=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ cmake pkg-config rpcsvc-proto ];
   buildInputs = [
-    nettools gettext readline openssl python2 flex ncurses sqlite postgresql
-    libmysqlclient zlib lzo jansson acl glusterfs libceph libcap rocksdb
+    acl
+    glusterfs
+    gtest
+    jansson
+    libcap
+    libceph.dev
+    libtirpc.dev
+    linux-pam
+    lzo
+    ncurses
+    openssl
+    postgresql
+    python3
+    readline
+    systemd.dev
+    zlib
+    libxml2.dev
+    json_c.dev
   ];
 
   postPatch = ''
-    sed -i 's,\(-I${withGlusterfs}/include\),\1/glusterfs,' configure
+    patchShebangs systemtests/scripts/generate_minio_certs.sh.in
+
+    substituteInPlace core/platforms/CMakeLists.txt --replace archlinux unknown
+
+    for plugin in dird stored filed; do
+      substituteInPlace core/src/plugins/''${plugin}/python/CMakeLists.txt --replace 'DESTINATION ''${Python3_SITELIB}' "DESTINATION $out/lib/python${pythonMajMin}/site-packages"
+    done
+
+    substituteInPlace core/CMakeLists.txt --replace /usr/include/tirpc ${libtirpc.dev}/include/tirpc
+    substituteInPlace core/src/droplet/cmake/Findjsonc.cmake --replace /usr/include ${json_c.dev}/include
+
+    substituteInPlace core/src/droplet/libdroplet/src/utils.c --replace attr/xattr.h sys/xattr.h
+    substituteInPlace core/src/droplet/libdroplet/src/backend/posix/reqbuilder.c --replace attr/xattr.h sys/xattr.h
   '';
 
-  configureFlags = [
-    "--sysconfdir=/etc"
-    "--exec-prefix=\${out}"
-    "--enable-lockmgr"
-    "--enable-dynamic-storage-backends"
-    "--with-basename=nixos" # For reproducible builds since it uses the hostname otherwise
-    "--with-hostname=nixos" # For reproducible builds since it uses the hostname otherwise
-    "--with-working-dir=/var/lib/bareos"
-    "--with-bsrdir=/var/lib/bareos"
-    "--with-logdir=/var/log/bareos"
-    "--with-pid-dir=/run/bareos"
-    "--with-subsys-dir=/run/bareos"
-    "--enable-ndmp"
-    "--enable-lmdb"
-    "--enable-batch-insert"
-    "--enable-dynamic-cats-backends"
-    "--enable-sql-pooling"
-    "--enable-scsi-crypto"
-  ] ++ optionals (readline != null) [ "--disable-conio" "--enable-readline" "--with-readline=${readline.dev}" ]
-    ++ optional (python2 != null) "--with-python=${python2}"
-    ++ optional (openssl != null) "--with-openssl=${openssl.dev}"
-    ++ optional (sqlite != null) "--with-sqlite3=${sqlite.dev}"
-    ++ optional (postgresql != null) "--with-postgresql=${postgresql}"
-    ++ optional (libmysqlclient != null) "--with-mysql=${libmysqlclient}"
-    ++ optional (zlib != null) "--with-zlib=${zlib.dev}"
-    ++ optional (lzo != null) "--with-lzo=${lzo}"
-    ++ optional (jansson != null) "--with-jansson=${jansson}"
-    ++ optional (acl != null) "--enable-acl"
-    ++ optional (glusterfs != null) "--with-glusterfs=${glusterfs}"
-    ++ optional (libceph != null) "--with-cephfs=${libceph}";
-
-  installFlags = [
-    "sysconfdir=\${out}/etc"
-    "confdir=\${out}/etc/bareos"
-    "scriptdir=\${out}/etc/bareos"
-    "working_dir=\${TMPDIR}"
-    "log_dir=\${TMPDIR}"
-    "sbindir=\${out}/bin"
+  cmakeFlags = [
+    # Make paths relative to build dir, for determinism.
+    "-DDEBUG_PREFIX_MAP=ON"
+    # Postgres is the only supported database remaining, mysql and
+    # sqlite are both obsoleted.
+    "-Dpostgresql=yes"
+    # scsi-crypto lets bareos manage hardware encryption on tape
+    # drives.
+    "-Dscsi-crypto=yes"
+    # Build and install systemd units.
+    "-Dsystemd=yes"
+    "-DSYSTEMD_UNITDIR=lib/systemd/system"
   ];
 
   meta = with lib; {
-    homepage = "http://www.bareos.org/";
-    description = "A fork of the bacula project";
+    homepage = "https://www.bareos.com/";
+    description = "A networked backup solution which preserves, archives, and recovers data from all major operating systems.";
     license = licenses.agpl3;
-    platforms = platforms.unix;
-    broken = true;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.danderson ];
   };
 }
