@@ -13,12 +13,12 @@
 
 buildPythonPackage rec {
   pname = "joblib";
-  version = "1.0.1";
+  version = "1.1.0";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9c17567692206d2f3fb9ecf5e991084254fe631665c450b443761c4186a613f7";
+    sha256 = "4158fcecd13733f8be669be0683b96ebdbbd38d23559f54dca7205aea1bf1e35";
   };
 
   checkInputs = [ sphinx numpydoc pytestCheckHook ];
