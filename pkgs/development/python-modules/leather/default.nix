@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "leather";
-  version = "0.3.3";
+  version = "0.3.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "125r372q7bwcajfdysp7w5zh5wccwxf1mkhqawl8h518nl1icv87";
+    sha256 = "b43e21c8fa46b2679de8449f4d953c06418666dc058ce41055ee8a8d3bb40918";
   };
 
   propagatedBuildInputs = [ six ];
