@@ -25,6 +25,6 @@ stdenvNoCC.mkDerivation rec {
     license = licenses.isc;
     platforms = platforms.all;
     maintainers = with maintainers; [ elkowar ];
+    mainProgram = "fet.sh";
   };
-
 }
