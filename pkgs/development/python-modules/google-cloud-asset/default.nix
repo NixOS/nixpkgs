@@ -16,11 +16,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-asset";
-  version = "3.6.0";
+  version = "3.6.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4aa14659d1b406d98b7d39f5d7b9399c4eaeb0c0b9f669fe51a5ac45a28b784e";
+    sha256 = "ba0f7a363e747e0dbd4075420fde42b3e6c50e739ba80880757878978a8f4ff9";
   };
 
   propagatedBuildInputs = [
