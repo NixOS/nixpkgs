@@ -10762,6 +10762,8 @@ with pkgs;
 
   wireguard-tools = callPackage ../tools/networking/wireguard-tools { };
 
+  wiretrustee = callPackage ../tools/networking/wiretrustee { };
+
   wg-friendly-peer-names = callPackage ../tools/networking/wg-friendly-peer-names { };
 
   woff2 = callPackage ../development/web/woff2 { };
