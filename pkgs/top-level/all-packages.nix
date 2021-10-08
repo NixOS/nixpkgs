@@ -15050,6 +15050,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security CoreServices;
   };
 
+  time-ghc-modules = callPackage ../development/tools/time-ghc-modules { };
+
   tflint = callPackage ../development/tools/analysis/tflint { };
 
   tfsec = callPackage ../development/tools/analysis/tfsec { };
