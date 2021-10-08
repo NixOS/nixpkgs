@@ -1,11 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, substituteAll, perl, file, ncurses }:
+{ lib, stdenv, fetchFromGitHub, substituteAll, perl, file, ncurses, runtimeShell }:
 
 stdenv.mkDerivation rec {
   pname = "lesspipe";
   version = "1.85";
 
+  nativeBuildInputs = [ perl ];
   buildInputs = [ perl ];
-  preConfigure = "patchShebangs .";
+  configurePhase = ''
+    patchShebangs --build configure
+    ./configure --prefix=$out --shell=${runtimeShell} --yes
+  '';
+  buildPhase = "patchShebangs --host .";
 
   src = fetchFromGitHub {
     owner = "wofr06";
@@ -20,6 +25,7 @@ stdenv.mkDerivation rec {
       file = "${file}/bin/file";
       tput = "${ncurses}/bin/tput";
     })
+    ./override-shell-detection.patch
   ];
 
   meta = with lib; {
