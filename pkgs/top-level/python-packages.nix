@@ -5377,9 +5377,11 @@ in {
 
   paste = callPackage ../development/python-modules/paste { };
 
-  PasteDeploy = callPackage ../development/python-modules/pastedeploy { };
+  pastedeploy = callPackage ../development/python-modules/pastedeploy { };
 
   pastel = callPackage ../development/python-modules/pastel { };
+
+  pastescript = callPackage ../development/python-modules/pastescript { };
 
   patator = callPackage ../development/python-modules/patator { };
 
@@ -5410,6 +5412,8 @@ in {
   patool = callPackage ../development/python-modules/patool { };
 
   patsy = callPackage ../development/python-modules/patsy { };
+
+  patrowl4py = callPackage ../development/python-modules/patrowl4py { };
 
   paver = callPackage ../development/python-modules/paver { };
 
@@ -6201,6 +6205,8 @@ in {
   pydy = callPackage ../development/python-modules/pydy { };
 
   pyechonest = callPackage ../development/python-modules/pyechonest { };
+
+  pyeclib = callPackage ../development/python-modules/pyeclib { };
 
   pyeconet = callPackage ../development/python-modules/pyeconet { };
 
@@ -8108,6 +8114,8 @@ in {
 
   rxv = callPackage ../development/python-modules/rxv { };
 
+  rzpipe = callPackage ../development/python-modules/rzpipe { };
+
   s2clientprotocol = callPackage ../development/python-modules/s2clientprotocol { };
 
   s3fs = callPackage ../development/python-modules/s3fs { };
@@ -8832,6 +8840,8 @@ in {
   swagger-spec-validator = callPackage ../development/python-modules/swagger-spec-validator { };
 
   swagger-ui-bundle = callPackage ../development/python-modules/swagger-ui-bundle { };
+
+  swift = callPackage ../development/python-modules/swift { };
 
   swisshydrodata = callPackage ../development/python-modules/swisshydrodata { };
 

@@ -292,14 +292,12 @@ let
 
       /* vim-plug is an extremely popular vim plugin manager.
       */
-      /* Remove repeated "/." suffixes from a path */
-      stripDots = path: lib.head (builtins.split "(/\\.)*$" path);
       plugImpl =
       (''
         source ${vimPlugins.vim-plug.rtp}/plug.vim
         silent! call plug#begin('/dev/null')
 
-        '' + (lib.concatMapStringsSep "\n" (pkg: "Plug '${stripDots pkg.rtp}'") plug.plugins) + ''
+        '' + (lib.concatMapStringsSep "\n" (pkg: "Plug '${pkg.rtp}'") plug.plugins) + ''
 
         call plug#end()
       '');

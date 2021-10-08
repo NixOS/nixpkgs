@@ -422,6 +422,7 @@ mapAliases ({
   liberationsansnarrow = liberation-sans-narrow; # added 2018-12-12
   libgnome_keyring = libgnome-keyring; # added 2018-02-25
   libgnome_keyring3 = libgnome-keyring3; # added 2018-02-25
+  libgpgerror = libgpg-error; # added 2021-09-04
   libgumbo = gumbo; # added 2018-01-21
   libGL_driver = mesa.drivers; # added 2019-05-28
   libintlOrEmpty = lib.optional (!stdenv.isLinux || stdenv.hostPlatform.libc != "glibc") gettext; # added 2018-03-14

@@ -1,6 +1,6 @@
 { stdenv, lib, fetchFromGitHub, autoconf, automake, libtool, makeWrapper
 , pkg-config, cmake, gnumake, yasm, python3Packages
-, libgcrypt, libgpgerror, libunistring
+, libgcrypt, libgpg-error, libunistring
 , boost, avahi, lame
 , gettext, pcre-cpp, yajl, fribidi, which
 , openssl, gperf, tinyxml2, taglib, libssh, swig, jre_headless
@@ -122,7 +122,7 @@ in stdenv.mkDerivation {
       sqlite libmysqlclient avahi lame
       curl bzip2 zip unzip glxinfo
       libcec libcec_platform dcadec libuuid
-      libgcrypt libgpgerror libunistring
+      libgcrypt libgpg-error libunistring
       libcrossguid libplist
       bluez giflib glib harfbuzz lcms2 libpthreadstubs
       ffmpeg flatbuffers fmt fstrcmp rapidjson
