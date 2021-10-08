@@ -22726,6 +22726,8 @@ with pkgs;
 
   ia-writer-duospace = callPackage ../data/fonts/ia-writer-duospace { };
 
+  i-dot-ming = callPackage ../data/fonts/i-dot-ming { };
+
   ibm-plex = callPackage ../data/fonts/ibm-plex { };
 
   iconpack-jade = callPackage ../data/icons/iconpack-jade { };
