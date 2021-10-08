@@ -36,6 +36,7 @@ buildPythonApplication rec {
 
   patches = [
     ./0001-setup-add-homeserver-as-console-script.patch
+    ./0002-Expose-generic-worker-as-binary-under-NixOS.patch
   ];
 
   buildInputs = [ openssl ];
