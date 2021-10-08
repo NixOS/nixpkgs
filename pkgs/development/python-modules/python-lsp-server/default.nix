@@ -49,6 +49,9 @@ buildPythonPackage rec {
     substituteInPlace setup.cfg \
       --replace "--cov-report html --cov-report term --junitxml=pytest.xml" "" \
       --replace "--cov pylsp --cov test" ""
+
+    substituteInPlace setup.py \
+      --replace "pylint>=2.5.0,<2.10.0" "pylint"
   '';
 
   propagatedBuildInputs = [
