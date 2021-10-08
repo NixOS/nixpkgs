@@ -23,11 +23,11 @@
 
 buildPythonPackage rec {
   pname = "virtualenv";
-  version = "20.7.2";
+  version = "20.8.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9ef4e8ee4710826e98ff3075c9a4739e2cb1040de6a2a8d35db0055840dc96a0";
+    sha256 = "bcc17f0b3a29670dd777d6f0755a4c04f28815395bca279cdcb213b97199a6b8";
   };
 
   nativeBuildInputs = [
