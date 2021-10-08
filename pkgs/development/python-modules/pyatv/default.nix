@@ -19,13 +19,13 @@
 
 buildPythonPackage rec {
   pname = "pyatv";
-  version = "0.8.2";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "postlund";
     repo = pname;
     rev = "v${version}";
-    sha256 = "035cjm78xakvfi7k8zahjk0xr23p9my67d8jvq5bqrd506awrl0f";
+    sha256 = "0rpf8qspk433jpj7qy3mv20vf3hbm6msx3mii5kq0dmsh5pqy6h4";
   };
 
   postPatch = ''
