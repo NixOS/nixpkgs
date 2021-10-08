@@ -11,7 +11,7 @@
 , libXtst
 , libargon2
 , libgcrypt
-, libgpgerror
+, libgpg-error
 , libsodium
 , libyubikey
 , pkg-config
@@ -99,7 +99,7 @@ stdenv.mkDerivation rec {
     libXtst
     libargon2
     libgcrypt
-    libgpgerror
+    libgpg-error
     libsodium
     libyubikey
     qrencode
