@@ -35,6 +35,8 @@ let
   x11env = buildEnv { name = "x11env"; paths = [libX11 xorgproto]; };
   x11lib = x11env + "/lib";
   x11inc = x11env + "/include";
+
+  fetchpatch' = x: if builtins.isAttrs x then fetchpatch x else x;
 in
 
 stdenv.mkDerivation (args // {
@@ -44,7 +46,7 @@ stdenv.mkDerivation (args // {
 
   inherit src;
 
-  patches = map fetchpatch patches;
+  patches = map fetchpatch' patches;
 
   strictDeps = true;
 
