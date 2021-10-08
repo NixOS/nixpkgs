@@ -30,6 +30,8 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/time-ghc-modules --prefix PATH : ${lib.makeBinPath [ sqlite python3 coreutils findutils gnused ]} \
                                           --set PROCESS_SCRIPT $out/lib/process \
                                           --set HTML_FILE $out/lib/index.html
+
+    runHook postBuild
   '';
 
   installPhase = ''
