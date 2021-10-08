@@ -1035,6 +1035,12 @@ let
       '';
     });
 
+    MatchIt = old.MatchIt.overrideDerivation (attrs: {
+      patches = [ (pkgs.fetchpatch {
+        url = "https://github.com/kosukeimai/MatchIt/commit/8c15a1afa16b74eb04a45e7e46f8aca64ed89bcb.patch";
+        sha256 = "sha256-3UI60n49xuX6LniHpTLOUSsHCEAQ7f1FMBVH0jNlW60=";
+      }) ];
+    });
   };
 in
   self
