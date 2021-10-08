@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "ambee";
-  version = "0.3.0";
+  version = "0.4.0";
   disabled = pythonOlder "3.8";
   format = "pyproject";
 
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "frenck";
     repo = "python-ambee";
     rev = "v${version}";
-    sha256 = "0vivzpfsmb4gy7k5wlbk5ylkpqy4jhki9lbgxyrrqj5yhhzz6cwy";
+    sha256 = "07n3fxkr7s4aasbgh8q5yh2qx3b0wsh5p3q1v1qdb4gsp84gc1fv";
   };
 
   nativeBuildInputs = [
