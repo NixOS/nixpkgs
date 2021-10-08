@@ -381,6 +381,13 @@
           <link xlink:href="options.html#opt-services.seafile.enable">services.seafile</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/mchehab/rasdaemon">rasdaemon</link>,
+          a hardware error logging daemon. Available as
+          <link linkend="opt-hardware.rasdaemon.enable">hardware.rasdaemon</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-incompatibilities">
