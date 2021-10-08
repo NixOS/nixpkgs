@@ -23,5 +23,6 @@ stdenv.mkDerivation rec {
     license     = licenses.mit;
     maintainers = with maintainers; [ siraben ];
     platforms   = platforms.all;
+    mainProgram = "remkrom";
   };
 }
