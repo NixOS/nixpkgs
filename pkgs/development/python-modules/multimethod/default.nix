@@ -6,11 +6,11 @@
 }:
 buildPythonPackage rec {
   pname = "multimethod";
-  version = "1.5";
+  version = "1.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b9c6f85ecf187f14a3951fff319643e1fac3086d757dec64f2469e1fd136b65d";
+    sha256 = "ed78cd3237c59652b226d571209d934860b99240c62935a706a9b3d0bce6ebb3";
   };
 
   checkInputs = [
