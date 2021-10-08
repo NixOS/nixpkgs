@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "FormEncode";
-  version = "2.0.0";
+  version = "2.0.1";
 
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "049pm276140h30xgzwylhpii24xcln1qfdlfmbj69sqpfhlr5szj";
+    sha256 = "8f2974112c2557839d5bae8b76490104c03830785d923abbdef148bf3f710035";
   };
 
   postPatch = ''
