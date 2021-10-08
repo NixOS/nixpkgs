@@ -320,6 +320,7 @@ in with py.pkgs; buildPythonApplication rec {
     "ecobee"
     "econet"
     "ee_brightbox"
+    "efergy"
     "elgato"
     "elkm1"
     "emonitor"
