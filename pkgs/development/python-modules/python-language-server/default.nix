@@ -78,6 +78,8 @@ buildPythonPackage rec {
     "test_snippet_parsing"
     "test_numpy_hover"
     "test_symbols"
+    "test_lint_free_pylint"
+    "test_per_file_caching"
   ] ++ lib.optional isPy27 "test_flake8_lint";
 
   meta = with lib; {
