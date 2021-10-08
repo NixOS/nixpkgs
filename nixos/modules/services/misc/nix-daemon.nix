@@ -189,7 +189,9 @@ in
         default = 0;
         description = ''
           Nix daemon process priority. This priority propagates to build processes.
-          0 is the default Unix process priority, 19 is the lowest.
+          0 is the default Unix process priority, 19 is the lowest. Note that nix
+          bypasses nix-daemon when running as root and this option does not have
+          any effect in such a case.
 
           Please note that if used on a recent Linux kernel with group scheduling,
           setting the nice level will only have an effect relative to other threads

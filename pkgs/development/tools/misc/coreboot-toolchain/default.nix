@@ -62,7 +62,7 @@ let
     sha256 = "0viw2x4ckjwiylb92w85k06b0g9pmamjy2yqs7fxfqbmfadkf1yr";
   };
 in stdenvNoCC.mkDerivation rec {
-  name = "coreboot-toolchain";
+  pname = "coreboot-toolchain";
   version = version_coreboot;
   src = tar_coreboot;
 

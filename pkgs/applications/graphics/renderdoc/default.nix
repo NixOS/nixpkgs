@@ -15,13 +15,13 @@ let
 in
 mkDerivation rec {
   pname = "renderdoc";
-  version = "1.15";
+  version = "1.16";
 
   src = fetchFromGitHub {
     owner = "baldurk";
     repo = "renderdoc";
     rev = "v${version}";
-    sha256 = "HSWl3FC5YDIADO3h6oHxHdwsrFQKKj2zTtH2e3cc5iI=";
+    sha256 = "150d1qzjs420clqr48gickiw5ymjx4md6iyjbxmxsdml0pyxpwwn";
   };
 
   buildInputs = [

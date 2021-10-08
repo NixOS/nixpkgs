@@ -80,6 +80,16 @@ function fetchLockedDep(builtinFetchGit) {
 
     const fileName = urlToName(url)
 
+    if (resolved.startsWith('https://codeload.github.com/')) {
+      const s = resolved.split('/')
+      const githubUrl = `https://github.com/${s[3]}/${s[4]}.git`
+      const githubRev = s[6]
+
+      const [_, branch] = nameWithVersion.split('#')
+
+      return fetchgit(fileName, githubUrl, rev, branch || 'master', builtinFetchGit)
+    }
+
     if (url.startsWith('git+') || url.startsWith("git:")) {
       const rev = sha1OrRev
 
