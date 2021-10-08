@@ -3,7 +3,7 @@
 , rustPlatform
 , pkg-config, cmake, protobuf
 , zlib, bzip2, openssl, leveldb
-, nodePackages, curl, gnumake, git
+, nodePackages, curl, git
 , libredirect
 , portable ? true
 }:
@@ -28,20 +28,25 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "lighthouse";
-  version = "1.5.2";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "sigp";
     repo = "lighthouse";
     rev = "v${version}";
-    sha256 = "13pacp39splz6glinz0fy58fb0lsbqp54ndb2d4w9xb716yr1vnk";
+    sha256 = "01p24xcxf8z0d3krpx6k1q1gp25yvqh2pcq9q197fd09vw4bh0pl";
   };
 
-  # Patch version check to not rely on git
   postPatch = ''
+    # Patch version check to not rely on git
     substituteInPlace common/lighthouse_version/src/lib.rs \
       --replace 'fallback = "unknown"' 'fallback = "Lighthouse/v${version}"' \
       --replace 'r"^Lighthouse/v[0-9]+\.[0-9]+\.[0-9]+(-rc.[0-9])?-[[:xdigit:]]{7}\+?$"' 'r"^Lighthouse/v[0-9]+\.[0-9]+\.[0-9]+(-rc.[0-9])?$"'
+
+    # web3signer_tests requires internet access to build, and fetches the latest version from github
+    # remove it it is only used for testing
+    substituteInPlace Cargo.toml \
+      --replace '"testing/web3signer_tests",' '#"testing/web3signer_tests",' \
   '';
 
   # LevelDB can't be unvendored and it requires cmake to be built
@@ -64,7 +69,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoBuildFlags = [ "--features" "${lib.optionalString portable "portable,"}" ];
 
-  cargoSha256 = "1i84gf7as3hkk6x5ir9br2sfxrh490704sdiqp44an005hlbaiav";
+  cargoSha256 = "1ihxrjrxv8ipjis9i20hcd1xaspblxw3rh5phpfzgbgbkhpaqn35";
 
   checkFlags = [
     # these want internet access, disable them
