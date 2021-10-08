@@ -563,7 +563,7 @@ in
                   ${cfgZfs.package}/sbin/zfs list -rHo name,keylocation ${pool} | while IFS=$'\t' read ds kl; do
                     (${optionalString (!isBool cfgZfs.requestEncryptionCredentials) ''
                          if ! echo '${concatStringsSep "\n" cfgZfs.requestEncryptionCredentials}' | grep -qFx "$ds"; then
-                           continue
+                           exit
                          fi
                        ''}
                     case "$kl" in
