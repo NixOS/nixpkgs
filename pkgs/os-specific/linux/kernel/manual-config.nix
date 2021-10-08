@@ -89,10 +89,7 @@ let
 
       isModular = config.isYes "MODULES";
 
-      # If the kernel config option for building DTBs is set, that
-      # takes priority. Otherwise, check if DTBs are usually enabled
-      # on the platform we're building for.
-      buildDTBs = if config.isSet "DTB" then config.isYes "DTB" else stdenv.hostPlatform.linux-kernel.DTB or false;
+      buildDTBs = kernelConf.DTB or false;
 
       installsFirmware = (config.isEnabled "FW_LOADER") &&
         (isModular || (config.isDisabled "FIRMWARE_IN_KERNEL")) &&
