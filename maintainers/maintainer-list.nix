@@ -7377,6 +7377,12 @@
     githubId = 7610974;
     name = "Jason Miller";
   };
+  milogert = {
+    email = "milo@milogert.com";
+    github = "milogert";
+    githubId = 5378535;
+    name = "Milo Gertjejansen";
+  };
   miltador = {
     email = "miltador@yandex.ua";
     name = "Vasiliy Solovey";
@@ -12244,6 +12250,12 @@
     github = "yesbox";
     githubId = 4113027;
     name = "Jesper Geertsen Jonsson";
+  };
+  yinfeng = {
+    email = "lin.yinfeng@outlook.com";
+    github = "linyinfeng";
+    githubId = 11229748;
+    name = "Lin Yinfeng";
   };
   ylwghst = {
     email = "ylwghst@onionmail.info";

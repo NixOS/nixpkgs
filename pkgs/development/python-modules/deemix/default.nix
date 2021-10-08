@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "deemix";
-  version = "3.5.3";
+  version = "3.5.5";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "36dc6279f547cc0947daceb568e2b5ac1e274655f642c133e2700c22892163ce";
+    sha256 = "sha256-qattUKdGr9P2al5cibG0CPJNmVCJjgE+hucOtl7pAhE=";
   };
 
   propagatedBuildInputs = [

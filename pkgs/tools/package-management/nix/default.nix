@@ -220,10 +220,10 @@ in rec {
 
   nixStable = callPackage common (rec {
     pname = "nix";
-    version = "2.3.15";
+    version = "2.3.16";
     src = fetchurl {
       url = "https://nixos.org/releases/nix/${pname}-${version}/${pname}-${version}.tar.xz";
-      sha256 = "sha256-N+MxClX94eUOfUMh0puRgNHp16+cjSEdtqZn5u5OtBA=";
+      sha256 = "sha256-fuaBtp8FtSVJLSAsO+3Nne4ZYLuBj2JpD2xEk7fCqrw=";
     };
 
     boehmgc = boehmgc_nix;
@@ -234,13 +234,13 @@ in rec {
   nixUnstable = lib.lowPrio (callPackage common rec {
     pname = "nix";
     version = "2.4${suffix}";
-    suffix = "pre20211001_${lib.substring 0 7 src.rev}";
+    suffix = "pre20211006_${lib.substring 0 7 src.rev}";
 
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "4f496150eb4e0012914c11f0a3ff4df2412b1d09";
-      sha256 = "00hxxk66f068588ymv60ygib6vgk7c97s9yia3qd561679rq3nsj";
+      rev = "53e479428958b39a126ce15de85d7397fdcfe2e1";
+      sha256 = "18mm3f0n964msj5bha6wpnwckg5lwjwdm6r7frrwdj75v10jiyb7";
     };
 
     boehmgc = boehmgc_nixUnstable;

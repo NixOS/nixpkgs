@@ -1,5 +1,6 @@
 { fetchFromGitHub
 , lib
+, Security
 , openssl
 , pkg-config
 , protobuf
@@ -26,7 +27,11 @@ in rustPlatform.buildRustPackage rec {
   cargoSha256 = "sha256-NAXoKz+tZmjmZ/PkDaXEp9D++iu/3Knp0Yy6NJWEoDM=";
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl protobuf ];
+
+  buildInputs = [
+    openssl
+    protobuf
+  ] ++ lib.optionals stdenv.isDarwin [ Security ];
 
   preBuild = ''
     export OPENSSL_DIR=${lib.getDev openssl}
@@ -52,7 +57,7 @@ in rustPlatform.buildRustPackage rec {
     description = "A collection of engines that power the core stack for Prisma";
     homepage = "https://www.prisma.io/";
     license = licenses.asl20;
-    platforms = [ "x86_64-linux" ];
+    platforms = platforms.unix;
     maintainers = with maintainers; [ pamplemousse pimeys ];
   };
 }

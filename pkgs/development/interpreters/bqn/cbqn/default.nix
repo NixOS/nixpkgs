@@ -11,20 +11,21 @@ let
     name = "cbqn-bytecode-files";
     owner = "dzaima";
     repo = "CBQN";
-    rev = "94bb312d20919f942eabed3dca33c514de3c3227";
-    hash = "sha256-aFw5/F7/sYkYmxAnGeK8EwkoVrbEcjuJAD9YT+iW9Rw=";
+    rev = "4d23479cdbd5ac6eb512c376ade58077b814b2b7";
+    hash = "sha256-MTvg4lOB26bqvJTqV71p4Y4qDjTYaOE40Jk4Sle/hsY=";
   };
 in
 assert genBytecode -> ((bqn-path != null) && (mbqn-source != null));
+
 stdenv.mkDerivation rec {
   pname = "cbqn" + lib.optionalString (!genBytecode) "-standalone";
-  version = "0.0.0+unstable=2021-10-01";
+  version = "0.pre+unstable=2021-10-05";
 
   src = fetchFromGitHub {
     owner = "dzaima";
     repo = "CBQN";
-    rev = "3725bd58c758a749653080319766a33169551536";
-    hash = "sha256-xWp64inFZRqGGTrH6Hqbj7aA0vYPyd+FdetowTMTjPs=";
+    rev = "e23dab20daff9c0dacc2561c616174af72029a3e";
+    hash = "sha256-amVKKD9hD5A+LbqglXHLKEsYqFSSztdXs1FCoNJyCJ4=";
   };
 
   dontConfigure = true;
@@ -34,6 +35,9 @@ stdenv.mkDerivation rec {
   '';
 
   preBuild = ''
+    # otherwise cbqn defaults to clang
+    makeFlagsArray+=("CC=$CC")
+
     # inform make we are providing the runtime ourselves
     touch src/gen/customRuntime
   '' + (if genBytecode then ''
@@ -41,10 +45,6 @@ stdenv.mkDerivation rec {
   '' else ''
     cp ${cbqn-bytecode-files}/src/gen/{compiler,formatter,runtime0,runtime1,src} src/gen/
   '');
-
-  makeFlags = [
-    "CC=${stdenv.cc.targetPrefix}cc"
-  ];
 
   installPhase = ''
      runHook preInstall
@@ -63,8 +63,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ AndersonTorres sternenseemann synthetica ];
     platforms = platforms.all;
-    priority = if genBytecode then 0 else 10;
   };
 }
-# TODO: factor and version cbqn-bytecode-files
+# TODO: version cbqn-bytecode-files
 # TODO: test suite
