@@ -1,13 +1,14 @@
-{ lib, stdenv, fetchFromGitLab, fetchpatch, cmake, perl, python3, boost, valgrind
-# Optional requirements
-# Lua 5.3 needed and not available now
-#, luaSupport ? false, lua5
+{ stdenv, lib, fetchFromGitLab, cmake, perl, python3, boost
 , fortranSupport ? false, gfortran
 , buildDocumentation ? false, transfig, ghostscript, doxygen
 , buildJavaBindings ? false, openjdk
+, buildPythonBindings ? true, python3Packages
 , modelCheckingSupport ? false, libunwind, libevent, elfutils # Inside elfutils: libelf and libdw
+, minimalBindings ? false
 , debug ? false
+, optimize ? (!debug)
 , moreTests ? false
+, withoutBin ? false
 }:
 
 with lib;
@@ -18,54 +19,34 @@ in
 
 stdenv.mkDerivation rec {
   pname = "simgrid";
-  version = "3.28";
+  version = "3.29";
 
   src = fetchFromGitLab {
     domain = "framagit.org";
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "0vylwgd4i89bvhbgfay0wq953324dwfmmr8jp9b4vvlc9m0017r9";
+    sha256 = "11bzmkhilh8id09gimqhjfhscqwszjhdrpnlhrbjvmmmapfc1d7i";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "fix-smpi-dirs-absolute.patch";
-      url = "https://framagit.org/simgrid/simgrid/-/commit/71f01e667577be1076646eb841e0a57bd5388545.patch";
-      sha256 = "0x3y324b6269687zfy43ilc48bwrs4nb7svh2mpg88lrz53rky15";
-    })
-  ];
-
   propagatedBuildInputs = [ boost ];
-  nativeBuildInputs = [ cmake perl python3 valgrind ]
-      ++ optionals fortranSupport [ gfortran ]
-      ++ optionals buildJavaBindings [ openjdk ]
-      ++ optionals buildDocumentation [ transfig ghostscript doxygen ]
-      ++ optionals modelCheckingSupport [ libunwind libevent elfutils ];
+  nativeBuildInputs = [ cmake perl python3 ]
+    ++ optionals fortranSupport [ gfortran ]
+    ++ optionals buildJavaBindings [ openjdk ]
+    ++ optionals buildPythonBindings [ python3Packages.pybind11 ]
+    ++ optionals buildDocumentation [ transfig ghostscript doxygen ]
+    ++ optionals modelCheckingSupport [ libunwind libevent elfutils ];
 
-  #buildInputs = optional luaSupport lua5;
+  outputs = ["out"]
+    ++ optionals buildPythonBindings ["python"];
 
-  # Make it so that libsimgrid.so will be found when running programs from
-  # the build dir.
-  preConfigure = ''
-    export LD_LIBRARY_PATH="$PWD/build/lib"
-  '';
-
-  # Release mode is not supported in SimGrid
+  # "Release" does not work. non-debug mode is Debug compiled with optimization
   cmakeBuildType = "Debug";
-
-  # Disable/Enable functionality
-  # Note: those packages are not packaged in Nixpkgs yet so some options
-  # are disabled:
-  # - papi:   for enable_smpi_papi
-  # - ns3:    for enable_ns3
-  # - lua53:  for enable_lua
-  #
-  # For more information see:
-  # https://simgrid.org/doc/3.22/Installing_SimGrid.html#simgrid-compilation-options)
   cmakeFlags = [
     "-Denable_documentation=${optionOnOff buildDocumentation}"
     "-Denable_java=${optionOnOff buildJavaBindings}"
+    "-Denable_python=${optionOnOff buildPythonBindings}"
+    "-Denable_msg=${optionOnOff buildJavaBindings}"
     "-Denable_fortran=${optionOnOff fortranSupport}"
     "-Denable_model-checking=${optionOnOff modelCheckingSupport}"
     "-Denable_ns3=off"
@@ -75,27 +56,28 @@ stdenv.mkDerivation rec {
     "-Denable_mallocators=on"
     "-Denable_debug=on"
     "-Denable_smpi=on"
+    "-Dminimal-bindings=${optionOnOff minimalBindings}"
     "-Denable_smpi_ISP_testsuite=${optionOnOff moreTests}"
     "-Denable_smpi_MPICH3_testsuite=${optionOnOff moreTests}"
-    "-Denable_compile_warnings=${optionOnOff debug}"
-    "-Denable_compile_optimizations=${optionOnOff (!debug)}"
-    "-Denable_lto=${optionOnOff (!debug)}"
-    # "-Denable_lua=${optionOnOff luaSupport}"
-    # "-Denable_smpi_papi=${optionOnOff moreTests}"
+    "-Denable_compile_warnings=off"
+    "-Denable_compile_optimizations=${optionOnOff optimize}"
+    "-Denable_lto=${optionOnOff optimize}"
   ];
-
   makeFlags = optional debug "VERBOSE=1";
 
-  # Some Perl scripts are called to generate test during build which
-  # is before the fixupPhase, so do this manualy here:
+  # needed to ensure correct perl dependency in outputs
   preBuild = ''
     patchShebangs ..
   '';
 
-  doCheck = true;
+  # needed by tests (so libsimgrid.so is found)
+  preConfigure = ''
+    export LD_LIBRARY_PATH="$PWD/build/lib"
+  '';
 
-  # Prevent the execution of tests known to fail.
+  doCheck = true;
   preCheck = ''
+    # prevent the execution of tests known to fail
     cat <<EOW >CTestCustom.cmake
     SET(CTEST_CUSTOM_TESTS_IGNORE smpi-replay-multiple)
     EOW
@@ -103,6 +85,24 @@ stdenv.mkDerivation rec {
     # make sure tests are built in parallel (this can be long otherwise)
     make tests -j $NIX_BUILD_CORES
   '';
+
+  postInstall = "" + lib.optionalString withoutBin ''
+    # remove bin from output if requested.
+    # having a specific bin output would be cleaner but it does not work currently (circular references)
+    rm -rf $out/bin
+  '' + lib.optionalString buildPythonBindings ''
+    # manually install the python binding if requested.
+    # library output file is expected to be formatted as simgrid.cpython-XY-.*.so
+    # where X is python version major and Y python version minor.
+    PYTHON_VERSION_MAJOR=$(ls lib/simgrid.cpython*.so | sed -E 'sWlib/simgrid\.cpython-([[:digit:]])([[:digit:]])-.*W\1W')
+    PYTHON_VERSION_MINOR=$(ls lib/simgrid.cpython*.so | sed -E 'sWlib/simgrid\.cpython-([[:digit:]])([[:digit:]])-.*W\2W')
+    mkdir -p $python/lib/python''${PYTHON_VERSION_MAJOR}.''${PYTHON_VERSION_MINOR}/site-packages/
+    cp lib/simgrid.cpython*.so $python/lib/python''${PYTHON_VERSION_MAJOR}.''${PYTHON_VERSION_MINOR}/site-packages/
+  '';
+
+  # improve debuggability if requested
+  hardeningDisable = if debug then [ "fortify" ] else [];
+  dontStrip = debug;
 
   meta = {
     description = "Framework for the simulation of distributed applications";
