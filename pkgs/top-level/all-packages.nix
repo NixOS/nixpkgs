@@ -6790,6 +6790,10 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
+  mdbook-katex = callPackage ../tools/text/mdbook-katex {
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+  };
+
   mdbook-mermaid = callPackage ../tools/text/mdbook-mermaid {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
