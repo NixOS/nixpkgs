@@ -1,4 +1,5 @@
 { bison
+, cacert
 , fetchFromGitHub
 , flex
 , php
@@ -46,6 +47,7 @@ stdenv.mkDerivation {
     make install -C support/xhpast
     make cleanall -C support/xhpast
     cp -R . $out/libexec/arcanist
+    ln -sf ${cacert}/etc/ssl/certs/ca-bundle.crt $out/libexec/arcanist/resources/ssl/default.pem
 
     ${makeArcWrapper "arc"}
     ${makeArcWrapper "phage"}
