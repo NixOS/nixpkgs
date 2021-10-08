@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "avogadro2";
-  version = "1.94.0";
+  version = "1.95.1";
 
   src = fetchFromGitHub {
     owner = "OpenChemistry";
     repo = "avogadroapp";
     rev = version;
-    sha256 = "6RaiX23YUMfTYAuSighcLGGlJtqeydNgi3PWGF77Jp8=";
+    sha256 = "9GnsxQsMuik6CPDmJbJPF0/+LXbZHf/JLevpSsMEoP0=";
   };
 
   nativeBuildInputs = [ cmake wrapQtAppsHook ];
