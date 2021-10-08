@@ -14,6 +14,12 @@ stdenv.mkDerivation rec {
     sha256 = "08mg5agd40qaz1hz5rqqhf0wgfna06f7l01z5v06y995xdmw2v9g";
   };
 
+  patches = [
+    # Adds a compatibility definition for BTF_KIND_FLOAT to allow files
+    # that pull in <bpf/btf.h> to compile with pre-5.13 kernel headers
+    ./libbpf-Add-BTF_KIND_FLOAT-compatibility-definition.patch
+  ];
+
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libelf zlib ];
 

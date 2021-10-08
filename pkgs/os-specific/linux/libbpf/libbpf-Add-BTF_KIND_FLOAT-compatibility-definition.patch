@@ -1,0 +1,35 @@
+From caf46eef59f5607bdd72df9de4c0f089f0a0d435 Mon Sep 17 00:00:00 2001
+From: V <v@anomalous.eu>
+Date: Thu, 7 Oct 2021 15:47:35 +0200
+Subject: [PATCH] libbpf: Add BTF_KIND_FLOAT compatibility definition
+
+While libbpf is built against vendored kernel headers, packages
+depending on it use kernel headers provided by the system. Unless
+the system's kernel headers are sufficiently recent (5.13 or newer),
+BTF_KIND_FLOAT will not be defined, which breaks compilation when
+including <bpf/btf.h> due to the reference in btf_is_float(3).
+---
+ btf.h | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/btf.h b/btf.h
+index 4a711f9..315b907 100644
+--- a/btf.h
++++ b/btf.h
+@@ -9,6 +9,13 @@
+ #include <linux/btf.h>
+ #include <linux/types.h>
+ 
++/* Required when compiling against kernel headers predating this definition */
++#ifndef BTF_KIND_FLOAT
++# define BTF_KIND_FLOAT 16
++# define BTF_KIND_MAX BTF_KIND_FLOAT
++# define BTF_INFO_KIND(info) (((info) >> 24) & 0x1f)
++#endif
++
+ #include "libbpf_common.h"
+ 
+ #ifdef __cplusplus
+-- 
+2.33.0
+
