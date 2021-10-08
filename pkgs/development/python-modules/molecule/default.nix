@@ -3,6 +3,7 @@
 , fetchPypi
 , setuptools-scm
 , ansible-lint
+, ansible-compat
 , cerberus
 , click
 , click-help-colors
@@ -16,15 +17,23 @@
 
 buildPythonPackage rec {
   pname = "molecule";
-  version = "3.3.1";
+  version = "3.5.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9ac0fde11f895bbc6727de26e2ab0bd0316964f4e4facfd821240959814f9572";
+    sha256 = "1jp0djj69w0vw2697yr471zdkvd4smggcfvan5z8v6f0wncz0an8";
   };
+
+  postPatch = ''
+    # loosen dependency constraints
+    substituteInPlace setup.cfg \
+      --replace 'subprocess-tee >= 0.3.5' 'subprocess-tee' \
+      --replace 'cerberus >= 1.3.1, !=1.3.3, !=1.3.4' 'cerberus'
+  '';
 
   propagatedBuildInputs = [
     ansible-lint
+    ansible-compat
     cerberus
     click
     click-completion

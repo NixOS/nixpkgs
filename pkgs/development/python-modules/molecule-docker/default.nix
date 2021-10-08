@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "molecule-docker";
-  version = "0.3.4";
+  version = "1.0.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "dc9a8ad60b70ede303805cd6865deb5fb9c162e67ff5e7d1a45eb7e58cd36b88";
+    sha256 = "0psmsj6526pkyk47yik854acp9xxaj46gfx3iz15w7gb6jvknvx1";
   };
 
   propagatedBuildInputs = [
@@ -25,9 +25,6 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     setuptools-scm
   ];
-
-  # Disabled because there's a conflict when resolving the ansible dependency
-  doCheck = false;
 
   pythonImportsCheck = [ "molecule_docker" ];
 
