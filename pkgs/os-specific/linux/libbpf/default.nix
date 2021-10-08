@@ -1,19 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config
+{ lib, stdenv, fetchFromGitHub
+, pkg-config
 , libelf, zlib
-, fetchpatch
 }:
-
-with builtins;
 
 stdenv.mkDerivation rec {
   pname = "libbpf";
-  version = "0.4.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner  = "libbpf";
     repo   = "libbpf";
     rev    = "v${version}";
-    sha256 = "1by5w7g3i2fc10bi6f0j8jqi2nq0x8r973j2qx7qlfryjxr7b2v3";
+    sha256 = "08mg5agd40qaz1hz5rqqhf0wgfna06f7l01z5v06y995xdmw2v9g";
   };
 
   nativeBuildInputs = [ pkg-config ];
