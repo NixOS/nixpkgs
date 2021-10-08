@@ -6,7 +6,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "quark-engine";
-  version = "21.8.1";
+  version = "21.10.2";
 
   disabled = python3.pythonOlder "3.6";
 
@@ -14,7 +14,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "0ksmzwji4c98pnqns780n5rdm5r1zx7sc40w8qipk2nf6jncwv6p";
+    sha256 = "0992wsy3plxpcqmq8cnnl0by1vkmkfb4lq2vb5rsj89wj900ci2n";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
