@@ -37,6 +37,7 @@ let
       focus = "focus.${cfg.hostName}";
     };
     bosh = "//${cfg.hostName}/http-bind";
+    websocket = "wss://${cfg.hostName}/xmpp-websocket";
   };
 in
 {
@@ -163,7 +164,9 @@ in
         ping = mkDefault true;
         roster = mkDefault true;
         saslauth = mkDefault true;
+        smacks = mkDefault true;
         tls = mkDefault true;
+        websocket = mkDefault true;
       };
       muc = [
         {
@@ -185,12 +188,17 @@ in
           #-- muc_room_cache_size = 1000
         }
       ];
-      extraModules = [ "pubsub" ];
+      extraModules = [ "pubsub" "smacks" ];
       extraPluginPaths = [ "${pkgs.jitsi-meet-prosody}/share/prosody-plugins" ];
-      extraConfig = mkAfter ''
+      extraConfig = lib.mkMerge [ (mkAfter ''
         Component "focus.${cfg.hostName}" "client_proxy"
           target_address = "focus@auth.${cfg.hostName}"
-      '';
+        '')
+        (mkBefore ''
+          cross_domain_websocket = true;
+          consider_websocket_secure = true;
+        '')
+      ];
       virtualHosts.${cfg.hostName} = {
         enabled = true;
         domain = cfg.hostName;
@@ -198,6 +206,10 @@ in
           authentication = "anonymous"
           c2s_require_encryption = false
           admins = { "focus@auth.${cfg.hostName}" }
+          smacks_max_unacked_stanzas = 5
+          smacks_hibernation_time = 60
+          smacks_max_hibernated_sessions = 1
+          smacks_max_old_sessions = 1
         '';
         ssl = {
           cert = "/var/lib/jitsi-meet/jitsi-meet.crt";
@@ -286,6 +298,11 @@ in
           rewrite ^/(.*)$ / break;
         '';
         locations."~ ^/([^/\\?&:'\"]+)$".tryFiles = "$uri @root_path";
+        locations."^~ /xmpp-websocket" = {
+          priority = 100;
+          proxyPass = "http://localhost:5280/xmpp-websocket";
+          proxyWebsockets = true;
+        };
         locations."=/http-bind" = {
           proxyPass = "http://localhost:5280/http-bind";
           extraConfig = ''
