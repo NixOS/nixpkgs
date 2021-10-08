@@ -231,16 +231,32 @@ in rec {
     inherit storeDir stateDir confDir;
   });
 
-  nixUnstable = lib.lowPrio (callPackage common rec {
+  nix_2_4 = callPackage common (rec {
     pname = "nix";
-    version = "2.4${suffix}";
-    suffix = "pre20211006_${lib.substring 0 7 src.rev}";
+    version = "2.4pre-rc1";
 
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "53e479428958b39a126ce15de85d7397fdcfe2e1";
-      sha256 = "18mm3f0n964msj5bha6wpnwckg5lwjwdm6r7frrwdj75v10jiyb7";
+      rev = version;
+      sha256 = "sha256-KOb8etMm5LksvT2l+CkvqzMO1bgmo9tJmyaNh0LvaR8=";
+    };
+
+    boehmgc = boehmgc_nixUnstable;
+
+    inherit storeDir stateDir confDir;
+  });
+
+  nixUnstable = lib.lowPrio (callPackage common rec {
+    pname = "nix";
+    version = "2.5${suffix}";
+    suffix = "pre20211007_${lib.substring 0 7 src.rev}";
+
+    src = fetchFromGitHub {
+      owner = "NixOS";
+      repo = "nix";
+      rev = "844dd901a7debe8b03ec93a7f717b6c4038dc572";
+      sha256 = "sha256-fe1B4lXkS6/UfpO0rJHwLC06zhOPrdSh4s9PmQ1JgPo=";
     };
 
     boehmgc = boehmgc_nixUnstable;
