@@ -8413,7 +8413,10 @@ with pkgs;
 
   podiff = callPackage ../tools/text/podiff { };
 
-  podman = callPackage ../applications/virtualization/podman/wrapper.nix { };
+  podman = if stdenv.isDarwin then
+    callPackage ../applications/virtualization/podman { }
+  else
+    callPackage ../applications/virtualization/podman/wrapper.nix { };
   podman-unwrapped = callPackage ../applications/virtualization/podman { };
 
   podman-compose = python3Packages.callPackage ../applications/virtualization/podman-compose {};
