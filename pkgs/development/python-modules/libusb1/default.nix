@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "libusb1";
-  version = "1.9.3";
+  version = "1.10.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "60e6ce37be064f6e51d02b25da44230ecc9c0b1fdb6f14568c71457d963c1749";
+    sha256 = "8d70e5ef11a9facf304e696cc1d571c526bd9e02a8710a045b3b2567db7a54e0";
   };
 
   postPatch = ''
