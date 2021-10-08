@@ -37,7 +37,7 @@ buildPythonPackage rec {
     description = "Radically simple IT automation";
     homepage = "https://www.ansible.com";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ilpianista ]; # if you're ok with it
+    maintainers = with maintainers; [ ilpianista ];
   };
 }
 
