@@ -84,6 +84,11 @@ in {
       default = 2;
       description = "Log level value between 0 (DEBUG) and 4 (FATAL).";
     };
+    logType = mkOption {
+      type = types.str;
+      default = "syslog";
+      description = "log driver used, could be errorlog, file, syslog or systemd";
+    };
     https = mkOption {
       type = types.bool;
       default = false;
@@ -605,7 +610,7 @@ in {
               'datadirectory' => '${cfg.home}/data',
               'skeletondirectory' => '${cfg.skeletonDirectory}',
               ${optionalString cfg.caching.apcu "'memcache.local' => '\\OC\\Memcache\\APCu',"}
-              'log_type' => 'syslog',
+              'log_type' => '${cfg.logType}',
               'log_level' => '${builtins.toString cfg.logLevel}',
               ${optionalString (c.overwriteProtocol != null) "'overwriteprotocol' => '${c.overwriteProtocol}',"}
               ${optionalString (c.dbname != null) "'dbname' => '${c.dbname}',"}
