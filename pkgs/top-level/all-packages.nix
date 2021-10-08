@@ -5621,6 +5621,16 @@ with pkgs;
 
   gnuapl = callPackage ../development/interpreters/gnu-apl { };
 
+  dapl = callPackage ../development/interpreters/dzaima-apl {
+    buildNativeImage = false;
+    stdenv = stdenvNoCC;
+    jdk = jre;
+  };
+  dapl-native = callPackage ../development/interpreters/dzaima-apl {
+    buildNativeImage = true;
+    jdk = graalvm11-ce;
+  };
+
   gnucap = callPackage ../applications/science/electronics/gnucap { };
 
   gnu-cobol = callPackage ../development/compilers/gnu-cobol { };
