@@ -2,11 +2,13 @@
 , stdenv
 , writeText
 , fetchurl
-, nss
 , buildcatrust
 , blacklist ? []
 , extraCertificateFiles ? []
 , extraCertificateStrings ? []
+
+# Used by update.sh
+, nssOverride ? null
 
 # Used for tests only
 , runCommand
@@ -17,23 +19,48 @@
 let
   blocklist = writeText "cacert-blocklist.txt" (lib.concatStringsSep "\n" blacklist);
   extraCertificatesBundle = writeText "cacert-extra-certificates-bundle.crt" (lib.concatStringsSep "\n\n" extraCertificateStrings);
+
+  srcVersion = "3.71";
+  version = if nssOverride != null then nssOverride.version else srcVersion;
+  meta = with lib; {
+    homepage = "https://curl.haxx.se/docs/caextract.html";
+    description = "A bundle of X.509 certificates of public Certificate Authorities (CA)";
+    platforms = platforms.all;
+    maintainers = with maintainers; [ andir fpletz lukegb ];
+    license = licenses.mpl20;
+  };
+  certdata = stdenv.mkDerivation {
+    pname = "nss-cacert-certdata";
+    inherit version;
+
+    src = if nssOverride != null then nssOverride.src else fetchurl {
+      url = "mirror://mozilla/security/nss/releases/NSS_${lib.replaceStrings ["."] ["_"] version}_RTM/src/nss-${version}.tar.gz";
+      sha256 = "0ly2l3dv6z5hlxs72h5x6796ni3x1bq60saavaf42ddgv4ax7b4r";
+    };
+
+    dontBuild = true;
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir $out
+      cp nss/lib/ckfw/builtins/certdata.txt $out
+
+      runHook postInstall
+    '';
+
+    inherit meta;
+  };
 in
 stdenv.mkDerivation rec {
   pname = "nss-cacert";
-  version = "3.71";
+  inherit version;
 
-  src = fetchurl {
-    url = "mirror://mozilla/security/nss/releases/NSS_${lib.replaceStrings ["."] ["_"] version}_RTM/src/nss-${version}.tar.gz";
-    sha256 = "0ly2l3dv6z5hlxs72h5x6796ni3x1bq60saavaf42ddgv4ax7b4r";
-  };
+  src = certdata;
 
   outputs = [ "out" "unbundled" "p11kit" ];
 
   nativeBuildInputs = [ buildcatrust ];
-
-  configurePhase = ''
-    ln -s nss/lib/ckfw/builtins/certdata.txt
-  '';
 
   buildPhase = ''
     mkdir unbundled
@@ -176,11 +203,5 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
-    homepage = "https://curl.haxx.se/docs/caextract.html";
-    description = "A bundle of X.509 certificates of public Certificate Authorities (CA)";
-    platforms = platforms.all;
-    maintainers = with maintainers; [ andir fpletz lukegb ];
-    license = licenses.mpl20;
-  };
+  inherit meta;
 }
