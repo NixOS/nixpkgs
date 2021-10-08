@@ -1,9 +1,11 @@
 { lib
+, stdenv
 , rustPlatform
 , fetchFromGitHub
 , pkg-config
 , libxml2
 , openssl
+, curl
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -24,6 +26,8 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     libxml2
     openssl
+  ] ++ lib.optionals stdenv.isDarwin [
+    curl
   ];
 
   # Tests require network access to a test server
