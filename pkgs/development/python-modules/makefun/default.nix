@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "makefun";
-  version = "1.11.3";
+  version = "1.12.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "033eed65e2c1804fca84161a38d1fc8bb8650d32a89ac1c5dc7e54b2b2c2e88c";
+    sha256 = "4d0e90ca3fdbdeb6a4a0891e2da7d4b8e80386e19e6db91ce29b8aa5c876ecfe";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
