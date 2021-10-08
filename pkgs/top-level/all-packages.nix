@@ -15444,6 +15444,8 @@ with pkgs;
 
   cdk = callPackage ../development/libraries/cdk {};
 
+  cdk-go = callPackage ../tools/security/cdk-go {};
+
   cdo = callPackage ../development/libraries/cdo { };
 
   cimg = callPackage  ../development/libraries/cimg { };
