@@ -14,13 +14,14 @@
 buildPythonPackage rec {
   pname = "pynws";
   version = "1.3.2";
+
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "MatthewFlamm";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0d2x3vlm444aar4wbdg48xzpgwng5m7i2d7h1z0pb6c514747sd1";
+    sha256 = "sha256-oelDDgmFmXXBD/A0EU8tz/J3f0fktcVJVooQUukeXTQ=";
   };
 
   propagatedBuildInputs = [
@@ -36,7 +37,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "pynws" ];
+  pythonImportsCheck = [
+    "pynws"
+  ];
 
   meta = with lib; {
     description = "Python library to retrieve data from NWS/NOAA";
