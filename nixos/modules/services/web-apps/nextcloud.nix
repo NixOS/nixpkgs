@@ -51,6 +51,12 @@ let
 in {
 
   imports = [
+    (mkRemovedOptionModule [ "services" "nextcloud" "config" "adminpass" ] ''
+      Please use `services.nextcloud.config.adminpassFile' instead!
+    '')
+    (mkRemovedOptionModule [ "services" "nextcloud" "config" "dbpass" ] ''
+      Please use `services.nextcloud.config.dbpassFile' instead!
+    '')
     (mkRemovedOptionModule [ "services" "nextcloud" "nginx" "enable" ] ''
       The nextcloud module supports `nginx` as reverse-proxy by default and doesn't
       support other reverse-proxies officially.
@@ -206,14 +212,6 @@ in {
         default = "nextcloud";
         description = "Database user.";
       };
-      dbpass = mkOption {
-        type = types.nullOr types.str;
-        default = null;
-        description = ''
-          Database password.  Use <literal>dbpassFile</literal> to avoid this
-          being world-readable in the <literal>/nix/store</literal>.
-        '';
-      };
       dbpassFile = mkOption {
         type = types.nullOr types.str;
         default = null;
@@ -246,17 +244,8 @@ in {
         default = "root";
         description = "Admin username.";
       };
-      adminpass = mkOption {
-        type = types.nullOr types.str;
-        default = null;
-        description = ''
-          Admin password.  Use <literal>adminpassFile</literal> to avoid this
-          being world-readable in the <literal>/nix/store</literal>.
-        '';
-      };
       adminpassFile = mkOption {
-        type = types.nullOr types.str;
-        default = null;
+        type = types.str;
         description = ''
           The full path to a file that contains the admin's password. Must be
           readable by user <literal>nextcloud</literal>.
@@ -403,7 +392,7 @@ in {
         This is used by the theming app and for generating previews of certain images (e.g. SVG and HEIF).
         You may want to disable it for increased security. In that case, previews will still be available
         for some images (e.g. JPEG and PNG).
-        See https://github.com/nextcloud/server/issues/13099
+        See <link xlink:href="https://github.com/nextcloud/server/issues/13099" />.
     '' // {
       default = true;
     };
@@ -464,13 +453,6 @@ in {
 
   config = mkIf cfg.enable (mkMerge [
     { assertions = let acfg = cfg.config; in [
-        { assertion = !(acfg.dbpass != null && acfg.dbpassFile != null);
-          message = "Please specify no more than one of dbpass or dbpassFile";
-        }
-        { assertion = ((acfg.adminpass != null || acfg.adminpassFile != null)
-            && !(acfg.adminpass != null && acfg.adminpassFile != null));
-          message = "Please specify exactly one of adminpass or adminpassFile";
-        }
         { assertion = versionOlder cfg.package.version "21" -> cfg.config.defaultPhoneRegion == null;
           message = "The `defaultPhoneRegion'-setting is only supported for Nextcloud >=21!";
         }
@@ -613,7 +595,6 @@ in {
               ${optionalString (c.dbport != null) "'dbport' => '${toString c.dbport}',"}
               ${optionalString (c.dbuser != null) "'dbuser' => '${c.dbuser}',"}
               ${optionalString (c.dbtableprefix != null) "'dbtableprefix' => '${toString c.dbtableprefix}',"}
-              ${optionalString (c.dbpass != null) "'dbpassword' => '${c.dbpass}',"}
               ${optionalString (c.dbpassFile != null) "'dbpassword' => nix_read_secret('${c.dbpassFile}'),"}
               'dbtype' => '${c.dbtype}',
               'trusted_domains' => ${writePhpArrary ([ cfg.hostName ] ++ c.extraTrustedDomains)},
@@ -628,15 +609,11 @@ in {
               arg = "DBPASS";
               value = if c.dbpassFile != null
                 then ''"$(<"${toString c.dbpassFile}")"''
-                else if c.dbpass != null
-                then ''"${toString c.dbpass}"''
                 else ''""'';
             };
             adminpass = {
               arg = "ADMINPASS";
-              value = if c.adminpassFile != null
-                then ''"$(<"${toString c.adminpassFile}")"''
-                else ''"${toString c.adminpass}"'';
+              value = ''"$(<"${toString c.adminpassFile}")"'';
             };
             installFlags = concatStringsSep " \\\n    "
               (mapAttrsToList (k: v: "${k} ${toString v}") {
@@ -682,16 +659,14 @@ in {
                 exit 1
               fi
             ''}
-            ${optionalString (c.adminpassFile != null) ''
-              if [ ! -r "${c.adminpassFile}" ]; then
-                echo "adminpassFile ${c.adminpassFile} is not readable by nextcloud:nextcloud! Aborting..."
-                exit 1
-              fi
-              if [ -z "$(<${c.adminpassFile})" ]; then
-                echo "adminpassFile ${c.adminpassFile} is empty!"
-                exit 1
-              fi
-            ''}
+            if [ ! -r "${c.adminpassFile}" ]; then
+              echo "adminpassFile ${c.adminpassFile} is not readable by nextcloud:nextcloud! Aborting..."
+              exit 1
+            fi
+            if [ -z "$(<${c.adminpassFile})" ]; then
+              echo "adminpassFile ${c.adminpassFile} is empty!"
+              exit 1
+            fi
 
             ln -sf ${cfg.package}/apps ${cfg.home}/
 
