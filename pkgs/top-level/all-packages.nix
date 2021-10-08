@@ -7942,7 +7942,9 @@ with pkgs;
 
   opendbx = callPackage ../development/libraries/opendbx { };
 
-  opendht = callPackage ../development/libraries/opendht {};
+  opendht = callPackage ../development/libraries/opendht  {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   opendkim = callPackage ../development/libraries/opendkim { };
 
