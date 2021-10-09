@@ -78,6 +78,8 @@ let
 
     bitv = callPackage ../development/ocaml-modules/bitv { };
 
+    bjack = callPackage ../development/ocaml-modules/bjack { };
+
     bls12-381 = callPackage ../development/ocaml-modules/bls12-381 { };
     bls12-381-gen = callPackage ../development/ocaml-modules/bls12-381/gen.nix { };
     bls12-381-unix = callPackage ../development/ocaml-modules/bls12-381/unix.nix { };
