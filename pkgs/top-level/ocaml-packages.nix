@@ -464,6 +464,10 @@ let
 
     fpath = callPackage ../development/ocaml-modules/fpath { };
 
+    frei0r = callPackage ../development/ocaml-modules/frei0r {
+      inherit (pkgs) frei0r;
+    };
+
     functoria = callPackage ../development/ocaml-modules/functoria { };
 
     functoria-runtime = callPackage ../development/ocaml-modules/functoria/runtime.nix { };
