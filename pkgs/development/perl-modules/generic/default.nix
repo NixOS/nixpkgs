@@ -17,6 +17,10 @@ toPerlModule(stdenv.mkDerivation (
 
     checkTarget = "test";
 
+    # Avoid non-deterministic output of associative arrays
+    # (example is libnet package).
+    PERL_HASH_SEED = "0";
+
     # Prevent CPAN downloads.
     PERL_AUTOINSTALL = "--skipdeps";
 
