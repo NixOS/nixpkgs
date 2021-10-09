@@ -6310,6 +6310,8 @@ in {
 
   pygls = callPackage ../development/python-modules/pygls { };
 
+  pygmars = callPackage ../development/python-modules/pygmars { };
+
   pygments-better-html = callPackage ../development/python-modules/pygments-better-html { };
 
   pygments = callPackage ../development/python-modules/Pygments { };
