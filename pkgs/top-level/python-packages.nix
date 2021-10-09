@@ -4309,6 +4309,8 @@ in {
 
   lima = callPackage ../development/python-modules/lima { };
 
+  limiter= callPackage ../development/python-modules/limiter { };
+
   limitlessled = callPackage ../development/python-modules/limitlessled { };
 
   limits = callPackage ../development/python-modules/limits { };
