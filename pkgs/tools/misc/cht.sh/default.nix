@@ -45,5 +45,6 @@ stdenv.mkDerivation {
     license = licenses.mit;
     maintainers = with maintainers; [ fgaz evanjs ];
     homepage = "https://github.com/chubin/cheat.sh";
+    mainProgram = "cht.sh";
   };
 }

@@ -23,5 +23,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Ancurio/colorpicker";
     maintainers = with maintainers; [ jb55 ];
     license = licenses.mit;
+    mainProgram = "colorpicker";
   };
 }
