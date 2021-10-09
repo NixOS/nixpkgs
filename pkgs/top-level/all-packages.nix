@@ -6668,6 +6668,8 @@ with pkgs;
     autoreconfHook = buildPackages.autoreconfHook269;
   };
 
+  libshumate = callPackage ../development/libraries/libshumate { };
+
   libsmartcols = callPackage ../development/libraries/libsmartcols { };
 
   libsmi = callPackage ../development/libraries/libsmi { };
