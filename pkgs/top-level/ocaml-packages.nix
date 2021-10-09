@@ -421,6 +421,10 @@ let
 
     fix = callPackage ../development/ocaml-modules/fix { };
 
+    flac = callPackage ../development/ocaml-modules/flac {
+      inherit (pkgs) flac;
+    };
+
     fmt = callPackage ../development/ocaml-modules/fmt { };
 
     fontconfig = callPackage ../development/ocaml-modules/fontconfig {
