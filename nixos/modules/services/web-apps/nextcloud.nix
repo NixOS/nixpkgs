@@ -5,7 +5,8 @@ with lib;
 let
   cfg = config.services.nextcloud;
   fpm = config.services.phpfpm.pools.nextcloud;
-  datadir = if cfg.datadir == null then "${cfg.home}" else "${cfg.datadir}";
+
+  inherit (cfg) datadir;
 
   phpPackage = cfg.phpPackage.buildEnv {
     extensions = { enabled, all }:
@@ -87,8 +88,8 @@ in {
       description = "Storage path of nextcloud.";
     };
     datadir = mkOption {
-      type = types.nullOr types.str;
-      default = null;
+      type = types.str;
+      defaultText = "config.services.nextcloud.home";
       description = ''
         Data storage path of nextcloud.  Will be <xref linkend="opt-services.nextcloud.home" /> by default.
         This folder will be populated with a config.php and data folder which contains the state of the instance (excl the database).";
@@ -107,13 +108,13 @@ in {
         {
           maps = pkgs.fetchNextcloudApp {
             name = "maps";
-            sha256 = "007y80idqg6b6zk6kjxg4vgw0z8fsxs9lajnv49vv1zjy6jx2i1i+useTheLatestVersion";
+            sha256 = "007y80idqg6b6zk6kjxg4vgw0z8fsxs9lajnv49vv1zjy6jx2i1i";
             url = "https://github.com/nextcloud/maps/releases/download/v0.1.9/maps-0.1.9.tar.gz";
             version = "0.1.9";
           };
           phonetrack = pkgs.fetchNextcloudApp {
             name = "phonetrack";
-            sha256 = "0qf366vbahyl27p9mshfma1as4nvql6w75zy2zk5xwwbp343vsbc+breakSha";
+            sha256 = "0qf366vbahyl27p9mshfma1as4nvql6w75zy2zk5xwwbp343vsbc";
             url = "https://gitlab.com/eneiluj/phonetrack-oc/-/wikis/uploads/931aaaf8dca24bf31a7e169a83c17235/phonetrack-0.6.9.tar.gz";
             version = "0.6.9";
           };
@@ -578,6 +579,8 @@ in {
           else nextcloud22
         );
 
+      services.nextcloud.datadir = mkOptionDefault config.services.nextcloud.home;
+
       services.nextcloud.phpPackage =
         if versionOlder cfg.package.version "21" then pkgs.php74
         else pkgs.php80;
@@ -617,6 +620,14 @@ in {
             ]
           '';
 
+          showAppStoreSetting = cfg.appstoreEnable != null || cfg.extraApps != {};
+          renderedAppStoreSetting =
+            let
+              x = cfg.appstoreEnable;
+            in
+              if x == null then "false"
+              else boolToString x;
+
           overrideConfig = pkgs.writeText "nextcloud-config.php" ''
             <?php
             ${optionalString requiresReadSecretFunction ''
@@ -639,11 +650,7 @@ in {
                 [ 'path' => '${cfg.home}/apps', 'url' => '/apps', 'writable' => false ],
                 [ 'path' => '${cfg.home}/store-apps', 'url' => '/store-apps', 'writable' => true ],
               ],
-              ${if (cfg.appstoreEnable != null)
-                then '''appstoreenabled' => ${lib.boolToString cfg.appstoreEnable},''
-                else (if (cfg.extraApps != { })
-                      then '''appstoreenabled' => false,''
-                      else "")}
+              ${optionalString (showAppStoreSetting) "'appstoreenabled' => ${renderedAppStoreSetting},"}
               'datadirectory' => '${datadir}/data',
               'skeletondirectory' => '${cfg.skeletonDirectory}',
               ${optionalString cfg.caching.apcu "'memcache.local' => '\\OC\\Memcache\\APCu',"}
@@ -729,10 +736,12 @@ in {
             fi
 
             ln -sf ${cfg.package}/apps ${cfg.home}/
-            rm -rf ${cfg.home}/nix-apps
 
-            #Install extra apps
-            ln -sfT ${pkgs.linkFarm "nix-apps" (lib.mapAttrsToList (name: target: {name=name; path=target;}) cfg.extraApps)} ${cfg.home}/nix-apps
+            # Install extra apps
+            ln -sfT \
+              ${pkgs.linkFarm "nix-apps"
+                (mapAttrsToList (name: path: { inherit name path; }) cfg.extraApps)} \
+              ${cfg.home}/nix-apps
 
             # create nextcloud directories.
             # if the directories exist already with wrong permissions, we fix that
@@ -757,7 +766,7 @@ in {
 
             ${optionalString (cfg.extraAppsEnable && cfg.extraApps != { }) ''
                 # Try to enable apps (don't fail when one of them cannot be enabled , eg. due to incompatible version)
-                ${occ}/bin/nextcloud-occ app:enable ${builtins.concatStringsSep " " ( lib.mapAttrsToList (name: target: "${name}") cfg.extraApps)}
+                ${occ}/bin/nextcloud-occ app:enable ${concatStringsSep " " (attrNames cfg.extraApps)}
             ''}
 
             ${occSetTrustedDomainsCmd}

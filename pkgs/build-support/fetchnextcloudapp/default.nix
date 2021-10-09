@@ -10,8 +10,7 @@ stdenv.mkDerivation {
   inherit version patches;
 
   src = fetchurl {
-    url = url;
-    sha256 = sha256;
+    inherit url sha256;
   };
 
   nativeBuildInputs = [
