@@ -770,6 +770,7 @@ in with py.pkgs; buildPythonApplication rec {
     "--deselect tests/components/wemo/test_sensor.py::TestInsightCurrentPower::test_state_unavailable"
     # tado/test_climate.py: Tries to connect to my.tado.com
     "--deselect tests/components/tado/test_climate.py::test_air_con"
+    "--deselect tests/components/tado/test_climate.py::test_heater"
     # helpers/test_system_info.py: AssertionError: assert 'Unknown' == 'Home Assistant Container'
     "--deselect tests/helpers/test_system_info.py::test_container_installationtype"
     # tests are located in tests/
