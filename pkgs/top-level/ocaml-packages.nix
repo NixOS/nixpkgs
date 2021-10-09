@@ -399,6 +399,8 @@ let
 
     ezxmlm = callPackage ../development/ocaml-modules/ezxmlm { };
 
+    faad = callPackage ../development/ocaml-modules/faad { };
+
     facile = callPackage ../development/ocaml-modules/facile { };
 
     faraday = callPackage ../development/ocaml-modules/faraday { };
