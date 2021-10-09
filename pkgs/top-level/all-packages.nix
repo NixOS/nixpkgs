@@ -2858,6 +2858,8 @@ in
 
   lowdown = callPackage ../tools/typesetting/lowdown { };
 
+  lowdown-0-9 = lowPrio (callPackage ../tools/typesetting/lowdown/0.9.x.nix { });
+
   numatop = callPackage ../os-specific/linux/numatop { };
 
   numworks-udev-rules = callPackage ../os-specific/linux/numworks-udev-rules { };
