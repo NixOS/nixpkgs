@@ -1156,6 +1156,8 @@ let
 
     ocurl = callPackage ../development/ocaml-modules/ocurl { };
 
+    ogg = callPackage ../development/ocaml-modules/ogg { };
+
     parany = callPackage ../development/ocaml-modules/parany { };
 
     pipebang = callPackage ../development/ocaml-modules/pipebang { };
