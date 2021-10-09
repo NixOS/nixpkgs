@@ -172,6 +172,12 @@ in
           disabled by default.
         '';
       };
+
+      useQtScaling = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Enable HiDPI scaling in Qt.";
+      };
     };
 
   };
@@ -346,6 +352,8 @@ in
       ];
 
       environment.etc."X11/xkb".source = xcfg.xkbDir;
+
+      environment.sessionVariables.PLASMA_USE_QT_SCALING = mkIf cfg.useQtScaling "1";
 
       # Enable GTK applications to load SVG icons
       services.xserver.gdk-pixbuf.modulePackages = [ pkgs.librsvg ];
