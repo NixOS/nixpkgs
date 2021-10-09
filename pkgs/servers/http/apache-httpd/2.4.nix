@@ -81,6 +81,8 @@ stdenv.mkDerivation rec {
     inherit apr aprutil sslSupport proxySupport ldapSupport luaSupport lua5;
     tests = {
       acme-integration = nixosTests.acme;
+      proxy = nixosTests.proxy;
+      php = nixosTests.php.httpd;
     };
   };
 
