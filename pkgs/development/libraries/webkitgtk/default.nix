@@ -56,11 +56,14 @@
 , xdg-dbus-proxy
 , substituteAll
 , glib
+, glib-networking
 , addOpenGLRunpath
+, wrapGAppsHook
 }:
 
 assert enableGeoLocation -> geoclue2 != null;
 
+# NOTE: Run $out/libexec/MiniBrowser to test changes for this package
 stdenv.mkDerivation rec {
   pname = "webkitgtk";
   version = "2.32.4";
@@ -101,6 +104,18 @@ stdenv.mkDerivation rec {
       sha256 = "sha256-78iP+T2vaIufO8TmIPO/tNDgmBgzlDzalklrOPrtUeo=";
       excludes = [ "Source/WebKit/ChangeLog" ];
     })
+
+    # keypresses are ignored with the GTK Quartz backend
+    # https://bugs.webkit.org/show_bug.cgi?id=227360
+    (fetchpatch {
+      url = "https://bug-227360-attachments.webkit.org/attachment.cgi?id=432180";
+      sha256 = "sha256-1JLJKu0G1hRTzqcHsZgbXIp9ZekwbYFWg/MtwB4jTjc=";
+      excludes = [ "Source/WebKit/ChangeLog" ];
+    })
+
+    # hides webkit processes from the macOS Dock
+    # https://source.atlas.engineer/view/repository/macports-port
+    ./0001-Prevent-WebKitWebProcess-from-being-in-the-dock-or-p.patch
   ];
 
   preConfigure = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
@@ -124,6 +139,7 @@ stdenv.mkDerivation rec {
     python3
     ruby
     glib # for gdbus-codegen
+    wrapGAppsHook # for MiniBrowser
   ] ++ lib.optionals stdenv.isLinux [
     wayland # for wayland-scanner
   ];
@@ -142,6 +158,7 @@ stdenv.mkDerivation rec {
     libgcrypt
     libidn
     libintl
+    glib-networking # for MiniBrowser
   ] ++ lib.optionals stdenv.isLinux [
     libmanette
   ] ++ [
@@ -191,12 +208,16 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DENABLE_INTROSPECTION=ON"
     "-DPORT=GTK"
+    "-DENABLE_MINIBROWSER=ON"
     "-DUSE_LIBHYPHEN=OFF"
     "-DUSE_WPE_RENDERER=OFF"
+    "-DENABLE_MINIBROWSER=ON"
+    "-DLIBEXEC_INSTALL_DIR=${placeholder "out"}/libexec/webkit2gtk"
+  ] ++ lib.optionals doCheck [
+    "-DENABLE_API_TESTS=ON"
   ] ++ lib.optionals stdenv.isDarwin [
     "-DENABLE_GAMEPAD=OFF"
     "-DENABLE_GTKDOC=OFF"
-    "-DENABLE_MINIBROWSER=OFF"
     "-DENABLE_QUARTZ_TARGET=ON"
     "-DENABLE_VIDEO=ON"
     "-DENABLE_WEBGL=OFF"
@@ -204,6 +225,12 @@ stdenv.mkDerivation rec {
     "-DENABLE_X11_TARGET=OFF"
     "-DUSE_APPLE_ICU=OFF"
     "-DUSE_OPENGL_OR_ES=OFF"
+
+    # FIXME: Remove this option once the macOS SDK has been updated to 10.13.
+    # This option disables WebKit's bmalloc memory allocator, which includes
+    # various mitigations against heap exploits.
+    #
+    # https://blogs.gnome.org/mcatanzaro/2018/11/02/on-webkit-build-options-also-how-to-accidentally-disable-important-security-features/
     "-DUSE_SYSTEM_MALLOC=ON"
   ] ++ lib.optionals (!stdenv.isLinux) [
     "-DUSE_SYSTEMD=OFF"
@@ -217,6 +244,17 @@ stdenv.mkDerivation rec {
     # <CommonCrypto/CommonRandom.h> needs CCCryptorStatus.
     sed 43i'#include <CommonCrypto/CommonCryptor.h>' -i Source/WTF/wtf/RandomDevice.cpp
   '';
+
+  postFixup = ''
+    # needed for TLS and multimedia functionality
+    wrapGApp $out/libexec/webkit2gtk/MiniBrowser --argv0 MiniBrowser
+  '';
+
+  # tests are still failing
+  doCheck = false;
+
+  # we only want to wrap the MiniBrowser
+  dontWrapGApps = true;
 
   requiredSystemFeatures = [ "big-parallel" ];
 
