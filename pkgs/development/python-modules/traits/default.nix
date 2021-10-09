@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "traits";
-  version = "6.2.0";
+  version = "6.3.0";
   disabled = isPy27; # setup.py no longer py3 compat
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "16fa1518b0778fd53bf0547e6a562b1787bf68c8f6b7995a13bd1902529fdb0c";
+    sha256 = "770241df047feb9e3ed4c26a36c2468a5b754e6082a78eeb737f058bd45344f5";
   };
 
   # Use pytest because its easier to discover tests
