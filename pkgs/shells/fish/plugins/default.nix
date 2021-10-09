@@ -23,4 +23,5 @@ lib.makeScope newScope (self: with self; {
 
   pure = callPackage ./pure.nix { };
 
+  replay = callPackage ./replay.nix { };
 })
