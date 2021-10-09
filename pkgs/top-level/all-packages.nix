@@ -20830,18 +20830,27 @@ in
 
   # Hardened Linux
   hardenedLinuxPackagesFor = kernel': overrides:
-    let # Note: We use this hack since the hardened patches can lag behind and we don't want to delay updates:
-      linux_latest_for_hardened = pkgs.linux_5_10;
-      kernel = (if kernel' == pkgs.linux_latest then linux_latest_for_hardened else kernel').override overrides;
+    let
+      kernel = kernel'.override overrides;
+      version = kernelPatches.hardened.${kernel.meta.branch}.version;
+      major = lib.versions.major version;
+      sha256 = kernelPatches.hardened.${kernel.meta.branch}.sha256;
+      modDirVersion' = builtins.replaceStrings [ kernel.version ] [ version ] kernel.modDirVersion;
     in linuxPackagesFor (kernel.override {
       structuredExtraConfig = import ../os-specific/linux/kernel/hardened/config.nix {
-        inherit lib;
-        inherit (kernel) version;
+        inherit lib version;
+      };
+      argsOverride = {
+        inherit version;
+        src = fetchurl {
+          url = "mirror://kernel/linux/kernel/v${major}.x/linux-${version}.tar.xz";
+          inherit sha256;
+        };
       };
       kernelPatches = kernel.kernelPatches ++ [
         kernelPatches.hardened.${kernel.meta.branch}
       ];
-      modDirVersionArg = kernel.modDirVersion + (kernelPatches.hardened.${kernel.meta.branch}).extra;
+      modDirVersionArg = modDirVersion' + (kernelPatches.hardened.${kernel.meta.branch}).extra;
       isHardened = true;
   });
 
