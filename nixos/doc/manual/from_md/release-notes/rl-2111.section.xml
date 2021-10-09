@@ -336,6 +336,13 @@
     <itemizedlist>
       <listitem>
         <para>
+          The <literal>services.wakeonlan</literal> option was removed,
+          and replaced with
+          <literal>networking.interfaces.&lt;name&gt;.wakeOnLan</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>security.wrappers</literal> option now requires
           to always specify an owner, group and whether the
           setuid/setgid bit should be set. This is motivated by the fact
