@@ -104,7 +104,7 @@ in {
         The appid must be identical to the "id" value in the apps appinfo/info.xml.
         Using this will disable the appstore to prevent Nextcloud from updating these apps (see <xref linkend="opt-services.nextcloud.appstoreEnable" />).
       '';
-      example = literalExample ''
+      example = literalExpression ''
         {
           maps = pkgs.fetchNextcloudApp {
             name = "maps";
