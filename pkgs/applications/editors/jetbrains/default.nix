@@ -1,6 +1,7 @@
 { lib, stdenv, callPackage, fetchurl
 , jdk, cmake, zlib, python3
 , dotnet-sdk_5
+, maven
 , autoPatchelfHook
 , libdbusmenu
 , vmopts ? null
@@ -98,6 +99,10 @@ let
       inherit name version src wmClass jdk;
       product = "IDEA";
       extraLdPath = [ zlib ];
+      extraWrapperArgs = [
+        ''--set M2_HOME "${maven}/maven"''
+        ''--set M2 "${maven}/maven/bin"''
+      ];
       meta = with lib; {
         homepage = "https://www.jetbrains.com/idea/";
         inherit description license;
