@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, writeShellScript
-, gtest, meson, ninja, pkgconfig
+, gtest, meson, ninja, pkg-config
 , alsaLib, fluidsynth, libGL, libGLU, libogg, libpng, munt, opusfile, SDL2, SDL2_net
 }:
 
@@ -19,7 +19,7 @@ in stdenv.mkDerivation rec {
     sha256 = "07jwmmm1bhfxavlhl854cj8l5iy5hqx5hpwkkjbcwqg7yh9jfs2x";
   };
 
-  nativeBuildInputs = [ gtest meson ninja pkgconfig ];
+  nativeBuildInputs = [ gtest meson ninja pkg-config ];
   buildInputs = [ alsaLib fluidsynth libGL libGLU libogg libpng munt opusfile SDL2 SDL2_net ];
 
   enableParallelBuilding = true;
