@@ -1,7 +1,6 @@
 { lib, stdenv
 , mkDerivation
 , fetchurl
-, autoPatchelfHook
 , dpkg
 , wrapGAppsHook
 , wrapQtAppsHook
@@ -34,6 +33,8 @@
 , unixODBC
 , xorg
 , zlib
+, steam
+, makeWrapper
 }:
 
 stdenv.mkDerivation rec {
@@ -53,7 +54,7 @@ stdenv.mkDerivation rec {
     rm opt/kingsoft/wps-office/office6/{libjsetapi.so,libjswppapi.so,libjswpsapi.so}
   '';
 
-  nativeBuildInputs = [ autoPatchelfHook dpkg wrapGAppsHook wrapQtAppsHook ];
+  nativeBuildInputs = [ dpkg wrapGAppsHook wrapQtAppsHook makeWrapper ];
 
   meta = with lib; {
     description = "Office suite, formerly Kingsoft Office";
@@ -107,6 +108,7 @@ stdenv.mkDerivation rec {
     sqlite
     unixODBC
     zlib
+    cups.lib
   ];
 
   dontPatchELF = true;
@@ -137,7 +139,12 @@ stdenv.mkDerivation rec {
     "tcmalloc" # gperftools
   ];
 
-  installPhase = ''
+  installPhase = let
+    steam-run = (steam.override {
+      extraPkgs = p: buildInputs;
+      nativeOnly = true;
+    }).run;
+  in ''
     prefix=$out/opt/kingsoft/wps-office
     mkdir -p $out
     cp -r opt $out
@@ -153,11 +160,14 @@ stdenv.mkDerivation rec {
       substituteInPlace $i \
         --replace /usr/bin $out/bin
     done
-  '';
 
-  runtimeLibPath = lib.makeLibraryPath [
-    cups.lib
-  ];
+    for i in wps wpp et wpspdf; do
+      mv $out/bin/$i $out/bin/.$i-orig
+      makeWrapper ${steam-run}/bin/steam-run $out/bin/$i \
+        --add-flags $out/bin/.$i-orig \
+        --argv0 $i
+    done
+  '';
 
   dontWrapQtApps = true;
   dontWrapGApps = true;
@@ -166,8 +176,7 @@ stdenv.mkDerivation rec {
       echo "Wrapping $f"
       wrapProgram "$f" \
         "''${gappsWrapperArgs[@]}" \
-        "''${qtWrapperArgs[@]}" \
-        --suffix LD_LIBRARY_PATH : "$runtimeLibPath"
+        "''${qtWrapperArgs[@]}"
     done
   '';
 }
