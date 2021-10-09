@@ -109,6 +109,16 @@ in {
       '';
     };
 
+    qemuOvmfPackage = mkOption {
+      type = types.package;
+      default = pkgs.OVMF;
+      defaultText = literalExpression "pkgs.OVMF";
+      example = literalExpression "pkgs.OVMFFull";
+      description = ''
+        OVMF package to use.
+      '';
+    };
+
     extraOptions = mkOption {
       type = types.listOf types.str;
       default = [ ];
@@ -160,6 +170,10 @@ in {
       {
         assertion = config.security.polkit.enable;
         message = "The libvirtd module currently requires Polkit to be enabled ('security.polkit.enable = true').";
+      }
+      {
+        assertion = builtins.elem "fd" cfg.qemuOvmfPackage.outputs;
+        message = "The option 'virtualisation.libvirtd.qemuOvmfPackage' needs a package that has an 'fd' output.";
       }
     ];
 
@@ -218,8 +232,8 @@ in {
         done
 
         ${optionalString cfg.qemuOvmf ''
-          ln -s --force ${pkgs.OVMF.fd}/FV/${ovmfFilePrefix}_CODE.fd /run/${dirName}/nix-ovmf/
-          ln -s --force ${pkgs.OVMF.fd}/FV/${ovmfFilePrefix}_VARS.fd /run/${dirName}/nix-ovmf/
+          ln -s --force ${cfg.qemuOvmfPackage.fd}/FV/${ovmfFilePrefix}_CODE.fd /run/${dirName}/nix-ovmf/
+          ln -s --force ${cfg.qemuOvmfPackage.fd}/FV/${ovmfFilePrefix}_VARS.fd /run/${dirName}/nix-ovmf/
         ''}
       '';
 
