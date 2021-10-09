@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     icu jemalloc libxml2 lld llvm lz4 libmysqlclient openssl perl
     poco protobuf python3 rapidjson re2 rdkafka readline sparsehash unixODBC
     xxHash zstd
-  ] ++ lib.optional stdenv.isx86_64 libcpuid;
+  ] ++ lib.optional stdenv.hostPlatform.isx86 libcpuid;
 
   postPatch = ''
     patchShebangs src/
