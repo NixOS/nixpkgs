@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "actionlint";
-  version = "1.6.4";
+  version = "1.6.5";
 
   subPackages = [ "cmd/actionlint" ];
 
@@ -10,7 +10,7 @@ buildGoModule rec {
     owner = "rhysd";
     repo = "actionlint";
     rev = "v${version}";
-    sha256 = "1516892wikz3zda0la57s8nbm6459pf4vd123rv09s4nivznbmcx";
+    sha256 = "12s9ijfvnmfbcvf5lxi2jm3j7vrn7rfkas2lib5jdih77hf9270k";
   };
 
   vendorSha256 = "1i7442n621jmc974b73pfz1gyqw74ilpg1zz16yxqpfh5c958m7n";
@@ -30,5 +30,6 @@ buildGoModule rec {
     changelog = "https://github.com/rhysd/actionlint/raw/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = [ maintainers.marsam ];
+    mainProgram = "actionlint";
   };
 }
