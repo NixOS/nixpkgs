@@ -239,6 +239,8 @@ let
 
     crunch = callPackage ../development/tools/ocaml/crunch { };
 
+    cry = callPackage ../development/ocaml-modules/cry { };
+
     cryptokit = callPackage ../development/ocaml-modules/cryptokit { };
 
     csexp = callPackage ../development/ocaml-modules/csexp { };
