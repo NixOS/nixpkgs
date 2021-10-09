@@ -1269,6 +1269,8 @@ with pkgs;
 
   ashuffle = callPackage ../applications/audio/ashuffle {};
 
+  ashpd-demo = callPackage ../development/tools/ashpd-demo {};
+
   asls = callPackage ../development/tools/misc/asls { };
 
   astc-encoder = callPackage ../tools/graphics/astc-encoder { };
