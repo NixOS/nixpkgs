@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, fmt_8 }:
+{ lib, stdenv, fetchFromGitHub, cmake, fmt_8, fetchpatch }:
 
 let
   generic = { version, sha256 }:
@@ -12,6 +12,14 @@ let
         rev    = "v${version}";
         inherit sha256;
       };
+
+      patches = [
+        # glibc 2.34 compat
+        (fetchpatch {
+          url = "https://github.com/gabime/spdlog/commit/d54b8e89c058f3cab2b32b3e9a2b49fd171d5895.patch";
+          sha256 = "sha256-pb7cREF90GXb5Mbs8xFLQ+eLo6Xum13/xYa8JUgJlbI=";
+        })
+      ];
 
       nativeBuildInputs = [ cmake ];
       # spdlog <1.3 uses a bundled version of fmt
