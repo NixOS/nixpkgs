@@ -3912,6 +3912,10 @@ with pkgs;
 
   cpuminer-multi = callPackage ../tools/misc/cpuminer-multi { };
 
+  crabz = callPackage ../tools/compression/crabz {
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
+  };
+
   cryptpad = callPackage ../servers/web-apps/cryptpad {
     nodejs = nodejs-12_x;
   };
