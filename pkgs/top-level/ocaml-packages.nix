@@ -293,6 +293,8 @@ let
 
     dose3 = callPackage ../development/ocaml-modules/dose3 { };
 
+    dssi = callPackage ../development/ocaml-modules/dssi { };
+
     dtoa = callPackage ../development/ocaml-modules/dtoa { };
 
     duff = callPackage ../development/ocaml-modules/duff { };
