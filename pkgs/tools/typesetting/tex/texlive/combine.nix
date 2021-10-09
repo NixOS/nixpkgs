@@ -33,11 +33,10 @@ let
       ++ lib.optional (lib.any pkgNeedsRuby splitBin.wrong) ruby;
   };
 
-  sortedByPN = pkgs: lib.sort (a: b: a.pname < b.pname) pkgs;
   sortedUniqueStrings = list: lib.sort (a: b: a < b) (lib.unique list);
 
   mkUniqueOutPaths = pkgs: lib.unique
-    (map (p: p.outPath) (sortedByPN (builtins.filter lib.isDerivation pkgs)));
+    (map (p: p.outPath) (builtins.filter lib.isDerivation pkgs));
 
 in (buildEnv {
   name = "texlive-${extraName}-${bin.texliveYear}${extraVersion}";
