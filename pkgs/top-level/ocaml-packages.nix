@@ -688,6 +688,10 @@ let
 
     lambda-term = callPackage ../development/ocaml-modules/lambda-term { };
 
+    lame = callPackage ../development/ocaml-modules/lame {
+      inherit (pkgs) lame;
+    };
+
     lastfm = callPackage ../development/ocaml-modules/lastfm { };
 
     lens = callPackage ../development/ocaml-modules/lens { };
