@@ -1,10 +1,12 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , pythonOlder
 , isPyPy
 , lazy-object-proxy
 , wrapt
+, typing-extensions
 , typed-ast
 , pytestCheckHook
 , setuptools-scm
@@ -26,6 +28,14 @@ buildPythonPackage rec {
 
   SETUPTOOLS_SCM_PRETEND_VERSION=version;
 
+  patches = [
+    (fetchpatch {
+      # Allow wrapt 1.13 (https://github.com/PyCQA/astroid/pull/1203)
+      url = "https://github.com/PyCQA/astroid/commit/fd510e08c2ee862cd284861e02b9bcc9a7fd9809.patch";
+      sha256 = "1s10whslcqnyz251fb76qkc9p41gagxljpljsmw89id1wywmjib4";
+    })
+  ];
+
   nativeBuildInputs = [
     setuptools-scm
   ];
@@ -34,6 +44,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     lazy-object-proxy
     wrapt
+  ] ++ lib.optionals (pythonOlder "3.10") [
+    typing-extensions
   ] ++ lib.optional (!isPyPy && pythonOlder "3.8") typed-ast;
 
   checkInputs = [
