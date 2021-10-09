@@ -13,18 +13,19 @@
 , peewee
 , python-jose
 , sqlalchemy
+, trio
 }:
 
 buildPythonPackage rec {
   pname = "fastapi";
-  version = "0.68.1";
+  version = "0.70.0";
   format = "flit";
 
   src = fetchFromGitHub {
     owner = "tiangolo";
     repo = "fastapi";
     rev = version;
-    sha256 = "sha256-zwfopyig4ImMbkx89l8SsLW8PzoVcDN5KSd7a7fOnms=";
+    sha256 = "sha256-mLI+w9PeewnwUMuUnXj6J2r/3shinjlwXMnhNcQlhrM=";
   };
 
   postPatch = ''
@@ -48,6 +49,7 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-asyncio
     sqlalchemy
+    trio
   ];
 
   # disabled tests require orjson which requires rust nightly
