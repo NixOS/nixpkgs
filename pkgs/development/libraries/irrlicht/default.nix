@@ -21,17 +21,20 @@ stdenv.mkDerivation rec {
     cd source/Irrlicht
   '';
 
-  buildPhase = ''
-    make sharedlib NDEBUG=1 "LDFLAGS=-lX11 -lGL -lXxf86vm"
+  preBuild = ''
+    makeFlagsArray+=(sharedlib NDEBUG=1 LDFLAGS="-lX11 -lGL -lXxf86vm")
   '';
+
+  enableParallelBuilding = true;
 
   preInstall = ''
     sed -i s,/usr/local/lib,$out/lib, Makefile
     mkdir -p $out/lib
   '';
 
-  buildInputs = [ libGLU libGL libXrandr libX11 libXxf86vm ]
-                ++ lib.optional stdenv.isAarch64 zlib;
+  buildInputs = [
+    libGLU libGL libXrandr libX11 libXxf86vm
+  ] ++ lib.optional stdenv.isAarch64 zlib;
 
   meta = {
     homepage = "http://irrlicht.sourceforge.net/";
