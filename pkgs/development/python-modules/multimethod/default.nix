@@ -1,21 +1,23 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pytestCheckHook
-, pytest-cov
 }:
+
 buildPythonPackage rec {
   pname = "multimethod";
   version = "1.6";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "ed78cd3237c59652b226d571209d934860b99240c62935a706a9b3d0bce6ebb3";
+  src = fetchFromGitHub {
+    owner = "coady";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "09vrxzv8q0lqsbh6d83wjdd29ja66rj31y7wmyha14jk603fd9k0";
   };
 
   checkInputs = [
     pytestCheckHook
-    pytest-cov
   ];
 
   pythonImportsCheck = [
