@@ -2,10 +2,10 @@
 , buildPythonPackage
 , fetchPypi
 , isPy3k
+, chardet
 , lml
 , pyexcel-io
 , texttable
-, nose
 }:
 
 buildPythonPackage rec {
@@ -20,22 +20,19 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
+    chardet
     lml
     pyexcel-io
     texttable
   ];
 
-  checkInputs = [
-    nose
+  pythonImportsCheck = [
+    "pyexcel"
   ];
 
   # Tests depend on pyexcel-xls & co. causing circular dependency.
   # https://github.com/pyexcel/pyexcel/blob/dev/tests/requirements.txt
   doCheck = false;
-
-  pythonImportsCheck = [ "pyexcel" ];
-
-  checkPhase = "nosetests";
 
   meta = {
     description = "Single API for reading, manipulating and writing data in csv, ods, xls, xlsx and xlsm files";
