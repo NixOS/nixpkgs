@@ -3,6 +3,7 @@
 buildPythonApplication rec {
   pname = "mypy-protobuf";
   version = "2.10";
+  format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
