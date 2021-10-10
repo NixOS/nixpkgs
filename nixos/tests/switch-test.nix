@@ -107,6 +107,8 @@ import ./make-test-python.nix ({ pkgs, ...} : {
             };
           };
         };
+
+        # The same system but with an activation script that restarts all services
         restart-and-reload-by-activation-script.configuration = {
           imports = [ config.specialisation.service-and-socket.configuration ];
           system.activationScripts.restart-and-reload-test = {
@@ -127,6 +129,25 @@ import ./make-test-python.nix ({ pkgs, ...} : {
               EOF
             '';
           };
+        };
+
+        # A system with a slice
+        with-slice.configuration = {
+          systemd.slices.testslice.sliceConfig.MemoryMax = "1"; # don't allow memory allocation
+          systemd.services.testservice = {
+            serviceConfig = {
+              Type = "oneshot";
+              RemainAfterExit = true;
+              ExecStart = "${pkgs.coreutils}/bin/true";
+              Slice = "testslice.slice";
+            };
+          };
+        };
+
+        # The same system but the slice allows to allocate memory
+        with-slice-non-crashing.configuration = {
+          imports = [ config.specialisation.with-slice.configuration ];
+          systemd.slices.testslice.sliceConfig.MemoryMax = lib.mkForce null;
         };
       };
     };
@@ -262,6 +283,19 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         assert_contains(out, "would reload the following units: simple-reload-service.service\n")
         assert_contains(out, "would restart the following units: simple-restart-service.service\n")
         assert_contains(out, "\nwould start the following units: simple-service.service")
+
+    # This test ensures that changes to slice configuration get applied.
+    # We test this by having a slice that allows no memory allocation at
+    # all and starting a service within it. If the service crashes, the slice
+    # is applied and if we modify the slice to allow memory allocation, the
+    # service should successfully start.
+    with subtest("slices"):
+        machine.succeed("echo 0 > /proc/sys/vm/panic_on_oom")  # allow OOMing
+        out = switch_to_specialisation("with-slice")
+        machine.fail("systemctl start testservice.service")
+        out = switch_to_specialisation("with-slice-non-crashing")
+        machine.succeed("systemctl start testservice.service")
+        machine.succeed("echo 1 > /proc/sys/vm/panic_on_oom")  # disallow OOMing
 
   '';
 })

@@ -152,7 +152,7 @@ sub fingerprintUnit {
 sub handleModifiedUnit {
     my ($unit, $baseName, $newUnitFile, $activePrev, $unitsToStop, $unitsToStart, $unitsToReload, $unitsToRestart, $unitsToSkip) = @_;
 
-    if ($unit eq "sysinit.target" || $unit eq "basic.target" || $unit eq "multi-user.target" || $unit eq "graphical.target") {
+    if ($unit eq "sysinit.target" || $unit eq "basic.target" || $unit eq "multi-user.target" || $unit eq "graphical.target" || $unit =~ /\.slice$/) {
         # Do nothing.  These cannot be restarted directly.
         # Slices and Paths don't have to be restarted since
         # properties (resource limits and inotify watches)
@@ -161,7 +161,7 @@ sub handleModifiedUnit {
         # Reload the changed mount unit to force a remount.
         $unitsToReload->{$unit} = 1;
         recordUnit($reloadListFile, $unit);
-    } elsif ($unit =~ /\.slice$/ || $unit =~ /\.path$/) {
+    } elsif ($unit =~ /\.path$/) {
         # FIXME: do something?
     } else {
         my $unitInfo = parseUnit($newUnitFile);
