@@ -1,4 +1,11 @@
-{ lib, fetchPypi, buildPythonPackage, six }:
+{ lib
+, fetchPypi
+, buildPythonPackage
+, six
+, cssselect
+, lxml
+, nose
+}:
 
 buildPythonPackage rec {
   pname = "leather";
@@ -10,6 +17,18 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ six ];
+
+  checkInputs = [
+    cssselect
+    lxml
+    nose
+  ];
+
+  checkPhase = ''
+    runHook preCheck
+    nosetests
+    runHook postCheck
+  '';
 
   meta = with lib; {
     homepage = "http://leather.rtfd.io";
