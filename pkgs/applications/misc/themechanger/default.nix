@@ -12,16 +12,19 @@
 , python3Packages
 , fetchFromGitHub
 }:
+
 python3Packages.buildPythonApplication rec {
   pname = "themechanger";
   version = "0.10.0";
   format = "other";
+
   src = fetchFromGitHub {
     owner = "ALEX11BR";
     repo = "ThemeChanger";
     rev = "v${version}";
     sha256 = "1v08fypbkwsgb78xam3ij5vrlrf67nb58mv7c7d9d9f7lflb3kwl";
   };
+
   nativeBuildInputs = [
     gobject-introspection
     meson
@@ -31,18 +34,22 @@ python3Packages.buildPythonApplication rec {
     desktop-file-utils
     gtk3
   ];
+
   buildInputs = [
     glib
     gtk3
     python3
     gsettings-desktop-schemas
   ];
+
   propagatedBuildInputs = with python3Packages; [
     pygobject3
   ];
+
   postPatch = ''
     patchShebangs postinstall.py
   '';
+
   meta = with lib; {
     homepage = "https://github.com/ALEX11BR/ThemeChanger";
     description = "A theme changing utility for Linux, BSDs, and whatnots";
