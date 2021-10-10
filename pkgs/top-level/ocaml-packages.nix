@@ -482,6 +482,8 @@ let
       inherit (pkgs) gsl;
     };
 
+    gstreamer = callPackage ../development/ocaml-modules/gstreamer { };
+
     h2 = callPackage ../development/ocaml-modules/h2 { };
 
     hack_parallel = callPackage ../development/ocaml-modules/hack_parallel { };
