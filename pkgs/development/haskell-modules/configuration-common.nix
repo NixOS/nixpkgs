@@ -2032,7 +2032,7 @@ EOT
 
   # Needs network >= 3.1.2
   quic = super.quic.overrideScope (self: super: {
-    network = self.network_3_1_2_3;
+    network = self.network_3_1_2_5;
   });
 
   http3 = super.http3.overrideScope (self: super: {
