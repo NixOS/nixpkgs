@@ -145,8 +145,50 @@ self: super: {
   type-equality = doJailbreak super.type-equality;
   vector = doJailbreak (dontCheck super.vector);
   vector-binary-instances = doJailbreak super.vector-binary-instances;
-  vector-th-unbox = doJailbreak super.vector-th-unbox;
   zlib = doJailbreak super.zlib;
+  indexed-traversable-instances = doJailbreak super.indexed-traversable-instances;
+
+  hpack = overrideCabal (doJailbreak super.hpack) (drv: {
+    # Cabal 3.6 seems to preserve comments when reading, which makes this test fail
+    # 2021-10-10: 9.2.1 is not yet supported (also no issue)
+    testFlags = [
+      "--skip=/Hpack/renderCabalFile/is inverse to readCabalFile/"
+    ] ++ drv.testFlags or [];
+  });
+
+  # Patch for TH code from head.hackage
+  vector-th-unbox = appendPatch (doJailbreak super.vector-th-unbox) (pkgs.fetchpatch {
+    url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/dfd024c9a336c752288ec35879017a43bd7e85a0/patches/vector-th-unbox-0.2.1.9.patch";
+    sha256 = "02bvvy3hx3cf4y4dr64zl5pjvq8giwk4286j5g1n6k8ikyn2403p";
+  });
+
+  # Patch for TH code from head.hackage
+  invariant = appendPatch (doJailbreak super.invariant) (pkgs.fetchpatch {
+    url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/dfd024c9a336c752288ec35879017a43bd7e85a0/patches/invariant-0.5.4.patch";
+    sha256 = "17gg8ck4r6qmlbcbpbnqzksgf5q7i891zs6axfzhas6ajncylxvc";
+  });
+
+  # base 4.15 support from head.hackage
+  lens = appendPatch (doJailbreak super.lens_5_0_1) (pkgs.fetchpatch {
+    url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/dfd024c9a336c752288ec35879017a43bd7e85a0/patches/lens-5.0.1.patch";
+    sha256 = "1s8qqg7ymvv94dnfnr1ragx91chh9y7ydc4jx25zn361wbn00pv7";
+  });
+
+  semigroupoids = overrideCabal super.semigroupoids (drv: {
+    # Patch from head.hackage for base 4.15 compat
+    patches = drv.patches or [] ++ [
+      (pkgs.fetchpatch {
+        url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/dfd024c9a336c752288ec35879017a43bd7e85a0/patches/semigroupoids-5.3.5.patch";
+        sha256 = "0xrn1gv6b2n76522pk2nfp4z69kvp14l2zpif2f8zzz6cwcrx9w8";
+      })
+    ];
+    # acrobatics to make the patch apply
+    prePatch = ''
+      find . -type f | xargs -L 1 ${pkgs.buildPackages.dos2unix}/bin/dos2unix
+    '';
+    editedCabalFile = null;
+    revision = null;
+  });
 
   # Syntax error in tests fixed in https://github.com/simonmar/alex/commit/84b29475e057ef744f32a94bc0d3954b84160760
   alex = dontCheck super.alex;
@@ -170,9 +212,6 @@ self: super: {
   # 1.2.1 introduced support for GHC 9.2.1, stackage has 1.2.0
   # The test suite indirectly depends on random, which leads to infinite recursion
   random = dontCheck super.random_1_2_1;
-
-  # 5 introduced support for GHC 9.0.x, but hasn't landed in stackage yet
-  lens = super.lens_5_0_1;
 
   # 0.16.0 introduced support for GHC 9.0.x, stackage has 0.15.0
   memory = appendPatch super.memory_0_16_0 (pkgs.fetchpatch {
