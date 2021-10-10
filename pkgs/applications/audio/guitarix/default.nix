@@ -24,7 +24,7 @@
 , lrdf
 , lv2
 , pkg-config
-, python2
+, python3
 , sassc
 , serd
 , sord
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     hicolor-icon-theme
     intltool
     pkg-config
-    python2
+    python3
     wafHook
     wrapGAppsHook
   ];
