@@ -2755,6 +2755,8 @@ in {
 
   flask-swagger-ui = callPackage ../development/python-modules/flask-swagger-ui { };
 
+  flask-talisman = callPackage ../development/python-modules/flask-talisman { };
+
   flask_testing = callPackage ../development/python-modules/flask-testing { };
 
   flask-versioned = callPackage ../development/python-modules/flask-versioned { };
