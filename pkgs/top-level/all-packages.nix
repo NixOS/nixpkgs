@@ -9533,6 +9533,10 @@ with pkgs;
 
   subfinder = callPackage ../tools/networking/subfinder { };
 
+  suckit = callPackage ../tools/networking/suckit {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   surfraw = callPackage ../tools/networking/surfraw { };
 
   swagger-codegen = callPackage ../tools/networking/swagger-codegen { };
