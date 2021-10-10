@@ -6614,6 +6614,8 @@ with pkgs;
     ffmpeg = ffmpeg-full;
   };
 
+  lfs = callPackage ../tools/filesystems/lfs { };
+
   lksctp-tools = callPackage ../os-specific/linux/lksctp-tools { };
 
   lldpd = callPackage ../tools/networking/lldpd { };
