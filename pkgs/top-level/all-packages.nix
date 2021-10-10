@@ -8582,6 +8582,8 @@ with pkgs;
 
   pywal = with python3Packages; toPythonApplication pywal;
 
+  pywayland = with python39Packages; callPackage ../development/python-modules/pywayland { };
+
   pystring = callPackage ../development/libraries/pystring {};
 
   rbw = callPackage ../tools/security/rbw {
