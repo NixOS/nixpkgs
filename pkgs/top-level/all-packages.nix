@@ -17978,6 +17978,8 @@ with pkgs;
 
   liburcu = callPackage ../development/libraries/liburcu { };
 
+  libjaylink = callPackage ../development/libraries/libjaylink { };
+
   libusb-compat-0_1 = callPackage ../development/libraries/libusb-compat/0.1.nix {};
 
   libusb1 = callPackage ../development/libraries/libusb1 {
