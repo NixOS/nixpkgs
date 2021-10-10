@@ -7,8 +7,8 @@ fetchNuGet:
   })
   (fetchNuGet {
     name = "SteamKit2";
-    version = "2.4.0-Alpha.2";
-    sha256 = "1r6chqdp912pr8f8d7px2vp4y1ydx0kida7d5a1hbf6b7acnsg7d";
+    version = "2.4.0-Alpha.3";
+    sha256 = "0n48yjkyzj49kv89jbkwdq6nm9w9ng6cjhvdv0chpryx9zgasgvv";
   })
   (fetchNuGet {
     name = "protobuf-net.Core";
