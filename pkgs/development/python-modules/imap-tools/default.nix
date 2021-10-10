@@ -29,6 +29,9 @@ buildPythonPackage rec {
     "test_connectio"
     "test_attributes"
     "test_live"
+    # logic operator tests broken in 0.49.0
+    # https://github.com/ikvk/imap_tools/issues/143
+    "test_logic_operators"
   ];
 
   pythonImportsCheck = [ "imap_tools" ];
