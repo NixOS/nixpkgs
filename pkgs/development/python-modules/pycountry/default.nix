@@ -22,7 +22,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    homepage = "https://bitbucket.org/flyingcircus/pycountry";
+    homepage = "https://github.com/flyingcircusio/pycountry";
     description = "ISO country, subdivision, language, currency and script definitions and their translations";
     license = licenses.lgpl2;
     maintainers = with maintainers; [ ];
