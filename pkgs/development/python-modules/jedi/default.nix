@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
@@ -39,6 +40,9 @@ buildPythonPackage rec {
   disabledTests = [
     # Assertions mismatches with pytest>=6.0
     "test_completion"
+  ] ++ lib.optionals (stdenv.isAarch64 && pythonOlder "3.9") [
+    # AssertionError: assert 'foo' in ['setup']
+    "test_init_extension_module"
   ];
 
   meta = with lib; {
