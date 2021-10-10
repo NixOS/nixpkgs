@@ -4,7 +4,7 @@
 , pythonOlder
 , setuptools-scm
 , six
-, pytest
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -18,19 +18,16 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ setuptools-scm ];
+
   propagatedBuildInputs = [ six ];
 
-  checkPhase = ''
-    py.test
-  '';
-
-  checkInputs = [ pytest ];
+  checkInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Python package for writing Value Change Dump (VCD) files";
     homepage = "https://github.com/SanDisk-Open-Source/pyvcd";
     changelog = "https://github.com/SanDisk-Open-Source/pyvcd/blob/${version}/CHANGELOG.rst";
     license = licenses.mit;
-    maintainers = [ maintainers.sb0 maintainers.emily ];
+    maintainers = with maintainers; [ sb0 emily ];
   };
 }
