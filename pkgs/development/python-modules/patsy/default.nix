@@ -1,11 +1,10 @@
 { lib
 , fetchPypi
 , buildPythonPackage
-, nose
 , six
 , numpy
 , scipy # optional, allows spline-related features (see patsy's docs)
-, parameterized
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -17,13 +16,18 @@ buildPythonPackage rec {
     sha256 = "5053de7804676aba62783dbb0f23a2b3d74e35e5bfa238b88b7cbf148a38b69d";
   };
 
-  checkInputs = [ nose parameterized ];
-  checkPhase = "nosetests -v";
-
   propagatedBuildInputs = [
     six
     numpy
     scipy
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "patsy"
   ];
 
   meta = {
