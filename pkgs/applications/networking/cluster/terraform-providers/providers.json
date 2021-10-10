@@ -768,11 +768,13 @@
     "version": "0.1.1"
   },
   "openstack": {
-    "owner": "terraform-providers",
+    "owner": "terraform-provider-openstack",
+    "provider-source-address": "registry.terraform.io/terraform-provider-openstack/openstack",
     "repo": "terraform-provider-openstack",
-    "rev": "v1.28.0",
-    "sha256": "1g2nxv312ddvkgpph17m9sh4zmy5ddj8gqwnfb3frbfbbamrgar6",
-    "version": "1.28.0"
+    "rev": "v1.43.1",
+    "sha256": "0n6r88p3a6p8p0gjys2r1kcgkwq450jmyd741g45lxmaf3jz2ynb",
+    "vendorSha256": "0k4srszs8xgf8gz4fa7ysqyww52d7kvqy6zf22f1gkcjyiks9pl7",
+    "version": "1.43.1"
   },
   "opentelekomcloud": {
     "owner": "terraform-providers",
