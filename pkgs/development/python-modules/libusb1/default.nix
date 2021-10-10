@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, libusb1, pytest }:
+{ lib, stdenv, buildPythonPackage, fetchPypi, libusb1, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "libusb1";
@@ -10,18 +10,18 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    substituteInPlace usb1/libusb1.py --replace \
+    substituteInPlace usb1/_libusb1.py --replace \
       "ctypes.util.find_library(base_name)" \
       "'${libusb1}/lib/libusb-1.0${stdenv.hostPlatform.extensions.sharedLibrary}'"
   '';
 
   buildInputs = [ libusb1 ];
 
-  checkInputs = [ pytest ];
+  checkInputs = [ pytestCheckHook ];
 
-  checkPhase = ''
-    py.test usb1/testUSB1.py
-  '';
+  pytestFlagsArray = [
+    "usb1/testUSB1.py"
+  ];
 
   meta = with lib; {
     homepage    = "https://github.com/vpelletier/python-libusb1";
