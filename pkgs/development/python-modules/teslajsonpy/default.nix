@@ -6,6 +6,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , fetchpatch
+, httpx
 , poetry-core
 , pytest-asyncio
 , pytestCheckHook
@@ -33,6 +34,7 @@ buildPythonPackage rec {
     aiohttp
     backoff
     beautifulsoup4
+    httpx
     wrapt
   ];
 
