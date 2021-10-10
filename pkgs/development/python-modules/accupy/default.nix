@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pythonOlder
 , mpmath
 , numpy
@@ -11,17 +11,19 @@
 , pytestCheckHook
 , matplotlib
 , dufte
-, isPy27
+, perfplot
 }:
 
 buildPythonPackage rec {
   pname = "accupy";
   version = "0.3.6";
-  disabled = isPy27;
+  disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "ad408f2937c22a0628fa8a73856e813c825064a14240cbfd64337d2a45a756c3";
+  src = fetchFromGitHub {
+    owner = "nschloe";
+    repo = pname;
+    rev = version;
+    sha256 = "0sxkwpp2xy2jgakhdxr4nh1cspqv8l89kz6s832h05pbpyc0n767";
   };
 
   nativeBuildInputs = [
@@ -39,6 +41,7 @@ buildPythonPackage rec {
   ] ++ lib.optional (pythonOlder "3.8") importlib-metadata;
 
   checkInputs = [
+    perfplot
     pytestCheckHook
     matplotlib
     dufte
