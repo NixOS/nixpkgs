@@ -8633,6 +8633,8 @@ with pkgs;
 
   openmodelica = recurseIntoAttrs (callPackage ../applications/science/misc/openmodelica {});
 
+  prowlarr = callPackage ../servers/prowlarr { };
+
   qarte = libsForQt5.callPackage ../applications/video/qarte { };
 
   qlcplus = libsForQt5.callPackage ../applications/misc/qlcplus { };
