@@ -1,0 +1,752 @@
+[
+  {
+    "name": "terraform",
+    "publisher": "4ops",
+    "sha256": "196026a89pizj8p0hqdgkyllj2spx2qwpynsaqjq17s8v15vk5dg",
+    "version": "0.2.1"
+  },
+  {
+    "name": "vscode-ron",
+    "publisher": "a5huynh",
+    "sha256": "0d3p50mhqp550fmj662d3xklj14gvzvhszm2hlqvx4h28v222z97",
+    "version": "0.9.0"
+  },
+  {
+    "name": "vscode-hie-server",
+    "publisher": "alanz",
+    "sha256": "1mz0h5zd295i73hbji9ivla8hx02i4yhqcv6l4r23w3f07ql3i8h",
+    "version": "0.0.27"
+  },
+  {
+    "name": "project-manager",
+    "publisher": "alefragnani",
+    "sha256": "sha256-fYBKmWn9pJh2V0fGdqVrXj9zIl8oTrZcBycDaMOXL/8=",
+    "version": "12.1.0"
+  },
+  {
+    "name": "copy-relative-path",
+    "publisher": "alexdima",
+    "sha256": "06g601n9d6wyyiz659w60phgm011gn9jj5fy0gf5wpi2bljk3vcn",
+    "version": "0.0.2"
+  },
+  {
+    "name": "vscode-tlaplus",
+    "publisher": "alygin",
+    "sha256": "1cy0qn8iyjrinscn9p5ckpsa2hyryapxfi7is6s2zk2mpligbb1d",
+    "version": "1.5.3"
+  },
+  {
+    "name": "ng-template",
+    "publisher": "Angular",
+    "sha256": "sha256-CChkWKiLi/OcOm268d45pNwiyrKhztqYsQvJV/9z+Ag=",
+    "version": "12.2.0"
+  },
+  {
+    "name": "icons-carbon",
+    "publisher": "antfu",
+    "sha256": "0mfap16la09mn0jhvy8s3dainrmjz64vra7d0d4fbcpgg420kv3f",
+    "version": "0.2.2"
+  },
+  {
+    "name": "slidev",
+    "publisher": "antfu",
+    "sha256": "sha256-vzmByEiKZIkd707Bs4RGQrMII5sghYlkQI6aAJOHFcY=",
+    "version": "0.3.2"
+  },
+  {
+    "name": "nord-visual-studio-code",
+    "publisher": "arcticicestudio",
+    "sha256": "sha256-Uo6peR+2ZNX6nwJ0Yar32Pe0rfBZ+f6ef1cYhUvVUbE=",
+    "version": "0.18.0"
+  },
+  {
+    "name": "nix-env-selector",
+    "publisher": "arrterian",
+    "sha256": "0e76885c9dbb6dca4eac8a75866ec372b948cc64a3a3845327d7c3ef6ba42a57",
+    "version": "1.0.7"
+  },
+  {
+    "name": "asciidoctor-vscode",
+    "publisher": "asciidoctor",
+    "sha256": "1xkxx5i3nhd0dzqhhdmx0li5jifsgfhv0p5h7xwsscz3gzgsdcyb",
+    "version": "2.8.9"
+  },
+  {
+    "name": "vscode-neovim",
+    "publisher": "asvetliakov",
+    "sha256": "17f0jzg9vdbqdjnnc5i1q28ij2kckvvxi7fw9szmyy754f074jb1",
+    "version": "0.0.82"
+  },
+  {
+    "name": "nixpkgs-fmt",
+    "publisher": "B4dM4n",
+    "sha256": "sha256-vz2kU36B1xkLci2QwLpl/SBEhfSWltIDJ1r7SorHcr8=",
+    "version": "0.0.1"
+  },
+  {
+    "name": "scaladex-search",
+    "publisher": "baccata",
+    "sha256": "1y8p4rr8qq5ng52g4pbx8ayq04gi2869wrx68k69rl7ga7bzcyp9",
+    "version": "0.0.1"
+  },
+  {
+    "name": "Nix",
+    "publisher": "bbenoist",
+    "sha256": "0zd0n9f5z1f0ckzfjr38xw2zzmcxg1gjrava7yahg5cvdcw6l35b",
+    "version": "1.0.1"
+  },
+  {
+    "name": "calva",
+    "publisher": "betterthantomorrow",
+    "sha256": "sha256-umnG1uLB42fUNKjANaKcABjVmqbdOQakd/6TPsEpF9c",
+    "version": "2.0.205"
+  },
+  {
+    "name": "file-browser",
+    "publisher": "bodil",
+    "sha256": "sha256-RW4vm0Hum9AeN4Rq7MSJOIHnALU0L1tBLKjaRLA2hL8=",
+    "version": "0.2.10"
+  },
+  {
+    "name": "vscode-tailwindcss",
+    "publisher": "bradlc",
+    "sha256": "098vrm28b7jpzk0c2d0cgxvdw4jsswzf18cx1m9jwsm1j40fp5f4",
+    "version": "0.6.13"
+  },
+  {
+    "name": "nixfmt-vscode",
+    "publisher": "brettm12345",
+    "sha256": "07w35c69vk1l6vipnq3qfack36qcszqxn8j3v332bl0w6m02aa7k",
+    "version": "0.0.1"
+  },
+  {
+    "name": "wal",
+    "publisher": "cmschuetz12",
+    "sha256": "0q089jnzqzhjfnv0vlb5kf747s3mgz64r7q3zscl66zb2pz5q4zd",
+    "version": "0.1.0"
+  },
+  {
+    "name": "gitignore",
+    "publisher": "codezombiech",
+    "sha256": "0gnc0691pwkd9s8ldqabmpfvj0236rw7bxvkf0bvmww32kv1ia0b",
+    "version": "0.6.0"
+  },
+  {
+    "name": "bracket-pair-colorizer",
+    "publisher": "CoenraadS",
+    "sha256": "0r3bfp8kvhf9zpbiil7acx7zain26grk133f0r0syxqgml12i652",
+    "version": "1.0.61"
+  },
+  {
+    "name": "bracket-pair-colorizer-2",
+    "publisher": "CoenraadS",
+    "sha256": "0bfvzs4ac537zqhnqaa38jf4lhiy1fmqcv6lq89nnx8k963380z7",
+    "version": "0.2.1"
+  },
+  {
+    "name": "systemd-unit-file",
+    "publisher": "coolbear",
+    "sha256": "0sc0zsdnxi4wfdlmaqwb6k2qc21dgwx6ipvri36x7agk7m8m4736",
+    "version": "1.0.6"
+  },
+  {
+    "name": "vscode-markdownlint",
+    "publisher": "DavidAnson",
+    "sha256": "c8c0647e0dd786fe68becca6dc73eade5f4220a26ab9faff8dd813a14b25df51",
+    "version": "0.42.1"
+  },
+  {
+    "name": "languagetool-linter",
+    "publisher": "davidlday",
+    "sha256": "sha256-AYINgq1BMfh7p4xhwSC2Www6dQvyQAGTA45HJsmMGDg=",
+    "version": "0.18.0"
+  },
+  {
+    "name": "vscode-eslint",
+    "publisher": "dbaeumer",
+    "sha256": "sha256-bVGmp871yu1Llr3uJ+CCosDsrxJtD4b1+CR+omMUfIQ=",
+    "version": "2.1.14"
+  },
+  {
+    "name": "vscode-deno",
+    "publisher": "denoland",
+    "sha256": "sha256-OuGTjmJQFAWrYp7YnFpyo0NnnCcXYF8itYjGKMa3FCs=",
+    "version": "3.9.1"
+  },
+  {
+    "name": "dhall-lang",
+    "publisher": "dhall",
+    "sha256": "0sa04srhqmngmw71slnrapi2xay0arj42j4gkan8i11n7bfi1xpf",
+    "version": "0.0.4"
+  },
+  {
+    "name": "vscode-dhall-lsp-server",
+    "publisher": "dhall",
+    "sha256": "1zin7s827bpf9yvzpxpr5n6mv0b5rhh3civsqzmj52mdq365d2js",
+    "version": "0.0.4"
+  },
+  {
+    "name": "competitive-programming-helper",
+    "publisher": "DivyanshuAgrawal",
+    "sha256": "25v2tdAX7fVl2B5nvOIKN9vP1G5rA0G67CiDQn9n9Uc=",
+    "version": "5.8.5"
+  },
+  {
+    "name": "githistory",
+    "publisher": "donjayamanne",
+    "sha256": "11x116hzqnhgbryp2kqpki1z5mlnwxb0ly9r1513m5vgbisrsn0i",
+    "version": "0.6.14"
+  },
+  {
+    "name": "xml",
+    "publisher": "dotjoshjohnson",
+    "sha256": "1v4x6yhzny1f8f4jzm4g7vqmqg5bqchyx4n25mkgvw2xp6yls037",
+    "version": "2.5.1"
+  },
+  {
+    "name": "theme-dracula",
+    "publisher": "dracula-theme",
+    "sha256": "0wni9sriin54ci8rly2s68lkfx8rj1cys6mgcizvps9sam6377w6",
+    "version": "2.22.3"
+  },
+  {
+    "name": "gitlens",
+    "publisher": "eamodio",
+    "sha256": "sha256-JxCNE/IL/v94xWmhebsRZo1Gw+nSSpDgZ41ZGongGVI=",
+    "version": "11.6.0"
+  },
+  {
+    "name": "EditorConfig",
+    "publisher": "EditorConfig",
+    "sha256": "0fa4h9hk1xq6j3zfxvf483sbb4bd17fjl5cdm3rll7z9kaigdqwg",
+    "version": "0.16.4"
+  },
+  {
+    "name": "vscode-command-runner",
+    "publisher": "edonet",
+    "sha256": "0fxvplyk080m0cdsvzynp6wjillrd4flr5qz7af7fibb2jbmfdkn",
+    "version": "0.0.116"
+  },
+  {
+    "name": "elixir-ls",
+    "publisher": "JakeBecker",
+    "sha256": "sha256-VD1g4DJfA0vDJ0cyHFDEtCEqQo0nXfPC5vknEU91cPk=",
+    "version": "0.8.0"
+  },
+  {
+    "name": "elm-ls-vscode",
+    "publisher": "Elmtooling",
+    "sha256": "06x5ld2r1hzns2s052mvhmfiaawjzcn0jf5lkfprhmrkxnmfdd43",
+    "version": "2.0.1"
+  },
+  {
+    "name": "vscode-great-icons",
+    "publisher": "emmanuelbeziat",
+    "sha256": "1cr1pxgxlfr643sfxbcr2xd53s1dnzcpacjj0ffkgizfda2psy78",
+    "version": "2.1.79"
+  },
+  {
+    "name": "prettier-vscode",
+    "publisher": "esbenp",
+    "sha256": "017lqpmzjxq5f1zr49akcm9gfki0qq8v7pj7gks6a3szjdx16mnl",
+    "version": "8.0.1"
+  },
+  {
+    "name": "magic-racket",
+    "publisher": "evzen-wybitul",
+    "sha256": "sha256-34/H0WgM73yzuOGU2w6Ipq7KuEBuN1bykcLGuvzY3mU=",
+    "version": "0.5.7"
+  },
+  {
+    "name": "lex-flex-yacc-bison",
+    "publisher": "faustinoaq",
+    "sha256": "6254f52157dc796eae7bf135ac88c1c9cc19d884625331a1e634f9768722cc3d",
+    "version": "0.0.3"
+  },
+  {
+    "name": "file-icons",
+    "publisher": "file-icons",
+    "sha256": "1lyx0l42xhi2f3rdnjddc3mw7m913kjnchawi98i6vqsx3dv7091",
+    "version": "1.0.28"
+  },
+  {
+    "name": "foam-vscode",
+    "publisher": "foam",
+    "sha256": "sha256-w9xGkezS3A9z6sTk8WWgW7g8qYX6mJFfRV0lv5cu160=",
+    "version": "0.14.1"
+  },
+  {
+    "name": "auto-close-tag",
+    "publisher": "formulahendry",
+    "sha256": "058jgmllqb0j6gg5anghdp35nkykii28igfcwqgh4bp10pyvspg0",
+    "version": "0.5.6"
+  },
+  {
+    "name": "auto-rename-tag",
+    "publisher": "formulahendry",
+    "sha256": "0cqg9mxkyf41brjq2c764w42lzyn6ffphw6ciw7xnqk1h1x8wwbs",
+    "version": "0.1.6"
+  },
+  {
+    "name": "code-runner",
+    "publisher": "formulahendry",
+    "sha256": "0qwcxr6m1xwhqmdl4pccjgpikpq1hgi2hgrva5abn8ixa2510hcy",
+    "version": "0.11.2"
+  },
+  {
+    "name": "shell-format",
+    "publisher": "foxundermoon",
+    "sha256": "09z72mdr5bfdcb67xyzlv7lb9vyjlc3k9ackj4jgixfk40c68cnj",
+    "version": "7.1.0"
+  },
+  {
+    "name": "reasonml",
+    "publisher": "freebroccolo",
+    "sha256": "1nay6qs9vcxd85ra4bv93gg3aqg3r2wmcnqmcsy9n8pg1ds1vngd",
+    "version": "1.0.38"
+  },
+  {
+    "name": "copilot",
+    "publisher": "github",
+    "sha256": "sha256-NryXLuMIZJngp2dBsGbNhBiblEthckw1Zk2vqMXIzFM=",
+    "version": "1.4.2678"
+  },
+  {
+    "name": "github-vscode-theme",
+    "publisher": "github",
+    "sha256": "14wz2b0bn1rnmpj28c0mivz2gacla2dgg8ncv7qfx9bsxhf95g68",
+    "version": "4.1.1"
+  },
+  {
+    "name": "vscode-pull-request-github",
+    "publisher": "github",
+    "sha256": "13p3z86vkra26npp5a78pxdwa4z6jqjzsd38arhgdnjgwmi6bnrw",
+    "version": "0.22.0"
+  },
+  {
+    "name": "Go",
+    "publisher": "golang",
+    "sha256": "sha256-ZDUWN9lzDnR77W7xcMFQaaFl/6Lf/x1jgaBkwZPqGGw=",
+    "version": "0.25.1"
+  },
+  {
+    "name": "vscode-graphql",
+    "publisher": "GraphQL",
+    "sha256": "sha256-JjEefVHQUYidUsr8Ce/dh7hLDm21WkyS+2RwsXHoY04=",
+    "version": "0.3.13"
+  },
+  {
+    "name": "todo-tree",
+    "publisher": "Gruntfuggly",
+    "sha256": "0fj7vvaqdldhbzm9dqh2plqlhg34jv5khd690xd87h418sv8rk95",
+    "version": "0.0.213"
+  },
+  {
+    "name": "haskell",
+    "publisher": "haskell",
+    "sha256": "1l6nrbqkq1p62dkmzs4sy0rxbid3qa1104s3fd9fzkmc1sldzgsn",
+    "version": "1.6.1"
+  },
+  {
+    "name": "beautify",
+    "publisher": "HookyQR",
+    "sha256": "1c0kfavdwgwham92xrh0gnyxkrl9qlkpv39l1yhrldn8vd10fj5i",
+    "version": "1.5.0"
+  },
+  {
+    "name": "output-colorizer",
+    "publisher": "IBM",
+    "sha256": "0i9kpnlk3naycc7k8gmcxas3s06d67wxr3nnyv5hxmsnsx5sfvb7",
+    "version": "0.1.2"
+  },
+  {
+    "name": "workspacesort",
+    "publisher": "iciclesoft",
+    "sha256": "1pbk8kflywll6lqhmffz9yjf01dn8xq8sk6rglnfn2kl2ildfhh6",
+    "version": "1.6.0"
+  },
+  {
+    "name": "flux",
+    "publisher": "influxdata",
+    "sha256": "sha256-rKkZ7Sg8buryFtbIuKsrf3V3Rf7PP8hnbEIRFf4FvSM=",
+    "version": "0.6.5"
+  },
+  {
+    "name": "Ionide-fsharp",
+    "publisher": "Ionide",
+    "sha256": "xrBNiIbZVJ0sGUk/4PudD8kSyX94QkrFtf7Ho/sB0Vs=",
+    "version": "5.5.5"
+  },
+  {
+    "name": "latex-workshop",
+    "publisher": "James-Yu",
+    "sha256": "1ai16aam4v5jzhxgms589q0l24kyk1a9in6z4i7g05b3sahyxab2",
+    "version": "8.2.0"
+  },
+  {
+    "name": "custom-local-formatters",
+    "publisher": "jkillian",
+    "sha256": "1pmqnc759fq86g2z3scx5xqpni9khcqi5z2kpl1kb7yygsv314gm",
+    "version": "0.0.4"
+  },
+  {
+    "name": "nix-ide",
+    "publisher": "jnoortheen",
+    "sha256": "04ky1mzyjjr1mrwv3sxz4mgjcq5ylh6n01lvhb19h3fmwafkdxbp",
+    "version": "0.1.16"
+  },
+  {
+    "name": "svg",
+    "publisher": "jock",
+    "sha256": "04ghqg4s7g7yylmvbxzwzpnyy4zin2bwlgvflh18m77w4j0ckpiq",
+    "version": "1.4.7"
+  },
+  {
+    "name": "vscode-peacock",
+    "publisher": "johnpapa",
+    "sha256": "1g7apzzgfm8s9sjavhwr8jpf9slhq8b9jfkww3q5n41mzzx8m94p",
+    "version": "3.9.1"
+  },
+  {
+    "name": "vscode-styled-components",
+    "publisher": "jpoissonnier",
+    "sha256": "sha256-ojbeuYBCS+DjF5R0aLuBImzoSOb8mXw1s0Uh0CzggzE=",
+    "version": "1.4.1"
+  },
+  {
+    "name": "language-haskell",
+    "publisher": "justusadam",
+    "sha256": "0ab7m5jzxakjxaiwmg0jcck53vnn183589bbxh3iiylkpicrv67y",
+    "version": "3.4.0"
+  },
+  {
+    "name": "magit",
+    "publisher": "kahole",
+    "sha256": "0sqzz5bbqqg60aypvwxcqnxrr72gmwfj9sv0amgkyaf60zg5sf7w",
+    "version": "0.6.18"
+  },
+  {
+    "name": "vscode-colorize",
+    "publisher": "kamikillerto",
+    "sha256": "1h82b1jz86k2qznprng5066afinkrd7j3738a56idqr3vvvqnbsm",
+    "version": "0.11.1"
+  },
+  {
+    "name": "i18n-ally",
+    "publisher": "Lokalise",
+    "sha256": "sha256-nHBYRSiPQ5ucWPr9VCUgMrosloLnVj40Fh+CEBvWONE=",
+    "version": "2.7.1"
+  },
+  {
+    "name": "bash-ide-vscode",
+    "publisher": "mads-hartmann",
+    "sha256": "1hq41fy2v1grjrw77mbs9k6ps6gncwlydm03ipawjnsinxc9rdkp",
+    "version": "1.11.0"
+  },
+  {
+    "name": "rainbow-csv",
+    "publisher": "mechatroner",
+    "sha256": "0w5mijs4ll5qjkpyw7qpn1k40pq8spm0b3q72x150ydbcini5hxw",
+    "version": "1.7.1"
+  },
+  {
+    "name": "dotenv",
+    "publisher": "mikestead",
+    "sha256": "sha256-dieCzNOIcZiTGu4Mv5zYlG7jLhaEsJR05qbzzzQ7RWc=",
+    "version": "1.0.1"
+  },
+  {
+    "name": "goto-next-previous-member",
+    "publisher": "mishkinf",
+    "sha256": "0kgzap1k924i95al0a63hxcsv8skhaapgfpi9d7vvaxm0fc10l1i",
+    "version": "0.0.5"
+  },
+  {
+    "name": "vscode-docker",
+    "publisher": "ms-azuretools",
+    "sha256": "1l7pm3s5kbf2vark164ykz4qbpa1ac9ls691hham36f6v91dmff9",
+    "version": "1.9.1"
+  },
+  {
+    "name": "vscode-kubernetes-tools",
+    "publisher": "ms-kubernetes-tools",
+    "sha256": "12a4phl1pddsajy3n0ld6rp607iy0pif6pqrs6ljbg2x97fyra28",
+    "version": "1.0.6"
+  },
+  {
+    "name": "vscode-pylance",
+    "publisher": "MS-python",
+    "sha256": "0n2dm21vgzir3hx1m3pmx7jq4zy3hdxfsandd2wv5da4fs9b5g50",
+    "version": "2020.11.2"
+  },
+  {
+    "name": "jupyter",
+    "publisher": "ms-toolsai",
+    "sha256": "0gjpsp61l8daqa87mpmxcrvsvb0pc2vwg7xbkvwn0f13c1739w9p",
+    "version": "2021.5.745244803"
+  },
+  {
+    "name": "debugger-for-chrome",
+    "publisher": "msjsdiag",
+    "sha256": "sha256-9i3TgCFThnFF5ccwzS4ATj5c2Xoe/4tDFGv75jJxeQ4=",
+    "version": "4.12.11"
+  },
+  {
+    "name": "one-dark-theme",
+    "publisher": "mskelton",
+    "sha256": "1ks6z8wsxmlfhiwa51f7d6digvw11dlxc7mja3hankgxcf5dyj31",
+    "version": "1.7.2"
+  },
+  {
+    "name": "rose-pine",
+    "publisher": "mvllow",
+    "sha256": "sha256-pKrwiA/ZArBfumT0VTauhINSDEbABWgBBzTZEE07wzk=",
+    "version": "1.3.6"
+  },
+  {
+    "name": "color-highlight",
+    "publisher": "naumovs",
+    "sha256": "1syzf43ws343z911fnhrlbzbx70gdn930q67yqkf6g0mj8lf2za2",
+    "version": "2.3.0"
+  },
+  {
+    "name": "ocaml-platform",
+    "publisher": "ocamllabs",
+    "sha256": "0jkxpcrbr8xmwfl8jphmarjz2jk54hvmc24ww89d4bgx1awayqfh",
+    "version": "1.5.1"
+  },
+  {
+    "name": "vetur",
+    "publisher": "octref",
+    "sha256": "09w3bik1mxs7qac67wgrc58vl98ham3syrn2anycpwd7135wlpby",
+    "version": "0.34.1"
+  },
+  {
+    "name": "material-icon-theme",
+    "publisher": "pkief",
+    "sha256": "1m9mis59j9xnf1zvh67p5rhayaa9qxjiw9iw847nyl9vsy73w8ya",
+    "version": "4.4.0"
+  },
+  {
+    "name": "java",
+    "publisher": "redhat",
+    "sha256": "0xb9brki4s00piv4kqgz6idm16nk6x1j6502jljz7y9pif38z32y",
+    "version": "0.76.0"
+  },
+  {
+    "name": "vscode-yaml",
+    "publisher": "redhat",
+    "sha256": "046kdk73a5xbrwq16ff0l64271c6q6ygjvxaph58z29gyiszfkig",
+    "version": "0.13.0"
+  },
+  {
+    "name": "gi",
+    "publisher": "rubbersheep",
+    "sha256": "0j9k6wm959sziky7fh55awspzidxrrxsdbpz1d79s5lr5r19rs6j",
+    "version": "0.2.11"
+  },
+  {
+    "name": "vscode-paste-and-indent",
+    "publisher": "Rubymaniac",
+    "sha256": "0fqwcvwq37ndms6vky8jjv0zliy6fpfkh8d9raq8hkinfxq6klgl",
+    "version": "0.0.8"
+  },
+  {
+    "name": "partial-diff",
+    "publisher": "ryu1kn",
+    "sha256": "1r4kg4slgxncdppr4fn7i5vfhvzcg26ljia2r97n6wvwn8534vs9",
+    "version": "1.4.1"
+  },
+  {
+    "name": "scala",
+    "publisher": "scala-lang",
+    "sha256": "0isw8jh845hj2fw7my1i19b710v3m5qsjy2faydb529ssdqv463p",
+    "version": "0.5.3"
+  },
+  {
+    "name": "metals",
+    "publisher": "scalameta",
+    "sha256": "0q6zjpdi98png4vpzz39q85nxmsh3h1nnan58saz5rr83d6jgj89",
+    "version": "1.10.4"
+  },
+  {
+    "name": "crates",
+    "publisher": "serayuzgur",
+    "sha256": "0l26pyvw7n3bszf97yx6qps72acq112akg3q4jq5mvlibng1nwk0",
+    "version": "0.5.9"
+  },
+  {
+    "name": "trailing-spaces",
+    "publisher": "shardulm94",
+    "sha256": "0h30zmg5rq7cv7kjdr5yzqkkc1bs20d72yz9rjqag32gwf46s8b8",
+    "version": "0.3.1"
+  },
+  {
+    "name": "vscode-spotify",
+    "publisher": "shyykoserhiy",
+    "sha256": "14d68rcnjx4a20r0ps9g2aycv5myyhks5lpfz0syr2rxr4kd1vh6",
+    "version": "3.2.1"
+  },
+  {
+    "name": "fish-vscode",
+    "publisher": "skyapps",
+    "sha256": "0y1ivymn81ranmir25zk83kdjpjwcqpnc9r3jwfykjd9x0jib2hl",
+    "version": "0.2.1"
+  },
+  {
+    "name": "vscode-multiclip",
+    "publisher": "slevesque",
+    "sha256": "1cg8dqj7f10fj9i0g6mi3jbyk61rs6rvg9aq28575rr52yfjc9f9",
+    "version": "0.1.5"
+  },
+  {
+    "name": "guides",
+    "publisher": "spywhere",
+    "sha256": "1kvsj085w1xax6fg0kvsj1cizqh86i0pkzpwi0sbfvmcq21i6ghn",
+    "version": "0.9.3"
+  },
+  {
+    "name": "vscode-tmux-keybinding",
+    "publisher": "stephlin",
+    "sha256": "0mph2nval1ddmv9hpl51fdvmagzkqsn8ljwqsfha2130bb7la0d9",
+    "version": "0.0.6"
+  },
+  {
+    "name": "code-spell-checker",
+    "publisher": "streetsidesoftware",
+    "sha256": "1ll046rf5dyc7294nbxqk5ya56g2bzqnmxyciqpz2w5x7j75rjib",
+    "version": "1.10.2"
+  },
+  {
+    "name": "svelte-vscode",
+    "publisher": "svelte",
+    "sha256": "11plqsj3c4dv0xg2d76pxrcn382qr9wbh1lhln2x8mzv840icvwr",
+    "version": "105.3.0"
+  },
+  {
+    "name": "markdown-memo",
+    "publisher": "svsool",
+    "sha256": "sha256-BsKFHR3wkSRHS8QOi63vLwGj3T2CPzvqXhgtEOq6gJM=",
+    "version": "0.3.9"
+  },
+  {
+    "name": "tabnine-vscode",
+    "publisher": "tabnine",
+    "sha256": "sha256-Xg/N59a38OKEWb/4anysslensUoj9ENcuobkyByFDxE=",
+    "version": "3.4.27"
+  },
+  {
+    "name": "even-better-toml",
+    "publisher": "tamasfe",
+    "sha256": "16x2y58hkankazpwm93j8lqdn3mala7iayck548kki9zx4qrhhck",
+    "version": "0.9.3"
+  },
+  {
+    "name": "zig",
+    "publisher": "tiehuis",
+    "sha256": "sha256-P8Sep0OtdchTfnudxFNvIK+SW++TyibGVI9zd+B5tu4=",
+    "version": "0.2.5"
+  },
+  {
+    "name": "shellcheck",
+    "publisher": "timonwong",
+    "sha256": "05z314sw9nqym3qlj7dcwm0fz1hb23xppzqn3nr2wcj17hs8zz4m",
+    "version": "0.14.4"
+  },
+  {
+    "name": "atom-material-theme",
+    "publisher": "tobiasalthoff",
+    "sha256": "sha256-t5CKrDEbDCuo28wN+hiWrvkt3C9vQAPfV/nd3QBGQ/s=",
+    "version": "1.10.7"
+  },
+  {
+    "name": "pdf",
+    "publisher": "tomoki1207",
+    "sha256": "0pcs4iy77v4f04f8m9w2rpdzfq7sqbspr7f2sm1fv7bm515qgsvb",
+    "version": "1.1.0"
+  },
+  {
+    "name": "sort-lines",
+    "publisher": "Tyriar",
+    "sha256": "0l4wibsjnlbzbrl1wcj18vnm1q4ygvxmh347jvzziv8f1l790qjl",
+    "version": "1.9.0"
+  },
+  {
+    "name": "errorlens",
+    "publisher": "usernamehw",
+    "sha256": "1x9rkyhbp15dwp6dikzpk9lzjnh9cnxac89gzx533681zld906m8",
+    "version": "3.4.0"
+  },
+  {
+    "name": "vscode-pitch-black-theme",
+    "publisher": "ViktorQvarfordt",
+    "sha256": "sha256-HTXToZv0WWFjuQiofEJuaZNSDTmCUcZ0B3KOn+CVALw=",
+    "version": "1.2.4"
+  },
+  {
+    "name": "highlight-matching-tag",
+    "publisher": "vincaslt",
+    "sha256": "1albwz3lc9i20if77inm1ipwws8apigvx24rbag3d1h3p4vwda49",
+    "version": "0.10.0"
+  },
+  {
+    "name": "vim",
+    "publisher": "vscodevim",
+    "sha256": "1v1xs1wcigisr6xip31i02cfryxrb157sla34y59pwlnhc5x1gny",
+    "version": "1.21.5"
+  },
+  {
+    "name": "vspacecode",
+    "publisher": "VSpaceCode",
+    "sha256": "sha256-H7SCC/ZhDswMQjLX+qpQa6A1N83MobJRPC4pyIbZ1kA=",
+    "version": "0.10.1"
+  },
+  {
+    "name": "whichkey",
+    "publisher": "VSpaceCode",
+    "sha256": "sha256-f+t2d8iWW88OYzuYFxzQPnmFMgx/DELBywYhA8A/0EU=",
+    "version": "0.9.2"
+  },
+  {
+    "name": "jinja",
+    "publisher": "wholroyd",
+    "sha256": "1ln9gly5bb7nvbziilnay4q448h9npdh7sd9xy277122h0qawkci",
+    "version": "0.0.8"
+  },
+  {
+    "name": "vscode-import-cost",
+    "publisher": "wix",
+    "sha256": "0d3b6654cdck1syn74vmmd1jmgkrw5v4c4cyrhdxbhggkip732bc",
+    "version": "2.15.0"
+  },
+  {
+    "name": "clang-format",
+    "publisher": "xaver",
+    "sha256": "abd0ef9176eff864f278c548c944032b8f4d8ec97d9ac6e7383d60c92e258c2f",
+    "version": "1.9.0"
+  },
+  {
+    "name": "local-history",
+    "publisher": "xyz",
+    "sha256": "1mfmnbdv76nvwg4xs3rgsqbxk8hw9zr1b61har9c3pbk9r4cay7v",
+    "version": "1.8.1"
+  },
+  {
+    "name": "markdown-all-in-one",
+    "publisher": "yzhang",
+    "sha256": "0ihfrsg2sc8d441a2lkc453zbw1jcpadmmkbkaf42x9b9cipd5qb",
+    "version": "3.4.0"
+  },
+  {
+    "name": "material-theme",
+    "publisher": "zhuangtongfa",
+    "sha256": "017h9hxplf2rhmlhn3vag0wypcx6gxi7p9fgllj5jzwrl2wsjl0g",
+    "version": "3.9.12"
+  },
+  {
+    "name": "vscode-proto3",
+    "publisher": "zxh404",
+    "sha256": "08dfl5h1k6s542qw5qx2czm1wb37ck9w2vpjz44kp2az352nmksb",
+    "version": "0.5.4"
+  }
+]
