@@ -17,8 +17,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ m4 perl ] ++ lib.optional stdenv.isSunOS help2man;
   propagatedBuildInputs = [ m4 ];
 
-  doCheck = false; # fails
-  doInstallCheck = false; # fails
+  enableParallelBuilding = true;
+
+  doCheck = true;
+  doInstallCheck = true;
 
   meta = {
     homepage = "https://www.gnu.org/software/bison/";
