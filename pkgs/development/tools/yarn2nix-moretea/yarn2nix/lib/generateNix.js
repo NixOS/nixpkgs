@@ -89,7 +89,7 @@ function fetchLockedDep(builtinFetchGit) {
 
       const [_, branch] = nameWithVersion.split('#')
 
-      return fetchgit(fileName, githubUrl, rev, branch || 'master', builtinFetchGit)
+      return fetchgit(fileName, githubUrl, githubRev, branch || 'master', builtinFetchGit)
     }
 
     if (url.startsWith('git+') || url.startsWith("git:")) {
