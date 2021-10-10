@@ -23125,6 +23125,8 @@ with pkgs;
     inherit (mate) marco;
   };
 
+  playfair-display = callPackage ../data/fonts/playfair-display { };
+
   poly = callPackage ../data/fonts/poly { };
 
   polytopes_db = callPackage ../data/misc/polytopes_db { };
