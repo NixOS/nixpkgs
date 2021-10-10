@@ -22,7 +22,6 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ gtest meson ninja pkg-config ];
   buildInputs = [ alsa-lib fluidsynth libGL libGLU libogg libpng munt opusfile SDL2 SDL2_net ];
 
-  enableParallelBuilding = true;
   hardeningDisable = [ "format" ];
 
   mesonFlags = [
