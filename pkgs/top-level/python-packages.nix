@@ -1741,6 +1741,8 @@ in {
 
   crownstone-cloud = callPackage ../development/python-modules/crownstone-cloud { };
 
+  crownstone-core = callPackage ../development/python-modules/crownstone-core { };
+
   cryptacular = callPackage ../development/python-modules/cryptacular { };
 
   cryptography = callPackage ../development/python-modules/cryptography {
