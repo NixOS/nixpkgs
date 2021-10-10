@@ -48,6 +48,7 @@ in stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = ./update.sh;
+    tests.smoke-test = nixosTests.prowlarr;
   };
 
   meta = with lib; {
