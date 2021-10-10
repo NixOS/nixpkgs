@@ -29,7 +29,7 @@ appimageTools.wrapType2 {
     description = "Cozy Drive is a synchronization tool for your files and folders with Cozy Cloud.";
     homepage = "https://cozy.io";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ "Simarra" ];
+    maintainers = with maintainers; [ simarra ];
     platforms = [ "x86_64-linux" ];
   };
 }

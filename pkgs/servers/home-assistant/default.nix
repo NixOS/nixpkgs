@@ -114,7 +114,7 @@ let
   extraBuildInputs = extraPackages py.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2021.10.0";
+  hassVersion = "2021.10.2";
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "homeassistant";
@@ -131,7 +131,7 @@ in with py.pkgs; buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = version;
-    sha256 = "0m54ynx0i4a6wljg6d9i6xa79c15cqah5cgaswgrbaxhjw5q78iv";
+    sha256 = "0nds4491v8wy4d8w842asjpjj7xhqghlq0h61i7z6wp8jln7m418";
   };
 
   # leave this in, so users don't have to constantly update their downstream patch handling
@@ -770,6 +770,7 @@ in with py.pkgs; buildPythonApplication rec {
     "--deselect tests/components/wemo/test_sensor.py::TestInsightCurrentPower::test_state_unavailable"
     # tado/test_climate.py: Tries to connect to my.tado.com
     "--deselect tests/components/tado/test_climate.py::test_air_con"
+    "--deselect tests/components/tado/test_climate.py::test_heater"
     # helpers/test_system_info.py: AssertionError: assert 'Unknown' == 'Home Assistant Container'
     "--deselect tests/helpers/test_system_info.py::test_container_installationtype"
     # tests are located in tests/

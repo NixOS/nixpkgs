@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2021.10.0";
+  version = "2021.10.2";
   components = {
     "abode" = ps: with ps; [ abodepy ];
     "accuweather" = ps: with ps; [ accuweather ];
@@ -216,7 +216,7 @@
     "edimax" = ps: with ps; [ pyedimax ];
     "edl21" = ps: with ps; [ pysml ];
     "ee_brightbox" = ps: with ps; [ eebrightbox ];
-    "efergy" = ps: with ps; [ ]; # missing inputs: pyefergy
+    "efergy" = ps: with ps; [ pyefergy ];
     "egardia" = ps: with ps; [ pythonegardia ];
     "eight_sleep" = ps: with ps; [ pyeight ];
     "elgato" = ps: with ps; [ elgato ];
