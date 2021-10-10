@@ -32438,6 +32438,8 @@ with pkgs;
 
   wiki-js = callPackage ../servers/web-apps/wiki-js { };
 
+  wiki-tui = callPackage ../misc/wiki-tui { };
+
   winePackagesFor = wineBuild: lib.makeExtensible (self: with self; {
     callPackage = newScope self;
 
