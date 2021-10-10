@@ -17,6 +17,8 @@ let
     configobj
     feedparser
     sabyenc3
+    puremagic
+    guessit
   ]);
   path = lib.makeBinPath [ par2cmdline unrar unzip p7zip ];
 in stdenv.mkDerivation rec {
