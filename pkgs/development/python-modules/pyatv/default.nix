@@ -1,11 +1,11 @@
 { lib
 , buildPythonPackage
 , aiohttp
-, audio-metadata
 , bitarray
 , cryptography
 , deepdiff
 , fetchFromGitHub
+, mediafile
 , miniaudio
 , netifaces
 , protobuf
@@ -35,9 +35,9 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiohttp
-    audio-metadata
     bitarray
     cryptography
+    mediafile
     miniaudio
     netifaces
     protobuf
