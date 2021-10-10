@@ -5338,6 +5338,8 @@ in {
 
   param = callPackage ../development/python-modules/param { };
 
+  parameter-expansion-patched = callPackage ../development/python-modules/parameter-expansion-patched { };
+
   parameterized = callPackage ../development/python-modules/parameterized { };
 
   paramiko = callPackage ../development/python-modules/paramiko { };
@@ -6323,6 +6325,8 @@ in {
   pyglet = callPackage ../development/python-modules/pyglet { };
 
   pygls = callPackage ../development/python-modules/pygls { };
+
+  pygmars = callPackage ../development/python-modules/pygmars { };
 
   pygments-better-html = callPackage ../development/python-modules/pygments-better-html { };
 

@@ -9,6 +9,7 @@
 , pytestCheckHook
 , pytest-xdist
 }:
+
 buildPythonPackage rec {
   pname = "extractcode";
   version = "21.7.23";
@@ -36,7 +37,7 @@ buildPythonPackage rec {
     pytest-xdist
   ];
 
-  # cli test tests the cli which we can't do until after install
+  # CLI test tests the cli which we can't do until after install
   disabledTestPaths = [
     "tests/test_extractcode_cli.py"
   ];
@@ -45,6 +46,7 @@ buildPythonPackage rec {
   disabledTests = [
     "test_uncompress_lz4_basic"
     "test_extract_tarlz4_basic"
+    "test_extract_rar_with_trailing_data"
     # tries to parse /boot/vmlinuz-*, which is not available in the nix sandbox
     "test_can_extract_qcow2_vm_image_as_tarball"
     "test_can_extract_qcow2_vm_image_not_as_tarball"
@@ -56,7 +58,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A mostly universal archive extractor using z7zip, libarchve, other libraries and the Python standard library for reliable archive extraction";
+    description = "Universal archive extractor using z7zip, libarchve, other libraries and the Python standard library";
     homepage = "https://github.com/nexB/extractcode";
     license = licenses.asl20;
     maintainers = teams.determinatesystems.members;
