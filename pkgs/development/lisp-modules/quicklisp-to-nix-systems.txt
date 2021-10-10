@@ -157,6 +157,7 @@ iterate
 jonathan
 jsown
 lack
+legit
 let-plus
 lev
 lfarm-client
