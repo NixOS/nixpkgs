@@ -11358,11 +11358,16 @@ let
       url = "mirror://cpan/authors/id/B/BR/BRMILLER/${pname}-${version}.tar.gz";
       sha256 = "1ccvdq7asxq6iw8x8ihwf5xs2mp7fkwm467xy7g8spkznr8wcacm";
     };
+    patches = [
+      (fetchpatch {
+        # https://github.com/brucemiller/LaTeXML/issues/1669
+        name = "downgrade-security-FileTemp.patch";
+        url = "https://github.com/brucemiller/LaTeXML/commit/c3d6b9b88f9eafce6eee52b1634ea33085ba9ec6.patch";
+        sha256 = "12w6nfv0bkj2mr4xwcqzkdngrpbq4fn52n85r9njdg913cvfirm7";
+      })
+    ];
     outputs = [ "out" "tex" ];
     propagatedBuildInputs = [ ArchiveZip DBFile FileWhich IOString ImageMagick ImageSize JSONXS LWP ParseRecDescent PodParser TextUnidecode XMLLibXSLT ];
-    preCheck = ''
-      rm t/931_epub.t # https://github.com/brucemiller/LaTeXML/issues/1669
-    '';
     nativeBuildInputs = [ pkgs.makeWrapper ] ++ lib.optional stdenv.isDarwin shortenPerlShebang;
     makeMakerFlags = "TEXMF=\${tex} NOMKTEXLSR";
     # shebangs need to be patched before executables are copied to $out
