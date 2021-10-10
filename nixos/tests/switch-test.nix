@@ -131,6 +131,26 @@ import ./make-test-python.nix ({ pkgs, ...} : {
           };
         };
 
+        # A system with a path unit
+        with-path.configuration = {
+          systemd.paths.test-watch = {
+            wantedBy = [ "paths.target" ];
+            pathConfig.PathExists = "/testpath";
+          };
+          systemd.services.test-watch = {
+            serviceConfig = {
+              Type = "oneshot";
+              ExecStart = "${pkgs.coreutils}/bin/touch /testpath-modified";
+            };
+          };
+        };
+
+        # The same system but watching another file
+        with-path-modified.configuration = {
+          imports = [ config.specialisation.with-path.configuration ];
+          systemd.paths.test-watch.pathConfig.PathExists = lib.mkForce "/testpath2";
+        };
+
         # A system with a slice
         with-slice.configuration = {
           systemd.slices.testslice.sliceConfig.MemoryMax = "1"; # don't allow memory allocation
@@ -283,6 +303,22 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         assert_contains(out, "would reload the following units: simple-reload-service.service\n")
         assert_contains(out, "would restart the following units: simple-restart-service.service\n")
         assert_contains(out, "\nwould start the following units: simple-service.service")
+
+    with subtest("paths"):
+        switch_to_specialisation("with-path")
+        machine.fail("test -f /testpath-modified")
+
+        # touch the file, unit should be triggered
+        machine.succeed("touch /testpath")
+        machine.wait_until_succeeds("test -f /testpath-modified")
+
+        machine.succeed("rm /testpath /testpath-modified")
+        switch_to_specialisation("with-path-modified")
+
+        machine.succeed("touch /testpath")
+        machine.fail("test -f /testpath-modified")
+        machine.succeed("touch /testpath2")
+        machine.wait_until_succeeds("test -f /testpath-modified")
 
     # This test ensures that changes to slice configuration get applied.
     # We test this by having a slice that allows no memory allocation at
