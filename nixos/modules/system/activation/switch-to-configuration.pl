@@ -485,7 +485,7 @@ unlink($startListFile);
 
 
 # Print failed and new units.
-my (@failed, @new, @restarting);
+my (@failed, @new);
 my $activeNew = getActiveUnits;
 while (my ($unit, $state) = each %{$activeNew}) {
     if ($state->{state} eq "failed") {
