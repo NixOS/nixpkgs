@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-backgrounds";
-  version = "40.1";
+  version = "41.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-backgrounds/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "YN+KDaMBzkJbcEPUKuMuxAEf8I8Y4Pxi8pQBMF2jpw4=";
+    sha256 = "HaGsDSYb7fD80shbSAvGVQXiPPUfEUMSbA03cX5pMUU=";
   };
 
   passthru = {

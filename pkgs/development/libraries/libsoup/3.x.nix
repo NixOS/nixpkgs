@@ -2,13 +2,11 @@
 , lib
 , fetchurl
 , glib
-, libxml2
 , meson
 , ninja
 , pkg-config
 , gnome
 , libsysprof-capture
-, gnomeSupport ? true
 , sqlite
 , glib-networking
 , gobject-introspection
@@ -18,17 +16,18 @@
 , libpsl
 , python3
 , brotli
+, libnghttp2
 }:
 
 stdenv.mkDerivation rec {
   pname = "libsoup";
-  version = "2.74.0";
+  version = "3.0.1";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-M7HU4NY5RWxnXCJ4d+lKgHjXMSM+LVdonBGrzvfTxI4=";
+    sha256 = "sha256-bwwxbRD4RYuW9WTHZEvjwgEb11rVBUyNsmr7DJqRvEc=";
   };
 
   nativeBuildInputs = [
@@ -48,13 +47,13 @@ stdenv.mkDerivation rec {
     libpsl
     glib.out
     brotli
+    libnghttp2
   ] ++ lib.optionals stdenv.isLinux [
     libsysprof-capture
   ];
 
   propagatedBuildInputs = [
     glib
-    libxml2
   ];
 
   mesonFlags = [
@@ -62,15 +61,22 @@ stdenv.mkDerivation rec {
     "-Dgssapi=disabled"
     "-Dvapi=${if withVala then "enabled" else "disabled"}"
     "-Dintrospection=${if withIntrospection then "enabled" else "disabled"}"
-    "-Dgnome=${lib.boolToString gnomeSupport}"
     "-Dntlm=disabled"
+    # Requires wstest from autobahn-testsuite.
+    "-Dautobahn=disabled"
+    # Requires quart Python module.
+    "-Dhttp2_tests=disabled"
+    # Requires gnutls, not added for closure size.
+    "-Dpkcs11_tests=disabled"
   ] ++ lib.optionals (!stdenv.isLinux) [
     "-Dsysprof=disabled"
   ];
 
-  NIX_CFLAGS_COMPILE = "-lpthread";
+  # TODO: For some reason the pkg-config setup hook does not pick this up.
+  PKG_CONFIG_PATH = "${libnghttp2.dev}/lib/pkgconfig";
 
-  doCheck = false; # ERROR:../tests/socket-test.c:37:do_unconnected_socket_test: assertion failed (res == SOUP_STATUS_OK): (2 == 200)
+  # HSTS tests fail.
+  doCheck = false;
 
   postPatch = ''
     patchShebangs libsoup/
@@ -81,6 +87,7 @@ stdenv.mkDerivation rec {
       glib-networking.out
     ];
     updateScript = gnome.updateScript {
+      attrPath = "libsoup3";
       packageName = pname;
       versionPolicy = "odd-unstable";
     };
