@@ -1373,6 +1373,8 @@ with pkgs;
 
   ec2-ami-tools = callPackage ../tools/virtualization/ec2-ami-tools { };
 
+  ec2-metadata-mock = callPackage ../development/tools/ec2-metadata-mock { };
+
   ec2-utils = callPackage ../tools/virtualization/ec2-utils { };
 
   exoscale-cli = callPackage ../tools/admin/exoscale-cli { };
@@ -2279,6 +2281,8 @@ with pkgs;
 
   calendar-cli = callPackage ../tools/networking/calendar-cli { };
 
+  cameradar = callPackage ../tools/security/cameradar { };
+
   candle = libsForQt5.callPackage ../applications/misc/candle { };
 
   capstone = callPackage ../development/libraries/capstone { };
@@ -2598,6 +2602,8 @@ with pkgs;
   };
 
   dialog = callPackage ../tools/misc/dialog { };
+
+  dialogbox = libsForQt5.callPackage ../tools/misc/dialogbox { };
 
   dibbler = callPackage ../tools/networking/dibbler { };
 
@@ -3525,6 +3531,8 @@ with pkgs;
   mar1d = callPackage ../games/mar1d { } ;
 
   mcrypt = callPackage ../tools/misc/mcrypt { };
+
+  mongoaudit = callPackage ../tools/security/mongoaudit { };
 
   mongodb-compass = callPackage ../tools/misc/mongodb-compass { };
 
@@ -15495,6 +15503,8 @@ with pkgs;
 
   cdk = callPackage ../development/libraries/cdk {};
 
+  cdk-go = callPackage ../tools/security/cdk-go {};
+
   cdo = callPackage ../development/libraries/cdo { };
 
   cimg = callPackage  ../development/libraries/cimg { };
@@ -22783,6 +22793,8 @@ with pkgs;
 
   ia-writer-duospace = callPackage ../data/fonts/ia-writer-duospace { };
 
+  i-dot-ming = callPackage ../data/fonts/i-dot-ming { };
+
   ibm-plex = callPackage ../data/fonts/ibm-plex { };
 
   iconpack-jade = callPackage ../data/icons/iconpack-jade { };
@@ -23585,6 +23597,8 @@ with pkgs;
   autotrace = callPackage ../applications/graphics/autotrace {};
 
   av-98 = callPackage ../applications/networking/browsers/av-98 { };
+
+  avizo = callPackage ../applications/misc/avizo { };
 
   avocode = callPackage ../applications/graphics/avocode {};
 
@@ -25274,6 +25288,8 @@ with pkgs;
   hugo = callPackage ../applications/misc/hugo { };
 
   go-org = callPackage ../applications/misc/go-org { };
+
+  hushboard = python3.pkgs.callPackage ../applications/audio/hushboard { };
 
   hydrogen = qt5.callPackage ../applications/audio/hydrogen { };
   hydrogen_0 = callPackage ../applications/audio/hydrogen/0.nix { }; # Old stable, has GMKit.

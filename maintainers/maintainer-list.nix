@@ -6494,6 +6494,12 @@
     githubId = 791115;
     name = "Linquize";
   };
+  linsui = {
+    email = "linsui555@gmail.com";
+    github = "linsui";
+    githubId = 36977733;
+    name = "linsui";
+  };
   linus = {
     email = "linusarver@gmail.com";
     github = "listx";
@@ -10133,6 +10139,12 @@
     github = "seqizz";
     githubId = 307899;
     name = "Gurkan Gur";
+  };
+  sersorrel = {
+    email = "ash@sorrel.sh";
+    github = "sersorrel";
+    githubId = 9433472;
+    name = "ash";
   };
   servalcatty = {
     email = "servalcat@pm.me";
