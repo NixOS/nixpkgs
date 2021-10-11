@@ -12,11 +12,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-dlp";
-  version = "3.2.2";
+  version = "3.2.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-ZxGWTsqCIvpTSN+aThVgjPuMJE7hHMVn4zsidpXk7xk=";
+    sha256 = "e59e3f8d45f20650b5be9bb04bb74fad3445c3596a7fe1868e6d9fa857c83a34";
   };
 
   propagatedBuildInputs = [ google-api-core libcst proto-plus ];

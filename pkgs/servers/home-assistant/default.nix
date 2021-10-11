@@ -144,6 +144,7 @@ in with py.pkgs; buildPythonApplication rec {
       --replace "awesomeversion==21.4.0" "awesomeversion" \
       --replace "bcrypt==3.1.7" "bcrypt" \
       --replace "cryptography==3.3.2" "cryptography" \
+      --replace "jinja2==3.0.1" "jinja2" \
       --replace "pip>=8.0.3,<20.3" "pip" \
       --replace "requests==2.25.1" "requests>=2.25.1" \
       --replace "ruamel.yaml==0.15.100" "ruamel.yaml" \

@@ -32,7 +32,7 @@ buildPythonPackage rec {
     owner = "python-poetry";
     repo = pname;
     rev = version;
-    sha256 = "17yi15jp32v5vc9aarxkncz3jd0s4bqw8p26yyf4swdvafig0qab";
+    sha256 = "1f3y3gav2snvcf2h9mbkinvnlcyl9kndf6bh6j0vxkxzlmb4zilx";
   };
 
   postPatch = ''

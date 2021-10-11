@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "jax";
-  version = "0.2.19";
+  version = "0.2.21";
 
   # Fetching from pypi doesn't allow us to run the test suite. See https://discourse.nixos.org/t/pythonremovetestsdir-hook-being-run-before-checkphase/14612/3.
   src = fetchFromGitHub {
     owner = "google";
     repo = pname;
     rev = "jax-v${version}";
-    sha256 = "sha256-pVn62G7pydR7ybkf7gSbu0FlEq2c0US6H2GTBAljup4=";
+    sha256 = "05w157h6jv20k8w2gnmlxbycmzf24lr5v392q0c5v0qcql11q7pn";
   };
 
   # jaxlib is _not_ included in propagatedBuildInputs because there are
