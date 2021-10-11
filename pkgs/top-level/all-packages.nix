@@ -2599,6 +2599,8 @@ with pkgs;
 
   dialog = callPackage ../tools/misc/dialog { };
 
+  dialogbox = libsForQt5.callPackage ../tools/misc/dialogbox { };
+
   dibbler = callPackage ../tools/networking/dibbler { };
 
   diesel-cli = callPackage ../development/tools/diesel-cli {
