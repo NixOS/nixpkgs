@@ -208,8 +208,7 @@ in {
         default = null;
         description = ''
           Use this config directory instead of generating one from the
-          <literal>settings</literal> option. Overrides all NixOS settings. If
-          you use this option,ensure `olcPidFile` is set to `/run/slapd/slapd.conf`.
+          <literal>settings</literal> option. Overrides all NixOS settings.
         '';
         example = "/var/db/slapd.d";
       };
@@ -259,7 +258,6 @@ in {
       attrs = {
         objectClass = "olcGlobal";
         cn = "config";
-        olcPidFile = "/run/slapd/slapd.pid";
       };
       children."cn=schema".attrs = {
         cn = "schema";
@@ -286,9 +284,6 @@ in {
           chown -R "${cfg.user}:${cfg.group}" ${dataDir}
         '';
       in ''
-        mkdir -p /run/slapd
-        chown -R "${cfg.user}:${cfg.group}" /run/slapd
-
         mkdir -p ${lib.escapeShellArg configDir} ${lib.escapeShellArgs (lib.attrValues dataDirs)}
         chown "${cfg.user}:${cfg.group}" ${lib.escapeShellArg configDir} ${lib.escapeShellArgs (lib.attrValues dataDirs)}
 
@@ -303,11 +298,9 @@ in {
       '';
       serviceConfig = {
         ExecStart = lib.escapeShellArgs ([
-          "${openldap}/libexec/slapd" "-u" cfg.user "-g" cfg.group "-F" configDir
+          "${openldap}/libexec/slapd" "-d" "0" "-u" cfg.user "-g" cfg.group "-F" configDir
           "-h" (lib.concatStringsSep " " cfg.urlList)
         ]);
-        Type = "forking";
-        PIDFile = cfg.settings.attrs.olcPidFile;
       };
     };
 
