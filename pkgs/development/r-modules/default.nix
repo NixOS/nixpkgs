@@ -718,6 +718,7 @@ let
   brokenPackages = [
     "rgl"
     "NetLogoR"
+    "x13binary"
   ];
 
   otherOverrides = old: new: {
