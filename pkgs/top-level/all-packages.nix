@@ -5957,7 +5957,8 @@ with pkgs;
 
   gvproxy = callPackage ../tools/networking/gvproxy { };
 
-  gzip = callPackage ../tools/compression/gzip { };
+  gzip = hiPrio (callPackage ../tools/compression/gzip { });
+  # hiPrio for collisions with ncompress (zcat)
 
   gzrt = callPackage ../tools/compression/gzrt { };
 
