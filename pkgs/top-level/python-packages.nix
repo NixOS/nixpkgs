@@ -2169,6 +2169,8 @@ in {
 
   django-postgresql-netfields = callPackage ../development/python-modules/django-postgresql-netfields { };
 
+  django-prometheus = callPackage ../development/python-modules/django-prometheus { };
+
   django-q = callPackage ../development/python-modules/django-q { };
 
   djangoql = callPackage ../development/python-modules/djangoql { };
