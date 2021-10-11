@@ -108,7 +108,12 @@ in rec {
       dontInstall = true;
       buildInputs = [ yarn nodejs git ] ++ extraBuildInputs;
 
-      configurePhase = ''
+      configurePhase = lib.optionalString (offlineCache ? outputHash) ''
+        if ! cmp -s ${yarnLock} ${offlineCache}/yarn.lock; then
+          echo "yarn.lock changed, you need to update the fetchYarnDeps hash"
+          exit 1
+        fi
+      '' + ''
         # Yarn writes cache directories etc to $HOME.
         export HOME=$PWD/yarn_home
       '';
