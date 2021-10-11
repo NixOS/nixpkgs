@@ -9,7 +9,7 @@ stdenvNoCC.mkDerivation rec {
 
   src = fetchgit {
     url = "https://review.coreboot.org/coreboot";
-    rev = "${version}";
+    rev = version;
     sha256 = "00xr74yc0kj9rrqa1a8b7bih865qlp9i4zs67ysavkfrjrwwssxm";
   };
 
