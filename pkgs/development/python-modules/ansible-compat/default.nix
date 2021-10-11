@@ -4,7 +4,7 @@
 , setuptools-scm
 , pyyaml
 , packaging
-, pytest
+, pytestCheckHook
 , flaky
 , pytest-mock
 }:
