@@ -27,7 +27,7 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    pytest
+    pytestCheckHook
     pytest-mock
     flaky
     packaging
