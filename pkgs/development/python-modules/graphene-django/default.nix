@@ -19,15 +19,15 @@
 
 buildPythonPackage rec {
   pname = "graphene-django";
-  version = "3.0.0b7";
+  version = "unstable-2021-06-11";
   format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "graphql-python";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-uPc9HNcciQpCcHLYespK8ICny5jOQaliFMyd2Yt6/as=";
+    rev = "e7f7d8da07ba1020f9916153f17e97b0ec037712";
+    sha256 = "0b33q1im90ahp3gzy9wx5amfzy6q57ydjpy5rn988gh81hbyqaxv";
   };
 
   postPatch = ''
@@ -59,7 +59,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Integrate GraphQL into your Django project";
     homepage = "https://github.com/graphql-python/graphene-django";
-    licenses = licenses.mit;
+    license = licenses.mit;
     maintainers = with maintainers; [ hexa ];
   };
 }
