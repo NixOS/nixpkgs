@@ -737,6 +737,7 @@ let
     "av"
     "rgl"
     "NetLogoR"
+    "proj4"
     "x13binary"
   ];
 
@@ -1064,6 +1065,7 @@ let
         sha256 = "sha256-3UI60n49xuX6LniHpTLOUSsHCEAQ7f1FMBVH0jNlW60=";
       }) ];
     });
+
   };
 in
   self
