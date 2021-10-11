@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
   # dejagnu-1.6.3 can't successfully run tests in source tree:
   #   https://wiki.linuxfromscratch.org/lfs/ticket/4871
   preConfigure = ''
-    mkdir BuildDir
-    cd BuildDir
+    mkdir build
+    cd build
   '';
   configureScript = "../configure";
 
