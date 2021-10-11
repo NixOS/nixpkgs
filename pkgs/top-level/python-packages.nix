@@ -2183,6 +2183,8 @@ in {
 
   django-rest-auth = callPackage ../development/python-modules/django-rest-auth { };
 
+  django-rq = callPackage ../development/python-modules/django-rq { };
+
   djangorestframework = callPackage ../development/python-modules/djangorestframework { };
 
   djangorestframework-simplejwt = callPackage ../development/python-modules/djangorestframework-simplejwt { };
