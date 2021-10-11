@@ -315,7 +315,8 @@ stdenv.mkDerivation ((drvAttrs config stdenv.hostPlatform.linux-kernel kernelPat
       ++ optional  (lib.versionAtLeast version "4.14" && lib.versionOlder version "5.8") libelf
       # Removed util-linuxMinimal since it should not be a dependency.
       ++ optionals (lib.versionAtLeast version "4.16") [ bison flex ]
-      ++ optionals (lib.versionAtLeast version "5.2")  [ cpio pahole zlib ]
+      ++ optionals (lib.versionAtLeast version "5.2")  [ cpio zlib ]
+      ++ optional (lib.versionAtLeast version "5.2" && features.debug or false) pahole
       ++ optional  (lib.versionAtLeast version "5.8")  elfutils
       ;
 

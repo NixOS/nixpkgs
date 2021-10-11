@@ -36,11 +36,8 @@ let
 
     debug = {
       # Necessary for BTF
-      DEBUG_INFO                = mkMerge [
-        (whenOlder "5.2" (if (features.debug or false) then yes else no))
-        (whenAtLeast "5.2" yes)
-      ];
-      DEBUG_INFO_BTF            = whenAtLeast "5.2" (option yes);
+      DEBUG_INFO                = mkIf (features.debug or false) yes;
+      DEBUG_INFO_BTF            = mkIf (features.debug or false && whenAtLeast "5.2") (option yes);
       DEBUG_KERNEL              = yes;
       DEBUG_DEVRES              = no;
       DYNAMIC_DEBUG             = yes;
