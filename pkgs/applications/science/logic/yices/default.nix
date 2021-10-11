@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs       = [ cudd gmp-static gperf libpoly ];
+  buildInputs = [ cudd gmp-static gperf libpoly ];
   configureFlags =
     [ "--with-static-gmp=${gmp-static.out}/lib/libgmp.a"
       "--with-static-gmp-include-dir=${gmp-static.dev}/include"
