@@ -2211,7 +2211,7 @@ in {
 
   django_tagging = callPackage ../development/python-modules/django_tagging { };
 
-  django_taggit = callPackage ../development/python-modules/django_taggit { };
+  django-taggit = callPackage ../development/python-modules/django-taggit { };
 
   django_treebeard = callPackage ../development/python-modules/django_treebeard { };
 

@@ -45,6 +45,7 @@ mapAliases ({
   discogs_client = discogs-client; # added 2021-07-02
   djangorestframework-jwt = drf-jwt; # added 2021-07-20
   django_redis = django-redis; # added 2021-10-11
+  django_taggit = django-taggit; # added 2021-10-11
   dns = dnspython; # added 2017-12-10
   dogpile_cache = dogpile-cache; # added 2021-10-28
   faulthandler = throw "faulthandler is built into ${python.executable}"; # added 2021-07-12
