@@ -144,7 +144,7 @@ in
       dictd = 105;
       couchdb = 106;
       #searx = 107; # dynamically allocated as of 2020-10-27
-      kippo = 108;
+      #kippo = 108; # removed 2021-10-07, the kippo package was removed in 1b213f321cdbfcf868b96fd9959c24207ce1b66a during 2021-04
       jenkins = 109;
       systemd-journal-gateway = 110;
       #notbit = 111; # unused
@@ -462,7 +462,7 @@ in
       dictd = 105;
       couchdb = 106;
       #searx = 107; # dynamically allocated as of 2020-10-27
-      kippo = 108;
+      #kippo = 108; # removed 2021-10-07, the kippo package was removed in 1b213f321cdbfcf868b96fd9959c24207ce1b66a during 2021-04
       jenkins = 109;
       systemd-journal-gateway = 110;
       #notbit = 111; # unused
