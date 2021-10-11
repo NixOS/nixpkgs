@@ -1375,6 +1375,8 @@ with pkgs;
 
   ec2-ami-tools = callPackage ../tools/virtualization/ec2-ami-tools { };
 
+  ec2-metadata-mock = callPackage ../development/tools/ec2-metadata-mock { };
+
   ec2-utils = callPackage ../tools/virtualization/ec2-utils { };
 
   exoscale-cli = callPackage ../tools/admin/exoscale-cli { };
@@ -2280,6 +2282,8 @@ with pkgs;
   };
 
   calendar-cli = callPackage ../tools/networking/calendar-cli { };
+
+  cameradar = callPackage ../tools/security/cameradar { };
 
   candle = libsForQt5.callPackage ../applications/misc/candle { };
 
@@ -3529,6 +3533,8 @@ with pkgs;
   mar1d = callPackage ../games/mar1d { } ;
 
   mcrypt = callPackage ../tools/misc/mcrypt { };
+
+  mongoaudit = callPackage ../tools/security/mongoaudit { };
 
   mongodb-compass = callPackage ../tools/misc/mongodb-compass { };
 
@@ -22781,6 +22787,8 @@ with pkgs;
   hyperscrypt-font = callPackage ../data/fonts/hyperscrypt { };
 
   ia-writer-duospace = callPackage ../data/fonts/ia-writer-duospace { };
+
+  i-dot-ming = callPackage ../data/fonts/i-dot-ming { };
 
   ibm-plex = callPackage ../data/fonts/ibm-plex { };
 
