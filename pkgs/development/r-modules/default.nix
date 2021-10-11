@@ -716,6 +716,7 @@ let
     "precommit"
     "PSCBS"
     "repmis"
+    "R_cache"
     "R_filesets"
     "RKorAPClient"
     "R_rsp"
@@ -1027,12 +1028,6 @@ let
         ln -s ../../../library/littler/man-page/r.1 $out/share/man/man1
         # these won't run without special provisions, so better remove them
         rm -r $out/library/littler/script-tests
-      '';
-    });
-
-    R_cache = old.R_cache.overrideDerivation (attrs: {
-      preConfigure = ''
-        export R_CACHE_ROOTPATH=$TMP
       '';
     });
 
