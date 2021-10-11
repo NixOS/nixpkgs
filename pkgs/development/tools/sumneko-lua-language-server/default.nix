@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sumneko-lua-language-server";
-  version = "2.4.1";
+  version = "2.4.2";
 
   src = fetchFromGitHub {
     owner = "sumneko";
     repo = "lua-language-server";
     rev = version;
-    sha256 = "sha256-RhjH/phRVlNO9nPL+TtcrZYpwqNygpXjI/Pdyrxxv/4=";
+    sha256 = "sha256-PYlHjKMnqnhAJAvmHbH6Bb+qOyNzDH+ewOkXkj2u4CU=";
     fetchSubmodules = true;
   };
 
@@ -33,13 +33,14 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin $out/extras
-    cp -r ./{locale,meta,script,*.lua} $out/extras/
-    cp ./bin/Linux/{bee.so,lpeglabel.so} $out/extras
-    cp ./bin/Linux/lua-language-server $out/extras/.lua-language-server-unwrapped
-    makeWrapper $out/extras/.lua-language-server-unwrapped \
+    install -Dt "$out"/share/lua-language-server/bin/Linux bin/Linux/lua-language-server
+    install -m644 -t "$out"/share/lua-language-server/bin/Linux bin/Linux/*.*
+    install -m644 -t "$out"/share/lua-language-server {debugger,main}.lua
+    cp -r locale meta script "$out"/share/lua-language-server
+
+    makeWrapper "$out"/share/lua-language-server/bin/Linux/lua-language-server \
       $out/bin/lua-language-server \
-      --add-flags "-E $out/extras/main.lua \
+      --add-flags "-E $out/share/lua-language-server/main.lua \
       --logpath='~/.cache/sumneko_lua/log' \
       --metapath='~/.cache/sumneko_lua/meta'"
 
