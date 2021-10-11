@@ -20964,8 +20964,12 @@ with pkgs;
   qboot = pkgsi686Linux.callPackage ../applications/virtualization/qboot { };
 
   OVMF = callPackage ../applications/virtualization/OVMF { };
-  OVMF-CSM = OVMF.override { csmSupport = true; };
-  OVMF-secureBoot = OVMF.override { secureBoot = true; };
+  OVMFFull = callPackage ../applications/virtualization/OVMF {
+    secureBoot = true;
+    csmSupport = true;
+    httpSupport = true;
+    tpmSupport = true;
+  };
 
   seabios = callPackage ../applications/virtualization/seabios { };
 
