@@ -118,6 +118,13 @@ in {
         OVMF package to use.
       '';
     };
+    qemuSwtpm = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Allows libvirtd to use swtpm to create an emulated TPM.
+      '';
+    };
 
     extraOptions = mkOption {
       type = types.listOf types.str;
@@ -257,7 +264,8 @@ in {
         ] ++ cfg.extraOptions);
 
       path = [ cfg.qemuPackage ] # libvirtd requires qemu-img to manage disk images
-             ++ optional vswitch.enable vswitch.package;
+             ++ optional vswitch.enable vswitch.package
+             ++ optional cfg.qemuSwtpm pkgs.swtpm;
 
       serviceConfig = {
         Type = "notify";
