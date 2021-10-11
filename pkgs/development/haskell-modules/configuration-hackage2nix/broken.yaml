@@ -1534,7 +1534,6 @@ broken-packages:
   - funcons-values
   - function-instances-algebra
   - functor
-  - functor-combinators
   - functor-friends
   - functor-infix
   - functorm
