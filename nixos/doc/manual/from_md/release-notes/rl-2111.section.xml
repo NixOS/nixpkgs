@@ -271,6 +271,14 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://wiki.servarr.com/prowlarr">prowlarr</link>,
+          an indexer manager/proxy built on the popular arr .net/reactjs
+          base stack
+          <link linkend="opt-services.prowlarr.enable">services.prowlarr</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://sr.ht/~emersion/soju">soju</link>, a
           user-friendly IRC bouncer. Available as
           <link xlink:href="options.html#opt-services.soju.enable">services.soju</link>.
