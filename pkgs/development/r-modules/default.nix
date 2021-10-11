@@ -324,6 +324,7 @@ let
     ModelMetrics = lib.optional stdenv.isDarwin pkgs.llvmPackages.openmp;
     mvabund = [ pkgs.gsl ];
     mwaved = [ pkgs.fftw.dev ];
+    mzR = [ pkgs.zlib ];
     ncdf4 = [ pkgs.netcdf ];
     nloptr = with pkgs; [ nlopt pkg-config ];
     n1qn1 = [ pkgs.gfortran ];
