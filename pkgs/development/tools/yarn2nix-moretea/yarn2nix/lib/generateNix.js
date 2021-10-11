@@ -45,11 +45,13 @@ function fetchgit(fileName, url, rev, branch, builtinFetchGit) {
     name = "${fileName}";
     path =
       let${builtinFetchGit ? `
-        repo = builtins.fetchGit {
+        repo = builtins.fetchGit ({
           url = "${url}";
           ref = "${branch}";
           rev = "${rev}";
-        };
+        } // (if builtins.substring 0 3 builtins.nixVersion == "2.4" then {
+          allRefs = true;
+        } else {}));
       ` : `
         repo = fetchgit {
           url = "${url}";
@@ -87,7 +89,7 @@ function fetchLockedDep(builtinFetchGit) {
 
       const [_, branch] = nameWithVersion.split('#')
 
-      return fetchgit(fileName, githubUrl, rev, branch || 'master', builtinFetchGit)
+      return fetchgit(fileName, githubUrl, githubRev, branch || 'master', builtinFetchGit)
     }
 
     if (url.startsWith('git+') || url.startsWith("git:")) {

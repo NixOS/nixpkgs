@@ -1,39 +1,31 @@
 { lib
 , buildPythonPackage
+, click
 , fetchPypi
-, fetchpatch
-, six
 , pyyaml
 , rdflib
 , ply
 , xmltodict
 , pytestCheckHook
-, pythonAtLeast
+, pythonOlder
 }:
+
 buildPythonPackage rec {
   pname = "spdx-tools";
-  version = "0.6.1";
+  version = "0.7.0a3";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9a1aaae051771e865705dd2fd374c3f73d0ad595c1056548466997551cbd7a81";
+    sha256 = "sha256-afV1W1n5ubHhqfLFpPO5fxaIy5TaZdw9eDy3JYOJ1oE=";
   };
 
-  patches = lib.optionals (pythonAtLeast "3.9") [
-    # https://github.com/spdx/tools-python/pull/159
-    # fixes tests on Python 3.9
-    (fetchpatch {
-      name = "drop-encoding-argument.patch";
-      url = "https://github.com/spdx/tools-python/commit/6c8b9a852f8a787122c0e2492126ee8aa52acff0.patch";
-      sha256 = "RhvLhexsQRjqYqJg10SAM53RsOW+R93G+mns8C9g5E8=";
-    })
-  ];
-
   propagatedBuildInputs = [
-    six
+    click
+    ply
     pyyaml
     rdflib
-    ply
     xmltodict
   ];
 
