@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
   preConfigure = "cd ./src";
 
   buildPhase = optionalString libOnly ''
-    MAKE="make -j $NIX_BUILD_CORES -l $NIX_BUILD_CORES"
+    MAKE="make -j $NIX_BUILD_CORES -l $NIX_MAX_CORES"
     (cd util; $MAKE)
     (cd include; $MAKE)
     (cd lib; $MAKE)
