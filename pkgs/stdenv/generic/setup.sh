@@ -659,14 +659,30 @@ unset _XDG_DATA_DIRS
 export NIX_INDENT_MAKE=1
 
 
+# Guess the optimal parallelism using the same formula as Ninja; return nothing
+# if it can not be determined.  (Note that "make" ignores "-l" without value.)
+guessParallelism() {
+    local n
+    n=$(getconf _NPROCESSORS_ONLN 2>/dev/null || nproc 2>/dev/null || true)
+    if [ "$n" -ge 1 ]; then
+        if [ "$n" -le 2 ]; then
+            echo $((n+1))
+        else
+            echo $((n+2))
+        fi
+    fi
+}
+
+# NIX_MAX_CORES is the optimal load average (when known).
+: "${NIX_MAX_CORES=$(guessParallelism)}"
+
 # Normalize the NIX_BUILD_CORES variable. The value might be 0, which
 # means that we're supposed to try and auto-detect the number of
 # available CPU cores at run-time.
 
 NIX_BUILD_CORES="${NIX_BUILD_CORES:-1}"
 if ((NIX_BUILD_CORES <= 0)); then
-  guess=$(nproc 2>/dev/null || true)
-  ((NIX_BUILD_CORES = guess <= 0 ? 1 : guess))
+  ((NIX_BUILD_CORES = NIX_MAX_CORES <= 0 ? 1 : NIX_MAX_CORES))
 fi
 export NIX_BUILD_CORES
 
