@@ -16,6 +16,7 @@ in
   displayVersion ? {},
   release ? {},
   extraBuildInputs ? [],
+  propagatedBuildInputs ? [],
   namePrefix ? [ "coq" ],
   enableParallelBuilding ? true,
   extraInstallFlags ? [],
@@ -79,6 +80,8 @@ stdenv.mkDerivation (removeAttrs ({
         out = { homepage = "https://${domain}/${owner}/${repo}"; };
       }] {}) //
     optionalAttrs (fetched.broken or false) { coqFilter = true; broken = true; }) //
+    # Filter packages that depend on filtered packages
+    optionalAttrs (any (p: p.meta.coqFilter or false) propagatedBuildInputs) { coqFilter = true; } //
     (args.meta or {}) ;
 
 }
