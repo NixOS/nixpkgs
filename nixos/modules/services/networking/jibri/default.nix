@@ -86,7 +86,7 @@ let
 in
 {
   options.services.jibri = with types; {
-    enable = mkEnableOption "Jitsi BRoadcasting Infrastructure. Currently the only supported way of enabling a jibri instance is with <option>services.jitsi-meet.jibri.enable</option>";
+    enable = mkEnableOption "Jitsi BRoadcasting Infrastructure. Currently Jibri must be run on a host that is also running <option>services.jitsi-meet.enable</option>, so for most use cases it will be simpler to run <option>services.jitsi-meet.jibri.enable</option>";
     config = mkOption {
       type = attrs;
       default = { };
@@ -141,6 +141,34 @@ in
     xmppEnvironments = mkOption {
       description = ''
         XMPP servers to connect to.
+      '';
+      example = literalExpression ''
+        "jitsi-meet" = {
+          xmppServerHosts = [ "localhost" ];
+          xmppDomain = config.services.jitsi-meet.hostName;
+
+          control.muc = {
+            domain = "internal.''${config.services.jitsi-meet.hostName}";
+            roomName = "JibriBrewery";
+            nickname = "jibri";
+          };
+
+          control.login = {
+            domain = "auth.''${config.services.jitsi-meet.hostName}";
+            username = "jibri";
+            passwordFile = "/var/lib/jitsi-meet/jibri-auth-secret";
+          };
+
+          call.login = {
+            domain = "recorder.''${config.services.jitsi-meet.hostName}";
+            username = "recorder";
+            passwordFile = "/var/lib/jitsi-meet/jibri-recorder-secret";
+          };
+
+          usageTimeout = "0";
+          disableCertificateVerification = true;
+          stripFromRoomDomain = "conference.";
+        };
       '';
       default = { };
       type = attrsOf (submodule ({ name, ... }: {

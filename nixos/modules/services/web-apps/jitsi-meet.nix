@@ -52,7 +52,7 @@ in
       type = str;
       example = "meet.example.org";
       description = ''
-        Hostname of the Jitsi Meet instance.
+        FQDN of the Jitsi Meet instance.
       '';
     };
 
@@ -140,9 +140,8 @@ in
       description = ''
         Whether to enable a Jibri instance and configure it to connect to Prosody.
 
-        Although additional configuration is possible with <option>services.jibri</option>, this is
-        currently not very supported and most users will only want to edit the finalize recordings
-        script at <option>services.jibri.finalizeScript</option>.
+        Additional configuration is possible with <option>services.jibri</option>, and
+        <option>services.jibri.finalizeScript</option> is especially useful.
       '';
     };
 
@@ -409,7 +408,8 @@ in
       bridgeMuc = "jvbbrewery@internal.${cfg.hostName}";
       config = mkMerge [{
         "org.jitsi.jicofo.ALWAYS_TRUST_MODE_ENABLED" = "true";
-      } (lib.mkIf cfg.jibri.enable {
+      #} (lib.mkIf cfg.jibri.enable {
+       } (lib.mkIf (config.services.jibri.enable || cfg.jibri.enable) {
         "org.jitsi.jicofo.jibri.BREWERY" = "JibriBrewery@internal.${cfg.hostName}";
         "org.jitsi.jicofo.jibri.PENDING_TIMEOUT" = "90";
       })];
