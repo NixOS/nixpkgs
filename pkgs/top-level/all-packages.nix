@@ -2858,6 +2858,8 @@ in
 
   lowdown = callPackage ../tools/typesetting/lowdown { };
 
+  lowdown-0-9 = lowPrio (callPackage ../tools/typesetting/lowdown/0.9.x.nix { });
+
   numatop = callPackage ../os-specific/linux/numatop { };
 
   numworks-udev-rules = callPackage ../os-specific/linux/numworks-udev-rules { };
@@ -15006,6 +15008,7 @@ in
     else if name == "newlib" && stdenv.targetPlatform.isVc4 then targetPackages.vc4-newlib or vc4-newlib
     else if name == "newlib" && stdenv.targetPlatform.isOr1k then targetPackages.or1k-newlib or or1k-newlib
     else if name == "newlib" then targetPackages.newlibCross or newlibCross
+    else if name == "newlib-nano" then targetPackages.newlib-nanoCross or newlib-nanoCross
     else if name == "musl" then targetPackages.muslCross or muslCross
     else if name == "msvcrt" then targetPackages.windows.mingw_w64 or windows.mingw_w64
     else if name == "libSystem" then
@@ -20457,13 +20460,6 @@ in
     ];
   };
 
-  linux_5_13 = callPackage ../os-specific/linux/kernel/linux-5.13.nix {
-    kernelPatches = [
-      kernelPatches.bridge_stp_helper
-      kernelPatches.request_key_helper
-    ];
-  };
-
   linux_5_14 = callPackage ../os-specific/linux/kernel/linux-5.14.nix {
     kernelPatches = [
       kernelPatches.bridge_stp_helper
@@ -20777,7 +20773,6 @@ in
   linuxPackages_4_19 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_19);
   linuxPackages_5_4 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_4);
   linuxPackages_5_10 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_10);
-  linuxPackages_5_13 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_13);
   linuxPackages_5_14 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_14);
 
   # When adding to the list above:
@@ -23055,8 +23050,6 @@ in
 
   dfilemanager = libsForQt5.callPackage ../applications/misc/dfilemanager { };
 
-  dht = callPackage ../applications/networking/p2p/dht { };
-
   dia = callPackage ../applications/graphics/dia {
     inherit (pkgs.gnome2) libart_lgpl libgnomeui;
   };
@@ -23739,8 +23732,6 @@ in
   foxtrotgps = callPackage ../applications/misc/foxtrotgps { };
 
   fractal = callPackage ../applications/networking/instant-messengers/fractal { };
-
-  fragments = callPackage ../applications/networking/p2p/fragments { };
 
   freecad = libsForQt5.callPackage ../applications/graphics/freecad {
     inherit (python3Packages)
@@ -24837,8 +24828,6 @@ in
   libreoffice-still-unwrapped = libreoffice-still.libreoffice;
 
   libvmi = callPackage ../development/libraries/libvmi { };
-
-  libutp = callPackage ../applications/networking/p2p/libutp { };
 
   lifelines = callPackage ../applications/misc/lifelines { };
 
@@ -31635,7 +31624,15 @@ in
   newlib = callPackage ../development/misc/newlib { };
   newlibCross = callPackage ../development/misc/newlib {
     stdenv = crossLibcStdenv;
-    };
+  };
+
+  newlib-nano = callPackage ../development/misc/newlib {
+    nanoizeNewlib = true;
+  };
+  newlib-nanoCross = callPackage ../development/misc/newlib {
+    nanoizeNewlib = true;
+    stdenv = crossLibcStdenv;
+  };
 
   omnisharp-roslyn = callPackage ../development/tools/omnisharp-roslyn { };
 

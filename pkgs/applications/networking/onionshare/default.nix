@@ -52,6 +52,8 @@ let
 
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ lourkeur ];
+
+    knownVulnerabilities = [ "CVE-2021-41867" "CVE-2021-41868" ];
   };
 
 in rec {

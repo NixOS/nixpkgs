@@ -1,18 +1,27 @@
-{ stdenv, lib, fetchFromGitHub, rustPlatform, Security }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, Security
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "routinator";
-  version = "0.8.3";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "NLnetLabs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-JwPAwhD+Pkx8Kx24m7z/RbEvDnI2YR8dnTgAV7TMsFE=";
+    sha256 = "sha256-ThgTGtTZ0LGm9nHJoy0KhnBFWNvKRjk7hoNTVVTeL/Y=";
   };
 
+  cargoPatches = [
+    ./Cargo.toml.patch
+  ];
+  cargoSha256 = "sha256-mcx+qUtTUxeYP0PeJp1eOQwsdS6PPUx/m7TfAyqFiIM=";
+
   buildInputs = lib.optionals stdenv.isDarwin [ Security ];
-  cargoSha256 = "sha256-NtugqvaickcEowxGwotGuh6jb2NTK95csJxtjezy90s=";
 
   meta = with lib; {
     description = "An RPKI Validator written in Rust";

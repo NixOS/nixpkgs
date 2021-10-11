@@ -36,6 +36,7 @@ in {
 
     extraMeta.knownVulnerabilities = [
       "CVE-2021-28041"
+      "CVE-2021-41617"
     ];
   };
 
@@ -66,6 +67,7 @@ in {
 
     extraMeta.knownVulnerabilities = [
       "CVE-2021-28041"
+      "CVE-2021-41617"
     ];
   };
 }

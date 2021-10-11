@@ -74,7 +74,7 @@ let
 
     installPhase = ''
       runHook preInstall
-    '' + (if system == "x86_64-darwin" then ''
+    '' + (if stdenv.isDarwin then ''
       mkdir -p "$out/Applications/${longName}.app" $out/bin
       cp -r ./* "$out/Applications/${longName}.app"
       ln -s "$out/Applications/${longName}.app/Contents/Resources/app/bin/code" $out/bin/${executableName}

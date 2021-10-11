@@ -2,7 +2,7 @@
   "name": "element-desktop",
   "productName": "Element",
   "main": "lib/electron-main.js",
-  "version": "1.8.5",
+  "version": "1.9.0",
   "description": "A feature-rich client for Matrix.org",
   "author": "Element",
   "repository": {
@@ -57,7 +57,7 @@
     "allchange": "^1.0.2",
     "asar": "^2.0.1",
     "chokidar": "^3.5.2",
-    "electron": "^13.1.9",
+    "electron": "13",
     "electron-builder": "22.11.4",
     "electron-builder-squirrel-windows": "22.11.4",
     "electron-devtools-installer": "^3.1.1",
@@ -83,7 +83,7 @@
   },
   "build": {
     "appId": "im.riot.app",
-    "electronVersion": "13.2.2",
+    "electronVersion": "13.4.0",
     "files": [
       "package.json",
       {
