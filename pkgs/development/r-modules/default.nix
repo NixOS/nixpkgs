@@ -734,6 +734,7 @@ let
 
   # Packages which cannot be installed due to lack of dependencies or other reasons.
   brokenPackages = [
+    "av"
     "rgl"
     "NetLogoR"
     "x13binary"
