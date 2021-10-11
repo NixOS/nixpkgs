@@ -674,7 +674,6 @@ let
   ];
 
   packagesRequiringHome = [
-    "R_cache"  # tries to write to home folder on check
   ];
 
   packagesToSkipCheck = [
