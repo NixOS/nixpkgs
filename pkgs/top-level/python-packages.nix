@@ -2124,6 +2124,8 @@ in {
 
   django-formtools = callPackage ../development/python-modules/django-formtools { };
 
+  django-graphiql-debug-toolbar = callPackage ../development/python-modules/django-graphiql-debug-toolbar { };
+
   django-gravatar2 = callPackage ../development/python-modules/django-gravatar2 { };
 
   django_guardian = callPackage ../development/python-modules/django_guardian { };
