@@ -1,18 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, gmp-static, gperf, autoreconfHook, libpoly }:
+{ lib, stdenv, fetchFromGitHub, cudd, gmp-static, gperf, autoreconfHook, libpoly }:
 
 stdenv.mkDerivation rec {
   pname = "yices";
-  version = "2.6.1";
+  version = "2.6.3";
 
   src = fetchFromGitHub {
     owner  = "SRI-CSL";
     repo   = "yices2";
     rev    = "Yices-${version}";
-    sha256 = "04vf468spsh00jh7gj94cjnq8kjyfwy9l6r4z7l2pm0zgwkqgyhm";
+    sha256 = "0a7xmsk0d6fn2lff1kcpcnmbm4yy1bjfhvlawbkcbkm3zf8rk2dx";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs       = [ gmp-static gperf libpoly ];
+  buildInputs       = [ cudd gmp-static gperf libpoly ];
   configureFlags =
     [ "--with-static-gmp=${gmp-static.out}/lib/libgmp.a"
       "--with-static-gmp-include-dir=${gmp-static.dev}/include"
