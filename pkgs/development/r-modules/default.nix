@@ -1034,6 +1034,12 @@ let
       buildInputs = [ libsodium.dev ] ++ attrs.buildInputs;
     });
 
+    keyring = old.keyring.overrideDerivation (attrs: {
+      preConfigure = ''
+        patchShebangs configure
+      '';
+    });
+
     Rhtslib = old.Rhtslib.overrideDerivation (attrs: {
       preConfigure = ''
         substituteInPlace R/zzz.R --replace "-lcurl" "-L${pkgs.curl.out}/lib -lcurl"
