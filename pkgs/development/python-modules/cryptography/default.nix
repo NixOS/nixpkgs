@@ -79,10 +79,6 @@ buildPythonPackage rec {
     py.test ${pytestFlags} tests
   '';
 
-  # IOKit's dependencies are inconsistent between OSX versions, so this is the best we
-  # can do until nix 1.11's release
-  __impureHostDeps = [ "/usr/lib" ];
-
   meta = with lib; {
     description = "A package which provides cryptographic recipes and primitives";
     longDescription = ''
