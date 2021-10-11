@@ -41,6 +41,7 @@ let
     mapAttrs
     optionalAttrs
     zipAttrsWith
+    recursiveUpdate
     ;
   inherit (lib.options)
     getFiles
@@ -341,6 +342,14 @@ rec {
       description = "attribute set";
       check = isAttrs;
       merge = loc: foldl' (res: def: res // def.value) {};
+      emptyValue = { value = {}; };
+    };
+
+    attrsRec = mkOptionType {
+      name = "attrs";
+      description = "attribute set (merged recursively)";
+      check = isAttrs;
+      merge = loc: foldl' (res: def: recursiveUpdate res def.value) {};
       emptyValue = { value = {}; };
     };
 
