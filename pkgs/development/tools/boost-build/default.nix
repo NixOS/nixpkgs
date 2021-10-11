@@ -33,10 +33,11 @@ stdenv.mkDerivation {
     sourceRoot="$sourceRoot/tools/build"
   '';
 
-  patches = [
-    # Upstream defaults to gcc on darwin, but we use clang.
-    ./darwin-default-toolset.patch
-  ];
+  # Upstream defaults to gcc on darwin, but we use clang.
+  postPatch = ''
+    substituteInPlace src/build-system.jam \
+    --replace "default-toolset = darwin" "default-toolset = clang-darwin"
+  '';
 
   nativeBuildInputs = [
     bison
