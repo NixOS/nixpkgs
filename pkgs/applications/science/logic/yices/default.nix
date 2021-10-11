@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner  = "SRI-CSL";
     repo   = "yices2";
     rev    = "Yices-${version}";
-    sha256 = "0a7xmsk0d6fn2lff1kcpcnmbm4yy1bjfhvlawbkcbkm3zf8rk2dx";
+    sha256 = "01fi818lbkwilfcf1dz2dpxkcc1kh8ls0sl5aynyx9pwfn2v03zl";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
