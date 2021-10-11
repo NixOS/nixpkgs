@@ -5,7 +5,14 @@ let
   cfg = config.services.openldap;
   legacyOptions = [ "rootpwFile" "suffix" "dataDir" "rootdn" "rootpw" ];
   openldap = cfg.package;
-  configDir = if cfg.configDir != null then cfg.configDir else "/etc/openldap/slapd.d";
+  useDefaultConfDir = cfg.configDir == null;
+  configDir = if cfg.configDir != null then cfg.configDir else "/var/lib/openldap/slapd.d";
+
+  dbSettings = filterAttrs (name: value: hasPrefix "olcDatabase=" name) cfg.settings.children;
+  dataDirsMap = mapAttrs' (_: value: nameValuePair value.attrs.olcSuffix (removePrefix "/var/lib/openldap/" value.attrs.olcDbDirectory))
+    (lib.filterAttrs (_: value: value.attrs ? olcDbDirectory && hasPrefix "/var/lib/openldap/" value.attrs.olcDbDirectory) dbSettings);
+  declarativeDNs = attrNames cfg.declarativeContents;
+  additionalStateDirectories = map (sfx: "openldap/" + sfx) (attrValues dataDirsMap);
 
   ldapValueType = let
     # Can't do types.either with multiple non-overlapping submodules, so define our own
@@ -102,7 +109,7 @@ in {
           # objectClass is case-insensitive, so don't need to capitalize ${database}
           objectClass = [ "olcdatabaseconfig" "olc${database}config" ];
           olcDatabase = "{1}${database}";
-          olcDbDirectory = lib.mkDefault "/var/db/openldap";
+          olcDbDirectory = lib.mkDefault "/var/lib/openldap/slapd.d";
         };
         "cn=schema".includes = lib.mkDefault (
           map (schema: "${openldap}/etc/schema/${schema}.ldif") [ "core" "cosine" "inetorgperson" "nis" ]
@@ -186,7 +193,7 @@ in {
                 attrs = {
                   objectClass = [ "olcDatabaseConfig" "olcMdbConfig" ];
                   olcDatabase = "{1}mdb";
-                  olcDbDirectory = "/var/db/ldap";
+                  olcDbDirectory = "/var/lib/openldap/db1";
                   olcDbIndex = [
                     "objectClass eq"
                     "cn pres,eq"
@@ -210,7 +217,7 @@ in {
           Use this config directory instead of generating one from the
           <literal>settings</literal> option. Overrides all NixOS settings.
         '';
-        example = "/var/db/slapd.d";
+        example = "/var/lib/openldap/slapd.d";
       };
 
       declarativeContents = mkOption {
@@ -224,6 +231,10 @@ in {
           reboot of the server. Performance-wise the database and indexes are
           rebuilt on each server startup, so this will slow down server startup,
           especially with large databases.
+
+          Note that the DIT root of the declarative DB must be defined in
+          <code>services.openldap.settings</code> AND the <code>olcDbDirectory</code>
+          must be prefixed by "/var/lib/openldap/"
         '';
         example = lib.literalExpression ''
           {
@@ -250,7 +261,13 @@ in {
     assertions = map (opt: {
       assertion = ((getAttr opt cfg) != "_mkMergedOptionModule") -> (cfg.database != "_mkMergedOptionModule");
       message = "Legacy OpenLDAP option `services.openldap.${opt}` requires `services.openldap.database` (use value \"mdb\" if unsure)";
-    }) legacyOptions;
+    }) legacyOptions ++ map (dn: {
+      assertion = dataDirsMap ? dn;
+      message = ''
+        declarative DB ${dn} does not exist in "servies.openldap.settings" or it exists but the "olcDbDirectory"
+        is not prefixed by "/var/lib/openldap/"
+      '';
+    }) declarativeDNs;
     environment.systemPackages = [ openldap ];
 
     # Literal attributes must always be set
@@ -271,36 +288,31 @@ in {
       after = [ "network.target" ];
       preStart = let
         settingsFile = pkgs.writeText "config.ldif" (lib.concatStringsSep "\n" (attrsToLdif "cn=config" cfg.settings));
-
-        dbSettings = lib.filterAttrs (name: value: lib.hasPrefix "olcDatabase=" name) cfg.settings.children;
-        dataDirs = lib.mapAttrs' (name: value: lib.nameValuePair value.attrs.olcSuffix value.attrs.olcDbDirectory)
-          (lib.filterAttrs (_: value: value.attrs ? olcDbDirectory) dbSettings);
         dataFiles = lib.mapAttrs (dn: contents: pkgs.writeText "${dn}.ldif" contents) cfg.declarativeContents;
         mkLoadScript = dn: let
-          dataDir = lib.escapeShellArg (getAttr dn dataDirs);
+          dataDir = lib.escapeShellArg (getAttr dn dataDirsMap);
         in  ''
           rm -rf ${dataDir}/*
           ${openldap}/bin/slapadd -F ${lib.escapeShellArg configDir} -b ${dn} -l ${getAttr dn dataFiles}
-          chown -R "${cfg.user}:${cfg.group}" ${dataDir}
         '';
       in ''
-        mkdir -p ${lib.escapeShellArg configDir} ${lib.escapeShellArgs (lib.attrValues dataDirs)}
-        chown "${cfg.user}:${cfg.group}" ${lib.escapeShellArg configDir} ${lib.escapeShellArgs (lib.attrValues dataDirs)}
-
-        ${lib.optionalString (cfg.configDir == null) (''
-          rm -Rf ${configDir}/*
+        ${lib.optionalString useDefaultConfDir ''
+          rm -rf ${configDir}/*
           ${openldap}/bin/slapadd -F ${configDir} -bcn=config -l ${settingsFile}
-        '')}
-        chown -R "${cfg.user}:${cfg.group}" ${lib.escapeShellArg configDir}
+        ''}
 
-        ${lib.concatStrings (map mkLoadScript (lib.attrNames cfg.declarativeContents))}
+        ${lib.concatStrings (map mkLoadScript declarativeDNs)}
         ${openldap}/bin/slaptest -u -F ${lib.escapeShellArg configDir}
       '';
       serviceConfig = {
+        User = cfg.user;
+        Group = cfg.group;
         ExecStart = lib.escapeShellArgs ([
-          "${openldap}/libexec/slapd" "-d" "0" "-u" cfg.user "-g" cfg.group "-F" configDir
+          "${openldap}/libexec/slapd" "-d" "0" "-F" configDir
           "-h" (lib.concatStringsSep " " cfg.urlList)
         ]);
+        StateDirectory = [ "openldap/slapd.d" ] ++ additionalStateDirectories;
+        StateDirectoryMode = "600";
       };
     };
 
