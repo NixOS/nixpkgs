@@ -27425,6 +27425,8 @@ with pkgs;
 
   rkdeveloptool = callPackage ../misc/rkdeveloptool { };
 
+  rocketchat-desktop = callPackage ../applications/networking/instant-messengers/rocketchat-desktop { };
+
   rofi-unwrapped = callPackage ../applications/misc/rofi {
     autoreconfHook = buildPackages.autoreconfHook269;
   };
