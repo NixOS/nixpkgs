@@ -23598,6 +23598,8 @@ with pkgs;
 
   av-98 = callPackage ../applications/networking/browsers/av-98 { };
 
+  avizo = callPackage ../applications/misc/avizo { };
+
   avocode = callPackage ../applications/graphics/avocode {};
 
   azpainter = callPackage ../applications/graphics/azpainter { };
