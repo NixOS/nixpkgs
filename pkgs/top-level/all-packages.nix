@@ -46,26 +46,6 @@ with pkgs;
       lib.mapNullable (rs: rs ++ [ bintools ]) (stdenv.allowedRequisites or null);
   };
 
-  stdenvNoLibs =
-    if stdenv.hostPlatform != stdenv.buildPlatform && (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isDarwin.useLLVM or false)
-    then
-      # We cannot touch binutils or cc themselves, because that will cause
-      # infinite recursion. So instead, we just choose a libc based on the
-      # current platform. That means we won't respect whatever compiler was
-      # passed in with the stdenv stage argument.
-      #
-      # TODO It would be much better to pass the `stdenvNoCC` and *unwrapped*
-      # cc, bintools, compiler-rt equivalent, etc. and create all final stdenvs
-      # as part of the stage. Then we would never be tempted to override a
-      # later thing to to create an earlier thing (leading to infinite
-      # recursion) and we also would still respect the stage arguments choices
-      # for these things.
-      overrideCC stdenv buildPackages.llvmPackages.clangNoCompilerRt
-    else mkStdenvNoLibs stdenv;
-
-  gccStdenvNoLibs = mkStdenvNoLibs gccStdenv;
-  clangStdenvNoLibs = mkStdenvNoLibs clangStdenv;
-
   # For convenience, allow callers to get the path to Nixpkgs.
   path = ../..;
 
@@ -11416,7 +11396,10 @@ with pkgs;
     stripped = false;
   }));
 
-  gccCrossLibcStdenv = overrideCC stdenv buildPackages.gccCrossStageStatic;
+  gccCrossLibcStdenv =
+    if stdenv.hostPlatform.useGccNg or false
+    then overrideCC stdenv buildPackages.gccNgPackages.gccNoLibc
+    else overrideCC stdenv buildPackages.gccCrossStageStatic;
 
   crossLibcStdenv =
     if stdenv.hostPlatform.useLLVM or false || stdenv.hostPlatform.isDarwin
@@ -11728,6 +11711,17 @@ with pkgs;
   });
 
   gnatboot = wrapCC (callPackage ../development/compilers/gnatboot { });
+
+  gccNgPackages = gccNgPackages_11;
+
+  gccNgPackages_11 = recurseIntoAttrs (callPackage ../development/compilers/gcc-ng/11 ({
+    inherit (stdenvAdapters) overrideCC;
+    # These are the default arguments, but do this to avoid splicing which was
+    # causing infinite recursion.
+    inherit bintools bintoolsNoLibc;
+    buildGccTools = buildPackages.gccNgPackages_11.tools;
+    targetGccLibraries = targetPackages.gccNgPackages_11.libraries;
+  }));
 
   gnu-smalltalk = callPackage ../development/compilers/gnu-smalltalk { };
 
@@ -14071,9 +14065,8 @@ with pkgs;
 
   librarian-puppet-go = callPackage ../development/tools/librarian-puppet-go { };
 
-  libgcc = callPackage ../development/libraries/gcc/libgcc {
-    stdenvNoLibs = gccStdenvNoLibs; # cannot be built with clang it seems
-  };
+  # TODO move to aliases
+  libgcc = gccNgPackages.libgcc;
 
   # This is for e.g. LLVM libraries on linux.
   gccForLibs =
@@ -14085,8 +14078,6 @@ with pkgs;
     # recursion if `targetPackages.stdenv.cc.cc` itself uses `gccForLibs`.
       then targetPackages.stdenv.cc.cc
     else gcc.cc;
-
-  libstdcxx5 = callPackage ../development/libraries/gcc/libstdc++/5.nix { };
 
   libsigrok = callPackage ../development/tools/libsigrok { };
   # old version:

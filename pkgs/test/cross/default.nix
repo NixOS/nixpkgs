@@ -107,7 +107,19 @@ let
     '';
   };
 
+  forEachTest = f: lib.mapAttrs (_: mapMultiPlatformTest f) tests;
+
 in {
-  gcc = (lib.mapAttrs (_: mapMultiPlatformTest (system: system // {useLLVM = false;})) tests);
-  llvm = (lib.mapAttrs (_: mapMultiPlatformTest (system: system // {useLLVM = true;})) tests);
+  gcc = forEachTest (system: system // {
+    useLLVM = false;
+    useGccNg = false;
+  });
+  gccNg = forEachTest (system: system // {
+    useLLVM = false;
+    useGccNg = true;
+  });
+  llvm = forEachTest (system: system // {
+    useLLVM = true;
+    useGccNg = false;
+  });
 }

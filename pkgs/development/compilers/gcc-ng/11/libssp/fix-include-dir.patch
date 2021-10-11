@@ -1,0 +1,13 @@
+diff --git a/libssp/Makefile.am b/libssp/Makefile.am
+index 6045c320cfa..2a31d2805e7 100644
+--- a/libssp/Makefile.am
++++ b/libssp/Makefile.am
+@@ -39,7 +39,7 @@ AM_CFLAGS += $(XCFLAGS)
+ toolexeclib_LTLIBRARIES = libssp.la libssp_nonshared.la
+ 
+ target_noncanonical = @target_noncanonical@
+-libsubincludedir = $(libdir)/gcc/$(target_noncanonical)/$(gcc_version)/include
++libsubincludedir = $(includedir)
+ nobase_libsubinclude_HEADERS = ssp/ssp.h ssp/string.h ssp/stdio.h ssp/unistd.h
+ 
+ libssp_la_SOURCES = \
