@@ -46,7 +46,7 @@ let
     owner  = "xbmc";
     repo   = "xbmc";
     rev    = "${kodiVersion}-${rel}";
-    sha256 = "0qc3rf6fv6k35iq5p0j86kpyghzl9djqxl6526fxknvrlw0xnh9j";
+    sha256 = "sha256-w5m7xlnjQDJ4l75b3ctF0wMZ4kqi+H0X6WFLs0gV6lM=";
   };
 
   ffmpeg = stdenv.mkDerivation rec {
