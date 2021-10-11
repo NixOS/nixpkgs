@@ -2139,6 +2139,8 @@ in {
 
   django-jinja = callPackage ../development/python-modules/django-jinja2 { };
 
+  django-js-asset = callPackage ../development/python-modules/django-js-asset { };
+
   django-logentry-admin = callPackage ../development/python-modules/django-logentry-admin { };
 
   django-mailman3 = callPackage ../development/python-modules/django-mailman3 { };
