@@ -706,7 +706,23 @@ let
   ];
 
   packagesRequiringHome = [
+    "aroma_affymetrix"
+    "aroma_cn"
+    "aroma_core"
+    "csodata"
+    "DiceView"
+    "MSnID"
     "OmnipathR"
+    "precommit"
+    "PSCBS"
+    "repmis"
+    "R_filesets"
+    "RKorAPClient"
+    "R_rsp"
+    "scholar"
+    "stepR"
+    "styler"
+    "TreeTools"
   ];
 
   packagesToSkipCheck = [
