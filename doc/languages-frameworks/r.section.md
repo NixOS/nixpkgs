@@ -125,3 +125,12 @@ patches and special requirements. These overrides are specified in the
 `pkgs/development/r-modules/default.nix` file. As the `*-packages.nix`
 contents are automatically generated it should not be edited and broken
 builds should be addressed using overrides.
+
+## Fixing packages {#fixing-packages}
+
+Hydra will attempt to build all the R packages in the branch
+`nixpkgs/r-updates`, and the results can be found at
+https://hydra.nixos.org/jobset/nixpkgs/r-updates
+
+Once the package set has been updated, push to `nixpkgs/r-updates`
+and fix any packages that are broken before submitting a PR to `master`.
