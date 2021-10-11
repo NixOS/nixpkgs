@@ -92,7 +92,8 @@ const performParallel = tasks => {
 	return Promise.all(workers)
 }
 
-const prefetchYarnDeps = async (lockData, verbose) => {
+const prefetchYarnDeps = async (lockContents, verbose) => {
+	const lockData = lockfile.parse(lockContents)
 	const tasks = Object.values(
 		Object.entries(lockData.object)
 		.map(([key, value]) => {
@@ -106,6 +107,7 @@ const prefetchYarnDeps = async (lockData, verbose) => {
 		.map(pkg => () => downloadPkg(pkg, verbose))
 
 	await performParallel(tasks)
+	await fs.promises.writeFile('yarn.lock', lockContents)
 	if (verbose) console.log('Done')
 }
 
@@ -140,19 +142,18 @@ const main = async () => {
 	let lockContents
 	try {
 		lockContents = await fs.promises.readFile(lockFile || 'yarn.lock', 'utf-8')
-	} catch(e) {
+	} catch {
 		showUsage()
 	}
-	const lockData = lockfile.parse(lockContents)
 
 	if (isBuilder) {
-		await prefetchYarnDeps(lockData, verbose)
+		await prefetchYarnDeps(lockContents, verbose)
 	} else {
 		const { stdout: tmpDir } = await exec('mktemp', [ '-d' ])
 
 		try {
 			process.chdir(tmpDir.trim())
-			await prefetchYarnDeps(lockData, verbose)
+			await prefetchYarnDeps(lockContents, verbose)
 			const { stdout: hash } = await exec('nix-hash', [ '--type', 'sha256', '--base32', tmpDir.trim() ])
 			console.log(hash)
 		} finally {
