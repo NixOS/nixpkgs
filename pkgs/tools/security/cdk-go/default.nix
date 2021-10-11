@@ -24,5 +24,6 @@ buildGoModule rec {
     homepage = "https://github.com/cdk-team/CDK";
     license = with licenses; [ gpl2Only ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "cdk";
   };
 }
