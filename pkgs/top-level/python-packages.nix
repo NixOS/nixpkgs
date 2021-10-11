@@ -1743,6 +1743,8 @@ in {
 
   crownstone-core = callPackage ../development/python-modules/crownstone-core { };
 
+  crownstone-sse = callPackage ../development/python-modules/crownstone-sse { };
+
   crownstone-uart = callPackage ../development/python-modules/crownstone-uart { };
 
   cryptacular = callPackage ../development/python-modules/cryptacular { };
