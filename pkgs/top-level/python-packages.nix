@@ -4587,6 +4587,8 @@ in {
 
   markdown = callPackage ../development/python-modules/markdown { };
 
+  markdown-include = callPackage ../development/python-modules/markdown-include { };
+
   markdown-it-py = callPackage ../development/python-modules/markdown-it-py { };
 
   markdown-macros = callPackage ../development/python-modules/markdown-macros { };
