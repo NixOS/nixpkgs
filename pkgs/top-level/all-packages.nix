@@ -8645,6 +8645,8 @@ with pkgs;
 
   openmodelica = recurseIntoAttrs (callPackage ../applications/science/misc/openmodelica {});
 
+  prowlarr = callPackage ../servers/prowlarr { };
+
   qarte = libsForQt5.callPackage ../applications/video/qarte { };
 
   qlcplus = libsForQt5.callPackage ../applications/misc/qlcplus { };
@@ -17974,6 +17976,8 @@ with pkgs;
   libunique3 = callPackage ../development/libraries/libunique/3.x.nix { };
 
   liburcu = callPackage ../development/libraries/liburcu { };
+
+  libjaylink = callPackage ../development/libraries/libjaylink { };
 
   libusb-compat-0_1 = callPackage ../development/libraries/libusb-compat/0.1.nix {};
 
@@ -31347,9 +31351,7 @@ with pkgs;
 
   scotch = callPackage ../applications/science/math/scotch { };
 
-  mininet = callPackage ../tools/virtualization/mininet {
-    python = python3;
-  };
+  mininet = callPackage ../tools/virtualization/mininet { };
 
   msieve = callPackage ../applications/science/math/msieve { };
 
