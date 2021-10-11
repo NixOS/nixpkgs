@@ -1,4 +1,6 @@
-{ lib, stdenv, buildPythonPackage, isPyPy, fetchPypi, libffi, pycparser, pytestCheckHook }:
+{ lib, stdenv, buildPythonPackage, isPyPy, fetchPypi, pytestCheckHook,
+  libffi, pkg-config, pycparser
+}:
 
 if isPyPy then null else buildPythonPackage rec {
   pname = "cffi";
@@ -13,9 +15,15 @@ if isPyPy then null else buildPythonPackage rec {
 
   buildInputs = [ libffi ];
 
+  nativeBuildInputs = [ pkg-config ];
+
   propagatedBuildInputs = [ pycparser ];
 
   prePatch = lib.optionalString stdenv.isDarwin ''
+    # Remove setup.py impurities
+    substituteInPlace setup.py --replace "'-iwithsysroot/usr/include/ffi'" ""
+    substituteInPlace setup.py --replace "'/usr/include/ffi'," ""
+    substituteInPlace setup.py --replace '/usr/include/libffi' '${lib.getDev libffi}/include'
   '';
 
   # The tests use -Werror but with python3.6 clang detects some unreachable code.
