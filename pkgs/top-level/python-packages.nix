@@ -2213,6 +2213,8 @@ in {
 
   django-taggit = callPackage ../development/python-modules/django-taggit { };
 
+  django-timezone-field = callPackage ../development/python-modules/django-timezone-field { };
+
   django_treebeard = callPackage ../development/python-modules/django_treebeard { };
 
   django-versatileimagefield = callPackage ../development/python-modules/django-versatileimagefield { };
