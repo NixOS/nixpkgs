@@ -22,7 +22,7 @@ if isPyPy then null else buildPythonPackage rec {
   NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang
     "-Wno-unused-command-line-argument -Wno-unreachable-code";
 
-  doCheck = !stdenv.hostPlatform.isMusl && !stdenv.isDarwin; # TODO: Investigate
+  doCheck = !stdenv.hostPlatform.isMusl;
 
   checkInputs = [ pytestCheckHook ];
 
