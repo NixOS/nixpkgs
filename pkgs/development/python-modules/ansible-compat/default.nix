@@ -24,13 +24,13 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     pyyaml
+    packaging
   ];
 
   checkInputs = [
     pytestCheckHook
     pytest-mock
     flaky
-    packaging
   ];
 
   meta = with lib; {
@@ -40,4 +40,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ ilpianista ];
   };
 }
-
