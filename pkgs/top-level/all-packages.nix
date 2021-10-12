@@ -18293,6 +18293,8 @@ with pkgs;
 
   libubox = callPackage ../development/libraries/libubox { };
 
+  libudev-zero = callPackage ../development/libraries/libudev-zero { };
+
   libuecc = callPackage ../development/libraries/libuecc { };
 
   libui = callPackage ../development/libraries/libui {
