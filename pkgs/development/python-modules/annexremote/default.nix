@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "annexremote";
-  version = "1.4.5";
+  version = "1.6.0";
 
   # use fetchFromGitHub instead of fetchPypi because the test suite of
   # the package is not included into the PyPI tarball
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     rev = "v${version}";
     owner = "Lykos153";
     repo = "AnnexRemote";
-    sha256 = "0r5chdk2aiqcz7z8r8m1j657cz79f6bbv96xdmhj4m5fiqn672if";
+    sha256 = "08myswj1vqkl4s1glykq6xn76a070nv5mxj0z8ibl6axz89bvypi";
   };
 
   propagatedBuildInputs = [ future ];
