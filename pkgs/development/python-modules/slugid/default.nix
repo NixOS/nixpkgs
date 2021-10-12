@@ -20,6 +20,6 @@ buildPythonPackage rec {
     description = "Compress UUIDs. a URL-safe base64 UUID encoder for generating 22 character slugs";
     homepage = "https://github.com/taskcluster/slugid.py";
     license = licenses.mpl20;
-    #maintainers = [];
+    maintainers = with maintainers; [ milahu ];
   };
 } 
