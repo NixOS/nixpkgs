@@ -11,9 +11,14 @@ stdenv.mkDerivation rec {
     hash = "sha256-LVwmbrq78mZcAEuAqjXTqLE5we83H9mcMPtxQx2Tn/c=";
   };
 
-  buildInputs = [ autoconf ncurses pcre ];
+  nativeBuildInputs = [ autoconf ];
 
-  preConfigure = "autoheader && autoconf ";
+  buildInputs = [ ncurses pcre ];
+
+  preConfigure = ''
+    autoheader
+    autoconf
+  '';
 
   meta = with lib; {
     description = "Fast, modular log colorizer";
