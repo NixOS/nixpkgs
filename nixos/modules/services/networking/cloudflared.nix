@@ -15,6 +15,8 @@ in
       package = lib.mkOption {
         type = lib.types.package;
         default = pkgs.cloudflared;
+        description = "The cloudflared package to use";
+        example = literalExpression ''pkgs.cloudflared'';
       };
       config = lib.mkOption {
         type = settingsFormat.type;
@@ -30,8 +32,8 @@ in
 
       configFile = mkOption {
         type = types.path;
-        example = literalExpression ''"/etc/cloudflared/config.yaml"'';
         description = "Path to cloudflared config.yaml.";
+        example = literalExpression ''"/etc/cloudflared/config.yaml"'';
       };
     };
   };
