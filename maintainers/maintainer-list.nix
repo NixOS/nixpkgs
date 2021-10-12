@@ -440,6 +440,12 @@
     githubId = 173595;
     name = "Caleb Maclennan";
   };
+  ALEX11BR = {
+    email = "alexioanpopa11@gmail.com";
+    github = "ALEX11BR";
+    githubId = 49609151;
+    name = "Popa Ioan Alexandru";
+  };
   alexarice = {
     email = "alexrice999@hotmail.co.uk";
     github = "alexarice";
