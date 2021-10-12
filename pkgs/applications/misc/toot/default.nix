@@ -1,7 +1,7 @@
 { lib, fetchFromGitHub, python3Packages }:
 
 python3Packages.buildPythonApplication rec {
-  pname   = "toot";
+  pname = "toot";
   version = "0.28.0";
 
   src = fetchFromGitHub {
