@@ -48,7 +48,7 @@ let
   compilerNames = lib.mapAttrs (name: _: name) pkgs.haskell.packages;
 
   # list of all compilers to test specific packages on
-  all = with compilerNames; [
+  released = with compilerNames; [
     ghc884
     ghc8107
     ghc901
@@ -304,18 +304,18 @@ let
       # and to confirm that critical packages for the
       # package sets (like Cabal, jailbreak-cabal) are
       # working as expected.
-      cabal-install = all;
-      Cabal_3_6_2_0 = with compilerNames; [ ghc884 ghc8107 ghc901 ghc921 ];
-      cabal2nix-unstable = all;
-      funcmp = all;
-      haskell-language-server = all;
-      hoogle = all;
-      hsdns = all;
-      jailbreak-cabal = all;
-      language-nix = all;
-      nix-paths = all;
-      titlecase = all;
-      ghc-api-compat = all;
+      cabal-install = released;
+      Cabal_3_6_2_0 = released ++ [ compilerNames.ghc921 ];
+      cabal2nix-unstable = released;
+      funcmp = released;
+      haskell-language-server = released;
+      hoogle = released;
+      hsdns = released;
+      jailbreak-cabal = released;
+      language-nix = released;
+      nix-paths = released;
+      titlecase = released;
+      ghc-api-compat = released;
     })
     {
       mergeable = pkgs.releaseTools.aggregate {
