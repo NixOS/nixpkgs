@@ -1,4 +1,4 @@
-{ lib, stdenv, stdenvNoCC, lndir, runtimeShell }:
+{ lib, stdenv, stdenvNoCC, lndir, runtimeShell, makeBinPath, shellcheck }:
 
 rec {
 
@@ -247,6 +247,51 @@ rec {
       checkPhase = ''
         ${stdenv.shell} -n $out/bin/${name}
       '';
+    };
+
+  /*
+   * Similar to writeShellScriptBin and writeScriptBin.
+   * Writes an executable Shell script to /nix/store/<store path>/bin/<name> and
+   * checks its syntax with shellcheck and the shell's -n option.
+   * Automatically includes sane set of shellopts (errexit, nounset, pipefail)
+   * and handles creation of PATH based on buildInputs
+   *
+   * Example:
+   * # Writes my-file to /nix/store/<store path>/bin/my-file and makes executable.
+   * writeShellApplication {
+   *   name = "my-file";
+   *   buildInputs = [ curl w3m ];
+   *   text = ''
+   *     curl -s 'https://nixos.org' | w3m -dump -T text/html
+   *    '';
+   * }
+  */
+  writeShellApplication =
+    { name
+    , text
+    , buildInputs ? [ ]
+    , checkPhase ? null
+    }:
+    writeTextFile {
+      inherit name;
+      executable = true;
+      destination = "/bin/${name}";
+      text = ''
+        #!${runtimeShell}
+        set -o errexit
+        set -o nounset
+        set- o pipefail
+
+        export PATH="${makeBinPath buildInputs}:$PATH"
+
+        ${text}
+      '';
+
+      checkPhase = if checkPhase == null then ''
+        ${stdenv.shell} -n $out/bin/${name}
+        ${shellcheck}/bin/shellcheck $out/bin/${name}
+      ''
+      else checkPhase;
     };
 
   # Create a C binary
