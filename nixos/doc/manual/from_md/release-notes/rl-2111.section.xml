@@ -83,7 +83,8 @@
           which introduced some breaking changes to the experimental OCI
           manifest format. See
           <link xlink:href="https://github.com/helm/community/blob/main/hips/hip-0006.md">HIP
-          6</link> for more details.
+          6</link> for more details. <literal>helmfile</literal> also
+          defaults to 0.141.0, which is the minimum compatible version.
         </para>
       </listitem>
       <listitem>
