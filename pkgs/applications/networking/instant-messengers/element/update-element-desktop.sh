@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -I nixpkgs=../../../../../ -i bash -p wget yarn2nix
+#!nix-shell -I nixpkgs=../../../../../ -i bash -p wget yarn2nix nix-prefetch-git
 
 set -euo pipefail
 
@@ -13,5 +13,5 @@ RIOT_WEB_SRC="https://raw.githubusercontent.com/vector-im/element-desktop/$1"
 
 wget "$RIOT_WEB_SRC/package.json" -O element-desktop-package.json
 wget "$RIOT_WEB_SRC/yarn.lock" -O element-desktop-yarndeps.lock
-yarn2nix --lockfile=element-desktop-yarndeps.lock > element-desktop-yarndeps.nix
+yarn2nix --no-patch --lockfile=element-desktop-yarndeps.lock > element-desktop-yarndeps.nix
 rm element-desktop-yarndeps.lock
