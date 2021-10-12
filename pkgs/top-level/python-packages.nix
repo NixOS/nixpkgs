@@ -1751,6 +1751,14 @@ in {
 
   croniter = callPackage ../development/python-modules/croniter { };
 
+  crownstone-cloud = callPackage ../development/python-modules/crownstone-cloud { };
+
+  crownstone-core = callPackage ../development/python-modules/crownstone-core { };
+
+  crownstone-sse = callPackage ../development/python-modules/crownstone-sse { };
+
+  crownstone-uart = callPackage ../development/python-modules/crownstone-uart { };
+
   cryptacular = callPackage ../development/python-modules/cryptacular { };
 
   cryptography = callPackage ../development/python-modules/cryptography {
