@@ -704,6 +704,7 @@ let
   ];
 
   packagesRequiringHome = [
+    "styler"
   ];
 
   packagesToSkipCheck = [
