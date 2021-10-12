@@ -1,4 +1,4 @@
-{ stdenv
+{ buildPythonPackage
 , lib
 , fetchFromGitHub
 }:
