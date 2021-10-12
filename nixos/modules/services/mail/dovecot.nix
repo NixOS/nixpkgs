@@ -435,6 +435,7 @@ in
         Restart = "on-failure";
         RestartSec = "1s";
         RuntimeDirectory = [ "dovecot2" ];
+        PrivateTmp = true;
       };
 
       # When copying sieve scripts preserve the original time stamp
