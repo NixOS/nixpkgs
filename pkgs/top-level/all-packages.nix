@@ -607,6 +607,7 @@ with pkgs;
 
   fetchNuGet = callPackage ../build-support/fetchnuget { };
   buildDotnetPackage = callPackage ../build-support/build-dotnet-package { };
+  buildDotnetModule = callPackage ../build-support/build-dotnet-module { };
   nuget-to-nix = callPackage ../build-support/nuget-to-nix { };
 
   fetchgx = callPackage ../build-support/fetchgx { };
@@ -9692,7 +9693,7 @@ with pkgs;
 
   ted = callPackage ../tools/typesetting/ted { };
 
-  teamviewer = libsForQt514.callPackage ../applications/networking/remote/teamviewer { };
+  teamviewer = libsForQt515.callPackage ../applications/networking/remote/teamviewer { };
 
   teleconsole = callPackage ../tools/misc/teleconsole { };
 
@@ -19272,6 +19273,8 @@ with pkgs;
   soapyuhd = callPackage ../applications/radio/soapyuhd { };
 
   socket_wrapper = callPackage ../development/libraries/socket_wrapper { };
+
+  soco-cli = callPackage ../tools/audio/soco-cli { };
 
   sofia_sip = callPackage ../development/libraries/sofia-sip {
     inherit (darwin.apple_sdk.frameworks) SystemConfiguration;

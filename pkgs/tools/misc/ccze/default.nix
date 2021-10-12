@@ -1,12 +1,14 @@
-{ lib, stdenv, fetchurl, autoconf, ncurses, pcre }:
+{ lib, stdenv, fetchFromGitHub, autoconf, ncurses, pcre }:
 
 stdenv.mkDerivation rec {
   pname = "ccze";
   version = "0.2.1-2";
 
-  src = fetchurl {
-    url = "https://github.com/madhouse/ccze/archive/ccze-${version}.tar.gz";
-    sha256 = "1amavfvyls4v0gnikk43n2rpciaspxifgrmvi99qj6imv3mfg66n";
+  src = fetchFromGitHub {
+    owner = "madhouse";
+    repo = "ccze";
+    rev = "ccze-${version}";
+    hash = "sha256-LVwmbrq78mZcAEuAqjXTqLE5we83H9mcMPtxQx2Tn/c=";
   };
 
   buildInputs = [ autoconf ncurses pcre ];
