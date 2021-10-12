@@ -2,7 +2,9 @@
 , buildPythonPackage, fetchPypi
 , pkg-config, cython, docutils
 , kivy-garden
-, mesa, mtdev, SDL2, SDL2_image, SDL2_ttf, SDL2_mixer, gst_all_1
+, mesa, mtdev, SDL2, SDL2_image, SDL2_ttf, SDL2_mixer
+, withGstreamer ? true
+, gst_all_1
 , pillow, requests, pygments
 }:
 
@@ -28,13 +30,13 @@ buildPythonPackage rec {
     SDL2_image
     SDL2_ttf
     SDL2_mixer
-
+  ] ++ lib.optionals withGstreamer (with gst_all_1; [
     # NOTE: The degree to which gstreamer actually works is unclear
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
-    gst_all_1.gst-plugins-bad
-  ];
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+  ]);
 
   propagatedBuildInputs = [
     kivy-garden
