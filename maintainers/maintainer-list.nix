@@ -1915,6 +1915,12 @@
     email = "me@philscotted.com";
     name = "Phil Scott";
   };
+  chekoopa = {
+    email = "chekoopa@mail.ru";
+    github = "chekoopa";
+    githubId = 1689801;
+    name = "Mikhail Chekan";
+  };
   ChengCat = {
     email = "yu@cheng.cat";
     github = "ChengCat";
