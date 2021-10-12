@@ -6,11 +6,11 @@
 
 mkDerivation rec {
   pname = "teamviewer";
-  version = "15.18.5";
+  version = "15.22.3";
 
   src = fetchurl {
     url = "https://dl.tvcdn.de/download/linux/version_15x/teamviewer_${version}_amd64.deb";
-    sha256 = "03m8k6qr3mgylik1gqi8qlm0dngb3vf4p6gdwd5hyvz7gh5mdm2r";
+    sha256 = "15fvzhdq7mnx2l2w4byvij8ww16qwdlkbadal60rm66yzv79mv9w";
   };
 
   unpackPhase = ''
@@ -28,6 +28,7 @@ mkDerivation rec {
     rm -R \
       $out/share/teamviewer/logfiles \
       $out/share/teamviewer/config \
+      $out/share/teamviewer/tv_bin/RTlib \
       $out/share/teamviewer/tv_bin/xdg-utils \
       $out/share/teamviewer/tv_bin/script/{teamviewer_setup,teamviewerd.sysv,teamviewerd.service,teamviewerd.*.conf,libdepend,tv-delayed-start.sh}
 
