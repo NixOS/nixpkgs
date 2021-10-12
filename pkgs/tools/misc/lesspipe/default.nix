@@ -7,7 +7,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ perl ];
   buildInputs = [ perl bash ];
   strictDeps = true;
-  preConfigure = "patchShebangs --build configure";
+  preConfigure = ''
+    patchShebangs --build configure
+  '';
   configureFlags = [ "--shell=${bash}/bin/bash" "--yes" ];
   configurePlatforms = [];
   dontBuild = true;
