@@ -6,11 +6,11 @@ let
     if stdenv.hostPlatform.system == "i686-linux" then fetchurl {
       name = "rescuetime-installer.deb";
       url = "https://www.rescuetime.com/installers/rescuetime_${version}_i386.deb";
-      sha256 = "1xrvyy0higc1fbc8ascpaszvg2bl6x0a35bzmdq6dkay48hnrd8b";
+      sha256 = "C7VsISJezWZwq3+VoUA3dIm3v1aXaYXYcoG9CIH3O/c=";
     } else fetchurl {
       name = "rescuetime-installer.deb";
       url = "https://www.rescuetime.com/installers/rescuetime_${version}_amd64.deb";
-      sha256 = "09ng0yal66d533vzfv27k9l2va03rqbqmsni43qi3hgx7w9wx5ii";
+      sha256 = "MZbOEz/9wRHxINHqihfOA6gtaJpHbPf3GKUZQ5UHzyY=";
     };
 in mkDerivation rec {
   # https://www.rescuetime.com/updates/linux_release_notes.html
