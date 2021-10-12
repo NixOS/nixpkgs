@@ -25,7 +25,6 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    # loosen dependency constraints
     substituteInPlace setup.cfg \
       --replace 'subprocess-tee >= 0.3.5' 'subprocess-tee' \
       --replace 'cerberus >= 1.3.1, !=1.3.3, !=1.3.4' 'cerberus'
