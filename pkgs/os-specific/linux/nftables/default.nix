@@ -4,7 +4,7 @@
 , gmp, jansson, readline
 , withDebugSymbols ? false
 , withPython ? false , python3
-, withXtables ? false , iptables
+, withXtables ? true , iptables
 }:
 
 with lib;
