@@ -1,6 +1,6 @@
 { mkDerivation, lib, fetchurl, autoPatchelfHook, makeWrapper, xdg-utils, dbus
 , qtbase, qtwebkit, qtwebengine, qtx11extras, qtquickcontrols, getconf, glibc
-, libXrandr, libX11, libXext, libXdamage, libXtst, libSM, libXfixes
+, libXrandr, libX11, libXext, libXdamage, libXtst, libSM, libXfixes, coreutils
 , wrapQtAppsHook
 }:
 
@@ -75,7 +75,7 @@ mkDerivation rec {
   '';
 
   makeWrapperArgs = [
-    "--prefix PATH : ${lib.makeBinPath [ getconf ]}"
+    "--prefix PATH : ${lib.makeBinPath [ getconf coreutils ]}"
     "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libXrandr libX11 libXext libXdamage libXtst libSM libXfixes dbus ]}"
   ];
 
