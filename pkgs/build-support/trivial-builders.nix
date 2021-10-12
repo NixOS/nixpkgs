@@ -1,4 +1,4 @@
-{ lib, stdenv, stdenvNoCC, lndir, runtimeShell, makeBinPath, shellcheck }:
+{ lib, stdenv, stdenvNoCC, lndir, runtimeShell, shellcheck }:
 
 rec {
 
@@ -282,7 +282,7 @@ rec {
         set -o nounset
         set- o pipefail
 
-        export PATH="${makeBinPath runtimeInputs}:$PATH"
+        export PATH="${lib.makeBinPath runtimeInputs}:$PATH"
 
         ${text}
       '';
