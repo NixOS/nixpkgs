@@ -45,7 +45,7 @@ self: super: {
 
   # cabal-install needs more recent versions of Cabal and base16-bytestring.
   cabal-install = (doJailbreak super.cabal-install).overrideScope (self: super: {
-    Cabal = self.Cabal_3_6_1_0;
+    Cabal = self.Cabal_3_6_2_0;
   });
 
   # Jailbreaks & Version Updates
