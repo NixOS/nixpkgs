@@ -304,17 +304,18 @@ let
       # and to confirm that critical packages for the
       # package sets (like Cabal, jailbreak-cabal) are
       # working as expected.
-      cabal-install = released;
+      cabal-install = released ++ [ compilerNames.ghc921 ];
       Cabal_3_6_2_0 = released ++ [ compilerNames.ghc921 ];
-      cabal2nix-unstable = released;
-      funcmp = released;
+      cabal2nix = released ++ [ compilerNames.ghc921 ];
+      cabal2nix-unstable = released ++ [ compilerNames.ghc921 ];
+      funcmp = released ++ [ compilerNames.ghc921 ];
       haskell-language-server = released;
       hoogle = released;
-      hsdns = released;
-      jailbreak-cabal = released;
-      language-nix = released;
-      nix-paths = released;
-      titlecase = released;
+      hsdns = released ++ [ compilerNames.ghc921 ];
+      jailbreak-cabal = released ++ [ compilerNames.ghc921 ];
+      language-nix = released ++ [ compilerNames.ghc921 ];
+      nix-paths = released ++ [ compilerNames.ghc921 ];
+      titlecase = released ++ [ compilerNames.ghc921 ];
       ghc-api-compat = released;
     })
     {
