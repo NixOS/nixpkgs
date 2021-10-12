@@ -11,14 +11,14 @@ in
 
   options = {
     services.cloudflared = {
-      enable = lib.mkEnableOption "cloudflared";
-      package = lib.mkOption {
-        type = lib.types.package;
+      enable = mkEnableOption "cloudflared";
+      package = mkOption {
+        type = types.package;
         default = pkgs.cloudflared;
         description = "The cloudflared package to use";
         example = literalExpression ''pkgs.cloudflared'';
       };
-      config = lib.mkOption {
+      config = mkOption {
         type = settingsFormat.type;
         description = "Contents of the config.yaml as an attrset; see https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/configuration/configuration-file for documentation on the contents";
         example = literalExpression ''
@@ -38,7 +38,7 @@ in
     };
   };
 
-  config = lib.mkIf cfg.enable ({
+  config = mkIf cfg.enable ({
     # Prefer the config file over settings if both are set.
     services.cloudflared.configFile = mkDefault (settingsFormat.generate "cloudflared.yaml" cfg.config);
 
