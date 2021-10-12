@@ -2544,6 +2544,8 @@ with pkgs;
 
   dale = callPackage ../development/compilers/dale { };
 
+  damon = callPackage ../tools/admin/damon { };
+
   dante = callPackage ../servers/dante { };
 
   dapr-cli = callPackage ../development/tools/dapr/cli {};
