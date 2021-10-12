@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "A preprocessor for mdbook, rendering Graphviz graphs to HTML at build time.";
-    homepage = "https://github.com/dylanowen/${pname}";
+    homepage = "https://github.com/dylanowen/mdbook-graphviz";
     license = [ licenses.mpl20 ];
     maintainers = with maintainers; [ lovesegfault ];
   };
