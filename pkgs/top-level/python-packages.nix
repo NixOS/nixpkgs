@@ -7821,6 +7821,8 @@ in {
 
   random2 = callPackage ../development/python-modules/random2 { };
 
+  rangehttpserver = callPackage ../development/python-modules/rangehttpserver { };
+
   rapidfuzz = callPackage ../development/python-modules/rapidfuzz { };
 
   rarfile = callPackage ../development/python-modules/rarfile {
