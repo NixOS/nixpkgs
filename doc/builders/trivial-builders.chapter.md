@@ -49,7 +49,7 @@ Many more commands wrap `writeTextFile` including `writeText`, `writeTextDir`, `
 
 ## `writeShellApplication` {#trivial-builder-writeShellApplication}
 
-This can be used to easily produce a shell script that has some dependencies (`buildInputs`). It automatically sets the `PATH` of the script to contain all of the listed inputs, sets some sanity shellopts (`errexit`, `nounset`, `pipefail`), and checks the resulting script with [`shellcheck`](https://github.com/koalaman/shellcheck).
+This can be used to easily produce a shell script that has some dependencies (`runtimeInputs`). It automatically sets the `PATH` of the script to contain all of the listed inputs, sets some sanity shellopts (`errexit`, `nounset`, `pipefail`), and checks the resulting script with [`shellcheck`](https://github.com/koalaman/shellcheck).
 
 For example, look at the following code:
 
@@ -57,7 +57,7 @@ For example, look at the following code:
 writeShellApplication {
   name = "show-nixos-org";
 
-  buildInputs = [ curl w3m ];
+  runtimeInputs = [ curl w3m ];
 
   text = ''
     curl -s 'https://nixos.org' | w3m -dump -T text/html

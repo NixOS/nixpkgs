@@ -260,7 +260,7 @@ rec {
    * # Writes my-file to /nix/store/<store path>/bin/my-file and makes executable.
    * writeShellApplication {
    *   name = "my-file";
-   *   buildInputs = [ curl w3m ];
+   *   runtimeInputs = [ curl w3m ];
    *   text = ''
    *     curl -s 'https://nixos.org' | w3m -dump -T text/html
    *    '';
@@ -269,7 +269,7 @@ rec {
   writeShellApplication =
     { name
     , text
-    , buildInputs ? [ ]
+    , runtimeInputs ? [ ]
     , checkPhase ? null
     }:
     writeTextFile {
@@ -282,7 +282,7 @@ rec {
         set -o nounset
         set- o pipefail
 
-        export PATH="${makeBinPath buildInputs}:$PATH"
+        export PATH="${makeBinPath runtimeInputs}:$PATH"
 
         ${text}
       '';
