@@ -35,7 +35,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Radically simple IT automation";
-    homepage = "https://www.ansible.com";
+    homepage = "https://github.com/ansible-community/ansible-compat";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ ilpianista ];
   };
