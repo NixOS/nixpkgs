@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "python_http_client";
-  version = "3.3.2";
+  version = "3.3.3";
 
   src = fetchFromGitHub {
     owner = "sendgrid";
     repo = "python-http-client";
     rev = version;
-    sha256 = "0z7nvfq9wdcprwh88xn9p3vm15gb3ijdc8pxn0a133ini9hxxlpx";
+    sha256 = "sha256-cZqyu67xP0UIKYbhYYTNL5kLiPjjMjayde75sqkHZhg=";
   };
 
   checkInputs = [

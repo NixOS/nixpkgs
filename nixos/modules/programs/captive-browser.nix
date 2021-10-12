@@ -14,7 +14,7 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.captive-browser;
-        defaultText = "pkgs.captive-browser";
+        defaultText = literalExpression "pkgs.captive-browser";
         description = "Which package to use for captive-browser";
       };
 
@@ -27,6 +27,7 @@ in
       browser = mkOption {
         type = types.str;
         default = concatStringsSep " " [
+          ''env XDG_CONFIG_HOME="$PREV_CONFIG_HOME"''
           ''${pkgs.chromium}/bin/chromium''
           ''--user-data-dir=''${XDG_DATA_HOME:-$HOME/.local/share}/chromium-captive''
           ''--proxy-server="socks5://$PROXY"''
@@ -84,18 +85,18 @@ in
 
     programs.captive-browser.dhcp-dns =
       let
-        iface = prefix:
-          optionalString cfg.bindInterface (concatStringsSep " " (map escapeShellArg [ prefix cfg.interface ]));
+        iface = prefixes:
+          optionalString cfg.bindInterface (escapeShellArgs (prefixes ++ [ cfg.interface ]));
       in
       mkOptionDefault (
         if config.networking.networkmanager.enable then
-          "${pkgs.networkmanager}/bin/nmcli dev show ${iface ""} | ${pkgs.gnugrep}/bin/fgrep IP4.DNS"
+          "${pkgs.networkmanager}/bin/nmcli dev show ${iface []} | ${pkgs.gnugrep}/bin/fgrep IP4.DNS"
         else if config.networking.dhcpcd.enable then
-          "${pkgs.dhcpcd}/bin/dhcpcd ${iface "-U"} | ${pkgs.gnugrep}/bin/fgrep domain_name_servers"
+          "${pkgs.dhcpcd}/bin/dhcpcd ${iface ["-U"]} | ${pkgs.gnugrep}/bin/fgrep domain_name_servers"
         else if config.networking.useNetworkd then
-          "${cfg.package}/bin/systemd-networkd-dns ${iface ""}"
+          "${cfg.package}/bin/systemd-networkd-dns ${iface []}"
         else
-          "${config.security.wrapperDir}/udhcpc --quit --now -f ${iface "-i"} -O dns --script ${
+          "${config.security.wrapperDir}/udhcpc --quit --now -f ${iface ["-i"]} -O dns --script ${
           pkgs.writeShellScript "udhcp-script" ''
             if [ "$1" = bound ]; then
               echo "$dns"
@@ -104,13 +105,18 @@ in
       );
 
     security.wrappers.udhcpc = {
+      owner = "root";
+      group = "root";
       capabilities = "cap_net_raw+p";
       source = "${pkgs.busybox}/bin/udhcpc";
     };
 
     security.wrappers.captive-browser = {
+      owner = "root";
+      group = "root";
       capabilities = "cap_net_raw+p";
       source = pkgs.writeShellScript "captive-browser" ''
+        export PREV_CONFIG_HOME="$XDG_CONFIG_HOME"
         export XDG_CONFIG_HOME=${pkgs.writeTextDir "captive-browser.toml" ''
                                   browser = """${cfg.browser}"""
                                   dhcp-dns = """${cfg.dhcp-dns}"""

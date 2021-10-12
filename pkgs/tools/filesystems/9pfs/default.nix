@@ -1,7 +1,8 @@
 { lib, stdenv, fetchFromGitHub, fuse }:
 
 stdenv.mkDerivation {
-  name = "9pfs-20150918";
+  pname = "9pfs";
+  version = "unstable-2015-09-18";
 
   src = fetchFromGitHub {
     owner = "mischief";

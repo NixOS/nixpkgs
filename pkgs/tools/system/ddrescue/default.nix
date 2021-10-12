@@ -3,10 +3,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "ddrescue-1.25";
+  pname = "ddrescue";
+  version = "1.25";
 
   src = fetchurl {
-    url = "mirror://gnu/ddrescue/${name}.tar.lz";
+    url = "mirror://gnu/ddrescue/ddrescue-${version}.tar.lz";
     sha256 = "0qqh38izl5ppap9a5izf3hijh94k65s3zbfkczd4b7x04syqwlyf";
   };
 

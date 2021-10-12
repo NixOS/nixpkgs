@@ -17,6 +17,10 @@ let
 
             nixops = super.nixops.overridePythonAttrs (
               old: {
+                postPatch = ''
+                  substituteInPlace nixops/args.py --subst-var version
+                '';
+
                 meta = old.meta // {
                   homepage = https://github.com/NixOS/nixops;
                   description = "NixOS cloud provisioning and deployment tool";

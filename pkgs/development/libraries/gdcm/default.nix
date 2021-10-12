@@ -7,7 +7,7 @@
 , ApplicationServices
 , Cocoa
 , enablePython ? false
-, python
+, python ? null
 , swig
 }:
 

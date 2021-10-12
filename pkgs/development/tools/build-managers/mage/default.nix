@@ -15,8 +15,7 @@ buildGoModule rec {
 
   doCheck = false;
 
-  buildFlagsArray = [
-    "-ldflags="
+  ldflags = [
     "-X github.com/magefile/mage/mage.commitHash=v${version}"
     "-X github.com/magefile/mage/mage.gitTag=v${version}"
     "-X github.com/magefile/mage/mage.timestamp=1970-01-01T00:00:00Z"

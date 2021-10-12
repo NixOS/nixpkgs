@@ -1,7 +1,8 @@
 { lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "anthy-9100h";
+  pname = "anthy";
+  version = "9100h";
 
   meta = with lib; {
     description = "Hiragana text to Kana Kanji mixed text Japanese input method";
@@ -12,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   src = fetchurl {
-    url = "mirror://osdn/anthy/37536/${name}.tar.gz";
+    url = "mirror://osdn/anthy/37536/anthy-${version}.tar.gz";
     sha256 = "0ism4zibcsa5nl77wwi12vdsfjys3waxcphn1p5s7d0qy1sz0mnj";
   };
 }

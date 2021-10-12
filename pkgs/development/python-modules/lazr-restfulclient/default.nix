@@ -16,13 +16,13 @@
 
 buildPythonPackage rec {
   pname = "lazr.restfulclient";
-  version = "0.14.3";
+  version = "0.14.4";
 
   disabled = isPy27; # namespace is broken for python2
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9f28bbb7c00374159376bd4ce36b4dacde7c6b86a0af625aa5e3ae214651a690";
+    sha256 = "bf0fd6b2749b3a2d02711f854c9d23704756f7afed21fb5d5b9809d72aa6d087";
   };
 
   propagatedBuildInputs = [ distro httplib2 oauthlib setuptools six wadllib ];

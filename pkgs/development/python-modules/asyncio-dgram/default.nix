@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "asyncio-dgram";
-  version = "2.0.0";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "jsbronder";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-EL3iOoCfLAtfdMI1J2XMf4izOEo9+a+0PNQs+4HuEfo=";
+    sha256 = "1ibyphncb3d8vrs3yk8j6l1smmnibizx9k1vir2njhi09r57h9mx";
   };
 
   # OSError: AF_UNIX path too long
@@ -26,6 +26,7 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [ "test_protocol_pause_resume" ];
+
   pythonImportsCheck = [ "asyncio_dgram" ];
 
   meta = with lib; {

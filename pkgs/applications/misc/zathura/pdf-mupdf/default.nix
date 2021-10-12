@@ -12,12 +12,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.3.6";
+  version = "0.3.7";
   pname = "zathura-pdf-mupdf";
 
   src = fetchurl {
     url = "https://pwmt.org/projects/${pname}/download/${pname}-${version}.tar.xz";
-    sha256 = "1r3v37k9fl2rxipvacgxr36llywvy7n20a25h3ajlyk70697sa66";
+    sha256 = "07d2ds9yqfrl20z3yfgc55vwg10mwmcg2yvpr4j66jjd5mlal01g";
   };
 
   nativeBuildInputs = [ meson ninja pkg-config ];

@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "goalzero";
-  version = "0.1.59";
+  version = "0.2.0";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0d0f11aa31672f3ef4ab617db92c87ef6f143804473022405f6da9d830f17638";
+    sha256 = "6cb67cf772a758225b2e23b394feb697e8cbfb1aff5a2d7a17a0d4ccf61e55cd";
   };
 
   propagatedBuildInputs = [

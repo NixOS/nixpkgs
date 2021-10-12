@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "yamllint";
-  version = "1.26.1";
+  version = "1.26.3";
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-h9lGKz7X6d+hnKoXf3p3zZiIs9xARER9auCrIzvNEyQ=";
+    sha256 = "3934dcde484374596d6b52d8db412929a169f6d9e52e20f9ade5bf3523d9b96e";
   };
 
   propagatedBuildInputs = [

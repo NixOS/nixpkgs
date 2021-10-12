@@ -2,6 +2,7 @@
 , alsa-lib, bzip2, fontconfig, freetype, gnutls, libiconv, lame, libass, libogg
 , libssh, libtheora, libva, libdrm, libvorbis, libvpx, xz, libpulseaudio, soxr
 , x264, x265, xvidcore, zlib, libopus, speex, nv-codec-headers, dav1d
+, srt ? null
 , openglSupport ? false, libGLU ? null, libGL ? null
 , libmfxSupport ? false, intel-media-sdk ? null
 , libaomSupport ? false, libaom ? null
@@ -17,7 +18,8 @@
 # Darwin frameworks
 , Cocoa, darwinFrameworks ? [ Cocoa ]
 # Inherit generics
-, branch, sha256, version, patches ? [], knownVulnerabilities ? [], ...
+, branch, sha256, version, patches ? [], knownVulnerabilities ? []
+, doCheck ? true, ...
 }:
 
 /* Maintainer notes:
@@ -94,6 +96,7 @@ stdenv.mkDerivation rec {
     # Build flags
       "--enable-shared"
       (ifMinVer "0.6" "--enable-pic")
+      (ifMinVer "4.0" (enableFeature (srt != null) "libsrt"))
       (enableFeature runtimeCpuDetectBuild "runtime-cpudetect")
       "--enable-hardcoded-tables"
     ] ++
@@ -171,7 +174,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     bzip2 fontconfig freetype gnutls libiconv lame libass libogg libssh libtheora
-    libvorbis xz soxr x264 x265 xvidcore zlib libopus speex nv-codec-headers
+    libvorbis xz soxr x264 x265 xvidcore zlib libopus speex srt nv-codec-headers
   ] ++ optionals openglSupport [ libGL libGLU ]
     ++ optional libmfxSupport intel-media-sdk
     ++ optional libaomSupport libaom
@@ -187,7 +190,13 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  doCheck = false; # fails
+  inherit doCheck;
+  checkPhase = let
+    ldLibraryPathEnv = if stdenv.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH";
+  in ''
+    ${ldLibraryPathEnv}="libavcodec:libavdevice:libavfilter:libavformat:libavresample:libavutil:libpostproc:libswresample:libswscale:''${${ldLibraryPathEnv}}" \
+      make check -j$NIX_BUILD_CORES
+  '';
 
   # ffmpeg 3+ generates pkg-config (.pc) files that don't have the
   # form automatically handled by the multiple-outputs hooks.

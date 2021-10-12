@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  postInstall = optional nftablesCompat ''
+  postInstall = optionalString nftablesCompat ''
     rm $out/sbin/{iptables,iptables-restore,iptables-save,ip6tables,ip6tables-restore,ip6tables-save}
     ln -sv xtables-nft-multi $out/bin/iptables
     ln -sv xtables-nft-multi $out/bin/iptables-restore

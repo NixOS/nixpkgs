@@ -1,23 +1,28 @@
-{ lib, stdenv, fetchgit }:
+{ lib
+, trivialBuild
+, fetchFromGitHub
+, dictionary
+, emacs
+, helm
+}:
 
-stdenv.mkDerivation {
-  name = "helm-words-20190917";
+trivialBuild rec {
+  pname = "helm-words";
+  version = "0.pre+unstable=2019-03-12";
 
-  src = fetchgit {
-    url = "https://github.com/pronobis/helm-words.git";
+  src = fetchFromGitHub {
+    owner = "emacsmirror";
+    repo = pname;
     rev = "e6387ece1940a06695b9d910de3d90252efb8d29";
-    sha256 = "1ly0mbzlgc26fqvf7rxpmy698g0cf9qldrwrx022ar6r68l1h7xf";
+    hash = "sha256-rh8YKDLZZCUE6JnnRnFyDDyUjK+35+M2dkawR/+qwNM=";
   };
 
-  installPhase = ''
-    mkdir -p $out/share/emacs/site-lisp
-    cp *.el *.elc $out/share/emacs/site-lisp/
-  '';
+  packageRequires = [ helm dictionary ];
 
-  meta = {
-    description = "Emacs major mode for jade and stylus";
-    homepage = "https://github.com/brianc/helm-words";
-    license = lib.licenses.gpl3;
-    platforms = lib.platforms.all;
+  meta = with lib; {
+    homepage = "https://github.com/emacsmirror/helm-words";
+    description = "Helm extension for looking up words in dictionaries and thesauri";
+    license = licenses.gpl3Plus;
+    inherit (emacs.meta) platforms;
   };
 }

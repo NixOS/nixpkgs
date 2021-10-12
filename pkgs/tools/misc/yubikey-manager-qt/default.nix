@@ -14,11 +14,11 @@
 
 mkDerivation rec {
   pname = "yubikey-manager-qt";
-  version = "1.2.2";
+  version = "1.2.3";
 
   src = fetchurl {
     url = "https://developers.yubico.com/${pname}/Releases/${pname}-${version}.tar.gz";
-    sha256 = "1jqibv7na9h2r8nxgzp40j9qpyiwx97c65krivkcqjwdjk5lrahl";
+    sha256 = "sha256-54HvuJXjm846sBxwNHLmaBXvO24bbBDyK8YvY4I6LjY=";
   };
 
   nativeBuildInputs = [

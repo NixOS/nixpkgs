@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libaudec";
-  version = "0.2.4";
+  version = "0.3.4";
 
   src = fetchFromGitHub {
     owner = "zrythm";
     repo = "libaudec";
     rev = "v${version}";
-    sha256 = "1570m2dfia17dbkhd2qhx8jjihrpm7g8nnyg6n4wif4vv229s7dz";
+    sha256 = "sha256-8morbrq8zG+2N3ruMeJa85ci9P0wPQOfZ5H56diFEAo=";
   };
 
   buildInputs = [ libsndfile libsamplerate ];

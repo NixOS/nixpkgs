@@ -17,7 +17,7 @@ buildGoModule rec {
 
   subPackages = [ "cmd/nebula" "cmd/nebula-cert" ];
 
-  buildFlagsArray = [ "-ldflags=" "-X main.Build=${version}" ];
+  ldflags = [ "-X main.Build=${version}" ];
 
   meta = with lib; {
     description = "A scalable overlay networking tool with a focus on performance, simplicity and security";

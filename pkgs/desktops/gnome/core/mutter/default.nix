@@ -14,6 +14,7 @@
 , zenity
 , libcanberra
 , ninja
+, xvfb-run
 , xkeyboard_config
 , libxkbfile
 , libXdamage
@@ -45,13 +46,13 @@
 
 let self = stdenv.mkDerivation rec {
   pname = "mutter";
-  version = "40.1";
+  version = "41.0";
 
   outputs = [ "out" "dev" "man" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/mutter/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-pl8ycpYRM4KWh9QQcmfk4ZKQ5thueAf62H6rCDHB4MA=";
+    sha256 = "sha256-+oChp0QETYjr/Wd/8DID1ncF7SzWJOoGy7i1iUjN+J4=";
   };
 
   patches = [
@@ -90,6 +91,7 @@ let self = stdenv.mkDerivation rec {
     mesa # needed for gbm
     meson
     ninja
+    xvfb-run
     pkg-config
     python3
     wrapGAppsHook
@@ -134,7 +136,7 @@ let self = stdenv.mkDerivation rec {
   PKG_CONFIG_UDEV_UDEVDIR = "${placeholder "out"}/lib/udev";
 
   passthru = {
-    libdir = "${self}/lib/mutter-7";
+    libdir = "${self}/lib/mutter-8";
 
     tests = {
       libdirExists = runCommand "mutter-libdir-exists" {} ''

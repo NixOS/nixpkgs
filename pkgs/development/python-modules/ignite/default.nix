@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , pytestCheckHook
 , pytest-xdist
+, torchvision
 , pythonOlder
 , matplotlib
 , mock
@@ -14,16 +15,16 @@
 
 buildPythonPackage rec {
   pname = "ignite";
-  version = "0.4.5";
+  version = "0.4.6";
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-FGFpaqq7InwRqFmQTmXGpJEjRUB69ZN/l20l42L2BAA=";
+    sha256 = "sha256-dlKGXjUUnyYmPDilo0LQg9OkSkBnMYNgzlFLIfI0T6I=";
   };
 
-  checkInputs = [ pytestCheckHook matplotlib mock pytest-xdist ];
+  checkInputs = [ pytestCheckHook matplotlib mock pytest-xdist torchvision ];
   propagatedBuildInputs = [ pytorch scikit-learn tqdm pynvml ];
 
   # runs succesfully in 3.9, however, async isn't correctly closed so it will fail after test suite.
@@ -38,6 +39,7 @@ buildPythonPackage rec {
     "--ignore=tests/ignite/contrib/handlers/test_trains_logger.py"
     "--ignore=tests/ignite/metrics/nlp/test_bleu.py"
     "--ignore=tests/ignite/metrics/nlp/test_rouge.py"
+    "--ignore=tests/ignite/metrics/gan" # requires pytorch_fid; tries to download model to $HOME
     "--ignore=tests/ignite/metrics/test_dill.py"
     "--ignore=tests/ignite/metrics/test_psnr.py"
     "--ignore=tests/ignite/metrics/test_ssim.py"

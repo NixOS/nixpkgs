@@ -15,7 +15,7 @@ in {
 
       package = mkOption {
         default = pkgs.telegraf;
-        defaultText = "pkgs.telegraf";
+        defaultText = literalExpression "pkgs.telegraf";
         description = "Which telegraf derivation to use";
         type = types.package;
       };
@@ -23,7 +23,7 @@ in {
       environmentFiles = mkOption {
         type = types.listOf types.path;
         default = [];
-        example = "/run/keys/telegraf.env";
+        example = [ "/run/keys/telegraf.env" ];
         description = ''
           File to load as environment file. Environment variables from this file
           will be interpolated into the config file using envsubst with this

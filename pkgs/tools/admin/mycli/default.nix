@@ -20,7 +20,7 @@ buildPythonApplication rec {
     configobj
     importlib-resources
     paramiko
-    prompt_toolkit
+    prompt-toolkit
     pyaes
     pycrypto
     pygments

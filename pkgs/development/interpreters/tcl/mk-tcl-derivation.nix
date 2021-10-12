@@ -39,8 +39,8 @@ let
     "addTclConfigureFlags" "checkPhase" "checkInputs" "doCheck"
   ]) // {
 
-    buildInputs = buildInputs ++ [ makeWrapper tcl.tclPackageHook ];
-    nativeBuildInputs = nativeBuildInputs ++ [ tcl ];
+    buildInputs = buildInputs ++ [ tcl.tclPackageHook ];
+    nativeBuildInputs = nativeBuildInputs ++ [ makeWrapper tcl ];
     propagatedBuildInputs = propagatedBuildInputs ++ [ tcl ];
 
     TCLSH = "${getBin tcl}/bin/tclsh";

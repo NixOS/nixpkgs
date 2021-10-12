@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mcelog";
-  version = "175";
+  version = "178";
 
   src = fetchFromGitHub {
     owner  = "andikleen";
     repo   = "mcelog";
     rev    = "v${version}";
-    sha256 = "sha256-Xzbck/nRdTR9H5o2XVFlFdNLz2ve65KEcefKAKe0eW8=";
+    sha256 = "sha256-++R/R3oRw0O0MoDnASdVr9UIiI0yS4UcIO8nV62PLzE=";
   };
 
   postPatch = ''
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
       errors are logged to /var/log/mcelog or syslog or the journal.
     '';
     homepage = "http://mcelog.org/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };
 }

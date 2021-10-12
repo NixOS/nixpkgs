@@ -287,7 +287,7 @@ in rec {
       rev    = "jvmci-${version}";
       sha256 =  "0j7my76vldbrvki9x1gn9ics3x2z96j05jdy4nflbpik8i396114";
     };
-    buildInputs = [ mx mercurial openjdk ] ++ lib.optional stdenv.isDarwin [
+    buildInputs = [ mx mercurial openjdk ] ++ lib.optionals stdenv.isDarwin [
       libobjc CoreFoundation Foundation JavaNativeFoundation JavaRuntimeSupport JavaVM xcodebuild Cocoa
     ];
     postUnpack = ''
@@ -370,9 +370,11 @@ in rec {
                 ./009_remove_signedness_verifier.patch ./010_mx_substratevm.py
               ];
 
+    nativeBuildInputs = [ gfortran ];
+
     buildInputs = [ mx zlib.dev mercurial jvmci8 git llvm clang
                     python27withPackages icu ruby bzip2 which
-                    readline bzip2 xz pcre curl ed gfortran
+                    readline bzip2 xz pcre curl ed
                   ]  ++ lib.optional stdenv.isDarwin [
                     CoreFoundation gcc.cc.lib libiconv perl openssl
                   ];

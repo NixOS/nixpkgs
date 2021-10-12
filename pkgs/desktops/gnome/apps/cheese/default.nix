@@ -2,7 +2,6 @@
 , stdenv
 , gettext
 , fetchurl
-, fetchpatch
 , wrapGAppsHook
 , gnome-video-effects
 , libcanberra-gtk3
@@ -30,26 +29,19 @@
 , ninja
 , dbus
 , python3
+, pipewire
 }:
 
 stdenv.mkDerivation rec {
   pname = "cheese";
-  version = "3.38.0";
+  version = "41.0";
 
   outputs = [ "out" "man" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/cheese/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0vyim2avlgq3a48rgdfz5g21kqk11mfb53b2l883340v88mp7ll8";
+    url = "mirror://gnome/sources/cheese/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    sha256 = "EG8d9n4c9Bwqp5yZveZ2rskA2wNstSX6EIObBhh9Ivk=";
   };
-
-  patches = [
-    # Fix build with latest Vala or GLib
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/cheese/commit/7cf6268e54620bbbe5e6e61800c50fb0cb4bea57.patch";
-      sha256 = "WJgGNrpZLTahe7Sxr8HdTl+4Mf4VcmJb6DdiInlDcT4=";
-    })
-  ];
 
   nativeBuildInputs = [
     appstream-glib
@@ -85,6 +77,7 @@ stdenv.mkDerivation rec {
     gtk3
     libcanberra-gtk3
     librsvg
+    pipewire # PipeWire provides a gstreamer plugin for using PipeWire for video
   ];
 
   postPatch = ''

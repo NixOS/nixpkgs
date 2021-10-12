@@ -6,14 +6,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "libva-${lib.optionalString minimal "minimal-"}${version}";
-  version = "2.12.0";
+  pname = "libva" + lib.optionalString minimal "minimal";
+  version = "2.13.0";
 
   src = fetchFromGitHub {
     owner  = "intel";
     repo   = "libva";
     rev    = version;
-    sha256 = "1zfv4kjx0715sy62lkpv0s31f9xwy232z5zwqi5all4w1jr630i7";
+    sha256 = "0vsvli3xc0gqqp06p7wkm973lhr7c5qgnyz5jfjmf8kv75rajazp";
   };
 
   outputs = [ "dev" "out" ];
@@ -25,8 +25,8 @@ stdenv.mkDerivation rec {
   # TODO: share libs between minimal and !minimal - perhaps just symlink them
 
   mesonFlags = [
-    # Add FHS paths for non-NixOS applications:
-    "-Ddriverdir=${mesa.drivers.driverLink}/lib/dri:/usr/lib/dri:/usr/lib32/dri"
+    # Add FHS and Debian paths for non-NixOS applications
+    "-Ddriverdir=${mesa.drivers.driverLink}/lib/dri:/usr/lib/dri:/usr/lib32/dri:/usr/lib/x86_64-linux-gnu/dri:/usr/lib/i386-linux-gnu/dri"
   ];
 
   meta = with lib; {

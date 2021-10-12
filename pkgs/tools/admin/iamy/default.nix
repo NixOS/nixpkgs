@@ -15,9 +15,9 @@ buildGoModule rec {
 
   doCheck = false;
 
-  buildFlagsArray = [''-ldflags=
-    -X main.Version=v${version} -s -w
-  ''];
+  ldflags = [
+    "-X main.Version=v${version}" "-s" "-w"
+  ];
 
   meta = with lib; {
     description = "A cli tool for importing and exporting AWS IAM configuration to YAML files";

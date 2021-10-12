@@ -1,15 +1,27 @@
 { stable, branch, version, sha256Hash, mkOverride, commonOverrides }:
 
-{ lib, python3, fetchFromGitHub }:
+{ lib, python3, fetchFromGitHub, packageOverrides ? self: super: {}
+ }:
 
 let
   defaultOverrides = commonOverrides ++ [
-    (mkOverride "aiofiles" "0.5.0"
-      "98e6bcfd1b50f97db4980e182ddd509b7cc35909e903a8fe50d8849e02d815af")
+    (self: super: {
+      aiofiles = super.aiofiles.overridePythonAttrs (oldAttrs: rec {
+        pname = "aiofiles";
+        version = "0.5.0";
+        src = fetchFromGitHub {
+          owner = "Tinche";
+          repo = pname;
+          rev = "v${version}";
+          sha256 = "17bsg2x5r0q6jy74hajnbp717pvbf752w0wgih6pbb4hdvfg5lcf";
+        };
+        doCheck = false;
+      });
+    })
   ];
 
   python = python3.override {
-    packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) defaultOverrides;
+    packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) ([ packageOverrides ] ++ defaultOverrides);
   };
 in python.pkgs.buildPythonPackage {
   pname = "gns3-server";
@@ -31,7 +43,7 @@ in python.pkgs.buildPythonPackage {
   propagatedBuildInputs = with python.pkgs; [
     aiohttp-cors yarl aiohttp multidict setuptools
     jinja2 psutil zipstream sentry-sdk jsonschema distro async_generator aiofiles
-    prompt_toolkit py-cpuinfo
+    prompt-toolkit py-cpuinfo
   ];
 
   # Requires network access

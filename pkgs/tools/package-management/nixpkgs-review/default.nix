@@ -17,7 +17,7 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   makeWrapperArgs = [
-    "--prefix" "PATH" ":" (lib.makeBinPath [ nixUnstable git ])
+    "--prefix" "PATH" ":" "${lib.makeBinPath [ nixUnstable git ]}"
   ];
 
   doCheck = false;
@@ -26,6 +26,6 @@ python3.pkgs.buildPythonApplication rec {
     description = "Review pull-requests on https://github.com/NixOS/nixpkgs";
     homepage = "https://github.com/Mic92/nixpkgs-review";
     license = licenses.mit;
-    maintainers = [ maintainers.mic92 ];
+    maintainers = with maintainers; [ mic92 SuperSandro2000 ];
   };
 }

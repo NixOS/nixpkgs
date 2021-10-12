@@ -21,15 +21,51 @@ let
   # The Group can vary depending on what the user has specified in
   # security.acme.certs.<cert>.group on some of the services.
   commonServiceConfig = {
-      Type = "oneshot";
-      User = "acme";
-      Group = mkDefault "acme";
-      UMask = 0022;
-      StateDirectoryMode = 750;
-      ProtectSystem = "full";
-      PrivateTmp = true;
+    Type = "oneshot";
+    User = "acme";
+    Group = mkDefault "acme";
+    UMask = 0022;
+    StateDirectoryMode = 750;
+    ProtectSystem = "strict";
+    ReadWritePaths = [
+      "/var/lib/acme"
+    ];
+    PrivateTmp = true;
 
-      WorkingDirectory = "/tmp";
+    WorkingDirectory = "/tmp";
+
+    CapabilityBoundingSet = [ "" ];
+    DevicePolicy = "closed";
+    LockPersonality = true;
+    MemoryDenyWriteExecute = true;
+    NoNewPrivileges = true;
+    PrivateDevices = true;
+    ProtectClock = true;
+    ProtectHome = true;
+    ProtectHostname = true;
+    ProtectControlGroups = true;
+    ProtectKernelLogs = true;
+    ProtectKernelModules = true;
+    ProtectKernelTunables = true;
+    ProtectProc = "invisible";
+    ProcSubset = "pid";
+    RemoveIPC = true;
+    RestrictAddressFamilies = [
+      "AF_INET"
+      "AF_INET6"
+    ];
+    RestrictNamespaces = true;
+    RestrictRealtime = true;
+    RestrictSUIDSGID = true;
+    SystemCallArchitectures = "native";
+    SystemCallFilter = [
+      # 1. allow a reasonable set of syscalls
+      "@system-service"
+      # 2. and deny unreasonable ones
+      "~@privileged @resources"
+      # 3. then allow the required subset within denied groups
+      "@chown"
+    ];
   };
 
   # In order to avoid race conditions creating the CA for selfsigned certs,
@@ -450,7 +486,7 @@ let
       extraDomainNames = mkOption {
         type = types.listOf types.str;
         default = [];
-        example = literalExample ''
+        example = literalExpression ''
           [
             "example.org"
             "mydomain.org"
@@ -620,7 +656,7 @@ in {
           to those units if they rely on the certificates being present,
           or trigger restarts of the service if certificates get renewed.
         '';
-        example = literalExample ''
+        example = literalExpression ''
           {
             "example.com" = {
               webroot = "/var/lib/acme/acme-challenge/";

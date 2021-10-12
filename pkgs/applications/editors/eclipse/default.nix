@@ -16,10 +16,10 @@ assert stdenv ? glibc;
 
 let
   platform_major = "4";
-  platform_minor = "19";
+  platform_minor = "21";
   year = "2021";
-  month = "03";
-  timestamp = "${year}${month}031800";
+  month = "09";
+  timestamp = "${year}${month}060500";
   gtk = gtk3;
 in rec {
 
@@ -37,7 +37,7 @@ in rec {
     src =
       fetchurl {
         url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/${year}-${month}/R/eclipse-cpp-${year}-${month}-R-linux-gtk-x86_64.tar.gz";
-        sha512 = "3j0lmll0glcr9p0hf49jiaq9xr8hadsy0y58wbbkdpldj3rclxr056dkswmiw2bkypfiwrjygbli5qxyp6mz380562hc2kjwijqq476";
+        sha512 = "3xdj7b0mlhdys9q4l19kkf1hm0d67dwx55gzfmgv90nvswv0jhyvs42my4wrlrmkh6lz8m0z6dakadhl1bxf2fd8pdp5sm4bv0w0gwc";
       };
   };
 
@@ -49,7 +49,7 @@ in rec {
     src =
       fetchurl {
         url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/${year}-${month}/R/eclipse-modeling-${year}-${month}-R-linux-gtk-x86_64.tar.gz";
-        sha512 = "0iqz9a3ixcbmaci6lnspdnzwd2h1fcygi54hmsl89pq3d1k5scyhcl123ixi24csi782w847bn0lq00n0zwras9akmnhsflra4mw5pz";
+        sha512 = "20xy4vzqlmg4sdvqimz2nc212vb45k5kwh40qagm13r6h3vfv3yrl8bznnappaf4msfa9xdaxns2kz0x94hw444zjmrnbf7614a48xi";
       };
   };
 
@@ -61,7 +61,7 @@ in rec {
     src =
       fetchurl {
         url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops${platform_major}/R-${platform_major}.${platform_minor}-${timestamp}/eclipse-platform-${platform_major}.${platform_minor}-linux-gtk-x86_64.tar.gz";
-        sha512 = "03v1ly7j9d9qnl3d9rl5a9kp483dz8i8v3cfnh55ksm9fk8iy2fzg6wq178ggnx2z5x9k88a4wk6n647yilh2hgc2l7926imkh2j1ly";
+        sha512 = "29hab3ha3spk0048k3mf2x5m80hlh1l6nazsykx0xxrqy9vdkdibv6mq74dzf1n93h1bd5qh9axicnhs465kp7r1irdl04761c1wibi";
       };
   };
 
@@ -86,7 +86,7 @@ in rec {
     src =
       fetchurl {
         url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops${platform_major}/R-${platform_major}.${platform_minor}-${timestamp}/eclipse-SDK-${platform_major}.${platform_minor}-linux-gtk-x86_64.tar.gz";
-        sha512 = "37m91my121pch12bwpwk5svfqkm7vl07wjx4fkhpy947v5kjf36hm6x0i45swdg7f0hk72y2qz5ka15ki5jv890qy5psj6z7ax9sys7";
+        sha512 = "3ag7nfpnn1149gkva58x0037pbdb5wds0qpwv21lif7a6b1a1n7g2n056bn43a7fkxkkj38752gkz29nvqh5g8hqkg29lax8sjlm7sm";
       };
   };
 
@@ -98,7 +98,7 @@ in rec {
     src =
       fetchurl {
         url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/${year}-${month}/R/eclipse-java-${year}-${month}-R-linux-gtk-x86_64.tar.gz";
-        sha512 = "3qrnj6krhrqc9rfwlim3v7kshwfhsi050pszw6xdfbj56mzr9whr7l76isbpxd5j0zipgfw3qrzrx379pdp899d35fv284ilvllzl4k";
+        sha512 = "27h5wjr4k0jhi256rk74kbjbm5h7xi4hbml89n1jhppq1yfyv2mf75zb32iaia2pxclx6hc0cd1hvq85fwvcshnq79fw8za687yvbhv";
       };
   };
 
@@ -110,7 +110,7 @@ in rec {
     src =
       fetchurl {
         url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/${year}-${month}/R/eclipse-jee-${year}-${month}-R-linux-gtk-x86_64.tar.gz";
-        sha512 = "04k4x9imabxddqlrgajn33ak8i58wcap40ll09xz23d1sxn9a8prh01s06ymgwg6ldg939srphvbz4112p8p0b1hl7m25a02qll91zv";
+        sha512 = "03li2bkhkdybwp411xs8i3cp2hmrfg2xd7inbdsxh07y4b9806spi3q10vga97m7ngl6fl5n0mvgxwj8dbdvp133wn9mgrlajb1n4n8";
       };
   };
 
@@ -122,7 +122,7 @@ in rec {
     src =
       fetchurl {
         url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/${year}-${month}/R/eclipse-committers-${year}-${month}-R-linux-gtk-x86_64.tar.gz";
-        sha512 = "2yksl3w7yr1a3h4zdpa9zf394r5c185zqxhigdv858ldg46kmr9h0l2c7shbgb16kkybcnrk4x44dhjvh60x8xw6ma05klp4lp9v5va";
+        sha512 = "38xwwvg59bdp0a6brmcvq0wlfikik0wnqq897abf5a8vyr0ci7xp5f4ii90x2l5sj5gmcc6jiwvi99c03cjbgivpalr741yka0p3pv5";
       };
   };
 
@@ -134,7 +134,7 @@ in rec {
     src =
       fetchurl {
         url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/${year}-${month}/R/eclipse-rcp-${year}-${month}-R-linux-gtk-x86_64.tar.gz";
-        sha512 = "3fhrhwbyqcys56c93s1vl9rbvn269nn5y3cb9f3n1qwgw6i97mim2zy98jl3r8cksf97jwsmqmsqclsgz9v799wcckv81dj1l628382";
+        sha512 = "30hhy83lmjldcwwbjpk5q9zjai5r3xyhlrddalgrw8mspknayncaa2l32gg327fw0a8qaakzgwkh68gj81pmk3dps5wzy881pf22dhc";
       };
   };
 

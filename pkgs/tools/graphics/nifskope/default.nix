@@ -35,8 +35,6 @@ stdenv.mkDerivation {
     done
   '';
 
-  enableParallelBuilding = true;
-
   # Inspired by install/linux-install/nifskope.spec.in.
   installPhase = ''
     runHook preInstall
@@ -62,7 +60,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     homepage = "http://niftools.sourceforge.net/wiki/NifSkope";
     description = "A tool for analyzing and editing NetImmerse/Gamebryo '*.nif' files";
-    maintainers = with maintainers; [ eelco ma27 ];
+    maintainers = with maintainers; [ eelco ];
     platforms = platforms.linux;
     license = licenses.bsd3;
   };

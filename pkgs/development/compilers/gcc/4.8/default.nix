@@ -86,6 +86,13 @@ let majorVersion = "4";
         ../struct-ucontext-4.8.patch
         ../sigsegv-not-declared.patch
         ../res_state-not-declared.patch
+        # gcc-11 compatibility
+        (fetchpatch {
+          name = "gcc4-char-reload.patch";
+          url = "https://gcc.gnu.org/git/?p=gcc.git;a=commitdiff_plain;h=d57c99458933a21fdf94f508191f145ad8d5ec58";
+          includes = [ "gcc/reload.h" ];
+          sha256 = "sha256-66AMP7/ajunGKAN5WJz/yPn42URZ2KN51yPrFdsxEuM=";
+        })
       ];
 
     javaEcj = fetchurl {

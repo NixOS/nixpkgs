@@ -20,7 +20,7 @@
 , requests
 , send2trash
 , pexpect
-, prometheus_client
+, prometheus-client
 }:
 
 buildPythonPackage rec {
@@ -40,7 +40,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     jinja2 tornado ipython_genutils traitlets jupyter_core send2trash
     jupyter_client nbformat nbconvert ipykernel terminado requests pexpect
-    prometheus_client
+    prometheus-client
   ];
 
   # disable warning_filters

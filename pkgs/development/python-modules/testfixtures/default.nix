@@ -1,25 +1,44 @@
-{ lib, buildPythonPackage, fetchPypi, fetchpatch, isPy27
-, mock, pytest, sybil, zope_component, twisted }:
+{ lib
+, buildPythonPackage
+, fetchpatch
+, fetchPypi
+, isPy27
+, mock
+, pytestCheckHook
+, sybil
+, twisted
+, zope_component
+}:
 
 buildPythonPackage rec {
   pname = "testfixtures";
-  version = "6.17.1";
+  version = "6.18.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5ec3a0dd6f71cc4c304fbc024a10cc293d3e0b852c868014b9f233203e149bda";
+    sha256 = "sha256-JgAQCulv/QgjNLN441VVD++LSlKab6TDT0cTCQXHQm0=";
   };
 
-  checkInputs = [ pytest mock sybil zope_component twisted ];
+  checkInputs = [
+    pytestCheckHook
+    mock
+    sybil
+    zope_component
+    twisted
+  ];
 
   doCheck = !isPy27;
-  checkPhase = ''
-    # django is too much hasle to setup at the moment
-    pytest -W ignore::DeprecationWarning \
-      --ignore=testfixtures/tests/test_django \
-      -k 'not (log_then_patch or our_wrap_dealing_with_mock_patch or patch_with_dict)' \
-      testfixtures/tests
-  '';
+
+  disabledTestPaths = [
+    # Django is too much hasle to setup at the moment
+    "testfixtures/tests/test_django"
+  ];
+
+  pytestFlagsArray = [
+    "testfixtures/tests"
+  ];
+
+  pythonImportsCheck = [ "testfixtures" ];
 
   meta = with lib; {
     homepage = "https://github.com/Simplistix/testfixtures";

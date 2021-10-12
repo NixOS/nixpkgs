@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "celery";
-  version = "5.1.1";
+  version = "5.1.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "54436cd97b031bf2e08064223240e2a83d601d9414bcb1b702f94c6c33c29485";
+    sha256 = "8d9a3de9162965e97f8e8cc584c67aad83b3f7a267584fa47701ed11c3e0d4b0";
   };
 
   # click  is only used for the repl, in most cases this shouldn't impact

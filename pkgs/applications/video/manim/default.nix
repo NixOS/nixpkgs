@@ -44,7 +44,7 @@ buildPythonApplication rec {
       python3 manim.py example_scenes.py $scene -l
       tail -n 20 files/Tex/*.log  # Print potential LaTeX erorrs
       ${file}/bin/file videos/example_scenes/480p15/$scene.mp4 \
-        | tee | grep -F "ISO Media, MP4 Base Media v1 [IS0 14496-12:2003]"
+        | tee | grep -F "ISO Media, MP4 Base Media v1 [ISO 14496-12:2003]"
     done
   '';
 

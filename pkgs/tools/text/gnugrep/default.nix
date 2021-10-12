@@ -60,6 +60,7 @@ stdenv.mkDerivation {
 
     maintainers = [ maintainers.eelco ];
     platforms = platforms.all;
+    mainProgram = "grep";
   };
 
   passthru = {inherit pcre;};

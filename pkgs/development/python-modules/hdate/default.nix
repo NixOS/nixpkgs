@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "hdate";
-  version = "0.10.3";
+  version = "0.10.4";
   disabled = pythonOlder "3.6";
   format = "pyproject";
 
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "py-libhdate";
     repo = "py-libhdate";
     rev = "v${version}";
-    sha256 = "sha256-6rOsG6qgq4woBhj25SNWvKshvFLBL/6MJiBZb+NPvdk=";
+    sha256 = "sha256-NF2ZA9ruW7sL2tLY11VAtyPRxGg2o5/mpv3ZsH/Zxb8=";
   };
 
   nativeBuildInputs = [

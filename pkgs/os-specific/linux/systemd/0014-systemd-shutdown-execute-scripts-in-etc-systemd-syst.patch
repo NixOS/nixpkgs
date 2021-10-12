@@ -1,4 +1,4 @@
-From 8f619304804b02f4e9d7a340ca90359f96adc6e8 Mon Sep 17 00:00:00 2001
+From 31732478745f7a200004fb8ec013f54dbc536f2e Mon Sep 17 00:00:00 2001
 From: Nikolay Amiantov <ab@fmap.me>
 Date: Thu, 25 Jul 2019 20:45:55 +0300
 Subject: [PATCH 14/19] systemd-shutdown: execute scripts in
@@ -10,7 +10,7 @@ This is needed for NixOS to use such scripts as systemd directory is immutable.
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/src/shutdown/shutdown.c b/src/shutdown/shutdown.c
-index 0d07865542..26d974ef73 100644
+index a98cfc4d8a..b0b34edda7 100644
 --- a/src/shutdown/shutdown.c
 +++ b/src/shutdown/shutdown.c
 @@ -312,7 +312,7 @@ int main(int argc, char *argv[]) {
@@ -23,5 +23,5 @@ index 0d07865542..26d974ef73 100644
          /* The log target defaults to console, but the original systemd process will pass its log target in through a
           * command line argument, which will override this default. Also, ensure we'll never log to the journal or
 -- 
-2.30.1
+2.32.0
 

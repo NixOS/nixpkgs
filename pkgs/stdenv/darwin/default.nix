@@ -268,6 +268,12 @@ rec {
               ${bootstrapTools}/bin/codesign > $out/bin/codesign
             chmod a+x $out/bin/codesign
           '';
+          # on next bootstrap tools update, use the following:
+          # installPhase = ''
+          #   mkdir -p $out/bin
+          #   ln -s ${bootstrapTools}/bin/sigtool  $out/bin
+          #   ln -s ${bootstrapTools}/bin/codesign $out/bin
+          # '';
         };
 
         print-reexports = stdenv.mkDerivation {

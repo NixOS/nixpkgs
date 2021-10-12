@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "which-2.21";
+  pname = "which";
+  version = "2.21";
 
   src = fetchurl {
-    url = "mirror://gnu/which/${name}.tar.gz";
+    url = "mirror://gnu/which/which-${version}.tar.gz";
     sha256 = "1bgafvy3ypbhhfznwjv1lxmd6mci3x1byilnnkc7gcr486wlb8pl";
   };
 

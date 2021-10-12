@@ -24,11 +24,11 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "postfix";
-  version = "3.6.1";
+  version = "3.6.2";
 
   src = fetchurl {
-    url = "ftp://ftp.cs.uu.nl/mirror/postfix/postfix-release/official/${pname}-${version}.tar.gz";
-    sha256 = "sha256-IKgFYlYB57lZiSIIMsj6FM43TwcR2gVBiPjOxqkv1xw=";
+    url = "http://cdn.postfix.johnriley.me/mirrors/postfix-release/official/${pname}-${version}.tar.gz";
+    sha256 = "sha256-UHMj0g17P3BfSc+MB9Q3xtgJC+0H4Vo8DsQF7a1Up9Q=";
   };
 
   nativeBuildInputs = [ makeWrapper m4 ];
@@ -101,6 +101,6 @@ in stdenv.mkDerivation rec {
     description = "A fast, easy to administer, and secure mail server";
     license = with licenses; [ ipl10 epl20 ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ globin dotlambda ];
+    maintainers = with maintainers; [ globin dotlambda lewo ];
   };
 }

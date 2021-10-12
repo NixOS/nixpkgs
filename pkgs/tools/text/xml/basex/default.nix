@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   desktopItem = makeDesktopItem {
     name = "basex";
     exec = "basexgui %f";
-    icon = ./basex.svg; # icon copied from Ubuntu basex package
+    icon = "${./basex.svg}"; # icon copied from Ubuntu basex package
     comment = "Visually query and analyse your XML data";
     desktopName = "BaseX XML Database";
     genericName = "XML database tool";

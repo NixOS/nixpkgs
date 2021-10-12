@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  nativeBuildInputs = [ cmake pkg-config git ];
-  buildInputs = [ gfortran mpi blas liblapack qt4 qwt6_qt4 ];
+  nativeBuildInputs = [ cmake gfortran pkg-config git ];
+  buildInputs = [ mpi blas liblapack qt4 qwt6_qt4 ];
 
   preConfigure = ''
     patchShebangs ./

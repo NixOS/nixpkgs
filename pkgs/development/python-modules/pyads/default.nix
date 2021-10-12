@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "pyads";
-  version = "3.3.7";
+  version = "3.3.8";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "stlehmann";
     repo = pname;
     rev = version;
-    sha256 = "sha256-h3c6z+dmrOc1Q7E8YVJZJD2FsxoxqQX5J92SEweIpto=";
+    sha256 = "sha256-jhEVBndUOKM8rBX0LEqPTMLqbpizCiD7T+OCzbVgLM8=";
   };
 
   buildInputs = [

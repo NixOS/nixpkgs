@@ -40,7 +40,8 @@ stdenv.mkDerivation rec {
   postPatch = ''
     for f in indi-qsi/CMakeLists.txt \
              indi-dsi/CMakeLists.txt \
-             indi-armadillo-platypus/CMakeLists.txt
+             indi-armadillo-platypus/CMakeLists.txt \
+             indi-orion-ssg3/CMakeLists.txt
     do
       substituteInPlace $f \
         --replace "/lib/udev/rules.d" "lib/udev/rules.d" \

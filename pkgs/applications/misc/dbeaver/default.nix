@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dbeaver";
-  version = "21.1.2"; # When updating also update fetchedMavenDeps.sha256
+  version = "21.2.2"; # When updating also update fetchedMavenDeps.sha256
 
   src = fetchFromGitHub {
     owner = "dbeaver";
     repo = "dbeaver";
     rev = version;
-    sha256 = "sha256-3q5LTllyqw7s8unJHTuasBCM4iaJ9lLpwgbXwBGUtIw=";
+    sha256 = "6FQd7UGX19Ez/updybia/tzl+9GYyPPzPGFsV67Enq0=";
   };
 
   fetchedMavenDeps = stdenv.mkDerivation {
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     dontFixup = true;
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "sha256-QPDnIXP3yB1Dn0LBbBBLvRDbCyguWvG9Zzb1Vjh72UA=";
+    outputHash = "VHOIK6sOAP+O9HicUiE2avLcppRzocPUf1XIcyuGw30=";
   };
 
   nativeBuildInputs = [
@@ -150,6 +150,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.asl20;
     platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" ];
-    maintainers = with maintainers; [ jojosch ];
+    maintainers = with maintainers; [ jojosch mkg20001 ];
   };
 }

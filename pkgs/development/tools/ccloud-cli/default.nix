@@ -2,19 +2,21 @@
 
 stdenv.mkDerivation rec {
   pname = "ccloud-cli";
-  version = "1.25.0";
+  version = "1.39.0";
 
   # To get the latest version:
   # curl -L https://cnfl.io/ccloud-cli | sh -s -- -l | grep -v latest | sort -V | tail -n1
   src = fetchurl (if stdenv.hostPlatform.isDarwin then {
       url = "https://s3-us-west-2.amazonaws.com/confluent.cloud/ccloud-cli/archives/${version}/ccloud_v${version}_darwin_amd64.tar.gz";
-      sha256 = "0306jg36dpccwyy239r2xvw3bvsrnrdc88390g26fhcb0048qmgb";
+      sha256 = "0jqpmnx3izl4gv02zpx03z6ayi3cb5if4rnyl1374yaclx44k1gd";
     } else {
       url = "https://s3-us-west-2.amazonaws.com/confluent.cloud/ccloud-cli/archives/${version}/ccloud_v${version}_linux_amd64.tar.gz";
-      sha256 = "02sly7cxqlrfd6chamlp05k9ar93mpfrkx5183js0hf595nlki61";
+      sha256 = "0936hipcl37w4mzzsnjlz4q1z4j9094i4irigzqwg14gdbs7p11s";
     });
 
   nativeBuildInputs = [ autoPatchelfHook ];
+
+  dontStrip = stdenv.isDarwin;
 
   installPhase = ''
     mkdir -p $out/{bin,share/doc/ccloud-cli}

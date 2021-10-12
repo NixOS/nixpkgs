@@ -2,21 +2,21 @@
 
 stdenv.mkDerivation rec {
   pname = "sambamba";
-  version = "0.8.0";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "biod";
     repo = "sambamba";
     rev = "v${version}";
-    sha256 = "sha256:0kx5a0fmvv9ldz2hnh7qavgf7711kqc73zxf51k4cca4hr58zxr9";
+    sha256 = "0f4qngnys2zjb0ri54k6kxqnssg938mnnscs4z9713hjn41rk7yd";
     fetchSubmodules = true;
   };
 
   patches = [
-    # Fixes hardcoded gcc, making clang build possible.
+    # make ldc 1.27.1 compatible
     (fetchpatch {
-      url = "https://github.com/biod/sambamba/commit/c50a1c91e1ba062635467f197139bf6784e9be15.patch";
-      sha256 = "1y0vlybmb9wpg4z1nca7m96mk9hxmvd3yrg7w8rxscj45hcqvf8q";
+      url = "https://github.com/biod/sambamba/pull/480/commits/b5c80feb62683d24ec0529f685a1d7a36962a1d4.patch";
+      sha256 = "0yr9baxqbhyb4scwcwczk77z8gazhkl60jllhz9dnrb7p5qsvs7r";
     })
   ];
 

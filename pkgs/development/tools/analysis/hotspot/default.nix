@@ -1,18 +1,22 @@
-{ lib,
-  mkDerivation,
-  cmake,
-  elfutils,
-  extra-cmake-modules,
-  fetchFromGitHub,
-  kconfigwidgets,
-  ki18n,
-  kio,
-  kitemmodels,
-  kitemviews,
-  kwindowsystem,
-  libelf,
-  qtbase,
-  threadweaver,
+{ lib
+, mkDerivation
+, cmake
+, elfutils
+, extra-cmake-modules
+, fetchFromGitHub
+, kconfigwidgets
+, ki18n
+, kio
+, kitemmodels
+, kitemviews
+, kwindowsystem
+, libelf
+, qtbase
+, threadweaver
+, qtx11extras
+, zstd
+, kddockwidgets
+, rustc-demangle
 }:
 
 mkDerivation rec {
@@ -27,10 +31,12 @@ mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    extra-cmake-modules
+  ];
   buildInputs = [
     elfutils
-    extra-cmake-modules
     kconfigwidgets
     ki18n
     kio
@@ -40,6 +46,10 @@ mkDerivation rec {
     libelf
     qtbase
     threadweaver
+    qtx11extras
+    zstd
+    kddockwidgets
+    rustc-demangle
   ];
 
   # hotspot checks for the presence of third party libraries'
@@ -47,8 +57,13 @@ mkDerivation rec {
   # submodules; but Nix clones them and removes .git (for reproducibility).
   # So we need to fake their existence here.
   postPatch = ''
-    mkdir -p 3rdparty/perfparser/.git
+    mkdir -p 3rdparty/{perfparser,PrefixTickLabels}/.git
   '';
+
+  cmakeFlags = [
+    "-DRUSTC_DEMANGLE_INCLUDE_DIR=${rustc-demangle}/include"
+    "-DRUSTC_DEMANGLE_LIBRARY=${rustc-demangle}/lib/librustc_demangle.so"
+  ];
 
   meta = {
     description = "A GUI for Linux perf";
@@ -58,7 +73,7 @@ mkDerivation rec {
       then displays the result in a graphical way.
     '';
     homepage = "https://github.com/KDAB/hotspot";
-    license = with lib.licenses; [ gpl2 gpl3 ];
+    license = with lib.licenses; [ gpl2Only gpl3Only ];
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ nh2 ];
   };

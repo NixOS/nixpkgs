@@ -33,12 +33,11 @@ buildGoModule rec {
 
   buildInputs = [ bzip2 lz4 rocksdb snappy zeromq zlib ];
 
-  buildFlagsArray = ''
-    -ldflags=
-       -X github.com/trezor/blockbook/common.version=${version}
-       -X github.com/trezor/blockbook/common.gitcommit=${commit}
-       -X github.com/trezor/blockbook/common.buildDate=unknown
-  '';
+  ldflags = [
+    "-X github.com/trezor/blockbook/common.version=${version}"
+    "-X github.com/trezor/blockbook/common.gitcommit=${commit}"
+    "-X github.com/trezor/blockbook/common.buildDate=unknown"
+  ];
 
   preBuild = lib.optionalString stdenv.isDarwin ''
     ulimit -n 8192

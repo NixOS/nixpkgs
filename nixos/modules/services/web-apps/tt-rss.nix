@@ -6,10 +6,6 @@ let
 
   configVersion = 26;
 
-  cacheDir = "cache";
-  lockDir = "lock";
-  feedIconsDir = "feed-icons";
-
   dbPort = if cfg.database.port == null
     then (if cfg.database.type == "pgsql" then 5432 else 3306)
     else cfg.database.port;
@@ -19,84 +15,102 @@ let
   mysqlLocal = cfg.database.createLocally && cfg.database.type == "mysql";
   pgsqlLocal = cfg.database.createLocally && cfg.database.type == "pgsql";
 
-  tt-rss-config = pkgs.writeText "config.php" ''
+  tt-rss-config = let
+    password =
+      if (cfg.database.password != null) then
+        "${(escape ["'" "\\"] cfg.database.password)}"
+      else if (cfg.database.passwordFile != null) then
+        "file_get_contents('${cfg.database.passwordFile}'"
+      else
+        ""
+      ;
+  in pkgs.writeText "config.php" ''
     <?php
+      putenv('TTRSS_PHP_EXECUTABLE=${pkgs.php}/bin/php');
 
-      define('PHP_EXECUTABLE', '${pkgs.php}/bin/php');
+      putenv('TTRSS_LOCK_DIRECTORY=${cfg.root}/lock');
+      putenv('TTRSS_CACHE_DIR=${cfg.root}/cache');
+      putenv('TTRSS_ICONS_DIR=${cfg.root}/feed-icons');
+      putenv('TTRSS_ICONS_URL=feed-icons');
+      putenv('TTRSS_SELF_URL_PATH=${cfg.selfUrlPath}');
 
-      define('LOCK_DIRECTORY', '${lockDir}');
-      define('CACHE_DIR', '${cacheDir}');
-      define('ICONS_DIR', '${feedIconsDir}');
-      define('ICONS_URL', '${feedIconsDir}');
-      define('SELF_URL_PATH', '${cfg.selfUrlPath}');
+      putenv('TTRSS_MYSQL_CHARSET=UTF8');
 
-      define('MYSQL_CHARSET', 'UTF8');
+      putenv('TTRSS_DB_TYPE=${cfg.database.type}');
+      putenv('TTRSS_DB_HOST=${optionalString (cfg.database.host != null) cfg.database.host}');
+      putenv('TTRSS_DB_USER=${cfg.database.user}');
+      putenv('TTRSS_DB_NAME=${cfg.database.name}');
+      putenv('TTRSS_DB_PASS=${password}');
+      putenv('TTRSS_DB_PORT=${toString dbPort}');
 
-      define('DB_TYPE', '${cfg.database.type}');
-      define('DB_HOST', '${optionalString (cfg.database.host != null) cfg.database.host}');
-      define('DB_USER', '${cfg.database.user}');
-      define('DB_NAME', '${cfg.database.name}');
-      define('DB_PASS', ${
-        if (cfg.database.password != null) then
-          "'${(escape ["'" "\\"] cfg.database.password)}'"
-        else if (cfg.database.passwordFile != null) then
-          "file_get_contents('${cfg.database.passwordFile}')"
-        else
-          "''"
-      });
-      define('DB_PORT', '${toString dbPort}');
+      putenv('TTRSS_AUTH_AUTO_CREATE=${boolToString cfg.auth.autoCreate}');
+      putenv('TTRSS_AUTH_AUTO_LOGIN=${boolToString cfg.auth.autoLogin}');
 
-      define('AUTH_AUTO_CREATE', ${boolToString cfg.auth.autoCreate});
-      define('AUTH_AUTO_LOGIN', ${boolToString cfg.auth.autoLogin});
-
-      define('FEED_CRYPT_KEY', '${escape ["'" "\\"] cfg.feedCryptKey}');
+      putenv('TTRSS_FEED_CRYPT_KEY=${escape ["'" "\\"] cfg.feedCryptKey}');
 
 
-      define('SINGLE_USER_MODE', ${boolToString cfg.singleUserMode});
+      putenv('TTRSS_SINGLE_USER_MODE=${boolToString cfg.singleUserMode}');
 
-      define('SIMPLE_UPDATE_MODE', ${boolToString cfg.simpleUpdateMode});
+      putenv('TTRSS_SIMPLE_UPDATE_MODE=${boolToString cfg.simpleUpdateMode}');
 
-      // Never check for updates - the running version of the code should be
-      // controlled entirely by the version of TT-RSS active in the current Nix
-      // profile. If TT-RSS updates itself to a version requiring a database
-      // schema upgrade, and then the SystemD tt-rss.service is restarted, the
-      // old code copied from the Nix store will overwrite the updated version,
-      // causing the code to detect the need for a schema "upgrade" (since the
-      // schema version in the database is different than in the code), but the
-      // update schema operation in TT-RSS will do nothing because the schema
-      // version in the database is newer than that in the code.
-      define('CHECK_FOR_UPDATES', false);
+      # Never check for updates - the running version of the code should
+      # be controlled entirely by the version of TT-RSS active in the
+      # current Nix profile. If TT-RSS updates itself to a version
+      # requiring a database schema upgrade, and then the SystemD
+      # tt-rss.service is restarted, the old code copied from the Nix
+      # store will overwrite the updated version, causing the code to
+      # detect the need for a schema "upgrade" (since the schema version
+      # in the database is different than in the code), but the update
+      # schema operation in TT-RSS will do nothing because the schema
+      # version in the database is newer than that in the code.
+      putenv('TTRSS_CHECK_FOR_UPDATES=false');
 
-      define('FORCE_ARTICLE_PURGE', ${toString cfg.forceArticlePurge});
-      define('SESSION_COOKIE_LIFETIME', ${toString cfg.sessionCookieLifetime});
-      define('ENABLE_GZIP_OUTPUT', ${boolToString cfg.enableGZipOutput});
+      putenv('TTRSS_FORCE_ARTICLE_PURGE=${toString cfg.forceArticlePurge}');
+      putenv('TTRSS_SESSION_COOKIE_LIFETIME=${toString cfg.sessionCookieLifetime}');
+      putenv('TTRSS_ENABLE_GZIP_OUTPUT=${boolToString cfg.enableGZipOutput}');
 
-      define('PLUGINS', '${builtins.concatStringsSep "," cfg.plugins}');
+      putenv('TTRSS_PLUGINS=${builtins.concatStringsSep "," cfg.plugins}');
 
-      define('LOG_DESTINATION', '${cfg.logDestination}');
-      define('CONFIG_VERSION', ${toString configVersion});
+      putenv('TTRSS_LOG_DESTINATION=${cfg.logDestination}');
+      putenv('TTRSS_CONFIG_VERSION=${toString configVersion}');
 
 
-      define('PUBSUBHUBBUB_ENABLED', ${boolToString cfg.pubSubHubbub.enable});
-      define('PUBSUBHUBBUB_HUB', '${cfg.pubSubHubbub.hub}');
+      putenv('TTRSS_PUBSUBHUBBUB_ENABLED=${boolToString cfg.pubSubHubbub.enable}');
+      putenv('TTRSS_PUBSUBHUBBUB_HUB=${cfg.pubSubHubbub.hub}');
 
-      define('SPHINX_SERVER', '${cfg.sphinx.server}');
-      define('SPHINX_INDEX', '${builtins.concatStringsSep "," cfg.sphinx.index}');
+      putenv('TTRSS_SPHINX_SERVER=${cfg.sphinx.server}');
+      putenv('TTRSS_SPHINX_INDEX=${builtins.concatStringsSep "," cfg.sphinx.index}');
 
-      define('ENABLE_REGISTRATION', ${boolToString cfg.registration.enable});
-      define('REG_NOTIFY_ADDRESS', '${cfg.registration.notifyAddress}');
-      define('REG_MAX_USERS', ${toString cfg.registration.maxUsers});
+      putenv('TTRSS_ENABLE_REGISTRATION=${boolToString cfg.registration.enable}');
+      putenv('TTRSS_REG_NOTIFY_ADDRESS=${cfg.registration.notifyAddress}');
+      putenv('TTRSS_REG_MAX_USERS=${toString cfg.registration.maxUsers}');
 
-      define('SMTP_SERVER', '${cfg.email.server}');
-      define('SMTP_LOGIN', '${cfg.email.login}');
-      define('SMTP_PASSWORD', '${escape ["'" "\\"] cfg.email.password}');
-      define('SMTP_SECURE', '${cfg.email.security}');
+      putenv('TTRSS_SMTP_SERVER=${cfg.email.server}');
+      putenv('TTRSS_SMTP_LOGIN=${cfg.email.login}');
+      putenv('TTRSS_SMTP_PASSWORD=${escape ["'" "\\"] cfg.email.password}');
+      putenv('TTRSS_SMTP_SECURE=${cfg.email.security}');
 
-      define('SMTP_FROM_NAME', '${escape ["'" "\\"] cfg.email.fromName}');
-      define('SMTP_FROM_ADDRESS', '${escape ["'" "\\"] cfg.email.fromAddress}');
-      define('DIGEST_SUBJECT', '${escape ["'" "\\"] cfg.email.digestSubject}');
+      putenv('TTRSS_SMTP_FROM_NAME=${escape ["'" "\\"] cfg.email.fromName}');
+      putenv('TTRSS_SMTP_FROM_ADDRESS=${escape ["'" "\\"] cfg.email.fromAddress}');
+      putenv('TTRSS_DIGEST_SUBJECT=${escape ["'" "\\"] cfg.email.digestSubject}');
 
       ${cfg.extraConfig}
+  '';
+
+  # tt-rss and plugins and themes and config.php
+  servedRoot = pkgs.runCommand "tt-rss-served-root" {} ''
+    cp --no-preserve=mode -r ${pkgs.tt-rss} $out
+    cp ${tt-rss-config} $out/config.php
+    ${optionalString (cfg.pluginPackages != []) ''
+    for plugin in ${concatStringsSep " " cfg.pluginPackages}; do
+    cp -r "$plugin"/* "$out/plugins.local/"
+    done
+    ''}
+    ${optionalString (cfg.themePackages != []) ''
+    for theme in ${concatStringsSep " " cfg.themePackages}; do
+    cp -r "$theme"/* "$out/themes.local/"
+    done
+    ''}
   '';
 
  in {
@@ -112,7 +126,6 @@ let
       root = mkOption {
         type = types.path;
         default = "/var/lib/tt-rss";
-        example = "/var/lib/tt-rss";
         description = ''
           Root of the application.
         '';
@@ -121,7 +134,6 @@ let
       user = mkOption {
         type = types.str;
         default = "tt_rss";
-        example = "tt_rss";
         description = ''
           User account under which both the update daemon and the web-application run.
         '';
@@ -542,10 +554,14 @@ let
       enable = true;
       virtualHosts = {
         ${cfg.virtualHost} = {
-          root = "${cfg.root}";
+          root = "${cfg.root}/www";
 
           locations."/" = {
             index = "index.php";
+          };
+
+          locations."^~ /feed-icons" = {
+            root = "${cfg.root}";
           };
 
           locations."~ \\.php$" = {
@@ -560,13 +576,22 @@ let
     };
 
     systemd.tmpfiles.rules = [
-      "d '${cfg.root}' 0755 ${cfg.user} tt_rss - -"
-      "Z '${cfg.root}' 0755 ${cfg.user} tt_rss - -"
+      "d '${cfg.root}' 0555 ${cfg.user} tt_rss - -"
+      "d '${cfg.root}/lock' 0755 ${cfg.user} tt_rss - -"
+      "d '${cfg.root}/cache' 0755 ${cfg.user} tt_rss - -"
+      "d '${cfg.root}/cache/upload' 0755 ${cfg.user} tt_rss - -"
+      "d '${cfg.root}/cache/images' 0755 ${cfg.user} tt_rss - -"
+      "d '${cfg.root}/cache/export' 0755 ${cfg.user} tt_rss - -"
+      "d '${cfg.root}/feed-icons' 0755 ${cfg.user} tt_rss - -"
+      "L+ '${cfg.root}/www' - - - - ${servedRoot}"
     ];
 
-    systemd.services.tt-rss =
-      {
+    systemd.services = {
+      phpfpm-tt-rss = mkIf (cfg.pool == "${poolName}") {
+        restartTriggers = [ servedRoot ];
+      };
 
+      tt-rss = {
         description = "Tiny Tiny RSS feeds update daemon";
 
         preStart = let
@@ -589,24 +614,7 @@ let
 
               else "";
 
-        in ''
-          rm -rf "${cfg.root}/*"
-          cp -r "${pkgs.tt-rss}/"* "${cfg.root}"
-          ${optionalString (cfg.pluginPackages != []) ''
-            for plugin in ${concatStringsSep " " cfg.pluginPackages}; do
-              cp -r "$plugin"/* "${cfg.root}/plugins.local/"
-            done
-          ''}
-          ${optionalString (cfg.themePackages != []) ''
-            for theme in ${concatStringsSep " " cfg.themePackages}; do
-              cp -r "$theme"/* "${cfg.root}/themes.local/"
-            done
-          ''}
-          ln -sf "${tt-rss-config}" "${cfg.root}/config.php"
-          chmod -R 755 "${cfg.root}"
-        ''
-
-        + (optionalString (cfg.database.type == "pgsql") ''
+        in (optionalString (cfg.database.type == "pgsql") ''
           exists=$(${callSql "select count(*) > 0 from pg_tables where tableowner = user"} \
           | tail -n+3 | head -n-2 | sed -e 's/[ \n\t]*//')
 
@@ -631,7 +639,7 @@ let
         serviceConfig = {
           User = "${cfg.user}";
           Group = "tt_rss";
-          ExecStart = "${pkgs.php}/bin/php ${cfg.root}/update.php --daemon --quiet";
+          ExecStart = "${pkgs.php}/bin/php ${cfg.root}/www/update.php --daemon --quiet";
           Restart = "on-failure";
           RestartSec = "60";
           SyslogIdentifier = "tt-rss";
@@ -640,6 +648,7 @@ let
         wantedBy = [ "multi-user.target" ];
         requires = optional mysqlLocal "mysql.service" ++ optional pgsqlLocal "postgresql.service";
         after = [ "network.target" ] ++ optional mysqlLocal "mysql.service" ++ optional pgsqlLocal "postgresql.service";
+      };
     };
 
     services.mysql = mkIf mysqlLocal {

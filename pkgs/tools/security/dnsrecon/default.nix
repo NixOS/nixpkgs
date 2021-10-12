@@ -17,7 +17,7 @@ python3.pkgs.buildPythonApplication rec {
   format = "other";
 
   pythonPath = with python3.pkgs; [
-    dns netaddr lxml
+    dnspython netaddr lxml
   ];
 
   postPatch = ''

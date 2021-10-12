@@ -94,8 +94,6 @@ self: super: builtins.intersectAttrs super {
   # Won't find it's header files without help.
   sfml-audio = appendConfigureFlag super.sfml-audio "--extra-include-dirs=${pkgs.openal}/include/AL";
 
-  hercules-ci-agent = disableLibraryProfiling super.hercules-ci-agent;
-
   # avoid compiling twice by providing executable as a separate output (with small closure size)
   niv = enableSeparateBinOutput super.niv;
   ormolu = enableSeparateBinOutput super.ormolu;
@@ -140,10 +138,6 @@ self: super: builtins.intersectAttrs super {
   # Add necessary reference to gtk3 package
   gi-dbusmenugtk3 = addPkgconfigDepend super.gi-dbusmenugtk3 pkgs.gtk3;
 
-  # Need WebkitGTK, not just webkit.
-  webkit = super.webkit.override { webkit = pkgs.webkitgtk24x-gtk2; };
-  websnap = super.websnap.override { webkit = pkgs.webkitgtk24x-gtk3; };
-
   hs-mesos = overrideCabal super.hs-mesos (drv: {
     # Pass _only_ mesos; the correct protobuf is propagated.
     extraLibraries = [ pkgs.mesos ];
@@ -167,6 +161,7 @@ self: super: builtins.intersectAttrs super {
   mongoDB = dontCheck super.mongoDB;
   network-transport-tcp = dontCheck super.network-transport-tcp;
   network-transport-zeromq = dontCheck super.network-transport-zeromq; # https://github.com/tweag/network-transport-zeromq/issues/30
+  oidc-client = dontCheck super.oidc-client;            # the spec runs openid against google.com
   pipes-mongodb = dontCheck super.pipes-mongodb;        # http://hydra.cryp.to/build/926195/log/raw
   pixiv = dontCheck super.pixiv;
   raven-haskell = dontCheck super.raven-haskell;        # http://hydra.cryp.to/build/502053/log/raw
@@ -211,7 +206,19 @@ self: super: builtins.intersectAttrs super {
   mime-mail = appendConfigureFlag super.mime-mail "--ghc-option=-DMIME_MAIL_SENDMAIL_PATH=\"sendmail\"";
 
   # Help the test suite find system timezone data.
-  tz = overrideCabal super.tz (drv: { preConfigure = "export TZDIR=${pkgs.tzdata}/share/zoneinfo"; });
+  tz = overrideCabal super.tz (drv: {
+    preConfigure = "export TZDIR=${pkgs.tzdata}/share/zoneinfo";
+    patches = [
+      # Fix tests failing with libSystem, musl etc. due to a lack of
+      # support for glibc's non-POSIX TZDIR environment variable.
+      # https://github.com/nilcons/haskell-tz/pull/29
+      (pkgs.fetchpatch {
+        name = "support-non-glibc-tzset.patch";
+        url = "https://github.com/sternenseemann/haskell-tz/commit/64928f1a50a1a276a718491ae3eeef63abcdb393.patch";
+        sha256 = "1f53w8k1vpy39hzalyykpvm946ykkarj2714w988jdp4c2c4l4cf";
+      })
+    ] ++ (drv.patches or []);
+  });
 
   # Nix-specific workaround
   xmonad = appendPatch (dontCheck super.xmonad) ./patches/xmonad-nix.patch;
@@ -222,7 +229,14 @@ self: super: builtins.intersectAttrs super {
   wxcore = super.wxcore.override { wxGTK = pkgs.wxGTK30; };
 
   # Test suite wants to connect to $DISPLAY.
+  bindings-GLFW = dontCheck super.bindings-GLFW;
+  gi-gtk-declarative = dontCheck super.gi-gtk-declarative;
+  gi-gtk-declarative-app-simple = dontCheck super.gi-gtk-declarative-app-simple;
   hsqml = dontCheck (addExtraLibraries (super.hsqml.override { qt5 = pkgs.qt5Full; }) [pkgs.libGLU pkgs.libGL]);
+  monomer = dontCheck super.monomer;
+
+  # Wants to check against a real DB, Needs freetds
+  odbc = dontCheck (addExtraLibraries super.odbc [ pkgs.freetds ]);
 
   # Tests attempt to use NPM to install from the network into
   # /homeless-shelter. Disabled.
@@ -347,13 +361,6 @@ self: super: builtins.intersectAttrs super {
 
   # Looks like Avahi provides the missing library
   dnssd = super.dnssd.override { dns_sd = pkgs.avahi.override { withLibdnssdCompat = true; }; };
-
-  # requires an X11 display
-  bindings-GLFW = dontCheck super.bindings-GLFW;
-
-  # requires an X11 display in test suite
-  gi-gtk-declarative = dontCheck super.gi-gtk-declarative;
-  gi-gtk-declarative-app-simple = dontCheck super.gi-gtk-declarative-app-simple;
 
   # tests depend on executable
   ghcide = overrideCabal super.ghcide (drv: {
@@ -698,22 +705,15 @@ self: super: builtins.intersectAttrs super {
     testTarget = "unit-tests";
   };
 
-  haskell-language-server = enableCabalFlag (enableCabalFlag (overrideCabal super.haskell-language-server (drv: {
-    postInstall = let
-      inherit (pkgs.lib) concatStringsSep take splitString;
-      ghc_version = self.ghc.version;
-      ghc_major_version = concatStringsSep "." (take 2 (splitString "." ghc_version));
-    in ''
-        ln -s $out/bin/haskell-language-server $out/bin/haskell-language-server-${ghc_version}
-        ln -s $out/bin/haskell-language-server $out/bin/haskell-language-server-${ghc_major_version}
-       '';
+  haskell-language-server = overrideCabal super.haskell-language-server (drv: {
+    postInstall = "ln -s $out/bin/haskell-language-server $out/bin/haskell-language-server-${self.ghc.version}";
     testToolDepends = [ self.cabal-install pkgs.git ];
     testTarget = "func-test"; # wrapper test accesses internet
     preCheck = ''
       export PATH=$PATH:$PWD/dist/build/haskell-language-server:$PWD/dist/build/haskell-language-server-wrapper
       export HOME=$TMPDIR
     '';
-  })) "all-plugins") "all-formatters";
+  });
 
   # tests depend on a specific version of solc
   hevm = dontCheck (doJailbreak super.hevm);
@@ -788,6 +788,11 @@ self: super: builtins.intersectAttrs super {
     platforms = pkgs.lib.platforms.x86;
   };
 
+  # uses x86 intrinsics
+  geomancy = overrideCabal super.geomancy {
+    platforms = pkgs.lib.platforms.x86;
+  };
+
   hls-brittany-plugin = overrideCabal super.hls-brittany-plugin (drv: {
     testToolDepends = [ pkgs.git ];
     preCheck = ''
@@ -818,6 +823,12 @@ self: super: builtins.intersectAttrs super {
       export HOME=$TMPDIR/home
     '';
   });
+  hls-rename-plugin = overrideCabal super.hls-rename-plugin (drv: {
+    testToolDepends = [ pkgs.git ];
+    preCheck = ''
+      export HOME=$TMPDIR/home
+    '' + (drv.preCheck or "");
+  });
   hls-splice-plugin = overrideCabal super.hls-splice-plugin (drv: {
     testToolDepends = [ pkgs.git ];
     preCheck = ''
@@ -832,6 +843,16 @@ self: super: builtins.intersectAttrs super {
   });
   hls-pragmas-plugin = overrideCabal super.hls-pragmas-plugin (drv: {
     testToolDepends = [ pkgs.git ];
+    preCheck = ''
+      export HOME=$TMPDIR/home
+    '';
+  });
+  hiedb = overrideCabal super.hiedb (drv: {
+    preCheck = ''
+      export PATH=$PWD/dist/build/hiedb:$PATH
+    '';
+  });
+  hls-call-hierarchy-plugin = overrideCabal super.hls-call-hierarchy-plugin (drv: {
     preCheck = ''
       export HOME=$TMPDIR/home
     '';
@@ -902,6 +923,8 @@ self: super: builtins.intersectAttrs super {
   # Runtime dependencies and CLI completion
   nvfetcher = generateOptparseApplicativeCompletion "nvfetcher" (overrideCabal
     super.nvfetcher (drv: {
+      # test needs network
+      doCheck = false;
       buildTools = drv.buildTools or [ ] ++ [ pkgs.buildPackages.makeWrapper ];
       postInstall = drv.postInstall or "" + ''
         wrapProgram "$out/bin/nvfetcher" --prefix 'PATH' ':' "${
@@ -919,4 +942,40 @@ self: super: builtins.intersectAttrs super {
   # Flag added in Agda 2.6.2
   Agda = appendConfigureFlag super.Agda "-foptimise-heavily";
 
+  # ats-format uses cli-setup in Setup.hs which is quite happy to write
+  # to arbitrary files in $HOME. This doesn't either not achieve anything
+  # or even fail, so we prevent it and install everything necessary ourselves.
+  # See also: https://hackage.haskell.org/package/cli-setup-0.2.1.4/docs/src/Distribution.CommandLine.html#setManpathGeneric
+  ats-format = generateOptparseApplicativeCompletion "atsfmt" (
+    justStaticExecutables (
+      overrideCabal super.ats-format (drv: {
+        # use vanilla Setup.hs
+        preCompileBuildDriver = ''
+          cat > Setup.hs << EOF
+          module Main where
+          import Distribution.Simple
+          main = defaultMain
+          EOF
+        '' + (drv.preCompileBuildDriver or "");
+        # install man page
+        buildTools = [
+          pkgs.buildPackages.installShellFiles
+        ] ++ (drv.buildTools or []);
+        postInstall = ''
+          installManPage man/atsfmt.1
+        '' + (drv.postInstall or "");
+      })
+    )
+  );
+
+  # Test suite is just the default example executable which doesn't work if not
+  # executed by Setup.hs, but works if started on a proper TTY
+  isocline = dontCheck super.isocline;
+
+  # Some hash implementations are x86 only, but part of the test suite.
+  # So executing and building it on non-x86 platforms will always fail.
+  hashes = overrideCabal super.hashes {
+    doCheck = with pkgs.stdenv; hostPlatform == buildPlatform
+      && buildPlatform.isx86;
+  };
 }

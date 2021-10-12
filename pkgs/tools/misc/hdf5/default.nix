@@ -20,11 +20,11 @@ assert !cpp || !mpiSupport;
 let inherit (lib) optional optionals; in
 
 stdenv.mkDerivation rec {
-  version = "1.12.0";
+  version = "1.12.1";
   pname = "hdf5";
   src = fetchurl {
     url = "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-${lib.versions.majorMinor version}/${pname}-${version}/src/${pname}-${version}.tar.bz2";
-    sha256 = "0qazfslkqbmzg495jafpvqp0khws3jkxa0z7rph9qvhacil6544p";
+    sha256 = "sha256-qvn1MrPtqD09Otyfi0Cpt2MVIhj6RTScO8d1Asofjxw=";
   };
 
   passthru = {
@@ -34,10 +34,10 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ removeReferencesTo ];
+  nativeBuildInputs = [ removeReferencesTo ]
+    ++ optional (gfortran != null) gfortran;
 
   buildInputs = []
-    ++ optional (gfortran != null) gfortran
     ++ optional (szip != null) szip
     ++ optional javaSupport jdk;
 

@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "importlib-resources";
-  version = "5.1.2";
+  version = "5.2.2";
 
   src = fetchPypi {
     pname = "importlib_resources";
     inherit version;
-    sha256 = "642586fc4740bd1cad7690f836b3321309402b20b332529f25617ff18e8e1370";
+    sha256 = "sha256-pliCpND+X79wInNFa6LOdP5EiSwl5C4FespSa3AqbUs=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];

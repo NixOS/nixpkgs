@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, esr ? false, ... }: {
+import ./make-test-python.nix ({ pkgs, firefoxPackage, ... }: {
   name = "firefox";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ eelco shlevy ];
@@ -8,12 +8,13 @@ import ./make-test-python.nix ({ pkgs, esr ? false, ... }: {
     { pkgs, ... }:
 
     { imports = [ ./common/x11.nix ];
-      environment.systemPackages =
-        (if esr then [ pkgs.firefox-esr ] else [ pkgs.firefox ])
-        ++ [ pkgs.xdotool ];
+      environment.systemPackages = [
+        firefoxPackage
+        pkgs.xdotool
+      ];
 
       # Need some more memory to record audio.
-      virtualisation.memorySize = "500";
+      virtualisation.memorySize = 500;
 
       # Create a virtual sound device, with mixing
       # and all, for recording audio.

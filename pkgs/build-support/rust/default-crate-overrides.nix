@@ -1,7 +1,30 @@
-{ lib, stdenv, pkg-config, curl, darwin, libiconv, libgit2, libssh2,
-  openssl, sqlite, zlib, dbus, dbus-glib, gdk-pixbuf, cairo, python3,
-  libsodium, postgresql, gmp, foundationdb, capnproto, nettle, clang,
-  llvmPackages, ... }:
+{ lib
+, stdenv
+, pkg-config
+, curl
+, darwin
+, libgit2
+, libssh2
+, openssl
+, sqlite
+, zlib
+, dbus
+, dbus-glib
+, gdk-pixbuf
+, cairo
+, python3
+, libsodium
+, postgresql
+, gmp
+, foundationdb
+, capnproto
+, nettle
+, clang
+, llvmPackages
+, linux-pam
+, rdkafka
+, ...
+}:
 
 let
   inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
@@ -17,20 +40,20 @@ in
 
   cargo = attrs: {
     buildInputs = [ openssl zlib curl ]
-      ++ lib.optionals stdenv.isDarwin [ CoreFoundation Security libiconv ];
+      ++ lib.optionals stdenv.isDarwin [ CoreFoundation Security ];
   };
 
   libz-sys = attrs: {
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ zlib ];
-    extraLinkFlags = ["-L${zlib.out}/lib"];
+    extraLinkFlags = [ "-L${zlib.out}/lib" ];
   };
 
   curl-sys = attrs: {
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ zlib curl ];
     propagatedBuildInputs = [ curl zlib ];
-    extraLinkFlags = ["-L${zlib.out}/lib"];
+    extraLinkFlags = [ "-L${zlib.out}/lib" ];
   };
 
   dbus = attrs: {
@@ -104,14 +127,23 @@ in
     buildInputs = [ openssl ];
   };
 
+  pam-sys = attr: {
+    buildInputs = [ linux-pam ];
+  };
+
   pq-sys = attr: {
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ postgresql ];
   };
 
+  rdkafka-sys = attr: {
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ rdkafka ];
+  };
+
   rink = attrs: {
     buildInputs = [ gmp ];
-    crateBin = [ {  name = "rink"; path = "src/bin/rink.rs"; } ];
+    crateBin = [{ name = "rink"; path = "src/bin/rink.rs"; }];
   };
 
   security-framework-sys = attr: {

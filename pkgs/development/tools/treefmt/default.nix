@@ -1,16 +1,16 @@
 { lib, rustPlatform, fetchFromGitHub }:
 rustPlatform.buildRustPackage rec {
   pname = "treefmt";
-  version = "0.2.2";
+  version = "0.2.6";
 
   src = fetchFromGitHub {
     owner = "numtide";
     repo = "treefmt";
     rev = "v${version}";
-    sha256 = "13z7n0xg150815c77ysz4iqpk8rbgj4vmqy1y2262ryb88dwaw5n";
+    sha256 = "sha256-hnrMy8iYoaeWxZlhO9L1kQW3OgL6jHL1MxJpbNFLHZk=";
   };
 
-  cargoSha256 = "1jfrmafj1b28k6xjpj0qq1jpccll0adqxhjypphxhyfsfnra8g6f";
+  cargoSha256 = "sha256-O7Ma6+Vniil5hIDd5JCWecTvkAjq7wMuuyfrzePDDq4=";
 
   meta = {
     description = "one CLI to format the code tree";

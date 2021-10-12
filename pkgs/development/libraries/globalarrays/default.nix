@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
     sha256 = "0bky91ncz6vy0011ps9prsnq9f4a5s5xwr23kkmi39xzg0417mnd";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ mpi blas gfortran openssh ];
+  nativeBuildInputs = [ autoreconfHook gfortran ];
+  buildInputs = [ mpi blas openssh ];
 
   preConfigure = ''
     configureFlagsArray+=( "--enable-i8" \

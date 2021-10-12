@@ -206,7 +206,7 @@ in {
                 For type <literal>meta</literal>, a list of stream names in the form <literal>/one/two/...</literal>. Don't forget the leading slash.
                 For type <literal>alsa</literal>, use an empty string.
               '';
-              example = literalExample ''
+              example = literalExpression ''
                 "/path/to/pipe"
                 "/path/to/librespot"
                 "192.168.1.2:4444"
@@ -226,7 +226,7 @@ in {
               description = ''
                 Key-value pairs that convey additional parameters about a stream.
               '';
-              example = literalExample ''
+              example = literalExpression ''
                 # for type == "pipe":
                 {
                   mode = "create";
@@ -254,7 +254,7 @@ in {
         description = ''
           The definition for an input source.
         '';
-        example = literalExample ''
+        example = literalExpression ''
           {
             mpd = {
               type = "pipe";

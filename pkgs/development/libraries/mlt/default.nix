@@ -3,7 +3,7 @@
 , libvorbis, libxml2, movit, pkg-config, sox, fftw, opencv4, SDL2
 , gtk2, genericUpdater, common-updater-scripts, libebur128
 , jack2, ladspa-sdk, swig, which, ncurses
-, enablePython ? false, python
+, enablePython ? false, python3
 }:
 
 stdenv.mkDerivation rec {
@@ -24,7 +24,9 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional enablePython ncurses;
 
   nativeBuildInputs = [ pkg-config makeWrapper which ]
-  ++ lib.optionals enablePython [ python swig ];
+  ++ lib.optionals enablePython [ python3 swig ];
+
+  strictDeps = true;
 
   # Mostly taken from:
   # http://www.kdenlive.org/user-manual/downloading-and-installing-kdenlive/installing-source/installing-mlt-rendering-engine

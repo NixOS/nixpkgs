@@ -14,6 +14,7 @@
 , rustPlatform
 , feedbackd
 , wrapGAppsHook
+, fetchpatch
 }:
 
 stdenv.mkDerivation rec {
@@ -36,6 +37,15 @@ stdenv.mkDerivation rec {
     name = "${pname}-${version}";
     sha256 = "0148ynzmapxfrlccikf20ikmi0ssbkn9fl5wi6nh6azflv50pzzn";
   };
+
+  patches = [
+    # remove when updating from 1.14.0
+    (fetchpatch {
+      name = "fix-rust-1.54-build.patch";
+      url = "https://gitlab.gnome.org/World/Phosh/squeekboard/-/commit/9cd56185c59ace535a6af26384ef6beca4423816.patch";
+      sha256 = "sha256-8rWcfhQmGiwlc2lpkRvJ95XQp1Xg7St+0K85x8nQ0mk=";
+    })
+  ];
 
   nativeBuildInputs = [
     meson

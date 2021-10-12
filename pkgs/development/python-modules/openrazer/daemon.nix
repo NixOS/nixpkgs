@@ -38,6 +38,10 @@ buildPythonApplication (common // rec {
     setproctitle
   ];
 
+  postPatch = ''
+    substituteInPlace openrazer_daemon/daemon.py --replace "plugdev" "openrazer"
+  '';
+
   postBuild = ''
     DESTDIR="$out" PREFIX="" make install manpages
   '';

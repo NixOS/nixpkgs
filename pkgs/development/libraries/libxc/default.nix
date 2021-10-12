@@ -2,17 +2,16 @@
 
 stdenv.mkDerivation rec {
   pname = "libxc";
-  version = "5.1.5";
+  version = "5.1.6";
 
   src = fetchFromGitLab {
     owner = "libxc";
     repo = "libxc";
     rev = version;
-    sha256 = "0cy3x2zn1bldc5i0rzislfbc8h4nqgds445jkfqjv0d1shvdy0zn";
+    sha256 = "07iljmv737kx24kd33x9ndf5l854mwslg9x2psqm12k07jmq9wjw";
   };
 
-  buildInputs = [ gfortran ];
-  nativeBuildInputs = [ perl cmake ];
+  nativeBuildInputs = [ perl cmake gfortran ];
 
   preConfigure = ''
     patchShebangs ./

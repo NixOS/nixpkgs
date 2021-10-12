@@ -28,6 +28,7 @@ from pathlib import Path
 from typing import Dict, List, Optional, Tuple, Union, Any, Callable
 from urllib.parse import urljoin, urlparse
 from tempfile import NamedTemporaryFile
+from dataclasses import dataclass
 
 import git
 
@@ -41,8 +42,6 @@ LOG_LEVELS = {
 }
 
 log = logging.getLogger()
-log.addHandler(logging.StreamHandler())
-
 
 def retry(ExceptionToCheck: Any, tries: int = 4, delay: float = 3, backoff: float = 2):
     """Retry calling the decorated function using an exponential backoff.
@@ -81,6 +80,13 @@ def make_request(url: str) -> urllib.request.Request:
     if token is not None:
         headers["Authorization"] = f"token {token}"
     return urllib.request.Request(url, headers=headers)
+
+@dataclass
+class PluginDesc:
+    owner: str
+    repo: str
+    branch: str
+    alias: Optional[str]
 
 
 class Repo:
@@ -195,20 +201,91 @@ class Editor:
         name: str,
         root: Path,
         get_plugins: str,
-        generate_nix: Callable[[List[Tuple[str, str, Plugin]], str], None],
         default_in: Optional[Path] = None,
         default_out: Optional[Path] = None,
         deprecated: Optional[Path] = None,
         cache_file: Optional[str] = None,
     ):
+        log.debug("get_plugins:", get_plugins)
         self.name = name
         self.root = root
         self.get_plugins = get_plugins
-        self.generate_nix = generate_nix
         self.default_in = default_in or root.joinpath(f"{name}-plugin-names")
         self.default_out = default_out or root.joinpath("generated.nix")
         self.deprecated = deprecated or root.joinpath("deprecated.json")
         self.cache_file = cache_file or f"{name}-plugin-cache.json"
+
+    def get_current_plugins(self):
+        """To fill the cache"""
+        return get_current_plugins(self)
+
+    def load_plugin_spec(self, plugin_file) -> List[PluginDesc]:
+        return load_plugin_spec(plugin_file)
+
+    def generate_nix(self, plugins, outfile: str):
+        '''Returns nothing for now, writes directly to outfile'''
+        raise NotImplementedError()
+
+    def get_update(self, input_file: str, outfile: str, proc: int):
+        return get_update(input_file, outfile, proc, editor=self)
+
+    @property
+    def attr_path(self):
+        return self.name + "Plugins"
+
+    def get_drv_name(self, name: str):
+        return self.attr_path + "." + name
+
+    def rewrite_input(self, *args, **kwargs):
+        return rewrite_input(*args, **kwargs)
+
+    def create_parser(self):
+        parser = argparse.ArgumentParser(
+            description=(
+                f"Updates nix derivations for {self.name} plugins"
+                f"By default from {self.default_in} to {self.default_out}"
+            )
+        )
+        parser.add_argument(
+            "--add",
+            dest="add_plugins",
+            default=[],
+            action="append",
+            help=f"Plugin to add to {self.attr_path} from Github in the form owner/repo",
+        )
+        parser.add_argument(
+            "--input-names",
+            "-i",
+            dest="input_file",
+            default=self.default_in,
+            help="A list of plugins in the form owner/repo",
+        )
+        parser.add_argument(
+            "--out",
+            "-o",
+            dest="outfile",
+            default=self.default_out,
+            help="Filename to save generated nix code",
+        )
+        parser.add_argument(
+            "--proc",
+            "-p",
+            dest="proc",
+            type=int,
+            default=30,
+            help="Number of concurrent processes to spawn.",
+        )
+        parser.add_argument(
+            "--no-commit", "-n", action="store_true", default=False,
+            help="Whether to autocommit changes"
+        )
+        parser.add_argument(
+            "--debug", "-d", choices=LOG_LEVELS.keys(),
+            default=logging.getLevelName(logging.WARN),
+            help="Adjust log level"
+        )
+        return parser
+
 
 
 class CleanEnvironment(object):
@@ -228,7 +305,9 @@ class CleanEnvironment(object):
 
 def get_current_plugins(editor: Editor) -> List[Plugin]:
     with CleanEnvironment():
-        out = subprocess.check_output(["nix", "eval", "--json", editor.get_plugins])
+        cmd = ["nix", "eval", "--json", editor.get_plugins]
+        log.debug("Running command %s", cmd)
+        out = subprocess.check_output(cmd)
     data = json.loads(out)
     plugins = []
     for name, attr in data.items():
@@ -238,18 +317,17 @@ def get_current_plugins(editor: Editor) -> List[Plugin]:
 
 
 def prefetch_plugin(
-    user: str,
-    repo_name: str,
-    branch: str,
-    alias: Optional[str],
+    p: PluginDesc,
     cache: "Optional[Cache]" = None,
 ) -> Tuple[Plugin, Dict[str, str]]:
-    log.info("Prefetching plugin %s", repo_name)
+    user, repo_name, branch, alias = p.owner, p.repo, p.branch, p.alias
+    log.info(f"Fetching last commit for plugin {user}/{repo_name}@{branch}")
     repo = Repo(user, repo_name, branch, alias)
     commit, date = repo.latest_commit()
     has_submodules = repo.has_submodules()
     cached_plugin = cache[commit] if cache else None
     if cached_plugin is not None:
+        log.debug("Cache hit !")
         cached_plugin.name = alias or repo_name
         cached_plugin.date = date
         return cached_plugin, repo.redirect
@@ -267,7 +345,7 @@ def prefetch_plugin(
 
 
 def fetch_plugin_from_pluginline(plugin_line: str) -> Plugin:
-    plugin, _ = prefetch_plugin(*parse_plugin_line(plugin_line))
+    plugin, _ = prefetch_plugin(parse_plugin_line(plugin_line))
     return plugin
 
 
@@ -306,8 +384,7 @@ def check_results(
 
         sys.exit(1)
 
-
-def parse_plugin_line(line: str) -> Tuple[str, str, str, Optional[str]]:
+def parse_plugin_line(line: str) -> PluginDesc:
     branch = "master"
     alias = None
     name, repo = line.split("/")
@@ -317,15 +394,15 @@ def parse_plugin_line(line: str) -> Tuple[str, str, str, Optional[str]]:
     if "@" in repo:
         repo, branch = repo.split("@")
 
-    return (name.strip(), repo.strip(), branch.strip(), alias)
+    return PluginDesc(name.strip(), repo.strip(), branch.strip(), alias)
 
 
-def load_plugin_spec(plugin_file: str) -> List[Tuple[str, str, str, Optional[str]]]:
+def load_plugin_spec(plugin_file: str) -> List[PluginDesc]:
     plugins = []
     with open(plugin_file) as f:
         for line in f:
             plugin = parse_plugin_line(line)
-            if not plugin[0]:
+            if not plugin.owner:
                 msg = f"Invalid repository {line}, must be in the format owner/repo[ as alias]"
                 print(msg, file=sys.stderr)
                 sys.exit(1)
@@ -387,12 +464,11 @@ class Cache:
 
 
 def prefetch(
-    args: Tuple[str, str, str, Optional[str]], cache: Cache
+    pluginDesc: PluginDesc, cache: Cache
 ) -> Tuple[str, str, Union[Exception, Plugin], dict]:
-    assert len(args) == 4
-    owner, repo, branch, alias = args
+    owner, repo = pluginDesc.owner, pluginDesc.repo
     try:
-        plugin, redirect = prefetch_plugin(owner, repo, branch, alias, cache)
+        plugin, redirect = prefetch_plugin(pluginDesc, cache)
         cache[plugin.commit] = plugin
         return (owner, repo, plugin, redirect)
     except Exception as e:
@@ -434,54 +510,6 @@ def rewrite_input(
         f.writelines(lines)
 
 
-def parse_args(editor: Editor):
-    parser = argparse.ArgumentParser(
-        description=(
-            f"Updates nix derivations for {editor.name} plugins"
-            f"By default from {editor.default_in} to {editor.default_out}"
-        )
-    )
-    parser.add_argument(
-        "--add",
-        dest="add_plugins",
-        default=[],
-        action="append",
-        help=f"Plugin to add to {editor.name}Plugins from Github in the form owner/repo",
-    )
-    parser.add_argument(
-        "--input-names",
-        "-i",
-        dest="input_file",
-        default=editor.default_in,
-        help="A list of plugins in the form owner/repo",
-    )
-    parser.add_argument(
-        "--out",
-        "-o",
-        dest="outfile",
-        default=editor.default_out,
-        help="Filename to save generated nix code",
-    )
-    parser.add_argument(
-        "--proc",
-        "-p",
-        dest="proc",
-        type=int,
-        default=30,
-        help="Number of concurrent processes to spawn.",
-    )
-    parser.add_argument(
-        "--no-commit", "-n", action="store_true", default=False,
-        help="Whether to autocommit changes"
-    )
-    parser.add_argument(
-        "--debug", "-d", choices=LOG_LEVELS.keys(),
-        default=logging.getLevelName(logging.WARN),
-        help="Adjust log level"
-    )
-    return parser.parse_args()
-
-
 def commit(repo: git.Repo, message: str, files: List[Path]) -> None:
     repo.index.add([str(f.resolve()) for f in files])
 
@@ -493,11 +521,11 @@ def commit(repo: git.Repo, message: str, files: List[Path]) -> None:
 
 
 def get_update(input_file: str, outfile: str, proc: int, editor: Editor):
-    cache: Cache = Cache(get_current_plugins(editor), editor.cache_file)
+    cache: Cache = Cache(editor.get_current_plugins(), editor.cache_file)
     _prefetch = functools.partial(prefetch, cache=cache)
 
     def update() -> dict:
-        plugin_names = load_plugin_spec(input_file)
+        plugin_names = editor.load_plugin_spec(input_file)
 
         try:
             pool = Pool(processes=proc)
@@ -514,42 +542,41 @@ def get_update(input_file: str, outfile: str, proc: int, editor: Editor):
     return update
 
 
-def update_plugins(editor: Editor):
+def update_plugins(editor: Editor, args):
     """The main entry function of this module. All input arguments are grouped in the `Editor`."""
 
-    args = parse_args(editor)
     log.setLevel(LOG_LEVELS[args.debug])
-
     log.info("Start updating plugins")
-    nixpkgs_repo = git.Repo(editor.root, search_parent_directories=True)
-    update = get_update(args.input_file, args.outfile, args.proc, editor)
+    update = editor.get_update(args.input_file, args.outfile, args.proc)
 
     redirects = update()
-    rewrite_input(args.input_file, editor.deprecated, redirects)
+    editor.rewrite_input(args.input_file, editor.deprecated, redirects)
 
     autocommit = not args.no_commit
 
     if autocommit:
-        commit(nixpkgs_repo, f"{editor.name}Plugins: update", [args.outfile])
+        nixpkgs_repo = git.Repo(editor.root, search_parent_directories=True)
+        commit(nixpkgs_repo, f"{editor.attr_path}: update", [args.outfile])
 
     if redirects:
         update()
         if autocommit:
             commit(
                 nixpkgs_repo,
-                f"{editor.name}Plugins: resolve github repository redirects",
+                f"{editor.attr_path}: resolve github repository redirects",
                 [args.outfile, args.input_file, editor.deprecated],
             )
 
     for plugin_line in args.add_plugins:
-        rewrite_input(args.input_file, editor.deprecated, append=(plugin_line + "\n",))
+        editor.rewrite_input(args.input_file, editor.deprecated, append=(plugin_line + "\n",))
         update()
         plugin = fetch_plugin_from_pluginline(plugin_line)
         if autocommit:
             commit(
                 nixpkgs_repo,
-                "{editor}Plugins.{name}: init at {version}".format(
-                    editor=editor.name, name=plugin.normalized_name, version=plugin.version
+                "{drv_name}: init at {version}".format(
+                    drv_name=editor.get_drv_name(plugin.normalized_name),
+                    version=plugin.version
                 ),
                 [args.outfile, args.input_file],
             )

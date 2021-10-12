@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pysaml2";
-  version = "6.5.2";
+  version = "7.0.1";
 
   disabled = !isPy3k;
 
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "IdentityPython";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1p0i88v2ng9fzs0fzjam1dc1idnihqc1wgagvnavqjrih721qcpi";
+    sha256 = "0ickqask6bjipgi3pvxg92pjr6dk2rr3q9garap39mdrp2gsfhln";
   };
 
   patches = [

@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "testtools";
-  version = "2.4.0";
+  version = "2.5.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "64c974a6cca4385d05f4bbfa2deca1c39ce88ede31c3448bee86a7259a9a61c8";
+    sha256 = "57c13433d94f9ffde3be6534177d10fb0c1507cc499319128958ca91a65cb23f";
   };
 
   propagatedBuildInputs = [ pbr python_mimeparse extras unittest2 ];

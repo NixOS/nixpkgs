@@ -117,8 +117,8 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.samba;
-        defaultText = "pkgs.samba";
-        example = literalExample "pkgs.samba4Full";
+        defaultText = literalExpression "pkgs.samba";
+        example = literalExpression "pkgs.samba4Full";
         description = ''
           Defines which package should be used for the samba server.
         '';
@@ -176,7 +176,7 @@ in
           See <command>man smb.conf</command> for options.
         '';
         type = types.attrsOf (types.attrsOf types.unspecified);
-        example = literalExample ''
+        example = literalExpression ''
           { public =
             { path = "/srv/public";
               "read only" = true;

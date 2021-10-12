@@ -1,6 +1,8 @@
 { lib
+, appdirs
 , attrs
 , buildPythonPackage
+, bson
 , cattrs
 , fetchFromGitHub
 , itsdangerous
@@ -18,15 +20,16 @@
 
 buildPythonPackage rec {
   pname = "requests-cache";
-  version = "0.7.2";
-  disabled = pythonOlder "3.6";
+  version = "0.8.1";
   format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "reclosedev";
     repo = "requests-cache";
     rev = "v${version}";
-    sha256 = "055dfyjm8dqwr62v86lyvq4r04692gmvlgp86218vwvzgm7p3p2c";
+    sha256 = "sha256-HzOcPWmvUhqPtb/7Mnw6wWY7a4CwGRwPgq+7QoHJAc8=";
   };
 
   nativeBuildInputs = [
@@ -34,7 +37,9 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    appdirs
     attrs
+    bson
     cattrs
     itsdangerous
     pyyaml

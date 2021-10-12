@@ -10,11 +10,11 @@ assert stdenv ? cc && stdenv.cc.isGNU;
 
 stdenv.mkDerivation rec {
   pname = "guile-lib";
-  version = "0.2.6.1";
+  version = "0.2.7";
 
   src = fetchurl {
     url = "mirror://savannah/${pname}/${pname}-${version}.tar.gz";
-    hash = "sha256-bR09DxTbnSgLjUJ9bh3sRBfd0Cv/I71Zguy24mLrPyo=";
+    hash = "sha256-5O87hF8SGILHwM8E+BocuP02DG9ktWuGjeVUYhT5BN4=";
   };
 
   nativeBuildInputs = [

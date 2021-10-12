@@ -26,11 +26,11 @@
 
 stdenv.mkDerivation rec {
   pname = "unbound";
-  version = "1.13.1";
+  version = "1.13.2";
 
   src = fetchurl {
-    url = "https://unbound.net/downloads/${pname}-${version}.tar.gz";
-    sha256 = "sha256-hQTZe4/FvYlzRcldEW4O4N34yP+ZWQqytL0TJ4yfULg=";
+    url = "https://nlnetlabs.nl/downloads/unbound/unbound-${version}.tar.gz";
+    sha256 = "sha256-ChO1R/O5KgJrXr0EI/VMmR5XGAN/2fckRYF/agQOGoM=";
   };
 
   outputs = [ "out" "lib" "man" ]; # "dev" would only split ~20 kB
@@ -58,6 +58,13 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals withDoH [
     "--with-libnghttp2=${libnghttp2.dev}"
   ];
+
+  # Remove references to compile-time dependencies that are included in the configure flags
+  postConfigure = let
+    inherit (builtins) storeDir;
+  in ''
+    sed -E '/CONFCMDLINE/ s;${storeDir}/[a-z0-9]{32}-;${storeDir}/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-;g' -i config.h
+  '';
 
   installFlags = [ "configfile=\${out}/etc/unbound/unbound.conf" ];
 

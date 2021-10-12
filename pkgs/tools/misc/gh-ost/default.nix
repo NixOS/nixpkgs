@@ -13,7 +13,7 @@ buildGoPackage rec {
 
   goPackagePath = "github.com/github/gh-ost";
 
-  buildFlagsArray = [ "-ldflags=-s -w -X main.AppVersion=${version} -X main.BuildDescribe=${src.rev}" ];
+  ldflags = [ "-s" "-w" "-X main.AppVersion=${version}" "-X main.BuildDescribe=${src.rev}" ];
 
   meta = with lib; {
     description = "Triggerless online schema migration solution for MySQL";

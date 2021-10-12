@@ -1,24 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, cmake, makeWrapper, openssl }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, openssl }:
 
-stdenv.mkDerivation {
-  name = "sigtool";
+stdenv.mkDerivation rec {
+  pname = "sigtool";
+  version = "0.1.2";
 
   src = fetchFromGitHub {
     owner = "thefloweringash";
     repo = "sigtool";
-    rev = "4a3719b42dc91c3f513df94048851cc98e7c7fcf";
-    sha256 = "04ra1cx7k1sdbkj5yrvl0s3l333vpir8rnm8k1dh2zy1w0a6hpqa";
+    rev = "v${version}";
+    sha256 = "sha256-v4udqW37vwcqBdqfvfwHnoyXpuLFt188ekVCPCPsTPM";
   };
 
-  nativeBuildInputs = [ pkg-config makeWrapper ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ];
 
   installFlags = [ "PREFIX=$(out)" ];
-
-  # Upstream (me) asserts the driver script is optional.
-  postInstall = ''
-    substitute $NIX_BUILD_TOP/$sourceRoot/codesign.sh $out/bin/codesign \
-      --replace sigtool "$out/bin/sigtool"
-    chmod a+x $out/bin/codesign
-  '';
 }

@@ -12,10 +12,11 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "pm-utils-1.4.1";
+  pname = "pm-utils";
+  version = "1.4.1";
 
   src = fetchurl {
-    url = "https://pm-utils.freedesktop.org/releases/${name}.tar.gz";
+    url = "https://pm-utils.freedesktop.org/releases/pm-utils-${version}.tar.gz";
     sha256 = "02qc6zaf7ams6qcc470fwb6jvr4abv3lrlx16clqpn36501rkn4f";
   };
 

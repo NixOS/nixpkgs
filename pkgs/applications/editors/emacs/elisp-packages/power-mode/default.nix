@@ -1,12 +1,12 @@
 { lib
-, stdenv
+, trivialBuild
 , fetchFromGitHub
 , emacs
 }:
 
-stdenv.mkDerivation rec {
+trivialBuild rec {
   pname = "power-mode";
-  version = "2021-06-06";
+  version = "0.pre+unstable=2021-06-06";
 
   src = fetchFromGitHub {
     owner = "elizagamedev";
@@ -15,15 +15,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-Wy8o9QTWqvH9cP7xsTpF5QSd4mWNIPXJTadoADKeHWY=";
   };
 
-  installPhase = ''
-    runHook preInstall
-    mkdir -p $out/share/emacs/site-lisp
-    install *.el $out/share/emacs/site-lisp
-    runHook postInstall
-  '';
-
   meta = {
-    homepage = "https://github.com/rougier/nano-theme";
+    homepage = "https://github.com/elizagamedev/power-mode.el";
     description = "Imbue Emacs with power!";
     inherit (emacs.meta) platforms;
   };

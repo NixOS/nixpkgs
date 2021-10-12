@@ -8,7 +8,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.13.2";
+  version = "1.13.4";
   pname = "wimlib";
 
   nativeBuildInputs = [ pkg-config makeWrapper ];
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://wimlib.net/downloads/${pname}-${version}.tar.gz";
-    sha256 = "0id9ym3hzij4kpdrk0sz3ijxp5r0z1md5jch83pml9hdy1zbx5bj";
+    sha256 = "sha256-S4fdCtnMGljO5XIa/ruYAR2rVJ5y8rVVM/MV8Isu3hI=";
   };
 
   preBuild = ''

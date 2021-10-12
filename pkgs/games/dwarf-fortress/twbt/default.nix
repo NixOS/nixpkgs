@@ -52,8 +52,8 @@ let
     };
     "0.47.05" = {
       twbtRelease = "6.xx";
-      dfhackRelease = "0.47.05-beta1";
-      sha256 = "sha256-Y6G0qBMHvotp/oyiqANlzXZVklL270dhskd135PnE9Q=";
+      dfhackRelease = "0.47.05-r1";
+      sha256 = "1nqhaf7271bm9rq9dmilhhk9q7v3841d0rv4y3fid40vfi4gpi3p";
       prerelease = true;
     };
   };

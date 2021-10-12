@@ -2,21 +2,20 @@
 
 buildGoModule rec {
   pname = "tfk8s";
-  version = "0.1.5";
+  version = "0.1.7";
   tag = "v${version}";
 
   src = fetchFromGitHub {
     owner = "jrhouston";
     repo = "tfk8s";
     rev = tag;
-    sha256 = "sha256-T0zM2JOmzk8YyS3+De6yGwiwLgyb6Rwy6hT9b44wNxQ=";
+    sha256 = "0mkfggwjrsp0rzh7ll6nmp9kqcw4fl8q81vk67z5mbd276dkyxrb";
   };
 
   vendorSha256 = "sha256-eLPmghs05pMMtys97Ja7YGdVMZmMmiaFeMwzaWNxW0I=";
   runVend = true;
 
-  buildFlagsArray = [
-    "-ldflags="
+  ldflags = [
     "-s"
     "-w"
     "-X main.toolVersion=${tag}"

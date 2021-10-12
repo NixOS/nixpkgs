@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "unicorn";
-  version = "1.0.2";
+  version = "1.0.3";
 
   src = fetchFromGitHub {
     owner = "unicorn-engine";
     repo = pname;
     rev = version;
-    sha256 = "0jgnyaq6ykpbg5hrwc0p3pargmr9hpzqfsj6ymp4k07pxnqal76j";
+    sha256 = "079azb1df4nwsnsck36b200rnf03aqilw30h3fiaqi1ixash957k";
   };
 
   nativeBuildInputs = [ pkg-config cmake ];

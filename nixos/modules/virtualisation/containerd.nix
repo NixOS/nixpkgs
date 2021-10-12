@@ -53,8 +53,11 @@ in
     virtualisation.containerd = {
       args.config = toString containerdConfigChecked;
       settings = {
-        plugins.cri.containerd.snapshotter = lib.mkIf config.boot.zfs.enabled "zfs";
-        plugins.cri.cni.bin_dir = lib.mkDefault "${pkgs.cni-plugins}/bin";
+        plugins."io.containerd.grpc.v1.cri" = {
+         containerd.snapshotter =
+           lib.mkIf config.boot.zfs.enabled (lib.mkOptionDefault "zfs");
+         cni.bin_dir = lib.mkOptionDefault "${pkgs.cni-plugins}/bin";
+        };
       };
     };
 
@@ -86,6 +89,7 @@ in
 
         StateDirectory = "containerd";
         RuntimeDirectory = "containerd";
+        RuntimeDirectoryPreserve = "yes";
       };
       unitConfig = {
         StartLimitBurst = "16";

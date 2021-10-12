@@ -87,7 +87,10 @@ in stdenv.mkDerivation rec {
     wrapProgram $out/bin/netdata-claim.sh --prefix PATH : ${lib.makeBinPath [ openssl ]}
   '';
 
-  passthru.tests.netdata = nixosTests.netdata;
+  passthru = {
+    inherit withIpmi;
+    tests.netdata = nixosTests.netdata;
+  };
 
   meta = {
     description = "Real-time performance monitoring tool";

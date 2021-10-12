@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
       This library is not meant as a public API for application developers.
       It is only used by other netfilter.org projects, like the aforementioned ones.
     '';
-    homepage = "http://www.netfilter.org/projects/libnfnetlink/index.html";
+    homepage = "https://www.netfilter.org/projects/libnfnetlink/index.html";
     license = lib.licenses.gpl2;
 
     platforms = lib.platforms.linux;

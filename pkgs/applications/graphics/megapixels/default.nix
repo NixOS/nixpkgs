@@ -4,6 +4,7 @@
 , meson
 , ninja
 , pkg-config
+, glib
 , wrapGAppsHook
 , epoxy
 , gtk4
@@ -26,22 +27,32 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "megapixels";
-  version = "1.1.0";
+  version = "1.3.0";
 
   src = fetchFromSourcehut {
     owner = "~martijnbraam";
     repo = "megapixels";
     rev = version;
-    sha256 = "0y56c6vchlzidfmp3a3bdc228vbhy7zaxvmhkyxchfb752yzr0n3";
+    sha256 = "0dagp1sh5whnnllrydk7ijjid0hmvcbdm8kkzq2g168khdfn80jm";
   };
 
-  nativeBuildInputs = [ meson ninja pkg-config wrapGAppsHook ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    glib
+    wrapGAppsHook
+  ];
 
   buildInputs = [
     epoxy
     gtk4
     zbar
   ];
+
+  postInstall = ''
+    glib-compile-schemas $out/share/glib-2.0/schemas
+  '';
 
   preFixup = optionalString (tiffSupport || jpgSupport) ''
     gappsWrapperArgs+=(
@@ -50,7 +61,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "GTK3 camera application using raw v4l2 and media-requests";
+    description = "GTK4 camera application that knows how to deal with the media request api";
     homepage = "https://sr.ht/~martijnbraam/Megapixels";
     changelog = "https://git.sr.ht/~martijnbraam/megapixels/refs/${version}";
     license = licenses.gpl3Only;

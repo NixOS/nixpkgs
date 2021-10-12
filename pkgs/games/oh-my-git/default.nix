@@ -20,6 +20,7 @@
 , libglvnd
 , libpulseaudio
 , zlib
+, udev # for libudev
 }:
 
 stdenv.mkDerivation rec {
@@ -54,6 +55,7 @@ stdenv.mkDerivation rec {
     libglvnd
     libpulseaudio
     zlib
+    udev
   ];
 
   desktopItems = [

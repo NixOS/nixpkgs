@@ -1,10 +1,10 @@
 { buildGoModule
 , buildGoPackage
 , fetchFromGitHub
+, fetchurl
 , go-bindata
 , lib
 , llvmPackages
-, mkYarnPackage
 , pkg-config
 , rustPlatform
 , stdenv
@@ -15,36 +15,21 @@
 # dependencies nix expression.
 
 let
-  version = "2.0.6";
-  shorthash = "4db98b4c9a"; # git rev-parse HEAD with 2.0.6 checked out
-  libflux_version = "0.115.0";
+  version = "2.0.8";
+  shorthash = "e91d41810f"; # git rev-parse HEAD with 2.0.8 checked out
+  libflux_version = "0.124.0";
 
   src = fetchFromGitHub {
     owner = "influxdata";
     repo = "influxdb";
     rev = "v${version}";
-    sha256 = "1x74p87csx4m4cgijk57xs75nikv3bnh7skgnzk30ab1ar13iirw";
+    sha256 = "0hbinnja13xr9ziyynjsnsbrxmyrvag7xdgfwq2ya28g07lw5wgq";
   };
 
-  ui = mkYarnPackage {
-    src = src;
-    packageJSON = ./influx-ui-package.json;
-    yarnLock = "${src}/ui/yarn.lock";
-    yarnNix = ./influx-ui-yarndeps.nix;
-    configurePhase = ''
-      cp -r $node_modules ui/node_modules
-      rsync -r $node_modules/../deps/influxdb-ui/node_modules/ ui/node_modules
-    '';
-    INFLUXDB_SHA = shorthash;
-    buildPhase = ''
-      pushd ui
-      yarn build:ci
-      popd
-    '';
-    installPhase = ''
-      mv ui/build $out
-    '';
-    distPhase = "true";
+  ui = fetchurl {
+    url = "https://github.com/influxdata/ui/releases/download/OSS-v${version}/build.tar.gz";
+    # https://github.com/influxdata/ui/releases/download/OSS-v${version}/sha256.txt
+    sha256 = "94965ae999a1098c26128141fbb849be3da9a723d509118eb6e0db4384ee01fc";
   };
 
   flux = rustPlatform.buildRustPackage {
@@ -54,10 +39,10 @@ let
       owner = "influxdata";
       repo = "flux";
       rev = "v${libflux_version}";
-      sha256 = "0zplwsk9xidv8l9sqbxqivy6q20ryd31fhrzspn1mjn4i45kkwz1";
+      sha256 = "1g1qilfzxqbbjbfvgkf7k7spcnhzvlmrqacpqdl05418ywkp3v29";
     };
     sourceRoot = "source/libflux";
-    cargoSha256 = "06gh466q7qkid0vs5scic0qqlz3h81yb00nwn8nwq8ppr5z2ijyq";
+    cargoSha256 = "0farcjwnwwgfvcgbs5r6vsdrsiwq2mp82sjxkqb1pzqfls4ixcxj";
     nativeBuildInputs = [ llvmPackages.libclang ];
     buildInputs = lib.optional stdenv.isDarwin libiconv;
     LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
@@ -85,7 +70,7 @@ in buildGoModule {
 
   nativeBuildInputs = [ go-bindata pkg-config ];
 
-  vendorSha256 = "03pabm0h9q0v5dfdq9by2l2n32bz9imwalz0aw897vsrfhci0ldf";
+  vendorSha256 = "1kar88vlm6px7smlnajpyf8qx6d481xk979qafpfb1xy8931781m";
   subPackages = [ "cmd/influxd" "cmd/influx" ];
 
   PKG_CONFIG_PATH = "${flux}/pkgconfig";
@@ -95,18 +80,19 @@ in buildGoModule {
   # the relevant go:generate directives, and run them by hand without
   # breaking hermeticity.
   preBuild = ''
-    ln -s ${ui} ui/build
+    tar -xzf ${ui} -C static/data
+
     grep -RI -e 'go:generate.*go-bindata' | cut -f1 -d: | while read -r filename; do
       sed -i -e 's/go:generate.*go-bindata/go:generate go-bindata/' $filename
       pushd $(dirname $filename)
       go generate
       popd
     done
-    export buildFlagsArray=(
-      -tags="assets"
-      -ldflags="-X main.commit=${shorthash} -X main.version=${version}"
-    )
   '';
+
+  tags = [ "assets" ];
+
+  ldflags = [ "-X main.commit=${shorthash}" "-X main.version=${version}" ];
 
   meta = with lib; {
     description = "An open-source distributed time series database";

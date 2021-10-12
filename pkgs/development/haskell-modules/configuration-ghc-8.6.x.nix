@@ -106,8 +106,4 @@ self: super: {
   # https://github.com/haskellari/time-compat/issues/23
   time-compat = dontCheck super.time-compat;
 
-  # hackage-db 2.1.1 is incompatible with Cabal < 3.4
-  # See https://github.com/NixOS/cabal2nix/issues/501
-  hackage-db = super.hackage-db_2_1_0;
-
 }

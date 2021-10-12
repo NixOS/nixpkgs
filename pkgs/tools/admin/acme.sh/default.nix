@@ -2,13 +2,13 @@
   unixtools, dnsutils, coreutils, gnugrep, gnused }:
 stdenv.mkDerivation rec {
   pname = "acme.sh";
-  version = "2.9.0";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "Neilpang";
     repo = "acme.sh";
     rev = version;
-    sha256 = "sha256-BSKqfj8idpE4OV8/EJkCFo5i1vq/aEde/moqJcwuDvk=";
+    sha256 = "sha256-KWSDAHzvNl8Iao13OV/ExRoKqkc9nouWim+bAN1V+Jo=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

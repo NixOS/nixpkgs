@@ -17,15 +17,22 @@ static int nrRedirects = 0;
 static char * from[MAX_REDIRECTS];
 static char * to[MAX_REDIRECTS];
 
+static int isInitialized = 0;
+
 // FIXME: might run too late.
 static void init() __attribute__((constructor));
 
 static void init()
 {
+    if (isInitialized) return;
+
     char * spec = getenv("NIX_REDIRECTS");
     if (!spec) return;
 
-    unsetenv("NIX_REDIRECTS");
+    // Ensure we only run this code once.
+    // We do not do `unsetenv("NIX_REDIRECTS")` to ensure that redirects
+    // also get initialized for subprocesses.
+    isInitialized = 1;
 
     char * spec2 = malloc(strlen(spec) + 1);
     strcpy(spec2, spec);
@@ -271,4 +278,18 @@ int system(const char *command)
     char newCommand[SYSTEM_CMD_MAX];
     rewriteSystemCall(command, newCommand);
     return _system(newCommand);
+}
+
+int mkdir(const char *path, mode_t mode)
+{
+    int (*mkdir_real) (const char *path, mode_t mode) = dlsym(RTLD_NEXT, "mkdir");
+    char buf[PATH_MAX];
+    return mkdir_real(rewrite(path, buf), mode);
+}
+
+int mkdirat(int dirfd, const char *path, mode_t mode)
+{
+    int (*mkdirat_real) (int dirfd, const char *path, mode_t mode) = dlsym(RTLD_NEXT, "mkdirat");
+    char buf[PATH_MAX];
+    return mkdirat_real(dirfd, rewrite(path, buf), mode);
 }

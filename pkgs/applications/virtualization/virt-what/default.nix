@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "virt-what";
-  version = "1.20";
+  version = "1.21";
 
   src = fetchurl {
     url = "https://people.redhat.com/~rjones/virt-what/files/${pname}-${version}.tar.gz";
-    sha256 = "1s0hg5w47gmnllbs935bx21k3zqrgvqx1wn0zzij2lfxkb9dq4zr";
+    sha256 = "0yqz1l4di57d4y1z94yhdmkiykg9a8i7xwkqmd9zsk5a6i9lbjqj";
   };
 
   meta = with lib; {

@@ -7,4 +7,5 @@ callPackage ./generic.nix (rec {
   knownVulnerabilities = [
     "CVE-2021-30123"
   ];
+  doCheck = false;
 } // args)

@@ -18,7 +18,6 @@ let
 
   fontconfig = config.fonts.fontconfig;
   xresourcesXft = pkgs.writeText "Xresources-Xft" ''
-    ${optionalString (fontconfig.dpi != 0) ''Xft.dpi: ${toString fontconfig.dpi}''}
     Xft.antialias: ${if fontconfig.antialias then "1" else "0"}
     Xft.rgba: ${fontconfig.subpixel.rgba}
     Xft.lcdfilter: lcd${fontconfig.subpixel.lcdfilter}
@@ -218,7 +217,7 @@ in
 
       session = mkOption {
         default = [];
-        example = literalExample
+        example = literalExpression
           ''
             [ { manage = "desktop";
                 name = "xterm";
@@ -306,9 +305,7 @@ in
 
         execCmd = mkOption {
           type = types.str;
-          example = literalExample ''
-            "''${pkgs.lightdm}/bin/lightdm"
-          '';
+          example = literalExpression ''"''${pkgs.lightdm}/bin/lightdm"'';
           description = "Command to start the display manager.";
         };
 

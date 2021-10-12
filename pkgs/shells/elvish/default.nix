@@ -2,20 +2,20 @@
 
 buildGoModule rec {
   pname = "elvish";
-  version = "0.15.0";
+  version = "0.16.3";
 
   excludedPackages = [ "website" ];
 
-  buildFlagsArray = [ "-ldflags=-s -w -X github.com/elves/elvish/pkg/buildinfo.Version==${version} -X github.com/elves/elvish/pkg/buildinfo.Reproducible=true" ];
+  ldflags = [ "-s" "-w" "-X github.com/elves/elvish/pkg/buildinfo.Version==${version}" "-X github.com/elves/elvish/pkg/buildinfo.Reproducible=true" ];
 
   src = fetchFromGitHub {
     owner = "elves";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1jksdpf86miz1dv3vrmvpvz4k1c2m23dway6a7b1cypg03c68a75";
+    sha256 = "1na2fswqp4rbgvlagz9nj3cmlxavlhi2gj6k6jpjq05mcbkxr3bd";
   };
 
-  vendorSha256 = "124m9680pl7wrh7ld7v39dfl86r6vih1pjk3bmbihy0fjgxnnq0b";
+  vendorSha256 = "06rx09vs08d9arim53al73z22hb40xj2101kbvafz6wbyp6pqws1";
 
   doCheck = false;
 
@@ -29,7 +29,6 @@ buildGoModule rec {
     homepage = "https://elv.sh/";
     license = licenses.bsd2;
     maintainers = with maintainers; [ vrthra AndersonTorres ];
-    platforms = with platforms; linux ++ darwin;
   };
 
   passthru = {

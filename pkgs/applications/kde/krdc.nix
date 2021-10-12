@@ -18,6 +18,7 @@ mkDerivation {
   '';
   meta = with lib; {
     homepage = "http://www.kde.org";
+    description = "Remote desktop client";
     license = with licenses; [ gpl2 lgpl21 fdl12 bsd3 ];
     maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.linux;

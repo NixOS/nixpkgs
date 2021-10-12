@@ -16,9 +16,9 @@ buildGoModule rec {
 
   vendorSha256 = "1nczzzsnh38qi949ki5268y39ggkwncanc1pv7727qpwllzl62vy";
 
-  preBuild = ''
-    buildFlagsArray+=("-ldflags" "-s -w -X github.com/assetnote/kiterunner/cmd/kiterunner/cmd.Version=${version}")
-  '';
+  ldflags = [
+    "-s" "-w" "-X github.com/assetnote/kiterunner/cmd/kiterunner/cmd.Version=${version}"
+  ];
 
   subPackages = [ "./cmd/kiterunner" ];
 

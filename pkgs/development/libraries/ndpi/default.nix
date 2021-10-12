@@ -1,23 +1,31 @@
-{ lib, stdenv, fetchFromGitHub, which, autoconf, automake, libtool, libpcap
+{ lib
+, stdenv
+, fetchFromGitHub
+, which
+, autoconf
+, automake
+, libtool
+, libpcap
+, json_c
 , pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "ndpi";
-  version = "3.4";
+  version = "4.0";
 
   src = fetchFromGitHub {
     owner = "ntop";
     repo = "nDPI";
     rev = version;
-    sha256 = "0xjh9gv0mq0213bjfs5ahrh6m7l7g99jjg8104c0pw54hz0p5pq1";
+    sha256 = "0snzvlracc6s7r2pgdn0jqcc7nxjxzcivsa579h90g5ibhhplv5x";
   };
 
   configureScript = "./autogen.sh";
 
-  nativeBuildInputs = [which autoconf automake libtool];
+  nativeBuildInputs = [ which autoconf automake libtool pkg-config ];
   buildInputs = [
     libpcap
-    pkg-config
+    json_c
   ];
 
   meta = with lib; {

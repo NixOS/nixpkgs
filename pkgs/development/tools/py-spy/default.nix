@@ -2,13 +2,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "py-spy";
-  version = "0.3.5";
+  version = "0.3.9";
 
   src = fetchFromGitHub {
     owner = "benfred";
     repo = "py-spy";
     rev = "v${version}";
-    sha256 = "sha256-O6DbY/0ZI+BeG22jd9snbE718Y2vv7fqmeDdGWTnqfY=";
+    sha256 = "sha256-jGHTt3MMSNBVi9W3JRWxKrao1OXrV8mB1pXoiZcQ7SU=";
   };
 
   NIX_CFLAGS_COMPILE = "-L${libunwind}/lib";
@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
 
   checkInputs = [ python3 ];
 
-  cargoSha256 = "sha256-hmqrVGNu3zb109TQfhLI3wvGVnlc4CfbkrIKMfRSn7M=";
+  cargoSha256 = "sha256-UW8fqauuE2e6NPsJP2YtjU8bwi60UWJvGvZ7dglmPA0=";
 
   meta = with lib; {
     description = "Sampling profiler for Python programs";

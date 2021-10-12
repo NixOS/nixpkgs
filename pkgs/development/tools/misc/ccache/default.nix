@@ -1,10 +1,9 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , substituteAll
 , binutils
-, asciidoc
+, asciidoctor
 , cmake
 , perl
 , zstd
@@ -15,13 +14,13 @@
 
 let ccache = stdenv.mkDerivation rec {
   pname = "ccache";
-  version = "4.3";
+  version = "4.4.2";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-ZBxDTMUZiZJLIYbvACTFwvlss+IZiMjiL0khfM5hFCM=";
+    hash = "sha256-VtwykRX5so6LqyC0En/Jx7anXD7qW47zqq3awCY0lJE=";
   };
 
   outputs = [ "out" "man" ];
@@ -35,15 +34,16 @@ let ccache = stdenv.mkDerivation rec {
       src = ./force-objdump-on-darwin.patch;
       objdump = "${binutils.bintools}/bin/objdump";
     })
-    # Fix clang C++ modules test (remove in next release)
-    (fetchpatch {
-      url = "https://github.com/ccache/ccache/commit/8b0c783ffc77d29a3e3520345b776a5c496fd892.patch";
-      sha256 = "13qllx0qhfrdila6bdij9lk74fhkm3vdj01zgq1ri6ffrv9lqrla";
-    })
   ];
 
-  nativeBuildInputs = [ asciidoc cmake perl ];
+  nativeBuildInputs = [ asciidoctor cmake perl ];
   buildInputs = [ zstd ];
+
+  cmakeFlags = [
+    # Build system does not autodetect redis library presence.
+    # Requires explicit flag.
+    "-DREDIS_STORAGE_BACKEND=OFF"
+  ];
 
   doCheck = true;
   checkInputs = [
@@ -52,12 +52,18 @@ let ccache = stdenv.mkDerivation rec {
     bashInteractive
   ] ++ lib.optional stdenv.isDarwin xcodebuild;
 
-  checkPhase = ''
+  checkPhase = let
+    badTests = [
+      "test.trim_dir" # flaky on hydra (possibly filesystem-specific?)
+    ] ++ lib.optionals stdenv.isDarwin [
+      "test.basedir"
+      "test.multi_arch"
+      "test.nocpp2"
+    ];
+  in ''
     runHook preCheck
     export HOME=$(mktemp -d)
-    ctest --output-on-failure ${lib.optionalString stdenv.isDarwin ''
-      -E '^(test.nocpp2|test.basedir|test.multi_arch)$'
-    ''}
+    ctest --output-on-failure -E '^(${lib.concatStringsSep "|" badTests})$'
     runHook postCheck
   '';
 

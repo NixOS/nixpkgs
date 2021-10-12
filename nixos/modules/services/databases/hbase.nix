@@ -44,8 +44,7 @@ in {
       package = mkOption {
         type = types.package;
         default = pkgs.hbase;
-        defaultText = "pkgs.hbase";
-        example = literalExample "pkgs.hbase";
+        defaultText = literalExpression "pkgs.hbase";
         description = ''
           HBase package to use.
         '';

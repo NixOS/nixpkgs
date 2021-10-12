@@ -24,9 +24,8 @@ existing packages here and modify it as necessary.
 
 */
 
-{
-  libsForQt5, lib, fetchurl,
-  gconf, gsettings-desktop-schemas
+{ libsForQt5, lib, config, fetchurl
+, gconf, gsettings-desktop-schemas
 }:
 
 let
@@ -123,12 +122,13 @@ let
       kscreen = callPackage ./kscreen.nix {};
       kscreenlocker = callPackage ./kscreenlocker.nix {};
       ksshaskpass = callPackage ./ksshaskpass.nix {};
-      ksysguard = callPackage ./ksysguard.nix {};
+      ksystemstats = callPackage ./ksystemstats.nix {};
       kwallet-pam = callPackage ./kwallet-pam.nix {};
       kwayland-integration = callPackage ./kwayland-integration.nix {};
       kwayland-server = callPackage ./kwayland-server {};
       kwin = callPackage ./kwin {};
       kwrited = callPackage ./kwrited.nix {};
+      layer-shell-qt = callPackage ./layer-shell-qt.nix {};
       libkscreen = callPackage ./libkscreen {};
       libksysguard = callPackage ./libksysguard {};
       milou = callPackage ./milou.nix {};
@@ -162,6 +162,8 @@ let
         parachute = callPackage ./3rdparty/kwin/scripts/parachute.nix { };
       };
 
+    } // lib.optionalAttrs (config.allowAliases or true) {
+      ksysguard = throw "ksysguard has been replaced with plasma-systemmonitor";
     };
 in
 lib.makeScope libsForQt5.newScope packages

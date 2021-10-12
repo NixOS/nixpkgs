@@ -1,5 +1,5 @@
 { lib, mkDerivation, fetchFromGitHub, cmake, doxygen, makeWrapper
-, msgpack, neovim, python3Packages, qtbase }:
+, msgpack, neovim, python3Packages, qtbase, qtsvg }:
 
 mkDerivation rec {
   pname = "neovim-qt-unwrapped";
@@ -20,6 +20,7 @@ mkDerivation rec {
   buildInputs = [
     neovim.unwrapped # only used to generate help tags at build time
     qtbase
+    qtsvg
   ] ++ (with python3Packages; [
     jinja2 python msgpack
   ]);

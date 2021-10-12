@@ -9,20 +9,21 @@
 , gpgme
 , gtk3
 , libxcb
+, libxkbcommon
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "prs";
-  version = "0.2.11";
+  version = "0.3.2";
 
   src = fetchFromGitLab {
     owner = "timvisee";
     repo = "prs";
     rev = "v${version}";
-    sha256 = "sha256-jBHe3ZeB+GS+Ds8c6ySwoyyJfqoCWKSgIObg+z1TNmU=";
+    sha256 = "sha256-90Ed/mafACSJvH+DjCbdXs3eeyT+pGflRzDD9l3b0/s=";
   };
 
-  cargoSha256 = "sha256-dhQuzzML817cDIsYuZElHZfq55AdZ20xeXTNm1nJPqk=";
+  cargoSha256 = "sha256-5teiF8s11Ml8UtbVn6fXur2OQzE52JZnsgyDihbEFTQ=";
 
   postPatch = ''
     # The GPGME backend is recommended
@@ -34,7 +35,14 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ gpgme installShellFiles pkg-config python3 ];
 
-  buildInputs = [ dbus glib gpgme gtk3 libxcb ];
+  buildInputs = [
+    dbus
+    glib
+    gpgme
+    gtk3
+    libxcb
+    libxkbcommon
+  ];
 
   postInstall = ''
     for shell in bash fish zsh; do

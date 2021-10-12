@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "mtx-1.3.12";
+  pname = "mtx";
+  version = "1.3.12";
 
   src = fetchurl {
-    url = "mirror://gentoo/distfiles/${name}.tar.gz";
+    url = "mirror://gentoo/distfiles/mtx-${version}.tar.gz";
     sha256 = "0261c5e90b98b6138cd23dadecbc7bc6e2830235145ed2740290e1f35672d843";
   };
 

@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "stella";
-  version = "6.5.2";
+  version = "6.5.3";
 
   src = fetchFromGitHub {
     owner = "stella-emu";
     repo = pname;
     rev = version;
-    hash = "sha256-CDLMOqSgRx75tjBoLycis/cckCNwgdlb9TRBlD3Dd04=";
+    hash = "sha256-Y9rEh9PZalQNj+d7OXN/8z5P8Hti4R3c2RL1BY+J1y4=";
   };
 
   nativeBuildInputs = [ pkg-config ];

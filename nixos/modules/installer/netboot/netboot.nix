@@ -9,7 +9,7 @@ with lib;
   options = {
 
     netboot.storeContents = mkOption {
-      example = literalExample "[ pkgs.stdenv ]";
+      example = literalExpression "[ pkgs.stdenv ]";
       description = ''
         This option lists additional derivations to be included in the
         Nix store in the generated netboot image.
@@ -29,27 +29,27 @@ with lib;
           then []
           else [ pkgs.grub2 pkgs.syslinux ]);
 
-    fileSystems."/" =
+    fileSystems."/" = mkImageMediaOverride
       { fsType = "tmpfs";
         options = [ "mode=0755" ];
       };
 
     # In stage 1, mount a tmpfs on top of /nix/store (the squashfs
     # image) to make this a live CD.
-    fileSystems."/nix/.ro-store" =
+    fileSystems."/nix/.ro-store" = mkImageMediaOverride
       { fsType = "squashfs";
         device = "../nix-store.squashfs";
         options = [ "loop" ];
         neededForBoot = true;
       };
 
-    fileSystems."/nix/.rw-store" =
+    fileSystems."/nix/.rw-store" = mkImageMediaOverride
       { fsType = "tmpfs";
         options = [ "mode=0755" ];
         neededForBoot = true;
       };
 
-    fileSystems."/nix/store" =
+    fileSystems."/nix/store" = mkImageMediaOverride
       { fsType = "overlay";
         device = "overlay";
         options = [

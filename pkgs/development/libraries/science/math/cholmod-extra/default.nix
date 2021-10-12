@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "0hz1lfp0zaarvl0dv0zgp337hyd8np41kmdpz5rr3fc6yzw7vmkg";
   };
 
-  buildInputs = [ suitesparse gfortran blas lapack ];
+  nativeBuildInputs = [ gfortran ];
+  buildInputs = [ suitesparse blas lapack ];
 
   makeFlags = [
     "BLAS=-lcblas"

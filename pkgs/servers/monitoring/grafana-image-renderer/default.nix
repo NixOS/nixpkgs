@@ -4,19 +4,19 @@
 # * Download the tarball of the new version to use.
 # * Remove the `resolutions`-section from upstream `package.json`
 #   as this breaks with `yarn2nix`.
-# * Regenerate `yarn.lock` and `yarn2nix`.
+# * Regenerate `yarn.lock` and `yarn2nix --no-patch`.
 # * Replace new `package.json`, `yarn.nix`, `yarn.lock` here.
 # * Update `version`+`hash` and rebuild.
 
 mkYarnPackage rec {
-  name = "grafana-image-renderer";
-  version = "3.0.0";
+  pname = "grafana-image-renderer";
+  version = "3.2.1";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "grafana-image-renderer";
     rev = "v${version}";
-    sha256 = "sha256-wg+cMAMqj4JORh5LPJnNELgsJYAxVgz2YPOl87WWda4=";
+    sha256 = "sha256-1xHRfEjtxiXXRt6Rpl4j8xxTQ6qXG4/ps885CLc35OQ=";
   };
 
   buildPhase = ''

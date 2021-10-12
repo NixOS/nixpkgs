@@ -49,6 +49,15 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "User-friendly and modern chat app, using XMPP";
+    longDescription = ''
+       Kaidan is a user-friendly and modern chat app for every device. It uses
+       the open communication protocol XMPP (Jabber). Unlike other chat apps,
+       you are not dependent on one specific service provider.
+
+       Kaidan does not have all basic features yet and has still some
+       stability issues. Current features include audio messages, video
+       messages, and file sharing.
+    '';
     homepage = "https://www.kaidan.im";
     license = with licenses; [
       gpl3Plus

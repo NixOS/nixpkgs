@@ -43,7 +43,7 @@ let
           return EXIT_SUCCESS;
         }
       '';
-    in pkgs.runCommandNoCC "mpitest" {} ''
+    in pkgs.runCommand "mpitest" {} ''
       mkdir -p $out/bin
       ${pkgs.openmpi}/bin/mpicc ${mpitestC} -o $out/bin/mpitest
     '';

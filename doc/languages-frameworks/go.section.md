@@ -13,6 +13,7 @@ In the following is an example expression using `buildGoModule`, the following a
 
 - `vendorSha256`: is the hash of the output of the intermediate fetcher derivation. `vendorSha256` can also take `null` as an input. When `null` is used as a value, rather than fetching the dependencies and vendoring them, we use the vendoring included within the source repo. If you'd like to not have to update this field on dependency changes, run `go mod vendor` in your source repo and set `vendorSha256 = null;`
 - `runVend`: runs the vend command to generate the vendor directory. This is useful if your code depends on c code and go mod tidy does not include the needed sources to build.
+- `proxyVendor`: Fetches (go mod download) and proxies the vendor directory. This is useful if any dependency has case-insensitive conflicts which will produce platform dependant `vendorSha256` checksums.
 
 ```nix
 pet = buildGoModule rec {
@@ -112,16 +113,6 @@ done
 
 Both `buildGoModule` and `buildGoPackage` can be tweaked to behave slightly differently, if the following attributes are used:
 
-### `buildFlagsArray` and `buildFlags`: {#ex-goBuildFlags-noarray}
-
-These attributes set build flags supported by `go build`. We recommend using `buildFlagsArray`.
-
-```nix
-  buildFlagsArray = [
-    "-tags=release"
-  ];
-```
-
 ### `ldflags` {#var-go-ldflags}
 
 Arguments to pass to the Go linker tool via the `-ldflags` argument of `go build`. The most common use case for this argument is to make the resulting executable aware of its own version. For example:
@@ -132,6 +123,21 @@ Arguments to pass to the Go linker tool via the `-ldflags` argument of `go build
     "-X main.Version=${version}"
     "-X main.Commit=${version}"
   ];
+```
+
+### `tags` {#var-go-tags}
+
+Arguments to pass to the Go via the `-tags` argument of `go build`. For example:
+
+```nix
+  tags = [
+    "production"
+    "sqlite"
+  ];
+```
+
+```nix
+  tags = [ "production" ] ++ lib.optionals withSqlite [ "sqlite" ];
 ```
 
 ### `deleteVendor` {#var-go-deleteVendor}

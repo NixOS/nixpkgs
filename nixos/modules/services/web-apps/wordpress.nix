@@ -2,7 +2,7 @@
 
 let
   inherit (lib) mkDefault mkEnableOption mkForce mkIf mkMerge mkOption types;
-  inherit (lib) any attrValues concatMapStringsSep flatten literalExample;
+  inherit (lib) any attrValues concatMapStringsSep flatten literalExpression;
   inherit (lib) filterAttrs mapAttrs mapAttrs' mapAttrsToList nameValuePair optional optionalAttrs optionalString;
 
   cfg = migrateOldAttrs config.services.wordpress;
@@ -87,6 +87,7 @@ let
         package = mkOption {
           type = types.package;
           default = pkgs.wordpress;
+          defaultText = literalExpression "pkgs.wordpress";
           description = "Which WordPress package to use.";
         };
 
@@ -106,23 +107,23 @@ let
             List of path(s) to respective plugin(s) which are copied from the 'plugins' directory.
             <note><para>These plugins need to be packaged before use, see example.</para></note>
           '';
-          example = ''
-            # Wordpress plugin 'embed-pdf-viewer' installation example
-            embedPdfViewerPlugin = pkgs.stdenv.mkDerivation {
-              name = "embed-pdf-viewer-plugin";
-              # Download the theme from the wordpress site
-              src = pkgs.fetchurl {
-                url = "https://downloads.wordpress.org/plugin/embed-pdf-viewer.2.0.3.zip";
-                sha256 = "1rhba5h5fjlhy8p05zf0p14c9iagfh96y91r36ni0rmk6y891lyd";
+          example = literalExpression ''
+            let
+              # Wordpress plugin 'embed-pdf-viewer' installation example
+              embedPdfViewerPlugin = pkgs.stdenv.mkDerivation {
+                name = "embed-pdf-viewer-plugin";
+                # Download the theme from the wordpress site
+                src = pkgs.fetchurl {
+                  url = "https://downloads.wordpress.org/plugin/embed-pdf-viewer.2.0.3.zip";
+                  sha256 = "1rhba5h5fjlhy8p05zf0p14c9iagfh96y91r36ni0rmk6y891lyd";
+                };
+                # We need unzip to build this package
+                nativeBuildInputs = [ pkgs.unzip ];
+                # Installing simply means copying all files to the output directory
+                installPhase = "mkdir -p $out; cp -R * $out/";
               };
-              # We need unzip to build this package
-              nativeBuildInputs = [ pkgs.unzip ];
-              # Installing simply means copying all files to the output directory
-              installPhase = "mkdir -p $out; cp -R * $out/";
-            };
-
-            And then pass this theme to the themes list like this:
-              plugins = [ embedPdfViewerPlugin ];
+            # And then pass this theme to the themes list like this:
+            in [ embedPdfViewerPlugin ]
           '';
         };
 
@@ -133,23 +134,23 @@ let
             List of path(s) to respective theme(s) which are copied from the 'theme' directory.
             <note><para>These themes need to be packaged before use, see example.</para></note>
           '';
-          example = ''
-            # Let's package the responsive theme
-            responsiveTheme = pkgs.stdenv.mkDerivation {
-              name = "responsive-theme";
-              # Download the theme from the wordpress site
-              src = pkgs.fetchurl {
-                url = "https://downloads.wordpress.org/theme/responsive.3.14.zip";
-                sha256 = "0rjwm811f4aa4q43r77zxlpklyb85q08f9c8ns2akcarrvj5ydx3";
+          example = literalExpression ''
+            let
+              # Let's package the responsive theme
+              responsiveTheme = pkgs.stdenv.mkDerivation {
+                name = "responsive-theme";
+                # Download the theme from the wordpress site
+                src = pkgs.fetchurl {
+                  url = "https://downloads.wordpress.org/theme/responsive.3.14.zip";
+                  sha256 = "0rjwm811f4aa4q43r77zxlpklyb85q08f9c8ns2akcarrvj5ydx3";
+                };
+                # We need unzip to build this package
+                nativeBuildInputs = [ pkgs.unzip ];
+                # Installing simply means copying all files to the output directory
+                installPhase = "mkdir -p $out; cp -R * $out/";
               };
-              # We need unzip to build this package
-              nativeBuildInputs = [ pkgs.unzip ];
-              # Installing simply means copying all files to the output directory
-              installPhase = "mkdir -p $out; cp -R * $out/";
-            };
-
-            And then pass this theme to the themes list like this:
-              themes = [ responsiveTheme ];
+            # And then pass this theme to the themes list like this:
+            in [ responsiveTheme ]
           '';
         };
 
@@ -204,7 +205,7 @@ let
           socket = mkOption {
             type = types.nullOr types.path;
             default = null;
-            defaultText = "/run/mysqld/mysqld.sock";
+            defaultText = literalExpression "/run/mysqld/mysqld.sock";
             description = "Path to the unix socket file to use for authentication.";
           };
 
@@ -217,7 +218,7 @@ let
 
         virtualHost = mkOption {
           type = types.submodule (import ../web-servers/apache-httpd/vhost-options.nix);
-          example = literalExample ''
+          example = literalExpression ''
             {
               adminAddr = "webmaster@example.org";
               forceSSL = true;
@@ -278,7 +279,7 @@ in
         };
 
         options.webserver = mkOption {
-          type = types.enum [ "httpd" "nginx" ];
+          type = types.enum [ "httpd" "nginx" "caddy" ];
           default = "httpd";
           description = ''
             Whether to use apache2 or nginx for virtual host management.
@@ -457,6 +458,33 @@ in
       }) eachSite;
     };
   })
+
+  (mkIf (cfg.webserver == "caddy") {
+    services.caddy = {
+      enable = true;
+      virtualHosts = mapAttrs' (hostName: cfg: (
+        nameValuePair "http://${hostName}" {
+          extraConfig = ''
+            root    * /${pkg hostName cfg}/share/wordpress
+            file_server
+
+            php_fastcgi unix/${config.services.phpfpm.pools."wordpress-${hostName}".socket}
+
+            @uploads {
+              path_regexp path /uploads\/(.*)\.php
+            }
+            rewrite @uploads /
+
+            @wp-admin {
+              path  not ^\/wp-admin/*
+            }
+            rewrite @wp-admin {path}/index.php?{query}
+          '';
+        }
+      )) eachSite;
+    };
+  })
+
 
   ]);
 }

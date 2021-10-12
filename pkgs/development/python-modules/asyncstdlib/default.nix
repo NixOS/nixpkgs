@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "asyncstdlib";
-  version = "3.9.2";
+  version = "3.10.1";
   disabled = pythonOlder "3.7";
   format = "flit";
 
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "maxfischer2781";
     repo = pname;
     rev = "v${version}";
-    sha256 = "04z0x2n4a7503h6xf853p7if218magi98x397648wb21l4gh3zwv";
+    sha256 = "sha256-D8XaBny/m6dXMz6k/FhVX/5t8guNdJsfiX4cVQV4VIY=";
   };
 
   propagatedBuildInputs = [

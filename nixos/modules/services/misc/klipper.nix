@@ -19,6 +19,7 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.klipper;
+        defaultText = literalExpression "pkgs.klipper";
         description = "The Klipper package.";
       };
 
@@ -30,8 +31,7 @@ in
 
       apiSocket = mkOption {
         type = types.nullOr types.path;
-        default = null;
-        example = "/run/klipper/api";
+        default = "/run/klipper/api";
         description = "Path of the API socket to create.";
       };
 

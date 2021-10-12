@@ -2,18 +2,18 @@
 
 buildGoPackage rec {
   pname = "cointop";
-  version = "1.6.5";
+  version = "1.6.8";
 
   src = fetchFromGitHub {
     owner = "miguelmota";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-pnh4z7vk8xazdBPNbwR5BrKFbi8df8UTM2SOU+KDvsk=";
+    sha256 = "sha256-uENfTj+pJjX4t+yrd7zrn3LHRbJJSZFCN1N6Ce47wcE=";
   };
 
   goPackagePath = "github.com/miguelmota/cointop";
 
-  buildFlagsArray = [ "-ldflags=-s -w -X ${goPackagePath}/cointop.version=${version}" ];
+  ldflags = [ "-s" "-w" "-X ${goPackagePath}/cointop.version=${version}" ];
 
   meta = with lib; {
     description = "The fastest and most interactive terminal based UI application for tracking cryptocurrencies";

@@ -351,7 +351,8 @@ with self;
 
   parsexp = janePackage {
     pname = "parsexp";
-    hash = "0rvbrf8ggh2imsbhqi15jzyyqbi3m5hzvy2iy2r4skx6m102mzpd";
+    version = "0.14.1";
+    hash = "1nr0ncb8l2mkk8pqzknr7fsqw5kpz8y102kyv5bc0x7c36v0d4zy";
     minimumOCamlVersion = "4.04.2";
     meta.description = "S-expression parsing library";
     propagatedBuildInputs = [ base sexplib0 ];
@@ -513,7 +514,8 @@ with self;
 
   ppx_js_style = janePackage {
     pname = "ppx_js_style";
-    hash = "1ahk4mv63s9cw8ji62598ggw6b3lqpaljqa2ya7w91lify3lb76q";
+    version = "0.14.1";
+    hash = "16ax6ww9h36xyn9acbm8zxv0ajs344sm37lgj2zd2bvgsqv24kxj";
     minimumOCamlVersion = "4.04.2";
     meta.description = "Code style checker for Jane Street Packages";
     propagatedBuildInputs = [ octavius ppxlib ];
@@ -545,8 +547,8 @@ with self;
 
   ppx_optcomp = janePackage {
     pname = "ppx_optcomp";
-    version = "0.14.1";
-    hash = "0j5smqa0hig1yn8wfrb4mv0y59kkwsalmqkm5asbd7kcc6589ap4";
+    version = "0.14.3";
+    hash = "1iflgfzs23asw3k6098v84al5zqx59rx2qjw0mhvk56avlx71pkw";
     minimumOCamlVersion = "4.04.2";
     meta.description = "Optional compilation for OCaml";
     propagatedBuildInputs = [ ppxlib ];

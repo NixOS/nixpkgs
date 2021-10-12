@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
   createFindlibDestdir = true;
 
   dontAddPrefix = true;
+  dontAddStaticConfigureFlags = true;
+  configurePlatforms = [];
 
   preConfigure = ''
     configureFlagsArray=(

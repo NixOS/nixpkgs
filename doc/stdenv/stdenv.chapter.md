@@ -373,11 +373,11 @@ Additional file types can be supported by setting the `unpackCmd` variable (see 
 
 ##### `srcs` / `src` {#var-stdenv-src}
 
-The list of source files or directories to be unpacked or copied. One of these must be set.
+The list of source files or directories to be unpacked or copied. One of these must be set. Note that if you use `srcs`, you should also set `sourceRoot` or `setSourceRoot`.
 
 ##### `sourceRoot` {#var-stdenv-sourceRoot}
 
-After running `unpackPhase`, the generic builder changes the current directory to the directory created by unpacking the sources. If there are multiple source directories, you should set `sourceRoot` to the name of the intended directory.
+After running `unpackPhase`, the generic builder changes the current directory to the directory created by unpacking the sources. If there are multiple source directories, you should set `sourceRoot` to the name of the intended directory. Set `sourceRoot = ".";` if you use `srcs` and control the unpack phase yourself.
 
 ##### `setSourceRoot` {#var-stdenv-setSourceRoot}
 
@@ -713,6 +713,8 @@ to `~/.gdbinit`. GDB will then be able to find debug information installed via `
 ### The installCheck phase {#ssec-installCheck-phase}
 
 The installCheck phase checks whether the package was installed correctly by running its test suite against the installed directories. The default `installCheck` calls `make installcheck`.
+
+It is often better to add tests that are not part of the source distribution to `passthru.tests` (see <xref linkend="var-meta-tests"/>). This avoids adding overhead to every build and enables us to run them independently.
 
 #### Variables controlling the installCheck phase {#variables-controlling-the-installcheck-phase}
 

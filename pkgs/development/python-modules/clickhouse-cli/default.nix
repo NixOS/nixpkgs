@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , click
-, prompt_toolkit
+, prompt-toolkit
 , pygments
 , requests
 , sqlparse
@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     click
-    prompt_toolkit
+    prompt-toolkit
     pygments
     requests
     sqlparse

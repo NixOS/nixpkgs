@@ -16,7 +16,6 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "doc" ];
 
   setOutputFlags = false;
-  enableParallelBuilding = true;
   NIX_QT_SUBMODULE = true;
   dontWrapQtApps = true;
 

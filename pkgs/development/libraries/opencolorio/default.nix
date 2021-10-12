@@ -16,13 +16,13 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "opencolorio";
-  version = "2.0.1";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "AcademySoftwareFoundation";
     repo = "OpenColorIO";
     rev = "v${version}";
-    sha256 = "194j9jp5c8ws0fryiz936wyinphnpzwpqnzvw9ryx6rbiwrba487";
+    sha256 = "sha256-Yr7yypXxf3ZvQVsDxVuKTN/DGPaLkIWli26RRoEDMdA=";
   };
 
   nativeBuildInputs = [ cmake ];

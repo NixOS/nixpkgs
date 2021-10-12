@@ -30,14 +30,23 @@
 
 stdenv.mkDerivation rec {
   pname = "appcenter";
-  version = "3.6.0";
+  version = "3.8.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "0kwqgilhyrj2nbvw5y34nzch5h9jnrg1a1n333qdsx4ax6yrxh4j";
+    sha256 = "07lkdpnjj9pxbq8h794qjiidvnysvzx0132w98r1wg9k7ca170bj";
   };
+
+  patches = [
+    # Try to remove other backends to make flatpak backend work.
+    # https://github.com/NixOS/nixpkgs/issues/70214
+    ./flatpak-only.patch
+    # The homepage banner does not show up on first run,
+    # has issues with app icon and mouse scrolling.
+    ./drop-homepage-banner.patch
+  ];
 
   passthru = {
     updateScript = nix-update-script {
@@ -76,7 +85,6 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dhomepage=false"
     "-Dpayments=false"
     "-Dcurated=false"
   ];
@@ -91,6 +99,6 @@ stdenv.mkDerivation rec {
     description = "An open, pay-what-you-want app store for indie developers, designed for elementary OS";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
   };
 }

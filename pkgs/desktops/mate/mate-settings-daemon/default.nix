@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mate-settings-daemon";
-  version = "1.24.2";
+  version = "1.26.0";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "051r7xrx1byllsszbwsk646sq4izyag9yxg8jw2rm6x6mgwb89cc";
+    sha256 = "0hbdwqagxh1mdpxfdqr1ps3yqvk0v0c5zm0bwk56y6l1zwbs0ymp";
   };
 
   nativeBuildInputs = [
@@ -45,6 +45,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/mate-desktop/mate-settings-daemon";
     license = with licenses; [ gpl2Plus gpl3Plus lgpl2Plus mit ];
     platforms = platforms.unix;
-    maintainers = [ maintainers.romildo ];
+    maintainers = teams.mate.members;
   };
 }

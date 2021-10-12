@@ -18,7 +18,7 @@ buildGoPackage rec {
 
   nativeBuildInputs = optional withSystemdSupport makeWrapper;
   buildInputs = optional withSystemdSupport systemd;
-  buildFlags = optional (!withSystemdSupport) "-tags nosystemd";
+  tags = optional (!withSystemdSupport) "nosystemd";
 
   goDeps = ./postfix-exporter-deps.nix;
   extraSrcs = optionals withSystemdSupport [

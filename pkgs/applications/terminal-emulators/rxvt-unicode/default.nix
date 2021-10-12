@@ -49,7 +49,7 @@ stdenv.mkDerivation {
 
 
   configureFlags = [
-    "--with-terminfo=$terminfo/share/terminfo"
+    "--with-terminfo=${placeholder "terminfo"}/share/terminfo"
     "--enable-256-color"
     (enableFeature perlSupport "perl")
     (enableFeature unicode3Support "unicode3")

@@ -4,16 +4,16 @@
 }:
 buildGoModule rec {
   pname = "lifecycled";
-  version = "3.1.0";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "buildkite";
     repo = "lifecycled";
     rev = "v${version}";
-    sha256 = "F9eovZpwbigP0AMdjAIxULPLDC3zO6GxQmPdt5Xvpkk=";
+    sha256 = "sha256-+Ts2ERoEZcBdxMXQlxPVtQe3pst5NXWKU3rmS5CgR7A=";
   };
 
-  vendorSha256 = "q5wYKSLHRzL+UGn29kr8+mUupOPR1zohTscbzjMRCS0=";
+  vendorSha256 = "sha256-q5wYKSLHRzL+UGn29kr8+mUupOPR1zohTscbzjMRCS0=";
 
   postInstall = ''
     mkdir -p $out/lib/systemd/system

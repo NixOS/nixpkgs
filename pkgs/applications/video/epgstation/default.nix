@@ -27,7 +27,7 @@ let
     # FIXME: This should be removed when a complete fix is available
     # https://github.com/svanderburg/node2nix/issues/145
     name = "workaround-opencollective-buildfailures";
-    phases = [ "installPhase" ];
+    dontUnpack = true;
     installPhase = ''
       mkdir -p $out/bin
       touch $out/bin/opencollective-postinstall

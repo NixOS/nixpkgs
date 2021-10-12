@@ -1,4 +1,4 @@
-{lib, stdenv, fetchgit, gettext, python, elfutils}:
+{lib, stdenv, fetchgit, gettext, python2, elfutils}:
 
 stdenv.mkDerivation {
   pname = "libsystemtap";
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
 
   dontBuild = true;
 
-  nativeBuildInputs = [ gettext python elfutils ];
+  nativeBuildInputs = [ gettext python2 elfutils ];
 
   installPhase = ''
     mkdir -p $out/include

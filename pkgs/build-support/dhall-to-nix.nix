@@ -15,12 +15,12 @@
     Note that this uses "import from derivation", meaning that Nix will perform
     a build during the evaluation phase if you use this `dhallToNix` utility
 */
-{ stdenv, dhall-nix }:
+{ stdenv, dhall-nix, writeText }:
 
 let
   dhallToNix = code :
     let
-      file = builtins.toFile "dhall-expression" code;
+      file = writeText "dhall-expression" code;
 
       drv = stdenv.mkDerivation {
         name = "dhall-compiled.nix";

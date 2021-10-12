@@ -58,7 +58,9 @@ in
     security.pam.services.atd = {};
 
     users.users.atd =
-      { uid = config.ids.uids.atd;
+      {
+        uid = config.ids.uids.atd;
+        group = "atd";
         description = "atd user";
         home = "/var/empty";
       };

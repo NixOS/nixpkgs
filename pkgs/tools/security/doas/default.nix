@@ -25,7 +25,6 @@ stdenv.mkDerivation rec {
   configureFlags = [
     (lib.optionalString withTimestamp "--with-timestamp") # to allow the "persist" setting
     (lib.optionalString (!withPAM) "--without-pam")
-    "--pamdir=${placeholder "out"}/etc/pam.d"
   ];
 
   patches = [

@@ -2,7 +2,6 @@
 , appdirs
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , poetry-core
 , pyee
 , pytest-xdist
@@ -16,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "pyppeteer";
-  version = "0.2.5";
+  version = "0.2.6";
   disabled = pythonOlder "3.6";
   format = "pyproject";
 
@@ -24,7 +23,7 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "1hl4rw8j5yiak0d34vx1l1blr8125bscjd8m46a5m8xzm98csjc7";
+    sha256 = "sha256-mMFQp8GMjKUc3yyB4c8Tgxut7LkMFa2cySO3iSA/aI4=";
   };
 
   nativeBuildInputs = [
@@ -44,21 +43,6 @@ buildPythonPackage rec {
     pytest-xdist
     pytestCheckHook
   ];
-
-  patches = [
-    # Switch to poetry-core, https://github.com/pyppeteer/pyppeteer/pull/262
-    (fetchpatch {
-      name = "switch-poetry-core.patch";
-      url = "https://github.com/pyppeteer/pyppeteer/commit/e248baebefcf262fd96f261d940e74ed49ba2df9.patch";
-      sha256 = "03g8n35kn2alqki37s0hf2231fk2zkr4nr1x1g2rfrhps9d6fyvw";
-    })
-  ];
-
-  postPatch = ''
-    # https://github.com/pyppeteer/pyppeteer/pull/252
-    substituteInPlace pyproject.toml \
-      --replace 'websockets = "^8.1"' 'websockets = "*"'
-  '';
 
   disabledTestPaths = [
     # Requires network access

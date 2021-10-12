@@ -56,6 +56,6 @@ in stdenv.mkDerivation rec {
     '';
     homepage = "http://xdelta.org/";
     license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

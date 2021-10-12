@@ -1,23 +1,27 @@
 { stdenv
 , lib
-, fetchurl
+, fetchFromGitHub
 , pkg-config
 , bison
 , libevent
 , libressl
 , ncurses
+, autoreconfHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "telescope";
-  version = "0.3.1";
+  version = "0.5.2";
 
-  src = fetchurl {
-    url = "https://github.com/omar-polo/telescope/releases/download/${version}/telescope-${version}.tar.gz";
-    sha256 = "11xrsh064ph1idhygh52y4mqapgwn1cqr0l3naj5n2a2p7lcsvvw";
+  src = fetchFromGitHub {
+    owner = "omar-polo";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-AdbFJfoicQUgJ9kesIWZ9ygttyjjDeC0UHRI98GwoZ8=";
   };
 
   nativeBuildInputs = [
+    autoreconfHook
     pkg-config
     bison
   ];

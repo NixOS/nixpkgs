@@ -16,12 +16,12 @@
 
 buildPythonPackage rec {
   pname = "b2sdk";
-  version = "1.9.0";
+  version = "1.12.0";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ff9c27c89f53583fd83c711d0a642d9b3bdbb8682c2e8e2315674b517cb441ec";
+    sha256 = "sha256-PsImSuK0IVY9EwpLKlP5ZFS6A7j2iJOtUg/GUcQTJR0=";
   };
 
   nativeBuildInputs = [
@@ -54,6 +54,7 @@ buildPythonPackage rec {
     # Test requires an API key
     "test_raw_api"
     "test_files_headers"
+    "test_large_file"
   ];
 
   pythonImportsCheck = [ "b2sdk" ];

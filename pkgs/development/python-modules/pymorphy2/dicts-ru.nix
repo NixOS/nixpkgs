@@ -18,6 +18,6 @@ buildPythonPackage rec {
     description = "Russian dictionaries for pymorphy2";
     homepage = "https://github.com/kmike/pymorphy2-dicts/";
     license = licenses.mit;
-    maintainers = with maintainers; [ danieldk ];
+    maintainers = with maintainers; [ ];
   };
 }

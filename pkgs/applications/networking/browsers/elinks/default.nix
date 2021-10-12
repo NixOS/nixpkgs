@@ -13,13 +13,13 @@ assert enablePython -> python != null;
 
 stdenv.mkDerivation rec {
   pname = "elinks";
-  version = "0.14.1";
+  version = "0.14.2";
 
   src = fetchFromGitHub {
     owner = "rkd77";
     repo = "felinks";
     rev = "v${version}";
-    sha256 = "sha256-D7dUVHgYGzY4FXEnOzXw0Fao3gLgfFuCl8LJdLVpcSM=";
+    sha256 = "sha256-/VsxMpITBDKJqyMwl1oitS8aUM4AziibV/OHRSHbRjg=";
   };
 
   buildInputs = [

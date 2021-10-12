@@ -15,13 +15,13 @@
 
 buildPythonPackage rec {
   pname = "pip-tools";
-  version = "6.1.0";
+  version = "6.2.0";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-QAv3finMpIwxq8IQBCkyu1LcwTjvTqTVLF20KaqK5u4=";
+    sha256 = "9ed38c73da4993e531694ea151f77048b4dbf2ba7b94c4a569daa39568cc6564";
   };
 
   LC_ALL = "en_US.UTF-8";

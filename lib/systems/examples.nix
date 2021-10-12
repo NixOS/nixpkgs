@@ -152,6 +152,10 @@ rec {
     config = "s390-unknown-linux-gnu";
   };
 
+  s390x = {
+    config = "s390x-unknown-linux-gnu";
+  };
+
   arm-embedded = {
     config = "arm-none-eabi";
     libc = "newlib";

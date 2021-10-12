@@ -18,11 +18,11 @@
 
 mkDerivation rec {
   pname = "hqplayer-desktop";
-  version = "4.12.2-36";
+  version = "4.13.1-38";
 
   src = fetchurl {
     url = "https://www.signalyst.eu/bins/hqplayer/fc34/hqplayer4desktop-${version}.fc34.x86_64.rpm";
-    sha256 = "sha256-ng0Tkx6CSnzTxuunStaBhUYjxUmzx31ZaOY2gBWnH6Q=";
+    sha256 = "sha256-DEZWEGk5SfhcNQddehCBVbfeTH8KfVCdaxQ+F3MrRe8=";
   };
 
   unpackPhase = ''

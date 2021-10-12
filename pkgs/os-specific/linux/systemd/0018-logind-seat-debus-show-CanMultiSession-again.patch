@@ -1,4 +1,4 @@
-From ebb37f81c28aaa80acd9187a7d77dcb3cb3828db Mon Sep 17 00:00:00 2001
+From beb594ff3bceb95598ffa8ec47c31bacb2449473 Mon Sep 17 00:00:00 2001
 From: Thomas Tuegel <ttuegel@mailbox.org>
 Date: Mon, 26 Oct 2020 21:21:38 +0100
 Subject: [PATCH 18/19] logind-seat-debus: show CanMultiSession again
@@ -9,10 +9,10 @@ Fixes the "switch user" function in Plasma < 5.20.
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/src/login/logind-seat-dbus.c b/src/login/logind-seat-dbus.c
-index a60ed2d3c2..69b6271075 100644
+index cceb3b1d2d..94b4723bb9 100644
 --- a/src/login/logind-seat-dbus.c
 +++ b/src/login/logind-seat-dbus.c
-@@ -450,7 +450,7 @@ static const sd_bus_vtable seat_vtable[] = {
+@@ -419,7 +419,7 @@ static const sd_bus_vtable seat_vtable[] = {
  
          SD_BUS_PROPERTY("Id", "s", NULL, offsetof(Seat, id), SD_BUS_VTABLE_PROPERTY_CONST),
          SD_BUS_PROPERTY("ActiveSession", "(so)", property_get_active_session, 0, SD_BUS_VTABLE_PROPERTY_EMITS_CHANGE),
@@ -22,5 +22,5 @@ index a60ed2d3c2..69b6271075 100644
          SD_BUS_PROPERTY("CanGraphical", "b", property_get_can_graphical, 0, SD_BUS_VTABLE_PROPERTY_EMITS_CHANGE),
          SD_BUS_PROPERTY("Sessions", "a(so)", property_get_sessions, 0, 0),
 -- 
-2.30.1
+2.32.0
 

@@ -11,8 +11,8 @@ buildGoModule rec {
     sha256 = "177fs3p2xzwjsffcxqqllx6wi6ghfyqbvfgn95v3q7a2993yqk4k";
   };
 
-  buildFlagsArray = [
-    "-ldflags=-X github.com/containerd/containerd/version.Version=${version}"
+  ldflags = [
+    "-X github.com/containerd/containerd/version.Version=${version}"
   ];
 
   vendorSha256 = null;

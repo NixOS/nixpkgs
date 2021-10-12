@@ -22,7 +22,7 @@ in {
 
     package = mkOption {
       default = pkgs.coredns;
-      defaultText = "pkgs.coredns";
+      defaultText = literalExpression "pkgs.coredns";
       type = types.package;
       description = "Coredns package to use.";
     };

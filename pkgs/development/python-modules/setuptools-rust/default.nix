@@ -23,17 +23,16 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ semantic-version setuptools toml ];
 
-  # no tests
   doCheck = false;
   pythonImportsCheck = [ "setuptools_rust" ];
 
-  passthru.tests.pyo3 = callPackage ./pyo3-test {};
+  passthru.tests.pyo3 = callPackage ./pyo3-test { };
 
   meta = with lib; {
     description = "Setuptools plugin for Rust support";
     homepage = "https://github.com/PyO3/setuptools-rust";
     changelog = "https://github.com/PyO3/setuptools-rust/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ danieldk ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

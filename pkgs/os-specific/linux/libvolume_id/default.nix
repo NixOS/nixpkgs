@@ -1,10 +1,11 @@
 {lib, stdenv, fetchurl}:
 
-stdenv.mkDerivation {
-  name = "libvolume_id-0.81.1";
+stdenv.mkDerivation rec {
+  pname = "libvolume_id";
+  version = "0.81.1";
 
   src = fetchurl {
-    url = "https://www.marcuscom.com/downloads/libvolume_id-0.81.1.tar.bz2";
+    url = "https://www.marcuscom.com/downloads/libvolume_id-${version}.tar.bz2";
     sha256 = "029z04vdxxsl8gycm9whcljhv6dy4b12ybsxdb99jr251gl1ifs5";
   };
 
@@ -21,5 +22,6 @@ stdenv.mkDerivation {
   meta = with lib; {
     platforms = platforms.linux;
     license = licenses.gpl2;
+    homepage = "http://www.marcuscom.com/downloads/";
   };
 }

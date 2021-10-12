@@ -12,24 +12,26 @@
 
 stdenv.mkDerivation rec {
   pname = "gsettings-desktop-schemas";
-  version = "40.0";
+  version = "41.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "11an29br55dp0b26kfqlrfxj19glfrmhcdpds2n1w9n04gq3pf7i";
+    sha256 = "dyiZcuWW0ERYPwwFYwbY8dvYrc+RKRClDaCmY+ZTMu0=";
   };
 
+  strictDeps = true;
+  depsBuildBuild = [ pkg-config ];
   nativeBuildInputs = [
     glib
     meson
     ninja
     pkg-config
     python3
+    gobject-introspection
   ];
 
-  buildInputs = [
-    glib
-    gobject-introspection
+  mesonFlags = [
+    "-Dintrospection=${lib.boolToString (stdenv.buildPlatform == stdenv.hostPlatform)}"
   ];
 
   postPatch = ''

@@ -8,10 +8,8 @@
 , cargoSetupHook
 , fetchCargoTarball
 , importCargoLock
-, runCommandNoCC
 , rustPlatform
 , callPackage
-, remarshal
 , git
 , rust
 , rustc

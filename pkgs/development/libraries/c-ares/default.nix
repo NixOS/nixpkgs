@@ -8,12 +8,14 @@
 let self =
 stdenv.mkDerivation rec {
   pname = "c-ares";
-  version = "1.17.1";
+  version = "1.17.2";
 
   src = fetchurl {
     url = "https://c-ares.haxx.se/download/${pname}-${version}.tar.gz";
-    sha256 = "0h7wjfnk2092glqcp9mqaax7xx0s13m501z1gi0gsjl2vvvd0gfp";
+    sha256 = "sha256-SAPIRM4gzlEO8OuD+OpB+iTsqunSgMRoxYLSuyWzkT0=";
   };
+
+  enableParallelBuilding = true;
 
   meta = with lib; {
     description = "A C library for asynchronous DNS requests";

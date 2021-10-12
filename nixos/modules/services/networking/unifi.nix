@@ -44,7 +44,7 @@ in
     services.unifi.jrePackage = mkOption {
       type = types.package;
       default = pkgs.jre8;
-      defaultText = "pkgs.jre8";
+      defaultText = literalExpression "pkgs.jre8";
       description = ''
         The JRE package to use. Check the release notes to ensure it is supported.
       '';
@@ -53,7 +53,7 @@ in
     services.unifi.unifiPackage = mkOption {
       type = types.package;
       default = pkgs.unifiLTS;
-      defaultText = "pkgs.unifiLTS";
+      defaultText = literalExpression "pkgs.unifiLTS";
       description = ''
         The unifi package to use.
       '';
@@ -62,7 +62,7 @@ in
     services.unifi.mongodbPackage = mkOption {
       type = types.package;
       default = pkgs.mongodb;
-      defaultText = "pkgs.mongodb";
+      defaultText = literalExpression "pkgs.mongodb";
       description = ''
         The mongodb package to use.
       '';
@@ -115,10 +115,12 @@ in
   config = mkIf cfg.enable {
 
     users.users.unifi = {
-      uid = config.ids.uids.unifi;
+      isSystemUser = true;
+      group = "unifi";
       description = "UniFi controller daemon user";
       home = "${stateDir}";
     };
+    users.groups.unifi = {};
 
     networking.firewall = mkIf cfg.openPorts {
       # https://help.ubnt.com/hc/en-us/articles/218506997
@@ -173,6 +175,41 @@ in
         User = "unifi";
         UMask = "0077";
         WorkingDirectory = "${stateDir}";
+
+        # Hardening
+        AmbientCapabilities = "";
+        CapabilityBoundingSet = "";
+        # ProtectClock= adds DeviceAllow=char-rtc r
+        DeviceAllow = "";
+        DevicePolicy = "closed";
+        LockPersonality = true;
+        NoNewPrivileges = true;
+        PrivateDevices = true;
+        PrivateMounts = true;
+        PrivateTmp = true;
+        PrivateUsers = true;
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectSystem = "strict";
+        RemoveIPC = true;
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        SystemCallErrorNumber = "EPERM";
+        SystemCallFilter = [ "@system-service" ];
+
+        # Required for ProtectSystem=strict
+        BindPaths = [ stateDir ];
+
+        # Needs network access
+        PrivateNetwork = false;
+        # Cannot be true due to OpenJDK
+        MemoryDenyWriteExecute = false;
       };
     };
 

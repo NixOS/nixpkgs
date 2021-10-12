@@ -15,7 +15,11 @@ buildDunePackage rec {
 
   buildInputs = [ cppo ];
 
-  configurePhase = "ocaml configure.ml --share $out/share/camomile";
+  configurePhase = ''
+    runHook preConfigure
+    ocaml configure.ml --share $out/share/camomile
+    runHook postConfigure
+  '';
 
   meta = {
     inherit (src.meta) homepage;

@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , poetry
-, prompt_toolkit
+, prompt-toolkit
 , pytest-cov
 , pytestCheckHook
 }:
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    prompt_toolkit
+    prompt-toolkit
   ];
 
   checkInputs = [

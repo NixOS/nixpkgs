@@ -2,15 +2,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "innernet";
-  version = "1.4.0";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "tonarino";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-n+xNWhOkRCIcoBHR8u+xZK81fU0usIfFhYg3BO9yXik=";
+    sha256 = "sha256-9oL91jacfUADaPvdTTvvXhpwzr9OnNnVLwy1okORss4=";
   };
-  cargoSha256 = "sha256-cTqQtJpuwVlUKfAK8ASf6vq6PU2NE8PT/el/Hz4HgtA=";
+  cargoSha256 = "sha256-jHWt7Jqv4B7u6Mvo3q69Omcn8kdnXGJSyzod1lDzvKE=";
 
   nativeBuildInputs = with llvmPackages; [
     llvm

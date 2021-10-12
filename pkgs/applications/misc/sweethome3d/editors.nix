@@ -99,14 +99,14 @@ in {
   };
 
   furniture-editor = mkEditorProject rec {
-    version = "1.27";
+    version = "1.28";
     module = "FurnitureLibraryEditor";
     pname = module;
     description = "Quickly create SH3F files and edit the properties of the 3D models it contain";
     license = lib.licenses.gpl2;
     src = fetchurl {
       url = "mirror://sourceforge/sweethome3d/${module}-${version}-src.zip";
-      sha256 = "1zxbcn9awgax8lalzkc05f5yfwbgnrayc17fkyv5i19j4qb3r2a0";
+      sha256 = "sha256-r5xJlUctUdcknJfm8rbz+bdzFhqgHsHpHwxEC4mItws=";
     };
     desktopName = "Sweet Home 3D - Furniture Library Editor";
   };

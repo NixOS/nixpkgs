@@ -47,9 +47,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A simple and easy-to-use library to enjoy videogames programming";
-    homepage = "http://www.raylib.com/";
+    homepage = "https://www.raylib.com/";
     license = licenses.zlib;
     maintainers = with maintainers; [ adamlwgriffiths ];
     platforms = platforms.linux;
+    changelog = "https://github.com/raysan5/raylib/blob/${version}/CHANGELOG";
   };
 }

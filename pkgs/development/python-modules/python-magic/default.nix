@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "python-magic";
-  version = "0.4.22";
+  version = "0.4.24";
 
   src = fetchFromGitHub {
     owner = "ahupp";
     repo = "python-magic";
     rev = version;
-    sha256 = "0zbdjr5shijs0jayz7gycpx0kn6v2bh83dpanyajk2vmy47jvbd6";
+    sha256 = "17jalhjbfd600lzfz296m0nvgp6c7vx1mgz82jbzn8hgdzknf4w0";
   };
 
   patches = [
@@ -32,9 +32,10 @@ buildPythonPackage rec {
     LC_ALL="en_US.UTF-8" ${python.interpreter} test/test.py
   '';
 
-  meta = {
+  meta = with lib; {
     description = "A python interface to the libmagic file type identification library";
     homepage = "https://github.com/ahupp/python-magic";
-    license = lib.licenses.mit;
+    license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
 }

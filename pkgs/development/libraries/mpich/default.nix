@@ -26,7 +26,8 @@ stdenv.mkDerivation  rec {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ perl gfortran openssh hwloc ]
+  nativeBuildInputs = [ gfortran ];
+  buildInputs = [ perl openssh hwloc ]
     ++ lib.optional (!stdenv.isDarwin) ch4backend;
 
   doCheck = true;

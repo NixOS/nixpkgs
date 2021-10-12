@@ -55,6 +55,7 @@
 , opencv4
 , openexr
 , openh264
+, libopenmpt
 , pango
 , rtmpdump
 , sbc
@@ -143,6 +144,7 @@ stdenv.mkDerivation rec {
     mpeg2dec
     libmicrodns
     openjpeg
+    libopenmpt
     libopus
     librsvg
     curl.dev
@@ -250,7 +252,6 @@ stdenv.mkDerivation rec {
     # is needed, and then patching upstream to find it (though it probably
     # already works on Arch?).
     "-Dmusepack=disabled"
-    "-Dopenmpt=disabled" # `libopenmpt` not packaged in nixpkgs as of writing
     "-Dopenni2=disabled" # not packaged in nixpkgs as of writing
     "-Dopensles=disabled" # not packaged in nixpkgs as of writing
     "-Dsctp=disabled" # required `usrsctp` library not packaged in nixpkgs as of writing

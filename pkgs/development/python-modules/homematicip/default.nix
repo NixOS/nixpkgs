@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "homematicip";
-  version = "1.0.0";
+  version = "1.0.1";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "coreGreenberet";
     repo = "homematicip-rest-api";
     rev = version;
-    sha256 = "0bgvrjcf10kiqqkbl56sxx3jydd722b08q2j9c8sxpk0qdrmrinv";
+    sha256 = "008snxx9ijpi1zr1pi1v4a6g74j821hyw0khs9lmi08v2mcabm36";
   };
 
   propagatedBuildInputs = [
@@ -53,6 +53,7 @@ buildPythonPackage rec {
     "test_pluggable_switch_measuring"
     "test_rotary_handle_sensor"
     "test_security_group"
+    "test_security_zone"
     "test_shutter_device"
     "test_smoke_detector"
     "test_switching_group"

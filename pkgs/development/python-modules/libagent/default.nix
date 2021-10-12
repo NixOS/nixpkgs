@@ -2,6 +2,8 @@
   unidecode, mock, pytest , backports-shutil-which, configargparse,
   python-daemon, pymsgbox }:
 
+# XXX: when changing this package, please test the package onlykey-agent.
+
 buildPythonPackage rec {
   pname = "libagent";
   version = "0.14.1";

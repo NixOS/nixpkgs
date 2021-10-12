@@ -121,7 +121,7 @@ in
 
       package = mkOption {
         default = pkgs.influxdb;
-        defaultText = "pkgs.influxdb";
+        defaultText = literalExpression "pkgs.influxdb";
         description = "Which influxdb derivation to use";
         type = types.package;
       };
@@ -185,6 +185,7 @@ in
     users.users = optionalAttrs (cfg.user == "influxdb") {
       influxdb = {
         uid = config.ids.uids.influxdb;
+        group = "influxdb";
         description = "Influxdb daemon user";
       };
     };

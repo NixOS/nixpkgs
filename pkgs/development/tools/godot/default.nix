@@ -13,13 +13,13 @@ let
   };
 in stdenv.mkDerivation rec {
   pname = "godot";
-  version = "3.3.2";
+  version = "3.3.3";
 
   src = fetchFromGitHub {
     owner  = "godotengine";
     repo   = "godot";
     rev    = "${version}-stable";
-    sha256 = "0rfm6sbbwzvsn76a8aqagd7cqdzmk8qxphgl89k7y982l9a5sz50";
+    sha256 = "0bkng0iwsfawxk8bxlq01ib4n6kaxjkbwcif1bhpvw5ra19430rg";
   };
 
   nativeBuildInputs = [ pkg-config ];

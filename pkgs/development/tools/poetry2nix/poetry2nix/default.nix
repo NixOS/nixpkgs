@@ -5,7 +5,7 @@
 }:
 let
   # Poetry2nix version
-  version = "1.17.1";
+  version = "1.21.0";
 
   inherit (poetryLib) isCompatible readTOML moduleName;
 
@@ -338,6 +338,9 @@ lib.makeScope pkgs.newScope (self: {
                 py.buildEnv.override args)
             ) { inherit app; };
           };
+
+          # Extract position from explicitly passed attrs so meta.position won't point to poetry2nix internals
+          pos = builtins.unsafeGetAttrPos (lib.elemAt (lib.attrNames attrs) 0) attrs;
 
           meta = lib.optionalAttrs (lib.hasAttr "description" pyProject.tool.poetry)
             {

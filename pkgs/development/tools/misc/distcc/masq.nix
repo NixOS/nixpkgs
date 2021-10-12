@@ -3,7 +3,8 @@
 stdenv.mkDerivation {
   name = "distcc-masq-${gccRaw.name}";
 
-  phases = [ "installPhase" ];
+  dontUnpack = true;
+
   installPhase = ''
     mkdir -p $out/bin
 

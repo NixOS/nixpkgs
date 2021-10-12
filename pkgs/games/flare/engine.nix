@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "flare-engine";
-  version = "1.12rc2";
+  version = "1.12";
 
   src = fetchFromGitHub {
     owner = "flareteam";
     repo = pname;
     rev = "v${version}";
-    sha256 = "10il9dpbcka1w5glmhv48bqwww44csmhq426lvsc7z84444gvvgq";
+    sha256 = "0swav6fzz970wj4iic3b7y06haa05720s2wivc8w7wcw9nzcac7j";
   };
 
   patches = [ ./desktop.patch ];

@@ -18,7 +18,7 @@ buildPythonPackage rec {
     pytest-cov
   ];
 
-  pythomImportsCheck = [
+  pythonImportsCheck = [
     "multimethod"
   ];
 

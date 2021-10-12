@@ -34,6 +34,6 @@ buildPythonPackage rec {
     description = "Download and publish models and other files on the huggingface.co hub";
     changelog = "https://github.com/huggingface/huggingface_hub/releases/tag/${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ danieldk ];
+    maintainers = with maintainers; [ ];
   };
 }

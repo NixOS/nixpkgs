@@ -44,14 +44,14 @@ let
 
   pname = "slack";
 
-  x86_64-darwin-version = "4.17.0";
-  x86_64-darwin-sha256 = "0r5cafxw73qnn14ljprn7w8bfn67zbkcniq60k9pf2zbqgb4cyj9";
+  x86_64-darwin-version = "4.20.0";
+  x86_64-darwin-sha256 = "1argl690i4dgz5ih02zg9v4zrlzm282wmibnc6p7xy5jisd5g79w";
 
-  x86_64-linux-version = "4.17.0";
-  x86_64-linux-sha256 = "07ccms58pq27ilkyhcf6cgwb7qrddwil5kgy8yv95ljikqzi5rxi";
+  x86_64-linux-version = "4.20.0";
+  x86_64-linux-sha256 = "1r8w8s3y74lh4klsmzq2d3f0h721b3a2b53nx8v7b0s6j8w0g0mh";
 
-  aarch64-darwin-version = "4.17.0";
-  aarch64-darwin-sha256 = "1a5crmnbz8ng3z2pk5zw17dds9d5fyir4rkvv611fn858kq5fv46";
+  aarch64-darwin-version = "4.20.0";
+  aarch64-darwin-sha256 = "1argl690i4dgz5ih02zg9v4zrlzm282wmibnc6p7xy5jisd5g79w";
 
   version = {
     x86_64-darwin = x86_64-darwin-version;
@@ -73,7 +73,7 @@ let
           sha256 = aarch64-darwin-sha256;
         };
         x86_64-linux = fetchurl {
-          url = "${base}/linux_releases/slack-desktop-${version}-amd64.deb";
+          url = "${base}/releases/linux/${version}/prod/x64/slack-desktop-${version}-amd64.deb";
           sha256 = x86_64-linux-sha256;
         };
       }.${system} or throwSystem;
@@ -147,6 +147,8 @@ let
     dontPatchELF = true;
 
     installPhase = ''
+      runHook preInstall
+
       # The deb file contains a setuid binary, so 'dpkg -x' doesn't work here
       dpkg --fsys-tarfile $src | tar --extract
       rm -rf usr/share/lintian
@@ -172,6 +174,8 @@ let
       substituteInPlace $out/share/applications/slack.desktop \
         --replace /usr/bin/ $out/bin/ \
         --replace /usr/share/ $out/share/
+
+      runHook postInstall
     '';
   };
 
@@ -185,9 +189,11 @@ let
     sourceRoot = "Slack.app";
 
     installPhase = ''
+      runHook preInstall
       mkdir -p $out/Applications/Slack.app
       cp -R . $out/Applications/Slack.app
       /usr/bin/defaults write com.tinyspeck.slackmacgap SlackNoAutoUpdates -bool YES
+      runHook postInstall
     '';
   };
 in

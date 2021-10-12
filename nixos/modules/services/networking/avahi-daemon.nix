@@ -54,7 +54,7 @@ in
     hostName = mkOption {
       type = types.str;
       default = config.networking.hostName;
-      defaultText = literalExample "config.networking.hostName";
+      defaultText = literalExpression "config.networking.hostName";
       description = ''
         Host name advertised on the LAN. If not set, avahi will use the value
         of <option>config.networking.hostName</option>.
@@ -87,7 +87,7 @@ in
     ipv6 = mkOption {
       type = types.bool;
       default = config.networking.enableIPv6;
-      defaultText = "config.networking.enableIPv6";
+      defaultText = literalExpression "config.networking.enableIPv6";
       description = "Whether to use IPv6.";
     };
 
@@ -134,7 +134,7 @@ in
     extraServiceFiles = mkOption {
       type = with types; attrsOf (either str path);
       default = {};
-      example = literalExample ''
+      example = literalExpression ''
         {
           ssh = "''${pkgs.avahi}/etc/avahi/services/ssh.service";
           smb = '''

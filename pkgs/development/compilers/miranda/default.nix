@@ -71,5 +71,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd2;
     maintainers = with maintainers; [ siraben ];
     platforms = platforms.all;
+    mainProgram = "mira";
   };
 }

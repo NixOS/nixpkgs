@@ -50,7 +50,7 @@ in
       repo = "ngx_brotli";
       rev = "25f86f0bac1101b6512135eac5f93c49c63609e3";
       sha256 = "02hfvfa6milj40qc2ikpb9f95sxqvxk4hly3x74kqhysbdi06hhv";
-    }; in pkgs.runCommandNoCC "ngx_brotli-src" {} ''
+    }; in pkgs.runCommand "ngx_brotli-src" {} ''
       cp -a ${gitsrc} $out
       substituteInPlace $out/filter/config \
         --replace '$ngx_addon_dir/deps/brotli/c' ${lib.getDev pkgs.brotli}
@@ -449,6 +449,16 @@ in
       repo = "nginx-module-sysguard";
       rev = "e512897f5aba4f79ccaeeebb51138f1704a58608";
       sha256 = "19c6w6wscbq9phnx7vzbdf4ay6p2ys0g7kp2rmc9d4fb53phrhfx";
+    };
+  };
+
+  upload = {
+    src = fetchFromGitHub {
+      name = "upload";
+      owner = "fdintino";
+      repo = "nginx-upload-module";
+      rev = "2.3.0";
+      sha256 = "8veZP516oC7TESO368ZsZreetbDt+1eTcamk7P1kWjU=";
     };
   };
 

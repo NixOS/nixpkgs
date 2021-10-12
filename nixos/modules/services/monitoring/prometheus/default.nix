@@ -10,7 +10,7 @@ let
   # a wrapper that verifies that the configuration is valid
   promtoolCheck = what: name: file:
     if cfg.checkConfig then
-      pkgs.runCommandNoCCLocal
+      pkgs.runCommandLocal
         "${name}-${replaceStrings [" "] [""] what}-checked"
         { buildInputs = [ cfg.package ]; } ''
       ln -s ${file} $out
@@ -19,7 +19,7 @@ let
 
   # Pretty-print JSON to a file
   writePrettyJSON = name: x:
-    pkgs.runCommandNoCCLocal name {} ''
+    pkgs.runCommandLocal name {} ''
       echo '${builtins.toJSON x}' | ${pkgs.jq}/bin/jq . > $out
     '';
 
@@ -692,7 +692,7 @@ in {
     package = mkOption {
       type = types.package;
       default = pkgs.prometheus;
-      defaultText = "pkgs.prometheus";
+      defaultText = literalExpression "pkgs.prometheus";
       description = ''
         The prometheus package that should be used.
       '';
@@ -833,7 +833,7 @@ in {
 
     alertmanagers = mkOption {
       type = types.listOf types.attrs;
-      example = literalExample ''
+      example = literalExpression ''
         [ {
           scheme = "https";
           path_prefix = "/alertmanager";

@@ -1,4 +1,4 @@
-From 561dc3b864d96753b5dc448e6e1a80460d5f0bc4 Mon Sep 17 00:00:00 2001
+From fe3aff271cf127c1484533237fe0a024e07ae7bc Mon Sep 17 00:00:00 2001
 From: Andreas Rammhold <andreas@rammhold.de>
 Date: Thu, 9 May 2019 11:15:22 +0200
 Subject: [PATCH 13/19] add rootprefix to lookup dir paths
@@ -34,5 +34,5 @@ index 2e60abb4f1..732ec51d36 100644
  #define CONF_PATHS(n)                           \
          CONF_PATHS_USR(n)                       \
 -- 
-2.30.1
+2.32.0
 

@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "pytest-console-scripts";
-  version = "1.2.0";
+  version = "1.2.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4a2138d7d567bc581fe081b6a5975849a2a36b3925cb0f066d2380103e13741c";
+    sha256 = "c7f258025110f1337c23499c2f6674b873d4adba2438be55895edf01451c5ce3";
   };
   postPatch = ''
     # setuptools-scm is pinned to <6 because it dropped Python 3.5

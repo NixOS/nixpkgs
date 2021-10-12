@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, boost, gtkmm2, lv2, pkg-config, python, wafHook }:
+{ lib, stdenv, fetchurl, boost, gtkmm2, lv2, pkg-config, python2, wafHook }:
 
 stdenv.mkDerivation rec {
   pname = "lvtk";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "03nbj2cqcklqwh50zj2gwm07crh5iwqbpxbpzwbg5hvgl4k4rnjd";
   };
 
-  nativeBuildInputs = [ pkg-config python wafHook ];
+  nativeBuildInputs = [ pkg-config python2 wafHook ];
   buildInputs = [ boost gtkmm2 lv2 ];
 
   enableParallelBuilding = true;
@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
     homepage = "https://lvtk.org/";
     license = licenses.gpl3;
     maintainers = [ maintainers.goibhniu ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

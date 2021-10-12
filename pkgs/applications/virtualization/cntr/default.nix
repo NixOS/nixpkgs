@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{ lib, rustPlatform, fetchFromGitHub, nixosTests }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cntr";
@@ -12,6 +12,10 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "sha256-3e5wDne6Idu+kDinHPcAKHfH/d4DrGg90GkiMbyF280=";
+
+  passthru.tests = {
+    nixos = nixosTests.cntr;
+  };
 
   meta = with lib; {
     description = "A container debugging tool based on FUSE";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, libiconv, Security }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, rustPlatform, libiconv, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "git-interactive-rebase-tool";
@@ -11,7 +11,15 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-DYl/GUbeNtKmXoR3gq8mK8EfsZNVNlrdngAwfzG+epw=";
   };
 
-  cargoSha256 = "sha256-1joMWPfn0s+pLsO6NHMT6AoXZ33R8MY2AWSrROY2mw8=";
+  cargoPatches = [
+    # update git2 crate to fix a compile error
+    (fetchpatch {
+      url = "https://github.com/MitMaro/git-interactive-rebase-tool/commit/f4d3026f23118d29a263bbca6c83f963e76c34c4.patch";
+      sha256 = "sha256-6ErPRcPbPRXbEslNiNInbbUhbOWb9ZRll7ZDRgTpWS4=";
+    })
+  ];
+
+  cargoSha256 = "sha256-2aHW9JIiqkO0X0B0D44tSZ8QkmKH/QZoYvKNEQWldo4=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security ];
 

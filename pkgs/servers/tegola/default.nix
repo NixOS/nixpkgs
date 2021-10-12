@@ -13,7 +13,7 @@ buildGoPackage rec {
     sha256 = "sha256-NA2KwyhLLIusf6a6v+OcmHz91kPcIhvG9PRmRk8h+fQ=";
   };
 
-  buildFlagsArray = [ "-ldflags=-s -w -X ${goPackagePath}/cmd/tegola/cmd.Version=${version}" ];
+  ldflags = [ "-s" "-w" "-X ${goPackagePath}/cmd/tegola/cmd.Version=${version}" ];
 
   excludedPackages = [ "example" ];
 

@@ -56,5 +56,8 @@ stdenv.mkDerivation {
     platforms = ocaml.meta.platforms or [];
     license = licenses.bsd3;
     maintainers = [ maintainers.vbgl ];
+    # See https://github.com/dbuenzli/uunf/issues/15#issuecomment-903151264
+    broken = lib.versions.majorMinor ocaml.version == "4.08"
+      && stdenv.hostPlatform.isAarch64;
   };
 }

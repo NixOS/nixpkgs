@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "freetube";
-  version = "0.13.2";
+  version = "0.14.0";
 
   src = fetchurl {
     url = "https://github.com/FreeTubeApp/FreeTube/releases/download/v${version}-beta/freetube_${version}_amd64.AppImage";
-    sha256 = "sha256:0rzx66nshzcrvvd9ky0wamvv5wb0xxlf3zi25xrxmh6haimqbrpv";
+    sha256 = "sha256:0qaghj70ffc90wck1i4217ky5d6cryrmgna2ipsc4v8dcvbyc1lh";
   };
 
   appimageContents = appimageTools.extractType2 {
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     description = "An Open Source YouTube app for privacy";
     homepage = "https://freetubeapp.io/";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ ryneeverett ];
+    maintainers = with maintainers; [ ryneeverett alyaeanyx ];
     platforms = [ "x86_64-linux" ];
   };
 }

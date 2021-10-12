@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "pathlib2";
-  version = "2.3.5";
+  version = "2.3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6cd9a47b597b37cc57de1c05e56fb1a1c9cc9fab04fe78c29acd090418529868";
+    sha256 = "7d8bcb5555003cdf4a8d2872c538faa3a0f5d20630cb360e518ca3b981795e5f";
   };
 
   propagatedBuildInputs = [ six ] ++ lib.optional (pythonOlder "3.5") scandir;

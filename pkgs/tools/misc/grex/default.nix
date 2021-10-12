@@ -8,15 +8,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "grex";
-  version = "1.2.0";
+  version = "1.3.0";
 
-  cargoSha256 = "sha256-aEwMJ9f08SJhrL8kLaTp54yP1hYGb3Ob5KNzZ5r752s=";
+  cargoSha256 = "sha256-zNwTk4RcTv2dGbKWelOPSvasBmj7tnjLhQ0DZhZ9hxk=";
 
   src = fetchFromGitHub {
     owner = "pemistahl";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-3M6wQB7+1MKPcxSvjDTNs33TrFjCEeFlbh1akwJHLLU=";
+    sha256 = "sha256-NMz35jgd7XPemVdA8nol2H6cgWD3yEPh0FEMPw8kgKQ=";
   };
 
   buildInputs = lib.optionals stdenv.isDarwin [ Security ];

@@ -70,7 +70,10 @@ let
 
       # Journal.
       "systemd-journald.socket"
+      "systemd-journald@.socket"
+      "systemd-journald-varlink@.socket"
       "systemd-journald.service"
+      "systemd-journald@.service"
       "systemd-journal-flush.service"
       "systemd-journal-catalog-update.service"
       ] ++ (optional (!config.boot.isContainer) "systemd-journald-audit.socket") ++ [
@@ -423,7 +426,7 @@ in
 
     systemd.package = mkOption {
       default = pkgs.systemd;
-      defaultText = "pkgs.systemd";
+      defaultText = literalExpression "pkgs.systemd";
       type = types.package;
       description = "The systemd package.";
     };
@@ -443,7 +446,7 @@ in
     systemd.packages = mkOption {
       default = [];
       type = types.listOf types.package;
-      example = literalExample "[ pkgs.systemd-cryptsetup-generator ]";
+      example = literalExpression "[ pkgs.systemd-cryptsetup-generator ]";
       description = "Packages providing systemd units and hooks.";
     };
 
@@ -660,7 +663,7 @@ in
 
     services.journald.forwardToSyslog = mkOption {
       default = config.services.rsyslogd.enable || config.services.syslog-ng.enable;
-      defaultText = "services.rsyslogd.enable || services.syslog-ng.enable";
+      defaultText = literalExpression "services.rsyslogd.enable || services.syslog-ng.enable";
       type = types.bool;
       description = ''
         Whether to forward log messages to syslog.
@@ -719,7 +722,7 @@ in
 
     services.logind.lidSwitchExternalPower = mkOption {
       default = config.services.logind.lidSwitch;
-      defaultText = "services.logind.lidSwitch";
+      defaultText = literalExpression "services.logind.lidSwitch";
       example = "ignore";
       type = logindHandlerType;
 
@@ -765,7 +768,7 @@ in
     systemd.tmpfiles.packages = mkOption {
       type = types.listOf types.package;
       default = [];
-      example = literalExample "[ pkgs.lvm2 ]";
+      example = literalExpression "[ pkgs.lvm2 ]";
       apply = map getLib;
       description = ''
         List of packages containing <command>systemd-tmpfiles</command> rules.
@@ -1044,7 +1047,7 @@ in
           done
         '' + concatMapStrings (name: optionalString (hasPrefix "tmpfiles.d/" name) ''
           rm -f $out/${removePrefix "tmpfiles.d/" name}
-        '') config.system.build.etc.targets;
+        '') config.system.build.etc.passthru.targets;
       }) + "/*";
 
       "systemd/system-generators" = { source = hooks "generators" cfg.generators; };
@@ -1053,9 +1056,20 @@ in
 
     services.dbus.enable = true;
 
-    users.users.systemd-network.uid = config.ids.uids.systemd-network;
+    users.users.systemd-coredump = {
+      uid = config.ids.uids.systemd-coredump;
+      group = "systemd-coredump";
+    };
+    users.groups.systemd-coredump = {};
+    users.users.systemd-network = {
+      uid = config.ids.uids.systemd-network;
+      group = "systemd-network";
+    };
     users.groups.systemd-network.gid = config.ids.gids.systemd-network;
-    users.users.systemd-resolve.uid = config.ids.uids.systemd-resolve;
+    users.users.systemd-resolve = {
+      uid = config.ids.uids.systemd-resolve;
+      group = "systemd-resolve";
+    };
     users.groups.systemd-resolve.gid = config.ids.gids.systemd-resolve;
 
     # Target for ‘charon send-keys’ to hook into.
@@ -1127,6 +1141,7 @@ in
 
     users.groups.systemd-journal.gid = config.ids.gids.systemd-journal;
     users.users.systemd-journal-gateway.uid = config.ids.uids.systemd-journal-gateway;
+    users.users.systemd-journal-gateway.group = "systemd-journal-gateway";
     users.groups.systemd-journal-gateway.gid = config.ids.gids.systemd-journal-gateway;
 
     # Generate timer units for all services that have a ‘startAt’ value.
@@ -1179,6 +1194,8 @@ in
     systemd.services."user-runtime-dir@".restartIfChanged = false;
     systemd.services.systemd-journald.restartTriggers = [ config.environment.etc."systemd/journald.conf".source ];
     systemd.services.systemd-journald.stopIfChanged = false;
+    systemd.services."systemd-journald@".restartTriggers = [ config.environment.etc."systemd/journald.conf".source ];
+    systemd.services."systemd-journald@".stopIfChanged = false;
     systemd.targets.local-fs.unitConfig.X-StopOnReconfiguration = true;
     systemd.targets.remote-fs.unitConfig.X-StopOnReconfiguration = true;
     systemd.targets.network-online.wantedBy = [ "multi-user.target" ];

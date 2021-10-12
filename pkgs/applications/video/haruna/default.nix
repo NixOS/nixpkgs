@@ -1,10 +1,11 @@
 { lib
-, fetchFromGitHub
+, fetchFromGitLab
 , mkDerivation
 , breeze-icons
 , breeze-qt5
 , cmake
 , extra-cmake-modules
+, ffmpeg-full
 , kcodecs
 , kconfig
 , kcoreaddons
@@ -26,18 +27,20 @@
 
 mkDerivation rec {
   pname = "haruna";
-  version = "0.6.3";
+  version = "0.7.2";
 
-  src = fetchFromGitHub {
-    owner = "g-fb";
+  src = fetchFromGitLab {
+    owner = "multimedia";
     repo = "haruna";
-    rev = version;
-    sha256 = "sha256-gJCLc8qJolv4Yufm/OBCTTEpyoodtySAqKH+zMHCoLU=";
+    rev = "v${version}";
+    sha256 = "sha256-0s4v3YJhSssp2S9mppMXq0AtWXPIaqOYWPmJgKjXjDE=";
+    domain = "invent.kde.org";
   };
 
   buildInputs = [
     breeze-icons
     breeze-qt5
+    ffmpeg-full
     kcodecs
     kconfig
     kcoreaddons

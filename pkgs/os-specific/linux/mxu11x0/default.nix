@@ -1,7 +1,8 @@
 { lib, stdenv, fetchurl, kernel }:
 
 stdenv.mkDerivation {
-  name = "mxu11x0-1.4-${kernel.version}";
+  pname = "mxu11x0";
+  version = "1.4-${kernel.version}";
 
   src = fetchurl {
     url = "https://www.moxa.com/Moxa/media/PDIM/S100000385/moxa-uport-1000-series-linux-3.x-and-4.x-for-uport-11x0-series-driver-v1.4.tgz";

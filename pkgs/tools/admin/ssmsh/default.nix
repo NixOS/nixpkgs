@@ -15,7 +15,7 @@ buildGoModule rec {
 
   doCheck = true;
 
-  buildFlagsArray = [ "-ldflags=-w -s -X main.Version=${version}" ];
+  ldflags = [ "-w" "-s" "-X main.Version=${version}" ];
 
   meta = with lib; {
     homepage = "https://github.com/bwhaley/ssmsh";

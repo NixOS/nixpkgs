@@ -18,7 +18,8 @@ buildPythonPackage {
     sha256 ="0i1dd85ls6n14m9q7lkympms1w3x0pqyaxvalq82s4xnjdv585j3";
   };
 
-  phases = [ "unpackPhase" "installPhase" ];
+  dontBuild = true;
+  doCheck = false;
 
   pythonPath = [ pyopenssl pkgs.gtk3 ];
 

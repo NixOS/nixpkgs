@@ -3,20 +3,23 @@
 , pythonOlder
 , fetchPypi
 , pydsdl
+, pyyaml
 }:
 
  buildPythonPackage rec {
   pname = "nunavut";
-  version = "1.2.2";
-  disabled = pythonOlder "3.5"; # only python>=3.5 is supported
+  version = "1.5.0";
+
+  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "78ab56951172ecd92f9b66dbf9b0ea986dcc6899d462eeef74563ddf33a5a9a5";
+    sha256 = "d0a7cfbb34dd93aff299a5a357f6f259a0a407c0e9136bab8e495a36e3f0846d";
   };
 
   propagatedBuildInputs = [
     pydsdl
+    pyyaml
   ];
 
   # allow for writable directory for darwin

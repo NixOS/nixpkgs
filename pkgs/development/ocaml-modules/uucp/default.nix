@@ -2,7 +2,7 @@
 
 let
   pname = "uucp";
-  version = "13.0.0";
+  version = "14.0.0";
   webpage = "https://erratique.ch/software/${pname}";
   minimumOCamlVersion = "4.03";
   doCheck = true;
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "${webpage}/releases/${pname}-${version}.tbz";
-    sha256 = "sha256-OPpHbCOC/vMFdyHwyhCSisUv2PyO8xbeY2oq1a9HbqY=";
+    sha256 = "sha256:1yx9nih3d9prb9zizq8fzmmqylf24a6yifhf81h33znrj5xn1mpj";
   };
 
   buildInputs = [ ocaml findlib ocamlbuild topkg uutf uunf ];
@@ -44,7 +44,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "An OCaml library providing efficient access to a selection of character properties of the Unicode character database";
     homepage = webpage;
-    platforms = ocaml.meta.platforms or [];
+    inherit (ocaml.meta) platforms;
     license = licenses.bsd3;
     maintainers = [ maintainers.vbgl ];
   };

@@ -64,6 +64,16 @@ python3Packages.buildPythonApplication rec {
     patchShebangs meson-postinstall.py
   '';
 
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
+  postFixup = ''
+    wrapPythonProgramsIn "$out/libexec" "$out $pythonPath"
+  '';
+
   passthru = {
     updateScript = gnome.updateScript {
       packageName = pname;

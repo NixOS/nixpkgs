@@ -1,7 +1,8 @@
 {lib, stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "noip-2.1.9-1";
+  pname = "noip";
+  version = "2.1.9-1";
 
   src = fetchurl {
     url = "https://www.noip.com/client/linux/noip-duc-linux.tar.gz";

@@ -14,8 +14,6 @@ buildLinux (args // rec {
     sha256 = "sha256-PunFd6tOsmrsPItp2QX4TEVxHnvvi1BMSwWio/DTlMU=";
   };
 
-  kernelTests = args.kernelTests or [ nixosTests.kernel-generic.linux_testing ];
-
   # Should the testing kernels ever be built on Hydra?
   extraMeta.hydraPlatforms = [];
 

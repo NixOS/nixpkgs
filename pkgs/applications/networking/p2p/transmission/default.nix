@@ -10,6 +10,11 @@
 , systemd
 , zlib
 , pcre
+, libb64
+, libutp
+, miniupnpc
+, dht
+, libnatpmp
   # Build options
 , enableGTK3 ? false
 , gtk3
@@ -69,6 +74,11 @@ in stdenv.mkDerivation {
     libevent
     zlib
     pcre
+    libb64
+    libutp
+    miniupnpc
+    dht
+    libnatpmp
   ]
   ++ lib.optionals enableQt [ qt5.qttools qt5.qtbase ]
   ++ lib.optionals enableGTK3 [ gtk3 xorg.libpthreadstubs ]
@@ -87,7 +97,7 @@ in stdenv.mkDerivation {
       include <abstractions/nameservice>
       include <abstractions/ssl_certs>
       include "${apparmorRulesFromClosure { name = "transmission-daemon"; } ([
-        curl libevent openssl pcre zlib
+        curl libevent openssl pcre zlib libnatpmp miniupnpc
       ] ++ lib.optionals enableSystemd [ systemd ]
         ++ lib.optionals stdenv.isLinux [ inotify-tools ]
       )}"
@@ -106,6 +116,7 @@ in stdenv.mkDerivation {
   '';
 
   passthru.tests = {
+    apparmor = nixosTests.transmission; # starts the service with apparmor enabled
     smoke-test = nixosTests.bittorrent;
   };
 
@@ -123,7 +134,7 @@ in stdenv.mkDerivation {
         * Full encryption, DHT, and PEX support
     '';
     homepage = "http://www.transmissionbt.com/";
-    license = lib.licenses.gpl2; # parts are under MIT
+    license = lib.licenses.gpl2Plus; # parts are under MIT
     maintainers = with lib.maintainers; [ astsmtl vcunat wizeman ];
     platforms = lib.platforms.unix;
   };

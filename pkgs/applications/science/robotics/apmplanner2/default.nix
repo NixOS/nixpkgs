@@ -30,8 +30,6 @@ mkDerivation rec {
       --replace /usr $out
   '';
 
-  enableParallelBuilding = true;
-
   meta = {
     description = "Ground station software for autonomous vehicles";
     longDescription = ''

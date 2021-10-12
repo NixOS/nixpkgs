@@ -61,7 +61,8 @@ let
     symlinkJoin {
       name = "mpv-with-scripts-${mpv.version}";
 
-      paths = [ mpv ];
+      # TODO: don't link all mpv outputs and convert package to mpv-unwrapped?
+      paths = [ mpv.all ];
 
       buildInputs = [ makeWrapper ];
 

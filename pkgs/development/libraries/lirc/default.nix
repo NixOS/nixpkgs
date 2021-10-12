@@ -42,6 +42,7 @@ stdenv.mkDerivation rec {
     "--with-systemdsystemunitdir=$(out)/lib/systemd/system"
     "--enable-uinput" # explicit activation because build env has no uinput
     "--enable-devinput" # explicit activation because build env has no /dev/input
+    "--with-lockdir=/run/lirc/lock" # /run/lock is not writable for 'lirc' user
   ];
 
   installFlags = [

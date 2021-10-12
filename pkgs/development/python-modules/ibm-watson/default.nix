@@ -14,13 +14,13 @@
 
 buildPythonPackage rec {
   pname = "ibm-watson";
-  version = "5.2.2";
+  version = "5.3.0";
 
   src = fetchFromGitHub {
     owner = "watson-developer-cloud";
     repo = "python-sdk";
     rev = "v${version}";
-    sha256 = "sha256-bK6lcTKAVwAJDb5LqKRWR/4wcOKx7bRwWYC+WB5qJE4=";
+    sha256 = "0g63h7rf0710bxcsr115857bvz69sl2g5d13k5a7qi7hjh33bxrk";
   };
 
   checkInputs = [

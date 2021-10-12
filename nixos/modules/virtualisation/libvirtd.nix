@@ -50,7 +50,7 @@ in {
     package = mkOption {
       type = types.package;
       default = pkgs.libvirt;
-      defaultText = "pkgs.libvirt";
+      defaultText = literalExpression "pkgs.libvirt";
       description = ''
         libvirt package to use.
       '';
@@ -59,6 +59,7 @@ in {
     qemuPackage = mkOption {
       type = types.package;
       default = pkgs.qemu;
+      defaultText = literalExpression "pkgs.qemu";
       description = ''
         Qemu package to use with libvirt.
         `pkgs.qemu` can emulate alien architectures (e.g. aarch64 on x86)
@@ -183,6 +184,9 @@ in {
     };
 
     security.wrappers.qemu-bridge-helper = {
+      setuid = true;
+      owner = "root";
+      group = "root";
       source = "/run/${dirName}/nix-helpers/qemu-bridge-helper";
     };
 

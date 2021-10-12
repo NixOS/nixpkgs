@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchFromGitHub, pkg-config, SDL2, glew, xcftools, python, pillow, makeWrapper }:
+{ lib, stdenv, fetchurl, fetchFromGitHub, pkg-config, SDL2, glew, xcftools, python2Packages, makeWrapper }:
 
 let
   vasm =
@@ -26,7 +26,7 @@ stdenv.mkDerivation {
     sha256 = "07wzbmzp0y8mh59jxg81q17gqagz3psxigxh8dmzsipgg68y6a8r";
   };
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ pkg-config SDL2 glew xcftools python pillow vasm ];
+  buildInputs = [ pkg-config SDL2 glew xcftools python2Packages.python python2Packages.pillow vasm ];
   preBuild = ''
     patchShebangs img2tiles.py
   '';

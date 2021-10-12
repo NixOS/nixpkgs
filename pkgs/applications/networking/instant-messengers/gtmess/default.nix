@@ -1,10 +1,11 @@
 {lib, stdenv, fetchurl, ncurses, openssl, tcl, tk}:
 
-stdenv.mkDerivation {
-  name = "gtmess-0.97";
+stdenv.mkDerivation rec {
+  pname = "gtmess";
+  version = "0.97";
 
   src = fetchurl {
-    url = "mirror://sourceforge/gtmess/gtmess-0.97.tar.gz";
+    url = "mirror://sourceforge/gtmess/gtmess-${version}.tar.gz";
     sha256 = "1ipmqsrj0r1ssbgs2fpr4x5vnzlxlqhx9jrnadp1jw7s0sxpjqv0";
   };
 

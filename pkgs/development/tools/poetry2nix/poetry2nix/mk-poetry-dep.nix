@@ -38,7 +38,7 @@ pythonPackages.callPackage
       fileCandidates =
         let
           supportedRegex = ("^.*(" + builtins.concatStringsSep "|" supportedExtensions + ")");
-          matchesVersion = fname: builtins.match ("^.*" + builtins.replaceStrings [ "." ] [ "\\." ] version + ".*$") fname != null;
+          matchesVersion = fname: builtins.match ("^.*" + builtins.replaceStrings [ "." "+" ] [ "\\." "\\+" ] version + ".*$") fname != null;
           hasSupportedExtension = fname: builtins.match supportedRegex fname != null;
           isCompatibleEgg = fname: ! lib.strings.hasSuffix ".egg" fname || lib.strings.hasSuffix "py${python.pythonVersion}.egg" fname;
         in
@@ -47,7 +47,8 @@ pythonPackages.callPackage
       isSource = source != null;
       isGit = isSource && source.type == "git";
       isUrl = isSource && source.type == "url";
-      isLocal = isSource && source.type == "directory";
+      isDirectory = isSource && source.type == "directory";
+      isFile = isSource && source.type == "file";
       isLegacy = isSource && source.type == "legacy";
       localDepPath = toPath source.url;
 
@@ -71,7 +72,10 @@ pythonPackages.callPackage
           sourceDist = builtins.filter isSdist fileCandidates;
           eggs = builtins.filter isEgg fileCandidates;
           entries = (if preferWheel then binaryDist ++ sourceDist else sourceDist ++ binaryDist) ++ eggs;
-          lockFileEntry = builtins.head entries;
+          lockFileEntry = (
+            if lib.length entries > 0 then builtins.head entries
+            else throw "Missing suitable source/wheel file entry for ${name}"
+          );
           _isEgg = isEgg lockFileEntry;
         in
         rec {
@@ -92,9 +96,13 @@ pythonPackages.callPackage
         "setuptools_scm"
         "setuptools-scm"
         "toml" # Toml is an extra for setuptools-scm
+        "tomli" # tomli is an extra for later versions of setuptools-scm
+        "packaging"
+        "six"
+        "pyparsing"
       ];
       baseBuildInputs = lib.optional (! lib.elem name skipSetupToolsSCM) pythonPackages.setuptools-scm;
-      format = if isLocal || isGit || isUrl then "pyproject" else fileInfo.format;
+      format = if isDirectory || isGit || isUrl then "pyproject" else fileInfo.format;
     in
     buildPythonPackage {
       pname = moduleName name;
@@ -118,7 +126,7 @@ pythonPackages.callPackage
         baseBuildInputs
         ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) pythonPackages.setuptools
         ++ lib.optional (!isSource) (getManyLinuxDeps fileInfo.name).pkg
-        ++ lib.optional isLocal buildSystemPkgs
+        ++ lib.optional isDirectory buildSystemPkgs
         ++ lib.optional (!__isBootstrap) pythonPackages.poetry
       );
 
@@ -170,8 +178,10 @@ pythonPackages.callPackage
             {
               inherit (source) url;
             }
-        else if isLocal then
+        else if isDirectory then
           (poetryLib.cleanPythonSources { src = localDepPath; })
+        else if isFile then
+          localDepPath
         else if isLegacy then
           fetchFromLegacy
             {

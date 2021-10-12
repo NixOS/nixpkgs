@@ -9,7 +9,6 @@ stdenv.mkDerivation {
     rev = "b7212d5640701f93f0cd88fbd3a32c619030ae62";
   };
 
-  enableParallelBuilding = true;
   dontWrapQtApps = true;
   nativeBuildInputs = [ qmake ];
 

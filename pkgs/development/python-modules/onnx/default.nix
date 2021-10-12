@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, pythonOlder
 , isPy27
 , cmake
 , protobuf
@@ -15,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "onnx";
-  version = "1.9.0";
+  version = "1.10.1";
 
   # Python 2 is not supported as of Onnx v1.8
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0yjv2axz2vc2ysniwislsp53fsb8f61y1warrr2ppn2d9ijml1d9";
+    sha256 = "9d941ba76cab55db8913ecad9dc50cefeb368460f6338a91783a5d7643f3a044";
   };
 
   nativeBuildInputs = [ cmake ];

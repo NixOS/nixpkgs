@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "mt-st-1.3";
+  pname = "mt-st";
+  version = "1.3";
 
   src = fetchurl {
-    url = "https://github.com/iustin/mt-st/releases/download/${name}/${name}.tar.gz";
+    url = "https://github.com/iustin/mt-st/releases/download/mt-st-${version}/mt-st-${version}.tar.gz";
     sha256 = "b552775326a327cdcc076c431c5cbc4f4e235ac7c41aa931ad83f94cccb9f6de";
   };
 

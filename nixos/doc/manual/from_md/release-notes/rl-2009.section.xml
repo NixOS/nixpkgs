@@ -1684,13 +1684,17 @@ CREATE ROLE postgres LOGIN SUPERUSER;
       </listitem>
       <listitem>
         <para>
-          The notmuch package move its emacs-related binaries and emacs
+          The notmuch package moves its emacs-related binaries and emacs
           lisp files to a separate output. They're not part of the
           default <literal>out</literal> output anymore - if you relied
           on the <literal>notmuch-emacs-mua</literal> binary or the
           emacs lisp files, access them via the
-          <literal>notmuch.emacs</literal> output. Device tree overlay
-          support was improved in
+          <literal>notmuch.emacs</literal> output.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Device tree overlay support was improved in
           <link xlink:href="https://github.com/NixOS/nixpkgs/pull/79370">#79370</link>
           and now uses
           <link xlink:href="options.html#opt-hardware.deviceTree.kernelPackage">hardware.deviceTree.kernelPackage</link>

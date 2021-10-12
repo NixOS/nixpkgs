@@ -73,7 +73,7 @@ in
       port = mkOption {
         type = types.int;
         default = 3000;
-        example = "80";
+        example = 80;
         description = ''
           Port to listen on.
         '';
@@ -135,7 +135,7 @@ in
       csp = mkOption {
         type = types.nullOr types.attrs;
         default = null;
-        example = literalExample ''
+        example = literalExpression ''
           {
             enable = true;
             directives = {
@@ -222,7 +222,7 @@ in
       db = mkOption {
         type = types.attrs;
         default = {};
-        example = literalExample ''
+        example = literalExpression ''
           {
             dialect = "sqlite";
             storage = "/var/lib/${name}/db.${name}.sqlite";
@@ -313,7 +313,7 @@ in
       errorPath = mkOption {
         type = types.nullOr types.str;
         default = null;
-        defaultText = "./public/views/error.ejs";
+        defaultText = literalExpression "./public/views/error.ejs";
         description = ''
           Path to the error template file.
           (Non-canonical paths are relative to HedgeDoc's base directory)
@@ -322,7 +322,7 @@ in
       prettyPath = mkOption {
         type = types.nullOr types.str;
         default = null;
-        defaultText = "./public/views/pretty.ejs";
+        defaultText = literalExpression "./public/views/pretty.ejs";
         description = ''
           Path to the pretty template file.
           (Non-canonical paths are relative to HedgeDoc's base directory)
@@ -331,7 +331,7 @@ in
       slidePath = mkOption {
         type = types.nullOr types.str;
         default = null;
-        defaultText = "./public/views/slide.hbs";
+        defaultText = literalExpression "./public/views/slide.hbs";
         description = ''
           Path to the slide template file.
           (Non-canonical paths are relative to HedgeDoc's base directory)
@@ -340,7 +340,7 @@ in
       uploadsPath = mkOption {
         type = types.str;
         default = "${cfg.workDir}/uploads";
-        defaultText = "/var/lib/${name}/uploads";
+        defaultText = literalExpression "/var/lib/${name}/uploads";
         description = ''
           Path under which uploaded files are saved.
         '';
@@ -925,6 +925,7 @@ in
     package = mkOption {
       type = types.package;
       default = pkgs.hedgedoc;
+      defaultText = literalExpression "pkgs.hedgedoc";
       description = ''
         Package that provides HedgeDoc.
       '';

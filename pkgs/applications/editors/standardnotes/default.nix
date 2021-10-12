@@ -2,18 +2,18 @@
 , fetchurl, libsecret, gtk3, gsettings-desktop-schemas }:
 
 let
-  version = "3.5.18";
+  version = "3.8.18";
   pname = "standardnotes";
   name = "${pname}-${version}";
 
   plat = {
-    i386-linux = "-i386";
+    i386-linux = "i386";
     x86_64-linux = "x86_64";
   }.${stdenv.hostPlatform.system};
 
   sha256 = {
-    i386-linux = "009fnnd7ysxkyykkbmhvr0vn13b21j1j5mzwdvqdkhm9v3c9rbgj";
-    x86_64-linux = "1zrnvvr9x0s2gp948iajsmgn38xm6x0g2dgxrfjis39rpplsrdww";
+    i386-linux = "1xiypsmvpk8i6kab862pipbdfb0y5d5355hdwjmva7v7g26aa7h7";
+    x86_64-linux = "03qlxlgyypnvcr40jh6i4wriyax2jbfhrb798cq0n7qlc1y4pg8r";
   }.${stdenv.hostPlatform.system};
 
   src = fetchurl {

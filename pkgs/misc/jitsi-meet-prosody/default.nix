@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   pname = "jitsi-meet-prosody";
-  version = "1.0.5056";
+  version = "1.0.5307";
   src = fetchurl {
     url = "https://download.jitsi.org/stable/${pname}_${version}-1_all.deb";
-    sha256 = "06qxa9h2ry92xrk2jklp76nv3sl8nvykdvsqmhn33lz6q6vmw2xr";
+    sha256 = "VsOoW8h7yFgMRVTP6AHs2HOqSwXMnRNgJI8FM/rHp2I=";
   };
 
   dontBuild = true;
@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
   passthru.tests = {
     single-node-smoke-test = nixosTests.jitsi-meet;
   };
+
+  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     description = "Prosody configuration for Jitsi Meet";

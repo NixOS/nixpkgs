@@ -2,7 +2,6 @@
 , runCommand
 , makeWrapper
 , lib
-, stdenv
 , extraPackages ? []
 , podman # Docker compat
 , runc # Default container runtime
@@ -14,14 +13,12 @@
 , cni-plugins # not added to path
 , iptables
 , iproute2
-, qemu
-, xz
 }:
 
 let
   podman = podman-unwrapped;
 
-  binPath = lib.makeBinPath ([ ] ++ lib.optionals stdenv.isLinux [
+  binPath = lib.makeBinPath ([
     runc
     crun
     conmon
@@ -30,9 +27,6 @@ let
     util-linux
     iptables
     iproute2
-  ] ++ lib.optionals stdenv.isDarwin [
-    qemu
-    xz
   ] ++ extraPackages);
 
 in runCommand podman.name {

@@ -16,17 +16,14 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "osu-lazer";
-  version = "2021.720.0";
+  version = "2021.1006.1";
 
   src = fetchFromGitHub {
     owner = "ppy";
     repo = "osu";
     rev = version;
-    sha256 = "I7UkbyH2i218d5RCq4al9Gr1C0MX339jFOeyKrKQ3b0=";
+    sha256 = "zQMXDqWfZ8g4HP3VQgeLogif51vVFLjb+a+7ma7OHIc=";
   };
-
-  patches = [ ./bypass-tamper-detection.patch ];
-  patchFlags = [ "--binary" "-p1" ];
 
   nativeBuildInputs = [
     dotnet-sdk dotnetPackages.Nuget makeWrapper
@@ -120,6 +117,7 @@ in stdenv.mkDerivation rec {
     ];
     maintainers = with maintainers; [ oxalica ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "osu!";
   };
   passthru.updateScript = ./update.sh;
 }

@@ -14,7 +14,8 @@ let
       });
       flask_migrate = super.flask_migrate.overridePythonAttrs (oldAttrs: rec {
         version = "2.7.0";
-        src = oldAttrs.src.override {
+        src = python3.pkgs.fetchPypi {
+          pname = "Flask-Migrate";
           inherit version;
           sha256 = "ae2f05671588762dd83a21d8b18c51fe355e86783e24594995ff8d7380dffe38";
         };
@@ -26,13 +27,13 @@ let
 in
 python3'.pkgs.buildPythonPackage rec {
   pname = "privacyIDEA";
-  version = "3.6.1";
+  version = "3.6.2";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-NRfTEZ/6K6xLP+wcT6o54wqk/EyWTiiC9W1KDgaAEbg=";
+    sha256 = "sha256-kv6XqsbGkaGEhfNxSOjCe6JbFOJnuqwM8CR/J9lJjks=";
     fetchSubmodules = true;
   };
 

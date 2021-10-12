@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , rustPlatform
-, fetchpatch
 , fetchFromGitHub
 , pkg-config
 , dbus
@@ -11,24 +10,23 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tiny";
-  version = "0.8.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "osa1";
     repo = pname;
     rev = "v${version}";
-    sha256 = "07a50shv6k4fwl2gmv4j0maxaqqkjpwwmqkxkqs0gvx38lc5f7m7";
+    sha256 = "gKyHR3FZHDybaP38rqB8/gvr8T+mDO4QQxoTtWS+TlE=";
   };
 
-  cargoSha256 = "0npkcprcqy2pn7k64jzwg41vk9id6yzw211xw203h80cc5444igr";
+  cargoSha256 = "0ChfW8vaqC2kCp4lpS0HOvhuihPw9G5TOmgwKzVDfws=";
 
+  # Fix Cargo.lock version. Remove with the next release.
   cargoPatches = [
-    # Fix Cargo.lock version. Remove with the next release.
-    (fetchpatch {
-      url = "https://github.com/osa1/tiny/commit/b1caf48a6399dad8875de1d965d1ad445e49585d.patch";
-      sha256 = "1zkjhx94nwmd69cfwwwzg51ipcwq01wyvgsmn0vq7iaa2h0d286i";
-    })
+    ./fix-Cargo.lock.patch
   ];
+
+  cargoBuildFlags = lib.optionals stdenv.isLinux [ "--features=desktop-notifications" ];
 
   nativeBuildInputs = lib.optional stdenv.isLinux pkg-config;
   buildInputs = lib.optionals stdenv.isLinux [ dbus openssl ] ++ lib.optional stdenv.isDarwin Foundation;
@@ -38,6 +36,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/osa1/tiny";
     changelog = "https://github.com/osa1/tiny/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ Br1ght0ne ];
+    maintainers = with maintainers; [ Br1ght0ne vyp ];
   };
 }

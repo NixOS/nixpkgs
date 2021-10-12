@@ -56,9 +56,13 @@ let
       ''}
 
       echo "$activationScript" > $out/activate
+      echo "$dryActivationScript" > $out/dry-activate
       substituteInPlace $out/activate --subst-var out
-      chmod u+x $out/activate
-      unset activationScript
+      substituteInPlace $out/dry-activate --subst-var out
+      chmod u+x $out/activate $out/dry-activate
+      unset activationScript dryActivationScript
+      ${pkgs.stdenv.shell} -n $out/activate
+      ${pkgs.stdenv.shell} -n $out/dry-activate
 
       cp ${config.system.build.bootStage2} $out/init
       substituteInPlace $out/init --subst-var-by systemConfig $out
@@ -108,6 +112,7 @@ let
       config.system.build.installBootLoader
       or "echo 'Warning: do not know how to make this configuration bootable; please enable a boot loader.' 1>&2; true";
     activationScript = config.system.activationScripts.script;
+    dryActivationScript = config.system.dryActivationScript;
     nixosLabel = config.system.nixos.label;
 
     configurationName = config.boot.loader.grub.configurationName;
@@ -150,7 +155,7 @@ in
 
     specialisation = mkOption {
       default = {};
-      example = lib.literalExample "{ fewJobsManyCores.configuration = { nix.buildCores = 0; nix.maxJobs = 1; }; }";
+      example = lib.literalExpression "{ fewJobsManyCores.configuration = { nix.buildCores = 0; nix.maxJobs = 1; }; }";
       description = ''
         Additional configurations to build. If
         <literal>inheritParentConfig</literal> is true, the system
@@ -238,7 +243,7 @@ in
 
     system.replaceRuntimeDependencies = mkOption {
       default = [];
-      example = lib.literalExample "[ ({ original = pkgs.openssl; replacement = pkgs.callPackage /path/to/openssl { }; }) ]";
+      example = lib.literalExpression "[ ({ original = pkgs.openssl; replacement = pkgs.callPackage /path/to/openssl { }; }) ]";
       type = types.listOf (types.submodule (
         { ... }: {
           options.original = mkOption {
@@ -269,7 +274,11 @@ in
         if config.networking.hostName == ""
         then "unnamed"
         else config.networking.hostName;
-      defaultText = '''networking.hostName' if non empty else "unnamed"'';
+      defaultText = literalExpression ''
+        if config.networking.hostName == ""
+        then "unnamed"
+        else config.networking.hostName;
+      '';
       description = ''
         The name of the system used in the <option>system.build.toplevel</option> derivation.
         </para><para>

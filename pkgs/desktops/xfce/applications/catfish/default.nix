@@ -1,15 +1,15 @@
 { lib, fetchurl, file, which, intltool, gobject-introspection,
-  findutils, xdg-utils, dconf, gtk3, python3Packages,
+  findutils, xdg-utils, dconf, gtk3, python3Packages, xfconf,
   wrapGAppsHook
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "catfish";
-  version = "1.4.13";
+  version = "4.16.3";
 
   src = fetchurl {
     url = "https://archive.xfce.org/src/apps/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-WMDqBuXyhgGSlVRfv9HbyiOup0xiV2K7tMiab0hK6Dk=";
+    sha256 = "sha256-6amaYtEJgTkVCN1D88v6LVCmm9a30e7vfTC6TGc9z9o=";
   };
 
   nativeBuildInputs = [
@@ -36,6 +36,7 @@ python3Packages.buildPythonApplication rec {
     python3Packages.pexpect
     xdg-utils
     findutils
+    xfconf
   ];
 
   # Explicitly set the prefix dir in "setup.py" because setuptools is

@@ -22,11 +22,11 @@
 }:
 
 let
-  version = "11.41.23";
-  openjdk = "11.0.8";
+  version = "11.50.19";
+  openjdk = "11.0.12";
 
-  sha256_linux = "f8aee4ab30ca11ab3c8f401477df0e455a9d6b06f2710b2d1b1ddcf06067bc79";
-  sha256_darwin = "643c6648cc4374f39e830e4fcb3d68f8667893d487c07eb7091df65937025cc3";
+  sha256_linux = "b8e8a63b79bc312aa90f3558edbea59e71495ef1a9c340e38900dd28a1c579f3";
+  sha256_darwin = "9bc6874932f7f88d0a48220d3200449ddf7dc5c0e82af2df2738bc13d21b0e4e";
 
   platform = if stdenv.isDarwin then "macosx" else "linux";
   hash = if stdenv.isDarwin then sha256_darwin else sha256_linux;
@@ -71,7 +71,10 @@ in stdenv.mkDerivation {
   installPhase = ''
     mkdir -p $out
     cp -r ./* "$out/"
-
+  '' + lib.optionalString stdenv.isLinux ''
+    # jni.h expects jni_md.h to be in the header search path.
+    ln -s $out/include/linux/*_md.h $out/include/
+  '' + ''
     mkdir -p $out/nix-support
     printWords ${setJavaClassPath} > $out/nix-support/propagated-build-inputs
 

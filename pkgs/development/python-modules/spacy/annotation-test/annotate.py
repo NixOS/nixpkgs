@@ -26,10 +26,10 @@ def test_entities(doc_en_core_web_sm):
 
     assert entities == [
         ('Sebastian Thrun', 'PERSON'),
+        ('Google', 'ORG'),
         ('2007', 'DATE'),
         ('American', 'NORP'),
-        ('Thrun', 'PERSON'),
-        ('Recode', 'PERSON'),
+        ('Thrun', 'GPE'),
         ('earlier this week', 'DATE'),
     ]
 

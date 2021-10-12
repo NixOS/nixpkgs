@@ -30,7 +30,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-code";
-  version = "6.0.0";
+  version = "6.0.1";
 
   repoName = "code";
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "1w1m52mq3zr9alkxk1c0s4ncscka1km5ppd0r6zm86qan9cjwq0f";
+    sha256 = "120328pprzqj4587yj54yya9v2mv1rfwylpmxyr5l2qf80cjxi9d";
   };
 
   passthru = {
@@ -53,10 +53,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-
-    # polkit is needed for ITS rules
-    polkit
-
+    polkit # needed for ITS rules
     python3
     vala
     wrapGAppsHook
@@ -100,6 +97,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/elementary/code";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
   };
 }

@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
       libX11 libXext libXi
     ];
 
-  phases = [ "installPhase" ];
+  dontUnpack = true;
 
   # NOTES:
   # Eagle for Linux comes as a self-extracting shell script with embedded

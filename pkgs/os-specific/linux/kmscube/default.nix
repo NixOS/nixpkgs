@@ -1,7 +1,8 @@
 { lib, stdenv, fetchgit, autoreconfHook, libdrm, libX11, libGL, mesa, pkg-config }:
 
 stdenv.mkDerivation {
-  name = "kmscube-2018-06-17";
+  pname = "kmscube";
+  version = "unstable-2018-06-17";
 
   src = fetchgit {
     url = "git://anongit.freedesktop.org/mesa/kmscube";

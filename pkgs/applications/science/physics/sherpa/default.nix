@@ -9,11 +9,14 @@ stdenv.mkDerivation rec {
     sha256 = "1iwa17s8ipj6a2b8zss5csb1k5y9s5js38syvq932rxcinbyjsl4";
   };
 
-  postPatch = lib.optional (stdenv.hostPlatform.libc == "glibc") ''
+  postPatch = lib.optionalString (stdenv.hostPlatform.libc == "glibc") ''
     sed -ie '/sys\/sysctl.h/d' ATOOLS/Org/Run_Parameter.C
   '';
 
-  buildInputs = [ gfortran sqlite lhapdf rivet ];
+
+  nativeBuildInputs = [ gfortran ];
+
+  buildInputs = [ sqlite lhapdf rivet ];
 
   enableParallelBuilding = true;
 

@@ -26,6 +26,6 @@ in fetchFromGitLab {
     homepage = "https://www.opensans.com";
     license = licenses.asl20;
     platforms = platforms.all;
-    maintainers = [ ];
+    maintainers = with maintainers; [ ] ++ teams.pantheon.members;
   };
 }

@@ -9,7 +9,7 @@ let
   podmanPackage = (pkgs.podman.override { inherit (cfg) extraPackages; });
 
   # Provides a fake "docker" binary mapping to podman
-  dockerCompat = pkgs.runCommandNoCC "${podmanPackage.pname}-docker-compat-${podmanPackage.version}" {
+  dockerCompat = pkgs.runCommand "${podmanPackage.pname}-docker-compat-${podmanPackage.version}" {
     outputs = [ "out" "man" ];
     inherit (podmanPackage) meta;
   } ''
@@ -95,7 +95,7 @@ in
     extraPackages = mkOption {
       type = with types; listOf package;
       default = [ ];
-      example = lib.literalExample ''
+      example = lib.literalExpression ''
         [
           pkgs.gvisor
         ]

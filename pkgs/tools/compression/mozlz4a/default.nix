@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     chmod a+x "$out/bin/mozlz4a"
   '';
 
-  buildInputs = [ python3 python3.pkgs.python-lz4 ];
+  buildInputs = [ python3 python3.pkgs.lz4 ];
 
   meta = {
     description = "A script to handle Mozilla's mozlz4 files";

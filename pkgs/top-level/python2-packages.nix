@@ -36,6 +36,10 @@ with self; with super; {
 
   box2d = callPackage ../development/python-modules/box2d { };
 
+  boto3 = callPackage ../development/python-modules/boto3/1_17.nix {};
+
+  botocore = callPackage ../development/python-modules/botocore/1_20.nix {};
+
   browsermob-proxy = callPackage ../development/python-modules/browsermob-proxy { };
 
   cairocffi = callPackage ../development/python-modules/cairocffi/0_9.nix { };
@@ -70,6 +74,8 @@ with self; with super; {
 
   construct = callPackage ../development/python-modules/construct/2.10.54.nix { };
 
+  contextlib2 = callPackage ../development/python-modules/contextlib2/0.nix { };
+
   convertdate = callPackage ../development/python-modules/convertdate/2.2.x.nix { };
 
   cryptography = callPackage ../development/python-modules/cryptography/3.3.nix { };
@@ -79,6 +85,8 @@ with self; with super; {
   darcsver = callPackage ../development/python-modules/darcsver { };
 
   dateparser = callPackage ../development/python-modules/dateparser/0.x.nix { };
+
+  decorator = callPackage ../development/python-modules/decorator/4.nix { };
 
   deskcon = callPackage ../development/python-modules/deskcon { };
 
@@ -281,6 +289,8 @@ with self; with super; {
 
   metaphone = callPackage ../development/python-modules/metaphone { };
 
+  mlt = disabled super.mlt;
+
   mock = callPackage ../development/python-modules/mock/2.nix { };
 
   # Needed here because moinmoin is loaded as a Python library.
@@ -378,8 +388,6 @@ with self; with super; {
 
   pandas = callPackage ../development/python-modules/pandas/2.nix { };
 
-  pasteScript = callPackage ../development/python-modules/pastescript { };
-
   pathpy = callPackage ../development/python-modules/path.py/2.nix { };
 
   pg8000 = callPackage ../development/python-modules/pg8000/1_12.nix { };
@@ -390,6 +398,8 @@ with self; with super; {
   };
 
   pip = callPackage ../development/python-modules/pip/20.nix { };
+
+  pluggy = callPackage ../development/python-modules/pluggy/0.nix { };
 
   postorius = disabled super.postorius;
 
@@ -403,7 +413,7 @@ with self; with super; {
 
   progressbar231 = callPackage ../development/python-modules/progressbar231 { };
 
-  prompt_toolkit = callPackage ../development/python-modules/prompt_toolkit/1.nix { };
+  prompt-toolkit = callPackage ../development/python-modules/prompt-toolkit/1.nix { };
 
   pyamf = callPackage ../development/python-modules/pyamf { };
 
@@ -535,6 +545,8 @@ with self; with super; {
   rpy2 = callPackage ../development/python-modules/rpy2/2.nix { };
 
   rsa = callPackage ../development/python-modules/rsa/4_0.nix { };
+
+  s3transfer = callPackage ../development/python-modules/s3transfer/0_4.nix { };
 
   sandboxlib = callPackage ../development/python-modules/sandboxlib { };
 

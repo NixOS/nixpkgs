@@ -1,11 +1,12 @@
 { lib, stdenv, fetchurl, fetchpatch, xmlto, docbook_xml_dtd_412
 , libxslt, docbook_xsl, autoconf, automake, gettext, libiconv, libtool}:
 
-stdenv.mkDerivation {
-  name = "opensp-1.5.2";
+stdenv.mkDerivation rec {
+  pname = "opensp";
+  version = "1.5.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/openjade/OpenSP-1.5.2.tar.gz";
+    url = "mirror://sourceforge/openjade/OpenSP-${version}.tar.gz";
     sha256 = "1khpasr6l0a8nfz6kcf3s81vgdab8fm2dj291n5r2s53k228kx2p";
   };
 

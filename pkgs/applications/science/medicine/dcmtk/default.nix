@@ -26,6 +26,6 @@ stdenv.mkDerivation rec {
     homepage = "https://dicom.offis.de/dcmtk";
     license = licenses.bsd3;
     maintainers = with maintainers; [ iimog ];
-    platforms = platforms.linux;
+    platforms = with platforms; linux ++ darwin;
   };
 }

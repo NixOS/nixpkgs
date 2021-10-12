@@ -20,9 +20,9 @@ buildGoModule rec {
 
   doCheck = false;
 
-  preBuild = ''
-    buildFlagsArray+=("-ldflags" "-s -w -X moul.io/assh/v2/pkg/version.Version=${version}")
-  '';
+  ldflags = [
+    "-s" "-w" "-X moul.io/assh/v2/pkg/version.Version=${version}"
+  ];
 
   nativeBuildInputs = [ makeWrapper ];
 

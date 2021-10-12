@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-SNp7qoFS3bIq7RsC2C0du0+/6iKs9nY0ARqgMDoQCkM=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake gfortran ];
 
   buildInputs = [
     python
@@ -29,7 +29,6 @@ stdenv.mkDerivation rec {
     ++ lib.optionals (lapackSupport)
     # Check that the same index size is used for both libraries
     (assert (blas.isILP64 == lapack.isILP64); [
-      gfortran
       blas
       lapack
     ])

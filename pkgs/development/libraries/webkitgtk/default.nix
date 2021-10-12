@@ -1,5 +1,5 @@
 { lib, stdenv
-, runCommandNoCC
+, runCommand
 , fetchurl
 , fetchpatch
 , perl
@@ -15,6 +15,7 @@
 , libnotify
 , gnutls
 , libgcrypt
+, libgpg-error
 , gtk3
 , wayland
 , libwebp
@@ -36,11 +37,12 @@
 , libidn
 , libedit
 , readline
-, sdk
+, apple_sdk
 , libGL
 , libGLU
 , mesa
 , libintl
+, lcms2
 , libmanette
 , openjpeg
 , enableGeoLocation ? true
@@ -63,7 +65,7 @@ assert enableGeoLocation -> geoclue2 != null;
 
 stdenv.mkDerivation rec {
   pname = "webkitgtk";
-  version = "2.32.3";
+  version = "2.34.0";
 
   outputs = [ "out" "dev" ];
 
@@ -71,7 +73,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://webkitgtk.org/releases/${pname}-${version}.tar.xz";
-    sha256 = "sha256-wfSW9axlTv5M72L71PL77u8mWgfF50GeXSkAv+6lLLw=";
+    sha256 = "sha256-iAyO5ib2cBn2dVfKCeWaI+zyReYPYXMhXxqII8sJrzQ=";
   };
 
   patches = lib.optionals stdenv.isLinux [
@@ -82,12 +84,6 @@ stdenv.mkDerivation rec {
     })
     ./libglvnd-headers.patch
   ] ++ lib.optionals stdenv.isDarwin [
-    (fetchpatch {
-      url = "https://github.com/WebKit/WebKit/commit/94cdcd289b993ed4d39c17d4b8b90db7c81a9b10.diff";
-      sha256 = "sha256-ywrTEjf3ATqI0Vvs60TeAZ+m58kCibum4DamRWrQfaA=";
-      excludes = [ "Source/WebKit/ChangeLog" ];
-    })
-
     # https://bugs.webkit.org/show_bug.cgi?id=225856
     (fetchpatch {
       url = "https://bug-225856-attachments.webkit.org/attachment.cgi?id=428797";
@@ -146,8 +142,10 @@ stdenv.mkDerivation rec {
     libGLU
     mesa # for libEGL headers
     libgcrypt
+    libgpg-error
     libidn
     libintl
+    lcms2
   ] ++ lib.optionals stdenv.isLinux [
     libmanette
   ] ++ [
@@ -173,13 +171,15 @@ stdenv.mkDerivation rec {
   ]) ++ lib.optionals stdenv.isDarwin [
     libedit
     readline
+  ] ++ lib.optional (stdenv.isDarwin && !stdenv.isAarch64) (
     # Pull a header that contains a definition of proc_pid_rusage().
     # (We pick just that one because using the other headers from `sdk` is not
-    # compatible with our C++ standard library)
-    (runCommandNoCC "${pname}_headers" {} ''
-      install -Dm444 "${lib.getDev sdk}"/include/libproc.h "$out"/include/libproc.h
-    '')
-  ] ++ lib.optionals stdenv.isLinux [
+    # compatible with our C++ standard library. This header is already in
+    # the standard library on aarch64)
+    runCommand "${pname}_headers" {} ''
+      install -Dm444 "${lib.getDev apple_sdk.sdk}"/include/libproc.h "$out"/include/libproc.h
+    ''
+  ) ++ lib.optionals stdenv.isLinux [
     bubblewrap
     libseccomp
     systemd
@@ -197,6 +197,7 @@ stdenv.mkDerivation rec {
     "-DPORT=GTK"
     "-DUSE_LIBHYPHEN=OFF"
     "-DUSE_WPE_RENDERER=OFF"
+    "-DUSE_SOUP2=${if lib.versions.major libsoup.version == "2" then "ON" else "OFF"}"
   ] ++ lib.optionals stdenv.isDarwin [
     "-DENABLE_GAMEPAD=OFF"
     "-DENABLE_GTKDOC=OFF"

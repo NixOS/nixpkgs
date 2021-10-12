@@ -22,7 +22,9 @@ let
     } // (optionalAttrs (vhostConfig.enableACME || vhostConfig.useACMEHost != null) {
       sslCertificate = "${certs.${certName}.directory}/fullchain.pem";
       sslCertificateKey = "${certs.${certName}.directory}/key.pem";
-      sslTrustedCertificate = "${certs.${certName}.directory}/chain.pem";
+      sslTrustedCertificate = if vhostConfig.sslTrustedCertificate != null
+                              then vhostConfig.sslTrustedCertificate
+                              else "${certs.${certName}.directory}/chain.pem";
     })
   ) cfg.virtualHosts;
   enableIPv6 = config.networking.enableIPv6;
@@ -169,6 +171,14 @@ let
         map_hash_max_size ${toString cfg.mapHashMaxSize};
       ''}
 
+      ${optionalString (cfg.serverNamesHashBucketSize != null) ''
+        server_names_hash_bucket_size ${toString cfg.serverNamesHashBucketSize};
+      ''}
+
+      ${optionalString (cfg.serverNamesHashMaxSize != null) ''
+        server_names_hash_max_size ${toString cfg.serverNamesHashMaxSize};
+      ''}
+
       # $connection_upgrade is used for websocket proxying
       map $http_upgrade $connection_upgrade {
           default upgrade;
@@ -230,13 +240,13 @@ let
 
         defaultListen =
           if vhost.listen != [] then vhost.listen
-          else optionals (hasSSL || vhost.rejectSSL) (
-            singleton { addr = "0.0.0.0"; port = 443; ssl = true; }
-            ++ optional enableIPv6 { addr = "[::]"; port = 443; ssl = true; }
-          ) ++ optionals (!onlySSL) (
-            singleton { addr = "0.0.0.0"; port = 80; ssl = false; }
-            ++ optional enableIPv6 { addr = "[::]"; port = 80; ssl = false; }
-          );
+          else
+            let addrs = if vhost.listenAddresses != [] then vhost.listenAddresses else (
+              [ "0.0.0.0" ] ++ optional enableIPv6 "[::0]"
+            );
+            in
+          optionals (hasSSL || vhost.rejectSSL) (map (addr: { inherit addr; port = 443; ssl = true; }) addrs)
+          ++ optionals (!onlySSL) (map (addr: { inherit addr; port = 80; ssl = false; }) addrs);
 
         hostListen =
           if vhost.forceSSL
@@ -415,7 +425,7 @@ in
 
       package = mkOption {
         default = pkgs.nginxStable;
-        defaultText = "pkgs.nginxStable";
+        defaultText = literalExpression "pkgs.nginxStable";
         type = types.package;
         apply = p: p.override {
           modules = p.modules ++ cfg.additionalModules;
@@ -430,7 +440,7 @@ in
       additionalModules = mkOption {
         default = [];
         type = types.listOf (types.attrsOf types.anything);
-        example = literalExample "[ pkgs.nginxModules.brotli ]";
+        example = literalExpression "[ pkgs.nginxModules.brotli ]";
         description = ''
           Additional <link xlink:href="https://www.nginx.com/resources/wiki/modules/">third-party nginx modules</link>
           to install. Packaged modules are available in
@@ -641,13 +651,30 @@ in
           '';
       };
 
+      serverNamesHashBucketSize = mkOption {
+        type = types.nullOr types.ints.positive;
+        default = null;
+        description = ''
+            Sets the bucket size for the server names hash tables. Default
+            value depends on the processor’s cache line size.
+          '';
+      };
+
+      serverNamesHashMaxSize = mkOption {
+        type = types.nullOr types.ints.positive;
+        default = null;
+        description = ''
+            Sets the maximum size of the server names hash tables.
+          '';
+      };
+
       resolver = mkOption {
         type = types.submodule {
           options = {
             addresses = mkOption {
               type = types.listOf types.str;
               default = [];
-              example = literalExample ''[ "[::1]" "127.0.0.1:5353" ]'';
+              example = literalExpression ''[ "[::1]" "127.0.0.1:5353" ]'';
               description = "List of resolvers to use";
             };
             valid = mkOption {
@@ -711,7 +738,7 @@ in
           Defines a group of servers to use as proxy target.
         '';
         default = {};
-        example = literalExample ''
+        example = literalExpression ''
           "backend_server" = {
             servers = { "127.0.0.1:8000" = {}; };
             extraConfig = ''''
@@ -728,7 +755,7 @@ in
         default = {
           localhost = {};
         };
-        example = literalExample ''
+        example = literalExpression ''
           {
             "hydra.example.com" = {
               forceSSL = true;

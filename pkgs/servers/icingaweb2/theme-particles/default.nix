@@ -4,12 +4,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "icingaweb2-theme-particles";
+  pname = "icingaweb2-theme-particles";
   version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "Mikesch-mp";
-    repo = name;
+    repo = pname;
     rev = "v${version}";
     sha256 = "0m6bbz191686k4djqbk8v0zcdm4cyi159jb3zwz7q295xbpi2vfy";
   };

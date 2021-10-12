@@ -64,7 +64,7 @@ assert lib.assertMsg (!(sanitizeAddress && sanitizeThreads))
   "'sanitizeAddress' and 'sanitizeThreads' are mutually exclusive, use one.";
 
 let
-  inherit (lib) optional optionals;
+  inherit (lib) optional optionals optionalString;
 in
 stdenv.mkDerivation rec {
   pname = "kicad-base";
@@ -172,7 +172,7 @@ stdenv.mkDerivation rec {
 
   dontStrip = debug;
 
-  postInstall = optional (withI18n) ''
+  postInstall = optionalString (withI18n) ''
     mkdir -p $out/share
     lndir ${i18n}/share $out/share
   '';

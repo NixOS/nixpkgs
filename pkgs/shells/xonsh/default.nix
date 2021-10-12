@@ -1,4 +1,4 @@
-{ lib, stdenv
+{ lib
 , fetchFromGitHub
 , python3Packages
 , glibcLocales
@@ -8,14 +8,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "xonsh";
-  version = "0.9.27";
+  version = "0.10.1";
 
   # fetch from github because the pypi package ships incomplete tests
   src = fetchFromGitHub {
-    owner  = "xonsh";
-    repo   = "xonsh";
-    rev    = version;
-    sha256 = "09w6bl3qsygfs2ph2r423ndnbd74bzf67vp8587h2dkkfxlzjbad";
+    owner = "xonsh";
+    repo = "xonsh";
+    rev = version;
+    sha256 = "03ahay2rl98a9k4pqkxksmj6mcg554jnbhw9jh8cyvjrygrpcpch";
   };
 
   LC_ALL = "en_US.UTF-8";
@@ -29,19 +29,48 @@ python3Packages.buildPythonApplication rec {
     find scripts -name 'xonsh*' -exec sed -i -e "s|env -S|env|" {} \;
     find -name "*.xsh" | xargs sed -ie 's|/usr/bin/env|${coreutils}/bin/env|'
     patchShebangs .
+
+    substituteInPlace scripts/xon.sh \
+      --replace 'python' "${python3Packages.python}/bin/python"
+
   '';
 
-  doCheck = !stdenv.isDarwin;
+  makeWrapperArgs = [
+    "--prefix PYTHONPATH : ${placeholder "out"}/lib/${python3Packages.python.libPrefix}/site-packages"
+  ];
 
-  checkPhase = ''
-    HOME=$TMPDIR pytest -k 'not test_repath_backslash and not test_os and not test_man_completion and not test_builtins and not test_main and not test_ptk_highlight and not test_pyghooks and not test_command_pipeline_capture and not test_git_dirty_working_directory_includes_untracked and not test_dirty_working_directory and not test_vc_get_branch'
-    HOME=$TMPDIR pytest -k 'test_builtins or test_main' --reruns 5
-    HOME=$TMPDIR pytest -k 'test_ptk_highlight'
+  postInstall = ''
+    wrapProgram $out/bin/xon.sh \
+      $makeWrapperArgs
   '';
 
-  checkInputs = [ python3Packages.pytest python3Packages.pytest-rerunfailures glibcLocales git ];
+  disabledTests = [
+    # fails on sandbox
+    "test_colorize_file"
+    "test_loading_correctly"
+    "test_no_command_path_completion"
+    # fails on non-interactive shells
+    "test_capture_always"
+    "test_casting"
+    "test_command_pipeline_capture"
+    "test_dirty_working_directory"
+    "test_man_completion"
+    "test_vc_get_branch"
+  ];
 
-  propagatedBuildInputs = with python3Packages; [ ply prompt_toolkit pygments ];
+  disabledTestPaths = [
+    # fails on non-interactive shells
+    "tests/prompt/test_gitstatus.py"
+    "tests/completers/test_bash_completer.py"
+  ];
+
+  preCheck = ''
+    HOME=$TMPDIR
+  '';
+
+  checkInputs = [ glibcLocales git ] ++ (with python3Packages; [ pytestCheckHook pytest-subprocess ]);
+
+  propagatedBuildInputs = with python3Packages; [ ply prompt-toolkit pygments ];
 
   meta = with lib; {
     description = "A Python-ish, BASHwards-compatible shell";
@@ -49,7 +78,6 @@ python3Packages.buildPythonApplication rec {
     changelog = "https://github.com/xonsh/xonsh/raw/${version}/CHANGELOG.rst";
     license = licenses.bsd3;
     maintainers = with maintainers; [ spwhitt vrthra ];
-    platforms = platforms.all;
   };
 
   passthru = {

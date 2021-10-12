@@ -51,8 +51,7 @@ in {
       package = mkOption {
         type = types.package;
         default = pkgs.pipewire;
-        defaultText = "pkgs.pipewire";
-        example = literalExample "pkgs.pipewire";
+        defaultText = literalExpression "pkgs.pipewire";
         description = ''
           The pipewire derivation to use.
         '';
@@ -194,7 +193,7 @@ in {
     };
 
     environment.sessionVariables.LD_LIBRARY_PATH =
-      lib.optional cfg.jack.enable "/run/current-system/sw/lib/pipewire";
+      lib.optional cfg.jack.enable "${cfg.package.jack}/lib";
 
     # https://gitlab.freedesktop.org/pipewire/pipewire/-/issues/464#note_723554
     systemd.user.services.pipewire.environment."PIPEWIRE_LINK_PASSIVE" = "1";

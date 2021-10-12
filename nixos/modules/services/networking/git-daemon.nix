@@ -107,6 +107,7 @@ in
     users.users = optionalAttrs (cfg.user == "git") {
       git = {
         uid = config.ids.uids.git;
+        group = "git";
         description = "Git daemon user";
       };
     };

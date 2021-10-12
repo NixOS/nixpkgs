@@ -9,24 +9,25 @@
 
 buildPythonPackage rec {
   pname = "marshmallow";
-  version = "3.11.1";
-  disabled = pythonOlder "3.5";
+  version = "3.13.0";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "marshmallow-code";
     repo = pname;
     rev = version;
-    sha256 = "1ypm142y3giaqydc7fkigm9r057yp2sd1ng5zr2x3w3wbbj5yfm6";
+    sha256 = "sha256-tP/RKo2Hzxz2bT7ybRs9wGzq7TpsmzmOPi3BGuSLDA0=";
   };
-
-  pythonImportsCheck = [
-    "marshmallow"
-  ];
 
   checkInputs = [
     pytestCheckHook
     pytz
     simplejson
+  ];
+
+  pythonImportsCheck = [
+    "marshmallow"
   ];
 
   meta = with lib; {
@@ -38,5 +39,4 @@ buildPythonPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ cript0nauta ];
   };
-
 }

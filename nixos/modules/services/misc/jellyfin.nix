@@ -19,7 +19,7 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.jellyfin;
-        example = literalExample "pkgs.jellyfin";
+        defaultText = literalExpression "pkgs.jellyfin";
         description = ''
           Jellyfin package to use.
         '';

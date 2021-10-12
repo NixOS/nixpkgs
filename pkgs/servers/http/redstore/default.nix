@@ -2,10 +2,11 @@
   , librdf_rasqal }:
 
 stdenv.mkDerivation rec {
-  name = "redstore-0.5.4";
+  pname = "redstore";
+  version = "0.5.4";
 
   src = fetchurl {
-    url = "https://www.aelius.com/njh/redstore/${name}.tar.gz";
+    url = "https://www.aelius.com/njh/redstore/redstore-${version}.tar.gz";
     sha256 = "0hc1fjfbfvggl72zqx27v4wy84f5m7bp4dnwd8g41aw8lgynbgaq";
   };
 

@@ -12,8 +12,10 @@ stdenv.mkDerivation {
   buildInputs = [ libXt libXaw libXpm libXext ];
 
   makeFlags = [
-    "BINDIR=$(out)/bin"
-    "XAPPLOADDIR=$(out)/etc/X11/app-defaults"
+    "BINDIR=${placeholder "out"}/bin"
+    "CONFDIR=${placeholder "out"}/etc/X11"
+    "LIBDIR=${placeholder "out"}/lib/X11"
+    "XAPPLOADDIR=${placeholder "out"}/etc/X11/app-defaults"
   ];
 
   meta = with lib; {

@@ -21,7 +21,7 @@
 
 stdenv.mkDerivation rec {
   pname = "xapps";
-  version = "2.0.6";
+  version = "2.2.3";
 
   outputs = [ "out" "dev" ];
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "11qbz547qlfsvkz4bdxhryrsf10aw5jc2f1glbik7pvmmm87gf4f";
+    sha256 = "sha256-hrSyoHA3XQXQb9N3YJ+NNfBjJNOuUhXhKEimh/n73MM=";
   };
 
   # TODO: https://github.com/NixOS/nixpkgs/issues/36468

@@ -19,7 +19,7 @@ buildGoModule rec {
   };
 
   buildInputs = [ libX11 libXi libXt libXtst ];
-  buildFlags = [ "-tags" "portal,x11" ];
+  tags = [ "portal,x11" ];
 
   vendorSha256 = "1pgj0m67g759mcs4s34h4pq3mc7gni643z5cp6ffq4rrn8mdi060";
 

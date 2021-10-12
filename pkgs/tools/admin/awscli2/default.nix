@@ -2,20 +2,36 @@
 let
   py = python3.override {
     packageOverrides = self: super: {
+      awscrt = super.awscrt.overridePythonAttrs (oldAttrs: rec {
+        version = "0.11.24";
+        src = self.fetchPypi {
+          inherit (oldAttrs) pname;
+          inherit version;
+          sha256 = "sha256-uKpovKQEvwCFvgVw7/W1QtAffo48D5sIWav+XgcBYv8=";
+        };
+      });
       botocore = super.botocore.overridePythonAttrs (oldAttrs: rec {
-        version = "2.0.0dev122";
+        version = "2.0.0dev148";
         src = fetchFromGitHub {
           owner = "boto";
           repo = "botocore";
-          rev = "8dd916418c8193f56226b7772f263b2435eae27a";
-          sha256 = "sha256-iAZmqnffqrmFuxlQyOpEQzSCcL/hRAjuXKulOXoy4hY=";
+          rev = "c0734f100f61bbef413cb04d9890bbffbccd230f";
+          sha256 = "sha256-ndSJdBF3NMNtpyHgYAksCUBDqlwPhugTkIK6Nby20oI=";
         };
+        propagatedBuildInputs = super.botocore.propagatedBuildInputs ++ [py.pkgs.awscrt];
       });
-      prompt_toolkit = super.prompt_toolkit.overridePythonAttrs (oldAttrs: rec {
+      prompt-toolkit = super.prompt-toolkit.overridePythonAttrs (oldAttrs: rec {
         version = "2.0.10";
         src = oldAttrs.src.override {
           inherit version;
           sha256 = "1nr990i4b04rnlw1ghd0xmgvvvhih698mb6lb6jylr76cs7zcnpi";
+        };
+      });
+      s3transfer = super.s3transfer.overridePythonAttrs (oldAttrs: rec {
+        version = "0.4.2";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "sha256-ywIvSxZVHt67sxo3fT8JYA262nNj2MXbeXbn9Hcy4bI=";
         };
       });
     };
@@ -24,13 +40,13 @@ let
 in
 with py.pkgs; buildPythonApplication rec {
   pname = "awscli2";
-  version = "2.2.14"; # N.B: if you change this, change botocore to a matching version too
+  version = "2.2.40"; # N.B: if you change this, change botocore to a matching version too
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-cli";
     rev = version;
-    sha256 = "sha256-LU9Tqzdi8ULZ5y3FbfSXdrip4NcxFkXRCTpVGo05LcM=";
+    sha256 = "sha256-IHnNRER9ePKVI9ez15HgxLDR1n6QR0iRESgNqbxQPx8=";
   };
 
   patches = [
@@ -42,12 +58,13 @@ with py.pkgs; buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "awscrt==0.11.13" "awscrt" \
       --replace "colorama>=0.2.5,<0.4.4" "colorama" \
       --replace "cryptography>=3.3.2,<3.4.0" "cryptography" \
       --replace "docutils>=0.10,<0.16" "docutils" \
       --replace "ruamel.yaml>=0.15.0,<0.16.0" "ruamel.yaml" \
-      --replace "wcwidth<0.2.0" "wcwidth"
+      --replace "s3transfer>=0.4.2,<0.5.0" "s3transfer" \
+      --replace "wcwidth<0.2.0" "wcwidth" \
+      --replace "distro>=1.5.0,<1.6.0" "distro"
   '';
 
   checkInputs = [ jsonschema mock nose ];
@@ -62,7 +79,7 @@ with py.pkgs; buildPythonApplication rec {
     docutils
     groff
     less
-    prompt_toolkit
+    prompt-toolkit
     pyyaml
     rsa
     ruamel_yaml

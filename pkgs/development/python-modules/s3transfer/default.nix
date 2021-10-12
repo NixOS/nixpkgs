@@ -14,15 +14,16 @@
 
 buildPythonPackage rec {
   pname = "s3transfer";
-  version = "0.4.2";
+  version = "0.5.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-ywIvSxZVHt67sxo3fT8JYA262nNj2MXbeXbn9Hcy4bI=";
+    sha256 = "sha256-UO2CPh3FhorUDI3JIHL3V6oOZToZKEXJSjtnb0pi2kw=";
   };
 
   propagatedBuildInputs =
-    [ botocore
+    [
+      botocore
     ] ++ lib.optional (pythonOlder "3") futures;
 
   buildInputs = [

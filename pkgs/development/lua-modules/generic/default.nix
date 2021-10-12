@@ -20,7 +20,7 @@ else
     attrs
     //
     {
-      name = "lua${lua.luaversion}-" + attrs.name;
+      name = "lua${lua.luaversion}-" + attrs.pname + "-" + attrs.version;
       propagatedBuildInputs = propagatedBuildInputs ++ [
         lua # propagate it for its setup-hook
       ];

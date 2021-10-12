@@ -1,10 +1,11 @@
 {lib, stdenv, fetchurl, libpng, perl, gettext }:
 
-stdenv.mkDerivation {
-  name = "xcftools-1.0.7";
+stdenv.mkDerivation rec {
+  pname = "xcftools";
+  version = "1.0.7";
 
   src = fetchurl {
-    url = "http://henning.makholm.net/xcftools/xcftools-1.0.7.tar.gz";
+    url = "http://henning.makholm.net/xcftools/xcftools-${version}.tar.gz";
     sha256 = "19i0x7yhlw6hd2gp013884zchg63yzjdj4hpany011il0n26vgqy";
   };
 

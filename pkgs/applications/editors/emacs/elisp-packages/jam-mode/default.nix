@@ -1,16 +1,23 @@
-{ trivialBuild, lib, fetchurl }:
+{ lib
+, trivialBuild
+, fetchurl
+}:
 
 trivialBuild rec {
   pname = "jam-mode";
   version = "0.3";
 
   src = fetchurl {
-    url = "https://dev.gentoo.org/~ulm/distfiles/jam-mode-${version}.el.xz";
-    sha256 = "1jchgiy2rgvnb3swr6ar72yas6pj4inpgpcq78q01q6snflmi2fh";
+    url = "https://dev.gentoo.org/~ulm/distfiles/${pname}-${version}.el.xz";
+    hash = "sha256-0IlYqbPa4AAwOpjdd20k8hqtvDhZmcz1WHa/LHx8kMk=";
   };
 
   unpackPhase = ''
+    runHook preUnpack
+
     xz -cd $src > jam-mode.el
+
+    runHook postUnpack
   '';
 
   meta = with lib; {

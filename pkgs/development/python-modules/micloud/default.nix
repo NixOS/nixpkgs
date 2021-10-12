@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "micloud";
-  version = "0.3";
+  version = "0.4";
 
   src = fetchFromGitHub {
     owner = "Squachen";
     repo = "micloud";
     rev = "v_${version}";
-    sha256 = "0267zyr79nfb5f9rwdwq3ym258yrpxx1b71xiqmszyz5s83mcixm";
+    sha256 = "01z1qfln6f7pnxb4ssmyygyamnfgh36fzgn85s8axdwy8wrch20x";
   };
 
   propagatedBuildInputs = [

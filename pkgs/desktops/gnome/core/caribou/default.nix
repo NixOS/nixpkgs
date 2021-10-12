@@ -1,6 +1,6 @@
 { fetchurl, lib, stdenv, pkg-config, gnome, glib, gtk3, clutter, dbus, python3, libxml2
 , libxklavier, libXtst, gtk2, intltool, libxslt, at-spi2-core, autoreconfHook
-, wrapGAppsHook, libgee }:
+, wrapGAppsHook, libgee, vala_0_40 }:
 
 let
   pname = "caribou";
@@ -21,9 +21,19 @@ in stdenv.mkDerivation rec {
       url = "https://bugzilla.gnome.org/attachment.cgi?id=364774";
       sha256 = "15k1455grf6knlrxqbjnk7sals1730b0whj30451scp46wyvykvd";
     })
+    (fetchurl {
+      name = "fix-build-modern-vala.patch";
+      url = "https://gitlab.gnome.org/GNOME/caribou/-/commit/76fbd11575f918fc898cb0f5defe07f67c11ec38.patch";
+      sha256 = "0qy27zk7889hg51nx40afgppcx9iaihxbg3aqz9w35d6fmhr2k2y";
+    })
+    (fetchurl {
+      name = "CVE-2021-3567.patch";
+      url = "https://gitlab.gnome.org/GNOME/caribou/-/commit/d41c8e44b12222a290eaca16703406b113a630c6.patch";
+      sha256 = "1vd2j3823k2p3msv7fq2437p3jvxzbd7hyh07i80g9754ylh92y8";
+    })
   ];
 
-  nativeBuildInputs = [ pkg-config intltool libxslt libxml2 autoreconfHook wrapGAppsHook ];
+  nativeBuildInputs = [ pkg-config intltool libxslt libxml2 autoreconfHook wrapGAppsHook vala_0_40 ];
 
   buildInputs = [
     glib gtk3 clutter at-spi2-core dbus pythonEnv python3.pkgs.pygobject3

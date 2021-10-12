@@ -41,9 +41,9 @@ buildPythonPackage rec {
     # enabled in nixpkgs.
     # Upstream Issue: https://issues.apache.org/jira/browse/ARROW-11393
     "--deselect=pyarrow/tests/test_memory.py::test_env_var"
-    # Deselect the parquet dataset write test because it erroneously fails to find the
+    # Deselect a parquet dataset test because it erroneously fails to find the
     # pyarrow._dataset module.
-    "--deselect=pyarrow/tests/parquet/test_dataset.py::test_write_to_dataset_filesystem"
+    "--deselect=pyarrow/tests/parquet/test_dataset.py::test_parquet_dataset_deprecated_properties"
   ];
 
   dontUseSetuptoolsCheck = true;

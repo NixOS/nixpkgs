@@ -44,7 +44,7 @@ in
 
       package = mkOption {
         type = types.package;
-        example = literalExample "pkgs.postgresql_11";
+        example = literalExpression "pkgs.postgresql_11";
         description = ''
           PostgreSQL package to use.
         '';
@@ -66,7 +66,7 @@ in
 
       dataDir = mkOption {
         type = types.path;
-        defaultText = "/var/lib/postgresql/\${config.services.postgresql.package.psqlSchema}";
+        defaultText = literalExpression ''"/var/lib/postgresql/''${config.services.postgresql.package.psqlSchema}"'';
         example = "/var/lib/postgresql/11";
         description = ''
           The data directory for PostgreSQL. If left as the default value
@@ -161,7 +161,7 @@ in
                 <link xlink:href="https://www.postgresql.org/docs/current/sql-grant.html">GRANT syntax</link>.
                 The attributes are used as <code>GRANT ''${attrValue} ON ''${attrName}</code>.
               '';
-              example = literalExample ''
+              example = literalExpression ''
                 {
                   "DATABASE \"nextcloud\"" = "ALL PRIVILEGES";
                   "ALL TABLES IN SCHEMA public" = "ALL PRIVILEGES";
@@ -179,7 +179,7 @@ in
           option is changed. This means that users created and permissions assigned once through this option or
           otherwise have to be removed manually.
         '';
-        example = literalExample ''
+        example = literalExpression ''
           [
             {
               name = "nextcloud";
@@ -221,7 +221,7 @@ in
       extraPlugins = mkOption {
         type = types.listOf types.path;
         default = [];
-        example = literalExample "with pkgs.postgresql_11.pkgs; [ postgis pg_repack ]";
+        example = literalExpression "with pkgs.postgresql_11.pkgs; [ postgis pg_repack ]";
         description = ''
           List of PostgreSQL plugins. PostgreSQL version for each plugin should
           match version for <literal>services.postgresql.package</literal> value.
@@ -241,7 +241,7 @@ in
             escaped with two single quotes as described by the upstream documentation linked above.
           </para></note>
         '';
-        example = literalExample ''
+        example = literalExpression ''
           {
             log_connections = true;
             log_statement = "all";

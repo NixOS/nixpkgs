@@ -10,6 +10,8 @@
 mkDerivation {
   pname = "krfb";
   meta = {
+    homepage = "https://apps.kde.org/krfb/";
+    description = "Desktop sharing (VNC)";
     license = with lib.licenses; [ gpl2 fdl12 ];
     maintainers = with lib.maintainers; [ jerith666 ];
   };

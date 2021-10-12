@@ -193,11 +193,11 @@ stdenv.mkDerivation rec {
           --set-interpreter "''$(cat $NIX_CC/nix-support/dynamic-linker)" $i
       fi
       if [[ $i =~ libcudart ]]; then
-        rpath2=
+        patchelf --remove-rpath $i
       else
         rpath2=$rpath:$lib/lib:$out/jre/lib/amd64/jli:$out/lib:$out/lib64:$out/nvvm/lib:$out/nvvm/lib64
+        patchelf --set-rpath "$rpath2" --force-rpath $i
       fi
-      patchelf --set-rpath "$rpath2" --force-rpath $i
     done < <(find $out $lib $doc -type f -print0)
   '';
 

@@ -8,7 +8,7 @@
     "url": "http://github.com/grafana/grafana-image-renderer.git"
   },
   "scripts": {
-    "eslint": "eslint -c eslint.json",
+    "eslint": "eslint . --ext .ts",
     "typecheck": "tsc --noEmit",
     "prettier:check": "prettier --list-different \"**/*.ts\"",
     "prettier:write": "prettier --list-different \"**/*.ts\" --write",
@@ -21,29 +21,38 @@
     "@grpc/grpc-js": "^1.0",
     "@grpc/proto-loader": "^0.5.4",
     "@hapi/boom": "^9.1.0",
-    "chokidar": "^3.5.1",
-    "eslint": "^7.13.0",
+    "chokidar": "^3.5.2",
     "express": "^4.16.3",
     "express-prom-bundle": "^5.1.5",
     "google-protobuf": "3.5.0",
     "lodash": "^4.17.21",
     "minimist": "^1.2.0",
     "morgan": "^1.9.0",
+    "on-finished": "^2.3.0",
     "prom-client": "^11.5.3",
-    "puppeteer": "^3.3.0",
+    "puppeteer": "^10.0.0",
     "puppeteer-cluster": "^0.22.0",
     "unique-filename": "^1.1.0",
     "winston": "^3.2.1"
   },
   "devDependencies": {
+    "@grafana/eslint-config": "^2.5.0",
     "@types/express": "^4.11.1",
     "@types/node": "^14.14.41",
+    "@typescript-eslint/eslint-plugin": "^4.32.0",
+    "@typescript-eslint/parser": "^4.32.0",
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-jsdoc": "^36.1.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-react": "^7.26.1",
+    "eslint-plugin-react-hooks": "^4.2.0",
     "husky": "^4.3.8",
-    "lint-staged": "^9.5.0",
-    "pkg": "^5.1.0",
-    "prettier": "^1.19.1",
+    "lint-staged": "^11.2.0",
+    "pkg": "^5.3.3",
+    "prettier": "2.2.1",
     "tsc-watch": "^4.2.3",
-    "typescript": "^3.8.3"
+    "typescript": "^4.3.2"
   },
   "husky": {
     "hooks": {
@@ -52,8 +61,7 @@
   },
   "lint-staged": {
     "*.ts": [
-      "prettier --write",
-      "git add"
+      "prettier --write"
     ]
   },
   "pkg": {

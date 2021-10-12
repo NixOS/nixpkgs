@@ -1,14 +1,11 @@
 { stdenv, lib, fetchurl, openssl, fetchpatch, static ? stdenv.hostPlatform.isStatic }:
 
-let
-  pkgname = "ipmitool";
+stdenv.mkDerivation rec {
+  pname = "ipmitool";
   version = "1.8.18";
-in
-stdenv.mkDerivation {
-  name = "${pkgname}-${version}";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pkgname}/${pkgname}-${version}.tar.gz";
+    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.gz";
     sha256 = "0kfh8ny35rvwxwah4yv91a05qwpx74b5slq2lhrh71wz572va93m";
   };
 

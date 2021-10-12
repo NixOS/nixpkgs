@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "pcapfix-1.1.4";
+  pname = "pcapfix";
+  version = "1.1.4";
 
   src = fetchurl {
-    url = "https://f00l.de/pcapfix/${name}.tar.gz";
+    url = "https://f00l.de/pcapfix/pcapfix-${version}.tar.gz";
     sha256 = "0m6308ka33wqs568b7cwa1f5q0bv61j2nwfizdyzrazw673lnh6d";
   };
 

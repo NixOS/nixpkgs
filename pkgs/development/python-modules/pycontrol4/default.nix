@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "pycontrol4";
-  version = "0.1.0";
+  version = "0.3.0";
 
   disabled = pythonOlder "3.6";
 
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "lawtancool";
     repo = "pyControl4";
     rev = "v${version}";
-    sha256 = "0idw9kv6yxrbp0r33vb1jlzgil20m2rjjfrxhcwxmbjjqv93zn6d";
+    sha256 = "sha256-z7MDz9fGwZY4JcqabeYFGZ9nsRU2qa5LYnNQx/ae/4Y=";
   };
 
   propagatedBuildInputs = [

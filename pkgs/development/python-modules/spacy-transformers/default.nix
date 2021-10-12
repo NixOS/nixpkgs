@@ -3,6 +3,7 @@
 , fetchPypi
 , buildPythonPackage
 , pytorch
+, pythonOlder
 , spacy
 , spacy-alignments
 , srsly
@@ -11,11 +12,13 @@
 
 buildPythonPackage rec {
   pname = "spacy-transformers";
-  version = "1.0.2";
+  version = "1.0.6";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-AYshH2trMTgeSkAPRb6wRWpm4gA5FaKV2NJd+PhzAy4=";
+    sha256 = "sha256-zkpSaiqb0wUTugmbeREVJyZzv5qxXXw4YFBpXzdSUXE=";
   };
 
   propagatedBuildInputs = [
@@ -37,6 +40,6 @@ buildPythonPackage rec {
     description = "spaCy pipelines for pretrained BERT, XLNet and GPT-2";
     homepage = "https://github.com/explosion/spacy-transformers";
     license = licenses.mit;
-    maintainers = with maintainers; [ danieldk ];
+    maintainers = with maintainers; [ ];
   };
 }

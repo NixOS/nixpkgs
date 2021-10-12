@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "restfly";
-  version = "1.4.0";
+  version = "1.4.2";
 
   src = fetchFromGitHub {
     owner = "stevemcgrath";
     repo = pname;
     rev = version;
-    sha256 = "0cmx15i57cxqw7naz8nkpqjckd6lpd2vszrkl82hvnajdimcd9wy";
+    sha256 = "sha256-1sLkjM6hRAbfrZEXP97N9ZDqpL255LC7JS1r2yOXG5E=";
   };
 
   propagatedBuildInputs = [

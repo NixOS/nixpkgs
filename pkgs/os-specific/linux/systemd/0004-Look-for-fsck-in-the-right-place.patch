@@ -1,4 +1,4 @@
-From 3a721cf70e952e933ef5374006bbb11a3a0ad36a Mon Sep 17 00:00:00 2001
+From 3f0780b25bdbe4156a2f761c90083bbba5f4d473 Mon Sep 17 00:00:00 2001
 From: Eelco Dolstra <eelco.dolstra@logicblox.com>
 Date: Thu, 1 May 2014 14:10:10 +0200
 Subject: [PATCH 04/19] Look for fsck in the right place
@@ -8,7 +8,7 @@ Subject: [PATCH 04/19] Look for fsck in the right place
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/src/fsck/fsck.c b/src/fsck/fsck.c
-index 510689f3b7..25cab5acae 100644
+index cd7adfaeb9..68cebdd158 100644
 --- a/src/fsck/fsck.c
 +++ b/src/fsck/fsck.c
 @@ -368,7 +368,7 @@ static int run(int argc, char *argv[]) {
@@ -21,5 +21,5 @@ index 510689f3b7..25cab5acae 100644
                  cmdline[i++] = "-T";
  
 -- 
-2.30.1
+2.32.0
 

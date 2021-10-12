@@ -1,14 +1,14 @@
 { lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
-  version = "0.5.0";
+  version = "1.1.0";
   pname = "tempo";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "grafana";
     repo = "tempo";
-    sha256 = "sha256-Har0JJqr6mkliKh25n+F4tork+bzfI/bv19H/rIRb9g=";
+    sha256 = "sha256-qKsgcc62HTwl7Usmp8zk4vKDo4XEJnwL+A3hoLhgBkk=";
   };
 
   vendorSha256 = null;

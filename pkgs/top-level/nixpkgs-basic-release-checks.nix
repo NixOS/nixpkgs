@@ -34,6 +34,7 @@ pkgs.runCommand "nixpkgs-release-checks" { src = nixpkgs; buildInputs = [nix]; }
 
         nix-env -f $src \
             --show-trace --argstr system "$platform" \
+            --arg config '{ allowAliases = false; }' \
             -qa --drv-path --system-filter \* --system \
             "''${opts[@]}" 2>&1 >/dev/null | tee eval-warnings.log
 
@@ -45,6 +46,7 @@ pkgs.runCommand "nixpkgs-release-checks" { src = nixpkgs; buildInputs = [nix]; }
 
         nix-env -f $src \
             --show-trace --argstr system "$platform" \
+            --arg config '{ allowAliases = false; }' \
             -qa --drv-path --system-filter \* --system --meta --xml \
             "''${opts[@]}" > /dev/null
     done

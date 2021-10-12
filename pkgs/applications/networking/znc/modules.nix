@@ -2,7 +2,7 @@
 
 let
   zncDerivation = a@{
-    name, src, module_name,
+    pname, src, module_name,
     buildPhase ? "${znc}/bin/znc-buildmod ${module_name}.cpp",
     installPhase ? "install -D ${module_name}.so $out/lib/znc/${module_name}.so", ...
   } : stdenv.mkDerivation (a // {
@@ -18,7 +18,7 @@ let
 in {
 
   backlog = zncDerivation rec {
-    name = "znc-backlog-${version}";
+    pname = "znc-backlog";
     version = "git-2017-06-13";
     module_name = "backlog";
 
@@ -38,7 +38,7 @@ in {
   };
 
   clientbuffer = zncDerivation rec {
-    name = "znc-clientbuffer-${version}";
+    pname = "znc-clientbuffer";
     version = "git-2020-04-24";
     module_name = "clientbuffer";
 
@@ -58,7 +58,7 @@ in {
   };
 
   clientaway = zncDerivation rec {
-    name = "znc-clientaway-${version}";
+    pname = "znc-clientaway";
     version = "git-2017-04-28";
     module_name = "clientaway";
 
@@ -78,7 +78,7 @@ in {
   };
 
   fish = zncDerivation rec {
-    name = "znc-fish-${version}";
+    pname = "znc-fish";
     version = "git-2017-06-26";
     module_name = "fish";
 
@@ -98,7 +98,7 @@ in {
   };
 
   ignore = zncDerivation rec {
-    name = "znc-ignore-${version}";
+    pname = "znc-ignore";
     version = "git-2017-04-28";
     module_name = "ignore";
 
@@ -118,7 +118,7 @@ in {
   };
 
   palaver = zncDerivation rec {
-    name = "znc-palaver-${version}";
+    pname = "znc-palaver";
     version = "2020-07-18";
     module_name = "palaver";
 
@@ -138,7 +138,7 @@ in {
   };
 
   playback = zncDerivation rec {
-    name = "znc-playback-${version}";
+    pname = "znc-playback";
     version = "git-2015-08-04";
     module_name = "playback";
 
@@ -158,7 +158,7 @@ in {
   };
 
   privmsg = zncDerivation rec {
-    name = "znc-privmsg-${version}";
+    pname = "znc-privmsg";
     version = "git-2015-02-22";
     module_name = "privmsg";
 
@@ -176,7 +176,7 @@ in {
   };
 
   push = zncDerivation rec {
-    name = "znc-push-${version}";
+    pname = "znc-push";
     version = "git-2016-10-12";
     module_name = "push";
 

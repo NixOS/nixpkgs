@@ -13,16 +13,19 @@
 , gettext
 , pkg-config
 , alsa-lib
+, udev
 }:
 
 stdenv.mkDerivation rec {
   pname = "fldigi";
-  version = "4.1.18";
+  version = "4.1.20";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-PH/YSrOoS6RSWyUenVYSDa7mJqODFoSpdP2tR2+QJw0=";
+    sha256 = "0f64pqijl3jlfmv00hkdxvn1wy5yy3zl33p6vf3fn1b91w590c2h";
   };
+
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     libXinerama
@@ -34,16 +37,13 @@ stdenv.mkDerivation rec {
     portaudio
     libsndfile
     libsamplerate
-    libpulseaudio
-    pkg-config
-    alsa-lib
-  ];
+  ] ++ lib.optionals (stdenv.isLinux) [ libpulseaudio alsa-lib udev ];
 
   meta = with lib; {
     description = "Digital modem program";
     homepage = "https://sourceforge.net/projects/fldigi/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ relrod ftrvxmtrx ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

@@ -6,7 +6,6 @@
 , pytestCheckHook
 , pytest-asyncio
 , pytest-tornado
-, pytest-cov
 , sqlalchemy
 , tornado
 , twisted
@@ -22,12 +21,13 @@
 
 buildPythonPackage rec {
   pname = "APScheduler";
-  version = "3.7.0";
+  version = "3.8.0";
+
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1cab7f2521e107d07127b042155b632b7a1cd5e02c34be5a28ff62f77c900c6a";
+    sha256 = "793b2d37c52ece53e34626619e6142e99b20b59a12155f39e1e6932e324f079d";
   };
 
   buildInputs = [
@@ -38,7 +38,6 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-tornado
     pytestCheckHook
-    pytest-cov
     sqlalchemy
     tornado
     twisted
@@ -54,7 +53,14 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace " --cov --tb=short" ""
+  '';
+
+  disabledTests = [
+    "test_broken_pool"
+  ] ++ lib.optionals stdenv.isDarwin [
     "test_submit_job"
     "test_max_instances"
   ];
@@ -65,5 +71,6 @@ buildPythonPackage rec {
     description = "A Python library that lets you schedule your Python code to be executed";
     homepage = "https://github.com/agronholm/apscheduler";
     license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
 }

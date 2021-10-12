@@ -11,7 +11,7 @@ in
     enabledCollectors = mkOption {
       type = types.listOf types.str;
       default = [];
-      example = ''[ "systemd" ]'';
+      example = [ "systemd" ];
       description = ''
         Collectors to enable. The collectors listed here are enabled in addition to the default ones.
       '';
@@ -19,7 +19,7 @@ in
     disabledCollectors = mkOption {
       type = types.listOf types.str;
       default = [];
-      example = ''[ "timex" ]'';
+      example = [ "timex" ];
       description = ''
         Collectors to disable which are enabled by default.
       '';

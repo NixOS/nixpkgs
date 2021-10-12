@@ -1,6 +1,7 @@
 {lib, stdenv, fetchurl, libXxf86vm, libXext, libX11, libXrandr, gcc}:
 stdenv.mkDerivation {
-  name = "xflux-2013-09-01";
+  pname = "xflux";
+  version = "unstable-2013-09-01";
   src = fetchurl {
     url = "https://justgetflux.com/linux/xflux64.tgz";
     sha256 = "cc50158fabaeee58c331f006cc1c08fd2940a126e99d37b76c8e878ef20c2021";

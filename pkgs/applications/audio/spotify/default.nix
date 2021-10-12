@@ -10,20 +10,20 @@ let
   # If an update breaks things, one of those might have valuable info:
   # https://aur.archlinux.org/packages/spotify/
   # https://community.spotify.com/t5/Desktop-Linux
-  version = "1.1.55.498.gf9a83c60";
+  version = "1.1.68.628.geb44bd66";
   # To get the latest stable revision:
   # curl -H 'X-Ubuntu-Series: 16' 'https://api.snapcraft.io/api/v1/snaps/details/spotify?channel=stable' | jq '.download_url,.version,.last_updated'
   # To get general information:
   # curl -H 'Snap-Device-Series: 16' 'https://api.snapcraft.io/v2/snaps/info/spotify' | jq '.'
   # More examples of api usage:
   # https://github.com/canonical-websites/snapcraft.io/blob/master/webapp/publisher/snaps/views.py
-  rev = "46";
+  rev = "52";
 
   deps = [
     alsa-lib
-    atk
     at-spi2-atk
     at-spi2-core
+    atk
     cairo
     cups
     curl
@@ -46,7 +46,10 @@ let
     pango
     stdenv.cc.cc
     systemd
+    xorg.libICE
+    xorg.libSM
     xorg.libX11
+    xorg.libxcb
     xorg.libXcomposite
     xorg.libXcursor
     xorg.libXdamage
@@ -56,10 +59,8 @@ let
     xorg.libXrandr
     xorg.libXrender
     xorg.libXScrnSaver
+    xorg.libxshmfence
     xorg.libXtst
-    xorg.libxcb
-    xorg.libSM
-    xorg.libICE
     zlib
   ];
 
@@ -79,7 +80,7 @@ stdenv.mkDerivation {
   # https://community.spotify.com/t5/Desktop-Linux/Redistribute-Spotify-on-Linux-Distributions/td-p/1695334
   src = fetchurl {
     url = "https://api.snapcraft.io/api/v1/snaps/download/pOBIoZ2LrCB3rDohMxoYGnbN14EHOgD7_${rev}.snap";
-    sha512 = "dabb55d2ba41f977b6d3f03bfcf147d11785136dd1277efc62011c8371ef25cc04531266bd16608639b9b6a500c1a18a45f44ba7a43e17ab5ac139e36eff7149";
+    sha512 = "be6f1cb650924eb9e244497374d1dfe6136d28056dbecc7000a03341a4bb4c6ab2c83ec6c707bd6f57afde95262230eafbde08e9c7a7dfcacdf660eb10499f3a";
   };
 
   nativeBuildInputs = [ makeWrapper wrapGAppsHook squashfsTools ];

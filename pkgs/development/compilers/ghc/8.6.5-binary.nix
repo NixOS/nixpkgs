@@ -34,8 +34,7 @@ in
 
 stdenv.mkDerivation rec {
   version = "8.6.5";
-
-  name = "ghc-${version}-binary";
+  pname = "ghc-binary";
 
   # https://downloads.haskell.org/~ghc/8.6.5/
   src = fetchurl ({
@@ -192,5 +191,8 @@ stdenv.mkDerivation rec {
     hydraPlatforms = builtins.filter (p: p != "aarch64-linux") platforms;
     # build segfaults, use ghc8102Binary which has proper musl support instead
     broken = stdenv.hostPlatform.isMusl;
+    maintainers = with lib.maintainers; [
+      guibou
+    ] ++ lib.teams.haskell.members;
   };
 }

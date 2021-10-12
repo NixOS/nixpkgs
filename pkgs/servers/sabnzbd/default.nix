@@ -20,14 +20,14 @@ let
   ]);
   path = lib.makeBinPath [ par2cmdline unrar unzip p7zip ];
 in stdenv.mkDerivation rec {
-  version = "3.3.1";
+  version = "3.4.0";
   pname = "sabnzbd";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "sha256-OcasqRu6nh9hKepMbXVgZ49MeJTlWK+qPSkiBPgmYYo=";
+    sha256 = "sha256-zax+PuvCmYOlEhRmiCp7UOd9VI0i8dbgTPyTtqLuGUM=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

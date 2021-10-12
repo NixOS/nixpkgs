@@ -1,5 +1,5 @@
 { lib, buildPackages, runCommand, nettools, bc, bison, flex, perl, rsync, gmp, libmpc, mpfr, openssl
-, libelf, cpio, elfutils, zstd, gawk, python3Minimal
+, libelf, cpio, elfutils, zstd, gawk, python3Minimal, zlib, pahole
 , writeTextFile
 }:
 
@@ -261,8 +261,7 @@ let
         find .  -type f -name '*.lds' -print0 | xargs -0 -r chmod u-w
 
         # Keep root and arch-specific Makefiles
-        chmod u-w Makefile
-        chmod u-w arch/$arch/Makefile*
+        chmod u-w Makefile arch/"$arch"/Makefile*
 
         # Keep whole scripts dir
         chmod u-w -R scripts
@@ -316,7 +315,7 @@ stdenv.mkDerivation ((drvAttrs config stdenv.hostPlatform.linux-kernel kernelPat
       ++ optional  (lib.versionAtLeast version "4.14" && lib.versionOlder version "5.8") libelf
       # Removed util-linuxMinimal since it should not be a dependency.
       ++ optionals (lib.versionAtLeast version "4.16") [ bison flex ]
-      ++ optional  (lib.versionAtLeast version "5.2")  cpio
+      ++ optionals (lib.versionAtLeast version "5.2")  [ cpio pahole zlib ]
       ++ optional  (lib.versionAtLeast version "5.8")  elfutils
       ;
 

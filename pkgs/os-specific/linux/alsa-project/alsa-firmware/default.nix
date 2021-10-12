@@ -1,10 +1,11 @@
 { lib, stdenv, buildPackages, autoreconfHook, fetchurl, fetchpatch }:
 
 stdenv.mkDerivation rec {
-  name = "alsa-firmware-1.2.1";
+  pname = "alsa-firmware";
+  version = "1.2.1";
 
   src = fetchurl {
-    url = "mirror://alsa/firmware/${name}.tar.bz2";
+    url = "mirror://alsa/firmware/alsa-firmware-${version}.tar.bz2";
     sha256 = "1aq8z8ajpjvcx7bwhwp36bh5idzximyn77ygk3ifs0my3mbpr8mf";
   };
 

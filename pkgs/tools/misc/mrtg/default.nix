@@ -1,24 +1,25 @@
 { lib, stdenv, fetchurl, perl, gd, rrdtool }:
 
 stdenv.mkDerivation rec {
-
-  version = "2.17.7";
   pname = "mrtg";
+  version = "2.17.8";
 
   src = fetchurl {
     url = "https://oss.oetiker.ch/mrtg/pub/${pname}-${version}.tar.gz";
-    sha256 = "1hrjqfi290i936nblwpfzjn6v8d8p69frcrvml206nxiiwkcp54v";
+    sha256 = "sha256-GsLgr2ng7N73VeeYylmDSreKwYXCpe/9t2hcWPLvAbQ=";
   };
 
   buildInputs = [
-    perl gd rrdtool
+    perl
+    gd
+    rrdtool
   ];
 
-  meta = {
+  meta = with lib; {
     description = "The Multi Router Traffic Grapher";
     homepage = "https://oss.oetiker.ch/mrtg/";
-    license = lib.licenses.gpl2;
-    maintainers = [ lib.maintainers.robberer ];
-    platforms = lib.platforms.unix;
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ robberer ];
+    platforms = platforms.unix;
   };
 }

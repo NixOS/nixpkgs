@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nuraft";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "eBay";
     repo = "NuRaft";
     rev = "v${version}";
-    sha256 = "sha256-1k+AWmpAiHcQVEB5kUaMtNWhOnTBnmJiNU8zL1J/PEk=";
+    sha256 = "sha256-Fyy9B5CXyMcDSOdqaeJ4ejo1svM90ESXuNL0rzsTZpE=";
   };
 
   nativeBuildInputs = [ cmake ];

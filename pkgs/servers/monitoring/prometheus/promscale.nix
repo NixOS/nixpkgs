@@ -5,18 +5,18 @@
 
 buildGoModule rec {
   pname = "promscale";
-  version = "0.4.1";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "timescale";
     repo = pname;
     rev = version;
-    sha256 = "sha256-RdhsQtrD+I8eAgFNr1hvW83Ho22aNhWBX8crCM0b8jU=";
+    sha256 = "sha256-2zbvibnmYAUyl7zkwcRgJKP24mid8/IUIUwfy7yaCzM=";
   };
 
-  vendorSha256 = "sha256-82E82O0yaLbu+oSTX7AQoYXFYy3wYVdBCevV7pHZVOA=";
+  vendorSha256 = "sha256-o7vRSCEEqzhruHEnRPuxC1e4NzCl8Br4vvqg0pwGIgA=";
 
-  buildFlagsArray = [ "-ldflags=-s -w -X github.com/timescale/promscale/pkg/version.Version=${version} -X github.com/timescale/promscale/pkg/version.CommitHash=${src.rev}" ];
+  ldflags = [ "-s" "-w" "-X github.com/timescale/promscale/pkg/version.Version=${version}" "-X github.com/timescale/promscale/pkg/version.CommitHash=${src.rev}" ];
 
   doCheck = false; # Requires access to a docker daemon
   doInstallCheck = true;

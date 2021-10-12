@@ -19,31 +19,35 @@
 
 stdenv.mkDerivation rec {
   pname = "baobab";
-  version = "40.0";
+  version = "41.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "19yii3bdgivxrcka1c4g6dpbmql5nyawwhzlsph7z6bs68nambm6";
+    sha256 = "ytYnjS3MgMhLVxBapbtY2KMM6Y1vq9dnUZ3bhshX6FU=";
   };
 
   nativeBuildInputs = [
+    desktop-file-utils
+    gettext
+    glib
+    itstool
+    libxml2
     meson
     ninja
     pkg-config
-    vala
-    gettext
-    itstool
-    libxml2
-    desktop-file-utils
-    wrapGAppsHook
     python3
+    vala
+    wrapGAppsHook
+    # Prevents “error: Package `libhandy-1' not found in specified Vala API
+    # directories or GObject-Introspection GIR directories” with strictDeps,
+    # even though it should only be a runtime dependency.
+    libhandy
   ];
 
   buildInputs = [
     gtk3
     libhandy
     glib
-    gnome.adwaita-icon-theme
   ];
 
   doCheck = true;

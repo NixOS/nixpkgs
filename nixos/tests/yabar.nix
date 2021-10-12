@@ -5,7 +5,7 @@ with lib;
 {
   name = "yabar";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ ma27 ];
+    maintainers = [ ];
   };
 
   machine = {

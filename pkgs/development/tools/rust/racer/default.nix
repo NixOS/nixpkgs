@@ -43,6 +43,6 @@ rustPlatform.buildRustPackage rec {
     description = "A utility intended to provide Rust code completion for editors and IDEs";
     homepage = "https://github.com/racer-rust/racer";
     license = licenses.mit;
-    maintainers = with maintainers; [ jagajaga ma27 ];
+    maintainers = with maintainers; [ jagajaga ];
   };
 }

@@ -16,14 +16,13 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
-  buildFlagsArray = ''
-     -ldflags=
-      -s -w
-      -X github.com/prometheus/common/version.Version=${version}
-      -X github.com/prometheus/common/version.Revision=${rev}
-      -X github.com/prometheus/common/version.Branch=master
-      -X github.com/prometheus/common/version.BuildDate=19700101-00:00:00
-  '';
+  ldflags = [
+    "-s" "-w"
+    "-X github.com/prometheus/common/version.Version=${version}"
+    "-X github.com/prometheus/common/version.Revision=${rev}"
+    "-X github.com/prometheus/common/version.Branch=master"
+    "-X github.com/prometheus/common/version.BuildDate=19700101-00:00:00"
+  ];
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) artifactory; };
 

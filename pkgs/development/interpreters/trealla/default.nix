@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "trealla";
-  version = "1.9.37";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "infradig";
     repo = "trealla";
     rev = "v${version}";
-    sha256 = "sha256-0cj4FGaYKIKCgWwRyLUw1DcvNnioQPOtqZhSvWSaojU=";
+    sha256 = "sha256-5gMf62WSGf46Bg8CaI9weSMRjrdGiuxtaDV9FrS2xO8=";
   };
 
   postPatch = ''

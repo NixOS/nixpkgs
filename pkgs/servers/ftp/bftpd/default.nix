@@ -1,15 +1,12 @@
 { lib, stdenv, fetchurl }:
 
-let
+stdenv.mkDerivation rec {
   pname = "bftpd";
-
-in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
-  version = "5.9";
+  version = "6.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/${pname}/${pname}/${name}/${name}.tar.gz";
-    sha256 = "sha256-LMcjPdePlKqVD3kdlPxF4LlVp9BLJFkgTg+WWaWPrqY=";
+    url = "mirror://sourceforge/project/${pname}/${pname}/${pname}-${version}/${pname}-${version}.tar.gz";
+    sha256 = "sha256-t+YCys67drYKcD3GXxSVzZo4HTRZArIpA6EofeyPAlw=";
   };
 
   preConfigure = ''

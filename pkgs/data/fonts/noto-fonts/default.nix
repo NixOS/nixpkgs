@@ -141,6 +141,14 @@ in
       # python requirements using python.withPackages
       sed -i '/ifndef VIRTUAL_ENV/,+2d' Makefile
 
+      # Remove check for missing zopfli, it doesn't
+      # work and we guarantee its presence already.
+      sed -i '/ifdef MISSING_ZOPFLI/,+2d' Makefile
+      sed -i '/ifeq (,$(shell which $(ZOPFLIPNG)))/,+4d' Makefile
+
+      sed -i '/ZOPFLIPNG = zopflipng/d' Makefile
+      echo "ZOPFLIPNG = ${zopfli}/bin/zopflipng" >> Makefile
+
       # Make the build verbose so it won't get culled by Hydra thinking that
       # it somehow got stuck doing nothing.
       sed -i 's;\t@;\t;' Makefile

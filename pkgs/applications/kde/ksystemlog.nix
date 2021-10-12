@@ -11,6 +11,8 @@ mkDerivation {
   propagatedBuildInputs = [ karchive kconfig kio ];
 
   meta = with lib; {
+    homepage = "https://apps.kde.org/ksystemlog/";
+    description = "System log viewer";
     license = with licenses; [ gpl2 ];
     maintainers = with maintainers; [ peterhoeg ];
   };

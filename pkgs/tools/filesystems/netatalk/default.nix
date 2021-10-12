@@ -4,10 +4,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "netatalk-3.1.12";
+  pname = "netatalk";
+  version = "3.1.12";
 
   src = fetchurl {
-    url = "mirror://sourceforge/netatalk/netatalk/${name}.tar.bz2";
+    url = "mirror://sourceforge/netatalk/netatalk/netatalk-${version}.tar.bz2";
     sha256 = "1ld5mnz88ixic21m6f0xcgf8v6qm08j6xabh1dzfj6x47lxghq0m";
   };
 

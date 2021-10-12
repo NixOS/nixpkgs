@@ -4,14 +4,14 @@
 
 buildPythonPackage rec {
   pname = "qcelemental";
-  version = "0.21.0";
+  version = "0.23.0";
 
   checkInputs = [ pytest-runner pytest-cov pytest ];
   propagatedBuildInputs = [ numpy pydantic pint networkx ];
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1b3c78fxbpnddrm1fnbvv4x2840jcfjg2l5cb5w4p38vzksiv238";
+    sha256 = "642bc86ce937621ddfb1291cbff0851be16b26feb5eec562296999e36181cee3";
   };
 
   doCheck = true;

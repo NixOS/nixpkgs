@@ -17,9 +17,9 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-   cython
-   cymem
-   murmurhash
+    cython
+    cymem
+    murmurhash
   ];
 
   checkInputs = [
@@ -34,6 +34,6 @@ buildPythonPackage rec {
     description = "Cython hash tables that assume keys are pre-hashed";
     homepage = "https://github.com/explosion/preshed";
     license = licenses.mit;
-    maintainers = with maintainers; [ sdll ];
-    };
+    maintainers = with maintainers; [ ];
+  };
 }

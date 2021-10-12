@@ -13,7 +13,6 @@
 let
   pname = "plausible";
   version = "1.3.0";
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "plausible";

@@ -21,15 +21,15 @@ let
 in
 buildGoModule rec {
   pname = "distrobuilder";
-  version = "1.2";
+  version = "1.3";
 
-  vendorSha256 = "sha256-G5FUO6Ul4dA4MZZI9Ho1kE9ptX31tAWak9rWAoD/iuU=";
+  vendorSha256 = "sha256-FKnpoLA4enZ1vGSJQFLbp/OjoEgdxagL73ucxUgIoKY=";
 
   src = fetchFromGitHub {
     owner = "lxc";
     repo = "distrobuilder";
     rev = "distrobuilder-${version}";
-    sha256 = "CE3Tq0oWpVZnSfBBY3/2E2GdZLFsO0NzkPABT8lu+TY=";
+    sha256 = "sha256-cvxbJbg9yTcAPWQccH+1nQivwRh8CIN3Cga2HKY8VlQ=";
     fetchSubmodules = false;
   };
 

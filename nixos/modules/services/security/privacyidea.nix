@@ -169,7 +169,6 @@ in
 
         configFile = mkOption {
           type = types.path;
-          default = "";
           description = ''
             Path to PrivacyIDEA LDAP Proxy configuration (proxy.ini).
           '';
@@ -228,7 +227,7 @@ in
         path = with pkgs; [ openssl ];
         environment.PRIVACYIDEA_CONFIGFILE = "${cfg.stateDir}/privacyidea.cfg";
         preStart = let
-          pi-manage = "${pkgs.sudo}/bin/sudo -u privacyidea -HE ${penv}/bin/pi-manage";
+          pi-manage = "${config.security.sudo.package}/bin/sudo -u privacyidea -HE ${penv}/bin/pi-manage";
           pgsu = config.services.postgresql.superUser;
           psql = config.services.postgresql.package;
         in ''
@@ -239,8 +238,8 @@ in
                                                    -i "${piCfgFile}"
           chown ${cfg.user}:${cfg.group} ${cfg.stateDir}/privacyidea.cfg
           if ! test -e "${cfg.stateDir}/db-created"; then
-            ${pkgs.sudo}/bin/sudo -u ${pgsu} ${psql}/bin/createuser --no-superuser --no-createdb --no-createrole ${cfg.user}
-            ${pkgs.sudo}/bin/sudo -u ${pgsu} ${psql}/bin/createdb --owner ${cfg.user} privacyidea
+            ${config.security.sudo.package}/bin/sudo -u ${pgsu} ${psql}/bin/createuser --no-superuser --no-createdb --no-createrole ${cfg.user}
+            ${config.security.sudo.package}/bin/sudo -u ${pgsu} ${psql}/bin/createdb --owner ${cfg.user} privacyidea
             ${pi-manage} create_enckey
             ${pi-manage} create_audit_keys
             ${pi-manage} createdb

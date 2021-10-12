@@ -56,7 +56,6 @@ in
 
       port = mkOption {
         default = 1883;
-        example = 1883;
         type = types.int;
         description = ''
           Port on which to listen without SSL.
@@ -95,7 +94,6 @@ in
 
         port = mkOption {
           default = 8883;
-          example = 8883;
           type = types.int;
           description = ''
             Port on which to listen with SSL.

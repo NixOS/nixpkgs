@@ -1,4 +1,4 @@
-{ buildDunePackage, jsonrpc, lsp, makeWrapper, dot-merlin-reader }:
+{ buildDunePackage, jsonrpc, lsp, re, makeWrapper, dot-merlin-reader }:
 
 buildDunePackage {
   pname = "ocaml-lsp-server";
@@ -7,7 +7,7 @@ buildDunePackage {
 
   inherit (lsp) preBuild;
 
-  buildInputs = lsp.buildInputs ++ [ lsp ];
+  buildInputs = lsp.buildInputs ++ [ lsp re ];
 
   nativeBuildInputs = [ makeWrapper ];
 

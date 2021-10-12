@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xmenu";
-  version = "4.5.4";
+  version = "4.5.5";
 
   src = fetchFromGitHub {
     owner = "phillbush";
     repo = "xmenu";
     rev = "v${version}";
-    sha256 = "1dy3aqqczs7d3f8rf6h7xssgr3881g8m5y4waskizjy9z7chs64q";
+    sha256 = "sha256-Gg4hSBBVBOB/wlY44C5bJOuOnLoA/tPvcNZamXae/WE=";
   };
 
   buildInputs = [ imlib2 libX11 libXft libXinerama ];

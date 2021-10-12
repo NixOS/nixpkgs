@@ -4,20 +4,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rdedup";
-  version = "3.1.1";
+  version = "3.2.1";
 
   src = fetchFromGitHub {
     owner = "dpc";
     repo = "rdedup";
-    rev = "rdedup-v${version}";
-    sha256 = "0y34a3mpghdmcb2rx4z62q0s351bfmy1287d75mm07ryfgglgsd7";
+    rev = "v${version}";
+    sha256 = "sha256-GEYP18CaCQShvCg8T7YTvlybH1LNO34KBxgmsTv2Lzs=";
   };
 
-  cargoSha256 = "1k0pl9i7zf1ki5ch2zxc1fqsf94bxjlvjrkh0500cycwqcdys296";
-
-  cargoPatches = [
-    ./v3.1.1-fix-Cargo.lock.patch
-  ];
+  cargoSha256 = "sha256-I6d3IyPBcUsrvlzF7W0hFM4hcXi4wWro9bCeP4eArHI=";
 
   nativeBuildInputs = [ pkg-config llvmPackages.libclang clang ];
   buildInputs = [ openssl libsodium xz ]

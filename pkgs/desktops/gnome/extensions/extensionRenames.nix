@@ -13,6 +13,30 @@
   "lockkeys@vaina.lt" = "lock-keys";
   "lockkeys@fawtytoo" = "lock-keys-2";
 
+  "system-monitor@paradoxxx.zero.gmail.com" = "system-monitor"; # manually packaged
+  "System_Monitor@bghome.gmail.com" = "system-monitor-2";
+
+  "Hide_Activities@shay.shayel.org" = "hide-activities-button";
+  "hide-activities-button@nmingori.gnome-shell-extensions.org" = "hide-activities-button-2";
+
+  # At the moment, ShutdownTimer@deminder is a fork of ShutdownTimer@neumann which adds new features
+  # there seem to be upstream plans, so this should be checked periodically:
+  # https://github.com/Deminder/ShutdownTimer https://github.com/neumann-d/ShutdownTimer/pull/46
+  "ShutdownTimer@neumann" = null;
+  "shutdown-timer-gnome-shell-extension" = "shutdowntimer-2";
+  "ShutdownTimer@deminder" = "shutdowntimer";
+
+  "noannoyance@sindex.com" = "noannoyance";
+  "noannoyance@daase.net" = "noannoyance-2";
+
+  "panel-date-format@keiii.github.com" = "panel-date-format";
+  "panel-date-format@atareao.es" = "panel-date-format-2";
+
+  "wireguard-indicator@gregos.me" = "wireguard-indicator-2";
+  "wireguard-indicator@atareao.es" = "wireguard-indicator";
+
+  "extension-list@tu.berry" = "extension-list";
+  "screen-lock@garciabaameiro.com" = "screen-lock"; # Don't know why they got 'extension-list' as slug
 
 
   # ############################################################################
@@ -28,7 +52,6 @@
 
   # That extension is broken because of https://github.com/NixOS/nixpkgs/issues/118612
   #"flypie@schneegans.github.com" = null;
-
 
 
   # ############################################################################

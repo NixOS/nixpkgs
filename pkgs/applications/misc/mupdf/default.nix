@@ -60,6 +60,11 @@ stdenv.mkDerivation rec {
       url = "http://git.ghostscript.com/?p=mupdf.git;a=patch;h=cee7cefc610d42fd383b3c80c12cbc675443176a";
       sha256 = "18g9jsj90jnqibaff8pqi70a7x8ygc3sh4jl4xnvlv8vr7fxxbh6";
     })
+    (fetchpatch {
+      name = "CVE-2021-37220.patch";
+      url = "http://git.ghostscript.com/?p=mupdf.git;a=patch;h=f5712c9949d026e4b891b25837edd2edc166151f";
+      sha256 = "1zyw6w6zr7k2akpzkyycj2zzw3y5qc7afsn1ysklfj2rvb6cnsx3";
+    })
   ];
 
   postPatch = ''

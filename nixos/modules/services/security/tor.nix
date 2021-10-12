@@ -232,8 +232,7 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.tor;
-        defaultText = "pkgs.tor";
-        example = literalExample "pkgs.tor";
+        defaultText = literalExpression "pkgs.tor";
         description = "Tor package to use.";
       };
 
@@ -1022,7 +1021,7 @@ in
         ProtectKernelTunables = true;
         ProtectSystem = "strict";
         RemoveIPC = true;
-        RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ];
+        RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" "AF_NETLINK" ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;

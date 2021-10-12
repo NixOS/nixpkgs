@@ -141,6 +141,15 @@ in rec {
         cp -r ${MacOSX-SDK}/usr/include/libDER $out/include
       '';
     };
+
+    simd = stdenv.mkDerivation {
+      name = "apple-lib-simd";
+      dontUnpack = true;
+      installPhase = ''
+        mkdir -p $out/include
+        cp -r ${MacOSX-SDK}/usr/include/simd $out/include
+      '';
+    };
   };
 
   overrides = super: {

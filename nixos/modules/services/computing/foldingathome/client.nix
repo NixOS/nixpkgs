@@ -23,7 +23,7 @@ in
     package = mkOption {
       type = types.package;
       default = pkgs.fahclient;
-      defaultText = "pkgs.fahclient";
+      defaultText = literalExpression "pkgs.fahclient";
       description = ''
         Which Folding@home client to use.
       '';

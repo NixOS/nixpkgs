@@ -2,7 +2,6 @@
 , buildPythonPackage, fetchPypi, pythonOlder, setuptools-scm, pytestCheckHook
 , aiohttp
 , aiohttp-cors
-, appdirs
 , attrs
 , click
 , colorama
@@ -10,6 +9,7 @@
 , mypy-extensions
 , pathspec
 , parameterized
+, platformdirs
 , regex
 , tomli
 , typed-ast
@@ -20,13 +20,13 @@
 
 buildPythonPackage rec {
   pname = "black";
-  version = "21.7b0";
+  version = "21.9b0";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "06d27adq6v6p8wspi0wwqz2pnq34p5jhnqvijbin54yyj5j3qdy8";
+    sha256 = "sha256-feTPx+trcQ3jJXEtQBJWiRAdIdJSg+7X6ZmHIs8Q65E=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
@@ -54,17 +54,20 @@ buildPythonPackage rec {
   ] ++ lib.optionals stdenv.isDarwin [
     # fails on darwin
     "test_expression_diff"
+    # Fail on Hydra, see https://github.com/NixOS/nixpkgs/pull/130785
+    "test_bpo_2142_workaround"
+    "test_skip_magic_trailing_comma"
   ];
 
   propagatedBuildInputs = [
     aiohttp
     aiohttp-cors
-    appdirs
     attrs
     click
     colorama
     mypy-extensions
     pathspec
+    platformdirs
     regex
     tomli
     typed-ast # required for tests and python2 extra

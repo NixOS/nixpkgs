@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     rm -rf googletest
-    cp -r ${gtest.src}/googletest googletest
+    cp -r ${gtest.src} googletest
     chmod -R a+w googletest
   '';
 

@@ -2,37 +2,24 @@
 , buildPythonPackage
 , fetchFromGitHub
 , numpy
-, requests
-, pyglet
-, scipy
-, pillow
 , cloudpickle
 }:
 
 buildPythonPackage rec {
   pname = "gym";
-  version = "0.18.3";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "openai";
     repo = pname;
     rev = version;
-    sha256 = "sha256-10KHUG6WacYzqna97vEhSQWDmJDvDmD5QxLhPW5NQSs=";
+    sha256 = "sha256-0O/s9OVNGQmeX9j8B1x63RxdI6dhqfTEJcgDH2jtCv4=";
   };
 
   propagatedBuildInputs = [
     cloudpickle
     numpy
-    pillow
-    pyglet
-    requests
-    scipy
   ];
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "Pillow<=8.2.0" "Pillow"
-  '';
 
   # The test needs MuJoCo that is not free library.
   doCheck = false;

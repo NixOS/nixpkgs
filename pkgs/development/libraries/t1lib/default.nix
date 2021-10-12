@@ -28,7 +28,7 @@ stdenv.mkDerivation {
   buildInputs = [ libX11 libXaw ];
   buildFlags = [ "without_doc" ];
 
-  postInstall = lib.optional (!stdenv.isDarwin) "chmod +x $out/lib/*.so.*"; # ??
+  postInstall = lib.optionalString (!stdenv.isDarwin) "chmod +x $out/lib/*.so.*"; # ??
 
   meta = with lib; {
     description = "A type 1 font rasterizer library for UNIX/X11";

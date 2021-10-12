@@ -10,8 +10,8 @@ let
       birdBin = if variant == "bird6" then "bird6" else "bird";
       birdc = if variant == "bird6" then "birdc6" else "birdc";
       descr =
-        { bird = "1.9.x with IPv4 suport";
-          bird6 = "1.9.x with IPv6 suport";
+        { bird = "1.6.x with IPv4 support";
+          bird6 = "1.6.x with IPv6 support";
           bird2 = "2.x";
         }.${variant};
     in {

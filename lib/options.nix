@@ -11,6 +11,7 @@ let
     filter
     foldl'
     head
+    tail
     isAttrs
     isBool
     isDerivation
@@ -53,7 +54,7 @@ rec {
 
      Example:
        mkOption { }  // => { _type = "option"; }
-       mkOption { defaultText = "foo"; } // => { _type = "option"; defaultText = "foo"; }
+       mkOption { default = "foo"; } // => { _type = "option"; default = "foo"; }
   */
   mkOption =
     {
@@ -144,7 +145,7 @@ rec {
       if def.value != first.value then
         throw "The option `${showOption loc}' has conflicting definition values:${showDefs [ first def ]}"
       else
-        first) (head defs) defs).value;
+        first) (head defs) (tail defs)).value;
 
   /* Extracts values of all "value" keys of the given list.
 
@@ -211,11 +212,25 @@ rec {
     else x;
 
 
-  /* For use in the `example` option attribute. It causes the given
-     text to be included verbatim in documentation. This is necessary
-     for example values that are not simple values, e.g., functions.
+  /* For use in the `defaultText` and `example` option attributes. Causes the
+     given string to be rendered verbatim in the documentation as Nix code. This
+     is necessary for complex values, e.g. functions, or values that depend on
+     other values or packages.
   */
-  literalExample = text: { _type = "literalExample"; inherit text; };
+  literalExpression = text:
+    if ! isString text then throw "literalExpression expects a string."
+    else { _type = "literalExpression"; inherit text; };
+
+  literalExample = lib.warn "literalExample is deprecated, use literalExpression instead, or use literalDocBook for a non-Nix description." literalExpression;
+
+
+  /* For use in the `defaultText` and `example` option attributes. Causes the
+     given DocBook text to be inserted verbatim in the documentation, for when
+     a `literalExpression` would be too hard to read.
+  */
+  literalDocBook = text:
+    if ! isString text then throw "literalDocBook expects a string."
+    else { _type = "literalDocBook"; inherit text; };
 
   # Helper functions.
 
@@ -246,7 +261,9 @@ rec {
   showDefs = defs: concatMapStrings (def:
     let
       # Pretty print the value for display, if successful
-      prettyEval = builtins.tryEval (lib.generators.toPretty {} def.value);
+      prettyEval = builtins.tryEval
+        (lib.generators.toPretty { }
+          (lib.generators.withRecursion { depthLimit = 10; throwOnDepthLimit = false; } def.value));
       # Split it into its lines
       lines = filter (v: ! isList v) (builtins.split "\n" prettyEval.value);
       # Only display the first 5 lines, and indent them for better visibility

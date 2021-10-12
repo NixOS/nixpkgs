@@ -8,14 +8,17 @@
       ++ pkgs.lib.optional (pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64) "rtc_cmos"
 }:
 
-with pkgs;
-with import ../../../nixos/lib/qemu-flags.nix { inherit pkgs; };
-
+let
+  inherit (pkgs) bash bashInteractive busybox cpio coreutils e2fsprogs fetchurl kmod rpm
+    stdenv util-linux
+    buildPackages writeScript writeText runCommand;
+in
 rec {
+  qemu-common = import ../../../nixos/lib/qemu-common.nix { inherit lib pkgs; };
 
-  qemu = pkgs.qemu_kvm;
+  qemu = buildPackages.qemu_kvm;
 
-  modulesClosure = makeModulesClosure {
+  modulesClosure = pkgs.makeModulesClosure {
     inherit kernel rootModules;
     firmware = kernel;
   };
@@ -24,7 +27,7 @@ rec {
   hd = "vda"; # either "sda" or "vda"
 
   initrdUtils = runCommand "initrd-utils"
-    { buildInputs = [ nukeReferences ];
+    { nativeBuildInputs = [ buildPackages.nukeReferences ];
       allowedReferences = [ "out" modulesClosure ]; # prevent accidents like glibc being included in the initrd
     }
     ''
@@ -137,7 +140,7 @@ rec {
   '';
 
 
-  initrd = makeInitrd {
+  initrd = pkgs.makeInitrd {
     contents = [
       { object = stage1Init;
         symlink = "/init";
@@ -152,7 +155,7 @@ rec {
 
     # Set the system time from the hardware clock.  Works around an
     # apparent KVM > 1.5.2 bug.
-    ${pkgs.util-linux}/bin/hwclock -s
+    ${util-linux}/bin/hwclock -s
 
     export NIX_STORE=${storeDir}
     export NIX_BUILD_TOP=/tmp
@@ -192,13 +195,13 @@ rec {
       export PATH=/bin:/usr/bin:${coreutils}/bin
       echo "Starting interactive shell..."
       echo "(To run the original builder: \$origBuilder \$origArgs)"
-      exec ${busybox}/bin/setsid ${bashInteractive}/bin/bash < /dev/${qemuSerialDevice} &> /dev/${qemuSerialDevice}
+      exec ${busybox}/bin/setsid ${bashInteractive}/bin/bash < /dev/${qemu-common.qemuSerialDevice} &> /dev/${qemu-common.qemuSerialDevice}
     fi
   '';
 
 
   qemuCommandLinux = ''
-    ${qemuBinary qemu} \
+    ${qemu-common.qemuBinary qemu} \
       -nographic -no-reboot \
       -device virtio-rng-pci \
       -virtfs local,path=${storeDir},security_model=none,mount_tag=store \
@@ -206,7 +209,7 @@ rec {
       ''${diskImage:+-drive file=$diskImage,if=virtio,cache=unsafe,werror=report} \
       -kernel ${kernel}/${img} \
       -initrd ${initrd}/initrd \
-      -append "console=${qemuSerialDevice} panic=1 command=${stage2Init} out=$out mountDisk=$mountDisk loglevel=4" \
+      -append "console=${qemu-common.qemuSerialDevice} panic=1 command=${stage2Init} out=$out mountDisk=$mountDisk loglevel=4" \
       $QEMU_OPTS
   '';
 
@@ -257,14 +260,23 @@ rec {
     eval "$postVM"
   '';
 
-
-  createEmptyImage = {size, fullName}: ''
-    mkdir $out
-    diskImage=$out/disk-image.qcow2
+  /*
+    A bash script fragment that produces a disk image at `destination`.
+   */
+  createEmptyImage = {
+    # Disk image size in MiB
+    size,
+    # Name that will be written to ${destination}/nix-support/full-name
+    fullName,
+    # Where to write the image files, defaulting to $out
+    destination ? "$out"
+  }: ''
+    mkdir -p ${destination}
+    diskImage=${destination}/disk-image.qcow2
     ${qemu}/bin/qemu-img create -f qcow2 $diskImage "${toString size}M"
 
-    mkdir $out/nix-support
-    echo "${fullName}" > $out/nix-support/full-name
+    mkdir ${destination}/nix-support
+    echo "${fullName}" > ${destination}/nix-support/full-name
   '';
 
 
@@ -315,7 +327,7 @@ rec {
 
 
   extractFs = {file, fs ? null} :
-    with pkgs; runInLinuxVM (
+    runInLinuxVM (
     stdenv.mkDerivation {
       name = "extract-file";
       buildInputs = [ util-linux ];
@@ -340,10 +352,10 @@ rec {
 
 
   extractMTDfs = {file, fs ? null} :
-    with pkgs; runInLinuxVM (
+    runInLinuxVM (
     stdenv.mkDerivation {
       name = "extract-file-mtd";
-      buildInputs = [ util-linux mtdutils ];
+      buildInputs = [ pkgs.util-linux pkgs.mtdutils ];
       buildCommand = ''
         ln -s ${kernel}/lib /lib
         ${kmod}/bin/modprobe mtd
@@ -494,7 +506,9 @@ rec {
      tarball must contain an RPM specfile. */
 
   buildRPM = attrs: runInLinuxImage (stdenv.mkDerivation ({
-    phases = "prepareImagePhase sysInfoPhase buildPhase installPhase";
+    prePhases = [ pkgs.prepareImagePhase pkgs.sysInfoPhase ];
+    dontUnpack = true;
+    dontConfigure = true;
 
     outDir = "rpms/${attrs.diskImage.name}";
 
@@ -573,7 +587,7 @@ rec {
       buildCommand = ''
         ${createRootFS}
 
-        PATH=$PATH:${lib.makeBinPath [ dpkg dpkg glibc xz ]}
+        PATH=$PATH:${lib.makeBinPath [ pkgs.dpkg pkgs.glibc pkgs.xz ]}
 
         # Unpack the .debs.  We do this to prevent pre-install scripts
         # (which have lots of circular dependencies) from barfing.
@@ -653,7 +667,10 @@ rec {
   rpmClosureGenerator =
     {name, packagesLists, urlPrefixes, packages, archs ? []}:
     assert (builtins.length packagesLists) == (builtins.length urlPrefixes);
-    runCommand "${name}.nix" {buildInputs = [perl perlPackages.XMLSimple]; inherit archs;} ''
+    runCommand "${name}.nix" {
+      nativeBuildInputs = [ buildPackages.perl buildPackages.perlPackages.XMLSimple ];
+      inherit archs;
+    } ''
       ${lib.concatImapStrings (i: pl: ''
         gunzip < ${pl} > ./packages_${toString i}.xml
       '') packagesLists}
@@ -692,7 +709,8 @@ rec {
   debClosureGenerator =
     {name, packagesLists, urlPrefix, packages}:
 
-    runCommand "${name}.nix" { buildInputs = [ perl dpkg ]; } ''
+    runCommand "${name}.nix"
+      { nativeBuildInputs = [ buildPackages.perl buildPackages.dpkg ]; } ''
       for i in ${toString packagesLists}; do
         echo "adding $i..."
         case $i in

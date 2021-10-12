@@ -1,8 +1,8 @@
-{ lib, nim, stdenv, fetchFromGitLab
+{ lib, nimPackages, fetchFromGitLab
 , enableShells ? [ "bash" "zsh" "fish" "sh" "posh" ]
 }:
 
-stdenv.mkDerivation {
+nimPackages.buildNimPackage {
     name = "swaycwd";
     version = "0.0.1";
 
@@ -13,27 +13,18 @@ stdenv.mkDerivation {
       hash = "sha256-MkyY3wWByQo0l0J28xKDfGtxfazVPRyZHCObl9Fszh4=";
     };
 
-    configurePhase = ''
-      runHook preConfigure
+    preConfigure = ''
       {
         echo 'let enabledShells: seq[string] = @${builtins.toJSON enableShells}'
         echo 'export enabledShells'
       } > shells.nim
-      runHook postConfigure
+      cat << EOF > swaycwd.nimble
+      srcDir = "."
+      bin = "swaycwd"
+      EOF
     '';
 
-    nativeBuildInputs = [ nim ];
-
-    buildPhase = ''
-      export HOME=$TMPDIR
-      nim c --opt:speed -d:release swaycwd.nim
-    '';
-
-    installPhase = ''
-      runHook preInstall
-      install -D -m555 -t $out/bin swaycwd
-      runHook postInstall
-    '';
+    nimFlags = [ "--opt:speed" ];
 
     meta = with lib; {
       homepage = "https://gitlab.com/cab404/swaycwd";

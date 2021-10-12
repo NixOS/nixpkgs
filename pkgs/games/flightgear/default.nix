@@ -17,7 +17,7 @@ let
       sha256 = "sha256-/KFumHRkmRvsU/L1i11jG/KbqobnOEP7l4lyPMKHycA=";
     };
 
-    phases = [ "installPhase" ];
+    dontUnpack = true;
 
     installPhase = ''
       mkdir -p "$out/share/FlightGear"

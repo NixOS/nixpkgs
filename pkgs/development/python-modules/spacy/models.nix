@@ -25,7 +25,7 @@ let
       ++ lib.optionals (lang == "ru") [ pymorphy2 ]
       ++ lib.optionals (pname == "fr_dep_news_trf") [ sentencepiece ];
 
-    postPatch = lib.optionals (pname == "fr_dep_news_trf") ''
+    postPatch = lib.optionalString (pname == "fr_dep_news_trf") ''
       substituteInPlace meta.json \
         --replace "sentencepiece==0.1.91" "sentencepiece>=0.1.91"
     '';

@@ -80,6 +80,8 @@ let self = rec {
 
   steam-launcher = callPackage ../applications/video/kodi-packages/steam-launcher { };
 
+  steam-library = callPackage ../applications/video/kodi-packages/steam-library { };
+
   pdfreader = callPackage ../applications/video/kodi-packages/pdfreader { };
 
   pvr-hts = callPackage ../applications/video/kodi-packages/pvr-hts { };
@@ -119,6 +121,10 @@ let self = rec {
   myconnpy = callPackage ../applications/video/kodi-packages/myconnpy { };
 
   requests = callPackage ../applications/video/kodi-packages/requests { };
+
+  requests-cache = callPackage ../applications/video/kodi-packages/requests-cache { };
+
+  routing = callPackage ../applications/video/kodi-packages/routing { };
 
   signals = callPackage ../applications/video/kodi-packages/signals { };
 

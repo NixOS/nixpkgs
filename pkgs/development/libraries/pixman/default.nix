@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0l0m48lnmdlmnaxn2021qi5cj366d9fzfjxkqgcj9bs14pxbgaw4";
   };
 
+  separateDebugInfo = true;
+
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ libpng ];

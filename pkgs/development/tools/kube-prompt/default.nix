@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   pname = "kube-prompt";
-  version = "1.0.5";
+  version = "1.0.11";
   rev = "v${version}";
 
   goPackagePath = "github.com/c-bata/kube-prompt";
@@ -11,7 +11,7 @@ buildGoPackage rec {
     inherit rev;
     owner = "c-bata";
     repo = "kube-prompt";
-    sha256 = "1c1y0n1yxcaxvhlsj7b0wvhi934b5g0s1mi46hh5amb9j3dhgq1c";
+    sha256 = "sha256-9OWsITbC7YO51QzsRwDWvojU54DiuGJhkSGwmesEj9w=";
   };
 
   subPackages = ["."];

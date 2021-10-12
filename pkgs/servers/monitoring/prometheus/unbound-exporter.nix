@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "unbound-telemetry";
-  version = "unstable-2021-03-17";
+  version = "unstable-2021-09-18";
 
   src = fetchFromGitHub {
     owner = "svartalf";
     repo = pname;
-    rev = "7f1b6d4e9e4b6a3216a78c23df745bcf8fc84021";
-    sha256 = "xCelL6WGaTRhDJkkUdpdwj1zcKKAU2dyUv3mHeI4oAw=";
+    rev = "19e53b05828a43b7062b67a9cc6c84836ca26439";
+    sha256 = "sha256-wkr9T6GlJP/PSv17z3MC7vC0cXg/Z6rGlhlCUHH3Ua4=";
   };
 
-  cargoSha256 = "sha256-P3nAtYOuwNSLMP7q1L5zKTsZ6rJA/qL1mhVHzP3szi4=";
+  cargoSha256 = "sha256-6V39Wfqin2RK73rehsIwmqDkOin4FEiqJQjTKAEx9Vs=";
 
   nativeBuildInputs = [ pkg-config ];
 

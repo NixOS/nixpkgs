@@ -1,4 +1,4 @@
-From 5580303956ca7d8eb431d23c2af0030c9cc0e6e9 Mon Sep 17 00:00:00 2001
+From 56ae06b48c6852071dfc57c1203c04f07309d757 Mon Sep 17 00:00:00 2001
 From: Gabriel Ebner <gebner@gebner.org>
 Date: Sun, 6 Dec 2015 14:26:36 +0100
 Subject: [PATCH 07/19] hostnamed, localed, timedated: disable methods that
@@ -11,10 +11,10 @@ Subject: [PATCH 07/19] hostnamed, localed, timedated: disable methods that
  3 files changed, 25 insertions(+)
 
 diff --git a/src/hostname/hostnamed.c b/src/hostname/hostnamed.c
-index a1794bdab1..77134731e1 100644
+index 36702f2fb0..669257ea2f 100644
 --- a/src/hostname/hostnamed.c
 +++ b/src/hostname/hostnamed.c
-@@ -643,6 +643,9 @@ static int method_set_static_hostname(sd_bus_message *m, void *userdata, sd_bus_
+@@ -797,6 +797,9 @@ static int method_set_static_hostname(sd_bus_message *m, void *userdata, sd_bus_
          if (r < 0)
                  return r;
  
@@ -24,7 +24,7 @@ index a1794bdab1..77134731e1 100644
          name = empty_to_null(name);
  
          context_read_etc_hostname(c);
-@@ -702,6 +705,9 @@ static int set_machine_info(Context *c, sd_bus_message *m, int prop, sd_bus_mess
+@@ -860,6 +863,9 @@ static int set_machine_info(Context *c, sd_bus_message *m, int prop, sd_bus_mess
          if (r < 0)
                  return r;
  
@@ -35,20 +35,20 @@ index a1794bdab1..77134731e1 100644
  
          context_read_machine_info(c);
 diff --git a/src/locale/localed.c b/src/locale/localed.c
-index 736dacdee9..53e0ee935e 100644
+index df0eb030d4..d026eae97e 100644
 --- a/src/locale/localed.c
 +++ b/src/locale/localed.c
-@@ -317,6 +317,9 @@ static int method_set_locale(sd_bus_message *m, void *userdata, sd_bus_error *er
+@@ -360,6 +360,9 @@ static int method_set_locale(sd_bus_message *m, void *userdata, sd_bus_error *er
          if (r < 0)
                  return r;
  
 +        return sd_bus_error_setf(error, SD_BUS_ERROR_NOT_SUPPORTED,
-+            "Changing system settings via systemd is not supported on NixOS.");
++                                 "Changing system settings via systemd is not supported on NixOS.");
 +
+         use_localegen = locale_gen_check_available();
+ 
          /* If single locale without variable name is provided, then we assume it is LANG=. */
-         if (strv_length(l) == 1 && !strchr(l[0], '=')) {
-                 if (!locale_is_valid(l[0]))
-@@ -432,6 +435,9 @@ static int method_set_vc_keyboard(sd_bus_message *m, void *userdata, sd_bus_erro
+@@ -485,6 +488,9 @@ static int method_set_vc_keyboard(sd_bus_message *m, void *userdata, sd_bus_erro
          if (r < 0)
                  return r;
  
@@ -58,7 +58,7 @@ index 736dacdee9..53e0ee935e 100644
          keymap = empty_to_null(keymap);
          keymap_toggle = empty_to_null(keymap_toggle);
  
-@@ -606,6 +612,9 @@ static int method_set_x11_keyboard(sd_bus_message *m, void *userdata, sd_bus_err
+@@ -665,6 +671,9 @@ static int method_set_x11_keyboard(sd_bus_message *m, void *userdata, sd_bus_err
          if (r < 0)
                  return r;
  
@@ -69,10 +69,10 @@ index 736dacdee9..53e0ee935e 100644
          model = empty_to_null(model);
          variant = empty_to_null(variant);
 diff --git a/src/timedate/timedated.c b/src/timedate/timedated.c
-index 76fe04900d..e87c4c8919 100644
+index 66b454269d..0a8fe25d0f 100644
 --- a/src/timedate/timedated.c
 +++ b/src/timedate/timedated.c
-@@ -646,6 +646,10 @@ static int method_set_timezone(sd_bus_message *m, void *userdata, sd_bus_error *
+@@ -668,6 +668,10 @@ static int method_set_timezone(sd_bus_message *m, void *userdata, sd_bus_error *
          if (r < 0)
                  return r;
  
@@ -83,7 +83,7 @@ index 76fe04900d..e87c4c8919 100644
          if (!timezone_is_valid(z, LOG_DEBUG))
                  return sd_bus_error_setf(error, SD_BUS_ERROR_INVALID_ARGS, "Invalid or not installed time zone '%s'", z);
  
-@@ -725,6 +729,9 @@ static int method_set_local_rtc(sd_bus_message *m, void *userdata, sd_bus_error
+@@ -747,6 +751,9 @@ static int method_set_local_rtc(sd_bus_message *m, void *userdata, sd_bus_error
          if (r < 0)
                  return r;
  
@@ -93,7 +93,7 @@ index 76fe04900d..e87c4c8919 100644
          if (lrtc == c->local_rtc && !fix_system)
                  return sd_bus_reply_method_return(m, NULL);
  
-@@ -907,6 +914,9 @@ static int method_set_ntp(sd_bus_message *m, void *userdata, sd_bus_error *error
+@@ -930,6 +937,9 @@ static int method_set_ntp(sd_bus_message *m, void *userdata, sd_bus_error *error
          if (r < 0)
                  return r;
  
@@ -104,5 +104,5 @@ index 76fe04900d..e87c4c8919 100644
          if (r < 0)
                  return r;
 -- 
-2.30.1
+2.32.0
 

@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, unzip, makeWrapper, jre }:
 
 stdenv.mkDerivation rec {
-  name = "ec2-api-tools-1.7.5.1";
+  pname = "ec2-api-tools";
+  version = "1.7.5.1";
 
   src = fetchurl {
-    url = "http://tarballs.nixos.org/${name}.zip";
+    url = "http://tarballs.nixos.org/ec2-api-tools-${version}.zip";
     sha256 = "0figmvcm82ghmpz3018ihysz8zpxpysgbpdx7rmciq9y80qbw6l5";
   };
 

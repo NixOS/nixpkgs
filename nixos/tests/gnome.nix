@@ -30,6 +30,21 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
         })
       ];
 
+      systemd.user.services = {
+        "org.gnome.Shell@wayland" = {
+          serviceConfig = {
+            ExecStart = [
+              # Clear the list before overriding it.
+              ""
+              # Eval API is now internal so Shell needs to run in unsafe mode.
+              # TODO: improve test driver so that it supports openqa-like manipulation
+              # that would allow us to drop this mess.
+              "${pkgs.gnome.gnome-shell}/bin/gnome-shell --unsafe-mode"
+            ];
+          };
+        };
+      };
+
       virtualisation.memorySize = 1024;
     };
 

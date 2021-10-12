@@ -2,18 +2,16 @@
 , pandoc, ethtool, iproute2, libnl, udev, python3, perl
 } :
 
-let
-  version = "35.0";
 
-in stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "rdma-core";
-  inherit version;
+  version = "37.0";
 
   src = fetchFromGitHub {
     owner = "linux-rdma";
     repo = "rdma-core";
     rev = "v${version}";
-    sha256 = "0ra0m1s0029qgcq0li7md6pkri7pcc4iy3cd6jrrqs9c6n1clnnd";
+    sha256 = "0cz6dq34w0zxm1c6xk4pqascvvppa1b0m8jfnpncg5a68day8x65";
   };
 
   nativeBuildInputs = [ cmake pkg-config pandoc docutils ];

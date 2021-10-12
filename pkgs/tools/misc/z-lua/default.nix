@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "z-lua";
-  version = "1.8.12";
+  version = "1.8.13";
 
   src = fetchFromGitHub {
     owner = "skywind3000";
     repo = "z.lua";
     rev = version;
-    sha256 = "sha256-q4hJ6QAR8cXjXM2e5Et1/DzyEw9L0120sgpTtqGG5wQ=";
+    sha256 = "sha256-74EWeLkSRrVsJuucdN8sSTl5fPmboViYW0qdovBZQ5U=";
   };
 
   dontBuild = true;

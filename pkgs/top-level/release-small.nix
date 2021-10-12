@@ -166,7 +166,6 @@ with import ./release-lib.nix { inherit supportedSystems nixpkgsArgs; };
   webkitgtk = linux;
   wget = all;
   which = all;
-  wicd = linux;
   wireshark = linux;
   wirelesstools = linux;
   wpa_supplicant = linux;

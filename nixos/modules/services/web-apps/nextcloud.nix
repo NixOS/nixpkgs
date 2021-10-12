@@ -6,7 +6,7 @@ let
   cfg = config.services.nextcloud;
   fpm = config.services.phpfpm.pools.nextcloud;
 
-  phpPackage = pkgs.php74.buildEnv {
+  phpPackage = cfg.phpPackage.buildEnv {
     extensions = { enabled, all }:
       (with all;
         enabled
@@ -51,6 +51,12 @@ let
 in {
 
   imports = [
+    (mkRemovedOptionModule [ "services" "nextcloud" "config" "adminpass" ] ''
+      Please use `services.nextcloud.config.adminpassFile' instead!
+    '')
+    (mkRemovedOptionModule [ "services" "nextcloud" "config" "dbpass" ] ''
+      Please use `services.nextcloud.config.dbpassFile' instead!
+    '')
     (mkRemovedOptionModule [ "services" "nextcloud" "nginx" "enable" ] ''
       The nextcloud module supports `nginx` as reverse-proxy by default and doesn't
       support other reverse-proxies officially.
@@ -94,6 +100,14 @@ in {
       description = "Which package to use for the Nextcloud instance.";
       relatedPackages = [ "nextcloud20" "nextcloud21" "nextcloud22" ];
     };
+    phpPackage = mkOption {
+      type = types.package;
+      relatedPackages = [ "php74" "php80" ];
+      defaultText = "pkgs.php";
+      description = ''
+        PHP package to use for Nextcloud.
+      '';
+    };
 
     maxUploadSize = mkOption {
       default = "512M";
@@ -126,14 +140,14 @@ in {
     phpExtraExtensions = mkOption {
       type = with types; functionTo (listOf package);
       default = all: [];
-      defaultText = "all: []";
+      defaultText = literalExpression "all: []";
       description = ''
         Additional PHP extensions to use for nextcloud.
         By default, only extensions necessary for a vanilla nextcloud installation are enabled,
         but you may choose from the list of available extensions and add further ones.
         This is sometimes necessary to be able to install a certain nextcloud app that has additional requirements.
       '';
-      example = literalExample ''
+      example = literalExpression ''
         all: [ all.pdlib all.bz2 ]
       '';
     };
@@ -198,14 +212,6 @@ in {
         default = "nextcloud";
         description = "Database user.";
       };
-      dbpass = mkOption {
-        type = types.nullOr types.str;
-        default = null;
-        description = ''
-          Database password.  Use <literal>dbpassFile</literal> to avoid this
-          being world-readable in the <literal>/nix/store</literal>.
-        '';
-      };
       dbpassFile = mkOption {
         type = types.nullOr types.str;
         default = null;
@@ -238,17 +244,8 @@ in {
         default = "root";
         description = "Admin username.";
       };
-      adminpass = mkOption {
-        type = types.nullOr types.str;
-        default = null;
-        description = ''
-          Admin password.  Use <literal>adminpassFile</literal> to avoid this
-          being world-readable in the <literal>/nix/store</literal>.
-        '';
-      };
       adminpassFile = mkOption {
-        type = types.nullOr types.str;
-        default = null;
+        type = types.str;
         description = ''
           The full path to a file that contains the admin's password. Must be
           readable by user <literal>nextcloud</literal>.
@@ -304,14 +301,98 @@ in {
           phone-numbers.
         '';
       };
+
+      objectstore = {
+        s3 = {
+          enable = mkEnableOption ''
+            S3 object storage as primary storage.
+
+            This mounts a bucket on an Amazon S3 object storage or compatible
+            implementation into the virtual filesystem.
+
+            Further details about this feature can be found in the
+            <link xlink:href="https://docs.nextcloud.com/server/22/admin_manual/configuration_files/primary_storage.html">upstream documentation</link>.
+          '';
+          bucket = mkOption {
+            type = types.str;
+            example = "nextcloud";
+            description = ''
+              The name of the S3 bucket.
+            '';
+          };
+          autocreate = mkOption {
+            type = types.bool;
+            description = ''
+              Create the objectstore if it does not exist.
+            '';
+          };
+          key = mkOption {
+            type = types.str;
+            example = "EJ39ITYZEUH5BGWDRUFY";
+            description = ''
+              The access key for the S3 bucket.
+            '';
+          };
+          secretFile = mkOption {
+            type = types.str;
+            example = "/var/nextcloud-objectstore-s3-secret";
+            description = ''
+              The full path to a file that contains the access secret. Must be
+              readable by user <literal>nextcloud</literal>.
+            '';
+          };
+          hostname = mkOption {
+            type = types.nullOr types.str;
+            default = null;
+            example = "example.com";
+            description = ''
+              Required for some non-Amazon implementations.
+            '';
+          };
+          port = mkOption {
+            type = types.nullOr types.port;
+            default = null;
+            description = ''
+              Required for some non-Amazon implementations.
+            '';
+          };
+          useSsl = mkOption {
+            type = types.bool;
+            default = true;
+            description = ''
+              Use SSL for objectstore access.
+            '';
+          };
+          region = mkOption {
+            type = types.nullOr types.str;
+            default = null;
+            example = "REGION";
+            description = ''
+              Required for some non-Amazon implementations.
+            '';
+          };
+          usePathStyle = mkOption {
+            type = types.bool;
+            default = false;
+            description = ''
+              Required for some non-Amazon S3 implementations.
+
+              Ordinarily, requests will be made with
+              <literal>http://bucket.hostname.domain/</literal>, but with path style
+              enabled requests are made with
+              <literal>http://hostname.domain/bucket</literal> instead.
+            '';
+          };
+        };
+      };
     };
 
     enableImagemagick = mkEnableOption ''
-        Whether to load the ImageMagick module into PHP.
+        the ImageMagick module for PHP.
         This is used by the theming app and for generating previews of certain images (e.g. SVG and HEIF).
         You may want to disable it for increased security. In that case, previews will still be available
         for some images (e.g. JPEG and PNG).
-        See https://github.com/nextcloud/server/issues/13099
+        See <link xlink:href="https://github.com/nextcloud/server/issues/13099" />.
     '' // {
       default = true;
     };
@@ -372,13 +453,6 @@ in {
 
   config = mkIf cfg.enable (mkMerge [
     { assertions = let acfg = cfg.config; in [
-        { assertion = !(acfg.dbpass != null && acfg.dbpassFile != null);
-          message = "Please specify no more than one of dbpass or dbpassFile";
-        }
-        { assertion = ((acfg.adminpass != null || acfg.adminpassFile != null)
-            && !(acfg.adminpass != null && acfg.adminpassFile != null));
-          message = "Please specify exactly one of adminpass or adminpassFile";
-        }
         { assertion = versionOlder cfg.package.version "21" -> cfg.config.defaultPhoneRegion == null;
           message = "The `defaultPhoneRegion'-setting is only supported for Nextcloud >=21!";
         }
@@ -399,13 +473,39 @@ in {
             The package can be upgraded by explicitly declaring the service-option
             `services.nextcloud.package`.
           '';
+
+        # FIXME(@Ma27) remove as soon as nextcloud properly supports
+        # mariadb >=10.6.
+        isUnsupportedMariadb =
+          # All currently supported Nextcloud versions are affected.
+          (versionOlder cfg.package.version "23")
+          # This module uses mysql
+          && (cfg.config.dbtype == "mysql")
+          # MySQL is managed via NixOS
+          && config.services.mysql.enable
+          # We're using MariaDB
+          && (getName config.services.mysql.package) == "mariadb-server"
+          # MariaDB is at least 10.6 and thus not supported
+          && (versionAtLeast (getVersion config.services.mysql.package) "10.6");
+
       in (optional (cfg.poolConfig != null) ''
           Using config.services.nextcloud.poolConfig is deprecated and will become unsupported in a future release.
           Please migrate your configuration to config.services.nextcloud.poolSettings.
         '')
         ++ (optional (versionOlder cfg.package.version "20") (upgradeWarning 19 "21.05"))
         ++ (optional (versionOlder cfg.package.version "21") (upgradeWarning 20 "21.05"))
-        ++ (optional (versionOlder cfg.package.version "22") (upgradeWarning 21 "21.11"));
+        ++ (optional (versionOlder cfg.package.version "22") (upgradeWarning 21 "21.11"))
+        ++ (optional isUnsupportedMariadb ''
+            You seem to be using MariaDB at an unsupported version (i.e. at least 10.6)!
+            Please note that this isn't supported officially by Nextcloud. You can either
+
+            * Switch to `pkgs.mysql`
+            * Downgrade MariaDB to at least 10.5
+            * Work around Nextcloud's problems by specifying `innodb_read_only_compressed=0`
+
+            For further context, please read
+            https://help.nextcloud.com/t/update-to-next-cloud-21-0-2-has-get-an-error/117028/15
+          '');
 
       services.nextcloud.package = with pkgs;
         mkDefault (
@@ -423,6 +523,10 @@ in {
           else if versionOlder stateVersion "21.11" then nextcloud21
           else nextcloud22
         );
+
+      services.nextcloud.phpPackage =
+        if versionOlder cfg.package.version "21" then pkgs.php74
+        else pkgs.php80;
     }
 
     { systemd.timers.nextcloud-cron = {
@@ -441,14 +545,31 @@ in {
         nextcloud-setup = let
           c = cfg.config;
           writePhpArrary = a: "[${concatMapStringsSep "," (val: ''"${toString val}"'') a}]";
+          requiresReadSecretFunction = c.dbpassFile != null || c.objectstore.s3.enable;
+          objectstoreConfig = let s3 = c.objectstore.s3; in optionalString s3.enable ''
+            'objectstore' => [
+              'class' => '\\OC\\Files\\ObjectStore\\S3',
+              'arguments' => [
+                'bucket' => '${s3.bucket}',
+                'autocreate' => ${boolToString s3.autocreate},
+                'key' => '${s3.key}',
+                'secret' => nix_read_secret('${s3.secretFile}'),
+                ${optionalString (s3.hostname != null) "'hostname' => '${s3.hostname}',"}
+                ${optionalString (s3.port != null) "'port' => ${toString s3.port},"}
+                'use_ssl' => ${boolToString s3.useSsl},
+                ${optionalString (s3.region != null) "'region' => '${s3.region}',"}
+                'use_path_style' => ${boolToString s3.usePathStyle},
+              ],
+            ]
+          '';
+
           overrideConfig = pkgs.writeText "nextcloud-config.php" ''
             <?php
-            ${optionalString (c.dbpassFile != null) ''
-              function nix_read_pwd() {
-                $file = "${c.dbpassFile}";
+            ${optionalString requiresReadSecretFunction ''
+              function nix_read_secret($file) {
                 if (!file_exists($file)) {
                   throw new \RuntimeException(sprintf(
-                    "Cannot start Nextcloud, dbpass file %s set by NixOS doesn't seem to "
+                    "Cannot start Nextcloud, secret file %s set by NixOS doesn't seem to "
                     . "exist! Please make sure that the file exists and has appropriate "
                     . "permissions for user & group 'nextcloud'!",
                     $file
@@ -474,23 +595,26 @@ in {
               ${optionalString (c.dbport != null) "'dbport' => '${toString c.dbport}',"}
               ${optionalString (c.dbuser != null) "'dbuser' => '${c.dbuser}',"}
               ${optionalString (c.dbtableprefix != null) "'dbtableprefix' => '${toString c.dbtableprefix}',"}
-              ${optionalString (c.dbpass != null) "'dbpassword' => '${c.dbpass}',"}
-              ${optionalString (c.dbpassFile != null) "'dbpassword' => nix_read_pwd(),"}
+              ${optionalString (c.dbpassFile != null) "'dbpassword' => nix_read_secret('${c.dbpassFile}'),"}
               'dbtype' => '${c.dbtype}',
               'trusted_domains' => ${writePhpArrary ([ cfg.hostName ] ++ c.extraTrustedDomains)},
               'trusted_proxies' => ${writePhpArrary (c.trustedProxies)},
               ${optionalString (c.defaultPhoneRegion != null) "'default_phone_region' => '${c.defaultPhoneRegion}',"}
+              ${objectstoreConfig}
             ];
           '';
           occInstallCmd = let
-            dbpass = if c.dbpassFile != null
-              then ''"$(<"${toString c.dbpassFile}")"''
-              else if c.dbpass != null
-              then ''"${toString c.dbpass}"''
-              else ''""'';
-            adminpass = if c.adminpassFile != null
-              then ''"$(<"${toString c.adminpassFile}")"''
-              else ''"${toString c.adminpass}"'';
+            mkExport = { arg, value }: "export ${arg}=${value}";
+            dbpass = {
+              arg = "DBPASS";
+              value = if c.dbpassFile != null
+                then ''"$(<"${toString c.dbpassFile}")"''
+                else ''""'';
+            };
+            adminpass = {
+              arg = "ADMINPASS";
+              value = ''"$(<"${toString c.adminpassFile}")"'';
+            };
             installFlags = concatStringsSep " \\\n    "
               (mapAttrsToList (k: v: "${k} ${toString v}") {
               "--database" = ''"${c.dbtype}"'';
@@ -501,14 +625,14 @@ in {
               ${if c.dbhost != null then "--database-host" else null} = ''"${c.dbhost}"'';
               ${if c.dbport != null then "--database-port" else null} = ''"${toString c.dbport}"'';
               ${if c.dbuser != null then "--database-user" else null} = ''"${c.dbuser}"'';
-              "--database-pass" = dbpass;
-              ${if c.dbtableprefix != null
-                then "--database-table-prefix" else null} = ''"${toString c.dbtableprefix}"'';
+              "--database-pass" = "\$${dbpass.arg}";
               "--admin-user" = ''"${c.adminuser}"'';
-              "--admin-pass" = adminpass;
+              "--admin-pass" = "\$${adminpass.arg}";
               "--data-dir" = ''"${cfg.home}/data"'';
             });
           in ''
+            ${mkExport dbpass}
+            ${mkExport adminpass}
             ${occ}/bin/nextcloud-occ maintenance:install \
                 ${installFlags}
           '';
@@ -535,16 +659,14 @@ in {
                 exit 1
               fi
             ''}
-            ${optionalString (c.adminpassFile != null) ''
-              if [ ! -r "${c.adminpassFile}" ]; then
-                echo "adminpassFile ${c.adminpassFile} is not readable by nextcloud:nextcloud! Aborting..."
-                exit 1
-              fi
-              if [ -z "$(<${c.adminpassFile})" ]; then
-                echo "adminpassFile ${c.adminpassFile} is empty!"
-                exit 1
-              fi
-            ''}
+            if [ ! -r "${c.adminpassFile}" ]; then
+              echo "adminpassFile ${c.adminpassFile} is not readable by nextcloud:nextcloud! Aborting..."
+              exit 1
+            fi
+            if [ -z "$(<${c.adminpassFile})" ]; then
+              echo "adminpassFile ${c.adminpassFile} is empty!"
+              exit 1
+            fi
 
             ln -sf ${cfg.package}/apps ${cfg.home}/
 

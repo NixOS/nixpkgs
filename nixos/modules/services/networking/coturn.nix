@@ -68,7 +68,7 @@ in {
       alt-listening-port = mkOption {
         type = types.int;
         default = cfg.listening-port + 1;
-        defaultText = "listening-port + 1";
+        defaultText = literalExpression "listening-port + 1";
         description = ''
           Alternative listening port for UDP and TCP listeners;
           default (or zero) value means "listening port plus one".
@@ -83,7 +83,7 @@ in {
       alt-tls-listening-port = mkOption {
         type = types.int;
         default = cfg.tls-listening-port + 1;
-        defaultText = "tls-listening-port + 1";
+        defaultText = literalExpression "tls-listening-port + 1";
         description = ''
           Alternative listening port for TLS and DTLS protocols.
         '';
@@ -311,6 +311,7 @@ in {
     {
       users.users.turnserver =
         { uid = config.ids.uids.turnserver;
+          group = "turnserver";
           description = "coturn TURN server user";
         };
       users.groups.turnserver =

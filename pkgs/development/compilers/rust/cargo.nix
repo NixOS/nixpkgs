@@ -1,4 +1,5 @@
-{ lib, stdenv, file, curl, pkg-config, python3, openssl, cmake, zlib
+{ lib, stdenv, pkgsHostHost
+, file, curl, pkg-config, python3, openssl, cmake, zlib
 , installShellFiles, makeWrapper, cacert, rustPlatform, rustc
 , CoreFoundation, Security
 }:
@@ -16,7 +17,10 @@ rustPlatform.buildRustPackage {
   # changes hash of vendor directory otherwise
   dontUpdateAutotoolsGnuConfigScripts = true;
 
-  nativeBuildInputs = [ pkg-config cmake installShellFiles makeWrapper ];
+  nativeBuildInputs = [
+    pkg-config cmake installShellFiles makeWrapper
+    (lib.getDev pkgsHostHost.curl)
+  ];
   buildInputs = [ cacert file curl python3 openssl zlib ]
     ++ lib.optionals stdenv.isDarwin [ CoreFoundation Security ];
 
@@ -53,6 +57,14 @@ rustPlatform.buildRustPackage {
 
   # Disable check phase as there are failures (4 tests fail)
   doCheck = false;
+
+  doInstallCheck = !stdenv.hostPlatform.isStatic &&
+    stdenv.hostPlatform.parsed.kernel.execFormat == lib.systems.parse.execFormats.elf;
+  installCheckPhase = ''
+    runHook preInstallCheck
+    readelf -a $out/bin/.cargo-wrapped | grep -F 'Shared library: [libcurl.so'
+    runHook postInstallCheck
+  '';
 
   meta = with lib; {
     homepage = "https://crates.io";

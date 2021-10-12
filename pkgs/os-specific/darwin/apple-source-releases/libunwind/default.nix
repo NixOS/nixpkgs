@@ -1,7 +1,7 @@
 { lib, appleDerivation }:
 
 appleDerivation {
-  buildPhase = ":";
+  dontBuild = true;
 
   # install headers only
   installPhase = ''
