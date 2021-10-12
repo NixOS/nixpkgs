@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, fetchpatch
 , meson
 , ninja
 , pkg-config
@@ -24,6 +25,14 @@ stdenv.mkDerivation rec {
     url = "https://libvirt.org/sources/glib/${pname}-${version}.tar.xz";
     sha256 = "hCP3Bp2qR2MHMh0cEeLswoU0DNMsqfwFIHdihD7erL0=";
   };
+
+  patches = [
+    # Fix build with GLib 2.70
+    (fetchpatch {
+      url = "https://gitlab.com/libvirt/libvirt-glib/-/commit/9a34c4ea55e0246c34896e48b8ecd637bc559ac7.patch";
+      sha256 = "UU70uTi55EzPMuLYVKRzpVcd3WogeAtWAWEC2hWlR7k=";
+    })
+  ];
 
   nativeBuildInputs = [
     meson
