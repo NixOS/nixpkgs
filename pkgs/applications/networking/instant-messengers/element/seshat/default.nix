@@ -1,14 +1,17 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, callPackage, sqlcipher, nodejs-14_x, python3, yarn, fixup_yarn_lock, CoreServices }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, callPackage, sqlcipher, nodejs-14_x, python3, yarn, fixup_yarn_lock, CoreServices, fetchYarnDeps }:
 
-rustPlatform.buildRustPackage rec {
+let
+  pinData = (builtins.fromJSON (builtins.readFile ./pin.json));
+
+in rustPlatform.buildRustPackage rec {
   pname = "seshat-node";
-  version = "2.3.0";
+  inherit (pinData) version;
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "seshat";
     rev = version;
-    sha256 = "0zigrz59mhih9asmbbh38z2fg0sii2342q6q0500qil2a0rssai7";
+    sha256 = pinData.srcHash;
   };
 
   sourceRoot = "source/seshat-node/native";
@@ -18,7 +21,10 @@ rustPlatform.buildRustPackage rec {
 
   npm_config_nodedir = nodejs-14_x;
 
-  yarnOfflineCache = (callPackage ./yarn.nix {}).offline_cache;
+  yarnOfflineCache = fetchYarnDeps {
+    yarnLock = src + "/seshat-node/yarn.lock";
+    sha256 = pinData.yarnHash;
+  };
 
   buildPhase = ''
     cd ..
@@ -42,5 +48,5 @@ rustPlatform.buildRustPackage rec {
     cp -r . $out
   '';
 
-  cargoSha256 = "0habjf85mzqxwf8k15msm4cavd7ldq4zpxddkwd4inl2lkvlffqj";
+  cargoSha256 = pinData.cargoHash;
 }
