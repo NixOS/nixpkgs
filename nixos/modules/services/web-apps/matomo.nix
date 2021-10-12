@@ -171,6 +171,19 @@ in {
         fi
         chown -R ${user}:${user} ${dataDir}
         chmod -R ug+rwX,o-rwx ${dataDir}
+
+        if [ -e ${dataDir}/current-package ]; then
+          CURRENT_PACKAGE=$(readlink ${dataDir}/current-package)
+          NEW_PACKAGE=${cfg.package}
+          if [ "$CURRENT_PACKAGE" != "$NEW_PACKAGE" ]; then
+            # keeping tmp arround between upgrades seems to bork stuff, so delete it
+            rm -rf ${dataDir}/tmp
+          fi
+        elif [ -e ${dataDir}/tmp ]; then
+          # upgrade from 4.4.1
+          rm -rf ${dataDir}/tmp
+        fi
+        ln -sfT ${cfg.package} ${dataDir}/current-package
         '';
       script = ''
             # Use User-Private Group scheme to protect Matomo data, but allow administration / backup via 'matomo' group
