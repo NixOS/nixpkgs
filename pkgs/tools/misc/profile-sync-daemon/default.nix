@@ -23,8 +23,6 @@ stdenv.mkDerivation rec {
       --replace "sudo " "/run/wrappers/bin/sudo "
   '';
 
-  preferLocalBuild = true;
-
   meta = with lib; {
     description = "Syncs browser profile dirs to RAM";
     longDescription = ''
