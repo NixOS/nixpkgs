@@ -18,6 +18,7 @@
 buildPythonPackage rec {
   pname = "cloudsplaining";
   version = "0.4.5";
+
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
@@ -44,7 +45,19 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "cloudsplaining" ];
+  postPatch = ''
+    # Ignore pinned versions
+    sed -i "s/'\(.*\)\(==\|>=\).*'/'\1'/g" requirements.txt
+  '';
+
+  disabledTests = [
+    "test_policy_expansion"
+    "test_statement_details_for_allow_not_action"
+  ];
+
+  pythonImportsCheck = [
+    "cloudsplaining"
+  ];
 
   meta = with lib; {
     description = "Python module for AWS IAM security assessment";
