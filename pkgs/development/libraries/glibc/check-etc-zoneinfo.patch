@@ -1,0 +1,30 @@
+diff --git a/time/tzfile.c b/time/tzfile.c
+index 040a5e34..9533f66f 100644
+--- a/time/tzfile.c
++++ b/time/tzfile.c
+@@ -16,6 +16,7 @@
+    <https://www.gnu.org/licenses/>.  */
+ 
+ #include <assert.h>
++#include <errno.h>
+ #include <limits.h>
+ #include <stdio.h>
+ #include <stdio_ext.h>
+@@ -146,6 +147,17 @@ __tzfile_read (const char *file, size_t extra, char **extrap)
+ 	tzdir = default_tzdir;
+       if (__asprintf (&new, "%s/%s", tzdir, file) == -1)
+ 	goto ret_free_transitions;
++
++      // nixos specific adjustment - also check /etc/zoneinfo, but only when tzdir
++      // equals TZDIR (the default). In all other cases the user has asked
++      // for some other path and we can't default to /etc/zoneinfo.
++      if (memcmp (tzdir, TZDIR, sizeof TZDIR) == 0) {
++        struct stat64 st;
++        if (__stat64 (new, &st) == ENOENT) {
++          if (__asprintf (&new, "/etc/zoneinfo/%s", file) == -1)
++            goto ret_free_transitions;
++        }
++      }
+       file = new;
+     }
+ 

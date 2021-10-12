@@ -72,6 +72,9 @@ stdenv.mkDerivation ({
       /* Allow NixOS and Nix to handle the locale-archive. */
       ./nix-locale-archive.patch
 
+      /* Check /etc/zoneinfo, see https://github.com/NixOS/nixpkgs/issues/105049 */
+      ./check-etc-zoneinfo.patch
+
       /* Don't use /etc/ld.so.cache, for non-NixOS systems.  */
       ./dont-use-system-ld-so-cache.patch
 
