@@ -3,6 +3,7 @@
 , cffi
 , coloredlogs
 , fetchFromGitHub
+, fetchpatch
 , ghostscript
 , img2pdf
 , importlib-resources
@@ -54,6 +55,12 @@ buildPythonPackage rec {
       pngquant = "${lib.getBin pngquant}/bin/pngquant";
       tesseract = "${lib.getBin tesseract4}/bin/tesseract";
       unpaper = "${lib.getBin unpaper}/bin/unpaper";
+    })
+    # Fix support with pybind11 2.8.0
+    # https://github.com/jbarlow83/OCRmyPDF/issues/843
+    (fetchpatch {
+      url = "https://github.com/jbarlow83/OCRmyPDF/commit/690f88119d3ec24b17ddd14bb44832954a452e48.patch";
+      sha256 = "02z3jz85nmv1iilcp62hm5pyfgp6936ds67p1fhw49i8955q8pby";
     })
   ];
 
