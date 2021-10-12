@@ -1,10 +1,9 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, python3
 }:
 
-python3.pkgs.buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "slugid";
   version = "2.0.0";
 
@@ -15,7 +14,7 @@ python3.pkgs.buildPythonPackage rec {
     sha256 = "McBxGRi8KqVhe2Xez5k4G67R5wBCCoh41dRsTKW4xMA=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [ tox twine ];
+  propagatedBuildInputs = [ tox twine ];
 
   meta = with lib; {
     description = "Compress UUIDs. a URL-safe base64 UUID encoder for generating 22 character slugs";
