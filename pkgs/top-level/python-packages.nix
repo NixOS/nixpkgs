@@ -7794,6 +7794,8 @@ in {
 
   qtpy = callPackage ../development/python-modules/qtpy { };
 
+  qualysclient = callPackage ../development/python-modules/qualysclient { };
+
   quamash = callPackage ../development/python-modules/quamash { };
 
   quandl = callPackage ../development/python-modules/quandl { };
