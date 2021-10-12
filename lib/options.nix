@@ -217,6 +217,10 @@ rec {
   */
   literalExample = text: { _type = "literalExample"; inherit text; };
 
+  # Compatibility shims for https://github.com/NixOS/nixpkgs/pull/136909
+  literalExpression = literalExample;
+  literalDocBook = literalExample;
+
   # Helper functions.
 
   /* Convert an option, described as a list of the option parts in to a
