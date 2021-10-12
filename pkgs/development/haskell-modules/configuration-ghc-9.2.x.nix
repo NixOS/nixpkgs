@@ -67,6 +67,11 @@ self: super: {
     postPatch = "sed -i -e 's,<4.16,<4.17,' basement.cabal";
   });
 
+  base16-bytestring = appendPatch super.base16-bytestring (pkgs.fetchpatch {
+    url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/dfd024c9a336c752288ec35879017a43bd7e85a0/patches/base16-bytestring-1.0.1.0.patch";
+    sha256 = "19ajai9y04981zfpcdj1nlz44b12gjj4m1ncciijv43mnz82plji";
+  });
+
   # Duplicate Show instances in tests and library cause compiling tests to fail
   blaze-builder = appendPatch (dontCheck super.blaze-builder) (pkgs.fetchpatch {
     url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/dfd024c9a336c752288ec35879017a43bd7e85a0/patches/blaze-builder-0.4.2.1.patch";
@@ -91,9 +96,9 @@ self: super: {
     sha256 = "1g48lrmqgd88hqvfq3klz7lsrpwrir2v1931myrhh6dy0d9pqj09";
   });
 
-  # cabal-install needs more recent versions of Cabal and base16-bytestring.
+  # cabal-install needs more recent versions of Cabal
   cabal-install = (doJailbreak super.cabal-install).overrideScope (self: super: {
-    Cabal = null;
+    Cabal = self.Cabal_3_6_2_0;
   });
 
   doctest = appendPatch (dontCheck (doJailbreak super.doctest_0_18_1)) (pkgs.fetchpatch {
