@@ -33242,6 +33242,8 @@ with pkgs;
 
   xcfun = callPackage ../development/libraries/science/chemistry/xcfun { };
 
+  zesarux = callPackage ../misc/emulators/zesarux { };
+
   zthrottle = callPackage ../tools/misc/zthrottle { };
 
   zktree = callPackage ../applications/misc/zktree {};
