@@ -859,7 +859,7 @@
     "tankerkoenig" = ps: with ps; [ pytankerkoenig ];
     "tapsaff" = ps: with ps; [ ]; # missing inputs: tapsaff
     "tasmota" = ps: with ps; [ aiohttp-cors hatasmota paho-mqtt ];
-    "tautulli" = ps: with ps; [ ]; # missing inputs: pytautulli
+    "tautulli" = ps: with ps; [ pytautulli ];
     "tcp" = ps: with ps; [ ];
     "ted5000" = ps: with ps; [ xmltodict ];
     "telegram" = ps: with ps; [ pysocks aiohttp-cors python-telegram-bot ];
