@@ -10140,6 +10140,12 @@
     githubId = 307899;
     name = "Gurkan Gur";
   };
+  sersorrel = {
+    email = "ash@sorrel.sh";
+    github = "sersorrel";
+    githubId = 9433472;
+    name = "ash";
+  };
   servalcatty = {
     email = "servalcat@pm.me";
     github = "servalcatty";

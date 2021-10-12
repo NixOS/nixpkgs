@@ -15,6 +15,7 @@
 , libnotify
 , gnutls
 , libgcrypt
+, libgpg-error
 , gtk3
 , wayland
 , libwebp
@@ -41,6 +42,7 @@
 , libGLU
 , mesa
 , libintl
+, lcms2
 , libmanette
 , openjpeg
 , enableGeoLocation ? true
@@ -63,7 +65,7 @@ assert enableGeoLocation -> geoclue2 != null;
 
 stdenv.mkDerivation rec {
   pname = "webkitgtk";
-  version = "2.32.4";
+  version = "2.34.0";
 
   outputs = [ "out" "dev" ];
 
@@ -71,7 +73,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://webkitgtk.org/releases/${pname}-${version}.tar.xz";
-    sha256 = "1zfkfyhm4i7901pp32wcwcfxax69qgq5k44x0glwaywdg4zjvkh0";
+    sha256 = "sha256-iAyO5ib2cBn2dVfKCeWaI+zyReYPYXMhXxqII8sJrzQ=";
   };
 
   patches = lib.optionals stdenv.isLinux [
@@ -140,8 +142,10 @@ stdenv.mkDerivation rec {
     libGLU
     mesa # for libEGL headers
     libgcrypt
+    libgpg-error
     libidn
     libintl
+    lcms2
   ] ++ lib.optionals stdenv.isLinux [
     libmanette
   ] ++ [
@@ -193,6 +197,7 @@ stdenv.mkDerivation rec {
     "-DPORT=GTK"
     "-DUSE_LIBHYPHEN=OFF"
     "-DUSE_WPE_RENDERER=OFF"
+    "-DUSE_SOUP2=${if lib.versions.major libsoup.version == "2" then "ON" else "OFF"}"
   ] ++ lib.optionals stdenv.isDarwin [
     "-DENABLE_GAMEPAD=OFF"
     "-DENABLE_GTKDOC=OFF"

@@ -6688,6 +6688,8 @@ with pkgs;
     autoreconfHook = buildPackages.autoreconfHook269;
   };
 
+  libshumate = callPackage ../development/libraries/libshumate { };
+
   libsmartcols = callPackage ../development/libraries/libsmartcols { };
 
   libsmi = callPackage ../development/libraries/libsmi { };
@@ -8451,7 +8453,10 @@ with pkgs;
 
   podiff = callPackage ../tools/text/podiff { };
 
-  podman = callPackage ../applications/virtualization/podman/wrapper.nix { };
+  podman = if stdenv.isDarwin then
+    callPackage ../applications/virtualization/podman { }
+  else
+    callPackage ../applications/virtualization/podman/wrapper.nix { };
   podman-unwrapped = callPackage ../applications/virtualization/podman { };
 
   podman-compose = python3Packages.callPackage ../applications/virtualization/podman-compose {};
@@ -12851,6 +12856,7 @@ with pkgs;
     vala_0_48
     vala_0_50
     vala_0_52
+    vala_0_54
     vala;
 
   vyper = with python3Packages; toPythonApplication vyper;
@@ -16385,6 +16391,8 @@ with pkgs;
 
   atkmm = callPackage ../development/libraries/atkmm { };
 
+  atkmm_2_36 = callPackage ../development/libraries/atkmm/2.36.nix { };
+
   pixman = callPackage ../development/libraries/pixman { };
 
   cairo = callPackage ../development/libraries/cairo { };
@@ -17861,6 +17869,8 @@ with pkgs;
 
   libsoup = callPackage ../development/libraries/libsoup { };
 
+  libsoup_3 = callPackage ../development/libraries/libsoup/3.x.nix { };
+
   libspectrum = callPackage ../development/libraries/libspectrum { };
 
   libspiro = callPackage ../development/libraries/libspiro {};
@@ -18470,6 +18480,7 @@ with pkgs;
 
   nv-codec-headers = callPackage ../development/libraries/nv-codec-headers { };
   nv-codec-headers-10 = callPackage ../development/libraries/nv-codec-headers/10_x.nix { };
+  nv-codec-headers-11 = callPackage ../development/libraries/nv-codec-headers/11_x.nix { };
 
   mkNvidiaContainerPkg = { name, containerRuntimePath, configTemplate, additionalPaths ? [] }:
     let
@@ -19700,6 +19711,10 @@ with pkgs;
     harfbuzz = harfbuzzFull;
     inherit (gst_all_1) gst-plugins-base gst-plugins-bad;
     inherit (darwin) apple_sdk;
+  };
+
+  webkitgtk_4_1 = webkitgtk.override {
+    libsoup = libsoup_3;
   };
 
   websocketpp = callPackage ../development/libraries/websocket++ { };
@@ -23593,6 +23608,8 @@ with pkgs;
 
   av-98 = callPackage ../applications/networking/browsers/av-98 { };
 
+  avizo = callPackage ../applications/misc/avizo { };
+
   avocode = callPackage ../applications/graphics/avocode {};
 
   azpainter = callPackage ../applications/graphics/azpainter { };
@@ -25282,6 +25299,8 @@ with pkgs;
 
   go-org = callPackage ../applications/misc/go-org { };
 
+  hushboard = python3.pkgs.callPackage ../applications/audio/hushboard { };
+
   hydrogen = qt5.callPackage ../applications/audio/hydrogen { };
   hydrogen_0 = callPackage ../applications/audio/hydrogen/0.nix { }; # Old stable, has GMKit.
 
@@ -25782,6 +25801,7 @@ with pkgs;
   krane = callPackage ../applications/networking/cluster/krane { };
 
   krita = libsForQt5.callPackage ../applications/graphics/krita { };
+  krita-beta = libsForQt5.callPackage ../applications/graphics/krita/beta.nix { };
 
   krusader = libsForQt5.callPackage ../applications/misc/krusader { };
 
@@ -28782,6 +28802,8 @@ with pkgs;
   xdg-dbus-proxy = callPackage ../development/libraries/xdg-dbus-proxy { };
 
   xdg-desktop-portal = callPackage ../development/libraries/xdg-desktop-portal { };
+
+  xdg-desktop-portal-gnome = callPackage ../development/libraries/xdg-desktop-portal-gnome { };
 
   xdg-desktop-portal-gtk = callPackage ../development/libraries/xdg-desktop-portal-gtk { };
 
