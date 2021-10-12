@@ -344,6 +344,14 @@
           controller support.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/cloudflare/cloudflared">cloudflared</link>,
+          the Cloudflare Argo Tunnel client, which allows exposing local
+          services over the Cloudflare network. Available as
+          <link linkend="opt-services.cloudflared.enable">services.cloudflared</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-incompatibilities">
