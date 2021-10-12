@@ -195,6 +195,7 @@ let
         catAttrs
         filterAttrs
         filterAttrsRecursive
+        filterAttrsRecursiveCond
         foldlAttrs
         foldAttrs
         collect
