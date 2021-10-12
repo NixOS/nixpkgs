@@ -312,7 +312,7 @@ in {
           "-h" (lib.concatStringsSep " " cfg.urlList)
         ]);
         StateDirectory = [ "openldap/slapd.d" ] ++ additionalStateDirectories;
-        StateDirectoryMode = "600";
+        StateDirectoryMode = "700";
         RuntimeDirectory = "openldap";
         AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
         CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
