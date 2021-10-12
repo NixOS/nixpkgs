@@ -513,6 +513,7 @@ let
     Rbowtie = with pkgs; [ zlib.dev ];
     gaston = with pkgs; [ zlib.dev ];
     csaw = with pkgs; [ zlib.dev curl ];
+    DirichletMultinomial = with pkgs; [ gsl ];
   };
 
   packagesRequiringX = [
