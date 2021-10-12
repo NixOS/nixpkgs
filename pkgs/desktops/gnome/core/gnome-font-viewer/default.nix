@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-font-viewer";
-  version = "40.0";
+  version = "41.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-font-viewer/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "0hpyi0sz3gcqqs9lkwyk8b6hr39m3n27432x98kxr436jj37dk6j";
+    sha256 = "XdQQMxvgcOTgNDl/J1SYDgc4UdUKIRny+/lq3G/i6HY=";
   };
 
   doCheck = true;

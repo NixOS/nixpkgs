@@ -81,6 +81,13 @@
           6</link> for more details.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          GNOME has been upgraded to 41. Please take a look at their
+          <link xlink:href="https://help.gnome.org/misc/release-notes/41.0/">Release
+          Notes</link> for details.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-new-services">
