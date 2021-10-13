@@ -290,7 +290,14 @@ in
   (prevStage: stageFun prevStage {
     name = "bootstrap-stage3";
 
-    overrides = self: super: rec {
+    overrides = self: super: let
+      wrapStage3 = pkg: (pkg.override {
+        stdenv = self.makeStaticLibraries self.stdenv;
+      }).overrideAttrs (oa: {
+        # Work around faulty stackprotector support in cross bootstrap tools
+        hardeningDisable = (oa.hardeningDisable or []) ++ [ "stackprotector" ];
+      });
+    in rec {
       inherit (prevStage)
         ccWrapperStdenv
         binutils coreutils gnugrep
@@ -299,10 +306,10 @@ in
       # Link GCC statically against GMP etc.  This makes sense because
       # these builds of the libraries are only used by GCC, so it
       # reduces the size of the stdenv closure.
-      gmp = super.gmp.override { stdenv = self.makeStaticLibraries self.stdenv; };
-      mpfr = super.mpfr.override { stdenv = self.makeStaticLibraries self.stdenv; };
-      libmpc = super.libmpc.override { stdenv = self.makeStaticLibraries self.stdenv; };
-      isl_0_20 = super.isl_0_20.override { stdenv = self.makeStaticLibraries self.stdenv; };
+      gmp = wrapStage3 super.gmp;
+      mpfr = wrapStage3 super.mpfr;
+      libmpc = wrapStage3 super.libmpc;
+      isl_0_20 = wrapStage3 super.isl_0_20;
       gcc-unwrapped = super.gcc-unwrapped.override {
         isl = isl_0_20;
         # Use a deterministically built compiler
