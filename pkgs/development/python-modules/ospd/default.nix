@@ -6,7 +6,6 @@
 , fetchFromGitHub
 , lxml
 , paramiko
-, poetry
 , psutil
 , pytestCheckHook
 , pythonOlder
@@ -14,8 +13,8 @@
 
 buildPythonPackage rec {
   pname = "ospd";
-  version = "21.4.3";
-  format = "pyproject";
+  version = "21.4.4";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7" || stdenv.isDarwin;
 
@@ -23,12 +22,8 @@ buildPythonPackage rec {
     owner = "greenbone";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1i4nfvxgxibqmqb6jwih951960sm2zy00i1wnjfnwb6za1xkpbkp";
+    sha256 = "sha256-dZgs+G2vJQIKnN9xHcNeNViG7mOIdKb+Ms2AKE+FC4M=";
   };
-
-  nativeBuildInputs = [
-    poetry
-  ];
 
   propagatedBuildInputs = [
     defusedxml
@@ -42,7 +37,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "ospd" ];
+  pythonImportsCheck = [
+    "ospd"
+  ];
 
   meta = with lib; {
     description = "Framework for vulnerability scanners which support OSP";
