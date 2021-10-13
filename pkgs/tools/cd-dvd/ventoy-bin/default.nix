@@ -1,7 +1,14 @@
 { lib, stdenv, fetchurl, fetchpatch
 , autoPatchelfHook, makeWrapper
 , hexdump, exfat, dosfstools, e2fsprogs, xz, util-linux, bash, parted
+, withGtk3 ? true, gtk3
+, withQt5 ? false, qt5
 }:
+
+assert withGtk3 -> gtk3 != null;
+assert withQt5 -> qt5 != null;
+
+with lib;
 
 let arch = {
   x86_64-linux = "x86_64";
@@ -9,16 +16,22 @@ let arch = {
   aarch64-linux = "aarch64";
   mipsel-linux = "mips64el";
 }.${stdenv.hostPlatform.system} or (throw "Unsupported platform ${stdenv.hostPlatform.system}");
+defaultGuiType = if withGtk3 then "gtk3"
+                 else if withQt5 then "qt5"
+                 else "";
 in stdenv.mkDerivation rec {
   pname = "ventoy-bin";
-  version = "1.0.51";
+  version = "1.0.54";
 
-  nativeBuildInputs = [ autoPatchelfHook makeWrapper ];
-  buildInputs = [ hexdump exfat dosfstools e2fsprogs xz util-linux bash parted ];
+  nativeBuildInputs = [ autoPatchelfHook makeWrapper ]
+  ++ optional withQt5 qt5.wrapQtAppsHook;
+  buildInputs = [ hexdump exfat dosfstools e2fsprogs xz util-linux bash parted ]
+  ++ optional withGtk3 gtk3
+  ++ optionals withQt5 [ qt5.qtbase ];
 
   src = fetchurl {
     url = "https://github.com/ventoy/Ventoy/releases/download/v${version}/ventoy-${version}-linux.tar.gz";
-    sha256 = "81ae02a06b132b5965dd09c9b64e000a6dafa1d57e03d8564feefda14ef1ee02";
+    sha256 = "8304e7833b53e94c3989c57fcf4de16feab3e92cf6947485c92ab5e5aad5aaba";
   };
   patches = [
     (fetchpatch {
@@ -53,12 +66,13 @@ in stdenv.mkDerivation rec {
 
     # Cleanup.
     case "$ARCH" in
-        x86_64) rm -r tool/{i386,aarch64,mips64el};;
-        i386) rm -r tool/{x86_64,aarch64,mips64el};;
-        aarch64) rm -r tool/{x86_64,i386,mips64el};;
-        mips64el) rm -r tool/{x86_64,i386,aarch64};;
+        x86_64) rm -r {tool/,VentoyGUI.}{i386,aarch64,mips64el};;
+        i386) rm -r {tool/,VentoyGUI.}{x86_64,aarch64,mips64el};;
+        aarch64) rm -r {tool/,VentoyGUI.}{x86_64,i386,mips64el};;
+        mips64el) rm -r {tool/,VentoyGUI.}{x86_64,i386,aarch64};;
     esac
     rm README
+    rm tool/"$ARCH"/Ventoy2Disk.gtk2
 
     # Copy from "$src" to "$out".
     mkdir -p "$out"/bin "$VENTOY_PATH"
@@ -72,9 +86,18 @@ in stdenv.mkDerivation rec {
                     --prefix PATH : "${lib.makeBinPath buildInputs}" \
                     --run "cd '$VENTOY_PATH' || exit 1"
     done
+  '' + optionalString (withGtk3 || withQt5) ''
+    echo "${defaultGuiType}" > "$VENTOY_PATH/ventoy_gui_type"
+    makeWrapper "$VENTOY_PATH/VentoyGUI.$ARCH" "$out/bin/ventoy-gui" \
+                --prefix PATH : "${lib.makeBinPath buildInputs}" \
+                --run "cd '$VENTOY_PATH' || exit 1"
+  '' + optionalString (!withGtk3) ''
+    rm "$out"/share/ventoy/tool/"$ARCH"/Ventoy2Disk.gtk3
+  '' + optionalString (!withQt5) ''
+    rm "$out"/share/ventoy/tool/"$ARCH"/Ventoy2Disk.qt5
   '';
 
-  meta = with lib; {
+  meta = {
     description = "An open source tool to create bootable USB drive for ISO/WIM/IMG/VHD(x)/EFI files";
     longDescription = ''
       An open source tool to create bootable USB drive for
