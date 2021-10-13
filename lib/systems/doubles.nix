@@ -29,6 +29,7 @@ let
     "armv7l-linux" "i686-linux" "m68k-linux" "mipsel-linux"
     "powerpc64-linux" "powerpc64le-linux" "riscv32-linux"
     "riscv64-linux" "s390-linux" "s390x-linux" "x86_64-linux"
+    "sparc64-linux"
 
     # MMIXware
     "mmix-mmixware"

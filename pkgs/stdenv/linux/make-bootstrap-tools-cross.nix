@@ -21,4 +21,5 @@ in lib.mapAttrs (n: make) (with lib.systems.examples; {
   powerpc64-musl = ppc64-musl;
   powerpc64le = powernv;
   powerpc64le-musl = musl-power;
+  sparc64 = sparc64;
 })
