@@ -151,6 +151,34 @@ import ./make-test-python.nix ({ pkgs, ...} : {
           systemd.timers.test-timer.timerConfig.OnCalendar = lib.mkForce "Fri 2012-11-23 16:00:00";
         };
 
+        # A system with a systemd mount
+        with-mount.configuration = {
+          systemd.mounts = [
+            {
+              description = "Testmount";
+              what = "tmpfs";
+              type = "tmpfs";
+              where = "/testmount";
+              options = "size=1M";
+              wantedBy = [ "local-fs.target" ];
+            }
+          ];
+        };
+
+        # The same system but with another time
+        with-mount-modified.configuration = {
+          systemd.mounts = [
+            {
+              description = "Testmount";
+              what = "tmpfs";
+              type = "tmpfs";
+              where = "/testmount";
+              options = "size=10M";
+              wantedBy = [ "local-fs.target" ];
+            }
+          ];
+        };
+
         # A system with a path unit
         with-path.configuration = {
           systemd.paths.test-watch = {
@@ -323,6 +351,22 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         assert_contains(out, "would reload the following units: simple-reload-service.service\n")
         assert_contains(out, "would restart the following units: simple-restart-service.service\n")
         assert_contains(out, "\nwould start the following units: simple-service.service")
+
+    with subtest("mounts"):
+        switch_to_specialisation("with-mount")
+        out = machine.succeed("mount | grep 'on /testmount'")
+        assert_contains(out, "size=1024k")
+
+        out = switch_to_specialisation("with-mount-modified")
+        assert_lacks(out, "stopping the following units:")
+        assert_contains(out, "reloading the following units: testmount.mount\n")
+        assert_lacks(out, "restarting the following units:")
+        assert_lacks(out, "\nstarting the following units:")
+        assert_lacks(out, "the following new units were started:")
+        assert_lacks(out, "as well:")
+        # It changed
+        out = machine.succeed("mount | grep 'on /testmount'")
+        assert_contains(out, "size=10240k")
 
     with subtest("timers"):
         switch_to_specialisation("with-timer")
