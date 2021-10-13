@@ -8219,6 +8219,8 @@ with pkgs;
 
   patchutils_0_3_3 = callPackage ../tools/text/patchutils/0.3.3.nix { };
 
+  patchutils_0_4_2 = callPackage ../tools/text/patchutils/0.4.2.nix { };
+
   parted = callPackage ../tools/misc/parted { };
 
   passh = callPackage ../tools/networking/passh { };

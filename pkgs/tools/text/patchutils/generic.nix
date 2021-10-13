@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, perl
-, version, sha256, patches ? []
+, version, sha256, patches ? [], extraBuildInputs ? []
 , ...
 }:
 stdenv.mkDerivation rec {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     inherit sha256;
   };
 
-  buildInputs = [ perl ];
+  buildInputs = [ perl ] ++ extraBuildInputs;
   hardeningDisable = [ "format" ];
 
   doCheck = false; # fails
