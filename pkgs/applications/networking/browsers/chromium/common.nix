@@ -6,7 +6,7 @@
 
 # Native build inputs:
 , ninja, pkg-config
-, python2, python3, perl
+, python3, perl
 , gnutar, which
 , llvmPackages
 # postPatch:
@@ -56,6 +56,10 @@ let
   python3WithPackages = python3.withPackages(ps: with ps; [
     ply jinja2 setuptools
   ]);
+  clangFormatPython3 = fetchurl {
+    url = "https://chromium.googlesource.com/chromium/tools/build/+/e77882e0dde52c2ccf33c5570929b75b4a2a2522/recipes/recipe_modules/chromium/resources/clang-format?format=TEXT";
+    sha256 = "0ic3hn65dimgfhakli1cyf9j3cxcqsf1qib706ihfhmlzxf7256l";
+  };
 
   # The additional attributes for creating derivations based on the chromium
   # source tree.
@@ -122,7 +126,7 @@ let
 
     nativeBuildInputs = [
       ninja pkg-config
-      python2 python3WithPackages perl
+      python3WithPackages perl
       gnutar which
       llvmPackages.bintools
     ];
@@ -208,6 +212,9 @@ let
 
       # Allow to put extensions into the system-path.
       sed -i -e 's,/usr,/run/current-system/sw,' chrome/common/chrome_paths.cc
+
+      # We need the fix for https://bugs.chromium.org/p/chromium/issues/detail?id=1254408:
+      base64 --decode ${clangFormatPython3} > buildtools/linux64/clang-format
 
       patchShebangs .
       # Link to our own Node.js and Java (required during the build):
