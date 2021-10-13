@@ -18,7 +18,7 @@ buildPythonPackage rec {
     name = "${pname}-${version}-source";
     extraPostFetch = ''
       cd $out
-      mv tests/testdata/unicode.dist/unicodedist/åäö_日本語.py \
+      mv tests/testdata/unicode.dist/unicodedist/åäö_日本語.py \
         tests/testdata/unicode.dist/unicodedist/æɐø_日本價.py
       patch -p1 < ${./0001-tests-Rename-a-a-o-_-.py-_-.py.patch}
     '';
