@@ -67,7 +67,7 @@ let
   filterDoubles = f: map parse.doubleFromSystem (lists.filter f allParsed);
 
 in {
-  inherit all;
+  inherit all filterDoubles;
 
   none = [];
 
@@ -76,7 +76,6 @@ in {
   x86           = filterDoubles predicates.isx86;
   i686          = filterDoubles predicates.isi686;
   x86_64        = filterDoubles predicates.isx86_64;
-  power         = filterDoubles predicates.isPower;
   mips          = filterDoubles predicates.isMips;
   mmix          = filterDoubles predicates.isMmix;
   riscv         = filterDoubles predicates.isRiscV;
