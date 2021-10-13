@@ -79,12 +79,11 @@ python3.pkgs.buildPythonApplication rec {
     gst-plugins-ugly
   ]);
 
-  propagatedBuildInputs = with python3.pkgs; [
+  pythonPath = with python3.pkgs; [
     pycairo
     dbus-python
     pygobject3
   ];
-
 
   postPatch = ''
     for f in meson_post_conf.py meson_post_install.py; do
