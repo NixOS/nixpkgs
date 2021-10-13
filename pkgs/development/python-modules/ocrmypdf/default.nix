@@ -3,9 +3,9 @@
 , cffi
 , coloredlogs
 , fetchFromGitHub
-, fetchpatch
 , ghostscript
 , img2pdf
+, importlib-metadata
 , importlib-resources
 , jbig2enc
 , leptonica
@@ -16,6 +16,7 @@
 , pngquant
 , pytest-xdist
 , pytestCheckHook
+, pythonOlder
 , reportlab
 , setuptools
 , setuptools-scm
@@ -29,7 +30,7 @@
 
 buildPythonPackage rec {
   pname = "ocrmypdf";
-  version = "12.6.0";
+  version = "12.7.0";
 
   src = fetchFromGitHub {
     owner = "jbarlow83";
@@ -41,7 +42,7 @@ buildPythonPackage rec {
     extraPostFetch = ''
       rm "$out/.git_archival.txt"
     '';
-    sha256 = "0zw7c6l9fkf128gxsbd7v4abazlxiygqys6627jpsjbmxg5jgp5w";
+    sha256 = "sha256-lpTuaZRrmFoKV1SAFoGpsYfPBkLB2+iB63fg3t9RC5o=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -56,12 +57,6 @@ buildPythonPackage rec {
       tesseract = "${lib.getBin tesseract4}/bin/tesseract";
       unpaper = "${lib.getBin unpaper}/bin/unpaper";
     })
-    # Fix support with pybind11 2.8.0
-    # https://github.com/jbarlow83/OCRmyPDF/issues/843
-    (fetchpatch {
-      url = "https://github.com/jbarlow83/OCRmyPDF/commit/690f88119d3ec24b17ddd14bb44832954a452e48.patch";
-      sha256 = "02z3jz85nmv1iilcp62hm5pyfgp6936ds67p1fhw49i8955q8pby";
-    })
   ];
 
   nativeBuildInputs = [
@@ -73,7 +68,6 @@ buildPythonPackage rec {
     cffi
     coloredlogs
     img2pdf
-    importlib-resources
     pdfminer
     pikepdf
     pillow
@@ -81,7 +75,11 @@ buildPythonPackage rec {
     reportlab
     setuptools
     tqdm
-  ];
+  ] ++ (lib.optionals (pythonOlder "3.8") [
+    importlib-metadata
+  ]) ++ (lib.optionals (pythonOlder "3.9") [
+    importlib-resources
+  ]);
 
   checkInputs = [
     pytest-xdist
