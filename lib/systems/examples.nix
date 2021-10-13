@@ -156,7 +156,7 @@ rec {
     config = "s390x-unknown-linux-gnu";
   };
 
-  sparc64 = {
+  sparc64-linux = {
     config = "sparc64-unknown-linux-gnu";
   };
 
