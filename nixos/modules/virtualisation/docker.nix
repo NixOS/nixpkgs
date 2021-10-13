@@ -8,7 +8,8 @@ let
 
   cfg = config.virtualisation.docker;
   proxy_env = config.networking.proxy.envVars;
-
+  daemonConfigJson = builtins.toJSON cfg.daemonConfig;
+  daemonConfigFile = pkgs.writeText "daemon.json" daemonConfigJson;
 in
 
 {
@@ -50,6 +51,20 @@ in
             <literal>--restart=always</literal> flag to work. If this option is
             disabled, docker might be started on demand by socket activation.
           '';
+      };
+
+    daemonConfig =
+      mkOption {
+        type = types.anything;
+        default = { };
+        example = {
+          ipv6 = true;
+          "fixed-cidr-v6" = "fd00::/80";
+        };
+        description = ''
+          Configuration for docker daemon. The attributes are serialized to JSON used as daemon.conf.
+          See https://docs.docker.com/engine/reference/commandline/dockerd/#daemon-configuration-file
+        '';
       };
 
     enableNvidia =
@@ -173,6 +188,7 @@ in
               ${cfg.package}/bin/dockerd \
                 --group=docker \
                 --host=fd:// \
+                --config-file=${daemonConfigFile} \
                 --log-driver=${cfg.logDriver} \
                 ${optionalString (cfg.storageDriver != null) "--storage-driver=${cfg.storageDriver}"} \
                 ${optionalString cfg.liveRestore "--live-restore" } \

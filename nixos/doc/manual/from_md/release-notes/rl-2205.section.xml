@@ -109,6 +109,14 @@
           <literal>writers.writePyPy2</literal> needs to be used.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          If you previously used
+          <literal>/etc/docker/daemon.json</literal>, you need to
+          incorporate the changes into the new option
+          <literal>virtualisation.docker.daemonConfig</literal>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.05-notable-changes">
