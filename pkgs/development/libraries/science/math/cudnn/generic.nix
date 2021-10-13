@@ -65,7 +65,7 @@ stdenv.mkDerivation {
   '';
 
   propagatedBuildInputs = [
-    cudatoolkit
+    (lib.getLib cudatoolkit)
   ];
 
   passthru = {
