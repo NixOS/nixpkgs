@@ -9520,6 +9520,8 @@ in {
 
   versioneer = callPackage ../development/python-modules/versioneer { };
 
+  versionfinder = callPackage ../development/python-modules/versionfinder { };
+
   versiontag = callPackage ../development/python-modules/versiontag { };
 
   versiontools = callPackage ../development/python-modules/versiontools { };
