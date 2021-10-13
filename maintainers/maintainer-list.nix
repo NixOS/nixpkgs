@@ -5467,6 +5467,12 @@
     githubId = 8735102;
     name = "John Ramsden";
   };
+  johnrichardrinehart = {
+    email = "johnrichardrinehart@gmail.com";
+    github = "johnrichardrinehart";
+    githubId = 6321578;
+    name = "John Rinehart";
+  };
   johntitor = {
     email = "huyuumi.dev@gmail.com";
     github = "JohnTitor";
