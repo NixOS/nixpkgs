@@ -82,6 +82,9 @@ in vscode-utils.buildVscodeMarketplaceExtension rec {
     cp -R --no-preserve=ownership ${languageServer}/* "$out/$installPrefix/languageServer.${languageServer.version}"
     chmod -R +wx "$out/$installPrefix/languageServer.${languageServer.version}"
 
+    patchelf "$out/$installPrefix/languageServer.${languageServer.version}/libcoreclrtraceptprovider.so" \
+      --replace-needed liblttng-ust.so.0 liblttng-ust.so
+
     patchPythonScript "$out/$installPrefix/pythonFiles/lib/python/isort/main.py"
   '';
 
