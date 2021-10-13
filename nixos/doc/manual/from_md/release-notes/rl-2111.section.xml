@@ -344,6 +344,13 @@
           controller support.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/opensvc/multipath-tools">multipath</link>,
+          the device mapper multipath (DM-MP) daemon. Available as
+          <link linkend="opt-services.multipath.enable">services.multipath</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-incompatibilities">

@@ -33,8 +33,13 @@ in {
     in {
       networking.firewall.allowedTCPPorts = [ 80 ];
 
+      systemd.tmpfiles.rules = [
+        "d /var/lib/nextcloud-data 0750 nextcloud nginx - -"
+      ];
+
       services.nextcloud = {
         enable = true;
+        datadir = "/var/lib/nextcloud-data";
         hostName = "nextcloud";
         config = {
           # Don't inherit adminuser since "root" is supposed to be the default
@@ -98,6 +103,7 @@ in {
         "${withRcloneEnv} ${copySharedFile}"
     )
     client.wait_for_unit("multi-user.target")
+    nextcloud.succeed("test -f /var/lib/nextcloud-data/data/root/files/test-shared-file")
     client.succeed(
         "${withRcloneEnv} ${diffSharedFile}"
     )
