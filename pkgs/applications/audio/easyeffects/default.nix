@@ -25,7 +25,7 @@
 , rnnoise
 , rubberband
 , speexdsp
-, wrapGAppsHook
+, wrapGAppsHook4
 , zam-plugins
 , zita-convolver
 }:
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     python3
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [
@@ -74,6 +74,8 @@ stdenv.mkDerivation rec {
   postPatch = ''
     chmod +x meson_post_install.py
     patchShebangs meson_post_install.py
+    # https://github.com/wwmm/easyeffects/pull/1205
+    substituteInPlace meson_post_install.py --replace "gtk-update-icon-cache" "gtk4-update-icon-cache"
   '';
 
   preFixup =
