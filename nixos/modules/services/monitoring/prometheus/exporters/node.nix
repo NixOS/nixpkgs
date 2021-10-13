@@ -37,6 +37,8 @@ in
       '';
       # The systemd collector needs AF_UNIX
       RestrictAddressFamilies = lib.optional (lib.any (x: x == "systemd") cfg.enabledCollectors) "AF_UNIX";
+      # The timex collector needs to access clock APIs
+      ProtectClock = lib.any (x: x == "timex") cfg.disabledCollectors;
     };
   };
 }
