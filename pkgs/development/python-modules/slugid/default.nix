@@ -15,9 +15,13 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ tox twine ];
-
+  pythonImportsCheck = [
+    "slugid"
+  ];
+  
+  doCheck = false; # has no tests
   meta = with lib; {
-    description = "Compress UUIDs. a URL-safe base64 UUID encoder for generating 22 character slugs";
+    description = "URL-safe base64 UUID encoder for generating 22 character slugs";
     homepage = "https://github.com/taskcluster/slugid.py";
     license = licenses.mpl20;
     maintainers = with maintainers; [ milahu ];
