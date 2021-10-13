@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, perl
+{ lib, stdenv, fetchurl, perl, makeWrapper
 , version, sha256, patches ? [], extraBuildInputs ? []
 , ...
 }:
@@ -11,8 +11,16 @@ stdenv.mkDerivation rec {
     inherit sha256;
   };
 
+  nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ perl ] ++ extraBuildInputs;
   hardeningDisable = [ "format" ];
+
+  postInstall = ''
+    for bin in $out/bin/{splitdiff,rediff,editdiff,dehtmldiff}; do
+      wrapProgram "$bin" \
+        --prefix PATH : "$out/bin"
+    done
+  '';
 
   doCheck = lib.versionAtLeast version "0.3.4";
 
@@ -21,7 +29,6 @@ stdenv.mkDerivation rec {
     chmod +x scripts/*
   '' + lib.optionalString (lib.versionOlder version "0.4.2") ''
     find tests -type f -name 'run-test' \
-      -exec echo "Patching {}" \; \
       -exec sed -i '{}' -e 's|/bin/echo|echo|g' \;
   '';
 
