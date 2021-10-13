@@ -2,13 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "yices";
-  version = "2.6.3";
+  # We never want X.Y.${odd} versions as they are moving development tags.
+  version = "2.6.2";
 
   src = fetchFromGitHub {
     owner  = "SRI-CSL";
     repo   = "yices2";
     rev    = "Yices-${version}";
-    sha256 = "01fi818lbkwilfcf1dz2dpxkcc1kh8ls0sl5aynyx9pwfn2v03zl";
+    sha256 = "1jx3854zxvfhxrdshbipxfgyq1yxb9ll9agjc2n0cj4vxkjyh9mn";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
@@ -25,12 +26,16 @@ stdenv.mkDerivation rec {
   # Usual shenanigans
   patchPhase = "patchShebangs tests/regress/check.sh";
 
-  # Includes a fix for the embedded soname being libyices.so.2.5, but
-  # only installing the libyices.so.2.5.x file.
+  # Includes a fix for the embedded soname being libyices.so.X.Y, but
+  # only installing the libyices.so.X.Y.Z file.
   installPhase = let
     ver_XdotY = lib.versions.majorMinor version;
   in ''
       make install LDCONFIG=true
+      # guard against packaging of unstable versions: they
+      # have a soname of hext (not current) release.
+      echo "Checking expected library version to be ${version}"
+      [ -f $out/lib/libyices.so.${version} ]
       ln -sfr $out/lib/libyices.so.{${version},${ver_XdotY}}
   '';
 
