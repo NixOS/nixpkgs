@@ -8,7 +8,16 @@ fixCmakeFiles() {
     find "$1" \( -type f -name "*.cmake" -o -name "*.cmake.in" -o -name CMakeLists.txt \) -print |
         while read fn; do
             sed -e 's^/usr\([ /]\|$\)^/var/empty\1^g' -e 's^/opt\([ /]\|$\)^/var/empty\1^g' < "$fn" > "$fn.tmp"
-            mv "$fn.tmp" "$fn"
+            if cmp -s "$fn.tmp" "$fn"; then
+                # Don't touch original file it it was unchanged.
+                # This way we preserve original timestamps that
+                # sometimes leak out to tarballs like in
+                # plasma5Packages.kirigami2 case.
+                rm "$fn.tmp"
+            else
+                echo "fixed '${fn}'"
+                mv "$fn.tmp" "$fn"
+            fi
         done
 }
 
