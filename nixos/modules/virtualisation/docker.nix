@@ -8,8 +8,8 @@ let
 
   cfg = config.virtualisation.docker;
   proxy_env = config.networking.proxy.envVars;
-  daemonSettingsJson = builtins.toJSON cfg.daemon.settings;
-  daemonSettingsFile = pkgs.writeText "daemon.json" daemonSettingsJson;
+  settingsFormat = pkgs.formats.json {};
+  daemonSettingsFile = settingsFormat.generate "daemon.json" cfg.daemon.settings;
 in
 
 {
@@ -55,7 +55,7 @@ in
 
     daemon.settings =
       mkOption {
-        type = types.anything;
+        type = settingsFormat.type;
         default = { };
         example = {
           ipv6 = true;
