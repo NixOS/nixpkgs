@@ -1,7 +1,7 @@
 # a simple derivation for nyzme, a wIDS for the raspberry pi
 
 
-{ stdenv, fetchurl, jre }:
+{ stdenv, lib, fetchurl, jre }:
 stdenv.mkDerivation rec {
     name = "nzyme-${version}";
     version = "1.1.1";
@@ -19,7 +19,8 @@ stdenv.mkDerivation rec {
 
     meta = {
         homepage = "https://www.nzyme.org/";
-        description = "The nzyme project uses WiFi adapters in monitor mode to scan the frequencies for suspicious behavior, specifically rogue access points and known WiFi attack platforms.";
+        description = "A program to detect attacks against wireless networks";
         license = stdenv.lib.licenses.sspl;
+        maintainers = with lib.maintainers; [ jakobu5 ];
     };
 }
