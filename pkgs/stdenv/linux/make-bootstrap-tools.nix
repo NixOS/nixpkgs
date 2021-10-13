@@ -1,9 +1,10 @@
 { localSystem ? { system = builtins.currentSystem; }
 , crossSystem ? null
+, nixpkgs ? import ../../..
+, pkgs ? import nixpkgs { inherit localSystem crossSystem; }
 }:
 
 let
-  pkgs = import ../../.. { inherit localSystem crossSystem; };
   libc = pkgs.stdenv.cc.libc;
 in with pkgs; rec {
 
