@@ -1,4 +1,4 @@
-{ lib, autoPatchelfHook, bzip2, cairo, coreutils, fetchurl, gdk-pixbuf, pango, gtk2, kcoreaddons, ki18n, kio, kservice
+{ lib, autoPatchelfHook, bzip2, cairo, coreutils, fetchurl, gdk-pixbuf, glibc, pango, gtk2, kcoreaddons, ki18n, kio, kservice
 , stdenv, runtimeShell, unzip
 }:
 
@@ -41,6 +41,7 @@ let
 
       substituteInPlace $out/bin/${pname} \
         --replace "/usr/lib/beyondcompare" "$out/lib/beyondcompare" \
+        --replace "ldd" "${glibc.out}/bin/ldd" \
         --replace "/bin/bash" "${runtimeShell}"
 
       # Create symlink bzip2 library
