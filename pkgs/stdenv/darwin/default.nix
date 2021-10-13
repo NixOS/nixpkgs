@@ -5,40 +5,13 @@
 , overlays
 , crossOverlays ? [ ]
 , bootstrapLlvmVersion ? if localSystem.isAarch64 then "11.1.0" else "7.1.0"
-  # Allow passing in bootstrap files directly so we can test the stdenv bootstrap process when changing the bootstrap tools
-, bootstrapFiles ? if localSystem.isAarch64 then
-    let
-      fetch = { file, sha256, executable ? true }: import <nix/fetchurl.nix> {
-        url = "http://tarballs.nixos.org/stdenv-darwin/aarch64/20acd4c4f14040485f40e55c0a76c186aa8ca4f3/${file}";
-        inherit (localSystem) system;
-        inherit sha256 executable;
-      }; in
-    {
-      sh = fetch { file = "sh"; sha256 = "17m3xrlbl99j3vm7rzz3ghb47094dyddrbvs2a6jalczvmx7spnj"; };
-      bzip2 = fetch { file = "bzip2"; sha256 = "1khs8s5klf76plhlvlc1ma838r8pc1qigk9f5bdycwgbn0nx240q"; };
-      mkdir = fetch { file = "mkdir"; sha256 = "1m9nk90paazl93v43myv2ay68c1arz39pqr7lk5ddbgb177hgg8a"; };
-      cpio = fetch { file = "cpio"; sha256 = "17pxq61yjjvyd738fy9f392hc9cfzkl612sdr9rxr3v0dgvm8y09"; };
-      tarball = fetch { file = "bootstrap-tools.cpio.bz2"; sha256 = "1v2332k33akm6mrm4bj749rxnnmc2pkbgcslmd0bbkf76bz2ildy"; executable = false; };
-    }
-  else
-    let
-      fetch = { file, sha256, executable ? true }: import <nix/fetchurl.nix> {
-        url = "http://tarballs.nixos.org/stdenv-darwin/x86_64/05ef940b94fe76e7ac06ea45a625adc8e4be96f9/${file}";
-        inherit (localSystem) system;
-        inherit sha256 executable;
-      }; in
-    {
-      sh = fetch { file = "sh"; sha256 = "sha256-igMAVEfumFv/LUNTGfNi2nSehgTNIP4Sg+f3L7u6SMA="; };
-      bzip2 = fetch { file = "bzip2"; sha256 = "sha256-K3rhkJZipudT1Jgh+l41Y/fNsMkrPtiAsNRDha/lpZI="; };
-      mkdir = fetch { file = "mkdir"; sha256 = "sha256-VddFELwLDJGNADKB1fWwWPBtIAlEUgJv2hXRmC4NEeM="; };
-      cpio = fetch { file = "cpio"; sha256 = "sha256-SWkwvLaFyV44kLKL2nx720SvcL4ej/p2V/bX3uqAGO0="; };
-      tarball = fetch { file = "bootstrap-tools.cpio.bz2"; sha256 = "sha256-b65dXbIm6o6s6U8tAiGpR6SMfvfn/VFcZgTHBetJZis="; executable = false; };
-    }
+, seeds ? import ../seeds.nix
 }:
 
 assert crossSystem == localSystem;
 
 let
+  bootstrapFiles = if localSystem.isAarch64 then seeds.darwin.aarch64 else seeds.darwin.x86_64;
   inherit (localSystem) system;
 
   useAppleSDKLibs = localSystem.isAarch64;

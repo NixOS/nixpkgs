@@ -5,24 +5,13 @@
 # ensuring purity of components produced by it.
 { lib
 , localSystem, crossSystem, config, overlays, crossOverlays ? []
+, seeds ? import ../seeds.nix
+}:
 
-, bootstrapFiles ?
-  let table = {
-    glibc = {
-      i686-linux = import ./bootstrap-files/i686.nix;
-      x86_64-linux = import ./bootstrap-files/x86_64.nix;
-      armv5tel-linux = import ./bootstrap-files/armv5tel.nix;
-      armv6l-linux = import ./bootstrap-files/armv6l.nix;
-      armv7l-linux = import ./bootstrap-files/armv7l.nix;
-      aarch64-linux = import ./bootstrap-files/aarch64.nix;
-      mipsel-linux = import ./bootstrap-files/loongson2f.nix;
-    };
-    musl = {
-      aarch64-linux = import ./bootstrap-files/aarch64-musl.nix;
-      armv6l-linux  = import ./bootstrap-files/armv6l-musl.nix;
-      x86_64-linux  = import ./bootstrap-files/x86_64-musl.nix;
-    };
-  };
+assert crossSystem == localSystem;
+
+let
+  inherit (localSystem) system;
 
   # Try to find an architecture compatible with our current system. We
   # just try every bootstrap we’ve got and test to see if it is
@@ -32,17 +21,10 @@
     else if localSystem.isCompatible (lib.systems.elaborate { inherit system; }) then archLookupTable.${system}
     else null) null (lib.attrNames archLookupTable);
 
-  archLookupTable = table.${localSystem.libc}
+  archLookupTable = seeds.linux.${localSystem.libc}
     or (abort "unsupported libc for the pure Linux stdenv");
-  files = archLookupTable.${localSystem.system} or (if getCompatibleTools != null then getCompatibleTools
+  bootstrapFiles = archLookupTable.${system} or (if getCompatibleTools != null then getCompatibleTools
     else (abort "unsupported platform for the pure Linux stdenv"));
-  in files
-}:
-
-assert crossSystem == localSystem;
-
-let
-  inherit (localSystem) system;
 
   commonPreHook =
     ''

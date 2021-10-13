@@ -72,6 +72,8 @@ in
 
 , crossOverlays ? []
 
+, seeds ? import ../stdenv/seeds.nix
+
 , ...
 } @ args:
 
