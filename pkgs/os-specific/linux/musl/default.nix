@@ -148,7 +148,7 @@ stdenv.mkDerivation rec {
     changelog   = "https://git.musl-libc.org/cgit/musl/tree/WHATSNEW?h=v${version}";
     license     = licenses.mit;
     # See https://wiki.musl-libc.org/supported-platforms.html
-    platforms   = with platforms; x86 ++ arm ++ aarch64 ++ mips ++ powerpc ++ or1k ++ s390 ++ riscv;
+    platforms   = with platforms; x86 ++ arm ++ aarch64 ++ mips ++ power ++ or1k ++ s390 ++ riscv;
     maintainers = with maintainers; [ thoughtpolice dtzWill ];
   };
 }
