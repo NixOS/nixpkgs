@@ -1,5 +1,5 @@
 { lib, fetchFromGitHub, python3Packages, file, less, highlight
-, imagePreviewSupport ? true, w3m }:
+, imagePreviewSupport ? true, w3m, wl-clipboard, xclip }:
 
 python3Packages.buildPythonApplication rec {
   pname = "ranger";
@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication rec {
   LC_ALL = "en_US.UTF-8";
 
   checkInputs = with python3Packages; [ pytestCheckHook ];
-  propagatedBuildInputs = [ file ]
+  propagatedBuildInputs = [ file xclip wl-clipboard ]
     ++ lib.optionals (imagePreviewSupport) [ python3Packages.pillow ];
 
   preConfigure = ''
@@ -40,7 +40,7 @@ python3Packages.buildPythonApplication rec {
       --replace "set preview_images false" "set preview_images true"
   '';
 
-  meta =  with lib; {
+  meta = with lib; {
     description = "File manager with minimalistic curses interface";
     homepage = "https://ranger.github.io/";
     license = licenses.gpl3Only;
