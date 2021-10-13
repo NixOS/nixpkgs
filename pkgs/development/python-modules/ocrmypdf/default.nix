@@ -28,7 +28,7 @@
 
 buildPythonPackage rec {
   pname = "ocrmypdf";
-  version = "12.6.0";
+  version = "12.7.0";
 
   src = fetchFromGitHub {
     owner = "jbarlow83";
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     extraPostFetch = ''
       rm "$out/.git_archival.txt"
     '';
-    sha256 = "0zw7c6l9fkf128gxsbd7v4abazlxiygqys6627jpsjbmxg5jgp5w";
+    sha256 = "sha256-lpTuaZRrmFoKV1SAFoGpsYfPBkLB2+iB63fg3t9RC5o=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
