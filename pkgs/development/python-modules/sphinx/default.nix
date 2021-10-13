@@ -39,7 +39,7 @@ buildPythonPackage rec {
     sha256 = "129x3kljxq7sbg5cc12z3cmjsili6l3qrsxllkx97id1a85f7zmj";
     extraPostFetch = ''
       cd $out
-      mv tests/roots/test-images/testimäge.png \
+      mv tests/roots/test-images/testimäge.png \
         tests/roots/test-images/testimæge.png
       patch -p1 < ${./0001-test-images-Use-normalization-equivalent-character.patch}
     '';
