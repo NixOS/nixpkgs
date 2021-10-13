@@ -151,13 +151,11 @@ stdenv.mkDerivation rec {
     in
     (lib.optionalString enableFIPS (''
       for libname in freebl3 nssdbm3 softokn3
-      do '' +
+      do libfile="$out/lib/lib$libname${stdenv.hostPlatform.extensions.sharedLibrary}"'' +
     (if stdenv.isDarwin
     then ''
-      libfile="$out/lib/lib$libname.dylib"
       DYLD_LIBRARY_PATH=$out/lib:${nspr.out}/lib \
     '' else ''
-      libfile="$out/lib/lib$libname.so"
       LD_LIBRARY_PATH=$out/lib:${nspr.out}/lib \
     '') + ''
           ${nss}/bin/shlibsign -v -i "$libfile"
