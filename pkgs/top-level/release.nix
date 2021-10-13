@@ -164,15 +164,15 @@ let
         };
 
       stdenvBootstrapTools = with lib;
-        genAttrs systemsWithAnySupport
-          (system: {
-            inherit
-              (import ../stdenv/linux/scratch {
-                from = "x86_64-linux";
-                to = system;
-              })
-              dist test;
-          })
+        genAttrs supportedSystems
+          (from: genAttrs systemsWithAnySupport
+            (to: {
+              inherit
+                (import ../stdenv/linux/scratch {
+                  inherit from to;
+                })
+                dist test;
+            }))
         # darwin is special in this
         // optionalAttrs supportDarwin {
           x86_64-darwin =
