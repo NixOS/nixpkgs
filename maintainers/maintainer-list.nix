@@ -9252,6 +9252,12 @@
     githubId = 165283;
     name = "Alexey Kutepov";
   };
+  rgnns = {
+    email = "gl@gabriellievano.com";
+    github = "rgnns";
+    githubId = 811827;
+    name = "Gabriel Lievano";
+  };
   rgrunbla = {
     email = "remy@grunblatt.org";
     github = "rgrunbla";
