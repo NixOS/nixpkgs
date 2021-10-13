@@ -6,23 +6,25 @@
 { lib
 , localSystem, crossSystem, config, overlays, crossOverlays ? []
 
-, bootstrapFiles ?
-  let table = {
-    glibc = {
-      i686-linux = import ./bootstrap-files/i686.nix;
-      x86_64-linux = import ./bootstrap-files/x86_64.nix;
-      armv5tel-linux = import ./bootstrap-files/armv5tel.nix;
-      armv6l-linux = import ./bootstrap-files/armv6l.nix;
-      armv7l-linux = import ./bootstrap-files/armv7l.nix;
-      aarch64-linux = import ./bootstrap-files/aarch64.nix;
-      mipsel-linux = import ./bootstrap-files/loongson2f.nix;
+, bootstrapFiles ? let
+    table = {
+      glibc = {
+        i686-linux = import ./bootstrap-files/i686.nix;
+        x86_64-linux = import ./bootstrap-files/x86_64.nix;
+        armv5tel-linux = import ./bootstrap-files/armv5tel.nix;
+        armv6l-linux = import ./bootstrap-files/armv6l.nix;
+        armv7l-linux = import ./bootstrap-files/armv7l.nix;
+        aarch64-linux = import ./bootstrap-files/aarch64.nix;
+        mipsel-linux = import ./bootstrap-files/loongson2f.nix;
+        powerpc64le-linux = import ./bootstrap-files/powerpc64le.nix;
+        sparc64-linux = import ./bootstrap-files/sparc64.nix;
+      };
+      musl = {
+        aarch64-linux = import ./bootstrap-files/aarch64-musl.nix;
+        armv6l-linux = import ./bootstrap-files/armv6l-musl.nix;
+        x86_64-linux = import ./bootstrap-files/x86_64-musl.nix;
+      };
     };
-    musl = {
-      aarch64-linux = import ./bootstrap-files/aarch64-musl.nix;
-      armv6l-linux  = import ./bootstrap-files/armv6l-musl.nix;
-      x86_64-linux  = import ./bootstrap-files/x86_64-musl.nix;
-    };
-  };
 
   # Try to find an architecture compatible with our current system. We
   # just try every bootstrap we’ve got and test to see if it is

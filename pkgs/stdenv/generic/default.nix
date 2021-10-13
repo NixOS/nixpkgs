@@ -69,14 +69,13 @@ let
       ../../build-support/setup-hooks/audit-tmpdir.sh
       ../../build-support/setup-hooks/move-systemd-user-units.sh
     ]
+    ++ lib.optional hasCC cc
     ++ [
       ../../build-support/setup-hooks/multiple-outputs.sh
       ../../build-support/setup-hooks/move-sbin.sh
       ../../build-support/setup-hooks/move-lib64.sh
       ../../build-support/setup-hooks/set-source-date-epoch-to-latest.sh
       ../../build-support/setup-hooks/reproducible-builds.sh
-      # TODO use lib.optional instead
-      (if hasCC then cc else null)
     ];
 
   defaultBuildInputs = extraBuildInputs;
