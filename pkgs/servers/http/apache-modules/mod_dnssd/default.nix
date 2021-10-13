@@ -28,6 +28,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  preFixup = ''
+    # TODO: Packages in non-standard directories not stripped.
+    # https://github.com/NixOS/nixpkgs/issues/141554
+    stripDebugList=modules
+  '';
+
   meta = with lib; {
     homepage = "http://0pointer.de/lennart/projects/mod_dnssd";
     description = "Provide Zeroconf support via DNS-SD using Avahi";
