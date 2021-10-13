@@ -82,7 +82,31 @@ let
           type = types.package;
           default = pkgs.wordpress;
           defaultText = literalExpression "pkgs.wordpress";
-          description = lib.mdDoc "Which WordPress package to use.";
+          example = literalExpression "pkgs.wordpress.override { wpPlugins = []; wpThemes = [ pkgs.wordpressPackages.themes.twentytwentyone ]; }";
+          description = ''
+            Which WordPress package to use.
+
+            <note>
+              <para>
+                The plugins and themes need to be packaged before use.
+                In a preferably separate directory do e.g.:
+                <programlisting language="nix">
+                WP_VERSION=5.8 WORKERS=1 wp4nix -t tt1-blocks -p gutenberg,wordpress-seo
+                </programlisting>
+                Then you can use them with
+                <programlisting language="nix">
+                  let themes-and-plugins = (pkgs.callPackage "''${nixpkgs}/pkgs/servers/web-apps/wordpress/themes-and-plugins" {
+                    plugins = lib.importJSON ./plugins.json;
+                    themes = lib.importJSON ./themes.json;
+                    languages = lib.importJSON ./languages.json;
+                    pluginLanguages = lib.importJSON ./pluginLanguages.json;
+                    themeLanguages = lib.importJSON ./themeLanguages.json;
+                  }); in pkgs.wordpress.override { wpPlugins = [ themes-and-plugins.plugins.gutenberg ]; wpThemes = [ themes-and-plugins.themes.twentytwentyone ]; }
+                </programlisting>
+                or similar.
+              </para>
+            </note>
+          '';
         };
 
         uploadsDir = mkOption {
@@ -99,25 +123,34 @@ let
           default = [];
           description = ''
             List of path(s) to respective plugin(s) which are copied from the 'plugins' directory.
-            <note><para>These plugins need to be packaged before use, see example.</para></note>
-          '';
-          example = literalExpression ''
-            let
-              # Wordpress plugin 'embed-pdf-viewer' installation example
-              embedPdfViewerPlugin = pkgs.stdenv.mkDerivation {
-                name = "embed-pdf-viewer-plugin";
-                # Download the theme from the wordpress site
-                src = pkgs.fetchurl {
-                  url = "https://downloads.wordpress.org/plugin/embed-pdf-viewer.2.0.3.zip";
-                  sha256 = "1rhba5h5fjlhy8p05zf0p14c9iagfh96y91r36ni0rmk6y891lyd";
-                };
-                # We need unzip to build this package
-                nativeBuildInputs = [ pkgs.unzip ];
-                # Installing simply means copying all files to the output directory
-                installPhase = "mkdir -p $out; cp -R * $out/";
-              };
-            # And then pass this theme to the themes list like this:
-            in [ embedPdfViewerPlugin ]
+
+            <warning>
+              <para>
+                This option is deprecated because it puts the version of the plugin in the directory name and this may break the configuration on updates.
+                Use <code>package = pkgs.wordpress.override { wpPlugins = [ ... ]; };</code> instead but keep in mind that you may need to migrate the configuration manually.
+              </para>
+            </warning>
+
+            <note>
+              <para>
+                These plugins need to be packaged before use.
+                In a preferably separate directory do e.g.:
+                <programlisting language="nix">
+                WP_VERSION=5.8 WORKERS=1 wp4nix -t tt1-blocks -p gutenberg,wordpress-seo
+                </programlisting>
+                Then you can use the plugins with
+                <programlisting language="nix">
+                  (pkgs.callPackage "''${nixpkgs}/pkgs/servers/web-apps/wordpress/themes-and-plugins" {
+                    plugins = lib.importJSON ./plugins.json;
+                    themes = lib.importJSON ./themes.json;
+                    languages = lib.importJSON ./languages.json;
+                    pluginLanguages = lib.importJSON ./pluginLanguages.json;
+                    themeLanguages = lib.importJSON ./themeLanguages.json;
+                  }).plugins.gutenberg
+                </programlisting>
+                or similar.
+              </para>
+            </note>
           '';
         };
 
@@ -126,25 +159,34 @@ let
           default = [];
           description = ''
             List of path(s) to respective theme(s) which are copied from the 'theme' directory.
-            <note><para>These themes need to be packaged before use, see example.</para></note>
-          '';
-          example = literalExpression ''
-            let
-              # Let's package the responsive theme
-              responsiveTheme = pkgs.stdenv.mkDerivation {
-                name = "responsive-theme";
-                # Download the theme from the wordpress site
-                src = pkgs.fetchurl {
-                  url = "https://downloads.wordpress.org/theme/responsive.3.14.zip";
-                  sha256 = "0rjwm811f4aa4q43r77zxlpklyb85q08f9c8ns2akcarrvj5ydx3";
-                };
-                # We need unzip to build this package
-                nativeBuildInputs = [ pkgs.unzip ];
-                # Installing simply means copying all files to the output directory
-                installPhase = "mkdir -p $out; cp -R * $out/";
-              };
-            # And then pass this theme to the themes list like this:
-            in [ responsiveTheme ]
+
+            <warning>
+              <para>
+                This option is deprecated because it puts the version of the theme in the directory name and this may break the configuration on updates.
+                Use <code>package = pkgs.wordpress.override { wpThemes = [ ... ]; };</code> instead but keep in mind that you may need to migrate the configuration manually.
+              </para>
+            </warning>
+
+            <note>
+              <para>
+                These themes need to be packaged before use.
+                In a preferably separate directory do e.g.:
+                <programlisting language="nix">
+                WP_VERSION=5.8 WORKERS=1 wp4nix -t tt1-blocks -p gutenberg,wordpress-seo
+                </programlisting>
+                Then you can use the themes with
+                <programlisting language="nix">
+                  (pkgs.callPackage "''${nixpkgs}/pkgs/servers/web-apps/wordpress/themes-and-plugins" {
+                    plugins = lib.importJSON ./plugins.json;
+                    themes = lib.importJSON ./themes.json;
+                    languages = lib.importJSON ./languages.json;
+                    pluginLanguages = lib.importJSON ./pluginLanguages.json;
+                    themeLanguages = lib.importJSON ./themeLanguages.json;
+                  }).themes.tt1-blocks
+                </programlisting>
+                or similar.
+              </para>
+            </note>
           '';
         };
 
@@ -298,6 +340,8 @@ in
           message = ''services.wordpress.sites."${hostName}".database.passwordFile cannot be specified if services.wordpress.sites."${hostName}".database.createLocally is set to true.'';
         }) eachSite);
 
+    warnings = mapAttrsToList (hostName: _: ''services.wordpress."${hostName}".plugins is deprecated and replaced by pkgs.wordpress.override { wpPlugins = [ ... ]; }. More info in the option documentation.'') (filterAttrs (n: v: v.plugins != []) eachSite)
+    ++ mapAttrsToList (hostName: _: ''services.wordpress."${hostName}".themes is deprecated and replaced by pkgs.wordpress.override { wpThemes = [ ... ]; }. More info in the option documentation.'') (filterAttrs (n: v: v.themes != []) eachSite);
 
     services.mysql = mkIf (any (v: v.database.createLocally) (attrValues eachSite)) {
       enable = true;
