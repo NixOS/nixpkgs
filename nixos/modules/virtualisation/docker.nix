@@ -233,9 +233,9 @@ in
       virtualisation.docker.daemon.settings = {
         group = "docker";
         hosts = [ "fd://" ];
-        log-driver = cfg.logDriver;
-        storage-driver = mkIf (cfg.storageDriver != null) cfg.storageDriver;
-        live-restore = cfg.liveRestore;
+        log-driver = mkDefault cfg.logDriver;
+        storage-driver = mkIf (cfg.storageDriver != null) (mkDefault cfg.storageDriver);
+        live-restore = mkDefault cfg.liveRestore;
         runtimes = mkIf cfg.enableNvidia {
           nvidia = {
             path = "${pkgs.nvidia-docker}/bin/nvidia-container-runtime";
