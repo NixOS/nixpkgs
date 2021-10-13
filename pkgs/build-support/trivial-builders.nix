@@ -254,7 +254,7 @@ rec {
    * Writes an executable Shell script to /nix/store/<store path>/bin/<name> and
    * checks its syntax with shellcheck and the shell's -n option.
    * Automatically includes sane set of shellopts (errexit, nounset, pipefail)
-   * and handles creation of PATH based on buildInputs
+   * and handles creation of PATH based on runtimeInputs
    *
    * Example:
    * # Writes my-file to /nix/store/<store path>/bin/my-file and makes executable.
