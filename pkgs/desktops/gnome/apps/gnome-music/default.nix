@@ -92,6 +92,13 @@ python3.pkgs.buildPythonApplication rec {
     done
   '';
 
+  # Prevent double wrapping, let the Python wrapper use the args in preFixup.
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   doCheck = false;
 
   # handle setup hooks better
