@@ -21,6 +21,6 @@ stdenv.mkDerivation rec {
         homepage = "https://www.nzyme.org/";
         description = "A program to detect attacks against wireless networks";
         license = stdenv.lib.licenses.sspl;
-        maintainers = with lib.maintainers; [ jakobu5 ];
+        #maintainers = with lib.maintainers; [ jakobu5 ];
     };
 }
