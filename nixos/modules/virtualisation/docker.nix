@@ -186,13 +186,7 @@ in
             ""
             ''
               ${cfg.package}/bin/dockerd \
-                --group=docker \
-                --host=fd:// \
                 --config-file=${daemonSettingsFile} \
-                --log-driver=${cfg.logDriver} \
-                ${optionalString (cfg.storageDriver != null) "--storage-driver=${cfg.storageDriver}"} \
-                ${optionalString cfg.liveRestore "--live-restore" } \
-                ${optionalString cfg.enableNvidia "--add-runtime nvidia=${pkgs.nvidia-docker}/bin/nvidia-container-runtime" } \
                 ${cfg.extraOptions}
             ''];
           ExecReload=[
@@ -235,6 +229,19 @@ in
         { assertion = cfg.enableNvidia -> config.hardware.opengl.driSupport32Bit or false;
           message = "Option enableNvidia requires 32bit support libraries";
         }];
+
+      virtualisation.docker.daemon.settings = {
+        group = "docker";
+        hosts = [ "fd://" ];
+        "log-driver" = cfg.logDriver;
+        "storage-driver" = mkIf (cfg.storageDriver != null) cfg.storageDriver;
+        "live-restore" = cfg.liveRestore;
+        runtimes = mkIf cfg.enableNvidia {
+          nvidia = {
+            path = "${pkgs.nvidia-docker}/bin/nvidia-container-runtime";
+          };
+        };
+      };
     }
   ]);
 
