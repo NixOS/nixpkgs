@@ -35,6 +35,7 @@
 , python3
 , readline
 , soci
+, boost
 , speex
 , sqlite
 , lib, stdenv
@@ -93,6 +94,7 @@ stdenv.mkDerivation rec {
     pango
     readline
     soci
+    boost
     speex
     sqlite
     udev
