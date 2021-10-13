@@ -15,6 +15,9 @@ stdenv.mkDerivation rec {
     extensionPortalSlug = "clock-override";
   };
 
+  # with small modifications of https://github.com/stuartlangridge/gnome-shell-clock-override/issues/57#issuecomment-942089876
+  patches = [ ./gnome-40.patch ];
+
   nativeBuildInputs = [ gettext glib ];
 
   buildPhase = ''
@@ -35,6 +38,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ rhoriguchi ];
     homepage = "https://github.com/stuartlangridge/gnome-shell-clock-override";
-    broken = versionOlder gnome.gnome-shell.version "3.18";
+    broken = versionOlder gnome.gnome-shell.version "3.40" && versionOlder gnome.gnome-shell.version "40";
   };
 }

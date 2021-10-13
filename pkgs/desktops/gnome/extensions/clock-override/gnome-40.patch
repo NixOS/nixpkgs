@@ -1,0 +1,56 @@
+diff --git a/metadata.json b/metadata.json
+index d0e7c0e..4b6195e 100644
+--- a/metadata.json
++++ b/metadata.json
+@@ -5,7 +5,8 @@
+   "settings-schema": "org.gnome.shell.extensions.clock-override", 
+   "shell-version": [
+     "3.18", 
+-    "3.28"
++    "3.28",
++    "40"
+   ], 
+   "url": "https://github.com/stuartlangridge/gnome-shell-clock-override", 
+   "uuid": "clock-override@gnomeshell.kryogenix.org", 
+diff --git a/prefs.js b/prefs.js
+index ea22dc2..ce27e2e 100644
+--- a/prefs.js
++++ b/prefs.js
+@@ -93,18 +93,13 @@ const ClockOverrideSettings = new GObject.Class({
+             /* It would be nicer to use just a Label with a hyperlink in it here, for accessibility
+                reasons, but god alone knows how to remove the underline on a label, thanks to the
+                lack of Gtk CSS examples. And a Button would be ugly. So an EventBox it is for now. */
+-            let eb = new Gtk.EventBox({
+-                hexpand: true,
+-                halign: Gtk.Align.START
+-            });
+             let r = new Gtk.Label({
+-                label: '<tt>' + eg[1] + '</tt>',
++                label: '<a href="#"><tt>' + eg[1] + '</tt></a>',
+                 use_markup: true,
+                 hexpand: true,
+                 halign: Gtk.Align.START
+             });
+-            eb.add(r);
+-            eb.connect("button-press-event", Lang.bind(grid, function(w) {
++            r.connect("activate-link", Lang.bind(grid, function(w) {
+                 this.update_textbox_value(eg[1]);
+                 grid._settings.set_string('override-string', eg[1]);
+                 return true;
+@@ -112,7 +107,7 @@ const ClockOverrideSettings = new GObject.Class({
+             r.get_style_context().add_provider(css, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
+ 
+             grid.attach(l, 0, rownumber, 1, 1);
+-            grid.attach(eb, 1, rownumber, 2, 1);
++            grid.attach(r, 1, rownumber, 2, 1);
+             rownumber += 1;
+         });
+ 
+@@ -136,7 +131,6 @@ const ClockOverrideSettings = new GObject.Class({
+ 
+ function buildPrefsWidget() {
+      let widget = new ClockOverrideSettings();
+-     widget.show_all();
+ 
+      return widget;
+ }
