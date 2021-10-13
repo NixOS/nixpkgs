@@ -730,6 +730,14 @@
       };
     }
     {
+      name = "_types_node___node_14.17.21.tgz";
+      path = fetchurl {
+        name = "_types_node___node_14.17.21.tgz";
+        url  = "https://registry.yarnpkg.com/@types/node/-/node-14.17.21.tgz";
+        sha1 = "6359d8cf73481e312a43886fa50afc70ce5592c6";
+      };
+    }
+    {
       name = "_types_plist___plist_3.0.2.tgz";
       path = fetchurl {
         name = "_types_plist___plist_3.0.2.tgz";
@@ -1626,11 +1634,11 @@
       };
     }
     {
-      name = "core_js___core_js_3.17.3.tgz";
+      name = "core_js___core_js_3.18.2.tgz";
       path = fetchurl {
-        name = "core_js___core_js_3.17.3.tgz";
-        url  = "https://registry.yarnpkg.com/core-js/-/core-js-3.17.3.tgz";
-        sha1 = "8e8bd20e91df9951e903cabe91f9af4a0895bc1e";
+        name = "core_js___core_js_3.18.2.tgz";
+        url  = "https://registry.yarnpkg.com/core-js/-/core-js-3.18.2.tgz";
+        sha1 = "63a551e8a29f305cd4123754846e65896619ba5b";
       };
     }
     {
@@ -2002,11 +2010,11 @@
       };
     }
     {
-      name = "electron___electron_13.4.0.tgz";
+      name = "electron___electron_13.5.1.tgz";
       path = fetchurl {
-        name = "electron___electron_13.4.0.tgz";
-        url  = "https://registry.yarnpkg.com/electron/-/electron-13.4.0.tgz";
-        sha1 = "f9f9e518d8c6bf23bfa8b69580447eea3ca0f880";
+        name = "electron___electron_13.5.1.tgz";
+        url  = "https://registry.yarnpkg.com/electron/-/electron-13.5.1.tgz";
+        sha1 = "76c02c39be228532f886a170b472cbd3d93f0d0f";
       };
     }
     {
@@ -2154,13 +2162,21 @@
       };
     }
     {
-      name = "2306b3d4da4eba908b256014b979f1d3d43d2945";
-      path = fetchurl {
-        name = "2306b3d4da4eba908b256014b979f1d3d43d2945";
-        url  = "https://codeload.github.com/matrix-org/eslint-plugin-matrix-org/tar.gz/2306b3d4da4eba908b256014b979f1d3d43d2945";
-        sha1 = "e82e07e6163d15ee5243d8df073947540bf0efc9";
-      };
-    }
+    name = "2306b3d4da4eba908b256014b979f1d3d43d2945";
+    path =
+      let
+        repo = fetchgit {
+          url = "https://github.com/matrix-org/eslint-plugin-matrix-org.git";
+          rev = "2306b3d4da4eba908b256014b979f1d3d43d2945";
+          sha256 = "0ywgrls2phviz47kzsjrxijkdbs1ky77471fbq9cnpj0fs3si81c";
+        };
+      in
+        runCommand "2306b3d4da4eba908b256014b979f1d3d43d2945" { buildInputs = [gnutar]; } ''
+          # Set u+w because tar-fs can't unpack archives with read-only dirs
+          # https://github.com/mafintosh/tar-fs/issues/79
+          tar cf $out --mode u+w -C ${repo} .
+        '';
+  }
     {
       name = "eslint_scope___eslint_scope_5.1.1.tgz";
       path = fetchurl {
@@ -3506,13 +3522,21 @@
       };
     }
     {
-      name = "e5c7071e0cdf715de87ef39dc8260e11d7add2f8";
-      path = fetchurl {
-        name = "e5c7071e0cdf715de87ef39dc8260e11d7add2f8";
-        url  = "https://codeload.github.com/matrix-org/matrix-web-i18n/tar.gz/e5c7071e0cdf715de87ef39dc8260e11d7add2f8";
-        sha1 = "efbc392e3523669d20b812a6dae2f6efb49b888d";
-      };
-    }
+    name = "e5c7071e0cdf715de87ef39dc8260e11d7add2f8";
+    path =
+      let
+        repo = fetchgit {
+          url = "https://github.com/matrix-org/matrix-web-i18n.git";
+          rev = "e5c7071e0cdf715de87ef39dc8260e11d7add2f8";
+          sha256 = "0whjmf23m3204ifgx3spfnlg9pwm956fc16gjxgp9ia0d93xrpn6";
+        };
+      in
+        runCommand "e5c7071e0cdf715de87ef39dc8260e11d7add2f8" { buildInputs = [gnutar]; } ''
+          # Set u+w because tar-fs can't unpack archives with read-only dirs
+          # https://github.com/mafintosh/tar-fs/issues/79
+          tar cf $out --mode u+w -C ${repo} .
+        '';
+  }
     {
       name = "memoizee___memoizee_0.4.15.tgz";
       path = fetchurl {

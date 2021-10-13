@@ -896,6 +896,12 @@
     githubId = 1296771;
     name = "Anders Riutta";
   };
+  arkivm = {
+    email = "vikram186@gmail.com";
+    github = "arkivm";
+    githubId = 1118815;
+    name = "Vikram Narayanan";
+  };
   armijnhemel = {
     email = "armijn@tjaldur.nl";
     github = "armijnhemel";
@@ -1908,6 +1914,12 @@
   chattered = {
     email = "me@philscotted.com";
     name = "Phil Scott";
+  };
+  chekoopa = {
+    email = "chekoopa@mail.ru";
+    github = "chekoopa";
+    githubId = 1689801;
+    name = "Mikhail Chekan";
   };
   ChengCat = {
     email = "yu@cheng.cat";

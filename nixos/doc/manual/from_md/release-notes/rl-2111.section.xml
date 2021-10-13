@@ -1499,6 +1499,13 @@ Superuser created successfully.
           <literal>/etc/xdg/mimeapps.list</literal>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          Kopia was upgraded from 0.8.x to 0.9.x. Please read the
+          <link xlink:href="https://github.com/kopia/kopia/releases/tag/v0.9.0">upstream
+          release notes</link> for changes and upgrade instructions.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
 </section>
