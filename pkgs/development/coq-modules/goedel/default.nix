@@ -10,7 +10,7 @@ mkCoqDerivation {
 
   inherit version;
   defaultVersion = with versions; switch coq.coq-version [
-    { case = isGe "8.11"; out = "8.12.0"; }
+    { case = range "8.11" "8.13"; out = "8.12.0"; }
   ] null;
 
   propagatedBuildInputs = [ hydra-battles pocklington ];

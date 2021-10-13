@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "brother";
-  version = "1.0.2";
+  version = "1.1.0";
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "bieniu";
     repo = pname;
     rev = version;
-    sha256 = "sha256-xs/GIsJUuKKbDotV1BeT/ng86UVkNsH48uHR4i3vqow=";
+    sha256 = "sha256-ZDQIpzdr3XkYrSUgrBDZsUwUZRQCdJdvmniMezvJxzU=";
   };
 
   nativeBuildInputs = [

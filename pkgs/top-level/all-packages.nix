@@ -28010,6 +28010,8 @@ with pkgs;
 
   tev = callPackage ../applications/graphics/tev { };
 
+  themechanger = callPackage ../applications/misc/themechanger { };
+
   thinkingRock = callPackage ../applications/misc/thinking-rock { };
 
   thonny = callPackage ../applications/editors/thonny { };
@@ -31066,10 +31068,11 @@ with pkgs;
     coqPackages_8_11 coq_8_11
     coqPackages_8_12 coq_8_12
     coqPackages_8_13 coq_8_13
+    coqPackages_8_14 coq_8_14
     coqPackages      coq
   ;
 
-  coq2html = callPackage ../applications/science/logic/coq2html { };
+  coq2html = callPackage ../tools/typesetting/coq2html { };
 
   cryptoverif = callPackage ../applications/science/logic/cryptoverif { };
 
