@@ -18,7 +18,7 @@ rec {
     ];
 
   qemuSerialDevice = if pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64 then "ttyS0"
-        else if (with pkgs.stdenv.hostPlatform; isAarch32 || isAarch64 || isPower) then "ttyAMA0"
+        else if (with pkgs.stdenv.hostPlatform; isAarch32 || isAarch64 || isPower || isSparc) then "ttyAMA0"
         else throw "Unknown QEMU serial device for system '${pkgs.stdenv.hostPlatform.system}'";
 
   qemuBinary = qemuPkg: {
