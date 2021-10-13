@@ -14941,6 +14941,8 @@ with pkgs;
 
   sauce-connect = callPackage ../development/tools/sauce-connect { };
 
+  sawjap = callPackage ../development/tools/java/sawjap { };
+
   sd-local = callPackage ../development/tools/sd-local { };
 
   selenium-server-standalone = callPackage ../development/tools/selenium/server { };
