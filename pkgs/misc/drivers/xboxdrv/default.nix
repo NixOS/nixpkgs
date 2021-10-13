@@ -10,12 +10,9 @@
 , dbus-glib
 }:
 
-let
-  version = "0.8.8";
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "xboxdrv";
-  inherit version;
+  version = "0.8.8";
 
   src = fetchFromGitHub {
     owner = "xboxdrv";
@@ -36,5 +33,4 @@ stdenv.mkDerivation {
     maintainers = [ ];
     platforms = platforms.linux;
   };
-
 }

@@ -11,15 +11,17 @@ stdenv.mkDerivation rec {
     hash = "sha256-SVfM2vCCacgchXj0c0sPk3VR6DUI4R0ofFnxJSY4oDg=";
   };
 
+  postPatch = ''
+    sed -i "s|/usr/local|$out|" Makefile
+  '';
+
   buildInputs = [ libxcb git xcbutil xcbutilwm ];
 
-  prePatch = ''sed -i "s@/usr/local@$out@" Makefile'';
-
-  meta = {
+  meta = with lib; {
     description = "Outputs X window titles";
     homepage = "https://github.com/baskerville/xtitle";
-    maintainers = [ lib.maintainers.meisternu ];
+    maintainers = with maintainers; [ meisternu ];
     license = "Custom";
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }
