@@ -1,0 +1,14 @@
+{
+  "akismet": {
+    "path": "akismet/tags/4.2.1",
+    "rev": "2608000",
+    "sha256": "05sis4s8lax56j52kl9ih6f4kp2qjk39y5mkdq9z35mp3zsj89ap",
+    "version": "4.2.1"
+  },
+  "hello-dolly": {
+    "path": "hello-dolly/tags/1.7.2",
+    "rev": "2599640",
+    "sha256": "0sd7s3fmc5yky6gaiqxkbdfl0bj5bmvxfyc9v5a4wmgnlbsnd7db",
+    "version": "1.7.2"
+  }
+}

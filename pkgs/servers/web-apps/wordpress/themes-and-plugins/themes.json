@@ -1,0 +1,20 @@
+{
+  "twentynineteen": {
+    "path": "twentynineteen/2.1",
+    "rev": "151906",
+    "sha256": "014159rmh8l4qyl195ds8dywbv1apz6dxkvanc0i29njazd9lfhm",
+    "version": "2.1"
+  },
+  "twentytwenty": {
+    "path": "twentytwenty/1.8",
+    "rev": "151907",
+    "sha256": "0h0s3irgsjbls56rsdhlj170s6jr13d1d2al378asvlnjln126rz",
+    "version": "1.8"
+  },
+  "twentytwentyone": {
+    "path": "twentytwentyone/1.4",
+    "rev": "151908",
+    "sha256": "09gjm1nim2r0mb728pxrlsia3yjwf79zn3s02dd4cnq73ja07yx6",
+    "version": "1.4"
+  }
+}

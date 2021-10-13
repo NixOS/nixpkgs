@@ -36158,6 +36158,14 @@ with pkgs;
 
   wordpress = callPackage ../servers/web-apps/wordpress { };
 
+  wordpressPackages = callPackage ../servers/web-apps/wordpress/themes-and-plugins {
+    plugins = lib.importJSON ../servers/web-apps/wordpress/themes-and-plugins/plugins.json;
+    themes = lib.importJSON ../servers/web-apps/wordpress/themes-and-plugins/themes.json;
+    languages = lib.importJSON ../servers/web-apps/wordpress/themes-and-plugins/languages.json;
+    pluginLanguages = lib.importJSON ../servers/web-apps/wordpress/themes-and-plugins/pluginLanguages.json;
+    themeLanguages = lib.importJSON ../servers/web-apps/wordpress/themes-and-plugins/themeLanguages.json;
+  };
+
   wprecon = callPackage ../tools/security/wprecon { };
 
   wraith = callPackage ../applications/networking/irc/wraith { };
