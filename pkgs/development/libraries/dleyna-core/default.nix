@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
   pname = "dleyna-core";
   version = "0.6.0";
 
+  outputs = [ "out" "dev" ];
+
   setupHook = ./setup-hook.sh;
 
   src = fetchFromGitHub {
