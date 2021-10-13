@@ -999,6 +999,8 @@ with pkgs;
     inherit (lxqt) qtermwidget;
   };
 
+  ctx = callPackage ../applications/terminal-emulators/ctx { };
+
   darktile = callPackage ../applications/terminal-emulators/darktile { };
 
   eterm = callPackage ../applications/terminal-emulators/eterm { };
