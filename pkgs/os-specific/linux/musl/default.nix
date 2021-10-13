@@ -149,7 +149,7 @@ stdenv.mkDerivation rec {
     license     = licenses.mit;
     # See https://wiki.musl-libc.org/supported-platforms.html
     platforms   = platforms.filterDoubles (
-      double: with systems.inspect;
+      double: with systems.inspect.predicates; (
         (isLinux double)
         && (
           (isx86 double)
@@ -159,8 +159,9 @@ stdenv.mkDerivation rec {
           || (isPower double)
           || (isOr1k double)
           || (isS390 double)
-          || ((isRiscV double) && (is64Bit double))
+          || ((isRiscV double) && (is64bit double))
         )
+      )
     );
     maintainers = with maintainers; [ thoughtpolice dtzWill ];
   };
