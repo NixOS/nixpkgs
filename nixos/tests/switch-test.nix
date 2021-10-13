@@ -131,6 +131,26 @@ import ./make-test-python.nix ({ pkgs, ...} : {
           };
         };
 
+        # A system with a timer
+        with-timer.configuration = {
+          systemd.timers.test-timer = {
+            wantedBy = [ "timers.target" ];
+            timerConfig.OnCalendar = "@1395716396"; # chosen by fair dice roll
+          };
+          systemd.services.test-timer = {
+            serviceConfig = {
+              Type = "oneshot";
+              ExecStart = "${pkgs.coreutils}/bin/true";
+            };
+          };
+        };
+
+        # The same system but with another time
+        with-timer-modified.configuration = {
+          imports = [ config.specialisation.with-timer.configuration ];
+          systemd.timers.test-timer.timerConfig.OnCalendar = lib.mkForce "Fri 2012-11-23 16:00:00";
+        };
+
         # A system with a path unit
         with-path.configuration = {
           systemd.paths.test-watch = {
@@ -303,6 +323,22 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         assert_contains(out, "would reload the following units: simple-reload-service.service\n")
         assert_contains(out, "would restart the following units: simple-restart-service.service\n")
         assert_contains(out, "\nwould start the following units: simple-service.service")
+
+    with subtest("timers"):
+        switch_to_specialisation("with-timer")
+        out = machine.succeed("systemctl show test-timer.timer")
+        assert_contains(out, "OnCalendar=2014-03-25 02:59:56 UTC")
+
+        out = switch_to_specialisation("with-timer-modified")
+        assert_lacks(out, "stopping the following units:")
+        assert_lacks(out, "reloading the following units:")
+        assert_contains(out, "restarting the following units: test-timer.timer\n")
+        assert_lacks(out, "\nstarting the following units:")
+        assert_lacks(out, "the following new units were started:")
+        assert_lacks(out, "as well:")
+        # It changed
+        out = machine.succeed("systemctl show test-timer.timer")
+        assert_contains(out, "OnCalendar=Fri 2012-11-23 16:00:00")
 
     with subtest("paths"):
         switch_to_specialisation("with-path")

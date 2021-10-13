@@ -210,7 +210,10 @@ sub handleModifiedUnit {
                     $unitsToRestart->{$unit} = 1;
                     recordUnit($restartListFile, $unit);
                 } else {
-                    if (!boolIsTrue($unitInfo->{'X-StopIfChanged'} // "yes")) {
+                    # Always restart non-services instead of stopping and starting them
+                    # because it doesn't make sense to stop them with a config from
+                    # the old evaluation.
+                    if (!boolIsTrue($unitInfo->{'X-StopIfChanged'} // "yes") || $unit !~ /\.service$/) {
                         # This unit should be restarted instead of
                         # stopped and started.
                         $unitsToRestart->{$unit} = 1;
