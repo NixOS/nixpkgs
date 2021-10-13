@@ -3,18 +3,18 @@
 
 { stdenv, lib, fetchurl, jre }:
 stdenv.mkDerivation rec {
-    name = "nzyme-${version}";
+    pname = "nzyme";
     version = "1.1.1";
 
     builder = ./builder.sh;
 
     src = fetchurl {
-        url = "https://assets.nzyme.org/releases/nzyme-1.1.1.jar";
+        url = "https://assets.nzyme.org/releases/${pname}-${version}.jar";
         sha256 = "1ygbblgqqwad389g2szabdacc218b4bvm240fk4l73x7w8halr9b";
     };
 
     buildInputs = [ ];
-    unpackPhase = "";
+    dontUnpack = true;
     inherit jre;
 
     meta = {
