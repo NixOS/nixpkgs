@@ -166,6 +166,12 @@ in {
     filesToInstall = ["u-boot-spl.kwb"];
   };
 
+  ubootCubieboard2 = buildUBoot {
+    defconfig = "Cubieboard2_defconfig";
+    extraMeta.platforms = ["armv7l-linux"];
+    filesToInstall = ["u-boot-sunxi-with-spl.bin"];
+  };
+
   ubootGuruplug = buildUBoot {
     defconfig = "guruplug_defconfig";
     extraMeta.platforms = ["armv5tel-linux"];
