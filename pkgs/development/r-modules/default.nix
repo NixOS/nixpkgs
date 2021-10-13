@@ -324,7 +324,7 @@ let
     ModelMetrics = lib.optional stdenv.isDarwin pkgs.llvmPackages.openmp;
     mvabund = [ pkgs.gsl ];
     mwaved = [ pkgs.fftw.dev ];
-    mzR = [ pkgs.zlib ];
+    mzR = with pkgs; [ zlib boost159.dev netcdf ];
     ncdf4 = [ pkgs.netcdf ];
     nloptr = with pkgs; [ nlopt pkg-config ];
     n1qn1 = [ pkgs.gfortran ];
@@ -479,7 +479,6 @@ let
     tikzDevice = with pkgs; [ which texlive.combined.scheme-medium ];
     gridGraphics = [ pkgs.which ];
     adimpro = with pkgs; [ which xorg.xdpyinfo ];
-    mzR = [ pkgs.netcdf ];
     cluster = [ pkgs.libiconv ];
     KernSmooth = [ pkgs.libiconv ];
     nlme = [ pkgs.libiconv ];
