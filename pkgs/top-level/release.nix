@@ -12,7 +12,13 @@
 , officialRelease ? false
   # The platforms for which we build Nixpkgs.
 , supportedSystems ? [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" ]
-, limitedSupportedSystems ? [ "i686-linux" ]
+  # The platforms for which we build bootstrap-tools but not Nixpkgs.
+, limitedSupportedSystems ? [
+  "i686-linux" "x86_64-unknown-linux-musl"
+  "aarch64-unknown-linux-musl" "armv5tel-linux" "armv6l-unknown-linux-musl" "armv6l-linux" "armv7l-linux"
+  "mipsel-linux"
+  "powerpc64le-linux"
+  "sparc64-linux"]
   # Strip most of attributes when evaluating to spare memory usage
 , scrubJobs ? true
   # Attributes passed to nixpkgs. Don't build packages marked as unfree.
@@ -161,8 +167,9 @@ let
         genAttrs systemsWithAnySupport
           (system: {
             inherit
-              (import ../stdenv/linux/make-bootstrap-tools.nix {
-                localSystem = { inherit system; };
+              (import ../stdenv/linux/scratch {
+                from = "x86_64-linux";
+                to = system;
               })
               dist test;
           })
