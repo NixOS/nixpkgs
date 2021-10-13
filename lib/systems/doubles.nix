@@ -76,6 +76,7 @@ in {
   x86           = filterDoubles predicates.isx86;
   i686          = filterDoubles predicates.isi686;
   x86_64        = filterDoubles predicates.isx86_64;
+  powerpc       = filterDoubles predicates.isPowerPC;
   mips          = filterDoubles predicates.isMips;
   mmix          = filterDoubles predicates.isMmix;
   riscv         = filterDoubles predicates.isRiscV;
