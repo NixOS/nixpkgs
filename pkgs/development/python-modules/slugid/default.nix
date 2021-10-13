@@ -14,11 +14,10 @@ buildPythonPackage rec {
     sha256 = "McBxGRi8KqVhe2Xez5k4G67R5wBCCoh41dRsTKW4xMA=";
   };
 
-  propagatedBuildInputs = [ tox twine ];
   pythonImportsCheck = [
     "slugid"
   ];
-  
+
   doCheck = false; # has no tests
   meta = with lib; {
     description = "URL-safe base64 UUID encoder for generating 22 character slugs";
@@ -26,4 +25,4 @@ buildPythonPackage rec {
     license = licenses.mpl20;
     maintainers = with maintainers; [ milahu ];
   };
-} 
+}
