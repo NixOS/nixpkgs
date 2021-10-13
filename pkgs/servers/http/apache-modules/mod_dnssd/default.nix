@@ -20,8 +20,12 @@ stdenv.mkDerivation rec {
   }) ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/modules
     cp src/.libs/mod_dnssd.so $out/modules
+
+    runHook postInstall
   '';
 
   meta = with lib; {
