@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
   pname = "steampipe";
@@ -16,10 +16,20 @@ buildGoModule rec {
   # tests are failing for no obvious reasons
   doCheck = false;
 
+  nativeBuildInputs = [ installShellFiles ];
+
   ldflags = [
     "-s"
     "-w"
   ];
+
+  postInstall = ''
+    INSTALL_DIR=$(mktemp -d)
+    installShellCompletion --cmd steampipe \
+      --bash <($out/bin/steampipe --install-dir $INSTALL_DIR completion bash) \
+      --fish <($out/bin/steampipe --install-dir $INSTALL_DIR completion fish) \
+      --zsh <($out/bin/steampipe --install-dir $INSTALL_DIR completion zsh)
+  '';
 
   meta = with lib; {
     homepage = "https://steampipe.io/";
