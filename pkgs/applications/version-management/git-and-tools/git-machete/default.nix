@@ -33,15 +33,14 @@ buildPythonApplication rec {
     installShellCompletion --zsh --name _git-machete completion/git-machete.completion.zsh
   '';
 
+  postInstallCheck = ''
+    git init
+    test "$($out/bin/git-machete version)" = "git-machete version ${version}"
+  '';
+
   passthru = {
     updateScript = nix-update-script {
       attrPath = pname;
-    };
-
-    tests = {
-      version = testVersion {
-        package = git-machete;
-      };
     };
   };
 
