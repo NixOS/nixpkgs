@@ -7903,6 +7903,8 @@ with pkgs;
     # https://github.com/theotherp/nzbhydra2/#how-to-run
     jre = openjdk11;
   };
+  
+  nzyme = callPackage ../servers/web-apps/nzyme { };
 
   oapi-codegen = callPackage ../tools/networking/oapi-codegen { };
 
