@@ -7404,8 +7404,6 @@ with pkgs;
 
   mimetic = callPackage ../development/libraries/mimetic { };
 
-  minetime = callPackage ../applications/office/minetime { };
-
   minio-client = callPackage ../tools/networking/minio-client { };
 
   minio-certgen = callPackage ../tools/security/minio-certgen { };
