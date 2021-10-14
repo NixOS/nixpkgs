@@ -557,7 +557,19 @@ if (scalar(keys %unitsToRestart) > 0) {
         system("@systemd@/bin/systemctl", "restart", "--", @unitsWithErrorHandling) == 0 or $res = 4;
     }
     if (scalar(@unitsWithoutErrorHandling) > 0) {
-        system("@systemd@/bin/systemctl", "restart", "--", @unitsWithoutErrorHandling);
+        # Don't print warnings from systemctl
+        no warnings 'once';
+        open(OLDERR, ">&", \*STDERR);
+        close(STDERR);
+
+        my $ret = system("@systemd@/bin/systemctl", "restart", "--", @unitsWithoutErrorHandling);
+
+        # Print stderr again
+        open(STDERR, ">&OLDERR");
+
+        if ($ret ne 0) {
+            print STDERR "warning: some sockets failed to restart. Please check your journal (journalctl -eb) and act accordingly.\n";
+        }
     }
     unlink($restartListFile);
     unlink($restartByActivationFile);
