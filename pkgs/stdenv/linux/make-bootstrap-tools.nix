@@ -264,7 +264,7 @@ in with pkgs; rec {
     else throw "unsupported libc";
 
   test = derivation {
-    name = "test-bootstrap-tools${stage}";
+    name = "test-bootstrap-tools${suffix}";
     inherit (stdenv.hostPlatform) system; # We cannot "cross test"
     builder = bootstrapFiles.busybox;
     args = [ "ash" "-e" "-c" "eval \"$buildCommand\"" ];
