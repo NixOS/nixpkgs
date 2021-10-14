@@ -107,21 +107,5 @@ in {
 
   embedded      = filterDoubles predicates.isNone;
 
-  # See https://wiki.musl-libc.org/supported-platforms.html
-  supportsMusl  = filterDoubles (
-    double: (
-      (predicates.isLinux double)
-      && (
-        (predicates.isx86 double)
-        || (predicates.isAarch32 double)
-        || (predicates.isAarch64 double)
-        || (predicates.isMips double)
-        || (predicates.isPower double)
-        || (predicates.isOr1k double)
-        || (predicates.isS390 double)
-        || ((predicates.isRiscV double) && (predicates.is64bit double))
-      )
-    )
-  );
   mesaPlatforms = ["i686-linux" "x86_64-linux" "x86_64-darwin" "armv5tel-linux" "armv6l-linux" "armv7l-linux" "armv7a-linux" "aarch64-linux" "powerpc64-linux" "powerpc64le-linux" "aarch64-darwin" "riscv64-linux"];
 }
