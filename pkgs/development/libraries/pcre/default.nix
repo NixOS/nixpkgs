@@ -24,7 +24,7 @@ in stdenv.mkDerivation {
   outputs = [ "bin" "dev" "out" "doc" "man" ];
 
   # Disable jit on Apple Silicon, https://github.com/zherczeg/sljit/issues/51
-  configureFlags = optional (!stdenv.hostPlatform.isRiscV && !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)) "--enable-jit" ++ [
+  configureFlags = optional (!stdenv.hostPlatform.isRiscV && !stdenv.hostPlatform.isSparc && !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)) "--enable-jit" ++ [
     "--enable-unicode-properties"
     "--disable-cpp"
   ]
