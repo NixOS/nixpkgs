@@ -29739,7 +29739,7 @@ in
   mathlibtools = with python3Packages; toPythonApplication mathlibtools;
 
   leo2 = callPackage ../applications/science/logic/leo2
-    { ocaml = ocaml-ng.ocamlPackages_4_01_0.ocaml; };
+    { inherit (ocaml-ng.ocamlPackages_4_05) ocaml camlp4; };
 
   leo3-bin = callPackage ../applications/science/logic/leo3/binary.nix {};
 
