@@ -17,8 +17,8 @@ let
     sha256Hash = "1j1fxl4vzq3bln2z9ycxn9imjgy55yd1nbl7ycmsi90bdp96pzj0";
   };
   latestVersion = { # canary & dev
-    version = "2021.1.1.13"; # "Android Studio Bumblebee (2021.1.1) Canary 13"
-    sha256Hash = "04w5jw79fkxk4gy1n9iy8kjxg6k3zcl59z76f04rh556n12f01gm";
+    version = "2021.2.1.1"; # "Android Studio Chipmunk (2021.2.1) Canary 1"
+    sha256Hash = "1fn0jv6ybgdhgpwhamw16fjqbg2961ir9jhbjzanysi7y3935nbv";
   };
 in {
   # Attributes are named by their corresponding release channels
