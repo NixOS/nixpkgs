@@ -37,8 +37,12 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp carve $out/bin/carve
+
+    runHook postInstall
   '';
 
   meta = with lib; {
