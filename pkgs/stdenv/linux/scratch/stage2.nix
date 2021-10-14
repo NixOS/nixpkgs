@@ -5,13 +5,14 @@ let
   make-bootstrap-tools = import ../make-bootstrap-tools.nix;
 in
   make-bootstrap-tools rec {
+    stage = "stage2";
     localSystem = {
       system = to;
     };
     inherit nixpkgs;
     pkgs = nixpkgs {
       inherit localSystem;
-      bootstrapTools = {
+      bootstrapFiles = {
         busybox = "${stage1.build}/on-server/busybox";
         bootstrapTools = "${stage1.build}/on-server/bootstrap-tools.tar.xz";
       };

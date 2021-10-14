@@ -7,7 +7,7 @@
 { # Args just for stdenvs' usage
   lib
   # Args to pass on to the pkgset builder, too
-, localSystem, crossSystem, config, overlays, crossOverlays ? []
+, localSystem, crossSystem, config, overlays, crossOverlays ? [], bootstrapFiles ? null
 } @ args:
 
 let

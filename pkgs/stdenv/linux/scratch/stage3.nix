@@ -11,7 +11,7 @@ in
     inherit nixpkgs;
     pkgs = nixpkgs {
       inherit localSystem;
-      bootstrapTools = {
+      bootstrapFiles = {
         busybox = "${stage2.build}/on-server/busybox";
         bootstrapTools = "${stage2.build}/on-server/bootstrap-tools.tar.xz";
       };

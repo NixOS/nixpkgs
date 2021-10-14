@@ -4,6 +4,7 @@ let
   make-bootstrap-tools = import ../make-bootstrap-tools.nix;
 in
   make-bootstrap-tools rec {
+    stage = "stage1";
     localSystem = {
       system = from;
     };
