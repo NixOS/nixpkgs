@@ -85,10 +85,10 @@ stdenv.mkDerivation rec {
         calf # limiter, compressor exciter, bass enhancer and others
         lsp-plugins # delay
         mda_lv2 # loudness
+        zam-plugins # maximizer
       ];
       ladspaPlugins = [
         rubberband # pitch shifting
-        zam-plugins # maximizer
       ];
     in
     ''
