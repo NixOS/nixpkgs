@@ -222,6 +222,8 @@ with pkgs;
 
   buildMaven = callPackage ../build-support/build-maven.nix {};
 
+  carve = callPackage ../development/tools/carve { };
+
   castget = callPackage ../applications/networking/feedreaders/castget { };
 
   castxml = callPackage ../development/tools/castxml {
