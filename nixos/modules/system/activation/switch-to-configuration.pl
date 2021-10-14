@@ -190,41 +190,44 @@ sub handleModifiedUnit {
                     }
                 }
             }
+
             # Don't do the rest of this for socket-activated units
             # because we handled these above where we stop the unit.
             # Since only services can be socket-activated, the
             # following condition always evaluates to `true` for
             # non-service units.
-            if (!$socketActivated) {
-                # If we are restarting a socket, also stop the corresponding
-                # service. This is required because restarting a socket
-                # when the service is already activated fails.
-                if ($unit =~ /\.socket$/) {
-                    my $service = $unitInfo->{Service} // "";
-                    if ($service eq "") {
-                        $service = "$baseName.service";
-                    }
-                    if (defined $activePrev->{$service}) {
-                        $unitsToStop->{$service} = 1;
-                    }
+            if ($socketActivated) {
+                return;
+            }
+
+            # If we are restarting a socket, also stop the corresponding
+            # service. This is required because restarting a socket
+            # when the service is already activated fails.
+            if ($unit =~ /\.socket$/) {
+                my $service = $unitInfo->{Service} // "";
+                if ($service eq "") {
+                    $service = "$baseName.service";
+                }
+                if (defined $activePrev->{$service}) {
+                    $unitsToStop->{$service} = 1;
+                }
+                $unitsToRestart->{$unit} = 1;
+                recordUnit($restartListFile, $unit);
+            } else {
+                # Always restart non-services instead of stopping and starting them
+                # because it doesn't make sense to stop them with a config from
+                # the old evaluation.
+                if (!boolIsTrue($unitInfo->{'X-StopIfChanged'} // "yes") || $unit !~ /\.service$/) {
+                    # This unit should be restarted instead of
+                    # stopped and started.
                     $unitsToRestart->{$unit} = 1;
                     recordUnit($restartListFile, $unit);
                 } else {
-                    # Always restart non-services instead of stopping and starting them
-                    # because it doesn't make sense to stop them with a config from
-                    # the old evaluation.
-                    if (!boolIsTrue($unitInfo->{'X-StopIfChanged'} // "yes") || $unit !~ /\.service$/) {
-                        # This unit should be restarted instead of
-                        # stopped and started.
-                        $unitsToRestart->{$unit} = 1;
-                        recordUnit($restartListFile, $unit);
-                    } else {
-                        # We write to a file to ensure that the
-                        # service gets restarted if we're interrupted.
-                        $unitsToStart->{$unit} = 1;
-                        recordUnit($startListFile, $unit);
-                        $unitsToStop->{$unit} = 1;
-                    }
+                    # We write to a file to ensure that the
+                    # service gets restarted if we're interrupted.
+                    $unitsToStart->{$unit} = 1;
+                    recordUnit($startListFile, $unit);
+                    $unitsToStop->{$unit} = 1;
                 }
             }
         }
