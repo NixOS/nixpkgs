@@ -62,7 +62,6 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome.updateScript {
       packageName = pname;
-      attrPath = "${pname}${lib.versions.major version}";
       versionPolicy = "odd-unstable";
     };
   };
