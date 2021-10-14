@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description =  "A tool for programming graphics intended to replace Metapost";
     license = licenses.gpl3Plus;
-    maintainers = [ maintainers.raskin maintainers.peti ];
+    maintainers = [ maintainers.raskin ];
     broken = stdenv.isDarwin;  # https://github.com/vectorgraphics/asymptote/issues/69
     platforms = platforms.linux ++ platforms.darwin;
   };
