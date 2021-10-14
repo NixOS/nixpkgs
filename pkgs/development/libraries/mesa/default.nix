@@ -93,6 +93,10 @@ self = stdenv.mkDerivation {
     ++ lib.optional stdenv.isLinux "driversdev"
     ++ lib.optional enableOpenCL "opencl";
 
+  preConfigure = ''
+    PATH=${llvmPackages.libllvm.dev}/bin:$PATH
+  '';
+
   # TODO: Figure out how to enable opencl without having a runtime dependency on clang
   mesonFlags = [
     "--sysconfdir=/etc"
