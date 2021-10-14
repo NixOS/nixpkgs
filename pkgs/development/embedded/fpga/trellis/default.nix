@@ -31,6 +31,8 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake python3 ];
   cmakeFlags = [
     "-DCURRENT_GIT_VERSION=${realVersion}"
+    # TODO: should this be in stdenv instead?
+    "-DCMAKE_INSTALL_DATADIR=${placeholder "out"}/share"
   ];
 
   preConfigure = ''
