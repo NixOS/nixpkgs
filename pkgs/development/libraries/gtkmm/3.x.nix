@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
       packageName = pname;
       attrPath = "${pname}3";
       versionPolicy = "odd-unstable";
+      freeze = true;
     };
   };
 
