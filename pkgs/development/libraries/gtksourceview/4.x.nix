@@ -88,6 +88,7 @@ stdenv.mkDerivation rec {
       packageName = "gtksourceview";
       attrPath = "gtksourceview4";
       versionPolicy = "odd-unstable";
+      freeze = true;
     };
   };
 
