@@ -1614,6 +1614,8 @@ with pkgs;
 
   esbuild = callPackage ../development/tools/esbuild { };
 
+  esbuild_netlify = callPackage ../development/tools/esbuild/netlify.nix { };
+
   essentia-extractor = callPackage ../tools/audio/essentia-extractor { };
 
   esh = callPackage ../tools/text/esh { };
