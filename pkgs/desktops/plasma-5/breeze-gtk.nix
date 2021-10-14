@@ -10,5 +10,8 @@ mkDerivation {
     sed -i cmake/FindGTKEngine.cmake \
       -e "s|\''${KDE_INSTALL_FULL_LIBDIR}|${getLib gtk2}/lib|"
   '';
+  preBuild = ''
+    chmod +x src/build_theme.sh
+  '';
   cmakeFlags = [ "-DWITH_GTK3_VERSION=3.22" ];
 }
