@@ -1,7 +1,8 @@
-{ busybox}:
+{ stdenv, busybox }:
 
 # Minimal shell for use as basic /bin/sh in sandbox builds
 busybox.override {
+  useMusl = (!stdenv.targetPlatform.isRiscV && !stdenv.targetPlatform.isSparc);
   enableStatic = true;
   enableMinimal = true;
   extraConfig = ''
