@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "frozendict";
-  version = "2.0.5";  # 2.0.6 breaks canonicaljson
+  version = "2.0.6";  # 2.0.6 breaks canonicaljson
   format = "setuptools";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-wb7hwHDY2fZA4SjluHV2pEAAhgCfeGLRPAv4YA5iE9M=";
+    sha256 = "3f00de72805cf4c9e81b334f3f04809278b967d2fed84552313a0fcce511beb1";
   };
 
   pythonImportsCheck = [

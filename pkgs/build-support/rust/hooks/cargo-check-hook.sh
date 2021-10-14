@@ -16,11 +16,11 @@ cargoCheckHook() {
         threads=1
     fi
 
-    if [ "${cargoBuildType}" != "debug" ]; then
-        cargoBuildProfileFlag="--${cargoBuildType}"
+    if [ "${cargoCheckType}" != "debug" ]; then
+        cargoCheckProfileFlag="--${cargoCheckType}"
     fi
 
-    argstr="${cargoBuildProfileFlag} --target @rustTargetPlatformSpec@ --frozen ${cargoTestFlags}";
+    argstr="${cargoCheckProfileFlag} --target @rustTargetPlatformSpec@ --frozen ${cargoTestFlags}";
 
     (
         set -x
