@@ -11279,7 +11279,6 @@ with pkgs;
   inherit (callPackages ../development/compilers/crystal {
     llvmPackages = llvmPackages_10;
   })
-    crystal_0_36
     crystal_1_0
     crystal_1_1
     crystal_1_2
@@ -14949,6 +14948,7 @@ with pkgs;
 
   inherit (callPackage ../development/tools/build-managers/shards { })
     shards_0_15
+    shards_0_16
     shards;
 
   shellcheck = callPackage ../development/tools/shellcheck {};
