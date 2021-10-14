@@ -13,8 +13,8 @@ let
     sha256Hash = "0k8jcq8vpjayvwm9wqcrjhnp7dly0h4bb8nxspck5zmi8q2ar67l";
   };
   betaVersion = {
-    version = "2020.3.1.21"; # "Android Studio Arctic Fox (2020.3.1) RC 1"
-    sha256Hash = "04k7c328bl8ixi8bvp2mm33q2hmv40yc9p5dff5cghyycarwpd3f";
+    version = "2021.1.1.14"; # "Android Studio Bumblebee (2021.1.1) Beta 1"
+    sha256Hash = "1j1fxl4vzq3bln2z9ycxn9imjgy55yd1nbl7ycmsi90bdp96pzj0";
   };
   latestVersion = { # canary & dev
     version = "2021.1.1.13"; # "Android Studio Bumblebee (2021.1.1) Canary 13"
