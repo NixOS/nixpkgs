@@ -262,7 +262,7 @@ in {
       assertion = ((getAttr opt cfg) != "_mkMergedOptionModule") -> (cfg.database != "_mkMergedOptionModule");
       message = "Legacy OpenLDAP option `services.openldap.${opt}` requires `services.openldap.database` (use value \"mdb\" if unsure)";
     }) legacyOptions ++ map (dn: {
-      assertion = dataDirsMap ? dn;
+      assertion = dataDirsMap ? "${dn}";
       message = ''
         declarative DB ${dn} does not exist in "servies.openldap.settings" or it exists but the "olcDbDirectory"
         is not prefixed by "/var/lib/openldap/"
