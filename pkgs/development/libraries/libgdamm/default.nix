@@ -26,7 +26,7 @@ in stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome.updateScript {
       packageName = pname;
-      versionPolicy = "odd-unstable";
+      versionPolicy = "none"; # Should be odd-unstable but stable version has not been released yet.
     };
   };
 
