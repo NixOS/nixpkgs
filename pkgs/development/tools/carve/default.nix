@@ -1,4 +1,4 @@
-{ clojure, fetchFromGitHub, lib, graalvm11-ce, stdenv }:
+{ clojure, fetchFromGitHub, git, lib, graalvm11-ce, stdenv }:
 
 stdenv.mkDerivation rec {
   pname = "carve";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1yijjxhkl4hln4f2q2z20bpwmqn5brsi8l0iw8968nmh9s9qy1vq";
   };
 
-  nativeBuildInputs = [ clojure graalvm11-ce ];
+  nativeBuildInputs = [ clojure git graalvm11-ce ];
 
   buildPhase = ''
     runHook preBuild
