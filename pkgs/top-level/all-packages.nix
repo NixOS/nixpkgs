@@ -27183,6 +27183,7 @@ with pkgs;
   procmail = callPackage ../applications/misc/procmail { };
 
   profanity = callPackage ../applications/networking/instant-messengers/profanity ({
+    gtk = gtk3;
     python = python3;
   } // (config.profanity or {}));
 
