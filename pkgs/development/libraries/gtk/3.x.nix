@@ -202,6 +202,7 @@ stdenv.mkDerivation rec {
     updateScript = gnome.updateScript {
       packageName = "gtk+";
       attrPath = "gtk3";
+      freeze = true;
     };
   };
 
