@@ -290,7 +290,7 @@ in {
         settingsFile = pkgs.writeText "config.ldif" (lib.concatStringsSep "\n" (attrsToLdif "cn=config" cfg.settings));
         dataFiles = lib.mapAttrs (dn: contents: pkgs.writeText "${dn}.ldif" contents) cfg.declarativeContents;
         mkLoadScript = dn: let
-          dataDir = lib.escapeShellArg (getAttr dn dataDirsMap);
+          dataDir = lib.escapeShellArg ("/var/lib/openldap/" + getAttr dn dataDirsMap);
         in  ''
           rm -rf ${dataDir}/*
           ${openldap}/bin/slapadd -F ${lib.escapeShellArg configDir} -b ${dn} -l ${getAttr dn dataFiles}
