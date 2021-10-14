@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
       glib-networking.out
     ];
     updateScript = gnome.updateScript {
-      attrPath = "libsoup3";
+      attrPath = "libsoup_3";
       packageName = pname;
       versionPolicy = "odd-unstable";
     };
