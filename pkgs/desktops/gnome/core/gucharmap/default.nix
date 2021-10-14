@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , intltool
 , fetchFromGitLab
 , meson
@@ -11,7 +12,6 @@
 , desktop-file-utils
 , gtk-doc
 , wrapGAppsHook
-, gnome
 , itstool
 , libxml2
 , yelp-tools
@@ -25,6 +25,7 @@
 , runCommand
 , symlinkJoin
 , gobject-introspection
+, nix-update-script
 }:
 
 let
@@ -93,8 +94,8 @@ in stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = pname;
+    updateScript = nix-update-script {
+      attrPath = "gnome.gucharmap";
     };
   };
 
