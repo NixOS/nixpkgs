@@ -6279,6 +6279,8 @@ with pkgs;
 
   imgurbash2 = callPackage ../tools/graphics/imgurbash2 { };
 
+  in-formant = callPackage ../applications/audio/in-formant { };
+
   inadyn = callPackage ../tools/networking/inadyn { };
 
   incron = callPackage ../tools/system/incron { };
@@ -7403,8 +7405,6 @@ with pkgs;
   mimeo = callPackage ../tools/misc/mimeo { };
 
   mimetic = callPackage ../development/libraries/mimetic { };
-
-  minetime = callPackage ../applications/office/minetime { };
 
   minio-client = callPackage ../tools/networking/minio-client { };
 
@@ -11281,6 +11281,8 @@ with pkgs;
   })
     crystal_0_36
     crystal_1_0
+    crystal_1_1
+    crystal_1_2
     crystal;
 
   crystal2nix = callPackage ../development/compilers/crystal2nix { };
@@ -24007,9 +24009,7 @@ with pkgs;
 
   csa = callPackage ../applications/audio/csa { };
 
-  csound = callPackage ../applications/audio/csound {
-    fluidsynth = fluidsynth_1;
-  };
+  csound = callPackage ../applications/audio/csound { };
 
   csound-manual = callPackage ../applications/audio/csound/csound-manual {
     python = python27;
