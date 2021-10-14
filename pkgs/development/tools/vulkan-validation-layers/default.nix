@@ -23,8 +23,8 @@ let
     src = fetchFromGitHub {
       owner = "KhronosGroup";
       repo = "SPIRV-Headers";
-      rev = "dafead1765f6c1a5f9f8a76387dcb2abe4e54acd"; # pin
-      sha256 = "1kj6wcx9y7r1xyg8n7ai2pzrg9ira7hbakr45wh5p4zyxh0m45n8";
+      rev = "449bc986ba6f4c5e10e32828783f9daef2a77644"; # pin
+      sha256 = "1249pvk4iz09caxm3kwckzwcx2hbw97cr2h8h770l6c061kb14z5";
     };
   });
   localGlslang = (glslang.override {
@@ -32,8 +32,8 @@ let
       src = fetchFromGitHub {
         owner = "KhronosGroup";
         repo = "SPIRV-Tools";
-        rev = "dc72924cb31cd9f3dbc3eb47e9d926cf641e3a07"; # pin
-        sha256 = "0pxgbq6xapw9hgrzb3rk5cylzgg1y1bkqz5wxzwqls63pwga5912";
+        rev = "1fbed83c8aab8517d821fcb4164c08567951938f"; # pin
+        sha256 = "0faz468bnxpvbg1np13gnbwf35s0hl9ad7r2p9wi9si5k336qjmj";
       };
     });
     argSpirv-headers = localSpirvHeaders;
@@ -41,20 +41,20 @@ let
     src = fetchFromGitHub {
       owner = "KhronosGroup";
       repo = "glslang";
-      rev = "18eef33bd7a4bf5ad8c69f99cb72022608cf6e73"; # pin
-      sha256 = "0wwj7q509pkp8wj7120g1n2ddl4x2r03ljf5czd9794ji6yraidn";
+      rev = "2fb89a0072ae7316af1c856f22663fde4928128a"; # pin
+      sha256 = "04kkmphv0a5mb5javhmkc4kab8r0n107kb7djakj5h238ni2j7q9";
     };
   });
   robin-hood-hashing = fetchFromGitHub {
     owner = "martinus";
     repo = "robin-hood-hashing";
-    rev = "3.11.2"; # pin
-    sha256 = "0103mnqpmka1smy0arnrbihlvi7i8xr5im0px8wn4faw4flikkcm";
+    rev = "3.11.3"; # pin
+    sha256 = "1gm3lwjkh6h8m7lfykzd0jzhfqjmjchindkmxc008rwvxafsd1pl";
   };
 in
 stdenv.mkDerivation rec {
   pname = "vulkan-validation-layers";
-  version = "1.2.182.0";
+  version = "1.2.189.1";
 
   # If we were to use "dev" here instead of headers, the setupHook would be
   # placed in that output instead of "out".
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
       owner = "KhronosGroup";
       repo = "Vulkan-ValidationLayers";
       rev = "sdk-${version}";
-      sha256 = "1fnmb7vbm7y1x67bf1xiwdrpj9j4lkvhk9xhb6hp6x2aryvcyrnc";
+      sha256 = "0a5plvvffidgnqh5ymq315xscl08w298sn9da48b3x2rdbdqgw90";
     });
 
   # Include absolute paths to layer libraries in their associated
