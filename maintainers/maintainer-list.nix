@@ -8326,6 +8326,17 @@
     githubId = 127548;
     name = "Judson Lester";
   };
+  nzbr = {
+    email = "nixos@nzbr.de";
+    github = "nzbr";
+    githubId = 7851175;
+    name = "nzbr";
+    matrix = "@nzbr:nzbr.de";
+    keys = [{
+      longkeyid = "rsa2048/0x6C78B50B97A42F8A";
+      fingerprint = "BF3A 3EE6 3144 2C5F C9FB  39A7 6C78 B50B 97A4 2F8A";
+    }];
+  };
   nzhang-zh = {
     email = "n.zhang.hp.au@gmail.com";
     github = "nzhang-zh";

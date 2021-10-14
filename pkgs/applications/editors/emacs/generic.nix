@@ -198,7 +198,7 @@ let emacs = stdenv.mkDerivation (lib.optionalAttrs nativeComp {
     description = "The extensible, customizable GNU text editor";
     homepage    = "https://www.gnu.org/software/emacs/";
     license     = licenses.gpl3Plus;
-    maintainers = with maintainers; [ lovek323 peti jwiegley adisbladis ];
+    maintainers = with maintainers; [ lovek323 jwiegley adisbladis ];
     platforms   = platforms.all;
 
     longDescription = ''
