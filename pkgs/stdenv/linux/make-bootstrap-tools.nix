@@ -316,7 +316,7 @@ in with pkgs; rec {
   };
 
   # Get an instance of nixpkgs with these tools
-  pkgsWithTools = import nixpkgs {
+  pkgsWithTools = import pkgs.path {
     inherit localSystem crossSystem bootstrapFiles;
   };
 }
