@@ -3434,6 +3434,8 @@ with pkgs;
 
   spacevim = callPackage ../applications/editors/spacevim { };
 
+  sscep = callPackage ../tools/security/sscep { };
+
   ssmsh = callPackage ../tools/admin/ssmsh { };
 
   stagit = callPackage ../development/tools/stagit { };
