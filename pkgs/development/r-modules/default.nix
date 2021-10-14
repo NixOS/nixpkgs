@@ -513,6 +513,9 @@ let
     Rbowtie = with pkgs; [ zlib.dev ];
     gaston = with pkgs; [ zlib.dev ];
     csaw = with pkgs; [ zlib.dev curl ];
+    DirichletMultinomial = with pkgs; [ gsl ];
+    DiffBind = with pkgs; [ zlib.dev ];
+    CNEr = with pkgs; [ zlib ];
   };
 
   packagesRequiringX = [
@@ -880,10 +883,6 @@ let
 
     SamplerCompare = old.SamplerCompare.overrideDerivation (attrs: {
       PKG_LIBS = "-L${pkgs.blas}/lib -lblas -L${pkgs.lapack}/lib -llapack";
-    });
-
-    EMCluster = old.EMCluster.overrideDerivation (attrs: {
-      patches = [ ./patches/EMCluster.patch ];
     });
 
     spMC = old.spMC.overrideDerivation (attrs: {
