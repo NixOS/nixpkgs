@@ -34,6 +34,8 @@
       cpio = fetch { file = "cpio"; sha256 = "sha256-SWkwvLaFyV44kLKL2nx720SvcL4ej/p2V/bX3uqAGO0="; };
       tarball = fetch { file = "bootstrap-tools.cpio.bz2"; sha256 = "sha256-b65dXbIm6o6s6U8tAiGpR6SMfvfn/VFcZgTHBetJZis="; executable = false; };
     }
+
+, ...
 }:
 
 assert crossSystem == localSystem;

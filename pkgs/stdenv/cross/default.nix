@@ -1,5 +1,5 @@
 { lib
-, localSystem, crossSystem, config, overlays, crossOverlays ? [], bootstrapFiles ? null
+, localSystem, crossSystem, config, overlays, crossOverlays ? [], ...
 }:
 
 let

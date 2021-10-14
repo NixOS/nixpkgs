@@ -38,9 +38,6 @@
   # list it returns.
   stdenvStages ? import ../stdenv
 
-, # The bootstrap files (binary "seeds") used to bootstrap stdenv
-  bootstrapFiles ? null
-
 , # Ignore unexpected args.
   ...
 } @ args:
@@ -118,9 +115,9 @@ in let
 
   boot = import ../stdenv/booter.nix { inherit lib allPackages; };
 
-  stages = stdenvStages {
-    inherit lib localSystem crossSystem config overlays crossOverlays bootstrapFiles;
-  };
+  stages = stdenvStages (args // {
+    inherit lib localSystem crossSystem config overlays crossOverlays;
+  });
 
   pkgs = boot stages;
 
