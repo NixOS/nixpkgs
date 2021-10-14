@@ -314,4 +314,9 @@ in with pkgs; rec {
       make install
     '';
   };
+
+  # Get an instance of nixpkgs with these tools
+  pkgsWithTools = import nixpkgs {
+    inherit localSystem crossSystem bootstrapFiles;
+  };
 }
