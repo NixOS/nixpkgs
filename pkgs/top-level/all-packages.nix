@@ -11279,7 +11279,6 @@ with pkgs;
   inherit (callPackages ../development/compilers/crystal {
     llvmPackages = llvmPackages_10;
   })
-    crystal_0_36
     crystal_1_0
     crystal_1_1
     crystal_1_2
