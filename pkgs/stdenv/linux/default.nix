@@ -292,6 +292,9 @@ in
 
     overrides = self: super: let
       wrapStage3 = pkg: (pkg.override {
+        # Link GCC statically against GMP etc.  This makes sense because
+        # these builds of the libraries are only used by GCC, so it
+        # reduces the size of the stdenv closure.
         stdenv = self.makeStaticLibraries self.stdenv;
       }).overrideAttrs (oa: {
         # Work around faulty stackprotector support in cross bootstrap tools
@@ -303,9 +306,6 @@ in
         binutils coreutils gnugrep
         perl patchelf linuxHeaders gnum4 bison libidn2 libunistring;
       ${localSystem.libc} = getLibc prevStage;
-      # Link GCC statically against GMP etc.  This makes sense because
-      # these builds of the libraries are only used by GCC, so it
-      # reduces the size of the stdenv closure.
       gmp = wrapStage3 super.gmp;
       mpfr = wrapStage3 super.mpfr;
       libmpc = wrapStage3 super.libmpc;
@@ -324,11 +324,45 @@ in
                    prevStage.updateAutotoolsGnuConfigScriptsHook;
   })
 
+  # Construct a fourth stdenv with a new GCC with stackprotector hardening
+  (prevStage: stageFun prevStage {
+    name = "bootstrap-stage4";
+
+    overrides = self: super: let
+      wrapStage4 = pkg: pkg.override {
+        # Link GCC statically against GMP etc.  This makes sense because
+        # these builds of the libraries are only used by GCC, so it
+        # reduces the size of the stdenv closure.
+        stdenv = self.makeStaticLibraries self.stdenv;
+      };
+    in rec {
+      inherit (prevStage)
+        ccWrapperStdenv
+        binutils coreutils gnugrep
+        perl patchelf linuxHeaders gnum4 bison libidn2 libunistring;
+      ${localSystem.libc} = getLibc prevStage;
+      gmp = wrapStage4 super.gmp;
+      mpfr = wrapStage4 super.mpfr;
+      libmpc = wrapStage4 super.libmpc;
+      isl_0_20 = wrapStage4 super.isl_0_20;
+      gcc-unwrapped = super.gcc-unwrapped.override {
+        isl = isl_0_20;
+        # Use a deterministically built compiler
+        # see https://github.com/NixOS/nixpkgs/issues/108475 for context
+        reproducibleBuild = true;
+        profiledCompiler = false;
+      };
+    };
+    extraNativeBuildInputs = [ prevStage.patchelf ] ++
+      # Many tarballs come with obsolete config.sub/config.guess that don't recognize aarch64.
+      lib.optional (!localSystem.isx86 || localSystem.libc == "musl")
+                   prevStage.updateAutotoolsGnuConfigScriptsHook;
+  })
 
   # Construct a fourth stdenv that uses the new GCC.  But coreutils is
   # still from the bootstrap tools.
   (prevStage: stageFun prevStage {
-    name = "bootstrap-stage4";
+    name = "bootstrap-stage5";
 
     overrides = self: super: {
       # Zlib has to be inherited and not rebuilt in this stage,
