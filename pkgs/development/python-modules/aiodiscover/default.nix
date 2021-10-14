@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "aiodiscover";
-  version = "1.4.4";
+  version = "1.4.5";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-DobTx6oUr25J8bolo84V4yTT0b0jBsOIzPn93uAmDl0=";
+    sha256 = "sha256-QfeAEFB5WikuriBTcfFIgnJw5H4vEcGIVX47fyDb1Dk=";
   };
 
   propagatedBuildInputs = [

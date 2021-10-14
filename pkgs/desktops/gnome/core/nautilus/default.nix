@@ -36,6 +36,8 @@ stdenv.mkDerivation rec {
   pname = "nautilus";
   version = "41.0";
 
+  outputs = [ "out" "dev" ];
+
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
     sha256 = "+blBrcEEcAxn6kB2YiMV8fa3fc7BVMN/PUwLKDlQoeU=";
