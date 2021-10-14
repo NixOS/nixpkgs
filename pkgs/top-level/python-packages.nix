@@ -9523,6 +9523,8 @@ in {
 
   typesystem = callPackage ../development/python-modules/typesystem { };
 
+  typical = callPackage ../development/python-modules/typical { };
+
   typing = null;
 
   typing-extensions = callPackage ../development/python-modules/typing-extensions { };
