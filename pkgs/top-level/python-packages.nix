@@ -9104,6 +9104,8 @@ in {
 
   timeago = callPackage ../development/python-modules/timeago { };
 
+  timecop = callPackage ../development/python-modules/timecop { };
+
   timelib = callPackage ../development/python-modules/timelib { };
 
   time-machine = callPackage ../development/python-modules/time-machine { };

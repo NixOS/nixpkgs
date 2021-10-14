@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
   checkPhase = ''
     runHook preCheck
 
-    HOME=$TMPDIR xvfb-run meson test
+    HOME=$TMPDIR xvfb-run meson test --print-errorlogs
 
     runHook postCheck
   '';
