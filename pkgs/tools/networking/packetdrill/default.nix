@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "0djkwb6l2959f44d98vwb092rghf0qmii8391vrpxqb99j6pv4h6";
   };
   patches = [
-    # Upstream fix for -fno-common tollchains
+    # Upstream fix for -fno-common toolchains
     (fetchpatch {
       name = "fno-common.patch";
       url = "https://github.com/google/packetdrill/commit/c08292838de81a71ee477d5bf9d95b1130a1292b.patch";
