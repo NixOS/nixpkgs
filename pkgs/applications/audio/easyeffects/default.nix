@@ -16,6 +16,7 @@
 , lilv
 , lsp-plugins
 , lv2
+, mda_lv2
 , meson
 , ninja
 , nlohmann_json
@@ -83,6 +84,7 @@ stdenv.mkDerivation rec {
       lv2Plugins = [
         calf # limiter, compressor exciter, bass enhancer and others
         lsp-plugins # delay
+        mda_lv2 # loudness
       ];
       ladspaPlugins = [
         rubberband # pitch shifting
