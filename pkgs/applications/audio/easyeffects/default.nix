@@ -33,13 +33,13 @@
 
 stdenv.mkDerivation rec {
   pname = "easyeffects";
-  version = "6.0.3";
+  version = "6.1.3";
 
   src = fetchFromGitHub {
     owner = "wwmm";
     repo = "easyeffects";
     rev = "v${version}";
-    sha256 = "sha256-GzqPC/m/HMthLMamhJ4EXX6fxZYscdX1QmXgqHOPEcg=";
+    sha256 = "sha256-1UfeqPJxY4YT98UdqTZtG+QUBOZlKfK+7WbszhO22A0=";
   };
 
   nativeBuildInputs = [
@@ -82,8 +82,8 @@ stdenv.mkDerivation rec {
   preFixup =
     let
       lv2Plugins = [
-        calf # limiter, compressor exciter, bass enhancer and others
-        lsp-plugins # delay
+        calf # compressor exciter, bass enhancer and others
+        lsp-plugins # delay, limiter, multiband compressor
         mda_lv2 # loudness
         zam-plugins # maximizer
       ];
