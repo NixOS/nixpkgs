@@ -897,6 +897,7 @@ mapAliases ({
   stumpwm-git = throw "stumpwm-git has been broken for a long time and lispPackages.stumpwm follows Quicklisp that is close to git version"; # added 2021-05-09
   surf-webkit2 = surf; # added 2017-04-02
   sup = throw "sup was deprecated on 2019-09-10: abandoned by upstream";
+  swec = throw "swec has been removed; broken and abandoned upstream."; # added 2021-10-14
   swfdec = throw "swfdec has been removed as broken and unmaintained."; # added 2020-08-23
   swtpm-tpm2 = swtpm; # added 2021-02-26
   syncthing-cli = syncthing; # added 2021-04-06
