@@ -11088,6 +11088,12 @@
     githubId = 1141680;
     name = "Thane Gill";
   };
+  thomassdk = {
+    email = "thomassdk@pm.me";
+    github = "thomassdk";
+    githubId = 32598350;
+    name = "Thomas Kelly";
+  };
   TheBrainScrambler = {
     email = "esthromeris@riseup.net";
     github = "TheBrainScrambler";
