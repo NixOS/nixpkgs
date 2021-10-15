@@ -1284,6 +1284,7 @@ broken-packages:
   - escape-artist
   - escoger
   - espial
+  - esqueleto-pgcrypto
   - ess
   - estimators
   - EstProgress
@@ -1675,6 +1676,7 @@ broken-packages:
   - git-cuk
   - git-date
   - gitdo
+  - github
   - github-backup
   - github-data
   - github-tools
@@ -4382,6 +4384,7 @@ broken-packages:
   - shopify
   - shortcut-links
   - shorten-strings
+  - short-vec
   - show-prettyprint
   - Shpadoinkle-backend-snabbdom
   - Shpadoinkle-isreal
@@ -4714,6 +4717,7 @@ broken-packages:
   - SVD2HS
   - svfactor
   - svg-builder-fork
+  - svgcairo
   - svgutils
   - svm-light-utils
   - svm-simple
@@ -5286,6 +5290,7 @@ broken-packages:
   - warc
   - warp-dynamic
   - warp-grpc
+  - warp-quic
   - warp-static
   - warp-systemd
   - wasm
