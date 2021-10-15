@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "kubescape";
-  version = "1.0.109";
+  version = "1.0.120";
 
   src = fetchFromGitHub {
     owner = "armosec";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-aPy0FcDFoBK02pCmDTe5T1QyB9+WC++cBuOI7CtaXtY=";
+    sha256 = "sha256-aFFJAib0/FTOaPtSLYXIFV3+QfIpzy8fC7rWAQW5yh0=";
   };
 
   vendorSha256 = "sha256-vN+ci2vCbtDuEEVzZQiFkdi1QkMgnnbbJgD9g6DS7qs=";
