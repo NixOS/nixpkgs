@@ -1,26 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, gettext, makeWrapper, tcl, which, fetchpatch
+{ lib, stdenv, fetchFromGitHub, gettext, makeWrapper, tcl, which
 , ncurses, perl , cyrus_sasl, gss, gpgme, libkrb5, libidn, libxml2, notmuch, openssl
 , lmdb, libxslt, docbook_xsl, docbook_xml_dtd_42, w3m, mailcap, sqlite, zlib
 }:
 
 stdenv.mkDerivation rec {
-  version = "20210205";
+  version = "20211015";
   pname = "neomutt";
 
   src = fetchFromGitHub {
     owner  = "neomutt";
     repo   = "neomutt";
     rev    = version;
-    sha256 = "sha256-ADg/+gmndOiuQHsncOzS5K4chthXeUFz6RRJsrZNeZY=";
+    sha256 = "sha256-ObYeh9Q/WZ1N60pxR2LoDNCU8rP4tQt/oIxnqALqMhs=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "CVE-2021-32055.patch";
-      url = "https://github.com/neomutt/neomutt/commit/fa1db5785e5cfd9d3cd27b7571b9fe268d2ec2dc.patch";
-      sha256 = "0bb7gisjynq3w7hhl6vxa469h609bcz6fkdi8vf740pqrwhk68yn";
-    })
-  ];
 
   buildInputs = [
     cyrus_sasl gss gpgme libkrb5 libidn ncurses
