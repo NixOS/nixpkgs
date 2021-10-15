@@ -29,11 +29,11 @@ buildGoModule rec {
     mkdir -p $out/lib/systemd/system
 
     substitute dist/systemd/maddy.service $out/lib/systemd/system/maddy.service \
-      --replace "/usr/bin/maddy" "$out/bin/maddy" \
+      --replace "/usr/local/bin/maddy" "$out/bin/maddy" \
       --replace "/bin/kill" "${coreutils}/bin/kill"
 
     substitute dist/systemd/maddy@.service $out/lib/systemd/system/maddy@.service \
-      --replace "/usr/bin/maddy" "$out/bin/maddy" \
+      --replace "/usr/local/bin/maddy" "$out/bin/maddy" \
       --replace "/bin/kill" "${coreutils}/bin/kill"
   '';
 
