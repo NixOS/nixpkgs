@@ -1176,17 +1176,7 @@ let
         };
       };
 
-      ms-toolsai.jupyter = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          name = "jupyter";
-          publisher = "ms-toolsai";
-          version = "2021.5.745244803";
-          sha256 = "0gjpsp61l8daqa87mpmxcrvsvb0pc2vwg7xbkvwn0f13c1739w9p";
-        };
-        meta = {
-          license = lib.licenses.unfree;
-        };
-      };
+      ms-toolsai.jupyter = callPackage ./ms-toolsai-jupyter {};
 
       mvllow.rose-pine = buildVscodeMarketplaceExtension {
         mktplcRef = {
