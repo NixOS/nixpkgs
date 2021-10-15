@@ -16,6 +16,6 @@ in {
   graalvm11-ce = mkGraal rec {
     version = "21.2.0";
     javaVersion = "11";
-    platforms = ["x86_64-linux" "x86_64-darwin"];
+    platforms = ["x86_64-linux" "aarch64-linux" "x86_64-darwin"];
   };
 }

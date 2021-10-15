@@ -10,17 +10,26 @@
 , gtkSupport ? true, cairo, glib, gtk3 }:
 
 let
-  platform = if stdenv.isDarwin then "darwin-amd64" else "linux-amd64";
+  platform = {
+    aarch64-linux = "linux-aarch64";
+    x86_64-linux = "linux-amd64";
+    x86_64-darwin = "darwin-amd64";
+  }.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
+
   runtimeDependencies = [ cups ]
     ++ lib.optionals gtkSupport [ cairo glib gtk3 ];
+
   runtimeLibraryPath = lib.makeLibraryPath runtimeDependencies;
+
   javaVersionPlatform = "${javaVersion}-${platform}";
+
   graalvmXXX-ce = stdenv.mkDerivation rec {
     name = "graalvm${javaVersion}-ce";
     srcs = [
       (fetchurl {
         sha256 = {
           "8-linux-amd64" = "01gyxjmfp7wpcyn7x8b184fn0lp3xryfw619bqch120pzvr6z88f";
+          "11-linux-aarch64" = "sha256-u9841eaHH347JHCrm5u3YGZ9RSTuKiDq368TY2otAYw=";
           "11-linux-amd64" = "0w7lhvxm4nggqdcl4xrhdd3y6dqw9jhyca9adjkp508n4lqf1lxv";
           "11-darwin-amd64" = "0dnahicdl0vhrbiml9z9nbb7k75hbsjj8rs246i1lwril12dqb7n";
         }.${javaVersionPlatform};
@@ -29,6 +38,7 @@ let
       (fetchurl {
         sha256 = {
           "8-linux-amd64" = "1jlvrxdlbsmlk3ia43h9m29kmmdn83h6zdlnf8qb7bm38c84nhsc";
+          "11-linux-aarch64" = "sha256-7W5gkhj2kON2ocrGpyH/OL/phOyHkjNDId2CtyUAEWY=";
           "11-linux-amd64" = "1ybd7a6ii6582skr0nkxx7bccsa7gkg0yriql2h1lcz0rfzcdi3g";
           "11-darwin-amd64" = "1jdy845vanmz05zx5b9227gb1msh9wdrz2kf3fx9z54ssd9qgdhm";
         }.${javaVersionPlatform};
@@ -37,6 +47,7 @@ let
       (fetchurl {
         sha256 = {
           "8-linux-amd64" = "18ip0ay06q1pryqs8ja988mvk9vw475c0nfjcznnsd1zp296p6jc";
+          "11-linux-aarch64" = "sha256-i9ysgqbI52PiXofZQ5AnPSzs2TeR8An5CIYzcwhx28o=";
           "11-linux-amd64" = "1jszz97mkqavxzyhx5jxhi43kqjxk9c36j5l5hy3kn8sdfmbplm4";
           "11-darwin-amd64" = "1767ryhv2cn5anlys63ysax1p8ag79bykac1xfrjfan8yv6d8ybl";
         }.${javaVersionPlatform};
@@ -44,19 +55,22 @@ let
       })
       (fetchurl {
         sha256 = {
+          "8-linux-amd64" = "08s36rjy5irg25b7lqx0m4v2wpywin3cqyhdrywhvq14f7zshsd5";
+          "11-linux-aarch64" = "sha256-Lkc/mq1w18+PQ5McvLGyQBSOz/TMSUgwioRZ0Dtyhm4=";
+          "11-linux-amd64" = "1ybjaknmbsdg8qzb986x39fq0h7fyiymdcigc7y86swk8dd916hv";
+          "11-darwin-amd64" = "02dwlb62kqr4rjjmvkhn2xk9l1p47ahg9xyyfkw7im1jwlqmqnzf";
+        }.${javaVersionPlatform};
+        url = "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-${version}/wasm-installable-svm-java${javaVersionPlatform}-${version}.jar";
+      })
+    ] ++ lib.optionals (platform == "amd64") [
+      # graalpython is not available on aarch64 platforms yet
+      (fetchurl {
+        sha256 = {
           "8-linux-amd64" = "0il15438qnikqsxdsl7fcdg0c8zs3cbm4ry7pys7fxxr1ckd8szq";
           "11-linux-amd64" = "07759sr8nijvqm8aqn69x9vq7lyppns7a6l6xribv43jvfmwpfkl";
           "11-darwin-amd64" = "01l3as8dihc7xqy5sdkrpxmpzrqbcvvg84m2s6j1j8y2db1khf2s";
         }.${javaVersionPlatform};
         url = "https://github.com/graalvm/graalpython/releases/download/vm-${version}/python-installable-svm-java${javaVersionPlatform}-${version}.jar";
-      })
-      (fetchurl {
-        sha256 = {
-          "8-linux-amd64" = "08s36rjy5irg25b7lqx0m4v2wpywin3cqyhdrywhvq14f7zshsd5";
-          "11-linux-amd64" = "1ybjaknmbsdg8qzb986x39fq0h7fyiymdcigc7y86swk8dd916hv";
-          "11-darwin-amd64" = "02dwlb62kqr4rjjmvkhn2xk9l1p47ahg9xyyfkw7im1jwlqmqnzf";
-        }.${javaVersionPlatform};
-        url = "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-${version}/wasm-installable-svm-java${javaVersionPlatform}-${version}.jar";
       })
     ];
 
@@ -124,10 +138,9 @@ let
          exit 1
       fi
 
-      unpack_jar ''${arr[1]}
-      unpack_jar ''${arr[2]}
-      unpack_jar ''${arr[3]}
-      unpack_jar ''${arr[4]}
+      for jar in "''${arr[@]:1}"; do
+        unpack_jar "$jar"
+      done
     '';
 
     outputs = [ "out" "lib" ];
@@ -145,7 +158,6 @@ let
           ln -s $f ${basepath}/${platform}/$(basename $f)
         done
       '';
-
       copyClibrariesToLib = ''
         # add those libraries to $lib output too, so we can use them with
         # `native-image -H:CLibraryPath=''${graalvm11-ce.lib}/lib ...` and reduce
@@ -167,6 +179,13 @@ let
         rm $out/jre/lib/jvmci/parentClassLoader.classpath
       '';
       "11-linux-amd64" = ''
+        ${nativePRNGWorkaround "$out/conf/security/java.security"}
+
+        ${copyClibrariesToOut "$out/lib/svm/clibraries"}
+
+        ${copyClibrariesToLib}
+      '';
+      "11-linux-aarch64" = ''
         ${nativePRNGWorkaround "$out/conf/security/java.security"}
 
         ${copyClibrariesToOut "$out/lib/svm/clibraries"}
@@ -219,53 +238,60 @@ let
 
     doInstallCheck = true;
     installCheckPhase = ''
-        echo ${
-          lib.escapeShellArg ''
-            public class HelloWorld {
-              public static void main(String[] args) {
-                System.out.println("Hello World");
-              }
+      echo ${
+        lib.escapeShellArg ''
+          public class HelloWorld {
+            public static void main(String[] args) {
+              System.out.println("Hello World");
             }
-          ''
-        } > HelloWorld.java
-        $out/bin/javac HelloWorld.java
+          }
+        ''
+      } > HelloWorld.java
+      $out/bin/javac HelloWorld.java
 
-        # run on JVM with Graal Compiler
-        $out/bin/java -XX:+UnlockExperimentalVMOptions -XX:+EnableJVMCI -XX:+UseJVMCICompiler HelloWorld | fgrep 'Hello World'
+      # run on JVM with Graal Compiler
+      $out/bin/java -XX:+UnlockExperimentalVMOptions -XX:+EnableJVMCI -XX:+UseJVMCICompiler HelloWorld | fgrep 'Hello World'
 
-        # Ahead-Of-Time compilation
-        $out/bin/native-image -H:-CheckToolchain -H:+ReportExceptionStackTraces --no-server HelloWorld
-        ./helloworld | fgrep 'Hello World'
+      # Ahead-Of-Time compilation
+      $out/bin/native-image -H:-CheckToolchain -H:+ReportExceptionStackTraces --no-server HelloWorld
+      ./helloworld | fgrep 'Hello World'
 
-        ${
-          lib.optionalString stdenv.isLinux ''
-            # Ahead-Of-Time compilation with --static
-            # --static flag doesn't work for darwin
-            $out/bin/native-image --no-server --static HelloWorld
-            ./helloworld | fgrep 'Hello World'
-          ''
-        }
+      ${
+        lib.optionalString stdenv.isLinux ''
+          # Ahead-Of-Time compilation with --static
+          # --static flag doesn't work for darwin
+          $out/bin/native-image --no-server --static HelloWorld
+          ./helloworld | fgrep 'Hello World'
+        ''
+      }
 
-        echo "Testing interpreted languages"
-        $out/bin/graalpython -c 'print(1 + 1)'
-        $out/bin/ruby -e 'puts(1 + 1)'
+      ${
+        lib.optionalString (platform == "amd64") ''
+          echo "Testing interpreted languages"
+          $out/bin/graalpython -c 'print(1 + 1)'
+          $out/bin/ruby -e 'puts(1 + 1)'
 
-        echo '1 + 1' | $out/bin/graalpython
+          echo '1 + 1' | $out/bin/graalpython
+        ''
+      }
 
-        ${
-          lib.optionalString stdenv.isLinux ''
-            # TODO: `irb` on MacOS gives an error saying "Could not find OpenSSL
-            # headers, install via Homebrew or MacPorts or set OPENSSL_PREFIX", even
-            # though `openssl` is in `propagatedBuildInputs`. For more details see:
-            # https://github.com/NixOS/nixpkgs/pull/105815
-            echo '1 + 1' | $out/bin/irb
-          ''
-        }
+      ${# TODO: `irb` on MacOS gives an error saying "Could not find OpenSSL
+        # headers, install via Homebrew or MacPorts or set OPENSSL_PREFIX", even
+        # though `openssl` is in `propagatedBuildInputs`. For more details see:
+        # https://github.com/NixOS/nixpkgs/pull/105815
+        # TODO: "truffleruby: an internal exception escaped out of the interpreter"
+        # error on linux-aarch64
+        lib.optionalString (platform == "linux-amd64") ''
+          echo '1 + 1' | $out/bin/irb
+        ''
+      }
 
-      ${lib.optionalString (javaVersion == "11" && stdenv.isLinux) ''
-        # Doesn't work on MacOS, we have this error: "Launching JShell execution engine threw: Operation not permitted (Bind failed)"
-        echo '1 + 1' | $out/bin/jshell
-      ''}'';
+      ${# TODO: Doesn't work on MacOS, we have this error:
+        # "Launching JShell execution engine threw: Operation not permitted (Bind failed)"
+        lib.optionalString (javaVersion == "11" && stdenv.isLinux) ''
+          echo '1 + 1' | $out/bin/jshell
+        ''
+      }'';
 
     passthru.home = graalvmXXX-ce;
 
@@ -280,6 +306,7 @@ let
         glittershark
         babariviere
         ericdallo
+        thiagokokada
       ];
       platforms = platforms;
     };
