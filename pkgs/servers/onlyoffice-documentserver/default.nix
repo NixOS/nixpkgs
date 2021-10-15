@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     # ^-- grep points here
     #
     # var_* are as described above
-    # shift_by seems to be safe so long as all patchelf adjustments occur 
+    # shift_by seems to be safe so long as all patchelf adjustments occur
     # before any locations pointed to by hardcoded offsets
     var_skip=20
     var_select=22
