@@ -123,6 +123,11 @@ self = stdenv.mkDerivation {
     "-Dgallium-nine=${boolToString enableGalliumNine}" # Direct3D in Wine
     "-Dosmesa=${boolToString enableOSMesa}" # used by wine
     "-Dmicrosoft-clc=disabled" # Only relevant on Windows (OpenCL 1.2 API on top of D3D12)
+
+    # To enable non-mesa gdm backends to be found (e.g. Nvidia)
+    # The default path is ${placeholder "out"}/lib/gbm, however
+    # libgbm.so gets installed under $out/lib
+    "-Dgbm-backends-path=/run/opengl-driver/lib:${placeholder "out"}/lib/gbm:${placeholder "out"}/lib"
   ] ++ optionals stdenv.isLinux [
     "-Dglvnd=true"
   ] ++ optionals enableOpenCL [
