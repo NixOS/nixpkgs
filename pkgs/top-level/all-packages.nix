@@ -9149,6 +9149,8 @@ with pkgs;
 
   seexpr = callPackage ../development/compilers/seexpr { };
 
+  semgrep = callPackage ../development/tools/semgrep { };
+
   setroot = callPackage  ../tools/X11/setroot { };
 
   setserial = callPackage ../tools/system/setserial { };
