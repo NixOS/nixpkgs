@@ -1,20 +1,31 @@
-{ lib, stdenv, fetchurl, makeWrapper, eprover, ocaml, perl, zlib }:
+{ lib, stdenv, fetchurl, fetchpatch, makeWrapper, eprover, ocaml, camlp4, perl, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "leo2";
-  version = "1.6.2";
+  version = "1.7.0";
 
   src = fetchurl {
     url = "https://page.mi.fu-berlin.de/cbenzmueller/leo/leo2_v${version}.tgz";
-    sha256 = "1wjpmizb181iygnd18lx7p77fwaci2clgzs5ix5j51cc8f3pazmv";
+    sha256 = "sha256:1b2q7vsz6s9ighypsigqjm1mzjiq3xgnz5id5ssb4rh9zm190r82";
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ eprover ocaml perl zlib ];
+  buildInputs = [ eprover ocaml camlp4 perl zlib ];
 
-  sourceRoot = "leo2/src";
+  patches = [ (fetchpatch {
+      url = "https://github.com/niklasso/minisat/commit/7eb6015313561a2586032574788fcb133eeaa19f.patch";
+      stripLen = 1;
+      extraPrefix = "lib/";
+      sha256 = "sha256:01ln7hi6nvvkqkhn9hciqizizz5qspvqffgksvgmzn9x7kdd9pnh";
+    })
+  ];
 
-  preConfigure = "patchShebangs configure";
+  preConfigure = ''
+    cd src
+    patchShebangs configure
+    substituteInPlace Makefile.pre \
+      --replace '+camlp4' "${camlp4}/lib/ocaml/${ocaml.version}/site-lib/camlp4"
+  '';
 
   buildFlags = [ "opt" ];
 

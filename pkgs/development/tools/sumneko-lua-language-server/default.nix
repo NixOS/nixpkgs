@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sumneko-lua-language-server";
-  version = "2.4.2";
+  version = "2.4.3";
 
   src = fetchFromGitHub {
     owner = "sumneko";
     repo = "lua-language-server";
     rev = version;
-    sha256 = "sha256-PYlHjKMnqnhAJAvmHbH6Bb+qOyNzDH+ewOkXkj2u4CU=";
+    sha256 = "sha256-qap6TsqaCy+9prWiUow78eBgaWGq5eUkOXBTYFnAZyo=";
     fetchSubmodules = true;
   };
 

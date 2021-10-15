@@ -999,6 +999,8 @@ with pkgs;
     inherit (lxqt) qtermwidget;
   };
 
+  ctx = callPackage ../applications/terminal-emulators/ctx { };
+
   darktile = callPackage ../applications/terminal-emulators/darktile { };
 
   eterm = callPackage ../applications/terminal-emulators/eterm { };
@@ -6277,6 +6279,8 @@ with pkgs;
 
   imgurbash2 = callPackage ../tools/graphics/imgurbash2 { };
 
+  in-formant = callPackage ../applications/audio/in-formant { };
+
   inadyn = callPackage ../tools/networking/inadyn { };
 
   incron = callPackage ../tools/system/incron { };
@@ -7401,8 +7405,6 @@ with pkgs;
   mimeo = callPackage ../tools/misc/mimeo { };
 
   mimetic = callPackage ../development/libraries/mimetic { };
-
-  minetime = callPackage ../applications/office/minetime { };
 
   minio-client = callPackage ../tools/networking/minio-client { };
 
@@ -9550,6 +9552,7 @@ with pkgs;
   storeBackup = callPackage ../tools/backup/store-backup { };
 
   stow = callPackage ../tools/misc/stow { };
+  xstow = callPackage ../tools/misc/xstow { };
 
   stun = callPackage ../tools/networking/stun { };
 
@@ -11276,8 +11279,9 @@ with pkgs;
   inherit (callPackages ../development/compilers/crystal {
     llvmPackages = llvmPackages_10;
   })
-    crystal_0_36
     crystal_1_0
+    crystal_1_1
+    crystal_1_2
     crystal;
 
   crystal2nix = callPackage ../development/compilers/crystal2nix { };
@@ -14944,6 +14948,7 @@ with pkgs;
 
   inherit (callPackage ../development/tools/build-managers/shards { })
     shards_0_15
+    shards_0_16
     shards;
 
   shellcheck = callPackage ../development/tools/shellcheck {};
@@ -24004,9 +24009,7 @@ with pkgs;
 
   csa = callPackage ../applications/audio/csa { };
 
-  csound = callPackage ../applications/audio/csound {
-    fluidsynth = fluidsynth_1;
-  };
+  csound = callPackage ../applications/audio/csound { };
 
   csound-manual = callPackage ../applications/audio/csound/csound-manual {
     python = python27;
@@ -31150,7 +31153,7 @@ with pkgs;
   mathlibtools = with python3Packages; toPythonApplication mathlibtools;
 
   leo2 = callPackage ../applications/science/logic/leo2
-    { ocaml = ocaml-ng.ocamlPackages_4_01_0.ocaml; };
+    { inherit (ocaml-ng.ocamlPackages_4_05) ocaml camlp4; };
 
   leo3-bin = callPackage ../applications/science/logic/leo3/binary.nix {};
 

@@ -37,6 +37,6 @@ mkDerivation rec {
     homepage = "http://stellarium.org/";
     license = licenses.gpl2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ peti ma27 ];
+    maintainers = with maintainers; [ ma27 ];
   };
 }
