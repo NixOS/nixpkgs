@@ -41,6 +41,12 @@ in stdenv.mkDerivation rec {
     cd libtrellis
   '';
 
+  doInstallCheck = true;
+
+  installCheckPhase = ''
+    $out/bin/ecppack $out/share/trellis/misc/basecfgs/empty_lfe5u-85f.config /tmp/test.bin
+  '';
+
   meta = with lib; {
     description     = "Documentation and bitstream tools for Lattice ECP5 FPGAs";
     longDescription = ''
@@ -51,7 +57,7 @@ in stdenv.mkDerivation rec {
     '';
     homepage    = "https://github.com/YosysHQ/prjtrellis";
     license     = licenses.isc;
-    maintainers = with maintainers; [ q3k thoughtpolice emily ];
+    maintainers = with maintainers; [ q3k thoughtpolice emily rowanG077 ];
     platforms   = platforms.all;
   };
 }
