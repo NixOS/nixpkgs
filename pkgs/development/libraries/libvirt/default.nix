@@ -84,23 +84,24 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "libvirt";
-  version = "7.7.0";
+  version = "7.8.0";
 
   src =
     if buildFromTarball then
       fetchurl
         {
           url = "https://libvirt.org/sources/${pname}-${version}.tar.xz";
-          sha256 = "1cjj48dn4ww13ayicd2g863a5kz0sc5jlbv2991bj54dq6cn0q8v";
+          sha256 = "sha256-pyfNCke/ok+n3ih00j86n58Czra0m6FSiPbZoJixmSE=";
         }
     else
-      fetchFromGitLab {
-        owner = pname;
-        repo = pname;
-        rev = "v${version}";
-        sha256 = "sha256-gv/tORDlzZP3L3YcU6/YPEpqHQSLzEWa6kEX8EzZM28=";
-        fetchSubmodules = true;
-      };
+      fetchFromGitLab
+        {
+          owner = pname;
+          repo = pname;
+          rev = "v${version}";
+          sha256 = "sha256-/tSMJFgLPAiQXcZ2qZLM4XZqf96NtW3+zwKyrwGho2s=";
+          fetchSubmodules = true;
+        };
 
   patches = [
     ./0001-meson-patch-in-an-install-prefix-for-building-on-nix.patch
