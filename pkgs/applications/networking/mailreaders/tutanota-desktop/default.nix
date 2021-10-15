@@ -1,28 +1,54 @@
-{ lib, fetchurl, appimageTools }:
+{ stdenv, lib, fetchurl, makeDesktopItem, copyDesktopItems, makeWrapper,
+electron, libsecret }:
 
-let
+stdenv.mkDerivation rec {
   pname = "tutanota-desktop";
   version = "3.88.4";
-  name = "tutanota-desktop-${version}";
+
   src = fetchurl {
-    url = "https://mail.tutanota.com/desktop/tutanota-desktop-linux.AppImage";
-    name = "tutanota-desktop-${version}.AppImage";
-    sha256 = "sha256-MwvH6SGZwcvxAr5olklqKTF2p2pv8+F5qwpmwN3uZkc=";
+    url = "https://github.com/tutao/tutanota/releases/download/tutanota-release-${version}/${pname}-${version}-unpacked-linux.tar.gz";
+    name = "tutanota-desktop-${version}.tar.gz";
+    sha256 = "sha256-UOb63+NfW6mHKaj3PDEzvz5hcmJBIISq02rtwgSZMjo=";
   };
-  appimageContents = appimageTools.extractType2 { inherit name src; };
 
-in appimageTools.wrapType2 {
-  inherit name src;
+  nativeBuildInputs = [
+    copyDesktopItems
+    makeWrapper
+  ];
 
-  extraPkgs = pkgs: (appimageTools.defaultFhsEnvArgs.multiPkgs pkgs) ++ [ pkgs.libsecret ];
+  dontConfigure = true;
+  dontBuild = true;
 
-  extraInstallCommands = ''
-    mv $out/bin/${name} $out/bin/${pname}
+  desktopItems = makeDesktopItem {
+    name = pname;
+    exec = "tutanota-desktop";
+    icon = "tutanota-desktop";
+    comment = meta.description;
+    desktopName = "Tutanota Desktop";
+    genericName = "Email Reader";
+  };
 
-    install -m 444 -D ${appimageContents}/tutanota-desktop.desktop -t $out/share/applications
-    substituteInPlace $out/share/applications/tutanota-desktop.desktop \
-      --replace 'Exec=AppRun' 'Exec=${pname}'
-    cp -r ${appimageContents}/usr/share/icons $out/share
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/bin $out/opt/tutanota-desktop $out/share/tutanota-desktop
+
+    cp -r ./ $out/opt/tutanota-desktop
+    mv $out/opt/tutanota-desktop/{locales,resources} $out/share/tutanota-desktop
+
+    for icon_size in 64 512; do
+      icon=resources/icons/icon/$icon_size.png
+      path=$out/share/icons/hicolor/$icon_size'x'$icon_size/apps/tutanota-desktop.png
+      install -Dm644 $icon $path
+    done
+
+    makeWrapper ${electron}/bin/electron \
+      $out/bin/tutanota-desktop \
+      --add-flags $out/share/tutanota-desktop/resources/app.asar \
+      --run "mkdir /tmp/tutanota" \
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libsecret ]}
+
+    runHook postInstall
   '';
 
   meta = with lib; {
