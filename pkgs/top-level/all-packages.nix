@@ -12940,6 +12940,8 @@ with pkgs;
 
   z88dk = callPackage ../development/compilers/z88dk { };
 
+  zephyr-sdk = callPackage ../development/embedded/zephyr-sdk { };
+
   zulip = callPackage ../applications/networking/instant-messengers/zulip {
     # Bubblewrap breaks zulip, see https://github.com/NixOS/nixpkgs/pull/97264#issuecomment-704454645
     appimageTools = pkgs.appimageTools.override {
