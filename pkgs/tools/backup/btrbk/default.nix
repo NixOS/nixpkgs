@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "btrbk";
-  version = "0.29.1";
+  version = "0.31.3";
 
   src = fetchurl {
     url = "https://digint.ch/download/btrbk/releases/${pname}-${version}.tar.xz";
-    sha256 = "153inyvvnl17hq1w3nsa783havznaykdam2yrj775bmi2wg6fvwn";
+    sha256 = "sha256-YvVJSWXdWU+BBl4boX+ZeNYDQ/cu517RjNoaNJzdp9M=";
   };
 
   nativeBuildInputs = [ asciidoc asciidoctor makeWrapper ];
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
-    wrapProgram $out/sbin/btrbk \
+    wrapProgram $out/bin/btrbk \
       --set PERL5LIB $PERL5LIB \
       --prefix PATH ':' "${lib.makeBinPath [ btrfs-progs bash mbuffer openssh ]}"
   '';
