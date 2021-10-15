@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "spiderpy";
-  version = "1.5.0";
+  version = "1.6.1";
 
   disabled = isPy27;
 
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "peternijssen";
     repo = "spiderpy";
     rev = version;
-    sha256 = "1nbfjqwiyyl7lhkb4rvickxiy9nwynr2sxr1hpyv0vm09h6q8hsc";
+    sha256 = "sha256-x8G9qjwmLL/Iom+YAADue5lt63lfEKj80zau1+0zHsI=";
   };
 
   propagatedBuildInputs = [
