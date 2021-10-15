@@ -333,6 +333,8 @@ mapAliases ({
   google-musicmanager = throw "google-musicmanager has been removed because Google Play Music was discontinued"; # added 2021-03-07
   googleAuthenticator = google-authenticator; # added 2016-10-16
   grantlee5 = libsForQt5.grantlee;  # added 2015-12-19
+  graalvm8 = graalvm8-ce;
+  graalvm11 = graalvm11-ce;
   gsettings_desktop_schemas = gsettings-desktop-schemas; # added 2018-02-25
   gtk_doc = gtk-doc; # added 2018-02-25
   guileCairo = guile-cairo; # added 2017-09-24
@@ -374,6 +376,7 @@ mapAliases ({
   jbuilder = dune_1; # added 2018-09-09
   jikes = throw "jikes was deprecated on 2019-10-07: abandoned by upstream";
   joseki = apache-jena-fuseki; # added 2016-02-28
+  jvmci8 = throw "graalvm8 and its tools were deprecated in favor of graalvm8-ce"; # added 2021-10-15
   json_glib = json-glib; # added 2018-02-25
   kdecoration-viewer = throw "kdecoration-viewer has been removed from nixpkgs, as there is no upstream activity"; # 2020-06-16
   k9copy = throw "k9copy has been removed from nixpkgs, as there is no upstream activity"; # 2020-11-06
@@ -569,6 +572,7 @@ mapAliases ({
   mpv-with-scripts = self.wrapMpv self.mpv-unwrapped { }; # added 2020-05-22
   multipath_tools = multipath-tools;  # added 2016-01-21
   mupen64plus1_5 = mupen64plus; # added 2016-02-12
+  mx = throw "graalvm8 and its tools were deprecated in favor of graalvm8-ce"; # added 2021-10-15
   mxisd = throw "mxisd has been removed from nixpkgs as it has reached end of life, see https://github.com/kamax-matrix/mxisd/blob/535e0a5b96ab63cb0ddef90f6f42c5866407df95/EOL.md#end-of-life-notice . ma1sd may be a suitable alternative."; # added 2021-04-15
   mysqlWorkbench = mysql-workbench; # added 2017-01-19
   nagiosPluginsOfficial = monitoring-plugins;
