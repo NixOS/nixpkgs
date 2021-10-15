@@ -8,7 +8,7 @@
 #
 #  This file can be run independently (quick):
 #
-#      $ pkgs/build-support/trivial-builders/test.sh
+#      $ pkgs/build-support/trivial-builders/references/test.sh
 #
 #  or in the build sandbox with a ~20s VM overhead
 #
@@ -33,9 +33,9 @@ nixosTest {
       builtins.toJSON [hello figlet stdenvNoCC]
     );
     environment.variables = {
-      SAMPLE = invokeSamples ./test/sample.nix;
-      REFERENCES = invokeSamples ./test/invoke-writeReferencesToFile.nix;
-      DIRECT_REFS = invokeSamples ./test/invoke-writeDirectReferencesToFile.nix;
+      SAMPLE = invokeSamples ./sample.nix;
+      REFERENCES = invokeSamples ./invoke-writeReferencesToFile.nix;
+      DIRECT_REFS = invokeSamples ./invoke-writeDirectReferencesToFile.nix;
     };
   };
   testScript = ''

@@ -8,7 +8,7 @@
 #
 #  This file can be run independently (quick):
 #
-#      $ pkgs/build-support/trivial-builders/test.sh
+#      $ pkgs/build-support/trivial-builders/references/test.sh
 #
 #  or in the build sandbox with a ~20s VM overhead
 #
@@ -26,9 +26,9 @@ set -euo pipefail
 cd "$(dirname ${BASH_SOURCE[0]})"
 
 if [[ -z ${SAMPLE:-} ]]; then
-  sample=( `nix-build test/sample.nix` )
-  directRefs=( `nix-build test/invoke-writeDirectReferencesToFile.nix` )
-  references=( `nix-build test/invoke-writeReferencesToFile.nix` )
+  sample=( `nix-build sample.nix` )
+  directRefs=( `nix-build invoke-writeDirectReferencesToFile.nix` )
+  references=( `nix-build invoke-writeReferencesToFile.nix` )
 else
   # Injected by Nix (to avoid evaluating in a derivation)
   # turn them into arrays
