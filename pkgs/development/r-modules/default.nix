@@ -1065,6 +1065,18 @@ let
       }) ];
     });
 
+    h2o = old.h2o.overrideDerivation (attrs: {
+      preConfigure = ''
+        # prevent download of jar file during install and postpone to first use
+        sed -i '/downloadJar()/d' R/zzz.R
+
+        # during runtime the package directory is not writable as it's in the
+        # nix store, so store the jar in the user's cache directory instead
+        substituteInPlace R/connection.R --replace \
+          'dest_file <- file.path(dest_folder, "h2o.jar")' \
+          'dest_file <- file.path("~/.cache/", "h2o.jar")'
+      '';
+    });
   };
 in
   self
