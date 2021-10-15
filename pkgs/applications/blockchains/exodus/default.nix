@@ -4,11 +4,11 @@ cups, vivaldi-ffmpeg-codecs, libpulseaudio, at-spi2-core, libxkbcommon, mesa }:
 
 stdenv.mkDerivation rec {
   pname = "exodus";
-  version = "21.8.19";
+  version = "21.10.11";
 
   src = fetchurl {
     url = "https://downloads.exodus.io/releases/${pname}-linux-x64-${version}.zip";
-    sha256 = "1ssacadx5hdxq0cljb869ds3d11i4fyy3qd5hzh8wk5mlpdnba6k";
+    sha256 = "57fc112e1e30e3523264fb56eae8ee3b3597bb4407487db3402f413195f35a81";
   };
 
   sourceRoot = ".";
