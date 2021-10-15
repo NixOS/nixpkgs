@@ -19,6 +19,9 @@ buildPythonPackage rec {
     ++ lib.optionals (pythonOlder "3.5") [ typing ]
     ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
+  # Tests fail on Python 3.7 due to importlib using a deprecated interface
+  doCheck = !(pythonOlder "3.8");
+
   # fixtures fail to initialize correctly
   checkPhase = ''
     py.test tests --ignore=tests/integration/test_checker.py
