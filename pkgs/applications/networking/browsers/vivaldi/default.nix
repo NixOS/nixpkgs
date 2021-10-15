@@ -18,11 +18,11 @@ let
   vivaldiName = if isSnapshot then "vivaldi-snapshot" else "vivaldi";
 in stdenv.mkDerivation rec {
   pname = "vivaldi";
-  version = "4.1.2369.21-1";
+  version = "4.3.2439.44-1";
 
   src = fetchurl {
     url = "https://downloads.vivaldi.com/${branch}/vivaldi-${branch}_${version}_amd64.deb";
-    sha256 = "03062mik6paqp219jz420jsg762jjrfxmj1daq129z2zgzq0qr8l";
+    sha256 = "1bsx8axs438f4p019mdq66pmpimf575r31rv6cibpgv85366xhh9";
   };
 
   unpackPhase = ''
@@ -49,7 +49,7 @@ in stdenv.mkDerivation rec {
   buildPhase = ''
     runHook preBuild
     echo "Patching Vivaldi binaries"
-    for f in crashpad_handler vivaldi-bin vivaldi-sandbox ; do
+    for f in chrome_crashpad_handler vivaldi-bin vivaldi-sandbox ; do
       patchelf \
         --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
         --set-rpath "${libPath}" \

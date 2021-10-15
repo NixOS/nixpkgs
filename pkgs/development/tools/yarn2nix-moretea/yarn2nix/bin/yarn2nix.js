@@ -63,7 +63,7 @@ let pkgs = R.pipe(
 
 ;(async () => {
   if (!options['--no-patch']) {
-    pkgs = await R.map(fixPkgAddMissingSha1, pkgs)
+    pkgs = await Promise.all(R.map(fixPkgAddMissingSha1, pkgs))
   }
 
   const origJson = lockfile.parse(data)

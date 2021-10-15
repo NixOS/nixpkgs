@@ -367,6 +367,6 @@ stdenv.mkDerivation {
     '';
 
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ primeos peti wmertens globin ];
+    maintainers = with lib.maintainers; [ primeos wmertens globin ];
   };
 }

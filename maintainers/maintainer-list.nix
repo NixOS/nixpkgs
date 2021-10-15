@@ -440,6 +440,12 @@
     githubId = 173595;
     name = "Caleb Maclennan";
   };
+  ALEX11BR = {
+    email = "alexioanpopa11@gmail.com";
+    github = "ALEX11BR";
+    githubId = 49609151;
+    name = "Popa Ioan Alexandru";
+  };
   alexarice = {
     email = "alexrice999@hotmail.co.uk";
     github = "alexarice";
@@ -2089,6 +2095,16 @@
     github = "ck3d";
     githubId = 25088352;
     name = "Christian Kögler";
+  };
+  ckie = {
+    email = "nixpkgs-0efe364@ckie.dev";
+    github = "ckiee";
+    githubId = 2526321;
+    keys = [{
+      longkeyid = "rsa4096/0x13E79449C0525215";
+      fingerprint = "539F 0655 4D35 38A5 429A  E253 13E7 9449 C052 5215";
+    }];
+    name = "ckie";
   };
   clkamp = {
     email = "c@lkamp.de";
@@ -5461,6 +5477,12 @@
     githubId = 8735102;
     name = "John Ramsden";
   };
+  johnrichardrinehart = {
+    email = "johnrichardrinehart@gmail.com";
+    github = "johnrichardrinehart";
+    githubId = 6321578;
+    name = "John Rinehart";
+  };
   johntitor = {
     email = "huyuumi.dev@gmail.com";
     github = "JohnTitor";
@@ -8314,6 +8336,17 @@
     githubId = 127548;
     name = "Judson Lester";
   };
+  nzbr = {
+    email = "nixos@nzbr.de";
+    github = "nzbr";
+    githubId = 7851175;
+    name = "nzbr";
+    matrix = "@nzbr:nzbr.de";
+    keys = [{
+      longkeyid = "rsa2048/0x6C78B50B97A42F8A";
+      fingerprint = "BF3A 3EE6 3144 2C5F C9FB  39A7 6C78 B50B 97A4 2F8A";
+    }];
+  };
   nzhang-zh = {
     email = "n.zhang.hp.au@gmail.com";
     github = "nzhang-zh";
@@ -9671,16 +9704,6 @@
     github = "rongcuid";
     githubId = 1312525;
     name = "Rongcui Dong";
-  };
-  ronthecookie = {
-    name = "Ron B";
-    email = "me@ronthecookie.me";
-    github = "ronthecookie";
-    githubId = 2526321;
-    keys = [{
-      longkeyid = "rsa2048/0x6F5B32DE5E5FA80C";
-      fingerprint = "4B2C DDA5 FA35 642D 956D  7294 6F5B 32DE 5E5F A80C";
-    }];
   };
   roosemberth = {
     email = "roosembert.palacios+nixpkgs@posteo.ch";

@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7754d4dcaa45975514b404ece0da2bb4292acbc67ca559a69e12a19d54fcdb06";
+    sha256 = "sha256-d1TU3KpFl1UUtATs4NortCkqy8Z8pVmmnhKhnVT82wY=";
   };
 
   propagatedBuildInputs = [
@@ -57,9 +57,12 @@ buildPythonPackage rec {
     "tests/conformance/test_conformance.py" # requires docker
   ];
 
-  # prevent google directory from shadowing google imports
   preCheck = ''
+    # prevent google directory from shadowing google imports
     rm -r google
+
+    # requires docker and network
+    rm tests/conformance/test_conformance.py
   '';
 
   pythonImportsCheck = [ "google.cloud.storage" ];

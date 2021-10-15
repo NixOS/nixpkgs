@@ -25,7 +25,6 @@ stdenv.mkDerivation rec {
       IPSEC.
     '';
     platforms = platforms.unix;
-    maintainers = [ maintainers.peti ];
     license = licenses.gpl2Plus;
   };
 }

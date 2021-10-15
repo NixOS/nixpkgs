@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0e2353d97e5292dc8ce54447b712fb9e89496e714b5cacfc3d536614d1c461dc";
+    sha256 = "sha256-DiNT2X5SktyM5URHtxL7nolJbnFLXKz8PVNmFNHEYdw=";
   };
 
   propagatedBuildInputs = [
@@ -53,7 +53,7 @@ buildPythonPackage rec {
     # requires credentials
     "test_bigquery_magic"
     "TestBigQuery"
-    "test_query_retry_539"
+    "test_arrow_extension_types_same_for_storage_and_REST_APIs_894"
     "test_query_retry_539"
     "test_list_rows_empty_table"
     "test_list_rows_page_size"

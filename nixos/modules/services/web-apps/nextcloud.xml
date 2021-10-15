@@ -237,6 +237,12 @@
    Some apps may require extra PHP extensions to be installed.
    This can be configured with the <xref linkend="opt-services.nextcloud.phpExtraExtensions" /> setting.
   </para>
+
+  <para>
+   Alternatively, extra apps can also be declared with the <xref linkend="opt-services.nextcloud.extraApps" /> setting.
+   When using this setting, apps can no longer be managed statefully because this can lead to Nextcloud updating apps
+   that are managed by Nix. If you want automatic updates it is recommended that you use web interface to install apps.
+  </para>
  </section>
 
  <section xml:id="module-services-nextcloud-maintainer-info">

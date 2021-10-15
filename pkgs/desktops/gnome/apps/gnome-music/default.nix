@@ -79,18 +79,24 @@ python3.pkgs.buildPythonApplication rec {
     gst-plugins-ugly
   ]);
 
-  propagatedBuildInputs = with python3.pkgs; [
+  pythonPath = with python3.pkgs; [
     pycairo
     dbus-python
     pygobject3
   ];
-
 
   postPatch = ''
     for f in meson_post_conf.py meson_post_install.py; do
       chmod +x $f
       patchShebangs $f
     done
+  '';
+
+  # Prevent double wrapping, let the Python wrapper use the args in preFixup.
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
   doCheck = false;
