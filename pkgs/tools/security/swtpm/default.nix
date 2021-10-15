@@ -42,7 +42,20 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-cuse"
+    "--localstatedir=/var"
   ];
+
+  prePatch = ''
+    # Makefile tries to create the directory /var/lib/swtpm-localcafor, which fails
+    substituteInPlace samples/Makefile.am \
+        --replace 'install-data-local:' 'do-not-execute:'
+
+    # Use the correct path to the certtool binary
+    # instead of relying on it being in the environment
+    substituteInPlace samples/swtpm_localca.c --replace \
+        '# define CERTTOOL_NAME "certtool"' \
+        '# define CERTTOOL_NAME "${gnutls}/bin/certtool"'
+  '';
 
   enableParallelBuilding = true;
 

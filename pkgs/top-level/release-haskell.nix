@@ -305,7 +305,7 @@ let
       # package sets (like Cabal, jailbreak-cabal) are
       # working as expected.
       cabal-install = all;
-      Cabal_3_6_1_0 = with compilerNames; [ ghc884 ghc8107 ghc901 ghc921 ];
+      Cabal_3_6_2_0 = with compilerNames; [ ghc884 ghc8107 ghc901 ghc921 ];
       cabal2nix-unstable = all;
       funcmp = all;
       haskell-language-server = all;

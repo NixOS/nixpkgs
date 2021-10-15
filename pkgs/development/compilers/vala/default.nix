@@ -91,10 +91,11 @@ let
     doCheck = false; # fails, requires dbus daemon
 
     passthru = {
-     updateScript = gnome.updateScript {
-       attrPath = "${pname}_${lib.versions.major version}_${lib.versions.minor version}";
-       packageName = pname;
-     };
+      updateScript = gnome.updateScript {
+        attrPath = "${pname}_${lib.versions.major version}_${lib.versions.minor version}";
+        packageName = pname;
+        freeze = true;
+      };
     };
 
     meta = with lib; {
