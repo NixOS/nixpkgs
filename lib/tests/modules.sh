@@ -284,6 +284,15 @@ checkConfigOutput '^"a b"$' config.resultFoo ./declare-variants.nix ./define-var
 checkConfigOutput '^"a y z"$' config.resultFooBar ./declare-variants.nix ./define-variant.nix
 checkConfigOutput '^"a b c"$' config.resultFooFoo ./declare-variants.nix ./define-variant.nix
 
+## emptyValue's
+checkConfigOutput "[ ]" config.list ./emptyValues.nix
+checkConfigOutput "{ }" config.attrs ./emptyValues.nix
+checkConfigOutput "null" config.null ./emptyValues.nix
+checkConfigOutput "{ }" config.submodule ./emptyValues.nix
+# These types don't have empty values
+checkConfigError 'The option .int. is used but not defined' config.int ./emptyValues.nix
+checkConfigError 'The option .nonEmptyList. is used but not defined' config.nonEmptyList ./emptyValues.nix
+
 cat <<EOF
 ====== module tests ======
 $pass Pass
