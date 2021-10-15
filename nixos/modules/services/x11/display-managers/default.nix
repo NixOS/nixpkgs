@@ -216,6 +216,7 @@ in
       };
 
       session = mkOption {
+        type = with types; listOf attrs;
         default = [];
         example = literalExpression
           ''
