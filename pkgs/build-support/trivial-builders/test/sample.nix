@@ -4,6 +4,7 @@ let
     figlet
     hello
     writeText
+    runCommand
     ;
 in
 {
@@ -12,6 +13,8 @@ in
   norefs = writeText "hi" "hello";
   helloRef = writeText "hi" "hello ${hello}";
   helloFigletRef = writeText "hi" "hello ${hello} ${figlet}";
+  selfRef = runCommand "self-ref" {} "echo $out >$out";
+  selfRef2 = runCommand "self-ref-2" {} ''echo "${figlet}, $out" >$out'';
   inherit (pkgs)
     emptyFile
     emptyDirectory

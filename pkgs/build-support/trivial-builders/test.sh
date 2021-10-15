@@ -23,7 +23,7 @@ set -euo pipefail
 # set -x
 # PS4='+(${BASH_SOURCE}:${LINENO}): ${FUNCNAME[0]:+${FUNCNAME[0]}(): }'
 
-cd "$(dirname ${BASH_SOURCE[0]})"  # nixpkgs root
+cd "$(dirname ${BASH_SOURCE[0]})"
 
 if [[ -z ${SAMPLE:-} ]]; then
   sample=( `nix-build test/sample.nix` )
