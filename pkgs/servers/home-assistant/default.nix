@@ -21,19 +21,6 @@
 
 let
   defaultOverrides = [
-    # Pinned due to API changes in async-upnp-client>=0.20.0, remove after
-    (self: super: {
-      async-upnp-client = super.async-upnp-client.overridePythonAttrs (oldAttrs: rec {
-        version = "0.20.0";
-        src = fetchFromGitHub {
-          owner = "StevenLooman";
-          repo = "async_upnp_client";
-          rev = "v${version}";
-          sha256 = "sha256-jxYGOljV7tcsiAgpOhbXj7g7AwyP1kDDC83PiHG6ZFg=";
-        };
-      });
-    })
-
     # Override the version of some packages pinned in Home Assistant's setup.py and requirements_all.txt
     (mkOverride "python-slugify" "4.0.1" "69a517766e00c1268e5bbfc0d010a0a8508de0b18d30ad5a1ff357f8ae724270")
 
@@ -51,24 +38,6 @@ let
         checkInputs = oldAttrs.checkInputs ++ [ python3.pkgs.asynctest ];
       });
     })
-
-    # Pinned due to API changes in pyjwt>=2.0
-    (self: super: {
-      pyjwt = super.pyjwt.overridePythonAttrs (oldAttrs: rec {
-        version = "1.7.1";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "15hflax5qkw1v6nssk1r0wkj83jgghskcmn875m3wgvpzdvajncd";
-        };
-        disabledTests = [
-          "test_ec_verify_should_return_false_if_signature_invalid"
-        ];
-      });
-    })
-
-    # Pinned due to API changes in pylast 4.2.1
-    (mkOverride "pylast" "4.2.0"
-      "0zd0dn2l738ndz62vpa751z0ldnm91dcz9zzbvxv53r08l0s9yf3")
 
     # Pinned due to API changes in pyruckus>0.12
     (self: super: {
@@ -145,7 +114,7 @@ let
   extraBuildInputs = extraPackages py.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2021.9.7";
+  hassVersion = "2021.10.4";
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "homeassistant";
@@ -162,7 +131,7 @@ in with py.pkgs; buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = version;
-    sha256 = "1vcdnxh671iqhlbf6811j537by2i03fhryp9r9x77477y2y0xd6k";
+    sha256 = "1cl0h15285x7xba425d9anv882adi6bdqx4i3cicg3gf0nzcc8am";
   };
 
   # leave this in, so users don't have to constantly update their downstream patch handling
@@ -175,9 +144,12 @@ in with py.pkgs; buildPythonApplication rec {
       --replace "awesomeversion==21.4.0" "awesomeversion" \
       --replace "bcrypt==3.1.7" "bcrypt" \
       --replace "cryptography==3.3.2" "cryptography" \
+      --replace "jinja2==3.0.1" "jinja2" \
       --replace "pip>=8.0.3,<20.3" "pip" \
       --replace "requests==2.25.1" "requests>=2.25.1" \
-      --replace "ruamel.yaml==0.15.100" "ruamel.yaml"
+      --replace "ruamel.yaml==0.15.100" "ruamel.yaml" \
+      --replace "voluptuous==0.12.1" "voluptuous==0.12.2" \
+      --replace "yarl==1.6.3" "yarl==1.7.0"
     substituteInPlace tests/test_config.py --replace '"/usr"' '"/build/media"'
   '';
 
@@ -336,8 +308,8 @@ in with py.pkgs; buildPythonApplication rec {
     "ecobee"
     "econet"
     "ee_brightbox"
-    "efergy"
     "elgato"
+    "elkm1"
     "emonitor"
     "emulated_hue"
     "emulated_kasa"
@@ -361,6 +333,7 @@ in with py.pkgs; buildPythonApplication rec {
     "filter"
     "fireservicerota"
     "firmata"
+    "fjaraskupan"
     "flick_electric"
     "flipr"
     "flo"
@@ -520,6 +493,7 @@ in with py.pkgs; buildPythonApplication rec {
     "my"
     "myq"
     "mysensors"
+    "mythicbeastsdns"
     "nam"
     "namecheapdns"
     "neato"
@@ -677,6 +651,7 @@ in with py.pkgs; buildPythonApplication rec {
     "trace"
     "tradfri"
     "transmission"
+    "transport_nsw"
     "trend"
     "tts"
     "tuya"
@@ -795,8 +770,6 @@ in with py.pkgs; buildPythonApplication rec {
     # wemo/test_sensor.py: KeyError for various power attributes
     "--deselect tests/components/wemo/test_sensor.py::TestInsightTodayEnergy::test_state_unavailable"
     "--deselect tests/components/wemo/test_sensor.py::TestInsightCurrentPower::test_state_unavailable"
-    # tado/test_climate.py: Tries to connect to my.tado.com
-    "--deselect tests/components/tado/test_climate.py::test_air_con["
     # helpers/test_system_info.py: AssertionError: assert 'Unknown' == 'Home Assistant Container'
     "--deselect tests/helpers/test_system_info.py::test_container_installationtype"
     # tests are located in tests/
@@ -809,6 +782,10 @@ in with py.pkgs; buildPythonApplication rec {
     "tests/components"
     # pyotp since v2.4.0 complains about the short mock keys, hass pins v2.3.0
     "tests/auth/mfa_modules/test_notify.py"
+    # emulated_hue/test_upnp.py: Tries to establish the public ipv4 address
+    "tests/components/emulated_hue/test_upnp.py"
+    # tado/test_climate.py: Tries to connect to my.tado.com
+    "tests/components/tado/test_climate.py"
   ];
 
   disabledTests = [

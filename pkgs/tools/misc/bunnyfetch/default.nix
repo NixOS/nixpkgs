@@ -22,5 +22,6 @@ buildGoModule rec {
     license = licenses.mit;
     maintainers = with maintainers; [ devins2518 ];
     platforms = platforms.linux;
+    mainProgram = "bunnyfetch";
   };
 }

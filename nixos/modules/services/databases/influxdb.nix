@@ -121,7 +121,7 @@ in
 
       package = mkOption {
         default = pkgs.influxdb;
-        defaultText = "pkgs.influxdb";
+        defaultText = literalExpression "pkgs.influxdb";
         description = "Which influxdb derivation to use";
         type = types.package;
       };

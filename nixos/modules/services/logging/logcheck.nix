@@ -172,7 +172,7 @@ in
 
       extraRulesDirs = mkOption {
         default = [];
-        example = "/etc/logcheck";
+        example = [ "/etc/logcheck" ];
         type = types.listOf types.path;
         description = ''
           Directories with extra rules.

@@ -45,16 +45,16 @@
           license = lib.licenses.free;
         };
       }) {};
-    caml = callPackage ({ cl-lib ? null, elpaBuild, emacs, fetchurl, lib }:
+    caml = callPackage ({ elpaBuild, emacs, fetchurl, lib }:
       elpaBuild {
         pname = "caml";
         ename = "caml";
-        version = "4.8";
+        version = "4.9";
         src = fetchurl {
-          url = "https://elpa.nongnu.org/nongnu/caml-4.8.tar";
-          sha256 = "02wzjdd1ig8ajy65rf87zaysfddjbhyswifwlcs52ly7p84q72wk";
+          url = "https://elpa.nongnu.org/nongnu/caml-4.9.tar";
+          sha256 = "00ldvz6r10vwwmk6f3az534p0340ywn7knsg2bmvbvh3q51vyl9i";
         };
-        packageRequires = [ cl-lib emacs ];
+        packageRequires = [ emacs ];
         meta = {
           homepage = "https://elpa.gnu.org/packages/caml.html";
           license = lib.licenses.free;
@@ -841,10 +841,10 @@
       elpaBuild {
         pname = "swift-mode";
         ename = "swift-mode";
-        version = "8.3.0";
+        version = "8.4.0";
         src = fetchurl {
-          url = "https://elpa.nongnu.org/nongnu/swift-mode-8.3.0.tar";
-          sha256 = "1bsyv0dl7c2m3f690g7fij7g4937skxjin456vfrgbzb219pdkcs";
+          url = "https://elpa.nongnu.org/nongnu/swift-mode-8.4.0.tar";
+          sha256 = "1pfp1nvq2gny6kbiq3q0dcms0ysw43zq0aayfwqdj0llkf025dfp";
         };
         packageRequires = [ emacs seq ];
         meta = {
@@ -946,10 +946,10 @@
       elpaBuild {
         pname = "yasnippet-snippets";
         ename = "yasnippet-snippets";
-        version = "0.2";
+        version = "1.0";
         src = fetchurl {
-          url = "https://elpa.nongnu.org/nongnu/yasnippet-snippets-0.2.tar";
-          sha256 = "1xhlx2n2sdpcc82cba9r7nbd0gwi7m821p7vk0vnw84dhwy863ic";
+          url = "https://elpa.nongnu.org/nongnu/yasnippet-snippets-1.0.tar";
+          sha256 = "0p2a10wfh1dvmxbjlbj6p241xaldjim2h8vrv9aghvm3ryfixcpb";
         };
         packageRequires = [ yasnippet ];
         meta = {

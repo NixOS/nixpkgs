@@ -25,5 +25,6 @@ buildGoModule rec {
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ sifmelcara ];
+    mainProgram = "powerline-go";
   };
 }

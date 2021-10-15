@@ -1,6 +1,6 @@
 { lib, stdenv, python3, openssl
 , enableSystemd ? stdenv.isLinux, nixosTests
-, enableRedis ? false
+, enableRedis ? true
 , callPackage
 }:
 
@@ -27,15 +27,16 @@ let
 in
 buildPythonApplication rec {
   pname = "matrix-synapse";
-  version = "1.43.0";
+  version = "1.44.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-t3ZXtEq/sHYymta4gYfmdBzpExyxepGQ4lzvZii2Q70=";
+    sha256 = "sha256-oH8FXHSa120/Fys21UJfAAFPehJxEbQ8Op98PYkK8dE=";
   };
 
   patches = [
     ./0001-setup-add-homeserver-as-console-script.patch
+    ./0002-Expose-generic-worker-as-binary-under-NixOS.patch
   ];
 
   buildInputs = [ openssl ];

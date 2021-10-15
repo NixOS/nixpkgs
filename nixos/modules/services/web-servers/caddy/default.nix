@@ -83,7 +83,7 @@ in
         inherit config lib;
       }));
       default = { };
-      example = literalExample ''
+      example = literalExpression ''
         {
           "hydra.example.com" = {
             serverAliases = [ "www.hydra.example.com" ];
@@ -162,8 +162,7 @@ in
 
     package = mkOption {
       default = pkgs.caddy;
-      defaultText = "pkgs.caddy";
-      example = "pkgs.caddy";
+      defaultText = literalExpression "pkgs.caddy";
       type = types.package;
       description = ''
         Caddy package to use.

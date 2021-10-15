@@ -65,7 +65,7 @@ buildPythonApplication rec {
     gobject-introspection
   ];
 
-  propagatedBuildInputs = [
+  pythonPath = [
     pygobject3
     pyatspi
     dbus-python

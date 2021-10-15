@@ -1,18 +1,17 @@
 { lib, buildGoModule, fetchFromGitHub, nixosTests, bash, which, ffmpeg, makeWrapper, coreutils, ... }:
 
 buildGoModule rec {
-
   pname = "owncast";
-  version = "0.0.8";
+  version = "0.0.9";
 
   src = fetchFromGitHub {
     owner = "owncast";
     repo = "owncast";
     rev = "v${version}";
-    sha256 = "0md4iafa767yxkwh6z8zpcjv9zd79ql2wapx9vzyd973ksvrdaw2";
+    sha256 = "sha256-pJb11ifaiamp7P7d/xCwDKfOFufLmDDroUJPnWlTOkI=";
   };
 
-  vendorSha256 = "sha256-bH2CWIgpOS974/P98n0R9ebGTJ0YoqPlH8UmxSYNHeM=";
+  vendorSha256 = "sha256-NARHYeOVT7sxfL1BdJc/CPCgHNZzjWE7kACJvrEC71Y=";
 
   propagatedBuildInputs = [ ffmpeg ];
 

@@ -1,6 +1,5 @@
 { lib, stdenv
 , fetchFromGitHub
-, fetchpatch
 , nix-update-script
 , pantheon
 , meson
@@ -16,23 +15,14 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-applications";
-  version = "6.0.0";
+  version = "6.0.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "0hgvmrgg6g2sjb3sda7kzfcd3zgngd5w982drl6ll44k1mh16gsj";
+    sha256 = "18izmzhqp6x5ivha9yl8gyz9adyrsylw7w5p0cwm1bndgqbi7yh5";
   };
-
-  patches = [
-    # Upstream code not respecting our localedir
-    # https://github.com/elementary/switchboard-plug-applications/pull/163
-    (fetchpatch {
-      url = "https://github.com/elementary/switchboard-plug-applications/commit/25db490654ab41694be7b7ba19218376f42fbb8d.patch";
-      sha256 = "16y8zcwnnjsh72ifpyqcdb9f5ajdj0iy8kb5sj6v77c1cxdhrv29";
-    })
-  ];
 
   passthru = {
     updateScript = nix-update-script {

@@ -5,6 +5,7 @@
 , fetchFromGitHub
 , ghostscript
 , img2pdf
+, importlib-metadata
 , importlib-resources
 , jbig2enc
 , leptonica
@@ -15,6 +16,7 @@
 , pngquant
 , pytest-xdist
 , pytestCheckHook
+, pythonOlder
 , reportlab
 , setuptools
 , setuptools-scm
@@ -28,14 +30,22 @@
 
 buildPythonPackage rec {
   pname = "ocrmypdf";
-  version = "12.5.0";
+  version = "12.7.0";
 
   src = fetchFromGitHub {
     owner = "jbarlow83";
     repo = "OCRmyPDF";
     rev = "v${version}";
-    sha256 = "sha256-g80WedX+TGHE9EJ/RSgOc53PM17V3WZslUNaHoqKTo0=";
+    # The content of .git_archival.txt is substituted upon tarball creation,
+    # which creates indeterminism if master no longer points to the tag.
+    # See https://github.com/jbarlow83/OCRmyPDF/issues/841
+    extraPostFetch = ''
+      rm "$out/.git_archival.txt"
+    '';
+    sha256 = "sha256-lpTuaZRrmFoKV1SAFoGpsYfPBkLB2+iB63fg3t9RC5o=";
   };
+
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   patches = [
     (substituteAll {
@@ -58,7 +68,6 @@ buildPythonPackage rec {
     cffi
     coloredlogs
     img2pdf
-    importlib-resources
     pdfminer
     pikepdf
     pillow
@@ -66,11 +75,19 @@ buildPythonPackage rec {
     reportlab
     setuptools
     tqdm
-  ];
+  ] ++ (lib.optionals (pythonOlder "3.8") [
+    importlib-metadata
+  ]) ++ (lib.optionals (pythonOlder "3.9") [
+    importlib-resources
+  ]);
 
   checkInputs = [
     pytest-xdist
     pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "ocrmypdf"
   ];
 
   meta = with lib; {

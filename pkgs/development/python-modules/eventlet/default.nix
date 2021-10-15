@@ -40,7 +40,9 @@ buildPythonPackage rec {
   checkPhase = ''
     runHook preCheck
 
-    nosetests --exclude test_getaddrinfo --exclude test_hosts_no_network
+    # test_fork-after_monkey_patch fails on aarch64 on hydra only
+    #   AssertionError: Expected single line "pass" in stdout
+    nosetests --exclude test_getaddrinfo --exclude test_hosts_no_network --exclude test_fork_after_monkey_patch
 
     runHook postCheck
   '';

@@ -2,18 +2,18 @@
 
 stdenv.mkDerivation rec {
   pname = "clojure-lsp";
-  version = "2021.09.13-22.25.35";
+  version = "2021.09.30-15.28.01";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "0ypn0m81lbhx45y0ajpgk7id9g47l1gnihvqdjxw5m1j2hdwjdzr";
+    sha256 = "i7HCVcQa35pRnk7uXf+8PQ4IMpdSVrT7FKvguvzOvj4=";
   };
 
   jar = fetchurl {
     url = "https://github.com/clojure-lsp/clojure-lsp/releases/download/${version}/clojure-lsp.jar";
-    sha256 = "e93e334a4ada04a28e0b148b8364b9433b8d83f6417249d7bded7cc86d1fe081";
+    sha256 = "27a1ca0ca96cf0b5177a76679c6b7d09e6e02dca4c85fd252f7b2c43ef39b89a";
   };
 
   GRAALVM_HOME = graalvm11-ce;
@@ -25,7 +25,16 @@ stdenv.mkDerivation rec {
   buildPhase = with lib; ''
     runHook preBuild
 
-    bash ./graalvm/native-unix-compile.sh
+    # https://github.com/clojure-lsp/clojure-lsp/blob/2021.09.30-15.28.01/graalvm/native-unix-compile.sh#L19-L24
+    args=("-jar" "$CLOJURE_LSP_JAR"
+          "-H:CLibraryPath=${graalvm11-ce.lib}/lib"
+          "-H:+ReportExceptionStackTraces"
+          "--verbose"
+          "--no-fallback"
+          "--native-image-info"
+          "$CLOJURE_LSP_XMX")
+
+    native-image ''${args[@]}
 
     runHook postBuild
   '';

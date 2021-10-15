@@ -3,7 +3,7 @@
 , heimdal, krb5, libsoup, libvorbis, speex, openssl, zlib, xorg, pango, gtk2
 , gnome2, mesa, nss, nspr, gtk_engines, freetype, dconf, libpng12, libxml2
 , libjpeg, libredirect, tzdata, cacert, systemd, libcxxabi, libcxx, e2fsprogs, symlinkJoin
-, libpulseaudio, pcsclite
+, libpulseaudio, pcsclite, glib-networking
 
 , homepage, version, prefix, hash
 
@@ -102,6 +102,7 @@ stdenv.mkDerivation rec {
 
   runtimeDependencies = [
     glib
+    glib-networking
     pcsclite
 
     xorg.libX11

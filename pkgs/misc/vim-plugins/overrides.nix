@@ -36,6 +36,7 @@
 , which
 , xkb-switch
 , ycmd
+, nodejs
 
 # test dependencies
 , neovim-unwrapped
@@ -114,6 +115,15 @@ self: super: {
     preFixup = ''
       sed "/^let g:clighter8_libclang_path/s|')$|${llvmPackages.clang.cc.lib}/lib/libclang.so')|" \
         -i "$out"/plugin/clighter8.vim
+    '';
+  });
+
+  cmp-tabnine = super.cmp-tabnine.overrideAttrs (old: {
+    buildInputs = [ tabnine ];
+
+    postFixup = ''
+      mkdir -p $target/binaries/${tabnine.version}
+      ln -s ${tabnine}/bin/ $target/binaries/${tabnine.version}/${tabnine.passthru.platform}
     '';
   });
 
@@ -380,6 +390,30 @@ self: super: {
 
   lir-nvim = super.lir-nvim.overrideAttrs (old: {
     dependencies = with self; [ plenary-nvim ];
+  });
+
+  markdown-preview-nvim = super.markdown-preview-nvim.overrideAttrs (old: let
+    # We only need its dependencies `node-modules`.
+    nodeDep = nodePackages."markdown-preview-nvim-../../misc/vim-plugins/markdown-preview-nvim".overrideAttrs (old: {
+      dontNpmInstall = true;
+    });
+  in {
+    patches = [
+      (substituteAll {
+        src = ./markdown-preview-nvim/fix-node-paths.patch;
+        node = "${nodejs}/bin/node";
+      })
+    ];
+    postInstall = ''
+      # The node package name is `*-vim` not `*-nvim`.
+      ln -s ${nodeDep}/lib/node_modules/markdown-preview-vim/node_modules $out/app
+    '';
+
+    nativeBuildInputs = [ nodejs ];
+    doInstallCheck = true;
+    installCheckPhase = ''
+      node $out/app/index.js --version
+    '';
   });
 
   meson = buildVimPluginFrom2Nix {

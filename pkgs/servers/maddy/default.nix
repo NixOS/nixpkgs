@@ -1,23 +1,31 @@
-{ lib, buildGoModule, fetchFromGitHub, coreutils }:
+{ lib, buildGoModule, fetchFromGitHub, coreutils, installShellFiles, scdoc }:
 
 buildGoModule rec {
   pname = "maddy";
-  version = "0.5.0";
+  version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "foxcpp";
     repo = "maddy";
     rev = "v${version}";
-    sha256 = "sha256-SxJfuNZBtwaILF4zD4hrTANc/GlOG53XVwg3NvKYAkg=";
+    sha256 = "sha256-b85g8Eu7qWTI+ggMr7JL/2BAVbkXocpsR89P6s6TfMg=";
   };
 
-  vendorSha256 = "sha256-bxKEQaOubjRfLX+dMxVDzLOUInHykUdy9X8wvFE6Va4=";
+  vendorSha256 = "sha256-kzSwqT3r6uGxq1GNzCWCn8VoCxmVtiUb23XLCpsPv/c=";
 
   ldflags = [ "-s" "-w" "-X github.com/foxcpp/maddy.Version=${version}" ];
 
   subPackages = [ "cmd/maddy" "cmd/maddyctl" ];
 
+  nativeBuildInputs = [ installShellFiles scdoc ];
+
   postInstall = ''
+    for f in docs/man/*.scd; do
+      local page="docs/man/$(basename "$f" .scd)"
+      scdoc < "$f" > "$page"
+      installManPage "$page"
+    done
+
     mkdir -p $out/lib/systemd/system
 
     substitute dist/systemd/maddy.service $out/lib/systemd/system/maddy.service \
@@ -33,6 +41,6 @@ buildGoModule rec {
     description = "Composable all-in-one mail server";
     homepage = "https://maddy.email";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [];
+    maintainers = with maintainers; [ nickcao ];
   };
 }

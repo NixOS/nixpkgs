@@ -11,11 +11,11 @@
 }:
 buildPythonPackage rec {
   pname = "qiling";
-  version = "1.2.4";
+  version = "1.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ecaa4415eea44f6f48021c1f7794c0d9fae7d64c8e43a3ff1d5de8e99bd963aa";
+    sha256 = "084ad706f6803d7de2391eab928ecf4cb3e8d892fd2988666d4791a422d6ab9a";
   };
 
   propagatedBuildInputs = [

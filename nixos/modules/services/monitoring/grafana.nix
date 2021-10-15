@@ -330,13 +330,14 @@ in {
     staticRootPath = mkOption {
       description = "Root path for static assets.";
       default = "${cfg.package}/share/grafana/public";
+      defaultText = literalExpression ''"''${package}/share/grafana/public"'';
       type = types.str;
     };
 
     package = mkOption {
       description = "Package to use.";
       default = pkgs.grafana;
-      defaultText = "pkgs.grafana";
+      defaultText = literalExpression "pkgs.grafana";
       type = types.package;
     };
 
@@ -344,7 +345,7 @@ in {
       type = with types; nullOr (listOf path);
       default = null;
       description = "If non-null, then a list of packages containing Grafana plugins to install. If set, plugins cannot be manually installed.";
-      example = literalExample "with pkgs.grafanaPlugins; [ grafana-piechart-panel ]";
+      example = literalExpression "with pkgs.grafanaPlugins; [ grafana-piechart-panel ]";
       # Make sure each plugin is added only once; otherwise building
       # the link farm fails, since the same path is added multiple
       # times.

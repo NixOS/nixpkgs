@@ -163,7 +163,7 @@ in
 
     fileSystems = mkOption {
       default = {};
-      example = literalExample ''
+      example = literalExpression ''
         {
           "/".device = "/dev/hda1";
           "/data" = {

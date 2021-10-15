@@ -110,7 +110,7 @@ in {
     package = mkOption {
       description = "The zookeeper package to use";
       default = pkgs.zookeeper;
-      defaultText = "pkgs.zookeeper";
+      defaultText = literalExpression "pkgs.zookeeper";
       type = types.package;
     };
 

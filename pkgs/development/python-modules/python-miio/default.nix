@@ -37,6 +37,7 @@ buildPythonPackage rec {
     substituteInPlace pyproject.toml \
       --replace 'click = "^7"' 'click = "*"' \
       --replace 'croniter = "^0"' 'croniter = "*"' \
+      --replace 'cryptography = "^3"' 'cryptography = "*"' \
       --replace 'defusedxml = "^0.6"' 'defusedxml = "*"'
   '';
 
@@ -74,4 +75,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ flyfloh ];
   };
 }
-

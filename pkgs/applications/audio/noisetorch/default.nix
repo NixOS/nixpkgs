@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "NoiseTorch";
-  version = "0.11.3";
+  version = "0.11.4";
 
   src = fetchFromGitHub {
     owner = "lawl";
     repo = "NoiseTorch";
     rev = version;
-    sha256 = "0rjs6hbi7dvd179lzjmvqy4rv4pbc9amgzb8jfky4yc0zh8xf5z5";
+    sha256 = "sha256-3+Yk7dqD7eyvd1I5CMmrg085ZtFxD2EnGqL5ttwx8eM=";
   };
 
   vendorSha256 = null;

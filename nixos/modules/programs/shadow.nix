@@ -66,7 +66,7 @@ in
         This must not be a store path, since the path is
         used outside the store (in particular in /etc/passwd).
       '';
-      example = literalExample "pkgs.zsh";
+      example = literalExpression "pkgs.zsh";
       type = types.either types.path types.shellPackage;
     };
 

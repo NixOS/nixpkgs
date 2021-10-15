@@ -126,7 +126,7 @@ in {
       description = "Kubernetes package to use.";
       type = types.package;
       default = pkgs.kubernetes;
-      defaultText = "pkgs.kubernetes";
+      defaultText = literalExpression "pkgs.kubernetes";
     };
 
     kubeconfig = mkKubeConfigOptions "Default kubeconfig";

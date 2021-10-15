@@ -46,6 +46,6 @@ nimPackages.buildNimPackage rec {
     maintainers = with maintainers; [ erdnaxe ];
     license = licenses.agpl3Only;
     platforms = [ "x86_64-linux" ];
+    mainProgram = "nitter";
   };
 }
-

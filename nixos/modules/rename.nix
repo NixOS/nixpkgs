@@ -79,6 +79,9 @@ with lib;
         The hidepid module was removed, since the underlying machinery
         is broken when using cgroups-v2.
     '')
+    (mkRemovedOptionModule ["services" "wakeonlan"] "This module was removed in favor of enabling it with networking.interfaces.<name>.wakeOnLan")
+
+    (mkRemovedOptionModule [ "services" "kippo" ] "The corresponding package was removed from nixpkgs.")
 
     # Do NOT add any option renames here, see top of the file
   ];

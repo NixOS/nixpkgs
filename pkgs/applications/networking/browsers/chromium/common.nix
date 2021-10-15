@@ -53,9 +53,6 @@ buildFun:
 with lib;
 
 let
-  python2WithPackages = python2.withPackages(ps: with ps; [
-    ply jinja2 setuptools
-  ]);
   python3WithPackages = python3.withPackages(ps: with ps; [
     ply jinja2 setuptools
   ]);
@@ -125,7 +122,7 @@ let
 
     nativeBuildInputs = [
       ninja pkg-config
-      python2WithPackages python3WithPackages perl
+      python2 python3WithPackages perl
       gnutar which
       llvmPackages.bintools
     ];
@@ -308,7 +305,7 @@ let
 
       # This is to ensure expansion of $out.
       libExecPath="${libExecPath}"
-      ${python2}/bin/python2 build/linux/unbundle/replace_gn_files.py --system-libraries ${toString gnSystemLibraries}
+      ${python3}/bin/python3 build/linux/unbundle/replace_gn_files.py --system-libraries ${toString gnSystemLibraries}
       ${gnChromium}/bin/gn gen --args=${escapeShellArg gnFlags} out/Release | tee gn-gen-outputs.txt
 
       # Fail if `gn gen` contains a WARNING.

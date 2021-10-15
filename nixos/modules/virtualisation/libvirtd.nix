@@ -50,7 +50,7 @@ in {
     package = mkOption {
       type = types.package;
       default = pkgs.libvirt;
-      defaultText = "pkgs.libvirt";
+      defaultText = literalExpression "pkgs.libvirt";
       description = ''
         libvirt package to use.
       '';
@@ -59,6 +59,7 @@ in {
     qemuPackage = mkOption {
       type = types.package;
       default = pkgs.qemu;
+      defaultText = literalExpression "pkgs.qemu";
       description = ''
         Qemu package to use with libvirt.
         `pkgs.qemu` can emulate alien architectures (e.g. aarch64 on x86)
@@ -167,7 +168,7 @@ in {
       etc."qemu/bridge.conf".text = lib.concatMapStringsSep "\n" (e:
         "allow ${e}") cfg.allowedBridges;
       systemPackages = with pkgs; [ libressl.nc iptables cfg.package cfg.qemuPackage ];
-      etc.ethertypes.source = "${pkgs.ebtables}/etc/ethertypes";
+      etc.ethertypes.source = "${pkgs.iptables}/etc/ethertypes";
     };
 
     boot.kernelModules = [ "tun" ];

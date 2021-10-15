@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
 let
-  inherit (lib) mkEnableOption mkIf mkOption types literalExample;
+  inherit (lib) mkEnableOption mkIf mkOption types literalExpression;
 
   cfg = config.services.isso;
 
@@ -31,7 +31,7 @@ in {
           freeformType = settingsFormat.type;
         };
 
-        example = literalExample ''
+        example = literalExpression ''
           {
             general = {
               host = "http://localhost";

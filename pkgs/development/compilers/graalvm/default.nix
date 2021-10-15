@@ -287,7 +287,7 @@ in rec {
       rev    = "jvmci-${version}";
       sha256 =  "0j7my76vldbrvki9x1gn9ics3x2z96j05jdy4nflbpik8i396114";
     };
-    buildInputs = [ mx mercurial openjdk ] ++ lib.optional stdenv.isDarwin [
+    buildInputs = [ mx mercurial openjdk ] ++ lib.optionals stdenv.isDarwin [
       libobjc CoreFoundation Foundation JavaNativeFoundation JavaRuntimeSupport JavaVM xcodebuild Cocoa
     ];
     postUnpack = ''

@@ -10,7 +10,6 @@
 , gettext
 , glib
 , gtk3
-, bamf
 , libwnck
 , libgee
 , libgtop
@@ -19,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "monitor";
-  version = "0.9.5";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "stsdc";
     repo = "monitor";
     rev = version;
-    sha256 = "sha256-eTsPn2Z1++KsZnnBnZ2s9fKK2HguPw+JqaRRkxQDiAk=";
+    sha256 = "sha256-Gin/1vbQbOAKFrjzDuDTNDQlTGTIlb0NUfIWWXd5tQ4=";
     fetchSubmodules = true;
   };
 
@@ -40,7 +39,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    bamf
     glib
     gtk3
     pantheon.granite

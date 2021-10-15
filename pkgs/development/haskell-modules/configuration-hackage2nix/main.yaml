@@ -1,6 +1,6 @@
 # pkgs/development/haskell-modules/configuration-hackage2nix.yaml
 
-compiler: ghc-8.10.4
+compiler: ghc-8.10.7
 
 core-packages:
   - array-0.5.4.0
@@ -150,6 +150,21 @@ package-maintainers:
   domenkozar:
     - cachix
     - cachix-api
+  dschrempf:
+    - circular
+    - covariance
+    - dirichlet
+    - elynx
+    - elynx-markov
+    - elynx-nexus
+    - elynx-seq
+    - elynx-tools
+    - elynx-tree
+    - glasso
+    - mcmc
+    - pava
+    - slynx
+    - tlynx
   expipiplus1:
     - VulkanMemoryAllocator
     - autoapply
@@ -224,31 +239,42 @@ package-maintainers:
     - mattermost-api-qc
     - Unique
   maralorn:
-    - arbtt
     - cabal-fmt
     - generic-optics
     - ghcup
+    - ghcid
     - ghcide
     - haskell-language-server
     - hedgehog
     - hlint
     - hmatrix
+    - hspec-discover
     - iCalendar
     - matrix-client
     - neuron
     - optics
+    - paths
+    - postgresql-simple
     - reflex-dom
     - releaser
+    - replace-megaparsec
     - req
     - shake-bench
     - shh
+    - shh-extras
     - snap
     - stm-containers
     - streamly
     - taskwarrior
+    - tz
+    - weeder
     - witch
   ncfavier:
     - lambdabot
+  nomeata:
+    - candid
+    - leb128-cereal
+    - tasty-expected-failure
   pacien:
     - ldgallery-compiler
   peti:
@@ -395,8 +421,10 @@ unsupported-platforms:
   HQu:                                          [ aarch64-linux, armv7l-linux ] # unsupported by vendored C++ library, TODO: explicitly list supported platforms
   HSoM:                                         [ x86_64-darwin, aarch64-darwin ]
   iwlib:                                        [ x86_64-darwin, aarch64-darwin ]
+  Jazzkell:                                     [ x86_64-darwin, aarch64-darwin ] # depends on Euterpea
   jsaddle-webkit2gtk:                           [ x86_64-darwin, aarch64-darwin ]
   kqueue:                                       [ x86_64-linux, aarch64-linux, i686-linux, armv7l-linux ] # BSD / Darwin only API
+  Kulitta:                                      [ x86_64-darwin, aarch64-darwin ] # depends on Euterpea
   LambdaHack:                                   [ x86_64-darwin, aarch64-darwin ]
   large-hashable:                               [ aarch64-linux ] # https://github.com/factisresearch/large-hashable/issues/17
   libmodbus:                                    [ x86_64-darwin, aarch64-darwin ]

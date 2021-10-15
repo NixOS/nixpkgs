@@ -71,12 +71,10 @@ in {
     };
 
     ghc884 = callPackage ../development/compilers/ghc/8.8.4.nix {
-      # the oldest ghc with aarch64-darwin support is 8.10.5
-      bootPkgs = if stdenv.isDarwin && stdenv.isAarch64 then
-          packages.ghc8107BinaryMinimal
+      bootPkgs =
         # aarch64 ghc865Binary gets SEGVs due to haskell#15449 or similar
         # Musl bindists do not exist for ghc 8.6.5, so we use 8.10.* for them
-        else if stdenv.isAarch64 || stdenv.targetPlatform.isMusl then
+        if stdenv.isAarch64 || stdenv.hostPlatform.isMusl then
           packages.ghc8102BinaryMinimal
         else
           packages.ghc865Binary;
@@ -85,15 +83,14 @@ in {
       llvmPackages = pkgs.llvmPackages_7;
     };
     ghc8107 = callPackage ../development/compilers/ghc/8.10.7.nix {
-      # the oldest ghc with aarch64-darwin support is 8.10.5
-      bootPkgs = if stdenv.isDarwin && stdenv.isAarch64 then
-          packages.ghc8107BinaryMinimal
+      bootPkgs =
         # aarch64 ghc865Binary gets SEGVs due to haskell#15449 or similar
+        # the oldest ghc with aarch64-darwin support is 8.10.5
         # Musl bindists do not exist for ghc 8.6.5, so we use 8.10.* for them
-        else if stdenv.isAarch64 || stdenv.isAarch32 || stdenv.targetPlatform.isMusl then
-          packages.ghc8102BinaryMinimal
+        if stdenv.isAarch64 || stdenv.isAarch32 then
+          packages.ghc8107BinaryMinimal
         else
-          packages.ghc865Binary;
+          packages.ghc8107Binary;
       inherit (buildPackages.python3Packages) sphinx;
       # Need to use apple's patched xattr until
       # https://github.com/xattr/xattr/issues/44 and
@@ -103,24 +100,24 @@ in {
       llvmPackages = pkgs.llvmPackages_9;
     };
     ghc901 = callPackage ../development/compilers/ghc/9.0.1.nix {
-      # the oldest ghc with aarch64-darwin support is 8.10.5
-      bootPkgs = if stdenv.isDarwin && stdenv.isAarch64 then
+      bootPkgs =
+        # aarch64 ghc8107Binary exceeds max output size on hydra
+        # the oldest ghc with aarch64-darwin support is 8.10.5
+        if stdenv.isAarch64 || stdenv.isAarch32 then
           packages.ghc8107BinaryMinimal
-        # aarch64 ghc8102Binary exceeds max output size on hydra
-        else if stdenv.isAarch64 || stdenv.isAarch32 then
-          packages.ghc8102BinaryMinimal
         else
-          packages.ghc8102Binary;
+          packages.ghc8107Binary;
       inherit (buildPackages.python3Packages) sphinx;
       buildLlvmPackages = buildPackages.llvmPackages_10;
       llvmPackages = pkgs.llvmPackages_10;
     };
     ghc921 = callPackage ../development/compilers/ghc/9.2.1.nix {
-      # aarch64 ghc8102Binary exceeds max output size on hydra
-      bootPkgs = if stdenv.isAarch64 || stdenv.isAarch32 then
-          packages.ghc8102BinaryMinimal
+      bootPkgs =
+        # aarch64 ghc8107Binary exceeds max output size on hydra
+        if stdenv.isAarch64 || stdenv.isAarch32 then
+          packages.ghc8107BinaryMinimal
         else
-          packages.ghc8102Binary;
+          packages.ghc8107Binary;
       inherit (buildPackages.python3Packages) sphinx;
       # Need to use apple's patched xattr until
       # https://github.com/xattr/xattr/issues/44 and

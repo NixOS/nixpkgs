@@ -26,7 +26,6 @@ mkDerivation rec {
   postInstall = with stdenv; lib.optionalString isDarwin ''
     mkdir -p $out/Applications
     mv GPXSee.app $out/Applications
-    wrapQtApp $out/Applications/GPXSee.app/Contents/MacOS/GPXSee
   '';
 
   meta = with lib; {

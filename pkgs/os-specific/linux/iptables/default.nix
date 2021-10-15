@@ -1,6 +1,6 @@
 { lib, stdenv, pkg-config, pruneLibtoolFiles, flex, bison
 , libmnl, libnetfilter_conntrack, libnfnetlink, libnftnl, libpcap
-, fetchzip, nixosTests, nftablesCompat ? false
+, fetchzip, nixosTests, nftablesCompat ? true
 }:
 
 with lib;

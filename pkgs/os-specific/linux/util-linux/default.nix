@@ -1,5 +1,7 @@
 { lib, stdenv, fetchurl, pkg-config, zlib, shadow, libcap_ng
-, ncurses ? null, perl ? null, pam, systemd ? null, minimal ? false }:
+, ncurses ? null, pam, systemd ? null
+, nlsSupport ? true
+}:
 
 stdenv.mkDerivation rec {
   pname = "util-linux";
@@ -14,7 +16,7 @@ stdenv.mkDerivation rec {
     ./rtcwake-search-PATH-for-shutdown.patch
   ];
 
-  outputs = [ "bin" "dev" "out" "man" ];
+  outputs = [ "bin" "dev" "out" "lib" "man" ];
 
   postPatch = ''
     patchShebangs tests/run.sh
@@ -30,6 +32,7 @@ stdenv.mkDerivation rec {
   # somewhat risky because we have to consider that mount can setuid
   # root...
   configureFlags = [
+    "--localstatedir=/var"
     "--enable-write"
     "--enable-last"
     "--enable-mesg"
@@ -37,29 +40,28 @@ stdenv.mkDerivation rec {
     "--enable-fs-paths-default=/run/wrappers/bin:/run/current-system/sw/bin:/sbin"
     "--disable-makeinstall-setuid" "--disable-makeinstall-chown"
     "--disable-su" # provided by shadow
+    (lib.enableFeature nlsSupport "nls")
     (lib.withFeature (ncurses != null) "ncursesw")
     (lib.withFeature (systemd != null) "systemd")
     (lib.withFeatureAs (systemd != null)
        "systemdsystemunitdir" "${placeholder "bin"}/lib/systemd/system/")
+    "SYSCONFSTATICDIR=${placeholder "lib"}/lib"
   ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
        "scanf_cv_type_modifier=ms"
   ;
 
   makeFlags = [
     "usrbin_execdir=${placeholder "bin"}/bin"
+    "usrlib_execdir=${placeholder "lib"}/lib"
     "usrsbin_execdir=${placeholder "bin"}/sbin"
   ];
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs =
     [ zlib pam libcap_ng ]
-    ++ lib.filter (p: p != null) [ ncurses systemd perl ];
+    ++ lib.filter (p: p != null) [ ncurses systemd ];
 
   doCheck = false; # "For development purpose only. Don't execute on production system!"
-
-  postInstall = lib.optionalString minimal ''
-    rm -rf $out/share/{locale,doc,bash-completion}
-  '';
 
   enableParallelBuilding = true;
 

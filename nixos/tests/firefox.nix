@@ -14,7 +14,7 @@ import ./make-test-python.nix ({ pkgs, firefoxPackage, ... }: {
       ];
 
       # Need some more memory to record audio.
-      virtualisation.memorySize = "500";
+      virtualisation.memorySize = 500;
 
       # Create a virtual sound device, with mixing
       # and all, for recording audio.

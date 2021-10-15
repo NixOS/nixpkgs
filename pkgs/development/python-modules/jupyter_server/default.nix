@@ -26,12 +26,12 @@
 
 buildPythonPackage rec {
   pname = "jupyter_server";
-  version = "1.11.0";
+  version = "1.11.1";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-irT0hKSiaY91fP8HadJ7XZkeAjKmZtVPTWraTmphMws=";
+    sha256 = "ab7ab1cc38512f15026cbcbb96300fb46ec8b24aa162263d9edd00e0a749b1e8";
   };
 
   propagatedBuildInputs = [

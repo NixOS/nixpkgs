@@ -95,7 +95,7 @@ in
     extraPackages = mkOption {
       type = with types; listOf package;
       default = [ ];
-      example = lib.literalExample ''
+      example = lib.literalExpression ''
         [
           pkgs.gvisor
         ]

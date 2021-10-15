@@ -9,17 +9,24 @@
 
 buildPythonPackage rec {
   pname = "msal";
-  version = "1.14.0";
+  version = "1.15.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0d389ef5db19ca8a30ae88fe05ba633a4623d3202d90f8dfcc81973dc28ee834";
+    sha256 = "00d3cc77c3bcd8e2accaf178aa58a1d036918faa9c0f3039772cc16a470bdacc";
   };
 
   propagatedBuildInputs = [
     pyjwt
     requests
   ];
+
+  # we already have cryptography included, version bounds are causing issues
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "PyJWT[crypto]>=1.0.0,<3" "PyJWT" \
+      --replace "cryptography>=0.6,<38" "cryptography"
+  '';
 
   # Tests assume Network Connectivity:
   # https://github.com/AzureAD/microsoft-authentication-library-for-python/blob/e2958961e8ec16d0af4199f60c36c3f913497e48/tests/test_authority.py#L73

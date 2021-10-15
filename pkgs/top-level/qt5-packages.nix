@@ -29,7 +29,7 @@ let
     mkPlasma5 = import ../desktops/plasma-5;
     attrs = {
       inherit libsForQt5;
-      inherit (pkgs) lib fetchurl;
+      inherit (pkgs) config lib fetchurl;
       gconf = pkgs.gnome2.GConf;
       inherit (pkgs) gsettings-desktop-schemas;
     };
@@ -43,9 +43,17 @@ let
     };
   in (lib.makeOverridable mkGear attrs);
 
-in (kdeFrameworks // plasma5 // plasma5.thirdParty // kdeGear // qt5 // {
+  plasmaMobileGear = let
+    mkPlamoGear = import ../applications/plasma-mobile;
+    attrs = {
+      inherit libsForQt5;
+      inherit (pkgs) lib fetchurl;
+    };
+  in (lib.makeOverridable mkPlamoGear attrs);
 
-  inherit kdeFrameworks plasma5 kdeGear qt5;
+in (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGear // qt5 // {
+
+  inherit kdeFrameworks plasmaMobileGear plasma5 kdeGear qt5;
 
   # Alias for backwards compatibility. Added 2021-05-07.
   kdeApplications = kdeGear;
@@ -88,6 +96,8 @@ in (kdeFrameworks // plasma5 // plasma5.thirdParty // kdeGear // qt5 // {
 
   kf5gpgmepp = callPackage ../development/libraries/kf5gpgmepp { };
 
+  kirigami-addons = libsForQt5.callPackage ../development/libraries/kirigami-addons { };
+
   kimageannotator = callPackage ../development/libraries/kimageannotator { };
 
   kproperty = callPackage ../development/libraries/kproperty { };
@@ -119,6 +129,8 @@ in (kdeFrameworks // plasma5 // plasma5.thirdParty // kdeGear // qt5 // {
   libqglviewer = callPackage ../development/libraries/libqglviewer {
     inherit (pkgs.darwin.apple_sdk.frameworks) AGL;
   };
+
+  libqofono = callPackage ../development/libraries/libqofono { };
 
   libqtav = callPackage ../development/libraries/libqtav { };
 

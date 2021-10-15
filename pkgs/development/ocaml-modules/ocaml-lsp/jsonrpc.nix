@@ -12,8 +12,8 @@
 let params =
   if lib.versionAtLeast ocaml.version "4.12"
   then {
-    version = "1.7.0";
-    sha256 = "1va2zj41znsr94bdw485vak96zrcvqwcrqf1sy8zipb6hdhbchya";
+    version = "1.8.3";
+    sha256 = "sha256-WO9ap78XZxJCi04LEBX+r21nfL2UdPiCLRMrJSI7FOk=";
   } else {
     version = "1.4.1";
     sha256 = "1ssyazc0yrdng98cypwa9m3nzfisdzpp7hqnx684rqj8f0g3gs6f";

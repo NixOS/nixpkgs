@@ -142,7 +142,7 @@ in {
         messages, and respond to them according to a set of rules.
       '';
       default = {};
-      example = literalExample ''
+      example = literalExpression ''
         {
           eth0.rules."1111::/64" = {};
         }

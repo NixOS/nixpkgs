@@ -9,7 +9,7 @@ with lib;
   options = {
 
     netboot.storeContents = mkOption {
-      example = literalExample "[ pkgs.stdenv ]";
+      example = literalExpression "[ pkgs.stdenv ]";
       description = ''
         This option lists additional derivations to be included in the
         Nix store in the generated netboot image.

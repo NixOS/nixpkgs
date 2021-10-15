@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation rec {
   pname = "uxn";
-  version = "0.0.0+unstable=2021-08-30";
+  version = "0.pre+unstable=2021-08-30";
 
   src = fetchFromSourcehut {
     owner = "~rabbits";

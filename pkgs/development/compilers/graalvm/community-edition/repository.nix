@@ -130,37 +130,53 @@ let
       unpack_jar ''${arr[4]}
     '';
 
-    installPhase = {
-      "8-linux-amd64" = ''
+    outputs = [ "out" "lib" ];
+
+    installPhase = let
+      nativePRNGWorkaround = path: ''
         # BUG workaround http://mail.openjdk.java.net/pipermail/graal-dev/2017-December/005141.html
-        substituteInPlace $out/jre/lib/security/java.security \
+        substituteInPlace ${path} \
           --replace file:/dev/random    file:/dev/./urandom \
           --replace NativePRNGBlocking  SHA1PRNG
-
+      '';
+      copyClibrariesToOut = basepath: ''
         # provide libraries needed for static compilation
         for f in ${glibc}/lib/* ${glibc.static}/lib/* ${zlib.static}/lib/*; do
-          ln -s $f $out/jre/lib/svm/clibraries/${platform}/$(basename $f)
+          ln -s $f ${basepath}/${platform}/$(basename $f)
         done
+      '';
+
+      copyClibrariesToLib = ''
+        # add those libraries to $lib output too, so we can use them with
+        # `native-image -H:CLibraryPath=''${graalvm11-ce.lib}/lib ...` and reduce
+        # closure size by not depending on GraalVM $out (that is much bigger)
+        mkdir -p $lib/lib
+        for f in ${glibc}/lib/*; do
+          ln -s $f $lib/lib/$(basename $f)
+        done
+      '';
+    in {
+      "8-linux-amd64" = ''
+        ${nativePRNGWorkaround "$out/jre/lib/security/java.security"}
+
+        ${copyClibrariesToOut "$out/jre/lib/svm/clibraries"}
+
+        ${copyClibrariesToLib}
 
         # allow using external truffle-api.jar and languages not included in the distrubution
         rm $out/jre/lib/jvmci/parentClassLoader.classpath
       '';
       "11-linux-amd64" = ''
-        # BUG workaround http://mail.openjdk.java.net/pipermail/graal-dev/2017-December/005141.html
-        substituteInPlace $out/conf/security/java.security \
-          --replace file:/dev/random    file:/dev/./urandom \
-          --replace NativePRNGBlocking  SHA1PRNG
+        ${nativePRNGWorkaround "$out/conf/security/java.security"}
 
-        # provide libraries needed for static compilation
-        for f in ${glibc}/lib/* ${glibc.static}/lib/* ${zlib.static}/lib/*; do
-          ln -s $f $out/lib/svm/clibraries/${platform}/$(basename $f)
-        done
+        ${copyClibrariesToOut "$out/lib/svm/clibraries"}
+
+        ${copyClibrariesToLib}
       '';
       "11-darwin-amd64" = ''
-        # BUG workaround http://mail.openjdk.java.net/pipermail/graal-dev/2017-December/005141.html
-        substituteInPlace $out/conf/security/java.security \
-          --replace file:/dev/random    file:/dev/./urandom \
-          --replace NativePRNGBlocking  SHA1PRNG
+        # create empty $lib/lib to avoid breaking builds
+        mkdir -p $lib/lib
+        ${nativePRNGWorkaround "$out/conf/security/java.security"}
       '';
     }.${javaVersionPlatform} + ''
       # jni.h expects jni_md.h to be in the header search path.

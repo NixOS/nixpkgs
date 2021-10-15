@@ -43,7 +43,8 @@ rec {
         from pydoc import importfile
         with open('driver-symbols', 'w') as fp:
           t = importfile('${testDriverScript}')
-          test_symbols = t._test_symbols()
+          d = t.Driver([],[],"")
+          test_symbols = d.test_symbols()
           fp.write(','.join(test_symbols.keys()))
         EOF
       '';
@@ -188,14 +189,6 @@ rec {
           --set startScripts "''${vmStartScripts[*]}" \
           --set testScript "$out/test-script" \
           --set vlans '${toString vlans}'
-
-        ${lib.optionalString (testScript == "") ''
-          ln -s ${testDriver}/bin/nixos-test-driver $out/bin/nixos-run-vms
-          wrapProgram $out/bin/nixos-run-vms \
-            --set startScripts "''${vmStartScripts[*]}" \
-            --set testScript "${pkgs.writeText "start-all" "start_all(); join_all();"}" \
-            --set vlans '${toString vlans}'
-        ''}
       '');
 
   # Make a full-blown test
@@ -217,7 +210,7 @@ rec {
       nodes = qemu_pkg:
         let
           build-vms = import ./build-vms.nix {
-            inherit system pkgs minimal specialArgs;
+            inherit system lib pkgs minimal specialArgs;
             extraConfigurations = extraConfigurations ++ [(
               {
                 virtualisation.qemu.package = qemu_pkg;
@@ -256,7 +249,6 @@ rec {
       test // {
         inherit test driver driverInteractive nodes;
       };
-
 
   abortForFunction = functionName: abort ''The ${functionName} function was
     removed because it is not an essential part of the NixOS testing

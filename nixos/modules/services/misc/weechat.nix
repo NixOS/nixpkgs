@@ -21,11 +21,10 @@ in
     };
     binary = mkOption {
       type = types.path;
-      description = "Binary to execute (by default \${weechat}/bin/weechat).";
-      example = literalExample ''
-        ''${pkgs.weechat}/bin/weechat-headless
-      '';
+      description = "Binary to execute.";
       default = "${pkgs.weechat}/bin/weechat";
+      defaultText = literalExpression ''"''${pkgs.weechat}/bin/weechat"'';
+      example = literalExpression ''"''${pkgs.weechat}/bin/weechat-headless"'';
     };
   };
 

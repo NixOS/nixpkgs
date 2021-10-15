@@ -104,8 +104,12 @@ stdenv.mkDerivation (overridable // {
     if [ -e $out/erts-* ]; then
       echo "ERTS found in $out - removing references to erlang to reduce closure size"
       # there is a link in $out/erts-*/bin/start always
+      # TODO:
       # sometimes there are links in dependencies like bcrypt compiled binaries
-      for file in $(rg "${erlang}/lib/erlang" "$out" --text --files-with-matches); do
+      # at the moment those are not removed since substituteInPlace will
+      # error on binaries
+      for file in $(rg "${erlang}/lib/erlang" "$out" --files-with-matches); do
+        echo "removing reference to erlang in $file"
         substituteInPlace "$file" --replace "${erlang}/lib/erlang" "$out"
       done
     fi

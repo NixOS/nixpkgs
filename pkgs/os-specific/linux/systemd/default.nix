@@ -32,7 +32,7 @@
 , acl
 , lz4
 , libgcrypt
-, libgpgerror
+, libgpg-error
 , libidn2
 , curl
 , gnutar
@@ -105,7 +105,7 @@
 , docbook_xml_dtd_45
 }:
 
-assert withResolved -> (libgcrypt != null && libgpgerror != null);
+assert withResolved -> (libgcrypt != null && libgpg-error != null);
 assert withImportd ->
 (curl.dev != null && zlib != null && xz != null && libgcrypt != null
   && gnutar != null && gnupg != null && withCompression);
@@ -184,9 +184,6 @@ stdenv.mkDerivation {
     substituteInPlace src/basic/path-util.h --replace "@defaultPathNormal@" "${placeholder "out"}/bin/"
     substituteInPlace src/boot/efi/meson.build \
       --replace \
-      "find_program('ld'" \
-      "find_program('${stdenv.cc.bintools.targetPrefix}ld'" \
-      --replace \
       "find_program('objcopy'" \
       "find_program('${stdenv.cc.bintools.targetPrefix}objcopy'"
   '' + (
@@ -254,6 +251,7 @@ stdenv.mkDerivation {
           { name = "libtss2-esys.so.0"; pkg = opt withTpm2Tss tpm2-tss; }
           { name = "libtss2-rc.so.0"; pkg = opt withTpm2Tss tpm2-tss; }
           { name = "libtss2-mu.so.0"; pkg = opt withTpm2Tss tpm2-tss; }
+          { name = "libtss2-tcti-"; pkg = opt withTpm2Tss tpm2-tss; }
           { name = "libfido2.so.1"; pkg = opt withFido2 libfido2; }
         ];
 
@@ -270,8 +268,12 @@ stdenv.mkDerivation {
         '' else ''
           # ensure that the library we provide actually exists
           if ! [ -e ${library} ]; then
-            echo 'The shared library `${library}` does not exist but was given as subtitute for `${dl.name}`'
-            exit 1
+            # exceptional case, details:
+            # https://github.com/systemd/systemd-stable/blob/v249-stable/src/shared/tpm2-util.c#L157
+            if ! [[ "${library}" =~ .*libtss2-tcti-$ ]]; then
+              echo 'The shared library `${library}` does not exist but was given as subtitute for `${dl.name}`'
+              exit 1
+            fi
           fi
           # make the path to the dependency explicit
           for file in $(grep -lr '"${dl.name}"' src); do
@@ -350,12 +352,13 @@ stdenv.mkDerivation {
     ++ lib.optional withLibseccomp libseccomp
     ++ lib.optional withNetworkd iptables
     ++ lib.optional withPCRE2 pcre2
-    ++ lib.optional withResolved libgpgerror
+    ++ lib.optional withResolved libgpg-error
     ++ lib.optional withSelinux libselinux
     ++ lib.optional withRemote libmicrohttpd
     ++ lib.optionals withHomed [ p11-kit ]
     ++ lib.optionals (withHomed || withCryptsetup) [ libfido2 ]
     ++ lib.optionals withLibBPF [ libbpf ]
+    ++ lib.optional withTpm2Tss tpm2-tss
   ;
 
   #dontAddPrefix = true;
@@ -408,6 +411,7 @@ stdenv.mkDerivation {
     "-Dsmack=true"
     "-Db_pie=true"
     "-Dinstall-sysconfdir=false"
+    "-Defi-ld=${stdenv.cc.bintools.targetPrefix}ld"
     /*
       As of now, systemd doesn't allow runtime configuration of these values. So
       the settings in /etc/login.defs have no effect on it. Many people think this
@@ -454,7 +458,7 @@ stdenv.mkDerivation {
     "-Dnss-systemd=false"
   ] ++ lib.optionals withLibBPF [
     "-Dbpf-framework=true"
-  ];
+  ] ++ lib.optional withTpm2Tss "-Dtpm2=true";
 
   preConfigure = ''
     mesonFlagsArray+=(-Dntp-servers="0.nixos.pool.ntp.org 1.nixos.pool.ntp.org 2.nixos.pool.ntp.org 3.nixos.pool.ntp.org")

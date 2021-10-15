@@ -57,6 +57,7 @@ stdenv.mkDerivation {
     ../../common/compiler-rt/glibc.patch
     ./codesign.patch # Revert compiler-rt commit that makes codesign mandatory
     ./gnu-install-dirs.patch
+    ../../common/compiler-rt/libsanitizer-no-cyclades-9.patch
   ]# ++ lib.optional stdenv.hostPlatform.isMusl ./sanitizers-nongnu.patch
     ++ lib.optional (useLLVM) ./crtbegin-and-end.patch
     ++ lib.optional stdenv.hostPlatform.isAarch32 ./armv7l.patch;

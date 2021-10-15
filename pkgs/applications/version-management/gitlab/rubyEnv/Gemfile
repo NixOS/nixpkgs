@@ -18,7 +18,7 @@ gem 'default_value_for', '~> 3.4.0'
 gem 'pg', '~> 1.1'
 
 gem 'rugged', '~> 1.1'
-gem 'grape-path-helpers', '~> 1.6.3'
+gem 'grape-path-helpers', '~> 1.7.0'
 
 gem 'faraday', '~> 1.0'
 gem 'marginalia', '~> 1.10.0'
@@ -32,7 +32,7 @@ gem 'bcrypt', '~> 3.1', '>= 3.1.14'
 gem 'doorkeeper', '~> 5.5.0.rc2'
 gem 'doorkeeper-openid_connect', '~> 1.7.5'
 gem 'rexml', '~> 3.2.5'
-gem 'ruby-saml', '~> 1.12.1'
+gem 'ruby-saml', '~> 1.13.0'
 gem 'omniauth', '~> 1.8'
 gem 'omniauth-auth0', '~> 2.0.0'
 gem 'omniauth-azure-activedirectory-v2', '~> 1.0'
@@ -120,7 +120,7 @@ gem 'carrierwave', '~> 1.3'
 gem 'mini_magick', '~> 4.10.1'
 
 # for backups
-gem 'fog-aws', '~> 3.9'
+gem 'fog-aws', '~> 3.12'
 # Locked until fog-google resolves https://github.com/fog/fog-google/issues/421.
 # Also see config/initializers/fog_core_patch.rb.
 gem 'fog-core', '= 2.1.0'
@@ -233,7 +233,7 @@ gem 'redis', '~> 4.1.4'
 gem 'connection_pool', '~> 2.0'
 
 # Redis session store
-gem 'redis-rails', '~> 5.0.2'
+gem 'redis-actionpack', '~> 5.2.0'
 
 # Discord integration
 gem 'discordrb-webhooks', '~> 3.4', require: false
@@ -333,7 +333,7 @@ gem 'snowplow-tracker', '~> 0.6.1'
 # Metrics
 gem 'method_source', '~> 1.0', require: false
 gem 'webrick', '~> 1.6.1', require: false
-gem 'prometheus-client-mmap', '~> 0.12.0', require: 'prometheus/client'
+gem 'prometheus-client-mmap', '~> 0.15.0', require: 'prometheus/client'
 
 gem 'warning', '~> 1.2.0'
 
@@ -372,7 +372,7 @@ group :development, :test do
   gem 'spring', '~> 2.1.0'
   gem 'spring-commands-rspec', '~> 1.0.4'
 
-  gem 'gitlab-styles', '~> 6.2.0', require: false
+  gem 'gitlab-styles', '~> 6.3.0', require: false
 
   gem 'haml_lint', '~> 0.36.0', require: false
   gem 'bundler-audit', '~> 0.7.0.1', require: false
@@ -474,7 +474,7 @@ end
 gem 'spamcheck', '~> 0.1.0'
 
 # Gitaly GRPC protocol definitions
-gem 'gitaly', '~> 14.2.0.pre.rc2'
+gem 'gitaly', '~> 14.3.0.pre.rc1'
 
 # KAS GRPC protocol definitions
 gem 'kas-grpc', '~> 0.0.2'
@@ -522,7 +522,7 @@ gem 'lockbox', '~> 0.6.2'
 gem 'valid_email', '~> 0.1'
 
 # JSON
-gem 'json', '~> 2.3.0'
+gem 'json', '~> 2.5.1'
 gem 'json_schemer', '~> 0.2.18'
 gem 'oj', '~> 3.10.6'
 gem 'multi_json', '~> 1.14.1'

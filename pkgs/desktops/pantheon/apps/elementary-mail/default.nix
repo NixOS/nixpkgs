@@ -26,7 +26,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-mail";
-  version = "6.1.1";
+  version = "6.2.0";
 
   repoName = "mail";
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "15ai0x9236pjx76m0756nyc1by78v0lg1dgdiifk868krdvipzzx";
+    sha256 = "1ab620zhwqqjq1bs1alvpcw9jmdxjij0ywczvwbg8gqvcsc80lkn";
   };
 
   passthru = {

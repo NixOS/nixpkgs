@@ -58,7 +58,7 @@ in
       systemPackages = mkOption {
         type = types.listOf types.package;
         default = [];
-        example = literalExample "[ pkgs.firefox pkgs.thunderbird ]";
+        example = literalExpression "[ pkgs.firefox pkgs.thunderbird ]";
         description = ''
           The set of packages that appear in
           /run/current-system/sw.  These packages are
@@ -73,9 +73,9 @@ in
       defaultPackages = mkOption {
         type = types.listOf types.package;
         default = defaultPackages;
-        example = literalExample "[]";
+        example = [];
         description = ''
-          Set of default packages that aren't strictly neccessary
+          Set of default packages that aren't strictly necessary
           for a running system, entries can be removed for a more
           minimal NixOS installation.
 

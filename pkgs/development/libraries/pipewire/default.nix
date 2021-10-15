@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitLab
+, fetchpatch
 , removeReferencesTo
 , python3
 , meson
@@ -24,10 +25,14 @@
 , vulkan-loader
 , webrtc-audio-processing
 , ncurses
+, readline81 # meson can't find <7 as those versions don't have a .pc file
 , makeFontsConf
 , callPackage
 , nixosTests
 , withMediaSession ? true
+, libcameraSupport ? true
+, libcamera
+, libdrm
 , gstreamerSupport ? true
 , gst_all_1 ? null
 , ffmpegSupport ? true
@@ -58,7 +63,7 @@ let
 
   self = stdenv.mkDerivation rec {
     pname = "pipewire";
-    version = "0.3.36";
+    version = "0.3.38";
 
     outputs = [
       "out"
@@ -77,7 +82,7 @@ let
       owner = "pipewire";
       repo = "pipewire";
       rev = version;
-      sha256 = "sha256-kwoffB0Hi84T4Q0NaxLxsCyPV4R0LayX9kHmXU/vRPA=";
+      sha256 = "sha256-QENz4MVyKuPJynA+NBdmKa6g1GrcRg9vzXLJ1/i3VJU=";
     };
 
     patches = [
@@ -93,6 +98,14 @@ let
       ./0080-pipewire-config-dir.patch
       # Remove output paths from the comments in the config templates to break dependency cycles
       ./0090-pipewire-config-template-paths.patch
+      # Place SPA data files in lib output to avoid dependency cycles
+      ./0095-spa-data-dir.patch
+      # Fix compilation on AArch64
+      # XXX: REMOVE ON NEXT RELEASE
+      (fetchpatch {
+        url = "https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/f8817b439433798bd7217dc4ae72197887b0fc96.diff";
+        sha256 = "0j4xds01h20mc606xp90h5v56kf17hf7n06k0xfa9qmmmfrh7i04";
+      })
     ];
 
     nativeBuildInputs = [
@@ -113,6 +126,7 @@ let
       libusb1
       libsndfile
       ncurses
+      readline81
       udev
       vulkan-headers
       vulkan-loader
@@ -121,6 +135,7 @@ let
       SDL2
       systemd
     ] ++ lib.optionals gstreamerSupport [ gst_all_1.gst-plugins-base gst_all_1.gstreamer ]
+    ++ lib.optionals libcameraSupport [ libcamera libdrm ]
     ++ lib.optional ffmpegSupport ffmpeg
     ++ lib.optionals bluezSupport [ bluez libfreeaptx ldacbt sbc fdk_aac ]
     ++ lib.optional pulseTunnelSupport libpulseaudio
@@ -128,14 +143,13 @@ let
 
     mesonFlags = [
       "-Ddocs=enabled"
-      "-Dexamples=${mesonEnable withMediaSession}" # only needed for `pipewire-media-session`
       "-Dudevrulesdir=lib/udev/rules.d"
       "-Dinstalled_tests=enabled"
       "-Dinstalled_test_prefix=${placeholder "installedTests"}"
       "-Dpipewire_pulse_prefix=${placeholder "pulse"}"
       "-Dmedia-session-prefix=${placeholder "mediaSession"}"
       "-Dlibjack-path=${placeholder "jack"}/lib"
-      "-Dlibcamera=disabled"
+      "-Dlibcamera=${mesonEnable libcameraSupport}"
       "-Droc=disabled"
       "-Dlibpulse=${mesonEnable pulseTunnelSupport}"
       "-Davahi=${mesonEnable zeroconfSupport}"

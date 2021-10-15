@@ -9262,10 +9262,10 @@ let
 
   GraphicsTIFF = buildPerlPackage {
     pname = "Graphics-TIFF";
-    version = "9";
+    version = "16";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RA/RATCLIFFE/Graphics-TIFF-9.tar.gz";
-      sha256 = "1n1r9r7f6hp2s6l361pyvb1i1pm9xqy0w9n3z5ygm7j64160kz9a";
+      sha256 = "Kv0JTCBGnvp8+cMmDjzuqd4Qw9r+BjOo0eJC405OOdg=";
     };
     buildInputs = [ pkgs.libtiff ExtUtilsDepends ExtUtilsPkgConfig ];
     propagatedBuildInputs = [ Readonly ];
@@ -10454,10 +10454,10 @@ let
 
   ImagePNGLibpng = buildPerlPackage {
     pname = "Image-PNG-Libpng";
-    version = "0.56";
+    version = "0.57";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BK/BKB/Image-PNG-Libpng-0.56.tar.gz";
-      sha256 = "1nf7qcql7b2w98i859f76q1vb4b2zd0k0ypjbsw7ngs2zzmvzyzs";
+      sha256 = "+vu/6/9CP3u4XvJ6MEH7YpG1AzbHpYIiSlysQzHDx9k=";
     };
     buildInputs = [ pkgs.libpng ];
     meta = {
@@ -11353,16 +11353,21 @@ let
 
   LaTeXML = buildPerlPackage rec {
     pname = "LaTeXML";
-    version = "0.8.5";
+    version = "0.8.6";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BR/BRMILLER/${pname}-${version}.tar.gz";
-      sha256 = "0dr69rgl4si9i9ww1r4dc7apgb7y6f7ih808w4g0924cvz823s0x";
+      sha256 = "1ccvdq7asxq6iw8x8ihwf5xs2mp7fkwm467xy7g8spkznr8wcacm";
     };
+    patches = [
+      (fetchpatch {
+        # https://github.com/brucemiller/LaTeXML/issues/1669
+        name = "downgrade-security-FileTemp.patch";
+        url = "https://github.com/brucemiller/LaTeXML/commit/c3d6b9b88f9eafce6eee52b1634ea33085ba9ec6.patch";
+        sha256 = "12w6nfv0bkj2mr4xwcqzkdngrpbq4fn52n85r9njdg913cvfirm7";
+      })
+    ];
     outputs = [ "out" "tex" ];
-    propagatedBuildInputs = [ ArchiveZip DBFile FileWhich IOString ImageSize JSONXS LWP ParseRecDescent ImageMagick PodParser TextUnidecode XMLLibXSLT ];
-    preCheck = ''
-      rm t/931_epub.t # epub test fails
-    '';
+    propagatedBuildInputs = [ ArchiveZip DBFile FileWhich IOString ImageMagick ImageSize JSONXS LWP ParseRecDescent PodParser TextUnidecode XMLLibXSLT ];
     nativeBuildInputs = [ pkgs.makeWrapper ] ++ lib.optional stdenv.isDarwin shortenPerlShebang;
     makeMakerFlags = "TEXMF=\${tex} NOMKTEXLSR";
     # shebangs need to be patched before executables are copied to $out
@@ -17031,10 +17036,10 @@ let
 
   PDFAPI2 = buildPerlPackage {
     pname = "PDF-API2";
-    version = "2.038";
+    version = "2.042";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SS/SSIMMS/PDF-API2-2.038.tar.gz";
-      sha256 = "7447c4749b02a784f525d3c7ece99d34b0a10475db65096f6316748dd2f9bd09";
+      sha256 = "dEfEdJsCp4T1JdPH7OmdNLChBHXbZQlvYxZ0jdL5vQk=";
     };
     buildInputs = [ TestException TestMemoryCycle ];
     propagatedBuildInputs = [ FontTTF ];
@@ -17046,10 +17051,10 @@ let
 
   PDFBuilder = buildPerlPackage {
     pname = "PDF-Builder";
-    version = "3.022";
+    version = "3.023";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PM/PMPERRY/PDF-Builder-3.022.tar.gz";
-      sha256 = "0cfafyci5xar567z82w0vcjrwa6inf1a9ydszgkz51bi1ilj8as8";
+      sha256 = "SCskaQxxhfLn+7r5pIKz0SieJduAC/SPKVn1Epl3yjE=";
     };
     checkInputs = [ TestException TestMemoryCycle ];
     propagatedBuildInputs = [ FontTTF ];

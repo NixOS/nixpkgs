@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
     homepage = "https://lvtk.org/";
     license = licenses.gpl3;
     maintainers = [ maintainers.goibhniu ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

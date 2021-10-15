@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "pathvalidate";
-  version = "2.4.1";
+  version = "2.5.0";
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-PJvZTH7CPpz7IR/741audfl51sCZosdF7pSQ9STzJGg=";
+    sha256 = "119ba36be7e9a405d704c7b7aea4b871c757c53c9adc0ed64f40be1ed8da2781";
   };
 
   # Requires `pytest-md-report`, causing infinite recursion.

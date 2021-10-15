@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "aioshelly";
-  version = "0.6.4";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = pname;
     rev = version;
-    sha256 = "sha256-QRCqkaKhPQQjNt9mw8nlTB5YKLmIZbXfrxarb3Ksr5k=";
+    sha256 = "sha256-STJ9BDVbvlIMvKMiGwkGZ9Z32NvlE+3cyYduYlwTbx4=";
   };
 
   propagatedBuildInputs = [

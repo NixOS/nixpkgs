@@ -24,7 +24,7 @@ in {
     package = mkOption {
       type = types.package;
       default = pkgs.tailscale;
-      defaultText = "pkgs.tailscale";
+      defaultText = literalExpression "pkgs.tailscale";
       description = "The package to use for tailscale";
     };
   };

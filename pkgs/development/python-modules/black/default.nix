@@ -54,6 +54,9 @@ buildPythonPackage rec {
   ] ++ lib.optionals stdenv.isDarwin [
     # fails on darwin
     "test_expression_diff"
+    # Fail on Hydra, see https://github.com/NixOS/nixpkgs/pull/130785
+    "test_bpo_2142_workaround"
+    "test_skip_magic_trailing_comma"
   ];
 
   propagatedBuildInputs = [

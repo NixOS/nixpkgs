@@ -216,10 +216,11 @@ in {
 
       package = mkOption {
         type = types.package;
-        example = literalExample "pkgs.mediatomb";
+        example = literalExpression "pkgs.mediatomb";
         default = pkgs.gerbera;
+        defaultText = literalExpression "pkgs.gerbera";
         description = ''
-          Underlying package to be used with the module (default: pkgs.gerbera).
+          Underlying package to be used with the module.
         '';
       };
 
@@ -325,7 +326,7 @@ in {
 
       mediaDirectories = mkOption {
         type = with types; listOf (submodule mediaDirectory);
-        default = {};
+        default = [];
         description = ''
           Declare media directories to index.
         '';

@@ -49,14 +49,14 @@ in
 
 stdenv.mkDerivation rec {
   pname = "busybox";
-  version = "1.33.1";
+  version = "1.34.1";
 
   # Note to whoever is updating busybox: please verify that:
   # nix-build pkgs/stdenv/linux/make-bootstrap-tools.nix -A test
   # still builds after the update.
   src = fetchurl {
     url = "https://busybox.net/downloads/${pname}-${version}.tar.bz2";
-    sha256 = "0a0dcvsh7nxnhxc5y73fky0z30i9p7r30qfidm2akn0n5fywdkhj";
+    sha256 = "0jfm9fik7nv4w21zqdg830pddgkdjmplmna9yjn9ck1lwn4vsps1";
   };
 
   hardeningDisable = [ "format" "pie" ]
@@ -80,6 +80,14 @@ stdenv.mkDerivation rec {
     CONFIG_INSTALL_NO_USR y
 
     CONFIG_LFS y
+
+    # More features for modprobe.
+    ${lib.optionalString (!enableMinimal) ''
+      CONFIG_FEATURE_MODPROBE_BLACKLIST y
+      CONFIG_FEATURE_MODUTILS_ALIAS y
+      CONFIG_FEATURE_MODUTILS_SYMBOLS y
+      CONFIG_MODPROBE_SMALL n
+    ''}
 
     ${lib.optionalString enableStatic ''
       CONFIG_STATIC y
@@ -135,7 +143,7 @@ stdenv.mkDerivation rec {
     description = "Tiny versions of common UNIX utilities in a single small executable";
     homepage = "https://busybox.net/";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ TethysSvensson ];
+    maintainers = with maintainers; [ TethysSvensson qyliss ];
     platforms = platforms.linux;
     priority = 10;
   };

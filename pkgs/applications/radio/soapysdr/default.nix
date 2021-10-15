@@ -50,6 +50,6 @@ in stdenv.mkDerivation {
     description = "Vendor and platform neutral SDR support library";
     license = licenses.boost;
     maintainers = with maintainers; [ markuskowa ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

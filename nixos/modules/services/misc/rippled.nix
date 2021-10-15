@@ -210,7 +210,7 @@ in
         description = "Which rippled package to use.";
         type = types.package;
         default = pkgs.rippled;
-        defaultText = "pkgs.rippled";
+        defaultText = literalExpression "pkgs.rippled";
       };
 
       ports = mkOption {

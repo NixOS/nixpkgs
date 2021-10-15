@@ -33,10 +33,6 @@ in mkDerivation {
     cp sleepyhead/SleepyHead $out/bin
   '';
 
-  postFixup = lib.optionalString stdenv.isDarwin ''
-    wrapQtApp "$out/Applications/SleepyHead.app/Contents/MacOS/SleepyHead"
-  '';
-
   meta = with lib; {
     homepage = "https://sleepyhead.jedimark.net/";
     description = "Review and explore data produced by CPAP and related machines";

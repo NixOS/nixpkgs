@@ -280,19 +280,19 @@ let
 
     prisma = super.prisma.override {
       nativeBuildInputs = [ pkgs.makeWrapper ];
-      version = "3.1.1";
+      version = "3.2.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/prisma/-/prisma-3.1.1.tgz";
-        sha512 = "sha512-+eZtWIL6hnOKUOvqq9WLBzSw2d/EbTmOx1Td1LI8/0XE40ctXMLG2N1p6NK5/+yivGaoNJ9PDpPsPL9lO4nJrQ==";
+        url = "https://registry.npmjs.org/prisma/-/prisma-3.2.0.tgz";
+        sha512 = "sha512-o8+DH0RD5DbP8QTZej2dsY64yvjOwOG3TWOlJyoCHQ+8DH9m4tzxo38j6IF/PqpN4PmAGPpHuNi/nssG1cvYlQ==";
       };
       dependencies = [
         {
           name = "_at_prisma_slash_engines";
           packageName = "@prisma/engines";
-          version = "3.1.0-24.c22652b7e418506fab23052d569b85d3aec4883f";
+          version = "3.2.0-34.afdab2f10860244038c4e32458134112852d4dad";
           src = fetchurl {
-            url = "https://registry.npmjs.org/@prisma/engines/-/engines-3.1.0-24.c22652b7e418506fab23052d569b85d3aec4883f.tgz";
-            sha512 = "sha512-6NEp0VlLho3hVtIvj2P4h0e19AYqQSXtFGts8gSIXDnV+l5pRFZaDMfGo2RiLMR0Kfrs8c3ZYxYX0sWmVL0tWw==";
+            url = "https://registry.npmjs.org/@prisma/engines/-/engines-3.2.0-34.afdab2f10860244038c4e32458134112852d4dad.tgz";
+            sha512 = "sha512-MiZORXXsGORXTF9RqqKIlN/2ohkaxAWTsS7qxDJTy5ThTYLrXSmzxTSohM4qN/AI616B+o5WV7XTBhjlPKSufg==";
           };
         }
       ];
@@ -387,18 +387,19 @@ let
     };
 
     vega-lite = super.vega-lite.override {
-        # npx tries to install vega from scratch at vegalite runtime if it
-        # can't find it. We thus replace it with a direct call to the nix
-        # derivation. This might not be necessary anymore in future vl
-        # versions: https://github.com/vega/vega-lite/issues/6863.
         postInstall = ''
-          substituteInPlace $out/lib/node_modules/vega-lite/bin/vl2pdf \
-            --replace "npx -p vega vg2pdf"  "${self.vega-cli}/bin/vg2pdf"
-          substituteInPlace $out/lib/node_modules/vega-lite/bin/vl2svg \
-            --replace "npx -p vega vg2svg"  "${self.vega-cli}/bin/vg2svg"
-          substituteInPlace $out/lib/node_modules/vega-lite/bin/vl2png \
-            --replace "npx -p vega vg2png"  "${self.vega-cli}/bin/vg2png"
+          cd node_modules
+          for dep in ${self.vega-cli}/lib/node_modules/vega-cli/node_modules/*; do
+            if [[ ! -d $dep ]]; then
+              ln -s "${self.vega-cli}/lib/node_modules/vega-cli/node_modules/$dep"
+            fi
+          done
         '';
+        passthru.tests = {
+          simple-execution = pkgs.callPackage ./package-tests/vega-lite.nix {
+            inherit (self) vega-lite;
+          };
+        };
     };
 
     webtorrent-cli = super.webtorrent-cli.override {

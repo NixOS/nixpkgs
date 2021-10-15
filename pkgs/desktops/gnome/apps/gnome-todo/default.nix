@@ -21,15 +21,16 @@
 , libical
 , librest
 , json-glib
+, itstool
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-todo";
-  version = "40.0";
+  version = "41.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "aAl8lvBnXHFCZn0QQ0ToNHLdf8xTj+wKzb9gJrucobE=";
+    sha256 = "1r94880d4khbjhhfnhaba3y3d4hv2bri82rzfzxn27s5iybpqras";
   };
 
   nativeBuildInputs = [
@@ -39,6 +40,7 @@ stdenv.mkDerivation rec {
     gettext
     python3
     wrapGAppsHook
+    itstool
   ];
 
   buildInputs = [
@@ -62,10 +64,6 @@ stdenv.mkDerivation rec {
   postPatch = ''
     chmod +x build-aux/meson/meson_post_install.py
     patchShebangs build-aux/meson/meson_post_install.py
-
-    # https://gitlab.gnome.org/GNOME/gnome-todo/merge_requests/103
-    substituteInPlace src/meson.build \
-      --replace 'Gtk-3.0' 'Gtk-4.0'
   '';
 
   passthru = {

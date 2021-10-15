@@ -14,21 +14,21 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "nextpnr";
-  version = "2021.08.16";
+  version = "2021.09.27";
 
   srcs = [
     (fetchFromGitHub {
       owner  = "YosysHQ";
       repo   = "nextpnr";
-      rev    = "b37d133c43c45862bd5c550b5d7fffaa8c49b968";
-      sha256 = "0qc9d8cay2j5ggn0mgjq484vv7a14na16s9dmp7bqz7r9cn4b98n";
+      rev    = "9d8d3bdbc48133ff7758c9c5293e5904bc6e5ba7";
+      sha256 = "sha256-5Axo8qX2+ATqQ170QqfhRwYfCRQLCKBW1kc89x9XljE=";
       name   = "nextpnr";
     })
     (fetchFromGitHub {
       owner  = "YosysHQ";
       repo   = "nextpnr-tests";
       rev    = "ccc61e5ec7cc04410462ec3196ad467354787afb";
-      sha256 = "09a0bhrphr3rsppryrfak4rhziyj8k3s17kgb0vgm0abjiz0jgam";
+      sha256 = "sha256-VT0JfpRLgfo2WG+eoMdE0scPM5nKZZ/v1XlkeDNcQCU=";
       name   = "nextpnr-tests";
     })
   ];
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
 
   patchPhase = with builtins; ''
     # use PyPy for icestorm if enabled
-    substituteInPlace ./ice40/family.cmake \
+    substituteInPlace ./ice40/CMakeLists.txt \
       --replace ''\'''${PYTHON_EXECUTABLE}' '${icestorm.pythonInterp}'
   '';
 

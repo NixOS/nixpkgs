@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-dns";
-  version = "0.33.1";
+  version = "0.34.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e4aa73fc6ca22764fd7294de19b602dff084d924c77366c136fb9c28e70ae739";
+    sha256 = "bd75d6e9fd456ce643ee936a113a1ead5405704515caa679db30d7f036e447f3";
   };
 
   propagatedBuildInputs = [ google-api-core google-cloud-core ];

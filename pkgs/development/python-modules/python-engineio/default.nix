@@ -16,13 +16,13 @@
 
 buildPythonPackage rec {
   pname = "python-engineio";
-  version = "4.2.0";
+  version = "4.2.1";
 
   src = fetchFromGitHub {
     owner = "miguelgrinberg";
     repo = "python-engineio";
     rev = "v${version}";
-    sha256 = "sha256-QfX8Volz5nabGVhQLXfSD/QooxLsU6DvCq1WRkRZ6hU=";
+    sha256 = "sha256-aAoTeQZCtxddVBPwlyv2j4aACMO9p0vQ/ESkkv4E3VE=";
   };
 
   checkInputs = [

@@ -136,6 +136,7 @@ dont-distribute-packages:
  - GrammarProducts
  - GraphHammer
  - GraphHammer-examples
+ - Grow
  - GrowlNotify
  - Gtk2hsGenerics
  - GtkGLTV
@@ -147,8 +148,22 @@ dont-distribute-packages:
  - HAppS-Server
  - HAppS-State
  - HGamer3D-API
+ - HGamer3D-Audio
+ - HGamer3D-Bullet-Binding
  - HGamer3D-CAudio-Binding
+ - HGamer3D-CEGUI-Binding
+ - HGamer3D-Common
+ - HGamer3D-Enet-Binding
+ - HGamer3D-GUI
+ - HGamer3D-Graphics3D
+ - HGamer3D-InputSystem
+ - HGamer3D-Network
  - HGamer3D-OIS-Binding
+ - HGamer3D-Ogre-Binding
+ - HGamer3D-SDL2-Binding
+ - HGamer3D-SFML-Binding
+ - HGamer3D-WinEvent
+ - HGamer3D-Wire
  - HJScript
  - HLearn-algebra
  - HLearn-approximation
@@ -156,6 +171,7 @@ dont-distribute-packages:
  - HLearn-datastructures
  - HLearn-distributions
  - HNM
+ - HPhone
  - HPlot
  - HPong
  - HROOT
@@ -445,7 +461,6 @@ dont-distribute-packages:
  - apotiki
  - approx-rand-test
  - arbor-monad-metric-datadog
- - arch-hs
  - archlinux-web
  - arduino-copilot
  - arff
@@ -582,7 +597,6 @@ dont-distribute-packages:
  - blatex
  - blaze-builder-enumerator
  - blaze-colonnade
- - ble
  - blink1
  - blip
  - blogination
@@ -602,6 +616,8 @@ dont-distribute-packages:
  - boots-web
  - borel
  - bowntz
+ - box-csv
+ - box-socket
  - breakout
  - bricks
  - bricks-internal-test
@@ -659,6 +675,13 @@ dont-distribute-packages:
  - casadi-bindings-ipopt-interface
  - casadi-bindings-snopt-interface
  - cash
+ - casr-logbook-html
+ - casr-logbook-meta
+ - casr-logbook-meta-html
+ - casr-logbook-reports
+ - casr-logbook-reports-html
+ - casr-logbook-reports-meta
+ - casr-logbook-reports-meta-html
  - cassandra-cql
  - cassandra-thrift
  - cassy
@@ -698,6 +721,7 @@ dont-distribute-packages:
  - chromatin
  - chronos_1_1_3
  - chu2
+ - chuchu
  - chunks
  - ciphersaber2
  - citation-resolve
@@ -824,6 +848,7 @@ dont-distribute-packages:
  - craftwerk-cairo
  - craftwerk-gtk
  - craze
+ - credentials-cli
  - crf-chain1
  - crf-chain1-constrained
  - crf-chain2-generic
@@ -897,7 +922,11 @@ dont-distribute-packages:
  - deeplearning-hs
  - deepzoom
  - defargs
+ - definitive-filesystem
  - definitive-graphics
+ - definitive-parser
+ - definitive-reactive
+ - definitive-sound
  - deka-tests
  - delaunay
  - delicious
@@ -917,7 +946,6 @@ dont-distribute-packages:
  - dewdrop
  - dfinity-radix-tree
  - dhall-docs
- - di-polysemy
  - dia-functions
  - diagrams-haddock
  - diagrams-html5
@@ -1194,7 +1222,6 @@ dont-distribute-packages:
  - ghc-instances
  - ghc-mod
  - ghc-tags-plugin
- - ghc-vis
  - ghci-pretty
  - ghcjs-hplay
  - ght
@@ -1235,6 +1262,188 @@ dont-distribute-packages:
  - goal-probability
  - goal-simulation
  - goat
+ - gogol
+ - gogol-abusiveexperiencereport
+ - gogol-acceleratedmobilepageurl
+ - gogol-accessapproval
+ - gogol-accesscontextmanager
+ - gogol-adexchange-buyer
+ - gogol-adexchange-seller
+ - gogol-adexchangebuyer2
+ - gogol-adexperiencereport
+ - gogol-admin-datatransfer
+ - gogol-admin-directory
+ - gogol-admin-emailmigration
+ - gogol-admin-reports
+ - gogol-adsense
+ - gogol-adsense-host
+ - gogol-affiliates
+ - gogol-alertcenter
+ - gogol-analytics
+ - gogol-analyticsreporting
+ - gogol-android-enterprise
+ - gogol-android-publisher
+ - gogol-androiddeviceprovisioning
+ - gogol-androidmanagement
+ - gogol-appengine
+ - gogol-apps-activity
+ - gogol-apps-calendar
+ - gogol-apps-licensing
+ - gogol-apps-reseller
+ - gogol-apps-tasks
+ - gogol-appstate
+ - gogol-autoscaler
+ - gogol-bigquery
+ - gogol-bigquerydatatransfer
+ - gogol-bigtableadmin
+ - gogol-billing
+ - gogol-binaryauthorization
+ - gogol-blogger
+ - gogol-books
+ - gogol-chat
+ - gogol-civicinfo
+ - gogol-classroom
+ - gogol-cloudasset
+ - gogol-clouderrorreporting
+ - gogol-cloudfunctions
+ - gogol-cloudidentity
+ - gogol-cloudiot
+ - gogol-cloudkms
+ - gogol-cloudmonitoring
+ - gogol-cloudprivatecatalog
+ - gogol-cloudprivatecatalogproducer
+ - gogol-cloudprofiler
+ - gogol-cloudscheduler
+ - gogol-cloudsearch
+ - gogol-cloudshell
+ - gogol-cloudtasks
+ - gogol-cloudtrace
+ - gogol-commentanalyzer
+ - gogol-composer
+ - gogol-compute
+ - gogol-consumersurveys
+ - gogol-container
+ - gogol-containeranalysis
+ - gogol-containerbuilder
+ - gogol-customsearch
+ - gogol-dataflow
+ - gogol-datafusion
+ - gogol-dataproc
+ - gogol-datastore
+ - gogol-debugger
+ - gogol-deploymentmanager
+ - gogol-dfareporting
+ - gogol-dialogflow
+ - gogol-digitalassetlinks
+ - gogol-discovery
+ - gogol-dlp
+ - gogol-dns
+ - gogol-docs
+ - gogol-doubleclick-bids
+ - gogol-doubleclick-search
+ - gogol-drive
+ - gogol-driveactivity
+ - gogol-factchecktools
+ - gogol-file
+ - gogol-firebase-dynamiclinks
+ - gogol-firebase-rules
+ - gogol-firebasehosting
+ - gogol-firebaseremoteconfig
+ - gogol-firestore
+ - gogol-fitness
+ - gogol-fonts
+ - gogol-freebasesearch
+ - gogol-fusiontables
+ - gogol-games
+ - gogol-games-configuration
+ - gogol-games-management
+ - gogol-genomics
+ - gogol-gmail
+ - gogol-groups-migration
+ - gogol-groups-settings
+ - gogol-healthcare
+ - gogol-iam
+ - gogol-iamcredentials
+ - gogol-iap
+ - gogol-identity-toolkit
+ - gogol-indexing
+ - gogol-jobs
+ - gogol-kgsearch
+ - gogol-language
+ - gogol-latencytest
+ - gogol-libraryagent
+ - gogol-logging
+ - gogol-manufacturers
+ - gogol-maps-coordinate
+ - gogol-maps-engine
+ - gogol-mirror
+ - gogol-ml
+ - gogol-monitoring
+ - gogol-oauth2
+ - gogol-oslogin
+ - gogol-pagespeed
+ - gogol-partners
+ - gogol-people
+ - gogol-photoslibrary
+ - gogol-play-moviespartner
+ - gogol-playcustomapp
+ - gogol-plus
+ - gogol-plus-domains
+ - gogol-poly
+ - gogol-prediction
+ - gogol-proximitybeacon
+ - gogol-pubsub
+ - gogol-qpxexpress
+ - gogol-redis
+ - gogol-remotebuildexecution
+ - gogol-replicapool
+ - gogol-replicapool-updater
+ - gogol-resourcemanager
+ - gogol-resourceviews
+ - gogol-run
+ - gogol-runtimeconfig
+ - gogol-safebrowsing
+ - gogol-script
+ - gogol-searchconsole
+ - gogol-securitycenter
+ - gogol-servicebroker
+ - gogol-serviceconsumermanagement
+ - gogol-servicecontrol
+ - gogol-servicemanagement
+ - gogol-servicenetworking
+ - gogol-serviceusage
+ - gogol-serviceuser
+ - gogol-sheets
+ - gogol-shopping-content
+ - gogol-siteverification
+ - gogol-slides
+ - gogol-sourcerepo
+ - gogol-spanner
+ - gogol-spectrum
+ - gogol-speech
+ - gogol-sqladmin
+ - gogol-storage
+ - gogol-storage-transfer
+ - gogol-streetviewpublish
+ - gogol-surveys
+ - gogol-tagmanager
+ - gogol-taskqueue
+ - gogol-testing
+ - gogol-texttospeech
+ - gogol-toolresults
+ - gogol-tpu
+ - gogol-tracing
+ - gogol-translate
+ - gogol-urlshortener
+ - gogol-useraccounts
+ - gogol-vault
+ - gogol-videointelligence
+ - gogol-vision
+ - gogol-webmaster-tools
+ - gogol-websecurityscanner
+ - gogol-youtube
+ - gogol-youtube-analytics
+ - gogol-youtube-reporting
  - google-drive
  - google-mail-filters
  - google-maps-geocoding
@@ -1288,6 +1497,7 @@ dont-distribute-packages:
  - gtk-serialized-event
  - gtk2hs-cast-glade
  - gtk2hs-cast-gnomevfs
+ - gtk2hs-cast-gtk
  - gtk2hs-cast-gtkglext
  - gtk2hs-cast-gtksourceview2
  - gtkimageview
@@ -1691,6 +1901,7 @@ dont-distribute-packages:
  - hylotab
  - hyloutils
  - hyperpublic
+ - iException
  - ice40-prim
  - ide-backend
  - ide-backend-common
@@ -1789,6 +2000,7 @@ dont-distribute-packages:
  - jobs-ui
  - join
  - jot
+ - jsc
  - jsmw
  - json-ast-json-encoder
  - json-autotype
@@ -1867,6 +2079,7 @@ dont-distribute-packages:
  - lambdaFeed
  - lambdaLit
  - lambdabot-zulip
+ - lambdacat
  - lambdacms-media
  - lambdacube
  - lambdacube-bullet
@@ -2027,7 +2240,9 @@ dont-distribute-packages:
  - majordomo
  - majority
  - manatee
+ - manatee-all
  - manatee-anything
+ - manatee-browser
  - manatee-core
  - manatee-curl
  - manatee-editor
@@ -2037,6 +2252,7 @@ dont-distribute-packages:
  - manatee-mplayer
  - manatee-pdfviewer
  - manatee-processmanager
+ - manatee-reader
  - manatee-template
  - manatee-terminal
  - manatee-welcome
@@ -2239,6 +2455,7 @@ dont-distribute-packages:
  - online-csv
  - open-adt-tutorial
  - open-union
+ - openpgp-Crypto
  - openpgp-crypto-api
  - openssh-github-keys
  - opentracing-jaeger
@@ -2342,36 +2559,12 @@ dont-distribute-packages:
  - polh-lexicon
  - polydata
  - polysemy-RandomFu
- - polysemy-chronos
- - polysemy-conc
- - polysemy-extra
- - polysemy-fs
- - polysemy-fskvstore
  - polysemy-http
- - polysemy-keyed-state
- - polysemy-kvstore
- - polysemy-kvstore-jsonfile
- - polysemy-log
  - polysemy-log-co
- - polysemy-log-di
- - polysemy-methodology
  - polysemy-methodology-co-log
- - polysemy-methodology-composite
- - polysemy-mocks
  - polysemy-optics
- - polysemy-path
- - polysemy-plugin
- - polysemy-plugin_0_4_0_0
  - polysemy-readline
- - polysemy-req
  - polysemy-resume
- - polysemy-several
- - polysemy-socket
- - polysemy-test
- - polysemy-time
- - polysemy-uncontrolled
- - polysemy-video
- - polysemy-vinyl
  - polysemy-webserver
  - polyseq
  - polytypeable-utils
@@ -2607,6 +2800,7 @@ dont-distribute-packages:
  - rio-process-pool
  - riot
  - ripple
+ - ripple-federation
  - risc-v
  - rivet
  - rlwe-challenges
@@ -2738,6 +2932,7 @@ dont-distribute-packages:
  - sgf
  - sgrep
  - sha1
+ - shady-graphics
  - shake-ats
  - shake-minify-css
  - shaker
@@ -2840,6 +3035,7 @@ dont-distribute-packages:
  - sphero
  - sphinx-cli
  - spice
+ - spike
  - spline3
  - splines
  - sprinkles
@@ -2913,6 +3109,7 @@ dont-distribute-packages:
  - swapper
  - sweet-egison
  - switch
+ - sydtest-amqp
  - sylvia
  - sym-plot
  - symantic-atom
@@ -2971,6 +3168,7 @@ dont-distribute-packages:
  - test-sandbox-quickcheck
  - test-simple
  - testbench
+ - text-json-qq
  - text-plus
  - text-trie
  - text-xml-generic
@@ -3178,6 +3376,7 @@ dont-distribute-packages:
  - wavy
  - web-mongrel2
  - web-page
+ - web-rep
  - web-routes-regular
  - web-routing
  - web3

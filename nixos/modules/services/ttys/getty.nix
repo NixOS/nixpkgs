@@ -42,6 +42,7 @@ in
       loginProgram = mkOption {
         type = types.path;
         default = "${pkgs.shadow}/bin/login";
+        defaultText = literalExpression ''"''${pkgs.shadow}/bin/login"'';
         description = ''
           Path to the login binary executed by agetty.
         '';

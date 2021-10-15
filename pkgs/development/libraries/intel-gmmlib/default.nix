@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "intel";
     repo = "gmmlib";
-    rev = "${pname}-${version}";
+    rev = "intel-gmmlib-${version}";
     sha256 = "0dzqfgbd0fxl8rxgf5nmj1jd4izzaqfb0s53l96qwz1j57q5ybj5";
   };
 
@@ -27,6 +27,6 @@ stdenv.mkDerivation rec {
       OpenCL(TM) and the Intel(R) Media Driver for VAAPI.
     '';
     platforms = [ "x86_64-linux" "i686-linux" ];
-    maintainers = with maintainers; [ primeos ];
+    maintainers = with maintainers; [ primeos SuperSandro2000 ];
   };
 }

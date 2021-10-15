@@ -9,18 +9,19 @@
 , makeWrapper
 , stdenv
 , zlib
-}: stdenv.mkDerivation rec {
+}:
+stdenv.mkDerivation rec {
   pname = "roon-server";
   version = "1.8-831";
 
-  # N.B. The URL is unstable. I've asked for them to provide a stable URL but
-  # they have ignored me. If this package fails to build for you, you may need
-  # to update the version and sha256.
-  # c.f. https://community.roonlabs.com/t/latest-roon-server-is-not-available-for-download-on-nixos/118129
-  src = fetchurl {
-    url = "https://web.archive.org/web/20210921161727/http://download.roonlabs.com/builds/RoonServer_linuxx64.tar.bz2";
-    sha256 = "sha256-SeMSC7K6DV7rVr1w/SqMnLvipoWbypS/gJnSZmpfXZk=";
-  };
+  src =
+    let
+      urlVersion = builtins.replaceStrings [ "." "-" ] [ "00" "00" ] version;
+    in
+    fetchurl {
+      url = "http://download.roonlabs.com/builds/RoonServer_linuxx64_${urlVersion}.tar.bz2";
+      sha256 = "sha256-SeMSC7K6DV7rVr1w/SqMnLvipoWbypS/gJnSZmpfXZk=";
+    };
 
   buildInputs = [
     alsa-lib
@@ -68,6 +69,6 @@
     homepage = "https://roonlabs.com";
     license = licenses.unfree;
     maintainers = with maintainers; [ lovesegfault steell ];
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" ];
   };
 }

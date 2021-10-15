@@ -206,12 +206,32 @@ opening the next one.  When you want to merge the currently open
     script uses the `gh` command to merge the current PR and open a new one.
     You should only need to do this once.
 
+    This command can be used to authenticate:
+
     ```console
     $ gh auth login
     ```
 
+    This command can be used to confirm that you have already authenticated:
+
+    ```console
+    $ gh auth status
+    ```
+
+1.  Make sure you have setup your `~/.cabal/config` file for authentication
+    for uploading the NixOS package versions to Hackage.  See the following
+    section for details on how to do this.
+
 1.  Make sure you have correctly marked packages broken.  One of the previous
     sections explains how to do this.
+
+    In short:
+
+    ```console
+    $ ./maintainers/scripts/haskell/hydra-report.hs get-report
+    $ ./maintainers/scripts/haskell/hydra-report.hs mark-broken-list
+    $ ./maintainers/scripts/haskell/mark-broken.sh --do-commit
+    ```
 
 1.  Merge `master` into `haskell-updates` and make sure to push to the
     `haskell-updates` branch.  (This can be skipped if `master` has recently
@@ -237,6 +257,8 @@ opening the next one.  When you want to merge the currently open
         `origin/haskell-updates`.
 
     1.  Merges the currently open `haskell-updates` PR.
+
+    1.  Updates the version of Haskell packages in NixOS on Hackage.
 
     1.  Updates Stackage and Hackage snapshots.  Regenerates the Haskell package set.
 

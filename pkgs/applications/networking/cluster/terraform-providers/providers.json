@@ -563,10 +563,10 @@
     "owner": "hashicorp",
     "provider-source-address": "registry.terraform.io/hashicorp/kubernetes",
     "repo": "terraform-provider-kubernetes",
-    "rev": "v2.4.1",
-    "sha256": "0mk0f12yy58gjkki7xpf9bjfw9h9zdgby2b4bddqp5csq11payhd",
+    "rev": "v2.5.0",
+    "sha256": "1hp3bwhlfiwf1a4l6xfldwdxmyjs4nq3n8g343grjya7ibbhh4sg",
     "vendorSha256": null,
-    "version": "2.4.1"
+    "version": "2.5.0"
   },
   "launchdarkly": {
     "owner": "terraform-providers",
@@ -664,11 +664,13 @@
     "version": "1.2.0"
   },
   "netlify": {
-    "owner": "terraform-providers",
+    "owner": "AegirHealth",
+    "provider-source-address": "registry.terraform.io/AegirHealth/netlify",
     "repo": "terraform-provider-netlify",
-    "rev": "v0.4.0",
-    "sha256": "07xds84k2vgpvn2cy3id7hmzg57sz2603zs4msn3ysxmi28lmqyg",
-    "version": "0.4.0"
+    "rev": "v0.6.12",
+    "sha256": "0h3ff1ligjvvlmhghx9g92an79b26nyyq5sq4cdsf6psvwfa2kzd",
+    "vendorSha256": null,
+    "version": "0.6.12"
   },
   "newrelic": {
     "owner": "terraform-providers",
@@ -766,11 +768,13 @@
     "version": "0.1.1"
   },
   "openstack": {
-    "owner": "terraform-providers",
+    "owner": "terraform-provider-openstack",
+    "provider-source-address": "registry.terraform.io/terraform-provider-openstack/openstack",
     "repo": "terraform-provider-openstack",
-    "rev": "v1.28.0",
-    "sha256": "1g2nxv312ddvkgpph17m9sh4zmy5ddj8gqwnfb3frbfbbamrgar6",
-    "version": "1.28.0"
+    "rev": "v1.43.1",
+    "sha256": "0n6r88p3a6p8p0gjys2r1kcgkwq450jmyd741g45lxmaf3jz2ynb",
+    "vendorSha256": "0k4srszs8xgf8gz4fa7ysqyww52d7kvqy6zf22f1gkcjyiks9pl7",
+    "version": "1.43.1"
   },
   "opentelekomcloud": {
     "owner": "terraform-providers",

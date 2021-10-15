@@ -452,6 +452,16 @@ in
     };
   };
 
+  upload = {
+    src = fetchFromGitHub {
+      name = "upload";
+      owner = "fdintino";
+      repo = "nginx-upload-module";
+      rev = "2.3.0";
+      sha256 = "8veZP516oC7TESO368ZsZreetbDt+1eTcamk7P1kWjU=";
+    };
+  };
+
   upstream-check = {
     src = fetchFromGitHub {
       name = "upstream-check";

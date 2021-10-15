@@ -2,7 +2,7 @@
 
 let
   inherit (lib) mkDefault mkEnableOption mkForce mkIf mkMerge mkOption types;
-  inherit (lib) concatStringsSep literalExample mapAttrsToList optional optionalString;
+  inherit (lib) concatStringsSep literalExpression mapAttrsToList optional optionalString;
 
   cfg = config.services.moodle;
   fpm = config.services.phpfpm.pools.moodle;
@@ -67,7 +67,7 @@ in
     package = mkOption {
       type = types.package;
       default = pkgs.moodle;
-      defaultText = "pkgs.moodle";
+      defaultText = literalExpression "pkgs.moodle";
       description = "The Moodle package to use.";
     };
 
@@ -100,7 +100,7 @@ in
           mysql = 3306;
           pgsql = 5432;
         }.${cfg.database.type};
-        defaultText = "3306";
+        defaultText = literalExpression "3306";
       };
 
       name = mkOption {
@@ -131,7 +131,7 @@ in
           if mysqlLocal then "/run/mysqld/mysqld.sock"
           else if pgsqlLocal then "/run/postgresql"
           else null;
-        defaultText = "/run/mysqld/mysqld.sock";
+        defaultText = literalExpression "/run/mysqld/mysqld.sock";
         description = "Path to the unix socket file to use for authentication.";
       };
 
@@ -144,7 +144,7 @@ in
 
     virtualHost = mkOption {
       type = types.submodule (import ../web-servers/apache-httpd/vhost-options.nix);
-      example = literalExample ''
+      example = literalExpression ''
         {
           hostName = "moodle.example.org";
           adminAddr = "webmaster@example.org";

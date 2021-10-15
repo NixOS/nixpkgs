@@ -149,10 +149,16 @@ let
     targetPackages.stdenv.cc.bintools.bintools
   ];
 
+  # Makes debugging easier to see which variant is at play in `nix-store -q --tree`.
+  variantSuffix = lib.concatStrings [
+    (lib.optionalString stdenv.hostPlatform.isMusl "-musl")
+    (lib.optionalString enableIntegerSimple "-integer-simple")
+  ];
+
 in
 stdenv.mkDerivation (rec {
   version = "8.8.4";
-  name = "${targetPrefix}ghc-${version}";
+  pname = "${targetPrefix}ghc${variantSuffix}";
 
   src = fetchurl {
     url = "https://downloads.haskell.org/ghc/${version}/ghc-${version}-src.tar.xz";
@@ -340,10 +346,11 @@ stdenv.mkDerivation (rec {
     ] ++ lib.teams.haskell.members;
     timeout = 24 * 3600;
     inherit (ghc.meta) license platforms;
-
-    # integer-simple builds are broken when GHC links against musl.
-    # See https://github.com/NixOS/nixpkgs/pull/129606#issuecomment-881323743.
-    broken = enableIntegerSimple && hostPlatform.isMusl;
+    # integer-simple builds are broken with musl when bootstrapping using
+    # GHC 8.10.2 and below, however it is not possible to reverse bootstrap
+    # GHC 8.8.4 with GHC 8.10.7.
+    # See https://github.com/NixOS/nixpkgs/pull/138523#issuecomment-927339953
+    broken = hostPlatform.isMusl && enableIntegerSimple;
   };
 
   dontStrip = (targetPlatform.useAndroidPrebuilt || targetPlatform.isWasm);

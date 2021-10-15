@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchurl
-, fetchpatch
 , cmake
 , pkg-config
 , hidapi
@@ -13,23 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libfido2";
-  version = "1.7.0";
+  version = "1.8.0";
 
   # releases on https://developers.yubico.com/libfido2/Releases/ are signed
   src = fetchurl {
     url = "https://developers.yubico.com/${pname}/Releases/${pname}-${version}.tar.gz";
-    sha256 = "13khkp2q8g447797l09p83qxy0z8vgmzr54l8dcnapy9lsr4jrqi";
+    sha256 = "07gxyy5yzgfh5hg7q9fr77z5mkj0xjvd5ya7p5f5kar4iwc92hjm";
   };
-
-  patches = [
-    # fix log truncation
-    # https://github.com/Yubico/libfido2/issues/318
-    # https://github.com/Yubico/libfido2/pull/319
-    (fetchpatch {
-      url = "https://github.com/Yubico/libfido2/commit/8edb9a204b2f4aeb487e282908c3187f1d02d606.patch";
-      sha256 = "1i360bghwbdccgkzjfzvhilscnwsj9lhfiviy000n928698l4wan";
-    })
-  ];
 
   nativeBuildInputs = [ cmake pkg-config ];
 

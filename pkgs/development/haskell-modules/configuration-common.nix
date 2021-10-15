@@ -605,6 +605,25 @@ self: super: {
     '';
   });
 
+  d-bus = let
+    # The latest release on hackage is missing necessary patches for recent compilers
+    # https://github.com/Philonous/d-bus/issues/24
+    newer = overrideSrc super.d-bus {
+      version = "unstable-2021-01-08";
+      src = pkgs.fetchFromGitHub {
+        owner = "Philonous";
+        repo = "d-bus";
+        rev = "fb8a948a3b9d51db618454328dbe18fb1f313c70";
+        hash = "sha256-R7/+okb6t9DAkPVUV70QdYJW8vRcvBdz4zKJT13jb3A=";
+      };
+    };
+  # Add now required extension on recent compilers.
+  # https://github.com/Philonous/d-bus/pull/23
+  in appendPatch newer (pkgs.fetchpatch {
+    url = "https://github.com/Philonous/d-bus/commit/e5f37900a3a301c41d98bdaa134754894c705681.patch";
+    sha256 = "6rQ7H9t483sJe1x95yLPAZ0BKTaRjgqQvvrQv7HkJRE=";
+  });
+
   # * The standard libraries are compiled separately.
   # * We need multiple patches from master to fix compilation with
   #   updated dependencies (haskeline and megaparsec) which can be
@@ -777,7 +796,13 @@ self: super: {
 
   # https://github.com/haskell-hvr/cryptohash-sha256/issues/11
   # Jailbreak is necessary to break out of tasty < 1.x dependency.
-  cryptohash-sha256 = markUnbroken (doJailbreak super.cryptohash-sha256);
+  # hackage2nix generates this as a broken package due to the (fake) dependency
+  # missing from hackage, so we need to fix the meta attribute set.
+  cryptohash-sha256 = overrideCabal super.cryptohash-sha256 (drv: {
+    jailbreak = true;
+    broken = false;
+    hydraPlatforms = pkgs.lib.platforms.all;
+  });
 
   # The test suite has all kinds of out-dated dependencies, so it feels easier
   # to just disable it.
@@ -830,6 +855,11 @@ self: super: {
       includes = [ "Hledger/Read/CsvReader.hs" ];
       stripLen = 1;
     });
+
+  # hledger-lib 1.23 depends on doctest >= 0.18
+  hledger-lib_1_23 = super.hledger-lib_1_23.override {
+    doctest = self.doctest_0_18_1;
+  };
 
   # Copy hledger man pages from data directory into the proper place. This code
   # should be moved into the cabal2nix generator.
@@ -1112,6 +1142,8 @@ self: super: {
   # https://bitbucket.org/rvlm/hakyll-contrib-hyphenation/src/master/
   # Therefore we jailbreak it.
   hakyll-contrib-hyphenation = doJailbreak super.hakyll-contrib-hyphenation;
+  # 2021-10-04: too strict upper bound on Hakyll
+  hakyll-filestore = doJailbreak super.hakyll-filestore;
 
   # 2020-06-22: NOTE: > 0.4.0 => rm Jailbreak: https://github.com/serokell/nixfmt/issues/71
   nixfmt = doJailbreak super.nixfmt;
@@ -1147,6 +1179,15 @@ self: super: {
     '';
     sha256 = "097wqn8hxsr50b9mhndg5pjim5jma2ym4ylpibakmmb5m98n17zp";
   });
+
+  # Pick patch from 1.6.0 which allows compilation with doctest 0.18
+  polysemy = appendPatches super.polysemy [
+    (pkgs.fetchpatch {
+      name = "allow-doctest-0.18.patch";
+      url = "https://github.com/polysemy-research/polysemy/commit/dbcf851eb69395ce3143ecf2dd616dcad953a339.patch";
+      sha256 = "1qf5pghc8p1glwaadkr95x12d74vhb98mg8dqwilyxbc6gq763w2";
+    })
+  ];
 
   # polysemy-plugin 0.2.5.0 has constraint ghc-tcplugins-extra (==0.3.*)
   # This upstream issue is relevant:
@@ -1231,6 +1272,12 @@ self: super: {
   gi-cairo-render = doJailbreak super.gi-cairo-render;
   gi-cairo-connector = doJailbreak super.gi-cairo-connector;
 
+  # Remove when https://github.com/gtk2hs/svgcairo/pull/10 gets merged.
+  svgcairo = appendPatch super.svgcairo (pkgs.fetchpatch {
+    url = "https://github.com/gtk2hs/svgcairo/commit/df6c6172b52ecbd32007529d86ba9913ba001306.patch";
+    sha256 = "128qrns56y139vfzg1rbyqfi2xn8gxsmpnxv3zqf4v5spsnprxwh";
+  });
+
   # Missing -Iinclude parameter to doc-tests (pull has been accepted, so should be resolved when 0.5.3 released)
   # https://github.com/lehins/massiv/pull/104
   massiv = dontCheck super.massiv;
@@ -1272,7 +1319,7 @@ self: super: {
   })) (drv: {
     patches = [ ./patches/graphql-engine-mapkeys.patch ];
     doHaddock = false;
-    version = "2.0.7";
+    version = "2.0.9";
   });
   hasura-ekg-core = super.hasura-ekg-core.overrideScope (self: super: {
     hspec = dontCheck self.hspec_2_8_3;
@@ -1430,7 +1477,11 @@ self: super: {
 
   hercules-ci-cli = generateOptparseApplicativeCompletion "hci" (
     # See hercules-ci-optparse-applicative in non-hackage-packages.nix.
-    addBuildDepend (unmarkBroken super.hercules-ci-cli) super.hercules-ci-optparse-applicative
+    addBuildDepend
+      (overrideCabal
+        (unmarkBroken super.hercules-ci-cli)
+        (drv: { hydraPlatforms = super.hercules-ci-cli.meta.platforms; }))
+      super.hercules-ci-optparse-applicative
   );
 
   # Readline uses Distribution.Simple from Cabal 2, in a way that is not
@@ -1868,9 +1919,34 @@ EOT
   # https://github.com/Porges/email-validate-hs/issues/58
   email-validate = doJailbreak super.email-validate;
 
-  # 2021-06-20: Outdated upper bounds
-  # https://github.com/Porges/email-validate-hs/issues/58
-  ghcup = doJailbreak super.ghcup;
+  # 2021-10-02: Make optics 0.4 packages work together
+  optics-th_0_4 = super.optics-th_0_4.override {
+    optics-core = self.optics-core_0_4;
+  };
+  optics-extra_0_4 = super.optics-extra_0_4.override {
+    optics-core = self.optics-core_0_4;
+  };
+  optics_0_4 = super.optics_0_4.override {
+    optics-core = self.optics-core_0_4;
+    optics-extra = self.optics-extra_0_4;
+    optics-th = self.optics-th_0_4;
+  };
+
+  # https://github.com/plow-technologies/hspec-golden-aeson/issues/17
+  hspec-golden-aeson_0_9_0_0 = dontCheck super.hspec-golden-aeson_0_9_0_0;
+
+  # 2021-10-02: Doesn't compile with optics < 0.4
+  ghcup = overrideCabal (super.ghcup.override {
+    hspec-golden-aeson = self.hspec-golden-aeson_0_9_0_0;
+    optics = self.optics_0_4;
+  }) (drv: {
+    # golden files are not shipped with the hackage tarball and hspec-golden-aeson
+    # needs some encouraging to create the missing files after version 0.8.0.0.
+    # See: https://gitlab.haskell.org/haskell/ghcup-hs/-/issues/255
+    preCheck = assert drv.version == "0.1.17.2"; ''
+      export CREATE_MISSING_GOLDEN=yes
+    '' + (drv.preCheck or "");
+  });
 
   # Break out of "Cabal < 3.2" constraint.
   stylish-haskell = doJailbreak super.stylish-haskell;
@@ -1920,9 +1996,16 @@ EOT
   # 2021-08-18: streamly-posix was released with hspec 2.8.2, but it works with older versions too.
   streamly-posix = doJailbreak super.streamly-posix;
 
+  # https://github.com/hadolint/language-docker/issues/72
+  language-docker_10_2_0 = overrideCabal super.language-docker_10_2_0 (drv: {
+    testFlags = (drv.testFlags or []) ++ [
+      "--skip=/Language.Docker.Integration/parse"
+    ];
+  });
+
   # 2021-09-06: hadolint depends on language-docker >= 10.1
   hadolint = super.hadolint.override {
-    language-docker = self.language-docker_10_1_2;
+    language-docker = self.language-docker_10_2_0;
   };
 
   # 2021-09-13: hls 1.3 needs a newer lsp than stackage-lts. (lsp >= 1.2.0.1)
@@ -1938,5 +2021,22 @@ EOT
 
   # 2021-09-18: https://github.com/haskell/haskell-language-server/issues/2205
   hls-stylish-haskell-plugin = doJailbreak super.hls-stylish-haskell-plugin;
+
+  # 2021-09-29: unnecessary lower bound on generic-lens
+  hw-ip = assert pkgs.lib.versionOlder self.generic-lens.version "2.2.0.0";
+    doJailbreak super.hw-ip;
+  hw-eliasfano = assert pkgs.lib.versionOlder self.generic-lens.version "2.2.0.0";
+    doJailbreak super.hw-eliasfano;
+  hw-xml = assert pkgs.lib.versionOlder self.generic-lens.version "2.2.0.0";
+    doJailbreak super.hw-xml;
+
+  # Needs network >= 3.1.2
+  quic = super.quic.overrideScope (self: super: {
+    network = self.network_3_1_2_5;
+  });
+
+  http3 = super.http3.overrideScope (self: super: {
+    network = self.network_3_1_2_5;
+  });
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

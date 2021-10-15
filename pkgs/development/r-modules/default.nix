@@ -22,7 +22,7 @@ let
         doCheck ? true,
         requireX ? false,
         broken ? false,
-        hydraPlatforms ? R.meta.hydraPlatforms
+        hydraPlatforms ? R.meta.platforms
       }: buildRPackage {
     name = "${name}-${version}";
     src = fetchurl {
@@ -342,6 +342,7 @@ let
     runjags = [ pkgs.jags ];
     RVowpalWabbit = with pkgs; [ zlib.dev boost ];
     rzmq = with pkgs; [ zeromq pkg-config ];
+    httpuv = [ pkgs.zlib.dev ];
     clustermq = [ pkgs.zeromq ];
     SAVE = with pkgs; [ zlib bzip2 icu xz pcre ];
     sdcTable = with pkgs; [ gmp glpk ];

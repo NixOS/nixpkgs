@@ -1,23 +1,23 @@
-{ lib, stdenv, fetchurl, perl }:
+{ lib, stdenv, fetchFromGitHub, perl }:
 
 stdenv.mkDerivation rec {
   pname = "uthash";
-  version = "2.1.0";
+  version = "2.3.0";
 
-  src = fetchurl {
-    url = "https://github.com/troydhanson/uthash/archive/v${version}.tar.gz";
-    sha256 = "17k6k97n20jpi9zj3lzvqfw8pv670r6rdqrjf8vrbx6hcj7csb0m";
+  src = fetchFromGitHub {
+    owner = "troydhanson";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-F0M5ENT3bMn3dD16Oaq9mBFYOWzVliVWupAIrLc2nkQ=";
   };
-
-  dontBuild = false;
 
   doCheck = true;
   checkInputs = [ perl ];
-  checkTarget = "-C tests/";
+  checkTarget = "all";
+  preCheck = "cd tests";
 
   installPhase = ''
-    mkdir -p "$out/include"
-    cp ./src/* "$out/include/"
+    install -Dm644 $src/include/*.h -t $out/include
   '';
 
   meta = with lib; {

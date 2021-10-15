@@ -1,22 +1,20 @@
 { lib
 , buildPythonPackage
-, fetchFromGitHub
+, fetchPypi
 , pythonOlder
 , requests
 }:
 
 buildPythonPackage rec {
   pname = "streamlabswater";
-  version = "0.3.2";
+  version = "1.0.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
-  src = fetchFromGitHub {
-    owner = pname;
-    repo = "stream-python";
-    rev = "v${version}";
-    sha256 = "1lh1i1ksic9yhxnwc7mqm5qla98x85dfwj846kwldwam0vcrqlk7";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "sha256-kXG0Wg3PVryMBQ9RMMtEzudMiwVQq7Ikw2OK7JcBojA=";
   };
 
   propagatedBuildInputs = [
