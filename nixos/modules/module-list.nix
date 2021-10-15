@@ -190,6 +190,7 @@
   ./programs/partition-manager.nix
   ./programs/plotinus.nix
   ./programs/proxychains.nix
+  ./programs/preload.nix
   ./programs/phosh.nix
   ./programs/qt5ct.nix
   ./programs/screen.nix
