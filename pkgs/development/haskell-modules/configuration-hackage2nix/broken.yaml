@@ -1284,6 +1284,7 @@ broken-packages:
   - escape-artist
   - escoger
   - espial
+  - esqueleto-pgcrypto
   - ess
   - estimators
   - EstProgress
@@ -1534,7 +1535,6 @@ broken-packages:
   - funcons-values
   - function-instances-algebra
   - functor
-  - functor-combinators
   - functor-friends
   - functor-infix
   - functorm
@@ -1676,6 +1676,7 @@ broken-packages:
   - git-cuk
   - git-date
   - gitdo
+  - github
   - github-backup
   - github-data
   - github-tools
@@ -3847,7 +3848,6 @@ broken-packages:
   - process-leksah
   - process-listlike
   - processmemory
-  - procex
   - procrastinating-variable
   - procstat
   - prof2pretty
@@ -4384,6 +4384,7 @@ broken-packages:
   - shopify
   - shortcut-links
   - shorten-strings
+  - short-vec
   - show-prettyprint
   - Shpadoinkle-backend-snabbdom
   - Shpadoinkle-isreal
@@ -4716,6 +4717,7 @@ broken-packages:
   - SVD2HS
   - svfactor
   - svg-builder-fork
+  - svgcairo
   - svgutils
   - svm-light-utils
   - svm-simple
@@ -5288,6 +5290,7 @@ broken-packages:
   - warc
   - warp-dynamic
   - warp-grpc
+  - warp-quic
   - warp-static
   - warp-systemd
   - wasm
