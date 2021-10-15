@@ -214,7 +214,7 @@ def main() -> None:
             subprocess.check_call(["@systemd@/bin/bootctl", "--path=@efiSysMountPoint@", "--no-variables", "install"])
     else:
         # Update bootloader to latest if needed
-        systemd_version = subprocess.check_output(["@systemd@/bin/bootctl", "--version"], universal_newlines=True).split()[1]
+        systemd_version = subprocess.check_output(["@systemd@/bin/bootctl", "--version"], universal_newlines=True).split()[2]
         sdboot_status = subprocess.check_output(["@systemd@/bin/bootctl", "--path=@efiSysMountPoint@", "status"], universal_newlines=True)
 
         # See status_binaries() in systemd bootctl.c for code which generates this
@@ -228,7 +228,7 @@ def main() -> None:
             # Let systemd-boot attempt an installation if a previous one wasn't found
             needs_install = True
         else:
-            sdboot_version = m.group(2)
+            sdboot_version = f'({m.group(2)})'
             if systemd_version != sdboot_version:
                 print("updating systemd-boot from %s to %s" % (sdboot_version, systemd_version))
                 needs_install = True
