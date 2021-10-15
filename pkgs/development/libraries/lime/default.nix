@@ -5,6 +5,7 @@
 , lib
 , soci
 , sqlite
+, boost
 , stdenv
 }:
 
@@ -21,7 +22,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-11vvvA+pud/eOyYsbRKVvGfiyhwdhNPfRQSfaquUro8=";
   };
 
-  buildInputs = [ bctoolbox soci belle-sip sqlite ];
+  buildInputs = [ bctoolbox soci belle-sip sqlite boost ];
   nativeBuildInputs = [ cmake ];
 
   # Do not build static libraries
