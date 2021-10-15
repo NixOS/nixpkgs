@@ -10,7 +10,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          # required to find all branches
           ref: ${{ github.event.pull_request.head.sha }}
       - name: Create backport PRs
         uses: zeebe-io/backport-action@v0.0.6
