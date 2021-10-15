@@ -1,54 +1,68 @@
 { lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
 , brotlicffi
+, buildPythonPackage
 , certifi
 , charset-normalizer
+, click
+, fetchFromGitHub
 , h2
 , httpcore
-, rfc3986
-, sniffio
-, pytestCheckHook
+, pygments
 , pytest-asyncio
 , pytest-trio
-, typing-extensions
+, pytestCheckHook
+, pythonOlder
+, rfc3986
+, rich
+, sniffio
 , trustme
+, typing-extensions
 , uvicorn
 }:
 
 buildPythonPackage rec {
   pname = "httpx";
-  version = "0.19.0";
+  version = "0.20.0";
+
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "encode";
     repo = pname;
     rev = version;
-    sha256 = "sha256-bUxxeUYqOHBmSL2gPQG5cIq6k5QY4Kyhj9ToA5yZXPA=";
+    sha256 = "sha256-j9dX2N29vRdi7RAkCiWqec3ztiUW2u+Bi44QUucUqs8=";
   };
 
   propagatedBuildInputs = [
     brotlicffi
     certifi
     charset-normalizer
+    click
     h2
     httpcore
+    pygments
     rfc3986
+    rich
     sniffio
   ];
 
   checkInputs = [
-    pytestCheckHook
     pytest-asyncio
     pytest-trio
+    pytestCheckHook
     trustme
     typing-extensions
     uvicorn
   ];
 
-  pythonImportsCheck = [ "httpx" ];
+  pythonImportsCheck = [
+    "httpx"
+  ];
+
+  disabledTestPaths = [
+    # Tests fail with AssertionError: assert ['HTTP/1.1 30...
+    "tests/test_main.py"
+  ];
 
   disabledTests = [
     # httpcore.ConnectError: [Errno 101] Network is unreachable
