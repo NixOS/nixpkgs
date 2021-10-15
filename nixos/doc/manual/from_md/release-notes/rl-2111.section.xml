@@ -1128,6 +1128,15 @@ Superuser created successfully.
           would be parsed as 3 parameters.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <literal>services.mongodb</literal>: There is a new
+          <link xlink:href="options.html#opt-services.mongodb.port">services.mongodb.port</link>
+          option. Should now use this instead of setting
+          <literal>net.port</literal> in extra config. This fixes calls
+          to mongo on startup.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-notable-changes">
