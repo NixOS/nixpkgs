@@ -26,7 +26,6 @@ let
     load-module module-udev-detect
     load-module module-native-protocol-unix
     load-module module-default-device-restore
-    load-module module-rescue-streams
     load-module module-always-sink
     load-module module-intended-roles
     load-module module-suspend-on-idle
