@@ -57,6 +57,11 @@
       </listitem>
       <listitem>
         <para>
+          KDE Plasma now finally works on Wayland.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           bash now defaults to major version 5.
         </para>
       </listitem>
@@ -1104,6 +1109,23 @@ Superuser created successfully.
           by default. Both packages now support an
           <literal>enableUnfree</literal> option to re-enable this
           functionality.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>services.xserver.displayManager.defaultSession = &quot;plasma5&quot;</literal>
+          does not work anymore, instead use either
+          <literal>&quot;plasma&quot;</literal> for the Plasma X11
+          session or <literal>&quot;plasmawayland&quot;</literal> for
+          the Plasma Wayland sesison.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>boot.kernelParams</literal> now only accepts one
+          command line parameter per string. This change is aimed to
+          reduce common mistakes like <quote>param = 12</quote>, which
+          would be parsed as 3 parameters.
         </para>
       </listitem>
     </itemizedlist>
