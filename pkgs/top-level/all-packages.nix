@@ -1271,6 +1271,8 @@ with pkgs;
 
   ashuffle = callPackage ../applications/audio/ashuffle {};
 
+  ashpd-demo = callPackage ../development/tools/ashpd-demo {};
+
   asls = callPackage ../development/tools/misc/asls { };
 
   astc-encoder = callPackage ../tools/graphics/astc-encoder { };
@@ -1665,6 +1667,8 @@ with pkgs;
   gem = callPackage ../applications/audio/pd-plugins/gem { };
 
   git-fire = callPackage ../tools/misc/git-fire { };
+
+  git-privacy = callPackage ../development/tools/git-privacy { };
 
   git-repo-updater = python3Packages.callPackage ../development/tools/git-repo-updater { };
 
@@ -2848,6 +2852,8 @@ with pkgs;
   firestarter = callPackage ../applications/misc/firestarter { };
 
   fits-cloudctl = callPackage ../tools/admin/fits-cloudctl { };
+
+  flitter = callPackage ../tools/misc/flitter { };
 
   frangipanni = callPackage ../tools/text/frangipanni { };
 
@@ -12642,7 +12648,7 @@ with pkgs;
   cargo-expand = callPackage ../development/tools/rust/cargo-expand { };
   cargo-feature = callPackage ../development/tools/rust/cargo-feature { };
   cargo-flash = callPackage ../development/tools/rust/cargo-flash {
-    inherit (darwin.apple_sdk.frameworks) Security AppKit;
+    inherit (darwin.apple_sdk.frameworks) AppKit;
   };
   cargo-fund = callPackage ../development/tools/rust/cargo-fund {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -12821,6 +12827,8 @@ with pkgs;
   metaBuildEnv = callPackage ../development/compilers/meta-environment/meta-build-env { };
 
   svd2rust = callPackage ../development/tools/rust/svd2rust { };
+
+  svdtools = with python3Packages; toPythonApplication svdtools;
 
   swift = callPackage ../development/compilers/swift { };
 
@@ -15383,19 +15391,31 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) AudioUnit CoreServices;
   };
 
+  aws-c-auth = callPackage ../development/libraries/aws-c-auth { };
+
   aws-c-cal = callPackage ../development/libraries/aws-c-cal {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
   aws-c-common = callPackage ../development/libraries/aws-c-common { };
 
+  aws-c-compression = callPackage ../development/libraries/aws-c-compression { };
+
   aws-c-event-stream = callPackage ../development/libraries/aws-c-event-stream { };
+
+  aws-c-http = callPackage ../development/libraries/aws-c-http { };
 
   aws-c-io = callPackage ../development/libraries/aws-c-io {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  aws-c-mqtt = callPackage ../development/libraries/aws-c-mqtt { };
+
+  aws-c-s3 = callPackage ../development/libraries/aws-c-s3 { };
+
   aws-checksums = callPackage ../development/libraries/aws-checksums { };
+
+  aws-crt-cpp = callPackage ../development/libraries/aws-crt-cpp { };
 
   aws-sdk-cpp = callPackage ../development/libraries/aws-sdk-cpp {
     inherit (darwin.apple_sdk.frameworks) CoreAudio AudioToolbox;
@@ -20941,8 +20961,12 @@ with pkgs;
   qboot = pkgsi686Linux.callPackage ../applications/virtualization/qboot { };
 
   OVMF = callPackage ../applications/virtualization/OVMF { };
-  OVMF-CSM = OVMF.override { csmSupport = true; };
-  OVMF-secureBoot = OVMF.override { secureBoot = true; };
+  OVMFFull = callPackage ../applications/virtualization/OVMF {
+    secureBoot = true;
+    csmSupport = true;
+    httpSupport = true;
+    tpmSupport = true;
+  };
 
   seabios = callPackage ../applications/virtualization/seabios { };
 
@@ -24183,6 +24207,7 @@ with pkgs;
   afterburn = callPackage ../tools/admin/afterburn {};
 
   docker-buildx = callPackage ../applications/virtualization/docker/buildx.nix { };
+  docker-compose_2 = callPackage ../applications/virtualization/docker/compose.nix { };
 
   amazon-ecr-credential-helper = callPackage ../tools/admin/amazon-ecr-credential-helper { };
 
@@ -27181,6 +27206,7 @@ with pkgs;
   procmail = callPackage ../applications/misc/procmail { };
 
   profanity = callPackage ../applications/networking/instant-messengers/profanity ({
+    gtk = gtk3;
     python = python3;
   } // (config.profanity or {}));
 
@@ -29523,6 +29549,8 @@ with pkgs;
   inherit (import ../games/deliantra pkgs)
     deliantra-server deliantra-arch deliantra-maps deliantra-data;
 
+  ddnet = callPackage ../games/ddnet { };
+
   devilutionx = callPackage ../games/devilutionx {};
 
   dhewm3 = callPackage ../games/dhewm3 {};
@@ -29691,6 +29719,10 @@ with pkgs;
   };
 
   gltron = callPackage ../games/gltron { };
+
+  gl-gsync-demo = callPackage ../games/gl-gsync-demo {
+    libXNVCtrl = linuxPackages.nvidia_x11.settings.libXNVCtrl;
+  };
 
   gmad = callPackage ../games/gmad { };
 

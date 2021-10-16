@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchurl
+, fetchpatch
 , gettext
 , meson
 , ninja
@@ -43,6 +44,13 @@ stdenv.mkDerivation rec {
     (substituteAll {
       src = ./fix-paths.patch;
       inherit asciidoc;
+    })
+  ] ++ lib.optionals (stdenv.hostPlatform.isi686) [
+    # Upstream: https://gitlab.gnome.org/GNOME/tracker/-/issues/332
+    (fetchpatch {
+      name = "i686-test.patch";
+      url = "https://gitlab.gnome.org/GNOME/tracker/-/commit/af707181a2c492a794daec7ce3f3062d67ffd9dc.patch";
+      sha256 = "sha256-KOdkTy79w3oiQILrPG00UVrv+VBjAk4Y868I8jtifqk=";
     })
   ];
 

@@ -1134,6 +1134,14 @@ Superuser created successfully.
           the Plasma Wayland sesison.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <literal>boot.kernelParams</literal> now only accepts one
+          command line parameter per string. This change is aimed to
+          reduce common mistakes like <quote>param = 12</quote>, which
+          would be parsed as 3 parameters.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-notable-changes">

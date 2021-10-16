@@ -10406,6 +10406,12 @@
       fingerprint = "B234 EFD4 2B42 FE81 EE4D  7627 F72C 4A88 7F9A 24CA";
     }];
   };
+  sirseruju = {
+    email = "sir.seruju@yandex.ru";
+    github = "sirseruju";
+    githubId = 74881555;
+    name = "Fofanov Sergey";
+  };
   sivteck = {
     email = "sivaram1992@gmail.com";
     github = "sivteck";

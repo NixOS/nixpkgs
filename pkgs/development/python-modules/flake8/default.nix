@@ -43,6 +43,9 @@ buildPythonPackage rec {
     importlib-metadata
   ];
 
+  # Tests fail on Python 3.7 due to importlib using a deprecated interface
+  doCheck = !(pythonOlder "3.8");
+
   checkInputs = [
     mock
     pytestCheckHook

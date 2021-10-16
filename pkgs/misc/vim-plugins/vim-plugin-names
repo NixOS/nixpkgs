@@ -290,6 +290,7 @@ josa42/coc-lua
 josa42/vim-lightline-coc
 jose-elias-alvarez/minsnip.nvim@main
 jose-elias-alvarez/null-ls.nvim@main
+jose-elias-alvarez/nvim-lsp-ts-utils@main
 joshdick/onedark.vim@main
 jpalardy/vim-slime@main
 jparise/vim-graphql
