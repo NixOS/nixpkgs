@@ -20,8 +20,9 @@
 , withSystemd ? false
 , systemd ? null
   # optionally support DNS-over-HTTPS as a server
-, withDoH ? false
-, libnghttp2
+, withDoH ? false, libnghttp2
+  # optionally enable the redis backend to cachedb
+, withRedis ? false, hiredis
 }:
 
 stdenv.mkDerivation rec {
@@ -39,7 +40,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ openssl nettle expat libevent ]
     ++ lib.optionals withSystemd [ pkg-config systemd ]
-    ++ lib.optionals withDoH [ libnghttp2 ];
+    ++ lib.optionals withDoH [ libnghttp2 ]
+    ++ lib.optionals withRedis [ hiredis ];
 
   configureFlags = [
     "--with-ssl=${openssl.dev}"
@@ -57,6 +59,9 @@ stdenv.mkDerivation rec {
     "--enable-systemd"
   ] ++ lib.optionals withDoH [
     "--with-libnghttp2=${libnghttp2.dev}"
+  ] ++ lib.optionals withRedis [
+    "--enable-cachedb"
+    "--with-libhiredis=${hiredis}"
   ];
 
   # Remove references to compile-time dependencies that are included in the configure flags
