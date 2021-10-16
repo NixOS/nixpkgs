@@ -19749,9 +19749,23 @@ with pkgs;
       inherit darwin;
     });
 
+  qt62 = recurseIntoAttrs (makeOverridable
+    (import ../development/libraries/qt-6/6.2) {
+      inherit newScope;
+      inherit lib stdenv fetchurl fetchpatch fetchgit fetchFromGitHub makeSetupHook makeWrapper;
+      inherit bison cups dconf harfbuzz libGL perl gtk3;
+      inherit (gst_all_1) gstreamer gst-plugins-base;
+      inherit llvmPackages_5 darwin;
+    });
+
   libsForQt512 = recurseIntoAttrs (import ./qt5-packages.nix {
     inherit lib pkgs;
     qt5 = qt512;
+  });
+
+  libsForQt62 = recurseIntoAttrs (import ./qt6-packages.nix {
+    inherit lib pkgs;
+    qt6 = qt62;
   });
 
   libsForQt514 = recurseIntoAttrs (import ./qt5-packages.nix {
@@ -19773,6 +19787,9 @@ with pkgs;
 
   qtEnv = qt5.env;
   qt5Full = qt5.full;
+
+  qt6 = qt62;
+  libsForQt6 = libsForQt62;
 
   qtscriptgenerator = callPackage ../development/libraries/qtscriptgenerator { };
 
