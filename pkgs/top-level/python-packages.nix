@@ -7744,6 +7744,8 @@ in {
 
   pywizlight = callPackage ../development/python-modules/pywizlight { };
 
+  pywlroots = callPackage ../development/python-modules/pywlroots { };
+
   pyxattr = callPackage ../development/python-modules/pyxattr { };
 
   pyworld = callPackage ../development/python-modules/pyworld { };
