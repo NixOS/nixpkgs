@@ -32,6 +32,9 @@ stdenv.mkDerivation rec {
     install -D waf $out/bin/waf
   '';
 
+  # Avoid regressions to cross-compiling
+  strictDeps = true;
+
   meta = with lib; {
     description = "Meta build system";
     homepage    = "https://waf.io";
