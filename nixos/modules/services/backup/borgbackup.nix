@@ -90,6 +90,10 @@ let
           # Borg needs write access to repo if it is not remote
           ++ optional (isLocalPath cfg.repo) cfg.repo;
         PrivateTmp = cfg.privateTmp;
+      } //
+      mkIf cfg.restartOnFail.enable {
+        Restart = "on-failure";
+        RestartSec = cfg.restartOnFail.restartSec;
       };
       environment = {
         BORG_REPO = cfg.repo;
@@ -551,6 +555,24 @@ in {
             '';
             default = "";
             example = "--save-space";
+          };
+
+          restartOnFail.enable = mkOption {
+            type = types.bool;
+            description = ''
+              Wether borgbackup shall be restarted when it fails
+            '';
+            default = false;
+          };
+
+          restartOnFail.restartSec = mkOption {
+            type = types.str;
+            description = ''
+              Configures the time to sleep before restarting borgbackup . Takes a unit-less value
+              in seconds, or a time span value.
+            '';
+            default = "5min";
+            example = "5min 20s";
           };
 
         };
