@@ -1,7 +1,7 @@
-From 1a2d24d210c9329e8b900fdb01576c57374581d8 Mon Sep 17 00:00:00 2001
+From 0ac75fbbf771dfbb368087f19b2ed61356f9367d Mon Sep 17 00:00:00 2001
 From: Andreas Rammhold <andreas@rammhold.de>
 Date: Mon, 26 Jul 2021 16:57:43 +0200
-Subject: [PATCH 20/20] core: respect install_sysconfdir_samples in meson file
+Subject: [PATCH 19/22] core: respect install_sysconfdir_samples in meson file
 
 The refactoring done in e11a25cadbe caused the configuration files to be
 installed into the pkgsysconfdir regardless of the state of the
@@ -27,5 +27,5 @@ index f0d2c6f642..4ff7e00e36 100644
                  file,
                  input : file + '.in',
 -- 
-2.32.0
+2.33.0
 

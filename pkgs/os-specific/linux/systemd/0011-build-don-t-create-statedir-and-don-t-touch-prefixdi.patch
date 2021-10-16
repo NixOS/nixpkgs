@@ -1,7 +1,7 @@
-From d5716cd93fdaad16b590a581f39d95954f40748e Mon Sep 17 00:00:00 2001
+From 654ac88b9b6f6b6a13e8af57ef88844769e1408f Mon Sep 17 00:00:00 2001
 From: Franz Pletz <fpletz@fnordicwalking.de>
 Date: Sun, 11 Feb 2018 04:37:44 +0100
-Subject: [PATCH 11/19] build: don't create statedir and don't touch prefixdir
+Subject: [PATCH 11/22] build: don't create statedir and don't touch prefixdir
 
 ---
  meson.build | 3 ---
@@ -22,5 +22,5 @@ index 738879eb21..453ee4b1c0 100644
  
  # Ensure that changes to the docs/ directory do not break the
 -- 
-2.32.0
+2.33.0
 
