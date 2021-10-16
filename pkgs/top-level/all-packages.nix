@@ -9120,8 +9120,6 @@ with pkgs;
 
   sasquatch = callPackage ../tools/filesystems/sasquatch { };
 
-  sasview = callPackage ../applications/science/misc/sasview {};
-
   scallion = callPackage ../tools/security/scallion { };
 
   scanbd = callPackage ../tools/graphics/scanbd { };
