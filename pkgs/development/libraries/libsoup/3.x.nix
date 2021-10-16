@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     glib
+    python3
   ] ++ lib.optionals withIntrospection [
     gobject-introspection
   ] ++ lib.optionals withVala [
@@ -42,7 +43,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    python3
     sqlite
     libpsl
     glib.out
