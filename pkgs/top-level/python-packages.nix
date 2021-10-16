@@ -3025,6 +3025,8 @@ in {
   git-annex-adapter =
     callPackage ../development/python-modules/git-annex-adapter { };
 
+  git-filter-repo = callPackage ../development/python-modules/git-filter-repo { };
+
   gitdb = callPackage ../development/python-modules/gitdb { };
 
   github3_py = callPackage ../development/python-modules/github3_py { };
