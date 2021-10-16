@@ -2,7 +2,8 @@
 
 stdenv.mkDerivation {
   pname = "ekam";
-  version = "2021-09-18";
+  version = "unstable-2021-09-18";
+
   src = fetchFromGitHub {
     owner = "capnproto";
     repo = "ekam";
