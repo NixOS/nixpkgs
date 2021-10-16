@@ -35,7 +35,7 @@ stdenv.mkDerivation {
   # See: https://nixos.wiki/wiki/Development_environment_with_nix-shell#Troubleshooting
   buildPhase = ''
     unset NIX_ENFORCE_PURITY
-    make
+    make PARALLEL=$NIX_BUILD_CORES
   '';
 
   installPhase = ''
