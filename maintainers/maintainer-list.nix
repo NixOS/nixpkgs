@@ -12353,6 +12353,12 @@
     githubId = 452;
     name = "Yurii Rashkovskii";
   };
+  yrd = {
+    name = "Yannik Rödel";
+    email = "nix@yannik.info";
+    github = "yrd";
+    githubId = 1820447;
+  };
   ysndr = {
     email = "me@ysndr.de";
     github = "ysndr";
