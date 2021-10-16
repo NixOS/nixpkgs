@@ -3,6 +3,9 @@
 
 , coreutils, bison, flex, gdb, gperf, lndir, perl, pkg-config, python3
 , which
+, cmake # used in configure
+, ninja # used in build
+
   # darwin support
 , libiconv, libobjc, xcbuild, AGL, AppKit, ApplicationServices, Carbon, Cocoa, CoreAudio, CoreBluetooth
 , CoreLocation, CoreServices, DiskArbitration, Foundation, OpenGL, MetalKit, IOKit
@@ -79,7 +82,7 @@ stdenv.mkDerivation {
     ++ lib.optional (libmysqlclient != null) libmysqlclient
     ++ lib.optional (postgresql != null) postgresql;
 
-  nativeBuildInputs = [ bison flex gperf lndir perl pkg-config which ]
+  nativeBuildInputs = [ bison flex gperf lndir perl pkg-config which cmake ninja ]
     ++ lib.optionals stdenv.isDarwin [ xcbuild ];
 
   propagatedNativeBuildInputs = [ lndir ];
@@ -107,25 +110,36 @@ stdenv.mkDerivation {
             --subst-var qtDocPrefix
     done
 
+    # grep /bin/ configure
     substituteInPlace configure --replace /bin/pwd pwd
-    substituteInPlace src/corelib/global/global.pri --replace /bin/ls ${coreutils}/bin/ls
+
+    # find . -name '*.pro' -exec grep -Hn /bin/ '{}' ';'
+    substituteInPlace util/cmake/tests/data/quoted.pro --replace /bin/ls ${coreutils}/bin/ls
+
     sed -e 's@/\(usr\|opt\)/@/var/empty/@g' -i mkspecs/*/*.conf
 
+    # find . -iname '*.cmake.in' -exec grep -Hn NO_DEFAULT_PATH '{}' ';'
+    # TODO
+    if false; then
     sed -i '/PATHS.*NO_DEFAULT_PATH/ d' src/corelib/Qt5Config.cmake.in
     sed -i '/PATHS.*NO_DEFAULT_PATH/ d' src/corelib/Qt5CoreMacros.cmake
     sed -i 's/NO_DEFAULT_PATH//' src/gui/Qt5GuiConfigExtras.cmake.in
     sed -i '/PATHS.*NO_DEFAULT_PATH/ d' mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
+    fi
   '' + (
     if stdenv.isDarwin then ''
+        # TODO this is a noop. these search patterns are not in configure
+        if false; then
         sed -i \
             -e 's|/usr/bin/xcode-select|xcode-select|' \
             -e 's|/usr/bin/xcrun|xcrun|' \
             -e 's|/usr/bin/xcodebuild|xcodebuild|' \
             -e 's|QMAKE_CONF_COMPILER=`getXQMakeConf QMAKE_CXX`|QMAKE_CXX="clang++"\nQMAKE_CONF_COMPILER="clang++"|' \
             ./configure
-            substituteInPlace ./mkspecs/common/mac.conf \
-                --replace "/System/Library/Frameworks/OpenGL.framework/" "${OpenGL}/Library/Frameworks/OpenGL.framework/" \
-                --replace "/System/Library/Frameworks/AGL.framework/" "${AGL}/Library/Frameworks/AGL.framework/"
+        fi
+        substituteInPlace ./mkspecs/common/mac.conf \
+            --replace "/System/Library/Frameworks/OpenGL.framework/" "${OpenGL}/Library/Frameworks/OpenGL.framework/" \
+            --replace "/System/Library/Frameworks/AGL.framework/" "${AGL}/Library/Frameworks/AGL.framework/"
     '' else lib.optionalString libGLSupported ''
       sed -i mkspecs/common/linux.conf \
           -e "/^QMAKE_INCDIR_OPENGL/ s|$|${libGL.dev or libGL}/include|" \
@@ -143,10 +157,14 @@ stdenv.mkDerivation {
   setOutputFlags = false;
   preConfigure = ''
     export LD_LIBRARY_PATH="$PWD/lib:$PWD/plugins/platforms''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
+    # TODO remove
+    if false; then
+      : # noop
     ${lib.optionalString (compareVersion "5.9.0" < 0) ''
     # We need to set LD to CXX or otherwise we get nasty compile errors
     export LD=$CXX
     ''}
+    fi
 
     NIX_CFLAGS_COMPILE+=" -DNIXPKGS_QT_PLUGIN_PREFIX=\"$qtPluginPrefix\""
   '';
@@ -219,17 +237,26 @@ stdenv.mkDerivation {
     "-I" "${icu.dev}/include"
     "-pch"
   ] ++ lib.optional debugSymbols "-debug"
+
+  # TODO remove?
     ++ lib.optionals (compareVersion "5.11.0" < 0) [
     "-qml-debug"
-  ] ++ lib.optionals (compareVersion "5.9.0" < 0) [
+  ]
+  # TODO remove?
+    ++ lib.optionals (compareVersion "5.9.0" < 0) [
     "-c++11"
     "-no-reduce-relocations"
-  ] ++ lib.optionals developerBuild [
+  ]
+
+    ++ lib.optionals developerBuild [
     "-developer-build"
     "-no-warnings-are-errors"
   ] ++ (if (!stdenv.hostPlatform.isx86_64) then [
     "-no-sse2"
-  ] else lib.optionals (compareVersion "5.9.0" >= 0) [
+  ] else
+
+  # TODO remove?
+  lib.optionals (compareVersion "5.9.0" >= 0) [
     "-sse2"
     "${lib.optionalString (!stdenv.hostPlatform.sse3Support)   "-no"}-sse3"
     "${lib.optionalString (!stdenv.hostPlatform.ssse3Support)  "-no"}-ssse3"
@@ -238,6 +265,7 @@ stdenv.mkDerivation {
     "${lib.optionalString (!stdenv.hostPlatform.avxSupport)    "-no"}-avx"
     "${lib.optionalString (!stdenv.hostPlatform.avx2Support)   "-no"}-avx2"
     ]
+
   ) ++ [
     "-no-mips_dsp"
     "-no-mips_dspr2"
@@ -263,17 +291,25 @@ stdenv.mkDerivation {
     "-make tools"
     ''-${lib.optionalString (!buildExamples) "no"}make examples''
     ''-${lib.optionalString (!buildTests) "no"}make tests''
-  ] ++ lib.optional (compareVersion "5.15.0" < 0) "-v"
-    ++ (
+  ]
+
+    # TODO remove?
+      ++ lib.optional (compareVersion "5.15.0" < 0) "-v"
+
+      ++ (
       if stdenv.isDarwin then [
       "-platform macx-clang"
       "-no-fontconfig"
       "-qt-freetype"
       "-qt-libpng"
       "-no-framework"
-    ] else [
+    ] else
+
+    # TODO remove?
+    [
       "-${lib.optionalString (compareVersion "5.9.0" < 0) "no-"}rpath"
     ] ++ lib.optional (compareVersion "5.15.0" < 0) "-system-xcb"
+
       ++ [
       "-xcb"
       "-qpa xcb"
@@ -289,7 +325,11 @@ stdenv.mkDerivation {
       ''-${lib.optionalString (cups == null) "no-"}cups''
       "-dbus-linked"
       "-glib"
-    ] ++ lib.optional (compareVersion "5.15.0" < 0) "-system-libjpeg"
+    ]
+
+    # TODO remove?
+      ++ lib.optional (compareVersion "5.15.0" < 0) "-system-libjpeg"
+
       ++ [
       "-system-libpng"
     ] ++ lib.optional withGtk3 "-gtk"
@@ -354,7 +394,7 @@ stdenv.mkDerivation {
     license = with licenses; [ fdl13 gpl2 lgpl21 lgpl3 ];
     maintainers = with maintainers; [ qknight ttuegel periklis bkchr ];
     platforms = platforms.unix;
-    broken = stdenv.isDarwin && (compareVersion "5.9.0" < 0);
+    #broken = stdenv.isDarwin && (compareVersion "5.9.0" < 0);
   };
 
 }

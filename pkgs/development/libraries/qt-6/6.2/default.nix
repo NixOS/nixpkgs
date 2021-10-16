@@ -81,6 +81,8 @@ let
   };
 
   patches = {
+    qtbase = []; # debug: disable all patches
+    /*
     qtbase = lib.optionals stdenv.isDarwin [
       ./qtbase.patch.d/0001-qtbase-mkspecs-mac.patch
 
@@ -113,6 +115,7 @@ let
         sha256 = "1cb2hwi859hds0fa2cbap014qaa7mah9p0rcxcm2cvj2ybl33qfc";
       })
     ];
+    */
     qtdeclarative = [ ./qtdeclarative.patch ];
     qtscript = [ ./qtscript.patch ];
     qtserialport = [ ./qtserialport.patch ];
