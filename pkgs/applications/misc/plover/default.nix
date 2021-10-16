@@ -1,38 +1,14 @@
-{ lib, fetchurl, python27Packages, python3Packages, wmctrl,
-  qtbase, mkDerivationWith }:
+{ fetchurl
+, lib
+, mkDerivationWith
+, python3Packages
+}:
 
-{
-  stable = with python27Packages; buildPythonPackage rec {
-    pname = "plover";
-    version = "3.1.1";
+with { inherit (python3Packages) buildPythonPackage pytestCheckHook mock Babel pyqt5 xlib pyserial appdirs wcwidth setuptools; };
 
-    meta = with lib; {
-      description = "OpenSteno Plover stenography software";
-      maintainers = with maintainers; [ twey kovirobi ];
-      license     = licenses.gpl2;
-    };
-
-    src = fetchurl {
-      url    = "https://github.com/openstenoproject/plover/archive/v${version}.tar.gz";
-      sha256 = "1hdg5491phx6svrxxsxp8v6n4b25y7y4wxw7x3bxlbyhaskgj53r";
-    };
-
-    nativeBuildInputs     = [ setuptools-scm ];
-    buildInputs           = [ pytest mock ];
-    propagatedBuildInputs = [
-      six setuptools pyserial appdirs hidapi wxPython xlib wmctrl dbus-python
-    ];
-  };
-
-  dev = with python3Packages; mkDerivationWith buildPythonPackage rec {
+mkDerivationWith buildPythonPackage rec {
     pname = "plover";
     version = "4.0.0.dev10";
-
-    meta = with lib; {
-      description = "OpenSteno Plover stenography software";
-      maintainers = with maintainers; [ twey kovirobi ];
-      license     = licenses.gpl2;
-    };
 
     src = fetchurl {
       url    = "https://github.com/openstenoproject/plover/archive/v${version}.tar.gz";
@@ -43,13 +19,33 @@
     # sed on many of the platforms Plover builds for
     postPatch = "sed -i /PyQt5/d setup.cfg";
 
-    checkInputs           = [ pytest mock ];
-    propagatedBuildInputs = [ Babel pyqt5 xlib pyserial appdirs wcwidth setuptools ];
+    propagatedBuildInputs = [
+      Babel
+      pyqt5
+      xlib
+      pyserial
+      appdirs
+      wcwidth
+      setuptools
+    ];
 
     dontWrapQtApps = true;
+
+    checkInputs = [
+      pytestCheckHook
+      mock
+    ];
 
     preFixup = ''
       makeWrapperArgs+=("''${qtWrapperArgs[@]}")
     '';
-  };
+
+    pythonImportsCheck = [ "plover" ];
+
+    meta = with lib; {
+      description = "OpenSteno Plover stenography software";
+      homepage = "https://github.com/openstenoproject/plover/";
+      license     = licenses.gpl2;
+      maintainers = with maintainers; [ twey kovirobi ];
+    };
 }
