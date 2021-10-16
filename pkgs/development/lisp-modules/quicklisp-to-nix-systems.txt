@@ -185,6 +185,7 @@ moptilities
 more-conditions
 mt19937
 named-readtables
+nbd
 net-telent-date
 nibbles
 optima

@@ -297,6 +297,15 @@ let quicklisp-to-nix-packages = rec {
        }));
 
 
+  "wild-package-inferred-system" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."wild-package-inferred-system" or (x: {}))
+       (import ./quicklisp-to-nix-output/wild-package-inferred-system.nix {
+         inherit fetchurl;
+           "fiveam" = quicklisp-to-nix-packages."fiveam";
+       }));
+
+
   "parseq" = buildLispPackage
     ((f: x: (x // (f x)))
        (qlOverrides."parseq" or (x: {}))
@@ -2707,6 +2716,18 @@ let quicklisp-to-nix-packages = rec {
        (qlOverrides."net-telent-date" or (x: {}))
        (import ./quicklisp-to-nix-output/net-telent-date.nix {
          inherit fetchurl;
+       }));
+
+
+  "nbd" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."nbd" or (x: {}))
+       (import ./quicklisp-to-nix-output/nbd.nix {
+         inherit fetchurl;
+           "bordeaux-threads" = quicklisp-to-nix-packages."bordeaux-threads";
+           "flexi-streams" = quicklisp-to-nix-packages."flexi-streams";
+           "lisp-binary" = quicklisp-to-nix-packages."lisp-binary";
+           "wild-package-inferred-system" = quicklisp-to-nix-packages."wild-package-inferred-system";
        }));
 
 
