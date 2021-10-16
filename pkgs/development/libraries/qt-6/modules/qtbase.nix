@@ -152,8 +152,9 @@ stdenv.mkDerivation {
   qtDocPrefix = "share/doc/qt-${qtCompatVersion}";
 
   setOutputFlags = false;
+  # out-of-tree build in $PWD/build
   preConfigure = ''
-    export LD_LIBRARY_PATH="$PWD/lib:$PWD/plugins/platforms''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
+    export LD_LIBRARY_PATH="$PWD/build/lib:$PWD/build/plugins/platforms''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
 
     NIX_CFLAGS_COMPILE+=" -DNIXPKGS_QT_PLUGIN_PREFIX=\"$qtPluginPrefix\""
   '';
