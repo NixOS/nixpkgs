@@ -63,8 +63,8 @@ qtModule {
 
   # Hack to avoid TMPDIR in RPATHs.
   preFixup = ''
-    rm -rf "$(pwd)"
-    mkdir "$(pwd)"
+    rm -rf "$PWD"
+    mkdir "$PWD"
   '';
 
   meta = {

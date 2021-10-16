@@ -19,7 +19,7 @@
 , ApplicationServices, AVFoundation, Foundation, ForceFeedback, GameController, AppKit
 , ImageCaptureCore, CoreBluetooth, IOBluetooth, CoreWLAN, Quartz, Cocoa, LocalAuthentication
 , cups, openbsm, runCommand, xcbuild, writeScriptBin
-, ffmpeg ? null
+, ffmpeg
 , lib, stdenv, fetchpatch
 , version ? null
 , qtCompatVersion
@@ -79,29 +79,21 @@ qtModule {
     sed -i -e '/libpci_loader.*Load/s!"\(libpci\.so\)!"${pciutils}/lib/\1!' \
       src/3rdparty/chromium/gpu/config/gpu_info_collector_linux.cc
   '' + lib.optionalString stdenv.isDarwin (
-  (if (lib.versionAtLeast qtCompatVersion "5.14") then ''
+  ''
     substituteInPlace src/buildtools/config/mac_osx.pri \
       --replace 'QMAKE_CLANG_DIR = "/usr"' 'QMAKE_CLANG_DIR = "${stdenv.cc}"'
-  '' else ''
-    substituteInPlace src/core/config/mac_osx.pri \
-      --replace 'QMAKE_CLANG_DIR = "/usr"' 'QMAKE_CLANG_DIR = "${stdenv.cc}"'
-  '')
+  ''
    # Following is required to prevent a build error:
    # ninja: error: '/nix/store/z8z04p0ph48w22rqzx7ql67gy8cyvidi-SDKs/MacOSX10.12.sdk/usr/include/mach/exc.defs', needed by 'gen/third_party/crashpad/crashpad/util/mach/excUser.c', missing and no known rule to make it
   + ''
     substituteInPlace src/3rdparty/chromium/third_party/crashpad/crashpad/util/BUILD.gn \
       --replace '$sysroot/usr' "${xnu}"
-  ''
   # Apple has some secret stuff they don't share with OpenBSM
-  + (if (lib.versionAtLeast qtCompatVersion "5.14") then ''
   substituteInPlace src/3rdparty/chromium/base/mac/mach_port_rendezvous.cc \
     --replace "audit_token_to_pid(request.trailer.msgh_audit)" "request.trailer.msgh_audit.val[5]"
   substituteInPlace src/3rdparty/chromium/third_party/crashpad/crashpad/util/mach/mach_message.cc \
     --replace "audit_token_to_pid(audit_trailer->msgh_audit)" "audit_trailer->msgh_audit.val[5]"
-  '' else ''
-  substituteInPlace src/3rdparty/chromium/base/mac/mach_port_broker.mm \
-    --replace "audit_token_to_pid(msg.trailer.msgh_audit)" "msg.trailer.msgh_audit.val[5]"
-  ''));
+  '';
 
   NIX_CFLAGS_COMPILE = lib.optionals stdenv.cc.isGNU [
     # with gcc8, -Wclass-memaccess became part of -Wall and this exceeds the logging limit
@@ -134,7 +126,7 @@ qtModule {
   '';
 
   qmakeFlags = [ "--" "-system-ffmpeg" ]
-    ++ lib.optional (stdenv.isLinux && (lib.versionAtLeast qtCompatVersion "5.15")) "-webengine-webrtc-pipewire"
+    ++ lib.optional stdenv.isLinux "-webengine-webrtc-pipewire"
     ++ lib.optional enableProprietaryCodecs "-proprietary-codecs";
 
   propagatedBuildInputs = [
@@ -168,7 +160,6 @@ qtModule {
     xorg.xrandr libXScrnSaver libXcursor libXrandr xorg.libpciaccess libXtst
     xorg.libXcomposite xorg.libXdamage libdrm xorg.libxkbfile
 
-  ] ++ lib.optionals (stdenv.isLinux && (lib.versionAtLeast qtCompatVersion "5.15")) [
     # Pipewire
     pipewire_0_2
   ]
@@ -226,9 +217,6 @@ qtModule {
     [Paths]
     Prefix = ..
     EOF
-  '' + lib.optionalString (lib.versions.majorMinor qtCompatVersion == "5.15") ''
-    # Fix for out-of-sync QtWebEngine and Qt releases (since 5.15.3)
-    sed 's/${lib.head (lib.splitString "-" version)} /${qtCompatVersion} /' -i "$out"/lib/cmake/*/*Config.cmake
   '';
 
   requiredSystemFeatures = [ "big-parallel" ];

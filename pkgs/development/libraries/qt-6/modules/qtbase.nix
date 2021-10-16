@@ -17,8 +17,8 @@
 , zlib, at-spi2-core
 
   # optional dependencies
-, cups ? null, libmysqlclient ? null, postgresql ? null
-, withGtk3 ? false, dconf ? null, gtk3 ? null
+, cups, libmysqlclient, postgresql
+, withGtk3 ? false, dconf, gtk3
 
   # options
 , libGLSupported ? !stdenv.isDarwin
@@ -30,12 +30,9 @@
 , decryptSslTraffic ? false
 }:
 
-assert withGtk3 -> dconf != null;
-assert withGtk3 -> gtk3 != null;
-
 let
   compareVersion = v: builtins.compareVersions version v;
-  qmakeCacheName = if compareVersion "5.12.4" < 0 then ".qmake.cache" else ".qmake.stash";
+  qmakeCacheName = ".qmake.stash";
   debugSymbols = debug || developerBuild;
 in
 
@@ -52,7 +49,7 @@ stdenv.mkDerivation {
 
     # Image formats
     libjpeg libpng
-    (if compareVersion "5.9.0" < 0 then pcre16 else pcre2)
+    pcre2
   ] ++ (
     if stdenv.isDarwin then [
       # TODO: move to buildInputs, this should not be propagated.
@@ -104,10 +101,10 @@ stdenv.mkDerivation {
 
   postPatch = ''
     for prf in qml_plugin.prf qt_plugin.prf qt_docs.prf qml_module.prf create_cmake.prf; do
-        substituteInPlace "mkspecs/features/$prf" \
-            --subst-var qtPluginPrefix \
-            --subst-var qtQmlPrefix \
-            --subst-var qtDocPrefix
+      substituteInPlace "mkspecs/features/$prf" \
+        --subst-var qtPluginPrefix \
+        --subst-var qtQmlPrefix \
+        --subst-var qtDocPrefix
     done
 
     # grep /bin/ configure
@@ -157,14 +154,6 @@ stdenv.mkDerivation {
   setOutputFlags = false;
   preConfigure = ''
     export LD_LIBRARY_PATH="$PWD/lib:$PWD/plugins/platforms''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
-    # TODO remove
-    if false; then
-      : # noop
-    ${lib.optionalString (compareVersion "5.9.0" < 0) ''
-    # We need to set LD to CXX or otherwise we get nasty compile errors
-    export LD=$CXX
-    ''}
-    fi
 
     NIX_CFLAGS_COMPILE+=" -DNIXPKGS_QT_PLUGIN_PREFIX=\"$qtPluginPrefix\""
   '';
@@ -199,10 +188,9 @@ stdenv.mkDerivation {
   ] ++ lib.optional libGLSupported ''-DNIXPKGS_MESA_GL="${libGL.out}/lib/libGL"''
     ++ lib.optional stdenv.isLinux "-DUSE_X11"
     ++ lib.optionals withGtk3 [
-         ''-DNIXPKGS_QGTK3_XDG_DATA_DIRS="${gtk3}/share/gsettings-schemas/${gtk3.name}"''
-         ''-DNIXPKGS_QGTK3_GIO_EXTRA_MODULES="${dconf.lib}/lib/gio/modules"''
-       ]
-    ++ lib.optional decryptSslTraffic "-DQT_DECRYPT_SSL_TRAFFIC");
+      ''-DNIXPKGS_QGTK3_XDG_DATA_DIRS="${gtk3}/share/gsettings-schemas/${gtk3.name}"''
+      ''-DNIXPKGS_QGTK3_GIO_EXTRA_MODULES="${dconf.lib}/lib/gio/modules"''
+    ] ++ lib.optional decryptSslTraffic "-DQT_DECRYPT_SSL_TRAFFIC");
 
   prefixKey = "-prefix ";
 
@@ -237,17 +225,6 @@ stdenv.mkDerivation {
     "-I" "${icu.dev}/include"
     "-pch"
   ] ++ lib.optional debugSymbols "-debug"
-
-  # TODO remove?
-    ++ lib.optionals (compareVersion "5.11.0" < 0) [
-    "-qml-debug"
-  ]
-  # TODO remove?
-    ++ lib.optionals (compareVersion "5.9.0" < 0) [
-    "-c++11"
-    "-no-reduce-relocations"
-  ]
-
     ++ lib.optionals developerBuild [
     "-developer-build"
     "-no-warnings-are-errors"
@@ -255,8 +232,7 @@ stdenv.mkDerivation {
     "-no-sse2"
   ] else
 
-  # TODO remove?
-  lib.optionals (compareVersion "5.9.0" >= 0) [
+  [
     "-sse2"
     "${lib.optionalString (!stdenv.hostPlatform.sse3Support)   "-no"}-sse3"
     "${lib.optionalString (!stdenv.hostPlatform.ssse3Support)  "-no"}-ssse3"
@@ -264,8 +240,7 @@ stdenv.mkDerivation {
     "${lib.optionalString (!stdenv.hostPlatform.sse4_2Support) "-no"}-sse4.2"
     "${lib.optionalString (!stdenv.hostPlatform.avxSupport)    "-no"}-avx"
     "${lib.optionalString (!stdenv.hostPlatform.avx2Support)   "-no"}-avx2"
-    ]
-
+  ]
   ) ++ [
     "-no-mips_dsp"
     "-no-mips_dspr2"
@@ -291,26 +266,14 @@ stdenv.mkDerivation {
     "-make tools"
     ''-${lib.optionalString (!buildExamples) "no"}make examples''
     ''-${lib.optionalString (!buildTests) "no"}make tests''
-  ]
-
-    # TODO remove?
-      ++ lib.optional (compareVersion "5.15.0" < 0) "-v"
-
-      ++ (
+  ] ++ (
       if stdenv.isDarwin then [
       "-platform macx-clang"
       "-no-fontconfig"
       "-qt-freetype"
       "-qt-libpng"
       "-no-framework"
-    ] else
-
-    # TODO remove?
-    [
-      "-${lib.optionalString (compareVersion "5.9.0" < 0) "no-"}rpath"
-    ] ++ lib.optional (compareVersion "5.15.0" < 0) "-system-xcb"
-
-      ++ [
+    ] else [
       "-xcb"
       "-qpa xcb"
       "-L" "${libX11.out}/lib"
@@ -325,24 +288,13 @@ stdenv.mkDerivation {
       ''-${lib.optionalString (cups == null) "no-"}cups''
       "-dbus-linked"
       "-glib"
-    ]
-
-    # TODO remove?
-      ++ lib.optional (compareVersion "5.15.0" < 0) "-system-libjpeg"
-
-      ++ [
       "-system-libpng"
     ] ++ lib.optional withGtk3 "-gtk"
-      ++ lib.optional (compareVersion "5.9.0" >= 0) "-inotify"
-      ++ lib.optionals (compareVersion "5.10.0" >= 0) [
+      "-inotify"
       # Without these, Qt stops working on kernels < 3.17. See:
       # https://github.com/NixOS/nixpkgs/issues/38832
       "-no-feature-renameat2"
       "-no-feature-getentropy"
-    ] ++ lib.optionals (compareVersion "5.12.1" < 0) [
-      # use -xkbcommon and -xkbcommon-evdev for versions before 5.12.1
-      "-system-xkbcommon"
-      "-xkbcommon-evdev"
     ] ++ lib.optionals (cups != null) [
       "-L" "${cups.lib}/lib"
       "-I" "${cups.dev}/include"
@@ -394,7 +346,5 @@ stdenv.mkDerivation {
     license = with licenses; [ fdl13 gpl2 lgpl21 lgpl3 ];
     maintainers = with maintainers; [ qknight ttuegel periklis bkchr ];
     platforms = platforms.unix;
-    #broken = stdenv.isDarwin && (compareVersion "5.9.0" < 0);
   };
-
 }

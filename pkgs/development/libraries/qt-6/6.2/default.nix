@@ -16,7 +16,7 @@ top-level attribute to `top-level/all-packages.nix`.
 
 { newScope
 , lib, stdenv, fetchurl, fetchgit, fetchpatch, fetchFromGitHub, makeSetupHook, makeWrapper
-, bison, cups ? null, harfbuzz, libGL, perl
+, bison, cups, harfbuzz, libGL, perl
 , gstreamer, gst-plugins-base, gtk3, dconf
 , llvmPackages_5, darwin
 
@@ -33,7 +33,7 @@ let
   stdenvActual = if stdenv.cc.isClang then llvmPackages_5.stdenv else stdenv;
 
   mirror = "https://download.qt.io";
-  srcs = import ./srcs.nix { inherit fetchurl; inherit mirror; } // {
+  srcs = import ./srcs.nix { inherit fetchurl mirror; } // {
     # qtwebkit does not have an official release tarball on the qt mirror and is
     # mostly maintained by the community.
     qtwebkit = rec {
@@ -153,13 +153,12 @@ let
   qtModule =
     import ../qtModule.nix
     {
-      inherit perl;
-      inherit lib;
+      inherit perl lib;
       # Use a variant of mkDerivation that does not include wrapQtApplications
       # to avoid cyclic dependencies between Qt modules.
       mkDerivation =
         import ../mkDerivation.nix
-        { inherit lib; inherit debug; wrapQtAppsHook = null; }
+        { inherit lib debug; wrapQtAppsHook = null; }
         stdenvActual.mkDerivation;
     }
     { inherit self srcs patches; };
@@ -173,16 +172,15 @@ let
 
       mkDerivationWith =
         import ../mkDerivation.nix
-        { inherit lib; inherit debug; inherit (self) wrapQtAppsHook; };
+        { inherit lib debug; inherit (self) wrapQtAppsHook; };
 
       mkDerivation = mkDerivationWith stdenvActual.mkDerivation;
 
       qtbase = callPackage ../modules/qtbase.nix {
         inherit (srcs.qtbase) src version;
         patches = patches.qtbase;
-        inherit bison cups harfbuzz libGL;
-        withGtk3 = true; inherit dconf gtk3;
-        inherit developerBuild decryptSslTraffic;
+        inherit bison cups harfbuzz libGL dconf gtk3 developerBuild decryptSslTraffic;
+        withGtk3 = true;
         inherit (darwin.apple_sdk.frameworks) AGL AppKit ApplicationServices Carbon Cocoa CoreAudio CoreBluetooth
           CoreLocation CoreServices DiskArbitration Foundation OpenGL MetalKit IOKit;
         inherit (darwin) libobjc;
@@ -202,7 +200,6 @@ let
         inherit gstreamer gst-plugins-base;
       };
       qtnetworkauth = callPackage ../modules/qtnetworkauth.nix {};
-      qtquick1 = null;
       qtquickcontrols = callPackage ../modules/qtquickcontrols.nix {};
       qtquickcontrols2 = callPackage ../modules/qtquickcontrols2.nix {};
       qtscript = callPackage ../modules/qtscript.nix {};
@@ -244,7 +241,7 @@ let
         qtvirtualkeyboard qtwebchannel qtwebengine qtwebkit qtwebsockets
         qtwebview qtx11extras qtxmlpatterns
       ] ++ lib.optional (!stdenv.isDarwin) qtwayland
-        ++ lib.optional (stdenv.isDarwin) qtmacextras);
+        ++ lib.optional stdenv.isDarwin qtmacextras);
 
       qmake = makeSetupHook {
         deps = [ self.qtbase.dev ];
