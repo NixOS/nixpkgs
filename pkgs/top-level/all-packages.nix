@@ -24638,7 +24638,6 @@ with pkgs;
   fluidsynth = callPackage ../applications/audio/fluidsynth {
     inherit (darwin.apple_sdk.frameworks) AudioUnit CoreAudio CoreMIDI CoreServices;
   };
-  fluidsynth_1 = fluidsynth.override { version = "1"; };
 
   fmit = libsForQt5.callPackage ../applications/audio/fmit { };
 
