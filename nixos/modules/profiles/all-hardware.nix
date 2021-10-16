@@ -44,7 +44,7 @@ in
       "ohci1394" "sbp2"
 
       # Virtio (QEMU, KVM etc.) support.
-      "virtio_net" "virtio_pci" "virtio_blk" "virtio_scsi" "virtio_balloon" "virtio_console"
+      "virtio_net" "virtio_pci" "virtio_mmio" "virtio_blk" "virtio_scsi" "virtio_balloon" "virtio_console"
 
       # VMware support.
       "mptspi" "vmxnet3" "vsock"
