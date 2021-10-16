@@ -4186,6 +4186,18 @@ final: prev:
     meta.homepage = "https://github.com/kosayoda/nvim-lightbulb/";
   };
 
+  nvim-lsp-ts-utils = buildVimPluginFrom2Nix {
+    pname = "nvim-lsp-ts-utils";
+    version = "2021-10-03";
+    src = fetchFromGitHub {
+      owner = "jose-elias-alvarez";
+      repo = "nvim-lsp-ts-utils";
+      rev = "efa321ad03fbffeca699bc04ca1a59db0c54d16f";
+      sha256 = "1bxj37jfcq6vrxpl5cslzmg03aqf2i13i71birvcvlw6n4p3kbbm";
+    };
+    meta.homepage = "https://github.com/jose-elias-alvarez/nvim-lsp-ts-utils/";
+  };
+
   nvim-lspconfig = buildVimPluginFrom2Nix {
     pname = "nvim-lspconfig";
     version = "2021-10-16";
