@@ -49,7 +49,7 @@ in
       # VMware support.
       "mptspi" "vmxnet3" "vsock"
     ] ++ lib.optional platform.isx86 "vmw_balloon"
-    ++ lib.optionals (!platform.isAarch64 && !platform.isAarch32) [ # not sure where else they're missing
+    ++ lib.optionals (pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64) [
       "vmw_vmci" "vmwgfx" "vmw_vsock_vmci_transport"
 
       # Hyper-V support.
