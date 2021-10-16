@@ -32,6 +32,9 @@ stdenv.mkDerivation rec {
         url = "https://gitlab.isc.org/isc-projects/dhcp/-/commit/46d101b97c5a3b19a3f63f7b60e5f88994a64e22.patch";
         sha256 = "1y3nsmqjzcg4bhp1xmqp47v7rkl3bpcildkx6mlrg255yvxapmdp";
       })
+
+      # Update config.guess in bundled BIND
+      ./bind-config-files.patch
     ];
 
   nativeBuildInputs = [ perl makeWrapper ];
