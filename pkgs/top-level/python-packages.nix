@@ -5170,6 +5170,8 @@ in {
 
   ondilo = callPackage ../development/python-modules/ondilo { };
 
+  onetimepass = callPackage ../development/python-modules/onetimepass { };
+
   onkyo-eiscp = callPackage ../development/python-modules/onkyo-eiscp { };
 
   onlykey-solo-python = callPackage ../development/python-modules/onlykey-solo-python { };
