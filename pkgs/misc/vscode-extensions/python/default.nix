@@ -94,7 +94,6 @@ in vscode-utils.buildVscodeMarketplaceExtension rec {
     substituteInPlace "./package.json" \
       --replace "\"default\": \"ctags\"" "\"default\": \"${ctagsDefaultsTo}\""
 
-
     # Similar cleanup to what's done in the `debugpy` python package.
     # This prevent our autopatchelf logic to bark on unsupported binaries (`attach_x86.so`
     # was problematic) but also should make our derivation less heavy.
