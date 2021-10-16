@@ -6,9 +6,9 @@ Before a major version update, make a copy of this directory. (We like to
 keep the old version around for a short time after major updates.) Add a
 top-level attribute to `top-level/all-packages.nix`.
 
-1. Update the URL in `pkgs/development/libraries/qt-5/$VERSION/fetch.sh`.
+1. Update the URL in `pkgs/development/libraries/qt-6/$VERSION/fetch.sh`.
 2. From the top of the Nixpkgs tree, run
-   `./maintainers/scripts/fetch-kde-qt.sh pkgs/development/libraries/qt-5/$VERSION`.
+   `./maintainers/scripts/fetch-kde-qt.sh pkgs/development/libraries/qt-6/$VERSION`.
 3. Check that the new packages build correctly.
 4. Commit the changes and open a pull request.
 
@@ -47,7 +47,7 @@ let
     };
     qtwebengine =
       let
-        branchName = "5.15.6";
+        branchName = "6.2.6";
         rev = "v${branchName}-lts";
       in
       {
@@ -91,7 +91,7 @@ let
       ./qtbase.patch.d/macos-sdk-10.12/0003-Revert-QCocoaDrag-maybeDragMultipleItems-fix-erroneo.patch
       ./qtbase.patch.d/macos-sdk-10.12/0004-Revert-QCocoaDrag-avoid-using-the-deprecated-API-if-.patch
       ./qtbase.patch.d/macos-sdk-10.12/0005-Revert-macOS-Fix-use-of-deprecated-NSOffState.patch
-      ./qtbase.patch.d/macos-sdk-10.12/0006-git-checkout-v5.15.0-src-plugins-platforms-cocoa-qco.patch
+      ./qtbase.patch.d/macos-sdk-10.12/0006-git-checkout-v6.2.0-src-plugins-platforms-cocoa-qco.patch
       ./qtbase.patch.d/qtbase-sdk-10.12-mac.patch
 
       # Patch framework detection to support X.framework/X.tbd,
@@ -119,8 +119,8 @@ let
     qtwebengine = [
       # Fix invisible fonts with glibc 2.33: https://github.com/NixOS/nixpkgs/issues/131074
       (fetchpatch {
-        url = "https://src.fedoraproject.org/rpms/qt5-qtwebengine/raw/d122c011631137b79455850c363676c655cf9e09/f/qtwebengine-everywhere-src-5.15.5-%231904652.patch";
-        name = "qtwebengine-everywhere-src-5.15.5-_1904652.patch";
+        url = "https://src.fedoraproject.org/rpms/qt5-qtwebengine/raw/d122c011631137b79455850c363676c655cf9e09/f/qtwebengine-everywhere-src-6.2.5-%231904652.patch";
+        name = "qtwebengine-everywhere-src-6.2.5-_1904652.patch";
         sha256 = "01q7hagq0ysii1jnrh5adm97vdm9cis592xr6im7accyw6hgcn7b";
       })
     ] ++ lib.optionals stdenv.isDarwin [

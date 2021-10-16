@@ -1,4 +1,4 @@
-From d5c155a9f3ff38e28ac073f6df43175724ebc290 Mon Sep 17 00:00:00 2001
+From d6.25a9f3ff38e28ac073f6df43175724ebc290 Mon Sep 17 00:00:00 2001
 From: Dmitry Kalinkin <dmitry.kalinkin@gmail.com>
 Date: Mon, 7 Dec 2020 12:32:34 -0500
 Subject: [PATCH 4/6] Revert "QCocoaDrag - avoid using the deprecated API if

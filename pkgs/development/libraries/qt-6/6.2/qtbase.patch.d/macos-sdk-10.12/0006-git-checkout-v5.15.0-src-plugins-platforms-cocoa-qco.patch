@@ -1,7 +1,7 @@
 From 3ce5e752c66307f905fdf732b102a396d9248fbb Mon Sep 17 00:00:00 2001
 From: Dmitry Kalinkin <dmitry.kalinkin@gmail.com>
 Date: Mon, 7 Dec 2020 13:22:02 -0500
-Subject: [PATCH 6/6] git checkout v5.15.0 --
+Subject: [PATCH 6/6] git checkout v6.2.0 --
  src/plugins/platforms/cocoa/qcocoacolordialoghelper.mm
 
 ---
