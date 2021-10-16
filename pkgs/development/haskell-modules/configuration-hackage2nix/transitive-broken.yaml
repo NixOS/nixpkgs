@@ -534,6 +534,7 @@ dont-distribute-packages:
  - base64-bytes
  - baserock-schema
  - batchd
+ - batching
  - battlenet-yesod
  - battleships
  - bayes-stack
@@ -732,7 +733,9 @@ dont-distribute-packages:
  - claferwiki
  - clash
  - clash-ghc
+ - clash-ghc_1_4_4
  - clash-lib
+ - clash-lib_1_4_4
  - clash-multisignal
  - clash-prelude-quickcheck
  - clash-shake
@@ -935,6 +938,7 @@ dont-distribute-packages:
  - delta
  - delta-h
  - dep-t-advice
+ - dependent-literals-plugin
  - dependent-state
  - dephd
  - deptrack-devops
@@ -1117,6 +1121,7 @@ dont-distribute-packages:
  - filesystem-enumerator
  - find-clumpiness
  - findhttp
+ - finite-table
  - firstify
  - fix-parser-simple
  - fixed-point-vector
@@ -2426,6 +2431,7 @@ dont-distribute-packages:
  - nomyx-language
  - nomyx-library
  - nomyx-server
+ - notifications-tray-icon
  - notmuch-haskell
  - notmuch-web
  - numeric-ode
@@ -2453,6 +2459,7 @@ dont-distribute-packages:
  - one-liner_2_0
  - online
  - online-csv
+ - opc-xml-da-client
  - open-adt-tutorial
  - open-union
  - openpgp-Crypto
@@ -2559,6 +2566,7 @@ dont-distribute-packages:
  - polh-lexicon
  - polydata
  - polysemy-RandomFu
+ - polysemy-check
  - polysemy-http
  - polysemy-log-co
  - polysemy-methodology-co-log
@@ -2907,13 +2915,13 @@ dont-distribute-packages:
  - servant-auth-token-persistent
  - servant-auth-token-rocksdb
  - servant-auth-wordpress
- - servant-cli
  - servant-client-namedargs
  - servant-csharp
  - servant-db-postgresql
  - servant-ede
  - servant-event-stream
  - servant-examples
+ - servant-github-webhook
  - servant-http2-client
  - servant-matrix-param
  - servant-polysemy
@@ -2941,6 +2949,7 @@ dont-distribute-packages:
  - shelduck
  - shellmate-extras
  - shine-varying
+ - short-vec-lens
  - showdown
  - shpider
  - shuffle

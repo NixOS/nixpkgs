@@ -1616,6 +1616,8 @@ with pkgs;
 
   esbuild = callPackage ../development/tools/esbuild { };
 
+  esbuild_netlify = callPackage ../development/tools/esbuild/netlify.nix { };
+
   essentia-extractor = callPackage ../tools/audio/essentia-extractor { };
 
   esh = callPackage ../tools/text/esh { };
@@ -6659,6 +6661,8 @@ with pkgs;
 
   ldc = callPackage ../development/compilers/ldc { };
 
+  ligo = callPackage ../development/compilers/ligo { };
+
   ldgallery = callPackage ../tools/graphics/ldgallery {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
@@ -9589,8 +9593,6 @@ with pkgs;
   swagger-codegen3 = callPackage ../tools/networking/swagger-codegen3 { };
 
   swapview = callPackage ../os-specific/linux/swapview/default.nix { };
-
-  swec = callPackage ../tools/networking/swec { };
 
   swtpm = callPackage ../tools/security/swtpm { };
 
@@ -18166,16 +18168,11 @@ with pkgs;
 
   libyamlcpp = callPackage ../development/libraries/libyaml-cpp { };
 
+  libyamlcpp_0_3 = callPackage ../development/libraries/libyaml-cpp/0.3.0.nix { };
+
   libcyaml = callPackage ../development/libraries/libcyaml { };
 
   rang = callPackage ../development/libraries/rang { };
-
-  libyamlcpp_0_3 = pkgs.libyamlcpp.overrideAttrs (oldAttrs: {
-    src = pkgs.fetchurl {
-      url = "https://github.com/jbeder/yaml-cpp/archive/release-0.3.0.tar.gz";
-      sha256 = "12aszqw6svwlnb6nzhsbqhz3c7vnd5ahd0k6xlj05w8lm83hx3db";
-      };
-  });
 
   libykclient = callPackage ../development/libraries/libykclient { };
 
@@ -27489,9 +27486,7 @@ with pkgs;
   rsclock = callPackage ../applications/misc/rsclock { };
 
   rstudio = libsForQt5.callPackage ../applications/editors/rstudio {
-    boost = boost166;
-    llvmPackages = llvmPackages_7;
-    jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
+    jdk = jdk8;
   };
 
   rsync = callPackage ../applications/networking/sync/rsync (config.rsync or {});
