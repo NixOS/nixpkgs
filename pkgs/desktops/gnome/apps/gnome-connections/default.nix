@@ -13,6 +13,7 @@
 , wrapGAppsHook
 , glib
 , gtk3
+, libhandy
 , libxml2
 , gtk-vnc
 , gtk-frdp
@@ -21,11 +22,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-connections";
-  version = "40.0.1";
+  version = "41.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    hash = "sha256-vpvLoHzz+vWs4M5UzSL4YJtNx3ZuJe5f2cGAw5WbTRE=";
+    hash = "sha256-M5/1VaEI0gt6sPO/GCmWMWAYYOeO+peLpqudGO3DtGA=";
   };
 
   nativeBuildInputs = [
@@ -46,6 +47,7 @@ stdenv.mkDerivation rec {
     glib
     gtk-vnc
     gtk3
+    libhandy
     libxml2
     gtk-frdp
   ];

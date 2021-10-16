@@ -1095,12 +1095,13 @@
     "version": "0.1.0"
   },
   "vault": {
-    "owner": "terraform-providers",
+    "owner": "hashicorp",
     "provider-source-address": "registry.terraform.io/hashicorp/vault",
     "repo": "terraform-provider-vault",
-    "rev": "v2.11.0",
-    "sha256": "1yzakc7jp0rs9axnfdqw409asrbjhq0qa7xn4xzpi7m94g1ii12d",
-    "version": "2.11.0"
+    "rev": "v2.24.1",
+    "sha256": "1xk14q06js774lqyylkbp53dnlsbgh3vi38mqqmndh80xigs6d99",
+    "version": "2.24.1",
+    "vendorSha256": "1ksla455qfgxpk2dmq3pg52nyyw3v0bg6fm5s60j6cb0lzvjbq48"
   },
   "vcd": {
     "owner": "terraform-providers",

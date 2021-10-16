@@ -1269,6 +1269,8 @@ with pkgs;
 
   ashuffle = callPackage ../applications/audio/ashuffle {};
 
+  ashpd-demo = callPackage ../development/tools/ashpd-demo {};
+
   asls = callPackage ../development/tools/misc/asls { };
 
   astc-encoder = callPackage ../tools/graphics/astc-encoder { };
@@ -1613,6 +1615,8 @@ with pkgs;
   enpass = callPackage ../tools/security/enpass { };
 
   esbuild = callPackage ../development/tools/esbuild { };
+
+  esbuild_netlify = callPackage ../development/tools/esbuild/netlify.nix { };
 
   essentia-extractor = callPackage ../tools/audio/essentia-extractor { };
 
@@ -6656,6 +6660,8 @@ with pkgs;
   last-resort = callPackage ../data/fonts/last-resort {};
 
   ldc = callPackage ../development/compilers/ldc { };
+
+  ligo = callPackage ../development/compilers/ligo { };
 
   ldgallery = callPackage ../tools/graphics/ldgallery {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
@@ -27183,6 +27189,7 @@ with pkgs;
   procmail = callPackage ../applications/misc/procmail { };
 
   profanity = callPackage ../applications/networking/instant-messengers/profanity ({
+    gtk = gtk3;
     python = python3;
   } // (config.profanity or {}));
 
@@ -29693,6 +29700,10 @@ with pkgs;
   };
 
   gltron = callPackage ../games/gltron { };
+
+  gl-gsync-demo = callPackage ../games/gl-gsync-demo {
+    libXNVCtrl = linuxPackages.nvidia_x11.settings.libXNVCtrl;
+  };
 
   gmad = callPackage ../games/gmad { };
 
