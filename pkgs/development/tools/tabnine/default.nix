@@ -1,13 +1,24 @@
 { stdenv, lib, fetchurl, unzip }:
 let
-  platform =
-    if stdenv.hostPlatform.system == "x86_64-linux" then {
+  supportedPlatforms = {
+    "x86_64-linux" = {
       name = "x86_64-unknown-linux-musl";
       sha256 = "sha256-+jxjHE2/6IGptMlKXGebHcaIVokOP76ut325EbkdaA0=";
-    } else if stdenv.hostPlatform.system == "x86_64-darwin" then {
+    };
+    "x86_64-darwin" = {
       name = "x86_64-apple-darwin";
       sha256 = "sha256-87Hy1akNrZWQbKutkv4CToTyMcxRc7Y24o1+vI4pev8=";
-    } else throw "Not supported on ${stdenv.hostPlatform.system}";
+    };
+    "aarch64-darwin" = {
+      name = "aarch64-apple-darwin";
+      sha256 = "sha256-BEq+kma38Ltok/HybgcO+OTVgfgIHb5magmu7ILSvgU=";
+    };
+  };
+  platform =
+    if (builtins.hasAttr stdenv.hostPlatform.system supportedPlatforms) then
+      builtins.getAttr (stdenv.hostPlatform.system) supportedPlatforms
+    else
+      throw "Not supported on ${stdenv.hostPlatform.system}";
 in
 stdenv.mkDerivation rec {
   pname = "tabnine";
@@ -42,7 +53,7 @@ stdenv.mkDerivation rec {
     homepage = "https://tabnine.com";
     description = "Smart Compose for code that uses deep learning to help you write code faster";
     license = licenses.unfree;
-    platforms = [ "x86_64-darwin" "x86_64-linux" ];
+    platforms = [ "x86_64-darwin" "aarch64-darwin" "x86_64-linux" ];
     maintainers = with maintainers; [ lovesegfault ];
   };
 }
