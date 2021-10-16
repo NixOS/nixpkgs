@@ -11,6 +11,13 @@ stdenv.mkDerivation rec {
     sha256 = "0lxks616nmdk8zkdbwpq5sf9zz19smgy5rpmp3hpk2mvrl7kk70f";
   };
 
+  patches = [
+    (fetchpatch {
+      url = "https://git.alpinelinux.org/aports/plain/main/xfsprogs/missing-signal.h.patch?id=aec53d35eadc54a52697e699589692dedf045f81";
+      sha256 = "sha256-fB9tf7opx3T800UGobobjGD+ztiRyh7gBwuNlgrvrig=";
+    })
+  ];
+
   outputs = [ "bin" "dev" "out" "doc" ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
