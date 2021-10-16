@@ -64,7 +64,7 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "1022ff2x9jvi2a0820lbgmmh54cxh1vbn0qfdwr50w7ggvjp88i6";
+      sha256 = "1yn84q0iy81b2sczbf4gx8b56f9ghb9kgwjc0n7l5xn5lb2wqlqa";
       # delete android and Android directories which cause issues on
       # darwin (case insensitive directory). Since we don't need them
       # during the build process, we can delete it to prevent a hash
@@ -1144,9 +1144,6 @@ self: super: {
   hakyll-contrib-hyphenation = doJailbreak super.hakyll-contrib-hyphenation;
   # 2021-10-04: too strict upper bound on Hakyll
   hakyll-filestore = doJailbreak super.hakyll-filestore;
-  # https://github.com/LaurentRDC/hakyll-images/issues/10, fixed in 1.1.1
-  hakyll-images = assert super.hakyll-images.version == "1.1.0";
-    dontCheck super.hakyll-images;
 
   # 2020-06-22: NOTE: > 0.4.0 => rm Jailbreak: https://github.com/serokell/nixfmt/issues/71
   nixfmt = doJailbreak super.nixfmt;
@@ -1993,15 +1990,22 @@ EOT
 
   # Needs Cabal >= 3.4
   chs-cabal = super.chs-cabal.override {
-    Cabal = self.Cabal_3_6_1_0;
+    Cabal = self.Cabal_3_6_2_0;
   };
 
   # 2021-08-18: streamly-posix was released with hspec 2.8.2, but it works with older versions too.
   streamly-posix = doJailbreak super.streamly-posix;
 
+  # https://github.com/hadolint/language-docker/issues/72
+  language-docker_10_2_0 = overrideCabal super.language-docker_10_2_0 (drv: {
+    testFlags = (drv.testFlags or []) ++ [
+      "--skip=/Language.Docker.Integration/parse"
+    ];
+  });
+
   # 2021-09-06: hadolint depends on language-docker >= 10.1
   hadolint = super.hadolint.override {
-    language-docker = self.language-docker_10_1_2;
+    language-docker = self.language-docker_10_2_0;
   };
 
   # 2021-09-13: hls 1.3 needs a newer lsp than stackage-lts. (lsp >= 1.2.0.1)
@@ -2028,11 +2032,11 @@ EOT
 
   # Needs network >= 3.1.2
   quic = super.quic.overrideScope (self: super: {
-    network = self.network_3_1_2_2;
+    network = self.network_3_1_2_5;
   });
 
   http3 = super.http3.overrideScope (self: super: {
-    network = self.network_3_1_2_2;
+    network = self.network_3_1_2_5;
   });
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

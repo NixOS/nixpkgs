@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, pkg-config, pcre, perl, flex, bison, gettext, libpcap, libnl, c-ares
-, gnutls, libgcrypt, libgpgerror, geoip, openssl, lua5, python3, libcap, glib
+, gnutls, libgcrypt, libgpg-error, geoip, openssl, lua5, python3, libcap, glib
 , libssh, nghttp2, zlib, cmake, makeWrapper
 , withQt ? true, qt5 ? null
 , ApplicationServices, SystemConfiguration, gmp
@@ -10,7 +10,7 @@ assert withQt  -> qt5  != null;
 with lib;
 
 let
-  version = "3.4.8";
+  version = "3.4.9";
   variant = if withQt then "qt" else "cli";
 
 in stdenv.mkDerivation {
@@ -20,7 +20,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.wireshark.org/download/src/all-versions/wireshark-${version}.tar.xz";
-    sha256 = "09fpvfj4m7glisj6p4zb8wylkrjkqqw69xnwnz4ah410zs6zm9sq";
+    sha256 = "084nv4fbgpxsf6b6cfi6cinn8l3wsbn0g8lsd7p2aifjkf15wln6";
   };
 
   cmakeFlags = [
@@ -37,7 +37,7 @@ in stdenv.mkDerivation {
 
   buildInputs = [
     gettext pcre perl libpcap lua5 libssh nghttp2 openssl libgcrypt
-    libgpgerror gnutls geoip c-ares python3 glib zlib
+    libgpg-error gnutls geoip c-ares python3 glib zlib
   ] ++ optionals withQt  (with qt5; [ qtbase qtmultimedia qtsvg qttools ])
     ++ optionals stdenv.isLinux  [ libcap libnl ]
     ++ optionals stdenv.isDarwin [ SystemConfiguration ApplicationServices gmp ]

@@ -175,7 +175,7 @@ rec {
 
       harfbuzz
       e2fsprogs
-      libgpgerror
+      libgpg-error
       keyutils.lib
       libjack2
       fribidi

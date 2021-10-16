@@ -6,7 +6,7 @@ API_URL="https://api.github.com/repos/pulumi"
 
 # Version of Pulumi from
 # https://www.pulumi.com/docs/get-started/install/versions/
-VERSION="3.13.2"
+VERSION="3.14.0"
 
 # A hashmap containing a plugin's name and it's respective repository inside
 # Pulumi's Github organization
@@ -15,6 +15,7 @@ declare -A pulumi_repos
 pulumi_repos=(
     ["auth0"]="pulumi-auth0"
     ["aws"]="pulumi-aws"
+    ["azure"]="pulumi-azure"
     ["cloudflare"]="pulumi-cloudflare"
     ["consul"]="pulumi-consul"
     ["datadog"]="pulumi-datadog"

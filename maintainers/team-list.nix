@@ -137,7 +137,7 @@ with lib.maintainers; {
       cleverca22
       disassembler
       jonringer
-      maveru
+      manveru
       nrdxp
     ];
     scope = "Input-Output Global employees, which maintain critical software";

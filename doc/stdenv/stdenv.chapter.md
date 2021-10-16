@@ -373,11 +373,11 @@ Additional file types can be supported by setting the `unpackCmd` variable (see 
 
 ##### `srcs` / `src` {#var-stdenv-src}
 
-The list of source files or directories to be unpacked or copied. One of these must be set.
+The list of source files or directories to be unpacked or copied. One of these must be set. Note that if you use `srcs`, you should also set `sourceRoot` or `setSourceRoot`.
 
 ##### `sourceRoot` {#var-stdenv-sourceRoot}
 
-After running `unpackPhase`, the generic builder changes the current directory to the directory created by unpacking the sources. If there are multiple source directories, you should set `sourceRoot` to the name of the intended directory.
+After running `unpackPhase`, the generic builder changes the current directory to the directory created by unpacking the sources. If there are multiple source directories, you should set `sourceRoot` to the name of the intended directory. Set `sourceRoot = ".";` if you use `srcs` and control the unpack phase yourself.
 
 ##### `setSourceRoot` {#var-stdenv-setSourceRoot}
 

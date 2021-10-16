@@ -63,7 +63,6 @@ stdenv.mkDerivation rec {
       declarativity of logic programming.
     '';
 
-    maintainers = [ lib.maintainers.peti ];
     platforms = lib.platforms.unix;
   };
 }

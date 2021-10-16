@@ -19,5 +19,6 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/siraben/regenkfs";
     license = licenses.mit;
     maintainers = with maintainers; [ siraben ];
+    mainProgram = "regenkfs";
   };
 }

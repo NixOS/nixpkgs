@@ -5,12 +5,14 @@ mkCoqDerivation {
   pname = "goedel";
   owner = "coq-community";
 
-  release."8.12.0".rev    = "v8.12.0";
+  releaseRev = (v: "v${v}");
+
   release."8.12.0".sha256 = "sha256-4lAwWFHGUzPcfHI9u5b+N+7mQ0sLJ8bH8beqQubfFEQ=";
+  release."8.13.0".sha256 = "0sqqkmj6wsk4xmhrnqkhcsbsrqjzn2gnk67nqzgrmjpw5danz8y5";
 
   inherit version;
   defaultVersion = with versions; switch coq.coq-version [
-    { case = isGe "8.11"; out = "8.12.0"; }
+    { case = range "8.11" "8.14"; out = "8.13.0"; }
   ] null;
 
   propagatedBuildInputs = [ hydra-battles pocklington ];

@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , nix-update-script
 , meson
@@ -6,25 +7,24 @@
 , vala
 , pkg-config
 , desktop-file-utils
-, pantheon
 , python3
 , glib
 , gtk4
 , json-glib
 , libadwaita
 , libgee
-, wrapGAppsHook
+, wrapGAppsHook4
 }:
 
 stdenv.mkDerivation rec {
   pname = "khronos";
-  version = "3.5.9";
+  version = "3.6.0";
 
   src = fetchFromGitHub {
     owner = "lainsce";
     repo = pname;
     rev = version;
-    sha256 = "sha256-3FatmyANB/tNYSN2hu5IVkyCy0YrC3uA2d/3+5u48w8=";
+    sha256 = "sha256-AETyVCBUuBzHwDgTkGRIokFYwcmXrb/F85J5GEIu4dE=";
   };
 
   nativeBuildInputs = [
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     vala
     pkg-config
     python3
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [
@@ -43,12 +43,14 @@ stdenv.mkDerivation rec {
     json-glib
     libadwaita
     libgee
-    pantheon.granite
   ];
 
   postPatch = ''
     chmod +x build-aux/post_install.py
     patchShebangs build-aux/post_install.py
+    # https://github.com/lainsce/khronos/pull/75
+    substituteInPlace build-aux/post_install.py \
+      --replace 'gtk-update-icon-cache' 'gtk4-update-icon-cache'
   '';
 
   passthru = {

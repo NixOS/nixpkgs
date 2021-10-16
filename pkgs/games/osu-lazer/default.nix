@@ -16,13 +16,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "osu-lazer";
-  version = "2021.815.0";
+  version = "2021.1016.0";
 
   src = fetchFromGitHub {
     owner = "ppy";
     repo = "osu";
     rev = version;
-    sha256 = "z5z/BKi9W4i7fbDmzKUscyNByDwe4nJXyUED8SROCrg=";
+    sha256 = "PaN/+t5qnHaOjh+DfM/Ylw1vESCM3Tejd3li9ml2Z+A=";
   };
 
   nativeBuildInputs = [
@@ -117,6 +117,7 @@ in stdenv.mkDerivation rec {
     ];
     maintainers = with maintainers; [ oxalica ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "osu!";
   };
   passthru.updateScript = ./update.sh;
 }

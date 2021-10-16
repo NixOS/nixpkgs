@@ -1,7 +1,7 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i bash -p curl gnugrep gnused jq
 
-set -eu -o pipefail
+set -x -eu -o pipefail
 
 cd $(dirname "$0")
 
@@ -14,7 +14,7 @@ VERSION=$(echo ${TAG} | sed 's/^stable-//')
 SHA256=$(nix-prefetch-url --quiet --unpack https://github.com/linkerd/linkerd2/archive/refs/tags/${TAG}.tar.gz)
 
 setKV () {
-    sed -i "s|$1 = \".*\"|$1 = \"$2\"|" ./default.nix
+  sed -i "s|$1 = \".*\"|$1 = \"${2:-}\"|" ./default.nix
 }
 
 setKV version ${VERSION}
@@ -25,11 +25,11 @@ cd ../../../../../
 set +e
 VENDOR_SHA256=$(nix-build --no-out-link -A linkerd 2>&1 | grep "got:" | cut -d':' -f2 | sed 's| ||g')
 set -e
+cd - > /dev/null
 
 if [ -n "${VENDOR_SHA256:-}" ]; then
-    cd - > /dev/null
-    setKV vendorSha256 ${VENDOR_SHA256}
+  setKV vendorSha256 ${VENDOR_SHA256}
 else
-    echo "Update failed. VENDOR_SHA256 is empty."
-    exit 1
+  echo "Update failed. VENDOR_SHA256 is empty."
+  exit 1
 fi

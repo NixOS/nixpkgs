@@ -3,16 +3,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tremor";
-  version = "0.11.5";
+  version = "0.11.6";
 
   src = fetchFromGitHub {
     owner = "tremor-rs";
     repo = "tremor-runtime";
     rev = "v${version}";
-    sha256 = "sha256-fE0f0tCI2V+HqHZwn9cO+xs0o3o6w0nrJg9Et0zJMOE=";
+    sha256 = "1ldqa4q7q9afrbjh7adinav21zsh26pqqvrd6q9542r90mxnygmx";
   };
 
-  cargoHash = "sha256-dky9ejzMgKXlzpg+9bmkd7th+EHBpNmZJkgYt2pjuuI=";
+  cargoSha256 = "0ivxd5mhvcpzv9wf859vwyiq1s0bbd9vdk6fy6m81bn5ykihx7ar";
 
   nativeBuildInputs = [ cmake pkg-config installShellFiles ];
 

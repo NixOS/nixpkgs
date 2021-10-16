@@ -15,7 +15,7 @@ alvan/vim-closetag
 alx741/vim-hindent
 alx741/vim-stylishask
 amiorin/ctrlp-z
-andersevenrud/compe-tmux@main
+andersevenrud/compe-tmux@cmp
 andrep/vimacs
 andreshazard/vim-logreview
 AndrewRadev/sideways.vim@main
@@ -548,8 +548,8 @@ ojroques/vim-oscyank@main
 Olical/aniseed
 Olical/conjure
 olimorris/onedark.nvim
+onsails/diaglist.nvim
 onsails/lspkind-nvim
-onsails/vimway-lsp-diag.nvim
 OrangeT/vim-csharp
 osyo-manga/shabadou.vim
 osyo-manga/vim-anzu

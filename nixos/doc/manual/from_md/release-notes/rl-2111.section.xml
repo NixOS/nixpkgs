@@ -57,6 +57,11 @@
       </listitem>
       <listitem>
         <para>
+          KDE Plasma now finally works on Wayland.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           bash now defaults to major version 5.
         </para>
       </listitem>
@@ -79,6 +84,13 @@
           manifest format. See
           <link xlink:href="https://github.com/helm/community/blob/main/hips/hip-0006.md">HIP
           6</link> for more details.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          GNOME has been upgraded to 41. Please take a look at their
+          <link xlink:href="https://help.gnome.org/misc/release-notes/41.0/">Release
+          Notes</link> for details.
         </para>
       </listitem>
     </itemizedlist>
@@ -271,6 +283,14 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://wiki.servarr.com/prowlarr">prowlarr</link>,
+          an indexer manager/proxy built on the popular arr .net/reactjs
+          base stack
+          <link linkend="opt-services.prowlarr.enable">services.prowlarr</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://sr.ht/~emersion/soju">soju</link>, a
           user-friendly IRC bouncer. Available as
           <link xlink:href="options.html#opt-services.soju.enable">services.soju</link>.
@@ -321,11 +341,33 @@
           <link linkend="opt-programs.pantheon-tweaks.enable">programs.pantheon-tweaks</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/DanielOgorchock/joycond">joycond</link>,
+          a service that uses <literal>hid-nintendo</literal> to provide
+          nintendo joycond pairing and better nintendo switch pro
+          controller support.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/opensvc/multipath-tools">multipath</link>,
+          the device mapper multipath (DM-MP) daemon. Available as
+          <link linkend="opt-services.multipath.enable">services.multipath</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-incompatibilities">
     <title>Backward Incompatibilities</title>
     <itemizedlist>
+      <listitem>
+        <para>
+          The <literal>services.wakeonlan</literal> option was removed,
+          and replaced with
+          <literal>networking.interfaces.&lt;name&gt;.wakeOnLan</literal>.
+        </para>
+      </listitem>
       <listitem>
         <para>
           The <literal>security.wrappers</literal> option now requires
@@ -1069,6 +1111,23 @@ Superuser created successfully.
           functionality.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <literal>services.xserver.displayManager.defaultSession = &quot;plasma5&quot;</literal>
+          does not work anymore, instead use either
+          <literal>&quot;plasma&quot;</literal> for the Plasma X11
+          session or <literal>&quot;plasmawayland&quot;</literal> for
+          the Plasma Wayland sesison.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>boot.kernelParams</literal> now only accepts one
+          command line parameter per string. This change is aimed to
+          reduce common mistakes like <quote>param = 12</quote>, which
+          would be parsed as 3 parameters.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-notable-changes">
@@ -1467,6 +1526,13 @@ Superuser created successfully.
           <link linkend="opt-xdg.mime.enable">xdg.mime</link> module to
           allow the configuration of
           <literal>/etc/xdg/mimeapps.list</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Kopia was upgraded from 0.8.x to 0.9.x. Please read the
+          <link xlink:href="https://github.com/kopia/kopia/releases/tag/v0.9.0">upstream
+          release notes</link> for changes and upgrade instructions.
         </para>
       </listitem>
     </itemizedlist>

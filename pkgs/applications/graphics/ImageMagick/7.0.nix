@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, libtool
 , bzip2, zlib, libX11, libXext, libXt, fontconfig, freetype, ghostscript, libjpeg, djvulibre
-, lcms2, openexr, libjxl, libpng, liblqr1, librsvg, libtiff, libxml2, openjpeg, libwebp, libheif
+, lcms2, openexr, libjxl, libpng, liblqr1, libraw, librsvg, libtiff, libxml2, openjpeg, libwebp, libheif
 , ApplicationServices
 , Foundation
 , testVersion, imagemagick
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ zlib fontconfig freetype ghostscript
-      liblqr1 libpng libtiff libxml2 libheif djvulibre
+      liblqr1 libpng libraw libtiff libxml2 libheif djvulibre
     ]
     # libjxl is broken on aarch64 (see meta.broken in libjxl) for now,
     # let's disable it for now to unbreak the imagemagick build.

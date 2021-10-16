@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pycarwings2";
-  version = "2.11";
+  version = "2.12";
   format = "setuptools";
 
   disabled = pythonOlder "3.5";
@@ -19,8 +19,9 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "filcole";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "0daqxnic7kphspqqq8a0bjp009l5a7d1k72q6cz43g7ca6wfq4b1";
+    # release not tagged: https://github.com/filcole/pycarwings2/issues/33
+    rev = "0dc9e7e74cb119614c72c7f955801a366f303c56";
+    sha256 = "sha256-3lyAgLuaNrCDvRT2yYkgaDiLPKW9Hbg05cQlMIBUs6o=";
   };
 
   propagatedBuildInputs = [

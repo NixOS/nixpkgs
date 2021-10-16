@@ -220,10 +220,10 @@ in rec {
 
   nixStable = callPackage common (rec {
     pname = "nix";
-    version = "2.3.15";
+    version = "2.3.16";
     src = fetchurl {
       url = "https://nixos.org/releases/nix/${pname}-${version}/${pname}-${version}.tar.xz";
-      sha256 = "sha256-N+MxClX94eUOfUMh0puRgNHp16+cjSEdtqZn5u5OtBA=";
+      sha256 = "sha256-fuaBtp8FtSVJLSAsO+3Nne4ZYLuBj2JpD2xEk7fCqrw=";
     };
 
     boehmgc = boehmgc_nix;
@@ -231,16 +231,32 @@ in rec {
     inherit storeDir stateDir confDir;
   });
 
-  nixUnstable = lib.lowPrio (callPackage common rec {
+  nix_2_4 = callPackage common (rec {
     pname = "nix";
-    version = "2.4${suffix}";
-    suffix = "pre20211001_${lib.substring 0 7 src.rev}";
+    version = "2.4pre-rc1";
 
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "4f496150eb4e0012914c11f0a3ff4df2412b1d09";
-      sha256 = "00hxxk66f068588ymv60ygib6vgk7c97s9yia3qd561679rq3nsj";
+      rev = version;
+      sha256 = "sha256-KOb8etMm5LksvT2l+CkvqzMO1bgmo9tJmyaNh0LvaR8=";
+    };
+
+    boehmgc = boehmgc_nixUnstable;
+
+    inherit storeDir stateDir confDir;
+  });
+
+  nixUnstable = lib.lowPrio (callPackage common rec {
+    pname = "nix";
+    version = "2.5${suffix}";
+    suffix = "pre20211007_${lib.substring 0 7 src.rev}";
+
+    src = fetchFromGitHub {
+      owner = "NixOS";
+      repo = "nix";
+      rev = "844dd901a7debe8b03ec93a7f717b6c4038dc572";
+      sha256 = "sha256-fe1B4lXkS6/UfpO0rJHwLC06zhOPrdSh4s9PmQ1JgPo=";
     };
 
     boehmgc = boehmgc_nixUnstable;

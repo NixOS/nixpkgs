@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "twilio";
-  version = "6.56.0";
+  version = "7.1.0";
 
 
   src = fetchFromGitHub {
     owner = "twilio";
     repo = "twilio-python";
     rev = version;
-    sha256 = "sha256-vVJuuPxVyOqnplPYrjCjIm5IyIFZvsCMoDLrrHpHK+4=";
+    sha256 = "sha256-pagqetDQ8/1xDCxZJVTZc9T0dmFA1opd7tMDR11wlVs=";
   };
 
   propagatedBuildInputs = [

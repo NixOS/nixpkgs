@@ -20,7 +20,6 @@ stdenv.mkDerivation rec {
     description = "A ISO-compatible high-performance Prolog compiler";
     license = lib.licenses.artistic2;
 
-    maintainers = [ lib.maintainers.peti ];
     platforms = lib.platforms.linux;
     broken = !stdenv.is64bit;   # the linux 32 bit build fails.
   };

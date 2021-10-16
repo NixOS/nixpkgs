@@ -1,5 +1,6 @@
 { fetchFromGitHub
 , lib
+, Security
 , openssl
 , pkg-config
 , protobuf
@@ -7,9 +8,7 @@
 , stdenv
 }:
 
-let
-  node-api-lib = (if stdenv.isDarwin then "libquery_engine.dylib" else "libquery_engine.so");
-in rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage rec {
   pname = "prisma-engines";
   version = "3.2.0";
 
@@ -26,7 +25,11 @@ in rustPlatform.buildRustPackage rec {
   cargoSha256 = "sha256-NAXoKz+tZmjmZ/PkDaXEp9D++iu/3Knp0Yy6NJWEoDM=";
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl protobuf ];
+
+  buildInputs = [
+    openssl
+    protobuf
+  ] ++ lib.optionals stdenv.isDarwin [ Security ];
 
   preBuild = ''
     export OPENSSL_DIR=${lib.getDev openssl}
@@ -42,7 +45,7 @@ in rustPlatform.buildRustPackage rec {
   cargoBuildFlags = "-p query-engine -p query-engine-node-api -p migration-engine-cli -p introspection-core -p prisma-fmt";
 
   postInstall = ''
-    mv $out/lib/${node-api-lib} $out/lib/libquery_engine.node
+    mv $out/lib/libquery_engine${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/libquery_engine.node
   '';
 
   # Tests are long to compile
@@ -52,7 +55,7 @@ in rustPlatform.buildRustPackage rec {
     description = "A collection of engines that power the core stack for Prisma";
     homepage = "https://www.prisma.io/";
     license = licenses.asl20;
-    platforms = [ "x86_64-linux" ];
+    platforms = platforms.unix;
     maintainers = with maintainers; [ pamplemousse pimeys ];
   };
 }

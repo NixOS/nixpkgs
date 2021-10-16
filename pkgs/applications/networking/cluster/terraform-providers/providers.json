@@ -563,10 +563,10 @@
     "owner": "hashicorp",
     "provider-source-address": "registry.terraform.io/hashicorp/kubernetes",
     "repo": "terraform-provider-kubernetes",
-    "rev": "v2.4.1",
-    "sha256": "0mk0f12yy58gjkki7xpf9bjfw9h9zdgby2b4bddqp5csq11payhd",
+    "rev": "v2.5.0",
+    "sha256": "1hp3bwhlfiwf1a4l6xfldwdxmyjs4nq3n8g343grjya7ibbhh4sg",
     "vendorSha256": null,
-    "version": "2.4.1"
+    "version": "2.5.0"
   },
   "launchdarkly": {
     "owner": "terraform-providers",
@@ -768,11 +768,13 @@
     "version": "0.1.1"
   },
   "openstack": {
-    "owner": "terraform-providers",
+    "owner": "terraform-provider-openstack",
+    "provider-source-address": "registry.terraform.io/terraform-provider-openstack/openstack",
     "repo": "terraform-provider-openstack",
-    "rev": "v1.28.0",
-    "sha256": "1g2nxv312ddvkgpph17m9sh4zmy5ddj8gqwnfb3frbfbbamrgar6",
-    "version": "1.28.0"
+    "rev": "v1.43.1",
+    "sha256": "0n6r88p3a6p8p0gjys2r1kcgkwq450jmyd741g45lxmaf3jz2ynb",
+    "vendorSha256": "0k4srszs8xgf8gz4fa7ysqyww52d7kvqy6zf22f1gkcjyiks9pl7",
+    "version": "1.43.1"
   },
   "opentelekomcloud": {
     "owner": "terraform-providers",
@@ -1093,12 +1095,13 @@
     "version": "0.1.0"
   },
   "vault": {
-    "owner": "terraform-providers",
+    "owner": "hashicorp",
     "provider-source-address": "registry.terraform.io/hashicorp/vault",
     "repo": "terraform-provider-vault",
-    "rev": "v2.11.0",
-    "sha256": "1yzakc7jp0rs9axnfdqw409asrbjhq0qa7xn4xzpi7m94g1ii12d",
-    "version": "2.11.0"
+    "rev": "v2.24.1",
+    "sha256": "1xk14q06js774lqyylkbp53dnlsbgh3vi38mqqmndh80xigs6d99",
+    "version": "2.24.1",
+    "vendorSha256": "1ksla455qfgxpk2dmq3pg52nyyw3v0bg6fm5s60j6cb0lzvjbq48"
   },
   "vcd": {
     "owner": "terraform-providers",

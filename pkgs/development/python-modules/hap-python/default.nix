@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "hap-python";
-  version = "4.1.0";
+  version = "4.3.0";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "ikalchev";
     repo = "HAP-python";
     rev = "v${version}";
-    sha256 = "sha256-vUbcsG6mKPgH+IF5i/BYSIkfIizSZzMWz0Kq0yfuKxE=";
+    sha256 = "sha256-G4KL6iMeVn/tmvFtFL8vyqHGNfqk6j8iG4tDK9VpCyM=";
   };
 
   propagatedBuildInputs = [

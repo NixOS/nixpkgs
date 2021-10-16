@@ -388,8 +388,6 @@ with self; with super; {
 
   pandas = callPackage ../development/python-modules/pandas/2.nix { };
 
-  pasteScript = callPackage ../development/python-modules/pastescript { };
-
   pathpy = callPackage ../development/python-modules/path.py/2.nix { };
 
   pg8000 = callPackage ../development/python-modules/pg8000/1_12.nix { };

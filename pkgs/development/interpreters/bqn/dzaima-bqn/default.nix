@@ -8,32 +8,30 @@
 
 stdenv.mkDerivation rec {
   pname = "dbqn" + lib.optionalString buildNativeImage "-native";
-  version = "0.0.0+unstable=2021-10-02";
+  version = "0.pre+unstable=2021-10-05";
 
   src = fetchFromGitHub {
     owner = "dzaima";
     repo = "BQN";
-    rev = "d6bd66d26a89b8e9f956ec4f6b6bc5dcb5861a09";
-    hash = "sha256-BLRep7OGHfDFowIAsBS19PTzgIhrdKMnO2JSjKuwGYo=";
+    rev = "c31ceef52bbf380e747723f5ffd09c5f006b21c5";
+    sha256 = "1nzqgwpjawcky85mfrz5izs9lfb3aqlm96dc8syrxhgg20xrziwx";
   };
-
-  buildInputs = lib.optional (!buildNativeImage) jdk;
 
   nativeBuildInputs = [
     makeWrapper
-  ] ++ lib.optional buildNativeImage jdk;
+    jdk
+  ];
 
   dontConfigure = true;
 
   buildPhase = ''
     runHook preBuild
 
-    mkdir -p output
-    javac --release 8 -encoding UTF-8 -d ./output $(find src -name '*.java')
-    (cd output; jar cvfe ../BQN.jar BQN.Main *)
-    rm -fr output
+    patchShebangs --build ./build8
+    ./build8
   '' + lib.optionalString buildNativeImage ''
     native-image --report-unsupported-elements-at-runtime \
+      -H:CLibraryPath=${lib.getLib jdk}/lib \
       -J-Dfile.encoding=UTF-8 -jar BQN.jar dbqn
   '' + ''
     runHook postBuild
@@ -64,7 +62,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ AndersonTorres sternenseemann ];
     inherit (jdk.meta) platforms;
-    priority = if buildNativeImage then 10 else 0;
   };
 }
 # TODO: Processing app

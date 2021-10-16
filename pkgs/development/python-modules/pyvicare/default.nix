@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pyvicare";
-  version = "2.8.1";
+  version = "2.13.0";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "somm15";
     repo = "PyViCare";
     rev = version;
-    sha256 = "sha256-SmbsEN6vZ28ihgUggtcF2AjbmUVaqLLweh7cKipr6u4=";
+    sha256 = "sha256-v1twWyxd0nhXxvbRCbnH5TP736eeDYE5Nz62sf6HIcA=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

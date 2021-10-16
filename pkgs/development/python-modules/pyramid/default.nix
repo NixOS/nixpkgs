@@ -4,7 +4,7 @@
 , webtest
 , zope_component
 , hupper
-, PasteDeploy
+, pastedeploy
 , plaster
 , plaster-pastedeploy
 , repoze_lru
@@ -27,11 +27,7 @@ buildPythonPackage rec {
 
   checkInputs = [ webtest zope_component ];
 
-  propagatedBuildInputs = [ hupper PasteDeploy plaster plaster-pastedeploy repoze_lru translationstring venusian webob zope_deprecation zope_interface ];
-
-  # Failing tests
-  # https://github.com/Pylons/pyramid/issues/1899
-  doCheck = !isPy35;
+  propagatedBuildInputs = [ hupper pastedeploy plaster plaster-pastedeploy repoze_lru translationstring venusian webob zope_deprecation zope_interface ];
 
   pythonImportsCheck = [ "pyramid" ];
 
