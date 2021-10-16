@@ -332,10 +332,6 @@ stdenv.mkDerivation {
     # Move development tools to $dev
     moveQtDevTools
     moveToOutput bin "$dev"
-
-    # fixup .pc file (where to find 'moc' etc.)
-    sed -i "$dev/lib/pkgconfig/Qt5Core.pc" \
-      -e "/^host_bins=/ c host_bins=$dev/bin"
   '';
 
   dontStrip = debugSymbols;
