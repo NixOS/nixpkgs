@@ -181,6 +181,10 @@ stdenv.mkDerivation {
     done
   '';
 
+  preBuild = ''
+    echo 'note: the build is silent. please wait'
+  '';
+
   NIX_CFLAGS_COMPILE = toString ([
     "-Wno-error=sign-compare" # freetype-2.5.4 changed signedness of some struct fields
     ''-DNIXPKGS_QTCOMPOSE="${libX11.out}/share/X11/locale"''
