@@ -1236,6 +1236,8 @@ in {
 
   bpython = callPackage ../development/python-modules/bpython { };
 
+  braceexpand = callPackage ../development/python-modules/braceexpand { };
+
   bracex = callPackage ../development/python-modules/bracex { };
 
   braintree = callPackage ../development/python-modules/braintree { };
