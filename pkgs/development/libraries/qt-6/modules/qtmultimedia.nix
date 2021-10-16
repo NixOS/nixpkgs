@@ -16,7 +16,7 @@ qtModule {
   qtInputs = [ qtbase qtdeclarative ];
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ gstreamer gst-plugins-base libpulseaudio ]
-    ++ lib.optionals stdenv.isLinux [ alsa-lib wayland ]
+    ++ lib.optionals stdenv.isLinux [ alsa-lib wayland ];
   outputs = [ "bin" "dev" "out" ];
   qmakeFlags = [ "GST_VERSION=1.0" ];
   NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-lobjc";

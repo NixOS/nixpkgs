@@ -191,22 +191,15 @@ let
       qtconnectivity = callPackage ../modules/qtconnectivity.nix {};
       qtdeclarative = callPackage ../modules/qtdeclarative.nix {};
       qtdoc = callPackage ../modules/qtdoc.nix {};
-      qtgamepad = callPackage ../modules/qtgamepad.nix {};
-      qtgraphicaleffects = callPackage ../modules/qtgraphicaleffects.nix {};
       qtimageformats = callPackage ../modules/qtimageformats.nix {};
       qtlocation = callPackage ../modules/qtlocation.nix {};
-      qtmacextras = callPackage ../modules/qtmacextras.nix {};
       qtmultimedia = callPackage ../modules/qtmultimedia.nix {
         inherit gstreamer gst-plugins-base;
       };
       qtnetworkauth = callPackage ../modules/qtnetworkauth.nix {};
-      qtquickcontrols = callPackage ../modules/qtquickcontrols.nix {};
-      qtquickcontrols2 = callPackage ../modules/qtquickcontrols2.nix {};
-      qtscript = callPackage ../modules/qtscript.nix {};
       qtsensors = callPackage ../modules/qtsensors.nix {};
       qtserialbus = callPackage ../modules/qtserialbus.nix {};
       qtserialport = callPackage ../modules/qtserialport.nix {};
-      qtspeech = callPackage ../modules/qtspeech.nix {};
       qtsvg = callPackage ../modules/qtsvg.nix {};
       qtscxml = callPackage ../modules/qtscxml.nix {};
       qttools = callPackage ../modules/qttools.nix {};
@@ -221,7 +214,6 @@ let
         inherit (darwin.apple_sdk.frameworks) ApplicationServices AVFoundation Foundation ForceFeedback GameController AppKit
           ImageCaptureCore CoreBluetooth IOBluetooth CoreWLAN Quartz Cocoa LocalAuthentication;
       };
-      qtwebglplugin = callPackage ../modules/qtwebglplugin.nix {};
       qtwebkit = callPackage ../modules/qtwebkit.nix {
         inherit (darwin) ICU;
         inherit (darwin.apple_sdk.frameworks) OpenGL;
@@ -230,18 +222,15 @@ let
       qtwebview = callPackage ../modules/qtwebview.nix {
         inherit (darwin.apple_sdk.frameworks) CoreFoundation WebKit;
       };
-      qtx11extras = callPackage ../modules/qtx11extras.nix {};
-      qtxmlpatterns = callPackage ../modules/qtxmlpatterns.nix {};
 
       env = callPackage ../qt-env.nix {};
       full = env "qt-full-${qtbase.version}" ([
-        qt3d qtcharts qtconnectivity qtdeclarative qtdoc qtgraphicaleffects
-        qtimageformats qtlocation qtmultimedia qtquickcontrols qtquickcontrols2
-        qtscript qtsensors qtserialport qtsvg qttools qttranslations
+        qt3d qtcharts qtconnectivity qtdeclarative qtdoc
+        qtimageformats qtlocation qtmultimedia
+        qtsensors qtserialport qtsvg qttools qttranslations
         qtvirtualkeyboard qtwebchannel qtwebengine qtwebkit qtwebsockets
-        qtwebview qtx11extras qtxmlpatterns
-      ] ++ lib.optional (!stdenv.isDarwin) qtwayland
-        ++ lib.optional stdenv.isDarwin qtmacextras);
+        qtwebview
+      ] ++ lib.optional (!stdenv.isDarwin) qtwayland);
 
       qmake = makeSetupHook {
         deps = [ self.qtbase.dev ];
