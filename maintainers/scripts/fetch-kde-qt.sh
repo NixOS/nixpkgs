@@ -19,10 +19,8 @@ pushd $tmp >/dev/null
 # patch WGET_ARGS from nixpkgs/pkgs/development/libraries/qt-6/6.2/fetch.sh etc
 [ "${WGET_ARGS[-1]}" = '*.tar.xz' ] && WGET_ARGS[-1]='*.tar.xz.mirrorlist'
 
-# debug
-echo "running wget in 5 seconds ..."
+echo 'fetching mirrorlist files ...'
 echo wget -nH -r -c --no-parent "${WGET_ARGS[@]}"
-sleep 5
 
 wget -nH -r -c --no-parent "${WGET_ARGS[@]}" >/dev/null
 
