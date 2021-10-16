@@ -268,7 +268,7 @@ stdenv.mkDerivation {
     ''-${lib.optionalString (!buildExamples) "no"}make examples''
     ''-${lib.optionalString (!buildTests) "no"}make tests''
   ] ++ (
-      if stdenv.isDarwin then [
+    if stdenv.isDarwin then [
       "-platform macx-clang"
       "-no-fontconfig"
       "-qt-freetype"
@@ -291,6 +291,7 @@ stdenv.mkDerivation {
       "-glib"
       "-system-libpng"
     ] ++ lib.optional withGtk3 "-gtk"
+      ++ [
       "-inotify"
       # Without these, Qt stops working on kernels < 3.17. See:
       # https://github.com/NixOS/nixpkgs/issues/38832
