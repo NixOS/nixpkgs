@@ -9841,6 +9841,8 @@ in {
 
   xhtml2pdf = callPackage ../development/python-modules/xhtml2pdf { };
 
+  xkbcommon = callPackage ../development/python-modules/xkbcommon { };
+
   xkcdpass = callPackage ../development/python-modules/xkcdpass { };
 
   xknx = callPackage ../development/python-modules/xknx { };
