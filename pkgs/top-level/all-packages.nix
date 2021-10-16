@@ -12822,6 +12822,8 @@ with pkgs;
 
   svd2rust = callPackage ../development/tools/rust/svd2rust { };
 
+  svdtools = with python3Packages; toPythonApplication svdtools;
+
   swift = callPackage ../development/compilers/swift { };
 
   swiProlog = callPackage ../development/compilers/swi-prolog {

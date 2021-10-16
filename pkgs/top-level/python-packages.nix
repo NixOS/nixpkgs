@@ -1236,6 +1236,8 @@ in {
 
   bpython = callPackage ../development/python-modules/bpython { };
 
+  braceexpand = callPackage ../development/python-modules/braceexpand { };
+
   bracex = callPackage ../development/python-modules/bracex { };
 
   braintree = callPackage ../development/python-modules/braintree { };
@@ -8858,6 +8860,8 @@ in {
   survey = callPackage ../development/python-modules/survey { };
 
   suseapi = callPackage ../development/python-modules/suseapi { };
+
+  svdtools = callPackage ../development/python-modules/svdtools { };
 
   svg2tikz = callPackage ../development/python-modules/svg2tikz { };
 
