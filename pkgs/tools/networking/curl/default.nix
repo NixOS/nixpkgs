@@ -43,21 +43,18 @@ assert gssSupport -> libkrb5 != null;
 
 stdenv.mkDerivation rec {
   pname = "curl";
-  version = "7.76.1";
+  version = "7.79.1";
 
   src = fetchurl {
     urls = [
       "https://curl.haxx.se/download/${pname}-${version}.tar.bz2"
       "https://github.com/curl/curl/releases/download/${lib.replaceStrings ["."] ["_"] pname}-${version}/${pname}-${version}.tar.bz2"
     ];
-    sha256 = "1scmfrp0c27pkd7yva9k50miprjpsyfbb33apx72qc9igm6ii3ks";
+    sha256 = "0lbq73wz44p4fm2gp05mzrqrzfvhlmvlgfg8c8wkj5lkkamw8qny";
   };
 
   patches = [
-    ./CVE-2021-22897.patch
-    ./CVE-2021-22898.patch
-    ./CVE-2021-22901.patch
-    ./CVE-2021-22945.patch
+    ./7.79.1-darwin-no-systemconfiguration.patch
   ];
 
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
