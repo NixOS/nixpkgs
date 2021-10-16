@@ -118,8 +118,8 @@ rec {
         ++ optional (libseccomp != null) "seccomp";
     });
 
-    plugins = optionals (buildxSupport) [ docker-buildx ]
-      ++ optionals (composeSupport) [ docker-compose_2 ];
+    plugins = optionals buildxSupport [ docker-buildx ]
+      ++ optionals composeSupport [ docker-compose_2 ];
     pluginsRef = symlinkJoin { name = "docker-plugins"; paths = plugins; };
   in
     buildGoPackage ((optionalAttrs (!clientOnly) {
