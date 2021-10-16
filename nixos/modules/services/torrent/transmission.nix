@@ -214,6 +214,15 @@ in
         example = "/var/lib/secrets/transmission/settings.json";
       };
 
+      extraFlags = mkOption {
+        type = types.listOf types.str;
+        default = [];
+        example = [ "--log-debug" ];
+        description = ''
+          Extra flags passed to the transmission command in the service definition.
+        '';
+      };
+
       openPeerPorts = mkEnableOption "opening of the peer port(s) in the firewall";
 
       openRPCPort = mkEnableOption "opening of the RPC port in the firewall";
@@ -262,7 +271,7 @@ in
           install -D -m 600 -o '${cfg.user}' -g '${cfg.group}' /dev/stdin \
            '${cfg.home}/${settingsDir}/settings.json'
         '')];
-        ExecStart="${pkgs.transmission}/bin/transmission-daemon -f -g ${cfg.home}/${settingsDir}";
+        ExecStart="${pkgs.transmission}/bin/transmission-daemon -f -g ${cfg.home}/${settingsDir} ${escapeShellArgs cfg.extraFlags}";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         User = cfg.user;
         Group = cfg.group;
