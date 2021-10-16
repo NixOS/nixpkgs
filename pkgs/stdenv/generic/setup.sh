@@ -1314,11 +1314,11 @@ genericBuild() {
         if [[ "$curPhase" = patchPhase && -n "${dontPatch:-}" ]]; then continue; fi
         if [[ "$curPhase" = configurePhase && -n "${dontConfigure:-}" ]]; then continue; fi
         if [[ "$curPhase" = buildPhase && -n "${dontBuild:-}" ]]; then continue; fi
-        if [[ "$curPhase" = checkPhase && -z "${doCheck:-}" ]]; then continue; fi
         if [[ "$curPhase" = installPhase && -n "${dontInstall:-}" ]]; then continue; fi
         if [[ "$curPhase" = fixupPhase && -n "${dontFixup:-}" ]]; then continue; fi
         if [[ "$curPhase" = installCheckPhase && -z "${doInstallCheck:-}" ]]; then continue; fi
         if [[ "$curPhase" = distPhase && -z "${doDist:-}" ]]; then continue; fi
+        if [[ "$curPhase" = checkPhase && -z "${doCheck:-}" ]]; then continue; fi
 
         if [[ -n $NIX_LOG_FD ]]; then
             echo "@nix { \"action\": \"setPhase\", \"phase\": \"$curPhase\" }" >&$NIX_LOG_FD
