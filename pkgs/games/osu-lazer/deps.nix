@@ -158,9 +158,9 @@
   (fetchNuGet { name = "OpenTabletDriver.Plugin"; version = "0.5.3.1"; sha256 = "17dxsvcz9g8kzydk5xlfz9kfxl62x9wi20609rh76wjd881bg1br"; })
   (fetchNuGet { name = "ppy.LocalisationAnalyser"; version = "2021.725.0"; sha256 = "00nvk8kw94v0iq5k7y810sa235lqdjlggq7f00c64c3d1zam4203"; })
   (fetchNuGet { name = "ppy.ManagedBass"; version = "3.1.3-alpha"; sha256 = "0qdrklalp42pbyb30vpr7c0kwjablsja0s6xplxxkpfd14y8mzk4"; })
-  (fetchNuGet { name = "ppy.osu.Framework"; version = "2021.1004.0"; sha256 = "01w8z0pz8b0fpa4qqk22lq1cf5pdic2nwrqyqmcz051yyiglmz3q"; })
+  (fetchNuGet { name = "ppy.osu.Framework"; version = "2021.1014.0"; sha256 = "0j0b9hhglpqgla82c8yxqangjxqabsc9xb0z1jc6lb7rh854xzli"; })
   (fetchNuGet { name = "ppy.osu.Framework.NativeLibs"; version = "2021.805.0"; sha256 = "004c053s6p7339bfw68lvlyk9jkbw6djkf2d72dz8wam546k8dcl"; })
-  (fetchNuGet { name = "ppy.osu.Game.Resources"; version = "2021.1004.0"; sha256 = "0wxdb72l7gzxzxyjysm1zshvlf0psaaanaqv2km1j3i37cnag0jp"; })
+  (fetchNuGet { name = "ppy.osu.Game.Resources"; version = "2021.1015.0"; sha256 = "0h2sb35yajgnfhn9729p9r83m8mwv7r03gd55b07wl8vhzb2r3s5"; })
   (fetchNuGet { name = "ppy.osuTK.NS20"; version = "1.0.178"; sha256 = "1bv77rrf3g6zr4bzfrrqqzl0vjj4c8izc0sakckda8dlm6h3gxln"; })
   (fetchNuGet { name = "ppy.SDL2-CS"; version = "1.0.452-alpha"; sha256 = "0l59cfji8w0x2nrp3m7xvfpw4y7z5dhwsq4wq3wf4r6npwnra0hc"; })
   (fetchNuGet { name = "ppy.squirrel.windows"; version = "1.9.0.5"; sha256 = "0nmhrg3q6izapfpwdslq80fqkvjj12ad9r94pd0nr2xx1zw0x1zl"; })
@@ -358,4 +358,5 @@
   (fetchNuGet { name = "System.Xml.ReaderWriter"; version = "4.3.0"; sha256 = "0c47yllxifzmh8gq6rq6l36zzvw4kjvlszkqa9wq3fr59n0hl3s1"; })
   (fetchNuGet { name = "System.Xml.XDocument"; version = "4.0.11"; sha256 = "0n4lvpqzy9kc7qy1a4acwwd7b7pnvygv895az5640idl2y9zbz18"; })
   (fetchNuGet { name = "System.Xml.XDocument"; version = "4.3.0"; sha256 = "08h8fm4l77n0nd4i4fk2386y809bfbwqb7ih9d7564ifcxr5ssxd"; })
+  (fetchNuGet { name = "TagLibSharp"; version = "2.2.0"; sha256 = "0jb0f84p4jd59ha36spyk9q08g6fjap3xywq32rcs2xwzhhqiq0y"; })
 ]
