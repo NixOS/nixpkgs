@@ -29553,6 +29553,8 @@ with pkgs;
   inherit (import ../games/deliantra pkgs)
     deliantra-server deliantra-arch deliantra-maps deliantra-data;
 
+  ddnet = callPackage ../games/ddnet { };
+
   devilutionx = callPackage ../games/devilutionx {};
 
   dhewm3 = callPackage ../games/dhewm3 {};
