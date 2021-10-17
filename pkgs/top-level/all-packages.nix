@@ -5998,7 +5998,9 @@ with pkgs;
 
   pixz = callPackage ../tools/compression/pixz { };
 
-  plplot = callPackage ../development/libraries/plplot { };
+  plplot = callPackage ../development/libraries/plplot {
+    inherit (xorg) libX11;
+  };
 
   pxattr = callPackage ../tools/archivers/pxattr { };
 
@@ -6065,28 +6067,25 @@ with pkgs;
 
   hddtemp = callPackage ../tools/misc/hddtemp { };
 
-  hdf4 = callPackage ../tools/misc/hdf4 {
-    szip = null;
-  };
+  hdf4 = callPackage ../tools/misc/hdf4 { };
 
   hdf5 = callPackage ../tools/misc/hdf5 {
-    gfortran = null;
-    szip = null;
+    fortranSupport = false;
+    fortran = gfortran;
   };
 
   hdf5_1_10 = callPackage ../tools/misc/hdf5/1.10.nix { };
 
   hdf5-mpi = appendToName "mpi" (hdf5.override {
-    szip = null;
     mpiSupport = true;
   });
 
   hdf5-cpp = appendToName "cpp" (hdf5.override {
-    cpp = true;
+    cppSupport = true;
   });
 
   hdf5-fortran = appendToName "fortran" (hdf5.override {
-    inherit gfortran;
+    fortranSupport = true;
   });
 
   hdf5-threadsafe = appendToName "threadsafe" (hdf5.overrideAttrs (oldAttrs: {
@@ -13086,6 +13085,12 @@ with pkgs;
     fetchHex beamPackages;
 
   inherit (beam.packages.erlangR21) lfe lfe_1_3;
+
+  gnudatalanguage = callPackage ../development/interpreters/gnudatalanguage {
+    inherit (llvmPackages) openmp;
+    # MPICH currently build on Darwin
+    mpi = mpich;
+  };
 
   groovy = callPackage ../development/interpreters/groovy { };
 
