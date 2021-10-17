@@ -1,7 +1,7 @@
-From 5f17b65d30480e489e135b403a072b38535b2911 Mon Sep 17 00:00:00 2001
+From 3e0e304959719958dee4d88ccbb9647ffb5797ef Mon Sep 17 00:00:00 2001
 From: Andreas Rammhold <andreas@rammhold.de>
 Date: Wed, 18 Aug 2021 19:10:08 +0200
-Subject: [PATCH] core: handle lookup paths being symlinks
+Subject: [PATCH 21/22] core: handle lookup paths being symlinks
 
 With a recent change paths leaving the statically known lookup paths
 would be treated differently then those that remained within those. That
@@ -76,5 +76,5 @@ index 884a0674a9..3ae2a115d0 100644
                                          log_debug("%s: linked unit file: %s → %s",
                                                    __func__, filename, simplified);
 -- 
-2.32.0
+2.33.0
 

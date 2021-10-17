@@ -1,7 +1,7 @@
-From 189ba3af8b21cfc53527453907e800a2917b1bfd Mon Sep 17 00:00:00 2001
+From c12879d75c5ba7cd982993a815fc6540ae50a941 Mon Sep 17 00:00:00 2001
 From: Andreas Rammhold <andreas@rammhold.de>
 Date: Mon, 26 Jul 2021 17:20:34 +0200
-Subject: [PATCH] login: respect install_sysconfdir_samples in meson file
+Subject: [PATCH 20/22] login: respect install_sysconfdir_samples in meson file
 
 The refactoring done in c900d89faa0 caused the configuration files to be
 installed into the pkgsysconfdir regardless of the state of the
@@ -25,5 +25,5 @@ index 8c20e6be65..b637adc9a2 100644
          ['71-seat.rules',      udevrulesdir,  enable_logind],
          ['73-seat-late.rules', udevrulesdir,  enable_logind],
 -- 
-2.32.0
+2.33.0
 

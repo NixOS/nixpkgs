@@ -1,7 +1,8 @@
-From 93413acd3ef3a637a0f31a1d133b103e1dc81fd6 Mon Sep 17 00:00:00 2001
+From 04eef1fb8e2a52277e051eb7980e96f9acc0afaa Mon Sep 17 00:00:00 2001
 From: Yu Watanabe <watanabe.yu+github@gmail.com>
 Date: Mon, 23 Aug 2021 06:16:48 +0900
-Subject: [PATCH] path-util: make find_executable() work without /proc mounted
+Subject: [PATCH 22/22] path-util: make find_executable() work without /proc
+ mounted
 
 Follow-up for 888f65ace6296ed61285d31db846babf1c11885e.
 
@@ -11,10 +12,10 @@ Hopefully fixes #20514.
  1 file changed, 5 insertions(+), 1 deletion(-)
 
 diff --git a/src/basic/path-util.c b/src/basic/path-util.c
-index d11f254a9f6a..a21981616b59 100644
+index e5afb5f5f5..13d71ed1b6 100644
 --- a/src/basic/path-util.c
 +++ b/src/basic/path-util.c
-@@ -630,7 +630,11 @@ static int check_x_access(const char *path, int *ret_fd) {
+@@ -628,7 +628,11 @@ static int check_x_access(const char *path, int *ret_fd) {
                  return r;
  
          r = access_fd(fd, X_OK);
@@ -27,3 +28,6 @@ index d11f254a9f6a..a21981616b59 100644
                  return r;
  
          if (ret_fd)
+-- 
+2.33.0
+
