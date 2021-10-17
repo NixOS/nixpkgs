@@ -17,5 +17,11 @@ stdenv.mkDerivation rec {
     description = "Userspace API to packets queued by the kernel packet filter";
     license = licenses.gpl2;
     platforms = platforms.linux;
+    longDescription = ''
+       libnetfilter_queue is a userspace library providing an API to packets that have been queued by the kernel packet filter
+       It is is part of a system that deprecates the old ip_queue / libipq mechanism.
+
+       libnetfilter_queue has been previously known as libnfnetlink_queue.
+    '';
   };
 }

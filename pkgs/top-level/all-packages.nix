@@ -182,6 +182,9 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
 
+  arptables = arptables-legacy;
+  arptables-legacy = callPackage ../os-specific/linux/arptables { };
+
   fiche = callPackage ../servers/fiche { };
 
   fishnet = callPackage ../servers/fishnet { };
@@ -21668,6 +21671,8 @@ with pkgs;
     stdenv = gcc11Stdenv;
   };
 
+  nfacct = callPackage ../os-specific/linux/nfacct {  };
+
   nmon = callPackage ../os-specific/linux/nmon { };
 
   hwdata = callPackage ../os-specific/linux/hwdata { };
@@ -22466,6 +22471,8 @@ with pkgs;
   udisks_glue = callPackage ../os-specific/linux/udisks-glue { };
 
   ugtrain = callPackage ../tools/misc/ugtrain { };
+
+  ulogd = callPackage ../os-specific/linux/ulogd { };
 
   untie = callPackage ../os-specific/linux/untie { };
 
