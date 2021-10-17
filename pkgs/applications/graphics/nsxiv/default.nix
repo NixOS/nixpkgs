@@ -1,7 +1,5 @@
 { lib, stdenv, fetchFromGitHub, libXft, imlib2, giflib, libexif, conf ? null }:
 
-with lib;
-
 stdenv.mkDerivation rec {
   pname = "nsxiv";
   version = "27.1";
