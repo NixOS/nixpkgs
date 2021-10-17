@@ -560,6 +560,10 @@ self: super: {
       };
     });
 
+  telescope-cheat-nvim = super.telescope-cheat-nvim.overrideAttrs (old: {
+    dependencies = with self; [ sqlite-lua telescope-nvim ];
+  });
+
   telescope-frecency-nvim = super.telescope-frecency-nvim.overrideAttrs (old: {
     dependencies = with self; [ sqlite-lua telescope-nvim ];
   });
