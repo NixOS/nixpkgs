@@ -2,22 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "libtorrent-jesec";
-  version = "0.13.8-r2";
+  version = "0.13.8-r3";
 
   src = fetchFromGitHub {
     owner = "jesec";
     repo = "libtorrent";
     rev = "v${version}";
-    sha256 = "sha256-eIXVTbVOCRHcxSsLPvIm9F60t2upk5ORpDSOOYqTCJ4=";
+    sha256 = "0j84717wyai4iavrz2g6kix6fl09sw1cgsqp4yclzgg46lmwww2b";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "test-fallback";
-      url = "https://github.com/jesec/libtorrent/commit/a38205ce06aadc9908478ec3a9c8aefd9be06344.patch";
-      sha256 = "sha256-2TyQ9zYWZw6bzAfVZzTOQSkfIZnDU8ykgpRAFXscEH0=";
-    })
-  ];
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ openssl zlib ];
