@@ -1300,6 +1300,21 @@ Superuser created successfully.
       </listitem>
       <listitem>
         <para>
+          <literal>nix.daemonNiceLevel</literal> and
+          <literal>nix.daemonIONiceLevel</literal> have been removed in
+          favour of the new options
+          <link xlink:href="options.html#opt-nix.daemonCPUSchedPolicy"><literal>nix.daemonCPUSchedPolicy</literal></link>,
+          <link xlink:href="options.html#opt-nix.daemonIOSchedClass"><literal>nix.daemonIOSchedClass</literal></link>
+          and
+          <link xlink:href="options.html#opt-nix.daemonIOSchedPriority"><literal>nix.daemonIOSchedPriority</literal></link>.
+          Please refer to the options documentation and the
+          <literal>sched(7)</literal> and
+          <literal>ioprio_set(2)</literal> man pages for guidance on how
+          to use them.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>coursier</literal> package’s binary was renamed
           from <literal>coursier</literal> to <literal>cs</literal>.
           Completions which haven’t worked for a while should now work
