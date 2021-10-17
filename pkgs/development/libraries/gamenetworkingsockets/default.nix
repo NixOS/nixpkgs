@@ -18,7 +18,8 @@ stdenv.mkDerivation rec {
   # tmp home for go
   preBuild = "export HOME=\"$TMPDIR\"";
 
-  buildInputs = [ protobuf openssl ];
+  buildInputs = [ protobuf ];
+  propagatedBuildInputs = [ openssl ];
 
   meta = with lib; {
     description = "GameNetworkingSockets is a basic transport layer for games";
