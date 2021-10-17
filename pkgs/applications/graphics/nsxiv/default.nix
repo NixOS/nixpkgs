@@ -24,10 +24,10 @@ stdenv.mkDerivation rec {
     install -Dt $out/share/applications nsxiv.desktop
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Neo Simple X Image Viewer";
     homepage = "https://github.com/nsxiv/nsxiv";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
   };
 }
