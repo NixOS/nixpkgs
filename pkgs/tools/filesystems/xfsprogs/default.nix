@@ -1,26 +1,17 @@
-{ lib, stdenv, buildPackages, fetchpatch, fetchurl, autoconf, automake, gettext, libtool, pkg-config
+{ lib, stdenv, buildPackages, fetchurl, autoconf, automake, gettext, libtool, pkg-config
 , icu, libuuid, readline, inih
 }:
 
 stdenv.mkDerivation rec {
   pname = "xfsprogs";
-  version = "5.11.0";
+  version = "5.13.0";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/fs/xfs/xfsprogs/${pname}-${version}.tar.xz";
-    sha256 = "0lxks616nmdk8zkdbwpq5sf9zz19smgy5rpmp3hpk2mvrl7kk70f";
+    sha256 = "sha256-ThQtS6vghq35AW2MYGyAWCnaCORjiaRDP0A0YgT5DNs=";
   };
 
   outputs = [ "bin" "dev" "out" "doc" ];
-
-  patches = [
-    # Fix musl build
-    (fetchpatch {
-      name = "missing-signal.h";
-      url = "https://git.alpinelinux.org/aports/plain/main/xfsprogs/missing-signal.h.patch?id=e0003b414d125ad32825014dcec2225df00f0a36";
-      sha256 = "0a5fxw59d38b0zh1xjliv37gwq4c3fxa21j5sgy79ir9p9zns7vw";
-    })
-  ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [
