@@ -5,6 +5,27 @@
 , which
 , cmake # used in configure
 , ninja # used in build
+, ccache
+, xmlstarlet
+, libproxy
+, xlibs
+, zstd
+, double_conversion
+, utillinux
+#, journalctl, systemd
+, libb2
+, md4c
+, mtdev
+, lksctp-tools
+, libselinux
+, libsepol
+, vulkan-headers
+, openvg, openvg-headers
+, libthai
+, libdrm
+, libdatrie
+, epoxy
+#, valgrind
 
   # darwin support
 , libiconv, libobjc, xcbuild, AGL, AppKit, ApplicationServices, Carbon, Cocoa, CoreAudio, CoreBluetooth
@@ -12,9 +33,12 @@
 
 , dbus, fontconfig, freetype, glib, harfbuzz, icu, libX11, libXcomposite
 , libXcursor, libXext, libXi, libXrender, libinput, libjpeg, libpng
-, libxcb, libxkbcommon, libxml2, libxslt, openssl, pcre16, pcre2, sqlite, udev
+, libxcb, libxkbcommon, libxml2, libxslt, openssl
+, pcre
+, pcre2, sqlite, udev
 , xcbutil, xcbutilimage, xcbutilkeysyms, xcbutilrenderutil, xcbutilwm
 , zlib, at-spi2-core
+, unixODBC , unixODBCDrivers
 
   # optional dependencies
 , cups, libmysqlclient, postgresql
@@ -42,7 +66,8 @@ stdenv.mkDerivation {
   debug = debugSymbols;
 
   propagatedBuildInputs = [
-    libxml2 libxslt openssl sqlite zlib
+    libxml2 libxslt openssl sqlite sqlite.out sqlite.dev zlib
+    unixODBC
 
     # Text rendering
     harfbuzz icu
@@ -50,7 +75,41 @@ stdenv.mkDerivation {
     # Image formats
     libjpeg libpng
     pcre2
-  ] ++ (
+    pcre
+    libproxy libproxy.dev
+    xlibs.libXdmcp.dev # xdmcp for xcb
+    xlibs.libXtst # for atspi-2
+    zstd
+    double_conversion
+    utillinux.dev # mount for gio-2.0
+    #journalctl systemd # journald logging backend
+    libb2
+    md4c
+    mtdev
+    lksctp-tools
+    libselinux
+    libsepol
+
+    # TODO enable vulkan/openvg only when openGL is available
+    vulkan-headers
+    openvg-headers
+
+    # testing qt openvg: https://bugreports.qt.io/browse/QTBUG-25720
+    # TODO allow to pass openvg impl as parameter to qtbase
+    openvg.shivavg # FIXME not detected
+    #openvg.monkvg # FIXME not detected
+    #openvg.amanithvg # commercial openvg impl
+
+    libthai # for pango
+    libdrm
+    libdatrie # for libthai
+    epoxy # for gdk-3.0
+    #valgrind # for libdrm (optional, too large)
+  ] ++ (with unixODBCDrivers; [
+    psql
+    sqlite
+    mariadb
+  ]) ++ (
     if stdenv.isDarwin then [
       # TODO: move to buildInputs, this should not be propagated.
       AGL AppKit ApplicationServices Carbon Cocoa CoreAudio CoreBluetooth
@@ -79,7 +138,7 @@ stdenv.mkDerivation {
     ++ lib.optional (libmysqlclient != null) libmysqlclient
     ++ lib.optional (postgresql != null) postgresql;
 
-  nativeBuildInputs = [ bison flex gperf lndir perl pkg-config which cmake ninja ]
+  nativeBuildInputs = [ bison flex gperf lndir perl pkg-config which cmake ninja ccache xmlstarlet ]
     ++ lib.optionals stdenv.isDarwin [ xcbuild ];
 
   propagatedNativeBuildInputs = [ lndir ];
@@ -107,11 +166,9 @@ stdenv.mkDerivation {
         --subst-var qtDocPrefix
     done
 
-    # grep /bin/ configure
     substituteInPlace configure --replace /bin/pwd pwd
-
-    # find . -name '*.pro' -exec grep -Hn /bin/ '{}' ';'
     substituteInPlace util/cmake/tests/data/quoted.pro --replace /bin/ls ${coreutils}/bin/ls
+    substituteInPlace src/corelib/CMakeLists.txt --replace /bin/ls ${coreutils}/bin/ls
 
     sed -e 's@/\(usr\|opt\)/@/var/empty/@g' -i mkspecs/*/*.conf
 
@@ -157,6 +214,8 @@ stdenv.mkDerivation {
     export LD_LIBRARY_PATH="$PWD/build/lib:$PWD/build/plugins/platforms''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
 
     NIX_CFLAGS_COMPILE+=" -DNIXPKGS_QT_PLUGIN_PREFIX=\"$qtPluginPrefix\""
+
+    # TODO patch /bin/ls
   '';
 
   postConfigure = ''
@@ -221,10 +280,14 @@ stdenv.mkDerivation {
     "-strip"
     "-system-proxies"
     "-pkg-config"
+    "-ccache" # FIXME Using ccache: no
+    "-openvg" # TODO requires GL -> not on darwin
 
     "-gui"
     "-widgets"
     "-opengl desktop"
+    "-libproxy"
+    "-sctp"
     "-icu"
     "-L" "${icu.out}/lib"
     "-I" "${icu.dev}/include"
@@ -312,30 +375,48 @@ stdenv.mkDerivation {
 
   # Move selected outputs.
   postInstall = ''
-    moveToOutput "mkspecs" "$dev"
+    set -o xtrace # debug
+
+    # debug
+    echo "postInstall: pwd = $(pwd)"
+    echo "postInstall: find mkspecs"
+    find mkspecs
+    echo "postInstall: find build/mkspecs"
+    find build/mkspecs
+
+    moveToOutput "build/mkspecs" "$dev"
   '';
 
   devTools = [
-    "bin/fixqt4headers.pl"
-    "bin/moc"
-    "bin/qdbuscpp2xml"
-    "bin/qdbusxml2cpp"
-    "bin/qlalr"
-    "bin/qmake"
-    "bin/rcc"
-    "bin/syncqt.pl"
-    "bin/uic"
+    "build/bin/fixqt4headers.pl"
+    "build/bin/moc"
+    "build/bin/qdbuscpp2xml"
+    "build/bin/qdbusxml2cpp"
+    "build/bin/qlalr"
+    "build/bin/qmake"
+    "build/bin/rcc"
+    "build/bin/syncqt.pl"
+    "build/bin/uic"
   ];
 
   postFixup = ''
+    set -o xtrace # debug
+
     # Don't retain build-time dependencies like gdb.
     sed '/QMAKE_DEFAULT_.*DIRS/ d' -i $dev/mkspecs/qconfig.pri
     fixQtModulePaths "''${!outputDev}/mkspecs/modules"
     fixQtBuiltinPaths "''${!outputDev}" '*.pr?'
 
+    # debug
+    echo "postFixup: pwd = $(pwd)"
+    echo "postFixup: find bin"
+    find bin
+    echo "postFixup: find build/bin"
+    find build/bin
+
     # Move development tools to $dev
     moveQtDevTools
-    moveToOutput bin "$dev"
+    moveToOutput build/bin "$dev"
   '';
 
   dontStrip = debugSymbols;
