@@ -10,11 +10,11 @@
 # Based on https://gist.github.com/msteen/96cb7df66a359b827497c5269ccbbf94 and joplin-desktop nixpkgs.
 let
   pname = "zettlr";
-  version = "1.8.9";
+  version = "2.0.0";
   name = "${pname}-${version}";
   src = fetchurl {
     url = "https://github.com/Zettlr/Zettlr/releases/download/v${version}/Zettlr-${version}-x86_64.appimage";
-    sha256 = "sha256-1cU9HdPXrJ4ibSjOitO8iJfMIaGub/jjlb2lssYFfcU=";
+    sha256 = "sha256-MIFgNUuuneIIkPRVRarbx6UMoB/3sdJtKvbacUnwHX8=";
   };
   appimageContents = appimageTools.extractType2 {
     inherit name src;
