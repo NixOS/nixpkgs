@@ -14,9 +14,11 @@ let
   minor = lib.versions.minor linux.modDirVersion;
   patch = lib.versions.patch linux.modDirVersion;
 
+  suffix = "gnu${lib.optionalString (!(lib.versionAtLeast linux.modDirVersion "5.14")) "1"}";
+
 in linux.override {
   argsOverride = {
-    modDirVersion = "${linux.modDirVersion}-gnu1";
+    modDirVersion = "${linux.modDirVersion}-${suffix}";
     isLibre = true;
 
     src = stdenv.mkDerivation {
