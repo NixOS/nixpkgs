@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-    "--cc=${stdenv.cc.targetPrefix}cc"
-    "--ar=${stdenv.cc.targetPrefix}ar"
+    "--cc=$CC"
+    "--ar=$AR"
     "--crtprefix=${lib.getLib stdenv.cc.libc}/lib"
     "--sysincludepaths=${lib.getDev stdenv.cc.libc}/include:{B}/include"
     "--libpaths=${lib.getLib stdenv.cc.libc}/lib"
