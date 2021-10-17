@@ -180,12 +180,13 @@ sub handleModifiedUnit {
                     @sockets = ("$baseName.socket");
                 }
                 foreach my $socket (@sockets) {
-                    if (defined $activePrev->{$socket}) {
-                        # Only restart sockets that actually
-                        # exist in new configuration
-                        if (-e "$out/etc/systemd/system/$socket") {
-                            $socketActivated = 1;
-                            $unitsToStop->{$unit} = 1;
+                    if (-e "$out/etc/systemd/system/$socket") {
+                        $socketActivated = 1;
+                        $unitsToStop->{$unit} = 1;
+                        # If the socket was not running previously,
+                        # start it now.
+                        if (not defined $activePrev->{$socket}) {
+                            $unitsToStart->{$socket} = 1;
                         }
                     }
                 }
