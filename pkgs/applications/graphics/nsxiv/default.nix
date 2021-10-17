@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
     sha256 = "1na7f0hpc9g04nm7991gzaqr5gkj08n2azx833hgxcm2w1pnn1bk";
   };
 
-  configFile = optionalString (conf!=null) (builtins.toFile "config.def.h" conf);
-  preBuild = optionalString (conf!=null) "cp ${configFile} config.def.h";
+  configFile = optionalString (conf != null) (builtins.toFile "config.def.h" conf);
+  preBuild = optionalString (conf != null) "cp ${configFile} config.def.h";
 
   buildInputs = [ libXft imlib2 giflib libexif ];
 
