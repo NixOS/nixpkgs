@@ -47,9 +47,11 @@ stdenv.mkDerivation rec {
   };
 
   patches = lib.optionals withPantheon [
+    # Make this respect dark mode settings from Pantheon
     # https://github.com/elementary/browser
-    ./dark-style.patch
-    ./navigation-buttons.patch
+    # The patch currently differs from upstream (updated for epiphany 40 and 41).
+    ./pantheon-dark-style.patch
+    ./pantheon-navigation-buttons.patch
   ];
 
   nativeBuildInputs = [
@@ -95,7 +97,9 @@ stdenv.mkDerivation rec {
     p11-kit
     sqlite
     webkitgtk
-  ] ++ lib.optional withPantheon pantheon.granite;
+  ] ++ lib.optionals withPantheon [
+    pantheon.granite
+  ];
 
   # Tests need an X display
   mesonFlags = [
