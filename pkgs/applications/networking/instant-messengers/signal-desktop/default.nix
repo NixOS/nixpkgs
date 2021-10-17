@@ -10,6 +10,7 @@
 , hunspellDicts, spellcheckerLanguage ? null # E.g. "de_DE"
 # For a full list of available languages:
 # $ cat pkgs/development/libraries/hunspell/dictionaries.nix | grep "dictFileName =" | awk '{ print $3 }'
+, useWayland ? false
 }:
 
 let
@@ -21,6 +22,11 @@ let
     in lib.optionalString (spellcheckerLanguage != null) ''
       --set HUNSPELL_DICTIONARIES "${hunspellDicts.${hunspellDict}}/share/hunspell" \
       --set LC_MESSAGES "${spellcheckerLanguage}"'');
+
+  waylandWrapperArgs = (with lib;
+    lib.optionalString useWayland ''
+      --add-flags " --enable-features=UseOzonePlatform --ozone-platform=wayland"
+  '');
 in stdenv.mkDerivation rec {
   pname = "signal-desktop";
   version = "5.20.0"; # Please backport all updates to the stable channel.
@@ -125,6 +131,7 @@ in stdenv.mkDerivation rec {
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc ] }"
       --prefix LD_PRELOAD : "$SQLCIPHER_LIB"
       ${customLanguageWrapperArgs}
+      ${waylandWrapperArgs}
     )
 
     # Fix the desktop link

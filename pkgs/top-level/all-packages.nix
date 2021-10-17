@@ -9242,6 +9242,10 @@ with pkgs;
 
   signal-desktop = callPackage ../applications/networking/instant-messengers/signal-desktop { };
 
+  signal-desktop-wayland = signal-desktop.override {
+    useWayland = true;
+  };
+
   slither-analyzer = with python3Packages; toPythonApplication slither-analyzer;
 
   signify = callPackage ../tools/security/signify { };
