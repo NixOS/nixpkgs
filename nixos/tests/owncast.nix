@@ -1,14 +1,14 @@
 { system ? builtins.currentSystem, config ? { }
 , pkgs ? import ../.. { inherit system config; } }:
 
-with import (nixpkgs + "/nixos/lib/testing-python.nix") { inherit system; };
+with import ../lib/testing-python.nix { inherit system; };
 makeTest {
   name = "owncast";
-  meta = with pkgs.stdenv.lib.maintainers; { maintainers = [ MayNiklas ]; };
+  meta = with pkgs.lib.maintainers; { maintainers = [ MayNiklas ]; };
 
   nodes = {
     client = { ... }: {
-      environment.systemPackages = [ curl ];
+      environment.systemPackages = with pkgs; [ curl ];
       services.owncast = { enable = true; };
     };
   };
