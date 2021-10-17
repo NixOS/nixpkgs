@@ -33007,14 +33007,32 @@ with pkgs;
     inherit pkgs;
   };
 
+  discord-wayland = import ../applications/networking/instant-messengers/discord {
+    branch = "stable";
+    inherit pkgs;
+    useWayland = true;
+  };
+
   discord-ptb = import ../applications/networking/instant-messengers/discord {
     branch = "ptb";
     inherit pkgs;
   };
 
+  discord-ptb-wayland = import ../applications/networking/instant-messengers/discord {
+    branch = "ptb";
+    inherit pkgs;
+    useWayland = true;
+  };
+
   discord-canary = import ../applications/networking/instant-messengers/discord {
     branch = "canary";
     inherit pkgs;
+  };
+
+  discord-canary-wayland = import ../applications/networking/instant-messengers/discord {
+    branch = "canary";
+    inherit pkgs;
+    useWayland = true;
   };
 
   golden-cheetah = libsForQt514.callPackage ../applications/misc/golden-cheetah {};
