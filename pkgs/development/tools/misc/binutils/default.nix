@@ -84,6 +84,7 @@ stdenv.mkDerivation {
     ./gold-Update-GNU_PROPERTY_X86_XXX-macros.patch
 
     ./CVE-2020-35448.patch
+    ./CVE-2021-3487.patch
   ] ++ lib.optional stdenv.targetPlatform.isiOS ./support-ios.patch
     ++ # This patch was suggested by Nick Clifton to fix
        # https://sourceware.org/bugzilla/show_bug.cgi?id=16177
