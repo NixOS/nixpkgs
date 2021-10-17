@@ -1,5 +1,5 @@
 {
-  mkDerivation, lib,
+  mkDerivation, lib, fetchpatch,
 
   extra-cmake-modules, kdoctools,
 
@@ -52,6 +52,12 @@ mkDerivation {
   patches = [
     ./0001-startkde.patch
     ./0002-absolute-wallpaper-install-dir.patch
+    # Included in 5.23.1
+    (fetchpatch {
+      name = "fix-missing-password-field";
+      url = "https://invent.kde.org/plasma/plasma-workspace/-/commit/d5a3e749a30613294f41386180aaf31dfb1a9bee.patch";
+      sha256 = "sha256-qmC/gCVfj/DDQZxQv9YxkZSxYi0WwSsu6/hBskrSqg4=";
+    })
   ];
 
   # QT_INSTALL_BINS refers to qtbase, and qdbus is in qttools
