@@ -6,14 +6,14 @@
 let
   base = stdenv.mkDerivation rec {
     pname = "soldat-base";
-    version = "unstable-2020-11-26";
+    version = "unstable-2021-09-05";
 
     src = fetchFromGitHub {
       name = "base";
       owner = "Soldat";
       repo = "base";
-      rev = "e5f9c35ec12562595b248a7a921dd3458b36b605";
-      sha256 = "0qg0p2adb5v6di44iqczswldhypdqvn1nl96vxkfkxdg9i8x90w3";
+      rev = "6c74d768d511663e026e015dde788006c74406b5";
+      sha256 = "175gmkdccy8rnkd95h2zqldqfydyji1hfby8b1qbnl8wz4dh08mz";
     };
 
     nativeBuildInputs = [ zip ];
@@ -39,14 +39,14 @@ in
 
 stdenv.mkDerivation rec {
   pname = "soldat";
-  version = "unstable-2021-04-27";
+  version = "unstable-2021-11-01";
 
   src = fetchFromGitHub {
     name = "soldat";
     owner = "Soldat";
     repo = "soldat";
-    rev = "4d17667c316ff08934e97448b7f290a8dc434e81";
-    sha256 = "1pf557psmhfaagblfwdn36cw80j7bgs0lgjq8hmjbv58dysw3jdb";
+    rev = "7780d2948b724970af9f2aaf4fb4e4350d5438d9";
+    sha256 = "0r39d1394q7kabsgq6vpdlzwsajxafsg23i0r273nggfvs3m805z";
   };
 
   nativeBuildInputs = [ fpc makeWrapper autoPatchelfHook ];
