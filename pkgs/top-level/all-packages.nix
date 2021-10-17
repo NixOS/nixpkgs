@@ -9775,6 +9775,8 @@ with pkgs;
 
   thinkpad-scripts = python3.pkgs.callPackage ../tools/misc/thinkpad-scripts { };
 
+  tidy-viewer = callPackage ../tools/text/tidy-viewer { };
+
   tiled = libsForQt5.callPackage ../applications/editors/tiled { };
 
   tiledb = callPackage ../development/libraries/tiledb { };
