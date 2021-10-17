@@ -868,6 +868,18 @@ final: prev:
     meta.homepage = "https://github.com/wincent/command-t/";
   };
 
+  comment-nvim = buildVimPluginFrom2Nix {
+    pname = "comment.nvim";
+    version = "2021-10-17";
+    src = fetchFromGitHub {
+      owner = "numtostr";
+      repo = "comment.nvim";
+      rev = "a86384dc153e86a9a3cbec1436a8acfa4b07690d";
+      sha256 = "043nczs67sa7i2nmmadhrd52d3yzjr1kcm3bgb4q5zig1a7r4dcj";
+    };
+    meta.homepage = "https://github.com/numtostr/comment.nvim/";
+  };
+
   committia-vim = buildVimPluginFrom2Nix {
     pname = "committia.vim";
     version = "2020-08-27";

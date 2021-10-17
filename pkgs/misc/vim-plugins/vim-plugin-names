@@ -519,6 +519,7 @@ norcalli/nvim-terminal.lua
 norcalli/snippets.nvim
 ntpeters/vim-better-whitespace
 numirias/semshi
+numtostr/comment.nvim
 nvie/vim-flake8
 nvim-lua/completion-nvim
 nvim-lua/diagnostic-nvim
