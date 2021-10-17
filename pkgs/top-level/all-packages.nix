@@ -16635,9 +16635,9 @@ with pkgs;
   herqq = libsForQt5.callPackage ../development/libraries/herqq { };
 
   hidapi = callPackage ../development/libraries/hidapi {
+    inherit (darwin.apple_sdk.frameworks) Cocoa IOKit;
     # TODO: remove once `udev` is `systemdMinimal` everywhere.
     udev = systemdMinimal;
-    autoreconfHook = buildPackages.autoreconfHook269;
   };
 
   highfive = callPackage ../development/libraries/highfive { };
