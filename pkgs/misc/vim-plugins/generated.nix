@@ -327,6 +327,18 @@ final: prev:
     meta.homepage = "https://github.com/rbgrouleff/bclose.vim/";
   };
 
+  better-escape-nvim = buildVimPluginFrom2Nix {
+    pname = "better-escape.nvim";
+    version = "2021-10-09";
+    src = fetchFromGitHub {
+      owner = "max397574";
+      repo = "better-escape.nvim";
+      rev = "a644df43e4607df2e645cb7b6f50ede79fffe477";
+      sha256 = "1kjc1h35xfqgsqbg00hsvg52wkjskfilxxsxnnlimcsv9v8iadmh";
+    };
+    meta.homepage = "https://github.com/max397574/better-escape.nvim/";
+  };
+
   BetterLua-vim = buildVimPluginFrom2Nix {
     pname = "BetterLua.vim";
     version = "2020-08-14";
