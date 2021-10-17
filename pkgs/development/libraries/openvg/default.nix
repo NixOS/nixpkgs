@@ -2,6 +2,10 @@
 , stdenv
 , fetchFromGitHub
 , cmake
+, autoconf
+, automake
+, libtool
+, libGL
 , libGLU
 , freeglut
 , libglvnd
@@ -56,4 +60,45 @@ rec {
       mcp "examples/test_*" "$out/bin/shivavg-example-#1"
     '';
   });
+
+  monkvg = stdenv.mkDerivation rec {
+    pname = "monkvg";
+    version = "2a04624";
+
+    nativeBuildInputs = [ autoconf automake libtool ];
+    buildInputs = [
+      libGL
+      libGLU
+      glew
+    ];
+
+    src = fetchFromGitHub {
+      owner = "micahpearlman";
+      repo = "MonkVG";
+      rev = "2a04624e7dd14d53cd1b7e828bd0f6aea689aeba";
+      sha256 = "KpQ82ZHjmH+toonmt+M/YCnw/crhb0OlzPKUO729THU=";
+      # 2 commits ahead: https://github.com/pwiecz/MonkVG/commits/master
+    };
+
+    # type conflict. guess: openGL desktop uses double, not float
+    # https://github.com/micahpearlman/MonkVG/issues/47
+    patchPhase = ''
+      sed -i 's|typedef float GLdouble;|typedef double GLdouble;|' glu/include/glu.h
+      sed -i -E 's,(^|[^a-zA-Z])float ([a-zA-Z0-9]+\[(4|16)\]),\1GLdouble \2,' glu/libutil/project.c
+      sed -i -E 's,GLclampd (nearVal|farVal),GLdouble \1,g' glu/libutil/project.c
+    '';
+
+    preConfigure = ''
+      cd projects/MonkVG-autotools
+      autoreconf -vfi
+    '';
+
+    meta = with lib; {
+      description = "OpenVG implementation, based on OpenGL ES";
+      homepage    = "https://github.com/micahpearlman/MonkVG";
+      platforms   = platforms.linux;
+      license     = licenses.bsd3;
+      #maintainers = [ maintainers.TODO ];
+    };
+  };
 }
