@@ -38,6 +38,9 @@ let
       linuxPackages_5_4_hardened
       linuxPackages_5_10_hardened
 
+      linuxPackages_latest-libre
+      linuxPackages-libre
+
       linuxPackages_testing;
   };
 
