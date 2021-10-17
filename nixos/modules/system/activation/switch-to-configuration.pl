@@ -430,18 +430,17 @@ if ($action eq "dry-activate") {
             if scalar @unitsToAlsoStopFiltered;
     }
 
-print STDERR "NOT restarting the following changed units as well: ", join(", ", sort(keys %unitsToAlsoSkip)), "\n"
-    if scalar(keys %unitsToAlsoSkip) > 0;
+    print STDERR "would NOT restart the following changed units as well: ", join(", ", sort(keys %unitsToAlsoSkip)), "\n"
+        if scalar(keys %unitsToAlsoSkip) > 0;
 
     print STDERR "would restart systemd\n" if $restartSystemd;
+    print STDERR "would reload the following units: ", join(", ", sort(keys %unitsToReload)), "\n"
+        if scalar(keys %unitsToReload) > 0;
     print STDERR "would restart the following units: ", join(", ", sort(keys %unitsToRestart)), "\n"
         if scalar(keys %unitsToRestart) > 0;
     my @unitsToStartFiltered = filterUnits(\%unitsToStart);
     print STDERR "would start the following units: ", join(", ", @unitsToStartFiltered), "\n"
         if scalar @unitsToStartFiltered;
-    print STDERR "would reload the following units: ", join(", ", sort(keys %unitsToReload)), "\n"
-        if scalar(keys %unitsToReload) > 0;
-    unlink($dryRestartByActivationFile);
     exit 0;
 }
 
