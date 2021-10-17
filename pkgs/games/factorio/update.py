@@ -23,6 +23,7 @@ FLAGS = flags.FLAGS
 flags.DEFINE_string('username', '', 'Factorio username for retrieving binaries.')
 flags.DEFINE_string('token', '', 'Factorio token for retrieving binaries.')
 flags.DEFINE_string('out', '', 'Output path for versions.json.')
+flags.DEFINE_boolean('debug', False, 'Produces debugging output.')
 
 
 @dataclass
@@ -158,10 +159,14 @@ def fill_in_hash(versions: OurVersionJSON) -> OurVersionJSON:
 
 
 def main(argv):
+    if FLAGS.debug:
+        logging.set_verbosity(logging.DEBUG)
+
     factorio_versions = fetch_versions()
     new_our_versions = generate_our_versions(factorio_versions)
     old_our_versions = None
     our_versions_path = find_versions_json()
+
     if our_versions_path:
         logging.info('Loading old versions.json from %s', our_versions_path)
         with open(our_versions_path, 'r') as f:
