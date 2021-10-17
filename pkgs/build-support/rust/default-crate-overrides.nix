@@ -12,6 +12,7 @@
 , dbus-glib
 , gdk-pixbuf
 , cairo
+, python2
 , python3
 , libsodium
 , postgresql
@@ -22,7 +23,11 @@
 , clang
 , llvmPackages
 , linux-pam
+, cmake
+, glib
+, freetype
 , rdkafka
+, udev
 , ...
 }:
 
@@ -61,6 +66,10 @@ in
     buildInputs = [ dbus ];
   };
 
+  expat-sys = attrs: {
+    nativeBuildInputs = [ cmake ];
+  };
+
   foundationdb-sys = attrs: {
     buildInputs = [ foundationdb ];
     # needed for 0.4+ release, when the FFI bindings are auto-generated
@@ -73,6 +82,16 @@ in
 
   foundationdb = attrs: {
     buildInputs = [ foundationdb ];
+  };
+
+  freetype-sys = attrs: {
+    nativeBuildInputs = [ cmake ];
+    buildInputs = [ freetype ];
+  };
+
+  glib-sys = attrs: {
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ glib ];
   };
 
   gobject-sys = attrs: {
@@ -112,6 +131,11 @@ in
     buildInputs = [ dbus ];
   };
 
+  libudev-sys = attrs: {
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ udev ];
+  };
+
   nettle-sys = attrs: {
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ nettle clang ];
@@ -144,6 +168,10 @@ in
   rink = attrs: {
     buildInputs = [ gmp ];
     crateBin = [{ name = "rink"; path = "src/bin/rink.rs"; }];
+  };
+
+  sdl2-sys = attr: {
+    nativeBuildInputs = [ curl ];
   };
 
   security-framework-sys = attr: {
@@ -182,6 +210,15 @@ in
 
   serde_derive = attrs: {
     buildInputs = lib.optional stdenv.isDarwin Security;
+  };
+
+  servo-fontconfig-sys = attrs: {
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ freetype ];
+  };
+
+  skia-bindings = attrs: {
+    nativeBuildInputs = [ python2 ];
   };
 
   thrussh-libsodium = attrs: {
