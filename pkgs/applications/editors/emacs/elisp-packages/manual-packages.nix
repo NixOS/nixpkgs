@@ -198,8 +198,6 @@
 
   railgun = callPackage ./railgun { };
 
-  rec-mode = callPackage ./rec-mode { };
-
   structured-haskell-mode = self.shm;
 
   sv-kalender = callPackage ./sv-kalender { };

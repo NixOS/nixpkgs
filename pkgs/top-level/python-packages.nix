@@ -365,6 +365,8 @@ in {
 
   aioresponses = callPackage ../development/python-modules/aioresponses { };
 
+  aioridwell = callPackage ../development/python-modules/aioridwell { };
+
   aiorpcx = callPackage ../development/python-modules/aiorpcx { };
 
   aiorun = callPackage ../development/python-modules/aiorun { };
@@ -1235,6 +1237,8 @@ in {
   bottleneck = callPackage ../development/python-modules/bottleneck { };
 
   bpython = callPackage ../development/python-modules/bpython { };
+
+  braceexpand = callPackage ../development/python-modules/braceexpand { };
 
   bracex = callPackage ../development/python-modules/bracex { };
 
@@ -3020,6 +3024,8 @@ in {
 
   git-annex-adapter =
     callPackage ../development/python-modules/git-annex-adapter { };
+
+  git-filter-repo = callPackage ../development/python-modules/git-filter-repo { };
 
   gitdb = callPackage ../development/python-modules/gitdb { };
 
@@ -5169,6 +5175,8 @@ in {
   omnilogic = callPackage ../development/python-modules/omnilogic { };
 
   ondilo = callPackage ../development/python-modules/ondilo { };
+
+  onetimepass = callPackage ../development/python-modules/onetimepass { };
 
   onkyo-eiscp = callPackage ../development/python-modules/onkyo-eiscp { };
 
@@ -8857,6 +8865,8 @@ in {
 
   suseapi = callPackage ../development/python-modules/suseapi { };
 
+  svdtools = callPackage ../development/python-modules/svdtools { };
+
   svg2tikz = callPackage ../development/python-modules/svg2tikz { };
 
   svglib = callPackage ../development/python-modules/svglib { };
@@ -9527,6 +9537,8 @@ in {
   verboselogs = callPackage ../development/python-modules/verboselogs { };
 
   versioneer = callPackage ../development/python-modules/versioneer { };
+
+  versionfinder = callPackage ../development/python-modules/versionfinder { };
 
   versiontag = callPackage ../development/python-modules/versiontag { };
 

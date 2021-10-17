@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, vscode-utils, extractNuGet
-, icu, curl, openssl, lttng-ust, autoPatchelfHook
+, icu, curl, openssl, liburcu, lttng-ust, autoPatchelfHook
 , python3, musl
 , pythonUseFixed ? false       # When `true`, the python default setting will be fixed to specified.
                                # Use version from `PATH` for default setting otherwise.
@@ -12,6 +12,24 @@
 assert ctagsUseFixed -> null != ctags;
 
 let
+  liburcu-0-12 = liburcu.overrideAttrs (oldAttrs: rec {
+    version = "0.12.2";
+    src = fetchurl {
+      url = "https://lttng.org/files/urcu/userspace-rcu-${version}.tar.bz2";
+      sha256 = "0yx69kbx9zd6ayjzvwvglilhdnirq4f1x1sdv33jy8bc9wgc3vsf";
+    };
+  });
+
+  lttng-ust-2-10 = (lttng-ust.override {
+    liburcu = liburcu-0-12;
+  }).overrideAttrs (oldAttrs: rec {
+    version = "2.10.5";
+    src = fetchurl {
+      url = "https://lttng.org/files/lttng-ust/lttng-ust-${version}.tar.bz2";
+      sha256 = "0ddwk0nl28bkv2xb78gz16a2bvlpfbjmzwfbgwf5p1cq46dyvy86";
+    };
+  });
+
   pythonDefaultsTo = if pythonUseFixed then "${python3}/bin/python" else "python";
   ctagsDefaultsTo = if ctagsUseFixed then "${ctags}/bin/ctags" else "ctags";
 
@@ -54,7 +72,7 @@ in vscode-utils.buildVscodeMarketplaceExtension rec {
     icu
     curl
     openssl
-    lttng-ust
+    lttng-ust-2-10
     musl
   ];
 
@@ -75,6 +93,19 @@ in vscode-utils.buildVscodeMarketplaceExtension rec {
     # Patch `packages.json` so that nix's *ctags* is used as default value for `python.workspaceSymbols.ctagsPath`.
     substituteInPlace "./package.json" \
       --replace "\"default\": \"ctags\"" "\"default\": \"${ctagsDefaultsTo}\""
+
+    # Similar cleanup to what's done in the `debugpy` python package.
+    # This prevent our autopatchelf logic to bark on unsupported binaries (`attach_x86.so`
+    # was problematic) but also should make our derivation less heavy.
+    (
+      cd pythonFiles/lib/python/debugpy/_vendored/pydevd/pydevd_attach_to_process
+      declare kept_aside="${{
+        "x86_64-linux" = "attach_linux_amd64.so";
+      }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}")}"
+      mv "$kept_aside" "$kept_aside.hidden"
+      rm *.so *.dylib *.dll *.exe *.pdb
+      mv "$kept_aside.hidden" "$kept_aside"
+    )
   '';
 
   postInstall = ''

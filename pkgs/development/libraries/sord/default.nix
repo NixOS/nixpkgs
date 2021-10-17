@@ -13,9 +13,14 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
+  preConfigure = ''
+    export PKGCONFIG="$PKG_CONFIG"
+  '';
+
   nativeBuildInputs = [ pkg-config python3 wafHook ];
   buildInputs = [ pcre ];
   propagatedBuildInputs = [ serd ];
+  dontAddWafCrossFlags = true;
 
   meta = with lib; {
     homepage = "http://drobilla.net/software/sord";

@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
     runHook preBuild
 
     patchShebangs --build ./build
+    substituteInPlace ./build \
+      --replace "javac" "javac -encoding utf8"
     ./build
   '' + lib.optionalString buildNativeImage ''
     native-image --report-unsupported-elements-at-runtime \

@@ -16,7 +16,7 @@ let
 
 in linux.override {
   argsOverride = {
-    modDirVersion = "${linux.modDirVersion}-gnu";
+    modDirVersion = "${linux.modDirVersion}-gnu1";
     isLibre = true;
 
     src = stdenv.mkDerivation {
@@ -34,8 +34,6 @@ in linux.override {
         cp -r . "$out"
       '';
     };
-
-    extraMeta.broken = true;
 
     passthru.updateScript = ./update-libre.sh;
 

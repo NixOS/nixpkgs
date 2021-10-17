@@ -616,6 +616,8 @@ mapAliases ({
   osquery = throw "osquery has been removed."; # added 2019-11-24
   osxfuse = macfuse-stubs; # added 2021-03-20
   otter-browser = throw "otter-browser has been removed from nixpkgs, as it was unmaintained"; # added 2020-02-02
+  OVMF-CSM = throw "OVMF-CSM has been removed in favor of OVMFFull"; # added 2021-10-16
+  OVMF-secureBoot = throw "OVMF-secureBoot has been removed in favor of OVMFFull"; # added 2021-10-16
   owncloudclient = owncloud-client;  # added 2016-08
   ocz-ssd-guru = throw "ocz-ssd-guru has been removed due to there being no source available"; # added 2021-07-12
   p11_kit = p11-kit; # added 2018-02-25
