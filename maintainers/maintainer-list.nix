@@ -7653,6 +7653,12 @@
     githubId = 99988;
     name = "Maarten Hoogendoorn";
   };
+  MoritzBoehme = {
+    email = "mail@moritzboeh.me";
+    github = "MoritzBoehme";
+    githubId = 42215704;
+    name = "Moritz Boehme";
+  };
   MostAwesomeDude = {
     email = "cds@corbinsimpson.com";
     github = "MostAwesomeDude";
