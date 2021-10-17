@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchurl
+, fetchpatch
 , alsa-lib
 , dbus
 , ell
@@ -28,6 +29,29 @@ in stdenv.mkDerivation rec {
     sha256 = "sha256-g6/WxSF5VUv+q7y1OP7C62vpCorDxAhxtJ162LScQjs=";
   };
 
+  patches = [
+    # fixes pkgsMusl.bluez build
+    (fetchpatch {
+      url = "https://git.alpinelinux.org/aports/plain/main/bluez/fix-musl.patch?id=dd7670b95f04c6dda707e3e0e9ced86cf2797e1c";
+      sha256 = "1zx1qy637d7nm87r3xb5snwlq7ajpdw5abbnwr0rnn4fvbz90xxs";
+    })
+    (fetchpatch {
+      url = "https://git.alpinelinux.org/aports/plain/main/bluez/musl.patch?id=dd7670b95f04c6dda707e3e0e9ced86cf2797e1c";
+      sha256 = "1abamk3p7xwfvbsg090rj5zzxjyw1q3xashmgy4gwfz188nvlwbk";
+    })
+  ];
+
+  postPatch = ''
+    substituteInPlace tools/hid2hci.rules \
+      --replace /sbin/udevadm ${systemd}/bin/udevadm \
+      --replace "hid2hci " "$out/lib/udev/hid2hci "
+    # Disable some tests:
+    # - test-mesh-crypto depends on the following kernel settings:
+    #   CONFIG_CRYPTO_[USER|USER_API|USER_API_AEAD|USER_API_HASH|AES|CCM|AEAD|CMAC]
+    if [[ ! -f unit/test-mesh-crypto.c ]]; then echo "unit/test-mesh-crypto.c no longer exists"; false; fi
+    echo 'int main() { return 77; }' > unit/test-mesh-crypto.c
+  '';
+
   buildInputs = [
     alsa-lib
     dbus
@@ -47,17 +71,6 @@ in stdenv.mkDerivation rec {
   ];
 
   outputs = [ "out" "dev" ] ++ lib.optional doCheck "test";
-
-  postPatch = ''
-    substituteInPlace tools/hid2hci.rules \
-      --replace /sbin/udevadm ${systemd}/bin/udevadm \
-      --replace "hid2hci " "$out/lib/udev/hid2hci "
-    # Disable some tests:
-    # - test-mesh-crypto depends on the following kernel settings:
-    #   CONFIG_CRYPTO_[USER|USER_API|USER_API_AEAD|USER_API_HASH|AES|CCM|AEAD|CMAC]
-    if [[ ! -f unit/test-mesh-crypto.c ]]; then echo "unit/test-mesh-crypto.c no longer exists"; false; fi
-    echo 'int main() { return 77; }' > unit/test-mesh-crypto.c
-  '';
 
   configureFlags = [
     "--localstatedir=/var"
