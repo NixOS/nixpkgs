@@ -11,11 +11,11 @@ buildGoModule rec {
     sha256 = "sha256-hquxv1BluR535WvMtJlVyP7JuARDNGDjPAbdSSj2juo=";
   };
 
-  nativeBuildInputs = [ installShellFiles ];
-
   vendorSha256 = null;
 
   subPackages = [ "cmd/kn" ];
+
+  nativeBuildInputs = [ installShellFiles ];
 
   ldflags = [
     "-X knative.dev/client/pkg/kn/commands/version.Version=v${version}"
