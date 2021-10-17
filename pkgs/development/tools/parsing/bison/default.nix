@@ -14,6 +14,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-BsnhO99+sk1M62tZIFpPZ8LH5yExGWREMP6C+9FKCrs=";
   };
 
+  # gnulib relies on --host= to detect iconv() features on musl().
+  # Otherwise tests fail due to incorrect unicode symbol oconversion.
+  configurePlatforms = [ "build" "host" ];
+
   nativeBuildInputs = [ m4 perl ] ++ lib.optional stdenv.isSunOS help2man;
   propagatedBuildInputs = [ m4 ];
 
