@@ -1,0 +1,11 @@
+{
+  "url": "https://github.com/alecthomas/chroma.git",
+  "rev": "6520148857c2ae3106ff371e527abea815b23915",
+  "date": "2021-10-17T08:46:20+11:00",
+  "path": "/nix/store/0s8a46d1nyjl3yhsgni2jz5vdv95cka8-chroma",
+  "sha256": "1iy6mymdjxbl5wbll1mivv7gqdyqhl6xpfqps99z307m7y38r1ni",
+  "fetchLFS": false,
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "leaveDotGit": false
+}
