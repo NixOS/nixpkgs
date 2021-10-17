@@ -10,13 +10,13 @@
 
 mkDerivation rec {
   pname = "flameshot";
-  version = "0.10.1";
+  version = "unstable-2021-10-17";
 
   src = fetchFromGitHub {
     owner = "flameshot-org";
     repo = "flameshot";
-    rev = "v${version}";
-    sha256 = "1ncknjayl6am740f49g0lc28z1zsifbicxz1j1kwps3ksj15nl7a";
+    rev = "7977cbb52c2d785abd0d85d9df5991e8f7cae441";
+    sha256 = "1dljxin5zvlzwzdvggn6kf9q08wawlqcfk29kxwcjflx3279fnmr";
   };
 
   passthru = {
@@ -27,6 +27,8 @@ mkDerivation rec {
 
   nativeBuildInputs = [ cmake qttools qtsvg ];
   buildInputs = [ qtbase ];
+
+  cmakeFlags = [ "-DUSE_LAUNCHER_ABSOLUTE_PATH:BOOL=OFF" ];
 
   meta = with lib; {
     description = "Powerful yet simple to use screenshot software";
