@@ -87,6 +87,16 @@ def generate_our_versions(factorio_versions: FactorioVersionsJSON) -> OurVersion
         if not factorio_versions[rc.name]:
             factorio_versions[rc.name] = factorio_versions['stable']
 
+    # Sometimes, factorio.com's API just doesn't advertise a demo version for experimental
+    if 'demo' not in factorio_versions['experimental']:
+        logging.debug("No 'demo' release in 'experimental' channel.")
+
+        if factorio_versions['experimental']['alpha'] == factorio_versions['stable']['alpha']:
+            logging.debug("'experimental' is the same as 'stable', setting 'demo' from it.")
+            factorio_versions['experimental']['demo'] = factorio_versions['stable']['demo']
+        else:
+            logging.error("'experimental' isn't the same version as 'stable' and doesn't have a 'demo' release.")
+
     for system in SYSTEMS:
         for release_type in RELEASE_TYPES:
             for release_channel in RELEASE_CHANNELS:
