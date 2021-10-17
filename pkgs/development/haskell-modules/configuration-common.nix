@@ -1272,10 +1272,21 @@ self: super: {
   gi-cairo-render = doJailbreak super.gi-cairo-render;
   gi-cairo-connector = doJailbreak super.gi-cairo-connector;
 
-  # Remove when https://github.com/gtk2hs/svgcairo/pull/10 gets merged.
-  svgcairo = appendPatch super.svgcairo (pkgs.fetchpatch {
-    url = "https://github.com/gtk2hs/svgcairo/commit/df6c6172b52ecbd32007529d86ba9913ba001306.patch";
-    sha256 = "128qrns56y139vfzg1rbyqfi2xn8gxsmpnxv3zqf4v5spsnprxwh";
+  svgcairo = overrideCabal super.svgcairo (drv: {
+    patches = [
+      # Remove when https://github.com/gtk2hs/svgcairo/pull/10 gets merged.
+      (pkgs.fetchpatch {
+        url = "https://github.com/gtk2hs/svgcairo/commit/df6c6172b52ecbd32007529d86ba9913ba001306.patch";
+        sha256 = "128qrns56y139vfzg1rbyqfi2xn8gxsmpnxv3zqf4v5spsnprxwh";
+      })
+      # The update here breaks svgcairo:
+      # https://github.com/NixOS/nixpkgs/commit/08fcd73d9dc9a28aa901210b259d9bfb3c228018
+      # and updating the call to the header with the correct name fixes it.
+      (pkgs.fetchpatch {
+        url = "https://github.com/dalpd/svgcairo/commit/4dc6d8d3a6c24be0b8c1fd73b282ff247e7b1e6f.patch";
+        sha256 = "1pq9ld9z67zsxj8vqjf82qwckcp69lvvnrjb7wsyb5jc6jaj3q0a";
+      })
+    ];
   });
 
   # Missing -Iinclude parameter to doc-tests (pull has been accepted, so should be resolved when 0.5.3 released)
