@@ -42,7 +42,7 @@ let
   src = fetchFromGitHub {
     owner = "rstudio";
     repo = "rstudio";
-    rev = version;
+    rev = "v${version}";
     sha256 = "sha256-9c1bNsf8kJjpcZ2cMV/pPNtXQkFOntX29a1cdnXpllE=";
   };
 
