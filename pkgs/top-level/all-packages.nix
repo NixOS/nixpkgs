@@ -26486,7 +26486,7 @@ with pkgs;
   };
 
   # Wraps without trigerring a rebuild
-  wrapMpv = callPackage ../applications/video/mpv/wrapper.nix { };
+  wrapMpv = callPackage ../applications/video/mpv/wrapper.nix { youtube-dl = yt-dlp.override { withAlias = true; }; };
   mpv = wrapMpv mpv-unwrapped {};
 
   mpvScripts = recurseIntoAttrs {
