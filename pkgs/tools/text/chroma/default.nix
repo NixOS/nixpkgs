@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "chroma";
-  version = "0.9.2";
+  version = "0.9.4";
 
   src = fetchFromGitHub {
     owner  = "alecthomas";
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "19d7yr6q8kwrm91yyglmw9n7wa861sgi6dbwn8sl6dp55czfwvaq";
+    sha256 = "14jp6f83ca2srcylf9w6v7cvznrm1sbpcs6lk7pimgr3jhy5j339";
     # populate values otherwise taken care of by goreleaser,
     # unfortunately these require us to use git. By doing
     # this in postFetch we can delete .git afterwards and
@@ -29,9 +29,10 @@ buildGoModule rec {
     '';
   };
 
-  vendorSha256 = "0y8mp08zccn9qxrsj9j7vambz8dwzsxbbgrlppzam53rg8rpxhrg";
+  vendorSha256 = "1l5ryhwifhff41r4z1d2lifpvjcc4yi1vzrzlvkx3iy9dmxqcssl";
 
-  subPackages = [ "cmd/chroma" ];
+  modRoot = "./cmd/chroma";
+
 
   meta = with lib; {
     homepage = "https://github.com/alecthomas/chroma";
