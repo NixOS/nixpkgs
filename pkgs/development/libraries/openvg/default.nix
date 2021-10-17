@@ -23,7 +23,6 @@ rec {
     nativeBuildInputs = [ cmake ];
 
     buildInputs = [
-      #libGL # -> libglvnd
       libGLU
       freeglut
       libglvnd # GL/glx.h
@@ -33,10 +32,17 @@ rec {
     ];
 
     src = fetchFromGitHub {
+      /*
       owner = "vpxyz";
       repo = "ShivaVG";
       rev = "e0da00336ae731ad76d93312a8542a079a39cd9d";
       sha256 = "IrzIMggjwoEppJ0pL+vrPbRpo3anvxt/784AZYD5eXo=";
+      */
+      # https://github.com/vpxyz/ShivaVG/pull/4
+      owner = "milahu";
+      repo = "ShivaVG";
+      rev = "a30c5bce2c6ca0d17f230b6c65687e452536f90a";
+      sha256 = "stMJ8e02q+shZAsfCD9rC7CVnoVcs9gGH7Ym92PJHB0=";
     };
 
     cmakeFlags = [ "-DBUILD_ALL_EXAMPLES=no" ]; # 20 seconds vs 320 seconds
@@ -67,6 +73,7 @@ rec {
 
     nativeBuildInputs = [ autoconf automake libtool ];
     buildInputs = [
+      # TODO libGL -> libglvnd?
       libGL
       libGLU
       glew

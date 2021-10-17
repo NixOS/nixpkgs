@@ -65,6 +65,8 @@ stdenv.mkDerivation {
   inherit qtCompatVersion src version;
   debug = debugSymbols;
 
+  #cmakeFlags = [ "--debug-output" ]; # noisy
+
   propagatedBuildInputs = [
     libxml2 libxslt openssl sqlite sqlite.out sqlite.dev zlib
     unixODBC
@@ -209,13 +211,21 @@ stdenv.mkDerivation {
   qtDocPrefix = "share/doc/qt-${qtCompatVersion}";
 
   setOutputFlags = false;
+
   # out-of-tree build in $PWD/build
   preConfigure = ''
     export LD_LIBRARY_PATH="$PWD/build/lib:$PWD/build/plugins/platforms''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
-
+    export LD_LIBRARY_PATH="${openvg.shivavg}/lib:$LD_LIBRARY_PATH"
     NIX_CFLAGS_COMPILE+=" -DNIXPKGS_QT_PLUGIN_PREFIX=\"$qtPluginPrefix\""
-
-    # TODO patch /bin/ls
+  '' +
+    # enable openvg. experimental. maybe not implemented
+    # testing qt openvg: https://bugreports.qt.io/browse/QTBUG-25720
+    # qtperf6 -graphicssystem openvg
+    # qtperf6 -graphicssystem OpenVG
+    # qtperf6 -graphicssystem ShivaVG
+  ''
+    sed -i 's,#### Tests,qt_find_package(OpenVG PROVIDED_TARGETS OpenVG::OpenVG MODULE_NAME gui QMAKE_LIB openvg MARK_OPTIONAL)\n\n&,' src/gui/configure.cmake
+    sed -i 's,CONDITION libs.openvg OR FIXME,CONDITION QT_FEATURE_library AND QT_FEATURE_opengl AND OpenVG_FOUND,' src/gui/configure.cmake
   '';
 
   postConfigure = ''
@@ -281,7 +291,15 @@ stdenv.mkDerivation {
     "-system-proxies"
     "-pkg-config"
     "-ccache" # FIXME Using ccache: no
-    "-openvg" # TODO requires GL -> not on darwin
+
+    "-openvg" # FIXME remove? no effect?
+    # qtbase/src/gui/qt_cmdline.cmake:26:qt_commandline_option(openvg TYPE boolean)
+    # qtbase/src/gui/configure.cmake:1208:qt_configure_add_summary_entry(ARGS "openvg")
+
+    "-journald"
+    "-sctp"
+    "-libproxy"
+    "-sqlite" "system"
 
     "-gui"
     "-widgets"
