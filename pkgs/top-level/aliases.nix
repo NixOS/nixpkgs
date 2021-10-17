@@ -853,7 +853,7 @@ mapAliases ({
   solr_8 = solr; # added 2021-01-30
   spectral = neochat; # added 2020-12-27
   sundials_3 = throw "sundials_3 was removed in 2020-02. outdated and no longer needed";
-  sxiv = nsxiv; # added 2021-10-17 
+  sxiv = nsxiv; # added 2021-10-17
 
   # added 2020-02-10
   sourceHanSansPackages = {
