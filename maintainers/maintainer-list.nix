@@ -12845,5 +12845,11 @@
     github = "mbprtpmnr";
     githubId = 88109321;
   };
+  dillenburg = {
+    name = "Tiago Dillenburg";
+    email = "TiagoDillenburg@users.noreply.github.com";
+    github = "TiagoDillenburg";
+    githubId = 13285472;
+  };
 
 }

@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Neo Simple X Image Viewer";
     homepage = "https://github.com/nsxiv/nsxiv";
+    maintainers = with maintainers; [ dillenburg ];
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };
