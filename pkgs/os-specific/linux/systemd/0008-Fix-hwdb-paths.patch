@@ -1,7 +1,7 @@
-From 4561f306751256a77d4c78dddf5c3d3056825b7a Mon Sep 17 00:00:00 2001
+From 992d0e6abb09aacceee2f8646c4bcdacf7277dc7 Mon Sep 17 00:00:00 2001
 From: Nikolay Amiantov <ab@fmap.me>
 Date: Thu, 7 Jul 2016 02:47:13 +0300
-Subject: [PATCH 08/22] Fix hwdb paths
+Subject: [PATCH 08/19] Fix hwdb paths
 
 Patch by vcunat.
 ---

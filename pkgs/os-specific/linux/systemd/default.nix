@@ -119,7 +119,7 @@ assert withHomed -> withCryptsetup;
 assert withCryptsetup -> (cryptsetup != null);
 let
   wantCurl = withRemote || withImportd;
-  version = "249.4";
+  version = "249.5";
 in
 stdenv.mkDerivation {
   inherit pname version;
@@ -130,7 +130,7 @@ stdenv.mkDerivation {
     owner = "systemd";
     repo = "systemd-stable";
     rev = "v${version}";
-    sha256 = "0pqi9gbk9kgwvd0idf13ybxz7s4h5przn01bwj6fna44jr0wy41c";
+    sha256 = "0bir2syy20rdi59sv8xp8nw1c92zl9z0wmv7ggsll8dca7niqwbp";
   };
 
   # If these need to be regenerated, `git am path/to/00*.patch` them into a
@@ -157,27 +157,12 @@ stdenv.mkDerivation {
     ./0017-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
     ./0018-pkg-config-derive-prefix-from-prefix.patch
 
-    # In v249 a bunch of meson files had been touched as part of the migration to
-    # jinja2 for templating. Unfortunately some of those files lost the `install_sysconfdir_samples` check.
-    # The following two patches are part of a PR that was filed to fix those cases.
-    # https://github.com/systemd/systemd/pull/20303
-    ./0019-core-respect-install_sysconfdir_samples-in-meson-fil.patch
-    ./0020-login-respect-install_sysconfdir_samples-in-meson-fi.patch
-
     # In v248 or v249 we started to get in trouble due to our
     # /etc/systemd/system being a symlink and thus being treated differently by
     # systemd. With the below patch we mitigate that effect by special casing
     # all our root unit dirs if they are symlinks. This does exactly what we
     # need (AFAICT).
-    ./0021-core-handle-lookup-paths-being-symlinks.patch
-
-    # The way files are being tested for being executable changed in v248/v249
-    # which caused our confinement setup to fail as we do not mount /proc by
-    # default.
-    # The issue has been reported upstream and this patch carries the upstream
-    # fix for the same. Upstream now has a test for this scenario.
-    # https://github.com/systemd/systemd/issues/20514
-    ./0022-path-util-make-find_executable-work-without-proc-mou.patch
+    ./0019-core-handle-lookup-paths-being-symlinks.patch
   ];
 
   postPatch = ''
