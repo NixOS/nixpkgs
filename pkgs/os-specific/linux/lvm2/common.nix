@@ -1,3 +1,5 @@
+{ version, sha256Hash }:
+
 { lib, stdenv
 , fetchpatch
 , fetchurl
@@ -15,12 +17,12 @@
 assert enableDmeventd -> enableCmdlib;
 
 stdenv.mkDerivation rec {
-  pname = "lvm2" + lib.optionalString enableDmeventd "with-dmeventd";
-  version = "2.03.12";
+  pname = "lvm2" + lib.optionalString enableDmeventd "-with-dmeventd";
+  inherit version;
 
   src = fetchurl {
     url = "https://mirrors.kernel.org/sourceware/lvm2/LVM2.${version}.tgz";
-    sha256 = "1shczwfd0888dchjiaqzd48ampm6f8y0ngsqd99fy4nxlbr5q1vn";
+    sha256 = sha256Hash;
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -60,6 +62,7 @@ stdenv.mkDerivation rec {
       --replace "(BINDIR)/systemd-run" /run/current-system/systemd/bin/systemd-run
 
     substituteInPlace make.tmpl.in --replace "@systemdsystemunitdir@" "$out/lib/systemd/system"
+  '' + lib.optionalString (lib.versionAtLeast version "2.03") ''
     substituteInPlace libdm/make.tmpl.in --replace "@systemdsystemunitdir@" "$out/lib/systemd/system"
   '';
 
