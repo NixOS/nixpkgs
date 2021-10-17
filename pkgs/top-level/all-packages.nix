@@ -27657,8 +27657,6 @@ with pkgs;
 
   swingsane = callPackage ../applications/graphics/swingsane { };
 
-  sxiv = callPackage ../applications/graphics/sxiv { };
-
   nsxiv = callPackage ../applications/graphics/nsxiv { };
 
   resilio-sync = callPackage ../applications/networking/resilio-sync { };
