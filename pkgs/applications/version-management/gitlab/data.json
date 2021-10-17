@@ -1,6 +1,7 @@
 {
   "version": "14.3.3",
   "repo_hash": "1sh8lf6arqljzc0hmajl2r2j38ahk9hl6kikg9inw72xycrll7dk",
+  "yarn_hash": "0b6brkxg93gv4gjp1f7qlx7v7q7mb8z9vikcz98igdnhm46nl4dn",
   "owner": "gitlab-org",
   "repo": "gitlab",
   "rev": "v14.3.3-ee",
