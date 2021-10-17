@@ -2418,6 +2418,8 @@ in {
 
   environmental-override = callPackage ../development/python-modules/environmental-override { };
 
+  environs = callPackage ../development/python-modules/environs { };
+
   envisage = callPackage ../development/python-modules/envisage { };
 
   envs = callPackage ../development/python-modules/envs { };
