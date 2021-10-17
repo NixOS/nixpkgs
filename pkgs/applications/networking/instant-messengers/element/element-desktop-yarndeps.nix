@@ -730,6 +730,14 @@
       };
     }
     {
+      name = "_types_node___node_14.17.21.tgz";
+      path = fetchurl {
+        name = "_types_node___node_14.17.21.tgz";
+        url  = "https://registry.yarnpkg.com/@types/node/-/node-14.17.21.tgz";
+        sha1 = "6359d8cf73481e312a43886fa50afc70ce5592c6";
+      };
+    }
+    {
       name = "_types_plist___plist_3.0.2.tgz";
       path = fetchurl {
         name = "_types_plist___plist_3.0.2.tgz";
@@ -1626,11 +1634,11 @@
       };
     }
     {
-      name = "core_js___core_js_3.17.3.tgz";
+      name = "core_js___core_js_3.18.2.tgz";
       path = fetchurl {
-        name = "core_js___core_js_3.17.3.tgz";
-        url  = "https://registry.yarnpkg.com/core-js/-/core-js-3.17.3.tgz";
-        sha1 = "8e8bd20e91df9951e903cabe91f9af4a0895bc1e";
+        name = "core_js___core_js_3.18.2.tgz";
+        url  = "https://registry.yarnpkg.com/core-js/-/core-js-3.18.2.tgz";
+        sha1 = "63a551e8a29f305cd4123754846e65896619ba5b";
       };
     }
     {
@@ -2002,11 +2010,11 @@
       };
     }
     {
-      name = "electron___electron_13.4.0.tgz";
+      name = "electron___electron_13.5.1.tgz";
       path = fetchurl {
-        name = "electron___electron_13.4.0.tgz";
-        url  = "https://registry.yarnpkg.com/electron/-/electron-13.4.0.tgz";
-        sha1 = "f9f9e518d8c6bf23bfa8b69580447eea3ca0f880";
+        name = "electron___electron_13.5.1.tgz";
+        url  = "https://registry.yarnpkg.com/electron/-/electron-13.5.1.tgz";
+        sha1 = "76c02c39be228532f886a170b472cbd3d93f0d0f";
       };
     }
     {
