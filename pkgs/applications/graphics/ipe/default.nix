@@ -44,11 +44,11 @@ mkDerivation rec {
     zlib
   ];
 
-  IPEPREFIX=placeholder "out";
-  URWFONTDIR="${texlive}/texmf-dist/fonts/type1/urw/";
+  IPEPREFIX = placeholder "out";
+  URWFONTDIR = "${texlive}/texmf-dist/fonts/type1/urw/";
   LUA_PACKAGE = "lua";
 
-  qtWrapperArgs = [ "--prefix PATH : ${texlive}/bin"  ];
+  qtWrapperArgs = [ "--prefix PATH : ${texlive}/bin" ];
 
   enableParallelBuilding = true;
 
@@ -76,7 +76,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "An editor for drawing figures";
-    homepage = "http://ipe.otfried.org";  # https not available
+    homepage = "http://ipe.otfried.org"; # https not available
     license = licenses.gpl3Plus;
     longDescription = ''
       Ipe is an extensible drawing editor for creating figures in PDF and Postscript format.
