@@ -966,6 +966,8 @@ with pkgs;
 
   ventoy-bin = callPackage ../tools/cd-dvd/ventoy-bin { };
 
+  vopono = callPackage ../tools/networking/vopono { };
+
   xcd = callPackage ../tools/misc/xcd { };
 
   xtrt = callPackage ../tools/archivers/xtrt { };
