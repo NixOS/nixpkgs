@@ -56,6 +56,12 @@ python3.pkgs.buildPythonApplication rec {
 
   doCheck = false;
 
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   meta = with lib; {
     description = "Terminal emulator with support for tiling and tabs";
     longDescription = ''
