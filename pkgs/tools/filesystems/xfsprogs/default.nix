@@ -13,6 +13,15 @@ stdenv.mkDerivation rec {
 
   outputs = [ "bin" "dev" "out" "doc" ];
 
+  patches = [
+    # Fix musl build
+    (fetchpatch {
+      name = "missing-signal.h";
+      url = "https://git.alpinelinux.org/aports/plain/main/xfsprogs/missing-signal.h.patch?id=e0003b414d125ad32825014dcec2225df00f0a36";
+      sha256 = "0a5fxw59d38b0zh1xjliv37gwq4c3fxa21j5sgy79ir9p9zns7vw";
+    })
+  ];
+
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [
     autoconf automake libtool gettext pkg-config
