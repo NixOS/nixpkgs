@@ -59,6 +59,11 @@ buildPythonPackage rec {
     "tests/sspi_stub.py"
   ];
 
+  disabledTests = [
+    # No PIN set
+    "TestSKAuthCTAP2"
+  ];
+
   pythonImportsCheck = [ "asyncssh" ];
 
   meta = with lib; {
