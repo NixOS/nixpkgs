@@ -1,4 +1,4 @@
-{ autoPatchelfHook, dpkg, fetchurl, glibc, lib, gnome, qt5, stdenv, }:
+{ lib, qt5, fetchurl, autoPatchelfHook, dpkg, glibc, gnome }:
 
 qt5.mkDerivation rec {
   pname = "synology-drive";
