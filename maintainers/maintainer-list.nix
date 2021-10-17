@@ -11000,6 +11000,12 @@
     githubId = 1634990;
     name = "Tom McLaughlin";
   };
+  thomassdk = {
+    email = "thomassdk@pm.me";
+    github = "thomassdk";
+    githubId = 32598350;
+    name = "Thomas Kelly";
+  };
   thoughtpolice = {
     email = "aseipp@pobox.com";
     github = "thoughtpolice";
