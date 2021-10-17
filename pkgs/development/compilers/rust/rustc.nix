@@ -87,6 +87,10 @@ in stdenv.mkDerivation rec {
     "${setBuild}.cxx=${cxxForBuild}"
     "${setHost}.cxx=${cxxForHost}"
     "${setTarget}.cxx=${cxxForTarget}"
+
+    "${setBuild}.crt-static=${lib.boolToString stdenv.buildPlatform.isStatic}"
+    "${setHost}.crt-static=${lib.boolToString stdenv.hostPlatform.isStatic}"
+    "${setTarget}.crt-static=${lib.boolToString stdenv.targetPlatform.isStatic}"
   ] ++ optionals (!withBundledLLVM) [
     "--enable-llvm-link-shared"
     "${setBuild}.llvm-config=${llvmSharedForBuild.dev}/bin/llvm-config"
