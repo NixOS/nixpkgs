@@ -59,6 +59,7 @@ in stdenv.mkDerivation rec {
     cxxForHost = "${pkgsBuildHost.targetPackages.stdenv.cc}/bin/${pkgsBuildHost.targetPackages.stdenv.cc.targetPrefix}c++";
     ccForTarget  = "${pkgsBuildTarget.targetPackages.stdenv.cc}/bin/${pkgsBuildTarget.targetPackages.stdenv.cc.targetPrefix}cc";
     cxxForTarget = "${pkgsBuildTarget.targetPackages.stdenv.cc}/bin/${pkgsBuildTarget.targetPackages.stdenv.cc.targetPrefix}c++";
+    toFlag = x: if x then "true" else "false";
   in [
     "--release-channel=stable"
     "--set=build.rustc=${rustPlatform.rust.rustc}/bin/rustc"
@@ -87,6 +88,10 @@ in stdenv.mkDerivation rec {
     "${setBuild}.cxx=${cxxForBuild}"
     "${setHost}.cxx=${cxxForHost}"
     "${setTarget}.cxx=${cxxForTarget}"
+
+    "${setBuild}.crt-static=${toFlag stdenv.buildPlatform.isStatic}"
+    "${setHost}.crt-static=${toFlag stdenv.hostPlatform.isStatic}"
+    "${setTarget}.crt-static=${toFlag stdenv.targetPlatform.isStatic}"
   ] ++ optionals (!withBundledLLVM) [
     "--enable-llvm-link-shared"
     "${setBuild}.llvm-config=${llvmSharedForBuild.dev}/bin/llvm-config"
