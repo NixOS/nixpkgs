@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "bond-api";
-  version = "0.1.13";
+  version = "0.1.14";
 
   src = fetchFromGitHub {
     owner = "prystupa";
     repo = "bond-api";
     rev = "v${version}";
-    sha256 = "0v3bwbpn98fjm8gza2k7fb7w5ps3982kfvbck5x0fh2xq2825b80";
+    sha256 = "0s7an6kbib1immrbwrh4pzj812zwf8kj3kgky5k3qwxzrj0iv6ak";
   };
 
   propagatedBuildInputs = [
