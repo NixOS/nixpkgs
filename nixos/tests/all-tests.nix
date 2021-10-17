@@ -311,6 +311,7 @@ in
   nitter = handleTest ./nitter.nix {};
   nix-serve = handleTest ./nix-ssh-serve.nix {};
   nix-ssh-serve = handleTest ./nix-ssh-serve.nix {};
+  nixops = handleTest ./nixops/default.nix {};
   nixos-generate-config = handleTest ./nixos-generate-config.nix {};
   node-red = handleTest ./node-red.nix {};
   nomad = handleTest ./nomad.nix {};
