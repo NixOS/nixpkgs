@@ -78,7 +78,7 @@ self: super: {
     sha256 = "1h5ny3mlng69vwaabl3af8hlv4qi24wfw8s14lw2ksw1yjbgi0j8";
   });
 
-  cereal = appendPatch super.cereal (pkgs.fetchpatch {
+  cereal = appendPatch (doJailbreak super.cereal) (pkgs.fetchpatch {
     url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/dfd024c9a336c752288ec35879017a43bd7e85a0/patches/cereal-0.5.8.1.patch";
     sha256 = "03v4nxwz9y6viaa8anxcmp4zdf2clczv4pf9fqq6lnpplpz5i128";
   });
