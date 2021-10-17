@@ -25827,6 +25827,8 @@ with pkgs;
 
   kmymoney = libsForQt5.callPackage ../applications/office/kmymoney { };
 
+  kn = callPackage ../applications/networking/cluster/kn { };
+
   kodestudio = callPackage ../applications/editors/kodestudio { };
 
   kondo = callPackage ../applications/misc/kondo { };
