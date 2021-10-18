@@ -45,5 +45,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/sendgrid/sendgrid-python";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
+    # No support for new starkbank-ecdsa releases
+    broken = true;
   };
 }
