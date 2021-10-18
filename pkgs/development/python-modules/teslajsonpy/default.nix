@@ -10,19 +10,22 @@
 , poetry-core
 , pytest-asyncio
 , pytestCheckHook
+, pythonOlder
 , wrapt
 }:
 
 buildPythonPackage rec {
   pname = "teslajsonpy";
-  version = "1.1.0";
+  version = "1.1.1";
   format = "pyproject";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "zabuldon";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1f6gbv6pczr5nhk8jmqpskvlffjd4ai4bkrmcj171mwq45vig6xr";
+    sha256 = "sha256-FuWDNSCyk+nirIwy+hI3y3WMYoRbOrvpLhPx8Arrrv4=";
   };
 
   nativeBuildInputs = [
