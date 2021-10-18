@@ -15,10 +15,10 @@ rustPlatform.buildRustPackage rec {
     owner = "romanz";
     repo = pname;
     rev = "v${version}";
-    sha256 = "04dqbn2nfzllxfcn3v9vkfy2hn2syihijr575621r1pj65pcgf8y";
+    hash = "sha256-HrnHbjHyhhyEKadkGWH0WlgovJs77WGZ65R+Z4VduBE=";
   };
 
-  cargoSha256 = "0hl8q62lankrab8gq9vxmkn68drs0hw5pk0q6aiq8fxsb63dzsw0";
+  cargoHash = "sha256-gOvfhlm6O4SjMhjMWzgEOjdk7Kx9J/zQUnlaRYXBiEI=";
 
   # needed for librocksdb-sys
   nativeBuildInputs = [ llvmPackages.clang ];
