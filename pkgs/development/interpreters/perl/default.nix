@@ -1,6 +1,7 @@
 { config, lib, stdenv, fetchurl, fetchpatch, fetchFromGitHub, pkgs, buildPackages
 , callPackage
 , enableThreading ? true, coreutils, makeWrapper
+, enableGdbm ? true, gdbm
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -31,6 +32,8 @@ let
     outputs = [ "out" "man" "devdoc" ] ++
       optional crossCompiling "mini";
     setOutputFlags = false;
+
+    buildInputs = lib.optionals enableGdbm [ gdbm ];
 
     disallowedReferences = [ stdenv.cc ];
 
