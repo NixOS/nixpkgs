@@ -17,7 +17,20 @@
 , qtwebengine
 , rustPlatform
 , srcs
+
+# These must be updated in tandem with package updates.
+, cargoShaForVersion ? "21.08"
+, cargoSha256 ? "1pbvw9hdzn3i97mahdy9y6jnjsmwmjs3lxfz7q6r9r10i8swbkak"
 }:
+
+# Guard against incomplete updates.
+# Values are provided as callPackage inputs to enable easier overrides through overlays.
+if cargoShaForVersion != srcs.angelfish.version
+then builtins.throw ''
+  angelfish package update is incomplete.
+         Hash for cargo dependencies is declared for version ${cargoShaForVersion}, but we're building ${srcs.angelfish.version}.
+         Update the cargoSha256 and cargoShaForVersion for angelfish.
+'' else
 
 mkDerivation rec {
   pname = "angelfish";
@@ -25,7 +38,7 @@ mkDerivation rec {
   cargoDeps = rustPlatform.fetchCargoTarball {
     src = srcs.angelfish.src;
     name = "${pname}-${srcs.angelfish.version}";
-    sha256 = "1pbvw9hdzn3i97mahdy9y6jnjsmwmjs3lxfz7q6r9r10i8swbkak";
+    sha256 = cargoSha256;
   };
 
   nativeBuildInputs = [
