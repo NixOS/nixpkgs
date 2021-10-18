@@ -3,14 +3,15 @@
 , async-timeout
 , buildPythonPackage
 , fetchPypi
-, isPy3k
+, pythonOlder
 , slixmpp
 }:
 
 buildPythonPackage rec {
   pname = "aioharmony";
   version = "0.2.8";
-  disabled = !isPy3k;
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
@@ -26,7 +27,10 @@ buildPythonPackage rec {
   # aioharmony does not seem to include tests
   doCheck = false;
 
-  pythonImportsCheck = [ "aioharmony.harmonyapi" "aioharmony.harmonyclient" ];
+  pythonImportsCheck = [
+    "aioharmony.harmonyapi"
+    "aioharmony.harmonyclient"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/ehendrix23/aioharmony";
