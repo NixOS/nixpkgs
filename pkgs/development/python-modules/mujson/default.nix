@@ -21,6 +21,7 @@ buildPythonPackage rec {
 
   # No tests
   doCheck = false;
+  pythonImportsCheck = [ "mujson" ];
 
   meta = with lib; {
     description = "Use the fastest JSON functions available at import time";
