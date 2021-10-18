@@ -1,4 +1,4 @@
-{ lib, stdenv, substituteAll, fetchFromGitHub, glib, glib-networking, libgtop, gnome }:
+{ lib, stdenv, substituteAll, fetchFromGitHub, fetchpatch, glib, glib-networking, libgtop, gnome }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-system-monitor";
@@ -23,6 +23,11 @@ stdenv.mkDerivation rec {
       clutter_path = gnome.mutter.libdir; # only needed for GNOME < 40.
       gtop_path = "${libgtop}/lib/girepository-1.0";
       glib_net_path = "${glib-networking}/lib/girepository-1.0";
+    })
+    # Support GNOME 41
+    (fetchpatch {
+      url = "https://github.com/paradoxxxzero/gnome-shell-system-monitor-applet/pull/718/commits/f4ebc29afa707326b977230329e634db169f55b1.patch";
+      sha256 = "0ndnla41mvrww6ldf9d55ar1ibyj8ak5pp1dkjg75jii9slgzjqb";
     })
   ];
 
