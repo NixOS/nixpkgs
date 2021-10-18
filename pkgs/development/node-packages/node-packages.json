@@ -6,6 +6,7 @@
 , "@commitlint/cli"
 , "@commitlint/config-conventional"
 , "@hyperspace/cli"
+, "@medable/mdctl-cli"
 , "@nerdwallet/shepherd"
 , "@nestjs/cli"
 , "@squoosh/cli"
