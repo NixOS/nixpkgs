@@ -19192,6 +19192,8 @@ with pkgs;
 
   sdrplay = callPackage ../applications/radio/sdrplay {};
 
+  sdrpp = callPackage ../applications/radio/sdrpp { };
+
   sblim-sfcc = callPackage ../development/libraries/sblim-sfcc {};
 
   selinux-sandbox = callPackage ../os-specific/linux/selinux-sandbox { };
