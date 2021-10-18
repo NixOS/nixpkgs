@@ -4716,7 +4716,6 @@ broken-packages:
   - SVD2HS
   - svfactor
   - svg-builder-fork
-  - svgcairo
   - svgutils
   - svm-light-utils
   - svm-simple
