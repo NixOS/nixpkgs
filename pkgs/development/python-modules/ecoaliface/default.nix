@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "ecoaliface";
-  version = "0.4.0";
+  version = "0.5.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1hzx0r3311f952jik3pgmrg74xp5m6w9c5v6snfrb8w2m19vs6qy";
+    sha256 = "sha256-8Xs0Us/TG7jDUJ1ZuEaInIHbX7hQgsBhwycDFiy+kIM=";
   };
 
   propagatedBuildInputs = [
