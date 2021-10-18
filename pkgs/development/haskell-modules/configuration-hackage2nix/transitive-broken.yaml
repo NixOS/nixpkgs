@@ -331,15 +331,9 @@ dont-distribute-packages:
  - Shellac-haskeline
  - Shellac-readline
  - ShortestPathProblems
- - Shpadoinkle-backend-pardiff
- - Shpadoinkle-backend-static
- - Shpadoinkle-developer-tools
  - Shpadoinkle-disembodied
  - Shpadoinkle-examples
- - Shpadoinkle-html
  - Shpadoinkle-router
- - Shpadoinkle-template
- - Shpadoinkle-widgets
  - SimpleGL
  - SimpleLog
  - SimpleServer
@@ -733,9 +727,9 @@ dont-distribute-packages:
  - claferwiki
  - clash
  - clash-ghc
- - clash-ghc_1_4_4
+ - clash-ghc_1_4_5
  - clash-lib
- - clash-lib_1_4_4
+ - clash-lib_1_4_5
  - clash-multisignal
  - clash-prelude-quickcheck
  - clash-shake
@@ -1075,6 +1069,7 @@ dont-distribute-packages:
  - every-bit-counts
  - exception-monads-fd
  - exference
+ - exon
  - expand
  - expat-enumerator
  - expiring-containers
@@ -2313,6 +2308,7 @@ dont-distribute-packages:
  - mkbndl
  - mlist
  - mmark-cli
+ - mmark-cli_0_0_5_1
  - mmark-ext
  - mmtl-base
  - moan
@@ -2631,7 +2627,6 @@ dont-distribute-packages:
  - proto3-suite
  - protobuf-native
  - protocol-buffers-descriptor-fork
- - proton
  - psc-ide
  - puffytools
  - pugs-compat
@@ -3443,6 +3438,7 @@ dont-distribute-packages:
  - xml-push
  - xml-query-xml-conduit
  - xml-query-xml-types
+ - xml-syntax
  - xml-tydom-conduit
  - xml2x
  - xmltv

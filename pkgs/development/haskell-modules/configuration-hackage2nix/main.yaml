@@ -149,6 +149,8 @@ package-maintainers:
     - pretty-simple
     - spago
     - termonad
+  dalpd:
+    - svgcairo
   domenkozar:
     - cachix
     - cachix-api
