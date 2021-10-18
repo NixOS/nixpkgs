@@ -10313,6 +10313,7 @@ with pkgs;
 
   wasm-bindgen-cli = callPackage ../development/tools/wasm-bindgen-cli {
     inherit (darwin.apple_sdk.frameworks) Security;
+    nodejs = nodejs_latest;
   };
 
   welkin = callPackage ../tools/graphics/welkin {};
