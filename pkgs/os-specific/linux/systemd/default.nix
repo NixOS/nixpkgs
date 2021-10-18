@@ -164,10 +164,11 @@ stdenv.mkDerivation {
     ./0019-core-respect-install_sysconfdir_samples-in-meson-fil.patch
     ./0020-login-respect-install_sysconfdir_samples-in-meson-fi.patch
 
-    # In v248 or v249 we started to get in trouble due to our /etc/systemd/sytem being
-    # a symlink and thus being treated differently by systemd. With the below
-    # patch we mitigate that effect by special casing all our root unit dirs
-    # if they are symlinks. This does exactly what we need (AFAICT).
+    # In v248 or v249 we started to get in trouble due to our
+    # /etc/systemd/system being a symlink and thus being treated differently by
+    # systemd. With the below patch we mitigate that effect by special casing
+    # all our root unit dirs if they are symlinks. This does exactly what we
+    # need (AFAICT).
     ./0021-core-handle-lookup-paths-being-symlinks.patch
 
     # The way files are being tested for being executable changed in v248/v249
