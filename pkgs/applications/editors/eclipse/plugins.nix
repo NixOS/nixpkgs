@@ -647,6 +647,29 @@ rec {
     };
   };
 
+  sonarlint = buildEclipseUpdateSite rec {
+    name = "sonarlint-${version}";
+    version = "7.0.0.37874";
+
+    src = fetchzip {
+      stripRoot = false;
+      url = "https://binaries.sonarsource.com/SonarLint-for-Eclipse/releases/org.sonarlint.eclipse.site-${version}.zip";
+      sha256 = "sha256:193k30452200ps85wplgpc1x61fknh6xh165ryq7chl48g6f1ajz";
+      postFetch = ''
+        #update site includes source, which we don't care about
+        cd $out
+        find . -name \*source_\* -exec rm -v {} \;
+      '';
+    };
+
+    meta = with lib; {
+      homepage = "https://github.com/SonarSource/sonarlint-eclipse";
+      description = "SonarLint is a Free and Open Source IDE extension that identifies and helps you fix quality and security issues as you code";
+      license = licenses.lgpl3;
+      platforms = platforms.all;
+    };
+  };
+
   spotbugs = buildEclipseUpdateSite rec {
     name = "spotbugs-${version}";
     version = "3.1.11";
