@@ -5,19 +5,20 @@
 , aws-c-compression
 , aws-c-http
 , aws-c-io
+, aws-c-sdkutils
 , cmake
 , s2n-tls
 }:
 
 stdenv.mkDerivation rec {
   pname = "aws-c-auth";
-  version = "0.6.4";
+  version = "0.6.5";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-c-auth";
     rev = "v${version}";
-    sha256 = "120p69lj279yq3d2b81f45kgfrvf32j6m7s03m8hh27w8yd4vbfp";
+    sha256 = "sha256-d3UdZucicp+Z0EjWNE5Xa/EMIGPk6GtQc7f0H8RBHA8=";
   };
 
   nativeBuildInputs = [
@@ -31,6 +32,10 @@ stdenv.mkDerivation rec {
     aws-c-http
     aws-c-io
     s2n-tls
+  ];
+
+  propagatedBuildInputs = [
+    aws-c-sdkutils
   ];
 
   cmakeFlags = [
