@@ -109,7 +109,7 @@ let cfg = config.services.subsonic; in {
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       script = ''
-        ${pkgs.jre}/bin/java -Xmx${toString cfg.maxMemory}m \
+        ${pkgs.jre8}/bin/java -Xmx${toString cfg.maxMemory}m \
           -Dsubsonic.home=${cfg.home} \
           -Dsubsonic.host=${cfg.listenAddress} \
           -Dsubsonic.port=${toString cfg.port} \
