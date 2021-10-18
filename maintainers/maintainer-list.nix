@@ -4421,6 +4421,16 @@
     githubId = 54728477;
     name = "Happy River";
   };
+  hardselius = {
+    email = "martin@hardselius.dev";
+    github = "hardselius";
+    githubId = 1422583;
+    name = "Martin Hardselius";
+    keys = [{
+      longkeyid = "rsa4096/0x03A6E6F786936619";
+      fingerprint = "3F35 E4CA CBF4 2DE1 2E90  53E5 03A6 E6F7 8693 6619";
+    }];
+  };
   haslersn = {
     email = "haslersn@fius.informatik.uni-stuttgart.de";
     github = "haslersn";
