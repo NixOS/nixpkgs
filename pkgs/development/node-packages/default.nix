@@ -335,14 +335,6 @@ let
       '';
     };
 
-    netlify-cli =
-      super.netlify-cli.override {
-        preRebuild = ''
-          export ESBUILD_BINARY_PATH="${pkgs.esbuild_netlify}/bin/esbuild"
-        '';
-        meta.maintainers = with lib.maintainers; [ roberth ];
-      };
-
     ssb-server = super.ssb-server.override {
       buildInputs = [ pkgs.automake pkgs.autoconf self.node-gyp-build ];
       meta.broken = since "10";
