@@ -429,6 +429,7 @@ mattn/emmet-vim
 mattn/vim-gist
 mattn/webapi-vim
 matze/vim-move
+max397574/better-escape.nvim
 maximbaz/lightline-ale
 MaxMEllon/vim-jsx-pretty
 mbbill/undotree
@@ -518,6 +519,7 @@ norcalli/nvim-terminal.lua
 norcalli/snippets.nvim
 ntpeters/vim-better-whitespace
 numirias/semshi
+numtostr/comment.nvim
 nvie/vim-flake8
 nvim-lua/completion-nvim
 nvim-lua/diagnostic-nvim
@@ -526,6 +528,7 @@ nvim-lua/lsp_extensions.nvim
 nvim-lua/plenary.nvim
 nvim-lua/popup.nvim
 nvim-neorg/neorg@main
+nvim-telescope/telescope-cheat.nvim
 nvim-telescope/telescope-dap.nvim
 nvim-telescope/telescope-frecency.nvim
 nvim-telescope/telescope-fzf-native.nvim@main

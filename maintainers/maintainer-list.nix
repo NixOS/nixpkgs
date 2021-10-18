@@ -10513,6 +10513,13 @@
     githubId = 4477729;
     name = "Sergey Mironov";
   };
+  smitop = {
+    name = "Smitty van Bodegom";
+    email = "me@smitop.com";
+    matrix = "@smitop:kde.org";
+    github = "Smittyvb";
+    githubId = 10530973;
+  };
   sna = {
     email = "abouzahra.9@wright.edu";
     github = "s-na";

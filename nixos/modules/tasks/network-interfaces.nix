@@ -10,6 +10,8 @@ let
   hasVirtuals = any (i: i.virtual) interfaces;
   hasSits = cfg.sits != { };
   hasBonds = cfg.bonds != { };
+  hasFous = cfg.fooOverUDP != { }
+    || filterAttrs (_: s: s.encapsulation != null) cfg.sits != { };
 
   slaves = concatMap (i: i.interfaces) (attrValues cfg.bonds)
     ++ concatMap (i: i.interfaces) (attrValues cfg.bridges)
@@ -823,6 +825,71 @@ in
       });
     };
 
+    networking.fooOverUDP = mkOption {
+      default = { };
+      example =
+        {
+          primary = { port = 9001; local = { address = "192.0.2.1"; dev = "eth0"; }; };
+          backup =  { port = 9002; };
+        };
+      description = ''
+        This option allows you to configure Foo Over UDP and Generic UDP Encapsulation
+        endpoints. See <citerefentry><refentrytitle>ip-fou</refentrytitle>
+        <manvolnum>8</manvolnum></citerefentry> for details.
+      '';
+      type = with types; attrsOf (submodule {
+        options = {
+          port = mkOption {
+            type = port;
+            description = ''
+              Local port of the encapsulation UDP socket.
+            '';
+          };
+
+          protocol = mkOption {
+            type = nullOr (ints.between 1 255);
+            default = null;
+            description = ''
+              Protocol number of the encapsulated packets. Specifying <literal>null</literal>
+              (the default) creates a GUE endpoint, specifying a protocol number will create
+              a FOU endpoint.
+            '';
+          };
+
+          local = mkOption {
+            type = nullOr (submodule {
+              options = {
+                address = mkOption {
+                  type = types.str;
+                  description = ''
+                    Local address to bind to. The address must be available when the FOU
+                    endpoint is created, using the scripted network setup this can be achieved
+                    either by setting <literal>dev</literal> or adding dependency information to
+                    <literal>systemd.services.&lt;name&gt;-fou-encap</literal>; it isn't supported
+                    when using networkd.
+                  '';
+                };
+
+                dev = mkOption {
+                  type = nullOr str;
+                  default = null;
+                  example = "eth0";
+                  description = ''
+                    Network device to bind to.
+                  '';
+                };
+              };
+            });
+            default = null;
+            example = { address = "203.0.113.22"; };
+            description = ''
+              Local address (and optionally device) to bind to using the given port.
+            '';
+          };
+        };
+      });
+    };
+
     networking.sits = mkOption {
       default = { };
       example = literalExpression ''
@@ -879,6 +946,44 @@ in
             example = "enp4s0f0";
             description = ''
               The underlying network device on which the tunnel resides.
+            '';
+          };
+
+          encapsulation = with types; mkOption {
+            type = nullOr (submodule {
+              options = {
+                type = mkOption {
+                  type = enum [ "fou" "gue" ];
+                  description = ''
+                    Selects encapsulation type. See
+                    <citerefentry><refentrytitle>ip-link</refentrytitle>
+                    <manvolnum>8</manvolnum></citerefentry> for details.
+                  '';
+                };
+
+                port = mkOption {
+                  type = port;
+                  example = 9001;
+                  description = ''
+                    Destination port for encapsulated packets.
+                  '';
+                };
+
+                sourcePort = mkOption {
+                  type = nullOr types.port;
+                  default = null;
+                  example = 9002;
+                  description = ''
+                    Source port for encapsulated packets. Will be chosen automatically by
+                    the kernel if unset.
+                  '';
+                };
+              };
+            });
+            default = null;
+            example = { type = "fou"; port = 9001; };
+            description = ''
+              Configures encapsulation in UDP packets.
             '';
           };
 
@@ -1116,7 +1221,8 @@ in
     boot.kernelModules = [ ]
       ++ optional hasVirtuals "tun"
       ++ optional hasSits "sit"
-      ++ optional hasBonds "bonding";
+      ++ optional hasBonds "bonding"
+      ++ optional hasFous "fou";
 
     boot.extraModprobeConfig =
       # This setting is intentional as it prevents default bond devices

@@ -2,13 +2,13 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "auto-cpufreq";
-  version = "1.6.9";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "AdnanHodzic";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1pri182cgbrhr0adq2784gpv6q8c8kjr0jsh8wpvd1wvfsbqywrm";
+    sha256 = "0b6j26glg1ffihdr2h7dlr1lrbhkclgp17dxmkjgg5gk4mhz799r";
   };
 
   propagatedBuildInputs = with python3Packages; [ click distro psutil ];
