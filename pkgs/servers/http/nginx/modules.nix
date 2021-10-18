@@ -512,7 +512,7 @@ in
       rev = "1.29";
       sha256 = "1z0ka0cwqbgh3fv2d5yva395sf90626rdzx7lyfrgs89gy4h9nrr";
     };
-    inputs = [ pkgs.ffmpeg pkgs.fdk_aac pkgs.openssl pkgs.libxml2 pkgs.libiconv ];
+    inputs = with pkgs; [ ffmpeg fdk_aac openssl libxml2 libiconv ];
   };
 
   vts = {
