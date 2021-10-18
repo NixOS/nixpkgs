@@ -144,6 +144,8 @@ in
       '';
     };
 
+    caddy.enable = mkEnableOption "Whether to enablle caddy reverse proxy to expose jitsi-meet";
+
     prosody.enable = mkOption {
       type = bool;
       default = true;
@@ -319,6 +321,42 @@ in
         locations."=/interface_config.js" = mkDefault {
           alias = overrideJs "${pkgs.jitsi-meet}/interface_config.js" "interfaceConfig" cfg.interfaceConfig "";
         };
+      };
+    };
+
+    services.caddy = mkIf cfg.caddy.enable {
+      enable = mkDefault true;
+      virtualHosts.${cfg.hostName} = {
+        extraConfig =
+        let
+          templatedJitsiMeet = pkgs.runCommand "templated-jitsi-meet" {} ''
+            cp -R ${pkgs.jitsi-meet}/* .
+            for file in *.html **/*.html ; do
+              ${pkgs.sd}/bin/sd '<!--#include virtual="(.*)" -->' '{{ include "$1" }}' $file
+            done
+            rm config.js
+            rm interface_config.js
+            cp -R . $out
+            cp ${overrideJs "${pkgs.jitsi-meet}/config.js" "config" (recursiveUpdate defaultCfg cfg.config) cfg.extraConfig} $out/config.js
+            cp ${overrideJs "${pkgs.jitsi-meet}/interface_config.js" "interfaceConfig" cfg.interfaceConfig ""} $out/interface_config.js
+            cp ./libs/external_api.min.js $out/external_api.js
+          '';
+        in ''
+          handle /http-bind {
+            header Host ${cfg.hostName}
+            reverse_proxy 127.0.0.1:5280
+          }
+          handle /xmpp-websocket {
+            reverse_proxy 127.0.0.1:5280
+          }
+          handle {
+            templates
+            root * ${templatedJitsiMeet}
+            try_files {path} {path}
+            try_files {path} /index.html
+            file_server
+          }
+        '';
       };
     };
 

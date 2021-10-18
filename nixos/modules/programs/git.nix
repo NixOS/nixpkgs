@@ -20,7 +20,7 @@ in
       };
 
       config = mkOption {
-        type = types.attrs;
+        type = with types; attrsOf (attrsOf anything);
         default = { };
         example = {
           init.defaultBranch = "main";
