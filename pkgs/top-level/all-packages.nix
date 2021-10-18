@@ -901,6 +901,8 @@ with pkgs;
 
   airspy = callPackage ../applications/radio/airspy { };
 
+  airspyhf = callPackage ../applications/radio/airspyhf { };
+
   airtame = callPackage ../applications/misc/airtame { };
 
   aj-snapshot  = callPackage ../applications/audio/aj-snapshot { };
