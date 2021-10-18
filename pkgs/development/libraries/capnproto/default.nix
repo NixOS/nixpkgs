@@ -1,12 +1,15 @@
-{ lib, stdenv, fetchurl, capnproto, cmake }:
+{ lib, stdenv, fetchFromGitHub, capnproto, cmake }:
 
 stdenv.mkDerivation rec {
   pname = "capnproto";
   version = "0.9.0";
 
-  src = fetchurl {
-    url = "https://capnproto.org/capnproto-c++-${version}.tar.gz";
-    sha256 = "sha256-soBUp6K/6kK/w5LI0AljDZTXLozoaiOtbxi15yV0Bk8=";
+  # release tarballs are missing some ekam rules
+  src = fetchFromGitHub {
+    owner = "capnproto";
+    repo = "capnproto";
+    rev = "v${version}";
+    sha256 = "038i40apywn8sg95kwld4mg9p9m08izcw5xj7mwkmshycmqw65na";
   };
 
   nativeBuildInputs = [ cmake ]
