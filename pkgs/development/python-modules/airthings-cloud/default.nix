@@ -7,7 +7,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "airthings";
+  pname = "airthings-cloud";
   version = "0.0.1";
   format = "setuptools";
 

@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchFromGitHub, GitPython, pytest, backoff, requests }:
+{ lib, buildPythonPackage, fetchFromGitHub, GitPython, pytestCheckHook, backoff, requests }:
 
 buildPythonPackage rec {
   pname = "versionfinder";
@@ -17,8 +17,13 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    pytest
+    pytestCheckHook
     requests
+  ];
+
+  disabledTestPaths = [
+    # acceptance tests use the network
+    "versionfinder/tests/test_acceptance.py"
   ];
 
   pythonImportsCheck = [ "versionfinder" ];

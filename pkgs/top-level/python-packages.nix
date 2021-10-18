@@ -405,7 +405,7 @@ in {
 
   airly = callPackage ../development/python-modules/airly { };
 
-  airthings = callPackage ../development/python-modules/airthings { };
+  airthings-cloud = callPackage ../development/python-modules/airthings-cloud { };
 
   ajpy = callPackage ../development/python-modules/ajpy { };
 
@@ -2419,6 +2419,8 @@ in {
   env-canada = callPackage ../development/python-modules/env-canada { };
 
   environmental-override = callPackage ../development/python-modules/environmental-override { };
+
+  environs = callPackage ../development/python-modules/environs { };
 
   envisage = callPackage ../development/python-modules/envisage { };
 
