@@ -43,7 +43,7 @@ let
       url = "${baseUrl}/${name}-linux-arm.tar.gz";
       sha256 = "1jk17fn3q1i625q1cdyxlvv58rw9ma7lwvngc04jqrccczsl1jqr";
     };
-  }.${system} or (throw "Unsopported system: ${system}");
+  }.${system} or (throw "Unsupported system: ${system}");
 
 in stdenv.mkDerivation rec {
   pname = "google-cloud-sdk";
