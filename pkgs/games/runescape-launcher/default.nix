@@ -7,8 +7,8 @@
 let
 
   runescape = stdenv.mkDerivation rec {
-    version = "2.2.9";
     pname = "runescape-launcher";
+    version = "2.2.9";
 
     src = fetchurl {
       url = "https://content.runescape.com/downloads/ubuntu/pool/non-free/r/${pname}/${pname}_${version}_amd64.deb";
