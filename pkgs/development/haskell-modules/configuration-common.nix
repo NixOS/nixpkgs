@@ -2050,4 +2050,8 @@ EOT
     network = self.network_3_1_2_5;
   });
 
+  # Fixes https://github.com/NixOS/nixpkgs/issues/140613
+  # https://github.com/recursion-schemes/recursion-schemes/issues/128
+  recursion-schemes = appendPatch super.recursion-schemes ./patches/recursion-schemes-128.patch;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
