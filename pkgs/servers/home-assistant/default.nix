@@ -68,6 +68,20 @@ let
     # Pinned due to API changes in 0.1.0
     (mkOverride "poolsense" "0.0.8" "09y4fq0gdvgkfsykpxnvmfv92dpbknnq5v82spz43ak6hjnhgcyp")
 
+    # Pinned due to missing simpliypy.errors.PendingAuthorizationError in simplisafe-python>12 which results in a failing import
+    (self: super: {
+      simplisafe-python = super.simplisafe-python.overridePythonAttrs (oldAttrs: rec {
+        version = "11.0.7";
+        src = fetchFromGitHub {
+          owner = "bachya";
+          repo = "simplisafe-python";
+          rev = version;
+          sha256 = "02nrighkdcd5n9qgbizm9gyfnpgdm4iibw7y8nbyfaxpng069fzp";
+        };
+        checkInputs = oldAttrs.checkInputs ++ [ super.aioresponses ];
+      });
+    })
+
     # Pinned due to changes in total-connect-client>0.58 which made the tests fails at the moment
     (self: super: {
       total-connect-client = super.total-connect-client.overridePythonAttrs (oldAttrs: rec {
