@@ -1,12 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, imagemagick, qrencode
-, testQR ? false, zbar ? null
+{ lib
+, stdenv
+, fetchFromGitHub
+, imagemagick
+, makeWrapper
+, qrencode
 }:
-
-assert testQR -> zbar != false;
 
 stdenv.mkDerivation {
   pname = "asc-key-to-qr-code-gif";
-  version = "20180613";
+  version = "20200304";
 
   src = fetchFromGitHub {
     owner = "yishilin14";
@@ -19,21 +21,13 @@ stdenv.mkDerivation {
   dontStrip = true;
   dontPatchELF = true;
 
-  preInstall = let
-    substitutions = [
-      ''--replace "convert" "${imagemagick}/bin/convert"''
-      ''--replace "qrencode" "${qrencode.bin}/bin/qrencode"''
-    ] ++ lib.optional testQR [
-      ''--replace "hash zbarimg" "true"'' # hash does not work on NixOS
-      ''--replace "$(zbarimg --raw" "$(${zbar.out}/bin/zbarimg --raw"''
-    ];
-  in ''
-    substituteInPlace asc-to-gif.sh ${lib.concatStringsSep " " substitutions}
-  '';
+  buildInputs = [ makeWrapper ];
 
   installPhase = ''
-    mkdir -p $out/bin
-    cp * $out/bin/
+    install -Dm755 asc-to-gif.sh -t $out/bin
+
+    wrapProgram $out/bin/asc-to-gif.sh \
+      --prefix PATH ":" ${lib.makeBinPath [ imagemagick qrencode ]}
   '';
 
   meta = with lib; {
