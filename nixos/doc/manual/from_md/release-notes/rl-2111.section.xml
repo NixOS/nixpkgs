@@ -1563,6 +1563,38 @@ Superuser created successfully.
           when they are socket-activated.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          The <literal>virtualisation.libvirtd</literal> module has been
+          refactored and updated with new options:
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              <literal>virtualisation.libvirtd.qemu*</literal> options
+              (e.g.:
+              <literal>virtualisation.libvirtd.qemuRunAsRoot</literal>)
+              were moved to
+              <link xlink:href="options.html#opt-virtualisation.libvirtd.qemu"><literal>virtualisation.libvirtd.qemu</literal></link>
+              submodule,
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              software TPM1/TPM2 support (e.g.: Windows 11 guests)
+              (<link xlink:href="options.html#opt-virtualisation.libvirtd.qemu.swtpm"><literal>virtualisation.libvirtd.qemu.swtpm</literal></link>),
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              custom OVMF package (e.g.:
+              <literal>pkgs.OVMFFull</literal> with HTTP, CSM and Secure
+              Boot support)
+              (<link xlink:href="options.html#opt-virtualisation.libvirtd.qemu.ovmf.package"><literal>virtualisation.libvirtd.qemu.ovmf.package</literal></link>).
+            </para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
     </itemizedlist>
   </section>
 </section>
