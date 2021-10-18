@@ -49,18 +49,19 @@
 , dconf
 , gsettings-desktop-schemas
 , librsvg
+, makeWrapper
 }:
 
 stdenv.mkDerivation rec {
   pname = "flatpak";
-  version = "1.10.2";
+  version = "1.12.2";
 
   # TODO: split out lib once we figure out what to do with triggerdir
   outputs = [ "out" "dev" "man" "doc" "devdoc" "installedTests" ];
 
   src = fetchurl {
     url = "https://github.com/flatpak/flatpak/releases/download/${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-2xUnOdBy+P8pnk6IjYljobRTjaexDguGUlvkOPLh3eQ=";
+    sha256 = "df1eb464f9142c11627f99f04f6a5c02c868bbb145489b8902cb6c105e774b75"; # Taken from https://github.com/flatpak/flatpak/releases/
   };
 
   patches = [
@@ -90,25 +91,19 @@ stdenv.mkDerivation rec {
     # Patch taken from gtk-doc expression.
     ./respect-xml-catalog-files-var.patch
 
-    # Don’t hardcode flatpak binary path in launchers stored under user’s profile otherwise they will break after Flatpak update.
-    # https://github.com/NixOS/nixpkgs/issues/43581
-    ./use-flatpak-from-path.patch
-
-    # Hardcode flatpak binary path for flatpak-spawn.
-    # When calling the portal’s Spawn command with FLATPAK_SPAWN_FLAGS_CLEAR_ENV flag,
-    # it will clear environment, including PATH, making the flatpak run fail.
-    # https://github.com/flatpak/flatpak/pull/4174
-    (fetchpatch {
-      url = "https://github.com/flatpak/flatpak/commit/495449daf6d3c072519a36c9e4bc6cc1da4d31db.patch";
-      sha256 = "gOX/sGupAE7Yg3MVrMhFXzWHpFn+izVyjtkuPzIckuY=";
-    })
-
     # Nix environment hacks should not leak into the apps.
     # https://github.com/NixOS/nixpkgs/issues/53441
     ./unset-env-vars.patch
 
     # But we want the GDK_PIXBUF_MODULE_FILE from the wrapper affect the icon validator.
     ./validate-icon-pixbuf.patch
+
+    # Tests don't respect the FLATPAK_BINARY override that was added, this is a workaround.
+    # https://github.com/flatpak/flatpak/pull/4496 (Can be removed once included).
+    (fetchpatch {
+      url = "https://github.com/flatpak/flatpak/commit/96dbe28cfa96e80b23fa1d8072eb36edad41279c.patch";
+      sha256 = "1jczk06ymfs98h3nsg245g0jwxvml7wg2x6pb7mrfpsdmrpz2czd";
+    })
   ];
 
   nativeBuildInputs = [
@@ -189,7 +184,14 @@ stdenv.mkDerivation rec {
   in ''
     patchShebangs buildutil
     patchShebangs tests
-    PATH=${lib.makeBinPath [vsc-py]}:$PATH patchShebangs --build variant-schema-compiler/variant-schema-compiler
+    PATH=${lib.makeBinPath [vsc-py]}:$PATH patchShebangs --build subprojects/variant-schema-compiler/variant-schema-compiler
+  '';
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      # Use flatpak from PATH in exported assets (e.g. desktop files).
+      --set FLATPAK_BINARY flatpak
+    )
   '';
 
   passthru = {

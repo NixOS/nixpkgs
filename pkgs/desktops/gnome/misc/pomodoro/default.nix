@@ -1,9 +1,13 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
-, autoconf-archive
-, appstream-glib
+, substituteAll
+, fetchpatch
+, meson
+, ninja
 , pkg-config
 , wrapGAppsHook
+, desktop-file-utils
 , libcanberra
 , gst_all_1
 , vala
@@ -11,43 +15,54 @@
 , gom
 , sqlite
 , libxml2
-, autoreconfHook
 , glib
 , gobject-introspection
 , libpeas
-, gnome-shell
 , gsettings-desktop-schemas
-, adwaita-icon-theme
 , gettext
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-pomodoro";
-  version = "0.19.1";
+  version = "0.20.0";
 
   src = fetchFromGitHub {
-    owner = "codito";
+    owner = "gnome-pomodoro";
     repo = "gnome-pomodoro";
     rev = version;
-    sha256 = "sha256-im66QUzz6PcX0vkf4cN57ttRLB4KKPFky1pwUa4V7kQ=";
+    sha256 = "sha256-USzLHoBM0QbBPtbTzJJY02cOSDtmlxPGYhMj7M1FJic=";
   };
 
+  patches = [
+    # Our glib setup hooks moves GSettings schemas to a subdirectory to prevent conflicts.
+    # We need to patch the build script so that the extension can find them.
+    (substituteAll {
+      src = ./fix-schema-path.patch;
+      inherit pname version;
+    })
+
+    # Fix error reporting code.
+    # https://github.com/gnome-pomodoro/gnome-pomodoro/pull/591
+    (fetchpatch {
+      url = "https://github.com/gnome-pomodoro/gnome-pomodoro/commit/133bd62f15653856d9705b66188b42c20d81719e.patch";
+      sha256 = "A20K+57A6/lYH2Buri2+wrCQgz6EGBdYg2xQbHPSkYc=";
+    })
+  ];
+
   nativeBuildInputs = [
-    appstream-glib
-    autoconf-archive
-    autoreconfHook
+    meson
+    ninja
     gettext
     gobject-introspection
     libxml2
     pkg-config
     vala
     wrapGAppsHook
+    desktop-file-utils
   ];
 
   buildInputs = [
-    adwaita-icon-theme
     glib
-    gnome-shell
     gom
     gsettings-desktop-schemas
     gst_all_1.gst-plugins-base
