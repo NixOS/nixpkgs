@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://openavproductions.com/fabla/"; 
-    description = "Fabla is an open-source LV2 drum sampler plugin instrument.";
+    description = "LV2 drum sampler plugin instrument";
     license = licenses.gpl2;
     maintainers = with maintainers; [ prusnak horhik];
     platforms = platforms.linux;
