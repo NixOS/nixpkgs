@@ -214,6 +214,7 @@ in with py.pkgs; buildPythonApplication rec {
     "air_quality"
     "airly"
     "airnow"
+    "airthings"
     "airvisual"
     "alarm_control_panel"
     "alarmdecoder"
