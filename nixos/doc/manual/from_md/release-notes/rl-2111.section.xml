@@ -449,6 +449,12 @@
           RandomX benchmark.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://cwiki.apache.org/confluence/pages/viewpage.action?pageId=27846330">Apache
+          Kafka MirrorMaker</link>, the Kafka cluster mirroring service.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-incompatibilities">
