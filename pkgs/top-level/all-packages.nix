@@ -16940,6 +16940,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) IOKit;
   };
 
+  libad9361 = callPackage ../development/libraries/libad9361 { };
+
   libadwaita = callPackage ../development/libraries/libadwaita { };
 
   libaec = callPackage ../development/libraries/libaec { };
