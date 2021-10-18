@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     homepage = "http://openavproductions.com/fabla/"; 
     description = "LV2 drum sampler plugin instrument";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ prusnak horhik];
+    maintainers = with maintainers; [ prusnak horhik ];
     platforms = platforms.linux;
   };
 }
