@@ -17,12 +17,6 @@
 
 { name ? "${args.pname}-${args.version}"
 
-  # SRI hash
-, cargoHash ? ""
-
-  # Legacy hash
-, cargoSha256 ? ""
-
   # Name for the vendored dependencies tarball
 , cargoDepsName ? name
 
@@ -54,7 +48,7 @@
 , buildAndTestSubdir ? null
 , ... } @ args:
 
-assert cargoVendorDir == null && cargoLock == null -> cargoSha256 == "" && cargoHash == ""
+assert cargoVendorDir == null && cargoLock == null -> !(args ? cargoSha256) && !(args ? cargoHash)
   -> throw "cargoSha256, cargoHash, cargoVendorDir, or cargoLock must be set";
 assert buildType == "release" || buildType == "debug";
 
@@ -66,15 +60,17 @@ let
     else fetchCargoTarball ({
       inherit src srcs sourceRoot unpackPhase cargoUpdateHook;
       name = cargoDepsName;
-      hash = cargoHash;
       patches = cargoPatches;
-      sha256 = cargoSha256;
+    } // lib.optionalAttrs (args ? cargoHash) {
+      hash = args.cargoHash;
+    } // lib.optionalAttrs (args ? cargoSha256) {
+      sha256 = args.cargoSha256;
     } // depsExtraArgs)
     else null;
 
   # If we have a cargoSha256 fixed-output derivation, validate it at build time
   # against the src fixed-output derivation to check consistency.
-  validateCargoDeps = !(cargoHash == "" && cargoSha256 == "");
+  validateCargoDeps = args ? cargoHash || args ? cargoSha256;
 
   target = rust.toRustTargetSpec stdenv.hostPlatform;
   targetIsJSON = lib.hasSuffix ".json" target;
