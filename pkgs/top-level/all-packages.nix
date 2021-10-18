@@ -15431,6 +15431,8 @@ with pkgs;
 
   aws-c-s3 = callPackage ../development/libraries/aws-c-s3 { };
 
+  aws-c-sdkutils = callPackage ../development/libraries/aws-c-sdkutils { };
+
   aws-checksums = callPackage ../development/libraries/aws-checksums { };
 
   aws-crt-cpp = callPackage ../development/libraries/aws-crt-cpp { };
