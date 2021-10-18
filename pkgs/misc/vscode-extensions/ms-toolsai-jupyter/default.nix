@@ -3,7 +3,6 @@
 let
   inherit (vscode-utils) buildVscodeMarketplaceExtension;
 
-
 in buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "jupyter";
