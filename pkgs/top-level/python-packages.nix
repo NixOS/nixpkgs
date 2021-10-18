@@ -4942,6 +4942,8 @@ in {
 
   mutf8 = callPackage ../development/python-modules/mutf8 { };
 
+  mujson = callPackage ../development/python-modules/mujson { };
+
   mwclient = callPackage ../development/python-modules/mwclient { };
 
   mwdblib = callPackage ../development/python-modules/mwdblib { };
