@@ -67,13 +67,18 @@ self: super: {
     postPatch = "sed -i -e 's,<4.16,<4.17,' basement.cabal";
   });
 
+  base16-bytestring = appendPatch super.base16-bytestring (pkgs.fetchpatch {
+    url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/dfd024c9a336c752288ec35879017a43bd7e85a0/patches/base16-bytestring-1.0.1.0.patch";
+    sha256 = "19ajai9y04981zfpcdj1nlz44b12gjj4m1ncciijv43mnz82plji";
+  });
+
   # Duplicate Show instances in tests and library cause compiling tests to fail
   blaze-builder = appendPatch (dontCheck super.blaze-builder) (pkgs.fetchpatch {
     url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/dfd024c9a336c752288ec35879017a43bd7e85a0/patches/blaze-builder-0.4.2.1.patch";
     sha256 = "1h5ny3mlng69vwaabl3af8hlv4qi24wfw8s14lw2ksw1yjbgi0j8";
   });
 
-  cereal = appendPatch super.cereal (pkgs.fetchpatch {
+  cereal = appendPatch (doJailbreak super.cereal) (pkgs.fetchpatch {
     url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/dfd024c9a336c752288ec35879017a43bd7e85a0/patches/cereal-0.5.8.1.patch";
     sha256 = "03v4nxwz9y6viaa8anxcmp4zdf2clczv4pf9fqq6lnpplpz5i128";
   });
@@ -91,9 +96,9 @@ self: super: {
     sha256 = "1g48lrmqgd88hqvfq3klz7lsrpwrir2v1931myrhh6dy0d9pqj09";
   });
 
-  # cabal-install needs more recent versions of Cabal and base16-bytestring.
+  # cabal-install needs more recent versions of Cabal
   cabal-install = (doJailbreak super.cabal-install).overrideScope (self: super: {
-    Cabal = null;
+    Cabal = self.Cabal_3_6_2_0;
   });
 
   doctest = appendPatch (dontCheck (doJailbreak super.doctest_0_18_1)) (pkgs.fetchpatch {
@@ -145,8 +150,50 @@ self: super: {
   type-equality = doJailbreak super.type-equality;
   vector = doJailbreak (dontCheck super.vector);
   vector-binary-instances = doJailbreak super.vector-binary-instances;
-  vector-th-unbox = doJailbreak super.vector-th-unbox;
   zlib = doJailbreak super.zlib;
+  indexed-traversable-instances = doJailbreak super.indexed-traversable-instances;
+
+  hpack = overrideCabal (doJailbreak super.hpack) (drv: {
+    # Cabal 3.6 seems to preserve comments when reading, which makes this test fail
+    # 2021-10-10: 9.2.1 is not yet supported (also no issue)
+    testFlags = [
+      "--skip=/Hpack/renderCabalFile/is inverse to readCabalFile/"
+    ] ++ drv.testFlags or [];
+  });
+
+  # Patch for TH code from head.hackage
+  vector-th-unbox = appendPatch (doJailbreak super.vector-th-unbox) (pkgs.fetchpatch {
+    url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/dfd024c9a336c752288ec35879017a43bd7e85a0/patches/vector-th-unbox-0.2.1.9.patch";
+    sha256 = "02bvvy3hx3cf4y4dr64zl5pjvq8giwk4286j5g1n6k8ikyn2403p";
+  });
+
+  # Patch for TH code from head.hackage
+  invariant = appendPatch (doJailbreak super.invariant) (pkgs.fetchpatch {
+    url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/dfd024c9a336c752288ec35879017a43bd7e85a0/patches/invariant-0.5.4.patch";
+    sha256 = "17gg8ck4r6qmlbcbpbnqzksgf5q7i891zs6axfzhas6ajncylxvc";
+  });
+
+  # base 4.15 support from head.hackage
+  lens = appendPatch (doJailbreak super.lens_5_0_1) (pkgs.fetchpatch {
+    url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/dfd024c9a336c752288ec35879017a43bd7e85a0/patches/lens-5.0.1.patch";
+    sha256 = "1s8qqg7ymvv94dnfnr1ragx91chh9y7ydc4jx25zn361wbn00pv7";
+  });
+
+  semigroupoids = overrideCabal super.semigroupoids (drv: {
+    # Patch from head.hackage for base 4.15 compat
+    patches = drv.patches or [] ++ [
+      (pkgs.fetchpatch {
+        url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/dfd024c9a336c752288ec35879017a43bd7e85a0/patches/semigroupoids-5.3.5.patch";
+        sha256 = "0xrn1gv6b2n76522pk2nfp4z69kvp14l2zpif2f8zzz6cwcrx9w8";
+      })
+    ];
+    # acrobatics to make the patch apply
+    prePatch = ''
+      find . -type f | xargs -L 1 ${pkgs.buildPackages.dos2unix}/bin/dos2unix
+    '';
+    editedCabalFile = null;
+    revision = null;
+  });
 
   # Syntax error in tests fixed in https://github.com/simonmar/alex/commit/84b29475e057ef744f32a94bc0d3954b84160760
   alex = dontCheck super.alex;
@@ -171,9 +218,6 @@ self: super: {
   # The test suite indirectly depends on random, which leads to infinite recursion
   random = dontCheck super.random_1_2_1;
 
-  # 5 introduced support for GHC 9.0.x, but hasn't landed in stackage yet
-  lens = super.lens_5_0_1;
-
   # 0.16.0 introduced support for GHC 9.0.x, stackage has 0.15.0
   memory = appendPatch super.memory_0_16_0 (pkgs.fetchpatch {
     url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/dfd024c9a336c752288ec35879017a43bd7e85a0/patches/memory-0.16.0.patch";
@@ -195,10 +239,12 @@ self: super: {
   # https://github.com/Soostone/retry/issues/71
   retry = dontCheck super.retry;
 
-  streaming-commons = appendPatch super.streaming-commons (pkgs.fetchpatch {
+  # Disable tests pending resolution of
+  # https://github.com/haskell/text/issues/380 or https://github.com/fpco/streaming-commons/issues/60
+  streaming-commons = dontCheck (appendPatch super.streaming-commons (pkgs.fetchpatch {
     url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/dfd024c9a336c752288ec35879017a43bd7e85a0/patches/streaming-commons-0.2.2.1.patch";
     sha256 = "04wi1jskr3j8ayh88kkx4irvhhgz0i7aj6fblzijy0fygikvidpy";
-  });
+  }));
 
   # hlint 3.3 needs a ghc-lib-parser newer than the one from stackage
   hlint = super.hlint_3_3_4.overrideScope (self: super: {

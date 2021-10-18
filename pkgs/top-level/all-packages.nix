@@ -968,6 +968,8 @@ with pkgs;
 
   ventoy-bin = callPackage ../tools/cd-dvd/ventoy-bin { };
 
+  vopono = callPackage ../tools/networking/vopono { };
+
   xcd = callPackage ../tools/misc/xcd { };
 
   xtrt = callPackage ../tools/archivers/xtrt { };
@@ -5467,7 +5469,7 @@ with pkgs;
 
   git-fame = callPackage ../applications/version-management/git-and-tools/git-fame {};
 
-  git-fast-export = callPackage ../applications/version-management/git-and-tools/fast-export { mercurial = mercurial_4; };
+  git-fast-export = callPackage ../applications/version-management/git-and-tools/fast-export { };
 
   git-filter-repo = callPackage ../applications/version-management/git-and-tools/git-filter-repo {
     pythonPackages = python3Packages;
@@ -8996,6 +8998,8 @@ with pkgs;
 
   runelite = callPackage ../games/runelite { };
 
+  runescape = callPackage ../games/runescape-launcher { };
+
   runningx = callPackage ../tools/X11/runningx { };
 
   rund = callPackage ../development/tools/rund { };
@@ -10311,6 +10315,7 @@ with pkgs;
 
   wasm-bindgen-cli = callPackage ../development/tools/wasm-bindgen-cli {
     inherit (darwin.apple_sdk.frameworks) Security;
+    nodejs = nodejs_latest;
   };
 
   welkin = callPackage ../tools/graphics/welkin {};
@@ -12095,14 +12100,6 @@ with pkgs;
 
   openjdk = openjdk16;
   openjdk_headless = openjdk16_headless;
-
-  inherit (callPackages ../development/compilers/graalvm {
-    gcc = if stdenv.targetPlatform.isDarwin then gcc8 else gcc;
-    inherit (darwin.apple_sdk.frameworks)
-      CoreFoundation Foundation JavaNativeFoundation
-      JavaVM JavaRuntimeSupport Cocoa;
-    inherit (darwin) libiconv libobjc libresolv;
-  }) mx jvmci8 graalvm8;
 
   graalvmCEPackages =
     recurseIntoAttrs (callPackage ../development/compilers/graalvm/community-edition {
@@ -23409,6 +23406,8 @@ with pkgs;
 
   ucs-fonts = callPackage ../data/fonts/ucs-fonts
     { inherit (buildPackages.xorg) fonttosfnt mkfontscale; };
+
+  bront_fonts = callPackage ../data/fonts/bront { };
 
   ultimate-oldschool-pc-font-pack = callPackage ../data/fonts/ultimate-oldschool-pc-font-pack { };
 

@@ -742,7 +742,6 @@ broken-packages:
   - commodities
   - commonmark-cli
   - commsec
-  - compactable
   - Compactable
   - compact-list
   - compact-map
@@ -1435,6 +1434,7 @@ broken-packages:
   - flamethrower
   - flamingra
   - flat-maybe
+  - flatparse
   - flay
   - flexible-time
   - flickr
@@ -2404,6 +2404,7 @@ broken-packages:
   - htssets
   - http2-client
   - http2-grpc-proto-lens
+  - http3
   - http-attoparsec
   - http-client-lens
   - http-client-request-modifiers
@@ -2846,6 +2847,7 @@ broken-packages:
   - linear-algebra-cblas
   - linear-base
   - linear-code
+  - linear-generics
   - linear-maps
   - linear-opengl
   - linearscan
@@ -4717,7 +4719,6 @@ broken-packages:
   - SVD2HS
   - svfactor
   - svg-builder-fork
-  - svgcairo
   - svgutils
   - svm-light-utils
   - svm-simple
