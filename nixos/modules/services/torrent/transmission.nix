@@ -152,6 +152,8 @@ in
       install -d -m '${cfg.downloadDirPermissions}' -o '${cfg.user}' -g '${cfg.group}' '${cfg.settings.download-dir}'
       '' + optionalString cfg.settings.incomplete-dir-enabled ''
       install -d -m '${cfg.downloadDirPermissions}' -o '${cfg.user}' -g '${cfg.group}' '${cfg.settings.incomplete-dir}'
+      '' + optionalString cfg.settings.watch-dir-enabled ''
+      install -d -m '${cfg.downloadDirPermissions}' -o '${cfg.user}' -g '${cfg.group}' '${cfg.settings.watch-dir}'
       '';
 
     assertions = [
