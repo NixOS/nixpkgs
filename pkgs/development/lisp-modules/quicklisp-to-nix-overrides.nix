@@ -51,6 +51,8 @@ in
     overrides = y: (x.overrides y) // {
       prePatch = ''
         sed 's|default \"libfixposix\"|default \"${pkgs.libfixposix}/lib/libfixposix\"|' -i src/syscalls/ffi-functions-unix.lisp
+        # Socket tests don't work because they try to access the internet
+        sed 's/(:file "sockets" :depends-on ("pkgdcl" "defsuites"))//' -i iolib.asd
       '';
     };
 
