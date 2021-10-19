@@ -12109,7 +12109,6 @@ with pkgs;
     recurseIntoAttrs (callPackage ../development/compilers/graalvm/community-edition {
       inherit (darwin.apple_sdk.frameworks) Foundation;
     });
-  graalvm8-ce = graalvmCEPackages.graalvm8-ce;
   graalvm11-ce = graalvmCEPackages.graalvm11-ce;
 
   inherit (callPackages ../development/compilers/graalvm/enterprise-edition.nix { })

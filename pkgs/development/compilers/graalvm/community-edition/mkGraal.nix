@@ -24,55 +24,20 @@ let
   javaVersionPlatform = "${javaVersion}-${platform}";
 
   graalvmXXX-ce = stdenv.mkDerivation rec {
+    inherit version;
     name = "graalvm${javaVersion}-ce";
-    srcs = [
-      (fetchurl {
-        sha256 = {
-          "8-linux-amd64" = "01gyxjmfp7wpcyn7x8b184fn0lp3xryfw619bqch120pzvr6z88f";
-          "11-linux-aarch64" = "sha256-u9841eaHH347JHCrm5u3YGZ9RSTuKiDq368TY2otAYw=";
-          "11-linux-amd64" = "0w7lhvxm4nggqdcl4xrhdd3y6dqw9jhyca9adjkp508n4lqf1lxv";
-          "11-darwin-amd64" = "0dnahicdl0vhrbiml9z9nbb7k75hbsjj8rs246i1lwril12dqb7n";
-        }.${javaVersionPlatform};
-        url = "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-${version}/graalvm-ce-java${javaVersionPlatform}-${version}.tar.gz";
-      })
-      (fetchurl {
-        sha256 = {
-          "8-linux-amd64" = "1jlvrxdlbsmlk3ia43h9m29kmmdn83h6zdlnf8qb7bm38c84nhsc";
-          "11-linux-aarch64" = "sha256-7W5gkhj2kON2ocrGpyH/OL/phOyHkjNDId2CtyUAEWY=";
-          "11-linux-amd64" = "1ybd7a6ii6582skr0nkxx7bccsa7gkg0yriql2h1lcz0rfzcdi3g";
-          "11-darwin-amd64" = "1jdy845vanmz05zx5b9227gb1msh9wdrz2kf3fx9z54ssd9qgdhm";
-        }.${javaVersionPlatform};
-        url = "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-${version}/native-image-installable-svm-java${javaVersionPlatform}-${version}.jar";
-      })
-      (fetchurl {
-        sha256 = {
-          "8-linux-amd64" = "18ip0ay06q1pryqs8ja988mvk9vw475c0nfjcznnsd1zp296p6jc";
-          "11-linux-aarch64" = "sha256-i9ysgqbI52PiXofZQ5AnPSzs2TeR8An5CIYzcwhx28o=";
-          "11-linux-amd64" = "1jszz97mkqavxzyhx5jxhi43kqjxk9c36j5l5hy3kn8sdfmbplm4";
-          "11-darwin-amd64" = "1767ryhv2cn5anlys63ysax1p8ag79bykac1xfrjfan8yv6d8ybl";
-        }.${javaVersionPlatform};
-        url = "https://github.com/oracle/truffleruby/releases/download/vm-${version}/ruby-installable-svm-java${javaVersionPlatform}-${version}.jar";
-      })
-      (fetchurl {
-        sha256 = {
-          "8-linux-amd64" = "08s36rjy5irg25b7lqx0m4v2wpywin3cqyhdrywhvq14f7zshsd5";
-          "11-linux-aarch64" = "sha256-Lkc/mq1w18+PQ5McvLGyQBSOz/TMSUgwioRZ0Dtyhm4=";
-          "11-linux-amd64" = "1ybjaknmbsdg8qzb986x39fq0h7fyiymdcigc7y86swk8dd916hv";
-          "11-darwin-amd64" = "02dwlb62kqr4rjjmvkhn2xk9l1p47ahg9xyyfkw7im1jwlqmqnzf";
-        }.${javaVersionPlatform};
-        url = "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-${version}/wasm-installable-svm-java${javaVersionPlatform}-${version}.jar";
-      })
-    ] ++ lib.optionals (platform == "amd64") [
-      # graalpython is not available on aarch64 platforms yet
-      (fetchurl {
-        sha256 = {
-          "8-linux-amd64" = "0il15438qnikqsxdsl7fcdg0c8zs3cbm4ry7pys7fxxr1ckd8szq";
-          "11-linux-amd64" = "07759sr8nijvqm8aqn69x9vq7lyppns7a6l6xribv43jvfmwpfkl";
-          "11-darwin-amd64" = "01l3as8dihc7xqy5sdkrpxmpzrqbcvvg84m2s6j1j8y2db1khf2s";
-        }.${javaVersionPlatform};
-        url = "https://github.com/graalvm/graalpython/releases/download/vm-${version}/python-installable-svm-java${javaVersionPlatform}-${version}.jar";
-      })
-    ];
+    srcs =
+      let
+        # Some platforms doesn't have all GraalVM features
+        # e.g.: GraalPython on aarch64-linux
+        # When the platform doesn't have a feature, sha256 is null on hashes.nix
+        # To update hashes.nix file, run `./update.sh <graalvm-ce-version>`
+        maybeFetchUrl = url: if url.sha256 != null then (fetchurl url) else null;
+      in
+      (lib.remove null
+        (map
+          maybeFetchUrl
+          (import ./hashes.nix { inherit javaVersionPlatform; })));
 
     buildInputs = lib.optionals stdenv.isLinux [
       alsa-lib # libasound.so wanted by lib/libjsound.so
@@ -168,16 +133,6 @@ let
         done
       '';
     in {
-      "8-linux-amd64" = ''
-        ${nativePRNGWorkaround "$out/jre/lib/security/java.security"}
-
-        ${copyClibrariesToOut "$out/jre/lib/svm/clibraries"}
-
-        ${copyClibrariesToLib}
-
-        # allow using external truffle-api.jar and languages not included in the distrubution
-        rm $out/jre/lib/jvmci/parentClassLoader.classpath
-      '';
       "11-linux-amd64" = ''
         ${nativePRNGWorkaround "$out/conf/security/java.security"}
 
@@ -265,15 +220,24 @@ let
         ''
       }
 
-      ${
-        lib.optionalString (platform == "amd64") ''
-          echo "Testing interpreted languages"
-          $out/bin/graalpython -c 'print(1 + 1)'
-          $out/bin/ruby -e 'puts(1 + 1)'
+      ${# TODO: Doesn't work on MacOS, we have this error:
+        # "Launching JShell execution engine threw: Operation not permitted (Bind failed)"
+        lib.optionalString (stdenv.isLinux) ''
+          echo "Testing Jshell"
+          echo '1 + 1' | $out/bin/jshell
+        ''
+      }
 
+      ${
+        lib.optionalString (platform != "linux-aarch64") ''
+          echo "Testing GraalPython"
+          $out/bin/graalpython -c 'print(1 + 1)'
           echo '1 + 1' | $out/bin/graalpython
         ''
       }
+
+      echo "Testing TruffleRuby"
+      $out/bin/ruby -e 'puts(1 + 1)'
 
       ${# TODO: `irb` on MacOS gives an error saying "Could not find OpenSSL
         # headers, install via Homebrew or MacPorts or set OPENSSL_PREFIX", even
@@ -281,21 +245,22 @@ let
         # https://github.com/NixOS/nixpkgs/pull/105815
         # TODO: "truffleruby: an internal exception escaped out of the interpreter"
         # error on linux-aarch64
-        lib.optionalString (platform == "linux-amd64") ''
+        # TODO: "core/kernel.rb:234:in `gem_original_require':
+        # /nix/store/wlc5xalzj2ip1l83siqw8ac5fjd52ngm-graalvm11-ce/languages/llvm/native/lib:
+        # cannot read file data: Is a directory (RuntimeError)" error on linux-amd64
+        lib.optionalString false ''
           echo '1 + 1' | $out/bin/irb
         ''
       }
+      '';
 
-      ${# TODO: Doesn't work on MacOS, we have this error:
-        # "Launching JShell execution engine threw: Operation not permitted (Bind failed)"
-        lib.optionalString (javaVersion == "11" && stdenv.isLinux) ''
-          echo '1 + 1' | $out/bin/jshell
-        ''
-      }'';
-
-    passthru.home = graalvmXXX-ce;
+    passthru = {
+      home = graalvmXXX-ce;
+      updateScript = ./update.sh;
+    };
 
     meta = with lib; {
+      inherit platforms;
       homepage = "https://www.graalvm.org/";
       description = "High-Performance Polyglot VM";
       license = with licenses; [ upl gpl2Classpath bsd3 ];
@@ -308,7 +273,6 @@ let
         ericdallo
         thiagokokada
       ];
-      platforms = platforms;
     };
   };
 in graalvmXXX-ce
