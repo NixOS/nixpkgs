@@ -3,7 +3,7 @@
 # has additional options that affect the web server as a whole, like
 # the user/group to run under.)
 
-{ lib, ... }:
+{ lib, config, ... }:
 
 with lib;
 {
@@ -182,7 +182,7 @@ with lib;
 
     http3 = mkOption {
       type = types.bool;
-      default = false;
+      default = config.services.nginx.package ? passthru.http3 && config.services.nginx.package.passthru.http3;
       description = ''
         Whether to enable HTTP 3.
         This requires using <literal>pkgs.nginxQuic</literal> package

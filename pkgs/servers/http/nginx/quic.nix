@@ -21,4 +21,6 @@ callPackage ./generic.nix args {
   ];
 
   version = "quic";
+
+  passthru.http3 = true;
 }

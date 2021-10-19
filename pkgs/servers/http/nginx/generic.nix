@@ -21,6 +21,7 @@
 , preConfigure ? ""
 , postInstall ? null
 , meta ? null
+, passthru ? {}
 }:
 
 with lib;
@@ -140,7 +141,7 @@ stdenv.mkDerivation {
     mv $out/sbin $out/bin
   '';
 
-  passthru = {
+  passthru = passthru // {
     modules = modules;
     tests = {
       inherit (nixosTests) nginx nginx-auth nginx-etag nginx-pubhtml nginx-sandbox nginx-sso;
