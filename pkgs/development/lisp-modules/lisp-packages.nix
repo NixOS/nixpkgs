@@ -221,6 +221,7 @@ let lispPackages = rec {
       sha256 = "sha256:09sf7nq7nmf9q7bh3a5ygl2i2n0nhrx5fk2kv5ili0ckv7g9x72s";
       # date = 2021-10-18T14:15+02:00
     };
+    buildSystems = [ "mgl" "mgl/test" ];
     packageName = "mgl";
     parasites = [ "mgl/test" ];
     asdFilesToKeep = [ "mgl.asd" "mgl-example.asd" "gnuplot/mgl-gnuplot.asd" "visuals/mgl-visuals.asd" ];
@@ -242,7 +243,7 @@ let lispPackages = rec {
       # date = 2021-10-18T14:15+02:00
     };
     packageName = "mgl-mat";
-    buildSystems = [ "mgl-mat" ];
+    buildSystems = [ "mgl-mat" "mgl-mat/test" ];
     parasites = [ "mgl-mat/test" ];
     asdFilesToKeep = [ "mgl-mat.asd" ];
   };
