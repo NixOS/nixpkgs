@@ -51,6 +51,8 @@ let
   });
 
   package = stdenv.mkDerivation (args // {
+    inherit buildType;
+
     nativeBuildInputs = args.nativeBuildInputs or [] ++ [ dotnet-sdk dotnetPackages.Nuget cacert makeWrapper ];
 
     # Stripping breaks the executable
@@ -71,7 +73,7 @@ let
       mkdir -p $HOME/.nuget/NuGet
       cp $HOME/.config/NuGet/NuGet.Config $HOME/.nuget/NuGet
 
-      dotnet restore ${lib.escapeShellArg projectFile} \
+      dotnet restore "$projectFile" \
         ${lib.optionalString (!enableParallelBuilding) "--disable-parallel"} \
         -p:ContinuousIntegrationBuild=true \
         -p:Deterministic=true \
@@ -85,13 +87,13 @@ let
     buildPhase = args.buildPhase or ''
       runHook preBuild
 
-      dotnet build ${lib.escapeShellArg projectFile} \
+      dotnet build "$projectFile" \
         -maxcpucount:${if enableParallelBuilding then "$NIX_BUILD_CORES" else "1"} \
         -p:BuildInParallel=${if enableParallelBuilding then "true" else "false"} \
         -p:ContinuousIntegrationBuild=true \
         -p:Deterministic=true \
         -p:Version=${args.version} \
-        --configuration ${buildType} \
+        --configuration "$buildType" \
         --no-restore \
         "''${dotnetBuildFlags[@]}"  \
         "''${dotnetFlags[@]}"
@@ -102,17 +104,17 @@ let
     installPhase = args.installPhase or ''
       runHook preInstall
 
-      dotnet publish ${lib.escapeShellArg projectFile} \
+      dotnet publish "$projectFile" \
         -p:ContinuousIntegrationBuild=true \
         -p:Deterministic=true \
         --output $out/lib/${args.pname} \
-        --configuration ${buildType} \
+        --configuration "$buildType" \
         --no-build \
         --no-self-contained \
         "''${dotnetInstallFlags[@]}"  \
         "''${dotnetFlags[@]}"
     '' + (if executables != null then ''
-      for executable in ''${executables}; do
+      for executable in $executables; do
         execPath="$out/lib/${args.pname}/$executable"
 
         if [[ -f "$execPath" && -x "$execPath" ]]; then
@@ -120,7 +122,7 @@ let
             --set DOTNET_ROOT "${dotnet-runtime}" \
             --suffix LD_LIBRARY_PATH : "${lib.makeLibraryPath runtimeDeps}" \
             "''${gappsWrapperArgs[@]}" \
-            ''${makeWrapperArgs}
+            "''${makeWrapperArgs[@]}"
         else
           echo "Specified binary \"$executable\" is either not an executable, or does not exist!"
           exit 1
@@ -133,7 +135,7 @@ let
             --set DOTNET_ROOT "${dotnet-runtime}" \
             --suffix LD_LIBRARY_PATH : "${lib.makeLibraryPath runtimeDeps}" \
             "''${gappsWrapperArgs[@]}" \
-            ''${makeWrapperArgs}
+            "''${makeWrapperArgs[@]}"
         fi
       done
     '') + ''
