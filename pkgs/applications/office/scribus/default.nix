@@ -43,6 +43,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = {
+    broken = true; # 2021-10-19
     maintainers = [ lib.maintainers.marcweber ];
     platforms = lib.platforms.linux;
     description = "Desktop Publishing (DTP) and Layout program for Linux";
