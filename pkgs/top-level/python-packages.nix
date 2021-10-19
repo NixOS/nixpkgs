@@ -9811,16 +9811,16 @@ in {
 
   wurlitzer = callPackage ../development/python-modules/wurlitzer { };
 
-  wxPython_4_0 = callPackage ../development/python-modules/wxPython/4.0.nix {
-    inherit (pkgs.darwin.apple_sdk.frameworks) AudioToolbox Carbon Cocoa CoreFoundation IOKit OpenGL;
-    wxGTK = pkgs.wxGTK30.override {
+  wxPython = callPackage ../development/python-modules/wxPython {
+    wxGTK = pkgs.wxGTK31.override {
       withGtk2 = false;
       withWebKit = true;
     };
   };
 
-  wxPython_4_1 = callPackage ../development/python-modules/wxPython/4.1.nix {
-    wxGTK = pkgs.wxGTK31.override {
+  wxPython_4_0 = callPackage ../development/python-modules/wxPython/4.0.nix {
+    inherit (pkgs.darwin.apple_sdk.frameworks) AudioToolbox Carbon Cocoa CoreFoundation IOKit OpenGL;
+    wxGTK = pkgs.wxGTK30.override {
       withGtk2 = false;
       withWebKit = true;
     };
