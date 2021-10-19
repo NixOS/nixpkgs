@@ -297,19 +297,19 @@ let
 
     prisma = super.prisma.override {
       nativeBuildInputs = [ pkgs.makeWrapper ];
-      version = "3.2.0";
+      version = "3.3.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/prisma/-/prisma-3.2.0.tgz";
-        sha512 = "sha512-o8+DH0RD5DbP8QTZej2dsY64yvjOwOG3TWOlJyoCHQ+8DH9m4tzxo38j6IF/PqpN4PmAGPpHuNi/nssG1cvYlQ==";
+        url = "https://registry.npmjs.org/prisma/-/prisma-3.3.0.tgz";
+        sha512 = "sha512-E7C9mXRwZVpcnSeJT533qGHUVrYULsE9ihFvAtQMuxhTXkxoRlMLyo/1ZOyeu9GdXP8DJ7ruLOw06kEs/N3dVg==";
       };
       dependencies = [
         {
           name = "_at_prisma_slash_engines";
           packageName = "@prisma/engines";
-          version = "3.2.0-34.afdab2f10860244038c4e32458134112852d4dad";
+          version = "3.3.0-30.33838b0f78f1fe9052cf9a00e9761c9dc097a63c";
           src = fetchurl {
-            url = "https://registry.npmjs.org/@prisma/engines/-/engines-3.2.0-34.afdab2f10860244038c4e32458134112852d4dad.tgz";
-            sha512 = "sha512-MiZORXXsGORXTF9RqqKIlN/2ohkaxAWTsS7qxDJTy5ThTYLrXSmzxTSohM4qN/AI616B+o5WV7XTBhjlPKSufg==";
+            url = "https://registry.npmjs.org/@prisma/engines/-/engines-3.3.0-30.33838b0f78f1fe9052cf9a00e9761c9dc097a63c.tgz";
+            sha512 = "sha512-T3nEnRWmoneNZJPd9IBR29G8ZDUjNelA8+cG5y8/lh6vySm6ryWSNxj1s377U9YzFYyZmXiA9vK1iyxMoRff/g==";
           };
         }
       ];
