@@ -100,6 +100,25 @@
           Notes</link> for details.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          LXD support was greatly improved:
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              building LXD images from configurations is now directly
+              possible with just nixpkgs
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              hydra is now building nixOS LXD images that can be used
+              standalone with full nixos-rebuild support
+            </para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-new-services">
