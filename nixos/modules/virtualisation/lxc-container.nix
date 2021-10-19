@@ -124,6 +124,7 @@ in
       ] ++ templates.files;
     };
 
+    # TODO: build rootfs as squashfs for faster unpack
     system.build.tarball = pkgs.callPackage ../../lib/make-system-tarball.nix {
       extraArgs = "--owner=0";
 
