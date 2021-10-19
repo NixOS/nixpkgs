@@ -2,15 +2,15 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = "rove";
-  version = "20200325-git";
+  version = "20210807-git";
 
   description = "Yet another testing framework intended to be a successor of Prove";
 
   deps = [ args."bordeaux-threads" args."dissect" args."trivial-gray-streams" ];
 
   src = fetchurl {
-    url = "http://beta.quicklisp.org/archive/rove/2020-03-25/rove-20200325-git.tgz";
-    sha256 = "0zn8d3408rgy2nibia5hdfbf80ix1fgssywx01izx7z99l5x50z5";
+    url = "http://beta.quicklisp.org/archive/rove/2021-08-07/rove-20210807-git.tgz";
+    sha256 = "1zg9jch2q8946a1bsjykq0bw86zh9gqvvqbqa8k4njvqbc42kqn8";
   };
 
   packageName = "rove";
@@ -20,11 +20,11 @@ rec {
 }
 /* (SYSTEM rove DESCRIPTION
     Yet another testing framework intended to be a successor of Prove SHA256
-    0zn8d3408rgy2nibia5hdfbf80ix1fgssywx01izx7z99l5x50z5 URL
-    http://beta.quicklisp.org/archive/rove/2020-03-25/rove-20200325-git.tgz MD5
-    7954cb65830d62142babecebf20d0226 NAME rove FILENAME rove DEPS
+    1zg9jch2q8946a1bsjykq0bw86zh9gqvvqbqa8k4njvqbc42kqn8 URL
+    http://beta.quicklisp.org/archive/rove/2021-08-07/rove-20210807-git.tgz MD5
+    502337a1120b19d1d70bb06191323ee0 NAME rove FILENAME rove DEPS
     ((NAME bordeaux-threads FILENAME bordeaux-threads)
      (NAME dissect FILENAME dissect)
      (NAME trivial-gray-streams FILENAME trivial-gray-streams))
     DEPENDENCIES (bordeaux-threads dissect trivial-gray-streams) VERSION
-    20200325-git SIBLINGS NIL PARASITES NIL) */
+    20210807-git SIBLINGS NIL PARASITES NIL) */

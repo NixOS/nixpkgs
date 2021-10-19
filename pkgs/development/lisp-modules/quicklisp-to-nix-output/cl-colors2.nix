@@ -2,17 +2,15 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = "cl-colors2";
-  version = "20210411-git";
-
-  parasites = [ "cl-colors2/tests" ];
+  version = "20210630-git";
 
   description = "Simple color library for Common Lisp";
 
-  deps = [ args."alexandria" args."cl-ppcre" args."clunit2" ];
+  deps = [ args."alexandria" args."cl-ppcre" ];
 
   src = fetchurl {
-    url = "http://beta.quicklisp.org/archive/cl-colors2/2021-04-11/cl-colors2-20210411-git.tgz";
-    sha256 = "14kdi214x8rxil27wfbx0csgi7g8dg5wsifpsrdrqph0p7ps8snk";
+    url = "http://beta.quicklisp.org/archive/cl-colors2/2021-06-30/cl-colors2-20210630-git.tgz";
+    sha256 = "00mb239p4r30fm7b0qwfg1vfyp83h2h87igk3hqqgvadp6infi7g";
   };
 
   packageName = "cl-colors2";
@@ -21,11 +19,10 @@ rec {
   overrides = x: x;
 }
 /* (SYSTEM cl-colors2 DESCRIPTION Simple color library for Common Lisp SHA256
-    14kdi214x8rxil27wfbx0csgi7g8dg5wsifpsrdrqph0p7ps8snk URL
-    http://beta.quicklisp.org/archive/cl-colors2/2021-04-11/cl-colors2-20210411-git.tgz
-    MD5 e6b54e76e7d1cfcff45955dbd4752f1d NAME cl-colors2 FILENAME cl-colors2
+    00mb239p4r30fm7b0qwfg1vfyp83h2h87igk3hqqgvadp6infi7g URL
+    http://beta.quicklisp.org/archive/cl-colors2/2021-06-30/cl-colors2-20210630-git.tgz
+    MD5 50a5885e2b55239d5904b0a0134e0be3 NAME cl-colors2 FILENAME cl-colors2
     DEPS
-    ((NAME alexandria FILENAME alexandria) (NAME cl-ppcre FILENAME cl-ppcre)
-     (NAME clunit2 FILENAME clunit2))
-    DEPENDENCIES (alexandria cl-ppcre clunit2) VERSION 20210411-git SIBLINGS
-    NIL PARASITES (cl-colors2/tests)) */
+    ((NAME alexandria FILENAME alexandria) (NAME cl-ppcre FILENAME cl-ppcre))
+    DEPENDENCIES (alexandria cl-ppcre) VERSION 20210630-git SIBLINGS NIL
+    PARASITES NIL) */

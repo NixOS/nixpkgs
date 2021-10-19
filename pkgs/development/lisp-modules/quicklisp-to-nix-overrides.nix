@@ -278,5 +278,17 @@ $out/lib/common-lisp/query-fs"
     (extraLispDeps (with quicklisp-to-nix-packages; [flexi-streams]));
   cl-gobject-introspection = addNativeLibs (with pkgs; [glib gobject-introspection]);
   generic-cl = x: { parasites = []; };
-  static-dispatch = x: { parasites = []; };
+  static-dispatch = x: {
+    overrides = y: (x.overrides y) // {
+      parasites = [];
+      # workaround for https://github.com/alex-gutev/static-dispatch/issues/12
+      postUnpack = ''
+        sed -e '/^(in-package / a (eval-when (:compile-toplevel :load-toplevel :execute)' \
+            -e '$a)' \
+            -i $sourceRoot/src/combin.lisp
+      '';
+    };
+  };
+  lla = addNativeLibs [ pkgs.openblas ];
+#  cl-opengl = addNativeLibs [ pkgs.libGL pkgs.glfw ];
 }
