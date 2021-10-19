@@ -102,7 +102,6 @@ stdenv.mkDerivation rec {
       additional features, such as additional effects, and a fork at a
       well-defined and proper place. This tryone fork contains patches for
       dual_kawase blur support
-      
       The package can be installed in debug mode as:
         picom.override { withDebug = true; }
       For gdb to find the source files, you need to run gdb in the bin directory
