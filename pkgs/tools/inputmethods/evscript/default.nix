@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-apq3kHipEX6zOTNwqpIQR46JqmeE7EKVSOGrNNSkyu8=";
   };
 
-  cargoHash = "sha256-1aR9/fhJQ+keRIxSG2cpY1HTalE6nM+MTb1Za3Tot28=";
+  cargoSha256 = "sha256-1aR9/fhJQ+keRIxSG2cpY1HTalE6nM+MTb1Za3Tot28=";
 
   meta = with lib; {
     homepage = "https://github.com/unrelentingtech/evscript";
