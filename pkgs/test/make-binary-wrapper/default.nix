@@ -4,6 +4,7 @@ let
   makeGoldenTest = { name, filename }: stdenv.mkDerivation {
     name = name;
     dontUnpack = true;
+    strictDeps = true;
     buildInputs = [ makeBinaryWrapper ];
     phases = [ "installPhase" ];
     installPhase = ''
