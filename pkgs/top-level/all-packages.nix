@@ -407,17 +407,13 @@ with pkgs;
 
   dotnetCorePackages = recurseIntoAttrs (callPackage ../development/compilers/dotnet {});
 
-  dotnet-sdk = dotnetCorePackages.sdk_2_1;
-
   dotnet-sdk_2 = dotnetCorePackages.sdk_2_1;
-
   dotnet-sdk_3 = dotnetCorePackages.sdk_3_1;
-
   dotnet-sdk_5 = dotnetCorePackages.sdk_5_0;
 
-  dotnet-netcore = dotnetCorePackages.netcore_2_1;
-
-  dotnet-aspnetcore = dotnetCorePackages.aspnetcore_2_1;
+  dotnet-sdk = dotnetCorePackages.sdk_5_0;
+  dotnet-runtime = dotnetCorePackages.runtime_5_0;
+  dotnet-aspnetcore = dotnetCorePackages.aspnetcore_5_0;
 
   dumb-init = callPackage ../applications/virtualization/dumb-init {};
 
@@ -2753,6 +2749,8 @@ with pkgs;
 
   eggdrop = callPackage ../tools/networking/eggdrop { };
 
+  ekam = callPackage ../development/tools/build-managers/ekam { };
+
   eksctl = callPackage ../tools/admin/eksctl { };
 
   electronplayer = callPackage ../applications/video/electronplayer/electronplayer.nix { };
@@ -3453,6 +3451,8 @@ with pkgs;
   starboard = callPackage ../applications/networking/cluster/starboard { };
 
   statserial = callPackage ../tools/misc/statserial { };
+
+  steampipe = callPackage ../tools/misc/steampipe { };
 
   step-ca = callPackage ../tools/security/step-ca {
     inherit (darwin.apple_sdk.frameworks) PCSC;
@@ -6132,6 +6132,8 @@ with pkgs;
 
   hivemind = callPackage ../applications/misc/hivemind { };
 
+  hobbits = libsForQt5.callPackage ../tools/graphics/hobbits { };
+
   hfsprogs = callPackage ../tools/filesystems/hfsprogs { };
 
   highlight = callPackage ../tools/text/highlight ({
@@ -7657,7 +7659,7 @@ with pkgs;
 
   netkittftp = callPackage ../tools/networking/netkit/tftp { };
 
-  netlify-cli = nodePackages.netlify-cli;
+  netlify-cli = callPackage ../development/web/netlify-cli { };
 
   netpbm = callPackage ../tools/graphics/netpbm { };
 
@@ -10125,6 +10127,8 @@ with pkgs;
 
   uwsgi = callPackage ../servers/uwsgi { };
 
+  uwufetch = callPackage ../tools/misc/uwufetch { };
+
   v2ray = callPackage ../tools/networking/v2ray { };
 
   vacuum = callPackage ../applications/networking/instant-messengers/vacuum {};
@@ -10902,6 +10906,8 @@ with pkgs;
   zsh-fast-syntax-highlighting = callPackage ../shells/zsh/zsh-fast-syntax-highlighting { };
 
   zsh-fzf-tab = callPackage ../shells/zsh/zsh-fzf-tab { };
+
+  zsh-autocomplete = callPackage ../shells/zsh/zsh-autocomplete { };
 
   zsh-autosuggestions = callPackage ../shells/zsh/zsh-autosuggestions { };
 
@@ -12401,7 +12407,7 @@ with pkgs;
 
   roslyn = callPackage ../development/compilers/roslyn { };
 
-  msbuild = callPackage ../development/tools/build-managers/msbuild { dotnet-sdk = dotnet-sdk_5; };
+  msbuild = callPackage ../development/tools/build-managers/msbuild { };
 
   mosml = callPackage ../development/compilers/mosml { };
 
@@ -15540,6 +15546,8 @@ with pkgs;
   hercules-ci-agent = callPackage ../development/tools/continuous-integration/hercules-ci-agent { };
 
   hci = callPackage ../development/tools/continuous-integration/hci { };
+
+  isa-l = callPackage ../development/libraries/isa-l { };
 
   niv = lib.getBin (haskell.lib.justStaticExecutables haskellPackages.niv);
 
@@ -24402,6 +24410,11 @@ with pkgs;
 
   epic5 = callPackage ../applications/networking/irc/epic5 { };
 
+  epick = callPackage ../applications/graphics/epick {
+    inherit (darwin.apple_sdk.frameworks) AppKit IOKit;
+    inherit (xorg) libX11 libXcursor libXi libXrandr libxcb;
+  };
+
   epr = callPackage ../applications/misc/epr { };
 
   eq10q = callPackage ../applications/audio/eq10q { };
@@ -26259,9 +26272,6 @@ with pkgs;
     inherit (xorg) libX11 libXrandr;
   };
 
-  mercurial_4 = callPackage ../applications/version-management/mercurial/4.9.nix {
-    inherit (darwin.apple_sdk.frameworks) ApplicationServices;
-  };
   mercurial = callPackage ../applications/version-management/mercurial {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;
   };
@@ -26929,10 +26939,7 @@ with pkgs;
     libtiff = callPackage ../applications/graphics/opentoonz/libtiff.nix { };
   })).callPackage ../applications/graphics/opentoonz { };
 
-  opentabletdriver = callPackage ../tools/X11/opentabletdriver {
-    dotnet-sdk = dotnetCorePackages.sdk_5_0;
-    dotnet-netcore = dotnetCorePackages.net_5_0;
-  };
+  opentabletdriver = callPackage ../tools/X11/opentabletdriver { };
 
   opentx = libsForQt5.callPackage ../applications/misc/opentx { };
 
@@ -27511,6 +27518,8 @@ with pkgs;
   ripser = callPackage ../applications/science/math/ripser { };
 
   rkdeveloptool = callPackage ../misc/rkdeveloptool { };
+
+  rocketchat-desktop = callPackage ../applications/networking/instant-messengers/rocketchat-desktop { };
 
   rofi-unwrapped = callPackage ../applications/misc/rofi {
     autoreconfHook = buildPackages.autoreconfHook269;
@@ -33205,7 +33214,7 @@ with pkgs;
     stdenv = crossLibcStdenv;
   };
 
-  omnisharp-roslyn = callPackage ../development/tools/omnisharp-roslyn { dotnet-sdk = dotnet-sdk_5; };
+  omnisharp-roslyn = callPackage ../development/tools/omnisharp-roslyn { };
 
   wasmtime = callPackage ../development/interpreters/wasmtime {};
 

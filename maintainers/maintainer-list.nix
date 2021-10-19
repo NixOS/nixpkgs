@@ -4094,6 +4094,12 @@
     githubId = 16470252;
     name = "Gemini Lasswell";
   };
+  gbtb = {
+    email = "goodbetterthebeast3@gmail.com";
+    github = "gbtb";
+    githubId = 37017396;
+    name = "gbtb";
+  };
   gebner = {
     email = "gebner@gebner.org";
     github = "gebner";
@@ -4420,6 +4426,16 @@
     github = "happy-river";
     githubId = 54728477;
     name = "Happy River";
+  };
+  hardselius = {
+    email = "martin@hardselius.dev";
+    github = "hardselius";
+    githubId = 1422583;
+    name = "Martin Hardselius";
+    keys = [{
+      longkeyid = "rsa4096/0x03A6E6F786936619";
+      fingerprint = "3F35 E4CA CBF4 2DE1 2E90  53E5 03A6 E6F7 8693 6619";
+    }];
   };
   haslersn = {
     email = "haslersn@fius.informatik.uni-stuttgart.de";
