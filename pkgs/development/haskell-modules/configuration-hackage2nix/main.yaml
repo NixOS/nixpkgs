@@ -102,6 +102,8 @@ default-package-overrides:
   - weeder < 2.3.0
   # 2021-10-10: taskwarrior 0.4 requires aeson > 2.0.1.0
   - taskwarrior < 0.4.0.0
+  # 2021-10-19: autoapply 0.4.1.1 requires th-desugar 1.12
+  - autoapply < 0.4.1.1
 
 extra-packages:
   - base16-bytestring < 1               # required for cabal-install etc.
