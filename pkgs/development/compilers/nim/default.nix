@@ -98,12 +98,12 @@ in {
 
   nim-unwrapped = stdenv.mkDerivation rec {
     pname = "nim-unwrapped";
-    version = "1.4.8";
+    version = "1.6.0";
     strictDeps = true;
 
     src = fetchurl {
       url = "https://nim-lang.org/download/nim-${version}.tar.xz";
-      hash = "sha256-t5jFd0EdfZW4YxJh27Nnbp0a/Z42dA0ESWagVVtBRBo=";
+      hash = "sha256-UgZdSNcqcnAuwa/l96mDHhFnNTHiec3/nK7AGgfuxj0=";
     };
 
     buildInputs = [ boehmgc openssl pcre readline sqlite ];
@@ -114,7 +114,7 @@ in {
 
       ./nixbuild.patch
       # Load libraries at runtime by absolute path
-    ];
+    ] ++ lib.optional (!stdenv.hostPlatform.isWindows) ./toLocation.patch;
 
     configurePhase = ''
       runHook preConfigure

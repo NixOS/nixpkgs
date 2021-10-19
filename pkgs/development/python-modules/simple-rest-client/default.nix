@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "simple-rest-client";
-  version = "1.1.0";
+  version = "1.1.1";
 
   disabled = pythonOlder "3.8";
 
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "allisson";
     repo = "python-simple-rest-client";
     rev = version;
-    sha256 = "sha256-i+wUc9qxyei+Jbch8vyIrm9ElClnOIKp+YK6jIDkbTA=";
+    sha256 = "sha256-oJXP2/lChlzzKyNiTgJMHkcNkFyy92kTPxgDkon54g8=";
   };
 
   propagatedBuildInputs = [

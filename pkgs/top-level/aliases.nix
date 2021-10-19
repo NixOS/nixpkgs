@@ -204,6 +204,7 @@ mapAliases ({
   dnnl = oneDNN; # added 2020-04-22
   docbook5_xsl = docbook_xsl_ns; # added 2018-04-25
   docbook_xml_xslt = docbook_xsl; # added 2018-04-25
+  dotnet-netcore = dotnet-runtime; # added 2021-10-07
   double_conversion = double-conversion; # 2017-11-22
   docker_compose = docker-compose; # 2018-11-10
   draftsight = throw "draftsight has been removed, no longer available as freeware"; # added 2020-08-14
@@ -548,6 +549,7 @@ mapAliases ({
   mopidy-local-sqlite = throw "mopidy-local-sqlite has been removed as it's unmaintained. Its functionality has been merged into the mopidy-local extension."; # added 2020-10-18
   mysql-client = hiPrio mariadb.client;
   memtest86 = memtest86plus; # added 2019-05-08
+  mercurial_4 = throw "mercurial_4 has been removed as it's unmaintained"; # added 2021-10-18
   mesa_noglu = mesa; # added 2019-05-28
   # NOTE: 2018-07-12: legacy alias:
   # grsecurity business is done: https://www.theregister.co.uk/2018/02/08/bruce_perens_grsecurity_anti_slapp/
