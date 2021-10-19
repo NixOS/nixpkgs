@@ -8,7 +8,7 @@ buildDunePackage rec {
 
   useDune2 = true;
 
-  minimumOCamlVersion = "4.08";
+  minimalOCamlVersion = "4.08";
 
   src = fetchurl {
     url = "https://github.com/patricoferris/ppx_deriving_yaml/releases/download/v${version}/ppx_deriving_yaml-v${version}.tbz";
@@ -22,7 +22,7 @@ buildDunePackage rec {
 
   meta = {
     description = "A YAML codec generator for OCaml";
-    inherit (src.meta) homepage;
+    homepage = "https://github.com/patricoferris/ppx_deriving_yaml";
     license = lib.licenses.isc;
     maintainers = [ ];
   };
