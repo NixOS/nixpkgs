@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     cairo
     cups
     expat
-    libgpgerror
+    libgpg-error
     alsa-lib
     nspr
     nss
