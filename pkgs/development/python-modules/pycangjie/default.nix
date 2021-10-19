@@ -1,5 +1,5 @@
 { lib, fetchurl, bash, autoconf, automake, libtool, pkg-config, libcangjie
-, sqlite, buildPythonPackage, cython
+, sqlite, buildPythonPackage, cython, isPy3k
 }:
 
 let
@@ -7,6 +7,7 @@ let
 in buildPythonPackage {
   pname = "pycangjie";
   version = "1.3_rev_${rev}";
+  disabled = !isPy3k;
   format = "other";
 
   src = fetchurl {
