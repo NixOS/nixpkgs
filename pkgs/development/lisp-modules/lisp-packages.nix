@@ -234,7 +234,7 @@ let lispPackages = rec {
     deps = with pkgs.lispPackages; [
       alexandria bordeaux-threads cffi cffi-grovel cl-cuda flexi-streams ieee-floats
       lla mgl-pax static-vectors trivial-garbage
-    ];     
+    ];
     src = pkgs.fetchFromGitHub {
       owner = "melisgl";
       repo = "mgl-mat";

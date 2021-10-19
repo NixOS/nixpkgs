@@ -30,8 +30,8 @@ let
     echo "fi" >> "$config_script"
     echo "if test -z \"\''${_''${outhash}_NIX_LISP_PATH_CONFIG:-}\"; then export _''${outhash}_NIX_LISP_PATH_CONFIG=1; " >> "$path_config_script"
     echo "NIX_LISP_ASDF_PATHS=\"$( echo "\''${NIX_LISP_ASDF_PATHS:-}"; echo "$NIX_LISP_ASDF_PATHS"; echo "$out/lib/common-lisp/${args.baseName}" )\"" >> "$path_config_script"
-    echo "export NIX_LISP_ASDF_PATHS=\$((tr ' ' '\n' | sort | uniq | tr '\n' ' ') <<< \$NIX_LISP_ASDF_PATHS)" >> $path_config_script    
-    
+    echo "export NIX_LISP_ASDF_PATHS=\$((tr ' ' '\n' | sort | uniq | tr '\n' ' ') <<< \$NIX_LISP_ASDF_PATHS)" >> $path_config_script
+
     test -n "$LD_LIBRARY_PATH" &&
         echo "export LD_LIBRARY_PATH=\"\$LD_LIBRARY_PATH\''${LD_LIBRARY_PATH:+:}\"'$LD_LIBRARY_PATH'" >> "$path_config_script"
     test -n "$NIX_LISP_LD_LIBRARY_PATH" &&
