@@ -11,6 +11,10 @@
 # the upstream repository's sources.
 super: super // {
 
+  "dash-to-dock@micxgx.gmail.com" = super."dash-to-dock@micxgx.gmail.com".overrideAttrs (old: {
+    meta.maintainers = with lib.maintainers; [ eperuffo jtojnar rhoriguchi ];
+  });
+
   "display-brightness-ddcutil@themightydeity.github.com" = super."display-brightness-ddcutil@themightydeity.github.com".overrideAttrs (old: {
     # Has a hard-coded path to a run-time dependency
     # https://github.com/NixOS/nixpkgs/issues/136111
