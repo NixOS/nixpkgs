@@ -11,6 +11,7 @@ in
   discourse-ldap-auth = callPackage ./discourse-ldap-auth {};
   discourse-math = callPackage ./discourse-math {};
   discourse-migratepassword = callPackage ./discourse-migratepassword {};
+  discourse-openid-connect = callPackage ./discourse-openid-connect {};
   discourse-solved = callPackage ./discourse-solved {};
   discourse-spoiler-alert = callPackage ./discourse-spoiler-alert {};
   discourse-yearly-review = callPackage ./discourse-yearly-review {};
