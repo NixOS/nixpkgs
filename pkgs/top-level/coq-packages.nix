@@ -37,6 +37,7 @@ let
       coqtail-math = callPackage ../development/coq-modules/coqtail-math {};
       coquelicot = callPackage ../development/coq-modules/coquelicot {};
       corn = callPackage ../development/coq-modules/corn {};
+      deriving = callPackage ../development/coq-modules/deriving {};
       dpdgraph = callPackage ../development/coq-modules/dpdgraph {};
       equations = callPackage ../development/coq-modules/equations { };
       fiat_HEAD = callPackage ../development/coq-modules/fiat/HEAD.nix {};
