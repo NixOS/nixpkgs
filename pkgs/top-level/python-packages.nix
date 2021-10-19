@@ -6961,6 +6961,8 @@ in {
 
   pysmappee = callPackage ../development/python-modules/pysmappee { };
 
+  pysmart = callPackage ../development/python-modules/pysmart { };
+
   pysmart-smartx = callPackage ../development/python-modules/pysmart-smartx { };
 
   pysmartapp = callPackage ../development/python-modules/pysmartapp { };
