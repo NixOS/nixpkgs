@@ -32,7 +32,7 @@
 # The dotnet SDK to use.
 , dotnet-sdk ? dotnetCorePackages.sdk_5_0
 # The dotnet runtime to use.
-, dotnet-runtime ? dotnetCorePackages.net_5_0
+, dotnet-runtime ? dotnetCorePackages.runtime_5_0
 , ... } @ args:
 
 assert projectFile == null -> throw "Defining the `projectFile` attribute is required. This is usually an `.csproj`, or `.sln` file.";
