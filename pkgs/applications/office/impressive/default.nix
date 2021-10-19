@@ -40,6 +40,7 @@ in stdenv.mkDerivation {
     '';
 
     meta = {
+      broken = true; # 2021-10-19
       description = "Impressive, an effect-rich presentation tool for PDFs";
 
       longDescription = ''
