@@ -40,6 +40,7 @@ let
       deriving = callPackage ../development/coq-modules/deriving {};
       dpdgraph = callPackage ../development/coq-modules/dpdgraph {};
       equations = callPackage ../development/coq-modules/equations { };
+      extructures = callPackage ../development/coq-modules/extructures { };
       fiat_HEAD = callPackage ../development/coq-modules/fiat/HEAD.nix {};
       flocq = callPackage ../development/coq-modules/flocq {};
       fourcolor = callPackage ../development/coq-modules/fourcolor {};
