@@ -28859,6 +28859,8 @@ with pkgs;
 
   inherit (xorg) xcompmgr;
 
+  picom-tryone = callPackage ../applications/window-managers/picom-tryone {};
+
   picom = callPackage ../applications/window-managers/picom {};
 
   xd = callPackage ../applications/networking/p2p/xd {};
