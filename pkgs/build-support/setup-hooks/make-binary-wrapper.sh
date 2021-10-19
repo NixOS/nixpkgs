@@ -27,6 +27,7 @@ assertExecutable() {
 # To troubleshoot a binary wrapper after you compiled it,
 # use the `strings` command or open the binary file in a text editor.
 makeBinaryWrapper() {
+    assertExecutable "$1"
     makeDocumentedCWrapper "$1" "${@:3}" | gcc -Os -x c -o "$2" -
 }
 
@@ -65,7 +66,6 @@ makeCWrapper() {
     local argv0 n params cmd main flagsBefore flags executable params length
     local uses_prefix uses_suffix uses_concat3
     executable=$(escapeStringLiteral "$1")
-    assertExecutable "$1"
     params=("$@")
     length=${#params[*]}
     for ((n = 1; n < length; n += 1)); do
