@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     owner = "tryone144";
     repo = "picom";
     rev = "5e0215abab83f11628703bfd279d618bca4ce5ef";
-    sha256 = "1ajv396p5421clwzm3am08gcp9nqqrwp2v92g6n0vwxqnx7c2di3";
+    sha256 = "1ajv396p5421clwzm3am08gcp9nqqrwp2v92g6n0vwxqnx7c2di8";
     fetchSubmodules = true;
   };
 
