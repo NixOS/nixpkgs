@@ -3718,8 +3718,6 @@ with pkgs;
   birdfont = callPackage ../tools/misc/birdfont { };
   xmlbird = callPackage ../tools/misc/birdfont/xmlbird.nix { stdenv = gccStdenv; };
 
-  blastem = callPackage ../misc/emulators/blastem { };
-
   blueberry = callPackage ../tools/bluetooth/blueberry { };
 
   blueman = callPackage ../tools/bluetooth/blueman { };
