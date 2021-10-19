@@ -871,15 +871,15 @@ someVar=$(stripHash $name)
 
 ### `wrapProgram` \<executable\> \<makeWrapperArgs\> {#fun-wrapProgram}
 
-Convenience function for `makeWrapper` that automatically creates a sane wrapper file. It takes all the same arguments as `makeWrapper`, except for `--argv0`.
+Convenience function for `makeWrapper` that replaces `<\executable\>` with a wrapper that executes the original program. It takes all the same arguments as `makeWrapper`, except for `--argv0`.
 
-It cannot be applied multiple times, since it will overwrite the wrapper file and you will end up with double wrapping.
+If you will apply it multiple times, it will overwrite the wrapper file and you will end up with double wrapping, which should be avoided.
 
 ### `wrapProgramBinary` \<executable\> \<makeBinaryWrapperArgs\> {#fun-wrapProgramBinary}
 
-Convenience function for `makeWrapperBinary` that automatically creates a sane wrapper file. It takes all the same arguments as `makeBinaryWrapper`, except for `--argv0`.
+Convenience function for `makeBinaryWrapper` that replaces `<\executable\>` with a wrapper that executes the original program. It takes all the same arguments as `makeBinaryWrapper`, except for `--argv0`.
 
-It cannot be applied multiple times, since it will overwrite the wrapper file and you will end up with double wrapping.
+If you will apply it multiple times, it will overwrite the wrapper file and you will end up with double wrapping, which should be avoided.
 
 ## Package setup hooks {#ssec-setup-hooks}
 
