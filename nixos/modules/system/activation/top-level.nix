@@ -84,6 +84,13 @@ let
       export localeArchive="${config.i18n.glibcLocales}/lib/locale/locale-archive"
       substituteAll ${./switch-to-configuration.pl} $out/bin/switch-to-configuration
       chmod +x $out/bin/switch-to-configuration
+      ${optionalString (pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform) ''
+        if ! output=$($perl/bin/perl -c $out/bin/switch-to-configuration 2>&1); then
+          echo "switch-to-configuration syntax is not valid:"
+          echo "$output"
+          exit 1
+        fi
+      ''}
 
       echo -n "${toString config.system.extraDependencies}" > $out/extra-dependencies
 

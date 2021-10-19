@@ -1408,6 +1408,8 @@ let
 
     yaml = callPackage ../development/ocaml-modules/yaml { };
 
+    yaml-sexp = callPackage ../development/ocaml-modules/yaml/yaml-sexp.nix { };
+
     yojson = callPackage ../development/ocaml-modules/yojson { };
 
     z3 = callPackage ../development/ocaml-modules/z3 {
