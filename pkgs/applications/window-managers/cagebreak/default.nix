@@ -74,7 +74,8 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = lib.optionalString withXwayland ''
-    wrapProgram $out/bin/cagebreak --prefix PATH : "${xwayland}/bin"
+    wrapProgram $out/bin/cagebreak \
+      --prefix PATH : "${lib.makeBinPath [ xwayland ]}"
   '';
 
   meta = with lib; {
