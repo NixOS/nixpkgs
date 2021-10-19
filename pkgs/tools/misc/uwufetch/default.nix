@@ -34,7 +34,8 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    wrapProgram $out/bin/uwufetch --prefix PATH ":" ${viu}/bin
+    wrapProgram $out/bin/uwufetch \
+    	--prefix PATH ":" ${lib.makeBinPath [ viu ]}
   '';
 
   meta = with lib; {
