@@ -1129,6 +1129,15 @@ Superuser created successfully.
           would be parsed as 3 parameters.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          The <literal>coursier</literal> package’s binary was renamed
+          from <literal>coursier</literal> to <literal>cs</literal>.
+          Completions which haven’t worked for a while should now work
+          with the renamed binary. To keep using
+          <literal>coursier</literal>, you can create a shell alias.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-notable-changes">
