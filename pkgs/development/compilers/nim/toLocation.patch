@@ -1,20 +1,16 @@
 diff --git a/lib/std/private/miscdollars.nim b/lib/std/private/miscdollars.nim
-index a41cf1bc1..5b92c696a 100644
+index 840fedf54..6c3436308 100644
 --- a/lib/std/private/miscdollars.nim
 +++ b/lib/std/private/miscdollars.nim
-@@ -4,12 +4,12 @@ template toLocation*(result: var string, file: string | cstring, line: int, col:
+@@ -6,9 +6,8 @@ template toLocation*(result: var string, file: string | cstring, line: int, col:
    # it can be done in a single place.
    result.add file
    if line > 0:
 -    result.add "("
-+    result.add ':'
-     # simplify this after moving moving `include strmantle` above import assertions`
-     when declared(addInt): result.addInt line
-     else: result.add $line
++    result.add ":"
+     addInt(result, line)
      if col > 0:
 -      result.add ", "
-+      result.add ':'
-       when declared(addInt): result.addInt col
-       else: result.add $col
++      result.add ":"
+       addInt(result, col)
 -    result.add ")"
-+    result.add ':'
