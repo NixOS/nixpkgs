@@ -5,7 +5,7 @@ let
     name = name;
     dontUnpack = true;
     strictDeps = true;
-    buildInputs = [ makeBinaryWrapper ];
+    nativeBuildInputs = [ makeBinaryWrapper ];
     phases = [ "installPhase" ];
     installPhase = ''
       source ${./golden-test-utils.sh}
