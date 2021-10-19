@@ -15549,6 +15549,8 @@ with pkgs;
 
   hci = callPackage ../development/tools/continuous-integration/hci { };
 
+  isa-l = callPackage ../development/libraries/isa-l { };
+
   niv = lib.getBin (haskell.lib.justStaticExecutables haskellPackages.niv);
 
   ormolu = haskellPackages.ormolu.bin;
