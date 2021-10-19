@@ -6,7 +6,7 @@ from xml.sax.saxutils import XMLGenerator
 from colorama import Style
 import queue
 import io
-import _thread
+import threading
 import argparse
 import atexit
 import base64
@@ -409,6 +409,7 @@ class Machine:
     pid: Optional[int] = None
     monitor: Optional[socket.socket] = None
     shell: Optional[socket.socket] = None
+    serial_thread: Optional[threading.Thread]
 
     booted: bool = False
     connected: bool = False
@@ -443,6 +444,8 @@ class Machine:
         if (not self.keep_vm_state) and self.state_dir.exists():
             self.cleanup_statedir()
         self.state_dir.mkdir(mode=0o700, exist_ok=True)
+
+        self.serial_thread = None
 
     @staticmethod
     def create_startcommand(args: Dict[str, str]) -> StartCommand:
@@ -921,7 +924,8 @@ class Machine:
                 self.last_lines.put(line)
                 self.log_serial(line)
 
-        _thread.start_new_thread(process_serial_output, ())
+        self.serial_thread = threading.Thread(target=process_serial_output)
+        self.serial_thread.start()
 
         self.wait_for_monitor_prompt()
 
@@ -1021,9 +1025,12 @@ class Machine:
         assert self.process
         assert self.shell
         assert self.monitor
+        assert self.serial_thread
+
         self.process.terminate()
         self.shell.close()
         self.monitor.close()
+        self.serial_thread.join()
 
 
 class VLan:
