@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, setuptools-scm, pytest }:
+{ lib, buildPythonPackage, fetchPypi, setuptools-scm, zopfli, pytest }:
 
 buildPythonPackage rec {
   pname = "zopfli";
@@ -11,6 +11,9 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ setuptools-scm ];
+
+  buildInputs = [ zopfli ];
+  USE_SYSTEM_ZOPFLI = "True";
 
   # doesn't work with pytestCheckHook
   checkInputs = [ pytest ];
