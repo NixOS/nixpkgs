@@ -405,14 +405,14 @@ class Machine:
     keep_vm_state: bool
     allow_reboot: bool
 
-    process: Optional[subprocess.Popen] = None
-    pid: Optional[int] = None
-    monitor: Optional[socket.socket] = None
-    shell: Optional[socket.socket] = None
+    process: Optional[subprocess.Popen]
+    pid: Optional[int]
+    monitor: Optional[socket.socket]
+    shell: Optional[socket.socket]
     serial_thread: Optional[threading.Thread]
 
-    booted: bool = False
-    connected: bool = False
+    booted: bool
+    connected: bool
     # Store last serial console lines for use
     # of wait_for_console_text
     last_lines: Queue = Queue()
@@ -445,7 +445,14 @@ class Machine:
             self.cleanup_statedir()
         self.state_dir.mkdir(mode=0o700, exist_ok=True)
 
+        self.process = None
+        self.pid = None
+        self.monitor = None
+        self.shell = None
         self.serial_thread = None
+
+        self.booted = False
+        self.connected = False
 
     @staticmethod
     def create_startcommand(args: Dict[str, str]) -> StartCommand:
