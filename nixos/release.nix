@@ -263,7 +263,7 @@ in rec {
           versionModule
           ./maintainers/scripts/lxd/lxd-image.nix
         ];
-    }).config.system.build.tarball.content) # use .content because this is an override
+    }).config.system.build.tarball)
 
   );
 

@@ -27,11 +27,7 @@ let
     };
   };
 
-  toYAML = name: attrs: pkgs.runCommandNoCC name {
-    preferLocalBuild = true;
-    json = builtins.toFile "${name}.json" (builtins.toJSON attrs);
-    nativeBuildInputs = [ pkgs.remarshal ];
-  } "json2yaml -i $json -o $out";
+  toYAML = name: data: pkgs.writeText name (generators.toYAML {} data);
 
   cfg = config.virtualisation.lxc;
   templates = if cfg.templates != {} then let
@@ -54,7 +50,9 @@ let
 in
 {
   imports = [
-    ../profiles/docker-container.nix # FIXME, shouldn't include something from profiles/
+    ../installer/cd-dvd/channel.nix
+    ../profiles/minimal.nix
+    ../profiles/clone-config.nix
   ];
 
   options = {
@@ -94,6 +92,20 @@ in
   };
 
   config = {
+    boot.isContainer = true;
+    boot.postBootCommands =
+      ''
+        # After booting, register the contents of the Nix store in the Nix
+        # database.
+        if [ -f /nix-path-registration ]; then
+          ${config.nix.package.out}/bin/nix-store --load-db < /nix-path-registration &&
+          rm /nix-path-registration
+        fi
+
+        # nixos-rebuild also requires a "system" profile
+        ${config.nix.package.out}/bin/nix-env -p /nix/var/nix/profiles/system --set /run/current-system
+      '';
+
     system.build.metadata = pkgs.callPackage ../../lib/make-system-tarball.nix {
       contents = [
         {
@@ -112,7 +124,7 @@ in
       ] ++ templates.files;
     };
 
-    system.build.tarball = mkForce (pkgs.callPackage ../../lib/make-system-tarball.nix {
+    system.build.tarball = pkgs.callPackage ../../lib/make-system-tarball.nix {
       extraArgs = "--owner=0";
 
       storeContents = [
@@ -130,7 +142,7 @@ in
       ];
 
       extraCommands = "mkdir -p proc sys dev";
-    });
+    };
 
     # Add the overrides from lxd distrobuilder
     systemd.extraConfig = ''
