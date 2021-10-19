@@ -10903,6 +10903,8 @@ with pkgs;
 
   zsh-fzf-tab = callPackage ../shells/zsh/zsh-fzf-tab { };
 
+  zsh-autocomplete = callPackage ../shells/zsh/zsh-autocomplete { };
+
   zsh-autosuggestions = callPackage ../shells/zsh/zsh-autosuggestions { };
 
   zsh-powerlevel10k = callPackage ../shells/zsh/zsh-powerlevel10k { };
