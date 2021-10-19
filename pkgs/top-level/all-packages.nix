@@ -8780,6 +8780,8 @@ with pkgs;
 
   rarian = callPackage ../development/libraries/rarian { };
 
+  rasdaemon = callPackage ../os-specific/linux/rasdaemon { };
+
   ratools = callPackage ../tools/networking/ratools { };
 
   rawdog = callPackage ../applications/networking/feedreaders/rawdog { };
