@@ -1,6 +1,7 @@
 { mkDerivation, lib, stdenv, fetchurl
 , qmake, qttools, qtbase, qtsvg, qtdeclarative, qtxmlpatterns, qtwebsockets
 , qtx11extras, qtwayland
+, wrapGAppsHook
 }:
 
 mkDerivation rec {
@@ -14,7 +15,7 @@ mkDerivation rec {
     sha256 = "2c86d66ae427bdcd16d706b982cedaa669a27340f7819fc97a8e2b24c709e74f";
   };
 
-  nativeBuildInputs = [ qmake qttools ];
+  nativeBuildInputs = [ qmake qttools wrapGAppsHook ];
 
   buildInputs = [ qtbase qtsvg qtdeclarative qtxmlpatterns qtwebsockets qtx11extras ]
     ++ lib.optionals stdenv.isLinux [ qtwayland ];
