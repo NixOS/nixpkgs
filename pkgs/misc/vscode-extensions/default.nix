@@ -1082,6 +1082,18 @@ let
         };
       };
 
+      mhutchie.git-graph = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "git-graph";
+          publisher = "mhutchie";
+          version = "1.30.0";
+          sha256 = "sha256-sHeaMMr5hmQ0kAFZxxMiRk6f0mfjkg2XMnA4Gf+DHwA=";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
       mikestead.dotenv = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "dotenv";
