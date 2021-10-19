@@ -4,6 +4,7 @@
 , makeWrapper
 , ruby
 , bundlerEnv
+, python3
 }:
 
 let
@@ -24,6 +25,7 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ (python3.withPackages (ps: [ ps.requests ])) ];
 
   dontPatchELF = true; # stay away from exploit executables
 
@@ -31,6 +33,8 @@ in stdenv.mkDerivation rec {
     mkdir -p $out/{bin,share/msf}
 
     cp -r * $out/share/msf
+
+    grep -rl "^#\!.*python2$" $out/share/msf | xargs -d '\n' rm
 
     (
       cd $out/share/msf/
