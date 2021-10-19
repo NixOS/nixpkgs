@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, graalvm11-ce, glibcLocales }:
+{ lib, stdenv, fetchurl, graalvm11-ce, glibcLocales, writeScript }:
 
 stdenv.mkDerivation rec {
   pname = "babashka";
@@ -56,6 +56,21 @@ stdenv.mkDerivation rec {
     $out/bin/bb --version | grep '${version}'
     $out/bin/bb '(+ 1 2)' | grep '3'
     $out/bin/bb '(vec (dedupe *input*))' <<< '[1 1 1 1 2]' | grep '[1 2]'
+  '';
+
+  passthru.updateScript = writeScript "update-babashka" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p curl common-updater-scripts jq
+
+    set -euo pipefail
+
+    readonly latest_version="$(curl \
+      ''${GITHUB_TOKEN:+"-u \":$GITHUB_TOKEN\""} \
+      -s "https://api.github.com/repos/babashka/babashka/releases/latest" \
+      | jq -r '.tag_name')"
+
+    # v0.6.2 -> 0.6.2
+    update-source-version babashka "''${latest_version/v/}"
   '';
 
   meta = with lib; {
