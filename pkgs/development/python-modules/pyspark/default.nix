@@ -1,4 +1,8 @@
-{ buildPythonPackage, fetchPypi, lib, py4j }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, py4j
+}:
 
 buildPythonPackage rec {
   pname = "pyspark";
@@ -13,16 +17,23 @@ buildPythonPackage rec {
   postPatch = ''
     sed -i "s/'pypandoc'//" setup.py
 
-    substituteInPlace setup.py --replace py4j==0.10.9 'py4j>=0.10.9,<0.11'
+    substituteInPlace setup.py \
+      --replace py4j==0.10.9.2 'py4j>=0.10.9,<0.11'
   '';
 
-  propagatedBuildInputs = [ py4j ];
+  propagatedBuildInputs = [
+    py4j
+  ];
 
-  # Tests assume running spark...
+  # Tests assume running spark instance
   doCheck = false;
 
+  pythonImportsCheck = [
+    "pyspark"
+  ];
+
   meta = with lib; {
-    description = "Apache Spark";
+    description = "Python bindings for Apache Spark";
     homepage = "https://github.com/apache/spark/tree/master/python";
     license = licenses.asl20;
     maintainers = [ maintainers.shlevy ];
