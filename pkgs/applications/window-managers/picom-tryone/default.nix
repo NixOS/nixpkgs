@@ -100,7 +100,7 @@ stdenv.mkDerivation rec {
       servers supporting the XFIXES, DAMAGE, RENDER, and COMPOSITE
       extensions. It enables basic eye-candy effects. This fork adds
       additional features, such as additional effects, and a fork at a
-      well-defined and proper place. This tryone fork contains patches for 
+      well-defined and proper place. This tryone fork contains patches for
       dual_kawase blur support
       
       The package can be installed in debug mode as:
