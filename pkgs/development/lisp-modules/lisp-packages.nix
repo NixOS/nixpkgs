@@ -214,11 +214,11 @@ let lispPackages = rec {
       alexandria closer-mop array-operations lla cl-reexport mgl-mat mgl-pax
       named-readtables pythonic-string-reader
     ];
-    src = {
+    src = pkgs.fetchFromGitHub {
       owner = "melisgl";
       repo = "mgl";
       rev = "e697791a9bcad3b6e7b3845246a2aa55238cfef7";
-      sha256 = "1bcg13g7qb3dr8z50aihdjqa6miz5ivlc9wsj2csgv1km1mak2k0";
+      sha256 = "sha256:09sf7nq7nmf9q7bh3a5ygl2i2n0nhrx5fk2kv5ili0ckv7g9x72s";
       # date = 2021-10-18T14:15+02:00
     };
     packageName = "mgl";
