@@ -26,6 +26,7 @@ _ = gettext.translation("calamares-python",
 def pretty_name():
     return _("Install rEFInd.")
 
+
 def get_uuid():
     partitions = libcalamares.globalstorage.value("partitions")
     for partition in partitions:
@@ -33,6 +34,7 @@ def get_uuid():
             libcalamares.utils.debug(partition["uuid"])
             return partition["uuid"]
     return None
+
 
 def update_conf(uuid, conf_path):
     """
@@ -86,7 +88,6 @@ def update_conf(uuid, conf_path):
             if line.startswith('"Boot with standard options"'):
                 line = '"Boot with standard options"    "rw {!s}"'.format(" ".join(kernel_params))
             refind_file.write(line + "\n")
-    refind_file.close()
 
 
 def install_refind():
@@ -119,6 +120,7 @@ def install_refind():
         ["refind-install", "--root", "{!s}".format(install_path)])
     update_conf(uuid, conf_path)
 
+
 def run():
     """
     Optional entry for when providing bootloader choices.
@@ -127,8 +129,5 @@ def run():
     """
     bootchoice = libcalamares.globalstorage.value("packagechooser_bootchoice")
 
-    if bootchoice != "refind":
-        return None
-
-    install_refind()
-    return None
+    if bootchoice == "refind":
+        return install_refind()
