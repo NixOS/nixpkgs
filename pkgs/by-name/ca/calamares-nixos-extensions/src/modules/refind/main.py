@@ -90,35 +90,29 @@ def update_conf(uuid, conf_path):
             refind_file.write(line + "\n")
 
 
+def efi_partitions(efi_boot_path):
+    """
+    The (one) partition mounted on @p efi_boot_path, or an empty list.
+    """
+    return [p for p in libcalamares.globalstorage.value("partitions") if p["mountPoint"] == efi_boot_path]
+
+
 def install_refind():
     install_path = libcalamares.globalstorage.value("rootMountPoint")
     uuid = get_uuid()
     conf_path = os.path.join(install_path, "boot/refind_linux.conf")
-    partitions = libcalamares.globalstorage.value("partitions")
-    device = None
 
     # TODO: some distro's use /boot/efi , so maybe this needs to
     #       become configurable (that depends on what rEFInd likes).
     efi_boot_path = "/boot"
 
-    for partition in partitions:
-        if partition["mountPoint"] == efi_boot_path:
-            boot_device = partition["device"]
-            boot_p = boot_device[-1:]
-            device = boot_device[:-1]
-            if boot_device.startswith('/dev/nvme'):
-                device = boot_device[:-2]
-
-            if not boot_p or not device:
-                return ("Boot device could not be determined",
-                        "Device mounted on {!s}: \"{!s}\"".format(efi_boot_path, boot_device))
-            else:
-                libcalamares.utils.debug("Mounted on {!s}: \"{!s}\"".format(efi_boot_path, boot_device))
-                libcalamares.utils.debug("Path \"{!s}\" number \"{!s}\"".format(device, boot_p))
-
-    if not device:
-        libcalamares.utils.warn("WARNING: no EFI system partition or EFI system partition mount point not set.")
+    # Might not have a /boot configured in the system at all; warn and don't operate
+    if not efi_partitions(efi_boot_path):
+        libcalamares.utils.warn("No partition mounted on {!s}".format(efi_boot_path))
+        # This isn't returned as an error, but the installation
+        # probably won't boot because no bootloader was installed.
         return None
+
     subprocess.call(
         ["refind-install", "--root", "{!s}".format(install_path)])
     update_conf(uuid, conf_path)
