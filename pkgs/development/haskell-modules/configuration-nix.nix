@@ -759,39 +759,8 @@ self: super: builtins.intersectAttrs super {
     })
     (generateOptparseApplicativeCompletion "pnbackup" super.pinboard-notes-backup);
 
-  # set more accurate set of platforms instead of maintaining
-  # an ever growing list of platforms to exclude via unsupported-platforms
-  cpuid = overrideCabal {
-    platforms = pkgs.lib.platforms.x86;
-  } super.cpuid;
-
   # Pass the correct libarchive into the package.
   streamly-archive = super.streamly-archive.override { archive = pkgs.libarchive; };
-
-  # passes the -msse2 flag which only works on x86 platforms
-  hsignal = overrideCabal {
-    platforms = pkgs.lib.platforms.x86;
-  } super.hsignal;
-
-  # uses x86 intrinsics
-  blake3 = overrideCabal {
-    platforms = pkgs.lib.platforms.x86;
-  } super.blake3;
-
-  # uses x86 intrinsics, see also https://github.com/NixOS/nixpkgs/issues/122014
-  crc32c = overrideCabal {
-    platforms = pkgs.lib.platforms.x86;
-  } super.crc32c;
-
-  # uses x86 intrinsics
-  seqalign = overrideCabal {
-    platforms = pkgs.lib.platforms.x86;
-  } super.seqalign;
-
-  # uses x86 intrinsics
-  geomancy = overrideCabal {
-    platforms = pkgs.lib.platforms.x86;
-  } super.geomancy;
 
   hlint = overrideCabal (drv: {
     postInstall = ''
@@ -810,16 +779,6 @@ self: super: builtins.intersectAttrs super {
       pkgs.zlib
     ] ++ (drv.librarySystemDepends or []);
   }) super.taglib;
-
-  # uses x86 assembler
-  inline-asm = overrideCabal {
-    platforms = pkgs.lib.platforms.x86;
-  } super.inline-asm;
-
-  # uses x86 assembler in C bits
-  hw-prim-bits = overrideCabal {
-    platforms = pkgs.lib.platforms.x86;
-  } super.hw-prim-bits;
 
   # random 1.2.0 has tests that indirectly depend on
   # itself causing an infinite recursion at evaluation
