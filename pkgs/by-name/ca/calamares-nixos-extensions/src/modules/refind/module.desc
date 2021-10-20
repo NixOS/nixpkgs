@@ -5,6 +5,7 @@ type:       "job"
 name:       "refind"
 interface:  "python"
 script:     "main.py"
+noconfig:   true
 # The partition module sets up the needed paths in
 # global storage, which is used to decide how to install.
 requiredModules: [ "partition" ]
