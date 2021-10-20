@@ -3042,6 +3042,10 @@ with pkgs;
 
   hidrd = callPackage ../tools/misc/hidrd { };
 
+  hiksink = callPackage ../tools/misc/hiksink {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   hocr-tools = with python3Packages; toPythonApplication hocr-tools;
 
   home-manager = callPackage ../tools/package-management/home-manager {};
