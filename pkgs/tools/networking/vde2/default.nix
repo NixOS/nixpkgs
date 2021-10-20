@@ -34,6 +34,13 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
+  # Disable parallel build as it fails as:
+  #   make: *** No rule to make target '../../src/lib/libvdemgmt.la',
+  #    needed by 'libvdesnmp.la'.  Stop.
+  # Next release should address it with
+  #     https://github.com/virtualsquare/vde-2/commit/7dd9ed46d5dca125ca45d679ac9f3acbfb0f9300.patch
+  enableParallelBuilding = false;
+
   meta = with lib; {
     homepage = "https://github.com/virtualsquare/vde-2";
     description = "Virtual Distributed Ethernet, an Ethernet compliant virtual network";
