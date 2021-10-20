@@ -19,7 +19,7 @@ buildPythonPackage rec {
     sha256 = "1h8lxyazvq3b2c8blj131zn8wkbzjb8ynpr2a7yaanblfsbzdv92";
   };
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace pytest.ini --replace "--cov --cov-report=xml" ""
   '';
 
