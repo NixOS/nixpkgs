@@ -44,8 +44,11 @@ readonly urls=(
 
 readonly platforms=(
   "11-linux-aarch64"
+  "17-linux-aarch64"
   "11-linux-amd64"
+  "17-linux-amd64"
   "11-darwin-amd64"
+  "17-darwin-amd64"
 )
 
 info "Deleting old hashes.nix file..."
