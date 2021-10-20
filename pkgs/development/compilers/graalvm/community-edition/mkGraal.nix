@@ -111,12 +111,6 @@ let
     outputs = [ "out" "lib" ];
 
     installPhase = let
-      nativePRNGWorkaround = path: ''
-        # BUG workaround http://mail.openjdk.java.net/pipermail/graal-dev/2017-December/005141.html
-        substituteInPlace ${path} \
-          --replace file:/dev/random    file:/dev/./urandom \
-          --replace NativePRNGBlocking  SHA1PRNG
-      '';
       copyClibrariesToOut = basepath: ''
         # provide libraries needed for static compilation
         for f in ${glibc}/lib/* ${glibc.static}/lib/* ${zlib.static}/lib/*; do
@@ -134,15 +128,11 @@ let
       '';
     in {
       "11-linux-amd64" = ''
-        ${nativePRNGWorkaround "$out/conf/security/java.security"}
-
         ${copyClibrariesToOut "$out/lib/svm/clibraries"}
 
         ${copyClibrariesToLib}
       '';
       "11-linux-aarch64" = ''
-        ${nativePRNGWorkaround "$out/conf/security/java.security"}
-
         ${copyClibrariesToOut "$out/lib/svm/clibraries"}
 
         ${copyClibrariesToLib}
@@ -150,7 +140,6 @@ let
       "11-darwin-amd64" = ''
         # create empty $lib/lib to avoid breaking builds
         mkdir -p $lib/lib
-        ${nativePRNGWorkaround "$out/conf/security/java.security"}
       '';
     }.${javaVersionPlatform} + ''
       # jni.h expects jni_md.h to be in the header search path.
