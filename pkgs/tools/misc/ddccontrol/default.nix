@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ddccontrol";
-  version = "0.5.2";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "ddccontrol";
     repo = "ddccontrol";
-    rev = "0.5.2";
-    sha256 = "sha256-kul0sjbwbCwadvrccG3KwL/fKWACFUg74QGvgfWE4FQ=";
+    rev = version;
+    sha256 = "00pmnzvd4l3w6chzw41mrf1pd7lrcwi1n7320bnq20rn8hsnbnxk";
   };
 
   nativeBuildInputs = [
