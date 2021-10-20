@@ -47,7 +47,6 @@ rec {
     ldapSupport = true;
     faudioSupport = true;
     vkd3dSupport = true;
-    embedInstallers = true;
   };
 
   stable = base.override { wineRelease = "stable"; };

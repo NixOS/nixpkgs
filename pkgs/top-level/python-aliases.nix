@@ -36,7 +36,6 @@ mapAliases ({
   blockdiagcontrib-cisco = throw "blockdiagcontrib-cisco is not compatible with blockdiag 2.0.0 and has been removed."; # Added 2020-11-29
   bt_proximity = bt-proximity; # added 2021-07-02
   bugseverywhere = throw "bugseverywhere has been removed: Abandoned by upstream."; # Added 2019-11-27
-  class-registry = phx-class-registry; # added 2021-10-05
   ConfigArgParse = configargparse; # added 2021-03-18
   dateutil = python-dateutil; # added 2021-07-03
   detox = throw "detox is no longer maintained, and was broken since may 2019"; # added 2020-07-04
@@ -55,7 +54,6 @@ mapAliases ({
   lammps-cython = throw "no longer builds and is unmaintained";
   MechanicalSoup = mechanicalsoup; # added 2021-06-01
   pam = python-pam; # added 2020-09-07.
-  PasteDeploy = pastedeploy;
   privacyidea = throw "renamed to pkgs.privacyidea"; # added 2021-06-20
   prometheus_client = prometheus-client; # added 2021-06-10
   prompt_toolkit = prompt-toolkit;
@@ -81,7 +79,6 @@ mapAliases ({
   sphinxcontrib_plantuml = sphinxcontrib-plantuml;
   topydo = throw "python3Packages.topydo was moved to topydo"; # 2017-09-22
   tvnamer = throw "python3Packages.tvnamer was moved to tvnamer"; # 2021-07-05
-  WazeRouteCalculator = wazeroutecalculator; # 2021-09-29
   websocket_client = websocket-client;
   zc_buildout221 = zc_buildout; # added 2021-07-21
 })

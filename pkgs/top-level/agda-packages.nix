@@ -13,10 +13,7 @@ let
 
     lib = lib.extend (final: prev: import ../build-support/agda/lib.nix { lib = prev; });
 
-    agda = withPackages [] // {
-      inherit withPackages;
-      passthru.tests.allPackages = withPackages (lib.filter (pkg: self.lib.isUnbrokenAgdaPackage pkg) (lib.attrValues self));
-    };
+    agda = withPackages [] // { inherit withPackages; };
 
     standard-library = callPackage ../development/libraries/agda/standard-library {
       inherit (pkgs.haskellPackages) ghcWithPackages;
@@ -34,7 +31,5 @@ let
       ../development/libraries/agda/functional-linear-algebra { };
 
     generic = callPackage ../development/libraries/agda/generic { };
-
-    agdarsec = callPackage ../development/libraries/agda/agdarsec { };
   };
 in mkAgdaPackages Agda

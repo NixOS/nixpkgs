@@ -9,7 +9,6 @@ runCommand "nixpkgs-metrics"
   }
   ''
     export NIX_STATE_DIR=$TMPDIR
-    export NIX_PAGER=
     nix-store --init
 
     mkdir -p $out/nix-support
@@ -25,10 +24,12 @@ runCommand "nixpkgs-metrics"
         # Redirect stdout to /dev/null to avoid hitting "Output Limit
         # Exceeded" on Hydra.
         nix-env.qaDrv|nix-env.qaDrvAggressive)
-          NIX_SHOW_STATS=1 NIX_SHOW_STATS_PATH=stats-nix time -o stats-time "$@" >/dev/null ;;
+          NIX_SHOW_STATS=1 time -o stats-time "$@" 2>stats-nix >/dev/null ;;
         *)
-          NIX_SHOW_STATS=1 NIX_SHOW_STATS_PATH=stats-nix time -o stats-time "$@" ;;
+          NIX_SHOW_STATS=1 time -o stats-time "$@" 2>stats-nix ;;
       esac
+
+      sed '/^warning:/d' -i stats-nix
 
       cat stats-nix; echo; cat stats-time; echo
 
