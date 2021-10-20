@@ -4,7 +4,7 @@ let
 in
 stdenv.mkDerivation {
 
-  name = "ocaml${ocaml.version}-ocp-build-${version}-beta";
+  name = "ocaml${ocaml.version}-ocp-build-${version}";
 
   src = fetchFromGitHub {
     owner = "OCamlPro";
@@ -24,9 +24,6 @@ stdenv.mkDerivation {
   buildInputs = [ ocaml findlib cmdliner re ];
   propagatedBuildInputs = [ ncurses ];
   preInstall = "mkdir -p $out/bin";
-  preConfigure = ''
-  export configureFlags="$configureFlags --with-metadir=$OCAMLFIND_DESTDIR"
-  '';
 
   meta = with lib; {
     homepage = "https://www.typerex.org/ocp-build.html";
