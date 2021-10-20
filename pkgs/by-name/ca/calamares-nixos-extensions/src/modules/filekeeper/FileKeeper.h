@@ -14,6 +14,8 @@
 #include <utils/PluginFactory.h>
 
 #include <QObject>
+#include <QString>
+#include <QStringList>
 #include <QVariantMap>
 
 class PLUGINDLLEXPORT FileKeeperJob : public Calamares::CppJob
@@ -29,6 +31,10 @@ public:
     Calamares::JobResult exec() override;
 
     void setConfigurationMap( const QVariantMap& configurationMap ) override;
+
+private:
+    QString m_destination;
+    QStringList m_files;
 };
 
 CALAMARES_PLUGIN_FACTORY_DECLARATION( FileKeeperJobFactory )

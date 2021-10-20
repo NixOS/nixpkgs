@@ -8,14 +8,14 @@
 
 #include "FileKeeper.h"
 
+#include <GlobalStorage.h>
+#include <JobQueue.h>
+#include <utils/Logger.h>
+#include <utils/Variant.h>
+
 #include <QDateTime>
 #include <QProcess>
 #include <QThread>
-
-#include <GlobalStorage.h>
-#include <JobQueue.h>
-
-#include <utils/Logger.h>
 
 FileKeeperJob::FileKeeperJob( QObject* parent )
     : Calamares::CppJob( parent )
@@ -42,7 +42,9 @@ FileKeeperJob::exec()
 void
 FileKeeperJob::setConfigurationMap( const QVariantMap& configurationMap )
 {
-    Q_UNUSED( configurationMap );
+    m_destination
+        = CalamaresUtils::getString( configurationMap, "destination", QStringLiteral( "/root/installation" ) );
+    m_files = CalamaresUtils::getStringList( configurationMap, "files" );
 }
 
 CALAMARES_PLUGIN_FACTORY_DEFINITION( FileKeeperJobFactory, registerPlugin< FileKeeperJob >(); )
