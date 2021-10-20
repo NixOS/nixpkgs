@@ -48,26 +48,25 @@ mkDerivation rec {
   URWFONTDIR = "${texlive}/texmf-dist/fonts/type1/urw/";
   LUA_PACKAGE = "lua";
 
-  qtWrapperArgs = [ "--prefix PATH : ${texlive}/bin" ];
+  qtWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ texlive ]}" ];
 
   enableParallelBuilding = true;
 
   desktopItems = [
-    (makeDesktopItem
-      {
-        name = pname;
-        desktopName = "Ipe";
-        genericName = "Drawing editor";
-        comment = "A drawing editor for creating figures in PDF format";
-        exec = "ipe";
-        icon = "ipe";
-        mimeType = "text/xml;application/pdf";
-        categories = "Graphics;Qt;";
-        extraDesktopEntries = {
-          StartupWMClass = "ipe";
-          StartupNotify = "true";
-        };
-      })
+    (makeDesktopItem {
+      name = pname;
+      desktopName = "Ipe";
+      genericName = "Drawing editor";
+      comment = "A drawing editor for creating figures in PDF format";
+      exec = "ipe";
+      icon = "ipe";
+      mimeType = "text/xml;application/pdf";
+      categories = "Graphics;Qt;";
+      extraDesktopEntries = {
+        StartupWMClass = "ipe";
+        StartupNotify = "true";
+      };
+    })
   ];
 
   postInstall = ''
