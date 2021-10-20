@@ -755,6 +755,8 @@ in
 
   adlplug = callPackage ../applications/audio/adlplug { };
 
+  tonelib-gfx = callPackage ../applications/audio/tonelib-gfx { };
+
   arc_unpacker = callPackage ../tools/archivers/arc_unpacker { };
 
   opnplug = callPackage ../applications/audio/adlplug {
