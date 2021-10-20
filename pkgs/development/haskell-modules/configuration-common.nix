@@ -49,6 +49,7 @@ self: super: {
   # These packages (and their reverse deps) cannot be built with profiling enabled.
   ghc-heap-view = disableLibraryProfiling super.ghc-heap-view;
   ghc-datasize = disableLibraryProfiling super.ghc-datasize;
+  ghc-vis = disableLibraryProfiling super.ghc-vis;
 
   # This test keeps being aborted because it runs too quietly for too long
   Lazy-Pbkdf2 = if pkgs.stdenv.isi686 then dontCheck super.Lazy-Pbkdf2 else super.Lazy-Pbkdf2;

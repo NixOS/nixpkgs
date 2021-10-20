@@ -1655,7 +1655,6 @@ broken-packages:
   - ghc-tcplugin-api
   - ghc-time-alloc-prof
   - ghc-usage
-  - ghc-vis
   - gh-labeler
   - giak
   - Gifcurry

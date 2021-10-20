@@ -154,6 +154,7 @@ package-maintainers:
     - spago
     - termonad
   dalpd:
+    - ghc-vis
     - svgcairo
   domenkozar:
     - cachix
