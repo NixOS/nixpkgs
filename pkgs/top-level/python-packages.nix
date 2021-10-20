@@ -5623,6 +5623,8 @@ in {
 
   pyatag = callPackage ../development/python-modules/pyatag { };
 
+  pyatome = callPackage ../development/python-modules/pyatome { };
+
   pycontrol4 = callPackage ../development/python-modules/pycontrol4 { };
 
   pycoolmasternet-async = callPackage ../development/python-modules/pycoolmasternet-async { };
