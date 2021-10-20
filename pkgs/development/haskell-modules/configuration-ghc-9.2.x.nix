@@ -86,7 +86,7 @@ self: super: {
   # Tests fail because of typechecking changes
   conduit = dontCheck super.conduit;
 
-  constraints = appendPatch super.constraints (pkgs.fetchpatch {
+  constraints = appendPatch (doJailbreak super.constraints) (pkgs.fetchpatch {
     url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/dfd024c9a336c752288ec35879017a43bd7e85a0/patches/constraints-0.13.patch";
     sha256 = "0cr4qzw0fbwy97f3wx0v3mv8yc642ahpfa80kaqrq191232fzzf3";
   });
