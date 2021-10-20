@@ -24989,6 +24989,8 @@ with pkgs;
       shiboken2;
   };
 
+  freedv = callPackage ../applications/radio/freedv { };
+
   freemind = callPackage ../applications/misc/freemind {
     jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
     jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
