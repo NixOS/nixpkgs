@@ -1,7 +1,7 @@
 import ../make-test-python.nix ({...}: {
   nodes = {
     resourcemanager = {pkgs, ...}: {
-      services.hadoop.package = pkgs.hadoop_3_1;
+      services.hadoop.package = pkgs.hadoop;
       services.hadoop.yarn.resourcemanager.enabled = true;
       services.hadoop.yarnSite = {
         "yarn.resourcemanager.scheduler.class" = "org.apache.hadoop.yarn.server.resourcemanager.scheduler.fifo.FifoScheduler";
@@ -12,7 +12,7 @@ import ../make-test-python.nix ({...}: {
       ];
     };
     nodemanager = {pkgs, ...}: {
-      services.hadoop.package = pkgs.hadoop_3_1;
+      services.hadoop.package = pkgs.hadoop;
       services.hadoop.yarn.nodemanager.enabled = true;
       services.hadoop.yarnSite = {
         "yarn.resourcemanager.hostname" = "resourcemanager";

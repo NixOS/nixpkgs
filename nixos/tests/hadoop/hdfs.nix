@@ -2,7 +2,7 @@ import ../make-test-python.nix ({...}: {
   nodes = {
     namenode = {pkgs, ...}: {
       services.hadoop = {
-        package = pkgs.hadoop_3_1;
+        package = pkgs.hadoop;
         hdfs.namenode.enabled = true;
         coreSite = {
           "fs.defaultFS" = "hdfs://namenode:8020";
@@ -20,7 +20,7 @@ import ../make-test-python.nix ({...}: {
     };
     datanode = {pkgs, ...}: {
       services.hadoop = {
-        package = pkgs.hadoop_3_1;
+        package = pkgs.hadoop;
         hdfs.datanode.enabled = true;
         coreSite = {
           "fs.defaultFS" = "hdfs://namenode:8020";
