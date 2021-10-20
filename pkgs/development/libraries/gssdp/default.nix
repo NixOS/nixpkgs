@@ -1,28 +1,27 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchurl
 , meson
 , ninja
 , pkg-config
 , gobject-introspection
 , vala
-, gtk-doc
-, docbook_xsl
-, docbook_xml_dtd_412
+, gi-docgen
+, python3
 , libsoup
-, gtk3
 , glib
 , gnome
 }:
 
 stdenv.mkDerivation rec {
   pname = "gssdp";
-  version = "1.2.3";
+  version = "1.4.0.1";
 
-  outputs = [ "out" "bin" "dev" "devdoc" ];
+  outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gssdp/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1s57i8a8wnnxnsfl27cq4503dkdlzbrhry5zpg23sfqfffvdqqx2";
+    sha256 = "hnaEnVf7giuHKIVtut6/OGf4nuR6DsR6IARdAR9DFYI=";
   };
 
   nativeBuildInputs = [
@@ -31,14 +30,12 @@ stdenv.mkDerivation rec {
     pkg-config
     gobject-introspection
     vala
-    gtk-doc
-    docbook_xsl
-    docbook_xml_dtd_412
+    gi-docgen
+    python3
   ];
 
   buildInputs = [
     libsoup
-    gtk3
   ];
 
   propagatedBuildInputs = [
@@ -47,9 +44,18 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dgtk_doc=true"
+    "-Dsniffer=false"
   ];
 
   doCheck = true;
+
+  postFixup = ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    find -L "$out/share/doc" -type f -regex '.*\.devhelp2?' -print0 \
+      | while IFS= read -r -d ''' file; do
+        moveToOutput "$(dirname "''${file/"$out/"/}")" "$devdoc"
+    done
+  '';
 
   passthru = {
     updateScript = gnome.updateScript {
@@ -61,6 +67,7 @@ stdenv.mkDerivation rec {
     description = "GObject-based API for handling resource discovery and announcement over SSDP";
     homepage = "http://www.gupnp.org/";
     license = licenses.lgpl2Plus;
+    maintainers = teams.gnome.members;
     platforms = platforms.all;
   };
 }
