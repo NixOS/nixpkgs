@@ -122,10 +122,10 @@ let
         done
 
         if test -d ${pkg}/share/xsessions; then
-          ${xorg.lndir}/bin/lndir ${pkg}/share/xsessions $out/share/xsessions
+          ${pkgs.buildPackages.xorg.lndir}/bin/lndir ${pkg}/share/xsessions $out/share/xsessions
         fi
         if test -d ${pkg}/share/wayland-sessions; then
-          ${xorg.lndir}/bin/lndir ${pkg}/share/wayland-sessions $out/share/wayland-sessions
+          ${pkgs.buildPackages.xorg.lndir}/bin/lndir ${pkg}/share/wayland-sessions $out/share/wayland-sessions
         fi
       '') cfg.displayManager.sessionPackages}
     '';
