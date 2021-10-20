@@ -107,11 +107,13 @@ formatExtRuntimeDeps() {
 
   declare jqQuery
   jqQuery=$(cat <<'EOF'
-.runtimeDependencies \
-| map(select(.platforms[] | in({"linux": null}))) \
-| map(select(.architectures[] | in({"x86_64": null}))) \
-| .[] | {(.id + "-" + (.architectures[0]) + "-" + (.platforms[0])): \
-{installPath, binaries, urls: [.url, .fallbackUrl]}}
+.runtimeDependencies
+| map(select(.platforms[] | in({"linux": null})))
+| map(select(.architectures[] | in({"x86_64": null})))
+| .[] | {
+  (.id + "__" + (.architectures[0]) + "-" + (.platforms[0])):
+    {installPath, binaries, urls: [.url, .fallbackUrl] | map(select(. != null))}
+}
 EOF
 )
 

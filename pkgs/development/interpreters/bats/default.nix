@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "bats";
-  version = "1.3.0";
+  version = "1.4.1";
 
   src = fetchzip {
     url = "https://github.com/bats-core/bats-core/archive/v${version}.tar.gz";
-    hash = "sha256-+dboExOx2YELxV8Cwk9SVwk9G3p8EoP0LdaJ3o7GT6c=";
+    hash = "sha256-bGZXjq6zG9MJgDccpVYATsgYhhb1Zf7Deoa/DoSv8QE=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

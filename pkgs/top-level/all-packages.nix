@@ -10125,6 +10125,8 @@ with pkgs;
 
   uwsgi = callPackage ../servers/uwsgi { };
 
+  uwufetch = callPackage ../tools/misc/uwufetch { };
+
   v2ray = callPackage ../tools/networking/v2ray { };
 
   vacuum = callPackage ../applications/networking/instant-messengers/vacuum {};
@@ -10902,6 +10904,8 @@ with pkgs;
   zsh-fast-syntax-highlighting = callPackage ../shells/zsh/zsh-fast-syntax-highlighting { };
 
   zsh-fzf-tab = callPackage ../shells/zsh/zsh-fzf-tab { };
+
+  zsh-autocomplete = callPackage ../shells/zsh/zsh-autocomplete { };
 
   zsh-autosuggestions = callPackage ../shells/zsh/zsh-autosuggestions { };
 
@@ -15546,6 +15550,8 @@ with pkgs;
   hercules-ci-agent = callPackage ../development/tools/continuous-integration/hercules-ci-agent { };
 
   hci = callPackage ../development/tools/continuous-integration/hci { };
+
+  isa-l = callPackage ../development/libraries/isa-l { };
 
   niv = lib.getBin (haskell.lib.justStaticExecutables haskellPackages.niv);
 
@@ -24404,6 +24410,11 @@ with pkgs;
   ephemeral = callPackage ../applications/networking/browsers/ephemeral { };
 
   epic5 = callPackage ../applications/networking/irc/epic5 { };
+
+  epick = callPackage ../applications/graphics/epick {
+    inherit (darwin.apple_sdk.frameworks) AppKit IOKit;
+    inherit (xorg) libX11 libXcursor libXi libXrandr libxcb;
+  };
 
   epr = callPackage ../applications/misc/epr { };
 
