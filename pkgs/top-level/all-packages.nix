@@ -12775,7 +12775,7 @@ with pkgs;
   sbcl_2_1_1 = callPackage ../development/compilers/sbcl/2.1.1.nix {};
   sbcl_2_1_2 = callPackage ../development/compilers/sbcl/2.1.2.nix {};
   sbcl_2_1_9 = callPackage ../development/compilers/sbcl/2.1.9.nix {};
-  sbcl = sbcl_2_1_2;
+  sbcl = sbcl_2_1_9;
 
   roswell = callPackage ../development/tools/roswell/default.nix { };
 

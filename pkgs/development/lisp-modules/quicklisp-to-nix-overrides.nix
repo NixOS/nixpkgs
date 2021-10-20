@@ -51,6 +51,8 @@ in
     overrides = y: (x.overrides y) // {
       prePatch = ''
         sed 's|default \"libfixposix\"|default \"${pkgs.libfixposix}/lib/libfixposix\"|' -i src/syscalls/ffi-functions-unix.lisp
+        # Socket tests don't work because they try to access the internet
+        sed 's/(:file "sockets" :depends-on ("pkgdcl" "defsuites"))//' -i iolib.asd
       '';
     };
 
@@ -278,5 +280,31 @@ $out/lib/common-lisp/query-fs"
     (extraLispDeps (with quicklisp-to-nix-packages; [flexi-streams]));
   cl-gobject-introspection = addNativeLibs (with pkgs; [glib gobject-introspection]);
   generic-cl = x: { parasites = []; };
-  static-dispatch = x: { parasites = []; };
+  static-dispatch = x: {
+    overrides = y: (x.overrides y) // {
+      parasites = [];
+      # workaround for https://github.com/alex-gutev/static-dispatch/issues/12
+      postUnpack = ''
+        sed -e '/^(in-package / a (eval-when (:compile-toplevel :load-toplevel :execute)' \
+            -e '$a)' \
+            -i $sourceRoot/src/combin.lisp
+      '';
+    };
+  };
+  lla = addNativeLibs [ pkgs.openblas ];
+  esrap = x: {
+    overrides = y: (x.overrides y) // {
+      postPatch = ''
+        patch -p1 < ${
+          # Quicklisp 2021-08-07 packages an Esrap that doesn't build with SBCL 2.1.9.
+          # Therefore we pull patches from the Esrap repo to fix this.
+          # See https://github.com/scymtym/parser.common-rules/issues/1
+          pkgs.fetchurl {
+            url = https://github.com/scymtym/esrap/compare/4034df872c2b1b8e91adbccab491645c8138253b...c99c33a33ff58ca85e8ba73912eba45d458eaa72.diff;
+            sha256 = "sha256:1sg2mgzilmwj5kwlmx0s60wk2769c3mpqjl00ga2p74ra5hykvx8";
+          }}
+      '';
+    };
+  };
+#  cl-opengl = addNativeLibs [ pkgs.libGL pkgs.glfw ];
 }
