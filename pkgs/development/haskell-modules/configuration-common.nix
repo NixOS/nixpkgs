@@ -1828,6 +1828,21 @@ self: super: {
     cabal-install-parsers = self.cabal-install-parsers_0_4_2;
   };
 
+  # Build haskell-ci from git repository, including some useful fixes,
+  # e. g. required for generating the workflows for the cabal2nix repository
+  haskell-ci-unstable = (overrideSrc super.haskell-ci {
+    version = "0.13.20211011";
+    src = pkgs.fetchFromGitHub {
+      owner = "haskell-CI";
+      repo = "haskell-ci";
+      rev = "c88e67e675bc4a990da53863c7fb42e67bcf9847";
+      sha256 = "1zhv1cg047lfyxfs3mvc73vv96pn240zaj7f2yl4lw5yj6y5rfk9";
+    };
+  }).overrideScope (self: super: {
+    attoparsec = self.attoparsec_0_14_1;
+    Cabal = self.Cabal_3_6_2_0;
+  });
+
   Frames-streamly = overrideCabal (super.Frames-streamly.override { relude = super.relude_1_0_0_1; }) (drv: {
     # https://github.com/adamConnerSax/Frames-streamly/issues/1
     patchPhase = ''
