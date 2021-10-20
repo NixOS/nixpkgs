@@ -62,7 +62,7 @@
     "asuswrt" = ps: with ps; [ aioasuswrt ];
     "atag" = ps: with ps; [ pyatag ];
     "aten_pe" = ps: with ps; [ atenpdu ];
-    "atome" = ps: with ps; [ ]; # missing inputs: pyatome
+    "atome" = ps: with ps; [ pyatome ];
     "august" = ps: with ps; [ yalexs ];
     "aurora" = ps: with ps; [ auroranoaa ];
     "aurora_abb_powerone" = ps: with ps; [ ]; # missing inputs: aurorapy
