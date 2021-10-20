@@ -197,6 +197,30 @@ rec {
     */
   toYAML = {}@args: toJSON args;
 
+  withRecursion =
+    args@{
+      /* If this option is not null, the given value will stop evaluating at a certain depth */
+      depthLimit
+      /* If this option is true, an error will be thrown, if a certain given depth is exceeded */
+    , throwOnDepthLimit ? true
+    }:
+      assert builtins.isInt depthLimit;
+      let
+        transform = depth:
+          if depthLimit != null && depth > depthLimit then
+            if throwOnDepthLimit
+              then throw "Exceeded maximum eval-depth limit of ${toString depthLimit} while trying to evaluate with `generators.withRecursion'!"
+              else const "<unevaluated>"
+          else id;
+        mapAny = with builtins; depth: v:
+          let
+            evalNext = x: mapAny (depth + 1) (transform (depth + 1) x);
+          in
+            if isAttrs v then mapAttrs (const evalNext) v
+            else if isList v then map evalNext v
+            else transform (depth + 1) v;
+      in
+        mapAny 0;
 
   /* Pretty print a value, akin to `builtins.trace`.
     * Should probably be a builtin as well.
@@ -208,7 +232,8 @@ rec {
     allowPrettyValues ? false,
     /* If this option is true, the output is indented with newlines for attribute sets and lists */
     multiline ? true
-  }@args: let
+  }@args:
+    let
     go = indent: v: with builtins;
     let     isPath   = v: typeOf v == "path";
             introSpace = if multiline then "\n${indent}  " else " ";

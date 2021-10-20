@@ -13,6 +13,8 @@
 mkDerivation {
   pname = "korganizer";
   meta = {
+    homepage = "https://apps.kde.org/korganizer/";
+    description = "Personal organizer";
     license = with lib.licenses; [ gpl2 lgpl21 fdl12 ];
     maintainers = kdepimTeam;
   };

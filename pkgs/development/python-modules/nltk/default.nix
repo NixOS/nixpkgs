@@ -6,13 +6,13 @@
 }:
 
 buildPythonPackage rec {
-  version = "3.6.2";
+  version = "3.6.5";
   pname = "nltk";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "57d556abed621ab9be225cc6d2df1edce17572efb67a3d754630c9f8381503eb";
+    sha256 = "834d1a8e38496369390be699be9bca4f2a0f2175b50327272b2ec7a98ffda2a0";
   };
 
   propagatedBuildInputs = [

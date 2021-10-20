@@ -14,7 +14,7 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.captive-browser;
-        defaultText = "pkgs.captive-browser";
+        defaultText = literalExpression "pkgs.captive-browser";
         description = "Which package to use for captive-browser";
       };
 

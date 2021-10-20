@@ -145,7 +145,8 @@ rec {
     let
       outputs = drv.outputs or [ "out" ];
 
-      commonAttrs = drv // (builtins.listToAttrs outputsList) //
+      commonAttrs = (removeAttrs drv [ "outputUnspecified" ]) //
+        (builtins.listToAttrs outputsList) //
         ({ all = map (x: x.value) outputsList; }) // passthru;
 
       outputToAttrListElement = outputName:

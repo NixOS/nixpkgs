@@ -50,7 +50,7 @@ in {
         config = mkOption {
           type = types.attrs;
           default = {};
-          example = literalExample ''
+          example = literalExpression ''
             {
               download_location = "/srv/torrents/";
               max_upload_speed = "1000.0";
@@ -149,7 +149,7 @@ in {
 
         package = mkOption {
           type = types.package;
-          example = literalExample "pkgs.deluge-2_x";
+          example = literalExpression "pkgs.deluge-2_x";
           description = ''
             Deluge package to use.
           '';

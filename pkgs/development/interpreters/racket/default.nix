@@ -8,6 +8,7 @@
 , libGL
 , libGLU
 , libjpeg
+, xorg
 , ncurses
 , libpng, libtool, mpfr, openssl, pango, poppler
 , readline, sqlite
@@ -96,6 +97,9 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = false;
 
+  postFixup = lib.optionalString stdenv.isDarwin ''
+    wrapProgram $out/bin/drracket --prefix DYLD_LIBRARY_PATH : ${xorg.libX11}/lib
+  '';
 
   meta = with lib; {
     description = "A programmable programming language";
@@ -112,6 +116,5 @@ stdenv.mkDerivation rec {
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ kkallio henrytill vrthra ];
     platforms = [ "x86_64-darwin" "x86_64-linux" "aarch64-linux" ];
-    broken = stdenv.isDarwin; # No support yet for setting FFI lookup path
   };
 }

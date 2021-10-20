@@ -197,6 +197,7 @@ self: super: ({
   hls-pragmas-plugin = dontCheck super.hls-pragmas-plugin;
   hls-haddock-comments-plugin = dontCheck super.hls-haddock-comments-plugin;
   hls-floskell-plugin = dontCheck super.hls-floskell-plugin;
+  hls-call-hierarchy-plugin = dontCheck super.hls-call-hierarchy-plugin;
 
   # We are lacking pure pgrep at the moment for tests to work
   tmp-postgres = dontCheck super.tmp-postgres;

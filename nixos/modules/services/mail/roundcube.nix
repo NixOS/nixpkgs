@@ -32,8 +32,9 @@ in
     package = mkOption {
       type = types.package;
       default = pkgs.roundcube;
+      defaultText = literalExpression "pkgs.roundcube";
 
-      example = literalExample ''
+      example = literalExpression ''
         roundcube.withPlugins (plugins: [ plugins.persistent_login ])
       '';
 
@@ -89,7 +90,7 @@ in
     dicts = mkOption {
       type = types.listOf types.package;
       default = [];
-      example = literalExample "with pkgs.aspellDicts; [ en fr de ]";
+      example = literalExpression "with pkgs.aspellDicts; [ en fr de ]";
       description = ''
         List of aspell dictionnaries for spell checking. If empty, spell checking is disabled.
       '';

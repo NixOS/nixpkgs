@@ -74,7 +74,7 @@ in {
       transcoders = mkOption {
         type = types.listOf types.path;
         default = [ "${pkgs.ffmpeg.bin}/bin/ffmpeg" ];
-        defaultText= [ "\${pkgs.ffmpeg.bin}/bin/ffmpeg" ];
+        defaultText = literalExpression ''[ "''${pkgs.ffmpeg.bin}/bin/ffmpeg" ]'';
         description = ''
           List of paths to transcoder executables that should be accessible
           from Airsonic. Symlinks will be created to each executable inside
@@ -85,7 +85,7 @@ in {
       jre = mkOption {
         type = types.package;
         default = pkgs.jre8;
-        defaultText = literalExample "pkgs.jre8";
+        defaultText = literalExpression "pkgs.jre8";
         description = ''
           JRE package to use.
 
@@ -97,7 +97,7 @@ in {
       war = mkOption {
         type = types.path;
         default = "${pkgs.airsonic}/webapps/airsonic.war";
-        defaultText = "\${pkgs.airsonic}/webapps/airsonic.war";
+        defaultText = literalExpression ''"''${pkgs.airsonic}/webapps/airsonic.war"'';
         description = "Airsonic war file to use.";
       };
 

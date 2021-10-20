@@ -2,19 +2,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "system76-power";
-  version = "1.1.16";
+  version = "1.1.18";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "system76-power";
     rev = version;
-    sha256 = "sha256-OtrhvUkNNgg6KlrqjwiBKL4zuQZBWevb0xgtSlEW2rQ=";
+    sha256 = "1zm06ywc3siwh2fpb8p7lp3xqjy4c08j8c8lipd6dyy3bakjh4r1";
   };
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ dbus libusb1 ];
 
-  cargoSha256 = "sha256-ImACDbnUbwc0ZXgF3xxzes8+vUjt76B1xxgqzhgAYX4=";
+  cargoSha256 = "0hda8cxa1pjz90bg215qmx5x2scz9mawq7irxbsw6zmcm7wahlii";
 
   postInstall = ''
     install -D -m 0644 data/system76-power.conf $out/etc/dbus-1/system.d/system76-power.conf

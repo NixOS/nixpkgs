@@ -12,7 +12,7 @@ in {
     package = mkOption {
       type = types.package;
       default = pkgs.clipcat;
-      defaultText = "pkgs.clipcat";
+      defaultText = literalExpression "pkgs.clipcat";
       description = "clipcat derivation to use.";
     };
   };

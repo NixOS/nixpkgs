@@ -5,7 +5,7 @@
 , rtmpdump
 , phantomjs2
 , atomicparsley
-, pycryptodome
+, pycryptodomex
 , websockets
 , mutagen
 , ffmpegSupport ? true
@@ -20,16 +20,16 @@ buildPythonPackage rec {
   # The websites yt-dlp deals with are a very moving target. That means that
   # downloads break constantly. Because of that, updates should always be backported
   # to the latest stable release.
-  version = "2021.9.2";
+  version = "2021.10.10";
 
   src = fetchPypi {
     inherit pname;
     version = builtins.replaceStrings [ ".0" ] [ "." ] version;
-    sha256 = "sha256-yn53zbBVuiaD31sIB6qxweEgy+AsjzXZ0yk9lNva6mM=";
+    sha256 = "sha256-zJYhHo5V67tI0uZgnA0JQlB+tUcbLOdOOPe5X41wpOc=";
   };
 
   propagatedBuildInputs = [ websockets mutagen ]
-    ++ lib.optional hlsEncryptedSupport pycryptodome;
+    ++ lib.optional hlsEncryptedSupport pycryptodomex;
 
   # Ensure these utilities are available in $PATH:
   # - ffmpeg: post-processing & transcoding support

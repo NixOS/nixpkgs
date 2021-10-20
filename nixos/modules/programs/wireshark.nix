@@ -19,7 +19,7 @@ in {
       package = mkOption {
         type = types.package;
         default = pkgs.wireshark-cli;
-        defaultText = "pkgs.wireshark-cli";
+        defaultText = literalExpression "pkgs.wireshark-cli";
         description = ''
           Which Wireshark package to install in the global environment.
         '';

@@ -1,6 +1,7 @@
 { lib, fetchFromGitHub
 , python3Packages
 , gdk-pixbuf, glib, gobject-introspection, gtk3
+, libnotify
 , intltool
 , wrapGAppsHook }:
 
@@ -20,7 +21,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   buildInputs = [
-    gdk-pixbuf glib
+    gdk-pixbuf glib libnotify
   ];
 
   propagatedBuildInputs = with python3Packages; [

@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation rec {
   pname = "blackfire-agent";
-  version = "1.46.0";
+  version = "1.49.4";
 
   src = fetchurl {
     url = "https://packages.blackfire.io/debian/pool/any/main/b/blackfire-php/blackfire-agent_${version}_amd64.deb";
-    sha256 = "0cxgc18xpwyb5wp08km7aj8asn5biqnwq9fkgkk6wv1r1ihqlhf2";
+    sha256 = "t1S54z3xTMTUBWz0jCFX1A7GJdWWsP/lTa9MMjo8t1A=";
   };
 
   nativeBuildInputs = [

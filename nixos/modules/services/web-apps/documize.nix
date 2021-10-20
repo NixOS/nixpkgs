@@ -26,6 +26,7 @@ in {
     package = mkOption {
       type = types.package;
       default = pkgs.documize-community;
+      defaultText = literalExpression "pkgs.documize-community";
       description = ''
         Which package to use for documize.
       '';

@@ -12,11 +12,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-appengine-logging";
-  version = "0.1.4";
+  version = "1.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-1E+3fXcGsIbTh7nXnBOcVT1UtY3cjulnu/MqU+e77lY=";
+    sha256 = "f10760c7df7052e63a79547b36fb439ab8a0f72fe28ff8356a0755c45ab75412";
   };
 
   propagatedBuildInputs = [

@@ -325,8 +325,8 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.iptables;
-        defaultText = "pkgs.iptables";
-        example = literalExample "pkgs.iptables-nftables-compat";
+        defaultText = literalExpression "pkgs.iptables";
+        example = literalExpression "pkgs.iptables-nftables-compat";
         description =
           ''
             The iptables package to use for running the firewall service."
@@ -500,7 +500,7 @@ in
       extraPackages = mkOption {
         type = types.listOf types.package;
         default = [ ];
-        example = literalExample "[ pkgs.ipset ]";
+        example = literalExpression "[ pkgs.ipset ]";
         description =
           ''
             Additional packages to be included in the environment of the system

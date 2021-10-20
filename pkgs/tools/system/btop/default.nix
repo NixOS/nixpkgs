@@ -1,17 +1,17 @@
 { lib
-, fetchFromGitHub
 , stdenv
+, fetchFromGitHub
 }:
 
 stdenv.mkDerivation rec {
   pname = "btop";
-  version = "1.0.5";
+  version = "1.0.18";
 
   src = fetchFromGitHub {
     owner = "aristocratos";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-pa9i65ndx8LMTMRXyL2GXCauM6Q8gAb16zGOylQFwL0=";
+    sha256 = "sha256-TUrCSpwbUP28COHAAFIdR5Kw18I35nBkiKU62IHCN4o=";
   };
 
   installFlags = [ "PREFIX=$(out)" ];
@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A monitor of resources";
     homepage = "https://github.com/aristocratos/btop";
+    changelog = "https://github.com/aristocratos/btop/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     platforms = platforms.linux;
     maintainers = with maintainers; [ rmcgibbo ];

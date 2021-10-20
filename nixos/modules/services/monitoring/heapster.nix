@@ -33,7 +33,7 @@ in {
     package = mkOption {
       description = "Package to use by heapster";
       default = pkgs.heapster;
-      defaultText = "pkgs.heapster";
+      defaultText = literalExpression "pkgs.heapster";
       type = types.package;
     };
   };

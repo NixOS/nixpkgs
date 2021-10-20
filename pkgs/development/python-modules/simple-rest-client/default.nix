@@ -1,5 +1,4 @@
 { lib
-, asynctest
 , buildPythonPackage
 , fetchFromGitHub
 , httpx
@@ -13,15 +12,15 @@
 
 buildPythonPackage rec {
   pname = "simple-rest-client";
-  version = "1.0.8";
+  version = "1.1.1";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "allisson";
     repo = "python-simple-rest-client";
     rev = version;
-    sha256 = "12qxhrjhlbyyr1pkvwfkcxbsmyns5b0mfdn42vz310za5x76ldj3";
+    sha256 = "sha256-oJXP2/lChlzzKyNiTgJMHkcNkFyy92kTPxgDkon54g8=";
   };
 
   propagatedBuildInputs = [
@@ -31,7 +30,6 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    asynctest
     pytest-asyncio
     pytest-httpserver
     pytestCheckHook
@@ -42,9 +40,17 @@ buildPythonPackage rec {
       --replace "pytest-runner" ""
     substituteInPlace pytest.ini \
       --replace " --cov=simple_rest_client --cov-report=term-missing" ""
+    substituteInPlace requirements-dev.txt \
+      --replace "asyncmock" ""
   '';
 
-  pythonImportsCheck = [ "simple_rest_client" ];
+  disabledTestPaths = [
+    "tests/test_decorators.py"
+  ];
+
+  pythonImportsCheck = [
+    "simple_rest_client"
+  ];
 
   meta = with lib; {
     description = "Simple REST client for Python";

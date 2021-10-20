@@ -43,6 +43,9 @@ stdenv.mkDerivation rec {
   patchFlags = [ "-p0" ];
 
   postPatch = ''
+    # Drop blanket -Werror to avoid build failure on fresh toolchains
+    # like gcc-11.
+    substituteInPlace squashfs-tools/Makefile --replace ' -Werror' ' '
     cd squashfs-tools
   '';
 

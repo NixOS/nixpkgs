@@ -57,7 +57,7 @@ in
         description = "Extra packages for btrbk, like compression utilities for <literal>stream_compress</literal>";
         type = lib.types.listOf lib.types.package;
         default = [ ];
-        example = lib.literalExample "[ pkgs.xz ]";
+        example = lib.literalExpression "[ pkgs.xz ]";
       };
       niceness = lib.mkOption {
         description = "Niceness for local instances of btrbk. Also applies to remote ones connecting via ssh when positive.";

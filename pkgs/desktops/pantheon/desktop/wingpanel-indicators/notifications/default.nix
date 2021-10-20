@@ -3,7 +3,6 @@
 , nix-update-script
 , pantheon
 , pkg-config
-, fetchpatch
 , meson
 , ninja
 , vala
@@ -17,23 +16,14 @@
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-notifications";
-  version = "6.0.0";
+  version = "6.0.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "1pvcpk1d2zh9pvw0clv3bhf2plcww6nbxs6j7xjbvnaqs7d6i1k2";
+    sha256 = "1qrbg8l3ifz09jx6v5j7hmgw0hmirj6mh3z634yl1cadz45p8fc9";
   };
-
-  patches = [
-    # Upstream code not respecting our localedir
-    # https://github.com/elementary/wingpanel-indicator-notifications/pull/218
-    (fetchpatch {
-      url = "https://github.com/elementary/wingpanel-indicator-notifications/commit/c7e73f0683561345935a959dafa2083b7e22fe99.patch";
-      sha256 = "10xiyq42bqfmih1jgqpq64nha3n0y7ra3j7j0q27rn5hhhgbyjs7";
-    })
-  ];
 
   passthru = {
     updateScript = nix-update-script {

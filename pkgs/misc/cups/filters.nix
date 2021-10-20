@@ -25,7 +25,7 @@ in stdenv.mkDerivation rec {
   ];
 
   configureFlags = [
-    # TODO(Profpatsch): mupdf support
+    "--with-mutool-path=${mupdf}/bin/mutool"
     "--with-pdftops=pdftops"
     "--with-pdftops-path=${poppler_utils}/bin/pdftops"
     "--with-gs-path=${ghostscript}/bin/gs"
@@ -35,6 +35,8 @@ in stdenv.mkDerivation rec {
     "--with-rcdir=no"
     "--with-shell=${stdenv.shell}"
     "--with-test-font-path=${dejavu_fonts}/share/fonts/truetype/DejaVuSans.ttf"
+    "--localstatedir=/var"
+    "--sysconfdir=/etc"
   ];
 
   makeFlags = [ "CUPS_SERVERBIN=$(out)/lib/cups" "CUPS_DATADIR=$(out)/share/cups" "CUPS_SERVERROOT=$(out)/etc/cups" ];

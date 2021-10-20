@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "aiomusiccast";
-  version = "0.9.2";
+  version = "0.11.0";
 
   format = "pyproject";
 
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "vigonotion";
     repo = "aiomusiccast";
     rev = version;
-    sha256 = "sha256-xZPNEynj0kbeika15ZDEIRUe519V6Asaw+CEiBu7VL4=";
+    sha256 = "sha256-58l9bmGmSRFHqiKwHtGcAu2H+JnKjsZZg+fxbLW5xBg=";
   };
 
   nativeBuildInputs = [

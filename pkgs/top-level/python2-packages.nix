@@ -388,8 +388,6 @@ with self; with super; {
 
   pandas = callPackage ../development/python-modules/pandas/2.nix { };
 
-  pasteScript = callPackage ../development/python-modules/pastescript { };
-
   pathpy = callPackage ../development/python-modules/path.py/2.nix { };
 
   pg8000 = callPackage ../development/python-modules/pg8000/1_12.nix { };
@@ -408,8 +406,6 @@ with self; with super; {
   praw = callPackage ../development/python-modules/praw/6.3.nix { };
 
   prettytable = callPackage ../development/python-modules/prettytable/1.nix { };
-
-  privacyidea-ldap-proxy = callPackage ../development/python-modules/privacyidea/ldap-proxy.nix { };
 
   ldaptor = callPackage ../development/python-modules/ldaptor/19.nix { };
 

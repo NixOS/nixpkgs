@@ -64,13 +64,13 @@
 }:
 let
 
-  version = "2.1.2";
+  version = "2.1.4";
 
   airflow-src = fetchFromGitHub rec {
     owner = "apache";
     repo = "airflow";
     rev = version;
-    sha256 = "sha256-Q0l2c1tuxcoE65zgdxnv/j1TIoQzaNoEFCYHvqN+Bzk=";
+    sha256 = "12nxjaz4afkq30s42x3rbsci8jiw2k5zjngsc8i190fasbacbnbs";
   };
 
   # airflow bundles a web interface, which is built using webpack by an undocumented shell script in airflow's source tree.
@@ -193,7 +193,9 @@ buildPythonPackage rec {
       --replace "sqlalchemy>=1.3.18, <1.4" "sqlalchemy" \
       --replace "sqlalchemy_jsonfield~=1.0" "sqlalchemy-jsonfield" \
       --replace "werkzeug~=1.0, >=1.0.1" "werkzeug" \
-      --replace "itsdangerous>=1.1.0, <2.0" "itsdangerous"
+      --replace "itsdangerous>=1.1.0, <2.0" "itsdangerous" \
+      --replace "python-slugify>=3.0.0,<5.0" "python-slugify" \
+      --replace "colorlog>=4.0.2, <6.0" "colorlog"
 
     substituteInPlace tests/core/test_core.py \
       --replace "/bin/bash" "${stdenv.shell}"

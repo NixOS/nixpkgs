@@ -32,7 +32,7 @@
 , acl
 , lz4
 , libgcrypt
-, libgpgerror
+, libgpg-error
 , libidn2
 , curl
 , gnutar
@@ -105,7 +105,7 @@
 , docbook_xml_dtd_45
 }:
 
-assert withResolved -> (libgcrypt != null && libgpgerror != null);
+assert withResolved -> (libgcrypt != null && libgpg-error != null);
 assert withImportd ->
 (curl.dev != null && zlib != null && xz != null && libgcrypt != null
   && gnutar != null && gnupg != null && withCompression);
@@ -183,9 +183,6 @@ stdenv.mkDerivation {
   postPatch = ''
     substituteInPlace src/basic/path-util.h --replace "@defaultPathNormal@" "${placeholder "out"}/bin/"
     substituteInPlace src/boot/efi/meson.build \
-      --replace \
-      "find_program('ld'" \
-      "find_program('${stdenv.cc.bintools.targetPrefix}ld'" \
       --replace \
       "find_program('objcopy'" \
       "find_program('${stdenv.cc.bintools.targetPrefix}objcopy'"
@@ -350,7 +347,7 @@ stdenv.mkDerivation {
     ++ lib.optional withLibseccomp libseccomp
     ++ lib.optional withNetworkd iptables
     ++ lib.optional withPCRE2 pcre2
-    ++ lib.optional withResolved libgpgerror
+    ++ lib.optional withResolved libgpg-error
     ++ lib.optional withSelinux libselinux
     ++ lib.optional withRemote libmicrohttpd
     ++ lib.optionals withHomed [ p11-kit ]
@@ -408,6 +405,7 @@ stdenv.mkDerivation {
     "-Dsmack=true"
     "-Db_pie=true"
     "-Dinstall-sysconfdir=false"
+    "-Defi-ld=${stdenv.cc.bintools.targetPrefix}ld"
     /*
       As of now, systemd doesn't allow runtime configuration of these values. So
       the settings in /etc/login.defs have no effect on it. Many people think this

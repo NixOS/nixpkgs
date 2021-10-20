@@ -3,6 +3,8 @@
 , callPackage
 , resholve
 , resholvePackage
+, resholveScript
+, resholveScriptBin
 , shunit2
 , coreutils
 , gnused
@@ -22,35 +24,6 @@
 }:
 
 let
-  inherit (callPackage ./default.nix { })
-    resholve resholvePackage;
-
-  # ourCoreutils = coreutils.override { singleBinary = false; };
-
-  /*
-    TODO: wrapped copy of find so that we can eventually test
-    our ability to see through wrappers. Unused for now.
-    Note: grep can serve the negative case; grep doesn't match, and
-    egrep is a shell wrapper for grep.
-  */
-  # wrapfind = runCommand "wrapped-find" { } ''
-  #   source ${makeWrapper}/nix-support/setup-hook
-  #   makeWrapper ${findutils}/bin/find $out/bin/wrapped-find
-  # '';
-  /* TODO:
-    unrelated, but is there already a function (or would
-    there be demand for one?) along the lines of:
-    wrap = { drv, executable(s?), args ? { } }: that:
-    - generates a sane output name
-    - sources makewrapper
-    - retargets real executable if already wrapped
-    - wraps the executable
-
-    I wonder because my first thought here was overrideAttrs,
-    but I realized rebuilding just for a custom wrapper is an
-    ongoing waste of time. If it is a common pattern in the
-    wild, it would be a nice QoL improvement.
-  */
 
 in
 rec {
@@ -224,4 +197,20 @@ rec {
       fi
     '';
   };
+
+  # Caution: ci.nix asserts the equality of both of these w/ diff
+  resholvedScript = resholveScript "resholved-script" {
+    inputs = [ file ];
+    interpreter = "${bash}/bin/bash";
+  } ''
+    echo "Hello"
+    file .
+  '';
+  resholvedScriptBin = resholveScriptBin "resholved-script-bin" {
+    inputs = [ file ];
+    interpreter = "${bash}/bin/bash";
+  } ''
+    echo "Hello"
+    file .
+  '';
 }

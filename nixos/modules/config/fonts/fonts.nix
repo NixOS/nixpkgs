@@ -61,7 +61,7 @@ in
       fonts = mkOption {
         type = types.listOf types.path;
         default = [];
-        example = literalExample "[ pkgs.dejavu_fonts ]";
+        example = literalExpression "[ pkgs.dejavu_fonts ]";
         description = "List of primary font paths.";
       };
 

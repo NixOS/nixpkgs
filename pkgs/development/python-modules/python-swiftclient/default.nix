@@ -25,6 +25,10 @@ buildPythonApplication rec {
     stestr
   ];
 
+  postInstall = ''
+    install -Dm644 tools/swift.bash_completion $out/share/bash_completion.d/swift
+  '';
+
   checkPhase = ''
     stestr run
   '';

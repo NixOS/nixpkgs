@@ -72,10 +72,10 @@ in {
             };
             deviceUri = mkOption {
               type = types.str;
-              example = [
+              example = literalExpression ''
                 "ipp://printserver.local/printers/BrotherHL_Workroom"
                 "usb://HP/DESKJET%20940C?serial=CN16E6C364BH"
-              ];
+              '';
               description = ''
                 How to reach the printer.
                 <command>lpinfo -v</command> shows a list of supported device URIs and schemes.
@@ -83,8 +83,8 @@ in {
             };
             model = mkOption {
               type = types.str;
-              example = literalExample ''
-                gutenprint.''${lib.versions.majorMinor (lib.getVersion pkgs.gutenprint)}://brother-hl-5140/expert
+              example = literalExpression ''
+                "gutenprint.''${lib.versions.majorMinor (lib.getVersion pkgs.gutenprint)}://brother-hl-5140/expert"
               '';
               description = ''
                 Location of the ppd driver file for the printer.

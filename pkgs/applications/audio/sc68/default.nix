@@ -13,12 +13,12 @@
 
 stdenv.mkDerivation rec {
   pname = "sc68";
-  version = "unstable-2020-05-18";
+  version = "unstable-2021-08-23";
 
   src = fetchsvn {
     url = "svn://svn.code.sf.net/p/sc68/code/";
-    rev = "693";
-    sha256 = "0liz5yjwiy41y160ag83zz9s5l8mk72fscxgvjv9g5qf4gwffnfa";
+    rev = "694";
+    sha256 = "1yycnr4ndzfhbmki41c30zskwyizpb9wb8sf0gxcprllmbq6a421";
   };
 
   preConfigure = "tools/svn-bootstrap.sh";

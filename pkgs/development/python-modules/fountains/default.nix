@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "fountains";
-  version = "1.0.0";
+  version = "1.1.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-e4WCO/CS7LBYUziKPuCQIOHEHUlnKE5vDbOsqC8SrA8=";
+    sha256 = "fbf4e2cb11d60d3bafca5bb7c01c254d08a5541ed7ddfe00ef975eb173fb75a4";
   };
 
   propagatedBuildInputs = [

@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-org-policy";
-  version = "1.0.1";
+  version = "1.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "12qwiqb7xrnq42z777j5nxdgka3vv411l9cngka6cr6mx4s83c9l";
+    sha256 = "c6811f8bde6019b18f5f0d154078000405af6fd38836713c05cbb9c1512f181a";
   };
 
   propagatedBuildInputs = [ google-api-core proto-plus ];

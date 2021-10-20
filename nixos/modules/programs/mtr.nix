@@ -20,6 +20,7 @@ in {
       package = mkOption {
         type = types.package;
         default = pkgs.mtr;
+        defaultText = literalExpression "pkgs.mtr";
         description = ''
           The package to use.
         '';

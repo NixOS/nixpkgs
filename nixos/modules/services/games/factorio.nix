@@ -86,7 +86,7 @@ in
       configFile = mkOption {
         type = types.path;
         default = configFile;
-        defaultText = "configFile";
+        defaultText = literalExpression "configFile";
         description = ''
           The server's configuration file.
 
@@ -162,8 +162,8 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.factorio-headless;
-        defaultText = "pkgs.factorio-headless";
-        example = "pkgs.factorio-headless-experimental";
+        defaultText = literalExpression "pkgs.factorio-headless";
+        example = literalExpression "pkgs.factorio-headless-experimental";
         description = ''
           Factorio version to use. This defaults to the stable channel.
         '';

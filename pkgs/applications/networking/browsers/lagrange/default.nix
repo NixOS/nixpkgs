@@ -7,6 +7,7 @@
 , fribidi
 , harfbuzz
 , libunistring
+, libwebp
 , mpg123
 , openssl
 , pcre
@@ -17,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lagrange";
-  version = "1.6.5";
+  version = "1.7.2";
 
   src = fetchFromGitHub {
     owner = "skyjake";
     repo = "lagrange";
     rev = "v${version}";
-    sha256 = "sha256-ZrpgSst17jjly6UnEWmlIBYjjW9nGFs7GTbVaKpZMrM=";
+    sha256 = "sha256-iJ6+tc5nls8E/9/Jp5OS9gfJo8SJ5bN+Im/JzEYEAfI=";
     fetchSubmodules = true;
   };
 
@@ -33,7 +34,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config ];
 
-  buildInputs = [ fribidi harfbuzz libunistring mpg123 openssl pcre SDL2 zlib ]
+  buildInputs = [ fribidi harfbuzz libunistring libwebp mpg123 openssl pcre SDL2 zlib ]
     ++ lib.optional stdenv.isDarwin AppKit;
 
   hardeningDisable = lib.optional (!stdenv.cc.isClang) "format";

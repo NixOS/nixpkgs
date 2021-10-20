@@ -93,7 +93,7 @@ in
     extraLayouts = mkOption {
       type = types.attrsOf (types.submodule layoutOpts);
       default = {};
-      example = literalExample
+      example = literalExpression
       ''
         {
           mine = {

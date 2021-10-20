@@ -19,13 +19,13 @@ let
 in
 buildGoPackage rec {
   pname = "lxd";
-  version = "4.18";
+  version = "4.19";
 
   goPackagePath = "github.com/lxc/lxd";
 
   src = fetchurl {
     url = "https://linuxcontainers.org/downloads/lxd/lxd-${version}.tar.gz";
-    sha256 = "19gkllahfd2fgz6vng5lrqx3bdrzaf9s874gzznvzvj9sgj0j3mn";
+    sha256 = "0mxbzg8xra0qpd3g3z1b230f0519h56x4jnn09lbbqa92p5zck3f";
   };
 
   postPatch = ''

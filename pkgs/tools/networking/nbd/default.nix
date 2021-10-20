@@ -30,7 +30,6 @@ stdenv.mkDerivation rec {
     homepage = "http://nbd.sourceforge.net";
     description = "Map arbitrary files as block devices over the network";
     license = lib.licenses.gpl2;
-    maintainers = [ lib.maintainers.peti ];
     platforms = lib.platforms.linux;
   };
 }

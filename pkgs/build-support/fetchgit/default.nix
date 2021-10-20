@@ -21,6 +21,11 @@ in
   postFetch ? ""
 , preferLocalBuild ? true
 , fetchLFS ? false
+, # Shell code to build a netrc file for BASIC auth
+  netrcPhase ? null
+, # Impure env vars (https://nixos.org/nix/manual/#sec-advanced-attributes)
+  # needed for netrcPhase
+  netrcImpureEnvVars ? []
 }:
 
 /* NOTE:
@@ -64,10 +69,17 @@ stdenvNoCC.mkDerivation {
 
   inherit url rev leaveDotGit fetchLFS fetchSubmodules deepClone branchName postFetch;
 
+  postHook = if netrcPhase == null then null else ''
+    ${netrcPhase}
+    # required that git uses the netrc file
+    mv {,.}netrc
+    export HOME=$PWD
+  '';
+
   GIT_SSL_CAINFO = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
-  impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
-    "GIT_PROXY_COMMAND" "SOCKS_SERVER"
+  impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ netrcImpureEnvVars ++ [
+    "GIT_PROXY_COMMAND" "NIX_GIT_SSL_CAINFO" "SOCKS_SERVER"
   ];
 
   inherit preferLocalBuild;

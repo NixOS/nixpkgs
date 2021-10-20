@@ -119,7 +119,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
 
     with subtest("The pullImage tool works"):
         docker.succeed(
-            "docker load --input='${examples.nixFromDockerHub}'",
+            "docker load --input='${examples.testNixFromDockerHub}'",
             "docker run --rm nix:2.2.1 nix-store --version",
             "docker rmi nix:2.2.1",
         )
@@ -378,5 +378,23 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         docker.succeed(
             "docker run --rm ${examples.layeredImageWithFakeRootCommands.imageName} sh -c 'stat -c '%u' /home/jane | grep -E ^1000$'"
         )
+
+    with subtest("exportImage produces a valid tarball"):
+        docker.succeed(
+            "tar -tf ${examples.exportBash} | grep '\./bin/bash' > /dev/null"
+        )
+
+    with subtest("Ensure bare paths in contents are loaded correctly"):
+        docker.succeed(
+            "docker load --input='${examples.build-image-with-path}'",
+            "docker run --rm build-image-with-path bash -c '[[ -e /hello.txt ]]'",
+            "docker rmi build-image-with-path",
+        )
+        docker.succeed(
+            "${examples.layered-image-with-path} | docker load",
+            "docker run --rm layered-image-with-path bash -c '[[ -e /hello.txt ]]'",
+            "docker rmi layered-image-with-path",
+        )
+
   '';
 })

@@ -1,6 +1,6 @@
 { lib, fetchFromGitHub, fetchpatch, python3, wirelesstools
 , aircrack-ng, wireshark-cli, reaverwps-t6x, cowpatty, hashcat, hcxtools
-, hcxdumptool, pyrit, which, bully }:
+, hcxdumptool, pyrit, which, bully, pixiewps }:
 
 python3.pkgs.buildPythonApplication rec {
   version = "2.5.7";
@@ -36,6 +36,7 @@ python3.pkgs.buildPythonApplication rec {
     pyrit
     which
     bully
+    pixiewps
   ];
 
   postFixup = let

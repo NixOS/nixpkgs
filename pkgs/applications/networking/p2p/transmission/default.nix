@@ -97,7 +97,7 @@ in stdenv.mkDerivation {
       include <abstractions/nameservice>
       include <abstractions/ssl_certs>
       include "${apparmorRulesFromClosure { name = "transmission-daemon"; } ([
-        curl libevent openssl pcre zlib
+        curl libevent openssl pcre zlib libnatpmp miniupnpc
       ] ++ lib.optionals enableSystemd [ systemd ]
         ++ lib.optionals stdenv.isLinux [ inotify-tools ]
       )}"
@@ -116,6 +116,7 @@ in stdenv.mkDerivation {
   '';
 
   passthru.tests = {
+    apparmor = nixosTests.transmission; # starts the service with apparmor enabled
     smoke-test = nixosTests.bittorrent;
   };
 

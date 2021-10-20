@@ -1,22 +1,18 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, upx
 }:
 
 stdenv.mkDerivation rec {
   pname = "hdl-dump";
-  version = "20202807";
+  version = "unstable-2021-08-20";
 
-  # Using AkuHAK's repo because playstation2's repo is outdated
   src = fetchFromGitHub {
-    owner = "AKuHAK";
+    owner = "ps2homebrew";
     repo = pname;
-    rev = "0c98b235c83c0fca1da93648f05ea5f940a4aee0";
-    sha256 = "1s3wflqjjlcslpa9n5chr8dbamhmfk88885dzw68apz4vf6g27iq";
+    rev = "1e760d7672dc12a36c09690b8c9b20d6642a2926";
+    sha256 = "sha256-NMExi2pUyj8vRn9beT2YvnEogRw/xzgqE+roaZ/vNZs=";
   };
-
-  buildInputs = [ upx ];
 
   makeFlags = [ "RELEASE=yes" ];
 
@@ -25,10 +21,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "https://github.com/AKuHAK/hdl-dump";
+    homepage = "https://github.com/ps2homebrew/hdl-dump";
     description = "PlayStation 2 HDLoader image dump/install utility";
     platforms = platforms.linux;
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ makefu ];
+    mainProgram = "hdl_dump";
   };
 }

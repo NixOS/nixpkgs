@@ -46,6 +46,11 @@ rec {
     nativeBuildInputs = [ git ];
   };
 
+  /*
+    Upstream isn't interested in packaging this as a library
+    (or accepting all of the patches we need to do so).
+    This creates one without disturbing upstream too much.
+  */
   oildev = python27Packages.buildPythonPackage rec {
     pname = "oildev-unstable";
     version = "2021-07-14";
@@ -61,22 +66,21 @@ rec {
         It's not critical to drop most of these; the primary target is
         the vendored fork of Python-2.7.13, which is ~ 55M and over 3200
         files, dozens of which get interpreter script patches in fixup.
+
+        Note: -f is necessary to keep it from being a pain to update
+        hash on rev updates. Command will fail w/o and not print hash.
       */
       extraPostFetch = ''
         rm -rf Python-2.7.13 benchmarks metrics py-yajl rfc gold web testdata services demo devtools cpp
       '';
     };
 
-    # TODO: not sure why I'm having to set this for nix-build...
-    #       can anyone tell if I'm doing something wrong?
-    SOURCE_DATE_EPOCH = 315532800;
-
     # patch to support a python package, pass tests on macOS, etc.
     patchSrc = fetchFromGitHub {
       owner = "abathur";
       repo = "nix-py-dev-oil";
-      rev = "v0.8.12";
-      hash = "sha256-/EvwxL201lGsioL0lIhzM8VTghe6FuVbc3PBJgY8c8E=";
+      rev = "v0.8.12.1";
+      hash = "sha256-7JVnosdcvmVFN3h6SIeeqcJFcyFkai//fFuzi7ThNMY=";
     };
     patches = [
       "${patchSrc}/0001-add_setup_py.patch"
@@ -102,7 +106,12 @@ rec {
       patchShebangs asdl build core doctools frontend native oil_lang
     '';
 
-    # TODO: this may be obsolete?
+    /*
+    We did convince oil to upstream an env for specifying
+    this to support a shell.nix. Would need a patch if they
+    later drop this support. See:
+    https://github.com/oilshell/oil/blob/46900310c7e4a07a6223eb6c08e4f26460aad285/doctools/cmark.py#L30-L34
+    */
     _NIX_SHELL_LIBCMARK = "${cmark}/lib/libcmark${stdenv.hostPlatform.extensions.sharedLibrary}";
 
     # See earlier note on glibcLocales TODO: verify needed?

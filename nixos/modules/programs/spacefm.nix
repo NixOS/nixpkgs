@@ -29,11 +29,13 @@ in
           terminal_su = "${pkgs.sudo}/bin/sudo";
           graphical_su = "${pkgs.gksu}/bin/gksu";
         };
-        example = literalExample ''{
-          tmp_dir = "/tmp";
-          terminal_su = "''${pkgs.sudo}/bin/sudo";
-          graphical_su = "''${pkgs.gksu}/bin/gksu";
-        }'';
+        defaultText = literalExpression ''
+          {
+            tmp_dir = "/tmp";
+            terminal_su = "''${pkgs.sudo}/bin/sudo";
+            graphical_su = "''${pkgs.gksu}/bin/gksu";
+          }
+        '';
         description = ''
           The system-wide spacefm configuration.
           Parameters to be written to <filename>/etc/spacefm/spacefm.conf</filename>.

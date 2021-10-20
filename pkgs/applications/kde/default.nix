@@ -4,8 +4,8 @@
 
 READ THIS FIRST
 
-This module is for official packages in the KDE Applications Bundle. All
-available packages are listed in `./srcs.nix`, although some are not yet
+This module is for official packages in the KDE Gear. All available
+packages are listed in `./srcs.nix`, although some are not yet
 packaged in Nixpkgs (see below).
 
 IF YOUR PACKAGE IS NOT LISTED IN `./srcs.nix`, IT DOES NOT GO HERE.
@@ -174,6 +174,7 @@ let
       ksquares = callPackage ./ksquares.nix {};
       kqtquickcharts = callPackage ./kqtquickcharts.nix {};
       kpkpass = callPackage ./kpkpass.nix {};
+      kpublictransport = callPackage ./kpublictransport.nix {};
       kreversi = callPackage ./kreversi.nix {};
       krdc = callPackage ./krdc.nix {};
       krfb = callPackage ./krfb.nix {};

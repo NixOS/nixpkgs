@@ -120,6 +120,9 @@ stdenv.mkDerivation ({
       })
 
       ./fix-x64-abi.patch
+
+      /* https://github.com/NixOS/nixpkgs/pull/137601 */
+      ./nix-nss-open-files.patch
     ]
     ++ lib.optional stdenv.hostPlatform.isMusl ./fix-rpc-types-musl-conflicts.patch
     ++ lib.optional stdenv.buildPlatform.isDarwin ./darwin-cross-build.patch;

@@ -10,7 +10,7 @@ in with lib; {
       description = "MeshCentral package to use. Replacing this may be necessary to add dependencies for extra functionality.";
       type = types.package;
       default = pkgs.meshcentral;
-      defaultText = "pkgs.meshcentral";
+      defaultText = literalExpression "pkgs.meshcentral";
     };
     settings = mkOption {
       description = ''

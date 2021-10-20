@@ -4,7 +4,10 @@
 { options, config, lib, pkgs, ... }:
 
 with lib;
-with import ../../lib/qemu-flags.nix { inherit pkgs; };
+
+let
+  qemu-common = import ../../lib/qemu-common.nix { inherit lib pkgs; };
+in
 
 {
 
@@ -12,8 +15,8 @@ with import ../../lib/qemu-flags.nix { inherit pkgs; };
 
     systemd.services.backdoor =
       { wantedBy = [ "multi-user.target" ];
-        requires = [ "dev-hvc0.device" "dev-${qemuSerialDevice}.device" ];
-        after = [ "dev-hvc0.device" "dev-${qemuSerialDevice}.device" ];
+        requires = [ "dev-hvc0.device" "dev-${qemu-common.qemuSerialDevice}.device" ];
+        after = [ "dev-hvc0.device" "dev-${qemu-common.qemuSerialDevice}.device" ];
         script =
           ''
             export USER=root
@@ -30,7 +33,7 @@ with import ../../lib/qemu-flags.nix { inherit pkgs; };
 
             cd /tmp
             exec < /dev/hvc0 > /dev/hvc0
-            while ! exec 2> /dev/${qemuSerialDevice}; do sleep 0.1; done
+            while ! exec 2> /dev/${qemu-common.qemuSerialDevice}; do sleep 0.1; done
             echo "connecting to host..." >&2
             stty -F /dev/hvc0 raw -echo # prevent nl -> cr/nl conversion
             echo
@@ -42,7 +45,7 @@ with import ../../lib/qemu-flags.nix { inherit pkgs; };
     # Prevent agetty from being instantiated on the serial device, since it
     # interferes with the backdoor (writes to it will randomly fail
     # with EIO).  Likewise for hvc0.
-    systemd.services."serial-getty@${qemuSerialDevice}".enable = false;
+    systemd.services."serial-getty@${qemu-common.qemuSerialDevice}".enable = false;
     systemd.services."serial-getty@hvc0".enable = false;
 
     # Only set these settings when the options exist. Some tests (e.g. those
@@ -57,7 +60,7 @@ with import ../../lib/qemu-flags.nix { inherit pkgs; };
         #       we avoid defining consoles if not possible.
         # TODO: refactor such that test-instrumentation can import qemu-vm
         #       or declare virtualisation.qemu.console option in a module that's always imported
-        consoles = [ qemuSerialDevice ];
+        consoles = [ qemu-common.qemuSerialDevice ];
         package  = lib.mkDefault pkgs.qemu_test;
       };
     };
@@ -88,7 +91,7 @@ with import ../../lib/qemu-flags.nix { inherit pkgs; };
     # Panic if an error occurs in stage 1 (rather than waiting for
     # user intervention).
     boot.kernelParams =
-      [ "console=${qemuSerialDevice}" "panic=1" "boot.panic_on_fail" ];
+      [ "console=${qemu-common.qemuSerialDevice}" "panic=1" "boot.panic_on_fail" ];
 
     # `xwininfo' is used by the test driver to query open windows.
     environment.systemPackages = [ pkgs.xorg.xwininfo ];

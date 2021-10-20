@@ -7,13 +7,13 @@
 buildPythonApplication rec {
 
   pname = "catcli";
-  version = "0.7.2";
+  version = "0.7.4";
 
   src = fetchFromGitHub {
     owner = "deadc0de6";
     repo = pname;
     rev = "v${version}";
-    sha256 = "12928pvwd6jr4x81nxi5691axianm4vz5gql1jazlij0ahc2f905";
+    sha256 = "1mzhfcf67dc5m0i9b216m58qg36g63if6273ch5bsckd0yrwdk8x";
   };
 
   propagatedBuildInputs = [ docopt anytree ];

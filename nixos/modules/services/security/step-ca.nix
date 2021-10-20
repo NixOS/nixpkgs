@@ -13,6 +13,7 @@ in
       package = lib.mkOption {
         type = lib.types.package;
         default = pkgs.step-ca;
+        defaultText = lib.literalExpression "pkgs.step-ca";
         description = "Which step-ca package to use.";
       };
       address = lib.mkOption {

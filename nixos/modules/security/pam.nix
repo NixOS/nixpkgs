@@ -586,7 +586,7 @@ in
     };
 
     security.pam.services = mkOption {
-      default = [];
+      default = {};
       type = with types; attrsOf (submodule pamOpts);
       description =
         ''

@@ -120,7 +120,7 @@ in {
           Proxies to be used by proxychains.
         '';
 
-        example = literalExample ''
+        example = literalExpression ''
           { myproxy =
             { type = "socks4";
               host = "127.0.0.1";

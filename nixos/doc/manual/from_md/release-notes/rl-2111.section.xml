@@ -57,6 +57,11 @@
       </listitem>
       <listitem>
         <para>
+          KDE Plasma now finally works on Wayland.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           bash now defaults to major version 5.
         </para>
       </listitem>
@@ -78,7 +83,15 @@
           which introduced some breaking changes to the experimental OCI
           manifest format. See
           <link xlink:href="https://github.com/helm/community/blob/main/hips/hip-0006.md">HIP
-          6</link> for more details.
+          6</link> for more details. <literal>helmfile</literal> also
+          defaults to 0.141.0, which is the minimum compatible version.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          GNOME has been upgraded to 41. Please take a look at their
+          <link xlink:href="https://help.gnome.org/misc/release-notes/41.0/">Release
+          Notes</link> for details.
         </para>
       </listitem>
     </itemizedlist>
@@ -99,7 +112,15 @@
         <para>
           <link xlink:href="https://github.com/xrelkd/clipcat/">clipcat</link>,
           an X11 clipboard manager written in Rust. Available at
-          [services.clipcat](options.html#o pt-services.clipcat.enable).
+          <link xlink:href="options.html#opt-services.clipcat.enable">services.clipcat</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/dexidp/dex">dex</link>,
+          an OpenID Connect (OIDC) identity and OAuth 2.0 provider.
+          Available at
+          <link xlink:href="options.html#opt-services.dex.enable">services.dex</link>.
         </para>
       </listitem>
       <listitem>
@@ -114,6 +135,13 @@
           <link xlink:href="https://www.isc.org/kea/">Kea</link>, ISCs
           2nd generation DHCP and DDNS server suite. Available at
           <link xlink:href="options.html#opt-services.kea">services.kea</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://owncast.online/">owncast</link>,
+          self-hosted video live streaming solution. Available at
+          <link xlink:href="options.html#opt-services.owncast">services.owncast</link>.
         </para>
       </listitem>
       <listitem>
@@ -256,6 +284,14 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://wiki.servarr.com/prowlarr">prowlarr</link>,
+          an indexer manager/proxy built on the popular arr .net/reactjs
+          base stack
+          <link linkend="opt-services.prowlarr.enable">services.prowlarr</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://sr.ht/~emersion/soju">soju</link>, a
           user-friendly IRC bouncer. Available as
           <link xlink:href="options.html#opt-services.soju.enable">services.soju</link>.
@@ -306,11 +342,33 @@
           <link linkend="opt-programs.pantheon-tweaks.enable">programs.pantheon-tweaks</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/DanielOgorchock/joycond">joycond</link>,
+          a service that uses <literal>hid-nintendo</literal> to provide
+          nintendo joycond pairing and better nintendo switch pro
+          controller support.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/opensvc/multipath-tools">multipath</link>,
+          the device mapper multipath (DM-MP) daemon. Available as
+          <link linkend="opt-services.multipath.enable">services.multipath</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-incompatibilities">
     <title>Backward Incompatibilities</title>
     <itemizedlist>
+      <listitem>
+        <para>
+          The <literal>services.wakeonlan</literal> option was removed,
+          and replaced with
+          <literal>networking.interfaces.&lt;name&gt;.wakeOnLan</literal>.
+        </para>
+      </listitem>
       <listitem>
         <para>
           The <literal>security.wrappers</literal> option now requires
@@ -987,8 +1045,8 @@ Superuser created successfully.
       <listitem>
         <para>
           The <literal>varnish</literal> package was upgraded from 6.3.x
-          to 6.5.x. <literal>varnish60</literal> for the last LTS
-          release is also still available.
+          to 7.x. <literal>varnish60</literal> for the last LTS release
+          is also still available.
         </para>
       </listitem>
       <listitem>
@@ -1044,6 +1102,33 @@ Superuser created successfully.
           changelog</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <literal>opencv2</literal> no longer includes the non-free
+          libraries by default, and consequently
+          <literal>pfstools</literal> no longer includes OpenCV support
+          by default. Both packages now support an
+          <literal>enableUnfree</literal> option to re-enable this
+          functionality.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>services.xserver.displayManager.defaultSession = &quot;plasma5&quot;</literal>
+          does not work anymore, instead use either
+          <literal>&quot;plasma&quot;</literal> for the Plasma X11
+          session or <literal>&quot;plasmawayland&quot;</literal> for
+          the Plasma Wayland sesison.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>boot.kernelParams</literal> now only accepts one
+          command line parameter per string. This change is aimed to
+          reduce common mistakes like <quote>param = 12</quote>, which
+          would be parsed as 3 parameters.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-notable-changes">
@@ -1061,6 +1146,40 @@ Superuser created successfully.
           now live under <literal>pkgs.linuxKernel.packages.*</literal>.
           The unversioned ones (such as
           <literal>linuxPackages_latest</literal>) remain untouched.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          In NixOS virtual machines (QEMU), the
+          <literal>virtualisation</literal> module has been updated with
+          new options to configure:
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              IPv4 port forwarding
+              (<link xlink:href="options.html#opt-virtualisation.forwardPorts"><literal>virtualisation.forwardPorts</literal></link>),
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              shared host directories
+              (<link xlink:href="options.html#opt-virtualisation.sharedDirectories"><literal>virtualisation.sharedDirectories</literal></link>),
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              screen resolution
+              (<link xlink:href="options.html#opt-virtualisation.resolution"><literal>virtualisation.resolution</literal></link>).
+            </para>
+          </listitem>
+        </itemizedlist>
+        <para>
+          In addition, the default
+          <link xlink:href="options.html#opt-virtualisation.msize"><literal>msize</literal></link>
+          parameter in 9P filesystems (including /nix/store and all
+          shared directories) has been increased to 16K for improved
+          performance.
         </para>
       </listitem>
       <listitem>
@@ -1231,6 +1350,73 @@ Superuser created successfully.
       <listitem>
         <para>
           The
+          <link xlink:href="options.html#opt-networking.wireless.enable">networking.wireless</link>
+          module (based on wpa_supplicant) has been heavily reworked,
+          solving a number of issues and adding useful features:
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              The automatic discovery of wireless interfaces at boot has
+              been made reliable again (issues
+              <link xlink:href="https://github.com/NixOS/nixpkgs/issues/101963">#101963</link>,
+              <link xlink:href="https://github.com/NixOS/nixpkgs/issues/23196">#23196</link>).
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              WPA3 and Fast BSS Transition (802.11r) are now enabled by
+              default for all networks.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Secrets like pre-shared keys and passwords can now be
+              handled safely, meaning without including them in a
+              world-readable file
+              (<literal>wpa_supplicant.conf</literal> under /nix/store).
+              This is achieved by storing the secrets in a secured
+              <link xlink:href="options.html#opt-networking.wireless.environmentFile">environmentFile</link>
+              and referring to them though environment variables that
+              are expanded inside the configuration.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              With multiple interfaces declared, independent
+              wpa_supplicant daemons are started, one for each interface
+              (the services are named
+              <literal>wpa_supplicant-wlan0</literal>,
+              <literal>wpa_supplicant-wlan1</literal>, etc.).
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              The generated <literal>wpa_supplicant.conf</literal> file
+              is now formatted for easier reading.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              A new
+              <link xlink:href="options.html#opt-networking.wireless.scanOnLowSignal">scanOnLowSignal</link>
+              option has been added to facilitate fast roaming between
+              access points (enabled by default).
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              A new
+              <link xlink:href="options.html#opt-networking.wireless.networks._name_.authProtocols">networks.&lt;name&gt;.authProtocols</link>
+              option has been added to change the authentication
+              protocols used when connecting to a network.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+      <listitem>
+        <para>
+          The
           <link xlink:href="options.html#opt-networking.wireless.iwd.enable">networking.wireless.iwd</link>
           module has a new
           <link xlink:href="options.html#opt-networking.wireless.iwd.settings">networking.wireless.iwd.settings</link>
@@ -1342,6 +1528,73 @@ Superuser created successfully.
           allow the configuration of
           <literal>/etc/xdg/mimeapps.list</literal>.
         </para>
+      </listitem>
+      <listitem>
+        <para>
+          Kopia was upgraded from 0.8.x to 0.9.x. Please read the
+          <link xlink:href="https://github.com/kopia/kopia/releases/tag/v0.9.0">upstream
+          release notes</link> for changes and upgrade instructions.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>systemd.network</literal> module has gained
+          support for the FooOverUDP link type.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>networking</literal> module has a new
+          <literal>networking.fooOverUDP</literal> option to configure
+          Foo-over-UDP encapsulations.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>networking.sits</literal> now supports Foo-over-UDP
+          encapsulation.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Changing systemd <literal>.socket</literal> units now restarts
+          them and stops the service that is activated by them.
+          Additionally, services with
+          <literal>stopOnChange = false</literal> don’t break anymore
+          when they are socket-activated.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>virtualisation.libvirtd</literal> module has been
+          refactored and updated with new options:
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              <literal>virtualisation.libvirtd.qemu*</literal> options
+              (e.g.:
+              <literal>virtualisation.libvirtd.qemuRunAsRoot</literal>)
+              were moved to
+              <link xlink:href="options.html#opt-virtualisation.libvirtd.qemu"><literal>virtualisation.libvirtd.qemu</literal></link>
+              submodule,
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              software TPM1/TPM2 support (e.g.: Windows 11 guests)
+              (<link xlink:href="options.html#opt-virtualisation.libvirtd.qemu.swtpm"><literal>virtualisation.libvirtd.qemu.swtpm</literal></link>),
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              custom OVMF package (e.g.:
+              <literal>pkgs.OVMFFull</literal> with HTTP, CSM and Secure
+              Boot support)
+              (<link xlink:href="options.html#opt-virtualisation.libvirtd.qemu.ovmf.package"><literal>virtualisation.libvirtd.qemu.ovmf.package</literal></link>).
+            </para>
+          </listitem>
+        </itemizedlist>
       </listitem>
     </itemizedlist>
   </section>

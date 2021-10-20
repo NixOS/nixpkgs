@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config autoreconfHook ];
   buildInputs = [ cppunit openssl libsigcxx zlib ];
 
+  enableParallelBuilding = true;
+
   meta = with lib; {
     homepage = "https://github.com/rakshasa/libtorrent";
     description = "A BitTorrent library written in C++ for *nix, with focus on high performance and good code";

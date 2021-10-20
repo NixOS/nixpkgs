@@ -189,7 +189,7 @@ in
           <literal>/bin</literal>, <literal>/usr/bin</literal>,
           <literal>/sbin</literal>, and <literal>/usr/sbin</literal>.
         '';
-        example = literalExample ''
+        example = literalExpression ''
           {
             zfs_usage_bigpool = /src/munin-contrib/plugins/zfs/zfs_usage_;
             zfs_usage_smallpool = /src/munin-contrib/plugins/zfs/zfs_usage_;
@@ -220,7 +220,7 @@ in
           <literal>/bin</literal>, <literal>/usr/bin</literal>,
           <literal>/sbin</literal>, and <literal>/usr/sbin</literal>.
         '';
-        example = literalExample ''
+        example = literalExpression ''
           [
             /src/munin-contrib/plugins/zfs
             /src/munin-contrib/plugins/ssh
@@ -285,9 +285,11 @@ in
           host for cron to succeed. See
           <link xlink:href='http://guide.munin-monitoring.org/en/latest/reference/munin.conf.html' />
         '';
-        example = ''
-          [''${config.networking.hostName}]
-          address localhost
+        example = literalExpression ''
+          '''
+            [''${config.networking.hostName}]
+            address localhost
+          '''
         '';
       };
 

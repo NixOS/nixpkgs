@@ -362,6 +362,19 @@ rec {
     if match "[a-zA-Z_][a-zA-Z0-9_'-]*" s != null
     then s else escapeNixString s;
 
+  /* Escapes a string such that it is safe to include verbatim in an XML
+     document.
+
+     Type: string -> string
+
+     Example:
+       escapeXML ''"test" 'test' < & >''
+       => "\\[\\^a-z]\\*"
+  */
+  escapeXML = builtins.replaceStrings
+    ["\"" "'" "<" ">" "&"]
+    ["&quot;" "&apos;" "&lt;" "&gt;" "&amp;"];
+
   # Obsolete - use replaceStrings instead.
   replaceChars = builtins.replaceStrings or (
     del: new: s:

@@ -48,7 +48,7 @@ in {
           as they don't get backported if they are not security-relevant.
         '';
         default = pkgs.matomo;
-        defaultText = "pkgs.matomo";
+        defaultText = literalExpression "pkgs.matomo";
       };
 
       webServerUser = mkOption {
@@ -100,13 +100,15 @@ in {
         )
         );
         default = null;
-        example = {
-          serverAliases = [
-            "matomo.\${config.networking.domain}"
-            "stats.\${config.networking.domain}"
-          ];
-          enableACME = false;
-        };
+        example = literalExpression ''
+          {
+            serverAliases = [
+              "matomo.''${config.networking.domain}"
+              "stats.''${config.networking.domain}"
+            ];
+            enableACME = false;
+          }
+        '';
         description = ''
             With this option, you can customize an nginx virtualHost which already has sensible defaults for Matomo.
             Either this option or the webServerUser option is mandatory.

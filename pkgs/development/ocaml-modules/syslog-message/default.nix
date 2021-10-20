@@ -1,4 +1,5 @@
 { lib, buildDunePackage, fetchurl
+, ocaml
 , astring, ptime, rresult, qcheck
 }:
 
@@ -21,7 +22,7 @@ buildDunePackage rec {
     rresult
   ];
 
-  doCheck = true;
+  doCheck = lib.versionAtLeast ocaml.version "4.08";
   checkInputs = [
     qcheck
   ];

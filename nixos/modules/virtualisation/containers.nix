@@ -2,7 +2,7 @@
 let
   cfg = config.virtualisation.containers;
 
-  inherit (lib) mkOption types;
+  inherit (lib) literalExpression mkOption types;
 
   toml = pkgs.formats.toml { };
 in
@@ -50,12 +50,12 @@ in
 
     containersConf.cniPlugins = mkOption {
       type = types.listOf types.package;
-      defaultText = ''
+      defaultText = literalExpression ''
         [
           pkgs.cni-plugins
         ]
       '';
-      example = lib.literalExample ''
+      example = literalExpression ''
         [
           pkgs.cniPlugins.dnsname
         ]
@@ -106,7 +106,7 @@ in
     policy = mkOption {
       default = {};
       type = types.attrs;
-      example = lib.literalExample ''
+      example = literalExpression ''
         {
           default = [ { type = "insecureAcceptAnything"; } ];
           transports = {

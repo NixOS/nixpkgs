@@ -110,7 +110,7 @@ in
     system.activationScripts = mkOption {
       default = {};
 
-      example = literalExample ''
+      example = literalExpression ''
         { stdio.text =
           '''
             # Needed by some programs.
@@ -147,7 +147,7 @@ in
     system.userActivationScripts = mkOption {
       default = {};
 
-      example = literalExample ''
+      example = literalExpression ''
         { plasmaSetup = {
             text = '''
               ${pkgs.libsForQt5.kservice}/bin/kbuildsycoca5"
@@ -193,9 +193,8 @@ in
 
     environment.usrbinenv = mkOption {
       default = "${pkgs.coreutils}/bin/env";
-      example = literalExample ''
-        "''${pkgs.busybox}/bin/env"
-      '';
+      defaultText = literalExpression ''"''${pkgs.coreutils}/bin/env"'';
+      example = literalExpression ''"''${pkgs.busybox}/bin/env"'';
       type = types.nullOr types.path;
       visible = false;
       description = ''
