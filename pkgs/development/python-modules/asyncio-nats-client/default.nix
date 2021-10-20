@@ -5,6 +5,7 @@
 , nats-server
 , pytestCheckHook
 , pythonOlder
+, uvloop
 }:
 
 buildPythonPackage rec {
@@ -26,6 +27,7 @@ buildPythonPackage rec {
   checkInputs = [
     nats-server
     pytestCheckHook
+    uvloop
   ];
 
   postPatch = ''
@@ -37,6 +39,8 @@ buildPythonPackage rec {
     # RuntimeError: Event loop is closed
     "test_subscribe_no_echo"
     "test_reconnect_to_new_server_with_auth"
+    "test_drain_connection"
+    "test_discover_servers_on_first_connect"
   ];
 
   pythonImportsCheck = [ "nats.aio" ];
