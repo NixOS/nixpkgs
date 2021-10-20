@@ -470,6 +470,10 @@ with pkgs;
 
   fetchMavenArtifact = callPackage ../build-support/fetchmavenartifact { };
 
+  inherit (callPackage ../build-support/node/fetch-yarn-deps { })
+    prefetch-yarn-deps
+    fetchYarnDeps;
+
   find-cursor = callPackage ../tools/X11/find-cursor { };
 
   flare-floss = callPackage ../tools/security/flare-floss { };
@@ -3043,6 +3047,10 @@ with pkgs;
   hid-listen = callPackage ../tools/misc/hid-listen { };
 
   hidrd = callPackage ../tools/misc/hidrd { };
+
+  hiksink = callPackage ../tools/misc/hiksink {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   hocr-tools = with python3Packages; toPythonApplication hocr-tools;
 
@@ -8324,6 +8332,8 @@ with pkgs;
 
   pdf2svg = callPackage ../tools/graphics/pdf2svg { };
 
+  pdftoipe = callPackage ../tools/graphics/pdftoipe { };
+
   fmodex = callPackage ../games/zandronum/fmod.nix { };
 
   pdfminer = with python3Packages; toPythonApplication pdfminer;
@@ -9736,6 +9746,10 @@ with pkgs;
   teler = callPackage ../tools/security/teler { };
 
   telescope = callPackage ../applications/networking/browsers/telescope { };
+
+  termscp = callPackage ../tools/networking/termscp {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   termius = callPackage ../applications/networking/termius { };
 
@@ -12111,7 +12125,6 @@ with pkgs;
     recurseIntoAttrs (callPackage ../development/compilers/graalvm/community-edition {
       inherit (darwin.apple_sdk.frameworks) Foundation;
     });
-  graalvm8-ce = graalvmCEPackages.graalvm8-ce;
   graalvm11-ce = graalvmCEPackages.graalvm11-ce;
 
   inherit (callPackages ../development/compilers/graalvm/enterprise-edition.nix { })
@@ -14929,6 +14942,8 @@ with pkgs;
   saleae-logic-2 = callPackage ../development/tools/misc/saleae-logic-2 { };
 
   sauce-connect = callPackage ../development/tools/sauce-connect { };
+
+  sawjap = callPackage ../development/tools/java/sawjap { };
 
   sd-local = callPackage ../development/tools/sd-local { };
 
