@@ -2,15 +2,15 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = "trivial-with-current-source-form";
-  version = "20200427-git";
+  version = "20210630-git";
 
   description = "Helps macro writers produce better errors for macro users";
 
   deps = [ args."alexandria" ];
 
   src = fetchurl {
-    url = "http://beta.quicklisp.org/archive/trivial-with-current-source-form/2020-04-27/trivial-with-current-source-form-20200427-git.tgz";
-    sha256 = "05zkj42f071zhg7swfyklg44k0zc893c9li9virkigzmvhids84f";
+    url = "http://beta.quicklisp.org/archive/trivial-with-current-source-form/2021-06-30/trivial-with-current-source-form-20210630-git.tgz";
+    sha256 = "0xa4mmrrkqr8lg74wk04ccgx06r17jskhrfmw23ywpbi2yy1qyhp";
   };
 
   packageName = "trivial-with-current-source-form";
@@ -20,9 +20,9 @@ rec {
 }
 /* (SYSTEM trivial-with-current-source-form DESCRIPTION
     Helps macro writers produce better errors for macro users SHA256
-    05zkj42f071zhg7swfyklg44k0zc893c9li9virkigzmvhids84f URL
-    http://beta.quicklisp.org/archive/trivial-with-current-source-form/2020-04-27/trivial-with-current-source-form-20200427-git.tgz
-    MD5 9a1367a5434664bd1ca2215d06e6d5cf NAME trivial-with-current-source-form
+    0xa4mmrrkqr8lg74wk04ccgx06r17jskhrfmw23ywpbi2yy1qyhp URL
+    http://beta.quicklisp.org/archive/trivial-with-current-source-form/2021-06-30/trivial-with-current-source-form-20210630-git.tgz
+    MD5 0b4fe9e9a99e0729cc8ecf851df2a6c5 NAME trivial-with-current-source-form
     FILENAME trivial-with-current-source-form DEPS
     ((NAME alexandria FILENAME alexandria)) DEPENDENCIES (alexandria) VERSION
-    20200427-git SIBLINGS NIL PARASITES NIL) */
+    20210630-git SIBLINGS NIL PARASITES NIL) */
