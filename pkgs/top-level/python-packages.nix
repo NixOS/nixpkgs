@@ -6186,6 +6186,8 @@ in {
 
   pydaikin = callPackage ../development/python-modules/pydaikin { };
 
+  pydal = callPackage ../development/python-modules/pydal { };
+
   pydanfossair = callPackage ../development/python-modules/pydanfossair { };
 
   pydantic = callPackage ../development/python-modules/pydantic { };
