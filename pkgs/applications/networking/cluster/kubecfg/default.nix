@@ -15,7 +15,7 @@ buildGoPackage {
 
   goPackagePath = "github.com/bitnami/kubecfg";
 
-  ldflags = [ "-X main.version=v${version}" ];
+  ldflags = [ "-s" "-w" "-X main.version=v${version}" ];
 
   meta = {
     description = "A tool for managing Kubernetes resources as code";
