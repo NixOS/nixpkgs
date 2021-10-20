@@ -23353,7 +23353,7 @@ with pkgs;
 
   source-code-pro = callPackage ../data/fonts/source-code-pro {};
 
-  source-sans-pro = callPackage ../data/fonts/source-sans-pro { };
+  source-sans = callPackage ../data/fonts/source-sans { };
 
   source-serif = callPackage ../data/fonts/source-serif { };
 

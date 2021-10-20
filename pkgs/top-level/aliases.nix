@@ -885,6 +885,7 @@ mapAliases ({
   source-han-serif-korean = source-han-serif;
   source-han-serif-simplified-chinese = source-han-serif;
   source-han-serif-traditional-chinese = source-han-serif;
+  source-sans-pro = source-sans; # added 2021-10-20
   source-serif-pro = source-serif; # added 2021-10-20
 
   net_snmp = net-snmp; # added 2019-12-21
