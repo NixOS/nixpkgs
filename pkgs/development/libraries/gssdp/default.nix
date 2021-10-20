@@ -11,6 +11,7 @@
 , libsoup
 , glib
 , gnome
+, gssdp-tools
 }:
 
 stdenv.mkDerivation rec {
@@ -50,6 +51,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   postFixup = ''
+    # Move developer documentation to devdoc output.
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
     find -L "$out/share/doc" -type f -regex '.*\.devhelp2?' -print0 \
       | while IFS= read -r -d ''' file; do
@@ -60,6 +62,10 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome.updateScript {
       packageName = pname;
+    };
+
+    tests = {
+      inherit gssdp-tools;
     };
   };
 
