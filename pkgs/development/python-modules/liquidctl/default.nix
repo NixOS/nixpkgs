@@ -35,6 +35,10 @@ buildPythonPackage rec {
     colorlog
   ];
 
+  propagatedNativeBuildInputs = [
+    smbus-cffi
+  ];
+
   outputs = [ "out" "man" ];
 
   postInstall = ''
