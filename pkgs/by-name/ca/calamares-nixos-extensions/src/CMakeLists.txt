@@ -84,6 +84,7 @@ if(CMAKE_VERSION VERSION_GREATER_EQUAL "3.10.0")
         "K_EXPORT_PLASMA_RUNNER"
     )
 endif()
+include( CTest )
 
 
 ### BRANDING
