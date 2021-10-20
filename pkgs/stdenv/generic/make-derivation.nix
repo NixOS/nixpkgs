@@ -60,6 +60,8 @@ in
     (stdenv.hostPlatform != stdenv.buildPlatform)
     [ "build" "host" ]
 
+, enableParallelBuilding ? true
+
 # TODO(@Ericson2314): Make unconditional / resolve #33599
 # Check phase
 , doCheck ? config.doCheckByDefault or false
@@ -310,7 +312,8 @@ else let
           llvm-config = 'llvm-config-native'
         '';
       in [ "--cross-file=${crossFile}" ] ++ mesonFlags;
-    } // lib.optionalAttrs (attrs.enableParallelBuilding or false) {
+    } // lib.optionalAttrs enableParallelBuilding {
+      inherit enableParallelBuilding;
       enableParallelChecking = attrs.enableParallelChecking or true;
     } // lib.optionalAttrs (hardeningDisable != [] || hardeningEnable != [] || stdenv.hostPlatform.isMusl) {
       NIX_HARDENING_ENABLE = enabledHardeningOptions;
