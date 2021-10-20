@@ -9,7 +9,7 @@ in
   inherit mkGraal;
 
   graalvm11-ce = mkGraal rec {
-    version = lib.fileContents ./version;
+    version = "21.3.0";
     javaVersion = "11";
     platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];
   };
