@@ -217,6 +217,20 @@ def pretty_name():
     return _("NixOS Configuration.")
 
 
+def catenate(d, key, *values):
+    """
+    Sets @p d[key] to the string-concatenation of @p values
+    if none of the values are None.
+
+    This can be used to set keys conditionally based on
+    the values being found.
+    """
+    if [v for v in values if v is None]:
+        return
+
+    d[key] = "".join(values)
+
+
 def run():
     """NixOS Configuration."""
 
@@ -225,14 +239,14 @@ def run():
 
     # Collect variables to substitute into the main text
     variables = dict()
-    variables["hostname"] = gs.value("hostname")
-    variables["timezone"] = gs.value("locationRegion") + "/" + gs.value("locationZone")
+    catenate(variables, "hostname", gs.value("hostname"))
+    catenate(variables, "timezone", gs.value("locationRegion"), "/", gs.value("locationZone"))
 
     # Check that all variables are used
     for key in variables.keys():
         pattern = "@@{key}@@".format(key=key)
         if not pattern in text:
-            libcalamares.utils.warn("Variable '{key}' is not used.".format(key=key))
+            libcalamares.utils.warning("Variable '{key}' is not used.".format(key=key))
 
     # Check that all patterns exist
     import re
@@ -240,7 +254,7 @@ def run():
     for match in variable_pattern.finditer(text):
         variable_name = text[match.start()+2:match.end()-2]
         if not variable_name in variables:
-            libcalamares.utils.warn("Variable '{key}' is used but not defined.".format(key=variable_name))
+            libcalamares.utils.warning("Variable '{key}' is used but not defined.".format(key=variable_name))
 
     # Do the substitutions
     for key in variables.keys():
