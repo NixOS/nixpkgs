@@ -5,12 +5,7 @@
 #   SPDX-License-Identifier: BSD-2-Clause
 #
 # Calls astyle with settings matching Calamares coding style
-# Requires astyle >= 2.04 and clang-format-7 -8 or -9
-#
-# Clang-format-10 is **not** supported, since it changes a default
-# that re-introduces a space into empty function bodies; this
-# can be turned off with a style setting, but that breaks
-# older format versions which don't recognize the setting.
+# Requires astyle >= 2.04 and clang-format-8 or later
 #
 # You can pass in directory names, in which case the files
 # in that directory (NOT below it) are processed.
@@ -20,9 +15,16 @@ LC_ALL=C
 LC_NUMERIC=C
 export LANG LC_ALL LC_NUMERIC
 
+BASEDIR=$(dirname $0)
+TOPDIR=$( cd $BASEDIR/.. && pwd -P )
+test -d "$BASEDIR" || { echo "! Could not determine base for $0" ; exit 1 ; }
+test -d "$TOPDIR" || { echo "! Cound not determine top-level source dir" ; exit 1 ; }
+test -f "$TOPDIR/.clang-format.base" || { echo "! No .clang-format support files in $TOPDIR" ; exit 1 ; }
+
 AS=$( which astyle )
 
-CF_VERSIONS="clang-format-7 clang-format-8 clang-format70 clang-format80 clang-format90 clang-format-9.0.1 clang-format"
+# Allow specifying CF_VERSIONS outside already
+CF_VERSIONS="$CF_VERSIONS clang-format-8 clang-format80 clang-format90 clang-format-9.0.1 clang-format"
 for _cf in $CF_VERSIONS
 do
 	# Not an error if this particular clang-format isn't found
@@ -35,14 +37,39 @@ test -n "$CF" || { echo "! No clang-format ($CF_VERSIONS) found in PATH"; exit 1
 test -x "$AS" || { echo "! $AS is not executable."; exit 1 ; }
 test -x "$CF" || { echo "! $CF is not executable."; exit 1 ; }
 
-unmangle_clang_format=""
-if expr `"$CF" --version | tr -dc '[^.0-9]' | cut  -d . -f 1` '<' 10 > /dev/null ; then
-	:
-else
-	unmangle_clang_format=$( dirname $0 )/../.clang-format
-	echo "SpaceInEmptyBlock: false" >> "$unmangle_clang_format"
-fi
+### CLANG-FORMAT-WRANGLING
+#
+# Version 7 and earlier doesn't understand all the options we would like
+# Version 8 is ok
+# Version 9 is ok
+# Later versions change some defaults so need extra wrangling.
+# .. there are extra files that are appended to the settings, per
+# .. clang-format version.
 
+format_version=`"$CF" --version | tr -dc '[^.0-9]' | cut  -d . -f 1`
+case "$format_version" in
+	[0-7] )
+		echo "! Clang-format version 8+ required"
+		exit 1
+		;;
+	[89] )
+		:
+		;;
+	* )
+		echo "! Clang-format version '$format_version' unsupported."
+		exit 1
+		;;
+esac
+_fmt="$TOPDIR/.clang-format"
+cp "$_fmt.base" "$_fmt"
+for f in "$extra_settings" ; do
+	test -f "$_fmt.$f" && cat "$_fmt.$f" >> "$_fmt"
+done
+
+
+### FILE PROCESSING
+#
+#
 set -e
 
 any_dirs=no
@@ -54,7 +81,7 @@ done
 style_some()
 {
 	if test -n "$*" ; then
-		$AS --options=$(dirname $0)/astylerc --quiet "$@"
+		$AS --options=$BASEDIR/astylerc --quiet "$@"
 		$CF -i -style=file "$@"
 	fi
 }
@@ -72,6 +99,7 @@ else
 	style_some "$@"
 fi
 
-if test -n "$unmangle_clang_format" ; then
-	sed -i.bak '/^SpaceInEmptyBlock/d' "$unmangle_clang_format"
-fi
+### CLANG-FORMAT-WRANGLING
+#
+# Restore the original .clang-format
+cp "$_fmt.base" "$_fmt"
