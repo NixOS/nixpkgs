@@ -172,9 +172,15 @@ in
         ExecStart = "${(removeSuffix "\n" cmd)} start";
         ExecStop = "${(removeSuffix "\n" cmd)} stop";
         Restart = "on-failure";
+        TimeoutSec = "5min";
         User = "unifi";
         UMask = "0077";
         WorkingDirectory = "${stateDir}";
+        # the stop command exits while the main process is still running, and unifi
+        # wants to manage its own child processes. this means we have to set KillSignal
+        # to something the main process ignores, otherwise every stop will have unifi.service
+        # fail with SIGTERM status.
+        KillSignal = "SIGCONT";
 
         # Hardening
         AmbientCapabilities = "";
@@ -215,5 +221,5 @@ in
 
   };
 
-  meta.maintainers = with lib.maintainers; [ erictapen ];
+  meta.maintainers = with lib.maintainers; [ erictapen pennae ];
 }

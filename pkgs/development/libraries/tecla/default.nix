@@ -19,6 +19,5 @@ stdenv.mkDerivation rec {
     license = "as-is";
 
     platforms = lib.platforms.unix;
-    maintainers = [ lib.maintainers.peti ];
   };
 }

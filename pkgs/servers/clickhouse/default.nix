@@ -22,10 +22,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake libtool llvm-bintools ninja ];
   buildInputs = [
     boost brotli capnproto cctz clang-unwrapped double-conversion
-    icu jemalloc libcpuid libxml2 lld llvm lz4 libmysqlclient openssl perl
+    icu jemalloc libxml2 lld llvm lz4 libmysqlclient openssl perl
     poco protobuf python3 rapidjson re2 rdkafka readline sparsehash unixODBC
     xxHash zstd
-  ];
+  ] ++ lib.optional stdenv.hostPlatform.isx86 libcpuid;
 
   postPatch = ''
     patchShebangs src/

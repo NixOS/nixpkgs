@@ -1,4 +1,4 @@
-#! /bin/sh -x
+#!/usr/bin/env bash
 
 # lists all available tags from a git repository
 

@@ -372,7 +372,13 @@ in
       services.xserver.libinput.enable = mkDefault true; # for controlling touchpad settings via gnome control center
 
       xdg.portal.enable = true;
-      xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+      xdg.portal.extraPortals = [
+        pkgs.xdg-desktop-portal-gnome
+        (pkgs.xdg-desktop-portal-gtk.override {
+          # Do not build portals that we already have.
+          buildPortalsInGnome = false;
+        })
+      ];
 
       # Harmonize Qt5 application style and also make them use the portal for file chooser dialog.
       qt5 = {

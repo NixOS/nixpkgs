@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2021.10.0";
+  version = "2021.10.4";
   components = {
     "abode" = ps: with ps; [ abodepy ];
     "accuweather" = ps: with ps; [ accuweather ];
@@ -19,7 +19,7 @@
     "air_quality" = ps: with ps; [ ];
     "airly" = ps: with ps; [ airly ];
     "airnow" = ps: with ps; [ pyairnow ];
-    "airthings" = ps: with ps; [ ]; # missing inputs: airthings_cloud
+    "airthings" = ps: with ps; [ airthings-cloud ];
     "airtouch4" = ps: with ps; [ ]; # missing inputs: airtouch4pyapi
     "airvisual" = ps: with ps; [ pyairvisual ];
     "aladdin_connect" = ps: with ps; [ aladdin-connect ];
@@ -216,7 +216,7 @@
     "edimax" = ps: with ps; [ pyedimax ];
     "edl21" = ps: with ps; [ pysml ];
     "ee_brightbox" = ps: with ps; [ eebrightbox ];
-    "efergy" = ps: with ps; [ ]; # missing inputs: pyefergy
+    "efergy" = ps: with ps; [ pyefergy ];
     "egardia" = ps: with ps; [ pythonegardia ];
     "eight_sleep" = ps: with ps; [ pyeight ];
     "elgato" = ps: with ps; [ elgato ];
@@ -859,7 +859,7 @@
     "tankerkoenig" = ps: with ps; [ pytankerkoenig ];
     "tapsaff" = ps: with ps; [ ]; # missing inputs: tapsaff
     "tasmota" = ps: with ps; [ aiohttp-cors hatasmota paho-mqtt ];
-    "tautulli" = ps: with ps; [ ]; # missing inputs: pytautulli
+    "tautulli" = ps: with ps; [ pytautulli ];
     "tcp" = ps: with ps; [ ];
     "ted5000" = ps: with ps; [ xmltodict ];
     "telegram" = ps: with ps; [ pysocks aiohttp-cors python-telegram-bot ];

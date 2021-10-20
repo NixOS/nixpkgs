@@ -1,7 +1,7 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i bash -p curl gnugrep gnused jq
 
-set -eu -o pipefail
+set -x -eu -o pipefail
 
 WORKDIR=$(mktemp -d)
 trap "rm -rf ${WORKDIR}" EXIT
@@ -45,7 +45,7 @@ CNIPLUGINS_SHA256=$(nix-prefetch-url --quiet --unpack \
     "https://github.com/rancher/plugins/archive/refs/tags/v${CNIPLUGINS_VERSION}.tar.gz")
 
 setKV () {
-    sed -i "s|$1 = \".*\"|$1 = \"$2\"|" ./default.nix
+    sed -i "s|$1 = \".*\"|$1 = \"${2:-}\"|" ./default.nix
 }
 
 setKV k3sVersion ${K3S_VERSION}

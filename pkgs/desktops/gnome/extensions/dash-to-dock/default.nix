@@ -7,14 +7,14 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-dash-to-dock";
-  version = "unstable-2021-07-07";
+  version = "unstable-2021-10-03";
 
-  # temporarily switched to https://github.com/micheleg/dash-to-dock/pull/1402 because upstream doesn't work with GNOME 40 yet.
+  # temporarily switched to commit hash because GNOME 40 version is not released yet.
   src = fetchFromGitHub {
-    owner = "ewlsh";
+    owner = "micheleg";
     repo = "dash-to-dock";
-    rev = "e4beec847181e4163b0a99ceaef4c4582cc8ae4c";
-    hash = "sha256-7UVnLXH7COnIbqxbt3CCscuu1YyPH6ax5DlKdaHCT/0=";
+    rev = "9605dd69fe86d4f92416299c3f62605e75827dd3";
+    sha256 = "0vrkiq5z2f11gqlfyis2rsnp6j25hwsp24s21vr55qkzkfszsigg";
   };
 
   nativeBuildInputs = [

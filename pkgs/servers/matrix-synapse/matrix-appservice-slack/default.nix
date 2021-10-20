@@ -3,8 +3,8 @@ let
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "matrix-appservice-slack";
-    rev = "1.8.0";
-    sha256 = "sha256-FA6SMivMnloeZmnUhGx6N+ZLDTZFO3y17xJYclkp5w0=";
+    rev = "1.9.0";
+    sha256 = "tx+dul+O7HZTGYW8ZSxoOZZmzm44nz0pYGQYp8xaVCw=";
   };
 
   nodePackages = import ./node-composition.nix {

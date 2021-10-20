@@ -57,7 +57,7 @@
 
     passthru = {
       fancyName = "MariaDB";
-      driver = if stdenv.isDarwin then "lib/libmaodbc.dylib" else "lib/libmaodbc.so";
+      driver = "lib/libmaodbc${stdenv.hostPlatform.extensions.sharedLibrary}";
     };
 
     meta = with lib; {

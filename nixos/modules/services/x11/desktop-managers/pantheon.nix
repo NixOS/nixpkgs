@@ -219,6 +219,7 @@ in
       ] config.environment.pantheon.excludePackages);
 
       programs.evince.enable = mkDefault true;
+      programs.evince.package = pkgs.pantheon.evince;
       programs.file-roller.enable = mkDefault true;
 
       # Settings from elementary-default-settings

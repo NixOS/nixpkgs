@@ -1,6 +1,7 @@
 { lib
 , mkDerivation
 , fetchurl
+, fetchpatch
 , poppler_utils
 , pkg-config
 , libpng
@@ -26,18 +27,21 @@
 
 mkDerivation rec {
   pname = "calibre";
-  version = "5.24.0";
+  version = "5.29.0";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${version}/${pname}-${version}.tar.xz";
-    hash = "sha256:18dr577nv7ijw3ar6mrk2xrc54mlrqkaj5jrc6s5sirl0710fdfg";
+    sha256 = "sha256-9ymHEpTHDUM3NAGoeSETzKRLKgJLRY4eEli6N5lbZug=";
   };
 
+  # https://sources.debian.org/patches/calibre/5.29.0+dfsg-1
   patches = [
-    # Plugin installation (very insecure) disabled (from Debian)
-    ./disable_plugins.patch
-    # Automatic version update disabled by default (from Debian)
-    ./no_updates_dialog.patch
+    #  allow for plugin update check, but no calibre version check
+    (fetchpatch {
+      name = "0001_only_plugin_update.patch";
+      url = "https://sources.debian.org/data/main/c/calibre/5.29.0%2Bdfsg-1/debian/patches/0001-only-plugin-update.patch";
+      sha256 = "sha256-aGT8rJ/eQKAkmyHBWdY0ouZuWvDwtLVJU5xY6d3hY3k=";
+    })
   ]
   ++ lib.optional (!unrarSupport) ./dont_build_unrar_plugin.patch;
 

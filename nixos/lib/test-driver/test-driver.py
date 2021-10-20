@@ -1126,9 +1126,9 @@ class Driver:
             try:
                 yield
                 return True
-            except:
-                rootlog.error(f'Test "{name}" failed with error:')
-                raise
+            except Exception as e:
+                rootlog.error(f'Test "{name}" failed with error: "{e}"')
+                raise e
 
     def test_symbols(self) -> Dict[str, Any]:
         @contextmanager

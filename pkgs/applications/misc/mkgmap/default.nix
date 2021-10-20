@@ -14,11 +14,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mkgmap";
-  version = "4807";
+  version = "4808";
 
   src = fetchurl {
     url = "https://www.mkgmap.org.uk/download/mkgmap-r${version}-src.tar.gz";
-    sha256 = "3DEcXopoCIcBANYrGclZH6K0JLgeYADXtPjQtobyfps=";
+    sha256 = "ooiXotpxdy99ViUQ0kFp0NoTowGEZjEoD31x+3XrW28=";
   };
 
   patches = [

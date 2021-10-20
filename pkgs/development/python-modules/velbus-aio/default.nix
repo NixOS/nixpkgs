@@ -1,4 +1,5 @@
 { lib
+, backoff
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
@@ -8,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "velbus-aio";
-  version = "2021.9.4";
+  version = "2021.10.2";
 
   disabled = pythonOlder "3.7";
 
@@ -16,10 +17,11 @@ buildPythonPackage rec {
     owner = "Cereal2nd";
     repo = pname;
     rev = version;
-    sha256 = "sha256-WywJ70tVniUX9RZTh9aswHgCEvWTggzABhSWoSRydUc=";
+    sha256 = "sha256-zamFDlahHQGo5g0dlGF6uWG53K/IkEjP0dA8cWYrhtI=";
   };
 
   propagatedBuildInputs = [
+    backoff
     pyserial-asyncio
   ];
 
@@ -27,7 +29,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ " velbusaio" ];
+  pythonImportsCheck = [
+    "velbusaio"
+  ];
 
   meta = with lib; {
     description = "Python library to support the Velbus home automation system";

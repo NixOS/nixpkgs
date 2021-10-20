@@ -174,6 +174,8 @@ in (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGea
 
   qca-qt5 = callPackage ../development/libraries/qca-qt5 { };
 
+  qcoro = callPackage ../development/libraries/qcoro { };
+
   qcsxcad = callPackage ../development/libraries/science/electronics/qcsxcad { };
 
   qmltermwidget = callPackage ../development/libraries/qmltermwidget {

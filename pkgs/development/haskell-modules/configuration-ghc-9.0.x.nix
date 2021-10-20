@@ -45,7 +45,7 @@ self: super: {
 
   # cabal-install needs more recent versions of Cabal and base16-bytestring.
   cabal-install = (doJailbreak super.cabal-install).overrideScope (self: super: {
-    Cabal = self.Cabal_3_6_1_0;
+    Cabal = self.Cabal_3_6_2_0;
   });
 
   # Jailbreaks & Version Updates
@@ -72,6 +72,17 @@ self: super: {
   vector-binary-instances = doJailbreak super.vector-binary-instances;
   vector-th-unbox = doJailbreak super.vector-th-unbox;
   zlib = doJailbreak super.zlib;
+  weeder = self.weeder_2_3_0;
+  generic-lens-core = self.generic-lens-core_2_2_0_0;
+  generic-lens = self.generic-lens_2_2_0_0;
+
+  # Doesn't allow Dhall 1.39.*
+  weeder_2_3_0 = super.weeder_2_3_0.override {
+    dhall = self.dhall_1_40_1;
+  };
+
+  # Upstream also disables test for GHC 9: https://github.com/kcsongor/generic-lens/pull/130
+  generic-lens_2_2_0_0 = dontCheck super.generic-lens_2_2_0_0;
 
   # Apply patches from head.hackage.
   alex = appendPatch (dontCheck super.alex) (pkgs.fetchpatch {
@@ -155,7 +166,7 @@ self: super: {
   # 2021-09-18: Need path >= 0.9.0 for ghc 9 compat
   path = self.path_0_9_0;
   # 2021-09-18: Need ormolu >= 0.3.0.0 for ghc 9 compat
-  ormolu = doDistribute self.ormolu_0_3_0_1;
+  ormolu = doDistribute self.ormolu_0_3_1_0;
   # 2021-09-18: https://github.com/haskell/haskell-language-server/issues/2206
   # Restrictive upper bound on ormolu
   hls-ormolu-plugin = doJailbreak super.hls-ormolu-plugin;

@@ -98,6 +98,8 @@ default-package-overrides:
   - ghc-api-compat == 8.10.7
   # 2021-09-14: Pin hiedb to version needed by ghcide
   - hiedb == 0.4.0.*
+  # 2021-10-13: weeder 2.3.0 require GHC == 9.0.*; remove pin when GHC version changes
+  - weeder < 2.3.0
 
 extra-packages:
   - base16-bytestring < 1               # required for cabal-install etc.
@@ -147,6 +149,8 @@ package-maintainers:
     - pretty-simple
     - spago
     - termonad
+  dalpd:
+    - svgcairo
   domenkozar:
     - cachix
     - cachix-api

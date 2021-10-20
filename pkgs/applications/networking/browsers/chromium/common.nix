@@ -6,7 +6,7 @@
 
 # Native build inputs:
 , ninja, pkg-config
-, python2, python3, perl
+, python3, perl
 , gnutar, which
 , llvmPackages
 # postPatch:
@@ -34,6 +34,7 @@
 , libva
 , libdrm, wayland, libxkbcommon # Ozone
 , curl
+, epoxy
 # postPatch:
 , glibc # gconv + locale
 
@@ -53,12 +54,13 @@ buildFun:
 with lib;
 
 let
-  python2WithPackages = python2.withPackages(ps: with ps; [
-    ply jinja2 setuptools
-  ]);
   python3WithPackages = python3.withPackages(ps: with ps; [
     ply jinja2 setuptools
   ]);
+  clangFormatPython3 = fetchurl {
+    url = "https://chromium.googlesource.com/chromium/tools/build/+/e77882e0dde52c2ccf33c5570929b75b4a2a2522/recipes/recipe_modules/chromium/resources/clang-format?format=TEXT";
+    sha256 = "0ic3hn65dimgfhakli1cyf9j3cxcqsf1qib706ihfhmlzxf7256l";
+  };
 
   # The additional attributes for creating derivations based on the chromium
   # source tree.
@@ -125,7 +127,7 @@ let
 
     nativeBuildInputs = [
       ninja pkg-config
-      python2WithPackages python3WithPackages perl
+      python3WithPackages perl
       gnutar which
       llvmPackages.bintools
     ];
@@ -150,6 +152,8 @@ let
       libva
       libdrm wayland mesa.drivers libxkbcommon
       curl
+    ] ++ optionals (chromiumVersionAtLeast "96") [
+      epoxy
     ] ++ optionals gnomeSupport [ gnome2.GConf libgcrypt ]
       ++ optional gnomeKeyringSupport libgnome-keyring3
       ++ optionals cupsSupport [ libgcrypt cups ]
@@ -211,6 +215,9 @@ let
 
       # Allow to put extensions into the system-path.
       sed -i -e 's,/usr,/run/current-system/sw,' chrome/common/chrome_paths.cc
+
+      # We need the fix for https://bugs.chromium.org/p/chromium/issues/detail?id=1254408:
+      base64 --decode ${clangFormatPython3} > buildtools/linux64/clang-format
 
       patchShebangs .
       # Link to our own Node.js and Java (required during the build):
@@ -308,7 +315,7 @@ let
 
       # This is to ensure expansion of $out.
       libExecPath="${libExecPath}"
-      ${python2}/bin/python2 build/linux/unbundle/replace_gn_files.py --system-libraries ${toString gnSystemLibraries}
+      ${python3}/bin/python3 build/linux/unbundle/replace_gn_files.py --system-libraries ${toString gnSystemLibraries}
       ${gnChromium}/bin/gn gen --args=${escapeShellArg gnFlags} out/Release | tee gn-gen-outputs.txt
 
       # Fail if `gn gen` contains a WARNING.

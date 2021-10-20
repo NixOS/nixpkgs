@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "postman";
-  version = "8.10.0";
+  version = "9.0.5";
 
   src = fetchurl {
     url = "https://dl.pstmn.io/download/version/${version}/linux64";
-    sha256 = "05f3eaa229483a7e1f698e6e2ea2031d37687de540d4fad05ce677ac216db24d";
+    sha256 = "1z28v5vrjld99ydai66k8hw01x54647324ax459bvblw989lzp7v";
     name = "${pname}.tar.gz";
   };
 
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
     rm $out/share/postman/Postman
 
     mkdir -p $out/bin
-    ln -s $out/share/postman/_Postman $out/bin/postman
+    ln -s $out/share/postman/postman $out/bin/postman
 
     mkdir -p $out/share/applications
     ln -s ${desktopItem}/share/applications/* $out/share/applications/
@@ -88,8 +88,8 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     pushd $out/share/postman
-    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" _Postman
-    for file in $(find . -type f \( -name \*.node -o -name _Postman -o -name \*.so\* \) ); do
+    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" postman
+    for file in $(find . -type f \( -name \*.node -o -name postman -o -name \*.so\* \) ); do
       ORIGIN=$(patchelf --print-rpath $file); \
       patchelf --set-rpath "${lib.makeLibraryPath buildInputs}:$ORIGIN" $file
     done
@@ -101,6 +101,6 @@ stdenv.mkDerivation rec {
     description = "API Development Environment";
     license = licenses.postman;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ xurei evanjs ];
+    maintainers = with maintainers; [ johnrichardrinehart evanjs ];
   };
 }

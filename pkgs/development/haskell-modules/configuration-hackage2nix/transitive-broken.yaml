@@ -331,15 +331,9 @@ dont-distribute-packages:
  - Shellac-haskeline
  - Shellac-readline
  - ShortestPathProblems
- - Shpadoinkle-backend-pardiff
- - Shpadoinkle-backend-static
- - Shpadoinkle-developer-tools
  - Shpadoinkle-disembodied
  - Shpadoinkle-examples
- - Shpadoinkle-html
  - Shpadoinkle-router
- - Shpadoinkle-template
- - Shpadoinkle-widgets
  - SimpleGL
  - SimpleLog
  - SimpleServer
@@ -534,6 +528,7 @@ dont-distribute-packages:
  - base64-bytes
  - baserock-schema
  - batchd
+ - batching
  - battlenet-yesod
  - battleships
  - bayes-stack
@@ -732,7 +727,9 @@ dont-distribute-packages:
  - claferwiki
  - clash
  - clash-ghc
+ - clash-ghc_1_4_5
  - clash-lib
+ - clash-lib_1_4_5
  - clash-multisignal
  - clash-prelude-quickcheck
  - clash-shake
@@ -935,6 +932,7 @@ dont-distribute-packages:
  - delta
  - delta-h
  - dep-t-advice
+ - dependent-literals-plugin
  - dependent-state
  - dephd
  - deptrack-devops
@@ -1071,6 +1069,7 @@ dont-distribute-packages:
  - every-bit-counts
  - exception-monads-fd
  - exference
+ - exon
  - expand
  - expat-enumerator
  - expiring-containers
@@ -1117,6 +1116,7 @@ dont-distribute-packages:
  - filesystem-enumerator
  - find-clumpiness
  - findhttp
+ - finite-table
  - firstify
  - fix-parser-simple
  - fixed-point-vector
@@ -2308,6 +2308,7 @@ dont-distribute-packages:
  - mkbndl
  - mlist
  - mmark-cli
+ - mmark-cli_0_0_5_1
  - mmark-ext
  - mmtl-base
  - moan
@@ -2426,6 +2427,7 @@ dont-distribute-packages:
  - nomyx-language
  - nomyx-library
  - nomyx-server
+ - notifications-tray-icon
  - notmuch-haskell
  - notmuch-web
  - numeric-ode
@@ -2453,6 +2455,7 @@ dont-distribute-packages:
  - one-liner_2_0
  - online
  - online-csv
+ - opc-xml-da-client
  - open-adt-tutorial
  - open-union
  - openpgp-Crypto
@@ -2559,6 +2562,7 @@ dont-distribute-packages:
  - polh-lexicon
  - polydata
  - polysemy-RandomFu
+ - polysemy-check
  - polysemy-http
  - polysemy-log-co
  - polysemy-methodology-co-log
@@ -2623,7 +2627,6 @@ dont-distribute-packages:
  - proto3-suite
  - protobuf-native
  - protocol-buffers-descriptor-fork
- - proton
  - psc-ide
  - puffytools
  - pugs-compat
@@ -2907,13 +2910,13 @@ dont-distribute-packages:
  - servant-auth-token-persistent
  - servant-auth-token-rocksdb
  - servant-auth-wordpress
- - servant-cli
  - servant-client-namedargs
  - servant-csharp
  - servant-db-postgresql
  - servant-ede
  - servant-event-stream
  - servant-examples
+ - servant-github-webhook
  - servant-http2-client
  - servant-matrix-param
  - servant-polysemy
@@ -2941,6 +2944,7 @@ dont-distribute-packages:
  - shelduck
  - shellmate-extras
  - shine-varying
+ - short-vec-lens
  - showdown
  - shpider
  - shuffle
@@ -3434,6 +3438,7 @@ dont-distribute-packages:
  - xml-push
  - xml-query-xml-conduit
  - xml-query-xml-types
+ - xml-syntax
  - xml-tydom-conduit
  - xml2x
  - xmltv

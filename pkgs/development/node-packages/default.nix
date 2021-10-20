@@ -1,6 +1,7 @@
 { pkgs, nodejs, stdenv, applyPatches, fetchFromGitHub, fetchpatch, fetchurl }:
 
 let
+  inherit (pkgs) lib;
   since = (version: pkgs.lib.versionAtLeast nodejs.version version);
   before = (version: pkgs.lib.versionOlder nodejs.version version);
   super = import ./composition.nix {
@@ -88,6 +89,22 @@ let
           pkgs.lib.makeBinPath [ pkgs.nodejs ]
         }
       '';
+    };
+
+    mdctl-cli = super."@medable/mdctl-cli".override {
+      nativeBuildInputs = with pkgs; with darwin.apple_sdk.frameworks; [
+        glib
+        libsecret
+        pkg-config
+      ] ++ lib.optionals stdenv.isDarwin [
+        AppKit
+        Security
+      ];
+      buildInputs = with pkgs; [
+        nodePackages.node-gyp-build
+        nodePackages.node-pre-gyp
+        nodejs
+      ];
     };
 
     coc-imselect = super.coc-imselect.override {
@@ -317,26 +334,6 @@ let
         ]}
       '';
     };
-
-    netlify-cli =
-      let
-        esbuild = pkgs.esbuild.overrideAttrs (old: rec {
-          version = "0.13.6";
-
-          src = fetchFromGitHub {
-            owner = "netlify";
-            repo = "esbuild";
-            rev = "v${version}";
-            sha256 = "0asjmqfzdrpfx2hd5hkac1swp52qknyqavsm59j8xr4c1ixhc6n9";
-          };
-
-        });
-      in
-      super.netlify-cli.override {
-        preRebuild = ''
-          export ESBUILD_BINARY_PATH="${esbuild}/bin/esbuild"
-        '';
-      };
 
     ssb-server = super.ssb-server.override {
       buildInputs = [ pkgs.automake pkgs.autoconf self.node-gyp-build ];

@@ -344,8 +344,6 @@ stdenv.mkDerivation ({
       compiler used in the GNU system including the GNU/Linux variant.
     '';
 
-    maintainers = with lib.maintainers; [ peti ];
-
     platforms = lib.platforms.unix;
   };
 }

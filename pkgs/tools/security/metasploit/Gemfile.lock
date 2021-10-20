@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/rapid7/metasploit-framework
-  revision: d50b53eafca062b7270a91894e4e9de7a526aa10
-  ref: refs/tags/6.1.8
+  revision: 822dd1ef2b1a1171d62803add58ee2afce30ea06
+  ref: refs/tags/6.1.10
   specs:
-    metasploit-framework (6.1.8)
+    metasploit-framework (6.1.10)
       actionpack (~> 6.0)
       activerecord (~> 6.0)
       activesupport (~> 6.0)
@@ -87,6 +87,7 @@ GIT
       tzinfo-data
       unix-crypt
       warden
+      win32api
       windows_error
       winrm
       xdr
@@ -127,19 +128,19 @@ GEM
     arel-helpers (2.12.1)
       activerecord (>= 3.1.0, < 7)
     aws-eventstream (1.2.0)
-    aws-partitions (1.510.0)
+    aws-partitions (1.516.0)
     aws-sdk-core (3.121.1)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.239.0)
       aws-sigv4 (~> 1.1)
       jmespath (~> 1.0)
-    aws-sdk-ec2 (1.265.0)
+    aws-sdk-ec2 (1.270.0)
       aws-sdk-core (~> 3, >= 3.120.0)
       aws-sigv4 (~> 1.1)
     aws-sdk-iam (1.61.0)
       aws-sdk-core (~> 3, >= 3.120.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-kms (1.48.0)
+    aws-sdk-kms (1.49.0)
       aws-sdk-core (~> 3, >= 3.120.0)
       aws-sigv4 (~> 1.1)
     aws-sdk-s3 (1.103.0)
@@ -219,7 +220,7 @@ GEM
     jmespath (1.4.0)
     jsobfu (0.4.2)
       rkelly-remix
-    json (2.5.1)
+    json (2.6.0)
     little-plugger (1.1.4)
     logging (2.3.0)
       little-plugger (~> 1.1)
@@ -295,7 +296,7 @@ GEM
       ttfunk
     pg (1.2.3)
     public_suffix (4.0.6)
-    puma (5.5.0)
+    puma (5.5.2)
       nio4r (~> 2.0)
     racc (1.5.2)
     rack (2.2.3)
@@ -404,7 +405,7 @@ GEM
     ttfunk (1.7.0)
     tzinfo (2.0.4)
       concurrent-ruby (~> 1.0)
-    tzinfo-data (1.2021.2)
+    tzinfo-data (1.2021.3)
       tzinfo (>= 1.0.0)
     unf (0.1.4)
       unf_ext
@@ -416,6 +417,7 @@ GEM
     websocket-driver (0.7.5)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
+    win32api (0.1.0)
     windows_error (0.1.2)
     winrm (2.3.6)
       builder (>= 2.1.2)

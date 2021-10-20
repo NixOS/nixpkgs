@@ -383,5 +383,18 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         docker.succeed(
             "tar -tf ${examples.exportBash} | grep '\./bin/bash' > /dev/null"
         )
+
+    with subtest("Ensure bare paths in contents are loaded correctly"):
+        docker.succeed(
+            "docker load --input='${examples.build-image-with-path}'",
+            "docker run --rm build-image-with-path bash -c '[[ -e /hello.txt ]]'",
+            "docker rmi build-image-with-path",
+        )
+        docker.succeed(
+            "${examples.layered-image-with-path} | docker load",
+            "docker run --rm layered-image-with-path bash -c '[[ -e /hello.txt ]]'",
+            "docker rmi layered-image-with-path",
+        )
+
   '';
 })

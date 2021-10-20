@@ -15,6 +15,8 @@
 }:
 
 let
+  dotnet-sdk = dotnetCorePackages.sdk_5_0;
+  dotnet-aspnetcore = dotnetCorePackages.aspnetcore_5_0;
   runtimeDeps = [
     ffmpeg
     fontconfig
@@ -34,10 +36,6 @@ let
       "musl-");
   # https://docs.microsoft.com/en-us/dotnet/core/rid-catalog#using-rids
   runtimeId = "${os}-${musl}${arch}";
-
-  dotnet-sdk = dotnetCorePackages.sdk_5_0;
-  dotnet-net = dotnetCorePackages.net_5_0;
-  dotnet-aspnetcore = dotnetCorePackages.aspnetcore_5_0;
 in
 stdenv.mkDerivation rec {
   pname = "jellyfin";

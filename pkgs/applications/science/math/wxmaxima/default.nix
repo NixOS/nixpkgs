@@ -26,6 +26,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     homepage = "https://wxmaxima-developers.github.io/wxmaxima/";
     platforms = platforms.linux;
-    maintainers = [ maintainers.peti ];
   };
 }

@@ -39,17 +39,19 @@
 
 stdenv.mkDerivation rec {
   pname = "epiphany";
-  version = "40.3";
+  version = "41.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "2tE4ufLVXeJxEo/KOLYfU/2YDFh9KeG6a1CP/zsZ9WQ=";
+    sha256 = "s50YJUkllbC3TF1qZoaoV/lBnfpMAvgBPCl7yHDibdA=";
   };
 
   patches = lib.optionals withPantheon [
+    # Make this respect dark mode settings from Pantheon
     # https://github.com/elementary/browser
-    ./dark-style.patch
-    ./navigation-buttons.patch
+    # The patch currently differs from upstream (updated for epiphany 40 and 41).
+    ./pantheon-dark-style.patch
+    ./pantheon-navigation-buttons.patch
   ];
 
   nativeBuildInputs = [
@@ -95,7 +97,9 @@ stdenv.mkDerivation rec {
     p11-kit
     sqlite
     webkitgtk
-  ] ++ lib.optional withPantheon pantheon.granite;
+  ] ++ lib.optionals withPantheon [
+    pantheon.granite
+  ];
 
   # Tests need an X display
   mesonFlags = [
