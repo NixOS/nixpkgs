@@ -3770,6 +3770,8 @@ in {
 
   inkex = callPackage ../development/python-modules/inkex { };
 
+  inotify = callPackage ../development/python-modules/inotify { };
+
   inotify-simple = callPackage ../development/python-modules/inotify-simple { };
 
   inotifyrecursive = callPackage ../development/python-modules/inotifyrecursive { };
