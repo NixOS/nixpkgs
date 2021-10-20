@@ -97,8 +97,12 @@ def install_refind():
     partitions = libcalamares.globalstorage.value("partitions")
     device = ""
 
+    # TODO: some distro's use /boot/efi , so maybe this needs to
+    #       become configurable (that depends on what rEFInd likes).
+    efi_boot_path = "/boot"
+
     for partition in partitions:
-        if partition["mountPoint"] == "/boot":
+        if partition["mountPoint"] == efi_boot_path:
             libcalamares.utils.debug(partition["device"])
             boot_device = partition["device"]
             boot_p = boot_device[-1:]
@@ -107,8 +111,8 @@ def install_refind():
                 device = boot_device[:-2]
 
             if not boot_p or not device:
-                return ("EFI directory /boot not found!",
-                        "Boot device: \"{!s}\"".format(boot_p, device))
+                return ("Boot device could not be determined",
+                        "Boot device: \"{!s}\"".format(boot_device))
             else:
                 print("Boot device: \"{!s}\"".format(device))
 
