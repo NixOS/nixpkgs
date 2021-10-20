@@ -13503,8 +13503,6 @@ with pkgs;
   inherit (callPackage ../development/interpreters/ruby {
     inherit (darwin) libiconv libobjc libunwind;
     inherit (darwin.apple_sdk.frameworks) Foundation;
-    autoreconfHook = buildPackages.autoreconfHook269;
-    bison = buildPackages.bison_3_5;
   })
     ruby_2_7
     ruby_3_0;
@@ -13949,15 +13947,6 @@ with pkgs;
   };
 
   bison = callPackage ../development/tools/parsing/bison { };
-
-  # Ruby fails to build with current bison
-  bison_3_5 = bison.overrideAttrs (oldAttrs: rec {
-    version = "3.5.4";
-    src = fetchurl {
-      url = "mirror://gnu/${oldAttrs.pname}/${oldAttrs.pname}-${version}.tar.gz";
-      sha256 = "0a2cbrqh7mgx2dwf5qm10v68iakv1i0dqh9di4x5aqxsz96ibpf0";
-    };
-  });
 
   bisoncpp = callPackage ../development/tools/parsing/bisonc++ { };
 
