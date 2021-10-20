@@ -28121,6 +28121,8 @@ with pkgs;
     fftw = fftwSinglePrec;
   };
 
+  timelimit = callPackage ../tools/misc/timelimit { };
+
   timewarrior = callPackage ../applications/misc/timewarrior { };
 
   timew-sync-server = callPackage ../applications/misc/timew-sync-server { };
