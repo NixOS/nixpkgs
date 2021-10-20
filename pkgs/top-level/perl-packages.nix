@@ -13841,6 +13841,10 @@ let
       url = "mirror://cpan/authors/id/L/LE/LEONT/Module-Build-0.4231.tar.gz";
       sha256 = "05xpn8qg814y49vrih16zfr9iiwb7pmdf57ahjnc2h0p5illq3vy";
     };
+    # support cross-compilation by removing unnecessary File::Temp version check
+    postPatch = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+      sed -i '/File::Temp/d' Build.PL
+    '';
     meta = {
       description = "Build and install Perl modules";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
