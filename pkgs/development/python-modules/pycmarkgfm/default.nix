@@ -10,6 +10,8 @@ buildPythonPackage rec {
     sha256 = "694cb242f4961437c30b5b015dfbce9d1a1fa48305c2e39f902ce7c65b4cbe0e";
   };
 
+  propagatedNativeBuildInputs = [ cffi ];
+
   propagatedBuildInputs = [ cffi ];
 
   # I would gladly use pytestCheckHook, but pycmarkgfm relies on a native
