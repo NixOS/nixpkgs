@@ -115,6 +115,7 @@ calamares_add_module_subdirectory( modules/freebsddisk LIST_SKIPPED_MODULES )  #
 calamares_add_module_subdirectory( modules/mobile LIST_SKIPPED_MODULES )
 calamares_add_module_subdirectory( modules/os-freebsd LIST_SKIPPED_MODULES )
 calamares_add_module_subdirectory( modules/os-nixos LIST_SKIPPED_MODULES )
+calamares_add_module_subdirectory( modules/refind LIST_SKIPPED_MODULES )
 calamares_add_module_subdirectory( modules/slowpython LIST_SKIPPED_MODULES )  # Python job
 calamares_add_module_subdirectory( modules/unpackfsc LIST_SKIPPED_MODULES )
 
