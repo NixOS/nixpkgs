@@ -21,6 +21,8 @@ buildPythonPackage rec {
     cached-property
   ] ++ lib.optional (!isPyPy) cffi;
 
+  propagatedNativeBuildInputs = lib.optional (!isPyPy) cffi;
+
   checkInputs = [ pytestCheckHook ];
 
   preCheck = ''
