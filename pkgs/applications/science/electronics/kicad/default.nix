@@ -277,7 +277,7 @@ stdenv.mkDerivation rec {
     then "Open Source Electronics Design Automation suite"
     else "Open Source EDA suite, development build")
     + (if (!with3d) then ", without 3D models" else "");
-    homepage = "https://www.kicad-pcb.org/";
+    homepage = "https://www.kicad.org/";
     longDescription = ''
       KiCad is an open source software suite for Electronic Design Automation.
       The Programs handle Schematic Capture, and PCB Layout with Gerber output.
