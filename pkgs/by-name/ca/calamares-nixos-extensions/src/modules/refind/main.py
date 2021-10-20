@@ -40,7 +40,7 @@ def update_conf(uuid, conf_path):
     """
     partitions = libcalamares.globalstorage.value("partitions")
 
-    kernel_params = ["quiet systemd.show_status=0"]
+    kernel_params = ["quiet", "systemd.show_status=0"]
     swap = ""
     swap_luks = ""
     cryptdevice_params = []
