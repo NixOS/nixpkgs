@@ -51,7 +51,7 @@
   fsType ? "ext4"
 
 , # Filesystem label
-  label ? "nixos"
+  label ? if onlyNixStore then "nix-store" else "nixos"
 
 , # The initial NixOS configuration file to be copied to
   # /etc/nixos/configuration.nix.
@@ -59,6 +59,11 @@
 
 , # Shell code executed after the VM has finished.
   postVM ? ""
+
+, # Copy the contents of the Nix store to the root of the image and
+  # skip further setup. Incompatible with `contents`,
+  # `installBootLoader` and `configFile`.
+  onlyNixStore ? false
 
 , name ? "nixos-disk-image"
 
@@ -83,6 +88,7 @@ assert lib.all
          (attrs: ((attrs.user  or null) == null)
               == ((attrs.group or null) == null))
          contents;
+assert onlyNixStore -> contents == [] && configFile == null && !installBootLoader;
 
 with lib;
 
@@ -345,25 +351,29 @@ let format' = format; in let
     ''}
 
     echo "copying staging root to image..."
-    cptofs -p ${optionalString (partitionTableType != "none") "-P ${rootPartition}"} -t ${fsType} -i $diskImage $root/* / ||
+    cptofs -p ${optionalString (partitionTableType != "none") "-P ${rootPartition}"} \
+           -t ${fsType} \
+           -i $diskImage \
+           $root${optionalString onlyNixStore builtins.storeDir}/* / ||
       (echo >&2 "ERROR: cptofs failed. diskSize might be too small for closure."; exit 1)
   '';
-in pkgs.vmTools.runInLinuxVM (
-  pkgs.runCommand name
-    { preVM = prepareImage;
+
+  moveOrConvertImage = ''
+    ${if format == "raw" then ''
+      mv $diskImage $out/${filename}
+    '' else ''
+      ${pkgs.qemu}/bin/qemu-img convert -f raw -O ${format} ${compress} $diskImage $out/${filename}
+    ''}
+    diskImage=$out/${filename}
+  '';
+
+  buildImage = pkgs.vmTools.runInLinuxVM (
+    pkgs.runCommand name {
+      preVM = prepareImage;
       buildInputs = with pkgs; [ util-linux e2fsprogs dosfstools ];
-      postVM = ''
-        ${if format == "raw" then ''
-          mv $diskImage $out/${filename}
-        '' else ''
-          ${pkgs.qemu}/bin/qemu-img convert -f raw -O ${format} ${compress} $diskImage $out/${filename}
-        ''}
-        diskImage=$out/${filename}
-        ${postVM}
-      '';
+      postVM = moveOrConvertImage + postVM;
       memSize = 1024;
-    }
-    ''
+    } ''
       export PATH=${binPath}:$PATH
 
       rootDisk=${if partitionTableType != "none" then "/dev/vda${rootPartition}" else "/dev/vda"}
@@ -425,4 +435,9 @@ in pkgs.vmTools.runInLinuxVM (
         tune2fs -T now -c 0 -i 0 $rootDisk
       ''}
     ''
-)
+  );
+in
+  if onlyNixStore then
+    pkgs.runCommand name {}
+      (prepareImage + moveOrConvertImage + postVM)
+  else buildImage
